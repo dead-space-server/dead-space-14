@@ -13,3 +13,12 @@
   - Necromorfs # DS14
   - SpiderTerror # DS14
   - SyndicateAgent # DS14-agents-faction
+
+- type: npcFaction
+  id: Changeling
+  hostile:
+  - NanoTrasen
+  - Syndicate
+  - Zombie
+  - Revolutionary
+

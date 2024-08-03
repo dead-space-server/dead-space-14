@@ -24,3 +24,5 @@ admin-verb-text-make-thief = Сделать вором
 admin-verb-text-make-blob = Сделать носителем Блоба
 admin-verb-text-make-event-role = Ивентовая роль
 admin-overlay-antag-classic = АНТАГ
+admin-verb-text-make-changeling = Сделать генокрадом
+admin-verb-make-changeling = Превратить цель в генокрада.

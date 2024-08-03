@@ -11,6 +11,7 @@ public sealed class RoleSystem : SharedRoleSystem
     [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
 
+
     public string? MindGetBriefing(EntityUid? mindId)
     {
         if (mindId == null)
