@@ -28,3 +28,6 @@ speed-buff-end = Мышцы расслабились
 
 armutant-and-traitors-title = Предатели
 armutant-and-traitor-description = Среди нас есть не только предатели...
+
+reagent-name-shrapnel = Шрапнель
+reagent-desc-shrapnel = Крайне вязкая жидкость, имеющая сладковатый аромат

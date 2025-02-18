@@ -38,7 +38,7 @@
   - type: TargetObjective
     title: objective-alive-person-armutant-title
   - type: PickRandomPerson
-    requireAlive: true
+    requireDie: true
   - type: ObjectiveAlivePerson
 
 - type: entity
