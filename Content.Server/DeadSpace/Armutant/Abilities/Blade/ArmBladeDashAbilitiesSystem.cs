@@ -1,4 +1,4 @@
-using Content.Server.DeadSpace.Armutant.Abilities.Components.BladeAblities;
+using Content.Server.DeadSpace.Armutant.Abilities.Components.BladeAbilities;
 using Content.Shared.Actions;
 using Content.Shared.Damage;
 using Content.Shared.DeadSpace.Armutant;
@@ -93,8 +93,7 @@ public sealed class ClawsDashSystem : EntitySystem
             {
                 _damageable.TryChangeDamage(entity, comp.DashDamage, true);
 
-                if (comp.DashSound != null)
-                    _audio.PlayPvs(comp.DashSound, entity);
+                _audio.PlayPvs(comp.DashSound, entity);
             }
 
             var dashDirection = (_transform.GetWorldPosition(entity) - _transform.GetWorldPosition(user)).Normalized();

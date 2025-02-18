@@ -1,7 +1,6 @@
-using Content.Server.DeadSpace.Armutant.Objectives.CreateMapObjective;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server.DeadSpace.Armutant.Objectives;
+namespace Content.Server.DeadSpace.Armutant.Objectives.CreateMapObjective;
 
 [RegisterComponent, Access(typeof(ObjectiveCreateMapSystem))]
 public sealed partial class ObjectiveCreateMapComponent : Component
