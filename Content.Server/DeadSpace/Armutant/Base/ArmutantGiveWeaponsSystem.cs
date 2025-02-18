@@ -85,9 +85,3 @@ public sealed class ArmutantGiveWeaponsSystem : EntitySystem
             RemComp<T>(user);
     }
 }
-
-
-
-
-
-
