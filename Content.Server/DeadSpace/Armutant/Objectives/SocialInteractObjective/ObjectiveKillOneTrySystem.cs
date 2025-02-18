@@ -1,3 +1,4 @@
+using Content.Server.DeadSpace.Armutant.Objectives.SocialInteractObjective;
 using Content.Server.Objectives.Components;
 using Content.Server.Objectives.Systems;
 using Content.Server.Shuttles.Systems;
