@@ -1,6 +1,4 @@
-using Content.Server.DeadSpace.Armutant.Objectives.SocialInteractObjective;
-
-namespace Content.Server.DeadSpace.Armutant.Objectives;
+namespace Content.Server.DeadSpace.Armutant.Objectives.SocialInteractObjective;
 
 [RegisterComponent, Access(typeof(ObjectiveKillOneTrySystem))]
 public sealed partial class ObjectiveKillOneTryComponent : Component

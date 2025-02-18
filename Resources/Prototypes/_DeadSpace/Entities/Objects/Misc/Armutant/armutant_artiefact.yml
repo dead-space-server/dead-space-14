@@ -18,11 +18,7 @@
       sound:
         collection: RadiationPulse
     - type: UseDelay
-<<<<<<< HEAD
       delay: 600
-=======
-      delay: 60
->>>>>>> 92a3cbdd5d (End)
 
 - type: entity
   id: ArtiefactArmutantObjectiveTrue
