@@ -7,19 +7,65 @@
   source: "https://github.com/tgstation/tgstation/tree/91a7e8e4c158ee9949fe5b0769931b78ec61abeb/sound/effects/magic"
 
 - files: ["sound_fight_first_boss.ogg"]
-  license: "CC-BY-SA-3.0"
+  license: "CC0-1.0"
+  source: https://zvukipro.com/
 
 - files: ["sound_fight_two_bosses.ogg"]
-  license: "CC-BY-SA-3.0"
+  license: "CC0-1.0"
+  source: https://zvukipro.com/
+
+- files: ["ambient_sound_void.ogg"]
+  license: "CC0-1.0"
+  source: https://zvukipro.com/
+
+- files: ["sound_effect_hit_shield.ogg"]
+  license: "CC0-1.0"
+  source: https://zvukipro.com/
+
+- files: ["sound_effetc_reflect.ogg"]
+  license: "CC0-1.0"
+  source: https://zvukipro.com/
+
+- files: ["sound_toggle_shield_claws.ogg"]
+  license: "CC0-1.0"
+  source: https://zvukipro.com/
 
 - files: ["sound_effects_splat.ogg"]
   license: "CC-BY-SA-3.0"
   source: "https://github.com/tgstation/tgstation/blob/66858d8afd021487c590f3b3302eb4a80dc32b2e/sound/effects/wounds/crackandbleed.ogg"
 
+- files: ["sound_effects_meat.ogg"]
+  license: "CC-BY-SA-3.0"
+  source: "https://github.com/tgstation/tgstation/"
+
 - files: ["sound_weapons_claws.ogg"]
   license: "CC-BY-SA-3.0"
   source: "https://github.com/ss220club/Paradise-SS220/blob/1e33cd99f688faf1cd647d23849ac1c16953134e/sound/weapons/armblade.ogg"
 
+- files: ["sound_effects_meteorimpact.ogg"]
+  license: "CC-BY-SA-3.0"
+  source: "https://github.com/ss220club/Paradise-SS220/"
+
+- files: ["sound_misc_enter_blood.ogg"]
+  license: "CC-BY-SA-3.0"
+  source: "https://github.com/ss220club/Paradise-SS220/"
+
 - files: ["sound_music_antag_brainwashed.ogg"]
   license: "CC-BY-SA-3.0"
   source: "https://github.com/tgstation/tgstation/blob/91a7e8e4c158ee9949fe5b0769931b78ec61abeb/sound/music/antag/brainwashed.ogg" 
+
+- files: ["sound_items_weapons_genhit2.ogg"]
+  license: "CC-BY-SA-3.0"
+  source: "https://github.com/tgstation/tgstation/" 
+
+- files: ["sound_items_weapons_dash.ogg"]
+  license: "CC-BY-SA-3.0"
+  source: "https://github.com/tgstation/tgstation/" 
+
+- files: ["sound_items_weapons_resonator_blast.ogg"]
+  license: "CC-BY-SA-3.0"
+  source: "https://github.com/tgstation/tgstation/" 
+
+- files: ["sound_music_antag_hypnotized.ogg"]
+  license: "CC-BY-SA-3.0"
+  source: "https://github.com/tgstation/tgstation/" 
