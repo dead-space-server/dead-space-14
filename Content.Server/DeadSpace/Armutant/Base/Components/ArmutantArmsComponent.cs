@@ -1,8 +1,7 @@
-using Content.Server.Destructible.Thresholds;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
-namespace Content.Server.DeadSpace.Armutant.Abilities.Components;
+namespace Content.Server.DeadSpace.Armutant.Base.Components;
 
 [RegisterComponent]
 public sealed partial class ArmutantArmsComponent : Component

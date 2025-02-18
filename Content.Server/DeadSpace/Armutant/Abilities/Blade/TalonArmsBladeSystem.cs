@@ -1,4 +1,4 @@
-using Content.Server.DeadSpace.Armutant.Abilities.Components.BladeAblities;
+using Content.Server.DeadSpace.Armutant.Abilities.Components.BladeAbilities;
 using Content.Shared.Actions;
 using Content.Shared.DeadSpace.Armutant;
 using Content.Shared.Hands.EntitySystems;
@@ -34,10 +34,7 @@ public sealed class TalonArmsBladeSystem : EntitySystem
         var shard = Spawn(TalonClawsPrototype, Transform(uid).Coordinates);
         _hands.TryPickupAnyHand(uid, shard);
 
-        if (component.MeatSound != null)
-        {
-            _audio.PlayPvs(component.MeatSound, uid);
-        }
+        _audio.PlayPvs(component.MeatSound, uid);
 
         args.Handled = true;
     }

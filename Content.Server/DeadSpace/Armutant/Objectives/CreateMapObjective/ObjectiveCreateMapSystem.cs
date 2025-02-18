@@ -1,5 +1,5 @@
 using System.Numerics;
-using Content.Server.DeadSpace.Armutant.Abilities.Components;
+using Content.Server.DeadSpace.Armutant.Base.Components;
 using Content.Shared.Interaction.Events;
 using Robust.Shared.Map;
 using Robust.Shared.Console;

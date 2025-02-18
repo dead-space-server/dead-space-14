@@ -1,4 +1,4 @@
-using Content.Server.DeadSpace.Armutant.Abilities.Components;
+using Content.Server.DeadSpace.Armutant.Base.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
 using Robust.Shared.Prototypes;
@@ -79,10 +79,7 @@ public sealed class ArmutantArmsSystem : EntitySystem
 
         args.Handled = true;
 
-        if (component.MeatSound != null)
-        {
-            _audio.PlayPvs(component.MeatSound, uid);
-        }
+        _audio.PlayPvs(component.MeatSound, uid);
     }
     private void OnToggleShield(EntityUid uid, ArmutantArmsComponent component, ref ShieldArmutantToggleEvent args)
     {
@@ -94,10 +91,7 @@ public sealed class ArmutantArmsSystem : EntitySystem
 
         args.Handled = true;
 
-        if (component.MeatSound != null)
-        {
-            _audio.PlayPvs(component.MeatSound, uid);
-        }
+        _audio.PlayPvs(component.MeatSound, uid);
     }
     private void OnToggleFist(EntityUid uid, ArmutantArmsComponent component, ref FistArmutantToggleEvent args)
     {
@@ -109,10 +103,7 @@ public sealed class ArmutantArmsSystem : EntitySystem
 
         args.Handled = true;
 
-        if (component.MeatSound != null)
-        {
-            _audio.PlayPvs(component.MeatSound, uid);
-        }
+        _audio.PlayPvs(component.MeatSound, uid);
     }
     private void OnToggleGun(EntityUid uid, ArmutantArmsComponent component, ref GunArmutantToggleEvent args)
     {
@@ -124,10 +115,7 @@ public sealed class ArmutantArmsSystem : EntitySystem
 
         args.Handled = true;
 
-        if (component.MeatSound != null)
-        {
-            _audio.PlayPvs(component.MeatSound, uid);
-        }
+        _audio.PlayPvs(component.MeatSound, uid);
     }
     private void OnEnterStasis(EntityUid uid, ArmutantArmsComponent component, ref EnterArmutantStasisEvent args)
     {

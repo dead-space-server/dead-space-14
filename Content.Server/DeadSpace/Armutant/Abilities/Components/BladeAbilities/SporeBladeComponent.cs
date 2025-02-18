@@ -1,7 +1,7 @@
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
-namespace Content.Server.DeadSpace.Armutant.Abilities.Components.BladeAblities;
+namespace Content.Server.DeadSpace.Armutant.Abilities.Components.BladeAbilities;
 
 [RegisterComponent]
 public sealed partial class SporeBladeComponent : Component

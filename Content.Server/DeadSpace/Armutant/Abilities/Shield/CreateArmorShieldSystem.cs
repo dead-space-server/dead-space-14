@@ -40,10 +40,7 @@ public sealed class CreateArmorShieldSystem : EntitySystem
 
     private void OnCreateArmorShield(EntityUid uid, ShieldCreateArmorComponent component, ref CreateArmorShieldToggleEvent args)
     {
-        if (component.MeatSound != null)
-        {
-            _audio.PlayPvs(component.MeatSound, uid);
-        }
+        _audio.PlayPvs(component.MeatSound, uid);
 
         if (component.Equipment.Count > 0)
         {

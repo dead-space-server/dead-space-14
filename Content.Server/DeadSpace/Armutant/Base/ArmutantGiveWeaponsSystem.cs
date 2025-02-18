@@ -1,4 +1,4 @@
-using Content.Server.DeadSpace.Armutant.Abilities.Components.BladeAblities;
+using Content.Server.DeadSpace.Armutant.Abilities.Components.BladeAbilities;
 using Content.Server.DeadSpace.Armutant.Abilities.Components.FistAbilities;
 using Content.Server.DeadSpace.Armutant.Abilities.Components.GunAbilities;
 using Content.Server.DeadSpace.Armutant.Abilities.Components.ShieldAbilities;
@@ -14,99 +14,75 @@ public sealed class ArmutantGiveWeaponsSystem : EntitySystem
         SubscribeLocalEvent<ArmutantGiveWeaponsComponent, DidEquipHandEvent>(OnEquip);
         SubscribeLocalEvent<ArmutantGiveWeaponsComponent, DidUnequipHandEvent>(OnUnequip);
     }
+
     private void OnEquip(EntityUid uid, ArmutantGiveWeaponsComponent component, DidEquipHandEvent args)
     {
-        if (TryComp<MetaDataComponent>(args.Equipped, out var clawsMetaData) && clawsMetaData.EntityPrototype?.ID == "BladeArmutant")
+        if (!TryComp(args.Equipped, out MetaDataComponent? metaData))
+            return;
+
+        switch (metaData.EntityPrototype?.ID)
         {
-            if (!HasComp<BladeDashArmutantComponent>(args.User))
-                AddComp<BladeDashArmutantComponent>(args.User);
-
-            if (!HasComp<BladeTalonSpawnComponent>(args.User))
-                AddComp<BladeTalonSpawnComponent>(args.User);
-
-            if (!HasComp<SporeBladeComponent>(args.User))
-                AddComp<SporeBladeComponent>(args.User);
-        }
-
-        if (TryComp<MetaDataComponent>(args.Equipped, out var shieldMetaData) && shieldMetaData.EntityPrototype?.ID == "ShieldArmutant")
-        {
-            if (!HasComp<ShieldCreateArmorComponent>(args.User))
-                AddComp<ShieldCreateArmorComponent>(args.User);
-
-            if (!HasComp<ShieldStunComponent>(args.User))
-                AddComp<ShieldStunComponent>(args.User);
-
-            if (!HasComp<VoidShieldComponent>(args.User))
-                AddComp<VoidShieldComponent>(args.User);
-        }
-
-        if (TryComp<MetaDataComponent>(args.Equipped, out var fistMetaData) && fistMetaData.EntityPrototype?.ID == "FistArmutant")
-        {
-            if (!HasComp<FistStunAroundComponent>(args.User))
-                AddComp<FistStunAroundComponent>(args.User);
-
-            if (!HasComp<FistMendSelfComponent>(args.User))
-                AddComp<FistMendSelfComponent>(args.User);
-
-            if (!HasComp<FistBuffSpeedComponent>(args.User))
-                AddComp<FistBuffSpeedComponent>(args.User);
-        }
-
-        if (TryComp<MetaDataComponent>(args.Equipped, out var gunMetaData) && gunMetaData.EntityPrototype?.ID == "GunArmutant")
-        {
-            if (!HasComp<GunZoomComponent>(args.User))
-                AddComp<GunZoomComponent>(args.User);
-
-            if (!HasComp<GunSmokeComponent>(args.User))
-                AddComp<GunSmokeComponent>(args.User);
+            case "BladeArmutant":
+                TryAdd<BladeDashArmutantComponent>(args.User);
+                TryAdd<BladeTalonSpawnComponent>(args.User);
+                TryAdd<SporeBladeComponent>(args.User);
+                break;
+            case "ShieldArmutant":
+                TryAdd<ShieldCreateArmorComponent>(args.User);
+                TryAdd<ShieldStunComponent>(args.User);
+                TryAdd<VoidShieldComponent>(args.User);
+                break;
+            case "FistArmutant":
+                TryAdd<FistStunAroundComponent>(args.User);
+                TryAdd<FistMendSelfComponent>(args.User);
+                TryAdd<FistBuffSpeedComponent>(args.User);
+                break;
+            case "GunArmutant":
+                TryAdd<GunZoomComponent>(args.User);
+                TryAdd<GunSmokeComponent>(args.User);
+                break;
         }
     }
+
     private void OnUnequip(EntityUid uid, ArmutantGiveWeaponsComponent component, DidUnequipHandEvent args)
     {
-        if (TryComp<MetaDataComponent>(args.Unequipped, out var clawsMetaData) && clawsMetaData.EntityPrototype?.ID == "BladeArmutant")
+        if (!TryComp(args.Unequipped, out MetaDataComponent? metaData))
+            return;
+
+        switch (metaData.EntityPrototype?.ID)
         {
-            if (HasComp<BladeDashArmutantComponent>(args.User))
-                RemComp<BladeDashArmutantComponent>(args.User);
-
-            if (HasComp<BladeTalonSpawnComponent>(args.User))
-                RemComp<BladeTalonSpawnComponent>(args.User);
-
-            if (HasComp<SporeBladeComponent>(args.User))
-                RemComp<SporeBladeComponent>(args.User);
+            case "BladeArmutant":
+                TryRemove<BladeDashArmutantComponent>(args.User);
+                TryRemove<BladeTalonSpawnComponent>(args.User);
+                TryRemove<SporeBladeComponent>(args.User);
+                break;
+            case "ShieldArmutant":
+                TryRemove<ShieldCreateArmorComponent>(args.User);
+                TryRemove<ShieldStunComponent>(args.User);
+                TryRemove<VoidShieldComponent>(args.User);
+                break;
+            case "FistArmutant":
+                TryRemove<FistStunAroundComponent>(args.User);
+                TryRemove<FistMendSelfComponent>(args.User);
+                TryRemove<FistBuffSpeedComponent>(args.User);
+                break;
+            case "GunArmutant":
+                TryRemove<GunZoomComponent>(args.User);
+                TryRemove<GunSmokeComponent>(args.User);
+                break;
         }
+    }
 
-        if (TryComp<MetaDataComponent>(args.Unequipped, out var shieldMetaData) && shieldMetaData.EntityPrototype?.ID == "ShieldArmutant")
-        {
-            if (HasComp<ShieldCreateArmorComponent>(args.User))
-                RemComp<ShieldCreateArmorComponent>(args.User);
+    private void TryAdd<T>(EntityUid user) where T : Component, new()
+    {
+        if (!HasComp<T>(user))
+            AddComp<T>(user);
+    }
 
-            if (HasComp<ShieldStunComponent>(args.User))
-                RemComp<ShieldStunComponent>(args.User);
-
-            if (HasComp<VoidShieldComponent>(args.User))
-                RemComp<VoidShieldComponent>(args.User);
-        }
-
-        if (TryComp<MetaDataComponent>(args.Unequipped, out var fistMetaData) && fistMetaData.EntityPrototype?.ID == "FistArmutant")
-        {
-            if (HasComp<FistStunAroundComponent>(args.User))
-                RemComp<FistStunAroundComponent>(args.User);
-
-            if (HasComp<FistMendSelfComponent>(args.User))
-                RemComp<FistMendSelfComponent>(args.User);
-
-            if (HasComp<FistBuffSpeedComponent>(args.User))
-                RemComp<FistBuffSpeedComponent>(args.User);
-        }
-
-        if (TryComp<MetaDataComponent>(args.Unequipped, out var gunMetaData) && gunMetaData.EntityPrototype?.ID == "GunArmutant")
-        {
-            if (HasComp<GunZoomComponent>(args.User))
-                RemComp<GunZoomComponent>(args.User);
-
-            if (HasComp<GunSmokeComponent>(args.User))
-                RemComp<GunSmokeComponent>(args.User);
-        }
+    private void TryRemove<T>(EntityUid user) where T : Component
+    {
+        if (HasComp<T>(user))
+            RemComp<T>(user);
     }
 }
 
