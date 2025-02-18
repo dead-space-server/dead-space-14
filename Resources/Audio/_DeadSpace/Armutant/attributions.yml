@@ -1,71 +1,89 @@
 - files: ["sound_effects_magic_cosmic_expansion.ogg"]
   license: "CC-BY-SA-3.0"
   source: "https://github.com/tgstation/tgstation/tree/91a7e8e4c158ee9949fe5b0769931b78ec61abeb/sound/effects/magic"
+  copyright: "Created by Unknow"
 
 - files: ["sound_effects_magic_voidblink.ogg"]
   license: "CC-BY-SA-3.0"
   source: "https://github.com/tgstation/tgstation/tree/91a7e8e4c158ee9949fe5b0769931b78ec61abeb/sound/effects/magic"
+  copyright: "Created by Unknow"
 
 - files: ["sound_fight_first_boss.ogg"]
   license: "CC0-1.0"
   source: https://zvukipro.com/
+  copyright: "Created by Unknow"
 
 - files: ["sound_fight_two_bosses.ogg"]
   license: "CC0-1.0"
   source: https://zvukipro.com/
+  copyright: "Created by Unknow"
 
 - files: ["ambient_sound_void.ogg"]
   license: "CC0-1.0"
   source: https://zvukipro.com/
+  copyright: "Created by Unknow"
 
 - files: ["sound_effect_hit_shield.ogg"]
   license: "CC0-1.0"
   source: https://zvukipro.com/
+  copyright: "Created by Unknow"
 
 - files: ["sound_effetc_reflect.ogg"]
   license: "CC0-1.0"
   source: https://zvukipro.com/
+  copyright: "Created by Unknow"
 
 - files: ["sound_toggle_shield_claws.ogg"]
   license: "CC0-1.0"
   source: https://zvukipro.com/
+  copyright: "Created by Unknow"
 
 - files: ["sound_effects_splat.ogg"]
   license: "CC-BY-SA-3.0"
   source: "https://github.com/tgstation/tgstation/blob/66858d8afd021487c590f3b3302eb4a80dc32b2e/sound/effects/wounds/crackandbleed.ogg"
+  copyright: "Created by Unknow"
 
 - files: ["sound_effects_meat.ogg"]
   license: "CC-BY-SA-3.0"
   source: "https://github.com/tgstation/tgstation/"
+  copyright: "Created by Unknow"
 
 - files: ["sound_weapons_claws.ogg"]
   license: "CC-BY-SA-3.0"
   source: "https://github.com/ss220club/Paradise-SS220/blob/1e33cd99f688faf1cd647d23849ac1c16953134e/sound/weapons/armblade.ogg"
+  copyright: "Created by Unknow"
 
 - files: ["sound_effects_meteorimpact.ogg"]
   license: "CC-BY-SA-3.0"
   source: "https://github.com/ss220club/Paradise-SS220/"
+  copyright: "Created by Unknow"
 
 - files: ["sound_misc_enter_blood.ogg"]
   license: "CC-BY-SA-3.0"
   source: "https://github.com/ss220club/Paradise-SS220/"
+  copyright: "Created by Unknow"
 
 - files: ["sound_music_antag_brainwashed.ogg"]
   license: "CC-BY-SA-3.0"
   source: "https://github.com/tgstation/tgstation/blob/91a7e8e4c158ee9949fe5b0769931b78ec61abeb/sound/music/antag/brainwashed.ogg" 
+  copyright: "Create by FeiH from https://github.com/OracleStation/OracleStation/pull/1122/commits/b28fbbad715b96db029a8e8df38b1357a58daec1"
 
 - files: ["sound_items_weapons_genhit2.ogg"]
   license: "CC-BY-SA-3.0"
-  source: "https://github.com/tgstation/tgstation/" 
+  source: "https://github.com/ss220club/Paradise-SS220/blob/1e33cd99f688faf1cd647d23849ac1c16953134e/sound/weapons/genhit2.ogg" 
+  copyright: "Created by Unknow"
 
 - files: ["sound_items_weapons_dash.ogg"]
   license: "CC-BY-SA-3.0"
   source: "https://github.com/tgstation/tgstation/" 
+  copyright: "Created by Unknow"
 
 - files: ["sound_items_weapons_resonator_blast.ogg"]
   license: "CC-BY-SA-3.0"
-  source: "https://github.com/tgstation/tgstation/" 
+  source: "https://github.com/ss220club/Paradise-SS220/blob/1e33cd99f688faf1cd647d23849ac1c16953134e/sound/weapons/resonator_blast.ogg" 
+  copyright: "Created by Unknow"
 
 - files: ["sound_music_antag_hypnotized.ogg"]
   license: "CC-BY-SA-3.0"
   source: "https://github.com/tgstation/tgstation/" 
+  copyright: "is from Flashback.wav https://freesound.org/people/Sclolex/sounds/342103"
