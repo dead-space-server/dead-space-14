@@ -97,6 +97,51 @@
       board: [ DoorElectronicsTaipan ]
 
 - type: entity
+  parent: AirlockHatch
+  id: AirlockHatchTaipan
+  name: герметичный люк
+  description: Он открывается, он закрывается, он может раздавить вас, а за ним лишь космос.
+  suffix: Тайпан, Внешний
+  components:
+  - type: Door
+    crushDamage:
+      types:
+        Blunt: 15
+    openSound:
+      path: /Audio/Machines/airlock_ext_open.ogg
+    closeSound:
+      path: /Audio/Machines/airlock_ext_close.ogg
+    denySound:
+      path: /Audio/Machines/airlock_deny.ogg
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_hatch.rsi
+  - type: Wires
+    layoutId: AirlockExternal
+
+- type: entity
+  parent: AirlockHatchTaipan
+  id: AirlockHatchGlassTaipan
+  suffix: Тайпан, Внешний
+  components:
+  - type: Door
+    occludes: false
+  - type: Occluder
+    enabled: false
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_glass_hatch.rsi
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        density: 100
+        mask:
+        - FullTileMask
+        layer:
+        - GlassAirlockLayer
+
+- type: entity
   parent: AirlockTaipan
   id: AirlockTaipanService
   suffix: Тайпан, Сервисный

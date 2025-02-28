@@ -199,3 +199,21 @@
   - type: ContainerFill
     containers:
       board: [ DoorElectronicsTaipanVault ]
+
+- type: entity
+  parent: AirlockHatchTaipan
+  id: AirlockHatchTaipanLocked
+  suffix: Тайпан, Внешний, Закрыт
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsTaipanExternal ]
+
+- type: entity
+  parent: AirlockHatchGlassTaipan
+  id: AirlockHatchGlassTaipanLocked
+  suffix: Тайпан, Внешний, Закрыт
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsTaipanExternal ]

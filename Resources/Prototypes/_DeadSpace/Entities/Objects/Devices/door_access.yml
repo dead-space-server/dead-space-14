@@ -117,3 +117,11 @@
   components:
   - type: AccessReader
     access: [["TaipanVault"]]
+
+- type: entity
+  parent: DoorElectronicsTaipan
+  id: DoorElectronicsTaipanExternal
+  suffix: Тайпан, Внешний, Закрыт
+  components:
+  - type: AccessReader
+    access: [["TaipanExternal"]]
