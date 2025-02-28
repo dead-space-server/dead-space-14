@@ -41,7 +41,7 @@
 - type: entity
   parent: DoorElectronicsTaipan
   id: DoorElectronicsTaipanCommand
-  suffix: Тайпан, Командный, Закрыт
+  suffix: Тайпан, Командование, Закрыт
   components:
   - type: AccessReader
     access: [["TaipanCommand"]]

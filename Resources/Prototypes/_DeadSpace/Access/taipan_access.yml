@@ -19,7 +19,7 @@
 - type: accessLevel
   id: TaipanArmory
   name: Арсенал
-  
+
 - type: accessLevel
   id: TaipanAtmospherics
   name: Атмосферный
@@ -30,7 +30,7 @@
 
 - type: accessLevel
   id: TaipanCommand
-  name: Командный
+  name: Командование
 
 - type: accessLevel
   id: TaipanCommunicationsOfficer

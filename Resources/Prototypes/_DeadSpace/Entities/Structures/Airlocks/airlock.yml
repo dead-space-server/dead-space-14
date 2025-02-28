@@ -269,7 +269,7 @@
 - type: entity
   parent: AirlockTaipanGlass
   id: AirlockTaipanGlassCommand
-  suffix: Тайпан, Командный
+  suffix: Тайпан, Командование
   components:
   - type: Sprite
     sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_glass_command.rsi
