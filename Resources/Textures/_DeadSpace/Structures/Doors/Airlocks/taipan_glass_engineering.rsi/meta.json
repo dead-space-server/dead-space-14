@@ -1,10 +1,10 @@
 {
-  "version": 1,
-  "license": "CC-BY-SA-3.0",
-  "copyright": "Made by murouxlul, recolored by andrew_fenriz (discord) for Space Station 14 server Мёртвый космос",
-  "size": {
-    "x": 32,
-    "y": 32
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Made by murouxlul, recolored by andrew_fenriz (discord) for Space Station 14 server Мёртвый космос",
+    "size": {
+        "x": 32,
+        "y": 32
   },
   "states": [
     {
