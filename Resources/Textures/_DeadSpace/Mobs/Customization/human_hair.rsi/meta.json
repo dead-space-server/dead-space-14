@@ -1,0 +1,13 @@
+{
+    "version": 1,
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "copyright": "Backport, taken from https://github.com/dead-space-server/space-station-14-fobos/blob/e0a4735fe2d1f727e83f250f867d51465b725fe5/Resources/Textures/Mob/human_hair.rsi",
+    "license": "CC-BY-SA-3.0",
+    "states": [
+        {"name": "braid", "directions": 4},
+        {"name": "braid2", "directions": 4}
+    ]
+}
