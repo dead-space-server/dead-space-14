@@ -87,7 +87,7 @@
 
 - type: entity
   id: MagazineShotgunSlug9000Alpha
-  name: барабан 9000 Альфа (12х70 пуля)
+  name: барабан 9000 Альфа (12х70 пули)
   parent: MagazineShotgun9000Alpha
   components:
   - type: BallisticAmmoProvider
