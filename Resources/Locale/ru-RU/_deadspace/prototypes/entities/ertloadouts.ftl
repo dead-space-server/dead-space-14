@@ -66,11 +66,11 @@ ert-loadout-category-mk58-description =
 ert-loadout-category-n1984-name = N1984
 ert-loadout-category-n1984-description =
     Запасное оружие любого уважающего себя офицера.
-    Выпускается в калибре .44 магнум, самом богоугодном калибре.
+    Выпускается в калибре .45 магнум, самом богоугодном калибре.
 ert-loadout-category-mateba-name = Матеба
 ert-loadout-category-mateba-description =
     Револьвер элитных сил NanoTrasen.
-    Использует калибр .44 магнум.
+    Использует калибр .45 магнум.
 ert-loadout-category-dominator-name = Доминатор
 ert-loadout-category-dominator-description =
     Имеет два режима стрельбы. Перед использованием
