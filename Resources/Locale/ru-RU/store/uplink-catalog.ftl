@@ -73,7 +73,7 @@ uplink-magazine-eagle-ap-name = Пистолетный магазин пусты
 uplink-magazine-eagle-ap-desc = Пистолетный магазин с 8 бронебойными, полностью игнорирующими броню, патронами для пистолета. Совместим с "Пустынным орлом".
 uplink-mosin-ammo-name = Коробка патронов (7.62х39 мм винтовочные)
 uplink-mosin-ammo-desc = Коробка с 60 патронами для резервной винтовки.
-uplink-sniper-ammo-name = Коробка патронов (.50 антиматериальные)
+uplink-sniper-ammo-name = Коробка патронов (.60 антиматериальные)
 uplink-sniper-ammo-desc = Коробка с 10 патронами для снайперской винтовки Христов.
 # Utility
 uplink-holopara-kit-name = Набор "Голопаразит"
