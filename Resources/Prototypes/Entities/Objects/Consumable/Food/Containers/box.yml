@@ -497,7 +497,7 @@
     sprite: Objects/Storage/Happyhonk/clown.rsi
     heldPrefix: box
   - type: Storage
-    maxItemSize: Small # DS14
+    maxItemSize: Normal # DS14
     grid:
     - 0,0,3,2 # DS14
   - type: Tag
@@ -591,10 +591,6 @@
   description: A sus meal with a potentially explosive surprise.
   suffix: Toy Unsafe
   components:
-  - type: Storage
-    maxItemSize: Small # DS14
-    grid:
-    - 0,0,5,2
   - type: Sprite
     sprite: Objects/Storage/Happyhonk/nukie.rsi
     state: box
@@ -657,11 +653,10 @@
     - id: DrinkColaCan
       orGroup: Drink2Pool
     - id: DrinkColaCan
-      amount: 2
     # food
     - id: FoodSaladValid
       prob: 0.05
-      amount: 4
+      amount: 2 # DS14
       orGroup: FoodPool
     - id: FoodSnackSyndi
       amount: 4
