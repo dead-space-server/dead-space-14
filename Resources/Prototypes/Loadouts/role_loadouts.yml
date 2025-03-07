@@ -368,7 +368,9 @@
 - type: roleLoadout
   id: JobHeadOfSecurity
   groups:
+  - GroupTankHarness
   - HeadofSecurityHead
+  - SecurityMask
   - HeadofSecurityNeck
   - HeadofSecurityJumpsuit
   - SecurityBackpack
@@ -379,11 +381,13 @@
   - Trinkets
   - SecurityStar
   - GroupSpeciesBreathToolSecurity
+  - HeadofSecuritySocks # DS14-Underwear
   - HeadofSecurityUnderwear # DS14-Underwear
 
 - type: roleLoadout
   id: JobWarden
   groups:
+  - GroupTankHarness
   - WardenHead
   - WardenJumpsuit
   - SecurityBackpack
@@ -394,12 +398,15 @@
   - Trinkets
   - SecurityStar
   - GroupSpeciesBreathToolSecurity
+  - WardenSocks # DS14-Underwear
   - WardenUnderwear # DS14-Underwear
 
 - type: roleLoadout
   id: JobSecurityOfficer
   groups:
+  - GroupTankHarness
   - SecurityHead
+  - SecurityMask
   - SecurityJumpsuit
   - SecurityBackpack
   - SecurityOuterClothing
@@ -410,31 +417,36 @@
   - Trinkets
   - SecurityStar
   - GroupSpeciesBreathToolSecurity
+  - SecuritySocks # DS14-Underwear
   - SecurityUnderwear # DS14-Underwear
 
 - type: roleLoadout
   id: JobDetective
   groups:
+  - GroupTankHarness
   - DetectiveHead
   - DetectiveNeck
   - DetectiveJumpsuit
-  - SecurityBackpack
+  - DetectiveBackpack
   - DetectiveOuterClothing
-  - SecurityShoes
+  - DetectiveShoes
   - SurvivalSecurity
   - Trinkets
   - SecurityStar
   - GroupSpeciesBreathToolSecurity
+  - DetectiveSocks # DS14-Underwear
   - DetectiveUnderwear # DS14-Underwear
 
 - type: roleLoadout
   id: JobSecurityCadet
   groups:
+  - GroupTankHarness
   - SecurityCadetJumpsuit
   - SecurityBackpack
   - SurvivalSecurity
   - Trinkets
   - GroupSpeciesBreathToolSecurity
+  - SecurityCadetSocks # DS14-Underwear
   - SecurityCadetUnderwear # DS14-Underwear
 
 # Medical
