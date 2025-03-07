@@ -40,7 +40,6 @@ entities:
       name: NT-Egida 76
     - type: Transform
       pos: -0.46875,-0.0625
-      parent: invalid
     - type: MapGrid
       chunks:
         0,0:
