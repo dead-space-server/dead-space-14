@@ -22,8 +22,8 @@
   id: ArtiefactArmutantObjectiveTrue
   name: steal-target-groups-artiefact-armutant
   sprite:
-    sprite: _DeadSpace/Armutant/bone_shard.rsi
-    state: icon
+    sprite: _DeadSpace/Armutant/artefact.rsi
+    state: icon_true
 
 - type: entity
   parent: [BaseArmutantObjective, BaseTargetObjective]
