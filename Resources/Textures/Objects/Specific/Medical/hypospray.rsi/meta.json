@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from tgstation at commit https://github.com/tgstation/tgstation/commit/23601a50d2c733122dc76e188984ed3e57aaa470, combat_hypo made by mutemaid (discord) for Space Station 14 server Мёртвый Космос",
+  "copyright": "Taken from tgstation at commit https://github.com/tgstation/tgstation/commit/23601a50d2c733122dc76e188984ed3e57aaa470",
   "size": {
     "x": 32,
     "y": 32
@@ -12,19 +12,6 @@
     },
     {
       "name": "borghypo_s"
-    },
-    {
-      "name": "combat_hypo",
-      "delays": [
-        [
-            0.2,
-            0.2,
-            0.2,
-            0.2,
-            0.2,
-            0.2
-        ]
-    ]
     },
     {
       "name": "hypo"
