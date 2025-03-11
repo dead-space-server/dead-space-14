@@ -1,0 +1,32 @@
+- type: entity
+  parent: ClothingHandsGlovesCombat
+  id: ClothingHandsTaipanRD
+  name: перчатки директора исследований
+  description: Жизненно необходимый предмет одежды, без которого не обойтись в научной лаборатории. Изолированы.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Hands/Gloves/gloves_rd.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Hands/Gloves/gloves_rd.rsi
+
+- type: entity
+  parent: ClothingHandsGlovesCombat
+  id: ClothingHandsTaipanCO
+  name: перчатки офицера телекоммуникаций
+  description: Тактические перчатки, защищающие его обладателя от нежелательных соприкосновений.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Hands/Gloves/gloves_co.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Hands/Gloves/gloves_co.rsi
+
+- type: entity
+  parent: ClothingHandsGlovesCombat
+  id: ClothingHandsTaipanTS
+  name: перчатки руководителя техобеспечения
+  description: Изолированные перчатки с позолоченными вставками. Без них невозможно работать.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Hands/Gloves/gloves_ts.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Hands/Gloves/gloves_ts.rsi
