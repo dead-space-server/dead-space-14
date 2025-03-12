@@ -1242,6 +1242,9 @@
     - mining
     - miningB
   - type: Appearance
+  - type: Construction # DS14
+    graph: Girder
+    node: miningWall
 
 - type: entity
   parent: WallShuttleDiagonal
@@ -1264,7 +1267,9 @@
   - type: Icon
     sprite: Structures/Walls/mining_diagonal.rsi
     state: state0
-
+  - type: Construction # DS14
+    graph: Girder
+    node: diagonalMiningWall
 
 # Vault Walls
 

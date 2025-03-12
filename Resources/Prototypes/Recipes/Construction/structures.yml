@@ -89,6 +89,42 @@
     - !type:TileNotBlocked
 
 - type: construction
+  name: шахтёрская стена
+  id: MiningWall # DS14
+  graph: Girder
+  startNode: start
+  targetNode: miningWall
+  category: construction-category-structures
+  description: Держит воздух внутри, а ассистентов снаружи.
+  canBuildInImpassable: true
+  conditions:
+    - !type:EmptyOrWindowValidInTile
+    - !type:NoWindowsInTile
+  icon:
+    sprite: Structures/Walls/mining.rsi
+    state: full
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+
+- type: construction
+  name: диагональная шахтёрская стена
+  id: MiningWallDiagonal # DS14
+  graph: Girder
+  startNode: start
+  targetNode: diagonalMiningWall
+  category: construction-category-structures
+  description: Держит воздух внутри, а ассистентов снаружи.
+  icon:
+    sprite: Structures/Walls/mining_diagonal.rsi
+    state: state0
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
   name: clock wall
   id: WallClock
   graph: ClockworkGirder
