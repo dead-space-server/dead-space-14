@@ -758,7 +758,8 @@ WeaponSubMachineGunVectorRubber: null
 ExplosionRuneBook: null
 IgniteRuneBook: null
 
-# 2025-03-02 - DS14
+# 2025-02-25 - DS14
+ClothingUnderwearSocksSecurityPilot: ClothingUnderwearSocksSecurityOfficer
 CBURNSierraPDA: null
 CBURNSierraLeaderPDA: null
 CBURNSierraIDcard: null
