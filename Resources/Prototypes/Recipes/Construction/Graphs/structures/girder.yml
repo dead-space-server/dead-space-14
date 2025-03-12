@@ -419,10 +419,6 @@
       entity: WallMining
       edges:
         - to: reinforcedGirder
-          completed:
-            - !type:SpawnPrototype
-              prototype: SheetPlasteel1
-              amount: 2
           steps:
             - tool: Cutting
               doAfter: 2
@@ -445,13 +441,6 @@
       entity: WallMiningDiagonal
       edges:
         - to: reinforcedGirder
-          completed:
-            - !type:SpawnPrototype
-              prototype: SheetPlasteel1
-              amount: 2
-            - !type:SpawnPrototype
-              prototype: SheetSteel1
-              amount: 1
           steps:
             - tool: Welding
               doAfter: 5
