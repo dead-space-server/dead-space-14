@@ -125,7 +125,7 @@
   parent: ClothingOuterWinterCoatToggleable
   id: ClothingOuterWinterCoatToggleableDragonFoxMadParadox
   name: мантия с ушками KUMA
-  description: уютная мантия в стиле харадзюку с капюшоном для стильных приключений.
+  description: Уютная мантия в стиле харадзюку с капюшоном для стильных приключений.
   components:
     - type: Sprite
       sprite: _DeadSpace/Sponsor/DragonFox/MadParadox/outerclothingmadparadox.rsi
