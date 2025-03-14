@@ -201,7 +201,7 @@
   - type: Sprite
     state: ahahaahahaha
   - type: TTS
-    voice: DreadT
+    voice: Garithos # не указал
   - type: SpeakOnTrigger
     pack: PlushieAhahaahahahaSpeech
 
@@ -214,7 +214,7 @@
   - type: Sprite
     state: kriss
   - type: TTS
-    voice: ##################
+    voice: Demoman # не указал
   - type: SpeakOnTrigger
     pack: PlushieKrissSpeech
 
