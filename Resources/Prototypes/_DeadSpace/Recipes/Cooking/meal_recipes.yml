@@ -1,6 +1,6 @@
 - type: microwaveMealRecipe
   id: RecipeFoodMegaSandwich
-  name: рецепт мегасэндвича
+  name: megasandwich recipe
   result: FoodMegaSandwich
   time: 15
   reagents:
