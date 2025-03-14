@@ -1,0 +1,13 @@
+- type: microwaveMealRecipe
+  id: RecipeFoodMegaSandwich
+  name: рецепт мегасэндвича
+  result: FoodMegaSandwich
+  time: 15
+  reagents:
+    Mayo: 10
+  solids:
+    FoodBreadBaguette: 1
+    FoodMeatCutlet: 3
+    FoodCheeseSlice: 2
+    FoodTomato: 2
+    FoodCabbage: 1
