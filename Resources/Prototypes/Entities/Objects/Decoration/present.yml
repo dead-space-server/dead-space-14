@@ -159,6 +159,38 @@
         orGroup: GiftPool
       - id: PlushieLilaMarrnes
         orGroup: GiftPool
+      - id: PlushieDeadSpaceBoich
+        orGroup: GiftPool
+      - id: PlushieDeadSpaceCyberFox
+        orGroup: GiftPool
+      - id: PlushieDeadSpaceAhahaahahaha
+        orGroup: GiftPool
+      - id: PlushieDeadSpaceKriss
+        orGroup: GiftPool
+      - id: PlushieDeadSpaceOstwind
+        orGroup: GiftPool
+      - id: PlushieDeadSpaceJeleshka
+        orGroup: GiftPool
+      - id: PlushieDeadSpaceDobryash
+        orGroup: GiftPool
+      - id: PlushieDeadSpaceHqdishka
+        orGroup: GiftPool
+      - id: PlushieDeadSpaceWillie
+        orGroup: GiftPool
+      - id: PlushieDeadSpaceAinnete
+        orGroup: GiftPool
+      - id: PlushieDeadSpaceAlex
+        orGroup: GiftPool
+      - id: PlushieDeadSpaceElizabeth
+        orGroup: GiftPool
+      - id: PlushieDeadSpaceEllis
+        orGroup: GiftPool
+      - id: PlushieDeadSpaceKermuth
+        orGroup: GiftPool
+      - id: PlushieDeadSpaceLucius
+        orGroup: GiftPool
+      - id: PlushieDeadSpaceEvelina
+        orGroup: GiftPool
 
 - type: entity
   id: PresentFigurine
@@ -268,6 +300,10 @@
         orGroup: GiftPool
       - id: ToyFigurineNukieElite
         orGroup: GiftPool
+      - id: ToyFigurineDeadSpaceHqdishka
+        orGroup: SpacemenFig
+      - id: ToyFigurineDeadSpaceHacksLua
+        orGroup: SpacemenFig
 
 - type: entity
   id: PresentRandom
