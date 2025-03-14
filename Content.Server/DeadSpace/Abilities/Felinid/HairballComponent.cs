@@ -4,5 +4,8 @@ namespace Content.Server.DeadSpace.Abilities.Felinid
     public sealed partial class HairballComponent : Component
     {
         public string SolutionName = "hairball";
+
+        [DataField, ViewVariables(VVAccess.ReadWrite)]
+        public float VomitChance = 0.2f;
     }
 }

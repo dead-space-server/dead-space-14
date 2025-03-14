@@ -1,5 +1,4 @@
 using Content.Server.DeadSpace.Drug.Components;
-using Content.Server.DeadSpace.Drug;
 using Content.Shared.EntityEffects;
 using Robust.Shared.Prototypes;
 

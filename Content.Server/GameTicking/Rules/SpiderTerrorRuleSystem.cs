@@ -333,14 +333,22 @@ public sealed class SpiderTerrorRuleSystem : GameRuleSystem<SpiderTerrorRuleComp
         if (_timing.CurTime >= component.TimeUtilErtAnnouncement && !component.IsDeadSquadSend && component.IsStationCaptureActive(station))
         {
             component.IsDeadSquadSend = true;
-            _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("centcomm-announcement-death-squad-team"), playSound: true, colorOverride: Color.Green);
+            _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("spider-terror-centcomm-announcement-station-was-capture"), playSound: true, colorOverride: Color.Green);
+
+            if (TryComp<StationDataComponent>(station, out var data))
+            {
+                var msg = new GameGlobalSoundEvent(component.Sound, AudioParams.Default);
+                var stationFilter = _station.GetInStation(data);
+                stationFilter.AddPlayersByPvs(station, entityManager: EntityManager);
+                RaiseNetworkEvent(msg, stationFilter);
+            }
         }
 
         if (_timing.CurTime >= component.TimeUtilErtAnnouncement && !component.IsDeadSquadArrival && component.IsStationCaptureActive(station))
         {
             component.IsDeadSquadArrival = true;
-            _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("station-event-death-squad-team-arrival"), playSound: true, colorOverride: Color.Green);
-            GameTicker.AddGameRule("ShuttleDeathSquad");
+            _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("station-event-response-team-arrival"), playSound: true, colorOverride: Color.Green);
+            GameTicker.AddGameRule("ShuttleCBURNSCST");
         }
 
         if (_timing.CurTime >= component.TimeUtilErtAnnouncement && !component.IsCodeEpsilon && component.IsStationCaptureActive(station))
@@ -359,15 +367,6 @@ public sealed class SpiderTerrorRuleSystem : GameRuleSystem<SpiderTerrorRuleComp
         component.TimeUtilDeadSquadArrival = _timing.CurTime + component.DurationDeadSquadArrival + component.DurationDeadSquadAnnouncement;
         component.TimeUtilCodeEpsilon = _timing.CurTime + component.DurationCodeEpsilon + component.DurationDeadSquadAnnouncement + component.DurationDeadSquadArrival;
 
-        _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("spider-terror-centcomm-announcement-station-was-capture"), playSound: true, colorOverride: Color.MediumVioletRed);
-
-        if (TryComp<StationDataComponent>(station, out var data))
-        {
-            var msg = new GameGlobalSoundEvent(component.Sound, AudioParams.Default);
-            var stationFilter = _station.GetInStation(data);
-            stationFilter.AddPlayersByPvs(station, entityManager: EntityManager);
-            RaiseNetworkEvent(msg, stationFilter);
-        }
     }
 
     private (float progress, int spiderCount) GetCaptureStationProgress(EntityUid uid, EntityUid station, SpiderTerrorRuleComponent? component = null)
