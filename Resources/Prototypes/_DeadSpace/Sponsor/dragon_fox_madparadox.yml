@@ -28,6 +28,8 @@
     - id: ClothingOuterWinterCoatToggleableDragonFoxMadParadox
     - id: ClothingUniformJumpsuitDragonFoxMadParadox
     - id: ClothingShoesBootsMagDragonFoxMadParadox
+    - id: PlushieDragonFoxMedTech
+    - id: PlushieDragonFoxMadParadox
 
 # WaistBag
 - type: entity
