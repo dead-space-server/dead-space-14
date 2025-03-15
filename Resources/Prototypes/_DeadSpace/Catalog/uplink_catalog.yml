@@ -360,8 +360,3 @@
     whitelist:
       tags:
       - NukeOpsUplink
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
-      tags:
-      - NukeOpsUplink
