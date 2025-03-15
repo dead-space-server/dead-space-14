@@ -201,7 +201,7 @@
   - type: Sprite
     state: ahahaahahaha
   - type: TTS
-    voice: Garithos # не указал
+    voice: Clockwerk
   - type: SpeakOnTrigger
     pack: PlushieAhahaahahahaSpeech
 
