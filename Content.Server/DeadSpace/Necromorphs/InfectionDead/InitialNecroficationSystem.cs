@@ -2,6 +2,7 @@
 
 using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;
 using Content.Shared.Mobs.Components;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Content.Shared.DeadSpace.Necromorphs.InfectionDead;
 using Content.Shared.Humanoid;
@@ -11,6 +12,7 @@ namespace Content.Server.DeadSpace.Necromorphs.InfectionDead;
 public sealed partial class InitialNecroficationSystem : SharedInfectionDeadSystem
 {
     [Dependency] private readonly NecromorfSystem _necromorfSystem = default!;
+    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
     public override void Initialize()
@@ -18,7 +20,7 @@ public sealed partial class InitialNecroficationSystem : SharedInfectionDeadSyst
         base.Initialize();
 
         SubscribeLocalEvent<InitialNecroficationComponent, ComponentStartup>(OnComponentStartUp);
-        SubscribeLocalEvent<InitialNecroficationComponent, InitialNecroficationEvent>(StartNecrofication);
+        SubscribeLocalEvent<InitialNecroficationComponent, StartNecroficationEvent>(StartNecrofication);
     }
 
     public override void Update(float frameTime)
@@ -29,14 +31,15 @@ public sealed partial class InitialNecroficationSystem : SharedInfectionDeadSyst
         var necroQuery = EntityQueryEnumerator<InitialNecroficationComponent>();
         while (necroQuery.MoveNext(out var uid, out var component))
         {
+            // Process only once per second
             if (component.StartTick > curTime)
             {
                 continue;
             }
             else
             {
-                var ev = new InitialNecroficationEvent();
-                RaiseLocalEvent(uid, ref ev);
+                var startNecroficationEvent = new StartNecroficationEvent();
+                RaiseLocalEvent(uid, ref startNecroficationEvent);
                 continue;
             }
         }
@@ -50,7 +53,7 @@ public sealed partial class InitialNecroficationSystem : SharedInfectionDeadSyst
         component.StartTick = _timing.CurTime + TimeSpan.FromSeconds(0.2);
     }
 
-    private void StartNecrofication(EntityUid uid, InitialNecroficationComponent component, InitialNecroficationEvent arg)
+    private void StartNecrofication(EntityUid uid, InitialNecroficationComponent component, StartNecroficationEvent arg)
     {
         if (HasComp<NecromorfComponent>(uid))
             return;
