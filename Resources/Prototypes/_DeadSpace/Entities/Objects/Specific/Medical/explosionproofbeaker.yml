@@ -57,5 +57,3 @@
         type: TransferAmountBoundUserInterface
   - type: Drink
     solution: beaker
-    materialComposition:
-      Steel: 50
