@@ -34,3 +34,5 @@ uplink-revive-implanter-name = Восстанавливающий автоимл
 uplink-revive-implanter-desc = Имплант, который начнёт вводить в вас дозу физраствора и эпинефрина как только вы упадётё в критическое состояние.
 uplink-clothing-eyes-pnv-adv-syndicate-name = ПНВ Синдиката
 uplink-clothing-eyes-pnv-adv-syndicate-desc = Профессиональный ПНВ Синдиката с встроенным визором и белым фильтром, а так же поддержкой анализа здоровья команды.
+uplink-explosion-proof-beaker-name = Взрывоустойчевая мензурка
+uplink-explosion-proof-beaker-desc = Мензурка сделанная из особо прочного стекла, разработанная специально для элитных отрядов ядерных оперативников.

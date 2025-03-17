@@ -282,3 +282,18 @@
       whitelist:
         tags:
           - NukeOpsUplink
+
+- type: listing
+  id: UplinkExplosionProofBeaker
+  name: uplink-explosion-proof-beaker-name
+  description: uplink-explosion-proof-beaker-desc
+  productEntity: ExplosionProofBeaker
+  cost:
+    Telecrystal: 5
+  categories:
+    - UplinkChemicals
+  conditions:
+    - !type:StoreWhitelistCondition
+      whitelist:
+        tags:
+          - NukeOpsUplink
