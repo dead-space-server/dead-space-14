@@ -289,7 +289,7 @@
   description: Древняя классика. Содержит ПП Томпсона и 1 дополнительный магазин к нему. "Мистер Анджело? Мистер Сальери передаёт привет."
   icon: { sprite: /Textures/_DeadSpace/Items/Toys/TommyGun/tommy_gun.rsi, state: icon }
   productEntity: ClothingBackpackDuffelSyndicateFilledSMGTommyGunAgent
-  discountCategory: UsualDiscounts
+  discountCategory: usualDiscounts
   discountDownTo:
     Telecrystal: 11
   cost:
