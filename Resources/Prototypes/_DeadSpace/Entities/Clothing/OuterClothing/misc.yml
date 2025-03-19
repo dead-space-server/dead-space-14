@@ -1,0 +1,32 @@
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterApronTaipanBotanist
+  name: фартук
+  description: Фартук из прочной ткани, предназначенный для  работы с особо опасными растениями.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/OuterClothing/Misc/apron_botanist.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/OuterClothing/Misc/apron_botanist.rsi
+
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterApronTaipanChef
+  name: фартук
+  description: Тёмный фартук, используемый лучшими поварами Синдиката.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/OuterClothing/Misc/apron_chef.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/OuterClothing/Misc/apron_chef.rsi
+
+- type: entity
+  parent: ClothingOuterWinterCoat
+  id: ClothingOuterJacketTaipanChef
+  name: куртка повара
+  description: Тёплая куртка, предназначенная для работы в холожных условиях.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/OuterClothing/Misc/chefjacket.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/OuterClothing/Misc/chefjacket.rsi
