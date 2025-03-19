@@ -44,3 +44,11 @@
   frequency: 3918
   color: "#8539bf"
   longRange: false
+
+- type: radioChannel
+  id: Taipan
+  name: Тайпан
+  keycode: 'х' # DS14-Localization
+  frequency: 1460
+  color: "#87181c"
+  longRange: false

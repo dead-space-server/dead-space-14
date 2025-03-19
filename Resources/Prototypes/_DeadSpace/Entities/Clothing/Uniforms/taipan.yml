@@ -1,0 +1,286 @@
+# Атмосферный инженер
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitTaipanAtmos
+  name: комбинезон атмосферного инженера
+  description: Функциональный комбинезон с множеством карманов, идеально подходящий для работы в техногенной среде.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/atmos_jumpsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/atmos_jumpsuit.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpskirtTaipanAtmos
+  name: юбка-комбинезон атмосферного инженера
+  description: Практичная юбка-комбинезон с воздухопроницаемыми вставками и просторными карманами для работы в разноплановых условиях.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/atmos_jumpskirt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/atmos_jumpskirt.rsi
+
+# Ботаник
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitTaipanBotanist
+  name: комбинезон ботаника
+  description: Комбинезон для ботаников, удобный для работы в саду и лаборатории с растениями.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/botanist_jumpsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/botanist_jumpsuit.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpskirtTaipanBotanist
+  name: юбка-комбинезон ботаника
+  description: Практичная юбка-комбинезон для ботаников, обеспечивающая свободу передвижения и удобство работы с растениями.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/botanist_jumpskirt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/botanist_jumpskirt.rsi
+
+# Повар
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitTaipanChef
+  name: комбинезон повара
+  description: Стильный чёрный костюм с кроваво-красной рубашкой, сочетающий элегантность и практичность для кулинарных шедевров.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/chef_jumpsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/chef_jumpsuit.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpskirtTaipanChef
+  name: юбка-комбинезон повара
+  description: Удивительно элегантное платье с золотым орнаментом, сделанное из устойчивой к загрязнению ткани.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/chef_jumpskirt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/chef_jumpskirt.rsi
+
+# Руководитель технических операций
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitTaipanTechnicalOperationsSupervisor
+  name: комбинезон руководителя техобеспечения
+  description: Прочный и функциональный комбинезон с высокотехнологичным дизайном для специалистов.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/supervisor_jumpsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/supervisor_jumpsuit.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpskirtTaipanTechnicalOperationsSupervisor
+  name: юбка-комбинезон руководителя техобеспечения
+  description: Прочная и стильная юбка-комбинезон для тех, кто управляет инженерными проектами.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/supervisor_jumpskirt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/supervisor_jumpskirt.rsi
+
+# Офицер телекоммуникаций
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitTaipanCommunicationsOfficer
+  name: комбинезон офицера телекоммуникаций
+  description: Современный комбинезон с высокотехнологичными элементами для работы с коммуникационными системами.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/co_jumpsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/co_jumpsuit.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpskirtTaipanCommunicationsOfficer
+  name: юбка-комбинезон офицера телекоммуникаций
+  description: Стильная юбка-комбинезон для работы с телекоммуникациями, обеспечивающая комфорт и профессиональный вид.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/co_jumpskirt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/co_jumpskirt.rsi
+
+# Медик
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitTaipanMedic
+  name: комбинезон медика
+  description: Белый медицинский комбинезон, подходящий для оказания медицинской помощи и диагностики.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/medic_jumpsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/medic_jumpsuit.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpskirtTaipanMedic
+  name: юбка-комбинезон медика
+  description: Элегантная юбка-комбинезон для медиков, обеспечивающая комфорт и профессиональный вид в медицинской среде.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/medic_jumpskirt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/medic_jumpskirt.rsi
+
+# Парамедик
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitTaipanParamedic
+  name: комбинезон парамедика
+  description: Практичный комбинезон для парамедиков, идеально подходящий для экстренной медицины.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/paramedic_jumpsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/paramedic_jumpsuit.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpskirtTaipanParamedic
+  name: юбка-комбинезон парамедика
+  description: Компактная и удобная юбка-комбинезон, позволяющая парамедикам быстро и эффективно оказывать помощь.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/paramedic_jumpskirt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/paramedic_jumpskirt.rsi
+
+# Рекрут
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitTaipanRecruit
+  name: комбинезон рекрута
+  description: Базовый комбинезон, сочетающий практичность и комфорт для начального обучения и работы.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/recruit_jumpsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/recruit_jumpsuit.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpskirtTaipanRecruit
+  name: юбка-комбинезон рекрута
+  description: Удобная и универсальная юбка-комбинезон, созданная для новичков, выделяющаяся своей стильной униформой.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/recruit_jumpskirt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/recruit_jumpskirt.rsi
+
+# Директор исследований
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitTaipanResearchDirector
+  name: комбинезон директора исследований
+  description: Элегантный комбинезон, сочетающий стиль и функциональность для главы научного отдела.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/rd_jumpsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/rd_jumpsuit.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpskirtTaipanResearchDirector
+  name: юбка-комбинезон директора исследований
+  description: Эксклюзивная юбка-комбинезон с элегантной отделкой для научных лидеров.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/rd_jumpskirt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/rd_jumpskirt.rsi
+
+# исследователь
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitTaipanScientist
+  name: комбинезон исследователя
+  description: Униформа исследователя, подходящая для лабораторных исследований и экспериментов.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/scientist_jumpsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/scientist_jumpsuit.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpskirtTaipanScientist
+  name: юбка-комбинезон исследователя
+  description: Практичная и стильная юбка-комбинезон, подходящая для научных исследований и лабораторных экспериментов.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/scientist_jumpskirt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/scientist_jumpskirt.rsi
+
+# Ремонтник
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitTaipanStationEngineer
+  name: комбинезон ремонтника
+  description: Комбинезон для инженерных задач, усиленный для работы в тяжёлых условиях.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/engineer_jumpsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/engineer_jumpsuit.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpskirtTaipanStationEngineer
+  name: юбка-комбинезон ремонтника
+  description: Практичная юбка-комбинезон для инженерных задач, обеспечивающая комфорт и защиту в тяжёлых условиях.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/engineer_jumpskirt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/engineer_jumpskirt.rsi
+
+# Карготехник
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitTaipanCargo
+  name: комбинезон карготехника
+  description: Практичный комбинезон с усиленными швами для тяжелой рабочей среды.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/cargo_jumpsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/cargo_jumpsuit.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpskirtTaipanCargo
+  name: юбка-комбинезон карготехника
+  description: Элегантная юбка-комбинезон с прочной тканью для работы, обеспечивающая свободу передвижения.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/cargo_jumpskirt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/cargo_jumpskirt.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitTaipanCargotech
+  name: рабочий комбинезон карготехника
+  description: Прочный и надежный комбинезон, идеально подходящий для интенсивной нагрузки и полной защиты во время работы.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/cargotech_jumpsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/cargotech_jumpsuit.rsi

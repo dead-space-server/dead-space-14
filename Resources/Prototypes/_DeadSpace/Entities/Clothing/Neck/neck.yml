@@ -19,3 +19,13 @@
     sprite: _DeadSpace/Clothing/Neck/pron_maid.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/Neck/pron_maid.rsi
+
+# Офицер телекоммуникаций
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckCloakCommunicationsOfficer
+  name: наплечная мантия офицера телекоммуникаций
+  description: Шёлковая мантия багрового цвета. Выглядит одновременно роскошно и зловеще.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/comantle.rsi
