@@ -191,6 +191,13 @@
   - HoPWintercoat
 
 - type: loadoutGroup
+  id: HoPShoes
+  name: loadout-group-hop-shoes
+  loadouts:
+  - ShoesBootsLaceup
+  - BrownShoes
+  
+- type: loadoutGroup
   id: HoPUnderwear
   name: loadout-group-hop-underwear
   minLimit: 2
@@ -794,6 +801,7 @@
   loadouts:
   - BrownShoes
   - CargoWinterBoots
+  - ShoesBootsLaceup
 
 - type: loadoutGroup
   id: QuartermasterUnderwear
@@ -942,6 +950,7 @@
   loadouts:
   - BrownShoes
   - EngineeringWinterBoots
+  - ShoesBootsLaceup
 
 - type: loadoutGroup
   id: ChiefEngineerUnderwear
@@ -1122,6 +1131,7 @@
   loadouts:
   - BrownShoes
   - ScienceWinterBoots
+  - ShoesBootsLaceup
 
 - type: loadoutGroup
   id: ResearchDirectorUnderwear
@@ -1268,6 +1278,22 @@
   - HeadofSecurityWinterCoat
 
 - type: loadoutGroup
+  id: HeadofSecurityShoes
+  name: loadout-group-head-of-security-shoes
+  loadouts:
+  - JackSecBoots
+  - CombatBoots
+  - JackBoots
+  - ShoesBootsLaceup
+
+- type: loadoutGroup
+  id: HeadofSecuritySocks
+  name: loadout-group-head-of-security-socks
+  loadouts:
+  - UnderwearSocksHeadOfSecurity
+  - UnderwearWomenSocksHeadOfSecurity
+
+- type: loadoutGroup
   id: HeadofSecurityUnderwear
   name: loadout-group-head-of-security-underwear
   minLimit: 2
@@ -1300,6 +1326,13 @@
   - WardenArmoredWinterCoat
 
 - type: loadoutGroup
+  id: WardenSocks
+  name: loadout-group-warden-socks
+  loadouts:
+  - UnderwearSocksWarden
+  - UnderwearWomenSocksWarden
+
+- type: loadoutGroup
   id: WardenUnderwear
   name: loadout-group-warden-underwear
   minLimit: 2
@@ -1318,6 +1351,13 @@
   - SecurityBeret
   - SecurityHat
   - TrooperHat
+
+- type: loadoutGroup
+  id: SecurityMask
+  name: loadout-group-security-mask
+  minLimit: 0
+  loadouts:
+  - SecurityBandana
 
 - type: loadoutGroup
   id: SecurityJumpsuit
@@ -1371,6 +1411,13 @@
   # - SeniorOfficerPDA
 
 - type: loadoutGroup
+  id: SecuritySocks
+  name: loadout-group-security-socks
+  loadouts:
+  - UnderwearSocksSecurityOfficer
+  - UnderwearWomenSocksSecurityOfficer
+
+- type: loadoutGroup
   id: SecurityUnderwear
   name: loadout-group-security-underwear
   minLimit: 2
@@ -1405,12 +1452,37 @@
   - NoirJumpskirt
 
 - type: loadoutGroup
+  id: DetectiveBackpack
+  name: loadout-group-detective-backpack
+  loadouts:
+  - SecurityBackpack
+  - SecuritySatchel
+  - SecurityDuffel
+  - DetectiveSatchel
+  - DetectiveGreySatchel
+
+- type: loadoutGroup
   id: DetectiveOuterClothing
   name: loadout-group-detective-outerclothing
   loadouts:
   - DetectiveArmorVest
   - DetectiveCoat
   - DetectiveCoatGrey
+  - DetectiveCoatAlt
+
+- type: loadoutGroup
+  id: DetectiveShoes
+  name: loadout-group-detective-shoes
+  loadouts:
+  - DetectiveBoots
+  - DetectiveGreyBoots
+
+- type: loadoutGroup
+  id: DetectiveSocks
+  name: loadout-group-detective-socks
+  loadouts:
+  - UnderwearSocksDetective
+  - UnderwearWomenSocksDetective
 
 - type: loadoutGroup
   id: DetectiveUnderwear
@@ -1428,6 +1500,13 @@
   loadouts:
   - RedJumpsuit
   - RedJumpskirt
+
+- type: loadoutGroup
+  id: SecurityCadetSocks
+  name: loadout-group-security-cadet-socks
+  loadouts:
+  - UnderwearSocksCadet
+  - UnderwearWomenSocksCadet
 
 - type: loadoutGroup
   id: SecurityCadetUnderwear
@@ -1510,6 +1589,7 @@
   loadouts:
   - BrownShoes
   - MedicalWinterBoots
+  - ShoesBootsLaceup
 
 - type: loadoutGroup
   id: ChiefMedicalOfficerUnderwear
