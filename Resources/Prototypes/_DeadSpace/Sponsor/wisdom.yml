@@ -1,0 +1,284 @@
+# Sponsor Loadout
+- type: sponsorLoadout
+  id: Wisdom
+  entity: ClothingBackpackWisdom
+  sponsorOnly: true
+
+# Backpack
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackWisdom
+  name: рюкзак спасателя
+  description: Этот рюкзак предназначен для хранения медицинских принадлежностей и инструментов, необходимых для быстрого реагирования в экстренных ситуациях.
+  suffix: Доминатор, Не спавнить
+ # categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Wisdom/backpack.rsi
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,11,5
+  - type: StorageFill
+    contents:
+    - id: ClothingBeltWisdom
+    - id: ClothingHandsGlovesWisdom
+    - id: ClothingOuterHardsuitWisdom
+    - id: ClothingUniformJumpsuitWisdom
+    - id: ClothingShoesBootsMagWisdom
+    - id: ClothingMaskWisdom
+    - id: ClothingHeadsetWisdom
+    - id: PDAWisdom
+    - id: ClothingOuterCoatWisdom
+    - id: ClothingBeltHolsterWisdom
+    - id: SyndicateJawsOfLifeWisdom
+
+# Belt
+- type: entity
+  parent: ClothingBeltStorageBase
+  id: ClothingBeltWisdom
+  name: РПС спасателя
+  description: Разгрузочный жилет с медикаментами, необходимыми для оказания помощи и спасения жизней в экстремальных условиях.
+  # categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Wisdom/belt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Wisdom/belt.rsi
+  - type: Item
+    size: Huge
+  - type: Storage
+    whitelist:
+      tags:
+      - Bottle
+      - Spray
+      - Brutepack
+      - Bloodpack
+      - Gauze
+      - Ointment
+      - PillCanister
+      - SurgeryTool
+      - Dropper
+      - SecBeltEquip
+      components:
+      - Hypospray
+      - Injector
+      - Pill
+
+# Gloves
+- type: entity
+  parent: ClothingHandsGlovesCombat
+  id: ClothingHandsGlovesWisdom
+  name: защитные перчатки спасателя
+  description: Перчатки, обеспечивающие защиту рук в опасных условиях, идеальны для оказания первой помощи. Изолированы.
+  # categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Wisdom/gloves.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Wisdom/gloves.rsi
+  - type: Fiber
+    fiberMaterial: fibers-insulative
+    fiberColor: fibers-red
+
+# Hardsuit
+- type: entity
+  parent: ClothingOuterHardsuitAtmos
+  id: ClothingOuterHardsuitWisdom
+  name: скафандр "Хранитель"
+  description: Скафандр с биокодированием, обеспечивающий защиту в критических ситуациях.
+  # categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Wisdom/hardsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Wisdom/hardsuit.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitWisdom
+  - type: Item
+    size: Huge
+  - type: HardsuitIdentification
+
+- type: entity
+  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase, ShowMedicalIcons ]
+  id: ClothingHeadHelmetHardsuitWisdom
+  # categories: [ HideSpawnMenu ]
+  name: шлем "Хранитель"
+  description: Шлем с встроенным медицинским визором, который обеспечивает защиту и освещение для работы в темных условиях.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Wisdom/helmet.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Wisdom/helmet.rsi
+  - type: PointLight
+    color: "#ebebeb"
+  - type: PressureProtection
+    highPressureMultiplier: 0.08
+    lowPressureMultiplier: 1000
+  - type: ShowHealthBars
+    damageContainers:
+    - Biological
+    - Inorganic
+    - Silicon
+  - type: FlashImmunity
+  - type: EyeProtection
+
+# Jumpsuit
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpsuitWisdom
+  name: комбинезон спасателя
+  description: Стильный и функциональный комбинезон, который обеспечивает комфорт и свободу передвижения во время спасательных операций.
+  # categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Wisdom/jumpsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Wisdom/jumpsuit.rsi
+
+# Magboots
+- type: entity
+  parent: ClothingShoesBootsMag
+  id: ClothingShoesBootsMagWisdom
+  name: магнитные ботинки спасателя
+  description: Ботинки, обеспечивающие отличное сцепление с поверхностями для выполнения задач в условиях невесомости.
+  # categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Wisdom/magboots.rsi
+    layers:
+    - state: icon
+      map: [ "enum.ToggleVisuals.Layer" ]
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Wisdom/magboots.rsi
+  - type: ClothingSpeedModifier
+    walkModifier: 0.95
+    sprintModifier: 0.9
+
+# Mask
+- type: entity
+  parent: ClothingMaskGas
+  id: ClothingMaskWisdom
+  name: противогаз спасателя
+  description: Противогаз, защищающий от токсичных веществ и обеспечивающий дыхание в неблагоприятных условиях.
+  # categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Wisdom/gasmask.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Wisdom/gasmask.rsi
+
+# Headset
+- type: entity
+  parent: ClothingHeadset
+  id: ClothingHeadsetWisdom
+  name: гарнитура спасателя
+  description: Гарнитура, обеспечивающая связь и возможность получения критической информации в полевых условиях.
+  # categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Wisdom/headset.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Wisdom/headset.rsi
+
+# PDA
+- type: entity
+  parent: BaseMedicalPDA
+  id: PDAWisdom
+  name: КПК спасателя
+  description: Персональный цифровой помощник с встроенными GPS и медицинским сканером для отслеживания состояния пациентов.
+  # categories: [ HideSpawnMenu ]
+  components:
+  - type: Icon
+    sprite: _DeadSpace/Sponsor/Wisdom/pda.rsi
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Wisdom/pda.rsi
+  - type: CartridgeLoader
+    uiKey: enum.PdaUiKey.Key
+    preinstalled:
+    - CrewManifestCartridge
+    - NotekeeperCartridge
+    - NewsReaderCartridge
+    - AstroNavCartridge
+    - MedTekCartridge
+  - type: PdaBorderColor
+    borderColor: "#222227"
+
+# JawsOfLife
+- type: entity
+  parent: SyndicateJawsOfLife
+  id: SyndicateJawsOfLifeWisdom
+  name: челюсти жизни спасателя
+  description: Изготовлено на заказ организацией LaFleur Wear.
+  # categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Wisdom/jawsoflife.rsi
+    state: syn_jaws_pry
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: syn_inhand-left
+      right:
+      - state: syn_inhand-right
+    size: Normal
+  - type: MultipleTool
+    entries:
+    - behavior: Prying
+      sprite:
+        sprite: _DeadSpace/Sponsor/Wisdom/jawsoflife.rsi
+        state: syn_jaws_pry
+      useSound: /Audio/Items/jaws_pry.ogg
+      changeSound: /Audio/Items/change_jaws.ogg
+    - behavior: Cutting
+      sprite:
+        sprite: _DeadSpace/Sponsor/Wisdom/jawsoflife.rsi
+        state: syn_jaws_cutter
+      useSound: /Audio/Items/jaws_cut.ogg
+      changeSound: /Audio/Items/change_jaws.ogg
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 14
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Wisdom/jawsoflife.rsi
+    quickEquip: false
+    slots:
+    - Belt
+
+# Coat
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterCoatWisdom
+  name: защитная куртка спасателя
+  description: Укреплённая куртка, защищающая владельца во время спасательных операций.
+  # categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Wisdom/coat.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Wisdom/coat.rsi
+
+# Holster
+- type: entity
+  parent: ClothingBeltStorageBase
+  id: ClothingBeltHolsterWisdom
+  name: наплечная сумка спасателя
+  description: Наплечная сумка для удобного ношения дефибриллятора.
+  # categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Wisdom/hipbag.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Wisdom/hipbag.rsi
+    slots:
+    - neck
+  - type: Storage
+    grid:
+    - 0,0,3,1
+    maxItemSize: Large
+    whitelist:
+      components:
+      - Defibrillator
+  - type: Item
+    size: Normal
