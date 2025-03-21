@@ -8,7 +8,7 @@
 - type: entity
   parent: ClothingBackpack
   id: ClothingBackpackWisdom
-  name: рюкзак спасателя
+  name: рюкзак Мед-Техника
   description: Этот рюкзак предназначен для хранения медицинских принадлежностей и инструментов, необходимых для быстрого реагирования в экстренных ситуациях.
   suffix: Доминатор, Не спавнить
  # categories: [ HideSpawnMenu ]
@@ -32,14 +32,16 @@
     - id: ClothingOuterCoatWisdom
     - id: ClothingBeltHolsterWisdom
     - id: SyndicateJawsOfLifeWisdom
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 # Belt
 - type: entity
   parent: ClothingBeltStorageBase
   id: ClothingBeltWisdom
-  name: РПС спасателя
+  name: РПС Мед-Техника
   description: Разгрузочный жилет с медикаментами, необходимыми для оказания помощи и спасения жизней в экстремальных условиях.
-  # categories: [ HideSpawnMenu ]
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Wisdom/belt.rsi
@@ -69,9 +71,9 @@
 - type: entity
   parent: ClothingHandsGlovesCombat
   id: ClothingHandsGlovesWisdom
-  name: защитные перчатки спасателя
+  name: защитные перчатки Мед-Техника
   description: Перчатки, обеспечивающие защиту рук в опасных условиях, идеальны для оказания первой помощи. Изолированы.
-  # categories: [ HideSpawnMenu ]
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Wisdom/gloves.rsi
@@ -80,14 +82,16 @@
   - type: Fiber
     fiberMaterial: fibers-insulative
     fiberColor: fibers-red
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 # Hardsuit
 - type: entity
   parent: ClothingOuterHardsuitAtmos
   id: ClothingOuterHardsuitWisdom
-  name: скафандр "Хранитель"
+  name: скафандр Мед-Техника
   description: Скафандр с биокодированием, обеспечивающий защиту в критических ситуациях.
-  # categories: [ HideSpawnMenu ]
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Wisdom/hardsuit.rsi
@@ -98,12 +102,26 @@
   - type: Item
     size: Huge
   - type: HardsuitIdentification
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.65
+        Slash: 0.65
+        Piercing: 0.55
+        Heat: 0.65
+        Radiation: 0.55
+        Caustic: 0.55
+  - type: ClothingSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
   parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase, ShowMedicalIcons ]
   id: ClothingHeadHelmetHardsuitWisdom
-  # categories: [ HideSpawnMenu ]
-  name: шлем "Хранитель"
+  categories: [ HideSpawnMenu ]
+  name: шлем скафандра Мед-Техника
   description: Шлем с встроенным медицинским визором, который обеспечивает защиту и освещение для работы в темных условиях.
   components:
   - type: Sprite
@@ -120,29 +138,32 @@
     - Biological
     - Inorganic
     - Silicon
-  - type: FlashImmunity
   - type: EyeProtection
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 # Jumpsuit
 - type: entity
   parent: ClothingUniformSkirtBase
   id: ClothingUniformJumpsuitWisdom
-  name: комбинезон спасателя
+  name: комбинезон Мед-Техника
   description: Стильный и функциональный комбинезон, который обеспечивает комфорт и свободу передвижения во время спасательных операций.
-  # categories: [ HideSpawnMenu ]
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Wisdom/jumpsuit.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Wisdom/jumpsuit.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 # Magboots
 - type: entity
   parent: ClothingShoesBootsMag
   id: ClothingShoesBootsMagWisdom
-  name: магнитные ботинки спасателя
+  name: магнитные ботинки Мед-Техника
   description: Ботинки, обеспечивающие отличное сцепление с поверхностями для выполнения задач в условиях невесомости.
-  # categories: [ HideSpawnMenu ]
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Wisdom/magboots.rsi
@@ -154,40 +175,46 @@
   - type: ClothingSpeedModifier
     walkModifier: 0.95
     sprintModifier: 0.9
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 # Mask
 - type: entity
   parent: ClothingMaskGas
   id: ClothingMaskWisdom
-  name: противогаз спасателя
+  name: противогаз Мед-Техника
   description: Противогаз, защищающий от токсичных веществ и обеспечивающий дыхание в неблагоприятных условиях.
-  # categories: [ HideSpawnMenu ]
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Wisdom/gasmask.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Wisdom/gasmask.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 # Headset
 - type: entity
   parent: ClothingHeadset
   id: ClothingHeadsetWisdom
-  name: гарнитура спасателя
+  name: гарнитура Мед-Техника
   description: Гарнитура, обеспечивающая связь и возможность получения критической информации в полевых условиях.
-  # categories: [ HideSpawnMenu ]
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Wisdom/headset.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Wisdom/headset.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 # PDA
 - type: entity
   parent: BaseMedicalPDA
   id: PDAWisdom
-  name: КПК спасателя
+  name: КПК Мед-Техника
   description: Персональный цифровой помощник с встроенными GPS и медицинским сканером для отслеживания состояния пациентов.
-  # categories: [ HideSpawnMenu ]
+  categories: [ HideSpawnMenu ]
   components:
   - type: Icon
     sprite: _DeadSpace/Sponsor/Wisdom/pda.rsi
@@ -203,14 +230,16 @@
     - MedTekCartridge
   - type: PdaBorderColor
     borderColor: "#222227"
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 # JawsOfLife
 - type: entity
   parent: SyndicateJawsOfLife
   id: SyndicateJawsOfLifeWisdom
-  name: челюсти жизни спасателя
+  name: челюсти жизни Мед-Техника
   description: Изготовлено на заказ организацией LaFleur Wear.
-  # categories: [ HideSpawnMenu ]
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Wisdom/jawsoflife.rsi
@@ -250,22 +279,24 @@
 - type: entity
   parent: ClothingOuterStorageBase
   id: ClothingOuterCoatWisdom
-  name: защитная куртка спасателя
+  name: защитная куртка Мед-Техника
   description: Укреплённая куртка, защищающая владельца во время спасательных операций.
-  # categories: [ HideSpawnMenu ]
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Wisdom/coat.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Wisdom/coat.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 # Holster
 - type: entity
   parent: ClothingBeltStorageBase
   id: ClothingBeltHolsterWisdom
-  name: наплечная сумка спасателя
-  description: Наплечная сумка для удобного ношения дефибриллятора.
-  # categories: [ HideSpawnMenu ]
+  name: набедренная сумка Мед-Техника
+  description: Набедренная сумка для удобного ношения дефибриллятора.
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Wisdom/hipbag.rsi
@@ -282,3 +313,5 @@
       - Defibrillator
   - type: Item
     size: Normal
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
