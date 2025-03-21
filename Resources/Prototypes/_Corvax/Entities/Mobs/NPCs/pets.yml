@@ -17,7 +17,7 @@
           shape:
             !type:PhysShapeCircle
             radius: 0.48
-          density: 200
+          density: 600 # DS14
           mask:
             - MobMask
           layer:
@@ -48,3 +48,35 @@
     - type: Tag
       tags:
         - CannotSuicide
+    - type: Inventory # DS14
+      speciesId: gorilla
+      templateId: largo
+    - type: InventorySlots # DS14
+    - type: Strippable # DS14
+    - type: UserInterface # DS14
+      interfaces:
+        enum.StrippingUiKey.Key:
+          type: StrippableBoundUserInterface
+    - type: Loadout # DS14
+      prototypes: [ MobLargoGear ]
+    - type: IdExaminable # DS14
+    - type: GhostRole # DS14
+      allowMovement: true
+      name: ghost-role-information-largo-name
+      description: ghost-role-information-largo-description
+      rules: ghost-role-information-nonantagonist-rules
+      requirements:
+        - !type:OverallPlaytimeRequirement
+          time: 72000 # 20 hours
+        - !type:DepartmentTimeRequirement
+          department: Cargo
+          time: 36000 # 19 hours
+    - type: GhostTakeoverAvailable # DS14
+    - type: Speech # DS14
+      speechSounds: Bass
+      speechVerb: Monkey
+    - type: MonkeyAccent # DS14
+    - type: MeleeWeapon # DS14
+      damage:
+        types:
+          Blunt: 7
