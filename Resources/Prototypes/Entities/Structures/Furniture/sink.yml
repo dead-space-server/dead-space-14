@@ -81,6 +81,9 @@
         reagents:
         - ReagentId: Water
           Quantity: 500
+  - type: Construction # DS14
+    graph: Sink
+    node: Sink
 
 - type: entity
   name: wide sink

@@ -896,6 +896,41 @@
   placementMode: SnapgridCenter
   canBuildInImpassable: false
 
+- type: construction # DS14
+  name: sink
+  id: Sink
+  graph: Sink
+  startNode: start
+  targetNode: Sink
+  category: construction-category-structures
+  description: Just like a lattice. Except it looks better.
+  conditions:
+    - !type:TileNotBlocked
+  icon:
+    sprite: Structures/Furniture/sink.rsi
+    state: sink_stem
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  canBuildInImpassable: false
+
+- type: construction # DS14
+  name: drain
+  id: FloorDrain
+  graph: FloorDrain
+  startNode: start
+  targetNode: FloorDrain
+  category: construction-category-structures
+  description: Just like a lattice. Except it looks better.
+  conditions:
+    - !type:TileNotBlocked
+  icon:
+    sprite: Objects/Specific/Janitorial/drain.rsi
+    state: icon
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+
 - type: construction
   name: bananium floor
   id: FloorBananium

@@ -1,0 +1,26 @@
+- type: constructionGraph
+  id: FloorDrain
+  start: start
+  graph:
+    - node: start
+      edges:
+        - to: FloorDrain
+          completed:
+            - !type:SnapToGrid
+          steps:
+            - material: Gold
+              amount: 30
+
+    - node: FloorDrain
+      entity: FloorDrain
+      edges:
+        - to: start
+          completed:
+          - !type:SpawnPrototype
+                prototype: IngotGold1
+                amount: 30
+          - !type:DeleteEntity {}
+          steps:
+            - tool: Screwing
+              doAfter: 2
+

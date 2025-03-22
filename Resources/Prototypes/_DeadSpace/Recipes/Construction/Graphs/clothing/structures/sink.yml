@@ -1,0 +1,26 @@
+- type: constructionGraph
+  id: Sink
+  start: start
+  graph:
+    - node: start
+      edges:
+        - to: Sink
+          completed:
+            - !type:SnapToGrid
+          steps:
+            - material: Gold
+              amount: 30
+
+    - node: Sink
+      entity: Sink
+      edges:
+        - to: start
+          completed:
+          - !type:SpawnPrototype
+                prototype: IngotGold1
+                amount: 30
+          - !type:DeleteEntity {}
+          steps:
+            - tool: Screwing
+              doAfter: 2
+
