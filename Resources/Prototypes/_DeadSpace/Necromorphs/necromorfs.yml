@@ -133,7 +133,7 @@
   thresholdMultiply: 4
   damage:
     groups:
-      Brute: 35
+      Brute: 50
     types:
       Structural: 40
   damageModifierSet: Necromorf

@@ -79,7 +79,7 @@ public sealed partial class NecromorfSystem
         if (!Resolve(target, ref mobState, logMissing: false))
             return;
 
-        var necromorfComp = AddComp<NecromorfComponent>(target);
+        var necromorfComp = EnsureComp<NecromorfComponent>(target);
 
         NecromorfLayerComponent necromorfLayercomp = new NecromorfLayerComponent(necromorf.Sprite, necromorf.State, necromorf.IsAnimal);
 

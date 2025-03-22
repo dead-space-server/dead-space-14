@@ -154,7 +154,6 @@ research-technology-basic-necro-research = Некротехнологии
 
 # Actions
 
-ent-ActionUnitologObeliskSpawn = Призвать обелиск
-    .desc = Призвать обелиск находясь рядом с тремя порабощёнными и трупом гуманоида.
-ent-ActionUnitologTentacleSpawn = Разместить некро щупальца
-    .desc = Разместить щупальца некро, наносящие урон, но не распространяющиеся.
+ent-ActionUnitologObeliskActivate = Запустить схождение обелиска
+    .desc = Запустить схождение рядом стоящего обелиска.
+
