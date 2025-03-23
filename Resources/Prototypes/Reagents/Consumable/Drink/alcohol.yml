@@ -205,8 +205,8 @@
         boozePower: 2
       # DeadSpace
       - !type:DrugIntoxication
-        addictionEffect: 0.08
-        toleranceEffect: 0.04
+        addictionEffect: 0.05
+        toleranceEffect: 0.0015
         drugStrenght: 1
 
 - type: reagent

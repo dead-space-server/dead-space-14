@@ -17,6 +17,6 @@ reagent-effect-guidebook-cure-drug-intoxication =
     } время до начала наркотической ломки
 
 drug-addication-effects-medium-plus = Вас ломает, хочется принять наркотик!
-drug-addication-effects-medium = Вы чувствуете озноб и повышенное давление
-drug-addication-effects-low = Вы чувствуете слабость и навязчивое желание
+drug-addication-effects-medium = Вы чувствуете озноб и повышенное давление, желание принять наркотик
+drug-addication-effects-low = Вы чувствуете слабость и навязчивое желание принять наркотик
 drug-addication-effects-high = Вам очень плохо, тяжело дышать, хочется принять наркотик!

@@ -22,7 +22,7 @@ public sealed partial class DrugInitializeMachineComponent : Component
 
     [DataField("paper", required: false, customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
     [ViewVariables(VVAccess.ReadOnly)]
-    public string Paper { get; set; } = "DiagnosisReportPaper";
+    public string Paper { get; set; } = "DrugInitializeDiagnoserReportPaper";
 
     [DataField]
     [ViewVariables(VVAccess.ReadOnly)]

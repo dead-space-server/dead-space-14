@@ -9,4 +9,4 @@ drug-test-message-paper =
       - Толерантность: {$tolerance}.
       Ломка:
       - Сила: {$withdrawal}.
-      - Время до/после: {$time}.
+      - Время до начала: {$time}.

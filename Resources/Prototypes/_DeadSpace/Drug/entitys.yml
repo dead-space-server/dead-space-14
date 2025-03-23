@@ -25,6 +25,32 @@
       amount: 10
 
 - type: entity
+  name: отчёт диагноста наркотической зависимости
+  parent: Paper
+  id: DrugInitializeDiagnoserReportPaper
+  description: «Леденящий душу медицинский отчёт».
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/bureaucracy.rsi
+    layers:
+    - state: paper_receipt
+    - state: paper_receipt_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: paper_stamp-generic
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundImagePath: "/Textures/Interface/Paper/paper_background_perforated.svg.96dpi.png"
+    headerImagePath: "/Textures/Interface/Paper/paper_heading_artifact_analyzer.svg.96dpi.png"
+    headerMargin: 0.0, 0.0, 0.0, 6.0
+    backgroundImageTile: true
+    backgroundPatchMargin: 0.0, 6.0, 0.0, 6.0
+    contentMargin: 24.0, 0.0, 24.0, 0.0
+    # This is a narrow piece of paper
+    maxWritableArea: 240.0, 0.0
+
+- type: entity
   id: DrugInitializeDiagnoserCircuitboard
   parent: BaseMachineCircuitboard
   name: плата машины диагностики наркотической зависимости
@@ -48,13 +74,13 @@
   id: DrugInitializeDiagnoser
   parent: [ BaseMachinePowered, SmallConstructibleMachine ]
   name: машина диагностики наркотической зависимости
-  description: Машина, которая анализирует образцы слюны.
+  description: Анализирует образцы слюны, определяет наркотическую зависимость существа.
   placement:
     mode: SnapgridCenter
   components:
   - type: DrugInitializeMachine
   - type: Sprite
-    sprite: Structures/Machines/diagnoser.rsi
+    sprite: _DeadSpace/Drug/diagnoser.rsi
     layers:
     - state: icon
       map: ["enum.DiseaseMachineVisualLayers.IsRunning"]
