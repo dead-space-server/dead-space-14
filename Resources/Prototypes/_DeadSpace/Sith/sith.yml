@@ -118,7 +118,6 @@
     description: ghost-role-information-sith-description
     rules: ghost-role-information-antagonist-rules
     requirements:
-    requirements:
     - !type:DepartmentTimeRequirement
       department: Medical
       time: 36000 # 10 hours
