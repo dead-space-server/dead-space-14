@@ -32,6 +32,17 @@
     - UplinkUnitologyInfection
 
 - type: listing
+  id: SyringeNecromorphMutagenBruteList
+  name: Шприц с мутагеном некроморфа зверя
+  description: После ввода вещества 5 ед. вещества в животное, после заражения он станет зверем.
+  icon: { sprite: Objects/Specific/Chemistry/syringe.rsi, state: syringe1 }
+  productEntity: SyringeNecromorphMutagenBrute
+  cost:
+    Telecrystal: 10
+  categories:
+    - UplinkUnitologyInfection
+
+- type: listing
   id: UnitologyPukerNecroList
   name: Некроморф выделитель газа
   description: Некроморф.
@@ -166,8 +177,8 @@
   id: UplinkRadioHeadLeaderUnitology
   name: линия связи юнитологов
   description: Подозрительно выглядящее старое радио...
-  suffix: 100 тк
+  suffix: 50 тк
   components:
   - type: Store
     balance:
-      Telecrystal: 100
+      Telecrystal: 50

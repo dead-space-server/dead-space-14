@@ -130,7 +130,7 @@
   id: NecroBrute
   isAnimal: true
   slowOnDamage: false
-  thresholdMultiply: 4
+  thresholdMultiply: 5
   damage:
     groups:
       Brute: 50

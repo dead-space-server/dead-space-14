@@ -9,6 +9,10 @@
   storage:
     back:
     - UplinkRadioHeadLeaderUnitology
+    - Candle
+    - Candle
+    - Candle
+    - CrayonBlack
 
 - type: antag
   id: UniHead
