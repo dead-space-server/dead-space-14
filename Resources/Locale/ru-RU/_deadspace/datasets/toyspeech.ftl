@@ -10,10 +10,10 @@ figurine-hackslua-2 = Я люблю Айрис.
 plushies-jeleshka-1 = Может всё таки начать выполнять свои задачи по разработке...?
 plushies-jeleshka-2 = Ты поддерживаешь политику НТ? Сосал?
 plushies-jeleshka-3 = Увы и ах.
-plushies-jeleshka-4 = Я не признаю ОПРС у блохастых вульп!!!
+plushies-jeleshka-4 = Я не признаю ОПРС у уродливых блохастых вульп.
 plushies-jeleshka-5 = Почему меня приняли на Главу СБ? Я убил целый отряд Ядерных Оперативников одними пирогами и топором.
-plushies-jeleshka-6 = SplikZerys ПРЕДАТЕЛЬ! ПОВТОРЯЮ, SplikZerys ПРЕДАТЕЛЬ!
-plushies-jeleshka-7 = Слава Диверсионному Отряду синд... кхм.
+plushies-jeleshka-6 = СПЛИК ПРЕДАТЕЛЬ! ПОВТОРЯЮ, СПЛИК ПРЕДАТЕЛЬ!
+plushies-jeleshka-7 = Слава Д.О.С.
 plushies-jeleshka-8 = Капитан, уверяю вас, вы можете доверить мне командование станцией. 
 
 plushies-ahahaahahaha-1 = Сервер успешно упал.
