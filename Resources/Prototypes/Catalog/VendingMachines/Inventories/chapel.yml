@@ -16,6 +16,17 @@
     ClothingHeadHatWitch1: 1
     ClothingOuterPlagueSuit: 1
     ClothingMaskPlague: 1
+    ADTClothingUniformPriestPrimalSuit: 1 # DS14
+    ADTClothingUniformBlackWeddingSuit: 1 # DS14
+    ADTClothingUniformBlueWeddingSuit: 1 # DS14
+    ADTClothingUniformBrownWeddingSuit: 1 # DS14
+    ADTClothingUniformWhiteWeddingWomenSuit: 1 # DS14
+    ADTClothingUniformBlackWeddingWomenSuit: 1 # DS14
+    ADTClothingUniformLushWhiteWeddingDress: 1 # DS14
+    ADTClothingUniformLushRoseWeddingDress: 1 # DS14
+    ADTClothingUniformWhiteGhoticWeddingDress: 1 # DS14
+    ADTClothingUniformBlackGhoticWeddingDress: 1 # DS14
+    RingCase: 1 # DS14
     ClothingHeadsetService: 2
     BoxCandle: 2
     BoxCandleSmall: 2
