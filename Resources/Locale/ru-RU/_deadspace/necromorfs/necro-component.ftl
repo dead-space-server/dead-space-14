@@ -113,6 +113,18 @@ reagent-effect-guidebook-cause-enslave =
        *[other] порабощает
     } жертву и делает её рабом юнитологов
 
+# Necromorph mutagen
+
+entity-name-necromorph-mutagen = мутаген некроморфа зверя
+reagent-desc-necromorph-mutagen = Густой и огненного цвета, пахнет отвратительно, действует только на животных.
+ent-SyringeNecromorphMutagenBrute = шприц
+    .desc = { ent-BaseSyringe.desc }
+reagent-effect-guidebook-necromorph-mutagen =
+    { $chance ->
+        [1] Запускает
+       *[other] запускает
+    } мутацию у существа, после заражения он станет определённым некроморфом.
+
 # Necromant store
 
 ent-ActionNecromantArmy = призыв расчленителя.

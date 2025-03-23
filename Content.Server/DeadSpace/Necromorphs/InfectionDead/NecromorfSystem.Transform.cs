@@ -307,6 +307,8 @@ public sealed partial class NecromorfSystem
         }
 
         RemComp<PullerComponent>(target);
+        var puller = new PullerComponent(false);
+        AddComp(target, puller);
 
         if (necromorf != null)
         {
