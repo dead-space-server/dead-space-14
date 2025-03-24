@@ -90,3 +90,12 @@
     stampTexture: "/Textures/Interface/Stamps/meow.png"
   - type: Sprite
     state: stamp-greytide
+
+- type: entity
+  parent: RubberStampGreytide
+  id: RubberStampCentcomSpecialOperationOfficer
+  name: печать Офицера Специальных Операций
+  description: Печать Офицера Специальных Операций из резины, для проставления печатей на невероятно важных документах.
+  components:
+    - type: Stamp
+      stampedName: Офицер Специальных Операций
