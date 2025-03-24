@@ -1,0 +1,139 @@
+- type: entity
+  id: ThrusterMedium
+  parent: [ BaseThruster ]
+  name: большой ракетный двигатель
+  description: Ну и ну, мне определенно не стоит совать туда свою голову. Тем не менее...
+  components:
+  - type: Machine
+    board: ThrusterMachineCircuitboard
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 600
+      behaviors:
+        - !type:DoActsBehavior
+          acts: ["Destruction"]
+    - trigger:
+        !type:DamageTrigger
+        damage: 500
+      behaviors:
+        - !type:DoActsBehavior
+          acts: ["Destruction"]
+        - !type:PlaySoundBehavior
+          sound:
+            collection: MetalBreak
+        - !type:SpawnEntitiesBehavior
+          spawn:
+            PartRodMetal1:
+              min: 5
+              max: 10
+            SheetSteel1:
+              min: 5
+              max: 10
+            CableApcStack1:
+              min: 5
+              max: 15
+            CableMVStack1:
+              min: 4
+              max: 10
+            CableHVStack1:
+              min: 1
+              max: 4
+            MachineFrame:
+              min: 1
+              max: 1
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Shuttles/Thrusters/medium.rsi
+    layers:
+    - state: base
+      map: ["enum.ThrusterVisualLayers.Base"]
+    - state: thrust
+      map: ["enum.ThrusterVisualLayers.ThrustOn"]
+      shader: unshaded
+      visible: false
+    - state: thrust_burn_unshaded
+      map: ["enum.ThrusterVisualLayers.ThrustingUnshaded"]
+      shader: unshaded
+      visible: false
+      offset: 0, 1.87
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.85,-0.85,0.85,0.85"
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+
+- type: entity
+  parent: [ BaseThruster ]
+  id: ThrusterLarge
+  name: огромный ракетный двигатель
+  description: Ну и ну, мне определенно не стоит совать туда свою голову. Тем не менее...
+  components:
+  - type: Machine
+    board: ThrusterMachineCircuitboard
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 1200
+      behaviors:
+        - !type:DoActsBehavior
+          acts: ["Destruction"]
+    - trigger:
+        !type:DamageTrigger
+        damage: 1000
+      behaviors:
+        - !type:DoActsBehavior
+          acts: ["Destruction"]
+        - !type:PlaySoundBehavior
+          sound:
+            collection: MetalBreak
+        - !type:SpawnEntitiesBehavior
+          spawn:
+            PartRodMetal1:
+              min: 15
+              max: 35
+            SheetSteel1:
+              min: 35
+              max: 50
+            CableApcStack1:
+              min: 15
+              max: 35
+            CableMVStack1:
+              min: 10
+              max: 20
+            CableHVStack1:
+              min: 5
+              max: 15
+            MachineFrame:
+              min: 1
+              max: 1
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Shuttles/Thrusters/large.rsi
+    layers:
+    - state: base
+      map: ["enum.ThrusterVisualLayers.Base"]
+    - state: thrust
+      map: ["enum.ThrusterVisualLayers.ThrustOn"]
+      shader: unshaded
+      visible: false
+    - state: thrust_burn_unshaded
+      map: ["enum.ThrusterVisualLayers.ThrustingUnshaded"]
+      shader: unshaded
+      visible: false
+      offset: 0,2.66
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.25,-1.45,1.25,1.25"
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
