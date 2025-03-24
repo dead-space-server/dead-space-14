@@ -36,10 +36,10 @@ public sealed class SpiderTerrorRuleSystem : GameRuleSystem<SpiderTerrorRuleComp
     [Dependency] private readonly IChatManager _chatManager = default!;
     [Dependency] private readonly IVoteManager _voteManager = default!;
 
-    private const int SpidersBreeding = 15;
-    private const int SpidersNukeCode = 35;
-    private const float ProgressBreeding = 0.3f;
-    private const float ProgressNukeCode = 0.5f;
+    private const int SpidersBreeding = 30;
+    private const int SpidersNukeCode = 55;
+    private const float ProgressBreeding = 0.45f;
+    private const float ProgressNukeCode = 0.65f;
     private const float ProgressCaptureStation = 0.98f;
 
     private bool voteSend = false;
