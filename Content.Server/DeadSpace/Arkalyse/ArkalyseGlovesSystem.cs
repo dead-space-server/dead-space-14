@@ -20,10 +20,10 @@ public sealed partial class ArkalyseGlovesSystem : EntitySystem
         if (!HasComp<ArkalyseStunComponent>(args.Equipee) || !HasComp<ArkalyseDamageComponent>(args.Equipee) || !HasComp<ArkalyseMutedComponent>(args.Equipee))
         {
             var stunComponent = EnsureComp<ArkalyseStunComponent>(args.Equipee);
-            stunComponent.ParalyzeTime = 0.7f;
+            stunComponent.ParalyzeTime = 1.0f;
 
             var damageComponent = EnsureComp<ArkalyseDamageComponent>(args.Equipee);
-            damageComponent.Damage.DamageDict["Piercing"] = 5;
+            damageComponent.Damage.DamageDict["Piercing"] = 10;
             damageComponent.PushStrength = 0f;
 
             EnsureComp<ArkalyseMutedComponent>(args.Equipee);

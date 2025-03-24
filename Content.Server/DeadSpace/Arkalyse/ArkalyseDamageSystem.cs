@@ -13,6 +13,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Audio;
+using Content.Shared.Popups;
 
 namespace Content.Server.DeadSpace.Arkalyse;
 
@@ -22,6 +23,7 @@ public sealed class ArkalyseDamageSystem : EntitySystem
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {
@@ -30,7 +32,6 @@ public sealed class ArkalyseDamageSystem : EntitySystem
         SubscribeLocalEvent<ArkalyseDamageComponent, ComponentShutdown>(OnComponentShutdown);
         SubscribeLocalEvent<ArkalyseDamageComponent, MeleeHitEvent>(OnMeleeHit);
         SubscribeLocalEvent<ArkalyseDamageComponent, DamageAtackArkalyseActionEvent>(OnActionActivated);
-
     }
     private void OnComponentInit(EntityUid uid, ArkalyseDamageComponent component, ComponentInit args)
     {
@@ -44,7 +45,15 @@ public sealed class ArkalyseDamageSystem : EntitySystem
     {
         if (args.Handled)
             return;
+
+        if (component.IsDamageAttack)
+            _popup.PopupEntity(Loc.GetString("non-active-smoking-carp"), uid, uid);
+
+        if (!component.IsDamageAttack)
+            _popup.PopupEntity(Loc.GetString("active-smoking-carp"), uid, uid);
+
         component.IsDamageAttack = !component.IsDamageAttack;
+
         args.Handled = true;
     }
     private void OnMeleeHit(EntityUid uid, ArkalyseDamageComponent component, MeleeHitEvent args)
