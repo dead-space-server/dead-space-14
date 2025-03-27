@@ -153,7 +153,7 @@
     thresholds:
       0: Alive
       350: Critical
-      450: Dead
+      600: Dead
   - type: Fixtures
     fixtures:
       fix1:
@@ -166,8 +166,8 @@
         layer:
         - MobLayer
   - type: MovementSpeedModifier
-    baseWalkSpeed: 3
-    baseSprintSpeed: 3
+    baseWalkSpeed: 5
+    baseSprintSpeed: 5
   - type: Bloodstream
     bloodReagent: CopperBlood
     bloodMaxVolume: 250
