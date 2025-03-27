@@ -23,9 +23,9 @@ public sealed partial class ArkalyseDamageComponent : Component
     [DataField]
     public DamageSpecifier Damage = new()
     {
-        DamageDict = new()
+        DamageDict =
         {
-            { "Piercing", 20 }
+            ["Piercing"] = 20
         }
     };
 

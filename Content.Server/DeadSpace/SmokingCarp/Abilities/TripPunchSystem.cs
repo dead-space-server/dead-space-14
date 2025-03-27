@@ -17,7 +17,6 @@ public sealed class TripPunchSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedActionsSystem _action = default!;
 
-    // This list is necessary in order to make exceptions
     private readonly HashSet<EntityUid> _receivers = new();
 
     public override void Initialize()

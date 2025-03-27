@@ -1,7 +1,6 @@
 using Content.Shared.Damage;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
-using Robust.Shared.Audio;
 
 namespace Content.Server.DeadSpace.SmokingCarp.Abilities.Components;
 
@@ -20,9 +19,9 @@ public sealed partial class SmokePunchComponent : Component
     [DataField]
     public DamageSpecifier Damage = new()
     {
-        DamageDict = new()
+        DamageDict =
         {
-            { "Slash", 5 }
+            ["Slash"] = 5
         }
     };
 

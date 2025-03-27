@@ -12,6 +12,10 @@ using Content.Shared.Mobs;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Audio;
 using Content.Shared.Popups;
+using Content.Server.Chat.Systems;
+using Robust.Shared.Random;
+using JetBrains.FormatRipper.Elf;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.SmokingCarp.Abilities;
 
@@ -22,6 +26,9 @@ public sealed class ArkalyseDamageSystem : EntitySystem
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -71,6 +78,12 @@ public sealed class ArkalyseDamageSystem : EntitySystem
                     _damageable.TryChangeDamage(target, component.Damage, true, false);
                     SpawnAttachedTo(component.EffectPunch, Transform(target).Coordinates);
                     _audio.PlayPvs(component.HitSound, args.User, AudioParams.Default.WithVolume(3.0f));
+
+                    if (!_prototypeManager.TryIndex(component.PackMessage, out var messagePack))
+                        return;
+
+                    var message = Loc.GetString(_random.Pick(messagePack.Values));
+                    _chat.TrySendInGameICMessage(uid, message, InGameICChatType.Speak, true);
                 }
                 if (TryComp<PhysicsComponent>(target, out var physicsComponent))
                 {
