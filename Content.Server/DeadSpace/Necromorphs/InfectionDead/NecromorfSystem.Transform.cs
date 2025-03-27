@@ -47,7 +47,6 @@ using Content.Shared.Cuffs.Components;
 using Content.Shared.DeadSpace.NightVision;
 using Content.Shared.Ghost.Roles.Components;
 using Content.Shared.DeadSpace.Necromorphs.Necroobelisk;
-using Content.Shared.DeadSpace.Necromorphs.InfectionDead;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Damage.Components;
 using Content.Shared.Rotation;
