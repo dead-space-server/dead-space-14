@@ -103,6 +103,15 @@ public abstract class SharedCombatModeSystem : EntitySystem
             RemComp<NoRotateOnMoveComponent>(uid);
         }
     }
+    // DS14 change begin
+    public void SetDisarmFailChance(EntityUid uid, float newChance)
+    {
+        if (TryComp<CombatModeComponent>(uid, out var combatMode))
+        {
+            combatMode.BaseDisarmFailChance = newChance;
+        }
+    }
+    // DS14 change end
 
     // todo: When we stop making fucking garbage abstract shared components, remove this shit too.
     protected abstract bool IsNpc(EntityUid uid);

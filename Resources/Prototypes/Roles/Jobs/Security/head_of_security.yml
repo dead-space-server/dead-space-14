@@ -43,6 +43,8 @@
   - !type:AddComponentSpecial
     components:
       - type: CommandStaff
+      - type: CorporateDjudo # DS14
+        canUseBaton: true
 
 - type: startingGear
   id: HoSGear

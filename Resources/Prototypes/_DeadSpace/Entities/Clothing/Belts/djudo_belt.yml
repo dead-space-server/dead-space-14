@@ -1,0 +1,11 @@
+- type: entity
+  parent: ClothingBeltSecurity
+  id: ClothingBeltSecurityCorporateDjudo
+  name: пояс для дзюдо
+  description: Усиливает человека благодаря встроенным наномашиннам и позволяет использовать корпорационное дзюдо, собственность NanoTrasen.
+  components:
+  - type: CorporateDjudoBelt
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Belt/djudo_belt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Belt/djudo_belt.rsi

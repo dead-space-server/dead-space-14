@@ -1,0 +1,12 @@
+- type: entity
+  id: ActionToBlindAttack
+  name: Удар по глазам
+  description: Вы ударяете пальцами прямо в глаза противника, это весьма подло.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: InstantAction
+    icon:
+      sprite: _DeadSpace/Actions/djudo_corporate_actions.rsi
+      state: blind
+    event: !type:BlindCorporateDjudoEvent {}
+    useDelay: 10
