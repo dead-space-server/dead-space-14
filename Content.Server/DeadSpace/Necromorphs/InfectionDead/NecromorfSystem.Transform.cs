@@ -232,13 +232,6 @@ public sealed partial class NecromorfSystem
             };
 
             melee.Damage = necromorf?.Damage ?? dspec;
-
-            var pryComp = EnsureComp<PryingComponent>(target);
-            pryComp.SpeedModifier = 0.75f;
-            pryComp.PryPowered = true;
-            pryComp.Force = true;
-
-            Dirty(target, pryComp);
         }
 
         if (necromorf != null)
@@ -309,6 +302,13 @@ public sealed partial class NecromorfSystem
         RemComp<PullerComponent>(target);
         var puller = new PullerComponent(false);
         AddComp(target, puller);
+
+        var pryComp = EnsureComp<PryingComponent>(target);
+        pryComp.SpeedModifier = 1f;
+        pryComp.PryPowered = true;
+        pryComp.Force = true;
+
+        Dirty(target, pryComp);
 
         if (necromorf != null)
         {
