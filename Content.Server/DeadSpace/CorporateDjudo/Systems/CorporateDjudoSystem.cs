@@ -72,6 +72,11 @@ public sealed partial class CorporateDjudoSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("equip-djudo-belt"), user, user);
 
         var meleeWeaponComponent = EnsureComp<MeleeWeaponComponent>(user);
+
+        if (user.Comp.AddDamage == null)
+        {
+            user.Comp.AddDamage = new DamageSpecifier();
+        }
         meleeWeaponComponent.Damage += user.Comp.AddDamage;
 
         var combatMode = _entitySystemManager.GetEntitySystem<SharedCombatModeSystem>();
