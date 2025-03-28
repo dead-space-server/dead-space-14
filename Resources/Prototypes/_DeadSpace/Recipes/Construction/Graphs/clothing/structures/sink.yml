@@ -8,8 +8,9 @@
           completed:
             - !type:SnapToGrid
           steps:
-            - material: Gold
-              amount: 30
+            - material: Steel
+              amount: 5
+              doAfter: 2
 
     - node: Sink
       entity: Sink
@@ -17,8 +18,8 @@
         - to: start
           completed:
           - !type:SpawnPrototype
-                prototype: IngotGold1
-                amount: 30
+                prototype: SheetSteel1
+                amount: 5
           - !type:DeleteEntity {}
           steps:
             - tool: Screwing
