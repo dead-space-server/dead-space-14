@@ -652,7 +652,7 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/dragonfox_plushie.rsi
-    state: plushie_MedTech
+    state: plushie_medtech
 
 - type: entity
   parent: BasePlushie
@@ -662,4 +662,4 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/dragonfox_plushie.rsi
-    state: plushie_MadParadox
+    state: plushie_madparadox
