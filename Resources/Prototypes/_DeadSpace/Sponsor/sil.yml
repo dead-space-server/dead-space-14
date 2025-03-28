@@ -176,3 +176,85 @@
       - 0.451303391 # 22% oxygen
       - 1.600075659 # 78% nitrogen
       temperature: 293.15
+
+# Plushie toys
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieSilAily
+  name: плюшевая Айли
+  description: Плюшевая игрушка вульпы в костюме Офицера Специальных Операций.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Sil/sil_plushie.rsi
+    state: plushie_aily
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieSilAizek
+  name: плюшевый Айзек
+  description: Мягкая игрушка человека в костюме оператора ЦК.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Sil/sil_plushie.rsi
+    state: plushie_aizek
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieSilAzrail
+  name: плюшевый Азраиль
+  description: Плюшевая игрушка человека в костюме главного врача.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Sil/sil_plushie.rsi
+    state: plushie_azrail
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieSilEmilia
+  name: плюшевая Эмилия
+  description: Мягкая игрушка фелинида в костюме главного врача.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Sil/sil_plushie.rsi
+    state: plushie_emilia
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieSilEva
+  name: плюшевая Ева
+  description: Плюшевая игрушка арканы в костюме ведущего врача.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Sil/sil_plushie.rsi
+    state: plushie_eva
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieSilKrivazzora
+  name: плюшевый Криваззора
+  description: Мягкая игрушка вокса в костюме старшего инженера.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Sil/sil_plushie.rsi
+    state: plushie_krivazzora
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieSilAzrailHardsuit
+  name: плюшевый Азраиль в "СЕВЕ"
+  description: Плюшевая игрушка человека в скафандре "СЕВА".
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Sil/sil_plushie.rsi
+    state: plushie_azrail_hardsuit
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieSilSharp
+  name: плюшевый Лекаон
+  description: Мягкая игрушка вульпы в гавайском наряде.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Sil/sil_plushie.rsi
+    state: plushie_sharp
