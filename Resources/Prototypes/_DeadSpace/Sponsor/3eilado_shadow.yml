@@ -6,7 +6,7 @@
   components:
   - type: Sprite
     drawdepth: Mobs
-    sprite: _DeadSpace/Sponsor/Ainnetel/Mobs/dark_butterfly.rsi
+    sprite: _DeadSpace/Sponsor/3eilado/Mobs/dark_butterfly.rsi
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: butterfly
@@ -26,7 +26,7 @@
   components:
   - type: Sprite
     drawdepth: Mobs
-    sprite: _DeadSpace/Sponsor/Ainnetel/Mobs/rabbit.rsi
+    sprite: _DeadSpace/Sponsor/3eilado/Mobs/rabbit.rsi
     layers:
     - map: ["enum.DamageStateVisualLayers.Base", "movement"]
       state: rabbit
@@ -60,7 +60,7 @@
   components:
   - type: Sprite
     drawdepth: Mobs
-    sprite: _DeadSpace/Sponsor/Ainnetel/Mobs/jellyfish.rsi
+    sprite: _DeadSpace/Sponsor/3eilado/Mobs/jellyfish.rsi
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: jellyfish
@@ -87,7 +87,7 @@
   components:
   - type: Sprite
     drawdepth: Mobs
-    sprite: _DeadSpace/Sponsor/Ainnetel/Mobs/angel.rsi
+    sprite: _DeadSpace/Sponsor/3eilado/Mobs/angel.rsi
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: angel
@@ -107,7 +107,7 @@
   components:
   - type: Sprite
     drawdepth: Mobs
-    sprite: _DeadSpace/Sponsor/Ainnetel/Mobs/smoking.rsi
+    sprite: _DeadSpace/Sponsor/3eilado/Mobs/smoking.rsi
     layers:
     - map: ["enum.DamageStateVisualLayers.Base", "movement"]
       state: smoking
