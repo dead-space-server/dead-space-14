@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-4.0",
-  "copyright": "Created by hq._.dishka (discord) for Space Station 14 server Dead Space",
+  "copyright": "created by hq._.dishka (discord) for Space Station 14 server Мёртвый Космос",
   "size": {
     "x": 32,
     "y": 32
@@ -12,22 +12,22 @@
     },
     {
       "name": "plushie_aizek"
-    },	
+    },
     {
       "name": "plushie_azrail"
-    },	
+    },
     {
       "name": "plushie_emilia"
-    },	
+    },
     {
       "name": "plushie_eva"
-    },	
+    },
     {
       "name": "plushie_krivazzora"
-    },	
+    },
     {
       "name": "plushie_azrail_hardsuit"
-    },	
+    },
     {
       "name": "plushie_sharp"
     }
