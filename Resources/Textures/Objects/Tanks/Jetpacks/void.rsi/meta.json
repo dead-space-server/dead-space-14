@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Drawn by Ubaser.",
+  "copyright": "Taken from tgstation",
   "size": {
     "x": 32,
     "y": 32
@@ -43,6 +43,14 @@
     },
     {
       "name": "on-equipped-SUITSTORAGE",
+      "directions": 4
+    },
+    {
+      "name": "equipped-BELT",
+      "directions": 4
+    },
+    {
+      "name": "on-equipped-BELT",
       "directions": 4
     }
   ]
