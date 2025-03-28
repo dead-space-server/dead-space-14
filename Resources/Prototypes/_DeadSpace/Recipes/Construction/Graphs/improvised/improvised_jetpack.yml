@@ -25,7 +25,7 @@
           state: icon
         doAfter: 3
       - material: Cable
-        amount: 15
+        amount: 30
         doAfter: 3
   - node: jetpack
     entity: JetpackImprovised
