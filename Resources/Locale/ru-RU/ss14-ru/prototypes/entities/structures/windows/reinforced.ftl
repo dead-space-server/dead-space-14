@@ -1,7 +1,7 @@
-ent-ReinforcedWindow = бронеокно
+ent-ReinforcedWindow = бронированное окно
     .desc = { ent-Window.desc }
 ent-WindowReinforcedDirectional = направленное бронеокно
-    .desc = { ent-Window.desc }
+    .desc = Смотри не заляпай.
 ent-ReinforcedWindowDiagonal = { ent-ReinforcedWindow }
-    .suffix = Дигональ
-    .desc = { ent-Window.desc }
+    .suffix = Диагональ
+    .desc = { ent-ReinforcedWindow.desc }
