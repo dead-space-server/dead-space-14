@@ -25,3 +25,4 @@ stamp-component-stamped-name-blueshield = Офицер "Синий Щит"
 stamp-component-stamped-name-senior-administrator = Менеджер
 stamp-component-stamped-name-greytide = Грейтайд
 stamp-component-stamped-name-psychologist = Психолог
+stamp-component-stamped-name-special-operation-officer = Офицер Специальных Операций

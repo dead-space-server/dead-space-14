@@ -92,10 +92,15 @@
     state: stamp-greytide
 
 - type: entity
-  parent: RubberStampGreytide
+  parent: RubberStampBase
   id: RubberStampCentcomSpecialOperationOfficer
   name: печать Офицера Специальных Операций
   description: Печать Офицера Специальных Операций из резины, для проставления печатей на невероятно важных документах.
+  categories: [ DoNotMap ]
   components:
-    - type: Stamp
-      stampedName: Офицер Специальных Операций
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-special-operation-officer
+    stampedColor: "#323232"
+    stampState: "paper_stamp-greytide"
+  - type: Sprite
+    state: stamp-greytide
