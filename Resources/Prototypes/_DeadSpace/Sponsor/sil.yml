@@ -183,7 +183,7 @@
   parent: BasePlushie
   id: PlushieSilAily
   name: плюшевая Айли
-  description: Плюшевая игрушка вульпы в костюме Офицера Специальных Операций.
+  description: Плюшевая игрушка Офицера Специальных Операций. Вызывает смешанное чувство умиления и страха.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Sil/sil_plushie.rsi
@@ -193,7 +193,7 @@
   parent: BasePlushie
   id: PlushieSilAizek
   name: плюшевый Айзек
-  description: Мягкая игрушка человека в костюме оператора ЦК.
+  description: Мягкая игрушка оператора ЦК. Пахнет бюрократией.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Sil/sil_plushie.rsi
@@ -202,8 +202,8 @@
 - type: entity
   parent: BasePlushie
   id: PlushieSilAzrail
-  name: плюшевый Азраиль
-  description: Плюшевая игрушка человека в костюме главного врача.
+  name: плюшевый Азраил
+  description: Плюшевая игрушка главного врача. От него исходит аромат едких химикатов и лекарств.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Sil/sil_plushie.rsi
@@ -213,7 +213,7 @@
   parent: BasePlushie
   id: PlushieSilEmilia
   name: плюшевая Эмилия
-  description: Мягкая игрушка фелинида в костюме главного врача.
+  description: От неё веет духотой и педантичностью, а рядом с ней вам становится очень некомфортно. Пожалуй, стоит отойти от неё на несколько метров. На ощупь жесткая.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Sil/sil_plushie.rsi
@@ -223,7 +223,7 @@
   parent: BasePlushie
   id: PlushieSilEva
   name: плюшевая Ева
-  description: Плюшевая игрушка арканы в костюме ведущего врача.
+  description: Плюшевая игрушка ведущего врача. От неё веет опытом, но не умением.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Sil/sil_plushie.rsi
@@ -232,8 +232,8 @@
 - type: entity
   parent: BasePlushie
   id: PlushieSilKrivazzora
-  name: плюшевый Криваззора
-  description: Мягкая игрушка вокса в костюме старшего инженера.
+  name: плюшевый Кривазора
+  description: Плюшевая игрушка старшего инженера. От неё исходит легкий фрезоновый холодок, навевающий теплые воспоминания. Слегка покалывает электрическим током.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Sil/sil_plushie.rsi
@@ -242,8 +242,8 @@
 - type: entity
   parent: BasePlushie
   id: PlushieSilAzrailHardsuit
-  name: плюшевый Азраиль в "СЕВЕ"
-  description: Плюшевая игрушка человека в скафандре "СЕВА".
+  name: плюшевый Азраил в "СЕВЕ"
+  description: Плюшевая игрушка человека в скафандре "СЕВА". Выглядит грозно.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Sil/sil_plushie.rsi
@@ -252,8 +252,8 @@
 - type: entity
   parent: BasePlushie
   id: PlushieSilSharp
-  name: плюшевый Лекаон
-  description: Мягкая игрушка вульпы в гавайском наряде.
+  name: плюшевый Ликаон
+  description: Плюшевая игрушка в виде вульпы в гавайском наряде. Излучает спокойствие.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Sil/sil_plushie.rsi
