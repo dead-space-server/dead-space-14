@@ -1,6 +1,6 @@
 - type: entity
   id: ThrusterMedium
-  parent: BaseThruster
+  parent: [ BaseThruster, ConstructibleMachine ]
   name: большой ракетный двигатель
   description: Ну и ну, мне определенно не стоит совать туда свою голову. Тем не менее...
   components:
@@ -8,12 +8,6 @@
     board: ThrusterMachineCircuitboard
   - type: Destructible
     thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 600
-      behaviors:
-        - !type:DoActsBehavior
-          acts: ["Destruction"]
     - trigger:
         !type:DamageTrigger
         damage: 500
@@ -43,6 +37,9 @@
             MachineFrame:
               min: 1
               max: 1
+            ThrusterMachineCircuitboard:
+              min: 1
+              max: 1
   - type: Sprite
     sprite: _DeadSpace/Structures/Shuttles/Thrusters/medium.rsi
     layers:
@@ -67,9 +64,33 @@
         - MachineMask
         layer:
         - MachineLayer
+        density: 75
+  - type: TileFrictionModifier
+    modifier: 0.7
 
 - type: entity
-  parent: BaseThruster
+  id: DebugThrusterMedium
+  parent: ThrusterMedium
+  suffix: DEBUG
+  components:
+  - type: ApcPowerReceiver
+    needsPower: false
+    powerLoad: 0
+  - type: Thruster
+    requireSpace: false
+
+- type: entity
+  id: ThrusterMediumUnanchored
+  parent: ThrusterMedium
+  suffix: Незакреплённый
+  components:
+    - type: Transform
+      anchored: false
+    - type: Physics
+      bodyType: Dynamic
+
+- type: entity
+  parent: [ BaseThruster, ConstructibleMachine ]
   id: ThrusterLarge
   name: огромный ракетный двигатель
   description: Ну и ну, мне определенно не стоит совать туда свою голову. Тем не менее...
@@ -78,12 +99,6 @@
     board: ThrusterMachineCircuitboard
   - type: Destructible
     thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 1200
-      behaviors:
-        - !type:DoActsBehavior
-          acts: ["Destruction"]
     - trigger:
         !type:DamageTrigger
         damage: 1000
@@ -113,6 +128,9 @@
             MachineFrame:
               min: 1
               max: 1
+            ThrusterMachineCircuitboard:
+              min: 1
+              max: 1
   - type: Sprite
     sprite: _DeadSpace/Structures/Shuttles/Thrusters/large.rsi
     layers:
@@ -137,3 +155,25 @@
         - MachineMask
         layer:
         - MachineLayer
+        density: 90
+
+- type: entity
+  id: DebugThrusterLarge
+  parent: ThrusterLarge
+  suffix: DEBUG
+  components:
+  - type: ApcPowerReceiver
+    needsPower: false
+    powerLoad: 0
+  - type: Thruster
+    requireSpace: false
+
+- type: entity
+  id: ThrusterLargeUnanchored
+  parent: ThrusterLarge
+  suffix: Незакреплённый
+  components:
+    - type: Transform
+      anchored: false
+    - type: Physics
+      bodyType: Dynamic
