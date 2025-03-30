@@ -14,7 +14,6 @@ using Robust.Shared.Audio;
 using Content.Shared.Popups;
 using Content.Server.Chat.Systems;
 using Robust.Shared.Random;
-using JetBrains.FormatRipper.Elf;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.SmokingCarp.Abilities;
