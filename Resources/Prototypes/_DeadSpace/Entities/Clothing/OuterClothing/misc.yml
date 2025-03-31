@@ -8,6 +8,8 @@
     sprite: _DeadSpace/Clothing/OuterClothing/Misc/apron_botanist.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/OuterClothing/Misc/apron_botanist.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
   parent: ClothingOuterStorageBase
@@ -19,6 +21,8 @@
     sprite: _DeadSpace/Clothing/OuterClothing/Misc/apron_chef.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/OuterClothing/Misc/apron_chef.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
   parent: ClothingOuterWinterCoat
@@ -30,3 +34,5 @@
     sprite: _DeadSpace/Clothing/OuterClothing/Misc/chefjacket.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/OuterClothing/Misc/chefjacket.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
