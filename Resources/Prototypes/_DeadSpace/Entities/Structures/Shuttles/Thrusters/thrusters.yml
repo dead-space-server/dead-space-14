@@ -68,8 +68,8 @@
   - type: TileFrictionModifier
     modifier: 0.7
   - type: StaticPrice
-    price: 1000
-
+    price: 500
+    
 - type: entity
   id: DebugThrusterMedium
   parent: ThrusterMedium
@@ -159,7 +159,7 @@
         - MachineLayer
         density: 90
   - type: StaticPrice
-    price: 1500
+    price: 500
 
 - type: entity
   id: DebugThrusterLarge
