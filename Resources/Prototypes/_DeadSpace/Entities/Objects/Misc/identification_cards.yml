@@ -41,7 +41,8 @@
     tags:
     - SyndicateAgent
     - NuclearOperative
-
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
   parent: IDCardStandard
@@ -54,7 +55,6 @@
     - state: taipancardcom
   - type: Access
     tags:
-    - Armory
     - Cargo
     - Medical
     - Engineering

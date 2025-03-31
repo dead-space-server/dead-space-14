@@ -1,0 +1,87 @@
+- type: entity
+  parent: ClothingOuterHardsuitAtmos
+  id: ClothingOuterHardsuitTaipanAtmos
+  name: скафандр атмосферного инженера
+  description: Герметичный скафандр, защищающий как от перепада давления, так и от температур.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/OuterClothing/Hardsuits/taipan_atmospherics.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/OuterClothing/Hardsuits/taipan_atmospherics.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitTaipanAtmos
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+- type: entity
+  parent: ClothingOuterHardsuitSalvage
+  id: ClothingOuterHardsuitTaipanCargotech
+  name: скафандр карготехника
+  description: Специальный укреплённый скафандр, предназначенный для работы в космосе.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/OuterClothing/Hardsuits/taipan_cargotech.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/OuterClothing/Hardsuits/taipan_cargotech.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.8
+        Slash: 0.8
+        Piercing: 0.7
+        Radiation: 0.3
+        Caustic: 0.7
+  - type: ClothingSpeedModifier
+    walkModifier: 0.85
+    sprintModifier: 0.75
+  - type: HeldSpeedModifier
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitTaipanCargotech
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+- type: entity
+  parent: ClothingOuterHardsuitEngineering
+  id: ClothingOuterHardsuitTaipanEngineering
+  name: скафандр ремонтника
+  description: Специальный скафандр, защищающий в опасных условиях при низком давлении. Имеет встроенную защиту от радиации.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/OuterClothing/Hardsuits/taipan_engineer.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/OuterClothing/Hardsuits/taipan_engineer.rsi
+  - type: HeldSpeedModifier
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitTaipanEngineering
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+- type: entity
+  parent: ClothingOuterHardsuitBrigmedic
+  id: ClothingOuterHardsuitTaipanParamedic
+  name: brigmedic hardsuit
+  description: Special hardsuit of the guardian angel of the brig. It is the medical version of the security hardsuit.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/OuterClothing/Hardsuits/taipan_medical.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/OuterClothing/Hardsuits/taipan_medical.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitTaipanParamedic
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+- type: entity
+  parent: ClothingOuterHardsuitSecurity
+  id: ClothingOuterHardsuitTaipanPatrol
+  name: скафандр патрульного
+  description: Укреплённый скафандр с бронепластинами, предназначенный для работы в космосе.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/OuterClothing/Hardsuits/taipan_patrol.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/OuterClothing/Hardsuits/taipan_patrol.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitTaipanPatrol
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag

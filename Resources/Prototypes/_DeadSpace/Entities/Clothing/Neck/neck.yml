@@ -29,3 +29,5 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/Neck/comantle.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag

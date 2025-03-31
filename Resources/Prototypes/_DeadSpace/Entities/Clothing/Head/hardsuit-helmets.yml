@@ -1,0 +1,88 @@
+- type: entity
+  parent: ClothingHeadHelmetHardsuitEngineering
+  id: ClothingHeadHelmetHardsuitTaipanAtmos
+  name: atmos hardsuit helmet
+  description: A special hardsuit helmet designed for working in low-pressure, high thermal environments.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/taipan_atmospherics.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/taipan_atmospherics.rsi
+  - type: PointLight
+    color: "#adffe6"
+  - type: PressureProtection
+    highPressureMultiplier: 0.08
+    lowPressureMultiplier: 1000
+  - type: TemperatureProtection
+    heatingCoefficient: 0.005
+    coolingCoefficient: 0.005
+  - type: FireProtection
+    reduction: 0.2
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+- type: entity
+  parent: ClothingHeadHelmetHardsuitSalvage
+  id: ClothingHeadHelmetHardsuitTaipanCargotech
+  name: salvage hardsuit helmet
+  description: A special helmet designed for work in a hazardous, low pressure environment. Has reinforced plating for wildlife encounters and dual floodlights.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/taipan_cargotech.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/taipan_cargotech.rsi
+  - type: PointLight
+    radius: 7
+    energy: 3
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+- type: entity
+  parent: ClothingHeadHelmetHardsuitEngineering
+  id: ClothingHeadHelmetHardsuitTaipanEngineering
+  name: engineering hardsuit helmet
+  description: An engineering hardsuit helmet designed for working in low-pressure, high radioactive environments.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/taipan_engineer.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/taipan_engineer.rsi
+  - type: PointLight
+    color: "#ffdbad"
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+- type: entity
+  parent: ClothingHeadHelmetHardsuitBrigmedic
+  id: ClothingHeadHelmetHardsuitTaipanParamedic
+  name: brigmedic hardsuit helmet
+  description: The lightweight helmet of the brigmedic hardsuit. Protects against viruses, and clowns.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/taipan_medical.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/taipan_medical.rsi
+  - type: PointLight
+    color: "#00FFFF"
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+- type: entity
+  parent: ClothingHeadHelmetHardsuitSecurity
+  id: ClothingHeadHelmetHardsuitTaipanPatrol
+  name: security hardsuit helmet
+  description: Armored hardsuit helmet for security needs.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/taipan_patrol.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/taipan_patrol.rsi
+  - type: PointLight
+    color: "#ffeead"
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag

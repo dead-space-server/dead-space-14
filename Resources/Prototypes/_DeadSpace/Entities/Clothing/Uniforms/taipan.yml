@@ -1,6 +1,22 @@
+- type: entity
+  abstract: true
+  parent: ClothingUniformBase
+  id: ClothingJumpsuitTaipanBase
+  components:
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+- type: entity
+  abstract: true
+  parent: ClothingUniformSkirtBase
+  id: ClothingJumpskirtTaipanBase
+  components:
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
 # Атмосферный инженер
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpsuitTaipanBase
   id: ClothingUniformJumpsuitTaipanAtmos
   name: комбинезон атмосферного инженера
   description: Функциональный комбинезон с множеством карманов, идеально подходящий для работы в техногенной среде.
@@ -11,7 +27,7 @@
     sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/atmos_jumpsuit.rsi
 
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpskirtTaipanBase
   id: ClothingUniformJumpskirtTaipanAtmos
   name: юбка-комбинезон атмосферного инженера
   description: Практичная юбка-комбинезон с воздухопроницаемыми вставками и просторными карманами для работы в разноплановых условиях.
@@ -23,7 +39,7 @@
 
 # Ботаник
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpsuitTaipanBase
   id: ClothingUniformJumpsuitTaipanBotanist
   name: комбинезон ботаника
   description: Комбинезон для ботаников, удобный для работы в саду и лаборатории с растениями.
@@ -34,7 +50,7 @@
     sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/botanist_jumpsuit.rsi
 
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpskirtTaipanBase
   id: ClothingUniformJumpskirtTaipanBotanist
   name: юбка-комбинезон ботаника
   description: Практичная юбка-комбинезон для ботаников, обеспечивающая свободу передвижения и удобство работы с растениями.
@@ -46,7 +62,7 @@
 
 # Повар
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpsuitTaipanBase
   id: ClothingUniformJumpsuitTaipanChef
   name: комбинезон повара
   description: Стильный чёрный костюм с кроваво-красной рубашкой, сочетающий элегантность и практичность для кулинарных шедевров.
@@ -57,7 +73,7 @@
     sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/chef_jumpsuit.rsi
 
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpskirtTaipanBase
   id: ClothingUniformJumpskirtTaipanChef
   name: юбка-комбинезон повара
   description: Удивительно элегантное платье с золотым орнаментом, сделанное из устойчивой к загрязнению ткани.
@@ -69,7 +85,7 @@
 
 # Руководитель технических операций
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpsuitTaipanBase
   id: ClothingUniformJumpsuitTaipanTechnicalOperationsSupervisor
   name: комбинезон руководителя техобеспечения
   description: Прочный и функциональный комбинезон с высокотехнологичным дизайном для специалистов.
@@ -80,7 +96,7 @@
     sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/supervisor_jumpsuit.rsi
 
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpskirtTaipanBase
   id: ClothingUniformJumpskirtTaipanTechnicalOperationsSupervisor
   name: юбка-комбинезон руководителя техобеспечения
   description: Прочная и стильная юбка-комбинезон для тех, кто управляет инженерными проектами.
@@ -92,7 +108,7 @@
 
 # Офицер телекоммуникаций
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpsuitTaipanBase
   id: ClothingUniformJumpsuitTaipanCommunicationsOfficer
   name: комбинезон офицера телекоммуникаций
   description: Современный комбинезон с высокотехнологичными элементами для работы с коммуникационными системами.
@@ -103,7 +119,7 @@
     sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/co_jumpsuit.rsi
 
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpskirtTaipanBase
   id: ClothingUniformJumpskirtTaipanCommunicationsOfficer
   name: юбка-комбинезон офицера телекоммуникаций
   description: Стильная юбка-комбинезон для работы с телекоммуникациями, обеспечивающая комфорт и профессиональный вид.
@@ -115,7 +131,7 @@
 
 # Медик
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpsuitTaipanBase
   id: ClothingUniformJumpsuitTaipanMedic
   name: комбинезон медика
   description: Белый медицинский комбинезон, подходящий для оказания медицинской помощи и диагностики.
@@ -126,7 +142,7 @@
     sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/medic_jumpsuit.rsi
 
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpskirtTaipanBase
   id: ClothingUniformJumpskirtTaipanMedic
   name: юбка-комбинезон медика
   description: Элегантная юбка-комбинезон для медиков, обеспечивающая комфорт и профессиональный вид в медицинской среде.
@@ -138,7 +154,7 @@
 
 # Парамедик
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpsuitTaipanBase
   id: ClothingUniformJumpsuitTaipanParamedic
   name: комбинезон парамедика
   description: Практичный комбинезон для парамедиков, идеально подходящий для экстренной медицины.
@@ -149,7 +165,7 @@
     sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/paramedic_jumpsuit.rsi
 
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpskirtTaipanBase
   id: ClothingUniformJumpskirtTaipanParamedic
   name: юбка-комбинезон парамедика
   description: Компактная и удобная юбка-комбинезон, позволяющая парамедикам быстро и эффективно оказывать помощь.
@@ -161,7 +177,7 @@
 
 # Рекрут
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpsuitTaipanBase
   id: ClothingUniformJumpsuitTaipanRecruit
   name: комбинезон рекрута
   description: Базовый комбинезон, сочетающий практичность и комфорт для начального обучения и работы.
@@ -172,7 +188,7 @@
     sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/recruit_jumpsuit.rsi
 
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpskirtTaipanBase
   id: ClothingUniformJumpskirtTaipanRecruit
   name: юбка-комбинезон рекрута
   description: Удобная и универсальная юбка-комбинезон, созданная для новичков, выделяющаяся своей стильной униформой.
@@ -184,7 +200,7 @@
 
 # Директор исследований
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpsuitTaipanBase
   id: ClothingUniformJumpsuitTaipanResearchDirector
   name: комбинезон директора исследований
   description: Элегантный комбинезон, сочетающий стиль и функциональность для главы научного отдела.
@@ -195,7 +211,7 @@
     sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/rd_jumpsuit.rsi
 
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpskirtTaipanBase
   id: ClothingUniformJumpskirtTaipanResearchDirector
   name: юбка-комбинезон директора исследований
   description: Эксклюзивная юбка-комбинезон с элегантной отделкой для научных лидеров.
@@ -207,7 +223,7 @@
 
 # исследователь
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpsuitTaipanBase
   id: ClothingUniformJumpsuitTaipanScientist
   name: комбинезон исследователя
   description: Униформа исследователя, подходящая для лабораторных исследований и экспериментов.
@@ -218,7 +234,7 @@
     sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/scientist_jumpsuit.rsi
 
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpskirtTaipanBase
   id: ClothingUniformJumpskirtTaipanScientist
   name: юбка-комбинезон исследователя
   description: Практичная и стильная юбка-комбинезон, подходящая для научных исследований и лабораторных экспериментов.
@@ -230,7 +246,7 @@
 
 # Ремонтник
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpsuitTaipanBase
   id: ClothingUniformJumpsuitTaipanStationEngineer
   name: комбинезон ремонтника
   description: Комбинезон для инженерных задач, усиленный для работы в тяжёлых условиях.
@@ -241,7 +257,7 @@
     sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/engineer_jumpsuit.rsi
 
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpskirtTaipanBase
   id: ClothingUniformJumpskirtTaipanStationEngineer
   name: юбка-комбинезон ремонтника
   description: Практичная юбка-комбинезон для инженерных задач, обеспечивающая комфорт и защиту в тяжёлых условиях.
@@ -253,7 +269,7 @@
 
 # Карготехник
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpsuitTaipanBase
   id: ClothingUniformJumpsuitTaipanCargo
   name: комбинезон карготехника
   description: Практичный комбинезон с усиленными швами для тяжелой рабочей среды.
@@ -264,7 +280,7 @@
     sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/cargo_jumpsuit.rsi
 
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpskirtTaipanBase
   id: ClothingUniformJumpskirtTaipanCargo
   name: юбка-комбинезон карготехника
   description: Элегантная юбка-комбинезон с прочной тканью для работы, обеспечивающая свободу передвижения.
@@ -275,7 +291,7 @@
     sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/cargo_jumpskirt.rsi
 
 - type: entity
-  parent: ClothingUniformBase
+  parent: ClothingJumpsuitTaipanBase
   id: ClothingUniformJumpsuitTaipanCargotech
   name: рабочий комбинезон карготехника
   description: Прочный и надежный комбинезон, идеально подходящий для интенсивной нагрузки и полной защиты во время работы.

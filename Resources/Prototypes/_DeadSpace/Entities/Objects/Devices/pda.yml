@@ -39,6 +39,8 @@
       whitelist:
         components:
         - Cartridge
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
   parent: BaseTaipanPDA

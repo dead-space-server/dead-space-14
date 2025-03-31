@@ -60,6 +60,8 @@
     sprite: _DeadSpace/Clothing/OuterClothing/Coats/co_trench.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/OuterClothing/Coats/co_trench.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
   parent: ClothingOuterCoatSyndieCapArmored
@@ -71,6 +73,8 @@
     sprite: _DeadSpace/Clothing/OuterClothing/Coats/co_coat.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/OuterClothing/Coats/co_coat.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
   parent: ClothingOuterStorageFoldableBase
@@ -86,6 +90,8 @@
     modifiers:
       coefficients:
         Caustic: 0.75
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
   parent: [ClothingOuterStorageFoldableBaseOpened, ClothingOuterTaipanCoatLab]
@@ -96,7 +102,7 @@
 - type: entity
   parent: ClothingOuterStorageFoldableBase
   id: ClothingOuterTaipanCoatLabMed
-  name: халат медика
+  name: лабораторный халат медика
   description: Халат из прочной стерильной ткани. Пахнет лекарствами.
   components:
   - type: Sprite
@@ -107,6 +113,8 @@
     modifiers:
       coefficients:
         Caustic: 0.75
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
   parent: [ClothingOuterStorageFoldableBaseOpened, ClothingOuterTaipanCoatLabMed]
@@ -117,7 +125,7 @@
 - type: entity
   parent: ClothingOuterStorageFoldableBase
   id: ClothingOuterTaipanCoatLabRD
-  name: халат директора исследований
+  name: лабораторный халат директора исследований
   description: Халат из мягкой на ощупь ткани, местами заметны следы экспериментов.
   components:
   - type: Sprite
@@ -129,6 +137,8 @@
       coefficients:
         Caustic: 0.75
         Radiation: 0.9
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
   parent: [ClothingOuterStorageFoldableBaseOpened, ClothingOuterTaipanCoatLabRD]
@@ -150,6 +160,8 @@
     modifiers:
       coefficients:
         Caustic: 0.75
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
   parent: [ClothingOuterStorageFoldableBaseOpened, ClothingOuterTaipanCoatLabScience]

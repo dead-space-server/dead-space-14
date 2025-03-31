@@ -47,6 +47,8 @@
     sprite: _DeadSpace/Clothing/Ears/Headsets/hs_base_taipan.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/Ears/Headsets/hs_base_taipan.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
   parent: ClothingHeadsetAlt
@@ -64,3 +66,5 @@
     sprite: _DeadSpace/Clothing/Ears/Headsets/hs_taipan.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/Ears/Headsets/hs_taipan.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
