@@ -1,6 +1,6 @@
 - type: entity
-  id: ThrusterMedium
   parent: [ BaseThruster, ConstructibleMachine ]
+  id: ThrusterMedium
   name: большой ракетный двигатель
   description: Ну и ну, мне определенно не стоит совать туда свою голову. Тем не менее...
   components:
@@ -92,8 +92,8 @@
       bodyType: Dynamic
 
 - type: entity
-  parent: BaseThruster
-  id: [ BaseThruster, ConstructibleMachine ]
+  parent: [ BaseThruster, ConstructibleMachine ]
+  id: ThrusterLarge
   name: огромный ракетный двигатель
   description: Ну и ну, мне определенно не стоит совать туда свою голову. Тем не менее...
   components:
