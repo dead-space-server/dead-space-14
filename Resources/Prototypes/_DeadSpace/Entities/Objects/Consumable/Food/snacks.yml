@@ -22,7 +22,7 @@
 - type: entity
   id: FoodSnackFabricbrickOpen
   parent: FoodSnackBase
-  name: вококнистый батончик
+  name: волокнистый батончик
   description: Высококалорийный батончик, сотканный из волокон хлопка. На вид лучше, чем на вкус.
   components:
   - type: FlavorProfile
