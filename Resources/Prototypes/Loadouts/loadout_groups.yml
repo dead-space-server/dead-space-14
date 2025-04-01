@@ -83,6 +83,7 @@
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeer
+  - EmergencyMoth
 
 - type: loadoutGroup
   id: GroupEVATank
@@ -196,7 +197,7 @@
   loadouts:
   - ShoesBootsLaceup
   - BrownShoes
-  
+
 - type: loadoutGroup
   id: HoPUnderwear
   name: loadout-group-hop-underwear
@@ -344,7 +345,7 @@
   name: loadout-group-chef-hand
   minLimit: 0
   loadouts:
-  - ChefGoldenKnife  
+  - ChefGoldenKnife
 
 - type: loadoutGroup
   id: ChefGloves
@@ -608,10 +609,11 @@
   - EmergencyOxygenClown
   # DS14-species-emergency-start
   - EmergencyNonBreather
-  - EmergencyRobotNonBreather  
+  - EmergencyRobotNonBreather
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerClown
+  - EmergencyMothClown
 
 - type: loadoutGroup
   id: MimeHead
@@ -677,10 +679,11 @@
   - EmergencyOxygenMime
   # DS14-species-emergency-start
   - EmergencyNonBreather
-  - EmergencyRobotNonBreather  
+  - EmergencyRobotNonBreather
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerMime
+  - EmergencyMothMime
 
 - type: loadoutGroup
   id: MimeUnderwear
@@ -878,7 +881,7 @@
   - SalvageSpecialistJumpsuitFormal
   - SalvageSpecialistJumpskirt
   - SalvageSpecialistJumpskirtFormal
-  
+
 - type: loadoutGroup
   id: SalvageSpecialistOuterClothing
   name: loadout-group-salvage-specialist-outerclothing
@@ -1093,6 +1096,7 @@
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerExtended
+  - EmergencyMothExtended
 
 # Science
 - type: loadoutGroup
@@ -1532,6 +1536,7 @@
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerSecurity
+  - EmergencyMothSecurity
 
 - type: loadoutGroup
   id: SecurityStar
@@ -1786,6 +1791,7 @@
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerMedical
+  - EmergencyMothMedical
 
 # Wildcards
 - type: loadoutGroup
@@ -1860,6 +1866,7 @@
   - EmergencyNitrogenSyndicate
   - EmergencyOxygenSyndicate
   - LoadoutSpeciesVoxNitrogen
+  - EmergencyMothSyndicate
 
 - type: loadoutGroup
   id: GroupSpeciesBreathTool
