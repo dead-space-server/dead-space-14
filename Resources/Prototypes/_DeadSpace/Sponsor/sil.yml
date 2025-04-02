@@ -118,6 +118,15 @@
     - id: PDADominatorSil
     - id: AirTankDominatorSil
     - id: ClothingEyesHudDominatorSil
+    - id: ViolinInstrument
+    - id: PlushieSilAily
+    - id: PlushieSilAizek
+    - id: PlushieSilAzrail
+    - id: PlushieSilEmilia
+    - id: PlushieSilEva
+    - id: PlushieSilKrivazora
+    - id: PlushieSilAzrailHardsuit
+    - id: PlushieSilSharp
 
 # PDA
 - type: entity
@@ -183,7 +192,7 @@
   parent: BasePlushie
   id: PlushieSilAily
   name: плюшевая Айли
-  description: Плюшевая игрушка Офицера Специальных Операций. Вызывает смешанное чувство умиления и страха.
+  description: Плюшевая игрушка вульпканина в форме офицера специальных операций. Её хвост необычайно мягкий.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Sil/sil_plushie.rsi
@@ -193,7 +202,7 @@
   parent: BasePlushie
   id: PlushieSilAizek
   name: плюшевый Айзек
-  description: Мягкая игрушка оператора ЦК. Пахнет бюрократией.
+  description: Плюшевая игрушка в виде человека. От фигурки веет диктатурой. По виду игрушки можно недооценить способности её оригинальной версии что может быть фатально. От фигурки веет травкой и виски.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Sil/sil_plushie.rsi
@@ -203,7 +212,7 @@
   parent: BasePlushie
   id: PlushieSilAzrail
   name: плюшевый Азраил
-  description: Плюшевая игрушка главного врача. От него исходит аромат едких химикатов и лекарств.
+  description: Плюшевая игрушка главного врача резко пахнущая метом и сливками. Ни в коем случае не ложить рядом с ней осколок стекла....
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Sil/sil_plushie.rsi
@@ -213,7 +222,7 @@
   parent: BasePlushie
   id: PlushieSilEmilia
   name: плюшевая Эмилия
-  description: От неё веет духотой и педантичностью, а рядом с ней вам становится очень некомфортно. Пожалуй, стоит отойти от неё на несколько метров. На ощупь жесткая.
+  description: Плюшевая игрушка Главного врача с недовольным выражением лица. От неё веет духотой и педантичностью, а рядом с ней вам становится очень некомфортно. Почему-то вам кажется, что она постоянно наблюдает за вами, а её взгляд каждую секунду становиться всё злее и враждебнее, вызывая у вас чувство тревоги, переростающее в панику. Пожалуй, стоит отойти от неё на несколько метров. На ощупь жесткая.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Sil/sil_plushie.rsi
@@ -223,7 +232,7 @@
   parent: BasePlushie
   id: PlushieSilEva
   name: плюшевая Ева
-  description: Плюшевая игрушка ведущего врача. От неё веет опытом, но не умением.
+  description: Плюшевая игрушка строгого ведущего врача, чей жизненный слоган «Нас окружают одни бандиты». Будь готов, интерн, учиться — или стать частью «корабля» медицинского отсека... От фигурки исходит тонкий аромат фиалок и никотина — как напоминание о том, что милое не всегда безопасно.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Sil/sil_plushie.rsi
@@ -231,7 +240,7 @@
 
 - type: entity
   parent: BasePlushie
-  id: PlushieSilKrivazzora
+  id: PlushieSilKrivazora
   name: плюшевый Кривазора
   description: Плюшевая игрушка старшего инженера. От неё исходит легкий фрезоновый холодок, навевающий теплые воспоминания. Слегка покалывает электрическим током.
   components:
@@ -243,7 +252,7 @@
   parent: BasePlushie
   id: PlushieSilAzrailHardsuit
   name: плюшевый Азраил в "СЕВЕ"
-  description: Плюшевая игрушка человека в скафандре "СЕВА". Выглядит грозно.
+  description: Мягкая игрушка феленида в необычном белом скафандре. На плече виднеется необычный шевроном на котором изображен человек с изображением атома. Взяв игрушку в руки вы начинаете чувствовать что вами будто повелевают...
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Sil/sil_plushie.rsi
@@ -253,7 +262,7 @@
   parent: BasePlushie
   id: PlushieSilSharp
   name: плюшевый Ликаон
-  description: Плюшевая игрушка в виде вульпы в гавайском наряде. Излучает спокойствие.
+  description: При виде этой игрушки, вам хочется кинуть её в стену. Пахнет космической смазкой...
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Sil/sil_plushie.rsi
