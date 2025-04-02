@@ -17,29 +17,8 @@
         - !type:PlaySoundBehavior
           sound:
             collection: MetalBreak
-        - !type:SpawnEntitiesBehavior
-          spawn:
-            PartRodMetal1:
-              min: 5
-              max: 10
-            SheetSteel1:
-              min: 5
-              max: 10
-            CableApcStack1:
-              min: 5
-              max: 15
-            CableMVStack1:
-              min: 4
-              max: 10
-            CableHVStack1:
-              min: 1
-              max: 4
-            MachineFrame:
-              min: 1
-              max: 1
-            ThrusterMachineCircuitboard:
-              min: 1
-              max: 1
+        - !type:ChangeConstructionNodeBehavior
+          node: machineFrame
   - type: Sprite
     sprite: _DeadSpace/Structures/Shuttles/Thrusters/medium.rsi
     layers:
@@ -108,29 +87,8 @@
         - !type:PlaySoundBehavior
           sound:
             collection: MetalBreak
-        - !type:SpawnEntitiesBehavior
-          spawn:
-            PartRodMetal1:
-              min: 15
-              max: 35
-            SheetSteel1:
-              min: 35
-              max: 50
-            CableApcStack1:
-              min: 15
-              max: 35
-            CableMVStack1:
-              min: 10
-              max: 20
-            CableHVStack1:
-              min: 5
-              max: 15
-            MachineFrame:
-              min: 1
-              max: 1
-            ThrusterMachineCircuitboard:
-              min: 1
-              max: 1
+        - !type:ChangeConstructionNodeBehavior
+          node: machineFrame
   - type: Sprite
     sprite: _DeadSpace/Structures/Shuttles/Thrusters/large.rsi
     layers:
