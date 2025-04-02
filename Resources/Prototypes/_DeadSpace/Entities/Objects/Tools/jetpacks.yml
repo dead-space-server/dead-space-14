@@ -8,7 +8,7 @@
   components:
   - type: Item
     sprite: _DeadSpace/Objects/Tanks/Jetpacks/improvised.rsi
-    size: Large
+    size: Ginormous
   - type: Sprite
     sprite: _DeadSpace/Objects/Tanks/Jetpacks/improvised.rsi
   - type: Clothing
