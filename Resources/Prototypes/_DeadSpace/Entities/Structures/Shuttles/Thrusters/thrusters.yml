@@ -1,5 +1,5 @@
 - type: entity
-  parent: [ BaseThruster, ConstructibleMachine ]
+  parent: BaseThruster
   id: ThrusterMedium
   name: большой ракетный двигатель
   description: Ну и ну, мне определенно не стоит совать туда свою голову. Тем не менее...
@@ -90,7 +90,7 @@
       bodyType: Dynamic
 
 - type: entity
-  parent: [ BaseThruster, ConstructibleMachine ]
+  parent: BaseThruster
   id: ThrusterLarge
   name: огромный ракетный двигатель
   description: Ну и ну, мне определенно не стоит совать туда свою голову. Тем не менее...
