@@ -659,7 +659,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/DragonFox/rcd.rsi/meta.json
+    sprite: _DeadSpace/Sponsor/DragonFox/rcd.rsi
     layers:
     - state: icon
   - type: AutoRecharge
