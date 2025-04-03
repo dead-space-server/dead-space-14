@@ -1,0 +1,20 @@
+- type: entity
+  name: пустотная пушка
+  parent: BaseItem
+  id: GunArmutant
+  description: Огромная пушка, размером с руку, на вид явно жуткое.
+  components:
+  - type: Unremoveable
+  - type: Sprite
+    sprite: _DeadSpace/Armutant/armutant_gun.rsi
+    state: icon
+  - type: Item
+    sprite: _DeadSpace/Armutant/armutant_gun.rsi
+  - type: BallisticAmmoProvider
+    proto: VoidFrag
+  - type: Gun
+    fireRate: 0.4
+    selectedMode: SemiAuto
+    soundGunshot:
+      path: /Audio/_DeadSpace/Armutant/sound_items_weapons_resonator_blast.ogg
+    projectileSpeed: 15

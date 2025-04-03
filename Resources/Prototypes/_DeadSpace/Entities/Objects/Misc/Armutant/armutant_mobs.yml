@@ -1,0 +1,215 @@
+- type: entity
+  name: Hivelord spawner
+  id: SpawnMobHiveLord
+  parent: MarkerBase
+  components:
+  - type: Sprite
+    layers:
+      - state: green
+      - sprite: Mobs/Animals/mouse.rsi
+        state: icon-2
+      - state: ai
+  - type: ConditionalSpawner
+    prototypes:
+      - MobHivelord
+
+- type: entity
+  parent: CollideSpawnVoidBosses
+  id: SpawnBossesSpider
+  suffix: Void Spider
+  components:
+    - type: TriggerOnCollide
+      fixtureID: spawnvoidbosses
+    - type: SoundOnTrigger
+      removeOnTrigger: true
+      sound:
+        path: /Audio/_DeadSpace/Armutant/sound_fight_first_boss.ogg
+        volume: 1
+    - type: SpawnOnTrigger
+      proto: MobBossesVoidSpider
+    - type: DeleteOnTrigger
+
+- type: entity
+  parent: CollideVendigoVoidBosses
+  id: SpawnBossesVendigo
+  suffix: Void Vendigo
+  components:
+    - type: TriggerOnCollide
+      fixtureID: spawnvendigobosses
+    - type: SoundOnTrigger
+      removeOnTrigger: true
+      sound:
+        path: /Audio/_DeadSpace/Armutant/sound_fight_two_bosses.ogg
+        volume: 1
+    - type: SpawnOnTrigger
+      proto: MobVendigoBosses
+    - type: DeleteOnTrigger
+
+- type: entity
+  id: MobBossesVoidSpider
+  parent:
+  - BaseMob
+  - MobDamageable
+  - MobAtmosExposed
+  - MobCombat
+  name: Паук Пустоты
+  description: Очень быстрое гуманоидное существо, к тому же и сильное.
+  components:
+  - type: StatusEffects
+    allowed:
+    - SlowedDown
+    - Stutter
+    - Stun
+    - Electrocution
+    - TemporaryBlindness
+    - RadiationProtection
+    - Drowsiness
+    - Adrenaline
+  - type: Sprite
+    sprite: _DeadSpace/Armutant/spider_void.rsi
+    layers:
+    - map: ["enum.DamageStateVisualLayers.Base"]
+      state: bossed_state
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: bossed_state
+  - type: MovementSpeedModifier
+    baseWalkSpeed : 5.00
+    baseSprintSpeed : 5.00
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      200: Dead
+  - type: MeleeWeapon
+    soundHit:
+      path: "/Audio/_DeadSpace/Armutant/sound_items_weapons_genhit2.ogg"
+    angle: 0
+    attackRate: 0.75
+    animation: WeaponArcPunch
+    damage:
+      types:
+        Slash: 5
+        Piercing: 10
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: HTN
+    rootTask:
+      task: GoliathCompound
+    blackboard:
+      VisionRadius: !type:Single
+        20
+      AggroVisionRadius: !type:Single
+        20
+  - type: NPCUseActionOnTarget
+    actionId: ActionToggleSporeBlade
+  - type: Tag
+    tags:
+    - CannotSuicide
+    - FootstepSound
+    - Goliath
+  - type: NoSlip
+  - type: SpawnOnTrigger
+    proto: SpawnBossesEffect
+  - type: Destructible
+    thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 200
+        behaviors:
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+          - !type:PlaySoundBehavior
+            sound:
+              collection: GlassBreak
+
+- type: entity
+  id: MobVendigoBosses
+  parent: MobBossesVoidSpider
+  name: Вендиго
+  description: Мифическое существо, на вид до ужаса сильное.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Armutant/vendigo_bosses.rsi
+    layers:
+    - map: ["enum.DamageStateVisualLayers.Base"]
+      state: bossed_state
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      350: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed : 3.00
+    baseSprintSpeed : 3.00
+  - type: MeleeWeapon
+    soundHit:
+      path: "/Audio/_DeadSpace/Armutant/sound_items_weapons_genhit2.ogg"
+    angle: 0
+    attackRate: 0.75
+    animation: WeaponArcPunch
+    damage:
+      types:
+        Slash: 5
+        Piercing: 10
+  - type: Destructible
+    thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 350
+        behaviors:
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+          - !type:PlaySoundBehavior
+            sound:
+              collection: GlassBreak
+
+- type: entity
+  id: CollideSpawnVoidBosses
+  abstract: true
+  placement:
+    mode: SnapgridCenter
+  components:
+    - type: Sprite
+      sprite: Objects/Fun/toys.rsi
+      state: plushie_arachnid
+    - type: Fixtures
+      fixtures:
+        spawnvoidbosses:
+          shape:
+            !type:PhysShapeAabb
+            bounds: "-2,-2,2,2"
+          hard: false
+          mask:
+            - ItemMask
+          layer:
+            - SlipLayer
+    - type: Physics
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  id: CollideVendigoVoidBosses
+  abstract: true
+  placement:
+    mode: SnapgridCenter
+  components:
+    - type: Sprite
+      sprite: Clothing/Head/Helmets/bone_helmet.rsi
+      state: icon
+    - type: Fixtures
+      fixtures:
+        spawnvendigobosses:
+          shape:
+            !type:PhysShapeAabb
+            bounds: "-3,-3,3,3"
+          hard: false
+          mask:
+            - ItemMask
+          layer:
+            - SlipLayer
+    - type: Physics
+    - type: Tag
+      tags:
+        - HideContextMenu

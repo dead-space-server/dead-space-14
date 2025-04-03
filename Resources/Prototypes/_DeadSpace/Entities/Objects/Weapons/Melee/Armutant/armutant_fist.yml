@@ -1,0 +1,85 @@
+- type: entity
+  name: пустотное щупальце
+  parent: BaseItem
+  id: FistArmutant
+  description: Огромное щупальце, размером с руку, на вид явно жуткое.
+  components:
+  - type: Unremoveable
+  - type: Sprite
+    sprite: _DeadSpace/Armutant/blood_fist.rsi
+    state: icon
+  - type: Item
+    sprite: _DeadSpace/Armutant/blood_fist.rsi
+  - type: MeleeWeapon
+    wideAnimationRotation: 90
+    attackRate: 1.1
+    damage:
+      types:
+        Blunt: 10
+    soundHit:
+      path: /Audio/_DeadSpace/Armutant/sound_items_weapons_genhit2.ogg
+      params:
+        volume: 3
+
+- type: reagent
+  id: Shrapnel
+  name: reagent-name-shrapnel
+  desc: reagent-desc-shrapnel
+  physicalDesc: reagent-physical-desc-energizing
+  group: Narcotics
+  flavor: sharp
+  color: "#4B0082"
+  metabolisms:
+    Narcotic:
+      metabolismRate: 0.5
+      effects:
+      - !type:AdjustReagent
+        conditions:
+        - !type:ReagentThreshold
+          reagent: ChloralHydrate
+          min: 1
+        reagent: ChloralHydrate
+        amount: -10
+      - !type:AdjustReagent
+        conditions:
+        - !type:ReagentThreshold
+          reagent: Lexorin
+          min: 1
+        reagent: Lexorin
+        amount: -10
+      - !type:AdjustReagent
+        conditions:
+        - !type:ReagentThreshold
+          reagent: Nocturine
+          min: 1
+        reagent: Nocturine
+        amount: -10
+      - !type:GenericStatusEffect
+        key: ForcedSleep
+        time: 3
+        type: Remove
+      - !type:GenericStatusEffect
+        key: Adrenaline
+        component: IgnoreSlowOnDamage
+        time: 5
+    Medicine:
+      metabolismRate: 0.5
+      effects:
+        - !type:ResetNarcolepsy
+        - !type:SatiateHunger
+          factor: 1
+        - !type:SatiateThirst
+          factor: 1
+        - !type:HealthChange
+          conditions:
+          damage:
+            groups:
+              Burn: -10
+              Brute: -10
+              Toxin: -10
+    Drink:
+      effects:
+        - !type:SatiateThirst
+          factor: 6
+        - !type:ModifyBloodLevel
+          amount: 6

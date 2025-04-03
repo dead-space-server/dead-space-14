@@ -1,0 +1,126 @@
+- type: entity
+  id: ArtiefactArmutantObjective
+  name: Артефакт
+  description: Нечто пульсирующие.
+  parent: BaseItem
+  suffix: телепорт
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Armutant/artefact.rsi
+      layers:
+      - state: icon_false
+    - type: PointLight
+      radius: 3
+      energy: 3
+      color: "#ff66cc"
+    - type: ObjectiveCreateMap
+    - type: EmitSoundOnUse
+      sound:
+        collection: RadiationPulse
+    - type: UseDelay
+      delay: 600
+
+- type: entity
+  id: ArtiefactArmutantObjectiveTrue
+  parent: BaseItem
+  name: Сердце пустоты
+  description: Нечто пульсирующие, нечто живое.
+  suffix: настоящий
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Armutant/artefact.rsi
+      layers:
+      - state: icon_true
+    - type: PointLight
+      radius: 2
+      energy: 2
+      color: "#ff66cc"
+    - type: StealTarget
+      stealGroup: ArtiefactArmutantObjectiveTrue
+    - type: ObjectiveTeleportToStation
+
+- type: entity
+  id: ObjectiveStorageBox
+  name: защищенная витрина с артефактом
+  description: A sturdy showcase for an expensive exhibit.
+  parent: BaseGlassBox
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: _DeadSpace/Armutant/glassbox_artiefact.rsi
+    layers:
+    - state: base
+    - state: artefact
+      map: ["enum.ItemCabinetVisuals.Layer"]
+      visible: true
+    - state: glass
+      map: ["enum.OpenableVisuals.Layer"]
+    - state: locked
+      shader: unshaded
+      map: ["enum.LockVisualLayers.Lock"]
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        density: 1000
+        mask:
+        - MachineMask
+        layer:
+        - LowImpassable
+        - MidImpassable
+        - BulletImpassable
+  - type: AccessReader
+    access: [ [ "ResearchDirector" ] ]
+  - type: Repairable
+    fuelCost: 15
+    doAfterDelay: 5
+  - type: Lock
+  - type: LockVisuals
+  - type: DamageVisuals
+    thresholds: [4, 8, 12] # TODO: Fix damage visuals on open state.
+    damageDivisor: 7.555
+    trackAllDamage: true
+    damageOverlay:
+      sprite: _DeadSpace/Armutant/glassbox_artiefact.rsi
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Glass
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        collection: GlassSmash
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:EmptyAllContainersBehaviour
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WindowShatter
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Machines/warning_buzzer.ogg
+          params:
+            volume: 10
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          ShardGlassReinforced:
+            min: 3
+            max: 5
+      - !type:ChangeConstructionNodeBehavior
+        node: brokenGlassBox
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: ItemSlots
+    slots:
+      ItemCabinet:
+        ejectOnInteract: true
+        ejectSound: /Audio/Machines/machine_switch.ogg
+  - type: ContainerFill
+    containers:
+      ItemCabinet:
+      - ArtiefactArmutantObjective

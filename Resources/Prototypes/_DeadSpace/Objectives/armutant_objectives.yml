@@ -1,0 +1,58 @@
+- type: entity
+  abstract: true
+  parent: BaseObjective
+  id: BaseArmutantObjective
+  components:
+  - type: Objective
+    issuer: objective-issuer-armutant
+
+- type: entity
+  parent: [BaseArmutantObjective, BaseStealObjective]
+  id: StealArtiefactArmutantObjective
+  components:
+  - type: StealCondition
+    verifyMapExistence: false
+    stealGroup: ArtiefactArmutantObjectiveTrue
+    objectiveNoOwnerText: steal-owner-artiefact-armutant
+    descriptionText: steal-target-groups-artiefact-armutant
+  - type: Objective
+    difficulty: 1
+
+- type: stealTargetGroup
+  id: ArtiefactArmutantObjectiveTrue
+  name: steal-target-groups-artiefact-armutant
+  sprite:
+    sprite: _DeadSpace/Armutant/bone_shard.rsi
+    state: icon
+
+- type: entity
+  parent: [BaseArmutantObjective, BaseTargetObjective]
+  id: ProtectedRandomPersonObjective
+  components:
+  - type: Objective
+    difficulty: 1
+    unique: false
+    icon:
+      sprite: Effects/hearts.rsi
+      state: hearts
+  - type: TargetObjective
+    title: objective-alive-person-armutant-title
+  - type: PickRandomPerson
+    requireAlive: true
+  - type: ObjectiveAlivePerson
+
+- type: entity
+  parent: [BaseArmutantObjective, BaseTargetObjective]
+  id: KillOneTryRandomPersonObjective
+  components:
+  - type: Objective
+    difficulty: 1
+    unique: false
+    icon:
+      sprite: Objects/Misc/books.rsi
+      state: icon_eye
+  - type: TargetObjective
+    title: objective-kill-person-armutant-title
+  - type: PickRandomPerson
+    requireAlive: true
+  - type: ObjectiveKillOneTry

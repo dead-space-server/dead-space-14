@@ -14,6 +14,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using Content.Shared.DeadSpace.Events.Roles.Components;
 using Content.Server.GameTicking.Rules;
+using Content.Server.DeadSpace.Armutant.Base.Components;
 
 namespace Content.Server.Administration.Systems;
 
@@ -50,6 +51,9 @@ public sealed partial class AdminVerbSystem
 
     private readonly EntProtoId _paradoxCloneRuleId = "ParadoxCloneSpawn";
 
+    [ValidatePrototypeId<EntityPrototype>]
+    private const string DefaultArmutantRule = "Armutant";
+
     // All antag verbs have names so invokeverb works.
     private void AddAntagVerbs(GetVerbsEvent<Verb> args)
     {
@@ -77,7 +81,7 @@ public sealed partial class AdminVerbSystem
                 _antag.ForceMakeAntag<TraitorRuleComponent>(targetPlayer, DefaultTraitorRule);
             },
             Impact = LogImpact.High,
-            Message = string.Join(": ", traitorName,  Loc.GetString("admin-verb-make-traitor")),
+            Message = string.Join(": ", traitorName, Loc.GetString("admin-verb-make-traitor")),
         };
         args.Verbs.Add(traitor);
 
@@ -264,6 +268,20 @@ public sealed partial class AdminVerbSystem
             Message = string.Join(": ", eventRoleName, Loc.GetString("admin-verb-make-event-role")),
         };
         args.Verbs.Add(eventRole);
+
+        Verb armutant = new()
+        {
+            Text = Loc.GetString("admin-verb-text-make-armutant"),
+            Category = VerbCategory.Antag,
+            Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/_DeadSpace/Armutant/skull_void.rsi"), "skull_void"),
+            Act = () =>
+            {
+                _antag.ForceMakeAntag<ArmutantRuleComponent>(targetPlayer, DefaultArmutantRule);
+            },
+            Impact = LogImpact.High,
+            Message = Loc.GetString("admin-verb-make-armutant"),
+        };
+        args.Verbs.Add(armutant);
         // DS14-end
     }
 }

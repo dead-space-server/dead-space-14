@@ -1,0 +1,258 @@
+# Blade region
+
+- type: entity
+  id: ActionToggleBlade
+  name: "[color=red]Преобразовать в клинок[/color]"
+  description: Преобразовывает вашу руку в клинок.
+  components:
+  - type: InstantAction
+    useDelay: 30
+    priority: -21
+    itemIconStyle: NoItem
+    checkCanInteract: false
+    checkConsciousness: false
+    icon:
+      sprite: _DeadSpace/Armutant/armblade.rsi
+      state: icon
+    event: !type:BladeArmutantToggleEvent {}
+
+- type: entity
+  id: ActionToggleSpawnTalon
+  name: "[color=red]Метательный осколок[/color]"
+  description: Создает метательный осколок.
+  components:
+  - type: InstantAction
+    useDelay: 5
+    itemIconStyle: NoItem
+    priority: -16
+    icon:
+      sprite: _DeadSpace/Actions/armutant_actions.rsi
+      state: shard
+    event: !type:CreateTalonBladeEvent {}
+
+- type: entity
+  id: ActionToggleDash
+  name: "[color=red]Вход в пустоту[/color]"
+  description: Совершает рывок с последующим уроном в выбранной точке.
+  components:
+  - type: WorldTargetAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _DeadSpace/Actions/armutant_actions.rsi
+      state: blink
+    priority: -15
+    event: !type:BladeDashActionEvent {}
+    range: 4
+    useDelay: 7
+    checkCanAccess: false
+
+- type: entity
+  id: ActionToggleSporeBlade
+  name: "[color=red]Призрачный пол[/color]"
+  description: Создает область, которая парализует противника на несколько секунд.
+  components:
+  - type: EntityWorldTargetAction
+    priority: -14
+    raiseOnUser: true
+    icon:
+      sprite: _DeadSpace/Actions/armutant_actions.rsi
+      state: spore
+    sound:
+      path: "/Audio/_DeadSpace/Armutant/sound_misc_enter_blood.ogg"
+    event: !type:GoliathSummonTentacleAction { entityId: EffectVoidSporeSpawn }
+    useDelay: 10
+    range: 10
+
+# Shield region
+
+- type: entity
+  id: ActionToggleShield
+  name: "[color=yellow]Преобразовать в щит[/color]"
+  description: Преобразовывает вашу руку в щит.
+  components:
+  - type: InstantAction
+    useDelay: 30
+    priority: -20
+    itemIconStyle: NoItem
+    checkCanInteract: false
+    checkConsciousness: false
+    icon:
+      sprite: _DeadSpace/Armutant/shield.rsi
+      state: icon
+    event: !type:ShieldArmutantToggleEvent {}
+
+- type: entity
+  id: ActionToggleShieldArmor
+  name: "[color=yellow]Призыв брони[/color]"
+  description: Моментально облачает вас в сильный доспех.
+  components:
+  - type: InstantAction
+    priority: -13
+    useDelay: 3
+    itemIconStyle: NoItem
+    checkCanInteract: false
+    icon:
+      sprite: _DeadSpace/Actions/armutant_actions.rsi
+      state: armor
+    event: !type:CreateArmorShieldToggleEvent {}
+
+- type: entity
+  id: ActionToggleShieldStun
+  name: "[color=yellow]Сейсмический топот[/color]"
+  description: Парализует всех противник, кто оказался около вас.
+  components:
+  - type: InstantAction
+    useDelay: 15
+    priority: -12
+    itemIconStyle: NoItem
+    checkCanInteract: false
+    icon:
+      sprite: _DeadSpace/Actions/armutant_actions.rsi
+      state: leg
+    event: !type:StunShieldToggleEvent {}
+
+- type: entity
+  id: ActionToggleVoidShield
+  name: "[color=yellow]Пустотный щит[/color]"
+  description: Создает вокруг вас ауру, которая дает вам 99% отражения любых снарядов.
+  components:
+  - type: InstantAction
+    priority: -11
+    useDelay: 30
+    itemIconStyle: NoItem
+    checkCanInteract: false
+    checkConsciousness: false
+    icon:
+      sprite: _DeadSpace/Actions/armutant_actions.rsi
+      state: shield
+    event: !type:VoidShieldToggleEvent {}
+
+# Fist region
+
+- type: entity
+  id: ActionToggleFist
+  name: "[color=green]Преобразовать в щупальце[/color]"
+  description: Преобразовывает вашу руку в щупальце.
+  components:
+  - type: InstantAction
+    useDelay: 30
+    priority: -19
+    itemIconStyle: NoItem
+    checkCanInteract: false
+    checkConsciousness: false
+    icon:
+      sprite: _DeadSpace/Armutant/blood_fist.rsi
+      state: icon
+    event: !type:FistArmutantToggleEvent {}
+
+- type: entity
+  id: ActionToggleFistStunAround
+  name: "[color=green]Хватка пустоты[/color]"
+  description: Парализует на расстоянии выбранную вами цель.
+  components:
+  - type: EntityTargetAction
+    useDelay: 10
+    itemIconStyle: NoItem
+    priority: -10
+    icon:
+      sprite: _DeadSpace/Actions/armutant_actions.rsi
+      state: arms
+    event: !type:FistStunAroundToggleEvent {}
+    range: 6
+    deselectOnMiss: false
+
+- type: entity
+  id: ActionToggleFistMendSelf
+  name: "[color=green]Затягивание ран[/color]"
+  description: Вводит вас особенный реагент, который со временем заживляет ваши раны, также если на вас были надеты наручники, моментально их снимет.
+  components:
+  - type: InstantAction
+    useDelay: 20
+    checkCanInteract: false
+    priority: -9
+    checkConsciousness: false
+    itemIconStyle: BigAction
+    icon:
+      sprite: _DeadSpace/Actions/armutant_actions.rsi
+      state: healthup
+    event: !type:FistMendSelfToggleEvent {}
+
+- type: entity
+  id: ActionToggleFistBuffSpeed
+  name: "[color=green]Пустотный допинг[/color]"
+  description: Увеличивает вашу стандартную скорость на короткий срок.
+  components:
+  - type: InstantAction
+    useDelay: 30
+    checkCanInteract: false
+    priority: -8
+    itemIconStyle: NoItem
+    icon:
+      sprite: _DeadSpace/Actions/armutant_actions.rsi
+      state: energyup
+    event: !type:FistBuffSpeedToggleEvent {}
+
+# Gun region
+
+- type: entity
+  id: ActionToggleGun
+  name: "[color=violet]Преобразовать в пушку[/color]"
+  description: Преобразовывает вашу руку в пушку.
+  components:
+  - type: InstantAction
+    useDelay: 30
+    priority: -18
+    itemIconStyle: NoItem
+    checkCanInteract: false
+    checkConsciousness: false
+    icon:
+      sprite: _DeadSpace/Armutant/armutant_gun.rsi
+      state: icon
+    event: !type:GunArmutantToggleEvent {}
+
+- type: entity
+  id: ActionToggleGunZoom
+  name: "[color=violet]Прицеливание[/color]"
+  description: Увеличивает ваш зрительный диапазон.
+  components:
+  - type: InstantAction
+    itemIconStyle: NoItem
+    priority: -7
+    icon:
+      sprite: _DeadSpace/Actions/armutant_actions.rsi
+      state: zoom
+    event: !type:GunZoomActionEvent {}
+    useDelay: 1
+
+- type: entity
+  id: ActionToggleGunSmoke
+  name: "[color=violet]Дымовая завеса[/color]"
+  description: Создает дымовую завесу на короткий срок.
+  components:
+  - type: InstantAction
+    itemIconStyle: NoItem
+    priority: -6
+    icon:
+      sprite: _DeadSpace/Actions/armutant_actions.rsi
+      state: smoke
+    event: !type:GunSmokeActionEvent {}
+    useDelay: 20
+
+# General region
+
+- type: entity
+  id: ActionToggleEnterStasis
+  name: "[color=blue]Войти в регенеративный стазис[/color]"
+  description: При активации вы моменатально умираете и воскрешаетесь спустя 30 секунд, залечивая все раны и снимая с себя наручники.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: InstantAction
+    checkCanInteract: false
+    checkConsciousness: false
+    priority: -17
+    itemIconStyle: NoItem
+    useDelay: 5
+    icon:
+      sprite: _DeadSpace/Actions/armutant_actions.rsi
+      state: revive
+    event: !type:EnterArmutantStasisEvent {}

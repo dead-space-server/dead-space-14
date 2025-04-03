@@ -1,0 +1,28 @@
+- type: antag
+  id: Armutant
+  name: roles-antag-armutant-name
+  antagonist: true
+  setPreference: true
+  objective: roles-antag-armutant-objective
+  requirements:
+    - !type:OverallPlaytimeRequirement
+      time: 108000 # 30 hours
+    - !type:DepartmentTimeRequirement
+      department: Medical
+      time: 18000 # 5 hours
+    - !type:DepartmentTimeRequirement
+      department: Science
+      time: 18000 # 5 hours
+    - !type:DepartmentTimeRequirement
+      department: Security
+      time: 36000 # 10 hrs
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleArmutant
+  name: Armutant Role
+  components:
+  - type: MindRole
+    antagPrototype: Armutant
+    roleType: SoloAntagonist
+  - type: ArmutantRole
