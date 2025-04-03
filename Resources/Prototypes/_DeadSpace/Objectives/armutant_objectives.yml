@@ -38,8 +38,8 @@
   - type: TargetObjective
     title: objective-alive-person-armutant-title
   - type: PickRandomPerson
-    requireDie: true
   - type: ObjectiveAlivePerson
+    requireDie: true
 
 - type: entity
   parent: [BaseArmutantObjective, BaseTargetObjective]
@@ -54,5 +54,5 @@
   - type: TargetObjective
     title: objective-kill-person-armutant-title
   - type: PickRandomPerson
-    requireAlive: true
   - type: ObjectiveKillOneTry
+    requireAlive: true
