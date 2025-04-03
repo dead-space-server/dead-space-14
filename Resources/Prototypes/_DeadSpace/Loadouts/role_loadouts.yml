@@ -146,7 +146,7 @@
   - GroupSpeciesBreathTool
   - SecuritySocks # DS14-Underwear
   - SecurityUnderwear # DS14-Underwear
-  - HeadofSecurityMedal # DS14-Medal
+  - SecurityPilotMedal # DS14-Medal
 
 # Medical
 - type: roleLoadout
