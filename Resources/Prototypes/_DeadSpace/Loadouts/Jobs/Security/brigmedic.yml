@@ -68,7 +68,7 @@
   - !type:JobRequirementLoadoutEffect
     requirement:
       !type:RoleTimeRequirement
-      role: BrigMedicMedal
+      role: JobBrigmedic
       time: 270000 # 75 hours
 
 - type: loadout
