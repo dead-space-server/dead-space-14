@@ -674,7 +674,7 @@
     staticPacks:
     - FloorTilesStatic
     - CircuitFloorsStatic
-    dynamicPacks: # DS14
+    dynamicPacks:
     - FauxTiles # DS14
   - type: MaterialStorage
     whitelist:
