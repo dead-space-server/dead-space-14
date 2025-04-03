@@ -122,7 +122,7 @@
   - !type:JobRequirementLoadoutEffect
     requirement:
       !type:RoleTimeRequirement
-      role: SecurityDetectiveMedal
+      role: JobDetective
       time: 270000 # 75 hours
 
 - type: loadout
