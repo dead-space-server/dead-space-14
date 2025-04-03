@@ -10,9 +10,6 @@ steal-owner-artiefact-armutant = Выкрасть артефакт.
 objective-kill-person-armutant-title = Проверь на прочность {$targetName}, {CAPITALIZE($job)}, цель должна умереть лишь ОДИН раз.
 objective-alive-person-armutant-title = Защити {$targetName}, {CAPITALIZE($job)}, цель должна эвакуироваться живой любой ценой.
 
-admin-verb-make-armutant = Сделать армутантом
-admin-verb-text-make-armutant = Сделать цель армутантом
-
 mendself-activated = Раны начали заживать
 armutant-stasis-enter-fail = Войти в стазис невозможно
 armutant-stasis-enter = Процесс регенерации начался
