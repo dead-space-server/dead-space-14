@@ -5,7 +5,7 @@
   - !type:JobRequirementLoadoutEffect
     requirement:
       !type:RoleTimeRequirement
-      role: SecurityPilotMedal
+      role: JobSecurityPilot
       time: 270000 # 75 hours
 
 - type: loadout
