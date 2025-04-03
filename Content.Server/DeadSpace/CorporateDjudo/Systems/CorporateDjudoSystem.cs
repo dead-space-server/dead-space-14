@@ -73,11 +73,8 @@ public sealed partial class CorporateDjudoSystem : EntitySystem
 
         var meleeWeaponComponent = EnsureComp<MeleeWeaponComponent>(user);
 
-        if (user.Comp.AddDamage == null)
-        {
-            user.Comp.AddDamage = new DamageSpecifier();
-        }
-        meleeWeaponComponent.Damage += user.Comp.AddDamage;
+        if (!(user.Comp.AddDamage is null))
+            meleeWeaponComponent.Damage += user.Comp.AddDamage;
 
         var combatMode = _entitySystemManager.GetEntitySystem<SharedCombatModeSystem>();
         combatMode.SetDisarmFailChance(user.Owner, user.Comp.SetChanceDisarm);
@@ -88,7 +85,8 @@ public sealed partial class CorporateDjudoSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("unequip-djudo-belt"), user, user);
 
         var meleeWeaponComponent = EnsureComp<MeleeWeaponComponent>(user);
-        meleeWeaponComponent.Damage -= user.Comp.AddDamage;
+        if (!(user.Comp.AddDamage is null))
+            meleeWeaponComponent.Damage -= user.Comp.AddDamage;
 
         var combatMode = _entitySystemManager.GetEntitySystem<SharedCombatModeSystem>();
         combatMode.SetDisarmFailChance(user.Owner, user.Comp.DefaultChanceDisarm);
@@ -126,7 +124,8 @@ public sealed partial class CorporateDjudoSystem : EntitySystem
             if (!_hands.IsHolding(user.Owner, stunbaton))
                 return;
 
-            _damage.TryChangeDamage(user, user.Comp.StunBatonUse, true, false);
+            if (!(user.Comp.StunBatonUse is null))
+                _damage.TryChangeDamage(user, user.Comp.StunBatonUse, true, false);
 
             _popup.PopupEntity(Loc.GetString("you-not-can-use-it"), user, user);
 
