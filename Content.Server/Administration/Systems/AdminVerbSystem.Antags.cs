@@ -250,6 +250,21 @@ public sealed partial class AdminVerbSystem
             args.Verbs.Add(paradox);
 
         // DS14-start
+        var armutantName = Loc.GetString("admin-verb-text-make-armutant");
+        Verb armutant = new()
+        {
+            Text = armutantName,
+            Category = VerbCategory.Antag,
+            Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/_DeadSpace/Armutant/skull_void.rsi"), "skull_void"),
+            Act = () =>
+            {
+                _antag.ForceMakeAntag<ArmutantRuleComponent>(targetPlayer, DefaultArmutantRule);
+            },
+            Impact = LogImpact.High,
+            Message = string.Join(": ", armutantName, Loc.GetString("admin-verb-make-armutant")),
+        };
+        args.Verbs.Add(armutant);
+
         var eventRoleName = Loc.GetString("admin-verb-text-make-event-role");
         Verb eventRole = new()
         {
@@ -268,20 +283,6 @@ public sealed partial class AdminVerbSystem
             Message = string.Join(": ", eventRoleName, Loc.GetString("admin-verb-make-event-role")),
         };
         args.Verbs.Add(eventRole);
-
-        Verb armutant = new()
-        {
-            Text = Loc.GetString("admin-verb-text-make-armutant"),
-            Category = VerbCategory.Antag,
-            Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/_DeadSpace/Armutant/skull_void.rsi"), "skull_void"),
-            Act = () =>
-            {
-                _antag.ForceMakeAntag<ArmutantRuleComponent>(targetPlayer, DefaultArmutantRule);
-            },
-            Impact = LogImpact.High,
-            Message = Loc.GetString("admin-verb-make-armutant"),
-        };
-        args.Verbs.Add(armutant);
         // DS14-end
     }
 }
