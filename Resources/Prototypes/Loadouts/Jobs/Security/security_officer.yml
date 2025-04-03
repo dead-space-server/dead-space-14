@@ -218,7 +218,7 @@
   - !type:JobRequirementLoadoutEffect
     requirement:
       !type:RoleTimeRequirement
-      role: JobWarden
+      role: JobSecurityOfficer
       time: 270000 # 75 hours
 
 - type: loadout
