@@ -654,7 +654,7 @@
 - type: entity
   id: RCDDragonfox
   parent: RCDCE
-  name: рСУ МедТех-Элит
+  name: РСУ МедТех-Элит
   description: Улучшенная версия базового РСУ которая самовосстанавливет заряды, может быстро размещать и демонтировать стены, полы и шлюзы.
   categories: [ HideSpawnMenu ]
   components:
