@@ -74,7 +74,7 @@
   - !type:JobRequirementLoadoutEffect
     requirement:
       !type:RoleTimeRequirement
-      role: WardenMedal
+      role: JobWarden
       time: 270000 # 75 hours
 
 - type: loadout
