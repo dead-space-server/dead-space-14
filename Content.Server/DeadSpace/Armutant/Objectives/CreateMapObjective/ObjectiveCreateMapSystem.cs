@@ -1,6 +1,5 @@
 using System.Numerics;
 using Content.Server.DeadSpace.Armutant.Base.Components;
-using Content.Server.DeadSpace.Armutant.Objectives.CreateMapObjective.Components;
 using Content.Shared.Interaction.Events;
 using Robust.Shared.Map;
 using Robust.Shared.Console;
@@ -47,7 +46,6 @@ public sealed class ObjectiveCreateMapSystem : EntitySystem
 
     public void CreateMap(EntityUid teleporter, ObjectiveCreateMapComponent component)
     {
-        // ���������, ���������� �� ����� � ������ ID
         var initialMapId = new MapId(component.MapId);
         if (_map.MapExists(initialMapId))
             return;
@@ -57,29 +55,23 @@ public sealed class ObjectiveCreateMapSystem : EntitySystem
 
         var resPath = new ResPath(component.MapPath);
 
-        // ��������� ���������� ��� �������� �����
         Entity<MapComponent>? mapEntity;
         if (!_mapLoader.TryLoadMap(resPath, out mapEntity, out _))
             return;
 
         var loadedMapId = mapEntity.Value.Comp.MapId;
 
-        // ��������� ������� � �������������� ����������� MapId
         _consoleHost.ExecuteCommand($"mapinit {loadedMapId}");
 
-        // �������� EntityUid ����� ����� MapManager
         var mapEntityUid = _map.GetMapEntityId(loadedMapId);
         if (!_entities.EntityExists(mapEntityUid))
             return;
 
-        // �������� �������� TransformComponent ��������
         if (!_entities.TryGetComponent(teleporter, out TransformComponent? transform))
             return;
 
-        // ������������� ���������� �������� �� ����� �����, � ����� (0,0)
         transform.Coordinates = new EntityCoordinates(mapEntityUid, Vector2.Zero);
 
-        // ����� �������
         SpawnAttachedTo(component.SelfEffect, Transform(teleporter).Coordinates);
     }
 }
