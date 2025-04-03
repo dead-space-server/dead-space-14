@@ -20,7 +20,7 @@
     - id: UnknownShuttleMeatZone
     - id: UnknownShuttleMicroshuttle
     - id: UnknownShuttleSpacebus
-    - id: UnknownShuttlePirate
+    - id: UnknownShuttlePirate # DS14
 
 - type: entityTable
   id: UnknownShuttlesFreelanceTable
@@ -243,6 +243,8 @@
     startAnnouncement: station-event-unknown-shuttle-incoming #!!
   - type: LoadMapRule
     preloadedGrid: Spacebus
+
+# DS14-start
 
 - type: entity
   id: UnknownShuttlePirate
