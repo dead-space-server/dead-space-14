@@ -126,7 +126,7 @@
   - !type:JobRequirementLoadoutEffect
     requirement:
       !type:RoleTimeRequirement
-      role: HeadofSecurityMedal
+      role: JobHeadOfSecurity
       time: 270000 # 75 hours
 
 - type: loadout
