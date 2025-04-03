@@ -99,7 +99,7 @@
   - !type:JobRequirementLoadoutEffect
     requirement:
       !type:RoleTimeRequirement
-      role: SeniorOfficerMedal
+      role: JobSeniorOfficer
       time: 270000 # 75 hours
 
 - type: loadout
