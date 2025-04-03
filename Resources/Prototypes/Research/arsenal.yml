@@ -180,7 +180,7 @@
   technologyPrerequisites:
   - SalvageWeapons
   
-  # DS14-start
+# DS14-start
 - type: technology
   id: NightVisionTechnology
   name: research-technology-night-vision-technology

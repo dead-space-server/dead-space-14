@@ -207,7 +207,7 @@
     - Instruments
     - Equipment
     - FauxTiles
-    - NightVisionTech
+    - NightVisionTech # DS14
   - type: EmagLatheRecipes
     emagDynamicPacks:
     - SecurityAmmo
