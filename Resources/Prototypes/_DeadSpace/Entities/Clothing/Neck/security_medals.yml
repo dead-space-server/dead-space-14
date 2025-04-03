@@ -30,7 +30,7 @@
 
 - type: entity
   parent: ClothingNeckBase
-  id: ClothingNeckSecurityHeadofSecurityMedal
+  id: ClothingNeckSecurityHeadOfSecurityMedal
   name: медаль главы службы безопасности
   description: Медаль для того, кто готов взять на себя ответственность за безопасность целой станции.
   components:
