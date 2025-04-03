@@ -130,7 +130,7 @@
       time: 270000 # 75 hours
 
 - type: loadout
-  id: HeadofSecurityMedal
+  id: HeadOfSecurityMedal
   storage:
     back:
     - ClothingNeckSecurityHeadofSecurityMedal
