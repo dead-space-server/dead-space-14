@@ -60,6 +60,7 @@
     - SpiderTerror
     - BasicStationEventScheduler
     - BasicRoundstartVariation
+<<<<<<< HEAD
     - SubGamemodesRuleNoWizard
 
 - type: gamePreset
@@ -228,3 +229,23 @@
   - SpaceTrafficControlEventScheduler
   - BasicRoundstartVariation
   - SubGamemodesRule # DS14
+=======
+    - SubGamemodesRule
+
+- type: gamePreset
+  id: ArmutantAndTraitors
+  alias:
+    - armutantandtraitors
+  name: armutant-and-traitors-title
+  description: armutant-and-traitor-description
+  showInVote: true
+  showInAdminVote: true # DS14
+  voteType: rdm # DS14
+  rules:
+    - WageScheduler # backmen: currency
+    - Armutant
+    - Traitor
+    - BasicStationEventScheduler
+    - BasicRoundstartVariation
+    - SubGamemodesRule
+>>>>>>> 66c354a890 (FixFixFixFixFixFix)

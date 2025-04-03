@@ -1,0 +1,327 @@
+# Blade region
+
+- type: entity
+  id: VoidSpore
+  name: хитиновые споры # почему они спорят
+  components:
+  - type: Transform
+    anchored: True
+  - type: Physics
+    bodyType: Static
+    canCollide: true
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: _DeadSpace/Armutant/general_effects.rsi
+    noRot: true
+    state: stun_fire_effect
+  - type: StunOnContact
+  - type: Fixtures
+    fixtures:
+      fix:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        mask:
+        - Impassable
+        layer:
+        - Impassable
+        hard: false
+  - type: TimedDespawn
+    lifetime: 1
+  - type: SpawnOnDespawn
+    prototype: EffectVoidSporeRetract
+
+- type: entity
+  id: BaseEffectVoidSporeSpawn
+  categories: [ HideSpawnMenu ]
+  name: хитиновые споры
+  abstract: true
+  components:
+  - type: Transform
+    anchored: True
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    sprite: _DeadSpace/Armutant/general_effects.rsi
+    noRot: true
+    state: stun_fire_effect
+    drawdepth: Effects
+  - type: InteractionOutline
+  - type: TimedDespawn
+    lifetime: 1
+
+- type: entity
+  id: EffectVoidSporeSpawn
+  parent: BaseEffectVoidSporeSpawn
+  categories: [ HideSpawnMenu ]
+  name: void spore
+  components:
+    - type: SpawnOnDespawn
+      prototype: VoidSpore
+
+- type: entity
+  id: EffectVoidSporeRetract
+  parent: BaseEffectVoidSporeSpawn
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EffectVisuals
+  - type: AnimationPlayer
+
+- type: entity
+  id: BladeDashSelfEffect
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Armutant/general_effects.rsi
+    noRot: true
+    state: dash_effect
+    drawdepth: Effects
+  - type: TimedDespawn
+    lifetime: 0.8
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+# Shield region
+
+- type: entity
+  id: EffectSelfStun
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 1.1
+  - type: Sprite
+    sprite: _DeadSpace/Armutant/general_effects.rsi
+    noRot: true
+    state: stun_around_effect
+    drawdepth: Effects
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: EffectStun
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 0.4
+  - type: Sprite
+    sprite: Effects/arcs.rsi
+    noRot: true
+    state: disarm
+    drawdepth: Effects
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: VoidShieldSelfEffect
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Armutant/void_shield.rsi
+    noRot: true
+    state: void_shield
+    drawdepth: Effects
+  - type: TimedDespawn
+    lifetime: 15
+  - type: EffectVisuals
+  - type: AmbientSound
+    volume: 6
+    range: 5
+    sound:
+      path: /Audio/_DeadSpace/Armutant/sound_toggle_shield_claws.ogg
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+# Fist region
+
+- type: entity
+  id: FistSelfMendEffect
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Armutant/self_mend_effect.rsi
+    noRot: true
+    state: self_mend
+    drawdepth: Effects
+  - type: TimedDespawn
+    lifetime: 1.4
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: FistStunAroundEffect
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Armutant/general_effects.rsi
+    noRot: true
+    state: stun_effect_fist
+    drawdepth: Effects
+  - type: TimedDespawn
+    lifetime: 1.5
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  name: тентакля
+  id: TentacleArmsHand
+  parent: BaseLightning
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Armutant/hand_tentacle.rsi
+    drawdepth: Effects
+    layers:
+    - state: "hand"
+  - type: Beam
+    sound: null
+  - type: TimedDespawn
+    lifetime: 0.3
+  - type: PointLight
+    enabled: false
+  - type: Electrified
+    enabled: false
+
+# Gun region
+
+- type: entity
+  categories: [ HideSpawnMenu ]
+  parent: BaseBullet
+  id: VoidFrag
+  name: костянной диск
+  components:
+  - type: Sprite
+    noRot: false
+    sprite: _DeadSpace/Armutant/bone_shard.rsi
+    layers:
+    - state: icon
+      shader: unshaded
+  - type: Projectile
+    impactEffect: BulletImpactEffectBoneShard
+    damage:
+      types:
+        Piercing: 40
+        Structural: 30
+
+- type: entity
+  id: BulletImpactEffectBoneShard
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 0.2
+  - type: Sprite
+    drawdepth: Effects
+    layers:
+    - shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+      sprite: Effects/arcs.rsi
+      state: smash
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+      - HideContextMenu
+
+- type: entity
+  id: GunSmokeInstantEffect
+  parent: AdminInstantEffectBase
+  components:
+  - type: SmokeOnTrigger
+    duration: 10
+    spreadAmount: 1
+  - type: SoundOnTrigger
+    sound: /Audio/Effects/smoke.ogg
+  - type: TimerTriggerVisuals
+    primingSound:
+      path: /Audio/Effects/Smoke-grenade.ogg
+
+# General region
+
+- type: entity
+  id: EnterToStasisEffect
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Armutant/general_effects.rsi
+    noRot: true
+    state: stasis_dead
+    drawdepth: Effects
+  - type: TimedDespawn
+    lifetime: 3
+  - type: EffectVisuals
+  - type: AmbientSound
+    volume: 5
+    range: 7
+    sound:
+      path: /Audio/_DeadSpace/Armutant/sound_music_antag_hypnotized.ogg
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: VoidTeleportSelfEffect
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Armutant/general_effects.rsi
+    noRot: true
+    state: teleport_into_void
+    drawdepth: Effects
+  - type: TimedDespawn
+    lifetime: 2.8
+  - type: EffectVisuals
+  - type: AmbientSound
+    volume: 7
+    range: 15
+    sound:
+      path: /Audio/_DeadSpace/Armutant/sound_effects_magic_voidblink.ogg
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: OutVoidTeleportSelfEffect
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Armutant/general_effects.rsi
+    noRot: true
+    state: teleport_out_the_void
+    drawdepth: Effects
+  - type: TimedDespawn
+    lifetime: 1.4
+  - type: EffectVisuals
+  - type: AmbientSound
+    volume: 7
+    range: 15
+    sound:
+      path: /Audio/_DeadSpace/Armutant/sound_effects_magic_cosmic_expansion.ogg
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: SpawnBossesEffect
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Armutant/general_effects.rsi
+    noRot: true
+    state: spawn_boss_effect
+    drawdepth: Effects
+  - type: TimedDespawn
+    lifetime: 1.8
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu

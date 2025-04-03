@@ -1,0 +1,65 @@
+- type: entity
+  name: пустотный клинок
+  parent: BaseItem
+  id: BladeArmutant
+  description: Огромный клинок, размером с руку, на вид слишком жуткое.
+  components:
+  - type: Sharp
+  - type: Execution
+    doAfterDuration: 4.0
+  - type: Sprite
+    sprite: _DeadSpace/Armutant/armblade.rsi
+    state: icon
+  - type: MeleeWeapon
+    wideAnimationRotation: 90
+    attackRate: 0.75
+    damage:
+      types:
+        Slash: 25
+    soundHit:
+      path: /Audio/_DeadSpace/Armutant/sound_weapons_claws.ogg
+      params:
+        volume: -3
+  - type: Item
+    size: Normal
+    sprite: _DeadSpace/Armutant/armblade.rsi
+  - type: Prying
+  - type: Unremoveable
+  - type: Tool
+    qualities:
+    - Slicing
+    - Prying
+
+- type: entity
+  parent: BaseItem
+  id: WeaponTalonClaws
+  name: пустотный шип
+  description: Довольно-таки большой, а главное сверкает и выглядит дорого!
+  suffix: Weapon
+  components:
+  - type: Item
+    size: Small
+    sprite: _DeadSpace/Armutant/bone_shard.rsi
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeCircle
+          radius: 0.2
+        density: 5
+        mask:
+        - ItemMask
+        restitution: 0.3
+        friction: 0.2
+  - type: EmbeddableProjectile
+    sound: /Audio/_DeadSpace/Armutant/sound_items_weapons_dash.ogg
+  - type: LandAtCursor
+  - type: Sprite
+    sprite: _DeadSpace/Armutant/bone_shard.rsi
+    state: icon
+  - type: DamageOtherOnHit
+    damage:
+      types:
+        Slash: 10
+        Piercing: 10
+  - type: StaticPrice
+    price: 400

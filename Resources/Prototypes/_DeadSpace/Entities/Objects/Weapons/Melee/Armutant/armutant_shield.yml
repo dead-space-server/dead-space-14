@@ -1,0 +1,79 @@
+- type: entity
+  name: пустотный щит
+  parent: BaseItem
+  id: ShieldArmutant
+  description: Огромный щит, больше самой руки, на вид явно жуткое.
+  components:
+  - type: Execution
+    doAfterDuration: 4.0
+  - type: Unremoveable
+  - type: Sprite
+    sprite: _DeadSpace/Armutant/shield.rsi
+    state: icon
+  - type: Item
+    sprite: _DeadSpace/Armutant/shield.rsi
+  - type: MeleeWeapon
+    wideAnimationRotation: 90
+    attackRate: 0.4
+    damage:
+      types:
+        Blunt: 20
+    soundHit:
+      path: /Audio/_DeadSpace/Armutant/sound_effect_hit_shield.ogg
+      params:
+        volume: 6
+  - type: ClothingSpeedModifier
+    walkModifier: 0.7
+    sprintModifier: 0.7
+  - type: HeldSpeedModifier
+    walkModifier: 0.7
+    sprintModifier: 0.7
+
+- type: entity
+  parent: [ ClothingOuterBaseLarge, BaseMajorContraband, AllowSuitStorageClothing ]
+  id: ClothingOuterArmorArmutant
+  name: пустотная броня
+  description: Броня, покрытая фиолетовым хитином.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Armutant/armor_outerclothing.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Armutant/armor_outerclothing.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.5
+        Slash: 0.5
+        Piercing: 0.5
+        Heat: 0.5
+        Radiation: 0.5
+        Stun: 0.9
+  - type: ClothingSpeedModifier
+    walkModifier: 1
+    sprintModifier: 1
+  - type: HeldSpeedModifier
+  - type: ExplosionResistance
+    damageCoefficient: 0.5
+  - type: GroupExamine
+  - type: ProtectedFromStepTriggers
+    slots: WITHOUT_POCKET
+  - type: Unremoveable
+
+- type: entity
+  parent: [ ClothingHeadBase, BaseMajorContraband]
+  id: ClothingHeadHelmetArmutant
+  name: пустотный шлем
+  description: Шлем, покрытый фиолетовым хитином.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Armutant/armor_head.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Armutant/armor_head.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.7
+        Slash: 0.7
+        Piercing: 0.7
+        Heat: 0.7
+  - type: Unremoveable

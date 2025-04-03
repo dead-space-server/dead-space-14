@@ -13,6 +13,11 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using Content.Shared.DeadSpace.Events.Roles.Components;
+<<<<<<< HEAD
+=======
+using Content.Server.GameTicking.Rules;
+using Content.Server.DeadSpace.Armutant.Base.Components;
+>>>>>>> 66c354a890 (FixFixFixFixFixFix)
 
 namespace Content.Server.Administration.Systems;
 
@@ -33,6 +38,9 @@ public sealed partial class AdminVerbSystem
     private static readonly EntProtoId DefaultUnitologyRule = "Unitology"; // DS14
     private static readonly EntProtoId DefaultSpiderTerrorRule = "SpiderTerror"; // DS14
     private static readonly ProtoId<StartingGearPrototype> PirateGearId = "PirateGear";
+
+    [ValidatePrototypeId<EntityPrototype>]
+    private const string DefaultArmutantRule = "Armutant";
 
     // All antag verbs have names so invokeverb works.
     private void AddAntagVerbs(GetVerbsEvent<Verb> args)
@@ -263,6 +271,20 @@ public sealed partial class AdminVerbSystem
             Message = string.Join(": ", eventRoleName, Loc.GetString("admin-verb-make-event-role")),
         };
         args.Verbs.Add(eventRole);
+
+        Verb armutant = new()
+        {
+            Text = Loc.GetString("admin-verb-text-make-armutant"),
+            Category = VerbCategory.Antag,
+            Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/_DeadSpace/Armutant/skull_void.rsi"), "skull_void"),
+            Act = () =>
+            {
+                _antag.ForceMakeAntag<ArmutantRuleComponent>(targetPlayer, DefaultArmutantRule);
+            },
+            Impact = LogImpact.High,
+            Message = Loc.GetString("admin-verb-make-armutant"),
+        };
+        args.Verbs.Add(armutant);
         // DS14-end
     }
 }
