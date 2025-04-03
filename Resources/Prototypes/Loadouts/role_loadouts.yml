@@ -383,7 +383,7 @@
   - GroupSpeciesBreathToolSecurity
   - HeadofSecuritySocks # DS14-Underwear
   - HeadofSecurityUnderwear # DS14-Underwear
-  - HeadofSecurityMedal # DS14-Medal
+  - HeadOfSecurityMedal # DS14-Medal
 
 - type: roleLoadout
   id: JobWarden
