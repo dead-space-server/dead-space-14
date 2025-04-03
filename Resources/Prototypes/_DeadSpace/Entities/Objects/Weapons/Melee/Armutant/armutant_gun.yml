@@ -18,3 +18,7 @@
     soundGunshot:
       path: /Audio/_DeadSpace/Armutant/sound_items_weapons_resonator_blast.ogg
     projectileSpeed: 15
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
