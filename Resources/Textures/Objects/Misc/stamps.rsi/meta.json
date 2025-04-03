@@ -65,10 +65,13 @@
       "name": "stamp-approve"
     },
     {
-      "name": "stamp-iaa"
+      "name": "stamp-greytide"
     },
     {
       "name": "stamp-psychologist"
+    },
+    {
+      "name": "stamp-wizard"
     },
     {
       "name": "stamp-senior-administrator"
@@ -90,6 +93,8 @@
     },
     {
       "name": "stamp-senior-salvage"
+    },
+      "name": "stamp-iaa"
     }
   ]
 }
