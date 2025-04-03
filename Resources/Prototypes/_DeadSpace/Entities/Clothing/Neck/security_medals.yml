@@ -2,7 +2,7 @@
   parent: ClothingNeckBase
   id: ClothingNeckSecurityOfficerMedal
   name: медаль офицера службы безопасности
-  description: Медаль для того, кто готов отдать свою жизнь ради защиты экипажа
+  description: Медаль для того, кто готов отдать свою жизнь ради защиты экипажа.
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/Neck/SecMedals/officer.rsi
@@ -17,7 +17,7 @@
   parent: ClothingNeckBase
   id: ClothingNeckSecurityWardenMedal
   name: медаль смотрителя службы безопасности
-  description: Медаль для того, кто милует невинных и карает виновных
+  description: Медаль для того, кто милует невинных, и карает виновных.
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/Neck/SecMedals/warden.rsi
@@ -32,7 +32,7 @@
   parent: ClothingNeckBase
   id: ClothingNeckSecurityHeadofSecurityMedal
   name: медаль главы службы безопасности
-  description: Медаль для того кто милует невинных, и карает виновных
+  description: Медаль для того, кто готов взять на себя ответственность за безопасность целой станции.
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/Neck/SecMedals/hos.rsi
@@ -47,7 +47,7 @@
   parent: ClothingNeckBase
   id: ClothingNeckSecurityBrigMedicMedal
   name: медаль бригмедика
-  description: Медаль для того, кто рискует своей жизнью ради спасения своих товарищей
+  description: Медаль для того, кто рискует своей жизнью ради спасения своих товарищей.
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/Neck/SecMedals/brigmed.rsi
@@ -62,7 +62,7 @@
   parent: ClothingNeckBase
   id: ClothingNeckSecuritySeniorOfficerMedal
   name: медаль инструктора службы безопасности
-  description: Медаль для того, кто готов взять ответственность за обучнение новобранцев
+  description: Медаль для того, кто готов взять ответственность за обучнение новобранцев.
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/Neck/SecMedals/seniorofficer.rsi
@@ -77,7 +77,7 @@
   parent: ClothingNeckBase
   id: ClothingNeckDetectiveMedal
   name: медаль детектива
-  description: Медаль для того, кто раскрывает самые запутанные дела
+  description: Медаль для того, кто раскрывает самые запутанные дела.
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/Neck/SecMedals/detective.rsi
@@ -92,7 +92,7 @@
   parent: ClothingNeckBase
   id: ClothingNeckSecurityPilotMedal
   name: медаль пилота службы безопасности
-  description: Медаль для аса, что пилотирует стальных птиц
+  description: Медаль для аса, что пилотирует стальных птиц.
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/Neck/SecMedals/pilot.rsi
