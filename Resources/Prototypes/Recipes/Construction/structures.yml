@@ -799,7 +799,6 @@
   placementMode: SnapgridCenter
 # DS14-end
 
-
 - type: construction
   name: firelock
   id: Firelock
