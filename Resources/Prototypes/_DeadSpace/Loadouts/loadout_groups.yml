@@ -267,10 +267,10 @@
   - SeniorOfficerMedal
 
 - type: loadoutGroup
-  id: HeadofSecurityMedal
+  id: HeadOfSecurityMedal
   name: loadout-group-head-of-security-medal
   loadouts:
-  - HeadofSecurityMedal
+  - HeadOfSecurityMedal
 
 - type: loadoutGroup
   id: BrigMedicMedal
