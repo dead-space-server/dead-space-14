@@ -5,7 +5,7 @@ namespace Content.Shared.Backmen.CCVar;
 
 // ReSharper disable once InconsistentNaming
 [CVarDefs]
-public sealed class CCVars
+public sealed partial class CCVars
 {
     /*
      * Blob
