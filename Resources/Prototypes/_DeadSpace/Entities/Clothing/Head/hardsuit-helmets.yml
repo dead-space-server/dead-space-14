@@ -86,3 +86,18 @@
     color: "#ffeead"
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
+
+- type: entity
+  parent: ClothingHeadHelmetHardsuitSecurityRed
+  id: ClothingHeadHelmetHardsuitTaipanCO
+  name: head of security's hardsuit helmet
+  description: Security hardsuit helmet with the latest top secret NT-HUD software. Belongs to the HoS.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/taipan_co.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/taipan_co.rsi
+  - type: PointLight
+    color: "#ffeead"
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag

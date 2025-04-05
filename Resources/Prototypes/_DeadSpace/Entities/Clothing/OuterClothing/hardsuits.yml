@@ -59,7 +59,7 @@
 - type: entity
   parent: ClothingOuterHardsuitBrigmedic
   id: ClothingOuterHardsuitTaipanParamedic
-  name: brigmedic hardsuit
+  name: скафандр парамедика
   description: Special hardsuit of the guardian angel of the brig. It is the medical version of the security hardsuit.
   components:
   - type: Sprite
@@ -85,3 +85,16 @@
     clothingPrototype: ClothingHeadHelmetHardsuitTaipanPatrol
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
+
+- type: entity
+  parent: ClothingOuterHardsuitSecurityRed
+  id: ClothingOuterHardsuitTaipanCO
+  name: head of security's hardsuit
+  description: A special suit that protects against hazardous, low pressure environments. Has an additional layer of armor.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/OuterClothing/Hardsuits/taipan_co.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/OuterClothing/Hardsuits/taipan_co.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitTaipanCO
