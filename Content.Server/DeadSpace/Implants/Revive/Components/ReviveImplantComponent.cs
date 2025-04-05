@@ -22,7 +22,13 @@ public sealed partial class ReviveImplantComponent : Component
     public int ReviveDamage = 3;
 
     [DataField]
+    public int CountDeath = 0;
+
+    [DataField]
     public float ThresholdRevive = 175f;
+
+    [DataField]
+    public float ThresholdHeal = 95f;
 
     [DataField]
     public DamageSpecifier HealCount = new()

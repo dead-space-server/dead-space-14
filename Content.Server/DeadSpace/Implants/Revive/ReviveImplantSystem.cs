@@ -87,7 +87,8 @@ public sealed partial class ReviveImplantSystem : EntitySystem
         if (!TryComp<DamageableComponent>(user, out var damageable))
             return;
 
-        _damageable.TryChangeDamage(user, comp.HealCount, true, false);
+        if (damageable.TotalDamage <= comp.ThresholdHeal)
+            _damageable.TryChangeDamage(user, comp.HealCount, true, false);
     }
     private void StartHealingCycle(EntityUid user, ReviveImplantComponent comp)
     {
@@ -104,14 +105,15 @@ public sealed partial class ReviveImplantSystem : EntitySystem
 
             RevivePerson(user, comp);
 
-
             if (mobState.CurrentState == MobState.Dead &&
                 TryComp<DamageableComponent>(user, out var damageable) &&
-                damageable.TotalDamage <= comp.ThresholdRevive)
+                damageable.TotalDamage <= comp.ThresholdRevive &&
+                comp.CountDeath <= 0)
             {
                 _mobState.ChangeMobState(user, MobState.Critical, null, null);
                 _blood.TryModifyBloodLevel(user, 1000);
                 _blood.TryModifyBleedAmount(user, -1000);
+                comp.CountDeath += 1;
             }
 
             if (mobState.CurrentState != MobState.Alive)
