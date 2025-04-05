@@ -18,4 +18,3 @@ namespace Content.Server.DeadSpace.Armutant.Abilities.Components.GunAbilities
         public EntProtoId? SmokePrototype = "GunSmokeInstantEffect";
     }
 }
-

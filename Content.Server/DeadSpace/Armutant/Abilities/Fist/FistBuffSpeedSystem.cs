@@ -12,6 +12,7 @@ public sealed class FistBuffSpeedSystem : EntitySystem
     [Dependency] private readonly SharedActionsSystem _action = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _speed = default!;
+
     public override void Initialize()
     {
         SubscribeLocalEvent<FistBuffSpeedComponent, FistBuffSpeedToggleEvent>(OnBuffSpeedActive);

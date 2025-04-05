@@ -24,6 +24,7 @@ public sealed class GunSmokeSystem : EntitySystem
     {
         _action.RemoveAction(uid, component.ActionGunSmokeEntity);
     }
+
     private void OnGunBallAction(Entity<GunSmokeComponent> ent, ref GunSmokeActionEvent args)
     {
         if (args.Handled)
@@ -34,5 +35,3 @@ public sealed class GunSmokeSystem : EntitySystem
         var effect = Spawn(ent.Comp.SmokePrototype, Transform(ent).Coordinates);
     }
 }
-
-

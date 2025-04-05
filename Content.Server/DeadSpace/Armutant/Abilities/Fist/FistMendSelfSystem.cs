@@ -19,6 +19,7 @@ public sealed class FistMendSelfSystem : EntitySystem
     [Dependency] private readonly CuffableSystem _cuffable = default!;
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly TransformSystem _transformSystem = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -27,6 +28,7 @@ public sealed class FistMendSelfSystem : EntitySystem
         SubscribeLocalEvent<FistMendSelfComponent, ComponentInit>(OnComponentInit);
         SubscribeLocalEvent<FistMendSelfComponent, ComponentShutdown>(OnComponentShutdown);
     }
+
     private void OnComponentInit(EntityUid uid, FistMendSelfComponent component, ComponentInit args)
     {
         _action.AddAction(uid, ref component.ActionFistMendSelfEntity, component.ActionToggleFistMendSelf, uid);
@@ -36,6 +38,7 @@ public sealed class FistMendSelfSystem : EntitySystem
     {
         _action.RemoveAction(uid, component.ActionFistMendSelfEntity);
     }
+
     private void OnShrapnelActive(EntityUid uid, FistMendSelfComponent component, FistMendSelfToggleEvent args)
     {
         if (TryComp<CuffableComponent>(uid, out var cuffs) && cuffs.Container.ContainedEntities.Count > 0)

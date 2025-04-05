@@ -7,17 +7,20 @@ using Robust.Shared.Network;
 using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Armutant.Abilities.Shield;
+
 public sealed partial class VoidShieldSystem : EntitySystem
 {
     [Dependency] private readonly SharedActionsSystem _action = default!;
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly TransformSystem _transformSystem = default!;
+
     public override void Initialize()
     {
         SubscribeLocalEvent<VoidShieldComponent, VoidShieldToggleEvent>(OnToggleShield);
         SubscribeLocalEvent<VoidShieldComponent, ComponentInit>(OnComponentInit);
         SubscribeLocalEvent<VoidShieldComponent, ComponentShutdown>(OnComponentShutdown);
     }
+
     private void OnComponentInit(EntityUid uid, VoidShieldComponent component, ComponentInit args)
     {
         _action.AddAction(uid, ref component.ActionVoidShieldEntity, component.ActionToggleVoidShield, uid);
@@ -27,6 +30,7 @@ public sealed partial class VoidShieldSystem : EntitySystem
     {
         _action.RemoveAction(uid, component.ActionVoidShieldEntity);
     }
+
     private void OnToggleShield(EntityUid uid, VoidShieldComponent component, VoidShieldToggleEvent args)
     {
         if (args.Handled)

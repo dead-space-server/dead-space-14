@@ -118,5 +118,4 @@ public sealed class StunShieldSystem : EntitySystem
         if (_net.IsServer && component.SelfEffect is not null)
             SpawnAttachedTo(component.SelfEffect, Transform(uid).Coordinates);
     }
-
 }
