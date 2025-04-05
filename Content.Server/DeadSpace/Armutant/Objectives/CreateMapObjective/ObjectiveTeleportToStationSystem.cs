@@ -12,6 +12,7 @@ public sealed class ObjectiveTeleportToStationSystem : EntitySystem
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly TransformSystem _transformSystem = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -69,5 +70,3 @@ public sealed class ObjectiveTeleportToStationSystem : EntitySystem
         return null;
     }
 }
-
-

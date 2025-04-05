@@ -75,4 +75,3 @@ public sealed class ObjectiveCreateMapSystem : EntitySystem
         SpawnAttachedTo(component.SelfEffect, Transform(teleporter).Coordinates);
     }
 }
-

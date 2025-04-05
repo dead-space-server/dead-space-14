@@ -11,7 +11,7 @@ public sealed partial class ArmutantArmsComponent : Component
 
     public bool IsInStasis = false;
 
-    public int newDamageValue = 1200;
+    public int NewDamageValue = 1200;
 
     [DataField]
     public EntityUid? ActionArmutantShieldEntity;

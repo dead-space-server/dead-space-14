@@ -16,6 +16,7 @@ public sealed class FistStunAroundSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedActionsSystem _action = default!;
     [Dependency] private readonly BeamSystem _beamSystem = default!;
+
     public override void Initialize()
     {
         SubscribeLocalEvent<FistStunAroundComponent, FistStunAroundToggleEvent>(OnFistStunAroundAction);

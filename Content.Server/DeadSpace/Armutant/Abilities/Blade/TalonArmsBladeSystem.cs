@@ -14,12 +14,14 @@ public sealed class TalonArmsBladeSystem : EntitySystem
     [Dependency] private readonly SharedHandsSystem _hands = default!;
 
     public EntProtoId TalonClawsPrototype = "WeaponTalonClaws";
+
     public override void Initialize()
     {
         SubscribeLocalEvent<BladeTalonSpawnComponent, CreateTalonBladeEvent>(OnCreateTalonClaws);
         SubscribeLocalEvent<BladeTalonSpawnComponent, ComponentInit>(OnComponentInit);
         SubscribeLocalEvent<BladeTalonSpawnComponent, ComponentShutdown>(OnComponentShutdown);
     }
+
     private void OnComponentInit(EntityUid uid, BladeTalonSpawnComponent component, ComponentInit args)
     {
         _action.AddAction(uid, ref component.ActionTalonEntity, component.ActionToggleTalonSpawn, uid);
@@ -29,6 +31,7 @@ public sealed class TalonArmsBladeSystem : EntitySystem
     {
         _action.RemoveAction(uid, component.ActionTalonEntity);
     }
+
     private void OnCreateTalonClaws(EntityUid uid, BladeTalonSpawnComponent component, ref CreateTalonBladeEvent args)
     {
         var shard = Spawn(TalonClawsPrototype, Transform(uid).Coordinates);

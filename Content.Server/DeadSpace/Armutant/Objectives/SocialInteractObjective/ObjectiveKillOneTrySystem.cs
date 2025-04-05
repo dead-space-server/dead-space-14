@@ -1,4 +1,3 @@
-using Content.Server.DeadSpace.Armutant.Objectives.SocialInteractObjective;
 using Content.Server.Objectives.Components;
 using Content.Server.Objectives.Systems;
 using Content.Server.Shuttles.Systems;
@@ -64,6 +63,7 @@ public sealed class ObjectiveKillOneTrySystem : EntitySystem
 
         _target.SetTarget(uid, _random.Pick(allHumans), target);
     }
+
     private float GetProgress(EntityUid target, bool requireDie)
     {
         if (!TryComp<MindComponent>(target, out var mind) || mind.OwnedEntity == null)

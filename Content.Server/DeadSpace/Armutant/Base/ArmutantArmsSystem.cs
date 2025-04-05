@@ -51,6 +51,7 @@ public sealed class ArmutantArmsSystem : EntitySystem
         SubscribeLocalEvent<ArmutantArmsComponent, ComponentInit>(OnComponentInit);
         SubscribeLocalEvent<ArmutantArmsComponent, ComponentShutdown>(OnComponentShutdown);
     }
+
     private void OnComponentInit(EntityUid uid, ArmutantArmsComponent component, ComponentInit args)
     {
         _action.AddAction(uid, ref component.ActionArmutantBladeEntity, component.ActionToggleBlade, uid);
@@ -59,8 +60,9 @@ public sealed class ArmutantArmsSystem : EntitySystem
         _action.AddAction(uid, ref component.ActionArmutantGunEntity, component.ActionToggleGun, uid);
         _action.AddAction(uid, ref component.ActionEnterStasisEntity, component.ActionToggleEnterStasis, uid);
 
-        SetDestructibleThreshold(uid, component.newDamageValue);
+        SetDestructibleThreshold(uid, component.NewDamageValue);
     }
+
     private void OnComponentShutdown(EntityUid uid, ArmutantArmsComponent component, ComponentShutdown args)
     {
         _action.RemoveAction(uid, component.ActionArmutantBladeEntity);
@@ -69,6 +71,7 @@ public sealed class ArmutantArmsSystem : EntitySystem
         _action.RemoveAction(uid, component.ActionArmutantGunEntity);
         _action.RemoveAction(uid, component.ActionEnterStasisEntity);
     }
+
     private void OnToggleClaws(EntityUid uid, ArmutantArmsComponent component, ref BladeArmutantToggleEvent args)
     {
         if (args.Handled)
@@ -81,6 +84,7 @@ public sealed class ArmutantArmsSystem : EntitySystem
 
         _audio.PlayPvs(component.MeatSound, uid);
     }
+
     private void OnToggleShield(EntityUid uid, ArmutantArmsComponent component, ref ShieldArmutantToggleEvent args)
     {
         if (args.Handled)
@@ -93,6 +97,7 @@ public sealed class ArmutantArmsSystem : EntitySystem
 
         _audio.PlayPvs(component.MeatSound, uid);
     }
+
     private void OnToggleFist(EntityUid uid, ArmutantArmsComponent component, ref FistArmutantToggleEvent args)
     {
         if (args.Handled)
@@ -105,6 +110,7 @@ public sealed class ArmutantArmsSystem : EntitySystem
 
         _audio.PlayPvs(component.MeatSound, uid);
     }
+
     private void OnToggleGun(EntityUid uid, ArmutantArmsComponent component, ref GunArmutantToggleEvent args)
     {
         if (args.Handled)
@@ -117,6 +123,7 @@ public sealed class ArmutantArmsSystem : EntitySystem
 
         _audio.PlayPvs(component.MeatSound, uid);
     }
+
     private void OnEnterStasis(EntityUid uid, ArmutantArmsComponent component, ref EnterArmutantStasisEvent args)
     {
         if (component.IsInStasis)
@@ -153,6 +160,7 @@ public sealed class ArmutantArmsSystem : EntitySystem
 
         args.Handled = true;
     }
+
     private void OnExitStasis(EntityUid uid, ArmutantArmsComponent component)
     {
         if (!component.IsInStasis)
@@ -172,6 +180,7 @@ public sealed class ArmutantArmsSystem : EntitySystem
 
         component.IsInStasis = false;
     }
+
     private void SetDestructibleThreshold(EntityUid uid, int newDamageValue)
     {
         if (!TryComp<DestructibleComponent>(uid, out var destructible))
@@ -203,6 +212,7 @@ public sealed class ArmutantArmsSystem : EntitySystem
             destructible.Thresholds.Add(newThreshold);
         }
     }
+
     public bool TryToggleItem(EntityUid uid, EntProtoId proto, ArmutantArmsComponent comp, string? clothingSlot = null)
     {
         if (!comp.Equipment.TryGetValue(proto.Id, out var item))

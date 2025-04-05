@@ -104,6 +104,3 @@ public sealed class ClawsDashSystem : EntitySystem
         }
     }
 }
-
-
-

@@ -5,9 +5,11 @@ using Content.Server.Roles;
 using Content.Shared.Humanoid;
 
 namespace Content.Server.DeadSpace.Armutant.Base;
+
 public sealed class ArmutantRuleSystem : GameRuleSystem<ArmutantRuleComponent>
 {
     [Dependency] private readonly AntagSelectionSystem _antag = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -16,6 +18,7 @@ public sealed class ArmutantRuleSystem : GameRuleSystem<ArmutantRuleComponent>
 
         SubscribeLocalEvent<ArmutantRuleComponent, GetBriefingEvent>(OnGetBriefing);
     }
+
     private void AfterAntagSelected(Entity<ArmutantRuleComponent> mindId, ref AfterAntagEntitySelectedEvent args)
     {
         var ent = args.EntityUid;
