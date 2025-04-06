@@ -289,7 +289,7 @@
   - type: Sprite
     state: double_sheetcult
   - type: Clothing
-    sprite: Clothing/Neck/Bedsheets/cult.rsi
+    sprite: Clothing/Neck/Bedsheets/yellow.rsi
 
 - type: entity
   id: DoubleBedsheetMedical
@@ -333,7 +333,7 @@
   - type: Sprite
     state: double_sheetpirate
   - type: Clothing
-    sprite: Clothing/Neck/Bedsheets/pirate.rsi
+    sprite: Clothing/Neck/Bedsheets/black.rsi
 
 - type: entity
   id: DoubleBedsheetSyndie
@@ -377,7 +377,7 @@
   - type: Sprite
     state: double_sheetruntime
   - type: Clothing
-    sprite: Clothing/Neck/Bedsheets/runtime.rsi
+    sprite: Clothing/Neck/Bedsheets/black.rsi
 
 - type: entity
   id: DoubleBedsheetChaplain
@@ -388,7 +388,7 @@
   - type: Sprite
     state: double_sheetchap
   - type: Clothing
-    sprite: Clothing/Neck/Bedsheets/chaplain.rsi
+    sprite: Clothing/Neck/Bedsheets/black.rsi
 
 - type: entity
   id: DoubleBedsheetClockwork
@@ -399,7 +399,7 @@
   - type: Sprite
     state: double_sheetclockwork
   - type: Clothing
-    sprite: Clothing/Neck/Bedsheets/clockwork.rsi
+    sprite: Clothing/Neck/Bedsheets/yellow.rsi
 
 # Bedsheets
 - type: entity
