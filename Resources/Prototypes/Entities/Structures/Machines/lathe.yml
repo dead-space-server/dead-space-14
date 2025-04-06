@@ -511,6 +511,7 @@
     - Scarves
     - Carpets
     - Bedsheets
+    - DoubleBedsheets # DS14
   - type: EmagLatheRecipes
     emagStaticPacks:
     - ClothingCentComm
