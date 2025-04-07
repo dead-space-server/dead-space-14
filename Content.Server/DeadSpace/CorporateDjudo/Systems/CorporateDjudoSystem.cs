@@ -43,6 +43,9 @@ public sealed partial class CorporateDjudoSystem : EntitySystem
         SubscribeLocalEvent<CorporateDjudoComponent, BlindCorporateDjudoEvent>(ToBlindCheck);
         SubscribeLocalEvent<CorporateDjudoComponent, MeleeHitEvent>(ToBlindHit);
     }
+    // При надевании пояса проверяет, есть ли у человека компонент аркалиса
+    // или человек уже может пользоваться дзюдо,
+    // если нет, то дается компонент
     private void OnBeltEquip(Entity<CorporateDjudoBeltComponent> ent, ref ClothingGotEquippedEvent args)
     {
         var user = args.Wearer;
@@ -52,6 +55,9 @@ public sealed partial class CorporateDjudoSystem : EntitySystem
         else
             return;
     }
+    // При снятии пояса проверяется, есть ли у человека компонент дзюдо,
+    // если да, то мы его снимаем, также есть дополнительная проверка на возможность использования батона,
+    // если указано true, то мы игнорируем пояс
     private void OnBeltUnequip(Entity<CorporateDjudoBeltComponent> ent, ref ClothingGotUnequippedEvent args)
     {
         var user = args.Wearer;
@@ -66,6 +72,7 @@ public sealed partial class CorporateDjudoSystem : EntitySystem
         else
             return;
     }
+    // При наделения игрока компонентом ему выдается action ослепления и меняются стандартные параметры
     private void OnComponentInit(Entity<CorporateDjudoComponent> user, ref ComponentInit args)
     {
         _action.AddAction(user.Owner, ref user.Comp.ActionToBlindAttackEntity, user.Comp.ActionToBlindId);
@@ -73,12 +80,18 @@ public sealed partial class CorporateDjudoSystem : EntitySystem
 
         var meleeWeaponComponent = EnsureComp<MeleeWeaponComponent>(user);
 
+        if (meleeWeaponComponent.Damage is null)
+            meleeWeaponComponent.Damage = new DamageSpecifier();
+
         if (!(user.Comp.AddDamage is null))
             meleeWeaponComponent.Damage += user.Comp.AddDamage;
 
         var combatMode = _entitySystemManager.GetEntitySystem<SharedCombatModeSystem>();
         combatMode.SetDisarmFailChance(user.Owner, user.Comp.SetChanceDisarm);
     }
+    //При убирания компонента у игрока, у него забираются изменения,
+    //также идет настройка стандартной скорости, это сделано для того,
+    //чтобы если игрок держит батон и снимает другой рукой пояс, он не оставался обездвиженным навсегда
     private void OnComponentShutdown(Entity<CorporateDjudoComponent> user, ref ComponentShutdown args)
     {
         _action.RemoveAction(user.Owner, user.Comp.ActionToBlindAttackEntity);
@@ -93,6 +106,8 @@ public sealed partial class CorporateDjudoSystem : EntitySystem
 
         _speed.ChangeBaseSpeed(user, 2.5f, 4.5f, 20f);
     }
+    // Метод который проверяет есть ли в руке прототип Stunbaton,
+    // если да, то убираем возможность передвигаться и запускаем метод StartStunBatonDamageCycle
     private void YouNotCanUseBatonEquip(Entity<CorporateDjudoComponent> user, ref DidEquipHandEvent args)
     {
         if (!user.Comp.CanUseBaton)
@@ -108,6 +123,8 @@ public sealed partial class CorporateDjudoSystem : EntitySystem
             }
         }
     }
+    // Асинхронный метод, который все время проверяет, держит ли игрок указанный прототип,
+    // если да, то каждые 2 секунды он получает 5 урона удушьем и popup сообщения, которые видит только носитель
     private void StartStunBatonDamageCycle(Entity<CorporateDjudoComponent> user, EntityUid stunbaton)
     {
         Timer.Spawn(TimeSpan.FromSeconds(2), () =>
@@ -132,6 +149,7 @@ public sealed partial class CorporateDjudoSystem : EntitySystem
             StartStunBatonDamageCycle(user, stunbaton);
         });
     }
+    // Метод который запускается при выкидывания из руки прототипа Stunbaton, скорость возвращается к стандартной
     private void YouNotCanUseBatonUnequip(Entity<CorporateDjudoComponent> user, ref DidUnequipHandEvent args)
     {
         if (!user.Comp.CanUseBaton)
@@ -147,6 +165,7 @@ public sealed partial class CorporateDjudoSystem : EntitySystem
             }
         }
     }
+    // Проверка на активность Action'а
     private void ToBlindCheck(Entity<CorporateDjudoComponent> user, ref BlindCorporateDjudoEvent args)
     {
         if (args.Handled)
@@ -156,6 +175,8 @@ public sealed partial class CorporateDjudoSystem : EntitySystem
 
         args.Handled = true;
     }
+    // Запуск события MeleeHitEvent, идет проверка пользователь ли это и имеется ли компонент MobStateComponent у цели,
+    // если есть и цель жива, мы накладываем эффекты слепоты и блюра, а активность Action'a делаем false
     private void ToBlindHit(Entity<CorporateDjudoComponent> user, ref MeleeHitEvent args)
     {
         if (user.Comp.IsReadyAtack && args.HitEntities.Any())
