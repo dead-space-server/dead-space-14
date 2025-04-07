@@ -111,6 +111,7 @@
   id: ClothingBackpackDominatorSil
   name: белый армейский вещмешок
   description: Вместительный вещмешок с множеством карманов. Имеет окрас городского камуфляжа. Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Sil/backpack.rsi
@@ -135,7 +136,7 @@
 - type: entity
   parent: BaseMedicalPDA
   id: PDADominatorSil
-  name: кпк "Монолит"
+  name: КПК "Монолит"
   description: Изготовлено на заказ организацией LaFleur Wear.
   categories: [ HideSpawnMenu ]
   components:
