@@ -281,7 +281,7 @@
   parent: BaseWeaponRifle
   id: WeaponDragonFoxBolter
   name: болтер
-  description: Вид ствольного огнестрельного оружия, стреляющего саморазгоняющимися на траектории болтами. Ввиду политики NanoTrasen калибр был изменён на .44 магнум.
+  description: Вид ствольного огнестрельного оружия, стреляющего саморазгоняющимися на траектории болтами. Ввиду политики NanoTrasen калибр был изменён на .45 магнум.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/boltgun.rsi
@@ -334,7 +334,7 @@
 - type: entity
   parent: BaseItem
   id: BaseMagazineDragonFoxBolter
-  name: магазин (.44 магнум)
+  name: магазин (.45 магнум)
   abstract: true
   components:
   - type: Tag
@@ -367,7 +367,7 @@
 - type: entity
   parent: BaseMagazineDragonFoxBolter
   id: MagazineDragonFoxBolter
-  name: магазин (.44 магнум)
+  name: магазин (.45 магнум)
   components:
   - type: BallisticAmmoProvider
     proto: CartridgeMagnum
