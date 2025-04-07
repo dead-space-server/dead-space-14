@@ -85,6 +85,8 @@
   - type: PhysicalComposition
     materialComposition:
       Glass: 100
+  - type: Item
+    size: Normal # DS14
 
 - type: entity
   id: DrinkBottleVisualsOpenable
