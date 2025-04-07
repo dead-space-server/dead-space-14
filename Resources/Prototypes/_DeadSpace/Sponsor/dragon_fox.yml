@@ -675,7 +675,7 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/hypo.rsi
-    state: Hypo
+    state: hypo
   - type: Item
     sprite: _DeadSpace/Sponsor/DragonFox/hypo.rsi
   - type: SolutionContainerManager
