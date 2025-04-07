@@ -19,6 +19,8 @@
     clothingPrototype: ClothingHeadHelmetHardsuitDominatorSil
   - type: Item
     size: Huge
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
   parent: ClothingHeadHelmetHardsuitAtmos
@@ -33,6 +35,8 @@
     sprite: _DeadSpace/Sponsor/Sil/helmet.rsi
   - type: PointLight
     color: "#4eb1ae"
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 # Gloves
 - type: entity
@@ -46,6 +50,8 @@
     sprite: _DeadSpace/Sponsor/Sil/gloves.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Sil/gloves.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 # Boots
 - type: entity
@@ -59,6 +65,8 @@
     sprite: _DeadSpace/Sponsor/Sil/boots.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Sil/boots.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 # Belt
 - type: entity
@@ -94,6 +102,8 @@
     sprite: _DeadSpace/Sponsor/Sil/gasmask.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Sil/gasmask.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 # Backpack
 - type: entity
@@ -101,6 +111,7 @@
   id: ClothingBackpackDominatorSil
   name: белый армейский вещмешок
   description: Вместительный вещмешок с множеством карманов. Имеет окрас городского камуфляжа. Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Sil/backpack.rsi
@@ -127,12 +138,14 @@
     - id: PlushieSilKrivazora
     - id: PlushieSilAzrailHardsuit
     - id: PlushieSilSharp
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 # PDA
 - type: entity
   parent: BaseMedicalPDA
   id: PDADominatorSil
-  name: кпк "Монолит"
+  name: КПК "Монолит"
   description: Изготовлено на заказ организацией LaFleur Wear.
   categories: [ HideSpawnMenu ]
   components:
@@ -140,6 +153,8 @@
     sprite: _DeadSpace/Sponsor/Sil/pda.rsi
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Sil/pda.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 # EYES
 - type: entity
@@ -156,6 +171,8 @@
   - type: EyeProtection
   - type: IdentityBlocker
     coverage: EYES
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 # AIRTANK
 - type: entity
