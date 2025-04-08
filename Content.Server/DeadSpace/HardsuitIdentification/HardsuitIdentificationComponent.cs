@@ -32,4 +32,7 @@ public sealed partial class HardsuitIdentificationComponent : Component
     {
         Params = AudioParams.Default.WithVolume(8),
     };
+    
+    [DataField]
+    public int Lethal = 1;
 }

@@ -57,6 +57,18 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
                 return;
             }
         }
+        
+        if (comp.Lethal == 0)
+        {
+            Timer.Spawn(0000,
+                () =>
+                {
+                    _chat.TrySendInGameICMessage(args.Equipment, Loc.GetString("hardsuit-identification-error"), InGameICChatType.Speak, true);
+                    _popupSystem.PopupEntity(Loc.GetString("Ошибка идентификации пользователя"), args.Equipee, args.Equipee);
+                    _inventory.TryUnequip(args.Equipee, "outerClothing", true, true);
+                });
+            return;
+        }
 
         comp.Activated = true;
 
