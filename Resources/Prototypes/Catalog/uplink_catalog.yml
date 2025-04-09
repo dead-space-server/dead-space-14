@@ -1829,7 +1829,7 @@
   categories:
   - UplinkWearables
   conditions:
-  - !type:StoreWhitelistConditionеееее
+  - !type:StoreWhitelistCondition
     whitelist:
       tags:
       - NukeOpsUplink
