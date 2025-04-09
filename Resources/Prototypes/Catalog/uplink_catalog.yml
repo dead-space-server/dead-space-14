@@ -1762,6 +1762,11 @@
     Telecrystal: 8
   categories:
   - UplinkWearables
+  conditions: # DS14
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
 
 - type: listing
   id: UplinkClothingOuterArmorRaid
@@ -1792,6 +1797,11 @@
     Telecrystal: 12
   categories:
   - UplinkWearables
+  conditions: # DS14
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
 
 - type: listing
   id: UplinkClothingOuterHardsuitJuggernaut
