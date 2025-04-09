@@ -1767,6 +1767,10 @@
     whitelist:
       tags:
       - NukeOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
 
 - type: listing
   id: UplinkClothingOuterArmorRaid
@@ -1783,6 +1787,10 @@
     whitelist:
       tags:
       - NukeOpsUplink
+  - !type:BuyerWhitelistCondition # DS14
+    blacklist:
+      components:
+      - SurplusBundle
 
 - type: listing
   id: UplinkHardsuitSyndieElite
@@ -1802,6 +1810,10 @@
     whitelist:
       tags:
       - NukeOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
 
 - type: listing
   id: UplinkClothingOuterHardsuitJuggernaut
@@ -1817,7 +1829,7 @@
   categories:
   - UplinkWearables
   conditions:
-  - !type:StoreWhitelistCondition
+  - !type:StoreWhitelistConditionеееее
     whitelist:
       tags:
       - NukeOpsUplink
