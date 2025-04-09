@@ -34,5 +34,5 @@ public sealed partial class HardsuitIdentificationComponent : Component
     };
     
     [DataField]
-    public int Lethal = 1;
+    public bool Nonlethal;
 }
