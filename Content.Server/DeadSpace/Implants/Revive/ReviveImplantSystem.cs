@@ -11,19 +11,16 @@ using Robust.Shared.Audio;
 using Content.Server.DeadSpace.Implants.Revive.Components;
 using Content.Shared.Damage;
 using Robust.Shared.Timing;
-using Content.Server.Electrocution;
 using Content.Shared.Mobs.Systems;
 using Content.Server.Body.Systems;
 
 namespace Content.Server.DeadSpace.Implants.Revive;
-
 public sealed partial class ReviveImplantSystem : EntitySystem
 {
     [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly ElectrocutionSystem _electrocution = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly BloodstreamSystem _blood = default!;
 
@@ -35,7 +32,6 @@ public sealed partial class ReviveImplantSystem : EntitySystem
         SubscribeLocalEvent<ReviveImplantComponent, ReviveImplantActivateEvent>(OnDoAfter);
         SubscribeLocalEvent<ReviveImplantComponent, MobStateChangedEvent>(OnMobStateChanged);
     }
-
     private void OnUseInHand(Entity<ReviveImplantComponent> item, ref UseInHandEvent args)
     {
         if (args.Handled)
@@ -55,7 +51,6 @@ public sealed partial class ReviveImplantSystem : EntitySystem
 
         args.Handled = true;
     }
-
     private void OnDoAfter(Entity<ReviveImplantComponent> item, ref ReviveImplantActivateEvent args)
     {
         if (args.Handled || args.Cancelled)
@@ -73,7 +68,7 @@ public sealed partial class ReviveImplantSystem : EntitySystem
 
         Del(item);
 
-        Spawn("AutosurgeonAfter", position);
+        Spawn(item.Comp.AutosurgeonUsed, position);
     }
     private void OnMobStateChanged(EntityUid user, ReviveImplantComponent comp, MobStateChangedEvent args)
     {
@@ -108,18 +103,16 @@ public sealed partial class ReviveImplantSystem : EntitySystem
             if (mobState.CurrentState == MobState.Dead &&
                 TryComp<DamageableComponent>(user, out var damageable) &&
                 damageable.TotalDamage <= comp.ThresholdRevive &&
-                comp.CountDeath <= 0)
+                comp.NumberOfDeath <= comp.NumberPossibleRevive)
             {
                 _mobState.ChangeMobState(user, MobState.Critical, null, null);
                 _blood.TryModifyBloodLevel(user, 1000);
                 _blood.TryModifyBleedAmount(user, -1000);
-                comp.CountDeath += 1;
+                comp.NumberOfDeath += 1;
             }
 
             if (mobState.CurrentState != MobState.Alive)
-            {
                 StartHealingCycle(user, comp);
-            }
         });
     }
 }

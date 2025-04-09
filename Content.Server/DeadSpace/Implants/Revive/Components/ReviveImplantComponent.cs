@@ -2,6 +2,7 @@
 
 using Content.Shared.Damage;
 using Robust.Shared.Audio;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Implants.Revive.Components;
 
@@ -19,10 +20,13 @@ public sealed partial class ReviveImplantComponent : Component
     public SoundSpecifier ImplantedSound = new SoundPathSpecifier("/Audio/_DeadSpace/Autosurgeon/sound_weapons_circsawhit.ogg");
 
     [DataField]
-    public int ReviveDamage = 3;
+    public int NumberPossibleRevive = 1;
 
     [DataField]
-    public int CountDeath = 0;
+    public int NumberOfDeath = 0;
+
+    [DataField]
+    public EntProtoId AutosurgeonUsed = "AutosurgeonUsed";
 
     [DataField]
     public float ThresholdRevive = 175f;
@@ -31,21 +35,5 @@ public sealed partial class ReviveImplantComponent : Component
     public float ThresholdHeal = 95f;
 
     [DataField]
-    public DamageSpecifier HealCount = new()
-    {
-        DamageDict =
-        {
-            ["Blunt"] = -2.5f,
-            ["Slash"] = -2.5f,
-            ["Piercing"] = -2.5f,
-            ["Asphyxiation"] = -2.5f,
-            ["Bloodloss"] = -8.0f,
-            ["Caustic"] = -2.0f,
-            ["Cold"] = -1.5f,
-            ["Heat"] = -1.5f,
-            ["Shock"] = -1.5f,
-            ["Poison"] = -2.0f
-
-        }
-    };
+    public DamageSpecifier HealCount = default!;
 }

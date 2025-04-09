@@ -2,12 +2,12 @@
   parent: ClothingHandsButcherable
   id: ClothingHandsGlovesArkalyse
   name: перчатки "Аркалис"
-  description: Перчатки подпитанные наномашинными, которые усиливают удары носителя.
+  description: Перчатки подпитанные наномашинными, которые усиливают удары носителя, кажется их окунули в какую-то смазку и теперь они не работают, но зато теперь он могут защитить от тока.
   components:
-  - type: ArkalyseGloves
   - type: Sprite
     sprite: _DeadSpace/Clothing/Hands/gloves_arkalis.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/Hands/gloves_arkalis.rsi
   - type: Fiber
     fiberMaterial: fibers-nanomachines
+  - type: Insulated

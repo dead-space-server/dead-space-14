@@ -8,4 +8,11 @@
       sprite: _DeadSpace/Objects/Specific/Arkalyse/arkalyse_book.rsi
       layers:
       - state: icon
-    - type: GiveArkalyse
+    - type: MartialArtsTrainingArkalyse
+      learnTime: 5
+      addAtackRate: 1.1
+      martialArtsForm: Arkalyse
+      actionAtackOne: ActionDamageArkalyseAttack
+      actionAtackTwo: ActionMutedArkalyseAttack
+      actionAtackThree: ActionStunArkalyseAttack
+      itemAfterLerning: Ash

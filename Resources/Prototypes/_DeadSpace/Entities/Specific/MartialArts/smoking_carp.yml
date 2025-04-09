@@ -1,0 +1,35 @@
+- type: martialArt
+  id: SmokingCarp
+  martialArtsForm: SmokingCarp
+  atackOne: SmokingCarpPowerPunch
+  atackTwo: SmokingCarpSmokePunch
+  atackThree: SmokingCarpTripPunch
+
+- type: combatTech
+  id: SmokingCarpPowerPunch
+  martialArtsForm: SmokingCarp
+  packMessageOnHit: CarpMessageHit
+  pushStrength: 300
+  maxPushDistance: 5
+  effectPunch: EffectPowerPunchCarp
+  hitSound: /Audio/Weapons/genhit1.ogg
+  damageType: Slash
+  hitDamage: 35
+
+- type: combatTech
+  id: SmokingCarpSmokePunch
+  martialArtsForm: SmokingCarp
+  packMessageOnHit: CarpMessageHit
+  effectPunch: WeaponArcBite
+  staminaDamage: 30
+  damageType: Slash
+  hitDamage: 5
+
+- type: combatTech
+  id: SmokingCarpTripPunch
+  martialArtsForm: SmokingCarp
+  packMessageOnHit: CarpMessageHit
+  selfEffect: EffectTripPunchCarp
+  hitSound: /Audio/_DeadSpace/SmokingCarp/sound_items_weapons_slam.ogg
+  range: 1.0
+  paralyzeTime: 1.2
