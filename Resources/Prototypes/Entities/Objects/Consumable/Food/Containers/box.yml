@@ -752,8 +752,8 @@
         orGroup: GiftPool
       - id: PersonalAI
         orGroup: GiftPool
-      - id: CrayonBox
-        orGroup: GiftPool
+      # - id: CrayonBox # DS14
+      #   orGroup: GiftPool
       - id: ToySword
         orGroup: GiftPool
       - id: RevolverCapGun
