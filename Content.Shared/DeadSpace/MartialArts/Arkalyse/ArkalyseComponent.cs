@@ -1,5 +1,6 @@
 using Content.Shared.DeadSpace.MartialArts.SmokingCarp;
 using Robust.Shared.Audio;
+using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.MartialArts.Arkalyse;
@@ -32,7 +33,7 @@ public sealed partial class ArkalyseActionComponent : Component
     public SoundSpecifier? HitSound;
 }
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class ArkalyseComponent : Component
 {
     [DataField]
@@ -51,6 +52,10 @@ public sealed partial class ArkalyseComponent : Component
     public readonly List<EntityUid> ArkalyseActionEntities = new()
     {
     };
+
+    [DataField]
+    [AutoNetworkedField]
+    public MartialArtsForms MartialArtsForm { get; set; } = MartialArtsForms.Arkalyse;
 }
 
 public enum ArkalyseList

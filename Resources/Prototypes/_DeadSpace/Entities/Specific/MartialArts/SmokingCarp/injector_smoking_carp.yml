@@ -11,6 +11,7 @@
   - type: MartialArtsTrainingCarp
     addAtackRate: 1.15
     itemAfterLerning: SmokingCarpInjectorAfter
+    martialArtsForm: SmokingCarp
 
 - type: entity
   parent: BaseItem

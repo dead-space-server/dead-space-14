@@ -11,9 +11,9 @@ public sealed class MartialArtsSystem : SharedMartialArtsSystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<SmokingCarpActionComponent, SmokingCarpSaying>(OnSmokingCarpSaying);
+        SubscribeLocalEvent<SmokingCarpComponent, SmokingCarpSaying>(OnSmokingCarpSaying);
     }
-    private void OnSmokingCarpSaying(Entity<SmokingCarpActionComponent> ent, ref SmokingCarpSaying args)
+    private void OnSmokingCarpSaying(Entity<SmokingCarpComponent> ent, ref SmokingCarpSaying args)
     {
         _chat.TrySendInGameICMessage(ent, Loc.GetString(args.Saying), InGameICChatType.Speak, false);
     }

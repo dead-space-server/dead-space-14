@@ -7,6 +7,7 @@ using Robust.Shared.Audio;
 using Content.Shared.Speech.Muting;
 using Robust.Shared.Timing;
 using Content.Shared.Weapons.Melee.Events;
+using Content.Shared.DeadSpace.MartialArts.SmokingCarp;
 
 namespace Content.Shared.DeadSpace.MartialArts;
 
@@ -28,6 +29,9 @@ public partial class SharedMartialArtsSystem
         if (args.Handled)
             return;
 
+        if (TryComp<SmokingCarpComponent>(args.User, out _))
+            return;
+
         var userArkalyse = EnsureComp<ArkalyseComponent>(args.User);
         foreach (var actionId in userArkalyse.BaseArkalyse)
         {
@@ -45,6 +49,9 @@ public partial class SharedMartialArtsSystem
     }
     private void OnArkalyseAction(Entity<ArkalyseComponent> ent, ref ArkalyseActionEvent args)
     {
+        if (_net.IsClient)
+            return;
+
         var actionEnt = args.Action.Owner;
         if (!TryComp<ArkalyseActionComponent>(actionEnt, out var arkalyseActionComp))
             return;
@@ -61,6 +68,9 @@ public partial class SharedMartialArtsSystem
     }
     private void OnMeleeHitEvent(Entity<ArkalyseComponent> ent, ref MeleeHitEvent args)
     {
+        if (_net.IsClient)
+            return;
+
         if (args.HitEntities.Count <= 0)
             return;
 
@@ -82,16 +92,22 @@ public partial class SharedMartialArtsSystem
         switch (ent.Comp.SelectedCombo)
         {
             case ArkalyseList.DamageAtack:
+                if (_net.IsClient)
+                    return;
                 DamageHit(ent, hitEntity, comboComp.DamageType, comboComp.HitDamage, comboComp.IgnoreResist, out _);
                 SpawnAttachedTo(comboComp.EffectPunch, Transform(hitEntity).Coordinates);
                 _audio.PlayPvs(comboComp.HitSound, ent, AudioParams.Default.WithVolume(3.0f));
                 break;
             case ArkalyseList.StunAtack:
+                if (_net.IsClient)
+                    return;
                 _audio.PlayPvs(comboComp.HitSound, ent, AudioParams.Default.WithVolume(0.5f));
                 _stun.TryParalyze(hitEntity, TimeSpan.FromSeconds(comboComp.ParalyzeTime), true);
                 SpawnAttachedTo(comboComp.EffectPunch, Transform(hitEntity).Coordinates);
                 break;
             case ArkalyseList.MuteAtack:
+                if (_net.IsClient)
+                    return;
                 EnsureComp<MutedComponent>(hitEntity);
                 Timer.Spawn(TimeSpan.FromSeconds(comboComp.ParalyzeTime), () => { if (Exists(hitEntity)) RemComp<MutedComponent>(hitEntity); });
 

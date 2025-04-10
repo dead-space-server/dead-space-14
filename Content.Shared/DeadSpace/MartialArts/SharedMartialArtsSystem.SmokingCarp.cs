@@ -17,7 +17,6 @@ namespace Content.Shared.DeadSpace.MartialArts;
 
 public partial class SharedMartialArtsSystem
 {
-    private readonly HashSet<EntityUid> _receivers = new();
     private void InitializeSmokingCarp()
     {
         SubscribeLocalEvent<SmokingCarpComponent, SmokingCarpActionEvent>(OnSmokingCarpAction);
@@ -59,6 +58,9 @@ public partial class SharedMartialArtsSystem
     // Активация события
     private void OnSmokingCarpAction(Entity<SmokingCarpComponent> ent, ref SmokingCarpActionEvent args)
     {
+        if (!_net.IsServer)
+            return;
+
         var actionEnt = args.Action.Owner;
         if (!TryComp<SmokingCarpActionComponent>(actionEnt, out var carpActionComp))
             return;
@@ -75,6 +77,9 @@ public partial class SharedMartialArtsSystem
     }
     private void OnMeleeHitEvent(Entity<SmokingCarpComponent> ent, ref MeleeHitEvent args)
     {
+        if (_net.IsClient)
+            return;
+
         if (args.HitEntities.Count <= 0)
             return;
 
@@ -96,6 +101,8 @@ public partial class SharedMartialArtsSystem
         switch (ent.Comp.SelectedCombo)
         {
             case SmokingCarpList.PowerPunch:
+                if (_net.IsClient)
+                    return;
                 DamageHit(ent, hitEntity, comboComp.DamageType, comboComp.HitDamage, comboComp.IgnoreResist, out _);
                 SpawnAttachedTo(comboComp.EffectPunch, Transform(hitEntity).Coordinates);
                 _audio.PlayPvs(comboComp.HitSound, ent, AudioParams.Default.WithVolume(3.0f));
@@ -129,6 +136,8 @@ public partial class SharedMartialArtsSystem
                 }
                 break;
             case SmokingCarpList.SmokePunch:
+                if (_net.IsClient)
+                    return;
                 DamageHit(ent, hitEntity, comboComp.DamageType, comboComp.HitDamage, comboComp.IgnoreResist, out _);
                 _stamina.TakeStaminaDamage(hitEntity, comboComp.StaminaDamage);
                 SpawnAttachedTo(comboComp.EffectPunch, Transform(hitEntity).Coordinates);
@@ -142,6 +151,9 @@ public partial class SharedMartialArtsSystem
     }
     private void SmokingCarpReflect(Entity<SmokingCarpComponent> ent, ref ReflectCarpEvent args)
     {
+        if (_net.IsClient)
+            return;
+
         if (HasComp<ReflectComponent>(ent))
         {
             _popup.PopupEntity(Loc.GetString("unreflect-smoking-carp"), ent, ent);
@@ -163,6 +175,9 @@ public partial class SharedMartialArtsSystem
     }
     private void SmokingCarpTripPunch(Entity<SmokingCarpTripPunchComponent> ent, ref SmokingCarpTripPunchEvent args)
     {
+        if (_net.IsClient)
+            return;
+
         if (args.Handled)
             return;
 

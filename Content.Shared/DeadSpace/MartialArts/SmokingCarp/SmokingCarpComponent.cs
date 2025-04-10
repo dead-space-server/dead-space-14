@@ -1,5 +1,6 @@
 using Content.Shared.Dataset;
 using Robust.Shared.Audio;
+using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.MartialArts.SmokingCarp;
@@ -56,7 +57,7 @@ public sealed partial class SmokingCarpTripPunchComponent : Component
     public float ParalyzeTime = 1.2f;
 }
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class SmokingCarpComponent : Component
 {
     [DataField]
@@ -76,6 +77,10 @@ public sealed partial class SmokingCarpComponent : Component
     public readonly List<EntityUid> SmokeCarpActionEntities = new()
     {
     };
+
+    [DataField]
+    [AutoNetworkedField]
+    public MartialArtsForms MartialArtsForm { get; set; } = MartialArtsForms.SmokingCarp;
 }
 
 public enum SmokingCarpList

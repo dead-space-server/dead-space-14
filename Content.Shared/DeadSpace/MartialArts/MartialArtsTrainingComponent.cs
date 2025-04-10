@@ -54,3 +54,9 @@ public sealed partial class MartialArtsTrainingArkalyseComponent : Component
     [DataField]
     public string? ActionAtackFour;
 }
+public enum MartialArtsForms
+{
+    CorporateJudo,
+    Arkalyse,
+    SmokingCarp,
+}

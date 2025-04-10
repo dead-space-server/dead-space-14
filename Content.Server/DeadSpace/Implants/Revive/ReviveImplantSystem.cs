@@ -58,7 +58,8 @@ public sealed partial class ReviveImplantSystem : EntitySystem
 
         args.Handled = true;
 
-        EnsureComp<ReviveImplantComponent>(args.Args.User);
+        var userReive = EnsureComp<ReviveImplantComponent>(args.Args.User);
+        userReive.HealCount = item.Comp.HealCount;
         TransformToItem(item);
         _audio.PlayPvs(item.Comp.ImplantedSound, args.User, AudioParams.Default.WithVolume(0.5f));
     }
@@ -82,7 +83,7 @@ public sealed partial class ReviveImplantSystem : EntitySystem
         if (!TryComp<DamageableComponent>(user, out var damageable))
             return;
 
-        if (damageable.TotalDamage <= comp.ThresholdHeal)
+        if (damageable.TotalDamage >= comp.ThresholdHeal)
             _damageable.TryChangeDamage(user, comp.HealCount, true, false);
     }
     private void StartHealingCycle(EntityUid user, ReviveImplantComponent comp)

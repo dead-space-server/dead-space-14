@@ -9,13 +9,13 @@
       sprite: _DeadSpace/Actions/arkalyse_actions.rsi
       state: punch
     event: !type:ArkalyseActionEvent {}
-    useDelay: 2
   - type: ArkalyseAction
     list: DamageAtack
     staminaDamage: 0
     paralyzeTime: 0
     effectPunch: WeaponArcKick
     hitSound: /Audio/_DeadSpace/Arkalyse/sound_effects_hit_kick.ogg
+    ignoreResist: true
     damageType: Piercing
     hitDamage: 15
 
@@ -30,13 +30,13 @@
       sprite: _DeadSpace/Actions/arkalyse_actions.rsi
       state: mute
     event: !type:ArkalyseActionEvent {}
-    useDelay: 2
   - type: ArkalyseAction
     list: MuteAtack
     staminaDamage: 25
     paralyzeTime: 10 # Mute Time
     pushStrength: 0
     maxPushDistance: 0
+    ignoreResist: true
     hitSound: /Audio/Weapons/star_hit.ogg
     damageType: Blunt
     hitDamage: 5
@@ -52,7 +52,6 @@
       sprite: _DeadSpace/Actions/arkalyse_actions.rsi
       state: kick
     event: !type:ArkalyseActionEvent {}
-    useDelay: 3
   - type: ArkalyseAction
     list: StunAtack
     effectPunch: WeaponArcDisarm

@@ -2,7 +2,7 @@
   parent: BaseItem
   id: BookArkalyse
   name: мануал "Аркалис"
-  description: Одноразовый мануал, который обучает истинному искусству "Аркалиса".
+  description: Одноразовый мануал, который обучает искусству "Аркалиса".
   components:
     - type: Sprite
       sprite: _DeadSpace/Objects/Specific/Arkalyse/arkalyse_book.rsi

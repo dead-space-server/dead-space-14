@@ -1,7 +1,7 @@
 - type: entity
   id: ActionPowerPunchCarp
   name: "[color=red]Удар крушащей волны[/color]"
-  description: Мощнейнший удар в грудь, который отправляет цель в полет, нанося 35 урона.
+  description: Мощнейнший удар в грудь, который отправляет цель в полет, нанося 30 урона.
   components:
   - type: InstantAction
     icon:
@@ -23,7 +23,7 @@
     pushStrength: 300
     maxPushDistance: 5
     paralyzeTime: 0
-    ignoreResist: false
+    ignoreResist: true
     effectPunch: EffectPowerPunchCarp
     hitSound: /Audio/Weapons/genhit1.ogg
     damageType: Slash
@@ -32,7 +32,7 @@
 - type: entity
   id: ActionSmokePunchCarp
   name: "[color=red]Скрежет зубов курящего карпа[/color]"
-  description: Быстрые удары в корпус, которые наносят 30 урона по выносливости и 5 обычного урона.
+  description: Быстрые удары в корпус, которые наносят 35 урона по выносливости и 5 обычного урона.
   components:
   - type: InstantAction
     icon:
@@ -47,6 +47,7 @@
     paralyzeTime: 0
     effectPunch: WeaponArcBite
     hitSound: /Audio/Effects/bite.ogg
+    ignoreResist: true
     damageType: Slash
     hitDamage: 5
     staminaDamage: 35
@@ -75,5 +76,4 @@
       state: reflect
       noRot: true
     event: !type:ReflectCarpEvent {}
-    useDelay: 2
     priority: -5

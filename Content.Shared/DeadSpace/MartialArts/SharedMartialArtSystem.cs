@@ -9,6 +9,7 @@ using Content.Shared.Mobs.Systems;
 using Robust.Shared.Network;
 using Content.Shared.Stunnable;
 using Robust.Shared.Random;
+using Content.Shared.DeadSpace.MartialArts.SmokingCarp;
 
 namespace Content.Shared.DeadSpace.MartialArts;
 
@@ -26,15 +27,16 @@ public abstract partial class SharedMartialArtsSystem : EntitySystem
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    private readonly HashSet<EntityUid> _receivers = new();
     public override void Initialize()
     {
         base.Initialize();
         InitializeSmokingCarp();
         InitializeArkalyse();
 
-        SubscribeLocalEvent<MartialArtsComponent, ShotAttemptedEvent>(OnShotAttempt);
+        SubscribeLocalEvent<SmokingCarpComponent, ShotAttemptedEvent>(OnShotAttempt);
     }
-    private void OnShotAttempt(Entity<MartialArtsComponent> ent, ref ShotAttemptedEvent args)
+    private void OnShotAttempt(Entity<SmokingCarpComponent> ent, ref ShotAttemptedEvent args)
     {
         if (ent.Comp.MartialArtsForm != MartialArtsForms.SmokingCarp)
             return;
