@@ -1,4 +1,3 @@
-using Content.Shared.DeadSpace.MartialArts;
 using Robust.Shared.GameStates;
 
 namespace Content.Server.DeadSpace.MartialArts;
@@ -15,18 +14,6 @@ public sealed partial class MartialArtsTrainingCarpComponent : Component
 
     [DataField]
     public string? ItemAfterLerning;
-
-    [DataField]
-    public string? ActionAtackOne;
-
-    [DataField]
-    public string? ActionAtackTwo;
-
-    [DataField]
-    public string? ActionAtackThree;
-
-    [DataField]
-    public string? ActionAtackFour;
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
@@ -41,18 +28,6 @@ public sealed partial class MartialArtsTrainingArkalyseComponent : Component
 
     [DataField]
     public string? ItemAfterLerning;
-
-    [DataField]
-    public string? ActionAtackOne;
-
-    [DataField]
-    public string? ActionAtackTwo;
-
-    [DataField]
-    public string? ActionAtackThree;
-
-    [DataField]
-    public string? ActionAtackFour;
 }
 public enum MartialArtsForms
 {

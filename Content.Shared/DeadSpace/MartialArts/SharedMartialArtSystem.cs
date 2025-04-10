@@ -10,6 +10,7 @@ using Robust.Shared.Network;
 using Content.Shared.Stunnable;
 using Robust.Shared.Random;
 using Content.Shared.DeadSpace.MartialArts.SmokingCarp;
+using Content.Server.DeadSpace.MartialArts;
 
 namespace Content.Shared.DeadSpace.MartialArts;
 

@@ -1,6 +1,4 @@
 using Content.Shared.Actions;
-using Content.Shared.Dataset;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.DeadSpace.SmokingCarp;
