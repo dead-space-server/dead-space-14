@@ -34,8 +34,6 @@
     list: MuteAtack
     staminaDamage: 25
     paralyzeTime: 10 # Mute Time
-    pushStrength: 0
-    maxPushDistance: 0
     ignoreResist: true
     hitSound: /Audio/Weapons/star_hit.ogg
     damageType: Blunt

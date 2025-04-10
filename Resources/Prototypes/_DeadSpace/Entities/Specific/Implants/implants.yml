@@ -42,7 +42,7 @@
       numberOfDeath: 0
       thresholdHeal: 95
       thresholdRevive: 175
-      autosurgeonAfter: AutosurgeonUsed
+      autosurgeonUsed: AutosurgeonUsed
 
 - type: entity
   parent: BaseItem
