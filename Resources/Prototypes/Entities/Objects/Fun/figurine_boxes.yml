@@ -133,7 +133,7 @@
       - id: ToyFigurineHamlet
         prob: 0.20
         orGroup: SpacemenFig
-      - id: ToyFigurineDeadSpaceHqdishka
+      - id: ToyFigurineHqdishka
         orGroup: SpacemenFig
-      - id: ToyFigurineDeadSpaceHacksLua
+      - id: ToyFigurineHacksLua
         orGroup: SpacemenFig

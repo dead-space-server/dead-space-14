@@ -17,7 +17,7 @@ plushies-jeleshka-7 = Слава Д.О.С.
 plushies-jeleshka-8 = Капитан, уверяю вас, вы можете доверить мне командование станцией. 
 
 plushies-ahahaahahaha-1 = Сервер успешно упал.
-plushies-ahahaahahaha-2 = @l4d2 пошли версус.
+plushies-ahahaahahaha-2 = @l4d2.
 plushies-ahahaahahaha-3 = Возможно всё.
 plushies-ahahaahahaha-4 = Апстрим скоро.
 

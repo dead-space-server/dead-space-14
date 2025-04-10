@@ -56,7 +56,7 @@
   description: Интересно, откуда они тут взялись?
   components:
   - type: Sprite
-    sprite: _DeadSpace/Items/Toys/mics.rsi
+    sprite: _DeadSpace/Items/Toys/misc.rsi
     state: floran
 
 - type: entity
@@ -66,7 +66,7 @@
   description: Мягкая игрушка, напоминающая джаггернаута ядерных оперативников Синдиката. На бирке указано, что оперативники это полнейшая выдумка.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Items/Toys/mics.rsi
+    sprite: _DeadSpace/Items/Toys/misc.rsi
     state: juggernaut
 
 - type: entity
@@ -76,7 +76,7 @@
   description: Милый плюшевый КПС.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Items/Toys/mics.rsi
+    sprite: _DeadSpace/Items/Toys/misc.rsi
     state: ips
     
 - type: entity
@@ -107,14 +107,14 @@
 #Plushie base (фигурка + плюшевая игрушка)
 - type: entity
   parent: BaseItem
-  id: BasePlushieDeadSpaceMics
+  id: BasePlushieDeadSpaceMisc
   abstract: true
   components:
   - type: PhysicalComposition
     materialComposition:
       Plastic: 100
   - type: Sprite
-    sprite: _DeadSpace/Items/Toys/mics.rsi
+    sprite: _DeadSpace/Items/Toys/misc.rsi
   - type: UseDelay
     delay: 10
   - type: TriggerOnActivate
@@ -175,8 +175,8 @@
 
 #Admin Staff
 - type: entity
-  parent: BasePlushieDeadSpaceMics
-  id: PlushieDeadSpaceBoich
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieBoich
   name: плюшевый Boich
   description: Великий и прекрасный, всемогущий Боич. Преклони колено перед отцом всего и вся
   components:
@@ -184,8 +184,8 @@
     state: boich
 
 - type: entity
-  parent: BasePlushieDeadSpaceMics
-  id: PlushieDeadSpaceCyberFox
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieCyberFox
   name: плюшевый Юрий Кривда
   description: Плюшевая игрушка могучего, но доброго мага. На бирке написано "CyberBoich"
   components:
@@ -193,8 +193,8 @@
     state: cyberfox
 
 - type: entity
-  parent: BasePlushieDeadSpaceMics
-  id: PlushieDeadSpaceAhahaahahaha
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieAhahaahahaha
   name: плюшевый Ахахаахич
   description: Всеми любимый главный разработчик!
   components:
@@ -206,8 +206,8 @@
     pack: PlushieAhahaahahahaSpeech
 
 - type: entity
-  parent: BasePlushieDeadSpaceMics
-  id: PlushieDeadSpaceKriss
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieKriss
   name: плюшевая Кристина
   description: От игрушки пахнет егерьмейстером
   components:
@@ -219,8 +219,8 @@
     pack: PlushieKrissSpeech
 
 - type: entity
-  parent: BasePlushieDeadSpaceMics
-  id: PlushieDeadSpaceOstwind
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieOstwind
   name: плюшевый Ostwind
   description: Ходят слухи, что он всё ещё в запое
   components:
@@ -232,8 +232,8 @@
     pack: PlushieOstwindSpeech
   
 - type: entity
-  parent: BasePlushieDeadSpaceMics
-  id: PlushieDeadSpaceJeleshka
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieJeleshka
   name: плюшевый Инспектор Желешка
   description: 
   components:
@@ -245,8 +245,8 @@
     pack: PlushieJeleshkaSpeech
 
 - type: entity
-  parent: BasePlushieDeadSpaceMics
-  id: PlushieDeadSpaceDobryash
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieDobryash
   name: плюшевый Лоуд Хернет
   description: плюшевая игрушка одного из определённо НЕ подозрительных ассистентов.
   components:
@@ -258,8 +258,8 @@
     pack: PlushieDobryashSpeech
 
 - type: entity
-  parent: BasePlushieDeadSpaceMics
-  id: PlushieDeadSpaceHqdishka
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieHqdishka
   name: игрушечная Айрис Луа
   description:  Это привлекательная игрушка, несмотря на то что она выглядит мило, когда вы её видите вы ощущаете удар палкой. "Осторожно, оно дерется и любит".
   components:
@@ -272,12 +272,12 @@
 
 - type: entity
   parent: BaseFigurine
-  id: ToyFigurineDeadSpaceHqdishka
+  id: ToyFigurineHqdishka
   name: игрушечная Айрис Луа
   description: Фигурка, изображающая Айрис Луа
   components:
   - type: Sprite
-    sprite: _DeadSpace/Items/Toys/mics.rsi
+    sprite: _DeadSpace/Items/Toys/misc.rsi
     state: hqdishka
   - type: SpeakOnTrigger
     pack: FigurinesHqdishkaSpeech
@@ -286,12 +286,12 @@
 
 - type: entity
   parent: BaseFigurine
-  id: ToyFigurineDeadSpaceHacksLua
+  id: ToyFigurineHacksLua
   name: игрушечный Хакс Луа
   description: Фигурка, изображающая Хакса Луа
   components:
   - type: Sprite
-    sprite: _DeadSpace/Items/Toys/mics.rsi
+    sprite: _DeadSpace/Items/Toys/misc.rsi
     state: hackslua
   - type: SpeakOnTrigger
     pack: FigurinesHacksLuaSpeech
@@ -300,8 +300,8 @@
 
 #Sponsor Staff
 - type: entity
-  parent: BasePlushieDeadSpaceMics
-  id: PlushieDeadSpaceWillie
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieWillie
   name: плюшевый Вилли Айрон
   description: Взяв данную мягкую игрушку в руки, вы сразу можете обратить своё внимания на большое подобие шрама на левой части лица игрушки, а осмотрев со спины данное чудо, можно заметить короткий хвостик, которым удобно крутить данную игрушку в руках. Если у вас появиться острое желание понюхать данную плюшку, то иногда вы можете почувствовать запах различной руды, иногда денег, а иногда мармелада...
   components:
@@ -313,8 +313,8 @@
     pack: PlushieWillieSpeech
 
 - type: entity
-  parent: BasePlushieDeadSpaceMics
-  id: PlushieDeadSpaceAinnete
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieAinnete
   name: плюшевый Ирвин Ван’Астрея
   description: Плюшевая игрушка представителя расы аркан. На бирке надпись гласит, что эта игрушка создана корпорацией 1’А. От неё пахнет цветком ириса.
   components:
@@ -326,8 +326,8 @@
     pack: PlushieAinnetelSpeech
 
 - type: entity
-  parent: BasePlushieDeadSpaceMics
-  id: PlushieDeadSpaceAlex
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieAlex
   name: плюшевый Алекс Спектр
   description: Плюшевая игрушка, приобретённая на средства, сэкономленные благодаря оптимизации поставок ручек в юридический отдел, выглядит слегка уставшей.
   components:
@@ -339,8 +339,8 @@
     pack: PlushieAlexSpeech
 
 - type: entity
-  parent: BasePlushieDeadSpaceMics
-  id: PlushieDeadSpaceElizabeth
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieElizabeth
   name: плюшевая Элизабет Фламар
   description: Милая плюшевая игрушка розоволосей фелинидки. Она похожа на маленького ангелочка, но, возможно, это не так.
   components:
@@ -352,8 +352,8 @@
     pack: PlushieElizabethSpeech
 
 - type: entity
-  parent: BasePlushieDeadSpaceMics
-  id: PlushieDeadSpaceEllis
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieEllis
   name: плюшевый Эллис Ар’Еви
   description: Плюшевая игрушка белого вульпканина в форме офицера "синий щит". При виде плюшки внутри вас появляется ощущение спокойствия и надежности, будто эта игрушка способна вас защитить от любой угрозы. Пахнет омнизином и метом
   components:
@@ -365,8 +365,8 @@
     pack: PlushieEllisSpeech
 
 - type: entity
-  parent: BasePlushieDeadSpaceMics
-  id: PlushieDeadSpaceKermuth
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieKermuth
   name: плюшевый Кемлухт К’Хфнг 
   description: ППлюшевая игрушка представителя расы Ниан. Его глаза словно смотрят вам в душу. Пахнет сигаретным дымом
   components:
@@ -378,8 +378,8 @@
     pack: PlushieKermuthSpeech
 
 - type: entity
-  parent: BasePlushieDeadSpaceMics
-  id: PlushieDeadSpaceLucius
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieLucius
   name: плюшевый Люций Ван'Астрея
   description: Плюшевая игрушка представителя расы аркан. На бирке надпись гласит, что эта игрушка создана корпорацией 1’А. На ощупь такой мягкий, что с ним можно спать в обнинку.
   components:
@@ -391,8 +391,8 @@
     pack: PlushieLuciusSpeech
 
 - type: entity
-  parent: BasePlushieDeadSpaceMics
-  id: PlushieDeadSpaceEvelina
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieEvelina
   name: плюшевая Эвелиина Ридницохккаль Синаиккало
   description: Плюшевая игрушка полуночно-синей арканы. Даже в виде плюшки выглядит так, словно вот-вот провалится в сон. На ощупь такая мягкая, что с ней можно спать в обнинку.
   components:
@@ -405,7 +405,7 @@
 
 #Mics with speech
 - type: entity
-  parent: BasePlushieDeadSpaceMics
+  parent: BasePlushieDeadSpaceMisc
   id: PlushieLieutenant
   name: плюшевый лейтенант хома
   description: Хладнокровный и расчётливы, специализирующийся на управлении специальными операциями. Способен принимать взвешенные решения в критических ситуациях не смотря на то что он хомяк.

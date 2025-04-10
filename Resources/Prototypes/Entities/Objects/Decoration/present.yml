@@ -163,37 +163,37 @@
         orGroup: GiftPool
       - id: PlushieDragonFoxMadParadox
         orGroup: GiftPool
-      - id: PlushieDeadSpaceBoich
+      - id: PlushieBoich
         orGroup: GiftPool
-      - id: PlushieDeadSpaceCyberFox
+      - id: PlushieCyberFox
         orGroup: GiftPool
-      - id: PlushieDeadSpaceAhahaahahaha
+      - id: PlushieAhahaahahaha
         orGroup: GiftPool
-      - id: PlushieDeadSpaceKriss
+      - id: PlushieKriss
         orGroup: GiftPool
-      - id: PlushieDeadSpaceOstwind
+      - id: PlushieOstwind
         orGroup: GiftPool
-      - id: PlushieDeadSpaceJeleshka
+      - id: PlushieJeleshka
         orGroup: GiftPool
-      - id: PlushieDeadSpaceDobryash
+      - id: PlushieDobryash
         orGroup: GiftPool
-      - id: PlushieDeadSpaceHqdishka
+      - id: PlushieHqdishka
         orGroup: GiftPool
-      - id: PlushieDeadSpaceWillie
+      - id: PlushieWillie
         orGroup: GiftPool
-      - id: PlushieDeadSpaceAinnete
+      - id: PlushieAinnete
         orGroup: GiftPool
-      - id: PlushieDeadSpaceAlex
+      - id: PlushieAlex
         orGroup: GiftPool
-      - id: PlushieDeadSpaceElizabeth
+      - id: PlushieElizabeth
         orGroup: GiftPool
-      - id: PlushieDeadSpaceEllis
+      - id: PlushieEllis
         orGroup: GiftPool
-      - id: PlushieDeadSpaceKermuth
+      - id: PlushieKermuth
         orGroup: GiftPool
-      - id: PlushieDeadSpaceLucius
+      - id: PlushieLucius
         orGroup: GiftPool
-      - id: PlushieDeadSpaceEvelina
+      - id: PlushieEvelina
         orGroup: GiftPool
 
 - type: entity
@@ -304,9 +304,9 @@
         orGroup: GiftPool
       - id: ToyFigurineNukieElite
         orGroup: GiftPool
-      - id: ToyFigurineDeadSpaceHqdishka
+      - id: ToyFigurineHqdishka
         orGroup: SpacemenFig
-      - id: ToyFigurineDeadSpaceHacksLua
+      - id: ToyFigurineHacksLua
         orGroup: SpacemenFig
 
 - type: entity
