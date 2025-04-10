@@ -223,9 +223,7 @@
     startAnnouncement: station-event-response-team-arrival
     startAudio:
       path: /Audio/_DeadSpace/Announcements/centcomm.ogg # DS14-Announcements
-    weight: 0
-    reoccurrenceDelay: 30
-    duration: 1
+    willNotStartRandomly: true
   - type: RuleGrids
   - type: LoadMapRule
     preloadedGrid: DeathSquadShuttle

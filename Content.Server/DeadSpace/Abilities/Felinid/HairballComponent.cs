@@ -5,7 +5,7 @@ namespace Content.Server.DeadSpace.Abilities.Felinid
     {
         public string SolutionName = "hairball";
 
-        [DataField, ViewVariables(VVAccess.ReadWrite)]
+        [DataField]
         public float VomitChance = 0.2f;
     }
 }

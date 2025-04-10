@@ -175,8 +175,7 @@ public sealed class FelinidSystem : EntitySystem
         if (HasComp<FelinidComponent>(args.Target) || !HasComp<StatusEffectsComponent>(args.Target))
             return;
 
-        component.VomitChance = Math.Min(1, component.VomitChance);
-        component.VomitChance = Math.Max(0, component.VomitChance);
+        component.VomitChance = Math.Clamp(component.VomitChance, 0, 1);
 
         if (_robustRandom.Prob(component.VomitChance))
             _vomitSystem.Vomit(args.Target);
@@ -187,8 +186,7 @@ public sealed class FelinidSystem : EntitySystem
         if (HasComp<FelinidComponent>(args.User) || !HasComp<StatusEffectsComponent>(args.User))
             return;
 
-        component.VomitChance = Math.Min(1, component.VomitChance);
-        component.VomitChance = Math.Max(0, component.VomitChance);
+        component.VomitChance = Math.Clamp(component.VomitChance, 0, 1);
 
         if (_robustRandom.Prob(component.VomitChance))
         {
@@ -197,4 +195,3 @@ public sealed class FelinidSystem : EntitySystem
         }
     }
 }
-
