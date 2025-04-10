@@ -1,68 +1,71 @@
-using Content.Shared.Dataset;
-using Robust.Shared.Audio;
-using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization;
-using Robust.Shared.Serialization.Manager.Attributes;
+//using Content.Shared.Dataset;
+//using Robust.Shared.Audio;
+//using Robust.Shared.Prototypes;
+//using Robust.Shared.Serialization;
+//using Robust.Shared.Serialization.Manager.Attributes;
 
-namespace Content.Shared.DeadSpace.MartialArts;
+//namespace Content.Shared.DeadSpace.MartialArts;
 
-[Prototype("martialArt")]
-[Serializable, NetSerializable, DataDefinition]
-public sealed partial class MartialArtPrototype : IPrototype
-{
-    [IdDataField] public string ID { get; private set; } = default!;
+//[Prototype("martialArt")]
+//[Serializable, NetSerializable, DataDefinition]
+//public sealed partial class MartialArtPrototype : IPrototype
+//{
+//    [IdDataField] public string ID { get; private set; } = default!;
 
-    [DataField]
-    public MartialArtsForms MartialArtsForm;
+//    [DataField]
+//    public MartialArtsForms MartialArtsForm;
 
-    [DataField("atackOne", required: true)]
-    public ProtoId<CombatTechPrototype> AtackOne = default!;
+//    [DataField]
+//    public ProtoId<ComboTechiqueListPrototype> ComboValues = "ArkalyseList";
+//}
+//[Prototype("combatTech")]
+//[Serializable, NetSerializable, DataDefinition]
+//public sealed partial class CombatTechPrototype : IPrototype
+//{
+//    [IdDataField] public string ID { get; private set; } = default!;
 
-    [DataField("atackTwo", required: true)]
-    public ProtoId<CombatTechPrototype> AtackTwo = default!;
+//    [DataField(required: true)]
+//    public MartialArtsForms MartialArtsForm;
 
-    [DataField("atackThree", required: true)]
-    public ProtoId<CombatTechPrototype> AtackThree = default!;
-}
-[Prototype("combatTech")]
-[Serializable, NetSerializable, DataDefinition]
-public sealed partial class CombatTechPrototype : IPrototype
-{
-    [IdDataField] public string ID { get; private set; } = default!;
+//    [DataField]
+//    public ProtoId<LocalizedDatasetPrototype> PackMessageOnHit;
 
-    [DataField(required: true)]
-    public MartialArtsForms MartialArtsForm;
+//    [DataField]
+//    public float PushStrength;
 
-    [DataField]
-    public ProtoId<LocalizedDatasetPrototype> PackMessageOnHit;
+//    [DataField]
+//    public int HitDamage;
 
-    [DataField]
-    public float PushStrength;
+//    [DataField]
+//    public float ParalyzeTime;
 
-    [DataField]
-    public int HitDamage;
+//    [DataField]
+//    public float StaminaDamage;
 
-    [DataField]
-    public float ParalyzeTime;
+//    [DataField]
+//    public float MaxPushDistance;
 
-    [DataField]
-    public float StaminaDamage;
+//    [DataField]
+//    public string DamageType = "Slash";
 
-    [DataField]
-    public float MaxPushDistance;
+//    [DataField]
+//    public EntProtoId? EffectPunch;
 
-    [DataField]
-    public string DamageType = "Slash";
+//    [DataField]
+//    public EntProtoId? SelfEffect;
 
-    [DataField]
-    public EntProtoId? EffectPunch;
+//    [DataField]
+//    public float Range;
 
-    [DataField]
-    public EntProtoId? SelfEffect;
+//    [DataField]
+//    public SoundSpecifier HitSound = default!;
+//}
 
-    [DataField]
-    public float Range;
+//[Prototype("techList")]
+//public sealed partial class ComboTechiqueListPrototype : IPrototype
+//{
+//    [IdDataField] public string ID { get; private init; } = default!;
 
-    [DataField]
-    public SoundSpecifier HitSound = default!;
-}
+//    [DataField(required: true)]
+//    public List<ProtoId<CombatTechPrototype>> Technique = new();
+//}

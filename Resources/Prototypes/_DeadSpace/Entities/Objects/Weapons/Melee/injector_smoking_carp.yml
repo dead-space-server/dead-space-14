@@ -9,13 +9,7 @@
     layers:
     - state: icon
   - type: MartialArtsTrainingCarp
-    learnTime: 5
-    addAtackRate: 1.3
-    martialArtsForm: SmokingCarp
-    actionAtackOne: ActionSmokePunchCarp
-    actionAtackTwo: ActionPowerPunchCarp
-    actionAtackThree: ActionTripPunchCarp
-    actionAtackFour: ActionReflectCarp
+    addAtackRate: 1.15
     itemAfterLerning: SmokingCarpInjectorAfter
 
 - type: entity

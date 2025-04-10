@@ -1,5 +1,4 @@
 using Robust.Shared.GameStates;
-using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.MartialArts;
 
@@ -7,23 +6,20 @@ namespace Content.Shared.DeadSpace.MartialArts;
 public sealed partial class MartialArtsComponent : Component
 {
     [DataField]
+    public string? ActionAtackOne;
+
+    [DataField]
+    public string? ActionAtackTwo;
+
+    [DataField]
+    public string? ActionAtackThree;
+
+    [DataField]
+    public string? ActionAtackFour;
+
+    [DataField]
     [AutoNetworkedField]
-    public MartialArtsForms MartialArtsForm = MartialArtsForms.Arkalyse;
-
-    [DataField]
-    public bool IsDamageAttack = false;
-
-    [DataField]
-    public ProtoId<CombatTechPrototype> TechDataOne;
-
-    [DataField]
-    public ProtoId<CombatTechPrototype> TechDataTwo;
-
-    [DataField]
-    public ProtoId<CombatTechPrototype> TechDataThree;
-
-    [DataField]
-    public int TypeAtack = 0;
+    public MartialArtsForms? MartialArtsForm;
 }
 public enum MartialArtsForms
 {
