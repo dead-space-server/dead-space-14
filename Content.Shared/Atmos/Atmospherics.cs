@@ -269,7 +269,7 @@ namespace Content.Shared.Atmos
         /// <summary>
         ///     1 / X of the tritium is converted into Frezon each tick
         /// </summary>
-        public const float FrezonProductionConversionRate = 50f;
+        public const float FrezonProductionConversionRate = 8f;
 
         /// <summary>
         ///     The maximum portion of the N2O that can decompose each reaction tick. (50%)
