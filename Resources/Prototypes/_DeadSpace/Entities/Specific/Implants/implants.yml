@@ -27,26 +27,10 @@
       layers:
       - state: iconBefore
     - type: ReviveImplant
-      healCount:
-        types:
-          Blunt: -2.5
-          Slash: -2.5
-          Piercing: -2.5
-          Asphyxiation: -2.5
-          Caustic: -2.0
-          Cold: -1.5
-          Heat: -1.5
-          Shock: -1.5
-          Poison: -2.0
-      numberPossibleRevive: 1
-      numberOfDeath: 0
-      thresholdHeal: 95
-      thresholdRevive: 175
-      autosurgeonUsed: AutosurgeonUsed
 
 - type: entity
   parent: BaseItem
-  id: AutosurgeonUsed
+  id: AutosurgeonAfter
   name: used Autosurgeon
   description: A multi-use auto surgeon for implanting whatever you want into yourself. Rip that station apart and make it part of your.
   components:
