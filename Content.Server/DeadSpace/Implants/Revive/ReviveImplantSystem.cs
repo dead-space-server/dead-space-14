@@ -5,24 +5,24 @@ using Content.Shared.Interaction.Events;
 using Robust.Server.GameObjects;
 using Content.Shared.DoAfter;
 using Content.Shared.Mobs;
-using Content.Shared.FixedPoint;
-using Content.Shared.Chemistry.EntitySystems;
-using System.Threading.Tasks;
 using Content.Shared.Mobs.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Audio;
 using Content.Server.DeadSpace.Implants.Revive.Components;
+using Content.Shared.Damage;
+using Robust.Shared.Timing;
+using Content.Shared.Mobs.Systems;
+using Content.Server.Body.Systems;
 
 namespace Content.Server.DeadSpace.Implants.Revive;
-
 public sealed partial class ReviveImplantSystem : EntitySystem
 {
-    private Dictionary<EntityUid, bool> _isReviving = new();
-
     [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solution = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly BloodstreamSystem _blood = default!;
 
     public override void Initialize()
     {
@@ -30,10 +30,9 @@ public sealed partial class ReviveImplantSystem : EntitySystem
 
         SubscribeLocalEvent<ReviveImplantComponent, UseInHandEvent>(OnUseInHand);
         SubscribeLocalEvent<ReviveImplantComponent, ReviveImplantActivateEvent>(OnDoAfter);
-        SubscribeLocalEvent<ReviveImplantComponent, MobStateChangedEvent>(OnMobStateCritical);
+        SubscribeLocalEvent<ReviveImplantComponent, MobStateChangedEvent>(OnMobStateChanged);
     }
-
-    private void OnUseInHand(EntityUid uid, ReviveImplantComponent component, UseInHandEvent args)
+    private void OnUseInHand(Entity<ReviveImplantComponent> item, ref UseInHandEvent args)
     {
         if (args.Handled)
             return;
@@ -41,7 +40,7 @@ public sealed partial class ReviveImplantSystem : EntitySystem
         if (HasComp<ReviveImplantComponent>(args.User))
             return;
 
-        var doAfterArgs = new DoAfterArgs(EntityManager, args.User, component.InjectTime, new ReviveImplantActivateEvent(), uid)
+        var doAfterArgs = new DoAfterArgs(EntityManager, args.User, item.Comp.InjectTime, new ReviveImplantActivateEvent(), item)
         {
             BreakOnMove = true,
             BreakOnDamage = true,
@@ -52,73 +51,72 @@ public sealed partial class ReviveImplantSystem : EntitySystem
 
         args.Handled = true;
     }
-
-    private void OnDoAfter(EntityUid uid, ReviveImplantComponent component, DoAfterEvent args)
+    private void OnDoAfter(Entity<ReviveImplantComponent> item, ref ReviveImplantActivateEvent args)
     {
         if (args.Handled || args.Cancelled)
             return;
 
         args.Handled = true;
 
-        EnsureComp<ReviveImplantComponent>(args.Args.User);
-        TransformToItem(uid, component);
-        _audio.PlayPvs(component.ImplantedSound, args.User, AudioParams.Default.WithVolume(0.5f));
+        var userReive = EnsureComp<ReviveImplantComponent>(args.Args.User);
+        userReive.HealCount = item.Comp.HealCount;
+        userReive.NumberPossibleRevive = item.Comp.NumberPossibleRevive;
+        userReive.ThresholdHeal = item.Comp.ThresholdHeal;
+        userReive.ThresholdRevive = item.Comp.ThresholdRevive;
+        TransformToItem(item);
+        _audio.PlayPvs(item.Comp.ImplantedSound, args.User, AudioParams.Default.WithVolume(0.5f));
     }
-
-    private void TransformToItem(EntityUid item, ReviveImplantComponent component)
+    private void TransformToItem(Entity<ReviveImplantComponent> item)
     {
         var position = _transform.GetMapCoordinates(item);
+
         Del(item);
-        Spawn("AutosurgeonAfter", position);
+
+        Spawn(item.Comp.AutosurgeonUsed, position);
     }
-
-    private async void OnMobStateCritical(EntityUid uid, ReviveImplantComponent component, MobStateChangedEvent args)
+    private void OnMobStateChanged(EntityUid user, ReviveImplantComponent comp, MobStateChangedEvent args)
     {
-        if (!TryComp<MobStateComponent>(uid, out var mobState) || mobState.CurrentState != MobState.Critical)
+        if (args.NewMobState == MobState.Alive)
             return;
 
-        if (_isReviving.TryGetValue(uid, out var reviving) && reviving)
+        StartHealingCycle(user, comp);
+    }
+    private void RevivePerson(EntityUid user, ReviveImplantComponent comp)
+    {
+        if (!TryComp<DamageableComponent>(user, out var damageable))
             return;
 
-        _isReviving[uid] = true;
-
-        try
+        if (damageable.TotalDamage >= comp.ThresholdHeal)
+            _damageable.TryChangeDamage(user, comp.HealCount, true, false);
+    }
+    private void StartHealingCycle(EntityUid user, ReviveImplantComponent comp)
+    {
+        Timer.Spawn(TimeSpan.FromSeconds(comp.WritheDuration), () =>
         {
-            while (args.NewMobState == MobState.Critical)
-            {
-                if (mobState.CurrentState != MobState.Critical)
-                    break;
+            if (!Exists(user))
+                return;
 
-                var reagents = new List<(string, FixedPoint2)>()
+            if (!TryComp<MobStateComponent>(user, out var mobState))
+                return;
+
+            if (mobState.CurrentState == MobState.Alive)
+                return;
+
+            RevivePerson(user, comp);
+
+            if (mobState.CurrentState == MobState.Dead &&
+                TryComp<DamageableComponent>(user, out var damageable) &&
+                damageable.TotalDamage <= comp.ThresholdRevive &&
+                comp.NumberOfDeath <= comp.NumberPossibleRevive)
             {
-                ("Epinephrine", 2.5f),
-                ("Saline", 2.5f),
-                ("Omnizine", 1f)
-            };
-                TryInjectReagents(uid, reagents);
-                await Task.Delay(5000);
+                _mobState.ChangeMobState(user, MobState.Critical, null, null);
+                _blood.TryModifyBloodLevel(user, 1000);
+                _blood.TryModifyBleedAmount(user, -1000);
+                comp.NumberOfDeath += 1;
             }
-        }
-        finally
-        {
-            _isReviving[uid] = false;
-        }
-    }
 
-    public bool TryInjectReagents(EntityUid uid, List<(string, FixedPoint2)> reagents)
-    {
-        var solution = new Shared.Chemistry.Components.Solution();
-        foreach (var reagent in reagents)
-        {
-            solution.AddReagent(reagent.Item1, reagent.Item2);
-        }
-
-        if (!_solution.TryGetInjectableSolution(uid, out var targetSolution, out var _))
-            return false;
-
-        if (!_solution.TryAddSolution(targetSolution.Value, solution))
-            return false;
-
-        return true;
+            if (mobState.CurrentState != MobState.Alive)
+                StartHealingCycle(user, comp);
+        });
     }
 }

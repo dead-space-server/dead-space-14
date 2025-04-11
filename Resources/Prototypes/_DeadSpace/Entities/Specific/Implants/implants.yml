@@ -27,10 +27,28 @@
       layers:
       - state: iconBefore
     - type: ReviveImplant
+      healCount: # Лечение
+        types:
+          Blunt: -2.5
+          Slash: -2.5
+          Piercing: -2.5
+          Asphyxiation: -2.5
+          Caustic: -2.0
+          Cold: -1.5
+          Heat: -1.5
+          Shock: -1.5
+          Poison: -2.0
+      numberPossibleRevive: 1
+      injectTime: 4 # Время ввода импланта
+      writheDuration: 4 # Цикл лечения
+      thresholdHeal: 95 # До какого общего кол-во повреждений будет лечение
+      thresholdRevive: 175 # Когда будет применен эффект дефибриллятора
+      autosurgeonUsed: AutosurgeonUsed # Какой предмет заспавнится после использования
+      implantedSound: /Audio/_DeadSpace/Autosurgeon/sound_weapons_circsawhit.ogg # Звук ввода импланта
 
 - type: entity
   parent: BaseItem
-  id: AutosurgeonAfter
+  id: AutosurgeonUsed
   name: used Autosurgeon
   description: A multi-use auto surgeon for implanting whatever you want into yourself. Rip that station apart and make it part of your.
   components:
