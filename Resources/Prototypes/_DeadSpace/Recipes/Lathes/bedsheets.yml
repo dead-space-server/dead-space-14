@@ -13,7 +13,7 @@
     Cloth: 300
     Durathread: 100
 
-# Base double bedsheets
+  #Base double bedsheets
 
 - type: latheRecipe
   parent: BaseDoubleBedsheetRecipe
@@ -65,7 +65,7 @@
   id: DoubleBedsheetYellow
   result: DoubleBedsheetYellow
 
-#Specified double bedsheets
+  #Specified double bedsheets
 
 - type: latheRecipe
   parent: BaseSpecifiedDoubleBedsheetRecipe

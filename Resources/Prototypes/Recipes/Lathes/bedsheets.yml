@@ -112,7 +112,7 @@
   id: BedsheetSyndie
   result: BedsheetSyndie
 
-# DS14 specified bedsheets
+# DS14-start
 
 - type: latheRecipe
   parent: BaseSpecifiedBedsheetRecipe
