@@ -20,6 +20,9 @@
       "name": "stamp-chaplain"
     },
     {
+      "name": "stamp-lawyer"
+    },
+    {
       "name": "stamp-clown"
     },
     {
@@ -62,16 +65,34 @@
       "name": "stamp-approve"
     },
     {
-      "name": "stamp-iaa"
+      "name": "stamp-greytide"
     },
     {
       "name": "stamp-psychologist"
     },
     {
+      "name": "stamp-wizard"
+    },
+    {
       "name": "stamp-senior-administrator"
     },
     {
-      "name": "stamp-greytide"
+      "name": "stamp-senior-engineer"
+    },
+    {
+      "name": "stamp-senior-officer"
+    },
+    {
+      "name": "stamp-senior-physician"
+    },
+    {
+      "name": "stamp-senior-researcher"
+    },
+    {
+      "name": "stamp-senior-salvage"
+    },
+    {
+      "name": "stamp-iaa"
     }
   ]
 }

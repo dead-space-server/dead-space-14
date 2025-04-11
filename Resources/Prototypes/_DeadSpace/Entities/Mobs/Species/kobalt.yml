@@ -81,9 +81,13 @@
   - type: Stamina
     critThreshold: 85
   - type: Sanity # DS14
-  - type: Wagging
+  # - type: Wagging
   - type: Inventory
     speciesId: reptilian # for reptilian masks
+  - type: FootPrints
+    leftBarePrint: "footprint-left-bare-lizard"
+    rightBarePrint: "footprint-right-bare-lizard"
+
 
 - type: entity
   parent: BaseSpeciesDummy

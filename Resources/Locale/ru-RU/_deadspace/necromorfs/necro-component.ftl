@@ -41,12 +41,12 @@ ent-MobTwitcherlvl2 = возвышенный
 # Other ent
 ent-StructureObelisk = красный обелиск
     .desc = От него веет смертью.
-ent-StructureBlackObelisk = черный обелиск
+ent-StructureBlackObelisk = чёрный обелиск
     .desc = От него веет смертью.
 ent-StructureObelisk2 = красный обелиск
     .desc = От него веет смертью.
     .suffix = Без оповещения
-ent-StructureBlackObelisk2 = черный обелиск
+ent-StructureBlackObelisk2 = чёрный обелиск
     .desc = От него веет смертью.
     .suffix = Без оповещения
 ent-FloorNecroTileItemFlesh = некротический пол
@@ -104,7 +104,7 @@ reagent-effect-guidebook-cause-infection-dead =
 
 ent-SyringeSerumEnslaved = шприц
     .desc = { ent-BaseSyringe.desc }
-    .suffix = Сыворотка порабощения, Не маппить
+    .suffix = Сыворотка порабощения
 entity-name-serum-enslaved = сыворотка порабощения
 reagent-desc-serum-enslaved = Густой и чёрный, пахнет ужасно.
 reagent-effect-guidebook-cause-enslave =

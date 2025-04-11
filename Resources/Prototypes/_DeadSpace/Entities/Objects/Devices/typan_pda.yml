@@ -2,8 +2,6 @@
   abstract: true
   parent: BasePDA
   id: BaseTypanPDA
-  name: PDA
-  description: Personal Data Assistant.
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Devices/typan_pda.rsi
@@ -13,7 +11,7 @@
 - type: entity
   parent: BaseTypanPDA
   id: SyndiPDARD
-  name: КПК Директора Исследований Синдиката
+  name: КПК директора исследований Синдиката
   description: Сосредоточение наизлейших технологий! Пахнет дешёвым пластиком...
   components:
   - type: Pda
@@ -31,7 +29,7 @@
 - type: entity
   parent: BaseTypanPDA
   id: SyndiPDAScience
-  name: КПК Учёного Синдиката
+  name: КПК учёного Синдиката
   description: Похоже этот КПК был взломан.
   components:
   - type: Pda
@@ -49,7 +47,7 @@
 - type: entity
   parent: BaseTypanPDA
   id: SyndiPDABotan
-  name: КПК Ботаника Синдиката
+  name: КПК ботаника Синдиката
   description: Весь разъеден ядами растительного происхождения.
   components:
   - type: Pda
@@ -67,7 +65,7 @@
 - type: entity
   parent: BaseTypanPDA
   id: MedicalPDASyndi
-  name: КПК Врача Синдиката
+  name: КПК врача Синдиката
   description: Ходят легенды, что на нём отображается пульс главы НТ.
   components:
   - type: Pda
@@ -95,7 +93,7 @@
 - type: entity
   parent: BaseTypanPDA
   id: SyndiPDAEng
-  name: КПК Атмосферного Инженера Синдиката
+  name: КПК атмосферного инженера Синдиката
   description: Крепкий КПК мастера на все руки.
   components:
   - type: Pda
@@ -113,7 +111,7 @@
 - type: entity
   parent: BaseTypanPDA
   id: SyndiPDACom
-  name: КПК Офицера Телекомуникаций Синдиката
+  name: КПК офицера телекоммуникаций Синдиката
   description: Оснащён всеми средствами и возможностями для получения наизлейших приказов.
   components:
   - type: Pda
@@ -131,7 +129,7 @@
 - type: entity
   parent: BaseTypanPDA
   id: SyndiPDACargo
-  name: КПК Карготехника Синдиката
+  name: КПК карготехника Синдиката
   description: В слоту для ручки застрял зуб карпоакулы.
   components:
   - type: Pda
@@ -149,7 +147,7 @@
 - type: entity
   parent: BaseTypanPDA
   id: SyndiPDAChef
-  name: КПК Повара Синдиката
+  name: КПК повара Синдиката
   description: Ну так как оно будет? С кишками или без кишок?
   components:
   - type: Pda

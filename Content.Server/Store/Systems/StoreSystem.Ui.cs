@@ -146,7 +146,7 @@ public sealed partial class StoreSystem
         //condition checking because why not
         if (listing.Conditions != null)
         {
-            var args = new ListingConditionArgs(component.AccountOwner ?? buyer, uid, listing, EntityManager);
+            var args = new ListingConditionArgs(component.AccountOwner ?? GetBuyerMind(buyer), uid, listing, EntityManager);
             var conditionsMet = listing.Conditions.All(condition => condition.Condition(args));
 
             if (!conditionsMet)
@@ -154,7 +154,7 @@ public sealed partial class StoreSystem
         }
 
         if (!IsOnStartingMap(uid, component))
-            component.RefundAllowed = false;
+            DisableRefund(uid, component);
 
         if (!HandleBankTransaction(uid, component, msg, listing)) // backmen: currency
         {
@@ -281,7 +281,7 @@ public sealed partial class StoreSystem
         listing.PurchaseAmount++; //track how many times something has been purchased
         _audio.PlayEntity(component.BuySuccessSound, msg.Actor, uid); //cha-ching!
 
-        _PlayEject(uid); // backmen: currency
+        PlayEject(uid); // backmen: currency
         var buyFinished = new StoreBuyFinishedEvent
         {
             PurchasedItem = listing,
@@ -345,7 +345,7 @@ public sealed partial class StoreSystem
 
         if (!IsOnStartingMap(uid, component))
         {
-            component.RefundAllowed = false;
+            DisableRefund(uid, component);
             UpdateUserInterface(buyer, uid, component);
         }
 
@@ -389,6 +389,7 @@ public sealed partial class StoreSystem
         component.BoughtEntities.Add(purchase);
         var refundComp = EnsureComp<StoreRefundComponent>(purchase);
         refundComp.StoreEntity = uid;
+        refundComp.BoughtTime = _timing.CurTime;
     }
 
     private bool IsOnStartingMap(EntityUid store, StoreComponent component)
