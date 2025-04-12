@@ -25,12 +25,19 @@ public sealed class SetNewDestructibleThreshold(EntityUid ent, string damageType
 public sealed partial class EnterArmutantStasisEvent : InstantActionEvent { }
 
 // Abilities claws
+public sealed partial class BladeDashActionEvent : WorldTargetActionEvent { }
+public sealed partial class CreateTalonBladeEvent : InstantActionEvent { }
 
-public sealed partial class ArmutantBladeActiveEvent : InstantActionEvent { }
-public sealed partial class BladeDashActionEvent : WorldTargetActionEvent
+// Abilities fist
+public sealed partial class FistStunTentacleToggleEvent : EntityTargetActionEvent { }
+[Serializable, NetSerializable]
+public sealed class BeamActiveVoidHold(string effect, EntityUid target) : EntityEventArgs
 {
-    public EntityCoordinates? Coords { get; set; }
+    public string Effect = effect;
+    public EntityUid Target = target;
 }
+public sealed partial class FistMendSelfToggleEvent : InstantActionEvent { }
+public sealed partial class FistBuffSpeedToggleEvent : InstantActionEvent { }
 
 // Abilities shield
 public sealed partial class CreateArmorShieldToggleEvent : InstantActionEvent { }
@@ -39,11 +46,6 @@ public sealed partial class VoidShieldToggleEvent : InstantActionEvent { }
 
 [ByRefEvent]
 public record struct StunShieldAttemptEvent(bool Cancelled);
-
-// Abilities fist
-public sealed partial class FistStunAroundToggleEvent : EntityTargetActionEvent { }
-public sealed partial class FistMendSelfToggleEvent : InstantActionEvent { }
-public sealed partial class FistBuffSpeedToggleEvent : InstantActionEvent { }
 
 // Abilities gun
 public sealed partial class GunZoomActionEvent : InstantActionEvent { }

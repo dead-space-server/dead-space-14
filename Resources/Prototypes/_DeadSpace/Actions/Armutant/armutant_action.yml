@@ -12,7 +12,10 @@
     icon:
       sprite: _DeadSpace/Actions/armutant_actions.rsi
       state: shard
-    event: !type:ArmutantBladeActiveEvent {}
+    event: !type:CreateTalonBladeEvent {}
+  - type: ArmutantBladeAction
+    talonBladePrototype: WeaponTalonClaws
+    soundEffect: /Audio/_DeadSpace/Armutant/sound_effects_meat.ogg
 
 - type: entity
   id: ActionToggleDash
@@ -25,10 +28,18 @@
       sprite: _DeadSpace/Actions/armutant_actions.rsi
       state: blink
     priority: -15
-    event: !type:ArmutantBladeActiveEvent {}
+    event: !type:BladeDashActionEvent {}
     range: 4
     useDelay: 7
     checkCanAccess: false
+  - type: ArmutantBladeAction
+    soundEffect: /Audio/_DeadSpace/Armutant/sound_items_weapons_dash.ogg
+    maxDashRange: 10
+    collisionRadiusDash: 1.5
+    typeDamage: Slash
+    amountDamage: 25
+    knockbackForce: 10
+    selfEffect: BladeDashSelfEffect
 
 - type: entity
   id: ActionToggleSporeBlade
@@ -109,9 +120,14 @@
     icon:
       sprite: _DeadSpace/Actions/armutant_actions.rsi
       state: arms
-    event: !type:FistStunAroundToggleEvent {}
+    event: !type:FistStunTentacleToggleEvent {}
     range: 6
     deselectOnMiss: false
+  - type: ArmutantFistAction
+    stunTime: 2
+    handEffect: TentacleArmsHand
+    targetEffect: FistStunAroundEffect
+    soundEffect: /Audio/_DeadSpace/Armutant/sound_effects_splat.ogg
 
 - type: entity
   id: ActionToggleFistMendSelf
@@ -128,6 +144,10 @@
       sprite: _DeadSpace/Actions/armutant_actions.rsi
       state: healthup
     event: !type:FistMendSelfToggleEvent {}
+  - type: ArmutantFistAction
+    amountReagent: 10
+    reagent: Shrapnel
+    selfEffect: FistSelfMendEffect # Эффект при снятие наручников
 
 - type: entity
   id: ActionToggleFistBuffSpeed
@@ -143,6 +163,10 @@
       sprite: _DeadSpace/Actions/armutant_actions.rsi
       state: energyup
     event: !type:FistBuffSpeedToggleEvent {}
+  - type: ArmutantFistAction
+    timeRecovery: 15 # Сколько длится ускорение
+    buffSpeedSprint: 5.5
+    buffSpeedWalk: 3.0
 
 # Gun region
 

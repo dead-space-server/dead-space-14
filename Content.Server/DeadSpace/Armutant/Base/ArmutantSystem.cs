@@ -5,8 +5,8 @@ using Content.Server.Cuffs;
 using Content.Server.Destructible.Thresholds.Triggers;
 using Content.Server.Destructible.Thresholds;
 using Content.Server.Destructible;
-using Content.Shared.Damage;
 using System.Linq;
+using Content.Server.Beam;
 
 namespace Content.Server.DeadSpace.Armutant.Base;
 
@@ -14,12 +14,14 @@ public sealed class ArmutantSystem : SharedArmutantSystem
 {
     [Dependency] private readonly BloodstreamSystem _blood = default!;
     [Dependency] private readonly CuffableSystem _cuffable = default!;
+    [Dependency] private readonly BeamSystem _beamSystem = default!;
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<ArmutantComponent, BloodStreamRecoveryEvent>(RecoveryBloodStream);
         SubscribeLocalEvent<ArmutantComponent, UnCuffableArmEvent>(UnCuffableArm);
         SubscribeLocalEvent<ArmutantComponent, SetNewDestructibleThreshold>(SetDestructibleThreshold);
+        SubscribeLocalEvent<ArmutantComponent, BeamActiveVoidHold>(OnBeamActive);
     }
     private void RecoveryBloodStream(Entity<ArmutantComponent> ent, ref BloodStreamRecoveryEvent args)
     {
@@ -49,5 +51,9 @@ public sealed class ArmutantSystem : SharedArmutantSystem
             }
         };
         armutantThreshold.Thresholds.Add(newThreshold);
+    }
+    private void OnBeamActive(Entity<ArmutantComponent> ent, ref BeamActiveVoidHold args)
+    {
+        _beamSystem.TryCreateBeam(ent, args.Target, args.Effect);
     }
 }
