@@ -1,3 +1,5 @@
+using Content.Shared.Damage;
+using Content.Shared.FixedPoint;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 
@@ -8,9 +10,6 @@ public sealed partial class ArmutantComponent : Component
 {
     [DataField]
     public ArmutantArms? SelectedArm;
-
-    [DataField]
-    public BladeArm? SelectAction;
 
     [DataField]
     public EntProtoId BladeArmPrototype = "BladeArmutant";
@@ -104,9 +103,64 @@ public sealed partial class ArmutantActionComponent : Component
 public sealed partial class ArmutantBladeActionComponent : Component
 {
     [DataField]
-    public BladeArm List = default!;
+    public SoundSpecifier? SoundEffect;
 
+    [DataField]
+    public float MaxDashRange = 10.0f;
 
+    [DataField]
+    public float CollisionRadiusDash = 1.5f;
+
+    [DataField]
+    public string TypeDamage = "Slash";
+
+    [DataField]
+    public int AmountDamage = 25;
+
+    [DataField]
+    public float KnockbackForce = 10f;
+
+    [DataField]
+    public EntProtoId? SelfEffect;
+
+    [DataField]
+    public EntProtoId? TalonBladePrototype;
+
+    [DataField]
+    public SoundSpecifier? MeatSound;
+}
+[RegisterComponent]
+public sealed partial class ArmutantFistActionComponent : Component
+{
+    [DataField]
+    public SoundSpecifier? SoundEffect;
+
+    [DataField]
+    public int TimeRecovery = 15;
+
+    [DataField]
+    public float BuffSpeedSprint = 5.5f;
+
+    [DataField]
+    public float BuffSpeedWalk = 3.0f;
+
+    [DataField]
+    public float AmountReagent = 10.0f;
+
+    [DataField]
+    public string Reagent = "Shrapnel";
+
+    [DataField]
+    public float StunTime = 2.0f;
+
+    [DataField]
+    public EntProtoId? SelfEffect;
+
+    [DataField]
+    public EntProtoId? TargetEffect;
+
+    [DataField]
+    public string HandEffect = "TentacleArmsHand"; // TryCreateBeam принимает только строковые значения, странно конечно
 }
 public enum ArmutantArms
 {
@@ -114,12 +168,6 @@ public enum ArmutantArms
     FistArm,
     ShieldArm,
     GunArm,
-}
-public enum BladeArm
-{
-    Dash,
-    SpawnTalon,
-    Spore,
 }
 public enum FistArm
 {
