@@ -159,8 +159,6 @@
 - type: entity
   parent: RubberStampBase
   id: RubberStampCentcomSpecialOperationOfficer
-  name: печать Офицера Специальных Операций
-  description: Печать Офицера Специальных Операций из резины, для проставления печатей на невероятно важных документах.
   categories: [ DoNotMap ]
   components:
   - type: Stamp
