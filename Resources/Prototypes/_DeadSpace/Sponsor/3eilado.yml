@@ -491,6 +491,7 @@
   id: DemonHorns3eilado
   bodyPart: HeadTop
   markingCategory: HeadTop
+  sponsorOnly: true
   sprites:
   - sprite: _DeadSpace/Sponsor/3eilado/horns.rsi
     state: horns
@@ -787,6 +788,9 @@
     sprite: _DeadSpace/Sponsor/3eilado/Spicebush/coat.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/3eilado/Spicebush/coat.rsi
+  - type: Storage
+    grid:
+    - 0,0,3,2
   - type: Armor
     modifiers:
       coefficients:
