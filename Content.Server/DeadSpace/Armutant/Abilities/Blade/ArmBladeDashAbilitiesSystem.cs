@@ -56,6 +56,7 @@ public sealed class ClawsDashSystem : EntitySystem
 
         var origin = _transform.GetMapCoordinates(user);
         var target = args.Target.ToMap(EntityManager, _transform);
+
         if (!_examine.InRangeUnOccluded(origin, target, comp.MaxDashRange, null))
         {
             _popup.PopupClient(Loc.GetString("claws-dash-ability-cant-see", ("item", uid)), user, user);

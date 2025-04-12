@@ -1,22 +1,6 @@
 # Blade region
 
 - type: entity
-  id: ActionToggleBlade
-  name: "[color=red]Преобразовать в клинок[/color]"
-  description: Преобразовывает вашу руку в клинок.
-  components:
-  - type: InstantAction
-    useDelay: 30
-    priority: -21
-    itemIconStyle: NoItem
-    checkCanInteract: false
-    checkConsciousness: false
-    icon:
-      sprite: _DeadSpace/Armutant/armblade.rsi
-      state: icon
-    event: !type:BladeArmutantToggleEvent {}
-
-- type: entity
   id: ActionToggleSpawnTalon
   name: "[color=red]Метательный осколок[/color]"
   description: Создает метательный осколок.
@@ -28,7 +12,7 @@
     icon:
       sprite: _DeadSpace/Actions/armutant_actions.rsi
       state: shard
-    event: !type:CreateTalonBladeEvent {}
+    event: !type:ArmutantBladeActiveEvent {}
 
 - type: entity
   id: ActionToggleDash
@@ -41,7 +25,7 @@
       sprite: _DeadSpace/Actions/armutant_actions.rsi
       state: blink
     priority: -15
-    event: !type:BladeDashActionEvent {}
+    event: !type:ArmutantBladeActiveEvent {}
     range: 4
     useDelay: 7
     checkCanAccess: false
@@ -64,22 +48,6 @@
     range: 10
 
 # Shield region
-
-- type: entity
-  id: ActionToggleShield
-  name: "[color=yellow]Преобразовать в щит[/color]"
-  description: Преобразовывает вашу руку в щит.
-  components:
-  - type: InstantAction
-    useDelay: 30
-    priority: -20
-    itemIconStyle: NoItem
-    checkCanInteract: false
-    checkConsciousness: false
-    icon:
-      sprite: _DeadSpace/Armutant/shield.rsi
-      state: icon
-    event: !type:ShieldArmutantToggleEvent {}
 
 - type: entity
   id: ActionToggleShieldArmor
@@ -130,23 +98,7 @@
 # Fist region
 
 - type: entity
-  id: ActionToggleFist
-  name: "[color=green]Преобразовать в щупальце[/color]"
-  description: Преобразовывает вашу руку в щупальце.
-  components:
-  - type: InstantAction
-    useDelay: 30
-    priority: -19
-    itemIconStyle: NoItem
-    checkCanInteract: false
-    checkConsciousness: false
-    icon:
-      sprite: _DeadSpace/Armutant/blood_fist.rsi
-      state: icon
-    event: !type:FistArmutantToggleEvent {}
-
-- type: entity
-  id: ActionToggleFistStunAround
+  id: ActionToggleFistVoidHold
   name: "[color=green]Хватка пустоты[/color]"
   description: Парализует на расстоянии выбранную вами цель.
   components:
@@ -195,22 +147,6 @@
 # Gun region
 
 - type: entity
-  id: ActionToggleGun
-  name: "[color=violet]Преобразовать в пушку[/color]"
-  description: Преобразовывает вашу руку в пушку.
-  components:
-  - type: InstantAction
-    useDelay: 30
-    priority: -18
-    itemIconStyle: NoItem
-    checkCanInteract: false
-    checkConsciousness: false
-    icon:
-      sprite: _DeadSpace/Armutant/armutant_gun.rsi
-      state: icon
-    event: !type:GunArmutantToggleEvent {}
-
-- type: entity
   id: ActionToggleGunZoom
   name: "[color=violet]Прицеливание[/color]"
   description: Увеличивает ваш зрительный диапазон.
@@ -256,3 +192,84 @@
       sprite: _DeadSpace/Actions/armutant_actions.rsi
       state: revive
     event: !type:EnterArmutantStasisEvent {}
+  - type: ArmutantAction
+    timeInStasis: 30
+    exitToStasisEffect: EnterToStasisEffect
+
+# Swap arms
+
+- type: entity
+  id: ActionToggleBlade
+  name: "[color=red]Преобразовать в клинок[/color]"
+  description: Преобразовывает вашу руку в клинок.
+  components:
+  - type: InstantAction
+    useDelay: 30
+    priority: -21
+    itemIconStyle: NoItem
+    checkCanInteract: false
+    checkConsciousness: false
+    icon:
+      sprite: _DeadSpace/Armutant/armblade.rsi
+      state: icon
+    event: !type:ArmutantSwapArmEvent {}
+  - type: ArmutantAction
+    list: BladeArm
+    meatSound: /Audio/_DeadSpace/Armutant/sound_effects_meat.ogg
+
+- type: entity
+  id: ActionToggleShield
+  name: "[color=yellow]Преобразовать в щит[/color]"
+  description: Преобразовывает вашу руку в щит.
+  components:
+  - type: InstantAction
+    useDelay: 30
+    priority: -20
+    itemIconStyle: NoItem
+    checkCanInteract: false
+    checkConsciousness: false
+    icon:
+      sprite: _DeadSpace/Armutant/shield.rsi
+      state: icon
+    event: !type:ArmutantSwapArmEvent {}
+  - type: ArmutantAction
+    list: FistArm
+    meatSound: /Audio/_DeadSpace/Armutant/sound_effects_meat.ogg
+
+- type: entity
+  id: ActionToggleFist
+  name: "[color=green]Преобразовать в щупальце[/color]"
+  description: Преобразовывает вашу руку в щупальце.
+  components:
+  - type: InstantAction
+    useDelay: 30
+    priority: -19
+    itemIconStyle: NoItem
+    checkCanInteract: false
+    checkConsciousness: false
+    icon:
+      sprite: _DeadSpace/Armutant/blood_fist.rsi
+      state: icon
+    event: !type:ArmutantSwapArmEvent {}
+  - type: ArmutantAction
+    list: ShieldArm
+    meatSound: /Audio/_DeadSpace/Armutant/sound_effects_meat.ogg
+
+- type: entity
+  id: ActionToggleGun
+  name: "[color=violet]Преобразовать в пушку[/color]"
+  description: Преобразовывает вашу руку в пушку.
+  components:
+  - type: InstantAction
+    useDelay: 30
+    priority: -18
+    itemIconStyle: NoItem
+    checkCanInteract: false
+    checkConsciousness: false
+    icon:
+      sprite: _DeadSpace/Armutant/armutant_gun.rsi
+      state: icon
+    event: !type:ArmutantSwapArmEvent {}
+  - type: ArmutantAction
+    list: GunArm
+    meatSound: /Audio/_DeadSpace/Armutant/sound_effects_meat.ogg
