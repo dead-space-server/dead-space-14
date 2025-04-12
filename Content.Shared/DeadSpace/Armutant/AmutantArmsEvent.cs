@@ -1,17 +1,32 @@
 using Content.Shared.Actions;
 using Robust.Shared.Map;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared.DeadSpace.Armutant;
 
-public sealed partial class BladeArmutantToggleEvent : InstantActionEvent { }
-public sealed partial class FistArmutantToggleEvent : InstantActionEvent { }
-public sealed partial class ShieldArmutantToggleEvent : InstantActionEvent { }
-public sealed partial class GunArmutantToggleEvent : InstantActionEvent { }
+public sealed partial class ArmutantSwapArmEvent : InstantActionEvent { }
+[Serializable, NetSerializable]
+public sealed class BloodStreamRecoveryEvent(EntityUid ent) : EntityEventArgs
+{
+    public EntityUid Entity = ent;
+}
+[Serializable, NetSerializable]
+public sealed class UnCuffableArmEvent(EntityUid ent) : EntityEventArgs
+{
+    public EntityUid Entity = ent;
+}
+[Serializable, NetSerializable]
+public sealed class SetNewDestructibleThreshold(EntityUid ent, string damageType, int damageAmount) : EntityEventArgs
+{
+    public EntityUid Entity = ent;
+    public string DamageType = damageType;
+    public int DamageAmount = damageAmount;
+}
 public sealed partial class EnterArmutantStasisEvent : InstantActionEvent { }
 
 // Abilities claws
 
-public sealed partial class CreateTalonBladeEvent : InstantActionEvent { }
+public sealed partial class ArmutantBladeActiveEvent : InstantActionEvent { }
 public sealed partial class BladeDashActionEvent : WorldTargetActionEvent
 {
     public EntityCoordinates? Coords { get; set; }
