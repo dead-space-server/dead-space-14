@@ -22,3 +22,6 @@ ent-RubberStampSeniorPhysician = senior physician rubber stamp
     .desc = { ent-RubberStampBase.desc }
 ent-RubberStampSeniorSalvage = senior salvage rubber stamp
     .desc = { ent-RubberStampBase.desc }
+ent-RubberStampCentcomSpecialOperationOfficer = печать Офицера Специальных Операций
+    .desc = Печать Офицера Специальных Операций из резины, для проставления печатей на невероятно важных документах.
+    .suffix = НЕ МАППИТЬ
