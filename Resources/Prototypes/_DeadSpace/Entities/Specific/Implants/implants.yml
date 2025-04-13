@@ -40,7 +40,7 @@
           Poison: -2.0
       possibleRevives: 1
       injectingTime: 4
-      writheDuration: 4 # Цикл лечения
+      healDuration: 4
       thresholdHeal: 95 # До какого общего кол-во повреждений будет лечение
       thresholdRevive: 175 # Когда будет применен эффект дефибриллятора
       autosurgeonUsed: AutosurgeonUsed # Какой предмет заспавнится после использования
