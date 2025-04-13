@@ -246,9 +246,9 @@
     mindRoles:
     - MindRoleGhostRoleSoloAntagonist
     requirements: # DS14
-      - !type:DepartmentTimeRequirement
-        department: Security
-        time: 36000 # 10 hours
+    - !type:DepartmentTimeRequirement
+      department: Security
+      time: 36000 # 10 hours
     raffle:
       settings: default
   - type: Sprite
