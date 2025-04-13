@@ -26,6 +26,10 @@
           !type:PipeNode
           nodeGroupID: Pipe
           pipeDirection: South
+    - type: RCDDeconstructable # DS14
+      cost: 4
+      delay: 2
+      fx: EffectRCDDeconstruct2
 
 - type: entity
   parent: GasTrinaryBase

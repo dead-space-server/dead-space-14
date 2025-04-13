@@ -1,0 +1,89 @@
+- type: entity
+  id: RPD
+  parent: [ BaseItem, BaseEngineeringContraband ]
+  name: РПТ
+  description: Ручной прокладчик труб пригодится, когда что-то взрывается. Если думаете, что взрыва не будет, подумайте еще раз. Иметь этот инструмент под рукой полезно для замены поврежденных труб,
+  components:
+  - type: RCD
+    availablePrototypes:
+    - GasPipeStraight
+    - GasPipeBend
+    - GasPipeTJunction
+    - GasPipeFourway
+    - GasPipeHalf
+    - GasVentPump
+    - GasPassiveVent
+    - GasVentScrubber
+    - GasDualPortVentPump
+    - GasOutletInjector
+    - GasPressurePump
+    - GasVolumePump
+    - GasValve
+    - SignalControlledValve
+    - GasPassiveGate
+    - PressureControlledValve
+    - GasPipeSensor
+    - GasPort
+    - HeatExchanger
+    - HeatExchangerBend
+    - GasFilter
+    - GasMixer
+    - DeconstructRPD
+  - type: LimitedCharges
+    maxCharges: 30
+    charges: 30
+  - type: UseDelay
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Tools/rpd.rsi
+    state: icon
+  - type: Item
+    size: Normal
+  - type: Clothing
+    sprite: _DeadSpace/Objects/Tools/rpd.rsi
+    quickEquip: false
+    slots:
+    - Belt
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 600
+      Plastic: 100
+  - type: StaticPrice
+    price: 110
+  - type: UserInterface
+    interfaces:
+      enum.RcdUiKey.Key:
+        type: RCDMenuBoundUserInterface
+  - type: ActivatableUI
+    inHandsOnly: true
+    key: enum.RcdUiKey.Key
+
+- type: entity
+  id: RPDEmpty
+  parent: RPD
+  suffix: Пустой
+  components:
+  - type: LimitedCharges
+    charges: 0
+
+- type: entity
+  id: RPDRecharging
+  parent: RPD
+  name: экспериментальный РПТ
+  description: Ручной прокладчик труб, усовершенствованный с помощью блюспейс-технологии, который пассивно генерирует сжатую материю.
+  suffix: Автозарядка
+  components:
+  - type: LimitedCharges
+    maxCharges: 20
+    charges: 20
+  - type: AutoRecharge
+    rechargeDuration: 10
+
+- type: entity
+  id: RPDExperimental
+  parent: RPD
+  suffix: Адмемы
+  name: экспериментальный РПТ
+  description: Ручной прокладчик труб, усовершенствованный с помощью блюспейс-технологии, который пассивно генерирует сжатую материю.
+  components:
+  - type: AutoRecharge
+    rechargeDuration: 1

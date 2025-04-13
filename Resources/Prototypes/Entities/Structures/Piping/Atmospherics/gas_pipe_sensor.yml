@@ -49,6 +49,10 @@
     guides:
     - AtmosphericNetworkMonitor
     - DeviceMonitoringAndControl
+  - type: RCDDeconstructable  # DS14
+    cost: 3
+    delay: 2
+    fx: EffectRCDDeconstruct2
 
 - type: entity
   parent: GasPipeSensor

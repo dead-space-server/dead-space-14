@@ -1,0 +1,321 @@
+# Deconstruct RPD
+- type: rcd
+  id: DeconstructRPD
+  name: rcd-component-deconstruct
+  category: Pipes
+  sprite: /Textures/_DeadSpace/Interface/Radial/RPD/deconstruct.png
+  mode: Deconstruct
+  prototype: EffectRCDDeconstructPreview
+  rotation: Camera
+
+# Pipes
+- type: rcd
+  id: GasPipeStraight
+  category: Pipes
+  sprite: /Textures/_DeadSpace/Interface/Radial/RPD/gas_pipe_straight.png
+  mode: ConstructObject
+  prototype: GasPipeStraight
+  cost: 2
+  delay: 1
+  collisionMask: Impassable
+  rules:
+  - MustBuildOnSubfloor
+  rotation: User
+  fx: EffectRCDConstruct1
+
+- type: rcd
+  id: GasPipeBend
+  category: Pipes
+  sprite: /Textures/_DeadSpace/Interface/Radial/RPD/gas_pipe_bend.png
+  mode: ConstructObject
+  prototype: GasPipeBend
+  cost: 2
+  delay: 1
+  collisionMask: Impassable
+  rules:
+  - MustBuildOnSubfloor
+  rotation: User
+  fx: EffectRCDConstruct1
+
+- type: rcd
+  id: GasPipeTJunction
+  category: Pipes
+  sprite: /Textures/_DeadSpace/Interface/Radial/RPD/gas_pipe_tjunction.png
+  mode: ConstructObject
+  prototype: GasPipeTJunction
+  cost: 2
+  delay: 1
+  collisionMask: Impassable
+  rules:
+  - MustBuildOnSubfloor
+  rotation: User
+  fx: EffectRCDConstruct1
+
+- type: rcd
+  id: GasPipeFourway
+  category: Pipes
+  sprite: /Textures/_DeadSpace/Interface/Radial/RPD/gas_pipe_fourway.png
+  mode: ConstructObject
+  prototype: GasPipeFourway
+  cost: 2
+  delay: 1
+  collisionMask: Impassable
+  rules:
+  - MustBuildOnSubfloor
+  rotation: Fixed
+  fx: EffectRCDConstruct1
+
+- type: rcd
+  id: GasPipeHalf
+  category: Pipes
+  sprite: /Textures/_DeadSpace/Interface/Radial/RPD/gas_pipe_half.png
+  mode: ConstructObject
+  prototype: GasPipeHalf
+  cost: 1
+  delay: 1
+  collisionMask: Impassable
+  rules:
+  - MustBuildOnSubfloor
+  rotation: User
+  fx: EffectRCDConstruct1
+
+# FlowControl
+- type: rcd
+  id: GasValve
+  category: FlowControl
+  sprite: /Textures/_DeadSpace/Interface/Radial/RPD/gas_valve.png
+  mode: ConstructObject
+  prototype: GasValve
+  cost: 3
+  delay: 2
+  collisionMask: Impassable
+  rules:
+  - MustBuildOnSubfloor
+  rotation: User
+  fx: EffectRCDConstruct2
+
+- type: rcd
+  id: SignalControlledValve
+  category: FlowControl
+  sprite: /Textures/_DeadSpace/Interface/Radial/RPD/signal_valve.png
+  mode: ConstructObject
+  prototype: SignalControlledValve
+  cost: 3
+  delay: 2
+  collisionMask: Impassable
+  rules:
+  - MustBuildOnSubfloor
+  rotation: User
+  fx: EffectRCDConstruct2
+
+- type: rcd
+  id: GasPassiveGate
+  category: FlowControl
+  sprite: /Textures/_DeadSpace/Interface/Radial/RPD/gas_passive_gate.png
+  mode: ConstructObject
+  prototype: GasPassiveGate
+  cost: 3
+  delay: 1
+  collisionMask: Impassable
+  rules:
+  - MustBuildOnSubfloor
+  rotation: User
+  fx: EffectRCDConstruct1
+
+- type: rcd
+  id: GasPressurePump
+  category: FlowControl
+  sprite: /Textures/_DeadSpace/Interface/Radial/RPD/gas_pressure_pump.png
+  mode: ConstructObject
+  prototype: GasPressurePump
+  cost: 3
+  delay: 2
+  collisionMask: Impassable
+  rules:
+  - MustBuildOnSubfloor
+  rotation: User
+  fx: EffectRCDConstruct3
+
+- type: rcd
+  id: GasVolumePump
+  category: FlowControl
+  sprite: /Textures/_DeadSpace/Interface/Radial/RPD/gas_volume_pump.png
+  mode: ConstructObject
+  prototype: GasVolumePump
+  cost: 3
+  delay: 2
+  collisionMask: Impassable
+  rules:
+  - MustBuildOnSubfloor
+  rotation: User
+  fx: EffectRCDConstruct4
+
+- type: rcd
+  id: GasPipeSensor
+  category: FlowControl
+  sprite: /Textures/_DeadSpace/Interface/Radial/RPD/gas_pipe_sensor.png
+  mode: ConstructObject
+  prototype: GasPipeSensor
+  cost: 3
+  delay: 2
+  collisionMask: Impassable
+  rules:
+  - MustBuildOnSubfloor
+  rotation: User
+  fx: EffectRCDConstruct2
+
+# Ventilation
+- type: rcd
+  id: GasVentPump
+  category: Ventilation
+  sprite: /Textures/_DeadSpace/Interface/Radial/RPD/gas_vent_pump.png
+  mode: ConstructObject
+  prototype: GasVentPump
+  cost: 3
+  delay: 2
+  collisionMask: Impassable
+  rules:
+  - MustBuildOnSubfloor
+  rotation: Fixed
+  fx: EffectRCDConstruct3
+
+- type: rcd
+  id: GasPassiveVent
+  category: Ventilation
+  sprite: /Textures/_DeadSpace/Interface/Radial/RPD/gas_passive_vent.png
+  mode: ConstructObject
+  prototype: GasPassiveVent
+  cost: 4
+  delay: 2
+  collisionMask: Impassable
+  rules:
+  - MustBuildOnSubfloor
+  rotation: Fixed
+  fx: EffectRCDConstruct2
+
+- type: rcd
+  id: GasVentScrubber
+  category: Ventilation
+  sprite: /Textures/_DeadSpace/Interface/Radial/RPD/gas_vent_scrubber.png
+  mode: ConstructObject
+  prototype: GasVentScrubber
+  cost: 3
+  delay: 2
+  collisionMask: Impassable
+  rules:
+  - MustBuildOnSubfloor
+  rotation: Fixed
+  fx: EffectRCDConstruct3
+
+- type: rcd
+  id: GasDualPortVentPump
+  category: Ventilation
+  sprite: /Textures/_DeadSpace/Interface/Radial/RPD/dual_port_vent.png
+  mode: ConstructObject
+  prototype: GasDualPortVentPump
+  cost: 4
+  delay: 3
+  collisionMask: Impassable
+  rules:
+  - MustBuildOnSubfloor
+  rotation: Fixed
+  fx: EffectRCDConstruct3
+
+- type: rcd
+  id: GasOutletInjector
+  category: Ventilation
+  sprite: /Textures/_DeadSpace/Interface/Radial/RPD/gas_outlet_injector.png
+  mode: ConstructObject
+  prototype: GasOutletInjector
+  cost: 3
+  delay: 2
+  collisionMask: Impassable
+  rules:
+  - MustBuildOnSubfloor
+  rotation: Fixed
+  fx: EffectRCDConstruct2
+
+# AtmosDevices
+- type: rcd
+  id: GasFilter
+  category: AtmosDevices
+  sprite: /Textures/_DeadSpace/Interface/Radial/RPD/gas_filter.png
+  mode: ConstructObject
+  prototype: GasFilter
+  cost: 4
+  delay: 3
+  collisionMask: Impassable
+  rules:
+  - MustBuildOnSubfloor
+  rotation: User
+  fx: EffectRCDConstruct3
+
+- type: rcd
+  id: GasMixer
+  category: AtmosDevices
+  sprite: /Textures/_DeadSpace/Interface/Radial/RPD/gas_mixer.png
+  mode: ConstructObject
+  prototype: GasMixer
+  cost: 4
+  delay: 3
+  collisionMask: Impassable
+  rules:
+  - MustBuildOnSubfloor
+  rotation: User
+  fx: EffectRCDConstruct3
+
+- type: rcd
+  id: PressureControlledValve
+  category: AtmosDevices
+  sprite: /Textures/_DeadSpace/Interface/Radial/RPD/pneumatic_valve.png
+  mode: ConstructObject
+  prototype: PressureControlledValve
+  cost: 3
+  delay: 2
+  collisionMask: Impassable
+  rules:
+  - MustBuildOnSubfloor
+  rotation: User
+  fx: EffectRCDConstruct2
+
+- type: rcd
+  id: HeatExchanger
+  category: AtmosDevices
+  sprite: /Textures/_DeadSpace/Interface/Radial/RPD/heat_exchanger.png
+  mode: ConstructObject
+  prototype: HeatExchanger
+  cost: 4
+  delay: 3
+  collisionMask: Impassable
+  rules:
+  - MustBuildOnSubfloor
+  rotation: User
+  fx: EffectRCDConstruct3
+
+- type: rcd
+  id: HeatExchangerBend
+  category: AtmosDevices
+  sprite: /Textures/_DeadSpace/Interface/Radial/RPD/heat_exchanger_bend.png
+  mode: ConstructObject
+  prototype: HeatExchangerBend
+  cost: 4
+  delay: 3
+  collisionMask: Impassable
+  rules:
+  - MustBuildOnSubfloor
+  rotation: User
+  fx: EffectRCDConstruct3
+
+- type: rcd
+  id: GasPort
+  category: AtmosDevices
+  sprite: /Textures/_DeadSpace/Interface/Radial/RPD/gas_port.png
+  mode: ConstructObject
+  prototype: GasPort
+  cost: 3
+  delay: 1
+  collisionMask: Impassable
+  rules:
+  - MustBuildOnSubfloor
+  rotation: Fixed
+  fx: EffectRCDConstruct2
