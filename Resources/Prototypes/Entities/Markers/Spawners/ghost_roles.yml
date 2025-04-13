@@ -288,7 +288,7 @@
     description: ghost-role-information-wizard-desc
     mindRoles:
     - MindRoleGhostRoleSoloAntagonist
-    requirements:
+    requirements: # DS14
     - !type:OverallPlaytimeRequirement
       time: 216000 # 60h overall
     raffle:
