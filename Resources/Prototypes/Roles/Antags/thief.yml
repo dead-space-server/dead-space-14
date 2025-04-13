@@ -5,8 +5,10 @@
   setPreference: true
   objective: roles-antag-thief-objective
   requirements:
+    - !type:DepartmentTimeRequirement
       department: Medical
       time: 36000 # 10 hours
+    - !type:DepartmentTimeRequirement
       department: Security
       time: 36000 # 10 hours
   # guides: [ Thieves ] # DS14: disabled due to lack of localization
