@@ -40,12 +40,12 @@
           Poison: -2.0
           Bloodloss: -5.0
       possibleRevives: 1
-      injectingTime: 4 # Время ввода импланта
-      healDuration: 4 # Цикл лечения
-      thresholdHeal: 95 # До какого общего кол-во повреждений будет лечение
-      thresholdRevive: 175 # Когда будет применен эффект дефибриллятора
-      spawnAfterUse: AutosurgeonUsed # Какой предмет заспавнится после использования
-      implantedSound: /Audio/_DeadSpace/Autosurgeon/sound_weapons_circsawhit.ogg # Звук ввода импланта
+      injectingTime: 4
+      healDuration: 4
+      thresholdHeal: 95
+      thresholdRevive: 175
+      spawnAfterUse: AutosurgeonUsed
+      implantedSound: /Audio/_DeadSpace/Autosurgeon/sound_weapons_circsawhit.ogg
 
 - type: entity
   parent: BaseItem
