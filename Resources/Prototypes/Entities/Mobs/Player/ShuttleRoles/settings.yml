@@ -802,9 +802,9 @@
       mindRoles:
       - MindRoleGhostRoleTeamAntagonist
       requirements: # DS14
-        - !type:DepartmentTimeRequirement
-          department: Security
-          time: 36000 # 10 hours
+      - !type:DepartmentTimeRequirement
+        department: Security
+        time: 36000 # 10 hours
       raffle:
         settings: default
     - type: Loadout
@@ -825,12 +825,12 @@
       mindRoles:
       - MindRoleGhostRoleTeamAntagonist
       requirements: # DS14
-        - !type:DepartmentTimeRequirement
-          department: Security
-          time: 36000 # 10 hours
-        - !type:DepartmentTimeRequirement
-          department: Command
-          time: 36000 # 10 hours
+      - !type:DepartmentTimeRequirement
+        department: Security
+        time: 36000 # 10 hours
+      - !type:DepartmentTimeRequirement
+        department: Command
+        time: 36000 # 10 hours
       raffle:
         settings: default
     - type: Loadout
