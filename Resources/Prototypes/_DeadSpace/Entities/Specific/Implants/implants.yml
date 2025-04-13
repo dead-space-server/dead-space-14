@@ -38,7 +38,7 @@
           Heat: -1.5
           Shock: -1.5
           Poison: -2.0
-      numberPossibleRevive: 1
+      possibleRevives: 1
       injectingTime: 4
       writheDuration: 4 # Цикл лечения
       thresholdHeal: 95 # До какого общего кол-во повреждений будет лечение
