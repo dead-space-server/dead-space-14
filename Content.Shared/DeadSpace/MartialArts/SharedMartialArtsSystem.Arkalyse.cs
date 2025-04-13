@@ -17,7 +17,6 @@ public partial class SharedMartialArtsSystem
     {
         SubscribeLocalEvent<ArkalyseComponent, ArkalyseActionEvent>(OnArkalyseAction);
         SubscribeLocalEvent<ArkalyseComponent, MeleeHitEvent>(OnMeleeHitEvent);
-
         SubscribeLocalEvent<MartialArtsTrainingArkalyseComponent, UseInHandEvent>(UseBookArkalyse);
     }
     // Выдача способностей и превращение книги в пепел
@@ -117,7 +116,6 @@ public partial class SharedMartialArtsSystem
             default:
                 throw new ArgumentOutOfRangeException();
         }
-
         ent.Comp.SelectedCombo = null;
         ent.Comp.SelectedComboComp = null;
     }

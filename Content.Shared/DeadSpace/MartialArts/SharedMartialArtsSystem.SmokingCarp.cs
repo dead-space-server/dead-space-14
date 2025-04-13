@@ -21,10 +21,8 @@ public partial class SharedMartialArtsSystem
     {
         SubscribeLocalEvent<SmokingCarpComponent, SmokingCarpActionEvent>(OnSmokingCarpAction);
         SubscribeLocalEvent<SmokingCarpComponent, MeleeHitEvent>(OnMeleeHitEvent);
-
         SubscribeLocalEvent<SmokingCarpComponent, ReflectCarpEvent>(SmokingCarpReflect);
         SubscribeLocalEvent<SmokingCarpTripPunchComponent, SmokingCarpTripPunchEvent>(SmokingCarpTripPunch);
-
         SubscribeLocalEvent<MartialArtsTrainingCarpComponent, UseInHandEvent>(UseInjectorSmokingCarp);
     }
     // Используем в руках инжектор, для получения умений + базовых показателей сущности
@@ -145,7 +143,6 @@ public partial class SharedMartialArtsSystem
             default:
                 throw new ArgumentOutOfRangeException();
         }
-
         ent.Comp.SelectedCombo = null;
         ent.Comp.SelectedComboComp = null;
     }
