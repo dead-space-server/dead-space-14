@@ -10,23 +10,22 @@ namespace Content.Server.DeadSpace.Implants.Revive.Components;
 public sealed partial class ReviveImplantComponent : Component
 {
     [DataField]
-    public float InjectTime = 4.0f;
+    public float InjectingTime = 4.0f;
 
     [DataField]
-    public float WritheDuration = 4.0f;
+    public float HealDuration = 4.0f;
 
-    [ViewVariables(VVAccess.ReadWrite)]
-    [DataField, AutoNetworkedField]
+    [DataField]
     public SoundSpecifier ImplantedSound = default!;
 
     [DataField]
-    public int NumberPossibleRevive = 1;
+    public int PossibleRevives = 1;
 
     [DataField]
     public int NumberOfDeath = 0;
 
     [DataField]
-    public EntProtoId AutosurgeonUsed = "AutosurgeonUsed";
+    public EntProtoId SpawnAfterUse = "AutosurgeonUsed";
 
     [DataField]
     public float ThresholdRevive = 175f;
@@ -35,5 +34,5 @@ public sealed partial class ReviveImplantComponent : Component
     public float ThresholdHeal = 95f;
 
     [DataField]
-    public DamageSpecifier HealCount = default!;
+    public DamageSpecifier HealAmount = default!;
 }

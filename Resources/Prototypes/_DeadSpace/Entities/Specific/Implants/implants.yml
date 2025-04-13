@@ -27,7 +27,7 @@
       layers:
       - state: iconBefore
     - type: ReviveImplant
-      healCount: # Лечение
+      healAmount: # Лечение
         types:
           Blunt: -2.5
           Slash: -2.5
@@ -38,12 +38,13 @@
           Heat: -1.5
           Shock: -1.5
           Poison: -2.0
-      numberPossibleRevive: 1
-      injectTime: 4 # Время ввода импланта
-      writheDuration: 4 # Цикл лечения
+          Bloodloss: -5.0
+      possibleRevives: 1
+      injectingTime: 4 # Время ввода импланта
+      healDuration: 4 # Цикл лечения
       thresholdHeal: 95 # До какого общего кол-во повреждений будет лечение
       thresholdRevive: 175 # Когда будет применен эффект дефибриллятора
-      autosurgeonUsed: AutosurgeonUsed # Какой предмет заспавнится после использования
+      spawnAfterUse: AutosurgeonUsed # Какой предмет заспавнится после использования
       implantedSound: /Audio/_DeadSpace/Autosurgeon/sound_weapons_circsawhit.ogg # Звук ввода импланта
 
 - type: entity
