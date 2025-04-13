@@ -42,7 +42,6 @@
       - id: WeaponDisablerToySponsor
       - id: ChainswordDragonFox
       - id: PaperLawdragon_fox
-      - id: RCDDragonfox
 
 # Belt
 - type: entity
@@ -67,6 +66,7 @@
       - id: JawsOfLife
       - id: WelderExperimental
       - id: Multitool
+      - id: RCDDragonfox
 
 # Jumpsuit
 - type: entity
