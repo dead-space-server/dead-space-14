@@ -34,7 +34,6 @@ public abstract partial class SharedMartialArtsSystem : EntitySystem
         base.Initialize();
         InitializeSmokingCarp();
         InitializeArkalyse();
-
         SubscribeLocalEvent<SmokingCarpComponent, ShotAttemptedEvent>(OnShotAttempt);
     }
     private void OnShotAttempt(Entity<SmokingCarpComponent> ent, ref ShotAttemptedEvent args)
