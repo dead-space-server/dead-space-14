@@ -43,7 +43,7 @@
       healDuration: 4
       thresholdHeal: 95 # До какого общего кол-во повреждений будет лечение
       thresholdRevive: 175 # Когда будет применен эффект дефибриллятора
-      autosurgeonUsed: AutosurgeonUsed # Какой предмет заспавнится после использования
+      spawnAfterUse: AutosurgeonUsed
       implantedSound: /Audio/_DeadSpace/Autosurgeon/sound_weapons_circsawhit.ogg # Звук ввода импланта
 
 - type: entity
