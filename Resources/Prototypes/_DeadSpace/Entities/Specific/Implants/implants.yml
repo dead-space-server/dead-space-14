@@ -39,7 +39,7 @@
           Shock: -1.5
           Poison: -2.0
       numberPossibleRevive: 1
-      injectTime: 4 # Время ввода импланта
+      injectingTime: 4
       writheDuration: 4 # Цикл лечения
       thresholdHeal: 95 # До какого общего кол-во повреждений будет лечение
       thresholdRevive: 175 # Когда будет применен эффект дефибриллятора
