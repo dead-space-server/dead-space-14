@@ -3,6 +3,7 @@
 using Content.Shared.Damage;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Server.DeadSpace.Implants.Revive.Components;
 
@@ -12,8 +13,11 @@ public sealed partial class ReviveImplantComponent : Component
     [DataField]
     public float InjectingTime = 4.0f;
 
-    [DataField]
-    public float HealDuration = 4.0f;
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, Access(Other = AccessPermissions.ReadWriteExecute)]
+    public TimeSpan HealDuration = TimeSpan.FromSeconds(4);
+
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, Access(Other = AccessPermissions.ReadWriteExecute)]
+    public TimeSpan NextHealTime = TimeSpan.Zero;
 
     [DataField]
     public SoundSpecifier ImplantedSound = default!;

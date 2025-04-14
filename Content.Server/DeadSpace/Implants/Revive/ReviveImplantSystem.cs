@@ -24,10 +24,10 @@ public sealed partial class ReviveImplantSystem : EntitySystem
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly BloodstreamSystem _blood = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
     public override void Initialize()
     {
         base.Initialize();
-
         SubscribeLocalEvent<ReviveImplantComponent, UseInHandEvent>(OnUseInHand);
         SubscribeLocalEvent<ReviveImplantComponent, ReviveImplantActivateEvent>(OnDoAfter);
         SubscribeLocalEvent<ReviveImplantComponent, MobStateChangedEvent>(OnMobStateChanged);
@@ -77,53 +77,59 @@ public sealed partial class ReviveImplantSystem : EntitySystem
 
         Spawn(item.Comp.SpawnAfterUse, position);
     }
-    private void OnMobStateChanged(Entity<ReviveImplantComponent> ent, ref MobStateChangedEvent args)
-    {
-        if (args.NewMobState == MobState.Alive)
-            return;
-
-        StartHealingCycle(ent);
-    }
-    private void RevivePerson(Entity<ReviveImplantComponent> ent)
+    private void RevivePerson(EntityUid ent, ReviveImplantComponent comp)
     {
         if (!TryComp<DamageableComponent>(ent, out var damageable))
             return;
 
-        if (damageable.TotalDamage >= ent.Comp.ThresholdHeal)
-            _damageable.TryChangeDamage(ent, ent.Comp.HealAmount, true, false);
+        if (damageable.TotalDamage >= comp.ThresholdHeal)
+            _damageable.TryChangeDamage(ent, comp.HealAmount, true, false);
     }
-    private void StartHealingCycle(Entity<ReviveImplantComponent> ent)
+    public override void Update(float frameTime)
     {
-        if (!TryComp<BloodstreamComponent>(ent, out var bloodstream))
-            return;
+        base.Update(frameTime);
 
-        Timer.Spawn(TimeSpan.FromSeconds(ent.Comp.HealDuration), () =>
+        var curTime = _timing.CurTime;
+
+        foreach (var comp in EntityQuery<ReviveImplantComponent>())
         {
-            if (!Exists(ent))
-                return;
+            var ent = comp.Owner;
 
-            if (!TryComp<MobStateComponent>(ent, out var mobState))
+            if (!TryComp(ent, out MobStateComponent? mobState))
+                continue;
+
+            if (!TryComp<BloodstreamComponent>(ent, out var bloodstream))
                 return;
 
             if (mobState.CurrentState == MobState.Alive)
-                return;
+                continue;
 
-            RevivePerson(ent);
+            if (curTime < comp.NextHealTime)
+                continue;
+
+            RevivePerson(ent, comp);
 
             if (mobState.CurrentState == MobState.Dead &&
-                TryComp<DamageableComponent>(ent, out var damageable) &&
-                damageable.TotalDamage <= ent.Comp.ThresholdRevive &&
-                ent.Comp.NumberOfDeath <= ent.Comp.PossibleRevives)
+                TryComp(ent, out DamageableComponent? damageable) &&
+                damageable.TotalDamage <= comp.ThresholdRevive &&
+                comp.NumberOfDeath <= comp.PossibleRevives)
             {
                 _mobState.ChangeMobState(ent, MobState.Critical, null, null);
 
                 _blood.TryModifyBleedAmount(ent, -bloodstream.BleedAmount);
 
-                ent.Comp.NumberOfDeath += 1;
-            }
+                _blood.TryModifyBloodLevel(ent, bloodstream.BloodMaxVolume);
 
-            if (mobState.CurrentState != MobState.Alive)
-                StartHealingCycle(ent);
-        });
+                comp.NumberOfDeath += 1;
+            }
+            comp.NextHealTime = curTime + comp.HealDuration;
+        }
+    }
+    private void OnMobStateChanged(Entity<ReviveImplantComponent> ent, ref MobStateChangedEvent args)
+    {
+        if (args.NewMobState == MobState.Alive)
+            return;
+
+        ent.Comp.NextHealTime = _timing.CurTime + ent.Comp.HealDuration;
     }
 }
