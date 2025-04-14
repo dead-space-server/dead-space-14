@@ -202,6 +202,16 @@
   - type: Item
     heldPrefix: durathread
 
+- type: entity # DS14
+  parent: MaterialDurathread
+  id: MaterialDurathread10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: durathread_2
+  - type: Stack
+    count: 10
+
 - type: entity
   parent: MaterialDurathread
   id: MaterialDurathread1
@@ -262,6 +272,8 @@
   id: MaterialWoodPlank10
   suffix: 10
   components:
+  - type: Sprite
+    state: wood_2
   - type: Stack
     count: 10
 
@@ -270,6 +282,8 @@
   id: MaterialWoodPlank1
   suffix: Single
   components:
+  - type: Sprite
+    state: wood
   - type: Stack
     count: 1
 
@@ -383,6 +397,16 @@
   - type: PhysicalComposition
     materialComposition:
       Diamond: 100
+
+- type: entity # DS14
+  parent: MaterialDiamond
+  id: MaterialDiamond10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: diamond_2
+  - type: Stack
+    count: 10
 
 - type: entity
   parent: MaterialDiamond
@@ -510,9 +534,9 @@
     materialComposition:
       Bananium: 150
   - type: Sprite
-    state: bananium_1
+    state: bananium_3
     layers:
-    - state: bananium_1
+    - state: bananium_3
       map: ["base"]
   - type: Stack
     stackType: Bananium
@@ -520,7 +544,8 @@
     baseLayer: base
     layerStates:
       - bananium
-      - bananium_1
+      - bananium_2
+      - bananium_3
   - type: FlavorProfile
     flavors:
       - banana
@@ -549,6 +574,16 @@
   - type: Appearance
   - type: Item
     heldPrefix: bananium
+
+- type: entity # DS14
+  parent: MaterialBananium
+  id: MaterialBananium10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: bananium_2
+  - type: Stack
+    count: 10
 
 - type: entity
   parent: MaterialBananium
@@ -649,6 +684,16 @@
     tags:
     - ToothSpaceCarp
 
+- type: entity # DS14
+  parent: MaterialToothSpaceCarp
+  id: MaterialToothSpaceCarp10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: tooth_2
+  - type: Stack
+    count: 10
+
 - type: entity
   parent: MaterialToothSpaceCarp
   id: MaterialToothSpaceCarp1
@@ -688,6 +733,16 @@
     - Knife
     - ToothSharkminnow
 
+- type: entity # DS14
+  parent: MaterialToothSharkminnow
+  id: MaterialToothSharkminnow10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: tooth_2
+  - type: Stack
+    count: 10
+
 - type: entity
   parent: MaterialToothSharkminnow
   id: MaterialToothSharkminnow1
@@ -726,6 +781,16 @@
           Quantity: 3
   - type: Item
     heldPrefix: bones
+
+- type: entity # DS14
+  parent: MaterialBones
+  id: MaterialBones10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: bones_2
+  - type: Stack
+    count: 10
 
 - type: entity
   parent: MaterialBones
@@ -784,6 +849,16 @@
     sprite: Objects/Materials/hide.rsi
     shape:
     - 0,0,2,2
+
+- type: entity # DS14
+  parent: MaterialGoliathHide
+  id: MaterialGoliathHide10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: goliath_hide_2
+  - type: Stack
+    count: 10
 
 - type: entity
   parent: MaterialGoliathHide

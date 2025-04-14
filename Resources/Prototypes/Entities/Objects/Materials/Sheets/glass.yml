@@ -172,6 +172,16 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
 
+- type: entity # DS14
+  parent: SheetRGlass
+  id: SheetRGlass10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: rglass_2
+  - type: Stack
+    count: 10
+
 - type: entity
   parent: SheetRGlass
   id: SheetRGlass1
@@ -249,6 +259,16 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
 
+- type: entity # DS14
+  parent: SheetPGlass
+  id: SheetPGlass10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: pglass_2
+  - type: Stack
+    count: 10
+
 - type: entity
   parent: SheetPGlass
   id: SheetPGlass1
@@ -314,6 +334,16 @@
         - ReagentId: Carbon
           Quantity: 0.5
         canReact: false
+
+- type: entity # DS14
+  parent: SheetRPGlass
+  id: SheetRPGlass10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: rpglass_2
+  - type: Stack
+    count: 10
 
 - type: entity
   parent: SheetRPGlass
@@ -390,6 +420,16 @@
           Quantity: 10
         canReact: false
 
+- type: entity # DS14
+  parent: SheetUGlass
+  id: SheetUGlass10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: uglass_2
+  - type: Stack
+    count: 10
+
 - type: entity
   parent: SheetUGlass
   id: SheetUGlass1
@@ -443,6 +483,16 @@
         - ReagentId: Carbon
           Quantity: 0.5
         canReact: false
+
+- type: entity # DS14
+  parent: SheetRUGlass
+  id: SheetRUGlass10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: ruglass_2
+  - type: Stack
+    count: 10
 
 - type: entity
   parent: SheetRUGlass
@@ -520,6 +570,16 @@
         - ReagentId: Copper
           Quantity: 6.7
         canReact: false
+
+- type: entity # DS14
+  parent: SheetClockworkGlass
+  id: SheetClockworkGlass10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: cglass_2
+  - type: Stack
+    count: 10
 
 - type: entity
   parent: SheetClockworkGlass

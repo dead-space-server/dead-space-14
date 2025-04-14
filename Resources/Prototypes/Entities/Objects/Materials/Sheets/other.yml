@@ -61,6 +61,15 @@
         - ReagentId: Cellulose
           Quantity: 3
 
+- type: entity # DS14
+  parent: SheetPaper
+  id: SheetPaper10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: paper_2
+  - type: Stack
+    count: 10
 
 - type: entity
   parent: SheetPaper
@@ -235,6 +244,16 @@
           Quantity: 2
         canReact: false
 
+- type: entity # DS14
+  parent: SheetUranium
+  id: SheetUranium10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: uranium_2
+  - type: Stack
+    count: 10
+
 - type: entity
   parent: SheetUranium
   id: SheetUranium1
@@ -250,46 +269,57 @@
   name: meat sheet
   suffix: Full
   components:
-    - type: Sprite
-      sprite: Objects/Materials/Sheets/meaterial.rsi
-      layers:
-      - state: meat_3
-        map: [ "base" ]
-    - type: Tag
-      tags:
-      - Sheet
-    - type: Material
-    - type: PhysicalComposition
-      materialComposition:
-        Meaterial: 100
-    - type: Stack
-      stackType: MeatSheets
-      baseLayer: base
-      layerStates:
-        - meat
-        - meat_2
-        - meat_3
-    - type: Item
-      sprite: Objects/Materials/Sheets/meaterial.rsi
-      heldPrefix: meat
-    - type: Extractable
-      grindableSolutionName: meatsheet
-    - type: SolutionContainerManager
-      solutions:
-        meatsheet:
-          reagents:
-          - ReagentId: Protein
-            Quantity: 7
-          - ReagentId: Fat
-            Quantity: 3
-          canReact: false
+  - type: Sprite
+    sprite: Objects/Materials/Sheets/meaterial.rsi
+    layers:
+    - state: meat_3
+      map: [ "base" ]
+  - type: Appearance # DS14
+  - type: Tag
+    tags:
+    - Sheet
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      Meaterial: 100
+  - type: Stack
+    stackType: MeatSheets
+    baseLayer: base
+    layerStates:
+    - meat
+    - meat_2
+    - meat_3
+  - type: Item
+    sprite: Objects/Materials/Sheets/meaterial.rsi
+    heldPrefix: meat
+  - type: Extractable
+    grindableSolutionName: meatsheet
+  - type: SolutionContainerManager
+    solutions:
+      meatsheet:
+        reagents:
+        - ReagentId: Protein
+          Quantity: 7
+        - ReagentId: Fat
+          Quantity: 3
+        canReact: false
+
+- type: entity # DS14
+  parent: MaterialSheetMeat
+  id: MaterialSheetMeat10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: meat_2
+  - type: Stack
+    count: 10
 
 - type: entity
   parent: MaterialSheetMeat
   id: MaterialSheetMeat1
   suffix: Single
   components:
-    - type: Sprite
-      state: meat
-    - type: Stack
-      count: 1
+  - type: Sprite
+    state: meat
+  - type: Stack
+    count: 1
