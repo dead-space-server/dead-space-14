@@ -5,22 +5,33 @@ using Robust.Shared.Serialization;
 namespace Content.Shared.DeadSpace.Armutant;
 
 public sealed partial class ArmutantSwapArmEvent : InstantActionEvent { }
-[Serializable, NetSerializable]
-public sealed class BloodStreamRecoveryEvent(EntityUid ent) : EntityEventArgs
+public sealed class BloodStreamRecoveryEvent : EntityEventArgs
 {
-    public EntityUid Entity = ent;
+    public EntityUid Entity;
+    public BloodStreamRecoveryEvent(EntityUid entity)
+    {
+        Entity = entity;
+    }
 }
-[Serializable, NetSerializable]
-public sealed class UnCuffableArmEvent(EntityUid ent) : EntityEventArgs
+public sealed class UnCuffableArmEvent : EntityEventArgs
 {
-    public EntityUid Entity = ent;
+    public EntityUid? Entity;
+    public UnCuffableArmEvent(EntityUid entity)
+    {
+        Entity = entity;
+    }
 }
-[Serializable, NetSerializable]
-public sealed class SetNewDestructibleThreshold(EntityUid ent, string damageType, int damageAmount) : EntityEventArgs
+public sealed class SetNewDestructibleThreshold: EntityEventArgs
 {
-    public EntityUid Entity = ent;
-    public string DamageType = damageType;
-    public int DamageAmount = damageAmount;
+    public EntityUid Entity;
+    public string? DamageType;
+    public int DamageAmount;
+    public SetNewDestructibleThreshold(EntityUid entity, string? damageType, int damageAmount)
+    {
+        Entity = entity;
+        DamageType = damageType;
+        DamageAmount = damageAmount;
+    }
 }
 public sealed partial class EnterArmutantStasisEvent : InstantActionEvent { }
 
@@ -30,11 +41,15 @@ public sealed partial class CreateTalonBladeEvent : InstantActionEvent { }
 
 // Abilities fist
 public sealed partial class FistStunTentacleToggleEvent : EntityTargetActionEvent { }
-[Serializable, NetSerializable]
-public sealed class BeamActiveVoidHold(string effect, EntityUid target) : EntityEventArgs
+public sealed class BeamActiveVoidHold: EntityEventArgs
 {
-    public string Effect = effect;
-    public EntityUid Target = target;
+    public string Effect;
+    public EntityUid Target;
+    public BeamActiveVoidHold(string effect, EntityUid target)
+    {
+        Effect = effect;
+        Target = target;
+    }
 }
 public sealed partial class FistMendSelfToggleEvent : InstantActionEvent { }
 public sealed partial class FistBuffSpeedToggleEvent : InstantActionEvent { }
@@ -50,4 +65,3 @@ public record struct StunShieldAttemptEvent(bool Cancelled);
 // Abilities gun
 public sealed partial class GunZoomActionEvent : InstantActionEvent { }
 public sealed partial class GunSmokeActionEvent : InstantActionEvent { }
-

@@ -7,6 +7,7 @@ using Robust.Shared.Random;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Utility;
 using Robust.Shared.Map.Components;
+using Content.Shared.DeadSpace.Armutant;
 
 namespace Content.Server.DeadSpace.Armutant.Objectives.CreateMapObjective;
 
@@ -27,7 +28,7 @@ public sealed class ObjectiveCreateMapSystem : EntitySystem
     private void OnInteractUsing(EntityUid uid, ObjectiveCreateMapComponent component, UseInHandEvent args)
     {
         var user = args.User;
-        if (!_entities.HasComponent<ArmutantArmsComponent>(user))
+        if (!_entities.HasComponent<ArmutantComponent>(user))
             return;
 
         int randomMapId;

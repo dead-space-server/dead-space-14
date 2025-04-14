@@ -47,7 +47,7 @@
         Piercing: 0.5
         Heat: 0.5
         Radiation: 0.5
-        Stun: 0.9
+        Stun: 0.5
   - type: ClothingSpeedModifier
     walkModifier: 1
     sprintModifier: 1

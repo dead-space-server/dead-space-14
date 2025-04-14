@@ -30,7 +30,7 @@ public partial class SharedArmutantSystem
 
         Timer.Spawn(TimeSpan.FromSeconds(armutantActionComp.TimeRecovery), () =>
         {
-            _speed.ChangeBaseSpeed(ent, 2.5f, 4.5f, 20f); // Возвращаем в базову значению скорости
+            _speed.ChangeBaseSpeed(ent, 2.5f, 4.5f, 20f); // Возвращаем к базовому значению скорости
             _popup.PopupEntity(Loc.GetString("speed-buff-end"), ent, ent);
         });
 

@@ -1,6 +1,6 @@
-using Content.Shared.Damage;
-using Content.Shared.FixedPoint;
+using System.Numerics;
 using Robust.Shared.Audio;
+using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.Armutant;
@@ -25,6 +25,9 @@ public sealed partial class ArmutantComponent : Component
 
     [DataField]
     public Dictionary<string, EntityUid?> Equipment = new();
+
+    [DataField]
+    public Dictionary<string, EntityUid> EquipmentArmor = new();
 
     [DataField]
     public ArmutantActionComponent? SelectedArmComp;
@@ -84,7 +87,7 @@ public sealed partial class ArmutantComponent : Component
 
     public readonly List<EntityUid> ArmutantActionEntitiesGun = new() { };
 }
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent]
 public sealed partial class ArmutantActionComponent : Component
 {
     [DataField]
@@ -99,7 +102,7 @@ public sealed partial class ArmutantActionComponent : Component
     [DataField]
     public float TimeInStasis = 30.0f;
 }
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent]
 public sealed partial class ArmutantBladeActionComponent : Component
 {
     [DataField]
@@ -129,7 +132,7 @@ public sealed partial class ArmutantBladeActionComponent : Component
     [DataField]
     public SoundSpecifier? MeatSound;
 }
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent]
 public sealed partial class ArmutantFistActionComponent : Component
 {
     [DataField]
@@ -162,27 +165,61 @@ public sealed partial class ArmutantFistActionComponent : Component
     [DataField]
     public string HandEffect = "TentacleArmsHand"; // TryCreateBeam принимает только строковые значения, странно конечно
 }
+[RegisterComponent, NetworkedComponent]
+public sealed partial class ArmutantShieldActionComponent : Component
+{
+    [DataField]
+    public SoundSpecifier? SoundEffect = new SoundPathSpecifier("/Audio/_DeadSpace/Armutant/sound_effects_meteorimpact.ogg");
+
+    [DataField]
+    public SoundSpecifier? ReflectSound = new SoundPathSpecifier("/Audio/_DeadSpace/Armutant/sound_effetc_reflect.ogg");
+
+    [DataField]
+    public EntProtoId ArmorPrototype = "ClothingOuterArmorArmutant";
+
+    [DataField]
+    public EntProtoId ArmorHelmetPrototype = "ClothingHeadHelmetArmutant";
+
+    [DataField]
+    public float Range = 3.0f;
+
+    [DataField]
+    public float ShortRange = 0.5f;
+
+    [DataField]
+    public EntProtoId? SelfEffect = "EffectSelfStun";
+
+    [DataField]
+    public EntProtoId? EffectTarget = "EffectStun";
+
+    [DataField]
+    public float KnockbackForce = 15.0f;
+
+    [DataField]
+    public TimeSpan ParalyzeTime = TimeSpan.FromSeconds(1.0);
+
+    [DataField]
+    public TimeSpan ActiveTime = TimeSpan.FromSeconds(15.0);
+}
+[RegisterComponent, NetworkedComponent]
+public sealed partial class ArmutantGunActionComponent : Component
+{
+    [DataField]
+    public bool Enabled;
+
+    [DataField]
+    public Vector2 Zoom = new(1.8f, 1.8f);
+
+    [DataField]
+    public Vector2 Offset;
+
+    [DataField]
+    public EntProtoId? SpawnPrototype = "GunSmokeInstantEffect";
+}
 public enum ArmutantArms
 {
     BladeArm,
     FistArm,
     ShieldArm,
     GunArm,
-}
-public enum FistArm
-{
-    VoidHold,
-    MendSelf,
-    BuffSpeed,
-}
-public enum ShieldArm
-{
-    Armor,
-    Stun,
-    VoidShield,
-}
-public enum GunArm
-{
-    Zoom,
-    Smoke,
 }
