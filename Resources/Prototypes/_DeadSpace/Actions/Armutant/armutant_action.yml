@@ -74,6 +74,9 @@
       sprite: _DeadSpace/Actions/armutant_actions.rsi
       state: armor
     event: !type:CreateArmorShieldToggleEvent {}
+  - type: ArmutantShieldAction
+    armorPrototype: ClothingOuterArmorArmutant
+    armorHelmetPrototype: ClothingHeadHelmetArmutant
 
 - type: entity
   id: ActionToggleShieldStun
@@ -89,6 +92,14 @@
       sprite: _DeadSpace/Actions/armutant_actions.rsi
       state: leg
     event: !type:StunShieldToggleEvent {}
+  - type: ArmutantShieldAction
+    soundEffect: /Audio/_DeadSpace/Armutant/sound_effects_meteorimpact.ogg
+    range: 3
+    shortRange: 0.5
+    selfEffect: EffectSelfStun
+    effectTarget: EffectStun
+    knockbackForce: 15
+    paralyzeTime: 1
 
 - type: entity
   id: ActionToggleVoidShield
@@ -105,6 +116,10 @@
       sprite: _DeadSpace/Actions/armutant_actions.rsi
       state: shield
     event: !type:VoidShieldToggleEvent {}
+  - type: ArmutantShieldAction
+    selfEffect: VoidShieldSelfEffect
+    reflectSound: /Audio/_DeadSpace/Armutant/sound_effetc_reflect.ogg
+    activeTime: 15
 
 # Fist region
 
@@ -183,6 +198,8 @@
       state: zoom
     event: !type:GunZoomActionEvent {}
     useDelay: 1
+  - type: ArmutantGunAction
+    
 
 - type: entity
   id: ActionToggleGunSmoke
@@ -197,6 +214,8 @@
       state: smoke
     event: !type:GunSmokeActionEvent {}
     useDelay: 20
+  - type: ArmutantGunAction
+    spawnPrototype: GunSmokeInstantEffect
 
 # General region
 
@@ -257,7 +276,7 @@
       state: icon
     event: !type:ArmutantSwapArmEvent {}
   - type: ArmutantAction
-    list: FistArm
+    list: ShieldArm
     meatSound: /Audio/_DeadSpace/Armutant/sound_effects_meat.ogg
 
 - type: entity
@@ -276,7 +295,7 @@
       state: icon
     event: !type:ArmutantSwapArmEvent {}
   - type: ArmutantAction
-    list: ShieldArm
+    list: FistArm
     meatSound: /Audio/_DeadSpace/Armutant/sound_effects_meat.ogg
 
 - type: entity

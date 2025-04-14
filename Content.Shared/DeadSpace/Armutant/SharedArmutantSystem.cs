@@ -1,5 +1,5 @@
+using System.Numerics;
 using Content.Shared.Actions;
-using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
 using Content.Shared.Examine;
@@ -12,6 +12,7 @@ using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
+using Content.Shared.Standing;
 using Content.Shared.Stunnable;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
@@ -39,15 +40,18 @@ public abstract partial class SharedArmutantSystem : EntitySystem
     [Dependency] private readonly MovementSpeedModifierSystem _speed = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solution = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
+    [Dependency] private readonly StandingStateSystem _standing = default!;
+    [Dependency] private readonly SharedContentEyeSystem _eye = default!;
+    private readonly HashSet<EntityUid> _receivers = new();
     public override void Initialize()
     {
         base.Initialize();
         InitializeBlade();
         InitializeFist();
-
+        InitializeShield();
+        InitializeGun();
         SubscribeLocalEvent<ArmutantComponent, ArmutantSwapArmEvent>(SwapArms);
         SubscribeLocalEvent<ArmutantComponent, EnterArmutantStasisEvent>(OnEnterStasis);
-
         SubscribeLocalEvent<ArmutantComponent, ComponentInit>(OnComponentInit);
     }
     private void OnComponentInit(Entity<ArmutantComponent> ent, ref ComponentInit args)
@@ -86,6 +90,10 @@ public abstract partial class SharedArmutantSystem : EntitySystem
         if (_net.IsClient)
             return;
 
+        var armutantActionShieldComp = EnsureComp<ArmutantShieldActionComponent>(ent);
+
+        var armutantActionGunComp = EnsureComp<ArmutantGunActionComponent>(ent);
+
         var armutantActionComp = EnsureComp<ArmutantComponent>(ent);
 
         var armutantComp = ent.Comp.SelectedArmComp;
@@ -119,29 +127,35 @@ public abstract partial class SharedArmutantSystem : EntitySystem
             case ArmutantArms.ShieldArm:
                 if (!TryToggleItem(ent, ent.Comp.ShieldArmPrototype))
                     return;
+
                 if (armutantActionComp.ArmutantActionEntitiesShield.Count > 0)
                 {
                     ClearActiveAbilities(ent, armutantActionComp.ArmutantActionEntitiesShield);
-                    break;
+                    RemoveAllArmor(ent, armutantActionComp.EquipmentArmor);
                 }
                 else
+                {
                     AddAbilities(ent, armutantActionComp.ArmutantAbilityShield, armutantActionComp.ArmutantActionEntitiesShield);
+                }
                 break;
             case ArmutantArms.GunArm:
                 if (!TryToggleItem(ent, ent.Comp.GunArmPrototype))
                     return;
+
                 if (armutantActionComp.ArmutantActionEntitiesGun.Count > 0)
                 {
                     ClearActiveAbilities(ent, armutantActionComp.ArmutantActionEntitiesGun);
-                    break;
+                    _eye.ResetZoom(ent);
+                    armutantActionGunComp.Offset = Vector2.Zero;
                 }
                 else
+                {
                     AddAbilities(ent, armutantActionComp.ArmutantAbilityGun, armutantActionComp.ArmutantActionEntitiesGun);
+                }
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
-
         ent.Comp.SelectedArm = null;
         ent.Comp.SelectedArmComp = null;
     }
@@ -289,5 +303,40 @@ public abstract partial class SharedArmutantSystem : EntitySystem
             return false;
 
         return true;
+    }
+    private bool TryEquipArmor(Entity<ArmutantComponent> ent,
+    EntProtoId proto,
+    string slot,
+    Dictionary<string, EntityUid> equipment)
+    {
+        if (equipment.ContainsKey(proto.Id))
+            return false;
+
+        var item = Spawn(proto, Transform(ent).Coordinates);
+
+        if (!_inventory.TryEquip(ent, item, slot, force: true))
+        {
+            QueueDel(item);
+            return false;
+        }
+
+        equipment.Add(proto.Id, item);
+        return true;
+    }
+    private void RemoveAllArmor(Entity<ArmutantComponent> ent,
+    Dictionary<string, EntityUid> equipment)
+    {
+        foreach (var item in equipment.Values)
+        {
+            if (EntityManager.EntityExists(item))
+            {
+                if (_inventory.TryGetSlotContainer(ent, item.ToString(), out var containerSlot, out var slotDefinition))
+                {
+                    _inventory.TryUnequip(ent, slotDefinition.Name);
+                }
+                QueueDel(item);
+            }
+        }
+        equipment.Clear();
     }
 }

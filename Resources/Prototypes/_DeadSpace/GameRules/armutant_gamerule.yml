@@ -20,8 +20,7 @@
       allowNonHumans: true
       multiAntagSetting: NotExclusive
       components:
-      - type: ArmutantGiveWeapons
-      - type: ArmutantArms
+      - type: Armutant
       mindRoles:
       - MindRoleArmutant
       briefing:

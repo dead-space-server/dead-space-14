@@ -7,6 +7,7 @@ using Content.Server.Destructible.Thresholds;
 using Content.Server.Destructible;
 using System.Linq;
 using Content.Server.Beam;
+using Content.Server.Body.Components;
 
 namespace Content.Server.DeadSpace.Armutant.Base;
 
@@ -25,8 +26,11 @@ public sealed class ArmutantSystem : SharedArmutantSystem
     }
     private void RecoveryBloodStream(Entity<ArmutantComponent> ent, ref BloodStreamRecoveryEvent args)
     {
-        _blood.TryModifyBloodLevel(ent, 1000);
-        _blood.TryModifyBleedAmount(ent, -1000);
+        if (!TryComp<BloodstreamComponent>(ent, out var bloodstream))
+            return;
+
+        _blood.TryModifyBleedAmount(ent, -bloodstream.BleedAmount);
+        _blood.TryModifyBloodLevel(ent, bloodstream.BloodMaxVolume);
     }
     private void UnCuffableArm(Entity<ArmutantComponent> ent, ref UnCuffableArmEvent args)
     {
@@ -35,9 +39,9 @@ public sealed class ArmutantSystem : SharedArmutantSystem
     }
     private void SetDestructibleThreshold(Entity<ArmutantComponent> ent, ref SetNewDestructibleThreshold args)
     {
-        var armutantThreshold = EnsureComp<DestructibleComponent>(ent);
+        var destructible = EnsureComp<DestructibleComponent>(ent);
 
-        var bluntThreshold = armutantThreshold.Thresholds
+        var bluntThreshold = destructible.Thresholds
             .OfType<DamageThreshold>()
             .FirstOrDefault(t => t.Trigger is DamageTypeTrigger damageTrigger &&
                                  damageTrigger.DamageType == "Blunt");
@@ -50,8 +54,15 @@ public sealed class ArmutantSystem : SharedArmutantSystem
                 Damage = ent.Comp.DamageAmountGib
             }
         };
-        armutantThreshold.Thresholds.Add(newThreshold);
+
+        if (bluntThreshold != null)
+        {
+            destructible.Thresholds.Remove(bluntThreshold);
+        }
+
+        destructible.Thresholds.Add(newThreshold);
     }
+
     private void OnBeamActive(Entity<ArmutantComponent> ent, ref BeamActiveVoidHold args)
     {
         _beamSystem.TryCreateBeam(ent, args.Target, args.Effect);
