@@ -54,12 +54,6 @@ public sealed class ArmutantSystem : SharedArmutantSystem
                 Damage = ent.Comp.DamageAmountGib
             }
         };
-
-        if (bluntThreshold != null)
-        {
-            destructible.Thresholds.Remove(bluntThreshold);
-        }
-
         destructible.Thresholds.Add(newThreshold);
     }
 
