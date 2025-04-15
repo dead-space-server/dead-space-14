@@ -1,78 +1,98 @@
 using System.Numerics;
-using Content.Server.DeadSpace.Armutant.Base.Components;
 using Content.Shared.Interaction.Events;
 using Robust.Shared.Map;
-using Robust.Shared.Console;
-using Robust.Shared.Random;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Utility;
-using Robust.Shared.Map.Components;
 using Content.Shared.DeadSpace.Armutant;
+using System.Diagnostics.CodeAnalysis;
+using Content.Shared.DeadSpace.Armutant.Objectives.System;
+using Robust.Server.Audio;
+using Robust.Shared.EntitySerialization;
+using Robust.Shared.Map.Components;
+using Robust.Shared.Timing;
+using Robust.Shared.Audio;
 
-namespace Content.Server.DeadSpace.Armutant.Objectives.CreateMapObjective;
+namespace Content.Server.DeadSpace.Armutant.Objectives;
 
-public sealed class ObjectiveCreateMapSystem : EntitySystem
+public sealed class ObjectiveCreateMapSystem : SharedObjectiveCreateMapSystem
 {
     [Dependency] private readonly IEntityManager _entities = default!;
-    [Dependency] private readonly IMapManager _map = default!;
-    [Dependency] private readonly IConsoleHost _consoleHost = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
+    [Dependency] private readonly MapLoaderSystem _loader = default!;
+    [Dependency] private readonly AudioSystem _audio = default!;
+    [Dependency] private readonly IMapManager _mapManager = default!;
+    private ISawmill _sawmill = default!;
 
     public override void Initialize()
     {
         base.Initialize();
+        _sawmill = Logger.GetSawmill("ObjectiveCreateMapSystem");
         SubscribeLocalEvent<ObjectiveCreateMapComponent, UseInHandEvent>(OnInteractUsing);
     }
-
-    private void OnInteractUsing(EntityUid uid, ObjectiveCreateMapComponent component, UseInHandEvent args)
+    private void OnInteractUsing(Entity<ObjectiveCreateMapComponent> ent, ref UseInHandEvent args)
     {
         var user = args.User;
+
         if (!_entities.HasComponent<ArmutantComponent>(user))
             return;
 
-        int randomMapId;
-        MapId mapId;
-        do
+        if (!TryAddMap(ent.Comp.MapPath, out var mapGrid))
+            return;
+
+        if (!_entities.EntityExists(mapGrid))
+            return;
+
+        if (!_entities.TryGetComponent(user, out TransformComponent? userTransform))
+            return;
+
+        userTransform.Coordinates = new EntityCoordinates(mapGrid!.Value, Vector2.Zero);
+
+        if (!string.IsNullOrEmpty(ent.Comp.SelfEffect))
         {
-            randomMapId = _random.Next(10000, 99999);
-            mapId = new MapId(randomMapId);
+            SpawnAttachedTo(ent.Comp.SelfEffect, Transform(user).Coordinates);
         }
-        while (_map.MapExists(mapId));
 
-        component.MapId = randomMapId;
+        args.Handled = true;
 
-        CreateMap(user, component);
+        var ambientAudio = _audio.PlayPvs(ent.Comp.Sound, mapGrid.Value);
+
+        var resolveAudio = _audio.ResolveSound(ent.Comp.Sound);
+
+        PlayMapAmbientAudio(resolveAudio, mapGrid.Value);
     }
-
-    public void CreateMap(EntityUid teleporter, ObjectiveCreateMapComponent component)
+    private void PlayMapAmbientAudio(ResolvedSoundSpecifier soundPath, EntityUid mapUid)
     {
-        var initialMapId = new MapId(component.MapId);
-        if (_map.MapExists(initialMapId))
-            return;
+        var ambientAudio = _audio.PlayPvs(soundPath, mapUid);
+        _audio.SetMapAudio(ambientAudio);
 
-        if (string.IsNullOrWhiteSpace(component.MapPath))
-            return;
+        var length = _audio.GetAudioLength(soundPath);
 
-        var resPath = new ResPath(component.MapPath);
+        if (length > TimeSpan.Zero)
+        {
+            Timer.Spawn(length, () =>
+            {
+                if (_entities.EntityExists(mapUid))
+                {
+                    PlayMapAmbientAudio(soundPath, mapUid);
+                }
+            });
+        }
+    }
+    private bool TryAddMap(ResPath mapPath, [NotNullWhen(true)] out EntityUid? mapGrid)
+    {
+        mapGrid = null;
 
-        Entity<MapComponent>? mapEntity;
-        if (!_mapLoader.TryLoadMap(resPath, out mapEntity, out _))
-            return;
+        var opts = DeserializationOptions.Default with { InitializeMaps = true };
 
-        var loadedMapId = mapEntity.Value.Comp.MapId;
+        if (!_loader.TryLoadMap(mapPath, out var mapEntity, out var gridset, opts))
+        {
+            _sawmill.Error($"Unable to spawn map {mapPath}");
+            return false;
+        }
 
-        _consoleHost.ExecuteCommand($"mapinit {loadedMapId}");
+        var mapComp = _entities.GetComponent<MapComponent>(mapEntity.Value);
 
-        var mapEntityUid = _map.GetMapEntityId(loadedMapId);
-        if (!_entities.EntityExists(mapEntityUid))
-            return;
+        mapGrid = _mapManager.GetMapEntityId(mapComp.MapId);
 
-        if (!_entities.TryGetComponent(teleporter, out TransformComponent? transform))
-            return;
-
-        transform.Coordinates = new EntityCoordinates(mapEntityUid, Vector2.Zero);
-
-        SpawnAttachedTo(component.SelfEffect, Transform(teleporter).Coordinates);
+        return true;
     }
 }

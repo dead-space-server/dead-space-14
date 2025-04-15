@@ -14,6 +14,9 @@
       energy: 3
       color: "#ff66cc"
     - type: ObjectiveCreateMap
+      sound: 
+        collection: ArmutantVoid
+      mapPath: /Maps/DungeonArmutant/dungeon_1.yml
     - type: EmitSoundOnUse
       sound:
         collection: RadiationPulse

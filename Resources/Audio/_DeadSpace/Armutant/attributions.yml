@@ -23,6 +23,16 @@
   source: https://zvukipro.com/
   copyright: "Created by Unknow"
 
+- files: ["ambient_sound_void_3.ogg"]
+  license: "CC0-1.0"
+  source: https://zvukipro.com/
+  copyright: "Created by Unknow"
+
+- files: ["ambient_sound_void_2.ogg"]
+  license: "CC0-1.0"
+  source: https://zvukipro.com/
+  copyright: "Created by Unknow"
+
 - files: ["sound_effect_hit_shield.ogg"]
   license: "CC0-1.0"
   source: https://zvukipro.com/

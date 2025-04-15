@@ -1,18 +1,28 @@
+using Content.Shared.DeadSpace.Armutant.Objectives.Components;
+using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations;
+using Robust.Shared.Utility;
 
-namespace Content.Server.DeadSpace.Armutant.Objectives.CreateMapObjective;
+namespace Content.Server.DeadSpace.Armutant.Objectives;
 
-[RegisterComponent, Access(typeof(ObjectiveCreateMapSystem))]
-public sealed partial class ObjectiveCreateMapComponent : Component
+[RegisterComponent]
+public sealed partial class ObjectiveCreateMapComponent : SharedObjectiveCreateMapComponent
 {
+    [DataField(customTypeSerializer: typeof(ResPathSerializer))]
+    public ResPath MapPath { get; private set; } = new("/Maps/DungeonArmutant/dungeon_1.yml");
+
     /// <summary>
-    /// Путь к карте, которая будет загружена
+    /// Countdown audio stream.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public EntityUid? Stream = null;
+
+    /// <summary>
+    /// Sound that plays when the mission end is imminent.
     /// </summary>
     [DataField]
-    public string MapPath = "/Maps/DungeonArmutant/dungeon_1.yml";
-
-    [DataField]
-    public int MapId;
+    public SoundSpecifier Sound;
 
     [DataField]
     public EntProtoId? SelfEffect = "VoidTeleportSelfEffect";
