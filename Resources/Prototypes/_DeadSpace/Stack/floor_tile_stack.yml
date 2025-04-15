@@ -1,0 +1,134 @@
+- type: stack
+  id: FloorTileTerracotta
+  name: terracotta tile
+  spawn: FloorTileItemTerracotta
+  maxCount: 30
+
+- type: stack
+  id: FloorTileTerracottaDiagonal
+  name: terracotta diagonal tile
+  spawn: FloorTileItemTerracottaDiagonal
+  maxCount: 30
+
+- type: stack
+  id: FloorTileTerracottaHerringbone
+  name: terracotta herringbone tile
+  spawn: FloorTileItemTerracottaHerringbone
+  maxCount: 30
+
+- type: stack
+  id: FloorTileTerracottaSmall
+  name: terracotta small tile
+  spawn: FloorTileItemTerracottaSmall
+  maxCount: 30
+
+- type: stack
+  id: FloorTileStone
+  name: stone tile
+  spawn: FloorTileItemStone
+  maxCount: 30
+
+- type: stack
+  id: FloorTilePlanetFairyGrass
+  name: planet fairy grass tile
+  spawn: FloorTileItemFairyGrass
+  maxCount: 30
+
+- type: stack
+  id: FloorTileFairyGrass
+  name: fairy grass tile
+  spawn: FloorTileItemFairyGrass
+  maxCount: 30
+
+- type: stack
+  id: FloorTileNecro
+  name: necro tile
+  spawn: FloorTileItemNecro
+  maxCount: 30
+
+- type: stack
+  id: FloorTileNecroYellow
+  name: necro yellow tile
+  spawn: FloorTileItemNecro
+  maxCount: 30
+
+- type: stack
+  id: FloorTileNecroWhite
+  name: necro white tile
+  spawn: FloorTileItemNecro
+  maxCount: 30
+
+- type: stack
+  id: FloorTileWastelandDug
+  name: wasteland dug tile
+  spawn: FloorTileItemWastelandDug
+  maxCount: 30
+
+- type: stack
+  id: FloorTileWastelandTile
+  name: wasteland tile
+  spawn: FloorTileItemWastelandTile
+  maxCount: 30
+
+- type: stack
+  id: FloorTileWasteland
+  name: wasteland variants tile
+  spawn: FloorTileItemWasteland
+  maxCount: 30
+
+- type: stack
+  id: FloorTileAlien
+  name: alien tile
+  spawn: FloorTileItemAlien
+  maxCount: 30
+
+- type: stack
+  id: FloorTileAlienPlating
+  name: alien plating tile
+  spawn: FloorTileItemAlienPlating
+  maxCount: 30
+
+# Новые стеклянные тайлы (обычные)
+- type: stack
+  id: FloorTilePlasmaGlass
+  name: plasma glass tile
+  spawn: FloorTileItemPlasmaGlass
+  maxCount: 30
+
+- type: stack
+  id: FloorTileUraniumGlass
+  name: uranium glass tile
+  spawn: FloorTileItemUraniumGlass
+  maxCount: 30
+
+# Новые стеклянные тайлы (укрепленные)
+- type: stack
+  id: FloorTileRPlasmaGlass
+  name: reinforced plasma glass tile
+  spawn: FloorTileItemRPlasmaGlass
+  maxCount: 30
+
+- type: stack
+  id: FloorTileRUraniumGlass
+  name: reinforced uranium glass tile
+  spawn: FloorTileItemRUraniumGlass
+  maxCount: 30
+
+# Новые материалы (один кадр)
+- type: stack
+  id: FloorTileDiamond
+  name: diamond tile
+  spawn: FloorTileItemDiamond
+  maxCount: 30
+
+- type: stack
+  id: FloorTilePlasma
+  name: plasma tile
+  spawn: FloorTileItemPlasma
+  maxCount: 30
+
+- type: stack
+  id: FloorTileUranium
+  name: uranium tile
+  spawn: FloorTileItemUranium
+  maxCount: 30
