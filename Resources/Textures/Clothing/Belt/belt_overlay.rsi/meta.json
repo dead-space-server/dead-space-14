@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from tgstation at commit https://github.com/tgstation/tgstation/commit/dc89ef0239830774bd3d9d7d6c8da2856da2b869",
+  "copyright": "Taken from tgstation at commit https://github.com/tgstation/tgstation/commit/dc89ef0239830774bd3d9d7d6c8da2856da2b869, golden_plunger, wetfloorsign and cleaner_grenade made by andrew_fenriz (discord) for Space Station 14 server Мёртвый Космос",
   "size": {
     "x": 32,
     "y": 32
@@ -138,6 +138,36 @@
     },
     {
       "name": "wrench_medical"
+    },
+    {
+      "name": "trashbag_blue"
+    },
+    {
+      "name": "golden_plunger"
+    },
+    {
+      "name": "plunger"
+    },
+    {
+      "name": "cleaner_grenade"
+    },
+    {
+      "name": "wetfloorsign"
+    },
+    {
+      "name": "soapsyndie"
+    },
+    {
+      "name": "light_replacer"
+    },
+    {
+      "name": "holosign"
+    },
+    {
+      "name": "soap"
+    },
+    {
+      "name": "trashbag"
     },
     {
       "name": "analyzer-equipped-BELT",
