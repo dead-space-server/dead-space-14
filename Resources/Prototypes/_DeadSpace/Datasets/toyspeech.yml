@@ -123,3 +123,21 @@
   values:
     prefix: plushies-eva-
     count: 5
+
+- type: localizedDataset
+  id: PlushieAizekSpeech
+  values:
+    prefix: plushies-aizek-
+    count: 5
+
+- type: localizedDataset
+  id: PlushieAzrailHardsuitSpeech
+  values:
+    prefix: plushies-azrail-hardsuit-
+    count: 5
+
+- type: localizedDataset
+  id: PlushieSharpSpeech
+  values:
+    prefix: plushies-sharp-
+    count: 5

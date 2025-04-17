@@ -229,7 +229,7 @@
     sprite: _DeadSpace/Items/Toys/sil_plushie.rsi
     state: plushie_aizek
   - type: TTS
-    voice: Clockwerk
+    voice: Soldier_Metro
   - type: SpeakOnTrigger
     pack: PlushieAizekSpeech
 
@@ -299,7 +299,7 @@
     sprite: _DeadSpace/Items/Toys/sil_plushie.rsi
     state: plushie_azrail_hardsuit
   - type: TTS
-    voice: Clockwerk
+    voice: Valeera
   - type: SpeakOnTrigger
     pack: PlushieAzrailHardsuitSpeech
 
@@ -313,6 +313,6 @@
     sprite: _DeadSpace/Items/Toys/sil_plushie.rsi
     state: plushie_sharp
   - type: TTS
-    voice: Clockwerk
+    voice: Flark
   - type: SpeakOnTrigger
     pack: PlushieSharpSpeech
