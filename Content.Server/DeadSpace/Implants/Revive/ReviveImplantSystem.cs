@@ -121,7 +121,7 @@ public sealed partial class ReviveImplantSystem : EntitySystem
                 damageable.TotalDamage <= comp.ThresholdRevive &&
                 comp.NumberOfDeath <= comp.PossibleRevives)
             {
-                _mobState.ChangeMobState(ent, MobState.Critical, null, null);
+                _mobState.ChangeMobState(ent, MobState.Critical);
 
                 _blood.TryModifyBleedAmount(ent, -bloodstream.BleedAmount);
 
