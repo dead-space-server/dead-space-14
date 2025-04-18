@@ -70,16 +70,16 @@ public sealed partial class ReviveImplantSystem : EntitySystem
         userReive.PossibleRevives = item.Comp.PossibleRevives;
         userReive.ThresholdHeal = item.Comp.ThresholdHeal;
         userReive.ThresholdRevive = item.Comp.ThresholdRevive;
+
         TransformToItem(item);
+
         _audio.PlayPvs(item.Comp.ImplantedSound, args.User, AudioParams.Default.WithVolume(0.5f));
     }
 
     private void TransformToItem(Entity<ReviveImplantComponent> item)
     {
         var position = _transform.GetMapCoordinates(item);
-
         Del(item);
-
         Spawn(item.Comp.SpawnAfterUse, position);
     }
 
@@ -129,6 +129,7 @@ public sealed partial class ReviveImplantSystem : EntitySystem
 
                 comp.NumberOfDeath += 1;
             }
+
             comp.NextHealTime = curTime + comp.HealDuration;
         }
     }
