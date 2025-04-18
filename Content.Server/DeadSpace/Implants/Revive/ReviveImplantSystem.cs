@@ -16,6 +16,7 @@ using Content.Server.Body.Systems;
 using Content.Server.Body.Components;
 
 namespace Content.Server.DeadSpace.Implants.Revive;
+
 public sealed partial class ReviveImplantSystem : EntitySystem
 {
     [Dependency] private readonly TransformSystem _transform = default!;
@@ -25,6 +26,7 @@ public sealed partial class ReviveImplantSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly BloodstreamSystem _blood = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -32,6 +34,7 @@ public sealed partial class ReviveImplantSystem : EntitySystem
         SubscribeLocalEvent<ReviveImplantComponent, ReviveImplantActivateEvent>(OnDoAfter);
         SubscribeLocalEvent<ReviveImplantComponent, MobStateChangedEvent>(OnMobStateChanged);
     }
+
     private void OnUseInHand(Entity<ReviveImplantComponent> item, ref UseInHandEvent args)
     {
         if (args.Handled)
@@ -54,6 +57,7 @@ public sealed partial class ReviveImplantSystem : EntitySystem
 
         args.Handled = true;
     }
+
     private void OnDoAfter(Entity<ReviveImplantComponent> item, ref ReviveImplantActivateEvent args)
     {
         if (args.Handled || args.Cancelled)
@@ -69,6 +73,7 @@ public sealed partial class ReviveImplantSystem : EntitySystem
         TransformToItem(item);
         _audio.PlayPvs(item.Comp.ImplantedSound, args.User, AudioParams.Default.WithVolume(0.5f));
     }
+
     private void TransformToItem(Entity<ReviveImplantComponent> item)
     {
         var position = _transform.GetMapCoordinates(item);
@@ -77,6 +82,7 @@ public sealed partial class ReviveImplantSystem : EntitySystem
 
         Spawn(item.Comp.SpawnAfterUse, position);
     }
+
     private void RevivePerson(EntityUid ent, ReviveImplantComponent comp)
     {
         if (!TryComp<DamageableComponent>(ent, out var damageable))
@@ -85,6 +91,7 @@ public sealed partial class ReviveImplantSystem : EntitySystem
         if (damageable.TotalDamage >= comp.ThresholdHeal)
             _damageable.TryChangeDamage(ent, comp.HealAmount, true, false);
     }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -125,6 +132,7 @@ public sealed partial class ReviveImplantSystem : EntitySystem
             comp.NextHealTime = curTime + comp.HealDuration;
         }
     }
+
     private void OnMobStateChanged(Entity<ReviveImplantComponent> ent, ref MobStateChangedEvent args)
     {
         if (args.NewMobState == MobState.Alive)
