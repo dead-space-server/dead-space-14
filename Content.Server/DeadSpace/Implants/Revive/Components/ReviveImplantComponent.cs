@@ -13,10 +13,10 @@ public sealed partial class ReviveImplantComponent : Component
     [DataField]
     public float InjectingTime = 4.0f;
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, Access(Other = AccessPermissions.ReadWriteExecute)]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
     public TimeSpan HealDuration = TimeSpan.FromSeconds(4);
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, Access(Other = AccessPermissions.ReadWriteExecute)]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
     public TimeSpan NextHealTime = TimeSpan.Zero;
 
     [DataField]
