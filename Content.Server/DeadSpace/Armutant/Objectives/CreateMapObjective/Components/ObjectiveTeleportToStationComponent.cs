@@ -2,7 +2,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Armutant.Objectives.CreateMapObjective;
 
-[RegisterComponent, Access(typeof(ObjectiveTeleportToStationSystem))]
+[RegisterComponent]
 public sealed partial class ObjectiveTeleportToStationComponent : Component
 {
     public EntityUid? StationGridId;

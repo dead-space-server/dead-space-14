@@ -43,6 +43,16 @@
   source: https://zvukipro.com/
   copyright: "Created by Unknow"
 
+- files: ["death_bosses.ogg"]
+  license: "CC0-1.0"
+  source: https://zvukipro.com/
+  copyright: "Created by Unknow"
+
+- files: ["heart_ambient.ogg"]
+  license: "CC0-1.0"
+  source: https://zvukipro.com/
+  copyright: "Created by Unknow"
+
 - files: ["sound_toggle_shield_claws.ogg"]
   license: "CC0-1.0"
   source: https://zvukipro.com/

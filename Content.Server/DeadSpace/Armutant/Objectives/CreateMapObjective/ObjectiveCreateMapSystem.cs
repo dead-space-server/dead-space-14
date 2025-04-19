@@ -5,7 +5,6 @@ using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Utility;
 using Content.Shared.DeadSpace.Armutant;
 using System.Diagnostics.CodeAnalysis;
-using Content.Shared.DeadSpace.Armutant.Objectives.System;
 using Robust.Server.Audio;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.Map.Components;
@@ -14,14 +13,13 @@ using Robust.Shared.Audio;
 
 namespace Content.Server.DeadSpace.Armutant.Objectives;
 
-public sealed class ObjectiveCreateMapSystem : SharedObjectiveCreateMapSystem
+public sealed class ObjectiveCreateMapSystem : EntitySystem
 {
     [Dependency] private readonly IEntityManager _entities = default!;
     [Dependency] private readonly MapLoaderSystem _loader = default!;
     [Dependency] private readonly AudioSystem _audio = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
     private ISawmill _sawmill = default!;
-
     public override void Initialize()
     {
         base.Initialize();
@@ -31,6 +29,9 @@ public sealed class ObjectiveCreateMapSystem : SharedObjectiveCreateMapSystem
     private void OnInteractUsing(Entity<ObjectiveCreateMapComponent> ent, ref UseInHandEvent args)
     {
         var user = args.User;
+
+        if (ent.Comp.UsingItem)
+            return;
 
         if (!_entities.HasComponent<ArmutantComponent>(user))
             return;
@@ -51,13 +52,15 @@ public sealed class ObjectiveCreateMapSystem : SharedObjectiveCreateMapSystem
             SpawnAttachedTo(ent.Comp.SelfEffect, Transform(user).Coordinates);
         }
 
-        args.Handled = true;
-
         var ambientAudio = _audio.PlayPvs(ent.Comp.Sound, mapGrid.Value);
 
         var resolveAudio = _audio.ResolveSound(ent.Comp.Sound);
 
         PlayMapAmbientAudio(resolveAudio, mapGrid.Value);
+
+        ent.Comp.UsingItem = true;
+
+        args.Handled = true;
     }
     private void PlayMapAmbientAudio(ResolvedSoundSpecifier soundPath, EntityUid mapUid)
     {

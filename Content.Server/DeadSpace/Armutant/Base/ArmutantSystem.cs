@@ -56,7 +56,6 @@ public sealed class ArmutantSystem : SharedArmutantSystem
         };
         destructible.Thresholds.Add(newThreshold);
     }
-
     private void OnBeamActive(Entity<ArmutantComponent> ent, ref BeamActiveVoidHold args)
     {
         _beamSystem.TryCreateBeam(ent, args.Target, args.Effect);

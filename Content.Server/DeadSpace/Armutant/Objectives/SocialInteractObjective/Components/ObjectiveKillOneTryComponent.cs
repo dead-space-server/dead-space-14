@@ -1,9 +1,9 @@
 namespace Content.Server.DeadSpace.Armutant.Objectives.SocialInteractObjective;
 
-[RegisterComponent, Access(typeof(ObjectiveKillOneTrySystem))]
+[RegisterComponent]
 public sealed partial class ObjectiveKillOneTryComponent : Component
 {
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    [DataField]
     public bool RequireDie = false;
 
     public bool OneTry = false;
