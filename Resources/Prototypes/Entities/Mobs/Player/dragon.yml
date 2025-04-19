@@ -154,7 +154,7 @@
     - DoorBumpOpener
   - type: Puller
     needsHands: false
-  - type: NightVision # DS14 
+  - type: NightVision # DS14
 
 - type: entity
   parent: BaseMobDragon
@@ -171,6 +171,13 @@
   - type: GuideHelp
     guides:
     - MinorAntagonists
+  # Deadspace-start
+  - type: Tag
+    tags:
+    - CannotSuicide
+    - DoorBumpOpener
+    - CarpRiftHealTarget
+  # Deadspace-end
 
 - type: entity
   categories: [ HideSpawnMenu ]

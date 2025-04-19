@@ -23,6 +23,9 @@
   id: BorgModuleSecurity
 
 - type: Tag
+  id: CarpRiftHealTarget
+
+- type: Tag
   id: CleanerGrenade
 
 - type: Tag

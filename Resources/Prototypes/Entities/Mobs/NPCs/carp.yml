@@ -188,6 +188,14 @@
     - type: HTN
       rootTask:
         task: DragonCarpCompound
+    # Deadspace-start
+    - type: Tag
+      tags:
+      - Carp
+      - DoorBumpOpener
+      - NoPaint  # Deadspace-edit
+      - CarpRiftHealTarget  # Deadspace-edit
+    # Deadspace-end
 
 - type: entity
   id: MobCarpDungeon
