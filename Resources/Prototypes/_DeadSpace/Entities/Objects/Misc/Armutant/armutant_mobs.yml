@@ -30,19 +30,19 @@
     - type: DeleteOnTrigger
 
 - type: entity
-  parent: CollideVendigoVoidBosses
-  id: SpawnBossesVendigo
-  suffix: Void Vendigo
+  parent: CollideVoidlingBosses
+  id: SpawnBossesVoidling
+  suffix: Voidling
   components:
     - type: TriggerOnCollide
-      fixtureID: spawnvendigobosses
+      fixtureID: spawnvoidlingbosses
     - type: SoundOnTrigger
       removeOnTrigger: true
       sound:
         path: /Audio/_DeadSpace/Armutant/sound_fight_two_bosses.ogg
         volume: 1
     - type: SpawnOnTrigger
-      proto: MobVendigoBosses
+      proto: MobVoidlingBosses
     - type: DeleteOnTrigger
 
 - type: entity
@@ -121,20 +121,20 @@
           - !type:DoActsBehavior
             acts: [ "Destruction" ]
           - !type:PlaySoundBehavior
-            sound:
-              collection: GlassBreak
+            sound: 
+              path: /Audio/_DeadSpace/Armutant/death_bosses.ogg
 
 - type: entity
-  id: MobVendigoBosses
+  id: MobVoidlingBosses
   parent: MobBossesVoidSpider
-  name: Вендиго
+  name: Войдлинг
   description: Мифическое существо, на вид до ужаса сильное.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Armutant/vendigo_bosses.rsi
+    sprite: _DeadSpace/Armutant/voidling_bosses.rsi
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
-      state: bossed_state
+      state: boss_state
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -150,7 +150,7 @@
     animation: WeaponArcPunch
     damage:
       types:
-        Slash: 5
+        Slash: 10
         Piercing: 10
   - type: Destructible
     thresholds:
@@ -161,8 +161,8 @@
           - !type:DoActsBehavior
             acts: [ "Destruction" ]
           - !type:PlaySoundBehavior
-            sound:
-              collection: GlassBreak
+            sound: 
+              path: /Audio/_DeadSpace/Armutant/death_bosses.ogg
 
 - type: entity
   id: CollideSpawnVoidBosses
@@ -190,7 +190,7 @@
         - HideContextMenu
 
 - type: entity
-  id: CollideVendigoVoidBosses
+  id: CollideVoidlingBosses
   abstract: true
   placement:
     mode: SnapgridCenter
@@ -200,7 +200,7 @@
       state: icon
     - type: Fixtures
       fixtures:
-        spawnvendigobosses:
+        spawnvoidlingbosses:
           shape:
             !type:PhysShapeAabb
             bounds: "-3,-3,3,3"

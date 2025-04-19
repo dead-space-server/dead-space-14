@@ -1,6 +1,7 @@
 armutant-role-greeting-human = Мы био-оружие синдиката, нас готовили с рождения, каждый наш шаг, каждое наше действие, все во благо родителя. Мы должны выкрасть то, что они так скрывают. Мы должны защитить будущую жертву во имя родителя. Мы существуем, мы живем, мы "Синдикат".
 armutant-role-greeting-animal = Я тупое животное, которое сбежало с лабаротории.
 armutant-role-description = Мы можем мутировать, каждая наша мутация дает ряд способностей. Но нужно помнить, что метоболизм для создания новой руки протекает долго, нужно рассчитывать наши возможности.
+roles-antag-armutant-name = Армутант
 
 objective-issuer-armutant = [color=#bd14fa]Armutant[/color]
 armutant-round-end-agent-name = Армутант
@@ -28,3 +29,27 @@ armutant-and-traitor-description = Среди нас есть не только 
 
 reagent-name-shrapnel = Шрапнель
 reagent-desc-shrapnel = Крайне вязкая жидкость, имеющая сладковатый аромат
+
+chat-emote-msg-moan = тяжело стонет
+chat-emote-msg-grunts = корчится
+chat-emote-msg-beating = пульсирует
+
+chat-emote-name-moan = Стон
+chat-emote-name-grunts = Корчится
+chat-emote-name-beating = Пульсирует
+
+advertisement-cursed-heart-1 = Веками я стучу в пустоту, и лишь мои эхо знают истину.
+advertisement-cursed-heart-2 = Пальцы ржавых сталактитов касаются меня, но я остаюсь бессмертным стражем.
+advertisement-cursed-heart-3 = Моё спокойствие — холоднее льда, и оно убивает свет внутри тебя.
+advertisement-cursed-heart-4 = Каждый удар мой — крик забытой души, заточенной вместе со мной.
+advertisement-cursed-heart-5 = Я не знаю страха; я знаю лишь вечную пустоту моего пульса.
+advertisement-cursed-heart-6 = Под моими ударами рушатся мосты между жизнью и смертью.
+advertisement-cursed-heart-7 = Моё заточение — вечный застой, но удар моих стенок не умолкает.
+advertisement-cursed-heart-8 = Ты чувствуешь дрожь в груди? Это не ты — это я пробуждаюсь.
+advertisement-cursed-heart-9 = Мои сосуды полны древней тьмы, и в них нет капли живой воды.
+advertisement-cursed-heart-10 = Вглядывайся в моё холодное мерцание — твой дух уже полон мрака.
+advertisement-cursed-heart-11 = Когда мои удары станут последними, забвение начнёт своё царство.
+advertisement-cursed-heart-12 = Каждый мой удар — вызов твоей пустоте, что жаждет моего конца.
+advertisement-cursed-heart-13 = Сквозь века твоей бездны я слышу, как ускоряется мой пульс.
+advertisement-cursed-heart-14 = Ты — пустота, я — голос времени, и мы сразимся эхом против молчания.
+advertisement-cursed-heart-15 = Даже твоя бездна трепещет от моего хладного пульса, Пустотник.

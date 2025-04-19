@@ -21,7 +21,7 @@
       sound:
         collection: RadiationPulse
     - type: UseDelay
-      delay: 600
+      delay: 10
 
 - type: entity
   id: ArtiefactArmutantObjectiveTrue

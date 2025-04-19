@@ -183,7 +183,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
             _popup.PopupEntity(selfMessage, ent, ent);
         }
 
-        if (!_mobState.IsDead(ent) || _mobState.IsCritical(ent))
+        if (!_mobState.IsDead(ent))
             _mobState.ChangeMobState(ent, MobState.Dead);
 
         ent.Comp.IsInStasis = true; // Указываем что он в стазисе
@@ -198,7 +198,6 @@ public abstract partial class SharedArmutantSystem : EntitySystem
             var effect = Spawn(armutantActionComp.ExitToStasisEffect, Transform(ent).Coordinates);
             _transform.SetParent(effect, ent);
         });
-
         args.Handled = true;
     }
     private void OnExitStasis(Entity<ArmutantComponent> ent)

@@ -5,7 +5,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.Armutant;
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent]
 public sealed partial class ArmutantComponent : Component
 {
     [DataField]
@@ -87,7 +87,7 @@ public sealed partial class ArmutantComponent : Component
 
     public readonly List<EntityUid> ArmutantActionEntitiesGun = new() { };
 }
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class ArmutantActionComponent : Component
 {
     [DataField]
@@ -100,6 +100,7 @@ public sealed partial class ArmutantActionComponent : Component
     public SoundSpecifier? MeatSound;
 
     [DataField]
+    [AutoNetworkedField]
     public float TimeInStasis = 30.0f;
 }
 [RegisterComponent, NetworkedComponent]

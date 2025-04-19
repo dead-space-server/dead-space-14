@@ -1,8 +1,8 @@
 namespace Content.Server.DeadSpace.Armutant.Objectives.SocialInteractObjective;
 
-[RegisterComponent, Access(typeof(ObjectiveAliveRandomPersonSystem))]
+[RegisterComponent]
 public sealed partial class ObjectiveAlivePersonComponent : Component
 {
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    [DataField]
     public bool RequireAlive = false;
 }
