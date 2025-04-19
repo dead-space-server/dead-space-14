@@ -54,6 +54,9 @@
     airBlockedDirection:
       - South
   - type: Clickable
+  - type: Construction # DS14
+    graph: FloorDrainGraph
+    node: floorDrain
   - type: Tag
     tags:
       - SpreaderIgnore

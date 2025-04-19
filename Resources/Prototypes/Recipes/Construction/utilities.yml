@@ -373,7 +373,7 @@
   startNode: start
   targetNode: sensor
   category: construction-category-structures
-  description: Reports on the status of the gas within the attached pipe network. 
+  description: Reports on the status of the gas within the attached pipe network.
   icon:
     sprite: Structures/Piping/Atmospherics/gas_pipe_sensor.rsi
     state: icon
@@ -872,9 +872,9 @@
   - !type:WallmountCondition
 
 
-# FAN
+# Fan
 - type: construction
-  name: Little fan
+  name: little fan
   id: LitleFan
   description: Fan to hold the air in and space outside.
   graph: Fan
@@ -886,3 +886,78 @@
   icon:
     sprite: Structures/Piping/Atmospherics/tinyfan.rsi
     state: icon
+
+# Directional fan
+- type: construction
+  name: directional fan
+  id: DirectionalFan
+  description: A thin fan, stopping the movement of gases across it.
+  graph: FanDirectional
+  startNode: start
+  targetNode: directionalFan
+  category: construction-category-utilities
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  icon:
+    sprite: Structures/Piping/Atmospherics/directionalfan.rsi
+    state: icon
+
+# Drain
+- type: construction
+  name: drain
+  id: FloorDrainConstruction
+  description: Drains puddles around it. Useful for dumping mop buckets or keeping certain rooms clean.
+  graph: FloorDrainGraph
+  startNode: start
+  targetNode: floorDrain
+  category: construction-category-utilities
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  icon:
+    sprite: Objects/Specific/Janitorial/drain.rsi
+    state: icon
+
+# Sink
+- type: construction
+  name: sink
+  id: SinkConstruction
+  description: A sink, useful for washing and draining water.
+  graph: SinkGraph
+  startNode: start
+  targetNode: sinkWater
+  category: construction-category-utilities
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  icon:
+    sprite: Structures/Furniture/sink.rsi
+    state: sink_stem
+
+# Wide Sink
+- type: construction
+  name: sink wide
+  id: SinkWideConstruction
+  description: A wide sink, useful for larger washing tasks.
+  graph: SinkWideGraph
+  startNode: start
+  targetNode: sinkWide
+  category: construction-category-utilities
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  icon:
+    sprite: Structures/Furniture/sink.rsi
+    state: sink_wide
+
+# Stemless Sink
+- type: construction
+  name: stemless sink
+  id: SinkStemlessConstruction
+  description: A stemless sink variation for washing and draining water.
+  graph: SinkStemlessGraph
+  startNode: start
+  targetNode: sinkStemlessWater
+  category: construction-category-utilities
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  icon:
+    sprite: Structures/Furniture/sink.rsi
+    state: sink
