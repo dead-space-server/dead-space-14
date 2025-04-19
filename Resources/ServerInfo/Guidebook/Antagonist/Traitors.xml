@@ -58,9 +58,9 @@
   <Box>
     <GuideEntityEmbed Entity="Hypospray" Caption="Гипоспрей Главврача"/>
   </Box>
-  - Украсть у Научного Руководителя [color=#a4885c]Скафандр[/color].
+  - Украсть у Научного Руководителя [color=#a4885c]модифицированный рюкзак[/color].
   <Box>
-    <GuideEntityEmbed Entity="ClothingOuterHardsuitRd" Caption="Скафандр Научрука"/>
+    <GuideEntityEmbed Entity="ClothingBackpackRD" Caption="Модифицированный рюкзак Научрука"/>
   </Box>
   - Украсть у Научного Руководителя [color=#a4885c]Ручной Телепорт[/color].
   <Box>

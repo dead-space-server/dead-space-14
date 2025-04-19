@@ -15,10 +15,10 @@
     state: scanner
 
 - type: stealTargetGroup
-  id: ClothingOuterHardsuitRd
-  name: steal-target-groups-clothing-outer-hardsuit-rd
+  id: ClothingBackpackRD # DS14
+  name: steal-target-groups-clothing-backpack-rd #DS14
   sprite:
-    sprite: Clothing/OuterClothing/Hardsuits/rd.rsi
+    sprite: _DeadSpace/Clothing/Back/rd.rsi #DS14
     state: icon
 
 - type: stealTargetGroup

@@ -204,10 +204,10 @@
 
 - type: entity
   parent: BaseRDStealObjective
-  id: RDHardsuitStealObjective
+  id: ClothingBackpackRDObjective #DS14
   components:
   - type: StealCondition
-    stealGroup: ClothingOuterHardsuitRd
+    stealGroup: ClothingBackpackRD #DS14
   - type: Objective
     # This item must be worn or stored in a slowing duffelbag, very hard to hide.
     difficulty: 3

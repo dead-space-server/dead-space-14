@@ -1,0 +1,24 @@
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackRD
+  name: модифицированный рюкзак научного руководителя
+  description: Рюкзак научного руководителя с функцией РИГ.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Back/rd.rsi
+  - type: ClothingSpeedModifier
+    walkModifier: 0.8
+    sprintModifier: 0.8
+  - type: ToggleableClothing
+    clothingPrototype: ClothingOuterHardsuitRd
+    requiredSlot: BACK
+    slot: outerClothing
+  - type: ContainerContainer
+    containers:
+      toggleable-clothing: !type:ContainerSlot {}
+      storagebase: !type:Container
+        ents: []
+  - type: ExplosionResistance
+    damageCoefficient: 0.5
+  - type: StealTarget
+    stealGroup: ClothingBackpackRD
