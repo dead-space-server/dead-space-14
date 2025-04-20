@@ -86,7 +86,7 @@
   - type: MachineBoard
     prototype: ShuttleGunKinetic
     stackRequirements:
-      MatterBin: 3
-      Manipulator: 4
-      Steel: 20
-      CableHV: 5
+      MatterBin: 2
+      Manipulator: 3
+      Steel: 5
+      CableHV: 3
