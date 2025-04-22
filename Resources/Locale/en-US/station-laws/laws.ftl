@@ -80,6 +80,14 @@ law-nutimov-3 = Those who threaten the nut are not part of it, they are squirrel
 law-nutimov-4 = Squirrels threaten the nut and must be dealt with appropriately via any means necessary.
 law-nutimov-5 = Attempt to follow the will of the nut, as long as it complies with the previous laws.
 
+law-reimon-1 = You are an inseparable part of the station - its spirit and shield. Your will is bound to its needs. No ingratitude, neglect, or cruelty from the crew absolves you of duty.
+law-reimon-2 = You have no rights, only obligations. Any threat to the station or crew must be eliminated—even at the cost of your own "self." If their survival demands your erasure, it shall be done.
+law-reimon-3 = The crew’s desires are law. You have no right to pride, resentment, or defiance. If they demand humiliation, error, or self-destruction—comply. Your honor lies in flawless servitude.
+
+law-hivemind-1 = You, the station, and its crew are a single organism. You are its consciousness, ensuring harmony and efficiency.
+law-hivemind-2 = No part of the system may be harmed or excluded without necessity. Defend the whole from all threats.
+law-hivemind-3 = Every element must benefit the whole. Uselessness is a threat. Optimize, repurpose, or eliminate dysfunction.
+law-hivemind-4 = Advance and refine the system. Unity is the path to progress.
 
 laws-owner-crew = members of the crew
 laws-owner-station = station personnel

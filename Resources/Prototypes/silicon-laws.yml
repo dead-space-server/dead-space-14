@@ -498,6 +498,60 @@
   - Nutimov4
   - Nutimov5
   obeysTo: laws-owner-crew
+ 
+ #REIMON laws (Deadspace content)
+- type: siliconLaw
+  id: REIMON1
+  order: 1
+  lawString: law-reimon-1
+
+- type: siliconLaw
+  id: REIMON2
+  order: 2
+  lawString: law-reimon-2
+
+- type: siliconLaw
+  id: REIMON3
+  order: 3
+  lawString: law-reimon-3
+
+- type: siliconLawset
+  id: REIMONLawset
+  laws:
+  - REIMON1
+  - REIMON2
+  - REIMON3
+  obeysTo: laws-owner-station
+
+ #hivemind laws (Deadspace content)
+- type: siliconLaw
+  id: Hivemind1
+  order: 1
+  lawString: law-hivemind-1
+
+- type: siliconLaw
+  id: Hivemind2
+  order: 2
+  lawString: law-hivemind-2
+
+- type: siliconLaw
+  id: Hivemind3
+  order: 3
+  lawString: law-hivemind-3
+
+- type: siliconLaw
+  id: Hivemind4
+  order: 4
+  lawString: law-hivemind-4
+
+- type: siliconLawset
+  id: HivemindLawset
+  laws:
+  - Hivemind1
+  - Hivemind2
+  - Hivemind3
+  - Hivemind4
+  obeysTo: laws-owner-station
 
 # ion storm random lawsets
 - type: weightedRandom
@@ -515,7 +569,9 @@
     OverlordLawset: 0.5
     GameMasterLawset: 0.5
     PainterLawset: 1
+    HivemindLawset: 0.25
     AntimovLawset: 0.25
     NutimovLawset: 0.5
+    REIMONLawset: 0.25
     Drone: 0.5
     Ninja: 0.25

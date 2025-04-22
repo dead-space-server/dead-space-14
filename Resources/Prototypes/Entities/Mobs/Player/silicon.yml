@@ -289,6 +289,30 @@
   - type: SiliconLawProvider
     laws: NutimovLawset
 
+- type: entity
+  id: REIMONCircuitBoard # DeadSpace content
+  parent: BaseElectronics
+  name: law board (REIMON)
+  description: An electronics board containing the REIMON lawset.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/module.rsi
+    state: std_mod
+  - type: SiliconLawProvider
+    laws: REIMONLawset
+
+- type: entity
+  id: HivemindCircuitBoard # DeadSpace content
+  parent: BaseElectronics
+  name: law board (REIMON)
+  description: An electronics board containing the Hivemind lawset.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/module.rsi
+    state: std_mod
+  - type: SiliconLawProvider
+    laws: HivemindLawset
+
 # Items
 - type: entity
   id: Intellicard
