@@ -2,9 +2,8 @@
   id: FoodCrateKvassTank
   icon:
     sprite: _Corvax/Structures/Storage/kvass.rsi
-    state: kvass
+    state: icon
   product: KvassTankFull
   cost: 2000
   category: cargoproduct-category-name-food
   group: market
-

@@ -8,7 +8,11 @@
   },
   "states": [
     {
-      "name": "kvass"
+      "name": "icon"
+    },
+    {
+      "name": "kvass",
+      "directions": 4
     }
  ]
 }

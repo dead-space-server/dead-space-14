@@ -1,0 +1,9 @@
+- type: cargoProduct
+  id: FoodCrateBeerTank
+  icon:
+    sprite: _DeadSpace/Structures/Storage/beer.rsi
+    state: icon
+  product: BeerTankFull
+  cost: 3000
+  category: cargoproduct-category-name-food
+  group: market

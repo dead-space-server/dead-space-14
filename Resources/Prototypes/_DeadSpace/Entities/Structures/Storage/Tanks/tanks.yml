@@ -1,0 +1,26 @@
+# Kvass
+- type: entity
+  id: BeerTank
+  parent: StorageTank
+  suffix: Пустой
+  name: бочка пива
+  description: Та самая бочка с янтарным хмельным напитком, что манит прохладой после трудового дня.
+  components:
+  - type: Rotatable
+  - type: Transform
+    noRot: false
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Storage/beer.rsi
+    state: beer
+
+- type: entity
+  parent: BeerTank
+  id: BeerTankFull
+  suffix: Полный
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        reagents:
+        - ReagentId: Beer
+          Quantity: 1500

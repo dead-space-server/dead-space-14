@@ -4,18 +4,21 @@
   parent: StorageTank
   suffix: Empty
   components:
-    - type: Sprite
-      sprite: _Corvax/Structures/Storage/kvass.rsi
-      state: kvass
+  - type: Rotatable
+  - type: Transform
+    noRot: false
+  - type: Sprite
+    sprite: _Corvax/Structures/Storage/kvass.rsi
+    state: kvass
 
 - type: entity
   parent: KvassTank
   id: KvassTankFull
   suffix: Full
   components:
-    - type: SolutionContainerManager
-      solutions:
-        tank:
-          reagents:
-            - ReagentId: Kvass
-              Quantity: 1500
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        reagents:
+          - ReagentId: Kvass
+            Quantity: 1500
