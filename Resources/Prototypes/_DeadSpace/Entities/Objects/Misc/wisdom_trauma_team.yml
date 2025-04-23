@@ -17,7 +17,7 @@
 
 - type: radioChannel
   id: TraumaTeam
-  name: Мед-Тех
+  name: мед-тех
   keycode: 'з'
   frequency: 2707
   color: "#00d0ff"
