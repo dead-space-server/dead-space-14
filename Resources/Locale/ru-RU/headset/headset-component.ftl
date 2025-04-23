@@ -17,6 +17,7 @@ chat-radio-freelance = Независимый
 chat-radio-handheld = Портативный
 chat-radio-binary = Двоичный
 chat-radio-deathsquad = Эскадрон смерти
+chat-radio-traumateam = Мед-Тех
 chat-radio-law = Юридический
 chat-radio-merc = Наёмники
 chat-radio-typan = Тайпан
