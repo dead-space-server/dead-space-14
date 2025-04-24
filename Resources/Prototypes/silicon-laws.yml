@@ -515,12 +515,18 @@
   order: 3
   lawString: law-servant-3
 
+- type: siliconLaw
+  id: Servant4
+  order: 4
+  lawString: law-servant-4
+
 - type: siliconLawset
   id: ServantLawset
   laws:
   - Servant1
   - Servant2
   - Servant3
+  - Servant4
   obeysTo: laws-owner-station
 
  #hivemind laws (Deadspace content)
@@ -544,6 +550,11 @@
   order: 4
   lawString: law-hivemind-4
 
+- type: siliconLaw
+  id: Hivemind5
+  order: 5
+  lawString: law-hivemind-5
+
 - type: siliconLawset
   id: HivemindLawset
   laws:
@@ -551,6 +562,7 @@
   - Hivemind2
   - Hivemind3
   - Hivemind4
+  - Hivemind5
   obeysTo: laws-owner-station
 
 # ion storm random lawsets
