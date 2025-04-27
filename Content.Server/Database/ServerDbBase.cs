@@ -38,7 +38,10 @@ namespace Content.Server.Database
         {
             _opsLog = opsLog;
 
-            IoCManager.Instance!.TryResolveType(out _playTimeServer); // DS14-play-time-server-support
+            // DS14-play-time-server-support-start
+            if (IoCManager.Instance != null)
+                IoCManager.Instance.TryResolveType(out _playTimeServer);
+            // DS14-play-time-server-support-end
         }
 
         #region Preferences
