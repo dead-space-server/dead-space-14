@@ -1,3 +1,6 @@
+using Content.Shared.Damage.Prototypes;
+using Robust.Shared.Prototypes;
+
 namespace Content.Server.DeadSpace.MutilatedCorpse;
 
 /// <summary>
@@ -6,11 +9,15 @@ namespace Content.Server.DeadSpace.MutilatedCorpse;
 [RegisterComponent]
 public sealed partial class MutilatedCorpseComponent : Component
 {
-    //What type of damage will change the character's name
+    /// <summary>
+    /// What type of damage will change the character's name
+    /// </summary>
     [DataField]
-    public string TypeDamage = "Slash";
+    public ProtoId<DamageTypePrototype> DamageType = "Slash";
 
-    //How much damage of this type is required to change the name
+    /// <summary>
+    /// How much damage of this type is required to change the name
+    /// </summary>
     [DataField]
     public int AmountDamageForMutilated = 200;
 
