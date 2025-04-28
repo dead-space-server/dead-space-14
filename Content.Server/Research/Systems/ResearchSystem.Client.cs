@@ -59,14 +59,18 @@ public sealed partial class ResearchSystem
         var allServers = new List<Entity<ResearchServerComponent>>();
         var query = AllEntityQuery<ResearchServerComponent>();
 
-        //DS14 - FilteringRNDserver - start
-        var mapId = Transform(uid).MapID;
+        //DS14-rnd-server-per-stations
+        var station = _station.GetOwningStation(uid);
+
+        if(!station.HasValue)
+            return;
+
         while (query.MoveNext(out var serverUid, out var serverComp))
         {
-            if (Transform(serverUid).MapID == mapId)
+            if (_station.GetOwningStation(serverUid) == station)
                 allServers.Add((serverUid, serverComp));
         }
-        //DS14 - FilteringRNDserver - end
+        //DS14-rnd-server-per-stations
 
         if (allServers.Count > 0)
             RegisterClient(uid, allServers[0], component, allServers[0]);
