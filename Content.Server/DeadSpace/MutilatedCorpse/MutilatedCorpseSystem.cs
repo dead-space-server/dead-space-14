@@ -12,6 +12,7 @@ public sealed class MutilatedCorpseSystem : EntitySystem
 {
     [Dependency] private readonly MetaDataSystem _meta = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
+
     /// <inheritdoc/>
     public override void Initialize()
     {
@@ -27,7 +28,7 @@ public sealed class MutilatedCorpseSystem : EntitySystem
 
     private void OnChangeHealth(Entity<MutilatedCorpseComponent> ent, ref DamageChangedEvent args)
     {
-        if(!TryComp<DamageableComponent>(ent.Owner, out var damageComp))
+        if (!TryComp<DamageableComponent>(ent.Owner, out var damageComp))
             return;
 
         var damageDict = damageComp.Damage.DamageDict;
@@ -38,7 +39,7 @@ public sealed class MutilatedCorpseSystem : EntitySystem
         if (identityComp.IdentityEntitySlot.ContainedEntity is not { } ident)
             return;
 
-        if (damageDict[ent.Comp.TypeDamage] >= ent.Comp.AmountDamageForMutilated && _mobState.IsDead(ent.Owner))
+        if (damageDict[ent.Comp.DamageType] >= ent.Comp.AmountDamageForMutilated && _mobState.IsDead(ent.Owner))
         {
             _meta.SetEntityName(ent.Owner, ent.Comp.ChangedName, raiseEvents: false);
             _meta.SetEntityName(ident, ent.Comp.ChangedName, raiseEvents: false); //for examination
@@ -49,5 +50,4 @@ public sealed class MutilatedCorpseSystem : EntitySystem
             _meta.SetEntityName(ident, ent.Comp.RealName, raiseEvents: false); //for examination
         }
     }
-
 }
