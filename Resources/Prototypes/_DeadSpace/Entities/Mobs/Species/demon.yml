@@ -55,7 +55,7 @@
   - type: Perishable
   - type: Sanity # DS14
   - type: FootPrints
-  - type: MutilatedCorpse #DS14 - MutilatedCorpse
+  - type: MutilatedCorpse # DS14 - MutilatedCorpse
 
 - type: entity
   parent: BaseSpeciesDummy
