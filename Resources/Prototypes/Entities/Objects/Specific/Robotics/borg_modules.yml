@@ -244,7 +244,7 @@
       - state: base-part-inhand-right
       - state: base-stripes-inhand-right
         color: "#7B0F12"
-      
+
 
 - type: entity
   id: BaseBorgModuleSyndicateAssault
@@ -498,6 +498,7 @@
     items:
     - MopItem
     - Bucket
+    - SprayBottleSpaceCleaner # DS14
     - TrashBag
   - type: BorgModuleIcon
     icon: { sprite: Interface/Actions/actions_borg.rsi, state: cleaning-module }
@@ -515,9 +516,9 @@
     items:
     - AdvMopItem
     - HoloprojectorBorg
-    - SprayBottleSpaceCleaner
+    - MegaSprayBottleSpaceCleaner # DS14
     - Dropper
-    - TrashBag
+    - BagOfSummoningGarbage # DS14
   - type: BorgModuleIcon
     icon: { sprite: Interface/Actions/actions_borg.rsi, state: adv-cleaning-module }
 
