@@ -1,4 +1,5 @@
-namespace Content.Server.DeadSpace.MutilatedCorpse;
+// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+namespace Content.Shared.DeadSpace.MutilatedCorpse;
 
 /// <summary>
 /// This is used for changes the character's name to unknown if there is a lot of damage

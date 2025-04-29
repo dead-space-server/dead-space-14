@@ -1,7 +1,11 @@
+// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 using Content.Shared.Damage;
+using Content.Shared.IdentityManagement.Components;
 using Content.Shared.Mobs.Systems;
+using Robust.Shared.GameObjects.Components.Localization;
+using Robust.Shared.Player;
 
-namespace Content.Server.DeadSpace.MutilatedCorpse;
+namespace Content.Shared.DeadSpace.MutilatedCorpse;
 
 /// <summary>
 /// This handles changes the character's name to unknown if there is a lot of damage
@@ -32,16 +36,23 @@ public sealed class MutilatedCorpseSystem : EntitySystem
         var damageDict = damageComp.Damage.DamageDict;
         var currentName = EntityManager.GetComponent<MetaDataComponent>(ent.Owner).EntityName;
 
+        // if(!TryComp<IdentityComponent>(ent.Owner, out var identityComp))
+        //     return;
+        //
+        // if (identityComp.IdentityEntitySlot.ContainedEntity is not { } ident)
+        //     return;
+        //
+        // _meta.SetEntityName(ident, ent.Comp.ChangedName);
+
         if (damageDict[ent.Comp.TypeDamage] >= ent.Comp.AmountDamageForMutilated && _mobState.IsDead(ent.Owner))
         {
-            if(currentName == ent.Comp.RealName)
-                _meta.SetEntityName(ent.Owner, ent.Comp.ChangedName);
+            _meta.SetEntityName(ent.Owner, ent.Comp.ChangedName, raiseEvents: false);
         }
         else
         {
-            if(currentName == ent.Comp.ChangedName)
-                _meta.SetEntityName(ent.Owner, ent.Comp.RealName);
+            _meta.SetEntityName(ent.Owner, ent.Comp.RealName, raiseEvents: false);
         }
+
 
     }
 
