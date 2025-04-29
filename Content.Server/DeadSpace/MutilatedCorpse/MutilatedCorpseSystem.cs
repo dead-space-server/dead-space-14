@@ -2,10 +2,8 @@
 using Content.Shared.Damage;
 using Content.Shared.IdentityManagement.Components;
 using Content.Shared.Mobs.Systems;
-using Robust.Shared.GameObjects.Components.Localization;
-using Robust.Shared.Player;
 
-namespace Content.Shared.DeadSpace.MutilatedCorpse;
+namespace Content.Server.DeadSpace.MutilatedCorpse;
 
 /// <summary>
 /// This handles changes the character's name to unknown if there is a lot of damage
@@ -24,7 +22,6 @@ public sealed class MutilatedCorpseSystem : EntitySystem
     private void OnStartUp(Entity<MutilatedCorpseComponent> ent, ref MapInitEvent args)
     {
         ent.Comp.RealName = EntityManager.GetComponent<MetaDataComponent>(ent.Owner).EntityName;
-
         ent.Comp.ChangedName = Loc.GetString(ent.Comp.LocIdChangedName);
     }
 
@@ -34,26 +31,23 @@ public sealed class MutilatedCorpseSystem : EntitySystem
             return;
 
         var damageDict = damageComp.Damage.DamageDict;
-        var currentName = EntityManager.GetComponent<MetaDataComponent>(ent.Owner).EntityName;
 
-        // if(!TryComp<IdentityComponent>(ent.Owner, out var identityComp))
-        //     return;
-        //
-        // if (identityComp.IdentityEntitySlot.ContainedEntity is not { } ident)
-        //     return;
-        //
-        // _meta.SetEntityName(ident, ent.Comp.ChangedName);
+        if(!TryComp<IdentityComponent>(ent.Owner, out var identityComp))
+            return;
+
+        if (identityComp.IdentityEntitySlot.ContainedEntity is not { } ident)
+            return;
 
         if (damageDict[ent.Comp.TypeDamage] >= ent.Comp.AmountDamageForMutilated && _mobState.IsDead(ent.Owner))
         {
             _meta.SetEntityName(ent.Owner, ent.Comp.ChangedName, raiseEvents: false);
+            _meta.SetEntityName(ident, ent.Comp.ChangedName, raiseEvents: false); //for examination
         }
         else
         {
             _meta.SetEntityName(ent.Owner, ent.Comp.RealName, raiseEvents: false);
+            _meta.SetEntityName(ident, ent.Comp.RealName, raiseEvents: false); //for examination
         }
-
-
     }
 
 }
