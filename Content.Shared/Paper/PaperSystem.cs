@@ -52,7 +52,7 @@ public sealed class PaperSystem : EntitySystem
 
         if (TryComp<AppearanceComponent>(entity, out var appearance))
         {
-            if (entity.Comp.Content != "")
+            if (entity.Comp.Content != "" || entity.Comp.Signatures.Count > 0)
                 _appearance.SetData(entity, PaperVisuals.Status, PaperStatus.Written, appearance);
 
             if (entity.Comp.StampState != null)
@@ -73,7 +73,7 @@ public sealed class PaperSystem : EntitySystem
 
         using (args.PushGroup(nameof(PaperComponent)))
         {
-            if (entity.Comp.Content != "")
+            if (entity.Comp.Content != "" || entity.Comp.Signatures.Count > 0)
             {
                 args.PushMarkup(
                     Loc.GetString(
@@ -183,6 +183,9 @@ public sealed class PaperSystem : EntitySystem
 
             var paperStatus = string.IsNullOrWhiteSpace(args.Text) ? PaperStatus.Blank : PaperStatus.Written;
 
+            if (entity.Comp.Signatures.Count > 0)
+                paperStatus = PaperStatus.Written;
+
             if (TryComp<AppearanceComponent>(entity, out var appearance))
                 _appearance.SetData(entity, PaperVisuals.Status, paperStatus, appearance);
 
@@ -258,12 +261,15 @@ public sealed class PaperSystem : EntitySystem
             ? PaperStatus.Blank
             : PaperStatus.Written;
 
+        if (entity.Comp.Signatures.Count > 0)
+            status = PaperStatus.Written;
+
         _appearance.SetData(entity, PaperVisuals.Status, status, appearance);
     }
 
     private void UpdateUserInterface(Entity<PaperComponent> entity)
     {
-        _uiSystem.SetUiState(entity.Owner, PaperUiKey.Key, new PaperBoundUserInterfaceState(entity.Comp.Content, entity.Comp.StampedBy, entity.Comp.Mode));
+        _uiSystem.SetUiState(entity.Owner, PaperUiKey.Key, new PaperBoundUserInterfaceState(entity.Comp.Content, entity.Comp.StampedBy, entity.Comp.Signatures, entity.Comp.Mode));
     }
 }
 

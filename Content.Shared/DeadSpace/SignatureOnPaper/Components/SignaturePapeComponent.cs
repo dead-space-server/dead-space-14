@@ -1,0 +1,18 @@
+// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+
+using Robust.Shared.GameStates;
+
+namespace Content.Shared.DeadSpace.SignatureOnPaper.Components;
+
+[RegisterComponent, NetworkedComponent]
+public sealed partial class SignaturePapeComponent : Component
+{
+    [DataField, ViewVariables(VVAccess.ReadOnly)]
+    public List<string> Signatures = new List<string>();
+
+    [DataField, ViewVariables(VVAccess.ReadOnly)]
+    public int NumberSignatures = 0;
+
+    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    public int MaximumSignatures = 100;
+}
