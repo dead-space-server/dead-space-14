@@ -50,7 +50,7 @@ public sealed partial class SignaturePapeSystem : EntitySystem
                 Text = Loc.GetString("Расписаться"),
                 Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/dot.svg.192dpi.png")),
                 Act = () => TrySignature((uid, paperComp), component, signatureToolComp, name),
-                Impact = LogImpact.High
+                Impact = LogImpact.Low
             });
         }
     }
