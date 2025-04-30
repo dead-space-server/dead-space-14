@@ -118,7 +118,7 @@
   parent: WeaponSMGTommyGun
   id: WeaponSMGTommyGunCap
   name: пистолет-пулемёт Томпсона
-  description: "- Это ещё что такое? куда они везут капитана?   - Прости, капитан в сделку не входил"
+  description: "- Это ещё что такое? куда они везут капитана?\n- Прости, капитан в сделку не входил"
   suffix: игрушечный
   components:
   - type: Sprite
