@@ -9,8 +9,6 @@
       - material: Steel
         amount: 10
         doAfter: 2
-      - material: Gold
-        amount: 2
 
   - node: sinkWater
     entity: Sink
@@ -20,9 +18,6 @@
       - !type:SpawnPrototype
         prototype: SheetSteel1
         amount: 10
-      - !type:SpawnPrototype
-        prototype: IngotGold1
-        amount: 2
       - !type:DeleteEntity {}
       steps:
       - tool: Screwing
@@ -41,8 +36,6 @@
       - material: Steel
         amount: 10
         doAfter: 3
-      - material: Gold
-        amount: 2
 
   - node: sinkWide
     entity: SinkWide
@@ -52,9 +45,6 @@
       - !type:SpawnPrototype
         prototype: SheetSteel1
         amount: 10
-      - !type:SpawnPrototype
-        prototype: IngotGold1
-        amount: 2
       - !type:DeleteEntity {}
       steps:
       - tool: Screwing
@@ -73,8 +63,6 @@
       - material: Steel
         amount: 10
         doAfter: 2
-      - material: Gold
-        amount: 2
 
   - node: sinkStemlessWater
     entity: SinkStemlessWater
@@ -84,9 +72,6 @@
       - !type:SpawnPrototype
         prototype: SheetSteel1
         amount: 10
-      - !type:SpawnPrototype
-        prototype: IngotGold1
-        amount: 2
       - !type:DeleteEntity {}
       steps:
       - tool: Screwing
