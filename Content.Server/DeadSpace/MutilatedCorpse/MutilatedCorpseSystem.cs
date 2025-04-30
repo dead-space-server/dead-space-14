@@ -27,44 +27,52 @@ public sealed class MutilatedCorpseSystem : EntitySystem
     {
         ent.Comp.RealName = EntityManager.GetComponent<MetaDataComponent>(ent.Owner).EntityName;
         ent.Comp.ChangedName = Loc.GetString(ent.Comp.LocIdChangedName);
+
     }
 
         private void OnIdentityChanged(Entity<MutilatedCorpseComponent> ent, ref IdentityChangedEvent args)
     {
         var currentIdentity = EntityManager.GetComponent<MetaDataComponent>(args.IdentityEntity);
 
-        if (currentIdentity.EntityName != ent.Comp.ChangedName &&
-            currentIdentity.EntityName != ent.Comp.RealName)
-            ent.Comp.IdentityIsHidden = true;
-        else
+        if (currentIdentity.EntityName == ent.Comp.ChangedName ||
+            currentIdentity.EntityName == ent.Comp.RealName)
             ent.Comp.IdentityIsHidden = false;
+        else
+            ent.Comp.IdentityIsHidden = true;
+
+        TryChangeName(ent.Owner, ent.Comp);
     }
 
     private void OnChangeHealth(Entity<MutilatedCorpseComponent> ent, ref DamageChangedEvent args)
     {
-        if (ent.Comp.IdentityIsHidden)
+        TryChangeName(ent.Owner, ent.Comp);
+    }
+
+    private void TryChangeName(EntityUid uid, MutilatedCorpseComponent comp)
+    {
+        if (comp.IdentityIsHidden)
             return;
 
-        if (!TryComp<DamageableComponent>(ent.Owner, out var damageComp))
+        if (!TryComp<DamageableComponent>(uid, out var damageComp))
             return;
 
         var damageDict = damageComp.Damage.DamageDict;
 
-        if (!TryComp<IdentityComponent>(ent.Owner, out var identityComp))
+        if (!TryComp<IdentityComponent>(uid, out var identityComp))
             return;
 
         if (identityComp.IdentityEntitySlot.ContainedEntity is not { } ident)
             return;
 
-        if (damageDict[ent.Comp.DamageType] >= ent.Comp.AmountDamageForMutilated && _mobState.IsDead(ent.Owner))
+        if (damageDict[comp.DamageType] >= comp.AmountDamageForMutilated && _mobState.IsDead(uid))
         {
-            _meta.SetEntityName(ent.Owner, ent.Comp.ChangedName, raiseEvents: false);
-            _meta.SetEntityName(ident, ent.Comp.ChangedName, raiseEvents: false); //for examination
+            _meta.SetEntityName(uid, comp.ChangedName, raiseEvents: false);
+            _meta.SetEntityName(ident, comp.ChangedName, raiseEvents: false); //for examination
         }
         else
         {
-            _meta.SetEntityName(ent.Owner, ent.Comp.RealName, raiseEvents: false);
-            _meta.SetEntityName(ident, ent.Comp.RealName, raiseEvents: false); //for examination
+            _meta.SetEntityName(uid, comp.RealName, raiseEvents: false);
+            _meta.SetEntityName(ident, comp.RealName, raiseEvents: false); //for examination
         }
     }
 }
