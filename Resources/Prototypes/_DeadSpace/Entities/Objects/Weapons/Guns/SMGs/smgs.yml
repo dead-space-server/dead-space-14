@@ -2,7 +2,7 @@
   id: WeaponSMGTommyGun
   parent: BaseItem
   name: пистолет-пулемёт Томпсона
-  description: "- Это ещё что такое? куда они везут капитана?   - Прости, капитан в сделку не входил"
+  description: "- Это ещё что такое? куда они везут капитана?\n- Прости, капитан в сделку не входил"
   components:
   - type: Sprite
     sprite: _DeadSpace/Items/Toys/TommyGun/tommy_gun.rsi
