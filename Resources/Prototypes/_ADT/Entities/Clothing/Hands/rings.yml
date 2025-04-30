@@ -12,7 +12,7 @@
     size: Tiny
   - type: StaticPrice
     price: 1000
-  - type: Tag # DS14
+  - type: Tag
     tags:
     - Ring
 
