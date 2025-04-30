@@ -183,7 +183,7 @@
   name: игрушечный барабан для пистолет-пулемёта Томпсона
   description: большой магазин для больших бандитов
   parent: BaseItem
-  suffix: игрушечный
+  suffix: Игрушечный
   components:
   - type: Tag
     tags:
