@@ -29,4 +29,6 @@ public sealed partial class MutilatedCorpseComponent : Component
     public string RealName = string.Empty;
 
     public string ChangedName = string.Empty;
+
+    public bool IdentityIsHidden = false;
 }
