@@ -21,7 +21,6 @@ public sealed class MutilatedCorpseSystem : EntitySystem
         SubscribeLocalEvent<MutilatedCorpseComponent, EntityRenamedEvent>(OnStartUp);
         SubscribeLocalEvent<MutilatedCorpseComponent, IdentityChangedEvent>(OnIdentityChanged);
         SubscribeLocalEvent<MutilatedCorpseComponent, DamageChangedEvent>(OnChangeHealth);
-
     }
 
     private void OnStartUp(Entity<MutilatedCorpseComponent> ent, ref EntityRenamedEvent args)
@@ -43,7 +42,7 @@ public sealed class MutilatedCorpseSystem : EntitySystem
 
     private void OnChangeHealth(Entity<MutilatedCorpseComponent> ent, ref DamageChangedEvent args)
     {
-        if(ent.Comp.IdentityIsHidden)
+        if (ent.Comp.IdentityIsHidden)
             return;
 
         if (!TryComp<DamageableComponent>(ent.Owner, out var damageComp))
@@ -51,7 +50,7 @@ public sealed class MutilatedCorpseSystem : EntitySystem
 
         var damageDict = damageComp.Damage.DamageDict;
 
-        if(!TryComp<IdentityComponent>(ent.Owner, out var identityComp))
+        if (!TryComp<IdentityComponent>(ent.Owner, out var identityComp))
             return;
 
         if (identityComp.IdentityEntitySlot.ContainedEntity is not { } ident)
