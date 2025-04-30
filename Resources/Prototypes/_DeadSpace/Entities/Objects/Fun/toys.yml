@@ -178,7 +178,6 @@
   - type: StaticPrice
     price: 500
 
-
 - type: entity
   id: MagazineDrumTommyGunCap
   name: игрушечный барабан для пистолет-пулемёта Томпсона
