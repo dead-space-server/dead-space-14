@@ -65,6 +65,15 @@
     - Lighter
 
 - type: loadout
+  id: FlippoLighter
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: Command
+  storage:
+    back:
+    - FlippoLighter
+
+- type: loadout
   id: CigPackGreen
   storage:
     back:
@@ -106,102 +115,60 @@
     back:
     - CigarGold
 
-# Pins
+# Pins (without LGBTQ+ pins)
 - type: loadout
-  id: ClothingNeckLGBTPin
+  id: ClothingNeckUSSPPin
   storage:
     back:
-    - ClothingNeckLGBTPin
+    - ClothingNeckUSSPPin
 
 - type: loadout
-  id: ClothingNeckAllyPin
+  id: ClothingNeckDonkPin
   storage:
     back:
-    - ClothingNeckAllyPin
+    - ClothingNeckDonkPin
 
 - type: loadout
-  id: ClothingNeckAromanticPin
+  id: ClothingNeckEarthPin
   storage:
     back:
-    - ClothingNeckAromanticPin
+    - ClothingNeckEarthPin
 
 - type: loadout
-  id: ClothingNeckAsexualPin
+  id: ClothingNeckLogistikaPin
   storage:
     back:
-    - ClothingNeckAsexualPin
+    - ClothingNeckLogistikaPin
 
 - type: loadout
-  id: ClothingNeckAroacePin
+  id: ClothingNeckDeForestPin
   storage:
     back:
-    - ClothingNeckAroacePin
+    - ClothingNeckDeForestPin
 
 - type: loadout
-  id: ClothingNeckBisexualPin
+  id: ClothingNeckNakamuraPin
   storage:
     back:
-    - ClothingNeckBisexualPin
+    - ClothingNeckNakamuraPin
 
 - type: loadout
-  id: ClothingNeckGayPin
+  id: ClothingNeckNanoTrasenPin
   storage:
     back:
-    - ClothingNeckGayPin
+    - ClothingNeckNanoTrasenPin
 
 - type: loadout
-  id: ClothingNeckIntersexPin
+  id: ClothingNeckSyndicakePin
   storage:
     back:
-    - ClothingNeckIntersexPin
+    - ClothingNeckSyndicakePin
 
 - type: loadout
-  id: ClothingNeckLesbianPin
+  id: ClothingNeckVitezstviPin
   storage:
     back:
-    - ClothingNeckLesbianPin
-
-- type: loadout
-  id: ClothingNeckNonBinaryPin
-  storage:
-    back:
-    - ClothingNeckNonBinaryPin
-
-- type: loadout
-  id: ClothingNeckPansexualPin
-  storage:
-    back:
-    - ClothingNeckPansexualPin
-
-- type: loadout
-  id: ClothingNeckOmnisexualPin
-  storage:
-    back:
-    - ClothingNeckOmnisexualPin
-
-- type: loadout
-  id: ClothingNeckGenderqueerPin
-  storage:
-    back:
-    - ClothingNeckGenderqueerPin
-
-- type: loadout
-  id: ClothingNeckTransPin
-  storage:
-    back:
-    - ClothingNeckTransPin
-
-- type: loadout
-  id: ClothingNeckAutismPin
-  storage:
-    back:
-    - ClothingNeckAutismPin
-
-- type: loadout
-  id: ClothingNeckGoldAutismPin
-  storage:
-    back:
-    - ClothingNeckGoldAutismPin
+    - ClothingNeckVitezstviPin
 
 # Towels
 - type: loadout
