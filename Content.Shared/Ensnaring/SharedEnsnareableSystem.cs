@@ -17,7 +17,7 @@ using Content.Shared.Throwing;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Serialization;
-using Content.Shared.Lube; // DS14-hotfix-lubed-bola-start
+using Content.Shared.Lube; // DS14-hotfix-lubed-bola
 
 namespace Content.Shared.Ensnaring;
 
