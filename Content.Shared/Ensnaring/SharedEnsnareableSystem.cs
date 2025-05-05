@@ -17,7 +17,7 @@ using Content.Shared.Throwing;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Serialization;
-using Content.Shared.Lube; // ds14-hot-fix-bola-with-lubed
+using Content.Shared.Lube; // DS14-hot-fix-bola-with-lubed
 
 namespace Content.Shared.Ensnaring;
 
@@ -253,10 +253,10 @@ public abstract class SharedEnsnareableSystem : EntitySystem
     /// <param name="component">The ensnaring component</param>
     public bool TryEnsnare(EntityUid target, EntityUid ensnare, EnsnaringComponent component)
     {
-        // ds14-hot-fix-bola-with-lubed-start
+        // DS14-hot-fix-bola-with-lubed-start
         if (HasComp<LubedComponent>(ensnare))
             return false;
-        // ds14-hot-fix-bola-with-lubed-end
+        // DS14-hot-fix-bola-with-lubed-end
 
         //Don't do anything if they don't have the ensnareable component.
         if (!TryComp<EnsnareableComponent>(target, out var ensnareable))
