@@ -2,7 +2,7 @@
   parent: ClothingHandsButcherable
   id: ClothingHandsGlovesArkalyse
   name: перчатки "Аркалис"
-  sufix: без функционала
+  suffix: без функционала
   description: Перчатки подпитанные наномашинными, которые усиливают удары носителя, кажется их окунули в какую-то смазку и теперь они не работают, но зато теперь они могут защитить вас от тока.
   components:
   - type: Sprite
