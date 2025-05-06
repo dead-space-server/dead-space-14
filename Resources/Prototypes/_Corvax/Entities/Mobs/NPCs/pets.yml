@@ -48,19 +48,20 @@
     - type: Tag
       tags:
         - CannotSuicide
-    - type: Inventory # DS14
+    # DS14-start
+    - type: Inventory
       speciesId: gorilla
       templateId: largo
-    - type: InventorySlots # DS14
-    - type: Strippable # DS14
-    - type: UserInterface # DS14
+    - type: InventorySlots
+    - type: Strippable
+    - type: UserInterface
       interfaces:
         enum.StrippingUiKey.Key:
           type: StrippableBoundUserInterface
-    - type: Loadout # DS14
+    - type: Loadout
       prototypes: [ MobLargoGear ]
-    - type: IdExaminable # DS14
-    - type: GhostRole # DS14
+    - type: IdExaminable
+    - type: GhostRole
       allowMovement: true
       name: ghost-role-information-largo-name
       description: ghost-role-information-largo-description
@@ -71,12 +72,13 @@
         - !type:DepartmentTimeRequirement
           department: Cargo
           time: 36000 # 19 hours
-    - type: GhostTakeoverAvailable # DS14
-    - type: Speech # DS14
+    - type: GhostTakeoverAvailable
+    - type: Speech
       speechSounds: Bass
       speechVerb: Monkey
-    - type: MonkeyAccent # DS14
-    - type: MeleeWeapon # DS14
+    - type: MonkeyAccent
+    - type: MeleeWeapon
       damage:
         types:
           Blunt: 7
+    # DS14-end
