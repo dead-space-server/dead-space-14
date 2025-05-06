@@ -41,6 +41,7 @@ public sealed partial class SmokingCarpActionComponent : Component
     [DataField]
     public SoundSpecifier? HitSound;
 }
+
 [RegisterComponent]
 public sealed partial class SmokingCarpTripPunchComponent : Component
 {

@@ -28,7 +28,9 @@ public abstract partial class SharedMartialArtsSystem : EntitySystem
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+
     private readonly HashSet<EntityUid> _receivers = new();
+
     public override void Initialize()
     {
         base.Initialize();
@@ -36,6 +38,7 @@ public abstract partial class SharedMartialArtsSystem : EntitySystem
         InitializeArkalyse();
         SubscribeLocalEvent<SmokingCarpComponent, ShotAttemptedEvent>(OnShotAttempt);
     }
+
     private void OnShotAttempt(Entity<SmokingCarpComponent> ent, ref ShotAttemptedEvent args)
     {
         if (ent.Comp.MartialArtsForm != MartialArtsForms.SmokingCarp)
@@ -43,6 +46,7 @@ public abstract partial class SharedMartialArtsSystem : EntitySystem
         _popup.PopupClient(Loc.GetString("gun-disabled"), ent, ent);
         args.Cancel();
     }
+
     private void DamageHit(EntityUid ent,
     EntityUid target,
     string damageType,
@@ -55,6 +59,7 @@ public abstract partial class SharedMartialArtsSystem : EntitySystem
 
         _damageable.TryChangeDamage(target, damage, ignoreResist);
     }
+
     private void TransformToItem(EntityUid item,
     string? itemAfter)
     {

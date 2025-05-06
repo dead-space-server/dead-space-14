@@ -23,10 +23,10 @@ public partial class SharedMartialArtsSystem
         SubscribeLocalEvent<SmokingCarpComponent, MeleeHitEvent>(OnMeleeHitEvent);
         SubscribeLocalEvent<SmokingCarpComponent, ReflectCarpEvent>(SmokingCarpReflect);
         SubscribeLocalEvent<SmokingCarpTripPunchComponent, SmokingCarpTripPunchEvent>(SmokingCarpTripPunch);
-        SubscribeLocalEvent<MartialArtsTrainingCarpComponent, UseInHandEvent>(UseInjectorSmokingCarp);
+        SubscribeLocalEvent<MartialArtsTrainingCarpComponent, UseInHandEvent>(OnUseInjectorSmokingCarp);
     }
-    // Используем в руках инжектор, для получения умений + базовых показателей сущности
-    private void UseInjectorSmokingCarp(Entity<MartialArtsTrainingCarpComponent> ent, ref UseInHandEvent args)
+
+    private void OnUseInjectorSmokingCarp(Entity<MartialArtsTrainingCarpComponent> ent, ref UseInHandEvent args)
     {
         if (!_net.IsServer)
             return;
@@ -53,7 +53,7 @@ public partial class SharedMartialArtsSystem
 
         args.Handled = true;
     }
-    // Активация события
+
     private void OnSmokingCarpAction(Entity<SmokingCarpComponent> ent, ref SmokingCarpActionEvent args)
     {
         if (!_net.IsServer)
@@ -73,6 +73,7 @@ public partial class SharedMartialArtsSystem
         ent.Comp.SelectedCombo = carpActionComp.List;
         ent.Comp.SelectedComboComp = carpActionComp;
     }
+
     private void OnMeleeHitEvent(Entity<SmokingCarpComponent> ent, ref MeleeHitEvent args)
     {
         if (_net.IsClient)
@@ -89,6 +90,7 @@ public partial class SharedMartialArtsSystem
             DoHitCarp(ent, hitEntity);
         }
     }
+
     private void DoHitCarp(Entity<SmokingCarpComponent> ent, EntityUid hitEntity)
     {
         if (ent.Comp.SelectedComboComp == null)
@@ -146,6 +148,7 @@ public partial class SharedMartialArtsSystem
         ent.Comp.SelectedCombo = null;
         ent.Comp.SelectedComboComp = null;
     }
+
     private void SmokingCarpReflect(Entity<SmokingCarpComponent> ent, ref ReflectCarpEvent args)
     {
         if (_net.IsClient)
@@ -170,6 +173,7 @@ public partial class SharedMartialArtsSystem
         reflectComponent.ReflectProb = 1.0f;
         reflectComponent.Spread = 360f;
     }
+
     private void SmokingCarpTripPunch(Entity<SmokingCarpTripPunchComponent> ent, ref SmokingCarpTripPunchEvent args)
     {
         if (_net.IsClient)

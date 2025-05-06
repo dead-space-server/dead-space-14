@@ -17,10 +17,10 @@ public partial class SharedMartialArtsSystem
     {
         SubscribeLocalEvent<ArkalyseComponent, ArkalyseActionEvent>(OnArkalyseAction);
         SubscribeLocalEvent<ArkalyseComponent, MeleeHitEvent>(OnMeleeHitEvent);
-        SubscribeLocalEvent<MartialArtsTrainingArkalyseComponent, UseInHandEvent>(UseBookArkalyse);
+        SubscribeLocalEvent<MartialArtsTrainingArkalyseComponent, UseInHandEvent>(OnUseBookArkalyse);
     }
-    // Выдача способностей и превращение книги в пепел
-    private void UseBookArkalyse(Entity<MartialArtsTrainingArkalyseComponent> ent, ref UseInHandEvent args)
+
+    private void OnUseBookArkalyse(Entity<MartialArtsTrainingArkalyseComponent> ent, ref UseInHandEvent args)
     {
         if (!_net.IsServer)
             return;
@@ -46,6 +46,7 @@ public partial class SharedMartialArtsSystem
 
         args.Handled = true;
     }
+
     private void OnArkalyseAction(Entity<ArkalyseComponent> ent, ref ArkalyseActionEvent args)
     {
         if (_net.IsClient)
@@ -65,6 +66,7 @@ public partial class SharedMartialArtsSystem
         ent.Comp.SelectedCombo = arkalyseActionComp.List;
         ent.Comp.SelectedComboComp = arkalyseActionComp;
     }
+
     private void OnMeleeHitEvent(Entity<ArkalyseComponent> ent, ref MeleeHitEvent args)
     {
         if (_net.IsClient)
@@ -81,6 +83,7 @@ public partial class SharedMartialArtsSystem
             DoHitArkalyse(ent, hitEntity);
         }
     }
+
     private void DoHitArkalyse(Entity<ArkalyseComponent> ent, EntityUid hitEntity)
     {
         if (ent.Comp.SelectedComboComp == null)

@@ -240,14 +240,14 @@
   categories:
   - UplinkWeaponry
   conditions:
-    - !type:StoreWhitelistCondition
-      blacklist:
-        tags:
-          - NukeOpsUplink
-    - !type:BuyerWhitelistCondition
-      blacklist:
-        components:
-          - SurplusBundle
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+        - NukeOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+        - SurplusBundle
 
 - type: listing
   id: UplinkArkalyseBundleNuke
