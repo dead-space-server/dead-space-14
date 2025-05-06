@@ -33,7 +33,7 @@ public sealed partial class ArkalyseActionComponent : Component
     public SoundSpecifier? HitSound;
 }
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent]
 public sealed partial class ArkalyseComponent : Component
 {
     [DataField]
@@ -54,7 +54,6 @@ public sealed partial class ArkalyseComponent : Component
     };
 
     [DataField]
-    [AutoNetworkedField]
     public MartialArtsForms MartialArtsForm { get; set; } = MartialArtsForms.Arkalyse;
 }
 

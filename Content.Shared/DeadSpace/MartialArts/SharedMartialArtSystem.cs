@@ -47,8 +47,7 @@ public abstract partial class SharedMartialArtsSystem : EntitySystem
         args.Cancel();
     }
 
-    private void DamageHit(EntityUid ent,
-    EntityUid target,
+    private void DamageHit(EntityUid target,
     string damageType,
     int damageAmount,
     bool ignoreResist,

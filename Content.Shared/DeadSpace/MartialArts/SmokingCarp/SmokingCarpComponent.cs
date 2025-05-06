@@ -58,7 +58,7 @@ public sealed partial class SmokingCarpTripPunchComponent : Component
     public float ParalyzeTime = 1.2f;
 }
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent]
 public sealed partial class SmokingCarpComponent : Component
 {
     [DataField]
@@ -80,7 +80,6 @@ public sealed partial class SmokingCarpComponent : Component
     };
 
     [DataField]
-    [AutoNetworkedField]
     public MartialArtsForms MartialArtsForm { get; set; } = MartialArtsForms.SmokingCarp;
 }
 

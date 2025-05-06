@@ -22,7 +22,7 @@ public partial class SharedMartialArtsSystem
 
     private void OnUseBookArkalyse(Entity<MartialArtsTrainingArkalyseComponent> ent, ref UseInHandEvent args)
     {
-        if (!_net.IsServer)
+        if (_net.IsClient)
             return;
 
         if (args.Handled)
@@ -41,7 +41,7 @@ public partial class SharedMartialArtsSystem
 
         TransformToItem(ent, ent.Comp.ItemAfterLerning);
 
-        var meleeWeaponComponent = EnsureComp<MeleeWeaponComponent>(args.User);
+        var meleeWeaponComponent = CompOrNull<MeleeWeaponComponent>(args.User)!;
         meleeWeaponComponent.AttackRate = ent.Comp.AddAtackRate;
 
         args.Handled = true;
@@ -49,14 +49,13 @@ public partial class SharedMartialArtsSystem
 
     private void OnArkalyseAction(Entity<ArkalyseComponent> ent, ref ArkalyseActionEvent args)
     {
+        if (args.Handled)
+            return;
+
         if (_net.IsClient)
             return;
 
-        var actionEnt = args.Action.Owner;
-        if (!TryComp<ArkalyseActionComponent>(actionEnt, out var arkalyseActionComp))
-            return;
-
-        if (args.Handled)
+        if (!TryComp<ArkalyseActionComponent>(args.Action.Owner, out var arkalyseActionComp))
             return;
 
         args.Handled = true;
@@ -96,7 +95,7 @@ public partial class SharedMartialArtsSystem
             case ArkalyseList.DamageAtack:
                 if (_net.IsClient)
                     return;
-                DamageHit(ent, hitEntity, comboComp.DamageType, comboComp.HitDamage, comboComp.IgnoreResist, out _);
+                DamageHit(hitEntity, comboComp.DamageType, comboComp.HitDamage, comboComp.IgnoreResist, out _);
                 SpawnAttachedTo(comboComp.EffectPunch, Transform(hitEntity).Coordinates);
                 _audio.PlayPvs(comboComp.HitSound, ent, AudioParams.Default.WithVolume(3.0f));
                 break;
@@ -113,7 +112,7 @@ public partial class SharedMartialArtsSystem
                 EnsureComp<MutedComponent>(hitEntity);
                 Timer.Spawn(TimeSpan.FromSeconds(comboComp.ParalyzeTime), () => { if (Exists(hitEntity)) RemComp<MutedComponent>(hitEntity); });
 
-                DamageHit(ent, hitEntity, comboComp.DamageType, comboComp.HitDamage, comboComp.IgnoreResist, out _);
+                DamageHit(hitEntity, comboComp.DamageType, comboComp.HitDamage, comboComp.IgnoreResist, out _);
                 _stamina.TakeStaminaDamage(hitEntity, comboComp.StaminaDamage);
                 break;
             default:

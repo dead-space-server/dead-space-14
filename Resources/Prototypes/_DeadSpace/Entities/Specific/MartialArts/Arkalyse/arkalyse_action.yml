@@ -11,8 +11,6 @@
     event: !type:ArkalyseActionEvent {}
   - type: ArkalyseAction
     list: DamageAtack
-    staminaDamage: 0
-    paralyzeTime: 0
     effectPunch: WeaponArcKick
     hitSound: /Audio/_DeadSpace/Arkalyse/sound_effects_hit_kick.ogg
     ignoreResist: true
@@ -53,7 +51,5 @@
   - type: ArkalyseAction
     list: StunAtack
     effectPunch: WeaponArcDisarm
-    paralyzeTime: 0.75
-    staminaDamage: 0
-    hitDamage: 0
+    paralyzeTime: 0.5
     hitSound: /Audio/_DeadSpace/Arkalyse/sound_effects_hit_punch.ogg

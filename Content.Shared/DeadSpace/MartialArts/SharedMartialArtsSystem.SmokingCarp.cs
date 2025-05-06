@@ -28,7 +28,7 @@ public partial class SharedMartialArtsSystem
 
     private void OnUseInjectorSmokingCarp(Entity<MartialArtsTrainingCarpComponent> ent, ref UseInHandEvent args)
     {
-        if (!_net.IsServer)
+        if (_net.IsClient)
             return;
 
         if (args.Handled)
@@ -48,7 +48,7 @@ public partial class SharedMartialArtsSystem
 
         TransformToItem(ent, ent.Comp.ItemAfterLerning);
 
-        var meleeWeaponComponent = EnsureComp<MeleeWeaponComponent>(args.User);
+        var meleeWeaponComponent = CompOrNull<MeleeWeaponComponent>(args.User)!;
         meleeWeaponComponent.AttackRate = ent.Comp.AddAtackRate;
 
         args.Handled = true;
@@ -56,14 +56,13 @@ public partial class SharedMartialArtsSystem
 
     private void OnSmokingCarpAction(Entity<SmokingCarpComponent> ent, ref SmokingCarpActionEvent args)
     {
-        if (!_net.IsServer)
-            return;
-
-        var actionEnt = args.Action.Owner;
-        if (!TryComp<SmokingCarpActionComponent>(actionEnt, out var carpActionComp))
-            return;
-
         if (args.Handled)
+            return;
+
+        if (_net.IsClient)
+            return;
+
+        if (!TryComp<SmokingCarpActionComponent>(args.Action.Owner, out var carpActionComp))
             return;
 
         args.Handled = true;
@@ -103,7 +102,7 @@ public partial class SharedMartialArtsSystem
             case SmokingCarpList.PowerPunch:
                 if (_net.IsClient)
                     return;
-                DamageHit(ent, hitEntity, comboComp.DamageType, comboComp.HitDamage, comboComp.IgnoreResist, out _);
+                DamageHit(hitEntity, comboComp.DamageType, comboComp.HitDamage, comboComp.IgnoreResist, out _);
                 SpawnAttachedTo(comboComp.EffectPunch, Transform(hitEntity).Coordinates);
                 _audio.PlayPvs(comboComp.HitSound, ent, AudioParams.Default.WithVolume(3.0f));
 
@@ -116,7 +115,7 @@ public partial class SharedMartialArtsSystem
                 {
                     var userTransform = Transform(ent);
                     var targetTransform = Transform(hitEntity);
-                    var pushDirection = targetTransform.WorldPosition - userTransform.WorldPosition;
+                    var pushDirection = _transform.GetWorldPosition(targetTransform) - _transform.GetWorldPosition(userTransform);
 
                     if (!pushDirection.Equals(Vector2.Zero))
                     {
@@ -138,7 +137,7 @@ public partial class SharedMartialArtsSystem
             case SmokingCarpList.SmokePunch:
                 if (_net.IsClient)
                     return;
-                DamageHit(ent, hitEntity, comboComp.DamageType, comboComp.HitDamage, comboComp.IgnoreResist, out _);
+                DamageHit(hitEntity, comboComp.DamageType, comboComp.HitDamage, comboComp.IgnoreResist, out _);
                 _stamina.TakeStaminaDamage(hitEntity, comboComp.StaminaDamage);
                 SpawnAttachedTo(comboComp.EffectPunch, Transform(hitEntity).Coordinates);
                 break;
@@ -184,8 +183,7 @@ public partial class SharedMartialArtsSystem
 
         args.Handled = true;
 
-        if (!TryComp<TransformComponent>(args.Performer, out var xform))
-            return;
+        var xform = Transform(args.Performer);
 
         _receivers.Clear();
 
