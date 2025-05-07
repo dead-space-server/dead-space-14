@@ -77,6 +77,8 @@
       speechSounds: Bass
       speechVerb: Monkey
     - type: MonkeyAccent
+    - type: TTS
+      voice: Hesutu
     - type: MeleeWeapon
       damage:
         types:
