@@ -1,15 +1,15 @@
 ﻿- type: gameMap
-  id: DSTypan
+  id: DSTaipan
   mapName: 'Сектор Тайпана'
-  mapPath: /Maps/ds_typan.yml
+  mapPath: /Maps/ds_taipan.yml
   minPlayers: 0
   stations:
-    Typan:
-      stationProto: StandardTypanStation
+    Taipan:
+      stationProto: StandardTaipanStation
       components:
       - type: StationNameSetup
         mapNameTemplate: '{0}-Тайпан-{1}'
-        nameGenerator: !type:TypanNameGenerator
+        nameGenerator: !type:TaipanNameGenerator
       - type: StationJobs
         availableJobs:
           TypanAtmosTech: [ 0, 2 ]

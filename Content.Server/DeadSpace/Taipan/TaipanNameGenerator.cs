@@ -4,10 +4,10 @@ using Content.Server.Maps.NameGenerators;
 using JetBrains.Annotations;
 using Robust.Shared.Random;
 
-namespace Content.Server.DeadSpace.Typan;
+namespace Content.Server.DeadSpace.Taipan;
 
 [UsedImplicitly]
-public sealed partial class TypanNameGenerator : StationNameGenerator
+public sealed partial class TaipanNameGenerator : StationNameGenerator
 {
     private string Prefix => "ННКСС";
     private string[] SuffixCodes => new []{ "S" };

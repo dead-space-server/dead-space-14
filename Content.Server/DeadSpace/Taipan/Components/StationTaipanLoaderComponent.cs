@@ -3,11 +3,11 @@
 using Content.Server.Maps;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server.DeadSpace.Typan.Components;
+namespace Content.Server.DeadSpace.Taipan.Components;
 
 [RegisterComponent]
-public sealed partial class StationTypanLoaderComponent : Component
+public sealed partial class StationTaipanLoaderComponent : Component
 {
     [DataField]
-    public ProtoId<GameMapPrototype> Station = "DSTypan";
+    public ProtoId<GameMapPrototype> Station = "DSTaipan";
 }

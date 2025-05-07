@@ -1,5 +1,5 @@
 - type: entity
-  id: StandardTypanStation
+  id: StandardTaipanStation
   parent:
   - BaseStation
   - BaseStationNews
@@ -12,7 +12,7 @@
   - BaseStationExpeditions
   - BaseStationSiliconLawCrewsimov
   # - BaseStationAllEventsEligible
-  - BaseStationTypan
+  - BaseStationTaipan
   categories: [ HideSpawnMenu ]
   components:
   - type: Transform

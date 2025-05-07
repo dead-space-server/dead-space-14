@@ -117,7 +117,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: Typan
+      name: Taipan
     - type: Transform
     - type: Map
       mapPaused: True
@@ -138,7 +138,7 @@ entities:
       pos: 0.578125,0.484375
       parent: 1
     - type: BecomesStation
-      id: Typan
+      id: Taipan
     - type: MapGrid
       chunks:
         0,0:
@@ -84030,7 +84030,7 @@ entities:
       parent: 10421
     - type: Paper
       content: >-
-        Уже прошел 19 день... Тейа кажется аппетитной... Надеюсь она не заберет мой пистолет пока я буду спать... 
+        Уже прошел 19 день... Тейа кажется аппетитной... Надеюсь она не заберет мой пистолет пока я буду спать...
 
         НЕТ! Нужно держать себя в руках! Я не буду ее убивать!
   - uid: 11176
