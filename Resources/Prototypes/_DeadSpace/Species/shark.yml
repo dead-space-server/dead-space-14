@@ -7,11 +7,10 @@
   markingLimits: MobSharkMarkingLimits
   dollPrototype: MobPlafDummy
   skinColoration: Hues
-  maleFirstNames: firstMaleVulp
-  femaleFirstNames: firstFemaleVulp
-  maleLastNames: VulpLast
-  femaleLastNames: VulpLast
-  naming: firstlast
+  maleFirstNames: NamesSharkFirstMale
+  femaleFirstNames: NamesSharkFirstFemale
+  maleLastNames: NamesSharkLast
+  femaleLastNames: NamesSharkLast
 
 - type: speciesBaseSprites
   id: MobSharkSprites
@@ -39,14 +38,14 @@
     Hair:
       points: 1
       required: false
+    FacialHair:
+      points: 0
+      required: false
     HeadTop:
       points: 1
       required: false
     HeadSide:
       points: 1
-      required: false
-    FacialHair:
-      points: 0
       required: false
     Chest:
       points: 1
@@ -56,6 +55,12 @@
       required: false
     Head:
       points: 3
+      required: false
+    Legs:
+      points: 4
+      required: false
+    Arms:
+      points: 4
       required: false
 
 - type: humanoidBaseSprite

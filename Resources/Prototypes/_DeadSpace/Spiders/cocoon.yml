@@ -17,14 +17,10 @@
       map: [ "enum.DamageStateVisualLayers.Base" ]
   - type: Damageable
     damageContainer: Biological
-  - type: Destructible
-    thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 100
-      behaviors:
-        - !type:DoActsBehavior
-          acts: [ "Destruction" ]
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Dead
   - type: Appearance
   - type: Evolution
     createGhostRole: true
@@ -36,6 +32,14 @@
       - MobSpiderTerrorBuilder
       - MobSpiderTerrorMedic
       - MobSpiderTerrorGuardianLvl2
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
 
 - type: entity
   name: королевский паучий кокон
@@ -56,14 +60,10 @@
       map: [ "enum.DamageStateVisualLayers.Base" ]
   - type: Damageable
     damageContainer: Biological
-  - type: Destructible
-    thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 200
-      behaviors:
-        - !type:DoActsBehavior
-          acts: [ "Destruction" ]
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Dead
   - type: Appearance
   - type: Evolution
     createGhostRole: true
@@ -73,6 +73,14 @@
     spawnedEntities:
       - MobSpiderTerrorRoyalGuard
       - MobSpiderTerrorPrincess
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
 
 - type: entity
   id: SpiderCocoon

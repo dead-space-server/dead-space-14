@@ -1,0 +1,143 @@
+- type: localizedDataset
+  id: FigurinesHqdishkaSpeech
+  values:
+    prefix: figurine-hqdishka-
+    count: 5
+
+- type: localizedDataset
+  id: FigurinesHacksLuaSpeech
+  values:
+    prefix: figurine-hackslua-
+    count: 2
+
+- type: localizedDataset
+  id: PlushieJeleshkaSpeech
+  values:
+    prefix: plushies-jeleshka-
+    count: 7
+
+- type: localizedDataset
+  id: PlushieAhahaahahahaSpeech
+  values:
+    prefix: plushies-ahahaahahaha-
+    count: 4
+
+- type: localizedDataset
+  id: PlushieDobryashSpeech
+  values:
+    prefix: plushies-dobryash-
+    count: 4
+
+- type: localizedDataset
+  id: PlushieKrissSpeech
+  values:
+    prefix: plushies-kriss-
+    count: 5
+
+- type: localizedDataset
+  id: PlushieOstwindSpeech
+  values:
+    prefix: plushies-ostwind-
+    count: 5
+
+- type: localizedDataset
+  id: PlushieWillieSpeech
+  values:
+    prefix: plushies-willie-
+    count: 5
+
+- type: localizedDataset
+  id: PlushieAinnetelSpeech
+  values:
+    prefix: plushies-ainnetel-
+    count: 4
+
+- type: localizedDataset
+  id: PlushieAlexSpeech
+  values:
+    prefix: plushies-alex-
+    count: 4
+
+- type: localizedDataset
+  id: PlushieElizabethSpeech
+  values:
+    prefix: plushies-elizabeth-
+    count: 5
+
+- type: localizedDataset
+  id: PlushieEllisSpeech
+  values:
+    prefix: plushies-ellis-
+    count: 5
+
+- type: localizedDataset
+  id: PlushieKermuthSpeech
+  values:
+    prefix: plushies-kermuth-
+    count: 5
+
+- type: localizedDataset
+  id: PlushieLuciusSpeech
+  values:
+    prefix: plushies-lucius-
+    count: 5
+
+- type: localizedDataset
+  id: PlushieEvelinaSpeech
+  values:
+    prefix: plushies-evelina-
+    count: 5
+
+- type: localizedDataset
+  id: PlushieLieutenantSpeech
+  values:
+    prefix: plushies-lieutenant-
+    count: 5
+
+- type: localizedDataset
+  id: PlushieAzrailSpeech
+  values:
+    prefix: plushies-azrail-
+    count: 5
+
+- type: localizedDataset
+  id: PlushieKrivazoraSpeech
+  values:
+    prefix: plushies-krivazora-
+    count: 5
+
+- type: localizedDataset
+  id: PlushieEmiliaSpeech
+  values:
+    prefix: plushies-emilia-
+    count: 5
+
+- type: localizedDataset
+  id: PlushieAilySpeech
+  values:
+    prefix: plushies-aily-
+    count: 5
+
+- type: localizedDataset
+  id: PlushieEvaSpeech
+  values:
+    prefix: plushies-eva-
+    count: 5
+
+- type: localizedDataset
+  id: PlushieAizekSpeech
+  values:
+    prefix: plushies-aizek-
+    count: 5
+
+- type: localizedDataset
+  id: PlushieAzrailHardsuitSpeech
+  values:
+    prefix: plushies-azrail-hardsuit-
+    count: 5
+
+- type: localizedDataset
+  id: PlushieSharpSpeech
+  values:
+    prefix: plushies-sharp-
+    count: 5
