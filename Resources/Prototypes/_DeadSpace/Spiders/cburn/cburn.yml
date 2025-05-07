@@ -9,11 +9,11 @@
     gloves: ClothingHandsGlovesCombat
     outerClothing: ClothingOuterHardsuitCBURNSCSTLeader
     shoes: ADTClothingShoesBootsMagERT
-    id: CBURNPDA
+    id: CBURNLeaderPDA
     pocket1: KukriKnife
     pocket2: WeaponPulsePistol
     suitstorage: OxygenTankFilled
-    belt: ClothingBeltBandolier
+    belt: ClothingBeltMilitaryWebbing
   storage:
     back:
     - BoxSurvivalEngineering
@@ -31,6 +31,7 @@
     - SCSTMedipen
     - SCSTMedipen
     - Crowbar
+    - PinpointerNuclear
 
 - type: startingGear
   id: CBURNSCSTSoldierGear
@@ -47,7 +48,7 @@
     pocket1: KukriKnife
     pocket2: WeaponPulsePistol
     suitstorage: OxygenTankFilled
-    belt: ClothingBeltBandolier
+    belt: ClothingBeltMilitaryWebbing
   storage:
     back:
     - BoxSurvivalEngineering
@@ -75,7 +76,7 @@
   - type: Loadout
     prototypes: [CBURNSCSTLeaderGear]
   - type: GhostRole
-    name: ghost-role-information-cburn-agent-name
+    name: ghost-role-information-cburn-leader-name
     description: ghost-role-information-cburn-agent-description
     rules: ghost-role-information-nonantagonist-rules
     requirements:
@@ -88,11 +89,14 @@
       - !type:DepartmentTimeRequirement
         department: Command
         time: 36000 # 10 hours
+    raffle:
+      settings: short
   - type: GhostTakeoverAvailable
   - type: RandomMetadata
     nameSegments:
     - NamesFirstERTLeader
     - NamesLastERT
+    nameFormat: name-format-ert
 
 - type: randomHumanoidSettings
   id: CBURNSoldierSCST
@@ -116,11 +120,14 @@
       - !type:DepartmentTimeRequirement
         department: Command
         time: 36000 # 10 hours
+    raffle:
+      settings: short
   - type: GhostTakeoverAvailable
   - type: RandomMetadata
     nameSegments:
     - NamesFirstERT
     - NamesLastERT
+    nameFormat: name-format-ert
 
 - type: entity
   id: RandomHumanoidCBURNSoldierSCST

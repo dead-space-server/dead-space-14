@@ -136,7 +136,7 @@
     contents:
       # - id: ClothingEyesGlassesSecurity # DS14-disabled
       #   prob: 0.3 # DS14-disabled
-      - id: ClothingHeadHatFedoraBrown
+      - id: ClothingHeadHatDetGadget
       - id: ClothingNeckTieDet
       - id: ClothingOuterVestDetective
       - id: ClothingOuterCoatDetective
@@ -172,7 +172,7 @@
         prob: 0.75 # DS14-value
 
 - type: entity
-  parent: [GunSafeBaseSecure, BaseRestrictedContraband]
+  parent: [GunSafeBaseSecure, BaseSecurityContraband]
   id: GunSafeDisabler
   name: disabler safe
   components:
@@ -182,17 +182,7 @@
       amount: 5
 
 - type: entity
-  parent: [GunSafeBaseSecure, BaseRestrictedContraband]
-  id: GunSafeDominator
-  name: dominators safe
-  components:
-  - type: StorageFill
-    contents:
-    - id: PistolDominator
-      amount: 3
-
-- type: entity
-  parent: [GunSafeBaseSecure, BaseRestrictedContraband]
+  parent: [GunSafeBaseSecure, BaseSecurityContraband]
   id: GunSafePistolMk58
   name: mk58 safe
   components:
@@ -204,7 +194,7 @@
       amount: 8
 
 - type: entity
-  parent: [GunSafeBaseSecure, BaseRestrictedContraband]
+  parent: [GunSafeBaseSecure, BaseSecurityContraband]
   id: GunSafeRifleLecter
   name: lecter safe
   components:
@@ -216,7 +206,7 @@
       amount: 4
 
 - type: entity
-  parent: [GunSafeBaseSecure, BaseRestrictedContraband]
+  parent: [GunSafeBaseSecure, BaseSecurityContraband]
   id: GunSafeSubMachineGunDrozd
   name: drozd safe
   components:
@@ -228,7 +218,7 @@
       amount: 4
 
 - type: entity
-  parent: [GunSafeBaseSecure, BaseRestrictedContraband]
+  parent: [GunSafeBaseSecure, BaseSecurityContraband]
   id: GunSafeShotgunEnforcer
   name: enforcer safe
   components:
@@ -240,7 +230,7 @@
       amount: 4
 
 - type: entity
-  parent: [GunSafeBaseSecure, BaseRestrictedContraband]
+  parent: [GunSafeBaseSecure, BaseSecurityContraband]
   id: GunSafeShotgunKammerer
   name: kammerer safe
   components:
@@ -254,7 +244,7 @@
 - type: entity
   id: GunSafeSubMachineGunWt550
   suffix: Wt550
-  parent: [GunSafeBaseSecure, BaseRestrictedContraband]
+  parent: [GunSafeBaseSecure, BaseSecurityContraband]
   name: wt550 safe
   components:
   - type: StorageFill
@@ -265,7 +255,7 @@
       amount: 4
 
 - type: entity
-  parent: [GunSafeBaseSecure, BaseRestrictedContraband]
+  parent: [GunSafeBaseSecure, BaseSecurityContraband]
   id: GunSafeLaserCarbine
   name: laser safe
   components:
@@ -273,6 +263,30 @@
     contents:
     - id: WeaponLaserCarbine
       amount: 3
+
+# DS14-start
+
+- type: entity
+  parent: [GunSafeBaseSecure, BaseSecurityContraband]
+  id: GunSafeDominator
+  name: dominators safe
+  components:
+  - type: StorageFill
+    contents:
+    - id: PistolDominator
+      amount: 3
+
+- type: entity
+  parent: [GunSafeBaseSecure, BaseSecurityContraband]
+  id: GunSafeArmorHeavy
+  name: armor heavy safe
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingOuterArmorHeavy
+    - id: ClothingShoesSwat
+    - id: ClothingMaskGasSwat
+    - id: ClothingHeadHelmetSwat
 
 - type: entity
   id: LockerBlueShieldFilled

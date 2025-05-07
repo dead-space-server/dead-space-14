@@ -195,6 +195,7 @@
     dynamicPacks:
     - AdvancedTools
     - ScienceEquipment
+    - ScienceExplosives
     - ScienceClothing
     - PowerCells
     - ScienceWeapons
@@ -205,7 +206,8 @@
     - Janitor
     - Instruments
     - Equipment
-    - FauxTiles
+    # - FauxTiles # DS14: moved to CutterMachine recipes
+    - NightVisionTech # DS14
   - type: EmagLatheRecipes
     emagDynamicPacks:
     - SecurityAmmo
@@ -395,11 +397,14 @@
     - SecurityWeaponsStatic
     - SecurityBorgModulesStatic
     dynamicPacks:
+    - SalvageSecurityBoards
+    - SalvageSecurityWeapons
     - SecurityEquipment
     - SecurityBoards
     - SecurityExplosives
     - SecurityAmmo
     - SecurityWeapons
+    - SecurityDisablers
   - type: MaterialStorage
     whitelist:
       tags:
@@ -511,6 +516,7 @@
     - Scarves
     - Carpets
     - Bedsheets
+    - DoubleBedsheets # DS14
   - type: EmagLatheRecipes
     emagStaticPacks:
     - ClothingCentComm
@@ -674,6 +680,8 @@
     staticPacks:
     - FloorTilesStatic
     - CircuitFloorsStatic
+    dynamicPacks:
+    - FauxTiles # DS14
   - type: MaterialStorage
     whitelist:
       tags:
