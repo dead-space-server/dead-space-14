@@ -88,7 +88,7 @@ public sealed class DrugAddicationSystem : EntitySystem
             RemComp<DrugAddicationComponent>(uid);
 
         var time = component.UpdateDuration;
-        float seconds = (float)Math.Abs(time.TotalSeconds);
+        float seconds = (float)time.TotalSeconds;
 
         AddTimeLastAppointment(uid, seconds, component);
 
