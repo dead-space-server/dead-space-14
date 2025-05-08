@@ -196,7 +196,7 @@ public sealed class DrugAddicationSystem : EntitySystem
         float addictionImpact = component.AddictionLevel / MaxAddictionLevel;
 
         // Влияние толерантности: чем выше толерантность, тем меньше MaxWithdrawalLvl
-        float toleranceImpact = 1 - (component.Tolerance / MaxTolerance);
+        float toleranceImpact = MaxTolerance - (component.Tolerance / MaxTolerance);
 
         // Общий расчет MaxWithdrawalLvl
         component.MaxWithdrawalLvl = Math.Min(
