@@ -20,16 +20,16 @@
   categories:
     - UplinkUnitologyInfection
 
-- type: listing
-  id: UnitologySerumList
-  name: Сыворотка порабощения
-  description: Шприц с сывороткой порабощения, 15 едениц.
-  icon: { sprite: Objects/Specific/Chemistry/syringe.rsi, state: syringe1 }
-  productEntity: SyringeSerumEnslaved
-  cost:
-    Telecrystal: 10
-  categories:
-    - UplinkUnitologyInfection
+# - type: listing
+#   id: UnitologySerumList
+#   name: Сыворотка порабощения
+#   description: Шприц с сывороткой порабощения, 15 едениц.
+#   icon: { sprite: Objects/Specific/Chemistry/syringe.rsi, state: syringe1 }
+#   productEntity: SyringeSerumEnslaved
+#   cost:
+#     Telecrystal: 10
+#   categories:
+#     - UplinkUnitologyInfection
 
 - type: listing
   id: SyringeNecromorphMutagenBruteList
