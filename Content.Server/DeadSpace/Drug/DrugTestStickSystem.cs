@@ -1,3 +1,5 @@
+// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+
 using Content.Server.DeadSpace.Drug.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Nutrition.Components;
@@ -37,7 +39,7 @@ public sealed class DrugTestStickSystem : EntitySystem
             }
 
 
-            if (TryComp<InstantDrugAddicationComponent>(args.Target, out var instantDrugAddication))
+            if (TryComp<DrugAddicationComponent>(args.Target, out var instantDrugAddication))
             {
                 component.DependencyLevel = instantDrugAddication.DependencyLevel;
                 component.AddictionLevel = instantDrugAddication.AddictionLevel;

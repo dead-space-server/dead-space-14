@@ -1,3 +1,4 @@
+// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 namespace Content.Server.DeadSpace.Drug.Components;
 
@@ -7,19 +8,19 @@ public sealed partial class DrugTestStickComponent : Component
     [DataField("dna"), ViewVariables(VVAccess.ReadOnly)]
     public string DNA = String.Empty;
 
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    [DataField]
     public int DependencyLevel = 0;
 
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    [DataField]
     public float AddictionLevel = 0;
 
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    [DataField]
     public float Tolerance = 0;
 
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    [DataField]
     public float WithdrawalLevel = 0;
 
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    [DataField]
     public float ThresholdTime = 0;
 
     [DataField, ViewVariables(VVAccess.ReadOnly)]

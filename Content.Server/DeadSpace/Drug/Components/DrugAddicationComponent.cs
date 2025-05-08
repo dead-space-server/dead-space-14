@@ -1,3 +1,5 @@
+// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 using Content.Shared.Damage;
 using Robust.Shared.Audio;
@@ -5,33 +7,33 @@ using Robust.Shared.Audio;
 namespace Content.Server.DeadSpace.Drug.Components;
 
 [RegisterComponent]
-public sealed partial class InstantDrugAddicationComponent : Component
+public sealed partial class DrugAddicationComponent : Component
 {
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    [DataField]
     public int DependencyLevel = 1;
 
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
-    public float AddictionLevel = 0;
+    [DataField]
+    public float AddictionLevel = 6;
 
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
-    public float Tolerance = 0;
+    [DataField]
+    public float Tolerance = 0.03f;
 
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    [DataField]
     public float WithdrawalLevel = 0;
 
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    [DataField]
     public float EffectStrengthModify = 1;
 
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    [DataField]
     public float WithdrawalRate = 0;
 
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    [DataField]
     public float MaxWithdrawalLvl = 0;
 
     [DataField, ViewVariables(VVAccess.ReadOnly)]
     public float StaminaMultiply = 0.5f;
 
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    [DataField]
     public float TimeLastAppointment = 0;
 
     [DataField, ViewVariables(VVAccess.ReadOnly)]

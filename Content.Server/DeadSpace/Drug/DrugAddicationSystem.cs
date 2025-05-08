@@ -13,11 +13,14 @@ using Robust.Shared.Player;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mind;
 using Content.Shared.Mobs.Systems;
+using Robust.Shared.Configuration;
+using Content.Shared.CCVar;
 
 namespace Content.Server.DeadSpace.Drug;
 
 public sealed class DrugAddicationSystem : EntitySystem
 {
+    [Dependency] private readonly IConfigurationManager _config = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly SharedJitteringSystem _sharedJittering = default!;
     [Dependency] private readonly SlurredSystem _slurred = default!;
@@ -28,29 +31,24 @@ public sealed class DrugAddicationSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     public const float MinAddictionLevel = 1;
     public const float MinTolerance = 0.01f;
-    public const float DefaultAddictionLevel = 6;
-    public const float DefaultTolerance = 0.03f;
     public const float MaxAddictionLevel = 100;
     public const float MaxTolerance = 1;
     public const float MaxWithdrawalLevel = 100;
     public const float MaxAddTemperature = 10;
     public const float MaxWithdrawalRate = 5;
-    public const float BaseThresholdTime = 300;
-    public const int MaxDrugStr = 4;
-    public const bool EnableMaxAddication = false; // настройка зависимости addication от тяжести наркотика (addication не будет превышать значение для зависимости с уровнем тяежсти)
     public override void Initialize()
     {
         base.Initialize();
 
-        SubscribeLocalEvent<InstantDrugAddicationComponent, ComponentInit>(OnComponentInit);
-        SubscribeLocalEvent<InstantDrugAddicationComponent, ComponentShutdown>(OnComponentShut);
+        SubscribeLocalEvent<DrugAddicationComponent, ComponentInit>(OnComponentInit);
+        SubscribeLocalEvent<DrugAddicationComponent, ComponentShutdown>(OnComponentShut);
     }
 
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
 
-        var query = EntityQueryEnumerator<InstantDrugAddicationComponent>();
+        var query = EntityQueryEnumerator<DrugAddicationComponent>();
         while (query.MoveNext(out var uid, out var component))
         {
             if (_gameTiming.CurTime > component.TimeUtilUpdate)
@@ -65,25 +63,20 @@ public sealed class DrugAddicationSystem : EntitySystem
         }
     }
 
-    private void OnComponentInit(EntityUid uid, InstantDrugAddicationComponent component, ComponentInit args)
+    private void OnComponentInit(EntityUid uid, DrugAddicationComponent component, ComponentInit args)
     {
         component.TimeUtilChangeAddiction = _gameTiming.CurTime + component.ChangeAddictionDuration;
 
-        component.Tolerance = DefaultTolerance;
-        component.AddictionLevel = DefaultAddictionLevel;
         if (TryComp<TemperatureComponent>(uid, out var temperature))
             component.StandartTemperature = temperature.CurrentTemperature;
-
-        if (TryComp<StaminaComponent>(uid, out var stamina) && component.IsStaminaEdit)
-            stamina.CritThreshold /= component.StaminaMultiply;
     }
 
-    private void OnComponentShut(EntityUid uid, InstantDrugAddicationComponent component, ComponentShutdown args)
+    private void OnComponentShut(EntityUid uid, DrugAddicationComponent component, ComponentShutdown args)
     {
         RemComp<SlowedDownComponent>(uid);
     }
 
-    public void UpdateDrugAddication(EntityUid uid, InstantDrugAddicationComponent? component = null)
+    public void UpdateDrugAddication(EntityUid uid, DrugAddicationComponent? component = null)
     {
         if (!Resolve(uid, ref component))
             return;
@@ -92,7 +85,7 @@ public sealed class DrugAddicationSystem : EntitySystem
             return;
 
         if (component.AddictionLevel < MinAddictionLevel && component.Tolerance < MinTolerance)
-            RemComp<InstantDrugAddicationComponent>(uid);
+            RemComp<DrugAddicationComponent>(uid);
 
         var time = component.UpdateDuration;
         float seconds = (float)Math.Abs(time.TotalSeconds);
@@ -125,18 +118,21 @@ public sealed class DrugAddicationSystem : EntitySystem
 
     }
 
-    public void AddAddictionLevel(EntityUid uid, float effectStrenght, InstantDrugAddicationComponent? component = null)
+    public void AddAddictionLevel(EntityUid uid, float effectStrenght, DrugAddicationComponent? component = null)
     {
         if (!Resolve(uid, ref component))
             return;
 
         component.AddictionLevel = Math.Min(MaxAddictionLevel, component.AddictionLevel + effectStrenght * (1 - component.Tolerance));
 
-        if (EnableMaxAddication)
-            component.AddictionLevel = Math.Min(MaxAddictionLevel * component.DependencyLevel / MaxDrugStr, component.AddictionLevel);
+        var enableMaxAddication = _config.GetCVar(CCVars.EnableMaxAddication);
+        var maxDrugStr = _config.GetCVar(CCVars.MaxDrugStr);
+
+        if (enableMaxAddication)
+            component.AddictionLevel = Math.Min(MaxAddictionLevel * component.DependencyLevel / maxDrugStr, component.AddictionLevel);
     }
 
-    public void AddTolerance(EntityUid uid, float effectStrenght, InstantDrugAddicationComponent? component = null)
+    public void AddTolerance(EntityUid uid, float effectStrenght, DrugAddicationComponent? component = null)
     {
         if (!Resolve(uid, ref component))
             return;
@@ -144,12 +140,14 @@ public sealed class DrugAddicationSystem : EntitySystem
         component.Tolerance = Math.Min(MaxTolerance, component.Tolerance + effectStrenght);
     }
 
-    public void TakeDrug(EntityUid uid, int drugStrenght, float addictionStrenght, float toleranceStrenght, InstantDrugAddicationComponent? component = null)
+    public void TakeDrug(EntityUid uid, int drugStrenght, float addictionStrenght, float toleranceStrenght, DrugAddicationComponent? component = null)
     {
         if (!Resolve(uid, ref component))
             return;
 
-        drugStrenght = Math.Min(MaxDrugStr, drugStrenght);
+        var maxDrugStr = _config.GetCVar(CCVars.MaxDrugStr);
+
+        drugStrenght = Math.Min(maxDrugStr, drugStrenght);
 
         if (component.DependencyLevel <= drugStrenght)
         {
@@ -161,7 +159,7 @@ public sealed class DrugAddicationSystem : EntitySystem
         }
         else if (!component.IsTakeWeakDrug && _gameTiming.CurTime > component.DurationOfActionWeakDrug)
         {
-            var strenght = drugStrenght / MaxDrugStr;
+            var strenght = drugStrenght / maxDrugStr;
 
             AddAddictionLevel(uid, addictionStrenght * strenght, component);
             AddTolerance(uid, toleranceStrenght * strenght, component);
@@ -171,7 +169,7 @@ public sealed class DrugAddicationSystem : EntitySystem
         }
     }
 
-    public void AddTimeLastAppointment(EntityUid uid, float count, InstantDrugAddicationComponent? component = null)
+    public void AddTimeLastAppointment(EntityUid uid, float count, DrugAddicationComponent? component = null)
     {
         if (!Resolve(uid, ref component))
             return;
@@ -180,7 +178,7 @@ public sealed class DrugAddicationSystem : EntitySystem
         component.TimeLastAppointment = Math.Max(0, component.TimeLastAppointment);
     }
 
-    public void UpdateWithdrawalLevel(EntityUid uid, InstantDrugAddicationComponent? component = null)
+    public void UpdateWithdrawalLevel(EntityUid uid, DrugAddicationComponent? component = null)
     {
         if (!Resolve(uid, ref component))
             return;
@@ -189,7 +187,7 @@ public sealed class DrugAddicationSystem : EntitySystem
         component.WithdrawalLevel = Math.Min(component.MaxWithdrawalLvl, component.WithdrawalLevel);
     }
 
-    public void UpdateMaxWithdrawalLevel(EntityUid uid, InstantDrugAddicationComponent? component = null)
+    public void UpdateMaxWithdrawalLevel(EntityUid uid, DrugAddicationComponent? component = null)
     {
         if (!Resolve(uid, ref component))
             return;
@@ -206,7 +204,7 @@ public sealed class DrugAddicationSystem : EntitySystem
             MaxWithdrawalLevel * addictionImpact * toleranceImpact);
     }
 
-    public void RunEffects(EntityUid uid, InstantDrugAddicationComponent? component = null)
+    public void RunEffects(EntityUid uid, DrugAddicationComponent? component = null)
     {
         if (!Resolve(uid, ref component))
             return;
@@ -256,7 +254,7 @@ public sealed class DrugAddicationSystem : EntitySystem
         {
             RemComp<SlowedDownComponent>(uid);
 
-            if (TryComp<StaminaComponent>(uid, out var stamina) && !component.IsStaminaEdit)
+            if (TryComp<StaminaComponent>(uid, out var stamina) && component.IsStaminaEdit)
             {
                 stamina.CritThreshold /= component.StaminaMultiply;
                 component.IsStaminaEdit = false;
@@ -264,7 +262,7 @@ public sealed class DrugAddicationSystem : EntitySystem
         }
     }
 
-    private void HighEffects(EntityUid uid, InstantDrugAddicationComponent component)
+    private void HighEffects(EntityUid uid, DrugAddicationComponent component)
     {
         MediumPlusEffects(uid, component);
         _slurred.DoSlur(uid, TimeSpan.FromSeconds(1f) + component.UpdateDuration);
@@ -279,7 +277,7 @@ public sealed class DrugAddicationSystem : EntitySystem
         }
     }
 
-    private void MediumPlusEffects(EntityUid uid, InstantDrugAddicationComponent component)
+    private void MediumPlusEffects(EntityUid uid, DrugAddicationComponent component)
     {
         _sharedJittering.DoJitter(uid, component.UpdateDuration, true, 10f * component.EffectStrengthModify);
         MediumEffects(uid, component);
@@ -293,7 +291,7 @@ public sealed class DrugAddicationSystem : EntitySystem
         _temperature.ChangeHeat(uid, 4000 * component.EffectStrengthModify, true, temperature);
     }
 
-    private void MediumEffects(EntityUid uid, InstantDrugAddicationComponent component)
+    private void MediumEffects(EntityUid uid, DrugAddicationComponent component)
     {
         LowEffects(uid, component);
 
@@ -306,7 +304,7 @@ public sealed class DrugAddicationSystem : EntitySystem
         _temperature.ChangeHeat(uid, 4000 * component.EffectStrengthModify, true, temperature);
     }
 
-    private void LowEffects(EntityUid uid, InstantDrugAddicationComponent component)
+    private void LowEffects(EntityUid uid, DrugAddicationComponent component)
     {
         if (TryComp<StaminaComponent>(uid, out var stamina) && !component.IsStaminaEdit)
         {
@@ -315,23 +313,10 @@ public sealed class DrugAddicationSystem : EntitySystem
         }
     }
 
-    public float CalculateThresholdTime(InstantDrugAddicationComponent component)
+    public float CalculateThresholdTime(DrugAddicationComponent component)
     {
-        // Рассчитываем модификатор зависимости: чем выше зависимость, тем меньше thresholdTime
-        float addictionModifier = 1 - (component.AddictionLevel / MaxAddictionLevel);
+        component.SomeThresholdTime = Random.Shared.Next(300, 600);
 
-        // Рассчитываем модификатор толерантности: чем выше толерантность, тем больше времени до ломки
-        float toleranceModifier = 1 + (component.Tolerance / MaxTolerance);
-
-        // Генерируем случайное значение в диапазоне от -10 до +10 секунд для случайности
-        float randomFactor = Random.Shared.Next(-10, 11);
-
-        // Вычисляем итоговое значение времени
-        float thresholdTime = BaseThresholdTime * addictionModifier * toleranceModifier + randomFactor;
-
-        // Ограничиваем значение, чтобы не было слишком короткого или слишком длинного времени
-        component.SomeThresholdTime = Math.Clamp(thresholdTime, 300, 600);
-
-        return component.SomeThresholdTime; // от 5 минут до 10 минут
+        return component.SomeThresholdTime;
     }
 }
