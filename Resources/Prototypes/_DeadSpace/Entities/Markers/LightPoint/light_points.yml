@@ -1,7 +1,7 @@
 - type: entity
   id: MarkerLightSource
   name: источник света
-  description: и сказал админ "да будет свет!"
+  description: И сказал админ "Да будет свет!"
   suffix: Включите ВВ (панель песочницы)
   components:
   - type: Clickable
