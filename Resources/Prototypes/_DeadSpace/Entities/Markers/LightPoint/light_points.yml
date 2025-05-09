@@ -2,7 +2,7 @@
   id: MarkerLightSource
   name: источник света
   description: И сказал админ "Да будет свет!"
-  suffix: Включите ВВ (панель песочницы)
+  suffix: Спавнер
   components:
   - type: Clickable
   - type: InteractionOutline
