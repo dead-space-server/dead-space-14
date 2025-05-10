@@ -22,10 +22,10 @@
             # law
             # Magistrat: [ 1, 1 ]
             IAA: [ 1, 1 ]
-            Lawyer: [ 4, 4 ]
+            Lawyer: [ 3, 3 ]
             # sec
             HeadOfSecurity: [ 1, 1 ]
-            Warden: [ 2, 2 ]
+            Warden: [ 2, 2 ] # ultra-large map
             SeniorOfficer: [ 1, 1 ]
             Detective: [ 1, 1 ]
             SecurityPilot: [ 1, 1 ]
@@ -35,7 +35,7 @@
             # med
             ChiefMedicalOfficer: [ 1, 1 ]
             SeniorPhysician: [ 1, 1 ]
-            Chemist: [ 2, 3 ]
+            Chemist: [ 3, 3 ]
             MedicalDoctor: [ 4, 4 ]
             Paramedic: [ 1, 1 ]
             Coroner: [ 1, 1 ]

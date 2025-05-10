@@ -2,8 +2,7 @@
   id: CorvaxAstra
   mapName: 'Astra Station'
   mapPath: /Maps/corvax_astra.yml
-  minPlayers: 45
-  maxPlayers: 65
+  minPlayers: 60
   stations:
     Astra:
       stationProto: StandardNanotrasenStation
@@ -23,7 +22,7 @@
             # law
             # Magistrat: [ 1, 1 ]
             IAA: [ 1, 1 ]
-            Lawyer: [ 2, 2 ]
+            Lawyer: [ 3, 3 ]
             # sec
             HeadOfSecurity: [ 1, 1 ]
             Warden: [ 1, 1 ]
@@ -32,7 +31,7 @@
             SecurityPilot: [ 1, 1 ]
             SecurityOfficer: [ 6, 6 ]
             Brigmedic: [ 1, 1 ]
-            SecurityCadet: [ 3, 4 ]
+            SecurityCadet: [ 4, 4 ]
             # med
             ChiefMedicalOfficer: [ 1, 1 ]
             SeniorPhysician: [ 1, 1 ]
@@ -41,28 +40,28 @@
             Paramedic: [ 1, 1 ]
             Coroner: [ 1, 1 ]
             Psychologist: [ 1, 1 ]
-            MedicalIntern: [ 3, 4 ]
+            MedicalIntern: [ 4, 4 ]
             # rnd
             ResearchDirector: [ 1, 1 ]
             SeniorResearcher: [ 1, 1 ]
-            Scientist: [ 5, 6 ]
-            ResearchAssistant: [ 3, 4 ]
+            Scientist: [ 6, 6 ]
+            ResearchAssistant: [ 3, 3 ]
             # eng
             ChiefEngineer: [ 1, 1 ]
             SeniorEngineer: [1, 1 ]
             AtmosphericTechnician: [ 3, 3 ]
-            StationEngineer: [ 4, 5 ]
-            TechnicalAssistant: [ 3, 4 ]
+            StationEngineer: [ 5, 5 ]
+            TechnicalAssistant: [ 3, 3 ]
             # sup
             Quartermaster: [ 1, 1 ]
             SeniorSalvageSpecialist: [ 1, 1 ]
             SalvageSpecialist: [ 3, 3 ]
-            CargoTechnician: [ 4, 5 ]
+            CargoTechnician: [ 3, 3 ]
             # civ
             HeadOfPersonnel: [ 1, 1 ]
             SeniorAdministrator: [ 1, 1 ]
             Chef: [ 1, 1 ]
-            Botanist: [ 2, 3 ]
+            Botanist: [ 3, 3 ]
             Bartender: [ 1, 1 ]
             ServiceWorker: [ 3, 3 ]
             Janitor: [ 2, 3 ]
