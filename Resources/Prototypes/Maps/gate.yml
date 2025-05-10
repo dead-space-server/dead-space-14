@@ -48,7 +48,7 @@
             ResearchAssistant: [ 4, 4 ]
             # eng
             ChiefEngineer: [ 1, 1 ]
-            SeniorEngineer: [1, 1 ]
+            SeniorEngineer: [ 1, 1 ]
             AtmosphericTechnician: [ 3, 3 ]
             StationEngineer: [ 4, 4 ]
             TechnicalAssistant: [ 4, 4 ]

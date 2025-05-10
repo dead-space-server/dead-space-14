@@ -47,7 +47,7 @@
             ResearchAssistant: [ 5, 5 ]
             # eng
             ChiefEngineer: [ 1, 1 ]
-            SeniorEngineer: [1, 1 ]
+            SeniorEngineer: [ 1, 1 ]
             AtmosphericTechnician: [ 3, 3 ]
             StationEngineer: [ 5, 5 ]
             TechnicalAssistant: [ 4, 4 ]
@@ -77,4 +77,4 @@
             BorgSecurity: [ 1, 1 ]
             # etc
             ClownSponsor: [ 0, 2 ]
-            Boxer: [2, 2]
+            Boxer: [ 2, 2 ]
