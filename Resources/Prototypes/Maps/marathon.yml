@@ -32,7 +32,7 @@
             SecurityPilot: [ 1, 1 ]
             SecurityOfficer: [ 4, 4 ]
             Brigmedic: [ 1, 1 ]
-            SecurityCadet: [ 4, 4 ]
+            SecurityCadet: [ 2, 2 ]
             # med
             ChiefMedicalOfficer: [ 1, 1 ]
             SeniorPhysician: [ 1, 1 ]
@@ -64,7 +64,7 @@
             Chef: [ 2, 2 ]
             Botanist: [ 3, 3 ]
             Bartender: [ 2, 2 ]
-            ServiceWorker: [ 2, 2 ]
+            ServiceWorker: [ 2, 3 ]
             Janitor: [ 3, 3 ]
             Librarian: [ 1, 1 ]
             Chaplain: [ 1, 1 ]

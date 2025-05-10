@@ -34,7 +34,7 @@
             SecurityPilot: [ 1, 1 ]
             SecurityOfficer: [ 4, 4 ]
             Brigmedic: [ 1, 1 ]
-            SecurityCadet: [ 1, 1 ]
+            SecurityCadet: [ 2, 2 ]
             # med
             ChiefMedicalOfficer: [ 1, 1 ]
             SeniorPhysician: [ 1, 1 ]
@@ -42,12 +42,12 @@
             MedicalDoctor: [ 3, 3 ]
             Paramedic: [ 1, 1 ]
             Coroner: [ 1, 1 ]
-            MedicalIntern: [ 2, 2 ]
+            MedicalIntern: [ 3, 3 ]
             # rnd
             ResearchDirector: [ 1, 1 ]
             SeniorResearcher: [ 1, 1 ]
             Scientist: [ 3, 3 ]
-            ResearchAssistant: [ 2, 2 ]
+            ResearchAssistant: [ 3, 3 ]
             # eng
             ChiefEngineer: [ 1, 1 ]
             SeniorEngineer: [ 1, 1 ]
@@ -65,7 +65,7 @@
             Chef: [ 1, 1 ]
             Botanist: [ 2, 2]
             Bartender: [ 2, 2 ]
-            ServiceWorker: [ 3, 3 ]
+            ServiceWorker: [ 2, 3 ]
             Janitor: [ 4, 4 ]
             Librarian: [ 1, 1 ]
             Chaplain: [ 1, 1 ]

@@ -32,7 +32,7 @@
             SecurityPilot: [ 1, 1 ]
             SecurityOfficer: [ 4, 4 ]
             Brigmedic: [ 1, 1 ]
-            SecurityCadet: [ 3, 3 ]
+            SecurityCadet: [ 2, 2 ]
             # med
             ChiefMedicalOfficer: [ 1, 1 ]
             SeniorPhysician: [ 1, 1 ]
@@ -45,7 +45,7 @@
             ResearchDirector: [ 1, 1 ]
             SeniorResearcher: [ 1, 1 ]
             Scientist: [ 4, 4 ]
-            ResearchAssistant: [2, 4]
+            ResearchAssistant: [ 3, 3 ]
             # eng
             ChiefEngineer: [ 1, 1 ]
             SeniorEngineer: [ 1, 1 ]
@@ -56,7 +56,7 @@
             Quartermaster: [ 1, 1 ]
             SeniorSalvageSpecialist: [ 1, 1 ]
             SalvageSpecialist: [ 3, 3 ]
-            CargoTechnician: [ 2, 2 ]
+            CargoTechnician: [ 3, 2 ]
             # civ
             HeadOfPersonnel: [ 1, 1 ]
             SeniorAdministrator: [ 1, 1 ]
