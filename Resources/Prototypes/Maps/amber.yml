@@ -9,7 +9,7 @@
       stationProto: StandardNanotrasenStation
       components:
         - type: StationNameSetup
-          mapNameTemplate: '{0} Amber Station {1}'
+          mapNameTemplate: '{0} Amber {1}'
           nameGenerator:
             !type:NanotrasenNameGenerator
             prefixCreator: '14-SB'

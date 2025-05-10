@@ -2,14 +2,13 @@
   id: Loop
   mapName: 'Loop Station'
   mapPath: /Maps/loop.yml
-  minPlayers: 35
-  maxPlayers: 70
+  maxPlayers: 40
   stations:
     Loop:
       stationProto: StandardNanotrasenStation
       components:
         - type: StationNameSetup
-          mapNameTemplate: '{0} Loop Station {1}'
+          mapNameTemplate: '{0} Loop {1}'
           nameGenerator:
             !type:NanotrasenNameGenerator
             prefixCreator: '14'
@@ -23,29 +22,29 @@
             # law
             # Magistrat: [ 1, 1 ]
             IAA: [ 1, 1 ]
-            Lawyer: [ 4, 4 ]
+            Lawyer: [ 2, 2 ]
             # sec
             HeadOfSecurity: [ 1, 1 ]
             Warden: [ 1, 1 ]
             SeniorOfficer: [ 1, 1 ]
             Detective: [ 1, 1 ]
             SecurityPilot: [ 1, 1 ]
-            SecurityOfficer: [ 5, 5 ]
+            SecurityOfficer: [ 3, 3 ]
             Brigmedic: [ 1, 1 ]
-            SecurityCadet: [ 4, 4 ]
+            SecurityCadet: [ 2, 2 ]
             # med
             ChiefMedicalOfficer: [ 1, 1 ]
             SeniorPhysician: [ 1, 1 ]
             Chemist: [ 2, 2 ]
-            MedicalDoctor: [ 4, 5 ]
+            MedicalDoctor: [ 4, 4 ]
             Paramedic: [ 2, 2 ]
             Coroner: [ 1, 1 ]
-            MedicalIntern: [ 4, 4 ]
+            MedicalIntern: [ 3, 3 ]
             # rnd
             ResearchDirector: [ 1, 1 ]
             SeniorResearcher: [ 1, 1 ]
-            Scientist: [ 5, 5 ]
-            ResearchAssistant: [ 4, 4 ]
+            Scientist: [ 3, 3 ]
+            ResearchAssistant: [ 3, 3 ]
             # eng
             ChiefEngineer: [ 1, 1 ]
             SeniorEngineer: [ 1, 1 ]
@@ -56,7 +55,7 @@
             Quartermaster: [ 1, 1 ]
             SeniorSalvageSpecialist: [ 1, 1 ]
             SalvageSpecialist: [ 3, 3 ]
-            CargoTechnician: [ 4, 4 ]
+            CargoTechnician: [ 2, 2 ]
             # civ
             HeadOfPersonnel: [ 1, 1 ]
             SeniorAdministrator: [ 1, 1 ]

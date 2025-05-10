@@ -2,8 +2,7 @@
   id: Packed
   mapName: 'Packed Station'
   mapPath: /Maps/packed.yml
-  minPlayers: 7
-  maxPlayers: 37
+  maxPlayers: 40
   stations:
     Packed:
       stationProto: StandardNanotrasenStation
@@ -21,14 +20,14 @@
             # law
             # Magistrat: [ 1, 1 ]
             IAA: [ 1, 1 ]
-            Lawyer: [ 1, 1 ]
+            Lawyer: [ 2, 2 ]
             # sec
             HeadOfSecurity: [ 1, 1 ]
             Warden: [ 1, 1 ]
             SeniorOfficer: [ 1, 1 ]
             Detective: [ 1, 1 ]
             SecurityPilot: [ 1, 1 ]
-            SecurityOfficer: [ 4, 4 ]
+            SecurityOfficer: [ 3, 3 ]
             Brigmedic: [ 1, 1 ]
             SecurityCadet: [ 2, 2 ]
             # med

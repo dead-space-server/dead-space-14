@@ -4,14 +4,13 @@
   mapPath: /Maps/ds_silly.yml
   maxRandomOffset: 0
   randomRotation: false
-  minPlayers: 0
-  maxPlayers: 35
+  maxPlayers: 40
   stations:
     Silly:
       stationProto: StandardNanotrasenStation
       components:
         - type: StationNameSetup
-          mapNameTemplate: '{0} Silly island {1}'
+          mapNameTemplate: '{0} Silly Island {1}'
           nameGenerator:
             !type:NanotrasenNameGenerator
             prefixCreator: 'ABK'
@@ -34,7 +33,7 @@
             SeniorOfficer: [ 1, 1 ]
             Detective: [ 1, 1 ]
             SecurityPilot: [ 1, 1 ]
-            SecurityOfficer: [ 2, 2 ]
+            SecurityOfficer: [ 3, 3 ]
             Brigmedic: [ 1, 1 ]
             SecurityCadet: [ 2, 2 ]
             # med
@@ -61,7 +60,7 @@
             Quartermaster: [ 1, 1 ]
             SeniorSalvageSpecialist: [ 1, 1 ]
             SalvageSpecialist: [ 3, 3 ]
-            CargoTechnician: [ 3, 3 ]
+            CargoTechnician: [ 2, 2 ]
             # civ
             HeadOfPersonnel: [ 1, 1 ]
             SeniorAdministrator: [ 1, 1 ]
