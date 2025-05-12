@@ -1,5 +1,5 @@
 - type: entity
-  parent: [ClothingOuterWinterCoat, ClothingOuterWinterCoatToggleable]
+  parent: ClothingOuterWinterCoatToggleable
   id: ClothingOuterWinterCoatLong
   name: длинное зимнее пальто
   description: В этом стильном пальто даже вашим ногам будет тепло.
