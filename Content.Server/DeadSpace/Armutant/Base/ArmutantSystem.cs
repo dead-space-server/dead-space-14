@@ -16,6 +16,7 @@ public sealed class ArmutantSystem : SharedArmutantSystem
     [Dependency] private readonly BloodstreamSystem _blood = default!;
     [Dependency] private readonly CuffableSystem _cuffable = default!;
     [Dependency] private readonly BeamSystem _beamSystem = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -24,6 +25,7 @@ public sealed class ArmutantSystem : SharedArmutantSystem
         SubscribeLocalEvent<ArmutantComponent, SetNewDestructibleThreshold>(SetDestructibleThreshold);
         SubscribeLocalEvent<ArmutantComponent, BeamActiveVoidHold>(OnBeamActive);
     }
+
     private void RecoveryBloodStream(Entity<ArmutantComponent> ent, ref BloodStreamRecoveryEvent args)
     {
         if (!TryComp<BloodstreamComponent>(ent, out var bloodstream))
@@ -32,11 +34,13 @@ public sealed class ArmutantSystem : SharedArmutantSystem
         _blood.TryModifyBleedAmount(ent, -bloodstream.BleedAmount);
         _blood.TryModifyBloodLevel(ent, bloodstream.BloodMaxVolume);
     }
+
     private void UnCuffableArm(Entity<ArmutantComponent> ent, ref UnCuffableArmEvent args)
     {
         if (TryComp<CuffableComponent>(ent, out var cuffs) && cuffs.Container.ContainedEntities.Count > 0)
             _cuffable.Uncuff(ent, cuffs.LastAddedCuffs, cuffs.LastAddedCuffs);
     }
+
     private void SetDestructibleThreshold(Entity<ArmutantComponent> ent, ref SetNewDestructibleThreshold args)
     {
         var destructible = EnsureComp<DestructibleComponent>(ent);
@@ -56,6 +60,7 @@ public sealed class ArmutantSystem : SharedArmutantSystem
         };
         destructible.Thresholds.Add(newThreshold);
     }
+
     private void OnBeamActive(Entity<ArmutantComponent> ent, ref BeamActiveVoidHold args)
     {
         _beamSystem.TryCreateBeam(ent, args.Target, args.Effect);

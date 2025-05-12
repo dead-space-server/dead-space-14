@@ -13,6 +13,7 @@ public partial class SharedArmutantSystem
         SubscribeLocalEvent<ArmutantComponent, FistMendSelfToggleEvent>(OnMendSelfAction);
         SubscribeLocalEvent<ArmutantComponent, FistStunTentacleToggleEvent>(OnFistStunTentacleAction);
     }
+
     private void OnBuffSpeedAction(Entity<ArmutantComponent> ent, ref FistBuffSpeedToggleEvent args)
     {
         if (!_net.IsServer)
@@ -35,6 +36,7 @@ public partial class SharedArmutantSystem
         });
         args.Handled = true;
     }
+
     private void OnMendSelfAction(Entity<ArmutantComponent> ent, ref FistMendSelfToggleEvent args)
     {
         if (!_net.IsServer)
@@ -70,6 +72,7 @@ public partial class SharedArmutantSystem
 
         args.Handled = true;
     }
+
     private void OnFistStunTentacleAction(Entity<ArmutantComponent> ent, ref FistStunTentacleToggleEvent args)
     {
         if (!_net.IsServer)

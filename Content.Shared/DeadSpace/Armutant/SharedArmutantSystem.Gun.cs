@@ -9,6 +9,7 @@ public partial class SharedArmutantSystem
         SubscribeLocalEvent<ArmutantComponent, GunSmokeActionEvent>(OnGunBallAction);
         SubscribeLocalEvent<ArmutantComponent, GunZoomActionEvent>(OnZoomAction);
     }
+
     private void OnGunBallAction(Entity<ArmutantComponent> ent, ref GunSmokeActionEvent args)
     {
         if (!_net.IsServer)
@@ -25,6 +26,7 @@ public partial class SharedArmutantSystem
 
         args.Handled = true;
     }
+
     private void OnZoomAction(Entity<ArmutantComponent> uid, ref GunZoomActionEvent args)
     {
         if (!_net.IsServer)

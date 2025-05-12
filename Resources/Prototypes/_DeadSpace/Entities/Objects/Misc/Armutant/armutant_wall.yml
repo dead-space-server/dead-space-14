@@ -11,9 +11,11 @@
       toolWhitelist:
         tags:
           - Pickaxe
-    - type: Damageable
-      damageContainer: StructuralInorganic
-      damageModifierSet: Metallic
+    - type: Destructible
+      thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: -1
     - type: SmoothEdge
     - type: IconSmooth
       key: walls
@@ -47,9 +49,11 @@
       toolWhitelist:
         tags:
           - Pickaxe
-    - type: Damageable
-      damageContainer: StructuralInorganic
-      damageModifierSet: Metallic
+    - type: Destructible
+      thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: -1
     - type: SmoothEdge
     - type: IconSmooth
       key: walls

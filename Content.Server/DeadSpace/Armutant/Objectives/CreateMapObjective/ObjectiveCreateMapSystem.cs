@@ -20,12 +20,14 @@ public sealed class ObjectiveCreateMapSystem : EntitySystem
     [Dependency] private readonly AudioSystem _audio = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
     private ISawmill _sawmill = default!;
+
     public override void Initialize()
     {
         base.Initialize();
         _sawmill = Logger.GetSawmill("ObjectiveCreateMapSystem");
         SubscribeLocalEvent<ObjectiveCreateMapComponent, UseInHandEvent>(OnInteractUsing);
     }
+
     private void OnInteractUsing(Entity<ObjectiveCreateMapComponent> ent, ref UseInHandEvent args)
     {
         var user = args.User;
@@ -62,6 +64,7 @@ public sealed class ObjectiveCreateMapSystem : EntitySystem
 
         args.Handled = true;
     }
+
     private void PlayMapAmbientAudio(ResolvedSoundSpecifier soundPath, EntityUid mapUid)
     {
         var ambientAudio = _audio.PlayPvs(soundPath, mapUid);
@@ -80,6 +83,7 @@ public sealed class ObjectiveCreateMapSystem : EntitySystem
             });
         }
     }
+
     private bool TryAddMap(ResPath mapPath, [NotNullWhen(true)] out EntityUid? mapGrid)
     {
         mapGrid = null;
