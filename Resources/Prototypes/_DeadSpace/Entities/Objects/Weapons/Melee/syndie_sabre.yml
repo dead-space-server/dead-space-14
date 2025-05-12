@@ -15,7 +15,7 @@
     soundHit:
         path: /Audio/Weapons/bladeslice.ogg
   - type: Reflect
-    reflectProb: .9
+    reflectProb: 0.9
     spread: 45
   - type: DamageOtherOnHit
     damage:
