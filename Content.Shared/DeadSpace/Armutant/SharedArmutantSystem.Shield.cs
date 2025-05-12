@@ -13,6 +13,7 @@ public partial class SharedArmutantSystem
         SubscribeLocalEvent<ArmutantComponent, StunShieldToggleEvent>(OnStunShieldAction);
         SubscribeLocalEvent<ArmutantComponent, VoidShieldToggleEvent>(OnToggleShield);
     }
+
     private void OnCreateArmorShield(Entity<ArmutantComponent> ent, ref CreateArmorShieldToggleEvent args) // Метод создания брони на сущности
     {
         if (!_net.IsServer)
@@ -44,6 +45,7 @@ public partial class SharedArmutantSystem
         }
         args.Handled = true;
     }
+
     private void OnStunShieldAction(Entity<ArmutantComponent> ent, ref StunShieldToggleEvent args) // Метод стана по площади
     {
         if (!_net.IsServer)
@@ -109,6 +111,7 @@ public partial class SharedArmutantSystem
         }
         SpawnAttachedTo(armutantActionComp.SelfEffect, Transform(ent).Coordinates);
     }
+
     private void OnToggleShield(Entity<ArmutantComponent> ent, ref VoidShieldToggleEvent args) // Метод вызова щита с отражением на 15 секунд
     {
         if (!_net.IsServer)

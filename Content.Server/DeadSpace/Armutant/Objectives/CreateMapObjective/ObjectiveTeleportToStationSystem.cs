@@ -15,11 +15,13 @@ public sealed class ObjectiveTeleportToStationSystem : EntitySystem
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly TransformSystem _transformSystem = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<ObjectiveTeleportToStationComponent, UseInHandEvent>(OnInteractUsing);
     }
+
     private void OnInteractUsing(Entity<ObjectiveTeleportToStationComponent> uid, ref UseInHandEvent args)
     {
         if (args.Handled)
@@ -56,6 +58,7 @@ public sealed class ObjectiveTeleportToStationSystem : EntitySystem
             _transformSystem.SetParent(effect, args.User);
         }
     }
+
     private EntityUid? FindStationGrid()
     {
         foreach (var mapId in _mapManager.GetAllMapIds())

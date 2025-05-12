@@ -16,11 +16,13 @@ public sealed class ObjectiveAliveRandomPersonSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly TargetObjectiveSystem _target = default!;
+
     public override void Initialize()
     {
         SubscribeLocalEvent<ObjectiveAlivePersonComponent, ObjectiveGetProgressEvent>(OnGetProgress);
         SubscribeLocalEvent<PickRandomPersonAliveComponent, ObjectiveAssignedEvent>(OnPersonAssigned);
     }
+
     private void OnGetProgress(EntityUid uid, ObjectiveAlivePersonComponent comp, ref ObjectiveGetProgressEvent args)
     {
         if (!_target.GetTarget(uid, out var target))
@@ -28,6 +30,7 @@ public sealed class ObjectiveAliveRandomPersonSystem : EntitySystem
 
         args.Progress = GetProgress(target.Value, comp.RequireAlive);
     }
+
     private void OnPersonAssigned(EntityUid uid, PickRandomPersonAliveComponent comp, ref ObjectiveAssignedEvent args)
     {
         if (!TryComp<TargetObjectiveComponent>(uid, out var target))
@@ -57,6 +60,7 @@ public sealed class ObjectiveAliveRandomPersonSystem : EntitySystem
 
         _target.SetTarget(uid, _random.Pick(allHumans), target);
     }
+
     private float GetProgress(EntityUid target, bool requireAlive)
     {
         if (!TryComp<MindComponent>(target, out var mind) || mind.OwnedEntity == null)

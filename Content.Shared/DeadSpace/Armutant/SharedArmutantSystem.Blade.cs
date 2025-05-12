@@ -10,6 +10,7 @@ public partial class SharedArmutantSystem
         SubscribeLocalEvent<ArmutantComponent, BladeDashActionEvent>(OnDashAction);
         SubscribeLocalEvent<ArmutantComponent, CreateTalonBladeEvent>(OnCreateTalonBladeAction);
     }
+
     private void OnDashAction(Entity<ArmutantComponent> ent, ref BladeDashActionEvent args)
     {
         if (!_net.IsServer)
@@ -56,6 +57,7 @@ public partial class SharedArmutantSystem
         }
         args.Handled = true;
     }
+
     private void OnCreateTalonBladeAction(Entity<ArmutantComponent> ent, ref CreateTalonBladeEvent args)
     {
         if (!_net.IsServer)

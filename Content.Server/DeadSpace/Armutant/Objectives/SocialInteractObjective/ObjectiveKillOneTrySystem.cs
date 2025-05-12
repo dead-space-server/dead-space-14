@@ -13,11 +13,13 @@ public sealed class ObjectiveKillOneTrySystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly TargetObjectiveSystem _target = default!;
+
     public override void Initialize()
     {
         SubscribeLocalEvent<ObjectiveKillOneTryComponent, ObjectiveGetProgressEvent>(OnGetProgress);
         SubscribeLocalEvent<PickRandomPersonToDieComponent, ObjectiveAssignedEvent>(OnPersonAssigned);
     }
+
     private void OnGetProgress(EntityUid uid, ObjectiveKillOneTryComponent comp, ref ObjectiveGetProgressEvent args)
     {
         if (!_target.GetTarget(uid, out var target))
@@ -31,6 +33,7 @@ public sealed class ObjectiveKillOneTrySystem : EntitySystem
         if (args.Progress == 1f)
             comp.OneTry = true;
     }
+
     private void OnPersonAssigned(EntityUid uid, PickRandomPersonToDieComponent comp, ref ObjectiveAssignedEvent args)
     {
         if (!TryComp<TargetObjectiveComponent>(uid, out var target))
@@ -60,6 +63,7 @@ public sealed class ObjectiveKillOneTrySystem : EntitySystem
 
         _target.SetTarget(uid, _random.Pick(allHumans), target);
     }
+
     private float GetProgress(EntityUid target, bool requireDie)
     {
         if (!TryComp<MindComponent>(target, out var mind) || mind.OwnedEntity == null)

@@ -43,6 +43,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
     [Dependency] private readonly StandingStateSystem _standing = default!;
     [Dependency] private readonly SharedContentEyeSystem _eye = default!;
     private readonly HashSet<EntityUid> _receivers = new();
+
     public override void Initialize()
     {
         base.Initialize();
@@ -54,6 +55,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
         SubscribeLocalEvent<ArmutantComponent, EnterArmutantStasisEvent>(OnEnterStasis);
         SubscribeLocalEvent<ArmutantComponent, ComponentInit>(OnComponentInit);
     }
+
     private void OnComponentInit(Entity<ArmutantComponent> ent, ref ComponentInit args)
     {
         var armutantEntity = EnsureComp<ArmutantComponent>(ent);
@@ -63,6 +65,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
         var ev = new SetNewDestructibleThreshold(ent, ent.Comp.DamageTypeGib, ent.Comp.DamageAmountGib); // Делаем вызов события для смены параметров гибба
         RaiseLocalEvent(ent, ev);
     }
+
     private void SwapArms(Entity<ArmutantComponent> ent, ref ArmutantSwapArmEvent args) // Логика смены рук
     {
         if (!_net.IsServer)
@@ -82,6 +85,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
 
         args.Handled = true;
     }
+
     private void DoSwap(Entity<ArmutantComponent> ent) // Логика выдачи способностей
     {
         if (ent.Comp.SelectedArmComp == null)
@@ -159,6 +163,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
         ent.Comp.SelectedArm = null;
         ent.Comp.SelectedArmComp = null;
     }
+
     private void OnEnterStasis(Entity<ArmutantComponent> ent, ref EnterArmutantStasisEvent args) // Логика входа в стазис
     {
         if (args.Handled)
@@ -200,6 +205,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
         });
         args.Handled = true;
     }
+
     private void OnExitStasis(Entity<ArmutantComponent> ent)
     {
         if (!ent.Comp.IsInStasis)
@@ -219,6 +225,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
 
         ent.Comp.IsInStasis = false;
     }
+
     private DamageSpecifier ConverDamageSpecifier(string damageType, // Сделан для удобства редактирования прототипов
     int damageAmount,
     out DamageSpecifier damage)
@@ -228,6 +235,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
 
         return damage;
     }
+
     private void AddAbilities(EntityUid ent, // Логика добавления способностей
     List<EntProtoId> ability,
     List<EntityUid> container)
@@ -239,6 +247,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
                 container.Add(actions.Value);
         }
     }
+
     private void ClearActiveAbilities(EntityUid ent, // Тоже самое, но удаление
     List<EntityUid> container
     )
@@ -249,6 +258,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
         }
         container.Clear();
     }
+
     private void HandlePullingInteractions(EntityUid ent) // Логика для рывка, убирает все взаимодействия с перетаскиванием перед рывком
     {
         if (TryComp<PullableComponent>(ent, out var pullable) && _pulling.IsPulled(ent, pullable))
@@ -257,6 +267,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
         if (TryComp<PullerComponent>(ent, out var puller) && TryComp<PullableComponent>(puller.Pulling, out var pullableTarget))
             _pulling.TryStopPull(puller.Pulling.Value, pullableTarget);
     }
+
     public bool TryToggleItem(Entity<ArmutantComponent> ent, EntProtoId proto, string? clothingSlot = null) // Логика снятия и надевания предметов
     {
         if (!ent.Comp.Equipment.TryGetValue(proto.Id, out var item))
@@ -287,6 +298,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
 
         return true;
     }
+
     public bool TryInjectReagents(EntityUid uid, List<(string, FixedPoint2)> reagents) // Вводит указанный реагент в сущность
     {
         var solution = new Shared.Chemistry.Components.Solution();
@@ -303,6 +315,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
 
         return true;
     }
+
     private bool TryEquipArmor(Entity<ArmutantComponent> ent,
     EntProtoId proto,
     string slot,
@@ -322,6 +335,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
         equipment.Add(proto.Id, item);
         return true;
     }
+
     private void RemoveAllArmor(Entity<ArmutantComponent> ent,
     Dictionary<string, EntityUid> equipment)
     {

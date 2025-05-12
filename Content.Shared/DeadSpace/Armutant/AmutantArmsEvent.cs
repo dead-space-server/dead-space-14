@@ -1,6 +1,4 @@
 using Content.Shared.Actions;
-using Robust.Shared.Map;
-using Robust.Shared.Serialization;
 
 namespace Content.Shared.DeadSpace.Armutant;
 
@@ -35,7 +33,7 @@ public sealed class SetNewDestructibleThreshold: EntityEventArgs
 }
 public sealed partial class EnterArmutantStasisEvent : InstantActionEvent { }
 
-// Abilities claws
+// Abilities blade
 public sealed partial class BladeDashActionEvent : WorldTargetActionEvent { }
 public sealed partial class CreateTalonBladeEvent : InstantActionEvent { }
 
