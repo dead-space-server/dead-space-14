@@ -206,7 +206,7 @@
   loadouts:
   - ShoesBootsLaceup
   - BrownShoes
-  
+
 - type: loadoutGroup
   id: HoPUnderwear
   name: loadout-group-hop-underwear
@@ -354,7 +354,7 @@
   name: loadout-group-chef-hand
   minLimit: 0
   loadouts:
-  - ChefGoldenKnife  
+  - ChefGoldenKnife
 
 - type: loadoutGroup
   id: ChefGloves
@@ -497,6 +497,14 @@
   minLimit: 0
   loadouts:
   - JanitorWintercoat
+  - JanitorHazardVest
+
+- type: loadoutGroup
+  id: JanitorShoes
+  name: loadout-group-janitor-shoes
+  loadouts:
+  - PurpleShoes
+  - GaloshesShoes
 
 - type: loadoutGroup
   id: JanitorPlunger
@@ -618,7 +626,7 @@
   - EmergencyOxygenClown
   # DS14-species-emergency-start
   - EmergencyNonBreather
-  - EmergencyRobotNonBreather  
+  - EmergencyRobotNonBreather
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerClown
@@ -687,7 +695,7 @@
   - EmergencyOxygenMime
   # DS14-species-emergency-start
   - EmergencyNonBreather
-  - EmergencyRobotNonBreather  
+  - EmergencyRobotNonBreather
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerMime
@@ -888,7 +896,7 @@
   - SalvageSpecialistJumpsuitFormal
   - SalvageSpecialistJumpskirt
   - SalvageSpecialistJumpskirtFormal
-  
+
 - type: loadoutGroup
   id: SalvageSpecialistOuterClothing
   name: loadout-group-salvage-specialist-outerclothing
