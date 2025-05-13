@@ -57,14 +57,26 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
                 return;
             }
         }
-        
+
         if (comp.Nonlethal)
         {
             Timer.Spawn(0000,
                 () =>
                 {
                     _popupSystem.PopupEntity(Loc.GetString("Ошибка идентификации пользователя"), args.Equipee, args.Equipee);
-                    _inventory.TryUnequip(args.Equipee, "outerClothing", true, true);
+
+                    if (TryComp<InventoryComponent>(args.Equipee, out var inv))
+                    {
+                        foreach (var slotDef in inv.Slots)
+                        {
+                            if (_inventory.TryGetSlotEntity(args.Equipee, slotDef.Name, out var slotEnt)
+                                && slotEnt == args.Equipment)
+                            {
+                                _inventory.TryUnequip(args.Equipee, slotDef.Name, true, true);
+                                return;
+                            }
+                        }
+                    }
                 });
             return;
         }
