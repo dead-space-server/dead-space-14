@@ -50,6 +50,9 @@
   id: MagazineEagleAP
 
 - type: Tag
+  id: MagazineKedrSubMachineGun
+
+- type: Tag
   id: MukhtarWearable
 
 - type: Tag

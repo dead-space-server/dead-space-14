@@ -1,0 +1,81 @@
+- type: entity
+  name: ПП-91-01 "Кедр-Б"
+  parent: [BaseWeaponSubMachineGun, BaseRestrictedContraband]
+  id: WeaponSubMachineGunKedr
+  description: Пистолет-пулемёт с интегрированным глушителем, разработанный в начале 2690-х годов под калибр 9х19 по заказу НКВБ СССП для специальных структур. Скорострельность немногим меньше чем у АЕКа, уникальные магазины и он может питаться только ими, на 20 патронов, звуки с глушителем.
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Objects/Weapons/Guns/SMGs/pp91.rsi
+      layers:
+        - state: base
+          map: ["enum.GunVisualLayers.Base"]
+        - state: mag-0
+          map: ["enum.GunVisualLayers.Mag"]
+    - type: Clothing
+      sprite: _DeadSpace/Objects/Weapons/Guns/SMGs/pp91.rsi
+    - type: Gun
+      minAngle: 1
+      maxAngle: 14
+      fireRate: 6
+      soundGunshot:
+        path: /Audio/Weapons/Guns/Gunshots/silenced.ogg
+        params:
+          volume: -5
+      availableModes:
+      - Burst
+      - FullAuto
+      - SemiAuto
+      shotsPerBurst: 3
+      burstCooldown: 0.25
+    - type: ItemSlots
+      slots:
+        gun_magazine:
+          name: Magazine
+          startingItem: MagazineKedrSubMachineGun
+          insertSound: /Audio/Weapons/Guns/MagIn/smg_magin.ogg
+          ejectSound: /Audio/Weapons/Guns/MagOut/smg_magout.ogg
+          priority: 2
+          whitelist:
+            tags:
+              - MagazineKedrSubMachineGun
+          whitelistFailPopup: gun-magazine-whitelist-fail
+        gun_chamber:
+          name: Chamber
+          startingItem: CartridgePistol
+          priority: 1
+          whitelist:
+            tags:
+              - CartridgePistol
+    - type: MagazineVisuals
+      magState: mag
+      steps: 1
+      zeroVisible: true
+    - type: Appearance
+
+- type: entity
+  id: MagazineKedrSubMachineGun
+  name: магазин для ПП-91 (9x19 авто любые)
+  parent: BaseMagazinePistolSubMachineGun
+  components:
+  - type: BallisticAmmoProvider
+    capacity: 20
+    proto: CartridgePistol
+    whitelist:
+      tags:
+        - CartridgePistol
+    soundInsert:
+      path: /Audio/Weapons/Guns/MagIn/bullet_insert.ogg
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Guns/Ammunition/Magazine/SMG/pp91_mag.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: MagazineVisuals
+    magState: mag
+    steps: 2
+    zeroVisible: false
+  - type: Tag
+    tags:
+    - MagazineKedrSubMachineGun
