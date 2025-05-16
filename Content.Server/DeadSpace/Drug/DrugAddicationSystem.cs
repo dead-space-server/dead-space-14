@@ -15,6 +15,7 @@ using Content.Shared.Mind;
 using Content.Shared.Mobs.Systems;
 using Robust.Shared.Configuration;
 using Content.Shared.CCVar;
+using Content.Shared.DeadSpace.CCCCVars;
 
 namespace Content.Server.DeadSpace.Drug;
 
@@ -125,8 +126,8 @@ public sealed class DrugAddicationSystem : EntitySystem
 
         component.AddictionLevel = Math.Min(MaxAddictionLevel, component.AddictionLevel + effectStrenght * (1 - component.Tolerance));
 
-        var enableMaxAddication = _config.GetCVar(CCVars.EnableMaxAddication);
-        var maxDrugStr = _config.GetCVar(CCVars.MaxDrugStr);
+        var enableMaxAddication = _config.GetCVar(CCCCVarsDrugs.EnableMaxAddication);
+        var maxDrugStr = _config.GetCVar(CCCCVarsDrugs.MaxDrugStr);
 
         if (enableMaxAddication)
             component.AddictionLevel = Math.Min(MaxAddictionLevel * component.DependencyLevel / maxDrugStr, component.AddictionLevel);
@@ -145,7 +146,7 @@ public sealed class DrugAddicationSystem : EntitySystem
         if (!Resolve(uid, ref component))
             return;
 
-        var maxDrugStr = _config.GetCVar(CCVars.MaxDrugStr);
+        var maxDrugStr = _config.GetCVar(CCCCVarsDrugs.MaxDrugStr);
 
         drugStrenght = Math.Min(maxDrugStr, drugStrenght);
 

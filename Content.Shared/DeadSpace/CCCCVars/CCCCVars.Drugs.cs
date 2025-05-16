@@ -2,9 +2,9 @@
 
 using Robust.Shared.Configuration;
 
-namespace Content.Shared.CCVar;
+namespace Content.Shared.DeadSpace.CCCCVars;
 
-public sealed partial class CCVars
+public sealed partial class CCCCVarsDrugs
 {
     /// <summary>
     ///    настройка зависимости addication от тяжести наркотика (addication не будет превышать значение для зависимости с уровнем тяжести)
