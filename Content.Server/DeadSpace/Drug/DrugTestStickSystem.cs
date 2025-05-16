@@ -31,7 +31,7 @@ public sealed class DrugTestStickSystem : EntitySystem
 
             if (TryComp<DnaComponent>(args.Target, out var dna))
             {
-                component.DNA = dna.DNA;
+                component.DNA = dna.DNA ?? string.Empty;
             }
             else
             {
