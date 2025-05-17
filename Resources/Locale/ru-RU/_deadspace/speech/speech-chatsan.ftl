@@ -218,18 +218,20 @@ deadspace-chatsan-replacement-108 = диловен
 deadspace-chatsan-word-109 = эпиф
 deadspace-chatsan-replacement-109 = эпинефрин
 # Jobs SS13
-#deadspace-chatsan-word-110 = хоп #free Jobs SS13
-#deadspace-chatsan-replacement-110 = гп #free Jobs SS13
-#deadspace-chatsan-word-111 = хос #free Jobs SS13
-#deadspace-chatsan-replacement-111 = гсб #free Jobs SS13
-#deadspace-chatsan-word-112 = хоса #free Jobs SS13
-#deadspace-chatsan-replacement-112 = гсб #free Jobs SS13
-#deadspace-chatsan-word-113 = смо #free Jobs SS13
-#deadspace-chatsan-replacement-113 = главрач #free Jobs SS13
-#deadspace-chatsan-word-114 = се #free Jobs SS13
-#deadspace-chatsan-replacement-114 = си #free Jobs SS13
-#deadspace-chatsan-word-115 = рд #free Jobs SS13
-#deadspace-chatsan-replacement-115 = нр #free Jobs SS13
+#free-Jobs-SS13 - start
+#deadspace-chatsan-word-110 = хоп 
+#deadspace-chatsan-replacement-110 = гп 
+#deadspace-chatsan-word-111 = хос 
+#deadspace-chatsan-replacement-111 = гсб 
+#deadspace-chatsan-word-112 = хоса 
+#deadspace-chatsan-replacement-112 = гсб 
+#deadspace-chatsan-word-113 = смо 
+#deadspace-chatsan-replacement-113 = главрач 
+#deadspace-chatsan-word-114 = се 
+#deadspace-chatsan-replacement-114 = си 
+#deadspace-chatsan-word-115 = рд 3
+#deadspace-chatsan-replacement-115 = нр 
+#free-Jobs-SS13 - end
 # Jobs SS14
 deadspace-chatsan-word-116 = кеп
 deadspace-chatsan-replacement-116 = капитан
