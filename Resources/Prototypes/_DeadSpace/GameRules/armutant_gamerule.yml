@@ -6,10 +6,13 @@
   - type: AntagObjectives
     objectives:
     - StealArtiefactArmutantObjective
-    - ProtectedRandomPersonObjective
-    - ProtectedRandomPersonObjective
     - KillOneTryRandomPersonObjective
-    - KillOneTryRandomPersonObjective
+    - ProtectedRandomPersonObjective
+  - type: AntagLoadProfileRule
+    speciesOverrideBlacklist:
+    - Xenomorph
+    - IPC
+    - IPS
   - type: AntagSelection
     agentName: armutant-round-end-agent-name
     definitions:

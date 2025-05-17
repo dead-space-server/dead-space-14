@@ -5,6 +5,7 @@
   components:
   - type: Objective
     issuer: objective-issuer-armutant
+    difficulty: 2
 
 - type: entity
   parent: [BaseArmutantObjective, BaseStealObjective]
@@ -26,11 +27,11 @@
     state: icon_true
 
 - type: entity
-  parent: [BaseArmutantObjective, BaseTargetObjective]
+  parent: [BaseArmutantObjective, BaseKeepAliveObjective]
   id: ProtectedRandomPersonObjective
   components:
   - type: Objective
-    difficulty: 1
+    difficulty: 0.5
     unique: false
     icon:
       sprite: Effects/hearts.rsi
@@ -38,21 +39,38 @@
   - type: TargetObjective
     title: objective-alive-person-armutant-title
   - type: PickRandomPerson
-  - type: ObjectiveAlivePerson
-    requireAlive: true
+    ignoredJobs:
+    - Passenger
+    - TypanAtmosTech
+    - TypanBotanist
+    - TypanCargotech
+    - TypanChef
+    - TypanMedic
+    - TypanRD
+    - TypanScience
+    - TypanTelecommunicationsOfficer
 
 - type: entity
-  parent: [BaseArmutantObjective, BaseTargetObjective]
+  parent: [BaseArmutantObjective, BaseKillObjective]
   id: KillOneTryRandomPersonObjective
   components:
   - type: Objective
-    difficulty: 1
-    unique: false
+    difficulty: 0.5
     icon:
       sprite: Objects/Misc/books.rsi
       state: icon_eye
+    unique: false
   - type: TargetObjective
     title: objective-kill-person-armutant-title
   - type: PickRandomPerson
-  - type: ObjectiveKillOneTry
-    requireDie: true
+    ignoredJobs:
+    - Passenger
+    - TypanAtmosTech
+    - TypanBotanist
+    - TypanCargotech
+    - TypanChef
+    - TypanMedic
+    - TypanRD
+    - TypanScience
+    - TypanTelecommunicationsOfficer
+  - type: KillPersonCondition

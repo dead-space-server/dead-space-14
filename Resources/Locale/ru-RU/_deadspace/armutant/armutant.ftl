@@ -8,7 +8,7 @@ armutant-round-end-agent-name = Армутант
 
 steal-target-groups-artiefact-armutant = Необходимо выкрасть особенный артефакт, который последний раз видели в кабинете научного руководителя.
 steal-owner-artiefact-armutant = Выкрасть артефакт.
-objective-kill-person-armutant-title = Проверь на прочность {$targetName}, {CAPITALIZE($job)}, цель должна умереть лишь ОДИН раз.
+objective-kill-person-armutant-title = Проверь на прочность {$targetName}, {CAPITALIZE($job)}, цель должна умереть.
 objective-alive-person-armutant-title = Защити {$targetName}, {CAPITALIZE($job)}, цель должна эвакуироваться живой любой ценой.
 
 mendself-activated = Раны начали заживать
