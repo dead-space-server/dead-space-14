@@ -1,20 +1,7 @@
-- type: listing
-  id: UplinkFoodCondimentBottleWithAmmoToxin
-  name: Бутылка ядовитого соуса
-  description: Бутылка из под соуса ,она наполненна ядом.
-  productEntity: FoodCondimentBottleWithAmaToxin
-  cost:
-    Telecrystal: 1
-  categories:
-  - UplinkJob
-  conditions:
-  - !type:BuyerJobCondition
-    whitelist:
-    - Chef
 - type: entity
   parent: BaseFoodCondimentBottle
-  id: FoodCondimentBottleWithAmaToxin
-  name: Лучший соус вселенной
+  id: ReagentContainerAmatoxin
+  name: лучший соус вселенной
   description: Лучший соус во всей вселенной, споснсирован одной жёлтой семейкой
   components:
   - type: SolutionContainerManager
