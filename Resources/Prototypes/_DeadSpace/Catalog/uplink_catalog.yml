@@ -288,8 +288,10 @@
   name: uplink-reagent-container-amatoxin-name
   description: uplink-reagent-container-amatoxin-desc
   productEntity: ReagentContainerAmatoxin
+  discountDownTo:
+    Telecrystal: 2
   cost:
-    Telecrystal: 1
+    Telecrystal: 3
   categories:
   - UplinkJob
   conditions:

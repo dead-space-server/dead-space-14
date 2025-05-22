@@ -1,22 +1,15 @@
 - type: entity
-  parent: BaseFoodCondimentBottle
+  parent: ReagentContainerOliveoil
   id: ReagentContainerAmatoxin
-  name: лучший соус вселенной
-  description: Лучший соус во всей вселенной, споснсирован одной жёлтой семейкой
+  name: оливковое масло
+  description: Оливковое масло. Из космических оливок, предположительно.
   components:
   - type: SolutionContainerManager
     solutions:
       food:
+        maxVol: 20
         reagents:
         - ReagentId: Amatoxin
-          Quantity: 30
+          Quantity: 20
   - type: Sprite
-    layers:
-    - state: bottle-empty
-      map: ["enum.OpenableVisuals.Layer"]
-    - state: label-v
-    - state: bottle-alpha-6
-      map: ["enum.SolutionContainerLayers.Fill"]
-      visible: true
-  - type: Icon
-    state: bottle-vinegar
+    state: oliveoil
