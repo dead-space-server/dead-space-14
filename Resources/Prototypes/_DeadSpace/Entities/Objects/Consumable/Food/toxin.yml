@@ -1,8 +1,6 @@
 - type: entity
   parent: ReagentContainerOliveoil
   id: ReagentContainerAmatoxin
-  name: оливковое масло
-  description: Оливковое масло. Из космических оливок, предположительно.
   components:
   - type: SolutionContainerManager
     solutions:
@@ -11,5 +9,3 @@
         reagents:
         - ReagentId: Amatoxin
           Quantity: 20
-  - type: Sprite
-    state: oliveoil
