@@ -22,9 +22,6 @@
   - type: Airtight
     noAirWhenFullyAirBlocked: false
   - type: Clickable
-  - type: Construction
-    graph: Fan
-    node: litleFan
   - type: Tag
     tags:
       - SpreaderIgnore
@@ -54,6 +51,9 @@
     airBlockedDirection:
       - South
   - type: Clickable
+  - type: Construction
+    graph: Fan
+    node: litleFan
   - type: Tag
     tags:
       - SpreaderIgnore

@@ -291,6 +291,12 @@
     tags:
     - WhitelistChameleon
     - FireHelmet
+  - type: PointLight
+    enabled: false
+    mask: /Textures/Effects/LightMasks/cone.png
+    autoRot: true
+    radius: 7
+    netsync: false
   - type: HideLayerClothing
     slots:
     - Hair
