@@ -98,15 +98,15 @@
   id: ZetaOneMedipen
   components:
   - type: Sprite
-    sprite: Objects/Specific/Medical/medipen.rsi
+    sprite: _DeadSpace/Necromorfs/medipen.rsi
     layers:
-    - state: hypovolemic
+    - state: Zeta-One
       map: [ "enum.SolutionContainerLayers.Fill" ]
   - type: Appearance
   - type: SolutionContainerVisuals
     maxFillLevels: 1
     changeColor: false
-    emptySpriteName: hypovolemic_empty
+    emptySpriteName: Zeta-One-Empty
   - type: Hypospray
     solutionName: pen
     transferAmount: 30
@@ -127,14 +127,14 @@
   id: ZetaTwoMedipen
   components:
   - type: Sprite
-    sprite: Objects/Specific/Medical/medipen.rsi
+    sprite: _DeadSpace/Necromorfs/medipen.rsi
     layers:
-    - state: medipen
+    - state: Zeta-Two
       map: [ "enum.SolutionContainerLayers.Fill" ]
   - type: SolutionContainerVisuals
     maxFillLevels: 1
     changeColor: false
-    emptySpriteName: medipen_empty
+    emptySpriteName: Zeta-Two-Empty
   - type: Hypospray
     solutionName: pen
     transferAmount: 25
