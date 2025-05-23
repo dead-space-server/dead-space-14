@@ -297,8 +297,10 @@ namespace Content.Client.Paper.UI
             }
             WrittenTextLabel.SetMessage(msg, _allowedTags, DefaultTextColor);
 
-            WrittenTextLabel.Visible = (!isEditing && state.Text.Length > 0) || state.Signatures != null; // DeadSpace
-            BlankPaperIndicator.Visible = !isEditing && state.Text.Length == 0 && state.Signatures == null; // DeadSpace
+            // WrittenTextLabel.Visible = (!isEditing && state.Text.Length > 0) || state.Signatures != null; // DeadSpace
+            // BlankPaperIndicator.Visible = !isEditing && state.Text.Length == 0 && state.Signatures == null; // DeadSpace
+            WrittenTextLabel.Visible = !isEditing && state.Text.Length > 0;
+            BlankPaperIndicator.Visible = !isEditing && state.Text.Length == 0;
 
             StampDisplay.RemoveAllChildren();
             StampDisplay.RemoveStamps();

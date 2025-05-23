@@ -7,6 +7,7 @@ using Content.Shared.Hands.Components;
 using Robust.Shared.Utility;
 using Content.Shared.Database;
 using Content.Shared.Paper;
+using Content.Shared.Examine;
 
 namespace Content.Server.DeadSpace.SignatureOnPaper;
 
@@ -19,7 +20,17 @@ public sealed partial class SignaturePapeSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<SignaturePapeComponent, GetVerbsEvent<Verb>>(DoSetVerbs);
+        SubscribeLocalEvent<SignaturePapeComponent, ExaminedEvent>(OnExamine);
     }
+
+    private void OnExamine(EntityUid uid, SignaturePapeComponent component, ExaminedEvent args)
+    {
+        if (component.NumberSignatures > 0)
+        {
+            args.PushMarkup(Loc.GetString("Документ подписан."));
+        }
+    }
+
     private void DoSetVerbs(EntityUid uid, SignaturePapeComponent component, GetVerbsEvent<Verb> args)
     {
         if (!TryComp<PaperComponent>(uid, out var paperComp))
