@@ -88,7 +88,7 @@ public sealed class UnitologyObeliskSpawnAbilitySystem : EntitySystem
             }
             if (!hasUni)
             {
-                if (EntityManager.HasComponent<UnitologyComponent>(victinUID))
+                if (EntityManager.HasComponent<UnitologyComponent>(victinUID) || EntityManager.HasComponent<UnitologyEnslavedComponent>(victinUID))
                 {
                     if (_mobState.IsAlive(victinUID))
                     {
