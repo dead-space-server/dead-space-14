@@ -49,6 +49,8 @@
     - id: ClothingShoesBootsMagpvrsifvl
     - id: ClothingHeadsetpvrsifvl
     - id: PaperLawpvrsifvl
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 
 # Belt
@@ -74,6 +76,8 @@
       - id: WelderExperimentalpvrsifvl
       - id: Multitoolpvrsifvl
       - id: SyndicateJawsOfLifepvrsifvl
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 # Cloack
 - type: entity
@@ -91,6 +95,7 @@
   parent: [BaseWeaponCrusher, BaseSecurityCargoContraband]
   id: WeaponCrusherpvrsifvl
   name: кроваво-красная катана Warmind
+  categories: [ HideSpawnMenu ]
   description: Длинные поясные ножны всегда под бдительным контролем мечника. Манящее кроваво-красное длинное лезвие катаны взывает к аналогии с реками крови. Обычно убивает фауну, чуть реже людей. Разработана по чертежам спонсорской организации Warmind.
   components:
   - type: Tag
@@ -164,6 +169,8 @@
     sprite: _DeadSpace/Sponsor/ex1stence/gasmask.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/ex1stence/gasmask.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 # Gloves
 - type: entity
@@ -177,6 +184,8 @@
     sprite: _DeadSpace/Sponsor/ex1stence/gloves.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/ex1stence/gloves.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 #Hardsuit
 - type: entity
@@ -209,12 +218,15 @@
   - type: ClothingSpeedModifier
     walkModifier: 0.9
     sprintModifier: 0.9
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
   parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
   id: ClothingHeadHelmetHardsuitpvrsifvl
   name: шлем скафандра железного лорда
   description: Дивной формы шлем Вас подозрительно отпугивает. Прикрытый защитными элементами визор шлема полностью затемнён со стороны, совершенно пуст на вид, словно в доспех никто не облачён. Разработан по чертежам спонсорской организации Warmind.
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/ex1stence/helmet.rsi
@@ -234,6 +246,8 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 #Рога-кастомизация
 - type: marking
@@ -260,6 +274,8 @@
   - type: EyeProtection
   - type: IdentityBlocker
     coverage: EYES
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 #Hypo
 - type: entity
@@ -310,6 +326,8 @@
       - Back
       - suitStorage
       - Belt
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 #Jumpsuit
 - type: entity
@@ -322,6 +340,8 @@
     sprite: _DeadSpace/Sponsor/ex1stence/jumpsuit.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/ex1stence/jumpsuit.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 #magboots
 - type: entity
@@ -341,6 +361,8 @@
     - type: ClothingSpeedModifier
       walkModifier: 1
       sprintModifier: 1
+    - type: Tag
+      tags: [] # ignore "WhitelistChameleon" tag
 
 #PDA
 - type: entity
@@ -489,6 +511,8 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/ex1stence/headset.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 #Документ
 - type: entity
