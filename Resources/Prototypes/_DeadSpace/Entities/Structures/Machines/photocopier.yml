@@ -87,7 +87,7 @@
         components:
           - Paper
     photocopierType: Centcomm
-    
+
 - type: entity
   parent: PhotocopierBase
   id: PhotocopierSyndicate
