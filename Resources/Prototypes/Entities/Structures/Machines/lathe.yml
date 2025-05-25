@@ -596,6 +596,8 @@
       whitelist:
         tags:
           - Ore
+      blacklist:
+      - uranium
     - type: Lathe
       idleState: icon
       runningState: building
