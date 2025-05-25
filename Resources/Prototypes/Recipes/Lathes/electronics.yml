@@ -607,5 +607,5 @@
 
 - type: latheRecipe
   parent: BaseCircuitboardRecipe
-  id: PhotocopierMachineCircuitboardRecipe
+  id: PhotocopierMachineCircuitboard
   result: PhotocopierMachineCircuitboard
