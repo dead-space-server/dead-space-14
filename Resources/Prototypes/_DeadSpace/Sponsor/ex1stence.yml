@@ -25,7 +25,12 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/ex1stence/backpack.rsi
-    scale: 0.5, 0.5
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/ex1stence/backpack.rsi
+    clothingVisuals:
+      back:
+      - state: equipped-BACKPACK
+        scale: 0.5, 0.5
   - type: Storage
     maxItemSize: Huge
     grid:
