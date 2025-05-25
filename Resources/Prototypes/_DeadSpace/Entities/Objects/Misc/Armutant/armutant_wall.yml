@@ -1,28 +1,12 @@
 - type: entity
-  id: WallRockChromiteUndestructe
   parent: BaseWall
+  id: WallRockChromiteUndestructe
   name: хромитовая стена
   suffix: indestructible
   components:
-    - type: Transform
-      noRot: true
-    - type: SoundOnGather
-    - type: Gatherable
-      toolWhitelist:
-        tags:
-          - Pickaxe
-    - type: Destructible
-      thresholds:
-      - trigger:
-          !type:DamageTrigger
-          damage: -1
-    - type: SmoothEdge
-    - type: IconSmooth
-      key: walls
-      mode: NoSprite
-    - type: Icon
-      sprite: Structures/Walls/rock.rsi
-      state: rock_chromite
+    - type: Tag
+      tags:
+        - Wall
     - type: Sprite
       sprite: Structures/Walls/rock.rsi
       layers:
@@ -35,29 +19,22 @@
           state: rock_chromite_north
         - map: [ "enum.EdgeLayer.West" ]
           state: rock_chromite_west
-
-- type: entity
-  id: WallRockSnowUndestructe
-  name: снежная скала
-  parent: BaseWall
-  suffix: indestructible
-  components:
-    - type: Transform
-      noRot: true
-    - type: SoundOnGather
-    - type: Gatherable
-      toolWhitelist:
-        tags:
-          - Pickaxe
-    - type: Destructible
-      thresholds:
-      - trigger:
-          !type:DamageTrigger
-          damage: -1
-    - type: SmoothEdge
+    - type: Icon
+      sprite: Structures/Walls/rock.rsi
+      state: rock_chromite
     - type: IconSmooth
       key: walls
       mode: NoSprite
+
+- type: entity
+  parent: BaseWall
+  id: WallRockSnowUndestructe
+  name: снежная скала
+  suffix: indestructible
+  components:
+    - type: Tag
+      tags:
+        - Wall
     - type: Icon
       sprite: Structures/Walls/rock.rsi
       state: rock_snow
@@ -73,3 +50,6 @@
           state: rock_snow_north
         - map: [ "enum.EdgeLayer.West" ]
           state: rock_snow_west
+    - type: IconSmooth
+      key: walls
+      mode: NoSprite
