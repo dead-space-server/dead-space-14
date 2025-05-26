@@ -15,6 +15,11 @@
     jumpsuit: ClothingUniformJumpsuitHoS
 
 - type: loadout
+  id: HeadofSecurityJumpsuitBlue
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitHoSBlue
+
+- type: loadout
   id: HeadofSecurityJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtHoS
