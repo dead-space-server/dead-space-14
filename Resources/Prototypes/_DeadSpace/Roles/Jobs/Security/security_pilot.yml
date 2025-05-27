@@ -35,7 +35,6 @@
   id: SecurityPilotGear
   equipment:
     eyes: ClothingEyesGlassesSecurity
-    head: ClothingHeadHatBeretSecurity
     outerClothing: ClothingOuterWinterSec
     id: SecurityPilotPDA
     ears: ClothingHeadsetSecurity
