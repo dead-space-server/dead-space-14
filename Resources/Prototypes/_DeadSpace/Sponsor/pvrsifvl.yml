@@ -508,11 +508,15 @@
   parent: ClothingHeadset
   id: ClothingHeadsetpvrsifvl
   name: полноразмерная гарнитура Warmind
-  description: полноразмерная гарнитура Warmind | К сожалению, не заглушает бесполезный вопль, а только заставляет его слушать. Модифицирована по чертежам Warmind.
+  description: К сожалению, не заглушает бесполезный вопль, а только заставляет его слушать. Модифицирована по чертежам Warmind.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/pvrsifvl/headset.rsi
+  - type: Headset
+    color: "#db313f"
+  - type: EncryptionKeyHolder
+    keySlots: 5
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -532,3 +536,5 @@
     - stampedColor: '#00BE00FF'
       stampedName: Одобрено
     content: paper-law-pvrsifvl
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
