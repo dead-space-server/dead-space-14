@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "modified signaller state taken from /vg/station at commit https://github.com/vgstation-coders/vgstation13/commit/2c980a1f423f26e990a578bae057d1eca19675ec. Modified by Rorkh for Мёртвый Космс",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "emergency_signaller"
+    },
+    {
+      "name": "inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "inhand-right",
+      "directions": 4
+    }
+  ]
+}

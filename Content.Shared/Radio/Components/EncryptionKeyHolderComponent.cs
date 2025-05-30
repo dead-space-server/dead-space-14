@@ -53,4 +53,15 @@ public sealed partial class EncryptionKeyHolderComponent : Component
     /// </summary>
     [ViewVariables]
     public string? DefaultChannel;
+
+    // DS14-emergency-signaller-start
+
+    /// <summary>
+    ///     Whether or not information about inserted keys should be shown on examination.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite)]
+    [DataField("showExamine")]
+    public bool ShowExamine = true;
+
+    // DS14-emergency-signaller-end
 }

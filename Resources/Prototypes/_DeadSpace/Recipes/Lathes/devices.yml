@@ -1,0 +1,8 @@
+- type: latheRecipe
+  parent: TargetHuman
+  id: EmergencySignaller
+  result: EmergencySignaller
+  completetime: 3
+  materials:
+    Steel: 100
+    Plastic: 100

@@ -1,0 +1,33 @@
+- type: entity
+  parent: BaseItem
+  id: EmergencySignaller
+  name: аварийный передатчик
+  description: Портативное устройство, используемое для передачи аварийного сигнала в систему связи станции. Гарантированно передает сигнал даже в космосе, но из-за этого обладает высоким энергопотреблением.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Devices/emergency_signaller.rsi
+    state: emergency_signaller
+  - type: UseDelay
+  - type: EncryptionKeyHolder
+    showExamine: false
+    keySlots: 1
+  - type: PowerCellSlot
+    cellSlotId: cell_slot
+  - type: ContainerContainer
+    containers:
+      cell_slot: !type:ContainerSlot
+      key_slots: !type:Container
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - EncryptionKeySecurity
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: PowerCellSmall
+  - type: PowerCellDraw
+    drawRate: 0
+    useRate: 120
+  - type: ToggleCellDraw
+  - type: EmergencySignaller

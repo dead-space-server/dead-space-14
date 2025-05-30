@@ -10,6 +10,7 @@
   - TargetHuman
   - TargetSyndicate
   - Zipties
+  - EmergencySignaller # DS14-emergency-signaller
 
 # Practice ammo/mags and practice weapons
 - type: latheRecipePack
