@@ -4,7 +4,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Prototypes;
 
-namespace Content.Server.DeadSpace.Necromorphs.Unitology.Abilities;
+namespace Content.Server.DeadSpace.Necromorphs.Unitology.Components;
 
 [RegisterComponent]
 public sealed partial class UnitologyObeliskActivateAbilityComponent : Component

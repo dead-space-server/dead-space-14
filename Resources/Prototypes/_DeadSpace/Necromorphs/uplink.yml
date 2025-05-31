@@ -1,7 +1,7 @@
 ﻿- type: listing
   id: UnitologyCrateObeliskSplinterList
   name: Осколок обелиска
-  description: Ящик с осколком обелиска. Без него обелиск не активировать.
+  description: Ящик с осколком обелиска.
   icon: { sprite: Structures/Storage/Crates/generic.rsi, state: icon }
   productEntity: CrateObeliskSplinter
   cost:
@@ -15,6 +15,17 @@
   description: Шприц с экстрактом заразителя, 15 едениц.
   icon: { sprite: Objects/Specific/Chemistry/syringe.rsi, state: syringe1 }
   productEntity: SyringeExtractInfectorDead
+  cost:
+    Telecrystal: 5
+  categories:
+    - UplinkUnitologyInfection
+
+- type: listing
+  id: UnitologyLighthouseList
+  name: Маяк
+  description: Маяк, притягивающий обелиск.
+  icon: { sprite: Objects/Tools/fulton.rsi, state: extraction_point }
+  productEntity: UnitologyLighthouse
   cost:
     Telecrystal: 5
   categories:
@@ -50,17 +61,6 @@
   productEntity: PukerNecro
   cost:
     Telecrystal: 10
-  categories:
-    - UplinkUnitologyInfection
-
-- type: listing
-  id: UnitologyPinpointerNecroobeliskList
-  name: Пинпоинтер
-  description: Указывает на обелиск.
-  icon: { sprite: Objects/Devices/pinpointer.rsi, state: pinpointer-way }
-  productEntity: PinpointerNecroobelisk
-  cost:
-    Telecrystal: 5
   categories:
     - UplinkUnitologyInfection
 

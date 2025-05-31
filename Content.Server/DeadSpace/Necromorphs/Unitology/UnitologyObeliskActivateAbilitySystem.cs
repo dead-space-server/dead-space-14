@@ -15,8 +15,9 @@ using Content.Shared.Zombies;
 using Content.Shared.DeadSpace.Necromorphs.Necroobelisk;
 using Content.Server.DeadSpace.Necromorphs.Necroobelisk;
 using Content.Server.Chat.Systems;
+using Content.Server.DeadSpace.Necromorphs.Unitology.Components;
 
-namespace Content.Server.DeadSpace.Necromorphs.Unitology.Abilities;
+namespace Content.Server.DeadSpace.Necromorphs.Unitology;
 
 public sealed class UnitologyObeliskSpawnAbilitySystem : EntitySystem
 {

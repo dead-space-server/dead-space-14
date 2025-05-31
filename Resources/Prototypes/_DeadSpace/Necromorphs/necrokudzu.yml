@@ -13,7 +13,7 @@
   - type: Sprite
     sprite: _DeadSpace/Necromorfs/necrokudzu.rsi
     state: kudzu_11
-    drawdepth: FloorTiles
+    drawdepth: BlobTiles
   - type: Appearance
   - type: KudzuVisuals
   - type: Clickable

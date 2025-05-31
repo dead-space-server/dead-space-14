@@ -8,7 +8,7 @@
   id: UnitologLeaderGear
   storage:
     back:
-    - UplinkRadioHeadLeaderUnitology
+    - UplinkRadioLeaderUnitology
     - Candle
     - Candle
     - Candle
@@ -45,6 +45,11 @@
   - type: GameRule
     minPlayers: 40
   - type: UnitologyRule
+  - type: AntagObjectives
+    objectives:
+    - UniSubmissionObjective
+    - UniInfectObjective
+    - UniInvitationObjective
   - type: AntagSelection
     definitions:
     - prefRoles: [ UniHead ]
@@ -66,7 +71,6 @@
         - Unitolog
       - type: IntrinsicRadioReceiver
       - type: Unitology
-      - type: UnitologyObeliskActivateAbility
       - type: UnitologyHead
       - type: AutoImplant
         implants:

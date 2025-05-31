@@ -5,7 +5,7 @@ using Content.Shared.DeadSpace.Necromorphs.Unitology;
 using Content.Shared.DeadSpace.Necromorphs.Unitology.Components;
 using Content.Server.Popups;
 using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;
-using Content.Server.DeadSpace.Necromorphs.Unitology.Abilities;
+using Content.Server.DeadSpace.Necromorphs.Unitology.Components;
 using Content.Shared.Zombies;
 using Content.Server.DeadSpace.Necromorphs.InfectionDead;
 using Content.Shared.Humanoid;
