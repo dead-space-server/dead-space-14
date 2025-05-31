@@ -9,6 +9,7 @@ using Content.Shared.DeadSpace.Necromorphs.InfectorDead;
 using Robust.Shared.Prototypes;
 using System.Linq;
 using Content.Shared.Zombies;
+using Content.Shared.Silicons.Borgs.Components;
 
 namespace Content.Shared.DeadSpace.Necromorphs.InfectionDead;
 
@@ -25,6 +26,9 @@ public abstract class SharedInfectionDeadSystem : EntitySystem
 
     public bool IsInfectionPossible(EntityUid target)
     {
+        if (HasComp<BorgChassisComponent>(target))
+            return false;
+
         if (!HasComp<MobStateComponent>(target) || HasComp<InfectorDeadComponent>(target) || HasComp<ImmunitetInfectionDeadComponent>(target))
         {
             return false;
