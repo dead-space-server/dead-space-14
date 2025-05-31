@@ -22,13 +22,13 @@ public sealed partial class NecromorfComponent : Component
     public float MovementSpeedMultiply = 1f;
 
     [DataField("skinColor")]
-    public Color SkinColor = new(0.64f, 0.60f, 0.72f);
+    public Color SkinColor = new(0.8f, 0.72f, 0.73f);
 
     /// <summary>
     /// The eye color of the Necromorf
     /// </summary>
     [DataField("eyeColor")]
-    public Color EyeColor = new(1f, 0f, 0f);
+    public Color EyeColor = new(1f, 1f, 1f);
 
     /// <summary>
     /// The base layer to apply to any 'external' humanoid layers upon zombification.

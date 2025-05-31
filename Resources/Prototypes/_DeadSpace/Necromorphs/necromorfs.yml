@@ -32,7 +32,7 @@
   id: NecroSlasher
   damage:
     groups:
-      Brute: 20
+      Brute: 15
     types:
       Structural: 10
   damageModifierSet: Necromorf
@@ -62,7 +62,7 @@
   movementSpeedMultiply: 1
   damage:
     groups:
-      Brute: 20
+      Brute: 15
     types:
       Structural: 10
   damageModifierSet: Necromorf
@@ -104,7 +104,7 @@
   id: NecroTwitcher
   damage:
     groups:
-      Brute: 20
+      Brute: 15
     types:
       Structural: 10
   damageModifierSet: Necromorf
@@ -116,7 +116,7 @@
   id: NecroPregnant
   damage:
     groups:
-      Brute: 20
+      Brute: 15
     types:
       Structural: 10
   damageModifierSet: Necromorf
@@ -152,7 +152,7 @@
   isAnimal: true
   damage:
     groups:
-      Brute: 15
+      Brute: 10
     types:
       Structural: 10
   damageModifierSet: Necromorf
