@@ -18,7 +18,7 @@
     icon: _DeadSpace/Sith/actions/submission.png
   - type: NumberObjective
     min: 1
-    max: 1
+    max: 6
     title: objective-condition-submission-title
   - type: UnitologySubmissionConditions
 
@@ -29,8 +29,8 @@
   - type: Objective
     icon: _DeadSpace/Interface/Actions/infector.png
   - type: NumberObjective
-    min: 1
-    max: 1
+    min: 10
+    max: 25
     title: objective-condition-infect-title
   - type: UnitologyInfectConditions
 
@@ -41,7 +41,7 @@
   - type: Objective
     icon: _DeadSpace/Interface/Actions/obelisk.png
   - type: NumberObjective
-    min: 1
-    max: 1
+    min: 2
+    max: 6
     title: objective-condition-invitation-title
   - type: UnitologyInvitationConditions

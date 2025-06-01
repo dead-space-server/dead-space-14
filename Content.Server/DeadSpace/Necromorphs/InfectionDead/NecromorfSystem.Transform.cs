@@ -50,6 +50,7 @@ using Content.Shared.DeadSpace.Necromorphs.Necroobelisk;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Damage.Components;
 using Content.Shared.Rotation;
+using Content.Shared.Interaction.Components;
 
 namespace Content.Server.DeadSpace.Necromorphs.InfectionDead;
 
@@ -111,18 +112,19 @@ public sealed partial class NecromorfSystem
         RemComp<ReproductiveComponent>(target);
         RemComp<ReproductivePartnerComponent>(target);
         RemComp<LegsParalyzedComponent>(target);
+        RemComp<ComplexInteractionComponent>(target);
+
+        NightVisionComponent nightVision = new NightVisionComponent();
+        nightVision.Color = Color.Red;
 
         if (!HasComp<NightVisionComponent>(target))
-            AddComp<NightVisionComponent>(target);
+            AddComp(target, nightVision);
 
         if (!HasComp<ImmunNecroobeliskComponent>(target))
             AddComp<ImmunNecroobeliskComponent>(target);
 
         if (!HasComp<ZombieImmuneComponent>(target))
             AddComp<ZombieImmuneComponent>(target);
-
-        if (!HasComp<IgnoreKudzuComponent>(target))
-            AddComp<IgnoreKudzuComponent>(target);
 
         if (HasComp<SlowOnDamageComponent>(target) && !necromorf.IsSlowOnDamage)
             RemComp<SlowOnDamageComponent>(target);

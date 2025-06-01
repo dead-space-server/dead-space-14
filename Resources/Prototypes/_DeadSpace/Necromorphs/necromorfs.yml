@@ -30,9 +30,10 @@
 
 - type: necromorf
   id: NecroSlasher
+  movementSpeedMultiply: 0.7
   damage:
     groups:
-      Brute: 15
+      Brute: 20
     types:
       Structural: 10
   damageModifierSet: Necromorf
@@ -41,10 +42,10 @@
 - type: necromorf
   id: NecroDeva
   scale: 1.2
-  movementSpeedMultiply: 1
+  movementSpeedMultiply: 0.7
   damage:
     groups:
-      Brute: 10
+      Brute: 15
     types:
       Structural: 10
   damageModifierSet: Necromorf
@@ -58,8 +59,8 @@
 
 - type: necromorf
   id: NecroHive
-  thresholdMultiply: 1
-  movementSpeedMultiply: 1
+  thresholdMultiply: 2
+  movementSpeedMultiply: 0.7
   damage:
     groups:
       Brute: 15
@@ -102,6 +103,7 @@
 
 - type: necromorf
   id: NecroTwitcher
+  movementSpeedMultiply: 1
   damage:
     groups:
       Brute: 15
@@ -110,13 +112,13 @@
   damageModifierSet: Necromorf
   claws: ClothingNecroClaws
   hardsuit: ClothingNecroRibs
-  movementSpeedMultiply: 1.2
 
 - type: necromorf
   id: NecroPregnant
+  movementSpeedMultiply: 0.7
   damage:
     groups:
-      Brute: 15
+      Brute: 20
     types:
       Structural: 10
   damageModifierSet: Necromorf
@@ -130,6 +132,7 @@
 
 - type: necromorf
   id: NecroBrute
+  movementSpeedMultiply: 1.1
   isAnimal: true
   slowOnDamage: false
   thresholdMultiply: 5
@@ -236,8 +239,8 @@
   # - Human
   # - Moth
   # - Reptilian
-  - SlimePerson
-  - Vox
+  # - SlimePerson
+  # - Vox
   # - Demon
   # - Shark
   # - Tajaran
@@ -247,6 +250,7 @@
   - Xenomorph
   - IPC
   - IPS
+  - Diona
   components:
   - type: GhostTakeoverAvailable
 
