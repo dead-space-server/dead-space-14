@@ -82,7 +82,7 @@
 
 # Boots
 - type: entity
-  parent: ClothingShoesBootsMag
+  parent: [ClothingShoesBootsMag, ClothingSlotBase]
   id: ClothingShoesBootsDominatorSil
   name: белые армейские ботинки
   description: Принадлежат члену экипажа, находящемуся под покровительством спонсорской организации. Могут вместить в себя нож.
