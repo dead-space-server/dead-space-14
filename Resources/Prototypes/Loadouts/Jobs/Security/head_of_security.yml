@@ -14,10 +14,12 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitHoS
 
+# DS14-start
 - type: loadout
   id: HeadofSecurityJumpsuitBlue
   equipment:
     jumpsuit: ClothingUniformJumpsuitHoSBlue
+# DS14 -end
 
 - type: loadout
   id: HeadofSecurityJumpskirt
