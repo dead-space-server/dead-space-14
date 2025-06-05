@@ -95,7 +95,6 @@ public sealed partial class ChangelingSystem : EntitySystem
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _speed = default!;
-    [Dependency] private readonly StaminaSystem _stamina = default!;
     [Dependency] private readonly GravitySystem _gravity = default!;
     [Dependency] private readonly BlindableSystem _blindable = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffect = default!;
@@ -128,6 +127,12 @@ public sealed partial class ChangelingSystem : EntitySystem
 
         SubscribeAbilities();
     }
+
+    [ValidatePrototypeId<AlertPrototype>]
+    private const string ChangelingChemicals = "ChangelingChemicals";
+
+    [ValidatePrototypeId<AlertPrototype>]
+    private const string ChangelingBiomass = "ChangelingBiomass";
 
     public override void Update(float frameTime)
     {
@@ -169,7 +174,7 @@ public sealed partial class ChangelingSystem : EntitySystem
         chemicals += amount ?? 1 + comp.BonusChemicalRegen;
         comp.Chemicals = Math.Clamp(chemicals, 0, comp.MaxChemicals);
         Dirty(uid, comp);
-        _alerts.ShowAlert(uid, "ChangelingChemicals");
+        _alerts.ShowAlert(uid, ChangelingChemicals);
     }
 
     private void UpdateBiomass(EntityUid uid, ChangelingComponent comp, float? amount = null)
@@ -192,10 +197,7 @@ public sealed partial class ChangelingSystem : EntitySystem
         {
             // THE FUNNY ITCH IS REAL!!
             comp.BonusChemicalRegen = 3f;
-            _popup.PopupEntity(Loc.GetString("popup-changeling-biomass-deficit-high"),
-                uid,
-                uid,
-                PopupType.LargeCaution);
+            _popup.PopupEntity(Loc.GetString("popup-changeling-biomass-deficit-high"), uid, uid, PopupType.LargeCaution);
             _jitter.DoJitter(uid, TimeSpan.FromSeconds(comp.BiomassUpdateCooldown), true, amplitude: 5, frequency: 10);
             return;
         }
@@ -215,30 +217,22 @@ public sealed partial class ChangelingSystem : EntitySystem
 
                 _puddle.TrySplashSpillAt(uid, Transform(uid).Coordinates, solution, out _);
 
-                _popup.PopupEntity(Loc.GetString("disease-vomit", ("person", Identity.Entity(uid, EntityManager))),
-                    uid);
+                _popup.PopupEntity(Loc.GetString("disease-vomit", ("person", Identity.Entity(uid, EntityManager))), uid);
             }
 
             // the funny itch is not real
             if (random == 3)
             {
-                _popup.PopupEntity(Loc.GetString("popup-changeling-biomass-deficit-medium"),
-                    uid,
-                    uid,
-                    PopupType.MediumCaution);
+                _popup.PopupEntity(Loc.GetString("popup-changeling-biomass-deficit-medium"), uid, uid, PopupType.MediumCaution);
                 _jitter.DoJitter(uid, TimeSpan.FromSeconds(.5f), true, amplitude: 5, frequency: 10);
             }
-
             return;
         }
 
         if (comp.Biomass <= comp.MaxBiomass / 2 && random == 3)
         {
             if (random == 1)
-                _popup.PopupEntity(Loc.GetString("popup-changeling-biomass-deficit-low"),
-                    uid,
-                    uid,
-                    PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("popup-changeling-biomass-deficit-low"), uid, uid, PopupType.SmallCaution);
             return;
         }
 
@@ -250,7 +244,6 @@ public sealed partial class ChangelingSystem : EntitySystem
         if (comp.StrainedMusclesActive)
         {
             var stamina = EnsureComp<StaminaComponent>(uid);
-            _stamina.TakeStaminaDamage(uid, 7.5f, visual: false);
             if (stamina.StaminaDamage >= stamina.CritThreshold || _gravity.IsWeightless(uid))
                 ToggleStrainedMuscles(uid, comp);
         }
@@ -294,7 +287,7 @@ public sealed partial class ChangelingSystem : EntitySystem
     public bool IsIncapacitated(EntityUid uid)
     {
         if (_mobState.IsIncapacitated(uid)
-            || TryComp<CuffableComponent>(uid, out var cuffs) && cuffs.CuffedHandCount > 0)
+        || TryComp<CuffableComponent>(uid, out var cuffs) && cuffs.CuffedHandCount > 0)
             return true;
 
         return false;
@@ -341,10 +334,7 @@ public sealed partial class ChangelingSystem : EntitySystem
         return true;
     }
 
-    public bool TrySting(EntityUid uid,
-        ChangelingComponent comp,
-        EntityTargetActionEvent action,
-        bool overrideMessage = false)
+    public bool TrySting(EntityUid uid, ChangelingComponent comp, EntityTargetActionEvent action, bool overrideMessage = false)
     {
         if (!TryUseAbility(uid, comp, action))
             return false;
@@ -360,18 +350,12 @@ public sealed partial class ChangelingSystem : EntitySystem
 
         if (HasComp<ChangelingComponent>(target))
         {
-            _popup.PopupEntity(Loc.GetString("changeling-sting-fail-self",
-                    ("target", Identity.Entity(target, EntityManager))),
-                uid,
-                uid);
+            _popup.PopupEntity(Loc.GetString("changeling-sting-fail-self", ("target", Identity.Entity(target, EntityManager))), uid, uid);
             _popup.PopupEntity(Loc.GetString("changeling-sting-fail-ling"), target, target);
             return false;
         }
-
         if (!overrideMessage)
-            _popup.PopupEntity(Loc.GetString("changeling-sting", ("target", Identity.Entity(target, EntityManager))),
-                uid,
-                uid);
+            _popup.PopupEntity(Loc.GetString("changeling-sting", ("target", Identity.Entity(target, EntityManager))), uid, uid);
         return true;
     }
 
@@ -390,10 +374,7 @@ public sealed partial class ChangelingSystem : EntitySystem
         return true;
     }
 
-    public bool TryReagentSting(EntityUid uid,
-        ChangelingComponent comp,
-        EntityTargetActionEvent action,
-        List<(string, FixedPoint2)> reagents)
+    public bool TryReagentSting(EntityUid uid, ChangelingComponent comp, EntityTargetActionEvent action, List<(string, FixedPoint2)> reagents)
     {
         var target = action.Target;
         if (!TrySting(uid, comp, action))
@@ -410,18 +391,17 @@ public sealed partial class ChangelingSystem : EntitySystem
         if (!comp.Equipment.TryGetValue(proto.Id, out var item) && item == null)
         {
             item = Spawn(proto, Transform(uid).Coordinates);
-            if (clothingSlot != null && !_inventory.TryEquip(uid, (EntityUid)item, clothingSlot, force: true))
+            if (clothingSlot != null && !_inventory.TryEquip(uid, (EntityUid) item, clothingSlot, force: true))
             {
                 QueueDel(item);
                 return false;
             }
-            else if (!_hands.TryForcePickupAnyHand(uid, (EntityUid)item))
+            else if (!_hands.TryForcePickupAnyHand(uid, (EntityUid) item))
             {
                 _popup.PopupEntity(Loc.GetString("changeling-fail-hands"), uid, uid);
                 QueueDel(item);
                 return false;
             }
-
             comp.Equipment.Add(proto.Id, item);
             return true;
         }
@@ -435,28 +415,27 @@ public sealed partial class ChangelingSystem : EntitySystem
 
     public bool TryStealDNA(EntityUid uid, EntityUid target, ChangelingComponent comp, bool countObjective = false)
     {
-        if (!TryComp<HumanoidAppearanceComponent>(target, out var appearance)
-            || !TryComp<MetaDataComponent>(target, out var metadata)
-            || !TryComp<DnaComponent>(target, out var dna)
-            || !TryComp<FingerprintComponent>(target, out var fingerprint))
+        if (
+            TerminatingOrDeleted(target)
+        || !TryComp<HumanoidAppearanceComponent>(target, out var appearance)
+        || !TryComp<DnaComponent>(target, out var dna)
+        || !TryComp<FingerprintComponent>(target, out var fingerprint))
             return false;
+
+        var metadata = MetaData(target);
 
         foreach (var storedDNA in comp.AbsorbedDNA)
         {
-            if (storedDNA.DNA != null && storedDNA.DNA == dna.DNA)
+            if (!string.IsNullOrEmpty(storedDNA.DNA) && storedDNA.DNA == dna.DNA)
                 return false;
-        }
-
-        if (dna.DNA == null)
-        {
-            return false;
         }
 
         var data = new TransformData
         {
             Name = metadata.EntityName,
-            DNA = dna.DNA,
-            Appearance = appearance
+            DNA = dna.DNA ?? "",
+            Appearance = (target,appearance),
+            TTS = appearance.Voice
         };
 
         if (fingerprint.Fingerprint != null)
@@ -468,8 +447,8 @@ public sealed partial class ChangelingSystem : EntitySystem
             comp.AbsorbedDNA.Add(data);
 
         if (countObjective
-            && _mind.TryGetMind(uid, out var mindId, out var mind)
-            && _mind.TryGetObjectiveComp<StealDNAConditionComponent>(mindId, out var objective, mind))
+        && _mind.TryGetMind(uid, out var mindId, out var mind)
+        && _mind.TryGetObjectiveComp<StealDNAConditionComponent>(mindId, out var objective, mind))
         {
             objective.DNAStolen += 1;
         }
@@ -500,17 +479,13 @@ public sealed partial class ChangelingSystem : EntitySystem
         return comp;
     }
 
-    private EntityUid? TransformEntity(EntityUid uid,
-        TransformData? data = null,
-        EntProtoId? protoId = null,
-        ChangelingComponent? comp = null,
-        bool persistentDna = false)
+    private EntityUid? TransformEntity(EntityUid uid, TransformData? data = null, EntProtoId? protoId = null, ChangelingComponent? comp = null, bool persistentDna = false)
     {
         EntProtoId? pid = null;
 
         if (data != null)
         {
-            if (!_proto.TryIndex(data.Appearance.Species, out var species))
+            if (!_proto.TryIndex(data.Appearance.Comp.Species, out var species))
                 return null;
             pid = species.Prototype;
         }
@@ -521,7 +496,7 @@ public sealed partial class ChangelingSystem : EntitySystem
 
         var config = new PolymorphConfiguration()
         {
-            Entity = (EntProtoId)pid,
+            Entity = (EntProtoId) pid,
             TransferDamage = true,
             Forced = true,
             Inventory = PolymorphInventoryChange.Transfer,
@@ -536,9 +511,9 @@ public sealed partial class ChangelingSystem : EntitySystem
 
         var newEnt = newUid.Value;
 
-        if (TryComp<TTSComponent>(uid, out var oldTts))
+        if (!string.IsNullOrEmpty(data?.TTS))
         {
-            EnsureComp<TTSComponent>(newEnt).VoicePrototypeId = oldTts.VoicePrototypeId;
+            EnsureComp<TTSComponent>(newEnt).VoicePrototypeId = data.TTS;
         }
 
         if (data != null)
@@ -546,7 +521,7 @@ public sealed partial class ChangelingSystem : EntitySystem
             Comp<FingerprintComponent>(newEnt).Fingerprint = data.Fingerprint;
             if (data.DNA != null)
                 Comp<DnaComponent>(newEnt).DNA = data.DNA;
-            _humanoid.CloneAppearance(data.Appearance.Owner, newEnt);
+            _humanoid.CloneAppearance(data.Appearance, newEnt, data.Appearance);
             _metaData.SetEntityName(newEnt, data.Name);
             var message = Loc.GetString("changeling-transform-finish", ("target", data.Name));
             _popup.PopupEntity(message, newEnt, newEnt);
@@ -597,7 +572,6 @@ public sealed partial class ChangelingSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("changeling-transform-fail-self"), target, target);
             return false;
         }
-
         if (data == comp.CurrentForm)
         {
             _popup.PopupEntity(Loc.GetString("changeling-transform-fail-choose"), target, target);
@@ -612,9 +586,9 @@ public sealed partial class ChangelingSystem : EntitySystem
 
         if (newUid != null)
         {
-            PlayMeatySound((EntityUid)newUid, comp);
+            PlayMeatySound((EntityUid) newUid, comp);
             var loc = Loc.GetString("changeling-transform-others", ("user", locName));
-            _popup.PopupEntity(loc, (EntityUid)newUid, PopupType.LargeCaution);
+            _popup.PopupEntity(loc, (EntityUid) newUid, PopupType.LargeCaution);
         }
 
         return true;
@@ -624,7 +598,7 @@ public sealed partial class ChangelingSystem : EntitySystem
     {
         // check if there's no entities or all entities are null
         if (comp.Equipment.Values.Count == 0
-            || comp.Equipment.Values.All(ent => ent == null ? true : false))
+        || comp.Equipment.Values.All(ent => ent == null ? true : false))
             return;
 
         foreach (var equip in comp.Equipment.Values)
