@@ -8,6 +8,12 @@
   entity: HypoKelic
   sponsorOnly: true
   whitelistJobs: [ChiefMedicalOfficer, MedicalDoctor, Chemist]
+
+- type: sponsorLoadout
+  id: KelicWeaponCrusher
+  entity: WeaponCrusherKelic
+  sponsorOnly: true
+  whitelistJobs: [SalvageSpecialist, SeniorSalvageSpecialist]
   
 # Backpack
 - type: entity
@@ -15,7 +21,7 @@
   id: ClothingBackpackKelic
   name: потрёпанная сумка
   description: Компактная, износостойкая сумка, специально созданная для скафандра MS-06. 
-  categories: [ HideSpawnMenu ]
+#  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Kelic/backpack.rsi
@@ -24,7 +30,7 @@
   - type: Storage
     maxItemSize: Huge
     grid:
-    - 0,0,15,5
+    - 0,0,15,7
   - type: StorageFill
     contents:
       - id: ClothingNeckKelic 
@@ -39,6 +45,9 @@
       - id: ClothingMaskGasKelic
       - id: MedkitFilled
       - id: SynthesizerInstrument
+      - id: PDAKelic
+      - id: ClothingHandsRingDiamondKelic
+      - id: ClothingHandsRingRubinoKelic
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -242,10 +251,11 @@
 
 # Hypospray
 - type: entity
+  id: HypoKelic
   name: гипоспрей исследователя
   parent: BaseItem
   description: Гипоспрей для полевого пользования из не самых дорогих компонентов.
-  id: HypoKelic
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Kelic/hypo.rsi
@@ -264,3 +274,74 @@
     onlyAffectsMobs: false
   - type: UseDelay
     delay: 0.5
+
+# new
+
+- type: entity
+  id: WeaponCrusherKelic
+  parent: WeaponCrusher
+  name: укреплённые перчатки
+  description: Многоцелевые перчатки, пригодные и для стерильных процедур, и для тяжёлых инженерных работ. Надёжно защищают руки от биозагрязнений, мелких порезов и лёгких электрических разрядов, не ограничивая точность движений.
+#  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Kelic/crusher.rsi
+    layers:
+    - state: icon
+  - type: Item
+    sprite: _DeadSpace/Sponsor/Kelic/crusher.rsi
+    size: Normal
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Kelic/crusher.rsi
+    quickEquip: false
+    slots:
+    - suitStorage
+
+# PDA
+- type: entity
+  parent: BaseMedicalPDA
+  id: PDAKelic
+  name: КПК MS-06
+  description: Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Icon
+    sprite: _DeadSpace/Sponsor/Kelic/pda.rsi
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Kelic/pda.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# rings
+
+- type: entity
+  parent: ClothingHandsBase
+  id: ClothingHandsRingDiamondKelic
+  name: обручальное кольцо с алмазом
+  description: Кольцо из чистой платины, в центре которого находится алмаз. На кольце виднеется гравировка "Эйрин".
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Kelic/ring_eirin.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Kelic/ring_eirin.rsi
+  - type: Item
+    size: Tiny
+  - type: StaticPrice
+    price: 1000
+
+- type: entity
+  parent: ClothingHandsBase
+  id: ClothingHandsRingRubinoKelic
+  name: кольцо с рубином
+  description: Кольцо из чистой платины, в центре которого находится рубин. На кольце виднеется гравировка "Келик".
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Kelic/ring_kelik.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Kelic/ring_kelik.rsi
+  - type: Item
+    size: Tiny
+  - type: StaticPrice
+    price: 1000
