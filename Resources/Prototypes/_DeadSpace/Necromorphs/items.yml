@@ -216,3 +216,56 @@
   - type: Pinpointer
     component: Necroobelisk
     targetName: обелиск
+
+- type: entity
+  id: ChemistryBottleStableMutagenInfectorDead
+  suffix: с. мутаген некро
+  parent: BaseChemistryBottleFilled
+  components:
+  - type: Label
+    currentLabel: опасно
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: StableMutagenInfectorDead
+          Quantity: 30
+
+- type: entity
+  id: ChemistryBottleNotStableMutagenInfectorDead
+  suffix: н. мутаген некро
+  parent: BaseChemistryBottleFilled
+  components:
+  - type: Label
+    currentLabel: опасно
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: NotStableMutagenInfectorDead
+          Quantity: 30
+
+- type: entity
+  name: анализатор мутаций
+  parent: BaseItem
+  id: InfectionDeadMutationAnalyzer
+  description: Прибор, обнаруживающий и сообщающий о наличии мутаций в биологических образцах.
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Atmos/gasanalyzer.rsi
+    layers:
+      - state: icon
+        map: ["analyzer"]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+        enum.GasAnalyzerVisuals.Enabled:
+          enabled:
+            True: { state: working }
+            False: { state: icon }
+  - type: StaticPrice
+    price: 80
+  - type: InfectionDeadMutationAnalyzer
+

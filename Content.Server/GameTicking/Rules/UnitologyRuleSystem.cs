@@ -261,7 +261,7 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
             if (HasComp<NecromorfComponent>(uniUid) || HasComp<ZombieComponent>(uniUid))
                 continue;
 
-            _necromorfSystem.Necrofication(uniUid, component.AfterGibNecroPrototype);
+            _necromorfSystem.Necrofication(uniUid, component.AfterGibNecroPrototype, new InfectionDeadStrainData());
         }
 
         while (queryUni.MoveNext(out var uniUid, out _))
@@ -271,7 +271,7 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
 
             var necromorf = _infectionDead.GetRandomNecromorfPrototypeId();
 
-            _necromorfSystem.Necrofication(uniUid, necromorf);
+            _necromorfSystem.Necrofication(uniUid, necromorf, new InfectionDeadStrainData());
         }
 
         while (queryEnsl.MoveNext(out var uniUid, out _))
@@ -281,7 +281,7 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
 
             var necromorf = _infectionDead.GetRandomNecromorfPrototypeId();
 
-            _necromorfSystem.Necrofication(uniUid, necromorf);
+            _necromorfSystem.Necrofication(uniUid, necromorf, new InfectionDeadStrainData());
         }
 
         component.IsTransformationEnd = true;

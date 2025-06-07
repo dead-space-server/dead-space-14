@@ -6,18 +6,22 @@ using Content.Server.DeadSpace.Necromorphs.InfectionDead;
 
 namespace Content.Server.Chemistry.ReagentEffects;
 
-public sealed partial class CureInfectionDead : EntityEffect
+public sealed partial class InfectiodDeadMutation : EntityEffect
 {
+    [DataField]
+    public float MutationStrength;
+
+    [DataField]
+    public bool IsStableMutation;
+
     protected override string? ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
     {
-        return Loc.GetString("reagent-effect-guidebook-cure-infection-dead", ("chance", Probability));
+        return Loc.GetString("reagent-effect-guidebook-mutate-infection-dead", ("chance", Probability));
     }
 
     public override void Effect(EntityEffectBaseArgs args)
     {
-        var entityManager = args.EntityManager;
-
-        args.EntityManager.System<InfectionDeadSystem>().TryCure(args.TargetEntity);
+        args.EntityManager.System<NecromorfSystem>().MutateVirus(args.TargetEntity, MutationStrength, IsStableMutation);
     }
 }
 

@@ -15,14 +15,16 @@ namespace Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class NecromorfComponent : Component
 {
-    public NecromorfComponent()
-    { }
+    public NecromorfComponent(InfectionDeadStrainData sd)
+    {
+        StrainData = sd;
+    }
+
+    [DataField]
+    public InfectionDeadStrainData StrainData = new InfectionDeadStrainData();
 
     [ViewVariables(VVAccess.ReadWrite)]
     public float MovementSpeedMultiply = 1f;
-
-    [DataField("skinColor")]
-    public Color SkinColor = new(0.8f, 0.72f, 0.73f);
 
     /// <summary>
     /// The eye color of the Necromorf
@@ -115,4 +117,7 @@ public sealed partial class NecromorfComponent : Component
 
     [DataField("useInventory")]
     public bool IsCanUseInventory = true;
+
+    [DataField]
+    public bool IsMutated = false;
 }

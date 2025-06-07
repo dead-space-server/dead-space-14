@@ -31,6 +31,28 @@
   categories:
     - UplinkUnitologyInfection
 
+- type: listing
+  id: UnitologyInfectionDeadMutationAnalyzerList
+  name: анализатор мутаций
+  description: Прибор, обнаруживающий и сообщающий о наличии мутаций в биологических образцах.
+  icon: { sprite: Objects/Specific/Atmos/gasanalyzer.rsi, state: icon }
+  productEntity: InfectionDeadMutationAnalyzer
+  cost:
+    Telecrystal: 1
+  categories:
+    - UplinkUnitologyInfection
+
+- type: listing
+  id: UnitologyChemistryBottleNotStableMutagenInfectorDeadList
+  name: бутылочка нестабильного мутагена
+  description: Содержит мутаген некроинфекции.
+  icon: { sprite: Objects/Specific/Chemistry/syringe.rsi, state: syringe1 }
+  productEntity: ChemistryBottleNotStableMutagenInfectorDead
+  cost:
+    Telecrystal: 5
+  categories:
+    - UplinkUnitologyInfection
+
 # - type: listing
 #   id: UnitologySerumList
 #   name: Сыворотка порабощения
