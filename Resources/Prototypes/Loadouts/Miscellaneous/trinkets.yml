@@ -115,7 +115,7 @@
     back:
     - CigarGold
 
-# Pins (without LGBTQ+ pins)
+# Best pins
 - type: loadout
   id: ClothingNeckUSSPPin
   storage:
@@ -169,6 +169,103 @@
   storage:
     back:
     - ClothingNeckVitezstviPin
+
+# Pins
+- type: loadout
+  id: ClothingNeckLGBTPin
+  storage:
+    back:
+    - ClothingNeckLGBTPin
+
+- type: loadout
+  id: ClothingNeckAllyPin
+  storage:
+    back:
+    - ClothingNeckAllyPin
+
+- type: loadout
+  id: ClothingNeckAromanticPin
+  storage:
+    back:
+    - ClothingNeckAromanticPin
+
+- type: loadout
+  id: ClothingNeckAsexualPin
+  storage:
+    back:
+    - ClothingNeckAsexualPin
+
+- type: loadout
+  id: ClothingNeckAroacePin
+  storage:
+    back:
+    - ClothingNeckAroacePin
+
+- type: loadout
+  id: ClothingNeckBisexualPin
+  storage:
+    back:
+    - ClothingNeckBisexualPin
+
+- type: loadout
+  id: ClothingNeckGayPin
+  storage:
+    back:
+    - ClothingNeckGayPin
+
+- type: loadout
+  id: ClothingNeckIntersexPin
+  storage:
+    back:
+    - ClothingNeckIntersexPin
+
+- type: loadout
+  id: ClothingNeckLesbianPin
+  storage:
+    back:
+    - ClothingNeckLesbianPin
+
+- type: loadout
+  id: ClothingNeckNonBinaryPin
+  storage:
+    back:
+    - ClothingNeckNonBinaryPin
+
+- type: loadout
+  id: ClothingNeckPansexualPin
+  storage:
+    back:
+    - ClothingNeckPansexualPin
+
+- type: loadout
+  id: ClothingNeckOmnisexualPin
+  storage:
+    back:
+    - ClothingNeckOmnisexualPin
+
+- type: loadout
+  id: ClothingNeckGenderqueerPin
+  storage:
+    back:
+    - ClothingNeckGenderqueerPin
+
+- type: loadout
+  id: ClothingNeckTransPin
+  storage:
+    back:
+    - ClothingNeckTransPin
+
+- type: loadout
+  id: ClothingNeckAutismPin
+  storage:
+    back:
+    - ClothingNeckAutismPin
+
+- type: loadout
+  id: ClothingNeckGoldAutismPin
+  storage:
+    back:
+    - ClothingNeckGoldAutismPin
 
 # Towels
 - type: loadout
