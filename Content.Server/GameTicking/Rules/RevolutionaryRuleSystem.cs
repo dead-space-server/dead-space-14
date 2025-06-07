@@ -98,6 +98,23 @@ public sealed class RevolutionaryRuleSystem : GameRuleSystem<RevolutionaryRuleCo
         {
             component.Check = _timing.CurTime + component.TimerWait;
 
+            if (component.Stage == RevolutionaryStage.Initial && CheckRevsLose())
+            {
+                var sessionData = _antag.GetAntagIdentifiers(uid);
+                string headRevsNames = "";
+
+                foreach (var (mind, data, name) in sessionData) // cursed
+                {
+                    if (!_role.MindHasRole<RevolutionaryRoleComponent>(mind, out var role)) 
+                        continue;
+                    headRevsNames += name + ", ";
+                }
+
+                _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("rev-alert-stage-initial-end-with-rev-lost", ("headRevsNames", headRevsNames)), colorOverride: Color.Green, usePresetTTS: true);
+                _roundEnd.DoRoundEndBehavior(RoundEndBehavior.ShuttleCall, component.ShuttleCallTime);
+                GameTicker.EndGameRule(uid, gameRule);
+            }
+
             if (component.Stage == RevolutionaryStage.Initial && (GetRevsFraction() >= 0.35f || CheckCommandLose()))
             {
                 component.Stage = RevolutionaryStage.Massacre;
