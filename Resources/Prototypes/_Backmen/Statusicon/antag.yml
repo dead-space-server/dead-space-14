@@ -11,7 +11,7 @@
     sprite: /Textures/_Backmen/Interface/Misc/antag_icon.rsi
     state: blob
 
-- type: statusIcon
+- type: factionIcon
   id: HivemindFaction
   priority: 11
   showTo:
