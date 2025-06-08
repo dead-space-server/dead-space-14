@@ -58,9 +58,13 @@
   - type: Vulpkanin # DS14: For emote panel
   - type: TypingIndicator
     proto: vulpkanin
-  - type: FootPrints
+  - type: FootPrints #BACKMEN-EDIT
     leftBarePrint: "footprint-left-bare-lizard"
     rightBarePrint: "footprint-right-bare-lizard"
+  - type: UserInterface #BACKMEN-EDIT
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
 
 
 - type: entity

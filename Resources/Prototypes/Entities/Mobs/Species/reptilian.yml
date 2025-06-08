@@ -80,6 +80,10 @@
             sprite: Mobs/Species/Human/displacement.rsi
             state: jumpsuit-female
   - type: Sanity # DS14
+  - type: UserInterface #BACKMEN-EDIT
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
 
 
 - type: entity

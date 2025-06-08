@@ -92,9 +92,13 @@
   - type: ImmunitetInfectionDead
   - type: LizardAccent
   - type: EmotePanel # DS14-Emote-panel
-  - type: FootPrints
+  - type: FootPrints #BACKMEN-EDIT
     leftBarePrint: "footprint-left-bare-lizard"
     rightBarePrint: "footprint-right-bare-lizard"
+  - type: UserInterface #BACKMEN-EDIT
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
 
 
 - type: damageModifierSet

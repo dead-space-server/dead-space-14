@@ -67,6 +67,10 @@
   - type: FootPrints # Backmen-footsteps
     leftBarePrint: "footprint-left-bare-dwarf"
     rightBarePrint: "footprint-right-bare-dwarf"
+  - type: UserInterface #BACKMEN-EDIT
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
 
 - type: entity
   parent: BaseSpeciesDummy
