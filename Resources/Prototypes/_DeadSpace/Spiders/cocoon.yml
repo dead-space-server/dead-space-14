@@ -132,11 +132,18 @@
   - type: MobState
     allowedStates:
     - Dead
+    - Alive
+  - type: MobThresholds
+    thresholds:
+      1: Dead
+      0: Alive
+  - type: Damageable
+    damageContainer: Biological
+    damage:
+      types:
+        Blunt: 1
   - type: Stamina
   - type: Muted
   - type: Appearance
-  - type: Damageable
-    damageContainer: Biological
-    damageModifierSet: Demon
   - type: ZombieImmune
   - type: ImmunitetInfectionDead
