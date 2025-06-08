@@ -132,9 +132,6 @@
   - type: MobState
     allowedStates:
     - Dead
-  - type: MobThresholds
-    thresholds:
-      0: Dead
   - type: Stamina
   - type: Muted
   - type: Appearance
