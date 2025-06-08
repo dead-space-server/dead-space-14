@@ -139,9 +139,9 @@
       0: Alive
   - type: Damageable
     damageContainer: Biological
-    damage:
-      types:
-        Blunt: 1
+    # damage:
+    #   types:
+    #     Blunt: 1
   - type: Stamina
   - type: Muted
   - type: Appearance
