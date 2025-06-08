@@ -27,7 +27,6 @@
   - Changeling
   - SubGamemodesRule
   - BasicStationEventScheduler
-  - GameRuleMeteorScheduler
   - BasicRoundstartVariation
 
 - type: gamePreset
@@ -43,5 +42,4 @@
   - Traitor
   - SubGamemodesRule
   - BasicStationEventScheduler
-  - GameRuleMeteorScheduler
   - BasicRoundstartVariation
