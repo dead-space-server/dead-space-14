@@ -2,6 +2,7 @@
 
 using Content.Shared.Interaction;
 using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;
+using Content.Shared.DeadSpace.Necromorphs.InfectionDead;
 using Content.Shared.Paper;
 using Robust.Shared.Timing;
 using Robust.Shared.Audio.Systems;
@@ -13,6 +14,7 @@ public sealed class InfectionDeadMutationAnalyzerSystem : EntitySystem
     [Dependency] private readonly PaperSystem _paperSystem = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -42,27 +44,23 @@ public sealed class InfectionDeadMutationAnalyzerSystem : EntitySystem
         if (!TryComp<NecromorfComponent>(args.Target, out var necro))
             return;
 
+        component.User = args.User;
         component.IsRunning = true;
-        component.Target = args.Target;
+        component.StrainData = necro.StrainData;
         component.RunningTime = _gameTiming.CurTime + component.DurationRunning;
         _audio.PlayPvs(component.PrintingSound, uid);
+        UpdateState(uid);
     }
 
     public void Running(EntityUid uid, InfectionDeadMutationAnalyzerComponent? component = null)
     {
-        if (!Resolve(uid, ref component) || component.Target == null)
+        if (!Resolve(uid, ref component))
             return;
 
-        if (!TryComp<NecromorfComponent>(component.Target, out var necro))
-        {
-            component.IsRunning = false;
-            return;
-        }
-
-        var strainData = necro.StrainData;
+        var strainData = component.StrainData;
 
         // Собираем свойства для вывода
-        string output = "Параметры InfectionDeadStrainData:\n";
+        string output = "Параметры некроинфекции:\n";
 
         output += $"Модификатор урона: {strainData.DamageMulty}\n";
         output += $"Модификатор выносливости: {strainData.StaminaMulty}\n";
@@ -71,9 +69,10 @@ public sealed class InfectionDeadMutationAnalyzerSystem : EntitySystem
 
         output += $"\nОсобые мутации: \n";
 
-        output += necro.StrainData.Effects.ToString();
+        output += strainData.Effects.ToString();
 
         var paper = Spawn(component.Paper, Transform(uid).Coordinates);
+
         if (!TryComp<PaperComponent>(paper, out var paperComp))
         {
             QueueDel(paper);
@@ -85,6 +84,24 @@ public sealed class InfectionDeadMutationAnalyzerSystem : EntitySystem
         _paperSystem.SetContent((paper, paperComp), content);
 
         component.IsRunning = false;
+        UpdateState(uid);
+    }
+
+    public void UpdateState(EntityUid uid, InfectionDeadMutationAnalyzerComponent? component = null)
+    {
+        if (!Resolve(uid, ref component))
+            return;
+
+        if (component.IsRunning)
+        {
+            _appearance.SetData(uid, InfectionDeadMutationAnalyzerVisuals.Icon, false);
+            _appearance.SetData(uid, InfectionDeadMutationAnalyzerVisuals.Working, true);
+        }
+        else
+        {
+            _appearance.SetData(uid, InfectionDeadMutationAnalyzerVisuals.Icon, true);
+            _appearance.SetData(uid, InfectionDeadMutationAnalyzerVisuals.Working, false);
+        }
     }
 }
 

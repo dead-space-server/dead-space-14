@@ -254,7 +254,7 @@
   description: Прибор, обнаруживающий и сообщающий о наличии мутаций в биологических образцах.
   components:
   - type: Sprite
-    sprite: Objects/Specific/Atmos/gasanalyzer.rsi
+    sprite: _DeadSpace/Necromorfs/mutagenanalyzer.rsi
     layers:
       - state: icon
         map: ["analyzer"]
@@ -269,3 +269,27 @@
     price: 80
   - type: InfectionDeadMutationAnalyzer
 
+- type: entity
+  name: отчёт диагноста некроморфных мутаций
+  parent: Paper
+  id: MutationAnalyzerReportPaper
+  description: «Леденящий душу медицинский отчёт».
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/bureaucracy.rsi
+    layers:
+    - state: paper_receipt
+    - state: paper_receipt_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: paper_stamp-generic
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundImagePath: "/Textures/Interface/Paper/paper_background_perforated.svg.96dpi.png"
+    headerImagePath: "/Textures/Interface/Paper/paper_heading_virus.svg.96dpi.png"
+    headerMargin: 0.0, 0.0, 0.0, 6.0
+    backgroundImageTile: true
+    backgroundPatchMargin: 0.0, 6.0, 0.0, 6.0
+    contentMargin: 30.0, 0.0, 30.0, 0.0
+    maxWritableArea: 300.0, 0.0

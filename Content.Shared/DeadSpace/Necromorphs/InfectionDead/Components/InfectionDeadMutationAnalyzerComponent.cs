@@ -14,7 +14,10 @@ public sealed partial class InfectionDeadMutationAnalyzerComponent : Component
     public bool IsRunning = false;
 
     [DataField, ViewVariables(VVAccess.ReadOnly)]
-    public EntityUid? Target = null;
+    public InfectionDeadStrainData StrainData = new InfectionDeadStrainData();
+
+    [DataField, ViewVariables(VVAccess.ReadOnly)]
+    public EntityUid? User = null;
 
     [DataField, ViewVariables(VVAccess.ReadOnly)]
     public TimeSpan RunningTime = TimeSpan.Zero;
@@ -24,10 +27,20 @@ public sealed partial class InfectionDeadMutationAnalyzerComponent : Component
 
     [DataField("paper", required: false, customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
     [ViewVariables(VVAccess.ReadOnly)]
-    public string Paper { get; set; } = "Paper";
+    public string Paper { get; set; } = "MutationAnalyzerReportPaper";
 
     [DataField]
     [ViewVariables(VVAccess.ReadOnly)]
     public SoundSpecifier? PrintingSound = new SoundPathSpecifier("/Audio/Machines/diagnoser_printing.ogg");
+
+    #region Visualizer
+
+    [DataField("state")]
+    public string State = "icon";
+
+    [DataField]
+    public string WorkingState = "working";
+
+    #endregion
 }
 
