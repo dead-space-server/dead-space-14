@@ -1,4 +1,3 @@
-
 # Changeling
 - type: entity
   parent: ClothingOuterBaseLarge
@@ -15,7 +14,8 @@
     highPressureMultiplier: 0.225
     lowPressureMultiplier: 1000
   - type: TemperatureProtection
-    coefficient: 0.01
+    heatingCoefficient: 0.001
+    coolingCoefficient: 0.001
   - type: ExplosionResistance
     damageCoefficient: 0.2
   - type: Armor
