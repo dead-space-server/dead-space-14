@@ -84,7 +84,7 @@
 
 - type: entity
   id: SpiderCocoon
-  parent: BaseStructureDynamic
+  parent: BaseMob
   name: паучий кокон
   description: В нём что-то есть.
   categories: [ HideSpawnMenu ]
@@ -139,9 +139,9 @@
       0: Alive
   - type: Damageable
     damageContainer: Biological
-    # damage:
-    #   types:
-    #     Blunt: 1
+    damage:
+      types:
+        Blunt: 1
   - type: Stamina
   - type: Muted
   - type: Appearance
