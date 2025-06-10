@@ -40,3 +40,9 @@
         enum.ToggleVisuals.Layer:
           True: {state: telescope_on}
           False: {state: telescope_off}
+  - type: Clothing
+    quickEquip: false
+    sprite: _ADT/Objects/Weapons/Melee/telescopic_baton.rsi
+    slots:
+    - suitStorage
+    - belt
