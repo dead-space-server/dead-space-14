@@ -4,3 +4,7 @@ discord-auth-warn = Не волнуйтесь, это всего пару кли
 discord-auth-link = Ссылка:
 discord-auth-browser-btn = Открыть в браузере
 discord-auth-quit-btn = Выйти
+discord-auth-qrcode = QrCode ссылки ниже для сканирования на телефоне
+discord-auth-bypass = Пропустить
+discord-auth-copy-btn = Скопировать ссылку
+role-required-discord = Требуется пройти discord авторизацию!
