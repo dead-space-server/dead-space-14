@@ -489,7 +489,7 @@
 - type: entity
   parent: BasePlushieDeadSpaceMisc
   id: PlushieSilEyrinLiht
-  name: плюшевая Эйрин Лихт
+  name: плюшевая Эйрин Като
   description: Это чёрная плюшевая плафеимка с лиловыми волосами. На этикетке написано "Сварим базу за 15 минут. Или? Без или."
   components:
   - type: Sprite
@@ -513,6 +513,8 @@
   - type: SpeakOnTrigger
     pack: PlushieKelicKatoSpeech
   - type: RoarAccent
+  - type: TTS
+    voice: Demoman
 
 - type: entity
   parent: BasePlushieDeadSpaceMisc
@@ -526,6 +528,8 @@
   - type: SpeakOnTrigger
     pack: PlushieKelicKatoSpeech
   - type: RoarAccent
+  - type: TTS
+    voice: Demoman
 
 - type: entity
   parent: BasePlushieDeadSpaceMisc
