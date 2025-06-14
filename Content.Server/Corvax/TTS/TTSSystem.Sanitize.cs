@@ -79,6 +79,8 @@ public sealed partial class TTSSystem
             {"ншцк", "Эн Эш Цэ Ка"},
             {"ацк", "А Цэ Ка"},
             {"асцк", "А Эс Цэ Ка"},
+            {"окгб", "О Кэ Гэ Бэ"},
+            {"кгб", "Кэ Гэ Бэ"},
             {"ксо", "Кэ Эс О"},
             {"дсо", "Дэ Эс О"},
             {"рнд", "Эр Эн Дэ"},
@@ -278,7 +280,7 @@ public static class NumberConverter
 
     public static string NumberToText(long value, bool male = true)
     {
-        if (value >= (long) Math.Pow(10, 15))
+        if (value >= (long)Math.Pow(10, 15))
             return String.Empty;
 
         if (value == 0)
@@ -297,11 +299,11 @@ public static class NumberConverter
         value = AppendPeriod(value, 1000000, str, "миллион", "миллиона", "миллионов", true);
         value = AppendPeriod(value, 1000, str, "тысяча", "тысячи", "тысяч", false);
 
-        var hundreds = (int) (value / 100);
+        var hundreds = (int)(value / 100);
         if (hundreds != 0)
             AppendWithSpace(str, Hunds[hundreds]);
 
-        var less100 = (int) (value % 100);
+        var less100 = (int)(value % 100);
         var frac20 = male ? Frac20Male : Frac20Female;
         if (less100 < 20)
             AppendWithSpace(str, frac20[less100]);
@@ -333,7 +335,7 @@ public static class NumberConverter
         string declension5,
         bool male)
     {
-        var thousands = (int) (value / power);
+        var thousands = (int)(value / power);
         if (thousands > 0)
         {
             AppendWithSpace(str, NumberToText(thousands, male, declension1, declension2, declension5));
@@ -352,7 +354,7 @@ public static class NumberConverter
         return
             NumberToText(value, male)
             + " "
-            + GetDeclension((int) (value % 10), valueDeclensionFor1, valueDeclensionFor2, valueDeclensionFor5);
+            + GetDeclension((int)(value % 10), valueDeclensionFor1, valueDeclensionFor2, valueDeclensionFor5);
     }
 
     private static string GetDeclension(int val, string one, string two, string five)
