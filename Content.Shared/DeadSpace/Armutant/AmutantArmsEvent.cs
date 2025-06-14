@@ -19,7 +19,7 @@ public sealed class UnCuffableArmEvent : EntityEventArgs
         Entity = entity;
     }
 }
-public sealed class SetNewDestructibleThreshold: EntityEventArgs
+public sealed class SetNewDestructibleThreshold : EntityEventArgs
 {
     public EntityUid Entity;
     public string? DamageType;
@@ -39,7 +39,7 @@ public sealed partial class CreateTalonBladeEvent : InstantActionEvent { }
 
 // Abilities fist
 public sealed partial class FistStunTentacleToggleEvent : EntityTargetActionEvent { }
-public sealed class BeamActiveVoidHold: EntityEventArgs
+public sealed class BeamActiveVoidHold : EntityEventArgs
 {
     public string Effect;
     public EntityUid Target;

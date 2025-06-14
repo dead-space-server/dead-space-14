@@ -307,7 +307,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
             solution.AddReagent(reagent.Item1, reagent.Item2);
         }
 
-        if (!_solution.TryGetInjectableSolution(uid, out var targetSolution, out var _))
+        if (!_solution.TryGetInjectableSolution(uid, out var targetSolution, out _))
             return false;
 
         if (!_solution.TryAddSolution(targetSolution.Value, solution))
@@ -343,7 +343,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
         {
             if (EntityManager.EntityExists(item))
             {
-                if (_inventory.TryGetSlotContainer(ent, item.ToString(), out var containerSlot, out var slotDefinition))
+                if (_inventory.TryGetSlotContainer(ent, item.ToString(), out _, out var slotDefinition))
                 {
                     _inventory.TryUnequip(ent, slotDefinition.Name);
                 }
