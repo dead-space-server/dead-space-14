@@ -3,176 +3,122 @@
   suffix: Неразрушимое
   abstract: true
   components:
-  - type: Destructible
-    thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: -1 #потому что нельзя убрать родительский компонент Destructible у других стен
+  - type: Godmode
 
 - type: entity
-  parent: [ WallIndestructible, WallSolid ]
+  parent: [ WallSolid, WallIndestructible ]
   id: WallSolidIndestructible
-  name: обычная стена
-  description: Удерживает воздух внутри, а ассистентов снаружи.
 
 - type: entity
-  parent: [ WallIndestructible, WallSolidRust ]
+  parent: [ WallSolidRust, WallIndestructible ]
   id: WallSolidRustIndestructible
-  name: обычная стена
-  description: Удерживает воздух внутри, а ассистентов снаружи.
 
 - type: entity
-  parent: [ WallIndestructible, WallReinforced ]
+  parent: [ WallReinforced, WallIndestructible ]
   id: WallReinforcedIndestructible
-  name: укреплённая стена
-  description: Удерживает воздух внутри, а ассистентов снаружи.
-  
+
 - type: entity
-  parent: [ WallIndestructible, WallReinforcedRust ]
+  parent: [ WallReinforcedRust, WallIndestructible ]
   id: WallReinforcedRustIndestructible
-  name: укреплённая стена
-  description: Удерживает воздух внутри, а ассистентов снаружи.
 
 - type: entity
-  parent: [ WallIndestructible, WallRiveted ]
+  parent: [ WallRiveted, WallIndestructible ]
   id: WallRivetedIndestructible
-  name:  клёпаная стена
-  description: Удерживает воздух внутри, а ассистентов снаружи.
 
 - type: entity
-  parent: [ WallIndestructible, WallRock ]
+  parent: [ WallRock, WallIndestructible ]
   id: WallRockIndestructible
-  name:  камень
 
 - type: entity
-  parent: [ WallIndestructible, MeteorRock ]
+  parent: [ MeteorRock, WallIndestructible ]
   id: MeteorRockIndestructible
-  name: метеоритный камень
-  description: Остатки метеорита
 
 - type: entity
-  parent: [ WallIndestructible, WallRockChromite ]
+  parent: [ WallRockChromite, WallIndestructible ]
   id: WallRockChromiteIndestructible
-  name: хромит
 
 - type: entity
-  parent: [ WallIndestructible, WallRockSand ]
+  parent: [ WallRockSand, WallIndestructible ]
   id: WallRockSandIndestructible
-  name: песчаник
 
 - type: entity
-  parent: [ WallIndestructible, WallRockAndesite ]
+  parent: [ WallRockAndesite, WallIndestructible ]
   id: WallRockAndesiteIndestructible
-  name: андезит
 
 - type: entity
-  parent: [ WallIndestructible, WallCobblebrick ]
+  parent: [ WallCobblebrick, WallIndestructible ]
   id: WallCobblebrickIndestructible
-  name: булыжниковая стена
-  description: Идеально подогнанные друг к другу кирпичик за кирпичиком образовали стену.
 
 - type: entity
-  parent: [ WallIndestructible, WallBasaltCobblebrick ]
+  parent: [ WallBasaltCobblebrick, WallIndestructible ]
   id: WallBasaltCobblebrickIndestructible
-  name:  базальтовая стена
-  description: Идеально подогнанные друг к другу кирпичик за кирпичиком образовали стену.
 
 - type: entity
-  parent: [ WallIndestructible, WallWood ]
+  parent: [ WallWood, WallIndestructible ]
   id: WallWoodIndestructible
-  name: деревянная стена
-  description: Традиционная защита от грейтайдеров.
 
 - type: entity
-  parent: [ WallIndestructible, WallClown ]
+  parent: [ WallClown, WallIndestructible ]
   id: WallClownIndestructible
-  name: бананиумовая стена
-  description: Удерживает воздух внутри, а ассистентов снаружи.
 
 - type: entity
-  parent: [ WallIndestructible, WallNecropolis ]
+  parent: [ WallNecropolis, WallIndestructible ]
   id: allNecropolisIndestructible
-  name: каменная стена
-  description: Удерживает воздух внутри, а ассистентов снаружи.
 
 - type: entity
-  parent: [ WallIndestructible, Window ]
+  parent: [ Window, WallIndestructible ]
   id: WindowIndestructible
-  name: окно
-  description: Смотри не заляпай.
 
 - type: entity
-  parent: [ WallIndestructible, WindowDirectional ]
+  parent: [ WindowDirectional, WallIndestructible ]
   id: WindowDirectionalIndestructible
-  name: направленное окно
-  description: Смотри не заляпай.
 
 - type: entity
-  parent: [ WallIndestructible, ReinforcedWindow ]
+  parent: [ ReinforcedWindow, WallIndestructible ]
   id: ReinforcedWindowIndestructible
-  name: бронеокно
-  description: Смотри не заляпай.
 
 - type: entity
-  parent: [ WallIndestructible, WindowReinforcedDirectional ]
+  parent: [ WindowReinforcedDirectional, WallIndestructible ]
   id: WindowReinforcedDirectionalIndestructible
-  name: направленное бронеокно
-  description: Смотри не заляпай.
 
 - type: entity
-  parent: [ WallIndestructible, PlasmaWindow ]
+  parent: [ PlasmaWindow, WallIndestructible ]
   id: PlasmaWindowIndestructible
-  name: плазменное окно
-  description: Смотри не заляпай.
 
 - type: entity
-  parent: [ WallIndestructible, PlasmaWindowDirectional ]
+  parent: [ PlasmaWindowDirectional, WallIndestructible ]
   id: PlasmaWindowDirectionalIndestructible
-  name: направленное плазменное бронеокно
-  description: Смотри не заляпай.
 
 - type: entity
-  parent: [ WallIndestructible, ReinforcedPlasmaWindow ]
+  parent: [ ReinforcedPlasmaWindow, WallIndestructible ]
   id: ReinforcedPlasmaWindowIndestructible
-  name: плазменное бронеокно
-  description: Смотри не заляпай.
 
 - type: entity
-  parent: [ WallIndestructible, PlasmaReinforcedWindowDirectional ]
+  parent: [ PlasmaReinforcedWindowDirectional, WallIndestructible ]
   id: PlasmaReinforcedWindowDirectionalIndestructible
-  name: направленное плазменное бронеокно
-  description: Смотри не заляпай.
 
 - type: entity
-  parent: [ WallIndestructible, UraniumWindow ]
+  parent: [ UraniumWindow, WallIndestructible ]
   id: UraniumWindowIndestructible
-  name: урановое окно
-  description: Смотри не заляпай.
 
 - type: entity
-  parent: [ WallIndestructible, UraniumWindowDirectional ]
+  parent: [ UraniumWindowDirectional, WallIndestructible ]
   id: UraniumWindowDirectionalIndestructible
-  name: направленное урановое бронеокно
-  description: Смотри не заляпай.
 
 - type: entity
-  parent: [ WallIndestructible, ReinforcedUraniumWindow ]
+  parent: [ ReinforcedUraniumWindow, WallIndestructible ]
   id: ReinforcedUraniumWindowIndestructible
-  name: урановое бронеокно
-  description: Смотри не заляпай.
 
 - type: entity
-  parent: [ WallIndestructible, UraniumReinforcedWindowDirectional ]
+  parent: [ UraniumReinforcedWindowDirectional, WallIndestructible ]
   id: UraniumReinforcedWindowDirectionalIndestructible
-  name: направленное урановое бронеокно
-  description: Смотри не заляпай.
 
 - type: entity
   id: InvisibleWall
   parent: BaseStructure
   name: вечная невидимая стена
   description: Have we all become invisible?
-  suffix: Включите ВВ (панель песочницы)
+  suffix: Включите BB в панели песочницы
   placement:
     mode: SnapgridCenter
   components:
@@ -191,5 +137,5 @@
         mask:
         - FullTileMask
         layer:
-        - TableLayer #не пропускает хитбоксы существ
+        - TableLayer # Не пропускает хитбоксы существ
   - type: Airtight
