@@ -51007,7 +51007,7 @@ entities:
     - type: ThrownItem
       playLandSound: True
       thrownTime: 3503.9631627
-- proto: ClothingBeltAssaultTypan
+- proto: ClothingBeltAssaultTaipan
   entities:
   - uid: 3603
     components:
@@ -51040,7 +51040,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 11.392486,-5.4469886
       parent: 14608
-- proto: ClothingBeltPlantTypan
+- proto: ClothingBeltPlantTaipan
   entities:
   - uid: 3618
     components:
@@ -51434,7 +51434,7 @@ entities:
       playLandSound: True
       landTime: 3514.7784802
       thrownTime: 3514.7298186
-- proto: ClothingEyesHudSyndicateAgentTypan
+- proto: ClothingEyesHudSyndicateAgentTaipan
   entities:
   - uid: 49
     components:
@@ -51450,7 +51450,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: ClothingEyesHudTypan
+- proto: ClothingEyesHudTaipan
   entities:
   - uid: 3604
     components:
@@ -51542,7 +51542,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 12.728703,-14.684895
       parent: 9551
-- proto: ClothingHandsRDTypan
+- proto: ClothingHandsRDTaipan
   entities:
   - uid: 3656
     components:
@@ -51551,7 +51551,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: ClothingHandsScienceTypan
+- proto: ClothingHandsScienceTaipan
   entities:
   - uid: 3657
     components:
@@ -51885,7 +51885,7 @@ entities:
       channels:
       - Science
       - Common
-- proto: ClothingHeadTypan
+- proto: ClothingHeadTaipan
   entities:
   - uid: 3606
     components:
@@ -52037,7 +52037,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: ClothingMaskGasTypanCargo
+- proto: ClothingMaskGasTaipanCargo
   entities:
   - uid: 3646
     components:
@@ -52138,7 +52138,7 @@ entities:
     - type: Transform
       pos: 6.7000275,-0.39756602
       parent: 17250
-- proto: ClothingOuterApronTypanBotanist
+- proto: ClothingOuterApronTaipanBotanist
   entities:
   - uid: 3619
     components:
@@ -52147,7 +52147,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: ClothingOuterApronTypanChef
+- proto: ClothingOuterApronTaipanChef
   entities:
   - uid: 3613
     components:
@@ -52194,7 +52194,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: ClothingOuterCoatRDTypan
+- proto: ClothingOuterCoatRDTaipan
   entities:
   - uid: 3659
     components:
@@ -52349,7 +52349,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: ClothingOuterMedTypan
+- proto: ClothingOuterMedTaipan
   entities:
   - uid: 52
     components:
@@ -52420,7 +52420,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 1.4909289,0.6779394
       parent: 9072
-- proto: ClothingOuterWinterTypanChef
+- proto: ClothingOuterWinterTaipanChef
   entities:
   - uid: 3614
     components:
@@ -52561,7 +52561,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: ClothingUniformJumpskirtTypanBotanist
+- proto: ClothingUniformJumpskirtTaipanBotanist
   entities:
   - uid: 3620
     components:
@@ -52577,7 +52577,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: ClothingUniformJumpskirtTypanCargotech
+- proto: ClothingUniformJumpskirtTaipanCargotech
   entities:
   - uid: 3647
     components:
@@ -52593,7 +52593,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: ClothingUniformJumpskirtTypanChef
+- proto: ClothingUniformJumpskirtTaipanChef
   entities:
   - uid: 3615
     components:
@@ -52602,7 +52602,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: ClothingUniformJumpskirtTypanMedic
+- proto: ClothingUniformJumpskirtTaipanMedic
   entities:
   - uid: 53
     components:
@@ -52704,7 +52704,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: ClothingUniformJumpsuitTypanCargotech
+- proto: ClothingUniformJumpsuitTaipanCargotech
   entities:
   - uid: 3648
     components:
@@ -52720,7 +52720,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: ClothingUniformJumpsuitTypanChef
+- proto: ClothingUniformJumpsuitTaipanChef
   entities:
   - uid: 3616
     components:
@@ -52729,7 +52729,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: ClothingUniformJumpsuitTypanDirectory
+- proto: ClothingUniformJumpsuitTaipanDirectory
   entities:
   - uid: 3660
     components:
@@ -52738,7 +52738,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: ClothingUniformJumpsuitTypanMedic
+- proto: ClothingUniformJumpsuitTaipanMedic
   entities:
   - uid: 56
     components:
@@ -52754,7 +52754,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: ClothingUniformScienceRDTypan
+- proto: ClothingUniformScienceRDTaipan
   entities:
   - uid: 3661
     components:
@@ -52763,7 +52763,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: ClothingUniformScienceTypan
+- proto: ClothingUniformScienceTaipan
   entities:
   - uid: 3666
     components:
@@ -58307,7 +58307,7 @@ entities:
       parent: 11011
     - type: Physics
       canCollide: False
-- proto: EncryptionKeyTypan
+- proto: EncryptionKeyTaipan
   entities:
   - uid: 4244
     components:
@@ -103732,56 +103732,56 @@ entities:
     - type: Transform
       pos: -4.5,7.5
       parent: 10421
-- proto: SpawnPointLatejoinTypanAtmos
+- proto: SpawnPointLatejoinTaipanAtmos
   entities:
   - uid: 7238
     components:
     - type: Transform
       pos: 17.5,2.5
       parent: 2
-- proto: SpawnPointLatejoinTypanBotanist
+- proto: SpawnPointLatejoinTaipanBotanist
   entities:
   - uid: 7239
     components:
     - type: Transform
       pos: 13.5,4.5
       parent: 2
-- proto: SpawnPointLatejoinTypanCargotech
+- proto: SpawnPointLatejoinTaipanCargotech
   entities:
   - uid: 7240
     components:
     - type: Transform
       pos: 13.5,3.5
       parent: 2
-- proto: SpawnPointLatejoinTypanChef
+- proto: SpawnPointLatejoinTaipanChef
   entities:
   - uid: 7241
     components:
     - type: Transform
       pos: 17.5,1.5
       parent: 2
-- proto: SpawnPointLatejoinTypanMedic
+- proto: SpawnPointLatejoinTaipanMedic
   entities:
   - uid: 7242
     components:
     - type: Transform
       pos: 13.5,1.5
       parent: 2
-- proto: SpawnPointLatejoinTypanOfficer
+- proto: SpawnPointLatejoinTaipanOfficer
   entities:
   - uid: 7243
     components:
     - type: Transform
       pos: 13.5,0.5
       parent: 2
-- proto: SpawnPointLatejoinTypanRD
+- proto: SpawnPointLatejoinTaipanRD
   entities:
   - uid: 7244
     components:
     - type: Transform
       pos: 13.5,2.5
       parent: 2
-- proto: SpawnPointLatejoinTypanScience
+- proto: SpawnPointLatejoinTaipanScience
   entities:
   - uid: 7245
     components:

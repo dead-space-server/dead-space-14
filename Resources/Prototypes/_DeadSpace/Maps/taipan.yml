@@ -12,11 +12,11 @@
         nameGenerator: !type:TaipanNameGenerator
       - type: StationJobs
         availableJobs:
-          TypanAtmosTech: [ 0, 2 ]
-          TypanBotanist: [ 0, 1 ]
-          TypanCargotech: [ 0, 2 ]
-          TypanChef: [ 0, 1 ]
-          TypanMedic: [ 0, 2 ]
-          TypanRD: [ 0, 1 ]
-          TypanScience: [ 0, 2 ]
-          TypanTelecommunicationsOfficer: [ 0, 1 ]
+          TaipanAtmosTech: [ 0, 2 ]
+          TaipanBotanist: [ 0, 1 ]
+          TaipanCargotech: [ 0, 2 ]
+          TaipanChef: [ 0, 1 ]
+          TaipanMedic: [ 0, 2 ]
+          TaipanRD: [ 0, 1 ]
+          TaipanScience: [ 0, 2 ]
+          TaipanTelecommunicationsOfficer: [ 0, 1 ]
