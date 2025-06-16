@@ -117,8 +117,7 @@ public sealed class DrugAddicationSystem : EntitySystem
         if (component.AddictionLevel < MinAddictionLevel && component.Tolerance < MinTolerance)
             RemComp<DrugAddicationComponent>(uid);
 
-        var time = TimeSpan.FromSeconds(component.UpdateDuration);
-        double seconds = time.TotalSeconds;
+        double seconds = TimeSpan.FromSeconds(component.UpdateDuration).TotalSeconds;
 
         // Нужно преобразование во float, потому-что не хочу перегружать метод
         AddTimeLastAppointment(uid, (float)seconds, component);
