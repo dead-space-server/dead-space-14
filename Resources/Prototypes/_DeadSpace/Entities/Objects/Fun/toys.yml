@@ -417,6 +417,7 @@
   - type: TTS
     voice: Spy
   - type: SpeakOnTrigger
+    pack: PlushieLieutenantSpeech
 
   
 - type: entity
@@ -451,5 +452,3 @@
     steps: 2
     zeroVisible: false
   - type: Appearance
-  
-    pack: PlushieLieutenantSpeech
