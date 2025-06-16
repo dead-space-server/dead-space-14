@@ -1,4 +1,4 @@
-ent-ClothingShoesBootsTypan = ботинки атмосферного инженера
+ent-ClothingShoesBootsTaipan = ботинки атмосферного инженера
     .desc = Кожаные ботинки, предпочитаемые инженерными работниками на станциях синдиката.
 ent-ClothingShoesBootsCombatSyndie = ботинки синдиката
     .desc = Ботинки для боевых операций или боевых действий.

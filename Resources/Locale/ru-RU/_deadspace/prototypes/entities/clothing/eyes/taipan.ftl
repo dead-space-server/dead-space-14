@@ -1,4 +1,4 @@
-ent-ClothingEyesHudSyndicateAgentTypan = визор медика синдиката
+ent-ClothingEyesHudSyndicateAgentTaipan = визор медика синдиката
     .desc = Визор, используемый медиками на защищенных станциях синдиката.
-ent-ClothingEyesHudTypan = визор офицера телекоммуникаций
+ent-ClothingEyesHudTaipan = визор офицера телекоммуникаций
     .desc = Удобный визор со встроенной системой разпознавания.

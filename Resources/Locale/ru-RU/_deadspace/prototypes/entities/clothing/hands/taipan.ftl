@@ -1,4 +1,4 @@
-ent-ClothingHandsRDTypan = перчатки директора исследований
+ent-ClothingHandsRDTaipan = перчатки директора исследований
     .desc = Тактические перчатки, защищающие его обладателя от нежелательных соприкосновений.
-ent-ClothingHandsScienceTypan = перчатки ученого синдиката
+ent-ClothingHandsScienceTaipan = перчатки ученого синдиката
     .desc = Удобные перчатки для проведения различных экспериментов.

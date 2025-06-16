@@ -1,6 +1,6 @@
-ent-ClothingBeltPlantTypan = пояс ботаника синдиката
+ent-ClothingBeltPlantTaipan = пояс ботаника синдиката
     .desc = Пояс, используемый для хранения основных принадлежностей для гидропоники. На удивление, не чёрный.
-ent-ClothingBeltAssaultTypan = тактический пояс
+ent-ClothingBeltAssaultTaipan = тактический пояс
     .desc = Удобный пояс, часто используемый синдикатом на засекреченных территориях.
-ent-ClothingBeltTypanSecurityWebbing = РПС синдиката
+ent-ClothingBeltTaipanSecurityWebbing = РПС синдиката
     .desc = Ременно-плечевая система тактических ремней, которую носят представители военных структур синдиката.

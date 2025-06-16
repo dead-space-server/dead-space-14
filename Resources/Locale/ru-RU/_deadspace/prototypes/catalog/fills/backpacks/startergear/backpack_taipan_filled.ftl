@@ -1,2 +1,2 @@
-ent-ClothingBackpackSatchelTypanFilled = { ent-ClothingBackpackSatchelTypan }
-    .desc = { ent-ClothingBackpackSatchelTypan.desc }
+ent-ClothingBackpackSatchelTaipanFilled = { ent-ClothingBackpackSatchelTaipan }
+    .desc = { ent-ClothingBackpackSatchelTaipan.desc }

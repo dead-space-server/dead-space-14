@@ -1,2 +1,2 @@
-ent-ClothingBeltPlantTypanFilled = пояс ботаника синдиката
+ent-ClothingBeltPlantTaipanFilled = пояс ботаника синдиката
     .desc = Пояс, используемый для хранения основных принадлежностей для гидропоники. На удивление, не чёрный.
