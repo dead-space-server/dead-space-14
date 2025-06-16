@@ -1,6 +1,5 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 using Content.Shared.Damage;
 using Robust.Shared.Audio;
 
@@ -42,28 +41,31 @@ public sealed partial class DrugAddicationComponent : Component
     [DataField, ViewVariables(VVAccess.ReadOnly)]
     public float StandartTemperature = 0;
 
-    [ViewVariables(VVAccess.ReadOnly)]
-    [DataField("updateDuration", customTypeSerializer: typeof(TimeOffsetSerializer))]
-    public TimeSpan UpdateDuration = TimeSpan.FromSeconds(1);
+    [DataField]
+    public float AddictionLevelRegeneration = 0.5f;
 
-    [DataField("timeUtilUpdate", customTypeSerializer: typeof(TimeOffsetSerializer)), ViewVariables(VVAccess.ReadOnly)]
+    [DataField]
+    public float ToleranceRegeneration = 0.01f;
+
+    [DataField]
+    public float UpdateDuration = 1f;
+
+    [ViewVariables(VVAccess.ReadOnly)]
     public TimeSpan TimeUtilUpdate = TimeSpan.Zero;
 
-    [ViewVariables(VVAccess.ReadOnly)]
-    [DataField("sendMessageDuration", customTypeSerializer: typeof(TimeOffsetSerializer))]
-    public TimeSpan SendMessageDuration = TimeSpan.FromSeconds(5);
+    [DataField]
+    public float SendMessageDuration = 5f;
 
-    [DataField("timeUtilSendMessage", customTypeSerializer: typeof(TimeOffsetSerializer)), ViewVariables(VVAccess.ReadOnly)]
+    [ViewVariables(VVAccess.ReadOnly)]
     public TimeSpan TimeUtilSendMessage = TimeSpan.Zero;
 
-    [ViewVariables(VVAccess.ReadOnly)]
-    [DataField("changeAddictionDuration", customTypeSerializer: typeof(TimeOffsetSerializer))]
-    public TimeSpan ChangeAddictionDuration = TimeSpan.FromSeconds(30);
+    [DataField]
+    public float ChangeAddictionDuration = 30f;
 
-    [DataField("timeUtilChangeAddiction", customTypeSerializer: typeof(TimeOffsetSerializer)), ViewVariables(VVAccess.ReadOnly)]
+    [ViewVariables(VVAccess.ReadOnly)]
     public TimeSpan TimeUtilChangeAddiction = TimeSpan.Zero;
 
-    [DataField("durationOfActionWeakDrug", customTypeSerializer: typeof(TimeOffsetSerializer)), ViewVariables(VVAccess.ReadOnly)]
+    [ViewVariables(VVAccess.ReadOnly)]
     public TimeSpan DurationOfActionWeakDrug = TimeSpan.Zero;
 
     [DataField, ViewVariables(VVAccess.ReadOnly)]

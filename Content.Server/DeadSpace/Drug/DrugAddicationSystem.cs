@@ -29,19 +29,49 @@ public sealed class DrugAddicationSystem : EntitySystem
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
-    public const float MinAddictionLevel = 1;
-    public const float MinTolerance = 0.01f;
-    public const float MaxAddictionLevel = 100;
-    public const float MaxTolerance = 1;
-    public const float MaxWithdrawalLevel = 100;
-    public const float MaxAddTemperature = 10;
-    public const float MaxWithdrawalRate = 5;
+
+    /// <summary>
+    ///     Минимальный предел зависимости к наркотику
+    /// </summary>
+    private const float MinAddictionLevel = 1;
+
+    /// <summary>
+    ///     Минимальный предел толерантности к наркотику
+    /// </summary>
+    private const float MinTolerance = 0.01f;
+
+    /// <summary>
+    ///     Максимальный предел зависимости к наркотику
+    /// </summary>
+    private const float MaxAddictionLevel = 100;
+
+    /// <summary>
+    ///     Максимальный предел толерантности к наркотику
+    /// </summary>
+    private const float MaxTolerance = 1;
+
+    /// <summary>
+    ///     Максимальный предел тяжести эффектов
+    /// </summary>
+    private const float MaxWithdrawalLevel = 100;
+
+    /// <summary>
+    ///     Повышение температуры от эффекта.
+    /// </summary>
+    private const float MaxAddTemperature = 10;
+
+    /// <summary>
+    ///     Скорость изменение параметра тяжести эффектов. Константа, которая задает верхнюю границу скорости увеличения симптомов.
+    ///     Возможно, что число не оптимально
+    /// </summary>
+    private const float MaxWithdrawalRate = 5;
+
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<DrugAddicationComponent, ComponentInit>(OnComponentInit);
-        SubscribeLocalEvent<DrugAddicationComponent, ComponentShutdown>(OnComponentShut);
+        SubscribeLocalEvent<DrugAddicationComponent, ComponentShutdown>(OnComponentShutdown);
     }
 
     public override void Update(float frameTime)
@@ -54,7 +84,7 @@ public sealed class DrugAddicationSystem : EntitySystem
             if (_gameTiming.CurTime > component.TimeUtilUpdate)
             {
                 UpdateDrugAddication(uid, component);
-                component.TimeUtilUpdate = _gameTiming.CurTime + component.UpdateDuration;
+                component.TimeUtilUpdate = _gameTiming.CurTime + TimeSpan.FromSeconds(component.UpdateDuration);
             }
 
             if (!component.IsTimeSendMessage && _gameTiming.CurTime > component.TimeUtilSendMessage)
@@ -65,13 +95,13 @@ public sealed class DrugAddicationSystem : EntitySystem
 
     private void OnComponentInit(EntityUid uid, DrugAddicationComponent component, ComponentInit args)
     {
-        component.TimeUtilChangeAddiction = _gameTiming.CurTime + component.ChangeAddictionDuration;
+        component.TimeUtilChangeAddiction = _gameTiming.CurTime + TimeSpan.FromSeconds(component.ChangeAddictionDuration);
 
         if (TryComp<TemperatureComponent>(uid, out var temperature))
             component.StandartTemperature = temperature.CurrentTemperature;
     }
 
-    private void OnComponentShut(EntityUid uid, DrugAddicationComponent component, ComponentShutdown args)
+    private void OnComponentShutdown(EntityUid uid, DrugAddicationComponent component, ComponentShutdown args)
     {
         RemComp<SlowedDownComponent>(uid);
     }
@@ -87,10 +117,11 @@ public sealed class DrugAddicationSystem : EntitySystem
         if (component.AddictionLevel < MinAddictionLevel && component.Tolerance < MinTolerance)
             RemComp<DrugAddicationComponent>(uid);
 
-        var time = component.UpdateDuration;
-        float seconds = (float)time.TotalSeconds;
+        var time = TimeSpan.FromSeconds(component.UpdateDuration);
+        double seconds = time.TotalSeconds;
 
-        AddTimeLastAppointment(uid, seconds, component);
+        // Нужно преобразование во float, потому-что не хочу перегружать метод
+        AddTimeLastAppointment(uid, (float)seconds, component);
 
         if (component.TimeLastAppointment > component.SomeThresholdTime)
         {
@@ -98,11 +129,7 @@ public sealed class DrugAddicationSystem : EntitySystem
             var timeSinceLastAppointment = component.TimeLastAppointment - component.SomeThresholdTime;
 
             // Определяем прогрессию WithdrawalRate от 0 до MaxWithdrawalRate
-            // Clamp для ограничения значения между 0 и 1
-            float progress = Math.Clamp(timeSinceLastAppointment / component.SomeThresholdTime, 0, 1);
-
-            // Вычисляем новый WithdrawalRate с интерполяцией
-            component.WithdrawalRate = progress * MaxWithdrawalRate;
+            component.WithdrawalRate = Math.Clamp(timeSinceLastAppointment / component.SomeThresholdTime, 0, MaxWithdrawalRate);
 
             UpdateMaxWithdrawalLevel(uid, component);
             UpdateWithdrawalLevel(uid, component);
@@ -111,9 +138,9 @@ public sealed class DrugAddicationSystem : EntitySystem
 
         if (_gameTiming.CurTime > component.TimeUtilChangeAddiction)
         {
-            component.AddictionLevel = Math.Max(0, component.AddictionLevel - 0.5f);
-            component.Tolerance = Math.Max(0, component.Tolerance - 0.01f);
-            component.TimeUtilChangeAddiction = _gameTiming.CurTime + component.ChangeAddictionDuration;
+            component.AddictionLevel = Math.Max(0, component.AddictionLevel - component.AddictionLevelRegeneration);
+            component.Tolerance = Math.Max(0, component.Tolerance - component.ToleranceRegeneration);
+            component.TimeUtilChangeAddiction = _gameTiming.CurTime + TimeSpan.FromSeconds(component.ChangeAddictionDuration);
         }
 
     }
@@ -214,7 +241,7 @@ public sealed class DrugAddicationSystem : EntitySystem
             if (component.IsTimeSendMessage)
             {
                 _popup.PopupEntity(Loc.GetString("drug-addication-effects-low"), uid, uid);
-                component.TimeUtilSendMessage = _gameTiming.CurTime + component.SendMessageDuration;
+                component.TimeUtilSendMessage = _gameTiming.CurTime + TimeSpan.FromSeconds(component.SendMessageDuration);
                 component.IsTimeSendMessage = false;
             }
 
@@ -224,7 +251,7 @@ public sealed class DrugAddicationSystem : EntitySystem
             if (component.IsTimeSendMessage)
             {
                 _popup.PopupEntity(Loc.GetString("drug-addication-effects-medium"), uid, uid);
-                component.TimeUtilSendMessage = _gameTiming.CurTime + component.SendMessageDuration;
+                component.TimeUtilSendMessage = _gameTiming.CurTime + TimeSpan.FromSeconds(component.SendMessageDuration);
                 component.IsTimeSendMessage = false;
             }
 
@@ -234,7 +261,7 @@ public sealed class DrugAddicationSystem : EntitySystem
             if (component.IsTimeSendMessage)
             {
                 _popup.PopupEntity(Loc.GetString("drug-addication-effects-medium-plus"), uid, uid);
-                component.TimeUtilSendMessage = _gameTiming.CurTime + component.SendMessageDuration;
+                component.TimeUtilSendMessage = _gameTiming.CurTime + TimeSpan.FromSeconds(component.SendMessageDuration);
                 component.IsTimeSendMessage = false;
             }
 
@@ -244,7 +271,7 @@ public sealed class DrugAddicationSystem : EntitySystem
             if (component.IsTimeSendMessage)
             {
                 _popup.PopupEntity(Loc.GetString("drug-addication-effects-high"), uid, uid);
-                component.TimeUtilSendMessage = _gameTiming.CurTime + component.SendMessageDuration;
+                component.TimeUtilSendMessage = _gameTiming.CurTime + TimeSpan.FromSeconds(component.SendMessageDuration);
                 component.IsTimeSendMessage = false;
             }
 
@@ -265,21 +292,18 @@ public sealed class DrugAddicationSystem : EntitySystem
     private void HighEffects(EntityUid uid, DrugAddicationComponent component)
     {
         MediumPlusEffects(uid, component);
-        _slurred.DoSlur(uid, TimeSpan.FromSeconds(1f) + component.UpdateDuration);
+        _slurred.DoSlur(uid, TimeSpan.FromSeconds(1f) + TimeSpan.FromSeconds(component.UpdateDuration));
         EnsureComp<SlowedDownComponent>(uid);
         _damageable.TryChangeDamage(uid, component.Damage, true);
 
         if (TryComp<MindContainerComponent>(uid, out var mind)
         && TryComp<MindComponent>(mind.Mind, out var mindComp) && mindComp.Session != null)
-        {
-            Filter playerFilter = Filter.Empty().AddPlayer(mindComp.Session);
-            _audio.PlayGlobal(component.SoundHighEffect, playerFilter, false);
-        }
+            _audio.PlayGlobal(component.SoundHighEffect, Filter.Empty().AddPlayer(mindComp.Session), false);
     }
 
     private void MediumPlusEffects(EntityUid uid, DrugAddicationComponent component)
     {
-        _sharedJittering.DoJitter(uid, component.UpdateDuration, true, 10f * component.EffectStrengthModify);
+        _sharedJittering.DoJitter(uid, TimeSpan.FromSeconds(component.UpdateDuration), true, 10f * component.EffectStrengthModify);
         MediumEffects(uid, component);
 
         if (!TryComp<TemperatureComponent>(uid, out var temperature))

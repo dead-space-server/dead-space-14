@@ -43,7 +43,7 @@ public sealed class DrugInitializeMachineSystem : EntitySystem
         }
     }
 
-    protected void OnMapInit(EntityUid uid, DrugInitializeMachineComponent component, MapInitEvent args)
+    private void OnMapInit(EntityUid uid, DrugInitializeMachineComponent component, MapInitEvent args)
     {
         component.Tube = _container.EnsureContainer<Container>(uid, "tube");
     }

@@ -79,12 +79,18 @@ public sealed class CCCCVars
         CVarDef.Create("ui.background", "Image", CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /// <summary>
-    ///    настройка зависимости addication от тяжести наркотика (addication не будет превышать значение для зависимости с уровнем тяжести)
+    ///    Настройка зависимости addication от тяжести наркотика (addication не будет превышать значение для зависимости с уровнем тяжести)
     /// </summary>
     public static readonly CVarDef<bool>
         EnableMaxAddication = CVarDef.Create("drugs.max_addication", false, CVar.SERVER);
 
-
+    /// <summary>
+    ///     Это максимально допустимый уровень силы наркотика, который можно применить или который может быть достигнут.
+    ///     Влияет на MaxAddication, если EnableMaxAddication включен.
+    ///     Чем выше MaxDrugStr, тем больше разбиений.
+    ///     Создает нормализованное значение в диапазоне от 0 до 1 для силы наркотика, это значение является множителем зависимости и толерантности.
+    ///     Возможно стоит убрать множитель для толерантности? Посмотрим.
+    /// </summary>
     public static readonly CVarDef<int>
         MaxDrugStr = CVarDef.Create("drugs.max_drug_str", 4, CVar.SERVER);
 }
