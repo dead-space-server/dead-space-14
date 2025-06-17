@@ -377,8 +377,8 @@
   id: ClothingHeadHatrcabrero
   name: фуражка чекиста
   description: Чёрная фуражка чекиста.
-  components:
   categories: [ HideSpawnMenu ]
+  components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/rcabrero/hat.rsi
   - type: Clothing
