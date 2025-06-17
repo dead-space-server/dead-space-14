@@ -269,40 +269,40 @@
   name: meat sheet
   suffix: Full
   components:
-  - type: Sprite
-    sprite: Objects/Materials/Sheets/meaterial.rsi
-    layers:
-    - state: meat_3
-      map: [ "base" ]
-  - type: Appearance # DS14
-  - type: Tag
-    tags:
-    - Sheet
-  - type: Material
-  - type: PhysicalComposition
-    materialComposition:
-      Meaterial: 100
-  - type: Stack
-    stackType: MeatSheets
-    baseLayer: base
-    layerStates:
-    - meat
-    - meat_2
-    - meat_3
-  - type: Item
-    sprite: Objects/Materials/Sheets/meaterial.rsi
-    heldPrefix: meat
-  - type: Extractable
-    grindableSolutionName: meatsheet
-  - type: SolutionContainerManager
-    solutions:
-      meatsheet:
-        reagents:
-        - ReagentId: Protein
-          Quantity: 7
-        - ReagentId: Fat
-          Quantity: 3
-        canReact: false
+    - type: Sprite
+      sprite: Objects/Materials/Sheets/meaterial.rsi
+      layers:
+      - state: meat_3
+        map: [ "base" ]
+    - type: Tag
+      tags:
+      - Sheet
+    - type: Material
+    - type: PhysicalComposition
+      materialComposition:
+        Meaterial: 100
+    - type: Stack
+      stackType: MeatSheets
+      baseLayer: base
+      layerStates:
+        - meat
+        - meat_2
+        - meat_3
+    - type: Item
+      sprite: Objects/Materials/Sheets/meaterial.rsi
+      heldPrefix: meat
+    - type: Extractable
+      grindableSolutionName: meatsheet
+    - type: SolutionContainerManager
+      solutions:
+        meatsheet:
+          reagents:
+          - ReagentId: Protein
+            Quantity: 7
+          - ReagentId: Fat
+            Quantity: 3
+          canReact: false
+    - type: Appearance # DS14
 
 - type: entity # DS14
   parent: MaterialSheetMeat
@@ -319,7 +319,7 @@
   id: MaterialSheetMeat1
   suffix: Single
   components:
-  - type: Sprite
-    state: meat
-  - type: Stack
-    count: 1
+    - type: Sprite
+      state: meat
+    - type: Stack
+      count: 1

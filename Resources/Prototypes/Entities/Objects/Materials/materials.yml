@@ -202,16 +202,6 @@
   - type: Item
     heldPrefix: durathread
 
-- type: entity # DS14
-  parent: MaterialDurathread
-  id: MaterialDurathread10
-  suffix: 10
-  components:
-  - type: Sprite
-    state: durathread_2
-  - type: Stack
-    count: 10
-
 - type: entity
   parent: MaterialDurathread
   id: MaterialDurathread1
@@ -272,7 +262,7 @@
   id: MaterialWoodPlank10
   suffix: 10
   components:
-  - type: Sprite
+  - type: Sprite # DS14
     state: wood_2
   - type: Stack
     count: 10
@@ -282,7 +272,7 @@
   id: MaterialWoodPlank1
   suffix: Single
   components:
-  - type: Sprite
+  - type: Sprite # DS14
     state: wood
   - type: Stack
     count: 1
@@ -397,16 +387,6 @@
   - type: PhysicalComposition
     materialComposition:
       Diamond: 100
-
-- type: entity # DS14
-  parent: MaterialDiamond
-  id: MaterialDiamond10
-  suffix: 10
-  components:
-  - type: Sprite
-    state: diamond_2
-  - type: Stack
-    count: 10
 
 - type: entity
   parent: MaterialDiamond
@@ -534,9 +514,9 @@
     materialComposition:
       Bananium: 150
   - type: Sprite
-    state: bananium_3
+    state: bananium_3 # DS14 state
     layers:
-    - state: bananium_3
+    - state: bananium_3 # DS14 state
       map: ["base"]
   - type: Stack
     stackType: Bananium
@@ -544,8 +524,10 @@
     baseLayer: base
     layerStates:
       - bananium
+# DS14-states-start
       - bananium_2
       - bananium_3
+# DS14-states-end
   - type: FlavorProfile
     flavors:
       - banana
@@ -574,16 +556,6 @@
   - type: Appearance
   - type: Item
     heldPrefix: bananium
-
-- type: entity # DS14
-  parent: MaterialBananium
-  id: MaterialBananium10
-  suffix: 10
-  components:
-  - type: Sprite
-    state: bananium_2
-  - type: Stack
-    count: 10
 
 - type: entity
   parent: MaterialBananium
@@ -684,16 +656,6 @@
     tags:
     - ToothSpaceCarp
 
-- type: entity # DS14
-  parent: MaterialToothSpaceCarp
-  id: MaterialToothSpaceCarp10
-  suffix: 10
-  components:
-  - type: Sprite
-    state: tooth_2
-  - type: Stack
-    count: 10
-
 - type: entity
   parent: MaterialToothSpaceCarp
   id: MaterialToothSpaceCarp1
@@ -733,16 +695,6 @@
     - Knife
     - ToothSharkminnow
 
-- type: entity # DS14
-  parent: MaterialToothSharkminnow
-  id: MaterialToothSharkminnow10
-  suffix: 10
-  components:
-  - type: Sprite
-    state: tooth_2
-  - type: Stack
-    count: 10
-
 - type: entity
   parent: MaterialToothSharkminnow
   id: MaterialToothSharkminnow1
@@ -781,16 +733,6 @@
           Quantity: 3
   - type: Item
     heldPrefix: bones
-
-- type: entity # DS14
-  parent: MaterialBones
-  id: MaterialBones10
-  suffix: 10
-  components:
-  - type: Sprite
-    state: bones_2
-  - type: Stack
-    count: 10
 
 - type: entity
   parent: MaterialBones
@@ -850,7 +792,77 @@
     shape:
     - 0,0,2,2
 
-- type: entity # DS14
+- type: entity
+  parent: MaterialGoliathHide
+  id: MaterialGoliathHide1
+  suffix: 1
+  components:
+  - type: Stack
+    count: 1
+
+# DS14-start
+
+- type: entity
+  parent: MaterialDurathread
+  id: MaterialDurathread10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: durathread_2
+  - type: Stack
+    count: 10
+
+- type: entity
+  parent: MaterialDiamond
+  id: MaterialDiamond10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: diamond_2
+  - type: Stack
+    count: 10
+
+- type: entity
+  parent: MaterialBananium
+  id: MaterialBananium10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: bananium_2
+  - type: Stack
+    count: 10
+
+- type: entity
+  parent: MaterialToothSpaceCarp
+  id: MaterialToothSpaceCarp10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: tooth_2
+  - type: Stack
+    count: 10
+
+- type: entity
+  parent: MaterialToothSharkminnow
+  id: MaterialToothSharkminnow10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: tooth_2
+  - type: Stack
+    count: 10
+
+- type: entity
+  parent: MaterialBones
+  id: MaterialBones10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: bones_2
+  - type: Stack
+    count: 10
+
+- type: entity
   parent: MaterialGoliathHide
   id: MaterialGoliathHide10
   suffix: 10
@@ -859,11 +871,3 @@
     state: goliath_hide_2
   - type: Stack
     count: 10
-
-- type: entity
-  parent: MaterialGoliathHide
-  id: MaterialGoliathHide1
-  suffix: 1
-  components:
-  - type: Stack
-    count: 1
