@@ -11,9 +11,16 @@
       "name": "icon"
     },
     {
+      "name": "icon-on"
+    },
+    {
       "name": "equipped-FEET",
       "directions": 4
     },
+	{
+      "name": "on-equipped-FEET",
+      "directions": 4
+	},
     {
       "name": "inhand-left",
       "directions": 4
