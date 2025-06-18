@@ -3030,7 +3030,7 @@
   - type: Item 
     size: Huge 
   - type: MultiHandedItem 
-  # DS14 -end
+  # DS14-end
   - type: Sprite
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
