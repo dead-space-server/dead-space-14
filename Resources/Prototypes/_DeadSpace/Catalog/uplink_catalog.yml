@@ -282,7 +282,7 @@
       whitelist:
         tags:
           - NukeOpsUplink
- 
+
 - type: listing
   id: UplinkTommyGunBundleAgent
   name: Набор "ПП Томпсона"
