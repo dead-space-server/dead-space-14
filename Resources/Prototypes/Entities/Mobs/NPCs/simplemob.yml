@@ -102,8 +102,8 @@
     - Stun
     - KnockedDown
     - SlowedDown
-    - SeeingRainbows
-    - Drunk
+    - SeeingRainbows # DS14
+    - Drunk # DS14
     - Stutter
     - Electrocution
     - ForcedSleep
