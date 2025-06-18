@@ -3026,7 +3026,7 @@
   parent: MobCatSpace
   description: Explosive kitten.
   components:
-  # DS14 -start
+  # DS14-start
   - type: Item 
     size: Huge 
   - type: MultiHandedItem 
