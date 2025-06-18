@@ -419,7 +419,6 @@
   - type: SpeakOnTrigger
     pack: PlushieLieutenantSpeech
 
-  
 - type: entity
   id: MagazineTommyCapGun
   name: магазин для игрушечного томми гана
