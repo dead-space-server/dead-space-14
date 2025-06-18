@@ -14,7 +14,7 @@
   parent: ClothingOuterHardsuitAtmos
   id: ClothingOuterHardsuitSil
   name: скафандр "СЕВА"
-  description: Принадлежат члену экипажа, находящемуся под покровительством спонсорской организации. Характеристики идентичны скафандру атмос-техника.
+  description: Принадлежат члену экипажа, находящемуся под покровительством спонсорской организации.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -373,8 +373,8 @@
 - type: entity
   parent: SyndicateJawsOfLife
   id: SyndicateJawsOfLifeSil
-  name: белые челюсти жизни
-  description: Изготовлено на заказ организацией LaFleur Wear.
+  name: бирюзовые челюсти жизни
+  description: Корпус похож на сплав тёмного титана и синего кварца, а между массивными губками переливается мягкая бирюзовая плазма-нить, создавая ощущение, будто инструмент «дышит» электрическим светом.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -410,8 +410,8 @@
 - type: entity
   parent: PowerDrill
   id: PowerDrillSil
-  name: белая электродрель
-  description: Изготовлено на заказ организацией LaFleur Wear.
+  name: бирюзовая электродрель
+  description: Цилиндрическое тело обтянуто рёбрами из графитового волокна, внутреннее сверло виднеется сквозь прозрачную секцию, где мерцают крошечные арк-искры, будто внутри спрятан крошечный шторм.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -449,8 +449,8 @@
 - type: entity
   parent: WelderExperimental
   id: WelderExperimentalSil
-  name: белый экспериментальный сварочный аппарат
-  description: Изготовлено на заказ организацией LaFleur Wear.
+  name: бирюзовый экспериментальный сварочный аппарат
+  description: Компактная рукоять плавно переходит в хромированный сопло-клюв, вокруг него клубится тонкое голубо-белое марево, словно пламя пытается выбраться наружу, но держится «в клетке» силового поля.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -462,8 +462,8 @@
 - type: entity
   parent: Multitool
   id: MultitoolSil
-  name: белый мультитул
-  description: Изготовлено на заказ организацией LaFleur Wear.
+  name: бирюзовый мультитул
+  description: Гладкий прямоугольник с рассыпанными по граням голографическими метками, при лёгком касании корпуса по его поверхности пробегает переливчатая сетка, напоминающая нервную систему живого организма.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -473,8 +473,8 @@
 - type: entity
   parent: trayScanner
   id: trayScannerSil
-  name: белый т-лучевой сканер
-  description: Изготовлено на заказ организацией LaFleur Wear.
+  name: бирюзовый т-лучевой сканер
+  description: Плоский, почти прозрачный планшет с дымчатыми краями, из глубины стеклопластика медленно всплывают тонкие световые дорожки, будто внутрь залили жидкий неон, который ищет себе путь наружу.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -487,7 +487,7 @@
 - type: entity
   parent: HolofanProjector
   id: HolofanProjectorSil
-  name: белый голопроектор
+  name: бирюзовый голопроектор
   description: Изготовлено на заказ организацией LaFleur Wear.
   categories: [ HideSpawnMenu ]
   components:
@@ -497,7 +497,7 @@
 
 # gas analyzer
 - type: entity
-  name: белый газоанализатор
+  name: бирюзовый газоанализатор
   parent: GasAnalyzer
   id: GasAnalyzerSil
   description: Изготовлено на заказ организацией LaFleur Wear.
@@ -511,10 +511,10 @@
 
 # mass scanner
 - type: entity
-  name: белый сканер массы
+  name: бирюзовый сканер массы
   parent: HandHeldMassScanner
   id: HandHeldMassScannerSil
-  description: Изготовлено на заказ организацией LaFleur Wear.
+  description: Широкий датчик цвета иней с зеркальной линзой.
   categories: [ HideSpawnMenu ]
   components:
   - type: Item
@@ -534,8 +534,8 @@
   id: HypospraySil
   name: гипоспрей "HEALTH-13"
   parent: BaseItem
-  description: Гипоспрей для полевого пользования из не самых дорогих компонентов. Изготовлено на заказ организацией LaFleur Wear.
- # categories: [ HideSpawnMenu ]
+  description: Стрелка каплевидного резервуара окружена кольцом полупрозрачных мембран, при взмахе через стенки проскакивают мягкие волны перламутрового света.
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Sil/hypo.rsi
