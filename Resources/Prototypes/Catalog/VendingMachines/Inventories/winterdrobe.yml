@@ -19,7 +19,17 @@
     ClothingOuterCoatBomber: 4
     ClothingHeadHatSantahat: 2
     ClothingHeadHatXmasCrown: 2
-
+    ClothingNeckScarfStripedAce: 2 # DS14
+    ClothingNeckScarfStripedAro: 2 # DS14
+    ClothingNeckScarfStripedBiSexual: 2 # DS14
+    ClothingNeckScarfStripedGay: 2 # DS14
+    ClothingNeckScarfStripedInter: 2 # DS14
+    ClothingNeckScarfStripedLesbian: 2 # DS14
+    ClothingNeckScarfStripedPan: 2 # DS14
+    ClothingNeckScarfStripedNonBinary: 2 # DS14
+    ClothingNeckScarfStripedRainbow: 2 # DS14
+    ClothingNeckScarfStripedTrans: 2 # DS14
+    ClothingNeckScarfStripedLesbianLong: 2 # DS14
   emaggedInventory:
     ClothingNeckScarfStripedSyndieGreen: 4
     ClothingNeckScarfStripedSyndieRed: 4
