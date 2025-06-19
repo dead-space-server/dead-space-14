@@ -23,19 +23,28 @@
   id: BorgModuleSecurity
 
 - type: Tag
+  id: CleanerGrenade
+
+- type: Tag
   id: DockCentcommERT
 
 - type: Tag
   id: FelinidFood
 
-- type: Tag 
+- type: Tag
   id: FittableInBackpackCase
 
-- type: Tag 
+- type: Tag
+  id: GoldenPlunger
+
+- type: Tag
   id: HardHat
 
 - type: Tag
   id: KatanaVjlados
+
+- type: Tag
+  id: LightReplacer
 
 - type: Tag
   id: MagazineEagle
@@ -53,9 +62,15 @@
   id: MagazineTommyCapGun
 
 - type: Tag
+  id: SnapPop
+
+- type: Tag
+  id: SoapSyndie
+
+- type: Tag
   id: ToySword
 
 - type: Tag
-  id: SnapPop
+  id: TrashBagBlue
 
   # Обязательно в алфавитном порядке

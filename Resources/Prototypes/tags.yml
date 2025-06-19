@@ -329,9 +329,6 @@
 - type: Tag
   id: Cleaver
 
-- type: Tag # DS14
-  id: CleanerGrenade
-
 - type: Tag
   id: ClockworkGlassShard
 
@@ -626,9 +623,6 @@
 - type: Tag
   id: Goliath
 
-- type: Tag # DS14
-  id: GoldenPlunger
-
 - type: Tag
   id: GPS
 
@@ -802,9 +796,6 @@
 
 - type: Tag
   id: LightBulb
-
-- type: Tag # DS14
-  id: LightReplacer
 
 - type: Tag
   id: Lime
@@ -1201,9 +1192,6 @@
 - type: Tag
   id: Soap
 
-- type: Tag # DS14
-  id: SoapSyndie
-
 - type: Tag
   id: SolarTrackerElectronics
 
@@ -1326,9 +1314,6 @@
 
 - type: Tag
   id: TrashBag
-
-- type: Tag # DS14
-  id: TrashBagBlue
 
 - type: Tag
   id: Truncheon
