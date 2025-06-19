@@ -57,4 +57,5 @@
         doAfter: 2
       - tool: Cutting
         doAfter: 1
-
+      - tool: Prying
+        doAfter: 2
