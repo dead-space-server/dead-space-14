@@ -1,13 +1,8 @@
+# Tiles
 - type: tile
   id: FloorTerracotta
   name: tiles-terracotta
   sprite: /Textures/_DeadSpace/Tiles/terracotta.png
-  variants: 4
-  placementVariants:
-    - 1.0
-    - 1.0
-    - 1.0
-    - 1.0
   baseTurf: Plating
   isSubfloor: false
   deconstructTools: [ Prying ]
@@ -20,12 +15,6 @@
   id: FloorTerracottaDiagonal
   name: tiles-terracotta-diagonal
   sprite: /Textures/_DeadSpace/Tiles/terracotta_diagonal.png
-  variants: 4
-  placementVariants:
-    - 1.0
-    - 1.0
-    - 1.0
-    - 1.0
   baseTurf: Plating
   isSubfloor: false
   deconstructTools: [ Prying ]
@@ -38,12 +27,6 @@
   id: FloorTerracottaHerringbone
   name: tiles-terracotta-herringbone
   sprite: /Textures/_DeadSpace/Tiles/terracotta_herringbone.png
-  variants: 4
-  placementVariants:
-    - 1.0
-    - 1.0
-    - 1.0
-    - 1.0
   baseTurf: Plating
   isSubfloor: false
   deconstructTools: [ Prying ]
@@ -56,12 +39,6 @@
   id: FloorTerracottaSmall
   name: tiles-terracotta-small
   sprite: /Textures/_DeadSpace/Tiles/terracotta_small.png
-  variants: 4
-  placementVariants:
-    - 1.0
-    - 1.0
-    - 1.0
-    - 1.0
   baseTurf: Plating
   isSubfloor: false
   deconstructTools: [ Prying ]
@@ -74,12 +51,6 @@
   id: FloorStone
   name: tiles-stone-floor
   sprite: /Textures/_DeadSpace/Tiles/stone_floor.png
-  variants: 4
-  placementVariants:
-    - 1.0
-    - 1.0
-    - 1.0
-    - 1.0
   baseTurf: Plating
   isSubfloor: false
   deconstructTools: [ Prying ]
@@ -89,9 +60,107 @@
   heatCapacity: 10000
 
 - type: tile
+  id: FloorCult
+  name: tiles-cult-floor
+  sprite: /Textures/_DeadSpace/Tiles/cult.png
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: FloorTileItemCult
+  heatCapacity: 10000
+
+# Shuttle mono tiles
+- type: tile
+  id: FloorShuttleMonoWhite
+  name: tiles-white-shuttle-mono-floor
+  sprite: /Textures/_DeadSpace/Tiles/shuttlewhite.png
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemShuttleMonoWhite
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorShuttleMonoGrey
+  name: tiles-grey-shuttle-mono-floor
+  sprite: /Textures/_DeadSpace/Tiles/shuttlegrey.png
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemShuttleMonoGrey
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorShuttleMonoBlack
+  name: tiles-black-shuttle-mono-floor
+  sprite: /Textures/_DeadSpace/Tiles/shuttleblack.png
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemShuttleMonoBlack
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorShuttleMonoBlue
+  name: tiles-blue-shuttle-mono-floor
+  sprite: /Textures/_DeadSpace/Tiles/shuttleblue.png
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemShuttleMonoBlue
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorShuttleMonoOrange
+  name: tiles-orange-shuttle-mono-floor
+  sprite: /Textures/_DeadSpace/Tiles/shuttleorange.png
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemShuttleMonoOrange
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorShuttleMonoPurple
+  name: tiles-purple-shuttle-mono-floor
+  sprite: /Textures/_DeadSpace/Tiles/shuttlepurple.png
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemShuttleMonoPurple
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorShuttleMonoRed
+  name: tiles-red-shuttle-mono-floor
+  sprite: /Textures/_DeadSpace/Tiles/shuttlered.png
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepFloor
+  itemDrop: FloorTileItemShuttleMonoRed
+  heatCapacity: 10000
+
+# FairyGrass tiles
+- type: tile
   id: FloorPlanetFairyGrass
   name: tiles-planet-fairy-grass
-  sprite: /Textures/_DeadSpace/Tiles/Grass/fairygrass.png
+  sprite: /Textures/_DeadSpace/Tiles/FairyGrass/fairygrass.png
   variants: 4
   placementVariants:
     - 1.0
@@ -100,14 +169,14 @@
     - 1.0
   edgeSpritePriority: 1
   edgeSprites:
-    SouthEast: /Textures/_DeadSpace/Tiles/Grass/single_edge.png
-    NorthEast: /Textures/_DeadSpace/Tiles/Grass/single_edge.png
-    NorthWest: /Textures/_DeadSpace/Tiles/Grass/single_edge.png
-    SouthWest: /Textures/_DeadSpace/Tiles/Grass/single_edge.png
-    South: /Textures/_DeadSpace/Tiles/Grass/double_edge.png
-    East: /Textures/_DeadSpace/Tiles/Grass/double_edge.png
-    North: /Textures/_DeadSpace/Tiles/Grass/double_edge.png
-    West: /Textures/_DeadSpace/Tiles/Grass/double_edge.png
+    SouthEast: /Textures/_DeadSpace/Tiles/FairyGrass/single_edge.png
+    NorthEast: /Textures/_DeadSpace/Tiles/FairyGrass/single_edge.png
+    NorthWest: /Textures/_DeadSpace/Tiles/FairyGrass/single_edge.png
+    SouthWest: /Textures/_DeadSpace/Tiles/FairyGrass/single_edge.png
+    South: /Textures/_DeadSpace/Tiles/FairyGrass/double_edge.png
+    East: /Textures/_DeadSpace/Tiles/FairyGrass/double_edge.png
+    North: /Textures/_DeadSpace/Tiles/FairyGrass/double_edge.png
+    West: /Textures/_DeadSpace/Tiles/FairyGrass/double_edge.png
   baseTurf: FloorPlanetDirt
   isSubfloor: true
   footstepSounds:
@@ -120,7 +189,7 @@
 - type: tile
   id: FloorFairyGrass
   name: tiles-fairy-grass
-  sprite: /Textures/_DeadSpace/Tiles/fairygrass.png
+  sprite: /Textures/_DeadSpace/Tiles/FairyGrass/fairygrass.png
   variants: 4
   placementVariants:
     - 1.0
@@ -136,56 +205,34 @@
   weather: true
 
 - type: tile
-  id: FloorNecro
-  name: tiles-necro
-  sprite: /Textures/_DeadSpace/Tiles/Necro/necro1.png
-  baseTurf: Space
-  isSubfloor: true
-  footstepSounds:
-    collection: FootstepBlood
-  friction: 0.05 #slippy
-  heatCapacity: 10000
-  weather: true
-
-- type: tile
-  id: FloorNecroYellow
-  name: tiles-necro-yellow
-  sprite: /Textures/_DeadSpace/Tiles/Necro/necro2.png
+  id: FloorFairyAstroGrass
+  name: tiles-fairy-astro-grass
+  sprite: /Textures/_DeadSpace/Tiles/FairyGrass/fairygrass.png
   variants: 4
   placementVariants:
-    - 1.0
-    - 1.0
-    - 1.0
-    - 1.0
-  baseTurf: Space
-  isSubfloor: true
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  edgeSpritePriority: 1
+  edgeSprites:
+    SouthEast: /Textures/_DeadSpace/Tiles/FairyGrass/single_edge.png
+    NorthEast: /Textures/_DeadSpace/Tiles/FairyGrass/single_edge.png
+    NorthWest: /Textures/_DeadSpace/Tiles/FairyGrass/single_edge.png
+    SouthWest: /Textures/_DeadSpace/Tiles/FairyGrass/single_edge.png
+    South: /Textures/_DeadSpace/Tiles/FairyGrass/double_edge.png
+    East: /Textures/_DeadSpace/Tiles/FairyGrass/double_edge.png
+    North: /Textures/_DeadSpace/Tiles/FairyGrass/double_edge.png
+    West: /Textures/_DeadSpace/Tiles/FairyGrass/double_edge.png
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Cutting ]
   footstepSounds:
-    collection: FootstepBlood
-  friction: 0.05 #slippy
+    collection: FootstepGrass
+  itemDrop: FloorTileItemFairyAstroGrass
   heatCapacity: 10000
-  weather: true
 
-- type: tile
-  id: FloorNecroWhite
-  name: tiles-necro-white
-  sprite: /Textures/_DeadSpace/Tiles/Necro/necro3.png
-  variants: 6
-  placementVariants:
-    - 1.0
-    - 1.0
-    - 1.0
-    - 1.0
-    - 1.0
-    - 1.0
-  baseTurf: Space
-  isSubfloor: true
-  footstepSounds:
-    collection: FootstepBlood
-  itemDrop: FloorTileItemNecro
-  friction: 0.05 #slippy
-  heatCapacity: 10000
-  weather: true
-
+# Wasteland tiles
 - type: tile
   id: FloorWastelandDug
   name: tiles-wasteland-dug
@@ -212,9 +259,8 @@
   id: FloorWasteland
   name: tiles-wasteland
   sprite: /Textures/_DeadSpace/Tiles/Wasteland/wasteland.png
-  variants: 13
+  variants: 12
   placementVariants:
-    - 0.2
     - 0.5
     - 0.5
     - 0.5
@@ -226,7 +272,7 @@
     - 0.5
     - 0.5
     - 0.5
-    - 0.2
+    - 0.5
   baseTurf: Space
   isSubfloor: true
   footstepSounds:
@@ -234,6 +280,93 @@
   heatCapacity: 10000
   weather: true
 
+# Moon tiles
+- type: tile
+  id: FloorMoonDug
+  name: tiles-moon-dug
+  sprite: /Textures/_DeadSpace/Tiles/Moon/moon_dug.png
+  baseTurf: Space
+  isSubfloor: true
+  footstepSounds:
+    collection: FootstepAsteroid
+  heatCapacity: 10000
+  weather: true
+
+- type: tile
+  id: FloorMoonTile
+  name: tiles-moon-tile
+  sprite: /Textures/_DeadSpace/Tiles/Moon/moon0.png
+  baseTurf: Space
+  isSubfloor: true
+  footstepSounds:
+    collection: FootstepAsteroid
+  heatCapacity: 10000
+  weather: true
+
+- type: tile
+  id: FloorMoon
+  name: tiles-moon
+  sprite: /Textures/_DeadSpace/Tiles/Moon/moon.png
+  variants: 13
+  placementVariants:
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  baseTurf: Space
+  isSubfloor: true
+  footstepSounds:
+    collection: FootstepAsteroid
+  heatCapacity: 10000
+  weather: true
+
+# XenoRock tiles
+- type: tile
+  id: FloorXenoRockTile
+  name: tiles-xenorock-tile
+  sprite: /Textures/_DeadSpace/Tiles/XenoRock/xenorock0.png
+  baseTurf: Space
+  isSubfloor: true
+  footstepSounds:
+    collection: FootstepAsteroid
+  heatCapacity: 10000
+  weather: true
+
+- type: tile
+  id: FloorXenoRock
+  name: tiles-xenorock
+  sprite: /Textures/_DeadSpace/Tiles/XenoRock/xenorock.png
+  variants: 12
+  placementVariants:
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  baseTurf: Space
+  isSubfloor: true
+  footstepSounds:
+    collection: FootstepAsteroid
+  heatCapacity: 10000
+  weather: true
+
+# Alien tiles
 - type: tile
   id: FloorAlien
   name: tiles-alien
@@ -248,10 +381,8 @@
     - 1.0
   baseTurf: Plating
   isSubfloor: false
-  deconstructTools: [Prying]
   footstepSounds:
     collection: FootstepHull
-  itemDrop: FloorTileItemAlien
   heatCapacity: 10000
 
 - type: tile
@@ -260,94 +391,76 @@
   sprite: /Textures/_DeadSpace/Tiles/alienplating.png
   baseTurf: Plating
   isSubfloor: false
-  deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepHull
-  itemDrop: FloorTileItemAlienPlating
   heatCapacity: 10000
 
-# Новые стеклянные тайлы (обычные)
+# Glass tiles
 - type: tile
-  id: FloorPlasmaGlass
-  name: tiles-plasmaglass
-  sprite: /Textures/_DeadSpace/Tiles/plasmaglass.png
-  variants: 4
-  placementVariants:
-    - 1.0
-    - 1.0
-    - 1.0
-    - 1.0
+  id: FloorBrassGlass
+  name: tiles-brassglass
+  sprite: /Textures/_DeadSpace/Tiles/brassglass.png
   baseTurf: Plating
   isSubfloor: false
   deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepTile
-  itemDrop: FloorTileItemPlasmaGlass
+  itemDrop: SheetClockworkGlass1
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorPlasmaGlass
+  name: tiles-plasmaglass
+  sprite: /Textures/_DeadSpace/Tiles/plasmaglass.png
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepTile
+  itemDrop: SheetPGlass1
   heatCapacity: 10000
 
 - type: tile
   id: FloorUraniumGlass
   name: tiles-uraniumglass
   sprite: /Textures/_DeadSpace/Tiles/uraniumglass.png
-  variants: 4
-  placementVariants:
-    - 1.0
-    - 1.0
-    - 1.0
-    - 1.0
   baseTurf: Plating
   isSubfloor: false
   deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepTile
-  itemDrop: FloorTileItemUraniumGlass
+  itemDrop: SheetUGlass1
   heatCapacity: 10000
 
-# Новые стеклянные тайлы (укрепленные)
 - type: tile
   id: FloorRPlasmaGlass
   name: tiles-rplasmaglass
   sprite: /Textures/_DeadSpace/Tiles/rplasmaglass.png
-  variants: 4
-  placementVariants:
-    - 1.0
-    - 1.0
-    - 1.0
-    - 1.0
   baseTurf: Plating
   isSubfloor: false
   deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepTile
-  itemDrop: FloorTileItemRPlasmaGlass
+  itemDrop: SheetRPGlass1
   heatCapacity: 10000
 
 - type: tile
   id: FloorRUraniumGlass
   name: tiles-ruraniumglass
   sprite: /Textures/_DeadSpace/Tiles/ruraniumglass.png
-  variants: 4
-  placementVariants:
-    - 1.0
-    - 1.0
-    - 1.0
-    - 1.0
   baseTurf: Plating
   isSubfloor: false
   deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepTile
-  itemDrop: FloorTileItemRUraniumGlass
+  itemDrop: SheetRUGlass1
   heatCapacity: 10000
 
-# Новые материалы (один кадр)
+# Material tiles
 - type: tile
   id: FloorDiamond
   name: tiles-diamond
   sprite: /Textures/_DeadSpace/Tiles/diamond.png
-  variants: 1
-  placementVariants:
-    - 1.0
   baseTurf: Plating
   isSubfloor: false
   deconstructTools: [ Prying ]
@@ -360,9 +473,6 @@
   id: FloorPlasma
   name: tiles-plasma
   sprite: /Textures/_DeadSpace/Tiles/plasma.png
-  variants: 1
-  placementVariants:
-    - 1.0
   baseTurf: Plating
   isSubfloor: false
   deconstructTools: [ Prying ]
@@ -375,9 +485,6 @@
   id: FloorUranium
   name: tiles-uranium
   sprite: /Textures/_DeadSpace/Tiles/uranium.png
-  variants: 1
-  placementVariants:
-    - 1.0
   baseTurf: Plating
   isSubfloor: false
   deconstructTools: [ Prying ]

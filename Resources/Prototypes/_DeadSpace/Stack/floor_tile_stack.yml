@@ -1,134 +1,111 @@
+# Tiles
 - type: stack
   id: FloorTileTerracotta
-  name: terracotta tile
+  name: терракотовая плитка
   spawn: FloorTileItemTerracotta
   maxCount: 30
 
 - type: stack
   id: FloorTileTerracottaDiagonal
-  name: terracotta diagonal tile
+  name: терракотовая диагональная плитка
   spawn: FloorTileItemTerracottaDiagonal
   maxCount: 30
 
 - type: stack
   id: FloorTileTerracottaHerringbone
-  name: terracotta herringbone tile
+  name: терракотовая плитка ёлочкой
   spawn: FloorTileItemTerracottaHerringbone
   maxCount: 30
 
 - type: stack
   id: FloorTileTerracottaSmall
-  name: terracotta small tile
+  name: терракотовые мини плиты
   spawn: FloorTileItemTerracottaSmall
   maxCount: 30
 
 - type: stack
   id: FloorTileStone
-  name: stone tile
+  name: каменный пол
   spawn: FloorTileItemStone
   maxCount: 30
 
 - type: stack
-  id: FloorTilePlanetFairyGrass
-  name: planet fairy grass tile
-  spawn: FloorTileItemFairyGrass
+  id: FloorTileCult
+  name: культовый пол
+  spawn: FloorTileItemCult
   maxCount: 30
 
+# Shuttle tiles
+- type: stack
+  id: FloorTileStackShuttleMonoWhite
+  name: белый моно пол шаттла
+  spawn: FloorTileItemShuttleMonoWhite
+  maxCount: 30
+
+- type: stack
+  id: FloorTileStackShuttleMonoGrey
+  name: серый моно пол шаттла
+  spawn: FloorTileItemShuttleMonoGrey
+  maxCount: 30
+
+- type: stack
+  id: FloorTileStackShuttleMonoBlack
+  name: чёрный моно пол шаттла
+  spawn: FloorTileItemShuttleMonoBlack
+  maxCount: 30
+
+- type: stack
+  id: FloorTileStackShuttleMonoBlue
+  name: синий моно пол шаттла
+  spawn: FloorTileItemShuttleMonoBlue
+  maxCount: 30
+
+- type: stack
+  id: FloorTileStackShuttleMonoOrange
+  name: оранжевый моно пол шаттла
+  spawn: FloorTileItemShuttleMonoOrange
+  maxCount: 30
+
+- type: stack
+  id: FloorTileStackShuttleMonoPurple
+  name: фиолетовый моно пол шаттла
+  spawn: FloorTileItemShuttleMonoPurple
+  maxCount: 30
+
+- type: stack
+  id: FloorTileStackShuttleMonoRed
+  name: красный моно пол шаттла
+  spawn: FloorTileItemShuttleMonoRed
+  maxCount: 30
+
+# Fairy grass tiles
 - type: stack
   id: FloorTileFairyGrass
-  name: fairy grass tile
+  name: сказочная трава
   spawn: FloorTileItemFairyGrass
   maxCount: 30
 
 - type: stack
-  id: FloorTileNecro
-  name: necro tile
-  spawn: FloorTileItemNecro
+  id: FloorTileFairyAstroGrass
+  name: сказочная астро-трава
+  spawn: FloorTileItemFairyAstroGrass
   maxCount: 30
 
-- type: stack
-  id: FloorTileNecroYellow
-  name: necro yellow tile
-  spawn: FloorTileItemNecro
-  maxCount: 30
-
-- type: stack
-  id: FloorTileNecroWhite
-  name: necro white tile
-  spawn: FloorTileItemNecro
-  maxCount: 30
-
-- type: stack
-  id: FloorTileWastelandDug
-  name: wasteland dug tile
-  spawn: FloorTileItemWastelandDug
-  maxCount: 30
-
-- type: stack
-  id: FloorTileWastelandTile
-  name: wasteland tile
-  spawn: FloorTileItemWastelandTile
-  maxCount: 30
-
-- type: stack
-  id: FloorTileWasteland
-  name: wasteland variants tile
-  spawn: FloorTileItemWasteland
-  maxCount: 30
-
-- type: stack
-  id: FloorTileAlien
-  name: alien tile
-  spawn: FloorTileItemAlien
-  maxCount: 30
-
-- type: stack
-  id: FloorTileAlienPlating
-  name: alien plating tile
-  spawn: FloorTileItemAlienPlating
-  maxCount: 30
-
-# Новые стеклянные тайлы (обычные)
-- type: stack
-  id: FloorTilePlasmaGlass
-  name: plasma glass tile
-  spawn: FloorTileItemPlasmaGlass
-  maxCount: 30
-
-- type: stack
-  id: FloorTileUraniumGlass
-  name: uranium glass tile
-  spawn: FloorTileItemUraniumGlass
-  maxCount: 30
-
-# Новые стеклянные тайлы (укрепленные)
-- type: stack
-  id: FloorTileRPlasmaGlass
-  name: reinforced plasma glass tile
-  spawn: FloorTileItemRPlasmaGlass
-  maxCount: 30
-
-- type: stack
-  id: FloorTileRUraniumGlass
-  name: reinforced uranium glass tile
-  spawn: FloorTileItemRUraniumGlass
-  maxCount: 30
-
-# Новые материалы (один кадр)
+# Material tiles
 - type: stack
   id: FloorTileDiamond
-  name: diamond tile
+  name: алмазный пол
   spawn: FloorTileItemDiamond
   maxCount: 30
 
 - type: stack
   id: FloorTilePlasma
-  name: plasma tile
+  name: плазменный пол
   spawn: FloorTileItemPlasma
   maxCount: 30
 
 - type: stack
   id: FloorTileUranium
-  name: uranium tile
+  name: урановый пол
   spawn: FloorTileItemUranium
   maxCount: 30
