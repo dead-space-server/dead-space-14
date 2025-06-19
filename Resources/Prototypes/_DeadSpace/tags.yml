@@ -26,7 +26,13 @@
   id: CleanerGrenade
 
 - type: Tag
+  id: ChefGoldenKnife
+
+- type: Tag
   id: DockCentcommERT
+
+- type: Tag
+  id: EnergyCartridge
 
 - type: Tag
   id: FelinidFood
@@ -59,7 +65,10 @@
   id: Necro
 
 - type: Tag
-  id: MagazineTommyCapGun
+  id: MagazineTommyGun
+
+- type: Tag
+  id: MagazineTommyGunCap
 
 - type: Tag
   id: SnapPop
