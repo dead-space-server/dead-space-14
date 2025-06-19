@@ -987,6 +987,9 @@
 - type: Tag
   id: PlasmaGlassShard
 
+- type: Tag # DS14
+  id: Plasteel
+
 - type: Tag
   id: Plastic
 
