@@ -1,5 +1,6 @@
 discord-auth-title = Авторизация Discord
 discord-auth-info = Вы можете связать аккаунт SS14 с Discord
+discord-auth-info-notopt = Вам необходимо связать аккаунт SS14 с Discord
 discord-auth-warn = Не волнуйтесь, это всего пару кликов!
 discord-auth-link = Ссылка:
 discord-auth-or = или

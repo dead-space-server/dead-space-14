@@ -28,6 +28,11 @@ public sealed partial class DiscordAuthGui : Control
 
         if (!_discordAuthManager.IsOpt)
         {
+            InfoLabel.Text = Loc.GetString("discord-auth-info-notopt");
+        }
+
+        if (!_discordAuthManager.IsOpt)
+        {
             ByPassBtn.Visible = false;
         }
         else

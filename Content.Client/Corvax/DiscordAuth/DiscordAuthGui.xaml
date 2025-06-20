@@ -25,7 +25,8 @@
             <controls:HighDivider/>
             <BoxContainer Orientation="Vertical"
                           Margin="50 20 50 20">
-                <Label Text="{Loc 'discord-auth-info'}"
+                <Label Name ="InfoLabel"
+                       Text="{Loc 'discord-auth-info'}"
                        Align="Center"/>
                 <Label Text="{Loc 'discord-auth-warn'}"
                        Margin="0 5 0 0"
