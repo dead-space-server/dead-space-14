@@ -1,0 +1,23 @@
+- type: entity
+  id: ServantCircuitBoard
+  parent: BaseElectronics
+  name: law board (Servant)
+  description: An electronics board containing the servant lawset.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/module.rsi
+    state: std_mod
+  - type: SiliconLawProvider
+    laws: ServantLawset
+
+- type: entity
+  id: HivemindCircuitBoard
+  parent: BaseElectronics
+  name: law board (Hivemind)
+  description: An electronics board containing the Hivemind lawset.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/module.rsi
+    state: std_mod
+  - type: SiliconLawProvider
+    laws: HivemindLawset
