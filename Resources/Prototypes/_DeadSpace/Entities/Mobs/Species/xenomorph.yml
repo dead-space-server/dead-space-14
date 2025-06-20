@@ -92,7 +92,7 @@
   - type: ImmunitetInfectionDead
   - type: LizardAccent
   - type: EmotePanel # DS14-Emote-panel
-  - type: FootPrints
+  # - type: FootPrints
     leftBarePrint: "footprint-left-bare-lizard"
     rightBarePrint: "footprint-right-bare-lizard"
 

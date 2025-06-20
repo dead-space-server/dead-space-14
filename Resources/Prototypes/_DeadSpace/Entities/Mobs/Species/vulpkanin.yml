@@ -58,7 +58,7 @@
   - type: Vulpkanin # DS14: For emote panel
   - type: TypingIndicator
     proto: vulpkanin
-  - type: FootPrints
+  # - type: FootPrints
     leftBarePrint: "footprint-left-bare-lizard"
     rightBarePrint: "footprint-right-bare-lizard"
 
