@@ -1,0 +1,79 @@
+- type: entity
+  id: ActionPowerPunchCarp
+  name: "[color=red]Удар крушащей волны[/color]"
+  description: Мощнейнший удар в грудь, который отправляет цель в полет, нанося 30 урона.
+  components:
+  - type: InstantAction
+    icon:
+      sprite: _DeadSpace/Actions/smoking_carp_actions.rsi
+      state: power_punch
+    event: !type:SmokingCarpActionEvent {}
+    useDelay: 3
+    priority: -7
+  - type: SmokingCarpAction
+    list: PowerPunch
+    staminaDamage: 0
+    packMessageOnHit:
+    - voice-message-carp-1
+    - voice-message-carp-2
+    - voice-message-carp-3
+    - voice-message-carp-4
+    - voice-message-carp-5
+    - voice-message-carp-6
+    pushStrength: 300
+    maxPushDistance: 5
+    paralyzeTime: 0
+    ignoreResist: true
+    effectPunch: EffectPowerPunchCarp
+    hitSound: /Audio/Weapons/genhit1.ogg
+    damageType: Slash
+    hitDamage: 30
+
+- type: entity
+  id: ActionSmokePunchCarp
+  name: "[color=red]Скрежет зубов курящего карпа[/color]"
+  description: Быстрые удары в корпус, которые наносят 35 урона по выносливости и 5 обычного урона.
+  components:
+  - type: InstantAction
+    icon:
+      sprite: _DeadSpace/Actions/smoking_carp_actions.rsi
+      state: smoke_punch
+    event: !type:SmokingCarpActionEvent {}
+    priority: -8
+  - type: SmokingCarpAction
+    list: SmokePunch
+    pushStrength: 300
+    maxPushDistance: 5
+    paralyzeTime: 0
+    effectPunch: WeaponArcBite
+    hitSound: /Audio/Effects/bite.ogg
+    ignoreResist: true
+    damageType: Slash
+    hitDamage: 5
+    staminaDamage: 35
+
+- type: entity
+  id: ActionTripPunchCarp
+  name: "[color=red]Подъем киля[/color]"
+  description: Мощный удар ногой, который сбивает всех с ног на секунду вокруг вас.
+  components:
+  - type: InstantAction
+    icon:
+      sprite: _DeadSpace/Actions/smoking_carp_actions.rsi
+      state: trip_punch
+    event: !type:SmokingCarpTripPunchEvent {}
+    useDelay: 5
+    priority: -6
+
+- type: entity
+  id: ActionReflectCarp
+  name: "[color=red]Полная концентрация[/color]"
+  description: Ваше дыхание учащилось, а мышцы находятся в постоянном напряжении, вы способны отражать любые снаряды голыми руками.
+  components:
+  - type: InstantAction
+    icon:
+      sprite: _DeadSpace/Actions/smoking_carp_actions.rsi
+      state: reflect
+      noRot: true
+    event: !type:ReflectCarpEvent {}
+    priority: -5

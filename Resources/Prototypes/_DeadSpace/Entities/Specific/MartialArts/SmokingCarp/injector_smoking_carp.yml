@@ -1,0 +1,25 @@
+- type: entity
+  parent: BaseItem
+  id: SmokingCarpInjector
+  name: инъектор "Smoking Carp"
+  description: Одноразовый инъектор, имеется гравировка "Smoking Carp".
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/injector_smoking_carp.rsi
+    layers:
+    - state: icon
+  - type: MartialArtsTrainingCarp
+    addAtackRate: 1.15
+    itemAfterLerning: SmokingCarpInjectorAfter
+    martialArtsForm: SmokingCarp
+
+- type: entity
+  parent: BaseItem
+  id: SmokingCarpInjectorAfter
+  name: инъектор "Smoking Carp"
+  description: Одноразовый инъектор, имеется гравировка "Smoking Carp", он пустой.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/injector_smoking_carp.rsi
+    layers:
+    - state: icon_after

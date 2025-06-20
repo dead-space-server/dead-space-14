@@ -1,0 +1,14 @@
+- type: entity
+  parent: BaseItem
+  id: BookArkalyse
+  name: мануал "Аркалис"
+  description: Одноразовый мануал, который обучает искусству "Аркалиса".
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Objects/Specific/Arkalyse/arkalyse_book.rsi
+      layers:
+      - state: icon
+    - type: MartialArtsTrainingArkalyse
+      addAtackRate: 1.1
+      martialArtsForm: Arkalyse
+      itemAfterLerning: Ash

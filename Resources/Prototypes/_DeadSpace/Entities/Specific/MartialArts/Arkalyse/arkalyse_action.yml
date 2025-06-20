@@ -8,8 +8,14 @@
     icon:
       sprite: _DeadSpace/Actions/arkalyse_actions.rsi
       state: punch
-    event: !type:DamageAtackArkalyseActionEvent {}
-    useDelay: 3
+    event: !type:ArkalyseActionEvent {}
+  - type: ArkalyseAction
+    list: DamageAtack
+    effectPunch: WeaponArcKick
+    hitSound: /Audio/_DeadSpace/Arkalyse/sound_effects_hit_kick.ogg
+    ignoreResist: true
+    damageType: Piercing
+    hitDamage: 15
 
 - type: entity
   id: ActionMutedArkalyseAttack
@@ -21,8 +27,15 @@
     icon:
       sprite: _DeadSpace/Actions/arkalyse_actions.rsi
       state: mute
-    event: !type:MutedAtackArkalyseActionEvent {}
-    useDelay: 3 
+    event: !type:ArkalyseActionEvent {}
+  - type: ArkalyseAction
+    list: MuteAtack
+    staminaDamage: 25
+    paralyzeTime: 10 # Mute Time
+    ignoreResist: true
+    hitSound: /Audio/Weapons/star_hit.ogg
+    damageType: Blunt
+    hitDamage: 5
 
 - type: entity
   id: ActionStunArkalyseAttack
@@ -34,5 +47,9 @@
     icon:
       sprite: _DeadSpace/Actions/arkalyse_actions.rsi
       state: kick
-    event: !type:StunedAtackArkalyseActionEvent {}
-    useDelay: 3
+    event: !type:ArkalyseActionEvent {}
+  - type: ArkalyseAction
+    list: StunAtack
+    effectPunch: WeaponArcDisarm
+    paralyzeTime: 0.5
+    hitSound: /Audio/_DeadSpace/Arkalyse/sound_effects_hit_punch.ogg

@@ -1,0 +1,31 @@
+- type: entity
+  id: EffectPowerPunchCarp
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 0.3
+  - type: Sprite
+    drawdepth: Effects
+    sprite: Effects/arcs.rsi
+    noRot: true
+    state: smash
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: EffectTripPunchCarp
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 0.7
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _DeadSpace/Effects/SmokingCarp/general_effects.rsi
+    noRot: true
+    state: trip_carp_effect
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+      - HideContextMenu
