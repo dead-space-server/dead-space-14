@@ -17,8 +17,11 @@ public sealed partial class DiscordAuthGui : Control
     [Dependency] private readonly IClientConsoleHost _consoleHost = default!;
     [Dependency] private readonly INetManager _netManager = default!;
 
-    public DiscordAuthGui()
+    private readonly IClipboardManager _clipboard;
+    public DiscordAuthGui(IClipboardManager clipboard)
     {
+        _clipboard = clipboard;
+
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
         LayoutContainer.SetAnchorPreset(this, LayoutContainer.LayoutPreset.Wide);
@@ -40,7 +43,6 @@ public sealed partial class DiscordAuthGui : Control
             _consoleHost.ExecuteCommand("quit");
         };
 
-        UrlEdit.TextRope = new Rope.Leaf(_discordAuthManager.AuthUrl);
         if (_discordAuthManager.Qrcode != null)
         {
             QrCode.Texture = _discordAuthManager.Qrcode;
@@ -48,9 +50,17 @@ public sealed partial class DiscordAuthGui : Control
 
         OpenUrlButton.OnPressed += (_) =>
         {
-            if (_discordAuthManager.AuthUrl != string.Empty)
+            if (!string.IsNullOrEmpty(_discordAuthManager.AuthUrl))
             {
                 IoCManager.Resolve<IUriOpener>().OpenUri(_discordAuthManager.AuthUrl);
+            }
+        };
+
+        CopyLinkButton.OnPressed += (_) =>
+        {
+            if (!string.IsNullOrEmpty(_discordAuthManager.AuthUrl))
+            {
+                _clipboard.SetText(_discordAuthManager.AuthUrl);
             }
         };
     }

@@ -40,22 +40,7 @@
                 <TextureRect Name="QrCode"
                              MaxHeight="400"
                              HorizontalAlignment="Center"
-                             Margin="10 0 0 0"></TextureRect>
-            </BoxContainer>
-            <BoxContainer Orientation="Horizontal"
-                          VerticalAlignment="Bottom"
-                          Margin="10 0 0 0">
-                <Label Text="{Loc 'discord-auth-link'}"
-                       Align="Center"
-                       VerticalAlignment="Top"
-                       Margin="10"/>
-                <Label Text=" "/>
-                <TextEdit Name="UrlEdit"
-                          HorizontalExpand="True"
-                          Editable="False"
-                          VerticalExpand="True"
-                          MinSize="220 100"
-                          Margin="10"></TextEdit>
+                             Margin="10 5 5 0"></TextureRect>
             </BoxContainer>
             <Button Name="OpenUrlButton"
                     Text="{Loc 'discord-auth-browser-btn'}"
@@ -63,7 +48,16 @@
                     StyleClasses="OpenRight"
                     MinSize="220 50"
                     VerticalExpand="True"
-                    Margin="5"/>
+                    Margin="3 5"/>
+            <Label Text="{Loc 'discord-auth-or'}"
+                   Align="Center"
+                   StyleClasses="LabelSubText"/>
+            <Button Name="CopyLinkButton"
+                    Text="{Loc 'discord-auth-copy-btn'}"
+                    HorizontalExpand="True"
+                    VerticalExpand="True"
+                    MinSize="220 50"
+                    Margin="5"></Button>
             <Button Name="ByPassBtn"
                     Text="{Loc 'discord-auth-bypass'}"
                     HorizontalExpand="True"
