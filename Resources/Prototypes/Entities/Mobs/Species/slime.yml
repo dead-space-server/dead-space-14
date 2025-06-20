@@ -121,8 +121,8 @@
   - type: Sanity # DS14
   - type: SlimePerson # DS14: For emote panel
   # - type: FootPrints # Backmen-footsteps
-    leftBarePrint: "footprint-left-bare-slime"
-    rightBarePrint: "footprint-right-bare-slime"
+    # leftBarePrint: "footprint-left-bare-slime"
+    # rightBarePrint: "footprint-right-bare-slime"
 
 - type: entity
   parent: MobHumanDummy

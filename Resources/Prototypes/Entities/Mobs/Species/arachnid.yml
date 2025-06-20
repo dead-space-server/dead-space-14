@@ -125,8 +125,8 @@
 
   - type: Sanity # DS14
   # - type: FootPrints # Backmen-footsteps
-    leftBarePrint: "footprint-left-bare-spider"
-    rightBarePrint: "footprint-right-bare-spider"
+    # leftBarePrint: "footprint-left-bare-spider"
+    # rightBarePrint: "footprint-right-bare-spider"
 
 - type: entity
   parent: BaseSpeciesDummy

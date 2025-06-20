@@ -48,8 +48,8 @@
   - type: TypingIndicator
     proto: plafeim
   # - type: FootPrints
-    leftBarePrint: "footprint-left-bare-lizard"
-    rightBarePrint: "footprint-right-bare-lizard"
+    # leftBarePrint: "footprint-left-bare-lizard"
+    # rightBarePrint: "footprint-right-bare-lizard"
 
 - type: entity
   parent: BaseSpeciesDummy

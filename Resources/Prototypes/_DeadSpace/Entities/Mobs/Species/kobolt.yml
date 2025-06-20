@@ -100,8 +100,8 @@
     critThreshold: 85
   - type: Sanity # DS14
   # - type: FootPrints
-    leftBarePrint: "footprint-left-bare-lizard"
-    rightBarePrint: "footprint-right-bare-lizard"
+    # leftBarePrint: "footprint-left-bare-lizard"
+    # rightBarePrint: "footprint-right-bare-lizard"
 
 
 - type: entity
