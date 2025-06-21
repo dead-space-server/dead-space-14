@@ -157,6 +157,7 @@
   cost: 10000
   recipeUnlocks:
   - WeaponXrayCannon
+  - WeaponIonRifle # DS14
 
 - type: technology
   id: BasicShuttleArmament
@@ -179,7 +180,7 @@
   - ShuttleGunFriendshipCircuitboard
   technologyPrerequisites:
   - SalvageWeapons
-  
+
 # DS14-start
 - type: technology
   id: NightVisionTechnology

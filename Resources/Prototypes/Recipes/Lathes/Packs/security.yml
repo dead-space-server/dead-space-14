@@ -144,6 +144,7 @@
   - WeaponLaserCarbine
   - WeaponXrayCannon
   - WeaponLaserRifle # DS14
+  - WeaponIonRifle # DS14
 
 - type: latheRecipePack
   id: SecurityDisablers
