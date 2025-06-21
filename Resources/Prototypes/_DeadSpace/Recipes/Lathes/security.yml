@@ -1,6 +1,6 @@
 - type: latheRecipe
   parent: BaseWeaponRecipeLong
-  id: WeaponLaserRifle # DS14
+  id: WeaponLaserRifle
   result: WeaponLaserRifle
   materials:
     Steel: 2000
