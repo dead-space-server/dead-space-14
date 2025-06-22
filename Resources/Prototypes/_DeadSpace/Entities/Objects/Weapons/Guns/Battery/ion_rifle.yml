@@ -35,6 +35,13 @@
       steps: 5
       zeroVisible: true
     - type: Appearance
+    - type: SpeedModifiedOnWield
+      walkModifier: 0.50
+      sprintModifier: 0.50
+    - type: CursorOffsetRequiresWield
+    - type: EyeCursorOffset
+      maxOffset: 3
+      pvsIncrease: 0.3
 
 - type: entity
   name: ионный заряд
