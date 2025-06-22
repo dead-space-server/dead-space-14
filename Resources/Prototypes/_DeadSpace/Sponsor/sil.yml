@@ -7,7 +7,7 @@
   id: SilHypospray
   entity: HypospraySil
   sponsorOnly: true
-  whitelistJobs: [ChiefMedicalOfficer, MedicalDoctor, Chemist]
+  whitelistJobs: [ChiefMedicalOfficer, SeniorPhysician, Chemist, MedicalDoctor, Paramedic, Coroner, MedicalIntern]
 
 # Hardsuit
 - type: entity
