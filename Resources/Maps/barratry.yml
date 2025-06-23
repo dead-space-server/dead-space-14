@@ -12724,8 +12724,6 @@ entities:
 - proto: ActionToggleInternals
   entities:
   - uid: 12
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 11
@@ -12733,8 +12731,6 @@ entities:
       originalIconColor: '#FFFFFFFF'
       container: 11
   - uid: 17
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 16
@@ -12744,8 +12740,6 @@ entities:
 - proto: ActionToggleJetpack
   entities:
   - uid: 18
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 16
@@ -80309,8 +80303,6 @@ entities:
 - proto: KnifePlastic
   entities:
   - uid: 741
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 739
@@ -80321,8 +80313,6 @@ entities:
     - type: Physics
       canCollide: False
   - uid: 742
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 739
