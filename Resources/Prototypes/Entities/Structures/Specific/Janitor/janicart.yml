@@ -276,10 +276,12 @@
           whitelist:
             tags:
               - Plunger
-        cart_plunger_golden: # DS14
+        # DS14-start
+        cart_plunger_golden:
           whitelist:
             tags:
             - GoldenPlunger
+        # DS14-end
         cart_mop:
           whitelist:
             tags:
@@ -292,10 +294,12 @@
           whitelist:
             tags:
               - TrashBag
-        cart_garbage_blue: # DS14
+        # DS14-start
+        cart_garbage_blue:
           whitelist:
             tags:
             - TrashBagBlue
+        # DS14-end
         cart_replacer:
           whitelist:
             components:
