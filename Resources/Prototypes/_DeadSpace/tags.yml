@@ -71,9 +71,6 @@
   id: Plasteel
 
 - type: Tag
-  id: ToySword
-
-- type: Tag
   id: MagazineTommyGunCap
 
 - type: Tag
