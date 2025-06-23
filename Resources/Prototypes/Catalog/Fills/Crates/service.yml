@@ -304,8 +304,6 @@
           prob: 0.1
         - id: FoodPacketMRETrash
           prob: 0.1
-        - id: FoodPacketFRETrash # DS14
-          prob: 0.1
         - id: FoodPacketPistachioTrash
           prob: 0.1
         - id: FoodPacketSemkiTrash
