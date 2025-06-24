@@ -61,6 +61,7 @@
     - BasicStationEventScheduler
     - BasicRoundstartVariation
     - SubGamemodesRuleNoWizard
+
 - type: gamePreset
   id: SecretSurvival
   alias:
