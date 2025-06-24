@@ -61,7 +61,7 @@
   id: SecurityJumpsuitBlue
   equipment:
     jumpsuit: ClothingUniformJumpsuitSecBlue
-# DS14 -end
+# DS14-end
 
 - type: loadout
   id: SecurityJumpskirt
