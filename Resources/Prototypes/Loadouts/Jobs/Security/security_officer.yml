@@ -56,7 +56,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitSec
 
-# DS14 -start
+# DS14-start
 - type: loadout
   id: SecurityJumpsuitBlue
   equipment:
