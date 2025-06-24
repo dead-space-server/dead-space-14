@@ -1,7 +1,7 @@
 {
     "version": 1,
     "license": "CC-BY-SA-3.0",
-    "copyright": "Made by rtwo45 (a.k.a Rorkh) для сервера Мёртвый Космос",
+    "copyright": "Made by rtwo45 (a.k.a Rorkh) for Space Station 14 server Мёртвый Космос",
     "size": {
       "x": 32,
       "y": 32
@@ -15,4 +15,3 @@
       }
     ]
   }
-  
