@@ -247,7 +247,7 @@
     inhandVisuals:
       left:
       - state: base-icon-inhand-left
-        color: "#326496"
+        color: "#EBD8B7"
       - state: base-module-inhand-left
         color: "#34476c"
       - state: base-part-inhand-left
@@ -255,7 +255,7 @@
         color: "#404040"
       right:
       - state: base-icon-inhand-right
-        color: "#326496"
+        color: "#EBD8B7"
       - state: base-module-inhand-right
         color: "#34476c"
       - state: base-part-inhand-right
