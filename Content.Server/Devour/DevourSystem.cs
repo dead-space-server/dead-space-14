@@ -4,6 +4,7 @@ using Content.Shared.Chemistry.Components;
 using Content.Shared.Devour;
 using Content.Shared.Devour.Components;
 using Content.Shared.Humanoid;
+using Content.Shared.Silicons.Borgs.Components;
 
 namespace Content.Server.Devour;
 
@@ -27,7 +28,9 @@ public sealed class DevourSystem : SharedDevourSystem
         var ichorInjection = new Solution(component.Chemical, component.HealRate);
 
         if (component.FoodPreference == FoodPreference.All ||
-            (component.FoodPreference == FoodPreference.Humanoid && HasComp<HumanoidAppearanceComponent>(args.Args.Target)))
+            (component.FoodPreference == FoodPreference.Humanoid
+            && (HasComp<HumanoidAppearanceComponent>(args.Args.Target)
+            || HasComp<BorgChassisComponent>(args.Args.Target))))
         {
             ichorInjection.ScaleSolution(0.5f);
 
