@@ -6,3 +6,12 @@
     Steel: 2000
     Plastic: 750
     Gold: 500
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: WeaponLaserRifle
+  result: WeaponLaserRifle
+  materials:
+    Steel: 2000
+    Plastic: 750
+    Silver: 500
