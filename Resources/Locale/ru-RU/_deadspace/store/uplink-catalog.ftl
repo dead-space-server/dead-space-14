@@ -1,5 +1,7 @@
 uplink-energy-crossbow-name = Энергетический арбалет
 uplink-energy-crossbow-desc = Маленькое, тихое оружие, которое можно спрятать в карман. Отрявляет и изнемождает жертв.
+uplink-syndiesabre-name = Пластитановая рапира
+uplink-syndiesabre-desc = Набор ножен с рапирой из пластитана способной проникать сквозь броню, лучший выбор элегантнаного убийцы.
 uplink-advanced-magboots-name = Продвинутые магнитные ботинки Синдиката
 uplink-advanced-magboots-desc = Улучшенные магнитные ботинки Синдиката.
 uplink-akms-bundle-name = Набор АКМС
@@ -34,7 +36,5 @@ uplink-revive-implanter-name = Восстанавливающий автоимл
 uplink-revive-implanter-desc = Имплант, который начнёт вводить в вас дозу физраствора и эпинефрина как только вы упадётё в критическое состояние.
 uplink-clothing-eyes-pnv-adv-syndicate-name = ПНВ Синдиката
 uplink-clothing-eyes-pnv-adv-syndicate-desc = Профессиональный ПНВ Синдиката с встроенным визором и белым фильтром, а так же поддержкой анализа здоровья команды.
-uplink-syndiesabre-name = Пластитановая рапира
-uplink-syndiesabre-desc = Набор ножен с рапирой из пластитана способной проникать сквозь броню, лучший выбор элегантнаного убийцы.
 uplink-reagent-container-amatoxin-name = Замаскированная бутылка с амотоксином
 uplink-reagent-container-amatoxin-desc = Бутылка замаскированная под оливковое масло содержащая 20 единиц сильного амотоксина. Спасибо Discount Dan's за спонсирование нашего завода по производству амотоксина!
