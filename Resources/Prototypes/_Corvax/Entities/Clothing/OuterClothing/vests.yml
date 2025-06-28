@@ -15,10 +15,25 @@
   name: security medic armor vest
   description: A security medic's armor vest, with little pockets for little things.
   components:
-    - type: Sprite
-      sprite: _Corvax/Clothing/OuterClothing/Vests/armor_sec_med.rsi
-    - type: Clothing
-      sprite: _Corvax/Clothing/OuterClothing/Vests/armor_sec_med.rsi
+  - type: Sprite
+    sprite: _Corvax/Clothing/OuterClothing/Vests/armor_sec_med.rsi
+  - type: Clothing
+    sprite: _Corvax/Clothing/OuterClothing/Vests/armor_sec_med.rsi
+  - type: Storage
+    maxItemSize: Small
+    defaultStorageOrientation: Vertical
+    grid:
+    - 0,0,1,1
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: []
+  - type: UserInterface
+    interfaces:
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+  - type: Item
+    size: Normal
 
 - type: entity
   parent: ClothingOuterBase
