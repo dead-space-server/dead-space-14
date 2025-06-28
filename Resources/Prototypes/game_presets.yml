@@ -270,7 +270,7 @@
   - MeteorSwarmScheduler
   - SpaceTrafficControlEventScheduler
   - BasicRoundstartVariation
-  - SubGamemodesRule # DS14
+  - SubGamemodesRuleNoWizard # DS14
 
 - type: gamePreset
   id: Zombieteors

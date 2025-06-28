@@ -50,7 +50,7 @@
       Unsexed: FemaleHuman
   - type: Speech
     speechSounds: Lizard
-  - type: FootPrints #BACKMEN-EDIT
+  # - type: FootPrints
   - type: UserInterface #BACKMEN-EDIT
     interfaces:
       enum.StoreUiKey.Key:

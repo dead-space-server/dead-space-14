@@ -12,7 +12,7 @@
     - BlobGameMode
     - BasicStationEventScheduler
     - BasicRoundstartVariation
-    - SubGamemodesRule
+    - SubGamemodesRuleNoWizard # DS14
 
 - type: gamePreset
   id: Changeling

@@ -63,7 +63,7 @@
       Unsexed: MaleFelinid
   - type: Felinid # For felinid stuff like hairballs
   - type: CatVocal # For cat emotes
-  - type: FootPrints #BACKMEN-EDIT
+  # - type: FootPrints
   - type: UserInterface #BACKMEN-EDIT
     interfaces:
       enum.StoreUiKey.Key:

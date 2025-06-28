@@ -93,7 +93,7 @@
       Female: IPSIPC
       Unsexed: IPSIPC
   - type: ComputerEmotes # DS14: For emote panel
-  - type: FootPrints #backmen-footsteps
+  # - type: FootPrints
   - type: UserInterface #BACKMEN-EDIT
     interfaces:
       enum.StoreUiKey.Key:
