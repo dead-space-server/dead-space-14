@@ -51,10 +51,6 @@
   - type: Speech
     speechSounds: Lizard
   # - type: FootPrints
-  - type: UserInterface #BACKMEN-EDIT
-    interfaces:
-      enum.StoreUiKey.Key:
-        type: StoreBoundUserInterface
 
 - type: entity
   parent: BaseSpeciesDummy

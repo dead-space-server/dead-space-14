@@ -71,10 +71,6 @@
       Unsexed: UnisexArachnid
   - type: TypingIndicator
     proto: spider
-  - type: UserInterface #BACKMEN-EDIT
-    interfaces:
-      enum.StoreUiKey.Key:
-        type: StoreBoundUserInterface
   - type: Sprite # I'd prefer if these maps were better. Insert map pun here.
     layers:
       - map: [ "enum.HumanoidVisualLayers.Chest" ]

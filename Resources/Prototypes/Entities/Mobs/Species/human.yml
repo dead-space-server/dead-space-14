@@ -29,10 +29,6 @@
             state: jumpsuit-female
   - type: Sanity # DS14
   # - type: FootPrints # Backmen-footsteps
-  - type: UserInterface #BACKMEN-EDIT
-    interfaces:
-      enum.StoreUiKey.Key:
-        type: StoreBoundUserInterface
 
 - type: entity
   parent: BaseSpeciesDummy

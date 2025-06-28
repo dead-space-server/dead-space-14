@@ -194,6 +194,8 @@
         type: HumanoidMarkingModifierBoundUserInterface
       enum.StrippingUiKey.Key:
         type: StrippableBoundUserInterface
+      enum.StoreUiKey.Key: #BACKMEN-EDIT
+        type: StoreBoundUserInterface
   - type: Puller
   - type: Speech
     speechSounds: Alto

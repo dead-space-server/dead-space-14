@@ -64,10 +64,6 @@
   - type: Felinid # For felinid stuff like hairballs
   - type: CatVocal # For cat emotes
   # - type: FootPrints
-  - type: UserInterface #BACKMEN-EDIT
-    interfaces:
-      enum.StoreUiKey.Key:
-        type: StoreBoundUserInterface
 
 - type: entity
   parent: MobHumanDummy

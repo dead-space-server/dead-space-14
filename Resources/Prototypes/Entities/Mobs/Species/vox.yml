@@ -165,10 +165,6 @@
   # - type: FootPrints # Backmen-footsteps
     # leftBarePrint: "footprint-left-bare-lizard"
     # rightBarePrint: "footprint-right-bare-lizard"
-  - type: UserInterface #BACKMEN-EDIT
-    interfaces:
-      enum.StoreUiKey.Key:
-        type: StoreBoundUserInterface
 
 
 - type: entity

@@ -94,7 +94,3 @@
       Unsexed: IPSIPC
   - type: ComputerEmotes # DS14: For emote panel
   # - type: FootPrints
-  - type: UserInterface #BACKMEN-EDIT
-    interfaces:
-      enum.StoreUiKey.Key:
-        type: StoreBoundUserInterface
