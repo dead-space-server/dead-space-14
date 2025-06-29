@@ -945,7 +945,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/3eilado/Holo.rsi
+    sprite: _DeadSpace/Sponsor/3eilado/holo.rsi
     state: icon
 
 - type: entity
