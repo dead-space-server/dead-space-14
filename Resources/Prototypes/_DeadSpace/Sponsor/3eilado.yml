@@ -161,7 +161,7 @@
 
 # Magboots
 - type: entity
-  parent: [ ClothingShoesBootsMag,  PowerCellSlotSmallItem, BaseToggleClothing ]
+  parent: [ ClothingShoesBootsMag,  PowerCellSlotSmallItem ]
   id: ClothingShoesBootsMag3eilado
   name: серые украшенные магнитные ботинки
   description: Магнитные ботинки серого цвета.
@@ -177,11 +177,6 @@
   - type: ClothingSpeedModifier
     walkModifier: 1.3
     sprintModifier: 1.3
-  - type: ContainerContainer
-    containers:
-      toggleable-clothing: !type:ContainerSlot {}
-      storagebase: !type:Container
-        ents: []
   - type: PowerCellDraw
     drawRate: 4
   - type: ToggleCellDraw
