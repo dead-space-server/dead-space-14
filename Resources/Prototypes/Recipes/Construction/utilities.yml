@@ -373,7 +373,7 @@
   startNode: start
   targetNode: sensor
   category: construction-category-structures
-  description: Reports on the status of the gas within the attached pipe network. 
+  description: Reports on the status of the gas within the attached pipe network.
   icon:
     sprite: Structures/Piping/Atmospherics/gas_pipe_sensor.rsi
     state: icon
@@ -472,7 +472,7 @@
   - sprite: Structures/Piping/Atmospherics/vent.rsi
     state: vent_off
   conditions:
-    - !type:NoUnstackableInTile
+  - !type:NoUnstackableInTile
 
 - type: construction
   name: passive vent
@@ -493,7 +493,7 @@
   - sprite: Structures/Piping/Atmospherics/vent.rsi
     state: vent_passive
   conditions:
-    - !type:NoUnstackableInTile
+  - !type:NoUnstackableInTile
 
 - type: construction
   name: air scrubber
@@ -514,7 +514,7 @@
   - sprite: Structures/Piping/Atmospherics/scrubber.rsi
     state: scrub_off
   conditions:
-    - !type:NoUnstackableInTile
+  - !type:NoUnstackableInTile
 
 - type: construction
   name: air injector
@@ -535,9 +535,9 @@
   - sprite: Structures/Piping/Atmospherics/outletinjector.rsi
     state: injector
   conditions:
-    - !type:NoUnstackableInTile
+  - !type:NoUnstackableInTile
 
-# ATMOS BINARY
+  # ATMOS BINARY
 - type: construction
   name: gas pump
   id: GasPressurePump
@@ -557,7 +557,7 @@
   - sprite: Structures/Piping/Atmospherics/pump.rsi
     state: pumpPressure
   conditions:
-    - !type:NoUnstackableInTile
+  - !type:NoUnstackableInTile
 
 - type: construction
   name: volumetric gas pump
@@ -578,7 +578,7 @@
   - sprite: Structures/Piping/Atmospherics/pump.rsi
     state: pumpVolume
   conditions:
-    - !type:NoUnstackableInTile
+  - !type:NoUnstackableInTile
 
 - type: construction
   id: GasPassiveGate
@@ -599,7 +599,7 @@
   - sprite: Structures/Piping/Atmospherics/pump.rsi
     state: pumpPassiveGate
   conditions:
-    - !type:NoUnstackableInTile
+  - !type:NoUnstackableInTile
 
 - type: construction
   id: GasValve
@@ -620,7 +620,7 @@
   - sprite: Structures/Piping/Atmospherics/pump.rsi
     state: pumpManualValve
   conditions:
-    - !type:NoUnstackableInTile
+  - !type:NoUnstackableInTile
 
 - type: construction
   id: SignalControlledValve
@@ -662,7 +662,7 @@
   - sprite: Structures/Piping/Atmospherics/gascanisterport.rsi
     state: gasCanisterPort
   conditions:
-    - !type:NoUnstackableInTile
+  - !type:NoUnstackableInTile
 
 - type: construction
   id: GasDualPortVentPump
@@ -727,7 +727,7 @@
     state: gasFilter
   mirror: GasFilterFlipped
   conditions:
-    - !type:NoUnstackableInTile
+  - !type:NoUnstackableInTile
 
 - type: construction
   id: GasFilterFlipped
@@ -745,7 +745,7 @@
     state: gasFilterF
   mirror: GasFilter
   conditions:
-    - !type:NoUnstackableInTile
+  - !type:NoUnstackableInTile
 
 - type: construction
   id: GasMixer
@@ -762,7 +762,7 @@
     state: gasMixer
   mirror: GasMixerFlipped
   conditions:
-    - !type:NoUnstackableInTile
+  - !type:NoUnstackableInTile
 
 - type: construction
   id: GasMixerFlipped
@@ -780,7 +780,7 @@
     state: gasMixerF
   mirror: GasMixer
   conditions:
-    - !type:NoUnstackableInTile
+  - !type:NoUnstackableInTile
 
 - type: construction
   id: PressureControlledValve
@@ -796,9 +796,9 @@
     sprite: Structures/Piping/Atmospherics/pneumaticvalve.rsi
     state: off
   conditions:
-    - !type:NoUnstackableInTile
+  - !type:NoUnstackableInTile
 
-# INTERCOM
+  # INTERCOM
 - type: construction
   name: intercom
   id: IntercomAssembly
@@ -872,7 +872,7 @@
   - !type:WallmountCondition
 
 
-# FAN
+  # FAN
 - type: construction
   name: little directional fan
   id: littleDirectionalFan
