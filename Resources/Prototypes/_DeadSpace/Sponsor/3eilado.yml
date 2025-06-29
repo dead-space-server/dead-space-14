@@ -532,14 +532,24 @@
 - type: entity
   parent: BaseMedicalPDA
   id: PDA3eilado
-  name: КПК модификации «Домашний демон»
-  description: Этот КПК выглядит уютно
+  name: дзибан
+  description: В позвоночнике этого существа что-то было.
   categories: [ HideSpawnMenu ]
   components:
   - type: Icon
     sprite: _DeadSpace/Sponsor/3eilado/pda.rsi 
   - type: Sprite
     sprite: _DeadSpace/Sponsor/3eilado/pda.rsi
+    layers:
+    - map: [ "enum.PdaVisualLayers.Base" ]
+      state: "pda"
+    - state: "light_overlay"
+      map: [ "enum.PdaVisualLayers.Flashlight" ]
+      shader: "unshaded"
+      visible: false
+    - state: "id_overlay"
+      map: [ "enum.PdaVisualLayers.IdLight" ]
+      visible: false
   
 # GoldenPlunger
 - type: entity
