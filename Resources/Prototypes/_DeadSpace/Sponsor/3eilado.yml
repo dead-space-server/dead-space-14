@@ -926,7 +926,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/3eilado/HolofanProjector.rsi
+    sprite: _DeadSpace/Sponsor/3eilado/holofanprojector.rsi
     state: icon
   - type: HolosignProjector
     signProto: HoloFan3eilado
