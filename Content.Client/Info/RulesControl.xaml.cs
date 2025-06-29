@@ -15,10 +15,9 @@ namespace Content.Client.Info;
 [GenerateTypedNameReferences]
 public sealed partial class RulesControl : BoxContainer, ILinkClickHandler
 {
-    [Dependency] private readonly IUriOpener _uri = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly DocumentParsingManager _parsingMan = default!;
-
+    [Dependency] private readonly IUriOpener _uri = default!;  // DS14
+    [Dependency] private readonly IConfigurationManager _cfg = default!; // DS14
     private string? _currentEntry;
     private readonly Stack<string> _priorEntries = new();
 
@@ -32,11 +31,13 @@ public sealed partial class RulesControl : BoxContainer, ILinkClickHandler
         HomeButton.OnPressed += _ => SetGuide();
 
         BackButton.OnPressed += _ => SetGuide(_priorEntries.Pop(), false);
+        // DS14-start
         WikiButton.OnPressed += _ =>
         {
             _uri.OpenUri(_cfg.GetCVar(CCVars.InfoLinksWiki));
         };
-        WikiButton.Visible = _cfg.GetCVar(CCVars.InfoLinksWiki) != "";
+        WikiButton.Visible = !string.IsNullOrEmpty(_cfg.GetCVar(CCVars.InfoLinksWiki));
+        // DS14-end
     }
 
     public void HandleClick(string link)
