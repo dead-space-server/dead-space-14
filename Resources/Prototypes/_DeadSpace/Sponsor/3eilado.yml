@@ -10,7 +10,7 @@
 
 # Backpack
 - type: entity
-  parent: [ ClothingBackpack, BaseToggleClothing ]
+  parent: ClothingBackpack
   id: ClothingBackpack3eilado
   name: карманный демон Ainnetel
   description: Провористый карманный демон, выглядит не особо дружелюбно. На его рожках виднеется гравировка Ван'Астрея.
@@ -32,6 +32,11 @@
     maxItemSize: Huge
     grid:
     - 0,0,15,5
+  - type: ContainerContainer
+    containers:
+      toggleable-clothing: !type:ContainerSlot {}
+      storagebase: !type:Container
+        ents: []
   - type: ToggleableClothing
     clothingPrototype: ClothingOuterHardsuit3eilado
     requiredSlot: BACK
@@ -172,6 +177,11 @@
   - type: ClothingSpeedModifier
     walkModifier: 1.3
     sprintModifier: 1.3
+  - type: ContainerContainer
+    containers:
+      toggleable-clothing: !type:ContainerSlot {}
+      storagebase: !type:Container
+        ents: []
   - type: PowerCellDraw
     drawRate: 4
   - type: ToggleCellDraw
