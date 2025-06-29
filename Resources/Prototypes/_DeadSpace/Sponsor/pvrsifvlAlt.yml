@@ -111,7 +111,7 @@
 
 - type: entity
   parent: [WeaponCrusherGlaive, BaseSecurityCargoContraband]
-  id: WeaponSynthocepsCrusherpvrsifvl
+  id: WeaponCrusherpvrsifvlAlt
   name: синтоцепсы ETL//07
   description: Модифицированный образец протокинетического ускорителя. Осторожно — у этих организмов может развиться сознание. Если это произошло, рекомендуем немедленно их уничтожить
   components:
