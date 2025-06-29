@@ -357,7 +357,7 @@ public static class NumberConverter
         return
             NumberToText(value, male)
             + " "
-            + GetDeclension((int)(value % 10), valueDeclensionFor1, valueDeclensionFor2, valueDeclensionFor5);
+            + GetDeclension((int) (value % 10), valueDeclensionFor1, valueDeclensionFor2, valueDeclensionFor5);
     }
 
     private static string GetDeclension(int val, string one, string two, string five)
