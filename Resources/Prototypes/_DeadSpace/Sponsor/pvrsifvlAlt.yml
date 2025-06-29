@@ -77,6 +77,10 @@
       - id: WelderExperimentalpvrsifvlAlt
       - id: MultitoolpvrsifvlAlt
       - id: SyndicateJawsOfLifepvrsifvlAlt
+      - id: GasAnalyzerpvrsifvlAlt
+      - id: MineralScannerpvrsifvlAlt
+      - id: HandHeldMassScannerpvrsifvlAlt
+      - id: trayScannerpvrsifvlAlt
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -503,6 +507,120 @@
   - type: Sprite
     sprite: _DeadSpace/Sponsor/pvrsifvlAlt/tools_multitool.rsi
 
+#t-ray scanner
+- type: entity
+  name: т-лучевой сканер ETL//07
+  parent: BaseItem
+  id: trayScannerpvrsifvlAlt
+  description: Где-то в доме слышен скрип. Модифицирован компанией Nakamura Engineering по индивидуальному заказу.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt/tools_trayscanner.rsi
+    layers:
+    - state: tray-off
+      map: ["base"]
+  - type: TrayScanner
+  - type: Item
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt/tools_trayscanner.rsi
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.TrayScannerVisual.Visual:
+        base:
+          On: { state: tray-on }
+          Off: { state: tray-off }
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 400
+      Glass: 150
+  - type: StaticPrice
+    price: 85
+
+#gasanalyzer
+- type: entity
+  name: газоанализатор ETL//07
+  parent: BaseItem
+  id: GasAnalyzerpvrsifvlAlt
+  description: Сгорай. Модифицирован компанией Nakamura Engineering по индивидуальному заказу.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt/tools_gasanalyzer.rsi
+    layers:
+      - state: icon
+        map: ["analyzer"]
+  - type: GasAnalyzer
+  - type: ActivatableUI
+    inHandsOnly: true
+    singleUser: true
+    requireActiveHand: false
+    key: enum.GasAnalyzerUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.GasAnalyzerUiKey.Key:
+        type: GasAnalyzerBoundUserInterface
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+        enum.GasAnalyzerVisuals.Enabled:
+          enabled:
+            True: { state: working }
+            False: { state: icon }
+  - type: StaticPrice
+    price: 80
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 400
+      Glass: 100
+  - type: GuideHelp
+    guides:
+    - AtmosTools
+    - PipeNetworks
+    - Pipes
+
+# mass scanner
+- type: entity
+  name: сканер массы ETL//07
+  parent: HandHeldMassScanner
+  id: HandHeldMassScannerpvrsifvlAlt
+  description: Помоги мне в последний раз, помоги мне в последний раз, помоги мне в последний раз, помоги мне... Помо-помоги мне. Модифицирован компанией Nakamura Engineering по индивидуальному заказу.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Item
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt/tools_massscanner.rsi
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt/tools_massscanner.rsi
+    state: icon
+    layers:
+    - state: icon
+    - state: scanner
+      shader: unshaded
+      visible: false
+      map: [ "enum.PowerDeviceVisualLayers.Powered" ]
+
+#mineralscanner
+- type: entity
+  id: MineralScannerpvrsifvlAlt
+  name: минеральный сканер ETL//07
+  description: Чёрт, у меня дрожащая рука. Сложно понимать, так сложно понимать. Модфицирован компанией Nakamura Engineering по индивидуальному заказу.
+  parent: [ MineralScannerUnpowered, PowerCellSlotMediumItem ]
+  categories: [ HideSpawnMenu ]
+  suffix: Powered
+  components:
+  - type: ToggleCellDraw
+  - type: PowerCellDraw
+    drawRate: 2.4 # ~5 minutes on a medium power cell.
+    useRate: 0
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt/tools_mineralscanner.rsi
+    layers:
+    - state: icon
+    - state: icon-o
+      shader: unshaded
+      visible: false
+      map: ["enum.ToggleVisuals.Layer"]
+
 #Гарнитура
 - type: entity
   parent: ClothingHeadset
@@ -560,45 +678,7 @@
     - Belt
 
 #Gun
-- type: entity
-  name: импульсный револьвер Хоукмун ETL//07
-  parent: BaseWeaponBatterySmall
-  id: GunpvrsifvlAlt
-  description: Модифицированный образец импульсного пистолета корпуса «Синий Щит». Выследи свою жертву и вонзи когти во Тьму. Разработан и спроектирован компанией Vitezstvi по индивидуальному заказу.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Sponsor/pvrsifvlAlt/gun.yml
-    layers:
-    - state: base
-      map: ["enum.GunVisualLayers.Base"]
-    - state: mag-unshaded-0
-      map: ["enum.GunVisualLayers.MagUnshaded"]
-      shader: unshaded
-  - type: HitscanBatteryAmmoProvider
-    proto: VioletLaser
-    fireCost: 50
-  - type: Clothing
-    sprite: _DeadSpace/Sponsor/pvrsifvlAlt/gun.yml
-  - type: Gun
-    selectedMode: SemiAuto
-    availableModes:
-    - SemiAuto
-    fireRate: 1.4
-    soundGunshot:
-      path: /Audio/_DeadSpace/Weapons/Guns/Gunshots/laser_shot.ogg
-      params:
-        volume: -2
-  - type: StaticPrice
-    price: 100
-  - type: Appearance
-  - type: MagazineVisuals
-    magState: mag
-    steps: 5
-    zeroVisible: true
-  - type: Battery
-    maxCharge: 750
-    startingCharge: 750
+#todo, тут должен быть револьвольвер осщ
 
 #Документ
 - type: entity

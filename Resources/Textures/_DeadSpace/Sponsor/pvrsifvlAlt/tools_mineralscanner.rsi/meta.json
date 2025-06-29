@@ -8,10 +8,10 @@
   },
   "states": [
     {
-      "name": "adv"
+      "name": "icon"
     },
     {
-      "name": "adv-o"
+      "name": "icon-o"
     }
   ]
 }
