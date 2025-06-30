@@ -30,7 +30,7 @@
       collection: MetalThud
     damage:
       types:
-        Blunt: 14
+        Blunt: 10
   - type: Clothing
     quickEquip: false
     slots:
