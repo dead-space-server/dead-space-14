@@ -2,7 +2,7 @@
   id: PhotocopierMachineCircuitboard
   parent: BaseMachineCircuitboard
   name: копировальный аппарат (машинная плата)
-  description: Из этой машинной платы собирается копировальный аппарат
+  description: Из этой машинной платы собирается копировальный аппарат.
   components:
     - type: Sprite
       state: science
