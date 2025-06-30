@@ -145,7 +145,7 @@
     rootTask:
       task: SimpleHostileCompound
   - type: GhostRoleNotify
-    GroupPrototype: FriendForPersonal
+    GroupPrototype: Slimeping
 
 - type: entity
   name: blue slime
@@ -176,7 +176,7 @@
       raffle:
         settings: short
     - type: GhostRoleNotify
-      GroupPrototype: SmallAntagGroup
+      GroupPrototype: Slimeping
 
 - type: entity
   name: green slime
@@ -218,7 +218,8 @@
       raffle:
         settings: short
     - type: GhostRoleNotify
-      GroupPrototype: SmallAntagGroup
+      GroupPrototype: Slimeping
+
 - type: entity
   name: yellow slime
   parent: MobAdultSlimes
@@ -258,4 +259,4 @@
       raffle:
         settings: short
     - type: GhostRoleNotify
-      GroupPrototype: SmallAntagGroup
+      GroupPrototype: Slimeping

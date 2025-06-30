@@ -338,7 +338,7 @@
     description: Вы некроморф, убейте всех своих врагов.
   - type: GhostTakeoverAvailable
   - type: GhostRoleNotify
-    GroupPrototype: NecromorfGroup
+    GroupPrototype: CorpseCollectorNecromorfping
 
 - type: entity
   id: RandomNecromorfSpawner

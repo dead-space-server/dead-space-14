@@ -235,4 +235,4 @@
   - type: StaticPrice
     price: 400
   - type: GhostRoleNotify
-    GroupPrototype: SmallAntagGroup
+    GroupPrototype: TomatoKillerping

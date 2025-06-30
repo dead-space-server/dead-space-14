@@ -1275,7 +1275,7 @@
   - type: TTS
     voice: Ycf
   - type: GhostRoleNotify
-    GroupPrototype: PetsGroup
+    GroupPrototype: Kangarooping
 
 - type: entity
   name: boxing kangaroo
@@ -3083,7 +3083,7 @@
         Piercing: 6
         Structural: 15
   - type: GhostRoleNotify
-    GroupPrototype: SyndicateGroup
+    GroupPrototype: ExplosiveCat
 
 - type: entity
   name: space cat

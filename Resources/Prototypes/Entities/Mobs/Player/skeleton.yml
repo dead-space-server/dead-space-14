@@ -27,7 +27,7 @@
     prototypes: [PirateGear]
   - type: RandomHumanoidAppearance
   - type: GhostRoleNotify
-    GroupPrototype: BigAntagsGroup
+    GroupPrototype: PirateSkeletonping
 
 
 - type: entity
@@ -68,4 +68,4 @@
     prototypes: [LimitedPassengerGear]
   - type: RandomHumanoidAppearance
   - type: GhostRoleNotify
-    GroupPrototype: FreeAgentGroup
+    GroupPrototype: Skeletonping

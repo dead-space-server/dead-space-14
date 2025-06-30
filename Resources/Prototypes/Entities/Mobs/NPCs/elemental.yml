@@ -359,7 +359,7 @@
   - type: DrainableSolution
     solution: bloodstream
   - type: GhostRoleNotify
-    GroupPrototype: SmallAntagGroup
+    GroupPrototype: Slimeping
 
 - type: entity
   name: Reagent Slime Spawner

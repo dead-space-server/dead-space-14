@@ -742,7 +742,7 @@
   - type: Loadout
     prototypes: [ BoxingKangarooGear ]
   - type: GhostRoleNotify
-    GroupPrototype: PetsGroup
+    GroupPrototype: Kangarooping
 
 - type: entity
   name: Smile
@@ -865,7 +865,7 @@
       proper: true
       gender: male
   - type: GhostRoleNotify
-    GroupPrototype: PetsGroup
+    GroupPrototype: PunPunping
 
 - type: entity
   name: Tropico

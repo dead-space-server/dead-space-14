@@ -20,7 +20,7 @@
       - sprite: _Backmen/Mobs/Aliens/blob.rsi
         state: blob_nuke_overlay
   - type: GhostRoleNotify
-    GroupPrototype: BlobGroup
+    GroupPrototype: Blob
 
 - type: entity
   id: MobBlobPod
@@ -358,7 +358,7 @@
       settings: default
   - type: GhostTakeoverAvailable
   - type: GhostRoleNotify
-    GroupPrototype: BlobGroup
+    GroupPrototype: Blob
 
 - type: entity
   parent: BaseBlob
@@ -609,4 +609,4 @@
     tags:
       - BypassInteractionRangeChecks
   - type: GhostRoleNotify
-    GroupPrototype: BlobGroup
+    GroupPrototype: Blob

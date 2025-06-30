@@ -120,7 +120,7 @@
     tags:
       - CannotSuicide
   - type: GhostRoleNotify
-    GroupPrototype: Demon
+    GroupPrototype: DemonShadowping
 
 - type: entity
   name: теневая рука

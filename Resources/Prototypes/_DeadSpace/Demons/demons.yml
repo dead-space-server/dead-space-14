@@ -88,8 +88,6 @@
         Burn: -2
   - type: TTS
     voice: Avozu
-  - type: GhostRoleNotify
-    GroupPrototype: Demon
 
 - type: entity
   parent: BaseMobDemonRS
@@ -139,6 +137,8 @@
     rules: ghost-role-information-slaughter-rules
   - type: Reflect
     reflectProb: 0.25
+  - type: GhostRoleNotify
+    GroupPrototype: DemonSlaughter
 
 - type: entity
   parent: BaseMobDemonRS
@@ -188,6 +188,8 @@
     name: ghost-role-information-honker-name
     description: ghost-role-information-honker-description
     rules: ghost-role-information-honker-rules
+  - type: GhostRoleNotify
+    GroupPrototype: DemonHonker
 
 - type: entity
   parent: BaseMobDemonRS
@@ -222,6 +224,8 @@
     soundGunshot: /Audio/Magic/fireball.ogg
   - type: BallisticAmmoProvider
     proto: FireballBullet
+  - type: GhostRoleNotify
+    GroupPrototype: DemonIfrit
 
 - type: entity
   parent: BaseMobDemonRS
@@ -268,6 +272,8 @@
         Blunt: 7
         Piercing: 1
         Heat: 5
+  - type: GhostRoleNotify
+    GroupPrototype: DemonJaunt
 
 - type: entity
   id: FireballBullet

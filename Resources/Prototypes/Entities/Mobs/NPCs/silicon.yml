@@ -221,7 +221,7 @@
       params:
         variation: 0.125
   - type: GhostRoleNotify
-    GroupPrototype: FriendForPersonal
+    GroupPrototype: Botsping
 
 - type: entity
   parent: MobHonkBot
@@ -264,7 +264,7 @@
     intensitySlope: 5
     canCreateVacuum: false
   - type: GhostRoleNotify
-    GroupPrototype: FriendForPersonal
+    GroupPrototype: Botsping
 
 - type: entity
   parent: MobSiliconBase
@@ -412,7 +412,7 @@
   - type: Inventory
     templateId: head
   - type: GhostRoleNotify
-    GroupPrototype: FriendForPersonal
+    GroupPrototype: Botsping
 
 - type: entity
   parent: MobSiliconBase
@@ -482,4 +482,4 @@
     - Common
     - Supply
   - type: GhostRoleNotify
-    GroupPrototype: FriendForPersonal
+    GroupPrototype: Botsping

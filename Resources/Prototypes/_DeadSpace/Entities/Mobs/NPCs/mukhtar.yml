@@ -113,7 +113,7 @@
     sprite: Mobs/Effects/onfire.rsi
     normalState: Monkey_burning
   - type: GhostRoleNotify
-    GroupPrototype: PetsGroup
+    GroupPrototype: Mukhtarping
 
 - type: startingGear
   id: MobMukhtarGear

@@ -74,7 +74,7 @@
   - type: RandomHumanoidAppearance
     randomizeName: false
   - type: GhostRoleNotify
-    GroupPrototype: BigAntags
+    GroupPrototype: Sithping
 
 - type: entity
   abstract: true
@@ -139,7 +139,7 @@
     - sprite: Objects/Weapons/Melee/energykatana.rsi
       state: icon
   - type: GhostRoleNotify
-    GroupPrototype: BigAntags
+    GroupPrototype: Sithping
 
 - type: entity
   parent: EnergySword

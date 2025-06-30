@@ -118,7 +118,7 @@
       bloodMaxVolume: 300
       bloodReagent: Laughter
     - type: GhostRoleNotify
-      GroupPrototype: BigAntagsGroup
+      GroupPrototype: Behonkerping
 
 - type: entity
   name: behonker

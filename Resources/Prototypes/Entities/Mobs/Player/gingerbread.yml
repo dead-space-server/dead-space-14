@@ -31,5 +31,5 @@
     rootTask:
       task: SimpleHostileCompound
   - type: GhostRoleNotify
-    GroupPrototype: FriendForPersonal
+    GroupPrototype: EventGroup
   

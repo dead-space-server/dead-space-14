@@ -84,4 +84,4 @@
   - type: TTS # Corvax-TTS
     voice: Kelthuzad
   - type: GhostRoleNotify
-    GroupPrototype: BigAntagsGroup
+    GroupPrototype: RevenantPing

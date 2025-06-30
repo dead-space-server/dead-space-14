@@ -169,7 +169,7 @@
   - type: TTS
     voice: Sunboy_mannered
   - type: GhostRoleNotify
-    GroupPrototype: SpidersGroup
+    GroupPrototype: SpiderTerrorBase
 
 - type: entity
   name: паук королевской крови
@@ -206,7 +206,7 @@
       MobSpiderTerrorRoyalGuard: 100
       MobSpiderTerrorPrincess: 150
   - type: GhostRoleNotify
-    GroupPrototype: SpidersGroup
+    GroupPrototype: SpiderTerrorKing
 
 - type: entity
   name: героический паук королевской крови
@@ -230,7 +230,7 @@
     description: Паук Ужаса.
     rules: ghost-role-information-rules-team-antagonist
   - type: GhostRoleNotify
-    GroupPrototype: SpidersGroup
+    GroupPrototype: SpiderTerrorGeroick
 
 - type: entity
   name: паук страж

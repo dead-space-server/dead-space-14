@@ -129,7 +129,7 @@
     voice: DrSezavo
   - type: NightVision # DS14
   - type: GhostRoleNotify
-    GroupPrototype: SmallAntagGroup
+    GroupPrototype: Ratking
 
 - type: entity
   id: MobRatKingBuff

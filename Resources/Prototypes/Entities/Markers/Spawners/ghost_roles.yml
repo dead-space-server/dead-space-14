@@ -35,7 +35,7 @@
       - sprite: Mobs/Animals/regalrat.rsi
         state: icon
   - type: GhostRoleNotify
-    GroupPrototype: SmallAntagGroup
+    GroupPrototype: Ratking
 
 - type: entity
   id: SpawnPointGhostRemilia
@@ -143,7 +143,7 @@
       - sprite: Structures/Wallmounts/signs.rsi
         state: radiation
   - type: GhostRoleNotify
-    GroupPrototype: OperativeGroup
+    GroupPrototype: LoneOper
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -167,7 +167,7 @@
       department: Command
       time: 72000 # 20 hours
   - type: GhostRoleNotify
-    GroupPrototype: OperativeGroup
+    GroupPrototype: CommanderOperatives
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -191,7 +191,7 @@
       department: Security
       time: 72000 # 20 hours
   - type: GhostRoleNotify
-    GroupPrototype: OperativeGroup
+    GroupPrototype: OperativeMedic
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -205,7 +205,7 @@
     mindRoles:
     - MindRoleGhostRoleTeamAntagonist
   - type: GhostRoleNotify
-    GroupPrototype: OperativeGroup
+    GroupPrototype: Operativeping
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -227,7 +227,7 @@
     - sprite: Mobs/Aliens/Carps/dragon.rsi
       state: alive
   - type: GhostRoleNotify
-    GroupPrototype: BigAntagsGroup
+    GroupPrototype: Dragonping
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -252,7 +252,7 @@
     - sprite: Objects/Weapons/Melee/energykatana.rsi
       state: icon
   - type: GhostRoleNotify
-    GroupPrototype: BigAntagsGroup
+    GroupPrototype: Nijaping
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -278,7 +278,7 @@
     - sprite: Mobs/Aliens/paradox_clone.rsi
       state: preview
   - type: GhostRoleNotify
-    GroupPrototype: SmallAntagGroup
+    GroupPrototype: Paradoxping
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -298,7 +298,7 @@
     - sprite: Mobs/Silicon/chassis.rsi
       state: derelict_icon
   - type: GhostRoleNotify
-    GroupPrototype: SmallAntagGroup
+    GroupPrototype: DerelictCyborg
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -324,4 +324,4 @@
     - sprite: Clothing/Head/Hats/wizardhat.rsi
       state: icon
   - type: GhostRoleNotify
-    GroupPrototype: BigAntagsGroup
+    GroupPrototype: Wizardping

@@ -85,5 +85,5 @@
         types:
           Blunt: 7
     - type: GhostRoleNotify
-      GroupPrototype: PetsGroup
+      GroupPrototype: Largoping
     # DS14-end

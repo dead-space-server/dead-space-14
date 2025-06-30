@@ -640,4 +640,4 @@
         settings: default
     - type: GhostTakeoverAvailable
     - type: GhostRoleNotify
-      GroupPrototype: FreeAgentGroup
+      GroupPrototype: DerelictCyborg

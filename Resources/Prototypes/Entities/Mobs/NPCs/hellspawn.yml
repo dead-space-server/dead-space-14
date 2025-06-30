@@ -103,4 +103,4 @@
     color: "#ff4242"
     castShadows: false
   - type: GhostRoleNotify
-    GroupPrototype: Demon
+    GroupPrototype: HellSpawnping

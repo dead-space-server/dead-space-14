@@ -1,59 +1,197 @@
 - type: ghostNotifyGroup
-  id: Demon
-  name: Демоны
+  id: DemonBoss
+  name: Демон Вестник
   MainGroup: Антаги
 
 - type: ghostNotifyGroup
-  id: BlobGroup
+  id: DemonSlaughter
+  name: Бронированный демон
+  MainGroup: Антаги
+
+- type: ghostNotifyGroup
+  id: DemonHonker
+  name: Демон клоун
+  MainGroup: Антаги
+
+- type: ghostNotifyGroup
+  id: DemonHonker
+  name: Демон клоун
+  MainGroup: Антаги
+
+- type: ghostNotifyGroup
+  id: DemonJaunt
+  name: Гуляющий демон
+  MainGroup: Антаги
+
+- type: ghostNotifyGroup
+  id: DemonShadowping
+  name: Теневой демон
+  MainGroup: Антаги
+
+- type: ghostNotifyGroup
+  id: HellSpawnping
+  name: Адское отродье
+  MainGroup: Антаги
+
+- type: ghostNotifyGroup
+  id: Sithping
+  name: Ситх
+ 
+- type: ghostNotifyGroup
+  id: SpiderTerrorBase
+  name: Паук страж ужаса
+
+- type: ghostNotifyGroup
+  id: SpiderTerrorKing
+  name: Паук королевской крови
+
+- type: ghostNotifyGroup
+  id: SpiderTerrorGeroick
+  name: Героический паук королевской крови
+
+- type: ghostNotifyGroup
+  id: Blob
   name: Блоб
+
+- type: ghostNotifyGroup
+  id: PirateSkeletonping
+  name: Скелет пират
+
+- type: ghostNotifyGroup
+  id: Skeletonping
+  name: Скелет 
+
+- type: ghostNotifyGroup
+  id: BlobBlobernaut
+  name: Блобернаут
+
+- type: ghostNotifyGroup
+  id: Largoping
+  name: Ларго
+
+- type: ghostNotifyGroup
+  id: Mukhtarping
+  name: Мухтар
+
+- type: ghostNotifyGroup
+  id: Kangarooping
+  name: Кенгуру
+
+- type: ghostNotifyGroup
+  id: PunPunping
+  name: Пун пун
 
 - type: ghostNotifyGroup
   id: PetsGroup
   name: Питомцы
 
 - type: ghostNotifyGroup
+  id: Ratking
+  name: Король крыс
+
+- type: ghostNotifyGroup
   id: SyndicateGroup
-  name: Синдикат
+  name: Борги Синдиката
 
 - type: ghostNotifyGroup
   id: NecromorfGroup
   name: Некроморфы
 
 - type: ghostNotifyGroup
+  id: CorpseCollectorNecromorfping
+  name: Собиратель трупов
+
+- type: ghostNotifyGroup
   id: CBURNGroup
   name: Рхбзз
 
 - type: ghostNotifyGroup
-  id: BigAntagsGroup
-  name: Большие Антоганисты
+  id: Dragonping
+  name: Космический дракон
+
+- type: ghostNotifyGroup
+  id: Nijaping
+  name: Космический нинзя
+
+- type: ghostNotifyGroup
+  id: Paradoxping
+  name: Парадоксальный клон
+
+- type: ghostNotifyGroup
+  id: DerelictCyborg
+  name: Неисправный борг
+
+- type: ghostNotifyGroup
+  id: Wizardping
+  name: Маг
+
+- type: ghostNotifyGroup
+  id: RevenantPing
+  name: Ревенант
+
+- type: ghostNotifyGroup
+  id: Behonkerping
+  name: Бехонкер
+
+- type: ghostNotifyGroup
+  id: ExplosiveCat
+  name: Взрывной котёнок
+
+- type: ghostNotifyGroup
+  id: Holoparasiteping
+  name: Голопаразит
+
+- type: ghostNotifyGroup
+  id: HoloClownping
+  name: Голоклоун
+
+- type: ghostNotifyGroup
+  id: ifritGuard
+  name: Ифрит
 
 - type: ghostNotifyGroup
   id: SpidersGroup
-  name: Пауки
+  name: Паук
 
 - type: ghostNotifyGroup
-  id: SmallAntagGroup
-  name: Антоганисты
+  id: Slimeping
+  name: Слаймы
 
 - type: ghostNotifyGroup
-  id: OperativeGroup
-  name: Ядерные Оперативники
+  id: LoneOper
+  name: Одинокий ядерный оперативник
+
+- type: ghostNotifyGroup
+  id: CommanderOperatives
+  name: Командир ЯО
+
+- type: ghostNotifyGroup
+  id: OperativeMedic
+  name: Медик ядерных оперативников
+
+- type: ghostNotifyGroup
+  id: Operativeping
+  name: Ядерный оперативник
 
 - type: ghostNotifyGroup
   id: CarpsGroup
-  name: Карпы
+  name: Космический карп
+
+- type: ghostNotifyGroup
+  id: TomatoKillerping
+  name: Томат убийца
 
 - type: ghostNotifyGroup
   id: FreeAgentGroup
   name: Свободные Агенты
 
 - type: ghostNotifyGroup
-  id: FriendForPersonal
-  name: Персонал или их союзники
+  id: Botsping
+  name: Боты
 
 - type: ghostNotifyGroup
-  id: GuardianGroup
-  name: Защитники
+  id: SyndicateGroup
+  name: Агенты синдиката(подкрепления)
 
 - type: ghostNotifyGroup
   id: ERTGroup

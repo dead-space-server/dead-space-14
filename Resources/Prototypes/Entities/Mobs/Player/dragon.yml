@@ -156,7 +156,7 @@
     needsHands: false
   - type: NightVision # DS14 
   - type: GhostRoleNotify
-    GroupPrototype: BigAntagsGroup
+    GroupPrototype: Dragonping
 
 - type: entity
   parent: BaseMobDragon
