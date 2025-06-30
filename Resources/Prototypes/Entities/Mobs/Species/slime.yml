@@ -122,15 +122,16 @@
             state: jumpsuit-female
   - type: Sanity # DS14
   - type: SlimePerson # DS14: For emote panel
-  - type: MagicMirror   
+  - type: MagicMirror
     internal: true
   - type: IntrinsicUI
     uis:
       enum.MagicMirrorUiKey.Key:
         toggleAction: HairstyleAction
-  - type: FootPrints # Backmen-footsteps
-    leftBarePrint: "footprint-left-bare-slime"
-    rightBarePrint: "footprint-right-bare-slime"
+  # - type: FootPrints # Backmen-footsteps
+    # leftBarePrint: "footprint-left-bare-slime"
+    # rightBarePrint: "footprint-right-bare-slime"
+
 
 - type: entity
   parent: MobHumanDummy
