@@ -553,6 +553,8 @@
   - type: GhostTakeoverAvailable
   - type: TTS
     voice: Chen
+  - type: GhostRoleNotify
+    GroupPrototype: PetsGroup
 
 - type: entity
   name: Renault
@@ -641,6 +643,8 @@
     - sadness
   - type: Hunger
     baseDecayRate: 0.1 # DS14: not soo hungry
+  - type: GhostRoleNotify
+    GroupPrototype: PetsGroup
 
 - type: entity
   name: Shiva
@@ -737,6 +741,8 @@
   - type: GhostTakeoverAvailable
   - type: Loadout
     prototypes: [ BoxingKangarooGear ]
+  - type: GhostRoleNotify
+    GroupPrototype: PetsGroup
 
 - type: entity
   name: Smile
@@ -821,6 +827,8 @@
     attributes:
       proper: true
       gender: female
+  - type: GhostRoleNotify
+    GroupPrototype: PetsGroup
 
 - type: entity
   name: Pun Pun
@@ -856,6 +864,8 @@
     attributes:
       proper: true
       gender: male
+  - type: GhostRoleNotify
+    GroupPrototype: PetsGroup
 
 - type: entity
   name: Tropico

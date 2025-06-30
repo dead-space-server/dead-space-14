@@ -30,4 +30,6 @@
   - type: HTN
     rootTask:
       task: SimpleHostileCompound
+  - type: GhostRoleNotify
+    GroupPrototype: FriendForPersonal
   

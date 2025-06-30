@@ -19,6 +19,8 @@
       - state: green
       - sprite: _Backmen/Mobs/Aliens/blob.rsi
         state: blob_nuke_overlay
+  - type: GhostRoleNotify
+    GroupPrototype: BlobGroup
 
 - type: entity
   id: MobBlobPod
@@ -202,6 +204,8 @@
       - map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
         state: nautdamage
         shader: unshaded
+  - type: GhostRoleNotify
+    GroupPrototype: BlobGroup
 
 - type: entity
   id: BaseBlob
@@ -353,6 +357,8 @@
     raffle:
       settings: default
   - type: GhostTakeoverAvailable
+  - type: GhostRoleNotify
+    GroupPrototype: BlobGroup
 
 - type: entity
   parent: BaseBlob
@@ -602,3 +608,5 @@
   - type: Tag
     tags:
       - BypassInteractionRangeChecks
+  - type: GhostRoleNotify
+    GroupPrototype: BlobGroup

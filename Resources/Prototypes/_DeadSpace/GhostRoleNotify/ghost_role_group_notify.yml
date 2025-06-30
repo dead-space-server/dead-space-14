@@ -1,0 +1,72 @@
+- type: ghostNotifyGroup
+  id: Demon
+  name: Демоны
+  MainGroup: Антаги
+
+- type: ghostNotifyGroup
+  id: BlobGroup
+  name: Блоб
+
+- type: ghostNotifyGroup
+  id: PetsGroup
+  name: Питомцы
+
+- type: ghostNotifyGroup
+  id: SyndicateGroup
+  name: Синдикат
+
+- type: ghostNotifyGroup
+  id: NecromorfGroup
+  name: Некроморфы
+
+- type: ghostNotifyGroup
+  id: CBURNGroup
+  name: Рхбзз
+
+- type: ghostNotifyGroup
+  id: BigAntagsGroup
+  name: Большие Антоганисты
+
+- type: ghostNotifyGroup
+  id: SpidersGroup
+  name: Пауки
+
+- type: ghostNotifyGroup
+  id: SmallAntagGroup
+  name: Антоганисты
+
+- type: ghostNotifyGroup
+  id: OperativeGroup
+  name: Ядерные Оперативники
+
+- type: ghostNotifyGroup
+  id: CarpsGroup
+  name: Карпы
+
+- type: ghostNotifyGroup
+  id: FreeAgentGroup
+  name: Свободные Агенты
+
+- type: ghostNotifyGroup
+  id: FriendForPersonal
+  name: Персонал или их союзники
+
+- type: ghostNotifyGroup
+  id: GuardianGroup
+  name: Защитники
+
+- type: ghostNotifyGroup
+  id: ERTGroup
+  name: Обр
+
+- type: ghostNotifyGroup
+  id: DeathSquadGroup
+  name: Эскадрон Смерти
+
+- type: ghostNotifyGroup
+  id: EventGroup
+  name: Ивенты
+
+- type: ghostNotifyGroup
+  id: VisitorGroup
+  name: Поситители

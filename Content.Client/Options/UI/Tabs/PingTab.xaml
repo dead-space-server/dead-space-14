@@ -1,0 +1,17 @@
+<Control xmlns="https://spacestation14.io"
+            xmlns:tabs="clr-namespace:Content.Client.Options.UI.Tabs"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:ui="clr-namespace:Content.Client.Options.UI">
+    <BoxContainer Orientation="Vertical">
+        <BoxContainer Orientation="Vertical" Margin="8 8 8 8" VerticalExpand="True">
+            <Label Text="{Loc 'ui-pings-title'}"
+                   StyleClasses="LabelKeyText"/>
+            <ScrollContainer VerticalExpand="True">
+                <BoxContainer Name="PingsCont" Orientation="Vertical" Margin="0 3 0 0">
+                    <!-- Keybind buttons are added here in the C# code -->
+                </BoxContainer>
+            </ScrollContainer>
+        </BoxContainer>
+        <ui:OptionsTabControlRow Name="Control" Access="Public" />
+    </BoxContainer>
+</Control>

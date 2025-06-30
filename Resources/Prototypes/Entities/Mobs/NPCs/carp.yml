@@ -188,6 +188,8 @@
     - type: HTN
       rootTask:
         task: DragonCarpCompound
+    - type: GhostRoleNotify
+      GroupPrototype: CarpsGroup
 
 - type: entity
   id: MobCarpDungeon

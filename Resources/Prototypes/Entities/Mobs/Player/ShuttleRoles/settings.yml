@@ -15,6 +15,8 @@
       rules: ghost-role-information-nonantagonist-rules
       raffle:
         settings: default
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorCaptain
@@ -26,6 +28,8 @@
     - type: Loadout
       prototypes: [ VisitorCaptain, VisitorCaptainAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorCE
@@ -37,6 +41,8 @@
     - type: Loadout
       prototypes: [ VisitorCE, VisitorCEAlt ]
       roleLoadout: [ RoleSurvivalExtended ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorCMO
@@ -48,6 +54,8 @@
     - type: Loadout
       prototypes: [ VisitorCMO, VisitorCMOAlt ]
       roleLoadout: [ RoleSurvivalMedical ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorHOP
@@ -59,6 +67,8 @@
     - type: Loadout
       prototypes: [ VisitorHOP, VisitorHOPAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorHOS
@@ -70,6 +80,8 @@
     - type: Loadout
       prototypes: [ VisitorHOS, VisitorHOSAlt ]
       roleLoadout: [ RoleSurvivalSecurity ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorResearchDirector
@@ -81,6 +93,8 @@
     - type: Loadout
       prototypes: [ VisitorRD, VisitorRDAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorQM
@@ -92,6 +106,8 @@
     - type: Loadout
       prototypes: [ VisitorQM, VisitorQMAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 # Security
 # Following use EventHumanoidMindShielded since they are heads and probably should have mindshields
@@ -106,6 +122,8 @@
       rules: ghost-role-information-nonantagonist-rules
       raffle:
         settings: default
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorSecurityCadet
@@ -116,6 +134,8 @@
     - type: Loadout
       prototypes: [ VisitorSecurityCadet, VisitorSecurityCadetAlt ]
       roleLoadout: [ RoleSurvivalSecurity ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorSecurityOfficer
@@ -126,6 +146,8 @@
     - type: Loadout
       prototypes: [ VisitorSecurityOfficer, VisitorSecurityOfficerAlt ]
       roleLoadout: [ RoleSurvivalSecurity ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorDetective
@@ -136,6 +158,8 @@
     - type: Loadout
       prototypes: [ VisitorDetective, VisitorDetectiveAlt ]
       roleLoadout: [ RoleSurvivalSecurity ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorWarden
@@ -146,6 +170,8 @@
     - type: Loadout
       prototypes: [ VisitorWarden, VisitorWardenAlt ]
       roleLoadout: [ RoleSurvivalSecurity ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 # Cargo
 
@@ -159,6 +185,8 @@
       rules: ghost-role-information-nonantagonist-rules
       raffle:
         settings: short
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorCargoTechnician
@@ -169,6 +197,8 @@
     - type: Loadout
       prototypes: [ VisitorCargoTech, VisitorCargoTechAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorSalvageSpecialist
@@ -179,6 +209,8 @@
     - type: Loadout
       prototypes: [ VisitorSalvageSpecialist, VisitorSalvageSpecialistAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 # Engineering
 
@@ -192,6 +224,8 @@
       rules: ghost-role-information-nonantagonist-rules
       raffle:
         settings: short
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorAtmosTech
@@ -202,6 +236,8 @@
     - type: Loadout
       prototypes: [ VisitorAtmosTech, VisitorAtmosTechAlt ]
       roleLoadout: [ RoleSurvivalExtended ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorTechnicalAssistant
@@ -212,6 +248,8 @@
     - type: Loadout
       prototypes: [ VisitorTechnicalAssistant, VisitorTechnicalAssistantAlt ]
       roleLoadout: [ RoleSurvivalExtended ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorEngineer
@@ -222,6 +260,8 @@
     - type: Loadout
       prototypes: [ VisitorEngineer, VisitorEngineerAlt ]
       roleLoadout: [ RoleSurvivalExtended ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 # Medical
 
@@ -235,6 +275,8 @@
       rules: ghost-role-information-nonantagonist-rules
       raffle:
         settings: short
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorMedicalIntern
@@ -245,6 +287,8 @@
     - type: Loadout
       prototypes: [ VisitorMedicalIntern, VisitorMedicalInternAlt ]
       roleLoadout: [ RoleSurvivalMedical ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorMedicalDoctor
@@ -255,6 +299,8 @@
     - type: Loadout
       prototypes: [ VisitorMedicalDoctor, VisitorMedicalDoctorAlt , VisitorScrubsPurple, VisitorScrubsGreen, VisitorScrubsBlue]
       roleLoadout: [ RoleSurvivalMedical ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorParamedic
@@ -265,6 +311,8 @@
     - type: Loadout
       prototypes: [ VisitorParamedic, VisitorParamedicAlt ]
       roleLoadout: [ RoleSurvivalMedical ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorVirologist
@@ -275,6 +323,8 @@
     - type: Loadout
       prototypes: [ VisitorVirologist, VisitorVirologistAlt ]
       roleLoadout: [ RoleSurvivalMedical ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorGeneticist
@@ -285,6 +335,8 @@
     - type: Loadout
       prototypes: [ VisitorGeneticist, VisitorGeneticistAlt ]
       roleLoadout: [ RoleSurvivalMedical ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorPsychologist
@@ -295,6 +347,8 @@
     - type: Loadout
       prototypes: [ VisitorPsychologist, VisitorPsychologistAlt ]
       roleLoadout: [ RoleSurvivalMedical ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorChemist
@@ -305,6 +359,8 @@
     - type: Loadout
       prototypes: [ VisitorChemist, VisitorChemistAlt ]
       roleLoadout: [ RoleSurvivalMedical ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorDentist
@@ -315,6 +371,8 @@
     - type: Loadout
       prototypes: [ VisitorDentist ]
       roleLoadout: [ RoleSurvivalMedical ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 # Science
 
@@ -328,6 +386,8 @@
       rules: ghost-role-information-nonantagonist-rules
       raffle:
         settings: short
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorResearchAssistant
@@ -338,6 +398,8 @@
     - type: Loadout
       prototypes: [ VisitorResearchAssistant, VisitorResearchAssistantAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorScientist
@@ -348,6 +410,8 @@
     - type: Loadout
       prototypes: [ VisitorScientist, VisitorScientistAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 # Civilian
 
@@ -361,6 +425,8 @@
       rules: ghost-role-information-nonantagonist-rules
       raffle:
         settings: short
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorBartender
@@ -371,6 +437,8 @@
     - type: Loadout
       prototypes: [ VisitorBartender, VisitorBartenderAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorBotanist
@@ -381,6 +449,8 @@
     - type: Loadout
       prototypes: [ VisitorBotanist, VisitorBotanistAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorBoxer
@@ -391,6 +461,8 @@
     - type: Loadout
       prototypes: [ VisitorBoxer, VisitorBoxerAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorChaplain
@@ -402,6 +474,8 @@
     - type: Loadout
       prototypes: [ VisitorChaplain, VisitorChaplainAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorChef
@@ -412,6 +486,8 @@
     - type: Loadout
       prototypes: [ VisitorChef, VisitorChefAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorClown
@@ -426,6 +502,8 @@
     - type: RandomMetadata
       nameSegments:
       - NamesClown
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorJanitor
@@ -436,6 +514,8 @@
     - type: Loadout
       prototypes: [ VisitorJanitor, VisitorJanitorAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorLawyer
@@ -447,6 +527,8 @@
       prototypes: [ VisitorLawyerAltA, VisitorLawyerAltB, VisitorLawyerAltC, VisitorLawyerAltD, VisitorLawyerAltE ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: LawyerStampProvider
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 # - type: randomHumanoidSettings
 #   id: VisitorLawyerCentcom
@@ -468,6 +550,8 @@
     - type: Loadout
       prototypes: [ VisitorLibrarian, VisitorLibrarianAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorMusician
@@ -478,6 +562,8 @@
     - type: Loadout
       prototypes: [ VisitorMusicianFancyAltA, VisitorMusicianFancyAltB, VisitorMusicianFancyAltC, VisitorMusicianFancyAltD, VisitorMusicianFancyAltE, VisitorMusicianFancyAltF, VisitorMusicianFancyAltG, VisitorMusicianFancyAltH, VisitorMusicianFancyAltI, VisitorMusicianRelaxedAltA, VisitorMusicianRelaxedAltB, VisitorMusicianRelaxedAltC, VisitorMusicianRelaxedAltD, VisitorMusicianRelaxedAltE, VisitorMusicianRelaxedAltF, VisitorMusicianMariachi ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorMusicianFancy
@@ -488,6 +574,8 @@
     - type: Loadout
       prototypes: [ VisitorMusicianFancyAltA, VisitorMusicianFancyAltB, VisitorMusicianFancyAltC, VisitorMusicianFancyAltD, VisitorMusicianFancyAltE, VisitorMusicianFancyAltF, VisitorMusicianFancyAltG, VisitorMusicianFancyAltH, VisitorMusicianFancyAltI ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorMusicianRelaxed
@@ -498,6 +586,8 @@
     - type: Loadout
       prototypes: [ VisitorMusicianRelaxedAltA, VisitorMusicianRelaxedAltB, VisitorMusicianRelaxedAltC, VisitorMusicianRelaxedAltD, VisitorMusicianRelaxedAltE, VisitorMusicianRelaxedAltF, VisitorMusicianMariachi ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorMime
@@ -509,6 +599,8 @@
     - type: Loadout
       prototypes: [ VisitorMime, VisitorMimeAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorReporter
@@ -519,6 +611,8 @@
     - type: Loadout
       prototypes: [ VisitorReporter, VisitorReporterAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorServiceWorker
@@ -529,6 +623,8 @@
     - type: Loadout
       prototypes: [ VisitorServiceWorker, VisitorServiceWorkerAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorZookeeper
@@ -539,6 +635,8 @@
     - type: Loadout
       prototypes: [ VisitorZookeeper, VisitorZookeeperAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: ClownTroupeBanana
@@ -574,6 +672,8 @@
     - type: Loadout
       prototypes: [ ChallengeVictimCaptain, ChallengeVictimCaptainAlt ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
     # - type: RandomMetadata
     #   nameSegments:
     #   - NamesFirst
@@ -594,6 +694,8 @@
     - type: Loadout
       prototypes: [ ChallengeVictimCE, ChallengeVictimCEAlt ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
     # - type: RandomMetadata
     #   nameSegments:
     #   - NamesFirst
@@ -614,6 +716,8 @@
     - type: Loadout
       prototypes: [ ChallengeVictimCMO, ChallengeVictimCMOAlt ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
     # - type: RandomMetadata
     #   nameSegments:
     #   - NamesFirst
@@ -634,6 +738,8 @@
     - type: Loadout
       prototypes: [ ChallengeVictimHOP, ChallengeVictimHOPAlt ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
     # - type: RandomMetadata
     #   nameSegments:
     #   - NamesFirst
@@ -654,6 +760,8 @@
     - type: Loadout
       prototypes: [ ChallengeVictimHOS, ChallengeVictimHOSAlt ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
     # - type: RandomMetadata
     #   nameSegments:
     #   - NamesFirst
@@ -674,6 +782,8 @@
     - type: Loadout
       prototypes: [ ChallengeVictimRD, ChallengeVictimRDAlt ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
     # - type: RandomMetadata
     #   nameSegments:
     #   - NamesFirst
@@ -694,6 +804,8 @@
     - type: Loadout
       prototypes: [ ChallengeVictimQM, ChallengeVictimQMAlt ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
     # - type: RandomMetadata
     #   nameSegments:
     #   - NamesFirst
@@ -719,6 +831,8 @@
     - type: Loadout
       prototypes: [ ChallengeCargoTechGearSuit, ChallengeCargoTechGearCoat ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
     # - type: RandomMetadata
     #   nameSegments:
     #   - NamesFirst
@@ -756,6 +870,8 @@
     - type: Loadout
       prototypes: [ SyndicateFootsoldierTeamLeaderGear ]
       roleLoadout: [ RoleSurvivalSyndicate ]
+    - type: GhostRoleNotify
+      GroupPrototype: OperativeGroup
 
 - type: randomHumanoidSettings
   id: SyndieSoldier
@@ -776,6 +892,8 @@
     - type: Loadout
       prototypes: [ SyndicateFootsoldierGear ]
       roleLoadout: [ RoleSurvivalSyndicate ]
+    - type: GhostRoleNotify
+      GroupPrototype: OperativeGroup
 
 - type: randomHumanoidSettings
   id: SyndieVisitor
@@ -795,6 +913,8 @@
     - type: Loadout
       prototypes: [ SyndicateOperativeGearCivilian ]
       roleLoadout: [ RoleSurvivalSyndicate ]
+    - type: GhostRoleNotify
+      GroupPrototype: SyndicateGroup
 
 - type: randomHumanoidSettings
   id: PirateScooner
@@ -818,6 +938,8 @@
     - type: Loadout
       prototypes: [ PirateScoonerAltA, PirateScoonerAltB, PirateScoonerAltC, PirateScoonerAltD ]
       roleLoadout: [ RoleSurvivalEVA ]
+    - type: GhostRoleNotify
+      GroupPrototype: BigAntagsGroup
 
 - type: randomHumanoidSettings
   id: PirateCaptainScooner
@@ -844,6 +966,8 @@
     - type: Loadout
       prototypes: [ PirateCaptainScooner ]
       roleLoadout: [ RoleSurvivalEVA ]
+    - type: GhostRoleNotify
+      GroupPrototype: BigAntagsGroup
 
 ### Other
 
@@ -862,6 +986,8 @@
     - type: Loadout
       prototypes: [ VisitorBlackmarketeer, VisitorBlackmarketeer ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: Cossack
@@ -882,3 +1008,5 @@
     - type: Loadout
       prototypes: [ CossackGear ]
       roleLoadout: [ RoleSurvivalEVA ]
+    - type: GhostRoleNotify
+      GroupPrototype: VisitorGroup

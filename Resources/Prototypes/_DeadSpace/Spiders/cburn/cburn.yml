@@ -97,6 +97,7 @@
     - NamesFirstERTLeader
     - NamesLastERT
     nameFormat: name-format-ert
+  - type: GhostRoleNotify
 
 - type: randomHumanoidSettings
   id: CBURNSoldierSCST
@@ -128,6 +129,7 @@
     - NamesFirstERT
     - NamesLastERT
     nameFormat: name-format-ert
+  - type: GhostRoleNotify
 
 - type: entity
   id: RandomHumanoidCBURNSoldierSCST

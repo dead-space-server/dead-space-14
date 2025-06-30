@@ -220,6 +220,8 @@
       path: /Audio/Items/bikehorn.ogg
       params:
         variation: 0.125
+  - type: GhostRoleNotify
+    GroupPrototype: FriendForPersonal
 
 - type: entity
   parent: MobHonkBot
@@ -261,6 +263,8 @@
     totalIntensity: 10
     intensitySlope: 5
     canCreateVacuum: false
+  - type: GhostRoleNotify
+    GroupPrototype: FriendForPersonal
 
 - type: entity
   parent: MobSiliconBase
@@ -407,6 +411,8 @@
     interactFailureString: petting-failure-mimebot
   - type: Inventory
     templateId: head
+  - type: GhostRoleNotify
+    GroupPrototype: FriendForPersonal
 
 - type: entity
   parent: MobSiliconBase
@@ -475,3 +481,5 @@
     channels:
     - Common
     - Supply
+  - type: GhostRoleNotify
+    GroupPrototype: FriendForPersonal

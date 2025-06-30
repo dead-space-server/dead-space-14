@@ -88,6 +88,8 @@
         Burn: -2
   - type: TTS
     voice: Avozu
+  - type: GhostRoleNotify
+    GroupPrototype: Demon
 
 - type: entity
   parent: BaseMobDemonRS

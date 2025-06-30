@@ -128,6 +128,8 @@
   - type: TTS
     voice: DrSezavo
   - type: NightVision # DS14
+  - type: GhostRoleNotify
+    GroupPrototype: SmallAntagGroup
 
 - type: entity
   id: MobRatKingBuff

@@ -144,6 +144,8 @@
   - type: HTN
     rootTask:
       task: SimpleHostileCompound
+  - type: GhostRoleNotify
+    GroupPrototype: FriendForPersonal
 
 - type: entity
   name: blue slime
@@ -173,6 +175,8 @@
       - MindRoleGhostRoleTeamAntagonist
       raffle:
         settings: short
+    - type: GhostRoleNotify
+      GroupPrototype: SmallAntagGroup
 
 - type: entity
   name: green slime
@@ -213,7 +217,8 @@
       - MindRoleGhostRoleTeamAntagonist
       raffle:
         settings: short
-
+    - type: GhostRoleNotify
+      GroupPrototype: SmallAntagGroup
 - type: entity
   name: yellow slime
   parent: MobAdultSlimes
@@ -252,3 +257,5 @@
       - MindRoleGhostRoleTeamAntagonist
       raffle:
         settings: short
+    - type: GhostRoleNotify
+      GroupPrototype: SmallAntagGroup

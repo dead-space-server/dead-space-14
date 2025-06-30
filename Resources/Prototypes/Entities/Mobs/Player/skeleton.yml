@@ -26,6 +26,8 @@
   - type: Loadout
     prototypes: [PirateGear]
   - type: RandomHumanoidAppearance
+  - type: GhostRoleNotify
+    GroupPrototype: BigAntagsGroup
 
 
 - type: entity
@@ -45,6 +47,8 @@
   - type: Loadout
     prototypes: [SkeletonBiker]
   - type: RandomHumanoidAppearance
+  - type: GhostRoleNotify
+    GroupPrototype: EventGroup
 
 - type: entity
   parent: MobSkeletonPerson
@@ -63,3 +67,5 @@
   - type: Loadout
     prototypes: [LimitedPassengerGear]
   - type: RandomHumanoidAppearance
+  - type: GhostRoleNotify
+    GroupPrototype: FreeAgentGroup

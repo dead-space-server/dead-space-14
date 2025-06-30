@@ -87,6 +87,8 @@
     - type: AutoImplant
       implants:
       - TrackingImplant
+    - type: GhostRoleNotify
+      GroupPrototype: ERTGroup
 
 - type: randomHumanoidSettings
   id: EventHumanoidERTZombieImmune
@@ -140,6 +142,8 @@
     prototypes: [ DeathSquadGear ]
   - type: TTS
     voice: Garithos
+  - type: GhostRoleNotify
+    GroupPrototype: DeathSquadGroup
 
 # ERT
 ## Leader
@@ -830,6 +834,8 @@
     - type: AutoImplant
       implants:
       - MicroBombImplant
+    - type: GhostRoleNotify
+      GroupPrototype: EventGroup
 
 - type: entity
   id: RandomHumanoidSpawnerCentcomAdministrator
@@ -912,6 +918,8 @@
     - type: Loadout
       prototypes: [ CentcomOfficerGear ]
       roleLoadout: [ RoleSurvivalStandard ]
+    - type: GhostRoleNotify
+      GroupPrototype: EventGroup
 
 ## Syndicate
 
@@ -976,3 +984,5 @@
         settings: default
     - type: GhostTakeoverAvailable
     - type: Cluwne
+    - type: GhostRoleNotify
+      GroupPrototype: EventGroup

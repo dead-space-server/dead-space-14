@@ -119,6 +119,8 @@
   - type: Tag
     tags:
       - CannotSuicide
+  - type: GhostRoleNotify
+    GroupPrototype: Demon
 
 - type: entity
   name: теневая рука

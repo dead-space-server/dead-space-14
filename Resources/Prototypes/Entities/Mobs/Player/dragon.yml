@@ -155,6 +155,8 @@
   - type: Puller
     needsHands: false
   - type: NightVision # DS14 
+  - type: GhostRoleNotify
+    GroupPrototype: BigAntagsGroup
 
 - type: entity
   parent: BaseMobDragon

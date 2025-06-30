@@ -91,6 +91,8 @@
       groups:
         Brute: -4
         Burn: -4
+  - type: GhostRoleNotify
+    GroupPrototype: Demon
 
 - type: entity
   parent: BaseMobDemonBoss

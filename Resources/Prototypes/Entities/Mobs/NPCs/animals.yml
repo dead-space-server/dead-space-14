@@ -618,6 +618,8 @@
           32:
             sprite: Mobs/Animals/mothroach/displacement.rsi
             state: neck
+  - type: GhostRoleNotify
+    GroupPrototype: PetsGroup
 
 
 # Note that the mallard duck is actually a male drake mallard, with the brown duck being the female variant of the same species, however ss14 lacks sex specific textures
@@ -1272,6 +1274,8 @@
   - type: Sanity
   - type: TTS
     voice: Ycf
+  - type: GhostRoleNotify
+    GroupPrototype: PetsGroup
 
 - type: entity
   name: boxing kangaroo
@@ -1431,6 +1435,8 @@
         Burn: 3
     clumsySound:
       path: /Audio/Animals/monkey_scream.ogg
+  - type: GhostRoleNotify
+    GroupPrototype: PetsGroup
 
 
 - type: entity
@@ -1465,6 +1471,8 @@
   - type: GhostTakeoverAvailable
   - type: Loadout
     prototypes: [SyndicateOperativeGearMonkey]
+  - type: GhostRoleNotify
+    GroupPrototype: SyndicateGroup
 
 - type: entity
   id: MobMonkeySyndicateAgent
@@ -1594,6 +1602,8 @@
     name: ghost-role-information-kobold-name
     description: ghost-role-information-kobold-description
     rules: ghost-role-information-nonantagonist-rules
+  - type: GhostRoleNotify
+    GroupPrototype: PetsGroup
 
 - type: entity
   name: kobold
@@ -1827,6 +1837,8 @@
       Skewer: RatSkewer
   - type: NecromorfAfterInfection
     necroPrototype: NecroSmall
+  - type: GhostRoleNotify
+    GroupPrototype: PetsGroup
 
 - type: entity
   parent: MobMouse
@@ -2470,6 +2482,8 @@
     raffle:
       settings: short
   - type: GhostTakeoverAvailable
+  - type: GhostRoleNotify
+    GroupPrototype: SpidersGroup
 
 - type: entity
   name: tarantula
@@ -3068,6 +3082,8 @@
         Slash: 6
         Piercing: 6
         Structural: 15
+  - type: GhostRoleNotify
+    GroupPrototype: SyndicateGroup
 
 - type: entity
   name: space cat
@@ -3414,6 +3430,8 @@
     normalState: Mouse_burning
   - type: NecromorfAfterInfection
     necroPrototype: NecroSmall
+  - type: GhostRoleNotify
+    GroupPrototype: PetsGroup
 
 - type: entity
   name: pig

@@ -84,4 +84,6 @@
       damage:
         types:
           Blunt: 7
+    - type: GhostRoleNotify
+      GroupPrototype: PetsGroup
     # DS14-end

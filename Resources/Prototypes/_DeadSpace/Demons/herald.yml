@@ -69,3 +69,5 @@
       Unsexed: Demon
   - type: TTS
     voice: Volibear
+  - type: GhostRoleNotify
+    GroupPrototype: Demon

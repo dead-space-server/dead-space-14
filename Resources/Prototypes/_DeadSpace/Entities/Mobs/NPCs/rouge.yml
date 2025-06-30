@@ -62,6 +62,8 @@
       name: ghost-role-information-rouge-name
       description: ghost-role-information-rouge-description
       rules: ghost-role-information-nonantagonist-rules
+    - type: GhostRoleNotify
+      GroupPrototype: SyndicateGroup
 
 - type: entity
   name: спавнер трёхглавый змей
