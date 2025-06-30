@@ -21,8 +21,10 @@ public sealed class CenserSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private readonly UseDelaySystem _delay = default!;
+
     public override void Initialize()
     {
+        base.Initialize();
         SubscribeLocalEvent<CenserComponent, AfterInteractEvent>(OnAfterInteract);
         SubscribeLocalEvent<CenserComponent, CenserDoAfterEvent>(OnCenserDoAfter);
     }
@@ -68,6 +70,7 @@ public sealed class CenserSystem : EntitySystem
             _delay.TryResetDelay((ent, useDelay));
         }
     }
+
     private void OnAfterInteract(Entity<CenserComponent> uid, ref AfterInteractEvent args)
     {
         if (!args.CanReach || args.Target == null || args.Target == args.User || !_mobStateSystem.IsAlive(args.Target.Value))

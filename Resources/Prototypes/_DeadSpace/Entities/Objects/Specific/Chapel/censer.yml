@@ -8,7 +8,7 @@
     delay: 30.0
   - type: SolutionContainerManager
     solutions:
-      Censer:
+      сenser:
         maxVol: 100
         reagents:
           - ReagentId: Holywater
@@ -20,7 +20,7 @@
     layers:
     - state: icon
   - type: RefillableSolution
-    solution: Censer
+    solution: censer
   - type: UserInterface
     interfaces:
       enum.TransferAmountUiKey.Key:
@@ -38,8 +38,8 @@
   - type: Censer
     heailng:
       groups:
-        Brute: -45
-        Burn: -45
-        Airloss: -30
+        Brute: -15
+        Burn: -15
+        Airloss: -15
   - type: ExaminableSolution
-    solution: Censer
+    solution: censer

@@ -12,7 +12,7 @@ public sealed partial class CenserComponent : Component
     /// Solution name in SolutionContainerManager
     /// </summary>
     [DataField]
-    public string SolutionName = "Censer";
+    public string SolutionName = "сenser";
 
     /// <summary>
     /// The reagent that is consumed
@@ -30,7 +30,7 @@ public sealed partial class CenserComponent : Component
     /// DoAfter delay
     /// </summary>
     [DataField]
-    public TimeSpan UsingDelay = TimeSpan.FromSeconds(15.0);
+    public TimeSpan UsingDelay = TimeSpan.FromSeconds(10.0);
 
     /// <summary>
     /// The damage that will be dealt at the end of use
