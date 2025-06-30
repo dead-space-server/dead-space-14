@@ -16,7 +16,7 @@ public sealed class CocoonSystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly RespiratorSystem _respirator = default!;
-    
+
     const float Factor = 1f;
 
     public override void Initialize()
@@ -44,6 +44,14 @@ public sealed class CocoonSystem : EntitySystem
         }
     }
 
+    public bool IsEntityInCocoon(EntityUid uid, EntityUid target, CocoonComponent? component = null)
+    {
+        if (!Resolve(uid, ref component, false))
+            return false;
+
+        return _container.IsEntityInContainer(target);
+    }
+
     protected void OnMapInit(EntityUid uid, CocoonComponent component, MapInitEvent args)
     {
         component.NextTick = _gameTiming.CurTime + TimeSpan.FromSeconds(1);
@@ -59,17 +67,17 @@ public sealed class CocoonSystem : EntitySystem
 
     private void OnGibbed(EntityUid uid, CocoonComponent component, BeingGibbedEvent args)
     {
-        TryEmptyCocoon(uid);
+        EmptyCocoon(uid);
     }
 
     private void OnShutDown(EntityUid uid, CocoonComponent component, ComponentShutdown args)
     {
-        TryEmptyCocoon(uid);
+        EmptyCocoon(uid);
     }
 
     private void OnDestruction(EntityUid uid, CocoonComponent component, DestructionEventArgs args)
     {
-        TryEmptyCocoon(uid);
+        EmptyCocoon(uid);
     }
 
     public bool TryInsertCocoon(EntityUid uid, EntityUid target, CocoonComponent? component = null)
@@ -92,27 +100,14 @@ public sealed class CocoonSystem : EntitySystem
 
         return component.Prisoner;
     }
-    public bool TryEmptyCocoon(EntityUid uid, CocoonComponent? component = null)
-    {
-        if (!Resolve(uid, ref component, false))
-            return false;
 
-        if (component.Prisoner == null)
-            return false;
-
-        if (!_container.IsEntityOrParentInContainer(component.Prisoner.Value))
-            return false;
-
-        EmptyCocoon(uid, component);
-
-        return true;
-    }
-    private void EmptyCocoon(EntityUid uid, CocoonComponent? component = null)
+    public void EmptyCocoon(EntityUid uid, CocoonComponent? component = null)
     {
         if (!Resolve(uid, ref component, false))
             return;
 
-        _container.EmptyContainer(component.Stomach);
+        if (component.Prisoner != null && !_container.IsEntityOrParentInContainer(component.Prisoner.Value))
+            _container.EmptyContainer(component.Stomach);
 
         if (!component.IsHermetically)
             return;
@@ -143,6 +138,7 @@ public sealed class CocoonSystem : EntitySystem
         {
             Logger.Warning("BarotraumaComponent is either already present or null.");
         }
+
     }
 
     public void UpdateCocoon(EntityUid uid, CocoonComponent? component = null)

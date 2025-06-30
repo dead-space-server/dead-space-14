@@ -12,7 +12,7 @@ public sealed partial class CocoonComponent : Component
     public bool IsHermetically = true;
 
     [DataField, ViewVariables(VVAccess.ReadOnly)]
-    public EntityUid? Prisoner;
+    public EntityUid? Prisoner = null;
 
     [ViewVariables(VVAccess.ReadOnly)]
     public bool Pressure = false;
