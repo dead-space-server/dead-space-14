@@ -30,7 +30,7 @@ public sealed partial class CenserComponent : Component
     /// DoAfter delay
     /// </summary>
     [DataField]
-    public TimeSpan UsingDelay = TimeSpan.FromSeconds(10.0);
+    public TimeSpan UsingDelay = TimeSpan.FromSeconds(10);
 
     /// <summary>
     /// The damage that will be dealt at the end of use
