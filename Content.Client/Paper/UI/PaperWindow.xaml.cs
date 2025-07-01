@@ -298,9 +298,7 @@ namespace Content.Client.Paper.UI
             }
             WrittenTextLabel.SetMessage(msg, _allowedTags, DefaultTextColor);
 
-            WrittenTextLabel.Visible = (!isEditing && state.Text.Length > 0) && (state.Signatures != null && state.Signatures.Count > 0); // DS14-signatures
-            // BlankPaperIndicator.Visible = !isEditing && state.Text.Length == 0 && state.Signatures == null; // DeadSpace
-            // WrittenTextLabel.Visible = !isEditing && state.Text.Length > 0;
+            WrittenTextLabel.Visible = !isEditing && state.Text.Length > 0 || (state.Signatures != null && state.Signatures.Count > 0); // DS14-signatures
             BlankPaperIndicator.Visible = !isEditing && state.Text.Length == 0;
 
             StampDisplay.RemoveAllChildren();

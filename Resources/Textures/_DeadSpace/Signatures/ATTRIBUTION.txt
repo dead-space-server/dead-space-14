@@ -1,0 +1,2 @@
+CC-BY-SA 3.0
+copyright: Pen icon by DeadSpace14, based on work by Lorc (https://github.com/dead-space-server/space-station-14-fobos)
