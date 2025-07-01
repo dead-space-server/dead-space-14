@@ -104,7 +104,7 @@ public sealed class PaperSystem : EntitySystem
     private void OnInteractUsing(Entity<PaperComponent> entity, ref InteractUsingEvent args)
     {
         // only allow editing if there are no stamps or when using a cyberpen
-        var editable = entity.Comp.StampedBy.Count == 0 && entity.Comp.StampedBy.Count == 0 || _tagSystem.HasTag(args.Used, WriteIgnoreStampsTag);
+        var editable = entity.Comp.Signatures.Count == 0 && entity.Comp.StampedBy.Count == 0 && entity.Comp.StampedBy.Count == 0 || _tagSystem.HasTag(args.Used, WriteIgnoreStampsTag); // DS14-signatures
         if (_tagSystem.HasTag(args.Used, WriteTag))
         {
             if (editable)
@@ -187,7 +187,7 @@ public sealed class PaperSystem : EntitySystem
 
             var paperStatus = string.IsNullOrWhiteSpace(args.Text) ? PaperStatus.Blank : PaperStatus.Written;
 
-            if (entity.Comp.Signatures.Count > 0)
+            if (entity.Comp.Signatures.Count > 0) // DS14-signatures
                 paperStatus = PaperStatus.Written;
 
             if (TryComp<AppearanceComponent>(entity, out var appearance))
@@ -265,7 +265,7 @@ public sealed class PaperSystem : EntitySystem
             ? PaperStatus.Blank
             : PaperStatus.Written;
 
-        if (entity.Comp.Signatures.Count > 0)
+        if (entity.Comp.Signatures.Count > 0) // DS14-signatures
             status = PaperStatus.Written;
 
         _appearance.SetData(entity, PaperVisuals.Status, status, appearance);
@@ -273,7 +273,7 @@ public sealed class PaperSystem : EntitySystem
 
     private void UpdateUserInterface(Entity<PaperComponent> entity)
     {
-        _uiSystem.SetUiState(entity.Owner, PaperUiKey.Key, new PaperBoundUserInterfaceState(entity.Comp.Content, entity.Comp.StampedBy, entity.Comp.Signatures, entity.Comp.Mode));
+        _uiSystem.SetUiState(entity.Owner, PaperUiKey.Key, new PaperBoundUserInterfaceState(entity.Comp.Content, entity.Comp.StampedBy, entity.Comp.Signatures, entity.Comp.Mode)); // DS14-signatures
     }
 }
 

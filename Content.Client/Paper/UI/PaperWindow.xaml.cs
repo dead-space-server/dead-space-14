@@ -253,7 +253,7 @@ namespace Content.Client.Paper.UI
             var msg = new FormattedMessage();
             msg.AddMarkupPermissive(state.Text);
 
-            // DeadSpace
+            // DS14-signatures-start
             if (state.Signatures != null && state.Signatures.Count > 0)
             {
                 string signaturesLine;
@@ -276,6 +276,7 @@ namespace Content.Client.Paper.UI
 
                 msg.AddMarkupPermissive($"\n\n[color=#4169E1][italic]{signaturesLine}[/italic][/color]");
             }
+            // DS14-signatures-end
 
             // For premade documents, we want to be able to edit them rather than
             // replace them.
@@ -297,9 +298,9 @@ namespace Content.Client.Paper.UI
             }
             WrittenTextLabel.SetMessage(msg, _allowedTags, DefaultTextColor);
 
-            // WrittenTextLabel.Visible = (!isEditing && state.Text.Length > 0) || state.Signatures != null; // DeadSpace
+            WrittenTextLabel.Visible = (!isEditing && state.Text.Length > 0) && (state.Signatures != null && state.Signatures.Count > 0); // DS14-signatures
             // BlankPaperIndicator.Visible = !isEditing && state.Text.Length == 0 && state.Signatures == null; // DeadSpace
-            WrittenTextLabel.Visible = !isEditing && state.Text.Length > 0;
+            // WrittenTextLabel.Visible = !isEditing && state.Text.Length > 0;
             BlankPaperIndicator.Visible = !isEditing && state.Text.Length == 0;
 
             StampDisplay.RemoveAllChildren();

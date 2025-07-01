@@ -47,11 +47,9 @@ public sealed partial class SignaturePapeSystem : EntitySystem
         if (!EntityManager.TryGetComponent(args.User, typeof(MetaDataComponent), out var compObj))
             return;
 
-        var metadataComp = (MetaDataComponent)compObj;
+        var name = ((MetaDataComponent)compObj).EntityName;
 
-        var name = metadataComp.EntityName;
-
-        if (component.Signatures.Contains(name))
+        if (paperComp.Signatures.Contains(name))
             return;
 
         if (TryComp<SignatureToolComponent>(item.Value, out var signatureToolComp) && component.NumberSignatures < component.MaximumSignatures)
@@ -59,19 +57,18 @@ public sealed partial class SignaturePapeSystem : EntitySystem
             args.Verbs.Add(new Verb()
             {
                 Text = Loc.GetString("Расписаться"),
-                Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/dot.svg.192dpi.png")),
-                Act = () => TrySignature((uid, paperComp), component, signatureToolComp, name),
+                Icon = new SpriteSpecifier.Texture(new("/Textures/_DeadSpace/Signatures/pen.svg.192dpi.png")),
+                Act = () => PushSignature((uid, paperComp), component, signatureToolComp, name),
                 Impact = LogImpact.Low
             });
         }
     }
 
-    public bool TrySignature(Entity<PaperComponent> entity, SignaturePapeComponent component, SignatureToolComponent toolComponent, string name)
+    private void PushSignature(Entity<PaperComponent> entity, SignaturePapeComponent component, SignatureToolComponent toolComponent, string name)
     {
         if (!entity.Comp.Signatures.Contains(name) && component.NumberSignatures < component.MaximumSignatures)
         {
             entity.Comp.Signatures.Add(name);
-            component.Signatures.Add(name);
             component.NumberSignatures += 1;
             Dirty(entity);
 
@@ -80,10 +77,8 @@ public sealed partial class SignaturePapeSystem : EntitySystem
 
             if (TryComp<AppearanceComponent>(entity, out var appearance))
                 _appearance.SetData(entity, PaperComponent.PaperVisuals.Status, PaperComponent.PaperStatus.Written, appearance);
-
-            return true;
         }
 
-        return false;
+        return;
     }
 }

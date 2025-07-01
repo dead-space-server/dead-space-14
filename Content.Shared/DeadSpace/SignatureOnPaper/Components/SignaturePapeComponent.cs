@@ -8,9 +8,6 @@ namespace Content.Shared.DeadSpace.SignatureOnPaper.Components;
 public sealed partial class SignaturePapeComponent : Component
 {
     [DataField, ViewVariables(VVAccess.ReadOnly)]
-    public List<string> Signatures = new List<string>();
-
-    [DataField, ViewVariables(VVAccess.ReadOnly)]
     public int NumberSignatures = 0;
 
     [DataField, ViewVariables(VVAccess.ReadWrite)]
