@@ -26,9 +26,7 @@ public sealed partial class SignaturePapeSystem : EntitySystem
     private void OnExamine(EntityUid uid, SignaturePapeComponent component, ExaminedEvent args)
     {
         if (component.NumberSignatures > 0)
-        {
             args.PushMarkup(Loc.GetString("Документ подписан."));
-        }
     }
 
     private void DoSetVerbs(EntityUid uid, SignaturePapeComponent component, GetVerbsEvent<Verb> args)
@@ -57,7 +55,7 @@ public sealed partial class SignaturePapeSystem : EntitySystem
             args.Verbs.Add(new Verb()
             {
                 Text = Loc.GetString("Расписаться"),
-                Icon = new SpriteSpecifier.Texture(new("/Textures/_DeadSpace/Signatures/pen.svg.192dpi.png")),
+                Icon = new SpriteSpecifier.Texture(new("/Textures/_DeadSpace/Interface/VerbIcons/pen.svg.192dpi.png")),
                 Act = () => PushSignature((uid, paperComp), component, signatureToolComp, name),
                 Impact = LogImpact.Low
             });
@@ -66,19 +64,17 @@ public sealed partial class SignaturePapeSystem : EntitySystem
 
     private void PushSignature(Entity<PaperComponent> entity, SignaturePapeComponent component, SignatureToolComponent toolComponent, string name)
     {
-        if (!entity.Comp.Signatures.Contains(name) && component.NumberSignatures < component.MaximumSignatures)
-        {
-            entity.Comp.Signatures.Add(name);
-            component.NumberSignatures += 1;
-            Dirty(entity);
+        if (entity.Comp.Signatures.Contains(name) && component.NumberSignatures > component.MaximumSignatures)
+            return;
 
-            if (toolComponent.Sound != null)
-                _audio.PlayPvs(toolComponent.Sound, entity);
+        entity.Comp.Signatures.Add(name);
+        component.NumberSignatures += 1;
+        Dirty(entity);
 
-            if (TryComp<AppearanceComponent>(entity, out var appearance))
-                _appearance.SetData(entity, PaperComponent.PaperVisuals.Status, PaperComponent.PaperStatus.Written, appearance);
-        }
+        if (toolComponent.Sound != null)
+            _audio.PlayPvs(toolComponent.Sound, entity);
 
-        return;
+        if (TryComp<AppearanceComponent>(entity, out var appearance))
+            _appearance.SetData(entity, PaperComponent.PaperVisuals.Status, PaperComponent.PaperStatus.Written, appearance);
     }
 }

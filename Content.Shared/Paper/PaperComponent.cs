@@ -49,7 +49,7 @@ public sealed partial class PaperComponent : Component
         public PaperBoundUserInterfaceState(string text, List<StampDisplayInfo> stampedBy, List<string> signatures, PaperAction mode = PaperAction.Read)
         {
             Text = text;
-            Signatures = signatures; // DeadSpace
+            Signatures = signatures; // DS14-signatures
             StampedBy = stampedBy;
             Mode = mode;
         }

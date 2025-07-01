@@ -56,7 +56,7 @@ public sealed class PaperSystem : EntitySystem
 
         if (TryComp<AppearanceComponent>(entity, out var appearance))
         {
-            if (entity.Comp.Content != "" || entity.Comp.Signatures.Count > 0)
+            if (entity.Comp.Content != "" || entity.Comp.Signatures.Count > 0) // DS14-signatures
                 _appearance.SetData(entity, PaperVisuals.Status, PaperStatus.Written, appearance);
 
             if (entity.Comp.StampState != null)
