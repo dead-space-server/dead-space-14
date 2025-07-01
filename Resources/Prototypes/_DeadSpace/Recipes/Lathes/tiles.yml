@@ -111,7 +111,7 @@
   id: FloorTileItemWoodChessRed
   result: FloorTileItemWoodChessRed
 
-# Прочие стальные плитки
+# Стальные плитки
 - type: latheRecipe
   parent: BaseTileRecipe
   id: FloorTileItemDirty
@@ -192,11 +192,43 @@
   id: FloorTileItemLaundry
   result: FloorTileItemLaundry
 
+- type: latheRecipe
+  parent: BaseTileRecipe
+  id: FloorTileItemStone
+  result: FloorTileItemStone
+
+# Терракотовые плитки
+- type: latheRecipe
+  parent: BaseTileRecipe
+  id: FloorTileItemTerracotta
+  result: FloorTileItemTerracotta
+
+- type: latheRecipe
+  parent: BaseTileRecipe
+  id: FloorTileItemTerracottaDiagonal
+  result: FloorTileItemTerracottaDiagonal
+
+- type: latheRecipe
+  parent: BaseTileRecipe
+  id: FloorTileItemTerracottaHerringbone
+  result: FloorTileItemTerracottaHerringbone
+
+- type: latheRecipe
+  parent: BaseTileRecipe
+  id: FloorTileItemTerracottaSmall
+  result: FloorTileItemTerracottaSmall
+
 # Пластиковые плитки
 - type: latheRecipe
   parent: BasePlasticTileRecipe
   id: FloorTileItemLino
   result: FloorTileItemLino
+
+# Травяные плитки
+- type: latheRecipe
+  parent: BaseFauxTileRecipe
+  id: FloorTileItemFairyAstroGrass
+  result: FloorTileItemFairyAstroGrass
 
 # Плитки шаттла
 - type: latheRecipe
@@ -233,6 +265,42 @@
   parent: BasePlasteelTileRecipe
   id: FloorTileItemShuttleBlack
   result: FloorTileItemShuttleBlack
+
+# Моно плитки шаттла
+- type: latheRecipe
+  parent: BasePlasteelTileRecipe
+  id: FloorTileItemShuttleMonoWhite
+  result: FloorTileItemShuttleMonoWhite
+
+- type: latheRecipe
+  parent: BasePlasteelTileRecipe
+  id: FloorTileItemShuttleMonoBlue
+  result: FloorTileItemShuttleMonoBlue
+
+- type: latheRecipe
+  parent: BasePlasteelTileRecipe
+  id: FloorTileItemShuttleMonoOrange
+  result: FloorTileItemShuttleMonoOrange
+
+- type: latheRecipe
+  parent: BasePlasteelTileRecipe
+  id: FloorTileItemShuttleMonoPurple
+  result: FloorTileItemShuttleMonoPurple
+
+- type: latheRecipe
+  parent: BasePlasteelTileRecipe
+  id: FloorTileItemShuttleMonoRed
+  result: FloorTileItemShuttleMonoRed
+
+- type: latheRecipe
+  parent: BasePlasteelTileRecipe
+  id: FloorTileItemShuttleMonoGrey
+  result: FloorTileItemShuttleMonoGrey
+
+- type: latheRecipe
+  parent: BasePlasteelTileRecipe
+  id: FloorTileItemShuttleMonoBlack
+  result: FloorTileItemShuttleMonoBlack
 
 # Ковры
 - type: latheRecipe
@@ -291,3 +359,27 @@
   completetime: 0.5
   materials:
     Silver: 50
+
+- type: latheRecipe
+  id: FloorTileItemDiamond
+  result: FloorTileItemDiamond
+  applyMaterialDiscount: false
+  completetime: 0.5
+  materials:
+    Diamond: 50
+
+- type: latheRecipe
+  id: FloorTileItemPlasma
+  result: FloorTileItemPlasma
+  applyMaterialDiscount: false
+  completetime: 0.5
+  materials:
+    Plasma: 50
+
+- type: latheRecipe
+  id: FloorTileItemUranium
+  result: FloorTileItemUranium
+  applyMaterialDiscount: false
+  completetime: 0.5
+  materials:
+    Uranium: 50
