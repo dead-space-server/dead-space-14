@@ -12,6 +12,9 @@
   - AllAccess
   access:
   - CentralCommand
+  special:
+  - !type:AddImplantSpecial
+    implants: [ MindShieldImplant, TrackingImplant ]
 
 - type: startingGear
   id: CentcomSpecialOperationsOfficerGear
@@ -43,6 +46,7 @@
     - type: StorageFill
       contents:
         - id: RubberStampCentcom
+        - id: RubberStampCentcomSpecialOperationOfficer
         - id: BoxFolderBlueFilled
 
 - type: entity

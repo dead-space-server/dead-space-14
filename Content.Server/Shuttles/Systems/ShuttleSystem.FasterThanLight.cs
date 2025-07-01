@@ -28,7 +28,8 @@ using Robust.Shared.Physics.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
 using FTLMapComponent = Content.Shared.Shuttles.Components.FTLMapComponent;
-using Content.Server.DeadSpace.Typan.Components;
+using Content.Server.DeadSpace.Taipan.Components;
+using Content.Shared.DeadSpace.LieDown;
 
 namespace Content.Server.Shuttles.Systems;
 
@@ -109,12 +110,12 @@ public sealed partial class ShuttleSystem
 
     private void OnStationPostInit(ref StationPostInitEvent ev)
     {
-        // DS14-prevent-ftl-to-typan-station-start
-        if (HasComp<StationTypanComponent>(ev.Station))
+        // DS14-prevent-ftl-to-taipan-station-start
+        if (HasComp<StationTaipanComponent>(ev.Station))
         {
             return;
         }
-        // DS14-prevent-ftl-to-typan-station-end
+        // DS14-prevent-ftl-to-taipan-station-end
 
         // Add all grid maps as ftl destinations that anyone can FTL to.
         foreach (var gridUid in ev.Station.Comp.Grids)
@@ -644,6 +645,9 @@ public sealed partial class ShuttleSystem
             foreach (var child in toKnock)
             {
                 if (!_statusQuery.TryGetComponent(child, out var status))
+                    continue;
+                
+                if (TryComp<LieDownComponent>(child, out var lieDownComp) && lieDownComp.IsLieDown)
                     continue;
 
                 _stuns.TryParalyze(child, _hyperspaceKnockdownTime, true, status);

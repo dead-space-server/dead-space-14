@@ -50,6 +50,7 @@
   - Zombie
   - BlobGameMode
   - SpiderTerror
+  - Wizard
   - KesslerSyndromeScheduler
   - RampingStationEventScheduler
   - SpaceTrafficControlEventScheduler
@@ -268,8 +269,8 @@
   - MeteorSwarmScheduler
   - SpaceTrafficControlEventScheduler
   - BasicRoundstartVariation
-  - SubGamemodesRule # DS14
-  
+  - SubGamemodesRuleNoWizard # DS14
+
 - type: gamePreset
   id: Zombieteors
   alias:

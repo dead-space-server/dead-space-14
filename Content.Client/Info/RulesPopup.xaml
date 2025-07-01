@@ -3,7 +3,7 @@
          xmlns:info="clr-namespace:Content.Client.Info"
          VerticalExpand="True" HorizontalExpand="True"
          MouseFilter="Stop">
-    <parallax:ParallaxControl />
+    <parallax:ParallaxControl SpeedX="20"/>
     <Control VerticalExpand="True"
              MaxWidth="800"
              MaxHeight="900">
@@ -18,6 +18,9 @@
                     <Button Name="QuitButton"
                             StyleClasses="Caution"
                             Text="{Loc 'ui-escape-quit'}" />
+                    <Button Name="WikiButton"
+                            Access="Public"
+                            Text="{Loc 'ui-escape-wiki'}"/>
                 </BoxContainer>
             </BoxContainer>
     </Control>
