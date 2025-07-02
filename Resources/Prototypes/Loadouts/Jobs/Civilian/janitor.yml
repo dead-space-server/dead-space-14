@@ -46,18 +46,18 @@
   equipment:
     outerClothing: ClothingOuterWinterJani
 
-- type: loadout
+- type: loadout # DS14
   id: JanitorHazardVest
   equipment:
     outerClothing: ClothingOuterVestHazard
 
 # Shoes
-- type: loadout
+- type: loadout # DS14
   id: PurpleShoes
   equipment:
     shoes: ClothingShoesColorPurple
 
-- type: loadout
+- type: loadout # DS14
   id: GaloshesShoes
   equipment:
     shoes: ClothingShoesGaloshes

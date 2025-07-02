@@ -497,9 +497,9 @@
   minLimit: 0
   loadouts:
   - JanitorWintercoat
-  - JanitorHazardVest
+  - JanitorHazardVest # DS14
 
-- type: loadoutGroup
+- type: loadoutGroup # DS14
   id: JanitorShoes
   name: loadout-group-janitor-shoes
   loadouts:
