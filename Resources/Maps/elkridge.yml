@@ -10803,8 +10803,6 @@ entities:
           damping: 1009.07904
           stiffness: 9057.473
   - uid: 5
-    mapInit: true
-    paused: true
     components:
     - type: MetaData
       name: solution - food
@@ -10822,8 +10820,6 @@ entities:
       containerName: food
       container: 4
   - uid: 7
-    mapInit: true
-    paused: true
     components:
     - type: MetaData
       name: solution - food
@@ -10841,8 +10837,6 @@ entities:
       containerName: food
       container: 6
   - uid: 9
-    mapInit: true
-    paused: true
     components:
     - type: MetaData
       name: solution - food
@@ -10860,8 +10854,6 @@ entities:
       containerName: food
       container: 8
   - uid: 11
-    mapInit: true
-    paused: true
     components:
     - type: MetaData
       name: solution - food
@@ -10879,8 +10871,6 @@ entities:
       containerName: food
       container: 10
   - uid: 13
-    mapInit: true
-    paused: true
     components:
     - type: MetaData
       name: solution - food
@@ -10898,8 +10888,6 @@ entities:
       containerName: food
       container: 12
   - uid: 15
-    mapInit: true
-    paused: true
     components:
     - type: MetaData
       name: solution - food
@@ -11254,8 +11242,6 @@ entities:
       originalIconColor: '#FFFFFFFF'
       container: 44
   - uid: 49
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 48
@@ -11263,8 +11249,6 @@ entities:
       originalIconColor: '#FFFFFFFF'
       container: 48
   - uid: 55
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 54
@@ -11295,8 +11279,6 @@ entities:
       originalIconColor: '#FFFFFFFF'
       container: 44
   - uid: 56
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 54
@@ -47151,8 +47133,6 @@ entities:
 - proto: ClothingHeadsetGrey
   entities:
   - uid: 16
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 3
@@ -47172,8 +47152,6 @@ entities:
       - Common
     - type: InsideEntityStorage
   - uid: 18
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 3
@@ -47202,8 +47180,6 @@ entities:
 - proto: ClothingMaskBreath
   entities:
   - uid: 50
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 47
@@ -47257,8 +47233,6 @@ entities:
 - proto: ClothingMaskMuzzle
   entities:
   - uid: 20
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 3
@@ -47507,8 +47481,6 @@ entities:
 - proto: ClothingShoesColorBlack
   entities:
   - uid: 6
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 3
@@ -47526,8 +47498,6 @@ entities:
           ent: 7
     - type: InsideEntityStorage
   - uid: 8
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 3
@@ -47573,8 +47543,6 @@ entities:
 - proto: ClothingUniformJumpskirtPrisoner
   entities:
   - uid: 10
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 3
@@ -47597,8 +47565,6 @@ entities:
           ent: 11
     - type: InsideEntityStorage
   - uid: 14
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 3
@@ -47630,8 +47596,6 @@ entities:
 - proto: ClothingUniformJumpsuitPrisoner
   entities:
   - uid: 4
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 3
@@ -47654,8 +47618,6 @@ entities:
           ent: 5
     - type: InsideEntityStorage
   - uid: 12
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 3
@@ -54839,8 +54801,6 @@ entities:
 - proto: EncryptionKeyCommon
   entities:
   - uid: 17
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 16
@@ -54849,8 +54809,6 @@ entities:
     - type: Physics
       canCollide: False
   - uid: 19
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 18
@@ -85484,8 +85442,6 @@ entities:
 - proto: OxygenTankFilled
   entities:
   - uid: 48
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 47
@@ -85715,10 +85671,10 @@ entities:
         stampedColor: '#006600FF'
         stampedName: stamp-component-stamped-name-centcom
       content: >-
-        Поздравляем, командование NanoTrasen решило обновить минимальный охранный шаттл службы безопасности станции NT-Raven-GE до версии 09. 
+        Поздравляем, командование NanoTrasen решило обновить минимальный охранный шаттл службы безопасности станции NT-Raven-GE до версии 09.
 
 
-        Добавлены экстерьерные осветительные приборы на внешней стороне шаттла, чтобы космический мрак космоса не мешал служебным обязанностям пилота службы безопасности станции. 
+        Добавлены экстерьерные осветительные приборы на внешней стороне шаттла, чтобы космический мрак космоса не мешал служебным обязанностям пилота службы безопасности станции.
 
 
         Так же мы учли недовольства по поводу кнопок, добавлена кнопка переключения гермозатвора оружия отдельно от остальных гермозатворов фонаря шаттла.
