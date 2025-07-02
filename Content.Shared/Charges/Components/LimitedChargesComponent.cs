@@ -8,12 +8,13 @@ namespace Content.Shared.Charges.Components;
 [AutoGenerateComponentState]
 public sealed partial class LimitedChargesComponent : Component
 {
-    /// DeadSpace
+    // DS14-start
     public LimitedChargesComponent(int max, int count)
     {
         Charges = count;
         MaxCharges = max;
     }
+    // DS14-end
 
     /// <summary>
     /// The maximum number of charges
