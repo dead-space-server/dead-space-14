@@ -12,7 +12,7 @@ namespace Content.Server.DeadSpace.ShowRevolutionIcon;
 /// </summary>
 public sealed class ShowRevolutionIconSystem : EntitySystem
 {
-    private bool _isMesscre = false;
+    private bool _isMassacre = false;
 
     /// <inheritdoc/>
 
@@ -24,10 +24,10 @@ public sealed class ShowRevolutionIconSystem : EntitySystem
         while (query.MoveNext(out var _, out var comp))
             if (comp.Stage == RevolutionaryStage.Massacre)
             {
-                _isMesscre = true;
+                _isMassacre = true;
             }
 
-        if (!_isMesscre)
+        if (!_isMassacre)
             return;
 
         while (queryActor.MoveNext(out var uid, out var _))
