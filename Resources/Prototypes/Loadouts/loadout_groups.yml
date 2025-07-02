@@ -20,6 +20,7 @@
   - CigPackBlack
   - CigarCase
   - CigarGold
+  # DS14-pins-start
   - ClothingNeckUSSPPin
   - ClothingNeckDonkPin
   - ClothingNeckEarthPin
@@ -29,6 +30,23 @@
   - ClothingNeckNanoTrasenPin
   - ClothingNeckSyndicakePin
   - ClothingNeckVitezstviPin
+  # DS14-pins-end
+  - ClothingNeckLGBTPin
+  - ClothingNeckAllyPin
+  - ClothingNeckAromanticPin
+  - ClothingNeckAsexualPin
+  - ClothingNeckAroacePin
+  - ClothingNeckBisexualPin
+  - ClothingNeckGayPin
+  - ClothingNeckIntersexPin
+  - ClothingNeckLesbianPin
+  - ClothingNeckNonBinaryPin
+  - ClothingNeckPansexualPin
+  - ClothingNeckOmnisexualPin
+  - ClothingNeckGenderqueerPin
+  - ClothingNeckTransPin
+  - ClothingNeckAutismPin
+  - ClothingNeckGoldAutismPin
   - CorporateLaw # Corvax-HyperLink
   - TowelColorBlack
   - TowelColorDarkBlue
