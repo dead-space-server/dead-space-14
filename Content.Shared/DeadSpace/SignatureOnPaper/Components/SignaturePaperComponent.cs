@@ -5,7 +5,7 @@ using Robust.Shared.GameStates;
 namespace Content.Shared.DeadSpace.SignatureOnPaper.Components;
 
 [RegisterComponent, NetworkedComponent]
-public sealed partial class SignaturePapeComponent : Component
+public sealed partial class SignaturePaperComponent : Component
 {
     [DataField, ViewVariables(VVAccess.ReadOnly)]
     public int NumberSignatures = 0;

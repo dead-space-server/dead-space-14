@@ -11,7 +11,7 @@ using Content.Shared.Examine;
 
 namespace Content.Server.DeadSpace.SignatureOnPaper;
 
-public sealed partial class SignaturePapeSystem : EntitySystem
+public sealed partial class SignaturePaperSystem : EntitySystem
 {
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
@@ -19,17 +19,17 @@ public sealed partial class SignaturePapeSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<SignaturePapeComponent, GetVerbsEvent<Verb>>(DoSetVerbs);
-        SubscribeLocalEvent<SignaturePapeComponent, ExaminedEvent>(OnExamine);
+        SubscribeLocalEvent<SignaturePaperComponent, GetVerbsEvent<Verb>>(DoSetVerbs);
+        SubscribeLocalEvent<SignaturePaperComponent, ExaminedEvent>(OnExamine);
     }
 
-    private void OnExamine(EntityUid uid, SignaturePapeComponent component, ExaminedEvent args)
+    private void OnExamine(EntityUid uid, SignaturePaperComponent component, ExaminedEvent args)
     {
         if (component.NumberSignatures > 0)
             args.PushMarkup(Loc.GetString("Документ подписан."));
     }
 
-    private void DoSetVerbs(EntityUid uid, SignaturePapeComponent component, GetVerbsEvent<Verb> args)
+    private void DoSetVerbs(EntityUid uid, SignaturePaperComponent component, GetVerbsEvent<Verb> args)
     {
         if (!TryComp<PaperComponent>(uid, out var paperComp))
             return;
@@ -62,7 +62,7 @@ public sealed partial class SignaturePapeSystem : EntitySystem
         }
     }
 
-    private void PushSignature(Entity<PaperComponent> entity, SignaturePapeComponent component, SignatureToolComponent toolComponent, string name)
+    private void PushSignature(Entity<PaperComponent> entity, SignaturePaperComponent component, SignatureToolComponent toolComponent, string name)
     {
         if (entity.Comp.Signatures.Contains(name) && component.NumberSignatures > component.MaximumSignatures)
             return;
