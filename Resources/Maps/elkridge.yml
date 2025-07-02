@@ -10771,8 +10771,6 @@ entities:
           damping: 1009.07904
           stiffness: 9057.473
   - uid: 11098
-    mapInit: true
-    paused: true
     components:
     - type: MetaData
       name: solution - food
@@ -10790,8 +10788,6 @@ entities:
       containerName: food
       container: 11097
   - uid: 11100
-    mapInit: true
-    paused: true
     components:
     - type: MetaData
       name: solution - food
@@ -10809,8 +10805,6 @@ entities:
       containerName: food
       container: 11099
   - uid: 11104
-    mapInit: true
-    paused: true
     components:
     - type: MetaData
       name: solution - food
@@ -10828,8 +10822,6 @@ entities:
       containerName: food
       container: 11103
   - uid: 11106
-    mapInit: true
-    paused: true
     components:
     - type: MetaData
       name: solution - food
@@ -10847,8 +10839,6 @@ entities:
       containerName: food
       container: 11105
   - uid: 11108
-    mapInit: true
-    paused: true
     components:
     - type: MetaData
       name: solution - food
@@ -10866,8 +10856,6 @@ entities:
       containerName: food
       container: 11107
   - uid: 11110
-    mapInit: true
-    paused: true
     components:
     - type: MetaData
       name: solution - food
@@ -11222,8 +11210,6 @@ entities:
       originalIconColor: '#FFFFFFFF'
       container: 23
   - uid: 11204
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 11203
@@ -11231,8 +11217,6 @@ entities:
       originalIconColor: '#FFFFFFFF'
       container: 11203
   - uid: 11212
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 11210
@@ -11263,8 +11247,6 @@ entities:
       originalIconColor: '#FFFFFFFF'
       container: 23
   - uid: 11211
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 11210
@@ -47071,8 +47053,6 @@ entities:
 - proto: ClothingHeadsetGrey
   entities:
   - uid: 11094
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 11093
@@ -47092,8 +47072,6 @@ entities:
       - Common
     - type: InsideEntityStorage
   - uid: 11101
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 11093
@@ -47143,8 +47121,6 @@ entities:
       canCollide: False
     - type: InsideEntityStorage
   - uid: 11202
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 11201
@@ -47182,8 +47158,6 @@ entities:
       pos: -11.790611,57.730843
       parent: 2
   - uid: 11096
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 11093
@@ -47427,8 +47401,6 @@ entities:
 - proto: ClothingShoesColorBlack
   entities:
   - uid: 11099
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 11093
@@ -47446,8 +47418,6 @@ entities:
           ent: 11100
     - type: InsideEntityStorage
   - uid: 11103
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 11093
@@ -47493,8 +47463,6 @@ entities:
 - proto: ClothingUniformJumpskirtPrisoner
   entities:
   - uid: 11105
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 11093
@@ -47517,8 +47485,6 @@ entities:
           ent: 11106
     - type: InsideEntityStorage
   - uid: 11109
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 11093
@@ -47550,8 +47516,6 @@ entities:
 - proto: ClothingUniformJumpsuitPrisoner
   entities:
   - uid: 11097
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 11093
@@ -47574,8 +47538,6 @@ entities:
           ent: 11098
     - type: InsideEntityStorage
   - uid: 11107
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 11093
@@ -54708,8 +54670,6 @@ entities:
 - proto: EncryptionKeyCommon
   entities:
   - uid: 11095
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 11094
@@ -54718,8 +54678,6 @@ entities:
     - type: Physics
       canCollide: False
   - uid: 11102
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 11101
@@ -85380,8 +85338,6 @@ entities:
       canCollide: False
     - type: InsideEntityStorage
   - uid: 11203
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 11201
@@ -85576,10 +85532,10 @@ entities:
         stampedColor: '#006600FF'
         stampedName: stamp-component-stamped-name-centcom
       content: >-
-        Поздравляем, командование NanoTrasen решило обновить минимальный охранный шаттл службы безопасности станции NT-Raven-GE до версии 09. 
+        Поздравляем, командование NanoTrasen решило обновить минимальный охранный шаттл службы безопасности станции NT-Raven-GE до версии 09.
 
 
-        Добавлены экстерьерные осветительные приборы на внешней стороне шаттла, чтобы космический мрак космоса не мешал служебным обязанностям пилота службы безопасности станции. 
+        Добавлены экстерьерные осветительные приборы на внешней стороне шаттла, чтобы космический мрак космоса не мешал служебным обязанностям пилота службы безопасности станции.
 
 
         Так же мы учли недовольства по поводу кнопок, добавлена кнопка переключения гермозатвора оружия отдельно от остальных гермозатворов фонаря шаттла.
