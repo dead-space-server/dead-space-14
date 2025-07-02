@@ -16,12 +16,14 @@ public sealed class CocoonSystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly RespiratorSystem _respirator = default!;
-
+    private ISawmill _sawmill = default!;
     const float Factor = 1f;
 
     public override void Initialize()
     {
         base.Initialize();
+
+        _sawmill = Logger.GetSawmill("CocoonSystem");
 
         SubscribeLocalEvent<CocoonComponent, BeingGibbedEvent>(OnGibbed);
         SubscribeLocalEvent<CocoonComponent, InsertIntoCocoonEvent>(OnInsert);
@@ -106,19 +108,19 @@ public sealed class CocoonSystem : EntitySystem
         if (!Resolve(uid, ref component, false))
             return;
 
-        if (component.Prisoner != null && !_container.IsEntityOrParentInContainer(component.Prisoner.Value))
-            _container.EmptyContainer(component.Stomach);
-
-        if (!component.IsHermetically)
-            return;
-
         var target = component.Prisoner;
 
         if (target == null)
         {
-            Logger.Error("Prisoner target is null in EmptyCocoon.");
+            _sawmill.Warning("Prisoner target is null in EmptyCocoon.");
             return;
         }
+
+        if (!_container.IsEntityOrParentInContainer(target.Value))
+            _container.EmptyContainer(component.Stomach);
+
+        if (!component.IsHermetically)
+            return;
 
         if (HasComp<MutedComponent>(target) && !component.Mute)
             RemComp<MutedComponent>(target.Value);
@@ -131,12 +133,12 @@ public sealed class CocoonSystem : EntitySystem
 
         if (HasComp<PressureImmunityComponent>(target) && !component.Pressure)
         {
-            Logger.Info("Adding BarotraumaComponent back to target.");
+            _sawmill.Info("Adding BarotraumaComponent back to target.");
             RemComp<PressureImmunityComponent>(target.Value);
         }
         else
         {
-            Logger.Warning("BarotraumaComponent is either already present or null.");
+            _sawmill.Warning("BarotraumaComponent is either already present or null.");
         }
 
     }
