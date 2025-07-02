@@ -30,7 +30,7 @@
     components:
       - ShowAntagIcons
       - Revolutionary
-      - ShowRevolutionIcon # DS14 see-icon-at-second-stage
+      - ShowRevolutionIcon # DS14
   icon:
     sprite: /Textures/Interface/Misc/job_icons.rsi
     state: Revolutionary
@@ -43,7 +43,7 @@
     components:
       - ShowAntagIcons
       - Revolutionary
-      - ShowRevolutionIcon # DS14 see-icon-at-second-stage
+      - ShowRevolutionIcon # DS14
   icon:
     sprite: /Textures/Interface/Misc/job_icons.rsi
     state: HeadRevolutionary
