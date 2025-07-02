@@ -6,7 +6,7 @@ using Content.Shared.Stunnable;
 using Robust.Shared.GameStates;
 using Robust.Shared.Player;
 using Content.Shared.Antag;
-using Content.Shared.DeadSpace.ShowRevolutionIcon; //DS14-show-icon-2-stage
+using Content.Shared.DeadSpace.ShowRevolutionIcon;
 
 namespace Content.Shared.Revolutionary;
 
@@ -26,8 +26,8 @@ public abstract class SharedRevolutionarySystem : EntitySystem
         SubscribeLocalEvent<HeadRevolutionaryComponent, ComponentStartup>(DirtyRevComps);
         SubscribeLocalEvent<ShowAntagIconsComponent, ComponentStartup>(DirtyRevComps);
 
-        SubscribeLocalEvent<ShowRevolutionIconComponent, ComponentStartup>(DirtyRevComps); //DS14-show-icon-2-stage
-        SubscribeLocalEvent<HeadRevolutionaryComponent, NewRevStageEvent>(OnRevNewStage); //DS14-new-rev-stage
+        SubscribeLocalEvent<ShowRevolutionIconComponent, ComponentStartup>(DirtyRevComps); // DS14
+        SubscribeLocalEvent<HeadRevolutionaryComponent, NewRevStageEvent>(OnRevNewStage); //DS14
     }
 
     /// <summary>
@@ -78,8 +78,7 @@ public abstract class SharedRevolutionarySystem : EntitySystem
         if (player?.AttachedEntity is not {} uid)
             return true;
 
-        //DS14-show-icon-2-stage
-        if (HasComp<RevolutionaryComponent>(uid) || HasComp<HeadRevolutionaryComponent>(uid) || HasComp<ShowRevolutionIconComponent>(uid))
+        if (HasComp<RevolutionaryComponent>(uid) || HasComp<HeadRevolutionaryComponent>(uid) || HasComp<ShowRevolutionIconComponent>(uid)) // DS14
             return true;
 
         return HasComp<ShowAntagIconsComponent>(uid);
@@ -106,10 +105,10 @@ public abstract class SharedRevolutionarySystem : EntitySystem
         }
     }
 
-    //DS14-new-rev-stage-start
+    // DS14-start
     private void OnRevNewStage(EntityUid uid, HeadRevolutionaryComponent comp, ref NewRevStageEvent ev)
     {
         comp.MassacreStage = true;
     }
-    //DS14-new-rev-stage-end
+    // DS14-end
 }
