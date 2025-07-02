@@ -33,29 +33,12 @@
       color: "#ff144b"
 
 - type: entity
-  parent: ClothingHeadsetAlt
-  id: ClothingHeadsetAltTypan
-  name: полноразмерная кроваво - красная гарнитура
-  description: Модифицированный модульный интерком синдиката.
-  components:
-  - type: Headset
-    color: "#8f4a4b"
-  - type: EncryptionKeyHolder
-    keySlots: 5
-  - type: ContainerFill
-    containers:
-      key_slots:
-      - EncryptionKeyTypan
-  - type: Sprite
-    sprite: Clothing/Ears/Headsets/syndicate.rsi
-  - type: Clothing
-    sprite: Clothing/Ears/Headsets/syndicate.rsi
-
-- type: entity
   parent: ClothingHeadset
   id: ClothingHeadsetTaipan
   name: багровая гарнитура
   components:
+  - type: Headset
+    color: "#8f4a4b"
   - type: ContainerFill
     containers:
       key_slots:
@@ -72,11 +55,14 @@
   id: ClothingHeadsetAltTaipan
   name: полноразмерная багровая гарнитура
   components:
+  - type: Headset
+    color: "#8f4a4b"
+  - type: EncryptionKeyHolder
+    keySlots: 5
   - type: ContainerFill
     containers:
       key_slots:
       - EncryptionKeyTaipan
-     # - EncryptionKeySyndie # Нам действительно нужно общение ОТК с агентами и ЯО?
   - type: Sprite
     sprite: _DeadSpace/Clothing/Ears/Headsets/hs_taipan.rsi
   - type: Clothing

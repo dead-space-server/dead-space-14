@@ -76,6 +76,8 @@
         orGroup: GiftPool
       - id: WeaponLauncherChinaLakeToy
         orGroup: GiftPool
+      - id: WeaponSMGTommyGunCap
+        orGroup: GiftPool
 
 - type: entity
   id: PresentToys
@@ -174,6 +176,7 @@
       - id: PlushieSilAzrailHardsuit
         orGroup: GiftPool
       - id: PlushieSilSharp
+        orGroup: GiftPool
       - id: PlushieDragonFoxMedTech
         orGroup: GiftPool
       - id: PlushieDragonFoxMadParadox

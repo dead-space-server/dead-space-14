@@ -47,6 +47,7 @@
       key_slots: !type:Container
   - type: EncryptionKeyHolder
     keySlots: 1
+    keysUnlocked: false
   - type: Appearance
   - type: ContainerFill
     containers:
@@ -83,7 +84,6 @@
     issuer: objective-issuer-spider-terror
   - type: RoleRequirement
     roles:
-      mindRoles:
       - SpiderTerrorRole
 
 - type: entity
@@ -96,7 +96,7 @@
       sprite: _DeadSpace/Spiders/egg.rsi
       state: tomb
   - type: NumberObjective
-    min: 4000
-    max: 4000
+    min: 5000
+    max: 5000
     title: objective-condition-capture-spiderterror-title
   - type: SpiderTerrorConditions
