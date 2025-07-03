@@ -11,7 +11,7 @@ public sealed partial class PaperComponent : Component
     [DataField("content"), AutoNetworkedField]
     public string Content { get; set; } = "";
 
-    [DataField("signatures"), AutoNetworkedField]
+    [DataField, AutoNetworkedField]
     public List<string> Signatures = new List<string>(); // DS14-signatures
 
     [DataField("contentSize")]
