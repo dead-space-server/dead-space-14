@@ -77,7 +77,7 @@ public sealed class PaperSystem : EntitySystem
 
         using (args.PushGroup(nameof(PaperComponent)))
         {
-            if (entity.Comp.Content != "" || entity.Comp.Signatures.Count > 0)
+            if (entity.Comp.Content != "" || entity.Comp.Signatures.Count > 0) // DS14-signatures
             {
                 args.PushMarkup(
                     Loc.GetString(
