@@ -27,9 +27,9 @@
     eyes: ClothingEyesGlassesHiddenSecurity
     ears: ClothingHeadsetAltTaipan
     shoes: ClothingShoesBootsCombat
-    outerClothing: ClothingOuterCoatRDTaipan
-    gloves: ClothingHandsRDTaipan
-    id: SyndiPDARD
+    outerClothing: ClothingOuterTaipanCoatLabRD # Fenriz
+    gloves: ClothingHandsTaipanRD # Fenriz
+    id: TaipanResearchDirectorPDA # Fenriz
     back: ClothingBackpackSyndicate
-    jumpsuit: ClothingUniformJumpsuitSyndieFormal
+    jumpsuit: ClothingUniformJumpsuitTaipanResearchDirector # Fenriz
     belt: ClothingBeltAssaultTaipan

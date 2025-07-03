@@ -22,8 +22,8 @@
 - type: startingGear
   id: SyndicateCargotech
   equipment:
-    ears: ClothingHeadsetAltTaipan
+    ears: ClothingHeadsetTaipan # Fenriz
     jumpsuit: ClothingUniformJumpsuitTaipanCargotech
     back: ClothingBackpackSyndicate
     shoes: ClothingShoesBootsCombatSyndie
-    id: SyndiPDACargo
+    id: TaipanCargotechPDA # Fenriz

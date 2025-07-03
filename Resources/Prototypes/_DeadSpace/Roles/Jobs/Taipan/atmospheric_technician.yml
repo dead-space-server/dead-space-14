@@ -20,9 +20,9 @@
 - type: startingGear
   id: SyndicateAtmos
   equipment:
-    ears: ClothingHeadsetAltTaipan
-    jumpsuit: ClothingUniformJumpsuitChiefEngineerSyndie
-    shoes: ClothingShoesBootsTaipan
+    ears: ClothingHeadsetTaipan # Fenriz
+    jumpsuit: ClothingUniformJumpsuitTaipanAtmos # Fenriz
+    shoes: ClothingShoesBootsCombat # Fenriz
     back: ClothingBackpackSyndicate
     belt: ClothingBeltAssaultTaipan
-    id: SyndiPDAEng
+    id: TaipanAtmosphericsEngineerPDA # Fenriz

@@ -26,8 +26,8 @@
   name: chat-radio-taipan
   keycode: 'й' # DS14-Localization
   frequency: 6542
-  color: "#8f0d4b"
-  longRange: true
+  color: "#87181c"
+  longRange: false
 
 - type: radioChannel
   id: Unitolog
@@ -43,12 +43,4 @@
   keycode: 'я' # DS14-Localization
   frequency: 3918
   color: "#8539bf"
-  longRange: false
-
-- type: radioChannel
-  id: Taipan
-  name: Тайпан
-  keycode: 'х' # DS14-Localization
-  frequency: 1460
-  color: "#87181c"
   longRange: false

@@ -24,10 +24,10 @@
   id: SyndicateParamedic
   equipment:
     eyes: ClothingEyesHudSyndicateAgentTaipan
-    ears: ClothingHeadsetAltTaipan
-    jumpsuit: ClothingUniformJumpsuitParamedicSyndie
-    outerClothing: ClothingOuterMedTaipan
+    ears: ClothingHeadsetTaipan # Fenriz
+    jumpsuit: ClothingUniformJumpskirtTaipanMedic # Fenriz
+    outerClothing: ClothingOuterTaipanCoatLabMed # Fenriz
     shoes: ClothingShoesBootsCombat
-    id: MedicalPDASyndi
+    id: TaipanMedicalDoctorPDA # Fenriz
     back: ClothingBackpackSyndicate
     belt: ClothingBeltMedicalFilled

@@ -20,8 +20,8 @@
 - type: startingGear
   id: SyndicateBotanist
   equipment:
-    ears: ClothingHeadsetAltTaipan
+    ears: ClothingHeadsetTaipan # Fenriz
     jumpsuit: ClothingUniformJumpsuitTaipanBotanist
     back: ClothingBackpackSyndicate
     shoes: ClothingShoesColorBlack
-    id: SyndiPDABotan
+    id: TaipanBotanistPDA # Fenriz
