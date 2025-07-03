@@ -41,14 +41,14 @@
         - Seed
   - type: Dumpable
 
-- type: entity
-  parent: ClothingOuterStorageBase
-  id: ClothingOuterApronTaipanBotanist
-  name: фартук ботаника синдиката
-  suffix: Botanical
-  description: Толстый фартук, идеально подходящий для защиты вашей нежной плоти от пятен, грязи и крови.
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Clothing/OuterClothing/apron_botanist.rsi
-  - type: Clothing
-    sprite: _DeadSpace/Clothing/OuterClothing/apron_botanist.rsi
+#- type: entity
+#  parent: ClothingOuterStorageBase
+#  id: ClothingOuterApronTaipanBotanist
+#  name: фартук ботаника синдиката
+#  suffix: Botanical
+#  description: Толстый фартук, идеально подходящий для защиты вашей нежной плоти от пятен, грязи и крови.
+#  components:
+#  - type: Sprite
+#    sprite: _DeadSpace/Clothing/OuterClothing/apron_botanist.rsi
+#  - type: Clothing
+#    sprite: _DeadSpace/Clothing/OuterClothing/apron_botanist.rsi

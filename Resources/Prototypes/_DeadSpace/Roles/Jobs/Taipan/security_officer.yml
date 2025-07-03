@@ -36,9 +36,9 @@
     eyes: ClothingEyesHudTaipan
     ears: ClothingHeadsetAltTaipan
     shoes: ClothingShoesBootsCombat
-    jumpsuit: ClothingUniformJumpsuitSyndieFormal
+    jumpsuit: ClothingUniformJumpsuitTaipanCommunicationsOfficer # Fenriz
     gloves: ClothingHandsGlovesCombat
-    id: SyndiPDACom
+    id: TaipanCommunicationsOfficerPDA
     back: ClothingBackpackSyndicate
     belt: ClothingBeltAssaultTaipan
     pocket1: SyndicateWhistle

@@ -56,7 +56,6 @@
   - type: Pda
     id: TaipanAtmosphericsEngineerIDcard
   - type: Icon
-    sprite: _DeadSpace/Objects/Devices/pda.rsi
     state: pda-atmos
 
 - type: entity

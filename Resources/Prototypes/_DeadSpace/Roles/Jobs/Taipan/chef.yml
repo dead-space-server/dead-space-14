@@ -20,9 +20,9 @@
 - type: startingGear
   id: SyndicateChef
   equipment:
-    ears: ClothingHeadsetAltTaipan
+    ears: ClothingHeadsetTaipan # Fenriz
     jumpsuit: ClothingUniformJumpsuitTaipanChef
     back: ClothingBackpackSyndicate
     outerClothing: ClothingOuterApronTaipanChef
     shoes: ClothingShoesColorBlack
-    id: SyndiPDAChef
+    id: TaipanChefPDA # Fenriz

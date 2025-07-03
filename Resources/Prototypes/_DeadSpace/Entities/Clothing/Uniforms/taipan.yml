@@ -1,124 +1,3 @@
-- type: entity
-  parent: ClothingUniformBase
-  id: ClothingUniformJumpskirtTaipanChef
-  name: юбка-комбинезон шеф-повара синдиката
-  description: Без неё ничего и никого не приготовить.
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Clothing/Uniforms/chefskirt.rsi
-  - type: Clothing
-    sprite: _DeadSpace/Clothing/Uniforms/chefskirt.rsi
-
-- type: entity
-  parent: ClothingUniformBase
-  id: ClothingUniformJumpskirtTaipanMedic
-  name: юбка-комбинезон медика синдиката
-  description: Практичность юбки обусловлена тяжестью стирания крови.
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Clothing/Uniforms/medicalskirt.rsi
-  - type: Clothing
-    sprite: _DeadSpace/Clothing/Uniforms/medicalskirt.rsi
-
-- type: entity
-  parent: ClothingUniformBase
-  id: ClothingUniformJumpsuitTaipanBotanist
-  name: комбинезон ботаника синдиката
-  description: Имеет сильный запах земли. Будем надеяться, что он просто грязный, а не весь в земле.
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Clothing/Uniforms/suitbotanist.rsi
-  - type: Clothing
-    sprite: _DeadSpace/Clothing/Uniforms/suitbotanist.rsi
-
-- type: entity
-  parent: ClothingUniformBase
-  id: ClothingUniformJumpsuitTaipanCargotech
-  name: комбинезон карготехника синдиката
-  description: Удобный прочный комбинезон.
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Clothing/Uniforms/suitcargotech.rsi
-  - type: Clothing
-    sprite: _DeadSpace/Clothing/Uniforms/suitcargotech.rsi
-
-- type: entity
-  parent: ClothingUniformBase
-  id: ClothingUniformJumpsuitTaipanChef
-  name: комбинезон шеф-повара синдиката
-  description: Без него ничего и никого не приготовить.
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Clothing/Uniforms/suitchef.rsi
-  - type: Clothing
-    sprite: _DeadSpace/Clothing/Uniforms/suitchef.rsi
-
-- type: entity
-  parent: ClothingUniformBase
-  id: ClothingUniformJumpsuitTaipanDirectory
-  name: парадная форма директора исследований синдиката
-  description: Роскошная униформа директора исследований, для особых случаев.
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Clothing/Uniforms/directory.rsi
-  - type: Clothing
-    sprite: _DeadSpace/Clothing/Uniforms/directory.rsi
-
-- type: entity
-  parent: ClothingUniformBase
-  id: ClothingUniformJumpsuitTaipanMedic
-  name: комбинезон медика синдиката
-  description: Удобный комбинезон для оказания различного рода медицинских услуг
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Clothing/Uniforms/suitmedical.rsi
-  - type: Clothing
-    sprite: _DeadSpace/Clothing/Uniforms/suitmedical.rsi
-
-- type: entity
-  parent: ClothingUniformBase
-  id: ClothingUniformScienceRDTaipan
-  name: униформа директора исследований
-  description: Слегка выцветшая от химикатов униформа.
-  components:
-  - type: Sprite
-    sprite: _ADT/Clothing/Uniforms/Jumpsuit/uniform_ili.rsi
-  - type: Clothing
-    sprite: _ADT/Clothing/Uniforms/Jumpsuit/uniform_ili.rsi
-
-- type: entity
-  parent: ClothingUniformBase
-  id: ClothingUniformScienceTaipan
-  name: комбинезон ученого синдиката
-  description: Чёрный тактический комбинезон, подходящий для всех видов исследований.
-  components:
-  - type: Sprite
-    sprite: _ADT/Clothing/Uniforms/Jumpsuit/investigator_suit.rsi
-  - type: Clothing
-    sprite: _ADT/Clothing/Uniforms/Jumpsuit/investigator_suit.rsi
-
-- type: entity
-  parent: ClothingUniformBase
-  id: ClothingUniformJumpskirtTaipanBotanist
-  name: юбка-комбинезон ботаника синдиката
-  description: Имеет сильный запах земли. Будем надеяться, что она просто грязная, а не вся в земле.
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Clothing/Uniforms/botanistskirt.rsi
-  - type: Clothing
-    sprite: _DeadSpace/Clothing/Uniforms/botanistskirt.rsi
-
-- type: entity
-  parent: ClothingUniformBase
-  id: ClothingUniformJumpskirtTaipanCargotech
-  name: юбка-комбинезон карготехника синдиката
-  description: Удобный прочный комбинезон, теперь с юбкой.
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Clothing/Uniforms/cargotechskirt.rsi
-  - type: Clothing
-    sprite: _DeadSpace/Clothing/Uniforms/cargotechskirt.rsi
-
 # New Taipan
 
 - type: entity
@@ -393,7 +272,7 @@
 # Карготехник
 - type: entity
   parent: ClothingJumpsuitTaipanBase
-  id: ClothingUniformJumpsuitTaipanCargo
+  id: ClothingUniformJumpsuitTaipanCargotech
   name: комбинезон карготехника
   description: Практичный комбинезон с усиленными швами для тяжелой рабочей среды.
   components:
@@ -404,7 +283,7 @@
 
 - type: entity
   parent: ClothingJumpskirtTaipanBase
-  id: ClothingUniformJumpskirtTaipanCargo
+  id: ClothingUniformJumpskirtTaipanCargotech
   name: юбка-комбинезон карготехника
   description: Элегантная юбка-комбинезон с прочной тканью для работы, обеспечивающая свободу передвижения.
   components:
@@ -415,7 +294,7 @@
 
 - type: entity
   parent: ClothingJumpsuitTaipanBase
-  id: ClothingUniformJumpsuitTaipanCargotech
+  id: ClothingUniformOverallsTaipanCargotech
   name: рабочий комбинезон карготехника
   description: Прочный и надежный комбинезон, идеально подходящий для интенсивной нагрузки и полной защиты во время работы.
   components:
