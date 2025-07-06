@@ -66,6 +66,8 @@
             ServiceWorker: [ 3, 3 ]
             Janitor: [ 3, 3 ]
             Librarian: [ 1, 1 ]
+            Reporter: [ 2, 2 ]
+            Boxer: [ 2, 2 ]
             Chaplain: [ 1, 1 ]
             Musician: [ 1, 1 ]
             Passenger: [ -1, -1 ]
