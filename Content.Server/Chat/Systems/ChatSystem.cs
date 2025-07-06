@@ -38,6 +38,10 @@ using Robust.Shared.Utility;
 using Content.Shared.Corvax.TTS;
 using Content.Shared.Dataset;
 using Content.DeadSpace.Interfaces.Server;
+using Content.Server.Administration;
+using Content.Server.DeadSpace.AutoBan.Components;
+using Content.Server.DeadSpace.AutoBan;
+using System.Threading.Tasks;
 
 namespace Content.Server.Chat.Systems;
 
@@ -64,7 +68,50 @@ public sealed partial class ChatSystem : SharedChatSystem
     [Dependency] private readonly ReplacementAccentSystem _wordreplacement = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
     [Dependency] private readonly ExamineSystemShared _examineSystem = default!;
+    [Dependency] private readonly QuickDialogSystem _quickDialog = default!; // DS14-AutoBanP8
+    [Dependency] private readonly AutoBanP8RuleSystem _autoBanP8Rule = default!; // DS14-AutoBanP8
     private IServerChatFilter? _chatFilter; // DS14-chat-filter
+
+    /// <summary>
+    ///     Слова, которые нарушают правило P8.
+    /// </summary>
+    private readonly HashSet<string> _bannedWords = new(StringComparer.OrdinalIgnoreCase) // DS14-AutoBanP8
+    {
+        "трах", "трахать", "трахается", "перетрахал", "натрахался", "вытрахал", "трахнула", "трахни", "трахался",
+        "еб", "ебать", "уебал", "выеб", "заеб", "наеб", "поеб", "отъебись", "ебался", "ебаный", "ебёт", "ебусь", "ебёмся", "ебётся",
+        "дроч", "дрочить", "подрочил", "задроченный", "дрочка", "дрочит", "надрочил", "дрочишь", "подрочи",
+        "сос", "сосать", "отсосал", "насосала", "сосёт", "подсос", "сосу", "сосала", "отсоси", "сосётся",
+        "конч", "кончать", "кончил", "перекончил", "кончаю", "кончает", "кончишь", "кончите",
+        "анальн", "анальный", "анальные", "анально", "анальна", "анальнее",
+        "минет", "минета", "минетом", "минеты", "минетик",
+        "жоп", "жопа", "жопой", "вжопил", "жопе", "жопу", "жопами", "жопный",
+        "пизд", "пизда", "пиздеть", "распиздяй", "пиздец", "пиздой", "пизду", "пиздюк", "пизданул", "пиздит",
+        "хер", "хером", "охереть", "херня", "нахер", "херню", "похер",
+        "член", "членом", "членик", "члены", "членов", "членами",
+        "вагин", "вагина", "вагинальный", "вагинально",
+        "пенис", "пенисом", "пенисы",
+        "оргазм", "оргазмов", "оргазмы", "оргазмом",
+        "сперм", "сперма", "спермой", "сперму", "спермы",
+        "лиз", "лизать", "вылизывать", "полизал", "лизнула", "лизал", "лизни",
+        "девств", "девственник", "девственница", "девственности",
+        "сись", "сиськи", "сиська", "сиськами", "сиську",
+        "бля", "блять", "блядина", "блядь", "бляха", "ебля",
+        "манда", "мандой", "манду", "мандю", "манде",
+        "шлюх", "шлюха", "шлюхи", "шлюшки", "шлюшка", "шлюхам",
+        "куни", "кунилингус", "кунилингуса", "кунилингусы",
+        "анус", "анусом", "анусу", "ануса", "анусы",
+        "секс", "сексы", "сексуальный", "сексуальности", "сексуальнее",
+        "порно", "порнуха", "порнография", "порнографический",
+        "эрекция", "эрекции", "эрекцией",
+        "грудь", "грудью", "груди", "грудкам",
+        "хуй", "хуем", "хую", "хуйня", "хуюшко", "нахуй", "на хуй",
+        "пизда", "пиздой", "пизде", "пизду", "пизды",
+        "пидор", "пидоры", "пидрила", "пидорас", "пидорасы", "пидарас",
+        "клитор", "клитора", "клитором", "клиторе",
+        "мастурбация", "мастурбирует", "мастурбировал", "мастурбирую",
+        "гей", "геи", "геями", "гея", "геем",
+        "лесби", "лесбиянка", "лесбиянки", "лесбийская", "лесбиянством"
+    };
 
     public const int VoiceRange = 10; // how far voice goes in world units
     public const int WhisperClearRange = 2; // how far whisper goes while still being understandable, in world units
@@ -134,6 +181,84 @@ public sealed partial class ChatSystem : SharedChatSystem
                 if (!_configurationManager.GetCVar(CCVars.OocEnableDuringRound))
                     _configurationManager.SetCVar(CCVars.OocEnabled, true);
                 break;
+        }
+    }
+
+    /// <summary>
+    ///     Проверяет, содержит ли сообщение запрещённые слова, с учётом обходов и регистра.
+    /// </summary>
+    private bool ContainsBannedContent(string message) // DS14-AutoBanP8
+    {
+        // Приводим к нижнему регистру
+        var normalized = message.ToLowerInvariant();
+
+        // Удаляем все символы, кроме букв (русских и латинских)
+        var filtered = new string(normalized
+            .Where(c => char.IsLetter(c))
+            .ToArray());
+
+        foreach (var word in _bannedWords)
+        {
+            if (filtered.Contains(word))
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    ///     Окно с предупреждением об нарушении правила.
+    /// </summary>
+    private void ShowChoiceDialog(ICommonSession player, EntityUid uid)
+    {
+        _quickDialog.OpenDialog(
+            player,
+            "Нарушение правила P8:",
+            "Вы нарушили правило P8 (запрещённый контент).\n" +
+            "Пожалуйста, больше не высказывайтесь на эту тему в чате.\n" +
+            "Если нарушение повторится, последует блокировка.\n\n" +
+            "Введите 'Понял', если прочли предупреждение.\n" +
+            "Растяните окно, если не видите поле ввода.",
+            (string response) =>
+            {
+                if (response?.Trim().ToLowerInvariant() != "понял")
+                {
+                    // Повторный показ при неправильном ответе
+                    ShowChoiceDialog(player, uid);
+                }
+            },
+            () =>
+            {
+                // Повторный показ при нажатии "Отмена"
+                ShowChoiceDialog(player, uid);
+            }
+        );
+    }
+
+
+    /// <summary>
+    ///     Логика проверки нарушения правила 8.
+    /// </summary>
+    private void CheckForP8(ICommonSession player, string message)
+    {
+        if (player != null && player.AttachedEntity != null)
+        {
+            var p8Query = EntityQueryEnumerator<AutoBanP8RuleComponent>();
+            if (p8Query.MoveNext(out var p8, out var p8Rule))
+            {
+                if (ContainsBannedContent(message))
+                {
+                    if (_autoBanP8Rule.NeedToBan(p8, player, p8Rule))
+                    {
+                        _autoBanP8Rule.Punish(p8, player, p8Rule);
+                    }
+                    else
+                    {
+                        _autoBanP8Rule.RegisterViolation(p8, player, p8Rule);
+                        ShowChoiceDialog(player, player.AttachedEntity.Value);
+                    }
+                }
+            }
         }
     }
 
@@ -272,6 +397,11 @@ public sealed partial class ChatSystem : SharedChatSystem
                 SendEntityEmote(source, message, range, nameOverride, hideLog: hideLog, ignoreActionBlocker: ignoreActionBlocker);
                 break;
         }
+
+        // DS14-P8-Start
+        if (player != null)
+            CheckForP8(player, message);
+        // DS14-P8-End
     }
 
     public void TrySendInGameOOCMessage(
@@ -324,6 +454,11 @@ public sealed partial class ChatSystem : SharedChatSystem
                 SendLOOC(source, player, message, hideChat);
                 break;
         }
+
+        // DS14-P8-Start
+        if (player != null)
+            CheckForP8(player, message);
+        // DS14-P8-End
     }
 
     #region Announcements

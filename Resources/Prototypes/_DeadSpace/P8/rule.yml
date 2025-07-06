@@ -1,0 +1,7 @@
+- type: entity
+  parent: BaseGameRule
+  id: P8
+  components:
+  - type: GameRule
+    minPlayers: 1
+  - type: AutoBanP8Rule
