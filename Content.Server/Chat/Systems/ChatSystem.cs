@@ -41,6 +41,7 @@ using Content.DeadSpace.Interfaces.Server;
 using Content.Server.Administration;
 using Content.Server.DeadSpace.AutoBan.Components;
 using Content.Server.DeadSpace.AutoBan;
+using Robust.Shared.Timing;
 
 namespace Content.Server.Chat.Systems;
 
@@ -122,6 +123,11 @@ public sealed partial class ChatSystem : SharedChatSystem
         ['6'] = 'б', ['7'] = 'т', ['8'] = 'в', ['9'] = 'д'
     };
 
+    /// <summary>
+    ///     Счёткик показа окон.
+    /// </summary>
+    private readonly Dictionary<NetUserId, bool> _dialogShown = new();
+
     public const int VoiceRange = 10; // how far voice goes in world units
     public const int WhisperClearRange = 2; // how far whisper goes while still being understandable, in world units
     public const int WhisperMuffledRange = 8; // how far whisper goes at all, in world units
@@ -194,7 +200,7 @@ public sealed partial class ChatSystem : SharedChatSystem
     }
 
     // DS14-P8-Start
-    private string NormalizeMessage(string message) // DS14-AutoBanP8
+    private string NormalizeMessage(string message)
     {
         var builder = new System.Text.StringBuilder();
 
@@ -238,28 +244,40 @@ public sealed partial class ChatSystem : SharedChatSystem
     /// </summary>
     private void ShowChoiceDialog(ICommonSession player, EntityUid uid)
     {
-        _quickDialog.OpenDialog(
-            player,
-            "Нарушение правила P8:",
-            "Вы нарушили правило P8 (запрещённый контент).\n" +
-            "Пожалуйста, больше не высказывайтесь на эту тему в чате.\n" +
-            "Если нарушение повторится, последует блокировка.\n\n" +
-            "Введите 'Понял', если прочли предупреждение.\n" +
-            "Растяните окно, если не видите поле ввода.",
-            (string response) =>
-            {
-                if (response?.Trim().ToLowerInvariant() != "понял")
+        if (_dialogShown.TryGetValue(player.UserId, out var alreadyShowing) && alreadyShowing)
+            return;
+
+        _dialogShown[player.UserId] = true;
+
+        void Show()
+        {
+            _quickDialog.OpenDialog(
+                player,
+                "Нарушение правила P8:",
+                "Вы нарушили правило P8 (запрещённый контент).\n" +
+                "Пожалуйста, больше не высказывайтесь на эту тему в чате.\n" +
+                "Если нарушение повторится, последует блокировка.\n\n" +
+                "Введите 'Понял', если прочли предупреждение.\n" +
+                "Растяните окно, если не видите поле ввода.",
+                (string response) =>
                 {
-                    // Повторный показ при неправильном ответе
-                    ShowChoiceDialog(player, uid);
+                    if (response?.Trim().ToLowerInvariant() != "понял")
+                    {
+                        Timer.Spawn(TimeSpan.FromMilliseconds(10), Show);
+                    }
+                    else
+                    {
+                        _dialogShown[player.UserId] = false;
+                    }
+                },
+                () =>
+                {
+                    Timer.Spawn(TimeSpan.FromMilliseconds(10), Show);
                 }
-            },
-            () =>
-            {
-                // Повторный показ при нажатии "Отмена"
-                ShowChoiceDialog(player, uid);
-            }
-        );
+            );
+        }
+
+        Show();
     }
 
 
