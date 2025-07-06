@@ -85,7 +85,6 @@ public sealed partial class ChatSystem : SharedChatSystem
         "анальн",
         "минет",
         "пизд",
-        "хер",
         "член",
         "вагин",
         "пенис",
