@@ -1,14 +1,12 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
-using Robust.Shared.Player;
-
 namespace Content.Server.DeadSpace.AutoBan.Components;
 
 [RegisterComponent, Access(typeof(AutoBanP8RuleSystem))]
 public sealed partial class AutoBanP8RuleComponent : Component
 {
     [ViewVariables(VVAccess.ReadOnly)]
-    public Dictionary<ICommonSession, int> RuleViolations = new();
+    public Dictionary<string, int> RuleViolations = new();
 
     [DataField, ViewVariables(VVAccess.ReadOnly)]
     public int MaxWarnings = 2;

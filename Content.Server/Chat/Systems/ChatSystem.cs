@@ -76,38 +76,50 @@ public sealed partial class ChatSystem : SharedChatSystem
     /// </summary>
     private readonly HashSet<string> _bannedWords = new(StringComparer.OrdinalIgnoreCase) // DS14-AutoBanP8
     {
-        "трах", "трахать", "трахается", "перетрахал", "натрахался", "вытрахал", "трахнула", "трахни", "трахался",
-        "еб", "ебать", "уебал", "выеб", "заеб", "наеб", "поеб", "отъебись", "ебался", "ебаный", "ебёт", "ебусь", "ебёмся", "ебётся",
-        "дроч", "дрочить", "подрочил", "задроченный", "дрочка", "дрочит", "надрочил", "дрочишь", "подрочи",
-        "сос", "сосать", "отсосал", "насосала", "сосёт", "подсос", "сосу", "сосала", "отсоси", "сосётся",
-        "конч", "кончать", "кончил", "перекончил", "кончаю", "кончает", "кончишь", "кончите",
-        "анальн", "анальный", "анальные", "анально", "анальна", "анальнее",
-        "минет", "минета", "минетом", "минеты", "минетик",
-        "пизд", "пизда", "пиздеть", "распиздяй", "пиздец", "пиздой", "пизду", "пиздюк", "пизданул", "пиздит",
-        "хер", "хером", "охереть", "херня", "нахер", "херню", "похер",
-        "член", "членом", "членик", "члены", "членов", "членами",
-        "вагин", "вагина", "вагинальный", "вагинально",
-        "пенис", "пенисом", "пенисы",
-        "оргазм", "оргазмов", "оргазмы", "оргазмом",
-        "сперм", "сперма", "спермой", "сперму", "спермы",
-        "лиз", "лизать", "вылизывать", "полизал", "лизнула", "лизал", "лизни",
-        "девств", "девственник", "девственница", "девственности",
-        "сись", "сиськи", "сиська", "сиськами", "сиську",
-        "бля", "блять", "блядина", "блядь", "бляха", "ебля",
-        "манда", "мандой", "манду", "мандю", "манде",
-        "шлюх", "шлюха", "шлюхи", "шлюшки", "шлюшка", "шлюхам",
-        "куни", "кунилингус", "кунилингуса", "кунилингусы",
-        "анус", "анусом", "анусу", "ануса", "анусы",
-        "секс", "сексы", "сексуальный", "сексуальности", "сексуальнее",
-        "порно", "порнуха", "порнография", "порнографический",
-        "эрекция", "эрекции", "эрекцией",
-        "хуй", "хуем", "хую", "хуйня", "хуюшко", "нахуй", "на хуй",
-        "пизда", "пиздой", "пизде", "пизду", "пизды",
+        "трах",
+        "ебать", "уебал", "выеб", "заеб", "наеб", "поеб", "отъебись", "ебался", "ебаный", "ебёт", "ебусь", "ебёмся", "ебётся",
+        "дроч",
+        "сос",
+        "конч",
+        "анальн",
+        "минет",
+        "пизд",
+        "хер",
+        "член",
+        "вагин",
+        "пенис",
+        "оргазм",
+        "сперм",
+        "девств",
+        "сиськ",
+        "бля",
+        "манда",
+        "шлюх",
+        "куни",
+        "анус",
+        "секс",
+        "порно",
+        "эрекци",
+        "хуй",
+        "пизд",
         "пидор", "пидоры", "пидрила", "пидорас", "пидорасы", "пидарас",
-        "клитор", "клитора", "клитором", "клиторе",
-        "мастурбация", "мастурбирует", "мастурбировал", "мастурбирую",
+        "клитор",
+        "мастурб",
         "гей", "геи", "геями", "гея", "геем",
-        "лесби", "лесбиянка", "лесбиянки", "лесбийская", "лесбиянством"
+        "лесби",
+    };
+
+    private static readonly Dictionary<char, char> СharReplacements = new() // DS14-AutoBanP8
+    {
+        // Латиница -> Кириллица
+        ['a'] = 'а', ['b'] = 'в', ['c'] = 'с', ['e'] = 'е', ['h'] = 'н',
+        ['k'] = 'к', ['m'] = 'м', ['n'] = 'н', ['o'] = 'о', ['p'] = 'р',
+        ['r'] = 'р', ['s'] = 'с', ['t'] = 'т', ['u'] = 'у', ['x'] = 'х',
+        ['y'] = 'у', ['z'] = 'з', ['i'] = 'и', ['g'] = 'г',
+
+        // Цифры
+        ['0'] = 'о', ['1'] = 'и', ['3'] = 'з', ['4'] = 'ч', ['5'] = 'с',
+        ['6'] = 'б', ['7'] = 'т', ['8'] = 'в', ['9'] = 'д'
     };
 
     public const int VoiceRange = 10; // how far voice goes in world units
@@ -182,23 +194,39 @@ public sealed partial class ChatSystem : SharedChatSystem
     }
 
     // DS14-P8-Start
+    private string NormalizeMessage(string message) // DS14-AutoBanP8
+    {
+        var builder = new System.Text.StringBuilder();
+
+        foreach (var ch in message.ToLowerInvariant())
+        {
+            if (СharReplacements.TryGetValue(ch, out var replacement))
+            {
+                builder.Append(replacement);
+            }
+            else if (char.IsLetter(ch) && ch <= 127)
+            {
+                continue;
+            }
+            else if (char.IsLetter(ch))
+            {
+                builder.Append(ch);
+            }
+        }
+
+        return builder.ToString();
+    }
 
     /// <summary>
     ///     Проверяет, содержит ли сообщение запрещённые слова, с учётом обходов и регистра.
     /// </summary>
-    private bool ContainsBannedContent(string message) // DS14-AutoBanP8
+    private bool ContainsBannedContent(string message)
     {
-        // Приводим к нижнему регистру
-        var normalized = message.ToLowerInvariant();
-
-        // Удаляем все символы, кроме букв (русских и латинских)
-        var filtered = new string(normalized
-            .Where(c => char.IsLetter(c))
-            .ToArray());
+        var normalized = NormalizeMessage(message);
 
         foreach (var word in _bannedWords)
         {
-            if (filtered.Contains(word))
+            if (normalized.Contains(word))
                 return true;
         }
 
@@ -242,18 +270,21 @@ public sealed partial class ChatSystem : SharedChatSystem
     {
         if (player != null && player.AttachedEntity != null)
         {
+            if (!_playerManager.TryGetPlayerData(player.UserId, out var data))
+                return;
+
             var p8Query = EntityQueryEnumerator<AutoBanP8RuleComponent>();
             if (p8Query.MoveNext(out var p8, out var p8Rule))
             {
                 if (ContainsBannedContent(message))
                 {
-                    if (_autoBanP8Rule.NeedToBan(p8, player, p8Rule))
+                    if (_autoBanP8Rule.NeedToBan(p8, data.UserName, p8Rule))
                     {
                         _autoBanP8Rule.Punish(p8, player, p8Rule);
                     }
                     else
                     {
-                        _autoBanP8Rule.RegisterViolation(p8, player, p8Rule);
+                        _autoBanP8Rule.RegisterViolation(p8, data.UserName, p8Rule);
                         ShowChoiceDialog(player, player.AttachedEntity.Value);
                     }
                 }
