@@ -251,34 +251,51 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         void Show()
         {
-            _quickDialog.OpenDialog(
-                player,
-                "Нарушение правила P8:",
-                "Вы нарушили правило P8 (запрещённый контент).\n" +
-                "Пожалуйста, больше не высказывайтесь на эту тему в чате.\n" +
-                "Если нарушение повторится, последует блокировка.\n\n" +
-                "Введите 'Понял', если прочли предупреждение.\n" +
-                "Растяните окно, если не видите поле ввода.",
-                (string response) =>
-                {
-                    if (response?.Trim().ToLowerInvariant() != "понял")
+            // Проверка, что клиент всё ещё подключён
+            if (player.Channel == null)
+            {
+                _dialogShown[player.UserId] = false;
+                return;
+            }
+
+            try
+            {
+                _quickDialog.OpenDialog(
+                    player,
+                    "Нарушение правила P8:",
+                    "Вы нарушили правило P8 (запрещённый контент).\n" +
+                    "Пожалуйста, больше не высказывайтесь на эту тему в чате.\n" +
+                    "Если нарушение повторится, последует блокировка.\n\n" +
+                    "Введите 'Понял', если прочли предупреждение.\n" +
+                    "Растяните окно, если не видите поле ввода.",
+                    (string response) =>
                     {
-                        Timer.Spawn(TimeSpan.FromMilliseconds(10), Show);
-                    }
-                    else
+                        if (response?.Trim().ToLowerInvariant() != "понял")
+                        {
+                            Timer.Spawn(TimeSpan.FromMilliseconds(100), Show);
+                        }
+                        else
+                        {
+                            _dialogShown[player.UserId] = false;
+                        }
+                    },
+                    () =>
                     {
-                        _dialogShown[player.UserId] = false;
+                        Timer.Spawn(TimeSpan.FromMilliseconds(100), Show);
                     }
-                },
-                () =>
-                {
-                    Timer.Spawn(TimeSpan.FromMilliseconds(10), Show);
-                }
-            );
+                );
+            }
+            catch (Exception ex)
+            {
+                // Предотвращаем падение сервера при ошибке канала
+                Logger.Warning($"[P8]: Ошибка при показе диалога игроку {player.Name}: {ex}");
+                _dialogShown[player.UserId] = false;
+            }
         }
 
         Show();
     }
+
 
 
     /// <summary>
