@@ -72,10 +72,12 @@ public sealed partial class ChatSystem : SharedChatSystem
     [Dependency] private readonly AutoBanP8RuleSystem _autoBanP8Rule = default!; // DS14-AutoBanP8
     private IServerChatFilter? _chatFilter; // DS14-chat-filter
 
+    // DS14-AutoBanP8-Start
+
     /// <summary>
     ///     Слова, которые нарушают правило P8.
     /// </summary>
-    private readonly HashSet<string> _bannedWords = new(StringComparer.OrdinalIgnoreCase) // DS14-AutoBanP8
+    private readonly HashSet<string> _bannedWords = new(StringComparer.OrdinalIgnoreCase)
     {
         "трах",
         "ебать", "уебал", "выеб", "заеб", "наеб", "поеб", "отъебись", "ебался", "ебаный", "ебёт", "ебусь", "ебёмся", "ебётся",
@@ -108,7 +110,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         "лесби",
     };
 
-    private static readonly Dictionary<char, char> СharReplacements = new() // DS14-AutoBanP8
+    private static readonly Dictionary<char, char> СharReplacements = new()
     {
         // Латиница -> Кириллица
         ['a'] = 'а', ['b'] = 'в', ['c'] = 'с', ['e'] = 'е', ['h'] = 'н',
@@ -125,6 +127,8 @@ public sealed partial class ChatSystem : SharedChatSystem
     ///     Счёткик показа окон.
     /// </summary>
     private readonly Dictionary<NetUserId, bool> _dialogShown = new();
+
+    // DS14-AutoBanP8-End
 
     public const int VoiceRange = 10; // how far voice goes in world units
     public const int WhisperClearRange = 2; // how far whisper goes while still being understandable, in world units
