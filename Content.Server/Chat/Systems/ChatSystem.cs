@@ -184,6 +184,8 @@ public sealed partial class ChatSystem : SharedChatSystem
         }
     }
 
+    // DS14-P8-Start
+
     /// <summary>
     ///     Проверяет, содержит ли сообщение запрещённые слова, с учётом обходов и регистра.
     /// </summary>
@@ -261,6 +263,8 @@ public sealed partial class ChatSystem : SharedChatSystem
             }
         }
     }
+
+    // DS14-P8-End
 
     /// <summary>
     ///     Sends an in-character chat message to relevant clients.
