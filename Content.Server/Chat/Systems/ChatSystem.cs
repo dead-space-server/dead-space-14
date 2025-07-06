@@ -41,7 +41,6 @@ using Content.DeadSpace.Interfaces.Server;
 using Content.Server.Administration;
 using Content.Server.DeadSpace.AutoBan.Components;
 using Content.Server.DeadSpace.AutoBan;
-using System.Threading.Tasks;
 
 namespace Content.Server.Chat.Systems;
 
