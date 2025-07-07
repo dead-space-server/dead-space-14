@@ -351,7 +351,7 @@ public sealed class DrugAddicationSystem : EntitySystem
     }
 }
 
-private enum WithdrawalSeverity
+public enum WithdrawalSeverity
 {
     None,
     Low,
