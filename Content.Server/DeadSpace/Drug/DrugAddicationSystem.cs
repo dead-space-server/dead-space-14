@@ -235,56 +235,49 @@ public sealed class DrugAddicationSystem : EntitySystem
         if (!Resolve(uid, ref component))
             return;
 
-        if (component.WithdrawalLevel >= 10 && component.WithdrawalLevel < 25)
-        {
-            if (component.IsTimeSendMessage)
-            {
-                _popup.PopupEntity(Loc.GetString("drug-addication-effects-low"), uid, uid);
-                component.TimeUtilSendMessage = _gameTiming.CurTime + TimeSpan.FromSeconds(component.SendMessageDuration);
-                component.IsTimeSendMessage = false;
-            }
+        var severity = GetSeverity(component.WithdrawalLevel);
 
-            LowEffects(uid, component);
-        } else if (component.WithdrawalLevel >= 25 && component.WithdrawalLevel < 50)
+        if (component.IsTimeSendMessage && severity != WithdrawalSeverity.None)
         {
-            if (component.IsTimeSendMessage)
+            string msg = severity switch
             {
-                _popup.PopupEntity(Loc.GetString("drug-addication-effects-medium"), uid, uid);
-                component.TimeUtilSendMessage = _gameTiming.CurTime + TimeSpan.FromSeconds(component.SendMessageDuration);
-                component.IsTimeSendMessage = false;
-            }
+                WithdrawalSeverity.Low        => "drug-addication-effects-low",
+                WithdrawalSeverity.Medium     => "drug-addication-effects-medium",
+                WithdrawalSeverity.MediumPlus => "drug-addication-effects-medium-plus",
+                WithdrawalSeverity.High       => "drug-addication-effects-high",
+                _ => ""
+            };
 
-            MediumEffects(uid, component);
-        } else if (component.WithdrawalLevel >= 50 && component.WithdrawalLevel < 75)
-        {
-            if (component.IsTimeSendMessage)
-            {
-                _popup.PopupEntity(Loc.GetString("drug-addication-effects-medium-plus"), uid, uid);
-                component.TimeUtilSendMessage = _gameTiming.CurTime + TimeSpan.FromSeconds(component.SendMessageDuration);
-                component.IsTimeSendMessage = false;
-            }
+            if (!string.IsNullOrEmpty(msg))
+                _popup.PopupEntity(Loc.GetString(msg), uid, uid);
 
-            MediumPlusEffects(uid, component);
-        } else if (component.WithdrawalLevel >= 75)
-        {
-            if (component.IsTimeSendMessage)
-            {
-                _popup.PopupEntity(Loc.GetString("drug-addication-effects-high"), uid, uid);
-                component.TimeUtilSendMessage = _gameTiming.CurTime + TimeSpan.FromSeconds(component.SendMessageDuration);
-                component.IsTimeSendMessage = false;
-            }
-
-            HighEffects(uid, component);
+            component.TimeUtilSendMessage = _gameTiming.CurTime + TimeSpan.FromSeconds(component.SendMessageDuration);
+            component.IsTimeSendMessage = false;
         }
-        else
-        {
-            RemComp<SlowedDownComponent>(uid);
 
-            if (TryComp<StaminaComponent>(uid, out var stamina) && component.IsStaminaEdit)
-            {
-                stamina.CritThreshold /= component.StaminaMultiply;
-                component.IsStaminaEdit = false;
-            }
+        switch (severity)
+        {
+            case WithdrawalSeverity.Low:
+                LowEffects(uid, component);
+                break;
+            case WithdrawalSeverity.Medium:
+                MediumEffects(uid, component);
+                break;
+            case WithdrawalSeverity.MediumPlus:
+                MediumPlusEffects(uid, component);
+                break;
+            case WithdrawalSeverity.High:
+                HighEffects(uid, component);
+                break;
+            case WithdrawalSeverity.None:
+                RemComp<SlowedDownComponent>(uid);
+
+                if (TryComp<StaminaComponent>(uid, out var stamina) && component.IsStaminaEdit)
+                {
+                    stamina.CritThreshold /= component.StaminaMultiply;
+                    component.IsStaminaEdit = false;
+                }
+                break;
         }
     }
 
@@ -336,10 +329,33 @@ public sealed class DrugAddicationSystem : EntitySystem
         }
     }
 
+    private WithdrawalSeverity GetSeverity(float level)
+    {
+        if (level < 10)
+            return WithdrawalSeverity.None;
+        if (level < 25)
+            return WithdrawalSeverity.Low;
+        if (level < 50)
+            return WithdrawalSeverity.Medium;
+        if (level < 75)
+            return WithdrawalSeverity.MediumPlus;
+
+        return WithdrawalSeverity.High;
+    }
+
     public float CalculateThresholdTime(DrugAddicationComponent component)
     {
         component.SomeThresholdTime = Random.Shared.Next(300, 600);
 
         return component.SomeThresholdTime;
     }
+}
+
+private enum WithdrawalSeverity
+{
+    None,
+    Low,
+    Medium,
+    MediumPlus,
+    High
 }

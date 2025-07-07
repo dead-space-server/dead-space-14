@@ -203,7 +203,7 @@
           shouldHave: false
       - !type:Drunk
         boozePower: 2
-      # DeadSpace
+      # DS14-DrugAddication
       - !type:DrugIntoxication
         addictionEffect: 0.05
         toleranceEffect: 0.0015
