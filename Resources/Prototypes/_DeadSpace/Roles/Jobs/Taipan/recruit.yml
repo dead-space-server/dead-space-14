@@ -1,0 +1,25 @@
+- type: job
+  id: TaipanRecruit
+  name: job-name-taipan-recruit
+  playTimeTracker: JobTaipanRecruit
+  description: Новобранец, готовый обучаться и поддерживать безопасность на станции Тайпан.
+  startingGear: TaipanRecruitGear
+  icon: "JobIconTaipanRecruit"
+  supervisors: job-supervisors-taipan-telecommunications-officer
+  canBeAntag: false
+  requirements:
+  - !type:DepartmentTimeRequirement
+    department: Security
+    time: 6000
+  access:
+  - TaipanBasic
+  - TaipanProtection
+
+- type: startingGear
+  id: TaipanRecruitGear
+  equipment:
+    ears: ClothingHeadsetTaipan
+    shoes: ClothingShoesBootsSyndieFilled
+    id: TaipanRecruitPDA
+    back: ClothingBackpackSyndicate
+    socks: ClothingUnderwearSocksTaipanRecruit

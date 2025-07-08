@@ -1,0 +1,251 @@
+- type: entity
+  parent: BoxCardboard
+  id: BoxSurvivalTaipan
+  name: аварийный запас
+  description: Коробка с базовым набором для выживания.
+  suffix: Тайпан, Стандартный
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingMaskBreathTaipan
+    - id: EmergencyOxygenTankFilled
+    - id: EmergencyMedipen
+    - id: Flare
+    - id: FoodSnackNutribrick
+    - id: DrinkWaterBottleFull
+  - type: Sprite
+    layers:
+    - state: box_of_doom
+    - state: emergencytank
+
+- type: entity
+  parent: BoxSurvivalTaipan
+  id: BoxSurvivalTaipanNitrogen
+  name: аварийный запас
+  description: Коробка с базовым набором для выживания для сотрудников дышащих азотом.
+  suffix: Тайпан, Азот
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingMaskBreathTaipan
+    - id: EmergencyNitrogenTankFilled
+    - id: EmergencyMedipen
+    - id: Flare
+    - id: FoodSnackNutribrick
+    - id: DrinkWaterBottleFull
+  - type: Sprite
+    layers:
+    - state: box_of_doom
+    - state: nitrogentank
+  - type: Label
+    currentLabel: reagent-name-nitrogen
+
+- type: entity
+  parent: BoxSurvivalTaipan
+  id: BoxSurvivalTaipanBeer
+  name: аварийный запас
+  description: Коробка с базовым набором для выживания для дворфов.
+  suffix: Тайпан, Дворф
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingMaskBreathTaipan
+    - id: EmergencyOxygenTankFilled
+    - id: EmergencyMedipen
+    - id: Flare
+    - id: FoodSnackNutribrick
+    - id: DrinkBeerCan
+
+- type: entity
+  parent: BoxSurvivalTaipan
+  id: BoxSurvivalTaipanMoth
+  name: аварийный запас
+  description: Коробка с базовым набором для выживания.
+  suffix: Тайпан, Ниан
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingMaskBreathTaipan
+    - id: EmergencyOxygenTankFilled
+    - id: EmergencyMedipen
+    - id: Flare
+    - id: FoodSnackFabricbrick
+    - id: DrinkWaterBottleFull
+
+- type: entity
+  parent: BoxSurvivalTaipan
+  id: BoxSurvivalTaipanNonBreather
+  name: аварийный запас
+  description: Коробка с базовым набором выживания для биологических сотрудников которым не нужен кислород или азот.
+  suffix: Тайпан, Ксеноморф
+  components:
+  - type: StorageFill
+    contents:
+    - id: Brutepack5
+    - id: Ointment5
+    - id: Gauze5
+    - id: Flare
+    - id: DrinkWaterBottleFull
+
+- type: entity
+  parent: BoxSurvivalTaipan
+  id: BoxSurvivalTaipanRobotNonBreather
+  name: аварийный запас для роботов
+  description: Коробка с базовым набором выживания для не биологических сотрудников.
+  suffix: Тайпан, Роботы, КПБ, КПС
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingHeadHatWelding
+    - id: CableApcStack5
+    - id: CrowbarRed
+    - id: Flare
+    - id: DrinkWaterBottleFull
+
+- type: entity
+  parent: BoxCardboard
+  id: BoxSurvivalTaipanEngineering
+  name: расширенный аварийный запас
+  description: Коробка с базовым набором для выживания. Согласно этикетке, содержит более ёмкий баллон.
+  suffix: Тайпан, Расширенный
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingMaskBreathTaipan
+    - id: ExtendedEmergencyOxygenTankFilled
+    - id: EmergencyMedipen
+    - id: Flare
+    - id: FoodSnackNutribrick
+    - id: DrinkWaterBottleFull
+  - type: Sprite
+    layers:
+    - state: box_of_doom
+    - state: extendedtank
+
+- type: entity
+  parent: BoxSurvivalTaipanEngineering
+  id: BoxSurvivalTaipanEngineeringNitrogen
+  name: расширенный аварийный запас
+  description: Коробка с базовым набором для выживания. Согласно этикетке, содержит более ёмкий баллон.
+  suffix: Тайпан, Расширенный, Азот
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingMaskBreathTaipan
+    - id: ExtendedEmergencyNitrogenTankFilled
+    - id: EmergencyMedipen
+    - id: Flare
+    - id: FoodSnackNutribrick
+    - id: DrinkWaterBottleFull
+  - type: Sprite
+    layers:
+    - state: box_of_doom
+    - state: nitrogentank
+  - type: Label
+    currentLabel: reagent-name-nitrogen
+
+- type: entity
+  parent: BoxSurvivalTaipanEngineering
+  id: BoxSurvivalTaipanEngineeringBeer
+  name: расширенный аварийный запас
+  description: Коробка с базовым набором для выживания. Согласно этикетке, содержит более ёмкий баллон.
+  suffix: Тайпан, Расширенный, Пиво
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingMaskBreathTaipan
+    - id: ExtendedEmergencyOxygenTankFilled
+    - id: EmergencyMedipen
+    - id: Flare
+    - id: FoodSnackNutribrick
+    - id: DrinkBeerCan
+
+- type: entity
+  parent: BoxSurvivalTaipanEngineering
+  id: BoxSurvivalTaipanEngineeringMoth
+  name: расширенный аварийный запас
+  description: Коробка с базовым набором для выживания. Согласно этикетке, содержит более ёмкий баллон.
+  suffix: Тайпан, Расширенный, Ниан
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingMaskBreathTaipan
+    - id: ExtendedEmergencyOxygenTankFilled
+    - id: EmergencyMedipen
+    - id: Flare
+    - id: FoodSnackFabricbrick
+    - id: DrinkWaterBottleFull
+
+- type: entity
+  parent: BoxCardboard
+  id: BoxSurvivalTaipanMedical
+  name: аварийный запас
+  description: Коробка с базовым набором для выживания.
+  suffix: Тайпан, Медицинский
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingMaskBreathMedical
+    - id: EmergencyOxygenTankFilled
+    - id: EmergencyMedipen
+    - id: Flare
+    - id: FoodSnackNutribrick
+    - id: DrinkWaterBottleFull
+  - type: Sprite
+    layers:
+    - state: box_of_doom
+    - state: emergencytank
+
+- type: entity
+  parent: BoxSurvivalTaipanMedical
+  id: BoxSurvivalTaipanMedicalNitrogen
+  name: аварийный запас
+  description: Коробка с базовым набором для выживания.
+  suffix: Тайпан, Медицинский, Азот
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingMaskBreathMedical
+    - id: EmergencyNitrogenTankFilled
+    - id: EmergencyMedipen
+    - id: Flare
+    - id: FoodSnackNutribrick
+    - id: DrinkWaterBottleFull
+  - type: Sprite
+    layers:
+    - state: box_of_doom
+    - state: nitrogentank
+  - type: Label
+    currentLabel: reagent-name-nitrogen
+
+- type: entity
+  parent: BoxSurvivalTaipanMedical
+  id: BoxSurvivalTaipanMedicalBeer
+  name: аварийный запас
+  description: Коробка с базовым набором для выживания.
+  suffix: Тайпан, Медицинский, Пиво
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingMaskBreathMedical
+    - id: EmergencyOxygenTankFilled
+    - id: EmergencyMedipen
+    - id: Flare
+    - id: FoodSnackNutribrick
+    - id: DrinkBeerCan
+
+- type: entity
+  parent: BoxSurvivalTaipanMedical
+  id: BoxSurvivalTaipanMedicalMoth
+  name: аварийный запас
+  description: Коробка с базовым набором для выживания.
+  suffix: Тайпан, Медицинский, Ниан
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingMaskBreathMedical
+    - id: EmergencyOxygenTankFilled
+    - id: EmergencyMedipen
+    - id: Flare
+    - id: FoodSnackFabricbrick
+    - id: DrinkWaterBottleFull

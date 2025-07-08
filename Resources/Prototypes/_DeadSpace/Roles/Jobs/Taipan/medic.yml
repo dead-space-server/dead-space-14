@@ -1,0 +1,30 @@
+- type: job
+  id: TaipanMedic
+  name: job-name-taipan-medic
+  playTimeTracker: JobTaipanMedic
+  description: Вы оказываете медицинскую помощь и заботитесь о здоровье экипажа на станции Тайпан.
+  startingGear: TaipanMedicGear
+  icon: "JobIconTaipanMedic"
+  supervisors: job-supervisors-taipan-research-director
+  canBeAntag: false
+  requirements:
+  - !type:DepartmentTimeRequirement
+    department: Medical
+    time: 18000
+  - !type:RoleTimeRequirement
+    role: JobChemist
+    time: 6000
+  access:
+  - TaipanBasic
+  - TaipanMedical
+
+- type: startingGear
+  id: TaipanMedicGear
+  equipment:
+    ears: ClothingHeadsetTaipan
+    outerClothing: ClothingOuterTaipanCoatLabMed
+    shoes: ClothingShoesColorWhite
+    id: TaipanMedicPDA
+    back: ClothingBackpackSyndicate
+    belt: ClothingBeltMedicalFilled
+    socks: ClothingUnderwearSocksTaipanMedic

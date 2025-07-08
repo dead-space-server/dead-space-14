@@ -1,0 +1,385 @@
+# Biohazard
+- type: entity
+  id: ClosetTaipanL3Filled
+  parent: ClosetL3
+  name: шкаф снаряжения 3-го уровня биологической опасности
+  description: Это хранилище для снаряжения 3-го уровня биологической опасности.
+  suffix: Заполненный, Тайпан
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingOuterTaipanBioResearcher
+    - id: ClothingHeadHatHoodTaipanBioResearcher
+
+# Medical
+- type: entity
+  parent: LockerTaipanChemistry
+  id: LockerTaipanChemistryFilled
+  suffix: Тайпан, Заполненный
+  components:
+  - type: StorageFill
+    contents:
+    - id: BoxSyringe
+    - id: BoxBeaker
+    - id: BoxBeaker
+      prob: 0.3
+    - id: BoxPillCanister
+    - id: BoxBottle
+    - id: BoxVial
+    - id: PlasmaChemistryVial
+    - id: ChemBag
+    - id: ClothingHandsGlovesLatex
+    - id: ClothingMaskSterile
+    - id: HandLabeler
+      prob: 0.5
+
+- type: entity
+  parent: LockerTaipanMedic
+  id: LockerTaipanMedicFilled
+  suffix: Тайпан, Заполненный
+  components:
+  - type: StorageFill
+    contents:
+    - id: HandheldHealthAnalyzer
+    - id: ClothingHeadMirror
+      prob: 0.1
+    - id: ClothingHandsGlovesLatex
+    - id: ClothingHeadsetMedical
+    - id: ClothingEyesHudMedical
+    - id: ClothingHeadHatSurgcapBlue
+      prob: 0.9
+    - id: ClothingHeadHatSurgcapGreen
+      prob: 0.1
+    - id: ClothingHeadHatSurgcapPurple
+      prob: 0.05
+    - id: ClothingUniformJumpsuitTaipanMedic
+      amount: 2
+    - id: ClothingUniformJumpskirtTaipanMedic
+      amount: 2
+    - id: ClothingMaskSterile
+
+- type: entity
+  parent: LockerTaipanParamedic
+  id: LockerTaipanParamedicFilled
+  suffix: Тайпан, Заполненный
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingUniformJumpsuitTaipanParamedic
+      amount: 2
+    - id: ClothingUniformJumpskirtTaipanParamedic
+      amount: 2
+    - id: ClothingEyesHudMedical
+    - id: Defibrillator
+    - id: ClothingHandsGlovesLatex
+    - id: ClothingMaskSterile
+    - id: HandheldGPSBasic
+    - id: MedkitFilled
+      prob: 0.3
+    - id: MedkitAdvancedFilled
+
+- type: entity
+  parent: LockerTaipanMedicine
+  id: LockerTaipanMedicineFilled
+  suffix: Тайпан, Заполненный
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: LockerFillMedicine
+
+- type: entity
+  parent: LockerWallMedical
+  id: LockerTaipanWallMedicalFilled
+  name: настенный медицинский шкаф
+  suffix: Тайпан, Заполненный
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: LockerFillMedicine
+  - type: AccessReader
+    access: [["TaipanMedical"]]
+
+# Science
+- type: entity
+  id: LockerTaipanResearcherFilled
+  suffix: Тайпан, Исследователь
+  parent: LockerTaipanResearcher
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingHandsGlovesLatex
+      amount: 2
+    - id: ClothingMaskSterile
+    - id: ClothingOuterCoatRnd
+      amount: 2
+    - id: AnomalyScanner
+    - id: NodeScanner
+    - id: NetworkConfigurator
+      prob: 0.5
+
+# Cargo
+- type: entity
+  id: LockerTaipanCargotechFilled
+  suffix: Тайпан, Заполненный
+  parent: LockerTaipanCargotech
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingUniformJumpsuitTaipanCargotech
+      amount: 2
+    - id: ClothingUniformJumpskirtTaipanCargotech
+      amount: 2
+    - id: ClothingUniformOverallsTaipanCargotech
+      amount: 2
+    - id: ClothingBeltUtilityFilled
+    - id: SurvivalKnife
+    - id: HandheldGPSBasic
+    - id: RadioHandheld
+    - id: AppraisalTool
+    - id: FireExtinguisher
+    - id: Flare
+      amount: 3
+      prob: 0.3
+
+# Engineering
+- type: entity
+  id: LockerTaipanElectricalSuppliesFilled
+  suffix: Тайпан, Заполненный
+  parent: LockerTaipanElectricalSupplies
+  components:
+  - type: StorageFill
+    contents:
+    - id: ToolboxElectricalFilled
+      prob: 0.7
+    - id: FirelockElectronics
+      prob: 0.05
+    - id: APCElectronics
+      prob: 0.1
+    - id: CableMVStack
+      prob: 0.2
+    - id: CableApcStack
+      prob: 0.3
+
+- type: entity
+  id: LockerTaipanWeldingSuppliesFilled
+  suffix: Тайпан, Заполненный
+  parent: LockerTaipanWeldingSupplies
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingHeadHatWelding
+    - id: ClothingHeadHatWelding
+    - id: ClothingHeadHatWelding
+      prob: 0.5
+    - id: Welder
+    - id: Welder
+    - id: WelderMini
+      orGroup: thirdWelder
+    - id: Welder
+      prob: 0.33
+      orGroup: thirdWelder
+    - id: WelderIndustrial
+      prob: 0.33
+      orGroup: thirdWelder
+
+- type: entity
+  id: LockerTaipanAtmosphericsFilled
+  suffix: Тайпан, Заполненный
+  parent: LockerTaipanAtmosphericsEngineer
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingUniformJumpsuitTaipanAtmosphericsEngineer
+      amount: 2
+    - id: ClothingUniformJumpskirtTaipanAtmosphericsEngineer
+      amount: 2
+    - id: GasAnalyzer
+    - id: MedkitOxygenFilled
+    - id: HolofanProjector
+    - id: RCD
+    - id: RCDAmmo
+
+- type: entity
+  id: LockerTaipanTechnicianFilled
+  suffix: Тайпан, Заполненный
+  parent: LockerTaipanTechnician
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingUniformJumpsuitTaipanTechnician
+      amount: 2
+    - id: ClothingUniformJumpskirtTaipanTechnician
+      amount: 2
+    - id: ClothingHandsGlovesColorYellow
+    - id: TrayScanner
+    - id: RCD
+    - id: RCDAmmo
+
+# Service
+- type: entity
+  id: LockerTaipanBoozeFilled
+  parent: LockerTaipanBooze
+  suffix: Тайпан, Заполненный
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingOuterArmorBasicSlim
+    - id: WeaponShotgunDoubleBarreledRubber
+    - id: DrinkShaker
+    - id: ClothingEyesHudBeer
+    - id: HandLabeler
+    - id: DrinkBottleBeer
+      prob: 0.5
+    - id: DrinkBottleBeer
+      prob: 0.5
+    - id: DrinkBottleBeer
+      prob: 0.5
+    - id: BoxBeanbag
+      amount: 2
+    - id: RagItem
+      amount: 2
+
+- type: entity
+  id: ClosetTaipanChefFilled
+  parent: ClosetChef
+  name: поварской гардероб
+  description: Хранилище кухонной одежды и мышеловок.
+  suffix: Тайпан, Заполненный
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingUniformJumpsuitTaipanChef
+      amount: 2
+    - id: ClothingUniformJumpskirtTaipanChef
+      amount: 2
+    - id: CrowbarRed
+    - id: VariantCubeBox
+    - id: BoxMousetrap
+      amount: 2
+    - id: SprayBottleWater
+    - id: ReagentContainerFlour
+      amount: 2
+    - id: FoodBoxCloth
+    - id: ReagentContainerSugar
+    - id: FoodCondimentPacketSalt
+      amount: 3
+    - id: FoodCondimentPacketPepper
+      amount: 3
+    - id: FoodCondimentBottleEnzyme
+    - id: DrinkMilkCarton
+      amount: 2
+    - id: DrinkSoyMilkCarton
+    - id: ADTIronTray
+
+- type: entity
+  id: LockerTaipanBotanistFilled
+  suffix: Тайпан, Заполненный
+  parent: LockerTaipanBotanist
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingUniformJumpsuitTaipanBotanist
+      amount: 2
+    - id: ClothingUniformJumpskirtTaipanBotanist
+      amount: 2
+    - id: ClothingHandsGlovesLeather
+    - id: ClothingOuterApronBotanist
+    - id: ClothingHeadBandBotany
+    - id: ChemistryBottleRobustHarvest
+      prob: 0.3
+    - id: ClothingBeltPlant
+    - id: PlantBag
+    - id: BoxMouthSwab
+    - id: Dropper
+    - id: HandLabeler
+    - id: ClothingHeadHatTrucker
+      prob: 0.1
+
+# Command
+- type: entity
+  id: LockerTaipanCommunicationsOfficerFilled
+  suffix: Тайпан, Заполненный
+  parent: LockerTaipanCommunicationsOfficer
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingUniformJumpsuitTaipanCommunicationsOfficer
+      amount: 2
+    - id: ClothingUniformJumpskirtTaipanCommunicationsOfficer
+      amount: 2
+
+- type: entity
+  id: LockerTaipanResearchDirectorFilled
+  suffix: Тайпан, Заполненный
+  parent: LockerTaipanResearchDirector
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingUniformJumpsuitTaipanResearchDirector
+      amount: 2
+    - id: ClothingUniformJumpskirtTaipanResearchDirector
+      amount: 2
+
+- type: entity
+  id: LockerTaipanTechnicalOperationsSupervisorFilled
+  suffix: Тайпан, Заполненный
+  parent: LockerTaipanTechnicalOperationsSupervisor
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingUniformJumpsuitTaipanTechnicalOperationsSupervisor
+      amount: 2
+    - id: ClothingUniformJumpskirtTaipanTechnicalOperationsSupervisor
+      amount: 2
+
+# Security
+- type: entity
+  id: LockerTaipanRecruitFilled
+  suffix: Тайпан, Заполненный
+  parent: LockerTaipanRecruit
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingUniformJumpsuitTaipanRecruit
+      amount: 2
+    - id: ClothingUniformJumpskirtTaipanRecruit
+      amount: 2
+
+# Safe
+- type: entity
+  id: GunSafeTaipanPistolViper
+  suffix: Тайпан, Гадюка
+  parent: GunSafeTaipan
+  components:
+  - type: StorageFill
+    contents:
+    - id: WeaponPistolViper
+      amount: 4
+    - id: MagazinePistol
+      amount: 8
+
+- type: entity
+  id: GunSafeTaipanShotgunBulldog
+  suffix: Тайпан, Бульдог
+  parent: GunSafeTaipan
+  components:
+  - type: StorageFill
+    contents:
+    - id: WeaponShotgunBulldog
+      amount: 2
+    - id: MagazineShotgun
+      amount: 4
+
+- type: entity
+  id: GunSafeTaipanSMGC20r
+  suffix: Тайпан, C20r
+  parent: GunSafeTaipan
+  components:
+  - type: StorageFill
+    contents:
+    - id: WeaponSubMachineGunC20r
+      amount: 2
+    - id: MagazinePistolSubMachineGun
+      amount: 4

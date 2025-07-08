@@ -1,23 +1,23 @@
 - type: playTimeTracker
-  id: TaipanAtmosTech
+  id: JobTaipanAtmosphericsEngineer
 
 - type: playTimeTracker
-  id: TaipanBotanist
+  id: JobTaipanBotanist
 
 - type: playTimeTracker
-  id: TaipanCargotech
+  id: JobTaipanCargotech
 
 - type: playTimeTracker
-  id: TaipanChef
+  id: JobTaipanChef
 
 - type: playTimeTracker
-  id: TaipanMedic
+  id: JobTaipanMedic
 
 - type: playTimeTracker
-  id: TaipanRD
+  id: JobTaipanResearchDirector
 
 - type: playTimeTracker
-  id: TaipanScience
+  id: JobTaipanResearcher
 
 - type: playTimeTracker
-  id: TaipanTelecommunicationsOfficer
+  id: JobTaipanCommunicationsOfficer

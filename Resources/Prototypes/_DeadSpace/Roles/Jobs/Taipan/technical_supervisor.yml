@@ -1,0 +1,37 @@
+- type: job
+  id: TaipanTechnicalOperationsSupervisor
+  name: job-name-taipan-technical-supervisor
+  playTimeTracker: JobTaipanTechnicalOperationsSupervisor
+  description: Вы управляете финансами станции Тайпан.
+  startingGear: TaipanTechnicalOperationsSupervisorGear
+  icon: "JobIconTaipanTechnicalOperationsSupervisor"
+  supervisors: job-supervisors-syndicate
+  canBeAntag: false
+  requirements:
+  - !type:DepartmentTimeRequirement
+    department: Engineering
+    time: 30000
+  - !type:DepartmentTimeRequirement
+    department: Cargo
+    time: 30000
+  - !type:DepartmentTimeRequirement
+    department: Service
+    time: 15000
+  - !type:OverallPlaytimeRequirement
+    time: 120000
+  - !type:AgeRequirement
+    requiredAge: 24
+  access:
+  - TaipanBasic
+  - TaipanEngineering
+  - TaipanCommand
+
+- type: startingGear
+  id: TaipanTechnicalOperationsSupervisorGear
+  equipment:
+    ears: ClothingHeadsetAltTaipan
+    shoes: ClothingShoesBootsLaceup
+    id: TaipanTechnicalOperationsSupervisorPDA
+    back: ClothingBackpackSyndicate
+    socks: ClothingUnderwearSocksTaipanTechnicalOperationsSupervisor
+    gloves: ClothingHandsTaipanTechnicalSupervisor

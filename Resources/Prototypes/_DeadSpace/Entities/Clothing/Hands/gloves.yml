@@ -1,6 +1,6 @@
 - type: entity
   parent: ClothingHandsGlovesCombat
-  id: ClothingHandsTaipanRD
+  id: ClothingHandsTaipanResearchDirector
   name: перчатки директора исследований
   description: Жизненно необходимый предмет одежды, без которого не обойтись в научной лаборатории. Изолированы.
   components:
@@ -13,7 +13,7 @@
 
 - type: entity
   parent: ClothingHandsGlovesCombat
-  id: ClothingHandsTaipanCO
+  id: ClothingHandsTaipanCommunicationsOfficer
   name: перчатки офицера телекоммуникаций
   description: Тактические перчатки, защищающие его обладателя от нежелательных соприкосновений.
   components:
@@ -26,7 +26,7 @@
 
 - type: entity
   parent: ClothingHandsGlovesCombat
-  id: ClothingHandsTaipanTS
+  id: ClothingHandsTaipanTechnicalSupervisor
   name: перчатки руководителя техобеспечения
   description: Изолированные перчатки с позолоченными вставками. Без них невозможно работать.
   components:

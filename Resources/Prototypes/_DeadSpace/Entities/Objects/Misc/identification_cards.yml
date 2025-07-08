@@ -30,7 +30,7 @@
 - type: entity
   parent: Clothing
   id: IDCardTaipan
-  description: Чёрная ID карта, предоставляющая различные доступы.
+  description: Чёрная ID-карта, предоставляющая различные доступы.
   suffix: Тайпан
   abstract: true
   components:
@@ -53,7 +53,7 @@
 - type: entity
   parent: IDCardTaipan
   id: TaipanAtmosphericsEngineerIDcard
-  name: ID карта атмосферного инженера
+  name: ID-карта атмосферного инженера
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Devices/idcards.rsi
@@ -68,7 +68,7 @@
 - type: entity
   parent: IDCardTaipan
   id: TaipanBotanistIDcard
-  name: ID карта ботаника
+  name: ID-карта ботаника
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Devices/idcards.rsi
@@ -81,7 +81,7 @@
 - type: entity
   parent: IDCardTaipan
   id: TaipanResearchDirectorIDcard
-  name: ID карта директора исследований
+  name: ID-карта директора исследований
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Devices/idcards.rsi
@@ -102,7 +102,7 @@
 - type: entity
   parent: IDCardTaipan
   id: TaipanCargotechIDcard
-  name: ID карта карготехника
+  name: ID-карта карготехника
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Devices/idcards.rsi
@@ -115,13 +115,13 @@
 
 - type: entity
   parent: IDCardTaipan
-  id: TaipanMedicalDoctorIDcard
-  name: ID карта медика
+  id: TaipanMedicIDcard
+  name: ID-карта медика
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Devices/idcards.rsi
     layers:
-    - state: medicaldoctor
+    - state: medic
   - type: Access
     tags:
     - TaipanMedical
@@ -129,7 +129,7 @@
 - type: entity
   parent: IDCardTaipan
   id: TaipanCommunicationsOfficerIDcard
-  name: ID карта офицера телекоммуникаций
+  name: ID-карта офицера телекоммуникаций
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Devices/idcards.rsi
@@ -156,7 +156,7 @@
 - type: entity
   parent: IDCardTaipan
   id: TaipanParamedicIDcard
-  name: ID карта парамедика
+  name: ID-карта парамедика
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Devices/idcards.rsi
@@ -170,12 +170,12 @@
 - type: entity
   parent: IDCardTaipan
   id: TaipanChefIDcard
-  name: ID карта повара
+  name: ID-карта повара
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Devices/idcards.rsi
     layers:
-    - state: cook
+    - state: chef
   - type: Access
     tags:
     - TaipanService
@@ -183,7 +183,7 @@
 - type: entity
   parent: IDCardTaipan
   id: TaipanRecruitIDcard
-  name: ID карта рекрута
+  name: ID-карта рекрута
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Devices/idcards.rsi
@@ -195,13 +195,13 @@
 
 - type: entity
   parent: IDCardTaipan
-  id: TaipanEngineerIDcard
-  name: ID карта ремонтника
+  id: TaipanTechnicianIDcard
+  name: ID-карта ремонтника
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Devices/idcards.rsi
     layers:
-    - state: stationengineer
+    - state: technician
   - type: Access
     tags:
     - TaipanEngineering
@@ -210,7 +210,7 @@
 - type: entity
   parent: IDCardTaipan
   id: TaipanTechnicalOperationsSupervisorIDcard
-  name: ID карта руководителя техобеспечения
+  name: ID-карта руководителя техобеспечения
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Devices/idcards.rsi
@@ -230,13 +230,13 @@
 
 - type: entity
   parent: IDCardTaipan
-  id: TaipanScientistIDcard
-  name: ID карта исследователя
+  id: TaipanResearcherIDcard
+  name: ID-карта исследователя
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Devices/idcards.rsi
     layers:
-    - state: chemist
+    - state: researcher
   - type: Access
     tags:
     - TaipanMaint

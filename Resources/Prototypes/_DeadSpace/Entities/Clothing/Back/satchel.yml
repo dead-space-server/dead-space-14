@@ -1,0 +1,10 @@
+- type: entity
+  parent: ClothingBackpackSatchel
+  id: ClothingBackpackSatchelTaipan
+  name: сумка синдиката
+  description: Модная сумка в красно-чёрных тонах.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Back/bag.rsi
+  - type: ExplosionResistance
+    damageCoefficient: 0.1

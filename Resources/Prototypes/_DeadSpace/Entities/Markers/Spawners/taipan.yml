@@ -1,12 +1,12 @@
 - type: entity
   name: атмосферный инженер Синдиката
-  id: SpawnPointLatejoinTaipanAtmos
+  id: SpawnPointLatejoinTaipanAtmosphericsEngineer
   parent: SpawnPointJobBase
   components:
   - type: Sprite
     state: green
   - type: SpawnPoint
-    job_id: TaipanAtmosTech
+    job_id: TaipanAtmosphericsEngineer
     spawn_type: LateJoin
 
 - type: entity
@@ -55,24 +55,24 @@
 
 - type: entity
   name: директор исследований Синдиката
-  id: SpawnPointLatejoinTaipanRD
+  id: SpawnPointLatejoinTaipanResearchDirector
   parent: SpawnPointJobBase
   components:
   - type: Sprite
     state: green
   - type: SpawnPoint
-    job_id: TaipanRD
+    job_id: TaipanResearchDirector
     spawn_type: LateJoin
 
 - type: entity
   name: учёный Синдиката
-  id: SpawnPointLatejoinTaipanScience
+  id: SpawnPointLatejoinTaipanResearcher
   parent: SpawnPointJobBase
   components:
   - type: Sprite
     state: green
   - type: SpawnPoint
-    job_id: TaipanScience
+    job_id: TaipanResearcher
     spawn_type: LateJoin
 
 - type: entity
@@ -83,5 +83,5 @@
   - type: Sprite
     state: green
   - type: SpawnPoint
-    job_id: TaipanTelecommunicationsOfficer
+    job_id: TaipanCommunicationsOfficer
     spawn_type: LateJoin

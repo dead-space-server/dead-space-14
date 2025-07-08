@@ -1,8 +1,7 @@
 - type: entity
   parent: ClothingHeadHelmetHardsuitEngineering
-  id: ClothingHeadHelmetHardsuitTaipanAtmos
-  name: atmos hardsuit helmet
-  description: A special hardsuit helmet designed for working in low-pressure, high thermal environments.
+  id: ClothingHeadHelmetHardsuitTaipanAtmosphericsEngineer
+  name: шлем скафандра атмосферного инженера
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -25,8 +24,7 @@
 - type: entity
   parent: ClothingHeadHelmetHardsuitSalvage
   id: ClothingHeadHelmetHardsuitTaipanCargotech
-  name: salvage hardsuit helmet
-  description: A special helmet designed for work in a hazardous, low pressure environment. Has reinforced plating for wildlife encounters and dual floodlights.
+  name: шлем скафандра карготехника
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -41,15 +39,14 @@
 
 - type: entity
   parent: ClothingHeadHelmetHardsuitEngineering
-  id: ClothingHeadHelmetHardsuitTaipanEngineering
-  name: engineering hardsuit helmet
-  description: An engineering hardsuit helmet designed for working in low-pressure, high radioactive environments.
+  id: ClothingHeadHelmetHardsuitTaipanTechnician
+  name: шлем скафандра ремонтника
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Clothing/Head/Hardsuits/taipan_engineer.rsi
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/taipan_technician.rsi
   - type: Clothing
-    sprite: _DeadSpace/Clothing/Head/Hardsuits/taipan_engineer.rsi
+    sprite: _DeadSpace/Clothing/Head/Hardsuits/taipan_technician.rsi
   - type: PointLight
     color: "#ffdbad"
   - type: Tag
@@ -58,8 +55,7 @@
 - type: entity
   parent: ClothingHeadHelmetHardsuitBrigmedic
   id: ClothingHeadHelmetHardsuitTaipanParamedic
-  name: brigmedic hardsuit helmet
-  description: The lightweight helmet of the brigmedic hardsuit. Protects against viruses, and clowns.
+  name: шлем скафандра парамедика
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -73,9 +69,8 @@
 
 - type: entity
   parent: ClothingHeadHelmetHardsuitSecurity
-  id: ClothingHeadHelmetHardsuitTaipanPatrol
-  name: security hardsuit helmet
-  description: Armored hardsuit helmet for security needs.
+  id: ClothingHeadHelmetHardsuitTaipanRecruit
+  name: шлем скафандра рекрута
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -90,8 +85,8 @@
 - type: entity
   parent: ClothingHeadHelmetHardsuitSecurityRed
   id: ClothingHeadHelmetHardsuitTaipanCO
-  name: head of security's hardsuit helmet
-  description: Security hardsuit helmet with the latest top secret NT-HUD software. Belongs to the HoS.
+  name: шлем скафандра офицера телекоммуникаций
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/Head/Hardsuits/taipan_co.rsi
