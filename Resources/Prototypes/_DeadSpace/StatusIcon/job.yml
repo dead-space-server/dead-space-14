@@ -1,63 +1,95 @@
 - type: jobIcon
+  id: JobIconTaipanAtmosphericsEngineer
   parent: JobIcon
-  id: JobIconSyndicateAtmos
   icon:
     sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
-    state: atmospheric_technician
-  jobName: job-name-taipan-atmos-tech
+    state: AtmosphericEngineer
+  jobName: job-name-taipan-atmospherics-engineer
 
 - type: jobIcon
-  parent: JobIcon
   id: JobIconTaipanBotanist
+  parent: JobIcon
   icon:
     sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
-    state: botanist
+    state: Botanist
   jobName: job-name-taipan-botanist
 
 - type: jobIcon
-  parent: JobIcon
   id: JobIconTaipanCargotech
+  parent: JobIcon
   icon:
     sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
-    state: cargo_technician
+    state: CargoTechnician
   jobName: job-name-taipan-cargotech
 
 - type: jobIcon
-  parent: JobIcon
   id: JobIconTaipanChef
+  parent: JobIcon
   icon:
     sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
-    state: chef
+    state: Chef
   jobName: job-name-taipan-chef
 
 - type: jobIcon
+  id: JobIconTaipanMedic
   parent: JobIcon
-  id: JobIconSyndicateParamedic
   icon:
     sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
-    state: medical_doctor
+    state: Medic
   jobName: job-name-taipan-medic
 
 - type: jobIcon
+  id: JobIconTaipanParamedic
   parent: JobIcon
-  id: JobIconSyndicateRD
   icon:
     sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
-    state: research_director
-  jobName: job-name-taipan-rd
+    state: Paramedic
+  jobName: job-name-taipan-paramedic
 
 - type: jobIcon
+  id: JobIconTaipanResearchDirector
   parent: JobIcon
-  id: JobIconSyndicateScience
   icon:
     sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
-    state: scientist
-  jobName: job-name-taipan-science
+    state: ResearchDirector
+  jobName: job-name-taipan-research-director
 
 - type: jobIcon
+  id: JobIconTaipanRecruit
   parent: JobIcon
-  id: JobIconSyndicateFormal
   icon:
     sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
-    state: security_officer
+    state: Recruit
+  jobName: job-name-taipan-recruit
+
+- type: jobIcon
+  id: JobIconTaipanResearcher
+  parent: JobIcon
+  icon:
+    sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
+    state: Researcher
+  jobName: job-name-taipan-researcher
+
+- type: jobIcon
+  id: JobIconTaipanTechnician
+  parent: JobIcon
+  icon:
+    sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
+    state: Technician
+  jobName: job-name-taipan-station-technician
+
+- type: jobIcon
+  id: JobIconTaipanTechnicalOperationsSupervisor
+  parent: JobIcon
+  icon:
+    sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
+    state: TechnicalSupervisor
+  jobName: job-name-taipan-technical-supervisor
+
+- type: jobIcon
+  id: JobIconTaipanCommunicationsOfficer
+  parent: JobIcon
+  icon:
+    sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
+    state: CommunicationOfficer
   jobName: job-name-taipan-telecommunications-officer

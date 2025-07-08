@@ -35,7 +35,7 @@
 
 - type: accessLevel
   id: TaipanCommunicationsOfficer
-  name: Кабинет ОТК
+  name: Кабинет офицера телекоммуникаций
 
 - type: accessLevel
   id: TaipanEngineering
@@ -55,7 +55,7 @@
 
 - type: accessLevel
   id: TaipanResearchDirector
-  name: Кабинет ДИ
+  name: Кабинет директора исследований
 
 - type: accessLevel
   id: TaipanScience
@@ -67,7 +67,7 @@
 
 - type: accessLevel
   id: TaipanTechnicalOperationsSupervisor
-  name: Кабинет РТ
+  name: Кабинет руководителя техобеспечения
 
 - type: accessLevel
   id: TaipanVault

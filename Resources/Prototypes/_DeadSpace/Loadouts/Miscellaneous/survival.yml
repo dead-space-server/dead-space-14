@@ -1,0 +1,177 @@
+# Basic
+- type: loadout
+  id: TaipanEmergencyOxygen
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: OxygenBreather
+  storage:
+    back:
+    - BoxSurvivalTaipan
+
+- type: loadout
+  id: TaipanEmergencyNitrogen
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: NitrogenBreather
+  storage:
+    back:
+    - BoxSurvivalTaipanNitrogen
+
+- type: loadout
+  id: TaipanEmergencyNonBreather
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: NonBreather
+  storage:
+    back:
+    - BoxSurvivalTaipanNonBreather
+
+- type: loadout
+  id: TaipanEmergencyRobotNonBreather
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: RobotNonBreather
+  storage:
+    back:
+    - BoxSurvivalTaipanRobotNonBreather
+
+- type: loadout
+  id: TaipanEmergencyBeer
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: EffectSpeciesDwarf
+  storage:
+    back:
+    - BoxSurvivalTaipanBeer
+
+- type: loadout
+  id: TaipanEmergencyMoth
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: EffectSpeciesMoth
+  storage:
+    back:
+    - BoxSurvivalTaipanMoth
+
+# Engineering / Extended
+- type: loadout
+  id: TaipanEmergencyOxygenExtended
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: OxygenBreather
+  storage:
+    back:
+    - BoxSurvivalTaipanEngineering
+
+- type: loadout
+  id: TaipanEmergencyNitrogenExtended
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: NitrogenBreather
+  storage:
+    back:
+    - BoxSurvivalTaipanEngineeringNitrogen
+
+- type: loadout
+  id: TaipanEmergencyBeerExtended
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: EffectSpeciesDwarf
+  storage:
+    back:
+    - BoxSurvivalTaipanEngineeringBeer
+
+- type: loadout
+  id: TaipanEmergencyMothExtended
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: EffectSpeciesMoth
+  storage:
+    back:
+    - BoxSurvivalTaipanEngineeringMoth
+
+# Medical
+- type: loadout
+  id: TaipanEmergencyOxygenMedical
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: OxygenBreather
+  storage:
+    back:
+    - BoxSurvivalTaipanMedical
+
+- type: loadout
+  id: TaipanEmergencyNitrogenMedical
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: NitrogenBreather
+  storage:
+    back:
+    - BoxSurvivalTaipanMedicalNitrogen
+
+- type: loadout
+  id: TaipanEmergencyBeerMedical
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: EffectSpeciesDwarf
+  storage:
+    back:
+    - BoxSurvivalTaipanMedicalBeer
+
+- type: loadout
+  id: TaipanEmergencyMothMedical
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: EffectSpeciesMoth
+  storage:
+    back:
+    - BoxSurvivalTaipanMedicalMoth
+
+# Loadout Groups
+- type: loadoutGroup
+  id: TaipanSurvival
+  name: loadout-group-survival-basic
+  minLimit: 3
+  hidden: true
+  loadouts:
+  - TaipanEmergencyNitrogen
+  - TaipanEmergencyOxygen
+  # DS14-species-emergency-start
+  - TaipanEmergencyNonBreather
+  - TaipanEmergencyRobotNonBreather
+  # DS14-species-emergency-end
+  - LoadoutSpeciesVoxNitrogen
+  - TaipanEmergencyBeer
+  - TaipanEmergencyMoth
+
+- type: loadoutGroup
+  id: TaipanSurvivalExtended
+  name: loadout-group-survival-extended
+  minLimit: 2
+  hidden: true
+  loadouts:
+  - TaipanEmergencyNitrogenExtended
+  - TaipanEmergencyOxygenExtended
+  # DS14-species-emergency-start
+  - TaipanEmergencyNonBreather
+  - TaipanEmergencyRobotNonBreather
+  # DS14-species-emergency-end
+  - LoadoutSpeciesVoxNitrogen
+  - TaipanEmergencyBeerExtended
+  - TaipanEmergencyMothExtended
+
+- type: loadoutGroup
+  id: TaipanSurvivalMedical
+  name: loadout-group-survival-medical
+  minLimit: 2
+  hidden: true
+  loadouts:
+  - TaipanEmergencyNitrogenMedical
+  - TaipanEmergencyOxygenMedical
+  # DS14-species-emergency-start
+  - TaipanEmergencyNonBreather
+  - TaipanEmergencyRobotNonBreather
+  # DS14-species-emergency-end
+  - LoadoutSpeciesVoxNitrogen
+  - TaipanEmergencyBeerMedical
+  - TaipanEmergencyMothMedical

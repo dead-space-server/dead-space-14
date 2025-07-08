@@ -1,0 +1,26 @@
+- type: job
+  id: TaipanAtmosphericsEngineer
+  name: job-name-taipan-atmospherics-engineer
+  playTimeTracker: JobTaipanAtmosphericsEngineer
+  description: Отвечает за управление и обслуживание всех систем атмосферы на станции Тайпан.
+  startingGear: TaipanAtmosphericsEngineerGear
+  icon: "JobIconTaipanAtmosphericsEngineer"
+  supervisors: job-supervisors-taipan-technical-supervisor
+  canBeAntag: false
+  requirements:
+  - !type:RoleTimeRequirement
+    role: JobAtmosphericsTechnician
+    time: 6000
+  access:
+  - TaipanMaint
+  - TaipanEngineering
+  - TaipanAtmospherics
+
+- type: startingGear
+  id: TaipanAtmosphericsEngineerGear
+  equipment:
+    ears: ClothingHeadsetTaipan
+    shoes: ClothingShoesTaipanBootsWork
+    back: ClothingBackpackSyndicate
+    socks: ClothingUnderwearSocksTaipanAtmosphericsEngineer
+    id: TaipanAtmosphericsEngineerPDA

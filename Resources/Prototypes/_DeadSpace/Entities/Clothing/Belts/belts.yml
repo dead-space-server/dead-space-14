@@ -1,0 +1,46 @@
+- type: entity
+  parent: ClothingBeltAssault
+  id: ClothingBeltAssaultTaipan
+  name: тактический пояс
+  description: Удобный пояс, часто используемый синдикатом на засекреченных территориях.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Belt/assault.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Belt/assault.rsi
+
+- type: entity
+  parent: ClothingBeltSecurity
+  id: ClothingBeltTaipanSecurityWebbing
+  name: РПС синдиката
+  description: Ременно-плечевая система тактических ремней, которую носят представители военных структур синдиката.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Belt/webbing.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Belt/wwebbing.rsi
+
+- type: entity
+  parent: ClothingBeltPlant
+  id: ClothingBeltPlantTaipan
+  name: пояс ботаника синдиката
+  description: Пояс, используемый для хранения основных принадлежностей для гидропоники. На удивление, не чёрный.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Belt/plantbelt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Belt/plantbelt.rsi
+
+- type: entity
+  name: сумка для растений синдиката
+  id: TaipanPlantBag
+  parent: BaseStorageItem
+  description: Сумка для ботаников, чтобы легко переносить свои огромные урожаи.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Back/plant_bag.rsi
+    state: icon
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - belt

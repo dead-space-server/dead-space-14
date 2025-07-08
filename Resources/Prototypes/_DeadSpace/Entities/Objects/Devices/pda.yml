@@ -100,11 +100,11 @@
     appearanceDataInit:
       enum.PdaVisuals.PdaType:
         !type:String
-        pda-cook
+        pda-chef
   - type: Pda
     id: TaipanChefIDcard
   - type: Icon
-    state: pda-cook
+    state: pda-chef
 
 - type: entity
   parent: BaseTaipanPDA
@@ -124,7 +124,7 @@
 
 - type: entity
   parent: BaseTaipanPDA
-  id: TaipanMedicalDoctorPDA
+  id: TaipanMedicPDA
   name: КПК медика
   description: Спасение жизней — его предназначение.
   components:
@@ -134,7 +134,7 @@
         !type:String
         pda-medical
   - type: Pda
-    id: TaipanMedicalDoctorIDcard
+    id: TaipanMedicIDcard
   - type: Icon
     state: pda-medical
 
@@ -188,7 +188,7 @@
 
 - type: entity
   parent: BaseTaipanPDA
-  id: TaipanScientistPDA
+  id: TaipanResearcherPDA
   name: КПК исследователя
   description: Научные данные всегда под рукой.
   components:
@@ -196,15 +196,15 @@
     appearanceDataInit:
       enum.PdaVisuals.PdaType:
         !type:String
-        pda-science
+        pda-researcher
   - type: Pda
-    id: TaipanScientistIDcard
+    id: TaipanResearcherIDcard
   - type: Icon
-    state: pda-science
+    state: pda-researcher
 
 - type: entity
   parent: BaseTaipanPDA
-  id: TaipanStationEngineerPDA
+  id: TaipanTechnicianPDA
   name: КПК ремонтника
   description: Ваш надежный инструмент по безопасности станции.
   components:
@@ -212,11 +212,11 @@
     appearanceDataInit:
       enum.PdaVisuals.PdaType:
         !type:String
-        pda-engineer
+        pda-technician
   - type: Pda
-    id: TaipanEngineerIDcard
+    id: TaipanTechnicianIDcard
   - type: Icon
-    state: pda-engineer
+    state: pda-technician
 
 - type: entity
   parent: BaseTaipanPDA

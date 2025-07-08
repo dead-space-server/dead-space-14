@@ -1,0 +1,27 @@
+- type: job
+  id: TaipanCargotech
+  name: job-name-taipan-cargotech
+  playTimeTracker: JobTaipanCargotech
+  description: Вы отвечает за управление грузовыми процессами и доставку по станции.
+  startingGear: TaipanCargotechGear
+  icon: "JobIconTaipanCargotech"
+  supervisors: job-name-taipan-technical-supervisor
+  canBeAntag: false
+  requirements:
+  - !type:DepartmentTimeRequirement
+    department: Cargo
+    time: 18000
+  - !type:OverallPlaytimeRequirement
+    time: 36000
+  access:
+  - TaipanMaint
+  - TaipanCargo
+
+- type: startingGear
+  id: TaipanCargotechGear
+  equipment:
+    ears: ClothingHeadsetTaipan
+    shoes: ClothingShoesTaipanBootsWork
+    back: ClothingBackpackSyndicate
+    id: TaipanCargotechPDA
+    socks: ClothingUnderwearSocksTaipanCargotech

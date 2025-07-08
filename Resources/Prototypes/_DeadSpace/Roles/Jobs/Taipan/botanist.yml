@@ -1,27 +1,25 @@
 - type: job
   id: TaipanBotanist
   name: job-name-taipan-botanist
-  playTimeTracker: TaipanBotanist
-  description: Ботаник из далёкого космоса.
-  startingGear: SyndicateBotanist
+  playTimeTracker: JobTaipanBotanist
+  description: Вы заботитесь о растениях станции и их выращивании, чтобы обеспечить экипаж свежей продукцией.
+  startingGear: TaipanBotanistGear
   icon: "JobIconTaipanBotanist"
-  supervisors: job-supervisors-taipan-telecommunications-officer
+  supervisors: job-supervisors-taipan-technical-supervisor
   canBeAntag: false
   requirements:
-    - !type:DepartmentTimeRequirement
-      department: Civilian
-      time: 6000
+  - !type:RoleTimeRequirement
+    role: JobBotanist
+    time: 6000
   access:
-  - SyndicateAgent
-  - NuclearOperative
-  accessGroups:
-  - AllAccess
+  - TaipanBasic
+  - TaipanService
 
 - type: startingGear
-  id: SyndicateBotanist
+  id: TaipanBotanistGear
   equipment:
-    ears: ClothingHeadsetTaipan # Fenriz
-    jumpsuit: ClothingUniformJumpsuitTaipanBotanist
+    ears: ClothingHeadsetTaipan
+    shoes: ClothingShoesBootsLaceup
     back: ClothingBackpackSyndicate
-    shoes: ClothingShoesColorBlack
-    id: TaipanBotanistPDA # Fenriz
+    id: TaipanBotanistPDA
+    socks: ClothingUnderwearSocksTaipanBotanist

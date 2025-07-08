@@ -17,19 +17,19 @@
       "name": "cargotechnician"
     },
     {
-      "name": "chemist"
+      "name": "researcher"
     },
     {
       "name": "chiefengineer"
     },
     {
-      "name": "cook"
+      "name": "chef"
     },
     {
       "name": "headofsecurity"
     },
     {
-      "name": "medicaldoctor"
+      "name": "medic"
     },
     {
       "name": "paramedic"
@@ -50,7 +50,7 @@
       "name": "shaftminer"
     },
     {
-      "name": "stationengineer"
+      "name": "technician"
     },
     {
       "name": "taipan"

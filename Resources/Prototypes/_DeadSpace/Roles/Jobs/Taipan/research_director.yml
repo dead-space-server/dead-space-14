@@ -1,35 +1,37 @@
 - type: job
-  id: TaipanRD
-  name: job-name-taipan-rd
-  playTimeTracker: TaipanRD
-  description: Директор исследований из далёкого космоса.
-  startingGear: SyndicateRD
-  icon: "JobIconSyndicateRD"
-  supervisors: job-supervisors-taipan-syndicate
+  id: TaipanResearchDirector
+  name: job-name-taipan-research-director
+  playTimeTracker: JobTaipanResearchDirector
+  description: Вы руководите научными проектами и управляете командой ученых на станции Тайпан.
+  startingGear: TaipanResearchDirectorGear
+  icon: "JobIconTaipanResearchDirector"
+  supervisors: job-supervisors-syndicate
   canBeAntag: false
   requirements:
-    - !type:DepartmentTimeRequirement
-      department: Science
-      time: 60000
-    - !type:OverallPlaytimeRequirement
-      time: 150000
-    - !type:AgeRequirement
-      requiredAge: 24
+  - !type:DepartmentTimeRequirement
+    department: Science
+    time: 30000
+  - !type:DepartmentTimeRequirement
+    department: Medical
+    time: 30000
+  - !type:OverallPlaytimeRequirement
+    time: 150000
+  - !type:AgeRequirement
+    requiredAge: 24
   access:
-  - SyndicateAgent
-  - NuclearOperative
-  accessGroups:
-  - AllAccess
+  - TaipanBasic
+  - TaipanScience
+  - TaipanCommand
+  - TaipanResearchDirector
 
 - type: startingGear
-  id: SyndicateRD
+  id: TaipanResearchDirectorGear
   equipment:
-    eyes: ClothingEyesGlassesHiddenSecurity
+    eyes: ClothingEyesGlasses
     ears: ClothingHeadsetAltTaipan
-    shoes: ClothingShoesBootsCombat
-    outerClothing: ClothingOuterTaipanCoatLabRD # Fenriz
-    gloves: ClothingHandsTaipanRD # Fenriz
-    id: TaipanResearchDirectorPDA # Fenriz
+    shoes: ClothingShoesBootsLaceup
+    outerClothing: ClothingOuterTaipanCoatLabResearchDirector
+    gloves: ClothingHandsTaipanResearchDirector
+    id: TaipanResearchDirectorPDA
     back: ClothingBackpackSyndicate
-    jumpsuit: ClothingUniformJumpsuitTaipanResearchDirector # Fenriz
-    belt: ClothingBeltAssaultTaipan
+    socks: ClothingUnderwearSocksTaipanResearchDirector

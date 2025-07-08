@@ -73,7 +73,7 @@
       ]
     },
     {
-      "name": "pda-cook",
+      "name": "pda-chef",
       "delays": [
         [
           1.2,
@@ -84,7 +84,7 @@
       ]
     },
     {
-      "name": "pda-engineer",
+      "name": "pda-technician",
       "delays": [
         [
           1.2,
@@ -139,7 +139,7 @@
       ]
     },
     {
-      "name": "pda-science",
+      "name": "pda-researcher",
       "delays": [
         [
           1.2,

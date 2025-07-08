@@ -93,14 +93,14 @@
   - type: PickRandomPerson
     ignoredJobs:
     - Passenger
-    - TaipanAtmosTech
+    - TaipanAtmosphericsEngineer
     - TaipanBotanist
     - TaipanCargotech
     - TaipanChef
     - TaipanMedic
-    - TaipanRD
-    - TaipanScience
-    - TaipanTelecommunicationsOfficer
+    - TaipanResearchDirector
+    - TaipanResearcher
+    - TaipanCommunicationsOfficer
 
 - type: entity
   parent: [BaseTraitorObjective, BaseKillObjective]

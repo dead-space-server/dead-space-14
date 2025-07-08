@@ -55,6 +55,7 @@
   id: ClothingOuterTrenchTaipanCO
   name: тренч офицера телекоммуникаций
   description: Укреплённый тренч из чёрной кожи с золотой вышивкой.
+  suffix: Тайпан
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/OuterClothing/Coats/co_trench.rsi
@@ -65,9 +66,10 @@
 
 - type: entity
   parent: ClothingOuterCoatSyndieCapArmored
-  id: ClothingOuterCoatTaipanCO
+  id: ClothingOuterCoatTaipanCommunicationsOfficer
   name: плащ офицера телекоммуникаций
   description: Изысканный плащ с фирменной символикой Синдиката. На вид прочный.
+  suffix: Тайпан
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/OuterClothing/Coats/co_coat.rsi
@@ -81,6 +83,7 @@
   id: ClothingOuterTaipanCoatLab
   name: лабораторный халат
   description: В плотную ткань въелся аромат едкой химии.
+  suffix: Тайпан
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/OuterClothing/Coats/syndi_labcoat.rsi
@@ -97,13 +100,14 @@
   parent: [ClothingOuterStorageFoldableBaseOpened, ClothingOuterTaipanCoatLab]
   id: ClothingOuterTaipanCoatLabOpened
   name: лабораторный халат
-  suffix: Расстёгнут
+  suffix: Тайпан, Расстёгнут
 
 - type: entity
   parent: ClothingOuterStorageFoldableBase
   id: ClothingOuterTaipanCoatLabMed
   name: лабораторный халат медика
   description: Халат из прочной стерильной ткани. Пахнет лекарствами.
+  suffix: Тайпан
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/OuterClothing/Coats/syndi_labcoat_med.rsi
@@ -120,13 +124,14 @@
   parent: [ClothingOuterStorageFoldableBaseOpened, ClothingOuterTaipanCoatLabMed]
   id: ClothingOuterTaipanCoatLabMedOpened
   name: лабораторный халат медика
-  suffix: Расстёгнут
+  suffix: Тайпан, Расстёгнут
 
 - type: entity
   parent: ClothingOuterStorageFoldableBase
-  id: ClothingOuterTaipanCoatLabRD
+  id: ClothingOuterTaipanCoatLabResearchDirector
   name: лабораторный халат директора исследований
   description: Халат из мягкой на ощупь ткани, местами заметны следы экспериментов.
+  suffix: Тайпан
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/OuterClothing/Coats/syndi_labcoat_rd.rsi
@@ -141,16 +146,17 @@
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ClothingOuterStorageFoldableBaseOpened, ClothingOuterTaipanCoatLabRD]
-  id: ClothingOuterTaipanCoatLabRDOpened
+  parent: [ClothingOuterStorageFoldableBaseOpened, ClothingOuterTaipanCoatLabResearchDirector]
+  id: ClothingOuterTaipanCoatLabResearchDirectorOpened
   name: халат директора исследований
-  suffix: Расстёгнут
+  suffix: Тайпан, Расстёгнут
 
 - type: entity
   parent: ClothingOuterStorageFoldableBase
-  id: ClothingOuterTaipanCoatLabScience
+  id: ClothingOuterTaipanCoatLabResearcher
   name: лабораторный халат исследователя
   description: Белоснежный халат с ароматом химикатов.
+  suffix: Тайпан
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/OuterClothing/Coats/syndi_labcoat_sci.rsi
@@ -164,10 +170,10 @@
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ClothingOuterStorageFoldableBaseOpened, ClothingOuterTaipanCoatLabScience]
-  id: ClothingOuterTaipanCoatLabScienceOpened
+  parent: [ClothingOuterStorageFoldableBaseOpened, ClothingOuterTaipanCoatLabResearcher]
+  id: ClothingOuterTaipanCoatLabResearcherOpened
   name: лабораторный халат исследователя
-  suffix: Расстёгнут
+  suffix: Тайпан, Расстёгнут
 
 - type: entity
   parent: ClothingOuterStorageBase

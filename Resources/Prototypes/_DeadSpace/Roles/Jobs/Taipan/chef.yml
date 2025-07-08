@@ -1,28 +1,25 @@
 - type: job
   id: TaipanChef
   name: job-name-taipan-chef
-  playTimeTracker: TaipanChef
-  description: Повар из далёкого космоса.
-  startingGear: SyndicateChef
+  playTimeTracker: JobTaipanChef
+  description: Вы готовите блюда для экипажа и поддерживаете порядок на кухне станции Тайпан.
+  startingGear: TaipanChefGear
   icon: "JobIconTaipanChef"
-  supervisors: job-supervisors-taipan-telecommunications-officer
+  supervisors: job-supervisors-taipan-technical-supervisor
   canBeAntag: false
   requirements:
-    - !type:DepartmentTimeRequirement
-      department: Civilian
-      time: 6000
+  - !type:RoleTimeRequirement
+    role: Chef
+    time: 6000
   access:
-  - SyndicateAgent
-  - NuclearOperative
-  accessGroups:
-  - AllAccess
+  - TaipanBasic
+  - TaipanService
 
 - type: startingGear
-  id: SyndicateChef
+  id: TaipanChefGear
   equipment:
-    ears: ClothingHeadsetTaipan # Fenriz
-    jumpsuit: ClothingUniformJumpsuitTaipanChef
+    ears: ClothingHeadsetTaipan
+    shoes: ClothingShoesBootsLaceup
     back: ClothingBackpackSyndicate
-    outerClothing: ClothingOuterApronTaipanChef
-    shoes: ClothingShoesColorBlack
-    id: TaipanChefPDA # Fenriz
+    id: TaipanChefPDA
+    socks: ClothingUnderwearSocksTaipanChef

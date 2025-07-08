@@ -1,0 +1,40 @@
+- type: job
+  id: TaipanCommunicationsOfficer
+  name: job-name-taipan-communications-officer
+  playTimeTracker: JobTaipanCommunicationsOfficer
+  description: Вы управляете системами связи и координацией информации на станции Тайпан.
+  startingGear: TaipanCommunicationsOfficerGear
+  icon: "JobIconTaipanCommunicationsOfficer"
+  supervisors: job-supervisors-syndicate
+  canBeAntag: false
+  requirements:
+  - !type:DepartmentTimeRequirement
+    department: Science
+    time: 60000
+  - !type:DepartmentTimeRequirement
+    department: Medical
+    time: 60000
+  - !type:DepartmentTimeRequirement
+    department: Command
+    time: 108000
+  - !type:DepartmentTimeRequirement
+    department: Security
+    time: 108000
+  - !type:OverallPlaytimeRequirement
+    time: 360000
+  - !type:AgeRequirement
+    requiredAge: 26
+  access:
+  - TaipanCommand
+  - TaipanCommunicationsOfficer
+  accessGroups:
+  - AllAccess
+
+- type: startingGear
+  id: TaipanCommunicationsOfficerGear
+  equipment:
+    ears: ClothingHeadsetAltTaipan
+    shoes: ClothingShoesBootsSyndieFilled
+    id: TaipanCommunicationsOfficerPDA
+    back: ClothingBackpackSyndicate
+    socks: ClothingUnderwearSocksTaipanCommunicationsOfficer

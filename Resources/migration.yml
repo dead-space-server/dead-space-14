@@ -809,7 +809,7 @@ ClothingBackpackDuffelSyndicateRaidBundle: ClothingBackpackSyndicateRaidBundle
 # 2025-06-23
 EncryptionKeyTypan: EncryptionKeyTaipan
 ClothingBackpackSatchelTypan: ClothingBackpackSatchelTaipan
-ClothingBackpackSatchelTypanFilled: ClothingBackpackSatchelTaipanFilled
+ClothingBackpackSatchelTypanFilled: null
 ClothingBeltPlantTypan: ClothingBeltPlantTaipan
 ClothingBeltPlantTypanFilled: ClothingBeltPlantTaipanFilled
 TypanPlantBag: TaipanPlantBag
@@ -822,7 +822,7 @@ ClothingEyesHudTypan: ClothingEyesHudTaipan
 ClothingHandsRDTypan: null
 ClothingHandsScienceTypan: null
 ClothingHeadTypan: ClothingHeadTaipan
-ClothingMaskGasTypanCargo: ClothingMaskGasTaipanCargo
+ClothingMaskGasTypanCargo: null
 ClothingOuterApronTypanChef: ClothingOuterApronTaipanChef
 ClothingOuterCoatRDTypan: null
 ClothingOuterMedTypan: null
@@ -847,14 +847,14 @@ TypanIDCardEng: null
 TypanIDCardCom: null
 TypanIDCardCargo: null
 TypanIDCardChef: null
-SpawnPointLatejoinTypanAtmos: SpawnPointLatejoinTaipanAtmos
+SpawnPointLatejoinTypanAtmos: SpawnPointLatejoinTaipanAtmosphericsEngineer
 SpawnPointLatejoinTypanBotanist: SpawnPointLatejoinTaipanBotanist
 SpawnPointLatejoinTypanChef: SpawnPointLatejoinTaipanChef
 SpawnPointLatejoinTypanCargotech: SpawnPointLatejoinTaipanCargotech
 SpawnPointLatejoinTypanOfficer: SpawnPointLatejoinTaipanOfficer
 SpawnPointLatejoinTypanMedic: SpawnPointLatejoinTaipanMedic
-SpawnPointLatejoinTypanRd: SpawnPointLatejoinTaipanRD
-SpawnPointLatejoinTypanScience: SpawnPointLatejoinTaipanScience
+SpawnPointLatejoinTypanRd: SpawnPointLatejoinTaipanResearchDirector
+SpawnPointLatejoinTypanScience: SpawnPointLatejoinTaipanResearcher
 
 # 2025-06-30
 ADTAbakanRifleAEK: WeaponRifleAEK
