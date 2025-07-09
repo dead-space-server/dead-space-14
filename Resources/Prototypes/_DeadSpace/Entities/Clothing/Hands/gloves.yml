@@ -26,7 +26,7 @@
 
 - type: entity
   parent: ClothingHandsGlovesCombat
-  id: ClothingHandsTaipanTechnicalSupervisor
+  id: ClothingHandsTaipanTechnicalOperationsSupervisor
   name: перчатки руководителя техобеспечения
   description: Изолированные перчатки с позолоченными вставками. Без них невозможно работать.
   components:

@@ -8,13 +8,12 @@
   - type: StorageFill
     contents:
     - id: ClothingUniformJumpsuitTaipanCommunicationsOfficer
-      amount: 2
     - id: ClothingUniformJumpskirtTaipanCommunicationsOfficer
-      amount: 2
-    - id: ClothingHeadsetCommand
-    - id: ClothingEyesGlassesCommand
-    - id: ClothingNeckCloakCap
-    - id: ClothingHandsGlovesColorBlack
+    - id: ClothingEyesHudTaipan
+    - id: ClothingOuterCoatTaipanCommunicationsOfficer
+    - id: ClothingOuterTrenchTaipanCommunicationsOfficer
+    - id: ClothingNeckCloakCommunicationsOfficer
+    - id: ClothingHandsTaipanCommunicationsOfficer
     - id: ClothingUnderwearSocksTaipanCommunicationsOfficer
     - id: ClothingUnderwearBottomBoxersTaipanCommunicationsOfficer
     - id: ClothingUnderwearTopBraTaipanCommunicationsOfficer
@@ -30,13 +29,10 @@
   - type: StorageFill
     contents:
     - id: ClothingUniformJumpsuitTaipanResearchDirector
-      amount: 2
     - id: ClothingUniformJumpskirtTaipanResearchDirector
-      amount: 2
-    - id: ClothingHeadsetAltScience
+    - id: ClothingOuterTaipanCoatLabResearchDirector
     - id: ClothingEyesGlasses
-    - id: ClothingNeckCloakRd
-    - id: ClothingHandsGlovesColorPurple
+    - id: ClothingHandsTaipanResearchDirector
     - id: ClothingUnderwearSocksTaipanResearchDirector
     - id: ClothingUnderwearBottomBoxersTaipanResearchDirector
     - id: ClothingUnderwearTopBraTaipanResearchDirector
@@ -52,13 +48,9 @@
   - type: StorageFill
     contents:
     - id: ClothingUniformJumpsuitTaipanTechnicalOperationsSupervisor
-      amount: 2
     - id: ClothingUniformJumpskirtTaipanTechnicalOperationsSupervisor
-      amount: 2
-    - id: ClothingHeadsetAltEngineering
     - id: ClothingEyesGlassesMeson
-    - id: ClothingNeckCloakCe
-    - id: ClothingHandsGlovesColorYellow
+    - id: ClothingHandsTaipanTechnicalOperationsSupervisor
     - id: ClothingUnderwearSocksTaipanTechnicalOperationsSupervisor
     - id: ClothingUnderwearBottomBoxersTaipanTechnicalOperationsSupervisor
     - id: ClothingUnderwearTopBraTaipanTechnicalOperationsSupervisor

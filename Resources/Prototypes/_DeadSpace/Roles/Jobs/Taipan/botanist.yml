@@ -2,7 +2,8 @@
   id: TaipanBotanist
   name: job-name-taipan-botanist
   playTimeTracker: JobTaipanBotanist
-  description: Вы заботитесь о растениях станции и их выращивании, чтобы обеспечить экипаж свежей продукцией.
+  setPreference: false
+  description: job-description-taipan-botanist
   startingGear: TaipanBotanistGear
   icon: "JobIconTaipanBotanist"
   supervisors: job-supervisors-taipan-technical-supervisor
@@ -14,6 +15,9 @@
   access:
   - TaipanBasic
   - TaipanService
+  special:
+  - !type:AddImplantSpecial
+    implants: [ DeathRattleImplantTaipan ]
 
 - type: startingGear
   id: TaipanBotanistGear

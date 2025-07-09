@@ -2,7 +2,8 @@
   id: TaipanAtmosphericsEngineer
   name: job-name-taipan-atmospherics-engineer
   playTimeTracker: JobTaipanAtmosphericsEngineer
-  description: Отвечает за управление и обслуживание всех систем атмосферы на станции Тайпан.
+  setPreference: false
+  description: job-description-taipan-atmospherics-engineer
   startingGear: TaipanAtmosphericsEngineerGear
   icon: "JobIconTaipanAtmosphericsEngineer"
   supervisors: job-supervisors-taipan-technical-supervisor
@@ -15,6 +16,9 @@
   - TaipanMaint
   - TaipanEngineering
   - TaipanAtmospherics
+  special:
+  - !type:AddImplantSpecial
+    implants: [ DeathRattleImplantTaipan ]
 
 - type: startingGear
   id: TaipanAtmosphericsEngineerGear

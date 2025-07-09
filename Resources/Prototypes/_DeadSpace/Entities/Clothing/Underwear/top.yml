@@ -624,7 +624,7 @@
 
 - type: entity
   parent: ClothingUnderwearTopBase
-  id: ClothingUnderwearTopBraTaipanSupervisor
+  id: ClothingUnderwearTopBraTaipanTechnicalOperationsSupervisor
   name: бра руководителя техобеспечения
   description: Стандартное нижнее бельё руководителя техобеспечения.
   components:

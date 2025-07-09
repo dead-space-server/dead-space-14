@@ -198,7 +198,7 @@
     - id: GasAnalyzer
     - id: MedkitOxygenFilled
     - id: HolofanProjector
-    - id: RCD
+    - id: RCDSyndicate
     - id: RCDAmmo
 
 - type: entity
@@ -214,7 +214,7 @@
       amount: 2
     - id: ClothingHandsGlovesColorYellow
     - id: TrayScanner
-    - id: RCD
+    - id: RCDSyndicate
     - id: RCDAmmo
 
 # Service
@@ -253,6 +253,10 @@
     - id: ClothingUniformJumpsuitTaipanChef
       amount: 2
     - id: ClothingUniformJumpskirtTaipanChef
+      amount: 2
+    - id: ClothingOuterApronTaipanChef
+      amount: 2
+    - id: ClothingOuterJacketTaipanChef
       amount: 2
     - id: CrowbarRed
     - id: VariantCubeBox
