@@ -2,7 +2,8 @@
   id: TaipanChef
   name: job-name-taipan-chef
   playTimeTracker: JobTaipanChef
-  description: Вы готовите блюда для экипажа и поддерживаете порядок на кухне станции Тайпан.
+  setPreference: false
+  description: job-description-taipan-chef
   startingGear: TaipanChefGear
   icon: "JobIconTaipanChef"
   supervisors: job-supervisors-taipan-technical-supervisor
@@ -14,6 +15,9 @@
   access:
   - TaipanBasic
   - TaipanService
+  special:
+  - !type:AddImplantSpecial
+    implants: [ DeathRattleImplantTaipan ]
 
 - type: startingGear
   id: TaipanChefGear

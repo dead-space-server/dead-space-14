@@ -687,7 +687,7 @@
 
 - type: entity
   parent: ClothingUnderwearSocksBase
-  id: ClothingUnderwearSocksTaipanSupervisor
+  id: ClothingUnderwearSocksTaipanTechnicalOperationsSupervisor
   name: носки руководителя техобеспечения
   description: Стандартные носки руководителя техобеспечения.
   components:

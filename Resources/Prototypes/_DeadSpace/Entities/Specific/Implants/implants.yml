@@ -38,3 +38,31 @@
       sprite: _DeadSpace/Objects/Specific/Autosurgeon/autosurgeon.rsi
       layers:
       - state: iconAfter
+
+- type: entity
+  parent: BaseSubdermalImplant
+  id: DeathRattleImplantTaipan
+  name: предсмертный хрип
+  suffix: Тайпан
+  description: Этот имплант информирует всех о физическом состоянии по частоте Тайпана.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SubdermalImplant
+    permanent: true
+    whitelist:
+      components:
+      - MobState
+  - type: TriggerOnMobstateChange
+    mobState:
+    - Critical
+    - Dead
+  - type: Rattle
+    radioChannel: "RadioTaipan"
+
+- type: entity
+  id: DeathRattleImplanterTaipan
+  suffix: Тайпан
+  parent: BaseImplantOnlyImplanterSyndi
+  components:
+  - type: Implanter
+    implant: DeathRattleImplantTaipan

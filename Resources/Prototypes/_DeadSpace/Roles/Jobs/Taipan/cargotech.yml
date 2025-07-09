@@ -2,7 +2,8 @@
   id: TaipanCargotech
   name: job-name-taipan-cargotech
   playTimeTracker: JobTaipanCargotech
-  description: Вы отвечает за управление грузовыми процессами и доставку по станции.
+  setPreference: false
+  description: job-description-taipan-cargotech
   startingGear: TaipanCargotechGear
   icon: "JobIconTaipanCargotech"
   supervisors: job-name-taipan-technical-supervisor
@@ -16,6 +17,9 @@
   access:
   - TaipanMaint
   - TaipanCargo
+  special:
+  - !type:AddImplantSpecial
+    implants: [ DeathRattleImplantTaipan ]
 
 - type: startingGear
   id: TaipanCargotechGear

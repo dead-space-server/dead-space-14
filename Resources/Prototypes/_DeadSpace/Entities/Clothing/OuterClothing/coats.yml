@@ -52,7 +52,7 @@
 
 - type: entity
   parent: ClothingOuterCoatSyndieCapArmored
-  id: ClothingOuterTrenchTaipanCO
+  id: ClothingOuterTrenchTaipanCommunicationsOfficer
   name: тренч офицера телекоммуникаций
   description: Укреплённый тренч из чёрной кожи с золотой вышивкой.
   suffix: Тайпан

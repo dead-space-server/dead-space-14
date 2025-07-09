@@ -615,7 +615,7 @@
 
 - type: entity
   parent: ClothingUnderwearBottomBase
-  id: ClothingUnderwearBottomBoxersTaipanSupervisor
+  id: ClothingUnderwearBottomBoxersTaipanTechnicalOperationsSupervisor
   name: боксеры руководителя техобеспечения
   description: Cтандартное нижнее бельё руководителя техобеспечения.
   components:
@@ -1212,7 +1212,7 @@
 
 - type: entity
   parent: ClothingUnderwearBottomBase
-  id: ClothingUnderwearBottomPantiesTaipanSupervisor
+  id: ClothingUnderwearBottomPantiesTaipanTechnicalOperationsSupervisor
   name: стринги руководителя техобеспечения
   description: Cтандартное нижнее бельё руководителя техобеспечения.
   components:

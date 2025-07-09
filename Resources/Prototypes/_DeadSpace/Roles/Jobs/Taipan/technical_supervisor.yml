@@ -2,7 +2,8 @@
   id: TaipanTechnicalOperationsSupervisor
   name: job-name-taipan-technical-supervisor
   playTimeTracker: JobTaipanTechnicalOperationsSupervisor
-  description: Вы управляете финансами станции Тайпан.
+  setPreference: false
+  description: job-description-taipan-technical-supervisor
   startingGear: TaipanTechnicalOperationsSupervisorGear
   icon: "JobIconTaipanTechnicalOperationsSupervisor"
   supervisors: job-supervisors-syndicate
@@ -25,6 +26,9 @@
   - TaipanBasic
   - TaipanEngineering
   - TaipanCommand
+  special:
+  - !type:AddImplantSpecial
+    implants: [ DeathRattleImplantTaipan ]
 
 - type: startingGear
   id: TaipanTechnicalOperationsSupervisorGear
@@ -34,4 +38,3 @@
     id: TaipanTechnicalOperationsSupervisorPDA
     back: ClothingBackpackSyndicate
     socks: ClothingUnderwearSocksTaipanTechnicalOperationsSupervisor
-    gloves: ClothingHandsTaipanTechnicalSupervisor

@@ -2,7 +2,8 @@
   id: TaipanParamedic
   name: job-name-taipan-paramedic
   playTimeTracker: JobTaipanParamedic
-  description: Вы отвечаете за экстренную медицинскую помощь и транспортировку пациентов на станции Тайпан.
+  setPreference: false
+  description: job-description-taipan-paramedic
   startingGear: TaipanParamedicGear
   icon: "JobIconTaipanParamedic"
   supervisors: job-supervisors-taipan-research-director
@@ -15,6 +16,9 @@
   - TaipanBasic
   - TaipanMedical
   - TaipanMaint
+  special:
+  - !type:AddImplantSpecial
+    implants: [ DeathRattleImplantTaipan ]
 
 - type: startingGear
   id: TaipanParamedicGear
