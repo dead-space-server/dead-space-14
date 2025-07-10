@@ -85,6 +85,7 @@
   parent: LockerElectricalSupplies
   name: шкаф электромонтажного оборудования
   description: Стандартное хранилище Синдиката.
+  suffix: Тайпан
   components:
   - type: AccessReader
     access: [ [ "TaipanEngineering" ] ]
@@ -95,6 +96,7 @@
   parent: LockerWeldingSupplies
   name: шкаф сварочного оборудования
   description: Стандартное хранилище Синдиката.
+  suffix: Тайпан
   components:
   - type: AccessReader
     access: [ [ "TaipanEngineering" ] ]
