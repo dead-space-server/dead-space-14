@@ -2,3 +2,128 @@
   parent: BaseCircuitboardRecipe
   id: PhotocopierMachineCircuitboard
   result: PhotocopierMachineCircuitboard
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: AutolatheMachineCircuitboardTaipanRecipe
+  result: AutolatheMachineCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseGoldCircuitboardRecipe
+  id: AutolatheHyperConvectionMachineCircuitboardTaipanRecipe
+  result: AutolatheHyperConvectionMachineCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: ProtolatheMachineCircuitboardTaipanRecipe
+  result: ProtolatheMachineCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseGoldCircuitboardRecipe
+  id: ProtolatheHyperConvectionMachineCircuitboardTaipanRecipe
+  result: ProtolatheHyperConvectionMachineCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: CircuitImprinterMachineCircuitboardTaipanRecipe
+  result: CircuitImprinterMachineCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseGoldCircuitboardRecipe
+  id: CircuitImprinterHyperConvectionMachineCircuitboardTaipanRecipe
+  result: CircuitImprinterHyperConvectionMachineCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: ExosuitFabricatorMachineCircuitboardTaipanRecipe
+  result: ExosuitFabricatorMachineCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: ResearchAndDevelopmentServerMachineCircuitboardTaipanRecipe
+  result: ResearchAndDevelopmentServerMachineCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: CrewMonitoringServerMachineCircuitboardTaipanRecipe
+  result: CrewMonitoringServerMachineCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: CargoTelepadMachineCircuitboardTaipanRecipe
+  result: CargoTelepadMachineCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: BiofabricatorMachineCircuitboardTaipanRecipe
+  result: BiofabricatorMachineCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseGoldCircuitboardRecipe
+  id: CargoRequestComputerCircuitboardTaipanRecipe
+  result: CargoRequestComputerCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: CargoBountyComputerCircuitboardTaipanRecipe
+  result: CargoBountyComputerCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: SalvageExpeditionsComputerCircuitboardTaipanRecipe
+  result: SalvageExpeditionsComputerCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: CargoShuttleConsoleCircuitboardTaipanRecipe
+  result: CargoShuttleConsoleCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseGoldCircuitboardRecipe
+  id: ResearchComputerCircuitboardTaipanRecipe
+  result: ResearchComputerCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseSilverCircuitboardRecipe
+  id: AnalysisComputerCircuitboardTaipanRecipe
+  result: AnalysisComputerCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: TechDiskComputerCircuitboardTaipanRecipe
+  result: TechDiskComputerCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: CrewMonitoringComputerCircuitboardTaipanRecipe
+  result: CrewMonitoringComputerCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseGoldCircuitboardRecipe
+  id: IDComputerCircuitboardTaipanRecipe
+  result: IDComputerCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: CommsComputerCircuitboardTaipanRecipe
+  result: CommsComputerCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: ShuttleConsoleCircuitboardTaipanRecipe
+  result: ShuttleConsoleCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: IFFConsoleCircuitboardTaipanRecipe
+  result: IFFConsoleCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: RoboticsConsoleCircuitboardTaipanRecipe
+  result: RoboticsConsoleCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: StationAiUploadCircuitboardTaipanRecipe
+  result: StationAiUploadCircuitboardTaipan

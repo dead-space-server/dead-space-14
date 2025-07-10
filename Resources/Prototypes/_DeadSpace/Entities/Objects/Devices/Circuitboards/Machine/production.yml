@@ -11,3 +11,216 @@
       stackRequirements:
         Plastic : 5
         Steel : 5
+
+# Base prototype for Taipan machine circuit boards
+- type: entity
+  id: BaseMachineCircuitboardTaipan
+  parent: BaseItem
+  name: машинная плата
+  abstract: true
+  suffix: Тайпан
+  components:
+  - type: MachineBoard
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/module.rsi
+    state: syndicate
+  - type: Item
+    storedRotation: -90
+  - type: StaticPrice
+    price: 100
+  - type: PhysicalComposition
+    materialComposition:
+      Glass: 230
+    chemicalComposition:
+      Silicon: 20
+
+# Derived prototypes for specific boards
+
+- type: entity
+  id: AutolatheMachineCircuitboardTaipan
+  parent: BaseMachineCircuitboardTaipan
+  name: автолат (машинная плата)
+  description: Печатная плата автолата.
+  components:
+  - type: MachineBoard
+    prototype: AutolatheTaipan
+    stackRequirements:
+      MatterBin: 3
+      Manipulator: 1
+      Glass: 1
+
+- type: entity
+  id: AutolatheHyperConvectionMachineCircuitboardTaipan
+  parent: BaseMachineCircuitboardTaipan
+  name: гиперконвекционный автолат (машинная плата)
+  description: Печатная плата гиперконвекционного автолата.
+  components:
+  - type: MachineBoard
+    prototype: AutolatheHyperConvectionTaipan
+    stackRequirements:
+      MatterBin: 3
+      Glass: 1
+    tagRequirements:
+      Igniter:
+        amount: 1
+        defaultPrototype: Igniter
+
+- type: entity
+  id: ProtolatheMachineCircuitboardTaipan
+  parent: BaseMachineCircuitboardTaipan
+  name: протолат (машинная плата)
+  description: Печатная плата протолата.
+  components:
+  - type: MachineBoard
+    prototype: ProtolatheTaipan
+    stackRequirements:
+      MatterBin: 2
+      Manipulator: 2
+    tagRequirements:
+      GlassBeaker:
+        amount: 2
+        defaultPrototype: Beaker
+
+- type: entity
+  id: ProtolatheHyperConvectionMachineCircuitboardTaipan
+  parent: BaseMachineCircuitboardTaipan
+  name: гиперконвекционный протолат (машинная плата)
+  description: Печатная плата гиперконвекционного протолата.
+  components:
+  - type: MachineBoard
+    prototype: ProtolatheHyperConvectionTaipan
+    stackRequirements:
+      MatterBin: 2
+    tagRequirements:
+      GlassBeaker:
+        amount: 2
+        defaultPrototype: Beaker
+      Igniter:
+        amount: 1
+        defaultPrototype: Igniter
+
+- type: entity
+  id: SecurityTechFabCircuitboardTaipan
+  parent: BaseMachineCircuitboardTaipan
+  name: охранный ТехФаб (машинная плата)
+  description: Печатная плата охранного ТехФаба.
+  components:
+  - type: MachineBoard
+    prototype: SecurityTechFabTaipan
+    stackRequirements:
+      MatterBin: 2
+      Manipulator: 2
+    tagRequirements:
+      GlassBeaker:
+        amount: 2
+        defaultPrototype: Beaker
+
+- type: entity
+  id: MedicalTechFabCircuitboardTaipan
+  parent: BaseMachineCircuitboardTaipan
+  name: медицинский ТехФаб (машинная плата)
+  description: Печатная плата медицинского ТехФаба.
+  components:
+  - type: MachineBoard
+    prototype: MedicalTechFabTaipan
+    stackRequirements:
+      MatterBin: 2
+      Manipulator: 2
+    tagRequirements:
+      GlassBeaker:
+        amount: 2
+        defaultPrototype: Beaker
+
+- type: entity
+  id: CircuitImprinterMachineCircuitboardTaipan
+  parent: BaseMachineCircuitboardTaipan
+  name: принтер схем (машинная плата)
+  description: Печатная плата принтера схем.
+  components:
+  - type: MachineBoard
+    prototype: CircuitImprinterTaipan
+    stackRequirements:
+      MatterBin: 1
+      Manipulator: 1
+    tagRequirements:
+      GlassBeaker:
+        amount: 2
+        defaultPrototype: Beaker
+
+- type: entity
+  id: CircuitImprinterHyperConvectionMachineCircuitboardTaipan
+  parent: BaseMachineCircuitboardTaipan
+  name: гиперконвекционный принтер схем (машинная плата)
+  description: Печатная плата гиперконвекционного принтера схем.
+  components:
+  - type: MachineBoard
+    prototype: CircuitImprinterHyperConvectionTaipan
+    stackRequirements:
+      MatterBin: 2
+    tagRequirements:
+      GlassBeaker:
+        amount: 2
+        defaultPrototype: Beaker
+      Igniter:
+        amount: 1
+        defaultPrototype: Igniter
+
+- type: entity
+  id: ExosuitFabricatorMachineCircuitboardTaipan
+  parent: BaseMachineCircuitboardTaipan
+  name: фабрикатор экзокостюмов (машинная плата)
+  description: Печатная плата фабрикатора экзокостюмов.
+  components:
+  - type: MachineBoard
+    prototype: ExosuitFabricatorTaipan
+    stackRequirements:
+      MatterBin: 1
+      Manipulator: 3
+      Glass: 5
+
+- type: entity
+  id: ResearchAndDevelopmentServerMachineCircuitboardTaipan
+  parent: BaseMachineCircuitboardTaipan
+  name: сервер РнД (машинная плата)
+  description: Печатная плата сервера РнД.
+  components:
+  - type: MachineBoard
+    prototype: ResearchAndDevelopmentServerTaipan
+    stackRequirements:
+      Plasma: 5
+
+- type: entity
+  id: CrewMonitoringServerMachineCircuitboardTaipan
+  parent: BaseMachineCircuitboardTaipan
+  name: сервер мониторинга экипажа (машинная плата)
+  description: Печатная плата сервера мониторинга экипажа.
+  components:
+  - type: MachineBoard
+    prototype: CrewMonitoringServerTaipan
+    stackRequirements:
+      Steel: 1
+      Cable: 2
+
+- type: entity
+  id: CargoTelepadMachineCircuitboardTaipan
+  parent: BaseMachineCircuitboardTaipan
+  name: грузовой телепад (машинная плата)
+  description: Печатная плата грузового телепада.
+  components:
+  - type: MachineBoard
+    prototype: CargoTelepadTaipan
+    stackRequirements:
+      Capacitor: 2
+      Steel: 5
+
+- type: entity
+  id: BiofabricatorMachineCircuitboardTaipan
+  parent: BaseMachineCircuitboardTaipan
+  name: фабрикатор биокубов (машинная плата)
+  description: Печатная плата фабрикатора биокубов.
+  components:
+  - type: MachineBoard
+    prototype: BiofabricatorTaipan
+    stackRequirements:
+      MatterBin: 4
+      Glass: 1

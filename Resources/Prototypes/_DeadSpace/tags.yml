@@ -77,6 +77,9 @@
   id: SoapSyndie
 
 - type: Tag
+  id: Taipan
+
+- type: Tag
   id: ToySword
 
 - type: Tag
