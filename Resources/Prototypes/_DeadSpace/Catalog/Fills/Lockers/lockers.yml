@@ -104,7 +104,7 @@
 # Science
 - type: entity
   id: LockerTaipanResearcherFilled
-  suffix: Тайпан, Исследователь
+  suffix: Тайпан, Заполненный
   parent: LockerTaipanResearcher
   components:
   - type: StorageFill
