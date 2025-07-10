@@ -1,0 +1,89 @@
+﻿- type: entity
+  id: ResearchAndDevelopmentServerTaipan
+  parent: [ BaseMachinePowered, ConstructibleMachine ]
+  name: Сервер РНД Тайпана
+  description: Содержит коллективные знания ученых станции. Уничтожив его, они вернулись бы в каменный век. Вы же этого не хотите, не так ли?
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Machines/server.rsi
+    layers:
+      - state: server
+      - state: variant-research
+      - state: server_o
+        map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: ResearchServer
+    isTaipan: true
+  - type: TechnologyDatabase
+    supportedDisciplines:
+    - Industrial
+    - Arsenal
+    - Experimental
+    - CivilianServices
+  #  - IndustrialTaipan
+  #  - ArsenalTaipan
+  #  - ExperimentalTaipan
+  #  - CivilianServicesTaipan
+  - type: ApcPowerReceiver
+    powerLoad: 200
+  - type: ExtensionCableReceiver
+  - type: WiresPanel
+  - type: WiresVisuals
+  - type: Machine
+    board: ResearchAndDevelopmentServerMachineCircuitboardTaipan
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 600
+      behaviors:
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          SheetSteel1:
+            min: 1
+            max: 2
+  - type: Appearance
+  - type: AmbientOnPowered
+  - type: AmbientSound
+    volume: -9
+    range: 5
+    sound:
+      path: /Audio/Ambience/Objects/server_fans.ogg
+
+- type: entity
+  parent: MachineAnomalyVessel
+  id: MachineAnomalyVesselTaipan
+  suffix: Тайпан
+  components:
+  - type: ResearchClient
+    isTaipan: true
+  - type: Machine
+    board: MachineAnomalyVesselTaipanCircuitboard
+
+- type: entity
+  parent: MachineAnomalyVesselExperimental
+  id: AnomalyVesselExperimentalTaipan
+  suffix: Тайпан
+  components:
+  - type: ResearchClient
+    isTaipan: true
+  - type: Machine
+    board: AnomalyVesselExperimentalTaipanCircuitboard
+
+- type: entity
+  parent: BaseResearchAndDevelopmentPointSource
+  id: BaseResearchAndDevelopmentPointSourceTaipan
+  suffix: Тайпан
+  components:
+  - type: ResearchClient
+    isTaipan: true
