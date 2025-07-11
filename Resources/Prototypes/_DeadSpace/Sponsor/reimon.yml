@@ -1,0 +1,528 @@
+# Loadout Definitions
+- type: sponsorLoadout
+  id: Reimon
+  entity: ClothingBackpackReimon
+  sponsorOnly: true
+
+- type: sponsorLoadout
+  id: ReimonHypospray
+  entity: HypoReimon
+  sponsorOnly: true
+  whitelistJobs: [ChiefMedicalOfficer, SeniorPhysician, Chemist, MedicalDoctor, Paramedic, Coroner, MedicalIntern]
+
+- type: sponsorLoadout
+  id: ReimonWeaponCrusher
+  entity: WeaponCrusherReimon
+  sponsorOnly: true
+  whitelistJobs: [SalvageSpecialist, SeniorSalvageSpecialist]
+
+# Backpack
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackReimon
+  name: поясной риг
+  description: Просторная двусторонняя кожаная сумка в темно-фиолетовых тонах с бежевыми пластинами, созданная для переноски инструментов и экипировки.
+#  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Reimon/backpack.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Reimon/backpack.rsi
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,19,9
+  - type: StorageFill
+    contents:
+    - id: ClothingNeckReimon
+    - id: ClothingBeltReimon
+    - id: ClothingShoesBootsMagReimon
+    - id: ClothingHandsGlovesCombatReimon
+    - id: ClothingUniformJumpsuitReimon
+    - id: ClothingEyesGlassesReimon
+    - id: ClothingMaskGasReimon
+    - id: PDAReimon
+    - id: HypoReimon # for test
+    - id: WeaponCrusherReimon # for test
+    - id: ClothingHeadsetReimon
+    - id: ClothingHeadCapReimon
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+  - type: ToggleableClothing
+    clothingPrototype: ClothingOuterHardsuitReimon
+    requiredSlot: BACK
+    slot: outerClothing
+  - type: ContainerContainer
+    containers:
+      toggleable-clothing: !type:ContainerSlot {}
+      storagebase: !type:Container
+        ents: []
+
+# Belt
+- type: entity
+  parent: ClothingBeltStorageBase
+  id: ClothingBeltReimon
+  name: поясной блок
+  description: Темно-фиолетовый пояс с бежевыми пластинами, оснащённый отсеками для инструментов, идеально подходит для экстремальных условий.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Reimon/belt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Reimon/belt.rsi
+  - type: Item
+    size: Huge
+  - type: Storage
+    grid:
+    - 0,0,9,1
+  - type: StorageFill
+    contents:
+    - id: GasAnalyzerReimon
+    - id: HolofanProjectorReimon
+    - id: JawsOfLifeReimon
+    - id: HandHeldMassScannerReimon
+    - id: MultitoolReimon
+    - id: PowerDrillReimon
+    - id: trayScannerReimon
+    - id: WelderExperimentalReimon
+
+# Neck
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckReimon
+  name: плащ
+  description: Потрепанный темно-фиолетовый плащ с бежевыми акцентами, добавляет стиль и защиту в комплекте экипировки.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Reimon/cloak.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Hardsuit
+- type: entity
+  parent: ClothingOuterHardsuitAtmos
+  id: ClothingOuterHardsuitReimon
+  name: скафандр
+  description: Темно-фиолетовый скафандр с бежевыми пластинами и кроваво-красными резисторами, оснащённый системой ускорения для элитных операций.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Reimon/hardsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Reimon/hardsuit.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitReimon
+  - type: Item
+    size: Huge
+  - type: ClothingSpeedModifier
+    walkModifier: 1
+    sprintModifier: 1
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.65
+        Slash: 0.65
+        Piercing: 0.6
+        Heat: 0.7
+        Radiation: 0.5
+        Caustic: 0.5
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+  - type: HardsuitIdentification
+    nonlethal: true
+  - type: HardsuitSpeedBuff
+  - type: PowerCellDraw
+    drawRate: 3.6
+    enabled: false
+  - type: PowerCellSlot
+    cellSlotId: cell_slot
+    fitsInCharger: false
+  - type: ContainerContainer
+    containers:
+      cell_slot: !type:ContainerSlot
+      toggleable-clothing: !type:ContainerSlot {}
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: PowerCellMicroreactor
+        disableEject: true
+        whitelist:
+          tags:
+          - PowerCell
+
+# Helmet
+- type: entity
+  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  id: ClothingHeadHelmetHardsuitReimon
+  name: шлем скафандра
+  description: Матовый оранжевый шлем скафандра.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Reimon/helmet.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Reimon/helmet.rsi
+  - type: PointLight
+    color: "#d46f11"
+    radius: 7
+    energy: 8
+  - type: PressureProtection
+    highPressureMultiplier: 0.08
+    lowPressureMultiplier: 1000
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Gloves
+- type: entity
+  parent: ClothingHandsGlovesCombat
+  id: ClothingHandsGlovesCombatReimon
+  name: перчатки
+  description: Темно-фиолетовые перчатки с бежевыми пластинами, обеспечивают защиту и точность движений в комплекте.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Reimon/gloves.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Reimon/gloves.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Magboots
+- type: entity
+  parent: [ClothingShoesBootsMag, BaseJetpack]
+  id: ClothingShoesBootsMagReimon
+  name: магнитные ботинки
+  description: Темно-фиолетовые ботинки с бежевыми вставками и встроенными пустотными двигателями, созданы для работы в невесомости.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Reimon/magboots.rsi
+    layers:
+    - state: icon
+      map: [ "enum.ToggleVisuals.Layer" ]
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Reimon/magboots.rsi
+  - type: ClothingSpeedModifier
+    walkModifier: 1
+    sprintModifier: 1
+  - type: GasTank
+    outputPressure: 42.6
+    air:
+      volume: 0.75
+      temperature: 293.15
+      moles:
+      - 0.153853429 # oxygen
+      - 0.153853429 # nitrogen
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Glasses
+- type: entity
+  parent: ClothingEyesHudMultiversal
+  id: ClothingEyesGlassesReimon
+  name: резервный визор
+  description: Матовый оранжевый визор с функцией отображения данных, часть экипировки.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Reimon/hud.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Reimon/hud.rsi
+  - type: EyeProtection
+  - type: IdentityBlocker
+    coverage: EYES
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Jumpsuit
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitReimon
+  name: комбинезон
+  description: Прочный темно-фиолетовый комбинезон с бежевыми акцентами, идеально подходит для работы под скафандром.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Reimon/jumpsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Reimon/jumpsuit.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Gas Mask
+- type: entity
+  parent: ClothingMaskGasSyndicate
+  id: ClothingMaskGasReimon
+  name: дыхательный модуль
+  description: Темно-фиолетовая маска с бежевыми вставками, обеспечивает надежную подачу воздуха в экстремальных условиях.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Reimon/gasmask.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Reimon/gasmask.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Headset
+- type: entity
+  parent: ClothingHeadset
+  id: ClothingHeadsetReimon
+  name: гарнитура
+  description: Темно-фиолетовая гарнитура с бежевыми вставками, обеспечивает надежную связь в комплекте.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Reimon/headset.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Reimon/headset.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Cap
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadCapReimon
+  name: фуражка
+  description: Темно-фиолетовая фуражка с бежевыми акцентами, стильный элемент экипировки.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Reimon/hat.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Reimon/hat.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Hypospray
+- type: entity
+  id: HypoReimon
+  name: инъектор
+  parent: BaseItem
+  description: Темно-фиолетовый инъектор с бежевыми вставками для быстрого введения медикаментов в полевых условиях.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Reimon/hypo.rsi
+    state: icon
+  - type: Item
+    sprite: _DeadSpace/Sponsor/Reimon/hypo.rsi
+  - type: SolutionContainerManager
+    solutions:
+      hypospray:
+        maxVol: 5
+  - type: RefillableSolution
+    solution: hypospray
+  - type: ExaminableSolution
+    solution: hypospray
+  - type: Hypospray
+    onlyAffectsMobs: false
+  - type: UseDelay
+    delay: 0.5
+
+# Crusher
+- type: entity
+  id: WeaponCrusherReimon
+  parent: WeaponCrusher
+  name: крушитель
+  description: Темно-фиолетовая саперная лопатка с бежевыми вставками и кроваво-красными резисторами, сочетает мощь и точность.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Reimon/crusher.rsi
+    layers:
+    - state: icon
+  - type: Item
+    sprite: _DeadSpace/Sponsor/Reimon/crusher.rsi
+    size: Normal
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Reimon/crusher.rsi
+    quickEquip: false
+    slots:
+    - suitStorage
+
+# PDA
+- type: entity
+  parent: BaseMedicalPDA
+  id: PDAReimon
+  name: КПК
+  description: Темно-фиолетовый КПК с бежевыми вставками, отображает зеленые символы при вставке ID-карты.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Icon
+    sprite: _DeadSpace/Sponsor/Reimon/pda.rsi
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Reimon/pda.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+  - type: CartridgeLoader
+    uiKey: enum.PdaUiKey.Key
+    preinstalled:
+    - CrewManifestCartridge
+    - NotekeeperCartridge
+    - NanoTaskCartridge
+    - NewsReaderCartridge
+    - MedTekCartridge
+    - AstroNavCartridge
+
+# JawsOfLife
+- type: entity
+  parent: SyndicateJawsOfLife
+  id: JawsOfLifeReimon
+  name: челюсти жизни
+  description: Массивный инструмент из темно-фиолетового сплава с бежевыми вставками, между губками мерцает кроваво-красная энергетическая нить, создающая ощущение скрытой мощи.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Reimon/tools_jawsoflife.rsi
+    state: syn_jaws_pry
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: syn_inhand-left
+      right:
+      - state: syn_inhand-right
+    size: Normal
+  - type: MultipleTool
+    entries:
+    - behavior: Prying
+      sprite:
+        sprite: _DeadSpace/Sponsor/Reimon/tools_jawsoflife.rsi
+        state: syn_jaws_pry
+      useSound: /Audio/Items/jaws_pry.ogg
+      changeSound: /Audio/Items/change_jaws.ogg
+    - behavior: Cutting
+      sprite:
+        sprite: _DeadSpace/Sponsor/Reimon/tools_jawsoflife.rsi
+        state: syn_jaws_cutter
+      useSound: /Audio/Items/jaws_cut.ogg
+      changeSound: /Audio/Items/change_jaws.ogg
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 14
+
+# drill
+- type: entity
+  parent: PowerDrill
+  id: PowerDrillReimon
+  name: дрель
+  description: Темно-фиолетовый корпус с бежевыми ребрами жесткости, через смотровое окно видны кроваво-красные энергетические разряды, напоминающие миниатюрные молнии.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Reimon/tools_powerdrill.rsi
+    state: drill_screw
+  - type: Item
+    sprite: _DeadSpace/Sponsor/Reimon/tools_powerdrill.rsi
+    size: Small
+  - type: Tool
+    qualities:
+    - Screwing
+    speedModifier: 1.5
+    useSound: /Audio/Items/drill_use.ogg
+  - type: MultipleTool
+    statusShowBehavior: true
+    entries:
+    - behavior: Screwing
+      sprite:
+        sprite: _DeadSpace/Sponsor/Reimon/tools_powerdrill.rsi
+        state: drill_screw
+      useSound:
+        path: /Audio/Items/drill_use.ogg
+      changeSound:
+        path: /Audio/Items/change_drill.ogg
+    - behavior: Anchoring
+      sprite:
+        sprite: _DeadSpace/Sponsor/Reimon/tools_powerdrill.rsi
+        state: drill_bolt
+      useSound:
+        path: /Audio/Items/drill_use.ogg
+      changeSound:
+        path: /Audio/Items/change_drill.ogg
+
+# welder
+- type: entity
+  parent: WelderExperimental
+  id: WelderExperimentalReimon
+  name: экспериментальный сварочный аппарат
+  description: Темно-фиолетовый корпус с бежевыми термоизоляционными панелями, пламя удерживается кроваво-красным силовым полем, создавая эффект "запертой бури".
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Reimon/tools_welder.rsi
+  - type: Item
+    sprite: _DeadSpace/Sponsor/Reimon/tools_welder.rsi
+
+# multitool
+- type: entity
+  parent: Multitool
+  id: MultitoolReimon
+  name: мультитул
+  description: Темно-фиолетовый прямоугольник с бежевыми сенсорными панелями, при активации по поверхности пробегают кроваво-красные импульсы, напоминающие пульсацию вен.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Reimon/tools_multitool.rsi
+
+# t-ray scanner
+- type: entity
+  parent: trayScanner
+  id: trayScannerReimon
+  name: т-лучевой сканер
+  description: Темно-фиолетовый планшет с бежевой окантовкой, сканирующие лучи проецируют кроваво-красную голограмму, создающую тревожное свечение.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Reimon/tools_trayscanner.rsi
+    state: icon
+  - type: Item
+    sprite: _DeadSpace/Sponsor/Reimon/tools_trayscanner.rsi
+
+# holofan projector
+- type: entity
+  parent: HolofanProjector
+  id: HolofanProjectorReimon
+  name: голопроектор
+  description: Темно-фиолетовый диск с бежевыми излучателями, создающий кроваво-красные голографические барьеры с фирменным узором.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Reimon/tools_holofanprojector.rsi
+    state: icon
+
+# gas analyzer
+- type: entity
+  name: газоанализатор
+  parent: GasAnalyzer
+  id: GasAnalyzerReimon
+  description: Темно-фиолетовый прибор с бежевыми сенсорами, дисплей отображает данные кроваво-красным шрифтом.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Reimon/tools_gasanalyzer.rsi
+    layers:
+    - state: icon
+      map: ["analyzer"]
+
+# mass scanner
+- type: entity
+  name: сканер массы
+  parent: HandHeldMassScanner
+  id: HandHeldMassScannerReimon
+  description: Темно-фиолетовый сканер с бежевой рукоятью, линза испускает пульсирующие кроваво-красные импульсы при сканировании.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Item
+    sprite: _DeadSpace/Sponsor/Reimon/tools_massscanner.rsi
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Reimon/tools_massscanner.rsi
+    state: icon
+    layers:
+    - state: icon
+    - state: scanner
+      shader: unshaded
+      visible: false
+      map: [ "enum.PowerDeviceVisualLayers.Powered" ]
