@@ -4,3 +4,7 @@ ent-ClothingEngineerWebbingFilled = { ent-ClothingEngineerWebbing }
 ent-ClothingEngineerWebbingEngineering = { ent-ClothingEngineerWebbing }
     .suffix = Инженерный
     .desc = { ent-ClothingEngineerWebbing.desc }
+
+ent-ClothingBeltMedicalSecurityWebbingFilled = { ent-ClothingBeltMedicalSecurityWebbing }
+    .suffix = Заполненный
+    .desc = { ent-ClothingBeltMedicalSecurityWebbing.desc }
