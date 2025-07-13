@@ -42,5 +42,4 @@
         - TrayScanner
         - GasAnalyzer
         - HandLabeler
-    sprite: _DeadSpace/Clothing/Belt/engwebbing.rsi
   - type: Appearance
