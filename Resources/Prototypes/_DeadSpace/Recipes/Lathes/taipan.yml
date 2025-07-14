@@ -1,0 +1,477 @@
+# Weaponry
+
+- type: latheRecipe
+  parent: BaseWeaponRecipe
+  id: WeaponPistolViper
+  result: WeaponPistolViper
+  materials:
+    Steel: 400
+    Plastic: 200
+
+- type: latheRecipe
+  parent: BaseWeaponRecipe
+  id: WeaponRevolverPython
+  result: WeaponRevolverPython
+  materials:
+    Steel: 500
+    Plastic: 150
+
+- type: latheRecipe
+  parent: BaseWeaponRecipe
+  id: EnergyDagger
+  result: EnergyDagger
+  materials:
+    Steel: 200
+    Glass: 100
+    Gold: 50
+
+- type: latheRecipe
+  id: GrenadeShrapnel
+  result: GrenadeShrapnel
+  completetime: 3
+  materials:
+    Steel: 200
+    Plastic: 100
+
+- type: latheRecipe
+  id: ExGrenade
+  result: ExGrenade
+  completetime: 3
+  materials:
+    Steel: 150
+    Plastic: 100
+    Plasma: 50
+
+- type: latheRecipe
+  id: GrenadeFlashBang
+  result: GrenadeFlashBang
+  completetime: 3
+  materials:
+    Steel: 100
+    Glass: 100
+    Plastic: 50
+
+- type: latheRecipe
+  id: SmokeGrenade
+  result: SmokeGrenade
+  completetime: 3
+  materials:
+    Steel: 100
+    Plastic: 100
+    Plasma: 50
+
+- type: latheRecipe
+  parent: BaseWeaponRecipe
+  id: ThrowingKnife
+  result: ThrowingKnife
+  materials:
+    Steel: 150
+
+- type: latheRecipe
+  id: CaneSheath
+  result: CaneSheath
+  completetime: 2
+  materials:
+    Steel: 200
+    Plastic: 100
+
+- type: latheRecipe
+  id: ClothingHandsGlovesNorthStar
+  result: ClothingHandsGlovesNorthStar
+  completetime: 3
+  materials:
+    Steel: 100
+    Plastic: 200
+    Cloth: 100
+
+- type: latheRecipe
+  id: ClothingHandsGlovesBoxingRigged
+  result: ClothingHandsGlovesBoxingRigged
+  completetime: 3
+  materials:
+    Steel: 150
+    Plastic: 200
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: WeaponSniperMosin
+  result: WeaponSniperMosin
+  materials:
+    Steel: 800
+    Wood: 400
+    Plastic: 200
+
+- type: latheRecipe
+  parent: BaseWeaponRecipe
+  id: WeaponSubMachineGunC20r
+  result: WeaponSubMachineGunC20r
+  materials:
+    Steel: 600
+    Plastic: 300
+
+- type: latheRecipe
+  id: ClothingEyesPNVAdvSyndicate
+  result: ClothingEyesPNVAdvSyndicate
+  completetime: 4
+  materials:
+    Steel: 200
+    Glass: 300
+    Gold: 100
+
+- type: latheRecipe
+  parent: BaseWeaponRecipe
+  id: WeaponPistolCobra
+  result: WeaponPistolCobra
+  materials:
+    Steel: 500
+    Plastic: 250
+    Gold: 50
+
+- type: latheRecipe
+  parent: BaseWeaponRecipe
+  id: WeaponPistolDesertEagle
+  result: WeaponPistolDesertEagle
+  materials:
+    Steel: 600
+    Plastic: 200
+    Gold: 100
+
+- type: latheRecipe
+  parent: BaseWeaponRecipe
+  id: EnergySword
+  result: EnergySword
+  materials:
+    Steel: 300
+    Glass: 200
+    Gold: 100
+    Plasma: 50
+
+- type: latheRecipe
+  parent: BaseWeaponRecipe
+  id: EnergyShield
+  result: EnergyShield
+  materials:
+    Steel: 400
+    Glass: 300
+    Gold: 150
+
+- type: latheRecipe
+  id: GrenadeIncendiary
+  result: GrenadeIncendiary
+  completetime: 3
+  materials:
+    Steel: 150
+    Plastic: 150
+    Plasma: 50
+
+- type: latheRecipe
+  id: ClusterGrenade
+  result: ClusterGrenade
+  completetime: 4
+  materials:
+    Steel: 300
+    Plastic: 200
+    Plasma: 100
+
+- type: latheRecipe
+  id: EmpGrenade
+  result: EmpGrenade
+  completetime: 3
+  materials:
+    Steel: 150
+    Plastic: 100
+    Gold: 50
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: WeaponSniperHristov
+  result: WeaponSniperHristov
+  materials:
+    Steel: 1000
+    Glass: 300
+    Gold: 200
+
+- type: latheRecipe
+  parent: BaseWeaponRecipe
+  id: WeaponSMGTommyGun
+  result: WeaponSMGTommyGun
+  materials:
+    Steel: 700
+    Wood: 300
+    Plastic: 200
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: ADTWeaponRifleXC67
+  result: ADTWeaponRifleXC67
+  materials:
+    Steel: 800
+    Plastic: 400
+    Gold: 100
+
+- type: latheRecipe
+  parent: BaseWeaponRecipe
+  id: WeaponShotgunBulldog
+  result: WeaponShotgunBulldog
+  materials:
+    Steel: 600
+    Plastic: 300
+    Wood: 200
+
+- type: latheRecipe
+  parent: BaseWeaponRecipe
+  id: EnergySwordDouble
+  result: EnergySwordDouble
+  materials:
+    Steel: 500
+    Glass: 300
+    Gold: 200
+    Plasma: 100
+
+- type: latheRecipe
+  id: HolyHandGrenade
+  result: HolyHandGrenade
+  completetime: 5
+  materials:
+    Steel: 200
+    Gold: 300
+    Plasma: 100
+
+- type: latheRecipe
+  id: WhiteholeGrenade
+  result: WhiteholeGrenade
+  completetime: 5
+  materials:
+    Steel: 200
+    Glass: 300
+    Plasma: 200
+
+- type: latheRecipe
+  id: SingularityGrenade
+  result: SingularityGrenade
+  completetime: 5
+  materials:
+    Steel: 200
+    Plasma: 400
+    Uranium: 100
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: WeaponLightMachineGunL6
+  result: WeaponLightMachineGunL6
+  materials:
+    Steel: 1200
+    Plastic: 500
+    Gold: 200
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: WeaponLauncherChinaLake
+  result: WeaponLauncherChinaLake
+  materials:
+    Steel: 1000
+    Plastic: 400
+    Glass: 300
+
+- type: latheRecipe
+  parent: BaseWeaponRecipe
+  id: WeaponEnergyCrossbow
+  result: WeaponEnergyCrossbow
+  materials:
+    Steel: 400
+    Glass: 300
+    Gold: 200
+    Plasma: 100
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: WeaponRifleAk
+  result: WeaponRifleAk
+  materials:
+    Steel: 900
+    Wood: 400
+    Plastic: 300
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: MagazineEagle
+  result: MagazineEagle
+  materials:
+    Steel: 350
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: MagazineBoxAntiMateriel
+  result: MagazineBoxAntiMateriel
+  materials:
+    Steel: 1200
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: MagazinePistolCaselessRifle
+  result: MagazinePistolCaselessRifle
+  materials:
+    Steel: 300
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: MagazineTommyGun
+  result: MagazineTommyGun
+  materials:
+    Steel: 400
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: MagazineDrumTommyGun
+  result: MagazineDrumTommyGun
+  materials:
+    Steel: 600
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: MagazineLightRifleBox
+  result: MagazineLightRifleBox
+  materials:
+    Steel: 1500
+
+# Research
+
+- type: latheRecipe
+  id: ClothingShoesBootsMagSyndie
+  result: ClothingShoesBootsMagSyndie
+  completetime: 10
+  materials:
+    Steel: 1000
+    Plastic: 500
+    Silver: 100
+
+- type: latheRecipe
+  id: ADTClothingShoesBootsMagAdvSynd
+  result: ADTClothingShoesBootsMagAdvSynd
+  completetime: 10
+  materials:
+    Steel: 1000
+    Plastic: 500
+    Gold: 100
+
+- type: latheRecipe
+  id: EmagTaipanLimited
+  result: EmagTaipanLimited
+  completetime: 10
+  materials:
+    Steel: 200
+    Plastic: 400
+    Gold: 300
+
+# Medical
+
+- type: latheRecipe
+  parent: BaseSurgicalRecipe
+  id: ScalpelAdvanced
+  result: ScalpelAdvanced
+
+- type: latheRecipe
+  parent: BaseSurgicalRecipe
+  id: SawAdvanced
+  result: SawAdvanced
+
+- type: latheRecipe
+  id: SyndiHypo
+  result: SyndiHypo
+  completetime: 10
+  materials:
+    Steel: 200
+    Glass: 400
+    Silver: 300
+
+- type: latheRecipe
+  id: ADTCyberHypospray
+  result: ADTCyberHypospray
+  completetime: 10
+  materials:
+    Steel: 200
+    Glass: 400
+    Gold: 300
+
+# Engineering
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: SyndicateWelderExperimental
+  result: SyndicateWelderExperimental
+  completetime: 6
+  materials:
+    Steel: 850
+    Plasma: 250
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: SyndicateJawsOfLife
+  result: SyndicateJawsOfLife
+  completetime: 6
+  materials:
+    Steel: 1100
+    Glass: 500
+    Plasma: 350
+    Gold: 75
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: SyndicatePowerDrill
+  result: SyndicatePowerDrill
+  completetime: 6
+  materials:
+    Steel: 700
+    Plastic: 250
+
+- type: latheRecipe
+  id: ClothingEyesHudTaipanDiagnostic
+  result: ClothingEyesHudTaipanDiagnostic
+  completetime: 30
+  materials:
+    Steel: 200
+    Glass: 75
+    Plastic: 150
+    Silver: 50
+
+- type: latheRecipe
+  id: ClothingEyesHudTaipanMedical
+  result: ClothingEyesHudTaipanMedical
+  completetime: 30
+  materials:
+    Steel: 200
+    Glass: 75
+    Plastic: 150
+    Silver: 50
+
+- type: latheRecipe
+  id: ClothingEyesHudTaipanRecruit
+  result: ClothingEyesHudTaipanRecruit
+  completetime: 30
+  materials:
+    Steel: 200
+    Glass: 75
+    Plastic: 150
+    Silver: 50
+
+- type: latheRecipe
+  id: ClothingEyesHudTaipanResearch
+  result: ClothingEyesHudTaipanResearch
+  completetime: 45
+  materials:
+    Steel: 250
+    Glass: 100
+    Plastic: 200
+    Silver: 75
+    Gold: 50
+
+- type: latheRecipe
+  id: ClothingEyesHudTaipanAdvanced
+  result: ClothingEyesHudTaipanAdvanced
+  completetime: 60
+  materials:
+    Steel: 400
+    Glass: 150
+    Plastic: 300
+    Silver: 150
+    Gold: 100

@@ -16,6 +16,11 @@ public sealed partial class CargoBountyPrototype : IPrototype
     [IdDataField]
     public string ID { get; private set; } = default!;
 
+    /// DS14-start
+    [DataField]
+    public bool IsTaipan = false;
+    /// DS14-end
+
     /// <summary>
     /// The monetary reward for completing the bounty
     /// </summary>

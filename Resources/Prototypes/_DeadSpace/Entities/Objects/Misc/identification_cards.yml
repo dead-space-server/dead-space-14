@@ -243,7 +243,7 @@
     - TaipanScience
 
 - type: entity
-  parent: EmagUnlimited
+  parent: Emag
   id: EmagTaipanLimited
   suffix: Тайпан, ЕМАГ, Ограниченный
   name: криптографический секвенсор
@@ -255,8 +255,6 @@
   - type: Item
     sprite: _DeadSpace/Objects/Devices/idcards.rsi
     storedRotation: -90
-  - type: LimitedCharges
-    maxCharges: 1
 
 - type: entity
   parent: EmagTaipanLimited
@@ -264,6 +262,6 @@
   suffix: Тайпан, ЕМАГ, Ограниченный
   components:
   - type: LimitedCharges
-    maxCharges: 1
+    maxCharges: 5
   - type: AutoRecharge
     rechargeDuration: 30

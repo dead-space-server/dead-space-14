@@ -57,7 +57,7 @@
     - Critical
     - Dead
   - type: Rattle
-    radioChannel: "RadioTaipan"
+    radioChannel: "Taipan"
 
 - type: entity
   id: DeathRattleImplanterTaipan

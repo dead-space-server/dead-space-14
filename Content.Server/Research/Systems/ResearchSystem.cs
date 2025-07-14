@@ -106,18 +106,32 @@ namespace Content.Server.Research.Systems
         /// Gets the ids of all the servers
         /// </summary>
         /// <returns></returns>
-        public int[] GetServerIds()
+
+        /// DS14-start
+        public int[] GetServerIds(bool isTaipan)
         {
             var allServers = EntityQuery<ResearchServerComponent>(true).ToArray();
             var list = new int[allServers.Length];
-
-            for (var i = 0; i < allServers.Length; i++)
+            if (!isTaipan)
             {
-                list[i] = allServers[i].Id;
+                for (var i = 0; i < allServers.Length; i++)
+                {
+                    if (!allServers[i].isTaipan)
+                        list[i] = allServers[i].Id;
+                }
+                return list;
             }
-
-            return list;
+            else
+            {
+                for (var i = 0; i < allServers.Length; i++)
+                {
+                    if (allServers[i].isTaipan)
+                        list[i] = allServers[i].Id;
+                }
+                return list;
+            }
         }
+        /// DS14-end
 
         // DS14-rnd-server-per-stations-start
         /// <summary>

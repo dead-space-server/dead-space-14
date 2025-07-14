@@ -56,6 +56,7 @@ public sealed partial class ResearchSystem
 
     private void OnClientMapInit(EntityUid uid, ResearchClientComponent component, MapInitEvent args)
     {
+        var taipanServers = new List<Entity<ResearchServerComponent>>();
         var allServers = new List<Entity<ResearchServerComponent>>();
         var query = AllEntityQuery<ResearchServerComponent>();
 
@@ -70,12 +71,19 @@ public sealed partial class ResearchSystem
             var gridServer = Transform(serverUid).GridUid;
 
             if (gridResearch == gridServer)
-                allServers.Add((serverUid, serverComp));
+            {
+                if (component.isTaipan && serverComp.isTaipan)
+                    taipanServers.Add((serverUid, serverComp));
+                else if (!component.isTaipan && !serverComp.isTaipan)
+                    allServers.Add((serverUid, serverComp));
+            }
         }
         // DS14-rnd-server-per-stations-end
 
         if (allServers.Count > 0)
             RegisterClient(uid, allServers[0], component, allServers[0]);
+        if (taipanServers.Count > 0)
+            RegisterClient(uid, taipanServers[0], component, taipanServers[0]);
     }
 
     private void OnClientShutdown(EntityUid uid, ResearchClientComponent component, ComponentShutdown args)

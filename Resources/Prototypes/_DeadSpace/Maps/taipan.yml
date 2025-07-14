@@ -1,7 +1,7 @@
 ﻿- type: gameMap
   id: DSTaipan
   mapName: 'Сектор Тайпана'
-  mapPath: /Maps/ds_taipan_old.yml
+  mapPath: /Maps/ds_taipan.yml
   minPlayers: 0
   stations:
     Taipan:

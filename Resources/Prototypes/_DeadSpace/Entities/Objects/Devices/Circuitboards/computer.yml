@@ -67,8 +67,8 @@
 - type: entity
   parent: BaseComputerCircuitboardTaipan
   id: SurveillanceCameraMonitorCircuitboardTaipan
-  name: монитор камер наблюдения (консольная плата)
-  description: Консольная плата для монитора камер наблюдения.
+  name: монитор камер слежения (консольная плата)
+  description: Консольная плата для монитора камер слежения.
   components:
   - type: ComputerBoard
     prototype: ComputerTaipanSurveillanceCameraMonitor

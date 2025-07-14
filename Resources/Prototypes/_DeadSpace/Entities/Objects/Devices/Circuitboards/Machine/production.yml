@@ -100,38 +100,6 @@
         defaultPrototype: Igniter
 
 - type: entity
-  id: SecurityTechFabCircuitboardTaipan
-  parent: BaseMachineCircuitboardTaipan
-  name: охранный ТехФаб (машинная плата)
-  description: Печатная плата охранного ТехФаба.
-  components:
-  - type: MachineBoard
-    prototype: SecurityTechFabTaipan
-    stackRequirements:
-      MatterBin: 2
-      Manipulator: 2
-    tagRequirements:
-      GlassBeaker:
-        amount: 2
-        defaultPrototype: Beaker
-
-- type: entity
-  id: MedicalTechFabCircuitboardTaipan
-  parent: BaseMachineCircuitboardTaipan
-  name: медицинский ТехФаб (машинная плата)
-  description: Печатная плата медицинского ТехФаба.
-  components:
-  - type: MachineBoard
-    prototype: MedicalTechFabTaipan
-    stackRequirements:
-      MatterBin: 2
-      Manipulator: 2
-    tagRequirements:
-      GlassBeaker:
-        amount: 2
-        defaultPrototype: Beaker
-
-- type: entity
   id: CircuitImprinterMachineCircuitboardTaipan
   parent: BaseMachineCircuitboardTaipan
   name: принтер схем (машинная плата)
@@ -179,6 +147,18 @@
       Glass: 5
 
 - type: entity
+  id: UniformPrinterMachineCircuitboardTaipan
+  parent: BaseMachineCircuitboard
+  name: принтер униформы (машинная плата)
+  description: Печатная плата принтера униформы.
+  components:
+  - type: MachineBoard
+    prototype: UniformPrinterTaipan
+    stackRequirements:
+      MatterBin: 1
+      Manipulator: 2
+
+- type: entity
   id: ResearchAndDevelopmentServerMachineCircuitboardTaipan
   parent: BaseMachineCircuitboardTaipan
   name: сервер РнД (машинная плата)
@@ -224,3 +204,62 @@
     stackRequirements:
       MatterBin: 4
       Glass: 1
+
+- type: entity
+  id: SecurityTechFabCircuitboardTaipan
+  parent: BaseMachineCircuitboardTaipan
+  name: оружейный ТехФаб (машинная плата)
+  description: Печатная плата оружейного ТехФаба.
+  components:
+  - type: MachineBoard
+    prototype: SecurityTechFab
+    stackRequirements:
+      MatterBin: 2
+      Manipulator: 2
+    tagRequirements:
+      GlassBeaker:
+        amount: 2
+        defaultPrototype: Beaker
+
+- type: entity
+  id: MedicalTechFabCircuitboardTaipan
+  parent: BaseMachineCircuitboardTaipan
+  name: медицинский ТехФаб (машинная плата)
+  description: Печатная плата медицинского ТехФаба.
+  components:
+  - type: MachineBoard
+    prototype: MedicalTechFab
+    stackRequirements:
+      MatterBin: 2
+      Manipulator: 2
+    tagRequirements:
+      GlassBeaker:
+        amount: 2
+        defaultPrototype: Beaker
+
+- type: entity
+  parent: BaseMachineCircuitboardTaipan
+  id: AnomalyVesselCircuitboardTaipan
+  name: сосуд аномалии (машинная плата)
+  description: Печатная плата для сосуда аномалии.
+  components:
+  - type: MachineBoard
+    prototype: MachineAnomalyVesselTaipan
+    stackRequirements:
+      Capacitor: 3
+      Cable: 1
+      PlasmaGlass: 10
+
+- type: entity
+  parent: BaseMachineCircuitboardTaipan
+  id: AnomalyVesselExperimentalCircuitboardTaipan
+  name: экспериментальный сосуд аномалии (машинная плата)
+  description: Печатная плата для экспериментального сосуда аномалии.
+  components:
+  - type: MachineBoard
+    prototype: MachineAnomalyVesselExperimentalTaipan
+    stackRequirements:
+      Capacitor: 3
+      Cable: 5
+      PlasmaGlass: 15
+      MetalRod: 4

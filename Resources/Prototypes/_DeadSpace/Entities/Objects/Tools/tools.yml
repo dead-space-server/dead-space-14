@@ -32,8 +32,8 @@
 
 - type: entity
   name: промышленная сварка Синдиката
-  parent: WelderIndustrialAdvanced
-  id: WelderIndustrialSyndicate
+  parent: WelderExperimental
+  id: SyndicateWelderExperimental
   description: Промышленная сварка с двойным топливным баком.
   components:
   - type: Sprite
@@ -52,7 +52,7 @@
 - type: entity
   name: дрель Синдиката
   parent: PowerDrill
-  id: PowerDrillSyndicate
+  id: SyndicatePowerDrill
   description: Простая электрическая ручная дрель.
   components:
   - type: Tag
