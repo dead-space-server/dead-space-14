@@ -1,11 +1,46 @@
 ﻿- type: entity
-  id: ResearchAndDevelopmentServerTaipan
-  parent: [ BaseMachinePowered, ConstructibleMachine ]
-  name: Сервер РНД Тайпана
-  description: Содержит коллективные знания ученых станции. Уничтожив его, они вернулись бы в каменный век. Вы же этого не хотите, не так ли?
+  id: MachineAnomalyGeneratorTaipan
+  parent: MachineAnomalyGenerator
+  name: генератор аномалий
+  description: Вершина псевдонаучных технологий.
+  suffix: Тайпан
+  placement:
+    mode: AlignTileAny
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Machines/server.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/anomaly_generator.rsi
+    offset: 0,1
+    drawdepth: Mobs
+    layers:
+    - state: base
+    - state: panel
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+      visible: false
+    - state: unshaded
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+    - state: inserting
+      visible: false
+      map: ["enum.MaterialStorageVisualLayers.Inserting"]
+    - state: generating
+      visible: false
+      shader: unshaded
+      map: ["enum.AnomalyGeneratorVisualLayers.Base"]
+  - type: ActiveRadio
+    channels:
+    - Taipan
+  - type: AccessReader
+    access: [["TaipanScience"]]
+
+- type: entity
+  id: ResearchAndDevelopmentServerTaipan
+  parent: ResearchAndDevelopmentServer
+  name: сервер РнД
+  description: Содержит коллективные знания ученых станции. Уничтожив его, они вернулись бы в каменный век. Вы же этого не хотите, не так ли?
+  suffix: Тайпан
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Machines/Taipan/server.rsi
     layers:
       - state: server
       - state: variant-research
@@ -15,75 +50,59 @@
     isTaipan: true
   - type: TechnologyDatabase
     supportedDisciplines:
-    - Industrial
-    - Arsenal
-    - Experimental
-    - CivilianServices
-  #  - IndustrialTaipan
-  #  - ArsenalTaipan
-  #  - ExperimentalTaipan
-  #  - CivilianServicesTaipan
-  - type: ApcPowerReceiver
-    powerLoad: 200
-  - type: ExtensionCableReceiver
-  - type: WiresPanel
-  - type: WiresVisuals
+    - TaipanMechworks
+    - TaipanWeaponry
+    - TaipanResearch
+    - TaipanLifeSupport
   - type: Machine
     board: ResearchAndDevelopmentServerMachineCircuitboardTaipan
-  - type: Destructible
-    thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 600
-      behaviors:
-        - !type:DoActsBehavior
-          acts: [ "Destruction" ]
-    - trigger:
-        !type:DamageTrigger
-        damage: 300
-      behaviors:
-      - !type:DoActsBehavior
-        acts: ["Destruction"]
-      - !type:PlaySoundBehavior
-        sound:
-          collection: MetalBreak
-      - !type:SpawnEntitiesBehavior
-        spawn:
-          SheetSteel1:
-            min: 1
-            max: 2
-  - type: Appearance
-  - type: AmbientOnPowered
-  - type: AmbientSound
-    volume: -9
-    range: 5
-    sound:
-      path: /Audio/Ambience/Objects/server_fans.ogg
 
 - type: entity
   parent: MachineAnomalyVessel
   id: MachineAnomalyVesselTaipan
+  name: сосуд аномалии
+  description: Контейнер, способный проводить сканирование аномалии и превращать её в очки исследований.
   suffix: Тайпан
   components:
+  - type: Sprite
+    noRot: true
+    sprite: _DeadSpace/Structures/Machines/Taipan/anomaly_vessel.rsi
+    layers:
+    - state: base
+    - state: powered-1
+      shader: unshaded
+      map: [ "enum.PowerDeviceVisualLayers.Powered" ]
+    - state: anomaly-1
+      visible: false
+      shader: unshaded
+      map: [ "enum.AnomalyVesselVisualLayers.Base" ]
+    - state: panel
+      map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
   - type: ResearchClient
     isTaipan: true
   - type: Machine
-    board: MachineAnomalyVesselTaipanCircuitboard
+    board: AnomalyVesselCircuitboardTaipan
+  - type: PointLight
+    radius: 1.2
+    energy: 2
+    color: "#8B0000"
 
 - type: entity
   parent: MachineAnomalyVesselExperimental
   id: AnomalyVesselExperimentalTaipan
+  name: экспериментальный сосуд аномалии
+  description: Усовершенствованный сосуд аномалии, обладающий большим исследовательским потенциалом за счёт повышенной летучести и низкоуровневого радиоактивного распада в окружающую среду.
   suffix: Тайпан
   components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Machines/Taipan/adv_anomaly_vessel.rsi
+    offset: 0,0.5
+    drawdepth: Mobs
   - type: ResearchClient
     isTaipan: true
   - type: Machine
-    board: AnomalyVesselExperimentalTaipanCircuitboard
-
-- type: entity
-  parent: BaseResearchAndDevelopmentPointSource
-  id: BaseResearchAndDevelopmentPointSourceTaipan
-  suffix: Тайпан
-  components:
-  - type: ResearchClient
-    isTaipan: true
+    board: AnomalyVesselExperimentalCircuitboardTaipan
+  - type: PointLight
+    radius: 1.2
+    energy: 2
+    color: "#8B0000"

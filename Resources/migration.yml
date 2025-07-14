@@ -817,8 +817,8 @@ ClothingOuterApronTypanBotanist: ClothingOuterApronTaipanBotanist
 ClothingBeltAssaultTypan: ClothingBeltAssaultTaipan
 ClothingBeltTypanSecurityWebbing: ClothingBeltTaipanSecurityWebbing
 ClothingHeadsetAltTypan: ClothingHeadsetAltTaipan
-ClothingEyesHudSyndicateAgentTypan: ClothingEyesHudSyndicateAgentTaipan
-ClothingEyesHudTypan: ClothingEyesHudTaipan
+ClothingEyesHudSyndicateAgentTypan: null
+ClothingEyesHudTypan: null
 ClothingHandsRDTypan: null
 ClothingHandsScienceTypan: null
 ClothingHeadTypan: ClothingHeadTaipan
@@ -858,3 +858,12 @@ SpawnPointLatejoinTypanScience: SpawnPointLatejoinTaipanResearcher
 
 # 2025-06-30
 ADTAbakanRifleAEK: WeaponRifleAEK
+
+# 2025-07-12
+ClothingHandsRDTaipan: null
+ClothingOuterCoatRDTaipan: null
+ClothingUniformScienceRDTaipan: null
+ClothingOuterWinterTaipanChef: null
+ClothingUniformJumpsuitTaipanDirectory: null
+ClothingEyesHudSyndicateAgentTaipan: null
+ClothingEyesHudTaipan: null

@@ -6,7 +6,7 @@
   components:
   - type: Sprite
     noRot: true
-    sprite: _DeadSpace/Structures/Machines/taipan_cryostorage.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/cryostorage.rsi
     layers:
     - state: sleeper_0
       map: ["base"]

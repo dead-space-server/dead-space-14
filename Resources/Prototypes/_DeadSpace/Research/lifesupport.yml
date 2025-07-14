@@ -1,0 +1,212 @@
+# Tier 1
+
+- type: technology
+  id: TaipanHydroponics
+  name: research-technology-basic-hydroponics
+  icon:
+    sprite: Structures/Machines/seed_extractor.rsi
+    state: seedextractor
+  discipline: TaipanLifeSupport
+  tier: 1
+  cost: 7500
+  recipeUnlocks:
+  - BorgModuleGardening
+  - BorgModuleHarvesting
+  - SeedExtractorMachineCircuitboard
+  - HydroponicsTrayMachineCircuitboard
+  - ReagentGrinderIndustrialMachineCircuitboard
+
+- type: technology
+  id: TaipanCritterMechs
+  name: research-technology-critter-mechs
+  icon:
+    sprite: Objects/Specific/Mech/mecha.rsi
+    state: hamtr
+  discipline: TaipanLifeSupport
+  tier: 1
+  cost: 7500
+  recipeUnlocks:
+  - HamtrHarness
+  - HamtrLArm
+  - HamtrRArm
+  - HamtrLLeg
+  - HamtrRLeg
+  - HamtrCentralElectronics
+  - HamtrPeripheralsElectronics
+  - MechEquipmentGrabberSmall
+  - VimHarness
+
+- type: technology
+  id: TaipanAdvancedEntertainment
+  name: research-technology-advanced-entertainment
+  icon:
+    sprite: Objects/Fun/Instruments/h_synthesizer.rsi
+    state: icon
+  discipline: TaipanLifeSupport
+  tier: 1
+  cost: 7500
+  recipeUnlocks:
+  - SynthesizerInstrument
+  - DawInstrumentMachineCircuitboard
+  - JukeboxCircuitBoard
+
+- type: technology
+  id: TaipanMeatManipulation
+  name: research-technology-meat-manipulation
+  icon:
+    sprite: Structures/Machines/fat_sucker.rsi
+    state: display
+  discipline: TaipanLifeSupport
+  tier: 1
+  cost: 7500
+  recipeUnlocks:
+  - FatExtractorMachineCircuitboard
+  - BiofabricatorMachineCircuitboardTaipan
+  - BiomassReclaimerMachineCircuitboard
+
+- type: technology
+  id: TaipanFauxAstroTiles
+  name: research-technology-faux-astro-tiles
+  icon:
+    sprite: Objects/Tiles/tile.rsi
+    state: astroice
+  discipline: TaipanLifeSupport
+  tier: 1
+  cost: 7500
+  recipeUnlocks:
+  - FauxTileAstroGrass
+  - FauxTileMowedAstroGrass
+  - FauxTileJungleAstroGrass
+  - FauxTileAstroIce
+  - FauxTileAstroSnow
+  - FauxTileAstroAsteroidSand
+
+# Tier 2
+
+- type: technology
+  id: TaipanBiochemicalStasis
+  name: research-technology-biochemical-stasis
+  icon:
+    sprite: Structures/Machines/stasis_bed.rsi
+    state: icon
+  discipline: TaipanLifeSupport
+  tier: 2
+  cost: 15000
+  recipeUnlocks:
+  - StasisBedMachineCircuitboard
+  - CryoPodMachineCircuitboard
+  - CryostasisBeaker
+  - SyringeCryostasis
+
+- type: technology
+  id: TaipanHypospray
+  name: research-technology-hypospray
+  icon:
+    sprite: Objects/Specific/Medical/syndihypo.rsi
+    state: hypo
+  discipline: TaipanLifeSupport
+  tier: 2
+  cost: 15000
+  recipeUnlocks:
+  - SyndiHypo
+
+- type: technology
+  id: TaipanMechanizedTreatment
+  name: research-technology-mechanized-treatment
+  icon:
+    sprite: Mobs/Silicon/chassis.rsi
+    state: medical
+  discipline: TaipanLifeSupport
+  tier: 2
+  cost: 15000
+  recipeUnlocks:
+  - BorgModuleAdvancedTreatment
+  - BorgModuleDefibrillator
+
+- type: technology
+  id: TaipanAdvancedCleaning
+  name: research-technology-advanced-cleaning
+  icon:
+    sprite: Objects/Specific/Janitorial/advmop.rsi
+    state: advmop
+  discipline: TaipanLifeSupport
+  tier: 2
+  cost: 15000
+  recipeUnlocks:
+  - AdvMopItem
+  - MegaSprayBottle
+  - BagOfSummoningGarbage
+  - BorgModuleAdvancedCleaning
+
+- type: technology
+  id: TaipanHONKMech
+  name: research-technology-honk-mech
+  icon:
+    sprite: Objects/Specific/Mech/mecha.rsi
+    state: honker
+  discipline: TaipanLifeSupport
+  tier: 2
+  cost: 15000
+  recipeUnlocks:
+  - HonkerHarness
+  - HonkerLArm
+  - HonkerRArm
+  - HonkerLLeg
+  - HonkerRLeg
+  - HonkerCentralElectronics
+  - HonkerPeripheralsElectronics
+  - HonkerTargetingElectronics
+  - MechEquipmentHorn
+
+- type: technology
+  id: TaipanAdvancedSpray
+  name: research-technology-advanced-spray
+  icon:
+    sprite: Objects/Weapons/Guns/Basic/spraynozzle.rsi
+    state: icon
+  discipline: TaipanLifeSupport
+  tier: 2
+  cost: 15000
+  recipeUnlocks:
+  - WeaponSprayNozzle
+  - ClothingBackpackWaterTank
+
+- type: technology
+  id: TaipanBluespaceCargoTransport
+  name: research-technology-bluespace-cargo-transport
+  icon:
+    sprite: Structures/cargo_telepad.rsi
+    state: display
+  discipline: TaipanLifeSupport
+  tier: 2
+  cost: 15000
+  recipeUnlocks:
+  - CargoTelepadMachineCircuitboard
+
+# Tier 3
+
+- type: technology
+  id: TaipanCloning
+  name: research-technology-cloning
+  icon:
+    sprite: Structures/Machines/cloning.rsi
+    state: pod_0
+  discipline: TaipanLifeSupport
+  tier: 3
+  cost: 30000
+  recipeUnlocks:
+  - CloningPodMachineCircuitboard
+  - MedicalScannerMachineCircuitboard
+  - CloningConsoleComputerCircuitboard
+
+- type: technology
+  id: TaipanAdvancedHypospray
+  name: research-technology-advanced-hypospray
+  icon:
+    sprite: _ADT/Objects/Specific/cyberhypo.rsi
+    state: hypo
+  discipline: TaipanLifeSupport
+  tier: 3
+  cost: 30000
+  recipeUnlocks:
+  - ADTCyberHypospray

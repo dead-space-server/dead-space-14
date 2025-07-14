@@ -6,7 +6,7 @@
   description: Производит базовые изделия из металла и стекла. Имеет возможность обрабатывать чертежи для печати по новым рецептам.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Machines/autolathe.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/autolathe.rsi
     snapCardinals: true
     layers:
     - state: icon
@@ -39,15 +39,11 @@
     - AtmosStatic
     - CablesStatic
     - CargoStatic
-    - MaterialsStatic
     - BasicChemistryStatic
-    - RollerBedsStatic
     - LightsStatic
     - ServiceStatic
     - PowerCellsStatic
     - ElectronicsStatic
-    # EMAG but without EMAG
-    - SecurityAmmoStatic
   - type: BlueprintReceiver
     whitelist:
       tags:
@@ -69,7 +65,7 @@
   description: Экспериментальный автолат, использующий технологию экстремального нагрева для замедленного, но гораздо более экономичного создания предметов.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Machines/autolathe_hypercon.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/autolathe_hypercon.rsi
   - type: Machine
     board: AutolatheHyperConvectionMachineCircuitboardTaipan
   - type: ResearchClient
@@ -83,7 +79,7 @@
   description: Преобразует сырьё в продвинутые предметы.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Machines/protolathe.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/protolathe.rsi
     snapCardinals: true
     layers:
     - state: icon
@@ -112,12 +108,12 @@
     unlitRunningState: unlit-building
     staticPacks:
     - ChemistryStatic
-    - SurgeryStatic
+    - TaipanSurgeryStatic
     dynamicPacks:
-    - AdvancedTools
+    - SyndicateAdvancedTools
     - ScienceEquipment
     - ScienceExplosives
-    - ScienceClothing
+    - TaipanScienceClothing
     - PowerCells
     - ScienceWeapons
     - Mining
@@ -126,13 +122,10 @@
     - Chemistry
     - Janitor
     - Instruments
-    - Equipment
-    - NightVisionTech # DS14
-    # EMAG but without EMAG
-    - SecurityAmmo
-    - SecurityExplosives
-    - SecurityEquipment
-    - SecurityWeapons
+    - TaipanHypospray
+    - TaipanEquipment
+    - TaipanSpecialEquipment
+    - SalvageSecurityWeapons
 
 - type: entity
   id: ProtolatheHyperConvectionTaipan
@@ -142,7 +135,7 @@
   description: Экспериментальный протолат, использующий технологию экстремального нагрева для замедленного, но гораздо более экономичного создания предметов.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Machines/protolathe_hypercon.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/protolathe_hypercon.rsi
   - type: Machine
     board: ProtolatheHyperConvectionMachineCircuitboardTaipan
   - type: ResearchClient
@@ -156,7 +149,7 @@
   description: Печатает платы для машин.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Machines/circuit_imprinter.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/circuit_imprinter.rsi
     snapCardinals: true
     layers:
     - state: icon
@@ -175,22 +168,23 @@
     idleState: icon
     runningState: building
     staticPacks:
-    - ScienceBoardsStatic
-    - ServiceBoardsStatic
+    - TaipanScienceBoardsStatic
+    - TaipanServiceBoardsStatic
     - CargoBoardsStatic
     - MedicalBoardsStatic
     - EngineeringBoardsStatic
+    - TaipanCameraBoards
     dynamicPacks:
     - EngineeringBoards
-    - CargoBoards
+    - TaipanCargoBoards
     - MedicalBoards
-    - ServiceBoards
-    - ScienceBoards
-    - CameraBoards
+    - TaipanServiceBoards
+    - TaipanScienceBoards
     - MechBoards
-    - ShuttleBoards
-    # EMAG but without EMAG
+    - TaipanShuttleBoards
+    - SalvageSecurityBoards
     - SecurityBoards
+    - TaipanCloning
   - type: MaterialStorage
     whitelist:
       tags:
@@ -207,7 +201,7 @@
   description: Экспериментальный принтер схем, использующий технологию экстремального нагрева для замедленного, но гораздо более экономичного создания предметов.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Machines/circuit_imprinter_hypercon.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/circuit_imprinter_hypercon.rsi
   - type: Machine
     board: CircuitImprinterHyperConvectionMachineCircuitboardTaipan
   - type: ResearchClient
@@ -221,7 +215,7 @@
   description: Печатает запчасти для создания робототехники и других механизмов.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Machines/exosuit_fabricator.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/exosuit_fabricator.rsi
     layers:
     - state: fab-idle
       map: ["enum.LatheVisualLayers.IsRunning"]
@@ -240,12 +234,54 @@
     - RoboticsStatic
     - BorgModulesStatic
     - BorgLimbsStatic
-    - BorgSecLimbsStatic
     dynamicPacks:
     - Robotics
     - BorgModules
     - MechParts
     - MechEquipment
+  - type: MaterialStorage
+    whitelist:
+      tags:
+      - Sheet
+      - RawMaterial
+      - Ingot
+
+- type: entity
+  parent: BaseLathe
+  id: UniformPrinterTaipan
+  name: принтер униформы
+  description: Печать новой или запасной униформы.
+  suffix: Тайпан
+  components:
+  - type: Transform
+    noRot: false
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Machines/Taipan/uniform_printer.rsi
+    snapCardinals: false
+    layers:
+    - state: icon
+      map: ["enum.LatheVisualLayers.IsRunning"]
+  - type: Machine
+    board: UniformPrinterMachineCircuitboardTaipan
+  - type: ResearchClient
+    isTaipan: true
+  - type: Lathe
+    producingSound: /Audio/Machines/uniformprinter.ogg
+    idleState: icon
+    runningState: building
+    staticPacks:
+    - ClothingTaipan
+    - ClothingSyndie
+    - Ties
+    - Scarves
+    - Carpets
+    - Bedsheets
+    - DoubleBedsheets
+    dynamicPacks:
+    - TaipanGloves
+  - type: EmagLatheRecipes
+    emagStaticPacks:
+    - ClothingCentComm
   - type: MaterialStorage
     whitelist:
       tags:
@@ -310,7 +346,7 @@
   description: Печатает инветнарь для медицинского отсека.
   components:
   - type: Sprite
-    sprite: Structures/Machines/techfab.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/techfab.rsi
     layers:
     - state: icon
       map: ["enum.LatheVisualLayers.IsRunning"]
@@ -334,13 +370,12 @@
     - RollerBedsStatic
     - MedicalClothingStatic
     - EmptyMedkitsStatic
-    - SurgeryStatic
+    - TaipanSurgeryStatic
     dynamicPacks:
     - Chemistry
+    - TaipanHypospray
   - type: Machine
     board: MedicalTechFabCircuitboardTaipan
-  - type: StealTarget
-    stealGroup: MedicalTechFabCircuitboard
 
 - type: entity
   id: SecurityTechFabTaipan
@@ -350,7 +385,7 @@
   description: Печатает инвентарь для охранного отсека.
   components:
   - type: Sprite
-    sprite: Structures/Machines/techfab.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/techfab.rsi
     layers:
     - state: icon
       map: ["enum.LatheVisualLayers.IsRunning"]
@@ -370,20 +405,23 @@
     idleState: icon
     runningState: icon
     staticPacks:
-    - SecurityEquipmentStatic
-    - SecurityPracticeStatic
+    - TaipanSecurityEquipmentStatic
     - SecurityAmmoStatic
-    - SecurityWeaponsStatic
-    - SecurityBorgModulesStatic
+    - TaipanAmmoStatic
     dynamicPacks:
     - SalvageSecurityBoards
     - SalvageSecurityWeapons
     - SecurityEquipment
-    - SecurityBoards
     - SecurityExplosives
     - SecurityAmmo
-    - SecurityWeapons
     - SecurityDisablers
+    - TaipanPistols
+    - TaipanSMGs
+    - TaipanRifles
+    - TaipanHeavyWeapons
+    - TaipanEnergyWeapons
+    - TaipanMelee
+    - TaipanGrenades
   - type: MaterialStorage
     whitelist:
       tags:

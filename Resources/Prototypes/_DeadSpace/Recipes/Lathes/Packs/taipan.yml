@@ -1,0 +1,274 @@
+# Weaponry
+
+- type: latheRecipePack
+  id: TaipanPistols
+  recipes:
+  - WeaponPistolViper
+  - WeaponRevolverPython
+  - WeaponPistolCobra
+  - WeaponPistolDesertEagle
+
+- type: latheRecipePack
+  id: TaipanSMGs
+  recipes:
+  - WeaponSubMachineGunC20r
+  - WeaponSMGTommyGun
+
+- type: latheRecipePack
+  id: TaipanRifles
+  recipes:
+  - WeaponSniperMosin
+  - WeaponSniperHristov
+  - ADTWeaponRifleXC67
+  - WeaponRifleAk
+
+- type: latheRecipePack
+  id: TaipanHeavyWeapons
+  recipes:
+  - WeaponShotgunBulldog
+  - WeaponLightMachineGunL6
+  - WeaponLauncherChinaLake
+
+- type: latheRecipePack
+  id: TaipanEnergyWeapons
+  recipes:
+  - EnergyDagger
+  - EnergySword
+  - EnergyShield
+  - EnergySwordDouble
+  - WeaponEnergyCrossbow
+
+- type: latheRecipePack
+  id: TaipanMelee
+  recipes:
+  - ThrowingKnife
+  - CombatKnife
+  - CaneSheath
+
+- type: latheRecipePack
+  id: TaipanGloves
+  recipes:
+  - ClothingHandsGlovesNorthStar
+  - ClothingHandsGlovesBoxingRigged
+
+- type: latheRecipePack
+  id: TaipanGrenades
+  recipes:
+  - GrenadeShrapnel
+  - ExGrenade
+  - GrenadeFlashBang
+  - SmokeGrenade
+  - GrenadeIncendiary
+  - ClusterGrenade
+  - EmpGrenade
+  - HolyHandGrenade
+  - WhiteholeGrenade
+  - SingularityGrenade
+
+- type: latheRecipePack
+  id: TaipanSpecialEquipment
+  recipes:
+  - ClothingEyesPNVAdvSyndicate
+
+- type: latheRecipePack
+  id: TaipanAmmoStatic
+  recipes:
+  - MagazineEagle
+  - MagazineBoxAntiMateriel
+  - MagazinePistolCaselessRifle
+  - MagazineTommyGun
+  - MagazineDrumTommyGun
+  - MagazineLightRifleBox
+
+- type: latheRecipePack
+  id: TaipanSecurityEquipmentStatic
+  recipes:
+  - Handcuffs
+  - Zipties
+
+# Research
+
+- type: latheRecipePack
+  id: TaipanScienceBoardsStatic
+  recipes:
+  - ProtolatheMachineCircuitboardTaipan
+  - AutolatheMachineCircuitboardTaipan
+  - CircuitImprinterMachineCircuitboardTaipan
+  - ExosuitFabricatorMachineCircuitboardTaipan
+  - CutterMachineCircuitboard
+  - BorgChargerCircuitboard
+
+- type: latheRecipePack
+  id: TaipanScienceBoards
+  recipes:
+  - TurboItemRechargerCircuitboard
+  - AutolatheHyperConvectionMachineCircuitboardTaipan
+  - ProtolatheHyperConvectionMachineCircuitboardTaipan
+  - CircuitImprinterHyperConvectionMachineCircuitboardTaipan
+  - TechDiskComputerCircuitboardTaipan
+  - FlatpackerMachineCircuitboard
+  - SheetifierMachineCircuitboard
+  - PowerCageRechargerCircuitboard
+  - AnalysisComputerCircuitboardTaipan
+  - AnomalyVesselCircuitboardTaipan
+  - AnomalyVesselExperimentalCircuitboardTaipan
+  - AnomalySynchronizerCircuitboard
+  - APECircuitboard
+  - ArtifactAnalyzerMachineCircuitboard
+  - ArtifactCrusherMachineCircuitboard
+
+- type: latheRecipePack
+  id: TaipanShuttleBoards
+  recipes:
+  - ShuttleConsoleCircuitboardTaipan
+  - IFFConsoleCircuitboardTaipan
+  - RadarConsoleCircuitboard
+  - ThrusterMachineCircuitboard
+  - GyroscopeMachineCircuitboard
+  - MiniGravityGeneratorCircuitboard
+
+- type: latheRecipePack
+  id: TaipanCameraBoards
+  recipes:
+  - SurveillanceCameraRouterCircuitboard
+  - SurveillanceCameraMonitorCircuitboardTaipan
+  - SurveillanceWirelessCameraMonitorCircuitboard
+  - SurveillanceCameraWirelessRouterCircuitboard
+  - ComputerTelevisionCircuitboard
+  - SurveillanceWirelessCameraMovableCircuitboard
+  - SurveillanceWirelessCameraAnchoredCircuitboard
+
+- type: latheRecipePack
+  id: TaipanScienceClothing
+  recipes:
+  - ClothingShoesBootsMagSyndie
+  - ClothingShoesBootsMoon
+  - ClothingShoesBootsSpeed
+  - ClothingBackpackHolding
+  - ClothingBackpackSatchelHolding
+  - ClothingBackpackDuffelHolding
+
+# Cargo
+
+- type: latheRecipePack
+  id: TaipanCargoBoards
+  recipes:
+  - OreProcessorIndustrialMachineCircuitboard
+  - CargoTelepadMachineCircuitboard
+  - ShuttleGunKineticCircuitboard
+  - SalvageExpeditionsComputerCircuitboard
+  - CargoTelepadMachineCircuitboardTaipan
+  - SalvageExpeditionsComputerCircuitboardTaipan
+
+# Service
+
+- type: latheRecipePack
+  id: TaipanServiceBoardsStatic
+  recipes:
+  - BiogeneratorMachineCircuitboard
+  - UniformPrinterMachineCircuitboardTaipan
+  - SyndicateMicrowaveMachineCircuitboard
+  - ReagentGrinderMachineCircuitboard
+  - ElectricGrillMachineCircuitboard
+  - BoozeDispenserMachineCircuitboard
+  - SodaDispenserMachineCircuitboard
+  - PhotocopierMachineCircuitboard
+
+- type: latheRecipePack
+  id: TaipanServiceBoards
+  recipes:
+  - BiofabricatorMachineCircuitboard
+  - FatExtractorMachineCircuitboard
+  - HydroponicsTrayMachineCircuitboard
+  - SeedExtractorMachineCircuitboard
+  - ReagentGrinderIndustrialMachineCircuitboard
+  - JukeboxCircuitBoard
+  - DawInstrumentMachineCircuitboard
+  - BiofabricatorMachineCircuitboardTaipan
+
+- type: latheRecipePack
+  id: ClothingTaipan
+  recipes:
+  - ClothingUniformJumpsuitTaipanAtmosphericsEngineer
+  - ClothingUniformJumpsuitTaipanBotanist
+  - ClothingUniformJumpsuitTaipanChef
+  - ClothingUniformJumpsuitTaipanTechnicalOperationsSupervisor
+  - ClothingUniformJumpsuitTaipanCommunicationsOfficer
+  - ClothingUniformJumpsuitTaipanMedic
+  - ClothingUniformJumpsuitTaipanParamedic
+  - ClothingUniformJumpsuitTaipanRecruit
+  - ClothingUniformJumpsuitTaipanResearchDirector
+  - ClothingUniformJumpsuitTaipanResearcher
+  - ClothingUniformJumpsuitTaipanTechnician
+  - ClothingUniformJumpsuitTaipanCargotech
+  - ClothingUniformOverallsTaipanCargotech
+  - ClothingUniformJumpskirtTaipanAtmosphericsEngineer
+  - ClothingUniformJumpskirtTaipanBotanist
+  - ClothingUniformJumpskirtTaipanChef
+  - ClothingUniformJumpskirtTaipanTechnicalOperationsSupervisor
+  - ClothingUniformJumpskirtTaipanCommunicationsOfficer
+  - ClothingUniformJumpskirtTaipanMedic
+  - ClothingUniformJumpskirtTaipanParamedic
+  - ClothingUniformJumpskirtTaipanRecruit
+  - ClothingUniformJumpskirtTaipanResearchDirector
+  - ClothingUniformJumpskirtTaipanResearcher
+  - ClothingUniformJumpskirtTaipanTechnician
+  - ClothingUniformJumpskirtTaipanCargotech
+  - ClothingOuterTrenchTaipanCommunicationsOfficer
+  - ClothingOuterCoatTaipanCommunicationsOfficer
+  - ClothingOuterTaipanCoatLab
+  - ClothingOuterTaipanCoatLabMed
+  - ClothingOuterTaipanCoatLabResearchDirector
+  - ClothingOuterTaipanCoatLabResearcher
+  - ClothingOuterApronTaipanBotanist
+  - ClothingOuterApronTaipanChef
+  - ClothingOuterJacketTaipanChef
+  - ClothingBackpackSatchelTaipan
+  - ClothingBackpackSyndicate
+  - ClothingBackpackDuffelSyndicate
+
+# Medical
+
+- type: latheRecipePack
+  id: TaipanSurgeryStatic
+  recipes:
+  - ScalpelAdvanced
+  - Retractor
+  - Cautery
+  - Drill
+  - SawAdvanced
+  - Hemostat
+
+- type: latheRecipePack
+  id: TaipanHypospray
+  recipes:
+  - SyndiHypo
+  - ADTCyberHypospray
+
+- type: latheRecipePack
+  id: TaipanCloning
+  recipes:
+  - CloningPodMachineCircuitboard
+  - MedicalScannerMachineCircuitboard
+  - CloningConsoleComputerCircuitboard
+
+# Engineering
+
+- type: latheRecipePack
+  id: SyndicateAdvancedTools
+  recipes:
+  - SyndicatePowerDrill
+  - SyndicateWelderExperimental
+  - SyndicateJawsOfLife
+
+- type: latheRecipePack
+  id: TaipanEquipment
+  recipes:
+  - HandHeldMassScanner
+  - ClothingMaskWeldingGas
+  - SignallerAdvanced
+  - ClothingEyesHudTaipanDiagnostic
+  - ClothingEyesHudTaipanMedical
+  - ClothingEyesHudTaipanRecruit
+  - ClothingEyesHudTaipanResearch
+  - ClothingEyesHudTaipanAdvanced

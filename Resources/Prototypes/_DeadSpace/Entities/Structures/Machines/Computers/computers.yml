@@ -6,7 +6,7 @@
   description: Используется для обновления законов ИИ станции.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Machines/computers.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/computers.rsi
     layers:
     - map: ["computerLayerBody"]
       state: computer
@@ -56,7 +56,7 @@
   description: Компьютер, используемый для взаимодействия с анализатором артефактов.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Machines/computers.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/computers.rsi
     layers:
     - map: ["computerLayerBody"]
       state: computer
@@ -106,7 +106,7 @@
   description: Используется для управления активными наградами.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Machines/computers.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/computers.rsi
     layers:
     - map: ["computerLayerBody"]
       state: computer
@@ -144,7 +144,7 @@
   description: Используется для заказа поставок и утверждения запросов.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Machines/computers.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/computers.rsi
     layers:
     - map: ["computerLayerBody"]
       state: computer
@@ -157,12 +157,12 @@
     - map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
       state: generic_panel_open
   - type: CargoOrderConsole
-    announcementChannel: RadioTaipan
+    announcementChannel: Taipan
     allowedGroups:
     - syndicate_market
   - type: ActiveRadio
     channels:
-    - RadioTaipan
+    - Taipan
   - type: ActivatableUI
     key: enum.CargoConsoleUiKey.Orders
   - type: Computer
@@ -177,12 +177,12 @@
 - type: entity
   parent: BaseComputer
   id: ComputerTaipanSurveillanceCameraMonitor
-  name: монитор камер наблюдения
-  description: Монитор камер наблюдения. Вы наблюдаете за ними. Возможно.
+  name: монитор камер слежения
+  description: Монитор камер слежения. Вы наблюдаете за ними. Возможно.
   suffix: Тайпан
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Machines/computers.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/computers.rsi
     layers:
     - map: ["computerLayerBody"]
       state: computer
@@ -223,7 +223,7 @@
   description: Используется для объявлений по станции, установки уровня тревоги и вызова экстренного шаттла.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Machines/computers.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/computers.rsi
     layers:
     - map: ["computerLayerBody"]
       state: computer
@@ -272,7 +272,7 @@
   description: Используется для мониторинга активных датчиков здоровья большинства униформ экипажа.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Machines/computers.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/computers.rsi
     layers:
     - map: ["computerLayerBody"]
       state: computer
@@ -361,7 +361,7 @@
     speechVerb: Robotic
     speechSounds: Pai
   - type: Sprite
-    sprite: _DeadSpace/Structures/Machines/computers.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/computers.rsi
     layers:
     - map: ["computerLayerBody"]
       state: computer
@@ -397,7 +397,7 @@
   components:
   - type: IFFConsole
   - type: Sprite
-    sprite: _DeadSpace/Structures/Machines/computers.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/computers.rsi
     layers:
     - map: ["computerLayerBody"]
       state: computer
@@ -432,7 +432,7 @@
   description: Используется для продажи товаров, загруженных на грузовые паллеты.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Machines/computers.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/computers.rsi
     layers:
     - map: ["computerLayerBody"]
       state: computer
@@ -470,7 +470,7 @@
   description: Компьютер, используемый для работы с инструментами исследования и разработки.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Machines/computers.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/computers.rsi
     layers:
     - map: ["computerLayerBody"]
       state: computer
@@ -487,7 +487,7 @@
   - type: ResearchConsole
   - type: ActiveRadio
     channels:
-    - Science
+    - Taipan
   - type: TechnologyDatabase
   - type: ActivatableUI
     key: enum.ResearchConsoleUiKey.Key
@@ -518,7 +518,7 @@
   description: Используется для удаленного мониторинга, отключения и уничтожения киборгов станции.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Machines/computers.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/computers.rsi
     layers:
     - map: ["computerLayerBody"]
       state: computer
@@ -533,7 +533,7 @@
   - type: RoboticsConsole
   - type: ActiveRadio
     channels:
-    - Science
+    - Taipan
   - type: ActivatableUI
     key: enum.RoboticsConsoleUiKey.Key
   - type: UserInterface
@@ -567,7 +567,7 @@
   description: Используется для управления грузовым шаттлом.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Machines/computers.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/computers.rsi
     layers:
     - map: ["computerLayerBody"]
       state: computer
@@ -590,8 +590,6 @@
     color: "#8B0000"
   - type: Computer
     board: CargoShuttleConsoleCircuitboardTaipan
-  - type: StealTarget
-    stealGroup: CargoShuttleConsoleCircuitboardTaipan
   - type: AccessReader
     access: [["TaipanCargo"]]
 
@@ -603,7 +601,7 @@
   description: Используется для пилотирования шаттла.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Machines/computers.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/computers.rsi
     layers:
     - map: ["computerLayerBody"]
       state: computer

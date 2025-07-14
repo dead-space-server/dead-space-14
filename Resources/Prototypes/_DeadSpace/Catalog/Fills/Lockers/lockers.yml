@@ -213,7 +213,7 @@
     - id: ClothingUniformJumpskirtTaipanTechnician
       amount: 2
     - id: ClothingHandsGlovesColorYellow
-    - id: TrayScanner
+    - id: trayScanner
     - id: RCDSyndicate
     - id: RCDAmmo
 
