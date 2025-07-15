@@ -53,7 +53,7 @@
   components:
     - type: NpcFactionMember
       factions:
-        - Syndicate
+        - Taipan
     - type: Tag
       tags:
         - CannotSuicide

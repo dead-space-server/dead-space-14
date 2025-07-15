@@ -247,7 +247,7 @@
   id: EmagTaipanLimited
   suffix: Тайпан, ЕМАГ, Ограниченный
   name: криптографический секвенсор
-  description: Универсальное устройство для взлома. Специализированная версия для руководства ННКСС Тайпан
+  description: Универсальное устройство для взлома. Специализированная версия для важных сотрудников Синдиката.
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Devices/idcards.rsi
