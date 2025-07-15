@@ -152,4 +152,8 @@ public sealed partial class BorgTypePrototype : IPrototype
     /// </summary>
     [DataField]
     public SoundSpecifier FootstepCollection { get; set; } = new SoundCollectionSpecifier(DefaultFootsteps);
+    // DS14-start DataField for Taipan borgs
+    [DataField]
+    public bool IsTaipan { get; set; } = false;
+    // DS14-end
 }

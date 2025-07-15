@@ -1,0 +1,176 @@
+- type: entity
+  id: BaseBorgChassisTaipan
+  parent: [BaseBorgChassis, BaseBorgTransponder]
+  abstract: true
+  description: Гибрид машины и человека, помогающий в работе станции. Они обожают, когда их снова и снова просят назвать свои законы.
+  suffix: Тайпан
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Mobs/Silicon/chassis.rsi
+  - type: RandomMetadata
+    nameSegments:
+    - NamesBorg
+  - type: NpcFactionMember
+    factions:
+    - Taipan
+  - type: Access
+    groups:
+    - TaipanAccess
+  - type: AccessReader
+    access: [["TaipanCommand"], ["TaipanScience"]]
+  - type: ShowSyndicateIcons
+  - type: SiliconLawProvider
+    laws: TaipanStatic
+    subverted: false
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Binary # But that has really long range
+    - Taipan
+  - type: ActiveRadio
+    channels:
+    - Taipan
+  - type: Speech
+    speechVerb: Robotic
+    speechSounds: SyndieBorg
+    allowedEmotes:
+    - Laugh
+  - type: Vocal
+    sounds:
+      Unsexed: UnisexSiliconSyndicate
+  - type: Damageable
+    damageModifierSet: CombatBorg
+  - type: InteractionPopup
+    interactSuccessString: petting-success-syndicate-cyborg
+    interactFailureString: petting-failure-syndicate-cyborg
+    interactSuccessSound:
+      path: /Audio/Ambience/Objects/periodic_beep.ogg
+
+- type: entity
+  id: BorgChassisTaipanSelectable
+  parent: BaseBorgChassisTaipan
+  components:
+  - type: Sprite
+    layers:
+    - state: robot
+      map: ["enum.BorgVisualLayers.Body", "movement"]
+    - state: robot_e_r
+      map: ["enum.BorgVisualLayers.Light"]
+      shader: unshaded
+      visible: false
+    - state: robot_l
+      shader: unshaded
+      map: ["light","enum.BorgVisualLayers.LightStatus"]
+      visible: false
+  - type: BorgChassis
+    maxModules: 0
+    hasMindState: robot_e
+    noMindState: robot_e_r
+  - type: BorgTransponder
+    sprite:
+      sprite: _DeadSpace/Mobs/Silicon/chassis.rsi
+      state: robot
+    name: taipan cyborg
+  - type: BorgSwitchableType
+    inherentRadioChannels:
+    - Taipan
+  - type: Appearance
+
+# Taipan Generic
+- type: entity
+  id: BorgChassisTaipanGeneric
+  parent: BorgChassisTaipanSelectable
+  components:
+  - type: BorgSwitchableType
+    selectedBorgType: taipan-generic
+  - type: SpriteMovement
+    movementLayers:
+      movement:
+        state: robot-moving
+    noMovementLayers:
+      movement:
+        state: robot
+
+# Taipan Engineer
+- type: entity
+  id: BorgChassisTaipanEngineer
+  parent: BorgChassisTaipanSelectable
+  components:
+  - type: BorgSwitchableType
+    selectedBorgType: taipan-engineering
+  - type: SpriteMovement
+    movementLayers:
+      movement:
+        state: engineer-moving
+    noMovementLayers:
+      movement:
+        state: engineer
+
+# Taipan Mining
+- type: entity
+  id: BorgChassisTaipanMining
+  parent: BorgChassisTaipanSelectable
+  components:
+  - type: BorgSwitchableType
+    selectedBorgType: taipan-mining
+  - type: SpriteMovement
+    movementLayers:
+      movement:
+        state: miner-moving
+    noMovementLayers:
+      movement:
+        state: miner
+
+# Taipan Janitor
+- type: entity
+  id: BorgChassisTaipanJanitor
+  parent: BorgChassisTaipanSelectable
+  components:
+  - type: BorgSwitchableType
+    selectedBorgType: taipan-janitor
+  - type: SpriteMovement
+    movementLayers:
+      movement:
+        state: janitor-moving
+    noMovementLayers:
+      movement:
+        state: janitor
+
+# Taipan Medical
+- type: entity
+  id: BorgChassisTaipanMedical
+  parent: BorgChassisTaipanSelectable
+  components:
+  - type: BorgSwitchableType
+    selectedBorgType: taipan-medical
+  - type: SpriteMovement
+    movementLayers:
+      movement:
+        state: medical-moving
+    noMovementLayers:
+      movement:
+        state: medical
+
+# Taipan Service
+- type: entity
+  id: BorgChassisTaipanService
+  parent: BorgChassisTaipanSelectable
+  components:
+  - type: BorgSwitchableType
+    selectedBorgType: taipan-service
+  - type: TTS # Corvax-TTS
+    voice: Glados
+
+# Taipan Security
+- type: entity
+  id: BorgChassisTaipanSecurity
+  parent: BorgChassisTaipanSelectable
+  components:
+  - type: BorgSwitchableType
+    selectedBorgType: taipan-security
+  - type: SpriteMovement
+    movementLayers:
+      movement:
+        state: sec-moving
+    noMovementLayers:
+      movement:
+        state: sec
