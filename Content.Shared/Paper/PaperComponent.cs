@@ -43,7 +43,7 @@ public sealed partial class PaperComponent : Component
         public readonly List<string> Signatures; // DS14-signatures
         public readonly PaperAction Mode;
 
-        public PaperBoundUserInterfaceState(string text, List<StampDisplayInfo> stampedBy, List<string> signatures, PaperAction mode = PaperAction.Read)
+        public PaperBoundUserInterfaceState(string text, List<StampDisplayInfo> stampedBy, List<string> signatures, PaperAction mode = PaperAction.Read) // DS14-signatures
         {
             Text = text;
             StampedBy = stampedBy;
