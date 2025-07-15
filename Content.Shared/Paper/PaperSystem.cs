@@ -104,7 +104,7 @@ public sealed class PaperSystem : EntitySystem
     private void OnInteractUsing(Entity<PaperComponent> entity, ref InteractUsingEvent args)
     {
         // only allow editing if there are no stamps or when using a cyberpen
-        var editable = entity.Comp.Signatures.Count == 0 && entity.Comp.StampedBy.Count == 0 && entity.Comp.StampedBy.Count == 0 || _tagSystem.HasTag(args.Used, WriteIgnoreStampsTag); // DS14-signatures
+        var editable = entity.Comp.Signatures.Count == 0 && entity.Comp.StampedBy.Count == 0 || _tagSystem.HasTag(args.Used, WriteIgnoreStampsTag); // DS14-signatures
         if (_tagSystem.HasTag(args.Used, WriteTag))
         {
             if (editable)

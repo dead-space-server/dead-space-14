@@ -254,20 +254,16 @@ namespace Content.Client.Paper.UI
             msg.AddMarkupPermissive(state.Text);
 
             // DS14-signatures-start
-            if (state.Signatures != null && state.Signatures.Count > 0)
+            if (state.Signatures?.Count > 0)
             {
                 string signaturesLine;
 
                 if (state.Signatures.Count <= 2)
                 {
                     if (state.Signatures.Count == 1)
-                    {
                         signaturesLine = $"{state.Signatures[0]}";
-                    }
                     else
-                    {
                         signaturesLine = $"{state.Signatures[0]} и {state.Signatures[1]}";
-                    }
                 }
                 else
                 {
@@ -298,7 +294,7 @@ namespace Content.Client.Paper.UI
             }
             WrittenTextLabel.SetMessage(msg, _allowedTags, DefaultTextColor);
 
-            WrittenTextLabel.Visible = !isEditing && state.Text.Length > 0 || (state.Signatures != null && state.Signatures.Count > 0); // DS14-signatures
+            WrittenTextLabel.Visible = !isEditing && state.Text.Length > 0 || state.Signatures?.Count > 0; // DS14-signatures
             BlankPaperIndicator.Visible = !isEditing && state.Text.Length == 0;
 
             StampDisplay.RemoveAllChildren();

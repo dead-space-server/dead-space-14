@@ -10,6 +10,6 @@ public sealed partial class SignaturePaperComponent : Component
     [DataField, ViewVariables(VVAccess.ReadOnly)]
     public int NumberSignatures = 0;
 
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
-    public int MaximumSignatures = 100;
+    [DataField]
+    public int MaximumSignatures = 10;
 }
