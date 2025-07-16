@@ -112,7 +112,7 @@
       - id: MedkitOxygenFilled
       - id: HolofanProjector
       - id: RCD
-      - id: RPD # Backmen-Edit-RPD
+      - id: RPD # DS14-RPD
       - id: RCDAmmo
       - id: ClothingOuterCoatAtmosWorking
         prob: 0.75
