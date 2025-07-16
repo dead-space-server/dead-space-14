@@ -2,7 +2,7 @@
   id: RPD
   parent: [ BaseItem, BaseEngineeringContraband ]
   name: RPD
-  description: The rapid construction device can be used to quickly place and remove various station structures and fixtures.
+  description: The newest rapid piping device, specialized in building and removal of atmospheric elements.
   components:
   - type: RCD
     isRpd: true
