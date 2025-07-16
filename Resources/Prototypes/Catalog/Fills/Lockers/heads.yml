@@ -178,7 +178,7 @@
     - id: RubberStampCE
     - id: ADTtelescopicBaton # ADT
     - id: RCDCE # DS14
-    - id: RPD # Backmen-Edit-RPD
+    - id: RPD # DS14-RPD
 
 # Hardsuit table, used for suit storage as well
 - type: entityTable
