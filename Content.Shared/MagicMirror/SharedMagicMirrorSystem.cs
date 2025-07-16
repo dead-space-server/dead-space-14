@@ -16,8 +16,8 @@ public abstract class SharedMagicMirrorSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<MagicMirrorComponent, AfterInteractEvent>(OnMagicMirrorInteract);
-        SubscribeLocalEvent<MagicMirrorComponent, BeforeIntrinsicUIOpenEvent>(OnBeforeIntrinsicUIOpen);
-        SubscribeLocalEvent<MagicMirrorComponent, BeforeActivatableUIOpenEvent>(OnBeforeUIOpen); // // DS14-slimeperson-hairdress
+        SubscribeLocalEvent<MagicMirrorComponent, BeforeIntrinsicUIOpenEvent>(OnBeforeIntrinsicUIOpen); // DS14-slimeperson-internal-magic-mirror
+        SubscribeLocalEvent<MagicMirrorComponent, BeforeActivatableUIOpenEvent>(OnBeforeUIOpen);
         SubscribeLocalEvent<MagicMirrorComponent, ActivatableUIOpenAttemptEvent>(OnAttemptOpenUI);
         SubscribeLocalEvent<MagicMirrorComponent, BoundUserInterfaceCheckRangeEvent>(OnMirrorRangeCheck);
     }
@@ -33,13 +33,13 @@ public abstract class SharedMagicMirrorSystem : EntitySystem
 
     private void OnMirrorRangeCheck(EntityUid uid, MagicMirrorComponent component, ref BoundUserInterfaceCheckRangeEvent args)
     {
-        // DS14-slimeperson-hairdress-start
+        // DS14-slimeperson-internal-magic-mirror-start
         if (component.Internal)
         {
             args.Result = BoundUserInterfaceRangeResult.Pass;
             return;
         }
-        // DS14-slimeperson-hairdress-end
+        // DS14-slimeperson-internal-magic-mirror-end
 
         if (args.Result == BoundUserInterfaceRangeResult.Fail)
             return;
@@ -68,12 +68,12 @@ public abstract class SharedMagicMirrorSystem : EntitySystem
         UpdateInterface(ent, args.User, ent);
     }
 
-    // DS14-slimeperson-hairdress-start
+    // DS14-slimeperson-internal-magic-mirror-start
     private void OnBeforeIntrinsicUIOpen(Entity<MagicMirrorComponent> ent, ref BeforeIntrinsicUIOpenEvent args)
     {
         UpdateInterface(ent, args.User, ent);
     }
-    // DS14-slimeperson-hairdress-end
+    // DS14-slimeperson-internal-magic-mirror-end
 
     protected void UpdateInterface(EntityUid mirrorUid, EntityUid targetUid, MagicMirrorComponent component)
     {
