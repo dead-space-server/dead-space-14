@@ -27,3 +27,4 @@ research-technology-emag = Устройства взлома
 research-technology-advanced-hypospray = Продвинутое впрыскивание химикатов
 research-technology-hypospray = Впрыскивание химикатов
 research-technology-cloning = Клонирование персонала
+research-technology-biofabrication = Биофабрикация

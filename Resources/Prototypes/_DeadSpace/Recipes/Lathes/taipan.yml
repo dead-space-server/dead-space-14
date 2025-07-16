@@ -363,6 +363,44 @@
     Plastic: 400
     Gold: 300
 
+- type: latheRecipe
+  parent: BaseRoboticsRecipe
+  id: TaipanCyborgEndoskeleton
+  result: TaipanCyborgEndoskeleton
+  completetime: 3
+  materials:
+    Steel: 1500
+
+- type: latheRecipe
+  parent: BaseBorgLimbRecipe
+  id: TaipanLeftArmBorg
+  result: TaipanLeftArmBorg
+
+- type: latheRecipe
+  parent: BaseBorgLimbRecipe
+  id: TaipanRightArmBorg
+  result: TaipanRightArmBorg
+
+- type: latheRecipe
+  parent: BaseBorgLimbRecipe
+  id: TaipanLeftLegBorg
+  result: TaipanLeftLegBorg
+
+- type: latheRecipe
+  parent: BaseBorgLimbRecipe
+  id: TaipanRightLegBorg
+  result: TaipanRightLegBorg
+
+- type: latheRecipe
+  parent: BaseBorgLimbRecipe
+  id: TaipanLightHeadBorg
+  result: TaipanLightHeadBorg
+
+- type: latheRecipe
+  parent: BaseBorgLimbRecipe
+  id: TaipanTorsoBorg
+  result: TaipanTorsoBorg
+
 # Medical
 
 - type: latheRecipe

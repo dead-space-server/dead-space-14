@@ -231,9 +231,9 @@
     idleState: fab-idle
     runningState: fab-active
     staticPacks:
-    - RoboticsStatic
+    - TaipanRoboticsStatic
     - BorgModulesStatic
-    - BorgLimbsStatic
+    - TaipanBorgLimbsStatic
     dynamicPacks:
     - Robotics
     - BorgModules
@@ -325,18 +325,10 @@
   - type: Lathe
     idleState: icon
     runningState: building
-    staticRecipes:
-    - MonkeyCube
-    - KoboldCube
-    - CowCube
-    - GoatCube
-    - MothroachCube
-    - MouseCube
-    - CockroachCube
-    dynamicRecipes:
-    - AbominationCube
-    - SpaceCarpCube
-    - SpaceTickCube
+    staticPacks:
+    - FriendlyCubesStatic
+    dynamicPacks:
+    - HostileCubesStatic
 
 - type: entity
   id: MedicalTechFabTaipan
