@@ -80,6 +80,24 @@
   id: Taipan
 
 - type: Tag
+  id: TaipanBorgHead
+
+- type: Tag
+  id: TaipanBorgLArm
+
+- type: Tag
+  id: TaipanBorgLLeg
+
+- type: Tag
+  id: TaipanBorgRArm
+
+- type: Tag
+  id: TaipanBorgRLeg
+
+- type: Tag
+  id: TaipanBorgTorso
+
+- type: Tag
   id: ToySword
 
 - type: Tag

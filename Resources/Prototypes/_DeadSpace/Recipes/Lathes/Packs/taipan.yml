@@ -148,6 +148,24 @@
   - ClothingBackpackSatchelHolding
   - ClothingBackpackDuffelHolding
 
+- type: latheRecipePack
+  id: TaipanRoboticsStatic
+  recipes:
+  - MMI
+  - PositronicBrain
+  - SciFlash
+  - TaipanCyborgEndoskeleton
+
+- type: latheRecipePack
+  id: TaipanBorgLimbsStatic
+  recipes:
+  - TaipanLeftArmBorg
+  - TaipanRightArmBorg
+  - TaipanLeftLegBorg
+  - TaipanRightLegBorg
+  - TaipanLightHeadBorg
+  - TaipanTorsoBorg
+
 # Cargo
 
 - type: latheRecipePack
