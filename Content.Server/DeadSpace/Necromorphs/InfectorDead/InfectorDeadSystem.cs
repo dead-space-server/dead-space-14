@@ -21,7 +21,7 @@ using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
 
-namespace Content.Server.DeadSpace.InfectorDead.EntitySystems;
+namespace Content.Server.DeadSpace.InfectorDead;
 
 public sealed partial class InfectorDeadSystem : EntitySystem
 {
@@ -32,8 +32,6 @@ public sealed partial class InfectorDeadSystem : EntitySystem
     [Dependency] private readonly RejuvenateSystem _rejuvenate = default!;
     [Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
-    public const string KnifeTag = "Knife";
 
     public override void Initialize()
     {

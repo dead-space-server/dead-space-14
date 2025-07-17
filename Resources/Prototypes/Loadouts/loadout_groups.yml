@@ -13,12 +13,24 @@
   - PlushieSpaceLizard
   - ThreeCandles
   - Lighter
+  - FlippoLighter
   - CigPackGreen
   - CigPackRed
   - CigPackBlue
   - CigPackBlack
   - CigarCase
   - CigarGold
+  # DS14-pins-start
+  - ClothingNeckUSSPPin
+  - ClothingNeckDonkPin
+  - ClothingNeckEarthPin
+  - ClothingNeckLogistikaPin
+  - ClothingNeckDeForestPin
+  - ClothingNeckNakamuraPin
+  - ClothingNeckNanoTrasenPin
+  - ClothingNeckSyndicakePin
+  - ClothingNeckVitezstviPin
+  # DS14-pins-end
   - ClothingNeckLGBTPin
   - ClothingNeckAllyPin
   - ClothingNeckAromanticPin
@@ -84,6 +96,7 @@
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeer
+  - EmergencyMoth
 
 # nitrogen or oxygen tank, depending on what your species needs
 - type: loadoutGroup
@@ -182,6 +195,7 @@
   minLimit: 0
   loadouts:
   - HoPCloak
+  - HoPAltCloak
   - HoPMantle
 
 - type: loadoutGroup
@@ -206,7 +220,7 @@
   loadouts:
   - ShoesBootsLaceup
   - BrownShoes
-  
+
 - type: loadoutGroup
   id: HoPUnderwear
   name: loadout-group-hop-underwear
@@ -354,7 +368,7 @@
   name: loadout-group-chef-hand
   minLimit: 0
   loadouts:
-  - ChefGoldenKnife  
+  - ChefGoldenKnife
 
 - type: loadoutGroup
   id: ChefGloves
@@ -497,6 +511,14 @@
   minLimit: 0
   loadouts:
   - JanitorWintercoat
+  - JanitorHazardVest
+
+- type: loadoutGroup
+  id: JanitorShoes
+  name: loadout-group-janitor-shoes
+  loadouts:
+  - PurpleShoes
+  - GaloshesShoes
 
 - type: loadoutGroup
   id: JanitorPlunger
@@ -618,10 +640,11 @@
   - EmergencyOxygenClown
   # DS14-species-emergency-start
   - EmergencyNonBreather
-  - EmergencyRobotNonBreather  
+  - EmergencyRobotNonBreather
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerClown
+  - EmergencyMothClown
 
 - type: loadoutGroup
   id: MimeHead
@@ -687,10 +710,11 @@
   - EmergencyOxygenMime
   # DS14-species-emergency-start
   - EmergencyNonBreather
-  - EmergencyRobotNonBreather  
+  - EmergencyRobotNonBreather
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerMime
+  - EmergencyMothMime
 
 - type: loadoutGroup
   id: MimeUnderwear
@@ -888,7 +912,7 @@
   - SalvageSpecialistJumpsuitFormal
   - SalvageSpecialistJumpskirt
   - SalvageSpecialistJumpskirtFormal
-  
+
 - type: loadoutGroup
   id: SalvageSpecialistOuterClothing
   name: loadout-group-salvage-specialist-outerclothing
@@ -1104,6 +1128,7 @@
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerExtended
+  - EmergencyMothExtended
 
 # Science
 - type: loadoutGroup
@@ -1543,6 +1568,7 @@
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerSecurity
+  - EmergencyMothSecurity
 
 - type: loadoutGroup
   id: SecurityStar
@@ -1584,7 +1610,7 @@
   - MedicalDoctorBackpack
   - MedicalDoctorSatchel
   - MedicalDoctorDuffel
-  - MedicalDoctorSatchelBlueCat
+  - ChiefMedicalOfficerSatchelBlueCat
 
 - type: loadoutGroup
   id: ChiefMedicalOfficerNeck
@@ -1798,6 +1824,7 @@
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerMedical
+  - EmergencyMothMedical
 
 # Wildcards
 - type: loadoutGroup
@@ -1872,6 +1899,7 @@
   - EmergencyNitrogenSyndicate
   - EmergencyOxygenSyndicate
   - LoadoutSpeciesVoxNitrogen
+  - EmergencyMothSyndicate
 
 - type: loadoutGroup
   id: GroupSpeciesBreathTool
