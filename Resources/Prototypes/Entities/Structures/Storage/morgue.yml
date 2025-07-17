@@ -74,6 +74,7 @@
   - type: AntiRottingContainer
   - type: StaticPrice
     price: 200
+  - type: ItemSlots # DS14
   - type: PaperLabel # DS14
     labelSlot:
       insertVerbText: comp-paper-label-insert
