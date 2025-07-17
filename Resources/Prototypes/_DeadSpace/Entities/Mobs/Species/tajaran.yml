@@ -5,7 +5,7 @@
   components:
   - type: Icon
     sprite: _ADT/Mobs/Species/Tajaran/parts.rsi
-    state: tajaran_m
+    state: full
   - type: HumanoidAppearance
     species: Tajaran
     hideLayersOnEquip:

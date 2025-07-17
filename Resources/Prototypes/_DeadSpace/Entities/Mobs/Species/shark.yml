@@ -5,7 +5,7 @@
   components:
   - type: Icon
     sprite: _ADT/Mobs/Species/Shark/parts.rsi
-    state: shark_m
+    state: full
   - type: HumanoidAppearance
     species: Shark
     hideLayersOnEquip:
