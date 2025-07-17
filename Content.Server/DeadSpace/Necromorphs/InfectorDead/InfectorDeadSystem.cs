@@ -32,6 +32,7 @@ public sealed partial class InfectorDeadSystem : EntitySystem
     [Dependency] private readonly RejuvenateSystem _rejuvenate = default!;
     [Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
 
     public override void Initialize()
     {
@@ -109,7 +110,6 @@ public sealed partial class InfectorDeadSystem : EntitySystem
             if (!TryComp<SolutionContainerManagerComponent>(ent, out var container))
                 continue;
 
-            // Предположим, что у вас есть имя решения, например "food"
             if (!_solutionContainer.TryGetSolution(ent, "food", out var entity, out var solution))
                 continue;
 
