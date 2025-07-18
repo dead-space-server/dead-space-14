@@ -1,3 +1,217 @@
+# AI Core
+- type: entity
+  id: AiHeldTaipan
+  description: Компоненты добавляются/удаляются из сущности, которая помещается в ядро ИИ.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IntrinsicRadioReceiver
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Binary
+    - Taipan
+  - type: ActiveRadio
+    channels:
+    - Binary
+    - Taipan
+  - type: IgnoreUIRange
+  - type: StationAiHeld
+  - type: StationAiOverlay
+  - type: ShowElectrocutionHUD
+  - type: SiliconLawProvider
+    laws: TaipanStatic
+  - type: RandomMetadata
+    nameSegments:
+    - NamesAI
+  - type: ActionGrant
+    actions:
+    - ActionJumpToCore
+    - ActionSurvCameraLights
+    - ActionAIViewLaws
+    - AIEyeCamAction
+  - type: UserInterface
+    interfaces:
+      enum.RadarConsoleUiKey.Key:
+        type: RadarConsoleBoundUserInterface
+      enum.CrewMonitoringUIKey.Key:
+        type: CrewMonitoringBoundUserInterface
+      enum.SiliconLawsUiKey.Key:
+        type: SiliconLawBoundUserInterface
+      enum.CommunicationsConsoleUiKey.Key:
+        type: CommunicationsConsoleBoundUserInterface
+      enum.AICameraListUiKey.Key:
+        type: AICameraListBoundUserInterface
+  - type: IntrinsicUI
+    uis:
+      enum.RadarConsoleUiKey.Key:
+        toggleAction: AIActionAGhostShowRadar
+      enum.CrewMonitoringUIKey.Key:
+        toggleAction: AIActionAGhostShowCrewMonitoring
+      enum.CommunicationsConsoleUiKey.Key:
+        toggleAction: AIActionAGhostShowCommunications
+  - type: CrewMonitoringConsole
+  - type: DeviceNetwork
+    deviceNetId: Wireless
+    receiveFrequencyId: CrewMonitor
+    transmitFrequencyId: ShuttleTimer
+  - type: RadarConsole
+    followEntity: false
+  - type: CommunicationsConsole
+    canCallShuttle: false
+    canCallERT: false
+    title: comms-console-announcement-title-station-ai
+    color: "#fc7777"
+  - type: HolographicAvatar
+    layerData:
+    - sprite: _DeadSpace/Mobs/Silicon/station_ai.rsi
+      state: default
+  - type: ShowJobIcons
+  - type: ShowSyndicateIcons
+  - type: AiEye
+  - type: TTS
+    voice: Glados
+
+- type: entity
+  id: AiHeldTaipanIntellicard
+  description: Компоненты добавляются/удаляются из сущности, которая помещается в интелкарту.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IntrinsicRadioReceiver
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Binary
+  - type: ActiveRadio
+    channels:
+    - Binary
+    - Taipan
+  - type: ActionGrant
+    actions:
+    - ActionAIViewLaws
+  - type: UserInterface
+    interfaces:
+      enum.SiliconLawsUiKey.Key:
+        type: SiliconLawBoundUserInterface
+  - type: ShowJobIcons
+  - type: ShowSyndicateIcons
+
+- type: entity
+  id: IntellicardTaipan
+  name: интелкарта Синдиката
+  description: Устройство для хранения ИИ.
+  parent:
+  - BaseItem
+  - AiHolder
+  suffix: Тайпан, Пустой
+  components:
+  - type: ContainerComp
+    proto: AiHeldTaipanIntellicard
+    container: station_ai_mind_slot
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Devices/ai_card.rsi
+    layers:
+    - state: base
+    - state: full
+      map: ["unshaded"]
+      shader: unshaded
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StationAiVisualState.Key:
+        unshaded:
+          Empty: { state: empty }
+          Occupied: { state: full }
+  - type: Intellicard
+
+- type: entity
+  id: PlayerTaipanAiEmpty
+  name: ядро ИИ Синдиката
+  description: Последние достижения в области искусственного интеллекта.
+  parent:
+  - BaseStructure
+  - AiHolder
+  suffix: Тайпан, Пустой
+  components:
+  - type: WarpPoint
+  - type: ContainerComp
+    proto: AiHeldTaipan
+    container: station_ai_mind_slot
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: ApcPowerReceiver
+    powerLoad: 1000
+  - type: StationAiCore
+    remoteEntityProto: StationAiTaipanHolo
+  - type: StationAiVision
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: _DeadSpace/Mobs/Silicon/station_ai.rsi
+    layers:
+    - state: base
+    - state: ai_empty
+      map: ["unshaded"]
+      shader: unshaded
+  - type: Appearance
+  - type: InteractionPopup
+    interactSuccessString: petting-success-station-ai
+    interactFailureString: petting-failure-station-ai
+    messagePerceivedByOthers: petting-success-station-ai-others # Otherwise AI cannot tell its being pet as It's just a brain inside of the core, not the core itself.
+    interactSuccessSound:
+      path: /Audio/Ambience/Objects/periodic_beep.ogg
+  - type: GenericVisualizer
+    visuals:
+      enum.StationAiVisualState.Key:
+        unshaded:
+          Empty: { state: ai_empty }
+          Occupied: { state: ai }
+  - type: Telephone
+    compatibleRanges:
+    - Grid
+    - Map
+    - Unlimited
+    listeningRange: 0
+    speakerVolume: Speak
+    unlistedNumber: true
+    requiresPower: false
+  - type: Holopad
+  - type: StationAiWhitelist
+  - type: UserInterface
+    interfaces:
+      enum.HolopadUiKey.AiRequestWindow:
+        type: HolopadBoundUserInterface
+      enum.HolopadUiKey.AiActionWindow:
+        type: HolopadBoundUserInterface
+
+- type: entity
+  parent:
+  - Incorporeal
+  - BaseMob
+  id: StationAiTaipanHolo
+  name: око ИИ Синдиката
+  description: Обозреватель ИИ.
+  categories: [ HideSpawnMenu, DoNotMap ]
+  components:
+  - type: NoFTL
+  - type: WarpPoint
+    follow: true
+  - type: Eye
+    pvsScale: 1.5
+  - type: Visibility
+    layer: 2
+  - type: Sprite
+    sprite: _DeadSpace/Mobs/Silicon/station_ai.rsi
+    layers:
+    - state: ai_camera
+      shader: unshaded
+      map: ["base"]
+
 # Taipan Selectable Battery
 - type: entity
   id: PlayerBorgTaipanBattery
