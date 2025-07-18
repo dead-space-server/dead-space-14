@@ -100,7 +100,9 @@ public sealed class RCDMenuBoundUserInterface : BoundUserInterface
             msg = Loc.GetString("rcd-component-change-build-mode", ("name", name));
         }
 
-        EntMan.System<PopupSystem>().PopupClient(msg, Owner, _playerManager.LocalSession.AttachedEntity);
+        // Popup message
+        var popup = EntMan.System<PopupSystem>();
+        popup.PopupClient(msg, Owner, _playerManager.LocalSession.AttachedEntity);
     }
 
     private string GetTooltip(RCDPrototype proto)
