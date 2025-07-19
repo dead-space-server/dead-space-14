@@ -99,7 +99,7 @@ public sealed class RevolutionaryRuleSystem : GameRuleSystem<RevolutionaryRuleCo
 
         if (component.Stage != RevolutionaryStage.Initial || !(GetRevsFraction() >= component.Ratio) && !CheckCommandLose())
         {
-            if (component.Stage != RevolutionaryStage.Massacre || !CheckRevsLose())
+            if (!CheckRevsLose())
                 return;
 
             _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("rev-alert-stage-massacre-end-with-rev-lost"),
