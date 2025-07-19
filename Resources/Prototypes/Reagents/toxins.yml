@@ -154,14 +154,39 @@
         damage:
           types:
             Caustic: 11.0
+# DS14-start
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+          shouldHave: false
+# DS14-end
       - !type:PopupMessage
         type: Local
         visualType: Large
         messages: [ "generic-reagent-effect-burning-insides" ]
         probability: 0.33
+        # DS14-start
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+          shouldHave: false
+        # DS14-end
       - !type:Emote
         emote: Scream
         probability: 0.3
+        # DS14-start
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+          shouldHave: false
+    Drink:
+      effects:
+      - !type:ModifyBloodLevel
+        amount: 7
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+# DS14-end
 
 - type: reagent
   id: FerrochromicAcid
@@ -184,6 +209,17 @@
           types:
             Heat: 2.5
             Caustic: 1
+        # DS14-start
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+          shouldHave: false
+      - !type:ModifyBloodLevel
+        amount: 3
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+        # DS14-end
 
 - type: reagent
   id: FluorosulfuricAcid
@@ -216,14 +252,39 @@
         damage:
           types:
             Caustic: 8
+# DS14-start
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+          shouldHave: false
+# DS14-end
       - !type:PopupMessage
         type: Local
         visualType: Large
         messages: [ "generic-reagent-effect-burning-insides" ]
         probability: 0.33
+        # DS14-start
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+          shouldHave: false
+      # DS14-end
       - !type:Emote
         emote: Scream
         probability: 0.25
+        # DS14-start
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+          shouldHave: false
+    Drink:
+      effects:
+      - !type:ModifyBloodLevel
+        amount: 9
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+# DS14-end
 
 - type: reagent
   id: SulfuricAcid
@@ -264,14 +325,39 @@
         damage:
           types:
             Caustic: 5
+# DS14-start
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+          shouldHave: false
+# DS14-end
       - !type:PopupMessage
         type: Local
         visualType: Large
         messages: [ "generic-reagent-effect-burning-insides" ]
         probability: 0.33
+        # DS14-start
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+          shouldHave: false
+      # DS14-end
       - !type:Emote
         emote: Scream
         probability: 0.2
+        # DS14-start
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+          shouldHave: false
+    Drink:
+      effects:
+      - !type:ModifyBloodLevel
+        amount: 5
+        conditions:
+        - !type:OrganType
+          type: Xenomorph
+         # DS14-end
 
 - type: reagent
   id: UnstableMutagen

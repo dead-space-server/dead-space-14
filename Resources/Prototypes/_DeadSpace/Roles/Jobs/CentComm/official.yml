@@ -37,10 +37,17 @@
   # innerClothingSkirt: ClothingUniformJumpskirtPencilCentcomOfficial
   # storage:
   #   back:
-  #   - 
+  #   -
 
 - type: entity
   parent: ClothingBackpackSatchelHoS
   id: ClothingBackpackSatchelOfficial
   name: чёрная сумка
   description: Стильная чёрная кожаная сумка.
+
+- type: roleLoadout
+  id: CentralCommandOfficial
+  groups:
+  - GroupTankHarness
+  - Survival
+  - GroupSpeciesBreathTool
