@@ -96,6 +96,18 @@ public sealed partial class CustomizableHumanoidSpawnerUI : FancyWindow
         if (state.RandomizedName != null)
             CustomNameInput.Text = state.RandomizedName;
 
+        if (state.AllowedSpecies.Count > 10)
+        {
+            List<string> speciesList = [];
+            foreach (var species in state.AllowedSpecies)
+            {
+                speciesList.Add(Loc.GetString("species-name-" + species.ToString().ToLower()));
+            }
+
+            AllowedSpeciesDescription.Text =
+                Loc.GetString("customizable-humanoid-spawner-species-list") + " " + string.Join(", ", speciesList);
+        }
+
         if (_timerStarted)
             return;
 

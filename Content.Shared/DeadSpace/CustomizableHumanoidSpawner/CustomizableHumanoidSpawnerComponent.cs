@@ -90,11 +90,13 @@ public sealed class CustomizableHumanoidSpawnerCharacterInfo(
 public sealed class CustomizableHumanoidSpawnerBuiState(
     List<CustomizableHumanoidSpawnerCharacterInfo> characters,
     bool canChangeNameAndDescription,
-    string? randomizedName) : BoundUserInterfaceState
+    string? randomizedName,
+    List<ProtoId<SpeciesPrototype>> allowedSpecies) : BoundUserInterfaceState
 {
     public readonly List<CustomizableHumanoidSpawnerCharacterInfo> Characters = characters;
     public readonly bool CanChangeNameAndDescription = canChangeNameAndDescription;
     public readonly string? RandomizedName = randomizedName;
+    public readonly List<ProtoId<SpeciesPrototype>> AllowedSpecies = allowedSpecies;
 }
 
 [Serializable, NetSerializable]
