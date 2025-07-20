@@ -61,7 +61,6 @@
     containers:
       key_slots:
       - EncryptionKeyTaipan
-     # - EncryptionKeySyndie # Нам действительно нужно общение ОТК с агентами и ЯО?
   - type: Sprite
     sprite: _DeadSpace/Clothing/Ears/Headsets/hs_taipan.rsi
   - type: Clothing
