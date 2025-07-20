@@ -26,6 +26,13 @@
   - UnderwearBottomPantiesBlueShield
   - UnderwearTopBraBlueShield
 
+- type: loadoutGroup
+  id: BlueShieldOfficerBackpack
+  name: loadout-group-blue-shield-officer-backpack
+  hidden: true
+  loadouts:
+  - BlueShieldOfficerBackpack
+
 # Civilian
 - type: loadoutGroup
   id: SeniorAdministratorJumpsuit

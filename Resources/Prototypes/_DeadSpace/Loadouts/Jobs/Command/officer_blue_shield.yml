@@ -28,3 +28,9 @@
     proto: FemaleUnderwear
   equipment:
     underweart: ClothingUnderwearTopBraBlueShieldOfficer
+
+# Backpack
+- type: loadout
+  id: BlueShieldOfficerBackpack
+  equipment:
+    back: ClothingBackpackBlueShield

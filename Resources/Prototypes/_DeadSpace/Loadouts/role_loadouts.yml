@@ -2,6 +2,7 @@
 - type: roleLoadout
   id: JobBlueShieldOfficer
   groups:
+  - BlueShieldOfficerBackpack
   - GroupTankHarness
   - BlueShieldOfficerJumpsuit
   - Survival

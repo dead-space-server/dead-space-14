@@ -24,7 +24,7 @@
   id: CentcomSpecialOperationsOfficerGear
   equipment:
     jumpsuit: ClothingUniformJumpsuitCentcomOfficerBlack
-    back: ClothingBackpackERTLeaderFilledSOO
+    # back: ClothingBackpackERTLeaderFilledSOO
     shoes: ClothingShoesCentcomBlack
     head: ClothingHeadCapCentcomBlack
     eyes: ClothingEyesGlassesSecurity

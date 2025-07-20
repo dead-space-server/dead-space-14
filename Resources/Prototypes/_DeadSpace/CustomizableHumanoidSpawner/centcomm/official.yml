@@ -20,6 +20,18 @@
 - type: roleLoadout
   id: JobCentralCommandOfficial
   groups:
+  - CentralCommandOfficialLoadout
   - GroupTankHarness
   - Survival
   - GroupSpeciesBreathTool
+
+- type: loadoutGroup
+  id: CentralCommandOfficialLoadout
+  name: CentralCommandOfficialLoadout
+  loadouts:
+  - CentralCommandOfficialLoadout
+
+- type: loadout
+  id: CentralCommandOfficialLoadout
+  equipment:
+    back: ClothingBackpackSatchelOfficial

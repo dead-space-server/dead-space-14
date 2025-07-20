@@ -25,7 +25,7 @@
   equipment:
     head: ClothingHeadHatBeretBlueShield
     jumpsuit: ClothingUniformJumpsuitBlueShield
-    back: ClothingBackpackBlueShield
+    # back: ClothingBackpackBlueShield
     mask: ClothingMaskGasSecurity
     eyes: ClothingEyesGlassesSecurity
     ears: ClothingHeadsetCentCom

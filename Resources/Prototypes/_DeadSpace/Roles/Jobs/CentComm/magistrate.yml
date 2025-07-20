@@ -36,7 +36,6 @@
     implants: [ MindShieldImplant ]
   - !type:AddComponentSpecial
     components:
-    - type: CommandStaff
     - type: AntagImmune
     - type: ZombieImmune
 

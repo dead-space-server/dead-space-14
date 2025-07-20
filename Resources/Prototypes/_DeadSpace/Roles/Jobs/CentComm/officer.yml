@@ -24,7 +24,7 @@
   id: CentcomOfficerGear
   equipment:
     jumpsuit: ADTClothingUniformTurleneckGreenBlack
-    back: ClothingBackpackMilitarySatchel
+    # back: ClothingBackpackMilitarySatchel
     mask: ClothingMaskGasSecurity
     shoes: ClothingShoesBootsJack
     outerClothing: ClothingOuterVestWeb

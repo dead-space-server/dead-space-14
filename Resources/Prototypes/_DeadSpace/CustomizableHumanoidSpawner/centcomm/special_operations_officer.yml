@@ -17,6 +17,18 @@
 - type: roleLoadout
   id: JobCentralCommandSpecialOperationsOfficer
   groups:
+  - CentralCommandSpecialOperationsOfficerLoadout
   - GroupTankHarness
   - Survival
   - GroupSpeciesBreathTool
+
+- type: loadoutGroup
+  id: CentralCommandSpecialOperationsOfficerLoadout
+  name: CentralCommandSpecialOperationsOfficerLoadout
+  loadouts:
+  - CentralCommandSpecialOperationsOfficerLoadout
+
+- type: loadout
+  id: CentralCommandSpecialOperationsOfficerLoadout
+  equipment:
+    back: ClothingBackpackERTLeaderFilledSOO

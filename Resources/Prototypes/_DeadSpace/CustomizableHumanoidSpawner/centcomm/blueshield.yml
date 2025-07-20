@@ -42,7 +42,19 @@
 - type: roleLoadout
   id: JobCentralCommandBlueShieldOfficer
   groups:
+  - CentralCommandBlueShieldOfficerLoadout
   - GroupTankHarness
   - Survival
   - GroupSpeciesBreathTool
   - BlueShieldOfficerUnderwear
+
+- type: loadoutGroup
+  id: CentralCommandBlueShieldOfficerLoadout
+  name: CentralCommandBlueShieldOfficerLoadout
+  loadouts:
+  - CentralCommandBlueShieldOfficerLoadout
+
+- type: loadout
+  id: CentralCommandBlueShieldOfficerLoadout
+  equipment:
+    back: ClothingBackpackBlueShield

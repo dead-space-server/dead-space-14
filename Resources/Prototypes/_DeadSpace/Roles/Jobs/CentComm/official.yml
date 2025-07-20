@@ -24,7 +24,7 @@
   id: CentcomGear
   equipment:
     jumpsuit: ClothingUniformJumpsuitCentcomOfficial
-    back: ClothingBackpackSatchelOfficial
+    # back: ClothingBackpackSatchelOfficial
     shoes: ClothingShoesBootsLaceup
     head: ClothingHeadHatCentcom
     eyes: ClothingEyesGlassesSunglasses
