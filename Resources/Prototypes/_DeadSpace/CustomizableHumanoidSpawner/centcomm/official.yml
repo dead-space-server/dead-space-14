@@ -11,6 +11,11 @@
     - Shark
     - Demon
     - Vulpkanin
+  - type: Sprite
+    layers:
+    - state: timed
+    - sprite: Markers/jobs.rsi
+      state: centcom
 
 - type: roleLoadout
   id: JobCentralCommandOfficial

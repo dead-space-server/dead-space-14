@@ -14,5 +14,5 @@
   - type: Sprite
     layers:
     - state: timed
-    - sprite: Mobs/Species/Human/parts.rsi
-      state: full
+    - sprite: Markers/jobs.rsi
+      state: passenger

@@ -13,6 +13,11 @@
     - Vulpkanin
     randomNameFirstDataset: CustomizableSpawnerCentralCommandBlueShieldOfficerFirstName
     randomNameSecondLocalized: NamesLastERT
+  - type: Sprite
+    layers:
+    - state: timed
+    - sprite: Markers/jobs.rsi
+      state: blueshield-low
   - type: GhostRole
     name: ghost-role-information-blueshieldofficer-name
     description: ghost-role-information-blueshieldofficer-description
