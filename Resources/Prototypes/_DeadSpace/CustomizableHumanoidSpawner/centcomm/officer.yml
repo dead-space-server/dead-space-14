@@ -1,9 +1,8 @@
-
 - type: entity
   parent: CustomizableSpawnerBase
   id: CustomizableSpawnerCentralCommandOfficer
-  name: Офицер ЦК
-  suffix: ОЦК
+  name: Офицер безопасности ЦК
+  suffix: ОЦК, Призрачная роль, Кастомизируемый персонаж
   components:
   - type: GhostRole
     name: ghost-role-information-centcomofficer-name

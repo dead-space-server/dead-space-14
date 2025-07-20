@@ -162,6 +162,7 @@ public sealed class StationSpawningSystem : SharedStationSpawningSystem
             profile = HumanoidCharacterProfile.RandomWithSpecies(speciesId);
         }
 
+        // DS14-edit-start
         if (prototype?.StartingGear != null)
         {
             var startingGear = _prototypeManager.Index<StartingGearPrototype>(prototype.StartingGear);
@@ -172,6 +173,7 @@ public sealed class StationSpawningSystem : SharedStationSpawningSystem
         {
             EquipRoleLoadout(entity.Value, loadout, roleProto!);
         }
+        // DS14-edit-end
 
         var gearEquippedEv = new StartingGearEquippedEvent(entity.Value);
         RaiseLocalEvent(entity.Value, ref gearEquippedEv);

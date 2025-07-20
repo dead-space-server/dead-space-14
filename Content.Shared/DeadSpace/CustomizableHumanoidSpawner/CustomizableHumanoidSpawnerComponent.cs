@@ -6,7 +6,6 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.NPC.Prototypes;
-using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Roles;
 using Content.Shared.Tag;
 using Robust.Shared.Enums;
@@ -17,39 +16,57 @@ namespace Content.Shared.DeadSpace.CustomizableHumanoidSpawner;
 [NetworkedComponent]
 public sealed partial class CustomizableHumanoidSpawnerComponent : Component
 {
-    // Отключает настройку персонажа и сразу спавнит рандомного.
+    /// <summary>
+    /// Отключает настройку персонажа и сразу спавнит рандомного. Может пригодится когда нужен только функционал добавления тегов и фракций.
+    /// </summary>
     [DataField]
     public bool ForceRandom;
 
-    // Прототип должности которая будет заспавнена
+    /// <summary>
+    /// Прототип должности которая будет заспавнена.
+    /// </summary>
     [DataField(required: true)]
     public ProtoId<JobPrototype> JobPrototype;
 
-    // Разрешённые расы
+    /// <summary>
+    /// Разрешённые расы.
+    /// </summary>
     [DataField(serverOnly: true)]
     public List<ProtoId<SpeciesPrototype>> AllowedSpecies = [];
 
-    // Датасет со списком имен для первой части имени
+    /// <summary>
+    /// Датасет со списком имен для первой части имени.
+    /// </summary>
     [DataField(serverOnly: true)]
     public ProtoId<DatasetPrototype>? RandomNameFirstDataset;
 
-    // Датасет со списком имен для второй части имени (для имени из одного слова - укажите только датасет первой части)
+    /// <summary>
+    /// Датасет со списком имен для второй части имени (для имени из одного слова - укажите только датасет первой части).
+    /// </summary>
     [DataField(serverOnly: true)]
     public ProtoId<DatasetPrototype>? RandomNameSecondDataset;
 
-    // Локализованный датасет имен для первой части имени. Игнорируется если указан обычный датасет.
+    /// <summary>
+    /// Альтернативный вариант указания первой части имени через локализованный датасет. Игнорируется если указан обычный датасет.
+    /// </summary>
     [DataField(serverOnly: true)]
     public ProtoId<LocalizedDatasetPrototype>? RandomNameFirstLocalized;
 
-    // Локализованный датасет имен для второй части имени. Игнорируется если указан обычный датасет.
+    /// <summary>
+    /// Альтернативный вариант указания второй части имени через локализованный датасет. Игнорируется если указан обычный датасет.
+    /// </summary>
     [DataField(serverOnly: true)]
     public ProtoId<LocalizedDatasetPrototype>? RandomNameSecondLocalized;
 
-    // Список тегов которые будут добавлены к персонажу
+    /// <summary>
+    /// Список тегов которые будут добавлены к персонажу.
+    /// </summary>
     [DataField(serverOnly: true)]
     public List<ProtoId<TagPrototype>>? Tags;
 
-    // Список фракций которые будут добавлены к персонажу
+    /// <summary>
+    /// Список фракций которые будут добавлены к персонажу.
+    /// </summary>
     [DataField(serverOnly: true)]
     public HashSet<ProtoId<NpcFactionPrototype>>? Factions;
 }

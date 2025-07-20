@@ -1,9 +1,8 @@
-
 - type: entity
   parent: CustomizableSpawnerBase
   id: CustomizableSpawnerCentralCommandAdministrator
   name: Администратор ЦК
-  suffix: АЦК
+  suffix: АЦК, Кастомизируемый персонаж
   components:
   - type: CustomizableHumanoidSpawner
     jobPrototype: CentralCommandAdministrator

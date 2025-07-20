@@ -1,9 +1,8 @@
-
 - type: entity
   parent: CustomizableSpawnerBase
   id: CustomizableSpawnerCentralCommandOperator
   name: Оператор ЦК
-  suffix: ОЦК
+  suffix: ОЦК, Кастомизируемый персонаж
   components:
   - type: CustomizableHumanoidSpawner
     jobPrototype: CentralCommandOperator

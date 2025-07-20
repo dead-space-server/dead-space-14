@@ -1,9 +1,8 @@
-
 - type: entity
   parent: CustomizableSpawnerBase
   id: CustomizableSpawnerCentralCommandOfficial
   name: Представитель ЦК
-  suffix: ПЦК
+  suffix: ПЦК, Кастомизируемый персонаж
   components:
   - type: CustomizableHumanoidSpawner
     jobPrototype: CentralCommandOfficial

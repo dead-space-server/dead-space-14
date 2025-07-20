@@ -1,9 +1,8 @@
-
 - type: entity
   parent: CustomizableSpawnerBase
   id: CustomizableSpawnerCentralCommandSpecialOperationsOfficer
   name: Офицер Специальных Операций
-  suffix: ОСО
+  suffix: ОСО, Кастомизируемый персонаж
   components:
   - type: CustomizableHumanoidSpawner
     jobPrototype: CentralCommandSpecialOperationsOfficer
