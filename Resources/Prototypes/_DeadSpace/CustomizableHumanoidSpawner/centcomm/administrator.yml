@@ -4,6 +4,11 @@
   name: Администратор ЦК
   suffix: АЦК, Кастомизируемый персонаж
   components:
+  - type: Sprite
+    layers:
+    - state: timed
+    - sprite: Markers/jobs.rsi
+      state: centcom
   - type: CustomizableHumanoidSpawner
     jobPrototype: CentralCommandAdministrator
     allowedSpecies:
@@ -11,8 +16,3 @@
     - Shark
     - Demon
     - Vulpkanin
-  - type: Sprite
-    layers:
-    - state: timed
-    - sprite: Markers/jobs.rsi
-      state: centcom

@@ -4,6 +4,11 @@
   name: Оператор ЦК
   suffix: ОЦК, Кастомизируемый персонаж
   components:
+  - type: Sprite
+    layers:
+    - state: timed
+    - sprite: Markers/jobs.rsi
+      state: centcom
   - type: CustomizableHumanoidSpawner
     jobPrototype: CentralCommandOperator
     allowedSpecies:
@@ -11,8 +16,3 @@
     - Shark
     - Demon
     - Vulpkanin
-  - type: Sprite
-    layers:
-    - state: timed
-    - sprite: Markers/jobs.rsi
-      state: centcom
