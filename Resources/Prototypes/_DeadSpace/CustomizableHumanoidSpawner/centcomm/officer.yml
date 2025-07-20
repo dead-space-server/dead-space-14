@@ -4,6 +4,13 @@
   name: Офицер безопасности ЦК
   suffix: ОЦК, Призрачная роль, Кастомизируемый персонаж
   components:
+  - type: CustomizableHumanoidSpawner
+    jobPrototype: CentralCommandOfficer
+    allowedSpecies:
+    - Human
+    - Shark
+    - Demon
+    - Vulpkanin
   - type: GhostRole
     name: ghost-role-information-centcomofficer-name
     description: ghost-role-information-centcomofficer-description
@@ -14,13 +21,6 @@
         time: 108000 # 30 hours
     raffle:
       settings: short
-  - type: CustomizableHumanoidSpawner
-    jobPrototype: CentralCommandOfficer
-    allowedSpecies:
-    - Human
-    - Shark
-    - Demon
-    - Vulpkanin
 
 - type: roleLoadout
   id: JobCentralCommandOfficer

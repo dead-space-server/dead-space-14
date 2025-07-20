@@ -4,7 +4,19 @@
   name: Офицер "Синий Щит" ЦК
   suffix: ОСЩ, Призрачная роль, Кастомизируемый персонаж
   components:
-  - type: GhostTakeoverAvailable
+  - type: CustomizableHumanoidSpawner
+    jobPrototype: CentralCommandBlueShieldOfficer
+    allowedSpecies:
+    - Human
+    - Shark
+    - Demon
+    - Vulpkanin
+    randomNameFirstDataset: CustomizableSpawnerCentralCommandBlueShieldOfficerFirstName
+    randomNameSecondLocalized: NamesLastERT
+    tags:
+    - Duck
+    factions:
+    - Syndicate
   - type: GhostRole
     name: ghost-role-information-blueshieldofficer-name
     description: ghost-role-information-blueshieldofficer-description
@@ -20,19 +32,6 @@
         time: 36000 # 10 hours
     raffle:
       settings: short
-  - type: CustomizableHumanoidSpawner
-    jobPrototype: CentralCommandBlueShieldOfficer
-    allowedSpecies:
-    - Human
-    - Shark
-    - Demon
-    - Vulpkanin
-    randomNameFirstDataset: CustomizableSpawnerCentralCommandBlueShieldOfficerFirstName
-    randomNameSecondLocalized: NamesLastERT
-    tags:
-    - Duck
-    factions:
-    - Syndicate
 
 - type: dataset
   id: CustomizableSpawnerCentralCommandBlueShieldOfficerFirstName
