@@ -29,8 +29,8 @@ public sealed class UnitologyInvitationConditionsSystem : EntitySystem
 
         float count = 0;
 
-        var query = AllEntityQuery<UnitologyComponent>();
-        while (query.MoveNext(out var ent, out _))
+        var query = AllEntityQuery<UnitologyComponent, HumanoidAppearanceComponent>();
+        while (query.MoveNext(out var ent, out _, out _))
         {
             if (
             !HasComp<UnitologyHeadComponent>(ent)
