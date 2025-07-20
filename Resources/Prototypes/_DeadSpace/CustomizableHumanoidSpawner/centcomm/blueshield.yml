@@ -13,10 +13,6 @@
     - Vulpkanin
     randomNameFirstDataset: CustomizableSpawnerCentralCommandBlueShieldOfficerFirstName
     randomNameSecondLocalized: NamesLastERT
-    tags:
-    - Duck
-    factions:
-    - Syndicate
   - type: GhostRole
     name: ghost-role-information-blueshieldofficer-name
     description: ghost-role-information-blueshieldofficer-description

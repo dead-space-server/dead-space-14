@@ -16,17 +16,3 @@
     - state: timed
     - sprite: Mobs/Species/Human/parts.rsi
       state: full
-
-- type: entity
-  parent: CustomizableSpawnerBase
-  id: CustomizableSpawnerAsisstant
-  name: Ассистент
-  components:
-  - type: GhostTakeoverAvailable
-  - type: GhostRole
-    name: Ассистент
-    description: Вы ассистент.
-    raffle:
-      settings: short
-  - type: CustomizableHumanoidSpawner
-    jobPrototype: Passenger

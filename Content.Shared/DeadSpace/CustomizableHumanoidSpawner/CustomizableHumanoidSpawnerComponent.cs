@@ -101,14 +101,12 @@ public sealed class CustomizableHumanoidSpawnerBuiState(
 public sealed class CustomizableHumanoidSpawnerMessage(
     bool useRandom,
     int characterIndex,
-    bool useCustomName,
     string customName,
     bool useCustomDescription,
     string customDescription) : BoundUserInterfaceMessage
 {
     public bool UseRandom = useRandom;
     public int CharacterIndex = characterIndex;
-    public bool UseCustomName = useCustomName;
     public string CustomName = customName;
     public bool UseCustomDescription = useCustomDescription;
     public string CustomDescription = customDescription;

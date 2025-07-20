@@ -31,7 +31,6 @@ public sealed class CustomizableHumanoidSpawnerBUI(EntityUid owner, Enum uiKey) 
     private void Send(
         bool useRandom,
         int characterIndex,
-        bool useCustomName,
         string customName,
         bool useCustomDescription,
         string customDescription)
@@ -39,7 +38,6 @@ public sealed class CustomizableHumanoidSpawnerBUI(EntityUid owner, Enum uiKey) 
         SendMessage(new CustomizableHumanoidSpawnerMessage(
             useRandom,
             characterIndex,
-            useCustomName,
             customName,
             useCustomDescription,
             customDescription));

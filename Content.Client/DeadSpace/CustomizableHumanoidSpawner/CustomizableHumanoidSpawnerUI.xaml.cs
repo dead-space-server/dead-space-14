@@ -15,7 +15,7 @@ namespace Content.Client.DeadSpace.CustomizableHumanoidSpawner;
 [GenerateTypedNameReferences]
 public sealed partial class CustomizableHumanoidSpawnerUI : FancyWindow
 {
-    public event Action<bool, int, bool, string, bool, string>? OnConfirm;
+    public event Action<bool, int, string, bool, string>? OnConfirm;
 
     private readonly List<CustomizableHumanoidSpawnerCharacterInfo> _characters = new();
     private readonly CancellationTokenSource _timerCancel = new();
@@ -143,7 +143,6 @@ public sealed partial class CustomizableHumanoidSpawnerUI : FancyWindow
         var descText = Rope.Collapse(CustomDescriptionInput.TextRope);
         OnConfirm?.Invoke(random,
             _characters[CharacterSelector.SelectedId].Index,
-            CustomNameCheck.Pressed,
             CustomNameInput.Text,
             CustomDescriptionCheck.Pressed,
             descText);

@@ -59,7 +59,6 @@ public sealed class CustomizableHumanoidSpawnerSystem : EntitySystem
                 actor,
                 true,
                 0,
-                false,
                 string.Empty,
                 false,
                 string.Empty);
@@ -95,7 +94,6 @@ public sealed class CustomizableHumanoidSpawnerSystem : EntitySystem
             actor,
             msg.UseRandom,
             msg.CharacterIndex,
-            msg.UseCustomName,
             msg.CustomName,
             msg.UseCustomDescription,
             msg.CustomDescription);
@@ -106,7 +104,6 @@ public sealed class CustomizableHumanoidSpawnerSystem : EntitySystem
         ActorComponent actor,
         bool isRandomCharacter,
         int characterIndex,
-        bool useCustomName,
         string customName,
         bool useCustomDescription,
         string customDescription)
