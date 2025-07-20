@@ -681,6 +681,13 @@
     Telecrystal: 6
   categories:
   - UplinkChemicals
+# DS14-start Hypopen for agents only
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+# DS14-end
 
 - type: listing
   id: UplinkHypoDart

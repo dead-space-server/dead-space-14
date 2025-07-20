@@ -244,7 +244,7 @@
       - state: base-part-inhand-right
       - state: base-stripes-inhand-right
         color: "#7B0F12"
-      
+
 
 - type: entity
   id: BaseBorgModuleSyndicateAssault
@@ -770,6 +770,7 @@
       - Emag
       - AccessBreaker
       - PinpointerSyndicateNuclear
+      - PinpointerSyndicateNuclearBomb # DS14
     - type: BorgModuleIcon
       icon: { sprite: Interface/Actions/actions_borg.rsi, state: syndicate-operative-module }
 
@@ -787,6 +788,7 @@
       items:
       - CyborgEnergySwordDouble
       - PinpointerSyndicateNuclear
+      - PinpointerSyndicateNuclearBomb # DS14
     - type: BorgModuleIcon
       icon: { sprite: Interface/Actions/actions_borg.rsi, state: syndicate-esword-module }
 
@@ -804,6 +806,7 @@
       items:
         - WeaponLightMachineGunL6C
         - PinpointerSyndicateNuclear
+        - PinpointerSyndicateNuclearBomb # DS14
     - type: BorgModuleIcon
       icon: { sprite: Interface/Actions/actions_borg.rsi, state: syndicate-l6c-module }
 
