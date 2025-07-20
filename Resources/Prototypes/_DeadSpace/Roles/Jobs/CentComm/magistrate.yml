@@ -3,7 +3,7 @@
   name: job-name-magistrat
   description: job-description-magistrat
   playTimeTracker: JobMagistrat
-  setPreference: false # Removed from station
+  setPreference: false
   requirements:
     - !type:RoleTimeRequirement
       role: JobHeadOfSecurity
