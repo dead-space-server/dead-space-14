@@ -228,12 +228,6 @@ public sealed class UnitologyHeadSystem : EntitySystem
 
         RemComp<UnitologyHeadComponent>(uid);
 
-        if (HasComp<UnitologyObeliskActivateAbilityComponent>(uid))
-        {
-            RemComp<UnitologyObeliskActivateAbilityComponent>(uid);
-            AddComp<UnitologyObeliskActivateAbilityComponent>(target);
-        }
-
         AddComp<UnitologyHeadComponent>(target);
     }
 

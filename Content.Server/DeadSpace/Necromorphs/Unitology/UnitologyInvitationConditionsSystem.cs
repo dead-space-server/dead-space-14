@@ -33,8 +33,7 @@ public sealed class UnitologyInvitationConditionsSystem : EntitySystem
         while (query.MoveNext(out var ent, out _))
         {
             if (
-                HasComp<HumanoidAppearanceComponent>(ent)
-            && !HasComp<UnitologyHeadComponent>(ent)
+            !HasComp<UnitologyHeadComponent>(ent)
             && !HasComp<UnitologyEnslavedComponent>(ent)
             )
                 count++;
