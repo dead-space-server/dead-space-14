@@ -27,7 +27,8 @@
 
 - type: loadoutGroup
   id: CentralCommandOfficialLoadout
-  name: CentralCommandOfficialLoadout
+  name: spawner-loadout-centcomm-official
+  hidden: true
   loadouts:
   - CentralCommandOfficialLoadout
 

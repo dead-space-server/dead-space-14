@@ -37,7 +37,8 @@
 
 - type: loadoutGroup
   id: CentralCommandOfficerLoadout
-  name: CentralCommandOfficerLoadout
+  name: spawner-loadout-centcomm-officer
+  hidden: true
   loadouts:
   - CentralCommandOfficerLoadout
 

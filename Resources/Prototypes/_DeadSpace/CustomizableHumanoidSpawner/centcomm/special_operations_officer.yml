@@ -24,7 +24,8 @@
 
 - type: loadoutGroup
   id: CentralCommandSpecialOperationsOfficerLoadout
-  name: CentralCommandSpecialOperationsOfficerLoadout
+  name: spawner-loadout-centcomm-soo
+  hidden: true
   loadouts:
   - CentralCommandSpecialOperationsOfficerLoadout
 
