@@ -18,8 +18,6 @@ loadout-group-senior-engineer-jumpsuit = Ведущий инженер, комб
 loadout-group-senior-engineer-id = Ведущий инженер, ID
 loadout-group-senior-engineer-underwear = Ведущий инженер, нижнее бельё
 loadout-group-senior-engineer-belt = Ведущий инженер, пояс
-loadout-group-station-engineer-belt = Инженер, пояс
-loadout-group-atmospheric-technician-belt = Атмосферный техник, пояс
 # Science
 loadout-group-senior-researcher-head = Ведущий учёный, голова
 loadout-group-senior-researcher-jumpsuit = Ведущий учёный, комбинезон
