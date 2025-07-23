@@ -106,9 +106,8 @@
     runningState: building
     unlitIdleState: unlit
     unlitRunningState: unlit-building
-    staticPacks:
-    - ChemistryStatic
-    - TaipanSurgeryStatic
+#    staticPacks:
+#    - ChemistryStatic
     dynamicPacks:
     - SyndicateAdvancedTools
     - ScienceEquipment
@@ -119,12 +118,9 @@
     - Mining
     - AtmosTools
     - EngineeringWeapons
-    - Chemistry
     - Janitor
     - Instruments
-    - TaipanHypospray
     - TaipanEquipment
-    - TaipanSpecialEquipment
     - SalvageSecurityWeapons
 
 - type: entity
@@ -173,14 +169,13 @@
     - CargoBoardsStatic
     - MedicalBoardsStatic
     - EngineeringBoardsStatic
-    - TaipanCameraBoards
     dynamicPacks:
     - EngineeringBoards
     - TaipanCargoBoards
     - MedicalBoards
     - TaipanServiceBoards
     - TaipanScienceBoards
-    - MechBoards
+    - TaipanMechBoards
     - TaipanShuttleBoards
     - SalvageSecurityBoards
     - SecurityBoards
@@ -237,8 +232,7 @@
     dynamicPacks:
     - Robotics
     - BorgModules
-    - MechParts
-    - MechEquipment
+    - TaipanMech
   - type: MaterialStorage
     whitelist:
       tags:
@@ -270,7 +264,7 @@
     idleState: icon
     runningState: building
     staticPacks:
-    - ClothingTaipan
+    - TaipanClothing
     - ClothingSyndie
     - Ties
     - Scarves
@@ -278,7 +272,7 @@
     - Bedsheets
     - DoubleBedsheets
     dynamicPacks:
-    - TaipanGloves
+    - TaipanSpecialClothing
   - type: EmagLatheRecipes
     emagStaticPacks:
     - ClothingCentComm
@@ -370,9 +364,9 @@
     board: MedicalTechFabCircuitboardTaipan
 
 - type: entity
-  id: SecurityTechFabTaipan
+  id: WeaponryTechFabTaipan
   parent: BaseLatheLube
-  name: охранный техфаб
+  name: оружейный техфаб
   suffix: Тайпан
   description: Печатает инвентарь для охранного отсека.
   components:
@@ -390,7 +384,7 @@
     - state: panel
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
   - type: Machine
-    board: SecurityTechFabCircuitboardTaipan
+    board: WeaponryTechFabCircuitboardTaipan
   - type: ResearchClient
     isTaipan: true
   - type: Lathe

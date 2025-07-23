@@ -101,23 +101,23 @@
   - GasRecyclerMachineCircuitboard
 
 - type: technology
-  id: TaipanRipleyAPLU
-  name: research-technology-ripley-aplu
+  id: TaipanRipley
+  name: research-technology-bloodredf-ripley
   icon:
-    sprite: Objects/Specific/Mech/mecha.rsi
-    state: ripley
+    sprite: _DeadSpace/Objects/Specific/Mech/mecha.rsi
+    state: bloodredripley
   discipline: TaipanMechworks
   tier: 1
   cost: 7500
   recipeUnlocks:
-  - RipleyHarness
-  - RipleyLArm
-  - RipleyRArm
-  - RipleyLLeg
-  - RipleyRLeg
-  - RipleyCentralElectronics
-  - RipleyPeripheralsElectronics
-  - MechEquipmentGrabber
+  - TaipanRipleyHarness
+  - TaipanRipleyLArm
+  - TaipanRipleyRArm
+  - TaipanRipleyLLeg
+  - TaipanRipleyRLeg
+  - TaipanRipleyCentralElectronics
+  - TaipanRipleyPeripheralsElectronics
+  - MechEquipmentTaipanRipleyGrabber
 
 - type: technology
   id: TaipanHUD
@@ -148,6 +148,7 @@
   cost: 15000
   recipeUnlocks:
   - ShuttleConsoleCircuitboardTaipan
+  - IFFConsoleCircuitboardTaipan
   - ThrusterMachineCircuitboard
   - GyroscopeMachineCircuitboard
   - MiniGravityGeneratorCircuitboard

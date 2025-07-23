@@ -64,11 +64,6 @@
   result: AnalysisComputerCircuitboardTaipan
 
 - type: latheRecipe
-  parent: BaseCircuitboardRecipe
-  id: TechDiskComputerCircuitboardTaipan
-  result: TechDiskComputerCircuitboardTaipan
-
-- type: latheRecipe
   parent: BaseGoldCircuitboardRecipe
   id: ShuttleConsoleCircuitboardTaipan
   result: ShuttleConsoleCircuitboardTaipan

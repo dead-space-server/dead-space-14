@@ -195,3 +195,116 @@
   materials:
     Cloth: 800
     Durathread: 400
+
+# Chameleon
+
+- type: latheRecipe
+  abstract: true
+  id: BaseChameleonClothingRecipe
+  categories:
+  - Special
+  completetime: 4
+  materials:
+    Cloth: 300
+
+# Chameleon Clothing Recipes
+
+- type: latheRecipe
+  parent: BaseChameleonClothingRecipe
+  id: ClothingBackpackChameleon
+  result: ClothingBackpackChameleon
+  materials:
+    Cloth: 600
+    Durathread: 300
+    Gold: 100
+    Silver: 100
+
+- type: latheRecipe
+  parent: BaseChameleonClothingRecipe
+  id: ClothingHeadsetChameleon
+  result: ClothingHeadsetChameleon
+  materials:
+    Cloth: 100
+    Durathread: 50
+    Gold: 50
+    Silver: 50
+
+- type: latheRecipe
+  parent: BaseChameleonClothingRecipe
+  id: ClothingEyesChameleon
+  result: ClothingEyesChameleon
+  materials:
+    Cloth: 150
+    Durathread: 75
+    Gold: 75
+    Silver: 75
+
+- type: latheRecipe
+  parent: BaseChameleonClothingRecipe
+  id: ClothingHandsChameleon
+  result: ClothingHandsChameleon
+  materials:
+    Cloth: 200
+    Durathread: 100
+    Gold: 50
+    Silver: 50
+
+- type: latheRecipe
+  parent: BaseChameleonClothingRecipe
+  id: ClothingHeadHatChameleon
+  result: ClothingHeadHatChameleon
+  materials:
+    Cloth: 250
+    Durathread: 125
+    Gold: 75
+    Silver: 75
+
+- type: latheRecipe
+  parent: BaseChameleonClothingRecipe
+  id: ClothingMaskGasChameleon
+  result: ClothingMaskGasChameleon
+  materials:
+    Cloth: 300
+    Durathread: 150
+    Gold: 50
+    Silver: 100
+
+- type: latheRecipe
+  parent: BaseChameleonClothingRecipe
+  id: ClothingNeckChameleon
+  result: ClothingNeckChameleon
+  materials:
+    Cloth: 200
+    Durathread: 100
+    Gold: 100
+    Silver: 50
+
+- type: latheRecipe
+  parent: BaseChameleonClothingRecipe
+  id: ClothingOuterChameleon
+  result: ClothingOuterChameleon
+  materials:
+    Cloth: 500
+    Durathread: 250
+    Gold: 150
+    Silver: 100
+
+- type: latheRecipe
+  parent: BaseChameleonClothingRecipe
+  id: ClothingShoesChameleon
+  result: ClothingShoesChameleon
+  materials:
+    Cloth: 300
+    Durathread: 150
+    Gold: 75
+    Silver: 75
+
+- type: latheRecipe
+  parent: BaseChameleonClothingRecipe
+  id: ClothingUniformJumpsuitChameleon
+  result: ClothingUniformJumpsuitChameleon
+  materials:
+    Cloth: 400
+    Durathread: 200
+    Gold: 100
+    Silver: 100

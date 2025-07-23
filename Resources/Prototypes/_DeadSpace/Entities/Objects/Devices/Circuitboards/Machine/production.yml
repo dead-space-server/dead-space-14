@@ -206,13 +206,13 @@
       Glass: 1
 
 - type: entity
-  id: SecurityTechFabCircuitboardTaipan
+  id: WeaponTechFabCircuitboardTaipan
   parent: BaseMachineCircuitboardTaipan
   name: оружейный ТехФаб (машинная плата)
   description: Печатная плата оружейного ТехФаба.
   components:
   - type: MachineBoard
-    prototype: SecurityTechFab
+    prototype: WeaponryTechFabTaipan
     stackRequirements:
       MatterBin: 2
       Manipulator: 2
@@ -228,7 +228,7 @@
   description: Печатная плата медицинского ТехФаба.
   components:
   - type: MachineBoard
-    prototype: MedicalTechFab
+    prototype: MedicalTechFabTaipan
     stackRequirements:
       MatterBin: 2
       Manipulator: 2

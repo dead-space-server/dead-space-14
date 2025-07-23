@@ -46,12 +46,6 @@
   - CaneSheath
 
 - type: latheRecipePack
-  id: TaipanGloves
-  recipes:
-  - ClothingHandsGlovesNorthStar
-  - ClothingHandsGlovesBoxingRigged
-
-- type: latheRecipePack
   id: TaipanGrenades
   recipes:
   - GrenadeShrapnel
@@ -64,11 +58,6 @@
   - HolyHandGrenade
   - WhiteholeGrenade
   - SingularityGrenade
-
-- type: latheRecipePack
-  id: TaipanSpecialEquipment
-  recipes:
-  - ClothingEyesPNVAdvSyndicate
 
 - type: latheRecipePack
   id: TaipanAmmoStatic
@@ -105,7 +94,6 @@
   - AutolatheHyperConvectionMachineCircuitboardTaipan
   - ProtolatheHyperConvectionMachineCircuitboardTaipan
   - CircuitImprinterHyperConvectionMachineCircuitboardTaipan
-  - TechDiskComputerCircuitboardTaipan
   - FlatpackerMachineCircuitboard
   - SheetifierMachineCircuitboard
   - PowerCageRechargerCircuitboard
@@ -128,25 +116,11 @@
   - MiniGravityGeneratorCircuitboard
 
 - type: latheRecipePack
-  id: TaipanCameraBoards
-  recipes:
-  - SurveillanceCameraRouterCircuitboard
-  - SurveillanceCameraMonitorCircuitboardTaipan
-  - SurveillanceWirelessCameraMonitorCircuitboard
-  - SurveillanceCameraWirelessRouterCircuitboard
-  - ComputerTelevisionCircuitboard
-  - SurveillanceWirelessCameraMovableCircuitboard
-  - SurveillanceWirelessCameraAnchoredCircuitboard
-
-- type: latheRecipePack
   id: TaipanScienceClothing
   recipes:
   - ClothingShoesBootsMagSyndie
+  - ADTClothingShoesBootsMagAdvSynd
   - ClothingShoesBootsMoon
-  - ClothingShoesBootsSpeed
-  - ClothingBackpackHolding
-  - ClothingBackpackSatchelHolding
-  - ClothingBackpackDuffelHolding
 
 - type: latheRecipePack
   id: TaipanRoboticsStatic
@@ -191,6 +165,7 @@
   - BoozeDispenserMachineCircuitboard
   - SodaDispenserMachineCircuitboard
   - PhotocopierMachineCircuitboard
+  - SurveillanceCameraMonitorCircuitboardTaipan
 
 - type: latheRecipePack
   id: TaipanServiceBoards
@@ -205,7 +180,7 @@
   - BiofabricatorMachineCircuitboardTaipan
 
 - type: latheRecipePack
-  id: ClothingTaipan
+  id: TaipanClothing
   recipes:
   - ClothingUniformJumpsuitTaipanAtmosphericsEngineer
   - ClothingUniformJumpsuitTaipanBotanist
@@ -245,6 +220,24 @@
   - ClothingBackpackSyndicate
   - ClothingBackpackDuffelSyndicate
 
+# Chameleon
+
+- type: latheRecipePack
+  id: TaipanSpecialClothing
+  recipes:
+  - ClothingBackpackChameleon
+  - ClothingHeadsetChameleon
+  - ClothingEyesChameleon
+  - ClothingHandsChameleon
+  - ClothingHeadHatChameleon
+  - ClothingMaskGasChameleon
+  - ClothingNeckChameleon
+  - ClothingOuterChameleon
+  - ClothingShoesChameleon
+  - ClothingUniformJumpsuitChameleon
+  - ClothingHandsGlovesNorthStar
+  - ClothingHandsGlovesBoxingRigged
+
 # Medical
 
 - type: latheRecipePack
@@ -262,6 +255,7 @@
   recipes:
   - SyndiHypo
   - ADTCyberHypospray
+  - Hypopen
 
 - type: latheRecipePack
   id: TaipanCloning
@@ -290,3 +284,22 @@
   - ClothingEyesHudTaipanRecruit
   - ClothingEyesHudTaipanResearch
   - ClothingEyesHudTaipanAdvanced
+  - ClothingEyesPNVAdvSyndicate
+  - ChameleonPDA
+  - ChameleonProjector
+
+- type: latheRecipePack
+  id: TaipanMech
+  recipes:
+  - TaipanRipleyHarness
+  - TaipanRipleyLArm
+  - TaipanRipleyRArm
+  - TaipanRipleyLLeg
+  - TaipanRipleyRLeg
+  - MechEquipmentTaipanRipleyGrabber
+
+- type: latheRecipePack
+  id: TaipanMechBoards
+  recipes:
+  - TaipanRipleyCentralElectronics
+  - TaipanRipleyPeripheralsElectronics

@@ -101,6 +101,27 @@
   id: TaipanBorgTorso
 
 - type: Tag
+  id: TaipanRipleyEquipment
+
+- type: Tag
+  id: TaipanRipleyCentralControlModule
+
+- type: Tag
+  id: TaipanRipleyPeripheralsControlModule
+
+- type: Tag
+  id: TaipanRipleyLArm
+
+- type: Tag
+  id: TaipanRipleyLLeg
+
+- type: Tag
+  id: TaipanRipleyRArm
+
+- type: Tag
+  id: TaipanRipleyRLeg
+
+- type: Tag
   id: ToySword
 
 - type: Tag

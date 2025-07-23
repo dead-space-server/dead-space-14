@@ -144,12 +144,3 @@
   components:
   - type: ComputerBoard
     prototype: ComputerTaipanAiUpload
-
-- type: entity
-  parent: BaseComputerCircuitboardTaipan
-  id: TechDiskComputerCircuitboardTaipan
-  name: терминал технологических дисков (консольная плата)
-  description: Консольная плата для терминала технологических дисков.
-  components:
-  - type: ComputerBoard
-    prototype: ComputerTaipanTechnologyDiskTerminal

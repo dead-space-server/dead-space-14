@@ -61,6 +61,18 @@
   - FauxTileAstroSnow
   - FauxTileAstroAsteroidSand
 
+- type: technology
+  id: TaipanBasicHypospray
+  name: research-technology-basic-hypospray
+  icon:
+    sprite: _ADT/Objects/Specific/cyberhypo.rsi
+    state: hypo
+  discipline: TaipanLifeSupport
+  tier: 1
+  cost: 7500
+  recipeUnlocks:
+  - ADTCyberHypospray
+
 # Tier 2
 
 - type: technology
@@ -76,6 +88,8 @@
   - AbominationCube
   - SpaceCarpCube
   - SpaceTickCube
+  technologyPrerequisites:
+  - TaipanMeatManipulation
 
 - type: technology
   id: TaipanBiochemicalStasis
@@ -91,18 +105,6 @@
   - CryoPodMachineCircuitboard
   - CryostasisBeaker
   - SyringeCryostasis
-
-- type: technology
-  id: TaipanHypospray
-  name: research-technology-hypospray
-  icon:
-    sprite: Objects/Specific/Medical/syndihypo.rsi
-    state: hypo
-  discipline: TaipanLifeSupport
-  tier: 2
-  cost: 15000
-  recipeUnlocks:
-  - SyndiHypo
 
 - type: technology
   id: TaipanMechanizedTreatment
@@ -133,26 +135,6 @@
   - BorgModuleAdvancedCleaning
 
 - type: technology
-  id: TaipanHONKMech
-  name: research-technology-honk-mech
-  icon:
-    sprite: Objects/Specific/Mech/mecha.rsi
-    state: honker
-  discipline: TaipanLifeSupport
-  tier: 2
-  cost: 15000
-  recipeUnlocks:
-  - HonkerHarness
-  - HonkerLArm
-  - HonkerRArm
-  - HonkerLLeg
-  - HonkerRLeg
-  - HonkerCentralElectronics
-  - HonkerPeripheralsElectronics
-  - HonkerTargetingElectronics
-  - MechEquipmentHorn
-
-- type: technology
   id: TaipanAdvancedSpray
   name: research-technology-advanced-spray
   icon:
@@ -177,6 +159,18 @@
   recipeUnlocks:
   - CargoTelepadMachineCircuitboard
 
+- type: technology
+  id: TaipanHypopen
+  name: research-technology-hypopen
+  icon:
+    sprite: Objects/Misc/pens.rsi
+    state: pen
+  discipline: TaipanLifeSupport
+  tier: 2
+  cost: 15000
+  recipeUnlocks:
+  - Hypopen
+
 # Tier 3
 
 - type: technology
@@ -197,10 +191,32 @@
   id: TaipanAdvancedHypospray
   name: research-technology-advanced-hypospray
   icon:
-    sprite: _ADT/Objects/Specific/cyberhypo.rsi
+    sprite: Objects/Specific/Medical/syndihypo.rsi
     state: hypo
   discipline: TaipanLifeSupport
   tier: 3
   cost: 30000
   recipeUnlocks:
-  - ADTCyberHypospray
+  - SyndiHypo
+
+- type: technology
+  id: TaipanChameleonClothing
+  name: research-technology-chameleon-clothing
+  icon:
+    sprite: Clothing/Neck/Scarfs/red.rsi
+    state: icon
+  discipline: TaipanLifeSupport
+  tier: 3
+  cost: 30000
+  recipeUnlocks:
+  - ClothingBackpackChameleon
+  - ClothingHeadsetChameleon
+  - ClothingEyesChameleon
+  - ClothingHandsChameleon
+  - ClothingHeadHatChameleon
+  - ClothingMaskGasChameleon
+  - ClothingNeckChameleon
+  - ClothingOuterChameleon
+  - ClothingShoesChameleon
+  - ClothingUniformJumpsuitChameleon
+  - ChameleonPDA

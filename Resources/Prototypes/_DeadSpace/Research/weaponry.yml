@@ -144,21 +144,6 @@
   - EnergyDagger
 
 - type: technology
-  id: TaipanBasicGrenades
-  name: research-technology-basic-grenades
-  icon:
-    sprite: Objects/Weapons/Grenades/shrapnelgrenade.rsi
-    state: icon
-  discipline: TaipanWeaponry
-  tier: 1
-  cost: 7500
-  recipeUnlocks:
-  - GrenadeShrapnel
-  - ExGrenade
-  - GrenadeFlashBang
-  - SmokeGrenade
-
-- type: technology
   id: TaipanEdgedWeapons
   name: research-technology-edged-weapons
   icon:
@@ -196,26 +181,14 @@
   recipeUnlocks:
   - WeaponSniperMosin
 
-- type: technology
-  id: TaipanBasicSMGs
-  name: research-technology-basic-smgs
-  icon:
-    sprite: Objects/Weapons/Guns/SMGs/c20r.rsi
-    state: icon
-  discipline: TaipanWeaponry
-  tier: 1
-  cost: 7500
-  recipeUnlocks:
-  - WeaponSubMachineGunC20r
-
 # Tier 2
 
 - type: technology
   id: TaipanBasicShuttleArmament
-  name: research-technology-basic-shuttle-armament
+  name: research-technology-shuttle-weapon
   icon:
-    sprite: Structures/Power/cage_recharger.rsi
-    state: full
+    sprite: Objects/Weapons/Guns/Ammunition/Magazine/Grenade/grenade_cartridge.rsi
+    state: base
   discipline: TaipanWeaponry
   tier: 2
   cost: 15000
@@ -223,14 +196,18 @@
   - PowerCageRechargerCircuitboard
   - PowerCageSmall
   - PowerCageMedium
+  - PowerCageHigh
   - MagazineGrenadeEmpty
   - GrenadeFlash
   - GrenadeBlast
+  - GrenadeEMP
   - ShuttleGunSvalinnMachineGunCircuitboard
   - ShuttleGunPerforatorCircuitboard
   - ShuttleGunFriendshipCircuitboard
+  - ShuttleGunDusterCircuitboard
   technologyPrerequisites:
   - TaipanSalvageWeapons
+  - TaipanExplosiveTechnology
 
 - type: technology
   id: TaipanNightVisionTechnology
@@ -275,20 +252,24 @@
   - TaipanEnergyDaggers
 
 - type: technology
-  id: TaipanAdvancedGrenades
-  name: research-technology-advanced-grenades
+  id: TaipanGrenades
+  name: research-technology-grenades
   icon:
-    sprite: Objects/Weapons/Grenades/pyrogrenade.rsi
+    sprite: Objects/Weapons/Grenades/shrapnelgrenade.rsi
     state: icon
   discipline: TaipanWeaponry
   tier: 2
   cost: 15000
   recipeUnlocks:
+  - GrenadeShrapnel
+  - ExGrenade
+  - GrenadeFlashBang
+  - SmokeGrenade
   - GrenadeIncendiary
   - ClusterGrenade
   - EmpGrenade
   technologyPrerequisites:
-  - TaipanBasicGrenades
+  - TaipanExplosiveTechnology
 
 - type: technology
   id: TaipanSniperRifles
@@ -305,18 +286,19 @@
   - TaipanBasicRifles
 
 - type: technology
-  id: TaipanAdvancedSMGs
-  name: research-technology-advanced-smgs
+  id: TaipanSMGs
+  name: research-technology-smgs
   icon:
-    sprite: _DeadSpace/Items/Toys/TommyGun/tommy_gun.rsi
+    sprite: Objects/Weapons/Guns/SMGs/c20r.rsi
     state: icon
   discipline: TaipanWeaponry
   tier: 2
   cost: 15000
   recipeUnlocks:
+  - WeaponSubMachineGunC20r
   - WeaponSMGTommyGun
   technologyPrerequisites:
-  - TaipanBasicSMGs
+  - TaipanBasicRifles
 
 - type: technology
   id: TaipanAssaultRifles
@@ -329,6 +311,7 @@
   cost: 15000
   recipeUnlocks:
   - ADTWeaponRifleXC67
+  - WeaponRifleAk
   technologyPrerequisites:
   - TaipanBasicRifles
 
@@ -347,22 +330,6 @@
 # Tier 3
 
 - type: technology
-  id: TaipanAdvancedShuttleWeapon
-  name: research-technology-advanced-shuttle-weapon
-  icon:
-    sprite: Objects/Weapons/Guns/Ammunition/Magazine/Grenade/grenade_cartridge.rsi
-    state: icon
-  discipline: TaipanWeaponry
-  tier: 3
-  cost: 30000
-  recipeUnlocks:
-  - GrenadeEMP
-  - PowerCageHigh
-  - ShuttleGunDusterCircuitboard
-  technologyPrerequisites:
-  - TaipanBasicShuttleArmament
-
-- type: technology
   id: TaipanEliteEnergyWeapons
   name: research-technology-elite-energy-weapons
   icon:
@@ -377,8 +344,8 @@
   - TaipanEnergyWeapons
 
 - type: technology
-  id: TaipanExoticGrenades
-  name: research-technology-exotic-grenades
+  id: TaipanExperimentalGrenades
+  name: research-technology-experimental-grenades
   icon:
     sprite: Objects/Weapons/Grenades/holyhandgrenade.rsi
     state: icon
@@ -390,7 +357,8 @@
   - WhiteholeGrenade
   - SingularityGrenade
   technologyPrerequisites:
-  - TaipanAdvancedGrenades
+  - TaipanGrenades
+  - TaipanBasicShuttleArmament
 
 - type: technology
   id: TaipanHeavyWeapons
@@ -418,7 +386,7 @@
   recipeUnlocks:
   - WeaponLauncherChinaLake
   technologyPrerequisites:
-  - TaipanAdvancedGrenades
+  - TaipanGrenades
 
 - type: technology
   id: TaipanSpecialWeapons
@@ -433,17 +401,3 @@
   - WeaponEnergyCrossbow
   technologyPrerequisites:
   - TaipanEnergyWeapons
-
-- type: technology
-  id: TaipanAdvancedAssaultRifles
-  name: research-technology-advanced-assault-rifles
-  icon:
-    sprite: Objects/Weapons/Guns/Rifles/ak.rsi
-    state: icon
-  discipline: TaipanWeaponry
-  tier: 3
-  cost: 30000
-  recipeUnlocks:
-  - WeaponRifleAk
-  technologyPrerequisites:
-  - TaipanAssaultRifles

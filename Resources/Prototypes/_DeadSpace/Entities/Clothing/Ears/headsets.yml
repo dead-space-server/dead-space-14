@@ -36,6 +36,7 @@
   parent: ClothingHeadset
   id: ClothingHeadsetTaipan
   name: багровая гарнитура
+  suffix: Тайпан
   components:
   - type: Headset
     color: "#8f4a4b"
@@ -54,6 +55,7 @@
   parent: ClothingHeadsetAlt
   id: ClothingHeadsetAltTaipan
   name: полноразмерная багровая гарнитура
+  suffix: Тайпан
   components:
   - type: Headset
     color: "#8f4a4b"

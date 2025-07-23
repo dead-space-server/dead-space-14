@@ -31,7 +31,7 @@
     - Deconstruct
 
 - type: entity
-  name: промышленная сварка Синдиката
+  name: кроваво-красная сварка
   parent: WelderExperimental
   id: SyndicateWelderExperimental
   description: Промышленная сварка с двойным топливным баком.
@@ -50,7 +50,7 @@
     speedModifier: 2.3
 
 - type: entity
-  name: дрель Синдиката
+  name: кроваво-красная дрель
   parent: PowerDrill
   id: SyndicatePowerDrill
   description: Простая электрическая ручная дрель.
@@ -100,7 +100,7 @@
 - type: entity
   id: RCDSyndicate
   parent: RCD
-  name: РСУ Синдиката
+  name: кроваво-красный РСУ
   description: Устройство быстрого строительства может использоваться для быстрой установки и удаления различных конструкций и приспособлений станции. Для работы требуется сжатый материал.
   components:
   - type: RCD

@@ -1,6 +1,16 @@
 # Weaponry
 
 - type: latheRecipe
+  abstract: true
+  id: TaipanBaseExplosiveRecipe
+  categories:
+  - Explosives
+  completetime: 3
+  materials:
+    Steel: 200
+    Plastic: 100
+
+- type: latheRecipe
   parent: BaseWeaponRecipe
   id: WeaponPistolViper
   result: WeaponPistolViper
@@ -27,16 +37,16 @@
 
 - type: latheRecipe
   id: GrenadeShrapnel
+  parent: TaipanBaseExplosiveRecipe
   result: GrenadeShrapnel
-  completetime: 3
   materials:
     Steel: 200
     Plastic: 100
 
 - type: latheRecipe
   id: ExGrenade
+  parent: TaipanBaseExplosiveRecipe
   result: ExGrenade
-  completetime: 3
   materials:
     Steel: 150
     Plastic: 100
@@ -44,8 +54,8 @@
 
 - type: latheRecipe
   id: GrenadeFlashBang
+  parent: TaipanBaseExplosiveRecipe
   result: GrenadeFlashBang
-  completetime: 3
   materials:
     Steel: 100
     Glass: 100
@@ -53,8 +63,8 @@
 
 - type: latheRecipe
   id: SmokeGrenade
+  parent: TaipanBaseExplosiveRecipe
   result: SmokeGrenade
-  completetime: 3
   materials:
     Steel: 100
     Plastic: 100
@@ -157,8 +167,8 @@
 
 - type: latheRecipe
   id: GrenadeIncendiary
+  parent: TaipanBaseExplosiveRecipe
   result: GrenadeIncendiary
-  completetime: 3
   materials:
     Steel: 150
     Plastic: 150
@@ -166,8 +176,8 @@
 
 - type: latheRecipe
   id: ClusterGrenade
+  parent: TaipanBaseExplosiveRecipe
   result: ClusterGrenade
-  completetime: 4
   materials:
     Steel: 300
     Plastic: 200
@@ -175,8 +185,8 @@
 
 - type: latheRecipe
   id: EmpGrenade
+  parent: TaipanBaseExplosiveRecipe
   result: EmpGrenade
-  completetime: 3
   materials:
     Steel: 150
     Plastic: 100
@@ -230,8 +240,8 @@
 
 - type: latheRecipe
   id: HolyHandGrenade
+  parent: TaipanBaseExplosiveRecipe
   result: HolyHandGrenade
-  completetime: 5
   materials:
     Steel: 200
     Gold: 300
@@ -239,8 +249,8 @@
 
 - type: latheRecipe
   id: WhiteholeGrenade
+  parent: TaipanBaseExplosiveRecipe
   result: WhiteholeGrenade
-  completetime: 5
   materials:
     Steel: 200
     Glass: 300
@@ -248,8 +258,8 @@
 
 - type: latheRecipe
   id: SingularityGrenade
+  parent: TaipanBaseExplosiveRecipe
   result: SingularityGrenade
-  completetime: 5
   materials:
     Steel: 200
     Plasma: 400
@@ -364,6 +374,26 @@
     Gold: 300
 
 - type: latheRecipe
+  id: ChameleonPDA
+  result: ChameleonPDA
+  completetime: 8
+  materials:
+    Steel: 300
+    Glass: 200
+    Gold: 250
+    Plasma: 50
+
+- type: latheRecipe
+  id: ChameleonProjector
+  result: ChameleonProjector
+  completetime: 12
+  materials:
+    Steel: 400
+    Glass: 300
+    Gold: 300
+    Plasma: 100
+
+- type: latheRecipe
   parent: BaseRoboticsRecipe
   id: TaipanCyborgEndoskeleton
   result: TaipanCyborgEndoskeleton
@@ -414,8 +444,8 @@
   result: SawAdvanced
 
 - type: latheRecipe
-  id: SyndiHypo
-  result: SyndiHypo
+  id: ADTCyberHypospray
+  result: ADTCyberHypospray
   completetime: 10
   materials:
     Steel: 200
@@ -423,8 +453,18 @@
     Silver: 300
 
 - type: latheRecipe
-  id: ADTCyberHypospray
-  result: ADTCyberHypospray
+  id: Hypopen
+  result: Hypopen
+  completetime: 10
+  materials:
+    Steel: 200
+    Glass: 400
+    Gold: 150
+    Silver: 150
+
+- type: latheRecipe
+  id: SyndiHypo
+  result: SyndiHypo
   completetime: 10
   materials:
     Steel: 200
@@ -513,3 +553,53 @@
     Plastic: 300
     Silver: 150
     Gold: 100
+
+# Mech
+- type: latheRecipe
+  parent: BaseMechPartRecipe
+  id: TaipanRipleyHarness
+  result: TaipanRipleyHarness
+  materials:
+    Steel: 1500
+    Glass: 1200
+
+- type: latheRecipe
+  parent: BaseMechPartRecipe
+  id: TaipanRipleyLArm
+  result: TaipanRipleyLArm
+  materials:
+    Steel: 1000
+    Glass: 750
+
+- type: latheRecipe
+  parent: TaipanRipleyLArm
+  id: TaipanRipleyLLeg
+  result: TaipanRipleyLLeg
+
+- type: latheRecipe
+  parent: TaipanRipleyLLeg
+  id: TaipanRipleyRLeg
+  result: TaipanRipleyRLeg
+
+- type: latheRecipe
+  parent: TaipanRipleyLArm
+  id: TaipanRipleyRArm
+  result: TaipanRipleyRArm
+
+- type: latheRecipe
+  parent: BaseMechPartRecipe
+  id: MechEquipmentTaipanRipleyGrabber
+  result: MechEquipmentTaipanRipleyGrabber
+  materials:
+    Steel: 500
+    Plastic: 200
+
+- type: latheRecipe
+  parent: BaseGoldCircuitboardRecipe
+  id: TaipanRipleyCentralElectronics
+  result: TaipanRipleyCentralElectronics
+
+- type: latheRecipe
+  parent: BaseGoldCircuitboardRecipe
+  id: TaipanRipleyPeripheralsElectronics
+  result: TaipanRipleyPeripheralsElectronics

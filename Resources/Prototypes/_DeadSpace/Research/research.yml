@@ -45,18 +45,6 @@
   - ArtifactAnalyzerMachineCircuitboard
 
 - type: technology
-  id: TaipanAlternativeResearch
-  name: research-technology-alternative-research
-  icon:
-    sprite: Structures/Machines/tech_disk_printer.rsi
-    state: display
-  discipline: TaipanResearch
-  tier: 1
-  cost: 7500
-  recipeUnlocks:
-  - TechDiskComputerCircuitboard
-
-- type: technology
   id: TaipanMagnetsTech
   name: research-technology-magnets-tech
   icon:
@@ -68,6 +56,18 @@
   recipeUnlocks:
   - ClothingShoesBootsMagSyndie
   - ClothingShoesBootsMoon
+
+- type: technology
+  id: TaipanChameleonProjector
+  name: research-technology-chameleon-projector
+  icon:
+    sprite: Objects/Devices/chameleon_projector.rsi
+    state: icon
+  discipline: TaipanResearch
+  tier: 2
+  cost: 15000
+  recipeUnlocks:
+  - ChameleonProjector
 
 # Tier 2
 
@@ -114,32 +114,7 @@
   - WeaponParticleDecelerator
   - HoloprojectorField
 
-- type: technology
-  id: TaipanAdvancedMagnetsTech
-  name: research-technology-advanced-magnets-tech
-  icon:
-    sprite: _ADT/Clothing/Shoes/Boots/advanced.rsi
-    state: icon
-  discipline: TaipanResearch
-  tier: 2
-  cost: 15000
-  recipeUnlocks:
-  - ADTClothingShoesBootsMagAdvSynd
-
 # Tier 3
-
-#- type: technology
-#  id: TaipanGravityManipulation
-#  name: research-technology-gravity-manipulation
-#  icon:
-#    sprite: Objects/Weapons/Guns/Launchers/tether_gun.rsi
-#    state: base
-#  discipline: TaipanResearch
-#  tier: 3
-#  cost: 30000
-#  recipeUnlocks:
-#  - WeaponForceGun
-#  - WeaponTetherGun
 
 - type: technology
   id: TaipanEmag
@@ -152,3 +127,17 @@
   cost: 30000
   recipeUnlocks:
   - EmagTaipanLimited
+
+- type: technology
+  id: TaipanAdvancedMagnetsTech
+  name: research-technology-advanced-magnets-tech
+  icon:
+    sprite: _ADT/Clothing/Shoes/Boots/advanced.rsi
+    state: icon
+  discipline: TaipanResearch
+  tier: 3
+  cost: 30000
+  recipeUnlocks:
+  - ADTClothingShoesBootsMagAdvSynd
+  technologyPrerequisites:
+  - TaipanMagnetsTech

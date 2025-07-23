@@ -1,0 +1,13 @@
+# Weapon techfab
+- type: latheCategory
+  id: Explosives
+  name: lathe-category-explosives
+
+# Uniform printer
+- type: latheCategory
+  id: Backpacks
+  name: lathe-category-backpacks
+
+- type: latheCategory
+  id: Special
+  name: lathe-category-special

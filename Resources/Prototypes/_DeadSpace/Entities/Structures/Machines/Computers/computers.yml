@@ -485,6 +485,7 @@
   - type: ResearchClient
     isTaipan: true
   - type: ResearchConsole
+    announcementChannel: Taipan
   - type: ActiveRadio
     channels:
     - Taipan
@@ -531,6 +532,7 @@
     - map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
       state: generic_panel_open
   - type: RoboticsConsole
+    radioChannel: Taipan
   - type: ActiveRadio
     channels:
     - Taipan
