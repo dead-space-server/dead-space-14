@@ -104,7 +104,7 @@
     # DS14-start: now they are antags
     startAnnouncement: null #dont nark on antags
     weight: 1 #  lower because antags.
-    earliestStart: 20
+    earliestStart: 30
     minimumPlayers: 25
     # DS14-end
     maxOccurrences: 2 # should be the same as [copies] in shuttle_incoming_event.yml
