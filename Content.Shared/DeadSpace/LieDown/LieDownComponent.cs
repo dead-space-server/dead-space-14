@@ -8,10 +8,10 @@ namespace Content.Shared.DeadSpace.LieDown;
 public sealed partial class LieDownComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public TimeSpan DownDelay = TimeSpan.FromSeconds(1f);
+    public TimeSpan DownDelay = TimeSpan.FromSeconds(0.1f);
 
     [DataField, AutoNetworkedField]
-    public TimeSpan UpDelay = TimeSpan.FromSeconds(1.5f);
+    public TimeSpan UpDelay = TimeSpan.FromSeconds(1f);
 
     [ViewVariables, AutoNetworkedField]
     public bool DrawDowned { get; set; } = false;
