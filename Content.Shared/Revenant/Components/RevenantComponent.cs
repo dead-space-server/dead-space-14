@@ -116,32 +116,23 @@ public sealed partial class RevenantComponent : Component
     public float DefileEffectChance = 0.5f;
     #endregion
 
-    #region Overload Lights Ability
+    #region Beam Fire Ability
     /// <summary>
     /// The amount of essence that is needed to use the ability.
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("overloadCost")]
-    public FixedPoint2 OverloadCost = 40;
+    [ViewVariables(VVAccess.ReadWrite), DataField("beamFireCost")]
+    public FixedPoint2 BeamFireCost = 40;
 
     /// <summary>
     /// The status effects applied after the ability
     /// the first float corresponds to amount of time the entity is stunned.
     /// the second corresponds to the amount of time the entity is made solid.
     /// </summary>
-    [DataField("overloadDebuffs")]
-    public Vector2 OverloadDebuffs = new(3, 8);
+    [DataField("beamFireDebuffs")]
+    public Vector2 BeamFireDebuffs = new(2, 6);
 
-    /// <summary>
-    /// The radius around the user that this ability affects
-    /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("overloadRadius")]
-    public float OverloadRadius = 5f;
-
-    /// <summary>
-    /// How close to the light the entity has to be in order to be zapped.
-    /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("overloadZapRadius")]
-    public float OverloadZapRadius = 2f;
+    [DataField(customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    public string BeamEntityId = "LightningRevenant";
     #endregion
 
     #region Blight Ability
@@ -201,6 +192,24 @@ public sealed partial class RevenantComponent : Component
     public EntityWhitelist? MalfunctionBlacklist;
     #endregion
 
+    #region Sleep Ability 
+    [ViewVariables(VVAccess.ReadWrite), DataField("sleepCost")]
+    public FixedPoint2 SleepCost = 30;
+
+    [DataField("sleepDebuffs")]
+    public Vector2 SleepDebuffs = new(2, 4);
+
+    [DataField] public EntityUid? SleepAction;
+    #endregion
+
+    #region Mind Capture Ability
+    [ViewVariables(VVAccess.ReadWrite), DataField("mindCaptureCost")]
+    public FixedPoint2 MindCaptureCost = 10;
+
+    [DataField("mindCaptureDebuffs")]
+    public Vector2 MindCaptureDebuffs = new(10, 10);
+
+    #endregion
     [DataField]
     public ProtoId<AlertPrototype> EssenceAlert = "Essence";
 

@@ -50,7 +50,7 @@ public sealed partial class RevenantDefileActionEvent : InstantActionEvent
 {
 }
 
-public sealed partial class RevenantOverloadLightsActionEvent : InstantActionEvent
+public sealed partial class RevenantBeamFireActionEvent : EntityTargetActionEvent
 {
 }
 
@@ -62,6 +62,13 @@ public sealed partial class RevenantMalfunctionActionEvent : InstantActionEvent
 {
 }
 
+public sealed partial class RevenantSleepActionEvent : EntityTargetActionEvent
+{
+}
+
+public sealed partial class RevenantMindCaptureActionEvent : EntityTargetActionEvent
+{
+}
 
 [NetSerializable, Serializable]
 public enum RevenantVisuals : byte

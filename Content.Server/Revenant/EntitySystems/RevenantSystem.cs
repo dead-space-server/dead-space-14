@@ -48,6 +48,7 @@ public sealed partial class RevenantSystem : EntitySystem
 
     [ValidatePrototypeId<EntityPrototype>]
     private const string RevenantShopId = "ActionRevenantShop";
+    private const string RevenantSleepId = "ActionRevenantSleep";
 
     public override void Initialize()
     {
@@ -97,6 +98,7 @@ public sealed partial class RevenantSystem : EntitySystem
     private void OnMapInit(EntityUid uid, RevenantComponent component, MapInitEvent args)
     {
         _action.AddAction(uid, ref component.Action, RevenantShopId);
+        _action.AddAction(uid, ref component.SleepAction, RevenantSleepId);
     }
 
     private void OnStatusAdded(EntityUid uid, RevenantComponent component, StatusEffectAddedEvent args)
@@ -150,6 +152,9 @@ public sealed partial class RevenantSystem : EntitySystem
 
         if (component.Essence <= 0)
         {
+            if (_mind.TryGetMind(uid, out var mindId, out var mind))
+                if (mind.IsVisitingEntity)
+                    _mind.UnVisit(mindId, mind);
             Spawn(component.SpawnOnDeathPrototype, Transform(uid).Coordinates);
             QueueDel(uid);
         }

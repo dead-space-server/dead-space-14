@@ -6,12 +6,17 @@ using Content.Shared.Tag;
 using Content.Server.Storage.Components;
 using Content.Server.Light.Components;
 using Content.Server.Ghost;
+using Content.Server.Lightning;
+using Content.Server.Silicons.Laws;
 using Robust.Shared.Physics;
 using Content.Shared.Throwing;
 using Content.Server.Storage.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Item;
 using Content.Shared.Bed.Sleep;
+using Content.Shared.Mindshield.Components;
+using Content.Shared.Silicons.Laws.Components;
+using Content.Server.Administration.Systems;
 using System.Linq;
 using System.Numerics;
 using Content.Server.Revenant.Components;
@@ -28,8 +33,12 @@ using Content.Shared.Revenant.Components;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Utility;
 using Robust.Shared.Map.Components;
+using Content.Shared.Mind;
 using Content.Shared.Whitelist;
 using Robust.Shared.Prototypes;
+using Content.Shared.Corvax.TTS;
+using Content.Shared.Ghost;
+using Content.Shared.Mind.Components;
 
 namespace Content.Server.Revenant.EntitySystems;
 
@@ -44,6 +53,10 @@ public sealed partial class RevenantSystem
     [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
+    [Dependency] private readonly LightningSystem _lightning = default!;
+    [Dependency] private readonly IonStormSystem _ionStorm = default!;
+    [Dependency] private readonly SharedMindSystem _mind = default!;
+    [Dependency] private readonly RejuvenateSystem _rejuvenate = default!;
 
     private static readonly ProtoId<TagPrototype> WindowTag = "Window";
 
@@ -54,9 +67,11 @@ public sealed partial class RevenantSystem
         SubscribeLocalEvent<RevenantComponent, HarvestEvent>(OnHarvest);
 
         SubscribeLocalEvent<RevenantComponent, RevenantDefileActionEvent>(OnDefileAction);
-        SubscribeLocalEvent<RevenantComponent, RevenantOverloadLightsActionEvent>(OnOverloadLightsAction);
+        SubscribeLocalEvent<RevenantComponent, RevenantBeamFireActionEvent>(OnBeamFireAction);
         SubscribeLocalEvent<RevenantComponent, RevenantBlightActionEvent>(OnBlightAction);
         SubscribeLocalEvent<RevenantComponent, RevenantMalfunctionActionEvent>(OnMalfunctionAction);
+        SubscribeLocalEvent<RevenantComponent, RevenantSleepActionEvent>(OnSleepAction);
+        SubscribeLocalEvent<RevenantComponent, RevenantMindCaptureActionEvent>(OnMindCaptureAction);
     }
 
     private void OnInteract(EntityUid uid, RevenantComponent component, UserActivateInWorldEvent args)
@@ -147,7 +162,7 @@ public sealed partial class RevenantSystem
             return;
         }
 
-        if(_physics.GetEntitiesIntersectingBody(uid, (int) CollisionGroup.Impassable).Count > 0)
+        if (_physics.GetEntitiesIntersectingBody(uid, (int)CollisionGroup.Impassable).Count > 0)
         {
             _popup.PopupEntity(Loc.GetString("revenant-in-solid"), uid, uid);
             return;
@@ -282,39 +297,50 @@ public sealed partial class RevenantSystem
         }
     }
 
-    private void OnOverloadLightsAction(EntityUid uid, RevenantComponent component, RevenantOverloadLightsActionEvent args)
+    private void OnBeamFireAction(EntityUid uid, RevenantComponent component, RevenantBeamFireActionEvent args)
     {
         if (args.Handled)
             return;
 
-        if (!TryUseAbility(uid, component, component.OverloadCost, component.OverloadDebuffs))
+        if (!TryUseAbility(uid, component, component.BeamFireCost, component.BeamFireDebuffs))
             return;
 
         args.Handled = true;
 
+        if (!HasComp<MobStateComponent>(args.Target) || !_mobState.IsAlive(args.Target))
+            return;
+
         var xform = Transform(uid);
+
+        if (!TryComp<MapGridComponent>(xform.GridUid, out var map))
+            return;
+
+        var tiles = _mapSystem.GetTilesIntersecting(
+            xform.GridUid.Value,
+            map,
+            Box2.CenteredAround(_transformSystem.GetWorldPosition(xform),
+            new Vector2(component.DefileRadius * 2, component.DefileRadius)))
+            .ToArray();
+
+        _random.Shuffle(tiles);
+
+        for (var i = 0; i < component.DefileTilePryAmount; i++)
+        {
+            if (!tiles.TryGetValue(i, out var value))
+                continue;
+            _tile.PryTile(value);
+        }
+
         var poweredLights = GetEntityQuery<PoweredLightComponent>();
-        var mobState = GetEntityQuery<MobStateComponent>();
-        var lookup = _lookup.GetEntitiesInRange(uid, component.OverloadRadius);
-        //TODO: feels like this might be a sin and a half
+        var lookup = _lookup.GetEntitiesInRange(uid, component.DefileRadius, LookupFlags.Approximate | LookupFlags.Static);
+
         foreach (var ent in lookup)
         {
-            if (!mobState.HasComponent(ent) || !_mobState.IsAlive(ent))
-                continue;
-
-            var nearbyLights = _lookup.GetEntitiesInRange(ent, component.OverloadZapRadius)
-                .Where(e => poweredLights.HasComponent(e) && !HasComp<RevenantOverloadedLightsComponent>(e) &&
-                            _interact.InRangeUnobstructed(e, uid, -1)).ToArray();
-
-            if (!nearbyLights.Any())
-                continue;
-
-            //get the closest light
-            var allLight = nearbyLights.OrderBy(e =>
-                Transform(e).Coordinates.TryDistance(EntityManager, xform.Coordinates, out var dist) ? component.OverloadZapRadius : dist);
-            var comp = EnsureComp<RevenantOverloadedLightsComponent>(allLight.First());
-            comp.Target = ent; //who they gon fire at?
+            if (poweredLights.HasComponent(ent))
+                _ghost.DoGhostBooEvent(ent);
         }
+
+        _lightning.ShootLightning(uid, args.Target, component.BeamEntityId);
     }
 
     private void OnBlightAction(EntityUid uid, RevenantComponent component, RevenantBlightActionEvent args)
@@ -345,8 +371,84 @@ public sealed partial class RevenantSystem
                 _whitelistSystem.IsBlacklistPass(component.MalfunctionBlacklist, ent))
                 continue;
 
+            if (TryComp<IonStormTargetComponent>(ent, out var target) && TryComp<SiliconLawBoundComponent>(ent, out var lawBound))
+                _ionStorm.IonStormTarget((ent, lawBound, target));
+
             var ev = new GotEmaggedEvent(uid, EmagType.Interaction | EmagType.Access);
             RaiseLocalEvent(ent, ref ev);
         }
+    }
+
+    private void OnSleepAction(EntityUid uid, RevenantComponent component, RevenantSleepActionEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        if (HasComp<MindShieldComponent>(args.Target))
+        {
+            _popup.PopupEntity(Loc.GetString("revenant-sleep-too-powerful"), uid, uid);
+            return;
+        }
+
+        if (!TryUseAbility(uid, component, component.SleepCost, component.SleepDebuffs))
+            return;
+
+        args.Handled = true;
+
+        EnsureComp<RevenantForcedSleepComponent>(args.Target);
+    }
+
+    private void OnMindCaptureAction(EntityUid uid, RevenantComponent component, RevenantMindCaptureActionEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        if (!HasComp<MobStateComponent>(args.Target) || !_mobState.IsDead(args.Target))
+            return;
+
+        if (!TryUseAbility(uid, component, component.MindCaptureCost, component.MindCaptureDebuffs))
+            return;
+
+        if (!_mind.TryGetMind(args.Performer, out var perMind, out var _))
+            return;
+
+        args.Handled = true;
+
+        string oldTTSProto = "";
+        var comp = EnsureComp<RevenantMindCapturedComponent>(args.Target);
+
+        comp.RevenantUid = uid;
+
+        if (TryComp<TTSComponent>(args.Target, out var targetTTS) && TryComp<TTSComponent>(uid, out var revTTS))
+        {
+            if (!string.IsNullOrEmpty(targetTTS.VoicePrototypeId))
+                oldTTSProto = targetTTS.VoicePrototypeId;
+
+            targetTTS.VoicePrototypeId = revTTS.VoicePrototypeId;
+
+            comp.ReturnTTSPrototype = oldTTSProto;
+        }
+
+        if (_mind.TryGetMind(args.Target, out var tarMindID, out var tarMind))
+        {
+            if (TryComp<GhostComponent>(tarMind.VisitingEntity, out var tarGhostComp))
+            {
+                comp.TargetUid = tarMind.VisitingEntity.Value;
+                _ghost.SetCanReturnToBody(tarGhostComp, false);
+            }
+            else
+            {
+                EntityUid? ghost = _ghost.SpawnGhost((tarMindID, tarMind), args.Target, true);
+                if (TryComp<GhostComponent>(ghost, out var tarGhostCompEnsured))
+                {
+                    comp.TargetUid = ghost.Value;
+                    _ghost.SetCanReturnToBody(tarGhostCompEnsured, false);
+                }
+            }
+        }
+
+        _rejuvenate.PerformRejuvenate(args.Target);
+        _mind.Visit(perMind, args.Target);
+
     }
 }

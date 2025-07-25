@@ -38,6 +38,7 @@
     name: ghost-role-information-revenant-name
     description: ghost-role-information-revenant-description
     rules: ghost-role-information-revenant-rules
+    reregister: false
     mindRoles:
     - MindRoleGhostRoleSoloAntagonist
     raffle:
