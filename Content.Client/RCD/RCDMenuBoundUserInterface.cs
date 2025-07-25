@@ -38,46 +38,56 @@ public sealed class RCDMenuBoundUserInterface : BoundUserInterface
         _menu.OpenOverMouseScreenPosition();
     }
 
-    private IEnumerable<RadialMenuOption> ConvertToButtons(HashSet<ProtoId<RCDPrototype>> prototypes)
+    private IEnumerable<RadialMenuOption> ConvertToButtons(HashSet<ProtoId<RCDPrototype>> prototypes) // DS14-RPD
     {
+        // DS14-RPD-start
         var categories = new Dictionary<string, (List<RadialMenuActionOption> Actions, SpriteSpecifier? Sprite, string? Tooltip)>();
         var options = new List<RadialMenuOption>();
+        // DS14-RPD-end
 
         foreach (var protoId in prototypes)
         {
+            // DS14-RPD-start
             var proto = _prototypeManager.Index(protoId);
             var button = new RadialMenuActionOption<RCDPrototype>(HandleMenuOptionClick, proto)
             {
                 Sprite = proto.Sprite,
                 ToolTip = GetTooltip(proto)
             };
+            // DS14-RPD-end
 
-            if (!_prototypeManager.TryIndex<RCDGroupPrototype>(proto.Category, out var group))
+            if (!_prototypeManager.TryIndex<RCDGroupPrototype>(proto.Category, out var group)) // DS14-RPD
             {
+                // DS14-RPD-start
                 options.Add(button);
                 continue;
+                // DS14-RPD-end
             }
 
-            if (!categories.TryGetValue(proto.Category, out var entry))
+            if (!categories.TryGetValue(proto.Category, out var entry)) // DS14-RPD
             {
+            // DS14-RPD-start
                 var sprite = group.Sprite;
                 entry = (new List<RadialMenuActionOption>(), sprite, Loc.GetString(group.Name));
                 categories[proto.Category] = entry;
             }
 
             entry.Actions.Add(button);
+            // DS14-RPD-end
         }
 
-        foreach (var (category, (actions, sprite, tooltip)) in categories)
+        foreach (var (category, (actions, sprite, tooltip)) in categories) // DS14-RPD
         {
-            options.Add(new RadialMenuNestedLayerOption(actions)
+            options.Add(new RadialMenuNestedLayerOption(actions) // DS14-RPD
             {
+            // DS14-RPD-start
                 Sprite = sprite,
                 ToolTip = tooltip
             });
+            // DS14-RPD-end
         }
 
-        return options;
+        return options; // DS14-RPD
     }
 
     private void HandleMenuOptionClick(RCDPrototype proto)
@@ -120,7 +130,7 @@ public sealed class RCDMenuBoundUserInterface : BoundUserInterface
             tooltip = Loc.GetString(proto.SetName);
         }
 
-        tooltip = OopsConcat(char.ToUpper(tooltip[0]).ToString(), tooltip[1..]);
+        tooltip = OopsConcat(char.ToUpper(tooltip[0]).ToString(), tooltip[1..]); // DS14-RPD
 
         return tooltip;
     }
