@@ -26,7 +26,7 @@ public sealed class RCDConstructionGhostRotationEvent : EntityEventArgs
         Direction = direction;
     }
 }
-
+// DS14-RPD-start
 [Serializable, NetSerializable]
 public sealed class RCDConstructionGhostFlipEvent : EntityEventArgs
 {
@@ -38,6 +38,7 @@ public sealed class RCDConstructionGhostFlipEvent : EntityEventArgs
         UseMirrorPrototype = useMirrorPrototype;
     }
 }
+// DS14-RPD-end
 
 [Serializable, NetSerializable]
 public enum RcdUiKey : byte
