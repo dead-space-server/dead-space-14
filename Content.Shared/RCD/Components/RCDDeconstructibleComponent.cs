@@ -32,10 +32,11 @@ public sealed partial class RCDDeconstructableComponent : Component
     [DataField, ViewVariables(VVAccess.ReadWrite)]
     public bool Deconstructable = true;
 
-
+    // DS14-RPD-start
     /// <summary>
     /// Toggles whether this entity is deconstructable by the RPD or not
     /// </summary>
     [DataField("rpd"), ViewVariables(VVAccess.ReadWrite)]
     public bool RpdDeconstructable = false;
+    // DS14-RPD-end
 }
