@@ -106,8 +106,9 @@ public sealed class RCDConstructionGhostSystem : EntitySystem
             _placementDirection = _placementManager.Direction;
             RaiseNetworkEvent(new RCDConstructionGhostRotationEvent(GetNetEntity(heldEntity.Value), _placementDirection));
         }
-
+        
         // If the placer has not changed build it.
+        // DS14-RPD-start
         _rcdSystem.UpdateCachedPrototype(heldEntity.Value, rcd);
         var useProto = (_useMirrorPrototype && !string.IsNullOrEmpty(rcd.CachedPrototype.MirrorPrototype)) ? rcd.CachedPrototype.MirrorPrototype : rcd.CachedPrototype.Prototype;
 
@@ -115,20 +116,21 @@ public sealed class RCDConstructionGhostSystem : EntitySystem
         {
             CreatePlacer(heldEntity.Value, rcd, useProto);
         }
+        // DS14-RPD-end
 
 
     }
 
-    private void CreatePlacer(EntityUid uid, RCDComponent component, string? prototype)
+    private void CreatePlacer(EntityUid uid, RCDComponent component, string? prototype) // DS14-RPD
     {
         // Create a new placer
         var newObjInfo = new PlacementInformation
         {
-            MobUid = uid,
+            MobUid = uid, // DS14-RPD
             PlacementOption = _placementMode,
-            EntityType = prototype,
-            Range = (int)Math.Ceiling(SharedInteractionSystem.InteractionRange),
-            IsTile = (component.CachedPrototype.Mode == RcdMode.ConstructTile),
+            EntityType = prototype, // DS14-RPD
+            Range = (int)Math.Ceiling(SharedInteractionSystem.InteractionRange), // DS14-RPD
+            IsTile = (component.CachedPrototype.Mode == RcdMode.ConstructTile), // DS14-RPD
             UseEditorContext = false,
         };
 
