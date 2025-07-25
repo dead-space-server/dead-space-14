@@ -21,11 +21,13 @@
   - type: PipeAppearance
   - type: Anchorable
   - type: Rotatable
+  # DS14-RPD-start
   - type: RCDDeconstructable
     cost: 1
     delay: 2
     fx: EffectRCDDeconstruct2
     rpd: true
+  # DS14-RPD-end
   - type: Destructible
     thresholds:
     - trigger: # for nukes
