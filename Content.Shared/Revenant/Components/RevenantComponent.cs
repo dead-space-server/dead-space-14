@@ -197,14 +197,14 @@ public sealed partial class RevenantComponent : Component
     public FixedPoint2 SleepCost = 30;
 
     [DataField("sleepDebuffs")]
-    public Vector2 SleepDebuffs = new(2, 4);
+    public Vector2 SleepDebuffs = new(2, 10);
 
     [DataField] public EntityUid? SleepAction;
     #endregion
 
     #region Mind Capture Ability
     [ViewVariables(VVAccess.ReadWrite), DataField("mindCaptureCost")]
-    public FixedPoint2 MindCaptureCost = 10;
+    public FixedPoint2 MindCaptureCost = 100;
 
     [DataField("mindCaptureDebuffs")]
     public Vector2 MindCaptureDebuffs = new(10, 10);

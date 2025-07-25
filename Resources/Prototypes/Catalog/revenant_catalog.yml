@@ -56,7 +56,7 @@
   description: revenant-mindcapture-desc
   productAction: ActionRevenantMindCapture
   cost:
-    StolenEssence: 0
+    StolenEssence: 200
   categories:
   - RevenantAbilities
   conditions:

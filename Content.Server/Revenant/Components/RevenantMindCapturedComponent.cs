@@ -8,7 +8,7 @@ public sealed partial class RevenantMindCapturedComponent : Component
     public float Accumulator = 0;
 
     [ViewVariables(VVAccess.ReadWrite)]
-    public float DurationOfCapture = 30f;
+    public float DurationOfCapture = 300f;
 
     [ViewVariables(VVAccess.ReadOnly)]
     public EntityUid RevenantUid;
