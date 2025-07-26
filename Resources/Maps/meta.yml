@@ -76072,8 +76072,6 @@ entities:
       pos: -11.5,-14.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 29
   - uid: 27859
@@ -76082,8 +76080,6 @@ entities:
       pos: -8.5,-14.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 29
 - proto: Fireplace
@@ -108734,8 +108730,6 @@ entities:
       pos: 0.5,-15.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 29
     - type: AtmosPipeColor
@@ -110316,8 +110310,6 @@ entities:
       pos: -9.5,-14.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 29
 - proto: GasVentScrubber
@@ -110402,8 +110394,6 @@ entities:
       pos: -5.5,-15.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 29
     - type: AtmosPipeColor
@@ -111766,8 +111756,6 @@ entities:
       pos: -10.5,-14.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 29
   - uid: 27679
