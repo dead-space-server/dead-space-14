@@ -196,7 +196,7 @@
     RawDiamond: 100
 
 #- type: latheRecipe
-#  id: SheetUranium1
+#  id: SheetUranium1 # DS14-uranium-rework
 #  result: SheetUranium1
 #  completetime: 0
 #  materials:
