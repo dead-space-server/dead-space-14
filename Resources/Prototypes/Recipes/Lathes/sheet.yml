@@ -125,7 +125,7 @@
     Coal: 1000
 
 #- type: latheRecipe
-#  id: SheetUranium30
+#  id: SheetUranium30 # DS14-uranium-rework
 #  result: SheetUranium
 #  completetime: 2
 #  materials:
