@@ -101,6 +101,9 @@
   id: TaipanBorgTorso
 
 - type: Tag
+  id: TaipanRole
+
+- type: Tag
   id: TaipanRipleyEquipment
 
 - type: Tag

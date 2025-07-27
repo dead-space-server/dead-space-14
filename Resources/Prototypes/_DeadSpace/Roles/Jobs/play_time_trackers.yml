@@ -11,7 +11,16 @@
   id: JobTaipanChef
 
 - type: playTimeTracker
+  id: JobTaipanCommunicationsOfficer
+
+- type: playTimeTracker
   id: JobTaipanMedic
+
+- type: playTimeTracker
+  id: JobTaipanParamedic
+
+- type: playTimeTracker
+  id: JobTaipanRecruit
 
 - type: playTimeTracker
   id: JobTaipanResearchDirector
@@ -20,4 +29,7 @@
   id: JobTaipanResearcher
 
 - type: playTimeTracker
-  id: JobTaipanCommunicationsOfficer
+  id: JobTaipanTechnician
+
+- type: playTimeTracker
+  id: JobTaipanTechnicalOperationsSupervisor

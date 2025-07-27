@@ -484,6 +484,9 @@
                   max: 1
             - !type:DoActsBehavior
               acts: [ "Destruction" ]
+    - type: Construction # DS14
+      graph: Girder
+      node: plastitaniumWall
 
 - type: entity
   parent: WallShuttleDiagonal
@@ -528,6 +531,9 @@
           collection: MetalSlam
       - !type:DoActsBehavior
         acts: ["Destruction"]
+  - type: Construction # DS14
+    graph: Girder
+    node: diagonalplastitaniumWall
 
 - type: entity
   id: WallPlastitaniumDiagonalIndestructible

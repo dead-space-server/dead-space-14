@@ -11,9 +11,11 @@
   requirements:
   - !type:DepartmentTimeRequirement
     department: Security
-    time: 6000
+    time: 36000 # 10 hours
   access:
   - TaipanBasic
+  - TaipanMaint
+  - TaipanExternal
   - TaipanProtection
   special:
   - !type:AddImplantSpecial

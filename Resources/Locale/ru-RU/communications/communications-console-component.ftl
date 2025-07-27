@@ -2,6 +2,7 @@
 comms-console-announcement-title-station = Консоль связи
 comms-console-announcement-title-centcom = Центральное командование
 comms-console-announcement-title-nukie = Ядерные оперативники
+comms-console-announcement-title-taipan = ННКСС Тайпан
 comms-console-menu-announcement-button-tooltip = Send your message as a station-wide radio announcement.
 comms-console-announcement-title-station-ai = Станционный ИИ
 # Popup

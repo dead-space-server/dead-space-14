@@ -848,14 +848,14 @@ TypanIDCardEng: null
 TypanIDCardCom: null
 TypanIDCardCargo: null
 TypanIDCardChef: null
-SpawnPointLatejoinTypanAtmos: SpawnPointLatejoinTaipanAtmosphericsEngineer
-SpawnPointLatejoinTypanBotanist: SpawnPointLatejoinTaipanBotanist
-SpawnPointLatejoinTypanChef: SpawnPointLatejoinTaipanChef
-SpawnPointLatejoinTypanCargotech: SpawnPointLatejoinTaipanCargotech
-SpawnPointLatejoinTypanOfficer: SpawnPointLatejoinTaipanOfficer
-SpawnPointLatejoinTypanMedic: SpawnPointLatejoinTaipanMedic
-SpawnPointLatejoinTypanRd: SpawnPointLatejoinTaipanResearchDirector
-SpawnPointLatejoinTypanScience: SpawnPointLatejoinTaipanResearcher
+SpawnPointLatejoinTypanAtmos: null
+SpawnPointLatejoinTypanBotanist: null
+SpawnPointLatejoinTypanChef: null
+SpawnPointLatejoinTypanCargotech: null
+SpawnPointLatejoinTypanOfficer: null
+SpawnPointLatejoinTypanMedic: null
+SpawnPointLatejoinTypanRd: null
+SpawnPointLatejoinTypanScience: null
 
 # 2025-06-30
 ADTAbakanRifleAEK: WeaponRifleAEK

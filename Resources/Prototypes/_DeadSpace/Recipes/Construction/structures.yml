@@ -1,3 +1,135 @@
+# Plastitanium
+
+- type: construction
+  name: plastitanium plasma window
+  id: PlastitaniumPlasmaWindow
+  graph: PlastitaniumWindow
+  startNode: start
+  targetNode: plastitaniumplasmaWindow
+  category: construction-category-structures
+  canBuildInImpassable: true
+  description: Clear, with a purple tint.
+  entityWhitelist:
+    tags:
+    - TaipanRole
+  conditions:
+  - !type:EmptyOrWindowValidInTile
+  - !type:NoWindowsInTile
+  icon:
+    sprite: _DeadSpace/Structures/Windows/plastitanium_plasma_window.rsi
+    state: full
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+
+- type: construction
+  name: plastitanium window
+  id: PlastitaniumWindow
+  graph: PlastitaniumWindow
+  startNode: start
+  targetNode: plastitaniumWindow
+  category: construction-category-structures
+  canBuildInImpassable: true
+  description: Clear but tough.
+  entityWhitelist:
+    tags:
+    - TaipanRole
+  conditions:
+  - !type:EmptyOrWindowValidInTile
+  - !type:NoWindowsInTile
+  icon:
+    sprite: Structures/Windows/plastitanium_window.rsi
+    state: full
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+
+- type: construction
+  name: diagonal plastitanium plasma window
+  id: PlastitaniumPlasmaWindowDiagonal
+  graph: PlastitaniumWindowDiagonal
+  startNode: start
+  targetNode: plastitaniumplasmaWindowDiagonal
+  category: construction-category-structures
+  canBuildInImpassable: true
+  description: Clear, with a purple tint.
+  entityWhitelist:
+    tags:
+    - TaipanRole
+  conditions:
+  - !type:EmptyOrWindowValidInTile
+  - !type:NoWindowsInTile
+  icon:
+    sprite: _DeadSpace/Structures/Windows/plastitanium_plasma_window_diagonal.rsi
+    state: state1
+  objectType: Structure
+  placementMode: SnapgridCenter
+
+- type: construction
+  name: diagonal plastitanium window
+  id: PlastitaniumWindowDiagonal
+  graph: PlastitaniumWindowDiagonal
+  startNode: start
+  targetNode: plastitaniumWindowDiagonal
+  category: construction-category-structures
+  canBuildInImpassable: true
+  description: Clear but tough.
+  entityWhitelist:
+    tags:
+    - TaipanRole
+  conditions:
+  - !type:EmptyOrWindowValidInTile
+  - !type:NoWindowsInTile
+  icon:
+    sprite: Structures/Windows/plastitanium_window_diagonal.rsi
+    state: state1
+  objectType: Structure
+  placementMode: SnapgridCenter
+
+- type: construction
+  name: plastitanium wall
+  id: PlastitaniumWall
+  graph: Girder
+  startNode: start
+  targetNode: plastitaniumWall
+  category: construction-category-structures
+  description: Keeps the air in and the greytide out.
+  entityWhitelist:
+    tags:
+    - TaipanRole
+  icon:
+    sprite: Structures/Walls/plastitanium.rsi
+    state: full
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  name: diagonal plastitanium wall
+  id: DiagonalPlastitaniumWall
+  graph: Girder
+  startNode: start
+  targetNode: diagonalplastitaniumWall
+  category: construction-category-structures
+  description: Keeps the air in and the greytide out.
+  entityWhitelist:
+    tags:
+    - TaipanRole
+  icon:
+    sprite: Structures/Walls/plastitanium_diagonal.rsi
+    state: state0
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+# Secret Doors
+
 - type: construction
   id: ReinforcedSecretDoor
   name: reinforced secret door

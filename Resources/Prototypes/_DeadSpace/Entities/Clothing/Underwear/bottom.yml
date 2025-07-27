@@ -1230,7 +1230,7 @@
 
 - type: entity
   parent: ClothingUnderwearBottomBase
-  id: ClothingUnderwearBottomPantiesTaipanCommuncationsOfficer
+  id: ClothingUnderwearBottomPantiesTaipanCommunicationsOfficer
   name: стринги офицера телекоммуникаций
   description: Cтандартное нижнее бельё офицера телекоммуникаций.
   components:

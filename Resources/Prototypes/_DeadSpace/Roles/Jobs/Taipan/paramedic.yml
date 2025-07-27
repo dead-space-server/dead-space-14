@@ -11,11 +11,12 @@
   requirements:
   - !type:RoleTimeRequirement
     role: JobTaipanMedic
-    time: 6000
+    time: 36000 # 10 hours
   access:
   - TaipanBasic
-  - TaipanMedical
   - TaipanMaint
+  - TaipanExternal
+  - TaipanMedical
   special:
   - !type:AddImplantSpecial
     implants: [ DeathRattleImplantTaipan ]

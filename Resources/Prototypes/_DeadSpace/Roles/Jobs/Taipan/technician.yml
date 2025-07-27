@@ -11,7 +11,7 @@
   requirements:
   - !type:DepartmentTimeRequirement
     department: Engineering
-    time: 12000
+    time: 36000 #10 hrs
   access:
   - TaipanBasic
   - TaipanEngineering

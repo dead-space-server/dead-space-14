@@ -10,17 +10,19 @@
   canBeAntag: false
   requirements:
   - !type:DepartmentTimeRequirement
-    department: Science
-    time: 30000
-  - !type:DepartmentTimeRequirement
-    department: Medical
-    time: 30000
-  - !type:OverallPlaytimeRequirement
-    time: 150000
-  - !type:AgeRequirement
-    requiredAge: 24
+    department: Taipan
+    time: 216000 # 60 hours
+  - !type:RoleTimeRequirement
+    role: JobTaipanResearcher
+    time: 72000 # 20 hours
+  - !type:RoleTimeRequirement
+    role: JobTaipanMedic
+    time: 36000 # 10 hours
   access:
   - TaipanBasic
+  - TaipanMaint
+  - TaipanExternal
+  - TaipanMedical
   - TaipanScience
   - TaipanCommand
   - TaipanResearchDirector

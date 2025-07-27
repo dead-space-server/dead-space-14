@@ -240,9 +240,12 @@
   - type: CommunicationsConsole
     title: comms-console-announcement-title-taipan
     announcementSound:
-      path: /Audio/_DeadSpace/Announcements/announce.ogg
+      path: /Audio/_DeadSpace/Announcements/announce_taipan.ogg
       params:
         volume: -2
+    canCallERT: False
+    canCallShuttle: False
+    color: "#8B0000"
   - type: DeviceNetwork
     transmitFrequencyId: ShuttleTimer
   - type: ActivatableUI

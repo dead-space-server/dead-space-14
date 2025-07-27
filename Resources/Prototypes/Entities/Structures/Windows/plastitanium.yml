@@ -109,6 +109,9 @@
   - type: Damageable
     damageContainer: StructuralInorganic
     damageModifierSet: RGlass
+  - type: Construction # DS14
+    graph: PlastitaniumWindow
+    node: plastitaniumWindow
 
 - type: entity
   id: PlastitaniumWindowDiagonalBase
@@ -199,3 +202,6 @@
   - type: Damageable
     damageContainer: StructuralInorganic
     damageModifierSet: RGlass
+  - type: Construction # DS14
+    graph: PlastitaniumWindowDiagonal
+    node: plastitaniumWindowDiagonal

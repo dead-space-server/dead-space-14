@@ -9,21 +9,21 @@
   supervisors: job-supervisors-syndicate
   canBeAntag: false
   requirements:
+  - !type:RoleTimeRequirement
+    role: JobTaipanCargotech
+    time: 36000 # 10 hours
+  - !type:RoleTimeRequirement
+    role: JobTaipanAtmosphericsEngineer
+    time: 18000 # 5 hours
   - !type:DepartmentTimeRequirement
-    department: Engineering
-    time: 30000
-  - !type:DepartmentTimeRequirement
-    department: Cargo
-    time: 30000
-  - !type:DepartmentTimeRequirement
-    department: Service
-    time: 15000
-  - !type:OverallPlaytimeRequirement
-    time: 120000
-  - !type:AgeRequirement
-    requiredAge: 24
+    department: Taipan
+    time: 144000 # 40 hours
   access:
   - TaipanBasic
+  - TaipanMaint
+  - TaipanExternal
+  - TaipanCargo
+  - TaipanAtmospherics
   - TaipanEngineering
   - TaipanCommand
   special:
