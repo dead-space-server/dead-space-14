@@ -1,0 +1,16 @@
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatBeretHop
+  name: берет главы персонала
+  description: Тёмно-синий берет с вставленным рубином посередине, для истинных ценителей бюрократии!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hats/beret_hop.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hats/beret_hop.rsi
+  - type: Tag
+    tags:
+    - HamsterWearable
+    - ClothMade
+    - Recyclable
+    - WhitelistChameleon

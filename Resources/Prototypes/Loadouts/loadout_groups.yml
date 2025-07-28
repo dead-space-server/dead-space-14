@@ -181,6 +181,7 @@
   minLimit: 0
   loadouts:
   - HoPHead
+  - HoPBeret #DS14
 
 - type: loadoutGroup
   id: HoPJumpsuit
