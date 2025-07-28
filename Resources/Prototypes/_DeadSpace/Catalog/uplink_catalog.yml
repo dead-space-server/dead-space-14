@@ -18,20 +18,6 @@
           - SurplusBundle
 
 - type: listing
-  id: UplinkSyndieSabre
-  name: uplink-syndiesabre-name
-  description: uplink-syndiesabre-desc
-  icon: { sprite: _DeadSpace/Objects/Weapons/Melee/syndie_sabre.rsi, state: icon }
-  discountCategory: veryRareDiscounts
-  discountDownTo:
-    Telecrystal: 6
-  productEntity: ClothingBeltSheathSyndieFilled
-  cost:
-    Telecrystal: 10
-  categories:
-  - UplinkWeaponry
-
-- type: listing
   id: UplinkEnergyCrossbowNuke
   name: uplink-energy-crossbow-name
   description: uplink-energy-crossbow-desc
@@ -49,6 +35,20 @@
     blacklist:
       components:
       - SurplusBundle
+
+- type: listing
+  id: UplinkSyndieSabre
+  name: uplink-syndiesabre-name
+  description: uplink-syndiesabre-desc
+  icon: { sprite: _DeadSpace/Objects/Weapons/Melee/syndie_sabre.rsi, state: icon }
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+    Telecrystal: 6
+  productEntity: ClothingBeltSheathSyndieFilled
+  cost:
+    Telecrystal: 10
+  categories:
+  - UplinkWeaponry
 
 - type: listing
   id: UplinkAdvansedMagboots

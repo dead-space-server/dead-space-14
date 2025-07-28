@@ -1238,9 +1238,6 @@
   id: SyndicateSegwayKeys
 
 - type: Tag
-  id: SyndieSabre # DS 14 
-
-- type: Tag
   id: Syringe
 
 - type: Tag
