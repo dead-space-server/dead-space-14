@@ -6,7 +6,7 @@
     edges:
     - to: plastitaniumplasmaWindow
       steps:
-      - material: Plasteel
+      - material: Plastitanium
         amount: 2
       - material: ReinforcedPlasmaGlass
         amount: 2
@@ -14,7 +14,7 @@
 
     - to: plastitaniumWindow
       steps:
-      - material: Plasteel
+      - material: Plastitanium
         amount: 2
       - material: ReinforcedGlass
         amount: 2
@@ -29,7 +29,7 @@
         prototype: SheetRPGlass1
         amount: 2
       - !type:SpawnPrototype
-        prototype: SheetPlasteel1
+        prototype: SheetPlastitanium1
         amount: 2
       - !type:DeleteEntity {}
       steps:
@@ -59,7 +59,7 @@
         prototype: SheetRGlass1
         amount: 2
       - !type:SpawnPrototype
-        prototype: SheetPlasteel1
+        prototype: SheetPlastitanium1
         amount: 2
       - !type:DeleteEntity {}
       steps:
@@ -88,7 +88,7 @@
     edges:
     - to: plastitaniumplasmaWindowDiagonal
       steps:
-      - material: Plasteel
+      - material: Plastitanium
         amount: 2
       - material: ReinforcedPlasmaGlass
         amount: 2
@@ -96,7 +96,7 @@
 
     - to: plastitaniumWindowDiagonal
       steps:
-      - material: Plasteel
+      - material: Plastitanium
         amount: 2
       - material: ReinforcedGlass
         amount: 2

@@ -43,7 +43,7 @@
     - LightsStatic
     - ServiceStatic
     - PowerCellsStatic
-    - ElectronicsStatic
+    - TaipanElectronicsStatic
   - type: BlueprintReceiver
     whitelist:
       tags:

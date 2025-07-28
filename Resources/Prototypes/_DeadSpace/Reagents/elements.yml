@@ -1,0 +1,19 @@
+- type: reagent
+  id: Titanium
+  name: reagent-name-titanium
+  group: Elements
+  desc: reagent-desc-titanium
+  physicalDesc: reagent-physical-desc-metallic
+  flavor: metallic
+  color: "#464762"
+  boilingPoint: 2862.0
+  meltingPoint: 1538.0
+  metabolisms:
+    Poison:
+      metabolismRate: 0.1
+      effects:
+      - !type:HealthChange
+        damage:
+          types:
+            Poison: 0.3
+# Заглушка, потом будет великая химия Тайпана

@@ -1,4 +1,45 @@
 # Plastitanium
+- type: construction
+  name: titanium girder
+  id: TitaniumGirder
+  graph: TitaniumGirder
+  startNode: start
+  targetNode: titaniumGirder
+  category: construction-category-structures
+  description: A large structural assembly made out of metal.
+  entityWhitelist:
+    tags:
+    - TaipanRole
+  icon:
+    sprite: _DeadSpace/Structures/Walls/girder.rsi
+    state: titanium_wall_girder
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  name: plastitanium girder
+  id: PlastitaniumGirder
+  graph: TitaniumGirder
+  startNode: start
+  targetNode: plastitaniumGirder
+  category: construction-category-structures
+  description: A large structural assembly made out of metal and plasteel.
+  entityWhitelist:
+    tags:
+    - TaipanRole
+  icon:
+    sprite: _DeadSpace/Structures/Walls/girder.rsi
+    state: plastitanium_wall_girder
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
 
 - type: construction
   name: plastitanium plasma window
@@ -89,7 +130,7 @@
 - type: construction
   name: plastitanium wall
   id: PlastitaniumWall
-  graph: Girder
+  graph: TitaniumGirder
   startNode: start
   targetNode: plastitaniumWall
   category: construction-category-structures
@@ -110,7 +151,7 @@
 - type: construction
   name: diagonal plastitanium wall
   id: DiagonalPlastitaniumWall
-  graph: Girder
+  graph: TitaniumGirder
   startNode: start
   targetNode: diagonalplastitaniumWall
   category: construction-category-structures

@@ -318,38 +318,6 @@
             - material: Steel
               amount: 1
               doAfter: 1
-
-        - to: plastitaniumWall
-          completed:
-          - !type:SnapToGrid
-            southRotation: true
-          conditions:
-          - !type:EntityAnchored { }
-          steps:
-          - material: MetalRod
-            amount: 4
-            doAfter: 1
-          - tool: Screwing
-            doAfter: 2
-          - material: Plasteel
-            amount: 2
-            doAfter: 1
-
-        - to: diagonalplastitaniumWall
-          completed:
-          - !type:SnapToGrid
-            southRotation: false
-          conditions:
-          - !type:EntityAnchored { }
-          steps:
-          - material: MetalRod
-            amount: 4
-            doAfter: 1
-          - tool: Welding
-            doAfter: 4
-          - material: Plasteel
-            amount: 2
-            doAfter: 1
         # DS14-end
 
         - to: shuttleWall
@@ -502,11 +470,11 @@
       - to: reinforcedGirder
         completed:
         - !type:SpawnPrototype
-          prototype: SheetPlasteel1
-          amount: 1
+          prototype: SheetPlastitanium1
+          amount: 2
         - !type:SpawnPrototype
-          prototype: SheetSteel1
-          amount: 1
+          prototype: SheetTitanium1
+          amount: 4
         steps:
         - tool: Welding
           doAfter: 5
@@ -536,12 +504,11 @@
         completed:
         - !type:SpawnPrototype
           prototype: SheetPlasteel1
-          amount: 1
+          amount: 2
         - !type:SpawnPrototype
-          prototype: SheetSteel1
+          prototype: PartRodMetal1
           amount: 1
         steps:
-        #To-Do: Add deconstruct visuals
         - tool: Welding
           doAfter: 5
         - tool: Cutting

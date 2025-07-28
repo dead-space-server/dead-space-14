@@ -78,6 +78,25 @@
 # Research
 
 - type: latheRecipePack
+  id: TaipanElectronicsStatic
+  recipes:
+  - IntercomElectronics
+  - FirelockElectronics
+  - TaipanDoorElectronics
+  - AirAlarmElectronics
+  - StationMapElectronics
+  - FireAlarmElectronics
+  - MailingUnitElectronics
+  - SignalTimerElectronics
+  - APCElectronics
+  - SMESMachineCircuitboard
+  - SubstationMachineCircuitboard
+  - WallmountSubstationElectronics
+  - CellRechargerCircuitboard
+  - WeaponCapacitorRechargerCircuitboard
+  - FreezerElectronics
+
+- type: latheRecipePack
   id: TaipanScienceBoardsStatic
   recipes:
   - ProtolatheMachineCircuitboardTaipan

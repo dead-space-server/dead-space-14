@@ -131,6 +131,12 @@
   id: TrashBagBlue
 
 - type: Tag
+  id: Titanium
+
+- type: Tag
+  id: Plastitanium
+
+- type: Tag
   id: WeldingMaskFlame
 
 - type: Tag

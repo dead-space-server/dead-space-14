@@ -92,3 +92,8 @@
   parent: BaseGoldCircuitboardRecipe
   id: AnomalyVesselExperimentalCircuitboardTaipan
   result: AnomalyVesselExperimentalCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseCheapElectronicsRecipe
+  id: DoorElectronicsTaipan
+  result: DoorElectronicsTaipan

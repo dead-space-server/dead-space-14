@@ -485,7 +485,7 @@
             - !type:DoActsBehavior
               acts: [ "Destruction" ]
     - type: Construction # DS14
-      graph: Girder
+      graph: TitaniumGirder
       node: plastitaniumWall
 
 - type: entity
@@ -532,7 +532,7 @@
       - !type:DoActsBehavior
         acts: ["Destruction"]
   - type: Construction # DS14
-    graph: Girder
+    graph: TitaniumGirder
     node: diagonalplastitaniumWall
 
 - type: entity
