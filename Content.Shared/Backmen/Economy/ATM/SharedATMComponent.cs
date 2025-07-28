@@ -13,6 +13,10 @@ namespace Content.Shared.Backmen.Economy.ATM;
 [NetworkedComponent, RegisterComponent]
 public sealed partial class AtmComponent : Component
 {
+    // <summary>
+    // Equals, how much need to drop spacecash at emag
+    // </summary>
+    public int DropEmagged = 10;
     public static string IdCardSlotId = "IdCardSlot";
 
     [DataField("idCardSlot")]

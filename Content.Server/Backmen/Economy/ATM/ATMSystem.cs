@@ -24,6 +24,10 @@ using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using Content.Shared.Power;
+using Content.Shared.Emag.Systems;
+using System.Numerics;
+using Robust.Shared.Random;
+using Content.Shared.Throwing;
 
 namespace Content.Server.Backmen.Economy.ATM;
 
@@ -40,6 +44,8 @@ public sealed class ATMSystem : SharedATMSystem
     [Dependency] private readonly StoreSystem _storeSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly ThrowingSystem _throwingSystem = default!;
 
     public override void Initialize()
     {
@@ -60,6 +66,8 @@ public sealed class ATMSystem : SharedATMSystem
                 subs.Event<ATMRequestWithdrawMessage>(OnRequestWithdraw);
             });
         SubscribeLocalEvent<AtmCurrencyComponent, AfterInteractEvent>(OnAfterInteract, before: new[] { typeof(StoreSystem) });
+
+        SubscribeLocalEvent<AtmComponent, GotEmaggedEvent>(OnEmag);
     }
 
     private void OnInteract(Entity<AtmComponent> uid, ref AfterActivatableUIOpenEvent args)
@@ -305,5 +313,21 @@ public sealed class ATMSystem : SharedATMSystem
     private void Apply(Entity<AtmComponent> atm)
     {
         _audioSystem.PlayPvs(atm.Comp.SoundApply, atm, AudioParams.Default.WithVolume(-2f));
+    }
+    private void OnEmag(EntityUid uid, AtmComponent comp, GotEmaggedEvent ev)
+    {
+        ev.Handled = true;
+
+        // Default spawn coordinates
+        var spawnCoordinates = Transform(uid).Coordinates;
+
+        var range = 5f;
+        var direction = new Vector2(_random.NextFloat(-range, range), _random.NextFloat(-range, range));
+
+        foreach (var _ in Enumerable.Range(1, comp.DropEmagged))
+        {
+            var ent = Spawn("SpaceCash1000", spawnCoordinates);
+            _throwingSystem.TryThrow(ent, direction, range);
+        }
     }
 }
