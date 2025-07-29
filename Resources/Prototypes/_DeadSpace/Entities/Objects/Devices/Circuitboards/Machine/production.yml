@@ -238,6 +238,30 @@
         defaultPrototype: Beaker
 
 - type: entity
+  id: OreProcessorMachineCircuitboardTaipan
+  parent: BaseMachineCircuitboardTaipan
+  name: переработчик руды (машинная плата)
+  components:
+  - type: MachineBoard
+    prototype: OreProcessorTaipan
+    stackRequirements:
+      MatterBin: 1
+      Manipulator: 3
+      Glass: 1
+
+- type: entity
+  parent: BaseMachineCircuitboardTaipan
+  id: OreProcessorIndustrialMachineCircuitboardTaipan
+  name: промышленный переработчик руды (машинная плата)
+  components:
+  - type: MachineBoard
+    prototype: OreProcessorIndustrialTaipan
+    stackRequirements:
+      MatterBin: 1
+      Manipulator: 3
+      Glass: 1
+
+- type: entity
   parent: BaseMachineCircuitboardTaipan
   id: AnomalyVesselCircuitboardTaipan
   name: сосуд аномалии (машинная плата)

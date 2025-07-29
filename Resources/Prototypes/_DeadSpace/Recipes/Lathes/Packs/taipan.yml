@@ -164,12 +164,39 @@
 - type: latheRecipePack
   id: TaipanCargoBoards
   recipes:
-  - OreProcessorIndustrialMachineCircuitboard
+  - OreProcessorIndustrialMachineCircuitboardTaipan
   - CargoTelepadMachineCircuitboard
   - ShuttleGunKineticCircuitboard
   - SalvageExpeditionsComputerCircuitboard
   - CargoTelepadMachineCircuitboardTaipan
   - SalvageExpeditionsComputerCircuitboardTaipan
+
+- type: latheRecipePack
+  id: TaipanCargoBoardsStatic
+  recipes:
+  - OreProcessorMachineCircuitboardTaipan
+  - SalvageMagnetMachineCircuitboard
+
+- type: latheRecipePack
+  id: TaipanOreSmelting
+  recipes:
+  - SheetSteel
+  - SheetGlass1
+  - SheetPlasma1
+  - SheetUranium1
+  - SheetTitanium1
+  - IngotGold1
+  - IngotSilver1
+  - MaterialBananium1
+  - MaterialDiamond
+
+- type: latheRecipePack
+  id: TaipanAdvancedSmelting
+  recipes:
+  - SheetPlasteel1
+  - SheetPlastitanium1
+  - SheetUGlass1
+  - SheetRUGlass1
 
 # Service
 

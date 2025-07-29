@@ -166,7 +166,7 @@
     staticPacks:
     - TaipanScienceBoardsStatic
     - TaipanServiceBoardsStatic
-    - CargoBoardsStatic
+    - TaipanCargoBoardsStatic
     - MedicalBoardsStatic
     - EngineeringBoardsStatic
     dynamicPacks:
@@ -414,3 +414,57 @@
         - Sheet
         - RawMaterial
         - Ingot
+
+- type: entity
+  parent: BaseLathe
+  id: OreProcessorTaipan
+  name: переработчик руды
+  description: Производит металлические листы и слитки из руды.
+  suffix: Тайпан
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Machines/Taipan/ore_processor.rsi
+    layers:
+    - state: icon
+      map: ["enum.LatheVisualLayers.IsRunning"]
+    - state: unlit
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+    - state: inserting
+      map: ["enum.MaterialStorageVisualLayers.Inserting"]
+    - state: panel
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: Machine
+    board: OreProcessorMachineCircuitboardTaipan
+  - type: MaterialStorage
+    ignoreColor: true
+    whitelist:
+      tags:
+      - Ore
+  - type: Lathe
+    idleState: icon
+    runningState: building
+    defaultProductionAmount: 10
+    staticPacks:
+    - TaipanOreSmelting
+    - RGlassSmelting
+
+- type: entity
+  parent: OreProcessorTaipan
+  id: OreProcessorIndustrialTaipan
+  name: промышленный переработчик руды
+  description: Переработчик руды, разработанный специально для производства металлов в промышленных масштабах.
+  suffix: Тайпан
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Machines/Taipan/ore_processor_industrial.rsi
+  - type: Machine
+    board: OreProcessorIndustrialMachineCircuitboardTaipan
+  - type: Lathe
+    materialUseMultiplier: 0.75
+    timeMultiplier: 0.5
+    staticPacks:
+    - OreSmelting
+    - TaipanOreSmelting
+    - RGlassSmelting
+    - TaipanAdvancedSmelting

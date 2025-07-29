@@ -97,3 +97,13 @@
   parent: BaseCheapElectronicsRecipe
   id: DoorElectronicsTaipan
   result: DoorElectronicsTaipan
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: OreProcessorMachineCircuitboardTaipan
+  result: OreProcessorMachineCircuitboardTaipan
+
+- type: latheRecipe
+  parent: BaseGoldCircuitboardRecipe
+  id: OreProcessorIndustrialMachineCircuitboardTaipan
+  result: OreProcessorIndustrialMachineCircuitboardTaipan
