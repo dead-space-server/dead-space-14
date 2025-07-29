@@ -14090,8 +14090,6 @@ entities:
 - proto: GrenadeBlast
   entities:
   - uid: 1915
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       rot: 0.5545102348551154 rad
