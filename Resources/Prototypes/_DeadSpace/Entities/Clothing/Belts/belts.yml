@@ -38,7 +38,7 @@
   description: Сумка для ботаников, чтобы легко переносить свои огромные урожаи.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Clothing/Back/plant_bag.rsi
+    sprite: _DeadSpace/Clothing/Belt/plant_bag.rsi
     state: icon
   - type: Clothing
     quickEquip: false

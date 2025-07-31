@@ -289,12 +289,12 @@
     - id: ClothingUniformJumpskirtTaipanBotanist
       amount: 2
     - id: ClothingHandsGlovesLeather
-    - id: ClothingOuterApronBotanist
-    - id: ClothingHeadBandBotany
+    - id: ClothingOuterApronTaipanBotanist
+    - id: ClothingMaskBandBotanyTaipan
     - id: ChemistryBottleRobustHarvest
       prob: 0.3
-    - id: ClothingBeltPlant
-    - id: PlantBag
+    - id: ClothingBeltPlantTaipan
+    - id: TaipanPlantBag
     - id: BoxMouthSwab
     - id: Dropper
     - id: HandLabeler
