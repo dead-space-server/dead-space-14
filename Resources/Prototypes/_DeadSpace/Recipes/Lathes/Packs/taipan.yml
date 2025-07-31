@@ -1,5 +1,6 @@
 # Weaponry
 
+## Firearms
 - type: latheRecipePack
   id: TaipanPistols
   recipes:
@@ -9,26 +10,19 @@
   - WeaponPistolDesertEagle
 
 - type: latheRecipePack
-  id: TaipanSMGs
-  recipes:
-  - WeaponSubMachineGunC20r
-  - WeaponSMGTommyGun
-
-- type: latheRecipePack
-  id: TaipanRifles
+  id: TaipanWeapons
   recipes:
   - WeaponSniperMosin
   - WeaponSniperHristov
   - ADTWeaponRifleXC67
   - WeaponRifleAk
-
-- type: latheRecipePack
-  id: TaipanHeavyWeapons
-  recipes:
+  - WeaponSubMachineGunC20r
+  - WeaponSMGTommyGun
   - WeaponShotgunBulldog
   - WeaponLightMachineGunL6
   - WeaponLauncherChinaLake
 
+## Energy Weapons
 - type: latheRecipePack
   id: TaipanEnergyWeapons
   recipes:
@@ -38,13 +32,14 @@
   - EnergySwordDouble
   - WeaponEnergyCrossbow
 
+## Melee
 - type: latheRecipePack
   id: TaipanMelee
   recipes:
   - ThrowingKnife
-  - CombatKnife
   - CaneSheath
 
+## Grenades
 - type: latheRecipePack
   id: TaipanGrenades
   recipes:
@@ -59,6 +54,7 @@
   - WhiteholeGrenade
   - SingularityGrenade
 
+## Ammo
 - type: latheRecipePack
   id: TaipanAmmoStatic
   recipes:
@@ -69,6 +65,7 @@
   - MagazineDrumTommyGun
   - MagazineLightRifleBox
 
+## Security
 - type: latheRecipePack
   id: TaipanSecurityEquipmentStatic
   recipes:
@@ -77,6 +74,7 @@
 
 # Research
 
+## Electronics
 - type: latheRecipePack
   id: TaipanElectronicsStatic
   recipes:
@@ -96,6 +94,7 @@
   - WeaponCapacitorRechargerCircuitboard
   - FreezerElectronics
 
+## Science
 - type: latheRecipePack
   id: TaipanScienceBoardsStatic
   recipes:
@@ -124,16 +123,7 @@
   - ArtifactAnalyzerMachineCircuitboard
   - ArtifactCrusherMachineCircuitboard
 
-- type: latheRecipePack
-  id: TaipanShuttleBoards
-  recipes:
-  - ShuttleConsoleCircuitboardTaipan
-  - IFFConsoleCircuitboardTaipan
-  - RadarConsoleCircuitboard
-  - ThrusterMachineCircuitboard
-  - GyroscopeMachineCircuitboard
-  - MiniGravityGeneratorCircuitboard
-
+## Clothing
 - type: latheRecipePack
   id: TaipanScienceClothing
   recipes:
@@ -141,6 +131,7 @@
   - ADTClothingShoesBootsMagAdvSynd
   - ClothingShoesBootsMoon
 
+## Robotics
 - type: latheRecipePack
   id: TaipanRoboticsStatic
   recipes:
@@ -159,8 +150,26 @@
   - TaipanLightHeadBorg
   - TaipanTorsoBorg
 
+## Mechs
+- type: latheRecipePack
+  id: TaipanMech
+  recipes:
+  - TaipanRipleyHarness
+  - TaipanRipleyLArm
+  - TaipanRipleyRArm
+  - TaipanRipleyLLeg
+  - TaipanRipleyRLeg
+  - MechEquipmentTaipanRipleyGrabber
+
+- type: latheRecipePack
+  id: TaipanMechBoards
+  recipes:
+  - TaipanRipleyCentralElectronics
+  - TaipanRipleyPeripheralsElectronics
+
 # Cargo
 
+## Boards
 - type: latheRecipePack
   id: TaipanCargoBoards
   recipes:
@@ -177,6 +186,7 @@
   - OreProcessorMachineCircuitboardTaipan
   - SalvageMagnetMachineCircuitboard
 
+## Smelting
 - type: latheRecipePack
   id: TaipanOreSmelting
   recipes:
@@ -200,6 +210,7 @@
 
 # Service
 
+## Boards
 - type: latheRecipePack
   id: TaipanServiceBoardsStatic
   recipes:
@@ -216,7 +227,6 @@
 - type: latheRecipePack
   id: TaipanServiceBoards
   recipes:
-  - BiofabricatorMachineCircuitboard
   - FatExtractorMachineCircuitboard
   - HydroponicsTrayMachineCircuitboard
   - SeedExtractorMachineCircuitboard
@@ -225,6 +235,7 @@
   - DawInstrumentMachineCircuitboard
   - BiofabricatorMachineCircuitboardTaipan
 
+## Clothing
 - type: latheRecipePack
   id: TaipanClothing
   recipes:
@@ -286,6 +297,7 @@
 
 # Medical
 
+## Surgery
 - type: latheRecipePack
   id: TaipanSurgeryStatic
   recipes:
@@ -296,13 +308,17 @@
   - SawAdvanced
   - Hemostat
 
+## Hyposprays
 - type: latheRecipePack
-  id: TaipanHypospray
+  id: TaipanMedical
   recipes:
   - SyndiHypo
   - ADTCyberHypospray
   - Hypopen
+  - HypoDart
+  - DefibrillatorSyndicate
 
+## Cloning
 - type: latheRecipePack
   id: TaipanCloning
   recipes:
@@ -312,6 +328,7 @@
 
 # Engineering
 
+## Tools
 - type: latheRecipePack
   id: SyndicateAdvancedTools
   recipes:
@@ -319,6 +336,19 @@
   - SyndicateWelderExperimental
   - SyndicateJawsOfLife
 
+## Hardsuits
+- type: latheRecipePack
+  id: TaipanHardsuits
+  recipes:
+  - ClothingOuterHardsuitSyndicate
+  - ClothingHeadHelmetSyndicate
+  - ClothingOuterHardsuitSyndie
+  - ClothingOuterHardsuitSyndieMedic
+  - ClothingOuterHardsuitSyndieElite
+  - ClothingOuterHardsuitSyndieCommander
+  - ClothingOuterHardsuitJuggernaut
+
+## Equipment
 - type: latheRecipePack
   id: TaipanEquipment
   recipes:
@@ -333,19 +363,15 @@
   - ClothingEyesPNVAdvSyndicate
   - ChameleonPDA
   - ChameleonProjector
+  - WeaponPistolCHIMPUpgradeKit
 
+## Shuttles
 - type: latheRecipePack
-  id: TaipanMech
+  id: TaipanShuttleBoards
   recipes:
-  - TaipanRipleyHarness
-  - TaipanRipleyLArm
-  - TaipanRipleyRArm
-  - TaipanRipleyLLeg
-  - TaipanRipleyRLeg
-  - MechEquipmentTaipanRipleyGrabber
-
-- type: latheRecipePack
-  id: TaipanMechBoards
-  recipes:
-  - TaipanRipleyCentralElectronics
-  - TaipanRipleyPeripheralsElectronics
+  - ShuttleConsoleCircuitboardTaipan
+  - IFFConsoleCircuitboardTaipan
+  - RadarConsoleCircuitboard
+  - ThrusterMachineCircuitboard
+  - GyroscopeMachineCircuitboard
+  - MiniGravityGeneratorCircuitboard

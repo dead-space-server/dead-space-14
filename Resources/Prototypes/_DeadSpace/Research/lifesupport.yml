@@ -110,7 +110,7 @@
   id: TaipanMechanizedTreatment
   name: research-technology-mechanized-treatment
   icon:
-    sprite: Mobs/Silicon/chassis.rsi
+    sprite: _DeadSpace/Mobs/Silicon/chassis.rsi
     state: medical
   discipline: TaipanLifeSupport
   tier: 2
@@ -170,6 +170,29 @@
   cost: 15000
   recipeUnlocks:
   - Hypopen
+  - HypoDart
+
+- type: technology
+  id: TaipanChameleonClothing
+  name: research-technology-chameleon-clothing
+  icon:
+    sprite: Clothing/Neck/Scarfs/red.rsi
+    state: icon
+  discipline: TaipanLifeSupport
+  tier: 2
+  cost: 15000
+  recipeUnlocks:
+  - ClothingBackpackChameleon
+  - ClothingHeadsetChameleon
+  - ClothingEyesChameleon
+  - ClothingHandsChameleon
+  - ClothingHeadHatChameleon
+  - ClothingMaskGasChameleon
+  - ClothingNeckChameleon
+  - ClothingOuterChameleon
+  - ClothingShoesChameleon
+  - ClothingUniformJumpsuitChameleon
+  - ChameleonPDA
 
 # Tier 3
 
@@ -200,23 +223,13 @@
   - SyndiHypo
 
 - type: technology
-  id: TaipanChameleonClothing
-  name: research-technology-chameleon-clothing
+  id: TaipanDefibrillatorSyndicate
+  name: research-technology-defibrillator-syndicate
   icon:
-    sprite: Clothing/Neck/Scarfs/red.rsi
+    sprite: Objects/Specific/Medical/defibsyndi.rsi
     state: icon
   discipline: TaipanLifeSupport
   tier: 3
   cost: 30000
   recipeUnlocks:
-  - ClothingBackpackChameleon
-  - ClothingHeadsetChameleon
-  - ClothingEyesChameleon
-  - ClothingHandsChameleon
-  - ClothingHeadHatChameleon
-  - ClothingMaskGasChameleon
-  - ClothingNeckChameleon
-  - ClothingOuterChameleon
-  - ClothingShoesChameleon
-  - ClothingUniformJumpsuitChameleon
-  - ChameleonPDA
+  - DefibrillatorSyndicate

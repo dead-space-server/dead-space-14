@@ -58,16 +58,16 @@
   - ClothingShoesBootsMoon
 
 - type: technology
-  id: TaipanChameleonProjector
-  name: research-technology-chameleon-projector
+  id: TaipanEnergyDaggers
+  name: research-technology-energy-daggers
   icon:
-    sprite: Objects/Devices/chameleon_projector.rsi
+    sprite: Objects/Weapons/Melee/e_dagger.rsi
     state: icon
   discipline: TaipanResearch
-  tier: 2
-  cost: 15000
+  tier: 1
+  cost: 7500
   recipeUnlocks:
-  - ChameleonProjector
+  - EnergyDagger
 
 # Tier 2
 
@@ -95,6 +95,7 @@
   cost: 15000
   recipeUnlocks:
   - WeaponPistolCHIMP
+  - WeaponPistolCHIMPUpgradeKit
   - AnomalySynchronizerCircuitboard
   - AnomalyVesselExperimentalCircuitboardTaipan
   - WeaponGauntletGorilla
@@ -113,6 +114,33 @@
   recipeUnlocks:
   - WeaponParticleDecelerator
   - HoloprojectorField
+
+- type: technology
+  id: TaipanChameleonProjector
+  name: research-technology-chameleon-projector
+  icon:
+    sprite: Objects/Devices/chameleon_projector.rsi
+    state: icon
+  discipline: TaipanResearch
+  tier: 2
+  cost: 15000
+  recipeUnlocks:
+  - ChameleonProjector
+
+- type: technology
+  id: TaipanEnergyWeapons
+  name: research-technology-energy-weapons
+  icon:
+    sprite: Objects/Weapons/Melee/e_sword.rsi
+    state: icon
+  discipline: TaipanResearch
+  tier: 2
+  cost: 15000
+  recipeUnlocks:
+  - EnergySword
+  - EnergyShield
+  technologyPrerequisites:
+  - TaipanEnergyDaggers
 
 # Tier 3
 
@@ -141,3 +169,17 @@
   - ADTClothingShoesBootsMagAdvSynd
   technologyPrerequisites:
   - TaipanMagnetsTech
+
+- type: technology
+  id: TaipanEliteEnergyWeapons
+  name: research-technology-elite-energy-weapons
+  icon:
+    sprite: Objects/Weapons/Melee/e_sword_double.rsi
+    state: icon
+  discipline: TaipanResearch
+  tier: 3
+  cost: 30000
+  recipeUnlocks:
+  - EnergySwordDouble
+  technologyPrerequisites:
+  - TaipanEnergyWeapons

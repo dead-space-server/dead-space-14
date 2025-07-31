@@ -132,18 +132,6 @@
   - WeaponRevolverPython
 
 - type: technology
-  id: TaipanEnergyDaggers
-  name: research-technology-energy-daggers
-  icon:
-    sprite: Objects/Weapons/Melee/e_dagger.rsi
-    state: icon
-  discipline: TaipanWeaponry
-  tier: 1
-  cost: 7500
-  recipeUnlocks:
-  - EnergyDagger
-
-- type: technology
   id: TaipanEdgedWeapons
   name: research-technology-edged-weapons
   icon:
@@ -237,21 +225,6 @@
   - TaipanBasicPistols
 
 - type: technology
-  id: TaipanEnergyWeapons
-  name: research-technology-energy-weapons
-  icon:
-    sprite: Objects/Weapons/Melee/e_sword.rsi
-    state: icon
-  discipline: TaipanWeaponry
-  tier: 2
-  cost: 15000
-  recipeUnlocks:
-  - EnergySword
-  - EnergyShield
-  technologyPrerequisites:
-  - TaipanEnergyDaggers
-
-- type: technology
   id: TaipanGrenades
   name: research-technology-grenades
   icon:
@@ -330,20 +303,6 @@
 # Tier 3
 
 - type: technology
-  id: TaipanEliteEnergyWeapons
-  name: research-technology-elite-energy-weapons
-  icon:
-    sprite: Objects/Weapons/Melee/e_sword_double.rsi
-    state: icon
-  discipline: TaipanWeaponry
-  tier: 3
-  cost: 30000
-  recipeUnlocks:
-  - EnergySwordDouble
-  technologyPrerequisites:
-  - TaipanEnergyWeapons
-
-- type: technology
   id: TaipanExperimentalGrenades
   name: research-technology-experimental-grenades
   icon:
@@ -399,5 +358,3 @@
   cost: 30000
   recipeUnlocks:
   - WeaponEnergyCrossbow
-  technologyPrerequisites:
-  - TaipanEnergyWeapons

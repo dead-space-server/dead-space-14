@@ -106,10 +106,9 @@
     runningState: building
     unlitIdleState: unlit
     unlitRunningState: unlit-building
-#    staticPacks:
-#    - ChemistryStatic
     dynamicPacks:
     - SyndicateAdvancedTools
+    - TaipanHardsuits
     - ScienceEquipment
     - ScienceExplosives
     - TaipanScienceClothing
@@ -359,7 +358,7 @@
     - TaipanSurgeryStatic
     dynamicPacks:
     - Chemistry
-    - TaipanHypospray
+    - TaipanMedical
   - type: Machine
     board: MedicalTechFabCircuitboardTaipan
 
@@ -394,6 +393,7 @@
     - TaipanSecurityEquipmentStatic
     - SecurityAmmoStatic
     - TaipanAmmoStatic
+    - SecurityWeaponsStatic
     dynamicPacks:
     - SalvageSecurityBoards
     - SalvageSecurityWeapons
@@ -402,9 +402,7 @@
     - SecurityAmmo
     - SecurityDisablers
     - TaipanPistols
-    - TaipanSMGs
-    - TaipanRifles
-    - TaipanHeavyWeapons
+    - TaipanWeapons
     - TaipanEnergyWeapons
     - TaipanMelee
     - TaipanGrenades

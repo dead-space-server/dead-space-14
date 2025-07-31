@@ -102,7 +102,7 @@
 
 - type: technology
   id: TaipanRipley
-  name: research-technology-bloodredf-ripley
+  name: research-technology-bloodred-ripley
   icon:
     sprite: _DeadSpace/Objects/Specific/Mech/mecha.rsi
     state: bloodredripley
@@ -120,20 +120,17 @@
   - MechEquipmentTaipanRipleyGrabber
 
 - type: technology
-  id: TaipanHUD
-  name: research-technology-hud
+  id: TaipanHardsuits
+  name: research-technology-basic-syndicate-hardsuits
   icon:
-    sprite: _DeadSpace/Clothing/Eyes/Hud/taipan_advhud.rsi
+    sprite: Clothing/Head/Helmets/eva_syndicate.rsi
     state: icon
   discipline: TaipanMechworks
-  tier: 2
+  tier: 1
   cost: 7500
   recipeUnlocks:
-  - ClothingEyesHudTaipanDiagnostic
-  - ClothingEyesHudTaipanMedical
-  - ClothingEyesHudTaipanRecruit
-  - ClothingEyesHudTaipanResearch
-  - ClothingEyesHudTaipanAdvanced
+  - ClothingOuterHardsuitSyndicate
+  - ClothingHeadHelmetSyndicate
 
 # Tier 2
 
@@ -196,38 +193,83 @@
   tier: 2
   cost: 15000
   recipeUnlocks:
-  - OreBagOfHolding
   - MiningDrillDiamond
   - AdvancedMineralScannerEmpty
   - SalvageExpeditionsComputerCircuitboard
   - BorgModuleAdvancedMining
 
+- type: technology
+  id: TaipanHUD
+  name: research-technology-hud
+  icon:
+    sprite: _DeadSpace/Clothing/Eyes/Hud/taipan_advhud.rsi
+    state: icon
+  discipline: TaipanMechworks
+  tier: 2
+  cost: 15000
+  recipeUnlocks:
+  - ClothingEyesHudTaipanDiagnostic
+  - ClothingEyesHudTaipanMedical
+  - ClothingEyesHudTaipanRecruit
+  - ClothingEyesHudTaipanResearch
+  - ClothingEyesHudTaipanAdvanced
+
+- type: technology
+  id: TaipanHardsuits
+  name: research-technology-syndicate-hardsuits
+  icon:
+    sprite: Clothing/OuterClothing/Hardsuits/syndicate.rsi
+    state: icon
+  discipline: TaipanMechworks
+  tier: 2
+  cost: 15000
+  recipeUnlocks:
+  - ClothingOuterHardsuitSyndie
+  - ClothingOuterHardsuitSyndieMedic
+  technologyPrerequisites:
+  - TaipanHardsuitsBasic
+
+- type: technology
+  id: TaipanEliteHardsuits
+  name: research-technology-elite-syndicate-hardsuits
+  icon:
+    sprite: Clothing/OuterClothing/Hardsuits/syndieelite.rsi
+    state: icon
+  discipline: TaipanMechworks
+  tier: 2
+  cost: 15000
+  recipeUnlocks:
+  - ClothingOuterHardsuitSyndieElite
+  - ClothingOuterHardsuitSyndieCommander
+  technologyPrerequisites:
+  - TaipanHardsuits
+
 # Tier 3
 
-#- type: technology
-#  id: TaipanBluespaceStorage
-#  name: research-technology-bluespace-storage
-#  icon:
-#    sprite: Clothing/Back/Backpacks/holding.rsi
-#    state: holding
-#  discipline: TaipanMechworks
-#  tier: 3
-#  cost: 30000
-#  recipeUnlocks:
-#  - ClothingBackpackHolding
-#  - ClothingBackpackSatchelHolding
-#  - ClothingBackpackDuffelHolding
-#
-#- type: technology
-#  id: TaipanPortableFission
-#  name: research-technology-portable-fission
-#  icon:
-#    sprite: Objects/Power/power_cells.rsi
-#    state: microreactor
-#  discipline: TaipanMechworks
-#  tier: 3
-#  cost: 30000
-#  recipeUnlocks:
-#  - PowerCellMicroreactor
-#  technologyPrerequisites:
-#  - TaipanAdvancedPowercells
+- type: technology
+  id: TaipanPortableFission
+  name: research-technology-portable-fission
+  icon:
+    sprite: Objects/Power/power_cells.rsi
+    state: microreactor
+  discipline: TaipanMechworks
+  tier: 3
+  cost: 30000
+  recipeUnlocks:
+  - PowerCellMicroreactor
+  technologyPrerequisites:
+  - TaipanAdvancedPowercells
+
+- type: technology
+  id: TaipanHeavyHardsuits
+  name: research-technology-heavy-syndicate-hardsuits
+  icon:
+    sprite: Clothing/OuterClothing/Hardsuits/cybersun.rsi
+    state: icon
+  discipline: TaipanMechworks
+  tier: 3
+  cost: 30000
+  recipeUnlocks:
+  - ClothingOuterHardsuitJuggernaut
+  technologyPrerequisites:
+  - TaipanEliteHardsuits
