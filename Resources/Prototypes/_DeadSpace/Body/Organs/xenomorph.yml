@@ -6,6 +6,7 @@
   id: BaseXenoOrganUnGibbable
   parent: BaseItem
   abstract: true
+  suffix: Ксеноморф
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Mobs/Species/Xenomorph/organs.rsi
@@ -73,7 +74,7 @@
 - type: entity
   id: OrganXenoHeart
   parent: BaseXenoOrgan
-  name: гамоциркулятор
+  name: гемоциркулятор
   description: "Мышечный орган со сложной камерной структурой, одновременно прокачивающий кислотную биожидкость и обеспечивающий её насыщение необходимыми компонентами через внутренние микропоры. Обеспечивает транспорт веществ и поддерживает химический гомеостаз организма."
   components:
   - type: Sprite
@@ -100,6 +101,7 @@
     specialDigestible:
       tags:
       - Meat
+      - ReptilianFood
       - Pill
       - Crayon
       - Paper
@@ -117,7 +119,7 @@
     metabolizerTypes: [Xenomorph]
     removeEmpty: true
     updateInterval: 1.5
-    maxReagents: 3
+    maxReagents: 1
     groups:
     - id: Food
     - id: Drink
