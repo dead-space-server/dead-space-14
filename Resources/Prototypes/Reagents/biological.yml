@@ -23,10 +23,6 @@
           - !type:OrganType
             type: Human
             shouldHave: false
-# DS14-start
-          - !type:OrganType
-            type: Xenomorph
-# DS14-end
     Food:
       effects:
         - !type:AdjustReagent

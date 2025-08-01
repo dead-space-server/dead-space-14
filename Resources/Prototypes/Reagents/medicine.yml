@@ -690,11 +690,6 @@
             type: Xenomorph
             shouldHave: false
           # DS14-start
-        - !type:SatiateThirst
-          factor: 2
-          conditions:
-          - !type:OrganType
-            type: Xenomorph
         - !type:ModifyBloodLevel
           amount: 2
           conditions:

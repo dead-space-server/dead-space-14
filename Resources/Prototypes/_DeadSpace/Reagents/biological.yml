@@ -57,13 +57,6 @@
         - !type:OrganType
           type: Xenomorph
           shouldHave: false
-    Drink:
-      effects:
-      - !type:SatiateThirst
-        factor: 1.0
-        conditions:
-        - !type:OrganType
-          type: Xenomorph
   footstepSound:
     collection: FootstepBlood
     params:

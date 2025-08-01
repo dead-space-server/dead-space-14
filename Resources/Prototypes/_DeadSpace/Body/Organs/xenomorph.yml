@@ -123,3 +123,5 @@
     groups:
     - id: Food
     - id: Drink
+    - id: Alcohol
+      rateModifier: 10 # instantly removes alcohol without effects
