@@ -3,7 +3,7 @@
   name: reagent-name-acidic-blood
   group: Biological
   desc: reagent-desc-acidic-blood
-  flavor: acidic
+  flavor: acid
   color: "#669900"
   physicalDesc: reagent-physical-desc-strong-smelling
   recognizable: true
