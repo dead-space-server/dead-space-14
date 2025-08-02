@@ -1,0 +1,22 @@
+- type: entity
+  name: поликристалл
+  parent: BaseItem
+  id: Polycrystal
+  description: не большой кристалл.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/polycristal.rsi
+    state: polycrystal
+  - type: Item
+    sprite: _DeadSpace/Objects/Specific/polycristal.rsi
+    size: Tiny
+  - type: Stack
+    count: 1
+    stackType: PolycrystalStack
+  - type: StaticPrice
+    price: 0
+  - type: StackPrice
+    price: 200
+  - type: Currency
+    price:
+      Polycrystal: 1

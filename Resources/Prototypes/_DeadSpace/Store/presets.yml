@@ -1,0 +1,15 @@
+- type: entity
+  id: StorePresetUplinkERT
+  abstract: true
+  components:
+  - type: Store
+    name: store-preset-name-uplink-ert
+    categories:
+    - UplinkERTMedical
+    - UplinkERTGrenade
+    - UplinkERTMagazine
+    - UplinkERTDifferent
+    currencyWhitelist:
+    - Polycrystal
+    balance:
+      Polycrystal: 0

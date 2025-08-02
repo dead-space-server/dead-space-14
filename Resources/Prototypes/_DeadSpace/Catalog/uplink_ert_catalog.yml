@@ -1,0 +1,222 @@
+#Медецина
+- type: listing
+  id: UplinkERTDesoxyephedrineMedipen
+  name: инъектор дезоксиэфедрина
+  description: инъектор быстрого стимулятора.
+  productEntity: DesoxyephedrineMedipen
+  cost:
+    Polycrystal: 5
+  categories:
+  - UplinkERTMedical
+
+- type: listing
+  id: UplinkERTCombatMedipen
+  name: боевой медипен
+  description: Одноразовый медипен, содержащий химические вещества, восстанавливающие большинство видов повреждений.
+  productEntity: CombatMedipen
+  cost:
+    Polycrystal: 8
+  categories:
+  - UplinkERTMedical
+
+- type: listing
+  id: UplinkERTDefibrillatorCompact
+  name: компактный дефибриллятор
+  description: Теперь и в весёлом размере!
+  productEntity: DefibrillatorCompact
+  cost:
+    Polycrystal: 8
+  categories:
+  - UplinkERTMedical
+
+- type: listing
+  id: UplinkERTADTCombatHypo
+  name: боевой гипоспрей
+  description: Модель гипоспрея, разработанная NT для использования в боевых ситуациях - с повышенным объемом в ущерб скорости применения.
+  productEntity: ADTCombatHypo
+  cost:
+    Polycrystal: 8
+  categories:
+  - UplinkERTMedical
+
+- type: listing
+  id: UplinkERTMedicatedSuture
+  name: медицинская нить
+  description: Нить, пропитанная лекарством, эффективно лечит механические травмы и закрывает раны.
+  productEntity: MedicatedSuture
+  cost:
+    Polycrystal: 2
+  categories:
+  - UplinkERTMedical
+
+- type: listing
+  id: UplinkERTRegenerativeMesh
+  name: регенеративная сеть
+  description: Применяется для лечения даже самых неприятных ожогов. Эффективна также при кислотных ожогах.
+  productEntity: RegenerativeMesh
+  cost:
+    Polycrystal: 2
+  categories:
+  - UplinkERTMedical
+
+#Взрывчатка
+- type: listing
+  id: UplinkERTSmokeGrenade
+  name: дымовая граната
+  description: Граната тактического применения, при использовании выпускающая большое и продолжительное облако дыма.
+  productEntity: SmokeGrenade
+  cost:
+    Polycrystal: 2
+  categories:
+  - UplinkERTGrenade
+
+- type: listing
+  id: UplinkERTGrenadeIncendiary
+  name: зажигательная граната
+  description: Зажгите этой ночью.
+  productEntity: GrenadeIncendiary
+  cost:
+    Polycrystal: 5
+  categories:
+  - UplinkERTGrenade
+
+- type: listing
+  id: UplinkERTGrenadeShrapnel
+  name: осколочная граната
+  description: Выпускает смертоносную шрапнель, вызывающую сильное кровотечение.
+  productEntity: GrenadeShrapnel
+  cost:
+    Polycrystal: 9
+  categories:
+  - UplinkERTGrenade
+
+- type: listing
+  id: UplinkERTMetalFoamGrenade
+  name: металлопенная граната
+  description: Аварийное приспособление, используемое для заделывания пробоин. Почти так же надёжно, как настоящие стены.
+  productEntity: MetalFoamGrenade
+  cost:
+    Polycrystal: 4
+  categories:
+  - UplinkERTGrenade
+
+- type: listing
+  id: UplinkERTTearGasGrenade
+  name: слезоточивая граната
+  description: Граната со слезоточивым газом для борьбы с беспорядками. Вызывает раздражение, боль и заставляет вас выплакать глаза.
+  productEntity: TearGasGrenade
+  cost:
+    Polycrystal: 5
+  categories:
+  - UplinkERTGrenade
+
+- type: listing
+  id: UplinkERTGrenadeStinger
+  name: травматическая граната
+  description: Здесь не на что смотреть, пожалуйста, расходитесь.
+  productEntity: GrenadeStinger
+  cost:
+    Polycrystal: 7
+  categories:
+  - UplinkERTGrenade
+
+- type: listing
+  id: UplinkERTGrenadeC4
+  name: взрывчатка C-4
+  description: Используется для проделывания аккуратных, не слишком больших, брешей в местах закладки. Любимое средство диверсантов.
+  productEntity: C4
+  cost:
+    Polycrystal: 7
+  categories:
+  - UplinkERTGrenade
+
+- type: listing
+  id: UplinkERTMagazinePistolSubMachineGun
+  name: магазин ПП (9х19 мм)
+  description: магазин с патронами 9х19 мм.
+  productEntity: MagazinePistolSubMachineGun
+  cost:
+    Polycrystal: 2
+  categories:
+  - UplinkERTMagazine
+
+- type: listing
+  id: UplinkERTMagazinePistolSubMachineGunIncendiary
+  name: магазин ПП (9х19 мм зажигательные)
+  description: магазин с зажигательными патронами 9х19 мм.
+  productEntity: MagazinePistolSubMachineGunIncendiary
+  cost:
+    Polycrystal: 6
+  categories:
+  - UplinkERTMagazine
+
+- type: listing
+  id: UplinkERTSpeedLoaderMagnum
+  name: спидлоадер (.45 магнум)
+  description: спидлоадер патрон .45 магнум.
+  productEntity: SpeedLoaderMagnum
+  cost:
+    Polycrystal: 2
+  categories:
+  - UplinkERTMagazine
+
+- type: listing
+  id: UplinkERTSpeedLoaderMagnumIncendiary
+  name: спидлоадер (.45 магнум зажигательные)
+  description: спидлоадер с зажигательными патронами.45 магнум.
+  productEntity: SpeedLoaderMagnumIncendiary
+  cost:
+    Polycrystal: 8
+  categories:
+  - UplinkERTMagazine
+
+#Разное
+- type: listing
+  id: UplinkERTRCDAmmo
+  name: картридж РСУ
+  description: Картридж для РСУ.
+  productEntity: RCDAmmo
+  cost:
+    Polycrystal: 3
+  categories:
+  - UplinkERTDifferent
+
+- type: listing
+  id: UplinkERTPillAmbuzolPlus
+  name: баночка для таблеток
+  description: Содержит пять таблеток амбузола плюс.
+  productEntity: PillCanisterAmbuzolPlus
+  cost:
+    Polycrystal: 4
+  categories:
+  - UplinkERTDifferent
+
+- type: listing
+  id: UplinkERTRiotBulletShield
+  name: противопульный щит
+  description: Щит на случай беспорядков, созданный противостоять пулям, но не более того.
+  productEntity: RiotBulletShield
+  cost:
+    Polycrystal: 6
+  categories:
+  - UplinkERTDifferent
+
+- type: listing
+  id: UplinkERTRiotShield
+  name: противоударный щит
+  description: Большой башенный щит на случай беспорядков. Хорошо подходит для контроля толпы.
+  productEntity: RiotShield
+  cost:
+    Polycrystal: 6
+  categories:
+  - UplinkERTDifferent
+
+- type: listing
+  id: UplinkERTRiotLaserShield
+  name: противолазерный щит
+  description: Щит на случай беспорядков, созданный противостоять лазерам, но не более того.
+  productEntity: RiotLaserShield
+  cost:
+    Polycrystal: 6
+  categories:
+  - UplinkERTDifferent

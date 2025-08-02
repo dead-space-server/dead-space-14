@@ -1,0 +1,5 @@
+- type: stack
+  id: PolycrystalStack
+  name: поликристалл
+  icon: _DeadSpace/Objects/Specific/polycristal.rsi
+  spawn: Polycrystal

@@ -1,0 +1,20 @@
+#ERT
+- type: storeCategory
+  id: UplinkERTMedical
+  name: Медицина
+  priority: 0
+
+- type: storeCategory
+  id: UplinkERTGrenade
+  name: Взрывчатка
+  priority: 1
+
+- type: storeCategory
+  id: UplinkERTMagazine
+  name: Боеприпасы
+  priority: 2
+
+- type: storeCategory
+  id: UplinkERTDifferent
+  name: Разное
+  priority: 3

@@ -1,0 +1,11 @@
+- type: entity
+  parent: PillCanister
+  id: PillCanisterAmbuzolPlus
+  name: баночка для таблеток
+  description: Содержит пять таблеток амбузола плюс.
+  suffix: Амбузол плюс
+  components:
+  - type: StorageFill
+    contents:
+    - id: PillAmbuzolPlus
+      amount: 5

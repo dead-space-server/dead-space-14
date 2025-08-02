@@ -1,0 +1,22 @@
+- type: entity
+  id: UplinkERT
+  name: uplink ERT
+  description: Uplink ERT. Don't touch it.
+  parent: [ BaseItem, StorePresetUplinkERT ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Devices/communication.rsi
+    layers:
+    - state: radio-ert
+  - type: Item
+    sprite: _DeadSpace/Objects/Devices/communication.rsi
+    heldPrefix: radio-ert
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+  - type: Store
+    balance:
+      Polycrystal: 20

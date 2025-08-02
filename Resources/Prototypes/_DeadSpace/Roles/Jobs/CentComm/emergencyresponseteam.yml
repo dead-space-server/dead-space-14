@@ -147,6 +147,7 @@
     - Flare
     - WeaponDisabler
     - ClothingEyesPNVAdv
+    - UplinkERT
 
 # Security
 ## Amber
@@ -289,6 +290,7 @@
     - Truncheon
     - PinpointerNuclear
     - ClothingEyesPNVAdv
+    - UplinkERT
 
 # Medical
 ## Amber
@@ -373,7 +375,7 @@
     outerClothing: ClothingOuterHardsuitERTMedical
     shoes: ADTClothingShoesBootsMagERT
     id: ERTMedicRedIDCard
-    belt: ClothingBeltERTMedicalFilled 
+    belt: ClothingBeltERTMedicalFilled
     pocket1: DoubleEmergencyOxygenTankFilled
   storage:
     back:
@@ -447,6 +449,7 @@
     - HandheldHealthAnalyzer
     - PinpointerNuclear
     - ClothingEyesPNVAdv
+    - UplinkERT
 
 # Engineer
 ## Amber
@@ -593,6 +596,7 @@
     - Flare
     - PinpointerNuclear
     - ClothingEyesPNVAdv
+    - UplinkERT
 
 # Janitor
 ## Amber
@@ -741,3 +745,4 @@
     - TrashBagBlue
     - PinpointerNuclear
     - ClothingEyesPNVAdv
+    - UplinkERT
