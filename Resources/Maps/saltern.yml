@@ -4,8 +4,8 @@ meta:
   engineVersion: 252.0.0
   forkId: ""
   forkVersion: ""
-  time: 06/28/2025 09:26:54
-  entityCount: 13584
+  time: 08/01/2025 12:33:40
+  entityCount: 13583
 maps:
 - 1
 grids:
@@ -5649,6 +5649,8 @@ entities:
 - proto: ActionToggleBlock
   entities:
   - uid: 12
+    mapInit: true
+    paused: true
     components:
     - type: Transform
       parent: 11
@@ -5656,6 +5658,8 @@ entities:
       originalIconColor: '#FFFFFFFF'
       container: 11
   - uid: 14
+    mapInit: true
+    paused: true
     components:
     - type: Transform
       parent: 13
@@ -7555,7 +7559,7 @@ entities:
       pos: -18.5,33.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -9569.246
+      secondsUntilStateChange: -10061.085
       changeAirtight: False
       state: Opening
     - type: Docking
@@ -7571,7 +7575,7 @@ entities:
       pos: 0.5,-7.5
       parent: 13282
     - type: Door
-      secondsUntilStateChange: -9568.413
+      secondsUntilStateChange: -10060.252
       changeAirtight: False
       state: Opening
     - type: Docking
@@ -10148,6 +10152,20 @@ entities:
     - type: Transform
       pos: -28.5,-26.5
       parent: 2
+- proto: BackmenVendingMachineClothing
+  entities:
+  - uid: 11296
+    components:
+    - type: Transform
+      pos: -30.5,-7.5
+      parent: 2
+- proto: BackmenVendingMachineClothingCapes
+  entities:
+  - uid: 10717
+    components:
+    - type: Transform
+      pos: -29.5,-7.5
+      parent: 2
 - proto: BackmenVendingMachineCoffee
   entities:
   - uid: 600
@@ -10200,6 +10218,13 @@ entities:
     components:
     - type: Transform
       pos: -25.5,-9.5
+      parent: 2
+- proto: BackmenVendingMachineWinter
+  entities:
+  - uid: 4738
+    components:
+    - type: Transform
+      pos: -28.5,-7.5
       parent: 2
 - proto: BalloonNT
   entities:
@@ -31964,11 +31989,6 @@ entities:
       rot: 3.141592653589793 rad
       pos: 48.5,-30.5
       parent: 2
-  - uid: 4738
-    components:
-    - type: Transform
-      pos: -28.5,-7.5
-      parent: 2
   - uid: 4739
     components:
     - type: Transform
@@ -35851,7 +35871,7 @@ entities:
       pos: 44.5,-24.5
       parent: 2
     - type: NavMapBeacon
-      text: observatory
+      text: Обсерватория
 - proto: DefaultStationBeaconAME
   entities:
   - uid: 5310
@@ -36005,7 +36025,7 @@ entities:
       pos: 57.5,10.5
       parent: 2
     - type: NavMapBeacon
-      text: Tesla Storage
+      text: Хранилище теслы
 - proto: DefaultStationBeaconEvac
   entities:
   - uid: 5332
@@ -73123,13 +73143,6 @@ entities:
     - type: Transform
       pos: 11.5,-30.5
       parent: 2
-- proto: SpawnPointMagistrat
-  entities:
-  - uid: 10717
-    components:
-    - type: Transform
-      pos: -31.5,-22.5
-      parent: 2
 - proto: SpawnPointMedicalDoctor
   entities:
   - uid: 10718
@@ -77310,13 +77323,6 @@ entities:
     - type: Transform
       pos: 14.5,-1.5
       parent: 2
-- proto: VendingMachineClothing
-  entities:
-  - uid: 11296
-    components:
-    - type: Transform
-      pos: -29.5,-7.5
-      parent: 2
 - proto: VendingMachineClownvend
   entities:
   - uid: 11297
@@ -77577,13 +77583,6 @@ entities:
     components:
     - type: Transform
       pos: 25.5,-18.5
-      parent: 2
-- proto: VendingMachineWinter
-  entities:
-  - uid: 11335
-    components:
-    - type: Transform
-      pos: -30.5,-7.5
       parent: 2
 - proto: VendingMachineYouTool
   entities:
@@ -86901,7 +86900,7 @@ entities:
       pos: 50.5,-5.5
       parent: 2
     - type: WarpPoint
-      location: telecomms
+      location: Телекоммуникации
   - uid: 13076
     components:
     - type: Transform
