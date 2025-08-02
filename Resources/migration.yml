@@ -801,7 +801,8 @@ SignERTsierra: null
 SignERTsierraDocking: null
 
 # 2025-04-11 - DS14
-RandomHumanoidSpawnerMobHumanCentcomBlueShieldOfficer: RandomHumanoidSpawnerCentcomBlueShieldOfficer
+RandomHumanoidSpawnerMobHumanCentcomBlueShieldOfficer: null
+RandomHumanoidSpawnerCentcomBlueShieldOfficer: null
 
 # 2025-03-29
 ClothingBackpackDuffelSyndicateRaidBundle: ClothingBackpackSyndicateRaidBundle
@@ -858,3 +859,6 @@ SpawnPointLatejoinTypanScience: SpawnPointLatejoinTaipanScience
 
 # 2025-06-30
 ADTAbakanRifleAEK: WeaponRifleAEK
+
+# 2025-07-20
+SpawnPointMagistrat: null

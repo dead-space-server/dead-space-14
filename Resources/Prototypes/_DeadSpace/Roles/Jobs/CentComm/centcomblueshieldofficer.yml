@@ -1,7 +1,7 @@
 - type: job
   id: CentralCommandBlueShieldOfficer
-  name: job-name-centcom-officer
-  description: job-description-centcom-officer
+  name: job-name-blue-shield-officer
+  description: job-description-blue-shield-officer
   playTimeTracker: JobCentralCommandBlueShieldOfficer
   setPreference: false
   startingGear: CentcomBlueShieldGear
@@ -15,13 +15,17 @@
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant, TrackingImplant ]
+  - !type:AddComponentSpecial
+    components:
+    - type: AntagImmune
+    - type: ZombieImmune
 
 - type: startingGear
   id: CentcomBlueShieldGear
   equipment:
     head: ClothingHeadHatBeretBlueShield
     jumpsuit: ClothingUniformJumpsuitBlueShield
-    back: ClothingBackpackBlueShield
+    # back: ClothingBackpackBlueShield
     mask: ClothingMaskGasSecurity
     eyes: ClothingEyesGlassesSecurity
     ears: ClothingHeadsetCentCom
@@ -36,7 +40,7 @@
     back:
     - DesoxyephedrineMedipen
     - DesoxyephedrineMedipen
-    - DesoxyephedrineMedipen 
+    - DesoxyephedrineMedipen
     - WelderIndustrialAdvanced
     - ClothingEyesGlassesMeson
     - MedkitCombatFilled
