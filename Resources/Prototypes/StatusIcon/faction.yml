@@ -29,7 +29,7 @@
   showTo:
     components:
       - ShowAntagIcons
-      - Revolutionary
+    #  - Revolutionary - DS14 - test-no-icon-for-anyone
   icon:
     sprite: /Textures/Interface/Misc/job_icons.rsi
     state: Revolutionary
@@ -41,7 +41,8 @@
   showTo:
     components:
       - ShowAntagIcons
-      - Revolutionary
+      - HeadRevolutionary  # DS14 - test-no-icon-for-anyone
+    #  - Revolutionary - DS14 - test-no-icon-for-anyone
   icon:
     sprite: /Textures/Interface/Misc/job_icons.rsi
     state: HeadRevolutionary
