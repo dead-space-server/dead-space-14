@@ -1,0 +1,32 @@
+- type: entity
+  name: таблетка
+  suffix: Дексалин 10u
+  parent: Pill
+  id: PillDz
+  components:
+  - type: Pill
+    pillType: 15
+  - type: Sprite
+    state: pill16
+  - type: Label
+    currentLabel: dexalin 10u
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 20
+        reagents:
+        - ReagentId: Desoxyephedrine
+          Quantity: 20
+
+- type: entity
+  name: таблетки для деда
+  parent: PillCanister
+  id: PillCanisterNarct
+  suffix: Дексалин 10u, 7
+  components:
+  - type: Label
+    currentLabel: дексалин 10u
+  - type: StorageFill
+    contents:
+    - id: PillDz
+      amount: 7

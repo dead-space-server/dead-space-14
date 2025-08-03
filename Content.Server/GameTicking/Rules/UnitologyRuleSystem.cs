@@ -78,8 +78,15 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
         float minutes = (float)time.TotalMinutes;
         float seconds = (float)time.TotalSeconds;
 
-        TimeSpan warningTime = TimeSpan.FromMinutes(minutes - component.TimeUntilWarning);
+        TimeSpan obeliskWarningTime = TimeSpan.FromMinutes(minutes - component.TimeUntilObeliskWarning);
+        TimeSpan uniWarningTime = TimeSpan.FromMinutes(minutes - component.TimeUntilUniWarning);
         TimeSpan spawnObeliskTime = TimeSpan.FromMinutes(seconds + component.TimeAfterTheExplosion);
+
+        if (component.IsStageObelisk == true && _timing.CurTime > component.TimeUntilCburn && component.CburnSended == false)
+        {
+            GameTicker.AddGameRule("ShuttleCBURNSCNT");
+            component.CburnSended = true;
+        }
 
         if (component.IsStageObelisk && component.TimeUtilStopTransformations > _timing.CurTime)
         {
@@ -91,10 +98,16 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
             EndTransformations(uid, component);
         }
 
-        if (!component.IsWarningSend && warningTime < _timing.CurTime)
+        if (!component.IsObeliskWarningSend && obeliskWarningTime < _timing.CurTime)
         {
             _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("unitology-centcomm-announcement-obelisk-arrival"), playSound: true, colorOverride: Color.LightSeaGreen);
-            component.IsWarningSend = true;
+            component.IsObeliskWarningSend = true;
+        }
+
+        if (!component.IsUniWarningSend && uniWarningTime < _timing.CurTime)
+        {
+            _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("unitology-centcomm-announcement-uni-warn"), playSound: true, colorOverride: Color.LightSeaGreen);
+            component.IsUniWarningSend = true;
         }
 
         if (!component.IsObeliskArrival && component.TimeUntilArrivalObelisk < _timing.CurTime)
@@ -244,6 +257,7 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
         component.Obelisk = ev.Obelisk;
         component.NextStageTime = _timing.CurTime + component.StageObeliskDuration;
         component.TimeUtilStopTransformations = _timing.CurTime + TimeSpan.FromSeconds(component.DurationTransformations);
+        component.TimeUntilCburn = _timing.CurTime + TimeSpan.FromSeconds(component.CburnDuration);
         component.IsStageObelisk = true;
     }
 
