@@ -437,6 +437,9 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
 
         while (query.MoveNext(out var ent, out _))
         {
+            if (wasSent)
+                return;
+
             var xform = Transform(ent);
             var station = _station.GetStationInMap(xform.MapID);
 
@@ -445,7 +448,7 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
 
             while (faxes.MoveNext(out var faxEnt, out var fax))
             {
-                if (!fax.ReceiveNukeCodes || wasSent == true)
+                if (!fax.ReceiveNukeCodes)
                     continue;
 
                 Spawn(OrderPaperPrototype, Transform(faxEnt).Coordinates);
