@@ -44,18 +44,23 @@
     - id: ClothingHeadMirror
       prob: 0.1
     - id: ClothingHandsGlovesLatex
-    - id: ClothingHeadsetMedical
-    - id: ClothingEyesHudMedical
-    - id: ClothingHeadHatSurgcapBlue
-      prob: 0.9
-    - id: ClothingHeadHatSurgcapGreen
-      prob: 0.1
-    - id: ClothingHeadHatSurgcapPurple
-      prob: 0.05
-    - id: ClothingUniformJumpsuitTaipanMedic
-      amount: 2
-    - id: ClothingUniformJumpskirtTaipanMedic
-      amount: 2
+    - id: ClothingEyesHudTaipanMedical
+    - !type:GroupSelector
+      children:
+      - id: ClothingHeadHatSurgcapGreen
+        weight: 0.1
+      - id: ClothingHeadHatSurgcapPurple
+        weight: 0.05
+      - id: ClothingHeadHatSurgcapBlue
+        weight: 0.90
+    - !type:GroupSelector
+      children:
+      - id: UniformScrubsColorBlue
+        weight: 0.5
+      - id: UniformScrubsColorGreen
+        weight: 0.1
+      - id: UniformScrubsColorPurple
+        weight: 0.05
     - id: ClothingMaskSterile
 
 - type: entity
@@ -65,11 +70,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: ClothingUniformJumpsuitTaipanParamedic
-      amount: 2
-    - id: ClothingUniformJumpskirtTaipanParamedic
-      amount: 2
-    - id: ClothingEyesHudMedical
+    - id: ClothingEyesHudTaipanMedical
     - id: Defibrillator
     - id: ClothingHandsGlovesLatex
     - id: ClothingMaskSterile
@@ -112,7 +113,7 @@
     - id: ClothingHandsGlovesLatex
       amount: 2
     - id: ClothingMaskSterile
-    - id: ClothingOuterCoatRnd
+    - id: ClothingOuterTaipanCoatLabResearcher
       amount: 2
     - id: AnomalyScanner
     - id: NodeScanner
@@ -127,16 +128,10 @@
   components:
   - type: StorageFill
     contents:
-    - id: ClothingUniformJumpsuitTaipanCargotech
-      amount: 2
-    - id: ClothingUniformJumpskirtTaipanCargotech
-      amount: 2
-    - id: ClothingUniformOverallsTaipanCargotech
-      amount: 2
     - id: ClothingBeltUtilityFilled
     - id: SurvivalKnife
     - id: HandheldGPSBasic
-    - id: RadioHandheld
+    - id: RadioHandheldTaipan
     - id: AppraisalTool
     - id: FireExtinguisher
     - id: Flare
@@ -309,10 +304,12 @@
   components:
   - type: StorageFill
     contents:
-    - id: ClothingUniformJumpsuitTaipanCommunicationsOfficer
-      amount: 2
-    - id: ClothingUniformJumpskirtTaipanCommunicationsOfficer
-      amount: 2
+    - id: CigarGoldCase
+      prob: 0.50
+    - id: ClothingBeltSecurityFilled
+    - id: ClothingEyesHudTaipanAdvanced
+    - id: DoorRemoteTaipan
+    - id: ClothingMaskGasSyndicate
 
 - type: entity
   id: LockerTaipanResearchDirectorFilled
@@ -333,10 +330,12 @@
   components:
   - type: StorageFill
     contents:
-    - id: ClothingUniformJumpsuitTaipanTechnicalOperationsSupervisor
-      amount: 2
-    - id: ClothingUniformJumpskirtTaipanTechnicalOperationsSupervisor
-      amount: 2
+    - id: CigarGoldCase
+      prob: 0.50
+    - id: ClothingBeltSecurityFilled
+    - id: ClothingEyesHudTaipanAdvanced
+    - id: DoorRemoteTaipan
+    - id: ClothingMaskGasSyndicate
 
 # Security
 - type: entity
@@ -346,9 +345,16 @@
   components:
   - type: StorageFill
     contents:
-    - id: ClothingUniformJumpsuitTaipanRecruit
-      amount: 2
-    - id: ClothingUniformJumpskirtTaipanRecruit
+    - id: ClothingHeadHelmetSwatSyndicate
+    - id: ClothingOuterVestWeb
+    - id: ClothingBeltAssaultTaipan
+    - id: ClothingBeltMilitaryWebbing
+    - id: ClothingBeltSyndieHolster
+    - id: ClothingEyesHudTaipanRecruit
+    - id: ClothingHandsGlovesColorBlack
+    - id: ClothingMaskGasSyndicate
+    - id: WeaponPistolViper
+    - id: MagazinePistol
       amount: 2
 
 # Safe

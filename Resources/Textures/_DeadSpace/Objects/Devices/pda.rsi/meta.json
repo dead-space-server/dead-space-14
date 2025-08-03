@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "created by andrew_fenriz and semkagamez (discord) for DS14",
+  "copyright": "recolored by andrew_fenriz and semkagamez (discord) for Space Statiom 14 server Мёртвый Космос",
   "size": {
     "x": 32,
     "y": 32
@@ -62,7 +62,7 @@
       ]
     },
     {
-      "name": "pda-ce",
+      "name": "pda-tos",
       "delays": [
         [
           1.2,
@@ -95,7 +95,7 @@
       ]
     },
     {
-      "name": "pda-hos",
+      "name": "pda-co",
       "delays": [
         [
           1.2,

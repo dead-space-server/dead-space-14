@@ -148,7 +148,7 @@
 - type: entity
   parent: [ClothingOuterStorageFoldableBaseOpened, ClothingOuterTaipanCoatLabResearchDirector]
   id: ClothingOuterTaipanCoatLabResearchDirectorOpened
-  name: халат директора исследований
+  name: лабораторный халат директора исследований
   suffix: Тайпан, Расстёгнут
 
 - type: entity

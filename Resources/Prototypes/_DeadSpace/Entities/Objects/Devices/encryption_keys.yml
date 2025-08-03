@@ -57,4 +57,4 @@
   - type: Sprite
     sprite: _DeadSpace/Objects/Devices/encryption_keys.rsi
     layers:
-    - state: crypt_typ
+    - state: crypt_taipan

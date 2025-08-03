@@ -84,11 +84,11 @@
     appearanceDataInit:
       enum.PdaVisuals.PdaType:
         !type:String
-        pda-ce
+        pda-tos
   - type: Pda
     id: TaipanTechnicalOperationsSupervisorIDcard
   - type: Icon
-    state: pda-ce
+    state: pda-tos
 
 - type: entity
   parent: BaseTaipanPDA
@@ -116,11 +116,11 @@
     appearanceDataInit:
       enum.PdaVisuals.PdaType:
         !type:String
-        pda-hos
+        pda-co
   - type: Pda
     id: TaipanCommunicationsOfficerIDcard
   - type: Icon
-    state: pda-hos
+    state: pda-co
 
 - type: entity
   parent: BaseTaipanPDA

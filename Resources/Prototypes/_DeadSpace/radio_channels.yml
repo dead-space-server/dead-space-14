@@ -30,6 +30,14 @@
   longRange: false
 
 - type: radioChannel
+  id: TaipanHandheld
+  name: chat-radio-taipan-handheld
+  frequency: 4265
+  color: "#872e18"
+  # long range since otherwise it'd defeat the point of a handheld radio independent of telecomms
+  longRange: true
+
+- type: radioChannel
   id: Unitolog
   name: chat-radio-unitolog
   keycode: 'ь' # DS14-Localization
