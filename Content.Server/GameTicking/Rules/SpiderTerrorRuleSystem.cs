@@ -41,7 +41,6 @@ public sealed class SpiderTerrorRuleSystem : GameRuleSystem<SpiderTerrorRuleComp
     private const float ProgressBreeding = 0.45f;
     private const float ProgressNukeCode = 0.7f;
     private const float ProgressCaptureStation = 0.98f;
-
     private bool _voteSend = false;
 
     public override void Initialize()

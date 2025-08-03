@@ -26,6 +26,10 @@ using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;
 using Content.Shared.Zombies;
 using Content.Server.DeadSpace.Necromorphs.InfectionDead;
 using Content.Shared.Stunnable;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
+using Content.Shared.Fax.Components;
+using Content.Server.Station.Components;
+using Content.Server.Station.Systems;
 
 namespace Content.Server.GameTicking.Rules;
 
@@ -46,12 +50,17 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
     [Dependency] private readonly NecromorfSystem _necromorfSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
+    [Dependency] private readonly StationSystem _station = default!;
 
     [ValidatePrototypeId<EntityPrototype>]
     private const string UnitologyRule = "Unitology";
 
     [ValidatePrototypeId<AntagPrototype>]
     public const string UnitologyAntagRole = "UniHead";
+
+    [DataField("orderPaperPrototype", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    private const string OrderPaperPrototype = "PaperOrderNecromorph";
+
     private const float ConvergenceSongLength = 60f + 37.6f;
     public override void Initialize()
     {
@@ -106,6 +115,7 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
 
         if (!component.IsUniWarningSend && uniWarningTime < _timing.CurTime)
         {
+            SendOrder();
             _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("unitology-centcomm-announcement-uni-warn"), playSound: true, colorOverride: Color.LightSeaGreen);
             component.IsUniWarningSend = true;
         }
@@ -416,6 +426,33 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
                 ("username", data.UserName)));
         }
 
+    }
+
+    private void SendOrder()
+    {
+        var faxes = EntityQueryEnumerator<FaxMachineComponent>();
+        var wasSent = false;
+
+        var query = EntityQueryEnumerator<UnitologyHeadComponent>();
+
+        while (query.MoveNext(out var ent, out _))
+        {
+            var xform = Transform(ent);
+            var station = _station.GetStationInMap(xform.MapID);
+
+            if (!HasComp<StationDataComponent>(station))
+                continue;
+
+            while (faxes.MoveNext(out var faxEnt, out var fax))
+            {
+                if (!fax.ReceiveNukeCodes || wasSent == true)
+                    continue;
+
+                Spawn(OrderPaperPrototype, Transform(faxEnt).Coordinates);
+
+                wasSent = true;
+            }
+        }
     }
 
     private static readonly string[] Outcomes =
