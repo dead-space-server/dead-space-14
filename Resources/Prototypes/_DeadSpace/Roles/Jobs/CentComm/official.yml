@@ -44,10 +44,3 @@
   id: ClothingBackpackSatchelOfficial
   name: чёрная сумка
   description: Стильная чёрная кожаная сумка.
-
-- type: roleLoadout
-  id: CentralCommandOfficial
-  groups:
-  - GroupTankHarness
-  - Survival
-  - GroupSpeciesBreathTool

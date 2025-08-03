@@ -165,16 +165,16 @@
         visualType: Large
         messages: [ "generic-reagent-effect-burning-insides" ]
         probability: 0.33
-        # DS14-start
+# DS14-start
         conditions:
         - !type:OrganType
           type: Xenomorph
           shouldHave: false
-        # DS14-end
+# DS14-end
       - !type:Emote
         emote: Scream
         probability: 0.3
-        # DS14-start
+# DS14-start
         conditions:
         - !type:OrganType
           type: Xenomorph
@@ -209,7 +209,7 @@
           types:
             Heat: 2.5
             Caustic: 1
-        # DS14-start
+# DS14-start
         conditions:
         - !type:OrganType
           type: Xenomorph
@@ -219,7 +219,7 @@
         conditions:
         - !type:OrganType
           type: Xenomorph
-        # DS14-end
+# DS14-end
 
 - type: reagent
   id: FluorosulfuricAcid
@@ -263,16 +263,16 @@
         visualType: Large
         messages: [ "generic-reagent-effect-burning-insides" ]
         probability: 0.33
-        # DS14-start
+# DS14-start
         conditions:
         - !type:OrganType
           type: Xenomorph
           shouldHave: false
-      # DS14-end
+# DS14-end
       - !type:Emote
         emote: Scream
         probability: 0.25
-        # DS14-start
+# DS14-start
         conditions:
         - !type:OrganType
           type: Xenomorph
@@ -336,16 +336,16 @@
         visualType: Large
         messages: [ "generic-reagent-effect-burning-insides" ]
         probability: 0.33
-        # DS14-start
+# DS14-start
         conditions:
         - !type:OrganType
           type: Xenomorph
           shouldHave: false
-      # DS14-end
+# DS14-end
       - !type:Emote
         emote: Scream
         probability: 0.2
-        # DS14-start
+# DS14-start
         conditions:
         - !type:OrganType
           type: Xenomorph
@@ -357,7 +357,7 @@
         conditions:
         - !type:OrganType
           type: Xenomorph
-         # DS14-end
+# DS14-end
 
 - type: reagent
   id: UnstableMutagen
