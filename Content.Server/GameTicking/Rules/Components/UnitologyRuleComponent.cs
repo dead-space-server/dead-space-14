@@ -87,7 +87,7 @@ public sealed partial class UnitologyRuleComponent : Component
     [DataField]
     public TimeSpan NextStageTime;
 
-    [IdDataField]
+    [DataField]
     public TimeSpan StageObeliskDuration = TimeSpan.FromMinutes(20);
 
     [DataField]
