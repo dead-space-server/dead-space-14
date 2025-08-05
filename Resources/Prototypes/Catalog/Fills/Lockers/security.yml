@@ -14,6 +14,7 @@
       # - id: ClothingShoesBootsJack # DS14-disabled
       # - id: ClothingOuterCoatWarden # DS14-disabled
       - id: ClothingOuterWinterWarden
+      - id: CriminalRecordsMonitor      
       - id: RubberStampWarden
       - id: DoorRemoteArmory
       - id: ClothingOuterHardsuitWarden
@@ -48,6 +49,7 @@
       - id: ClothingOuterWinterWarden
       - id: RubberStampWarden
       - id: DoorRemoteArmory
+      - id: CriminalRecordsMonitor      
       - id: HoloprojectorSecurity
       - id: BookSpaceLaw
       - id: ClothingBackpackElectropack
