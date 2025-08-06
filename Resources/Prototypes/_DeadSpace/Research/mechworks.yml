@@ -120,7 +120,7 @@
   - MechEquipmentTaipanRipleyGrabber
 
 - type: technology
-  id: TaipanHardsuits
+  id: TaipanHardsuitsBasic
   name: research-technology-basic-syndicate-hardsuits
   icon:
     sprite: Clothing/Head/Helmets/eva_syndicate.rsi

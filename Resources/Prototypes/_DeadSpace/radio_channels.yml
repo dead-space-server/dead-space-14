@@ -32,6 +32,7 @@
 - type: radioChannel
   id: TaipanHandheld
   name: chat-radio-taipan-handheld
+  keycode: '7' # DS14-Localization
   frequency: 4265
   color: "#872e18"
   # long range since otherwise it'd defeat the point of a handheld radio independent of telecomms

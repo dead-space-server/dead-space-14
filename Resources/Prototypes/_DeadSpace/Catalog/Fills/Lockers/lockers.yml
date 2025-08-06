@@ -45,22 +45,18 @@
       prob: 0.1
     - id: ClothingHandsGlovesLatex
     - id: ClothingEyesHudTaipanMedical
-    - !type:GroupSelector
-      children:
-      - id: ClothingHeadHatSurgcapGreen
-        weight: 0.1
-      - id: ClothingHeadHatSurgcapPurple
-        weight: 0.05
-      - id: ClothingHeadHatSurgcapBlue
-        weight: 0.90
-    - !type:GroupSelector
-      children:
-      - id: UniformScrubsColorBlue
-        weight: 0.5
-      - id: UniformScrubsColorGreen
-        weight: 0.1
-      - id: UniformScrubsColorPurple
-        weight: 0.05
+    - id: ClothingHeadHatSurgcapGreen
+      weight: 0.1
+    - id: ClothingHeadHatSurgcapPurple
+      weight: 0.05
+    - id: ClothingHeadHatSurgcapBlue
+      weight: 0.90
+    - id: UniformScrubsColorBlue
+      weight: 0.5
+    - id: UniformScrubsColorGreen
+      weight: 0.1
+    - id: UniformScrubsColorPurple
+      weight: 0.05
     - id: ClothingMaskSterile
 
 - type: entity
@@ -128,10 +124,10 @@
   components:
   - type: StorageFill
     contents:
-    - id: ClothingBeltUtilityFilled
+    - id: ClothingBeltUtilityEngineering
     - id: SurvivalKnife
     - id: HandheldGPSBasic
-    - id: RadioHandheldTaipan
+#    - id: RadioHandheldTaipan
     - id: AppraisalTool
     - id: FireExtinguisher
     - id: Flare
@@ -186,10 +182,6 @@
   components:
   - type: StorageFill
     contents:
-    - id: ClothingUniformJumpsuitTaipanAtmosphericsEngineer
-      amount: 2
-    - id: ClothingUniformJumpskirtTaipanAtmosphericsEngineer
-      amount: 2
     - id: GasAnalyzer
     - id: MedkitOxygenFilled
     - id: HolofanProjector
@@ -203,13 +195,9 @@
   components:
   - type: StorageFill
     contents:
-    - id: ClothingUniformJumpsuitTaipanTechnician
-      amount: 2
-    - id: ClothingUniformJumpskirtTaipanTechnician
-      amount: 2
     - id: ClothingHandsGlovesColorYellow
     - id: trayScanner
-    - id: RCDSyndicate
+    - id: RCD
     - id: RCDAmmo
 
 # Service
@@ -245,10 +233,6 @@
   components:
   - type: StorageFill
     contents:
-    - id: ClothingUniformJumpsuitTaipanChef
-      amount: 2
-    - id: ClothingUniformJumpskirtTaipanChef
-      amount: 2
     - id: ClothingOuterApronTaipanChef
       amount: 2
     - id: ClothingOuterJacketTaipanChef
@@ -279,10 +263,6 @@
   components:
   - type: StorageFill
     contents:
-    - id: ClothingUniformJumpsuitTaipanBotanist
-      amount: 2
-    - id: ClothingUniformJumpskirtTaipanBotanist
-      amount: 2
     - id: ClothingHandsGlovesLeather
     - id: ClothingOuterApronTaipanBotanist
     - id: ClothingMaskBandBotanyTaipan
@@ -306,10 +286,16 @@
     contents:
     - id: CigarGoldCase
       prob: 0.50
-    - id: ClothingBeltSecurityFilled
+    - id: ClothingBeltAssaultTaipan
+    - id: ClothingBeltMilitaryWebbing
+    - id: ClothingBeltSyndieHolster
     - id: ClothingEyesHudTaipanAdvanced
     - id: DoorRemoteTaipan
+    - id: ClothingHeadHelmetSwatSyndicate
     - id: ClothingMaskGasSyndicate
+    - id: WeaponPistolDesertEagle
+    - id: MagazineEagle
+      amount: 2
 
 - type: entity
   id: LockerTaipanResearchDirectorFilled
@@ -318,10 +304,13 @@
   components:
   - type: StorageFill
     contents:
-    - id: ClothingUniformJumpsuitTaipanResearchDirector
-      amount: 2
-    - id: ClothingUniformJumpskirtTaipanResearchDirector
-      amount: 2
+    - id: IntellicardTaipan
+    - id: CircuitImprinterMachineCircuitboardTaipan
+    - id: ClothingBeltUtilityEngineering
+    - id: DoorRemoteTaipan
+    - id: ProtolatheMachineCircuitboardTaipan
+    - id: ResearchComputerCircuitboardTaipan
+    - id: EncryptionKeyBinary
 
 - type: entity
   id: LockerTaipanTechnicalOperationsSupervisorFilled
@@ -330,12 +319,20 @@
   components:
   - type: StorageFill
     contents:
-    - id: CigarGoldCase
-      prob: 0.50
-    - id: ClothingBeltSecurityFilled
-    - id: ClothingEyesHudTaipanAdvanced
+    - id: CargoBountyComputerCircuitboardTaipan
+    - id: CargoRequestComputerCircuitboardTaipan
+    - id: CargoSaleComputerCircuitboardTaipan
+    - id: CargoShuttleConsoleCircuitboardTaipan
+    - id: SalvageMagnetMachineCircuitboard
     - id: DoorRemoteTaipan
-    - id: ClothingMaskGasSyndicate
+    - id: MailTeleporterMachineCircuitboard
+    - id: AccessConfiguratorTaipan
+    - id: CigarCase
+      prob: 0.15
+    - id: ClothingBeltUtilityEngineering
+    - id: ClothingEyesGlassesMeson
+    - id: RCD
+    - id: RCDAmmo
 
 # Security
 - type: entity

@@ -3,7 +3,7 @@
   parent: Dresser
   name: комод
   desc: Деревянный комод, в котором можно хранить вещи, идеально подходит для нижнего белья и чьих-то почек?...
-  suffix: Тайпан, Заполненный, Офицер телекоммуникаций
+  suffix: Тайпан, Офицер телекоммуникаций
   components:
   - type: StorageFill
     contents:
@@ -23,14 +23,13 @@
   parent: Dresser
   name: комод
   desc: Деревянный комод, в котором можно хранить вещи, идеально подходит для нижнего белья и чьих-то почек?...
-  suffix: Тайпан, Заполненный, Директор исследований
+  suffix: Тайпан, Директор исследований
   components:
   - type: StorageFill
     contents:
     - id: ClothingUniformJumpsuitTaipanResearchDirector
     - id: ClothingUniformJumpskirtTaipanResearchDirector
     - id: ClothingOuterTaipanCoatLabResearchDirector
-    - id: ClothingEyesGlasses
     - id: ClothingHandsTaipanResearchDirector
     - id: ClothingUnderwearSocksTaipanResearchDirector
     - id: ClothingUnderwearBottomBoxersTaipanResearchDirector
@@ -42,13 +41,12 @@
   parent: Dresser
   name: комод
   desc: Деревянный комод, в котором можно хранить вещи, идеально подходит для нижнего белья и чьих-то почек?...
-  suffix: Тайпан, Заполненный, Руководитель техобеспечения
+  suffix: Тайпан, Руководитель техобеспечения
   components:
   - type: StorageFill
     contents:
     - id: ClothingUniformJumpsuitTaipanTechnicalOperationsSupervisor
     - id: ClothingUniformJumpskirtTaipanTechnicalOperationsSupervisor
-    - id: ClothingEyesGlassesMeson
     - id: ClothingHandsTaipanTechnicalOperationsSupervisor
     - id: ClothingUnderwearSocksTaipanTechnicalOperationsSupervisor
     - id: ClothingUnderwearBottomBoxersTaipanTechnicalOperationsSupervisor
