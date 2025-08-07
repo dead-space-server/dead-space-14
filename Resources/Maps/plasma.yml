@@ -74,7 +74,6 @@ entities:
       name: Plasma
     - type: Transform
     - type: Map
-      mapPaused: True
     - type: PhysicsMap
     - type: GridTree
     - type: MovedGrids
@@ -10468,8 +10467,6 @@ entities:
       originalIconColor: '#FFFFFFFF'
       container: 9
   - uid: 19134
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 19133
