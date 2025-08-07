@@ -6558,8 +6558,6 @@ entities:
       containerName: beaker
       container: 7
   - uid: 10
-    mapInit: true
-    paused: true
     components:
     - type: MetaData
       name: solution - food
@@ -88647,8 +88645,6 @@ entities:
 - proto: PaperPrintedCommand
   entities:
   - uid: 9
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       pos: -4.649935,-346.35376
