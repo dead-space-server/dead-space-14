@@ -6558,6 +6558,8 @@ entities:
       containerName: beaker
       container: 7
   - uid: 10
+    mapInit: true
+    paused: true
     components:
     - type: MetaData
       name: solution - food
@@ -88554,6 +88556,10 @@ entities:
           restitution: 0
           friction: 0.4
     - type: ThrownItem
+      playLandSound: True
+      landTime: 60629.5042775
+      thrownTime: 60629.4727038
+      thrower: invalid
   - uid: 13187
     components:
     - type: Transform
@@ -88645,6 +88651,8 @@ entities:
 - proto: PaperPrintedCommand
   entities:
   - uid: 9
+    mapInit: true
+    paused: true
     components:
     - type: Transform
       pos: -4.649935,-346.35376
