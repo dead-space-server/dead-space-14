@@ -6896,8 +6896,6 @@ entities:
       originalIconColor: '#FFFFFFFF'
       container: 16
   - uid: 19
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 18
