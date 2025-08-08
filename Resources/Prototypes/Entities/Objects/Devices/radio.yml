@@ -6,7 +6,7 @@
   components:
   - type: TelecomExempt
   - type: RadioMicrophone
-    ToggleOnInteract: false #DS-14-radio-mode
+    toggleOnInteract: false #DS-14-radio-mode
     broadcastChannel: Handheld
   - type: RadioSpeaker
     channels:
