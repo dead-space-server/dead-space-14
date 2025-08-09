@@ -124,7 +124,7 @@
   - type: Sprite
     sprite: _DeadSpace/Sponsor/pvrsifvlAlt/gun.rsi
     layers:
-    - state: base
+    - state: icon
       map: ["enum.GunVisualLayers.Base"]
     - state: mag-unshaded-4
       map: ["enum.GunVisualLayers.MagUnshaded"]
