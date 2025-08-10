@@ -26,10 +26,11 @@ using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;
 using Content.Shared.Zombies;
 using Content.Server.DeadSpace.Necromorphs.InfectionDead;
 using Content.Shared.Stunnable;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Content.Shared.Fax.Components;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
+using Content.Shared.Paper;
+using Content.Server.Fax;
 
 namespace Content.Server.GameTicking.Rules;
 
@@ -51,16 +52,13 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private readonly FaxSystem _faxSystem = default!;
 
     [ValidatePrototypeId<EntityPrototype>]
     private const string UnitologyRule = "Unitology";
 
     [ValidatePrototypeId<AntagPrototype>]
     public const string UnitologyAntagRole = "UniHead";
-
-    [DataField("orderPaperPrototype", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    private const string OrderPaperPrototype = "PaperOrderNecromorph";
-
     private const float ConvergenceSongLength = 60f + 37.6f;
     public override void Initialize()
     {
@@ -451,7 +449,21 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
                 if (!fax.ReceiveNukeCodes)
                     continue;
 
-                Spawn(OrderPaperPrototype, Transform(faxEnt).Coordinates);
+                var content = Loc.GetString("paper-order-necromorph");
+
+                var printout = new FaxPrintout(
+                    content,
+                    Loc.GetString("nuke-codes-fax-paper-name"),
+                    null,
+                    null,
+                    "paper_stamp-centcom",
+                    new List<StampDisplayInfo>
+                    {
+                        new StampDisplayInfo { StampedName = Loc.GetString("stamp-component-stamped-name-centcom"), StampedColor = Color.FromHex("#006600") },
+                    }
+                );
+
+                _faxSystem.Receive(faxEnt, printout, null, fax);
 
                 wasSent = true;
             }
