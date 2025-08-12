@@ -220,7 +220,7 @@
       path: /Audio/Items/bikehorn.ogg
       params:
         variation: 0.125
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: Botsping
 
 - type: entity
@@ -263,7 +263,7 @@
     totalIntensity: 10
     intensitySlope: 5
     canCreateVacuum: false
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: Botsping
 
 - type: entity
@@ -411,7 +411,7 @@
     interactFailureString: petting-failure-mimebot
   - type: Inventory
     templateId: head
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: Botsping
 
 - type: entity
@@ -481,5 +481,5 @@
     channels:
     - Common
     - Supply
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: Botsping

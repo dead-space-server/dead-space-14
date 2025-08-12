@@ -4,6 +4,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
 using Content.Shared.DeadSpace.GhostRoleNotify.Prototypes;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Configuration;
 
 namespace Content.Client.Options.UI.Tabs;
 
@@ -11,25 +12,32 @@ namespace Content.Client.Options.UI.Tabs;
 
 public sealed partial class PingTab : Control
 {
-    List<bool> _roles = new List<bool>();
-    int _numberForButton = 0;
-    //[Dependency] private readonly IPrototypeManager _prototypes = default!;
-
-    void Lolalaoalalal()
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    public static Dictionary<string, bool> _dictAccess = new Dictionary<string, bool>();
+    public static bool GetValueAccess(string key)
     {
-        for (int i = 0; i < 60; i++)
+        if (key == null)
         {
-            _roles.Add(false);
+            return false;
+        }
+        if (_dictAccess.TryGetValue(key, out bool value))
+        {
+            return value;
+        }
+        else
+        {
+            // Поведение, если ключ не найден — например, бросить исключение или вернуть false
+            return false;
         }
     }
 
-    private void AddCheckBox(string checkBoxName, int number)
+    private void AddCheckBox(string checkBoxName, string id)
     {
         CheckBox newCheckBox = new CheckBox() { Text = Loc.GetString(checkBoxName) };
-        newCheckBox.Pressed = _roles[number];
+        newCheckBox.Pressed = false;
         newCheckBox.OnToggled += (lol) =>
         {
-            _roles[number] = newCheckBox.Pressed;
+            _dictAccess[id] = newCheckBox.Pressed;
         };
 
         PingsCont.AddChild(newCheckBox);
@@ -37,12 +45,11 @@ public sealed partial class PingTab : Control
     public PingTab()
     {
         var prototypeManager = IoCManager.Resolve<IPrototypeManager>();
-        Lolalaoalalal();
         RobustXamlLoader.Load(this);
         foreach (var proto in prototypeManager.EnumeratePrototypes<GhostRoleGroupNotify>())
         {
-            AddCheckBox(proto.Name, _numberForButton);
-            _numberForButton += 1;
+            _dictAccess.Add(proto.ID, false);
+            AddCheckBox(proto.Name, proto.ID);
         }
         Control.Initialize();
     }

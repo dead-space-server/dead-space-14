@@ -84,6 +84,6 @@
       damage:
         types:
           Blunt: 7
-    - type: GhostRoleNotify
+    - type: GhostRoleNotifys
       GroupPrototype: Largoping
     # DS14-end

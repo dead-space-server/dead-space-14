@@ -130,7 +130,7 @@
       Male: Demon
       Female: Demon
       Unsexed: Demon
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: DemonBoss
 
 - type: entity

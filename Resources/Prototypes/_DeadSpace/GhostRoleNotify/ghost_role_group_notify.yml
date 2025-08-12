@@ -9,12 +9,7 @@
   MainGroup: Антаги
 
 - type: ghostNotifyGroup
-  id: DemonHonker
-  name: Демон клоун
-  MainGroup: Антаги
-
-- type: ghostNotifyGroup
-  id: DemonHonker
+  id: DemonHonkerping
   name: Демон клоун
   MainGroup: Антаги
 
@@ -90,7 +85,7 @@
   name: Король крыс
 
 - type: ghostNotifyGroup
-  id: SyndicateGroup
+  id: SyndicateBorgGroup
   name: Борги Синдиката
 
 - type: ghostNotifyGroup
@@ -180,10 +175,6 @@
 - type: ghostNotifyGroup
   id: TomatoKillerping
   name: Томат убийца
-
-- type: ghostNotifyGroup
-  id: FreeAgentGroup
-  name: Свободные Агенты
 
 - type: ghostNotifyGroup
   id: Botsping

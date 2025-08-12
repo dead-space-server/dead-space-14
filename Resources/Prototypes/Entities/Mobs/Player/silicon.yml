@@ -552,8 +552,8 @@
       raffle:
         settings: default
     - type: GhostTakeoverAvailable
-    - type: GhostRoleNotify
-      GroupPrototype: SyndicateGroup
+    - type: GhostRoleNotifys
+      GroupPrototype: SyndicateBorgGroup
 
 - type: entity
   id: PlayerBorgSyndicateSaboteurBattery
@@ -587,8 +587,8 @@
       raffle:
         settings: default
     - type: GhostTakeoverAvailable
-    - type: GhostRoleNotify
-      GroupPrototype: SyndicateGroup
+    - type: GhostRoleNotifys
+      GroupPrototype: SyndicateBorgGroup
 
 - type: entity
   name: syndicate invasion borg spawner
@@ -639,5 +639,5 @@
       raffle:
         settings: default
     - type: GhostTakeoverAvailable
-    - type: GhostRoleNotify
+    - type: GhostRoleNotifys
       GroupPrototype: DerelictCyborg

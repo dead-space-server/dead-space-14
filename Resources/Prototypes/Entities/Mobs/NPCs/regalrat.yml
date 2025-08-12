@@ -128,7 +128,7 @@
   - type: TTS
     voice: DrSezavo
   - type: NightVision # DS14
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: Ratking
 
 - type: entity

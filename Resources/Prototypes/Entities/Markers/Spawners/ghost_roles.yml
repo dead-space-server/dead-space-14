@@ -34,7 +34,7 @@
       - state: green
       - sprite: Mobs/Animals/regalrat.rsi
         state: icon
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: Ratking
 
 - type: entity
@@ -59,7 +59,7 @@
       - state: green
       - sprite: Mobs/Animals/bat.rsi
         state: bat
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: PetsGroup
 
 - type: entity
@@ -84,7 +84,7 @@
       - state: green
       - sprite: Mobs/Pets/corgi.rsi
         state: narsian
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: PetsGroup
 
 - type: entity
@@ -115,7 +115,7 @@
       - state: green
       - sprite: Structures/Wallmounts/signs.rsi
         state: radiation
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: OperativeGroup
 
 - type: entity
@@ -142,7 +142,7 @@
       - state: green
       - sprite: Structures/Wallmounts/signs.rsi
         state: radiation
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: LoneOper
 
 - type: entity
@@ -166,7 +166,7 @@
     - !type:DepartmentTimeRequirement
       department: Command
       time: 72000 # 20 hours
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: CommanderOperatives
 
 - type: entity
@@ -190,7 +190,7 @@
     - !type:DepartmentTimeRequirement
       department: Security
       time: 72000 # 20 hours
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: OperativeMedic
 
 - type: entity
@@ -204,7 +204,7 @@
     rules: ghost-role-information-rules-default-team-antagonist
     mindRoles:
     - MindRoleGhostRoleTeamAntagonist
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: Operativeping
 
 - type: entity
@@ -226,7 +226,7 @@
     - state: green
     - sprite: Mobs/Aliens/Carps/dragon.rsi
       state: alive
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: Dragonping
 
 - type: entity
@@ -251,7 +251,7 @@
     - state: green
     - sprite: Objects/Weapons/Melee/energykatana.rsi
       state: icon
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: Nijaping
 
 - type: entity
@@ -277,7 +277,7 @@
       state: green
     - sprite: Mobs/Aliens/paradox_clone.rsi
       state: preview
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: Paradoxping
 
 - type: entity
@@ -297,7 +297,7 @@
     - state: green
     - sprite: Mobs/Silicon/chassis.rsi
       state: derelict_icon
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: DerelictCyborg
 
 - type: entity
@@ -323,5 +323,5 @@
     - state: green
     - sprite: Clothing/Head/Hats/wizardhat.rsi
       state: icon
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: Wizardping

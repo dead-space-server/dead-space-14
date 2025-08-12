@@ -358,7 +358,7 @@
     solution: bloodstream
   - type: DrainableSolution
     solution: bloodstream
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: Slimeping
 
 - type: entity

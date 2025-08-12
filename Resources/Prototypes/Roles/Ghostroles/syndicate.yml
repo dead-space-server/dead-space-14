@@ -5,7 +5,7 @@
   rules: ghost-role-information-syndicate-reinforcement-rules
   entityPrototype: MobKoboldSyndicateAgent
   components:
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: SyndicateGroup
 
 - type: ghostRole
@@ -15,7 +15,7 @@
   rules: ghost-role-information-nukeop-reinforcement-rules
   entityPrototype: MobKoboldSyndicateAgentNukeops
   components:
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: SyndicateGroup
 
 - type: ghostRole
@@ -25,7 +25,7 @@
   rules: ghost-role-information-syndicate-reinforcement-rules
   entityPrototype: MobMonkeySyndicateAgent
   components:
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: SyndicateGroup
 
 - type: ghostRole
@@ -35,7 +35,7 @@
   rules: ghost-role-information-nukeop-reinforcement-rules
   entityPrototype: MobMonkeySyndicateAgentNukeops
   components:
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: SyndicateGroup
 
 - type: ghostRole
@@ -46,7 +46,7 @@
   entityPrototype: MobHumanSyndicateAgentMedic
   iconPrototype: MedkitCombat
   components:
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: SyndicateGroup
 
 - type: ghostRole
@@ -57,7 +57,7 @@
   entityPrototype: MobHumanSyndicateAgentSpy
   iconPrototype: ClothingMaskGasVoiceChameleon
   components:
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: SyndicateGroup
 
 - type: ghostRole
@@ -68,5 +68,5 @@
   entityPrototype: MobHumanSyndicateAgentThief
   iconPrototype: SyndicateJawsOfLife
   components:
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: SyndicateGroup

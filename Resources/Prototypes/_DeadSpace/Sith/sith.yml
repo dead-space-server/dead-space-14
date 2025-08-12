@@ -73,7 +73,7 @@
     - NamesSith
   - type: RandomHumanoidAppearance
     randomizeName: false
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: Sithping
 
 - type: entity
@@ -138,7 +138,7 @@
     - state: green
     - sprite: Objects/Weapons/Melee/energykatana.rsi
       state: icon
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: Sithping
 
 - type: entity

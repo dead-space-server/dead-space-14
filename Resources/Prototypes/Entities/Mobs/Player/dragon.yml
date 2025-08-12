@@ -155,7 +155,7 @@
   - type: Puller
     needsHands: false
   - type: NightVision # DS14 
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: Dragonping
 
 - type: entity

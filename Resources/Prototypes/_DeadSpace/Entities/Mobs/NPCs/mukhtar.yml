@@ -112,7 +112,7 @@
   - type: FireVisuals
     sprite: Mobs/Effects/onfire.rsi
     normalState: Monkey_burning
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: Mukhtarping
 
 - type: startingGear

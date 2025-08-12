@@ -618,7 +618,7 @@
           32:
             sprite: Mobs/Animals/mothroach/displacement.rsi
             state: neck
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: PetsGroup
 
 
@@ -1274,7 +1274,7 @@
   - type: Sanity
   - type: TTS
     voice: Ycf
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: Kangarooping
 
 - type: entity
@@ -1435,7 +1435,7 @@
         Burn: 3
     clumsySound:
       path: /Audio/Animals/monkey_scream.ogg
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: PetsGroup
 
 
@@ -1471,7 +1471,7 @@
   - type: GhostTakeoverAvailable
   - type: Loadout
     prototypes: [SyndicateOperativeGearMonkey]
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: SyndicateGroup
 
 - type: entity
@@ -1602,7 +1602,7 @@
     name: ghost-role-information-kobold-name
     description: ghost-role-information-kobold-description
     rules: ghost-role-information-nonantagonist-rules
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: PetsGroup
 
 - type: entity
@@ -1837,7 +1837,7 @@
       Skewer: RatSkewer
   - type: NecromorfAfterInfection
     necroPrototype: NecroSmall
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: PetsGroup
 
 - type: entity
@@ -2482,7 +2482,7 @@
     raffle:
       settings: short
   - type: GhostTakeoverAvailable
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: SpidersGroup
 
 - type: entity
@@ -3082,7 +3082,7 @@
         Slash: 6
         Piercing: 6
         Structural: 15
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: ExplosiveCat
 
 - type: entity
@@ -3430,7 +3430,7 @@
     normalState: Mouse_burning
   - type: NecromorfAfterInfection
     necroPrototype: NecroSmall
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: PetsGroup
 
 - type: entity

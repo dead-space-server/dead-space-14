@@ -1,38 +1,45 @@
 using Content.Server.Ghost.Roles.Components;
 using Content.Shared.DeadSpace.GhostRoleNotify.Components;
 using Robust.Shared.Prototypes;
+using Content.Shared.Ghost;
 using Content.Shared.DeadSpace.GhostRoleNotify.Prototypes;
 using Content.Server.Ghost.Roles;
+using Robust.Server.Player;
+using Content.Shared.Ghost.SharedGhostPing;
 
 namespace Content.Server.DeadSpace.GhostRoleNotify.GhostRoleNotifySystem;
 
 public sealed partial class GhostRoleNotifySystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    void Lolol()
-    {
-        //  _prototypes.EnumeratePrototypes<GhostRoleGroupNotify>()
-        foreach (var proto in _prototypes.EnumeratePrototypes<GhostRoleGroupNotify>())
-        {
-            Console.WriteLine(proto.Name);
-        }
-    }
+    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
+
+
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<GhostRoleNotifyComponent, ComponentStartup>(OnInit, after: new[] { typeof(GhostRoleSystem) });
+        SubscribeLocalEvent<GhostRoleNotifysComponent, ComponentStartup>(OnInit, after: new[] { typeof(GhostRoleSystem) });
     }
 
-    private void OnInit(EntityUid uid, GhostRoleNotifyComponent component, ref ComponentStartup args)
+    private void OnInit(EntityUid uid, GhostRoleNotifysComponent component, ref ComponentStartup args)
     {
-        Lolol();
         if (!TryComp<GhostRoleComponent>(uid, out var ghostRole))
         {
             Console.WriteLine("netu");
         }
         else
         {
-            Console.WriteLine(ghostRole.RoleName);
+            foreach (var player in _playerManager.Sessions)
+            {
+                if (_entityManager.HasComponent<GhostComponent>(player.AttachedEntity))
+                {
+                    if (_entityManager.HasComponent<GhostRoleNotifysComponent>(uid))
+                    {
+                        RaiseNetworkEvent(new PingMessege(component.GroupPrototype), player);
+                    }
+                }
+            }
 
         }
     }

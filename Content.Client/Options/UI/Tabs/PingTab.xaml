@@ -4,7 +4,7 @@
          xmlns:ui="clr-namespace:Content.Client.Options.UI">
     <BoxContainer Orientation="Vertical">
         <BoxContainer Orientation="Vertical" Margin="8 8 8 8" VerticalExpand="True">
-            <Label Text="{Loc 'ui-pings-title'}"
+            <Label Text="{Loc 'ui-options-tab-ping'}"
                    StyleClasses="LabelKeyText"/>
             <ScrollContainer VerticalExpand="True">
                 <BoxContainer Name="PingsCont" Orientation="Vertical" Margin="0 3 0 0">

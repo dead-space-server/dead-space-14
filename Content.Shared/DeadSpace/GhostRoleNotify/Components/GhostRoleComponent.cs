@@ -5,18 +5,11 @@ namespace Content.Shared.DeadSpace.GhostRoleNotify.Components;
 
 [RegisterComponent, NetworkedComponent]
 
-public sealed partial class GhostRoleNotifyComponent : Component
+public sealed partial class GhostRoleNotifysComponent : Component
 {
-    public GhostRoleNotifyComponent()
+    public GhostRoleNotifysComponent()
     { }
 
-    [DataField("prototype", customTypeSerializer: typeof(PrototypeIdSerializer<GhostRoleGroupNotify>))]
-    public string GroupPrototype = String.Empty!;
-    //ViewVariables(VVAccess.ReadOnly)]
-    //public TimeSpan TimeUtilNotification = TimeSpan.Zero;
-    //[DataField]
-    //public float Delay = 1f;
-
-    //[ViewVariables(VVAccess.ReadOnly)]
-    //public bool IsNotificationSend = false;
+    [DataField("GroupPrototype", required: true)]
+    public string GroupPrototype = string.Empty;
 }

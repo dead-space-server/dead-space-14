@@ -553,7 +553,7 @@
   - type: GhostTakeoverAvailable
   - type: TTS
     voice: Chen
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: PetsGroup
 
 - type: entity
@@ -643,7 +643,7 @@
     - sadness
   - type: Hunger
     baseDecayRate: 0.1 # DS14: not soo hungry
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: PetsGroup
 
 - type: entity
@@ -741,7 +741,7 @@
   - type: GhostTakeoverAvailable
   - type: Loadout
     prototypes: [ BoxingKangarooGear ]
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: Kangarooping
 
 - type: entity
@@ -827,7 +827,7 @@
     attributes:
       proper: true
       gender: female
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: PetsGroup
 
 - type: entity
@@ -864,7 +864,7 @@
     attributes:
       proper: true
       gender: male
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: PunPunping
 
 - type: entity

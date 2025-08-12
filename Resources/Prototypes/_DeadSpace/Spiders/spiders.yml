@@ -168,7 +168,7 @@
       Acidic: [Touch, Ingestion]
   - type: TTS
     voice: Sunboy_mannered
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: SpiderTerrorBase
 
 - type: entity
@@ -205,7 +205,7 @@
     bloodCosts: # Цены
       MobSpiderTerrorRoyalGuard: 100
       MobSpiderTerrorPrincess: 150
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: SpiderTerrorKing
 
 - type: entity
@@ -229,7 +229,7 @@
     name: Героический паук ужаса королевской крови
     description: Паук Ужаса.
     rules: ghost-role-information-rules-team-antagonist
-  - type: GhostRoleNotify
+  - type: GhostRoleNotifys
     GroupPrototype: SpiderTerrorGeroick
 
 - type: entity
