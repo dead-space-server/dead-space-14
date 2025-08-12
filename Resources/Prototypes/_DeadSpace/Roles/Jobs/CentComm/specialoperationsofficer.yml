@@ -14,13 +14,17 @@
   - CentralCommand
   special:
   - !type:AddImplantSpecial
-    implants: [ MindShieldImplant, TrackingImplant ]
+    implants: [ MindShieldImplant, TrackingImplant, MacroBombImplant ]
+  - !type:AddComponentSpecial
+    components:
+    - type: AntagImmune
+    - type: ZombieImmune
 
 - type: startingGear
   id: CentcomSpecialOperationsOfficerGear
   equipment:
     jumpsuit: ClothingUniformJumpsuitCentcomOfficerBlack
-    back: ClothingBackpackERTLeaderFilledSOO
+    # back: ClothingBackpackERTLeaderFilledSOO
     shoes: ClothingShoesCentcomBlack
     head: ClothingHeadCapCentcomBlack
     eyes: ClothingEyesGlassesSecurity
@@ -35,7 +39,7 @@
   # innerClothingSkirt: ClothingUniformJumpskirtPencilSpecialOperationsOfficer
   # storage:
   #   back:
-  #   - 
+  #   -
 
 - type: entity
   parent: ClothingBackpackERTLeader
