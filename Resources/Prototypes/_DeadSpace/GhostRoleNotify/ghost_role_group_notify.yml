@@ -1,33 +1,27 @@
 - type: ghostNotifyGroup
   id: DemonBoss
   name: Демон Вестник
-  MainGroup: Антаги
 
 - type: ghostNotifyGroup
   id: DemonSlaughter
   name: Бронированный демон
-  MainGroup: Антаги
 
 - type: ghostNotifyGroup
   id: DemonHonkerping
   name: Демон клоун
-  MainGroup: Антаги
 
 - type: ghostNotifyGroup
   id: DemonJaunt
   name: Гуляющий демон
-  MainGroup: Антаги
 
 - type: ghostNotifyGroup
   id: DemonShadowping
   name: Теневой демон
-  MainGroup: Антаги
 
 - type: ghostNotifyGroup
   id: HellSpawnping
   name: Адское отродье
-  MainGroup: Антаги
-
+  
 - type: ghostNotifyGroup
   id: Sithping
   name: Ситх

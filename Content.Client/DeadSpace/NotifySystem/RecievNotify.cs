@@ -24,11 +24,8 @@ public sealed partial class RecievNotifySys : EntitySystem
 
     private void CheckRecievedNotify(PingMessege messege)
     {
-        _sawmill.Debug(messege.ID);
-        _sawmill.Debug(PingTab.GetValueAccess(messege.ID).ToString());
         if (PingTab.GetValueAccess(messege.ID))
         {
-            _sawmill.Debug("ГООООООООООООООООООООООООЛ");
             _audio.PlayGlobal(SoundNotify, Filter.Local(), false);
         }
     }

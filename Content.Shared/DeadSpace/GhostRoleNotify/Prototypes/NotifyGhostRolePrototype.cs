@@ -8,6 +8,4 @@ public sealed partial class GhostRoleGroupNotify : IPrototype
     public string ID { get; private set; } = default!;
     [DataField]
     public string Name { get; private set; } = default!;
-    public string MainGroup { get; private set; } = default!;
-    public string SecondGroup { get; private set; } = default!;
 }

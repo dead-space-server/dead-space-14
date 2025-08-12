@@ -24,6 +24,8 @@
   - type: NpcFactionMember
     factions:
     - Syndicate
+  - type: GhostRoleNotifys
+    GroupPrototype: SyndicateGroup
 
 - type: entity
   parent: MobHumanSyndicateAgentBase

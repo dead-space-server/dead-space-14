@@ -4,9 +4,6 @@
   description: ghost-role-information-syndicate-kobold-reinforcement-description
   rules: ghost-role-information-syndicate-reinforcement-rules
   entityPrototype: MobKoboldSyndicateAgent
-  components:
-  - type: GhostRoleNotifys
-    GroupPrototype: SyndicateGroup
 
 - type: ghostRole
   id: SyndicateKoboldNukeops
@@ -14,9 +11,6 @@
   description: ghost-role-information-syndicate-kobold-reinforcement-description
   rules: ghost-role-information-nukeop-reinforcement-rules
   entityPrototype: MobKoboldSyndicateAgentNukeops
-  components:
-  - type: GhostRoleNotifys
-    GroupPrototype: SyndicateGroup
 
 - type: ghostRole
   id: SyndicateMonkey
@@ -24,9 +18,7 @@
   description: ghost-role-information-syndicate-monkey-reinforcement-description
   rules: ghost-role-information-syndicate-reinforcement-rules
   entityPrototype: MobMonkeySyndicateAgent
-  components:
-  - type: GhostRoleNotifys
-    GroupPrototype: SyndicateGroup
+
 
 - type: ghostRole
   id: SyndicateMonkeyNukeops
@@ -34,9 +26,7 @@
   description: ghost-role-information-syndicate-monkey-reinforcement-description
   rules: ghost-role-information-nukeop-reinforcement-rules
   entityPrototype: MobMonkeySyndicateAgentNukeops
-  components:
-  - type: GhostRoleNotifys
-    GroupPrototype: SyndicateGroup
+
 
 - type: ghostRole
   id: SyndicateAgentMedic
@@ -45,9 +35,6 @@
   rules: ghost-role-information-syndicate-reinforcement-rules
   entityPrototype: MobHumanSyndicateAgentMedic
   iconPrototype: MedkitCombat
-  components:
-  - type: GhostRoleNotifys
-    GroupPrototype: SyndicateGroup
 
 - type: ghostRole
   id: SyndicateAgentSpy
@@ -56,9 +43,6 @@
   rules: ghost-role-information-syndicate-reinforcement-rules
   entityPrototype: MobHumanSyndicateAgentSpy
   iconPrototype: ClothingMaskGasVoiceChameleon
-  components:
-  - type: GhostRoleNotifys
-    GroupPrototype: SyndicateGroup
 
 - type: ghostRole
   id: SyndicateAgentThief
@@ -67,6 +51,3 @@
   rules: ghost-role-information-syndicate-reinforcement-rules
   entityPrototype: MobHumanSyndicateAgentThief
   iconPrototype: SyndicateJawsOfLife
-  components:
-  - type: GhostRoleNotifys
-    GroupPrototype: SyndicateGroup

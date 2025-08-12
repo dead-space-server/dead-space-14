@@ -1645,6 +1645,8 @@
     # make the player a traitor once its taken
   - type: AutoTraitor
     profile: TraitorReinforcement
+  - type: GhostRoleNotifys
+    GroupPrototype: SyndicateGroup
 
 - type: entity
   id: MobKoboldSyndicateAgentNukeops # Reinforcement exclusive to nukeops uplink
