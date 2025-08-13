@@ -19,6 +19,22 @@
         Service: [ ]
     - type: StationCargoBountyDatabase
 
+# Позже доделаю
+#- type: entity
+#  id: BaseStationTaipanCargo
+#  abstract: true
+#  components:
+#  - type: StationBankAccount
+#  - type: StationCargoOrderDatabase
+#    orders:
+#      Cargo: [ ]
+#      Engineering: [ ]
+#      Medical: [ ]
+#      Science: [ ]
+#      Security: [ ]
+#      Service: [ ]
+#  - type: StationCargoBountyDatabase
+
 - type: entity
   id: BaseStationJobsSpawning
   abstract: true
