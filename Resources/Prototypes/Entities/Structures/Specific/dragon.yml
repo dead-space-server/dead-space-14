@@ -45,6 +45,7 @@
   - type: EmitSoundOnSpawn
     sound:
       path: /Audio/Weapons/Guns/Gunshots/rocket_launcher.ogg
+# Deadspace-start
   - type: AoEHeal
     threshold: 0.9
     damage:
@@ -57,3 +58,4 @@
     whitelist:
       tags:
       - CarpRiftHealTarget
+# Deadspace-end
