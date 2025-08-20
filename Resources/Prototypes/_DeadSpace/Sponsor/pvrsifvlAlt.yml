@@ -98,7 +98,7 @@
 
 #dominator security
 - type: entity
-  parent: [BaseWeaponBatterySmall, PistolDominator]
+  parent: PistolDominator
   id: PistolDominatorpvrsifvlAlt
   name: лазерный револьвер Хоукмун ETL//07
   description: Модифицированный образец табельного доминатора службы безопасности. Выследи свою жертву и вонзи когти во Тьму. Разработан и спроектирован компанией Vitezstvi по индивидуальному заказу.
@@ -116,7 +116,7 @@
 # Blushield Gun
 - type: entity
   name: импульсный револьвер Хоукмун ETL//07
-  parent: [BaseWeaponBatterySmall, PistolBlueShield]
+  parent: PistolBlueShield
   categories: [ HideSpawnMenu ]
   id: PistolBlueShieldpvrsifvlAlt
   description: Модифицированный образец импульсного пистолета корпуса «Синий Щит». Выследи свою жертву и вонзи когти во Тьму. Разработан и спроектирован компанией Vitezstvi по индивидуальному заказу.
