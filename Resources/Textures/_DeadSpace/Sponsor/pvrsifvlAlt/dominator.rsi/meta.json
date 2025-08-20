@@ -11,7 +11,10 @@
             "name": "icon"
         },
         {
-            "name": "base"
+            "name": "base-0"
+        },
+        {
+            "name": "base-1"
         },
         {
             "name": "mag-unshaded-0-0",
