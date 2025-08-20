@@ -7,50 +7,53 @@
         "y": 32
     },
     "states": [
-		{
-			"name": "icon"
-		},
-		{
-			"name": "base-0"
-		},
         {
-			"name": "base-1"
-		},
-		{
-			"name": "mag-unshaded-0-0",
-            "delays": [
-                [
-                    0.3,
-                    0.3
-                ]
-            ]
-		},
-		{
-			"name": "mag-unshaded-0-1",
-            "delays": [
-                [
-                    0.3,
-                    0.3
-                ]
-            ]
-		},
-        {
-            "name": "mag-unshaded-1-0"
+            "name": "icon"
         },
         {
-            "name": "mag-unshaded-1-1"
+            "name": "base"
+        },
+        {
+            "name": "mag-unshaded-0-0",
+            "delays": [
+                [
+                    0.3,
+                    0.3
+                ]
+            ]
+        },
+        {
+            "name": "mag-unshaded-1-0"
         },
         {
             "name": "mag-unshaded-2-0"
         },
         {
-            "name": "mag-unshaded-2-1"
-        },
-        {
             "name": "mag-unshaded-3-0"
         },
         {
+            "name": "mag-unshaded-4-0"
+        },
+        {
+            "name": "mag-unshaded-0-1",
+            "delays": [
+                [
+                    0.3,
+                    0.3
+                ]
+            ]
+        },
+        {
+            "name": "mag-unshaded-1-1"
+        },
+        {
+            "name": "mag-unshaded-2-1"
+        },
+        {
             "name": "mag-unshaded-3-1"
+        },
+        {
+            "name": "mag-unshaded-4-1"
         },
         {
             "name": "inhand-left",
