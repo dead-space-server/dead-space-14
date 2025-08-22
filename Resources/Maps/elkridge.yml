@@ -83212,6 +83212,8 @@ entities:
 - proto: LightBulb
   entities:
   - uid: 16910
+    mapInit: true
+    paused: true
     components:
     - type: Transform
       parent: 16909
@@ -83226,6 +83228,8 @@ entities:
     - type: Physics
       canCollide: False
   - uid: 16912
+    mapInit: true
+    paused: true
     components:
     - type: Transform
       parent: 16911
