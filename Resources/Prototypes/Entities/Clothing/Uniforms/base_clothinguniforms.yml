@@ -40,7 +40,7 @@
 
 - type: entity
   abstract: true
-  parent: UnsensoredClothingUniformBase
+  parent: [UnsensoredClothingUniformBase, BaseUniformAccessoryItemJumpsuit] # DS14 accessory
   id: ClothingUniformBase
   components:
   - type: SuitSensor
@@ -51,6 +51,12 @@
   - type: WirelessNetworkConnection
     range: 1200
   - type: StationLimitedNetwork
+# DS14 start
+  - type: UserInterface
+    interfaces:
+      enum.UniformAccessoriesUi.Key:
+        type: UniformAccessoryBui
+# DS14 end
 
 - type: entity
   abstract: true

@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Client.DeadSpace.UniformAccessories;
 using Content.Client.Gameplay;
 using Content.Client.Hands.Systems;
 using Content.Client.Inventory;
@@ -28,7 +29,7 @@ using static Content.Client.Inventory.ClientInventorySystem;
 namespace Content.Client.UserInterface.Systems.Inventory;
 
 public sealed class InventoryUIController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>,
-    IOnSystemChanged<ClientInventorySystem>, IOnSystemChanged<HandsSystem>
+    IOnSystemChanged<ClientInventorySystem>, IOnSystemChanged<HandsSystem>, IOnSystemChanged<UniformAccessorySystem>
 {
     [Dependency] private readonly IEntityManager _entities = default!;
 
@@ -497,4 +498,20 @@ public sealed class InventoryUIController : UIController, IOnStateEntered<Gamepl
         if (_lastHovered != null)
             UpdateHover(_lastHovered);
     }
+    // DS14-start
+    public void OnSystemLoaded(UniformAccessorySystem system)
+    {
+        system.PlayerAccessoryVisualsUpdated += InventoryUpdated;
+    }
+
+    public void OnSystemUnloaded(UniformAccessorySystem system)
+    {
+        system.PlayerAccessoryVisualsUpdated -= InventoryUpdated;
+    }
+
+    private void InventoryUpdated()
+    {
+        UpdateInventoryHotbar(_playerInventory);
+    }
+    // DS14-end
 }
