@@ -31,11 +31,6 @@
   equipment:
     socks: ClothingUnderwearSocksBrigmedic
 
-- type: loadout
-  id: UnderwearWomenSocksBrigmedic
-  equipment:
-    socks: ClothingUnderwearWomenSocksBrigmedic
-
 # Underwear
 - type: loadout
   id: UnderwearBottomBoxersBrigmedic

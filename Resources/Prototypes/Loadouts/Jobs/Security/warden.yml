@@ -37,11 +37,6 @@
   equipment:
     socks: ClothingUnderwearSocksWarden
 
-- type: loadout
-  id: UnderwearWomenSocksWarden
-  equipment:
-    socks: ClothingUnderwearWomenSocksWarden
-
 # Underwear
 - type: loadout
   id: UnderwearBottomBoxersWarden

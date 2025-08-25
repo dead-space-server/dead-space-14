@@ -62,11 +62,6 @@
   equipment:
     socks: ClothingUnderwearSocksSeniorOfficer
 
-- type: loadout
-  id: UnderwearWomenSocksSeniorOfficer
-  equipment:
-    socks: ClothingUnderwearWomenSocksSeniorOfficer
-
 # Underwear
 - type: loadout
   id: UnderwearBottomBoxersSeniorOfficer
