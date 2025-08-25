@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: Clothing
+  parent: [Clothing, BaseUniformAccessoryItemGloves] # DS14 accessory
   id: ClothingHandsBase
   components:
   - type: Sprite
@@ -27,6 +27,12 @@
     damageProtection:
       flatReductions:
         Heat: 5 # the average lightbulb only does around four damage!
+# DS14 start
+  - type: UserInterface
+    interfaces:
+      enum.UniformAccessoriesUi.Key:
+        type: UniformAccessoryBui
+# DS14 end
 
 - type: entity
   abstract: true
