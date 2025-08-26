@@ -101,6 +101,7 @@
   parent: PistolDominator
   id: PistolDominatorpvrsifvlAlt
   name: лазерный револьвер Хоукмун ETL//07
+  categories: [ HideSpawnMenu ]
   description: Модифицированный образец табельного доминатора службы безопасности. Выследи свою жертву и вонзи когти во Тьму. Разработан и спроектирован компанией Vitezstvi по индивидуальному заказу.
   components:
   - type: Sprite
