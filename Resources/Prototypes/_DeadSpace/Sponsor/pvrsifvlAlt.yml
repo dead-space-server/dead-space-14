@@ -102,16 +102,18 @@
   id: PistolDominatorpvrsifvlAlt
   name: лазерный револьвер Хоукмун ETL//07
   description: Модифицированный образец табельного доминатора службы безопасности. Выследи свою жертву и вонзи когти во Тьму. Разработан и спроектирован компанией Vitezstvi по индивидуальному заказу.
-  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/pvrsifvlAlt/dominator.rsi
     layers:
-    - state: icon
+    - state: base-0
       map: ["enum.GunVisualLayers.Base"]
-    - state: mag-unshaded-3-0
+    - state: mag-unshaded-4-0
       map: ["enum.GunVisualLayers.MagUnshaded"]
       shader: unshaded
+  - type: MagazineVisuals
+    magState: mag
+    steps: 5
 
 # Blushield Gun
 - type: entity
