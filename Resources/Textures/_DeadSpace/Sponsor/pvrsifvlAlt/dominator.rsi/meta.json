@@ -8,10 +8,16 @@
     },
     "states": [
         {
-            "name": "icon"
+            "name": "icon-0"
         },
         {
-            "name": "base"
+            "name": "icon-1"
+        },
+        {
+            "name": "base-0"
+        },
+        {
+            "name": "base-1"
         },
         {
             "name": "mag-unshaded-0-0",
@@ -56,11 +62,19 @@
             "name": "mag-unshaded-4-1"
         },
         {
-            "name": "inhand-left",
+            "name": "inhand-left-0",
             "directions": 4
         },
         {
-            "name": "inhand-right",
+            "name": "inhand-left-1",
+            "directions": 4
+        },
+        {
+            "name": "inhand-right-0",
+            "directions": 4
+        },
+        {
+            "name": "inhand-right-1",
             "directions": 4
         }
     ]
