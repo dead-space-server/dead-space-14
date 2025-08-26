@@ -34,7 +34,6 @@ public sealed partial class HitscanPrototype : IPrototype, IShootable
 
     /// <summary>
     /// DS14: Прибавляет или отнимает температуру в килоджоулях.
-    /// 100 = 25-30~ градусов по Уристу без одежды.
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite), DataField("temperature")]
     public float Temperature = 0f;
