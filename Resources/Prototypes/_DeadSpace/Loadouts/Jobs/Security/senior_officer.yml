@@ -19,6 +19,11 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtSeniorOfficer
 
+- type: loadout
+  id: SeniorOfficerJumpskirtPencil
+  equipment:
+    jumpsuit: ClothingUniformJumpskirtPencilSeniorOfficer
+
 # Back
 - type: loadout
   id: SeniorOfficerBackpack

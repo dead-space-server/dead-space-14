@@ -20,6 +20,13 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtWarden
 
+# DS14-start
+- type: loadout
+  id: WardenJumpskirtPencil
+  equipment:
+    jumpsuit: ClothingUniformJumpskirtPencilWarden
+# DS14-end
+
 # OuterClothing
 - type: loadout
   id: WardenCoat

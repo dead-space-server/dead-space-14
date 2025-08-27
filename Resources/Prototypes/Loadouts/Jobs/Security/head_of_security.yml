@@ -19,7 +19,12 @@
   id: HeadofSecurityJumpsuitBlue
   equipment:
     jumpsuit: ClothingUniformJumpsuitHoSBlue
-# DS14 -end
+
+- type: loadout
+  id: HeadofSecurityJumpskirtPencil
+  equipment:
+    jumpsuit: ClothingUniformJumpskirtPencilHoS
+# DS14-end
 
 - type: loadout
   id: HeadofSecurityJumpskirt
