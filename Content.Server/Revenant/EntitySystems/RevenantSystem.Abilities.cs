@@ -402,7 +402,7 @@ public sealed partial class RevenantSystem
     {
         if (args.Handled)
             return;
-            
+
         if (!HasComp<MindCaptureDefenceComponent>(args.Target))
             return;
 
