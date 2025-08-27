@@ -110,6 +110,7 @@
   - !type:AddComponentSpecial
     components:
     - type: BibleUser #Lets them heal with bibles
+    - type: MindCaptureDefence
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant, TrackingImplant ]
 

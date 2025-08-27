@@ -11,7 +11,7 @@ public sealed partial class RevenantMindCapturedComponent : Component
     public float DurationOfCapture = 300f;
 
     [ViewVariables(VVAccess.ReadOnly)]
-    public EntityUid RevenantUid;
+    public EntityUid RevenantUid = default!;
 
     [ViewVariables(VVAccess.ReadOnly)]
     public EntityUid TargetUid = default!;

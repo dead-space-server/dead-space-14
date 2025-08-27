@@ -402,6 +402,9 @@ public sealed partial class RevenantSystem
     {
         if (args.Handled)
             return;
+            
+        if (!HasComp<MindCaptureDefenceComponent>(args.Target))
+            return;
 
         if (!HasComp<MobStateComponent>(args.Target) || !_mobState.IsDead(args.Target))
             return;
@@ -414,13 +417,15 @@ public sealed partial class RevenantSystem
 
         args.Handled = true;
 
-        string oldTTSProto = "";
+        // Component on target, don`t confuse with revenant comp.
         var comp = EnsureComp<RevenantMindCapturedComponent>(args.Target);
 
         comp.RevenantUid = uid;
 
         if (TryComp<TTSComponent>(args.Target, out var targetTTS) && TryComp<TTSComponent>(uid, out var revTTS))
         {
+            string oldTTSProto = "";
+
             if (!string.IsNullOrEmpty(targetTTS.VoicePrototypeId))
                 oldTTSProto = targetTTS.VoicePrototypeId;
 
@@ -439,6 +444,7 @@ public sealed partial class RevenantSystem
             else
             {
                 EntityUid? ghost = _ghost.SpawnGhost((tarMindID, tarMind), args.Target, true);
+
                 if (TryComp<GhostComponent>(ghost, out var tarGhostCompEnsured))
                 {
                     comp.TargetUid = ghost.Value;

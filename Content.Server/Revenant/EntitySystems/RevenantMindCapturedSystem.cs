@@ -58,6 +58,9 @@ public sealed class RevenantMindCapturedSystem : EntitySystem
         if (!_mind.TryGetMind(comp.RevenantUid, out var mindId, out var mind))
             return;
 
+        if (!_mobThresholdSystem.TryGetThresholdForState(uid, MobState.Dead, out var damage))
+            return;
+
         if (TryComp<TTSComponent>(uid, out var tts))
         {
             if (!string.IsNullOrEmpty(comp.ReturnTTSPrototype))
@@ -66,8 +69,6 @@ public sealed class RevenantMindCapturedSystem : EntitySystem
                 tts.VoicePrototypeId = null;
         }
 
-        if (!_mobThresholdSystem.TryGetThresholdForState(uid, MobState.Dead, out var damage))
-            return;
         DamageSpecifier dspec = new();
         dspec.DamageDict.Add("Cold", damage.Value);
 
@@ -80,6 +81,14 @@ public sealed class RevenantMindCapturedSystem : EntitySystem
 
         if (!_mobThresholdSystem.TryGetThresholdForState(uid, MobState.Dead, out var damage))
             return;
+
+        if (TryComp<TTSComponent>(uid, out var tts))
+        {
+            if (!string.IsNullOrEmpty(comp.ReturnTTSPrototype))
+                tts.VoicePrototypeId = comp.ReturnTTSPrototype;
+            else
+                tts.VoicePrototypeId = null;
+        }
 
         DamageSpecifier dspec = new();
         dspec.DamageDict.Add("Cold", damage.Value);

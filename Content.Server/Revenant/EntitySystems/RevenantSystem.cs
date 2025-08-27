@@ -155,6 +155,7 @@ public sealed partial class RevenantSystem : EntitySystem
             if (_mind.TryGetMind(uid, out var mindId, out var mind))
                 if (mind.IsVisitingEntity)
                     _mind.UnVisit(mindId, mind);
+            
             Spawn(component.SpawnOnDeathPrototype, Transform(uid).Coordinates);
             QueueDel(uid);
         }
