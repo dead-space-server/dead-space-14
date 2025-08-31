@@ -362,6 +362,60 @@
       - NukeOpsUplink
 
 - type: listing
+  id: UplinkCarbineSKSBundleAgent
+  name: Набор "самозарядный карабин Симонова"
+  description: Содержит в себе модифицированный самозарядный карабин с пластиковым ложе. А так же 1 дополнительный магазин на 20 патрон (7.62х39)
+  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Carbines/sks_scope.rsi, state: icon }
+  productEntity: ClothingBackpackDuffelSyndicateMagazineCabrineSKSAgent
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 11
+  cost:
+    Telecrystal: 15
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+        - NukeOpsUplink
+
+- type: listing
+  id: UplinkCarbineSKSBundle
+  name: Набор "самозарядный карабин Симонова"
+  description: Содержит в себе модифицированный самозарядный карабин с пластиковым ложе. А так же 3 дополнительных магазина на 20 патрон (7.62х39)
+  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Carbines/sks_scope.rsi, state: icon }
+  productEntity: ClothingBackpackDuffelSyndicateMagazineCabrineSKS
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 11
+  cost:
+    Telecrystal: 13
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+        - NukeOpsUplink
+
+- type: listing
+  ##### id: UplinkMagazineTommyGun
+  name: Магазин для самозарядного карабина Симонова
+  description: 1 магазин на 20 патрон (7.62х39)
+  icon: { sprite: /Textures/_DeadSpace/Items/Toys/TommyGun/magazine.rsi, state: base }
+  productEntity: MagazineTommyGun
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkAmmo
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
   id: UplinkReagentContainerAmatoxin
   name: uplink-reagent-container-amatoxin-name
   description: uplink-reagent-container-amatoxin-desc

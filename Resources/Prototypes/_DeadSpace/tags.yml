@@ -53,6 +53,9 @@
   id: LightReplacer
 
 - type: Tag
+  id: MagazineCabrineSKS
+
+- type: Tag
   id: MagazineEagle
 
 - type: Tag

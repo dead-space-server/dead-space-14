@@ -1,0 +1,108 @@
+- type: entity
+  parent: [ BaseWeaponRifle, BaseGunWieldable ]
+  id: WeaponCarbineSKS
+  name: самозарядный карабин Симонова
+  suffix: СКС
+  description: Модифицированный самозарядный карабин с пластиковым ложе. Использует патроны калибра 7.62х39. Обычно идёт в комплекте с магазином на 20 патрон
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Guns/Carbines/sks_scope.rsi
+    layers:
+      - state: base
+        map: ["enum.GunVisualLayers.Base"]
+      - state: mag-0
+        map: ["enum.GunVisualLayers.Mag"]
+  - type: Item
+    size: Huge
+  - type: Clothing
+    sprite: _DeadSpace/Objects/Weapons/Guns/Carbines/sks_scope.rsi
+    quickEquip: false
+    slots:
+    - Back
+    - suitStorage
+  - type: GunRequiresWield
+  - type: AmmoCounter
+  - type: Gun
+    fireRate: 7
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/_DeadSpace/Weapons/Guns/Gunshots/sks.ogg
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: MagazineCabrineSKS
+        insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
+        ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
+        priority: 2
+        whitelist:
+          tags:
+            - MagazineCabrineSKS
+        whitelistFailPopup: gun-magazine-whitelist-fail
+      gun_chamber:
+        name: Chamber
+        startingItem: CartridgeLightRifle
+        priority: 1
+        whitelist:
+          tags:
+            - CartridgeLightRifle
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+  - type: MagazineVisuals
+    magState: mag
+    steps: 1
+    zeroVisible: true
+  - type: Appearance
+  - type: CursorOffsetRequiresWield
+  - type: EyeCursorOffset
+    maxOffset: 4
+    pvsIncrease: 0.5
+  - type: SpeedModifiedOnWield
+    walkModifier: 0.75
+    sprintModifier: 0.75
+
+- type: entity
+  parent: BaseItem
+  id: MagazineCabrineSKS
+  name: магазин СКС (7.62х39мм)
+  components:
+  - type: Tag
+    tags:
+      - MagazineCabrineSKS
+  - type: Item
+    size: Small
+  - type: BallisticAmmoProvider
+    proto: CartridgeLightRifle
+    mayTransfer: true
+    whitelist:
+      tags:
+        - CartridgeLightRifle
+    capacity: 20
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Magazine/Rifle/rifle_mag.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: MagazineVisuals
+    magState: mag
+    steps: 2
+    zeroVisible: false
+  - type: Appearance
+
+- type: entity
+  parent: MagazineCabrineSKS
+  id: MagazineCabrineSKSEmpty
+  name: магазин СКС (7.62х39мм)
+  suffix: пустой
+  components:
+  - type: BallisticAmmoProvider
+    proto: null
