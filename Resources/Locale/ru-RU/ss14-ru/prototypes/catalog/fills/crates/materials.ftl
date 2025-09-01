@@ -28,3 +28,5 @@ ent-CrateMaterialSilo = ящик хранилища материалов
     .desc = Упаковка, включающая все материалы для создания хранилища материалов.
 ent-CrateMaterialBasicResource = ящик базовых материалов
     .desc = По 30 листов стали, стекла и пластика.
+ent-CrateMaterialArmory = защищённый ящик с материалами
+    .desc = { ent-CrateBaseSecure.desc }
