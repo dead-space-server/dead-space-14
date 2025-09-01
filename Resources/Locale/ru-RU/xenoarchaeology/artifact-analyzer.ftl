@@ -1,5 +1,5 @@
 analysis-console-menu-title = аналитическая консоль
-analysis-console-server-list-button = Список серверов
+analysis-console-server-list-button = Сервер
 analysis-console-extract-button = Извлечь О.И.
 analysis-console-info-no-scanner = Анализатор не подключён! Пожалуйста, подключите его с помощью мультитула.
 analysis-console-info-no-artifact = Артефакт не найден!
