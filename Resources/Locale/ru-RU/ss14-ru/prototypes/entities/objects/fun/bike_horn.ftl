@@ -7,5 +7,5 @@ ent-GoldenBikeHorn = золотой клаксон
     .suffix = НЕ МАППИТЬ
 ent-BananiumHorn = бананиумовый клаксон
     .desc = Клаксон, сделанный из бананиума.
-ent-PushHorn = push horn
-    .desc = This powerful bikehorn is sure to blast frowns away.
+ent-PushHorn = толкающий клаксон
+    .desc = Этот мощный велосипедный клаксон точно оттолкнёт всю хмурость.
