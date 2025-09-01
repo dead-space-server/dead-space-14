@@ -29,7 +29,6 @@ ent-NukeCodePaperStation = { ent-NukeCodePaper }
     .desc = { ent-NukeCodePaper.desc }
 ent-TraitorCodePaper = кодовое слово Синдиката
     .desc = Раскрытое кодовое слово, с помощью которого можно связаться с Синдикатом.
-    .suffix = НЕ МАППИТЬ
 ent-AllTraitorCodesPaper = реестр кодовых слов Синдиката
     .desc = Реестр всех активных кодовых слов Синдиката.
     .suffix = Адмемы
