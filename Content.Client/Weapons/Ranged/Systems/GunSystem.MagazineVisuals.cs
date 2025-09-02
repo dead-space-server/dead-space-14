@@ -147,7 +147,7 @@ public sealed partial class GunSystem
 
                     if (_sprite.LayerMapTryGet((uid, sprite), GunVisualLayers.MagUnshaded, out _, false))
                     {
-                        _sprite.LayerSetVisible((uid, sprite), GunVisualLayers.MagUnshaded, true );
+                        _sprite.LayerSetVisible((uid, sprite), GunVisualLayers.MagUnshaded, true);
                         _sprite.LayerSetRsiState((uid, sprite), GunVisualLayers.MagUnshaded, $"{component.MagState}-unshaded-{step}-{dominator.CurrentFireMode}");
                         _sprite.LayerSetVisible((uid, sprite), GunVisualLayers.Base, true);
                         _sprite.LayerSetRsiState((uid, sprite), GunVisualLayers.Base, $"base-{dominator.CurrentFireMode}");
