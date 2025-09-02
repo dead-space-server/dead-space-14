@@ -254,11 +254,11 @@
         reagents:
         - ReagentId: RawUranium
           Quantity: 5
-        canReact: false
 #        - ReagentId: Uranium # DS14-uranium-rework
 #          Quantity: 8
 #        - ReagentId: Radium
 #          Quantity: 2
+        canReact: false
   - type: Item
     heldPrefix: uranium
 
