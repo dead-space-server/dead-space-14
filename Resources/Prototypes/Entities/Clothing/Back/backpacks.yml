@@ -138,6 +138,15 @@
 
 - type: entity
   parent: ClothingBackpack
+  id: ClothingBackpackRoboticist
+  name: roboticist backpack
+  description: A backpack specially designed to repel stains and hazardous liquids.
+  components:
+  - type: Sprite
+    sprite: Clothing/Back/Backpacks/robotics.rsi
+
+- type: entity
+  parent: ClothingBackpack
   id: ClothingBackpackScience
   name: science backpack
   description: A backpack specially designed to repel stains and hazardous liquids.

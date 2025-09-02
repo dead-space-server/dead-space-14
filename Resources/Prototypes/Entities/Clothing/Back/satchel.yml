@@ -109,6 +109,15 @@
     sprite: Clothing/Back/Satchels/science.rsi
 
 - type: entity
+  parent: ClothingBackpackSatchel
+  id: ClothingBackpackSatchelRoboticist
+  name: robotics satchel
+  description: Useful for transferring materials.
+  components:
+  - type: Sprite
+    sprite: Clothing/Back/Satchels/robotics.rsi
+
+- type: entity
   parent: [ClothingBackpackSatchel, BaseSecurityContraband]
   id: ClothingBackpackSatchelSecurity
   name: security satchel

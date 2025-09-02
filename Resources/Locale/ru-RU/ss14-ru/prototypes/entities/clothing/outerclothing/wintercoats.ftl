@@ -94,3 +94,5 @@ ent-ClothingOuterWinterColorYellow = жёлтая зимняя куртка
     .desc = { ent-ClothingOuterWinterCoatToggleable.desc }
 ent-ClothingOuterWinterClownDownjacket = зимний пуховик клоуна
     .desc = { ent-ClothingOuterWinterCoatToggleable.desc }
+ent-ClothingOuterWinterSR = зимняя куртка ведущего учёного
+    .desc = { ent-ClothingOuterWinterCoatToggleable.desc }

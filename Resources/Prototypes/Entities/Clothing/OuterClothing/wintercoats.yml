@@ -1233,3 +1233,33 @@
     clothingVisuals:
       outerClothing:
       - state: CLOWN-equipped-OUTERCLOTHING
+
+- type: entity
+  parent: ClothingOuterWinterCoatToggleable
+  id: ClothingOuterWinterSR
+  name: senior researcher winter coat
+  components:
+  - type: Sprite
+    sprite: Clothing/OuterClothing/WinterCoats/coat.rsi
+    layers:
+    - state: SR-icon
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: SR-inhand-left
+      right:
+      - state: SR-inhand-right
+  - type: Clothing
+    sprite: Clothing/OuterClothing/WinterCoats/coat.rsi
+    clothingVisuals:
+      outerClothing:
+      - state: SR-equipped-OUTERCLOTHING
+  - type: Armor
+    modifiers:
+      coefficients:
+        Slash: 0.95
+        Heat: 0.90
+        Caustic: 0.9
+    priceMultiplier: 0.15
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHatHoodWinterRD

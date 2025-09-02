@@ -166,3 +166,5 @@ ent-ClothingHeadHatStrawHat = соломенная шляпа
     .desc = Модная шляпа для жарких деньков! Не рекомендуется носить около источников огня.
 ent-ClothingHeadHatBeretMedic = берет врача
     .desc = Белый берет, призывающий вас к чистоте.
+ent-ClothingHeadHatBeretRoboticist = берет робототехника
+    .desc = Берет для хорошего робототехника.

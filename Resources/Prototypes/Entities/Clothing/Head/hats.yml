@@ -1148,3 +1148,14 @@
     sprite: Clothing/Head/Hats/beret_medic.rsi
   - type: Clothing
     sprite: Clothing/Head/Hats/beret_medic.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatBeretRoboticist
+  name: roboticist beret
+  description: Beret for good roboticist.
+  components:
+  - type: Sprite
+    sprite: Clothing/Head/Hats/beret_robo.rsi
+  - type: Clothing
+    sprite: Clothing/Head/Hats/beret_robo.rsi
