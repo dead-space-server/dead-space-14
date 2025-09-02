@@ -12787,8 +12787,6 @@ entities:
 - proto: ActionToggleInternals
   entities:
   - uid: 12
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 11
@@ -12796,8 +12794,6 @@ entities:
       originalIconColor: '#FFFFFFFF'
       container: 11
   - uid: 17
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 16
@@ -12805,8 +12801,6 @@ entities:
       originalIconColor: '#FFFFFFFF'
       container: 16
   - uid: 20
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 19
@@ -12816,8 +12810,6 @@ entities:
 - proto: ActionToggleJetpack
   entities:
   - uid: 18
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 16
@@ -12825,8 +12817,6 @@ entities:
       originalIconColor: '#FFFFFFFF'
       container: 16
   - uid: 21
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 19
@@ -12848,8 +12838,6 @@ entities:
     - type: InstantAction
       container: 24
   - uid: 27
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 26
@@ -80608,8 +80596,6 @@ entities:
 - proto: KnifePlastic
   entities:
   - uid: 757
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 755
@@ -80620,8 +80606,6 @@ entities:
     - type: Physics
       canCollide: False
   - uid: 758
-    mapInit: true
-    paused: true
     components:
     - type: Transform
       parent: 755
@@ -84108,7 +84092,7 @@ entities:
         stampedColor: '#006600FF'
         stampedName: stamp-component-stamped-name-centcom
       content: >-
-        Поздравляем, командование NanoTrasen решило обновить минимальный охранный шаттл службы безопасности станции NT-Raven-GE до версии 12. 
+        Поздравляем, командование NanoTrasen решило обновить минимальный охранный шаттл службы безопасности станции NT-Raven-GE до версии 12.
 
 
         Добавлены мигалки, которые активируются по кнопке, чтобы нарушитель правопорядка услышал через космическую тишину знакомые звуки сирен.
