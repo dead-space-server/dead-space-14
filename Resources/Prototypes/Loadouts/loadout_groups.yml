@@ -1152,6 +1152,10 @@
   loadouts:
   - ResearchDirectorJumpsuit
   - ResearchDirectorJumpskirt
+  - ResearchDirectorJumpsuitShirt
+  - ResearchDirectorJumpskirtShirt
+  - ResearchDirectorJumpsuitSuit
+  - ResearchDirectorJumpskirtSuit
 
 - type: loadoutGroup
   id: ResearchDirectorOuterClothing
@@ -1184,6 +1188,7 @@
   name: loadout-group-scientist-head
   minLimit: 0
   loadouts:
+  - RoboticistBeret
   - RoboticistCap
   - SkullBandana
   # - ScientificBeret
@@ -1201,8 +1206,16 @@
   loadouts:
   - ScientistJumpsuit
   - ScientistJumpskirt
+  - ScientistJumpsuitFormal
+  - ScientistJumpskirtFormal
+  - ScientistJumpsuitTurtleneck
+  - ScientistJumpskirtTurtleneck
   - RoboticistJumpsuit
   - RoboticistJumpskirt
+  - RoboticistJumpsuitOveralls
+  - RoboticistJumpskirtOveralls
+  - RoboticistJumpsuitWhite
+  - RoboticistJumpskirtWhite
   # - SeniorResearcherJumpsuit
   # - SeniorResearcherJumpskirt
 
@@ -1213,6 +1226,9 @@
   - ScientistBackpack
   - ScientistSatchel
   - ScientistDuffel
+  - RoboticistBackpack
+  - RoboticistSatchel
+  - RoboticistDuffel
 
 - type: loadoutGroup
   id: ScientistOuterClothing

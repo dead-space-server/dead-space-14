@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from tgstation at commit https://github.com/tgstation/tgstation/commit/4f6190e2895e09116663ef282d3ce1d8b35c032e. Vox state made by Flareguy for SS14",
+  "copyright": "Taken from shiptest at commit https://github.com/shiptest-ss13/Shiptest/pull/1933/commits/c83640f260c822b4e5f6dfad19906df233f80fa7 by thgvr (github). Vox, icon and inhand sprites made by KingFroozy (github) for space station 14 server Мёртвый космос",
   "size": {
     "x": 32,
     "y": 32
