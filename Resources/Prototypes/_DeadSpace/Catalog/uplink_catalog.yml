@@ -369,9 +369,9 @@
   productEntity: ClothingBackpackDuffelSyndicateFilledCarbineSKSAgent
   discountCategory: usualDiscounts
   discountDownTo:
-    Telecrystal: 11
+    Telecrystal: 9
   cost:
-    Telecrystal: 15
+    Telecrystal: 12
   categories:
   - UplinkWeaponry
   conditions:
@@ -388,9 +388,9 @@
   productEntity: ClothingBackpackDuffelSyndicateFilledCarbineSKS
   discountCategory: usualDiscounts
   discountDownTo:
-    Telecrystal: 11
+    Telecrystal: 8
   cost:
-    Telecrystal: 13
+    Telecrystal: 11
   categories:
   - UplinkWeaponry
   conditions:
