@@ -90,7 +90,7 @@
   - type: CursorOffsetRequiresWield
   - type: EyeCursorOffset
     maxOffset: 7 # DS14, prev3
-    pvsIncrease: 0.3
+    pvsIncrease: 0.5 # DS14, prev 0.3
 
 - type: entity
   name: musket

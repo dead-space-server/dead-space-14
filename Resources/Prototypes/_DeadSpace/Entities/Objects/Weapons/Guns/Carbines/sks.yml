@@ -3,7 +3,7 @@
   id: WeaponCarbineSKS
   name: самозарядный карабин Симонова
   suffix: СКС
-  description: Модифицированный самозарядный карабин с пластиковым ложе. Использует патроны калибра 7.62х39. Обычно идёт в комплекте с магазином на 20 патрон
+  description: Модифицированный самозарядный карабин с пластиковым ложе. Использует патроны калибра 7.62х39 мм. Обычно идёт в комплекте с магазином на 20 патрон
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Weapons/Guns/Carbines/sks_scope.rsi
@@ -33,13 +33,13 @@
     slots:
       gun_magazine:
         name: Magazine
-        startingItem: MagazineCabrineSKS
+        startingItem: MagazineCarbineSKS
         insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
         ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
         priority: 2
         whitelist:
           tags:
-            - MagazineCabrineSKS
+            - MagazineCarbineSKS
         whitelistFailPopup: gun-magazine-whitelist-fail
       gun_chamber:
         name: Chamber
@@ -59,20 +59,20 @@
   - type: Appearance
   - type: CursorOffsetRequiresWield
   - type: EyeCursorOffset
-    maxOffset: 4
-    pvsIncrease: 0.5
+    maxOffset: 3
+    pvsIncrease: 0.3
   - type: SpeedModifiedOnWield
     walkModifier: 0.75
     sprintModifier: 0.75
 
 - type: entity
   parent: BaseItem
-  id: MagazineCabrineSKS
-  name: магазин СКС (7.62х39мм)
+  id: MagazineCarbineSKS
+  name: магазин СКС (7.62х39мм винтовочные)
   components:
   - type: Tag
     tags:
-      - MagazineCabrineSKS
+      - MagazineCarbineSKS
   - type: Item
     size: Small
   - type: BallisticAmmoProvider
@@ -86,9 +86,9 @@
     containers:
       ballistic-ammo: !type:Container
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Ammunition/Magazine/Rifle/rifle_mag.rsi
+    sprite: _DeadSpace/Objects/Weapons/Guns/Ammunition/Magazine/Carbines/sks_scope.rsi
     layers:
-    - state: base
+    - state: red
       map: ["enum.GunVisualLayers.Base"]
     - state: mag-1
       map: ["enum.GunVisualLayers.Mag"]
@@ -99,10 +99,58 @@
   - type: Appearance
 
 - type: entity
-  parent: MagazineCabrineSKS
-  id: MagazineCabrineSKSEmpty
-  name: магазин СКС (7.62х39мм)
+  parent: MagazineCarbineSKS
+  id: MagazineCarbineSKSEmpty
+  name: магазин СКС (7.62х39мм винтовочные любые)
   suffix: пустой
   components:
   - type: BallisticAmmoProvider
     proto: null
+  - type: Sprite
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+
+- type: entity
+  parent: MagazineCarbineSKS
+  id: MagazineCarbineSKSUranium
+  name: магазин СКС (7.62х39мм винтовочные урановые)
+  components:
+  - type: BallisticAmmoProvider
+    proto: CartridgeLightRifleUranium
+  - type: Sprite
+    layers:
+    - state: uranium
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+
+- type: entity
+  parent: MagazineCarbineSKS
+  id: MagazineCarbineSKSIncendiary
+  name: магазин СКС (7.62х39мм винтовочные зажигательные)
+  components:
+  - type: BallisticAmmoProvider
+    proto: CartridgeLightRifleIncendiary
+  - type: Sprite
+    layers:
+    - state: red
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+
+- type: entity
+  parent: MagazineCarbineSKS
+  id: MagazineCarbineSKSPractice
+  name: магазин СКС (7.62х39мм винтовочные учебные)
+  components:
+  - type: BallisticAmmoProvider
+    proto: CartridgeLightRiflePractice
+  - type: Sprite
+    layers:
+    - state: practice
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]

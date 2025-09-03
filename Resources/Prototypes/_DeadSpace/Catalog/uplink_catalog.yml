@@ -363,10 +363,10 @@
 
 - type: listing
   id: UplinkCarbineSKSBundleAgent
-  name: Набор "самозарядный карабин Симонова"
-  description: Содержит в себе модифицированный самозарядный карабин с пластиковым ложе. А так же 1 дополнительный магазин на 20 патрон (7.62х39)
+  name: Набор "СКС"
+  description: Содержит в себе модифицированный самозарядный карабин с пластиковым ложе, а так же 1 дополнительный магазин на 20 патрон
   icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Carbines/sks_scope.rsi, state: icon }
-  productEntity: ClothingBackpackDuffelSyndicateMagazineCabrineSKSAgent
+  productEntity: ClothingBackpackDuffelSyndicateFilledCarbineSKSAgent
   discountCategory: usualDiscounts
   discountDownTo:
     Telecrystal: 11
@@ -382,10 +382,10 @@
 
 - type: listing
   id: UplinkCarbineSKSBundle
-  name: Набор "самозарядный карабин Симонова"
-  description: Содержит в себе модифицированный самозарядный карабин с пластиковым ложе. А так же 3 дополнительных магазина на 20 патрон (7.62х39)
+  name: Набор "СКС"
+  description: Отлично подходит для поддержи первой линии наступления. Содержит в себе модифицированный самозарядный карабин с пластиковым ложе, а так же 4 магазина на 20 патрон
   icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Carbines/sks_scope.rsi, state: icon }
-  productEntity: ClothingBackpackDuffelSyndicateMagazineCabrineSKS
+  productEntity: ClothingBackpackDuffelSyndicateFilledCarbineSKS
   discountCategory: usualDiscounts
   discountDownTo:
     Telecrystal: 11
@@ -400,11 +400,11 @@
         - NukeOpsUplink
 
 - type: listing
-  ##### id: UplinkMagazineTommyGun
-  name: Магазин для самозарядного карабина Симонова
-  description: 1 магазин на 20 патрон (7.62х39)
-  icon: { sprite: /Textures/_DeadSpace/Items/Toys/TommyGun/magazine.rsi, state: base }
-  productEntity: MagazineTommyGun
+  id: UplinkMagazineCarbineSKSAmmo
+  name: Магазин для СКС
+  description: Магазин для СКС на 20 патрон (7.62х39 мм винтовочные)
+  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Ammunition/Magazine/Carbines/sks_scope.rsi, state: red }
+  productEntity: MagazineCarbineSKS
   cost:
     Telecrystal: 1
   categories:
