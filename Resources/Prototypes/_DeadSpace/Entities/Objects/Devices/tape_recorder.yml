@@ -69,7 +69,7 @@
     size: Tiny
   - type: Damageable
   - type: TapeCassette
-    maxCapacity: 180
+    maxCapacity: 1500
     repairWhitelist:
       tags:
       - Screwdriver
