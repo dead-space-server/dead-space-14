@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "license": "CC-BY-SA-3.0",
+    "license": "CC-BY-SA-4.0",
     "copyright": "Created by hq._.dishka (discord) for Space Station 14 server Мёртвый Космос",
     "size": {
         "x": 32,
@@ -11,26 +11,14 @@
             "name": "icon"
         },
         {
-            "name": "base"
+            "name": "icon-flash"
         },
         {
-            "name": "mag-unshaded-0",
-            "delays": [
-                [
-                    0.3,
-                    0.3
-                ]
-            ]
-        },
-        {
-            "name": "mag-unshaded-1"
-        },
-        {
-            "name": "inhand-left",
+            "name": "off-equipped-HELMET",
             "directions": 4
         },
         {
-            "name": "inhand-right",
+            "name": "on-equipped-HELMET",
             "directions": 4
         }
     ]
