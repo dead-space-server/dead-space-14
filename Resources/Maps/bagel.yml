@@ -13918,7 +13918,6 @@ entities:
       pos: -78.5,-1.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -12.46671
       changeAirtight: False
       state: Opening
     - type: Docking
@@ -13934,7 +13933,6 @@ entities:
       pos: 0.5,-7.5
       parent: 26631
     - type: Door
-      secondsUntilStateChange: -11.866711
       changeAirtight: False
       state: Opening
     - type: Docking
