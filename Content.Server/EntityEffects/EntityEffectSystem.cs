@@ -48,6 +48,7 @@ using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;
 
 using TemperatureCondition = Content.Shared.EntityEffects.EffectConditions.Temperature; // disambiguate the namespace
 using PolymorphEffect = Content.Shared.EntityEffects.Effects.Polymorph;
+using Content.Server.DeadSpace.Asthma.Components;
 
 namespace Content.Server.EntityEffects;
 
@@ -855,6 +856,11 @@ public sealed class EntityEffectSystem : EntitySystem
         {
             multiplier = reagentArgs.Quantity.Float();
         }
+
+        // DS14-Asthma-Start
+        if (EntityManager.TryGetComponent<AsthmaComponent>(args.Args.TargetEntity, out var asthma) && asthma.IsAsthmaAttack)
+            return;
+        // DS14-Asthma-End
 
         if (TryComp<RespiratorComponent>(args.Args.TargetEntity, out var resp))
         {
