@@ -1,0 +1,115 @@
+- type: trait
+  id: LowParanoia
+  name: trait-low-paranoia-name
+  description: trait-low-paranoia-desc
+  category: Disabilities
+  components:
+  - type: MentalIllness
+    activeIllnesses:
+      - Paranoia
+    severity:
+      Paranoia: 0.25
+
+- type: trait
+  id: LowDepression
+  name: trait-low-depression-name
+  description: trait-low-depression-desc
+  category: Disabilities
+  components:
+  - type: MentalIllness
+    activeIllnesses:
+      - Depression
+    severity:
+      Depression: 0.25
+
+- type: trait
+  id: LowMania
+  name: trait-low-mania-name
+  description: trait-low-mania-desc
+  category: Disabilities
+  components:
+  - type: MentalIllness
+    activeIllnesses:
+      - Mania
+    severity:
+      Mania: 0.25
+
+- type: trait
+  id: LowAnxiety
+  name: trait-low-anxiety-name
+  description: trait-low-anxiety-desc
+  category: Disabilities
+  components:
+  - type: MentalIllness
+    activeIllnesses:
+      - Anxiety
+    severity:
+      Anxiety: 0.25
+
+- type: trait
+  id: MedParanoia
+  name: trait-med-paranoia-name
+  description: trait-med-paranoia-desc
+  category: Disabilities
+  components:
+  - type: MentalIllness
+    activeIllnesses:
+      - Paranoia
+    severity:
+      Paranoia: 0.5
+
+- type: trait
+  id: MedDepression
+  name: trait-med-depression-name
+  description: trait-med-depression-desc
+  category: Disabilities
+  components:
+  - type: MentalIllness
+    activeIllnesses:
+      - Depression
+    severity:
+      Depression: 0.5
+
+- type: trait
+  id: MedMania
+  name: trait-med-mania-name
+  description: trait-med-mania-desc
+  category: Disabilities
+  components:
+  - type: MentalIllness
+    activeIllnesses:
+      - Mania
+    severity:
+      Mania: 0.5
+
+- type: trait
+  id: MedAnxiety
+  name: trait-med-anxiety-name
+  description: trait-med-anxiety-desc
+  category: Disabilities
+  components:
+  - type: MentalIllness
+    activeIllnesses:
+      - Anxiety
+    severity:
+      Anxiety: 0.5
+
+- type: trait
+  id: LowRandomMentalIllness
+  name: trait-low-random-mental-illness-name
+  description: trait-low-random-mental-illness-desc
+  category: Disabilities
+  components:
+  - type: MentalIllness
+    severityOnInitialization: 0.25
+    randomOnInitialization: true
+
+- type: trait
+  id: MedRandomMentalIllness
+  name: trait-med-random-mental-illness-name
+  description: trait-med-random-mental-illness-desc
+  category: Disabilities
+  components:
+  - type: MentalIllness
+    severityOnInitialization: 0.5
+    randomOnInitialization: true
