@@ -13,3 +13,6 @@ trait-asthma-desc = Ваши лёгкие - не лучшие нанопроду
 
 inhaler-volume-label =
     Объём: [color=white]{ $currentVolume }/{ $totalVolume } ед.[/color]
+
+
+asthma-inhaler-not-use = Не удаётся применить ингалятор

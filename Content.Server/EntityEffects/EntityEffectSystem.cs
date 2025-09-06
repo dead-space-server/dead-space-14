@@ -41,14 +41,13 @@ using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Content.Server.DeadSpace.Necromorphs.InfectionDead;
-using Content.Shared.Mobs.Systems;
-using Content.Shared.DeadSpace.Abilities.Egg.Components;
-using Content.Shared.DeadSpace.Abilities.Egg;
 using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;
-
+using Content.Shared.DeadSpace.MentalIllness.ReagentEffects;
 using TemperatureCondition = Content.Shared.EntityEffects.EffectConditions.Temperature; // disambiguate the namespace
 using PolymorphEffect = Content.Shared.EntityEffects.Effects.Polymorph;
 using Content.Server.DeadSpace.Asthma.Components;
+using Content.Server.DeadSpace.MentalIllness.Components;
+using Content.Server.DeadSpace.MentalIllness;
 
 namespace Content.Server.EntityEffects;
 
@@ -140,6 +139,8 @@ public sealed class EntityEffectSystem : EntitySystem
         SubscribeLocalEvent<ExecuteEntityEffectEvent<CauseInfectionDead>>(OnExecuteCauseInfectionDead);
         SubscribeLocalEvent<ExecuteEntityEffectEvent<CureInfectionDead>>(OnExecuteCureInfectionDead);
         SubscribeLocalEvent<ExecuteEntityEffectEvent<InfectiodDeadMutation>>(OnExecuteInfectiodDeadMutation);
+        SubscribeLocalEvent<ExecuteEntityEffectEvent<AddMentalIllness>>(OnAddMentalIllness);
+        SubscribeLocalEvent<ExecuteEntityEffectEvent<CauseMentalIllness>>(OnCauseMentalIllness);
         // DS14-end
     }
 
@@ -300,7 +301,7 @@ public sealed class EntityEffectSystem : EntitySystem
         if (!CanMetabolizePlant(args.Args.TargetEntity, out var plantHolderComp))
             return;
 
-        _plantHolder.AffectGrowth(args.Args.TargetEntity, (int) args.Effect.Amount, plantHolderComp);
+        _plantHolder.AffectGrowth(args.Args.TargetEntity, (int)args.Effect.Amount, plantHolderComp);
     }
 
     // Mutate reference 'val' between 'min' and 'max' by pretending the value
@@ -421,9 +422,9 @@ public sealed class EntityEffectSystem : EntitySystem
         if (seed == null)
             return;
         if (plantHolderComp.Age > seed.Maturation)
-            deviation = (int) Math.Max(seed.Maturation - 1, plantHolderComp.Age - _random.Next(7, 10));
+            deviation = (int)Math.Max(seed.Maturation - 1, plantHolderComp.Age - _random.Next(7, 10));
         else
-            deviation = (int) (seed.Maturation / seed.GrowthStages);
+            deviation = (int)(seed.Maturation / seed.GrowthStages);
         plantHolderComp.Age -= deviation;
         plantHolderComp.LastProduce = plantHolderComp.Age;
         plantHolderComp.SkipAging++;
@@ -534,7 +535,7 @@ public sealed class EntityEffectSystem : EntitySystem
             if (reagentArgs.Source == null)
                 return;
 
-            var spreadAmount = (int) Math.Max(0, Math.Ceiling((reagentArgs.Quantity / args.Effect.OverflowThreshold).Float()));
+            var spreadAmount = (int)Math.Max(0, Math.Ceiling((reagentArgs.Quantity / args.Effect.OverflowThreshold).Float()));
             var splitSolution = reagentArgs.Source.SplitSolution(reagentArgs.Source.Volume);
             var transform = Comp<TransformComponent>(reagentArgs.TargetEntity);
             var mapCoords = _xform.GetMapCoordinates(reagentArgs.TargetEntity, xform: transform);
@@ -665,7 +666,7 @@ public sealed class EntityEffectSystem : EntitySystem
 
         if (args.Args is EntityEffectReagentArgs reagentArgs)
         {
-            range = MathF.Min((float) (reagentArgs.Quantity * args.Effect.EmpRangePerUnit), args.Effect.EmpMaxRange);
+            range = MathF.Min((float)(reagentArgs.Quantity * args.Effect.EmpRangePerUnit), args.Effect.EmpMaxRange);
         }
 
         _emp.EmpPulse(_xform.GetMapCoordinates(args.Args.TargetEntity, xform: transform),
@@ -680,7 +681,7 @@ public sealed class EntityEffectSystem : EntitySystem
 
         if (args.Args is EntityEffectReagentArgs reagentArgs)
         {
-            intensity = MathF.Min((float) reagentArgs.Quantity * args.Effect.IntensityPerUnit, args.Effect.MaxTotalIntensity);
+            intensity = MathF.Min((float)reagentArgs.Quantity * args.Effect.IntensityPerUnit, args.Effect.MaxTotalIntensity);
         }
 
         _explosion.QueueExplosion(
@@ -792,7 +793,8 @@ public sealed class EntityEffectSystem : EntitySystem
         if (TryComp<BloodstreamComponent>(args.Args.TargetEntity, out var blood))
         {
             var amt = args.Effect.Amount;
-            if (args.Args is EntityEffectReagentArgs reagentArgs) {
+            if (args.Args is EntityEffectReagentArgs reagentArgs)
+            {
                 if (args.Effect.Scaled)
                     amt *= reagentArgs.Quantity.Float();
                 amt *= reagentArgs.Scale.Float();
@@ -843,7 +845,7 @@ public sealed class EntityEffectSystem : EntitySystem
             {
                 var quantity = ratio * amount / Atmospherics.BreathMolesToReagentMultiplier;
                 if (quantity < 0)
-                    quantity = Math.Max(quantity, -lung.Air[(int) gas]);
+                    quantity = Math.Max(quantity, -lung.Air[(int)gas]);
                 lung.Air.AdjustMoles(gas, quantity);
             }
         }
@@ -1042,5 +1044,42 @@ public sealed class EntityEffectSystem : EntitySystem
     {
         _necromorf.MutateVirus(args.Args.TargetEntity, args.Effect.MutationStrength, args.Effect.IsStableMutation);
     }
+
+    private void OnAddMentalIllness(ref ExecuteEntityEffectEvent<AddMentalIllness> args)
+    {
+        var target = args.Args.TargetEntity;
+
+        if (!EntityManager.TryGetComponent<MentalIllnessComponent>(target, out var component))
+            return;
+
+        foreach (var illness in args.Effect.Illnesses)
+        {
+            if (!component.ActiveIllnesses.Contains(illness))
+                continue;
+
+            var system = EntityManager.EntitySysManager.GetEntitySystem<MentalIllnessSystem>();
+
+            system.AddIllnessSeverity(target, illness, args.Effect.Severity, true, component);
+            system.AddIllnessTickIntervals(target, illness, args.Effect.AddTickIntervals, component);
+        }
+    }
+
+    public void OnCauseMentalIllness(ref ExecuteEntityEffectEvent<CauseMentalIllness> args)
+    {
+        var target = args.Args.TargetEntity;
+        var system = EntityManager.EntitySysManager.GetEntitySystem<MentalIllnessSystem>();
+
+        if (EntityManager.TryGetComponent<MentalIllnessComponent>(target, out var component))
+        {
+            system.TryAddIllness(target, args.Effect.Illnesses, args.Effect.Severity, component);
+        }
+        else
+        {
+            var mentalIllness = EntityManager.AddComponent<MentalIllnessComponent>(target);
+            system.TryAddIllness(target, args.Effect.Illnesses, args.Effect.Severity, mentalIllness);
+        }
+
+    }
+
     // DS14-end
 }

@@ -40,7 +40,7 @@ public sealed class InhalerSystem : EntitySystem
     private void OnUseInHand(EntityUid uid, InhalerComponent component, UseInHandEvent args)
     {
         if (!TryUseInhaler(uid, args.User, args.User, component))
-            _popup.PopupEntity("Не удаётся применить ингалятор.", args.User, args.User);
+            _popup.PopupEntity(Loc.GetString("asthma-inhaler-not-use "), args.User, args.User);
     }
 
     private void OnAfterInteract(EntityUid uid, InhalerComponent component, AfterInteractEvent args)
@@ -49,7 +49,7 @@ public sealed class InhalerSystem : EntitySystem
             return;
 
         if (!TryUseInhaler(uid, target, args.User, component))
-            _popup.PopupEntity("Не удаётся применить ингалятор.", args.User, args.User);
+            _popup.PopupEntity(Loc.GetString("asthma-inhaler-not-use "), args.User, args.User);
 
     }
 
