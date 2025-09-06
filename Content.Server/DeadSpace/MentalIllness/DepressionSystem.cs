@@ -2,13 +2,11 @@ using Content.Server.DeadSpace.MentalIllness.Components;
 using Content.Shared.DeadSpace.MentalIllness;
 using Content.Shared.Speech.Components;
 using Content.Server.Chat.Systems;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.MentalIllness;
 
 public sealed partial class MentalIllnessSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
     public void TriggerDepressionEffects(EntityUid uid, MentalIllnessComponent? component = null)
     {
         if (!Resolve(uid, ref component, true))

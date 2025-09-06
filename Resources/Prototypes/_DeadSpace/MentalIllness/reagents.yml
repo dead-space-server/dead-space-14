@@ -1,0 +1,140 @@
+- type: reagent
+  id: Alertival
+  name: reagent-name-alertival
+  group: Medicine
+  desc: reagent-desc-alertival
+  physicalDesc: reagent-physical-desc-nothing
+  flavor: bitter
+  color: "#4682B4"
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.05
+      effects:
+      - !type:AddMentalIllness
+        conditions:
+        - !type:ReagentThreshold
+          min: 5
+        illnesses:
+        - Depression
+        severity: -0.0004
+    Poison:
+      metabolismRate: 0.05
+      effects:
+      - !type:CauseMentalIllness
+        conditions:
+          - !type:ReagentThreshold
+            min: 6
+        illnesses: Anxiety
+        severity: 0.3
+
+
+- type: reagent
+  id: Lamotripan
+  name: reagent-name-lamotripan
+  group: Medicine
+  desc: reagent-desc-lamotripan
+  physicalDesc: reagent-physical-desc-nothing
+  flavor: bitter
+  color: "#B0E0E6"
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.05
+      effects:
+      - !type:AddMentalIllness
+        conditions:
+        - !type:ReagentThreshold
+          min: 5
+        illnesses:
+        - Mania
+        severity: -0.0004
+    Poison:
+      metabolismRate: 0.05
+      effects:
+      - !type:CauseMentalIllness
+        conditions:
+          - !type:ReagentThreshold
+            min: 6
+        illnesses: Paranoia
+        severity: 0.3
+
+- type: reagent
+  id: Femaplaz
+  name: reagent-name-femaplaz
+  group: Medicine
+  desc: reagent-desc-femaplaz
+  physicalDesc: reagent-physical-desc-nothing
+  flavor: bitter
+  color: "#0000CD"
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.05
+      effects:
+      - !type:AddMentalIllness
+        conditions:
+        - !type:ReagentThreshold
+          min: 5
+        illnesses:
+        - Paranoia
+        severity: -0.0004
+    Poison:
+      metabolismRate: 0.05
+      effects:
+      - !type:CauseMentalIllness
+        conditions:
+          - !type:ReagentThreshold
+            min: 6
+        illnesses: Mania
+        severity: 0.3
+
+- type: reagent
+  id: Grandex
+  name: reagent-name-grandex
+  group: Medicine
+  desc: reagent-desc-grandex
+  physicalDesc: reagent-physical-desc-nothing
+  flavor: bitter
+  color: "#1E90FF"
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.05
+      effects:
+      - !type:AddMentalIllness
+        conditions:
+        - !type:ReagentThreshold
+          min: 5
+        illnesses:
+        - Anxiety
+        severity: -0.0004
+    Poison:
+      metabolismRate: 0.05
+      effects:
+      - !type:CauseMentalIllness
+        conditions:
+          - !type:ReagentThreshold
+            min: 6
+        illnesses: Depression
+        severity: 0.3
+
+- type: reagent
+  id: Goldfraim
+  name: reagent-name-goldfraim
+  group: Medicine
+  desc: reagent-desc-goldfraim
+  physicalDesc: reagent-physical-desc-nothing
+  flavor: bitter
+  color: "#FFD700"
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.05
+      effects:
+      - !type:AddMentalIllness
+        conditions:
+        - !type:ReagentThreshold
+          min: 5
+        illnesses:
+        - Anxiety
+        - Paranoia
+        - Mania
+        - Depression
+        addTickIntervals: 3
+        severity: 0

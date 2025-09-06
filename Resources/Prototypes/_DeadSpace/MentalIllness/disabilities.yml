@@ -1,0 +1,115 @@
+- type: trait
+  id: LowParanoia
+  name: легкая паранойя
+  description: Вы чувствуете себя немного тревожным. Кажется, кто-то за вами наблюдает.
+  category: Disabilities
+  components:
+  - type: MentalIllness
+    activeIllnesses:
+      - Paranoia
+    severity:
+      Paranoia: 0.25
+
+- type: trait
+  id: LowDepression
+  name: легкая депрессия
+  description: Ваше настроение слегка ухудшено. Все кажется чуть сложнее, чем обычно.
+  category: Disabilities
+  components:
+  - type: MentalIllness
+    activeIllnesses:
+      - Depression
+    severity:
+      Depression: 0.25
+
+- type: trait
+  id: LowMania
+  name: легкая мания
+  description: Вы испытываете небольшой прилив энергии. Невозможно сосредоточиться на одном деле.
+  category: Disabilities
+  components:
+  - type: MentalIllness
+    activeIllnesses:
+      - Mania
+    severity:
+      Mania: 0.25
+
+- type: trait
+  id: LowAnxiety
+  name: легкая тревожность
+  description: Вы часто беспокоитесь по мелочам, иногда без видимой причины.
+  category: Disabilities
+  components:
+  - type: MentalIllness
+    activeIllnesses:
+      - Anxiety
+    severity:
+      Anxiety: 0.25
+
+- type: trait
+  id: MedParanoia
+  name: умеренная паранойя
+  description: Ваше беспокойство усиливается. Кажется, все вокруг представляют опасность.
+  category: Disabilities
+  components:
+  - type: MentalIllness
+    activeIllnesses:
+      - Paranoia
+    severity:
+      Paranoia: 0.5
+
+- type: trait
+  id: MedDepression
+  name: умеренная депрессия
+  description: Вы чувствуете себя подавленным. Выполнение задач дается с трудом.
+  category: Disabilities
+  components:
+  - type: MentalIllness
+    activeIllnesses:
+      - Depression
+    severity:
+      Depression: 0.5
+
+- type: trait
+  id: MedMania
+  name: умеренная мания
+  description: Ваша энергия неудержима, но вы не можете рационально использовать ее.
+  category: Disabilities
+  components:
+  - type: MentalIllness
+    activeIllnesses:
+      - Mania
+    severity:
+      Mania: 0.5
+
+- type: trait
+  id: MedAnxiety
+  name: умеренная тревожность
+  description: Ваши нервы на пределе. Малейшие события заставляют вас беспокоиться.
+  category: Disabilities
+  components:
+  - type: MentalIllness
+    activeIllnesses:
+      - Anxiety
+    severity:
+      Anxiety: 0.5
+
+- type: trait
+  id: LowRandomMentalIllness
+  name: случайное легкое заболевание психики
+  description: Вы начинаете испытывать легкие симптомы психического расстройства. Что именно — неизвестно.
+  category: Disabilities
+  components:
+  - type: MentalIllness
+    severityOnInitialization: 0.25
+    randomOnInitialization: true
+
+- type: trait
+  id: MedRandomMentalIllness
+  name: случайное умеренное заболевание психики
+  description: У вас умеренные симптомы психического расстройства. Видимо, все станет хуже.
+  category: Disabilities
+  components:
+  - type: MentalIllness
+    severityOnInitialization: 0.5
+    randomOnInitialization: true

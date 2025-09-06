@@ -9,6 +9,7 @@ using Content.Shared.Movement.Systems;
 using Content.Shared.Stunnable;
 using Content.Shared.StatusEffect;
 using Content.Shared.Weapons.Melee.Events;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Asthma;
 
@@ -21,6 +22,7 @@ public sealed class AsthmaSystem : EntitySystem
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffect = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -93,8 +95,11 @@ public sealed class AsthmaSystem : EntitySystem
         if (TryComp<VocalComponent>(uid, out var vocal))
         {
             var message = Loc.GetString("emote-asthma-gasp", ("random", _random.Next(1, 6)));
-            _chat.TryPlayEmoteSound(uid, vocal.EmoteSounds, "Gasp");
+
             _chat.TrySendInGameICMessage(uid, message, InGameICChatType.Emote, ChatTransmitRange.Normal);
+
+            if (vocal.EmoteSounds != null)
+                _chat.TryPlayEmoteSound(uid, _proto.Index(vocal.EmoteSounds), "Gasp");
         }
 
         component.MovementSpeedMultiplier = component.SpeedDebuff;

@@ -13,11 +13,13 @@ using Content.Shared.Jittering;
 using Content.Shared.Zombies;
 using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;
 using Content.Shared.Mobs.Systems;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.MentalIllness;
 
 public sealed partial class MentalIllnessSystem : EntitySystem
 {
+    [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly ChatSystem _chat = default!;

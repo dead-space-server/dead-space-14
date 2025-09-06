@@ -24,7 +24,7 @@ public sealed class InhalerSystem : EntitySystem
     [Dependency] private readonly AudioSystem _audio = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private readonly AsthmaSystem _asthma = default!;
-    [Dependency] private readonly FoodSystem _food = default!;
+    [Dependency] private readonly IngestionSystem _ingestion = default!;
     [Dependency] private readonly BodySystem _body = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
 
@@ -82,7 +82,7 @@ public sealed class InhalerSystem : EntitySystem
         if (!_body.TryGetBodyOrganEntityComps<LungComponent>((target, body), out _))
             return false;
 
-        if (_food.IsMouthBlocked(target, user))
+        if (!_ingestion.HasMouthAvailable(target, user))
             return false;
 
         if (!_solutionContainer.TryGetSolution(uid, component.SolutionName, out _, out var solution))
