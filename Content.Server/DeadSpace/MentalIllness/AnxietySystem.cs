@@ -2,7 +2,6 @@ using Content.Server.DeadSpace.MentalIllness.Components;
 using Content.Shared.DeadSpace.MentalIllness;
 using Content.Shared.Popups;
 using Content.Server.Chat.Systems;
-using Content.Shared.DeadSpace.Necromorphs.Sanity;
 using Content.Shared.Hands.Components;
 
 namespace Content.Server.DeadSpace.MentalIllness;

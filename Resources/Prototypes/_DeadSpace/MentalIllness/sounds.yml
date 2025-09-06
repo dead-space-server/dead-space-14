@@ -4,12 +4,12 @@
   - /Audio/Voice/Cluwne/cluwnelaugh1.ogg
   - /Audio/Voice/Cluwne/cluwnelaugh2.ogg
   - /Audio/Voice/Cluwne/cluwnelaugh3.ogg
-  - /Audio/DeadSpace/Demons/scream_01.ogg
-  - /Audio/DeadSpace/Demons/scream_02.ogg
-  - /Audio/DeadSpace/Demons/scream_03.ogg
-  - /Audio/DeadSpace/Demons/laugh_01.ogg
-  - /Audio/DeadSpace/Demons/laugh_01.ogg
-  - /Audio/DeadSpace/Demons/laugh_01.ogg
+  - /Audio/_DeadSpace/Demons/scream_01.ogg
+  - /Audio/_DeadSpace/Demons/scream_02.ogg
+  - /Audio/_DeadSpace/Demons/scream_03.ogg
+  - /Audio/_DeadSpace/Demons/laugh_01.ogg
+  - /Audio/_DeadSpace/Demons/laugh_01.ogg
+  - /Audio/_DeadSpace/Demons/laugh_01.ogg
   - /Audio/Weapons/smash.ogg
   - /Audio/Machines/airlock_open.ogg
   - /Audio/Machines/airlock_close.ogg
@@ -19,9 +19,9 @@
   - /Audio/Animals/monkey_scream.ogg
   - /Audio/Animals/pig_oink.ogg
   - /Audio/Weapons/Xeno/alien_claw_flesh3.ogg
-  - /Audio/DeadSpace/Spiders/Eggs/gib1.ogg
-  - /Audio/DeadSpace/Spiders/Eggs/gib2.ogg
-  - /Audio/DeadSpace/Spiders/Eggs/gib3.ogg
+  - /Audio/_DeadSpace/Spiders/Eggs/gib1.ogg
+  - /Audio/_DeadSpace/Spiders/Eggs/gib2.ogg
+  - /Audio/_DeadSpace/Spiders/Eggs/gib3.ogg
   - /Audio/Animals/snake_hiss.ogg
   - /Audio/Misc/gamma.ogg
   - /Audio/Misc/epsilon.ogg
