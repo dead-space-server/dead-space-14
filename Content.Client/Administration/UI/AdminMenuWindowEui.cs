@@ -27,7 +27,11 @@ namespace Content.Client.Administration.UI
                 CloseAfter = !_window.KeepWindowOpen.Pressed,
                 Voice = (string) (_window.VoiceSelector.SelectedMetadata ?? ""),
                 EnableTTS = _window.EnableTTS.Pressed,
-                CustomTTS = _window.CustomTTS.Pressed
+                CustomTTS = _window.CustomTTS.Pressed,
+                ColorHex = _window.ColorHexText, // DS14-announce-color
+                SoundPath = _window.SoundPathText, // DS14-announce-audio
+                SoundVolume = _window.SoundVolumeValue, // DS14-announce-volume
+                Sender = _window.SenderText // DS14-announce-sender
             });
 
         }

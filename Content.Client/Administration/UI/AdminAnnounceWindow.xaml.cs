@@ -19,12 +19,29 @@ namespace Content.Client.Administration.UI
         private readonly List<TTSVoicePrototype> _voices; // Corvax-TTS
         public Action<string>? OnVoiceChange; // Corvax-TTS
 
+        private LineEdit _colorHexEdit; // DS14-announce
+        private Button _colorPreviewBtn; // DS14-announce
+        private LineEdit _soundPathEdit; // DS14-announce
+        private LineEdit _soundVolumeEdit; // DS14-announce
+        private LineEdit _senderEdit; // DS14-announce
+
         public AdminAnnounceWindow()
         {
             RobustXamlLoader.Load(this);
             IoCManager.InjectDependencies(this);
 
-            Announcement.Placeholder = new Rope.Leaf(_localization.GetString("admin-announce-announcement-placeholder"));
+            // DS14-announce-start
+            _colorHexEdit = FindControl<LineEdit>("ColorHex");
+            _colorPreviewBtn = FindControl<Button>("ColorPreview");
+            _soundPathEdit = FindControl<LineEdit>("SoundPath");
+            _soundVolumeEdit = FindControl<LineEdit>("SoundVolume");
+            _senderEdit = FindControl<LineEdit>("Sender");
+            _colorHexEdit.OnTextChanged += OnColorTextChanged;
+            UpdateColorPreview();
+            // DS14-announce-end
+
+            Announcement.Placeholder =
+                new Rope.Leaf(_localization.GetString("admin-announce-announcement-placeholder"));
             AnnounceMethod.AddItem(_localization.GetString("admin-announce-type-station"));
             AnnounceMethod.SetItemMetadata(0, AdminAnnounceType.Station);
             AnnounceMethod.AddItem(_localization.GetString("admin-announce-type-server"));
@@ -48,6 +65,39 @@ namespace Content.Client.Administration.UI
             // Corvax-TTS-End
         }
 
+        // DS14-announce-start
+        private void OnColorTextChanged(LineEdit.LineEditEventArgs args)
+        {
+            UpdateColorPreview();
+        }
+
+        private void UpdateColorPreview()
+        {
+            try
+            {
+                var color = Color.FromHex(_colorHexEdit.Text);
+                _colorPreviewBtn.ModulateSelfOverride = color;
+            }
+            catch
+            {
+                _colorPreviewBtn.ModulateSelfOverride = null;
+            }
+        }
+
+        public string ColorHexText => _colorHexEdit.Text;
+        public string SoundPathText => _soundPathEdit.Text;
+        public string SenderText => _senderEdit.Text;
+        public float SoundVolumeValue
+        {
+            get
+            {
+                if (float.TryParse(_soundVolumeEdit.Text, out var volume))
+                    return Math.Clamp(volume, 1f, 10f);
+                return 5f;
+            }
+        }
+        // DS14-announce-end
+
         private void AnnouncementOnOnTextChanged(GUIBoundKeyEventArgs args)
         {
             AnnounceButton.Disabled = Rope.Collapse(Announcement.TextRope).TrimStart() == "";
@@ -56,7 +106,8 @@ namespace Content.Client.Administration.UI
         private void AnnounceMethodOnOnItemSelected(OptionButton.ItemSelectedEventArgs args)
         {
             AnnounceMethod.SelectId(args.Id);
-            Announcer.Editable = ((AdminAnnounceType?)args.Button.SelectedMetadata ?? AdminAnnounceType.Station) == AdminAnnounceType.Station;
+            Announcer.Editable = ((AdminAnnounceType?)args.Button.SelectedMetadata ?? AdminAnnounceType.Station) ==
+                                 AdminAnnounceType.Station;
         }
 
         // Corvax-TTS-Start

@@ -5,6 +5,7 @@ using Content.Server.Chat.Systems;
 using Content.Server.EUI;
 using Content.Shared.Administration;
 using Content.Shared.Eui;
+using Robust.Shared.Audio;
 
 namespace Content.Server.Administration.UI
 {
@@ -43,21 +44,81 @@ namespace Content.Server.Administration.UI
                         break;
                     }
 
+                    // DS14-announce-start
+                    Color color;
+                    try
+                    {
+                        color = Color.FromHex(doAnnounce.ColorHex);
+                    }
+                    catch
+                    {
+                        color = Color.FromHex("#1d8bad");
+                    }
+
+                    SoundSpecifier? sound = null;
+                    if (!string.IsNullOrWhiteSpace(doAnnounce.SoundPath))
+                    {
+                        var audioParams = AudioParams.Default.WithVolume(doAnnounce.SoundVolume).AddVolume(-8);
+                        sound = new SoundPathSpecifier(doAnnounce.SoundPath)
+                        {
+                            Params = audioParams
+                        };
+                    }
+                    // DS14-announce-end
+
                     switch (doAnnounce.AnnounceType)
                     {
                         case AdminAnnounceType.Server:
-                            _chatManager.DispatchServerAnnouncement(doAnnounce.Announcement);
+                            _chatManager.DispatchServerAnnouncement(doAnnounce.Announcement, color);
                             break;
                         // TODO: Per-station announcement support
                         case AdminAnnounceType.Station:
-                            if (doAnnounce.EnableTTS && !doAnnounce.CustomTTS)
-                                _chatSystem.DispatchGlobalAnnouncement(doAnnounce.Announcement, doAnnounce.Announcer, colorOverride: Color.Gold,
-                                    originalMessage: doAnnounce.Announcement, usePresetTTS: true);
-                            else if (doAnnounce.EnableTTS)
-                                _chatSystem.DispatchGlobalAnnouncement(doAnnounce.Announcement, doAnnounce.Announcer, colorOverride: Color.Gold,
-                                    originalMessage: doAnnounce.Announcement, voice: doAnnounce.Voice);
+                            var sender = string.IsNullOrEmpty(doAnnounce.Announcer)
+                                ? Loc.GetString("chat-manager-sender-announcement")
+                                : doAnnounce.Announcer;
+
+                            var announcementWithSender = doAnnounce.Announcement;
+                            if (!string.IsNullOrEmpty(doAnnounce.Sender))
+                            {
+                                announcementWithSender +=
+                                    $"\n{Loc.GetString("comms-console-announcement-sent-by")} {doAnnounce.Sender}";
+                            }
+
+                            if (doAnnounce.EnableTTS)
+                            {
+                                if (!doAnnounce.CustomTTS)
+                                {
+                                    _chatSystem.DispatchGlobalAnnouncement(
+                                        message: announcementWithSender,
+                                        sender: sender,
+                                        playSound: true,
+                                        announcementSound: sound,
+                                        colorOverride: color,
+                                        originalMessage: doAnnounce.Announcement,
+                                        usePresetTTS: true);
+                                }
+                                else
+                                {
+                                    _chatSystem.DispatchGlobalAnnouncement(
+                                        message: announcementWithSender,
+                                        sender: sender,
+                                        playSound: true,
+                                        announcementSound: sound,
+                                        colorOverride: color,
+                                        originalMessage: doAnnounce.Announcement,
+                                        voice: doAnnounce.Voice);
+                                }
+                            }
                             else
-                                _chatSystem.DispatchGlobalAnnouncement(doAnnounce.Announcement, doAnnounce.Announcer, colorOverride: Color.Gold);
+                            {
+                                _chatSystem.DispatchGlobalAnnouncement(
+                                    message: announcementWithSender,
+                                    sender: sender,
+                                    playSound: true,
+                                    announcementSound: sound,
+                                    colorOverride: color);
+                            }
+
                             break;
                     }
 
