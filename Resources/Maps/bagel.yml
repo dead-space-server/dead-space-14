@@ -4,7 +4,7 @@ meta:
   engineVersion: 252.0.0
   forkId: ""
   forkVersion: ""
-  time: 09/06/2025 13:45:41
+  time: 09/06/2025 14:16:51
   entityCount: 26911
 maps:
 - 1
@@ -10601,10 +10601,10 @@ entities:
     - type: NavMap
     - type: Joint
       joints:
-        docking102795: !type:WeldJoint
+        docking744321: !type:WeldJoint
           bodyB: 26631
           bodyA: 2
-          id: docking102795
+          id: docking744321
           localAnchorB: 0.49999997,-8
           localAnchorA: -79,-1.5
           referenceAngle: 1.5707964
@@ -10892,10 +10892,10 @@ entities:
     - type: RadiationGridResistance
     - type: Joint
       joints:
-        docking102795: !type:WeldJoint
+        docking744321: !type:WeldJoint
           bodyB: 26631
           bodyA: 2
-          id: docking102795
+          id: docking744321
           localAnchorB: 0.49999997,-8
           localAnchorA: -79,-1.5
           referenceAngle: 1.5707964
@@ -13918,11 +13918,11 @@ entities:
       pos: -78.5,-1.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -17892.771
+      secondsUntilStateChange: -12.46671
       changeAirtight: False
       state: Opening
     - type: Docking
-      dockJointId: docking102795
+      dockJointId: docking744321
       dockedWith: 26636
     - type: DeviceLinkSource
       lastSignals:
@@ -13934,11 +13934,11 @@ entities:
       pos: 0.5,-7.5
       parent: 26631
     - type: Door
-      secondsUntilStateChange: -17892.238
+      secondsUntilStateChange: -11.866711
       changeAirtight: False
       state: Opening
     - type: Docking
-      dockJointId: docking102795
+      dockJointId: docking744321
       dockedWith: 303
     - type: DeviceLinkSource
       lastSignals:
@@ -167692,7 +167692,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: -56.5,7.5
       parent: 2
-  - uid: 25661
+  - uid: 25660
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
@@ -167700,7 +167700,7 @@ entities:
       parent: 2
 - proto: WindoorSecureEngineeringLocked
   entities:
-  - uid: 25660
+  - uid: 25661
     components:
     - type: Transform
       pos: -3.5,17.5
