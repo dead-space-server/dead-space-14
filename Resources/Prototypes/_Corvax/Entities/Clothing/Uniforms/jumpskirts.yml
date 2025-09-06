@@ -42,3 +42,14 @@
     sprite: _Corvax/Clothing/Uniforms/Jumpskirt/schoolskirt.rsi
   - type: Clothing
     sprite: _Corvax/Clothing/Uniforms/Jumpskirt/schoolskirt.rsi
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtElegantMaid
+  name: elegant maid uniform
+  description: Call me master and bring me some beer.
+  components:
+    - type: Sprite
+      sprite: _Corvax/Clothing/Uniforms/Jumpskirt/elegantmaid.rsi
+    - type: Clothing
+      sprite: _Corvax/Clothing/Uniforms/Jumpskirt/elegantmaid.rsi

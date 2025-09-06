@@ -6,3 +6,5 @@ ent-ClothingUniformColorJumpskirtRainbow = rainbow jumpskirt
     .desc = A multi-colored jumpskirt!
 ent-ClothingUniformJumpskirtSchool = school skirt
     .desc = Stylish and comfortable school skirt.
+ent-ClothingUniformJumpskirtElegantMaid = elegant maid uniform
+    .desc = Call me master and bring me some beer.
