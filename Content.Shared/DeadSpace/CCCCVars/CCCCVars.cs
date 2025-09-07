@@ -77,4 +77,14 @@ public sealed class CCCCVars
     /// </summary>
     public static readonly CVarDef<string> Background =
         CVarDef.Create("ui.background", "Image", CVar.CLIENTONLY | CVar.ARCHIVE);
+    /*
+    * SysNotify
+    */
+
+    /// <summary>
+    /// Dictionary for ping
+    /// </summary>
+    public static readonly CVarDef<string> SysNotifyCvar =
+        CVarDef.Create("sysnotify.Dict", "NOTHING", CVar.CLIENTONLY | CVar.ARCHIVE);
+
 }

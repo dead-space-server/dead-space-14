@@ -8,7 +8,7 @@
 
 - type: ghostNotifyGroup
   id: DemonHonkerping
-  name: Демон клоун
+  name: Демон-клоун
 
 - type: ghostNotifyGroup
   id: DemonJaunt
@@ -28,7 +28,7 @@
  
 - type: ghostNotifyGroup
   id: SpiderTerrorBase
-  name: Паук страж ужаса
+  name: Паук-страж ужаса
 
 - type: ghostNotifyGroup
   id: SpiderTerrorKing
@@ -44,7 +44,7 @@
 
 - type: ghostNotifyGroup
   id: PirateSkeletonping
-  name: Скелет пират
+  name: Скелет-пират
 
 - type: ghostNotifyGroup
   id: Skeletonping
@@ -68,7 +68,7 @@
 
 - type: ghostNotifyGroup
   id: PunPunping
-  name: Пун пун
+  name: Пун-Пун
 
 - type: ghostNotifyGroup
   id: PetsGroup
@@ -100,7 +100,7 @@
 
 - type: ghostNotifyGroup
   id: Nijaping
-  name: Космический нинзя
+  name: Космический ниндзя
 
 - type: ghostNotifyGroup
   id: Paradoxping
@@ -168,7 +168,7 @@
 
 - type: ghostNotifyGroup
   id: TomatoKillerping
-  name: Томат убийца
+  name: Томат-убийца
 
 - type: ghostNotifyGroup
   id: Botsping
@@ -176,7 +176,7 @@
 
 - type: ghostNotifyGroup
   id: SyndicateGroup
-  name: Агенты синдиката(подкрепления)
+  name: Агенты Синдиката (подкрепления)
 
 - type: ghostNotifyGroup
   id: ERTGroup
@@ -192,4 +192,4 @@
 
 - type: ghostNotifyGroup
   id: VisitorGroup
-  name: Поситители
+  name: Посетители
