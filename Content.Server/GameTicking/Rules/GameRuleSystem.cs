@@ -2,6 +2,7 @@ using Content.Server.Atmos.EntitySystems;
 using Content.Server.Chat.Managers;
 using Content.Shared.GameTicking.Components;
 using Robust.Server.GameObjects;
+using Robust.Server.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -13,6 +14,7 @@ public abstract partial class GameRuleSystem<T> : EntitySystem where T : ICompon
     [Dependency] protected readonly IChatManager ChatManager = default!;
     [Dependency] protected readonly GameTicker GameTicker = default!;
     [Dependency] protected readonly IGameTiming Timing = default!;
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
 
     // Not protected, just to be used in utility methods
     [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
@@ -38,13 +40,18 @@ public abstract partial class GameRuleSystem<T> : EntitySystem where T : ICompon
         while (query.MoveNext(out var uid, out _, out var gameRule))
         {
             var minPlayers = gameRule.MinPlayers;
-            if (args.Players.Length >= minPlayers)
+            // DS14-start
+            var totalPlayers = _playerManager.PlayerCount;
+            if (totalPlayers >= minPlayers)
+            // DS14-end
                 continue;
 
             if (gameRule.CancelPresetOnTooFewPlayers)
             {
-                ChatManager.SendAdminAnnouncement(Loc.GetString("preset-not-enough-ready-players",
-                    ("readyPlayersCount", args.Players.Length),
+                // DS14-start
+                ChatManager.SendAdminAnnouncement(Loc.GetString("preset-not-enough-current-players",
+                    ("currentPlayers", totalPlayers),
+                // DS14-end
                     ("minimumPlayers", minPlayers),
                     ("presetName", ToPrettyString(uid))));
                 args.Cancel();
