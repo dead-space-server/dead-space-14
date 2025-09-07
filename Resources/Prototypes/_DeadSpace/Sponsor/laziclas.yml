@@ -33,6 +33,7 @@
     - id: ClothingShoesBootsMaglaziclas
     - id: ClothingHeadsetlaziclas
     - id: ClothingOuterVestlaziclas
+    - id: ClothingHeadlaziclas
     - id: PaperLawlaziclas
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
@@ -175,7 +176,7 @@
 #Шлем
 - type: entity
   parent: [ ClothingHeadHelmetBase, BaseMajorContraband ]
-  id: ClothingHeadHelmetMerc
+  id: ClothingHeadlaziclas
   name: шлем 6Б47
   categories: [ HideSpawnMenu ]
   description: Лёгкий кевларовый защитный шлем, устойчивый к осколкам и пулям.
