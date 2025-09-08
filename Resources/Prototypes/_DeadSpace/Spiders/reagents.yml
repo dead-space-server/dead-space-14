@@ -156,6 +156,6 @@
       effects:
       - !type:CauseEgg
         duration: 360
-      conditions:
+        conditions:
         - !type:ReagentThreshold
           min: 1
