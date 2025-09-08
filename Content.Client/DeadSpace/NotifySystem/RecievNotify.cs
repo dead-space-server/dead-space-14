@@ -5,9 +5,7 @@ using Robust.Shared.Audio;
 using Content.Client.DeadSpace.NotifySystem.NotifyFunctions;
 using Content.Shared.DeadSpace.CCCCVars;
 using Robust.Shared.Configuration;
-using Content.Shared.DeadSpace.GhostRoleNotify.Prototypes;
 using Robust.Shared.Prototypes;
-using Microsoft.CodeAnalysis.Elfie.Extensions;
 
 
 namespace Content.Client.DeadSpace.NotifySystem.RecievNotify;
