@@ -25,6 +25,7 @@ ui-options-general-storage = Инвентарь
 ui-options-general-accessibility = Специальные возможности
 ui-options-cooldown-ping = Задержка для пинга
 ui-options-cooldown-pin = Пинг
+ui-options-ping-permission = Получать уведомление о появлении роли
 
 ## Audio menu
 

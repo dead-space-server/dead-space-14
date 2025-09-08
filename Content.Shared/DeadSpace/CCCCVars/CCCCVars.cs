@@ -92,6 +92,9 @@ public sealed class CCCCVars
     /// </summary>
     public static readonly CVarDef<int> SysNotifyCoolDown =
         CVarDef.Create("sysnotify.cooldown", 1, CVar.CLIENTONLY | CVar.ARCHIVE);
-
-
+    /// <summary>
+    /// Get ping or no
+    /// </summary>
+    public static readonly CVarDef<bool> SysNotifyPerm =
+        CVarDef.Create("sysnotify.permission", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 }
