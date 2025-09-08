@@ -12,6 +12,7 @@ ui-options-apply = Применить
 ui-options-reset-all = Сбросить всё и применить
 ui-options-default = По-умолчанию
 ui-options-value-percent = { TOSTRING($value, "P0") }
+ui-options-tab-ping = Пинг меню
 
 # Misc/General menu
 
@@ -22,6 +23,8 @@ ui-options-general-cursor = Курсор
 ui-options-general-speech = Речь
 ui-options-general-storage = Инвентарь
 ui-options-general-accessibility = Специальные возможности
+ui-options-cooldown-ping = Задержка для пинга
+ui-options-cooldown-pin = Пинг
 
 ## Audio menu
 
@@ -326,5 +329,3 @@ ui-options-enable-overlay-starting-job = Show starting job
 ui-options-overlay-merge-distance = Stack merge distance
 ui-options-overlay-ghost-fade-distance = Ghost overlay fade range from mouse
 ui-options-overlay-ghost-hide-distance = Ghost overlay hide range from mouse
-## ping menu
-ui-options-tab-ping = Пинг меню

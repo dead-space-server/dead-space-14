@@ -87,4 +87,11 @@ public sealed class CCCCVars
     public static readonly CVarDef<string> SysNotifyCvar =
         CVarDef.Create("sysnotify.Dict", "NOTHING", CVar.CLIENTONLY | CVar.ARCHIVE);
 
+    /// <summary>
+    /// How much we were wating to next ping
+    /// </summary>
+    public static readonly CVarDef<int> SysNotifyCoolDown =
+        CVarDef.Create("sysnotify.cooldown", 1, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+
 }

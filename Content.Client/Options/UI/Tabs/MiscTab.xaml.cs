@@ -62,6 +62,12 @@ public sealed partial class MiscTab : Control
         Control.AddOptionCheckBox(CCVars.ChatFancyNameBackground, FancyNameBackgroundsCheckBox);
         Control.AddOptionCheckBox(CCVars.StaticStorageUI, StaticStorageUI);
 
+        Control.AddOptionSlider(
+            CCCCVars.SysNotifyCoolDown,
+            SliderCooldownForPing,
+            0,
+            10);
+
         Control.Initialize();
     }
 }

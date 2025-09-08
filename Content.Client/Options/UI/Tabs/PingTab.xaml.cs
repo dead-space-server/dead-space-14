@@ -6,7 +6,7 @@ using Content.Shared.DeadSpace.GhostRoleNotify.Prototypes;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Configuration;
 using Content.Shared.DeadSpace.CCCCVars;
-using Robust.Shared.Toolshed.Commands.Values;
+using Content.Client.DeadSpace.NotifySystem.NotifyFunctions;
 
 namespace Content.Client.Options.UI.Tabs;
 
@@ -14,69 +14,14 @@ namespace Content.Client.Options.UI.Tabs;
 
 public sealed partial class PingTab : Control
 {
-    public static Dictionary<string, bool> _dictAccess = new Dictionary<string, bool>();
-    public static Dictionary<string, bool> DictCvar = new Dictionary<string, bool>();
-
-    public static bool GetValueAccess(string key)
-    {
-        if (key == null)
-        {
-            return false;
-        }
-        if (_dictAccess.TryGetValue(key, out bool value))
-        {
-            return value;
-        }
-        else
-        {
-            // Поведение, если ключ не найден — например, бросить исключение или вернуть false
-            return false;
-        }
-    }
-    // Метод для преобразования строки в список пар (string, bool)
-    public static Dictionary<string, bool> StringToPairList(string input)
-    {
-        var result = new Dictionary<string, bool>();
-        var parts = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-
-        // Проверка, что количество элементов чётное
-        if (parts.Length % 2 != 0)
-            throw new ArgumentException("Строка должна содержать чётное число элементов (слово + значение).");
-
-        for (int i = 0; i < parts.Length; i += 2)
-        {
-            string word = parts[i];
-            string boolStr = parts[i + 1];
-            // Преобразуем строку в булевое значение
-            bool value;
-            if (!bool.TryParse(boolStr, out value))
-                throw new ArgumentException($"Некорректное булевое значение {boolStr}");
-
-            result.Add(word, value);
-        }
-
-        return result;
-    }
-
-    // Метод для преобразования списка пар обратно в строку
-    public static string PairListToString(Dictionary<string, bool> list)
-    {
-        var parts = new List<string>();
-        foreach (var (word, value) in list)
-        {
-            parts.Add(word);
-            parts.Add(value.ToString()); // чтобы было true или false
-        }
-        return string.Join(" ", parts);
-    }
     private void AddCheckBox(string checkBoxName, string id, IConfigurationManager cfg, bool savedSelection)
     {
         CheckBox newCheckBox = new CheckBox() { Text = Loc.GetString(checkBoxName) };
         newCheckBox.Pressed = savedSelection;
         newCheckBox.OnToggled += (lol) =>
         {
-            _dictAccess[id] = newCheckBox.Pressed;
-            cfg.SetCVar(CCCCVars.SysNotifyCvar, PairListToString(_dictAccess));
+            NotifyFunction._dictAccess[id] = newCheckBox.Pressed;
+            cfg.SetCVar(CCCCVars.SysNotifyCvar, NotifyFunction.PairListToString(NotifyFunction._dictAccess));
             cfg.SaveToFile();
         };
 
@@ -87,21 +32,9 @@ public sealed partial class PingTab : Control
         var prototypeManager = IoCManager.Resolve<IPrototypeManager>();
         var cfg = IoCManager.Resolve<IConfigurationManager>();
         RobustXamlLoader.Load(this);
-        if (cfg.GetCVar(CCCCVars.SysNotifyCvar) != "NOTHING")
-        {
-            DictCvar = StringToPairList(cfg.GetCVar(CCCCVars.SysNotifyCvar));
-        }
         foreach (var proto in prototypeManager.EnumeratePrototypes<GhostRoleGroupNotify>())
         {
-            if (DictCvar.ContainsKey(proto.ID))
-            {
-                _dictAccess.Add(proto.ID, DictCvar[proto.ID]);
-            }
-            else
-            {
-                _dictAccess.Add(proto.ID, false);
-            }
-            AddCheckBox(proto.Name, proto.ID, cfg, _dictAccess[proto.ID]);
+            AddCheckBox(proto.Name, proto.ID, cfg, NotifyFunction._dictAccess[proto.ID]);
         }
         Control.Initialize();
     }
