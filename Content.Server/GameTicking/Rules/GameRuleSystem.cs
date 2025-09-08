@@ -1,12 +1,12 @@
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Chat.Managers;
-using Content.Shared.DeadSpace.CCCCVars;
 using Content.Shared.GameTicking.Components;
 using Robust.Server.GameObjects;
-using Robust.Server.Player;
-using Robust.Shared.Configuration;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Content.Shared.DeadSpace.CCCCVars;
+using Robust.Server.Player;
+using Robust.Shared.Configuration;
 
 namespace Content.Server.GameTicking.Rules;
 
@@ -16,8 +16,10 @@ public abstract partial class GameRuleSystem<T> : EntitySystem where T : ICompon
     [Dependency] protected readonly IChatManager ChatManager = default!;
     [Dependency] protected readonly GameTicker GameTicker = default!;
     [Dependency] protected readonly IGameTiming Timing = default!;
+    // DS14-start
     [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IConfigurationManager _configurationManager = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    // DS14-end
 
     // Not protected, just to be used in utility methods
     [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
@@ -38,21 +40,22 @@ public abstract partial class GameRuleSystem<T> : EntitySystem where T : ICompon
     {
         if (args.Forced || args.Cancelled)
             return;
-        // DS14-start
-        var useTotalPlayers = _configurationManager.GetCVar(CCCCVars.GameModesUseTotalPlayers);
+
+        var useTotalPlayers = _cfg.GetCVar(CCCCVars.GameModesUseTotalPlayers); // DS14
 
         var query = QueryAllRules();
         while (query.MoveNext(out var uid, out _, out var gameRule))
         {
             var minPlayers = gameRule.MinPlayers;
 
-            int playerCount = useTotalPlayers ? _playerManager.PlayerCount : args.Players.Length;
+            int playerCount = useTotalPlayers ? _playerManager.PlayerCount : args.Players.Length; // DS14
 
-            if (playerCount >= minPlayers)
+            if (playerCount >= minPlayers) // DS14-edit
                 continue;
 
             if (gameRule.CancelPresetOnTooFewPlayers)
             {
+                // DS14-edit-start
                 if (useTotalPlayers)
                 {
                     ChatManager.SendAdminAnnouncement(Loc.GetString("preset-not-enough-current-players",
@@ -66,8 +69,8 @@ public abstract partial class GameRuleSystem<T> : EntitySystem where T : ICompon
                         ("readyPlayersCount", playerCount),
                         ("minimumPlayers", minPlayers),
                         ("presetName", ToPrettyString(uid))));
-        // DS14-end
                 }
+                // DS14-edit-end
                 args.Cancel();
             }
             else
@@ -115,6 +118,7 @@ public abstract partial class GameRuleSystem<T> : EntitySystem where T : ICompon
     /// </summary>
     protected virtual void Added(EntityUid uid, T component, GameRuleComponent gameRule, GameRuleAddedEvent args)
     {
+
     }
 
     /// <summary>
@@ -122,6 +126,7 @@ public abstract partial class GameRuleSystem<T> : EntitySystem where T : ICompon
     /// </summary>
     protected virtual void Started(EntityUid uid, T component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
+
     }
 
     /// <summary>
@@ -129,16 +134,15 @@ public abstract partial class GameRuleSystem<T> : EntitySystem where T : ICompon
     /// </summary>
     protected virtual void Ended(EntityUid uid, T component, GameRuleComponent gameRule, GameRuleEndedEvent args)
     {
+
     }
 
     /// <summary>
     /// Called at the end of a round when text needs to be added for a game rule.
     /// </summary>
-    protected virtual void AppendRoundEndText(EntityUid uid,
-        T component,
-        GameRuleComponent gameRule,
-        ref RoundEndTextAppendEvent args)
+    protected virtual void AppendRoundEndText(EntityUid uid, T component, GameRuleComponent gameRule, ref RoundEndTextAppendEvent args)
     {
+
     }
 
     /// <summary>
@@ -146,6 +150,7 @@ public abstract partial class GameRuleSystem<T> : EntitySystem where T : ICompon
     /// </summary>
     protected virtual void ActiveTick(EntityUid uid, T component, GameRuleComponent gameRule, float frameTime)
     {
+
     }
 
     public override void Update(float frameTime)
