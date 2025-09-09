@@ -34,10 +34,7 @@ public sealed partial class GhostRoleNotifySystem : EntitySystem
             {
                 if (_entityManager.HasComponent<GhostComponent>(player.AttachedEntity))
                 {
-                    if (_entityManager.HasComponent<GhostRoleNotifysComponent>(uid))
-                    {
                         RaiseNetworkEvent(new PingMessege(component.GroupPrototype), player);
-                    }
                 }
             }
 
