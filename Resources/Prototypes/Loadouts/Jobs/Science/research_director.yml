@@ -75,12 +75,6 @@
   equipment:
     outerClothing: ClothingOuterWinterRD
 
-# Shoes
-- type: loadout
-  id: LeatherShoes
-  equipment:
-    shoes: ClothingShoesLeather
-
 # Underwear
 - type: loadout
   id: UnderwearBottomBoxersResearchDirector

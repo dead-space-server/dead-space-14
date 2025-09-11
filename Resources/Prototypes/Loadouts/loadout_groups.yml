@@ -1171,7 +1171,6 @@
   loadouts:
   - BrownShoes
   - ScienceWinterBoots
-  - LeatherShoes
   - ShoesBootsLaceup
 
 - type: loadoutGroup
