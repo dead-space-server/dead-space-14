@@ -131,6 +131,6 @@
             state: jumpsuit-female
   - type: Language
     selectedLanguage: GeneralLanguage
-    languagesId:
+    knownLanguages:
     - KoboltLanguage
     - GeneralLanguage

@@ -32,7 +32,7 @@
         60: Dead
     - type: Language
       selectedLanguage: XenomorphLanguage
-      languagesId:
+      knownLanguages:
       - XenomorphLanguage
     - type: TypingIndicator
       proto: lizard

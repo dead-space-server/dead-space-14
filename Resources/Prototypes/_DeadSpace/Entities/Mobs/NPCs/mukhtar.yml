@@ -53,7 +53,7 @@
     # - id: MukhtarIDCard
   - type: Language
     selectedLanguage: DogLanguage
-    languagesId:
+    knownLanguages:
     - DogLanguage
   - type: InteractionPopup
     successChance: 0.05

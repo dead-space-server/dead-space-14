@@ -479,9 +479,9 @@
     - state: ai_camera
       shader: unshaded
       map: ["base"]
-  - type: Language # DS14-Languages 
+  - type: Language # DS14-Languages
     selectedLanguage: GeneralLanguage
-    languagesId:
+    knownLanguages:
     - GeneralLanguage
     - ArachnidLanguage
     - SlimeLanguage

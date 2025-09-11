@@ -82,7 +82,7 @@
   - type: Sanity # DS14
   - type: Language # DS14-Languages
     selectedLanguage: GeneralLanguage
-    languagesId:
+    knownLanguages:
     - GeneralLanguage
     - ReptilianLanguage
 

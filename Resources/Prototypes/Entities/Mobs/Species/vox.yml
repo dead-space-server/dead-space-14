@@ -164,7 +164,7 @@
   - type: Sanity # DS14
   - type: Language # DS14-Languages
     selectedLanguage: GeneralLanguage
-    languagesId:
+    knownLanguages:
     - GeneralLanguage
     - VoxLanguage
   # - type: FootPrints # Backmen-footsteps

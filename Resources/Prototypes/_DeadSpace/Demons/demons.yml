@@ -64,7 +64,7 @@
         Heat: 5
   - type: Language
     selectedLanguage: DemonLanguage
-    languagesId:
+    knownLanguages:
     - DemonLanguage
   - type: Demon
   - type: Damageable

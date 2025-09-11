@@ -113,7 +113,7 @@
   - type: ImmunitetInfectionDead # DS14
   - type: Language # DS14-Languages
     selectedLanguage: GeneralLanguage
-    languagesId:
+    knownLanguages:
     - GeneralLanguage
     - DionaLanguage
   # - type: FootPrints # Backmen-footsteps

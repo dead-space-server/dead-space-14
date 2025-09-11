@@ -126,7 +126,7 @@
   - type: SlimePerson # DS14: For emote panel
   - type: Language # DS14-Languages
     selectedLanguage: GeneralLanguage
-    languagesId:
+    knownLanguages:
     - GeneralLanguage
     - SlimeLanguage
   # DS14-slimeperson-internal-magic-mirror-start

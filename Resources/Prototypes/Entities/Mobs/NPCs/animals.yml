@@ -53,7 +53,7 @@
     bloodMaxVolume: 50
   - type: Language # DS14-Languages
     selectedLanguage: MouseLanguage
-    languagesId:
+    knownLanguages:
     - MouseLanguage
   - type: MeleeWeapon
     soundHit:
@@ -251,7 +251,7 @@
   - type: ExaminableHunger
   - type: Language # DS14-Languages
     selectedLanguage: ChickenLanguage
-    languagesId:
+    knownLanguages:
     - ChickenLanguage
   - type: SentienceTarget
     flavorKind: station-event-random-sentience-flavor-organic
@@ -553,7 +553,7 @@
     grindableSolutionName: food
   - type: Language # DS14-Languages
     selectedLanguage: MothLanguage
-    languagesId:
+    knownLanguages:
     - MothLanguage
   - type: ZombieAccentOverride
     accent: zombieMoth
@@ -696,7 +696,7 @@
   - type: ExaminableHunger
   - type: Language # DS14-Languages
     selectedLanguage: ChickenLanguage
-    languagesId:
+    knownLanguages:
     - ChickenLanguage
   - type: SentienceTarget
     flavorKind: station-event-random-sentience-flavor-organic
@@ -910,7 +910,7 @@
     - FoodRecipes
   - type: Language # DS14-Languages
     selectedLanguage: CowLanguage
-    languagesId:
+    knownLanguages:
     - CowLanguage
   - type: TTS
     voice: Thrud
@@ -971,7 +971,7 @@
       path: /Audio/Voice/Arachnid/arachnid_chitter.ogg
   - type: Language # DS14-Languages
     selectedLanguage: CrabLanguage
-    languagesId:
+    knownLanguages:
     - CrabLanguage
   - type: Bloodstream
     bloodMaxVolume: 50
@@ -1230,7 +1230,7 @@
     templateId: kangaroo
   - type: Language # DS14-Languages
     selectedLanguage: KangarooLanguage
-    languagesId:
+    knownLanguages:
     - KangarooLanguage
   - type: Butcherable
     spawned:
@@ -1508,7 +1508,7 @@
   - type: LizardAccent
   - type: Language # DS14-Languages
     selectedLanguage: KoboltLanguage
-    languagesId:
+    knownLanguages:
     - KoboltLanguage
   - type: Speech
     speechSounds: Lizard
@@ -1791,7 +1791,7 @@
       amount: 1
   - type: Language # DS14-Languages
     selectedLanguage: MouseLanguage
-    languagesId:
+    knownLanguages:
     - MouseLanguage
   - type: Tag
     tags:
@@ -2420,7 +2420,7 @@
     solution: melee
   - type: Language # DS14-Languages
     selectedLanguage: XenomorphLanguage
-    languagesId:
+    knownLanguages:
     - XenomorphLanguage
   - type: InteractionPopup
     successChance: 0.5
@@ -2840,7 +2840,7 @@
       amount: 2
   - type: Language # DS14-Languages
     selectedLanguage: DogLanguage
-    languagesId:
+    knownLanguages:
     - DogLanguage
   - type: InteractionPopup
     interactSuccessString: petting-success-dog
@@ -2992,7 +2992,7 @@
       amount: 3
   - type: Language # DS14-Languages
     selectedLanguage: CatLanguage
-    languagesId:
+    knownLanguages:
     - CatLanguage
   - type: InteractionPopup
     successChance: 0.7
@@ -3046,9 +3046,9 @@
   description: Explosive kitten.
   components:
   # DS14-start
-  - type: Item 
-    size: Huge 
-  - type: MultiHandedItem 
+  - type: Item
+    size: Huge
+  - type: MultiHandedItem
   # DS14-end
   - type: Sprite
     layers:
@@ -3392,7 +3392,7 @@
       amount: 1
   - type: Language # DS14-Languages
     selectedLanguage: MouseLanguage
-    languagesId:
+    knownLanguages:
     - MouseLanguage
   - type: Tag
     tags:
@@ -3503,7 +3503,7 @@
       path: /Audio/Animals/pig_oink.ogg
   - type: Language # DS14-Languages
     selectedLanguage: PigLanguage
-    languagesId:
+    knownLanguages:
     - PigLanguage
   - type: SentienceTarget
     flavorKind: station-event-random-sentience-flavor-organic
@@ -3602,7 +3602,7 @@
   components:
   - type: Language # DS14-Languages
     selectedLanguage: DionaLanguage
-    languagesId:
+    knownLanguages:
     - DionaLanguage
 
 - type: entity

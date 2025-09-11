@@ -126,7 +126,7 @@
     - FootstepSound
   - type: Language
     selectedLanguage: NecromorfLanguage
-    languagesId:
+    knownLanguages:
     - NecromorfLanguage
   - type: Damageable
     damageModifierSet: DeadSquadNecro

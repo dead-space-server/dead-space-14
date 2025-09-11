@@ -47,7 +47,7 @@ public sealed class LanguageSystem : EntitySystem
 
         if (EntityManager.TryGetComponent<ActorComponent?>(uid, out var actorComponent))
         {
-            var ev = new RequestLanguageMenuEvent(uid.Id, component.LanguagesId);
+            var ev = new RequestLanguageMenuEvent(uid.Id, component.KnownLanguages);
 
             ev.Prototypes.Sort();
             RaiseNetworkEvent(ev, actorComponent.PlayerSession);
@@ -85,12 +85,12 @@ public sealed class LanguageSystem : EntitySystem
         return string.Join(' ', words);
     }
 
-    public List<string>? GetKnowsLanguage(EntityUid entity)
+    public List<string>? GetKnowsLanguage(EntityUid entity, LanguageComponent? component = null)
     {
-        if (TryComp<LanguageComponent>(entity, out var language))
-            return language.LanguagesId;
-        else
+        if (!Resolve(entity, ref component))
             return null;
+
+        return component.KnownLanguages;
     }
 
     public bool KnowsLanguage(EntityUid receiver, string senderLanguageId)
@@ -129,11 +129,8 @@ public sealed class LanguageSystem : EntitySystem
             if (session.AttachedEntity == null)
                 continue;
 
-            if (TryComp<LanguageComponent>(session.AttachedEntity, out var lanquage) && KnowsLanguage(session.AttachedEntity.Value, languageId))
-            {
-                Console.WriteLine(session.AttachedEntity + " знает " + languageId);
+            if (HasComp<LanguageComponent>(session.AttachedEntity) && KnowsLanguage(session.AttachedEntity.Value, languageId))
                 understanding.Add(session);
-            }
         }
 
         return understanding.ToArray();

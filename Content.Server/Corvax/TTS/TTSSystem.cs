@@ -1,5 +1,3 @@
-// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
-// DS14-Languages - система TTS переписана для поддержки языков
 
 using System.Threading.Tasks;
 using Content.Server.Chat.Systems;

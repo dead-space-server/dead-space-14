@@ -320,7 +320,7 @@
       amount: 2
   - type: Language # DS14-Languages
     selectedLanguage: DogLanguage
-    languagesId:
+    knownLanguages:
     - DogLanguage
   - type: InteractionPopup
     successChance: 0.5
@@ -418,7 +418,7 @@
       amount: 3
   - type: Language # DS14-Languages
     selectedLanguage: DogLanguage
-    languagesId:
+    knownLanguages:
     - DogLanguage
   - type: InteractionPopup
     successChance: 0.7

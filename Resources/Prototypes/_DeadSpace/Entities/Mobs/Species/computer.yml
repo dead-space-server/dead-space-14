@@ -95,7 +95,7 @@
   - type: ComputerEmotes # DS14: For emote panel
   - type: Language
     selectedLanguage: GeneralLanguage
-    languagesId:
+    knownLanguages:
     - MachineLanguage
     - GeneralLanguage
   # - type: FootPrints

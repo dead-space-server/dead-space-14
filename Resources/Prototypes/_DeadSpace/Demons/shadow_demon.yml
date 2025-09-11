@@ -121,7 +121,7 @@
       - CannotSuicide
   - type: Language
     selectedLanguage: DemonLanguage
-    languagesId:
+    knownLanguages:
     - DemonLanguage
     - GeneralLanguage
 

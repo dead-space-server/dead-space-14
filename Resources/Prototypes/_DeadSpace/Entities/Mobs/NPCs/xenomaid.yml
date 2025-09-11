@@ -89,7 +89,7 @@
         volume: 20
   - type: Language
     selectedLanguage: XenomorphLanguage
-    languagesId:
+    knownLanguages:
     - XenomorphLanguage
   - type: TypingIndicator
     proto: alien

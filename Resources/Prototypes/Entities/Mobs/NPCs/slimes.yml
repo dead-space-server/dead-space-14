@@ -122,7 +122,7 @@
   components:
   - type: Language # DS14-Languages
     selectedLanguage: SlimeLanguage
-    languagesId:
+    knownLanguages:
     - SlimeLanguage
   - type: GhostTakeoverAvailable
   - type: GhostRole

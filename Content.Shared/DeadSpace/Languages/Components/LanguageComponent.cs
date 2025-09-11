@@ -10,7 +10,7 @@ namespace Content.Shared.DeadSpace.Languages.Components;
 public sealed partial class LanguageComponent : Component
 {
     [DataField]
-    public List<string> LanguagesId = new();
+    public List<string> KnownLanguages = new();
 
     [DataField]
     public string SelectedLanguage = String.Empty;

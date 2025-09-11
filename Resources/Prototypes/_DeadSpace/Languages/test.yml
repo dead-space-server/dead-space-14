@@ -32,7 +32,7 @@
 #     voice: En0
 #   - type: Language
 #     selectedLanguage: language1
-#     languagesId:
+#     knownLanguages:
 #     - language1
 
 # - type: entity
@@ -43,5 +43,5 @@
 #     voice: En0
 #   - type: Language
 #     selectedLanguage: language2
-#     languagesId:
+#     knownLanguages:
 #     - language2

@@ -18,7 +18,7 @@
         color: "#525252"
   - type: Language
     selectedLanguage: GeneralLanguage
-    languagesId:
+    knownLanguages:
     - MachineLanguage
     - GeneralLanguage
 

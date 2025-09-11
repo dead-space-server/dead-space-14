@@ -52,7 +52,7 @@
     speechSounds: Lizard
   - type: Language
     selectedLanguage: GeneralLanguage
-    languagesId:
+    knownLanguages:
     - DemonLanguage
     - GeneralLanguage
   # - type: FootPrints

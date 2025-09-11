@@ -168,9 +168,9 @@
       Acidic: [Touch, Ingestion]
   - type: TTS
     voice: Sunboy_mannered
-  - type: Language # DS14 
+  - type: Language # DS14
     selectedLanguage: ArachnidLanguage
-    languagesId:
+    knownLanguages:
     - ArachnidLanguage
 
 - type: entity

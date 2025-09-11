@@ -223,7 +223,7 @@
   - type: LieDown # DS14
   - type: Language # DS14-Languages
     selectedLanguage: GeneralLanguage
-    languagesId:
+    knownLanguages:
     - GeneralLanguage
 
 - type: entity

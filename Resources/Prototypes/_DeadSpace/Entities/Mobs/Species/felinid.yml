@@ -65,7 +65,7 @@
   - type: CatVocal # For cat emotes
   - type: Language
     selectedLanguage: GeneralLanguage
-    languagesId:
+    knownLanguages:
     - CatLanguage
     - GeneralLanguage
   # - type: FootPrints

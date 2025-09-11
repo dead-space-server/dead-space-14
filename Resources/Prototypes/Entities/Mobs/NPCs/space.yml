@@ -167,7 +167,7 @@
       collection: FootstepBounce
   - type: Language # DS14-Languages
     selectedLanguage: KangarooLanguage
-    languagesId:
+    knownLanguages:
     - KangarooLanguage
   - type: Butcherable
     spawned:
@@ -250,7 +250,7 @@
     transferAmount: 4
   - type: Language # DS14-Languages
     selectedLanguage: ArachnidLanguage
-    languagesId:
+    knownLanguages:
     - ArachnidLanguage
   - type: InteractionPopup
     successChance: 0.20

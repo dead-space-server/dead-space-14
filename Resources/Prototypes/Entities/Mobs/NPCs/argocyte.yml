@@ -17,7 +17,7 @@
   - type: SolutionContainerManager
   - type: Language # DS14-Languages
     selectedLanguage: XenomorphLanguage
-    languagesId:
+    knownLanguages:
     - XenomorphLanguage
   - type: Bloodstream
     bloodReagent: FerrochromicAcid
