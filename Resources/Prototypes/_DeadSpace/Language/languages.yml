@@ -1,6 +1,9 @@
 - type: language
   id: GeneralLanguage
   name: Обще-галактический
+  generateTTSForLexicon: false
+  lexiconSound:
+    path: /Audio/Items/Toys/weh.ogg # Если захотите, то найдёте нормальный звук
   lexicon:
   - ала
   - вети
