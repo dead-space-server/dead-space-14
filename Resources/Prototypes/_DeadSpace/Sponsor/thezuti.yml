@@ -1,73 +1,73 @@
 # Loadout Definitions
 - type: sponsorLoadout
-  id: TheZuti
-  entity: ClothingBackpackTheZuti
+  id: TheZuTi
+  entity: ClothingBackpackTheZuTi
   sponsorOnly: true
 
 - type: sponsorLoadout
-  id: TheZutiHypospray
-  entity: HypoTheZuti
+  id: TheZuTiHypospray
+  entity: HypoTheZuTi
   sponsorOnly: true
   whitelistJobs: [ChiefMedicalOfficer, SeniorPhysician, Chemist, MedicalDoctor, Paramedic, Coroner, MedicalIntern, ResearchDirector, SeniorResearcher, Scientist, ResearchAssistant, BlueShieldOfficer]
 
 - type: sponsorLoadout
-  id: TheZutiWeaponCrusher
-  entity: WeaponCrusherTheZuti
+  id: TheZuTiWeaponCrusher
+  entity: WeaponCrusherTheZuTi
   sponsorOnly: true
   whitelistJobs: [SalvageSpecialist, SeniorSalvageSpecialist]
 
 - type: sponsorLoadout
-  id: TheZutiWeaponKinetic
-  entity: WeaponProtoKineticAcceleratorTheZuti
+  id: TheZuTiWeaponKinetic
+  entity: WeaponProtoKineticAcceleratorTheZuTi
   sponsorOnly: true
   whitelistJobs: [SalvageSpecialist, SeniorSalvageSpecialist]
 
 # Backpack
 - type: entity
   parent: ClothingBackpack
-  id: ClothingBackpackTheZuti
+  id: ClothingBackpackTheZuTi
   name: акулья блюспейс сумка
   description: Наплечная сумка с дизайном акульих зубов и технологией блюспейс сжатия пространства. Если прислушаться то внутри сумки слышно шум моря.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/backpack.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/backpack.rsi
   - type: Clothing
-    sprite: _DeadSpace/Sponsor/TheZuti/backpack.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/backpack.rsi
   - type: Storage
     maxItemSize: Huge
     grid:
     - 0,0,19,9
   - type: StorageFill
     contents:
-    - id: ClothingOuterHardsuitTheZuti
-    - id: ClothingNeckTheZuti
-    - id: ClothingBeltTheZuti
-    - id: ClothingShoesBootsMagTheZuti
-    - id: ClothingShoesBootsJackTheZuti
-    - id: ClothingHandsGlovesCombatTheZuti
-    - id: ClothingUniformJumpsuitTheZuti
-    - id: ClothingEyesGlassesTheZuti
-    - id: ClothingMaskGasTheZuti
-    - id: PDATheZuti
-    - id: ClothingHeadsetTheZuti
-    - id: JetpackVoidFilledTheZuti
-    - id: PaperLawTheZuti
+    - id: ClothingOuterHardsuitTheZuTi
+    - id: ClothingNeckTheZuTi
+    - id: ClothingBeltTheZuTi
+    - id: ClothingShoesBootsMagTheZuTi
+    - id: ClothingShoesBootsJackTheZuTi
+    - id: ClothingHandsGlovesCombatTheZuTi
+    - id: ClothingUniformJumpsuitTheZuTi
+    - id: ClothingEyesGlassesTheZuTi
+    - id: ClothingMaskGasTheZuTi
+    - id: PDATheZuTi
+    - id: ClothingHeadsetTheZuTi
+    - id: JetpackVoidFilledTheZuTi
+    - id: PaperLawTheZuTi
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 # Belt
 - type: entity
   parent: ClothingBeltStorageBase
-  id: ClothingBeltTheZuti
+  id: ClothingBeltTheZuTi
   name: решимость
   description: Парящее сердце, вмещающее в себя различные инструменты и предметы. Неизвестно как... но оно всегда дает вам тот инструмент, который нужен вам в данный момент.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/belt.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/belt.rsi
   - type: Clothing
-    sprite: _DeadSpace/Sponsor/TheZuti/belt.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/belt.rsi
     clothingVisuals:
       belt:
       - state: equipped-BELT
@@ -79,42 +79,42 @@
     - 0,0,9,1
   - type: StorageFill
     contents:
-    - id: GasAnalyzerTheZuti
-    - id: HolofanProjectorTheZuti
-    - id: JawsOfLifeTheZuti
-    - id: HandHeldMassScannerTheZuti
-    - id: MultitoolTheZuti
-    - id: PowerDrillTheZuti
-    - id: AdvancedMineralScannerTheZuti
-    - id: WelderExperimentalTheZuti
+    - id: GasAnalyzerTheZuTi
+    - id: HolofanProjectorTheZuTi
+    - id: JawsOfLifeTheZuTi
+    - id: HandHeldMassScannerTheZuTi
+    - id: MultitoolTheZuTi
+    - id: PowerDrillTheZuTi
+    - id: AdvancedMineralScannerTheZuTi
+    - id: WelderExperimentalTheZuTi
 
 # Neck
 - type: entity
   parent: ClothingNeckBase
-  id: ClothingNeckTheZuti
+  id: ClothingNeckTheZuTi
   name: плащ героя
   description: Порванный плащ, прошедший множество сражений, такие носили герои древности.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/cloak.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/cloak.rsi
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 # Hardsuit
 - type: entity
   parent: ClothingOuterHardsuitAtmos
-  id: ClothingOuterHardsuitTheZuti
+  id: ClothingOuterHardsuitTheZuTi
   name: скафандр королевской стражи
   description: Бронированный скафандр с защитой 5 класса прочности стилизованный под латный доспех.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/hardsuit.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/hardsuit.rsi
   - type: Clothing
-    sprite: _DeadSpace/Sponsor/TheZuti/hardsuit.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/hardsuit.rsi
   - type: ToggleableClothing
-    clothingPrototype: ClothingHeadHelmetHardsuitTheZuti
+    clothingPrototype: ClothingHeadHelmetHardsuitTheZuTi
   - type: Item
     size: Huge
   - type: ClothingSpeedModifier
@@ -135,15 +135,15 @@
 # Helmet
 - type: entity
   parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
-  id: ClothingHeadHelmetHardsuitTheZuti
+  id: ClothingHeadHelmetHardsuitTheZuTi
   name: шлем скафандра королевской стражи
   description: Смотря в глаза данного латного и тёмного шлема, на удивление, вы наполняетесь решимостью.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/helmet.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/helmet.rsi
   - type: Clothing
-    sprite: _DeadSpace/Sponsor/TheZuti/helmet.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/helmet.rsi
   - type: PointLight
     color: "#e9baff"
     radius: 7
@@ -164,48 +164,48 @@
 # Gloves
 - type: entity
   parent: ClothingHandsGlovesCombat
-  id: ClothingHandsGlovesCombatTheZuti
+  id: ClothingHandsGlovesCombatTheZuTi
   name: боевые перчатки валькирии
   description: Сделанные на заказ боевые перчатки с удлинёнными рукавицами. Ткань укреплена углеродными нитями что обеспечивает надежную защиту рук.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/gloves.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/gloves.rsi
   - type: Clothing
-    sprite: _DeadSpace/Sponsor/TheZuti/gloves.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/gloves.rsi
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 # Boots
 - type: entity
   parent: ClothingShoesBootsJack
-  id: ClothingShoesBootsJackTheZuti
+  id: ClothingShoesBootsJackTheZuTi
   name: укрепленные берцы
   description: Удобные и прочные походные ботинки, носок и подошва укреплены стальной пластиной вшитой внутрь обуви.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/boots.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/boots.rsi
   - type: Clothing
-    sprite: _DeadSpace/Sponsor/TheZuti/boots.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/boots.rsi
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 # Magboots
 - type: entity
   parent: ClothingShoesBootsMag
-  id: ClothingShoesBootsMagTheZuti
+  id: ClothingShoesBootsMagTheZuTi
   name: стальная поступь
   description: Магнитные ботинки с повышенной защитой. Обшиты пластинами из сплава титана и хрома
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/magboots.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/magboots.rsi
     layers:
     - state: icon
       map: [ "enum.ToggleVisuals.Layer" ]
   - type: Clothing
-    sprite: _DeadSpace/Sponsor/TheZuti/magboots.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/magboots.rsi
   - type: ClothingSpeedModifier
     walkModifier: 1
     sprintModifier: 1
@@ -215,15 +215,15 @@
 # Glasses
 - type: entity
   parent: ClothingEyesHudMultiversal
-  id: ClothingEyesGlassesTheZuti
+  id: ClothingEyesGlassesTheZuTi
   name: продвинутый визор валькирии
   description: Специализированный визор отслеживающий должность и состояние здоровья, выполнен в темно-фиолетовой расцветке.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/hud.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/hud.rsi
   - type: Clothing
-    sprite: _DeadSpace/Sponsor/TheZuti/hud.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/hud.rsi
   - type: EyeProtection
   - type: IdentityBlocker
     coverage: EYES
@@ -233,45 +233,45 @@
 # Jumpsuit
 - type: entity
   parent: ClothingUniformBase
-  id: ClothingUniformJumpsuitTheZuti
+  id: ClothingUniformJumpsuitTheZuTi
   name: деловой костюм валькирии
   description: Брюки, белая рубашка и подтяжки, которые подчеркивают образ. Идеальный вариант для настоящих акул бизнеса.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/jumpsuit.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/jumpsuit.rsi
   - type: Clothing
-    sprite: _DeadSpace/Sponsor/TheZuti/jumpsuit.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/jumpsuit.rsi
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 # Gas Mask
 - type: entity
   parent: ClothingMaskGasSyndicate
-  id: ClothingMaskGasTheZuti
+  id: ClothingMaskGasTheZuTi
   name: боевой респиратор валькирии
   description: Улучшенная модель боевого респиратора с повышенной эффективностью фильтрации воздуха.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/gasmask.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/gasmask.rsi
   - type: Clothing
-    sprite: _DeadSpace/Sponsor/TheZuti/gasmask.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/gasmask.rsi
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 # Headset
 - type: entity
   parent: ClothingHeadset
-  id: ClothingHeadsetTheZuti
+  id: ClothingHeadsetTheZuTi
   name: гарнитура рыцаря
   description: Темно-фиолетовая гарнитура, неизвестно почему, но слыша голос с этой гарнитуры вам хочется извинится перед рыцарем...
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/headset.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/headset.rsi
   - type: Clothing
-    sprite: _DeadSpace/Sponsor/TheZuti/headset.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/headset.rsi
   - type: Headset
     color: "#7b4fdb"
   - type: Tag
@@ -279,19 +279,19 @@
 
 # Jetpack
 - type: entity
-  id: JetpackVoidFilledTheZuti
+  id: JetpackVoidFilledTheZuTi
   parent: JetpackVoidFilled
   name: поясной джетпак «крылья валькирии»
   description: Технологичный и компактный джетпак на пояс с увеличенным запасом баллона за счёт экстремального сжатия газа.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/jetpack.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/jetpack.rsi
   - type: Item
-    sprite: _DeadSpace/Sponsor/TheZuti/jetpack.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/jetpack.rsi
     size: Huge
   - type: Clothing
-    sprite: _DeadSpace/Sponsor/TheZuti/jetpack.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/jetpack.rsi
     slots:
       - back
       - suitStorage
@@ -302,17 +302,17 @@
 
 # Hypospray
 - type: entity
-  id: HypoTheZuti
+  id: HypoTheZuTi
   name: гипоспрей рыцаря
   parent: BaseItem
   description: Военный гипоспрей для быстрого ввода реагентов, благодаря конструкции крайне прост в применении даже в пылу сражения.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/hypo.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/hypo.rsi
     state: icon
   - type: Item
-    sprite: _DeadSpace/Sponsor/TheZuti/hypo.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/hypo.rsi
   - type: SolutionContainerManager
     solutions:
       hypospray:
@@ -328,39 +328,39 @@
 
 # Crusher
 - type: entity
-  id: WeaponCrusherTheZuti
+  id: WeaponCrusherTheZuTi
   parent: WeaponCrusherGlaive
   name: Справедливость
   description: Копье из чистой энергии. Почти невесомое, но удары его сильны, словно тяжесть совершенных грехов.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/crusher.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/crusher.rsi
     layers:
     - state: icon
   - type: Item
-    sprite: _DeadSpace/Sponsor/TheZuti/crusher.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/crusher.rsi
     size: Normal
   - type: Clothing
-    sprite: _DeadSpace/Sponsor/TheZuti/crusher.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/crusher.rsi
     quickEquip: false
     slots:
     - suitStorage
   - type: Gun
-    soundGunshot: /Audio/_DeadSpace/Sponsor/TheZuti/shot.ogg
+    soundGunshot: /Audio/_DeadSpace/Sponsor/TheZuTi/shot.ogg
     fireRate: 1
     useKey: false
   - type: RechargeBasicEntityAmmo
     rechargeCooldown: 0.5
     rechargeSound:
-      path: /Audio/_DeadSpace/Sponsor/TheZuti/reload.ogg
+      path: /Audio/_DeadSpace/Sponsor/TheZuTi/reload.ogg
   - type: BasicEntityAmmoProvider
-    proto: BulletChargeTheZuti
+    proto: BulletChargeTheZuTi
     capacity: 1
     count: 1
 
 - type: entity
-  id: BulletChargeTheZuti
+  id: BulletChargeTheZuTi
   name: charge bolt
   parent: BulletCharge
   categories: [ HideSpawnMenu ]
@@ -368,7 +368,7 @@
   components:
   - type: Sprite
     noRot: false
-    sprite: _DeadSpace/Sponsor/TheZuti/projectile_crusher.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/projectile_crusher.rsi
     layers:
       - state: projectile
         shader: unshaded
@@ -376,7 +376,7 @@
 #proto-kinetic accelerator
 - type: entity
   parent: WeaponProtoKineticAcceleratorBase
-  id: WeaponProtoKineticAcceleratorTheZuti
+  id: WeaponProtoKineticAcceleratorTheZuTi
   categories: [ HideSpawnMenu ]
   name: Правосудие
   description: Один взгляд на это копье дает вам понять о неотвратимости судьбы. Божественной кары не избежать и остается только молиться.
@@ -390,33 +390,33 @@
     availableModes:
     - SemiAuto
     soundGunshot:
-      path: /Audio/_DeadSpace/Sponsor/TheZuti/shot_kinetik.ogg
+      path: /Audio/_DeadSpace/Sponsor/TheZuTi/shot_kinetik.ogg
   - type: BasicEntityAmmoProvider
-    proto: BulletKineticTheZuti
+    proto: BulletKineticTheZuTi
     capacity: 1
     count: 1
   - type: RechargeBasicEntityAmmo
     rechargeCooldown: 0.75
     rechargeSound:
-      path: /Audio/_DeadSpace/Sponsor/TheZuti/reload_kinetik.ogg
+      path: /Audio/_DeadSpace/Sponsor/TheZuTi/reload_kinetik.ogg
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/kinetic_accelerator.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/kinetic_accelerator.rsi
     layers:
     - state: icon
     - state: animation-icon
       visible: false
       map: [ "empty-icon" ]
   - type: Item
-    sprite: _DeadSpace/Sponsor/TheZuti/kinetic_accelerator.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/kinetic_accelerator.rsi
     size: Normal
   - type: Clothing
-    sprite: _DeadSpace/Sponsor/TheZuti/kinetic_accelerator.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/kinetic_accelerator.rsi
     quickEquip: false
     slots:
     - suitStorage
 
 - type: entity
-  id: BulletKineticTheZuti
+  id: BulletKineticTheZuTi
   name: kinetic bolt
   parent: BulletKinetic
   categories: [ HideSpawnMenu ]
@@ -424,7 +424,7 @@
   components:
   - type: Sprite
     noRot: false
-    sprite: _DeadSpace/Sponsor/TheZuti/projectile_kinetic.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/projectile_kinetic.rsi
     layers:
     - state: projectile
       shader: unshaded
@@ -432,15 +432,15 @@
 # PDA
 - type: entity
   parent: BaseMedicalPDA
-  id: PDATheZuti
+  id: PDATheZuTi
   name: КПК рыцаря
   description: Темно-фиолетовый кпк с увеличенным экраном и поддержкой систем глобального позиционирования.
   categories: [ HideSpawnMenu ]
   components:
   - type: Icon
-    sprite: _DeadSpace/Sponsor/TheZuti/pda.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/pda.rsi
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/pda.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/pda.rsi
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
   - type: CartridgeLoader
@@ -465,13 +465,13 @@
 # JawsOfLife
 - type: entity
   parent: SyndicateJawsOfLife
-  id: JawsOfLifeTheZuti
+  id: JawsOfLifeTheZuTi
   name: челюсти жизни валькирии
   description: Челюсти жизни выполненные на заказ. Имеет повышенную эффективность и темно-фиолетовый дизайн.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/tools_jawsoflife.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/tools_jawsoflife.rsi
     state: syn_jaws_pry
   - type: Item
     inhandVisuals:
@@ -484,13 +484,13 @@
     entries:
     - behavior: Prying
       sprite:
-        sprite: _DeadSpace/Sponsor/TheZuti/tools_jawsoflife.rsi
+        sprite: _DeadSpace/Sponsor/TheZuTi/tools_jawsoflife.rsi
         state: syn_jaws_pry
       useSound: /Audio/Items/jaws_pry.ogg
       changeSound: /Audio/Items/change_jaws.ogg
     - behavior: Cutting
       sprite:
-        sprite: _DeadSpace/Sponsor/TheZuti/tools_jawsoflife.rsi
+        sprite: _DeadSpace/Sponsor/TheZuTi/tools_jawsoflife.rsi
         state: syn_jaws_cutter
       useSound: /Audio/Items/jaws_cut.ogg
       changeSound: /Audio/Items/change_jaws.ogg
@@ -502,16 +502,16 @@
 # drill
 - type: entity
   parent: PowerDrill
-  id: PowerDrillTheZuti
+  id: PowerDrillTheZuTi
   name: дрель валькирии
   description: Дрель выполненная на заказ. Имеет повышенную эффективность и темно-фиолетовый дизайн.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/tools_powerdrill.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/tools_powerdrill.rsi
     state: drill_screw
   - type: Item
-    sprite: _DeadSpace/Sponsor/TheZuti/tools_powerdrill.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/tools_powerdrill.rsi
     size: Small
   - type: Tool
     qualities:
@@ -523,7 +523,7 @@
     entries:
     - behavior: Screwing
       sprite:
-        sprite: _DeadSpace/Sponsor/TheZuti/tools_powerdrill.rsi
+        sprite: _DeadSpace/Sponsor/TheZuTi/tools_powerdrill.rsi
         state: drill_screw
       useSound:
         path: /Audio/Items/drill_use.ogg
@@ -531,7 +531,7 @@
         path: /Audio/Items/change_drill.ogg
     - behavior: Anchoring
       sprite:
-        sprite: _DeadSpace/Sponsor/TheZuti/tools_powerdrill.rsi
+        sprite: _DeadSpace/Sponsor/TheZuTi/tools_powerdrill.rsi
         state: drill_bolt
       useSound:
         path: /Audio/Items/drill_use.ogg
@@ -541,74 +541,74 @@
 # welder
 - type: entity
   parent: WelderExperimental
-  id: WelderExperimentalTheZuti
+  id: WelderExperimentalTheZuTi
   name: сварочный апарат валькирии
   description: Сварочный апарат выполненный на заказ. Имеет повышенную эффективность и темно-фиолетовый дизайн.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/tools_welder.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/tools_welder.rsi
   - type: Item
-    sprite: _DeadSpace/Sponsor/TheZuti/tools_welder.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/tools_welder.rsi
 
 # multitool
 - type: entity
   parent: Multitool
-  id: MultitoolTheZuti
+  id: MultitoolTheZuTi
   name: мультитул валькирии
   description: Мультитул выполненный на заказ. Имеет повышенную эффективность и темно-фиолетовый дизайн.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/tools_multitool.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/tools_multitool.rsi
 
 # mineral scanner
 - type: entity
-  id: AdvancedMineralScannerTheZuti
+  id: AdvancedMineralScannerTheZuTi
   parent: AdvancedMineralScanner
   name: продвинутый сканер минералов валькирии
   description: Сканер минералов выполненный на заказ. Имеет повышенную эффективность и темно-фиолетовый дизайн.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/tools_mineralscanner.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/tools_mineralscanner.rsi
     state: icon
 
 # holofan projector
 - type: entity
   parent: HolofanProjector
-  id: HolofanProjectorTheZuti
+  id: HolofanProjectorTheZuTi
   name: голопроектор валькирии
   description: Голопроектор выполненный на заказ. Имеет повышенную эффективность и темно-фиолетовый дизайн.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/tools_holofanprojector.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/tools_holofanprojector.rsi
     state: icon
   - type: HolosignProjector
-    signProto: HoloFanTheZuti
+    signProto: HoloFanTheZuTi
     chargeUse: 120
 
 - type: entity
-  id: HoloFanTheZuti
+  id: HoloFanTheZuTi
   parent: HoloFan
   name: атмосферный барьер
   description: Барьер из твёрдого света, который блокирует воздух и ничего более.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/holofan.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/holofan.rsi
     state: icon
 
 # gas analyzer
 - type: entity
   name: газоанализатор валькирии
   parent: GasAnalyzer
-  id: GasAnalyzerTheZuti
+  id: GasAnalyzerTheZuTi
   description: Газоанализатор выполненный на заказ. Имеет повышенную эффективность и темно-фиолетовый дизайн.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/tools_gasanalyzer.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/tools_gasanalyzer.rsi
     layers:
     - state: icon
       map: ["analyzer"]
@@ -617,30 +617,30 @@
 - type: entity
   name: ручной сканер масс валькирии
   parent: HandHeldMassScanner
-  id: HandHeldMassScannerTheZuti
+  id: HandHeldMassScannerTheZuTi
   description: Сканер масс выполненный на заказ. Имеет повышенную эффективность и темно-фиолетовый дизайн.
   categories: [ HideSpawnMenu ]
   components:
   - type: Item
-    sprite: _DeadSpace/Sponsor/TheZuti/tools_massscanner.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/tools_massscanner.rsi
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/TheZuti/tools_massscanner.rsi
+    sprite: _DeadSpace/Sponsor/TheZuTi/tools_massscanner.rsi
     state: icon
 
 # Hair
 - type: marking
-  id: HumanHairTheZuti
+  id: HumanHairTheZuTi
   bodyPart: Hair
   markingCategory: Hair
   sponsorOnly: true
   sprites:
-  - sprite: _DeadSpace/Sponsor/TheZuti/hair_marking.rsi
+  - sprite: _DeadSpace/Sponsor/TheZuTi/hair_marking.rsi
     state: hair
 
 # Law
 - type: entity
   parent: PaperPrintedCentcomm
-  id: PaperLawTheZuti
+  id: PaperLawTheZuTi
   name: распечатанный документ
   description: Лист бумаги с заголовком ЦентКома. Страшно даже смотреть на него.
   categories: [ HideSpawnMenu ]
