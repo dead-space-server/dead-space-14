@@ -23,11 +23,6 @@
 #     head: ClothingHeadHatBeretRND
 
 - type: loadout
-  id: RoboticistBeret
-  equipment:
-    head: ClothingHeadHatBeretRobotics
-
-- type: loadout
   id: RoboticistCap
   equipment:
     head: ClothingHeadHatCorpsoft
@@ -56,26 +51,6 @@
     jumpsuit: ClothingUniformJumpskirtScientist
 
 - type: loadout
-  id: ScientistJumpsuitTurtleneck
-  equipment:
-    jumpsuit: ClothingUniformJumpsuitScientistTurtle
-
-- type: loadout
-  id: ScientistJumpskirtTurtleneck
-  equipment:
-    jumpsuit: ClothingUniformJumpskirtScientistTurtle
-
-- type: loadout
-  id: ScientistJumpsuitFormal
-  equipment:
-    jumpsuit: ClothingUniformJumpsuitScientistFormal
-
-- type: loadout
-  id: ScientistJumpskirtFormal
-  equipment:
-    jumpsuit: ClothingUniformJumpskirtScientistFormal
-
-- type: loadout
   id: RoboticistJumpsuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitRoboticist
@@ -84,26 +59,6 @@
   id: RoboticistJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtRoboticist
-
-- type: loadout
-  id: RoboticistJumpsuitOveralls
-  equipment:
-    jumpsuit: ClothingUniformJumpsuitRoboticistOveralls
-
-- type: loadout
-  id: RoboticistJumpskirtOveralls
-  equipment:
-    jumpsuit: ClothingUniformJumpskirtRoboticistOveralls
-
-- type: loadout
-  id: RoboticistJumpsuitWhite
-  equipment:
-    jumpsuit: ClothingUniformJumpsuitRoboticistWhite
-
-- type: loadout
-  id: RoboticistJumpskirtWhite
-  equipment:
-    jumpsuit: ClothingUniformJumpskirtRoboticistWhite
 
 # - type: loadout
 #   id: SeniorResearcherJumpsuit
@@ -136,21 +91,6 @@
   id: ScientistDuffel
   equipment:
     back: ClothingBackpackDuffelScience
-
-- type: loadout
-  id: RoboticistBackpack
-  equipment:
-    back: ClothingBackpackRobotics
-
-- type: loadout
-  id: RoboticistSatchel
-  equipment:
-    back: ClothingBackpackSatchelRobotics
-
-- type: loadout
-  id: RoboticistDuffel
-  equipment:
-    back: ClothingBackpackDuffelRobotics
 
 # OuterClothing
 - type: loadout

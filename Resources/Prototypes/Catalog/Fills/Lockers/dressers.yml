@@ -137,12 +137,6 @@
   components:
   - type: StorageFill
     contents:
-      - id: ClothingUniformJumpsuitResearchDirector
-      - id: ClothingUniformJumpskirtResearchDirector
-      - id: ClothingUniformJumpsuitResearchDirectorShirt
-      - id: ClothingUniformJumpskirtResearchDirectorShirt
-      - id: ClothingUniformJumpsuitResearchDirectorSuit
-      - id: ClothingUniformJumpskirtResearchDirectorSuit
       - id: ClothingNeckMantleRD
       - id: ClothingNeckCloakRd
       - id: ClothingHeadHatBeretRND

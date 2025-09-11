@@ -129,9 +129,6 @@
   loadouts:
   - SeniorResearcherJumpsuit
   - SeniorResearcherJumpskirt
-  - SeniorResearcherJumpsuitTurtleneck
-  - SeniorResearcherJumpskirtTurtleneck
-
 
 - type: loadoutGroup
   id: SeniorResearcherOuterClothing
@@ -139,7 +136,6 @@
   minLimit: 0
   loadouts:
   - SeniorResearcherLabCoat
-  - SeniorResearcherWinterCoat
 
 - type: loadoutGroup
   id: SeniorResearcherPDA
