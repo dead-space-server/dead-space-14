@@ -36,6 +36,7 @@ public sealed partial class EggSystem : SharedEggSystem
 
     private void BeginSpawn(EntityUid uid, EggComponent component, EggSpawnEvent args)
     {
+        if (_net.IsClient) return;
         var spawns = EntitySpawnCollection.GetSpawns(component.SpawnedEntities, _robustRandom);
         var coords = Transform(uid).Coordinates;
         int amount = 3;
