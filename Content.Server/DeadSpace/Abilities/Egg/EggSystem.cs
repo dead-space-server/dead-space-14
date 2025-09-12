@@ -37,7 +37,9 @@ public sealed partial class EggSystem : SharedEggSystem
     private void BeginSpawn(EntityUid uid, EggComponent component, EggSpawnEvent args)
     {
         var spawns = EntitySpawnCollection.GetSpawns(component.SpawnedEntities, _robustRandom);
+        Console.WriteLine(spawns.Count);
         var coords = Transform(uid).Coordinates;
+        int amount = 3;
 
         EntityUid popupEnt = default!;
         if (spawns.Count <= 0)
@@ -46,9 +48,9 @@ public sealed partial class EggSystem : SharedEggSystem
             return;
         }
 
-        foreach (var proto in spawns)
+        for (int i = 0; i < 3; i++) // (var proto in spawns)
         {
-            popupEnt = Spawn(proto, coords.Offset(_robustRandom.NextVector2(0.25f)));
+            popupEnt = Spawn(spawns[i], coords.Offset(_robustRandom.NextVector2(0.25f)));
         }
 
         if (HasComp<MobStateComponent>(uid))
