@@ -31,8 +31,8 @@ public abstract class SharedChatSystem : EntitySystem
 
     public static readonly SoundSpecifier DefaultAnnouncementSound
         = new SoundPathSpecifier("/Audio/_DeadSpace/Announcements/announce.ogg"); // DS14-Announcements
-    public static readonly SoundSpecifier CentComAnnouncementSound
-        = new SoundPathSpecifier("/Audio/_DeadSpace/Announcements/centcomm.ogg"); // DS14-Announcements
+    // public static readonly SoundSpecifier CentComAnnouncementSound
+    //     = new SoundPathSpecifier("/Audio/_DeadSpace/Announcements/centcomm.ogg"); // DS14-Announcements
 
     public static readonly ProtoId<RadioChannelPrototype> CommonChannel = "Common";
 
