@@ -272,7 +272,7 @@ namespace Content.IntegrationTests.Tests
 
             // We consider only non-audio entities, as some entities will just play sounds when they spawn.
             int Count(IEntityManager ent) => ent.EntityCount - ent.Count<AudioComponent>();
-            IEnumerable<EntityUid> Entities(IEntityManager entMan) => entMan.GetEntities().Where(entMan.HasComponent<AudioComponent>);
+            IEnumerable<EntityUid> Entities(IEntityManager entMan) => entMan.GetEntities();
 
             await Assert.MultipleAsync(async () =>
             {
@@ -322,24 +322,36 @@ namespace Content.IntegrationTests.Tests
             await pair.CleanReturnAsync();
         }
 
-        private static string BuildDiffString(IEnumerable<EntityUid> oldEnts, IEnumerable<EntityUid> newEnts, IEntityManager entMan)
+        private static string BuildDiffString(IEnumerable<EntityUid> before, IEnumerable<EntityUid> after, IEntityManager entMan)
         {
-            var sb = new StringBuilder();
-            var addedEnts = newEnts.Except(oldEnts);
-            var removedEnts = oldEnts.Except(newEnts);
-            if (addedEnts.Any())
-                sb.AppendLine("Listing new entities:");
-            foreach (var addedEnt in addedEnts)
+            var diff = new List<string>();
+
+            var beforeSet = new HashSet<EntityUid>(before);
+            var afterSet = new HashSet<EntityUid>(after);
+
+            foreach (var added in afterSet.Except(beforeSet))
             {
-                sb.AppendLine(entMan.ToPrettyString(addedEnt));
+                var name = entMan.GetComponent<MetaDataComponent>(added).EntityName;
+                var proto = entMan.TryGetComponent<MetaDataComponent>(added, out var meta) ? meta.EntityPrototype?.ID ?? "null" : "null";
+                diff.Add($"+ {added} ({name}) proto={proto}");
             }
-            if (removedEnts.Any())
-                sb.AppendLine("Listing removed entities:");
-            foreach (var removedEnt in removedEnts)
+
+            foreach (var removed in beforeSet.Except(afterSet))
             {
-                sb.AppendLine("\t" + entMan.ToPrettyString(removedEnt));
+                var name = entMan.GetComponent<MetaDataComponent>(removed).EntityName;
+                var proto = entMan.TryGetComponent<MetaDataComponent>(removed, out var meta) ? meta.EntityPrototype?.ID ?? "null" : "null";
+                diff.Add($"- {removed} ({name}) proto={proto}");
             }
-            return sb.ToString();
+
+            diff.Add("=== All entities now ===");
+            foreach (var ent in afterSet)
+            {
+                var name = entMan.GetComponent<MetaDataComponent>(ent).EntityName;
+                var proto = entMan.TryGetComponent<MetaDataComponent>(ent, out var meta) ? meta.EntityPrototype?.ID ?? "null" : "null";
+                diff.Add($"* {ent} ({name}) proto={proto}");
+            }
+
+            return string.Join("\n", diff);
         }
 
         private static bool HasRequiredDataField(Component component)
