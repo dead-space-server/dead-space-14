@@ -791,10 +791,6 @@
     color: "#1d8bad"
     canShuttle: false
     global: true
-    sound:
-      path: /Audio/_DeadSpace/Announcements/centcomm.ogg # DS14-Announcements
-      params:
-        volume: -2
   - type: Computer
     board: CentcommCommsComputerCircuitboard
   - type: PointLight
