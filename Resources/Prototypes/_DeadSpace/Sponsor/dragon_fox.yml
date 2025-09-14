@@ -497,6 +497,7 @@
         Heat: 0.5
         Radiation: 0.5
         Caustic: 0.5
+        Stun: 0.65
   - type: ExplosionResistance
     damageCoefficient: 0.5
   - type: ClothingSpeedModifier
