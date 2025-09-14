@@ -245,7 +245,6 @@ namespace Content.IntegrationTests.Tests
                 "Eftpos", // attach to bank account on mapinit
                 // makes an announcement on mapInit.
                 "AnnounceOnSpawn",
-                "StationEvent"
             };
 
             Assert.That(server.CfgMan.GetCVar(CVars.NetPVS), Is.False);
@@ -269,7 +268,7 @@ namespace Content.IntegrationTests.Tests
 
             var coords = new MapCoordinates(Vector2.Zero, mapId);
 
-            await pair.RunTicksSync(5); // DS14
+            await pair.RunTicksSync(8); // DS14
 
             // We consider only non-audio entities, as some entities will just play sounds when they spawn.
             int Count(IEntityManager ent) => ent.EntityCount - ent.Count<AudioComponent>();
@@ -285,7 +284,7 @@ namespace Content.IntegrationTests.Tests
                     var clientEntities = new HashSet<EntityUid>(Entities(client.EntMan));
                     EntityUid uid = default;
                     await server.WaitPost(() => uid = server.EntMan.SpawnEntity(protoId, coords));
-                    await pair.RunTicksSync(5); // DS14
+                    await pair.RunTicksSync(8); // DS14
 
                     // If the entity deleted itself, check that it didn't spawn other entities
                     if (!server.EntMan.EntityExists(uid))
