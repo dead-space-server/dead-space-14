@@ -203,7 +203,7 @@
     sprite: _DeadSpace/Sponsor/TheZuTi/magboots.rsi
     layers:
     - state: icon
-      map: [ "enum.ToggleVisuals.Layer" ]
+      map: [ "enum.ToggleableVisuals.Layer" ]
   - type: Clothing
     sprite: _DeadSpace/Sponsor/TheZuTi/magboots.rsi
   - type: ClothingSpeedModifier
@@ -337,7 +337,7 @@
     - state: icon
   - type: Item
     sprite: _DeadSpace/Sponsor/TheZuTi/crusher.rsi
-    size: Normal
+    size: Huge
   - type: Clothing
     sprite: _DeadSpace/Sponsor/TheZuTi/crusher.rsi
     quickEquip: false
@@ -355,6 +355,10 @@
     proto: BulletChargeTheZuTi
     capacity: 1
     count: 1
+  - type: PointLight
+    color: "#e9baff"
+    enabled: false
+    radius: 4
 
 - type: entity
   id: BulletChargeTheZuTi
