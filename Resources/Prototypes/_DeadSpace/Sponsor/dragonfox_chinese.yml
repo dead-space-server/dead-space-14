@@ -38,7 +38,7 @@
           True: { visible: true }
           False: { visible: false }
   - type: Appearance
-  - type: ToggleableLightVisuals
+  - type: ToggleableVisuals
     spriteLayer: flame
     inhandVisuals:
       left:
@@ -104,7 +104,7 @@
       - state: off-inhand-left
       right:
       - state: off-inhand-right
-  - type: ToggleableLightVisuals
+  - type: ToggleableVisuals
     spriteLayer: flame
     inhandVisuals:
       left:
