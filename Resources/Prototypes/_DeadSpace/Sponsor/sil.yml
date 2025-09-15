@@ -923,7 +923,7 @@
   parent: BasePlushieDeadSpaceMisc
   id: PlushieSilEkaterinaAkkerman
   name: плюшевый Екатерина Аккерман
-  description: От нее пахнет медикоментами. На ощпуь влажно-мягкая.
+  description: От нее пахнет медикоментами. На ощупь влажно-мягкая.
   components:
   - type: Sprite
     sprite: _DeadSpace/Items/Toys/sil_plushie.rsi
@@ -1098,7 +1098,7 @@
   parent: BasePlushieDeadSpaceMisc
   id: PlushieSilArevin
   name: плюшевый Аревин
-  description: Плюшевая вульпа с загадочным, немного отрешённым выражением мордочки. Её шёрстка будто тронута космическим холодом, а взгляд направлен куда-то дальше окружающей реальности.
+  description: Плюшевая вульпа с загадочным, немного отрешённым выражением мордочки. Его шёрстка будто тронута космическим холодом, а взгляд направлен куда-то дальше окружающей реальности.
   components:
   - type: Sprite
     sprite: _DeadSpace/Items/Toys/sil_plushie.rsi
