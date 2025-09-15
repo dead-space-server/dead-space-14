@@ -174,6 +174,9 @@ public sealed partial class EncryptionKeySystem : EntitySystem
 
     private void OnHolderExamined(EntityUid uid, EncryptionKeyHolderComponent component, ExaminedEvent args)
     {
+        if (!component.ShowExamine)
+            return;
+
         if (!args.IsInDetailsRange)
             return;
 
