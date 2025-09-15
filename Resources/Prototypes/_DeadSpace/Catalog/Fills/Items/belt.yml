@@ -16,6 +16,16 @@
         amount: 2
 
 - type: entity
+  id: ClothingBeltSheathSyndieFilled
+  parent: ClothingBeltSheathSyndie
+  suffix: Filled
+  components:
+  - type: ContainerFill
+    containers:
+      item:
+      - SyndieSabre
+
+- type: entity
   id: ClothingEngineerWebbingFilled
   parent: ClothingEngineerWebbing
   suffix: Filled

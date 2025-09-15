@@ -1,6 +1,6 @@
 - type: gameMap
   id: Meta
-  mapName: 'Meta Station'
+  mapName: 'Meta'
   mapPath: /Maps/meta.yml
   minPlayers: 35
   maxPlayers: 70
@@ -21,7 +21,6 @@
             Captain: [ 1, 1 ]
             BlueShieldOfficer: [ 1, 1 ]
             # law
-            # Magistrat: [ 1, 1 ]
             IAA: [ 1, 1 ]
             Lawyer: [ 2, 2 ]
             # sec
