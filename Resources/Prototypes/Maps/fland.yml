@@ -1,6 +1,6 @@
 - type: gameMap
   id: Fland
-  mapName: 'Fland Station'
+  mapName: 'Fland'
   mapPath: /Maps/fland.yml
   minPlayers: 60
   stations:
@@ -13,7 +13,7 @@
             !type:NanotrasenNameGenerator
             prefixCreator: 'B'
         - type: StationEmergencyShuttle
-          emergencyShuttlePath: /Maps/Shuttles/emergency_delta.yml
+          emergencyShuttlePath: /Maps/Shuttles/emergency_fland.yml
         - type: StationCargoShuttle
           path: /Maps/Shuttles/cargo_fland.yml
         - type: StationJobs
