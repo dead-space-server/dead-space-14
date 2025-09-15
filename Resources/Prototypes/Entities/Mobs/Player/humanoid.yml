@@ -122,9 +122,9 @@
     - FreedomImplant
     - DeathAcidifierImplant
   - type: GhostRole
-    name: ghost-role-information-death-squad-name
-    description: ghost-role-information-death-squad-description
-    rules: ghost-role-information-death-squad-rules
+    name: ghost-role-information-Death-Squad-name
+    description: ghost-role-information-Death-Squad-description
+    rules: ghost-role-information-Death-Squad-rules
     requirements:
       - !type:OverallPlaytimeRequirement
         time: 756000 # 210 hours
@@ -135,6 +135,7 @@
     nameSegments:
     - NamesSyndicateNormal
     - NamesLastDeathSquad
+    nameFormat: name-format-ert
   - type: Loadout
     prototypes: [ DeathSquadGear ]
   - type: TTS
@@ -154,6 +155,7 @@
       nameSegments:
       - NamesFirstERTLeader
       - NamesLastERT
+      nameFormat: name-format-ert
     - type: RandomHumanoidSpawner
       settings: ERTLeaderAmber
 
@@ -184,6 +186,7 @@
       nameSegments:
       - NamesFirstERTLeader
       - NamesLastERT
+      nameFormat: name-format-ert
 
 ### Red
 - type: entity
@@ -224,6 +227,7 @@
       nameSegments:
       - NamesFirstERTLeader
       - NamesLastERT
+      nameFormat: name-format-ert
 
 ### Gamma
 - type: entity
@@ -264,6 +268,7 @@
       nameSegments:
       - NamesFirstERTLeader
       - NamesLastERT
+      nameFormat: name-format-ert
 
 ### CBURN
 - type: entity
@@ -302,6 +307,7 @@
       nameSegments:
       - NamesFirstERTLeader
       - NamesLastERT
+      nameFormat: name-format-ert
     - type: Loadout
       prototypes: [ CBURNLeaderGear ]
       roleLoadout: [ RoleSurvivalExtended ]
@@ -320,6 +326,7 @@
       nameSegments:
       - NamesFirstERT
       - NamesLastERT
+      nameFormat: name-format-ert
     - type: RandomHumanoidSpawner
       settings: ERTSecurityAmber
 
@@ -345,6 +352,7 @@
       nameSegments:
       - NamesFirstERT
       - NamesLastERT
+      nameFormat: name-format-ert
     - type: Loadout
       prototypes: [ ERTSecurityGearAmber ]
 
@@ -422,6 +430,7 @@
       nameSegments:
       - NamesFirstERT
       - NamesLastERT
+      nameFormat: name-format-ert
     - type: RandomHumanoidSpawner
       settings: ERTMedicalAmber
 
@@ -447,6 +456,7 @@
       nameSegments:
       - NamesFirstERT
       - NamesLastERT
+      nameFormat: name-format-ert
     - type: Loadout
       prototypes: [ ERTMedicalGearAmber ]
 
@@ -524,6 +534,7 @@
       nameSegments:
       - NamesFirstERT
       - NamesLastERT
+      nameFormat: name-format-ert
     - type: RandomHumanoidSpawner
       settings: ERTJanitorAmber
 
@@ -546,6 +557,7 @@
       nameSegments:
       - NamesFirstERT
       - NamesLastERT
+      nameFormat: name-format-ert
     - type: Loadout
       prototypes: [ ERTJanitorGearAmber ]
 
@@ -617,6 +629,7 @@
       nameSegments:
       - NamesFirstERT
       - NamesLastERT
+      nameFormat: name-format-ert
     - type: RandomHumanoidSpawner
       settings: ERTEngineerAmber
 
@@ -642,6 +655,7 @@
       nameSegments:
       - NamesFirstERT
       - NamesLastERT
+      nameFormat: name-format-ert
     - type: Loadout
       prototypes: [ ERTEngineerGearAmber ]
 
@@ -718,6 +732,7 @@
       nameSegments:
       - NamesFirstERT
       - NamesLastERT
+      nameFormat: name-format-ert
     - type: RandomHumanoidSpawner
       settings: CBURNAgent
 
@@ -743,158 +758,9 @@
       nameSegments:
       - NamesFirstERT
       - NamesLastERT
+      nameFormat: name-format-ert
     - type: Loadout
       prototypes: [ CBURNAgentGear ]
-
-# Central Command
-
-- type: entity
-  id: RandomHumanoidSpawnerCentcomBlueShieldOfficer 
-  components:
-    - type: Sprite
-      layers:
-      - sprite: Markers/jobs.rsi
-        state: blueshield-low
-    - type: RandomHumanoidSpawner
-      settings: CentcomBlueShieldOfficer
-
-- type: randomHumanoidSettings
-  parent: EventHumanoidERT
-  id: CentcomBlueShieldOfficer
-  components:
-    - type: GhostRole
-      name: ghost-role-information-blueshieldofficer-name
-      description: ghost-role-information-blueshieldofficer-description
-      rules: ghost-role-information-centcom-personal-rules
-      requirements:
-        - !type:OverallPlaytimeRequirement
-          time: 252000 # 70 hours
-        - !type:DepartmentTimeRequirement
-          department: Security
-          time: 108000 # 30 hours
-        - !type:DepartmentTimeRequirement
-          department: Medical
-          time: 36000 # 10 hours 
-      raffle:
-        settings: short
-    - type: RandomMetadata
-      nameSegments:
-      - NamesFirstERT
-      - NamesLastERT
-    - type: Loadout
-      prototypes: [ CentcomBlueShieldGear ]
-      roleLoadout: [ RoleSurvivalEVA ]
-
-- type: entity
-  id: RandomHumanoidSpawnerCentcomOfficial
-  components:
-    - type: Sprite
-      sprite: Markers/jobs.rsi
-      state: centcom
-    - type: RandomHumanoidSpawner
-      settings: CentcomOfficial
-
-- type: randomHumanoidSettings
-  id: CentcomOfficial
-  parent: EventHumanoidMindShieldedHuman
-  components:
-    - type: GhostRole
-      name: ghost-role-information-centcom-official-name
-      description: ghost-role-information-centcom-official-description
-      rules: ghost-role-information-nonantagonist-rules
-      requirements:
-        - !type:OverallPlaytimeRequirement
-          time: 756000 # 210 hours
-      raffle:
-        settings: short
-    - type: Loadout
-      prototypes: [ CentcomGear ]
-      roleLoadout: [ RoleSurvivalStandard ]
-    - type: AutoImplant
-      implants:
-      - MicroBombImplant
-
-- type: entity
-  id: RandomHumanoidSpawnerCentcomAdministrator
-  components:
-    - type: Sprite
-      sprite: Markers/jobs.rsi
-      state: centcom
-    - type: RandomHumanoidSpawner
-      settings: CentcomAdministrator
-
-- type: randomHumanoidSettings
-  id: CentcomAdministrator
-  parent: EventHumanoidMindShieldedHuman
-  components:
-    - type: Loadout
-      prototypes: [ CentcomAdministratorGear ]
-      roleLoadout: [ RoleSurvivalStandard ]
-
-- type: entity
-  id: RandomHumanoidSpawnerCentcomOperator
-  components:
-    - type: Sprite
-      sprite: Markers/jobs.rsi
-      state: centcom
-    - type: RandomHumanoidSpawner
-      settings: CentcomOperator
-
-- type: randomHumanoidSettings
-  id: CentcomOperator
-  parent: EventHumanoidMindShieldedCentcom
-  components:
-    - type: Loadout
-      prototypes: [ CentcomOperatorGear ]
-      roleLoadout: [ RoleSurvivalStandard ]
-
-- type: entity
-  id: RandomHumanoidSpawnerCentcomSpecialOperationsOfficer
-  components:
-    - type: Sprite
-      sprite: Markers/jobs.rsi
-      state: centcom
-    - type: RandomHumanoidSpawner
-      settings: CentcomSpecialOperationsOfficer
-    - type: AutoImplant
-      implants:
-      - MacroBombImplant
-
-- type: randomHumanoidSettings
-  id: CentcomSpecialOperationsOfficer
-  parent: EventHumanoidMindShieldedHuman
-  components:
-    - type: Loadout
-      prototypes: [ CentcomSpecialOperationsOfficerGear ]
-      roleLoadout: [ RoleSurvivalStandard ]
-
-- type: entity
-  id: RandomHumanoidSpawnerCentcomOfficer
-  components:
-    - type: Sprite
-      sprite: Markers/jobs.rsi
-      state: centcom
-    - type: RandomHumanoidSpawner
-      settings: CentcomOfficer
-
-- type: randomHumanoidSettings
-  id: CentcomOfficer
-  parent: EventHumanoidMindShieldedCentcom
-  components:
-    - type: GhostRole
-      name: ghost-role-information-centcomofficer-name
-      description: ghost-role-information-centcomofficer-description
-      rules: ghost-role-information-centcom-personal-rules
-      requirements:
-        - !type:DepartmentTimeRequirement
-          department: Security
-          time: 108000 # 30 hours
-      raffle:
-        settings: short
-    - type: RandomMetadata
-    - type: Loadout
-      prototypes: [ CentcomOfficerGear ]
-      roleLoadout: [ RoleSurvivalStandard ]
 
 ## Syndicate
 

@@ -1,0 +1,29 @@
+# Sink
+- type: construction
+  id: SinkConstruction
+  graph: SinkGraph
+  startNode: start
+  targetNode: sinkWater
+  category: construction-category-furniture
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+
+# Wide Sink
+- type: construction
+  id: SinkWideConstruction
+  graph: SinkWideGraph
+  startNode: start
+  targetNode: sinkWide
+  category: construction-category-furniture
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+
+# Stemless Sink
+- type: construction
+  id: SinkStemlessConstruction
+  graph: SinkStemlessGraph
+  startNode: start
+  targetNode: sinkStemlessWater
+  category: construction-category-furniture
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false

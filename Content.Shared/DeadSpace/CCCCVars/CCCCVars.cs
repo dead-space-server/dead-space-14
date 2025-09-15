@@ -59,14 +59,14 @@ public sealed class CCCCVars
         CVarDef.Create("audio.radio_tts_sounds_enabled", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /*
-    * Typan
+    * Taipan
     */
 
     /// <summary>
-    /// Should Typan spawn or not.
+    /// Should Taipan spawn or not.
     /// </summary>
-    public static readonly CVarDef<bool> TypanEnabled =
-        CVarDef.Create("typan.enabled", false, CVar.SERVERONLY);
+    public static readonly CVarDef<bool> TaipanEnabled =
+        CVarDef.Create("taipan.enabled", false, CVar.SERVERONLY);
 
     /*
     * Lobby ui
@@ -77,4 +77,14 @@ public sealed class CCCCVars
     /// </summary>
     public static readonly CVarDef<string> Background =
         CVarDef.Create("ui.background", "Image", CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /*
+    * Player Count Mode
+    */
+
+    /// <summary>
+    /// Whether to use total players or ready players for game mode selection.
+    /// </summary>
+    public static readonly CVarDef<bool> GameModesUseTotalPlayers =
+        CVarDef.Create("game.modes_use_total_players", true, CVar.SERVERONLY | CVar.ARCHIVE);
 }

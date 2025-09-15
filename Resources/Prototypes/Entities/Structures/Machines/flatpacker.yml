@@ -9,7 +9,7 @@
     snapCardinals: true
     layers:
     - state: base
-    - state: screen
+    - state: unlit # DS14
       map: ["enum.PowerDeviceVisualLayers.Powered"]
       shader: unshaded
     - state: panel
@@ -44,6 +44,7 @@
       - Sheet
       - RawMaterial
       - Ingot
+  - type: OreSiloClient
   - type: AmbientSound
     enabled: false
     volume: 5

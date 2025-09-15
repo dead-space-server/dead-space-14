@@ -195,6 +195,25 @@
     sprite: Structures/Doors/Airlocks/Glass/medical.rsi
     state: "assembly"
 
+#Salvage
+- type: entity
+  parent: AirlockAssembly
+  id: AirlockAssemblySalvage
+  suffix: Salvage
+  components:
+  - type: Sprite
+    sprite: Structures/Doors/Airlocks/Standard/salvage.rsi
+    state: "assembly"
+
+- type: entity
+  parent: AirlockAssembly
+  id: AirlockAssemblySalvageGlass
+  suffix: Salvage, Glass
+  components:
+  - type: Sprite
+    sprite: Structures/Doors/Airlocks/Glass/salvage.rsi
+    state: "assembly"
+
 #Science
 - type: entity
   parent: AirlockAssembly
@@ -299,6 +318,9 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/mining.rsi
     state: "assembly"
+  - type: Construction # DS14
+    graph: MiningAirlock
+    node: assembly
 
 - type: entity
   parent: AirlockAssembly
@@ -308,6 +330,9 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Glass/mining.rsi
     state: "assembly"
+  - type: Construction # DS14
+    graph: MiningAirlock
+    node: glassElectronics
 
 #Syndicate
 - type: entity

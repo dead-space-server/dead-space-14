@@ -52,9 +52,6 @@
         Blunt: 1
     soundHit:
       path: /Audio/Effects/hit_kick.ogg
-  - type: MovementSpeedModifier
-    baseWalkSpeed: 2.7
-    baseSprintSpeed: 4.8
   - type: Stamina
     critThreshold: 85
   - type: Perishable
@@ -66,7 +63,7 @@
       Unsexed: MaleFelinid
   - type: Felinid # For felinid stuff like hairballs
   - type: CatVocal # For cat emotes
-  - type: FootPrints
+  # - type: FootPrints
 
 - type: entity
   parent: MobHumanDummy

@@ -4,8 +4,8 @@
   abstract: true
   components:
   - type: Icon
-    sprite: Mobs/Species/CatSkin/parts.rsi
-    state: tajaran_m
+    sprite: _ADT/Mobs/Species/Tajaran/parts.rsi
+    state: full
   - type: HumanoidAppearance
     species: Tajaran
     hideLayersOnEquip:
@@ -56,9 +56,9 @@
   # - type: Speech
   #   speechSounds: Tajaran
   - type: CatVocal # For cat emotes
-  - type: FootPrints
-    leftBarePrint: "footprint-left-bare-lizard"
-    rightBarePrint: "footprint-right-bare-lizard"
+  # - type: FootPrints
+    # leftBarePrint: "footprint-left-bare-lizard"
+    # rightBarePrint: "footprint-right-bare-lizard"
 
 
 - type: entity

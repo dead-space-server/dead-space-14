@@ -13,12 +13,24 @@
   - PlushieSpaceLizard
   - ThreeCandles
   - Lighter
+  - FlippoLighter
   - CigPackGreen
   - CigPackRed
   - CigPackBlue
   - CigPackBlack
   - CigarCase
   - CigarGold
+  # DS14-pins-start
+  - ClothingNeckUSSPPin
+  - ClothingNeckDonkPin
+  - ClothingNeckEarthPin
+  - ClothingNeckLogistikaPin
+  - ClothingNeckDeForestPin
+  - ClothingNeckNakamuraPin
+  - ClothingNeckNanoTrasenPin
+  - ClothingNeckSyndicakePin
+  - ClothingNeckVitezstviPin
+  # DS14-pins-end
   - ClothingNeckLGBTPin
   - ClothingNeckAllyPin
   - ClothingNeckAromanticPin
@@ -30,11 +42,19 @@
   - ClothingNeckLesbianPin
   - ClothingNeckNonBinaryPin
   - ClothingNeckPansexualPin
+  - ClothingNeckPluralPin
   - ClothingNeckOmnisexualPin
   - ClothingNeckGenderqueerPin
+  - ClothingNeckGenderfluidPin
   - ClothingNeckTransPin
   - ClothingNeckAutismPin
   - ClothingNeckGoldAutismPin
+  - OffsetCane
+  - OffsetCaneWood
+  - OffsetCaneClown
+  - OffsetCaneMime
+  - OffsetCaneNT
+  - Cane
   - CorporateLaw # Corvax-HyperLink
   - TowelColorBlack
   - TowelColorDarkBlue
@@ -84,6 +104,7 @@
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeer
+  - EmergencyMoth
 
 # nitrogen or oxygen tank, depending on what your species needs
 - type: loadoutGroup
@@ -182,6 +203,7 @@
   minLimit: 0
   loadouts:
   - HoPCloak
+  - HoPAltCloak
   - HoPMantle
 
 - type: loadoutGroup
@@ -206,7 +228,7 @@
   loadouts:
   - ShoesBootsLaceup
   - BrownShoes
-  
+
 - type: loadoutGroup
   id: HoPUnderwear
   name: loadout-group-hop-underwear
@@ -226,6 +248,7 @@
   - GreyJumpskirt
   - AncientJumpsuit
   - RainbowJumpsuit
+  - RainbowJumpskirt
 
 - type: loadoutGroup
   id: PassengerFace
@@ -354,7 +377,7 @@
   name: loadout-group-chef-hand
   minLimit: 0
   loadouts:
-  - ChefGoldenKnife  
+  - ChefGoldenKnife
 
 - type: loadoutGroup
   id: ChefGloves
@@ -459,6 +482,17 @@
   - ChaplainNeck
 
 - type: loadoutGroup
+  id: ChaplainBible
+  name: loadout-group-chaplain-bible
+  minLimit: 1
+  loadouts:
+  - Bible
+  - BibleDruid
+  - BibleNanoTrasen
+  - BibleSatanic
+  - BibleTanakh
+
+- type: loadoutGroup
   id: ChaplainUnderwear
   name: loadout-group-chaplain-underwear
   minLimit: 2
@@ -497,6 +531,14 @@
   minLimit: 0
   loadouts:
   - JanitorWintercoat
+  - JanitorHazardVest
+
+- type: loadoutGroup
+  id: JanitorShoes
+  name: loadout-group-janitor-shoes
+  loadouts:
+  - PurpleShoes
+  - GaloshesShoes
 
 - type: loadoutGroup
   id: JanitorPlunger
@@ -618,10 +660,11 @@
   - EmergencyOxygenClown
   # DS14-species-emergency-start
   - EmergencyNonBreather
-  - EmergencyRobotNonBreather  
+  - EmergencyRobotNonBreather
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerClown
+  - EmergencyMothClown
 
 - type: loadoutGroup
   id: MimeHead
@@ -687,8 +730,9 @@
   - EmergencyOxygenMime
   # DS14-species-emergency-start
   - EmergencyNonBreather
-  - EmergencyRobotNonBreather  
+  - EmergencyRobotNonBreather
   # DS14-species-emergency-end
+  - EmergencySpeciesMothMime
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerMime
 
@@ -888,7 +932,7 @@
   - SalvageSpecialistJumpsuitFormal
   - SalvageSpecialistJumpskirt
   - SalvageSpecialistJumpskirtFormal
-  
+
 - type: loadoutGroup
   id: SalvageSpecialistOuterClothing
   name: loadout-group-salvage-specialist-outerclothing
@@ -1104,6 +1148,7 @@
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerExtended
+  - EmergencyMothExtended
 
 # Science
 - type: loadoutGroup
@@ -1543,6 +1588,7 @@
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerSecurity
+  - EmergencyMothSecurity
 
 - type: loadoutGroup
   id: SecurityStar
@@ -1584,7 +1630,7 @@
   - MedicalDoctorBackpack
   - MedicalDoctorSatchel
   - MedicalDoctorDuffel
-  - MedicalDoctorSatchelBlueCat
+  - ChiefMedicalOfficerSatchelBlueCat
 
 - type: loadoutGroup
   id: ChiefMedicalOfficerNeck
@@ -1775,6 +1821,17 @@
   - MedicalWinterBoots
 
 - type: loadoutGroup
+  id: MedicalEyewear
+  name: loadout-group-medical-glasses
+  minLimit: 0
+  loadouts:
+  - MedicalHud
+  - MedicalEyePatchHud
+  - Glasses
+  - GlassesJamjar
+  - GlassesJensen
+
+- type: loadoutGroup
   id: ParamedicUnderwear
   name: loadout-group-paramedic-underwear
   minLimit: 2
@@ -1798,6 +1855,7 @@
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerMedical
+  - EmergencyMothMedical
 
 # Wildcards
 - type: loadoutGroup
@@ -1872,6 +1930,7 @@
   - EmergencyNitrogenSyndicate
   - EmergencyOxygenSyndicate
   - LoadoutSpeciesVoxNitrogen
+  - EmergencyMothSyndicate
 
 - type: loadoutGroup
   id: GroupSpeciesBreathTool

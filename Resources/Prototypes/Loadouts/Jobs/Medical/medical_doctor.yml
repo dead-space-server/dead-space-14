@@ -130,11 +130,6 @@
   equipment:
     back: ClothingBackpackDuffelMedical
 
-- type: loadout
-  id: MedicalDoctorSatchelBlueCat
-  equipment:
-    back: ClothingSatchelBlueCat
-
 # OuterClothing
 - type: loadout
   id: MedicalDoctorWintercoat
@@ -180,6 +175,17 @@
   id: SterileMask
   equipment:
     mask: ClothingMaskSterile
+
+#Eyewear
+- type: loadout
+  id: MedicalHud
+  equipment:
+    eyes: ClothingEyesHudMedical
+
+- type: loadout
+  id: MedicalEyePatchHud
+  equipment:
+    eyes: ClothingEyesEyepatchHudMedical
 
 # Underwear
 - type: loadout

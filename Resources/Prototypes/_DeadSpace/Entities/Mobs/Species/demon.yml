@@ -4,7 +4,7 @@
   abstract: true
   components:
   - type: Icon
-    sprite: _ADT/Mobs/Demon/parts.rsi
+    sprite: _ADT/Mobs/Species/Demon/parts.rsi
     state: full_m
   - type: HumanoidAppearance
     species: Demon
@@ -50,7 +50,7 @@
       Unsexed: FemaleHuman
   - type: Speech
     speechSounds: Lizard
-  - type: FootPrints
+  # - type: FootPrints
 
 - type: entity
   parent: BaseSpeciesDummy

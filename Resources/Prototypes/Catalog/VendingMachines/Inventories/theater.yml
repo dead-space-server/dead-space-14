@@ -59,14 +59,21 @@
     ClothingShoesBootsCowboyBrown: 1
     ClothingShoesBootsCowboyBlack: 1
     ClothingShoesBootsCowboyWhite: 1
+    ADTClothingUniformDruidLeaderDress: 1 # DS14
+    ClothingUniformJumpskirtSuitNurse: 1 # DS14
+    ClothingUniformJumpskirtJanimaid: 1 # DS14
+    ClothingUniformJumpskirtMaid: 1 # DS14
+    ClothingNeckMantleMaid: 2 # DS14
   contrabandInventory:
     ClothingHeadHatRichard: 1
     ToyFigurineBoxer: 1
     ToyFigurineMusician: 1
-  emaggedInventory:
     ClothingShoesBling: 1
     ClothingShoesBootsCowboyFancy: 1
     ClothingOuterDogi: 1
     ClothingMaskBlushingClown: 1
     ClothingMaskBlushingMime: 1
     ClothingHeadHatCowboyBountyHunter: 1
+    ClothingUniformJumpskirtSchool: 1 # DS14
+    ClothingShoesSchoolBlack: 1 # DS14
+    ClothingShoesSchoolWhite: 1 # DS14
