@@ -56,6 +56,7 @@
   id: ClothingHeadHelmetHardsuitDragonFox
   name: королевский шлем
   description: Шлем изолирующий владельца от страшного вакуума снаружи.
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/helmet_suit.rsi
