@@ -1,13 +1,12 @@
 - type: sponsorLoadout
   id: DragonFox
-  entity: ClothingBackpackDragonFox
+  entity: ClothingBackpackDragonFoxMedTech
   sponsorOnly: true
 
 - type: sponsorLoadout
-  id: DragonFoxHypospray
-  entity: HypoDragonfox
+  id: DragonFoxBelt
+  entity: ClothingBeltWebbingDragonFoxMedTech
   sponsorOnly: true
-  whitelistJobs: [ChiefMedicalOfficer, MedicalDoctor, Chemist]
 
 # Backpack
 - type: entity
@@ -41,7 +40,6 @@
       - id: ToySword
       - id: WeaponDisablerToySponsor
       - id: ChainswordDragonFox
-      - id: PaperLawdragon_fox
 
 # Belt
 - type: entity
@@ -258,7 +256,7 @@
       sprite: _DeadSpace/Sponsor/vjlados/magboots.rsi
       layers:
       - state: icon
-        map: [ "enum.ToggleVisuals.Layer" ]
+        map: [ "enum.ToggleableVisuals.Layer" ]
     - type: Clothing
       sprite: _DeadSpace/Sponsor/vjlados/magboots.rsi
     - type: ClothingSpeedModifier
@@ -468,7 +466,7 @@
   - type: Storage
     maxItemSize: Huge
     grid:
-    - 0,0,15,5
+    - 0,0,19,9
   - type: StorageFill
     contents:
       - id: ClothingOuterHardsuitDragonFoxMedTech
@@ -479,7 +477,10 @@
       - id: JetpackVoidFilled
       - id: ClothingEyesHudMultiversalDragonFoxMedTech
       - id: ClothingUniformJumpsuitDragonFoxMedTech
-      - id: JawsOfLife
+      - id: DominatorMedkitAdvanced
+      - id: ClothingHeadsetMedTech
+      - id: DefibrillatorCompact
+      - id: PaperLawdragon_fox
 
 - type: entity
   parent: ClothingOuterHardsuitBase
@@ -490,18 +491,17 @@
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.3
-        Slash: 0.3
-        Piercing: 0.3
-        Heat: 0.3
-        Radiation: 0.3
-        Caustic: 0.3
-        Stun: 0.85
+        Blunt: 0.5
+        Slash: 0.5
+        Piercing: 0.4
+        Heat: 0.5
+        Radiation: 0.5
+        Caustic: 0.5
   - type: ExplosionResistance
-    damageCoefficient: 0.3
+    damageCoefficient: 0.5
   - type: ClothingSpeedModifier
-    walkModifier: 0.7
-    sprintModifier: 0.7
+    walkModifier: 0.9
+    sprintModifier: 0.9
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/hardsuit/suit.rsi
   - type: Clothing
@@ -543,7 +543,9 @@
   - type: Clothing
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/hardsuit/helmet.rsi
   - type: PointLight
-    color: "#ffde59"
+    color: "#ffefad"
+    radius: 7
+    energy: 3
   - type: PressureProtection
     highPressureMultiplier: 0.08
     lowPressureMultiplier: 1000
@@ -559,17 +561,19 @@
   - type: Clothing
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/other/belt.rsi
   - type: Storage
-    maxItemSize: Small
+    maxItemSize: Normal
     grid:
-    - 0,0,7,1
+    - 0,0,9,1
   - type: Item
     size: Huge
   - type: StorageFill
     contents:
       - id: PowerDrill
-      - id: CrowbarRed
       - id: WelderExperimental
       - id: Multitool
+      - id: RCDDragonfox
+      - id: JawsOfLife
+      - id: HypoDragonfox
 
 - type: entity
   parent: ClothingShoesBootsMag
@@ -581,7 +585,7 @@
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/other/magboots.rsi
     layers:
     - state: icon
-      map: [ "enum.ToggleVisuals.Layer" ]
+      map: [ "enum.ToggleableVisuals.Layer" ]
   - type: Clothing
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/other/magboots.rsi
   - type: ClothingSpeedModifier
@@ -611,6 +615,15 @@
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/other/pda.rsi
     state: pda
     scale: 0.7, 0.7
+  - type: CartridgeLoader
+    uiKey: enum.PdaUiKey.Key
+    preinstalled:
+      - CrewManifestCartridge
+      - NotekeeperCartridge
+      - NanoTaskCartridge
+      - NewsReaderCartridge
+      - BankCartridge
+      - MedTekCartridge
 
 - type: entity
   parent: ClothingUniformBase
