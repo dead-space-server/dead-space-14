@@ -1,6 +1,6 @@
 - type: gameMap
   id: Packed
-  mapName: 'Packed Station'
+  mapName: 'Packed'
   mapPath: /Maps/packed.yml
   minPlayers: 0
   maxPlayers: 40
@@ -13,13 +13,14 @@
           nameGenerator:
             !type:NanotrasenNameGenerator
             prefixCreator: 'VG'
+        - type: StationEmergencyShuttle
+          emergencyShuttlePath: /Maps/Shuttles/emergency_crimson.yml
         - type: StationJobs
           availableJobs:
             # cmd
             Captain: [ 1, 1 ]
             BlueShieldOfficer: [ 1, 1 ]
             # law
-            # Magistrat: [ 1, 1 ]
             IAA: [ 1, 1 ]
             Lawyer: [ 2, 2 ]
             # sec

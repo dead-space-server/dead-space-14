@@ -62,6 +62,8 @@
   - type: ClothingSpeedModifier
     walkModifier: 0.9
     sprintModifier: 0.9
+  - type: HardsuitIdentification
+    nonlethal: true
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -166,7 +168,7 @@
     sprite: _DeadSpace/Sponsor/Sil/magboots.rsi
     layers:
     - state: icon
-      map: [ "enum.ToggleVisuals.Layer" ]
+      map: [ "enum.ToggleableVisuals.Layer" ]
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Sil/magboots.rsi
   - type: ClothingSpeedModifier
