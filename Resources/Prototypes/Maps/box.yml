@@ -1,6 +1,6 @@
 - type: gameMap
   id: Box
-  mapName: 'DS Box Station'
+  mapName: 'Box'
   mapPath: /Maps/ds_box.yml
   minPlayers: 60
   stations:
@@ -20,7 +20,6 @@
             Captain: [ 1, 1 ]
             BlueShieldOfficer: [ 1, 1 ]
             # law
-            # Magistrat: [ 1, 1 ]
             IAA: [ 1, 1 ]
             Lawyer: [ 3, 3 ]
             # sec
@@ -64,9 +63,11 @@
             Botanist: [ 3, 3 ]
             Bartender: [ 2, 2 ]
             ServiceWorker: [ 3, 3 ]
+            Boxer: [ 2, 2 ]
             Janitor: [ 3, 3 ]
             Librarian: [ 1, 1 ]
             Chaplain: [ 1, 1 ]
+            Reporter: [ 2, 2 ]
             Musician: [ 1, 1 ]
             Passenger: [ -1, -1 ]
             Mime: [ 1, 1 ]

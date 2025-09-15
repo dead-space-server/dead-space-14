@@ -43,6 +43,13 @@
   wageDepartment: Specific
   wage: 190
   #end-backmen: currency
+  # DS14-blueshield-disabilities-disallow-start
+  traitsBlacklist:
+    - Blindness
+    - PoorVision
+    - Muted
+    - Narcolepsy
+  # DS14-blueshield-disabilities-disallow-end
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant ]
@@ -51,7 +58,7 @@
   id: BlueShieldOfficerGear
   equipment:
     head: ClothingHeadHatBeretBlueShield
-    back: ClothingBackpackBlueShield
+    # back: ClothingBackpackBlueShield
     eyes: ClothingEyesGlassesSecurity
     ears: ClothingHeadsetAltCommand
     shoes: ClothingShoesBootsJackFilled
@@ -118,7 +125,6 @@
         ents: []
   - type: StorageFill
     contents:
-      - id: BoxSurvivalSecurity
       - id: Zipties
         amount: 3
       - id: ADTtelescopicBaton # ADT
@@ -128,3 +134,15 @@
       - id: HandheldCrewMonitor
   - type: ExplosionResistance
     damageCoefficient: 0.6
+
+- type: chameleonOutfit
+  id: BlueShieldOfficerChameleonOutfit
+  job: BlueShieldOfficer
+  equipment:
+    head: ClothingHeadHatBeretBlueShield
+    eyes: ClothingEyesGlassesSecurity
+    shoes: ClothingShoesBootsJackFilled
+    socks: ClothingUnderwearSocksBlueShieldOfficer
+    outerClothing: ClothingOuterArmorBasicBlueShield
+    belt: ClothingBeltMilitaryWebbingBlueShieldFilled
+    gloves: ClothingHandsGlovesCombat

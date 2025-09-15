@@ -4,6 +4,10 @@
   parent: BaseItem
   abstract: true
   components:
+  - type: Reactive
+    groups:
+      Extinguish: [ Touch ]
+  - type: ExtinguishableSetCollisionWake
   - type: Smokable
   - type: Sprite
   - type: Appearance
@@ -36,6 +40,8 @@
         reagents:
           - ReagentId: Nicotine
             Quantity: 10
+  - type: Extractable # DS14
+    grindableSolutionName: smokable
 
 - type: entity
   parent: BaseSmokable
@@ -70,8 +76,8 @@
   components:
   - type: Vape
     damage:
-      groups:
-        Burn: 2
+      types:
+        Heat: 2
   - type: SolutionContainerManager
     solutions:
       smokable:
