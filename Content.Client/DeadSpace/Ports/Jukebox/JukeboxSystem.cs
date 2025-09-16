@@ -1,4 +1,4 @@
-using Content.Shared._MK.Jukebox;
+using Content.Shared.DeadSpace.Ports.Jukebox;
 using Content.Shared.DeadSpace.CCCCVars;
 using Content.Shared.GameTicking;
 using Content.Shared.Physics;
@@ -13,7 +13,7 @@ using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Utility;
 
-namespace Content.Client._MK.Jukebox;
+namespace Content.Client.DeadSpace.Ports.Jukebox;
 
 public sealed class JukeboxSystem : EntitySystem
 {

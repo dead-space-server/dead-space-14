@@ -5,7 +5,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
 
-namespace Content.Shared._MK.Jukebox;
+namespace Content.Shared.DeadSpace.Ports.Jukebox;
 
 [Serializable, NetSerializable]
 public sealed class JukeboxStopRequest : BoundUserInterfaceMessage;

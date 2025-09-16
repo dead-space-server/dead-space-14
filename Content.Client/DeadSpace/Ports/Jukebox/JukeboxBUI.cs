@@ -1,8 +1,8 @@
-using Content.Shared._MK.Jukebox;
+using Content.Shared.DeadSpace.Ports.Jukebox;
 using Content.Shared.Popups;
 using Robust.Client.UserInterface.Controls;
 
-namespace Content.Client._MK.Jukebox;
+namespace Content.Client.DeadSpace.Ports.Jukebox;
 
 public sealed class JukeboxBUI : BoundUserInterface
 {

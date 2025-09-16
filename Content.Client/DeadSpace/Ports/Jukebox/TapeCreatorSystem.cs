@@ -1,8 +1,8 @@
-using Content.Shared._MK.Jukebox;
+using Content.Shared.DeadSpace.Ports.Jukebox;
 using Robust.Client.GameObjects;
 using Robust.Shared.GameStates;
 
-namespace Content.Client._MK.Jukebox;
+namespace Content.Client.DeadSpace.Ports.Jukebox;
 
 public sealed class TapeCreatorSystem : EntitySystem
 {

@@ -1,7 +1,7 @@
 using Robust.Shared;
 using Robust.Shared.Configuration;
 
-namespace Content.Shared._MK.Jukebox;
+namespace Content.Shared.DeadSpace.Ports.Jukebox;
 
 [CVarDefs]
 public sealed class JKCVars

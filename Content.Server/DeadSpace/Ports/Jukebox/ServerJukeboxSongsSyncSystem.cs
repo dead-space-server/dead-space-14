@@ -1,6 +1,6 @@
 using Content.Shared.GameTicking;
 
-namespace Content.Server._MK.Jukebox;
+namespace Content.Server.DeadSpace.Ports.Jukebox;
 
 public sealed class ServerJukeboxSongsSyncSystem : EntitySystem
 {

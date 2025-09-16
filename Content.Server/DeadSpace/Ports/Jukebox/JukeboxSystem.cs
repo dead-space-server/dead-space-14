@@ -1,5 +1,5 @@
 using System.Linq;
-using Content.Shared._MK.Jukebox;
+using Content.Shared.DeadSpace.Ports.Jukebox;
 using Content.Shared.GameTicking;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
@@ -8,7 +8,7 @@ using Robust.Server.GameStates;
 using Robust.Shared.Containers;
 using Robust.Shared.Utility;
 
-namespace Content.Server._MK.Jukebox;
+namespace Content.Server.DeadSpace.Ports.Jukebox;
 
 public sealed class JukeboxSystem : EntitySystem
 {

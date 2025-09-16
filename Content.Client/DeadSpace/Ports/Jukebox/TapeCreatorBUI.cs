@@ -1,7 +1,7 @@
-using Content.Shared._MK.Jukebox;
+using Content.Shared.DeadSpace.Ports.Jukebox;
 using Content.Shared.Popups;
 
-namespace Content.Client._MK.Jukebox;
+namespace Content.Client.DeadSpace.Ports.Jukebox;
 
 public sealed class TapeCreatorBUI : BoundUserInterface
 {

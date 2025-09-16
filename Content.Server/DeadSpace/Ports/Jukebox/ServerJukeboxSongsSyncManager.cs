@@ -1,8 +1,8 @@
-using Content.Shared._MK.Jukebox;
+using Content.Shared.DeadSpace.Ports.Jukebox;
 using Robust.Shared.Network;
 using Robust.Shared.Utility;
 
-namespace Content.Server._MK.Jukebox;
+namespace Content.Server.DeadSpace.Ports.Jukebox;
 
 public sealed class ServerJukeboxSongsSyncManager : JukeboxSongsSyncManager
 {

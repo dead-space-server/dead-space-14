@@ -8,36 +8,36 @@
   components:
   - type: Tape
   - type: Sprite
-    sprite: Objects/Devices/jukeboxStuff/tape.rsi
+    sprite: _DeadSpace/Ports/jukeboxStuff/tape.rsi
     layers:
     - state: tape
     netsync: false
   - type: Item
-    sprite: Objects/Devices/jukeboxStuff/tape.rsi
+    sprite: _DeadSpace/Ports/jukeboxStuff/tape.rsi
     heldPrefix: tape
     size: Tiny
 
 - type: entity
   parent: BaseTape
   id: TapeEmpty
-  name: Old tape
+  name: старая кассета
 
 - type: entity
   parent: BaseItem
   id: JukeboxMK
-  name: jukebox
+  name: музыкальный плеер
   suffix: Empty
   components:
   - type: WhiteJukebox
   - type: Sprite
-    sprite: Objects/Devices/jukeboxStuff/jukebox.rsi
+    sprite: _DeadSpace/Ports/jukeboxStuff/jukebox.rsi
     layers:
     - state: boombox
     - state: boombox_working_overlay
       map: ["bars"]
     netsync: false
   - type: Item
-    sprite: Objects/Devices/jukeboxStuff/jukebox.rsi
+    sprite: _DeadSpace/Ports/jukeboxStuff/jukebox.rsi
     heldPrefix: boombox
     size: Small
   - type: UserInterface
@@ -50,14 +50,14 @@
 - type: entity
   parent: BaseItem
   id: TapeRecorderr
-  name: tape recorder
+  name: записыватель кассет
   suffix: Empty
   components:
   - type: TapeCreator
     coins: 3
   - type: Sprite
     scale: 0.7, 0.7
-    sprite: Objects/Devices/jukeboxStuff/tapeRecorder.rsi
+    sprite: _DeadSpace/Ports/jukeboxStuff/tapeRecorder.rsi
     layers:
     - state: base
     - state: tape
@@ -65,7 +65,7 @@
       visible: false
     netsync: false
   - type: Item
-    sprite: Objects/Devices/jukeboxStuff/tapeRecorder.rsi
+    sprite: _DeadSpace/Ports/jukeboxStuff/tapeRecorder.rsi
     heldPrefix: tapeRecorder
     size: Small
   - type: UserInterface

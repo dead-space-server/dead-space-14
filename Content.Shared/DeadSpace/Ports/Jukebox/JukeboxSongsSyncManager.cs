@@ -2,7 +2,7 @@ using Robust.Shared.ContentPack;
 using Robust.Shared.Network;
 using Robust.Shared.Utility;
 
-namespace Content.Shared._MK.Jukebox;
+namespace Content.Shared.DeadSpace.Ports.Jukebox;
 
 public abstract class JukeboxSongsSyncManager : IDisposable
 {

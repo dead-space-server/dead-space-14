@@ -1,7 +1,7 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._MK.Jukebox;
+namespace Content.Shared.DeadSpace.Ports.Jukebox;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class TapeComponent : Component

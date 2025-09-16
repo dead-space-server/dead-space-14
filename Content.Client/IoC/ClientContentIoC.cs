@@ -1,4 +1,4 @@
-using Content.Client._MK.Jukebox;
+using Content.Client.DeadSpace.Ports.Jukebox;
 using Content.Client.Administration.Managers;
 using Content.Client.Changelog;
 using Content.Client.Chat.Managers;

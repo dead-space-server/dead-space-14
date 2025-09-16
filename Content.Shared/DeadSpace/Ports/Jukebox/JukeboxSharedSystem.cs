@@ -1,7 +1,7 @@
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
 
-namespace Content.Shared._MK.Jukebox;
+namespace Content.Shared.DeadSpace.Ports.Jukebox;
 
 public sealed class JukeboxSharedSystem : EntitySystem
 {
