@@ -119,18 +119,6 @@
   - ExplosivePayload
   - ChemicalPayload
 
-#- type: technology
-#  id: SpecialMeans
-#  name: research-technology-special-means
-#  icon:
-#    sprite: Clothing/Back/Backpacks/electropack.rsi
-#    state: icon
-#  discipline: Arsenal
-#  tier: 1
-#  cost: 5000
-#  recipeUnlocks:
-#  - ClothingBackpackElectropack
-
 # Tier 2
 
 - type: technology
@@ -246,7 +234,7 @@
   cost: 15000
   recipeUnlocks:
   - WeaponAdvancedLaser
-#  - PortableRecharger
+#  - PortableRecharger DS14: Move to SpecialMeans
 
 - type: technology
   id: ThermalWeaponry
