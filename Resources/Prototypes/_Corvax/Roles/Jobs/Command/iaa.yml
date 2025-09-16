@@ -55,3 +55,10 @@
   equipment:
     shoes: ClothingShoesBootsLaceup
     eyes: ClothingEyesGlassesSunglasses
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconIAA
+  icon:
+    sprite: /Textures/Interface/Misc/job_icons.rsi
+    state: IAA
