@@ -33,13 +33,6 @@
 
 - type: jobIcon
   parent: JobIcon
-  id: JobIconIAA
-  icon:
-    sprite: /Textures/Interface/Misc/job_icons.rsi
-    state: IAA
-
-- type: jobIcon
-  parent: JobIcon
   id: JobIconBlueShieldOfficer
   icon:
     sprite: /Textures/Interface/Misc/job_icons.rsi
