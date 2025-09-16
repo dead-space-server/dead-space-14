@@ -245,7 +245,6 @@
   - type: HitscanBatteryAmmoProvider
     fireCost: 50 # DS14-value
     proto: RedLaser
-    fireCost: 62.5
   - type: StaticPrice
     price: 420
 
