@@ -126,9 +126,8 @@ public sealed partial class ResearchSystem
 
         TryGetClientServer(uid, out _, out var serverComponent, component);
 
-        // Используем DS14-фильтр при получении сетки
-        var serverNames = GetGridServerNames(uid);
-        var serverIds = GetGridServerIds(uid);
+        var serverNames = GetServerNames(uid);
+        var serverIds = GetServerIds(uid, component?.isTaipan ?? false); // DS14
 
         var state = new ResearchClientBoundInterfaceState(
             serverNames.Length,
