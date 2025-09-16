@@ -13,12 +13,24 @@
   - PlushieSpaceLizard
   - ThreeCandles
   - Lighter
+  - FlippoLighter
   - CigPackGreen
   - CigPackRed
   - CigPackBlue
   - CigPackBlack
   - CigarCase
   - CigarGold
+  # DS14-pins-start
+  - ClothingNeckUSSPPin
+  - ClothingNeckDonkPin
+  - ClothingNeckEarthPin
+  - ClothingNeckLogistikaPin
+  - ClothingNeckDeForestPin
+  - ClothingNeckNakamuraPin
+  - ClothingNeckNanoTrasenPin
+  - ClothingNeckSyndicakePin
+  - ClothingNeckVitezstviPin
+  # DS14-pins-end
   - ClothingNeckLGBTPin
   - ClothingNeckAllyPin
   - ClothingNeckAromanticPin
@@ -30,11 +42,19 @@
   - ClothingNeckLesbianPin
   - ClothingNeckNonBinaryPin
   - ClothingNeckPansexualPin
+  - ClothingNeckPluralPin
   - ClothingNeckOmnisexualPin
   - ClothingNeckGenderqueerPin
+  - ClothingNeckGenderfluidPin
   - ClothingNeckTransPin
   - ClothingNeckAutismPin
   - ClothingNeckGoldAutismPin
+  - OffsetCane
+  - OffsetCaneWood
+  - OffsetCaneClown
+  - OffsetCaneMime
+  - OffsetCaneNT
+  - Cane
   - CorporateLaw # Corvax-HyperLink
   - TowelColorBlack
   - TowelColorDarkBlue
@@ -183,6 +203,7 @@
   minLimit: 0
   loadouts:
   - HoPCloak
+  - HoPAltCloak
   - HoPMantle
 
 - type: loadoutGroup
@@ -227,6 +248,7 @@
   - GreyJumpskirt
   - AncientJumpsuit
   - RainbowJumpsuit
+  - RainbowJumpskirt
 
 - type: loadoutGroup
   id: PassengerFace
@@ -460,6 +482,17 @@
   - ChaplainNeck
 
 - type: loadoutGroup
+  id: ChaplainBible
+  name: loadout-group-chaplain-bible
+  minLimit: 1
+  loadouts:
+  - Bible
+  - BibleDruid
+  - BibleNanoTrasen
+  - BibleSatanic
+  - BibleTanakh
+
+- type: loadoutGroup
   id: ChaplainUnderwear
   name: loadout-group-chaplain-underwear
   minLimit: 2
@@ -498,6 +531,14 @@
   minLimit: 0
   loadouts:
   - JanitorWintercoat
+  - JanitorHazardVest
+
+- type: loadoutGroup
+  id: JanitorShoes
+  name: loadout-group-janitor-shoes
+  loadouts:
+  - PurpleShoes
+  - GaloshesShoes
 
 - type: loadoutGroup
   id: JanitorPlunger
@@ -691,9 +732,9 @@
   - EmergencyNonBreather
   - EmergencyRobotNonBreather
   # DS14-species-emergency-end
+  - EmergencySpeciesMothMime
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerMime
-  - EmergencyMothMime
 
 - type: loadoutGroup
   id: MimeUnderwear
@@ -1589,7 +1630,7 @@
   - MedicalDoctorBackpack
   - MedicalDoctorSatchel
   - MedicalDoctorDuffel
-  - MedicalDoctorSatchelBlueCat
+  - ChiefMedicalOfficerSatchelBlueCat
 
 - type: loadoutGroup
   id: ChiefMedicalOfficerNeck
@@ -1778,6 +1819,17 @@
   - BlueShoes
   - WhiteShoes
   - MedicalWinterBoots
+
+- type: loadoutGroup
+  id: MedicalEyewear
+  name: loadout-group-medical-glasses
+  minLimit: 0
+  loadouts:
+  - MedicalHud
+  - MedicalEyePatchHud
+  - Glasses
+  - GlassesJamjar
+  - GlassesJensen
 
 - type: loadoutGroup
   id: ParamedicUnderwear

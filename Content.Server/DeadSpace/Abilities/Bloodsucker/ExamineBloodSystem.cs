@@ -1,12 +1,12 @@
 using Content.Shared.DeadSpace.Abilities.Bloodsucker.Components;
 using Content.Shared.NPC.Systems;
-using Content.Server.Body.Components;
 using Content.Shared.DeadSpace.Abilities.Bloodsucker;
 using Content.Server.DeadSpace.Abilities.Bloodsucker.Components;
 using Content.Shared.Examine;
 using Content.Shared.Chemistry.Components;
 using Content.Server.DeadSpace.Abilities.Cocoon.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Body.Components;
 
 namespace Content.Server.DeadSpace.Abilities.Bloodsucker;
 
@@ -28,9 +28,9 @@ public sealed partial class ExamineBloodSystem : SharedBloodsuckerSystem
 
         if (TryComp<CocoonComponent>(target, out var cocoonComp))
         {
-            if (cocoonComp.Stomach.ContainedEntities.Count > 0)
+            if (cocoonComp.Cocoon.ContainedEntities.Count > 0)
             {
-                var firstEntity = cocoonComp.Stomach.ContainedEntities[0];
+                var firstEntity = cocoonComp.Cocoon.ContainedEntities[0];
                 target = firstEntity;
 
                 if (_mobState.IsDead(target))
