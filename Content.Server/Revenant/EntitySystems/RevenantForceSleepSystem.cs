@@ -1,16 +1,13 @@
 using Content.Server.Revenant.Components;
-using Content.Shared.StatusEffect;
 using Content.Shared.Bed.Sleep;
 using Content.Shared.Popups;
 using Robust.Shared.Random;
+using Content.Shared.StatusEffectNew;
 
 namespace Content.Server.Revenant.EntitySystems;
 
 public sealed class RevenantForcedSleepSystem : EntitySystem
 {
-    [ValidatePrototypeId<StatusEffectPrototype>]
-    private const string StatusEffectKey = "ForcedSleep";
-
     [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
@@ -54,7 +51,6 @@ public sealed class RevenantForcedSleepSystem : EntitySystem
     {
         var duration = _random.NextFloat(ent.Comp.DurationOfSleep.X, ent.Comp.DurationOfSleep.Y);
 
-        _statusEffects.TryAddStatusEffect<ForcedSleepingComponent>(ent.Owner, StatusEffectKey,
-            TimeSpan.FromSeconds(duration), false);
+        _statusEffects.TryAddStatusEffectDuration(ent.Owner, SleepingSystem.StatusEffectForcedSleeping, TimeSpan.FromSeconds(duration));
     }
 }
