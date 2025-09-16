@@ -1,0 +1,111 @@
+# Tiles
+- type: stack
+  id: FloorTileTerracotta
+  name: stack-floor-tile-terracotta
+  spawn: FloorTileItemTerracotta
+  maxCount: 30
+
+- type: stack
+  id: FloorTileTerracottaDiagonal
+  name: stack-floor-tile-terracotta-diagonal
+  spawn: FloorTileItemTerracottaDiagonal
+  maxCount: 30
+
+- type: stack
+  id: FloorTileTerracottaHerringbone
+  name: stack-floor-tile-terracotta-herringbone
+  spawn: FloorTileItemTerracottaHerringbone
+  maxCount: 30
+
+- type: stack
+  id: FloorTileTerracottaSmall
+  name: stack-floor-tile-terracotta-small
+  spawn: FloorTileItemTerracottaSmall
+  maxCount: 30
+
+- type: stack
+  id: FloorTileStone
+  name: stack-floor-tile-stone
+  spawn: FloorTileItemStone
+  maxCount: 30
+
+- type: stack
+  id: FloorTileCult
+  name: stack-floor-tile-cult
+  spawn: FloorTileItemCult
+  maxCount: 30
+
+# Shuttle tiles
+- type: stack
+  id: FloorTileStackShuttleMonoWhite
+  name: stack-floor-tile-stack-shuttle-mono-white
+  spawn: FloorTileItemShuttleMonoWhite
+  maxCount: 30
+
+- type: stack
+  id: FloorTileStackShuttleMonoGrey
+  name: stack-floor-tile-stack-shuttle-mono-grey
+  spawn: FloorTileItemShuttleMonoGrey
+  maxCount: 30
+
+- type: stack
+  id: FloorTileStackShuttleMonoBlack
+  name: stack-floor-tile-stack-shuttle-mono-black
+  spawn: FloorTileItemShuttleMonoBlack
+  maxCount: 30
+
+- type: stack
+  id: FloorTileStackShuttleMonoBlue
+  name: stack-floor-tile-stack-shuttle-mono-blue
+  spawn: FloorTileItemShuttleMonoBlue
+  maxCount: 30
+
+- type: stack
+  id: FloorTileStackShuttleMonoOrange
+  name: stack-floor-tile-stack-shuttle-mono-orange
+  spawn: FloorTileItemShuttleMonoOrange
+  maxCount: 30
+
+- type: stack
+  id: FloorTileStackShuttleMonoPurple
+  name: stack-floor-tile-stack-shuttle-mono-purple
+  spawn: FloorTileItemShuttleMonoPurple
+  maxCount: 30
+
+- type: stack
+  id: FloorTileStackShuttleMonoRed
+  name: stack-floor-tile-stack-shuttle-mono-red
+  spawn: FloorTileItemShuttleMonoRed
+  maxCount: 30
+
+# Fairy grass tiles
+- type: stack
+  id: FloorTileFairyGrass
+  name: stack-floor-tile-fairy-grass
+  spawn: FloorTileItemFairyGrass
+  maxCount: 30
+
+- type: stack
+  id: FloorTileFairyAstroGrass
+  name: stack-floor-tile-fairy-astro-grass
+  spawn: FloorTileItemFairyAstroGrass
+  maxCount: 30
+
+# Material tiles
+- type: stack
+  id: FloorTileDiamond
+  name: stack-floor-tile-diamond
+  spawn: FloorTileItemDiamond
+  maxCount: 30
+
+- type: stack
+  id: FloorTilePlasma
+  name: stack-floor-tile-plasma
+  spawn: FloorTileItemPlasma
+  maxCount: 30
+
+- type: stack
+  id: FloorTileUranium
+  name: stack-floor-tile-uranium
+  spawn: FloorTileItemUranium
+  maxCount: 30

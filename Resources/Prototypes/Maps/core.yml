@@ -1,6 +1,6 @@
 - type: gameMap
   id: Core
-  mapName: 'Core Station'
+  mapName: 'Core'
   mapPath: /Maps/core.yml
   minPlayers: 40
   maxPlayers: 75
@@ -23,7 +23,6 @@
             Captain: [ 1, 1 ]
             BlueShieldOfficer: [ 1, 1 ]
             # law
-            # Magistrat: [ 1, 1 ]
             IAA: [ 1, 1 ]
             Lawyer: [ 2, 2 ]
             # sec
