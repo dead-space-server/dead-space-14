@@ -1,5 +1,7 @@
 uplink-energy-crossbow-name = Энергетический арбалет
 uplink-energy-crossbow-desc = Маленькое, тихое оружие, которое можно спрятать в карман. Отрявляет и изнемождает жертв.
+uplink-syndiesabre-name = Пластитановая рапира
+uplink-syndiesabre-desc = Набор ножен с рапирой из пластитана способной проникать сквозь броню, лучший выбор элегантнаного убийцы.
 uplink-advanced-magboots-name = Продвинутые магнитные ботинки Синдиката
 uplink-advanced-magboots-desc = Улучшенные магнитные ботинки Синдиката.
 uplink-akms-bundle-name = Набор АКМС
@@ -36,3 +38,9 @@ uplink-clothing-eyes-pnv-adv-syndicate-name = ПНВ Синдиката
 uplink-clothing-eyes-pnv-adv-syndicate-desc = Профессиональный ПНВ Синдиката с встроенным визором и белым фильтром, а так же поддержкой анализа здоровья команды.
 uplink-reagent-container-amatoxin-name = Замаскированная бутылка с амотоксином
 uplink-reagent-container-amatoxin-desc = Бутылка замаскированная под оливковое масло содержащая 20 единиц сильного амотоксина. Спасибо Discount Dan's за спонсирование нашего завода по производству амотоксина!
+uplink-syndicate-flippo-syndicate-lighter-name = { ent-FlippoSyndicateLighter }
+uplink-syndicate-flippo-syndicate-lighter-desc = { ent-FlippoSyndicateLighter.desc }
+uplink-magazine-eagle-name = Пистолетный магазин пустынного орла (.45 магнум)
+uplink-magazine-eagle-desc = Пистолетный магазин с 8 патронами для пистолета. Совместим с "Пустынным орлом".
+uplink-magazine-eagle-ap-name = Пистолетный магазин пустынного орла (.45 магнум бронебойные)
+uplink-magazine-eagle-ap-desc = Пистолетный магазин с 8 бронебойными, полностью игнорирующими броню, патронами для пистолета. Совместим с "Пустынным орлом".

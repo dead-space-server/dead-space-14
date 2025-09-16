@@ -1,6 +1,6 @@
 - type: gameMap
   id: Fland
-  mapName: 'Fland Station'
+  mapName: 'Fland'
   mapPath: /Maps/fland.yml
   minPlayers: 60
   stations:
@@ -13,7 +13,7 @@
             !type:NanotrasenNameGenerator
             prefixCreator: 'B'
         - type: StationEmergencyShuttle
-          emergencyShuttlePath: /Maps/Shuttles/emergency_delta.yml
+          emergencyShuttlePath: /Maps/Shuttles/emergency_fland.yml
         - type: StationCargoShuttle
           path: /Maps/Shuttles/cargo_fland.yml
         - type: StationJobs
@@ -22,7 +22,6 @@
             Captain: [ 1, 1 ]
             BlueShieldOfficer: [ 1, 1 ]
             # law
-            # Magistrat: [ 1, 1 ]
             IAA: [ 1, 1 ]
             Lawyer: [ 3, 3 ]
             # sec
@@ -39,7 +38,7 @@
             SeniorPhysician: [ 1, 1 ]
             Chemist: [ 3, 3 ]
             MedicalDoctor: [ 5, 5 ]
-            Paramedic: [ 2, 2 ]
+            Paramedic: [ 1, 1 ]
             Coroner: [ 1, 1 ]
             MedicalIntern: [ 4, 4 ]
             # rnd

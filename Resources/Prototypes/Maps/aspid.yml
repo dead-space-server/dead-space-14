@@ -1,6 +1,6 @@
 # - type: gameMap
 #   id: Aspid
-#   mapName: 'DS Aspid Station'
+#   mapName: 'Aspid'
 #   mapPath: /Maps/ds_aspid.yml
 #   minPlayers: 20
 #   maxPlayers: 60
@@ -63,7 +63,6 @@
 #             Mime: [ 1, 1 ]
 #             Musician: [ 1, 1 ]
 #             # law
-#             # Magistrat: [ 1, 1 ]
 #             IAA: [ 1, 1 ]
 #             Lawyer: [ 2, 2 ]
 #             # silicon
