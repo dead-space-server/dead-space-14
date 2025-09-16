@@ -142,7 +142,7 @@
 
 - type: lobbyBackground
   id: DonerDarkRain
-  background: /Textures/LobbyScreens/Fobos/doner_darkRain.webp
+  background: /Textures/LobbyScreens/Fobos/doner_darkrain.webp
 
 - type: lobbyBackground
   id: DonerEllis
@@ -154,7 +154,7 @@
   
 - type: lobbyBackground
   id: DonerHopFrontier
-  background: /Textures/LobbyScreens/Fobos/doner_hopFrontier.webp
+  background: /Textures/LobbyScreens/Fobos/doner_hopfrontier.webp
   
 - type: lobbyBackground
   id: DonerParamedic
@@ -182,7 +182,7 @@
   
 - type: lobbyBackground
   id: DonerSmokeBreak
-  background: /Textures/LobbyScreens/Fobos/doner_smokeBreak.webp
+  background: /Textures/LobbyScreens/Fobos/doner_smokebreak.webp
   
 - type: lobbyBackground
   id: DonerViolence
