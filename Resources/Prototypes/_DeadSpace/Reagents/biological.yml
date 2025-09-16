@@ -7,7 +7,6 @@
   color: "#669900"
   physicalDesc: reagent-physical-desc-strong-smelling
   recognizable: true
-  slippery: false
   reactiveEffects:
     Acidic:
       methods: [ Touch ]
