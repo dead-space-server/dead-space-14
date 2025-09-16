@@ -106,7 +106,7 @@ entities:
       name: Oasis
     - type: Transform
     - type: Map
-      mapPaused: True
+      mapPaused: false
     - type: GridTree
     - type: Broadphase
     - type: OccluderTree
