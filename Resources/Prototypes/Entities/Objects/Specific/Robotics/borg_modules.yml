@@ -1212,12 +1212,12 @@
       - state: syndicate
       - state: icon-syndicate
     - type: ItemBorgModule
-      items:
-      - Crowbar
-      - Emag
-      - AccessBreaker
-      - PinpointerSyndicateNuclear
-      - PinpointerSyndicateNuclearBomb # DS14
+      hands:
+      - item: Crowbar
+      - item: Emag
+      - item: AccessBreaker
+      - item: PinpointerSyndicateNuclear
+      - item: PinpointerSyndicateNuclearBomb # DS14
     - type: BorgModuleIcon
       icon: { sprite: Interface/Actions/actions_borg.rsi, state: syndicate-operative-module }
 
