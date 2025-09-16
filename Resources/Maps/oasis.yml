@@ -107,7 +107,6 @@ entities:
     - type: Transform
     - type: Map
       mapPaused: True
->>>>>>> a346cf687bf2002d37e80e12524f982a5d75e38a
     - type: GridTree
     - type: Broadphase
     - type: OccluderTree
