@@ -39,5 +39,5 @@
   description: Этот имплант сообщит по радиоканалу UNKNOWN, если пользователь окажется в критическом состоянии или умрёт.
   categories: [ HideSpawnMenu ]
   components:
-  - type: Rattle
+  - type: RattleOnTrigger
     radioChannel: DeathSquad
