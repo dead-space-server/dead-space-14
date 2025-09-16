@@ -26,8 +26,10 @@
   name: Overload Lights
   description: Costs 40 Essence.
   components:
-  - type: EntityTargetAction
+  - type: Action
     icon: Interface/Actions/overloadlight.png
+    useDelay: 20
+  - type: EntityTargetAction
     event: !type:RevenantBeamFireActionEvent
 
 
@@ -61,20 +63,22 @@
   name: Усыпление
   description: Цена 30 эссенций.
   components:
+  - type: Action
+    useDelay: 45
+    icon: { sprite: Clothing/Head/Hats/pyjamasyndicatered.rsi, state: icon }
   - type: EntityTargetAction
     canTargetSelf: false
-    icon: { sprite: Clothing/Head/Hats/pyjamasyndicatered.rsi, state: icon }
     event: !type:RevenantSleepActionEvent
-    useDelay: 45
 
 - type: entity
   id: ActionRevenantMindCapture
   name: Захват Разума
   description: Цена 100 эссенций.
   components:
+  - type: Action
+    icon: { sprite: Mobs/Species/Human/organs.rsi, state: brain }
+    useDelay: 600
   - type: EntityTargetAction
     canTargetSelf: false
-    icon: { sprite: Mobs/Species/Human/organs.rsi, state: brain }
     event: !type:RevenantMindCaptureActionEvent
-    useDelay: 600
 # DeadSpace end
