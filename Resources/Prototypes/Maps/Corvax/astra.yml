@@ -1,6 +1,6 @@
 - type: gameMap
   id: CorvaxAstra
-  mapName: 'Astra Station'
+  mapName: 'Astra'
   mapPath: /Maps/corvax_astra.yml
   minPlayers: 60
   stations:
@@ -20,7 +20,6 @@
             Captain: [ 1, 1 ]
             BlueShieldOfficer: [ 1, 1 ]
             # law
-            # Magistrat: [ 1, 1 ]
             IAA: [ 1, 1 ]
             Lawyer: [ 3, 3 ]
             # sec

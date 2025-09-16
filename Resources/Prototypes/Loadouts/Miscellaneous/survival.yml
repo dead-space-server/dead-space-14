@@ -15,7 +15,6 @@
     - Arachnid
     - Diona
     - Human
-    - Moth
     - Reptilian
     # DS14-species-start
     - Demon
@@ -159,11 +158,29 @@
     - BoxHugMoth
 
 # Mime
+- type: loadoutEffectGroup
+  id: OxygenBreatherMime
+  effects:
+  - !type:SpeciesLoadoutEffect
+    species:
+    - Arachnid
+    - Diona
+    - Dwarf
+    - Human
+    - Reptilian
+
+- type: loadoutEffectGroup
+  id: OxygenBreatherMimeMoth
+  effects:
+  - !type:SpeciesLoadoutEffect
+    species:
+    - Moth
+
 - type: loadout
   id: EmergencyOxygenMime
   effects:
   - !type:GroupLoadoutEffect
-    proto: OxygenBreather
+    proto: OxygenBreatherMime
   storage:
     back:
     - BoxMime
@@ -187,10 +204,10 @@
     - BoxMimeBeer
 
 - type: loadout
-  id: EmergencyMothMime
+  id: EmergencySpeciesMothMime
   effects:
   - !type:GroupLoadoutEffect
-    proto: EffectSpeciesMoth
+    proto: OxygenBreatherMimeMoth
   storage:
     back:
     - BoxMimeMoth

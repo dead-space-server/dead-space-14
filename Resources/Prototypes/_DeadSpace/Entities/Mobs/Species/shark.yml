@@ -4,8 +4,8 @@
   abstract: true
   components:
   - type: Icon
-    sprite: _ADT/Mobs/Customization/Shark/parts.rsi
-    state: shark_m
+    sprite: _ADT/Mobs/Species/Shark/parts.rsi
+    state: full
   - type: HumanoidAppearance
     species: Shark
     hideLayersOnEquip:
@@ -47,9 +47,9 @@
   - type: Sanity # DS14
   - type: TypingIndicator
     proto: plafeim
-  - type: FootPrints
-    leftBarePrint: "footprint-left-bare-lizard"
-    rightBarePrint: "footprint-right-bare-lizard"
+  # - type: FootPrints
+    # leftBarePrint: "footprint-left-bare-lizard"
+    # rightBarePrint: "footprint-right-bare-lizard"
 
 - type: entity
   parent: BaseSpeciesDummy
