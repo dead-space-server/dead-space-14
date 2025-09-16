@@ -441,6 +441,9 @@
       behaviors:
       - !type:TriggerBehavior
         keyOut: timer # explode immediately
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
   - type: ScatteringGrenade
     fillPrototype: ChinesePetardDragonFox
     capacity: 5
