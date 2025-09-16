@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Content.Server.Power.EntitySystems;
 using Content.Shared.Research.Components;
 
@@ -23,11 +24,15 @@ public sealed partial class ResearchSystem
 
     private void OnClientSelected(EntityUid uid, ResearchClientComponent component, ResearchClientServerSelectedMessage args)
     {
-        if (!TryGetServerById(args.ServerId, out var serveruid, out var serverComponent))
+        if (!TryGetServerById(uid, args.ServerId, out var serverUid, out var serverComponent))
+            return;
+
+        // Validate that we can access this server.
+        if (!GetServers(uid).Contains((serverUid.Value, serverComponent)))
             return;
 
         UnregisterClient(uid, component);
-        RegisterClient(uid, serveruid.Value, component, serverComponent);
+        RegisterClient(uid, serverUid.Value, component, serverComponent);
     }
 
     private void OnClientDeselected(EntityUid uid, ResearchClientComponent component, ResearchClientServerDeselectedMessage args)
@@ -47,6 +52,7 @@ public sealed partial class ResearchSystem
 
         _uiSystem.TryToggleUi(uid, ResearchClientUiKey.Key, args.Actor);
     }
+
     #endregion
 
     private void OnClientRegistrationChanged(EntityUid uid, ResearchClientComponent component, ref ResearchRegistrationChangedEvent args)
@@ -57,31 +63,30 @@ public sealed partial class ResearchSystem
     private void OnClientMapInit(EntityUid uid, ResearchClientComponent component, MapInitEvent args)
     {
         var taipanServers = new List<Entity<ResearchServerComponent>>();
-        var allServers = new List<Entity<ResearchServerComponent>>();
-        var query = AllEntityQuery<ResearchServerComponent>();
+        var normalServers = new List<Entity<ResearchServerComponent>>();
+        var allServers = GetServers(uid).ToList();
 
         // DS14-rnd-server-per-stations-start
-        var gridResearch = Transform(uid).GridUid;
-
-        if(!gridResearch.HasValue)
-            return;
-
-        while (query.MoveNext(out var serverUid, out var serverComp))
+        var clientGrid = Transform(uid).GridUid;
+        if (clientGrid.HasValue)
         {
-            var gridServer = Transform(serverUid).GridUid;
-
-            if (gridResearch == gridServer)
+            foreach (var (serverUid, serverComp) in allServers)
             {
-                if (component.isTaipan && serverComp.isTaipan)
-                    taipanServers.Add((serverUid, serverComp));
-                else if (!component.isTaipan && !serverComp.isTaipan)
-                    allServers.Add((serverUid, serverComp));
+                var serverGrid = Transform(serverUid).GridUid;
+
+                if (clientGrid == serverGrid)
+                {
+                    if (component.isTaipan && serverComp.isTaipan)
+                        taipanServers.Add((serverUid, serverComp));
+                    else if (!component.isTaipan && !serverComp.isTaipan)
+                        normalServers.Add((serverUid, serverComp));
+                }
             }
         }
         // DS14-rnd-server-per-stations-end
 
-        if (allServers.Count > 0)
-            RegisterClient(uid, allServers[0], component, allServers[0]);
+        if (normalServers.Count > 0)
+            RegisterClient(uid, normalServers[0], component, normalServers[0]);
         if (taipanServers.Count > 0)
             RegisterClient(uid, taipanServers[0], component, taipanServers[0]);
     }
@@ -96,6 +101,24 @@ public sealed partial class ResearchSystem
         UpdateClientInterface(uid, component);
     }
 
+    private void OnClientAnchorStateChanged(Entity<ResearchClientComponent> ent, ref AnchorStateChangedEvent args)
+    {
+        if (args.Anchored)
+        {
+            if (ent.Comp.Server is not null)
+                return;
+
+            var allServers = GetServers(ent).ToList();
+
+            if (allServers.Count > 0)
+                RegisterClient(ent, allServers[0], ent, allServers[0]);
+        }
+        else
+        {
+            UnregisterClient(ent, ent.Comp);
+        }
+    }
+
     private void UpdateClientInterface(EntityUid uid, ResearchClientComponent? component = null)
     {
         if (!Resolve(uid, ref component, false))
@@ -103,9 +126,15 @@ public sealed partial class ResearchSystem
 
         TryGetClientServer(uid, out _, out var serverComponent, component);
 
-        var names = GetGridServerNames(uid);
-        var state = new ResearchClientBoundInterfaceState(names.Length, names,
-            GetGridServerIds(uid), serverComponent?.Id ?? -1);
+        // Используем DS14-фильтр при получении сетки
+        var serverNames = GetGridServerNames(uid);
+        var serverIds = GetGridServerIds(uid);
+
+        var state = new ResearchClientBoundInterfaceState(
+            serverNames.Length,
+            serverNames,
+            serverIds,
+            serverComponent?.Id ?? -1);
 
         _uiSystem.SetUiState(uid, ResearchClientUiKey.Key, state);
     }

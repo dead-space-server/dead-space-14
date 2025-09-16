@@ -24,7 +24,6 @@ public sealed partial class BorgSelectTypeMenu : FancyWindow
 
     public event Action<ProtoId<BorgTypePrototype>>? ConfirmedBorgType;
 
-    [ValidatePrototypeId<GuideEntryPrototype>]
     private static readonly List<ProtoId<GuideEntryPrototype>> GuidebookEntries = new() { "Cyborgs", "Robotics" };
     // DS14-start Modified for Taipan borgs
     public BorgSelectTypeMenu(EntityUid owner)

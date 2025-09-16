@@ -63,8 +63,8 @@
   - type: ContainerFill
     containers:
       board: [ DoorElectronicsTaipan ]
-  - type: PaintableAirlock
-    group: TaipanStandard
+  - type: Paintable
+    group: TaipanAirlockStandard
   - type: Destructible
     thresholds:
     - trigger:
@@ -91,8 +91,8 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass.rsi
-  - type: PaintableAirlock
-    group: TaipanGlass
+  - type: Paintable
+    group: TaipanAirlockGlass
   - type: ContainerFill
     containers:
       board: [ DoorElectronicsTaipan ]

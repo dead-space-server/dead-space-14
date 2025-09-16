@@ -1,3 +1,7 @@
+ent-ServantCircuitBoard = плата законов (Слуга)
+    .desc = Электронная плата, хранящая набор законов ИИ 'Слуга'.
+ent-HivemindCircuitBoard = плата законов (Коллективный Разум)
+    .desc = Электронная плата, хранящая набор законов ИИ 'Коллективный Разум'.
 ent-PlayerBorgTaipanBattery = киборг
     .suffix = Тайпан, Батарея, Выбранный тип
     .desc = { ent-BorgChassisTaipanSelectable.desc }

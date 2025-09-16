@@ -16,6 +16,16 @@
         amount: 2
 
 - type: entity
+  id: ClothingBeltSheathSyndieFilled
+  parent: ClothingBeltSheathSyndie
+  suffix: Filled
+  components:
+  - type: ContainerFill
+    containers:
+      item:
+      - SyndieSabre
+
+- type: entity
   parent: ClothingBeltPlantTaipan
   id: ClothingBeltPlantTaipanFilled
   name: пояс ботаника синдиката
