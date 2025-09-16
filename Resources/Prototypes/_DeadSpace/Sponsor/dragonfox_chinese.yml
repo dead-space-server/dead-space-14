@@ -272,6 +272,7 @@
   parent: ClothingUniformJumpsuitKimono
   id: ClothingUniformHanfuRedMDragonFox
   name: мужское красное ханьфу
+  description: Традиционное мужское  китайское одеяние в красном цвете.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/Chinese/man_hanfu_RB1.rsi
@@ -282,6 +283,7 @@
   parent: ClothingUniformJumpsuitKimono
   id: ClothingUniformHanfuBlackMDragonFox
   name: мужское чёрное ханьфу
+  description: Традиционное мужское китайское одеяние в чёрном цвете.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/Chinese/man_hanfu_RB2.rsi
@@ -292,6 +294,7 @@
   parent: ClothingUniformJumpsuitKimono
   id: ClothingUniformHanfuWhiteMDragonFox
   name: мужское белое ханьфу
+  description: Традиционное мужское китайское одеяние в белом цвете.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/Chinese/man_hanfu_WB.rsi
@@ -302,6 +305,7 @@
   parent: ClothingUniformJumpsuitKimono
   id: ClothingUniformHanfuRedFDragonFox
   name: женское красное ханьфу
+  description: Традиционное женское китайское одеяние в красном цвете.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/Chinese/woman_hanfu_R.rsi
@@ -312,6 +316,7 @@
   parent: ClothingUniformJumpsuitKimono
   id: ClothingUniformHanfuWhiteFDragonFox
   name: женское белое ханьфу
+  description: Традиционное женское китайское одеяние в белом цвете.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/Chinese/woman_hanfu_W.rsi
@@ -322,6 +327,7 @@
   parent: ClothingUniformJumpsuitKimono
   id: ClothingUniformHanfuRedWhiteFDragonFox
   name: женское бело-красное ханьфу
+  description: Традиционное женское китайское одеяние в бело-красном цвете.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/Chinese/woman_hanfu_WR.rsi
