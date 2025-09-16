@@ -423,13 +423,6 @@
 
 - type: jobIcon
   parent: JobIcon
-  id: JobIconNanotrasenRed
-  icon:
-    sprite: /Textures/Interface/Misc/job_icons.rsi
-    state: NanotrasenRed
-
-- type: jobIcon
-  parent: JobIcon
   id: JobIconVisitor
   icon:
     sprite: /Textures/Interface/Misc/job_icons.rsi
