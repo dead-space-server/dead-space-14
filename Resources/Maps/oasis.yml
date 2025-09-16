@@ -106,7 +106,11 @@ entities:
       name: Oasis
     - type: Transform
     - type: Map
+<<<<<<< HEAD
       mapPaused: false
+=======
+      mapPaused: True
+>>>>>>> a346cf687bf2002d37e80e12524f982a5d75e38a
     - type: GridTree
     - type: Broadphase
     - type: OccluderTree
@@ -10490,10 +10494,17 @@ entities:
       parent: 2
 - proto: ADTClothingHeadHatFox
   entities:
+<<<<<<< HEAD
   - uid: 10
     components:
     - type: Transform
       parent: 9
+=======
+  - uid: 26
+    components:
+    - type: Transform
+      parent: 25
+>>>>>>> a346cf687bf2002d37e80e12524f982a5d75e38a
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -67958,7 +67969,11 @@ entities:
     - type: Transform
       pos: -26.606686,15.712919
       parent: 2
+<<<<<<< HEAD
   - uid: 10205
+=======
+  - uid: 10214
+>>>>>>> a346cf687bf2002d37e80e12524f982a5d75e38a
     components:
     - type: Transform
       pos: -68.5,-42.5
@@ -69552,7 +69567,11 @@ entities:
     - type: Transform
       pos: -26.481686,14.431669
       parent: 2
+<<<<<<< HEAD
   - uid: 10459
+=======
+  - uid: 10466
+>>>>>>> a346cf687bf2002d37e80e12524f982a5d75e38a
     components:
     - type: Transform
       pos: 21.622385,-51.509045
@@ -75003,7 +75022,11 @@ entities:
     components:
     - type: Transform
       pos: 2.4978046,0.6471896
+<<<<<<< HEAD
       parent: 24089
+=======
+      parent: 24067
+>>>>>>> a346cf687bf2002d37e80e12524f982a5d75e38a
 - proto: FloorDrain
   entities:
   - uid: 10953
@@ -116948,7 +116971,11 @@ entities:
     - type: Transform
       pos: 27.505058,-41.10279
       parent: 2
+<<<<<<< HEAD
   - uid: 16621
+=======
+  - uid: 16627
+>>>>>>> a346cf687bf2002d37e80e12524f982a5d75e38a
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
