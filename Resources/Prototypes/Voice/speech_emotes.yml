@@ -280,7 +280,7 @@
     - хлопает в ладоши
     - хлопнул в ладоши
     - хлопнула в ладоши
-    - апплодирует
+    - аплодирует
     # Corvax-Localization-End
 
 - type: emote
@@ -421,9 +421,9 @@
    - gasp
    - gasps
    - gasped
-   # DS14-locakalization-start
+   # DS14-localization-start
    - задыхается
-   # DS14-locakalization-end
+   # DS14-localization-end
 
 - type: emote
   id: DefaultDeathgasp
