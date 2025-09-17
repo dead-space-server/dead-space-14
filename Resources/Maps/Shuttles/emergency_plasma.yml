@@ -40,7 +40,6 @@ entities:
       name: NT Evac Plasma
     - type: Transform
       pos: -4.652828,1.09375
-      parent: invalid
     - type: MapGrid
       chunks:
         0,0:
