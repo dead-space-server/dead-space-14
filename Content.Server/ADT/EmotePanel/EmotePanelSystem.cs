@@ -1,7 +1,6 @@
-using Content.Server.Actions;
+using System.Linq;
 using Content.Server.Chat.Systems;
 using Content.Shared.ADT.EmotePanel;
-using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Content.Shared.Chat.Prototypes;
 using Content.Server.Emoting.Components;
@@ -12,96 +11,70 @@ using Content.Shared.Speech;
 
 namespace Content.Server.ADT.EmotePanel;
 
-/// <summary>
-/// EmotePanelSystem process actions on "ActionOpenEmotes" and RadialUi.
-/// <see cref="Content.Shared.ADT.EmotePanel.EmotePanelComponent"/>
-/// </summary>
 public sealed class EmotePanelSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly ActionsSystem _actions = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly IEntityManager _entManager = default!;
+    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
-    [Dependency] private readonly EntityManager _entManager = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<EmotePanelComponent, MapInitEvent>(OnMapInit);
-        SubscribeLocalEvent<EmotePanelComponent, ComponentShutdown>(OnShutdown);
-        SubscribeLocalEvent<EmotePanelComponent, OpenEmotesActionEvent>(OnEmotingAction);
-
-        SubscribeNetworkEvent<SelectEmoteEvent>(OnSelectEmote);
+        SubscribeAllEvent<RequestEmoteMenuEvent>(OnRequestEmoteMenu);
+        SubscribeAllEvent<PlayEmoteEvent>(OnPlayEmote);
     }
 
-    private void OnMapInit(EntityUid uid, EmotePanelComponent component, MapInitEvent args)
+    private void OnRequestEmoteMenu(RequestEmoteMenuEvent msg, EntitySessionEventArgs args)
     {
-        _actions.AddAction(uid, ref component.OpenEmotesActionEntity, component.OpenEmotesAction);
-    }
+        var player = args.SenderSession.AttachedEntity;
+        var target = GetEntity(msg.Target);
 
-    private void OnShutdown(EntityUid uid, EmotePanelComponent component, ComponentShutdown args)
-    {
-        _actions.RemoveAction(uid, component.OpenEmotesActionEntity);
-    }
-
-    /// <summary>
-    /// Gathers emotes-prototypes and sends to client, which trigger OpenEmotesActionEvent.
-    /// </summary>
-    /// <param name="uid">source of action</param>
-    /// <param name="component"></param>
-    /// <param name="args"></param>
-    private void OnEmotingAction(EntityUid uid, EmotePanelComponent component, OpenEmotesActionEvent args)
-    {
-        if (args.Handled)
+        if (!player.HasValue || player.Value != target)
             return;
 
-        if (EntityManager.TryGetComponent<ActorComponent?>(uid, out var actorComponent))
-        {
-            var ev = new RequestEmoteMenuEvent(uid.Id);
-
-            foreach (var emote in _proto.EnumeratePrototypes<EmotePrototype>())
-            {
-                if (emote.Category == EmoteCategory.Invalid ||
-                    emote.ChatTriggers.Count == 0 ||
-                    !(_whitelistSystem.IsWhitelistPassOrNull(emote.Whitelist, uid)) ||
-                    _whitelistSystem.IsBlacklistPass(emote.Blacklist, uid))
-                    continue;
-
-                if (!emote.Available &&
-                    _entManager.TryGetComponent<SpeechComponent>(uid, out var speech) &&
-                    !speech.AllowedEmotes.Contains(emote.ID))
-                    continue;
-
-                if (emote.ID == "Scream" || emote.ID == "EmoteStopTail" || emote.ID == "EmoteStartTail") // TODO: FIX
-                    continue;
-
-                switch (emote.Category)
-                {
-                    case EmoteCategory.General:
-                        ev.Prototypes.Add(emote.ID);
-                        break;
-                    case EmoteCategory.Hands:
-                        if (EntityManager.TryGetComponent<BodyEmotesComponent>(uid, out var _))
-                            ev.Prototypes.Add(emote.ID);
-                        break;
-                    case EmoteCategory.Vocal:
-                        if (EntityManager.TryGetComponent<VocalComponent>(uid, out var _))
-                            ev.Prototypes.Add(emote.ID);
-                        break;
-                    case EmoteCategory.Animations:
-                        if (EntityManager.TryGetComponent<EmoteAnimationComponent>(uid, out var _))
-                            ev.Prototypes.Add(emote.ID);
-                        break;
-                }
-            }
-            ev.Prototypes.Sort();
-            RaiseNetworkEvent(ev, actorComponent.PlayerSession);
-        }
-
-        args.Handled = true;
+        var availableEmotes = GetAvailableEmotes(target);
+        RaiseNetworkEvent(new RequestEmoteMenuEvent(msg.Target, availableEmotes), args.SenderSession);
     }
-    private void OnSelectEmote(SelectEmoteEvent msg)
+
+    private List<string> GetAvailableEmotes(EntityUid uid)
     {
-        _chat.TryEmoteWithChat(new EntityUid(msg.Target), msg.PrototypeId);
+        return _prototypeManager.EnumeratePrototypes<EmotePrototype>()
+            .Where(e => IsEmoteAvailable(uid, e))
+            .OrderBy(e => Loc.GetString(e.Name))
+            .Select(e => e.ID)
+            .ToList();
+    }
+
+    private bool IsEmoteAvailable(EntityUid uid, EmotePrototype emote)
+    {
+        if (emote.Category == EmoteCategory.Invalid ||
+            emote.ChatTriggers.Count == 0 ||
+            !emote.ShowInMenu ||
+            !_whitelistSystem.IsWhitelistPassOrNull(emote.Whitelist, uid) ||
+            _whitelistSystem.IsBlacklistPass(emote.Blacklist, uid))
+            return false;
+
+        if (!emote.Available &&
+            _entManager.TryGetComponent<SpeechComponent>(uid, out var speech) &&
+            !speech.AllowedEmotes.Contains(emote.ID))
+            return false;
+
+        return emote.Category switch
+        {
+            EmoteCategory.Hands when !HasComp<BodyEmotesComponent>(uid) => false,
+            EmoteCategory.Vocal when !HasComp<VocalComponent>(uid) => false,
+            EmoteCategory.Animations when !HasComp<EmoteAnimationComponent>(uid) => false,
+            _ => true
+        };
+    }
+
+    private void OnPlayEmote(PlayEmoteEvent msg, EntitySessionEventArgs args)
+    {
+        var player = args.SenderSession.AttachedEntity;
+        if (!player.HasValue || player.Value != GetEntity(msg.Target))
+            return;
+
+        _chat.TryEmoteWithChat(player.Value, msg.ProtoId);
     }
 }

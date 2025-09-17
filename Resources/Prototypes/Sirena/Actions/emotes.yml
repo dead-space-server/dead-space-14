@@ -99,6 +99,7 @@
   id: EmoteStopTail
   name: chat-emote-name-stop-tail
   category: Animations
+  showInMenu: false # DS14-emote panel
   chatMessages: ["chat-emote-msg-stop-tail"]
   chatTriggers:
     - хвост замирает
@@ -111,6 +112,7 @@
   id: EmoteStartTail
   name: chat-emote-name-start-tail
   category: Animations
+  showInMenu: false # DS14-emote panel
   chatMessages: ["chat-emote-msg-start-tail"]
   chatTriggers:
     - виляет хвостом

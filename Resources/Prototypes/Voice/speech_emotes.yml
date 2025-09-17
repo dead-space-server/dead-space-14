@@ -3,6 +3,7 @@
   id: Scream
   name: chat-emote-name-scream
   category: Vocal
+  showInMenu: false # DS14-emote panel
   icon: Interface/Emotes/scream.png
   whitelist:
     components:
@@ -138,6 +139,7 @@
     # Corvax-Localization-Start
     - свистит
     - свистнул
+    - свистнула
     # Corvax-Localization-End
 
 - type: emote
@@ -300,6 +302,11 @@
     - claps her hands together
     - claps his hands together
     - claps its hands together
+# DS14-localization-start
+    - делает хлопок
+    - хлопает один раз
+    - ударяет в ладоши
+# DS14-localization-end
 
 - type: emote
   id: Snap
@@ -401,6 +408,7 @@
 - type: emote
   id: Gasp
   name: chat-emote-name-gasp
+  showInMenu: false # DS14-emote panel
   whitelist:
     components:
     - Respirator
@@ -413,6 +421,9 @@
    - gasp
    - gasps
    - gasped
+   # DS14-locakalization-start
+   - задыхается
+   # DS14-locakalization-end
 
 - type: emote
   id: DefaultDeathgasp

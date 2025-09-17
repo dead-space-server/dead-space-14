@@ -4,15 +4,16 @@
   id: Bubbling
   name: chat-emote-name-bubbling
   category: Vocal
+  icon: _DeadSpace/Interface/Emotes/bubbling.png
   whitelist:
     requireAll: true
     components:
     - Vocal
     - SlimePerson
   blacklist:
-    components:
-    - BorgChassis
-    - ComputerEmotes
+    tags:
+    - SiliconEmotes
+    - SiliconIPSIPCEmotes
   chatMessages: ["chat-emote-msg-bubbling"]
   chatTriggers:
     - громко пузыриться
@@ -23,15 +24,16 @@
   id: Pop
   name: chat-emote-name-pop
   category: Vocal
+  icon: _DeadSpace/Interface/Emotes/pop.png
   whitelist:
     requireAll: true
     components:
     - Vocal
     - SlimePerson
   blacklist:
-    components:
-    - BorgChassis
-    - ComputerEmotes
+    tags:
+    - SiliconEmotes
+    - SiliconIPSIPCEmotes
   chatMessages: ["chat-emote-msg-pop"]
   chatTriggers:
     - издаёт хлопок
@@ -43,15 +45,16 @@
   id: Hiss
   name: chat-emote-name-hiss
   category: Vocal
+  icon: _DeadSpace/Interface/Emotes/hiss.png
   whitelist:
     requireAll: true
     components:
     - Vocal
     - CatVocal
   blacklist:
-    components:
-    - BorgChassis
-    - ComputerEmotes
+    tags:
+    - SiliconEmotes
+    - SiliconIPSIPCEmotes
   chatMessages: ["chat-emote-msg-hiss"]
   chatTriggers:
     - шипит
@@ -64,15 +67,16 @@
   id: Meow
   name: chat-emote-name-meow
   category: Vocal
+  icon: _DeadSpace/Interface/Emotes/meow.png
   whitelist:
     requireAll: true
     components:
     - Vocal
     - CatVocal
   blacklist:
-    components:
-    - BorgChassis
-    - ComputerEmotes
+    tags:
+    - SiliconEmotes
+    - SiliconIPSIPCEmotes
   chatMessages: ["chat-emote-msg-meow"]
   chatTriggers:
     - мяукает
@@ -90,15 +94,16 @@
   id: Mew
   name: chat-emote-name-mew
   category: Vocal
+  icon: _DeadSpace/Interface/Emotes/mew.png
   whitelist:
     requireAll: true
     components:
     - Vocal
     - Felinid
   blacklist:
-    components:
-    - BorgChassis
-    - ComputerEmotes
+    tags:
+    - SiliconEmotes
+    - SiliconIPSIPCEmotes
   chatMessages: ["chat-emote-msg-mew"]
   chatTriggers:
     - мявкает
@@ -111,15 +116,16 @@
   id: Purr
   name: chat-emote-name-purr
   category: Vocal
+  icon: _DeadSpace/Interface/Emotes/purr.png
   whitelist:
     requireAll: true
     components:
     - Vocal
     - Felinid
   blacklist:
-    components:
-    - BorgChassis
-    - ComputerEmotes
+    tags:
+    - SiliconEmotes
+    - SiliconIPSIPCEmotes
   chatMessages: ["chat-emote-msg-purr"]
   chatTriggers:
     - мурлычет
@@ -135,16 +141,16 @@
   id: Growl
   name: chat-emote-name-growl
   category: Vocal
-  icon: Interface/Emotes/scream.png
+  icon: _DeadSpace/Interface/Emotes/growl.png
   whitelist:
     requireAll: true
     components:
     - Vocal
     - Vulpkanin
   blacklist:
-    components:
-    - BorgChassis
-    - ComputerEmotes
+    tags:
+    - SiliconEmotes
+    - SiliconIPSIPCEmotes
   chatMessages: ["chat-emote-msg-growl"]
   chatTriggers:
     - рычит
@@ -157,16 +163,16 @@
   id: Howl
   name: chat-emote-name-howl
   category: Vocal
-  icon: Interface/Emotes/scream.png
+  icon: _DeadSpace/Interface/Emotes/howl.png
   whitelist:
     requireAll: true
     components:
     - Vocal
     - Vulpkanin
   blacklist:
-    components:
-    - BorgChassis
-    - ComputerEmotes
+    tags:
+    - SiliconEmotes
+    - SiliconIPSIPCEmotes
   chatMessages: ["chat-emote-msg-howl"]
   chatTriggers:
     - воет

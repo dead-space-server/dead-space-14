@@ -68,6 +68,13 @@ public sealed partial class EmotePrototype : IPrototype
     /// </summary>
     [DataField]
     public HashSet<string> ChatTriggers = new();
+
+    /// <summary>
+    ///     DS14: Determines if emote should be shown in the radial menu.
+    /// </summary>
+    [DataField]
+    public bool ShowInMenu = true;
+
 }
 
 /// <summary>
