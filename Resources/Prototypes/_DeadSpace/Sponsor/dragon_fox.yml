@@ -1,72 +1,12 @@
 - type: sponsorLoadout
   id: DragonFox
-  entity: ClothingBackpackDragonFox
+  entity: ClothingBackpackDragonFoxMedTech
   sponsorOnly: true
 
 - type: sponsorLoadout
-  id: DragonFoxHypospray
-  entity: HypoDragonfox
+  id: DragonFoxBelt
+  entity: ClothingBeltWebbingDragonFoxMedTech
   sponsorOnly: true
-  whitelistJobs: [ChiefMedicalOfficer, MedicalDoctor, Chemist]
-
-# Backpack
-- type: entity
-  parent: ClothingBackpack
-  id: ClothingBackpackDragonFox
-  name: однолямочный блюспейс рюкзак
-  description: Однолямочный рюкзак использующий технологию блюспейса для увелечения своего максимального объёма. Окрашен в зелёный хаки.
-  # categories: [ HideSpawnMenu ]
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Sponsor/DragonFox/backpack.rsi
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,13,5
-  - type: StorageFill
-    contents:
-      - id: ClothingBeltDragonFoxFilled
-      - id: ClothingNeckCloakDragonFox
-      - id: ClothingEyesHudMedicalDragonFox
-      - id: ClothingMaskDragonFox
-      - id: JetpackVoidFilled
-      - id: ClothingHandsGlovesCaptain
-      - id: ClothingOuterHardsuitDragonFox
-      - id: ClothingUniformJumpsuitDragonFox
-      - id: ClothingHeadHatDragonFox
-      - id: ClothingShoesBootsMagDragonFox
-      - id: ClothingUnderSocksDragonFox
-      - id: DominatorMedkitAdvanced
-      - id: ADTtelescopicBaton
-      - id: ToySword
-      - id: WeaponDisablerToySponsor
-      - id: ChainswordDragonFox
-      - id: PaperLawdragon_fox
-
-# Belt
-- type: entity
-  parent: ClothingBeltStorageBase
-  id: ClothingBeltDragonFoxFilled
-  name: золотой украшенный РПС
-  description: РПС окрашенный в золотой цвет.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Storage
-    grid:
-    - 0,0,9,1
-  - type: Sprite
-    sprite: _DeadSpace/Sponsor/DragonFox/belt.rsi
-  - type: Clothing
-    sprite: _DeadSpace/Sponsor/DragonFox/belt.rsi
-  - type: Item
-    size: Huge
-  - type: StorageFill
-    contents:
-      - id: PowerDrill
-      - id: JawsOfLife
-      - id: WelderExperimental
-      - id: Multitool
-      - id: RCDDragonfox
 
 # Jumpsuit
 - type: entity
@@ -74,7 +14,6 @@
   id: ClothingUniformJumpsuitDragonFox
   name: чёрный нано-костюм
   description: Чёрный нано-костюм, выполненый из очень дорогих тканей.
-  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/jumpsuit.rsi
@@ -87,7 +26,6 @@
   id: ClothingOuterHardsuitDragonFox
   name: королевский украшенный скафандр
   description: Принадлежат члену экипажа, находящемуся под покровительством спонсорской организации.
-  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/suit.rsi
@@ -116,9 +54,9 @@
 - type: entity
   parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
   id: ClothingHeadHelmetHardsuitDragonFox
-  categories: [ HideSpawnMenu ]
   name: королевский шлем
   description: Шлем изолирующий владельца от страшного вакуума снаружи.
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/helmet_suit.rsi
@@ -205,76 +143,6 @@
     sprite: _DeadSpace/Sponsor/DragonFox/gas.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/DragonFox/gas.rsi
-
-# Cloak
-- type: entity
-  parent: ClothingNeckBase
-  id: ClothingNeckCloakDragonFox
-  name: зелёный украшенный плащ
-  description: Накидка в зелёном цвете. Принадлежат члену экипажа, находящемуся под покровительством спонсорской организации.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Sponsor/vjlados/cloak.rsi
-
-# Eyes
-- type: entity
-  parent: ClothingEyesHudMultiversal
-  id: ClothingEyesHudMedicalDragonFox
-  name: золотой визор
-  description: Изготовленый на заказ золотой визор, его владелец влиятельный человек.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Sponsor/DragonFox/hud.rsi
-  - type: Clothing
-    sprite: _DeadSpace/Sponsor/DragonFox/hud.rsi
-  - type: EyeProtection
-  - type: IdentityBlocker
-    coverage: EYES
-
-# Head
-- type: entity
-  parent: ClothingHeadBase
-  id: ClothingHeadHatDragonFox
-  name: бантиковая лента
-  description: Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Sponsor/vjlados/head.rsi
-  - type: Clothing
-    sprite: _DeadSpace/Sponsor/vjlados/head.rsi
-
-# Magboots
-- type: entity
-  parent: ClothingShoesBootsMag
-  id: ClothingShoesBootsMagDragonFox
-  name: зелёные украшенные магнитные ботинки
-  description: Магнитные ботинки в зелёном цвете. Принадлежат члену экипажа, находящемуся под покровительством спонсорской организации.
-  categories: [ HideSpawnMenu ]
-  components:
-    - type: Sprite
-      sprite: _DeadSpace/Sponsor/vjlados/magboots.rsi
-      layers:
-      - state: icon
-        map: [ "enum.ToggleVisuals.Layer" ]
-    - type: Clothing
-      sprite: _DeadSpace/Sponsor/vjlados/magboots.rsi
-    - type: ClothingSpeedModifier
-      walkModifier: 1
-      sprintModifier: 1
-
-# Socks
-- type: entity
-  parent: ClothingUnderwearSocksBase
-  id: ClothingUnderSocksDragonFox
-  name: полосатые чулки
-  description: Принадлежат члену экипажа, находящемуся под покровительством спонсорской организации.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Sponsor/vjlados/socks.rsi
 
 # Bolter gun
 - type: entity
@@ -468,7 +336,7 @@
   - type: Storage
     maxItemSize: Huge
     grid:
-    - 0,0,15,5
+    - 0,0,19,9
   - type: StorageFill
     contents:
       - id: ClothingOuterHardsuitDragonFoxMedTech
@@ -479,7 +347,10 @@
       - id: JetpackVoidFilled
       - id: ClothingEyesHudMultiversalDragonFoxMedTech
       - id: ClothingUniformJumpsuitDragonFoxMedTech
-      - id: JawsOfLife
+      - id: DominatorMedkitAdvanced
+      - id: ClothingHeadsetMedTech
+      - id: DefibrillatorCompact
+      - id: PaperLawdragon_fox
 
 - type: entity
   parent: ClothingOuterHardsuitBase
@@ -490,18 +361,17 @@
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.3
-        Slash: 0.3
-        Piercing: 0.3
-        Heat: 0.3
-        Radiation: 0.3
-        Caustic: 0.3
-        Stun: 0.85
+        Blunt: 0.5
+        Slash: 0.5
+        Piercing: 0.4
+        Heat: 0.5
+        Radiation: 0.5
+        Caustic: 0.5
   - type: ExplosionResistance
-    damageCoefficient: 0.3
+    damageCoefficient: 0.5
   - type: ClothingSpeedModifier
-    walkModifier: 0.7
-    sprintModifier: 0.7
+    walkModifier: 0.9
+    sprintModifier: 0.9
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/hardsuit/suit.rsi
   - type: Clothing
@@ -543,7 +413,9 @@
   - type: Clothing
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/hardsuit/helmet.rsi
   - type: PointLight
-    color: "#ffde59"
+    color: "#ffefad"
+    radius: 7
+    energy: 3
   - type: PressureProtection
     highPressureMultiplier: 0.08
     lowPressureMultiplier: 1000
@@ -559,17 +431,19 @@
   - type: Clothing
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/other/belt.rsi
   - type: Storage
-    maxItemSize: Small
+    maxItemSize: Normal
     grid:
-    - 0,0,7,1
+    - 0,0,9,1
   - type: Item
     size: Huge
   - type: StorageFill
     contents:
       - id: PowerDrill
-      - id: CrowbarRed
       - id: WelderExperimental
       - id: Multitool
+      - id: RCDDragonfox
+      - id: JawsOfLife
+      - id: HypoDragonfox
 
 - type: entity
   parent: ClothingShoesBootsMag
@@ -581,7 +455,7 @@
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/other/magboots.rsi
     layers:
     - state: icon
-      map: [ "enum.ToggleVisuals.Layer" ]
+      map: [ "enum.ToggleableVisuals.Layer" ]
   - type: Clothing
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/other/magboots.rsi
   - type: ClothingSpeedModifier
@@ -611,6 +485,15 @@
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/other/pda.rsi
     state: pda
     scale: 0.7, 0.7
+  - type: CartridgeLoader
+    uiKey: enum.PdaUiKey.Key
+    preinstalled:
+      - CrewManifestCartridge
+      - NotekeeperCartridge
+      - NanoTaskCartridge
+      - NewsReaderCartridge
+      - BankCartridge
+      - MedTekCartridge
 
 - type: entity
   parent: ClothingUniformBase
@@ -689,25 +572,3 @@
     onlyAffectsMobs: false
   - type: UseDelay
     delay: 0.5
-
-# Plushie toys
-
-- type: entity
-  parent: BasePlushie
-  id: PlushieDragonFoxMedTech
-  name: плюшевый боец МедТех
-  description: Плюшевая игрушка, внешне напоминающая рядового бойца МедТех.
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Sponsor/DragonFox/dragonfox_plushie.rsi
-    state: plush_medtech
-
-- type: entity
-  parent: BasePlushie
-  id: PlushieDragonFoxMadParadox
-  name: плюшевый Парадокс
-  description: Мягкая игрушка человека в волшебном наряде. Имеет мягкий и пушистый хвостик.
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Sponsor/DragonFox/dragonfox_plushie.rsi
-    state: plush_madparadox

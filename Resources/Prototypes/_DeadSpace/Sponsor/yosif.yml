@@ -222,7 +222,7 @@
       sprite: _DeadSpace/Sponsor/Yosif/magboots.rsi
       layers:
       - state: icon
-        map: [ "enum.ToggleVisuals.Layer" ]
+        map: [ "enum.ToggleableVisuals.Layer" ]
     - type: Clothing
       sprite: _DeadSpace/Sponsor/Yosif/magboots.rsi
     - type: ClothingSpeedModifier
@@ -381,43 +381,9 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Icon
-    sprite: _DeadSpace/Sponsor/Yosif/pda.rsi 
+    sprite: _DeadSpace/Sponsor/Yosif/pda.rsi
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Yosif/pda.rsi
-
-#Plushie
-- type: entity
-  parent: BasePlushie
-  id: PlushieYosifAnita
-  name: плюшевая Анита
-  description: Милая плюшевая игрушка.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Sponsor/Yosif/plushie.rsi
-    state: anita
-
-- type: entity
-  parent: BasePlushie
-  id: PlushieYosifEvelina
-  name: плюшевая Эвелина
-  description: Милая плюшевая игрушка.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Sponsor/Yosif/plushie.rsi
-    state: evelina
-
-- type: entity
-  parent: BasePlushie
-  id: PlushieYosifLucius
-  name: плюшевая Люциус
-  description: Милая плюшевая игрушка.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Sponsor/Yosif/plushie.rsi
-    state: lucius
 
 # Law
 - type: entity
