@@ -3865,7 +3865,6 @@ entities:
       pos: -8.5,-1.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
       deviceLists:
       - 9
     - type: AtmosPipeColor
@@ -3886,7 +3885,6 @@ entities:
       pos: -4.5,2.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
       deviceLists:
       - 9
     - type: AtmosPipeColor
@@ -3910,7 +3908,6 @@ entities:
       pos: -5.5,2.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
       deviceLists:
       - 9
     - type: AtmosPipeColor
@@ -4018,7 +4015,6 @@ entities:
       pos: -8.5,-0.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
       deviceLists:
       - 9
     - type: AtmosPipeColor

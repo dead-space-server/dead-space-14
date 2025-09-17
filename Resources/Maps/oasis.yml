@@ -162354,7 +162354,6 @@ entities:
       pos: 48.5,13.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
       deviceLists:
       - 23676
       - 23677
@@ -162365,7 +162364,6 @@ entities:
       pos: 54.5,22.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
       deviceLists:
       - 23676
       - 23677
@@ -162376,7 +162374,6 @@ entities:
       pos: 54.5,19.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
       deviceLists:
       - 23676
       - 23677
@@ -162387,7 +162384,6 @@ entities:
       pos: 54.5,13.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
       deviceLists:
       - 23676
       - 23677
@@ -162398,7 +162394,6 @@ entities:
       pos: 48.5,22.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
       deviceLists:
       - 23676
       - 23677
@@ -162409,7 +162404,6 @@ entities:
       pos: 48.5,19.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
       deviceLists:
       - 23676
       - 23677
