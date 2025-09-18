@@ -4361,14 +4361,6 @@ entities:
     - type: Transform
       pos: -1.1360443,7.1296577
       parent: 1
-    - type: GasTank
-      toggleActionEntity: 3
-    - type: ActionsContainer
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          ents:
-          - 3
 - proto: PlushieMoth
   entities:
   - uid: 550
