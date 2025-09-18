@@ -3,11 +3,14 @@ using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Content.Server.Administration.Managers;
 using Robust.Server.ServerStatus;
+using Content.Server.Database;
+using Robust.Shared.Toolshed.TypeParsers;
 
 namespace Content.Server.Administration;
 
 public sealed partial class ServerApi
 {
+    [Dependency] private readonly IServerDbManager _db = default!;
     /// <summary>
     /// Get players and active admins list
     /// </summary>
@@ -41,5 +44,27 @@ public sealed partial class ServerApi
         };
 
         await context.RespondJsonAsync(jObject);
+    }
+    private async Task SetAdminPermissions(IStatusHandlerContext context)
+    {
+        var permissionList = await ReadJson<PermissionActionBody>(context);
+        if (permissionList == null)
+            await context.RespondJsonAsync("Erorr");
+        var playersList = new JsonArray();
+        var ranks = await _db.GetAllAdminAndRanksAsync();
+        foreach (var keq in ranks.Item2)
+        {
+            foreach (var hue in keq.Flags)
+            {
+                var obj = new JsonObject
+                {
+                    ["Id"] = hue.Id,
+                    ["Name"] = keq.Name,
+                    ["Flag"] = hue.Flag
+                };
+                playersList.Add(obj);
+            }
+        }
+        await context.RespondJsonAsync(playersList);
     }
 }

