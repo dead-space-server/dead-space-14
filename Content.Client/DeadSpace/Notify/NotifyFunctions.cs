@@ -69,11 +69,11 @@ public sealed class NotifyFunction
             DictCvar = StringToPairList(cfg.GetCVar(CCCCVars.SysNotifyCvar));
         }
     }
-    public static void CreateDictionaryForReciveSys(IPrototypeManager _prototypeManager)
+    public static void CreateDictionaryForReciveSys(IPrototypeManager prototypeManager)
     {
-        foreach (var proto in _prototypeManager.EnumeratePrototypes<GhostRoleGroupNotify>())
+        foreach (var proto in prototypeManager.EnumeratePrototypes<GhostRoleGroupNotify>())
         {
-            if (DictCvar.ContainsKey(proto.ID))
+            if (DictCvar.ContainsKey(proto.ID) & _dictAccess.ContainsKey(proto.ID))
             {
                 _dictAccess.Add(proto.ID, DictCvar[proto.ID]);
             }
