@@ -525,7 +525,6 @@ public sealed partial class ServerApi : IPostInjectInit
 
     private async Task<bool> CheckAccess(IStatusHandlerContext context)
     {
-        return true;
         var auth = context.RequestHeaders.TryGetValue("Authorization", out var authToken);
         if (!auth)
         {
@@ -638,6 +637,7 @@ public sealed partial class ServerApi : IPostInjectInit
     {
         public required string Permissions { get; init; }
         public required string Ckey { get; init; }
+        public required bool OnServer { get; init; }
     }
 
 
