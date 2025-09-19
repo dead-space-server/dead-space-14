@@ -58,7 +58,6 @@ public sealed partial class ServerApi
         var adminMgr = await RunOnMainThread(IoCManager.Resolve<IAdminManager>);
         var playerMgr = await RunOnMainThread(IoCManager.Resolve<ISharedPlayerManager>);
         var ply = await _db.GetPlayerRecordByUserName(permissionList.Ckey);
-        var playersList = new JsonArray();
         var ranks = await _db.GetAllAdminAndRanksAsync();
         Admin previoslyAdmin = new Admin();
         if (ply == null)
@@ -78,13 +77,6 @@ public sealed partial class ServerApi
             {
                 isAdmin = true;
             }
-            var obj = new JsonObject
-            {
-                ["Name"] = adminname.lastUserName,
-                ["IsAdmin"] = isAdmin,
-                ["Flags"] = adminname.Item1.Flags.First().Flag
-            };
-            playersList.Add(obj);
             if (isAdmin)
             {
                 previoslyAdmin = adminname.Item1;
@@ -103,7 +95,6 @@ public sealed partial class ServerApi
                 {
                     Admin adminTOGive = new Admin
                     {
-                        //Flags = AdminFlagsHelper.NamesToFlags(flags),
                         AdminRankId = admin.Id,
                         AdminRank = admin,
                         UserId = ply.UserId,
@@ -160,6 +151,6 @@ public sealed partial class ServerApi
                 }
             }
         }
-        await context.RespondJsonAsync(playersList);
+        await context.RespondJsonAsync("success");
     }
 }
