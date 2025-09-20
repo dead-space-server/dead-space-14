@@ -27,9 +27,6 @@
       startingGear: ThiefGear
       components:
       # - type: Pacified # DS14 no pacified thiefs
-      - type: Thieving
-        stripTimeReduction: 2
-        stealthy: true
       mindRoles:
       - MindRoleThief
       briefing:
