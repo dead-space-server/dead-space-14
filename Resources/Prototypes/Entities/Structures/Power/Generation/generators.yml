@@ -261,6 +261,8 @@
     board: GeneratorRTGMachineCircuitboard
   - type: StaticPrice
     price: 5500 # DS14-uranium-rework
+  - type: RadiationBlockingContainer
+    resistance: 2
 
 # TODO: need radioactive fallout when destroyed
 
