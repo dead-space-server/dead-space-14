@@ -51,7 +51,7 @@
   id: NoirJumpskirtPencil
   equipment:
     jumpsuit: ClothingUniformJumpskirtPencilDetectiveGrey
-# DS14 -end
+# DS14-end
 
 # Back
 - type: loadout
