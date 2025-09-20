@@ -219,9 +219,9 @@
       board: PortableGeneratorSuperPacmanMachineCircuitboard
     - type: FuelGenerator
       minTargetPower: 10000
-      maxTargetPower: 75000
-      targetPower: 75000
-      optimalPower: 75000
+      maxTargetPower: 75000 # DS14-uranium-rework
+      targetPower: 75000 # DS14-uranium-rework
+      optimalPower: 75000 # DS14-uranium-rework
       # 30 minutes at full power
       optimalBurnRate: 0.016666666
       # Barely save any fuel from reducing power output
