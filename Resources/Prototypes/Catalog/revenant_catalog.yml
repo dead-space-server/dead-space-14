@@ -1,28 +1,28 @@
-# - type: listing
-#   id: RevenantDefile
-#   name: revenant-defile-name
-#   description: revenant-defile-desc
-#   productAction: ActionRevenantDefile
-#   cost:
-#     StolenEssence: 20
-#   categories:
-#   - RevenantAbilities
-#   conditions:
-#   - !type:ListingLimitedStockCondition
-#     stock: 1
+#- type: listing
+#  id: RevenantDefile
+#  name: revenant-defile-name
+#  description: revenant-defile-desc
+#  productAction: ActionRevenantDefile
+#  cost:
+#    StolenEssence: 20
+#  categories:
+#  - RevenantAbilities
+#  conditions:
+# - !type:ListingLimitedStockCondition
+#    stock: 1
 
-- type: listing
-  id: RevenantBeamFire
-  name: revenant-beamfire-name
-  description: revenant-beamfire-desc
-  productAction: ActionRevenantBeamFire
-  cost:
-    StolenEssence: 40
-  categories:
-  - RevenantAbilities
-  conditions:
-  - !type:ListingLimitedStockCondition
-    stock: 1
+#- type: listing
+#  id: RevenantOverloadLights
+#  name: revenant-overload-name
+#  description: revenant-overload-desc
+#  productAction: ActionRevenantOverloadLights
+#  cost:
+#    StolenEssence: 40
+#  categories:
+#  - RevenantAbilities
+#  conditions:
+#  - !type:ListingLimitedStockCondition
+#    stock: 1
 
 #- type: listing
 #  id: RevenantBlight
@@ -44,6 +44,19 @@
   productAction: ActionRevenantMalfunction
   cost:
     StolenEssence: 140
+  categories:
+  - RevenantAbilities
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: RevenantBeamFire
+  name: revenant-beamfire-name
+  description: revenant-beamfire-desc
+  productAction: ActionRevenantBeamFire
+  cost:
+    StolenEssence: 40
   categories:
   - RevenantAbilities
   conditions:

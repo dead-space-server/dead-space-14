@@ -9,29 +9,29 @@
   - type: InstantAction
     event: !type:RevenantShopActionEvent
 
-# - type: entity
-#   parent: BaseAction
-#   id: ActionRevenantDefile
-#   name: Defile
-#   description: Costs 30 Essence.
-#   components:
-#   - type: Action
-#     useDelay: 15
-#     icon: Interface/Actions/defile.png
-#   - type: InstantAction
-#     event: !type:RevenantDefileActionEvent
+#- type: entity
+#  parent: BaseAction
+#  id: ActionRevenantDefile
+#  name: Defile
+#  description: Costs 30 Essence.
+#  components:
+#  - type: Action
+#    useDelay: 15
+#    icon: Interface/Actions/defile.png
+#  - type: InstantAction
+#    event: !type:RevenantDefileActionEvent
 
-- type: entity
-  id: ActionRevenantBeamFire
-  name: Overload Lights
-  description: Costs 40 Essence.
-  components:
-  - type: Action
-    icon: Interface/Actions/overloadlight.png
-    useDelay: 20
-  - type: EntityTargetAction
-    event: !type:RevenantBeamFireActionEvent
-
+#- type: entity
+#  parent: BaseAction
+#  id: ActionRevenantOverloadLights
+#  name: Overload Lights
+#  description: Costs 40 Essence.
+#  components:
+#  - type: Action
+#    icon: Interface/Actions/overloadlight.png
+#    useDelay: 20
+#  - type: InstantAction
+#    event: !type:RevenantOverloadLightsActionEvent
 
 #- type: entity
 #  parent: BaseAction
@@ -56,8 +56,20 @@
     useDelay: 20
   - type: InstantAction
     event: !type:RevenantMalfunctionActionEvent
-    
+
 # DeadSpace start
+
+- type: entity
+  id: ActionRevenantBeamFire
+  name: Overload Lights
+  description: Costs 40 Essence.
+  components:
+  - type: Action
+    icon: Interface/Actions/overloadlight.png
+    useDelay: 20
+  - type: EntityTargetAction
+    event: !type:RevenantBeamFireActionEvent
+    
 - type: entity
   id: ActionRevenantSleep
   name: Усыпление
