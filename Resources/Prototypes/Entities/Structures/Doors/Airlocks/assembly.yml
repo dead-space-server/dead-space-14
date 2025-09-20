@@ -88,7 +88,7 @@
   suffix: Chemistry
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Standard/Chemistry.rsi
+    sprite: Structures/Doors/Airlocks/Standard/chemistry.rsi
     state: "assembly"
 
 - type: entity
@@ -97,7 +97,7 @@
   suffix: Chemistry, Glass
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Glass/Chemistry.rsi
+    sprite: Structures/Doors/Airlocks/Glass/chemistry.rsi
     state: "assembly"
 
 # DS14-End
