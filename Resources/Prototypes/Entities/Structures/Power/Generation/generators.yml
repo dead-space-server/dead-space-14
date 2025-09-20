@@ -257,6 +257,8 @@
                 max: 1
           - !type:DoActsBehavior
             acts: [ "Destruction" ]
+  - type: Machine
+    board: GeneratorRTGMachineCircuitboard
 
 # TODO: need radioactive fallout when destroyed
 
@@ -304,3 +306,6 @@
             max: 5
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
+    - type: StaticPrice
+      price: 5500 # DS14-uranium-rework
+
