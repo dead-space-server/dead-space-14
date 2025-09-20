@@ -53,6 +53,7 @@
         Dead:
           Base: dead
           BaseUnshaded: dead_mouth
+    # DS14-start
     - type: Butcherable
       spawned:
         - id: FoodMeatFish
@@ -61,8 +62,10 @@
           amount: 1
           maxAmount: 4
         - id: FoodCaviar # DS14
-          amount: 2
-          maxAmount: 4
+          amount: 1
+          maxAmount: 2
+          prob: 0.5
+    # DS14-end
     - type: MeleeWeapon
       altDisarm: false
       angle: 0
@@ -79,6 +82,7 @@
       tags:
         - Carp
         - DoorBumpOpener
+        - CannotSuicide
     - type: ReplacementAccent
       accent: genericAggressive
     - type: Speech
@@ -118,6 +122,19 @@
       sprite: Mobs/Aliens/Carps/magic.rsi
     - type: TypingIndicator
       proto: guardian
+    # DS14-start
+    - type: Butcherable
+      spawned:
+      - id: FoodMeatFish
+        amount: 2
+      - id: MaterialToothSpaceCarp1
+        amount: 1
+        maxAmount: 4
+      - id: FoodCaviarMagic # DS14
+        amount: 1
+        maxAmount: 2
+        prob: 0.5
+    # DS14-end
 
 - type: entity
   name: holocarp
@@ -147,6 +164,19 @@
             - Opaque
     - type: TypingIndicator
       proto: robot
+    # DS14-start
+    - type: Butcherable
+      spawned:
+      - id: FoodMeatFish
+        amount: 2
+      - id: MaterialToothSpaceCarp1
+        amount: 1
+        maxAmount: 4
+      - id: FoodCaviarHolo # DS14
+        amount: 1
+        maxAmount: 2
+        prob: 0.5
+    # DS14-end
 
 - type: entity
   parent: MobCarp
@@ -159,6 +189,19 @@
     energy: 0.5
   - type: RgbLightController
     layers: [ 0 ]
+  # DS14-start
+  - type: Butcherable
+    spawned:
+    - id: FoodMeatFish
+      amount: 2
+    - id: MaterialToothSpaceCarp1
+      amount: 1
+      maxAmount: 4
+    - id: FoodCaviarRainbow # DS14
+      amount: 1
+      maxAmount: 2
+      prob: 0.5
+  # DS14-end
 
 - type: entity
   id: MobCarpSalvage
@@ -166,6 +209,10 @@
   suffix: "Salvage Ruleset"
   components:
     - type: SalvageMobRestrictions
+    - type: MobThresholds
+      thresholds:
+        0: Alive
+        30: Dead
 
 - type: entity
   name: space carp
@@ -182,8 +229,6 @@
       rules: ghost-role-information-space-dragon-summoned-carp-rules
       mindRoles:
       - MindRoleGhostRoleTeamAntagonistFlock
-      raffle:
-        settings: short
     - type: GhostTakeoverAvailable
     - type: HTN
       rootTask:
@@ -234,7 +279,7 @@
     - type: MobThresholds
       thresholds:
         0: Alive
-        150: Dead
+        82: Dead # Might seem random, but this brings up the hits to kill with a crusher mark to 3
     - type: Stamina
       critThreshold: 150
     - type: DamageStateVisuals
@@ -248,6 +293,7 @@
     - type: Body
       prototype: Bloodsucker
       requiredLegs: 1
+    # DS14-start
     - type: Butcherable
       spawned:
         - id: FoodMeatFish
@@ -255,6 +301,11 @@
         - id: MaterialToothSharkminnow1
           amount: 1
           maxAmount: 3
+        - id: FoodCaviarBlack # DS14
+          amount: 1
+          maxAmount: 2
+          prob: 0.5
+    # DS14-end
     - type: MeleeWeapon
       damage:
         types:

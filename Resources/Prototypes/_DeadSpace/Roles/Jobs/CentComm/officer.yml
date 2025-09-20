@@ -34,4 +34,15 @@
     gloves: ClothingHandsGlovesCombat
     ears: ClothingHeadsetCentCom
     belt: ClothingBeltSecurityWebbingFilled
-    # pocket2: WeaponPistolN1984
+
+- type: chameleonOutfit
+  id: CentralCommandOfficerChameleonOutfit
+  job: CentralCommandOfficer
+  equipment:
+    mask: ClothingMaskGasSecurity
+    shoes: ClothingShoesBootsJack
+    outerClothing: ClothingOuterVestWeb
+    eyes: ClothingEyesGlassesSecurity
+    head: ClothingHeadHatBeretCentcomNaval
+    gloves: ClothingHandsGlovesCombat
+    belt: ClothingBeltSecurityWebbingFilled
