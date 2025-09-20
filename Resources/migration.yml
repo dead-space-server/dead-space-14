@@ -1012,7 +1012,6 @@ ClothingUniformJumpsuitParamedicNT: ClothingUniformJumpsuitParamedic
 
 # 2025-08-30 - DS14
 Fulton0: null
-ClothingUnderwearWomenSocksSeniorOfficer: null
 
 # 2025-09-01 - DS14
 CentcomComputerComms: CentcommComputerComms
@@ -1035,3 +1034,12 @@ PartRodMetalLingering0: null
 FloorTileItemSteelLingering0: null
 BorgModuleDefibrillator: null
 BorgModuleGrapplingGun: null
+
+# 2025-09-20 - DS14
+ClothingUnderwearWomenSocksSeniorOfficer: null
+ClothingUnderwearWomenSocksHeadOfSecurity: null
+ClothingUnderwearWomenSocksBrigmedic: null
+ClothingUnderwearWomenSocksCadet: null
+ClothingUnderwearWomenSocksDetective: null
+ClothingUnderwearWomenSocksSecurityOfficer: null
+ClothingUnderwearWomenSocksWarden: null
