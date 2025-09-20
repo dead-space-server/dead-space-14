@@ -1034,3 +1034,7 @@ PartRodMetalLingering0: null
 FloorTileItemSteelLingering0: null
 BorgModuleDefibrillator: null
 BorgModuleGrapplingGun: null
+
+# 2025-09-20 - DS14
+ADTDoubleBedTop: null
+ADTDoubleBedBottom: null

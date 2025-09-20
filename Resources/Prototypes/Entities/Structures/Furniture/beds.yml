@@ -138,6 +138,9 @@
     state: mattress
   - type: Damageable
     damageModifierSet: Inflatable
+  - type: Construction # DS14
+    graph: bed
+    node: mattress
 
 - type: entity
   parent: Bed

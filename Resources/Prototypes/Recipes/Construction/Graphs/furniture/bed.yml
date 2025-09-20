@@ -16,6 +16,26 @@
             - material: Cloth
               amount: 2
               doAfter: 1
+        - to: bedwood
+          completed:
+            - !type:SnapToGrid { }
+          steps:
+            - material: WoodPlank
+              amount: 2
+              doAfter: 1
+            - material: Cloth
+              amount: 2
+              doAfter: 1
+        - to: bedgold
+          completed:
+            - !type:SnapToGrid { }
+          steps:
+            - material: Gold
+              amount: 2
+              doAfter: 1
+            - material: Cloth
+              amount: 2
+              doAfter: 1
         - to: dogbed
           completed:
             - !type:SnapToGrid { }
@@ -33,6 +53,20 @@
             - material: Durathread
               amount: 2
               doAfter: 1
+        - to: mattress
+          completed:
+            - !type:SnapToGrid { }
+          steps:
+            - material: Cloth
+              amount: 2
+              doAfter: 1
+        - to: doublemattress
+          completed:
+            - !type:SnapToGrid { }
+          steps:
+            - material: Cloth
+              amount: 4
+              doAfter: 1
         - to: adtdeckchair
           completed:
             - !type:SnapToGrid { }
@@ -40,25 +74,35 @@
             - material: WoodPlank
               amount: 5
               doAfter: 1
-        - to: adtdoublebedtop
+        - to: doublebedsteel
           completed:
             - !type:SnapToGrid { }
           steps:
             - material: Steel
-              amount: 2
+              amount: 4
               doAfter: 1
             - material: Cloth
-              amount: 2
+              amount: 4
               doAfter: 1
-        - to: adtdoublebedbottom
+        - to: doublebedwood
           completed:
             - !type:SnapToGrid { }
           steps:
-            - material: Steel
-              amount: 2
+            - material: WoodPlank
+              amount: 4
               doAfter: 1
             - material: Cloth
-              amount: 2
+              amount: 4
+              doAfter: 1
+        - to: doublebedgold
+          completed:
+            - !type:SnapToGrid { }
+          steps:
+            - material: Gold
+              amount: 4
+              doAfter: 1
+            - material: Cloth
+              amount: 4
               doAfter: 1
     - node: bed
       entity: Bed
@@ -67,6 +111,34 @@
           completed:
             - !type:SpawnPrototype
               prototype: SheetSteel1
+              amount: 2
+            - !type:SpawnPrototype
+              prototype: MaterialCloth1
+              amount: 2
+          steps:
+            - tool: Screwing
+              doAfter: 1
+    - node: bedwood
+      entity: BedWood
+      edges:
+        - to: start
+          completed:
+            - !type:SpawnPrototype
+              prototype: MaterialWoodPlank1
+              amount: 2
+            - !type:SpawnPrototype
+              prototype: MaterialCloth1
+              amount: 2
+          steps:
+            - tool: Screwing
+              doAfter: 1
+    - node: bedgold
+      entity: BedGold
+      edges:
+        - to: start
+          completed:
+            - !type:SpawnPrototype
+              prototype: IngotGold1
               amount: 2
             - !type:SpawnPrototype
               prototype: MaterialCloth1
@@ -99,6 +171,28 @@
           steps:
             - tool: Screwing
               doAfter: 1
+    - node: mattress
+      entity: Mattress
+      edges:
+        - to: start
+          completed:
+            - !type:SpawnPrototype
+              prototype: MaterialCloth1
+              amount: 2
+          steps:
+            - tool: Screwing
+              doAfter: 1
+    - node: doublemattress
+      entity: DoubleMattress
+      edges:
+        - to: start
+          completed:
+            - !type:SpawnPrototype
+              prototype: MaterialCloth1
+              amount: 4
+          steps:
+            - tool: Screwing
+              doAfter: 1
     - node: adtdeckchair
       entity: ADTDeckChair
       edges:
@@ -110,31 +204,45 @@
           steps:
             - tool: Screwing
               doAfter: 1
-    - node: adtdoublebedtop
-      entity: ADTDoubleBedTop
+    - node: doublebedsteel
+      entity: DoubleBedSteel
       edges:
         - to: start
           completed:
             - !type:SpawnPrototype
               prototype: SheetSteel1
-              amount: 2
+              amount: 4
             - !type:SpawnPrototype
               prototype: MaterialCloth1
-              amount: 2
+              amount: 4
           steps:
             - tool: Screwing
               doAfter: 1
-    - node: adtdoublebedbottom
-      entity: ADTDoubleBedBottom
+    - node: doublebedwood
+      entity: DoubleBedWood
       edges:
         - to: start
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
-              amount: 2
+              prototype: MaterialWoodPlank1
+              amount: 4
             - !type:SpawnPrototype
               prototype: MaterialCloth1
-              amount: 2
+              amount: 4
+          steps:
+            - tool: Screwing
+              doAfter: 1
+    - node: doublebedgold
+      entity: DoubleBedGold
+      edges:
+        - to: start
+          completed:
+            - !type:SpawnPrototype
+              prototype: IngotGold1
+              amount: 4
+            - !type:SpawnPrototype
+              prototype: MaterialCloth1
+              amount: 4
           steps:
             - tool: Screwing
               doAfter: 1

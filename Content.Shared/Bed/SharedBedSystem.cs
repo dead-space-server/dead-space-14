@@ -39,7 +39,9 @@ public abstract class SharedBedSystem : EntitySystem
 
     private void OnHealMapInit(Entity<HealOnBuckleComponent> ent, ref MapInitEvent args)
     {
-        _actConts.EnsureAction(ent.Owner, ref ent.Comp.SleepAction, SleepingSystem.SleepActionId);
+        // DS14-start
+        // _actConts.EnsureAction(ent.Owner, ref ent.Comp.SleepAction, SleepingSystem.SleepActionId);
+        // DS14-end
         Dirty(ent);
     }
 
@@ -47,11 +49,14 @@ public abstract class SharedBedSystem : EntitySystem
     {
         EnsureComp<HealOnBuckleHealingComponent>(bed);
         bed.Comp.NextHealTime = Timing.CurTime + TimeSpan.FromSeconds(bed.Comp.HealTime);
-        _actionsSystem.AddAction(args.Buckle, ref bed.Comp.SleepAction, SleepingSystem.SleepActionId, bed);
-        Dirty(bed);
-
-        // Single action entity, cannot strap multiple entities to the same bed.
-        DebugTools.AssertEqual(args.Strap.Comp.BuckledEntities.Count, 1);
+        // DS14-start
+       var actionEntity = _actionsSystem.AddAction(args.Buckle.Owner, SleepingSystem.SleepActionId);
+       if (actionEntity != null)
+       {
+           bed.Comp.SleepAction[args.Buckle.Owner] = actionEntity.Value;
+           Dirty(bed);
+       }
+        // DS14-end
     }
 
     private void OnUnstrapped(Entity<HealOnBuckleComponent> bed, ref UnstrappedEvent args)
@@ -59,10 +64,16 @@ public abstract class SharedBedSystem : EntitySystem
         // If the entity being unbuckled is terminating, we shouldn't try to act upon it, as some components may be gone
         if (!Terminating(args.Buckle.Owner))
         {
-            _actionsSystem.RemoveAction(args.Buckle.Owner, bed.Comp.SleepAction);
+            // DS14-start
+            if (bed.Comp.SleepAction.TryGetValue(args.Buckle.Owner, out var actionEntity))
+            {
+                _actionsSystem.RemoveAction(args.Buckle.Owner, actionEntity);
+                bed.Comp.SleepAction.Remove(args.Buckle.Owner);
+            }
+            // DS14-end
             _sleepingSystem.TryWaking(args.Buckle.Owner);
         }
-        
+
         RemComp<HealOnBuckleHealingComponent>(bed);
     }
 

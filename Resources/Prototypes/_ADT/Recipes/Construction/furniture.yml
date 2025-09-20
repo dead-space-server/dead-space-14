@@ -59,30 +59,6 @@
     - !type:TileNotBlocked
 
 - type: construction
-  id: ADTDoubleBedTopRecipe
-  graph: bed
-  startNode: start
-  targetNode: adtdoublebedtop
-  category: construction-category-furniture
-  objectType: Structure
-  placementMode: SnapgridCenter
-  canBuildInImpassable: false
-  conditions:
-    - !type:TileNotBlocked
-
-- type: construction
-  id: ADTDoubleBedBottomRecipe
-  graph: bed
-  startNode: start
-  targetNode: adtdoublebedbottom
-  category: construction-category-furniture
-  objectType: Structure
-  placementMode: SnapgridCenter
-  canBuildInImpassable: false
-  conditions:
-    - !type:TileNotBlocked
-
-- type: construction
   id: ADTRedSofaLeftSideRecipe
   graph: Seat
   startNode: start
