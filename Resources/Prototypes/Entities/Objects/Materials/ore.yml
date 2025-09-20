@@ -48,6 +48,10 @@
           Quantity: 10
   - type: Item
     heldPrefix: gold
+  - type: Tag
+    tags:
+    - Ore
+    - OreGold
 
 - type: entity
   parent: GoldOre
@@ -152,6 +156,10 @@
           Quantity: 10
   - type: Item
     heldPrefix: plasma
+  - type: Tag
+    tags:
+    - Ore
+    - OrePlasma
 
 - type: entity
   parent: PlasmaOre
@@ -185,6 +193,10 @@
           Quantity: 10
   - type: Item
     heldPrefix: silver
+  - type: Tag
+    tags:
+    - Ore
+    - OreSilver
 
 - type: entity
   parent: SilverOre
@@ -241,24 +253,30 @@
   - type: PhysicalComposition
     materialComposition:
       RawUranium: 300
-  - type: PointLight
-    radius: 1.2
-    energy: 0.8
-    castShadows: false
-    color: "#9be792"
+#  - type: PointLight # DS14-uranium-rework
+#    radius: 1.2
+#    energy: 0.8
+#    castShadows: false
+#    color: "#9be792"
   - type: Extractable
     grindableSolutionName: uraniumore
   - type: SolutionContainerManager
     solutions:
       uraniumore:
         reagents:
-        - ReagentId: Uranium
-          Quantity: 8
-        - ReagentId: Radium
-          Quantity: 2
+        - ReagentId: RawUranium
+          Quantity: 5
+#        - ReagentId: Uranium # DS14-uranium-rework
+#          Quantity: 8
+#        - ReagentId: Radium
+#          Quantity: 2
         canReact: false
   - type: Item
     heldPrefix: uranium
+  - type: Tag
+    tags:
+    - Ore
+    - OreUranium
 
 - type: entity
   parent: UraniumOre
@@ -301,6 +319,10 @@
           Quantity: 5
   - type: Item
     heldPrefix: bananium
+  - type: Tag
+    tags:
+    - Ore
+    - OreBananium
 
 - type: entity
   parent: BananiumOre
@@ -409,3 +431,4 @@
   components:
   - type: Stack
     count: 1
+

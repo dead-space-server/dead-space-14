@@ -208,6 +208,17 @@
     sprite: Clothing/Uniforms/Jumpskirt/hos_parade.rsi
 
 - type: entity
+  parent: [ClothingUniformSkirtBase, BaseCommandContraband]
+  id: ClothingUniformJumpskirtCommandGeneric
+  name: command jumpskirt
+  description: A generic Command-colored jumpsuit not associated with any particular department.
+  components:
+  - type: Sprite
+    sprite: Clothing/Uniforms/Jumpskirt/commandgeneric.rsi
+  - type: Clothing
+    sprite: Clothing/Uniforms/Jumpskirt/commandgeneric.rsi
+
+- type: entity
   parent: ClothingUniformSkirtBase
   id: ClothingUniformJumpskirtHydroponics
   name: hydroponics jumpskirt
@@ -309,6 +320,7 @@
   - type: Tag
     tags:
     - ClothMade
+    - Recyclable
     - PrisonUniform
     - WhitelistChameleon
 
@@ -465,6 +477,8 @@
     sprite: Clothing/Uniforms/Jumpskirt/operative_s.rsi
   - type: Clothing
     sprite: Clothing/Uniforms/Jumpskirt/operative_s.rsi
+  - type: StaticPrice
+    price: 500
 
 - type: entity
   parent: ClothingUniformSkirtBase
@@ -570,7 +584,7 @@
       sprite: Clothing/Uniforms/Jumpskirt/lawyergood.rsi
 
 - type: entity
-  parent: ClothingUniformSkirtBase
+  parent: [ ClothingUniformSkirtBase, BaseSyndicateContraband ]
   id: ClothingUniformJumpskirtSyndieFormalDress
   name: syndicate formal dress
   description: "The syndicate's uniform is made in an elegant style, it's even a pity to do dirty tricks in this."
@@ -698,25 +712,25 @@
     sprite: Clothing/Uniforms/Jumpsuit/casual.rsi
     layers:
     - state: icon-jumpskirt
-    - state: icon-shirt
-      color: "#134fc1"
+    - state: icon-skirt
+      color: "#336899"
   - type: Item
     inhandVisuals:
       left:
       - state: inhand-left-jumpskirt
       - state: inhand-left-shirt
-        color: "#134fc1"
+        color: "#336899"
       right:
       - state: inhand-right-jumpskirt
       - state: inhand-right-shirt
-        color: "#134fc1"
+        color: "#336899"
   - type: Clothing
     sprite: Clothing/Uniforms/Jumpsuit/casual.rsi
     clothingVisuals:
       jumpsuit:
       - state: equipped-INNERCLOTHING-jumpskirt
-      - state: equipped-INNERCLOTHING-shirt
-        color: "#134fc1"
+      - state: equipped-INNERCLOTHING-skirt
+        color: "#336899"
 
 - type: entity
   parent: ClothingUniformSkirtBase
@@ -728,25 +742,25 @@
     sprite: Clothing/Uniforms/Jumpsuit/casual.rsi
     layers:
     - state: icon-jumpskirt
-    - state: icon-shirt
-      color: "#9c0dff"
+    - state: icon-skirt
+      color: "#9337b8"
   - type: Item
     inhandVisuals:
       left:
       - state: inhand-left-jumpskirt
       - state: inhand-left-shirt
-        color: "#9c0dff"
+        color: "#9337b8"
       right:
       - state: inhand-right-jumpskirt
       - state: inhand-right-shirt
-        color: "#9c0dff"
+        color: "#9337b8"
   - type: Clothing
     sprite: Clothing/Uniforms/Jumpsuit/casual.rsi
     clothingVisuals:
       jumpsuit:
       - state: equipped-INNERCLOTHING-jumpskirt
-      - state: equipped-INNERCLOTHING-shirt
-        color: "#9c0dff"
+      - state: equipped-INNERCLOTHING-skirt
+        color: "#9337b8"
 
 - type: entity
   parent: ClothingUniformSkirtBase
@@ -758,25 +772,25 @@
     sprite: Clothing/Uniforms/Jumpsuit/casual.rsi
     layers:
     - state: icon-jumpskirt
-    - state: icon-shirt
-      color: "#b30000"
+    - state: icon-skirt
+      color: "#a52f29"
   - type: Item
     inhandVisuals:
       left:
       - state: inhand-left-jumpskirt
       - state: inhand-left-shirt
-        color: "#b30000"
+        color: "#a52f29"
       right:
       - state: inhand-right-jumpskirt
       - state: inhand-right-shirt
-        color: "#b30000"
+        color: "#a52f29"
   - type: Clothing
     sprite: Clothing/Uniforms/Jumpsuit/casual.rsi
     clothingVisuals:
       jumpsuit:
       - state: equipped-INNERCLOTHING-jumpskirt
-      - state: equipped-INNERCLOTHING-shirt
-        color: "#b30000"
+      - state: equipped-INNERCLOTHING-skirt
+        color: "#a52f29"
 
 - type: entity
   parent: ClothingUniformSkirtBase
@@ -788,25 +802,25 @@
     sprite: Clothing/Uniforms/Jumpsuit/casual.rsi
     layers:
     - state: icon-jumpskirt
-    - state: icon-shirt
-      color: "#00661D"
+    - state: icon-skirt
+      color: "#52a249"
   - type: Item
     inhandVisuals:
       left:
       - state: inhand-left-jumpskirt
       - state: inhand-left-shirt
-        color: "#00661D"
+        color: "#52a249"
       right:
       - state: inhand-right-jumpskirt
       - state: inhand-right-shirt
-        color: "#00661D"
+        color: "#52a249"
   - type: Clothing
     sprite: Clothing/Uniforms/Jumpsuit/casual.rsi
     clothingVisuals:
       jumpsuit:
       - state: equipped-INNERCLOTHING-jumpskirt
-      - state: equipped-INNERCLOTHING-shirt
-        color: "#00661D"
+      - state: equipped-INNERCLOTHING-skirt
+        color: "#52a249"
 
 - type: entity
   parent: ClothingUniformSkirtBase

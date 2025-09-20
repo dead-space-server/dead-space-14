@@ -2,6 +2,7 @@
 
 - type: entity
   abstract: true
+  parent: BaseMachine
   id: BaseGenerator
   description: A high efficiency thermoelectric generator.
   name: generator
@@ -12,10 +13,6 @@
     range: 5
     sound:
       path: /Audio/Ambience/Objects/engine_hum.ogg
-  - type: Clickable
-  - type: InteractionOutline
-  - type: Physics
-    bodyType: Static
   - type: Fixtures
     fixtures:
       fix1:
@@ -27,9 +24,6 @@
         - MachineMask
         layer:
         - MachineLayer
-  - type: Transform
-    anchored: true
-    noRot: true
   - type: Sprite
     sprite: Structures/Power/power.rsi
     state: generator
@@ -49,8 +43,7 @@
     supplyRate: 3000
     supplyRampRate: 500
     supplyRampTolerance: 500
-  - type: Anchorable
-  - type: Pullable
+  - type: Anchorable # Reduces anchor time to 1 second
   - type: Damageable
     damageContainer: StructuralInorganic
     damageModifierSet: Metallic
@@ -96,11 +89,9 @@
 - type: entity
   abstract: true
   id: BaseGeneratorWallmount
-  parent: BaseGenerator
+  parent: [ BaseGenerator, BaseWallmount ]
   name: wallmount generator
   description: A high efficiency thermoelectric generator stuffed in a wall cabinet.
-  placement:
-    mode: SnapgridCenter
   components:
   - type: AmbientOnPowered
   - type: AmbientSound
@@ -114,12 +105,6 @@
     color: "#3db83b"
     castShadows: false
     netsync: false
-  - type: Fixtures
-  - type: Transform
-    anchored: true
-  - type: Physics
-    bodyType: Static
-    canCollide: false
   - type: Sprite
     drawdepth: WallMountedItems
     sprite: Structures/Power/Generation/wallmount_generator.rsi
@@ -142,7 +127,6 @@
     supplyRate: 3000
     supplyRampRate: 500
     supplyRampTolerance: 500
-  - type: WallMount
   - type: GuideHelp
     guides:
     - ShuttleCraft
@@ -150,20 +134,12 @@
 # Construction Frames
 
 - type: entity
+  parent: BaseWallmountMetallic
   categories: [ HideSpawnMenu ]
   id: BaseGeneratorWallmountFrame
   name: wallmount generator frame
   description: A construction frame for a wallmount generator.
-  placement:
-    mode: SnapgridCenter
   components:
-  - type: Clickable
-  - type: InteractionOutline
-  - type: Physics
-    canCollide: false
-  - type: Fixtures
-  - type: Transform
-    anchored: true
   - type: Sprite
     drawdepth: WallMountedItems
     sprite: Structures/Power/Generation/wallmount_generator.rsi
@@ -172,7 +148,6 @@
   - type: Construction
     graph: WallmountGenerator
     node: frame
-  - type: WallMount
 
 # Generators in use
 
@@ -238,7 +213,7 @@
 # RTG - no fuel requirement
 
 - type: entity
-  parent: BaseGenerator
+  parent: [ BaseGenerator, ConstructibleMachine ]
   id: GeneratorRTG
   name: RTG
   description: A Radioisotope Thermoelectric Generator for long term power.
@@ -282,6 +257,12 @@
                 max: 1
           - !type:DoActsBehavior
             acts: [ "Destruction" ]
+  - type: Machine
+    board: GeneratorRTGMachineCircuitboard
+  - type: StaticPrice
+    price: 5500 # DS14-uranium-rework
+  - type: RadiationBlockingContainer
+    resistance: 2
 
 # TODO: need radioactive fallout when destroyed
 
@@ -290,10 +271,10 @@
   id: GeneratorRTGDamaged
   name: damaged RTG
   description: A Radioisotope Thermoelectric Generator for long term power. This one has damaged shielding.
-  suffix: 10kW
+  suffix: 1kW # DS14-uranium-rework
   components:
   - type: PowerSupplier
-    supplyRate: 10000
+    supplyRate: 1000 # DS14-uranium-rework
   - type: Sprite
     sprite: Structures/Power/Generation/rtg.rsi
     layers:
@@ -303,7 +284,7 @@
     sprite: Structures/Power/Generation/rtg.rsi
     state: rtg_damaged
   - type: RadiationSource # ideally only when opened.
-    intensity: 2
+    intensity: 3 # DS14-uranium-rework
   - type: Destructible
     thresholds:
     - trigger:
@@ -329,3 +310,4 @@
             max: 5
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
+
