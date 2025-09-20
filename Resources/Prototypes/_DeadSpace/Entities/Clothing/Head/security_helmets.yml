@@ -23,9 +23,7 @@
       - state: on-inhand-right
     clothingVisuals:
       head:
-      - state: off-equipped-HELMET
-      - state: on-equipped-HELMET-unshaded
-        shader: unshaded
+      - state: on-equipped-HELMET
   - type: Item
     inhandVisuals:
       left:
@@ -35,7 +33,7 @@
   - type: Tag
     tags:
     - WhitelistChameleon
-    - SecurityHelmet  
+    - SecurityHelmet
 
 #ви лив ин сосаити
 - type: entity
@@ -45,9 +43,9 @@
   description: Нестандартная защитная экипировка. Защищает голову от ударов.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Clothing/Head/Helmets/securityflash-neko.rsi
+    sprite: _DeadSpace/Clothing/Head/Helmets/security-neko.rsi
   - type: Clothing
-    sprite: _DeadSpace/Clothing/Head/Helmets/securityflash-neko.rsi
+    sprite: _DeadSpace/Clothing/Head/Helmets/security-neko.rsi
   - type: Tag
     tags:
     - WhitelistChameleon
