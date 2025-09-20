@@ -241,8 +241,8 @@
       sprite: Structures/Power/Generation/portable_generator.rsi
       state: portgen1
     - type: PowerSupplier
-      supplyRampRate: 10000
-      supplyRampTolerance: 4000
+      supplyRampRate: 10000 # DS14-uranium-rework
+      supplyRampTolerance: 4000 # DS14-uranium-rework
 
 - type: entity
   name: J.R.P.A.C.M.A.N.-type portable generator
