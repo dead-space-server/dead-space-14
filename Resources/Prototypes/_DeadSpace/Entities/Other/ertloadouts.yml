@@ -343,7 +343,7 @@
     sprite: _DeadSpace/Objects/Weapons/Guns/Shotguns/hammerhead.rsi
     state: icon
   content:
-  - WeaponShotgunHammerhead
+  - WeaponShotgunHammerheadIncendiary
   - ADTMagazineShotgunIncendiaryXL
   - ADTMagazineShotgunIncendiaryXL
   - ADTMagazineShotgunIncendiaryXL
