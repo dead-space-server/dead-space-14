@@ -76,7 +76,7 @@ public sealed class NotifyFunction
             {
                 if (!_dictAccess.ContainsKey(proto.ID))
                 {
-                    _dictAccess.Add(proto.ID, false);
+                    _dictAccess.TryAdd(proto.ID, false);
                 }
             }
         }
