@@ -38,3 +38,25 @@
       sprite: _DeadSpace/Objects/Specific/Autosurgeon/autosurgeon.rsi
       layers:
       - state: iconAfter
+
+- type: entity
+  parent: BaseImplantOnlyImplanterSyndi
+  id: MantisBladesImplanter
+  name: military implant
+  description: Illegal military-grade implant manufactured by Cybersun. Installs a pair of mantis blades into the forearms.
+  suffix: mantis blades
+  components:
+  - type: Implanter
+    implant: MantisBladesImplant
+
+- type: entity
+  parent: BaseSubdermalImplant
+  id: MantisBladesImplant
+  name: military implant
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SubdermalImplant
+    implantAction: ActionRetractableItemMantisBladesImplant
+    whitelist:
+      components:
+      - Hands
