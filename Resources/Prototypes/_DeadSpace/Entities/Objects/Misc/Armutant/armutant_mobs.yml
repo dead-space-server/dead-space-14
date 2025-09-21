@@ -15,18 +15,36 @@
 
 - type: entity
   parent: CollideSpawnVoidBosses
+  id: SpawnBossesSpiderERP
+  suffix: Void SpiderERP
+  components:
+    - type: TriggerOnCollide
+      fixtureID: spawnvoidbosses
+    - type: EmitSoundOnTrigger
+      sound:
+        path: /Audio/_DeadSpace/Armutant/sound_fight_first_boss.ogg
+        volume: 1
+      predicted: true
+      positional: true
+    - type: SpawnOnTrigger
+      proto: MobBossesVoidSpider
+    - type: DeleteOnTrigger
+
+- type: entity
+  parent: CollideSpawnVoidBosses
   id: SpawnBossesSpider
   suffix: Void Spider
   components:
     - type: TriggerOnCollide
       fixtureID: spawnvoidbosses
-    - type: SoundOnTrigger
-      removeOnTrigger: true
+    - type: EmitSoundOnTrigger
       sound:
         path: /Audio/_DeadSpace/Armutant/sound_fight_first_boss.ogg
         volume: 1
+      predicted: true
+      positional: true
     - type: SpawnOnTrigger
-      proto: MobBossesVoidSpider
+      proto: SoundVoidSpiderEffect
     - type: DeleteOnTrigger
 
 - type: entity
@@ -36,8 +54,8 @@
   components:
     - type: TriggerOnCollide
       fixtureID: spawnvoidlingbosses
-    - type: SoundOnTrigger
-      removeOnTrigger: true
+    - type: EmitSoundOnTrigger
+      removeOnTrigger: false
       sound:
         path: /Audio/_DeadSpace/Armutant/sound_fight_two_bosses.ogg
         volume: 1
@@ -171,8 +189,8 @@
     mode: SnapgridCenter
   components:
     - type: Sprite
-      sprite: Objects/Fun/toys.rsi
-      state: plushie_arachnid
+      sprite: Objects/Fun/Plushies/arachnid.rsi
+      state: icon
     - type: Fixtures
       fixtures:
         spawnvoidbosses:

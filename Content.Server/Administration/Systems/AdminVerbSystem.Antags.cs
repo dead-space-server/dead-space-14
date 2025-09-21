@@ -13,11 +13,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using Content.Shared.DeadSpace.Events.Roles.Components;
-<<<<<<< HEAD
-=======
-using Content.Server.GameTicking.Rules;
 using Content.Server.DeadSpace.Armutant.Base.Components;
->>>>>>> 66c354a890 (FixFixFixFixFixFix)
 
 namespace Content.Server.Administration.Systems;
 

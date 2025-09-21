@@ -84,7 +84,7 @@ public partial class SharedArmutantSystem
             if (_mobState.IsDead(receiver))
                 continue;
 
-            _stun.TryParalyze(receiver, args.ParalyzeTime, true);
+            _stun.TryUpdateParalyzeDuration(receiver, args.ParalyzeTime);
 
             var dashDirection = (_transform.GetWorldPosition(receiver) - _transform.GetWorldPosition(ent)).Normalized();
             _physics.SetLinearVelocity(receiver, dashDirection * args.KnockbackForce, body: physics);

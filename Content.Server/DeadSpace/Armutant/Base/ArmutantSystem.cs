@@ -7,7 +7,7 @@ using Content.Server.Destructible.Thresholds;
 using Content.Server.Destructible;
 using System.Linq;
 using Content.Server.Beam;
-using Content.Server.Body.Components;
+using Content.Shared.Body.Components;
 
 namespace Content.Server.DeadSpace.Armutant.Base;
 
@@ -31,8 +31,8 @@ public sealed class ArmutantSystem : SharedArmutantSystem
         if (!TryComp<BloodstreamComponent>(ent, out var bloodstream))
             return;
 
-        _blood.TryModifyBleedAmount(ent, -bloodstream.BleedAmount);
-        _blood.TryModifyBloodLevel(ent, bloodstream.BloodMaxVolume);
+        _blood.TryModifyBleedAmount(ent.Owner, -bloodstream.BleedAmount);
+        _blood.TryModifyBloodLevel(ent.Owner, bloodstream.BloodMaxVolume);
     }
 
     private void UnCuffableArm(Entity<ArmutantComponent> ent, ref UnCuffableArmEvent args)

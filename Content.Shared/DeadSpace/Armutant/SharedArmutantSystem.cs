@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Shared.Actions;
+using Content.Shared.Actions.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
 using Content.Shared.Examine;
@@ -41,7 +42,6 @@ public abstract partial class SharedArmutantSystem : EntitySystem
     [Dependency] private readonly SharedSolutionContainerSystem _solution = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly StandingStateSystem _standing = default!;
-    [Dependency] private readonly SharedContentEyeSystem _eye = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     private readonly HashSet<EntityUid> _receivers = new();
 
@@ -59,9 +59,10 @@ public abstract partial class SharedArmutantSystem : EntitySystem
 
     private void OnComponentInit(Entity<ArmutantComponent> ent, ref ComponentInit args)
     {
-        var armutantEntity = EnsureComp<ArmutantComponent>(ent);
+        if (!_net.IsServer)
+            return;
 
-        AddAbilities(ent, armutantEntity.ArmutantAbility, armutantEntity.ArmutantActionEntities);
+        AddAbilities(ent.Owner, ent.Comp.ArmutantAbility, ent.Comp.ArmutantActionEntities);
 
         var ev = new SetNewDestructibleThreshold(ent, ent.Comp.DamageTypeGib, ent.Comp.DamageAmountGib);
         RaiseLocalEvent(ent, ev);

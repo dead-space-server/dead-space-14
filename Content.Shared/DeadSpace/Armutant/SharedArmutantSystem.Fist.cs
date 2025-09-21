@@ -76,7 +76,7 @@ public partial class SharedArmutantSystem
         var ev = new BeamActiveVoidHold(args.HandEffect, args.Target);
         RaiseLocalEvent(ent, ev);
 
-        _stun.TryParalyze(args.Target, TimeSpan.FromSeconds(args.StunTime), true);
+        _stun.TryUpdateParalyzeDuration(args.Target, TimeSpan.FromSeconds(args.StunTime));
 
         _audio.PlayPvs(args.SoundEffect, ent);
 
