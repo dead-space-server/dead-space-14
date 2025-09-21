@@ -14,6 +14,7 @@
 
 - type: construction
   id: MiningWindowDiagonal
+  name: construction-recipe-mining-window-diagonal
   graph: DiagonalWindow
   startNode: start
   targetNode: miningWindowDiagonal
@@ -27,6 +28,7 @@
 
 - type: construction
   id: ShuttleWindowDiagonal
+  name: construction-recipe-shuttle-window-diagonal
   graph: DiagonalWindow
   startNode: start
   targetNode: shuttleWindowDiagonal
