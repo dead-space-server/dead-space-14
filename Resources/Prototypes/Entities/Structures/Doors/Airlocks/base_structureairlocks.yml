@@ -180,7 +180,6 @@
     - Airlocks
     - WirePanels
     - Networking
-  - type: ChameleonDisguise # DS14
   placement:
     mode: SnapgridCenter
 

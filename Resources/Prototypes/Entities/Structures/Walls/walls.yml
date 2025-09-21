@@ -55,7 +55,6 @@
     resistance: 2
   - type: BlockWeather
   - type: SunShadowCast
-  - type: ChameleonDisguise # DS14
 
 - type: entity
   abstract: true
