@@ -737,7 +737,7 @@
         Caustic: 0.2
         Stun: 0.2 # DS14-value: what is stun?
   - type: ClothingSpeedModifier
-    walkModifier: 0.55 # DS14-value
+    walkModifier: 0.65 # DS14-value
     sprintModifier: 0.55 # DS14-value
   - type: HeldSpeedModifier
   - type: ToggleableClothing
