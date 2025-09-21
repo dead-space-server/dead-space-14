@@ -636,7 +636,6 @@ public sealed partial class ServerApi : IPostInjectInit
     {
         public required string Permissions { get; init; }
         public required string Ckey { get; init; }
-        public required bool OnServer { get; init; }
     }
 
 

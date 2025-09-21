@@ -5,8 +5,7 @@ using Content.Server.Administration.Managers;
 using Robust.Server.ServerStatus;
 using Content.Server.Database;
 using Robust.Shared.Player;
-using Robust.Shared.Toolshed.TypeParsers;
-using System.Linq;
+
 
 namespace Content.Server.Administration;
 
@@ -59,6 +58,7 @@ public sealed partial class ServerApi
         var playerMgr = await RunOnMainThread(IoCManager.Resolve<ISharedPlayerManager>);
         var ply = await _db.GetPlayerRecordByUserName(permissionList.Ckey);
         var ranks = await _db.GetAllAdminAndRanksAsync();
+        var rank = await _db.GetAdminRankAsync(5);
         Admin previoslyAdmin = new Admin();
         if (ply == null)
         {
@@ -71,6 +71,7 @@ public sealed partial class ServerApi
         {
             if (string.IsNullOrEmpty(adminname.lastUserName))
             {
+                await context.RespondJsonAsync("string.IsNullOrEmpty(adminname.lastUserName)");
                 return;
             }
             if (ply.LastSeenUserName == adminname.lastUserName.ToString())
@@ -85,72 +86,70 @@ public sealed partial class ServerApi
         }
         if (!isAdmin)
         {
-            foreach (var admin in ranks.Item2)
+            if (rank == null)
             {
-                if (admin.Name == null)
-                {
-                    return;
-                }
-                if (admin.Name == permissionList.Permissions)
-                {
-                    Admin adminTOGive = new Admin
-                    {
-                        AdminRankId = admin.Id,
-                        AdminRank = admin,
-                        UserId = ply.UserId,
-                        Title = admin.Name,
-                        Suspended = false,
-                    };
-                    await _db.AddAdminAsync(adminTOGive);
-                    if (permissionList.OnServer)
-                    {
-                        adminMgr.ReloadAdmin(playerMgr.GetSessionById(ply.UserId));
-                    }
-                    break;
-                }
+                return;
             }
+            Admin adminTOGive = new Admin
+            {
+                AdminRankId = rank.Id,
+                UserId = ply.UserId,
+                Title = rank.Name,
+                Suspended = false,
+                Deadminned = false
+            };
+            await _db.AddAdminAsync(adminTOGive);
+            //if (permissionList.OnServer)
+            //{
+            //    if (_playerManager.TryGetSessionById(ply.UserId, out var player))
+            //    {
+            //        _adminMgr.ReloadAdmin(player);
+            //        adminMgr.ReloadAdmin(player);
+            //    }
+            //}
         }
         else
         {
-            foreach (var admin in ranks.Item2)
+            if (rank == null || previoslyAdmin == null || previoslyAdmin.AdminRank == null)
             {
-                if (admin.Name == null || previoslyAdmin == null)
+                await context.RespondJsonAsync("admin.Name == null");
+                return;
+            }
+            List<AdminFlag> flags = new List<AdminFlag>();
+            foreach (var flag in rank.Flags)
+            {
+                flags.Add(new AdminFlag
                 {
-                    return;
-                }
-                if (admin.Name == permissionList.Permissions)
+                    Flag = flag.Flag,
+                    Negative = false,
+                });
+            }
+            foreach (var flag in previoslyAdmin.Flags)
+            {
+                if (!flags.Contains(flag))
                 {
-                    List<AdminFlag> flags = new List<AdminFlag>();
-                    foreach (var flag in admin.Flags)
-                    {
-                        flags.Add(new AdminFlag
-                        {
-                            Flag = flag.Flag,
-                            Negative = false,
-                        });
-                    }
-                    foreach (var flag in previoslyAdmin.Flags)
-                    {
-                        flags.Add(flag);
-                    }
-                    Admin adminTOGive = new Admin
-                    {
-                        Flags = flags,
-                        AdminRankId = previoslyAdmin.AdminRankId,
-                        AdminRank = previoslyAdmin.AdminRank,
-                        UserId = previoslyAdmin.UserId,
-                        Title = previoslyAdmin.Title,
-                        Suspended = previoslyAdmin.Suspended,
-                    };
-                    await _db.AddAdminAsync(adminTOGive);
-                    if (permissionList.OnServer)
-                    {
-                        adminMgr.ReloadAdmin(playerMgr.GetSessionById(ply.UserId));
-                    }
-                    break;
+                    flags.Add(flag);
                 }
             }
+            Admin adminTOGive = new Admin
+            {
+                Flags = flags,
+                AdminRankId = previoslyAdmin.AdminRank.Id,
+                UserId = previoslyAdmin.UserId,
+                Title = previoslyAdmin.Title,
+                Suspended = previoslyAdmin.Suspended,
+            };
+            await _db.UpdateAdminAsync(adminTOGive);
+            //if (permissionList.OnServer)
+            //{
+            //    //adminMgr.ReloadAdmin(playerMgr.GetSessionById(ply.UserId));
+            //    if (_playerManager.TryGetSessionById(ply.UserId, out var player))
+            //    {
+            //        adminMgr.ReloadAdmin(player);
+            //    }
+            //}
         }
         await context.RespondJsonAsync("success");
     }
 }
+
