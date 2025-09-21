@@ -10,7 +10,7 @@
     - Wall
   components:
   - type: Anchorable
-    flags: 
+    flags:
     - Anchorable
   - type: Rotatable
   - type: RangedDamageSound
@@ -55,6 +55,7 @@
     resistance: 2
   - type: BlockWeather
   - type: SunShadowCast
+  - type: ChameleonDisguise # DS14
 
 - type: entity
   abstract: true

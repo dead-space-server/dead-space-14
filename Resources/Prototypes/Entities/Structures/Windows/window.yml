@@ -96,6 +96,7 @@
   - type: StaticPrice
     price: 100
   - type: BlockWeather
+  - type: ChameleonDisguise # DS14
 
 - type: entity
   parent: Window
