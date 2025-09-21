@@ -42,6 +42,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly StandingStateSystem _standing = default!;
     [Dependency] private readonly SharedContentEyeSystem _eye = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
     private readonly HashSet<EntityUid> _receivers = new();
 
     public override void Initialize()
@@ -62,11 +63,42 @@ public abstract partial class SharedArmutantSystem : EntitySystem
 
         AddAbilities(ent, armutantEntity.ArmutantAbility, armutantEntity.ArmutantActionEntities);
 
-        var ev = new SetNewDestructibleThreshold(ent, ent.Comp.DamageTypeGib, ent.Comp.DamageAmountGib); // Делаем вызов события для смены параметров гибба
+        var ev = new SetNewDestructibleThreshold(ent, ent.Comp.DamageTypeGib, ent.Comp.DamageAmountGib);
         RaiseLocalEvent(ent, ev);
     }
 
-    private void SwapArms(Entity<ArmutantComponent> ent, ref ArmutantSwapArmEvent args) // Логика смены рук
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        if (!_net.IsServer)
+            return;
+
+        var curTime = _timing.CurTime;
+        var query = EntityQueryEnumerator<ArmutantComponent>();
+        while (query.MoveNext(out var uid, out var armutant))
+        {
+            if (armutant.TimeToExitStasis == null || curTime < armutant.TimeToExitStasis)
+                continue;
+
+            var ent = (uid, armutant);
+            if (TryExitStasis(ent))
+            {
+                var ev = new UnCuffableArmEvent(uid);
+                RaiseLocalEvent(uid, ev);
+                if (armutant.ExitToStasisEffect != null)
+                {
+                    var effect = Spawn(armutant.ExitToStasisEffect, Transform(uid).Coordinates);
+                    _transform.SetParent(effect, uid);
+                }
+            }
+
+            armutant.TimeToExitStasis = null;
+            armutant.ExitToStasisEffect = null;
+        }
+    }
+
+    private void SwapArms(Entity<ArmutantComponent> ent, ref ArmutantSwapArmEvent args)
     {
         if (!_net.IsServer)
             return;
@@ -74,48 +106,39 @@ public abstract partial class SharedArmutantSystem : EntitySystem
         if (args.Handled)
             return;
 
-        var actionEnt = args.Action.Owner;
-        if (!TryComp<ArmutantActionComponent>(actionEnt, out var armutantActionComp))
-            return;
-
-        ent.Comp.SelectedArm = armutantActionComp.List; // Передаем список способностей в основной компонент
-        ent.Comp.SelectedArmComp = armutantActionComp;
+        ent.Comp.SelectedArm = args.List;
 
         DoSwap(ent);
 
         args.Handled = true;
     }
 
-    private void DoSwap(Entity<ArmutantComponent> ent) // Логика выдачи способностей
+    private void DoSwap(Entity<ArmutantComponent> ent)
     {
-        if (ent.Comp.SelectedArmComp == null)
+        if (ent.Comp.SelectedArm == null)
             return;
 
         if (_net.IsClient)
             return;
 
-        var armutantActionShieldComp = EnsureComp<ArmutantShieldActionComponent>(ent);
-
-        var armutantActionGunComp = EnsureComp<ArmutantGunActionComponent>(ent);
-
         var armutantActionComp = EnsureComp<ArmutantComponent>(ent);
 
-        var armutantComp = ent.Comp.SelectedArmComp;
+        var armutantComp = ent.Comp.SelectedArm;
 
-        _audio.PlayPvs(armutantComp.MeatSound, ent);
+        _audio.PlayPvs(ent.Comp.MeatSound, ent);
 
         switch (ent.Comp.SelectedArm)
         {
             case ArmutantArms.BladeArm:
-                if (!TryToggleItem(ent, ent.Comp.BladeArmPrototype)) // Надеваем или снимаем руку
+                if (!TryToggleItem(ent, ent.Comp.BladeArmPrototype))
                     return;
-                if (armutantActionComp.ArmutantActionEntitiesBlade.Count > 0) // Если список имеет данные, удаляем все способности и выходим из кейса
+                if (armutantActionComp.ArmutantActionEntitiesBlade.Count > 0)
                 {
                     ClearActiveAbilities(ent, armutantActionComp.ArmutantActionEntitiesBlade);
                     break;
                 }
                 else
-                    AddAbilities(ent, armutantActionComp.ArmutantAbilityBlade, armutantActionComp.ArmutantActionEntitiesBlade); // Если список был пустым, то добавляем способности
+                    AddAbilities(ent, armutantActionComp.ArmutantAbilityBlade, armutantActionComp.ArmutantActionEntitiesBlade);
                 break;
             case ArmutantArms.FistArm:
                 if (!TryToggleItem(ent, ent.Comp.FistArmPrototype))
@@ -138,39 +161,26 @@ public abstract partial class SharedArmutantSystem : EntitySystem
                     RemoveAllArmor(ent, armutantActionComp.EquipmentArmor);
                 }
                 else
-                {
                     AddAbilities(ent, armutantActionComp.ArmutantAbilityShield, armutantActionComp.ArmutantActionEntitiesShield);
-                }
                 break;
             case ArmutantArms.GunArm:
                 if (!TryToggleItem(ent, ent.Comp.GunArmPrototype))
                     return;
 
                 if (armutantActionComp.ArmutantActionEntitiesGun.Count > 0)
-                {
                     ClearActiveAbilities(ent, armutantActionComp.ArmutantActionEntitiesGun);
-                    _eye.ResetZoom(ent);
-                    armutantActionGunComp.Offset = Vector2.Zero;
-                }
                 else
-                {
                     AddAbilities(ent, armutantActionComp.ArmutantAbilityGun, armutantActionComp.ArmutantActionEntitiesGun);
-                }
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
         ent.Comp.SelectedArm = null;
-        ent.Comp.SelectedArmComp = null;
     }
 
-    private void OnEnterStasis(Entity<ArmutantComponent> ent, ref EnterArmutantStasisEvent args) // Логика входа в стазис
+    private void OnEnterStasis(Entity<ArmutantComponent> ent, ref EnterArmutantStasisEvent args)
     {
         if (args.Handled)
-            return;
-
-        var actionEnt = args.Action.Owner;
-        if (!TryComp<ArmutantActionComponent>(actionEnt, out var armutantActionComp))
             return;
 
         if (ent.Comp.IsInStasis)
@@ -179,7 +189,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
             return;
         }
 
-        if (_mobState.IsAlive(ent)) // Если человек живой, меняем его состояние на Dead и пишем от его лица что он совершил суицид
+        if (_mobState.IsAlive(ent))
         {
             var othersMessage = Loc.GetString("suicide-command-default-text-others", ("name", ent));
             _popup.PopupEntity(othersMessage, ent, Robust.Shared.Player.Filter.PvsExcept(ent), true);
@@ -191,31 +201,24 @@ public abstract partial class SharedArmutantSystem : EntitySystem
         if (!_mobState.IsDead(ent))
             _mobState.ChangeMobState(ent, MobState.Dead);
 
-        ent.Comp.IsInStasis = true; // Указываем что он в стазисе
+        ent.Comp.IsInStasis = true;
 
-        Timer.Spawn(TimeSpan.FromSeconds(armutantActionComp.TimeInStasis), () => // Как проходит время, вытаскиваем его из стазиса, спавним эффект и снимаем наручники, если они есть
-        {
-            OnExitStasis(ent);
+        ent.Comp.TimeToExitStasis = _timing.CurTime + TimeSpan.FromSeconds(args.TimeInStasis);
+        ent.Comp.ExitToStasisEffect = args.ExitToStasisEffect;
 
-            var ev = new UnCuffableArmEvent(ent);
-            RaiseLocalEvent(ent, ev);
-
-            var effect = Spawn(armutantActionComp.ExitToStasisEffect, Transform(ent).Coordinates);
-            _transform.SetParent(effect, ent);
-        });
         args.Handled = true;
     }
 
-    private void OnExitStasis(Entity<ArmutantComponent> ent)
+    private bool TryExitStasis(Entity<ArmutantComponent> ent)
     {
         if (!ent.Comp.IsInStasis)
         {
             _popup.PopupEntity(Loc.GetString("armutant-stasis-exit-fail"), ent, ent);
-            return;
+            return false;
         }
 
         if (!TryComp<DamageableComponent>(ent, out var damageable))
-            return;
+            return false;
 
         _damage.SetAllDamage(ent, damageable, 0);
         _mobState.ChangeMobState(ent, MobState.Alive);
@@ -224,9 +227,11 @@ public abstract partial class SharedArmutantSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("armutant-stasis-exit"), ent, ent);
 
         ent.Comp.IsInStasis = false;
+
+        return true;
     }
 
-    private DamageSpecifier ConverDamageSpecifier(string damageType, // Сделан для удобства редактирования прототипов
+    private DamageSpecifier ConverDamageSpecifier(string damageType,
     int damageAmount,
     out DamageSpecifier damage)
     {
@@ -236,7 +241,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
         return damage;
     }
 
-    private void AddAbilities(EntityUid ent, // Логика добавления способностей
+    private void AddAbilities(EntityUid ent,
     List<EntProtoId> ability,
     List<EntityUid> container)
     {
@@ -248,7 +253,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
         }
     }
 
-    private void ClearActiveAbilities(EntityUid ent, // Тоже самое, но удаление
+    private void ClearActiveAbilities(EntityUid ent,
     List<EntityUid> container
     )
     {
@@ -259,7 +264,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
         container.Clear();
     }
 
-    private void HandlePullingInteractions(EntityUid ent) // Логика для рывка, убирает все взаимодействия с перетаскиванием перед рывком
+    private void HandlePullingInteractions(EntityUid ent)
     {
         if (TryComp<PullableComponent>(ent, out var pullable) && _pulling.IsPulled(ent, pullable))
             _pulling.TryStopPull(ent, pullable);
@@ -268,7 +273,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
             _pulling.TryStopPull(puller.Pulling.Value, pullableTarget);
     }
 
-    public bool TryToggleItem(Entity<ArmutantComponent> ent, EntProtoId proto, string? clothingSlot = null) // Логика снятия и надевания предметов
+    public bool TryToggleItem(Entity<ArmutantComponent> ent, EntProtoId proto, string? clothingSlot = null)
     {
         if (!ent.Comp.Equipment.TryGetValue(proto.Id, out var item))
         {
@@ -299,7 +304,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
         return true;
     }
 
-    public bool TryInjectReagents(EntityUid uid, List<(string, FixedPoint2)> reagents) // Вводит указанный реагент в сущность
+    public bool TryInjectReagents(EntityUid uid, List<(string, FixedPoint2)> reagents)
     {
         var solution = new Shared.Chemistry.Components.Solution();
         foreach (var reagent in reagents)

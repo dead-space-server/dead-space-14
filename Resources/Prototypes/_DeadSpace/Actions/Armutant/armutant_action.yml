@@ -12,10 +12,9 @@
     icon:
       sprite: _DeadSpace/Actions/armutant_actions.rsi
       state: shard
-    event: !type:CreateTalonBladeEvent {}
-  - type: ArmutantBladeAction
-    talonBladePrototype: WeaponTalonClaws
-    soundEffect: /Audio/_DeadSpace/Armutant/sound_effects_meat.ogg
+    event: !type:CreateTalonBladeEvent
+      talonBladePrototype: WeaponTalonClaws
+      soundEffectSpawn: /Audio/_DeadSpace/Armutant/sound_effects_meat.ogg
 
 - type: entity
   id: ActionToggleDash
@@ -28,18 +27,17 @@
       sprite: _DeadSpace/Actions/armutant_actions.rsi
       state: blink
     priority: -15
-    event: !type:BladeDashActionEvent {}
+    event: !type:BladeDashActionEvent
+      soundEffectDash: /Audio/_DeadSpace/Armutant/sound_items_weapons_dash.ogg
+      maxDashRange: 10
+      collisionRadiusDash: 1.5
+      typeDamage: Slash
+      amountDamage: 25
+      knockbackForce: 10
+      selfEffect: BladeDashSelfEffect
     range: 4
     useDelay: 7
     checkCanAccess: false
-  - type: ArmutantBladeAction
-    soundEffect: /Audio/_DeadSpace/Armutant/sound_items_weapons_dash.ogg
-    maxDashRange: 10
-    collisionRadiusDash: 1.5
-    typeDamage: Slash
-    amountDamage: 25
-    knockbackForce: 10
-    selfEffect: BladeDashSelfEffect
 
 - type: entity
   id: ActionToggleSporeBlade
@@ -73,10 +71,10 @@
     icon:
       sprite: _DeadSpace/Actions/armutant_actions.rsi
       state: armor
-    event: !type:CreateArmorShieldToggleEvent {}
-  - type: ArmutantShieldAction
-    armorPrototype: ClothingOuterArmorArmutant
-    armorHelmetPrototype: ClothingHeadHelmetArmutant
+    event: !type:CreateArmorShieldToggleEvent
+      armorPrototype: ClothingOuterArmorArmutant
+      armorHelmetPrototype: ClothingHeadHelmetArmutant
+      soundEffect: /Audio/_DeadSpace/Armutant/sound_effects_meteorimpact.ogg
 
 - type: entity
   id: ActionToggleShieldStun
@@ -91,15 +89,14 @@
     icon:
       sprite: _DeadSpace/Actions/armutant_actions.rsi
       state: leg
-    event: !type:StunShieldToggleEvent {}
-  - type: ArmutantShieldAction
-    soundEffect: /Audio/_DeadSpace/Armutant/sound_effects_meteorimpact.ogg
-    range: 3
-    shortRange: 0.5
-    selfEffect: EffectSelfStun
-    effectTarget: EffectStun
-    knockbackForce: 15
-    paralyzeTime: 1
+    event: !type:StunShieldToggleEvent
+      range: 3
+      shortRange: 0.5
+      selfEffectStun: EffectSelfStun
+      effectTarget: EffectStun
+      knockbackForce: 15
+      paralyzeTime: 1
+      soundEffect: /Audio/_DeadSpace/Armutant/sound_effects_meteorimpact.ogg
 
 - type: entity
   id: ActionToggleVoidShield
@@ -115,11 +112,10 @@
     icon:
       sprite: _DeadSpace/Actions/armutant_actions.rsi
       state: shield
-    event: !type:VoidShieldToggleEvent {}
-  - type: ArmutantShieldAction
-    selfEffect: VoidShieldSelfEffect
-    reflectSound: /Audio/_DeadSpace/Armutant/sound_effetc_reflect.ogg
-    activeTime: 15
+    event: !type:VoidShieldToggleEvent
+      selfEffectShield: VoidShieldSelfEffect
+      reflectSound: /Audio/_DeadSpace/Armutant/sound_effetc_reflect.ogg
+      activeTime: 15
 
 # Fist region
 
@@ -135,14 +131,13 @@
     icon:
       sprite: _DeadSpace/Actions/armutant_actions.rsi
       state: arms
-    event: !type:FistStunTentacleToggleEvent {}
+    event: !type:FistStunTentacleToggleEvent
+      stunTime: 2
+      handEffect: TentacleArmsHand
+      targetEffect: FistStunAroundEffect
+      soundEffect: /Audio/_DeadSpace/Armutant/sound_effects_splat.ogg
     range: 6
     deselectOnMiss: false
-  - type: ArmutantFistAction
-    stunTime: 2
-    handEffect: TentacleArmsHand
-    targetEffect: FistStunAroundEffect
-    soundEffect: /Audio/_DeadSpace/Armutant/sound_effects_splat.ogg
 
 - type: entity
   id: ActionToggleFistMendSelf
@@ -158,11 +153,10 @@
     icon:
       sprite: _DeadSpace/Actions/armutant_actions.rsi
       state: healthup
-    event: !type:FistMendSelfToggleEvent {}
-  - type: ArmutantFistAction
-    amountReagent: 10
-    reagent: Shrapnel
-    selfEffect: FistSelfMendEffect # Эффект при снятие наручников
+    event: !type:FistMendSelfToggleEvent
+      amountReagent: 10
+      reagent: Shrapnel
+      selfEffect: FistSelfMendEffect
 
 - type: entity
   id: ActionToggleFistBuffSpeed
@@ -177,29 +171,12 @@
     icon:
       sprite: _DeadSpace/Actions/armutant_actions.rsi
       state: energyup
-    event: !type:FistBuffSpeedToggleEvent {}
-  - type: ArmutantFistAction
-    timeRecovery: 15 # Сколько длится ускорение
-    buffSpeedSprint: 5.5
-    buffSpeedWalk: 3.0
+    event: !type:FistBuffSpeedToggleEvent
+      timeRecovery: 15 # Сколько длится ускорение
+      buffSpeedSprint: 5.5
+      buffSpeedWalk: 3.0
 
 # Gun region
-
-- type: entity
-  id: ActionToggleGunZoom
-  name: "[color=violet]Прицеливание[/color]"
-  description: Увеличивает ваш зрительный диапазон.
-  components:
-  - type: InstantAction
-    itemIconStyle: NoItem
-    priority: -7
-    icon:
-      sprite: _DeadSpace/Actions/armutant_actions.rsi
-      state: zoom
-    event: !type:GunZoomActionEvent {}
-    useDelay: 1
-  - type: ArmutantGunAction
-    
 
 - type: entity
   id: ActionToggleGunSmoke
@@ -212,10 +189,9 @@
     icon:
       sprite: _DeadSpace/Actions/armutant_actions.rsi
       state: smoke
-    event: !type:GunSmokeActionEvent {}
+    event: !type:GunSmokeActionEvent
+      spawnPrototype: GunSmokeInstantEffect
     useDelay: 20
-  - type: ArmutantGunAction
-    spawnPrototype: GunSmokeInstantEffect
 
 # General region
 
@@ -234,10 +210,10 @@
     icon:
       sprite: _DeadSpace/Actions/armutant_actions.rsi
       state: revive
-    event: !type:EnterArmutantStasisEvent {}
-  - type: ArmutantAction
-    timeInStasis: 30
-    exitToStasisEffect: EnterToStasisEffect
+    event: !type:EnterArmutantStasisEvent
+      timeInStasis: 30
+      exitToStasisEffect: EnterToStasisEffect
+
 
 # Swap arms
 
@@ -255,10 +231,8 @@
     icon:
       sprite: _DeadSpace/Armutant/armblade.rsi
       state: icon
-    event: !type:ArmutantSwapArmEvent {}
-  - type: ArmutantAction
-    list: BladeArm
-    meatSound: /Audio/_DeadSpace/Armutant/sound_effects_meat.ogg
+    event: !type:ArmutantSwapArmEvent
+      list: BladeArm
 
 - type: entity
   id: ActionToggleShield
@@ -274,10 +248,8 @@
     icon:
       sprite: _DeadSpace/Armutant/shield.rsi
       state: icon
-    event: !type:ArmutantSwapArmEvent {}
-  - type: ArmutantAction
-    list: ShieldArm
-    meatSound: /Audio/_DeadSpace/Armutant/sound_effects_meat.ogg
+    event: !type:ArmutantSwapArmEvent
+      list: ShieldArm
 
 - type: entity
   id: ActionToggleFist
@@ -293,10 +265,8 @@
     icon:
       sprite: _DeadSpace/Armutant/blood_fist.rsi
       state: icon
-    event: !type:ArmutantSwapArmEvent {}
-  - type: ArmutantAction
-    list: FistArm
-    meatSound: /Audio/_DeadSpace/Armutant/sound_effects_meat.ogg
+    event: !type:ArmutantSwapArmEvent
+      list: FistArm
 
 - type: entity
   id: ActionToggleGun
@@ -312,7 +282,5 @@
     icon:
       sprite: _DeadSpace/Armutant/armutant_gun.rsi
       state: icon
-    event: !type:ArmutantSwapArmEvent {}
-  - type: ArmutantAction
-    list: GunArm
-    meatSound: /Audio/_DeadSpace/Armutant/sound_effects_meat.ogg
+    event: !type:ArmutantSwapArmEvent
+      list: GunArm

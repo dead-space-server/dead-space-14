@@ -52,7 +52,7 @@
   - MobDamageable
   - MobAtmosExposed
   - MobCombat
-  name: Паук Пустоты
+  name: паук пустоты
   description: Очень быстрое гуманоидное существо, к тому же и сильное.
   components:
   - type: StatusEffects
@@ -127,7 +127,7 @@
 - type: entity
   id: MobVoidlingBosses
   parent: MobBossesVoidSpider
-  name: Войдлинг
+  name: войдлинг
   description: Мифическое существо, на вид до ужаса сильное.
   components:
   - type: Sprite

@@ -53,3 +53,34 @@
     - type: IconSmooth
       key: walls
       mode: NoSprite
+
+- type: entity
+  id: VoidStatue
+  parent: BaseStructure
+  name: статуя воина
+  description: |
+    Перед вами высокая статуя
+    Вы видите неизвестного вам воина
+    Возможно он как-то связан с этим местом
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Armutant/void_statue.rsi
+      state: void_statue
+      drawdepth: Mobs
+      noRot: true
+      offset: "0.0,0.5"
+
+- type: entity
+  id: CursehHeartStatue
+  parent: BaseStructure
+  name: насос пустоты
+  description: |
+    Перед вами большая и пульсирующая структура
+    Возможно оно живое
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Armutant/cursed_heart.rsi
+      state: cursed_heart
+      drawdepth: Mobs
+      noRot: true
+      offset: "0.0,0.5"

@@ -22,16 +22,12 @@ public partial class SharedArmutantSystem
         if (args.Handled)
             return;
 
-        var actionEnt = args.Action.Owner;
-        if (!TryComp<ArmutantFistActionComponent>(actionEnt, out var armutantActionComp))
-            return;
-
-        _speed.ChangeBaseSpeed(ent, armutantActionComp.BuffSpeedWalk, armutantActionComp.BuffSpeedSprint, 20f); // Бафф скорости, значение 20f базовое, никак не будет менять
+        _speed.ChangeBaseSpeed(ent, args.BuffSpeedWalk, args.BuffSpeedSprint, 20f);
         _popup.PopupEntity(Loc.GetString("speed-buff-start"), ent, ent);
 
-        Timer.Spawn(TimeSpan.FromSeconds(armutantActionComp.TimeRecovery), () =>
+        Timer.Spawn(TimeSpan.FromSeconds(args.TimeRecovery), () =>
         {
-            _speed.ChangeBaseSpeed(ent, 2.5f, 4.5f, 20f); // Возвращаем к базовому значению скорости
+            _speed.ChangeBaseSpeed(ent, 2.5f, 4.5f, 20f);
             _popup.PopupEntity(Loc.GetString("speed-buff-end"), ent, ent);
         });
         args.Handled = true;
@@ -45,22 +41,18 @@ public partial class SharedArmutantSystem
         if (args.Handled)
             return;
 
-        var actionEnt = args.Action.Owner;
-        if (!TryComp<ArmutantFistActionComponent>(actionEnt, out var armutantActionComp))
-            return;
-
-        if (TryComp<CuffableComponent>(ent, out var cuffs) && cuffs.Container.ContainedEntities.Count > 0) // Если человек в наручниках, освобождаем его
+        if (TryComp<CuffableComponent>(ent, out var cuffs) && cuffs.Container.ContainedEntities.Count > 0)
         {
             var ev = new UnCuffableArmEvent(ent);
             RaiseLocalEvent(ent, ev);
 
-            var effect = Spawn(armutantActionComp.SelfEffect, Transform(ent).Coordinates);
+            var effect = Spawn(args.SelfEffect, Transform(ent).Coordinates);
             _transform.SetParent(effect, ent);
         }
 
-        var reagents = new List<(string, FixedPoint2)>() // Создаем контейнер реагента
+        var reagents = new List<(string, FixedPoint2)>()
         {
-            (armutantActionComp.Reagent, armutantActionComp.AmountReagent)
+            (args.Reagent, args.AmountReagent)
         };
 
         if (TryInjectReagents(ent, reagents))
@@ -81,18 +73,14 @@ public partial class SharedArmutantSystem
         if (args.Handled)
             return;
 
-        var actionEnt = args.Action.Owner;
-        if (!TryComp<ArmutantFistActionComponent>(actionEnt, out var armutantActionComp))
-            return;
-
-        var ev = new BeamActiveVoidHold(armutantActionComp.HandEffect, args.Target); // Вызываем эффект руки
+        var ev = new BeamActiveVoidHold(args.HandEffect, args.Target);
         RaiseLocalEvent(ent, ev);
 
-        _stun.TryParalyze(args.Target, TimeSpan.FromSeconds(armutantActionComp.StunTime), true); // Парализуем цель
+        _stun.TryParalyze(args.Target, TimeSpan.FromSeconds(args.StunTime), true);
 
-        _audio.PlayPvs(armutantActionComp.SoundEffect, ent);
+        _audio.PlayPvs(args.SoundEffect, ent);
 
-        SpawnAttachedTo(armutantActionComp.TargetEffect, args.Target.ToCoordinates());
+        SpawnAttachedTo(args.TargetEffect, args.Target.ToCoordinates());
 
         args.Handled = true;
     }

@@ -19,7 +19,7 @@ public partial class SharedArmutantSystem
         if (args.Handled)
             return;
 
-        var coordinatesEnt = _transform.GetMapCoordinates(ent); // Логика для совершения рывка
+        var coordinatesEnt = _transform.GetMapCoordinates(ent);
         var target = args.Target.ToMap(EntityManager, _transform);
 
         HandlePullingInteractions(ent);
@@ -28,31 +28,27 @@ public partial class SharedArmutantSystem
         _transform.SetCoordinates(ent, userTransform, args.Target);
         _transform.AttachToGridOrMap(ent, userTransform);
 
-        var actionEnt = args.Action.Owner;
-        if (!TryComp<ArmutantBladeActionComponent>(actionEnt, out var armutantActionComp)) // Вводим переменную для использования данных с компонента
-            return;
-
-        if (!_examine.InRangeUnOccluded(coordinatesEnt, target, armutantActionComp.MaxDashRange, null)) // Если человек указывает слишком далекое расстояние или что-то стоит на пути телепортации
+        if (!_examine.InRangeUnOccluded(coordinatesEnt, target, args.MaxDashRange, null))
         {
             _popup.PopupEntity(Loc.GetString("claws-dash-ability-cant-see", ("item", ent)), ent, ent);
             return;
         }
 
-        foreach (var entity in _lookup.GetEntitiesInRange(ent, armutantActionComp.CollisionRadiusDash)) // Все кто попадают под способность в радиусе CollisionRadiusDash
+        foreach (var entity in _lookup.GetEntitiesInRange(ent, args.CollisionRadiusDash))
         {
             if (entity == args.Performer || !TryComp<PhysicsComponent>(entity, out var physics))
                 continue;
 
             if (TryComp<DamageableComponent>(entity, out var damageable))
             {
-                _damage.TryChangeDamage(entity, ConverDamageSpecifier(armutantActionComp.TypeDamage, armutantActionComp.AmountDamage, out _), true); // Наносим урон
-                _audio.PlayPvs(armutantActionComp.SoundEffect, entity);
+                _damage.TryChangeDamage(entity, ConverDamageSpecifier(args.TypeDamage, args.AmountDamage, out _), true);
+                _audio.PlayPvs(args.SoundEffectDash, entity);
             }
 
-            var dashDirection = (_transform.GetWorldPosition(entity) - _transform.GetWorldPosition(ent)).Normalized(); // Происходит эффект отталкивания
-            _physics.SetLinearVelocity(entity, dashDirection * armutantActionComp.KnockbackForce, body: physics);
+            var dashDirection = (_transform.GetWorldPosition(entity) - _transform.GetWorldPosition(ent)).Normalized();
+            _physics.SetLinearVelocity(entity, dashDirection * args.KnockbackForce, body: physics);
 
-            var effect = Spawn(armutantActionComp.SelfEffect, Transform(ent).Coordinates); // Спавним эффект при приземлении
+            var effect = Spawn(args.SelfEffect, Transform(ent).Coordinates);
             _transform.SetParent(effect, ent);
         }
         args.Handled = true;
@@ -66,14 +62,10 @@ public partial class SharedArmutantSystem
         if (args.Handled)
             return;
 
-        var actionEnt = args.Action.Owner;
-        if (!TryComp<ArmutantBladeActionComponent>(actionEnt, out var armutantActionComp))
-            return;
-
-        var shard = Spawn(armutantActionComp.TalonBladePrototype, Transform(ent).Coordinates); // Просто создаем сущность в руках
+        var shard = Spawn(args.TalonBladePrototype, Transform(ent).Coordinates);
         _hands.TryPickupAnyHand(ent, shard);
 
-        _audio.PlayPvs(armutantActionComp.SoundEffect, ent);
+        _audio.PlayPvs(args.SoundEffectSpawn, ent);
 
         args.Handled = true;
     }
