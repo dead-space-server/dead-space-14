@@ -351,34 +351,44 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         _chatManager.ChatMessageToAll(ChatChannel.Radio, message, wrappedMessage, default, false, true, colorOverride);
 
-        // Fucked up logic ahead... FIX THIS PLEASE.
-
+        // DS14-start
         if (playSound)
         {
-            if (announcementSound == null)
-            {
-                if (sender == Loc.GetString("chat-manager-sender-announcement")) announcementSound = CentComAnnouncementSound; // Corvax-Announcements: Support custom alert sound from admin panel
-            }
+            var soundToPlay = announcementSound;
+            if (soundToPlay == null && sender == Loc.GetString("chat-manager-sender-announcement"))
+                soundToPlay = CentComAnnouncementSound;
 
-            _audio.PlayGlobal(announcementSound ?? DefaultAnnouncementSound, Filter.Broadcast(), true, announcementSound?.Params ?? AudioParams.Default.WithVolume(-2f));
+            _audio.PlayGlobal(
+                soundToPlay ?? DefaultAnnouncementSound,
+                Filter.Broadcast(),
+                true,
+                soundToPlay?.Params ?? AudioParams.Default.WithVolume(-2f));
 
-            if (author != null && TryComp<TTSComponent>(author.Value, out var tts) && tts.VoicePrototypeId != null) // For comms console announcements
+            string? chosenVoice = null;
+            EntityUid? chosenVoiceAuthor = null;
+
+            if (author != null && TryComp<TTSComponent>(author.Value, out var tts) && !string.IsNullOrEmpty(tts.VoicePrototypeId))
             {
-                var ev = new AnnounceSpokeEvent(tts.VoicePrototypeId, originalMessage, author.Value);
-                RaiseLocalEvent(ev);
+                chosenVoice = tts.VoicePrototypeId;
+                chosenVoiceAuthor = author;
             }
-            else if (usePresetTTS && sender == Loc.GetString("chat-manager-sender-announcement")) // For admin announcements from Centcomm with preset voices
+            else if (usePresetTTS && sender == Loc.GetString("chat-manager-sender-announcement"))
             {
-                voice = _centcommTTS;
-                var ev = new AnnounceSpokeEvent(voice, originalMessage, null);
-                RaiseLocalEvent(ev);
+                chosenVoice = _centcommTTS;
+                chosenVoiceAuthor = null;
             }
-            else if (voice != null) // For admin announcements
+            else if (!string.IsNullOrEmpty(voice))
             {
-                var ev = new AnnounceSpokeEvent(voice, originalMessage, null);
+                chosenVoice = voice;
+                chosenVoiceAuthor = null;
+            }
+            if (!string.IsNullOrEmpty(chosenVoice))
+            {
+                var ev = new AnnounceSpokeEvent(chosenVoice, originalMessage, chosenVoiceAuthor);
                 RaiseLocalEvent(ev);
             }
         }
+        // DS14-end
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Global station announcement from {sender}: {message}");
     }
 
