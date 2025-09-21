@@ -95,10 +95,10 @@
               anchored: false
           completed:
             - !type:SpawnPrototype
-              prototype: Steel
+              prototype: SheetSteel1
               amount: 2
             - !type:SpawnPrototype
-              prototype: Cloth
+              prototype: MaterialCloth1
               amount: 4
             - !type:DeleteEntity {}
           steps:
@@ -115,10 +115,10 @@
               anchored: false
           completed:
             - !type:SpawnPrototype
-              prototype: Steel
+              prototype: SheetSteel1
               amount: 2
             - !type:SpawnPrototype
-              prototype: Cloth
+              prototype: MaterialCloth1
               amount: 4
             - !type:DeleteEntity {}
           steps:
@@ -135,10 +135,10 @@
               anchored: false
           completed:
             - !type:SpawnPrototype
-              prototype: Steel
+              prototype: SheetSteel1
               amount: 2
             - !type:SpawnPrototype
-              prototype: Cloth
+              prototype: MaterialCloth1
               amount: 4
             - !type:DeleteEntity {}
           steps:
@@ -155,10 +155,10 @@
               anchored: false
           completed:
             - !type:SpawnPrototype
-              prototype: Steel
+              prototype: SheetSteel1
               amount: 2
             - !type:SpawnPrototype
-              prototype: Cloth
+              prototype: MaterialCloth1
               amount: 4
             - !type:DeleteEntity {}
           steps:
@@ -175,10 +175,10 @@
               anchored: false
           completed:
             - !type:SpawnPrototype
-              prototype: Steel
+              prototype: SheetSteel1
               amount: 2
             - !type:SpawnPrototype
-              prototype: Cloth
+              prototype: MaterialCloth1
               amount: 4
             - !type:DeleteEntity {}
           steps:
@@ -195,10 +195,10 @@
               anchored: false
           completed:
             - !type:SpawnPrototype
-              prototype: Steel
+              prototype: SheetSteel1
               amount: 2
             - !type:SpawnPrototype
-              prototype: Cloth
+              prototype: MaterialCloth1
               amount: 4
             - !type:DeleteEntity {}
           steps:
@@ -215,10 +215,10 @@
               anchored: false
           completed:
             - !type:SpawnPrototype
-              prototype: Steel
+              prototype: SheetSteel1
               amount: 2
             - !type:SpawnPrototype
-              prototype: Cloth
+              prototype: MaterialCloth1
               amount: 4
             - !type:DeleteEntity {}
           steps:
@@ -235,10 +235,10 @@
               anchored: false
           completed:
             - !type:SpawnPrototype
-              prototype: Steel
+              prototype: SheetSteel1
               amount: 2
             - !type:SpawnPrototype
-              prototype: Cloth
+              prototype: MaterialCloth1
               amount: 4
             - !type:DeleteEntity {}
           steps:
@@ -255,10 +255,10 @@
               anchored: false
           completed:
             - !type:SpawnPrototype
-              prototype: Steel
+              prototype: SheetSteel1
               amount: 2
             - !type:SpawnPrototype
-              prototype: Cloth
+              prototype: MaterialCloth1
               amount: 4
             - !type:DeleteEntity {}
           steps:
@@ -275,10 +275,10 @@
               anchored: false
           completed:
             - !type:SpawnPrototype
-              prototype: Steel
+              prototype: SheetSteel1
               amount: 2
             - !type:SpawnPrototype
-              prototype: Cloth
+              prototype: MaterialCloth1
               amount: 4
             - !type:DeleteEntity {}
           steps:
@@ -295,10 +295,10 @@
               anchored: false
           completed:
             - !type:SpawnPrototype
-              prototype: Steel
+              prototype: SheetSteel1
               amount: 2
             - !type:SpawnPrototype
-              prototype: Cloth
+              prototype: MaterialCloth1
               amount: 4
             - !type:DeleteEntity {}
           steps:
@@ -315,10 +315,10 @@
               anchored: false
           completed:
             - !type:SpawnPrototype
-              prototype: Steel
+              prototype: SheetSteel1
               amount: 2
             - !type:SpawnPrototype
-              prototype: Cloth
+              prototype: MaterialCloth1
               amount: 4
             - !type:DeleteEntity {}
           steps:
