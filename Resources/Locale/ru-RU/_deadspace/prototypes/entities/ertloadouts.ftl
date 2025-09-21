@@ -98,7 +98,7 @@ ert-loadout-category-pulseshotgun-description =
     Имеет три режима стрельбы.
 ert-loadout-category-minigun-name = Миниган
 ert-loadout-category-minigun-description =
-    Тяжёлый пулемёт с огромным боезапасом и огромной скорострельностью.
+    Тяжёлый пулемёт с огромным боезапасом и скорострельностью.
     Использует лёгкие патроны калибра 5.6х15 мм R.
 ert-loadout-category-pulserifle-name = Импульсная винтовка
 ert-loadout-category-pulserifle-description =
