@@ -68,7 +68,7 @@ public sealed class NotifyFunction
     {
         foreach (var proto in prototypeManager.EnumeratePrototypes<GhostRoleGroupNotify>())
         {
-            if (DictCvar.ContainsKey(proto.ID) & _dictAccess.ContainsKey(proto.ID))
+            if (DictCvar.ContainsKey(proto.ID) & !_dictAccess.ContainsKey(proto.ID))
             {
                 _dictAccess.Add(proto.ID, DictCvar[proto.ID]);
             }
