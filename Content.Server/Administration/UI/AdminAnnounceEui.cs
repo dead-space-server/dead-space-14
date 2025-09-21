@@ -84,41 +84,16 @@ namespace Content.Server.Administration.UI
                                     $"\n{Loc.GetString("comms-console-announcement-sent-by")} {doAnnounce.Sender}";
                             }
 
-                            if (doAnnounce.EnableTTS)
-                            {
-                                if (!doAnnounce.CustomTTS)
-                                {
-                                    _chatSystem.DispatchGlobalAnnouncement(
-                                        message: announcementWithSender,
-                                        sender: sender,
-                                        playSound: true,
-                                        announcementSound: sound,
-                                        colorOverride: color,
-                                        originalMessage: doAnnounce.Announcement,
-                                        usePresetTTS: true);
-                                }
-                                else
-                                {
-                                    _chatSystem.DispatchGlobalAnnouncement(
-                                        message: announcementWithSender,
-                                        sender: sender,
-                                        playSound: true,
-                                        announcementSound: sound,
-                                        colorOverride: color,
-                                        originalMessage: doAnnounce.Announcement,
-                                        voice: doAnnounce.Voice);
-                                }
-                            }
-                            else
-                            {
-                                _chatSystem.DispatchGlobalAnnouncement(
-                                    message: announcementWithSender,
-                                    sender: sender,
-                                    playSound: true,
-                                    announcementSound: sound,
-                                    colorOverride: color);
-                            }
-
+                            _chatSystem.DispatchGlobalAnnouncement(
+                                message: announcementWithSender,
+                                sender: sender,
+                                playSound: true,
+                                announcementSound: sound,
+                                colorOverride: color,
+                                originalMessage: doAnnounce.Announcement,
+                                voice: doAnnounce.EnableTTS && doAnnounce.CustomTTS ? doAnnounce.Voice : null,
+                                usePresetTTS: doAnnounce.EnableTTS && !doAnnounce.CustomTTS
+                            );
                             break;
                     }
 
