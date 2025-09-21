@@ -91,7 +91,7 @@ ert-loadout-category-pulsepistol-description =
 ert-loadout-category-hammerhead-name = Отбойник
 ert-loadout-category-hammerhead-description =
     Автоматический дробовик с магазинным питанием для ближнего боя. Имеет высокую скорострельность, что делает его убойным в противостоянии с любой целью в ближнем бою.
-    Использует патроны калибра 12х70. В комплекте идут зажигательные патроны.
+    Использует патроны калибра 12х70. В комплекте идут расширенные магазины с зажигательными патронами.
 ert-loadout-category-pulseshotgun-name = Импульсный дробовик
 ert-loadout-category-pulseshotgun-description =
     Высокотехнологичное энергетическое оружие ближнего боя.
