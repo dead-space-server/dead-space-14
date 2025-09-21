@@ -96,10 +96,10 @@ ert-loadout-category-pulseshotgun-name = Импульсный дробовик
 ert-loadout-category-pulseshotgun-description =
     Высокотехнологичное энергетическое оружие ближнего боя.
     Имеет три режима стрельбы.
-ert-loadout-category-machinegun-name = Пулемёт L6
-ert-loadout-category-machinegun-description =
-    Лёгкий ручной пулемёт с высокой скорострельностью.
-    Использует патроны калибра 6.5х39 TSF.
+ert-loadout-category-minigun-name = Миниган
+ert-loadout-category-minigun-description =
+    Тяжёлый пулемёт с огромным боезапасом и огромной скорострельностью.
+    Использует лёгкие патроны калибра 5.6х15 мм R.
 ert-loadout-category-pulserifle-name = Импульсная винтовка
 ert-loadout-category-pulserifle-description =
     Оружие, почти столь же печально известное, как и его пользователи.
