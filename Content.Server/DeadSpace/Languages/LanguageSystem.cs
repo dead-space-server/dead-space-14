@@ -19,6 +19,7 @@ public sealed class LanguageSystem : EntitySystem
     [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly AudioSystem _audio = default!;
+    private static readonly ProtoId<LanguagePrototype> DefaultLanguageId = "GeneralLanguage";
     public override void Initialize()
     {
         base.Initialize();
@@ -134,6 +135,11 @@ public sealed class LanguageSystem : EntitySystem
         }
 
         return understanding.ToArray();
+    }
+
+    public string GetDefaultLanguageId()
+    {
+        return DefaultLanguageId.Id;
     }
 
 }

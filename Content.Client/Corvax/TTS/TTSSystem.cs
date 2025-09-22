@@ -101,8 +101,8 @@ public sealed class TTSSystem : EntitySystem
         audioResource.Load(IoCManager.Instance!, Prefix / filePath);
 
         var audioParams = AudioParams.Default
-        .WithVolume(AdjustVolume(ev.IsWhisper, ev.IsRadio))
-        .WithMaxDistance(AdjustDistance(ev.IsWhisper));
+            .WithVolume(AdjustVolume(ev.IsWhisper, ev.IsRadio))
+            .WithMaxDistance(AdjustDistance(ev.IsWhisper));
 
         var soundSpecifier = new ResolvedPathSpecifier(Prefix / filePath);
 

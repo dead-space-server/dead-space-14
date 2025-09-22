@@ -80,7 +80,7 @@ public sealed class RadioSystem : EntitySystem
         var msg = args.ChatMsg;
 
         if (!string.IsNullOrEmpty(args.LanguageId) && !_language.KnowsLanguage(uid, args.LanguageId))
-            msg = args.lexiconChatMsg;
+            msg = args.LexiconChatMsg;
 
         if (TryComp(uid, out ActorComponent? actor))
             _netMan.ServerSendMessage(args.ChatMsg, actor.PlayerSession.Channel);
@@ -173,7 +173,7 @@ public sealed class RadioSystem : EntitySystem
 
         if (TryComp<LanguageComponent>(messageSource, out var language))
         {
-            lexiconMessage = _language.ReplaceWordsWithLexicon(message, language.SelectedLanguage);
+            lexiconMessage = _language.ReplaceWordsWithLexicon(message, language.SelectedLanguage.Id);
 
             var lexiconContent = escapeMarkup
             ? FormattedMessage.EscapeText(lexiconMessage)
@@ -202,10 +202,10 @@ public sealed class RadioSystem : EntitySystem
             chatMsgLexicon = new MsgChatMessage { Message = chatLexicon };
         }
 
-        var languageId = "GeneralLanguage";
+        var languageId = _language.GetDefaultLanguageId();
 
         if (language != null)
-            languageId = language.SelectedLanguage;
+            languageId = language.SelectedLanguage.Id;
 
         var ev = new RadioReceiveEvent(message, languageId, messageSource, channel, radioSource, chatMsg, chatMsgLexicon, []);
         // DS14-End
@@ -248,9 +248,9 @@ public sealed class RadioSystem : EntitySystem
             RaiseLocalEvent(receiver, ref ev);
         }
 
-        var selectedLanguage = language != null ? language.SelectedLanguage : string.Empty;
+        var selectedLanguage = language != null ? language.SelectedLanguage.Id : string.Empty; // DS14-Languages
 
-        RaiseLocalEvent(new RadioSpokeEvent(messageSource, message, lexiconMessage, selectedLanguage, ev.Receivers.ToArray())); // DS14
+        RaiseLocalEvent(new RadioSpokeEvent(messageSource, message, lexiconMessage, selectedLanguage, ev.Receivers.ToArray())); // DS14-Languages
 
         if (name != Name(messageSource))
             _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Radio message from {ToPrettyString(messageSource):user} as {name} on {channel.LocalizedName}: {message}");

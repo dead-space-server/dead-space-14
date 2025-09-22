@@ -4,7 +4,7 @@ using Content.Shared.Radio;
 namespace Content.Server.Radio;
 
 [ByRefEvent]
-public readonly record struct RadioReceiveEvent(string Message, string LanguageId, EntityUid MessageSource, RadioChannelPrototype Channel, EntityUid RadioSource, MsgChatMessage ChatMsg, MsgChatMessage lexiconChatMsg, List<EntityUid> Receivers);
+public readonly record struct RadioReceiveEvent(string Message, string LanguageId, EntityUid MessageSource, RadioChannelPrototype Channel, EntityUid RadioSource, MsgChatMessage ChatMsg, MsgChatMessage LexiconChatMsg, List<EntityUid> Receivers);
 
 /// <summary>
 /// Event raised on the parent entity of a headset radio when a radio message is received

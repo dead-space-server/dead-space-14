@@ -341,16 +341,19 @@ public sealed partial class ChatSystem : SharedChatSystem
         EntityUid? author = null,
         string? voice = null,
         bool usePresetTTS = false,
-        string languageId = "GeneralLanguage" // DS14-Languages
+        string? languageId = null // DS14-Languages
         )
     {
+        languageId = string.IsNullOrEmpty(languageId) ? _language.GetDefaultLanguageId() : languageId;
+
         sender ??= Loc.GetString("chat-manager-sender-announcement");
 
         var wrappedMessage = Loc.GetString("chat-manager-sender-announcement-wrap-message", ("sender", sender), ("message", FormattedMessage.EscapeText(message)));
 
-        // DS14-Languages-Start
-        if (_chatFilter != null && _chatFilter.NotAllowedMessage(wrappedMessage))
+        if (_chatFilter != null && _chatFilter.NotAllowedMessage(wrappedMessage)) // DS14-chat-filter
             return;
+
+        // DS14-Languages-Start
 
         string lexiconMessage = _language.ReplaceWordsWithLexicon(message, languageId);
         var understanding = _language.GetUnderstanding(languageId);
@@ -524,12 +527,12 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         if (language != null)
         {
-            lexiconMessage = _language.ReplaceWordsWithLexicon(message, language.SelectedLanguage);
+            lexiconMessage = _language.ReplaceWordsWithLexicon(message, language.SelectedLanguage.Id);
 
             lexiconWrappedMessage = wrappedMessage.Replace(FormattedMessage.EscapeText(message), FormattedMessage.EscapeText(lexiconMessage));
         }
 
-        var selectedLanguage = language != null ? language.SelectedLanguage : string.Empty;
+        var selectedLanguage = language != null ? language.SelectedLanguage.Id : string.Empty;
 
         SendInVoiceRange(ChatChannel.Local, message, wrappedMessage, source, range, null, lexiconMessage, lexiconWrappedMessage, selectedLanguage);
 
@@ -610,7 +613,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         string lexiconMessage = message;
 
         if (TryComp<LanguageComponent>(source, out var language))
-            lexiconMessage = _language.ReplaceWordsWithLexicon(message, language.SelectedLanguage);
+            lexiconMessage = _language.ReplaceWordsWithLexicon(message, language.SelectedLanguage.Id);
 
         var newObfuscatedMessage = ObfuscateMessageReadability(lexiconMessage, 0.2f);
 
@@ -633,7 +636,7 @@ public sealed partial class ChatSystem : SharedChatSystem
                 continue; // Won't get logged to chat, and ghosts are too far away to see the pop-up, so we just won't send it to them.
 
             // DS14-Languages-Start
-            if (language != null && !_language.KnowsLanguage(listener, language.SelectedLanguage))
+            if (language != null && !_language.KnowsLanguage(listener, language.SelectedLanguage.Id))
             {
                 if (data.Range <= WhisperClearRange || data.Observer)
                     _chatManager.ChatMessageToOne(ChatChannel.Whisper, lexiconMessage, newWrappedMessage, source, false, session.Channel);
@@ -659,7 +662,7 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         _replay.RecordServerMessage(new ChatMessage(ChatChannel.Whisper, message, wrappedMessage, GetNetEntity(source), null, MessageRangeHideChatForReplay(range)));
 
-        var selectedLanguage = language != null ? language.SelectedLanguage : string.Empty; // DS14-Languages
+        var selectedLanguage = language != null ? language.SelectedLanguage.Id : string.Empty; // DS14-Languages
         var ev = new EntitySpokeEvent(source, message, lexiconMessage, selectedLanguage, originalMessage, channel, obfuscatedMessage); // DS14-Languages
 
         RaiseLocalEvent(source, ev, true);
@@ -1087,8 +1090,8 @@ public sealed class EntitySpokeEvent : EntityEventArgs
 {
     public readonly EntityUid Source;
     public readonly string Message;
-    public readonly string LexiconMessage; // DS14
-    public readonly string LanguageId; // DS14
+    public readonly string LexiconMessage; // DS14-Languages
+    public readonly string LanguageId; // DS14-Languages
     public readonly string OriginalMessage;
     public readonly string? ObfuscatedMessage; // not null if this was a whisper
 

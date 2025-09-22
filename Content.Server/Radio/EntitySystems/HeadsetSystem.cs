@@ -108,7 +108,7 @@ public sealed class HeadsetSystem : SharedHeadsetSystem
         var msg = args.ChatMsg;
 
         if (!string.IsNullOrEmpty(args.LanguageId) && !_language.KnowsLanguage(Transform(uid).ParentUid, args.LanguageId))
-            msg = args.lexiconChatMsg;
+            msg = args.LexiconChatMsg;
 
         // TTS-start
         _audio.PlayPvs(component.RadioReceiveSoundPath, uid, AudioParams.Default.WithVolume(-10f));

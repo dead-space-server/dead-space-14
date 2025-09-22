@@ -269,7 +269,7 @@ namespace Content.Server.Communications
             var languageId = "GeneralLanguage";
 
             if (TryComp<LanguageComponent>(message.Actor, out var languageComponent))
-                languageId = languageComponent.SelectedLanguage;
+                languageId = languageComponent.SelectedLanguage.Id;
 
             // DS14-Languages-End
 
