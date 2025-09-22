@@ -70,11 +70,11 @@
   components:
 # DS14-start: Shields rebalanced
     - type: HeldSpeedModifier
-      walkModifier: 0.8
-      sprintModifier: 0.75
+      walkModifier: 0.90
+      sprintModifier: 0.85
     - type: ClothingSpeedModifier
-      walkModifier: 0.8
-      sprintModifier: 0.75
+      walkModifier: 0.90
+      sprintModifier: 0.85
 # DS14-end
     - type: StaticPrice
       price: 90
@@ -104,11 +104,11 @@
   components:
 # DS14-start: Shields rebalanced
     - type: HeldSpeedModifier
-      walkModifier: 0.85
-      sprintModifier: 0.8
+      walkModifier: 0.90
+      sprintModifier: 0.85
     - type: ClothingSpeedModifier
-      walkModifier: 0.85
-      sprintModifier: 0.8
+      walkModifier: 0.90
+      sprintModifier: 0.85
 # DS14-end
     - type: Sprite
       sprite: Objects/Weapons/Melee/riot_laser-shield.rsi
@@ -139,11 +139,11 @@
   components:
 # DS14-start: Shields rebalanced
     - type: HeldSpeedModifier
-      walkModifier: 0.8
-      sprintModifier: 0.75
+      walkModifier: 0.85
+      sprintModifier: 0.8
     - type: ClothingSpeedModifier
-      walkModifier: 0.8
-      sprintModifier: 0.75
+      walkModifier: 0.85
+      sprintModifier: 0.8
 # DS14-end
     - type: Sprite
       sprite: Objects/Weapons/Melee/riot_bullet-shield.rsi
@@ -176,11 +176,11 @@
   components:
 # DS14-start: Shields rebalanced
     - type: HeldSpeedModifier
-      walkModifier: 0.9
-      sprintModifier: 0.85
+      walkModifier: 0.95
+      sprintModifier: 0.9
     - type: ClothingSpeedModifier
-      walkModifier: 0.9
-      sprintModifier: 0.85
+      walkModifier: 0.95
+      sprintModifier: 0.9
 # DS14-end
     - type: Sprite
       sprite: Objects/Weapons/Melee/buckler-shield.rsi
@@ -299,11 +299,11 @@
   components:
 # DS14-start: Shields rebalanced
     - type: HeldSpeedModifier
-      walkModifier: 0.75
-      sprintModifier: 0.70
+      walkModifier: 0.8
+      sprintModifier: 0.75
     - type: ClothingSpeedModifier
-      walkModifier: 0.75
-      sprintModifier: 0.70
+      walkModifier: 0.8
+      sprintModifier: 0.75
 # DS14-end
     - type: Sprite
       sprite: Objects/Weapons/Melee/shields.rsi
@@ -418,11 +418,11 @@
   components:
 # DS14-start: Shields rebalanced
     - type: HeldSpeedModifier
-      walkModifier: 0.9
-      sprintModifier: 0.85
+      walkModifier: 0.95
+      sprintModifier: 0.9
     - type: ClothingSpeedModifier
-      walkModifier: 0.9
-      sprintModifier: 0.85
+      walkModifier: 0.95
+      sprintModifier: 0.9
 # DS14-end
     - type: Sprite
       sprite: Objects/Weapons/Melee/ratvarian-shield.rsi
@@ -659,14 +659,6 @@
       components:
       - type: DisarmMalus
         malus: 0.6
-# DS14-start: Shields rebalanced
-      - type: HeldSpeedModifier
-        walkModifier: 0.9
-        sprintModifier: 0.85
-      - type: ClothingSpeedModifier
-        walkModifier: 0.9
-        sprintModifier: 0.85
-# DS14-end
     - type: ItemToggleSize
       activatedSize: Huge
     - type: Sprite
