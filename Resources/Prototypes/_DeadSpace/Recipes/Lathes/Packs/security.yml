@@ -1,0 +1,13 @@
+- type: latheRecipePack
+  id: CBURNAmmoStatic
+  recipes:
+  - MagazineShotgunIncendiary
+  - MagazinePistolSubMachineGunIncendiary
+  - MagazinePistolIncendiary
+  - MagazineRifleIncendiary
+  - MagazineLightRifleIncendiary
+  - BoxShotgunIncendiary
+  - MagazineBoxPistolIncendiary
+  - MagazineBoxRifleIncendiary
+  - MagazineBoxLightRifleIncendiary
+  - GrenadeIncendiary

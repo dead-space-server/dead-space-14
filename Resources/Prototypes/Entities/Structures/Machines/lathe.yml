@@ -455,41 +455,6 @@
     - type: OreSiloClient
 
 - type: entity
-  id: CBURNTechFab
-  parent: BaseLatheLube
-  name: cburn techfab
-  description: Differs from the standard Ammo TechFab by offering a range of incendiary rounds for every taste. Essential for the liquidation operations of the CBURN.
-  components:
-    - type: Sprite
-      sprite: Structures/Machines/techfab.rsi
-      layers:
-        - state: icon
-          map: ["enum.LatheVisualLayers.IsRunning"]
-        - state: cburn
-        - state: unlit
-          shader: unshaded
-          map: ["enum.PowerDeviceVisualLayers.Powered"]
-        - state: inserting
-          map: ["enum.MaterialStorageVisualLayers.Inserting"]
-        - state: panel
-          map: ["enum.WiresVisualLayers.MaintenancePanel"]
-    - type: Machine
-      board: CBURNTechFabCircuitboard
-    - type: Lathe
-      idleState: icon
-      runningState: icon
-      staticPacks:
-      - CBURNAmmoStatic
-    - type: MaterialStorage
-      whitelist:
-        tags:
-          - Sheet
-          - Plastic
-          - RawMaterial
-          - Ingot
-    - type: OreSiloClient
-
-- type: entity
   id: MedicalTechFab
   parent: BaseLatheLube
   name: medical techfab

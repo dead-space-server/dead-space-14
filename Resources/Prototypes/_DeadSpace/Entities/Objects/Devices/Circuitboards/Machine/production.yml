@@ -11,3 +11,16 @@
       stackRequirements:
         Plastic : 5
         Steel : 5
+
+- type: entity
+  id: CBURNTechFabCircuitboard
+  parent: BaseMachineCircuitboard
+  name: ЗажигФаб РХБЗЗ (машинная плата)
+  description: Печатная плата ЗажигФаба РХБЗЗ.
+  components:
+    - type: Sprite
+      state: security
+    - type: MachineBoard
+      prototype: CBURNTechFab
+      stackRequirements:
+        Manipulator: 2

@@ -1,0 +1,34 @@
+- type: entity
+  id: CBURNTechFab
+  parent: BaseLatheLube
+  name: ЗажигФаб РХБЗЗ
+  description: Отличается от обычного ТехФаба патронов ассортиментом из зажигательных патрон на любой вкус. Необходим для ликвидационных мероприятий РХБЗЗ.
+  components:
+    - type: Sprite
+      sprite: Structures/Machines/techfab.rsi
+      layers:
+        - state: icon
+          map: ["enum.LatheVisualLayers.IsRunning"]
+        - state: cburn
+        - state: unlit
+          shader: unshaded
+          map: ["enum.PowerDeviceVisualLayers.Powered"]
+        - state: inserting
+          map: ["enum.MaterialStorageVisualLayers.Inserting"]
+        - state: panel
+          map: ["enum.WiresVisualLayers.MaintenancePanel"]
+    - type: Machine
+      board: CBURNTechFabCircuitboard
+    - type: Lathe
+      idleState: icon
+      runningState: icon
+      staticPacks:
+      - CBURNAmmoStatic
+    - type: MaterialStorage
+      whitelist:
+        tags:
+          - Sheet
+          - Plastic
+          - RawMaterial
+          - Ingot
+    - type: OreSiloClient
