@@ -51,14 +51,14 @@
                 collection: MetalBreak
             - !type:SpawnEntitiesBehavior
               spawn:
-                SheetPlasteel: # DS14
+                SheetPlasteel1: # DS14
                   min: 2
                   max: 2
                 SheetGlass:
                   min: 2
                   max: 2
     - type: StaticPrice
-      price: 150 # DS14
+      price: 100
 
 #Security Shields
 
