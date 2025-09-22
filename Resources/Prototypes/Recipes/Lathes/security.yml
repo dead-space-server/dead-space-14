@@ -102,7 +102,7 @@
   id: RiotShield
   result: RiotShield
   materials:
-    Steel: 400
+    Plasteel: 400 # DS14
     Glass: 400
 
 - type: latheRecipe
@@ -110,7 +110,7 @@
   id: TelescopicShield
   result: TelescopicShield
   materials:
-    Steel: 300
+    Plasteel: 300 # DS14
     Glass: 800
 
 # Targets

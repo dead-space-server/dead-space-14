@@ -51,7 +51,7 @@
                 collection: MetalBreak
             - !type:SpawnEntitiesBehavior
               spawn:
-                SheetSteel:
+                SheetPlasteel: # DS14
                   min: 2
                   max: 2
                 SheetGlass:
@@ -68,6 +68,14 @@
   id: RiotShield
   description: A large tower shield. Good for controlling crowds.
   components:
+# DS14-start: Shields rebalanced
+    - type: HeldSpeedModifier
+      walkModifier: 0.8
+      sprintModifier: 0.75
+    - type: ClothingSpeedModifier
+      walkModifier: 0.8
+      sprintModifier: 0.75
+# DS14-end
     - type: StaticPrice
       price: 90
     - type: Clothing
@@ -94,6 +102,14 @@
   id: RiotLaserShield
   description: A shield built for withstanding lasers, but not much else.
   components:
+# DS14-start: Shields rebalanced
+    - type: HeldSpeedModifier
+      walkModifier: 0.85
+      sprintModifier: 0.8
+    - type: ClothingSpeedModifier
+      walkModifier: 0.85
+      sprintModifier: 0.8
+# DS14-end
     - type: Sprite
       sprite: Objects/Weapons/Melee/riot_laser-shield.rsi
       state: icon
@@ -121,6 +137,14 @@
   id: RiotBulletShield
   description: A shield built for protecting against ballistics, but not much else.
   components:
+# DS14-start: Shields rebalanced
+    - type: HeldSpeedModifier
+      walkModifier: 0.8
+      sprintModifier: 0.75
+    - type: ClothingSpeedModifier
+      walkModifier: 0.8
+      sprintModifier: 0.75
+# DS14-end
     - type: Sprite
       sprite: Objects/Weapons/Melee/riot_bullet-shield.rsi
       state: icon
@@ -150,6 +174,14 @@
   id: WoodenBuckler
   description: A small round wooden makeshift shield.
   components:
+# DS14-start: Shields rebalanced
+    - type: HeldSpeedModifier
+      walkModifier: 0.9
+      sprintModifier: 0.85
+    - type: ClothingSpeedModifier
+      walkModifier: 0.9
+      sprintModifier: 0.85
+# DS14-end
     - type: Sprite
       sprite: Objects/Weapons/Melee/buckler-shield.rsi
       state: icon
@@ -265,6 +297,14 @@
   id: MakeshiftShield
   description: A rundown looking shield, not good for much.
   components:
+# DS14-start: Shields rebalanced
+    - type: HeldSpeedModifier
+      walkModifier: 0.75
+      sprintModifier: 0.70
+    - type: ClothingSpeedModifier
+      walkModifier: 0.75
+      sprintModifier: 0.70
+# DS14-end
     - type: Sprite
       sprite: Objects/Weapons/Melee/shields.rsi
       state: makeshift-icon
@@ -376,6 +416,14 @@
   id: ClockworkShield
   description: Ratvar oyrffrf lbh jvgu uvf cebgrpgvba.
   components:
+# DS14-start: Shields rebalanced
+    - type: HeldSpeedModifier
+      walkModifier: 0.9
+      sprintModifier: 0.85
+    - type: ClothingSpeedModifier
+      walkModifier: 0.9
+      sprintModifier: 0.85
+# DS14-end
     - type: Sprite
       sprite: Objects/Weapons/Melee/ratvarian-shield.rsi
       state: icon
@@ -404,7 +452,30 @@
           Blunt: 1
           Slash: 1
           Piercing: 1
-      #Have it break into brass when clock cult is in
+# DS14-start
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 100
+          behaviors:
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+        - trigger:
+            !type:DamageTrigger
+            damage: 80
+          behaviors:
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+            - !type:PlaySoundBehavior
+              sound:
+                collection: MetalBreak
+            - !type:SpawnEntitiesBehavior
+              spawn:
+                SheetBrass:
+                  min: 1
+                  max: 2
+# DS14-end
 
 - type: entity
   name: mirror shield
@@ -588,6 +659,14 @@
       components:
       - type: DisarmMalus
         malus: 0.6
+# DS14-start: Shields rebalanced
+      - type: HeldSpeedModifier
+        walkModifier: 0.9
+        sprintModifier: 0.85
+      - type: ClothingSpeedModifier
+        walkModifier: 0.9
+        sprintModifier: 0.85
+# DS14-end
     - type: ItemToggleSize
       activatedSize: Huge
     - type: Sprite
@@ -630,7 +709,7 @@
                 collection: MetalGlassBreak
             - !type:SpawnEntitiesBehavior
               spawn:
-                SheetSteel:
+                SheetPlasteel: # DS14
                   min: 1
                   max: 1
                 SheetGlass:
