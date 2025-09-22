@@ -1172,10 +1172,10 @@
   loadouts:
   - ResearchDirectorJumpsuit
   - ResearchDirectorJumpskirt
-  - ResearchDirectorJumpsuitShirt
-  - ResearchDirectorJumpskirtShirt
-  - ResearchDirectorJumpsuitSuit
-  - ResearchDirectorJumpskirtSuit
+  - ResearchDirectorJumpsuitShirt # DS14
+  - ResearchDirectorJumpskirtShirt # DS14
+  - ResearchDirectorJumpsuitSuit # DS14
+  - ResearchDirectorJumpskirtSuit # DS14
 
 - type: loadoutGroup
   id: ResearchDirectorOuterClothing
