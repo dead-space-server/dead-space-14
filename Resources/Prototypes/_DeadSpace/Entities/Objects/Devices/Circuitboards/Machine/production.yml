@@ -165,18 +165,6 @@
       Plasma: 5
 
 - type: entity
-  id: CrewMonitoringServerMachineCircuitboardTaipan
-  parent: BaseMachineCircuitboardTaipan
-  name: сервер мониторинга экипажа (машинная плата)
-  description: Печатная плата сервера мониторинга экипажа.
-  components:
-  - type: MachineBoard
-    prototype: CrewMonitoringServerTaipan
-    stackRequirements:
-      Steel: 1
-      Cable: 2
-
-- type: entity
   id: CargoTelepadMachineCircuitboardTaipan
   parent: BaseMachineCircuitboardTaipan
   name: грузовой телепад (машинная плата)

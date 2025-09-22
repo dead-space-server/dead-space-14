@@ -339,7 +339,7 @@
 - type: latheRecipePack
   id: TaipanHardsuits
   recipes:
-  - ClothingOuterHardsuitSyndicate
+  - ClothingOuterEVASuitSyndicate
   - ClothingHeadHelmetSyndicate
   - ClothingOuterHardsuitSyndie
   - ClothingOuterHardsuitSyndieMedic

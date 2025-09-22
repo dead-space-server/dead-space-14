@@ -37,7 +37,7 @@
           data: 4
 
       - tag: TaipanRipleyCentralControlModule
-        name: центральный модуль управления кроваво-красного Рипли
+        name: construction-graph-tag-taipan-ripley-central-control-module
         icon:
           sprite: "Objects/Misc/module.rsi"
           state: "mainboard"
@@ -54,7 +54,7 @@
           data: 6
 
       - tag: TaipanRipleyPeripheralsControlModule
-        name: модуль управления периферией кроваво-красного Рипли
+        name: construction-graph-tag-taipan-ripley-peripherals-control-module
         icon:
           sprite: "Objects/Misc/module.rsi"
           state: id_mod
@@ -71,7 +71,7 @@
           data: 12
 
       - component: PowerCell
-        name: батарея
+        name: construction-graph-component-power-cell
         store: battery-container
         icon:
           sprite: Objects/Power/power_cells.rsi

@@ -1,0 +1,10 @@
+- type: entity
+  id: CargoTelepadTaipan
+  parent: CargoTelepad
+  name: грузовой телепад
+  description:
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/cargo_telepad.rsi
+  - type: Machine
+    board: CargoTelepadMachineCircuitboardTaipan

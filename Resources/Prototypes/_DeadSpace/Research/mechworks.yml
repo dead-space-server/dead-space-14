@@ -128,7 +128,7 @@
   tier: 1
   cost: 7500
   recipeUnlocks:
-  - ClothingOuterHardsuitSyndicate
+  - ClothingOuterEVASuitSyndicate
   - ClothingHeadHelmetSyndicate
 
 # Tier 2
