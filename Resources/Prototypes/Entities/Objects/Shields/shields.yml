@@ -51,7 +51,7 @@
                 collection: MetalBreak
             - !type:SpawnEntitiesBehavior
               spawn:
-                SheetPlasteel1: # DS14
+                SheetSteel:
                   min: 2
                   max: 2
                 SheetGlass:
