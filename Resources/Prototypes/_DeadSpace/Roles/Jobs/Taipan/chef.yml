@@ -19,7 +19,6 @@
     role: JobBartender
     time: 3600 # 1 hour
   access:
-  - TaipanBasic
   - TaipanService
   special:
   - !type:AddImplantSpecial

@@ -642,8 +642,8 @@
 
 # Hardsuits
 - type: latheRecipe
-  id: ClothingOuterHardsuitSyndicate
-  result: ClothingOuterHardsuitSyndicate
+  id: ClothingOuterEVASuitSyndicate
+  result: ClothingOuterEVASuitSyndicate
   completetime: 15
   materials:
     Steel: 1000
@@ -661,7 +661,7 @@
 
 - type: latheRecipe
   id: ClothingOuterHardsuitSyndie
-  parent: ClothingOuterHardsuitSyndicate
+  parent: ClothingOuterEVASuitSyndicate
   result: ClothingOuterHardsuitSyndie
   materials:
     Titanium: 3000
@@ -671,7 +671,7 @@
 
 - type: latheRecipe
   id: ClothingOuterHardsuitSyndieMedic
-  parent: ClothingOuterHardsuitSyndicate
+  parent: ClothingOuterEVASuitSyndicate
   result: ClothingOuterHardsuitSyndieMedic
   materials:
     Titanium: 3200
@@ -682,7 +682,7 @@
 
 - type: latheRecipe
   id: ClothingOuterHardsuitSyndieElite
-  parent: ClothingOuterHardsuitSyndicate
+  parent: ClothingOuterEVASuitSyndicate
   result: ClothingOuterHardsuitSyndieElite
   materials:
     Titanium: 4000
@@ -693,7 +693,7 @@
 
 - type: latheRecipe
   id: ClothingOuterHardsuitSyndieCommander
-  parent: ClothingOuterHardsuitSyndicate
+  parent: ClothingOuterEVASuitSyndicate
   result: ClothingOuterHardsuitSyndieCommander
   materials:
     Titanium: 5000
@@ -704,7 +704,7 @@
 
 - type: latheRecipe
   id: ClothingOuterHardsuitJuggernaut
-  parent: ClothingOuterHardsuitSyndicate
+  parent: ClothingOuterEVASuitSyndicate
   result: ClothingOuterHardsuitJuggernaut
   materials:
     Titanium: 6000

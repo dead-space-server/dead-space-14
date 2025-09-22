@@ -126,12 +126,3 @@
   - type: Stack
     stackType: Plastitanium
     count: 1
-
-- type: entity
-  parent: SheetPlastitanium
-  id: SheetPlastitaniumLingering0
-  suffix: Никогда не закончится, 0
-  components:
-  - type: Stack
-    lingering: true
-    count: 0

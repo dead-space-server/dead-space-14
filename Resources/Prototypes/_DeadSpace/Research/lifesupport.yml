@@ -114,8 +114,7 @@
   tier: 2
   cost: 15000
   recipeUnlocks:
-  - BorgModuleAdvancedTreatment
-  - BorgModuleDefibrillator
+  - BorgModuleAdvancedChemical
 
 - type: technology
   id: TaipanAdvancedCleaning

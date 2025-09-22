@@ -16,7 +16,6 @@
     role: JobChemist
     time: 18000 # 5 hours
   access:
-  - TaipanBasic
   - TaipanMaint
   - TaipanScience
   special:

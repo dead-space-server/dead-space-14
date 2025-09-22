@@ -19,7 +19,6 @@
     role: JobTaipanMedic
     time: 36000 # 10 hours
   access:
-  - TaipanBasic
   - TaipanMaint
   - TaipanExternal
   - TaipanMedical

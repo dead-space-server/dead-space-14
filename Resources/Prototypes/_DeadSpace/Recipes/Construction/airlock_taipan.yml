@@ -1,17 +1,12 @@
 - type: construction
-  name: airlock
   id: AirlockTaipan
   graph: AirlockTaipan
   startNode: start
   targetNode: airlock
   category: construction-category-structures
-  description: It opens, it closes, and maybe crushes you.
   entityWhitelist:
     tags:
     - TaipanRole
-  icon:
-    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_basic.rsi
-    state: assembly
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
@@ -19,19 +14,14 @@
   - !type:TileNotBlocked
 
 - type: construction
-  name: glass airlock
   id: AirlockTaipanGlass
   graph: AirlockTaipan
   startNode: start
   targetNode: glassAirlock
   category: construction-category-structures
-  description: It opens, it closes, and maybe crushes you.
   entityWhitelist:
     tags:
     - TaipanRole
-  icon:
-    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass.rsi
-    state: assembly
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false

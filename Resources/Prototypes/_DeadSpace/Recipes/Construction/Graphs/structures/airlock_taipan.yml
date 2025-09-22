@@ -48,7 +48,7 @@
       steps:
       - component: DoorElectronics
         store: board
-        name: "микросхема шлюза"
+        name: construction-graph-component-door-electronics-circuit-board
         icon:
           sprite: "_DeadSpace/Objects/Misc/module.rsi"
           state: "door_electronics_syndicate"

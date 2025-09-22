@@ -13,7 +13,6 @@
     department: Engineering
     time: 36000 #10 hrs
   access:
-  - TaipanBasic
   - TaipanEngineering
   - TaipanMaint
   special:

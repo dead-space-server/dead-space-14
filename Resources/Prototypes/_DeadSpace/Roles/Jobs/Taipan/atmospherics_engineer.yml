@@ -19,7 +19,6 @@
     department: Taipan
     time: 36000 #10 hrs
   access:
-  - TaipanBasic
   - TaipanMaint
   - TaipanEngineering
   - TaipanAtmospherics

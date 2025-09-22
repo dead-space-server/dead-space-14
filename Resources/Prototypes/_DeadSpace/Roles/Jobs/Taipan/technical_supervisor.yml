@@ -19,7 +19,6 @@
     department: Taipan
     time: 144000 # 40 hours
   access:
-  - TaipanBasic
   - TaipanMaint
   - TaipanExternal
   - TaipanCargo

@@ -89,7 +89,7 @@
 
 - type: entity
   parent: MachineAnomalyVesselExperimental
-  id: AnomalyVesselExperimentalTaipan
+  id: MachineAnomalyVesselExperimentalTaipan
   name: экспериментальный сосуд аномалии
   description: Усовершенствованный сосуд аномалии, обладающий большим исследовательским потенциалом за счёт повышенной летучести и низкоуровневого радиоактивного распада в окружающую среду.
   suffix: Тайпан

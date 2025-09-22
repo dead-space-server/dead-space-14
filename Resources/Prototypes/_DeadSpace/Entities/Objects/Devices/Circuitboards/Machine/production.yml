@@ -45,8 +45,7 @@
   - type: MachineBoard
     prototype: AutolatheTaipan
     stackRequirements:
-      MatterBin: 3
-      Manipulator: 1
+      Manipulator: 4
       Glass: 1
 
 - type: entity
@@ -58,7 +57,7 @@
   - type: MachineBoard
     prototype: AutolatheHyperConvectionTaipan
     stackRequirements:
-      MatterBin: 3
+      Manipulator: 3
       Glass: 1
     tagRequirements:
       Igniter:
@@ -74,8 +73,7 @@
   - type: MachineBoard
     prototype: ProtolatheTaipan
     stackRequirements:
-      MatterBin: 2
-      Manipulator: 2
+      Manipulator: 4
     tagRequirements:
       GlassBeaker:
         amount: 2
@@ -90,7 +88,7 @@
   - type: MachineBoard
     prototype: ProtolatheHyperConvectionTaipan
     stackRequirements:
-      MatterBin: 2
+      Manipulator: 4
     tagRequirements:
       GlassBeaker:
         amount: 2
@@ -108,8 +106,7 @@
   - type: MachineBoard
     prototype: CircuitImprinterTaipan
     stackRequirements:
-      MatterBin: 1
-      Manipulator: 1
+      Manipulator: 2
     tagRequirements:
       GlassBeaker:
         amount: 2
@@ -124,7 +121,7 @@
   - type: MachineBoard
     prototype: CircuitImprinterHyperConvectionTaipan
     stackRequirements:
-      MatterBin: 2
+      Manipulator: 2
     tagRequirements:
       GlassBeaker:
         amount: 2
@@ -142,8 +139,7 @@
   - type: MachineBoard
     prototype: ExosuitFabricatorTaipan
     stackRequirements:
-      MatterBin: 1
-      Manipulator: 3
+      Manipulator: 4
       Glass: 5
 
 - type: entity
@@ -155,8 +151,7 @@
   - type: MachineBoard
     prototype: UniformPrinterTaipan
     stackRequirements:
-      MatterBin: 1
-      Manipulator: 2
+      Manipulator: 3
 
 - type: entity
   id: ResearchAndDevelopmentServerMachineCircuitboardTaipan
@@ -190,7 +185,7 @@
   - type: MachineBoard
     prototype: CargoTelepadTaipan
     stackRequirements:
-      Capacitor: 2
+      Manipulator: 2
       Steel: 5
 
 - type: entity
@@ -202,7 +197,7 @@
   - type: MachineBoard
     prototype: BiofabricatorTaipan
     stackRequirements:
-      MatterBin: 4
+      Manipulator: 4
       Glass: 1
 
 - type: entity
@@ -214,8 +209,7 @@
   - type: MachineBoard
     prototype: WeaponryTechFabTaipan
     stackRequirements:
-      MatterBin: 2
-      Manipulator: 2
+      Manipulator: 4
     tagRequirements:
       GlassBeaker:
         amount: 2
@@ -230,8 +224,7 @@
   - type: MachineBoard
     prototype: MedicalTechFabTaipan
     stackRequirements:
-      MatterBin: 2
-      Manipulator: 2
+      Manipulator: 4
     tagRequirements:
       GlassBeaker:
         amount: 2
@@ -245,8 +238,7 @@
   - type: MachineBoard
     prototype: OreProcessorTaipan
     stackRequirements:
-      MatterBin: 1
-      Manipulator: 3
+      Manipulator: 4
       Glass: 1
 
 - type: entity
@@ -257,8 +249,7 @@
   - type: MachineBoard
     prototype: OreProcessorIndustrialTaipan
     stackRequirements:
-      MatterBin: 1
-      Manipulator: 3
+      Manipulator: 4
       Glass: 1
 
 - type: entity
@@ -270,7 +261,7 @@
   - type: MachineBoard
     prototype: MachineAnomalyVesselTaipan
     stackRequirements:
-      Capacitor: 3
+      Manipulator: 3
       Cable: 1
       PlasmaGlass: 10
 
@@ -283,7 +274,7 @@
   - type: MachineBoard
     prototype: MachineAnomalyVesselExperimentalTaipan
     stackRequirements:
-      Capacitor: 3
+      Manipulator: 3
       Cable: 5
       PlasmaGlass: 15
       MetalRod: 4

@@ -54,11 +54,6 @@
   result: BiofabricatorMachineCircuitboardTaipan
 
 - type: latheRecipe
-  parent: BaseCircuitboardRecipe
-  id: SalvageExpeditionsComputerCircuitboardTaipan
-  result: SalvageExpeditionsComputerCircuitboardTaipan
-
-- type: latheRecipe
   parent: BaseGoldCircuitboardRecipe
   id: AnalysisComputerCircuitboardTaipan
   result: AnalysisComputerCircuitboardTaipan

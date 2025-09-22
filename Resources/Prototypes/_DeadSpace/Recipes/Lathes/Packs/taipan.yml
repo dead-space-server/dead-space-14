@@ -80,7 +80,7 @@
   recipes:
   - IntercomElectronics
   - FirelockElectronics
-  - TaipanDoorElectronics
+  - DoorElectronicsTaipan
   - AirAlarmElectronics
   - StationMapElectronics
   - FireAlarmElectronics
@@ -178,7 +178,6 @@
   - ShuttleGunKineticCircuitboard
   - SalvageExpeditionsComputerCircuitboard
   - CargoTelepadMachineCircuitboardTaipan
-  - SalvageExpeditionsComputerCircuitboardTaipan
 
 - type: latheRecipePack
   id: TaipanCargoBoardsStatic

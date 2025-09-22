@@ -2,7 +2,7 @@
   id: DresserTaipanCommunicationsOfficerFilled
   parent: Dresser
   name: комод
-  desc: Деревянный комод, в котором можно хранить вещи, идеально подходит для нижнего белья и чьих-то почек?...
+  description: Деревянный комод, в котором можно хранить вещи, идеально подходит для нижнего белья и чьих-то почек?...
   suffix: Тайпан, Офицер телекоммуникаций
   components:
   - type: StorageFill
@@ -22,7 +22,7 @@
   id: DresserTaipanResearchDirectorFilled
   parent: Dresser
   name: комод
-  desc: Деревянный комод, в котором можно хранить вещи, идеально подходит для нижнего белья и чьих-то почек?...
+  description: Деревянный комод, в котором можно хранить вещи, идеально подходит для нижнего белья и чьих-то почек?...
   suffix: Тайпан, Директор исследований
   components:
   - type: StorageFill
@@ -40,7 +40,7 @@
   id: DresserTaipanTechnicalOperationsSupervisorFilled
   parent: Dresser
   name: комод
-  desc: Деревянный комод, в котором можно хранить вещи, идеально подходит для нижнего белья и чьих-то почек?...
+  description: Деревянный комод, в котором можно хранить вещи, идеально подходит для нижнего белья и чьих-то почек?...
   suffix: Тайпан, Руководитель техобеспечения
   components:
   - type: StorageFill
