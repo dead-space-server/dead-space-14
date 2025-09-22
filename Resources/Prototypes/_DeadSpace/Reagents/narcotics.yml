@@ -3,7 +3,7 @@
   name: reagent-name-phenylacetone
   desc: reagent-desc-phenylacetone
   physicalDesc: reagent-physical-desc-oily
-  flavor: pungent
+  flavor: bitter
   color: "#FFA500"
   boilingPoint: 216.0
   meltingPoint: -15.0
