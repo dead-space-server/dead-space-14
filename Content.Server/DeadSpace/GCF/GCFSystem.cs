@@ -73,7 +73,11 @@ public sealed class GCFSystem : EntitySystem
     {
         if (!_gcfNotify)
             return;
-        _chat.SendAdminAnnouncement("Автоочистка завершена успешно");
+
+        var before = GC.GetTotalMemory(false);
+        GC.Collect(2, GCCollectionMode.Forced, true, true);
+        var after = GC.GetTotalMemory(false);
+        _chat.SendAdminAnnouncement($"Автоочистка завершена: {(before - after) / 1024 / 1024} MB освобождено");
     }
 
     private void RecalculateNextGCFTime()
