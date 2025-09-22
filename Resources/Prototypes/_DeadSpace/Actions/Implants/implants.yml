@@ -19,8 +19,8 @@
 - type: entity
   parent: BaseAction
   id: ActionRetractableItemMantisBladesImplant
-  name: "[color=red]Toggle mantis blades[/color]"
-  description: Give 'em the blade.
+  name: "[color=red]Переключить клинки богомола[/color]"
+  description: Пустите их под клинок.
   categories: [ HideSpawnMenu ]
   components:
   - type: Action
@@ -42,8 +42,8 @@
 - type: entity
   parent: BaseAction
   id: ActionMantisJump
-  name: "[color=red]Mantis pounce[/color]"
-  description: Unleash your hatred upon the enemy.
+  name: "[color=red]Рывок богомола[/color]"
+  description: Набросьтесь на врага со всей ненавистью.
   components:
   - type: Action
     useDelay: 2

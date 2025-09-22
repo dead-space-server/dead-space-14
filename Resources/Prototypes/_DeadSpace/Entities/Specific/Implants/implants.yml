@@ -42,9 +42,8 @@
 - type: entity
   parent: BaseImplantOnlyImplanterSyndi
   id: MantisBladesImplanter
-  name: military implant
-  description: Illegal military-grade implant manufactured by Cybersun. Installs a pair of mantis blades into the forearms.
-  suffix: mantis blades
+  name: имплантер
+  suffix: клинки богомола
   components:
   - type: Implanter
     implant: MantisBladesImplant
@@ -52,7 +51,8 @@
 - type: entity
   parent: BaseSubdermalImplant
   id: MantisBladesImplant
-  name: military implant
+  name: военный имплант
+  description: Нелегальный военный имплант, производимый корпорацией Cybersun. Устанавливает в руки пару клинков богомола.
   categories: [ HideSpawnMenu ]
   components:
   - type: SubdermalImplant

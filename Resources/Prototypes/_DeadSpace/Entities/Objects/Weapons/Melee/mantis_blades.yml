@@ -1,8 +1,8 @@
 - type: entity
   parent: [ BaseItem, BaseSyndicateContraband ]
   id: MantisBladesSyndicate
-  name: mantis blades
-  description: A smoky aroma of cyberpsychosis streams from the blades. Ready to put a pack of corporate rats to the blade?
+  name: клинки богомола
+  description: От лезвий струится дымчатый аромат киберпсихоза. Готовы пустить под клинок стаю корпоративных крыс?
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
