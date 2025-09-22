@@ -206,7 +206,7 @@
       Glass: 1
 
 - type: entity
-  id: WeaponTechFabCircuitboardTaipan
+  id: WeaponryTechFabCircuitboardTaipan
   parent: BaseMachineCircuitboardTaipan
   name: оружейный ТехФаб (машинная плата)
   description: Печатная плата оружейного ТехФаба.

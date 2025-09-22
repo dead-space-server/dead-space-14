@@ -56,8 +56,8 @@
   - type: RadarConsole
     followEntity: false
   - type: CommunicationsConsole
-    canCallShuttle: false
-    canCallERT: false
+#    canCallShuttle: false
+#    canCallERT: false
     title: comms-console-announcement-title-station-ai
     color: "#fc7777"
   - type: HolographicAvatar
@@ -179,7 +179,6 @@
     listeningRange: 0
     speakerVolume: Speak
     unlistedNumber: true
-    requiresPower: false
   - type: Holopad
   - type: StationAiWhitelist
   - type: UserInterface
@@ -228,21 +227,15 @@
         name: power-cell-slot-component-slot-name-default
         startingItem: PowerCellMedium
   - type: StartingMindRole
-    mindRole: "MindRoleSiliconBrain"
+    mindRole: MindRoleSiliconBrain
     silent: true
 
 # Taipan Generic Battery
 - type: entity
   id: PlayerBorgTaipanGenericBattery
-  parent: BorgChassisTaipanGeneric
+  parent: [BorgChassisTaipanGeneric, BorgChassisGeneric]
   suffix: Тайпан, Батарея
   components:
-  - type: ContainerFill
-    containers:
-      borg_brain:
-      - PositronicBrain
-      borg_module:
-      - BorgModuleTool
   - type: ItemSlots
     slots:
       cell_slot:
@@ -255,7 +248,7 @@
 # Taipan Engineer Battery
 - type: entity
   id: PlayerBorgTaipanEngineerBattery
-  parent: BorgChassisTaipanEngineer
+  parent: [BorgChassisTaipanEngineer, BorgChassisEngineer]
   suffix: Тайпан, Батарея
   components:
   - type: ContainerFill
@@ -279,17 +272,9 @@
 # Taipan Mining Battery
 - type: entity
   id: PlayerBorgTaipanMiningBattery
-  parent: BorgChassisTaipanMining
+  parent: [BorgChassisTaipanMining, BorgChassisMining]
   suffix: Тайпан, Батарея
   components:
-  - type: ContainerFill
-    containers:
-      borg_brain:
-      - PositronicBrain
-      borg_module:
-      - BorgModuleGrapplingGun
-      - BorgModuleMining
-      - BorgModuleAppraisal
   - type: ItemSlots
     slots:
       cell_slot:
@@ -302,16 +287,9 @@
 # Taipan Janitor Battery
 - type: entity
   id: PlayerBorgTaipanJanitorBattery
-  parent: BorgChassisTaipanJanitor
+  parent: [BorgChassisTaipanJanitor, BorgChassisJanitor]
   suffix: Тайпан, Батарея
   components:
-  - type: ContainerFill
-    containers:
-      borg_brain:
-      - PositronicBrain
-      borg_module:
-      - BorgModuleLightReplacer
-      - BorgModuleCleaning
   - type: ItemSlots
     slots:
       cell_slot:
@@ -324,15 +302,9 @@
 # Taipan Medical Battery
 - type: entity
   id: PlayerBorgTaipanMedicalBattery
-  parent: BorgChassisTaipanMedical
+  parent: [BorgChassisTaipanMedical, BorgChassisMedical]
   suffix: Тайпан, Батарея
   components:
-  - type: ContainerFill
-    containers:
-      borg_brain:
-      - PositronicBrain
-      borg_module:
-      - BorgModuleTreatment
   - type: ItemSlots
     slots:
       cell_slot:
@@ -345,7 +317,7 @@
 # Taipan Service Battery
 - type: entity
   id: PlayerBorgTaipanServiceBattery
-  parent: BorgChassisTaipanService
+  parent: [BorgChassisTaipanService, BorgChassisService]
   suffix: Тайпан, Батарея
   components:
   - type: ContainerFill
@@ -376,8 +348,8 @@
       borg_brain:
       - PositronicBrain
       borg_module:
-      - BorgModuleArrestSecurity
-      - BorgModulEnergySecurity
+      - BorgModuleEsword
+      - BorgModuleC20r
   - type: ItemSlots
     slots:
       cell_slot:

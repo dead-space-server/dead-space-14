@@ -61,15 +61,6 @@
     count: 1
 
 - type: entity
-  parent: SheetTitanium
-  id: SheetTitaniumLingering0
-  suffix: Никогда не закончится, 0
-  components:
-  - type: Stack
-    lingering: true
-    count: 0
-
-- type: entity
   parent: SheetMetalBase
   id: SheetPlastitanium
   name: пластитан

@@ -1,30 +1,34 @@
-- type: AirlockGroup
+- type: paintableGroup
   id: TaipanStandard
-  iconPriority: 60
-  stylePaths:
-    базовый тёмный:      _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_basic.rsi
-    атмосферный тёмный:  _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_atmospherics.rsi
-    снабжение тёмный:    _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_cargo.rsi
-    командование тёмный: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_command.rsi
-    инженерный тёмный:   _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_engineering.rsi
-    морозильник тёмный:  _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_freezer.rsi
-    технический тёмный:  _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_maint.rsi
-    медицинский тёмный:  _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_medical.rsi
-    научный тёмный:      _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_science.rsi
-    сервисный тёмный:    _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_service.rsi
-    вирусология тёмный:  _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_virology.rsi
+  time: 3
+  cost: 3
+  defaultStyle: AirlockTaipan
+  styles:
+    basic: AirlockTaipan
+    service: AirlockTaipanService
+    freezer: AirlockTaipanFreezer
+    engineering: AirlockTaipanEngineering
+    atmospherics: AirlockTaipanAtmospherics
+    cargo: AirlockTaipanCargo
+    maint: AirlockTaipanMaint
+    medical: AirlockTaipanMedical
+    virology: AirlockTaipanVirology
+    science: AirlockTaipanScience
+    command: AirlockTaipanCommand
 
-- type: AirlockGroup
+- type: paintableGroup
   id: TaipanGlass
-  iconPriority: 50
-  stylePaths:
-    базовый тёмный:      _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass.rsi
-    атмосферный тёмный:  _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_atmospherics.rsi
-    снабжение тёмный:    _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_cargo.rsi
-    командование тёмный: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_command.rsi
-    инженерный тёмный:   _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_engineering.rsi
-    технический тёмный:  _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_maint.rsi
-    медицинский тёмный:  _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_medical.rsi
-    научный тёмный:      _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_science.rsi
-    сервисный тёмный:    _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_service.rsi
-    вирусология тёмный:  _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_virology.rsi
+  time: 3
+  cost: 3
+  defaultStyle: AirlockTaipanGlass
+  styles:
+    basic: AirlockTaipanGlass
+    service: AirlockTaipanGlassService
+    engineering: AirlockTaipanGlassEngineering
+    atmospherics: AirlockTaipanGlassAtmospherics
+    cargo: AirlockTaipanGlassCargo
+    maint: AirlockTaipanGlassMaint
+    medical: AirlockTaipanGlassMedical
+    virology: AirlockTaipanGlassVirology
+    science: AirlockTaipanGlassScience
+    command: AirlockTaipanGlassCommand

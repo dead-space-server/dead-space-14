@@ -72,7 +72,6 @@
     - BorgModuleSyndicate
 
   defaultModules:
-  - BorgModuleGrapplingGun
   - BorgModuleMining
   - BorgModuleAppraisal
 

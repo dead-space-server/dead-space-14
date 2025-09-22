@@ -49,7 +49,7 @@
       board: !type:Container
 
 - type: entity
-  parent: BaseComputerAiAccess
+  parent: ComputerAnalysisConsole
   id: ComputerTaipanAnalysisConsole
   name: аналитическая консоль
   suffix: Тайпан
@@ -70,27 +70,6 @@
       state: generic_panel_open
   - type: ResearchClient
     isTaipan: true
-  - type: AnalysisConsole
-    reportEntityId: PaperArtifactAnalyzer
-  - type: DeviceList
-  - type: DeviceNetwork
-    deviceNetId: Wired
-  - type: DeviceLinkSource
-    range: 5
-    ports:
-    - ArtifactAnalyzerSender
-  - type: ActivatableUI
-    key: enum.ArtifactAnalzyerUiKey.Key
-  - type: UserInterface
-    interfaces:
-      enum.ArtifactAnalzyerUiKey.Key:
-        type: AnalysisConsoleBoundUserInterface
-      enum.ResearchClientUiKey.Key:
-        type: ResearchClientBoundUserInterface
-      enum.WiresUiKey.Key:
-        type: WiresBoundUserInterface
-  - type: ApcPowerReceiver
-    powerLoad: 1000
   - type: Computer
     board: AnalysisComputerCircuitboardTaipan
   - type: PointLight
@@ -239,12 +218,12 @@
     access: [["TaipanCommand"]]
   - type: CommunicationsConsole
     title: comms-console-announcement-title-taipan
-    announcementSound:
+    sound:
       path: /Audio/_DeadSpace/Announcements/announce_taipan.ogg
       params:
         volume: -2
-    canCallERT: False
-    canCallShuttle: False
+#    canCallERT: False
+#    canCallShuttle: False
     color: "#8B0000"
   - type: DeviceNetwork
     transmitFrequencyId: ShuttleTimer

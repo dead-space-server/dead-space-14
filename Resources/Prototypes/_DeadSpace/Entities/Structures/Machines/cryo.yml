@@ -11,7 +11,7 @@
     - state: sleeper_0
       map: ["base"]
   - type: AccessReader
-    breakOnEmag: false
+    breakOnAccessBreaker: false
     access: [["TaipanMedical"]]
   - type: PointLight
     color: Red

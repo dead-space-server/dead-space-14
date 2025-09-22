@@ -38,12 +38,6 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Tools/welder_industrial_taipan.rsi
-    layers:
-    - state: icon
-    - state: welder_flame
-      visible: false
-      shader: unshaded
-      map: ["enum.ToggleVisuals.Layer"]
   - type: Item
     sprite: _DeadSpace/Objects/Tools/welder_industrial_taipan.rsi
   - type: Tool
@@ -139,4 +133,4 @@
   suffix: Пустой
   components:
   - type: LimitedCharges
-    charges: 0
+    lastCharges: -1

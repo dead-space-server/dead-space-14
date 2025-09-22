@@ -32,6 +32,9 @@
   id: DockCentcommERT
 
 - type: Tag
+  id: DeathRipleyEquipment
+
+- type: Tag
   id: EnergyCartridge
 
 - type: Tag

@@ -1,7 +1,7 @@
 - type: entity
   id: PlastitaniumPlasmaWindowIndestructible
   name: пластитановое плазменное окно
-  discription: Смотри не заляпай.
+  description: Смотри не заляпай.
   parent: PlastitaniumWindowIndestructible
   suffix: Неразрушимое
   components:
@@ -60,7 +60,7 @@
 - type: entity
   id: PlastitaniumPlasmaWindowDiagonalIndestructible
   name: пластитановое плазменное окно
-  discription: Смотри не заляпай.
+  description: Смотри не заляпай.
   parent: PlastitaniumWindowDiagonalIndestructible
   suffix: Диагональное, Неразрушимое
   components:

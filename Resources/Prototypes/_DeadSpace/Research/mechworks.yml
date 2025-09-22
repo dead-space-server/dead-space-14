@@ -27,7 +27,6 @@
   recipeUnlocks:
   - RadarConsoleCircuitboard
   - HandHeldMassScanner
-  - BorgModuleGPS
 
 - type: technology
   id: TaipanAdvancedPowercells
@@ -247,8 +246,8 @@
 # Tier 3
 
 - type: technology
-  id: TaipanPortableFission
-  name: research-technology-portable-fission
+  id: TaipanOptimizedMicrogalvanism
+  name: research-technology-optimized-microgalvanism
   icon:
     sprite: Objects/Power/power_cells.rsi
     state: microreactor
@@ -257,6 +256,7 @@
   cost: 30000
   recipeUnlocks:
   - PowerCellMicroreactor
+  - PowerCellHyper
   technologyPrerequisites:
   - TaipanAdvancedPowercells
 

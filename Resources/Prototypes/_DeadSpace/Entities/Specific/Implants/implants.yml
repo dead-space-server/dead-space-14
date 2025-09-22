@@ -56,8 +56,8 @@
     mobState:
     - Critical
     - Dead
-  - type: Rattle
-    radioChannel: "Taipan"
+  - type: RattleOnTrigger
+    radioChannel: Taipan
 
 - type: entity
   id: DeathRattleImplanterTaipan
