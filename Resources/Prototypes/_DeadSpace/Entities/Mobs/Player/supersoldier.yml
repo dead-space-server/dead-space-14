@@ -168,7 +168,7 @@
   - type: AnimationPlayer
   - type: Buckle
   - type: CombatMode
-    baseDisarmFailChance: 0.45
+    disarmFailChance: 0.45
     canDisarm: true
   - type: MeleeWeapon
     soundHit:
