@@ -58,7 +58,7 @@ public sealed partial class ServerApi
         var playerMgr = await RunOnMainThread(IoCManager.Resolve<ISharedPlayerManager>);
         var ply = await _db.GetPlayerRecordByUserName(permissionList.Ckey);
         var ranks = await _db.GetAllAdminAndRanksAsync();
-        var rank = await _db.GetAdminRankAsync(5);
+        var rank = await _db.GetAdminRankAsync(permissionList.Permissions);
         Admin previoslyAdmin = new Admin();
         if (ply == null)
         {

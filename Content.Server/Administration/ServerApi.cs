@@ -634,7 +634,7 @@ public sealed partial class ServerApi : IPostInjectInit
 
     private sealed class PermissionActionBody
     {
-        public required string Permissions { get; init; }
+        public required int Permissions { get; init; }
         public required string Ckey { get; init; }
     }
 
