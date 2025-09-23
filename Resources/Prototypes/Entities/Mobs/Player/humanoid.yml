@@ -133,9 +133,6 @@
         time: 756000 # 210 hours
     raffle:
       settings: short
-  - type: NpcFactionMember
-    factions:
-    - CentralCommand
   - type: GhostTakeoverAvailable
   - type: RandomMetadata
     nameSegments:
