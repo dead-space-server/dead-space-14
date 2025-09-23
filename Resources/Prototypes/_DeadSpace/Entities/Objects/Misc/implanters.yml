@@ -24,7 +24,7 @@
   parent: BaseSubdermalImplant
   id: RadioImplantDeathSquad
   name: имплант "радио"
-  description: Этот имплант даёт доступ к радиочастоте UNKNOWN без гарнитуры.
+  description: Этот имплант даёт доступ к радиочастоте НЕИЗВЕСТНО без гарнитуры.
   categories: [ HideSpawnMenu ]
   components:
   - type: SubdermalImplant
@@ -36,7 +36,7 @@
   parent: DeathRattleImplant
   id: DeathRattleImplantDeathSquad
   name: имплант "предсмертный хрип"
-  description: Этот имплант сообщит по радиоканалу UNKNOWN, если пользователь окажется в критическом состоянии или умрёт.
+  description: Этот имплант сообщит по радиоканалу НЕИЗВЕСТНО, если пользователь окажется в критическом состоянии или умрёт.
   categories: [ HideSpawnMenu ]
   components:
   - type: RattleOnTrigger
