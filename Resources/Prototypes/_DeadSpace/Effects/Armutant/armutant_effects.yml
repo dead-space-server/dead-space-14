@@ -239,7 +239,11 @@
   - type: SmokeOnTrigger
     duration: 10
     spreadAmount: 1
+<<<<<<< HEAD
   - type: EmitSoundOnTrigger
+=======
+  - type: SoundOnTrigger
+>>>>>>> aae74230027de3995009b60cae20059374e38691
     sound: /Audio/Effects/smoke.ogg
   - type: TimerTriggerVisuals
     primingSound:

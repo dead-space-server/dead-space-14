@@ -1,6 +1,10 @@
 - type: entity
   id: ArtiefactArmutantObjective
+<<<<<<< HEAD
   name: артефакт
+=======
+  name: Артефакт
+>>>>>>> aae74230027de3995009b60cae20059374e38691
   description: Нечто пульсирующие.
   parent: BaseItem
   suffix: телепорт
@@ -26,7 +30,11 @@
 - type: entity
   id: ArtiefactArmutantObjectiveTrue
   parent: BaseItem
+<<<<<<< HEAD
   name: сердце пустоты
+=======
+  name: Сердце пустоты
+>>>>>>> aae74230027de3995009b60cae20059374e38691
   description: Нечто пульсирующие, нечто живое.
   suffix: настоящий
   components:

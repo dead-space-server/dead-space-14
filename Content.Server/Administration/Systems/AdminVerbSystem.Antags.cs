@@ -13,6 +13,10 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using Content.Shared.DeadSpace.Events.Roles.Components;
+<<<<<<< HEAD
+=======
+using Content.Server.GameTicking.Rules;
+>>>>>>> aae74230027de3995009b60cae20059374e38691
 using Content.Server.DeadSpace.Armutant.Base.Components;
 
 namespace Content.Server.Administration.Systems;
@@ -34,6 +38,9 @@ public sealed partial class AdminVerbSystem
     private static readonly EntProtoId DefaultUnitologyRule = "Unitology"; // DS14
     private static readonly EntProtoId DefaultSpiderTerrorRule = "SpiderTerror"; // DS14
     private static readonly ProtoId<StartingGearPrototype> PirateGearId = "PirateGear";
+
+    [ValidatePrototypeId<EntityPrototype>]
+    private const string DefaultArmutantRule = "Armutant";
 
     [ValidatePrototypeId<EntityPrototype>]
     private const string DefaultArmutantRule = "Armutant";

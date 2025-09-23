@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 using System.Numerics;
 using Content.Shared.Actions;
 using Robust.Shared.Audio;
@@ -10,6 +11,13 @@ public sealed partial class ArmutantSwapArmEvent : InstantActionEvent
     [DataField]
     public ArmutantArms List;
 }
+=======
+using Content.Shared.Actions;
+
+namespace Content.Shared.DeadSpace.Armutant;
+
+public sealed partial class ArmutantSwapArmEvent : InstantActionEvent { }
+>>>>>>> aae74230027de3995009b60cae20059374e38691
 public sealed class BloodStreamRecoveryEvent : EntityEventArgs
 {
     public EntityUid Entity;
@@ -38,6 +46,7 @@ public sealed class SetNewDestructibleThreshold : EntityEventArgs
         DamageAmount = damageAmount;
     }
 }
+<<<<<<< HEAD
 public sealed partial class EnterArmutantStasisEvent : InstantActionEvent
 {
     [DataField]
@@ -96,6 +105,16 @@ public sealed partial class FistStunTentacleToggleEvent : EntityTargetActionEven
     [DataField]
     public string HandEffect = "TentacleArmsHand";
 }
+=======
+public sealed partial class EnterArmutantStasisEvent : InstantActionEvent { }
+
+// Abilities blade
+public sealed partial class BladeDashActionEvent : WorldTargetActionEvent { }
+public sealed partial class CreateTalonBladeEvent : InstantActionEvent { }
+
+// Abilities fist
+public sealed partial class FistStunTentacleToggleEvent : EntityTargetActionEvent { }
+>>>>>>> aae74230027de3995009b60cae20059374e38691
 public sealed class BeamActiveVoidHold : EntityEventArgs
 {
     public string Effect;
@@ -106,6 +125,7 @@ public sealed class BeamActiveVoidHold : EntityEventArgs
         Target = target;
     }
 }
+<<<<<<< HEAD
 public sealed partial class FistMendSelfToggleEvent : InstantActionEvent
 {
     [DataField]
@@ -175,13 +195,27 @@ public sealed partial class VoidShieldToggleEvent : InstantActionEvent
     [DataField]
     public TimeSpan ActiveTime = TimeSpan.FromSeconds(15.0);
 }
+=======
+public sealed partial class FistMendSelfToggleEvent : InstantActionEvent { }
+public sealed partial class FistBuffSpeedToggleEvent : InstantActionEvent { }
+
+// Abilities shield
+public sealed partial class CreateArmorShieldToggleEvent : InstantActionEvent { }
+public sealed partial class StunShieldToggleEvent : InstantActionEvent { }
+public sealed partial class VoidShieldToggleEvent : InstantActionEvent { }
+>>>>>>> aae74230027de3995009b60cae20059374e38691
 
 [ByRefEvent]
 public record struct StunShieldAttemptEvent(bool Cancelled);
 
 // Abilities gun
+<<<<<<< HEAD
 public sealed partial class GunSmokeActionEvent : InstantActionEvent
 {
     [DataField]
     public EntProtoId? SpawnPrototype = "GunSmokeInstantEffect";
 }
+=======
+public sealed partial class GunZoomActionEvent : InstantActionEvent { }
+public sealed partial class GunSmokeActionEvent : InstantActionEvent { }
+>>>>>>> aae74230027de3995009b60cae20059374e38691

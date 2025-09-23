@@ -14,7 +14,11 @@ public partial class SharedArmutantSystem
         SubscribeLocalEvent<ArmutantComponent, VoidShieldToggleEvent>(OnToggleShield);
     }
 
+<<<<<<< HEAD
     private void OnCreateArmorShield(Entity<ArmutantComponent> ent, ref CreateArmorShieldToggleEvent args)
+=======
+    private void OnCreateArmorShield(Entity<ArmutantComponent> ent, ref CreateArmorShieldToggleEvent args) // Метод создания брони на сущности
+>>>>>>> aae74230027de3995009b60cae20059374e38691
     {
         if (!_net.IsServer)
             return;
@@ -22,7 +26,15 @@ public partial class SharedArmutantSystem
         if (args.Handled)
             return;
 
+<<<<<<< HEAD
         _audio.PlayPvs(args.SoundEffect, ent);
+=======
+        var actionEnt = args.Action.Owner;
+        if (!TryComp<ArmutantShieldActionComponent>(actionEnt, out var armutantActionComp))
+            return;
+
+        _audio.PlayPvs(armutantActionComp.SoundEffect, ent);
+>>>>>>> aae74230027de3995009b60cae20059374e38691
 
         if (ent.Comp.EquipmentArmor.Count > 0)
         {
@@ -31,8 +43,13 @@ public partial class SharedArmutantSystem
         }
         else
         {
+<<<<<<< HEAD
             var success = TryEquipArmor(ent, args.ArmorPrototype, "outerClothing", ent.Comp.EquipmentArmor) &
                           TryEquipArmor(ent, args.ArmorHelmetPrototype, "head", ent.Comp.EquipmentArmor);
+=======
+            var success = TryEquipArmor(ent, armutantActionComp.ArmorPrototype, "outerClothing", ent.Comp.EquipmentArmor) &
+                           TryEquipArmor(ent, armutantActionComp.ArmorHelmetPrototype, "head", ent.Comp.EquipmentArmor);
+>>>>>>> aae74230027de3995009b60cae20059374e38691
 
             if (!success)
                 _popup.PopupEntity(Loc.GetString("armutant-equip-armor-fail"), ent, ent);
@@ -42,7 +59,11 @@ public partial class SharedArmutantSystem
         args.Handled = true;
     }
 
+<<<<<<< HEAD
     private void OnStunShieldAction(Entity<ArmutantComponent> ent, ref StunShieldToggleEvent args)
+=======
+    private void OnStunShieldAction(Entity<ArmutantComponent> ent, ref StunShieldToggleEvent args) // Метод стана по площади
+>>>>>>> aae74230027de3995009b60cae20059374e38691
     {
         if (!_net.IsServer)
             return;
@@ -50,6 +71,13 @@ public partial class SharedArmutantSystem
         if (args.Handled)
             return;
 
+<<<<<<< HEAD
+=======
+        var actionEnt = args.Action.Owner;
+        if (!TryComp<ArmutantShieldActionComponent>(actionEnt, out var armutantActionComp))
+            return;
+
+>>>>>>> aae74230027de3995009b60cae20059374e38691
         var ev = new StunShieldAttemptEvent();
         RaiseLocalEvent(ent, ref ev);
 
@@ -57,12 +85,22 @@ public partial class SharedArmutantSystem
             return;
 
         if (!TryComp<TransformComponent>(ent, out var xform) || _mobState.IsDead(ent))
+<<<<<<< HEAD
             return;
+=======
+        {
+            return;
+        }
+>>>>>>> aae74230027de3995009b60cae20059374e38691
 
         args.Handled = true;
 
         _receivers.Clear();
+<<<<<<< HEAD
         foreach (var entity in _lookup.GetEntitiesInRange(xform.Coordinates, args.Range))
+=======
+        foreach (var entity in _lookup.GetEntitiesInRange(xform.Coordinates, armutantActionComp.Range))
+>>>>>>> aae74230027de3995009b60cae20059374e38691
         {
             if (entity == args.Performer)
                 continue;
@@ -74,7 +112,11 @@ public partial class SharedArmutantSystem
         }
 
         if (_net.IsServer)
+<<<<<<< HEAD
             _audio.PlayPvs(args.SoundEffect, ent);
+=======
+            _audio.PlayPvs(armutantActionComp.SoundEffect, ent);
+>>>>>>> aae74230027de3995009b60cae20059374e38691
 
         foreach (var receiver in _receivers)
         {
@@ -84,6 +126,7 @@ public partial class SharedArmutantSystem
             if (_mobState.IsDead(receiver))
                 continue;
 
+<<<<<<< HEAD
             _stun.TryUpdateParalyzeDuration(receiver, args.ParalyzeTime);
 
             var dashDirection = (_transform.GetWorldPosition(receiver) - _transform.GetWorldPosition(ent)).Normalized();
@@ -94,12 +137,28 @@ public partial class SharedArmutantSystem
 
             if (xform.Coordinates.TryDistance(EntityManager, Transform(receiver).Coordinates, out var distance) &&
                 distance <= args.ShortRange)
+=======
+            _stun.TryParalyze(receiver, armutantActionComp.ParalyzeTime, true);
+
+            var dashDirection = (_transform.GetWorldPosition(receiver) - _transform.GetWorldPosition(ent)).Normalized();
+            _physics.SetLinearVelocity(receiver, dashDirection * armutantActionComp.KnockbackForce, body: physics);
+
+            if (_net.IsServer && armutantActionComp.EffectTarget is not null)
+                SpawnAttachedTo(armutantActionComp.EffectTarget, Transform(receiver).Coordinates);
+
+            if (xform.Coordinates.TryDistance(EntityManager, Transform(receiver).Coordinates, out var distance) &&
+                distance <= armutantActionComp.ShortRange)
+>>>>>>> aae74230027de3995009b60cae20059374e38691
             {
                 if (!_standing.IsDown(receiver))
                     continue;
             }
         }
+<<<<<<< HEAD
         SpawnAttachedTo(args.SelfEffectStun, Transform(ent).Coordinates);
+=======
+        SpawnAttachedTo(armutantActionComp.SelfEffect, Transform(ent).Coordinates);
+>>>>>>> aae74230027de3995009b60cae20059374e38691
     }
 
     private void OnToggleShield(Entity<ArmutantComponent> ent, ref VoidShieldToggleEvent args) // Метод вызова щита с отражением на 15 секунд
@@ -110,6 +169,7 @@ public partial class SharedArmutantSystem
         if (args.Handled)
             return;
 
+<<<<<<< HEAD
         var reflectComponent = EnsureComp<ReflectComponent>(ent);
         reflectComponent.ReflectProb = 0.99f;
         reflectComponent.Spread = 180f;
@@ -122,6 +182,24 @@ public partial class SharedArmutantSystem
         }
 
         Timer.Spawn(args.ActiveTime, () =>
+=======
+        var actionEnt = args.Action.Owner;
+        if (!TryComp<ArmutantShieldActionComponent>(actionEnt, out var armutantActionComp))
+            return;
+
+        var reflectComponent = EnsureComp<ReflectComponent>(ent);
+        reflectComponent.ReflectProb = 0.99f;
+        reflectComponent.Spread = 180f;
+        reflectComponent.SoundOnReflect = armutantActionComp.ReflectSound;
+
+        if (_net.IsServer && armutantActionComp.SelfEffect is not null)
+        {
+            var effect = Spawn(armutantActionComp.SelfEffect, Transform(ent).Coordinates);
+            _transform.SetParent(effect, ent);
+        }
+
+        Timer.Spawn(armutantActionComp.ActiveTime, () =>
+>>>>>>> aae74230027de3995009b60cae20059374e38691
         {
             RemComp<ReflectComponent>(ent);
         });

@@ -14,6 +14,7 @@
       - MobHivelord
 
 - type: entity
+<<<<<<< HEAD
   name: теневой кролик
   id: SpawnMobRabbitShadow
   suffix: Спавнер
@@ -63,13 +64,20 @@
 
 
 - type: entity
+=======
+>>>>>>> aae74230027de3995009b60cae20059374e38691
   parent: CollideSpawnVoidBosses
   id: SpawnBossesSpider
   suffix: Void Spider
   components:
     - type: TriggerOnCollide
       fixtureID: spawnvoidbosses
+<<<<<<< HEAD
     - type: EmitSoundOnTrigger
+=======
+    - type: SoundOnTrigger
+      removeOnTrigger: true
+>>>>>>> aae74230027de3995009b60cae20059374e38691
       sound:
         path: /Audio/_DeadSpace/Armutant/sound_fight_first_boss.ogg
         volume: 1
@@ -84,7 +92,12 @@
   components:
     - type: TriggerOnCollide
       fixtureID: spawnvoidlingbosses
+<<<<<<< HEAD
     - type: EmitSoundOnTrigger
+=======
+    - type: SoundOnTrigger
+      removeOnTrigger: true
+>>>>>>> aae74230027de3995009b60cae20059374e38691
       sound:
         path: /Audio/_DeadSpace/Armutant/sound_fight_two_bosses.ogg
         volume: 1
@@ -99,7 +112,11 @@
   - MobDamageable
   - MobAtmosExposed
   - MobCombat
+<<<<<<< HEAD
   name: паук пустоты
+=======
+  name: Паук Пустоты
+>>>>>>> aae74230027de3995009b60cae20059374e38691
   description: Очень быстрое гуманоидное существо, к тому же и сильное.
   components:
   - type: StatusEffects
@@ -174,7 +191,11 @@
 - type: entity
   id: MobVoidlingBosses
   parent: MobBossesVoidSpider
+<<<<<<< HEAD
   name: войдлинг
+=======
+  name: Войдлинг
+>>>>>>> aae74230027de3995009b60cae20059374e38691
   description: Мифическое существо, на вид до ужаса сильное.
   components:
   - type: Sprite
@@ -218,8 +239,13 @@
     mode: SnapgridCenter
   components:
     - type: Sprite
+<<<<<<< HEAD
       sprite: Objects/Fun/Plushies/arachnid.rsi
       state: icon
+=======
+      sprite: Objects/Fun/toys.rsi
+      state: plushie_arachnid
+>>>>>>> aae74230027de3995009b60cae20059374e38691
     - type: Fixtures
       fixtures:
         spawnvoidbosses:
