@@ -87,7 +87,7 @@
   - type: HumanoidAppearance
     species: SuperSoldier
   - type: Damageable
-    damageModifier: SuperSoldier
+    damageModifierSet: SuperSoldier
   - type: SlowOnDamage
     speedModifierThresholds:
       30: 0.7 # instead of 60
@@ -156,8 +156,6 @@
   - type: Identity
   - type: IdExaminable
   - type: Hands
-    throwRange: 13 
-    baseThrowSpeed: 14
   - type: ComplexInteraction
   - type: Internals
   - type: FloatingVisuals
@@ -208,7 +206,7 @@
     - NanoTrasen
   - type: Stripping
   - type: Strippable
-    handStripDelay: 17
+    handDelay: 17
   - type: UserInterface
     interfaces:
       enum.HumanoidMarkingModifierKey.Key:
@@ -299,15 +297,11 @@
     state: full
   - type: Thirst
     baseDecayRate: 0.01 
-    actualDecayRate: 0.01
   - type: Butcherable
     butcheringType: Spike
     spawned:
     - id: FoodMeatHuman
       amount: 5
-    hideLayersOnEquip:
-    - Hair
-    - Snout
   - type: Inventory
     templateId: supersoldier
     femaleDisplacements:
