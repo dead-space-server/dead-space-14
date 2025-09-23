@@ -38,9 +38,6 @@
     components:
     - type: AntagImmune
     - type: ZombieImmune
-    - type: NpcFactionMember
-      factions:
-      - CentralCommand
 
 - type: startingGear
   id: MagistratGear
