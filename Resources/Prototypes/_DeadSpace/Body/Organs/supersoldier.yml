@@ -1,0 +1,67 @@
+- type: entity
+  id: OrganSuperSoldierStomach
+  parent: BaseHumanOrgan
+  name: stomach
+  description: "Gross. This is hard to stomach."
+  components:
+  - type: Sprite
+    state: stomach
+  - type: Item
+    size: Small
+    heldPrefix: stomach
+  - type: SolutionContainerManager
+    solutions:
+      stomach:
+        maxVol: 50
+      food:
+        maxVol: 5
+        reagents:
+        - ReagentId: UncookedAnimalProteins
+          Quantity: 5
+  - type: Stomach
+  - type: Metabolizer
+    maxReagents: 3
+    metabolizerTypes: [SuperSoldier]
+    groups:
+    - id: Food
+    - id: Drink
+  
+- type: entity
+  id: OrganSuperSoldierHeart
+  parent: BaseHumanOrgan
+  name: heart
+  description: "I feel bad for the heartless bastard who lost this."
+  components:
+  - type: Sprite
+    state: heart-on
+  # The heart 'metabolizes' medicines and poisons that aren't filtered out by other organs.
+  # This is done because these chemicals need to have some effect even if they aren't being filtered out of your body.
+  # You're technically 'immune to poison' without a heart, but.. uhh, you'll have bigger problems on your hands.
+  - type: Metabolizer
+    maxReagents: 2
+    metabolizerTypes: [SuperSoldier]
+    groups:
+    - id: Medicine
+    - id: Poison
+    - id: Narcotic
+  - type: Item
+    size: Small
+    heldPrefix: heart
+
+- type: entity
+  id: OrganSuperSoldierLiver
+  parent: BaseHumanOrgan
+  name: liver
+  description: "Pairing suggestion: chianti and fava beans."
+  components:
+  - type: Sprite
+    state: liver
+  - type: Item
+    size: Small
+    heldPrefix: liver
+  - type: Metabolizer # The liver metabolizes certain chemicals only, like alcohol.
+    maxReagents: 1
+    metabolizerTypes: [SuperSoldier]
+    groups:
+    - id: Alcohol
+      rateModifier: 0.1 # removes alcohol very slowly along with the stomach removing it as a drink

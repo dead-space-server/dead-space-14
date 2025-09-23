@@ -269,6 +269,8 @@
   name: death squad backpack
   description: Holds the kit of CentComm's most feared agents.
   components:
+    - type: Clothing # DS14
+      unequipDelay: 12
     - type: Storage
       grid:
       - 0,0,7,6

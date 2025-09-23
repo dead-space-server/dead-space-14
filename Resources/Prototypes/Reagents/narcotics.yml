@@ -28,6 +28,17 @@
       - !type:MovespeedModifier
         walkSpeedModifier: 1.35
         sprintSpeedModifier: 1.35
+        conditions: # DS-14-start
+        - !type:OrganType
+          type: SuperSoldier
+          shouldHave: false 
+      - !type:MovespeedModifier
+        walkSpeedModifier: 1.55
+        sprintSpeedModifier: 1.55
+        conditions:
+        - !type:OrganType
+          type: SuperSoldier
+          shouldHave: true # DS-14-end       
       - !type:GenericStatusEffect
         key: Stutter
         component: StutteringAccent
@@ -71,6 +82,17 @@
       - !type:MovespeedModifier
         walkSpeedModifier: 1.25
         sprintSpeedModifier: 1.25
+        conditions: # DS-14-start
+        - !type:OrganType
+          type: SuperSoldier
+          shouldHave: false 
+      - !type:MovespeedModifier
+        walkSpeedModifier: 1.45
+        sprintSpeedModifier: 1.45
+        conditions:
+        - !type:OrganType
+          type: SuperSoldier
+          shouldHave: true # DS-14-end 
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
@@ -125,6 +147,17 @@
       - !type:MovespeedModifier
         walkSpeedModifier: 1.3
         sprintSpeedModifier: 1.3
+        conditions: # DS-14-start
+        - !type:OrganType
+          type: SuperSoldier
+          shouldHave: false 
+      - !type:MovespeedModifier
+        walkSpeedModifier: 1.5
+        sprintSpeedModifier: 1.5
+        conditions:
+        - !type:OrganType
+          type: SuperSoldier
+          shouldHave: true # DS-14-end 
       - !type:HealthChange
         conditions:
           - !type:ReagentThreshold
@@ -231,6 +264,10 @@
       - !type:MovespeedModifier
         walkSpeedModifier: 0.65
         sprintSpeedModifier: 0.65
+        conditions: # DS-14-start
+        - !type:OrganType
+          type: SuperSoldier
+          shouldHave: false # DS-14-end 
       - !type:HealthChange
         damage:
           types:
@@ -240,6 +277,10 @@
         time: 10
         type: Add
         refresh: false
+        conditions: # DS-14-start
+        - !type:OrganType
+          type: SuperSoldier
+          shouldHave: false # DS-14-end 
       - !type:ChemVomit # Vomiting is a symptom of brain damage
         probability: 0.05
       - !type:Drunk # Headaches and slurring are major symptoms of brain damage, this is close enough
@@ -301,6 +342,9 @@
         - !type:ReagentThreshold
           reagent: Nocturine
           min: 8
+        - !type:OrganType # DS-14-start
+          type: SuperSoldier
+          shouldHave: false # DS-14-end
         effectProto: StatusEffectForcedSleeping
         time: 3
         type: Add
@@ -318,6 +362,10 @@
     Narcotic:
       effects:
       - !type:GenericStatusEffect
+        conditions: # DS-14-start
+        - !type:OrganType
+          type: SuperSoldier
+          shouldHave: false # DS-14-end
         key: Muted
         component: Muted
         type: Add
@@ -392,6 +440,10 @@
         - norepinephricacid-effect-eyes-itch
         - norepinephricacid-effect-vision-fade
         - norepinephricacid-effect-vision-fail
+        conditions: # DS-14-start
+        - !type:OrganType
+          type: SuperSoldier
+          shouldHave: false # DS-14-end
       - !type:PopupMessage
         type: Local
         visualType: MediumCaution
@@ -401,6 +453,10 @@
         - norepinephricacid-effect-eye-pain
         - norepinephricacid-effect-darkness
         - norepinephricacid-effect-blindness
+        conditions: # DS-14-start
+        - !type:OrganType
+          type: SuperSoldier
+          shouldHave: false # DS-14-end
       - !type:Emote
         emote: Scream
         probability: 0.08

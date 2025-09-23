@@ -1,0 +1,8 @@
+﻿# Accents that work off of full replacements rather than word replacements.
+
+- type: accent
+  id: unreadable
+  fullReplacements:
+  - accent-words-unreadable-1
+  - accent-words-unreadable-2
+  - accent-words-unreadable-3

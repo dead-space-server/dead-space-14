@@ -888,7 +888,7 @@
 - type: entity
   parent: [ BaseCentcommContraband, ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ] # Corvax-Resprite
   id: ClothingHeadHelmetHardsuitDeathsquad
-  name: deathsquad hardsuit helmet
+  name: armored spacesuit helmet
   description: A robust helmet for special operations.
   components:
   - type: BreathMask
@@ -897,6 +897,8 @@
   - type: Clothing
     sprite: Clothing/Head/Hardsuits/deathsquad.rsi
   - type: PointLight # Corvax-Resprite
+    radius: 7 # DS-14-value
+    energy: 5
     color: cyan
   - type: PressureProtection
     highPressureMultiplier: 0.08
@@ -913,6 +915,9 @@
         Radiation: 0.80
         Caustic: 0.95
         Poison: 0.80 # DS14
+  - type: ClothingGrantComponent # Sirena-Component
+    component: 
+      - type: ImmunNecroobelisk
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 

@@ -446,13 +446,17 @@
 - type: entity
   parent: ClothingMaskGasERT
   id: ClothingMaskGasDeathSquad
-  name: death squad gas mask
-  description: A unique gas mask for the NT's most elite squad.
+  name: armored gas mask
+  description: A unique gas mask for the most elite squad.
   components:
   - type: Sprite
     sprite: Clothing/Mask/squadron.rsi
   - type: Clothing
     sprite: Clothing/Mask/squadron.rsi
+    unequipDelay: 10
+  - type: AddAccentClothing
+    accent: ReplacementAccent
+    replacement: unreadable
   - type: HideLayerClothing
     slots:
     - Hair

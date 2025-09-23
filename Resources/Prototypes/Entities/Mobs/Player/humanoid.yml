@@ -110,17 +110,20 @@
     - MobHumanDeathSquadUnit
 
 - type: entity
-  parent: MobHuman
+  parent: MobSuperSoldier  # DS14
   id: MobHumanDeathSquadUnit
   categories: [ HideSpawnMenu ]
   components:
-  - type: MindShield
   - type: ZombieImmune
   - type: AntagImmune
   - type: AutoImplant
     implants:
     - FreedomImplant
     - DeathAcidifierImplant
+    - RadioImplantCentcomm
+  - type: BlobSpeak # Backmen-Component
+    overrideName: false
+    channel: DeathSquad
   - type: GhostRole
     name: ghost-role-information-Death-Squad-name
     description: ghost-role-information-Death-Squad-description
@@ -130,6 +133,9 @@
         time: 756000 # 210 hours
     raffle:
       settings: short
+  - type: NpcFactionMember
+    factions:
+    - CentralCommand
   - type: GhostTakeoverAvailable
   - type: RandomMetadata
     nameSegments:
