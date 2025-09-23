@@ -84,3 +84,38 @@
       drawdepth: Mobs
       noRot: true
       offset: "0.0,0.5"
+
+- type: entity
+  id: VoidLightStructure
+  parent: BaseStructure
+  name: фонарь пустоты
+  description: |
+    Фонарь, излучающий фиолетовое свечение
+    Кажется оно может светить вечно
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Armutant/void_light.rsi
+      state: void_light
+      drawdepth: Mobs
+    - type: PointLight
+      radius: 5
+      energy: 2
+      softness: 0.9
+      color: "#9052bc"
+
+- type: entity
+  parent: SeatBase
+  id: BenchVoidStructure
+  name: скамейка из гладкого камня
+  description: |
+    Скамейка из гладкого темно-зеленого материала
+    От нее веет холодом
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Armutant/void_bench.rsi
+      state: full
+    - type: Transform
+      anchored: false
+    - type: Rotatable
+    - type: Physics
+      bodyType: Static

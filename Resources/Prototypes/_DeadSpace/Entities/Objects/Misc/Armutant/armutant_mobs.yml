@@ -14,21 +14,53 @@
       - MobHivelord
 
 - type: entity
-  parent: CollideSpawnVoidBosses
-  id: SpawnBossesSpiderERP
-  suffix: Void SpiderERP
+  name: теневой кролик
+  id: SpawnMobRabbitShadow
+  suffix: Спавнер
+  parent: MarkerBase
   components:
-    - type: TriggerOnCollide
-      fixtureID: spawnvoidbosses
-    - type: EmitSoundOnTrigger
-      sound:
-        path: /Audio/_DeadSpace/Armutant/sound_fight_first_boss.ogg
-        volume: 1
-      predicted: true
-      positional: true
-    - type: SpawnOnTrigger
-      proto: MobBossesVoidSpider
-    - type: DeleteOnTrigger
+  - type: Sprite
+    layers:
+      - state: green
+      - sprite: Mobs/Animals/mouse.rsi
+        state: icon-2
+      - state: ai
+  - type: ConditionalSpawner
+    prototypes:
+      - MobRabbitShadow
+
+- type: entity
+  name: теневая бабочка
+  id: SpawnMobButterflyShadow
+  suffix: Спавнер
+  parent: MarkerBase
+  components:
+  - type: Sprite
+    layers:
+      - state: green
+      - sprite: Mobs/Animals/mouse.rsi
+        state: icon-2
+      - state: ai
+  - type: ConditionalSpawner
+    prototypes:
+      - MobButterflyShadow
+
+- type: entity
+  name: теневая медуза
+  id: SpawnMobJellyfishShadow
+  suffix: Спавнер
+  parent: MarkerBase
+  components:
+  - type: Sprite
+    layers:
+      - state: green
+      - sprite: Mobs/Animals/mouse.rsi
+        state: icon-2
+      - state: ai
+  - type: ConditionalSpawner
+    prototypes:
+      - MobJellyfishShadow
+
 
 - type: entity
   parent: CollideSpawnVoidBosses
@@ -41,10 +73,8 @@
       sound:
         path: /Audio/_DeadSpace/Armutant/sound_fight_first_boss.ogg
         volume: 1
-      predicted: true
-      positional: true
     - type: SpawnOnTrigger
-      proto: SoundVoidSpiderEffect
+      proto: MobBossesVoidSpider
     - type: DeleteOnTrigger
 
 - type: entity
@@ -55,7 +85,6 @@
     - type: TriggerOnCollide
       fixtureID: spawnvoidlingbosses
     - type: EmitSoundOnTrigger
-      removeOnTrigger: false
       sound:
         path: /Audio/_DeadSpace/Armutant/sound_fight_two_bosses.ogg
         volume: 1
