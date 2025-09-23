@@ -1,0 +1,25 @@
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckChaplainChailGold
+  name: позолоченая христианская цепочка
+  description: Металлическая цепь с позолотой, которая удерживает на шее носящего её - христианский крест. Еще и с позолотой!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/chaplain/chain_gold.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Neck/chaplain/chain_gold.rsi
+  - type: Item
+    sprite: _DeadSpace/Clothing/Neck/chaplain/chain_gold.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckChaplainChail
+  name: христианская цепочка
+  description: Нить держит на шее владельца небольшой, железный и христианский крестик, означающий принадлежность к христианству.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/chaplain/chain_iron.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Neck/chaplain/chain_iron.rsi
+  - type: Item
+    sprite: _DeadSpace/Clothing/Neck/chaplain/chain_iron.rsi
