@@ -60,7 +60,6 @@
     - SpiderTerror
     - BasicStationEventScheduler
     - BasicRoundstartVariation
-<<<<<<< HEAD
     - SubGamemodesRuleNoWizard
 
 - type: gamePreset
@@ -229,9 +228,6 @@
   - SpaceTrafficControlEventScheduler
   - BasicRoundstartVariation
   - SubGamemodesRule # DS14
-=======
-    - SubGamemodesRule
->>>>>>> aae74230027de3995009b60cae20059374e38691
 
 - type: gamePreset
   id: ArmutantAndTraitors
@@ -248,8 +244,4 @@
     - Traitor
     - BasicStationEventScheduler
     - BasicRoundstartVariation
-<<<<<<< HEAD
     - SubGamemodesRule
-=======
-    - SubGamemodesRule
->>>>>>> aae74230027de3995009b60cae20059374e38691

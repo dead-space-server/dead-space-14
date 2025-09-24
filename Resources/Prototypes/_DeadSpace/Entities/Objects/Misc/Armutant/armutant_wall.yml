@@ -53,7 +53,6 @@
     - type: IconSmooth
       key: walls
       mode: NoSprite
-<<<<<<< HEAD
 
 - type: entity
   id: VoidStatue
@@ -120,5 +119,3 @@
     - type: Rotatable
     - type: Physics
       bodyType: Static
-=======
->>>>>>> aae74230027de3995009b60cae20059374e38691

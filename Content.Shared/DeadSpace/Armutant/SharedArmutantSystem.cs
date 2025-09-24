@@ -1,9 +1,6 @@
 using System.Numerics;
 using Content.Shared.Actions;
-<<<<<<< HEAD
 using Content.Shared.Actions.Components;
-=======
->>>>>>> aae74230027de3995009b60cae20059374e38691
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
 using Content.Shared.Examine;
@@ -45,11 +42,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
     [Dependency] private readonly SharedSolutionContainerSystem _solution = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly StandingStateSystem _standing = default!;
-<<<<<<< HEAD
     [Dependency] private readonly IGameTiming _timing = default!;
-=======
-    [Dependency] private readonly SharedContentEyeSystem _eye = default!;
->>>>>>> aae74230027de3995009b60cae20059374e38691
     private readonly HashSet<EntityUid> _receivers = new();
 
     public override void Initialize()
@@ -66,7 +59,6 @@ public abstract partial class SharedArmutantSystem : EntitySystem
 
     private void OnComponentInit(Entity<ArmutantComponent> ent, ref ComponentInit args)
     {
-<<<<<<< HEAD
         if (!_net.IsServer)
             return;
 
@@ -108,17 +100,6 @@ public abstract partial class SharedArmutantSystem : EntitySystem
     }
 
     private void SwapArms(Entity<ArmutantComponent> ent, ref ArmutantSwapArmEvent args)
-=======
-        var armutantEntity = EnsureComp<ArmutantComponent>(ent);
-
-        AddAbilities(ent, armutantEntity.ArmutantAbility, armutantEntity.ArmutantActionEntities);
-
-        var ev = new SetNewDestructibleThreshold(ent, ent.Comp.DamageTypeGib, ent.Comp.DamageAmountGib); // Делаем вызов события для смены параметров гибба
-        RaiseLocalEvent(ent, ev);
-    }
-
-    private void SwapArms(Entity<ArmutantComponent> ent, ref ArmutantSwapArmEvent args) // Логика смены рук
->>>>>>> aae74230027de3995009b60cae20059374e38691
     {
         if (!_net.IsServer)
             return;
@@ -126,76 +107,39 @@ public abstract partial class SharedArmutantSystem : EntitySystem
         if (args.Handled)
             return;
 
-<<<<<<< HEAD
         ent.Comp.SelectedArm = args.List;
-=======
-        var actionEnt = args.Action.Owner;
-        if (!TryComp<ArmutantActionComponent>(actionEnt, out var armutantActionComp))
-            return;
-
-        ent.Comp.SelectedArm = armutantActionComp.List; // Передаем список способностей в основной компонент
-        ent.Comp.SelectedArmComp = armutantActionComp;
->>>>>>> aae74230027de3995009b60cae20059374e38691
 
         DoSwap(ent);
 
         args.Handled = true;
     }
 
-<<<<<<< HEAD
     private void DoSwap(Entity<ArmutantComponent> ent)
     {
         if (ent.Comp.SelectedArm == null)
-=======
-    private void DoSwap(Entity<ArmutantComponent> ent) // Логика выдачи способностей
-    {
-        if (ent.Comp.SelectedArmComp == null)
->>>>>>> aae74230027de3995009b60cae20059374e38691
             return;
 
         if (_net.IsClient)
             return;
 
-<<<<<<< HEAD
         var armutantActionComp = EnsureComp<ArmutantComponent>(ent);
 
         var armutantComp = ent.Comp.SelectedArm;
 
         _audio.PlayPvs(ent.Comp.MeatSound, ent);
-=======
-        var armutantActionShieldComp = EnsureComp<ArmutantShieldActionComponent>(ent);
-
-        var armutantActionGunComp = EnsureComp<ArmutantGunActionComponent>(ent);
-
-        var armutantActionComp = EnsureComp<ArmutantComponent>(ent);
-
-        var armutantComp = ent.Comp.SelectedArmComp;
-
-        _audio.PlayPvs(armutantComp.MeatSound, ent);
->>>>>>> aae74230027de3995009b60cae20059374e38691
 
         switch (ent.Comp.SelectedArm)
         {
             case ArmutantArms.BladeArm:
-<<<<<<< HEAD
                 if (!TryToggleItem(ent, ent.Comp.BladeArmPrototype))
                     return;
                 if (armutantActionComp.ArmutantActionEntitiesBlade.Count > 0)
-=======
-                if (!TryToggleItem(ent, ent.Comp.BladeArmPrototype)) // Надеваем или снимаем руку
-                    return;
-                if (armutantActionComp.ArmutantActionEntitiesBlade.Count > 0) // Если список имеет данные, удаляем все способности и выходим из кейса
->>>>>>> aae74230027de3995009b60cae20059374e38691
                 {
                     ClearActiveAbilities(ent, armutantActionComp.ArmutantActionEntitiesBlade);
                     break;
                 }
                 else
-<<<<<<< HEAD
                     AddAbilities(ent, armutantActionComp.ArmutantAbilityBlade, armutantActionComp.ArmutantActionEntitiesBlade);
-=======
-                    AddAbilities(ent, armutantActionComp.ArmutantAbilityBlade, armutantActionComp.ArmutantActionEntitiesBlade); // Если список был пустым, то добавляем способности
->>>>>>> aae74230027de3995009b60cae20059374e38691
                 break;
             case ArmutantArms.FistArm:
                 if (!TryToggleItem(ent, ent.Comp.FistArmPrototype))
@@ -218,71 +162,35 @@ public abstract partial class SharedArmutantSystem : EntitySystem
                     RemoveAllArmor(ent, armutantActionComp.EquipmentArmor);
                 }
                 else
-<<<<<<< HEAD
                     AddAbilities(ent, armutantActionComp.ArmutantAbilityShield, armutantActionComp.ArmutantActionEntitiesShield);
-=======
-                {
-                    AddAbilities(ent, armutantActionComp.ArmutantAbilityShield, armutantActionComp.ArmutantActionEntitiesShield);
-                }
->>>>>>> aae74230027de3995009b60cae20059374e38691
                 break;
             case ArmutantArms.GunArm:
                 if (!TryToggleItem(ent, ent.Comp.GunArmPrototype))
                     return;
 
                 if (armutantActionComp.ArmutantActionEntitiesGun.Count > 0)
-<<<<<<< HEAD
                     ClearActiveAbilities(ent, armutantActionComp.ArmutantActionEntitiesGun);
                 else
                     AddAbilities(ent, armutantActionComp.ArmutantAbilityGun, armutantActionComp.ArmutantActionEntitiesGun);
-=======
-                {
-                    ClearActiveAbilities(ent, armutantActionComp.ArmutantActionEntitiesGun);
-                    _eye.ResetZoom(ent);
-                    armutantActionGunComp.Offset = Vector2.Zero;
-                }
-                else
-                {
-                    AddAbilities(ent, armutantActionComp.ArmutantAbilityGun, armutantActionComp.ArmutantActionEntitiesGun);
-                }
->>>>>>> aae74230027de3995009b60cae20059374e38691
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
         ent.Comp.SelectedArm = null;
-<<<<<<< HEAD
     }
 
     private void OnEnterStasis(Entity<ArmutantComponent> ent, ref EnterArmutantStasisEvent args)
-=======
-        ent.Comp.SelectedArmComp = null;
-    }
-
-    private void OnEnterStasis(Entity<ArmutantComponent> ent, ref EnterArmutantStasisEvent args) // Логика входа в стазис
->>>>>>> aae74230027de3995009b60cae20059374e38691
     {
         if (args.Handled)
             return;
 
-<<<<<<< HEAD
-=======
-        var actionEnt = args.Action.Owner;
-        if (!TryComp<ArmutantActionComponent>(actionEnt, out var armutantActionComp))
-            return;
-
->>>>>>> aae74230027de3995009b60cae20059374e38691
         if (ent.Comp.IsInStasis)
         {
             _popup.PopupEntity(Loc.GetString("armutant-stasis-enter-fail"), ent, ent);
             return;
         }
 
-<<<<<<< HEAD
         if (_mobState.IsAlive(ent))
-=======
-        if (_mobState.IsAlive(ent)) // Если человек живой, меняем его состояние на Dead и пишем от его лица что он совершил суицид
->>>>>>> aae74230027de3995009b60cae20059374e38691
         {
             var othersMessage = Loc.GetString("suicide-command-default-text-others", ("name", ent));
             _popup.PopupEntity(othersMessage, ent, Robust.Shared.Player.Filter.PvsExcept(ent), true);
@@ -294,7 +202,6 @@ public abstract partial class SharedArmutantSystem : EntitySystem
         if (!_mobState.IsDead(ent))
             _mobState.ChangeMobState(ent, MobState.Dead);
 
-<<<<<<< HEAD
         ent.Comp.IsInStasis = true;
 
         ent.Comp.TimeToExitStasis = _timing.CurTime + TimeSpan.FromSeconds(args.TimeInStasis);
@@ -304,41 +211,15 @@ public abstract partial class SharedArmutantSystem : EntitySystem
     }
 
     private bool TryExitStasis(Entity<ArmutantComponent> ent)
-=======
-        ent.Comp.IsInStasis = true; // Указываем что он в стазисе
-
-        Timer.Spawn(TimeSpan.FromSeconds(armutantActionComp.TimeInStasis), () => // Как проходит время, вытаскиваем его из стазиса, спавним эффект и снимаем наручники, если они есть
-        {
-            OnExitStasis(ent);
-
-            var ev = new UnCuffableArmEvent(ent);
-            RaiseLocalEvent(ent, ev);
-
-            var effect = Spawn(armutantActionComp.ExitToStasisEffect, Transform(ent).Coordinates);
-            _transform.SetParent(effect, ent);
-        });
-        args.Handled = true;
-    }
-
-    private void OnExitStasis(Entity<ArmutantComponent> ent)
->>>>>>> aae74230027de3995009b60cae20059374e38691
     {
         if (!ent.Comp.IsInStasis)
         {
             _popup.PopupEntity(Loc.GetString("armutant-stasis-exit-fail"), ent, ent);
-<<<<<<< HEAD
             return false;
         }
 
         if (!TryComp<DamageableComponent>(ent, out var damageable))
             return false;
-=======
-            return;
-        }
-
-        if (!TryComp<DamageableComponent>(ent, out var damageable))
-            return;
->>>>>>> aae74230027de3995009b60cae20059374e38691
 
         _damage.SetAllDamage(ent, damageable, 0);
         _mobState.ChangeMobState(ent, MobState.Alive);
@@ -347,17 +228,11 @@ public abstract partial class SharedArmutantSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("armutant-stasis-exit"), ent, ent);
 
         ent.Comp.IsInStasis = false;
-<<<<<<< HEAD
 
         return true;
     }
 
     private DamageSpecifier ConverDamageSpecifier(string damageType,
-=======
-    }
-
-    private DamageSpecifier ConverDamageSpecifier(string damageType, // Сделан для удобства редактирования прототипов
->>>>>>> aae74230027de3995009b60cae20059374e38691
     int damageAmount,
     out DamageSpecifier damage)
     {
@@ -367,11 +242,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
         return damage;
     }
 
-<<<<<<< HEAD
     private void AddAbilities(EntityUid ent,
-=======
-    private void AddAbilities(EntityUid ent, // Логика добавления способностей
->>>>>>> aae74230027de3995009b60cae20059374e38691
     List<EntProtoId> ability,
     List<EntityUid> container)
     {
@@ -383,11 +254,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
         }
     }
 
-<<<<<<< HEAD
     private void ClearActiveAbilities(EntityUid ent,
-=======
-    private void ClearActiveAbilities(EntityUid ent, // Тоже самое, но удаление
->>>>>>> aae74230027de3995009b60cae20059374e38691
     List<EntityUid> container
     )
     {
@@ -398,11 +265,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
         container.Clear();
     }
 
-<<<<<<< HEAD
     private void HandlePullingInteractions(EntityUid ent)
-=======
-    private void HandlePullingInteractions(EntityUid ent) // Логика для рывка, убирает все взаимодействия с перетаскиванием перед рывком
->>>>>>> aae74230027de3995009b60cae20059374e38691
     {
         if (TryComp<PullableComponent>(ent, out var pullable) && _pulling.IsPulled(ent, pullable))
             _pulling.TryStopPull(ent, pullable);
@@ -411,11 +274,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
             _pulling.TryStopPull(puller.Pulling.Value, pullableTarget);
     }
 
-<<<<<<< HEAD
     public bool TryToggleItem(Entity<ArmutantComponent> ent, EntProtoId proto, string? clothingSlot = null)
-=======
-    public bool TryToggleItem(Entity<ArmutantComponent> ent, EntProtoId proto, string? clothingSlot = null) // Логика снятия и надевания предметов
->>>>>>> aae74230027de3995009b60cae20059374e38691
     {
         if (!ent.Comp.Equipment.TryGetValue(proto.Id, out var item))
         {
@@ -446,11 +305,7 @@ public abstract partial class SharedArmutantSystem : EntitySystem
         return true;
     }
 
-<<<<<<< HEAD
     public bool TryInjectReagents(EntityUid uid, List<(string, FixedPoint2)> reagents)
-=======
-    public bool TryInjectReagents(EntityUid uid, List<(string, FixedPoint2)> reagents) // Вводит указанный реагент в сущность
->>>>>>> aae74230027de3995009b60cae20059374e38691
     {
         var solution = new Shared.Chemistry.Components.Solution();
         foreach (var reagent in reagents)
