@@ -38,9 +38,6 @@ public sealed partial class AdminVerbSystem
     [ValidatePrototypeId<EntityPrototype>]
     private const string DefaultArmutantRule = "Armutant";
 
-    [ValidatePrototypeId<EntityPrototype>]
-    private const string DefaultArmutantRule = "Armutant";
-
     // All antag verbs have names so invokeverb works.
     private void AddAntagVerbs(GetVerbsEvent<Verb> args)
     {
