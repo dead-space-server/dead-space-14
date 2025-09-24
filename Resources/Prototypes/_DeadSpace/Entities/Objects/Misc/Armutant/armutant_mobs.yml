@@ -70,9 +70,9 @@
     - type: TriggerOnCollide
       fixtureID: spawnvoidbosses
     - type: EmitSoundOnTrigger
-      sound:
-        path: /Audio/_DeadSpace/Armutant/sound_fight_first_boss.ogg
-        volume: 1
+      positional: true
+      predicted: true
+      sound: /Audio/_DeadSpace/Armutant/sound_fight_first_boss.ogg
     - type: SpawnOnTrigger
       proto: MobBossesVoidSpider
     - type: DeleteOnTrigger
@@ -85,9 +85,9 @@
     - type: TriggerOnCollide
       fixtureID: spawnvoidlingbosses
     - type: EmitSoundOnTrigger
-      sound:
-        path: /Audio/_DeadSpace/Armutant/sound_fight_two_bosses.ogg
-        volume: 1
+      predicted: true
+      positional: true
+      sound: /Audio/_DeadSpace/Armutant/sound_fight_two_bosses.ogg
     - type: SpawnOnTrigger
       proto: MobVoidlingBosses
     - type: DeleteOnTrigger

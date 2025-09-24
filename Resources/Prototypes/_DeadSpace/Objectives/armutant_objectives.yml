@@ -39,16 +39,18 @@
   - type: TargetObjective
     title: objective-alive-person-armutant-title
   - type: PickRandomPerson
-    ignoredJobs:
-    - Passenger
-    - TypanAtmosTech
-    - TypanBotanist
-    - TypanCargotech
-    - TypanChef
-    - TypanMedic
-    - TypanRD
-    - TypanScience
-    - TypanTelecommunicationsOfficer
+    filters:
+    - !type:BlacklistedJobsMindFilter
+      blacklist:
+      - Passenger
+      - TaipanAtmosTech
+      - TaipanBotanist
+      - TaipanCargotech
+      - TaipanChef
+      - TaipanMedic
+      - TaipanRD
+      - TaipanScience
+      - TaipanTelecommunicationsOfficer
 
 - type: entity
   parent: [BaseArmutantObjective, BaseKillObjective]
@@ -63,14 +65,20 @@
   - type: TargetObjective
     title: objective-kill-person-armutant-title
   - type: PickRandomPerson
-    ignoredJobs:
-    - Passenger
-    - TypanAtmosTech
-    - TypanBotanist
-    - TypanCargotech
-    - TypanChef
-    - TypanMedic
-    - TypanRD
-    - TypanScience
-    - TypanTelecommunicationsOfficer
+    filters:
+    - !type:TargetObjectiveMindFilter
+      blacklist:
+        components:
+        - KillPersonCondition
+    - !type:BlacklistedJobsMindFilter
+      blacklist:
+      - Passenger
+      - TaipanAtmosTech
+      - TaipanBotanist
+      - TaipanCargotech
+      - TaipanChef
+      - TaipanMedic
+      - TaipanRD
+      - TaipanScience
+      - TaipanTelecommunicationsOfficer
   - type: KillPersonCondition
