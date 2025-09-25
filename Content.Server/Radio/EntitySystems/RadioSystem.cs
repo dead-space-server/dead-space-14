@@ -83,7 +83,7 @@ public sealed class RadioSystem : EntitySystem
             msg = args.LexiconChatMsg;
 
         if (TryComp(uid, out ActorComponent? actor))
-            _netMan.ServerSendMessage(args.ChatMsg, actor.PlayerSession.Channel);
+            _netMan.ServerSendMessage(msg, actor.PlayerSession.Channel);
     }
 
     /// <summary>

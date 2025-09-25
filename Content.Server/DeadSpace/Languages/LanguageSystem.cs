@@ -86,9 +86,9 @@ public sealed class LanguageSystem : EntitySystem
         return string.Join(' ', words);
     }
 
-    public List<string>? GetKnowsLanguage(EntityUid entity, LanguageComponent? component = null)
+    public List<ProtoId<LanguagePrototype>>? GetKnowsLanguage(EntityUid entity)
     {
-        if (!Resolve(entity, ref component))
+        if (!TryComp<LanguageComponent>(entity, out var component))
             return null;
 
         return component.KnownLanguages;

@@ -2,6 +2,8 @@
 
 using Robust.Shared.Serialization;
 using Content.Shared.Actions;
+using Content.Shared.DeadSpace.Languages.Prototypes;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.Languages;
 
@@ -13,9 +15,9 @@ public sealed partial class SelectLanguageActionEvent : InstantActionEvent
 [Serializable, NetSerializable]
 public sealed partial class RequestLanguageMenuEvent : EntityEventArgs
 {
-    public readonly List<string> Prototypes = new();
+    public readonly List<ProtoId<LanguagePrototype>> Prototypes = new();
     public int Target { get; }
-    public RequestLanguageMenuEvent(int target, List<string> prototypes)
+    public RequestLanguageMenuEvent(int target, List<ProtoId<LanguagePrototype>> prototypes)
     {
         Target = target;
         Prototypes = prototypes;
