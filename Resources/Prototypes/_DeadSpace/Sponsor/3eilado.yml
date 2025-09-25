@@ -728,7 +728,7 @@
     slots:
     - Hair
 
-# Ring
+# Gloves
 - type: entity
   parent: ClothingHandsBase
   id: ClothingHandsGloves3eilado
@@ -996,13 +996,13 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/3eilado/BlackSword/sword.rsi
+    sprite: _DeadSpace/Sponsor/3eilado/Blacksword/sword.rsi
     layers:
     - state: icon
     - state: icon-unshaded
       shader: unshaded
   - type: Item
-    sprite: _DeadSpace/Sponsor/3eilado/BlackSword/sword.rsi
+    sprite: _DeadSpace/Sponsor/3eilado/Blacksword/sword.rsi
     size: Huge
   - type: PointLight
     enabled: true
