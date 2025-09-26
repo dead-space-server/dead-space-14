@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Content.Shared.DeadSpace.Ports.UniformAccessories.Components;
+﻿using Content.Shared.DeadSpace.UniformAccessories.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory.Events;
@@ -8,9 +7,9 @@ using Content.Shared.Popups;
 using Content.Shared.Verbs;
 using Robust.Shared.Containers;
 
-namespace Content.Shared.DeadSpace.Ports.UniformAccessories;
+namespace Content.Shared.DeadSpace.UniformAccessories;
 
-public abstract partial class SharedUniformAccessorySystem : EntitySystem
+public abstract class SharedUniformAccessorySystem : EntitySystem
 {
     private const string ContainerId = "rmc_uniform_accessories";
     private const string RemoveCategoryKey = "rmc-uniform-accessory-remove";
@@ -32,13 +31,7 @@ public abstract partial class SharedUniformAccessorySystem : EntitySystem
 
     private void OnHolderMapInit(Entity<UniformAccessoryHolderComponent> holder, ref MapInitEvent eventArgs)
     {
-        _container.EnsureContainer<Container>(holder, ContainerId);
-        if (holder.Comp.StartingAccessories is not { } startingAccessories)
-            return;
-        foreach (var accessoryId in startingAccessories)
-        {
-            SpawnInContainerOrDrop(accessoryId, holder.Owner, ContainerId);
-        }
+        holder.Comp.AccessoryContainer = _container.EnsureContainer<Container>(holder, ContainerId);
     }
 
     private void OnHolderInteractUsing(Entity<UniformAccessoryHolderComponent> holder, ref InteractUsingEvent eventArgs)
@@ -46,7 +39,10 @@ public abstract partial class SharedUniformAccessorySystem : EntitySystem
         if (!TryComp(eventArgs.Used, out UniformAccessoryComponent? accessory))
             return;
 
-        var container = _container.EnsureContainer<Container>(holder, ContainerId);
+        var container = holder.Comp.AccessoryContainer;
+        if (container == null)
+            return;
+
         eventArgs.Handled = true;
 
         if (!holder.Comp.AllowedCategories.Contains(accessory.Category))
@@ -81,7 +77,7 @@ public abstract partial class SharedUniformAccessorySystem : EntitySystem
 
     private void OnHolderGotEquipped(Entity<UniformAccessoryHolderComponent> holder, ref GotEquippedEvent eventArgs)
     {
-        if (!_container.TryGetContainer(holder, ContainerId, out _))
+        if (holder.Comp.AccessoryContainer == null)
             return;
         _item.VisualsChanged(holder);
     }
@@ -91,21 +87,23 @@ public abstract partial class SharedUniformAccessorySystem : EntitySystem
         if (!eventArgs.CanAccess || !eventArgs.CanInteract)
             return;
 
-        if (!_container.TryGetContainer(holder, ContainerId, out var container) ||
-            container.ContainedEntities.Count == 0)
+        var container = holder.Comp.AccessoryContainer;
+        if (container == null || container.ContainedEntities.Count == 0)
             return;
 
         var removeCategoryText = Loc.GetString(RemoveCategoryKey);
-        if (eventArgs.Verbs.Any(v => v.Category?.Text == removeCategoryText))
-            return;
+        foreach (var verb in eventArgs.Verbs)
+        {
+            if (verb.Category?.Text == removeCategoryText)
+                return;
+        }
 
         var interactor = eventArgs.User;
         var category = new VerbCategory(removeCategoryText, null);
 
         foreach (var accessory in container.ContainedEntities)
         {
-            if (!TryComp<MetaDataComponent>(accessory, out var meta))
-                continue;
+            var meta = Comp<MetaDataComponent>(accessory);
 
             var verb = new Verb
             {
@@ -125,7 +123,8 @@ public abstract partial class SharedUniformAccessorySystem : EntitySystem
 
     private void OnRemoveAccessory(RemoveAccessoryEvent eventArgs)
     {
-        if (!_container.TryGetContainer(eventArgs.Holder, ContainerId, out var container))
+        var container = CompOrNull<UniformAccessoryHolderComponent>(eventArgs.Holder)?.AccessoryContainer;
+        if (container == null)
             return;
 
         if (_container.Remove(eventArgs.Accessory, container))

@@ -1,11 +1,10 @@
-﻿using Content.Shared.DeadSpace.Ports.UniformAccessories;
-using Content.Shared.DeadSpace.Ports.UniformAccessories.Components;
+﻿using Content.Shared.DeadSpace.UniformAccessories;
 using Content.Shared.Examine;
 using Robust.Shared.Containers;
 
-namespace Content.Server.DeadSpace.Ports.UniformAccessories;
+namespace Content.Server.DeadSpace.UniformAccessories;
 
-public sealed partial class UniformAccessorySystem : SharedUniformAccessorySystem
+public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
 {
     private const string ContainerId = "rmc_uniform_accessories";
 
@@ -14,13 +13,16 @@ public sealed partial class UniformAccessorySystem : SharedUniformAccessorySyste
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<UniformAccessoryHolderComponent, EntityTerminatingEvent>(OnTerminating);
-        SubscribeLocalEvent<UniformAccessoryHolderComponent, ExaminedEvent>(OnExamineAccessories);
+        SubscribeLocalEvent<Shared.DeadSpace.UniformAccessories.Components.UniformAccessoryHolderComponent, EntityTerminatingEvent>(OnTerminating);
+        SubscribeLocalEvent<Shared.DeadSpace.UniformAccessories.Components.UniformAccessoryHolderComponent, ExaminedEvent>(OnExamineAccessories);
     }
 
-    private void OnTerminating(EntityUid holder, UniformAccessoryHolderComponent holderComp, ref EntityTerminatingEvent eventArgs)
+    private void OnTerminating(EntityUid holder,
+        Shared.DeadSpace.UniformAccessories.Components.UniformAccessoryHolderComponent holderComp,
+        ref EntityTerminatingEvent eventArgs)
     {
-        if (!_container.TryGetContainer(holder, ContainerId, out var container) || container.ContainedEntities.Count == 0)
+        var container = holderComp.AccessoryContainer;
+        if (container == null || container.ContainedEntities.Count == 0)
             return;
 
         if (!TryComp<TransformComponent>(holder, out var transform))
@@ -37,12 +39,15 @@ public sealed partial class UniformAccessorySystem : SharedUniformAccessorySyste
         }
     }
 
-    private void OnExamineAccessories(EntityUid holder, UniformAccessoryHolderComponent holderComp, ExaminedEvent eventArgs)
+    private void OnExamineAccessories(EntityUid holder,
+        Shared.DeadSpace.UniformAccessories.Components.UniformAccessoryHolderComponent holderComp,
+        ExaminedEvent eventArgs)
     {
         if (!eventArgs.IsInDetailsRange)
             return;
 
-        if (!_container.TryGetContainer(holder, ContainerId, out var container) || container.ContainedEntities.Count == 0)
+        var container = holderComp.AccessoryContainer;
+        if (container == null || container.ContainedEntities.Count == 0)
             return;
 
         var accessories = new List<string>();
@@ -52,8 +57,8 @@ public sealed partial class UniformAccessorySystem : SharedUniformAccessorySyste
                 continue;
 
             var colorHex = "#FFFF55";
-            if (TryComp<UniformAccessoryComponent>(accessory, out var acc) && acc.Color != null)
-                colorHex = ColorToHex(acc.Color.Value);
+            if (TryComp<Shared.DeadSpace.UniformAccessories.Components.UniformAccessoryComponent>(accessory, out var acc) && acc.Color != null)
+                colorHex = acc.Color.Value.ToHex();
 
             accessories.Add($"[color={colorHex}]{metaData.EntityName}[/color]");
         }
@@ -63,13 +68,5 @@ public sealed partial class UniformAccessorySystem : SharedUniformAccessorySyste
 
         var accessoriesList = string.Join(", ", accessories);
         eventArgs.PushMarkup($"На этом предмете закреплено: {accessoriesList}.");
-    }
-
-    private string ColorToHex(Color color)
-    {
-        var r = (int)MathF.Round(color.R * 255);
-        var g = (int)MathF.Round(color.G * 255);
-        var b = (int)MathF.Round(color.B * 255);
-        return $"#{r:X2}{g:X2}{b:X2}";
     }
 }
