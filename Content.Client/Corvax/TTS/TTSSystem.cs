@@ -106,9 +106,7 @@ public sealed class TTSSystem : EntitySystem
 
         var soundSpecifier = new ResolvedPathSpecifier(Prefix / filePath);
 
-        var sourceUid = GetEntity(ev.SourceUid);
-
-        if (sourceUid != null)
+        if (ev.SourceUid != null)
         {
             if (!TryGetEntity(ev.SourceUid.Value, out _))
                 return;

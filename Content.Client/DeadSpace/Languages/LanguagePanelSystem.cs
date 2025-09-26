@@ -2,7 +2,6 @@
 
 using Content.Client.UserInterface.Systems.Radial;
 using Content.Client.UserInterface.Systems.Radial.Controls;
-using Content.Shared.DeadSpace.EntityPanel;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
@@ -11,7 +10,6 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using Content.Shared.DeadSpace.Languages.Prototypes;
 using Content.Shared.DeadSpace.Languages;
-using Content.Shared.DeadSpace.Languages.Components;
 
 namespace Content.Client.DeadSpace.Languages;
 
