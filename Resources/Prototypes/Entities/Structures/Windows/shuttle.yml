@@ -70,6 +70,7 @@
   - type: Tag
     tags:
     - Diagonal
+    - Window
   - type: IconSmooth
     mode: Diagonal
     key: walls  # Corvax-Resprite
@@ -98,3 +99,6 @@
   - type: DamageVisuals
     damageOverlay:
       sprite: Structures/Windows/cracks_diagonal.rsi
+  - type: Construction # DS14
+    graph: DiagonalWindow
+    node: shuttleWindowDiagonal

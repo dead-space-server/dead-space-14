@@ -195,10 +195,8 @@
             - "-0.5,-0.5"
             - "0.5,0.5"
             - "0.5,-0.5"
-        mask:
-        - FullTileMask
         layer:
-        - WallLayer
+        - GlassLayer
   - type: Construction
     graph: GrilleDiagonal
     node: grilleDiagonal
@@ -233,10 +231,8 @@
             - "-0.5,-0.5"
             - "0.5,0.5"
             - "0.5,-0.5"
-        mask:
-        - FullTileMask
         layer:
-        - WallLayer
+        - GlassLayer
   - type: Construction
     graph: GrilleDiagonal
     node: clockworkGrilleDiagonal

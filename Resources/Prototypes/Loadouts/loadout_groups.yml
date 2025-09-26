@@ -42,11 +42,19 @@
   - ClothingNeckLesbianPin
   - ClothingNeckNonBinaryPin
   - ClothingNeckPansexualPin
+  - ClothingNeckPluralPin
   - ClothingNeckOmnisexualPin
   - ClothingNeckGenderqueerPin
+  - ClothingNeckGenderfluidPin
   - ClothingNeckTransPin
   - ClothingNeckAutismPin
   - ClothingNeckGoldAutismPin
+  - OffsetCane
+  - OffsetCaneWood
+  - OffsetCaneClown
+  - OffsetCaneMime
+  - OffsetCaneNT
+  - Cane
   - CorporateLaw # Corvax-HyperLink
   - TowelColorBlack
   - TowelColorDarkBlue
@@ -240,6 +248,7 @@
   - GreyJumpskirt
   - AncientJumpsuit
   - RainbowJumpsuit
+  - RainbowJumpskirt
 
 - type: loadoutGroup
   id: PassengerFace
@@ -471,6 +480,17 @@
   minLimit: 0
   loadouts:
   - ChaplainNeck
+
+- type: loadoutGroup
+  id: ChaplainBible
+  name: loadout-group-chaplain-bible
+  minLimit: 1
+  loadouts:
+  - Bible
+  - BibleDruid
+  - BibleNanoTrasen
+  - BibleSatanic
+  - BibleTanakh
 
 - type: loadoutGroup
   id: ChaplainUnderwear
@@ -712,9 +732,9 @@
   - EmergencyNonBreather
   - EmergencyRobotNonBreather
   # DS14-species-emergency-end
+  - EmergencySpeciesMothMime
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerMime
-  - EmergencyMothMime
 
 - type: loadoutGroup
   id: MimeUnderwear
@@ -1292,6 +1312,7 @@
   loadouts:
   - HeadofSecurityJumpsuit
   - HeadofSecurityJumpskirt
+  - HeadofSecurityJumpskirtPencil
   - HeadofSecurityTurtleneck
   - HeadofSecurityTurtleneckSkirt
   - HeadofSecurityFormalSuit
@@ -1327,7 +1348,6 @@
   name: loadout-group-head-of-security-socks
   loadouts:
   - UnderwearSocksHeadOfSecurity
-  - UnderwearWomenSocksHeadOfSecurity
 
 - type: loadoutGroup
   id: HeadofSecurityUnderwear
@@ -1353,6 +1373,7 @@
   loadouts:
   - WardenJumpsuit
   - WardenJumpskirt
+  - WardenJumpskirtPencil # DS14
 
 - type: loadoutGroup
   id: WardenOuterClothing
@@ -1366,7 +1387,6 @@
   name: loadout-group-warden-socks
   loadouts:
   - UnderwearSocksWarden
-  - UnderwearWomenSocksWarden
 
 - type: loadoutGroup
   id: WardenUnderwear
@@ -1403,6 +1423,8 @@
   - SecurityJumpskirt
   - SecurityJumpsuitGrey
   - SecurityJumpskirtGrey
+  - SecurityJumpsuitBlack # DS14
+  - SecurityJumpskirtPencil # DS14
   # - SeniorOfficerJumpsuit
   # - SeniorOfficerJumpskirt
   - TrooperUniform
@@ -1451,7 +1473,6 @@
   name: loadout-group-security-socks
   loadouts:
   - UnderwearSocksSecurityOfficer
-  - UnderwearWomenSocksSecurityOfficer
 
 - type: loadoutGroup
   id: SecurityUnderwear
@@ -1486,6 +1507,9 @@
   - DetectiveJumpskirt
   - NoirJumpsuit
   - NoirJumpskirt
+  - NoirJumpsuitAlt # DS14
+  - DetectiveJumpsuitAlt # DS14
+  - NoirJumpskirtPencil # DS14
 
 - type: loadoutGroup
   id: DetectiveBackpack
@@ -1518,7 +1542,6 @@
   name: loadout-group-detective-socks
   loadouts:
   - UnderwearSocksDetective
-  - UnderwearWomenSocksDetective
 
 - type: loadoutGroup
   id: DetectiveUnderwear
@@ -1542,7 +1565,6 @@
   name: loadout-group-security-cadet-socks
   loadouts:
   - UnderwearSocksCadet
-  - UnderwearWomenSocksCadet
 
 - type: loadoutGroup
   id: SecurityCadetUnderwear
@@ -1799,6 +1821,17 @@
   - BlueShoes
   - WhiteShoes
   - MedicalWinterBoots
+
+- type: loadoutGroup
+  id: MedicalEyewear
+  name: loadout-group-medical-glasses
+  minLimit: 0
+  loadouts:
+  - MedicalHud
+  - MedicalEyePatchHud
+  - Glasses
+  - GlassesJamjar
+  - GlassesJensen
 
 - type: loadoutGroup
   id: ParamedicUnderwear

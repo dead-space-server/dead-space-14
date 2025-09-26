@@ -73,7 +73,7 @@
   name: materials-uranium
   icon: { sprite: Objects/Materials/Sheets/other.rsi, state: uranium }
   color: "#32a852"
-  price: 0.85 # $85 for 1 unit
+  price: 1.5 # $150 for 1 unit # DS14-uranium-rework
 
 - type: material
   id: Bananium
@@ -99,6 +99,14 @@
   icon: { sprite: Objects/Materials/silk.rsi, state: icon }
   color: "#eeeeee" #eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
   price: 0 # Maybe better for it to be priceless, knowing how greedy cargo is.
+
+- type: material
+  id: Cotton
+  name: materials-cotton
+  unit: materials-unit-boll
+  icon: { sprite: Objects/Materials/materials.rsi, state: cotton }
+  color: "#cccccc"
+  price: 0.01 #Who knew cotton was infinitely more valuable than silk
 
 - type: material
   id: Bones
@@ -127,6 +135,7 @@
 
 - type: material
   id: Diamond
+  stackEntity: MaterialDiamond1
   name: materials-diamond
   unit: materials-unit-piece
   icon: { sprite: Objects/Materials/materials.rsi, state: diamond }
