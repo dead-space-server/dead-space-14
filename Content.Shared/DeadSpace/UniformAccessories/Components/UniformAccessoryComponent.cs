@@ -7,7 +7,7 @@ namespace Content.Shared.DeadSpace.UniformAccessories.Components;
 public sealed partial class UniformAccessoryComponent : Component
 {
     /// <summary>
-    /// The category of the accessory (e.g., "Patch").
+    /// The category of the accessory.
     /// </summary>
     [DataField] [AutoNetworkedField]
     public string Category = "";
@@ -43,7 +43,7 @@ public sealed partial class UniformAccessoryComponent : Component
     public string? LayerKey;
 
     /// <summary>
-    /// The maximum number of accessories of this category allowed on the holder (0 for unlimited).
+    /// The maximum number of accessories of this category allowed on the holder.
     /// </summary>
     [DataField] [AutoNetworkedField]
     public int Limit = 1;
