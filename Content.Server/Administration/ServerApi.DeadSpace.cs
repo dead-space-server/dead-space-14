@@ -115,28 +115,33 @@ public sealed partial class ServerApi
                 await context.RespondJsonAsync("admin.Name == null");
                 return;
             }
+            List<string> anything = new List<string>();
             List<AdminFlag> flags = new List<AdminFlag>();
+            foreach (var flag in previoslyAdmin.AdminRank.Flags)
+            {
+                anything.Add(flag.Flag);
+            }
             foreach (var flag in rank.Flags)
             {
-                flags.Add(new AdminFlag
+                if (!anything.Contains(flag.Flag))
                 {
-                    Flag = flag.Flag,
-                    Negative = false,
-                });
-            }
-            foreach (var flag in previoslyAdmin.Flags)
-            {
-                if (!flags.Contains(flag))
-                {
-                    flags.Add(flag);
+                    flags.Add(new AdminFlag
+                    {
+                        Flag = flag.Flag,
+                        Negative = false,
+                    });
                 }
+            }
+            if (string.IsNullOrEmpty(previoslyAdmin.Title))
+            {
+                previoslyAdmin.Title = previoslyAdmin.AdminRank.Name;
             }
             Admin adminTOGive = new Admin
             {
                 Flags = flags,
                 AdminRankId = previoslyAdmin.AdminRank.Id,
                 UserId = previoslyAdmin.UserId,
-                Title = previoslyAdmin.Title,
+                Title = previoslyAdmin.Title + "+" + rank.Name,
                 Suspended = previoslyAdmin.Suspended,
             };
             await _db.UpdateAdminAsync(adminTOGive);
