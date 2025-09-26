@@ -11,7 +11,6 @@ namespace Content.Shared.DeadSpace.UniformAccessories;
 
 public abstract class SharedUniformAccessorySystem : EntitySystem
 {
-    private const string ContainerId = "uniform_accessories";
     private const string RemoveCategoryKey = "uniform-accessory-remove";
 
     [Dependency] private readonly SharedContainerSystem _container = default!;
@@ -29,27 +28,28 @@ public abstract class SharedUniformAccessorySystem : EntitySystem
         SubscribeLocalEvent<RemoveAccessoryEvent>(OnRemoveAccessory);
     }
 
-    private void OnHolderMapInit(Entity<UniformAccessoryHolderComponent> holder, ref MapInitEvent eventArgs)
+    private void OnHolderMapInit(Entity<UniformAccessoryHolderComponent> holder, ref MapInitEvent args)
     {
-        holder.Comp.AccessoryContainer = _container.EnsureContainer<Container>(holder, ContainerId);
+        holder.Comp.AccessoryContainer =
+            _container.EnsureContainer<Container>(holder, UniformAccessoryHolderComponent.ContainerId);
     }
 
-    private void OnHolderInteractUsing(Entity<UniformAccessoryHolderComponent> holder, ref InteractUsingEvent eventArgs)
+    private void OnHolderInteractUsing(Entity<UniformAccessoryHolderComponent> holder, ref InteractUsingEvent args)
     {
-        if (!TryComp(eventArgs.Used, out UniformAccessoryComponent? accessory))
+        if (!TryComp(args.Used, out UniformAccessoryComponent? accessory))
             return;
 
         var container = holder.Comp.AccessoryContainer;
         if (container == null)
             return;
 
-        eventArgs.Handled = true;
+        args.Handled = true;
 
         if (!holder.Comp.AllowedCategories.Contains(accessory.Category))
         {
             _popup.PopupClient(Loc.GetString("uniform-accessory-fail-not-allowed"),
-                eventArgs.User,
-                eventArgs.User,
+                args.User,
+                args.User,
                 PopupType.SmallCaution);
             return;
         }
@@ -65,26 +65,26 @@ public abstract class SharedUniformAccessorySystem : EntitySystem
         if (categoryCounts.TryGetValue(accessory.Category, out var count) && accessory.Limit <= count)
         {
             _popup.PopupClient(Loc.GetString("uniform-accessory-fail-limit"),
-                eventArgs.User,
-                eventArgs.User,
+                args.User,
+                args.User,
                 PopupType.SmallCaution);
             return;
         }
 
-        _container.Insert(eventArgs.Used, container);
+        _container.Insert(args.Used, container);
         _item.VisualsChanged(holder);
     }
 
-    private void OnHolderGotEquipped(Entity<UniformAccessoryHolderComponent> holder, ref GotEquippedEvent eventArgs)
+    private void OnHolderGotEquipped(Entity<UniformAccessoryHolderComponent> holder, ref GotEquippedEvent args)
     {
         if (holder.Comp.AccessoryContainer == null)
             return;
         _item.VisualsChanged(holder);
     }
 
-    private void OnHolderGetVerbs(Entity<UniformAccessoryHolderComponent> holder, ref GetVerbsEvent<Verb> eventArgs)
+    private void OnHolderGetVerbs(Entity<UniformAccessoryHolderComponent> holder, ref GetVerbsEvent<Verb> args)
     {
-        if (!eventArgs.CanAccess || !eventArgs.CanInteract)
+        if (!args.CanAccess || !args.CanInteract)
             return;
 
         var container = holder.Comp.AccessoryContainer;
@@ -92,13 +92,13 @@ public abstract class SharedUniformAccessorySystem : EntitySystem
             return;
 
         var removeCategoryText = Loc.GetString(RemoveCategoryKey);
-        foreach (var verb in eventArgs.Verbs)
+        foreach (var verb in args.Verbs)
         {
             if (verb.Category?.Text == removeCategoryText)
                 return;
         }
 
-        var interactor = eventArgs.User;
+        var interactor = args.User;
         var category = new VerbCategory(removeCategoryText, null);
 
         foreach (var accessory in container.ContainedEntities)
@@ -117,20 +117,20 @@ public abstract class SharedUniformAccessorySystem : EntitySystem
                 },
                 Priority = 0,
             };
-            eventArgs.Verbs.Add(verb);
+            args.Verbs.Add(verb);
         }
     }
 
-    private void OnRemoveAccessory(RemoveAccessoryEvent eventArgs)
+    private void OnRemoveAccessory(RemoveAccessoryEvent args)
     {
-        var container = CompOrNull<UniformAccessoryHolderComponent>(eventArgs.Holder)?.AccessoryContainer;
+        var container = CompOrNull<UniformAccessoryHolderComponent>(args.Holder)?.AccessoryContainer;
         if (container == null)
             return;
 
-        if (_container.Remove(eventArgs.Accessory, container))
+        if (_container.Remove(args.Accessory, container))
         {
-            _hands.TryPickupAnyHand(eventArgs.User, eventArgs.Accessory);
-            _item.VisualsChanged(eventArgs.Holder);
+            _hands.TryPickupAnyHand(args.User, args.Accessory);
+            _item.VisualsChanged(args.Holder);
         }
     }
 

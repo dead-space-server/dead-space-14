@@ -3,6 +3,7 @@ using Content.Shared.Clothing;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Clothing.EntitySystems;
 using Content.Shared.DeadSpace.UniformAccessories;
+using Content.Shared.DeadSpace.UniformAccessories.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Item;
@@ -24,32 +25,33 @@ public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<Shared.DeadSpace.UniformAccessories.Components.UniformAccessoryHolderComponent, GetEquipmentVisualsEvent>(OnHolderGetEquipmentVisuals,
+        SubscribeLocalEvent<UniformAccessoryHolderComponent, GetEquipmentVisualsEvent>(OnHolderGetEquipmentVisuals,
             after: [typeof(ClothingSystem)]);
-        SubscribeLocalEvent<Shared.DeadSpace.UniformAccessories.Components.UniformAccessoryHolderComponent, AfterAutoHandleStateEvent>(OnHolderVisualUpdate);
-        SubscribeLocalEvent<Shared.DeadSpace.UniformAccessories.Components.UniformAccessoryHolderComponent, EntInsertedIntoContainerMessage>(OnHolderVisualUpdate);
-        SubscribeLocalEvent<Shared.DeadSpace.UniformAccessories.Components.UniformAccessoryHolderComponent, EntRemovedFromContainerMessage>(OnHolderRemovedContainer);
-        SubscribeLocalEvent<Shared.DeadSpace.UniformAccessories.Components.UniformAccessoryHolderComponent, EquipmentVisualsUpdatedEvent>(OnHolderVisualsUpdated,
+        SubscribeLocalEvent<UniformAccessoryHolderComponent, AfterAutoHandleStateEvent>(OnHolderVisualUpdate);
+        SubscribeLocalEvent<UniformAccessoryHolderComponent, EntInsertedIntoContainerMessage>(OnHolderVisualUpdate);
+        SubscribeLocalEvent<UniformAccessoryHolderComponent, EntRemovedFromContainerMessage>(OnHolderRemovedContainer);
+        SubscribeLocalEvent<UniformAccessoryHolderComponent, EquipmentVisualsUpdatedEvent>(OnHolderVisualsUpdated,
             after: [typeof(ClothingSystem)]);
     }
 
-    private void OnHolderGetEquipmentVisuals(Entity<Shared.DeadSpace.UniformAccessories.Components.UniformAccessoryHolderComponent> ent,
+    private void OnHolderGetEquipmentVisuals(Entity<UniformAccessoryHolderComponent> ent,
         ref GetEquipmentVisualsEvent args)
     {
         if (TryComp(_player.LocalEntity, out HumanoidAppearanceComponent? humanoid) && ShouldHideAccessories(humanoid))
             return;
 
         var clothingSprite = CompOrNull<SpriteComponent>(ent);
-        if (!_container.TryGetContainer(ent, "uniform_accessories", out var container))
+        if (!_container.TryGetContainer(ent, UniformAccessoryHolderComponent.ContainerId, out var container))
             return;
 
         var index = 0;
         foreach (var accessory in container.ContainedEntities)
         {
-            if (!TryComp<Shared.DeadSpace.UniformAccessories.Components.UniformAccessoryComponent>(accessory, out var accessoryComp))
+            if (!TryComp<UniformAccessoryComponent>(accessory, out var accessoryComp))
                 continue;
 
             var layerKey = GetLayerKey(accessory, accessoryComp, index);
+
             if (accessoryComp.PlayerSprite is { } specified)
             {
                 if (clothingSprite != null && accessoryComp.HasIconSprite)
@@ -118,6 +120,7 @@ public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
         {
             if (!string.IsNullOrEmpty(clothing.InSlot))
                 return clothing.InSlot;
+
             foreach (var slot in Enum.GetValues<SlotFlags>())
             {
                 if (slot == SlotFlags.NONE)
@@ -127,8 +130,9 @@ public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
             }
         }
 
-        if (TryComp<Shared.DeadSpace.UniformAccessories.Components.UniformAccessoryComponent>(uid, out var accComp) && !string.IsNullOrEmpty(accComp.Category))
+        if (TryComp<UniformAccessoryComponent>(uid, out var accComp) && !string.IsNullOrEmpty(accComp.Category))
             return accComp.Category.ToLowerInvariant();
+
         return null;
     }
 
@@ -147,16 +151,16 @@ public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
 
         var clothingVisualsEv = new GetEquipmentVisualsEvent(ev.Equipee, ev.Slot);
         RaiseLocalEvent(accessory, clothingVisualsEv);
+
         if (clothingVisualsEv.Layers.Count > 0)
             layerData.State = clothingVisualsEv.Layers[0].Item2.State;
         else if (TryComp<ClothingComponent>(accessory, out var clothing))
         {
-            if (!string.IsNullOrEmpty(clothing.EquippedState))
-                layerData.State = clothing.EquippedState;
-            else if (!string.IsNullOrEmpty(clothing.EquippedPrefix))
-                layerData.State = $"{clothing.EquippedPrefix}-equipped-{ev.Slot.ToUpperInvariant()}";
-            else
-                layerData.State = $"equipped-{ev.Slot.ToUpperInvariant()}";
+            layerData.State = !string.IsNullOrEmpty(clothing.EquippedState)
+                ? clothing.EquippedState
+                : !string.IsNullOrEmpty(clothing.EquippedPrefix)
+                    ? $"{clothing.EquippedPrefix}-equipped-{ev.Slot.ToUpperInvariant()}"
+                    : $"equipped-{ev.Slot.ToUpperInvariant()}";
         }
         else
             layerData.State = $"equipped-{ev.Slot.ToUpperInvariant()}";
@@ -173,24 +177,24 @@ public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
         return (null, null);
     }
 
-    private void OnHolderVisualUpdate(Entity<Shared.DeadSpace.UniformAccessories.Components.UniformAccessoryHolderComponent> ent,
+    private void OnHolderVisualUpdate(Entity<UniformAccessoryHolderComponent> ent,
         ref EntInsertedIntoContainerMessage args)
     {
         _item.VisualsChanged(ent);
-        if (TryComp<Shared.DeadSpace.UniformAccessories.Components.UniformAccessoryComponent>(args.Entity, out var acc) && acc.DrawOnItemIcon)
+        if (TryComp<UniformAccessoryComponent>(args.Entity, out var acc) && acc.DrawOnItemIcon)
             UpdateItemIconOverlay(ent.Owner, args.Entity, true);
     }
 
-    private void OnHolderVisualUpdate(Entity<Shared.DeadSpace.UniformAccessories.Components.UniformAccessoryHolderComponent> ent, ref AfterAutoHandleStateEvent args)
+    private void OnHolderVisualUpdate(Entity<UniformAccessoryHolderComponent> ent, ref AfterAutoHandleStateEvent args)
     {
         _item.VisualsChanged(ent);
     }
 
-    private void OnHolderRemovedContainer(Entity<Shared.DeadSpace.UniformAccessories.Components.UniformAccessoryHolderComponent> ent,
+    private void OnHolderRemovedContainer(Entity<UniformAccessoryHolderComponent> ent,
         ref EntRemovedFromContainerMessage args)
     {
         var item = args.Entity;
-        if (!TryComp<Shared.DeadSpace.UniformAccessories.Components.UniformAccessoryComponent>(item, out var accessoryComp))
+        if (!TryComp<UniformAccessoryComponent>(item, out var accessoryComp))
             return;
 
         var index = 0;
@@ -219,7 +223,7 @@ public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
             return;
 
         var key = $"AccessoryIcon_{accessory}";
-        if (!TryComp<Shared.DeadSpace.UniformAccessories.Components.UniformAccessoryComponent>(accessory, out var acc) || !acc.DrawOnItemIcon)
+        if (!TryComp<UniformAccessoryComponent>(accessory, out var acc) || !acc.DrawOnItemIcon)
             return;
 
         if (add)
@@ -254,10 +258,10 @@ public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
         }
     }
 
-    private void OnHolderVisualsUpdated(Entity<Shared.DeadSpace.UniformAccessories.Components.UniformAccessoryHolderComponent> ent,
+    private void OnHolderVisualsUpdated(Entity<UniformAccessoryHolderComponent> ent,
         ref EquipmentVisualsUpdatedEvent args)
     {
-        if (!_container.TryGetContainer(ent, "uniform_accessories", out var container))
+        if (!_container.TryGetContainer(ent, UniformAccessoryHolderComponent.ContainerId, out var container))
             return;
 
         if (!TryComp(args.Equipee, out SpriteComponent? sprite))
@@ -266,7 +270,7 @@ public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
         var index = 0;
         foreach (var accessory in container.ContainedEntities)
         {
-            if (!TryComp<Shared.DeadSpace.UniformAccessories.Components.UniformAccessoryComponent>(accessory, out var acc))
+            if (!TryComp<UniformAccessoryComponent>(accessory, out var acc))
                 continue;
 
             var key = GetLayerKey(accessory, acc, index);
@@ -290,7 +294,7 @@ public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
         return false;
     }
 
-    private string GetLayerKey(EntityUid uid, Shared.DeadSpace.UniformAccessories.Components.UniformAccessoryComponent component, int index)
+    private string GetLayerKey(EntityUid uid, UniformAccessoryComponent component, int index)
     {
         if (_layerKeyCache.TryGetValue(uid, out var cachedKey))
             return cachedKey;
