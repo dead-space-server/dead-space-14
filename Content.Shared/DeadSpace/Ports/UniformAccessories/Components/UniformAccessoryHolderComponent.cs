@@ -3,16 +3,25 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.Ports.UniformAccessories.Components;
 
-[RegisterComponent] [NetworkedComponent] [AutoGenerateComponentState(true)]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 [Access(typeof(SharedUniformAccessorySystem))]
 public sealed partial class UniformAccessoryHolderComponent : Component
 {
-    [DataField] [AutoNetworkedField]
-    public List<string> AllowedCategories;
+    /// <summary>
+    /// Categories of accessories allowed on this holder.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public List<string> AllowedCategories = new();
 
-    [DataField] [AutoNetworkedField]
+    /// <summary>
+    /// The ID of the container for storing accessories.
+    /// </summary>
+    [DataField, AutoNetworkedField]
     public string ContainerId = "rmc_uniform_accessories";
 
-    [DataField] [AutoNetworkedField]
+    /// <summary>
+    /// List of accessory prototype IDs to spawn on initialization.
+    /// </summary>
+    [DataField, AutoNetworkedField]
     public List<EntProtoId>? StartingAccessories;
 }

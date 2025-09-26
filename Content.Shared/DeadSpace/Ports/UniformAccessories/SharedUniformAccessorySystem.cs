@@ -12,6 +12,9 @@ namespace Content.Shared.DeadSpace.Ports.UniformAccessories;
 
 public abstract partial class SharedUniformAccessorySystem : EntitySystem
 {
+    private const string ContainerId = "rmc_uniform_accessories";
+    private const string RemoveCategoryKey = "rmc-uniform-accessory-remove";
+
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedItemSystem _item = default!;
@@ -27,75 +30,83 @@ public abstract partial class SharedUniformAccessorySystem : EntitySystem
         SubscribeLocalEvent<RemoveAccessoryEvent>(OnRemoveAccessory);
     }
 
-    private void OnHolderMapInit(Entity<UniformAccessoryHolderComponent> ent, ref MapInitEvent args)
+    private void OnHolderMapInit(Entity<UniformAccessoryHolderComponent> holder, ref MapInitEvent eventArgs)
     {
-        _container.EnsureContainer<Container>(ent, ent.Comp.ContainerId);
-        if (ent.Comp.StartingAccessories is not { } startingAccessories)
+        _container.EnsureContainer<Container>(holder, ContainerId);
+        if (holder.Comp.StartingAccessories is not { } startingAccessories)
             return;
         foreach (var accessoryId in startingAccessories)
         {
-            SpawnInContainerOrDrop(accessoryId, ent.Owner, ent.Comp.ContainerId);
+            SpawnInContainerOrDrop(accessoryId, holder.Owner, ContainerId);
         }
     }
 
-    private void OnHolderInteractUsing(Entity<UniformAccessoryHolderComponent> ent, ref InteractUsingEvent args)
+    private void OnHolderInteractUsing(Entity<UniformAccessoryHolderComponent> holder, ref InteractUsingEvent eventArgs)
     {
-        if (!TryComp(args.Used, out UniformAccessoryComponent? accessory))
+        if (!TryComp(eventArgs.Used, out UniformAccessoryComponent? accessory))
             return;
-        var container = _container.EnsureContainer<Container>(ent, ent.Comp.ContainerId);
-        args.Handled = true;
-        if (!ent.Comp.AllowedCategories.Contains(accessory.Category))
+
+        var container = _container.EnsureContainer<Container>(holder, ContainerId);
+        eventArgs.Handled = true;
+
+        if (!holder.Comp.AllowedCategories.Contains(accessory.Category))
         {
             _popup.PopupClient(Loc.GetString("rmc-uniform-accessory-fail-not-allowed"),
-                args.User,
-                args.User,
+                eventArgs.User,
+                eventArgs.User,
                 PopupType.SmallCaution);
             return;
         }
-        var counts = new Dictionary<string, int>();
-        foreach (var inserted in container.ContainedEntities)
+
+        var categoryCounts = new Dictionary<string, int>();
+        foreach (var entity in container.ContainedEntities)
         {
-            if (!TryComp<UniformAccessoryComponent>(inserted, out var ins))
+            if (!TryComp<UniformAccessoryComponent>(entity, out var comp))
                 continue;
-            counts[ins.Category] = counts.GetValueOrDefault(ins.Category) + 1;
+            categoryCounts[comp.Category] = categoryCounts.GetValueOrDefault(comp.Category) + 1;
         }
-        if (counts.TryGetValue(accessory.Category, out var amount) && accessory.Limit <= amount)
+
+        if (categoryCounts.TryGetValue(accessory.Category, out var count) && accessory.Limit <= count)
         {
             _popup.PopupClient(Loc.GetString("rmc-uniform-accessory-fail-limit"),
-                args.User,
-                args.User,
+                eventArgs.User,
+                eventArgs.User,
                 PopupType.SmallCaution);
             return;
         }
-        _container.Insert(args.Used, container);
-        _item.VisualsChanged(ent);
+
+        _container.Insert(eventArgs.Used, container);
+        _item.VisualsChanged(holder);
     }
 
-    private void OnHolderGotEquipped(Entity<UniformAccessoryHolderComponent> ent, ref GotEquippedEvent args)
+    private void OnHolderGotEquipped(Entity<UniformAccessoryHolderComponent> holder, ref GotEquippedEvent eventArgs)
     {
-        if (!_container.TryGetContainer(ent, ent.Comp.ContainerId, out var container))
+        if (!_container.TryGetContainer(holder, ContainerId, out _))
             return;
-        _item.VisualsChanged(ent);
+        _item.VisualsChanged(holder);
     }
 
-    private void OnHolderGetVerbs(Entity<UniformAccessoryHolderComponent> ent, ref GetVerbsEvent<Verb> args)
+    private void OnHolderGetVerbs(Entity<UniformAccessoryHolderComponent> holder, ref GetVerbsEvent<Verb> eventArgs)
     {
-        if (!args.CanAccess || !args.CanInteract)
-            return;
-        if (!_container.TryGetContainer(ent, ent.Comp.ContainerId, out var container)
-            || container.ContainedEntities.Count == 0)
+        if (!eventArgs.CanAccess || !eventArgs.CanInteract)
             return;
 
-        if (args.Verbs.Any(v => v.Category?.Text == Loc.GetString("rmc-uniform-accessory-remove")))
+        if (!_container.TryGetContainer(holder, ContainerId, out var container) ||
+            container.ContainedEntities.Count == 0)
             return;
 
-        var user = args.User;
-        var category = new VerbCategory(Loc.GetString("rmc-uniform-accessory-remove"), null);
+        var removeCategoryText = Loc.GetString(RemoveCategoryKey);
+        if (eventArgs.Verbs.Any(v => v.Category?.Text == removeCategoryText))
+            return;
+
+        var interactor = eventArgs.User;
+        var category = new VerbCategory(removeCategoryText, null);
 
         foreach (var accessory in container.ContainedEntities)
         {
             if (!TryComp<MetaDataComponent>(accessory, out var meta))
                 continue;
+
             var verb = new Verb
             {
                 Text = meta.EntityName,
@@ -103,30 +114,31 @@ public abstract partial class SharedUniformAccessorySystem : EntitySystem
                 Category = category,
                 Act = () =>
                 {
-                    var ev = new RemoveAccessoryEvent(ent, accessory, user);
+                    var ev = new RemoveAccessoryEvent(holder, accessory, interactor);
                     RaiseLocalEvent(ev);
                 },
-                Priority = 0
+                Priority = 0,
             };
-            args.Verbs.Add(verb);
+            eventArgs.Verbs.Add(verb);
         }
     }
 
-    private void OnRemoveAccessory(RemoveAccessoryEvent args)
+    private void OnRemoveAccessory(RemoveAccessoryEvent eventArgs)
     {
-        if (!_container.TryGetContainer(args.Holder, "rmc_uniform_accessories", out var container))
+        if (!_container.TryGetContainer(eventArgs.Holder, ContainerId, out var container))
             return;
-        if (_container.Remove(args.Accessory, container))
+
+        if (_container.Remove(eventArgs.Accessory, container))
         {
-            _hands.TryPickupAnyHand(args.User, args.Accessory);
-            _item.VisualsChanged(args.Holder);
+            _hands.TryPickupAnyHand(eventArgs.User, eventArgs.Accessory);
+            _item.VisualsChanged(eventArgs.Holder);
         }
     }
 
-    private sealed partial class RemoveAccessoryEvent : EntityEventArgs
+    private sealed class RemoveAccessoryEvent : EntityEventArgs
     {
-        public readonly EntityUid Holder;
         public readonly EntityUid Accessory;
+        public readonly EntityUid Holder;
         public readonly EntityUid User;
 
         public RemoveAccessoryEvent(Entity<UniformAccessoryHolderComponent> holder, EntityUid accessory, EntityUid user)
@@ -135,10 +147,5 @@ public abstract partial class SharedUniformAccessorySystem : EntitySystem
             Accessory = accessory;
             User = user;
         }
-    }
-
-    public bool BelongsToUser(NetEntity user, EntityUid target)
-    {
-        return user == GetNetEntity(target);
     }
 }

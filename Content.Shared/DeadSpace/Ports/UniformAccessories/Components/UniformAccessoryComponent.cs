@@ -6,36 +6,51 @@ namespace Content.Shared.DeadSpace.Ports.UniformAccessories.Components;
 [RegisterComponent] [NetworkedComponent] [AutoGenerateComponentState]
 public sealed partial class UniformAccessoryComponent : Component
 {
-    /// <summary>Категория аксессуара.</summary>
+    /// <summary>
+    /// The category of the accessory (e.g., "Patch").
+    /// </summary>
     [DataField] [AutoNetworkedField]
-    public string Category = string.Empty;
+    public string Category = "";
 
-    /// <summary>Цвет категории при осмотре.</summary>
-    [DataField("color")] public Color? Color;
+    /// <summary>
+    /// The color used for the accessory name in examine text.
+    /// </summary>
+    [DataField("color")]
+    public Color? Color;
 
-    /// <summary>Если true — этот аксессуар также дорисовывается поверх иконки предмета-держателя (в инвентаре/мире).</summary>
+    /// <summary>
+    /// Whether the accessory is drawn on the holder's item icon (in inventory/world).
+    /// </summary>
     [DataField] [AutoNetworkedField]
     public bool DrawOnItemIcon = true;
 
-    /// <summary>Если true — аксессуар может дорисовываться поверх одежды на персонаже (иконка на спрайте одежды).</summary>
+    /// <summary>
+    /// Whether the accessory can be drawn on the character's sprite.
+    /// </summary>
     [DataField] [AutoNetworkedField]
     public bool HasIconSprite;
 
-    /// <summary>Скрывать ли аксессуар на персонаже.</summary>
+    /// <summary>
+    /// Whether the accessory is hidden on the character's sprite.
+    /// </summary>
     [DataField] [AutoNetworkedField]
     public bool Hidden;
 
-    /// <summary>Явный ключ слоя (если нужно привязаться к конкретному layer-key на спрайте персонажа).</summary>
+    /// <summary>
+    /// The explicit layer key for the accessory on the character's sprite.
+    /// </summary>
     [DataField] [AutoNetworkedField]
     public string? LayerKey;
 
-    /// <summary>Сколько аксессуаров этой категории может быть в держателе одновременно.</summary>
+    /// <summary>
+    /// The maximum number of accessories of this category allowed on the holder (0 for unlimited).
+    /// </summary>
     [DataField] [AutoNetworkedField]
     public int Limit = 1;
 
+    /// <summary>
+    /// The sprite to use for the accessory on the character's sprite.
+    /// </summary>
     [DataField] [AutoNetworkedField]
     public Rsi? PlayerSprite;
-
-    [DataField] [AutoNetworkedField]
-    public NetEntity? User;
 }

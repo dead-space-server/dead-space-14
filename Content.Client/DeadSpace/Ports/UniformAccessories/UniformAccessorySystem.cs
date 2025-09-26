@@ -3,7 +3,7 @@ using Content.Shared.Clothing;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Clothing.EntitySystems;
 using Content.Shared.DeadSpace.Ports.UniformAccessories;
-using Content.Shared.Humanoid;
+using Content.Shared.DeadSpace.Ports.UniformAccessories.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Item;
 using Robust.Client.GameObjects;
@@ -14,144 +14,128 @@ namespace Content.Client.DeadSpace.Ports.UniformAccessories;
 
 public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
 {
+    private const string ContainerId = "rmc_uniform_accessories";
+
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedItemSystem _item = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
 
-    public event Action? PlayerAccessoryVisualsUpdated;
-
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<Shared.DeadSpace.Ports.UniformAccessories.Components.UniformAccessoryHolderComponent, GetEquipmentVisualsEvent>(OnHolderGetEquipmentVisuals,
+        SubscribeLocalEvent<UniformAccessoryHolderComponent, GetEquipmentVisualsEvent>(OnHolderGetEquipmentVisuals,
             after: [typeof(ClothingSystem)]);
-        SubscribeLocalEvent<Shared.DeadSpace.Ports.UniformAccessories.Components.UniformAccessoryHolderComponent, AfterAutoHandleStateEvent>(OnHolderAfterState);
-        SubscribeLocalEvent<Shared.DeadSpace.Ports.UniformAccessories.Components.UniformAccessoryHolderComponent, EntInsertedIntoContainerMessage>(
+        SubscribeLocalEvent<UniformAccessoryHolderComponent, AfterAutoHandleStateEvent>(OnHolderAfterState);
+        SubscribeLocalEvent<UniformAccessoryHolderComponent, EntInsertedIntoContainerMessage>(
             OnHolderInsertedContainer);
-        SubscribeLocalEvent<Shared.DeadSpace.Ports.UniformAccessories.Components.UniformAccessoryHolderComponent, EntRemovedFromContainerMessage>(OnHolderRemovedContainer);
-        SubscribeLocalEvent<Shared.DeadSpace.Ports.UniformAccessories.Components.UniformAccessoryHolderComponent, EquipmentVisualsUpdatedEvent>(OnHolderVisualsUpdated,
+        SubscribeLocalEvent<UniformAccessoryHolderComponent, EntRemovedFromContainerMessage>(OnHolderRemovedContainer);
+        SubscribeLocalEvent<UniformAccessoryHolderComponent, EquipmentVisualsUpdatedEvent>(OnHolderVisualsUpdated,
             after: [typeof(ClothingSystem)]);
     }
 
-    private void OnHolderGetEquipmentVisuals(Entity<Shared.DeadSpace.Ports.UniformAccessories.Components.UniformAccessoryHolderComponent> ent,
-        ref GetEquipmentVisualsEvent args)
+    private void OnHolderGetEquipmentVisuals(Entity<UniformAccessoryHolderComponent> holder,
+        ref GetEquipmentVisualsEvent eventArgs)
     {
-        if (TryComp(_player.LocalEntity, out HumanoidAppearanceComponent? humanoid) && ShouldHideAccessories(humanoid))
+        if (!_container.TryGetContainer(holder, ContainerId, out var container))
             return;
-        var clothingSprite = CompOrNull<SpriteComponent>(ent);
-        if (!_container.TryGetContainer(ent, ent.Comp.ContainerId, out var container))
-            return;
-        var index = 0;
+
+        var clothingSprite = CompOrNull<SpriteComponent>(holder);
+        var layerIndex = 0;
+
         foreach (var accessory in container.ContainedEntities)
         {
-            if (!TryComp<Shared.DeadSpace.Ports.UniformAccessories.Components.UniformAccessoryComponent>(accessory, out var accessoryComp))
+            if (!TryComp<UniformAccessoryComponent>(accessory, out var accessoryComp))
                 continue;
-            var layerKey = GetLayerKey(accessory, accessoryComp, index);
-            if (accessoryComp.PlayerSprite is { } specified)
+
+            var layerKey = GetLayerKey(accessory, accessoryComp, layerIndex);
+            var layerData = GetLayerData(accessory, accessoryComp, eventArgs.Slot);
+
+            if (layerData == null)
             {
-                if (clothingSprite != null && accessoryComp.HasIconSprite)
-                {
-                    var li = clothingSprite.LayerMapReserveBlank(layerKey);
-                    clothingSprite.LayerSetVisible(li, !accessoryComp.Hidden);
-                    clothingSprite.LayerSetRSI(li, specified.RsiPath);
-                    clothingSprite.LayerSetState(li, specified.RsiState);
-                }
-                if (args.Layers.All(t => t.Item1 != layerKey))
-                {
-                    args.Layers.Add((layerKey, new PrototypeLayerData
-                    {
-                        RsiPath = specified.RsiPath.ToString(),
-                        State = specified.RsiState,
-                        Visible = !accessoryComp.Hidden,
-                    }));
-                }
-                index++;
+                layerIndex++;
                 continue;
             }
-            var accessorySlot = GetAccessorySlot(accessory) ?? args.Slot;
-            var accessoryEv = new GetEquipmentVisualsEvent(args.Equipee, accessorySlot);
-            ForceAccessoryRSI(accessory, accessoryEv, layerKey);
-            RaiseLocalEvent(accessory, accessoryEv);
-            if (accessoryEv.Layers.Count > 0)
-            {
-                var layerData = accessoryEv.Layers[0].Item2;
-                if (clothingSprite != null && accessoryComp.HasIconSprite)
-                {
-                    var li = clothingSprite.LayerMapReserveBlank(layerKey);
-                    clothingSprite.LayerSetVisible(li, !accessoryComp.Hidden);
-                    if (layerData.RsiPath != null)
-                        clothingSprite.LayerSetRSI(li, layerData.RsiPath);
-                    if (layerData.State != null)
-                        clothingSprite.LayerSetState(li, layerData.State);
-                }
-                if (args.Layers.All(t => t.Item1 != layerKey))
-                {
-                    args.Layers.Add((layerKey, new PrototypeLayerData
-                    {
-                        RsiPath = layerData.RsiPath,
-                        State = layerData.State,
-                        TexturePath = layerData.TexturePath,
-                        Color = layerData.Color,
-                        Scale = layerData.Scale,
-                        Visible = !accessoryComp.Hidden && (layerData.Visible ?? true),
-                    }));
-                }
-            }
-            index++;
+
+            ApplyLayerData(clothingSprite, eventArgs, layerKey, layerData, accessoryComp);
+            layerIndex++;
         }
-        PlayerAccessoryVisualsUpdated?.Invoke();
     }
 
-    private string? GetAccessorySlot(EntityUid uid)
+    private void ApplyLayerData(SpriteComponent? clothingSprite,
+        GetEquipmentVisualsEvent eventArgs,
+        string layerKey,
+        PrototypeLayerData layerData,
+        UniformAccessoryComponent accessoryComp)
     {
-        if (TryComp<ClothingComponent>(uid, out var clothing))
+        if (clothingSprite != null && accessoryComp.HasIconSprite)
         {
-            if (!string.IsNullOrEmpty(clothing.InSlot))
-                return clothing.InSlot;
-            foreach (SlotFlags f in Enum.GetValues(typeof(SlotFlags)))
-            {
-                if (f == SlotFlags.NONE)
-                    continue;
-                if ((clothing.Slots & f) != 0)
-                    return f.ToString().ToLowerInvariant();
-            }
+            var layerIndex = clothingSprite.LayerMapReserveBlank(layerKey);
+            clothingSprite.LayerSetVisible(layerIndex, !accessoryComp.Hidden);
+            if (layerData.RsiPath != null)
+                clothingSprite.LayerSetRSI(layerIndex, layerData.RsiPath);
+            if (layerData.State != null)
+                clothingSprite.LayerSetState(layerIndex, layerData.State);
         }
-        if (TryComp<Shared.DeadSpace.Ports.UniformAccessories.Components.UniformAccessoryComponent>(uid, out var accComp) &&
-            !string.IsNullOrEmpty(accComp.Category))
-            return accComp.Category.ToLowerInvariant();
-        return null;
+
+        if (!eventArgs.Layers.Any(t => t.Item1 == layerKey))
+        {
+            eventArgs.Layers.Add((layerKey, new PrototypeLayerData
+            {
+                RsiPath = layerData.RsiPath,
+                State = layerData.State,
+                TexturePath = layerData.TexturePath,
+                Color = layerData.Color,
+                Scale = layerData.Scale,
+                Visible = !accessoryComp.Hidden && (layerData.Visible ?? true),
+            }));
+        }
     }
 
-    private void ForceAccessoryRSI(EntityUid accessory, GetEquipmentVisualsEvent ev, string layerKey)
+    private PrototypeLayerData? GetLayerData(EntityUid accessory, UniformAccessoryComponent accessoryComp, string slot)
+    {
+        if (accessoryComp.PlayerSprite is { } specified)
+        {
+            return new PrototypeLayerData
+            {
+                RsiPath = specified.RsiPath.ToString(),
+                State = specified.RsiState,
+                Visible = !accessoryComp.Hidden,
+            };
+        }
+
+        var accessorySlot = GetAccessorySlot(accessory) ?? slot;
+        var accessoryEv = new GetEquipmentVisualsEvent(accessory, accessorySlot);
+        ForceAccessoryRSI(accessory, accessoryEv);
+        return accessoryEv.Layers.Count > 0 ? accessoryEv.Layers[0].Item2 : null;
+    }
+
+    private void ForceAccessoryRSI(EntityUid accessory, GetEquipmentVisualsEvent eventArgs)
     {
         var (rsiPath, state) = GetAccessorySpriteInfo(accessory);
         if (string.IsNullOrEmpty(rsiPath))
             return;
-        ev.Layers.Clear();
-        var layerData = new PrototypeLayerData
+
+        eventArgs.Layers.Clear();
+        var layerData = new PrototypeLayerData { RsiPath = rsiPath, Visible = true };
+
+        if (TryComp<ClothingComponent>(accessory, out var clothing))
         {
-            RsiPath = rsiPath,
-            Visible = true,
-        };
-        var clothingVisualsEv = new GetEquipmentVisualsEvent(ev.Equipee, ev.Slot);
-        RaiseLocalEvent(accessory, clothingVisualsEv);
-        if (clothingVisualsEv.Layers.Count > 0)
-            layerData.State = clothingVisualsEv.Layers[0].Item2.State;
-        else if (TryComp<ClothingComponent>(accessory, out var clothing))
-        {
-            if (!string.IsNullOrEmpty(clothing.EquippedState))
-                layerData.State = clothing.EquippedState;
-            else if (!string.IsNullOrEmpty(clothing.EquippedPrefix))
-            {
-                var slotSuffix = ev.Slot.ToUpperInvariant();
-                layerData.State = $"{clothing.EquippedPrefix}-equipped-{slotSuffix}";
-            }
-            else
-                layerData.State = $"equipped-{ev.Slot.ToUpperInvariant()}";
+            layerData.State = !string.IsNullOrEmpty(clothing.EquippedState)
+                ? clothing.EquippedState
+                : !string.IsNullOrEmpty(clothing.EquippedPrefix)
+                    ? $"{clothing.EquippedPrefix}-equipped-{eventArgs.Slot.ToUpperInvariant()}"
+                    : $"equipped-{eventArgs.Slot.ToUpperInvariant()}";
         }
         else
-            layerData.State = $"equipped-{ev.Slot.ToUpperInvariant()}";
-        ev.Layers.Add((layerKey, layerData));
+        {
+            var clothingVisualsEv = new GetEquipmentVisualsEvent(eventArgs.Equipee, eventArgs.Slot);
+            RaiseLocalEvent(accessory, clothingVisualsEv);
+            layerData.State = clothingVisualsEv.Layers.Count > 0
+                ? clothingVisualsEv.Layers[0].Item2.State
+                : $"equipped-{eventArgs.Slot.ToUpperInvariant()}";
+        }
+
+        eventArgs.Layers.Add(($"Accessory_{accessory.Id}", layerData));
     }
 
     private (string? RsiPath, string? State) GetAccessorySpriteInfo(EntityUid uid)
@@ -163,55 +147,80 @@ public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
         return (null, null);
     }
 
-    private void OnHolderAfterState(Entity<Shared.DeadSpace.Ports.UniformAccessories.Components.UniformAccessoryHolderComponent> ent, ref AfterAutoHandleStateEvent args)
+    private string? GetAccessorySlot(EntityUid uid)
     {
-        _item.VisualsChanged(ent);
+        if (TryComp<ClothingComponent>(uid, out var clothing))
+        {
+            if (!string.IsNullOrEmpty(clothing.InSlot))
+                return clothing.InSlot;
+            foreach (SlotFlags slot in Enum.GetValues(typeof(SlotFlags)))
+            {
+                if (slot == SlotFlags.NONE)
+                    continue;
+                if ((clothing.Slots & slot) != 0)
+                    return slot.ToString().ToLowerInvariant();
+            }
+        }
+
+        if (TryComp<UniformAccessoryComponent>(uid, out var accComp) && !string.IsNullOrEmpty(accComp.Category))
+            return accComp.Category.ToLowerInvariant();
+        return null;
     }
 
-    private void OnHolderInsertedContainer(Entity<Shared.DeadSpace.Ports.UniformAccessories.Components.UniformAccessoryHolderComponent> ent,
-        ref EntInsertedIntoContainerMessage args)
+    private void OnHolderAfterState(Entity<UniformAccessoryHolderComponent> holder,
+        ref AfterAutoHandleStateEvent eventArgs)
     {
-        _item.VisualsChanged(ent);
-        if (TryComp<Shared.DeadSpace.Ports.UniformAccessories.Components.UniformAccessoryComponent>(args.Entity, out var acc) && acc.DrawOnItemIcon)
-            UpdateItemIconOverlay(ent.Owner, args.Entity, true);
+        _item.VisualsChanged(holder);
     }
 
-    private void OnHolderRemovedContainer(Entity<Shared.DeadSpace.Ports.UniformAccessories.Components.UniformAccessoryHolderComponent> ent,
-        ref EntRemovedFromContainerMessage args)
+    private void OnHolderInsertedContainer(Entity<UniformAccessoryHolderComponent> holder,
+        ref EntInsertedIntoContainerMessage eventArgs)
     {
-        var item = args.Entity;
-        if (!TryComp<Shared.DeadSpace.Ports.UniformAccessories.Components.UniformAccessoryComponent>(item, out var accessoryComp))
+        _item.VisualsChanged(holder);
+        if (TryComp<UniformAccessoryComponent>(eventArgs.Entity, out var acc) && acc.DrawOnItemIcon)
+            UpdateItemIconOverlay(holder.Owner, eventArgs.Entity, true);
+    }
+
+    private void OnHolderRemovedContainer(Entity<UniformAccessoryHolderComponent> holder,
+        ref EntRemovedFromContainerMessage eventArgs)
+    {
+        var item = eventArgs.Entity;
+        if (!TryComp<UniformAccessoryComponent>(item, out var accessoryComp))
             return;
-        var index = 0;
-        foreach (var accessory in args.Container.ContainedEntities)
+
+        var layerIndex = 0;
+        foreach (var accessory in eventArgs.Container.ContainedEntities)
         {
             if (accessory == item)
                 break;
-            index++;
+            layerIndex++;
         }
-        var layerKey = GetLayerKey(item, accessoryComp, index);
-        if (TryComp(ent.Owner, out SpriteComponent? clothingSprite) &&
+
+        var layerKey = GetLayerKey(item, accessoryComp, layerIndex);
+        if (TryComp(holder.Owner, out SpriteComponent? clothingSprite) &&
             clothingSprite.LayerMapTryGet(layerKey, out var clothingLayer))
             clothingSprite.LayerSetVisible(clothingLayer, false);
-        _item.VisualsChanged(ent);
+
+        _item.VisualsChanged(holder);
         if (accessoryComp.DrawOnItemIcon)
-            UpdateItemIconOverlay(ent.Owner, args.Entity, false);
+            UpdateItemIconOverlay(holder.Owner, item, false);
     }
 
     private void UpdateItemIconOverlay(EntityUid holder, EntityUid accessory, bool add)
     {
         if (!TryComp<SpriteComponent>(holder, out var itemSprite))
             return;
+
         var key = $"AccessoryIcon_{accessory}";
-        if (!TryComp<Shared.DeadSpace.Ports.UniformAccessories.Components.UniformAccessoryComponent>(accessory, out var acc) || !acc.DrawOnItemIcon)
+        if (!TryComp<UniformAccessoryComponent>(accessory, out var acc) || !acc.DrawOnItemIcon)
             return;
+
         if (add)
         {
-            if (!itemSprite.LayerMapTryGet(key, out var layer))
-                layer = itemSprite.LayerMapReserveBlank(key);
+            var layer = itemSprite.LayerMapReserveBlank(key);
             if (acc.PlayerSprite is { } specified)
             {
-                itemSprite.LayerSetRSI(layer, specified.RsiPath);
+                itemSprite.LayerSetRSI(layer, specified.RsiPath.ToString());
                 itemSprite.LayerSetState(layer, specified.RsiState);
                 itemSprite.LayerSetVisible(layer, !acc.Hidden);
             }
@@ -219,7 +228,7 @@ public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
             {
                 var accessorySlot = GetAccessorySlot(accessory) ?? "outerClothing";
                 var ev = new GetEquipmentVisualsEvent(holder, accessorySlot);
-                ForceAccessoryRSI(accessory, ev, key);
+                ForceAccessoryRSI(accessory, ev);
                 if (ev.Layers.Count > 0)
                 {
                     var layerData = ev.Layers[0].Item2;
@@ -240,46 +249,41 @@ public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
         }
         else
         {
-            if (itemSprite.LayerMapTryGet(key, out var li))
-                itemSprite.RemoveLayer(li);
+            if (itemSprite.LayerMapTryGet(key, out var layer))
+                itemSprite.RemoveLayer(layer);
         }
     }
 
-    private void OnHolderVisualsUpdated(Entity<Shared.DeadSpace.Ports.UniformAccessories.Components.UniformAccessoryHolderComponent> ent,
-        ref EquipmentVisualsUpdatedEvent args)
+    private void OnHolderVisualsUpdated(Entity<UniformAccessoryHolderComponent> holder,
+        ref EquipmentVisualsUpdatedEvent eventArgs)
     {
-        if (!_container.TryGetContainer(ent, ent.Comp.ContainerId, out var container))
+        if (!_container.TryGetContainer(holder, ContainerId, out var container))
             return;
-        if (!TryComp(args.Equipee, out SpriteComponent? sprite))
+
+        if (!TryComp(eventArgs.Equipee, out SpriteComponent? sprite))
             return;
+
         foreach (var accessory in container.ContainedEntities)
         {
-            if (!TryComp<Shared.DeadSpace.Ports.UniformAccessories.Components.UniformAccessoryComponent>(accessory, out var acc))
+            if (!TryComp<UniformAccessoryComponent>(accessory, out var acc) || string.IsNullOrEmpty(acc.LayerKey))
                 continue;
-            var key = acc.LayerKey;
-            if (string.IsNullOrEmpty(key))
+
+            if (!eventArgs.RevealedLayers.Contains(acc.LayerKey))
                 continue;
-            if (!args.RevealedLayers.Contains(key))
-                continue;
-            if (!sprite.LayerMapTryGet(key, out var layer) ||
+
+            if (!sprite.LayerMapTryGet(acc.LayerKey, out var layer) ||
                 !sprite.TryGetLayer(layer, out var layerData))
                 continue;
+
             var data = layerData.ToPrototypeData();
             sprite.RemoveLayer(layer);
-            layer = sprite.LayerMapReserveBlank(key);
+            layer = sprite.LayerMapReserveBlank(acc.LayerKey);
             sprite.LayerSetData(layer, data);
         }
     }
 
-    private bool ShouldHideAccessories(HumanoidAppearanceComponent humanoid)
+    private string GetLayerKey(EntityUid uid, UniformAccessoryComponent component, int layerIndex)
     {
-        return false;
-    }
-
-    private string GetLayerKey(EntityUid uid, Shared.DeadSpace.Ports.UniformAccessories.Components.UniformAccessoryComponent component, int index)
-    {
-        if (!string.IsNullOrEmpty(component.LayerKey))
-            return component.LayerKey!;
-        return $"Accessory_{uid.Id}_{index}";
+        return !string.IsNullOrEmpty(component.LayerKey) ? component.LayerKey : $"Accessory_{uid.Id}_{layerIndex}";
     }
 }

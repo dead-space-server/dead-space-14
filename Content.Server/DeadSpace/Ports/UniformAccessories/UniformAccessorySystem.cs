@@ -1,62 +1,51 @@
-﻿using System.Linq;
-using Content.Shared.DeadSpace.Ports.UniformAccessories;
+﻿using Content.Shared.DeadSpace.Ports.UniformAccessories;
 using Content.Shared.DeadSpace.Ports.UniformAccessories.Components;
-using Content.Shared.Destructible;
 using Content.Shared.Examine;
 using Robust.Shared.Containers;
 
 namespace Content.Server.DeadSpace.Ports.UniformAccessories;
 
-public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
+public sealed partial class UniformAccessorySystem : SharedUniformAccessorySystem
 {
+    private const string ContainerId = "rmc_uniform_accessories";
+
     [Dependency] private readonly SharedContainerSystem _container = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-
-        SubscribeLocalEvent<UniformAccessoryHolderComponent, ExaminedEvent>(OnExamineAccessories);
-        SubscribeLocalEvent<UniformAccessoryHolderComponent, DestructionEventArgs>(OnDestroyed);
         SubscribeLocalEvent<UniformAccessoryHolderComponent, EntityTerminatingEvent>(OnTerminating);
+        SubscribeLocalEvent<UniformAccessoryHolderComponent, ExaminedEvent>(OnExamineAccessories);
     }
 
-    private void OnDestroyed(EntityUid uid, UniformAccessoryHolderComponent component, DestructionEventArgs args)
+    private void OnTerminating(EntityUid holder, UniformAccessoryHolderComponent holderComp, ref EntityTerminatingEvent eventArgs)
     {
-        DropAllAccessories(uid, component);
-    }
-
-    private void OnTerminating(EntityUid uid,
-        UniformAccessoryHolderComponent component,
-        ref EntityTerminatingEvent args)
-    {
-        DropAllAccessories(uid, component);
-    }
-
-    private void DropAllAccessories(EntityUid uid, UniformAccessoryHolderComponent component)
-    {
-        if (!_container.TryGetContainer(uid, component.ContainerId, out var container) || container.Count == 0)
+        if (!_container.TryGetContainer(holder, ContainerId, out var container) || container.ContainedEntities.Count == 0)
             return;
 
-        var coordinates = Transform(uid).Coordinates;
-        var accessories = container.ContainedEntities.ToList();
+        if (!TryComp<TransformComponent>(holder, out var transform))
+            return;
 
-        foreach (var accessory in accessories)
+        var coordinates = transform.Coordinates;
+        foreach (var accessory in container.ContainedEntities)
         {
             if (_container.Remove(accessory, container))
-                Transform(accessory).Coordinates = coordinates;
+            {
+                if (TryComp<TransformComponent>(accessory, out var accessoryTransform))
+                    accessoryTransform.Coordinates = coordinates;
+            }
         }
     }
 
-    private void OnExamineAccessories(EntityUid uid, UniformAccessoryHolderComponent component, ExaminedEvent args)
+    private void OnExamineAccessories(EntityUid holder, UniformAccessoryHolderComponent holderComp, ExaminedEvent eventArgs)
     {
-        if (!args.IsInDetailsRange)
+        if (!eventArgs.IsInDetailsRange)
             return;
 
-        if (!_container.TryGetContainer(uid, component.ContainerId, out var container) || container.Count == 0)
+        if (!_container.TryGetContainer(holder, ContainerId, out var container) || container.ContainedEntities.Count == 0)
             return;
 
         var accessories = new List<string>();
-
         foreach (var accessory in container.ContainedEntities)
         {
             if (!TryComp<MetaDataComponent>(accessory, out var metaData))
@@ -73,14 +62,14 @@ public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
             return;
 
         var accessoriesList = string.Join(", ", accessories);
-        args.PushMarkup($"На этом предмете закреплено: {accessoriesList}.");
+        eventArgs.PushMarkup($"На этом предмете закреплено: {accessoriesList}.");
     }
 
-    private string ColorToHex(Color c)
+    private string ColorToHex(Color color)
     {
-        var r = (int)MathF.Round(c.R * 255);
-        var g = (int)MathF.Round(c.G * 255);
-        var b = (int)MathF.Round(c.B * 255);
+        var r = (int)MathF.Round(color.R * 255);
+        var g = (int)MathF.Round(color.G * 255);
+        var b = (int)MathF.Round(color.B * 255);
         return $"#{r:X2}{g:X2}{b:X2}";
     }
 }
