@@ -55,12 +55,6 @@
   - type: WirelessNetworkConnection
     range: 1200
   - type: StationLimitedNetwork
-# DS14 start
-  - type: UserInterface
-    interfaces:
-      enum.UniformAccessoriesUi.Key:
-        type: UniformAccessoryBui
-# DS14 end
 
 - type: entity
   abstract: true

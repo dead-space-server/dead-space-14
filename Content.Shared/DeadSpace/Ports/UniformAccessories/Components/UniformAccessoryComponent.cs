@@ -1,7 +1,7 @@
 ﻿using Robust.Shared.GameStates;
 using static Robust.Shared.Utility.SpriteSpecifier;
 
-namespace Content.Shared.DeadSpace.UniformAccessories;
+namespace Content.Shared.DeadSpace.Ports.UniformAccessories.Components;
 
 [RegisterComponent] [NetworkedComponent] [AutoGenerateComponentState]
 public sealed partial class UniformAccessoryComponent : Component

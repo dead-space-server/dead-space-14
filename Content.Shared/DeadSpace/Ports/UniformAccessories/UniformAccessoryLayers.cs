@@ -1,6 +1,6 @@
 ﻿using Robust.Shared.Serialization;
 
-namespace Content.Shared.DeadSpace.UniformAccessories;
+namespace Content.Shared.DeadSpace.Ports.UniformAccessories;
 
 [Serializable] [NetSerializable]
 public enum UniformAccessoryLayer

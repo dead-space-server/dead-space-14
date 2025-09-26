@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Numerics;
-using Content.Client.DeadSpace.UniformAccessories;
+using Content.Client.DeadSpace.Ports.UniformAccessories;
 using Content.Client.Gameplay;
 using Content.Client.Hands.Systems;
 using Content.Client.Inventory;

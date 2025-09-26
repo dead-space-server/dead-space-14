@@ -1,7 +1,7 @@
 ﻿using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.DeadSpace.UniformAccessories;
+namespace Content.Shared.DeadSpace.Ports.UniformAccessories.Components;
 
 [RegisterComponent] [NetworkedComponent] [AutoGenerateComponentState(true)]
 [Access(typeof(SharedUniformAccessorySystem))]

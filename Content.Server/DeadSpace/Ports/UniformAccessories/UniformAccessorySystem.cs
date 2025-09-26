@@ -1,10 +1,11 @@
 ﻿using System.Linq;
-using Content.Shared.DeadSpace.UniformAccessories;
+using Content.Shared.DeadSpace.Ports.UniformAccessories;
+using Content.Shared.DeadSpace.Ports.UniformAccessories.Components;
 using Content.Shared.Destructible;
 using Content.Shared.Examine;
 using Robust.Shared.Containers;
 
-namespace Content.Server.DeadSpace.UniformAccessories;
+namespace Content.Server.DeadSpace.Ports.UniformAccessories;
 
 public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
 {
@@ -14,24 +15,24 @@ public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<Shared.DeadSpace.UniformAccessories.UniformAccessoryHolderComponent, ExaminedEvent>(OnExamineAccessories);
-        SubscribeLocalEvent<Shared.DeadSpace.UniformAccessories.UniformAccessoryHolderComponent, DestructionEventArgs>(OnDestroyed);
-        SubscribeLocalEvent<Shared.DeadSpace.UniformAccessories.UniformAccessoryHolderComponent, EntityTerminatingEvent>(OnTerminating);
+        SubscribeLocalEvent<UniformAccessoryHolderComponent, ExaminedEvent>(OnExamineAccessories);
+        SubscribeLocalEvent<UniformAccessoryHolderComponent, DestructionEventArgs>(OnDestroyed);
+        SubscribeLocalEvent<UniformAccessoryHolderComponent, EntityTerminatingEvent>(OnTerminating);
     }
 
-    private void OnDestroyed(EntityUid uid, Shared.DeadSpace.UniformAccessories.UniformAccessoryHolderComponent component, DestructionEventArgs args)
+    private void OnDestroyed(EntityUid uid, UniformAccessoryHolderComponent component, DestructionEventArgs args)
     {
         DropAllAccessories(uid, component);
     }
 
     private void OnTerminating(EntityUid uid,
-        Shared.DeadSpace.UniformAccessories.UniformAccessoryHolderComponent component,
+        UniformAccessoryHolderComponent component,
         ref EntityTerminatingEvent args)
     {
         DropAllAccessories(uid, component);
     }
 
-    private void DropAllAccessories(EntityUid uid, Shared.DeadSpace.UniformAccessories.UniformAccessoryHolderComponent component)
+    private void DropAllAccessories(EntityUid uid, UniformAccessoryHolderComponent component)
     {
         if (!_container.TryGetContainer(uid, component.ContainerId, out var container) || container.Count == 0)
             return;
@@ -46,7 +47,7 @@ public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
         }
     }
 
-    private void OnExamineAccessories(EntityUid uid, Shared.DeadSpace.UniformAccessories.UniformAccessoryHolderComponent component, ExaminedEvent args)
+    private void OnExamineAccessories(EntityUid uid, UniformAccessoryHolderComponent component, ExaminedEvent args)
     {
         if (!args.IsInDetailsRange)
             return;
@@ -62,7 +63,7 @@ public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
                 continue;
 
             var colorHex = "#FFFF55";
-            if (TryComp<Shared.DeadSpace.UniformAccessories.UniformAccessoryComponent>(accessory, out var acc) && acc.Color != null)
+            if (TryComp<UniformAccessoryComponent>(accessory, out var acc) && acc.Color != null)
                 colorHex = ColorToHex(acc.Color.Value);
 
             accessories.Add($"[color={colorHex}]{metaData.EntityName}[/color]");
