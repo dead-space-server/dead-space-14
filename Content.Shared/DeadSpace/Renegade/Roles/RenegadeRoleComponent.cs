@@ -3,7 +3,7 @@
 using Content.Shared.Roles.Components;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared.DeadSpace.Renegade.Components;
+namespace Content.Shared.DeadSpace.Renegade.Roles;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class RenegadeRoleComponent : BaseMindRoleComponent;
