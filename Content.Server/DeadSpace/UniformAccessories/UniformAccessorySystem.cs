@@ -6,7 +6,7 @@ namespace Content.Server.DeadSpace.UniformAccessories;
 
 public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
 {
-    private const string ContainerId = "rmc_uniform_accessories";
+    private const string ContainerId = "uniform_accessories";
 
     [Dependency] private readonly SharedContainerSystem _container = default!;
 

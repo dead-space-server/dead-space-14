@@ -40,7 +40,7 @@ public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
             return;
 
         var clothingSprite = CompOrNull<SpriteComponent>(ent);
-        if (!_container.TryGetContainer(ent, "rmc_uniform_accessories", out var container))
+        if (!_container.TryGetContainer(ent, "uniform_accessories", out var container))
             return;
 
         var index = 0;
@@ -257,7 +257,7 @@ public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
     private void OnHolderVisualsUpdated(Entity<Shared.DeadSpace.UniformAccessories.Components.UniformAccessoryHolderComponent> ent,
         ref EquipmentVisualsUpdatedEvent args)
     {
-        if (!_container.TryGetContainer(ent, "rmc_uniform_accessories", out var container))
+        if (!_container.TryGetContainer(ent, "uniform_accessories", out var container))
             return;
 
         if (!TryComp(args.Equipee, out SpriteComponent? sprite))

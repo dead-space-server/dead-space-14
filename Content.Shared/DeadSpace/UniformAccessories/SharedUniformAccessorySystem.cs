@@ -11,8 +11,8 @@ namespace Content.Shared.DeadSpace.UniformAccessories;
 
 public abstract class SharedUniformAccessorySystem : EntitySystem
 {
-    private const string ContainerId = "rmc_uniform_accessories";
-    private const string RemoveCategoryKey = "rmc-uniform-accessory-remove";
+    private const string ContainerId = "uniform_accessories";
+    private const string RemoveCategoryKey = "uniform-accessory-remove";
 
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
@@ -47,7 +47,7 @@ public abstract class SharedUniformAccessorySystem : EntitySystem
 
         if (!holder.Comp.AllowedCategories.Contains(accessory.Category))
         {
-            _popup.PopupClient(Loc.GetString("rmc-uniform-accessory-fail-not-allowed"),
+            _popup.PopupClient(Loc.GetString("uniform-accessory-fail-not-allowed"),
                 eventArgs.User,
                 eventArgs.User,
                 PopupType.SmallCaution);
@@ -64,7 +64,7 @@ public abstract class SharedUniformAccessorySystem : EntitySystem
 
         if (categoryCounts.TryGetValue(accessory.Category, out var count) && accessory.Limit <= count)
         {
-            _popup.PopupClient(Loc.GetString("rmc-uniform-accessory-fail-limit"),
+            _popup.PopupClient(Loc.GetString("uniform-accessory-fail-limit"),
                 eventArgs.User,
                 eventArgs.User,
                 PopupType.SmallCaution);
