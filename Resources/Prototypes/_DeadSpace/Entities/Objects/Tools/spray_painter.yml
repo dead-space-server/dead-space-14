@@ -6,10 +6,10 @@
   suffix: Тайпан
   components:
   - type: Sprite
-    sprite: Objects/Tools/spray_painter.rsi
+    sprite: _DeadSpace/Objects/Tools/spray_painter.rsi
     state: spray_painter
   - type: Item
-    sprite: Objects/Tools/spray_painter.rsi
+    sprite: _DeadSpace/Objects/Tools/spray_painter.rsi
   - type: SprayPainter
     colorPalette:
       red: '#FF1212FF'

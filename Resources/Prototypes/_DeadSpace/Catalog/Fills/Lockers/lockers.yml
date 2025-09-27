@@ -136,46 +136,6 @@
 
 # Engineering
 - type: entity
-  id: LockerTaipanElectricalSuppliesFilled
-  suffix: Тайпан, Заполненный
-  parent: LockerTaipanElectricalSupplies
-  components:
-  - type: StorageFill
-    contents:
-    - id: ToolboxElectricalFilled
-      prob: 0.7
-    - id: FirelockElectronics
-      prob: 0.05
-    - id: APCElectronics
-      prob: 0.1
-    - id: CableMVStack
-      prob: 0.2
-    - id: CableApcStack
-      prob: 0.3
-
-- type: entity
-  id: LockerTaipanWeldingSuppliesFilled
-  suffix: Тайпан, Заполненный
-  parent: LockerTaipanWeldingSupplies
-  components:
-  - type: StorageFill
-    contents:
-    - id: ClothingHeadHatWelding
-    - id: ClothingHeadHatWelding
-    - id: ClothingHeadHatWelding
-      prob: 0.5
-    - id: Welder
-    - id: Welder
-    - id: WelderMini
-      orGroup: thirdWelder
-    - id: Welder
-      prob: 0.33
-      orGroup: thirdWelder
-    - id: WelderIndustrial
-      prob: 0.33
-      orGroup: thirdWelder
-
-- type: entity
   id: LockerTaipanAtmosphericsFilled
   suffix: Тайпан, Заполненный
   parent: LockerTaipanAtmosphericsEngineer

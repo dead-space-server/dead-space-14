@@ -5,6 +5,6 @@
   description:
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/cargo_telepad.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/cargo_telepad.rsi
   - type: Machine
     board: CargoTelepadMachineCircuitboardTaipan

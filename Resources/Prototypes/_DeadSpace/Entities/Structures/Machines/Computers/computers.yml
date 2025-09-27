@@ -137,8 +137,8 @@
       state: generic_panel_open
   - type: CargoOrderConsole
     announcementChannel: Taipan
-    allowedGroups:
-    - syndicate_market
+#    allowedGroups:
+#    - syndicate_market
   - type: ActiveRadio
     channels:
     - Taipan

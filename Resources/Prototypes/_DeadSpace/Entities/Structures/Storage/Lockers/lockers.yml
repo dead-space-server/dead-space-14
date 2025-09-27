@@ -79,28 +79,6 @@
   - type: AccessReader
     access: [["TaipanService"]]
 
-# Electrical supplies
-- type: entity
-  id: LockerTaipanElectricalSupplies
-  parent: LockerElectricalSupplies
-  name: шкаф электромонтажного оборудования
-  description: Стандартное хранилище Синдиката.
-  suffix: Тайпан
-  components:
-  - type: AccessReader
-    access: [ [ "TaipanEngineering" ] ]
-
-# Welding supplies
-- type: entity
-  id: LockerTaipanWeldingSupplies
-  parent: LockerWeldingSupplies
-  name: шкаф сварочного оборудования
-  description: Стандартное хранилище Синдиката.
-  suffix: Тайпан
-  components:
-  - type: AccessReader
-    access: [ [ "TaipanEngineering" ] ]
-
 # Technical Operations Supervisor
 - type: entity
   id: LockerTaipanTechnicalOperationsSupervisor

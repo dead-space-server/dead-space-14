@@ -148,13 +148,13 @@
   id: TaipanBluespaceCargoTransport
   name: research-technology-bluespace-cargo-transport
   icon:
-    sprite: Structures/cargo_telepad.rsi
+    sprite: _DeadSpace/Structures/Machines/Taipan/cargo_telepad.rsi
     state: display
   discipline: TaipanLifeSupport
   tier: 2
   cost: 15000
   recipeUnlocks:
-  - CargoTelepadMachineCircuitboard
+  - CargoTelepadMachineCircuitboardTaipan
 
 - type: technology
   id: TaipanHypopen

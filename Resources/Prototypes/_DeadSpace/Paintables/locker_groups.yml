@@ -5,8 +5,8 @@
   styles:
     basic: ClosetSteelBase
     botanist: LockerTaipanBotanist
-    electrical: LockerTaipanElectricalSupplies
-    welding: LockerTaipanWeldingSupplies
+    electrical: LockerElectricalSupplies
+    welding: LockerWeldingSupplies
     technical: LockerTaipanTechnicalOperationsSupervisor
     cargotech: LockerTaipanCargotech
     atmospherics: LockerTaipanAtmosphericsEngineer
