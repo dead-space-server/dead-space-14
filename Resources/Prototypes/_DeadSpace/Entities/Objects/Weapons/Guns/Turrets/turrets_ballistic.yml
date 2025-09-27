@@ -1,0 +1,8 @@
+- type: entity
+  parent: BaseWeaponBallisticTurret
+  id: WeaponTurretCentralCommand
+  suffix: Central Command
+  components:
+  - type: NpcFactionMember
+    factions:
+    - CentralCommand
