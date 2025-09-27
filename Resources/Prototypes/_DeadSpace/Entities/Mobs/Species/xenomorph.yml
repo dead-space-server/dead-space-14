@@ -10,7 +10,7 @@
   - type: Barotrauma
     damage:
       types:
-        Blunt: 0.07 #per second, scales with pressure and other constants.
+        Blunt: 0.35 #per second, scales with pressure and other constants.
   - type: Respirator #It just works?
     minSaturation: 5.0
   - type: Temperature
@@ -20,7 +20,7 @@
     specificHeat: 42
     coldDamage:
       types:
-        Cold: 0.05 #per second, scales with temperature & other constants
+        Cold: 0.25 #per second, scales with temperature & other constants
     heatDamage:
       types:
         Heat: 3 #per second, scales with temperature & other constants
