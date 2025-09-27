@@ -50,7 +50,8 @@ public sealed class SprayPainterSystem : SharedSprayPainterSystem
 
     private void OnPrototypesReloaded(PrototypesReloadedEventArgs args)
     {
-        if (!args.WasModified<PaintableGroupCategoryPrototype>() || !args.WasModified<PaintableGroupPrototype>() || !args.WasModified<DecalPrototype>())
+        if (!args.WasModified<PaintableGroupCategoryPrototype>() || !args.WasModified<PaintableGroupPrototype>() ||
+            !args.WasModified<DecalPrototype>())
             return;
 
         CachePrototypes();
@@ -87,6 +88,61 @@ public sealed class SprayPainterSystem : SharedSprayPainterSystem
             Decals.Add(new SprayPainterDecalEntry(decalPrototype.ID, decalPrototype.Sprite));
         }
     }
+
+// DS14-start: Methods to get filtered categories based on spray painter component
+    /// <summary>
+    /// Gets the paintable groups filtered by the spray painter's allowed categories.
+    /// </summary>
+    public Dictionary<string, List<string>> GetFilteredPaintableGroups(SprayPainterComponent component)
+    {
+        var filteredGroups = new Dictionary<string, List<string>>();
+
+        foreach (var category in Proto.EnumeratePrototypes<PaintableGroupCategoryPrototype>().OrderBy(x => x.ID))
+        {
+            // Skip categories that are not allowed
+            if (component.AllowedCategories.Count > 0 && !component.AllowedCategories.Contains(category.ID))
+                continue;
+
+            var groupList = new List<string>();
+            foreach (var groupId in category.Groups)
+            {
+                // Skip groups that are not allowed (additional check)
+                if (!IsGroupAllowed(component, groupId))
+                    continue;
+
+                if (!Proto.TryIndex(groupId, out var group))
+                    continue;
+
+                groupList.Add(groupId);
+            }
+
+            if (groupList.Count > 0)
+                filteredGroups[category.ID] = groupList;
+        }
+
+        return filteredGroups;
+    }
+
+    /// <summary>
+    /// Gets the paintable styles filtered by the spray painter's allowed categories.
+    /// </summary>
+    public Dictionary<string, Dictionary<string, EntProtoId>> GetFilteredPaintableStyles(
+        SprayPainterComponent component)
+    {
+        var filteredStyles = new Dictionary<string, Dictionary<string, EntProtoId>>();
+
+        foreach (var groupId in PaintableStylesByGroup.Keys)
+        {
+            // Skip groups that are not allowed
+            if (!IsGroupAllowed(component, groupId))
+                continue;
+
+            filteredStyles[groupId] = PaintableStylesByGroup[groupId];
+        }
+
+        return filteredStyles;
+    }
+// DS14-end
 
     private sealed class StatusControl : Control
     {

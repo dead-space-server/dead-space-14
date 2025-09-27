@@ -51,6 +51,15 @@ public sealed partial class SprayPainterComponent : Component
     [DataField, AutoNetworkedField]
     public Dictionary<string, string> StylesByGroup = new();
 
+    // DS14-start
+    /// <summary>
+    /// Categories that this spray painter is allowed to paint.
+    /// If empty, all categories are allowed.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public HashSet<string> AllowedCategories = new();
+    // DS14-end
+
     /// <summary>
     /// The currently open tab of the painter
     /// (Are you selecting canister color?)
