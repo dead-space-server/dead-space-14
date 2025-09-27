@@ -350,11 +350,12 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         var wrappedMessage = Loc.GetString("chat-manager-sender-announcement-wrap-message", ("sender", sender), ("message", FormattedMessage.EscapeText(message)));
 
-        if (_chatFilter != null && _chatFilter.NotAllowedMessage(wrappedMessage)) // DS14-chat-filter
+        // DS14-chat-filter-start
+        if (_chatFilter != null && _chatFilter.NotAllowedMessage(wrappedMessage))
             return;
+        // DS14-chat-filter-end
 
         // DS14-Languages-Start
-
         string lexiconMessage = _language.ReplaceWordsWithLexicon(message, languageId);
         var understanding = _language.GetUnderstanding(languageId);
 
@@ -382,18 +383,18 @@ public sealed partial class ChatSystem : SharedChatSystem
 
             if (author != null && TryComp<TTSComponent>(author.Value, out var tts) && tts.VoicePrototypeId != null) // For comms console announcements
             {
-                var ev = new AnnounceSpokeEvent(tts.VoicePrototypeId, originalMessage, lexiconMessage, languageId, author.Value); // DS14-Languages
+                var ev = new AnnounceSpokeEvent(tts.VoicePrototypeId, originalMessage, lexiconMessage, languageId, author.Value);
                 RaiseLocalEvent(ev);
             }
             else if (usePresetTTS && sender == Loc.GetString("chat-manager-sender-announcement")) // For admin announcements from Centcomm with preset voices
             {
                 voice = _centcommTTS;
-                var ev = new AnnounceSpokeEvent(voice, originalMessage, lexiconMessage, languageId, null); // DS14-Languages
+                var ev = new AnnounceSpokeEvent(voice, originalMessage, lexiconMessage, languageId, null);
                 RaiseLocalEvent(ev);
             }
             else if (voice != null) // For admin announcements
             {
-                var ev = new AnnounceSpokeEvent(voice, originalMessage, lexiconMessage, languageId, null); // DS14-Languages
+                var ev = new AnnounceSpokeEvent(voice, originalMessage, lexiconMessage, languageId, null);
                 RaiseLocalEvent(ev);
             }
         }
@@ -539,7 +540,6 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         var ev = new EntitySpokeEvent(source, message, lexiconMessage, selectedLanguage, originalMessage, null, null);
         RaiseLocalEvent(source, ev, true);
-
         // DS14-Languages-End
 
         // To avoid logging any messages sent by entities that are not players, like vendors, cloning, etc.

@@ -21,6 +21,7 @@ public sealed class TTSSystem : EntitySystem
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IResourceManager _res = default!;
     [Dependency] private readonly AudioSystem _audio = default!;
+
     private ISawmill _sawmill = default!;
     private readonly MemoryContentRoot _contentRoot = new();
     private static readonly ResPath Prefix = ResPath.Root / "TTS";
@@ -96,7 +97,6 @@ public sealed class TTSSystem : EntitySystem
         var filePath = new ResPath($"{_fileIdx++}.ogg");
         _contentRoot.AddOrUpdateFile(filePath, ev.Data);
 
-
         var audioResource = new AudioResource();
         audioResource.Load(IoCManager.Instance!, Prefix / filePath);
 
@@ -106,11 +106,13 @@ public sealed class TTSSystem : EntitySystem
 
         var soundSpecifier = new ResolvedPathSpecifier(Prefix / filePath);
 
-        var sourceUid = GetEntity(ev.SourceUid);
-
-        if (sourceUid != null)
+        if (ev.SourceUid != null)
         {
-            _audio.PlayEntity(audioResource.AudioStream, sourceUid.Value, soundSpecifier, audioParams);
+            if (!TryGetEntity(ev.SourceUid.Value, out _))
+                return;
+
+            var sourceUid = GetEntity(ev.SourceUid.Value);
+            _audio.PlayEntity(audioResource.AudioStream, sourceUid, soundSpecifier, audioParams);
         }
         else
         {
