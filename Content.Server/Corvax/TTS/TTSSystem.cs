@@ -190,10 +190,10 @@ public sealed partial class TTSSystem : EntitySystem
                 if (soundLexiconData is null)
                     _language.PlayLexiconSound(session, languageId);
                 else
-                    RaiseNetworkEvent(new PlayTTSEvent(soundLexiconData, GetNetEntity(uid), languageId: languageId), session);
+                    RaiseNetworkEvent(new PlayTTSEvent(soundLexiconData, GetNetEntity(uid)), session);
             }
             else
-                RaiseNetworkEvent(new PlayTTSEvent(soundData, GetNetEntity(uid), languageId: languageId), session);
+                RaiseNetworkEvent(new PlayTTSEvent(soundData, GetNetEntity(uid)), session);
         }
 
     }
@@ -218,10 +218,10 @@ public sealed partial class TTSSystem : EntitySystem
                 if (soundLexiconData is null)
                     _language.PlayLexiconSound(session, languageId);
                 else
-                    RaiseNetworkEvent(new PlayTTSEvent(soundLexiconData, GetNetEntity(uid), languageId: languageId), session);
+                    RaiseNetworkEvent(new PlayTTSEvent(soundLexiconData, GetNetEntity(uid)), session);
             }
             else
-                RaiseNetworkEvent(new PlayTTSEvent(soundData, GetNetEntity(uid), languageId: languageId), session);
+                RaiseNetworkEvent(new PlayTTSEvent(soundData, GetNetEntity(uid)), session);
         }
     }
 
@@ -247,10 +247,10 @@ public sealed partial class TTSSystem : EntitySystem
                     if (soundLexiconData is null)
                         _language.PlayLexiconSound(session, languageId);
                     else
-                        RaiseNetworkEvent(new PlayTTSEvent(soundLexiconData, GetNetEntity(uid), languageId: languageId), session);
+                        RaiseNetworkEvent(new PlayTTSEvent(soundLexiconData, GetNetEntity(uid)), session);
                 }
                 else
-                    RaiseNetworkEvent(new PlayTTSEvent(soundData, GetNetEntity(uid), languageId: languageId), session);
+                    RaiseNetworkEvent(new PlayTTSEvent(soundData, GetNetEntity(uid)), session);
             }
         }
     }
@@ -275,10 +275,10 @@ public sealed partial class TTSSystem : EntitySystem
                 if (soundLexiconData is null)
                     _language.PlayLexiconSound(session, languageId);
                 else
-                    RaiseNetworkEvent(new PlayTTSEvent(soundLexiconData, languageId: languageId), session);
+                    RaiseNetworkEvent(new PlayTTSEvent(soundLexiconData), session);
             }
             else
-                RaiseNetworkEvent(new PlayTTSEvent(soundData, languageId: languageId), session);
+                RaiseNetworkEvent(new PlayTTSEvent(soundData), session);
         }
     }
 
@@ -297,7 +297,7 @@ public sealed partial class TTSSystem : EntitySystem
 
         if (fullSoundData is null) return;
 
-        var fullTtsEvent = new PlayTTSEvent(fullSoundData, GetNetEntity(uid), languageId: languageId);
+        var fullTtsEvent = new PlayTTSEvent(fullSoundData, GetNetEntity(uid));
 
         var understanding = _language.GetUnderstanding(languageId);
 
@@ -318,7 +318,7 @@ public sealed partial class TTSSystem : EntitySystem
                 if (lexiconSoundData is null)
                     _language.PlayLexiconSound(session, languageId);
                 else
-                    RaiseNetworkEvent(new PlayTTSEvent(lexiconSoundData, GetNetEntity(uid), languageId: languageId), session);
+                    RaiseNetworkEvent(new PlayTTSEvent(lexiconSoundData, GetNetEntity(uid)), session);
             }
             else
                 RaiseNetworkEvent(fullTtsEvent, session);

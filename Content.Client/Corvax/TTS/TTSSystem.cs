@@ -87,7 +87,7 @@ public sealed class TTSSystem : EntitySystem
 
         if (ev.Data == null || ev.Data.Length == 0)
         {
-            _sawmill.Error("Данные TTS пустые или отсутствуют");
+            _sawmill.Warning("Данные TTS пустые или отсутствуют");
             return;
         }
 

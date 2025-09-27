@@ -10,14 +10,12 @@ public sealed class PlayTTSEvent : EntityEventArgs
     public NetEntity? SourceUid { get; }
     public bool IsWhisper { get; }
     public bool IsRadio { get; }
-    public string? LanguageId { get; } // DS14-Languages
 
-    public PlayTTSEvent(byte[] data, NetEntity? sourceUid = null, bool isWhisper = false, bool isRadio = false, string? languageId = null)
+    public PlayTTSEvent(byte[] data, NetEntity? sourceUid = null, bool isWhisper = false, bool isRadio = false)
     {
         Data = data;
         SourceUid = sourceUid;
         IsWhisper = isWhisper;
         IsRadio = isRadio;
-        LanguageId = languageId; // DS14-Languages
     }
 }

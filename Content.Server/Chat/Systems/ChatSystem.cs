@@ -344,7 +344,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         string? languageId = null // DS14-Languages
         )
     {
-        languageId = string.IsNullOrEmpty(languageId) ? _language.GetDefaultLanguageId() : languageId;
+        languageId = string.IsNullOrEmpty(languageId) ? _language.GetDefaultLanguageId() : languageId; // DS14-Languages
 
         sender ??= Loc.GetString("chat-manager-sender-announcement");
 
