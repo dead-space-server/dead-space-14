@@ -3,7 +3,7 @@
   parent: JobIcon
   icon:
     sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
-    state: AtmosphericEngineer
+    state: atmosphericengineer
   jobName: job-name-taipan-atmospherics-engineer
 
 - type: jobIcon
@@ -11,7 +11,7 @@
   parent: JobIcon
   icon:
     sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
-    state: Botanist
+    state: botanist
   jobName: job-name-taipan-botanist
 
 - type: jobIcon
@@ -19,7 +19,7 @@
   parent: JobIcon
   icon:
     sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
-    state: CargoTechnician
+    state: cargotechnician
   jobName: job-name-taipan-cargotech
 
 - type: jobIcon
@@ -27,7 +27,7 @@
   parent: JobIcon
   icon:
     sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
-    state: Chef
+    state: chef
   jobName: job-name-taipan-chef
 
 - type: jobIcon
@@ -35,7 +35,7 @@
   parent: JobIcon
   icon:
     sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
-    state: Medic
+    state: medic
   jobName: job-name-taipan-medic
 
 - type: jobIcon
@@ -43,7 +43,7 @@
   parent: JobIcon
   icon:
     sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
-    state: Paramedic
+    state: paramedic
   jobName: job-name-taipan-paramedic
 
 - type: jobIcon
@@ -51,7 +51,7 @@
   parent: JobIcon
   icon:
     sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
-    state: ResearchDirector
+    state: researchdirector
   jobName: job-name-taipan-research-director
 
 - type: jobIcon
@@ -59,7 +59,7 @@
   parent: JobIcon
   icon:
     sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
-    state: Recruit
+    state: recruit
   jobName: job-name-taipan-recruit
 
 - type: jobIcon
@@ -67,7 +67,7 @@
   parent: JobIcon
   icon:
     sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
-    state: Researcher
+    state: researcher
   jobName: job-name-taipan-researcher
 
 - type: jobIcon
@@ -75,7 +75,7 @@
   parent: JobIcon
   icon:
     sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
-    state: Technician
+    state: technician
   jobName: job-name-taipan-station-technician
 
 - type: jobIcon
@@ -83,7 +83,7 @@
   parent: JobIcon
   icon:
     sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
-    state: TechnicalSupervisor
+    state: technicalsupervisor
   jobName: job-name-taipan-technical-supervisor
 
 - type: jobIcon
@@ -91,5 +91,5 @@
   parent: JobIcon
   icon:
     sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
-    state: CommunicationOfficer
+    state: communicationofficer
   jobName: job-name-taipan-telecommunications-officer

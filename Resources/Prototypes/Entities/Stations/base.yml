@@ -19,21 +19,23 @@
         Service: [ ]
     - type: StationCargoBountyDatabase
 
-# Позже доделаю
-#- type: entity
-#  id: BaseStationTaipanCargo
-#  abstract: true
-#  components:
-#  - type: StationBankAccount
-#  - type: StationCargoOrderDatabase
-#    orders:
-#      Cargo: [ ]
-#      Engineering: [ ]
-#      Medical: [ ]
-#      Science: [ ]
-#      Security: [ ]
-#      Service: [ ]
-#  - type: StationCargoBountyDatabase
+- type: entity
+  id: BaseStationTaipanCargo
+  abstract: true
+  components:
+  - type: StationBankAccount
+    primaryAccount: Taipan
+  - type: StationCargoOrderDatabase
+    orders:
+      Cargo: [ ]
+      Engineering: [ ]
+      Medical: [ ]
+      Science: [ ]
+      Security: [ ]
+      Service: [ ]
+      Taipan: [ ]
+  - type: StationCargoBountyDatabase
+    isTaipan: true
 
 - type: entity
   id: BaseStationJobsSpawning
@@ -197,6 +199,13 @@
   components:
   - type: SiliconLawProvider
     laws: Crewsimov
+
+- type: entity
+  id: BaseStationSiliconTaipanStatic
+  abstract: true
+  components:
+  - type: SiliconLawProvider
+    laws: TaipanStatic
 
 - type: entity
   id: BaseStationNews

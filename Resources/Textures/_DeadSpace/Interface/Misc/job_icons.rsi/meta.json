@@ -8,46 +8,43 @@
   },
   "states": [
     {
-      "name": "AtmosphericEngineer"
+      "name": "atmosphericengineer"
     },
     {
-      "name": "Borg"
+      "name": "borg"
     },
     {
-      "name": "Botanist"
+      "name": "botanist"
     },
     {
-      "name": "CargoTechnician"
+      "name": "cargotechnician"
     },
     {
-      "name": "Chef"
+      "name": "chef"
     },
     {
-      "name": "CommunicationOfficer"
+      "name": "communicationofficer"
     },
     {
-      "name": "Medic"
+      "name": "medic"
     },
     {
-      "name": "Technician"
+      "name": "technician"
     },
     {
-      "name": "Miner"
+      "name": "paramedic"
     },
     {
-      "name": "Paramedic"
+      "name": "recruit"
     },
     {
-      "name": "Recruit"
+      "name": "researchdirector"
     },
     {
-      "name": "ResearchDirector"
+      "name": "researcher"
     },
     {
-      "name": "Researcher"
-    },
-    {
-      "name": "TechnicalSupervisor"
+      "name": "technicalsupervisor"
     }
   ]
 }
