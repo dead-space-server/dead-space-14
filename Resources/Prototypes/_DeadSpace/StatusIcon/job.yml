@@ -92,4 +92,4 @@
   icon:
     sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
     state: communicationofficer
-  jobName: job-name-taipan-telecommunications-officer
+  jobName: job-name-taipan-communications-officer

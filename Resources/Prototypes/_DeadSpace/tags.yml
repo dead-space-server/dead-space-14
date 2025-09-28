@@ -35,6 +35,9 @@
   id: DeathRipleyEquipment
 
 - type: Tag
+  id: EncryptionTaipan
+
+- type: Tag
   id: EnergyCartridge
 
 - type: Tag
