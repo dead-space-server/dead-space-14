@@ -71,6 +71,7 @@
     - id: ClothingHandsGlovesLatex
     - id: ClothingMaskSterile
     - id: HandheldGPSBasic
+    - id: SpyCrewMonitor
     - id: MedkitFilled
       prob: 0.3
     - id: MedkitAdvancedFilled
@@ -185,11 +186,9 @@
       amount: 2
 
 - type: entity
-  id: ClosetTaipanChefFilled
-  parent: ClosetChef
-  name: поварской гардероб
-  description: Хранилище кухонной одежды и мышеловок.
+  id: LockerTaipanChefFilled
   suffix: Тайпан, Заполненный
+  parent: LockerTaipanChef
   components:
   - type: StorageFill
     contents:
@@ -197,24 +196,6 @@
       amount: 2
     - id: ClothingOuterJacketTaipanChef
       amount: 2
-    - id: CrowbarRed
-    - id: VariantCubeBox
-    - id: BoxMousetrap
-      amount: 2
-    - id: SprayBottleWater
-    - id: ReagentContainerFlour
-      amount: 2
-    - id: FoodBoxCloth
-    - id: ReagentContainerSugar
-    - id: FoodCondimentPacketSalt
-      amount: 3
-    - id: FoodCondimentPacketPepper
-      amount: 3
-    - id: FoodCondimentBottleEnzyme
-    - id: DrinkMilkCarton
-      amount: 2
-    - id: DrinkSoyMilkCarton
-    - id: ADTIronTray
 
 - type: entity
   id: LockerTaipanBotanistFilled
@@ -246,15 +227,15 @@
     contents:
     - id: CigarGoldCase
       prob: 0.50
-    - id: ClothingBeltAssaultTaipan
-    - id: ClothingBeltMilitaryWebbing
+    - id: ClothingBeltSheathSyndieFilled
     - id: ClothingBeltSyndieHolster
     - id: ClothingEyesHudTaipanAdvanced
     - id: DoorRemoteTaipan
+    - id: EmagTaipan
     - id: ClothingHeadHelmetSwatSyndicate
     - id: ClothingMaskGasSyndicate
-    - id: WeaponPistolDesertEagle
-    - id: MagazineEagle
+    - id: WeaponRevolverSelerat
+    - id: SpeedLoader357
       amount: 2
 
 - type: entity
@@ -323,9 +304,9 @@
   - type: StorageFill
     contents:
     - id: WeaponPistolViper
-      amount: 4
+      amount: 2
     - id: MagazinePistol
-      amount: 8
+      amount: 4
 
 - type: entity
   id: GunSafeTaipanShotgunBulldog

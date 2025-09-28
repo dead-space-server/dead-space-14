@@ -48,6 +48,14 @@
 
 - type: entity
   parent: DoorElectronicsTaipan
+  id: DoorElectronicsTaipanCommunicationsOfficer
+  suffix: Тайпан, Офицер телекоммуникаций, Закрыт
+  components:
+  - type: AccessReader
+    access: [["TaipanCommunicationsOfficer"]]
+
+- type: entity
+  parent: DoorElectronicsTaipan
   id: DoorElectronicsTaipanEngineering
   suffix: Тайпан, Инженерный, Закрыт
   components:

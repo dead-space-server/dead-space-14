@@ -3,28 +3,19 @@
   id: ClothingBeltAssaultTaipan
   name: тактический пояс
   description: Удобный пояс, часто используемый синдикатом на засекреченных территориях.
+  suffix: Тайпан
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/Belt/assault.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/Belt/assault.rsi
-
-- type: entity
-  parent: ClothingBeltSecurity
-  id: ClothingBeltTaipanSecurityWebbing
-  name: РПС синдиката
-  description: Ременно-плечевая система тактических ремней, которую носят представители военных структур синдиката.
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Clothing/Belt/webbing.rsi
-  - type: Clothing
-    sprite: _DeadSpace/Clothing/Belt/wwebbing.rsi
 
 - type: entity
   parent: ClothingBeltPlant
   id: ClothingBeltPlantTaipan
   name: пояс ботаника синдиката
   description: Пояс, используемый для хранения основных принадлежностей для гидропоники. На удивление, не чёрный.
+  suffix: Тайпан
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/Belt/plantbelt.rsi
@@ -36,6 +27,7 @@
   id: TaipanPlantBag
   parent: BaseStorageItem
   description: Сумка для ботаников, чтобы легко переносить свои огромные урожаи.
+  suffix: Тайпан
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/Belt/plant_bag.rsi

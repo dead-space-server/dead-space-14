@@ -43,8 +43,8 @@
   parent: BaseSubdermalImplant
   id: DeathRattleImplantTaipan
   name: предсмертный хрип
-  suffix: Тайпан
   description: Этот имплант информирует всех о физическом состоянии по частоте Тайпана.
+  suffix: Тайпан
   categories: [ HideSpawnMenu ]
   components:
   - type: SubdermalImplant
@@ -61,8 +61,10 @@
 
 - type: entity
   id: DeathRattleImplanterTaipan
-  suffix: Тайпан
   parent: BaseImplantOnlyImplanterSyndi
+  name: предсмертный хрип
+  description: Этот имплант информирует всех о физическом состоянии по частоте Тайпана.
+  suffix: Тайпан
   components:
   - type: Implanter
     implant: DeathRattleImplantTaipan

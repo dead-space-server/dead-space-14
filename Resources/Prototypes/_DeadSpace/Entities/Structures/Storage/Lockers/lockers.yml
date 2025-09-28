@@ -154,6 +154,19 @@
   - type: AccessReader
     access: [["TaipanService"]]
 
+# Chef
+- type: entity
+  id: LockerTaipanChef
+  parent: LockerTaipanBaseSecure
+  name: шкаф повара
+  components:
+  - type: EntityStorageVisuals
+    stateBaseClosed: hydro
+    stateDoorOpen: hydro_open
+    stateDoorClosed: hydro_door
+  - type: AccessReader
+    access: [["TaipanService"]]
+
 # Medicine
 - type: entity
   id: LockerTaipanMedicine

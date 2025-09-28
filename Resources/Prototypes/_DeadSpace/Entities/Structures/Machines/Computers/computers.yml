@@ -515,6 +515,7 @@
       state: generic_panel_open
   - type: RoboticsConsole
     radioChannel: Taipan
+    isTaipan: true
   - type: ActiveRadio
     channels:
     - Taipan
@@ -578,7 +579,7 @@
     access: [["TaipanCargo"]]
 
 - type: entity
-  parent: BaseComputerAiAccess
+  parent: ComputerShuttleSyndie
   id: ComputerTaipanShuttle
   name: консоль управления шаттлом
   suffix: Тайпан
@@ -600,15 +601,6 @@
   - type: Tag
     tags:
     - Taipan
-  - type: ShuttleConsole
-  - type: ActivatableUI
-    key: enum.ShuttleConsoleUiKey.Key
-  - type: UserInterface
-    interfaces:
-      enum.ShuttleConsoleUiKey.Key:
-        type: ShuttleConsoleBoundUserInterface
-      enum.WiresUiKey.Key:
-        type: WiresBoundUserInterface
   - type: Computer
     board: ShuttleConsoleCircuitboardTaipan
   - type: PointLight

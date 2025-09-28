@@ -3,6 +3,7 @@
   id: ClothingHandsTaipanResearchDirector
   name: перчатки директора исследований
   description: Жизненно необходимый предмет одежды, без которого не обойтись в научной лаборатории. Изолированы.
+  suffix: Тайпан
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/Hands/Gloves/gloves_rd.rsi
@@ -16,6 +17,7 @@
   id: ClothingHandsTaipanCommunicationsOfficer
   name: перчатки офицера телекоммуникаций
   description: Тактические перчатки, защищающие его обладателя от нежелательных соприкосновений.
+  suffix: Тайпан
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/Hands/Gloves/gloves_co.rsi
@@ -29,6 +31,7 @@
   id: ClothingHandsTaipanTechnicalOperationsSupervisor
   name: перчатки руководителя техобеспечения
   description: Изолированные перчатки с позолоченными вставками. Без них невозможно работать.
+  suffix: Тайпан
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/Hands/Gloves/gloves_ts.rsi

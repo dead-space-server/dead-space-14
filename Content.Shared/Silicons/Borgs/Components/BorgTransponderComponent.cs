@@ -11,6 +11,12 @@ namespace Content.Shared.Silicons.Borgs.Components;
 public sealed partial class BorgTransponderComponent : Component
 {
     /// <summary>
+    /// DS14
+    /// </summary>
+    [DataField]
+    public bool IsTaipan;
+
+    /// <summary>
     /// Sprite of the chassis to send.
     /// </summary>
     [DataField(required: true)]

@@ -144,6 +144,14 @@
 
 - type: entity
   parent: HolopadTaipan
+  id: HolopadTaipanVirology
+  suffix: Тайпан, Вирусология
+  components:
+  - type: Label
+    currentLabel: holopad-taipan-virology
+
+- type: entity
+  parent: HolopadTaipan
   id: HolopadTaipanEngineering
   suffix: Тайпан, Инженерный
   components:

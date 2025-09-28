@@ -31,7 +31,7 @@
     - Deconstruct
 
 - type: entity
-  name: кроваво-красная сварка
+  name: кроваво-красный сварочный аппарат
   parent: WelderExperimental
   id: SyndicateWelderExperimental
   description: Промышленная сварка с двойным топливным баком.

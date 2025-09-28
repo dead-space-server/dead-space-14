@@ -30,6 +30,7 @@
   id: ClothingBeltPlantTaipanFilled
   name: пояс ботаника синдиката
   description: Пояс, используемый для хранения основных принадлежностей для гидропоники. На удивление, не чёрный.
+  suffix: Тайпан, Заполненный
   components:
   - type: StorageFill
     contents:

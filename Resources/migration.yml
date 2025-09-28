@@ -938,7 +938,7 @@ ClothingBeltPlantTypanFilled: ClothingBeltPlantTaipanFilled
 TypanPlantBag: TaipanPlantBag
 ClothingOuterApronTypanBotanist: ClothingOuterApronTaipanBotanist
 ClothingBeltAssaultTypan: ClothingBeltAssaultTaipan
-ClothingBeltTypanSecurityWebbing: ClothingBeltTaipanSecurityWebbing
+ClothingBeltTypanSecurityWebbing: null
 ClothingHeadsetAltTypan: ClothingHeadsetAltTaipan
 ClothingEyesHudSyndicateAgentTypan: null
 ClothingEyesHudTypan: null
@@ -990,6 +990,7 @@ ClothingOuterWinterTaipanChef: null
 ClothingUniformJumpsuitTaipanDirectory: null
 ClothingEyesHudSyndicateAgentTaipan: null
 ClothingEyesHudTaipan: null
+ClothingBeltTaipanSecurityWebbing: null
 
 # 2025-07-20 - DS14
 SpawnPointMagistrat: null

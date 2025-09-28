@@ -33,3 +33,6 @@
 
 - type: playTimeTracker
   id: JobTaipanTechnicalOperationsSupervisor
+
+- type: playTimeTracker
+  id: JobTaipanAi
