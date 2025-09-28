@@ -14,7 +14,13 @@
       "name": "atmos_door"
     },
     {
-      "name": "atmos_open"
+      "name": "chef"
+    },
+    {
+      "name": "chef_door"
+    },
+    {
+      "name": "door_open"
     },
     {
       "name": "ts"
@@ -23,16 +29,10 @@
       "name": "ts_door"
     },
     {
-      "name": "ts_open"
-    },
-    {
       "name": "eng_secure"
     },
     {
       "name": "eng_secure_door"
-    },
-    {
-      "name": "eng_secure_open"
     },
     {
       "name": "co"
@@ -41,16 +41,10 @@
       "name": "co_door"
     },
     {
-      "name": "co_open"
-    },
-    {
       "name": "hydro"
     },
     {
       "name": "hydro_door"
-    },
-    {
-      "name": "hydro_open"
     },
     {
       "name": "locked"
@@ -62,16 +56,10 @@
       "name": "med_secure_door"
     },
     {
-      "name": "med_secure_open"
-    },
-    {
       "name": "mining"
     },
     {
       "name": "mining_door"
-    },
-    {
-      "name": "mining_open"
     },
     {
       "name": "paramed"
@@ -80,16 +68,10 @@
       "name": "paramed_door"
     },
     {
-      "name": "paramed_open"
-    },
-    {
       "name": "rd"
     },
     {
       "name": "rd_door"
-    },
-    {
-      "name": "rd_open"
     },
     {
       "name": "science"
@@ -98,16 +80,10 @@
       "name": "science_door"
     },
     {
-      "name": "science_open"
-    },
-    {
       "name": "sec"
     },
     {
       "name": "sec_door"
-    },
-    {
-      "name": "sec_open"
     },
     {
       "name": "shotgun"

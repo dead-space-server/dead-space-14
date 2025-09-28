@@ -87,7 +87,7 @@
   components:
   - type: EntityStorageVisuals
     stateBaseClosed: ts
-    stateDoorOpen: ts_open
+    stateDoorOpen: door_open
     stateDoorClosed: ts_door
   - type: AccessReader
     access: [["TaipanTechnicalOperationsSupervisor"]]
@@ -100,7 +100,7 @@
   components:
   - type: EntityStorageVisuals
     stateBaseClosed: mining
-    stateDoorOpen: mining_open
+    stateDoorOpen: door_open
     stateDoorClosed: mining_door
   - type: AccessReader
     access: [["TaipanCargo"]]
@@ -113,7 +113,7 @@
   components:
   - type: EntityStorageVisuals
     stateBaseClosed: atmos
-    stateDoorOpen: atmos_open
+    stateDoorOpen: door_open
     stateDoorClosed: atmos_door
   - type: AccessReader
     access: [["TaipanAtmospherics"]]
@@ -126,7 +126,7 @@
   components:
   - type: EntityStorageVisuals
     stateBaseClosed: eng_secure
-    stateDoorOpen: eng_secure_open
+    stateDoorOpen: door_open
     stateDoorClosed: eng_secure_door
   - type: AccessReader
     access: [["TaipanEngineering"]]
@@ -149,7 +149,7 @@
   components:
   - type: EntityStorageVisuals
     stateBaseClosed: hydro
-    stateDoorOpen: hydro_open
+    stateDoorOpen: door_open
     stateDoorClosed: hydro_door
   - type: AccessReader
     access: [["TaipanService"]]
@@ -161,9 +161,9 @@
   name: шкаф повара
   components:
   - type: EntityStorageVisuals
-    stateBaseClosed: hydro
-    stateDoorOpen: hydro_open
-    stateDoorClosed: hydro_door
+    stateBaseClosed: chef
+    stateDoorOpen: door_open
+    stateDoorClosed: chef_door
   - type: AccessReader
     access: [["TaipanService"]]
 
@@ -190,7 +190,7 @@
   components:
   - type: EntityStorageVisuals
     stateBaseClosed: med_secure
-    stateDoorOpen: med_secure_open
+    stateDoorOpen: door_open
     stateDoorClosed: med_secure_door
   - type: AccessReader
     access: [["TaipanMedical"]]
@@ -203,7 +203,7 @@
   components:
   - type: EntityStorageVisuals
     stateBaseClosed: paramed
-    stateDoorOpen: paramed_open
+    stateDoorOpen: door_open
     stateDoorClosed: paramed_door
   - type: AccessReader
     access: [["TaipanMedical"]]
@@ -231,7 +231,7 @@
   components:
   - type: EntityStorageVisuals
     stateBaseClosed: rd
-    stateDoorOpen: rd_open
+    stateDoorOpen: door_open
     stateDoorClosed: rd_door
   - type: AccessReader
     access: [["TaipanResearchDirector"]]
@@ -244,7 +244,7 @@
   components:
   - type: EntityStorageVisuals
     stateBaseClosed: science
-    stateDoorOpen: science_open
+    stateDoorOpen: door_open
     stateDoorClosed: science_door
   - type: AccessReader
     access: [["TaipanScience"]]
@@ -257,7 +257,7 @@
   components:
   - type: EntityStorageVisuals
     stateBaseClosed: co
-    stateDoorOpen: co_open
+    stateDoorOpen: door_open
     stateDoorClosed: co_door
   - type: AccessReader
     access: [["TaipanCommunicationsOfficer"]]
@@ -270,7 +270,7 @@
   components:
   - type: EntityStorageVisuals
     stateBaseClosed: sec
-    stateDoorOpen: sec_open
+    stateDoorOpen: door_open
     stateDoorClosed: sec_door
   - type: AccessReader
     access: [["TaipanProtection"]]

@@ -5,6 +5,7 @@
   styles:
     basic: ClosetSteelBase
     botanist: LockerTaipanBotanist
+    chef: LockerTaipanChef
     electrical: LockerElectricalSupplies
     welding: LockerWeldingSupplies
     technical: LockerTaipanTechnicalOperationsSupervisor
