@@ -135,14 +135,14 @@
   id: TaipanEdgedWeapons
   name: research-technology-edged-weapons
   icon:
-    sprite: Objects/Weapons/Melee/throwing_knife.rsi
-    state: icon
+    sprite: Clothing/Hands/Gloves/KnuckleDusters/syndicateknuckleduster.rsi
+    state: syndicateknuckleduster
   discipline: TaipanWeaponry
   tier: 1
   cost: 7500
   recipeUnlocks:
+  - ClothingHandsKnuckleDustersSyndicate
   - ThrowingKnife
-  - CaneSheath
 
 - type: technology
   id: TaipanCombatGloves

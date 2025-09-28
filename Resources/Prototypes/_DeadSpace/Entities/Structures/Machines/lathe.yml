@@ -272,6 +272,7 @@
     - DoubleBedsheets
     dynamicPacks:
     - TaipanSpecialClothing
+    - TaipanArmorVest
   - type: EmagLatheRecipes
     emagStaticPacks:
     - ClothingCentComm
@@ -351,7 +352,7 @@
     staticPacks:
     - TopicalsStatic
     - ChemistryStatic
-    - MedicalStatic
+    - TaipanMedicalStatic
     - RollerBedsStatic
     - MedicalClothingStatic
     - EmptyMedkitsStatic

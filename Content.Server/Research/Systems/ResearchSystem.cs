@@ -46,21 +46,16 @@ namespace Content.Server.Research.Systems
         /// <param name="serverUid"></param>
         /// <param name="serverComponent"></param>
         /// <returns></returns>
-        public bool TryGetServerById(EntityUid client, int id, [NotNullWhen(true)] out EntityUid? serverUid, [NotNullWhen(true)] out ResearchServerComponent? serverComponent)
+        public HashSet<Entity<ResearchServerComponent>> GetServers(EntityUid client)
         {
-            serverUid = null;
-            serverComponent = null;
+            ClientLookup.Clear();
 
-            var query = GetServers(client).ToList();
-            foreach (var (uid, server) in query)
-            {
-                if (server.Id != id)
-                    continue;
-                serverUid = uid;
-                serverComponent = server;
-                return true;
-            }
-            return false;
+            var clientXform = Transform(client);
+            if (clientXform.GridUid is not { } grid)
+                return ClientLookup;
+
+            _lookup.GetGridEntities(grid, ClientLookup);
+            return ClientLookup;
         }
 
         /// <summary>
@@ -99,6 +94,23 @@ namespace Content.Server.Research.Systems
 
         // DS14-start
         /// <summary>
+        /// Gets the names of servers visible to a client, filtered by isTaipan.
+        /// </summary>
+        public string[] GetServerNames(EntityUid client, bool isTaipan)
+        {
+            var allServers = GetServers(client).ToArray();
+            var list = new List<string>();
+
+            foreach (var server in allServers)
+            {
+                if (server.Comp.isTaipan == isTaipan)
+                    list.Add(server.Comp.ServerName);
+            }
+
+            return list.ToArray();
+        }
+
+        /// <summary>
         /// Gets the ids of all the servers visible to a client, filtered by isTaipan.
         /// </summary>
         public int[] GetServerIds(EntityUid client, bool isTaipan)
@@ -119,16 +131,22 @@ namespace Content.Server.Research.Systems
         /// <summary>
         /// Gets servers visible to a client (on the same grid).
         /// </summary>
-        public HashSet<Entity<ResearchServerComponent>> GetServers(EntityUid client)
+        public bool TryGetServerById(EntityUid client, int id, [NotNullWhen(true)] out EntityUid? serverUid, [NotNullWhen(true)] out ResearchServerComponent? serverComponent)
         {
-            ClientLookup.Clear();
+            serverUid = null;
+            serverComponent = null;
 
-            var clientXform = Transform(client);
-            if (clientXform.GridUid is not { } grid)
-                return ClientLookup;
+            var query = GetServers(client).ToList();
+            foreach (var (uid, server) in query)
+            {
+                if (server.Id != id)
+                    continue;
+                serverUid = uid;
+                serverComponent = server;
+                return true;
+            }
 
-            _lookup.GetGridEntities(grid, ClientLookup);
-            return ClientLookup;
+            return false;
         }
 
         public override void Update(float frameTime)

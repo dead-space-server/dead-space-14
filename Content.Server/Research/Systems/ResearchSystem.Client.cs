@@ -67,21 +67,12 @@ public sealed partial class ResearchSystem
         var allServers = GetServers(uid).ToList();
 
         // DS14-rnd-server-per-stations-start
-        var clientGrid = Transform(uid).GridUid;
-        if (clientGrid.HasValue)
+        foreach (var (serverUid, serverComp) in allServers)
         {
-            foreach (var (serverUid, serverComp) in allServers)
-            {
-                var serverGrid = Transform(serverUid).GridUid;
-
-                if (clientGrid == serverGrid)
-                {
-                    if (component.isTaipan && serverComp.isTaipan)
-                        taipanServers.Add((serverUid, serverComp));
-                    else if (!component.isTaipan && !serverComp.isTaipan)
-                        normalServers.Add((serverUid, serverComp));
-                }
-            }
+            if (component.isTaipan && serverComp.isTaipan)
+                taipanServers.Add((serverUid, serverComp));
+            else if (!component.isTaipan && !serverComp.isTaipan)
+                normalServers.Add((serverUid, serverComp));
         }
         // DS14-rnd-server-per-stations-end
 
@@ -126,8 +117,10 @@ public sealed partial class ResearchSystem
 
         TryGetClientServer(uid, out _, out var serverComponent, component);
 
-        var serverNames = GetServerNames(uid);
-        var serverIds = GetServerIds(uid, component?.isTaipan ?? false); // DS14
+        // DS14-start
+        var serverNames = GetServerNames(uid, component?.isTaipan ?? false);
+        var serverIds = GetServerIds(uid, component?.isTaipan ?? false);
+        // DS14-end
 
         var state = new ResearchClientBoundInterfaceState(
             serverNames.Length,

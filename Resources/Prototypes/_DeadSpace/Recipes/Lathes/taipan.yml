@@ -183,12 +183,19 @@
     Steel: 150
 
 - type: latheRecipe
-  id: CaneSheath
-  result: CaneSheath
+  parent: BaseWeaponRecipe
+  id: ClothingHandsKnuckleDustersSyndicate
+  result: ClothingHandsKnuckleDustersSyndicate
+  materials:
+    Titanium: 150
+
+- type: latheRecipe
+  id: CaneSheathFilled
+  result: CaneSheathFilled
   completetime: 2
   materials:
     Steel: 200
-    Plastic: 100
+    Wood: 100
 
 # Grenades
 - type: latheRecipe

@@ -1,9 +1,9 @@
-- files: ["TaipanParallax.png"]
-  license: "CC-BY-NC-SA-3.0"
-  copyright: "by andrew_fenriz for SS14 server Мёртвый Космос"
-  source: "https://github.com/tgstation/tgstation"
+- files: ["TaipanParallaxNeb.png", "TaipanParallaxBG.png"]
+  license: "CC0-1.0"
+  copyright: "adapted from Screaming Brain Studios by andrew_fenriz for SS14 server Мёртвый Космос"
+  source: "https://opengameart.org/content/seamless-space-backgrounds"
 
-- files: ["gas_giant.png"]
+- files: ["blackhole.png"]
   license: "CC-BY-NC-SA-3.0"
   copyright: "by andrew_fenriz for SS14 server Мёртвый Космос"
-  source: "https://github.com/space-wizards/space-station-14/blob/master/Resources/Textures/Parallaxes/gas_giant.png"
+  source: "https://github.com/AndrewFenriz"

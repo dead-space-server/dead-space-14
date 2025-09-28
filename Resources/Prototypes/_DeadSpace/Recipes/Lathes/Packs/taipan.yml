@@ -37,7 +37,7 @@
   id: TaipanMelee
   recipes:
   - ThrowingKnife
-  - CaneSheath
+  - ClothingHandsKnuckleDustersSyndicate
 
 ## Grenades
 - type: latheRecipePack
@@ -294,7 +294,25 @@
   - ClothingHandsGlovesNorthStar
   - ClothingHandsGlovesBoxingRigged
 
+## Armor vest
+
+- type: latheRecipePack
+  id: TaipanArmorVest
+  recipes:
+  - ClothingOuterVestWeb
+  - ClothingOuterVestWeb
+
 # Medical
+
+- type: latheRecipePack
+  id: TaipanMedicalStatic
+  recipes:
+  - Implanter
+  - Defibrillator
+  - HandheldHealthAnalyzer
+  - DiseaseSwab
+  - BodyBag
+  - CaneSheathFilled
 
 ## Surgery
 - type: latheRecipePack

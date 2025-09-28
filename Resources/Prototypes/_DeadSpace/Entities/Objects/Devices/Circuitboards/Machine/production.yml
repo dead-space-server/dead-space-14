@@ -266,3 +266,42 @@
       Cable: 5
       PlasmaGlass: 15
       MetalRod: 4
+
+- type: entity
+  parent: WeaponEnergyTurretStationMachineCircuitboardBase
+  id: WeaponEnergyTurretTaipanAIMachineCircuitboard
+  name: охранная турель (машинная плата)
+  description: Печатная плата для охранной турели.
+  suffix: Тайпан, ИИ, Борги
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/module.rsi
+    state: syndicate
+  - type: MachineBoard
+    prototype: WeaponEnergyTurretTaipanAI
+
+- type: entity
+  parent: WeaponEnergyTurretStationMachineCircuitboardBase
+  id: WeaponEnergyTurretTaipanSecurityMachineCircuitboard
+  name: охранная турель (машинная плата)
+  description: Печатная плата для охранной турели.
+  suffix: Тайпан, Охрана
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/module.rsi
+    state: syndicate
+  - type: MachineBoard
+    prototype: WeaponEnergyTurretTaipanSecurity
+
+- type: entity
+  parent: WeaponEnergyTurretStationMachineCircuitboardBase
+  id: WeaponEnergyTurretTaipanCommandMachineCircuitboard
+  name: охранная турель (машинная плата)
+  description: Печатная плата для охранной турели.
+  suffix: Тайпан, Командование
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/module.rsi
+    state: syndicate
+  - type: MachineBoard
+    prototype: WeaponEnergyTurretTaipanCommand

@@ -170,6 +170,19 @@
   - HypoDart
 
 - type: technology
+  id: TaipanArmorVest
+  name: research-technology-armor-vest
+  icon:
+    sprite: Clothing/OuterClothing/Vests/webvest.rsi
+    state: icon
+  discipline: TaipanLifeSupport
+  tier: 2
+  cost: 15000
+  recipeUnlocks:
+  - ClothingOuterVestWeb
+  - ClothingOuterVestWebElite
+
+- type: technology
   id: TaipanChameleonClothing
   name: research-technology-chameleon-clothing
   icon:

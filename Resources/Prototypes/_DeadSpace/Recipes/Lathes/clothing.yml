@@ -308,3 +308,21 @@
     Durathread: 200
     Gold: 100
     Silver: 100
+
+# Armor vest
+
+- type: latheRecipe
+  id: ClothingOuterVestWeb
+  result: ClothingOuterVestWeb
+  materials:
+    Cloth: 300
+    Durathread: 200
+    Titanium: 400
+
+- type: latheRecipe
+  id: ClothingOuterVestWebElite
+  result: ClothingOuterVestWebElite
+  materials:
+    Cloth: 300
+    Durathread: 400
+    Titanium: 200
