@@ -30,6 +30,9 @@
     steps: 6
     zeroVisible: false
   - type: Appearance
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 100
 
 - type: entity
   id: BaseMagazinePistolHighCapacity
@@ -63,6 +66,9 @@
     steps: 6
     zeroVisible: false
   - type: Appearance
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 100
 
 - type: entity
   id: BaseMagazinePistolSubMachineGun  # Yeah it's weird but it's pistol caliber
@@ -96,6 +102,9 @@
     steps: 6
     zeroVisible: false
   - type: Appearance
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 100
 
 - type: entity
   id: MagazinePistolSubMachineGunTopMounted

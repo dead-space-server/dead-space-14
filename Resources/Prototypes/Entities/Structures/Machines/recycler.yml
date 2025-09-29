@@ -115,3 +115,25 @@
   - type: Speech
     speechVerb: Robotic
     speechSounds: SyndieBorg
+
+- type: entity
+  id: RecyclerXenBorgs
+  parent: Recycler
+  name: recycler
+  description: A large crushing machine used to recycle small items inefficiently. There are lights on the side.
+  components:
+  - type: CollideMaterialReclaimer
+  - type: MaterialReclaimer
+    enabled: false
+    scaleProcessSpeed: false #instant!
+    minimumProcessDuration: 0
+    whitelist:
+      components:
+      - PhysicalComposition
+      - MobState
+      - SpaceGarbage
+    blacklist:
+      components:
+      - Material
+      tags:
+      - HighRiskItem

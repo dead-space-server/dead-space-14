@@ -340,6 +340,10 @@
   - type: Fiber
     fiberMaterial: fibers-insulative
     fiberColor: fibers-yellow
+  - type: PhysicalComposition
+    materialComposition:
+      Cloth: 500
+      Plastic: 200
 
 # Budget Insulated Gloves
 - type: entity
@@ -368,6 +372,7 @@
     fiberMaterial: fibers-insulative-frayed
     fiberColor: fibers-yellow
 
+
 # Conductive Insulated Gloves
 - type: entity
   parent: ClothingHandsGlovesColorYellow
@@ -376,3 +381,7 @@
   components:
   - type: Insulated
     coefficient: 5 # zap em good
+  - type: PhysicalComposition
+    materialComposition:
+      Cloth: 400
+      Plastic: 200

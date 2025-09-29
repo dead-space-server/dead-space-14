@@ -108,6 +108,10 @@
     fiberMaterial: fibers-durathread
     fiberColor: fibers-regal-blue
   - type: FingerprintMask
+  - type: PhysicalComposition
+    materialComposition:
+      Durathread: 500
+      Plasteel: 200
 
 - type: entity
   parent: ClothingHandsBase
@@ -343,6 +347,9 @@
     damageProtection:
       flatReductions:
         Heat: 0 # no protection
+  - type: PhysicalComposition
+    materialComposition:
+      Cloth: 200
 
 - type: entity
   parent: ClothingHandsButcherable
@@ -438,6 +445,10 @@
   - type: GuideHelp
     guides:
     - Forensics
+  - type: PhysicalComposition
+    materialComposition:
+      Cloth: 1000
+      Durathread: 300
 
 # TODO Make lubed items not slip in hands
 - type: entity

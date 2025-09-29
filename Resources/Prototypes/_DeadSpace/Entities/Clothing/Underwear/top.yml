@@ -23,7 +23,10 @@
   - type: Tag
     tags:
       - ClothMade
-
+  - type: PhysicalComposition
+    materialComposition:
+      Cloth: 100
+      
 # Sirena
 - type: entity
   parent: ClothingUnderwearTopBase

@@ -25,6 +25,10 @@
     - WhitelistChameleonIdCard
   - type: StealTarget
     stealGroup: IDCard
+  - type: PhysicalComposition
+    materialComposition:
+      Plastic: 500
+      Steel: 100
 
 #IDs with layers
 

@@ -123,6 +123,10 @@
     proto: robot
   - type: Speech
     speechVerb: Robotic
+  - type: PhysicalComposition
+    materialComposition:
+      Glass: 500
+      Plastic: 500
 
 - type: entity
   parent: BasePDA
