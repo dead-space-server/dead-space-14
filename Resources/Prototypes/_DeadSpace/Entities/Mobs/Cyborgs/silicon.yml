@@ -211,7 +211,7 @@
 # The actual brain inside the core
 - type: entity
   id: TaipanAiBrain
-  parent: PositronicBrain
+  parent: StationAiBrain
   categories: [ HideSpawnMenu, DoNotMap ]
   components:
   - type: Sprite
@@ -219,7 +219,7 @@
   - type: BlockMovement
     blockInteraction: false
   - type: SiliconLawProvider
-    laws: Crewsimov
+    laws: TaipanStatic
   - type: SiliconLawBound
   - type: ActionGrant
     actions:
