@@ -42,6 +42,8 @@ public sealed class RadioSystem : EntitySystem
 
     private EntityQuery<TelecomExemptComponent> _exemptQuery;
 
+    // DS14-start
+    // Fix this
     private readonly Dictionary<string, string[]> _departments = new Dictionary<string, string[]>
     {
         { "fcdf03", ["командование", "кэп", "капитан", "глава персонала"] },
@@ -56,6 +58,7 @@ public sealed class RadioSystem : EntitySystem
         { "fb77f3", ["клуня", "клоун"] },
         { "d0d0d0", ["мим"] }
     };
+    // DS14-end
 
     public override void Initialize()
     {
@@ -77,13 +80,16 @@ public sealed class RadioSystem : EntitySystem
 
     private void OnIntrinsicReceive(EntityUid uid, IntrinsicRadioReceiverComponent component, ref RadioReceiveEvent args)
     {
+        // DS14-Languages-start
         var msg = args.ChatMsg;
 
-        if (!string.IsNullOrEmpty(args.LanguageId) && !_language.KnowsLanguage(uid, args.LanguageId))
+        if (!_language.KnowsLanguage(uid, args.LanguageId))
             msg = args.LexiconChatMsg;
 
+        // DS14-Languages-end
+
         if (TryComp(uid, out ActorComponent? actor))
-            _netMan.ServerSendMessage(msg, actor.PlayerSession.Channel);
+            _netMan.ServerSendMessage(msg, actor.PlayerSession.Channel); // DS14-edit
     }
 
     /// <summary>
@@ -167,13 +173,13 @@ public sealed class RadioSystem : EntitySystem
             null);
         var chatMsg = new MsgChatMessage { Message = chat };
 
-        // DS14-Languages-Start
+        // DS14-Languages-start
         var lexiconMessage = message;
         var chatMsgLexicon = chatMsg;
 
         if (TryComp<LanguageComponent>(messageSource, out var language))
         {
-            lexiconMessage = _language.ReplaceWordsWithLexicon(message, language.SelectedLanguage.Id);
+            lexiconMessage = _language.ReplaceWordsWithLexicon(message, language.SelectedLanguage);
 
             var lexiconContent = escapeMarkup
             ? FormattedMessage.EscapeText(lexiconMessage)
@@ -202,13 +208,10 @@ public sealed class RadioSystem : EntitySystem
             chatMsgLexicon = new MsgChatMessage { Message = chatLexicon };
         }
 
-        var languageId = _language.GetDefaultLanguageId();
+        var languageId = language?.SelectedLanguage ?? LanguageSystem.DefaultLanguageId;
 
-        if (language != null)
-            languageId = language.SelectedLanguage.Id;
-
-        var ev = new RadioReceiveEvent(message, languageId, messageSource, channel, radioSource, chatMsg, chatMsgLexicon, []);
-        // DS14-End
+        var ev = new RadioReceiveEvent(message, languageId, messageSource, channel, radioSource, chatMsg, chatMsgLexicon, []); // DS14
+        // DS14-Languages-end
 
         var sendAttemptEv = new RadioSendAttemptEvent(channel, radioSource);
         RaiseLocalEvent(ref sendAttemptEv);
@@ -250,7 +253,7 @@ public sealed class RadioSystem : EntitySystem
 
         var selectedLanguage = language != null ? language.SelectedLanguage.Id : string.Empty; // DS14-Languages
 
-        RaiseLocalEvent(new RadioSpokeEvent(messageSource, message, lexiconMessage, selectedLanguage, ev.Receivers.ToArray())); // DS14-Languages
+        RaiseLocalEvent(new RadioSpokeEvent(messageSource, message, lexiconMessage, selectedLanguage, ev.Receivers.ToArray())); // DS14
 
         if (name != Name(messageSource))
             _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Radio message from {ToPrettyString(messageSource):user} as {name} on {channel.LocalizedName}: {message}");

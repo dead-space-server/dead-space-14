@@ -12,9 +12,11 @@ public sealed partial class LanguageComponent : Component
     [DataField]
     public List<ProtoId<LanguagePrototype>> KnownLanguages = new();
 
-    [DataField,]
-    [ViewVariables(VVAccess.ReadOnly)]
-    public ProtoId<LanguagePrototype> SelectedLanguage = String.Empty;
+    [DataField]
+    public List<ProtoId<LanguagePrototype>> CantSpeakLanguages = new();
+
+    [DataField, ViewVariables(VVAccess.ReadOnly)]
+    public ProtoId<LanguagePrototype> SelectedLanguage = default!;
 
     [DataField]
     public EntProtoId SelectLanguageAction = "SelectLanguageAction";

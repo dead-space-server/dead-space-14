@@ -18,7 +18,7 @@ public sealed partial class LanguagePrototype : IPrototype
     [DataField]
     public List<string> Lexicon = new();
 
-    [DataField]
+    [DataField(required: true)]
     public string Name = string.Empty;
 
     [DataField]

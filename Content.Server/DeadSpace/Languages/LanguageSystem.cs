@@ -19,7 +19,9 @@ public sealed class LanguageSystem : EntitySystem
     [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly AudioSystem _audio = default!;
-    private static readonly ProtoId<LanguagePrototype> DefaultLanguageId = "GeneralLanguage";
+
+    public static readonly ProtoId<LanguagePrototype> DefaultLanguageId = "GeneralLanguage";
+
     public override void Initialize()
     {
         base.Initialize();
@@ -48,9 +50,11 @@ public sealed class LanguageSystem : EntitySystem
 
         if (EntityManager.TryGetComponent<ActorComponent?>(uid, out var actorComponent))
         {
-            var ev = new RequestLanguageMenuEvent(uid.Id, component.KnownLanguages);
+            var ev = new RequestLanguageMenuEvent(uid.Id, component.KnownLanguages, component.CantSpeakLanguages);
 
-            ev.Prototypes.Sort();
+            ev.KnownLanguages.Sort();
+            ev.CantSpeakLanguages.Sort();
+
             RaiseNetworkEvent(ev, actorComponent.PlayerSession);
         }
 
@@ -61,12 +65,11 @@ public sealed class LanguageSystem : EntitySystem
     {
         if (EntityManager.TryGetComponent<LanguageComponent>(new EntityUid(msg.Target), out var language))
             language.SelectedLanguage = msg.PrototypeId;
-
     }
 
-    public string ReplaceWordsWithLexicon(string message, string prototypeId)
+    public string ReplaceWordsWithLexicon(string message, ProtoId<LanguagePrototype> languageId)
     {
-        if (!_prototypeManager.TryIndex<LanguagePrototype>(prototypeId, out var languageProto))
+        if (!_prototypeManager.TryIndex(languageId, out var languageProto))
             return message;
 
         var lexiconWords = languageProto.Lexicon;
@@ -86,7 +89,7 @@ public sealed class LanguageSystem : EntitySystem
         return string.Join(' ', words);
     }
 
-    public List<ProtoId<LanguagePrototype>>? GetKnowsLanguage(EntityUid entity)
+    public List<ProtoId<LanguagePrototype>>? GetKnownLanguages(EntityUid entity)
     {
         if (!TryComp<LanguageComponent>(entity, out var component))
             return null;
@@ -94,9 +97,9 @@ public sealed class LanguageSystem : EntitySystem
         return component.KnownLanguages;
     }
 
-    public bool KnowsLanguage(EntityUid receiver, string senderLanguageId)
+    public bool KnowsLanguage(EntityUid receiver, ProtoId<LanguagePrototype> senderLanguageId)
     {
-        var languages = GetKnowsLanguage(receiver);
+        var languages = GetKnownLanguages(receiver);
 
         if (languages == null)
             return false;
@@ -104,24 +107,24 @@ public sealed class LanguageSystem : EntitySystem
         return languages.Contains(senderLanguageId);
     }
 
-    public void PlayLexiconSound(ICommonSession session, string prototypeId)
+    public void PlayLexiconSound(ICommonSession session, ProtoId<LanguagePrototype> languageId)
     {
-        if (!_prototypeManager.TryIndex<LanguagePrototype>(prototypeId, out var languageProto))
+        if (!_prototypeManager.TryIndex(languageId, out var languageProto))
             return;
 
         if (languageProto.LexiconSound != null)
             _audio.PlayGlobal(languageProto.LexiconSound, session);
     }
 
-    public bool NeedGenerateTTS(string prototypeId)
+    public bool NeedGenerateTTS(ProtoId<LanguagePrototype> languageId)
     {
-        if (!_prototypeManager.TryIndex<LanguagePrototype>(prototypeId, out var languageProto))
+        if (!_prototypeManager.TryIndex(languageId, out var languageProto))
             return true;
 
         return languageProto.GenerateTTSForLexicon;
     }
 
-    public ICommonSession[] GetUnderstanding(string languageId)
+    public List<ICommonSession> GetUnderstanding(ProtoId<LanguagePrototype> languageId)
     {
         var understanding = new List<ICommonSession>();
 
@@ -134,12 +137,6 @@ public sealed class LanguageSystem : EntitySystem
                 understanding.Add(session);
         }
 
-        return understanding.ToArray();
+        return understanding;
     }
-
-    public string GetDefaultLanguageId()
-    {
-        return DefaultLanguageId.Id;
-    }
-
 }

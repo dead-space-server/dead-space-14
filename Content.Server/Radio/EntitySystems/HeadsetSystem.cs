@@ -18,7 +18,7 @@ public sealed class HeadsetSystem : SharedHeadsetSystem
 {
     [Dependency] private readonly INetManager _netMan = default!;
     [Dependency] private readonly RadioSystem _radio = default!;
-    [Dependency] private readonly AudioSystem _audio = default!;
+    [Dependency] private readonly AudioSystem _audio = default!; // DS14-TTS
     [Dependency] private readonly LanguageSystem _language = default!; // DS14-Languages
 
     public override void Initialize()
@@ -105,19 +105,18 @@ public sealed class HeadsetSystem : SharedHeadsetSystem
 
     private void OnHeadsetReceive(EntityUid uid, HeadsetComponent component, ref RadioReceiveEvent args)
     {
+        // TTS-edit-start
         var msg = args.ChatMsg;
+        var parent = Transform(uid).ParentUid;
 
-        if (!string.IsNullOrEmpty(args.LanguageId) && !_language.KnowsLanguage(Transform(uid).ParentUid, args.LanguageId))
+        if (!_language.KnowsLanguage(parent, args.LanguageId))
             msg = args.LexiconChatMsg;
 
-        // TTS-start
         _audio.PlayPvs(component.RadioReceiveSoundPath, uid, AudioParams.Default.WithVolume(-10f));
 
         // TODO: change this when a code refactor is done
         // this is currently done this way because receiving radio messages on an entity otherwise requires that entity
         // to have an ActiveRadioComponent
-
-        var parent = Transform(uid).ParentUid;
 
         if (parent.IsValid())
         {

@@ -1,4 +1,3 @@
-
 using System.Threading.Tasks;
 using Content.Server.Chat.Systems;
 using Content.Shared.CCVar;
@@ -13,6 +12,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Server.DeadSpace.Languages;
 using Robust.Server.Player;
+using Content.Shared.DeadSpace.Languages.Prototypes;
 using System.Linq;
 
 namespace Content.Server.Corvax.TTS;
@@ -170,7 +170,7 @@ public sealed partial class TTSSystem : EntitySystem
         Timer.Spawn(6000, () => HandleAnnounce(args.Message, args.LexiconMessage, args.LanguageId, protoVoice.Speaker)); // Awful, but better than sending announce sound to client in resource file
     }
 
-    private async void HandleSay(EntityUid uid, string message, string lexiconMessage, string languageId, string speaker)
+    private async void HandleSay(EntityUid uid, string message, string lexiconMessage, ProtoId<LanguagePrototype> languageId, string speaker)
     {
         var soundData = await GenerateTTS(message, speaker);
 
@@ -198,7 +198,7 @@ public sealed partial class TTSSystem : EntitySystem
 
     }
 
-    private async void HandleDirectSay(EntityUid uid, string message, string lexiconMessage, string languageId, string speaker)
+    private async void HandleDirectSay(EntityUid uid, string message, string lexiconMessage, ProtoId<LanguagePrototype> languageId, string speaker)
     {
         var soundData = await GenerateTTS(message, speaker);
 
@@ -225,7 +225,7 @@ public sealed partial class TTSSystem : EntitySystem
         }
     }
 
-    private async void HandleRadio(EntityUid[] uids, string message, string lexiconMessage, string languageId, string speaker)
+    private async void HandleRadio(EntityUid[] uids, string message, string lexiconMessage, ProtoId<LanguagePrototype> languageId, string speaker)
     {
         var soundData = await GenerateTTS(message, speaker);
 
@@ -255,7 +255,7 @@ public sealed partial class TTSSystem : EntitySystem
         }
     }
 
-    private async void HandleAnnounce(string message, string lexiconMessage, string languageId, string speaker)
+    private async void HandleAnnounce(string message, string lexiconMessage, ProtoId<LanguagePrototype> languageId, string speaker)
     {
         var soundData = await GenerateTTS(message, speaker);
 
@@ -282,7 +282,7 @@ public sealed partial class TTSSystem : EntitySystem
         }
     }
 
-    private async void HandleWhisper(EntityUid uid, string message, string lexiconMessage, string languageId, string obfMessage, string speaker)
+    private async void HandleWhisper(EntityUid uid, string message, string lexiconMessage, ProtoId<LanguagePrototype> languageId, string obfMessage, string speaker)
     {
         var fullSoundData = await GenerateTTS(message, speaker, true);
 

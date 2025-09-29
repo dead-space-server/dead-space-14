@@ -14,7 +14,7 @@ public sealed partial class TelepathySystem : EntitySystem
 {
     [Dependency] private readonly QuickDialogSystem _quickDialog = default!;
     [Dependency] private readonly PrayerSystem _prayerSystem = default!;
-    [Dependency] private readonly LanguageSystem _language = default!; // DS14-Languages
+    [Dependency] private readonly LanguageSystem _language = default!;
 
     public override void Initialize()
     {
@@ -45,12 +45,12 @@ public sealed partial class TelepathySystem : EntitySystem
                 telepathy.Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/vv.svg.192dpi.png"));
                 telepathy.Act = () =>
                 {
-                    _quickDialog.OpenDialog(player, "Пробраться в мысли", "Сообщение", (string message) => // DS14-Languages
+                    _quickDialog.OpenDialog(player, "Пробраться в мысли", "Сообщение", (string message) =>
                     {
                         var lexiconMessage = message;
 
                         if (TryComp<LanguageComponent>(args.User, out var language))
-                            lexiconMessage = _language.ReplaceWordsWithLexicon(message, language.SelectedLanguage.Id);
+                            lexiconMessage = _language.ReplaceWordsWithLexicon(message, language.SelectedLanguage);
 
                         var selectedLanguage = language != null ? language.SelectedLanguage.Id : _language.GetDefaultLanguageId();
 

@@ -114,11 +114,13 @@
             state: jumpsuit-female
   - type: Rootable
   - type: ImmunitetInfectionDead # DS14
-  - type: Language # DS14-Languages
+  # DS14-Languages-start
+  - type: Language
     selectedLanguage: GeneralLanguage
     knownLanguages:
     - GeneralLanguage
     - DionaLanguage
+  # DS14-Languages-end
   # - type: FootPrints # Backmen-footsteps
     # leftBarePrint: "footprint-left-bare-diona"
     # rightBarePrint: "footprint-right-bare-diona"

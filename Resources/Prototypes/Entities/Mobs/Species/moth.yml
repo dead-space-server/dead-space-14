@@ -178,11 +178,13 @@
             sprite: Mobs/Species/Moth/displacement.rsi
             state: shoes
   - type: Sanity # DS14
-  - type: Language # DS14-Languages
+  # DS14-Languages-start
+  - type: Language
     selectedLanguage: GeneralLanguage
     knownLanguages:
     - GeneralLanguage
     - MothLanguage
+  # DS14-Languages-end
   # - type: FootPrints # Backmen-footsteps
 
 

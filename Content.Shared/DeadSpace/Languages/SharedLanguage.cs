@@ -7,29 +7,30 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.Languages;
 
-public sealed partial class SelectLanguageActionEvent : InstantActionEvent
-{
-
-}
+public sealed partial class SelectLanguageActionEvent : InstantActionEvent {}
 
 [Serializable, NetSerializable]
 public sealed partial class RequestLanguageMenuEvent : EntityEventArgs
 {
-    public readonly List<ProtoId<LanguagePrototype>> Prototypes = new();
     public int Target { get; }
-    public RequestLanguageMenuEvent(int target, List<ProtoId<LanguagePrototype>> prototypes)
+    public readonly List<ProtoId<LanguagePrototype>> KnownLanguages = new();
+    public readonly List<ProtoId<LanguagePrototype>> CantSpeakLanguages = new();
+
+    public RequestLanguageMenuEvent(int target, List<ProtoId<LanguagePrototype>> knownLanguages, List<ProtoId<LanguagePrototype>> cantSpeakLanguages)
     {
         Target = target;
-        Prototypes = prototypes;
+        KnownLanguages = knownLanguages;
+        CantSpeakLanguages = cantSpeakLanguages;
     }
 }
 
 [Serializable, NetSerializable]
 public sealed partial class SelectLanguageEvent : EntityEventArgs
 {
-    public string PrototypeId { get; }
     public int Target { get; }
-    public SelectLanguageEvent(int target, string prototypeId)
+    public ProtoId<LanguagePrototype> PrototypeId { get; }
+
+    public SelectLanguageEvent(int target, ProtoId<LanguagePrototype> prototypeId)
     {
         Target = target;
         PrototypeId = prototypeId;
