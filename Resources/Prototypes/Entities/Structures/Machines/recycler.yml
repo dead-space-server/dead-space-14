@@ -120,8 +120,8 @@
 - type: entity
   id: RecyclerXenBorgs
   parent: Recycler
-  name: recycler
-  description: A large crushing machine used to recycle small items inefficiently. There are lights on the side.
+  name: Переработчик
+  description: Большая машина похожая на переработчик, но видны явно модифицированные элементы.
   components:
   - type: CollideMaterialReclaimer
   - type: MaterialReclaimer
