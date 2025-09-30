@@ -63,7 +63,7 @@
   icon: { sprite: _DeadSpace/Objects/Weapons/Melee/mantis_blades.rsi, state: icon }
   productEntity: MantisBladesImplanter
   cost:
-    Telecrystal: 18
+    Telecrystal: 20
   categories:
   - UplinkWeaponry
   conditions:

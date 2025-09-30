@@ -42,11 +42,10 @@
     onActivate: false
   - type: MeleeWeapon
     attackRate: 3
-    wideAnimationRotation: -90
     autoAttack: true
     damage:
       types:
-        Slash: 8
+        Slash: 7
         Structural: 20
     animation: WeaponArcClaw
     wideAnimation: WeaponArcStatic
