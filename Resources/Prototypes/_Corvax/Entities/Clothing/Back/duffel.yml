@@ -9,7 +9,10 @@
   - type: Storage
     grid:
     - 0,0,9,5
-
+  - type: PhysicalComposition
+    materialComposition:
+      Cloth: 100
+      
 - type: entity
   parent: ClothingBackpackDuffel
   id: ClothingBackpackDuffelCE

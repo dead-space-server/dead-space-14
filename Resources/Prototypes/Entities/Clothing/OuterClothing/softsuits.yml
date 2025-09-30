@@ -15,6 +15,13 @@
     - MonkeyWearable
     - CorgiWearable
     - WhitelistChameleon
+  # DS14-start
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 100
+      Cloth: 600
+      Plastic: 500
+  # DS14-end
 
 #Syndicate EVA
 - type: entity
@@ -40,6 +47,11 @@
   - type: ClothingSpeedModifier
     walkModifier: 0.9
     sprintModifier: 0.9
+  - type: PhysicalComposition
+    materialComposition:
+      Plasteel: 100
+      Cloth: 600
+      Plastic: 500
   # DS14-end
   - type: Tag
     tags:
@@ -179,3 +191,10 @@
     tags:
     - CorgiWearable
     - WhitelistChameleon
+  # DS14-start
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 100
+      Durathread: 600
+      Plastic: 500
+  # DS14-end

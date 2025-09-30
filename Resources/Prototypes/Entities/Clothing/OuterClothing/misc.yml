@@ -188,7 +188,9 @@
   id: ClothingOuterWizardBase
   components:
   - type: WizardClothes
-
+  - type: PhysicalComposition
+    materialComposition:
+      Cloth: 100
 # Is this wizard wearing a fanny pack???
 - type: entity
   parent: ClothingOuterWizardBase

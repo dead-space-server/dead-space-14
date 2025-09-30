@@ -41,6 +41,11 @@
     - CorgiWearable
     - Hardsuit
     - WhitelistChameleon
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 2000
+      Cloth: 600
+      Plastic: 100
 
 #Engineering Hardsuit
 - type: entity
@@ -78,6 +83,13 @@
     - CorgiWearable
     - Hardsuit
     - WhitelistChameleon
+  # DS14-start
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 1000
+      Cloth: 600
+      Plastic: 100
+  # DS14-end
 
 #Spationaut Hardsuit
 - type: entity
@@ -113,6 +125,12 @@
     - WhitelistChameleon
     - HardsuitSpatio
     - CorgiWearable
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 500
+      Durathread: 300
+      Plasteel: 100
+      Plastic: 100
 
 #Salvage Hardsuit
 - type: entity
@@ -150,7 +168,12 @@
     - CorgiWearable
     - Hardsuit
     - WhitelistChameleon
-
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 1000
+      Durathread: 400
+      Plasteel: 200
+      Plastic: 100
 #Goliath Hardsuit
 - type: entity
   parent: [ClothingOuterHardsuitBase, BaseCargoContraband]
@@ -190,6 +213,12 @@
     - CorgiWearable
     - Hardsuit
     - WhitelistChameleon
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 250
+      Durathread: 300
+      Plasteel: 100
+      Plastic: 100
 
 #Maxim Hardsuit
 - type: entity
@@ -259,6 +288,12 @@
     - CorgiWearable
     - Hardsuit
     - WhitelistChameleon
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 200
+      Durathread: 300
+      Plasteel: 1000
+      Plastic: 100
 
 #Brigmedic Hardsuit
 - type: entity
@@ -289,6 +324,11 @@
   - type: HeldSpeedModifier
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitBrigmedic
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 200
+      Durathread: 300
+      Plastic: 100
 
 #Warden's Hardsuit
 - type: entity
@@ -320,6 +360,12 @@
   - type: HeldSpeedModifier
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitWarden
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 200
+      Durathread: 300
+      Plasteel: 1100
+      Plastic: 100
 
 #Captain's Hardsuit
 - type: entity
@@ -357,6 +403,12 @@
     - CorgiWearable
     - Hardsuit
     - WhitelistChameleon
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 300
+      Durathread: 500
+      Plasteel: 600
+      Plastic: 100
 
 #Chief Engineer's Hardsuit
 - type: entity
@@ -397,6 +449,13 @@
     - CorgiWearable
     - Hardsuit
     - WhitelistChameleon
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 200
+      Durathread: 300
+      Plasteel: 200
+      Plastic: 100
+      Plasma: 3000
 
 #Chief Medical Officer's Hardsuit
 - type: entity
@@ -429,6 +488,11 @@
     - CorgiWearable
     - Hardsuit
     - WhitelistChameleon
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 500
+      Durathread: 300
+      Plastic: 500
 
 #Research Director's Hardsuit
 - type: entity
@@ -475,6 +539,13 @@
     price: 750
   - type: StealTarget
     stealGroup: ClothingOuterHardsuitRd
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 200
+      Durathread: 300
+      Plasteel: 500
+      Plastic: 100
+      Plasma: 2000
 
 #Head of Security's Hardsuit
 - type: entity
@@ -507,6 +578,12 @@
   - type: HeldSpeedModifier
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitSecurityRed
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 600
+      Durathread: 1000
+      Plasteel: 6000
+      Plastic: 100
 
 #Luxury Mining Hardsuit
 - type: entity
@@ -540,6 +617,12 @@
   - type: HeldSpeedModifier
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitLuxury
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 500
+      Durathread: 3000
+      Plasteel: 3000
+      Plastic: 100
 
 #ANTAG HARDSUITS
 #Blood-red Hardsuit
@@ -1121,6 +1204,11 @@
     node: clownHardsuit
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitClown
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 200
+      Cloth: 300
+      Plastic: 500
 
 #Mime Hardsuit
 - type: entity
@@ -1138,6 +1226,11 @@
     node: mimeHardsuit
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitMime
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 200
+      Cloth: 300
+      Plastic: 500
 
 #Santa's Hardsuit
 - type: entity
@@ -1168,3 +1261,8 @@
   - type: HeldSpeedModifier
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitSanta
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 200
+      Durathread: 8000
+      Plastic: 500

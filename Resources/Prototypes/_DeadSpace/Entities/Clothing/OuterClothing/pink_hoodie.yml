@@ -9,3 +9,6 @@
     sprite:  _DeadSpace/Clothing/OuterClothing/Misc/pink_hoodie.rsi
   - type: Clothing
     sprite:  _DeadSpace/Clothing/OuterClothing/Misc/pink_hoodie.rsi
+  - type: PhysicalComposition
+    materialComposition:
+      Cloth: 500

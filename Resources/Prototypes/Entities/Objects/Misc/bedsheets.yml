@@ -24,6 +24,9 @@
   - type: Tag
     tags:
     - Bedsheet
+  - type: PhysicalComposition
+    materialComposition:
+    Cloth: 100
 
 - type: entity
   id: BedsheetBlack
