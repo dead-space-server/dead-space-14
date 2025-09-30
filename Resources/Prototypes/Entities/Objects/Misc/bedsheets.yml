@@ -26,7 +26,7 @@
     - Bedsheet
   - type: PhysicalComposition
     materialComposition:
-    Cloth: 100
+      Cloth: 100
 
 - type: entity
   id: BedsheetBlack

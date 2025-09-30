@@ -793,8 +793,8 @@
       HeadTop : HEAD
       HeadSide : HEAD
   - type: PhysicalComposition
-  materialComposition:
-    Cloth: 100
+    materialComposition:
+      Cloth: 100
 - type: entity
   abstract: true
   parent: [ ClothingHeadBase, BaseMagicalContraband ]

@@ -203,8 +203,8 @@
   - type: AddAccentClothing
     accent: MobsterAccent
   - type: PhysicalComposition
-  materialComposition:
-    Steel: 100
+    materialComposition:
+      Steel: 100
 
 - type: entity
   parent: [ ClothingHeadBase, BaseSyndicateContraband ]
