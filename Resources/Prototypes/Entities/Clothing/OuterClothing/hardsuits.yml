@@ -584,6 +584,8 @@
       Durathread: 1000
       Plasteel: 6000
       Plastic: 100
+  - type: StaticPrice
+    price: 3460
 
 #Luxury Mining Hardsuit
 - type: entity
