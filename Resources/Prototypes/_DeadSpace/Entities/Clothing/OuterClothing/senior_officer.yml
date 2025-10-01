@@ -15,3 +15,5 @@
     sprintModifier: 0.8
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitSeniorOfficer
+  - type: StaticPrice
+    price: 655

@@ -34,7 +34,7 @@
     price: 0
   - type: PhysicalComposition
     materialComposition:
-      Steel: 100
+      Steel: 25
 
 - type: entity
   id: BaseMagazinePistolHighCapacity
@@ -72,7 +72,7 @@
     price: 0
   - type: PhysicalComposition
     materialComposition:
-      Steel: 100
+      Steel: 25
 
 - type: entity
   id: BaseMagazinePistolSubMachineGun  # Yeah it's weird but it's pistol caliber
@@ -110,7 +110,7 @@
     price: 0
   - type: PhysicalComposition
     materialComposition:
-      Steel: 100
+      Steel: 25
 
 - type: entity
   id: MagazinePistolSubMachineGunTopMounted

@@ -179,7 +179,6 @@
       materialComposition:
         Steel: 100
         Glass: 100
-        Plastic: 100
 
 
 - type: entity

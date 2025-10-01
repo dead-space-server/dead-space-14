@@ -620,7 +620,7 @@
   - type: PhysicalComposition
     materialComposition:
       Steel: 500
-      Durathread: 3000
+      Durathread: 300
       Plasteel: 3000
       Plastic: 100
 
