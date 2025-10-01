@@ -344,6 +344,8 @@
     materialComposition:
       Cloth: 500
       Plastic: 200
+  - type: StaticPrice
+    price: 0
 
 # Budget Insulated Gloves
 - type: entity
@@ -385,3 +387,5 @@
     materialComposition:
       Cloth: 400
       Plastic: 200
+  - type: StaticPrice
+    price: 0

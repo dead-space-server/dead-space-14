@@ -26,6 +26,8 @@
   - type: PhysicalComposition
     materialComposition:
       Cloth: 100
+  - type: StaticPrice
+    price: 0
 
 # Sirena
 - type: entity

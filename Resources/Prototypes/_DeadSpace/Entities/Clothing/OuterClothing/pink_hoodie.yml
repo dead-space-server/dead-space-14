@@ -12,3 +12,5 @@
   - type: PhysicalComposition
     materialComposition:
       Cloth: 500
+  - type: StaticPrice
+    price: 0

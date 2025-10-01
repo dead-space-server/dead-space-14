@@ -112,6 +112,8 @@
     materialComposition:
       Durathread: 500
       Plasteel: 200
+  - type: StaticPrice
+    price: 0
 
 - type: entity
   parent: ClothingHandsBase
@@ -350,6 +352,8 @@
   - type: PhysicalComposition
     materialComposition:
       Cloth: 200
+  - type: StaticPrice
+    price: 0
 
 - type: entity
   parent: ClothingHandsButcherable
@@ -449,6 +453,8 @@
     materialComposition:
       Cloth: 1000
       Durathread: 300
+  - type: StaticPrice
+    price: 0
 
 # TODO Make lubed items not slip in hands
 - type: entity

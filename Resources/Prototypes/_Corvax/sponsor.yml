@@ -13,6 +13,8 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 500
+    - type: StaticPrice
+      price: 0
 - type: entity
   parent: ClothingMaskGas
   id: ClothingMaskGasAtmosian
@@ -27,6 +29,8 @@
     - type: PhysicalComposition
       materialComposition:
         Plastic: 200
+    - type: StaticPrice
+      price: 0
 
 - type: entity
   parent: ClothingNeckBase
@@ -40,6 +44,8 @@
     - type: PhysicalComposition
       materialComposition:
         Plastic: 200
+    - type: StaticPrice
+      price: 0
 
 # Fezory
 - type: entity
@@ -57,6 +63,8 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
+    - type: StaticPrice
+      price: 0
 
 - type: entity
   parent: ClothingNeckBase
@@ -70,6 +78,8 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
+    - type: StaticPrice
+      price: 0
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitSkeleton
@@ -84,6 +94,8 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 500
+    - type: StaticPrice
+      price: 0
 
 # NEKISH
 - type: entity
@@ -98,6 +110,8 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 500
+    - type: StaticPrice
+      price: 0
 
 - type: entity
   parent: ClothingBeltStorageBase
@@ -137,6 +151,8 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 500
+    - type: StaticPrice
+      price: 0
 
 - type: entity
   parent: ClothingHandsBase
@@ -152,6 +168,8 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
+    - type: StaticPrice
+      price: 0
 
 - type: entity
   parent: ClothingHeadBase
@@ -167,6 +185,8 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
+    - type: StaticPrice
+      price: 0
 
 - type: entity
   parent: ClothingOuterCoatHoSTrench
@@ -182,7 +202,9 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
-
+    - type: StaticPrice
+      price: 0
+      
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitHoSOld
@@ -197,6 +219,8 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 200
+    - type: StaticPrice
+      price: 0
 # ken41k
 - type: entity
   parent: ClothingHandsBase
@@ -212,6 +236,8 @@
     - type: PhysicalComposition
       materialComposition:
         Plastic: 200
+    - type: StaticPrice
+      price: 0
 # jesuisunfou
 - type: entity
   parent: ClothingHandsGlovesCombat
@@ -227,6 +253,8 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
+    - type: StaticPrice
+      price: 0
 
 - type: entity
   parent: ClothingHeadBase
@@ -242,6 +270,8 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 200
+    - type: StaticPrice
+      price: 0
 
 - type: entity
   parent: ClothingOuterStorageBase
@@ -257,6 +287,8 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 500
+    - type: StaticPrice
+      price: 0
 
 - type: entity
   parent: ClothingUniformBase
@@ -272,6 +304,8 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 200
+    - type: StaticPrice
+      price: 0
 
 - type: entity
   parent: ClothingShoesBaseButcherable
@@ -287,3 +321,5 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 200
+    - type: StaticPrice
+      price: 0

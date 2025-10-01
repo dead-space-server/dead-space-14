@@ -127,7 +127,9 @@
     materialComposition:
       Glass: 500
       Plastic: 500
-
+  - type: StaticPrice
+    price: 0
+    
 - type: entity
   parent: BasePDA
   id: BaseWidePDA
