@@ -202,8 +202,6 @@
     price: 3000
   - type: AddAccentClothing
     accent: MobsterAccent
-  - type: StaticPrice
-    price: 0
   - type: PhysicalComposition
     materialComposition:
       Steel: 100
