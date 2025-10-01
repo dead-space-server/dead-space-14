@@ -43,7 +43,7 @@
     - WhitelistChameleon
   - type: PhysicalComposition
     materialComposition:
-      Steel: 2000
+      Steel: 1000
       Cloth: 600
       Plastic: 100
 
@@ -292,7 +292,7 @@
     materialComposition:
       Steel: 200
       Durathread: 300
-      Plasteel: 1000
+      Plasteel: 500
       Plastic: 100
 
 #Brigmedic Hardsuit
@@ -364,7 +364,7 @@
     materialComposition:
       Steel: 200
       Durathread: 300
-      Plasteel: 1100
+      Plasteel: 550
       Plastic: 100
 
 #Captain's Hardsuit
@@ -455,7 +455,7 @@
       Durathread: 300
       Plasteel: 200
       Plastic: 100
-      Plasma: 3000
+      Plasma: 1500
 
 #Chief Medical Officer's Hardsuit
 - type: entity
@@ -623,6 +623,8 @@
       Durathread: 300
       Plasteel: 3000
       Plastic: 100
+  - type: StaticPrice
+    price: 1700
 
 #ANTAG HARDSUITS
 #Blood-red Hardsuit
@@ -1266,3 +1268,5 @@
       Steel: 200
       Durathread: 8000
       Plastic: 500
+  - type: StaticPrice
+    price: 2930
