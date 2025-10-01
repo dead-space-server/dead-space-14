@@ -1,6 +1,6 @@
 - type: entity
   id: WeaponEnergyCrossbow
-  name: мини энергетический арбалет
+  name: энергетический мини-арбалет
   description: Маленькое, скрытное, смертоносное устройство.
   parent: BaseItem
   components:
