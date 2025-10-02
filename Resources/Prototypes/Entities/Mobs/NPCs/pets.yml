@@ -596,6 +596,9 @@
   - type: GhostTakeoverAvailable
   - type: TTS
     voice: Chen
+  - type: Vocal
+    sounds:
+      Unsexed: Pig
 
 - type: entity
   name: Renault

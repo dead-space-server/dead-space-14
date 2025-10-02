@@ -653,3 +653,10 @@
       collection: MaleGasp
     DefaultDeathgasp:
       collection: WawaDeath
+
+- type: emoteSounds
+  id: Pig
+  sound:
+    path: /Audio/Animals/pig_oink.ogg
+    params:
+      variation: 0.125

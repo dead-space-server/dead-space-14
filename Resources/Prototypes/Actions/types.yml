@@ -456,3 +456,15 @@
     itemIconStyle: BigAction
   - type: InstantAction
     event: !type:ChameleonControllerOpenMenuEvent
+
+- type: entity
+  parent: BaseAction
+  id: ActionScreamPig
+  name: Pig Scream
+  components:
+  - type: Action
+    useDelay: 30
+    icon: Interface/Actions/scream.png
+    checkCanInteract: false
+  - type: InstantAction
+    event: !type:ScreamActionEvent
