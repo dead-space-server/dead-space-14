@@ -4,7 +4,7 @@ meta:
   engineVersion: 266.0.0
   forkId: ""
   forkVersion: ""
-  time: 10/04/2025 17:13:15
+  time: 10/04/2025 17:38:07
   entityCount: 26179
 maps:
 - 1
@@ -16004,7 +16004,7 @@ entities:
       pos: 1.5,61.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -1146942.2
+      secondsUntilStateChange: -1148425.2
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -16033,7 +16033,7 @@ entities:
       pos: -27.5,77.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -105789.7
+      secondsUntilStateChange: -107272.695
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -16057,7 +16057,7 @@ entities:
       pos: -29.5,75.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -105787.54
+      secondsUntilStateChange: -107270.53
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -16068,7 +16068,7 @@ entities:
       pos: -31.5,77.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -105787.07
+      secondsUntilStateChange: -107270.06
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -16135,7 +16135,7 @@ entities:
       pos: -31.5,30.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -615105.1
+      secondsUntilStateChange: -616588.1
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -16344,7 +16344,7 @@ entities:
       pos: -55.5,23.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -597662.75
+      secondsUntilStateChange: -599145.75
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -16435,7 +16435,7 @@ entities:
       pos: 16.5,-3.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -750702.7
+      secondsUntilStateChange: -752185.7
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -17125,7 +17125,7 @@ entities:
       pos: -19.5,31.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -1391370.9
+      secondsUntilStateChange: -1392853.9
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -17199,7 +17199,7 @@ entities:
       pos: 9.5,68.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -1176196.2
+      secondsUntilStateChange: -1177679.2
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -17538,7 +17538,7 @@ entities:
       pos: -76.5,51.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -821919.2
+      secondsUntilStateChange: -823402.2
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -82100,7 +82100,7 @@ entities:
       - 325
       - 295
     - type: Door
-      secondsUntilStateChange: -948690.25
+      secondsUntilStateChange: -950173.25
       state: Closing
   - uid: 11846
     components:
@@ -121062,7 +121062,7 @@ entities:
       pos: -66.5,14.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -148817.61
+      secondsUntilStateChange: -150300.6
       state: Opening
 - proto: InflatableDoorStack1
   entities:
@@ -121475,24 +121475,18 @@ entities:
       parent: 2
 - proto: JetpackBlue
   entities:
-  - uid: 17152
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -60.377365,-3.3166163
-      parent: 2
-- proto: JetpackBlueFilled
-  entities:
   - uid: 17153
     components:
     - type: Transform
-      pos: 5.3089895,-5.4141407
+      pos: 5.6492367,-5.3320093
       parent: 2
   - uid: 17154
     components:
     - type: Transform
-      pos: 5.7125998,-5.3040648
+      pos: 5.2898617,-5.4257593
       parent: 2
+- proto: JetpackBlueFilled
+  entities:
   - uid: 17155
     components:
     - type: Transform
@@ -121549,24 +121543,24 @@ entities:
     - type: Transform
       pos: -41.649376,60.558712
       parent: 2
-- proto: JetpackSecurityFilled
+- proto: JetpackSecurity
   entities:
   - uid: 17159
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -2.299782,43.989754
+      pos: -6.7148647,44.073708
       parent: 2
   - uid: 17160
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -6.647759,43.78795
+      rot: 1.5707963267948966 rad
+      pos: -2.3867397,43.979958
       parent: 2
   - uid: 17161
     components:
     - type: Transform
-      pos: -6.482646,44.026447
+      rot: -1.5707963267948966 rad
+      pos: -6.3867397,43.761208
       parent: 2
 - proto: Joint
   entities:
@@ -145243,7 +145237,7 @@ entities:
       pos: 26.5,12.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -26644.576
+      secondsUntilStateChange: -28127.566
       state: Opening
   - uid: 20886
     components:
@@ -146910,6 +146904,14 @@ entities:
     components:
     - type: Transform
       pos: -49.665962,71.615074
+      parent: 2
+- proto: ScrapJetpack
+  entities:
+  - uid: 17152
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -60.19332,-3.2591674
       parent: 2
 - proto: ScrapMedkit
   entities:
@@ -173517,7 +173519,7 @@ entities:
       lastSignals:
         DoorStatus: True
     - type: Door
-      secondsUntilStateChange: -1317647.4
+      secondsUntilStateChange: -1319130.4
       state: Opening
     - type: Airlock
       autoClose: False
