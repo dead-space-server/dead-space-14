@@ -1,0 +1,8 @@
+- type: entity
+  id: AirAlarmTaipan
+  parent: AirAlarm
+  name: воздушная сигнализация
+  description: Воздушная сигнализация. Сигнализация... воздуха?
+  components:
+  - type: AccessReader
+    access: [["TaipanAtmospherics"]]

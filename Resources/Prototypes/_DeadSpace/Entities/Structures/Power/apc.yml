@@ -1,0 +1,10 @@
+- type: entity
+  parent: BaseAPC
+  id: APCTaipan
+  suffix: Базовый, 50кДж, Тайпан
+  components:
+  - type: Battery
+    maxCharge: 50000
+    startingCharge: 50000
+  - type: AccessReader
+    access: [["TaipanEngineering"]]

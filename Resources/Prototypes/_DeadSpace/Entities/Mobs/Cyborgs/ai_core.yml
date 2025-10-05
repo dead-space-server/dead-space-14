@@ -146,16 +146,16 @@
       path: /Audio/Ambience/Objects/periodic_beep.ogg
 
 # The job-ready version of an AI spawn.
-- type: entity
-  id: PlayerTaipanAi
-  parent: PlayerTaipanAiEmpty
-  name: ядро ИИ Синдиката
-  description: Последние достижения в области искусственного интеллекта.
-  suffix: Тайпан, Спавн должности
-  components:
-  - type: ContainerSpawnPoint
-    containerId: station_ai_mind_slot
-    job: TaipanAi
+#- type: entity
+#  id: PlayerTaipanAi
+#  parent: PlayerTaipanAiEmpty
+#  name: ядро ИИ Синдиката
+#  description: Последние достижения в области искусственного интеллекта.
+#  suffix: Тайпан, Спавн должности
+#  components:
+#  - type: ContainerSpawnPoint
+#    containerId: station_ai_mind_slot
+#    job: TaipanAi
 
 # The actual brain inside the core
 - type: entity
