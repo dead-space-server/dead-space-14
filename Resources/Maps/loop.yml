@@ -21630,17 +21630,6 @@ entities:
       rot: 12.566370614359172 rad
       pos: -8.494614,75.605286
       parent: 2
-    - type: ContainerContainer
-      containers:
-        cell_slot: !type:ContainerSlot
-          showEnts: False
-          occludes: True
-          ent: null
-        actions: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - invalid
 - proto: BalloonNT
   entities:
   - uid: 1276
@@ -75586,14 +75575,6 @@ entities:
     - type: Transform
       pos: 34.867767,31.545778
       parent: 2
-    - type: GasTank
-      toggleActionEntity: invalid
-    - type: ActionsContainer
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          ents:
-          - invalid
   - uid: 10902
     components:
     - type: Transform
@@ -75607,27 +75588,11 @@ entities:
     - type: Transform
       pos: 12.11149,69.26998
       parent: 2
-    - type: GasTank
-      toggleActionEntity: invalid
-    - type: ActionsContainer
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          ents:
-          - invalid
   - uid: 10904
     components:
     - type: Transform
       pos: -41.466125,36.10582
       parent: 2
-    - type: GasTank
-      toggleActionEntity: invalid
-    - type: ActionsContainer
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          ents:
-          - invalid
 - proto: DoubleEmergencyOxygenTank
   entities:
   - uid: 10905
@@ -75635,14 +75600,6 @@ entities:
     - type: Transform
       pos: 16.65105,59.11516
       parent: 2
-    - type: GasTank
-      toggleActionEntity: invalid
-    - type: ActionsContainer
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          ents:
-          - invalid
 - proto: DoubleEmergencyOxygenTankFilled
   entities:
   - uid: 10906
@@ -75650,14 +75607,6 @@ entities:
     - type: Transform
       pos: -77.80842,25.357967
       parent: 2
-    - type: GasTank
-      toggleActionEntity: invalid
-    - type: ActionsContainer
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          ents:
-          - invalid
   - uid: 10907
     components:
     - type: Transform
@@ -78563,14 +78512,6 @@ entities:
     - type: Transform
       pos: 33.363396,21.357729
       parent: 2
-    - type: GasTank
-      toggleActionEntity: invalid
-    - type: ActionsContainer
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          ents:
-          - invalid
   - uid: 11382
     components:
     - type: Transform
@@ -78619,14 +78560,6 @@ entities:
     - type: Transform
       pos: -23.77707,61.143326
       parent: 2
-    - type: GasTank
-      toggleActionEntity: invalid
-    - type: ActionsContainer
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          ents:
-          - invalid
 - proto: EmergencyRollerBed
   entities:
   - uid: 11390
@@ -127698,14 +127631,6 @@ entities:
     - type: Transform
       pos: 7.8644266,19.30108
       parent: 2
-    - type: GasTank
-      toggleActionEntity: invalid
-    - type: ActionsContainer
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          ents:
-          - invalid
 - proto: PackageDelivery
   entities:
   - uid: 18012
