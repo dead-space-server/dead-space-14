@@ -1048,3 +1048,14 @@ ClothingUnderwearWomenSocksSecurityOfficer: null
 ClothingUnderwearWomenSocksWarden: null
 ADTDoubleBedTop: null
 ADTDoubleBedBottom: null
+
+# 2025-09-26 - DS14
+ClothingNeckSith: ClothingNeckRenegade
+ClothingHandsGlovesSith: ClothingHandsGlovesRenegade
+ClothingUniformJumpsuitSith: ClothingUniformJumpsuitRenegade
+ClothingShoesBootsSith: ClothingShoesBootsRenegade
+ClothingHeadHelmetSith: ClothingHeadHelmetRenegade
+ClothingHeadHatHoodSith: ClothingHeadHatHoodRenegade
+ClothingMaskSith: ClothingMaskRenegade
+ClothingOuterHardsuitSith: ClothingOuterHardsuitRenegade
+EnergySwordSith: EnergySwordRenegade
