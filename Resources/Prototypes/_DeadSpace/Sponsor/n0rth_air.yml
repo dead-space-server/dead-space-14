@@ -137,8 +137,14 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/N0rthAir/helmet.rsi
+    layers:
+    - state: icon
+    - state: icon-flash
+      visible: false
+      map: [ "light" ]
   - type: Clothing
     sprite: _DeadSpace/Sponsor/N0rthAir/helmet.rsi
+    equippedPrefix: off
   - type: PointLight
     color: "#f5da41"
     radius: 5
