@@ -81,10 +81,17 @@ public sealed partial class CargoOrderConsoleComponent : Component
     public List<ProtoId<CargoMarketPrototype>> AllowedGroups = new()
     {
         "market",
+        "taipan_market",
         "SalvageJobReward2",
         "SalvageJobReward3",
         "SalvageJobRewardMAX",
     };
+
+    /// <summary>
+    /// DS14: Taipan cargo order console
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool IsTaipan;
 
     /// <summary>
     /// Access needed to toggle the limit on this console.

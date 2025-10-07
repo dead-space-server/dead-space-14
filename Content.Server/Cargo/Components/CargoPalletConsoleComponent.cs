@@ -6,4 +6,11 @@ namespace Content.Server.Cargo.Components;
 
 [RegisterComponent]
 [Access(typeof(CargoSystem))]
-public sealed partial class CargoPalletConsoleComponent : Component;
+public sealed partial class CargoPalletConsoleComponent : Component
+{
+    /// <summary>
+    /// DS14
+    /// </summary>
+    [DataField]
+    public bool IsTaipan;
+}

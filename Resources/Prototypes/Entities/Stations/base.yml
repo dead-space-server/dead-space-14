@@ -27,12 +27,6 @@
     primaryAccount: Taipan
   - type: StationCargoOrderDatabase
     orders:
-      Cargo: [ ]
-      Engineering: [ ]
-      Medical: [ ]
-      Science: [ ]
-      Security: [ ]
-      Service: [ ]
       Taipan: [ ]
   - type: StationCargoBountyDatabase
     isTaipan: true

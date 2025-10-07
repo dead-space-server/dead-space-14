@@ -136,9 +136,12 @@
     - map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
       state: generic_panel_open
   - type: CargoOrderConsole
+    isTaipan: true
+    removeLimitAccess: [ "TaipanTechnicalOperationsSupervisor" ]
     announcementChannel: Taipan
-#    allowedGroups:
-#    - syndicate_market
+    account: Taipan
+    allowedGroups:
+    - taipan_market
   - type: ActiveRadio
     channels:
     - Taipan
@@ -222,9 +225,11 @@
       path: /Audio/_DeadSpace/Announcements/announce_taipan.ogg
       params:
         volume: -2
+    canShuttle: False
 #    canCallERT: False
 #    canCallShuttle: False
     color: "#8B0000"
+#    global: false
   - type: DeviceNetwork
     transmitFrequencyId: ShuttleTimer
   - type: ActivatableUI
@@ -309,7 +314,6 @@
     - TaipanScience
     - TaipanService
     - TaipanTechnicalOperationsSupervisor
-    - TaipanVault
     - TaipanExternal
     privilegedIdSlot:
       name: id-card-console-privileged-id
@@ -407,7 +411,7 @@
     color: "#8B0000"
 
 - type: entity
-  parent: BaseComputerAiAccess
+  parent: ComputerPalletConsole
   id: ComputerTaipanPalletConsole
   name: консоль продажи грузов
   suffix: Тайпан
@@ -427,6 +431,7 @@
     - map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
       state: generic_panel_open
   - type: CargoPalletConsole
+    isTaipan: true
   - type: ActivatableUI
     key: enum.CargoPalletConsoleUiKey.Sale
   - type: UserInterface
