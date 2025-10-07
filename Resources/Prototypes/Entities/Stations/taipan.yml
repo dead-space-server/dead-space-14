@@ -7,7 +7,7 @@
   # - BaseStationJobsSpawning
   # - BaseStationRecords
   # - BaseStationShuttles
-  - BaseStationAlertLevels
+  - BaseTaipanStationAlertLevels
   - BaseStationMagnet
   - BaseStationExpeditions
   - BaseStationSiliconTaipanStatic

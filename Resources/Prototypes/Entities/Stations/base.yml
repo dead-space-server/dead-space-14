@@ -146,6 +146,13 @@
       alertLevelPrototype: stationAlerts
 
 - type: entity
+  id: BaseTaipanStationAlertLevels
+  abstract: true
+  components:
+    - type: AlertLevel
+      alertLevelPrototype: taipanStationAlerts
+
+- type: entity
   id: BaseStationERTCall # DS14
   abstract: true
   components:
