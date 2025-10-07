@@ -482,14 +482,24 @@ namespace Content.Server.Cargo.Systems
     {
         return station.Comp.TaipanOrders.ToList();
     }
-// DS14-end
-            var ourOrders = station.Comp.Orders[console.Comp.Account];
+
+    if (!station.Comp.Orders.TryGetValue(console.Comp.Account, out var ourOrders))
+    {
+        ourOrders = new List<CargoOrderData>();
+        station.Comp.Orders[console.Comp.Account] = ourOrders;
+    }
 
             if (console.Comp.Account == bank.PrimaryAccount)
                 return ourOrders;
 
-            var otherOrders = station.Comp.Orders[bank.PrimaryAccount].Where(order => order.Account == console.Comp.Account);
+            if (!station.Comp.Orders.TryGetValue(bank.PrimaryAccount, out var primaryOrders))
+            {
+                primaryOrders = new List<CargoOrderData>();
+                station.Comp.Orders[bank.PrimaryAccount] = primaryOrders;
+            }
 
+            var otherOrders = primaryOrders.Where(order => order.Account == console.Comp.Account);
+// DS14-end
             return ourOrders.Concat(otherOrders).ToList();
         }
 
