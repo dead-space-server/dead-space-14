@@ -43,7 +43,7 @@
 - type: entity
   id: LockerTaipanBaseSecure
   parent: LockerBaseSecure
-  name: шкаф
+  name: защищённый шкаф
   description: Стандартное хранилище Синдиката.
   abstract: true
   suffix: Тайпан
@@ -68,6 +68,45 @@
       offset: "-0.065,0"
       map: ["enum.PaperLabelVisuals.Layer"]
   - type: Appearance
+
+- type: entity
+  id: ClosetTaipanSteel
+  parent: ClosetSteelBase
+  name: шкаф
+  description: Стандартное хранилище Синдиката.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: _DeadSpace/Structures/Storage/closet.rsi
+    layers:
+    - state: secure
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: generic_door
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: paper
+      visible: false
+      sprite: Structures/Storage/closet_labels.rsi
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Appearance
+  - type: EntityStorageVisuals
+    stateBaseClosed: secure
+    stateDoorOpen: door_open
+    stateDoorClosed: generic_door
+
+- type: entity
+  id: LockerTaipanSteel
+  parent: LockerTaipanBaseSecure
+  name: защищённый шкаф
+  description: Стандартное хранилище Синдиката.
+  components:
+  - type: Appearance
+  - type: EntityStorageVisuals
+    stateBaseClosed: secure
+    stateDoorOpen: door_open
+    stateDoorClosed: secure_door
 
 # Booze
 - type: entity
@@ -247,7 +286,7 @@
     stateDoorOpen: door_open
     stateDoorClosed: science_door
   - type: AccessReader
-    access: [["TaipanScience"]]
+    access: [["TaipanResearch"]]
 
 # Communications Officer
 - type: entity

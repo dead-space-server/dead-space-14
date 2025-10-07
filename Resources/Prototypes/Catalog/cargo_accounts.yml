@@ -45,11 +45,3 @@
   color: "#539c00"
   radioChannel: Service
   acquisitionSlip: PaperAcquisitionSlipService
-
-- type: cargoAccount
-  id: Taipan
-  name: cargo-account-security-name
-  code: cargo-account-security-code
-  color: "#ff4242"
-  radioChannel: Taipan
-  acquisitionSlip: PaperAcquisitionSlipSecurity

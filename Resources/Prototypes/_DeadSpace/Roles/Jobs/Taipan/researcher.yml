@@ -17,7 +17,7 @@
     time: 18000 # 5 hours
   access:
   - TaipanMaint
-  - TaipanScience
+  - TaipanResearch
   special:
   - !type:AddImplantSpecial
     implants: [ DeathRattleImplantTaipan ]

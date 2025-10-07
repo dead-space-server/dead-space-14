@@ -96,11 +96,11 @@
 
 - type: entity
   parent: DoorElectronicsTaipan
-  id: DoorElectronicsTaipanScience
+  id: DoorElectronicsTaipanResearch
   suffix: Тайпан, Научный, Закрыт
   components:
   - type: AccessReader
-    access: [["TaipanScience"]]
+    access: [["TaipanResearch"]]
 
 - type: entity
   parent: DoorElectronicsTaipan
@@ -117,14 +117,6 @@
   components:
   - type: AccessReader
     access: [["TaipanTechnicalOperationsSupervisor"]]
-
-- type: entity
-  parent: DoorElectronicsTaipan
-  id: DoorElectronicsTaipanVault
-  suffix: Тайпан, Хранилище, Закрыт
-  components:
-  - type: AccessReader
-    access: [["TaipanVault"]]
 
 - type: entity
   parent: DoorElectronicsTaipan

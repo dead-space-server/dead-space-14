@@ -3,7 +3,8 @@
   cost: 2
   defaultStyle: basic
   styles:
-    basic: ClosetSteelBase
+    basic: ClosetTaipanSteel
+    secure: LockerTaipanSteel
     botanist: LockerTaipanBotanist
     chef: LockerTaipanChef
     electrical: LockerElectricalSupplies

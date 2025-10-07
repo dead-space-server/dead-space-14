@@ -77,6 +77,7 @@
   - type: Access
     tags:
     - TaipanService
+    - TaipanMaint
 
 - type: entity
   parent: IDCardTaipan
@@ -96,7 +97,7 @@
     - TaipanMaint
     - TaipanMedical
     - TaipanResearchDirector
-    - TaipanScience
+    - TaipanResearch
     - TaipanService
 
 - type: entity
@@ -125,6 +126,7 @@
   - type: Access
     tags:
     - TaipanMedical
+    - TaipanMaint
 
 - type: entity
   parent: IDCardTaipan
@@ -147,10 +149,9 @@
     - TaipanMedical
     - TaipanProtection
     - TaipanResearchDirector
-    - TaipanScience
+    - TaipanResearch
     - TaipanService
     - TaipanTechnicalOperationsSupervisor
-    - TaipanVault
     - SyndicateAgent
 
 - type: entity
@@ -179,6 +180,7 @@
   - type: Access
     tags:
     - TaipanService
+    - TaipanMaint
 
 - type: entity
   parent: IDCardTaipan
@@ -192,6 +194,7 @@
   - type: Access
     tags:
     - TaipanProtection
+    - TaipanMaint
 
 - type: entity
   parent: IDCardTaipan
@@ -225,7 +228,7 @@
     - TaipanMaint
     - TaipanMedical
     - TaipanResearchDirector
-    - TaipanScience
+    - TaipanResearch
     - TaipanService
 
 - type: entity
@@ -240,7 +243,7 @@
   - type: Access
     tags:
     - TaipanMaint
-    - TaipanScience
+    - TaipanResearch
 
 - type: entity
   parent: Emag

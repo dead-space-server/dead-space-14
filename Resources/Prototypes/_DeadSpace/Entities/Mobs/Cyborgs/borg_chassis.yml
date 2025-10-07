@@ -17,7 +17,7 @@
     groups:
     - TaipanAccess
   - type: AccessReader
-    access: [["TaipanCommand"], ["TaipanScience"]]
+    access: [["TaipanCommand"], ["TaipanResearch"]]
   - type: ShowSyndicateIcons
   - type: SiliconLawProvider
     laws: TaipanStatic

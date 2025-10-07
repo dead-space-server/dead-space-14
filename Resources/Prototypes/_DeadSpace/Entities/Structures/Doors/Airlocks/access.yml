@@ -77,7 +77,7 @@
   components:
   - type: ContainerFill
     containers:
-      board: [ DoorElectronicsTaipanScience ]
+      board: [ DoorElectronicsTaipanResearch ]
 
 - type: entity
   parent: AirlockTaipanVirology
@@ -203,7 +203,7 @@
   components:
   - type: ContainerFill
     containers:
-      board: [ DoorElectronicsTaipanScience ]
+      board: [ DoorElectronicsTaipanResearch ]
 
 - type: entity
   parent: AirlockTaipanGlassCommand
@@ -248,7 +248,7 @@
   components:
   - type: ContainerFill
     containers:
-      board: [ DoorElectronicsTaipanVault ]
+      board: [ DoorElectronicsTaipanCommunicationsOfficer ]
 
 - type: entity
   parent: AirlockHatchTaipan

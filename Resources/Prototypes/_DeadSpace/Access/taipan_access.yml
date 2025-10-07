@@ -11,10 +11,9 @@
   - TaipanMedical
   - TaipanProtection
   - TaipanResearchDirector
-  - TaipanScience
+  - TaipanResearch
   - TaipanService
   - TaipanTechnicalOperationsSupervisor
-  - TaipanVault
   - TaipanExternal
 
 - type: accessLevel
@@ -58,7 +57,7 @@
   name: Директор исследований
 
 - type: accessLevel
-  id: TaipanScience
+  id: TaipanResearch
   name: Научный
 
 - type: accessLevel
@@ -68,10 +67,6 @@
 - type: accessLevel
   id: TaipanTechnicalOperationsSupervisor
   name: Руководитель техобеспечения
-
-- type: accessLevel
-  id: TaipanVault
-  name: Хранилище
 
 - type: accessLevel
   id: TaipanExternal
