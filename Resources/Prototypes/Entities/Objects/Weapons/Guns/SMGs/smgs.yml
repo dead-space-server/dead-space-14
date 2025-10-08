@@ -100,7 +100,7 @@
     sprite: Objects/Weapons/Guns/SMGs/c20r.rsi
   - type: Gun
     minAngle: 2
-    maxAngle: 16 
+    maxAngle: 16
     shotsPerBurst: 5
     availableModes:
     - Burst
@@ -177,13 +177,13 @@
     - type: Wieldable
       unwieldOnUse: false
     - type: GunWieldBonus
-      minAngle: -19
-      maxAngle: -16
+      minAngle: -23 # DS14-value
+      maxAngle: -21 # DS14-value
     - type: Gun
       minAngle: 21
       maxAngle: 32
-      fireRate: 6
-      burstFireRate: 18
+      fireRate: 7.5 # DS14-value
+      burstFireRate: 20 # DS14-value
       soundGunshot:
         path: /Audio/Weapons/Guns/Gunshots/atreides.ogg
       selectedMode: Burst

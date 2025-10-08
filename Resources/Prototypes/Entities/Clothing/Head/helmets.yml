@@ -121,6 +121,7 @@
         Blunt: 0.8
         Slash: 0.8
         Piercing: 0.95
+        Heat: 0.95 # DS14-value
   - type: HideLayerClothing
     layers:
       Hair: HEAD
