@@ -10,7 +10,6 @@ using Robust.Client.UserInterface.XAML;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Timing;
 using System.Globalization;
-using Robust.Shared.Toolshed.TypeParsers;
 
 namespace Content.Client.PDA
 {
