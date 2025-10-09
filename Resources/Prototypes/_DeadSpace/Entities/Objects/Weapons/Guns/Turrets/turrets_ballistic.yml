@@ -1,7 +1,9 @@
 - type: entity
   parent: BaseWeaponBallisticTurret
   id: WeaponTurretCentralCommand
-  suffix: Central Command
+  name: баллистическая турель
+  description: Автоматическая турель с баллистическим пулемётом.
+  suffix: Центральное Командование
   components:
   - type: NpcFactionMember
     factions:
