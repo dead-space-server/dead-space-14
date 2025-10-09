@@ -208,7 +208,7 @@
   - type: Item
     storedOffset: 0,-2
   - type: Gun
-    fireRate: 1
+    fireRate: 5
     availableModes:
     - SemiAuto
     - Burst
