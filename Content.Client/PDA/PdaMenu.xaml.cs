@@ -37,7 +37,7 @@ namespace Content.Client.PDA
 
 
         private int _currentView;
-        private PdaUpdateState? _pdaUpdateState;
+        private PdaUpdateState? _pdaUpdateState; // DS14
 
         public event Action<EntityUid>? OnProgramItemPressed;
         public event Action<EntityUid>? OnUninstallButtonPressed;
