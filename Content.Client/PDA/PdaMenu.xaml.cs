@@ -372,7 +372,7 @@ namespace Content.Client.PDA
             base.Draw(handle);
 
             var stationTime = _gameTiming.CurTime.Subtract(_gameTicker.RoundStartTimeSpan);
-            var state = _pdaUpdateState!;
+            var state = _pdaUpdateState!; // DS14
 
             StationTimeLabel.SetMarkup(Loc.GetString("comp-pda-ui-station-time",
                 ("time", stationTime.ToString("hh\\:mm\\:ss")),
