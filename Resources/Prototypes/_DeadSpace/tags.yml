@@ -1,4 +1,7 @@
 - type: Tag
+  id: ADTFoodSausageFried
+
+- type: Tag
   id: BatteryWeaponFireModesSprites
 
 - type: Tag
@@ -23,6 +26,12 @@
   id: BorgModuleSecurity
 
 - type: Tag
+  id: DarkFlower
+
+- type: Tag
+  id: DrinkBeerBottleFull
+
+- type: Tag
   id: ChefGoldenKnife
 
 - type: Tag
@@ -39,6 +48,12 @@
 
 - type: Tag
   id: FittableInBackpackCase
+
+- type: Tag
+  id: FoodCheeseSlice
+
+- type: Tag
+  id: FoodChiliPepper
 
 - type: Tag
   id: HardHat
@@ -66,6 +81,15 @@
 
 - type: Tag
   id: Plasteel
+
+- type: Tag
+  id: PinkFlower
+
+- type: Tag
+  id: PurpleFlower
+
+- type: Tag
+  id: RedFlower
 
 - type: Tag
   id: MagazineTommyGunCap
@@ -102,5 +126,11 @@
 
 - type: Tag
   id: WeldingMaskWhite
+
+- type: Tag
+  id: WhiteFlower
+
+- type: Tag
+  id: YellowFlower
 
   # Обязательно в алфавитном порядке

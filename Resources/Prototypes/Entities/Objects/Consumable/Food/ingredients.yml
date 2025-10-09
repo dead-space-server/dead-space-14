@@ -716,6 +716,7 @@
   - type: Tag
     tags:
     - Slice
+    - FoodCheeseSlice # DS14
   - type: FoodSequenceElement
     entries:
       Taco: CheeseTaco

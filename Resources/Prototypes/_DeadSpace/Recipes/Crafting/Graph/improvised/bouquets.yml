@@ -1,0 +1,320 @@
+- type: constructionGraph
+  id: BouquetCraftBeer
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: bouquetCraftBeer
+      steps:
+      - tag: DrinkBeerBottleFull
+        name: бутылка пива
+        icon:
+          sprite: Objects/Consumable/Drinks/beer.rsi
+          state: icon
+        doAfter: 2
+      - tag: DrinkBeerBottleFull
+        name: бутылка пива
+        icon:
+          sprite: Objects/Consumable/Drinks/beer.rsi
+          state: icon
+        doAfter: 2
+      - tag: ADTFoodSausageFried
+        name: жареная сосиска
+        icon:
+          sprite: _ADT/Objects/Consumable/Food/sausage.rsi
+          state: fried
+        doAfter: 2
+      - tag: ADTFoodSausageFried
+        name: жареная сосиска
+        icon:
+          sprite: _ADT/Objects/Consumable/Food/sausage.rsi
+          state: fried
+        doAfter: 2
+      - tag: FoodCheeseSlice
+        name: кусок сыра
+        icon:
+          sprite: Objects/Consumable/Food/ingredients.rsi
+          state: cheesewedge
+        doAfter: 2
+      - tag: FoodChiliPepper
+        name: перец чили
+        icon:
+          sprite: Objects/Specific/Hydroponics/chili.rsi
+          state: produce
+        doAfter: 2
+      - tag: FoodChiliPepper
+        name: перец чили
+        icon:
+          sprite: Objects/Specific/Hydroponics/chili.rsi
+          state: produce
+        doAfter: 2
+      - material: Plastic
+        amount: 2
+        doAfter: 2
+  - node: bouquetCraftBeer
+    entity: ADTObjectWeaponsMeleeBouquetWithBeer
+
+
+- type: constructionGraph
+  id: RedCraftFlower
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: redCraftFlower
+      steps:
+      - tag: RedFlower
+        name: красный цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: red_flower
+        doAfter: 2
+      - tag: RedFlower
+        name: красный цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: red_flower
+        doAfter: 2
+      - tag: RedFlower
+        name: красный цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: red_flower
+        doAfter: 2
+      - tag: RedFlower
+        name: красный цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: red_flower
+        doAfter: 2
+      - tag: RedFlower
+        name: красный цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: red_flower
+        doAfter: 2
+      - material: Plastic
+        amount: 2
+        doAfter: 2
+  - node: redCraftFlower
+    entity: ObjectWeaponsMeleeRedBouquet
+
+- type: constructionGraph
+  id: WhiteCraftFlower
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: whiteCraftFlower
+      steps:
+      - tag: WhiteFlower
+        name: белый цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: white_flower
+        doAfter: 2
+      - tag: WhiteFlower
+        name: белый цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: white_flower
+        doAfter: 2
+      - tag: WhiteFlower
+        name: белый цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: white_flower
+        doAfter: 2
+      - tag: WhiteFlower
+        name: белый цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: white_flower
+        doAfter: 2
+      - tag: WhiteFlower
+        name: белый цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: white_flower
+        doAfter: 2
+      - material: Plastic
+        amount: 2
+        doAfter: 2
+  - node: whiteCraftFlower
+    entity: ADTObjectWeaponsMeleeWhiteBouquet
+
+- type: constructionGraph
+  id: PinkCraftFlower
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: pinkCraftFlower
+      steps:
+      - tag: PinkFlower
+        name: розовый цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: pink_flower
+        doAfter: 2
+      - tag: PinkFlower
+        name: розовый цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: pink_flower
+        doAfter: 2
+      - tag: PinkFlower
+        name: розовый цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: pink_flower
+        doAfter: 2
+      - tag: PinkFlower
+        name: розовый цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: pink_flower
+        doAfter: 2
+      - tag: PinkFlower
+        name: розовый цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: pink_flower
+        doAfter: 2
+      - material: Plastic
+        amount: 2
+        doAfter: 2
+  - node: pinkCraftFlower
+    entity: ADTObjectWeaponsMeleeRoseBouquet
+
+- type: constructionGraph
+  id: YellowCraftFlower
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: yellowCraftFlower
+      steps:
+      - tag: YellowFlower
+        name: желтый цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: yellow_flower
+        doAfter: 2
+      - tag: YellowFlower
+        name: желтый цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: yellow_flower
+        doAfter: 2
+      - tag: YellowFlower
+        name: желтый цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: yellow_flower
+        doAfter: 2
+      - tag: YellowFlower
+        name: желтый цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: yellow_flower
+        doAfter: 2
+      - tag: YellowFlower
+        name: желтый цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: yellow_flower
+        doAfter: 2
+      - material: Plastic
+        amount: 2
+        doAfter: 2
+  - node: yellowCraftFlower
+    entity: ADTObjectWeaponsMeleeYellowBouquet
+
+- type: constructionGraph
+  id: DarkCraftFlower
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: darkCraftFlower
+      steps:
+      - tag: DarkFlower
+        name: черный цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: dark_flower
+        doAfter: 2
+      - tag: DarkFlower
+        name: черный цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: dark_flower
+        doAfter: 2
+      - tag: DarkFlower
+        name: черный цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: dark_flower
+        doAfter: 2
+      - tag: DarkFlower
+        name: черный цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: dark_flower
+        doAfter: 2
+      - tag: DarkFlower
+        name: черный цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: dark_flower
+        doAfter: 2
+      - material: Plastic
+        amount: 2
+        doAfter: 2
+  - node: darkCraftFlower
+    entity: ADTObjectWeaponsMeleeBlackBouquet
+
+- type: constructionGraph
+  id: PurpleCraftFlower
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: purpleCraftFlower
+      steps:
+      - tag: PurpleFlower
+        name: сиреневый цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: purple_flower
+        doAfter: 2
+      - tag: PurpleFlower
+        name: сиреневый цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: purple_flower
+        doAfter: 2
+      - tag: PurpleFlower
+        name: сиреневый цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: purple_flower
+        doAfter: 2
+      - tag: PurpleFlower
+        name: сиреневый цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: purple_flower
+        doAfter: 2
+      - tag: PurpleFlower
+        name: сиреневый цветок
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: purple_flower
+        doAfter: 2
+      - material: Plastic
+        amount: 2
+        doAfter: 2
+  - node: purpleCraftFlower
+    entity: ADTObjectWeaponsMeleeLiliacBouquet

@@ -1,0 +1,29 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Made by minokaa (discord) for Space Station 14 server Мёртвый Космос",
+    "size": {
+    "x": 32,
+    "y": 32
+    },
+    "states": [
+        {
+            "name": "red_flower"
+        },
+        {
+            "name": "dark_flower"
+        },
+        {
+            "name": "pink_flower"
+        },
+        {
+            "name": "white_flower"
+        },
+        {
+            "name": "yellow_flower"
+        },
+        {
+            "name": "purple_flower"
+        }
+    ]
+}

@@ -1,0 +1,89 @@
+- type: entity
+  parent: BaseItem
+  id: RedFlower
+  name: красный цветок
+  description: Выглядит как настоящий.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/flowers.rsi
+    state: red_flower
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - RedFlower
+
+- type: entity
+  parent: BaseItem
+  id: DarkFlower
+  name: чёрный цветок
+  description: Выглядит как настоящий.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/flowers.rsi
+    state: dark_flower
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - DarkFlower
+
+- type: entity
+  parent: BaseItem
+  id: PinkFlower
+  name: розовый цветок
+  description: Выглядит как настоящий.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/flowers.rsi
+    state: pink_flower
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - PinkFlower
+
+- type: entity
+  parent: BaseItem
+  id: WhiteFlower
+  name: белый цветок
+  description: Выглядит как настоящий.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/flowers.rsi
+    state: white_flower
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WhiteFlower
+
+- type: entity
+  parent: BaseItem
+  id: YellowFlower
+  name: жёлтый цветок
+  description: Выглядит как настоящий.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/flowers.rsi
+    state: yellow_flower
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - YellowFlower
+
+- type: entity
+  parent: BaseItem
+  id: PurpleFlower
+  name: сиреневый цветок
+  description: Выглядит как настоящий.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/flowers.rsi
+    state: purple_flower
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - PurpleFlower

@@ -767,6 +767,7 @@
   - type: Tag
     tags:
     - Beer
+    - DrinkBeerBottleFull # DS14
 
 - type: entity
   parent: [DrinkBottleVisualsAll, DrinkBottleGlassSmallBaseFull]
