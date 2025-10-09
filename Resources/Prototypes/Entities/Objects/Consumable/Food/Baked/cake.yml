@@ -260,6 +260,7 @@
     tags:
     - Cake
     - Meat
+    - CakeBrain # DS14
   - type: Item
     inhandVisuals:
       left:
