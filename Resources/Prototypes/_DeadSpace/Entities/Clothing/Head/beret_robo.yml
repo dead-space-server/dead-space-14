@@ -2,7 +2,7 @@
   parent: ClothingHeadBase
   id: ClothingHeadHatBeretRobotics
   name: берет робототехника
-  description: красный берет с белой кокардой. киборги будут в восторге от вашего стиля!
+  description: Красный берет с белой кокардой. киборги будут в восторге от вашего стиля!
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/Head/Hats/beret_robo.rsi

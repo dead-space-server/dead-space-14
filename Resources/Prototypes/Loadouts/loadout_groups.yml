@@ -1172,10 +1172,12 @@
   loadouts:
   - ResearchDirectorJumpsuit
   - ResearchDirectorJumpskirt
-  - ResearchDirectorJumpsuitShirt # DS14
-  - ResearchDirectorJumpskirtShirt # DS14
-  - ResearchDirectorJumpsuitSuit # DS14
-  - ResearchDirectorJumpskirtSuit # DS14
+  # DS14-rnd-start
+  - ResearchDirectorJumpsuitShirt
+  - ResearchDirectorJumpskirtShirt
+  - ResearchDirectorJumpsuitSuit
+  - ResearchDirectorJumpskirtSuit
+  # DS14-rnd-end
 
 - type: loadoutGroup
   id: ResearchDirectorOuterClothing
@@ -1227,16 +1229,20 @@
   loadouts:
   - ScientistJumpsuit
   - ScientistJumpskirt
-  - ScientistJumpsuitFormal # DS14
-  - ScientistJumpskirtFormal # DS14
-  - ScientistJumpsuitTurtleneck # DS14
-  - ScientistJumpskirtTurtleneck # DS14
+  # DS14-rnd-start
+  - ScientistJumpsuitFormal
+  - ScientistJumpskirtFormal
+  - ScientistJumpsuitTurtleneck
+  - ScientistJumpskirtTurtleneck
+  # DS14-rnd-end
   - RoboticistJumpsuit
   - RoboticistJumpskirt
-  - RoboticistJumpsuitOveralls # DS14
-  - RoboticistJumpskirtOveralls # DS14
-  - RoboticistJumpsuitWhite # DS14
-  - RoboticistJumpskirtWhite # DS14
+  # DS14-rnd-start
+  - RoboticistJumpsuitOveralls
+  - RoboticistJumpskirtOveralls
+  - RoboticistJumpsuitWhite
+  - RoboticistJumpskirtWhite
+  # DS14-rnd-end
   # - SeniorResearcherJumpsuit
   # - SeniorResearcherJumpskirt
 
@@ -1247,9 +1253,11 @@
   - ScientistBackpack
   - ScientistSatchel
   - ScientistDuffel
-  - RoboticistBackpack # DS14
-  - RoboticistSatchel # DS14
-  - RoboticistDuffel # DS14
+  # DS14-rnd-start
+  - RoboticistBackpack
+  - RoboticistSatchel
+  - RoboticistDuffel
+  # DS14-rnd-end
 
 - type: loadoutGroup
   id: ScientistOuterClothing

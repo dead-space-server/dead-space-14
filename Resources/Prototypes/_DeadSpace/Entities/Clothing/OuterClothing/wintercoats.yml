@@ -12,10 +12,10 @@
     clothingPrototype: ClothingHeadHatHoodWinterDefault
 
 - type: entity
-  parent: ClothingOuterWinterCoatToggleable
+  parent: ClothingOuterWinterSci
   id: ClothingOuterWinterCoatSeniorResearcher
   name: зимняя куртка ведущего учёного
-  description: эта тёплая зимняя куртка сочетает в себе элементы бирюзового и фиолетового цветов, подчёркивая отличительный профессионализм носящего его учёного.
+  description: Эта тёплая зимняя куртка сочетает в себе элементы бирюзового и фиолетового цветов, подчёркивая отличительный профессионализм носящего его учёного.
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/OuterClothing/WinterCoats/senior_researcher.rsi
@@ -32,12 +32,3 @@
     clothingVisuals:
       outerClothing:
       - state: equipped-OUTERCLOTHING
-  - type: Armor
-    modifiers:
-      coefficients:
-        Slash: 0.95
-        Heat: 0.90
-        Caustic: 0.9
-    priceMultiplier: 0.15
-  - type: ToggleableClothing
-    clothingPrototype: ClothingHeadHatHoodWinterSci

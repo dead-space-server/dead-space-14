@@ -139,10 +139,12 @@
     contents:
       - id: ClothingUniformJumpsuitResearchDirector
       - id: ClothingUniformJumpskirtResearchDirector
-      - id: ClothingUniformJumpsuitResearchDirectorShirt # DS14
-      - id: ClothingUniformJumpskirtResearchDirectorShirt # DS14
-      - id: ClothingUniformJumpsuitResearchDirectorSuit # DS14
-      - id: ClothingUniformJumpskirtResearchDirectorSuit #DS14
+      # DS14-rnd-start
+      - id: ClothingUniformJumpsuitResearchDirectorShirt
+      - id: ClothingUniformJumpskirtResearchDirectorShirt
+      - id: ClothingUniformJumpsuitResearchDirectorSuit
+      - id: ClothingUniformJumpskirtResearchDirectorSuit
+      # DS14-rnd-end
       - id: ClothingNeckMantleRD
       - id: ClothingNeckCloakRd
       - id: ClothingHeadHatBeretRND
