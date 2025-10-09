@@ -1,6 +1,7 @@
 - type: cargoBounty
   id: TaipanBountyBerryDelight
   isTaipan: true
+  idPrefix: SYN
   reward: 6000
   description: bounty-description-taipan-berry-delight
   entries:
@@ -11,20 +12,22 @@
       - BerryDelight
 
 - type: cargoBounty
-  id: TaipanBountySupermatter
+  id: TaipanBountySuppermatter
   isTaipan: true
+  idPrefix: SYN
   reward: 15000
-  description: bounty-destruction-taipan-supermatter
+  description: bounty-destruction-taipan-suppermatter
   entries:
-  - name: bounty-item-taipan-supermatter
+  - name: bounty-item-taipan-suppermatter
     amount: 1
     whitelist:
       tags:
-      - Supermatter
+      - Suppermatter
 
 - type: cargoBounty
   id: TaipanBountyCakeBrain
   isTaipan: true
+  idPrefix: SYN
   reward: 8000
   description: bounty-description-taipan-brain-cake
   entries:
@@ -35,8 +38,9 @@
       - CakeBrain
 
 - type: cargoBounty
-  id: TaipanBountyHolocarpCaviar
+  id: TaipanBountyCaviarHolo
   isTaipan: true
+  idPrefix: SYN
   reward: 9500
   description: bounty-description-taipan-holocarp-caviar
   entries:
@@ -44,11 +48,12 @@
     amount: 1
     whitelist:
       tags:
-      - HolocarpCaviar
+      - CaviarHolo
 
 - type: cargoBounty
-  id: TaipanBountyEyedSoup
+  id: TaipanBountySoupEyeball
   isTaipan: true
+  idPrefix: SYN
   reward: 7200
   description: bounty-description-taipan-eyed-soup
   entries:
@@ -56,11 +61,12 @@
     amount: 1
     whitelist:
       tags:
-      - EyedSoup
+      - SoupEyeball
 
 - type: cargoBounty
-  id: TaipanBountyFlyAgaricJelly
+  id: TaipanBountyJellyAmanita
   isTaipan: true
+  idPrefix: SYN
   reward: 8500
   description: bounty-description-taipan-fly-agaric-jelly
   entries:
@@ -68,11 +74,12 @@
     amount: 1
     whitelist:
       tags:
-      - FlyAgaricJelly
+      - JellyAmanita
 
 - type: cargoBounty
-  id: TaipanBountyAnomalySteak
+  id: TaipanBountyMeatAnomaly
   isTaipan: true
+  idPrefix: SYN
   reward: 11000
   description: bounty-description-taipan-anomaly-steak
   entries:
@@ -80,47 +87,51 @@
     amount: 1
     whitelist:
       tags:
-      - AnomalySteak
+      - MeatAnomalyCooked
 
 - type: cargoBounty
-  id: TaipanBountyKopipaste
+  id: TaipanBountyNoodlesCopy
   isTaipan: true
+  idPrefix: SYN
   reward: 7000
-  description: bounty-description-taipan-kopipaste
+  description: bounty-description-taipan-copypasta
   entries:
-  - name: bounty-item-taipan-kopipaste
+  - name: bounty-item-taipan-copypasta
     amount: 1
     whitelist:
       tags:
-      - Kopipaste
+      - NoodlesCopy
 
 - type: cargoBounty
-  id: TaipanBountyRedflag
+  id: TaipanBountyBloodRed
   isTaipan: true
+  idPrefix: SYN
   reward: 12000
-  description: bounty-description-taipan-redflag
+  description: bounty-description-taipan-bloodred
   entries:
-  - name: bounty-item-taipan-redflag
+  - name: bounty-item-taipan-bloodred
     amount: 1
     whitelist:
       tags:
-      - RedflagSuit
+      - HardsuitSyndie
 
 - type: cargoBounty
-  id: TaipanBountyJuggernautCostume
+  id: TaipanBountyJuggernaut
   isTaipan: true
+  idPrefix: SYN
   reward: 9500
-  description: bounty-description-taipan-juggernaut-costume
+  description: bounty-description-taipan-juggernaut
   entries:
-  - name: bounty-item-taipan-juggernaut-costume
+  - name: bounty-item-taipan-juggernaut
     amount: 1
     whitelist:
       tags:
-      - JuggernautCostume
+      - HardsuitJuggernaut
 
 - type: cargoBounty
   id: TaipanBountyGoldenApple
   isTaipan: true
+  idPrefix: SYN
   reward: 5000
   description: bounty-description-taipan-golden-apple
   entries:
@@ -131,56 +142,61 @@
       - GoldenApple
 
 - type: cargoBounty
-  id: TaipanBountyCoibobs
+  id: TaipanBountyKoibean
   isTaipan: true
+  idPrefix: SYN
   reward: 7000
-  description: bounty-description-taipan-coibobs
+  description: bounty-description-taipan-koibean
   entries:
-  - name: bounty-item-taipan-coibobs
+  - name: bounty-item-taipan-koibean
     amount: 3
     whitelist:
       tags:
-      - Coibob
+      - Koibean
 
 - type: cargoBounty
-  id: TaipanBountyPistofruit
+  id: TaipanBountyRealCapfruit
   isTaipan: true
+  idPrefix: SYN
   reward: 8500
-  description: bounty-description-taipan-pistofruit
+  description: bounty-description-taipan-capfruit
   entries:
-  - name: bounty-item-taipan-pistofruit
+  - name: bounty-item-taipan-capfruit
     amount: 5
     whitelist:
       tags:
-      - Pistofruit
+      - RealCapfruit
 
 - type: cargoBounty
-  id: TaipanBountyButcher
+  id: TaipanBountyMeatWheat
   isTaipan: true
+  idPrefix: SYN
   reward: 9000
-  description: bounty-description-taipan-butcher
+  description: bounty-description-taipan-meatwheat
   entries:
-  - name: bounty-item-taipan-butcher
+  - name: bounty-item-taipan-meatwheat
     amount: 3
     whitelist:
       tags:
-      - ButcherPlant
+      - MeatWheat
 
 - type: cargoBounty
-  id: TaipanBountyDeadlyNettles
+  id: TaipanBountyDeathNettle
   isTaipan: true
+  idPrefix: SYN
   reward: 9500
-  description: bounty-description-taipan-deadly-nettles
+  description: bounty-description-taipan-death-nettles
   entries:
-  - name: bounty-item-taipan-deadly-nettles
+  - name: bounty-item-taipan-death-nettles
     amount: 5
     whitelist:
       tags:
-      - DeadlyNettles
+      - DeathNettle
 
 - type: cargoBounty
   id: TaipanBountyAmbrosiaDeus
   isTaipan: true
+  idPrefix: SYN
   reward: 10500
   description: bounty-description-taipan-ambrosia-deus
   entries:
@@ -193,6 +209,7 @@
 - type: cargoBounty
   id: TaipanBountyChameleonProjector
   isTaipan: true
+  idPrefix: SYN
   reward: 14000
   description: bounty-description-taipan-chameleon-projector
   entries:
@@ -205,6 +222,7 @@
 - type: cargoBounty
   id: TaipanBountyHypopen
   isTaipan: true
+  idPrefix: SYN
   reward: 8000
   description: bounty-description-taipan-hypopen
   entries:
@@ -217,6 +235,7 @@
 - type: cargoBounty
   id: TaipanBountySyndiHypo
   isTaipan: true
+  idPrefix: SYN
   reward: 9500
   description: bounty-description-taipan-syndihypo
   entries:
@@ -229,6 +248,7 @@
 - type: cargoBounty
   id: TaipanBountySpaceCarpCube
   isTaipan: true
+  idPrefix: SYN
   reward: 7000
   description: bounty-description-taipan-space-carp-cube
   entries:
@@ -241,6 +261,7 @@
 - type: cargoBounty
   id: TaipanBountyDonkCo
   isTaipan: true
+  idPrefix: SYN
   reward: 11000
   description: bounty-description-taipan-donkco
   entries:
@@ -248,35 +269,38 @@
     amount: 2
     whitelist:
       tags:
-      - DonkCoMicrowave
+      - SyndicateMicrowave
 
 - type: cargoBounty
-  id: TaipanBountyClone
+  id: TaipanBountyCloningPod
   isTaipan: true
+  idPrefix: SYN
   reward: 12000
-  description: bounty-description-taipan-clone
+  description: bounty-description-taipan-cloning-pod
   entries:
-  - name: bounty-item-taipan-clone
+  - name: bounty-item-taipan-cloning-pod
     amount: 1
     whitelist:
       tags:
-      - CloneSystemBoard
+      - CloningPodMachineCircuitboard
 
 - type: cargoBounty
-  id: TaipanBountySwordDouble
+  id: TaipanBountyEnergySwordDouble
   isTaipan: true
+  idPrefix: SYN
   reward: 13500
-  description: bounty-description-taipan-sword-doubole
+  description: bounty-description-taipan-sword-double
   entries:
-  - name: bounty-item-taipan-sword-doubole
+  - name: bounty-item-taipan-sword-double
     amount: 1
     whitelist:
       tags:
-      - DualEnergySword
+      - EnergySwordDouble
 
 - type: cargoBounty
-  id: TaipanBountyEsword
+  id: TaipanBountyEnergySword
   isTaipan: true
+  idPrefix: SYN
   reward: 12500
   description: bounty-description-taipan-esword
   entries:
@@ -287,20 +311,22 @@
       - EnergySword
 
 - type: cargoBounty
-  id: TaipanBountyTompson
+  id: TaipanBountyTommyGun
   isTaipan: true
+  idPrefix: SYN
   reward: 11000
-  description: bounty-description-taipan-tompson
+  description: bounty-description-taipan-tommygun
   entries:
-  - name: bounty-item-taipan-tompson
+  - name: bounty-item-taipan-tommygun
     amount: 1
     whitelist:
       tags:
-      - Tompson
+      - SMGTommyGun
 
 - type: cargoBounty
-  id: TaipanBountyChina
+  id: TaipanBountyChinaLake
   isTaipan: true
+  idPrefix: SYN
   reward: 9000
   description: bounty-description-taipan-china
   entries:
@@ -308,11 +334,12 @@
     amount: 1
     whitelist:
       tags:
-      - ChinaLauncher
+      - LauncherChinaLake
 
 - type: cargoBounty
   id: TaipanBountyShotgunBulldog
   isTaipan: true
+  idPrefix: SYN
   reward: 9500
   description: bounty-description-taipan-shotgun-bulldog
   entries:
@@ -323,8 +350,9 @@
       - ShotgunBulldog
 
 - type: cargoBounty
-  id: TaipanBountyC20R
+  id: TaipanBountySubMachineGunC20r
   isTaipan: true
+  idPrefix: SYN
   reward: 10000
   description: bounty-description-taipan-c20r
   entries:
@@ -332,11 +360,12 @@
     amount: 1
     whitelist:
       tags:
-      - C20R
+      - SubMachineGunC20r
 
 - type: cargoBounty
-  id: TaipanBountyPython
+  id: TaipanBountyRevolverPython
   isTaipan: true
+  idPrefix: SYN
   reward: 9500
   description: bounty-description-taipan-python
   entries:
@@ -344,11 +373,12 @@
     amount: 1
     whitelist:
       tags:
-      - PythonRevolver
+      - RevolverPython
 
 - type: cargoBounty
-  id: TaipanBountyCobra
+  id: TaipanBountyPistolCobra
   isTaipan: true
+  idPrefix: SYN
   reward: 9000
   description: bounty-description-taipan-cobra
   entries:
@@ -356,11 +386,12 @@
     amount: 1
     whitelist:
       tags:
-      - CobraPistol
+      - PistolCobra
 
 - type: cargoBounty
-  id: TaipanBountyDesertEagle
+  id: TaipanBountyPistolDesertEagle
   isTaipan: true
+  idPrefix: SYN
   reward: 11500
   description: bounty-description-taipan-deserteagle
   entries:
@@ -368,11 +399,12 @@
     amount: 1
     whitelist:
       tags:
-      - DesertEagle
+      - PistolDesertEagle
 
 - type: cargoBounty
-  id: TaipanBountyGunL6
+  id: TaipanBountyLightMachineGunL6
   isTaipan: true
+  idPrefix: SYN
   reward: 13000
   description: bounty-description-taipan-gunl6
   entries:
@@ -380,11 +412,12 @@
     amount: 1
     whitelist:
       tags:
-      - L6MachineGun
+      - LightMachineGunL6
 
 - type: cargoBounty
-  id: TaipanBountyGunHristov
+  id: TaipanBountySniperHristov
   isTaipan: true
+  idPrefix: SYN
   reward: 15000
   description: bounty-description-taipan-gun-hristov
   entries:
@@ -392,4 +425,4 @@
     amount: 1
     whitelist:
       tags:
-      - HristovSniper
+      - SniperHristov
