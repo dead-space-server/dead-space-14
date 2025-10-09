@@ -21,8 +21,6 @@
       Steel: 100
       Cloth: 600
       Plastic: 500
-  - type: StaticPrice
-    price: 0
   # DS14-end
 
 #Syndicate EVA
@@ -199,6 +197,4 @@
       Steel: 100
       Durathread: 600
       Plastic: 500
-  - type: StaticPrice
-    price: 0
   # DS14-end
