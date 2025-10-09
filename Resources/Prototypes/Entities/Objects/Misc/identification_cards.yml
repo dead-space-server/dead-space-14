@@ -27,10 +27,7 @@
     stealGroup: IDCard
   - type: PhysicalComposition
     materialComposition:
-      Plastic: 500
-      Steel: 100
-  - type: StaticPrice
-    price: 0
+      Steel: 50
     
 #IDs with layers
 

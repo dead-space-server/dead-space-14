@@ -34,8 +34,6 @@
     tags:
     - WhitelistChameleon
     - Backpack
-  - type: StaticPrice
-    price: 0
   - type: PhysicalComposition
     materialComposition:
       Cloth: 100

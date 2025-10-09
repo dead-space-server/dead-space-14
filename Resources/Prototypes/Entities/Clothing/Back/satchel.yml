@@ -14,8 +14,6 @@
   - type: Tag
     tags:
     - MonkeyWearable
-  - type: StaticPrice
-    price: 0
   - type: PhysicalComposition
     materialComposition:
       Cloth: 100

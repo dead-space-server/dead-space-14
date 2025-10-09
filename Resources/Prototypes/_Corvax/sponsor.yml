@@ -12,9 +12,8 @@
       sprite: _Corvax/Sponsor/Clothing/OuterClothing/Coats/atmosian.rsi
     - type: PhysicalComposition
       materialComposition:
-        Cloth: 500
-    - type: StaticPrice
-      price: 0
+        Cloth: 100
+
 - type: entity
   parent: ClothingMaskGas
   id: ClothingMaskGasAtmosian
@@ -28,9 +27,8 @@
       sprite: _Corvax/Sponsor/Clothing/Mask/atmosian.rsi
     - type: PhysicalComposition
       materialComposition:
-        Plastic: 200
-    - type: StaticPrice
-      price: 0
+        Plastic: 100
+
 
 - type: entity
   parent: ClothingNeckBase
@@ -43,9 +41,8 @@
       sprite: _Corvax/Sponsor/Clothing/Neck/Cloaks/atmosian.rsi
     - type: PhysicalComposition
       materialComposition:
-        Plastic: 200
-    - type: StaticPrice
-      price: 0
+        Plastic: 50
+
 
 # Fezory
 - type: entity
@@ -63,8 +60,7 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
-    - type: StaticPrice
-      price: 0
+
 
 - type: entity
   parent: ClothingNeckBase
@@ -78,8 +74,7 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
-    - type: StaticPrice
-      price: 0
+
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitSkeleton
@@ -93,9 +88,8 @@
       sprite: _Corvax/Sponsor/Clothing/Uniforms/Jumpsuit/skeleton.rsi
     - type: PhysicalComposition
       materialComposition:
-        Cloth: 500
-    - type: StaticPrice
-      price: 0
+        Cloth: 100
+
 
 # NEKISH
 - type: entity
@@ -109,9 +103,8 @@
       sprite: _Corvax/Sponsor/NEKISH/Clothing/Back/Satchels/hos.rsi
     - type: PhysicalComposition
       materialComposition:
-        Cloth: 500
-    - type: StaticPrice
-      price: 0
+        Cloth: 100
+
 
 - type: entity
   parent: ClothingBeltStorageBase
@@ -150,9 +143,8 @@
     - type: Appearance
     - type: PhysicalComposition
       materialComposition:
-        Cloth: 500
-    - type: StaticPrice
-      price: 0
+        Cloth: 400
+
 
 - type: entity
   parent: ClothingHandsBase
@@ -168,8 +160,6 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
-    - type: StaticPrice
-      price: 0
 
 - type: entity
   parent: ClothingHeadBase
@@ -185,8 +175,7 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
-    - type: StaticPrice
-      price: 0
+
 
 - type: entity
   parent: ClothingOuterCoatHoSTrench
@@ -202,8 +191,7 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
-    - type: StaticPrice
-      price: 0
+
       
 - type: entity
   parent: ClothingUniformBase
@@ -219,8 +207,7 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 200
-    - type: StaticPrice
-      price: 0
+
 # ken41k
 - type: entity
   parent: ClothingHandsBase
@@ -235,9 +222,8 @@
     - type: Clock
     - type: PhysicalComposition
       materialComposition:
-        Plastic: 200
-    - type: StaticPrice
-      price: 0
+        Plastic: 50
+
 # jesuisunfou
 - type: entity
   parent: ClothingHandsGlovesCombat
@@ -253,8 +239,6 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
-    - type: StaticPrice
-      price: 0
 
 - type: entity
   parent: ClothingHeadBase
@@ -270,8 +254,6 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 200
-    - type: StaticPrice
-      price: 0
 
 - type: entity
   parent: ClothingOuterStorageBase
@@ -287,8 +269,6 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 500
-    - type: StaticPrice
-      price: 0
 
 - type: entity
   parent: ClothingUniformBase
@@ -304,8 +284,6 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 200
-    - type: StaticPrice
-      price: 0
 
 - type: entity
   parent: ClothingShoesBaseButcherable
@@ -321,5 +299,3 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 200
-    - type: StaticPrice
-      price: 0

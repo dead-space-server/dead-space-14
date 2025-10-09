@@ -11,6 +11,4 @@
     sprite:  _DeadSpace/Clothing/OuterClothing/Misc/pink_hoodie.rsi
   - type: PhysicalComposition
     materialComposition:
-      Cloth: 500
-  - type: StaticPrice
-    price: 0
+      Cloth: 100

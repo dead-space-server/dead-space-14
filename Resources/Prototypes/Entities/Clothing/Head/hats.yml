@@ -792,8 +792,6 @@
       Hair: HEAD
       HeadTop : HEAD
       HeadSide : HEAD
-  - type: StaticPrice
-    price: 0
   - type: PhysicalComposition
     materialComposition:
       Cloth: 100

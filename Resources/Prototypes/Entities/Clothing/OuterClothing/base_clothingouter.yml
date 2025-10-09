@@ -150,8 +150,6 @@
     slots:
     - Tail
     hideOnToggle: true
-  - type: StaticPrice
-    price: 0
 
 - type: entity
   abstract: true

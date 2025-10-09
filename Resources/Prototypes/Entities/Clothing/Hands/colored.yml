@@ -342,10 +342,8 @@
     fiberColor: fibers-yellow
   - type: PhysicalComposition
     materialComposition:
-      Cloth: 500
-      Plastic: 200
-  - type: StaticPrice
-    price: 0
+      Cloth: 50
+      Plastic: 20
 
 # Budget Insulated Gloves
 - type: entity
@@ -385,7 +383,5 @@
     coefficient: 5 # zap em good
   - type: PhysicalComposition
     materialComposition:
-      Cloth: 400
-      Plastic: 200
-  - type: StaticPrice
-    price: 0
+      Cloth: 40
+      Plastic: 20

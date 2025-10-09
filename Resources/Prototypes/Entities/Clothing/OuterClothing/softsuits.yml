@@ -18,9 +18,7 @@
   # DS14-start
   - type: PhysicalComposition
     materialComposition:
-      Steel: 100
-      Cloth: 600
-      Plastic: 500
+      Steel: 50
   # DS14-end
 
 #Syndicate EVA

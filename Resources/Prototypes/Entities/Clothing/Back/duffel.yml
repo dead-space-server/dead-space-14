@@ -14,8 +14,6 @@
     walkModifier: 1
     sprintModifier: 0.9
   - type: HeldSpeedModifier
-  - type: StaticPrice
-    price: 0
   - type: PhysicalComposition
     materialComposition:
       Cloth: 100
@@ -177,8 +175,6 @@
   - type: Storage
     grid:
     - 0,0,8,4
-  - type: StaticPrice
-    price: 0
   - type: PhysicalComposition
     materialComposition:
       Cloth: 100

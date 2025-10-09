@@ -409,6 +409,7 @@
       Durathread: 500
       Plasteel: 600
       Plastic: 100
+  - type: CargoSellBlacklist
 
 #Chief Engineer's Hardsuit
 - type: entity
@@ -456,6 +457,7 @@
       Plasteel: 200
       Plastic: 100
       Plasma: 1500
+  - type: CargoSellBlacklist
 
 #Chief Medical Officer's Hardsuit
 - type: entity
@@ -493,6 +495,7 @@
       Steel: 500
       Durathread: 300
       Plastic: 500
+  - type: CargoSellBlacklist
 
 #Research Director's Hardsuit
 - type: entity
@@ -523,6 +526,7 @@
     walkModifier: 0.75
     sprintModifier: 0.75
   - type: HeldSpeedModifier
+  - type: CargoSellBlacklist
   - type: Item
     size: Huge
     shape:

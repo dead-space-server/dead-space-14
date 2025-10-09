@@ -30,8 +30,6 @@
     steps: 6
     zeroVisible: false
   - type: Appearance
-  - type: StaticPrice
-    price: 0
   - type: PhysicalComposition
     materialComposition:
       Steel: 25
@@ -68,8 +66,6 @@
     steps: 6
     zeroVisible: false
   - type: Appearance
-  - type: StaticPrice
-    price: 0
   - type: PhysicalComposition
     materialComposition:
       Steel: 25
@@ -106,8 +102,6 @@
     steps: 6
     zeroVisible: false
   - type: Appearance
-  - type: StaticPrice
-    price: 0
   - type: PhysicalComposition
     materialComposition:
       Steel: 25

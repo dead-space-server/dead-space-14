@@ -110,10 +110,8 @@
   - type: FingerprintMask
   - type: PhysicalComposition
     materialComposition:
-      Durathread: 500
-      Plasteel: 200
-  - type: StaticPrice
-    price: 0
+      Durathread: 10
+      Plasteel: 10
 
 - type: entity
   parent: ClothingHandsBase
@@ -352,8 +350,6 @@
   - type: PhysicalComposition
     materialComposition:
       Cloth: 200
-  - type: StaticPrice
-    price: 0
 
 - type: entity
   parent: ClothingHandsButcherable
@@ -451,11 +447,8 @@
     - Forensics
   - type: PhysicalComposition
     materialComposition:
-      Cloth: 1000
-      Durathread: 300
-  - type: StaticPrice
-    price: 0
-
+      Cloth: 10
+      Durathread: 25
 # TODO Make lubed items not slip in hands
 - type: entity
   parent: ClothingHandsBase
