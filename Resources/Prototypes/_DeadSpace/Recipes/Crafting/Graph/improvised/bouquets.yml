@@ -7,43 +7,43 @@
     - to: bouquetCraftBeer
       steps:
       - tag: DrinkBeerBottleFull
-        name: бутылка пива
+        name: construction-graph-tag-beer-bottle
         icon:
           sprite: Objects/Consumable/Drinks/beer.rsi
           state: icon
         doAfter: 2
       - tag: DrinkBeerBottleFull
-        name: бутылка пива
+        name: construction-graph-tag-beer-bottle
         icon:
           sprite: Objects/Consumable/Drinks/beer.rsi
           state: icon
         doAfter: 2
       - tag: ADTFoodSausageFried
-        name: жареная сосиска
+        name: construction-graph-tag-fried-sausage
         icon:
           sprite: _ADT/Objects/Consumable/Food/sausage.rsi
           state: fried
         doAfter: 2
       - tag: ADTFoodSausageFried
-        name: жареная сосиска
+        name: construction-graph-tag-fried-sausage
         icon:
           sprite: _ADT/Objects/Consumable/Food/sausage.rsi
           state: fried
         doAfter: 2
       - tag: FoodCheeseSlice
-        name: кусок сыра
+        name: construction-graph-tag-cheese-slice
         icon:
           sprite: Objects/Consumable/Food/ingredients.rsi
           state: cheesewedge
         doAfter: 2
       - tag: FoodChiliPepper
-        name: перец чили
+        name: construction-graph-tag-chili-pepper
         icon:
           sprite: Objects/Specific/Hydroponics/chili.rsi
           state: produce
         doAfter: 2
       - tag: FoodChiliPepper
-        name: перец чили
+        name: construction-graph-tag-chili-pepper
         icon:
           sprite: Objects/Specific/Hydroponics/chili.rsi
           state: produce
@@ -54,7 +54,6 @@
   - node: bouquetCraftBeer
     entity: ADTObjectWeaponsMeleeBouquetWithBeer
 
-
 - type: constructionGraph
   id: RedCraftFlower
   start: start
@@ -64,31 +63,31 @@
     - to: redCraftFlower
       steps:
       - tag: RedFlower
-        name: красный цветок
+        name: construction-graph-tag-red-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: red_flower
         doAfter: 2
       - tag: RedFlower
-        name: красный цветок
+        name: construction-graph-tag-red-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: red_flower
         doAfter: 2
       - tag: RedFlower
-        name: красный цветок
+        name: construction-graph-tag-red-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: red_flower
         doAfter: 2
       - tag: RedFlower
-        name: красный цветок
+        name: construction-graph-tag-red-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: red_flower
         doAfter: 2
       - tag: RedFlower
-        name: красный цветок
+        name: construction-graph-tag-red-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: red_flower
@@ -108,31 +107,31 @@
     - to: whiteCraftFlower
       steps:
       - tag: WhiteFlower
-        name: белый цветок
+        name: construction-graph-tag-white-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: white_flower
         doAfter: 2
       - tag: WhiteFlower
-        name: белый цветок
+        name: construction-graph-tag-white-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: white_flower
         doAfter: 2
       - tag: WhiteFlower
-        name: белый цветок
+        name: construction-graph-tag-white-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: white_flower
         doAfter: 2
       - tag: WhiteFlower
-        name: белый цветок
+        name: construction-graph-tag-white-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: white_flower
         doAfter: 2
       - tag: WhiteFlower
-        name: белый цветок
+        name: construction-graph-tag-white-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: white_flower
@@ -152,31 +151,31 @@
     - to: pinkCraftFlower
       steps:
       - tag: PinkFlower
-        name: розовый цветок
+        name: construction-graph-tag-pink-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: pink_flower
         doAfter: 2
       - tag: PinkFlower
-        name: розовый цветок
+        name: construction-graph-tag-pink-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: pink_flower
         doAfter: 2
       - tag: PinkFlower
-        name: розовый цветок
+        name: construction-graph-tag-pink-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: pink_flower
         doAfter: 2
       - tag: PinkFlower
-        name: розовый цветок
+        name: construction-graph-tag-pink-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: pink_flower
         doAfter: 2
       - tag: PinkFlower
-        name: розовый цветок
+        name: construction-graph-tag-pink-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: pink_flower
@@ -196,31 +195,31 @@
     - to: yellowCraftFlower
       steps:
       - tag: YellowFlower
-        name: желтый цветок
+        name: construction-graph-tag-yellow-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: yellow_flower
         doAfter: 2
       - tag: YellowFlower
-        name: желтый цветок
+        name: construction-graph-tag-yellow-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: yellow_flower
         doAfter: 2
       - tag: YellowFlower
-        name: желтый цветок
+        name: construction-graph-tag-yellow-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: yellow_flower
         doAfter: 2
       - tag: YellowFlower
-        name: желтый цветок
+        name: construction-graph-tag-yellow-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: yellow_flower
         doAfter: 2
       - tag: YellowFlower
-        name: желтый цветок
+        name: construction-graph-tag-yellow-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: yellow_flower
@@ -240,31 +239,31 @@
     - to: darkCraftFlower
       steps:
       - tag: DarkFlower
-        name: черный цветок
+        name: construction-graph-tag-dark-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: dark_flower
         doAfter: 2
       - tag: DarkFlower
-        name: черный цветок
+        name: construction-graph-tag-dark-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: dark_flower
         doAfter: 2
       - tag: DarkFlower
-        name: черный цветок
+        name: construction-graph-tag-dark-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: dark_flower
         doAfter: 2
       - tag: DarkFlower
-        name: черный цветок
+        name: construction-graph-tag-dark-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: dark_flower
         doAfter: 2
       - tag: DarkFlower
-        name: черный цветок
+        name: construction-graph-tag-dark-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: dark_flower
@@ -284,31 +283,31 @@
     - to: purpleCraftFlower
       steps:
       - tag: PurpleFlower
-        name: сиреневый цветок
+        name: construction-graph-tag-purple-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: purple_flower
         doAfter: 2
       - tag: PurpleFlower
-        name: сиреневый цветок
+        name: construction-graph-tag-purple-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: purple_flower
         doAfter: 2
       - tag: PurpleFlower
-        name: сиреневый цветок
+        name: construction-graph-tag-purple-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: purple_flower
         doAfter: 2
       - tag: PurpleFlower
-        name: сиреневый цветок
+        name: construction-graph-tag-purple-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: purple_flower
         doAfter: 2
       - tag: PurpleFlower
-        name: сиреневый цветок
+        name: construction-graph-tag-purple-flower
         icon:
           sprite: _DeadSpace/Objects/Misc/flowers.rsi
           state: purple_flower
