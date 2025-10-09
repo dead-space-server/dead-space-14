@@ -5,6 +5,12 @@
 
 - type: latheRecipe
   parent: BaseCircuitboardRecipe
+  id: GeneratorRTGMachineCircuitboard
+  result: GeneratorRTGMachineCircuitboard
+
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
   id: AutolatheMachineCircuitboardTaipan
   result: AutolatheMachineCircuitboardTaipan
 
