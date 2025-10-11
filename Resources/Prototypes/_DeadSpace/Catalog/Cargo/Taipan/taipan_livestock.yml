@@ -237,3 +237,13 @@
   cost: 25000
   category: cargoproduct-category-name-livestock
   group: taipan_market
+
+- type: cargoProduct
+  id: TaipanLivestockGiantSpiderSpace
+  icon:
+    sprite: Mobs/Animals/spacespider.rsi
+    state: spacespider
+  product: CrateNPCGiantSpiderSpace
+  cost: 4000
+  category: cargoproduct-category-name-livestock
+  group: taipan_market
