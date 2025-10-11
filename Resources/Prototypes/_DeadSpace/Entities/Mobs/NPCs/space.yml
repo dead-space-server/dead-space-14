@@ -2,7 +2,7 @@
   id: MobGiantSpiderSpace
   parent: MobSpiderSpace
   name: гигантский космический паук
-  description: Светиться ярче и с более крупным брюхом.. Явно не к добру.
+  description: Светиться ярче и с более крупным брюхом. Явно не к добру.
   components:
   - type: Sprite
     scale: 1.2,1.2
