@@ -1,8 +1,8 @@
 - type: entity
   parent: BaseChemistryEmptyVial
   id: TerratosomochromolinChemistryVial
-  name: бутылочка
-  description: Маленькая бутылочка.
+  name: пробирка
+  description: Маленькая пробирка.
   suffix: Терратосоматохромолин
   components:
   - type: Label
