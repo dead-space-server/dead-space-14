@@ -1,6 +1,7 @@
 - type: entity
   parent: ADTClothingBeltSupremeCommanderSheath
   id: ADTClothingBeltSupremeCommanderSheathFilled
+  suffix: Заполненный
   components:
   - type: ContainerFill
     containers:
@@ -10,6 +11,7 @@
 - type: entity
   parent: ADTClothingBeltSupremeSheath
   id: ADTClothingBeltSupremeSheathFilled
+  suffix: Заполненный
   components:
   - type: ContainerFill
     containers:
