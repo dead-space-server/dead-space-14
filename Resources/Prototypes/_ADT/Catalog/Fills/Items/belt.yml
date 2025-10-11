@@ -1,0 +1,17 @@
+- type: entity
+  parent: ADTClothingBeltSupremeCommanderSheath
+  id: ADTClothingBeltSupremeCommanderSheathFilled
+  components:
+  - type: ContainerFill
+    containers:
+      item:
+      - ADTObjectWeaponsMeleeSupremeCommanderSabre
+
+- type: entity
+  parent: ADTClothingBeltSupremeSheath
+  id: ADTClothingBeltSupremeSheathFilled
+  components:
+  - type: ContainerFill
+    containers:
+      item:
+      - ADTObjectWeaponsMeleeSupremeSabre

@@ -1,7 +1,7 @@
 {
     "version": 1,
     "license": "CC-BY-SA-3.0",
-    "copyright": "Created by discord:Floppa#0007, resprite by gribgear (discord) for Space Station 14 server Мёртвый Космос",
+    "copyright": "Created by discord:JayJacobs#1187",
     "size": {
         "x": 32,
         "y": 32
@@ -9,10 +9,6 @@
     "states": [
         {
             "name": "icon"
-        },
-        {
-            "name": "equipped-OUTERCLOTHING",
-            "directions": 4
         },
         {
             "name": "inhand-left",
