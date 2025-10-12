@@ -1,4 +1,3 @@
-reagent-name-xeno-blood = кровь ксеноморфа
 reagent-name-chitoectesin = хитоэктезин
 reagent-desc-chitoectesin = Особое вещество, которое позитивно влияет на паукообразных, но только в зачатке.
 reagent-name-terratosomochromolin = терратосоматохромолин
