@@ -205,7 +205,7 @@
 - type: listing
   id: UplinkMagazineShothgun
   name: uplink-shotgun-magazine-name
-  description: uplink-Shotgun-magazine-desc
+  description: uplink-shotgun-magazine-desc
   icon: { sprite: /Textures/Objects/Weapons/Guns/Ammunition/Magazine/Shotgun/m12.rsi, state: base }
   productEntity: MagazineShotgun
   cost:
@@ -235,30 +235,35 @@
   categories:
   - UplinkAmmo
 
-- type: listing
-  id: UplinkSyndieCloak
-  name: uplink-syndiecloak-name
-  description: uplink-syndiecloak-desc
-  productEntity: ADTClothingNeckSyndicateCloak
-  cost:
-    Telecrystal: 5
-  categories:
-  - UplinkPointless
+# - type: listing
+#  id: UplinkSyndieCloak
+#  name: uplink-syndiecloak-name
+#  description: uplink-syndiecloak-desc
+#  productEntity: ADTClothingNeckSyndicateCloak
+#  cost:
+#    Telecrystal: 5
+#  categories:
+#  - UplinkPointless
+#  conditions:
+#  - !type:StoreWhitelistCondition
+#    blacklist:
+#      tags:
+#      - NukeOpsUplink
 
-- type: listing
-  id: UplinkNukeOpsCloak
-  name: uplink-nukeopscloak-name
-  description: uplink-nukeopscloak-desc
-  productEntity: ADTClothingNeckNukeOpsCloak
-  cost:
-    Telecrystal: 5
-  categories:
-  - UplinkPointless
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
-      tags:
-      - NukeOpsUplink
+# - type: listing
+#  id: UplinkNukeOpsCloak
+#  name: uplink-nukeopscloak-name
+#  description: uplink-nukeopscloak-desc
+#  productEntity: ADTClothingNeckNukeOpsCloak
+#  cost:
+#    Telecrystal: 5
+#  categories:
+#  - UplinkPointless
+#  conditions:
+#  - !type:StoreWhitelistCondition
+#    whitelist:
+#      tags:
+#      - NukeOpsUplink
 
 # - type: listing
 #   id: UplinkArkalyseBundle
@@ -462,19 +467,19 @@
       tags:
       - NukeOpsUplink
 
-- type: listing
-  id: UplinkFlippoSyndicateLighter
-  name: uplink-syndicate-flippo-syndicate-lighter-name
-  description: uplink-syndicate-flippo-syndicate-lighter-desc
-  icon: { sprite: /Textures/Objects/Tools/Lighters/lighters.rsi, state: zippo_syndicate_icon_base }
-  productEntity: FlippoSyndicateLighter
-  cost:
-    Telecrystal: 1
-  categories:
-  - UplinkPointless
-  conditions:
-  - !type:ListingLimitedStockCondition
-    stock: 1
+# - type: listing
+#  id: UplinkFlippoSyndicateLighter
+#  name: uplink-syndicate-flippo-syndicate-lighter-name
+#  description: uplink-syndicate-flippo-syndicate-lighter-desc
+#  icon: { sprite: /Textures/Objects/Tools/Lighters/lighters.rsi, state: zippo_syndicate_icon_base }
+#  productEntity: FlippoSyndicateLighter
+#  cost:
+#    Telecrystal: 1
+#  categories:
+#  - UplinkPointless
+#  conditions:
+#  - !type:ListingLimitedStockCondition
+#    stock: 1
 
 # For the DesertEagle
 - type: listing
@@ -502,6 +507,51 @@
     Telecrystal: 3
   categories:
   - UplinkAmmo
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkCombatMedipenNuke
+  name: uplink-combat-medipen-name
+  description: uplink-combat-medipen-desc
+  productEntity: CombatMedipen
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkChemicals
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkStimpackNuke
+  name: uplink-stimpack-name
+  description: uplink-stimpack-desc
+  productEntity: Stimpack
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkChemicals
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkCostumeClownNuke
+  name: uplink-costume-clown-name
+  description: uplink-costume-clown-desc
+  productEntity: ClothingBackpackDuffelSyndicateCostumeClown
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkDeception
   conditions:
   - !type:StoreWhitelistCondition
     whitelist:
