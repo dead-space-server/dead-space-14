@@ -260,7 +260,7 @@
     stateDoorOpen: med_open
     stateDoorClosed: chemical_door
   - type: AccessReader
-    access: [["TaipanMedical"], ["TaipanScience"]]
+    access: [["TaipanMedical"], ["TaipanResearch"]]
 
 # Research Director
 - type: entity
