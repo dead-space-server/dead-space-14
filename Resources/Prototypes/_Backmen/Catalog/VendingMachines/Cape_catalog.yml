@@ -319,3 +319,27 @@
   conditions:
   - !type:ListingLimitedStockCondition
     stock: 2
+
+# DS14-start
+- type: listing
+  id: ClothesMateCapeInventoryEmag3
+  productEntity: ADTClothingNeckSyndicateCloak
+  cost:
+    SpaceCash: 100
+  categories:
+  - ClothesMateCapeInventoryEmag
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 2
+
+- type: listing
+  id: ClothesMateCapeInventoryEmag4
+  productEntity: ADTClothingNeckNukeOpsCloak
+  cost:
+    SpaceCash: 100
+  categories:
+  - ClothesMateCapeInventoryEmag
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 2
+# DS14-end

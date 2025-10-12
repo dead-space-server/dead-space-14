@@ -235,35 +235,35 @@
   categories:
   - UplinkAmmo
 
-# - type: listing
-#  id: UplinkSyndieCloak
-#  name: uplink-syndiecloak-name
-#  description: uplink-syndiecloak-desc
-#  productEntity: ADTClothingNeckSyndicateCloak
-#  cost:
-#    Telecrystal: 5
-#  categories:
-#  - UplinkPointless
-#  conditions:
-#  - !type:StoreWhitelistCondition
-#    blacklist:
-#      tags:
-#      - NukeOpsUplink
+- type: listing
+  id: UplinkSyndieCloak
+  name: uplink-syndiecloak-name
+  description: uplink-syndiecloak-desc
+  productEntity: ADTClothingNeckSyndicateCloak
+  cost:
+    Telecrystal: 5
+  categories:
+  - UplinkPointless
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
 
-# - type: listing
-#  id: UplinkNukeOpsCloak
-#  name: uplink-nukeopscloak-name
-#  description: uplink-nukeopscloak-desc
-#  productEntity: ADTClothingNeckNukeOpsCloak
-#  cost:
-#    Telecrystal: 5
-#  categories:
-#  - UplinkPointless
-#  conditions:
-#  - !type:StoreWhitelistCondition
-#    whitelist:
-#      tags:
-#      - NukeOpsUplink
+- type: listing
+  id: UplinkNukeOpsCloak
+  name: uplink-nukeopscloak-name
+  description: uplink-nukeopscloak-desc
+  productEntity: ADTClothingNeckNukeOpsCloak
+  cost:
+    Telecrystal: 5
+  categories:
+  - UplinkPointless
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
 
 # - type: listing
 #   id: UplinkArkalyseBundle
@@ -467,19 +467,23 @@
       tags:
       - NukeOpsUplink
 
-# - type: listing
-#  id: UplinkFlippoSyndicateLighter
-#  name: uplink-syndicate-flippo-syndicate-lighter-name
-#  description: uplink-syndicate-flippo-syndicate-lighter-desc
-#  icon: { sprite: /Textures/Objects/Tools/Lighters/lighters.rsi, state: zippo_syndicate_icon_base }
-#  productEntity: FlippoSyndicateLighter
-#  cost:
-#    Telecrystal: 1
-#  categories:
-#  - UplinkPointless
-#  conditions:
-#  - !type:ListingLimitedStockCondition
-#    stock: 1
+- type: listing
+  id: UplinkFlippoSyndicateLighter
+  name: uplink-syndicate-flippo-syndicate-lighter-name
+  description: uplink-syndicate-flippo-syndicate-lighter-desc
+  icon: { sprite: /Textures/Objects/Tools/Lighters/lighters.rsi, state: zippo_syndicate_icon_base }
+  productEntity: FlippoSyndicateLighter
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkPointless
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
 
 # For the DesertEagle
 - type: listing
