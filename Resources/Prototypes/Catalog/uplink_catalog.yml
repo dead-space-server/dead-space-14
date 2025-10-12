@@ -287,9 +287,9 @@
   description: uplink-grenade-launcher-bundle-desc
   icon: { sprite: /Textures/Objects/Weapons/Guns/Launchers/china_lake.rsi, state: icon }
   productEntity: ClothingBackpackDuffelSyndicateFilledGrenadeLauncher
-  # discountCategory: veryRareDiscounts
-  # discountDownTo:
-  #  Telecrystal: 40 # DS14-value
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+  Telecrystal: 40 # DS14-value
   cost:
     Telecrystal: 45 # DS14-value
   categories:

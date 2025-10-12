@@ -320,7 +320,6 @@
   - !type:ListingLimitedStockCondition
     stock: 2
 
-# DS14-start
 - type: listing
   id: ClothesMateCapeInventoryEmag3
   productEntity: ADTClothingNeckSyndicateCloak
@@ -342,4 +341,3 @@
   conditions:
   - !type:ListingLimitedStockCondition
     stock: 2
-# DS14-end
