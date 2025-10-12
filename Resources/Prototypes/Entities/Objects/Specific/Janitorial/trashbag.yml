@@ -13,7 +13,7 @@
     grid:
     - 0,0,7,5
     quickInsert: true
-    quickEject: false
+    quickEject: false # DS14
     areaInsert: true
     storageOpenSound:
       collection: trashBagRustle
@@ -71,7 +71,6 @@
     grid:
     - 0,0,19,9
     quickInsert: true
-    quickEject: false
     areaInsert: true
     areaInsertRadius: 5
 
@@ -82,7 +81,6 @@
   description: An upgraded trash bag with a larger internal volume, installed directly into a custodial cyborg.
   components:
   - type: Storage
-    quickEject: false
     maxItemSize: Huge
     grid:
     - 0,0,7,6
