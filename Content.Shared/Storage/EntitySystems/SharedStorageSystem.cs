@@ -234,6 +234,7 @@ public abstract class SharedStorageSystem : EntitySystem
             Whitelist = component.Whitelist,
             Blacklist = component.Blacklist,
             QuickInsert = component.QuickInsert,
+            QuickEject = component.QuickEject, // DS14
             AreaInsert = component.AreaInsert,
             StorageInsertSound = component.StorageInsertSound,
             StorageRemoveSound = component.StorageRemoveSound,
@@ -2008,6 +2009,7 @@ public abstract class SharedStorageSystem : EntitySystem
         public EntityWhitelist? Whitelist;
         public EntityWhitelist? Blacklist;
         public bool QuickInsert;
+        public bool QuickEject; // DS14
         public bool AreaInsert;
         public SoundSpecifier? StorageInsertSound;
         public SoundSpecifier? StorageRemoveSound;

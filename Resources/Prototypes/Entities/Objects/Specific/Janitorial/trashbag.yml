@@ -13,6 +13,7 @@
     grid:
     - 0,0,7,5
     quickInsert: true
+    quickEject: false
     areaInsert: true
     storageOpenSound:
       collection: trashBagRustle
@@ -70,6 +71,7 @@
     grid:
     - 0,0,19,9
     quickInsert: true
+    quickEject: false
     areaInsert: true
     areaInsertRadius: 5
 
