@@ -14,6 +14,8 @@
         map: ["enum.GunVisualLayers.Mag"]
   - type: Item
     size: Huge
+    shape:
+    - 0,0,4,1
   - type: Clothing
     sprite: _DeadSpace/Objects/Weapons/Guns/Carbines/sks_scope.rsi
     quickEquip: false
