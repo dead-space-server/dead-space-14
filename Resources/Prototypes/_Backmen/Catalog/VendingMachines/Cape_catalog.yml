@@ -321,7 +321,7 @@
 
 # EMAG
 - type: listing
-  id: ClothesMateCapeInventoryEma1
+  id: ClothesMateCapeInventoryEmag1
   productEntity: ADTClothingNeckSyndicateCloak
   cost:
     SpaceCash: 100
