@@ -29,7 +29,6 @@
       materialComposition:
         Plastic: 100
 
-
 - type: entity
   parent: ClothingNeckBase
   id: ClothingCloakAtmosian
@@ -42,7 +41,6 @@
     - type: PhysicalComposition
       materialComposition:
         Plastic: 50
-
 
 # Fezory
 - type: entity
@@ -60,7 +58,6 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
-
 
 - type: entity
   parent: ClothingNeckBase
@@ -90,7 +87,6 @@
       materialComposition:
         Cloth: 100
 
-
 # NEKISH
 - type: entity
   parent: ClothingBackpackSatchel
@@ -104,7 +100,6 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
-
 
 - type: entity
   parent: ClothingBeltStorageBase
@@ -145,7 +140,6 @@
       materialComposition:
         Cloth: 400
 
-
 - type: entity
   parent: ClothingHandsBase
   id: ClothingHandsGlovesLeatherHoS
@@ -176,7 +170,6 @@
       materialComposition:
         Cloth: 100
 
-
 - type: entity
   parent: ClothingOuterCoatHoSTrench
   id: ClothingOuterCoatHoSOvercoat
@@ -191,7 +184,6 @@
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
-
       
 - type: entity
   parent: ClothingUniformBase
