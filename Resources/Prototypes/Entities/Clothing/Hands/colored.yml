@@ -374,7 +374,6 @@
     fiberMaterial: fibers-insulative-frayed
     fiberColor: fibers-yellow
 
-
 # Conductive Insulated Gloves
 - type: entity
   parent: ClothingHandsGlovesColorYellow
