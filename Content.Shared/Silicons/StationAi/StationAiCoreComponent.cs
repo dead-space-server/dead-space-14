@@ -38,11 +38,17 @@ public sealed partial class StationAiCoreComponent : Component
     [DataField(readOnly: true)]
     public EntProtoId? PhysicalEntityProto = "StationAiHoloLocal";
 
+    /// <summary>
+    /// DS14: The prototype of the brain to spawn when an AI is created or uploaded.
+    /// </summary>
+    [DataField(readOnly: true)]
+    public EntProtoId? SpawnedBrainProto = "StationAiBrain";
+
     public const string Container = "station_ai_mind_slot";
 }
 
 /// <summary>
-/// This event is raised on a station AI 'eye' that is being replaced with a new one 
+/// This event is raised on a station AI 'eye' that is being replaced with a new one
 /// </summary>
 /// <param name="NewRemoteEntity">The entity UID of the replacement entity</param>
 [ByRefEvent]

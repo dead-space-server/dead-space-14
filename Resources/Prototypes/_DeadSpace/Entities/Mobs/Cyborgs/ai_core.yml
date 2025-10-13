@@ -18,12 +18,6 @@
   - type: RandomMetadata
     nameSegments:
     - NamesAI
-  - type: ActionGrant
-    actions:
-    - ActionJumpToCore
-    - ActionSurvCameraLights
-    - ActionAIViewLaws
-    - AIEyeCamAction
   - type: UserInterface
     interfaces:
       enum.RadarConsoleUiKey.Key:
@@ -58,6 +52,22 @@
   - type: AiEye
   - type: TTS
     voice: Glados
+  - type: MindContainer
+  - type: GhostRole
+    allowMovement: false
+    name: job-name-station-ai
+    description: job-description-station-ai
+    rules: ghost-role-information-taipan-personal-rules
+    requirements:
+    - !type:DepartmentTimeRequirement
+      department: Silicon
+      time: 72000 # 20 hours
+    - !type:DepartmentTimeRequirement
+      department: Taipan
+      time: 72000 # 20 hours
+    raffle:
+      settings: default
+  - type: GhostTakeoverAvailable
 
 - type: entity
   id: AiHeldTaipanIntellicard
@@ -116,19 +126,48 @@
 
 - type: entity
   id: PlayerTaipanAiEmpty
-  parent: PlayerStationAiEmpty
   name: ядро ИИ Синдиката
   description: Последние достижения в области искусственного интеллекта.
+  parent:
+  - BaseStructure
+  - AiHolder
   suffix: Тайпан, Пустой
   components:
+  - type: Anchorable
+    flags:
+    - Anchorable
+  - type: Rotatable
   - type: WarpPoint
+    blacklist:
+      tags:
+      - GhostOnlyWarp
   - type: ContainerComp
     proto: AiHeldTaipan
     container: station_ai_mind_slot
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: ApcPowerReceiver
+    powerLoad: 1000
+    needsPower: false
   - type: StationAiCore
+    spawnedBrainProto: TaipanAiBrain
     remoteEntityProto: TaipanAiHolo
     physicalEntityProto: TaipanAiHoloLocal
+  - type: StationAiVision
+  - type: StationAiWhitelist
+  - type: Appearance
+  - type: InteractionOutline
   - type: Sprite
+    snapCardinals: true
     sprite: _DeadSpace/Mobs/Silicon/station_ai.rsi
     layers:
     - state: base
@@ -138,6 +177,21 @@
       map: ["enum.StationAiVisualState.Key"]
       shader: unshaded
       visible: false
+  - type: Telephone
+    compatibleRanges:
+    - Grid
+    - Map
+    - Unlimited
+    listeningRange: 0
+    speakerVolume: Speak
+    unlistedNumber: true
+  - type: Holopad
+  - type: UserInterface
+    interfaces:
+      enum.HolopadUiKey.AiRequestWindow:
+        type: HolopadBoundUserInterface
+      enum.HolopadUiKey.AiActionWindow:
+        type: HolopadBoundUserInterface
   - type: InteractionPopup
     interactSuccessString: petting-success-station-ai
     interactFailureString: petting-failure-station-ai
@@ -145,24 +199,49 @@
     interactSuccessSound:
       path: /Audio/Ambience/Objects/periodic_beep.ogg
 
-# The job-ready version of an AI spawn.
-#- type: entity
-#  id: PlayerTaipanAi
-#  parent: PlayerTaipanAiEmpty
-#  name: ядро ИИ Синдиката
-#  description: Последние достижения в области искусственного интеллекта.
-#  suffix: Тайпан, Спавн должности
-#  components:
-#  - type: ContainerSpawnPoint
-#    containerId: station_ai_mind_slot
-#    job: TaipanAi
+- type: entity
+  id: PlayerTaipanAi
+  parent: PlayerTaipanAiEmpty
+  name: ядро ИИ Синдиката
+  description: Последние достижения в области искусственного интеллекта.
+  suffix: Тайпан, Спавн должности
+  components:
+  - type: ContainerFill
+    containers:
+      station_ai_mind_slot:
+      - TaipanAiBrain
 
 # The actual brain inside the core
 - type: entity
   id: TaipanAiBrain
-  parent: StationAiBrain
+  parent: PositronicBrain
   categories: [ HideSpawnMenu, DoNotMap ]
   components:
+  - type: Sprite
+    # Once it's in a core it's pretty much an abstract entity at that point.
+    visible: false
+  - type: BlockMovement
+    blockInteraction: false
+  - type: SiliconLawBound
+  - type: ActionGrant
+    actions:
+    - ActionViewLaws
+  - type: UserInterface
+    interfaces:
+      enum.SiliconLawsUiKey.Key:
+        type: SiliconLawBoundUserInterface
+        requireInputValidation: false
+  - type: ComplexInteraction
+  - type: Actions
+  - type: Eye
+    drawFov: false
+  - type: Examiner
+  - type: InputMover
+  - type: Tag
+    tags:
+    - HideContextMenu
+    - StationAi
+    - NoConsoleSound
   - type: SiliconLawProvider
     laws: TaipanStatic
   - type: Access
