@@ -19,6 +19,14 @@
           orGroup: GoalPool
         - id: PaperTaipanGoalVirus
           orGroup: GoalPool
+        - id: PaperTaipanGoalExplosives
+          orGroup: GoalPool
+        - id: PaperTaipanGoalSpiders
+          orGroup: GoalPool
+        - id: PaperTaipanGoalZombies
+          orGroup: GoalPool
+        - id: PaperTaipanGoalNecromorfs
+          orGroup: GoalPool
       sound:
         path: /Audio/Effects/packetrip.ogg
     - type: Appearance
@@ -70,3 +78,39 @@
         - stampedColor: "#850000"
           stampedName: Синдикат
       content: paper-taipan-goal-explosives
+
+- type: entity
+  parent: PaperPrintedSyndicate
+  id: PaperTaipanGoalSpiders
+  categories: [HideSpawnMenu]
+  components:
+    - type: Paper
+      stampState: paper_stamp-syndicate
+      stampedBy:
+        - stampedColor: "#850000"
+          stampedName: Синдикат
+      content: paper-taipan-goal-spiders
+
+- type: entity
+  parent: PaperPrintedSyndicate
+  id: PaperTaipanGoalZombies
+  categories: [HideSpawnMenu]
+  components:
+    - type: Paper
+      stampState: paper_stamp-syndicate
+      stampedBy:
+        - stampedColor: "#850000"
+          stampedName: Синдикат
+      content: paper-taipan-goal-zombies
+
+- type: entity
+  parent: PaperPrintedSyndicate
+  id: PaperTaipanGoalNecromorfs
+  categories: [HideSpawnMenu]
+  components:
+    - type: Paper
+      stampState: paper_stamp-syndicate
+      stampedBy:
+        - stampedColor: "#850000"
+          stampedName: Синдикат
+      content: paper-taipan-goal-necromorfs
