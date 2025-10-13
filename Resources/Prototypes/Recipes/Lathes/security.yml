@@ -102,7 +102,7 @@
   id: RiotShield
   result: RiotShield
   materials:
-    Plasteel: 400 # DS14
+    Steel: 400
     Glass: 400
 
 - type: latheRecipe

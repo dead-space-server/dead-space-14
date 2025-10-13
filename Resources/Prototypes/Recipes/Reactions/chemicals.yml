@@ -307,14 +307,10 @@
     Ephedrine:
       amount: 1
 # DS14-start: Desoxy rebalance
-    FluorosulfuricAcid:
-      amount: 1
-    Carbon:
+    Methylamine:
       amount: 1
     Phenylacetone:
       amount: 1
-    Lithium:
-     amount: 1
   products:
     Desoxyephedrine: 3 #I kinda remember having to heat this up, and if you heated it up too much, it went boom, I can't remember the specific values tho.
 # DS14-end
@@ -340,11 +336,11 @@
 # DS14-start: Ephedrine rebalance
     Oil:
       amount: 1
-    Methylamine:
-      amount: 1
     Hydrogen:
       amount: 1
-    Mercury:
+    Sugar:
+      amount: 1
+    Diethylamine:
      amount: 1
   products:
     Ephedrine: 2

@@ -25,8 +25,6 @@
             Poison: 1.5
             Cellular: 0.5
             Asphyxiation: 2
-      - !type:Electrocute
-        probability: 0.1
     Narcotic:
       effects:
       - !type:MovespeedModifier
@@ -90,8 +88,6 @@
           types:
             Poison: 1.5
             Cellular: 0.5
-      - !type:Electrocute
-        probability: 0.1
     Narcotic:
       effects:
       - !type:Jitter
