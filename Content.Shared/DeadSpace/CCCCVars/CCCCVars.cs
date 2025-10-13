@@ -87,4 +87,8 @@ public sealed class CCCCVars
     /// </summary>
     public static readonly CVarDef<bool> GameModesUseTotalPlayers =
         CVarDef.Create("game.modes_use_total_players", true, CVar.SERVERONLY | CVar.ARCHIVE);
+
+
+    public static readonly CVarDef<bool> LobbyUIEnabled =
+        CVarDef.Create("ui.lobby_visible", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 }

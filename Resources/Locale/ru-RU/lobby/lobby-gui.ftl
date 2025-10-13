@@ -7,3 +7,4 @@ ui-lobby-ready-up-button = Готовность
 ui-lobby-online-players-block = Текущие игроки
 ui-lobby-server-info-block = Серверная информация
 ui-lobby-minimize-button = Интерфейс лобби
+ui-lobby-enable-interface = Включить интерфейс лобби
