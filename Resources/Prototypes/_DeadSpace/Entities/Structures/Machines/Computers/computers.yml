@@ -493,7 +493,7 @@
   - type: Computer
     board: ResearchComputerCircuitboardTaipan
   - type: AccessReader
-    access: [["TaipanScience"]]
+    access: [["TaipanResearch"]]
   - type: PointLight
     radius: 1.5
     energy: 1.6

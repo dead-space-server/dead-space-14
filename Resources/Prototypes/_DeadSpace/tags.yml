@@ -80,6 +80,9 @@
   id: GoldenApple
 
 - type: Tag
+  id: GiantSpiderSpace
+
+- type: Tag
   id: HardHat
 
 - type: Tag

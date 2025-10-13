@@ -26,11 +26,13 @@
       visible: false
       shader: unshaded
       map: ["enum.AnomalyGeneratorVisualLayers.Base"]
+  - type: AnomalyGenerator
+    spawnerPrototype: RandomAnomalyExtendedSpawner
   - type: ActiveRadio
     channels:
     - Taipan
   - type: AccessReader
-    access: [["TaipanScience"]]
+    access: [["TaipanResearch"]]
 
 - type: entity
   id: ResearchAndDevelopmentServerTaipan
