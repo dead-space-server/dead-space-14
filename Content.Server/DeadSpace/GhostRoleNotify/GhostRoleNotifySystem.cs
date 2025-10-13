@@ -24,11 +24,7 @@ public sealed partial class GhostRoleNotifySystem : EntitySystem
 
     private void OnInit(EntityUid uid, GhostRoleNotifysComponent component, ref ComponentStartup args)
     {
-        if (!TryComp<GhostRoleComponent>(uid, out var ghostRole))
-        {
-            Console.WriteLine("netu");
-        }
-        else
+        if (TryComp<GhostRoleComponent>(uid, out var ghostRole))
         {
             foreach (var player in _playerManager.Sessions)
             {
