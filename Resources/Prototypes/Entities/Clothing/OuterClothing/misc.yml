@@ -193,6 +193,7 @@
     materialComposition:
       Cloth: 100
   # DS14-end
+
 # Is this wizard wearing a fanny pack???
 - type: entity
   parent: ClothingOuterWizardBase

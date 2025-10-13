@@ -33,7 +33,6 @@
         Plastic: 100
     # DS14-end
 
-
 - type: entity
   parent: ClothingNeckBase
   id: ClothingCloakAtmosian
@@ -48,7 +47,6 @@
       materialComposition:
         Plastic: 50
     # DS14-end
-
 
 # Fezory
 - type: entity
@@ -68,7 +66,6 @@
       materialComposition:
         Cloth: 100
     # DS14-end
-
 
 - type: entity
   parent: ClothingNeckBase
@@ -102,7 +99,6 @@
         Cloth: 100
     # DS14-end
 
-
 # NEKISH
 - type: entity
   parent: ClothingBackpackSatchel
@@ -118,7 +114,6 @@
       materialComposition:
         Cloth: 100
     # DS14-end
-
 
 - type: entity
   parent: ClothingBeltStorageBase
@@ -161,7 +156,6 @@
         Cloth: 400
     # DS14-end
 
-
 - type: entity
   parent: ClothingHandsBase
   id: ClothingHandsGlovesLeatherHoS
@@ -196,7 +190,6 @@
         Cloth: 100
     # DS14-end
 
-
 - type: entity
   parent: ClothingOuterCoatHoSTrench
   id: ClothingOuterCoatHoSOvercoat
@@ -214,7 +207,6 @@
         Cloth: 100
     # DS14-end
 
-      
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitHoSOld

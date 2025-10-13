@@ -455,6 +455,7 @@
       Cloth: 10
       Durathread: 25
   # DS14-end
+
 # TODO Make lubed items not slip in hands
 - type: entity
   parent: ClothingHandsBase

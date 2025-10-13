@@ -180,6 +180,7 @@
       Plasteel: 200
       Plastic: 100
   # DS14-end
+
 #Goliath Hardsuit
 - type: entity
   parent: [ClothingOuterHardsuitBase, BaseCargoContraband]

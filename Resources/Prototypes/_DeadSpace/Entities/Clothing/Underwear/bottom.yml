@@ -28,6 +28,7 @@
     materialComposition:
       Cloth: 100
   # DS14-end
+
 # Sirena
 - type: entity
   parent: ClothingUnderwearBottomBase
