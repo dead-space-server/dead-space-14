@@ -297,31 +297,31 @@
   - !type:ListingLimitedStockCondition
     stock: 3
 
-# EMAG
 - type: listing
-  id: ClothesMateCapeInventoryEmag1
+  id: ClothesMateCapeInventory28
   productEntity: ADTClothingNeckGothicCloak
   cost:
-    SpaceCash: 20
+    SpaceCash: 60
   categories:
-  - ClothesMateCapeInventoryEmag
+  - ClothesMateCapeInventory
   conditions:
   - !type:ListingLimitedStockCondition
     stock: 2
 
 - type: listing
-  id: ClothesMateCapeInventoryEmag2
+  id: ClothesMateCapeInventory29
   productEntity: ADTClothingNeckDarkGreyCloak
   cost:
-    SpaceCash: 20
+    SpaceCash: 60
   categories:
-  - ClothesMateCapeInventoryEmag
+  - ClothesMateCapeInventory
   conditions:
   - !type:ListingLimitedStockCondition
     stock: 2
 
+# EMAG
 - type: listing
-  id: ClothesMateCapeInventoryEmag3
+  id: ClothesMateCapeInventoryEma1
   productEntity: ADTClothingNeckSyndicateCloak
   cost:
     SpaceCash: 100
@@ -332,7 +332,7 @@
     stock: 2
 
 - type: listing
-  id: ClothesMateCapeInventoryEmag4
+  id: ClothesMateCapeInventoryEmag2
   productEntity: ADTClothingNeckNukeOpsCloak
   cost:
     SpaceCash: 100
