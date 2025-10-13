@@ -333,7 +333,6 @@
   id: Ephedrine
   impact: Medium
   reactants:
-# DS14-start: Ephedrine rebalance
     Oil:
       amount: 1
     Hydrogen:
@@ -343,8 +342,7 @@
     Diethylamine:
      amount: 1
   products:
-    Ephedrine: 2
-# DS14-end
+    Ephedrine: 2 # DS14-value
 
 - type: reaction
   id: MuteToxin
