@@ -15,5 +15,7 @@
     sprintModifier: 0.8
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitSeniorOfficer
+  # DS14-start
   - type: StaticPrice
     price: 655
+  # DS14-end

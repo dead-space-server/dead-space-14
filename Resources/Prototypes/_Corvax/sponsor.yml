@@ -10,9 +10,11 @@
       sprite: _Corvax/Sponsor/Clothing/OuterClothing/Coats/atmosian.rsi
     - type: Clothing
       sprite: _Corvax/Sponsor/Clothing/OuterClothing/Coats/atmosian.rsi
+    # DS14-start
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
+    # DS14-end
 
 - type: entity
   parent: ClothingMaskGas
@@ -25,9 +27,11 @@
       sprite: _Corvax/Sponsor/Clothing/Mask/atmosian.rsi
     - type: Clothing
       sprite: _Corvax/Sponsor/Clothing/Mask/atmosian.rsi
+    # DS14-start
     - type: PhysicalComposition
       materialComposition:
         Plastic: 100
+    # DS14-end
 
 
 - type: entity
@@ -39,9 +43,11 @@
   components:
     - type: Sprite
       sprite: _Corvax/Sponsor/Clothing/Neck/Cloaks/atmosian.rsi
+    # DS14-start
     - type: PhysicalComposition
       materialComposition:
         Plastic: 50
+    # DS14-end
 
 
 # Fezory
@@ -57,9 +63,11 @@
     - type: Clothing
       sprite: _Corvax/Sponsor/Clothing/Mask/death.rsi
     - type: BreathMask
+    # DS14-start
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
+    # DS14-end
 
 
 - type: entity
@@ -71,9 +79,11 @@
   components:
     - type: Sprite
       sprite: _Corvax/Sponsor/Clothing/Neck/Cloaks/gamer.rsi
+    # DS14-start
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
+    # DS14-end
 
 - type: entity
   parent: ClothingUniformBase
@@ -86,9 +96,11 @@
       sprite: _Corvax/Sponsor/Clothing/Uniforms/Jumpsuit/skeleton.rsi
     - type: Clothing
       sprite: _Corvax/Sponsor/Clothing/Uniforms/Jumpsuit/skeleton.rsi
+    # DS14-start
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
+    # DS14-end
 
 
 # NEKISH
@@ -101,9 +113,11 @@
   components:
     - type: Sprite
       sprite: _Corvax/Sponsor/NEKISH/Clothing/Back/Satchels/hos.rsi
+    # DS14-start  
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
+    # DS14-end
 
 
 - type: entity
@@ -141,9 +155,11 @@
               - Stunbaton
       sprite: Clothing/Belt/belt_overlay.rsi
     - type: Appearance
+    # DS14-start
     - type: PhysicalComposition
       materialComposition:
         Cloth: 400
+    # DS14-end
 
 
 - type: entity
@@ -157,9 +173,11 @@
       sprite: _Corvax/Sponsor/NEKISH/Clothing/Hands/Gloves/hos.rsi
     - type: Clothing
       sprite: _Corvax/Sponsor/NEKISH/Clothing/Hands/Gloves/hos.rsi
+    # DS14-start
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
+    # DS14-end
 
 - type: entity
   parent: ClothingHeadBase
@@ -172,9 +190,11 @@
       sprite: _Corvax/Sponsor/NEKISH/Clothing/Head/Hats/hoscap.rsi
     - type: Clothing
       sprite: _Corvax/Sponsor/NEKISH/Clothing/Head/Hats/hoscap.rsi
+    # DS14-start
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
+    # DS14-end
 
 
 - type: entity
@@ -188,9 +208,11 @@
       sprite: _Corvax/Sponsor/NEKISH/Clothing/OuterClothing/Coats/hos_overcoat.rsi
     - type: Clothing
       sprite: _Corvax/Sponsor/NEKISH/Clothing/OuterClothing/Coats/hos_overcoat.rsi
+    # DS14-start
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
+    # DS14-end
 
       
 - type: entity
@@ -204,9 +226,11 @@
       sprite: _Corvax/Sponsor/NEKISH/Clothing/Uniforms/Jumpsuit/hos.rsi
     - type: Clothing
       sprite: _Corvax/Sponsor/NEKISH/Clothing/Uniforms/Jumpsuit/hos.rsi
+    # DS14-start
     - type: PhysicalComposition
       materialComposition:
         Cloth: 200
+    # DS14-end
 
 # ken41k
 - type: entity
@@ -220,9 +244,11 @@
     - type: Clothing
       sprite: _Corvax/Clothing/Hands/Accessories/watch.rsi
     - type: Clock
+    # DS14-start
     - type: PhysicalComposition
       materialComposition:
         Plastic: 50
+    # DS14-end
 
 # jesuisunfou
 - type: entity
@@ -236,9 +262,11 @@
       sprite: _Corvax/Sponsor/jesuisunfou/Clothing/Hands/Gloves/ussp.rsi
     - type: Clothing
       sprite: _Corvax/Sponsor/jesuisunfou/Clothing/Hands/Gloves/ussp.rsi
+    # DS14-start
     - type: PhysicalComposition
       materialComposition:
         Cloth: 100
+    # DS14-end
 
 - type: entity
   parent: ClothingHeadBase
@@ -251,9 +279,11 @@
       sprite: _Corvax/Sponsor/jesuisunfou/Clothing/Head/Hats/ussp.rsi
     - type: Clothing
       sprite: _Corvax/Sponsor/jesuisunfou/Clothing/Head/Hats/ussp.rsi
+    # DS14-start
     - type: PhysicalComposition
       materialComposition:
         Cloth: 200
+    # DS14-end
 
 - type: entity
   parent: ClothingOuterStorageBase
@@ -266,9 +296,11 @@
       sprite: _Corvax/Sponsor/jesuisunfou/Clothing/OuterClothing/Coats/ussp.rsi
     - type: Clothing
       sprite: _Corvax/Sponsor/jesuisunfou/Clothing/OuterClothing/Coats/ussp.rsi
+    # DS14-start
     - type: PhysicalComposition
       materialComposition:
         Cloth: 500
+    # DS14-end
 
 - type: entity
   parent: ClothingUniformBase
@@ -281,9 +313,11 @@
       sprite: _Corvax/Sponsor/jesuisunfou/Clothing/Uniforms/Jumpsuit/ussp.rsi
     - type: Clothing
       sprite: _Corvax/Sponsor/jesuisunfou/Clothing/Uniforms/Jumpsuit/ussp.rsi
+    # DS14-start
     - type: PhysicalComposition
       materialComposition:
         Cloth: 200
+    # DS14-end
 
 - type: entity
   parent: ClothingShoesBaseButcherable
@@ -296,6 +330,8 @@
       sprite: _Corvax/Sponsor/jesuisunfou/Clothing/Shoes/ussp.rsi
     - type: Clothing
       sprite: _Corvax/Sponsor/jesuisunfou/Clothing/Shoes/ussp.rsi
+    # DS14-start
     - type: PhysicalComposition
       materialComposition:
         Cloth: 200
+    # DS14-end
