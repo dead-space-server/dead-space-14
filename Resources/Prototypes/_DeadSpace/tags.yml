@@ -5,13 +5,13 @@
   id: BatteryWeaponFireModesSprites
 
 - type: Tag
-  id: BorgSecRLeg
-
-- type: Tag
-  id: BorgSecTorso
+  id: BorgModuleSecurity
 
 - type: Tag
   id: BorgSecHead
+
+- type: Tag
+  id: BorgSecLArm
 
 - type: Tag
   id: BorgSecLLeg
@@ -20,10 +20,10 @@
   id: BorgSecRArm
 
 - type: Tag
-  id: BorgSecLArm
+  id: BorgSecRLeg
 
 - type: Tag
-  id: BorgModuleSecurity
+  id: BorgSecTorso
 
 - type: Tag
   id: DarkFlower
@@ -71,22 +71,25 @@
   id: LightReplacer
 
 - type: Tag
+  id: MagazineCarbineSKS
+
+- type: Tag
   id: MagazineEagle
 
 - type: Tag
   id: MagazineEagleAP
 
 - type: Tag
-  id: MukhtarWearable
-
-- type: Tag
-  id: Necro
-
-- type: Tag
   id: MagazineTommyGun
 
 - type: Tag
-  id: Plasteel
+  id: MagazineTommyGunCap
+
+- type: Tag
+  id: MukhtarWearable
+
+- type: Tag
+  id: MantisBlades
 
 - type: Tag
   id: PinkFlower
@@ -99,6 +102,12 @@
 
 - type: Tag
   id: MagazineTommyGunCap
+
+- type: Tag
+  id: Necro
+
+- type: Tag
+  id: Plasteel
 
 - type: Tag
   id: SiliconIPSIPCEmotes
