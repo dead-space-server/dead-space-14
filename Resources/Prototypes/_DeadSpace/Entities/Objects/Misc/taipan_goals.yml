@@ -2,6 +2,7 @@
   parent: BaseItem
   id: BoxFolderTaipanGoals
   name: папка с целью ННКСС "Тайпан"
+  suffix: Тайпан, Случайная цель
   components:
     - type: Sprite
       sprite: Objects/Misc/folders.rsi
