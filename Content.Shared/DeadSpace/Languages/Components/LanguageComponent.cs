@@ -10,10 +10,10 @@ namespace Content.Shared.DeadSpace.Languages.Components;
 public sealed partial class LanguageComponent : Component
 {
     [DataField]
-    public List<ProtoId<LanguagePrototype>> KnownLanguages = new();
+    public HashSet<ProtoId<LanguagePrototype>> KnownLanguages = new();
 
     [DataField]
-    public List<ProtoId<LanguagePrototype>> CantSpeakLanguages = new();
+    public HashSet<ProtoId<LanguagePrototype>> CantSpeakLanguages = new();
 
     [DataField, ViewVariables(VVAccess.ReadOnly)]
     public ProtoId<LanguagePrototype> SelectedLanguage = default!;

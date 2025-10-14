@@ -51,10 +51,6 @@ public sealed class LanguageSystem : EntitySystem
         if (EntityManager.TryGetComponent<ActorComponent?>(uid, out var actorComponent))
         {
             var ev = new RequestLanguageMenuEvent(uid.Id, component.KnownLanguages, component.CantSpeakLanguages);
-
-            ev.KnownLanguages.Sort();
-            ev.CantSpeakLanguages.Sort();
-
             RaiseNetworkEvent(ev, actorComponent.PlayerSession);
         }
 
@@ -89,7 +85,7 @@ public sealed class LanguageSystem : EntitySystem
         return string.Join(' ', words);
     }
 
-    public List<ProtoId<LanguagePrototype>>? GetKnownLanguages(EntityUid entity)
+    public HashSet<ProtoId<LanguagePrototype>>? GetKnownLanguages(EntityUid entity)
     {
         if (!TryComp<LanguageComponent>(entity, out var component))
             return null;

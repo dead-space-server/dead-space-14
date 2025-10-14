@@ -13,10 +13,10 @@ public sealed partial class SelectLanguageActionEvent : InstantActionEvent {}
 public sealed partial class RequestLanguageMenuEvent : EntityEventArgs
 {
     public int Target { get; }
-    public readonly List<ProtoId<LanguagePrototype>> KnownLanguages = new();
-    public readonly List<ProtoId<LanguagePrototype>> CantSpeakLanguages = new();
+    public readonly HashSet<ProtoId<LanguagePrototype>> KnownLanguages = new();
+    public readonly HashSet<ProtoId<LanguagePrototype>> CantSpeakLanguages = new();
 
-    public RequestLanguageMenuEvent(int target, List<ProtoId<LanguagePrototype>> knownLanguages, List<ProtoId<LanguagePrototype>> cantSpeakLanguages)
+    public RequestLanguageMenuEvent(int target, HashSet<ProtoId<LanguagePrototype>> knownLanguages, HashSet<ProtoId<LanguagePrototype>> cantSpeakLanguages)
     {
         Target = target;
         KnownLanguages = knownLanguages;

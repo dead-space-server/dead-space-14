@@ -112,7 +112,7 @@
 
 - type: language
   id: SlimeLanguage
-  name: Слаймовский
+  name: Пузырчатый
   icon: /Textures/_DeadSpace/LanguageIcons/slime.png
   lexicon:
   - Блимп
@@ -432,7 +432,7 @@
 
 - type: language
   id: MothLanguage
-  name: Мольский
+  name: Ткачий
   icon: /Textures/_DeadSpace/LanguageIcons/moth.png
   generateTTSForLexicon: false
   lexiconSound:
@@ -650,7 +650,7 @@
 
 - type: language
   id: VoxLanguage
-  name: Вокс-пиджин
+  name: Вокс-птичий
   icon: /Textures/_DeadSpace/LanguageIcons/vox.png
   generateTTSForLexicon: false
   lexiconSound:
@@ -1751,4 +1751,3 @@
   - чрха
   - фшшрр
   - хгшхаа
-
