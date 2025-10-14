@@ -45,6 +45,7 @@
   id: ClothingHandsGlovesNitrileTaipan
   name: красные нитриловые перчатки
   description: Высококачественные нитриловые перчатки. Дорогое медицинское средство индивидуальной защиты.
+  suffix: Тайпан
   components:
   - type: Sprite
     sprite: Clothing/Hands/Gloves/nitrile.rsi
