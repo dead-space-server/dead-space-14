@@ -29,14 +29,9 @@
 
 - type: entity
   parent: ClothingBeltStorageBase
-  id: ClothingUtilityWebbing
-  name: РПС для инструментов
-  description: Дизайнеры NanoTrasen ожидали заменить этим старый добрый пояс для инструментов.
+  id: ClothingBeltUtilityBase
+  abstract: true
   components:
-  - type: Sprite
-    sprite: _DeadSpace/Clothing/Belt/utilitywebbing.rsi
-  - type: Clothing
-    sprite: _DeadSpace/Clothing/Belt/utilitywebbing.rsi
   - type: Storage
     maxItemSize: Normal
     whitelist:
@@ -58,9 +53,11 @@
         - JawsOfLife
         - GPS
         - WeldingMask
+        - RemoteSignaller
       components:
         - StationMap
         - SprayPainter
+        - SprayPainterAmmo
         - NetworkConfigurator
         - RCD
         - RCDAmmo
@@ -70,3 +67,14 @@
         - TrayScanner
         - GasAnalyzer
         - HandLabeler
+
+- type: entity
+  parent: ClothingBeltUtilityBase
+  id: ClothingUtilityWebbing
+  name: РПС для инструментов
+  description: Дизайнеры NanoTrasen ожидали заменить этим старый добрый пояс для инструментов.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Belt/utilitywebbing.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Belt/utilitywebbing.rsi
