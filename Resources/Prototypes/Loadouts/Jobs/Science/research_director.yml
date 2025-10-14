@@ -76,11 +76,12 @@
   equipment:
     outerClothing: ClothingOuterWinterRD
 
-# Shoes DS14
+# DS14-start
 - type: loadout
   id: LeatherShoes
   equipment:
     shoes: ClothingShoesLeather
+# DS14-end
 
 # Underwear
 - type: loadout
