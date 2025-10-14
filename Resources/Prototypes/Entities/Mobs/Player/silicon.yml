@@ -79,6 +79,9 @@
   - type: TTS
     voice: Glados
   # DS14-Languages-start
+  - type: Actions
+  - type: ActionsContainer
+  - type: ContainerContainer
   - type: Language
     selectedLanguage: GeneralLanguage
     knownLanguages:
