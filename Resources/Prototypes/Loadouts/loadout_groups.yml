@@ -1229,20 +1229,18 @@
   loadouts:
   - ScientistJumpsuit
   - ScientistJumpskirt
-  # DS14-rnd-start
+  # DS14-start
   - ScientistJumpsuitFormal
   - ScientistJumpskirtFormal
   - ScientistJumpsuitTurtleneck
   - ScientistJumpskirtTurtleneck
-  # DS14-rnd-end
-  - RoboticistJumpsuit
-  - RoboticistJumpskirt
-  # DS14-rnd-start
   - RoboticistJumpsuitOveralls
   - RoboticistJumpskirtOveralls
   - RoboticistJumpsuitWhite
   - RoboticistJumpskirtWhite
-  # DS14-rnd-end
+  # DS14-end
+  - RoboticistJumpsuit
+  - RoboticistJumpskirt
   # - SeniorResearcherJumpsuit
   # - SeniorResearcherJumpskirt
 
@@ -1253,11 +1251,11 @@
   - ScientistBackpack
   - ScientistSatchel
   - ScientistDuffel
-  # DS14-rnd-start
+  # DS14-start
   - RoboticistBackpack
   - RoboticistSatchel
   - RoboticistDuffel
-  # DS14-rnd-end
+  # DS14-end
 
 - type: loadoutGroup
   id: ScientistOuterClothing

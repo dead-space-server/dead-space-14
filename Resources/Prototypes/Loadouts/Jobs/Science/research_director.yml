@@ -63,7 +63,7 @@
   id: ResearchDirectorJumpskirtSuit
   equipment:
     jumpsuit: ClothingUniformJumpskirtResearchDirectorSuit
-
+# DS14
 
 # OuterClothing
 - type: loadout

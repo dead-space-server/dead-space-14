@@ -83,10 +83,31 @@
   id: ClothingScience
   recipes:
   - ClothingHeadHatBeretRND
+  - ClothingHeadHatBeretRobotics # DS14
   - ClothingUniformJumpsuitResearchDirector
   - ClothingUniformJumpskirtResearchDirector
+# DS14-start
+  - ClothingUniformJumpsuitResearchDirectorShirt
+  - ClothingUniformJumpskirtResearchDirectorShirt
+  - ClothingUniformJumpsuitResearchDirectorSuit
+  - ClothingUniformJumpskirtResearchDirectorSuit
+# DS14-end
   - ClothingUniformJumpsuitScientist
   - ClothingUniformJumpskirtScientist
+# DS14-start 
+  - ClothingUniformJumpsuitScientistFormal
+  - ClothingUniformJumpskirtScientistFormal
+  - ClothingUniformJumpsuitScientistTurtle
+  - ClothingUniformJumpskirtScientistTurtle
+  - ClothingUniformJumpsuitRoboticist
+  - ClothingUniformJumpskirtRoboticist
+  - ClothingUniformJumpsuitRoboticistOveralls
+  - ClothingUniformJumpskirtRoboticistOveralls
+  - ClothingUniformJumpsuitRoboticistWhite
+  - ClothingUniformJumpskirtRoboticistWhite
+  - ClothingUniformJumpsuitSeniorResearcherTurtle
+  - ClothingUniformJumpskirtSeniorResearcherTurtle
+# DS14-end
   - ClothingUniformJumpsuitSeniorResearcher
   - ClothingUniformJumpskirtSeniorResearcher
 
@@ -178,6 +199,7 @@
   - ClothingOuterWinterViro
   - ClothingOuterWinterSci
   - ClothingOuterWinterRobo
+  - ClothingOuterWinterCoatSeniorResearcher # DS14
   - ClothingOuterWinterSec
   - ClothingOuterWinterClownDownjacket # DS14
 

@@ -109,6 +109,7 @@
   id: RoboticistJumpskirtWhite
   equipment:
     jumpsuit: ClothingUniformJumpskirtRoboticistWhite
+# DS14
 
 # - type: loadout
 #   id: SeniorResearcherJumpsuit
@@ -157,6 +158,7 @@
   id: RoboticistDuffel
   equipment:
     back: ClothingBackpackDuffelRobotics
+# DS14
 
 # OuterClothing
 - type: loadout
