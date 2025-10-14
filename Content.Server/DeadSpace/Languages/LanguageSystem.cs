@@ -26,14 +26,14 @@ public sealed class LanguageSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<LanguageComponent, ComponentInit>(OnComponentInit);
+        SubscribeLocalEvent<LanguageComponent, MapInitEvent>(OnComponentMapInit);
         SubscribeLocalEvent<LanguageComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<LanguageComponent, SelectLanguageActionEvent>(OnSelect);
 
         SubscribeNetworkEvent<SelectLanguageEvent>(OnSelectLanguage);
     }
 
-    private void OnComponentInit(EntityUid uid, LanguageComponent component, ComponentInit args)
+    private void OnComponentMapInit(EntityUid uid, LanguageComponent component, MapInitEvent args)
     {
         _actionsSystem.AddAction(uid, ref component.SelectLanguageActionEntity, component.SelectLanguageAction);
     }
