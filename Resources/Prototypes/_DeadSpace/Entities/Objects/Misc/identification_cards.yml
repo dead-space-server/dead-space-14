@@ -61,9 +61,10 @@
     - state: atmosphericsengineer
   - type: Access
     tags:
-    - TaipanAtmospherics
-    - TaipanEngineering
     - TaipanMaint
+    - TaipanEngineering
+    - TaipanAtmospherics
+    - TaipanExternal
 
 - type: entity
   parent: IDCardTaipan
@@ -99,6 +100,7 @@
     - TaipanResearchDirector
     - TaipanResearch
     - TaipanService
+    - TaipanExternal
 
 - type: entity
   parent: IDCardTaipan
@@ -111,8 +113,9 @@
     - state: shaftminer
   - type: Access
     tags:
-    - TaipanCargo
     - TaipanMaint
+    - TaipanCargo
+    - TaipanExternal
 
 - type: entity
   parent: IDCardTaipan
@@ -125,8 +128,8 @@
     - state: medic
   - type: Access
     tags:
-    - TaipanMedical
     - TaipanMaint
+    - TaipanMedical
 
 - type: entity
   parent: IDCardTaipan
@@ -152,6 +155,7 @@
     - TaipanResearch
     - TaipanService
     - TaipanTechnicalOperationsSupervisor
+    - TaipanExternal
     - SyndicateAgent
 
 - type: entity
@@ -166,6 +170,7 @@
   - type: Access
     tags:
     - TaipanMaint
+    - TaipanExternal
     - TaipanMedical
 
 - type: entity
@@ -193,8 +198,9 @@
     - state: pilot
   - type: Access
     tags:
-    - TaipanProtection
     - TaipanMaint
+    - TaipanExternal
+    - TaipanProtection
 
 - type: entity
   parent: IDCardTaipan
@@ -209,6 +215,7 @@
     tags:
     - TaipanEngineering
     - TaipanMaint
+    - TaipanExternal
 
 - type: entity
   parent: IDCardTaipan
@@ -227,9 +234,10 @@
     - TaipanEngineering
     - TaipanMaint
     - TaipanMedical
-    - TaipanResearchDirector
     - TaipanResearch
     - TaipanService
+    - TaipanTechnicalOperationsSupervisor
+    - TaipanExternal
 
 - type: entity
   parent: IDCardTaipan

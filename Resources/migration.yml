@@ -944,7 +944,8 @@ ClothingEyesHudSyndicateAgentTypan: null
 ClothingEyesHudTypan: null
 ClothingHandsRDTypan: null
 ClothingHandsScienceTypan: null
-ClothingHeadTypan: ClothingHeadTaipan
+ClothingHeadTypan: null
+ClothingHeadTaipan: null
 ClothingMaskGasTypanCargo: null
 ClothingOuterApronTypanChef: ClothingOuterApronTaipanChef
 ClothingOuterCoatRDTypan: null

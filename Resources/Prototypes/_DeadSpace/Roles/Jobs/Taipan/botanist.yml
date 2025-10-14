@@ -17,6 +17,7 @@
     time: 3600 # 1 hour
   access:
   - TaipanService
+  - TaipanMaint
   special:
   - !type:AddImplantSpecial
     implants: [ DeathRattleImplantTaipan ]

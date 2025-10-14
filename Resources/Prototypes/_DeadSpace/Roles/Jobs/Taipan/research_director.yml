@@ -19,12 +19,16 @@
     role: JobTaipanMedic
     time: 36000 # 10 hours
   access:
-  - TaipanMaint
-  - TaipanExternal
-  - TaipanMedical
-  - TaipanResearch
+  - TaipanAtmospherics
+  - TaipanCargo
   - TaipanCommand
+  - TaipanEngineering
+  - TaipanMaint
+  - TaipanMedical
   - TaipanResearchDirector
+  - TaipanResearch
+  - TaipanService
+  - TaipanExternal
   special:
   - !type:AddImplantSpecial
     implants: [ DeathRattleImplantTaipan ]

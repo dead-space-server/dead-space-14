@@ -39,3 +39,16 @@
     sprite: _DeadSpace/Clothing/Hands/Gloves/gloves_ts.rsi
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
+
+- type: entity
+  parent: ClothingHandsGlovesNitrile
+  id: ClothingHandsGlovesNitrileTaipan
+  name: красные нитриловые перчатки
+  description: Высококачественные нитриловые перчатки. Дорогое медицинское средство индивидуальной защиты.
+  components:
+  - type: Sprite
+    sprite: Clothing/Hands/Gloves/nitrile.rsi
+  - type: Clothing
+    sprite: Clothing/Hands/Gloves/nitrile.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag

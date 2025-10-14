@@ -104,19 +104,8 @@
   id: VendingMachineMedicalTaipan
   name: СиндиМед Плюс
   description: Это медицинский раздатчик препаратов. Только натуральные химикаты!
+  suffix: Тайпан
   components:
-  - type: VendingMachine
-    pack: NanoMedPlusInventory
-    offState: off
-    brokenState: broken
-    normalState: normal-unshaded
-    ejectState: eject-unshaded
-    denyState: deny-unshaded
-    ejectDelay: 0.6
-  - type: DatasetVocalizer
-    dataset: NanoMedAds
-  - type: SpeakOnUIClosed
-    pack: GenericVendGoodbyes
   - type: Sprite
     sprite: _DeadSpace/Structures/Machines/VendingMachines/medical.rsi
     layers:
@@ -129,6 +118,30 @@
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
   - type: AccessReader
     access: [["TaipanMedical"]]
+  - type: PointLight
+    radius: 1.5
+    energy: 1.6
+    color: "#8B0000"
+
+- type: entity
+  parent: VendingMachineEngivend
+  id: VendingMachineEngivendTaipan
+  name: СиндиИнж
+  description: Запасные инструменты. А что? Вы ожидали чего-то остроумного?
+  suffix: Тайпан
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Machines/VendingMachines/engivend.rsi
+    layers:
+    - state: "off"
+      map: ["enum.VendingMachineVisualLayers.Base"]
+    - state: "off"
+      map: ["enum.VendingMachineVisualLayers.BaseUnshaded"]
+      shader: unshaded
+    - state: panel
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: AccessReader
+    access: [["TaipanEngineering"]]
   - type: PointLight
     radius: 1.5
     energy: 1.6

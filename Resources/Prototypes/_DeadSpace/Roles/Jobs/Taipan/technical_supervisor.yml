@@ -19,12 +19,16 @@
     department: Taipan
     time: 144000 # 40 hours
   access:
-  - TaipanMaint
-  - TaipanExternal
-  - TaipanCargo
   - TaipanAtmospherics
-  - TaipanEngineering
+  - TaipanCargo
   - TaipanCommand
+  - TaipanEngineering
+  - TaipanMaint
+  - TaipanMedical
+  - TaipanResearch
+  - TaipanService
+  - TaipanTechnicalOperationsSupervisor
+  - TaipanExternal
   special:
   - !type:AddImplantSpecial
     implants: [ DeathRattleImplantTaipan ]

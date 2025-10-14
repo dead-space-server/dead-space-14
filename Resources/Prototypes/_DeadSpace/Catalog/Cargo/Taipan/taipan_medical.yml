@@ -137,3 +137,13 @@
   cost: 750
   category: cargoproduct-category-name-medical
   group: taipan_market
+
+- type: cargoProduct
+  id: TaipanZetaOneMedipenProduct
+  icon:
+    sprite: Objects/Specific/Medical/medipen.rsi
+    state: medipen
+  product: CrateZetaOneMedipen
+  cost: 2000
+  category: cargoproduct-category-name-medical
+  group: taipan_market

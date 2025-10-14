@@ -22,6 +22,7 @@
   - TaipanMaint
   - TaipanEngineering
   - TaipanAtmospherics
+  - TaipanExternal
   special:
   - !type:AddImplantSpecial
     implants: [ DeathRattleImplantTaipan ]
@@ -33,4 +34,5 @@
     shoes: ClothingShoesTaipanBootsWork
     back: ClothingBackpackSyndicate
     socks: ClothingUnderwearSocksTaipanAtmosphericsEngineer
+    belt: ClothingBeltUtilityEngineering
     id: TaipanAtmosphericsEngineerPDA

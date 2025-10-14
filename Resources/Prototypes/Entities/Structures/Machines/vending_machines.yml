@@ -907,7 +907,7 @@
     - state: panel
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
   - type: AccessReader
-    access: [["Engineering"], ["TaipanEngineering"]] # DS14
+    access: [["Engineering"]]
   - type: PointLight
     radius: 1.5
     energy: 1.6
@@ -1343,7 +1343,7 @@
     - state: panel
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
   - type: AccessReader
-    access: [["Research"], ["TaipanResearch"]] # DS14
+    access: [["Research"]]
   - type: PointLight
     radius: 1.5
     energy: 1.6

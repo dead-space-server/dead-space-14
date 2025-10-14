@@ -28,7 +28,7 @@
     - id: BoxVial
     - id: PlasmaChemistryVial
     - id: ChemBag
-    - id: ClothingHandsGlovesLatex
+    - id: ClothingHandsGlovesNitrileTaipan
     - id: ClothingMaskSterile
     - id: HandLabeler
       prob: 0.5
@@ -43,20 +43,9 @@
     - id: HandheldHealthAnalyzer
     - id: ClothingHeadMirror
       prob: 0.1
-    - id: ClothingHandsGlovesLatex
+    - id: ClothingHandsGlovesNitrileTaipan
     - id: ClothingEyesHudTaipanMedical
-    - id: ClothingHeadHatSurgcapGreen
-      prob: 0.1
-    - id: ClothingHeadHatSurgcapPurple
-      prob: 0.05
-    - id: ClothingHeadHatSurgcapBlue
-      prob: 0.90
-    - id: UniformScrubsColorBlue
-      prob: 0.5
-    - id: UniformScrubsColorGreen
-      prob: 0.1
-    - id: UniformScrubsColorPurple
-      prob: 0.05
+    - id: ClothingHeadHatBeretMedicTaipan
     - id: ClothingMaskSterile
 
 - type: entity
@@ -68,7 +57,7 @@
     contents:
     - id: ClothingEyesHudTaipanMedical
     - id: Defibrillator
-    - id: ClothingHandsGlovesLatex
+    - id: ClothingHandsGlovesNitrileTaipan
     - id: ClothingMaskSterile
     - id: HandheldGPSBasic
     - id: SpyCrewMonitor
