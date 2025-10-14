@@ -425,7 +425,6 @@
       Durathread: 500
       Plasteel: 600
       Plastic: 100
-  - type: CargoSellBlacklist
   # DS14-end
 
 #Chief Engineer's Hardsuit
@@ -475,7 +474,6 @@
       Plasteel: 200
       Plastic: 100
       Plasma: 1500
-  - type: CargoSellBlacklist
   # DS14-end
 
 #Chief Medical Officer's Hardsuit
@@ -515,7 +513,6 @@
       Steel: 500
       Durathread: 300
       Plastic: 500
-  - type: CargoSellBlacklist
   # DS14-end
 
 #Research Director's Hardsuit
@@ -571,7 +568,6 @@
       Plasteel: 500
       Plastic: 100
       Plasma: 2000
-  - type: CargoSellBlacklist
   # DS14-end
 
 #Head of Security's Hardsuit
