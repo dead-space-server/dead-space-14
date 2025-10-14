@@ -83,18 +83,16 @@
   id: ClothingScience
   recipes:
   - ClothingHeadHatBeretRND
-  - ClothingHeadHatBeretRobotics # DS14
   - ClothingUniformJumpsuitResearchDirector
   - ClothingUniformJumpskirtResearchDirector
-# DS14-start
+  - ClothingUniformJumpsuitScientist
+  - ClothingUniformJumpskirtScientist
+  # DS14-start
+  - ClothingHeadHatBeretRobotics
   - ClothingUniformJumpsuitResearchDirectorShirt
   - ClothingUniformJumpskirtResearchDirectorShirt
   - ClothingUniformJumpsuitResearchDirectorSuit
   - ClothingUniformJumpskirtResearchDirectorSuit
-# DS14-end
-  - ClothingUniformJumpsuitScientist
-  - ClothingUniformJumpskirtScientist
-# DS14-start 
   - ClothingUniformJumpsuitScientistFormal
   - ClothingUniformJumpskirtScientistFormal
   - ClothingUniformJumpsuitScientistTurtle
@@ -107,7 +105,7 @@
   - ClothingUniformJumpskirtRoboticistWhite
   - ClothingUniformJumpsuitSeniorResearcherTurtle
   - ClothingUniformJumpskirtSeniorResearcherTurtle
-# DS14-end
+  # DS14-end
   - ClothingUniformJumpsuitSeniorResearcher
   - ClothingUniformJumpskirtSeniorResearcher
 
