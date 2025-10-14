@@ -24,5 +24,3 @@ public sealed partial class LanguageComponent : Component
     [DataField]
     public EntityUid? SelectLanguageActionEntity;
 }
-
-
