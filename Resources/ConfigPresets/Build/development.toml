@@ -53,8 +53,3 @@ rules_file = "DeadSpaceDefaultRuleset"
 
 [taipan]
 enabled = false
-
-[tts]
-enabled = true
-api_token = "dd1b00cc9725379dda0a5b75e7c28f6da7aacf96"
-api_url = "http://185.97.255.17:5001/tts"
