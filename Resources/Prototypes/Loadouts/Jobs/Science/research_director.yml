@@ -43,7 +43,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtResearchDirector
 
-# DS14
+# DS14-start
 - type: loadout
   id: ResearchDirectorJumpsuitShirt
   equipment:
@@ -63,7 +63,7 @@
   id: ResearchDirectorJumpskirtSuit
   equipment:
     jumpsuit: ClothingUniformJumpskirtResearchDirectorSuit
-# DS14
+# DS14-end
 
 # OuterClothing
 - type: loadout
