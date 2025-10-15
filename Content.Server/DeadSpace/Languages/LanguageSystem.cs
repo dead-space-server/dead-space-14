@@ -9,6 +9,8 @@ using Robust.Shared.Player;
 using Content.Shared.DeadSpace.Languages;
 using Robust.Server.Player;
 using Robust.Server.Audio;
+using Content.Shared.Chat;
+using System.Linq;
 
 namespace Content.Server.DeadSpace.Languages;
 
@@ -19,6 +21,8 @@ public sealed class LanguageSystem : EntitySystem
     [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly AudioSystem _audio = default!;
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
     private static readonly ProtoId<LanguagePrototype> DefaultLanguageId = "GeneralLanguage";
     public override void Initialize()
     {
@@ -113,12 +117,39 @@ public sealed class LanguageSystem : EntitySystem
             _audio.PlayGlobal(languageProto.LexiconSound, session);
     }
 
-    public bool NeedGenerateTTS(string prototypeId)
+    public bool NeedGenerateTTS(EntityUid sourceUid, string prototypeId, bool isWhisper)
     {
         if (!_prototypeManager.TryIndex<LanguagePrototype>(prototypeId, out var languageProto))
-            return true;
+            return false;
 
-        return languageProto.GenerateTTSForLexicon;
+        if (!languageProto.GenerateTTSForLexicon)
+            return false;
+
+        float range = isWhisper ? SharedChatSystem.WhisperMuffledRange : SharedChatSystem.VoiceRange;
+
+        var ents = _lookup.GetEntitiesInRange<ActorComponent>(_transform.GetMapCoordinates(sourceUid, Transform(sourceUid)), range).ToList();
+
+        var hasListener = ents.Any(ent =>
+            ent.Comp.PlayerSession is { AttachedEntity: not null }
+            && !KnowsLanguage(ent.Owner, prototypeId));
+
+        return hasListener;
+    }
+
+    public bool NeedGenerateGlobalTTS(string prototypeId, out ICommonSession[] understandings)
+    {
+        understandings = GetUnderstanding(prototypeId);
+
+        if (!_prototypeManager.TryIndex<LanguagePrototype>(prototypeId, out var languageProto))
+            return false;
+
+        if (!languageProto.GenerateTTSForLexicon)
+            return false;
+
+        if (understandings.Length <= 0)
+            return false;
+
+        return true;
     }
 
     public ICommonSession[] GetUnderstanding(string languageId)

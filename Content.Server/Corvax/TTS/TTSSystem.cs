@@ -176,7 +176,7 @@ public sealed partial class TTSSystem : EntitySystem
 
         byte[]? soundLexiconData = null;
 
-        if (_language.NeedGenerateTTS(languageId))
+        if (_language.NeedGenerateTTS(uid, languageId, false))
             soundLexiconData = await GenerateTTS(lexiconMessage, speaker);
 
         var understanding = _language.GetUnderstanding(languageId);
@@ -204,7 +204,7 @@ public sealed partial class TTSSystem : EntitySystem
 
         byte[]? soundLexiconData = null;
 
-        if (_language.NeedGenerateTTS(languageId))
+        if (_language.NeedGenerateTTS(uid, languageId, false))
             soundLexiconData = await GenerateTTS(lexiconMessage, speaker);
 
         var understanding = _language.GetUnderstanding(languageId);
@@ -230,11 +230,10 @@ public sealed partial class TTSSystem : EntitySystem
         var soundData = await GenerateTTS(message, speaker);
 
         byte[]? soundLexiconData = null;
+        ICommonSession[] understanding = new List<ICommonSession>().ToArray();
 
-        if (_language.NeedGenerateTTS(languageId))
+        if (_language.NeedGenerateGlobalTTS(languageId, out understanding))
             soundLexiconData = await GenerateTTS(lexiconMessage, speaker);
-
-        var understanding = _language.GetUnderstanding(languageId);
 
         if (soundData is null) return;
 
@@ -260,11 +259,10 @@ public sealed partial class TTSSystem : EntitySystem
         var soundData = await GenerateTTS(message, speaker);
 
         byte[]? soundLexiconData = null;
+        ICommonSession[] understanding = new List<ICommonSession>().ToArray();
 
-        if (_language.NeedGenerateTTS(languageId))
+        if (_language.NeedGenerateGlobalTTS(languageId, out understanding))
             soundLexiconData = await GenerateTTS(lexiconMessage, speaker);
-
-        var understanding = _language.GetUnderstanding(languageId);
 
         if (soundData is null) return;
 
@@ -288,7 +286,7 @@ public sealed partial class TTSSystem : EntitySystem
 
         byte[]? lexiconSoundData = null;
 
-        if (_language.NeedGenerateTTS(languageId))
+        if (_language.NeedGenerateTTS(uid, languageId, true))
             lexiconSoundData = await GenerateTTS(lexiconMessage, speaker);
 
         // var obfSoundData = await GenerateTTS(obfMessage, speaker, true);
