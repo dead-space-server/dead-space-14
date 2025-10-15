@@ -178,11 +178,29 @@
             sprite: Mobs/Species/Moth/displacement.rsi
             state: shoes
   - type: Sanity # DS14
-  - type: Language # DS14-Languages
+  - type: Reactive
+  # DS14-start
+    reactions:
+    - reagents: [ PestKiller ]
+      methods: [ Touch ]
+      effects:
+      - !type:HealthChange
+        scaleByQuantity: true
+        damage:
+          types:
+            Caustic: 2
+  # DS14-end
+    - reagents: [Water, SpaceCleaner]
+      methods: [Touch]
+      effects:
+      - !type:WashCreamPieReaction
+  # DS14-Languages-start
+  - type: Language
     selectedLanguage: GeneralLanguage
     knownLanguages:
     - GeneralLanguage
     - MothLanguage
+  # DS14-Languages-end
   # - type: FootPrints # Backmen-footsteps
 
 

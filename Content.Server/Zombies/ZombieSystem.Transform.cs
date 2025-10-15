@@ -121,22 +121,31 @@ public sealed partial class ZombieSystem
         RemComp<ComplexInteractionComponent>(target);
         RemComp<SentienceTargetComponent>(target);
 
-        // DS14-Languages-Start
-        if (HasComp<LanguageComponent>(target))
-            RemComp<LanguageComponent>(target);
+        // DS14-Languages-start
 
-        var langComp = new LanguageComponent();
-        langComp.KnownLanguages.Add(ZombieLanguage);
-        langComp.SelectedLanguage = ZombieLanguage;
-        AddComp(target, langComp);
+        if (TryComp<LanguageComponent>(target, out var language))
+        {
+            language.KnownLanguages.Clear();
+            language.KnownLanguages.Add(ZombieLanguage);
+            language.SelectedLanguage = ZombieLanguage;
+        }
+        else
+        {
+            AddComp(target, new LanguageComponent
+            {
+                KnownLanguages = { ZombieLanguage },
+                SelectedLanguage = ZombieLanguage
+            });
+        }
 
-
-        // //funny voice
+        //funny voice
         // var accentType = "zombie";
         // if (TryComp<ZombieAccentOverrideComponent>(target, out var accent))
         //     accentType = accent.Accent;
 
-        // DS14-Languages-End
+        // EnsureComp<ReplacementAccentComponent>(target).Accent = accentType;
+
+        // DS14-Languages-end
 
 
         //This is needed for stupid entities that fuck up combat mode component

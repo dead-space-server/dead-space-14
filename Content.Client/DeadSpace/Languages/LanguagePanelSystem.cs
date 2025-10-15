@@ -10,6 +10,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using Content.Shared.DeadSpace.Languages.Prototypes;
 using Content.Shared.DeadSpace.Languages;
+using System.Linq;
 
 namespace Content.Client.DeadSpace.Languages;
 
@@ -51,9 +52,13 @@ public sealed class LanguagePanelSystem : EntitySystem
         _openedMenu = _userInterfaceManager.GetUIController<RadialUiController>()
             .CreateRadialContainer();
 
-        foreach (var protoId in args.Prototypes)
+        var speakableLanguages = args.KnownLanguages
+            .Except(args.CantSpeakLanguages)
+            .ToList();
+
+        foreach (var protoId in speakableLanguages)
         {
-            if (_proto.TryIndex<LanguagePrototype>(protoId, out var prototype))
+            if (_proto.TryIndex(protoId, out var prototype))
             {
                 if (prototype == null)
                     return;

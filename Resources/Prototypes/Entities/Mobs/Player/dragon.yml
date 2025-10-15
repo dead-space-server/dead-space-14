@@ -155,10 +155,12 @@
     - StunImmune
   - type: Puller
     needsHands: false
-  - type: Language # DS14-Languages
+  # DS14-Languages-start
+  - type: Language
     selectedLanguage: CarpDragonLanguage
     knownLanguages:
     - CarpDragonLanguage
+  # DS14-Languages-end
   - type: RandomMetadata
     nameSegments:
     - NamesDragon

@@ -3,7 +3,7 @@
   name: Обще-галактический
   generateTTSForLexicon: false
   lexiconSound:
-    path: /Audio/Items/Toys/weh.ogg # Если захотите, то найдёте нормальный звук
+    path: /Audio/Items/Toys/weh.ogg
   lexicon:
   - ала
   - вети
@@ -112,7 +112,7 @@
 
 - type: language
   id: SlimeLanguage
-  name: Слаймовский
+  name: Пузырчатый
   icon: /Textures/_DeadSpace/LanguageIcons/slime.png
   lexicon:
   - Блимп
@@ -325,7 +325,7 @@
 
 - type: language
   id: DionaLanguage
-  name: Дионский
+  name: Песнь корней
   generateTTSForLexicon: false
   lexiconSound:
     collection: DionaLexicon
@@ -431,115 +431,8 @@
   - Друаарр
 
 - type: language
-  id: DwarfLanguage
-  name: Дварфийский
-  icon: /Textures/_DeadSpace/LanguageIcons/lawyer.png
-  lexicon:
-  - Гррум
-  - Брак
-  - Дарн
-  - Грра!
-  - Трум
-  - Брррак!
-  - Крг
-  - Грумп!
-  - Траг
-  - Зурд
-  - Грог
-  - Друк!
-  - Баррук
-  - Грамм
-  - Бугр
-  - Краг!
-  - Труун
-  - Дрогг
-  - Брум
-  - Грбрр!
-  - Бррр...
-  - Гррунд
-  - Драгг
-  - Тзанг
-  - Глум
-  - Крумм
-  - Граах!
-  - Тракт
-  - Барк!
-  - Ррунг
-  - Друмм
-  - Зангр
-  - Гркук
-  - Бзрр
-  - Грба
-  - Кракг
-  - Брунг
-  - Бргрр!
-  - Дгррн
-  - Бурдр
-  - Грфт
-  - Ктрак!
-  - Грундр
-  - Брубг
-  - Крат!
-  - Бгрунг
-  - Груах
-  - Дргрр
-  - Грух!
-  - Бруаг
-  - Ктуг
-  - Гррн!
-  - Дрбг
-  - Трубр
-  - Згррт
-  - Брра!
-  - Драхг
-  - Крагн
-  - Гррам!
-  - Баркг
-  - Грунрр
-  - Дрбаг
-  - Знгрр
-  - Трубаа!
-  - Багру
-  - Краах!
-  - Грбрум
-  - Тарн
-  - Дгрум
-  - Бркут
-  - Грубд
-  - Зрук!
-  - Граанг!
-  - Трраг
-  - Бргг!
-  - Дарбр
-  - Труук!
-  - Грбагр
-  - Багрг
-  - Дрбрг!
-  - Бзанг
-  - Грунгх
-  - Брр...
-  - Грмаах
-  - Трунг
-  - Здраг
-  - Броор!
-  - Грдам
-  - Крумба
-  - Дгрш
-  - Граат
-  - Трахг!
-  - Грувв
-  - Бршнг
-  - Дарраг
-  - Грхуур
-  - Ктрр
-  - Здрру!
-  - Бхраа!
-  - Грбра!
-
-
-- type: language
   id: MothLanguage
-  name: Мольский
+  name: Ткачий
   icon: /Textures/_DeadSpace/LanguageIcons/moth.png
   generateTTSForLexicon: false
   lexiconSound:
@@ -649,8 +542,8 @@
 
 - type: language
   id: ReptilianLanguage
-  name: Рептилойдский
-  icon: /Textures/_DeadSpace/LanguageIcons/clock.png
+  name: Синта’Унати
+  icon: /Textures/_DeadSpace/LanguageIcons/lawyer.png
   generateTTSForLexicon: false
   lexiconSound:
     collection: ReptilianLexicon
@@ -757,7 +650,7 @@
 
 - type: language
   id: VoxLanguage
-  name: Вокский
+  name: Вокс-птичий
   icon: /Textures/_DeadSpace/LanguageIcons/vox.png
   generateTTSForLexicon: false
   lexiconSound:
@@ -1087,55 +980,7 @@
   lexiconSound:
     collection: MachineLexicon
   lexicon:
-  - 0 1 0 1
-  - 1 1 0 0
-  - 0 0 1 1
-  - 1 0 1 0 1 0
-  - 0 0 0 1 1 1
-  - 1 1 1 0 0 0
-  - 0 1 1 0
-  - 1 0 0 1
-  - 1 1 1 1
-  - 0 0 0 0
-  - 1 1 0 1 1 0
-  - 1 0 1 0 0 1
-  - 0 1 1 0 1 1
-  - 1 0 0 0 0
-  - 0 0 0 1 1
-  - 1 1 1 1 0
-  - 1 0 1 0
-  - 0 1 0 1 0 1
-  - 1 1 0 0 1
-  - 0 0 1 1 0
-  - 1 0 0 1 1 0
-  - 0 1 1 1 0 0
-  - BZ - 0 1 1
-  - PX - 0 1 0 0
-  - SIG - 1 0 1
-  - ERR - 4 0 4
-  - SYS - 1 1 0
-  - ACK - 0 0 0
-  - CMD - 1
-  - 1 1 1 0 1 1
-  - 0 0 0 1
-  - 1 0 1
-  - 0 1 1 0
-  - 0 1 0 0
-  - 0 0 1 0
-  - 1 1 1 1
-  - I / O - 0 1
-  - 1 0 0 1 0 0 1 0
-  - KLIK - 1 0
-  - 0 1 0 1 0
-  - 1 0 1 0 1
-  - 0 0 0 0 1
-  - 1 1 0 0 0
-  - 1 0 0 0 0
-  - В з з т !
-  - Т и к - т и к
-  - К л и к !
-  - В и р р р . . .
-  - Б ж ж
+  - 0 0 0
   - 0 0 1
   - 0 1 0
   - 0 1 1
@@ -1143,50 +988,24 @@
   - 1 0 1
   - 1 1 0
   - 1 1 1
-  - I / O - F A I L
-  - S Y S - C H K
-  - P X - 0 0 0
-  - P X - F F F
-  - I / O - 1 1 0 1 1 0
-  - C M D - R E B O O T
-  - S Y S - E R R !
-  - Б и п - б у п
-  - К Л - 0 0 0 1
-  - 1 1 1 0 0
-  - 0 0 0 1 1
-  - 1 0 1 0 1
-  - 0 0 1 1 0
-  - 1 0 0 0 0
-  - Б и п
-  - Б у п
-  - К л к !
-  - Р р р . . .
-  - Щ е л к !
-  - 0 1 0 1 1
-  - 1 0 1 0 0
-  - 0 0 0 0 0
-  - 1 1 1 1 1
-  - S Y S - L O O P
-  - C M D - O V E R R I D E
-  - E R R - C O R E
-  - F A T A L - 1
-  - 1 0 0 1 0 1
-  - 0 1 1 0 0 1
-  - P X - A L R T !
-  - A L P H A - 1 0 1
-  - G A M M A - 0 0 0
-  - О Ш - 1
-  - 0 1 0 0 1
-  - Б з з - з т
-  - П и н г
-  - П О Н Г
-  - 1 0 0 1 0
-  - 0 1 1 0 1
-  - 0 0 1 0 0
-  - 1 1 0 1
-  - 0 0 0 1 1
-  - Б з т - 0 1
-
+  - S Y S ;
+  - C M D ;
+  - E R R ;
+  - F A T A L ;
+  - A L R T ! ;
+  - A L P H A ;
+  - G A M M A ;
+  - B E T A ;
+  - D E L T A ;
+  - O M E G A ;
+  - P I N G ;
+  - L O A D ;
+  - R E S T ;
+  - N U L L ;
+  - W A R N ;
+  - H A L T ;
+  - R E S E T ;
+  - Z E R O ;
 
 - type: language
   id: KoboltLanguage
@@ -1296,7 +1115,7 @@
 
 - type: language
   id: PlafLanguage
-  name: Плафеймский
+  name: Акулий
   icon: /Textures/_DeadSpace/LanguageIcons/plaf.png
   lexicon:
   - Гшк
@@ -1932,4 +1751,3 @@
   - чрха
   - фшшрр
   - хгшхаа
-

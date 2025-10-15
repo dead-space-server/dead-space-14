@@ -23,19 +23,20 @@ public sealed class LanguageSystem : EntitySystem
     [Dependency] private readonly AudioSystem _audio = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
-    private static readonly ProtoId<LanguagePrototype> DefaultLanguageId = "GeneralLanguage";
+    public static readonly ProtoId<LanguagePrototype> DefaultLanguageId = "GeneralLanguage";
+
     public override void Initialize()
     {
         base.Initialize();
 
-        SubscribeLocalEvent<LanguageComponent, ComponentInit>(OnComponentInit);
+        SubscribeLocalEvent<LanguageComponent, MapInitEvent>(OnComponentMapInit);
         SubscribeLocalEvent<LanguageComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<LanguageComponent, SelectLanguageActionEvent>(OnSelect);
 
         SubscribeNetworkEvent<SelectLanguageEvent>(OnSelectLanguage);
     }
 
-    private void OnComponentInit(EntityUid uid, LanguageComponent component, ComponentInit args)
+    private void OnComponentMapInit(EntityUid uid, LanguageComponent component, MapInitEvent args)
     {
         _actionsSystem.AddAction(uid, ref component.SelectLanguageActionEntity, component.SelectLanguageAction);
     }
@@ -52,9 +53,7 @@ public sealed class LanguageSystem : EntitySystem
 
         if (EntityManager.TryGetComponent<ActorComponent?>(uid, out var actorComponent))
         {
-            var ev = new RequestLanguageMenuEvent(uid.Id, component.KnownLanguages);
-
-            ev.Prototypes.Sort();
+            var ev = new RequestLanguageMenuEvent(uid.Id, component.KnownLanguages, component.CantSpeakLanguages);
             RaiseNetworkEvent(ev, actorComponent.PlayerSession);
         }
 
@@ -65,12 +64,11 @@ public sealed class LanguageSystem : EntitySystem
     {
         if (EntityManager.TryGetComponent<LanguageComponent>(new EntityUid(msg.Target), out var language))
             language.SelectedLanguage = msg.PrototypeId;
-
     }
 
-    public string ReplaceWordsWithLexicon(string message, string prototypeId)
+    public string ReplaceWordsWithLexicon(string message, ProtoId<LanguagePrototype> languageId)
     {
-        if (!_prototypeManager.TryIndex<LanguagePrototype>(prototypeId, out var languageProto))
+        if (!_prototypeManager.TryIndex(languageId, out var languageProto))
             return message;
 
         var lexiconWords = languageProto.Lexicon;
@@ -90,7 +88,7 @@ public sealed class LanguageSystem : EntitySystem
         return string.Join(' ', words);
     }
 
-    public List<ProtoId<LanguagePrototype>>? GetKnowsLanguage(EntityUid entity)
+    public HashSet<ProtoId<LanguagePrototype>>? GetKnownLanguages(EntityUid entity)
     {
         if (!TryComp<LanguageComponent>(entity, out var component))
             return null;
@@ -98,9 +96,9 @@ public sealed class LanguageSystem : EntitySystem
         return component.KnownLanguages;
     }
 
-    public bool KnowsLanguage(EntityUid receiver, string senderLanguageId)
+    public bool KnowsLanguage(EntityUid receiver, ProtoId<LanguagePrototype> senderLanguageId)
     {
-        var languages = GetKnowsLanguage(receiver);
+        var languages = GetKnownLanguages(receiver);
 
         if (languages == null)
             return false;
@@ -108,9 +106,9 @@ public sealed class LanguageSystem : EntitySystem
         return languages.Contains(senderLanguageId);
     }
 
-    public void PlayLexiconSound(ICommonSession session, string prototypeId)
+    public void PlayLexiconSound(ICommonSession session, ProtoId<LanguagePrototype> languageId)
     {
-        if (!_prototypeManager.TryIndex<LanguagePrototype>(prototypeId, out var languageProto))
+        if (!_prototypeManager.TryIndex(languageId, out var languageProto))
             return;
 
         if (languageProto.LexiconSound != null)
@@ -136,7 +134,7 @@ public sealed class LanguageSystem : EntitySystem
         return hasListener;
     }
 
-    public bool NeedGenerateGlobalTTS(string prototypeId, out ICommonSession[] understandings)
+    public bool NeedGenerateGlobalTTS(string prototypeId, out List<ICommonSession> understandings)
     {
         understandings = GetUnderstanding(prototypeId);
 
@@ -146,13 +144,13 @@ public sealed class LanguageSystem : EntitySystem
         if (!languageProto.GenerateTTSForLexicon)
             return false;
 
-        if (understandings.Length <= 0)
+        if (understandings.Count <= 0)
             return false;
 
         return true;
     }
 
-    public ICommonSession[] GetUnderstanding(string languageId)
+    public List<ICommonSession> GetUnderstanding(ProtoId<LanguagePrototype> languageId)
     {
         var understanding = new List<ICommonSession>();
 
@@ -165,12 +163,6 @@ public sealed class LanguageSystem : EntitySystem
                 understanding.Add(session);
         }
 
-        return understanding.ToArray();
+        return understanding;
     }
-
-    public string GetDefaultLanguageId()
-    {
-        return DefaultLanguageId.Id;
-    }
-
 }
