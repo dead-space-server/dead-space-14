@@ -1,9 +1,11 @@
 - type: job
   id: TaipanResearcher
   name: job-name-taipan-researcher
+  description: job-description-taipan-researcher
   playTimeTracker: JobTaipanResearcher
   setPreference: false
-  description: job-description-taipan-researcher
+  overrideConsoleVisibility: true
+  isTaipan: true
   startingGear: TaipanResearcherGear
   icon: "JobIconTaipanResearcher"
   supervisors: job-supervisors-taipan-research-director

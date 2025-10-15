@@ -1,9 +1,11 @@
 - type: job
   id: TaipanMedic
   name: job-name-taipan-medic
+  description: job-description-taipan-medic
   playTimeTracker: JobTaipanMedic
   setPreference: false
-  description: job-description-taipan-medic
+  overrideConsoleVisibility: true
+  isTaipan: true
   startingGear: TaipanMedicGear
   icon: "JobIconTaipanMedic"
   supervisors: job-supervisors-taipan-research-director

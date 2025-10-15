@@ -1,9 +1,11 @@
 - type: job
   id: TaipanChef
   name: job-name-taipan-chef
+  description: job-description-taipan-chef
   playTimeTracker: JobTaipanChef
   setPreference: false
-  description: job-description-taipan-chef
+  overrideConsoleVisibility: true
+  isTaipan: true
   startingGear: TaipanChefGear
   icon: "JobIconTaipanChef"
   supervisors: job-supervisors-taipan-technical-supervisor

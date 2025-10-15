@@ -301,6 +301,7 @@
   description: Терминал для программирования ID-карт сотрудников.
   components:
   - type: IdCardConsole
+    isTaipan: true
     accessLevels:
     - TaipanArmory
     - TaipanAtmospherics

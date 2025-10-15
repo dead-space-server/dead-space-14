@@ -1,9 +1,11 @@
 - type: job
   id: TaipanAtmosphericsEngineer
   name: job-name-taipan-atmospherics-engineer
+  description: job-description-taipan-atmospherics-engineer
   playTimeTracker: JobTaipanAtmosphericsEngineer
   setPreference: false
-  description: job-description-taipan-atmospherics-engineer
+  overrideConsoleVisibility: true
+  isTaipan: true
   startingGear: TaipanAtmosphericsEngineerGear
   icon: "JobIconTaipanAtmosphericsEngineer"
   supervisors: job-supervisors-taipan-technical-supervisor

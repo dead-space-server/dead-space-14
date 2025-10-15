@@ -1,9 +1,11 @@
 - type: job
   id: TaipanTechnician
   name: job-name-taipan-technician
+  description: job-description-taipan-technician
   playTimeTracker: JobTaipanTechnician
   setPreference: false
-  description: job-description-taipan-technician
+  overrideConsoleVisibility: true
+  isTaipan: true
   startingGear: TaipanTechnicianGear
   icon: "JobIconTaipanTechnician"
   supervisors: job-supervisors-taipan-technical-supervisor

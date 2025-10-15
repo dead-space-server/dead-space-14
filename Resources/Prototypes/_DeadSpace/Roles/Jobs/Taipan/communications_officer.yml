@@ -1,9 +1,11 @@
 - type: job
   id: TaipanCommunicationsOfficer
   name: job-name-taipan-communications-officer
+  description: job-description-taipan-communications-officer
   playTimeTracker: JobTaipanCommunicationsOfficer
   setPreference: false
-  description: job-description-taipan-communications-officer
+  overrideConsoleVisibility: true
+  isTaipan: true
   startingGear: TaipanCommunicationsOfficerGear
   icon: "JobIconTaipanCommunicationsOfficer"
   supervisors: job-supervisors-syndicate

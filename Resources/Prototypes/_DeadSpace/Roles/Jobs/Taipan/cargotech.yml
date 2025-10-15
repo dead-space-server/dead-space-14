@@ -1,9 +1,11 @@
 - type: job
   id: TaipanCargotech
   name: job-name-taipan-cargotech
+  description: job-description-taipan-cargotech
   playTimeTracker: JobTaipanCargotech
   setPreference: false
-  description: job-description-taipan-cargotech
+  overrideConsoleVisibility: true
+  isTaipan: true
   startingGear: TaipanCargotechGear
   icon: "JobIconTaipanCargotech"
   supervisors: job-name-taipan-technical-supervisor

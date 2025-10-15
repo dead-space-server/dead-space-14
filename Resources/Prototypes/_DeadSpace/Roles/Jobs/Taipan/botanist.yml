@@ -1,9 +1,11 @@
 - type: job
   id: TaipanBotanist
   name: job-name-taipan-botanist
+  description: job-description-taipan-botanist
   playTimeTracker: JobTaipanBotanist
   setPreference: false
-  description: job-description-taipan-botanist
+  overrideConsoleVisibility: true
+  isTaipan: true
   startingGear: TaipanBotanistGear
   icon: "JobIconTaipanBotanist"
   supervisors: job-supervisors-taipan-technical-supervisor

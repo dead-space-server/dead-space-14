@@ -1,9 +1,11 @@
 - type: job
   id: TaipanTechnicalOperationsSupervisor
   name: job-name-taipan-technical-supervisor
+  description: job-description-taipan-technical-supervisor
   playTimeTracker: JobTaipanTechnicalOperationsSupervisor
   setPreference: false
-  description: job-description-taipan-technical-supervisor
+  overrideConsoleVisibility: true
+  isTaipan: true
   startingGear: TaipanTechnicalOperationsSupervisorGear
   icon: "JobIconTaipanTechnicalOperationsSupervisor"
   supervisors: job-supervisors-syndicate
