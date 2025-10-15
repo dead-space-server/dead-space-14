@@ -230,7 +230,7 @@ public sealed partial class TTSSystem : EntitySystem
         var soundData = await GenerateTTS(message, speaker);
 
         byte[]? soundLexiconData = null;
-        ICommonSession[] understanding = new List<ICommonSession>().ToArray();
+        List<ICommonSession> understanding = new List<ICommonSession>();
 
         if (_language.NeedGenerateGlobalTTS(languageId, out understanding))
             soundLexiconData = await GenerateTTS(lexiconMessage, speaker);
@@ -259,7 +259,7 @@ public sealed partial class TTSSystem : EntitySystem
         var soundData = await GenerateTTS(message, speaker);
 
         byte[]? soundLexiconData = null;
-        ICommonSession[] understanding = new List<ICommonSession>().ToArray();
+        List<ICommonSession> understanding = new List<ICommonSession>();
 
         if (_language.NeedGenerateGlobalTTS(languageId, out understanding))
             soundLexiconData = await GenerateTTS(lexiconMessage, speaker);
