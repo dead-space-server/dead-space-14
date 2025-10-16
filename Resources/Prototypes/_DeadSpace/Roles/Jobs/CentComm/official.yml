@@ -19,6 +19,9 @@
     components:
     - type: AntagImmune
     - type: ZombieImmune
+    - type: NpcFactionMember
+      factions:
+      - CentralCommand
 
 - type: startingGear
   id: CentcomGear
@@ -28,13 +31,13 @@
     shoes: ClothingShoesBootsLaceup
     # head: ClothingHeadHatCentcom
     # eyes: ClothingEyesGlassesSunglasses
-    gloves: ClothingHandsGlovesColorBlack
-    outerClothing: ClothingOuterVestWeb
+    gloves: ClothingHandsGlovesCentcomNaval
+    outerClothing: ClothingOuterArmorCentcommCarapace
     id: CentcomOfficialPDA
     ears: ClothingHeadsetAltCentCom
-    belt: WeaponPistolN1984
+    belt: ADTClothingBeltSupremeSheathFilled
     pocket1: RubberStampCentcom
-    pocket2: ClothingMaskGasCentcom
+    pocket2: WeaponPistolN1984
 
 - type: entity
   parent: ClothingBackpackSatchelHoS
