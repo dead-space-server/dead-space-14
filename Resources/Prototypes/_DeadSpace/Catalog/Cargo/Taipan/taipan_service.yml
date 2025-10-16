@@ -189,16 +189,6 @@
   group: taipan_market
 
 - type: cargoProduct
-  id: TaipanJanitorExplosive
-  icon:
-    sprite: Clothing/Head/Helmets/janitor_bombsuit.rsi
-    state: icon
-  product: ClosetJanitorBombFilled
-  cost: 1000
-  category: cargoproduct-category-name-service
-  group: taipan_market
-
-- type: cargoProduct
   id: TaipanServiceJanitorTrolley
   icon:
     sprite: Objects/Specific/Janitorial/janitorial_cart.rsi

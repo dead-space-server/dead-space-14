@@ -9,32 +9,12 @@
   group: taipan_market
 
 - type: cargoProduct
-  id: TaipanCrateVendingMachineRestockChefvend
-  icon:
-    sprite: Objects/Specific/Service/vending_machine_restock.rsi
-    state: base
-  product: CrateVendingMachineRestockChefvendFilled
-  cost: 680
-  category: cargoproduct-category-name-service
-  group: taipan_market
-
-- type: cargoProduct
   id: TaipanCrateVendingMachineRestockAutoDrobe
   icon:
     sprite: Objects/Specific/Service/vending_machine_restock.rsi
     state: base
   product: CrateVendingMachineRestockAutoDrobeFilled
   cost: 2500
-  category: cargoproduct-category-name-service
-  group: taipan_market
-
-- type: cargoProduct
-  id: TaipanCrateVendingMachineRestockDinnerware
-  icon:
-    sprite: Objects/Specific/Service/vending_machine_restock.rsi
-    state: base
-  product: CrateVendingMachineRestockDinnerwareFilled
-  cost: 2000
   category: cargoproduct-category-name-service
   group: taipan_market
 
@@ -125,7 +105,7 @@
     state: base
   product: CrateVendingMachineRestockSalvageEquipmentFilled
   cost: 1500
-  category: cargoproduct-category-name-engineering
+  category: cargoproduct-category-name-cargo
   group: taipan_market
 
 - type: cargoProduct
@@ -156,16 +136,6 @@
   product: CrateVendingMachineRestockVendomatFilled
   cost: 1200
   category: cargoproduct-category-name-service
-  group: taipan_market
-
-- type: cargoProduct
-  id: TaipanCrateVendingMachineRestockRobotics
-  icon:
-    sprite: Objects/Specific/Service/vending_machine_restock.rsi
-    state: base
-  product: CrateVendingMachineRestockRoboticsFilled
-  cost: 1600
-  category: cargoproduct-category-name-science
   group: taipan_market
 
 - type: cargoProduct

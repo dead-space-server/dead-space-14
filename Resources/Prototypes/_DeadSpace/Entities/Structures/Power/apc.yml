@@ -1,6 +1,8 @@
 - type: entity
   parent: BaseAPC
   id: APCTaipan
+  name: ЛКП
+  description: Терминал управления локальными электрическими системами.
   suffix: Базовый, 50кДж, Тайпан
   components:
   - type: Battery

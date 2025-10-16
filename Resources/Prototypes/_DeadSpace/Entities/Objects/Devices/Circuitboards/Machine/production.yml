@@ -322,3 +322,14 @@
     state: syndicate
   - type: MachineBoard
     prototype: WeaponEnergyTurretTaipanCommand
+
+- type: entity
+  id: MaterialSiloMachineCircuitboardTaipan
+  parent: BaseMachineCircuitboardTaipan
+  name: хранилище материалов (машинная плата)
+  components:
+  - type: MachineBoard
+    prototype: MachineMaterialSiloTaipan
+    stackRequirements:
+      Manipulator: 4
+      Cable: 1

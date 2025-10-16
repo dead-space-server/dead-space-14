@@ -81,7 +81,6 @@ public sealed partial class CargoOrderConsoleComponent : Component
     public List<ProtoId<CargoMarketPrototype>> AllowedGroups = new()
     {
         "market",
-        "taipan_market",
         "SalvageJobReward2",
         "SalvageJobReward3",
         "SalvageJobRewardMAX",
