@@ -59,16 +59,13 @@ public abstract class SharedSprayPainterSystem : EntitySystem
     private void OnMapInit(Entity<SprayPainterComponent> ent, ref MapInitEvent args)
     {
         bool stylesByGroupPopulated = false;
-
-        // DS14-start: Filter groups by allowed categories
+            // DS14-start
         foreach (var groupProto in Proto.EnumeratePrototypes<PaintableGroupPrototype>())
         {
-            // Check if this group belongs to any allowed category
             bool isAllowed = ent.Comp.AllowedCategories.Count == 0;
 
             if (!isAllowed)
             {
-                // Find which category contains this group
                 foreach (var categoryProto in Proto.EnumeratePrototypes<PaintableGroupCategoryPrototype>())
                 {
                     if (ent.Comp.AllowedCategories.Contains(categoryProto.ID) &&
@@ -93,20 +90,15 @@ public abstract class SharedSprayPainterSystem : EntitySystem
             SetPipeColor(ent, ent.Comp.ColorPalette.First().Key);
     }
 
-// DS14-start: Method to get allowed categories for UI
-    /// <summary>
-    /// Gets the list of paintable group prototypes that are allowed for this spray painter.
-    /// </summary>
+// DS14-start
     public IEnumerable<PaintableGroupPrototype> GetAllowedGroups(SprayPainterComponent component)
     {
         foreach (var groupProto in Proto.EnumeratePrototypes<PaintableGroupPrototype>())
         {
-            // Check if this group belongs to any allowed category
             bool isAllowed = component.AllowedCategories.Count == 0;
 
             if (!isAllowed)
             {
-                // Find which category contains this group
                 foreach (var categoryProto in Proto.EnumeratePrototypes<PaintableGroupCategoryPrototype>())
                 {
                     if (component.AllowedCategories.Contains(categoryProto.ID) &&
@@ -125,15 +117,11 @@ public abstract class SharedSprayPainterSystem : EntitySystem
         }
     }
 
-    /// <summary>
-    /// Checks if a specific group is allowed for this spray painter.
-    /// </summary>
     public bool IsGroupAllowed(SprayPainterComponent component, string groupId)
     {
         if (component.AllowedCategories.Count == 0)
             return true;
 
-        // Find which category contains this group
         foreach (var categoryProto in Proto.EnumeratePrototypes<PaintableGroupCategoryPrototype>())
         {
             if (component.AllowedCategories.Contains(categoryProto.ID) &&
@@ -175,8 +163,7 @@ public abstract class SharedSprayPainterSystem : EntitySystem
 
         Appearance.SetData(target, PaintableVisuals.Prototype, args.Prototype);
         Audio.PlayPredicted(ent.Comp.SpraySound, ent, args.Args.User);
-        Charges.TryUseCharges(new Entity<LimitedChargesComponent?>(ent, EnsureComp<LimitedChargesComponent>(ent)),
-            args.Cost);
+        Charges.TryUseCharges(new Entity<LimitedChargesComponent?>(ent, EnsureComp<LimitedChargesComponent>(ent)), args.Cost);
 
         var paintedComponent = EnsureComp<PaintedComponent>(target);
         paintedComponent.DryTime = _timing.CurTime + ent.Comp.FreshPaintDuration;
@@ -261,9 +248,7 @@ public abstract class SharedSprayPainterSystem : EntitySystem
             || !Proto.TryIndex(group, out PaintableGroupPrototype? targetGroup))
             return;
 
-        // DS14-start: Check if this painter is allowed to paint this category
-        // If the category is not in StylesByGroup, it means it was filtered out during initialization
-        // so we can simply return without showing any message
+        // DS14-start
         if (!painter.StylesByGroup.ContainsKey(group))
             return;
         // DS14-end

@@ -414,10 +414,12 @@ public sealed partial class CargoSystem
         {
             if (component.Bounties.Any(b => b.Bounty == proto.ID))
                 continue;
+            // DS14-start
             if (proto.IsTaipan && component.IsTaipan)
                 filteredBounties.Add(proto);
             else if (!proto.IsTaipan && !component.IsTaipan)
                 filteredBounties.Add(proto);
+            // DS14-end
         }
 
         var pool = filteredBounties.Count == 0 ? allBounties : filteredBounties;

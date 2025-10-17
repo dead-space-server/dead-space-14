@@ -50,8 +50,7 @@ public sealed class SprayPainterSystem : SharedSprayPainterSystem
 
     private void OnPrototypesReloaded(PrototypesReloadedEventArgs args)
     {
-        if (!args.WasModified<PaintableGroupCategoryPrototype>() || !args.WasModified<PaintableGroupPrototype>() ||
-            !args.WasModified<DecalPrototype>())
+        if (!args.WasModified<PaintableGroupCategoryPrototype>() || !args.WasModified<PaintableGroupPrototype>() || !args.WasModified<DecalPrototype>())
             return;
 
         CachePrototypes();
@@ -89,24 +88,19 @@ public sealed class SprayPainterSystem : SharedSprayPainterSystem
         }
     }
 
-// DS14-start: Methods to get filtered categories based on spray painter component
-    /// <summary>
-    /// Gets the paintable groups filtered by the spray painter's allowed categories.
-    /// </summary>
+// DS14-start
     public Dictionary<string, List<string>> GetFilteredPaintableGroups(SprayPainterComponent component)
     {
         var filteredGroups = new Dictionary<string, List<string>>();
 
         foreach (var category in Proto.EnumeratePrototypes<PaintableGroupCategoryPrototype>().OrderBy(x => x.ID))
         {
-            // Skip categories that are not allowed
             if (component.AllowedCategories.Count > 0 && !component.AllowedCategories.Contains(category.ID))
                 continue;
 
             var groupList = new List<string>();
             foreach (var groupId in category.Groups)
             {
-                // Skip groups that are not allowed (additional check)
                 if (!IsGroupAllowed(component, groupId))
                     continue;
 
@@ -123,9 +117,6 @@ public sealed class SprayPainterSystem : SharedSprayPainterSystem
         return filteredGroups;
     }
 
-    /// <summary>
-    /// Gets the paintable styles filtered by the spray painter's allowed categories.
-    /// </summary>
     public Dictionary<string, Dictionary<string, EntProtoId>> GetFilteredPaintableStyles(
         SprayPainterComponent component)
     {
@@ -133,7 +124,6 @@ public sealed class SprayPainterSystem : SharedSprayPainterSystem
 
         foreach (var groupId in PaintableStylesByGroup.Keys)
         {
-            // Skip groups that are not allowed
             if (!IsGroupAllowed(component, groupId))
                 continue;
 

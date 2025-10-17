@@ -178,10 +178,10 @@ namespace Content.Shared.Roles
         public IReadOnlyCollection<ProtoId<TraitPrototype>> TraitsBlacklist { get; private set; } = Array.Empty<ProtoId<TraitPrototype>>();
         // DS14-blueshield-disabilities-disallow-end
 
-        // DS14-taipan-start
+        // DS14-start
         [DataField("isTaipan")]
         public bool IsTaipan { get; private set; } = false;
-        // DS14-taipan-end
+        // DS14-end
     }
 
     /// <summary>

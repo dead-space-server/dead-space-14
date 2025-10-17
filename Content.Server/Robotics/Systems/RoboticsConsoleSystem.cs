@@ -26,7 +26,7 @@ public sealed class RoboticsConsoleSystem : SharedRoboticsConsoleSystem
     [Dependency] private readonly LockSystem _lock = default!;
     [Dependency] private readonly RadioSystem _radio = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private readonly IEntityManager _entityManager = default!; // DS14
 
     // almost never timing out more than 1 per tick so initialize with that capacity
     private List<string> _removing = new(1);

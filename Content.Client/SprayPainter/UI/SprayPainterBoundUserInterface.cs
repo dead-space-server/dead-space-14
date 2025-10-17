@@ -34,7 +34,9 @@ public sealed class SprayPainterBoundUserInterface(EntityUid owner, Enum uiKey) 
 
         var sprayPainter = EntMan.System<SprayPainterSystem>();
 
-        // DS14-start: Get filtered data based on spray painter component
+        // DS14-start
+        // _window.PopulateCategories(sprayPainter.PaintableStylesByGroup, sprayPainter.PaintableGroupsByCategory, sprayPainter.Decals);
+        // Update();
         if (EntMan.TryGetComponent(Owner, out SprayPainterComponent? sprayPainterComp))
         {
             var filteredGroups = sprayPainter.GetFilteredPaintableGroups(sprayPainterComp);

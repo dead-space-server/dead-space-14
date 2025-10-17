@@ -13,27 +13,29 @@ using Robust.Shared.GameObjects;
 
 namespace Content.Client.Silicons.Borgs;
 
+/// <summary>
+/// Menu used by borgs to select their type.
+/// </summary>
+/// <seealso cref="BorgSelectTypeUserInterface"/>
+/// <seealso cref="BorgSwitchableTypeComponent"/>
 [GenerateTypedNameReferences]
 public sealed partial class BorgSelectTypeMenu : FancyWindow
 {
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private readonly IEntityManager _entityManager = default!; // DS14
 
     private BorgTypePrototype? _selectedBorgType;
-    private readonly EntityUid _owner;
 
     public event Action<ProtoId<BorgTypePrototype>>? ConfirmedBorgType;
 
     private static readonly List<ProtoId<GuideEntryPrototype>> GuidebookEntries = new() { "Cyborgs", "Robotics" };
-    // DS14-start Modified for Taipan borgs
+    // DS14-start
     public BorgSelectTypeMenu(EntityUid owner)
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
 
-        _owner = owner;
-
-        var borgComp = _entityManager.GetComponentOrNull<BorgSwitchableTypeComponent>(_owner);
+        var borgComp = _entityManager.GetComponentOrNull<BorgSwitchableTypeComponent>(owner);
         var isTaipan = borgComp?.InherentRadioChannels.Contains("Taipan") ?? false;
 
         var group = new ButtonGroup();
@@ -41,7 +43,7 @@ public sealed partial class BorgSelectTypeMenu : FancyWindow
         foreach (var borgType in _prototypeManager.EnumeratePrototypes<BorgTypePrototype>()
                      .Where(b => isTaipan ? b.IsTaipan == true : b.IsTaipan != true)
                      .OrderBy(PrototypeName))
-            // DS14-end
+        // DS14-end
         {
             var button = new Button
             {
@@ -58,7 +60,7 @@ public sealed partial class BorgSelectTypeMenu : FancyWindow
 
         ConfirmTypeButton.OnPressed += ConfirmButtonPressed;
         HelpGuidebookIds = GuidebookEntries;
-        // DS14-start Modified for Taipan borgs
+        // DS14-start
         InfoContents.Visible = false;
         InfoPlaceholder.Visible = true;
         ConfirmTypeButton.Disabled = true;

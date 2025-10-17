@@ -8,9 +8,8 @@ namespace Content.Server.Cargo.Components;
 [Access(typeof(CargoSystem))]
 public sealed partial class CargoPalletConsoleComponent : Component
 {
-    /// <summary>
-    /// DS14
-    /// </summary>
+    // DS14-start
     [DataField]
     public bool IsTaipan;
+    // DS14-end
 }

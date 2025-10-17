@@ -24,15 +24,15 @@ public sealed partial class ResearchSystem
 
     private void OnClientSelected(EntityUid uid, ResearchClientComponent component, ResearchClientServerSelectedMessage args)
     {
-        if (!TryGetServerById(uid, args.ServerId, out var serverUid, out var serverComponent))
+        if (!TryGetServerById(uid, args.ServerId, out var serveruid, out var serverComponent))
             return;
 
         // Validate that we can access this server.
-        if (!GetServers(uid).Contains((serverUid.Value, serverComponent)))
+        if (!GetServers(uid).Contains((serveruid.Value, serverComponent)))
             return;
 
         UnregisterClient(uid, component);
-        RegisterClient(uid, serverUid.Value, component, serverComponent);
+        RegisterClient(uid, serveruid.Value, component, serverComponent);
     }
 
     private void OnClientDeselected(EntityUid uid, ResearchClientComponent component, ResearchClientServerDeselectedMessage args)
@@ -52,7 +52,6 @@ public sealed partial class ResearchSystem
 
         _uiSystem.TryToggleUi(uid, ResearchClientUiKey.Key, args.Actor);
     }
-
     #endregion
 
     private void OnClientRegistrationChanged(EntityUid uid, ResearchClientComponent component, ref ResearchRegistrationChangedEvent args)
@@ -62,11 +61,11 @@ public sealed partial class ResearchSystem
 
     private void OnClientMapInit(EntityUid uid, ResearchClientComponent component, MapInitEvent args)
     {
+        // DS14-start
         var taipanServers = new List<Entity<ResearchServerComponent>>();
         var normalServers = new List<Entity<ResearchServerComponent>>();
         var allServers = GetServers(uid).ToList();
 
-        // DS14-rnd-server-per-stations-start
         foreach (var (serverUid, serverComp) in allServers)
         {
             if (component.isTaipan && serverComp.isTaipan)
@@ -74,12 +73,12 @@ public sealed partial class ResearchSystem
             else if (!component.isTaipan && !serverComp.isTaipan)
                 normalServers.Add((serverUid, serverComp));
         }
-        // DS14-rnd-server-per-stations-end
 
         if (normalServers.Count > 0)
             RegisterClient(uid, normalServers[0], component, normalServers[0]);
         if (taipanServers.Count > 0)
             RegisterClient(uid, taipanServers[0], component, taipanServers[0]);
+        // DS14-end
     }
 
     private void OnClientShutdown(EntityUid uid, ResearchClientComponent component, ComponentShutdown args)
@@ -120,12 +119,12 @@ public sealed partial class ResearchSystem
         // DS14-start
         var serverNames = GetServerNames(uid, component?.isTaipan ?? false);
         var serverIds = GetServerIds(uid, component?.isTaipan ?? false);
-        // DS14-end
 
         var state = new ResearchClientBoundInterfaceState(
             serverNames.Length,
             serverNames,
             serverIds,
+        // DS14-end
             serverComponent?.Id ?? -1);
 
         _uiSystem.SetUiState(uid, ResearchClientUiKey.Key, state);

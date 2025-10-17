@@ -38,11 +38,10 @@ public sealed partial class StationAiCoreComponent : Component
     [DataField(readOnly: true)]
     public EntProtoId? PhysicalEntityProto = "StationAiHoloLocal";
 
-    /// <summary>
-    /// DS14: The prototype of the brain to spawn when an AI is created or uploaded.
-    /// </summary>
+    // DS14-start
     [DataField(readOnly: true)]
     public EntProtoId? SpawnedBrainProto = "StationAiBrain";
+    // DS14-end
 
     public const string Container = "station_ai_mind_slot";
 }

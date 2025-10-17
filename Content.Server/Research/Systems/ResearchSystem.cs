@@ -46,6 +46,7 @@ namespace Content.Server.Research.Systems
         /// <param name="serverUid"></param>
         /// <param name="serverComponent"></param>
         /// <returns></returns>
+        // DS14-start
         public HashSet<Entity<ResearchServerComponent>> GetServers(EntityUid client)
         {
             ClientLookup.Clear();
@@ -56,6 +57,7 @@ namespace Content.Server.Research.Systems
 
             _lookup.GetGridEntities(grid, ClientLookup);
             return ClientLookup;
+        // DS14-end
         }
 
         /// <summary>
@@ -93,9 +95,6 @@ namespace Content.Server.Research.Systems
         }
 
         // DS14-start
-        /// <summary>
-        /// Gets the names of servers visible to a client, filtered by isTaipan.
-        /// </summary>
         public string[] GetServerNames(EntityUid client, bool isTaipan)
         {
             var allServers = GetServers(client).ToArray();
@@ -110,9 +109,6 @@ namespace Content.Server.Research.Systems
             return list.ToArray();
         }
 
-        /// <summary>
-        /// Gets the ids of all the servers visible to a client, filtered by isTaipan.
-        /// </summary>
         public int[] GetServerIds(EntityUid client, bool isTaipan)
         {
             var allServers = GetServers(client).ToArray();
@@ -120,17 +116,13 @@ namespace Content.Server.Research.Systems
 
             foreach (var server in allServers)
             {
-                if (server.Comp.isTaipan == isTaipan) // обращение через компонент
+                if (server.Comp.isTaipan == isTaipan)
                     list.Add(server.Comp.Id);
             }
 
             return list.ToArray();
         }
-        // DS14-end
 
-        /// <summary>
-        /// Gets servers visible to a client (on the same grid).
-        /// </summary>
         public bool TryGetServerById(EntityUid client, int id, [NotNullWhen(true)] out EntityUid? serverUid, [NotNullWhen(true)] out ResearchServerComponent? serverComponent)
         {
             serverUid = null;
@@ -147,6 +139,7 @@ namespace Content.Server.Research.Systems
             }
 
             return false;
+        // DS14-end
         }
 
         public override void Update(float frameTime)
