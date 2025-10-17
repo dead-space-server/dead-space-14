@@ -1472,7 +1472,7 @@
     energy: 1.6
     color: "#b89f25"
   - type: AccessReader
-    access: [["Salvage"], ["TaipanCargo"]] # DS14
+    access: [["Salvage"]]
   - type: GuideHelp
     guides:
     - Salvage

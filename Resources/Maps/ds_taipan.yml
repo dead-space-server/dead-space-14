@@ -4,8 +4,8 @@ meta:
   engineVersion: 266.0.0
   forkId: ""
   forkVersion: ""
-  time: 10/16/2025 17:44:56
-  entityCount: 10093
+  time: 10/17/2025 13:01:11
+  entityCount: 10100
 maps:
 - 1
 grids:
@@ -7577,11 +7577,10 @@ entities:
     - type: Transform
       pos: 9.5,-19.5
       parent: 2
-- proto: AirlockTaipanGlassMedicalLocked
-  entities:
   - uid: 205
     components:
     - type: Transform
+      rot: -1.5707963267948966 rad
       pos: -8.5,-26.5
       parent: 2
 - proto: AirlockTaipanGlassProtectionLocked
@@ -9314,6 +9313,8 @@ entities:
     - type: Transform
       pos: -2.5,13.5
       parent: 2
+    - type: BarSign
+      current: WhiskeyEchoes
     - type: Fixtures
       fixtures: {}
 - proto: BarSpoon
@@ -27424,11 +27425,6 @@ entities:
       parent: 2
 - proto: CustomizableSpawnerTaipanRecruit
   entities:
-  - uid: 3743
-    components:
-    - type: Transform
-      pos: -20.5,-22.5
-      parent: 2
   - uid: 3744
     components:
     - type: Transform
@@ -27438,11 +27434,6 @@ entities:
     components:
     - type: Transform
       pos: -20.5,-21.5
-      parent: 2
-  - uid: 3746
-    components:
-    - type: Transform
-      pos: -20.5,-18.5
       parent: 2
 - proto: CustomizableSpawnerTaipanResearchDirector
   entities:
@@ -42886,9 +42877,6 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -8.5,-31.5
       parent: 2
-    - type: DeviceNetwork
-      deviceLists:
-      - 52
     - type: AtmosPipeColor
       color: '#0055CCFF'
   - uid: 5913
@@ -46880,16 +46868,6 @@ entities:
     components:
     - type: Transform
       pos: -19.5,-21.5
-      parent: 2
-  - uid: 6510
-    components:
-    - type: Transform
-      pos: -19.5,-22.5
-      parent: 2
-  - uid: 6511
-    components:
-    - type: Transform
-      pos: -19.5,-18.5
       parent: 2
 - proto: LockerTaipanResearchDirectorFilled
   entities:
@@ -54125,6 +54103,28 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 47.5,10.5
       parent: 2
+- proto: ShuttersWindowOpen
+  entities:
+  - uid: 10095
+    components:
+    - type: Transform
+      pos: -12.5,-43.5
+      parent: 2
+  - uid: 10096
+    components:
+    - type: Transform
+      pos: -12.5,-44.5
+      parent: 2
+  - uid: 10097
+    components:
+    - type: Transform
+      pos: -4.5,-43.5
+      parent: 2
+  - uid: 10098
+    components:
+    - type: Transform
+      pos: -4.5,-44.5
+      parent: 2
 - proto: ShuttleGunKinetic
   entities:
   - uid: 10030
@@ -54279,6 +54279,38 @@ entities:
         - - Pressed
           - Toggle
         9928:
+        - - Pressed
+          - Toggle
+    - type: Fixtures
+      fixtures: {}
+  - uid: 10099
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -12.5,-42.5
+      parent: 2
+    - type: DeviceLinkSource
+      linkedPorts:
+        10095:
+        - - Pressed
+          - Toggle
+        10096:
+        - - Pressed
+          - Toggle
+    - type: Fixtures
+      fixtures: {}
+  - uid: 10100
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -4.5,-42.5
+      parent: 2
+    - type: DeviceLinkSource
+      linkedPorts:
+        10097:
+        - - Pressed
+          - Toggle
+        10098:
         - - Pressed
           - Toggle
     - type: Fixtures
@@ -55802,6 +55834,16 @@ entities:
       parent: 2
 - proto: SuitStorageTaipanRecruitFilled
   entities:
+  - uid: 3743
+    components:
+    - type: Transform
+      pos: -19.5,-22.5
+      parent: 2
+  - uid: 3746
+    components:
+    - type: Transform
+      pos: -19.5,-18.5
+      parent: 2
   - uid: 7858
     components:
     - type: Transform
@@ -57880,15 +57922,13 @@ entities:
     - type: Transform
       pos: -9.455908,-43.428894
       parent: 2
-- proto: VendingMachineBooze
+- proto: VendingMachineBoozeSyndicate
   entities:
-  - uid: 8193
+  - uid: 6510
     components:
     - type: Transform
       pos: -11.5,-42.5
       parent: 2
-- proto: VendingMachineBoozeSyndicate
-  entities:
   - uid: 8194
     components:
     - type: Transform
@@ -58058,14 +58098,9 @@ entities:
     - type: Transform
       pos: -29.5,-2.5
       parent: 2
-  - uid: 8222
-    components:
-    - type: Transform
-      pos: 12.5,-31.5
-      parent: 2
-- proto: VendingMachineSalvage
+- proto: VendingMachineSalvageTaipan
   entities:
-  - uid: 8223
+  - uid: 8193
     components:
     - type: Transform
       pos: 32.5,-16.5
@@ -58194,6 +58229,11 @@ entities:
       parent: 2
 - proto: VendingMachineVendomat
   entities:
+  - uid: 6511
+    components:
+    - type: Transform
+      pos: 12.5,-31.5
+      parent: 2
   - uid: 8243
     components:
     - type: Transform
@@ -58201,20 +58241,39 @@ entities:
       parent: 2
 - proto: VendingMachineYouTool
   entities:
-  - uid: 8232
-    components:
-    - type: Transform
-      pos: 20.5,-8.5
-      parent: 2
-  - uid: 8244
-    components:
-    - type: Transform
-      pos: 26.5,-3.5
-      parent: 2
   - uid: 8245
     components:
     - type: Transform
       pos: 38.5,-3.5
+      parent: 2
+- proto: VendingMachineYouToolTaipan
+  entities:
+  - uid: 8222
+    components:
+    - type: Transform
+      pos: 20.5,-8.5
+      parent: 2
+  - uid: 8223
+    components:
+    - type: Transform
+      pos: 26.5,-3.5
+      parent: 2
+- proto: VestineChemistryVial
+  entities:
+  - uid: 8232
+    components:
+    - type: Transform
+      pos: 17.183065,-39.247467
+      parent: 2
+  - uid: 8244
+    components:
+    - type: Transform
+      pos: 16.964315,-39.388092
+      parent: 2
+  - uid: 10094
+    components:
+    - type: Transform
+      pos: -5.482002,-30.448853
       parent: 2
 - proto: WallmountSubstationElectronics
   entities:
