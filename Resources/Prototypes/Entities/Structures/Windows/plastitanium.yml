@@ -123,9 +123,13 @@
   - type: Damageable
     damageContainer: StructuralInorganic
     damageModifierSet: RGlass
-  - type: Construction # DS14
+# DS14-start
+  - type: Construction
     graph: PlastitaniumWindow
     node: plastitaniumWindow
+  - type: StaticPrice
+    price: 115
+# DS14-end
 
 - type: entity
   id: PlastitaniumWindowDiagonalBase

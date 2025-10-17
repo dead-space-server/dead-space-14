@@ -32,6 +32,8 @@
       - !type:PlaySoundBehavior
         sound:
           collection: MetalBreak
+  - type: StaticPrice
+    price: 60
 
 - type: entity
   id: PlastitaniumGirder
@@ -74,4 +76,4 @@
         sound:
           collection: MetalBreak
   - type: StaticPrice
-    price: 100
+    price: 200
