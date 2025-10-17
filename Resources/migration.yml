@@ -944,12 +944,15 @@ ClothingEyesHudSyndicateAgentTypan: null
 ClothingEyesHudTypan: null
 ClothingHandsRDTypan: null
 ClothingHandsScienceTypan: null
+ClothingHandsScienceTaipan: null
 ClothingHeadTypan: null
 ClothingHeadTaipan: null
 ClothingMaskGasTypanCargo: null
+ClothingMaskGasTaipanCargo: null
 ClothingOuterApronTypanChef: ClothingOuterApronTaipanChef
 ClothingOuterCoatRDTypan: null
 ClothingOuterMedTypan: null
+ClothingOuterMedTaipan: null
 ClothingOuterWinterTypanChef: null
 ClothingShoesBootsTypan: null
 ClothingUniformJumpskirtTypanChef: ClothingUniformJumpskirtTaipanChef
@@ -961,6 +964,7 @@ ClothingUniformJumpsuitTypanDirectory: null
 ClothingUniformJumpsuitTypanMedic: ClothingUniformJumpsuitTaipanMedic
 ClothingUniformScienceRDTypan: null
 ClothingUniformScienceTypan: null
+ClothingUniformScienceTaipan: TaipanResearcherJumpsuit
 ClothingUniformJumpskirtTypanBotanist: ClothingUniformJumpskirtTaipanBotanist
 ClothingUniformJumpskirtTypanCargotech: ClothingUniformJumpskirtTaipanCargotech
 TypanIDCardRd: null
@@ -979,6 +983,14 @@ SpawnPointLatejoinTypanOfficer: null
 SpawnPointLatejoinTypanMedic: null
 SpawnPointLatejoinTypanRd: null
 SpawnPointLatejoinTypanScience: null
+SpawnPointLatejoinTaipanAtmos: null
+SpawnPointLatejoinTaipanBotanist: null
+SpawnPointLatejoinTaipanChef: null
+SpawnPointLatejoinTaipanCargotech: null
+SpawnPointLatejoinTaipanOfficer: null
+SpawnPointLatejoinTaipanMedic: null
+SpawnPointLatejoinTaipanRd: null
+SpawnPointLatejoinTaipanScience: null
 
 # 2025-06-30 - DS14
 ADTAbakanRifleAEK: WeaponRifleAEK
