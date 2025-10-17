@@ -12,7 +12,7 @@
   recipeUnlocks:
   - MiningDrill
   - MineralScannerEmpty
-  - OreProcessorIndustrialMachineCircuitboard
+  - OreProcessorIndustrialMachineCircuitboardTaipan
   - ClothingMaskWeldingGas
 
 - type: technology

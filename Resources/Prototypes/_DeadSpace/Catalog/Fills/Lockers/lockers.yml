@@ -252,7 +252,6 @@
     - id: CargoBountyComputerCircuitboardTaipan
     - id: CargoRequestComputerCircuitboardTaipan
     - id: CargoSaleComputerCircuitboardTaipan
-    - id: CargoShuttleConsoleCircuitboardTaipan
     - id: SalvageMagnetMachineCircuitboard
     - id: DoorRemoteTaipan
     - id: MailTeleporterMachineCircuitboard

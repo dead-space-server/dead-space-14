@@ -299,7 +299,7 @@
   id: TaipanArmorVest
   recipes:
   - ClothingOuterVestWeb
-  - ClothingOuterVestWeb
+  - ClothingOuterVestWebElite
 
 # Medical
 
@@ -377,6 +377,7 @@
   - ClothingEyesHudTaipanResearch
   - ClothingEyesHudTaipanAdvanced
   - ClothingEyesPNVAdvSyndicate
+  - EmagTaipanLimited
   - ChameleonPDA
   - ChameleonProjector
   - WeaponPistolCHIMPUpgradeKit

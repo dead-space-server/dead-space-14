@@ -57,15 +57,6 @@
 
 - type: entity
   parent: BaseComputerCircuitboardTaipan
-  id: CargoShuttleConsoleCircuitboardTaipan
-  name: консоль управления грузовым шаттлом (консольная плата)
-  description: Консольная плата для консоли управления грузовым шаттлом.
-  components:
-  - type: ComputerBoard
-    prototype: ComputerTaipanShuttleCargo
-
-- type: entity
-  parent: BaseComputerCircuitboardTaipan
   id: SurveillanceCameraMonitorCircuitboardTaipan
   name: монитор камер слежения (консольная плата)
   description: Консольная плата для монитора камер слежения.
