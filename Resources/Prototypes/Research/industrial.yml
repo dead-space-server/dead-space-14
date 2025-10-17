@@ -151,7 +151,7 @@
   tier: 2
   cost: 10000
   recipeUnlocks:
-  - ShuttleConsoleCircuitboardTaipan
+  - ShuttleConsoleCircuitboard
   - ThrusterMachineCircuitboard
   - GyroscopeMachineCircuitboard
   - MiniGravityGeneratorCircuitboard
