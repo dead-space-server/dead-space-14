@@ -30,3 +30,11 @@
     id: TaipanRecruitPDA
     back: ClothingBackpackSyndicate
     socks: ClothingUnderwearSocksTaipanRecruit
+
+- type: chameleonOutfit
+  id: TaipanRecruitChameleonOutfit
+  name:
+  startingGear: TaipanRecruitGear
+  equipment:
+    id: PassengerPDA
+    neck: ClothingNeckGoldmedal

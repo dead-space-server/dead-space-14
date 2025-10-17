@@ -46,3 +46,11 @@
     id: TaipanCommunicationsOfficerPDA
     back: ClothingBackpackSyndicate
     socks: ClothingUnderwearSocksTaipanCommunicationsOfficer
+
+- type: chameleonOutfit
+  id: TaipanCommunicationsOfficerChameleonOutfit
+  name:
+  startingGear: TaipanCommunicationsOfficerGear
+  equipment:
+    id: PassengerPDA
+    neck: ClothingNeckGoldmedal

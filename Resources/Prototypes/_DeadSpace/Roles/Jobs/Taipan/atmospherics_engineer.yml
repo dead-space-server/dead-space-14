@@ -38,3 +38,11 @@
     socks: ClothingUnderwearSocksTaipanAtmosphericsEngineer
     belt: ClothingBeltUtilityEngineering
     id: TaipanAtmosphericsEngineerPDA
+
+- type: chameleonOutfit
+  id: TaipanAtmosphericsEngineerChameleonOutfit
+  name:
+  startingGear: TaipanAtmosphericsEngineerGear
+  equipment:
+    id: PassengerPDA
+    neck: ClothingNeckGoldmedal

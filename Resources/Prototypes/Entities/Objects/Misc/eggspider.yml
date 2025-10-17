@@ -25,6 +25,7 @@
     prototype: EggSpider
   - type: InjectableSolution
     solution: chemicals
+  - type: ContainerContainer
   # DS-14-end
   - type: Item
     size: Small

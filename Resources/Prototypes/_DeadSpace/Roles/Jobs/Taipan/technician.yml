@@ -31,3 +31,11 @@
     belt: ClothingBeltUtilityEngineering
     back: ClothingBackpackSyndicate
     socks: ClothingUnderwearSocksTaipanTechnician
+
+- type: chameleonOutfit
+  id: TaipanTechnicianChameleonOutfit
+  name:
+  startingGear: TaipanTechnicianGear
+  equipment:
+    id: PassengerPDA
+    neck: ClothingNeckGoldmedal

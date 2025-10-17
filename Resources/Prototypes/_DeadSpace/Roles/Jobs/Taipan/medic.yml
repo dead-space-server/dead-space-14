@@ -34,3 +34,11 @@
     back: ClothingBackpackSyndicate
     belt: ClothingBeltMedicalFilled
     socks: ClothingUnderwearSocksTaipanMedic
+
+- type: chameleonOutfit
+  id: TaipanMedicChameleonOutfit
+  name:
+  startingGear: TaipanMedicGear
+  equipment:
+    id: PassengerPDA
+    neck: ClothingNeckGoldmedal

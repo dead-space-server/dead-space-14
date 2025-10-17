@@ -179,6 +179,9 @@
   id: SMGTommyGun
 
 - type: Tag
+  id: SMGTommyGunCap
+
+- type: Tag
   id: SnapPop
 
 - type: Tag

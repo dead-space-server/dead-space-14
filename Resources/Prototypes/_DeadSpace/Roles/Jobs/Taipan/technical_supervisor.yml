@@ -43,3 +43,11 @@
     id: TaipanTechnicalOperationsSupervisorPDA
     back: ClothingBackpackSyndicate
     socks: ClothingUnderwearSocksTaipanTechnicalOperationsSupervisor
+
+- type: chameleonOutfit
+  id: TaipanTechnicalOperationsSupervisorChameleonOutfit
+  name:
+  startingGear: TaipanTechnicalOperationsSupervisorGear
+  equipment:
+    id: PassengerPDA
+    neck: ClothingNeckGoldmedal

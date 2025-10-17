@@ -3,7 +3,7 @@
   result: SheetTitanium1
   completetime: 0
   materials:
-    Silver: 100
+    RawSilver: 100
     RawIron: 300
     Coal: 150
     RawSalt: 100
@@ -14,7 +14,7 @@
   completetime: 0
   materials:
     RawPlasma: 200
-    Silver: 100
+    RawSilver: 100
     RawIron: 400
     Coal: 150
     RawSalt: 100

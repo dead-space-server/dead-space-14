@@ -30,3 +30,11 @@
     back: ClothingBackpackSyndicate
     id: TaipanCargotechPDA
     socks: ClothingUnderwearSocksTaipanCargotech
+
+- type: chameleonOutfit
+  id: TaipanCargotechChameleonOutfit
+  name:
+  startingGear: TaipanCargotechGear
+  equipment:
+    id: PassengerPDA
+    neck: ClothingNeckGoldmedal

@@ -32,3 +32,11 @@
     back: ClothingBackpackSyndicate
     id: TaipanBotanistPDA
     socks: ClothingUnderwearSocksTaipanBotanist
+
+- type: chameleonOutfit
+  id: TaipanBotanistChameleonOutfit
+  name:
+  startingGear: TaipanBotanistGear
+  equipment:
+    id: PassengerPDA
+    neck: ClothingNeckGoldmedal

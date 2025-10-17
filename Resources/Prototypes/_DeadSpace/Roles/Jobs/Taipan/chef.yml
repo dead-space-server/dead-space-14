@@ -35,3 +35,11 @@
     back: ClothingBackpackSyndicate
     id: TaipanChefPDA
     socks: ClothingUnderwearSocksTaipanChef
+
+- type: chameleonOutfit
+  id: TaipanChefChameleonOutfit
+  name:
+  startingGear: TaipanChefGear
+  equipment:
+    id: PassengerPDA
+    neck: ClothingNeckGoldmedal

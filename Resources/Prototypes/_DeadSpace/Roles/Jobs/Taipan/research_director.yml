@@ -44,3 +44,11 @@
     id: TaipanResearchDirectorPDA
     back: ClothingBackpackSyndicate
     socks: ClothingUnderwearSocksTaipanResearchDirector
+
+- type: chameleonOutfit
+  id: TaipanResearchDirectorChameleonOutfit
+  name:
+  startingGear: TaipanResearchDirectorGear
+  equipment:
+    id: PassengerPDA
+    neck: ClothingNeckGoldmedal
