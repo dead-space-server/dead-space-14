@@ -1988,7 +1988,7 @@
     energy: 1.6
     color: "#d82929"
   - type: AccessReader
-    access: [["NuclearOperative"], ["SyndicateAgent"], ["TaipanMaint"]]
+    access: [["NuclearOperative"], ["SyndicateAgent"], ["TaipanMaint"]] # DS14
 
 - type: entity
   parent: VendingMachine
