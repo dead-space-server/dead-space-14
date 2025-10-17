@@ -46,7 +46,7 @@
 
 - type: chameleonOutfit
   id: TaipanTechnicalOperationsSupervisorChameleonOutfit
-  name:
+  job: TaipanTechnicalOperationsSupervisor
   startingGear: TaipanTechnicalOperationsSupervisorGear
   equipment:
     id: PassengerPDA

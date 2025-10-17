@@ -221,6 +221,7 @@
   - SodaDispenserMachineCircuitboard
   - PhotocopierMachineCircuitboard
   - SurveillanceCameraMonitorCircuitboardTaipan
+  - TaipanHolopadMachineCircuitboard
 
 - type: latheRecipePack
   id: TaipanServiceBoards

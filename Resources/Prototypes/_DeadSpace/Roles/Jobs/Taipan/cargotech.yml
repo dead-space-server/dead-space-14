@@ -33,7 +33,7 @@
 
 - type: chameleonOutfit
   id: TaipanCargotechChameleonOutfit
-  name:
+  job: TaipanCargotech
   startingGear: TaipanCargotechGear
   equipment:
     id: PassengerPDA

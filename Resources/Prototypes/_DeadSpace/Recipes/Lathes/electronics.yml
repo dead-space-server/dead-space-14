@@ -8,7 +8,7 @@
   id: GeneratorRTGMachineCircuitboard
   result: GeneratorRTGMachineCircuitboard
 
-
+# Taipan
 - type: latheRecipe
   parent: BaseCircuitboardRecipe
   id: AutolatheMachineCircuitboardTaipan
@@ -123,3 +123,8 @@
   parent: [ BaseGoldCircuitboardRecipe, BaseMedicalMachineRecipeCategory ]
   id: CloningConsoleComputerCircuitboard
   result: CloningConsoleComputerCircuitboard
+
+- type: latheRecipe
+  parent: [ BaseCircuitboardRecipe, BaseGeneralMachineRecipeCategory ]
+  id: TaipanHolopadMachineCircuitboard
+  result: TaipanHolopadMachineCircuitboard

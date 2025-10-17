@@ -33,7 +33,7 @@
 
 - type: chameleonOutfit
   id: TaipanRecruitChameleonOutfit
-  name:
+  job: TaipanRecruit
   startingGear: TaipanRecruitGear
   equipment:
     id: PassengerPDA

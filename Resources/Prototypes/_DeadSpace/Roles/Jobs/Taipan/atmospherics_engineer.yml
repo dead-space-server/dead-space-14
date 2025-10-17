@@ -41,7 +41,7 @@
 
 - type: chameleonOutfit
   id: TaipanAtmosphericsEngineerChameleonOutfit
-  name:
+  job: TaipanAtmosphericsEngineer
   startingGear: TaipanAtmosphericsEngineerGear
   equipment:
     id: PassengerPDA

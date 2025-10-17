@@ -81,6 +81,8 @@
     node: airlock
     containers:
     - board
+  - type: StaticPrice
+    price: 235
 
 - type: entity
   id: AirlockTaipanGlass

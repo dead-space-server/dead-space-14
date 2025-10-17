@@ -34,7 +34,7 @@
 
 - type: chameleonOutfit
   id: TaipanTechnicianChameleonOutfit
-  name:
+  job: TaipanTechnician
   startingGear: TaipanTechnicianGear
   equipment:
     id: PassengerPDA

@@ -47,7 +47,7 @@
 
 - type: chameleonOutfit
   id: TaipanResearchDirectorChameleonOutfit
-  name:
+  job: TaipanResearchDirector
   startingGear: TaipanResearchDirectorGear
   equipment:
     id: PassengerPDA

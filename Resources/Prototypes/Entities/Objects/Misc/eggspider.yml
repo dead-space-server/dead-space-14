@@ -26,6 +26,11 @@
   - type: InjectableSolution
     solution: chemicals
   - type: ContainerContainer
+    containers:
+      body_root_part: !type:ContainerSlot
+        showEnts: False
+        occludes: True
+        ents: []
   # DS-14-end
   - type: Item
     size: Small

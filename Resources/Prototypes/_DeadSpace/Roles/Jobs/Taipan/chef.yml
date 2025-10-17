@@ -38,7 +38,7 @@
 
 - type: chameleonOutfit
   id: TaipanChefChameleonOutfit
-  name:
+  job: TaipanChef
   startingGear: TaipanChefGear
   equipment:
     id: PassengerPDA
