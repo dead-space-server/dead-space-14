@@ -1068,3 +1068,18 @@ ClothingHeadHatHoodSith: ClothingHeadHatHoodRenegade
 ClothingMaskSith: ClothingMaskRenegade
 ClothingOuterHardsuitSith: ClothingOuterHardsuitRenegade
 EnergySwordSith: EnergySwordRenegade
+
+# 2025-10-11 - DS14
+ADTClothingHeadHatsDungeonMasterHat: null
+ADTClothingUniformDungeonMasterSuit: null
+ClothingBackpackSatchelTaipanFilled: null
+ADTinquisitory: null
+ADTInquisitoryHead: null
+ADTClothingOuterCoatLabSec: null
+ADTVeteranSecHardsuit: null
+ADTVeteranSecHardsuitHelm: null
+LedLightTubeGreen: LightTubeCrystalGreen
+LedLightTubeRed: LightTubeCrystalRed
+LedLightTubeBlue: LightTubeCrystalBlue
+LedLightTubeYellow: LightTubeCrystalYellow
+LedLightTubeViolet: LightBulbCrystalPink

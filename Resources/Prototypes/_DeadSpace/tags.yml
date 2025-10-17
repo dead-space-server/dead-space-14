@@ -1,11 +1,5 @@
 - type: Tag
-  id: AmbrosiaDeus
-
-- type: Tag
   id: BatteryWeaponFireModesSprites
-
-- type: Tag
-  id: BerryDelight
 
 - type: Tag
   id: BorgModuleSecurity
@@ -47,6 +41,9 @@
   id: CloningPodMachineCircuitboard
 
 - type: Tag
+  id: CompactDefibrillator
+
+- type: Tag
   id: DeathNettle
 
 - type: Tag
@@ -77,10 +74,13 @@
   id: FittableInBackpackCase
 
 - type: Tag
+  id: GiantSpiderSpace
+
+- type: Tag
   id: GoldenApple
 
 - type: Tag
-  id: GiantSpiderSpace
+  id: GrenadeCleanade
 
 - type: Tag
   id: HardHat
@@ -113,6 +113,9 @@
   id: LightReplacer
 
 - type: Tag
+  id: MagazineCarbineSKS
+
+- type: Tag
   id: MagazineEagle
 
 - type: Tag
@@ -123,6 +126,9 @@
 
 - type: Tag
   id: MagazineTommyGunCap
+
+- type: Tag
+  id: MantisBlades
 
 - type: Tag
   id: MeatAnomalyCooked
@@ -218,9 +224,6 @@
   id: TaipanBorgTorso
 
 - type: Tag
-  id: TaipanRole
-
-- type: Tag
   id: TaipanRipleyCentralControlModule
 
 - type: Tag
@@ -240,6 +243,9 @@
 
 - type: Tag
   id: TaipanRipleyRLeg
+
+- type: Tag
+  id: TaipanRole
 
 - type: Tag
   id: Titanium
