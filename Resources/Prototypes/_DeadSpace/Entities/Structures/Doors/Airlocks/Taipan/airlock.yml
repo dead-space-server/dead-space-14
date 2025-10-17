@@ -101,6 +101,8 @@
   - type: Construction
     graph: AirlockTaipan
     node: glassAirlock
+  - type: StaticPrice
+    price: 235
 
 - type: entity
   id: HighSecDoorTaipan
