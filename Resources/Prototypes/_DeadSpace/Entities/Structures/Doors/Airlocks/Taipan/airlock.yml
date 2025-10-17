@@ -1,3 +1,28 @@
+# Assembly
+- type: entity
+  id: AirlockTaipanAssembly
+  parent: AirlockAssembly
+  name: каркас шлюза
+  description: Он открывается, он закрывается, и он может вас раздавить.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_basic.rsi
+    state: "assembly"
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: Construction
+    graph: AirlockTaipan
+    node: assembly
+
+# Airlock
 - type: entity
   id: AirlockTaipan
   parent: Airlock
@@ -6,7 +31,7 @@
   suffix: Тайпан
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_basic.rsi
     snapCardinals: true
     layers:
     - state: closed
@@ -40,6 +65,22 @@
       board: [ DoorElectronicsTaipan ]
   - type: Paintable
     group: TaipanAirlockStandard
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 700
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalSlam
+  - type: Construction
+    graph: AirlockTaipan
+    node: airlock
+    containers:
+    - board
 
 - type: entity
   id: AirlockTaipanGlass
@@ -49,12 +90,15 @@
   suffix: Тайпан
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_glass.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass.rsi
   - type: Paintable
     group: TaipanAirlockGlass
   - type: ContainerFill
     containers:
       board: [ DoorElectronicsTaipan ]
+  - type: Construction
+    graph: AirlockTaipan
+    node: glassAirlock
 
 - type: entity
   id: HighSecDoorTaipan
@@ -64,7 +108,7 @@
   suffix: Тайпан
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_highsec.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_highsec.rsi
     layers:
     - state: closed
       map: ["enum.DoorVisualLayers.Base"]
@@ -114,7 +158,7 @@
     denySound:
       path: /Audio/Machines/airlock_deny.ogg
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_hatch.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_hatch.rsi
   - type: Wires
     layoutId: AirlockExternal
 
@@ -128,7 +172,7 @@
   - type: Occluder
     enabled: false
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_glass_hatch.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_hatch.rsi
   - type: Fixtures
     fixtures:
       fix1:
@@ -147,7 +191,7 @@
   suffix: Тайпан, Сервисный
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_service.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_service.rsi
   - type: Wires
     layoutId: AirlockService
 
@@ -157,7 +201,7 @@
   suffix: Тайпан, Холодильник
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_freezer.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_freezer.rsi
   - type: Wires
     layoutId: AirlockService
 
@@ -167,7 +211,7 @@
   suffix: Тайпан, Инженерный
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_engineering.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_engineering.rsi
   - type: Wires
     layoutId: AirlockEngineering
 
@@ -177,7 +221,7 @@
   suffix: Тайпан, Атмосферный
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_atmospherics.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_atmospherics.rsi
 
 - type: entity
   parent: AirlockTaipan
@@ -185,7 +229,7 @@
   suffix: Тайпан, Снабжение
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_cargo.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_cargo.rsi
   - type: Wires
     layoutId: AirlockCargo
 
@@ -195,7 +239,7 @@
   suffix: Тайпан, Технический
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_maint.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_maint.rsi
 
 - type: entity
   parent: AirlockTaipan
@@ -203,7 +247,7 @@
   suffix: Тайпан, Медицинский
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_medical.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_medical.rsi
   - type: Wires
     layoutId: AirlockMedical
 
@@ -213,7 +257,7 @@
   suffix: Тайпан, Вирусология
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_virology.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_virology.rsi
 
 - type: entity
   parent: AirlockTaipan
@@ -221,7 +265,7 @@
   suffix: Тайпан, Научный
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_science.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_science.rsi
   - type: Wires
     layoutId: AirlockScience
 
@@ -231,7 +275,7 @@
   suffix: Тайпан, Командование
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_command.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_command.rsi
   - type: WiresPanelSecurity
     securityLevel: medSecurity
   - type: Wires
@@ -243,7 +287,7 @@
   suffix: Тайпан, Сервисный
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_glass_service.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_service.rsi
   - type: Wires
     layoutId: AirlockService
 
@@ -253,7 +297,7 @@
   suffix: Тайпан, Инженерный
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_glass_engineering.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_engineering.rsi
   - type: Wires
     layoutId: AirlockEngineering
 
@@ -263,7 +307,7 @@
   suffix: Тайпан, Технический
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_glass_maint.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_maint.rsi
 
 - type: entity
   parent: AirlockTaipanGlassEngineering
@@ -271,7 +315,7 @@
   suffix: Тайпан, Атмосферный
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_glass_atmospherics.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_atmospherics.rsi
 
 - type: entity
   parent: AirlockTaipanGlass
@@ -279,7 +323,7 @@
   suffix: Тайпан, Снабжение
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_glass_cargo.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_cargo.rsi
   - type: Wires
     layoutId: AirlockCargo
 
@@ -289,7 +333,7 @@
   suffix: Тайпан, Медицинский
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_glass_medical.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_medical.rsi
   - type: Wires
     layoutId: AirlockMedical
 
@@ -299,7 +343,7 @@
   suffix: Тайпан, Вирусология
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_glass_virology.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_virology.rsi
 
 - type: entity
   parent: AirlockTaipanGlass
@@ -307,7 +351,7 @@
   suffix: Тайпан, Научный
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_glass_science.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_science.rsi
   - type: Wires
     layoutId: AirlockScience
 
@@ -317,7 +361,7 @@
   suffix: Тайпан, Командование
   components:
   - type: Sprite
-    sprite: _DeadSpace/Structures/Doors/Airlocks/taipan_glass_command.rsi
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_command.rsi
   - type: WiresPanelSecurity
     securityLevel: medSecurity
   - type: Wires

@@ -4,7 +4,7 @@
   group: Toxins
   desc: reagent-desc-chitoectesin
   physicalDesc: reagent-physical-desc-strong-smelling
-  flavor: barozine
+  flavor: medicine
   color: "#CD853F"
   metabolisms:
     Poison:

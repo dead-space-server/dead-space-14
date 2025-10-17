@@ -16,7 +16,7 @@
   isTaipan: true
   idPrefix: SYN
   reward: 15000
-  description: bounty-destruction-taipan-suppermatter
+  description: bounty-description-taipan-suppermatter
   entries:
   - name: bounty-item-taipan-suppermatter
     amount: 1

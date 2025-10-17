@@ -60,11 +60,11 @@
     access: [["StationAi"], ["TaipanProtection"]]
   - type: TurretTargetSettings
     exemptAccessLevels:
-    - Protection
+    - TaipanProtection
     - Borg
     - BasicSilicon
   - type: Machine
-    board: WeaponEnergyTurretTaipanSecurityMachineCircuitboard
+    board: WeaponEnergyTurretTaipanProtectionMachineCircuitboard
   - type: DeviceNetwork
     receiveFrequencyId: TurretControl
     transmitFrequencyId: Turret

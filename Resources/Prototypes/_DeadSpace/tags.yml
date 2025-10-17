@@ -1,5 +1,11 @@
 - type: Tag
+  id: AmbrosiaDeus
+
+- type: Tag
   id: BatteryWeaponFireModesSprites
+
+- type: Tag
+  id: BerryDelight
 
 - type: Tag
   id: BorgModuleSecurity
@@ -270,5 +276,3 @@
 
 - type: Tag
   id: WeldingMaskWhite
-
-  # Обязательно в алфавитном порядке

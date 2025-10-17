@@ -19,7 +19,6 @@
       announcement: alert-level-white-announcement
       selectable: true
       sound: /Audio/_DeadSpace/AlertLevels/Taipan/white.ogg # DS14 alert sound
-      instructions: alert-level-white-instructions
       color: White
       emergencyLightColor: White
       shuttleTime: 600
@@ -27,7 +26,6 @@
       announcement: alert-level-zeta-announcement
       selectable: true
       sound: /Audio/_DeadSpace/AlertLevels/Taipan/zeta.ogg # DS14 alert sound
-      instructions: alert-level-zeta-instructions
       color: PowderBlue
       emergencyLightColor: PowderBlue
       forceEnableEmergencyLights: true
@@ -35,7 +33,6 @@
       announcement: alert-level-omega-announcement
       selectable: false
       sound: /Audio/_DeadSpace/AlertLevels/Taipan/omega.ogg # DS14 alert sound
-      instructions: alert-level-omega-instructions
       color: Red
       emergencyLightColor: Red
       forceEnableEmergencyLights: true
@@ -43,7 +40,6 @@
       announcement: alert-level-audit-announcement
       selectable: false
       sound: /Audio/_DeadSpace/AlertLevels/Taipan/audit.ogg # DS14 alert sound
-      instructions: alert-level-audit-instructions
       color: MidnightBlue
       emergencyLightColor: DarkBlue
       shuttleTime: 600

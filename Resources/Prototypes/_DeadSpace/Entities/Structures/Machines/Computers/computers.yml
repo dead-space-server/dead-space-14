@@ -98,7 +98,6 @@
     - map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
       state: generic_panel_open
   - type: CargoBountyConsole
-    isTaipan: true
   - type: ActivatableUI
     key: enum.CargoConsoleUiKey.Bounty
   - type: UserInterface
