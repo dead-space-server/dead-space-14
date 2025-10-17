@@ -28,7 +28,7 @@
 - type: entity
   parent: ClothingBeltPlantTaipan
   id: ClothingBeltPlantTaipanFilled
-  name: пояс ботаника синдиката
+  name: пояс ботаника
   description: Пояс, используемый для хранения основных принадлежностей для гидропоники. На удивление, не чёрный.
   suffix: Тайпан, Заполненный
   components:

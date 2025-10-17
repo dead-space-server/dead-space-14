@@ -26,7 +26,7 @@
     zeta:
       announcement: alert-level-zeta-announcement
       selectable: true
-      sound: /Audio/_DeadSpace/AlertLevels/zeta.ogg # DS14 alert sound
+      sound: /Audio/_DeadSpace/AlertLevels/Taipan/zeta.ogg # DS14 alert sound
       instructions: alert-level-zeta-instructions
       color: PowderBlue
       emergencyLightColor: PowderBlue
