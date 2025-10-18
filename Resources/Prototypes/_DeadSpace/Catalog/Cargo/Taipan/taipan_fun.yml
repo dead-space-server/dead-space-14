@@ -219,16 +219,6 @@
   group: taipan_market
 
 - type: cargoProduct
-  id: TaipanFunCrateGambling
-  icon:
-    sprite: Objects/Economy/cash.rsi
-    state: cash_1000000
-  product: CrateCargoGambling
-  cost: 10000
-  category: cargoproduct-category-name-fun
-  group: taipan_market
-
-- type: cargoProduct
   id: TaipanChurchOrganInstrument
   icon:
     sprite: Objects/Fun/Instruments/structureinstruments.rsi

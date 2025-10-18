@@ -13,7 +13,7 @@
         Blunt: 6
         Structural: 2
     animation: WeaponArcPunch
-  # DS-14-start
+  # DS14-start
   - type: SolutionContainerManager
     solutions:
       chemicals:
@@ -28,7 +28,7 @@
   - type: ContainerContainer
     containers:
       body_root_part: !type:ContainerSlot
-  # DS-14-end
+  # DS14-end
   - type: Item
     size: Small
   - type: PointLight
