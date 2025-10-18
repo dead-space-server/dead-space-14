@@ -56,8 +56,6 @@
   - type: Construction
     graph: PlastitaniumWindow
     node: plastitaniumplasmaWindow
-  - type: StaticPrice
-    price: 255
 
 - type: entity
   id: PlastitaniumPlasmaWindowDiagonalIndestructible
@@ -120,5 +118,3 @@
   - type: Construction
     graph: PlastitaniumWindowDiagonal
     node: plastitaniumplasmaWindowDiagonal
-  - type: StaticPrice
-    price: 115

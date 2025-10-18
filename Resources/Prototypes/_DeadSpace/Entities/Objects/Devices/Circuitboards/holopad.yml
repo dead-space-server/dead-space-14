@@ -1,6 +1,6 @@
 - type: entity
   id: TaipanHolopadMachineCircuitboard
-  parent: BaseComputerCircuitboardTaipan
+  parent: BaseMachineCircuitboardTaipan
   name: кроваво-красный голопад (машинная плата)
   description: Печатная плата кроваво-красного голопада.
   components:
