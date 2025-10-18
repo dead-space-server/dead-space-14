@@ -32,10 +32,10 @@ public sealed partial class RecievNotifySys : EntitySystem
     {
         if (NotifyFunction.GetValueAccess(messege.ID) & _cfg.GetCVar(CCCCVars.SysNotifyPerm))
         {
-            if (NextPing < DateTime.Now)
+            if (NextPing.AddSeconds(_cfg.GetCVar(CCCCVars.SysNotifyCoolDown)) < DateTime.Now)
             {
                 _audio.PlayGlobal(SoundNotify, Filter.Local(), false);
-                NextPing = DateTime.Now.AddSeconds(_cfg.GetCVar(CCCCVars.SysNotifyCoolDown));
+                NextPing = DateTime.Now;
             }
 
         }
