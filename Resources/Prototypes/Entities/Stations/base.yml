@@ -20,6 +20,18 @@
     - type: StationCargoBountyDatabase
 
 - type: entity
+  id: BaseStationTaipanCargo
+  abstract: true
+  components:
+  - type: StationBankAccount
+    primaryAccount: Taipan
+  - type: StationCargoOrderDatabase
+    orders:
+      Taipan: [ ]
+  - type: StationCargoBountyDatabase
+    isTaipan: true
+
+- type: entity
   id: BaseStationJobsSpawning
   abstract: true
   components:
@@ -134,6 +146,13 @@
       alertLevelPrototype: stationAlerts
 
 - type: entity
+  id: BaseTaipanStationAlertLevels
+  abstract: true
+  components:
+    - type: AlertLevel
+      alertLevelPrototype: taipanStationAlerts
+
+- type: entity
   id: BaseStationERTCall # DS14
   abstract: true
   components:
@@ -181,6 +200,13 @@
   components:
   - type: SiliconLawProvider
     laws: Crewsimov
+
+- type: entity
+  id: BaseStationSiliconTaipanStatic
+  abstract: true
+  components:
+  - type: SiliconLawProvider
+    laws: TaipanStatic
 
 - type: entity
   id: BaseStationNews
