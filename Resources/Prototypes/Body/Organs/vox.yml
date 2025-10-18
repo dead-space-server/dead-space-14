@@ -20,9 +20,11 @@
   name: stomach
   description: "A stomach that smells of ammonia."
   components:
+# DS14-start
   - type: Sprite
-    sprite: Mobs/Species/Vox/organs.rsi # DS-14-resprite
+    sprite: _DeadSpace/Mobs/Species/Vox/organs.rsi # DS-14-resprite
     state: stomach
+# DS14-end
   - type: Metabolizer #Skreeeee!
     metabolizerTypes: [Vox]
   - type: Stomach
@@ -38,11 +40,13 @@
   name: liver
   description: "Smells flammable."
   components:
+# DS14-start
   - type: Sprite
-    sprite: Mobs/Species/Vox/organs.rsi # DS-14-resprite
+    sprite: _DeadSpace/Mobs/Species/Vox/organs.rsi # DS-14-resprite
     state: liver
   - type: Metabolizer
     metabolizerTypes: [Vox]
+# DS14-end
 
 - type: entity
   parent: OrganHumanHeart
@@ -50,20 +54,22 @@
   name: heart
   description: "The strange heart of a vox."
   components:
+# DS14-start
   - type: Sprite
-    sprite: Mobs/Species/Vox/organs.rsi # DS-14-resprite
+    sprite: _DeadSpace/Mobs/Species/Vox/organs.rsi # DS-14-resprite
     state: heart
+# DS14-end
   - type: Metabolizer
     metabolizerTypes: [Vox]
 
-# DS-14-start
+# DS14-start
 - type: entity
   id: OrganVoxBrain
   parent: OrganHumanBrain
   name: brain
   components:
   - type: Sprite
-    sprite: Mobs/Species/Vox/organs.rsi # DS-14-resprite
+    sprite: _DeadSpace/Mobs/Species/Vox/organs.rsi # DS-14-resprite
     state: brain
 
 - type: entity
@@ -72,8 +78,8 @@
   name: kidneys
   components:
   - type: Sprite
-    sprite: Mobs/Species/Vox/organs.rsi # DS-14-resprite
+    sprite: _DeadSpace/Mobs/Species/Vox/organs.rsi # DS-14-resprite
     layers:
       - state: kidney-l
       - state: kidney-r
-# DS-14-end
+# DS14-end
