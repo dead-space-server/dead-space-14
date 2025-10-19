@@ -8,7 +8,6 @@ using Content.Shared.Actions;
 using Robust.Shared.Player;
 using Content.Shared.DeadSpace.Languages;
 using Robust.Server.Player;
-using Robust.Server.Audio;
 using Content.Shared.Chat;
 using System.Linq;
 
@@ -20,7 +19,6 @@ public sealed class LanguageSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly AudioSystem _audio = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     public static readonly ProtoId<LanguagePrototype> DefaultLanguageId = "GeneralLanguage";
@@ -106,15 +104,6 @@ public sealed class LanguageSystem : EntitySystem
         return languages.Contains(senderLanguageId);
     }
 
-    public void PlayLexiconSound(ICommonSession session, ProtoId<LanguagePrototype> languageId)
-    {
-        if (!_prototypeManager.TryIndex(languageId, out var languageProto))
-            return;
-
-        if (languageProto.LexiconSound != null)
-            _audio.PlayGlobal(languageProto.LexiconSound, session);
-    }
-
     public bool NeedGenerateTTS(EntityUid sourceUid, string prototypeId, bool isWhisper)
     {
         if (!_prototypeManager.TryIndex<LanguagePrototype>(prototypeId, out var languageProto))
@@ -159,7 +148,7 @@ public sealed class LanguageSystem : EntitySystem
             if (session.AttachedEntity == null)
                 continue;
 
-            if (HasComp<LanguageComponent>(session.AttachedEntity) && KnowsLanguage(session.AttachedEntity.Value, languageId))
+            if (!HasComp<LanguageComponent>(session.AttachedEntity) && KnowsLanguage(session.AttachedEntity.Value, languageId))
                 understanding.Add(session);
         }
 
