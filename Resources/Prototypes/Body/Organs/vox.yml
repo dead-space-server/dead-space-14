@@ -22,7 +22,7 @@
   components:
 # DS14-start
   - type: Sprite
-    sprite: _DeadSpace/Mobs/Species/Vox/organs.rsi # DS-14-resprite
+    sprite: _DeadSpace/Mobs/Species/Vox/organs.rsi
     state: stomach
 # DS14-end
   - type: Metabolizer #Skreeeee!
@@ -42,11 +42,11 @@
   components:
 # DS14-start
   - type: Sprite
-    sprite: _DeadSpace/Mobs/Species/Vox/organs.rsi # DS-14-resprite
+    sprite: _DeadSpace/Mobs/Species/Vox/organs.rsi
     state: liver
+# DS14-end
   - type: Metabolizer
     metabolizerTypes: [Vox]
-# DS14-end
 
 - type: entity
   parent: OrganHumanHeart
@@ -56,7 +56,7 @@
   components:
 # DS14-start
   - type: Sprite
-    sprite: _DeadSpace/Mobs/Species/Vox/organs.rsi # DS-14-resprite
+    sprite: _DeadSpace/Mobs/Species/Vox/organs.rsi
     state: heart
 # DS14-end
   - type: Metabolizer
@@ -69,7 +69,7 @@
   name: brain
   components:
   - type: Sprite
-    sprite: _DeadSpace/Mobs/Species/Vox/organs.rsi # DS-14-resprite
+    sprite: _DeadSpace/Mobs/Species/Vox/organs.rsi
     state: brain
 
 - type: entity
@@ -78,7 +78,7 @@
   name: kidneys
   components:
   - type: Sprite
-    sprite: _DeadSpace/Mobs/Species/Vox/organs.rsi # DS-14-resprite
+    sprite: _DeadSpace/Mobs/Species/Vox/organs.rsi
     layers:
       - state: kidney-l
       - state: kidney-r
