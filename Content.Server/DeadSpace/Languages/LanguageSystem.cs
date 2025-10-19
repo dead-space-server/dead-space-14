@@ -148,7 +148,7 @@ public sealed class LanguageSystem : EntitySystem
             if (session.AttachedEntity == null)
                 continue;
 
-            if (!HasComp<LanguageComponent>(session.AttachedEntity) && KnowsLanguage(session.AttachedEntity.Value, languageId))
+            if (!HasComp<LanguageComponent>(session.AttachedEntity) || KnowsLanguage(session.AttachedEntity.Value, languageId))
                 understanding.Add(session);
         }
 

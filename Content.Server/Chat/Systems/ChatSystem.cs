@@ -539,7 +539,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         SendInVoiceRange(ChatChannel.Local, message, wrappedMessage, source, range, null, lexiconMessage, lexiconWrappedMessage, selectedLanguage);
 
 
-        var ev = new EntitySpokeEvent(source, message, lexiconMessage, selectedLanguage, originalMessage, null, null);
+        var ev = new EntitySpokeEvent(source, message, originalMessage, lexiconMessage, selectedLanguage, null, null);
         RaiseLocalEvent(source, ev, true);
         // DS14-Languages-end
 
@@ -664,7 +664,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         _replay.RecordServerMessage(new ChatMessage(ChatChannel.Whisper, message, wrappedMessage, GetNetEntity(source), null, MessageRangeHideChatForReplay(range)));
 
         var selectedLanguage = language != null ? language.SelectedLanguage.Id : string.Empty; // DS14-Languages
-        var ev = new EntitySpokeEvent(source, message, lexiconMessage, selectedLanguage, originalMessage, channel, obfuscatedMessage); // DS14-Languages
+        var ev = new EntitySpokeEvent(source, message, originalMessage, lexiconMessage, selectedLanguage, channel, obfuscatedMessage); // DS14-Languages
 
         RaiseLocalEvent(source, ev, true);
         if (!hideLog)
