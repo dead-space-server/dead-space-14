@@ -13,7 +13,6 @@ using Robust.Shared.Timing;
 using Content.Server.DeadSpace.Languages;
 using Robust.Server.Player;
 using Content.Shared.DeadSpace.Languages.Prototypes;
-using System.Linq;
 
 namespace Content.Server.Corvax.TTS;
 
@@ -188,12 +187,12 @@ public sealed partial class TTSSystem : EntitySystem
             if (!understanding.Contains(session))
             {
                 if (soundLexiconData is null)
-                    _language.PlayLexiconSound(session, languageId);
+                    RaiseNetworkEvent(new PlayTTSEvent(new byte[0], GetNetEntity(uid), isSoundLexicon: true, languageId: languageId), session);
                 else
                     RaiseNetworkEvent(new PlayTTSEvent(soundLexiconData, GetNetEntity(uid)), session);
             }
             else
-                RaiseNetworkEvent(new PlayTTSEvent(soundData, GetNetEntity(uid)), session);
+                RaiseNetworkEvent(new PlayTTSEvent(soundData, GetNetEntity(uid), isSoundLexicon: false), session);
         }
 
     }
@@ -216,7 +215,7 @@ public sealed partial class TTSSystem : EntitySystem
             if (!understanding.Contains(session))
             {
                 if (soundLexiconData is null)
-                    _language.PlayLexiconSound(session, languageId);
+                    RaiseNetworkEvent(new PlayTTSEvent(new byte[0], GetNetEntity(uid), isSoundLexicon: true, languageId: languageId), session);
                 else
                     RaiseNetworkEvent(new PlayTTSEvent(soundLexiconData, GetNetEntity(uid)), session);
             }
@@ -244,7 +243,7 @@ public sealed partial class TTSSystem : EntitySystem
                 if (!understanding.Contains(session))
                 {
                     if (soundLexiconData is null)
-                        _language.PlayLexiconSound(session, languageId);
+                        RaiseNetworkEvent(new PlayTTSEvent(new byte[0], GetNetEntity(uid), isSoundLexicon: true, languageId: languageId), session);
                     else
                         RaiseNetworkEvent(new PlayTTSEvent(soundLexiconData, GetNetEntity(uid)), session);
                 }
@@ -271,7 +270,7 @@ public sealed partial class TTSSystem : EntitySystem
             if (!understanding.Contains(session))
             {
                 if (soundLexiconData is null)
-                    _language.PlayLexiconSound(session, languageId);
+                    RaiseNetworkEvent(new PlayTTSEvent(new byte[0], isSoundLexicon: true, languageId: languageId), session);
                 else
                     RaiseNetworkEvent(new PlayTTSEvent(soundLexiconData), session);
             }
@@ -314,7 +313,7 @@ public sealed partial class TTSSystem : EntitySystem
             if (!understanding.Contains(session))
             {
                 if (lexiconSoundData is null)
-                    _language.PlayLexiconSound(session, languageId);
+                    RaiseNetworkEvent(new PlayTTSEvent(new byte[0], GetNetEntity(uid), isSoundLexicon: true, languageId: languageId), session);
                 else
                     RaiseNetworkEvent(new PlayTTSEvent(lexiconSoundData, GetNetEntity(uid)), session);
             }
