@@ -154,12 +154,11 @@ public sealed class TTSSystem : EntitySystem
     {
         var volume = MinimalVolume + SharedAudioSystem.GainToVolume(_volume);
 
-        if (isWhisper)
+        if (isWhisper && !isRadio)
         {
             volume -= SharedAudioSystem.GainToVolume(WhisperFade);
         }
-
-        if (isRadio)
+        else if (isRadio)
         {
             volume = MinimalVolume + SharedAudioSystem.GainToVolume(_volumeRadio);
         }
