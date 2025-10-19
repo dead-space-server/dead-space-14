@@ -179,10 +179,10 @@
   - type: Computer
     board: SurveillanceCameraMonitorCircuitboardTaipan
   - type: DeviceNetwork
-    deviceNetId: Wireless
+    deviceNetId: Wired
     receiveFrequencyId: SurveillanceCamera
     transmitFrequencyId: SurveillanceCamera
-  - type: WirelessNetworkConnection
+  - type: WiredNetworkConnection
   - type: DeviceNetworkRequiresPower
   - type: SurveillanceCameraMonitor
   - type: ActivatableUI
