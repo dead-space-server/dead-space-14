@@ -243,12 +243,12 @@ public sealed partial class TTSSystem : EntitySystem
                 if (!understanding.Contains(session))
                 {
                     if (soundLexiconData is null)
-                        RaiseNetworkEvent(new PlayTTSEvent(new byte[0], GetNetEntity(uid), isWhisper: true, isSoundLexicon: true, languageId: languageId), session);
+                        RaiseNetworkEvent(new PlayTTSEvent(new byte[0], GetNetEntity(uid), isWhisper: true, isRadio: true, isSoundLexicon: true, languageId: languageId), session);
                     else
-                        RaiseNetworkEvent(new PlayTTSEvent(soundLexiconData, GetNetEntity(uid), isWhisper: true), session);
+                        RaiseNetworkEvent(new PlayTTSEvent(soundLexiconData, GetNetEntity(uid), isWhisper: true, isRadio: true), session);
                 }
                 else
-                    RaiseNetworkEvent(new PlayTTSEvent(soundData, GetNetEntity(uid), isWhisper: true), session);
+                    RaiseNetworkEvent(new PlayTTSEvent(soundData, GetNetEntity(uid), isWhisper: true, isRadio: true), session);
             }
         }
     }
