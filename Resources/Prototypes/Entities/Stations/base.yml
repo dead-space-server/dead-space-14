@@ -127,6 +127,25 @@
           - VGRoid
 
 - type: entity
+  id: BaseTaipanStationShuttles
+  abstract: true
+  components:
+    - type: GridSpawn
+      groups:
+        ruins: !type:GridSpawnGroup
+          hide: true
+          nameGrid: true
+          minCount: 1
+          maxCount: 1
+          minimumDistance: 100
+          maximumDistance: 200
+          stationGrid: false
+          paths:
+          - /Maps/Ruins/Taipan/bluespace_science_grid.yml
+          - /Maps/Ruins/Taipan/colossal_asteroid.yml
+          - /Maps/Ruins/Taipan/lincore_crush.yml
+
+- type: entity
   id: BaseStationCentcomm
   abstract: true
   components:
