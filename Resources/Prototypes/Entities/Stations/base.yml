@@ -143,7 +143,6 @@
           paths:
           - /Maps/Ruins/Taipan/bluespace_science_grid.yml
           - /Maps/Ruins/Taipan/colossal_asteroid.yml
-          - /Maps/Ruins/Taipan/erida.yml
           - /Maps/Ruins/Taipan/lincore_crush.yml
 
 - type: entity
