@@ -538,7 +538,6 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         SendInVoiceRange(ChatChannel.Local, message, wrappedMessage, source, range, null, lexiconMessage, lexiconWrappedMessage, selectedLanguage);
 
-
         var ev = new EntitySpokeEvent(source, message, originalMessage, lexiconMessage, selectedLanguage, null, null);
         RaiseLocalEvent(source, ev, true);
         // DS14-Languages-end
