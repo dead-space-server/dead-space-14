@@ -1069,3 +1069,5 @@ LedLightTubeRed: LightTubeCrystalRed
 LedLightTubeBlue: LightTubeCrystalBlue
 LedLightTubeYellow: LightTubeCrystalYellow
 LedLightTubeViolet: LightBulbCrystalPink
+SpawnMobCrabAtmos: null
+SpawnMobSmile: null
