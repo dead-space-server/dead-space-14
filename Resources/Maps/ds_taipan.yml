@@ -4,8 +4,8 @@ meta:
   engineVersion: 266.0.0
   forkId: ""
   forkVersion: ""
-  time: 10/18/2025 13:11:44
-  entityCount: 10212
+  time: 10/19/2025 12:29:01
+  entityCount: 10256
 maps:
 - 1
 grids:
@@ -26891,12 +26891,6 @@ entities:
     - type: Transform
       pos: -21.5,-1.5
       parent: 2
-  - uid: 7631
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -25.5,-22.5
-      parent: 2
 - proto: ContainmentFieldGenerator
   entities:
   - uid: 3667
@@ -27501,6 +27495,249 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 2.055151,15.965922
+      parent: 2
+- proto: DefaultStationBeaconAICore
+  entities:
+  - uid: 10219
+    components:
+    - type: Transform
+      pos: 34.5,-47.5
+      parent: 2
+- proto: DefaultStationBeaconAIPower
+  entities:
+  - uid: 10218
+    components:
+    - type: Transform
+      pos: 26.5,-49.5
+      parent: 2
+- proto: DefaultStationBeaconAISatellite
+  entities:
+  - uid: 10217
+    components:
+    - type: Transform
+      pos: 36.5,-49.5
+      parent: 2
+- proto: DefaultStationBeaconAME
+  entities:
+  - uid: 10213
+    components:
+    - type: Transform
+      pos: 34.5,-10.5
+      parent: 2
+- proto: DefaultStationBeaconAnchor
+  entities:
+  - uid: 10232
+    components:
+    - type: Transform
+      pos: 7.5,4.5
+      parent: 2
+- proto: DefaultStationBeaconArmory
+  entities:
+  - uid: 10223
+    components:
+    - type: Transform
+      pos: -13.5,-7.5
+      parent: 2
+- proto: DefaultStationBeaconArtifactLab
+  entities:
+  - uid: 10256
+    components:
+    - type: Transform
+      pos: 13.5,-49.5
+      parent: 2
+- proto: DefaultStationBeaconAtmospherics
+  entities:
+  - uid: 10255
+    components:
+    - type: Transform
+      pos: 29.5,3.5
+      parent: 2
+- proto: DefaultStationBeaconBotany
+  entities:
+  - uid: 10241
+    components:
+    - type: Transform
+      pos: -11.5,5.5
+      parent: 2
+- proto: DefaultStationBeaconCargoBay
+  entities:
+  - uid: 10228
+    components:
+    - type: Transform
+      pos: 34.5,-25.5
+      parent: 2
+- proto: DefaultStationBeaconChemistry
+  entities:
+  - uid: 10233
+    components:
+    - type: Transform
+      pos: -3.5,-28.5
+      parent: 2
+  - uid: 10234
+    components:
+    - type: Transform
+      pos: 10.5,-41.5
+      parent: 2
+- proto: DefaultStationBeaconCryonics
+  entities:
+  - uid: 10244
+    components:
+    - type: Transform
+      pos: -6.5,-16.5
+      parent: 2
+- proto: DefaultStationBeaconCryosleep
+  entities:
+  - uid: 10239
+    components:
+    - type: Transform
+      pos: 10.5,-4.5
+      parent: 2
+- proto: DefaultStationBeaconDisposals
+  entities:
+  - uid: 10237
+    components:
+    - type: Transform
+      pos: -3.5,-35.5
+      parent: 2
+- proto: DefaultStationBeaconDockingArm
+  entities:
+  - uid: 10231
+    components:
+    - type: Transform
+      pos: -28.5,-39.5
+      parent: 2
+- proto: DefaultStationBeaconDorms
+  entities:
+  - uid: 10216
+    components:
+    - type: Transform
+      pos: 3.5,-4.5
+      parent: 2
+- proto: DefaultStationBeaconEngineering
+  entities:
+  - uid: 10220
+    components:
+    - type: Transform
+      pos: 36.5,-3.5
+      parent: 2
+- proto: DefaultStationBeaconGateway
+  entities:
+  - uid: 10214
+    components:
+    - type: Transform
+      pos: -28.5,14.5
+      parent: 2
+- proto: DefaultStationBeaconGravGen
+  entities:
+  - uid: 10215
+    components:
+    - type: Transform
+      pos: 42.5,-8.5
+      parent: 2
+- proto: DefaultStationBeaconJanitorsCloset
+  entities:
+  - uid: 10240
+    components:
+    - type: Transform
+      pos: -17.5,4.5
+      parent: 2
+- proto: DefaultStationBeaconKitchen
+  entities:
+  - uid: 10238
+    components:
+    - type: Transform
+      pos: -1.5,4.5
+      parent: 2
+- proto: DefaultStationBeaconMedbay
+  entities:
+  - uid: 10242
+    components:
+    - type: Transform
+      pos: -4.5,-20.5
+      parent: 2
+- proto: DefaultStationBeaconMorgue
+  entities:
+  - uid: 10221
+    components:
+    - type: Transform
+      pos: 3.5,-23.5
+      parent: 2
+- proto: DefaultStationBeaconPermaBrig
+  entities:
+  - uid: 10224
+    components:
+    - type: Transform
+      pos: -30.5,-13.5
+      parent: 2
+- proto: DefaultStationBeaconRobotics
+  entities:
+  - uid: 10225
+    components:
+    - type: Transform
+      pos: 13.5,-34.5
+      parent: 2
+- proto: DefaultStationBeaconScience
+  entities:
+  - uid: 10222
+    components:
+    - type: Transform
+      pos: 13.5,-27.5
+      parent: 2
+- proto: DefaultStationBeaconServerRoom
+  entities:
+  - uid: 10226
+    components:
+    - type: Transform
+      pos: 31.5,-32.5
+      parent: 2
+- proto: DefaultStationBeaconService
+  entities:
+  - uid: 10236
+    components:
+    - type: Transform
+      pos: 3.5,6.5
+      parent: 2
+- proto: DefaultStationBeaconSingularity
+  entities:
+  - uid: 10243
+    components:
+    - type: Transform
+      pos: 44.5,6.5
+      parent: 2
+- proto: DefaultStationBeaconSolarsE
+  entities:
+  - uid: 10229
+    components:
+    - type: Transform
+      pos: 41.5,-13.5
+      parent: 2
+- proto: DefaultStationBeaconSolarsN
+  entities:
+  - uid: 10230
+    components:
+    - type: Transform
+      pos: -18.5,16.5
+      parent: 2
+- proto: DefaultStationBeaconSupply
+  entities:
+  - uid: 10227
+    components:
+    - type: Transform
+      pos: 26.5,-24.5
+      parent: 2
+- proto: DefaultStationBeaconTEG
+  entities:
+  - uid: 10235
+    components:
+    - type: Transform
+      pos: 16.5,7.5
+      parent: 2
+- proto: DefaultStationBeaconTelecoms
+  entities:
+  - uid: 10245
+    components:
+    - type: Transform
+      pos: 36.5,-40.5
       parent: 2
 - proto: DefibrillatorCabinetFilled
   entities:
@@ -53649,6 +53886,14 @@ entities:
     - type: Transform
       pos: 28.595577,-36.182037
       parent: 2
+- proto: SalvageMagnet
+  entities:
+  - uid: 7631
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 34.5,-25.5
+      parent: 2
 - proto: SalvageMaterialCrateSpawner
   entities:
   - uid: 7510
@@ -55638,6 +55883,77 @@ entities:
     - type: Transform
       pos: 7.5,4.5
       parent: 2
+- proto: StationMap
+  entities:
+  - uid: 10246
+    components:
+    - type: Transform
+      pos: -24.5,-5.5
+      parent: 2
+    - type: Fixtures
+      fixtures: {}
+  - uid: 10247
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 2.5,-11.5
+      parent: 2
+    - type: Fixtures
+      fixtures: {}
+  - uid: 10248
+    components:
+    - type: Transform
+      pos: -6.5,2.5
+      parent: 2
+    - type: Fixtures
+      fixtures: {}
+  - uid: 10249
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -19.5,3.5
+      parent: 2
+    - type: Fixtures
+      fixtures: {}
+  - uid: 10250
+    components:
+    - type: Transform
+      pos: -16.5,-9.5
+      parent: 2
+    - type: Fixtures
+      fixtures: {}
+  - uid: 10251
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -23.5,-25.5
+      parent: 2
+    - type: Fixtures
+      fixtures: {}
+  - uid: 10252
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 2.5,-20.5
+      parent: 2
+    - type: Fixtures
+      fixtures: {}
+  - uid: 10253
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 15.5,-19.5
+      parent: 2
+    - type: Fixtures
+      fixtures: {}
+  - uid: 10254
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 23.5,-8.5
+      parent: 2
+    - type: Fixtures
+      fixtures: {}
 - proto: Stool
   entities:
   - uid: 7821

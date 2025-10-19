@@ -24247,16 +24247,6 @@ entities:
     - type: Transform
       pos: -7.5,83.5
       parent: 9149
-- proto: SyringeExtractInfectorDead
-  entities:
-  - uid: 28720
-    components:
-    - type: MetaData
-      name: шприц с биркой "Экстракт некроморфизации"
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 2.6119897,49.719025
-      parent: 9149
 - proto: TableReinforced
   entities:
   - uid: 28721
