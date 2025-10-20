@@ -182,7 +182,7 @@ public sealed partial class TTSSystem : EntitySystem
 
         if (soundData is null) return;
 
-        foreach (var session in _playerManager.Sessions)
+        foreach (var session in Filter.Pvs(uid).Recipients)
         {
             if (!understanding.Contains(session))
             {
@@ -229,28 +229,25 @@ public sealed partial class TTSSystem : EntitySystem
         var soundData = await GenerateTTS(message, speaker);
 
         byte[]? soundLexiconData = null;
-        List<ICommonSession> understanding = new List<ICommonSession>();
 
-        if (_language.NeedGenerateGlobalTTS(languageId, out understanding))
+        if (_language.NeedGenerateRadioTTS(languageId, uids, out var understandings, out var notUnderstandings))
             soundLexiconData = await GenerateTTS(lexiconMessage, speaker);
 
         if (soundData is null) return;
 
-        foreach (var uid in uids)
+        foreach (var uid in understandings)
         {
-            foreach (var session in _playerManager.Sessions)
-            {
-                if (!understanding.Contains(session))
-                {
-                    if (soundLexiconData is null)
-                        RaiseNetworkEvent(new PlayTTSEvent(new byte[0], GetNetEntity(uid), isWhisper: true, isRadio: true, isSoundLexicon: true, languageId: languageId), session);
-                    else
-                        RaiseNetworkEvent(new PlayTTSEvent(soundLexiconData, GetNetEntity(uid), isWhisper: true, isRadio: true), session);
-                }
-                else
-                    RaiseNetworkEvent(new PlayTTSEvent(soundData, GetNetEntity(uid), isWhisper: true, isRadio: true), session);
-            }
+            RaiseNetworkEvent(new PlayTTSEvent(soundData, GetNetEntity(uid), isRadio: true), Filter.Entities(uid));
         }
+
+        foreach (var uid in notUnderstandings)
+        {
+            if (soundLexiconData is null)
+                RaiseNetworkEvent(new PlayTTSEvent(new byte[0], GetNetEntity(uid), isRadio: true, isSoundLexicon: true, languageId: languageId), Filter.Entities(uid));
+            else
+                RaiseNetworkEvent(new PlayTTSEvent(soundLexiconData, GetNetEntity(uid), isRadio: true), Filter.Entities(uid));
+        }
+
     }
 
     private async void HandleAnnounce(string message, string lexiconMessage, ProtoId<LanguagePrototype> languageId, string speaker)
@@ -265,7 +262,7 @@ public sealed partial class TTSSystem : EntitySystem
 
         if (soundData is null) return;
 
-        foreach (var session in _playerManager.Sessions)
+        foreach (var session in Filter.Broadcast().Recipients)
         {
             if (!understanding.Contains(session))
             {
