@@ -106,7 +106,7 @@ public sealed class LanguageSystem : EntitySystem
 
     public bool NeedGenerateTTS(EntityUid sourceUid, ProtoId<LanguagePrototype> prototypeId, bool isWhisper)
     {
-        if (!_prototypeManager.TryIndex<LanguagePrototype>(prototypeId, out var languageProto))
+        if (!_prototypeManager.TryIndex(prototypeId, out var languageProto))
             return false;
 
         if (!languageProto.GenerateTTSForLexicon)
@@ -123,11 +123,25 @@ public sealed class LanguageSystem : EntitySystem
         return hasListener;
     }
 
+    public bool NeedGenerateDirectTTS(EntityUid uid, ProtoId<LanguagePrototype> prototypeId)
+    {
+        if (!_prototypeManager.TryIndex(prototypeId, out var languageProto))
+            return false;
+
+        if (!languageProto.GenerateTTSForLexicon)
+            return false;
+
+        if (KnowsLanguage(uid, prototypeId))
+            return false;
+
+        return true;
+    }
+
     public bool NeedGenerateGlobalTTS(ProtoId<LanguagePrototype> prototypeId, out List<ICommonSession> understandings)
     {
         understandings = GetUnderstanding(prototypeId);
 
-        if (!_prototypeManager.TryIndex<LanguagePrototype>(prototypeId, out var languageProto))
+        if (!_prototypeManager.TryIndex(prototypeId, out var languageProto))
             return false;
 
         if (!languageProto.GenerateTTSForLexicon)
