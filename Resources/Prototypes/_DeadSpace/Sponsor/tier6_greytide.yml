@@ -30,12 +30,13 @@
       - id: ClothingCloakAtmosian
       - id: ClothingHeadHatFancyCrown
       - id: ClothingCloakGamer
-      - id: ClothingNeckWingsViolet
       - id: ClothingOuterWinterKirasCloak
       - id: ClothingMaskFawkesSponsor
       - id: ClothingOuterBlueTrenchSponsor
       - id: ClothingNeckCloakGreyFox
       - id: ClothingNeckCloakRedGeytide
+      - id: ClothingUniformJumpsuitNanonachos
+      - id: FoodSnackNanonachos
       - id: JukeboxMK
       - id: TapeRecorderr
       - id: TapeEmpty
