@@ -20,6 +20,7 @@ namespace Content.Client.Administration.UI
         private readonly List<TTSVoicePrototype> _voices; // Corvax-TTS
         private readonly List<LanguagePrototype> _languages; // DS14-Languages
         public Action<string>? OnVoiceChange; // Corvax-TTS
+        public static readonly ProtoId<LanguagePrototype> FirstLanguageId = "GeneralLanguage"; // DS14-Languages
 
         public AdminAnnounceWindow()
         {
@@ -36,9 +37,10 @@ namespace Content.Client.Administration.UI
             LanguageSelector.OnItemSelected += AnnounceMethodOnLanguageSelected; // DS14-Languages
             Announcement.OnKeyBindUp += AnnouncementOnOnTextChanged;
 
+            var protoManager = IoCManager.Resolve<IPrototypeManager>(); // DS14-Languages
+
             // Corvax-TTS-Start
-            _voices = IoCManager
-                .Resolve<IPrototypeManager>()
+            _voices = protoManager // DS14-Languages
                 .EnumeratePrototypes<TTSVoicePrototype>()
                 .OrderBy(o => Loc.GetString(o.Name))
                 .ToList();
@@ -51,11 +53,18 @@ namespace Content.Client.Administration.UI
             // Corvax-TTS-End
 
             // DS14-Languages-start
-            _languages = IoCManager
-                .Resolve<IPrototypeManager>()
-                .EnumeratePrototypes<LanguagePrototype>()
+
+            _languages = protoManager.EnumeratePrototypes<LanguagePrototype>()
                 .OrderBy(o => Loc.GetString(o.Name))
                 .ToList();
+
+            var defaultLanguage = _languages.FirstOrDefault(l => l.ID == FirstLanguageId);
+            if (defaultLanguage != null)
+            {
+                _languages.Remove(defaultLanguage);
+                _languages.Insert(0, defaultLanguage);
+            }
+
             for (var i = 0; i < _languages.Count; i++)
             {
                 var name = Loc.GetString(_languages[i].Name);
