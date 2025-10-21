@@ -20,7 +20,7 @@ namespace Content.Client.Administration.UI
         private readonly List<TTSVoicePrototype> _voices; // Corvax-TTS
         private readonly List<LanguagePrototype> _languages; // DS14-Languages
         public Action<string>? OnVoiceChange; // Corvax-TTS
-        public static readonly ProtoId<LanguagePrototype> FirstLanguageId = "GeneralLanguage"; // DS14-Languages
+        private static readonly ProtoId<LanguagePrototype> FirstLanguageId = "GeneralLanguage"; // DS14-Languages
 
         public AdminAnnounceWindow()
         {
