@@ -39,6 +39,8 @@
       - id: ClothingOuterBlueTrenchSponsor
       - id: ClothingNeckCloakGreyFox
       - id: ClothingNeckCloakRedGeytide
+      - id: ClothingUniformJumpsuitNanonachos
+      - id: FoodSnackNanonachos
 
 - type: sponsorLoadout
   id: ClothingBackpackTier6HOSIAASponsorLoadout
