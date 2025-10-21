@@ -46,7 +46,7 @@ namespace Content.Server.Research.Systems
         /// <param name="serverUid"></param>
         /// <param name="serverComponent"></param>
         /// <returns></returns>
-        // DS14-start
+        // DS14-edit-start
         public HashSet<Entity<ResearchServerComponent>> GetServers(EntityUid client)
         {
             ClientLookup.Clear();
