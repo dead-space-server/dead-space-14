@@ -104,9 +104,9 @@ public sealed class LanguageSystem : EntitySystem
         return languages.Contains(senderLanguageId);
     }
 
-    public bool NeedGenerateTTS(EntityUid sourceUid, string prototypeId, bool isWhisper)
+    public bool NeedGenerateTTS(EntityUid sourceUid, ProtoId<LanguagePrototype> prototypeId, bool isWhisper)
     {
-        if (!_prototypeManager.TryIndex<LanguagePrototype>(prototypeId, out var languageProto))
+        if (!_prototypeManager.TryIndex(prototypeId, out var languageProto))
             return false;
 
         if (!languageProto.GenerateTTSForLexicon)
@@ -123,11 +123,25 @@ public sealed class LanguageSystem : EntitySystem
         return hasListener;
     }
 
-    public bool NeedGenerateGlobalTTS(string prototypeId, out List<ICommonSession> understandings)
+    public bool NeedGenerateDirectTTS(EntityUid uid, ProtoId<LanguagePrototype> prototypeId)
+    {
+        if (!_prototypeManager.TryIndex(prototypeId, out var languageProto))
+            return false;
+
+        if (!languageProto.GenerateTTSForLexicon)
+            return false;
+
+        if (KnowsLanguage(uid, prototypeId))
+            return false;
+
+        return true;
+    }
+
+    public bool NeedGenerateGlobalTTS(ProtoId<LanguagePrototype> prototypeId, out List<ICommonSession> understandings)
     {
         understandings = GetUnderstanding(prototypeId);
 
-        if (!_prototypeManager.TryIndex<LanguagePrototype>(prototypeId, out var languageProto))
+        if (!_prototypeManager.TryIndex(prototypeId, out var languageProto))
             return false;
 
         if (!languageProto.GenerateTTSForLexicon)
@@ -137,6 +151,28 @@ public sealed class LanguageSystem : EntitySystem
             return false;
 
         return true;
+    }
+
+    public bool NeedGenerateRadioTTS(ProtoId<LanguagePrototype> prototypeId, EntityUid[] recivers, out List<EntityUid> understandings, out List<EntityUid> notUnderstandings)
+    {
+        understandings = new List<EntityUid>();
+        notUnderstandings = new List<EntityUid>();
+        bool result = false;
+
+        foreach (var uid in recivers)
+        {
+            if (!KnowsLanguage(uid, prototypeId))
+            {
+                notUnderstandings.Add(uid);
+                result = true;
+            }
+            else
+            {
+                understandings.Add(uid);
+            }
+        }
+
+        return result;
     }
 
     public List<ICommonSession> GetUnderstanding(ProtoId<LanguagePrototype> languageId)
