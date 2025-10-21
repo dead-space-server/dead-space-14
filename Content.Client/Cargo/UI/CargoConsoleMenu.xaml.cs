@@ -69,7 +69,7 @@ namespace Content.Client.Cargo.UI
                     ("code", Loc.GetString(accountProto.Code)));
             }
 
-// DS14-start
+            // DS14-start
            if (entMan.TryGetComponent<CargoOrderConsoleComponent>(owner, out var console) && console.IsTaipan)
            {
                TabContainer.SetTabTitle(0, Loc.GetString("cargo-console-menu-tab-title-orders"));
@@ -77,7 +77,7 @@ namespace Content.Client.Cargo.UI
            }
            else
            {
-// DS14-end
+            // DS14-end
             TabContainer.SetTabTitle(0, Loc.GetString("cargo-console-menu-tab-title-orders"));
             TabContainer.SetTabTitle(1, Loc.GetString("cargo-console-menu-tab-title-funds"));
 
