@@ -401,8 +401,8 @@
   result: ChameleonPDA
   completetime: 8
   materials:
-    Plastic: 700
-    Glass: 700
+    Plastic: 1000
+    Glass: 1000
     Gold: 250
     Plasma: 50
 
@@ -653,9 +653,9 @@
   result: ClothingOuterEVASuitSyndicate
   completetime: 15
   materials:
-    Plasteel: 70
-    Cloth: 500
-    Plastic: 300
+    Plasteel: 200
+    Cloth: 1200
+    Plastic: 1000
 
 - type: latheRecipe
   id: ClothingHeadHelmetSyndicate
