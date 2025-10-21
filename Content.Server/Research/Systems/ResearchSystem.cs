@@ -57,7 +57,7 @@ namespace Content.Server.Research.Systems
 
             _lookup.GetGridEntities(grid, ClientLookup);
             return ClientLookup;
-        // DS14-end
+        // DS14-edit-end
         }
 
         /// <summary>
