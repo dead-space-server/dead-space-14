@@ -402,7 +402,7 @@
   completetime: 8
   materials:
     Steel: 300
-    Glass: 200
+    Glass: 100
     Gold: 250
     Plasma: 50
 
@@ -654,7 +654,7 @@
   completetime: 15
   materials:
     Steel: 1000
-    Plastic: 800
+    Plastic: 400
     Glass: 400
 
 - type: latheRecipe
