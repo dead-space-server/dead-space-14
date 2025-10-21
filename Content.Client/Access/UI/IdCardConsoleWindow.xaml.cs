@@ -70,6 +70,7 @@ namespace Content.Client.Access.UI
                 .Where(job => job.OverrideConsoleVisibility.GetValueOrDefault(job.SetPreference))
                 .Where(job => isTaipan ? job.IsTaipan : !job.IsTaipan)
                 .ToList();
+            // DS14-end
 
             jobs.Sort((x, y) => string.Compare(x.LocalizedName, y.LocalizedName, StringComparison.CurrentCulture));
 
