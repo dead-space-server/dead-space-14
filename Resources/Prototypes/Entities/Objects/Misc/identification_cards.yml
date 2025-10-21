@@ -1065,6 +1065,7 @@
   - type: Access
     groups:
     - AllAccess
+    - TaipanAccess # DS14-taipan
     - Silicon
     tags:
     - CentralCommand

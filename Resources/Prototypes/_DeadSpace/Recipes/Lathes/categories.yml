@@ -26,3 +26,22 @@
 - type: latheCategory
   id: Terracotta
   name: lathe-category-terracotta
+
+# Implants
+- type: latheCategory
+  id: Implants
+  name: lathe-category-implants
+
+# Weapon techfab
+- type: latheCategory
+  id: Explosives
+  name: lathe-category-explosives
+
+# Uniform printer
+- type: latheCategory
+  id: Backpacks
+  name: lathe-category-backpacks
+
+- type: latheCategory
+  id: Special
+  name: lathe-category-special
