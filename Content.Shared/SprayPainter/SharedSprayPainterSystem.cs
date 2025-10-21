@@ -90,7 +90,7 @@ public abstract class SharedSprayPainterSystem : EntitySystem
             SetPipeColor(ent, ent.Comp.ColorPalette.First().Key);
     }
 
-// DS14-start
+    // DS14-start
     public IEnumerable<PaintableGroupPrototype> GetAllowedGroups(SprayPainterComponent component)
     {
         foreach (var groupProto in Proto.EnumeratePrototypes<PaintableGroupPrototype>())
@@ -133,7 +133,7 @@ public abstract class SharedSprayPainterSystem : EntitySystem
 
         return false;
     }
-// DS14-end
+    // DS14-end
 
     private void SetPipeColor(Entity<SprayPainterComponent> ent, string? paletteKey)
     {

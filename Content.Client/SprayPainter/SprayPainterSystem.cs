@@ -88,7 +88,7 @@ public sealed class SprayPainterSystem : SharedSprayPainterSystem
         }
     }
 
-// DS14-start
+            // DS14-start
     public Dictionary<string, List<string>> GetFilteredPaintableGroups(SprayPainterComponent component)
     {
         var filteredGroups = new Dictionary<string, List<string>>();
@@ -132,7 +132,7 @@ public sealed class SprayPainterSystem : SharedSprayPainterSystem
 
         return filteredStyles;
     }
-// DS14-end
+            // DS14-end
 
     private sealed class StatusControl : Control
     {

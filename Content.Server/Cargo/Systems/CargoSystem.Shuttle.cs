@@ -244,7 +244,7 @@ public sealed partial class CargoSystem
                 {
                     { sellComponent.OverrideAccount, cut },
                     { bankAccount.PrimaryAccount, 1.0 - cut },
-// DS14-start
+                // DS14-start
             };
             }
             else
@@ -260,7 +260,7 @@ public sealed partial class CargoSystem
                 {
                     distribution = baseDistribution;
                 }
-// DS14-end
+                // DS14-end
             }
 
             UpdateBankAccount((station, bankAccount), (int) Math.Round(value), distribution, false);

@@ -31,7 +31,7 @@ public sealed class BorgSwitchableTypeSystem : SharedBorgSwitchableTypeSystem
         // Borg transponder for the robotics console
         if (TryComp(ent, out BorgTransponderComponent? transponder))
         {
-// DS14-start
+            // DS14-start
             ResPath rsiPath = prototype.IsTaipan
                 ? new ResPath("_DeadSpace/Mobs/Silicon/chassis.rsi")
                : new ResPath("Mobs/Silicon/chassis.rsi");
@@ -39,7 +39,7 @@ public sealed class BorgSwitchableTypeSystem : SharedBorgSwitchableTypeSystem
             _borgSystem.SetTransponderSprite(
                 (ent.Owner, transponder),
                 new SpriteSpecifier.Rsi(rsiPath, prototype.SpriteBodyState));
-// DS14-end
+            // DS14-end
 
             _borgSystem.SetTransponderName(
                 (ent.Owner, transponder),

@@ -262,10 +262,10 @@ namespace Content.Client.Cargo.UI
                 !_entityManager.TryGetComponent<CargoOrderConsoleComponent>(_owner, out var console))
                 return;
 
-// DS14-start
+            // DS14-start
             if (console.IsTaipan)
                 return;
-// DS14-end
+            // DS14-end
             var i = 0;
             ActionOptions.Clear();
             ActionOptions.AddItem(Loc.GetString("cargo-console-menu-account-action-option-withdraw"), i);
