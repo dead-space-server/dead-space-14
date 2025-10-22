@@ -5,10 +5,8 @@ using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
-using Content.Server.Players.RateLimiting;
-using Content.Server.Speech.Prototypes;
 using Content.Server.Speech.EntitySystems;
-using Content.Server.Station.Components;
+using Content.Server.Speech.Prototypes;
 using Content.Server.Station.Systems;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Administration;
@@ -22,7 +20,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Players;
 using Content.Shared.Players.RateLimiting;
 using Content.Shared.Radio;
-using Robust.Server.Console;
+using Content.Shared.Station.Components;
 using Content.Shared.Whitelist;
 using Robust.Server.Player;
 using Robust.Shared.Audio;
@@ -38,6 +36,10 @@ using Robust.Shared.Utility;
 using Content.Shared.Corvax.TTS;
 using Content.Shared.Dataset;
 using Content.DeadSpace.Interfaces.Server;
+using Content.Shared.DeadSpace.Languages.Components;
+using Content.Server.DeadSpace.Languages;
+using Robust.Server.Console;
+using Content.Shared.DeadSpace.Languages.Prototypes;
 
 namespace Content.Server.Chat.Systems;
 
@@ -64,13 +66,8 @@ public sealed partial class ChatSystem : SharedChatSystem
     [Dependency] private readonly ReplacementAccentSystem _wordreplacement = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
     [Dependency] private readonly ExamineSystemShared _examineSystem = default!;
+    [Dependency] private readonly LanguageSystem _language = default!; // DS14-Languages
     private IServerChatFilter? _chatFilter; // DS14-chat-filter
-
-    public const int VoiceRange = 10; // how far voice goes in world units
-    public const int WhisperClearRange = 2; // how far whisper goes while still being understandable, in world units
-    public const int WhisperMuffledRange = 8; // how far whisper goes at all, in world units
-    public const string DefaultAnnouncementSound = "/Audio/_DeadSpace/Announcements/announce.ogg"; // DS14-Announcements
-    public const string CentComAnnouncementSound = "/Audio/_DeadSpace/Announcements/centcomm.ogg"; // DS14-Announcements
 
     private bool _loocEnabled = true;
     private bool _deadLoocEnabled;
@@ -344,9 +341,12 @@ public sealed partial class ChatSystem : SharedChatSystem
         string originalMessage = "",
         EntityUid? author = null,
         string? voice = null,
-        bool usePresetTTS = false
+        bool usePresetTTS = false,
+        string? languageId = null // DS14-Languages
         )
     {
+        languageId = string.IsNullOrEmpty(languageId) ? LanguageSystem.DefaultLanguageId : languageId;
+
         sender ??= Loc.GetString("chat-manager-sender-announcement");
 
         var wrappedMessage = Loc.GetString("chat-manager-sender-announcement-wrap-message", ("sender", sender), ("message", FormattedMessage.EscapeText(message)));
@@ -356,7 +356,20 @@ public sealed partial class ChatSystem : SharedChatSystem
             return;
         // DS14-chat-filter-end
 
-        _chatManager.ChatMessageToAll(ChatChannel.Radio, message, wrappedMessage, default, false, true, colorOverride);
+        // DS14-Languages-start
+        string lexiconMessage = _language.ReplaceWordsWithLexicon(message, languageId);
+        var understanding = _language.GetUnderstanding(languageId);
+
+        var lexiconWrappedMessage = Loc.GetString("chat-manager-sender-announcement-wrap-message", ("sender", sender), ("message", FormattedMessage.EscapeText(lexiconMessage)));
+
+        foreach (var session in _playerManager.Sessions)
+        {
+            if (!understanding.Contains(session))
+                _chatManager.ChatMessageToOne(ChatChannel.Radio, lexiconMessage, lexiconWrappedMessage, default, false, session.Channel, colorOverride, true);
+            else
+                _chatManager.ChatMessageToOne(ChatChannel.Radio, message, wrappedMessage, default, false, session.Channel, colorOverride, true);
+        }
+        // DS14-Languages-end
 
         // Fucked up logic ahead... FIX THIS PLEASE.
 
@@ -364,25 +377,25 @@ public sealed partial class ChatSystem : SharedChatSystem
         {
             if (announcementSound == null)
             {
-                if (sender == Loc.GetString("chat-manager-sender-announcement")) announcementSound = new SoundPathSpecifier(CentComAnnouncementSound); // Corvax-Announcements: Support custom alert sound from admin panel
+                if (sender == Loc.GetString("chat-manager-sender-announcement")) announcementSound = CentComAnnouncementSound; // Corvax-Announcements: Support custom alert sound from admin panel
             }
 
-            _audio.PlayGlobal(announcementSound == null ? DefaultAnnouncementSound : _audio.ResolveSound(announcementSound), Filter.Broadcast(), true, announcementSound?.Params ?? AudioParams.Default.WithVolume(-2f));
+            _audio.PlayGlobal(announcementSound ?? DefaultAnnouncementSound, Filter.Broadcast(), true, announcementSound?.Params ?? AudioParams.Default.WithVolume(-2f));
 
             if (author != null && TryComp<TTSComponent>(author.Value, out var tts) && tts.VoicePrototypeId != null) // For comms console announcements
             {
-                var ev = new AnnounceSpokeEvent(tts.VoicePrototypeId, originalMessage, author.Value);
+                var ev = new AnnounceSpokeEvent(tts.VoicePrototypeId, originalMessage, lexiconMessage, languageId, author.Value);
                 RaiseLocalEvent(ev);
             }
             else if (usePresetTTS && sender == Loc.GetString("chat-manager-sender-announcement")) // For admin announcements from Centcomm with preset voices
             {
                 voice = _centcommTTS;
-                var ev = new AnnounceSpokeEvent(voice, originalMessage, null);
+                var ev = new AnnounceSpokeEvent(voice, originalMessage, lexiconMessage, languageId, null);
                 RaiseLocalEvent(ev);
             }
             else if (voice != null) // For admin announcements
             {
-                var ev = new AnnounceSpokeEvent(voice, originalMessage, null);
+                var ev = new AnnounceSpokeEvent(voice, originalMessage, lexiconMessage, languageId, null);
                 RaiseLocalEvent(ev);
             }
         }
@@ -414,7 +427,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         _chatManager.ChatMessageToManyFiltered(filter, ChatChannel.Radio, message, wrappedMessage, source ?? default, false, true, colorOverride);
         if (playSound)
         {
-            _audio.PlayGlobal(announcementSound?.ToString() ?? DefaultAnnouncementSound, filter, true, AudioParams.Default.WithVolume(-2f));
+            _audio.PlayGlobal(announcementSound ?? DefaultAnnouncementSound, filter, true, AudioParams.Default.WithVolume(-2f));
         }
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Station Announcement from {sender}: {message}");
     }
@@ -446,7 +459,7 @@ public sealed partial class ChatSystem : SharedChatSystem
             return;
         }
 
-        if (!EntityManager.TryGetComponent<StationDataComponent>(station, out var stationDataComp)) return;
+        if (!TryComp<StationDataComponent>(station, out var stationDataComp)) return;
 
         var filter = _stationSystem.GetInStation(stationDataComp);
 
@@ -454,7 +467,7 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         if (playDefaultSound)
         {
-            _audio.PlayGlobal(announcementSound?.ToString() ?? DefaultAnnouncementSound, filter, true, AudioParams.Default.WithVolume(-2f));
+            _audio.PlayGlobal(announcementSound ?? DefaultAnnouncementSound, filter, true, AudioParams.Default.WithVolume(-2f));
         }
 
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Station Announcement on {station} from {sender}: {message}");
@@ -508,10 +521,26 @@ public sealed partial class ChatSystem : SharedChatSystem
             ("fontSize", speech.FontSize),
             ("message", FormattedMessage.EscapeText(message)));
 
-        SendInVoiceRange(ChatChannel.Local, message, wrappedMessage, source, range);
+        // DS14-Languages-start
+        TryComp<LanguageComponent>(source, out var language);
 
-        var ev = new EntitySpokeEvent(source, message, originalMessage, null, null);
+        string lexiconMessage = message;
+        string lexiconWrappedMessage = wrappedMessage;
+
+        if (language != null)
+        {
+            lexiconMessage = _language.ReplaceWordsWithLexicon(message, language.SelectedLanguage.Id);
+
+            lexiconWrappedMessage = wrappedMessage.Replace(FormattedMessage.EscapeText(message), FormattedMessage.EscapeText(lexiconMessage));
+        }
+
+        var selectedLanguage = language != null ? language.SelectedLanguage.Id : string.Empty;
+
+        SendInVoiceRange(ChatChannel.Local, message, wrappedMessage, source, range, null, lexiconMessage, lexiconWrappedMessage, selectedLanguage);
+
+        var ev = new EntitySpokeEvent(source, message, originalMessage, lexiconMessage, selectedLanguage, null, null);
         RaiseLocalEvent(source, ev, true);
+        // DS14-Languages-end
 
         // To avoid logging any messages sent by entities that are not players, like vendors, cloning, etc.
         // Also doesn't log if hideLog is true.
@@ -580,6 +609,19 @@ public sealed partial class ChatSystem : SharedChatSystem
         var wrappedUnknownMessage = Loc.GetString("chat-manager-entity-whisper-unknown-wrap-message",
             ("message", FormattedMessage.EscapeText(obfuscatedMessage)));
 
+        // DS14-Languages-start
+        string lexiconMessage = message;
+
+        if (TryComp<LanguageComponent>(source, out var language))
+            lexiconMessage = _language.ReplaceWordsWithLexicon(message, language.SelectedLanguage.Id);
+
+        var newObfuscatedMessage = ObfuscateMessageReadability(lexiconMessage, 0.2f);
+
+        var newWrappedMessage = wrappedMessage.Replace(FormattedMessage.EscapeText(message), FormattedMessage.EscapeText(lexiconMessage));
+        var newWrappedobfuscatedMessage = wrappedobfuscatedMessage.Replace(FormattedMessage.EscapeText(obfuscatedMessage), FormattedMessage.EscapeText(newObfuscatedMessage));
+        var newWrappedUnknownMessage = wrappedUnknownMessage.Replace(FormattedMessage.EscapeText(obfuscatedMessage), FormattedMessage.EscapeText(newObfuscatedMessage));
+
+        // DS14-Languages-end
 
         foreach (var (session, data) in GetRecipients(source, WhisperMuffledRange))
         {
@@ -587,13 +629,29 @@ public sealed partial class ChatSystem : SharedChatSystem
 
             if (session.AttachedEntity is not { Valid: true } playerEntity)
                 continue;
+
             listener = session.AttachedEntity.Value;
 
             if (MessageRangeCheck(session, data, range) != MessageRangeCheckResult.Full)
                 continue; // Won't get logged to chat, and ghosts are too far away to see the pop-up, so we just won't send it to them.
 
-            if (data.Range <= WhisperClearRange)
+            // DS14-Languages-start
+            if (language != null && !_language.KnowsLanguage(listener, language.SelectedLanguage.Id))
+            {
+                if (data.Range <= WhisperClearRange || data.Observer)
+                    _chatManager.ChatMessageToOne(ChatChannel.Whisper, lexiconMessage, newWrappedMessage, source, false, session.Channel);
+                else if (_examineSystem.InRangeUnOccluded(source, listener, WhisperMuffledRange))
+                    _chatManager.ChatMessageToOne(ChatChannel.Whisper, newObfuscatedMessage, newWrappedobfuscatedMessage, source, false, session.Channel);
+                else
+                    _chatManager.ChatMessageToOne(ChatChannel.Whisper, newObfuscatedMessage, newWrappedUnknownMessage, source, false, session.Channel);
+
+                continue;
+            }
+            // DS14-Languages-end
+
+            if (data.Range <= WhisperClearRange || data.Observer)
                 _chatManager.ChatMessageToOne(ChatChannel.Whisper, message, wrappedMessage, source, false, session.Channel);
+
             //If listener is too far, they only hear fragments of the message
             else if (_examineSystem.InRangeUnOccluded(source, listener, WhisperMuffledRange))
                 _chatManager.ChatMessageToOne(ChatChannel.Whisper, obfuscatedMessage, wrappedobfuscatedMessage, source, false, session.Channel);
@@ -604,7 +662,9 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         _replay.RecordServerMessage(new ChatMessage(ChatChannel.Whisper, message, wrappedMessage, GetNetEntity(source), null, MessageRangeHideChatForReplay(range)));
 
-        var ev = new EntitySpokeEvent(source, message, originalMessage, channel, obfuscatedMessage);
+        var selectedLanguage = language != null ? language.SelectedLanguage.Id : string.Empty; // DS14-Languages
+        var ev = new EntitySpokeEvent(source, message, originalMessage, lexiconMessage, selectedLanguage, channel, obfuscatedMessage); // DS14-Languages
+
         RaiseLocalEvent(source, ev, true);
         if (!hideLog)
             if (originalMessage == message)
@@ -649,8 +709,10 @@ public sealed partial class ChatSystem : SharedChatSystem
             ("entity", ent),
             ("message", FormattedMessage.RemoveMarkupOrThrow(action)));
 
-        if (checkEmote)
-            TryEmoteChatInput(source, action);
+        if (checkEmote &&
+            !TryEmoteChatInput(source, action))
+            return;
+
         SendInVoiceRange(ChatChannel.Emotes, action, wrappedMessage, source, range, author);
         if (!hideLog)
             if (name != Name(source))
@@ -759,15 +821,39 @@ public sealed partial class ChatSystem : SharedChatSystem
     /// <summary>
     ///     Sends a chat message to the given players in range of the source entity.
     /// </summary>
-    private void SendInVoiceRange(ChatChannel channel, string message, string wrappedMessage, EntityUid source, ChatTransmitRange range, NetUserId? author = null)
+    private void SendInVoiceRange(ChatChannel channel, string message, string wrappedMessage, EntityUid source, ChatTransmitRange range, NetUserId? author = null, string? lexiconMessage = null, string? lexiconWrappedMessage = null, string? selectedLanguage = null)
     {
+        var totalWrappedMessage = wrappedMessage;
+        var totalMessage = message;
+
         foreach (var (session, data) in GetRecipients(source, VoiceRange))
         {
+            // DS14-Languages-start
+            EntityUid listener;
+
+            if (session.AttachedEntity is not { Valid: true } playerEntity)
+                continue;
+
+            listener = session.AttachedEntity.Value;
+
+            if (lexiconMessage != null && lexiconWrappedMessage != null && selectedLanguage != null && !_language.KnowsLanguage(listener, selectedLanguage))
+            {
+                totalWrappedMessage = lexiconWrappedMessage;
+                totalMessage = lexiconMessage;
+            }
+            else
+            {
+                totalWrappedMessage = wrappedMessage;
+                totalMessage = message;
+            }
+
+            // DS14-Languages-end
+
             var entRange = MessageRangeCheck(session, data, range);
             if (entRange == MessageRangeCheckResult.Disallowed)
                 continue;
             var entHideChat = entRange == MessageRangeCheckResult.HideChat;
-            _chatManager.ChatMessageToOne(channel, message, wrappedMessage, source, entHideChat, session.Channel, author: author);
+            _chatManager.ChatMessageToOne(channel, totalMessage, totalWrappedMessage, source, entHideChat, session.Channel, author: author);
         }
 
         _replay.RecordServerMessage(new ChatMessage(channel, message, wrappedMessage, GetNetEntity(source), null, MessageRangeHideChatForReplay(range)));
@@ -870,8 +956,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         return message;
     }
 
-    [ValidatePrototypeId<ReplacementAccentPrototype>]
-    public const string ChatSanitize_Accent = "chatsanitize";
+    public static readonly ProtoId<ReplacementAccentPrototype> ChatSanitize_Accent = "chatsanitize";
 
     public string SanitizeMessageReplaceWords(string message)
     {
@@ -1006,6 +1091,8 @@ public sealed class EntitySpokeEvent : EntityEventArgs
     public readonly EntityUid Source;
     public readonly string Message;
     public readonly string OriginalMessage;
+    public readonly string LexiconMessage; // DS14-Languages
+    public readonly ProtoId<LanguagePrototype> LanguageId; // DS14-Languages
     public readonly string? ObfuscatedMessage; // not null if this was a whisper
 
     /// <summary>
@@ -1014,11 +1101,13 @@ public sealed class EntitySpokeEvent : EntityEventArgs
     /// </summary>
     public RadioChannelPrototype? Channel;
 
-    public EntitySpokeEvent(EntityUid source, string message, string originalMessage, RadioChannelPrototype? channel, string? obfuscatedMessage)
+    public EntitySpokeEvent(EntityUid source, string message, string originalMessage, string lexiconMessage, ProtoId<LanguagePrototype> languageId, RadioChannelPrototype? channel, string? obfuscatedMessage)
     {
         Source = source;
         Message = message;
         OriginalMessage = originalMessage; // Corvax-TTS: Spec symbol sanitize
+        LexiconMessage = lexiconMessage; // DS14-Languages
+        LanguageId = languageId; // DS14-Languages
         Channel = channel;
         ObfuscatedMessage = obfuscatedMessage;
     }
@@ -1031,11 +1120,15 @@ public sealed class EntitySpokeToEntityEvent : EntityEventArgs
 {
     public readonly EntityUid Target;
     public readonly string Message;
+    public readonly string LexiconMessage; // DS14-Languages
+    public readonly ProtoId<LanguagePrototype> LanguageId; // DS14-Languages
 
-    public EntitySpokeToEntityEvent(EntityUid target, string message)
+    public EntitySpokeToEntityEvent(EntityUid target, string message, string lexiconMessage, ProtoId<LanguagePrototype> languageId)
     {
         Target = target;
         Message = message;
+        LanguageId = languageId; // DS14-Languages
+        LexiconMessage = lexiconMessage; // DS14-Languages
     }
 }
 
@@ -1046,16 +1139,20 @@ public sealed class RadioSpokeEvent : EntityEventArgs
 {
     public readonly EntityUid Source;
     public readonly string Message;
+    public readonly string LexiconMessage; // DS14-Languages
+    public readonly ProtoId<LanguagePrototype> LanguageId; // DS14-Languages
 
     /// <summary>
     ///     Of course, we can just use <see cref="EntitySpokeEvent"/>, but it's easier to send a message using RadioSystem
     /// </summary>
     public readonly EntityUid[] Receivers;
 
-    public RadioSpokeEvent(EntityUid source, string message, EntityUid[] receivers)
+    public RadioSpokeEvent(EntityUid source, string message, string lexiconMessage, ProtoId<LanguagePrototype> languageId, EntityUid[] receivers)
     {
         Source = source;
         Message = message;
+        LexiconMessage = lexiconMessage; // DS14-Languages
+        LanguageId = languageId; // DS14-Languages
         Receivers = receivers;
     }
 }
@@ -1067,12 +1164,16 @@ public sealed class AnnounceSpokeEvent : EntityEventArgs
 {
     public readonly string Voice;
     public readonly string Message;
+    public readonly string LexiconMessage; // DS14-Languages
+    public readonly ProtoId<LanguagePrototype> LanguageId; // DS14-Languages
     public readonly EntityUid? Source;
 
-    public AnnounceSpokeEvent(string voice, string message, EntityUid? source)
+    public AnnounceSpokeEvent(string voice, string message, string lexiconMessage, ProtoId<LanguagePrototype> languageId, EntityUid? source)
     {
         Voice = voice;
         Message = message;
+        LexiconMessage = lexiconMessage; // DS14-Languages
+        LanguageId = languageId; // DS14-Languages
         Source = source;
     }
 }

@@ -14,6 +14,11 @@
     walkModifier: 1
     sprintModifier: 0.9
   - type: HeldSpeedModifier
+  # DS14-start 
+  - type: PhysicalComposition
+    materialComposition:
+      Cloth: 100
+  # DS14-end
 
 - type: entity
   parent: ClothingBackpackDuffel
@@ -116,6 +121,7 @@
   components:
   - type: Sprite
     sprite: Clothing/Back/Duffels/mime.rsi
+  - type: Storage
     storageOpenSound:
       collection: null
     storageInsertSound:
@@ -170,10 +176,18 @@
   - type: Storage
     grid:
     - 0,0,8,4
+  
+- type: entity
+  parent: [ ClothingBackpackDuffelSyndicate, BaseSyndicateContraband ]
+  id: ClothingBackpackDuffelSyndicateBundle
+  abstract: true
+  components:
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: ClothingBackpackDuffelSyndicate
-  id: ClothingBackpackDuffelSyndicateBundle
+  parent: ClothingBackpackDuffel
+  id: ClothingBackpackDuffelBundle
   abstract: true
   components:
   - type: Tag
@@ -182,7 +196,6 @@
 - type: entity
   parent: ClothingBackpackDuffelSyndicate
   id: ClothingBackpackDuffelSyndicateAmmo
-  name: syndicate duffel bag
   components:
   - type: Sprite
     sprite: Clothing/Back/Duffels/syndicate.rsi
@@ -203,7 +216,6 @@
 - type: entity
   parent: ClothingBackpackDuffelSyndicate
   id: ClothingBackpackDuffelSyndicateMedical
-  name: syndicate duffel bag
   components:
   - type: Sprite
     sprite: Clothing/Back/Duffels/syndicate.rsi

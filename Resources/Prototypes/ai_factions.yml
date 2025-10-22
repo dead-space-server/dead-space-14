@@ -9,6 +9,7 @@
   - Revolutionary
   - AllHostile
   - Wizard
+  - CentralCommand # DS14
   - Necromorfs # DS14
   - SpiderTerror # DS14
   - Blob # DS14
@@ -25,6 +26,7 @@
   - Dragon
   - AllHostile
   - Wizard
+  - Xenoborg
   - Necromorfs # DS14
   - SpiderTerror # DS14
   - Blob # DS14
@@ -59,9 +61,12 @@
   - PetsNT
   - Zombie
   - Revolutionary
+  - Dragon
+  - Xeno
   - AllHostile
   - Wizard
-  - Dragon
+  - Xenoborg
+  - CentralCommand # DS14
   - Necromorfs # DS14
   - SpiderTerror # DS14
   - SyndicateAgent # DS14-agents-faction
@@ -80,6 +85,8 @@
   - Dragon
   - AllHostile
   - Wizard
+  - Xenoborg
+  - CentralCommand # DS14
   - Necromorfs # DS14
   - SpiderTerror # DS14
   - Blob # DS14
@@ -94,6 +101,8 @@
   - Dragon
   - AllHostile
   - Wizard
+  - Xenoborg
+  - CentralCommand # DS14
   - Necromorfs # DS14
   - SpiderTerror # DS14
 # DS14-agents-faction-end
@@ -110,6 +119,8 @@
   - AllHostile
   - Wizard
   - Dragon
+  - Xenoborg
+  - CentralCommand # DS14
   - Necromorfs # DS14
   - SpiderTerror # DS14
   - Blob # DS14
@@ -128,6 +139,8 @@
   - AllHostile
   - Wizard
   - Dragon
+  - Xenoborg
+  - CentralCommand # DS14
   - Necromorfs # DS14
   - SpiderTerror # DS14
   - Blob # DS14
@@ -142,6 +155,8 @@
   - Dragon
   - AllHostile
   - Wizard
+  - Xenoborg
+  - CentralCommand # DS14
   - Necromorfs # DS14
   - SpiderTerror # DS14
   - Blob # DS14
@@ -161,6 +176,8 @@
   - Zombie
   - Revolutionary
   - Wizard
+  - Xenoborg
+  - CentralCommand # DS14
   - Necromorfs # DS14
   - SpiderTerror # DS14
   - SyndicateAgent # DS14-agents-faction
@@ -181,7 +198,30 @@
   - Zombie
   - Revolutionary
   - AllHostile
+  - Xenoborg
+  - CentralCommand # DS14
   - Necromorfs # DS14
   - SpiderTerror # DS14
   - SyndicateAgent # DS14-agents-faction
   - Blob # DS14
+
+- type: npcFaction
+  id: Xenoborg
+  hostile:
+  # they have brains
+  - NanoTrasen
+  - Syndicate
+  - Zombie
+  - Revolutionary
+  - Wizard
+  - CentralCommand # DS14
+  - Necromorfs # DS14
+  - SpiderTerror # DS14
+  - SyndicateAgent # DS14-agents-faction
+  - Blob # DS14
+
+  - Xeno # rivalry
+
+  # cause they are hostile to them
+  - SimpleHostile 
+  - AllHostile

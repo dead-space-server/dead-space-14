@@ -11,10 +11,24 @@
 
 # Command
 - type: loadoutGroup
+  id: BlueShieldOfficerBackpack
+  name: loadout-group-blue-shield-officer-backpack
+  hidden: true
+  loadouts:
+  - BlueShieldOfficerBackpack
+
+- type: loadoutGroup
   id: BlueShieldOfficerJumpsuit
   name: loadout-group-blue-shield-officer-jumpsuit
   loadouts:
   - BlueShieldOfficerJumpsuit
+
+- type: loadoutGroup
+  id: BlueShieldOfficerNeck
+  name: loadout-group-blue-shield-officer-neck
+  loadouts:
+  - BlueShieldOfficerCloak
+  - BlueShieldOfficerMantle
 
 - type: loadoutGroup
   id: BlueShieldOfficerUnderwear
@@ -108,6 +122,13 @@
   - UnderwearTopBraSeniorEngineer
   - UnderwearBottomPantiesSeniorEngineer
 
+- type: loadoutGroup
+  id: SeniorEngineerBelt
+  name: loadout-group-senior-engineer-belt
+  loadouts:
+  - StationEngineerBeltUtility
+  - StationEngineerBeltWebbing
+
 # Science
 - type: loadoutGroup
   id: SeniorResearcherHead
@@ -122,6 +143,9 @@
   loadouts:
   - SeniorResearcherJumpsuit
   - SeniorResearcherJumpskirt
+  - SeniorResearcherJumpsuitTurtleneck
+  - SeniorResearcherJumpskirtTurtleneck
+
 
 - type: loadoutGroup
   id: SeniorResearcherOuterClothing
@@ -129,6 +153,7 @@
   minLimit: 0
   loadouts:
   - SeniorResearcherLabCoat
+  - SeniorResearcherWinterCoat
 
 - type: loadoutGroup
   id: SeniorResearcherPDA
@@ -153,6 +178,7 @@
   loadouts:
   - BrigmedicJumpsuit
   - BrigmedicJumpskirt
+  - BrigmedicJumpskirtPencil
 
 - type: loadoutGroup
   id: BrigmedicBackpack
@@ -168,6 +194,7 @@
   loadouts:
   - SeniorOfficerJumpsuit
   - SeniorOfficerJumpskirt
+  - SeniorOfficerJumpskirtPencil
 
 - type: loadoutGroup
   id: SeniorOfficerBackpack
@@ -201,7 +228,6 @@
   name: loadout-group-senior-officer-socks
   loadouts:
   - UnderwearSocksSeniorOfficer
-  - UnderwearWomenSocksSeniorOfficer
 
 - type: loadoutGroup
   id: SeniorOfficerUnderwear
@@ -230,7 +256,6 @@
   name: loadout-group-brigmedic-socks
   loadouts:
   - UnderwearSocksBrigmedic
-  - UnderwearWomenSocksBrigmedic
 
 - type: loadoutGroup
   id: BrigmedicUnderwear
@@ -283,6 +308,16 @@
   name: loadout-group-security-pilot-medal
   loadouts:
   - SecurityPilotMedal
+
+- type: loadoutGroup
+  id: SecurityPilotJumpsuit
+  name: loadout-group-security-pilot-jumpsuit
+  loadouts:
+  - SecurityPilotJumpsuit
+  - SecurityJumpsuit
+  - SecurityJumpskirt
+  - SecurityJumpsuitGrey
+  - SecurityJumpskirtGrey
 
 # Medical
 - type: loadoutGroup

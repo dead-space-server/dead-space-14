@@ -1,4 +1,6 @@
 using Content.Shared.Cargo;
+using Content.Shared.Cargo.Prototypes;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Server.Cargo.Components;
@@ -9,6 +11,11 @@ namespace Content.Server.Cargo.Components;
 [RegisterComponent]
 public sealed partial class StationCargoBountyDatabaseComponent : Component
 {
+    // DS14-start
+    [DataField]
+    public bool IsTaipan = false;
+    // DS14-end
+
     /// <summary>
     /// Maximum amount of bounties a station can have.
     /// </summary>
@@ -40,6 +47,12 @@ public sealed partial class StationCargoBountyDatabaseComponent : Component
     /// </summary>
     [DataField]
     public HashSet<string> CheckedBounties = new();
+
+    /// <summary>
+    /// The group that bounties are pulled from.
+    /// </summary>
+    [DataField]
+    public ProtoId<CargoBountyGroupPrototype> Group = "StationBounty";
 
     /// <summary>
     /// The time at which players will be able to skip the next bounty.

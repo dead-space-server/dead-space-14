@@ -1,7 +1,7 @@
 # Belts that need/have visualizers
 
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingBeltUtilityBase # DS14
   id: ClothingBeltUtility
   name: utility belt
   description: Can hold various things.
@@ -10,40 +10,6 @@
     sprite: Clothing/Belt/utility.rsi
   - type: Clothing
     sprite: Clothing/Belt/utility.rsi
-  - type: Storage
-    maxItemSize: Normal
-    # TODO: Fill this out more.
-    whitelist:
-      tags:
-        - Powerdrill
-        - Wirecutter
-        - Crowbar
-        - Screwdriver
-        - Flashlight
-        - Wrench
-        - GeigerCounter
-        - Flare
-        - CableCoil
-        - CigPack
-        - Radio
-        - HolofanProjector
-        - Multitool
-        - AppraisalTool
-        - JawsOfLife
-        - GPS
-        - WeldingMask
-      components:
-        - StationMap
-        - SprayPainter
-        - NetworkConfigurator
-        - RCD
-        - RCDAmmo
-        - Welder
-        - PowerCell
-        - Geiger
-        - TrayScanner
-        - GasAnalyzer
-        - HandLabeler
   - type: ItemMapper
     mapLayers:
       drill:
@@ -102,6 +68,10 @@
       # DS14-end
     sprite: Clothing/Belt/belt_overlay.rsi
   - type: Appearance
+  - type: Tag
+    tags:
+    - UtilityBelt
+    - WhitelistChameleon
 
 - type: entity
   parent: ClothingBeltStorageBase
@@ -137,6 +107,7 @@
       components:
         - StationMap
         - SprayPainter
+        - SprayPainterAmmo
         - NetworkConfigurator
         - RCD
         - RCDAmmo
@@ -247,6 +218,8 @@
         - WetFloorSign
         - HolosignProjector
         - Plunger
+        - GoldenPlunger
+        - WireBrush
         # DS14-start
         - SoapSyndie
         - TrashBagBlue
@@ -321,6 +294,7 @@
   - type: Clothing
     sprite: Clothing/Belt/medical.rsi
   - type: Storage
+    maxItemSize: Large # DS14
     whitelist:
       tags:
         - Wrench
@@ -336,6 +310,8 @@
         - DiscreteHealthAnalyzer
         - SurgeryTool
         - Dropper
+        - Medkit # DS14
+        - CompactDefibrillator # DS14
       components:
         - Hypospray
         - Injector
@@ -551,6 +527,8 @@
         - MagazineMagnum
         - CombatKnife
         - Truncheon
+        - HandGrenade
+        - EnergyCartridge # DS14
       components:
         - Stunbaton
         - FlashOnTrigger
@@ -686,6 +664,8 @@
         - Gun
         - BallisticAmmoProvider
         - CartridgeAmmo
+  - type: StaticPrice
+    price: 500
 
 - type: entity
   parent: ClothingBeltSecurity
@@ -731,7 +711,9 @@
   - type: Clothing
     sprite: Clothing/Belt/militarywebbing.rsi
   - type: ExplosionResistance
-    damageCoefficient: 0.5
+    damageCoefficient: 0.1
+  - type: StaticPrice
+    price: 500
 
 - type: entity
   parent: ClothingBeltMilitaryWebbing

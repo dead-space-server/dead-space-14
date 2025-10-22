@@ -1,6 +1,7 @@
 ﻿using Content.Shared.Whitelist;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
+using Robust.Shared.Utility;
 
 namespace Content.Shared.Cargo.Prototypes;
 
@@ -9,12 +10,17 @@ namespace Content.Shared.Cargo.Prototypes;
 /// that must be sold together in a labeled container in order
 /// to receive a monetary reward.
 /// </summary>
-[Prototype, Serializable, NetSerializable]
+[Prototype]
 public sealed partial class CargoBountyPrototype : IPrototype
 {
     /// <inheritdoc/>
     [IdDataField]
     public string ID { get; private set; } = default!;
+
+    /// DS14-start
+    [DataField]
+    public bool IsTaipan = false;
+    /// DS14-end
 
     /// <summary>
     /// The monetary reward for completing the bounty
@@ -39,6 +45,18 @@ public sealed partial class CargoBountyPrototype : IPrototype
     /// </summary>
     [DataField]
     public string IdPrefix = "NT";
+
+    /// <summary>
+    /// A group used for categorizing this bounty.
+    /// </summary>
+    [DataField]
+    public ProtoId<CargoBountyGroupPrototype> Group = "StationBounty";
+
+    /// <summary>
+    /// Optional sprite representing this bounty.
+    /// </summary>
+    [DataField]
+    public SpriteSpecifier? Sprite;
 }
 
 [DataDefinition, Serializable, NetSerializable]

@@ -1,5 +1,4 @@
 using Content.Server.Administration.Logs;
-using Content.Server.DeviceNetwork;
 using Content.Server.DeviceNetwork.Systems;
 using Content.Server.Radio.EntitySystems;
 using Content.Shared.Lock;
@@ -10,7 +9,8 @@ using Content.Shared.Robotics.Components;
 using Content.Shared.Robotics.Systems;
 using Robust.Server.GameObjects;
 using Robust.Shared.Timing;
-using System.Diagnostics.CodeAnalysis;
+using Content.Shared.DeviceNetwork.Events;
+using Content.Shared.Silicons.Borgs.Components;
 
 namespace Content.Server.Research.Systems;
 
@@ -26,6 +26,7 @@ public sealed class RoboticsConsoleSystem : SharedRoboticsConsoleSystem
     [Dependency] private readonly LockSystem _lock = default!;
     [Dependency] private readonly RadioSystem _radio = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private readonly IEntityManager _entityManager = default!; // DS14
 
     // almost never timing out more than 1 per tick so initialize with that capacity
     private List<string> _removing = new(1);
@@ -82,6 +83,13 @@ public sealed class RoboticsConsoleSystem : SharedRoboticsConsoleSystem
         if (!payload.TryGetValue(RoboticsConsoleConstants.NET_CYBORG_DATA, out CyborgControlData? data))
             return;
 
+        // DS14-start
+        if (!_entityManager.TryGetComponent<BorgTransponderComponent>(args.Sender, out var transponder))
+            return;
+
+        if (ent.Comp.IsTaipan != transponder.IsTaipan)
+            return;
+        // DS14-end
         var real = data.Value;
         real.Timeout = _timing.CurTime + ent.Comp.Timeout;
         ent.Comp.Cyborgs[args.SenderAddress] = real;
@@ -96,6 +104,9 @@ public sealed class RoboticsConsoleSystem : SharedRoboticsConsoleSystem
 
     private void OnDisable(Entity<RoboticsConsoleComponent> ent, ref RoboticsConsoleDisableMessage args)
     {
+        if (!ent.Comp.AllowBorgControl)
+            return;
+
         if (_lock.IsLocked(ent.Owner))
             return;
 
@@ -113,6 +124,9 @@ public sealed class RoboticsConsoleSystem : SharedRoboticsConsoleSystem
 
     private void OnDestroy(Entity<RoboticsConsoleComponent> ent, ref RoboticsConsoleDestroyMessage args)
     {
+        if (!ent.Comp.AllowBorgControl)
+            return;
+
         if (_lock.IsLocked(ent.Owner))
             return;
 
@@ -140,7 +154,7 @@ public sealed class RoboticsConsoleSystem : SharedRoboticsConsoleSystem
 
     private void UpdateUserInterface(Entity<RoboticsConsoleComponent> ent)
     {
-        var state = new RoboticsConsoleState(ent.Comp.Cyborgs);
+        var state = new RoboticsConsoleState(ent.Comp.Cyborgs, ent.Comp.AllowBorgControl);
         _ui.SetUiState(ent.Owner, RoboticsConsoleUiKey.Key, state);
     }
 }

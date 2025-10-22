@@ -67,9 +67,9 @@
         Heat : 1.5 #per second, scales with temperature & other constants
   - type: TemperatureSpeed
     thresholds:
-      301: 0.8
-      295: 0.6
-      285: 0.4
+      301: 0.9
+      295: 0.8
+      285: 0.7
   - type: Wagging
   - type: Inventory
     speciesId: reptilian
@@ -80,6 +80,13 @@
             sprite: Mobs/Species/Human/displacement.rsi
             state: jumpsuit-female
   - type: Sanity # DS14
+  # DS14-Languages-start
+  - type: Language
+    selectedLanguage: GeneralLanguage
+    knownLanguages:
+    - GeneralLanguage
+    - ReptilianLanguage
+  # DS14-Languages-end
 
 
 - type: entity
