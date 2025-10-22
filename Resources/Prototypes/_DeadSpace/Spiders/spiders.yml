@@ -955,68 +955,68 @@
   - type: StunAttack
     paralyzeTime: 2.5
 
-# - type: entity
-#   name: переносчик заразы
-#   parent: BaseMobSpiderTerror
-#   id: MobSpiderTerrorInfector
-#   description: Паук, распространитель яиц пауков ужаса.
-#   components:
-#   - type: Sprite
-#     scale: 0.6, 0.6
-#     drawdepth: Mobs
-#     layers:
-#     - map: ["enum.DamageStateVisualLayers.Base", "movement"]
-#       state: running
-#       sprite: _DeadSpace/Spiders/infector.rsi
-#   - type: MeleeWeapon
-#     altDisarm: false
-#     angle: 0
-#     animation: WeaponArcBite
-#     soundHit:
-#       path: /Audio/Effects/bite.ogg
-#     damage:
-#       types:
-#         Poison: 1
-#         Structural: 5
-#       groups:
-#         Brute: 7
-#   - type: MobThresholds
-#     thresholds:
-#       0: Alive
-#       250: Critical
-#       350: Dead
-#   - type: Fixtures
-#     fixtures:
-#       fix1:
-#         shape:
-#           !type:PhysShapeCircle
-#           radius: 0.3
-#         density: 130
-#         mask:
-#         - MobMask
-#         layer:
-#         - MobLayer
-#   - type: MovementSpeedModifier
-#     baseWalkSpeed: 4
-#     baseSprintSpeed: 4
-#   - type: Bloodstream
-#     bloodReagent: CopperBlood
-#     bloodMaxVolume: 200
-#     bloodlossThreshold: 0.4
-#   - type: Puller
-#     needsHands: false
-#   - type: SlowOnDamage
-#     speedModifierThresholds:
-#       100: 0.9
-#   - type: SpiderInfector
-#     spawned:
-#     - id: MobSpiderTerrorGuardian
-#       amount: 4
-#     infectDuration: 300
-#   - type: HipoHand
-#     countRegen: 1
-#     quantity: 1 #Сколько впрыскивать
-#     countReagent: 1 #Сколько при спавне
-#     maxCountReagent: 1 #Хранилище реагента
-#     durationRegenReagent: 60 #Время регена
-#     reagent: SpiderEggs #Что в хранилище
+- type: entity
+  name: переносчик заразы
+  parent: BaseMobSpiderTerror
+  id: MobSpiderTerrorInfector
+  description: Паук, распространитель яиц пауков ужаса.
+  components:
+  - type: Sprite
+    scale: 0.6, 0.6
+    drawdepth: Mobs
+    layers:
+    - map: ["enum.DamageStateVisualLayers.Base", "movement"]
+      state: running
+      sprite: _DeadSpace/Spiders/infector.rsi
+  - type: MeleeWeapon
+    altDisarm: false
+    angle: 0
+    animation: WeaponArcBite
+    soundHit:
+      path: /Audio/Effects/bite.ogg
+    damage:
+      types:
+        Poison: 1
+        Structural: 5
+      groups:
+        Brute: 7
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      250: Critical
+      350: Dead
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.3
+        density: 130
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4
+    baseSprintSpeed: 4
+  - type: Bloodstream
+    bloodReagent: CopperBlood
+    bloodMaxVolume: 200
+    bloodlossThreshold: 0.4
+  - type: Puller
+    needsHands: false
+  - type: SlowOnDamage
+    speedModifierThresholds:
+      100: 0.9
+  - type: SpiderInfector
+    spawned:
+    - id: MobSpiderTerrorGuardian
+      amount: 4
+    infectDuration: 300
+  - type: HipoHand
+    countRegen: 1
+    quantity: 1 #Сколько впрыскивать
+    countReagent: 1 #Сколько при спавне
+    maxCountReagent: 1 #Хранилище реагента
+    durationRegenReagent: 60 #Время регена
+    reagent: SpiderEggs #Что в хранилище
