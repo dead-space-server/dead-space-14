@@ -69,44 +69,44 @@ namespace Content.Client.Cargo.UI
                     ("code", Loc.GetString(accountProto.Code)));
             }
 
-                // DS14-start
-            if (entMan.TryGetComponent<CargoOrderConsoleComponent>(owner, out var console) && console.IsTaipan)
-            {
-                TabContainer.SetTabTitle(0, Loc.GetString("cargo-console-menu-tab-title-orders"));
-                TabContainer.GetChild(1)?.Orphan();
-            }
-            else
-            {
-                // DS14-end
-                TabContainer.SetTabTitle(0, Loc.GetString("cargo-console-menu-tab-title-orders"));
-                TabContainer.SetTabTitle(1, Loc.GetString("cargo-console-menu-tab-title-funds"));
+            // DS14-start
+           if (entMan.TryGetComponent<CargoOrderConsoleComponent>(owner, out var console) && console.IsTaipan)
+           {
+               TabContainer.SetTabTitle(0, Loc.GetString("cargo-console-menu-tab-title-orders"));
+               TabContainer.GetChild(1)?.Orphan();
+           }
+           else
+           {
+            // DS14-end
+            TabContainer.SetTabTitle(0, Loc.GetString("cargo-console-menu-tab-title-orders"));
+            TabContainer.SetTabTitle(1, Loc.GetString("cargo-console-menu-tab-title-funds"));
 
-                ActionOptions.OnItemSelected += idx =>
-                {
-                    ActionOptions.SelectId(idx.Id);
-                };
+            ActionOptions.OnItemSelected += idx =>
+            {
+                ActionOptions.SelectId(idx.Id);
+            };
 
-                TransferSpinBox.IsValid = val =>
-                {
-                    if (!_entityManager.TryGetComponent<CargoOrderConsoleComponent>(owner, out var console) ||
+            TransferSpinBox.IsValid = val =>
+            {
+                if (!_entityManager.TryGetComponent<CargoOrderConsoleComponent>(owner, out var console) ||
                     !_entityManager.TryGetComponent<StationBankAccountComponent>(_station, out var bank))
-                        return true;
+                    return true;
 
-                    return val >= 0 && val <= (int) (console.TransferLimit * bank.Accounts[console.Account]);
-                };
+                return val >= 0 && val <= (int) (console.TransferLimit * bank.Accounts[console.Account]);
+            };
 
-                AccountActionButton.OnPressed += _ =>
-                {
-                    var account = (ProtoId<CargoAccountPrototype>?) ActionOptions.SelectedMetadata;
-                    OnAccountAction?.Invoke(account, TransferSpinBox.Value);
-                };
+            AccountActionButton.OnPressed += _ =>
+            {
+                var account = (ProtoId<CargoAccountPrototype>?) ActionOptions.SelectedMetadata;
+                OnAccountAction?.Invoke(account, TransferSpinBox.Value);
+            };
 
-                AccountLimitToggleButton.OnPressed += a =>
-                {
-                    OnToggleUnboundedLimit?.Invoke(a);
-                };
-            }
-        }
+            AccountLimitToggleButton.OnPressed += a =>
+            {
+                OnToggleUnboundedLimit?.Invoke(a);
+            };
+           }
+}
 
         private void OnCategoryItemSelected(OptionButton.ItemSelectedEventArgs args)
         {
@@ -266,7 +266,6 @@ namespace Content.Client.Cargo.UI
             if (console.IsTaipan)
                 return;
             // DS14-end
-
             var i = 0;
             ActionOptions.Clear();
             ActionOptions.AddItem(Loc.GetString("cargo-console-menu-account-action-option-withdraw"), i);
