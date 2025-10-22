@@ -8,7 +8,6 @@ using Robust.Client.UserInterface;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
-using Content.Shared.DeadSpace.Languages.Prototypes;
 using Content.Shared.DeadSpace.Languages;
 using System.Linq;
 
