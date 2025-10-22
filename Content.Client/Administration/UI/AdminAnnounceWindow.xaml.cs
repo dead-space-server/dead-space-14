@@ -53,7 +53,6 @@ namespace Content.Client.Administration.UI
             // Corvax-TTS-End
 
             // DS14-Languages-start
-
             _languages = protoManager.EnumeratePrototypes<LanguagePrototype>()
                 .OrderBy(o => Loc.GetString(o.Name))
                 .ToList();

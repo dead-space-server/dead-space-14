@@ -769,7 +769,6 @@ public sealed class EntityEffectSystem : EntitySystem
         RemComp<MonkeyAccentComponent>(uid);
 
         // DS14-Languages-start
-
         if (TryComp<LanguageComponent>(uid, out var language))
         {
             language.KnownLanguages.Add(LanguageSystem.DefaultLanguageId);
@@ -782,7 +781,6 @@ public sealed class EntityEffectSystem : EntitySystem
                 SelectedLanguage = LanguageSystem.DefaultLanguageId
             });
         }
-
         // DS14-Languages-end
 
         // Stops from adding a ghost role to things like people who already have a mind

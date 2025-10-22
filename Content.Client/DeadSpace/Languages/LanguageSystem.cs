@@ -35,6 +35,4 @@ public sealed class LanguageSystem : EntitySystem
         if (languageProto.LexiconSound != null)
             _audio.PlayGlobal(_audio.ResolveSound(languageProto.LexiconSound), Filter.Empty(), false, audioParams);
     }
-
-
 }
