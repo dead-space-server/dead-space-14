@@ -69,7 +69,7 @@ public sealed partial class SpiderTerrorRuleComponent : Component
     public int CburnCount = 0;
 
     [DataField, ViewVariables(VVAccess.ReadOnly)]
-    public float PeopleOnSpidersBreeding = 3;
+    public float PeopleOnSpidersBreeding = 2;
 
     [DataField, ViewVariables(VVAccess.ReadOnly)]
     public float PeopleOnSpidersNukeCode = 0.8f;

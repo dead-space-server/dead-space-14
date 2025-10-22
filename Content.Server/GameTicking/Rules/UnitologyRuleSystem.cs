@@ -27,7 +27,7 @@ using Content.Shared.Zombies;
 using Content.Server.DeadSpace.Necromorphs.InfectionDead;
 using Content.Shared.Stunnable;
 using Content.Shared.Fax.Components;
-using Content.Server.Station.Components;
+using Content.Shared.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Shared.Paper;
 using Content.Server.Fax;
