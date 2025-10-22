@@ -9,6 +9,8 @@
   - type: Clothing
     sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/nanonachos.rsi
 
+# Taipan
+
 - type: entity
   abstract: true
   parent: ClothingUniformBase
@@ -159,4 +161,3 @@
     sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/cargotech_jumpsuit.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/cargotech_jumpsuit.rsi
-

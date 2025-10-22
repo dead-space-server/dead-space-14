@@ -64,49 +64,49 @@ namespace Content.Client.Cargo.UI
             {
                 var accountProto = _protoManager.Index(orderConsole.Account);
                 AccountNameLabel.Text = Loc.GetString("cargo-console-menu-account-name-format",
-                    ("color", accountProto.Color),
-                    ("name", Loc.GetString(accountProto.Name)),
-                    ("code", Loc.GetString(accountProto.Code)));
+                ("color", accountProto.Color),
+                ("name", Loc.GetString(accountProto.Name)),
+                ("code", Loc.GetString(accountProto.Code)));
             }
 
-// DS14-start
-           if (entMan.TryGetComponent<CargoOrderConsoleComponent>(owner, out var console) && console.IsTaipan)
-           {
-               TabContainer.SetTabTitle(0, Loc.GetString("cargo-console-menu-tab-title-orders"));
-               TabContainer.GetChild(1)?.Orphan();
-           }
-           else
-           {
-// DS14-end
-            TabContainer.SetTabTitle(0, Loc.GetString("cargo-console-menu-tab-title-orders"));
-            TabContainer.SetTabTitle(1, Loc.GetString("cargo-console-menu-tab-title-funds"));
-
-            ActionOptions.OnItemSelected += idx =>
+                // DS14-start
+            if (entMan.TryGetComponent<CargoOrderConsoleComponent>(owner, out var console) && console.IsTaipan)
             {
-                ActionOptions.SelectId(idx.Id);
-            };
-
-            TransferSpinBox.IsValid = val =>
+                TabContainer.SetTabTitle(0, Loc.GetString("cargo-console-menu-tab-title-orders"));
+                TabContainer.GetChild(1)?.Orphan();
+            }
+            else
             {
-                if (!_entityManager.TryGetComponent<CargoOrderConsoleComponent>(owner, out var console) ||
+                // DS14-end
+                TabContainer.SetTabTitle(0, Loc.GetString("cargo-console-menu-tab-title-orders"));
+                TabContainer.SetTabTitle(1, Loc.GetString("cargo-console-menu-tab-title-funds"));
+
+                ActionOptions.OnItemSelected += idx =>
+                {
+                    ActionOptions.SelectId(idx.Id);
+                };
+
+                TransferSpinBox.IsValid = val =>
+                {
+                    if (!_entityManager.TryGetComponent<CargoOrderConsoleComponent>(owner, out var console) ||
                     !_entityManager.TryGetComponent<StationBankAccountComponent>(_station, out var bank))
-                    return true;
+                        return true;
 
-                return val >= 0 && val <= (int) (console.TransferLimit * bank.Accounts[console.Account]);
-            };
+                    return val >= 0 && val <= (int) (console.TransferLimit * bank.Accounts[console.Account]);
+                };
 
-            AccountActionButton.OnPressed += _ =>
-            {
-                var account = (ProtoId<CargoAccountPrototype>?) ActionOptions.SelectedMetadata;
-                OnAccountAction?.Invoke(account, TransferSpinBox.Value);
-            };
+                AccountActionButton.OnPressed += _ =>
+                {
+                    var account = (ProtoId<CargoAccountPrototype>?) ActionOptions.SelectedMetadata;
+                    OnAccountAction?.Invoke(account, TransferSpinBox.Value);
+                };
 
-            AccountLimitToggleButton.OnPressed += a =>
-            {
-                OnToggleUnboundedLimit?.Invoke(a);
-            };
-           }
-}
+                AccountLimitToggleButton.OnPressed += a =>
+                {
+                    OnToggleUnboundedLimit?.Invoke(a);
+                };
+            }
+        }
 
         private void OnCategoryItemSelected(OptionButton.ItemSelectedEventArgs args)
         {
@@ -262,10 +262,11 @@ namespace Content.Client.Cargo.UI
                 !_entityManager.TryGetComponent<CargoOrderConsoleComponent>(_owner, out var console))
                 return;
 
-// DS14-start
+            // DS14-start
             if (console.IsTaipan)
                 return;
-// DS14-end
+            // DS14-end
+
             var i = 0;
             ActionOptions.Clear();
             ActionOptions.AddItem(Loc.GetString("cargo-console-menu-account-action-option-withdraw"), i);

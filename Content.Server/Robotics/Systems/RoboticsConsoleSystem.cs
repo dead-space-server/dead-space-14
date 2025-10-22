@@ -83,13 +83,13 @@ public sealed class RoboticsConsoleSystem : SharedRoboticsConsoleSystem
         if (!payload.TryGetValue(RoboticsConsoleConstants.NET_CYBORG_DATA, out CyborgControlData? data))
             return;
 
-// DS14-start
+        // DS14-start
         if (!_entityManager.TryGetComponent<BorgTransponderComponent>(args.Sender, out var transponder))
             return;
 
         if (ent.Comp.IsTaipan != transponder.IsTaipan)
             return;
-// DS14-end
+        // DS14-end
         var real = data.Value;
         real.Timeout = _timing.CurTime + ent.Comp.Timeout;
         ent.Comp.Cyborgs[args.SenderAddress] = real;

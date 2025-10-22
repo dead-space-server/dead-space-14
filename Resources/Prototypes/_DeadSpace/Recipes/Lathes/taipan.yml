@@ -401,8 +401,8 @@
   result: ChameleonPDA
   completetime: 8
   materials:
-    Steel: 300
-    Glass: 200
+    Plastic: 1000
+    Glass: 1000
     Gold: 250
     Plasma: 50
 
@@ -653,18 +653,18 @@
   result: ClothingOuterEVASuitSyndicate
   completetime: 15
   materials:
-    Steel: 1000
-    Plastic: 800
-    Glass: 400
+    Plasteel: 200
+    Cloth: 1200
+    Plastic: 1000
 
 - type: latheRecipe
   id: ClothingHeadHelmetSyndicate
   result: ClothingHeadHelmetSyndicate
   completetime: 5
   materials:
-    Steel: 600
-    Plastic: 400
-    Glass: 200
+    Plasteel: 50
+    Cloth: 300
+    Plastic: 200
 
 - type: latheRecipe
   id: ClothingOuterHardsuitSyndie

@@ -27,11 +27,6 @@
   id: Terracotta
   name: lathe-category-terracotta
 
-# Implants
-- type: latheCategory
-  id: Implants
-  name: lathe-category-implants
-
 # Weapon techfab
 - type: latheCategory
   id: Explosives
