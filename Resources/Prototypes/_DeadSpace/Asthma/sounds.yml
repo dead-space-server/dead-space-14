@@ -1,0 +1,5 @@
+- type: soundCollection
+  id: Inhaler
+  files:
+  - /Audio/_DeadSpace/Asthma/inhaler1.ogg
+  - /Audio/_DeadSpace/Asthma/inhaler2.ogg

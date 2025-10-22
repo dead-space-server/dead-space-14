@@ -1,0 +1,129 @@
+- type: entity
+  name: алетривал
+  parent: Pill
+  id: PillAlertival
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 20
+        reagents:
+        - ReagentId: Alertival
+          Quantity: 10
+
+- type: entity
+  name: баночка для таблеток
+  parent: PillCanister
+  id: PillCanisterAlertival
+  suffix: алетривал 5u, 5
+  components:
+  - type: Label
+    currentLabel: Алетривал 5u
+  - type: StorageFill
+    contents:
+    - id: PillAlertival
+      amount: 10
+
+- type: entity
+  name: Lamotripan
+  parent: Pill
+  id: PillLamotripan
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 20
+        reagents:
+        - ReagentId: Lamotripan
+          Quantity: 5
+
+- type: entity
+  name: баночка для таблеток
+  parent: PillCanister
+  id: PillCanisterLamotripan
+  suffix: ламотрипан 5u, 5
+  components:
+  - type: Label
+    currentLabel: Ламотрипан 5u
+  - type: StorageFill
+    contents:
+    - id: PillLamotripan
+      amount: 5
+
+- type: entity
+  name: фемаплаз
+  parent: Pill
+  id: PillFemaplaz
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 20
+        reagents:
+        - ReagentId: Femaplaz
+          Quantity: 5
+
+- type: entity
+  name: баночка для таблеток
+  parent: PillCanister
+  id: PillCanisterFemaplaz
+  suffix: фемаплаз 5u, 5
+  components:
+  - type: Label
+    currentLabel: Фемаплаз 5u
+  - type: StorageFill
+    contents:
+    - id: PillFemaplaz
+      amount: 5
+
+- type: entity
+  name: грандекс
+  parent: Pill
+  id: PillGrandex
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 20
+        reagents:
+        - ReagentId: Grandex
+          Quantity: 5
+
+- type: entity
+  name: баночка для таблеток
+  parent: PillCanister
+  id: PillCanisterGrandex
+  suffix: грандекс 5u, 5
+  components:
+  - type: Label
+    currentLabel: Грандекс 5u
+  - type: StorageFill
+    contents:
+    - id: PillGrandex
+      amount: 5
+
+- type: entity
+  name: голдфреим
+  parent: Pill
+  id: PillGoldfraim
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 20
+        reagents:
+        - ReagentId: Goldfraim
+          Quantity: 5
+
+- type: entity
+  name: баночка для таблеток
+  parent: PillCanister
+  id: PillCanisterGoldfraim
+  suffix: голдфреим 5u, 5
+  components:
+  - type: Label
+    currentLabel: Голдфреим 5u
+  - type: StorageFill
+    contents:
+    - id: PillGoldfraim
+      amount: 5

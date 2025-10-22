@@ -46,6 +46,7 @@
   - WhiteCane
   - OffsetCane
   - OffsetCaneWood
+  - Inhaler # DS14-Asthma
 
 - type: latheRecipePack
   id: RollerBedsStatic

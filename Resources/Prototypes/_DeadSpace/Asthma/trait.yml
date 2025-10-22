@@ -1,0 +1,9 @@
+- type: trait
+  id: Asthma
+  name: trait-asthma-name
+  description: trait-asthma-desc
+  traitGear: Inhaler
+  category: Disabilities
+  components:
+    - type: Asthma
+

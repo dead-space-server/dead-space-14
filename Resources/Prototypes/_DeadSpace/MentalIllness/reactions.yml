@@ -1,0 +1,59 @@
+- type: reaction
+  id: Goldfraim
+  impact: Medium
+  minTemp: 325
+  reactants:
+    Impedrezene:
+      amount: 1
+    Synaptizine:
+      amount: 1
+  products:
+    Goldfraim: 4
+
+- type: reaction
+  id: Femaplaz
+  impact: Medium
+  minTemp: 325
+  reactants:
+    Synaptizine:
+      amount: 1
+    Mannitol:
+      amount: 1
+  products:
+    Femaplaz: 3
+
+- type: reaction
+  id: Alertival
+  impact: Medium
+  minTemp: 325
+  reactants:
+    Ephedrine:
+      amount: 1
+    Mannitol:
+      amount: 1
+  products:
+    Alertival: 3
+
+- type: reaction
+  id: Grandex
+  impact: Medium
+  minTemp: 325
+  reactants:
+    ChloralHydrate:
+      amount: 1
+    Mannitol:
+      amount: 1
+  products:
+    Grandex: 3
+
+- type: reaction
+  id: Lamotripan
+  impact: Medium
+  minTemp: 325
+  reactants:
+    Pax:
+      amount: 1
+    Mannitol:
+      amount: 1
+  products:
+    Lamotripan: 3
