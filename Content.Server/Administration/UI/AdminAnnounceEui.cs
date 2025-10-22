@@ -71,6 +71,7 @@ namespace Content.Server.Administration.UI
                         case AdminAnnounceType.Server:
                             _chatManager.DispatchServerAnnouncement(doAnnounce.Announcement, color);
                             break;
+
                         // TODO: Per-station announcement support
                         case AdminAnnounceType.Station:
                             var sender = string.IsNullOrEmpty(doAnnounce.Announcer)
@@ -92,7 +93,8 @@ namespace Content.Server.Administration.UI
                                 colorOverride: color,
                                 originalMessage: doAnnounce.Announcement,
                                 voice: doAnnounce.EnableTTS && doAnnounce.CustomTTS ? doAnnounce.Voice : null,
-                                usePresetTTS: doAnnounce.EnableTTS && !doAnnounce.CustomTTS
+                                usePresetTTS: doAnnounce.EnableTTS && !doAnnounce.CustomTTS,
+                                languageId: doAnnounce.LanguageId // DS14-Languages
                             );
                             break;
                     }
