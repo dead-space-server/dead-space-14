@@ -172,6 +172,7 @@
     selectedLanguage: ArachnidLanguage
     knownLanguages:
     - ArachnidLanguage
+  - type: NoSlip
 
 - type: entity
   name: паук королевской крови
