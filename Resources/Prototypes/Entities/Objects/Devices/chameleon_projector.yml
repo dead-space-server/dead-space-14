@@ -19,9 +19,19 @@
       - ChameleonDisguise # no becoming kleiner
       - MindContainer # no
       - Pda # PDAs currently make you invisible /!\
+# DS14-start
+      tags:
+      - Wall
+      - Window
+      - Airlock
+      - Diagonal
+# DS14-end
     disguiseProto: ChameleonDisguise
   - type: StaticPrice
     price: 5000
+  - type: Tag # DS14
+    tags:
+    - ChameleonProjector
 
 - type: entity
   categories: [ HideSpawnMenu ]

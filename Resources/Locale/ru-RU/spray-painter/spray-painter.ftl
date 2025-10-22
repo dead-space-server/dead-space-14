@@ -37,7 +37,6 @@ spray-painter-color-white = белый
 spray-painter-color-black = чёрный
 # Categories (tabs)
 spray-painter-tab-category-airlocks = Шлюзы
-spray-painter-tab-category-taipanairlocks = Шлюзы
 spray-painter-tab-category-canisters = Канистры
 spray-painter-tab-category-crates = Ящики
 spray-painter-tab-category-lockers = Шкафчики
@@ -68,6 +67,7 @@ spray-painter-style-airlockstandard-salvage = Утилизаторский
 spray-painter-style-airlockstandard-science = Научный
 spray-painter-style-airlockstandard-security = Служба безопасности
 spray-painter-style-airlockstandard-virology = Вирусология
+spray-painter-style-airlockstandard-lawyer = Юридический
 spray-painter-style-airlockglass-atmospherics = Атмос
 spray-painter-style-airlockglass-basic = Обычный
 spray-painter-style-airlockglass-cargo = Снабжение
@@ -81,6 +81,7 @@ spray-painter-style-airlockglass-salvage = Утилизаторский
 spray-painter-style-airlockglass-science = Научный
 spray-painter-style-airlockglass-security = Служба безопасности
 spray-painter-style-airlockglass-virology = Вирусология
+spray-painter-style-airlockglass-lawyer = Юридический
 # Lockers
 spray-painter-style-locker-atmospherics = Атмос
 spray-painter-style-locker-basic = Обычный

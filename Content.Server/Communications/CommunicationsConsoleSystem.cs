@@ -19,6 +19,8 @@ using Content.Shared.IdentityManagement;
 using Content.Shared.Popups;
 using Robust.Server.GameObjects;
 using Robust.Shared.Configuration;
+using Content.Shared.DeadSpace.Languages.Components;
+using Content.Server.DeadSpace.Languages;
 
 namespace Content.Server.Communications
 {
@@ -230,6 +232,7 @@ namespace Content.Server.Communications
         {
             var maxLength = _cfg.GetCVar(CCVars.ChatMaxAnnouncementLength);
             var msg = SharedChatSystem.SanitizeAnnouncement(message.Message, maxLength);
+            string originalMessage = msg; // DS14-TTS
             var author = Loc.GetString("comms-console-announcement-unknown-sender");
             if (message.Actor is { Valid: true } mob)
             {
@@ -259,12 +262,19 @@ namespace Content.Server.Communications
             Loc.TryGetString(comp.Title, out var title);
             title ??= comp.Title;
 
+            // DS14-Languages-start
+            var languageId = LanguageSystem.DefaultLanguageId;
+
+            if (TryComp<LanguageComponent>(message.Actor, out var languageComponent))
+                languageId = languageComponent.SelectedLanguage.Id;
+            // DS14-Languages-end
+
             if (comp.AnnounceSentBy)
                 msg += "\n" + Loc.GetString("comms-console-announcement-sent-by") + " " + author;
 
             if (comp.Global)
             {
-                _chatSystem.DispatchGlobalAnnouncement(msg, title, announcementSound: comp.Sound, colorOverride: comp.Color);
+                _chatSystem.DispatchGlobalAnnouncement(msg, title, announcementSound: comp.Sound, colorOverride: comp.Color, originalMessage: originalMessage, author: message.Actor, languageId: languageId); // DS14-TTS
 
                 _adminLogger.Add(LogType.Chat, LogImpact.Low, $"{ToPrettyString(message.Actor):player} has sent the following global announcement: {msg}");
                 return;
