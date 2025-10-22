@@ -467,7 +467,7 @@
               doAfter: 2
             - tool: Cutting
               doAfter: 3
-          
+
     - node: diagonalMiningWall
       entity: WallMiningDiagonal
       edges:
@@ -491,6 +491,72 @@
               doAfter: 1
             - tool: Cutting
               doAfter: 1
+
+    - node: diagonalplastitaniumWall
+      entity: WallPlastitaniumDiagonal
+      edges:
+      - to: reinforcedGirder
+        completed:
+        - !type:SpawnPrototype
+          prototype: SheetPlastitanium1
+          amount: 2
+        - !type:SpawnPrototype
+          prototype: SheetTitanium1
+          amount: 4
+        steps:
+        - tool: Welding
+          doAfter: 5
+        - tool: Cutting
+          doAfter: 1
+        - tool: Screwing
+          doAfter: 1
+        - tool: Welding
+          doAfter: 5
+        - tool: Prying
+          doAfter: 1
+        - tool: Anchoring
+          doAfter: 1
+        - tool: Welding
+          doAfter: 10
+        - tool: Prying
+          doAfter: 1
+        - tool: Screwing
+          doAfter: 1
+        - tool: Cutting
+          doAfter: 1
+
+    - node: plastitaniumWall
+      entity: WallPlastitanium
+      edges:
+      - to: reinforcedGirder
+        completed:
+        - !type:SpawnPrototype
+          prototype: SheetPlasteel1
+          amount: 2
+        - !type:SpawnPrototype
+          prototype: PartRodMetal1
+          amount: 1
+        steps:
+        - tool: Welding
+          doAfter: 5
+        - tool: Cutting
+          doAfter: 1
+        - tool: Screwing
+          doAfter: 1
+        - tool: Welding
+          doAfter: 5
+        - tool: Prying
+          doAfter: 1
+        - tool: Anchoring
+          doAfter: 1
+        - tool: Welding
+          doAfter: 10
+        - tool: Prying
+          doAfter: 1
+        - tool: Screwing
+          doAfter: 1
+        - tool: Cutting
+          doAfter: 1
     # DS14-end
 
     - node: shuttleWall
@@ -607,3 +673,29 @@
           steps:
             - tool: Brushing
               doAfter: 12
+
+# DS14-start: Vine walls
+    - node: wallvine
+      entity: WallSolidVine
+      edges:
+        - to: wall
+          steps:
+            - tool: Welding
+              doAfter: 5
+        - to: wall
+          steps:
+            - tool: Brushing
+              doAfter: 12
+
+    - node: reinforcedWallVine
+      entity: WallReinforcedVine
+      edges:
+        - to: reinforcedWall
+          steps:
+            - tool: Cutting
+              doAfter: 5
+        - to: reinforcedWall
+          steps:
+            - tool: Brushing
+              doAfter: 12
+# DS14-end
