@@ -64,9 +64,9 @@ namespace Content.Client.Cargo.UI
             {
                 var accountProto = _protoManager.Index(orderConsole.Account);
                 AccountNameLabel.Text = Loc.GetString("cargo-console-menu-account-name-format",
-                ("color", accountProto.Color),
-                ("name", Loc.GetString(accountProto.Name)),
-                ("code", Loc.GetString(accountProto.Code)));
+                    ("color", accountProto.Color),
+                    ("name", Loc.GetString(accountProto.Name)),
+                    ("code", Loc.GetString(accountProto.Code)));
             }
 
                 // DS14-start
