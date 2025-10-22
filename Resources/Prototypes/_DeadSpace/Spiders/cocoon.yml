@@ -40,6 +40,9 @@
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
+  - type: NpcFactionMember
+    factions:
+    - SpiderTerror
 
 - type: entity
   name: королевский паучий кокон
@@ -81,6 +84,9 @@
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
+  - type: NpcFactionMember
+    factions:
+    - SpiderTerror
 
 - type: entity
   id: SpiderCocoon
@@ -148,3 +154,6 @@
   - type: ZombieImmune
   - type: ImmunitetInfectionDead
   - type: Pullable
+  - type: NpcFactionMember
+    factions:
+    - SpiderTerror
