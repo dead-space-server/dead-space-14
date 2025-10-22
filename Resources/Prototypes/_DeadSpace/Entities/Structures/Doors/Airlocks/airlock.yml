@@ -1,0 +1,23 @@
+- type: entity
+  parent: Airlock
+  id: AirlockLawyer
+  name: шлюз
+  description: Он открывается, он закрывается, и он может вас раздавить.
+  suffix: Юридический
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/lawyer.rsi
+  - type: Wires
+    layoutId: AirlockSecurity
+
+- type: entity
+  parent: AirlockGlass
+  id: AirlockLawyerGlass
+  name: стеклянный шлюз
+  description: Он открывается, он закрывается, и он может вас раздавить.
+  suffix: Юридический
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/lawyer.rsi
+  - type: Wires
+    layoutId: AirlockSecurity

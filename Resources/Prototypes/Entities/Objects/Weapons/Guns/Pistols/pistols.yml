@@ -189,6 +189,9 @@
       gun_chamber: !type:ContainerSlot
   - type: StaticPrice
     price: 1500
+  - type: Tag
+    tags:
+    - PistolCobra
 
 - type: entity
   name: mk 58
@@ -208,7 +211,7 @@
   - type: Item
     storedOffset: 0,-2
   - type: Gun
-    fireRate: 7
+    fireRate: 5 # DS14
     availableModes:
     - SemiAuto
     - Burst
