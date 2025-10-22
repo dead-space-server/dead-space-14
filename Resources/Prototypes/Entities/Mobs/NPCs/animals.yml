@@ -517,7 +517,6 @@
   - type: GhostTakeoverAvailable
   - type: Speech
     speechVerb: Moth
-    speechSounds: Squeak
     allowedEmotes: ['Chitter', 'Squeak']
   - type: FaxableObject
     insertingState: inserting_mothroach
@@ -1267,8 +1266,14 @@
       0: Alive
       200: Critical
       250: Dead
+  # DS14-start
   - type: NecromorfAfterInfection
     necroPrototype: NecroBrute
+  - type: Language
+    knownLanguages: 
+    - MonkeyLanguage
+    selectedLanguage: MonkeyLanguage
+  # DS14-end
 
 - type: entity
   name: kangaroo
@@ -1502,9 +1507,7 @@
   - type: NameIdentifier
     group: Monkey
   - type: Speech
-    speechSounds: Monkey
     speechVerb: Monkey
-  - type: MonkeyAccent
   - type: SentienceTarget
     flavorKind: station-event-random-sentience-flavor-primate
   - type: AlwaysRevolutionaryConvertible
@@ -1527,7 +1530,12 @@
         Blunt: 1
     clumsySound:
       path: /Audio/Animals/monkey_scream.ogg
-
+  # DS14-start
+  - type: Language
+    knownLanguages: 
+    - MonkeyLanguage
+    selectedLanguage: MonkeyLanguage
+  # DS14-end
 
 - type: entity
   name: monkey
@@ -1541,9 +1549,7 @@
   - type: SentienceTarget
     flavorKind: station-event-random-sentience-flavor-primate
   - type: Speech
-    speechSounds: Monkey
     speechVerb: Monkey
-  - type: MonkeyAccent
   - type: NpcFactionMember
     factions:
     - Syndicate
@@ -1561,6 +1567,12 @@
   - type: GhostTakeoverAvailable
   - type: Loadout
     prototypes: [SyndicateOperativeGearMonkey]
+  # DS14-start
+  - type: Language
+    knownLanguages: 
+    - MonkeyLanguage
+    selectedLanguage: MonkeyLanguage
+  # DS14-end
 
 - type: entity
   id: MobMonkeySyndicateAgent
@@ -1597,7 +1609,6 @@
     - KoboltLanguage
   # DS14-Languages-end
   - type: Speech
-    speechSounds: Lizard
     speechVerb: Reptilian
     allowedEmotes: ['Thump']
   - type: Vocal
@@ -1776,7 +1787,6 @@
     - MindRoleGhostRoleFreeAgentHarmless
   - type: GhostTakeoverAvailable
   - type: Speech
-    speechSounds: Squeak
     speechVerb: SmallMob
     allowedEmotes: ['Squeak']
   - type: Sprite
@@ -2585,7 +2595,6 @@
     bloodReagent: CopperBlood
   - type: Speech
     speechVerb: Arachnid
-    speechSounds: Arachnid
     allowedEmotes: ['Click', 'Chitter']
   - type: Vocal
     sounds:
@@ -2614,6 +2623,12 @@
       groups:
         Brute: -0.07
         Burn: -0.07
+  # DS14-start
+  - type: Language
+    knownLanguages: 
+    - ArachnidLanguage
+    selectedLanguage: ArachnidLanguage
+  # DS14-end
 
 - type: entity
   parent: MobSpiderBase
