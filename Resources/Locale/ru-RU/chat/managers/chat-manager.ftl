@@ -25,12 +25,12 @@ chat-manager-entity-say-bold-wrap-message = [BubbleHeader][bold][Name]{ $entityN
 chat-manager-entity-whisper-wrap-message = [font size=11][italic][BubbleHeader][Name]{ $entityName }[/Name][/BubbleHeader] шепчет,"[BubbleContent]{ $message }[/BubbleContent]"[/italic][/font]
 
 # DS14-start
-chat-manager-sender-announcement-wrap-message-lang = [font size=14][bold]Объявление [font size=11](язык: { $language }) [font size=14][bold]{ $sender }:[/font][font size=12]
+chat-manager-sender-announcement-wrap-message-lang = [font size=14][bold]Объявление [font size=11]({ $language }) [font size=14][bold]{ $sender }:[/font][font size=12]
     { $message }[/bold][/font]
 
-chat-manager-entity-say-wrap-message-lang = [BubbleHeader][bold][Name]{ $entityName }[/Name][/bold][/BubbleHeader] { $verb } [font size=11][italic][BubbleHeader](язык: { $language }): [font={ $fontType } size={ $fontSize } ]"[BubbleContent]{ $message }[/BubbleContent]"[/font]
-chat-manager-entity-say-bold-wrap-message-lang = [BubbleHeader][bold][Name]{ $entityName }[/Name][/bold][/BubbleHeader] { $verb } [font size=11][italic][BubbleHeader](язык: { $language }): [font={ $fontType } size={ $fontSize }]"[BubbleContent][bold]{ $message }[/bold][/BubbleContent]"[/font]
-chat-manager-entity-whisper-wrap-message-lang = [font size=11][italic][BubbleHeader][Name]{ $entityName }[/Name][/BubbleHeader] шепчет [font size=11][italic][BubbleHeader](язык: { $language }): "[BubbleContent]{ $message }[/BubbleContent]"[/italic][/font]
+chat-manager-entity-say-wrap-message-lang = [BubbleHeader][bold][Name]{ $entityName }[/Name][/bold][/BubbleHeader] { $verb } [font size=11][italic][BubbleHeader]({ $language }): [font={ $fontType } size={ $fontSize } ]"[BubbleContent]{ $message }[/BubbleContent]"[/font]
+chat-manager-entity-say-bold-wrap-message-lang = [BubbleHeader][bold][Name]{ $entityName }[/Name][/bold][/BubbleHeader] { $verb } [font size=11][italic][BubbleHeader]({ $language }): [font={ $fontType } size={ $fontSize }]"[BubbleContent][bold]{ $message }[/bold][/BubbleContent]"[/font]
+chat-manager-entity-whisper-wrap-message-lang = [font size=11][italic][BubbleHeader][Name]{ $entityName }[/Name][/BubbleHeader] шепчет [font size=11][italic][BubbleHeader]({ $language }): "[BubbleContent]{ $message }[/BubbleContent]"[/italic][/font]
 # DS14-end
 
 chat-manager-entity-whisper-unknown-wrap-message = [font size=11][italic][BubbleHeader]Кто-то[/BubbleHeader] шепчет, "[BubbleContent]{ $message }[/BubbleContent]"[/italic][/font]
