@@ -1,0 +1,55 @@
+- type: preloadedGrid
+  id: ERTAmberShuttle
+  path: /Maps/Shuttles/ShuttleEvent/amber.yml
+  copies: 1
+
+- type: preloadedGrid
+  id: ERTRedShuttle
+  path: /Maps/Shuttles/ShuttleEvent/red.yml
+  copies: 1
+
+- type: preloadedGrid
+  id: ERTGammaShuttle
+  path: /Maps/Shuttles/ShuttleEvent/gamma.yml
+  copies: 1
+
+- type: entity
+  parent: BaseGameRule
+  id: ShuttleAmber
+  components:
+  - type: StationEvent
+    startAnnouncement: station-event-ert-amber-spawn
+    startAudio:
+      path: /Audio/_DeadSpace/Announcements/ERT/spawn.ogg # DS14-Announcements
+    willNotStartRandomly: true
+  - type: RuleGrids
+  - type: LoadMapRule
+    preloadedGrid: ERTAmberShuttle
+
+- type: entity
+  parent: BaseGameRule
+  id: ShuttleRed
+  components:
+  - type: StationEvent
+    startAnnouncementColor: "#7FFFD4"
+    startAnnouncement: station-event-ert-red-spawn
+    startAudio:
+      path: /Audio/_DeadSpace/Announcements/ERT/spawn.ogg # DS14-Announcements
+    willNotStartRandomly: true
+  - type: RuleGrids
+  - type: LoadMapRule
+    preloadedGrid: ERTRedShuttle
+
+- type: entity
+  parent: BaseGameRule
+  id: ShuttleGamma
+  components:
+  - type: StationEvent
+    startAnnouncementColor: "#DB7093"
+    startAnnouncement: station-event-ert-gamma-spawn
+    startAudio:
+      path: /Audio/_DeadSpace/Announcements/ERT/spawn.ogg # DS14-Announcements
+    willNotStartRandomly: true
+  - type: RuleGrids
+  - type: LoadMapRule
+    preloadedGrid: ERTGammaShuttle
