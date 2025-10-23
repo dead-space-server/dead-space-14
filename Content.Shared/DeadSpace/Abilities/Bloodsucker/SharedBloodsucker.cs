@@ -16,3 +16,13 @@ public sealed partial class BloodsuckerDoAfterEvent : SimpleDoAfterEvent
 {
 
 }
+
+public sealed class ModBloodEvent : HandledEntityEventArgs
+{
+    public float Quantity { get; }
+
+    public ModBloodEvent(float quantity)
+    {
+        Quantity = quantity;
+    }
+}
