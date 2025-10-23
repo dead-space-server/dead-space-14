@@ -86,6 +86,29 @@ public sealed class LanguageSystem : EntitySystem
         return string.Join(' ', words);
     }
 
+    public string GetLangName(ProtoId<LanguagePrototype>? languageId)
+    {
+        var name = "Неизвестно";
+
+        if (_prototypeManager.TryIndex(languageId, out var languageProto))
+            name = languageProto.Name;
+
+        return name;
+    }
+
+    public string GetLangName(EntityUid uid, LanguageComponent? component = null)
+    {
+        var name = "Неизвестно";
+
+        if (!Resolve(uid, ref component))
+            return name;
+
+        if (_prototypeManager.TryIndex(component.SelectedLanguage, out var languageProto))
+            name = languageProto.Name;
+
+        return name;
+    }
+
     public HashSet<ProtoId<LanguagePrototype>>? GetKnownLanguages(EntityUid entity)
     {
         if (!TryComp<LanguageComponent>(entity, out var component))
