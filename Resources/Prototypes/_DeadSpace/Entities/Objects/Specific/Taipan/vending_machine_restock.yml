@@ -1,0 +1,16 @@
+- type: entity
+  parent: BaseVendingMachineRestock
+  id: VendingMachineRestockSyndJuiceVend
+  name: JuiceVend restock box
+  description: A box filled with chemicals and covered in dangerous-looking NFPA diamonds. Load it into a JuiceVend to begin.
+  components:
+  - type: VendingMachineRestock
+    canRestock:
+    - ChemVendInventorySyndicate
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Taipan/vending_machine_restock.rsi
+    layers:
+    - state: base
+    - state: red_bit
+      shader: unshaded
+    - state: refill_juice
