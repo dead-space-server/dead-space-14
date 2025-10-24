@@ -24,20 +24,12 @@ public sealed partial class GraphicsTab : Control
         Control.AddOption(new OptionFullscreen(Control, _cfg, FullscreenCheckBox));
         Control.AddOption(new OptionLightingQuality(Control, _cfg, DropDownLightingQuality));
 
-        Control.AddOptionDropDown(
+        Control.AddOptionPercentSlider(
             CVars.DisplayUIScale,
-            DropDownUIScale,
-            [
-                new OptionDropDownCVar<float>.ValueOption(
-                    0f,
-                    Loc.GetString("ui-options-scale-auto", ("scale", UserInterfaceManager.DefaultUIScale))),
-                new OptionDropDownCVar<float>.ValueOption(0.75f, Loc.GetString("ui-options-scale-75")),
-                new OptionDropDownCVar<float>.ValueOption(1.00f, Loc.GetString("ui-options-scale-100")),
-                new OptionDropDownCVar<float>.ValueOption(1.25f, Loc.GetString("ui-options-scale-125")),
-                new OptionDropDownCVar<float>.ValueOption(1.50f, Loc.GetString("ui-options-scale-150")),
-                new OptionDropDownCVar<float>.ValueOption(1.75f, Loc.GetString("ui-options-scale-175")),
-                new OptionDropDownCVar<float>.ValueOption(2.00f, Loc.GetString("ui-options-scale-200")),
-            ]);
+            UIScaleSlider,
+            0.75f,
+            2.0f,
+            scale: 1.25f);
 
         Control.AddOptionDropDown(
             CCVars.ViewportScalingFilterMode,

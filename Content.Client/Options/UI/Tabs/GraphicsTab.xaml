@@ -1,4 +1,4 @@
-﻿<tabs:GraphicsTab xmlns="https://spacestation14.io"
+<tabs:GraphicsTab xmlns="https://spacestation14.io"
           xmlns:tabs="clr-namespace:Content.Client.Options.UI.Tabs"
           xmlns:ui="clr-namespace:Content.Client.Options.UI">
     <BoxContainer Orientation="Vertical">
@@ -18,7 +18,7 @@
 
                 <!-- Interface -->
                 <Label Text="{Loc 'ui-options-interface-label'}" StyleClasses="LabelKeyText"/>
-                <ui:OptionDropDown Name="DropDownUIScale" Title="{Loc 'ui-options-scale-label'}" />
+                <ui:OptionSlider Name="UIScaleSlider" Title="{Loc 'ui-options-scale-label'}" />
                 <CheckBox Name="ViewportStretchCheckBox" Text="{Loc 'ui-options-vp-stretch'}" />
                 <ui:OptionSlider Name="ViewportScaleSlider" Title="{Loc ui-options-vp-scale}" />
                 <ui:OptionSlider Name="ViewportWidthSlider" Title="{Loc ui-options-vp-width}" />
