@@ -361,6 +361,8 @@ public sealed partial class ChatSystem : SharedChatSystem
             return;
         // DS14-chat-filter-end
 
+        // DS14-Languages-start
+        string lexiconMessage = _language.ReplaceWordsWithLexicon(message, languageId);
         var understanding = _language.GetUnderstanding(languageId);
 
         var lexiconWrappedMessage = Loc.GetString("chat-manager-sender-announcement-wrap-message", ("sender", sender), ("message", FormattedMessage.EscapeText(lexiconMessage)));
@@ -639,6 +641,19 @@ public sealed partial class ChatSystem : SharedChatSystem
         var wrappedUnknownMessage = Loc.GetString("chat-manager-entity-whisper-unknown-wrap-message",
             ("message", FormattedMessage.EscapeText(obfuscatedMessage)));
 
+        // DS14-Languages-start
+        string lexiconMessage = message;
+
+        if (TryComp<LanguageComponent>(source, out var language))
+            lexiconMessage = _language.ReplaceWordsWithLexicon(message, language.SelectedLanguage.Id);
+
+        var newObfuscatedMessage = ObfuscateMessageReadability(lexiconMessage, 0.2f);
+
+        var newWrappedMessage = wrappedMessage.Replace(FormattedMessage.EscapeText(message), FormattedMessage.EscapeText(lexiconMessage));
+        var newWrappedobfuscatedMessage = wrappedobfuscatedMessage.Replace(FormattedMessage.EscapeText(obfuscatedMessage), FormattedMessage.EscapeText(newObfuscatedMessage));
+        var newWrappedUnknownMessage = wrappedUnknownMessage.Replace(FormattedMessage.EscapeText(obfuscatedMessage), FormattedMessage.EscapeText(newObfuscatedMessage));
+
+        // DS14-Languages-end
 
         var newObfuscatedMessage = ObfuscateMessageReadability(lexiconMessage, 0.2f);
 
