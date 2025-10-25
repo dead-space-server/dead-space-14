@@ -14,6 +14,7 @@
   recipes:
   - WeaponSniperMosin
   - WeaponSniperHristov
+  - WeaponCarbineSKS
   - ADTWeaponRifleXC67
   - WeaponRifleAk
   - WeaponSubMachineGunC20r
@@ -64,6 +65,12 @@
   - MagazineTommyGun
   - MagazineDrumTommyGun
   - MagazineLightRifleBox
+  - ADTExtMagazineRifle
+  - MagazineCarbineSKS
+  - MagazineCarbineSKSIncendiary
+  - MagazineCarbineSKSUranium
+  - SpeedLoader357
+  - MagazineBox357
 
 ## Security
 - type: latheRecipePack
@@ -275,6 +282,7 @@
   - ClothingBackpackSatchelTaipan
   - ClothingBackpackSyndicate
   - ClothingBackpackDuffelSyndicate
+  - ClothingBeltMilitaryWebbing
 
 # Chameleon
 
@@ -334,6 +342,7 @@
   - Hypopen
   - HypoDart
   - DefibrillatorSyndicate
+  - DrinkShakerSyndie
 
 ## Cloning
 - type: latheRecipePack
