@@ -124,6 +124,6 @@
     sprite: Objects/Consumable/Food/Baked/donkpocket.rsi
     state: box
   product: CrateFoodDonk
-  cost: 3600
+  cost: 4800
   category: cargoproduct-category-name-food
   group: taipan_market
