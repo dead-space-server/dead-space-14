@@ -65,12 +65,16 @@
   - MagazineTommyGun
   - MagazineDrumTommyGun
   - MagazineLightRifleBox
+  - SpeedLoader357
+  - MagazineBox357
+
+- type: latheRecipePack
+  id: TaipanAmmo
+  recipes:
   - ADTExtMagazineRifle
   - MagazineCarbineSKS
   - MagazineCarbineSKSIncendiary
   - MagazineCarbineSKSUranium
-  - SpeedLoader357
-  - MagazineBox357
 
 ## Security
 - type: latheRecipePack
@@ -156,6 +160,16 @@
   - TaipanRightLegBorg
   - TaipanLightHeadBorg
   - TaipanTorsoBorg
+
+- type: latheRecipePack
+  id: TaipanBorgModules
+  recipes:
+  - BorgModuleL6C
+  - BorgModuleC20r
+  - BorgModuleSyndicateWeapon
+  - BorgModuleEsword
+  - BorgModuleDoubleEsword
+  - BorgModuleOperative
 
 ## Mechs
 - type: latheRecipePack

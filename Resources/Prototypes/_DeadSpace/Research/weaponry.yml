@@ -272,6 +272,7 @@
   recipeUnlocks:
   - WeaponSubMachineGunC20r
   - WeaponSMGTommyGun
+  - BorgModuleC20r
   technologyPrerequisites:
   - TaipanBasicRifles
 
@@ -348,6 +349,7 @@
   cost: 30000
   recipeUnlocks:
   - WeaponLightMachineGunL6
+  - BorgModuleL6C
   technologyPrerequisites:
   - TaipanAssaultRifles
 
