@@ -29,7 +29,7 @@ public sealed partial class GraphicsTab : Control
             UIScaleSlider,
             0.75f,
             2.0f,
-            scale: 1.25f);
+            scale: 1.0f);
 
         Control.AddOptionDropDown(
             CCVars.ViewportScalingFilterMode,
