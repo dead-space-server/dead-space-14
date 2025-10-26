@@ -35,10 +35,10 @@ public abstract class SharedBloodsuckerSystem : EntitySystem
         if (!Resolve(uid, ref component))
             return count;
 
-        var modBloodEvent = new ModBloodEvent(count);
-        RaiseLocalEvent(uid, modBloodEvent);
+        var bloodsuckEvent = new BloodsuckEvent(count);
+        RaiseLocalEvent(uid, bloodsuckEvent);
 
-        if (modBloodEvent.Handled)
+        if (bloodsuckEvent.Handled)
         {
             UpdateBloodAlert(uid, component);
             return component.CountReagent;

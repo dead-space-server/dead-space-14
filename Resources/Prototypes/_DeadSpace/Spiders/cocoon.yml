@@ -76,6 +76,7 @@
     spawnedEntities:
       - MobSpiderTerrorRoyalGuard
       - MobSpiderTerrorPrincess
+      - MobSpiderTerrorSupportLvl1
   - type: Destructible
     thresholds:
     - trigger:

@@ -3,6 +3,7 @@
 using Content.Shared.Actions;
 using Robust.Shared.Serialization;
 using Content.Shared.DoAfter;
+using Content.Shared.FixedPoint;
 
 namespace Content.Shared.DeadSpace.Abilities.Bloodsucker;
 
@@ -17,11 +18,21 @@ public sealed partial class BloodsuckerDoAfterEvent : SimpleDoAfterEvent
 
 }
 
-public sealed class ModBloodEvent : HandledEntityEventArgs
+public sealed class BloodsuckEvent : HandledEntityEventArgs
 {
     public float Quantity { get; }
 
-    public ModBloodEvent(float quantity)
+    public BloodsuckEvent(float quantity)
+    {
+        Quantity = quantity;
+    }
+}
+
+public sealed class ModifyBloodLevelEvent : HandledEntityEventArgs
+{
+    public FixedPoint2 Quantity { get; }
+
+    public ModifyBloodLevelEvent(FixedPoint2 quantity)
     {
         Quantity = quantity;
     }

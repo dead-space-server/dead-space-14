@@ -68,7 +68,7 @@ public sealed partial class BloodsuckerSystem : SharedBloodsuckerSystem
         if (args.Handled)
             return;
 
-        if (args.Target == uid && !component.CanSuckSelf)
+        if (args.Target == uid)
             return;
 
         var target = args.Target;
@@ -119,10 +119,10 @@ public sealed partial class BloodsuckerSystem : SharedBloodsuckerSystem
         if (!isCanSuck)
             return;
 
-        if (_npcFaction.IsEntityFriendly(uid, target))
+        if (_npcFaction.IsEntityFriendly(uid, target) && !HasComp<IgnorFriendlyForSuckBloodComponent>(target))
             return;
 
-        if (!HasComp<BodyComponent>(target) && !HasComp<IgnorFriendlyForSuckBloodComponent>(target))
+        if (!HasComp<BodyComponent>(target))
             return;
 
         if (!_solutionContainer.TryGetInjectableSolution(target, out var injectable, out _))
@@ -197,15 +197,15 @@ public sealed partial class BloodsuckerSystem : SharedBloodsuckerSystem
         if (!_solutionContainer.ResolveSolution(uid, component.BloodSolutionName, ref component.BloodSolution))
             return false;
 
-        if (amount >= 0)
-            return _solutionContainer.TryAddReagent(component.BloodSolution.Value, component.BloodReagent, amount, out _);
-
-        var newSol = _solutionContainer.SplitSolution(component.BloodSolution.Value, -amount);
+        _solutionContainer.SplitSolution(component.BloodSolution.Value, -amount);
 
         if (!_solutionContainer.ResolveSolution(uid, component.BloodTemporarySolutionName, ref component.TemporarySolution, out _))
             return true;
 
         _solutionContainer.UpdateChemicals(component.TemporarySolution.Value);
+
+        var bloodsuckEvent = new ModifyBloodLevelEvent(amount);
+        RaiseLocalEvent(uid, bloodsuckEvent);
 
         return true;
     }

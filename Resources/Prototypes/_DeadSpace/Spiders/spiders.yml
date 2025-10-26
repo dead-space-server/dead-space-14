@@ -958,7 +958,93 @@
 - type: entity
   name: паук поддержки
   parent: BaseMobSpiderTerror
-  id: MobSpiderTerrorSupport
+  id: MobSpiderTerrorSupportLvl1
+  suffix: lvl1
+  description: Паук, помогает своим товарищам.
+  components:
+  - type: RotationVisuals
+    defaultRotation: 180
+  - type: Sprite
+    layers:
+    - map: ["enum.DamageStateVisualLayers.Base", "movement"]
+      state: running6
+      scale: 0.7, 0.7
+      sprite: _DeadSpace/Spiders/support.rsi
+  - type: MeleeWeapon
+    altDisarm: false
+    angle: 0
+    animation: WeaponArcBite
+    soundHit:
+      path: /Audio/Effects/bite.ogg
+    damage:
+      types:
+        Poison: 1
+        Structural: 5
+      groups:
+        Brute: 7
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      100: Critical
+      200: Dead
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.3
+        density: 130
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4
+    baseSprintSpeed: 4
+  - type: Bloodstream
+    bloodReagent: CopperBlood
+    bloodMaxVolume: 150
+    bloodlossThreshold: 0
+  - type: Bloodsucker
+    canSuckTomb: true
+    maxCountReagent: 150
+    countReagent: 150
+    duration: 1 # Длительность сосания
+    howMuchWillItSuck: 20 # Сколько высосет за один укус
+    injectSound:
+      collection: SpiderHatches # Звуки после высасывания
+  - type: IgnorFriendlyForSuckBlood
+  - type: Puller
+    needsHands: false
+  - type: SlowOnDamage
+    speedModifierThresholds:
+      100: 0.9
+  - type: HipoHand
+    quantity: 5 # Сколько впрыскивать
+    countReagent: 20 # Сколько при спавне
+    maxCountReagent: 20 #Хранилище реагента
+    durationRegenReagent: 10 # Время регена
+    reagent: Stimulants # Что в хранилище    
+  - type: BloodIncubator
+    states:
+    - running
+    - running2
+    - running3
+    - running4
+    - running5
+    - running6
+  - type: Evolution
+    duration: 150
+    spawnedEntities:
+      - MobSpiderTerrorSupportLvl2
+  - type: NeededBloodForEvolution
+    defaultCost: 150
+
+- type: entity
+  name: паук поддержки
+  parent: BaseMobSpiderTerror
+  id: MobSpiderTerrorSupportLvl2
+  suffix: lvl2
   description: Паук, помогает своим товарищам.
   components:
   - type: RotationVisuals
@@ -967,7 +1053,7 @@
     drawdepth: Mobs
     layers:
     - map: ["enum.DamageStateVisualLayers.Base", "movement"]
-      state: running
+      state: running6
       sprite: _DeadSpace/Spiders/support.rsi
   - type: MeleeWeapon
     altDisarm: false
@@ -1002,11 +1088,16 @@
     baseSprintSpeed: 4
   - type: Bloodstream
     bloodReagent: CopperBlood
-    bloodMaxVolume: 400
+    bloodMaxVolume: 300
     bloodlossThreshold: 0
   - type: Bloodsucker
-    canSuckSelf: true
     canSuckTomb: true
+    maxCountReagent: 300
+    countReagent: 300
+    duration: 2 # Длительность сосания
+    howMuchWillItSuck: 20 # Сколько высосет за один укус
+    injectSound:
+      collection: SpiderHatches # Звуки после высасывания
   - type: IgnorFriendlyForSuckBlood
   - type: Puller
     needsHands: false
@@ -1032,6 +1123,14 @@
   - type: ActionGun
     action: ActionSpiderWebShot
     gunProto: SpiderWebGun
+  - type: BloodIncubator
+    states:
+    - running
+    - running2
+    - running3
+    - running4
+    - running5
+    - running6
 
 - type: entity
   categories: [ HideSpawnMenu ]
