@@ -31465,7 +31465,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 28.187601,4.1461515
       parent: 2
-- proto: ExtinguisherCabinet
+- proto: ExtinguisherCabinetFilled
   entities:
   - uid: 4355
     components:
