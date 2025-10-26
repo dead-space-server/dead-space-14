@@ -1,0 +1,41 @@
+{
+    "version": 1,
+    "license": "CC-BY-NC-SA-3.0",
+    "copyright": "Unknow, added by Wizard without meta",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "jellyfish",
+            "directions": 4,
+            "delays": [
+                [
+                  0.1,
+                  0.1,
+                  0.1,
+                  0.1
+                ],
+                [
+                  0.1,
+                  0.1,
+                  0.1,
+                  0.1
+                ],
+                [
+                  0.1,
+                  0.1,
+                  0.1,
+                  0.1
+                ],
+                [
+                  0.1,
+                  0.1,
+                  0.1,
+                  0.1
+                ]
+              ]
+        }
+    ]
+}
