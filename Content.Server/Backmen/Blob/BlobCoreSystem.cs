@@ -257,7 +257,6 @@ public sealed class BlobCoreSystem : SharedBlobCoreSystem
                 if (blobRuleComp.Stage == BlobStage.Critical ||
                     blobRuleComp.Stage == BlobStage.Begin)
                 {
-                    _alertLevelSystem.SetLevel(stationUid!.Value, "green", true, true, true, false);
                     _roundEndSystem.CancelRoundEndCountdown(null, false);
                 }
             }
