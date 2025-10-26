@@ -138,6 +138,15 @@
     sprite: Objects/Specific/Chapel/satanicbible.rsi
   - type: Item
     sprite: Objects/Specific/Chapel/satanicbible.rsi
+# DS14-start
+  - type: MeleeWeapon
+    soundHit:
+      collection: Punch
+    damage:
+      types:
+        Holy: -25
+        Blunt: 1
+# DS14-end
 
 - type: entity
   parent: Bible

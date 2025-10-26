@@ -1,0 +1,89 @@
+- type: entity
+  id: HolyCrossbow
+  parent: BaseBow
+  name: святой арбалетa
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Guns/Bow/holy_crossbow.rsi
+    layers:
+    - state: unwielded
+      map: [ base ]
+    - state: unwielded-arrow
+      map: [ arrow ]
+      visible: false
+  - type: Appearance
+  - type: ItemMapper
+    spriteLayers:
+    - arrow
+    mapLayers:
+      arrow:
+        whitelist:
+          tags:
+          - Arrow
+  - type: GenericVisualizer
+    visuals:
+      enum.WieldableVisuals.Wielded:
+        arrow:
+          True: { state: wielded-arrow }
+          False: { state: unwielded-arrow }
+        base:
+          True: { state: wielded }
+          False: { state: unwielded }
+  - type: ItemSlots
+    slots:
+      projectiles:
+        name: Projectiles
+        startingItem: null
+        insertSound: /Audio/Weapons/Guns/Misc/arrow_nock.ogg
+        whitelist:
+          tags:
+          - Arrow
+  - type: Item
+    shape:
+    - 0,0,3,1
+
+- type: entity
+  parent: BaseArrow
+  id: HollyArrow
+  name: святая стрела
+  components:
+  - type: Sprite
+    layers:
+    - state: tail
+      color: cyan
+    - state: rod
+      color: white
+    - state: tip
+      color: white
+    - state: solution1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 30
+        Holy: 45
+
+- type: entity
+  id: PresentQuiver
+  parent: [PresentBase, BaseItem]
+  name: обмоток с стрелами
+  description: Хорошо обмотанные святые стрелы, вы можете видеть, что их тут в порядке 10-и штук
+  components:
+  - type: SpawnItemsOnUse
+    items:
+      - id: HollyArrow
+      - id: HollyArrow
+      - id: HollyArrow
+      - id: HollyArrow
+      - id: HollyArrow
+      - id: HollyArrow
+      - id: HollyArrow
+      - id: HollyArrow
+      - id: HollyArrow
+    sound:
+      path: /Audio/Effects/unwrap.ogg
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Decoration/holy-quiver.rsi
+    layers:
+      - state: base

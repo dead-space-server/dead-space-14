@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "take from https://scrubby.melonmesa.com/dmi/icons/obj/storage.dmi?codebase=ds13-2.0 for Space Station 14 server Мёртвый Космос",
+    "size": {
+      "x": 32,
+      "y": 32
+    },
+    "states": [
+      {
+        "name": "base"
+      }
+    ]
+  }

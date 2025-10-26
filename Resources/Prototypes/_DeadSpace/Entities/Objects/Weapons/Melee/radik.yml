@@ -1,0 +1,126 @@
+- type: entity
+  name: святой меч
+  parent: BaseItem
+  id: Radiance
+  suffix: Радик
+  description: Божественный меч, окружающий владельца ярким сиянием, при виде только этого меча, вся нечесть что окружает своего владельца, помирает от святого пламени этого дивного меча. В рукояти вы можете заметить контейнер, в котором виднеется святая вода
+  components:
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/Items/welder_drop.ogg
+  - type: Sprite
+    sprite: Objects/Tools/welder.rsi
+    layers:
+    - state: icon
+    - state: welder_flame
+      visible: false
+      shader: unshaded
+      map: ["enum.ToggleableVisuals.Layer"]
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Item
+    size: Large
+    sprite: Objects/Tools/welder.rsi
+    shape:
+    - 0,0,1,4
+  - type: ItemToggle
+    onActivate: false # DS14
+    predictable: false
+    soundActivate:
+      collection: WelderOn
+      params:
+        variation: 0.125
+        volume: -5
+    soundDeactivate:
+      collection: WelderOff
+      params:
+        variation: 0.125
+        volume: -5
+  - type: ItemToggleMeleeWeapon
+    activatedSoundOnHit:
+      path: /Audio/Weapons/Guns/Hits/energy_meat1.ogg
+      params:
+        variation: 0.250
+        volume: -10
+    activatedSoundOnHitNoDamage:
+      path: /Audio/Weapons/Guns/Hits/energy_meat1.ogg
+      params:
+        variation: 0.250
+        volume: -12
+    deactivatedSoundOnHitNoDamage:
+      collection: MetalThud
+    activatedDamage:
+        types:
+            Heat: 30
+            Holy: 30
+  - type: ItemToggleSize
+    activatedSize: Ginormous
+  - type: ItemToggleHot
+  - type: ComponentToggler
+    components:
+    - type: DisarmMalus
+      malus: 0.6
+  - type: ToggleableVisuals
+    spriteLayer: flame
+    inhandVisuals:
+      left:
+      - state: inhand-left-flame
+        shader: unshaded
+      right:
+      - state: inhand-right-flame
+        shader: unshaded
+  - type: UseDelay
+  - type: MeleeWeapon
+    wideAnimationRotation: -90
+    damage:
+      types:
+        Slash: 20
+    soundHit:
+      collection: MetalThud
+  - type: RefillableSolution
+    solution: Holywater
+  - type: SolutionContainerManager
+    solutions:
+      Holywater:
+        reagents:
+        - ReagentId: Holywater
+          Quantity: 25
+        maxVol: 25
+  - type: PointLight
+    enabled: false
+    radius: 5.5
+    color: orange
+    netsync: false
+  - type: ItemTogglePointLight
+  - type: Appearance
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 200
+  - type: IgnitionSource
+    temperature: 700
+  - type: Welder
+    fuelSolutionName: Holywater
+    fuelReagent: Holywater
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - Belt
+  - type: DamageContacts
+    damage:
+      types:
+        Holy: 2
+  - type: Damageable
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false
+        density: 7
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-7.5,-7.5,7.5,7.5"
+        layer:
+        - MidImpassable
