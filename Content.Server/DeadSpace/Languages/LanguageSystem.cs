@@ -100,7 +100,7 @@ public sealed class LanguageSystem : EntitySystem
     {
         var name = "Неизвестно";
 
-        if (!Resolve(uid, ref component))
+        if (!Resolve(uid, ref component, false))
             return name;
 
         if (_prototypeManager.TryIndex(component.SelectedLanguage, out var languageProto))
