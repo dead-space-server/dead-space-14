@@ -4,8 +4,8 @@ meta:
   engineVersion: 266.0.0
   forkId: ""
   forkVersion: ""
-  time: 10/25/2025 10:56:05
-  entityCount: 10296
+  time: 10/26/2025 07:17:29
+  entityCount: 10297
 maps:
 - 1
 grids:
@@ -5474,7 +5474,7 @@ entities:
   - uid: 9703
     components:
     - type: MetaData
-      name: SYND-Blockage-812
+      name: СТ - Блокада-812
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -39.59964,-31.575666
@@ -9722,18 +9722,6 @@ entities:
       rot: 3.141592653589793 rad
       pos: -1.5,-16.5
       parent: 2
-- proto: OreBag
-  entities:
-  - uid: 9933
-    components:
-    - type: Transform
-      pos: 2.4078903,1.5772171
-      parent: 9909
-  - uid: 9934
-    components:
-    - type: Transform
-      pos: 2.6110153,1.4209671
-      parent: 9909
 - proto: BoxBeaker
   entities:
   - uid: 534
@@ -27638,6 +27626,8 @@ entities:
     - type: Transform
       pos: 34.5,-47.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconAIPower
   entities:
   - uid: 10218
@@ -27645,6 +27635,8 @@ entities:
     - type: Transform
       pos: 26.5,-49.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconAISatellite
   entities:
   - uid: 10217
@@ -27652,6 +27644,8 @@ entities:
     - type: Transform
       pos: 36.5,-49.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconAME
   entities:
   - uid: 10213
@@ -27659,6 +27653,8 @@ entities:
     - type: Transform
       pos: 34.5,-10.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconAnchor
   entities:
   - uid: 10232
@@ -27666,6 +27662,8 @@ entities:
     - type: Transform
       pos: 7.5,4.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconArmory
   entities:
   - uid: 10223
@@ -27673,6 +27671,8 @@ entities:
     - type: Transform
       pos: -13.5,-7.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconArtifactLab
   entities:
   - uid: 10256
@@ -27680,6 +27680,8 @@ entities:
     - type: Transform
       pos: 13.5,-49.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconAtmospherics
   entities:
   - uid: 10255
@@ -27687,6 +27689,8 @@ entities:
     - type: Transform
       pos: 29.5,3.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconBotany
   entities:
   - uid: 10241
@@ -27694,6 +27698,8 @@ entities:
     - type: Transform
       pos: -11.5,5.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconCargoBay
   entities:
   - uid: 10228
@@ -27701,6 +27707,8 @@ entities:
     - type: Transform
       pos: 34.5,-25.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconChemistry
   entities:
   - uid: 10233
@@ -27708,11 +27716,15 @@ entities:
     - type: Transform
       pos: -3.5,-28.5
       parent: 2
+    missingComponents:
+    - WarpPoint
   - uid: 10234
     components:
     - type: Transform
       pos: 10.5,-41.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconCryonics
   entities:
   - uid: 10244
@@ -27720,6 +27732,8 @@ entities:
     - type: Transform
       pos: -6.5,-16.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconCryosleep
   entities:
   - uid: 10239
@@ -27727,6 +27741,8 @@ entities:
     - type: Transform
       pos: 10.5,-4.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconDisposals
   entities:
   - uid: 10237
@@ -27734,6 +27750,8 @@ entities:
     - type: Transform
       pos: -3.5,-35.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconDockingArm
   entities:
   - uid: 10231
@@ -27741,6 +27759,8 @@ entities:
     - type: Transform
       pos: -28.5,-39.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconDorms
   entities:
   - uid: 10216
@@ -27748,6 +27768,8 @@ entities:
     - type: Transform
       pos: 3.5,-4.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconEngineering
   entities:
   - uid: 10220
@@ -27755,6 +27777,8 @@ entities:
     - type: Transform
       pos: 36.5,-3.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconGateway
   entities:
   - uid: 10214
@@ -27762,6 +27786,8 @@ entities:
     - type: Transform
       pos: -28.5,14.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconGravGen
   entities:
   - uid: 10215
@@ -27769,6 +27795,8 @@ entities:
     - type: Transform
       pos: 42.5,-8.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconJanitorsCloset
   entities:
   - uid: 10240
@@ -27776,6 +27804,8 @@ entities:
     - type: Transform
       pos: -17.5,4.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconKitchen
   entities:
   - uid: 10238
@@ -27783,6 +27813,8 @@ entities:
     - type: Transform
       pos: -1.5,4.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconMedbay
   entities:
   - uid: 10242
@@ -27790,6 +27822,8 @@ entities:
     - type: Transform
       pos: -4.5,-20.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconMorgue
   entities:
   - uid: 10221
@@ -27797,6 +27831,8 @@ entities:
     - type: Transform
       pos: 3.5,-23.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconPermaBrig
   entities:
   - uid: 10224
@@ -27804,6 +27840,8 @@ entities:
     - type: Transform
       pos: -30.5,-13.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconRobotics
   entities:
   - uid: 10225
@@ -27811,6 +27849,8 @@ entities:
     - type: Transform
       pos: 13.5,-34.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconScience
   entities:
   - uid: 10222
@@ -27818,6 +27858,8 @@ entities:
     - type: Transform
       pos: 13.5,-27.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconServerRoom
   entities:
   - uid: 10226
@@ -27825,6 +27867,8 @@ entities:
     - type: Transform
       pos: 31.5,-32.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconService
   entities:
   - uid: 10236
@@ -27832,6 +27876,8 @@ entities:
     - type: Transform
       pos: 3.5,6.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconSingularity
   entities:
   - uid: 10243
@@ -27839,6 +27885,8 @@ entities:
     - type: Transform
       pos: 44.5,6.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconSolarsE
   entities:
   - uid: 10229
@@ -27846,6 +27894,8 @@ entities:
     - type: Transform
       pos: 41.5,-13.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconSolarsN
   entities:
   - uid: 10230
@@ -27853,6 +27903,8 @@ entities:
     - type: Transform
       pos: -18.5,16.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconSupply
   entities:
   - uid: 10227
@@ -27860,6 +27912,8 @@ entities:
     - type: Transform
       pos: 26.5,-24.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconTEG
   entities:
   - uid: 10235
@@ -27867,6 +27921,8 @@ entities:
     - type: Transform
       pos: 16.5,7.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefaultStationBeaconTelecoms
   entities:
   - uid: 10245
@@ -27874,6 +27930,8 @@ entities:
     - type: Transform
       pos: 36.5,-40.5
       parent: 2
+    missingComponents:
+    - WarpPoint
 - proto: DefibrillatorCabinetFilled
   entities:
   - uid: 3757
@@ -44725,6 +44783,15 @@ entities:
     - type: Transform
       pos: -2.5,-7.5
       parent: 9703
+- proto: GhostWarpPoint
+  entities:
+  - uid: 10297
+    components:
+    - type: Transform
+      pos: 3.5,-5.5
+      parent: 2
+    - type: WarpPoint
+      location: ННКСС Тайпан
 - proto: Girder
   entities:
   - uid: 6025
@@ -48462,6 +48529,18 @@ entities:
     - type: Transform
       pos: -32.5,0.5
       parent: 2
+- proto: OreBag
+  entities:
+  - uid: 9933
+    components:
+    - type: Transform
+      pos: 2.4078903,1.5772171
+      parent: 9909
+  - uid: 9934
+    components:
+    - type: Transform
+      pos: 2.6110153,1.4209671
+      parent: 9909
 - proto: OreBox
   entities:
   - uid: 3413
