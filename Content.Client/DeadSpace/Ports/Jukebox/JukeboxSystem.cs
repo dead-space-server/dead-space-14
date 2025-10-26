@@ -46,7 +46,14 @@ public sealed class JukeboxSystem : EntitySystem
     private void JukeboxVolumeChanged(float volume)
     {
         _jukeboxVolume = volume;
-        CleanUp();
+        foreach (var jukebox in _playingJukeboxes.Values)
+        {
+            if (jukebox.PlayingStream.Playing)
+            {
+                jukebox.PlayingStream.Volume =
+                    _jukeboxVolume <= 0f ? float.NegativeInfinity : MinimalVolume + _jukeboxVolume;
+            }
+        }
     }
 
     private void JoinLobby(TickerJoinLobbyEvent ev)
@@ -268,7 +275,7 @@ public sealed class JukeboxSystem : EntitySystem
         if (playingStream == null)
             return null;
 
-        playingStream.Volume = MinimalVolume + _jukeboxVolume;
+        playingStream.Volume = _jukeboxVolume <= 0f ? float.NegativeInfinity : MinimalVolume + _jukeboxVolume;
         playingStream.PlaybackPosition = jukeboxComponent.PlayingSongData.PlaybackPosition;
 
         playingStream.Position = _transform.GetWorldPosition(jukebox);
