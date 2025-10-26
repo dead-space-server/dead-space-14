@@ -26,6 +26,7 @@ public sealed partial class SmokeAbilityComponent : Component
     [ViewVariables(VVAccess.ReadOnly)]
     public bool IsHide = false;
 
+    [DataField]
     [ViewVariables(VVAccess.ReadOnly)]
     public bool ChangeApperacne = true;
 
