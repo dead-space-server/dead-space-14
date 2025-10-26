@@ -308,9 +308,11 @@ public sealed class BlobCoreSystem : SharedBlobCoreSystem
         component.Points += amount;
 
         if (component.Observer != null)
+        {
             _alerts.ShowAlert(component.Observer.Value,
                 BlobResource,
                 (short)Math.Clamp(Math.Round(component.Points.Float() / 10f), 0, 16));
+        }
 
         return true;
     }
