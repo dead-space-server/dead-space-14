@@ -28,7 +28,7 @@
     components:
     - type: Reflect
       inRightPlace: True
-      reflectProb: 0.35
+      reflectProb: 0.15 # balance
       spread: 90
       soundOnReflect:
         collection: mantis_reflect
