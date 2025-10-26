@@ -7,7 +7,7 @@
   flavor: medicine
   color: "#fcf7f9"
   reactiveEffects:
-    Medicine:
+    Acidic:
       methods: [ Touch ]
       effects:
       - !type:HealthChange
@@ -134,7 +134,7 @@
             Toxin: 3
             Airloss: 3
   reactiveEffects:
-    Poison:
+    Acidic:
       methods: [ Touch ]
       effects:
       - !type:MovespeedModifier
