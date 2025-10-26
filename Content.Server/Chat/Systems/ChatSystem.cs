@@ -479,7 +479,6 @@ public sealed partial class ChatSystem : SharedChatSystem
     #endregion
 
     #region Private API
-
     private void SendEntitySpeak(
         EntityUid source,
         string originalMessage,
