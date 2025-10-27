@@ -206,18 +206,20 @@ namespace Content.Server.Administration.Systems
                         ConfirmationPopup = true
                     });
 
-                    // Respawn
+                    // DS14-start
+                    // camera
                     args.Verbs.Add(new Verb
                     {
-                        Text = Loc.GetString("admin-player-actions-respawn"),
+                        Text = Loc.GetString("admin-player-actions-camera"),
                         Category = VerbCategory.Admin,
                         Act = () =>
                         {
-                            _console.ExecuteCommand(player, $"respawn \"{mindComp.UserId}\"");
+                            _console.ExecuteCommand(player, $"camera \"{mindComp.UserId}\"");
                         },
                         ConfirmationPopup = true,
                         // No logimpact as the command does it internally.
                     });
+                    // DS14-end
 
                     // Inspect mind
                     args.Verbs.Add(new Verb

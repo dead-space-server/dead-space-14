@@ -188,10 +188,10 @@ namespace Content.Client.Administration.UI.Bwoink
                     _console.ExecuteCommand($"follow \"{_currentPlayer.NetEntity}\"");
             };
 
-            Respawn.OnPressed += _ =>
+            Camera.OnPressed += _ =>
             {
                 if (_currentPlayer is not null)
-                    _console.ExecuteCommand($"respawn \"{_currentPlayer.Username}\"");
+                    _console.ExecuteCommand($"camera \"{_currentPlayer.Username}\"");
             };
 
             PopOut.OnPressed += _ =>
@@ -240,8 +240,8 @@ namespace Content.Client.Administration.UI.Bwoink
             Kick.Visible = _adminManager.CanCommand("kick");
             Kick.Disabled = !Kick.Visible || disabled;
 
-            Respawn.Visible = _adminManager.CanCommand("respawn");
-            Respawn.Disabled = !Respawn.Visible || disabled;
+            Camera.Visible = _adminManager.CanCommand("camera");
+            Camera.Disabled = !Camera.Visible || disabled;
 
             Follow.Visible = _adminManager.CanCommand("follow");
             Follow.Disabled = !Follow.Visible || disabled;
