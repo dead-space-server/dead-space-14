@@ -49,7 +49,10 @@
         variation: 0.250
         volume: -5
     deactivatedSoundOnHitNoDamage:
-      collection: RadianceHitSoundOn
+      collection: RadianceHitSoundOff
+      params:
+        variation: 0.250
+        volume: -5
     activatedDamage:
         types:
             Heat: 30
