@@ -309,11 +309,11 @@
       Alive:
         Base: bloody_army_soldier
       Dead:
-        Base: bloody_army_soldier
+        Base: bloody_army_soldier_dead
   - type: MobThresholds
     thresholds:
       0: Alive
-      100: Dead
+      125: Dead
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.5
     baseSprintSpeed: 5.5
@@ -362,11 +362,11 @@
       Alive:
         Base: dark_rattlesnake
       Dead:
-        Base: dark_rattlesnake
+        Base: dark_rattlesnake_dead
   - type: MobThresholds
     thresholds:
       0: Alive
-      100: Dead
+      166: Dead
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.5
     baseSprintSpeed: 2.5
@@ -407,14 +407,14 @@
       Alive:
         Base: demonic_mouth
       Dead:
-        Base: demonic_mouth
+        Base: demonic_mouth_dead
   - type: MobThresholds
     thresholds:
       0: Alive
-      200: Dead
+      265: Dead
   - type: MovementSpeedModifier
-    baseWalkSpeed: 2.5
-    baseSprintSpeed: 2.5
+    baseWalkSpeed: 3
+    baseSprintSpeed: 3
   - type: GhostRole
     allowMovement: true
     allowSpeech: true
@@ -432,22 +432,17 @@
     damage:
       types:
         Slash: 5
-        Blunt: 7
+        Blunt: 3
         Piercing: 1
-        Heat: 5
-  - type: Deva
-    eatSound:
-      collection: DevaEat
-    enrageSound:
-      collection: DevaEnrage
   - type: Devourer
-    stomachStorageWhitelist:
     whitelist:
       components:
       - Door
       tags:
       - Wall
-      
+  - type: Puller
+    needsHands: false
+    
 - type: entity
   id: FireballBullet
   name: огненный шар
