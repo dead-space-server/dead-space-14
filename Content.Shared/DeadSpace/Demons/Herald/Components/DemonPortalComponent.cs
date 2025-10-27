@@ -22,5 +22,5 @@ public sealed partial class DemonPortalComponent : Component
     public TimeSpan DemonSpawnTime = TimeSpan.FromSeconds(0);
 
     [DataField]
-    public HashSet<EntProtoId> DemonSpawnIdArray = ["MobDemonSlaughter", "MobDemonSlaughterBow", "MobDemonHonker", "MobDemonIfrit", "MobDemonJaunt", "MobDemonBloodyArms", "MobDemonSnake", "MobDemonMouth"];
+    public HashSet<EntProtoId> DemonSpawnIdArray = ["MobDemonSlaughter", "MobDemonHonker", "MobDemonIfrit", "MobDemonJaunt"];
 }
