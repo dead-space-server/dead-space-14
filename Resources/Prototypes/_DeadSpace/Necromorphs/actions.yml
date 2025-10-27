@@ -48,7 +48,7 @@
   components:
   - type: Action
     useDelay: 30
-    icon: Interface/Actions/jump.rsi/icon.png
+    icon: _DeadSpace/Interface/Actions/deva.png
     itemIconStyle: NoItem
   - type: InstantAction
     event: !type:DevaEnrageActionEvent
