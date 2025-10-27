@@ -69,6 +69,10 @@ public sealed partial class CustomizableHumanoidSpawnerComponent : Component
     /// </summary>
     [DataField(serverOnly: true)]
     public HashSet<ProtoId<NpcFactionPrototype>>? Factions;
+
+    [DataField]
+    [AlwaysPushInheritance]
+    public ComponentRegistry? Components { get; private set; }
 }
 
 [Serializable, NetSerializable]

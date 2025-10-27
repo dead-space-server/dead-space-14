@@ -34,6 +34,24 @@
     - Xenomorph
 #    - IPC
 #    - IPS
+    components: 
+    - type: GhostRole
+      name: job-name-taipan-atmospherics-engineer
+      description: job-description-taipan-atmospherics-engineer
+      rules: ghost-role-information-taipan-personal-rules
+      job: TaipanAtmosphericsEngineer
+      requirements:
+      - !type:RoleTimeRequirement
+        role: JobAtmosphericTechnician
+        time: 18000 #5 hrs
+      - !type:RoleTimeRequirement
+        role: JobTaipanTechnician
+        time: 18000 #5 hrs
+      - !type:DepartmentTimeRequirement
+        department: Taipan
+        time: 36000 #10 hrs
+      raffle:
+        settings: default
   - type: GhostRole
     name: job-name-taipan-atmospherics-engineer
     description: job-description-taipan-atmospherics-engineer
