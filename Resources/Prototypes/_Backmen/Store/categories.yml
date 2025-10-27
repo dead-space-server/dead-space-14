@@ -52,10 +52,6 @@
   name: store-category-vending-drinks
 
 - type: storeCategory
-  id: ColaRedInventory
-  name: store-category-vending-drinks
-
-- type: storeCategory
   id: ShamblersJuiceInventory
   name: store-category-vending-drinks
 
@@ -76,7 +72,7 @@
   name: store-category-HappyHonk
 
 - type: storeCategory
-  id: DrinkVendInventoryEmag
+  id: RobustSoftdrinksInventoryEmag
   name: store-category-emag
 
 - type: storeCategory
@@ -160,3 +156,25 @@
 - type: storeCategory
   id: WinterDrobeInventoryEmag
   name: store-category-emag
+
+# Contraband
+
+- type: storeCategory
+  id: HotDrinksMachineInventoryContraband
+  name: store-category-contraband
+
+- type: storeCategory
+  id: RobustSoftdrinksInventoryContraband
+  name: store-category-contraband
+
+- type: storeCategory
+  id: DiscountDansInventoryContraband
+  name: store-category-contraband
+
+- type: storeCategory
+  id: DonutInventoryContraband
+  name: store-category-contraband
+
+- type: storeCategory
+  id: DrGibbInventoryContraband
+  name: store-category-contraband
