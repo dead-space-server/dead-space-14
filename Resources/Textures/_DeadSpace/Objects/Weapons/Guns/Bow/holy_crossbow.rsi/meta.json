@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "take from https://scrubby.melonmesa.com/dmi/icons/obj/guns/projectile/hunter_crossbow.dmi?codebase=sojourn; inhand and equipped resprited by thezuti(discord) for Space Station 14 server Мёртвый Космос",
+  "copyright": "icon based on sojourn-13 at https://github.com/sojourn-13/sojourn-station/blob/master/icons/obj/guns/projectile/hunter_crossbow.dmi; inhand and equipped resprited by thezuti(discord) for Space Station 14 server Мёртвый Космос",
   "size": {
     "x": 32,
     "y": 32
