@@ -5,9 +5,6 @@
   suffix: Радик
   description: Божественный меч, окружающий владельца ярким сиянием, при виде только этого меча, вся нечесть что окружает своего владельца, помирает от святого пламени этого дивного меча. В рукояти вы можете заметить контейнер, в котором виднеется святая вода
   components:
-  - type: EmitSoundOnLand
-    sound:
-      path: /Audio/Items/welder_drop.ogg
   - type: Sprite
     sprite: Objects/Tools/welder.rsi
     layers:
@@ -31,7 +28,7 @@
     onActivate: false # DS14
     predictable: false
     soundActivate:
-      collection: WelderOn
+      collection: RadianceOn
       params:
         variation: 0.125
         volume: -5
@@ -42,17 +39,17 @@
         volume: -5
   - type: ItemToggleMeleeWeapon
     activatedSoundOnHit:
-      path: /Audio/Weapons/Guns/Hits/energy_meat1.ogg
+      collection: RadianceHitSoundOn
       params:
         variation: 0.250
-        volume: -10
+        volume: -5
     activatedSoundOnHitNoDamage:
-      path: /Audio/Weapons/Guns/Hits/energy_meat1.ogg
+      collection: RadianceHitSoundOn
       params:
         variation: 0.250
-        volume: -12
+        volume: -5
     deactivatedSoundOnHitNoDamage:
-      collection: MetalThud
+      collection: RadianceHitSoundOn
     activatedDamage:
         types:
             Heat: 30
@@ -80,7 +77,10 @@
       types:
         Slash: 20
     soundHit:
-      collection: MetalThud
+      collection: RadianceHitSoundOff
+      params:
+        variation: 0.250
+        volume: -8
   - type: RefillableSolution
     solution: Holywater
   - type: SolutionContainerManager
