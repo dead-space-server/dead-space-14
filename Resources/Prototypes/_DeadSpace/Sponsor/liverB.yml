@@ -223,6 +223,8 @@
     sprite: _DeadSpace/Sponsor/LiverB/coat.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/LiverB/coat.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
 
 # AIRTANK
 - type: entity
