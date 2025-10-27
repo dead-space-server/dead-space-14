@@ -47819,7 +47819,7 @@ entities:
     - type: Transform
       pos: 7.5,-37.5
       parent: 2
-- proto: MachineAPE
+- proto: MachineAPETaipan
   entities:
   - uid: 6534
     components:
