@@ -107,14 +107,3 @@
   conditions:
     - !type:ListingLimitedStockCondition
       stock: 2
-
-- type: listing
-  id: StarkistEmagged1
-  productEntity: DrinkNukieCan
-  cost:
-    SpaceCash: 30
-  categories:
-    - StarkistInventoryEmagged
-  conditions:
-    - !type:ListingLimitedStockCondition
-      stock: 2

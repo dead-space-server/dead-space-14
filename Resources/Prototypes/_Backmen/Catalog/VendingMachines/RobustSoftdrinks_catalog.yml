@@ -109,14 +109,14 @@
     - !type:ListingLimitedStockCondition
       stock: 2
 
-# Emagged
+# Emag
 - type: listing
-  id: ColaRedEmagged1
+  id: ColaRedEmag1
   productEntity: DrinkNukieCan
   cost:
     SpaceCash: 30
   categories:
-    - RobustSoftdrinksInventoryEmagged
+    - RobustSoftdrinksInventoryEmag
   conditions:
     - !type:ListingLimitedStockCondition
       stock: 2

@@ -164,25 +164,25 @@
     - !type:ListingLimitedStockCondition
       stock: 1
 
-# Emagged
+# Emag
 - type: listing
-  id: CigaretteMachineEmagged1
+  id: CigaretteMachineEmag1
   productEntity: FlippoSyndicateLighter
   cost:
     SpaceCash: 50
   categories:
-    - CigaretteMachineInventoryEmagged
+    - CigaretteMachineInventoryEmag
   conditions:
     - !type:ListingLimitedStockCondition
       stock: 1
 
 - type: listing
-  id: CigaretteMachineEmagged2
+  id: CigaretteMachineEmag2
   productEntity: CigPackSyndicate
   cost:
     SpaceCash: 50
   categories:
-    - CigaretteMachineInventoryEmagged
+    - CigaretteMachineInventoryEmag
   conditions:
     - !type:ListingLimitedStockCondition
       stock: 1

@@ -39,6 +39,7 @@
   - type: BuyStoreBank
     emagCategories:
     - CigaretteMachineInventoryEmag
+    - CigaretteMachineInventoryContraband
   - type: ActivatableUI
     key: enum.StoreUiKey.Key
     singleUser: true
@@ -240,6 +241,8 @@
     balance:
       SpaceCash: 0
   - type: BuyStoreBank
+    emagCategories:
+    - BodaInventoryContraband
   - type: ActivatableUI
     key: enum.StoreUiKey.Key
     singleUser: true
@@ -264,6 +267,8 @@
     balance:
       SpaceCash: 0
   - type: BuyStoreBank
+    emagCategories:
+    - GetmoreChocolateCorpInventoryContraband
   - type: ActivatableUI
     key: enum.StoreUiKey.Key
     singleUser: true
@@ -288,6 +293,9 @@
     balance:
       SpaceCash: 0
   - type: BuyStoreBank
+    emagCategories:
+    - RobustSoftdrinksInventoryEmag
+    - SpaceUpInventoryContraband
   - type: ActivatableUI
     key: enum.StoreUiKey.Key
     singleUser: true
@@ -439,6 +447,7 @@
   - type: BuyStoreBank
     emagCategories:
     - RobustSoftdrinksInventoryEmag
+    - ShamblersJuiceInventoryContraband
   - type: ActivatableUI
     key: enum.StoreUiKey.Key
     singleUser: true
@@ -491,7 +500,7 @@
   - type: BuyStoreBank
     emagCategories:
     - RobustSoftdrinksInventoryEmag
-    - DrGibbInventoryContraband
+    - RobustSoftdrinksInventoryContraband
   - type: ActivatableUI
     key: enum.StoreUiKey.Key
     singleUser: true
@@ -544,6 +553,7 @@
   - type: BuyStoreBank
     emagCategories:
     - HappyHonkInventoryEmag
+    - HappyHonkInventoryContraband
   - type: ActivatableUI
     key: enum.StoreUiKey.Key
     singleUser: true

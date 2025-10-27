@@ -65,14 +65,14 @@
     - !type:ListingLimitedStockCondition
       stock: 1
 
-# Emagged
+# Emag
 - type: listing
-  id: HappyHonkEmagged1
+  id: HappyHonkEmag1
   productEntity: HappyHonkNukie
   cost:
     SpaceCash: 100
   categories:
-    - HappyHonkInventoryEmagged
+    - HappyHonkInventoryEmag
   conditions:
     - !type:ListingLimitedStockCondition
       stock: 1

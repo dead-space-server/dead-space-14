@@ -118,14 +118,3 @@
   conditions:
     - !type:ListingLimitedStockCondition
       stock: 2
-
-- type: listing
-  id: PwrGameEmagged1
-  productEntity: DrinkNukieCan
-  cost:
-    SpaceCash: 30
-  categories:
-    - PwrGameInventoryEmagged
-  conditions:
-    - !type:ListingLimitedStockCondition
-      stock: 2

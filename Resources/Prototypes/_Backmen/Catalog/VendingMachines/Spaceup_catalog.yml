@@ -108,13 +108,3 @@
     - !type:ListingLimitedStockCondition
       stock: 2
 
-- type: listing
-  id: SpaceUpEmagged1
-  productEntity: DrinkNukieCan
-  cost:
-    SpaceCash: 30
-  categories:
-    - SpaceUpInventoryEmagged
-  conditions:
-    - !type:ListingLimitedStockCondition
-      stock: 2
