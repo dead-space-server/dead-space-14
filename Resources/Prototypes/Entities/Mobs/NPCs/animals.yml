@@ -517,6 +517,7 @@
   - type: GhostTakeoverAvailable
   - type: Speech
     speechVerb: Moth
+    # speechSounds: Squeak # DS14
     allowedEmotes: ['Chitter', 'Squeak']
   - type: FaxableObject
     insertingState: inserting_mothroach
@@ -1507,7 +1508,9 @@
   - type: NameIdentifier
     group: Monkey
   - type: Speech
+    # speechSounds: Monkey # DS14
     speechVerb: Monkey
+  - type: MonkeyAccent
   - type: SentienceTarget
     flavorKind: station-event-random-sentience-flavor-primate
   - type: AlwaysRevolutionaryConvertible
@@ -1549,7 +1552,9 @@
   - type: SentienceTarget
     flavorKind: station-event-random-sentience-flavor-primate
   - type: Speech
+    # speechSounds: Monkey # DS14
     speechVerb: Monkey
+  - type: MonkeyAccent
   - type: NpcFactionMember
     factions:
     - Syndicate
@@ -1787,6 +1792,7 @@
     - MindRoleGhostRoleFreeAgentHarmless
   - type: GhostTakeoverAvailable
   - type: Speech
+    # speechSounds: Squeak # DS14
     speechVerb: SmallMob
     allowedEmotes: ['Squeak']
   - type: Sprite
@@ -2587,6 +2593,7 @@
     bloodReagent: CopperBlood
   - type: Speech
     speechVerb: Arachnid
+    # speechSounds: Arachnid # DS14
     allowedEmotes: ['Click', 'Chitter']
   - type: Vocal
     sounds:
