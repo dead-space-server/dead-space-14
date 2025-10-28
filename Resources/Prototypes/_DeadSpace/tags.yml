@@ -62,9 +62,6 @@
   id: DeathNettle
 
 - type: Tag
-  id: DeathRipleyEquipment
-
-- type: Tag
   id: DockCentcommERT
 
 - type: Tag
