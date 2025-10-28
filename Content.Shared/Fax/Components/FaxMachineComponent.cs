@@ -144,6 +144,13 @@ public sealed partial class FaxMachineComponent : Component
     /// </summary>
     [DataField]
     public EntProtoId PrintOfficePaperId = "PaperOffice";
+    // DS14-start
+    /// <summary>
+    ///     history of all received faxes (time, sender)
+    /// </summary>
+    [DataField]
+    public List<(int, string)> ReceiveHistory = new();
+    // DS14-end
 }
 
 [DataDefinition]

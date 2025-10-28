@@ -30,6 +30,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing; // DS14
 
 namespace Content.Server.Fax;
 
@@ -51,6 +52,7 @@ public sealed class FaxSystem : EntitySystem
     [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly FaxecuteSystem _faxecute = default!;
     [Dependency] private readonly EmagSystem _emag = default!;
+    [Dependency] private readonly IGameTiming _gameTiming = default!; // DS14
 
     private static readonly ProtoId<ToolQualityPrototype> ScrewingQuality = "Screwing";
 
@@ -582,6 +584,10 @@ public sealed class FaxSystem : EntitySystem
 
         if (component.NotifyAdmins)
             NotifyAdmins(faxName);
+        // DS14-start ReceiveHistory
+        var shiftTime = _gameTiming.CurTime;
+        component.ReceiveHistory.Add(((int)shiftTime.TotalSeconds, faxName));
+        // DS14-end
 
         component.PrintingQueue.Enqueue(printout);
     }
