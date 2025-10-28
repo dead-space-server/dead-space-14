@@ -147,14 +147,11 @@ public sealed class CustomizableHumanoidSpawnerSystem : EntitySystem
         if (comp.Tags != null)
             _tagSystem.AddTags(newEntity, comp.Tags);
 
-        if (comp.Components != null)
+        if (TryComp<GhostRoleComponent>(uid, out var ghostRoleComponent))
         {
-            foreach (var entry in comp.Components.Values)
-            {
-                var component = (Component)_serialization.CreateCopy(entry.Component, notNullableOverride: true);
-                RemComp(newEntity, component.GetType());
-                AddComp(newEntity, component);
-            }
+            var component = (Component)_serialization.CreateCopy(ghostRoleComponent, notNullableOverride: true);
+            RemComp(newEntity, component.GetType());
+            AddComp(newEntity, component);
         }
 
         if (comp.Factions != null)

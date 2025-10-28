@@ -34,24 +34,6 @@
     - Xenomorph
 #    - IPC
 #    - IPS
-    components:
-    - type: GhostRole
-      name: job-name-taipan-atmospherics-engineer
-      description: job-description-taipan-atmospherics-engineer
-      rules: ghost-role-information-taipan-personal-rules
-      job: TaipanAtmosphericsEngineer
-      requirements:
-      - !type:RoleTimeRequirement
-        role: JobAtmosphericTechnician
-        time: 18000 #5 hrs
-      - !type:RoleTimeRequirement
-        role: JobTaipanTechnician
-        time: 18000 #5 hrs
-      - !type:DepartmentTimeRequirement
-        department: Taipan
-        time: 36000 #10 hrs
-      raffle:
-        settings: default
   - type: GhostRole
     name: job-name-taipan-atmospherics-engineer
     description: job-description-taipan-atmospherics-engineer
@@ -106,21 +88,6 @@
     - Xenomorph
 #    - IPC
 #    - IPS
-    components:
-    - type: GhostRole
-      name: job-name-taipan-botanist
-      description: job-description-taipan-botanist
-      rules: ghost-role-information-taipan-personal-rules
-      job: TaipanBotanist
-      requirements:
-      - !type:DepartmentTimeRequirement
-        department: Civilian
-        time: 18000 # 5 hours
-      - !type:RoleTimeRequirement
-        role: JobBotanist
-        time: 3600 # 1 hour
-      raffle:
-        settings: default
   - type: GhostRole
     name: job-name-taipan-botanist
     description: job-description-taipan-botanist
@@ -172,18 +139,6 @@
     - Xenomorph
 #    - IPC
 #    - IPS
-    components:
-    - type: GhostRole
-      name: job-name-taipan-cargotech
-      description: job-description-taipan-cargotech
-      rules: ghost-role-information-taipan-personal-rules
-      job: TaipanCargotech
-      requirements:
-      - !type:RoleTimeRequirement
-        role: JobSalvageSpecialist
-        time: 36000 # 10 hours
-      raffle:
-        settings: default
   - type: GhostRole
     name: job-name-taipan-cargotech
     description: job-description-taipan-cargotech
@@ -232,24 +187,6 @@
     - Xenomorph
 #    - IPC
 #    - IPS
-    components:
-    - type: GhostRole
-      name: job-name-taipan-chef
-      description: job-description-taipan-chef
-      rules: ghost-role-information-taipan-personal-rules
-      job: TaipanChef
-      requirements:
-      - !type:DepartmentTimeRequirement
-        department: Civilian
-        time: 18000 # 5 hours
-      - !type:RoleTimeRequirement
-        role: JobChef
-        time: 3600 # 1 hour
-      - !type:RoleTimeRequirement
-        role: JobBartender
-        time: 3600 # 1 hour
-      raffle:
-        settings: default
   - type: GhostRole
     name: job-name-taipan-chef
     description: job-description-taipan-chef
@@ -304,21 +241,6 @@
     - Xenomorph
 #    - IPC
 #    - IPS
-    components:
-    - type: GhostRole
-      name: job-name-taipan-communications-officer
-      description: job-description-taipan-communications-officer
-      rules: ghost-role-information-taipan-personal-rules
-      job: TaipanCommunicationsOfficer
-      requirements:
-      - !type:RoleTimeRequirement
-        role: JobTaipanRecruit
-        time: 36000 # 10 hours
-      - !type:DepartmentTimeRequirement
-        department: Taipan
-        time: 360000 # 100 hours
-      raffle:
-        settings: default
   - type: GhostRole
     name: job-name-taipan-communications-officer
     description: job-description-taipan-communications-officer
@@ -370,21 +292,6 @@
     - Xenomorph
 #    - IPC
 #    - IPS
-    components:
-    - type: GhostRole
-      name: job-name-taipan-medic
-      description: job-description-taipan-medic
-      rules: ghost-role-information-taipan-personal-rules
-      job: TaipanMedic
-      requirements:
-      - !type:DepartmentTimeRequirement
-        department: Medical
-        time: 36000 # 10 hours
-      - !type:RoleTimeRequirement
-        role: JobChemist
-        time: 18000 # 5 hours
-      raffle:
-        settings: default
   - type: GhostRole
     name: job-name-taipan-medic
     description: job-description-taipan-medic
@@ -436,18 +343,6 @@
     - Xenomorph
 #    - IPC
 #    - IPS
-    components:
-    - type: GhostRole
-      name: job-name-taipan-paramedic
-      description: job-description-taipan-paramedic
-      rules: ghost-role-information-taipan-personal-rules
-      job: TaipanParamedic
-      requirements:
-      - !type:RoleTimeRequirement
-        role: JobTaipanMedic
-        time: 36000 # 10 hours
-      raffle:
-        settings: default
   - type: GhostRole
     name: job-name-taipan-paramedic
     description: job-description-taipan-paramedic
@@ -496,18 +391,6 @@
     - Xenomorph
 #    - IPC
 #    - IPS
-    components:
-    - type: GhostRole
-      name: job-name-taipan-recruit
-      description: job-description-taipan-recruit
-      rules: ghost-role-information-taipan-personal-rules
-      job: TaipanRecruit
-      requirements:
-      - !type:DepartmentTimeRequirement
-        department: Security
-        time: 36000 # 10 hours
-      raffle:
-        settings: default
   - type: GhostRole
     name: job-name-taipan-recruit
     description: job-description-taipan-recruit
@@ -556,24 +439,6 @@
     - Xenomorph
 #    - IPC
 #    - IPS
-    components:
-    - type: GhostRole
-      name: job-name-taipan-research-director
-      description: job-description-taipan-research-director
-      rules: ghost-role-information-taipan-personal-rules
-      job: TaipanResearchDirector
-      requirements:
-      - !type:DepartmentTimeRequirement
-        department: Taipan
-        time: 216000 # 60 hours
-      - !type:RoleTimeRequirement
-        role: JobTaipanResearcher
-        time: 72000 # 20 hours
-      - !type:RoleTimeRequirement
-        role: JobTaipanMedic
-        time: 36000 # 10 hours
-      raffle:
-        settings: default
   - type: GhostRole
     name: job-name-taipan-research-director
     description: job-description-taipan-research-director
@@ -628,21 +493,6 @@
     - Xenomorph
 #    - IPC
 #    - IPS
-    components:
-    - type: GhostRole
-      name: job-name-taipan-researcher
-      description: job-description-taipan-researcher
-      rules: ghost-role-information-taipan-personal-rules
-      job: TaipanResearcher
-      requirements:
-      - !type:DepartmentTimeRequirement
-        department: Science
-        time: 36000 # 10 hours
-      - !type:RoleTimeRequirement
-        role: JobChemist
-        time: 18000 # 5 hours
-      raffle:
-        settings: default
   - type: GhostRole
     name: job-name-taipan-researcher
     description: job-description-taipan-researcher
@@ -694,18 +544,6 @@
     - Xenomorph
 #    - IPC
 #    - IPS
-    components:
-    - type: GhostRole
-      name: job-name-taipan-technician
-      description: job-description-taipan-technician
-      rules: ghost-role-information-taipan-personal-rules
-      job: TaipanTechnician
-      requirements:
-      - !type:DepartmentTimeRequirement
-        department: Engineering
-        time: 36000 #10 hrs
-      raffle:
-        settings: default
   - type: GhostRole
     name: job-name-taipan-technician
     description: job-description-taipan-technician
@@ -754,24 +592,6 @@
     - Xenomorph
 #    - IPC
 #    - IPS
-    components:
-    - type: GhostRole
-      name: job-name-taipan-technical-supervisor
-      description: job-description-taipan-technical-supervisor
-      rules: ghost-role-information-taipan-personal-rules
-      job: TaipanTechnicalOperationsSupervisor
-      requirements:
-      - !type:RoleTimeRequirement
-        role: JobTaipanCargotech
-        time: 36000 # 10 hours
-      - !type:RoleTimeRequirement
-        role: JobTaipanAtmosphericsEngineer
-        time: 18000 # 5 hours
-      - !type:DepartmentTimeRequirement
-        department: Taipan
-        time: 144000 # 40 hours
-      raffle:
-        settings: default
   - type: GhostRole
     name: job-name-taipan-technical-supervisor
     description: job-description-taipan-technical-supervisor
