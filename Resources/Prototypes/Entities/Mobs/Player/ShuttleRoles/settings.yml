@@ -983,7 +983,7 @@
 # DS14-start
       requirements:
       - !type:OverallPlaytimeRequirement
-        time: 36000 # 10h overall
+        time: 7200 # 2 hours
 # DS14-end
       raffle:
         settings: default
@@ -1008,7 +1008,7 @@
 # DS14-start
       requirements:
       - !type:OverallPlaytimeRequirement
-        time: 36000 # 10h overall
+        time: 7200 # 2 hours
 # DS14-end
       raffle:
         settings: default
