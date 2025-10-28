@@ -16,6 +16,17 @@
     Laugh:
       collection: DemonLaughs
 
+- type: emoteSounds
+  id: DemonHonk
+  params:
+    variation: 0.125
+    volume: 2
+  sounds:
+    Scream:
+      collection: DemonScreams
+    Laugh:
+      collection: HonkDemonLaugh
+
 - type: soundCollection
   id: DemonScreams
   files:
@@ -29,3 +40,21 @@
     - /Audio/_DeadSpace/Demons/laugh_01.ogg
     - /Audio/_DeadSpace/Demons/laugh_01.ogg
     - /Audio/_DeadSpace/Demons/laugh_01.ogg
+
+- type: emoteSounds
+  id: DemonADT
+  params:
+    variation: 0.125
+    volume: 2
+  sounds:
+    Scream:
+      collection: DemonScreamsADT
+    Laugh:
+      collection: DemonLaughs
+
+- type: soundCollection
+  id: DemonScreamsADT
+  files:
+    - /Audio/_DeadSpace/Demons/scream_01_adt.ogg
+    - /Audio/_DeadSpace/Demons/scream_02_adt.ogg
+    - /Audio/_DeadSpace/Demons/scream_03.ogg

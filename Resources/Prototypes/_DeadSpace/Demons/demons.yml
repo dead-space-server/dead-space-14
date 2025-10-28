@@ -105,6 +105,11 @@
   - type: Sprite
     drawdepth: Mobs
     sprite: _ADT/Mobs/Aliens/nar_si_big_demons.rsi
+  - type: Vocal
+    sounds:
+      Male: DemonADT
+      Female: DemonADT
+      Unsexed: DemonADT
 
 - type: entity
   parent: BaseMobDemonRS
@@ -183,6 +188,11 @@
         Base: honk_demon
       Dead:
         Base: honk_demon
+  - type: Vocal
+    sounds:
+      Male: DemonHonk
+      Female: DemonHonk
+      Unsexed: DemonHonk
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -366,7 +376,7 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      166: Dead
+      90: Dead
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.5
     baseSprintSpeed: 2.5
@@ -442,7 +452,78 @@
       - Wall
   - type: Puller
     needsHands: false
+  - type: Fixtures
+    fixtures: # TODO: This needs a second fixture just for mob collisions.
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 650 # instead of 185
+        restitution: 0.0
+  - type: ActionGun
+    action: ActionDemonBreath
+    gunProto: DemonBreathGun
+
+- type: entity
+  parent: BaseAction
+  id: ActionDemonBreath
+  name: "[color=red]Кричащие слюни[/color]"
+  description: Вы накапливаете раз в 15 секунд всю свою силу, плюясь в свою жертву остатками не перевереных живностей-... Кажеться, эти слюни тоже умеют кричать
+  components:
+  - type: Action
+    icon: { sprite : _DeadSpace/Objects/Weapons/Throwable/demon_bola.rsi, state: icon }
+    itemIconStyle: BigAction
+    priority: 2
+  - type: TargetAction
+    checkCanAccess: false
+    range: 0
+  - type: WorldTargetAction
+    event: !type:ActionGunShootEvent
     
+- type: entity
+  categories: [ HideSpawnMenu ]
+  id: DemonBreathGun
+  name: Плевок слюной
+  description: Вы плюёте в своего недруга своими слюнями, заставляя того падать на пол и быть замедлённым, пока тот не скинет с себя это несто
+  components:
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 15
+  - type: BasicEntityAmmoProvider
+    proto: DemonBola
+    capacity: 1
+    count: 1
+  - type: Gun
+    projectileSpeed: 15
+    soundGunshot:
+      path: /Audio/_DeadSpace/Effects/Species/demon_bola_throw.ogg
+
+- type: entity
+  name: слюни демона
+  id: DemonBola
+  categories: [ HideSpawnMenu ]
+  parent: Bola
+  description: Фу! Какое оно мерзкое! Эта штука и кричать может!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Throwable/demon_bola.rsi
+    state: icon
+  - type: Ensnaring
+    freeTime: 2.0
+    breakoutTime: 1 #all bola should generally be fast to remove
+    walkSpeed: 0.2 #makeshift bola shouldn't slow too much
+    sprintSpeed: 0.2
+    staminaDamage: 0 # anything but this is gamebreaking
+    canThrowTrigger: true
+    canMoveBreakout: true
+    maxEnsnares: 1
+  - type: StunOnCollide
+    stunAmount: 1
+    knockdownAmount: 1
+  - type: EmitSoundOnThrow
+    sound: /Audio/_DeadSpace/Effects/Species/demon_bola_throw.ogg
+  - type: EmitSoundOnLand
+    sound: /Audio/_DeadSpace/Effects/Species/demon_bola_snap.ogg
+
 - type: entity
   id: FireballBullet
   name: огненный шар
