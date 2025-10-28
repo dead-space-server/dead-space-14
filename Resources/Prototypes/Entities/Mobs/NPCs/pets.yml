@@ -907,7 +907,7 @@
     requirements:
     - !type:RoleTimeRequirement
       role: JobBartender
-      time: 21600 # 6 hours
+      time: 7200 # 2 hours
 # DS14-end
   - type: GhostTakeoverAvailable
   - type: Butcherable
