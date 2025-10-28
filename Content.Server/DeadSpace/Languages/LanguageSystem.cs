@@ -66,6 +66,9 @@ public sealed class LanguageSystem : EntitySystem
 
     public string ReplaceWordsWithLexicon(string message, ProtoId<LanguagePrototype> languageId)
     {
+        if (String.IsNullOrEmpty(languageId))
+            return message;
+
         if (!_prototypeManager.TryIndex(languageId, out var languageProto))
             return message;
 
@@ -90,6 +93,9 @@ public sealed class LanguageSystem : EntitySystem
     {
         var name = "Неизвестно";
 
+        if (String.IsNullOrEmpty(languageId))
+            return name;
+
         if (_prototypeManager.TryIndex(languageId, out var languageProto))
             name = languageProto.Name;
 
@@ -101,6 +107,9 @@ public sealed class LanguageSystem : EntitySystem
         var name = "Неизвестно";
 
         if (!Resolve(uid, ref component, false))
+            return name;
+
+        if (String.IsNullOrEmpty(component.SelectedLanguage))
             return name;
 
         if (_prototypeManager.TryIndex(component.SelectedLanguage, out var languageProto))
@@ -129,6 +138,9 @@ public sealed class LanguageSystem : EntitySystem
 
     public bool NeedGenerateTTS(EntityUid sourceUid, ProtoId<LanguagePrototype> prototypeId, bool isWhisper)
     {
+        if (String.IsNullOrEmpty(prototypeId))
+            return false;
+
         if (!_prototypeManager.TryIndex(prototypeId, out var languageProto))
             return false;
 
@@ -148,6 +160,9 @@ public sealed class LanguageSystem : EntitySystem
 
     public bool NeedGenerateDirectTTS(EntityUid uid, ProtoId<LanguagePrototype> prototypeId)
     {
+        if (String.IsNullOrEmpty(prototypeId))
+            return false;
+
         if (!_prototypeManager.TryIndex(prototypeId, out var languageProto))
             return false;
 
@@ -163,6 +178,9 @@ public sealed class LanguageSystem : EntitySystem
     public bool NeedGenerateGlobalTTS(ProtoId<LanguagePrototype> prototypeId, out List<ICommonSession> understandings)
     {
         understandings = GetUnderstanding(prototypeId);
+
+        if (String.IsNullOrEmpty(prototypeId))
+            return false;
 
         if (!_prototypeManager.TryIndex(prototypeId, out var languageProto))
             return false;
