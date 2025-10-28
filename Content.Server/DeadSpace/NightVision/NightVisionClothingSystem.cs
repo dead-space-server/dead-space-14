@@ -38,6 +38,6 @@ public sealed class NightVisionClothingSystem : EntitySystem
 
         nightVisionComp.Color = comp.Color;
 
-        _nightVision.UpdateIsNightVision(args.Equipee); // Actually we should remove NightVisionComponent, and if you know how to properly do it, please fix this
+        _nightVision.UpdateIsNightVision(args.Equipee);
     }
 }

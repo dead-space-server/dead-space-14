@@ -24,7 +24,7 @@ public sealed class NightVisionOverlay : Overlay
     {
         IoCManager.InjectDependencies(this);
         _greyscaleShader = _prototypeManager.Index<ShaderPrototype>("GreyscaleFullscreen").InstanceUnique();
-        _circleMaskShader = _prototypeManager.Index<ShaderPrototype>("CircleMask").InstanceUnique();
+        _circleMaskShader = _prototypeManager.Index<ShaderPrototype>("ColorCircleMask").InstanceUnique();
     }
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
@@ -64,7 +64,6 @@ public sealed class NightVisionOverlay : Overlay
             return;
 
         var playerEntity = _playerManager.LocalSession?.AttachedEntity;
-
         if (playerEntity == null)
             return;
 
@@ -72,24 +71,30 @@ public sealed class NightVisionOverlay : Overlay
         {
             _nightVisionComponent.LightSetup = true;
             _lightManager.DrawLighting = false;
-        } else
+        }
+        else
         {
             _nightVisionComponent.GraceFrame = false;
         }
 
-        if (_entityManager.TryGetComponent<EyeComponent>(playerEntity, out var content))
-        {
-            _circleMaskShader?.SetParameter("Zoom", content.Zoom.X / 14); // Neh, but looks nice
-        }
+        if (!_nightVisionComponent.IsNightVision)
+            return;
 
-        _greyscaleShader?.SetParameter("SCREEN_TEXTURE", ScreenTexture);
+        if (_entityManager.TryGetComponent<EyeComponent>(playerEntity, out var eye))
+            _circleMaskShader?.SetParameter("Zoom", eye.Zoom.X / 14);
 
         var worldHandle = args.WorldHandle;
         var viewport = args.WorldBounds;
+
+        _greyscaleShader?.SetParameter("SCREEN_TEXTURE", ScreenTexture);
         worldHandle.UseShader(_greyscaleShader);
-        worldHandle.DrawRect(viewport, _nightVisionComponent.Color);
+        worldHandle.DrawRect(viewport, Color.White);
+
+        _circleMaskShader?.SetParameter("SCREEN_TEXTURE", ScreenTexture);
+        _circleMaskShader?.SetParameter("Color", _nightVisionComponent.Color);
+
         worldHandle.UseShader(_circleMaskShader);
-        worldHandle.DrawRect(viewport, Color.Gray);
+        worldHandle.DrawRect(viewport, Color.White);
         worldHandle.UseShader(null);
     }
 }

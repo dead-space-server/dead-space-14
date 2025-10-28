@@ -1,12 +1,22 @@
 using Content.Shared.Actions;
+using Content.Shared.Inventory;
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.NightVision;
 
 [RegisterComponent, NetworkedComponent]
+[AutoGenerateComponentState]
 public sealed partial class NightVisionComponent : Component
 {
-    [ViewVariables(VVAccess.ReadWrite), DataField("isNightVision")]
+    [DataField]
+    public EntProtoId ActionToggleNightVision = "ActionToggleNightVision";
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? ActionToggleNightVisionEntity;
+
+    [ViewVariables(VVAccess.ReadWrite), DataField]
+    [AutoNetworkedField]
     public bool IsNightVision;
 
     /// <description>
@@ -23,7 +33,16 @@ public sealed partial class NightVisionComponent : Component
     public bool GraceFrame = false;
 
     [DataField, ViewVariables(VVAccess.ReadWrite)]
-    public Color Color = Color.White;
+    public Color Color = new Color(80f / 255f, 220f / 255f, 70f / 255f, 0.2f);
 }
 
 public sealed partial class ToggleNightVisionActionEvent : InstantActionEvent { }
+
+/// <summary>
+///     Raised directed at an entity to see whether the entity is currently have night vision or not.
+/// </summary>
+public sealed class CanNightVisionAttemptEvent : CancellableEntityEventArgs, IInventoryRelayEvent
+{
+    public bool NightVision => Cancelled;
+    public SlotFlags TargetSlots => SlotFlags.EYES | SlotFlags.MASK | SlotFlags.HEAD;
+}

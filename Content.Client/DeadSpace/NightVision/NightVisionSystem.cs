@@ -51,6 +51,7 @@ public sealed class NightVisionSystem : EntitySystem
         if (_player.LocalEntity == uid)
         {
             _overlayMan.RemoveOverlay(_overlay);
+            _lightManager.DrawLighting = true;
         }
     }
 

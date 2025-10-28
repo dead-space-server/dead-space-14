@@ -1,0 +1,19 @@
+uniform highp float Zoom; 
+
+uniform highp float CircleRadius; 
+uniform highp float CircleMinDist;
+uniform highp float CirclePow;
+uniform highp float CircleMax; 
+uniform highp float CircleMult; 
+uniform highp vec4 Color; 
+
+uniform sampler2D SCREEN_TEXTURE;
+ 
+void fragment() 
+{ 
+	highp vec2 aspect = vec2(1.0/SCREEN_PIXEL_SIZE.x, 1.0/SCREEN_PIXEL_SIZE.y);
+    highp float actualZoom = Zoom;
+
+    highp float circle = zCircleGradient(aspect, FRAGCOORD.xy, CircleMax, CircleRadius / actualZoom, CircleMinDist / actualZoom, CirclePow) * CircleMult;
+    COLOR = mix(Color, vec4(0.0, 0.0, 0.0, 1.0), clamp(circle, 0.0, 1));
+}
