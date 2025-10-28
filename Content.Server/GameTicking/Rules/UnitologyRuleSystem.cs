@@ -31,6 +31,8 @@ using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Shared.Paper;
 using Content.Server.Fax;
+using Robust.Shared.Random;
+using Content.Shared.Station.Components;
 
 namespace Content.Server.GameTicking.Rules;
 
@@ -53,13 +55,14 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly FaxSystem _faxSystem = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
 
-    [ValidatePrototypeId<EntityPrototype>]
-    private const string UnitologyRule = "Unitology";
+    private static readonly EntProtoId UnitologyRule = "Unitology";
+    public static readonly ProtoId<AntagPrototype> UnitologyAntagRole = "UniHead";
 
-    [ValidatePrototypeId<AntagPrototype>]
-    public const string UnitologyAntagRole = "UniHead";
     private const float ConvergenceSongLength = 60f + 37.6f;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -202,7 +205,7 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
             if (mind == null)
                 continue;
 
-            foreach (var objId in mind.AllObjectives)
+            foreach (var objId in mind.Objectives)
             {
                 if (!_objectives.IsCompleted(objId, (mindId, mind)))
                 {
@@ -357,20 +360,22 @@ public sealed class UnitologyRuleSystem : GameRuleSystem<UnitologyRuleComponent>
             return;
 
         _damageable.TryChangeDamage(target, component.Damage, false, false, damageable);
-        _stun.TryParalyze(target, TimeSpan.FromSeconds(2f), true);
+        _stun.TryUpdateParalyzeDuration(target, TimeSpan.FromSeconds(2f));
 
         if (TryComp<VocalComponent>(target, out var vocal))
         {
-            var random = new Random();
-            int chance = random.Next(0, 5);
+            int chance = _random.Next(0, 5);
+
+            if (vocal.EmoteSounds is not { } sounds)
+                return;
 
             if (chance < 1)
             {
-                _chatSystem.TryPlayEmoteSound(target, vocal.EmoteSounds, "Crying");
+                _chatSystem.TryPlayEmoteSound(target, _proto.Index(sounds), "Crying");
             }
             else
             {
-                _chatSystem.TryPlayEmoteSound(target, vocal.EmoteSounds, "Scream");
+                _chatSystem.TryPlayEmoteSound(target, _proto.Index(sounds), "Scream");
             }
         }
 

@@ -13,6 +13,8 @@
   - AllHostile
   - Wizard
   - Dragon
+  - Xenoborg
+  - CentralCommand # DS14
   - SpiderTerror # DS14
   - Blob # DS14
   - SyndicateAgent # DS14-agents-faction
@@ -72,7 +74,6 @@
   - type: Hive
   - type: LimitedCharges
     maxCharges: 3
-    charges: 2
   - type: RatKing
     actionRaiseArmy: ActionHiveRaiseArmy
     armyMobSpawnId: MobSmallNecroHive
@@ -103,7 +104,7 @@
 
 - type: necromorf
   id: NecroTwitcher
-  movementSpeedMultiply: 1
+  movementSpeedMultiply: 0.9
   damage:
     groups:
       Brute: 15
@@ -152,6 +153,7 @@
 
 - type: necromorf
   id: NecroInfector
+  movementSpeedMultiply: 0.85
   isAnimal: true
   damage:
     groups:
@@ -220,7 +222,7 @@
   # hardsuit: ClothingCorpseCollectorLvl1 #Верхняя одежда некроморфа
   sprite: _DeadSpace/Necromorfs/corpsecollector.rsi
   state: lvl1
-  movementSpeedMultiply: 1 # Модификатор скорости
+  movementSpeedMultiply: 0.8 # Модификатор скорости
   components: # Доп. компоненты
   - type: StunAttack
     paralyzeTime: 1
@@ -229,6 +231,13 @@
     spawned:
     - id: InfectorGland # Что вылупилось
       amount: 2 # Колличество
+
+- type: weightedRandomEntity
+  id: CorpseCollectorMobToSpawn
+  weights:
+    RandomNecromorfSpawner: 70
+    BruteNecromorfSpawner: 5
+    InfectorNecromorfSpawner: 25
 
 - type: randomHumanoidSettings
   id: Necromorf
@@ -247,7 +256,7 @@
   # - Vulpkanin
   # - Felinid
   # - Kobolt
-  - Xenomorph
+  # - Xenomorph
   - IPC
   - IPS
   - Diona

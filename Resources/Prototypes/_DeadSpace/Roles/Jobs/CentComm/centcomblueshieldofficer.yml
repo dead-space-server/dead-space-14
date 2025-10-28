@@ -14,14 +14,21 @@
   - CentralCommand
   special:
   - !type:AddImplantSpecial
-    implants: [ MindShieldImplant, TrackingImplant ]
+    implants: [ MindShieldImplant, TrackingImplant, DeathRattleImplantCentcomm ]
+  - !type:AddComponentSpecial
+    components:
+    - type: AntagImmune
+    - type: ZombieImmune
+    - type: NpcFactionMember
+      factions:
+      - CentralCommand
 
 - type: startingGear
   id: CentcomBlueShieldGear
   equipment:
     head: ClothingHeadHatBeretBlueShield
     jumpsuit: ClothingUniformJumpsuitBlueShield
-    back: ClothingBackpackBlueShield
+    # back: ClothingBackpackBlueShield
     mask: ClothingMaskGasSecurity
     eyes: ClothingEyesGlassesSecurity
     ears: ClothingHeadsetCentCom
@@ -40,3 +47,15 @@
     - WelderIndustrialAdvanced
     - ClothingEyesGlassesMeson
     - MedkitCombatFilled
+
+- type: chameleonOutfit
+  id: CentralCommandBlueShieldOfficerChameleonOutfit
+  job: CentralCommandBlueShieldOfficer
+  equipment:
+    head: ClothingHeadHatBeretBlueShield
+    mask: ClothingMaskGasSecurity
+    eyes: ClothingEyesGlassesSecurity
+    gloves: ClothingHandsGlovesCombat
+    outerClothing: ClothingOuterArmorBasicBlueShield
+    shoes: ClothingShoesBootsJack
+    belt: ClothingBeltMilitaryWebbingMed

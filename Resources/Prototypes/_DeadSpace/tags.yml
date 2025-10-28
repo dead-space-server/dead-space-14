@@ -2,13 +2,13 @@
   id: BatteryWeaponFireModesSprites
 
 - type: Tag
-  id: BorgSecRLeg
-
-- type: Tag
-  id: BorgSecTorso
+  id: BorgModuleSecurity
 
 - type: Tag
   id: BorgSecHead
+
+- type: Tag
+  id: BorgSecLArm
 
 - type: Tag
   id: BorgSecLLeg
@@ -17,16 +17,19 @@
   id: BorgSecRArm
 
 - type: Tag
-  id: BorgSecLArm
+  id: BorgSecRLeg
 
 - type: Tag
-  id: BorgModuleSecurity
+  id: BorgSecTorso
+
+- type: Tag
+  id: ChefGoldenKnife
 
 - type: Tag
   id: CleanerGrenade
 
 - type: Tag
-  id: ChefGoldenKnife
+  id: CompactDefibrillator
 
 - type: Tag
   id: DockCentcommERT
@@ -41,7 +44,7 @@
   id: FittableInBackpackCase
 
 - type: Tag
-  id: GoldenPlunger
+  id: GrenadeCleanade
 
 - type: Tag
   id: HardHat
@@ -53,31 +56,43 @@
   id: LightReplacer
 
 - type: Tag
+  id: MagazineCarbineSKS
+
+- type: Tag
   id: MagazineEagle
 
 - type: Tag
   id: MagazineEagleAP
 
 - type: Tag
+  id: MagazineTommyGun
+
+- type: Tag
+  id: MagazineTommyGunCap
+
+- type: Tag
   id: MukhtarWearable
+
+- type: Tag
+  id: MantisBlades
 
 - type: Tag
   id: Necro
 
 - type: Tag
-  id: MagazineTommyGun
-
-- type: Tag
   id: Plasteel
 
 - type: Tag
-  id: MagazineTommyGunCap
+  id: SiliconIPSIPCEmotes
 
 - type: Tag
   id: SnapPop
 
 - type: Tag
   id: SoapSyndie
+
+- type: Tag
+  id: SyndieSabre
 
 - type: Tag
   id: ToySword

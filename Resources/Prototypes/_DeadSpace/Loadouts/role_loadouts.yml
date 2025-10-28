@@ -2,8 +2,10 @@
 - type: roleLoadout
   id: JobBlueShieldOfficer
   groups:
-  - GroupTankHarness
+  # - GroupTankHarness # outerClothing occupied by startingGear
+  - BlueShieldOfficerBackpack
   - BlueShieldOfficerJumpsuit
+  - BlueShieldOfficerNeck
   - Survival
   - Trinkets
   - GroupSpeciesBreathTool
@@ -137,7 +139,7 @@
   groups:
   - GroupTankHarness
   - SecurityHead
-  - SecurityJumpsuit
+  - SecurityPilotJumpsuit # DS14
   - SecurityBackpack
   - SecurityShoes
   - SecurityBelt

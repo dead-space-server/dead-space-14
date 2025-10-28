@@ -186,7 +186,7 @@
     - BoxMimeBeer
 
 - type: loadout
-  id: EmergencyMothMime
+  id: EmergencySpeciesMothMime
   effects:
   - !type:GroupLoadoutEffect
     proto: EffectSpeciesMoth
