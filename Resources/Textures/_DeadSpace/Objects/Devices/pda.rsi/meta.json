@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Deathsquad states resprite by permissioner(discord) for Space Station 14 server Мёртвый Космос, recolored by andrew_fenriz and semkagamez (discord) for Space Statiom 14 server Мёртвый Космос",
+  "copyright": "Deathsquad states resprite by permissioner(discord) for Space Station 14 server Мёртвый Космос, recolored by andrew_fenriz and semkagamez (discord) for Space Station 14 server Мёртвый Космос",
   "size": {
     "x": 32,
     "y": 32
@@ -48,6 +48,8 @@
           0.3
         ]
       ]
+    },
+    {
       "name": "pda",
       "delays": [
         [
@@ -189,10 +191,6 @@
           1.2
         ]
       ]
-    },
-    {
-      "name": "equipped-IDCARD",
-      "directions": 4
     }
   ]
 }
