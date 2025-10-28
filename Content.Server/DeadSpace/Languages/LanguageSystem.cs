@@ -225,7 +225,7 @@ public sealed class LanguageSystem : EntitySystem
             if (session.AttachedEntity == null)
                 continue;
 
-            if (!HasComp<LanguageComponent>(session.AttachedEntity) || KnowsLanguage(session.AttachedEntity.Value, languageId)) // если нет язков, значит знает всё
+            if (KnowsLanguage(session.AttachedEntity.Value, languageId)) // если нет язков, значит знает всё
                 understanding.Add(session);
         }
 
