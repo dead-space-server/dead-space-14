@@ -130,7 +130,7 @@ public sealed class LanguageSystem : EntitySystem
     {
         var languages = GetKnownLanguages(receiver);
 
-        if (languages == null) // если нет язков, значит знает всё
+        if (languages == null) // если нет языков, значит знает всё
             return true;
 
         return languages.Contains(senderLanguageId);
@@ -225,7 +225,7 @@ public sealed class LanguageSystem : EntitySystem
             if (session.AttachedEntity == null)
                 continue;
 
-            if (KnowsLanguage(session.AttachedEntity.Value, languageId)) // если нет язков, значит знает всё
+            if (KnowsLanguage(session.AttachedEntity.Value, languageId))
                 understanding.Add(session);
         }
 
