@@ -15,8 +15,8 @@ public sealed partial class LanguageComponent : Component
     [DataField]
     public HashSet<ProtoId<LanguagePrototype>> CantSpeakLanguages = new();
 
-    [DataField, ViewVariables(VVAccess.ReadOnly)]
-    public ProtoId<LanguagePrototype> SelectedLanguage = default!;
+    [DataField]
+    public ProtoId<LanguagePrototype> SelectedLanguage = String.Empty;
 
     [DataField]
     public EntProtoId SelectLanguageAction = "SelectLanguageAction";
