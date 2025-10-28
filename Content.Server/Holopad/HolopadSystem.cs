@@ -110,13 +110,13 @@ public sealed class HolopadSystem : SharedHolopadSystem
 
         if (!TryComp<TelephoneComponent>(receiver, out var receiverTelephone))
             return;
-    // DS14-start
+        // DS14-start
         if (TryComp<HolopadComponent>(receiver, out var receverHolopadComp))
         {
             if (receverHolopadComp.NotifyAdmins)
                 NotifyAdmins(Name(source));
         }
-    // DS14-end
+        // DS14-end
 
         LinkHolopadToUser(source, args.Actor);
         _telephoneSystem.CallTelephone((source, sourceTelephone), (receiver, receiverTelephone), args.Actor);
