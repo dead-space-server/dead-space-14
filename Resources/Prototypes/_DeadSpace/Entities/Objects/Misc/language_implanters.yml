@@ -98,14 +98,6 @@
 
 - type: entity
   parent: BaseImplantOnlyImplanter
-  id: LearnDogLanguageImplanter
-  name: имплант изучения собачьего языка
-  components:
-  - type: Implanter
-    implant: LearnDogLanguageImplant
-
-- type: entity
-  parent: BaseImplantOnlyImplanter
   id: LearnAllLanguageImplanter
   name: имплант изучения всех языков
   suffix: Адмемы

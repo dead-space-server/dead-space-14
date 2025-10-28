@@ -52,9 +52,9 @@
       amount: 3
     # - id: MukhtarIDCard
   - type: Language
-    selectedLanguage: DogLanguage
+    selectedLanguage: GeneralLanguage
     knownLanguages:
-    - DogLanguage
+    - GeneralLanguage
   - type: InteractionPopup
     successChance: 0.05
     interactSuccessString: petting-success-dog
