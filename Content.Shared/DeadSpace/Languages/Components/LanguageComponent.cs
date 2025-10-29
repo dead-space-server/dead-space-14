@@ -10,17 +10,21 @@ namespace Content.Shared.DeadSpace.Languages.Components;
 public sealed partial class LanguageComponent : Component
 {
     [DataField]
+    [ViewVariables(VVAccess.ReadOnly)]
     public HashSet<ProtoId<LanguagePrototype>> KnownLanguages = new();
 
     [DataField]
+    [ViewVariables(VVAccess.ReadOnly)]
     public HashSet<ProtoId<LanguagePrototype>> CantSpeakLanguages = new();
 
     [DataField]
-    public ProtoId<LanguagePrototype> SelectedLanguage = String.Empty;
+    public String SelectedLanguage = String.Empty;
 
     [DataField]
+    [ViewVariables(VVAccess.ReadOnly)]
     public EntProtoId SelectLanguageAction = "SelectLanguageAction";
 
     [DataField]
+    [ViewVariables(VVAccess.ReadOnly)]
     public EntityUid? SelectLanguageActionEntity;
 }
