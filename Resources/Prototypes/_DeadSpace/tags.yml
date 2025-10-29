@@ -59,6 +59,9 @@
   id: DonkCo
 
 - type: Tag
+  id: Demon
+
+- type: Tag
   id: EnergyCartridge
 
 - type: Tag

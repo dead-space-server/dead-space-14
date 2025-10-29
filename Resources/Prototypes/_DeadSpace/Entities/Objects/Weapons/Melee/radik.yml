@@ -6,7 +6,7 @@
   description: Божественный меч, окружающий владельца ярким сиянием, при виде только этого меча, вся нечесть что окружает своего владельца, помирает от святого пламени этого дивного меча. В рукояти вы можете заметить контейнер, в котором виднеется святая вода
   components:
   - type: Sprite
-    sprite: Objects/Tools/welder.rsi
+    sprite: _DeadSpace/Objects/Weapons/Melee/radic.rsi
     layers:
     - state: icon
     - state: welder_flame
@@ -21,9 +21,11 @@
           False: { visible: false }
   - type: Item
     size: Large
-    sprite: Objects/Tools/welder.rsi
     shape:
     - 0,0,1,4
+    storedSprite:
+      state: storage
+      sprite: Objects/Weapons/Melee/claymore_storage_64x.rsi #Done in 64x64 because it looks way too puny in 32x32
   - type: ItemToggle
     onActivate: false # DS14
     predictable: false
@@ -84,6 +86,7 @@
       params:
         variation: 0.250
         volume: -8
+    animation: WeaponArcClaw
   - type: RefillableSolution
     solution: Holywater
   - type: SolutionContainerManager

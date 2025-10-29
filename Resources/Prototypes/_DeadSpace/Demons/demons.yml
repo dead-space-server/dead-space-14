@@ -20,6 +20,7 @@
       - CannotSuicide
       - DoorBumpOpener
       - FootstepSound
+      - Demon
   - type: Prying
     pryPowered: true
     force: true
@@ -401,7 +402,85 @@
         Piercing: 1
         Heat: 5
   - type: NPCUseActionOnTarget
-    actionId: ActionGoliathTentacle
+    actionId: ActionDemonTentacle
+
+- type: entity
+  id: ActionDemonTentacle
+  parent: BaseAction
+  name: "[color=red]На повал[/color]"
+  description: Вы опускаете свой язык в пол, заставляя бедолаг падать на пол
+  components:
+  - type: Action
+    raiseOnUser: true
+    icon:
+      sprite: _DeadSpace/Demons/tentacle.rsi
+      state: goliath_tentacle_spawn
+    iconOn:
+      sprite: _DeadSpace/Demons/tentacle.rsi
+      state: goliath_tentacle_wiggle
+    sound:
+      path: "/Audio/_DeadSpace/Demons/scream_snake.ogg"
+      params:
+        volume: -5
+    useDelay: 8
+  - type: TargetAction
+    range: 10
+  - type: WorldTargetAction
+    event: !type:GoliathSummonTentacleAction { entityId: DemonTentacle }
+
+- type: entity
+  id: DemonTentacle
+  parent: GoliathTentacle
+  name: tentacle
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Demons/tentacle.rsi
+    layers:
+    - state: goliath_tentacle_wiggle
+  - type: StunOnContact
+    blacklist:
+      tags:
+      - Demon
+  - type: SpawnOnDespawn
+    prototype: EffectDemonTentacleRetract
+
+- type: entity
+  id: BaseEffectDemonTentacleSpawn
+  categories: [ HideSpawnMenu ]
+  name: tentacle
+  abstract: true
+  components:
+  - type: Transform
+    anchored: True
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    sprite: _DeadSpace/Demons/tentacle.rsi
+  - type: InteractionOutline
+  - type: TimedDespawn
+    lifetime: 0.7
+
+- type: entity
+  id: EffectDemonTentacleSpawn
+  parent: BaseEffectDemonTentacleSpawn
+  categories: [ HideSpawnMenu ]
+  name: tentacle
+  components:
+    - type: Sprite
+      state: goliath_tentacle_spawn
+    - type: SpawnOnDespawn
+      prototype: DemonTentacle
+
+- type: entity
+  id: EffectDemonTentacleRetract
+  parent: BaseEffectDemonTentacleSpawn
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    state: goliath_tentacle_retract
+  - type: EffectVisuals
+  - type: AnimationPlayer
 
 - type: entity
   parent: BaseMobDemonADT
@@ -509,10 +588,10 @@
     state: icon
   - type: Ensnaring
     freeTime: 2.0
-    breakoutTime: 1 #all bola should generally be fast to remove
-    walkSpeed: 0.2 #makeshift bola shouldn't slow too much
+    breakoutTime: 1 
+    walkSpeed: 0.2 
     sprintSpeed: 0.2
-    staminaDamage: 0 # anything but this is gamebreaking
+    staminaDamage: 0 
     canThrowTrigger: true
     canMoveBreakout: true
     maxEnsnares: 1
