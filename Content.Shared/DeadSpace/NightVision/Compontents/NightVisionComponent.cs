@@ -1,22 +1,21 @@
 using Content.Shared.Actions;
-using Content.Shared.Inventory;
+using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
 
-namespace Content.Shared.DeadSpace.NightVision;
+namespace Content.Shared.DeadSpace.Components.NightVision;
 
 [RegisterComponent, NetworkedComponent]
-[AutoGenerateComponentState]
 public sealed partial class NightVisionComponent : Component
 {
     [DataField]
     public EntProtoId ActionToggleNightVision = "ActionToggleNightVision";
 
-    [DataField, AutoNetworkedField]
+    [ViewVariables(VVAccess.ReadOnly), DataField]
     public EntityUid? ActionToggleNightVisionEntity;
 
-    [ViewVariables(VVAccess.ReadWrite), DataField]
-    [AutoNetworkedField]
+    [DataField]
     public bool IsNightVision;
 
     /// <description>
@@ -32,17 +31,25 @@ public sealed partial class NightVisionComponent : Component
     [Access(Other = AccessPermissions.ReadWriteExecute)]
     public bool GraceFrame = false;
 
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    [DataField, ViewVariables(VVAccess.ReadOnly)]
     public Color Color = new Color(80f / 255f, 220f / 255f, 70f / 255f, 0.2f);
+
+    public NightVisionComponent(Color? color = null)
+    {
+        Color = color ?? new Color(80f / 255f, 220f / 255f, 70f / 255f, 0.2f);
+    }
+
 }
 
 public sealed partial class ToggleNightVisionActionEvent : InstantActionEvent { }
 
-/// <summary>
-///     Raised directed at an entity to see whether the entity is currently have night vision or not.
-/// </summary>
-public sealed class CanNightVisionAttemptEvent : CancellableEntityEventArgs, IInventoryRelayEvent
+[Serializable, NetSerializable]
+public sealed class NightVisionComponentState : ComponentState
 {
-    public bool NightVision => Cancelled;
-    public SlotFlags TargetSlots => SlotFlags.EYES | SlotFlags.MASK | SlotFlags.HEAD;
+    public bool IsNightVision;
+
+    public NightVisionComponentState(bool isNightVision)
+    {
+        IsNightVision = isNightVision;
+    }
 }

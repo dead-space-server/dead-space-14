@@ -1,8 +1,9 @@
 using Robust.Client.Graphics;
 using Robust.Client.Player;
-using Content.Shared.DeadSpace.NightVision;
 using Content.Shared.GameTicking;
 using Robust.Shared.Player;
+using Content.Shared.DeadSpace.Components.NightVision;
+using Robust.Shared.GameStates;
 
 namespace Content.Client.DeadSpace.NightVision;
 
@@ -18,6 +19,8 @@ public sealed class NightVisionSystem : EntitySystem
     {
         base.Initialize();
 
+        SubscribeLocalEvent<NightVisionComponent, ComponentHandleState>(OnHandleState);
+
         SubscribeLocalEvent<NightVisionComponent, ComponentInit>(OnNightVisionInit);
         SubscribeLocalEvent<NightVisionComponent, ComponentShutdown>(OnNightVisionShutdown);
 
@@ -27,6 +30,14 @@ public sealed class NightVisionSystem : EntitySystem
         SubscribeNetworkEvent<RoundRestartCleanupEvent>(RoundRestartCleanup);
 
         _overlay = new();
+    }
+
+    private void OnHandleState(EntityUid uid, NightVisionComponent component, ref ComponentHandleState args)
+    {
+        if (args.Current is not NightVisionComponentState state)
+            return;
+
+        component.IsNightVision = state.IsNightVision;
     }
 
     private void OnPlayerAttached(EntityUid uid, NightVisionComponent component, LocalPlayerAttachedEvent args)

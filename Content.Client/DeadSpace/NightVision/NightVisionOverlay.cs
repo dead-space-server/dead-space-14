@@ -2,7 +2,7 @@ using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
-using Content.Shared.DeadSpace.NightVision;
+using Content.Shared.DeadSpace.Components.NightVision;
 
 namespace Content.Client.DeadSpace.NightVision;
 
@@ -12,19 +12,19 @@ public sealed class NightVisionOverlay : Overlay
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly IEntityManager _entityManager = default!;
     [Dependency] private readonly ILightManager _lightManager = default!;
-
     public override bool RequestScreenTexture => true;
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
     private readonly ShaderInstance _greyscaleShader;
     private readonly ShaderInstance _circleMaskShader;
-
     private NightVisionComponent _nightVisionComponent = default!;
+    private static readonly ProtoId<ShaderPrototype> GreyscaleFullscreenId = "GreyscaleFullscreen";
+    private static readonly ProtoId<ShaderPrototype> ColorCircleMaskId = "ColorCircleMask";
 
     public NightVisionOverlay()
     {
         IoCManager.InjectDependencies(this);
-        _greyscaleShader = _prototypeManager.Index<ShaderPrototype>("GreyscaleFullscreen").InstanceUnique();
-        _circleMaskShader = _prototypeManager.Index<ShaderPrototype>("ColorCircleMask").InstanceUnique();
+        _greyscaleShader = _prototypeManager.Index(GreyscaleFullscreenId).InstanceUnique();
+        _circleMaskShader = _prototypeManager.Index(ColorCircleMaskId).InstanceUnique();
     }
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
