@@ -2,11 +2,12 @@
 namespace Content.Server.DeadSpace.Components.NightVision;
 
 [RegisterComponent]
-public sealed partial class NightVisionClothingComponent : Component
+public sealed partial class PNVComponent : Component
 {
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
-    public Color Color = Color.LimeGreen;
+    [DataField]
+    public Color Color = new Color(80f / 255f, 220f / 255f, 70f / 255f, 0.2f);
 
+    [DataField]
     [ViewVariables(VVAccess.ReadOnly)]
     public bool HasNightVision = false;
 }

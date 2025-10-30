@@ -10,7 +10,7 @@
     scale: 0.7, 0.7 # bad practice, don't do it
   - type: Clothing
     sprite: _DeadSpace/Clothing/Eyes/Hud/pnv.rsi
-  - type: NightVisionClothing
+  - type: PNV
     color: "#41af0ef2"
 
 - type: latheRecipe
@@ -34,7 +34,7 @@
     scale: 0.7, 0.7 # bad practice, don't do it
   - type: Clothing
     sprite: _DeadSpace/Clothing/Eyes/Hud/pnv-adv.rsi
-  - type: NightVisionClothing
+  - type: PNV
     color: "#ffffffe6"
 
 - type: entity
@@ -49,7 +49,7 @@
     scale: 0.7, 0.7 # bad practice, don't do it
   - type: Clothing
     sprite: _DeadSpace/Clothing/Eyes/Hud/pnv-synd.rsi
-  - type: NightVisionClothing
+  - type: PNV
     color: "#ffffffe6"
   - type: ShowSyndicateIcons
   - type: ShowHealthBars

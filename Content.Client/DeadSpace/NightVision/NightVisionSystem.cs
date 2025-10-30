@@ -25,8 +25,6 @@ public sealed class NightVisionSystem : EntitySystem
         SubscribeLocalEvent<NightVisionComponent, LocalPlayerAttachedEvent>(OnPlayerAttached);
         SubscribeLocalEvent<NightVisionComponent, LocalPlayerDetachedEvent>(OnPlayerDetached);
 
-        SubscribeLocalEvent<NightVisionComponent, ToggleNightVisionActionEvent>(OnToggleNightVision);
-
         SubscribeNetworkEvent<RoundRestartCleanupEvent>(RoundRestartCleanup);
         SubscribeLocalEvent<NightVisionComponent, ComponentHandleState>(OnHandleState);
 
@@ -39,19 +37,7 @@ public sealed class NightVisionSystem : EntitySystem
             return;
 
         component.Color = state.Color;
-    }
-
-    private void OnToggleNightVision(EntityUid uid, NightVisionComponent component, ToggleNightVisionActionEvent args)
-    {
-        if (args.Handled)
-            return;
-
-        ToggleNightVision(uid, component);
-    }
-
-    private void ToggleNightVision(EntityUid uid, NightVisionComponent component)
-    {
-        component.IsNightVision = !component.IsNightVision;
+        component.IsNightVision = state.IsNightVision;
     }
 
     private void OnPlayerAttached(EntityUid uid, NightVisionComponent component, LocalPlayerAttachedEvent args)

@@ -14,11 +14,12 @@ public sealed class NightVisionSystem : EntitySystem
         SubscribeLocalEvent<NightVisionComponent, ComponentStartup>(OnComponentStartup);
         SubscribeLocalEvent<NightVisionComponent, ComponentRemove>(OnComponentRemove);
         SubscribeLocalEvent<NightVisionComponent, ComponentGetState>(OnNightVisionGetState);
+        SubscribeLocalEvent<NightVisionComponent, ToggleNightVisionActionEvent>(OnToggleNightVision);
     }
 
     private void OnNightVisionGetState(EntityUid uid, NightVisionComponent component, ref ComponentGetState args)
     {
-        args.State = new NightVisionComponentState(component.Color);
+        args.State = new NightVisionComponentState(component.Color, component.IsNightVision);
     }
 
     private void OnComponentStartup(EntityUid uid, NightVisionComponent component, ComponentStartup args)
@@ -29,6 +30,21 @@ public sealed class NightVisionSystem : EntitySystem
     private void OnComponentRemove(EntityUid uid, NightVisionComponent component, ComponentRemove args)
     {
         _actions.RemoveAction(uid, component.ActionToggleNightVisionEntity);
+    }
+
+    private void OnToggleNightVision(EntityUid uid, NightVisionComponent component, ToggleNightVisionActionEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        ToggleNightVision(uid, component);
+    }
+
+    private void ToggleNightVision(EntityUid uid, NightVisionComponent component)
+    {
+        component.IsNightVision = !component.IsNightVision;
+
+        Dirty(uid, component);
     }
 
 }

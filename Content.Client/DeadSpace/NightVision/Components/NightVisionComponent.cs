@@ -3,12 +3,9 @@ using Robust.Shared.GameStates;
 
 namespace Content.Client.DeadSpace.Components.NightVision;
 
-[NetworkedComponent]
+[RegisterComponent]
 public sealed partial class NightVisionComponent : SharedNightVisionComponent
 {
-    [DataField]
-    public bool IsNightVision;
-
     /// <description>
     ///     Used to ensure that this doesn't break with sandbox or admin tools.
     ///     This is not "enabled/disabled".
