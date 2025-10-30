@@ -14,6 +14,8 @@
   recipes:
   - WeaponSniperMosin
   - WeaponSniperHristov
+  - WeaponCarbineSKS
+  - WeaponRifleEstoc
   - ADTWeaponRifleXC67
   - WeaponRifleAk
   - WeaponSubMachineGunC20r
@@ -31,6 +33,7 @@
   - EnergyShield
   - EnergySwordDouble
   - WeaponEnergyCrossbow
+  - WeaponEnergyCrossbowLarge
 
 ## Melee
 - type: latheRecipePack
@@ -64,6 +67,16 @@
   - MagazineTommyGun
   - MagazineDrumTommyGun
   - MagazineLightRifleBox
+  - SpeedLoader357
+  - MagazineBox357
+  - ADTExtMagazineRifle
+  - MagazineCarbineSKS
+
+- type: latheRecipePack
+  id: TaipanAmmo
+  recipes:
+  - MagazineCarbineSKSIncendiary
+  - MagazineCarbineSKSUranium
 
 ## Security
 - type: latheRecipePack
@@ -79,14 +92,14 @@
   id: TaipanElectronicsStatic
   recipes:
   - IntercomElectronics
-  - FirelockElectronics
+  - FirelockElectronicsTaipan
   - DoorElectronicsTaipan
-  - AirAlarmElectronics
+  - AirAlarmElectronicsTaipan
   - StationMapElectronics
   - FireAlarmElectronics
   - MailingUnitElectronics
   - SignalTimerElectronics
-  - APCElectronics
+  - APCElectronicsTaipan
   - SMESMachineCircuitboard
   - SubstationMachineCircuitboard
   - WallmountSubstationElectronics
@@ -119,7 +132,7 @@
   - AnomalyVesselCircuitboardTaipan
   - AnomalyVesselExperimentalCircuitboardTaipan
   - AnomalySynchronizerCircuitboard
-  - APECircuitboard
+  - APECircuitboardTaipan
   - ArtifactAnalyzerMachineCircuitboard
   - ArtifactCrusherMachineCircuitboard
 
@@ -149,6 +162,16 @@
   - TaipanRightLegBorg
   - TaipanLightHeadBorg
   - TaipanTorsoBorg
+
+- type: latheRecipePack
+  id: TaipanBorgModules
+  recipes:
+  - BorgModuleL6C
+  - BorgModuleC20r
+  - BorgModuleSyndicateWeapon
+  - BorgModuleEsword
+  - BorgModuleDoubleEsword
+  - BorgModuleOperative
 
 ## Mechs
 - type: latheRecipePack
@@ -275,6 +298,7 @@
   - ClothingBackpackSatchelTaipan
   - ClothingBackpackSyndicate
   - ClothingBackpackDuffelSyndicate
+  - ClothingBeltMilitaryWebbing
 
 # Chameleon
 
@@ -334,6 +358,7 @@
   - Hypopen
   - HypoDart
   - DefibrillatorSyndicate
+  - DrinkShakerSyndie
 
 ## Cloning
 - type: latheRecipePack
@@ -345,7 +370,30 @@
 
 # Engineering
 
-## Tools
+# Tools
+- type: latheRecipePack
+  id: TaipanToolsStatic
+  recipes:
+  - Wirecutter
+  - Screwdriver
+  - Welder
+  - Wrench
+  - CrowbarGreen
+  - Multitool
+  - NetworkConfigurator
+  - Signaller
+  - SprayPainterTaipan
+  - SprayPainterAmmo
+  - FlashlightLantern
+  - HandheldGPSBasic
+  - TRayScanner
+  - UtilityBelt
+  - ClothingOuterVestTank
+  - HandheldStationMap
+  - ClothingHeadHatWelding
+  - ClothingHeadHatCone
+  - GeigerCounter # DS14
+
 - type: latheRecipePack
   id: SyndicateAdvancedTools
   recipes:

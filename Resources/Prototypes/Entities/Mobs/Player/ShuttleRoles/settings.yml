@@ -13,6 +13,12 @@
       name: ghost-role-information-command-name
       description: ghost-role-information-command-description
       rules: ghost-role-information-nonantagonist-rules
+# DS14-start
+      requirements:
+      - !type:DepartmentTimeRequirement
+        department: Command
+        time: 7200 # 2 hours
+# DS14-end
       raffle:
         settings: default
     - type: GhostRoleNotifys
@@ -120,6 +126,12 @@
       name: ghost-role-information-security-name
       description: ghost-role-information-security-description
       rules: ghost-role-information-nonantagonist-rules
+# DS14-start
+      requirements:
+      - !type:DepartmentTimeRequirement
+        department: Security
+        time: 7200 # 2 hours
+# DS14-end
       raffle:
         settings: default
     - type: GhostRoleNotifys
@@ -183,6 +195,12 @@
       name: ghost-role-information-cargo-name
       description: ghost-role-information-cargo-description
       rules: ghost-role-information-nonantagonist-rules
+# DS14-start
+      requirements:
+      - !type:DepartmentTimeRequirement
+        department: Cargo
+        time: 7200 # 2 hours
+# DS14-end
       raffle:
         settings: short
     - type: GhostRoleNotifys
@@ -222,6 +240,12 @@
       name: ghost-role-information-engineering-name
       description: ghost-role-information-engineering-description
       rules: ghost-role-information-nonantagonist-rules
+# DS14-start
+      requirements:
+      - !type:DepartmentTimeRequirement
+        department: Engineering
+        time: 7200 # 2 hours
+# DS14-end
       raffle:
         settings: short
     - type: GhostRoleNotifys
@@ -273,6 +297,12 @@
       name: ghost-role-information-medical-name
       description: ghost-role-information-medical-description
       rules: ghost-role-information-nonantagonist-rules
+# DS14-start
+      requirements:
+      - !type:DepartmentTimeRequirement
+        department: Medical
+        time: 7200 # 2 hours
+# DS14-end
       raffle:
         settings: short
     - type: GhostRoleNotifys
@@ -384,6 +414,12 @@
       name: ghost-role-information-science-name
       description: ghost-role-information-science-description
       rules: ghost-role-information-nonantagonist-rules
+# DS14-start
+      requirements:
+      - !type:DepartmentTimeRequirement
+        department: Science
+        time: 7200 # 2 hours
+# DS14-end
       raffle:
         settings: short
     - type: GhostRoleNotifys
@@ -423,6 +459,12 @@
       name: ghost-role-information-civilian-name
       description: ghost-role-information-civilian-description
       rules: ghost-role-information-nonantagonist-rules
+# DS14-start
+      requirements:
+      - !type:DepartmentTimeRequirement
+        department: Civilian
+        time: 7200 # 2 hours
+# DS14-end
       raffle:
         settings: short
     - type: GhostRoleNotifys
@@ -519,7 +561,7 @@
 
 - type: randomHumanoidSettings
   id: VisitorLawyer
-  parent: VisitorCivilian
+  parent: VisitorSecurity # DS14
   components:
     - type: GhostRole
       name: job-name-lawyer
@@ -666,6 +708,12 @@
       name: ghost-role-information-lost-challenge-commander-name
       description: ghost-role-information-lost-challenge-commander-description
       rules: ghost-role-information-lost-challenge-commander-rules
+# DS14-start
+      requirements:
+      - !type:DepartmentTimeRequirement
+        department: Command
+        time: 7200 # 2 hours
+# DS14-end
       raffle:
         settings: default
     - type: GhostTakeoverAvailable
@@ -689,6 +737,12 @@
       name: ghost-role-information-lost-challenge-commander-name
       description: ghost-role-information-lost-challenge-commander-description
       rules: ghost-role-information-lost-challenge-commander-rules
+# DS14-start
+      requirements:
+      - !type:DepartmentTimeRequirement
+        department: Command
+        time: 7200 # 2 hours
+# DS14-end
       raffle:
         settings: default
     - type: GhostTakeoverAvailable
@@ -712,6 +766,12 @@
       name: ghost-role-information-lost-challenge-commander-name
       description: ghost-role-information-lost-challenge-commander-description
       rules: ghost-role-information-lost-challenge-commander-rules
+# DS14-start
+      requirements:
+      - !type:DepartmentTimeRequirement
+        department: Command
+        time: 7200 # 2 hours
+# DS14-end
       raffle:
         settings: default
     - type: GhostTakeoverAvailable
@@ -735,6 +795,12 @@
       name: ghost-role-information-lost-challenge-commander-name
       description: ghost-role-information-lost-challenge-commander-description
       rules: ghost-role-information-lost-challenge-commander-rules
+# DS14-start
+      requirements:
+      - !type:DepartmentTimeRequirement
+        department: Command
+        time: 7200 # 2 hours
+# DS14-end
       raffle:
         settings: default
     - type: GhostTakeoverAvailable
@@ -758,6 +824,12 @@
       name: ghost-role-information-lost-challenge-commander-name
       description: ghost-role-information-lost-challenge-commander-description
       rules: ghost-role-information-lost-challenge-commander-rules
+# DS14-start
+      requirements:
+      - !type:DepartmentTimeRequirement
+        department: Command
+        time: 7200 # 2 hours
+# DS14-end
       raffle:
         settings: default
     - type: GhostTakeoverAvailable
@@ -781,6 +853,12 @@
       name: ghost-role-information-lost-challenge-commander-name
       description: ghost-role-information-lost-challenge-commander-description
       rules: ghost-role-information-lost-challenge-commander-rules
+# DS14-start
+      requirements:
+      - !type:DepartmentTimeRequirement
+        department: Command
+        time: 7200 # 2 hours
+# DS14-end
       raffle:
         settings: default
     - type: GhostTakeoverAvailable
@@ -804,6 +882,12 @@
       name: ghost-role-information-lost-challenge-commander-name
       description: ghost-role-information-lost-challenge-commander-description
       rules: ghost-role-information-lost-challenge-commander-rules
+# DS14-start
+      requirements:
+      - !type:DepartmentTimeRequirement
+        department: Command
+        time: 7200 # 2 hours
+# DS14-end
       raffle:
         settings: default
     - type: GhostTakeoverAvailable
@@ -831,6 +915,12 @@
       name: ghost-role-information-lost-challenge-cargo-technican-name
       description: ghost-role-information-lost-challenge-cargo-technican-description
       rules: ghost-role-information-lost-disaster-challenge-cargo-technican-rules
+# DS14-start
+      requirements:
+      - !type:DepartmentTimeRequirement
+        department: Cargo
+        time: 7200 # 2 hours
+# DS14-end
       raffle:
         settings: short
     - type: GhostTakeoverAvailable
@@ -871,6 +961,18 @@
       rules: ghost-role-information-rules-team-antagonist
       mindRoles:
       - MindRoleGhostRoleTeamAntagonist
+# DS14-start
+      requirements:
+      - !type:DepartmentTimeRequirement
+        department: Medical
+        time: 108000 # 30 hours
+      - !type:DepartmentTimeRequirement
+        department: Security
+        time: 72000 # 20 hours
+      - !type:DepartmentTimeRequirement
+        department: Command
+        time: 72000 # 20 hours
+# DS14-end
       raffle:
         settings: default
     - type: Loadout
@@ -893,6 +995,15 @@
       rules: ghost-role-information-rules-team-antagonist
       mindRoles:
       - MindRoleGhostRoleTeamAntagonist
+# DS14-start
+      requirements:
+      - !type:DepartmentTimeRequirement
+        department: Medical
+        time: 36000 # 10 hours
+      - !type:DepartmentTimeRequirement
+        department: Security
+        time: 72000 # 20 hours
+# DS14-end
       raffle:
         settings: default
     - type: Loadout
@@ -914,6 +1025,12 @@
       rules: ghost-role-information-freeagent-rules
       mindRoles:
       - MindRoleGhostRoleFreeAgent
+# DS14-start
+      requirements:
+      - !type:DepartmentTimeRequirement
+        department: Security
+        time: 72000 # 20 hours
+# DS14-end
       raffle:
         settings: short
     - type: Loadout
@@ -987,6 +1104,11 @@
       rules: ghost-role-information-freeagent-rules
       mindRoles:
       - MindRoleGhostRoleFreeAgent
+# DS14-start
+      requirements:
+      - !type:OverallPlaytimeRequirement
+        time: 7200 # 2 hours
+# DS14-end
       raffle:
         settings: default
     - type: Loadout
@@ -1009,6 +1131,11 @@
       rules: ghost-role-information-freeagent-rules
       mindRoles:
       - MindRoleGhostRoleFreeAgent
+# DS14-start
+      requirements:
+      - !type:OverallPlaytimeRequirement
+        time: 7200 # 2 hours
+# DS14-end
       raffle:
         settings: default
     - type: Loadout

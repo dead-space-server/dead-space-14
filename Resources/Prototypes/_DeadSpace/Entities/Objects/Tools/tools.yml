@@ -104,13 +104,13 @@
     - Plating
     - Catwalk
     - Grille
-    - Window
-    - WindowDirectional
-    - WindowReinforcedDirectional
-    - ReinforcedWindow
-    - Airlock
-    - AirlockGlass
-    - Firelock
+    - PlasmaWindow
+    - PlasmaWindowDirectional
+    - PlasmaReinforcedWindowDirectional
+    - ReinforcedPlasmaWindow
+    - AirlockTaipan
+    - AirlockTaipanGlass
+    - FirelockTaipan
     - TubeLight
     - BulbLight
     - LVCable
