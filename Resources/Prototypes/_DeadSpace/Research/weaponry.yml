@@ -273,6 +273,7 @@
   diskAvailable: false
   recipeUnlocks:
   - WeaponSniperHristov
+  - WeaponRifleEstoc
   technologyPrerequisites:
   - TaipanBasicRifles
 
@@ -305,7 +306,6 @@
   diskAvailable: false
   recipeUnlocks:
   - WeaponCarbineSKS
-  - WeaponRifleEstoc
   technologyPrerequisites:
   - TaipanBasicRifles
 
