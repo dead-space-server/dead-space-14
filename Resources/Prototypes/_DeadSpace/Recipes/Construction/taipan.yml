@@ -65,7 +65,7 @@
 - type: construction
   id: FirelockTaipanEdge
   name: construction-recipe-firelock-edge
-  graph: Firelock
+  graph: FirelockTaipan
   startNode: start
   targetNode: FirelockTaipanEdge
   category: construction-category-structures

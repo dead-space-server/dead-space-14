@@ -38,6 +38,9 @@
         toggleAction: AIActionAGhostShowCrewMonitoring
       enum.CommunicationsConsoleUiKey.Key:
         toggleAction: AIActionAGhostShowCommunications
+  - type: DeviceNetwork
+    deviceNetId: Wireless
+    receiveFrequencyId: CrewMonitorTaipan
   - type: CommunicationsConsole
 #    canCallShuttle: false
 #    canCallERT: false
