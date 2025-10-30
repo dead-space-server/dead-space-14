@@ -68,9 +68,9 @@ namespace Content.Client.IoC
             collection.Register<DiscordAuthManager>(); // Corvax-DiscordAuth
             collection.Register<ClientsidePlaytimeTrackingManager>();
 
-            // MK-EDIT
+            // Jukebox-port-edit
             collection.Register<ClientJukeboxSongsSyncManager>();
-            // MK-EDIT
+            // Jukebox-port-edit
         }
     }
 }

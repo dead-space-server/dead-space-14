@@ -127,9 +127,9 @@ namespace Content.Server.Entry
                 IoCManager.Resolve<JobWhitelistManager>().Initialize();
                 IoCManager.Resolve<PlayerRateLimitManager>().Initialize();
 
-                // MK-EDIT
+                // Jukebox-port-edit
                 IoCManager.Resolve<ServerJukeboxSongsSyncManager>().Initialize();
-                // MK-EDIT
+                // Jukebox-port-edit
             }
         }
 

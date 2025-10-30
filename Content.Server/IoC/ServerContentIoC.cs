@@ -87,9 +87,9 @@ namespace Content.Server.IoC
             IoCManager.Register<DiscordLink>();
             IoCManager.Register<DiscordChatLink>();
 
-            // MK-EDIT
+            // Jukebox-port-edit
             IoCManager.Register<ServerJukeboxSongsSyncManager>();
-            // MK-EDIT
+            // Jukebox-port-edit
         }
     }
 }

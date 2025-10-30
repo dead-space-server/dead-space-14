@@ -150,9 +150,9 @@ namespace Content.Client.Entry
             _playbackMan.Initialize();
             _clientsidePlaytimeManager.Initialize();
 
-            // MK-EDIT
+            // Jukebox-port-edit
             _jukeboxSongsSync.Initialize();
-            // MK-EDIT
+            // Jukebox-port-edit
 
             //AUTOSCALING default Setup!
             _configManager.SetCVar("interface.resolutionAutoScaleUpperCutoffX", 1080);
