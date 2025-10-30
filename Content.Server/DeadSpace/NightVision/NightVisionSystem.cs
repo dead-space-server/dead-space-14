@@ -1,5 +1,6 @@
 using Content.Shared.Actions;
-using Content.Shared.DeadSpace.Components.NightVision;
+using Content.Server.DeadSpace.Components.NightVision;
+using Content.Shared.DeadSpace.NightVision;
 using Robust.Shared.GameStates;
 
 namespace Content.Server.DeadSpace.NightVision;
@@ -12,13 +13,12 @@ public sealed class NightVisionSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<NightVisionComponent, ComponentStartup>(OnComponentStartup);
         SubscribeLocalEvent<NightVisionComponent, ComponentRemove>(OnComponentRemove);
-        SubscribeLocalEvent<NightVisionComponent, ToggleNightVisionActionEvent>(OnToggleNightVision);
         SubscribeLocalEvent<NightVisionComponent, ComponentGetState>(OnNightVisionGetState);
     }
 
     private void OnNightVisionGetState(EntityUid uid, NightVisionComponent component, ref ComponentGetState args)
     {
-        args.State = new NightVisionComponentState(component.IsNightVision);
+        args.State = new NightVisionComponentState(component.Color);
     }
 
     private void OnComponentStartup(EntityUid uid, NightVisionComponent component, ComponentStartup args)
@@ -29,21 +29,6 @@ public sealed class NightVisionSystem : EntitySystem
     private void OnComponentRemove(EntityUid uid, NightVisionComponent component, ComponentRemove args)
     {
         _actions.RemoveAction(uid, component.ActionToggleNightVisionEntity);
-    }
-
-    private void OnToggleNightVision(EntityUid uid, NightVisionComponent component, ToggleNightVisionActionEvent args)
-    {
-        if (args.Handled)
-            return;
-
-        ToggleNightVision(uid, component);
-    }
-
-    private void ToggleNightVision(EntityUid uid, NightVisionComponent component)
-    {
-        component.IsNightVision = !component.IsNightVision;
-
-        Dirty(uid, component);
     }
 
 }

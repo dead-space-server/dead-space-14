@@ -2,7 +2,7 @@ using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
-using Content.Shared.DeadSpace.Components.NightVision;
+using Content.Client.DeadSpace.Components.NightVision;
 
 namespace Content.Client.DeadSpace.NightVision;
 

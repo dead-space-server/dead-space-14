@@ -1,4 +1,4 @@
-﻿using Content.Shared.DeadSpace.Components.NightVision;
+﻿using Content.Client.DeadSpace.Components.NightVision;
 using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.Mobs.Components;
 using Robust.Client.Console;

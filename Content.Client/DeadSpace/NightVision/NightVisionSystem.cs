@@ -2,7 +2,8 @@ using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Content.Shared.GameTicking;
 using Robust.Shared.Player;
-using Content.Shared.DeadSpace.Components.NightVision;
+using Content.Shared.DeadSpace.NightVision;
+using Content.Client.DeadSpace.Components.NightVision;
 using Robust.Shared.GameStates;
 
 namespace Content.Client.DeadSpace.NightVision;
@@ -12,14 +13,11 @@ public sealed class NightVisionSystem : EntitySystem
     [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly IOverlayManager _overlayMan = default!;
     [Dependency] ILightManager _lightManager = default!;
-
     private NightVisionOverlay _overlay = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-
-        SubscribeLocalEvent<NightVisionComponent, ComponentHandleState>(OnHandleState);
 
         SubscribeLocalEvent<NightVisionComponent, ComponentInit>(OnNightVisionInit);
         SubscribeLocalEvent<NightVisionComponent, ComponentShutdown>(OnNightVisionShutdown);
@@ -27,7 +25,10 @@ public sealed class NightVisionSystem : EntitySystem
         SubscribeLocalEvent<NightVisionComponent, LocalPlayerAttachedEvent>(OnPlayerAttached);
         SubscribeLocalEvent<NightVisionComponent, LocalPlayerDetachedEvent>(OnPlayerDetached);
 
+        SubscribeLocalEvent<NightVisionComponent, ToggleNightVisionActionEvent>(OnToggleNightVision);
+
         SubscribeNetworkEvent<RoundRestartCleanupEvent>(RoundRestartCleanup);
+        SubscribeLocalEvent<NightVisionComponent, ComponentHandleState>(OnHandleState);
 
         _overlay = new();
     }
@@ -37,7 +38,20 @@ public sealed class NightVisionSystem : EntitySystem
         if (args.Current is not NightVisionComponentState state)
             return;
 
-        component.IsNightVision = state.IsNightVision;
+        component.Color = state.Color;
+    }
+
+    private void OnToggleNightVision(EntityUid uid, NightVisionComponent component, ToggleNightVisionActionEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        ToggleNightVision(uid, component);
+    }
+
+    private void ToggleNightVision(EntityUid uid, NightVisionComponent component)
+    {
+        component.IsNightVision = !component.IsNightVision;
     }
 
     private void OnPlayerAttached(EntityUid uid, NightVisionComponent component, LocalPlayerAttachedEvent args)

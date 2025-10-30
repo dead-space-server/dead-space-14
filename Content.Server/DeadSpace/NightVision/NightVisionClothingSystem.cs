@@ -1,5 +1,4 @@
 using Content.Server.DeadSpace.Components.NightVision;
-using Content.Shared.DeadSpace.Components.NightVision;
 using Content.Shared.Inventory.Events;
 
 namespace Content.Server.DeadSpace.NightVision;
@@ -20,7 +19,7 @@ public sealed class NightVisionClothingSystem : EntitySystem
         if (HasComp<NightVisionComponent>(args.Equipee))
             return;
 
-        var nightVisionComp = new NightVisionComponent(comp.Color);
+        var nightVisionComp = new NightVisionComponent();
         comp.HasNightVision = true;
         AddComp(args.Equipee, nightVisionComp);
     }
