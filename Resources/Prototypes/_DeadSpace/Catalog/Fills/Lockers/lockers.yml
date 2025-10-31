@@ -41,6 +41,7 @@
   - type: StorageFill
     contents:
     - id: HandheldHealthAnalyzer
+    - id: ToolAlcoTester
     - id: ClothingHeadMirror
       prob: 0.1
     - id: ClothingHandsGlovesNitrileTaipan

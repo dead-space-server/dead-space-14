@@ -90,3 +90,20 @@
   components:
   - type: Implanter
     implant: DeathRattleImplantTaipan
+
+- type: entity
+  id: AntiAlcoholImplant
+  parent: BaseSubdermalImplant
+  name: имплант "кодирования"
+  description: Подкожный имплант, быстро очищающий кровь от этанола и препятствующий опьянению.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SubdermalImplant
+  - type: AntiAlcoholWatcher
+    bloodstreamSolution: bloodstream
+    ethanolId: Ethanol
+    threshold: 0.01
+    cooldownSeconds: 10
+    probability: 1.0
+  - type: Item
+    size: Small

@@ -44,6 +44,7 @@
     children:
     - id: HandheldHealthAnalyzer
       # prob: 0.6 # DS14
+    - id: ToolAlcoTester
     - id: ClothingHeadMirror
       prob: 0.1
     - id: ClothingHandsGlovesLatex
@@ -66,6 +67,7 @@
       - id: UniformScrubsColorPurple
         weight: 0.05
     - id: ClothingMaskSterile
+    - id: AntiAlcoholImplanter #DS14
 
 - type: entity
   parent: LockerMedical
