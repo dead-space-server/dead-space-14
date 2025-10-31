@@ -2,12 +2,14 @@ using Content.Shared.Actions;
 using Content.Server.DeadSpace.Components.NightVision;
 using Content.Shared.DeadSpace.NightVision;
 using Robust.Shared.GameStates;
+using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.NightVision;
 
 public sealed class NightVisionSystem : EntitySystem
 {
     [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -19,7 +21,7 @@ public sealed class NightVisionSystem : EntitySystem
 
     private void OnNightVisionGetState(EntityUid uid, NightVisionComponent component, ref ComponentGetState args)
     {
-        args.State = new NightVisionComponentState(component.Color, component.IsNightVision);
+        args.State = new NightVisionComponentState(component.Color, component.IsNightVision, _timing.CurTime);
     }
 
     private void OnComponentStartup(EntityUid uid, NightVisionComponent component, ComponentStartup args)

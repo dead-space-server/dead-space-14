@@ -19,4 +19,16 @@ public sealed partial class NightVisionComponent : SharedNightVisionComponent
     [Access(Other = AccessPermissions.ReadWriteExecute)]
     public bool GraceFrame = false;
 
+    /// <description>
+    ///     Время до обновления состояния
+    /// </description>
+    [DataField, ViewVariables(VVAccess.ReadOnly)]
+    public TimeSpan ClientLastToggleTick = TimeSpan.Zero;
+
+    /// <description>
+    ///     Время активации
+    /// </description>
+    [DataField, ViewVariables(VVAccess.ReadOnly)]
+    public TimeSpan ServerLastToggleTick = TimeSpan.Zero;
+
 }

@@ -21,10 +21,12 @@ public sealed class NightVisionComponentState : ComponentState
 {
     public Color Color;
     public bool IsNightVision;
+    public TimeSpan LastToggleTick;
 
-    public NightVisionComponentState(Color color, bool isNightVision)
+    public NightVisionComponentState(Color color, bool isNightVision, TimeSpan lastToggleTick)
     {
         Color = color;
         IsNightVision = isNightVision;
+        LastToggleTick = lastToggleTick;
     }
 }
