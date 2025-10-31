@@ -100,10 +100,5 @@
   components:
   - type: SubdermalImplant
   - type: AntiAlcoholWatcher
-    bloodstreamSolution: bloodstream
-    ethanolId: Ethanol
-    threshold: 0.01
-    cooldownSeconds: 10
-    probability: 1.0
   - type: Item
     size: Small

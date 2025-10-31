@@ -7,8 +7,7 @@
   - type: Implanter
     implant: AntiAlcoholImplant
     implantTime: 4               
-    drawTime: 2                  
-    whitelistImplants: [ AntiAlcoholImplant ]  
+    drawTime: 2
   - type: Item
     size: Small
   - type: Sprite

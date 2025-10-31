@@ -13,5 +13,3 @@
   - type: InteractionOutline
   - type: AlcoTester
     ethanolId: Ethanol
-    scanDelay: 1.5
-    cooldownSeconds: 4
