@@ -1,9 +1,19 @@
 - type: entity
   id: CrateNPCGiantSpiderSpace
-  parent: CrateSecure
+  parent: CrateSyndicateSecure
   name: ящик с космическим пауком
   description: Ящик для содержания гигантского космического паука.
   components:
   - type: StorageFill
     contents:
     - id: MobGiantSpiderSpace
+
+- type: entity
+  id: CrateNPCXeno
+  parent: CrateSyndicateSecure
+  name: ящик с ксеноморфом
+  description: Ящик для содержания ксеноморфа.
+  components:
+  - type: StorageFill
+    contents:
+    - id: MobXenoRavager
