@@ -36,10 +36,13 @@ public sealed class NightVisionSystem : EntitySystem
 
     private void OnToggleNightVision(EntityUid uid, NightVisionComponent component, ref ToggleNightVisionActionEvent args)
     {
-        if (args.Handled)
+        if (args.Handled || component.IsToggled)
             return;
 
-        component.ClientLastToggleTick = _timing.CurTime;
+        args.Handled = true;
+
+        component.ClientLastToggleTick = _timing.CurTick.Value;
+        component.IsToggled = true;
 
         ToggleNightVision(uid, component, !component.IsNightVision);
     }
@@ -63,6 +66,8 @@ public sealed class NightVisionSystem : EntitySystem
         // Применяю серверное состояние, если оно свежее предсказанного клиентом
         if (component.ClientLastToggleTick > component.ServerLastToggleTick)
             return;
+
+        component.IsToggled = false;
 
         if (component.IsNightVision == state.IsNightVision)
             return;

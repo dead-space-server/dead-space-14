@@ -1,5 +1,4 @@
 using Content.Shared.DeadSpace.NightVision;
-using Robust.Shared.GameStates;
 
 namespace Content.Client.DeadSpace.Components.NightVision;
 
@@ -22,13 +21,16 @@ public sealed partial class NightVisionComponent : SharedNightVisionComponent
     /// <description>
     ///     Время до обновления состояния
     /// </description>
-    [DataField, ViewVariables(VVAccess.ReadOnly)]
-    public TimeSpan ClientLastToggleTick = TimeSpan.Zero;
+    [ViewVariables(VVAccess.ReadOnly)]
+    public uint ClientLastToggleTick;
 
     /// <description>
     ///     Время активации
     /// </description>
-    [DataField, ViewVariables(VVAccess.ReadOnly)]
-    public TimeSpan ServerLastToggleTick = TimeSpan.Zero;
+    [ViewVariables(VVAccess.ReadOnly)]
+    public uint ServerLastToggleTick;
+
+    [ViewVariables(VVAccess.ReadOnly)]
+    public bool IsToggled = false;
 
 }
