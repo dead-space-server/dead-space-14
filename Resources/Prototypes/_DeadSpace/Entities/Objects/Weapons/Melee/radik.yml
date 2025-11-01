@@ -3,16 +3,18 @@
   parent: BaseItem
   id: Radiance
   suffix: Радик
-  description: Божественный меч, окружающий владельца ярким сиянием, при виде только этого меча, вся нечесть что окружает своего владельца, помирает от святого пламени этого дивного меча. В рукояти вы можете заметить контейнер, в котором виднеется святая вода
+  description: Божественный меч, окружающий владельца ярким сиянием, при виде только этого меча, вся нечесть что окружает своего владельца, помирает от святого пламени этого дивного меча. В рукояти вы можете заметить контейнер, в котором виднеется святая вода.
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Weapons/Melee/radic.rsi
     layers:
     - state: icon
+      scale: 0.9, 0.9
     - state: welder_flame
       visible: false
       shader: unshaded
       map: ["enum.ToggleableVisuals.Layer"]
+      scale: 0.9, 0.9
   - type: GenericVisualizer
     visuals:
       enum.ToggleableVisuals.Enabled:
@@ -24,8 +26,8 @@
     shape:
     - 0,0,1,4
     storedSprite:
-      state: storage
-      sprite: Objects/Weapons/Melee/claymore_storage_64x.rsi #Done in 64x64 because it looks way too puny in 32x32
+      state: icon
+      sprite: _DeadSpace/Objects/Weapons/Melee/radic.rsi #Done in 64x64 because it looks way too puny in 32x32
   - type: ItemToggle
     onActivate: false # DS14
     predictable: false
@@ -58,7 +60,7 @@
     activatedDamage:
         types:
             Heat: 30
-            Holy: 30
+            Holy: 25
   - type: ItemToggleSize
     activatedSize: Ginormous
   - type: ItemToggleHot
@@ -77,7 +79,7 @@
         shader: unshaded
   - type: UseDelay
   - type: MeleeWeapon
-    wideAnimationRotation: -90
+    wideAnimationRotation: -180
     damage:
       types:
         Slash: 20
@@ -86,7 +88,6 @@
       params:
         variation: 0.250
         volume: -8
-    animation: WeaponArcClaw
   - type: RefillableSolution
     solution: Holywater
   - type: SolutionContainerManager
@@ -111,10 +112,6 @@
   - type: Welder
     fuelSolutionName: Holywater
     fuelReagent: Holywater
-  - type: Clothing
-    quickEquip: false
-    slots:
-    - Belt
   - type: DamageContacts
     damage:
       types:

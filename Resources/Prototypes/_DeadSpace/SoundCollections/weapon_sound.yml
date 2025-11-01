@@ -11,8 +11,6 @@
    - /Audio/_DeadSpace/Weapons/Melee/Radiance/fire_hit_1.ogg
    - /Audio/_DeadSpace/Weapons/Melee/Radiance/fire_hit_2.ogg
    - /Audio/_DeadSpace/Weapons/Melee/Radiance/fire_hit_3.ogg
-   - /Audio/_DeadSpace/Weapons/Melee/Radiance/fire_hit_4.ogg
-   - /Audio/_DeadSpace/Weapons/Melee/Radiance/fire_hit_5.ogg
   
 - type: soundCollection
   id: RadianceHitSoundOff

@@ -129,7 +129,7 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      200: Dead
+      220: Dead
   - type: StunAttack
   - type: Damageable
     damageModifierSet: SlaughterDemon
@@ -547,7 +547,7 @@
   parent: BaseAction
   id: ActionDemonBreath
   name: "[color=red]Кричащие слюни[/color]"
-  description: Вы накапливаете раз в 15 секунд всю свою силу, плюясь в свою жертву остатками не перевереных живностей-... Кажеться, эти слюни тоже умеют кричать
+  description: Вы накапливаете раз в 15 секунд всю свою силу, плюясь в свою жертву остатками не перевереных живностей
   components:
   - type: Action
     icon: { sprite : _DeadSpace/Objects/Weapons/Throwable/demon_bola.rsi, state: icon }
@@ -563,7 +563,7 @@
   categories: [ HideSpawnMenu ]
   id: DemonBreathGun
   name: Плевок слюной
-  description: Вы плюёте в своего недруга своими слюнями, заставляя того падать на пол и быть замедлённым, пока тот не скинет с себя это несто
+  description: Вы плюёте в своего недруга своими слюнями, заставляя того падать на пол и быть замедлённым, пока тот не скинет с себя это, нечто.
   components:
   - type: RechargeBasicEntityAmmo
     rechargeCooldown: 15
@@ -581,7 +581,7 @@
   id: DemonBola
   categories: [ HideSpawnMenu ]
   parent: Bola
-  description: Фу! Какое оно мерзкое! Эта штука и кричать может!
+  description: Фу! Какое оно мерзкое! 
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Weapons/Throwable/demon_bola.rsi
@@ -599,9 +599,17 @@
     stunAmount: 1
     knockdownAmount: 1
   - type: EmitSoundOnThrow
-    sound: /Audio/_DeadSpace/Effects/Species/demon_bola_throw.ogg
+    sound: 
+      path: "/Audio/_DeadSpace/Effects/Species/demon_bola_throw.ogg"
+      params:
+        volume: -5
+        variation: 0.125
   - type: EmitSoundOnLand
-    sound: /Audio/_DeadSpace/Effects/Species/demon_bola_snap.ogg
+    sound:
+      path: "/Audio/_DeadSpace/Effects/Species/demon_bola_snap.ogg"
+      params:
+        volume: -5
+        variation: 0.125
 
 - type: entity
   id: FireballBullet

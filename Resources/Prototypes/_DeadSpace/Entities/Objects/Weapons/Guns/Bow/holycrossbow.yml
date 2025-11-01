@@ -1,7 +1,7 @@
 - type: entity
   id: HolyCrossbow
   parent: BaseBow
-  name: святой арбалетa
+  name: святой арбалет
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Weapons/Guns/Bow/holy_crossbow.rsi
@@ -56,7 +56,7 @@
 
 - type: entity
   parent: BaseArrow
-  id: HollyArrow
+  id: HolyArrow
   name: святая стрела
   components:
   - type: Sprite
@@ -73,26 +73,26 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 30
-        Holy: 45
+        Piercing: 25
+        Holy: 15
 
 - type: entity
   id: PresentQuiver
   parent: [PresentBase, BaseItem]
   name: обмоток с стрелами
-  description: Хорошо обмотанные святые стрелы, вы можете видеть, что их тут в порядке 10-и штук
+  description: Хорошо обмотанные святые стрелы, вы можете видеть, что их тут в порядке 10-и штук.
   components:
   - type: SpawnItemsOnUse
     items:
-      - id: HollyArrow
-      - id: HollyArrow
-      - id: HollyArrow
-      - id: HollyArrow
-      - id: HollyArrow
-      - id: HollyArrow
-      - id: HollyArrow
-      - id: HollyArrow
-      - id: HollyArrow
+      - id: HolyArrow
+      - id: HolyArrow
+      - id: HolyArrow
+      - id: HolyArrow
+      - id: HolyArrow
+      - id: HolyArrow
+      - id: HolyArrow
+      - id: HolyArrow
+      - id: HolyArrow
     sound:
       path: /Audio/Effects/unwrap.ogg
   - type: Sprite
