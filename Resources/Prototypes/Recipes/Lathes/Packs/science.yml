@@ -43,6 +43,8 @@
   - ClothingBackpackHolding
   - ClothingBackpackSatchelHolding
   - ClothingBackpackDuffelHolding
+  - ClothingShoesBootsMagSuper # DS14
+  - JetBoots # DS14
 
 - type: latheRecipePack
   id: PowerCells
@@ -57,6 +59,10 @@
   - WeaponPistolCHIMP
   - WeaponForceGun
   - WeaponProtoKineticAccelerator
+# DS14-start
+  - WeaponProtoKineticAcceleratorShotgun
+  - WeaponProtoKineticAcceleratorReapeter
+# DS14-end
   - PKAUpgradeDamage
   - PKAUpgradeRange
   - PKAUpgradeFireRate
