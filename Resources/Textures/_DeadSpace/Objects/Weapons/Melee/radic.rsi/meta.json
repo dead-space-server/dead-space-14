@@ -3,8 +3,8 @@
   "license": "CC-BY-SA-3.0",
   "copyright": "Taken from skyrat-tg at https://github.com/Skyrat-SS13/Skyrat-tg/commit/31156a1fcd48d67a717e7b63c11513172b28eeb1",
   "size": {
-    "x": 32,
-    "y": 32
+    "x": 64,
+    "y": 64
   },
   "states": [
     {
@@ -14,7 +14,9 @@
       "name": "welder_flame",
       "delays": [
         [
-          0.2,
+          0.1,
+          0.1,
+          0.1,
           0.1
         ]
       ]
@@ -29,58 +31,10 @@
     },
     {
       "name": "inhand-left-flame",
-      "directions": 4,
-      "delays": [
-        [
-          0.2,
-          0.2,
-          0.2
-        ],
-        [
-          0.2,
-          0.2,
-          0.2
-        ],
-        [
-          0.2,
-          0.2,
-          0.2
-        ],
-        [
-          0.2,
-          0.2,
-          0.2
-        ]
-      ]
+      "directions": 4
     },
     {
       "name": "inhand-right-flame",
-      "directions": 4,
-      "delays": [
-        [
-          0.2,
-          0.2,
-          0.2
-        ],
-        [
-          0.2,
-          0.2,
-          0.2
-        ],
-        [
-          0.2,
-          0.2,
-          0.2
-        ],
-        [
-          0.2,
-          0.2,
-          0.2
-        ]
-      ]
-    },
-    {
-      "name": "equipped-BELT",
       "directions": 4
     }
   ]
