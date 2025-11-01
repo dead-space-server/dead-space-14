@@ -17,7 +17,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: MobXenoRavager
+    - id: MobXenoRavager 
 
 # Engineering
 - type: entity
