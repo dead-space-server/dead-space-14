@@ -70,13 +70,12 @@ public sealed class StationGoalPaperSystem : EntitySystem
                 }
             };
 
-            if (!string.IsNullOrEmpty(goal.ExtraStamp))
+            if (goal.ExtraStamps != null)
             {
-                stamps.Add(new StampDisplayInfo
+                foreach (var stamp in goal.ExtraStamps)
                 {
-                    StampedName = goal.ExtraStamp,
-                    StampedColor = !string.IsNullOrEmpty(goal.ExtraStampColor) ? Color.FromHex(goal.ExtraStampColor) : Color.Red
-                });
+                    stamps.Add(stamp);
+                }
             }
 
             var printout = new FaxPrintout(

@@ -2,6 +2,7 @@
 
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using Content.Shared.Paper;
 
 namespace Content.Server.DeadSpace.StationGoal;
 
@@ -17,7 +18,5 @@ public sealed partial class StationGoalPrototype : IPrototype
     [DataField]
     public int? ModifyStationBalance;
     [DataField]
-    public string? ExtraStamp;
-    [DataField]
-    public string? ExtraStampColor;
+    public List<StampDisplayInfo>? ExtraStamps;
 }

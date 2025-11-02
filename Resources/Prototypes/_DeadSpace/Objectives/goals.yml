@@ -51,16 +51,17 @@
   id: MilitaryShuttle
   text: "/Paperwork/StationGoal/MilitaryShuttle.xml"
   modifyStationBalance: 30000
-  extraStamp: Департамент Вооруженных Сил NanoTrasen
-  extraStampColor: "#505050"
-
+  extraStamps:
+  - stampedName: Департамент Вооруженных Сил NanoTrasen
+    stampedColor: "#505050"
 
 - type: stationGoal
   id: OrbitalBunker
   text: "/Paperwork/StationGoal/OrbitalBunker.xml"
   modifyStationBalance: 30000
-  extraStamp: Департамент Вооруженных Сил NanoTrasen
-  extraStampColor: "#505050"
+  extraStamps:
+    - stampedName: Департамент Вооруженных Сил NanoTrasen
+      stampedColor: "#505050"
 
 - type: stationGoal
   id: Anomalies
