@@ -546,8 +546,8 @@
 - type: entity
   parent: BaseAction
   id: ActionDemonBreath
-  name: "[color=red]Кричащие слюни[/color]"
-  description: Вы накапливаете раз в 15 секунд всю свою силу, плюясь в свою жертву остатками не перевереных живностей
+  name: "[color=red]Плевок слюной[/color]"
+  description: Запустите раз в 15 секунд слюну изо всех сил в жертву, чтобы она не смогла сбежать.
   components:
   - type: Action
     icon: { sprite : _DeadSpace/Objects/Weapons/Throwable/demon_bola.rsi, state: icon }
@@ -577,7 +577,7 @@
       path: /Audio/_DeadSpace/Effects/Species/demon_bola_throw.ogg
 
 - type: entity
-  name: слюни демона
+  name: слюна демона
   id: DemonBola
   categories: [ HideSpawnMenu ]
   parent: Bola
