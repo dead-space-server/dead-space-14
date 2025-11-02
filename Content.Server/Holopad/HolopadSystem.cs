@@ -51,7 +51,7 @@ public sealed class HolopadSystem : SharedHolopadSystem
     [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly IAdminManager _adminManager = default!;
     // DS14-end
-    
+
     private float _updateTimer = 1.0f;
     private const float UpdateTime = 1.0f;
 
@@ -111,6 +111,9 @@ public sealed class HolopadSystem : SharedHolopadSystem
 
         if (!TryComp<TelephoneComponent>(receiver, out var receiverTelephone))
             return;
+
+        LinkHolopadToUser(source, args.Actor);
+        _telephoneSystem.CallTelephone((source, sourceTelephone), (receiver, receiverTelephone), args.Actor);
         // DS14-start
         if (TryComp<HolopadComponent>(receiver, out var receverHolopadComp))
         {
@@ -118,9 +121,6 @@ public sealed class HolopadSystem : SharedHolopadSystem
                 NotifyAdmins(Name(source));
         }
         // DS14-end
-
-        LinkHolopadToUser(source, args.Actor);
-        _telephoneSystem.CallTelephone((source, sourceTelephone), (receiver, receiverTelephone), args.Actor);
     }
 
     private void OnHolopadAnswerCall(Entity<HolopadComponent> receiver, ref HolopadAnswerCallMessage args)
