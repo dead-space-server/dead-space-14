@@ -79,7 +79,7 @@
 - type: entity
   id: PresentQuiver
   parent: [PresentBase, BaseItem]
-  name: обмоток с стрелами
+  name: обмоток со стрелами
   description: Хорошо обмотанные святые стрелы, вы можете видеть, что их тут в порядке 10-и штук.
   components:
   - type: SpawnItemsOnUse
