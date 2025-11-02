@@ -1064,7 +1064,6 @@
   - type: SpeakOnTrigger
     pack: PlushieEmmaSpeech
 
-
 - type: entity
   parent: BasePlushie
   id: PlushieYosifAnita
