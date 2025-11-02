@@ -1008,7 +1008,7 @@
   - type: Sprite
     state: plushie_astro
   - type: TTS
-    voice: Katy
+    voice: Kate
   - type: SpeakOnTrigger
     pack: PlushieAstroSpeech
 
