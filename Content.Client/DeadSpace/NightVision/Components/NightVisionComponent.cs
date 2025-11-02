@@ -33,4 +33,12 @@ public sealed partial class NightVisionComponent : SharedNightVisionComponent
     [ViewVariables(VVAccess.ReadOnly)]
     public bool IsToggled = false;
 
+    /// <description>
+    ///     Скорость анимации
+    /// </description>
+    [DataField, ViewVariables(VVAccess.ReadOnly)]
+    public float TransitionSpeed = 1f;
+
+    [ViewVariables(VVAccess.ReadOnly)]
+    public EntityUid? SoundEntity = null;
 }

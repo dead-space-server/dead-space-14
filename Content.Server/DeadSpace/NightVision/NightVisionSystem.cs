@@ -21,7 +21,7 @@ public sealed class NightVisionSystem : EntitySystem
 
     private void OnNightVisionGetState(EntityUid uid, NightVisionComponent component, ref ComponentGetState args)
     {
-        args.State = new NightVisionComponentState(component.Color, component.IsNightVision, _timing.CurTick.Value);
+        args.State = new NightVisionComponentState(component.Color, component.IsNightVision, _timing.CurTick.Value, component.ActivateSound);
     }
 
     private void OnComponentStartup(EntityUid uid, NightVisionComponent component, ComponentStartup args)
@@ -38,6 +38,8 @@ public sealed class NightVisionSystem : EntitySystem
     {
         if (args.Handled)
             return;
+
+        args.Handled = true;
 
         ToggleNightVision(uid, component);
     }

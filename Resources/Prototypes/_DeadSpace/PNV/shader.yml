@@ -1,5 +1,5 @@
 - type: shader
-  id: ColorCircleMask
+  id: PNVMask
   kind: source
   path: "/Textures/_DeadSpace/Shaders/colored_circle_mask.swsl"
   params:
@@ -9,3 +9,4 @@
     CircleMax: 4.0
     CircleMult: 0.5
     Color: "#31bd1522"
+    TransitionProgress: 0
