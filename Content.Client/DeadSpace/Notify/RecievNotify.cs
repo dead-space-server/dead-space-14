@@ -15,7 +15,6 @@ public sealed partial class RecievNotifySys : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
-    public static readonly NotifyHelper _helper = new NotifyHelper();
     public SoundSpecifier SoundNotify = new SoundPathSpecifier("/Audio/Effects/adminhelp.ogg");
 
     public DateTime IGameTiming = DateTime.Now;
@@ -25,20 +24,18 @@ public sealed partial class RecievNotifySys : EntitySystem
     {
         base.Initialize();
         SubscribeNetworkEvent<PingMessege>(CheckRecievedNotify);
-        _helper.EnsureInitialized(_cfg, _prototypeManager);
+        NotifyHelper.EnsureInitialized(_cfg, _prototypeManager);
     }
 
     private void CheckRecievedNotify(PingMessege messege)
     {
-        if (_helper.GetValueAccess(messege.ID) && _cfg.GetCVar(CCCCVars.SysNotifyPerm))
+        if (NotifyHelper.GetValueAccess(messege.ID) && _cfg.GetCVar(CCCCVars.SysNotifyPerm))
         {
-            if (IGameTiming .AddSeconds(_cfg.GetCVar(CCCCVars.SysNotifyCoolDown)) < DateTime.Now)
+            if (IGameTiming.AddSeconds(_cfg.GetCVar(CCCCVars.SysNotifyCoolDown)) < DateTime.Now)
             {
                 _audio.PlayGlobal(SoundNotify, Filter.Local(), false);
-                IGameTiming  = DateTime.Now;
+                IGameTiming = DateTime.Now;
             }
-
         }
-
     }
 }

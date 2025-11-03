@@ -7,9 +7,9 @@ namespace Content.Client.DeadSpace.NotifySystem.NotifyHelpers;
 
 public sealed class NotifyHelper
 {
-    private Dictionary<string, bool> DictCvar = new Dictionary<string, bool>();
-    private Dictionary<string, bool> DictAccess = new Dictionary<string, bool>();
-    public bool GetValueAccess(string key)
+    private static Dictionary<string, bool> DictCvar = new Dictionary<string, bool>();
+    private static Dictionary<string, bool> DictAccess = new Dictionary<string, bool>();
+    public static bool GetValueAccess(string key)
     {
         if (DictAccess.TryGetValue(key, out bool value))
         {
@@ -20,15 +20,15 @@ public sealed class NotifyHelper
             return false;
         }
     }
-    public void SetValueAccess(string key, bool value)
+    public static void SetValueAccess(string key, bool value)
     {
         DictAccess[key] = value;
     }
-    public Dictionary<string, bool> GetDictionaryAccess()
+    public static Dictionary<string, bool> GetDictionaryAccess()
     {
         return DictAccess;
     }
-    public Dictionary<string, bool> StringToPairList(string input)
+    public static Dictionary<string, bool> StringToPairList(string input)
     {
         var result = new Dictionary<string, bool>();
         var parts = input.Split("/", StringSplitOptions.RemoveEmptyEntries);
@@ -50,7 +50,7 @@ public sealed class NotifyHelper
         return result;
     }
 
-    public void EnsureInitialized(IConfigurationManager cfg, IPrototypeManager prototypeManager)
+    public static void EnsureInitialized(IConfigurationManager cfg, IPrototypeManager prototypeManager)
     {
         if (DictAccess.Count == 0)
         {
@@ -58,7 +58,7 @@ public sealed class NotifyHelper
             CreateDictionaryForReciveSys(prototypeManager);
         }
     }
-    public string PairListToString(Dictionary<string, bool> list)
+    public static string PairListToString(Dictionary<string, bool> list)
     {
         var parts = new List<string>();
         foreach (var (word, value) in list)
@@ -68,14 +68,14 @@ public sealed class NotifyHelper
         }
         return string.Join("/", parts);
     }
-    public void GetDictionaryFromCCvar(IConfigurationManager cfg)
+    public static void GetDictionaryFromCCvar(IConfigurationManager cfg)
     {
         if (!string.IsNullOrWhiteSpace(cfg.GetCVar(CCCCVars.SysNotifyCvar)))
         {
             DictCvar = StringToPairList(cfg.GetCVar(CCCCVars.SysNotifyCvar));
         }
     }
-    public void CreateDictionaryForReciveSys(IPrototypeManager prototypeManager)
+    public static void CreateDictionaryForReciveSys(IPrototypeManager prototypeManager)
     {
         foreach (var proto in prototypeManager.EnumeratePrototypes<GhostRoleGroupNotify>())
         {
