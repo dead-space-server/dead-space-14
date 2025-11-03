@@ -61,13 +61,13 @@ public sealed partial class MiscTab : Control
         Control.AddOptionCheckBox(CCVars.ChatEnableFancyBubbles, FancySpeechBubblesCheckBox);
         Control.AddOptionCheckBox(CCVars.ChatFancyNameBackground, FancyNameBackgroundsCheckBox);
         Control.AddOptionCheckBox(CCVars.StaticStorageUI, StaticStorageUI);
-        Control.AddOptionCheckBox(CCCCVars.SysNotifyPerm, GetPingPermission);
+        Control.AddOptionCheckBox(CCCCVars.SysNotifyPerm, GetPingPermission); // DS14-start
 
         Control.AddOptionSlider(
             CCCCVars.SysNotifyCoolDown,
             SliderCooldownForPing,
             0,
-            10);
+            10);//DS14-end
 
         Control.Initialize();
     }

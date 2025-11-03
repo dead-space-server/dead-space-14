@@ -28,10 +28,10 @@
                 <CheckBox Name="OpaqueStorageWindowCheckBox" Text="{Loc 'ui-options-opaque-storage-window'}" />
                 <CheckBox Name="StaticStorageUI" Text="{Loc 'ui-options-static-storage-ui'}" />
                 <Label Text="{Loc 'ui-options-cooldown-pin'}"
-                       StyleClasses="LabelKeyText"/>
+                       StyleClasses="LabelKeyText"/> <!--DS14-start-->
                 <ui:OptionSlider Name="SliderCooldownForPing" Title="{Loc 'ui-options-cooldown-ping'}" 
                                  Margin="0 0 0 8" />
-                <CheckBox Name="GetPingPermission" Text="{Loc 'ui-options-ping-permission'}" />
+                <CheckBox Name="GetPingPermission" Text="{Loc 'ui-options-ping-permission'}" /><!--DS14-end-->
                 <!-- <CheckBox Name="ToggleWalk" Text="{Loc 'ui-options-hotkey-toggle-walk'}" /> -->
             </BoxContainer>
         </ScrollContainer>

@@ -6,7 +6,8 @@ using Content.Shared.DeadSpace.GhostRoleNotify.Prototypes;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Configuration;
 using Content.Shared.DeadSpace.CCCCVars;
-using Content.Client.DeadSpace.NotifySystem.NotifyFunctions;
+using Content.Client.DeadSpace.NotifySystem.NotifyHelpers;
+using Content.Client.DeadSpace.NotifySystem.RecievNotify;
 
 namespace Content.Client.Options.UI.Tabs;
 
@@ -14,14 +15,14 @@ namespace Content.Client.Options.UI.Tabs;
 
 public sealed partial class PingTab : Control
 {
-    private void AddCheckBox(string checkBoxName, string id, IConfigurationManager cfg, bool savedSelection)
+    private void AddCheckBox(string checkBoxName, string id, IConfigurationManager cfg, NotifyHelper helper, bool savedSelection)
     {
         CheckBox newCheckBox = new CheckBox() { Text = Loc.GetString(checkBoxName) };
         newCheckBox.Pressed = savedSelection;
-        newCheckBox.OnToggled += (lol) =>
+        newCheckBox.OnToggled += lol =>
         {
-            NotifyFunction._dictAccess[id] = newCheckBox.Pressed;
-            cfg.SetCVar(CCCCVars.SysNotifyCvar, NotifyFunction.PairListToString(NotifyFunction._dictAccess));
+            helper.SetValueAccess(id, newCheckBox.Pressed);
+            cfg.SetCVar(CCCCVars.SysNotifyCvar, helper.PairListToString(helper.GetDictionaryAccess()));
             cfg.SaveToFile();
         };
 
@@ -31,10 +32,11 @@ public sealed partial class PingTab : Control
     {
         var prototypeManager = IoCManager.Resolve<IPrototypeManager>();
         var cfg = IoCManager.Resolve<IConfigurationManager>();
+        var helper = RecievNotifySys._helper;
         RobustXamlLoader.Load(this);
         foreach (var proto in prototypeManager.EnumeratePrototypes<GhostRoleGroupNotify>())
         {
-            AddCheckBox(proto.Name, proto.ID, cfg, NotifyFunction._dictAccess[proto.ID]);
+            AddCheckBox(proto.Name, proto.ID, cfg, helper, helper.GetValueAccess(proto.ID));
         }
         Control.Initialize();
     }

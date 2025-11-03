@@ -102,7 +102,7 @@ public sealed class CCCCVars
     /// Dictionary for ping
     /// </summary>
     public static readonly CVarDef<string> SysNotifyCvar =
-        CVarDef.Create("sysnotify.Dict", "NOTHING", CVar.CLIENTONLY | CVar.ARCHIVE);
+        CVarDef.Create("sysnotify.Dict", "", CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /// <summary>
     /// How much we were wating to next ping

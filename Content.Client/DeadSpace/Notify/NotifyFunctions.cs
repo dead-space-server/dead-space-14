@@ -3,19 +3,15 @@ using Robust.Shared.Configuration;
 using Content.Shared.DeadSpace.GhostRoleNotify.Prototypes;
 using Robust.Shared.Prototypes;
 
-namespace Content.Client.DeadSpace.NotifySystem.NotifyFunctions;
+namespace Content.Client.DeadSpace.NotifySystem.NotifyHelpers;
 
-public sealed class NotifyFunction
+public sealed class NotifyHelper
 {
-    public static Dictionary<string, bool> DictCvar = new Dictionary<string, bool>();
-    public static Dictionary<string, bool> _dictAccess = new Dictionary<string, bool>();
-    public static bool GetValueAccess(string key)
+    private Dictionary<string, bool> DictCvar = new Dictionary<string, bool>();
+    private Dictionary<string, bool> DictAccess = new Dictionary<string, bool>();
+    public bool GetValueAccess(string key)
     {
-        if (key == null)
-        {
-            return false;
-        }
-        if (_dictAccess.TryGetValue(key, out bool value))
+        if (DictAccess.TryGetValue(key, out bool value))
         {
             return value;
         }
@@ -24,11 +20,18 @@ public sealed class NotifyFunction
             return false;
         }
     }
-
-    public static Dictionary<string, bool> StringToPairList(string input)
+    public void SetValueAccess(string key, bool value)
+    {
+        DictAccess[key] = value;
+    }
+    public Dictionary<string, bool> GetDictionaryAccess()
+    {
+        return DictAccess;
+    }
+    public Dictionary<string, bool> StringToPairList(string input)
     {
         var result = new Dictionary<string, bool>();
-        var parts = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+        var parts = input.Split("/", StringSplitOptions.RemoveEmptyEntries);
 
         if (parts.Length % 2 != 0)
             throw new ArgumentException("Строка должна содержать чётное число элементов (слово + значение).");
@@ -41,13 +44,21 @@ public sealed class NotifyFunction
             if (!bool.TryParse(boolStr, out value))
                 throw new ArgumentException($"Некорректное булевое значение {boolStr}");
 
-            result.Add(word, value);
+            result[word] = value;
         }
 
         return result;
     }
 
-    public static string PairListToString(Dictionary<string, bool> list)
+    public void EnsureInitialized(IConfigurationManager cfg, IPrototypeManager prototypeManager)
+    {
+        if (DictAccess.Count == 0)
+        {
+            GetDictionaryFromCCvar(cfg);
+            CreateDictionaryForReciveSys(prototypeManager);
+        }
+    }
+    public string PairListToString(Dictionary<string, bool> list)
     {
         var parts = new List<string>();
         foreach (var (word, value) in list)
@@ -55,28 +66,28 @@ public sealed class NotifyFunction
             parts.Add(word);
             parts.Add(value.ToString());
         }
-        return string.Join(" ", parts);
+        return string.Join("/", parts);
     }
-    public static void GetDictionaryFromCCvar(IConfigurationManager cfg)
+    public void GetDictionaryFromCCvar(IConfigurationManager cfg)
     {
-        if (cfg.GetCVar(CCCCVars.SysNotifyCvar) != "NOTHING")
+        if (!string.IsNullOrWhiteSpace(cfg.GetCVar(CCCCVars.SysNotifyCvar)))
         {
             DictCvar = StringToPairList(cfg.GetCVar(CCCCVars.SysNotifyCvar));
         }
     }
-    public static void CreateDictionaryForReciveSys(IPrototypeManager prototypeManager)
+    public void CreateDictionaryForReciveSys(IPrototypeManager prototypeManager)
     {
         foreach (var proto in prototypeManager.EnumeratePrototypes<GhostRoleGroupNotify>())
         {
-            if (DictCvar.ContainsKey(proto.ID) & !_dictAccess.ContainsKey(proto.ID))
+            if (DictCvar.ContainsKey(proto.ID) && !DictAccess.ContainsKey(proto.ID))
             {
-                _dictAccess.Add(proto.ID, DictCvar[proto.ID]);
+                DictAccess.Add(proto.ID, DictCvar[proto.ID]);
             }
             else
             {
-                if (!_dictAccess.ContainsKey(proto.ID))
+                if (!DictAccess.ContainsKey(proto.ID))
                 {
-                    _dictAccess.TryAdd(proto.ID, false);
+                    DictAccess.TryAdd(proto.ID, false);
                 }
             }
         }
