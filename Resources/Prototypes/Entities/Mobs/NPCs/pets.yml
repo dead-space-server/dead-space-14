@@ -894,6 +894,12 @@
     name: ghost-role-information-punpun-name
     description: ghost-role-information-punpun-description
     rules: ghost-role-information-nonantagonist-rules
+# DS14-start
+    requirements:
+    - !type:RoleTimeRequirement
+      role: JobBartender
+      time: 7200 # 2 hours
+# DS14-end
   - type: GhostTakeoverAvailable
   - type: Butcherable
     butcheringType: Spike
@@ -939,8 +945,8 @@
       proper: true
       gender: male
 #  - type: AlwaysRevolutionaryConvertible
-  - type: StealTarget
-    stealGroup: AnimalTropico
+#  - type: StealTarget
+#    stealGroup: AnimalTropico
 
 - type: entity
   name: Polly the parrot
@@ -960,3 +966,5 @@
     prototypes: [ MobPollyGear ]
   - type: TTS
     voice: Gyro
+  - type: StealTarget
+    stealGroup: AnimalPolly
