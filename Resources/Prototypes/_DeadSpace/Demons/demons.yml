@@ -414,10 +414,10 @@
     raiseOnUser: true
     icon:
       sprite: _DeadSpace/Demons/tentacle.rsi
-      state: goliath_tentacle_spawn
+      state: demon_tentacle_spawn
     iconOn:
       sprite: _DeadSpace/Demons/tentacle.rsi
-      state: goliath_tentacle_wiggle
+      state: demon_tentacle_wiggle
     sound:
       path: "/Audio/_DeadSpace/Demons/scream_snake.ogg"
       params:
@@ -436,7 +436,7 @@
   - type: Sprite
     sprite: _DeadSpace/Demons/tentacle.rsi
     layers:
-    - state: goliath_tentacle_wiggle
+    - state: demon_tentacle_wiggle
   - type: StunOnContact
     blacklist:
       tags:
@@ -468,7 +468,7 @@
   name: tentacle
   components:
     - type: Sprite
-      state: goliath_tentacle_spawn
+      state: demon_tentacle_spawn
     - type: SpawnOnDespawn
       prototype: DemonTentacle
 
@@ -478,7 +478,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    state: goliath_tentacle_retract
+    state: demon_tentacle_retract
   - type: EffectVisuals
   - type: AnimationPlayer
 
@@ -532,13 +532,17 @@
   - type: Puller
     needsHands: false
   - type: Fixtures
-    fixtures: # TODO: This needs a second fixture just for mob collisions.
+    fixtures:
       fix1:
         shape:
           !type:PhysShapeCircle
           radius: 0.35
-        density: 650 # instead of 185
+        density: 600
         restitution: 0.0
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
   - type: ActionGun
     action: ActionDemonBreath
     gunProto: DemonBreathGun
@@ -601,12 +605,6 @@
       params:
         volume: -5
         variation: 0.125
-  - type: MeleeWeapon
-    wideAnimationRotation: -135
-    attackRate: 1.5
-    damage:
-      types:
-        Caustic: 5
   - type: DamageOtherOnHit
     damage:
       types:

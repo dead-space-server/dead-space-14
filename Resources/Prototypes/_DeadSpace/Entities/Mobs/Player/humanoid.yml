@@ -11,7 +11,7 @@
   parent: EventHumanoidERT
   components:
     - type: GhostRole
-      name: ghost-role-information-ert-security-chaplain
+      name: ghost-role-information-ert-chaplain-name
       description: ghost-role-information-ert-security-description
       rules: ghost-role-information-nonantagonist-rules
       requirements:

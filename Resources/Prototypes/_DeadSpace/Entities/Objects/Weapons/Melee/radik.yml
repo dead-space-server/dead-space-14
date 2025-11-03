@@ -10,7 +10,7 @@
     layers:
     - state: icon
       scale: 0.8, 0.8
-    - state: welder_flame
+    - state: flame
       visible: false
       shader: unshaded
       map: ["enum.ToggleableVisuals.Layer"]
@@ -58,7 +58,7 @@
     activatedDamage:
         types:
             Heat: 30
-            Holy: 25
+            Holy: 30
   - type: ItemToggleSize
     activatedSize: Ginormous
   - type: ItemToggleHot

@@ -8,7 +8,7 @@
   },
   "states": [
     {
-      "name": "goliath_tentacle_spawn",
+      "name": "demon_tentacle_spawn",
       "delays": [
         [
           0.2,
@@ -19,7 +19,7 @@
       ]
     },
     {
-      "name": "goliath_tentacle_wiggle",
+      "name": "demon_tentacle_wiggle",
       "delays": [
         [
           0.1,
@@ -30,7 +30,7 @@
       ]
     },
     {
-      "name": "goliath_tentacle_retract",
+      "name": "demon_tentacle_retract",
       "delays": [
         [
           0.1,
