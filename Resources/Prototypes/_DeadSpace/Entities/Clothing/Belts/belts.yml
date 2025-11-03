@@ -59,7 +59,6 @@
         whitelist:
           tags:
           - SyndieSabre
-        maxItemSize: Large
   - type: ItemMapper
     mapLayers:
       sheath-sabre:
