@@ -87,5 +87,5 @@
     - type: StealTarget
       stealGroup: AnimalLargo
     - type: GhostRoleNotifys
-      GroupPrototype: Largoping
+      groupPrototype: Largoping
     # DS14-end
