@@ -1,20 +1,20 @@
 - type: entity
   name: святой меч
-  parent: BaseItem
+  parent: BaseSword
   id: Radiance
   suffix: Радик
   description: Божественный меч, окружающий владельца ярким сиянием, при виде только этого меча, вся нечесть что окружает своего владельца, помирает от святого пламени этого дивного меча. В рукояти вы можете заметить контейнер, в котором виднеется святая вода.
   components:
   - type: Sprite
-    sprite: _DeadSpace/Objects/Weapons/Melee/radic.rsi
+    sprite: _DeadSpace/Objects/Weapons/Melee/radic64.rsi
     layers:
     - state: icon
-      scale: 0.9, 0.9
+      scale: 0.8, 0.8
     - state: welder_flame
       visible: false
       shader: unshaded
       map: ["enum.ToggleableVisuals.Layer"]
-      scale: 0.9, 0.9
+      scale: 0.8, 0.8
   - type: GenericVisualizer
     visuals:
       enum.ToggleableVisuals.Enabled:
@@ -22,14 +22,12 @@
           True: { visible: true }
           False: { visible: false }
   - type: Item
+    sprite: _DeadSpace/Objects/Weapons/Melee/radic.rsi
     size: Large
     shape:
     - 0,0,1,4
-    storedSprite:
-      state: icon
-      sprite: _DeadSpace/Objects/Weapons/Melee/radic.rsi #Done in 64x64 because it looks way too puny in 32x32
   - type: ItemToggle
-    onActivate: false # DS14
+    onActivate: false 
     predictable: false
     soundActivate:
       collection: RadianceOn
@@ -127,3 +125,6 @@
           bounds: "-7.5,-7.5,7.5,7.5"
         layer:
         - MidImpassable
+  - type: Tag
+    tags:
+      - Radiance

@@ -152,6 +152,9 @@
   id: NoodlesCopy
 
 - type: Tag
+  id: Radiance
+
+- type: Tag
   id: PistolCobra
 
 - type: Tag

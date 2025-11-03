@@ -2,6 +2,7 @@
   id: HolyCrossbow
   parent: BaseBow
   name: святой арбалет
+  description: В этом арбалете виднееться-... Дешёвая ламочка что светит синим цветом-...?
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Weapons/Guns/Bow/holy_crossbow.rsi
