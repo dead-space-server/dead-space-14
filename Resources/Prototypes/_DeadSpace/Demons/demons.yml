@@ -134,7 +134,7 @@
     rules: ghost-role-information-slaughter-rules
   - type: Reflect
     reflectProb: 0.25
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: DemonSlaughter
 
 - type: entity
@@ -183,7 +183,7 @@
     name: ghost-role-information-honker-name
     description: ghost-role-information-honker-description
     rules: ghost-role-information-honker-rules
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: DemonHonkerping
 
 - type: entity
@@ -219,7 +219,7 @@
     soundGunshot: /Audio/Magic/fireball.ogg
   - type: BallisticAmmoProvider
     proto: FireballBullet
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: DemonIfrit
 
 - type: entity
@@ -266,7 +266,7 @@
         Blunt: 7
         Piercing: 1
         Heat: 5
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: DemonJaunt
 
 - type: entity

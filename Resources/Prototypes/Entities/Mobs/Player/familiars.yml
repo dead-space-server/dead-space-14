@@ -32,7 +32,7 @@
     - PetsNT
   - type: Alerts
   - type: Familiar
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: PetsGroup
 
 - type: entity
@@ -96,5 +96,5 @@
       Male: Cerberus
       Female: Cerberus
       Unsexed: Cerberus
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: PetsGroup

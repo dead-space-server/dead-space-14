@@ -239,7 +239,7 @@
     - type: HTN
       rootTask:
         task: DragonCarpCompound
-    - type: GhostRoleNotifys
+    - type: GhostRoleNotifys #DS14
       GroupPrototype: CarpsGroup
 
 - type: entity

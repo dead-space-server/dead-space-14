@@ -97,7 +97,7 @@
     - NamesFirstERTLeader
     - NamesLastERT
     nameFormat: name-format-ert
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: CBURNGroup
 
 - type: randomHumanoidSettings
@@ -130,7 +130,7 @@
     - NamesFirstERT
     - NamesLastERT
     nameFormat: name-format-ert
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: CBURNGroup
     
 - type: entity

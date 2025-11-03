@@ -24,7 +24,7 @@
   - type: NpcFactionMember
     factions:
     - Syndicate
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: SyndicateGroup
 
 - type: entity

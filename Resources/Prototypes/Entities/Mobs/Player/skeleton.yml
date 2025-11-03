@@ -26,7 +26,7 @@
   - type: Loadout
     prototypes: [PirateGear]
   - type: RandomHumanoidAppearance
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: PirateSkeletonping
 
 
@@ -47,7 +47,7 @@
   - type: Loadout
     prototypes: [SkeletonBiker]
   - type: RandomHumanoidAppearance
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: EventGroup
 
 - type: entity
@@ -67,5 +67,5 @@
   - type: Loadout
     prototypes: [LimitedPassengerGear]
   - type: RandomHumanoidAppearance
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: Skeletonping

@@ -66,7 +66,7 @@
     name: ghost-role-information-rouge-name
     description: ghost-role-information-rouge-description
     rules: ghost-role-information-nonantagonist-rules
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: EventGroup
 
 - type: entity

@@ -111,7 +111,7 @@
     - type: Tag
       tags:
         - CannotSuicide
-    - type: GhostRoleNotifys
+    - type: GhostRoleNotifys #DS14
       GroupPrototype: EventGroup
 
 # From the uplink injector
@@ -146,7 +146,7 @@
     - type: HTN
       rootTask:
         task: SimpleHumanoidHostileCompound
-    - type: GhostRoleNotifys
+    - type: GhostRoleNotifys #DS14
       GroupPrototype: Holoparasiteping
 
 # From Wizard deck of cards
@@ -178,7 +178,7 @@
           map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
           color: "#40a7d7"
           shader: unshaded
-    - type: GhostRoleNotifys
+    - type: GhostRoleNotifys #DS14
       GroupPrototype: ifritGuard
 
 - type: entity
@@ -268,7 +268,7 @@
     - type: HTN
       rootTask:
         task: SimpleHumanoidHostileCompound
-    - type: GhostRoleNotifys
+    - type: GhostRoleNotifys #DS14
       GroupPrototype: HoloClownping
 
 - type: entity

@@ -90,7 +90,7 @@
     - type: AutoImplant
       implants:
       - TrackingImplant
-    - type: GhostRoleNotifys
+    - type: GhostRoleNotifys #DS14
       GroupPrototype: ERTGroup
 
 - type: randomHumanoidSettings
@@ -148,7 +148,7 @@
     prototypes: [ DeathSquadGear ]
   - type: TTS
     voice: Garithos
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: DeathSquadGroup
 
 # ERT
@@ -835,5 +835,5 @@
         settings: default
     - type: GhostTakeoverAvailable
     - type: Cluwne
-    - type: GhostRoleNotifys
+    - type: GhostRoleNotifys #DS14
       GroupPrototype: EventGroup

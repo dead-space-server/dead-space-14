@@ -130,7 +130,7 @@
     voice: DrSezavo
   - type: NightVision # DS14
   - type: ZombieImmune # DS14
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: Ratking
 
 - type: entity

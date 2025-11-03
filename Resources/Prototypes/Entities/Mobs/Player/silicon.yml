@@ -446,7 +446,7 @@
       raffle:
         settings: default
     - type: GhostTakeoverAvailable
-    - type: GhostRoleNotifys
+    - type: GhostRoleNotifys #DS14
       GroupPrototype: SyndicateBorgGroup
 
 - type: entity
@@ -481,7 +481,7 @@
       raffle:
         settings: default
     - type: GhostTakeoverAvailable
-    - type: GhostRoleNotifys
+    - type: GhostRoleNotifys #DS14
       GroupPrototype: SyndicateBorgGroup
 
 - type: entity
@@ -535,7 +535,7 @@
     raffle:
       settings: default
   - type: GhostTakeoverAvailable
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: DerelictCyborg
 
 - type: entity
@@ -570,7 +570,7 @@
       raffle:
         settings: default
     - type: GhostTakeoverAvailable
-    - type: GhostRoleNotifys
+    - type: GhostRoleNotifys #DS14
       GroupPrototype: DerelictCyborg
 
 - type: entity
@@ -607,7 +607,7 @@
     raffle:
       settings: default
   - type: GhostTakeoverAvailable
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: DerelictCyborg
 
 - type: entity
@@ -645,7 +645,7 @@
     raffle:
       settings: default
   - type: GhostTakeoverAvailable
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: DerelictCyborg
 
 - type: entity
@@ -682,7 +682,7 @@
     raffle:
       settings: default
   - type: GhostTakeoverAvailable
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: DerelictCyborg
 
 - type: entity
@@ -718,5 +718,5 @@
     raffle:
       settings: default
   - type: GhostTakeoverAvailable
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: DerelictCyborg

@@ -659,7 +659,7 @@
           32:
             sprite: Mobs/Animals/mothroach/displacement.rsi
             state: neck
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: PetsGroup
 
 
@@ -1364,7 +1364,7 @@
   - type: Sanity # DS14
   - type: TTS # DS14
     voice: Ycf
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: Kangarooping
 
 - type: entity
@@ -1531,7 +1531,7 @@
         Blunt: 1
     clumsySound:
       path: /Audio/Animals/monkey_scream.ogg
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: PetsGroup
 
 
@@ -1567,7 +1567,7 @@
   - type: GhostTakeoverAvailable
   - type: Loadout
     prototypes: [SyndicateOperativeGearMonkey]
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: SyndicateGroup
 
 - type: entity
@@ -1704,7 +1704,7 @@
     name: ghost-role-information-kobold-name
     description: ghost-role-information-kobold-description
     rules: ghost-role-information-nonantagonist-rules
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: PetsGroup
 
 - type: entity
@@ -1750,7 +1750,7 @@
     # make the player a traitor once its taken
   - type: AutoTraitor
     profile: TraitorReinforcement
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: SyndicateGroup
 
 - type: entity
@@ -1960,7 +1960,7 @@
         recursive: false
   - type: NecromorfAfterInfection
     necroPrototype: NecroSmall
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: PetsGroup
 
 - type: entity
@@ -2652,7 +2652,7 @@
     raffle:
       settings: short
   - type: GhostTakeoverAvailable
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #Ds14
     GroupPrototype: SpidersGroup
 
 - type: entity
@@ -3277,7 +3277,7 @@
         Slash: 6
         Piercing: 6
         Structural: 15
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: ExplosiveCat
 
 - type: entity
@@ -3641,7 +3641,7 @@
         recursive: false
   - type: NecromorfAfterInfection # DS14
     necroPrototype: NecroSmall
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: PetsGroup
 
 - type: entity

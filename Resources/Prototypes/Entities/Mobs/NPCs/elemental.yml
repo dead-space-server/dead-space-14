@@ -408,7 +408,7 @@
     solution: bloodstream
   - type: DrainableSolution
     solution: bloodstream
-  - type: GhostRoleNotifys
+  - type: GhostRoleNotifys #DS14
     GroupPrototype: Slimeping
 
 - type: entity
