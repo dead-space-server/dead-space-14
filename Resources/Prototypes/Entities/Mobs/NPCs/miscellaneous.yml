@@ -233,4 +233,4 @@
   - type: StaticPrice
     price: 400
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: TomatoKillerping
+    groupPrototype: TomatoKillerping

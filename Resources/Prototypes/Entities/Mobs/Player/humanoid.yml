@@ -91,7 +91,7 @@
       implants:
       - TrackingImplant
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: ERTGroup
+      groupPrototype: ERTGroup
 
 - type: randomHumanoidSettings
   id: EventHumanoidERTZombieImmune
@@ -149,7 +149,7 @@
   - type: TTS
     voice: Garithos
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: DeathSquadGroup
+    groupPrototype: DeathSquadGroup
 
 # ERT
 ## Leader
@@ -836,4 +836,4 @@
     - type: GhostTakeoverAvailable
     - type: Cluwne
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: EventGroup
+      groupPrototype: EventGroup

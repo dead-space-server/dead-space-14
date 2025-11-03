@@ -9,6 +9,8 @@
   id: VisitorHead
   parent: EventHumanoidMindShielded
   components:
+    - type: GhostRoleNotifys #DS14
+      groupPrototype: VisitorGroup
     - type: GhostRole
       name: ghost-role-information-command-name
       description: ghost-role-information-command-description
@@ -18,8 +20,6 @@
       - !type:DepartmentTimeRequirement
         department: Command
         time: 7200 # 2 hours
-    - type: GhostRoleNotifys
-      GroupPrototype: VisitorGroup
 # DS14-end
       raffle:
         settings: default
@@ -35,7 +35,7 @@
       prototypes: [ VisitorCaptain, VisitorCaptainAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorCE
@@ -48,7 +48,7 @@
       prototypes: [ VisitorCE, VisitorCEAlt ]
       roleLoadout: [ RoleSurvivalExtended ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorCMO
@@ -61,7 +61,7 @@
       prototypes: [ VisitorCMO, VisitorCMOAlt ]
       roleLoadout: [ RoleSurvivalMedical ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorHOP
@@ -74,7 +74,7 @@
       prototypes: [ VisitorHOP, VisitorHOPAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorHOS
@@ -87,7 +87,7 @@
       prototypes: [ VisitorHOS, VisitorHOSAlt ]
       roleLoadout: [ RoleSurvivalSecurity ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorResearchDirector
@@ -100,7 +100,7 @@
       prototypes: [ VisitorRD, VisitorRDAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorQM
@@ -113,7 +113,7 @@
       prototypes: [ VisitorQM, VisitorQMAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 # Security
 # Following use EventHumanoidMindShielded since they are heads and probably should have mindshields
@@ -122,12 +122,12 @@
   id: VisitorSecurity
   parent: EventHumanoidMindShielded
   components:
+    - type: GhostRoleNotifys #DS14
+      groupPrototype: VisitorGroup
     - type: GhostRole
       name: ghost-role-information-security-name
       description: ghost-role-information-security-description
       rules: ghost-role-information-nonantagonist-rules
-    - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
 # DS14-start
       requirements:
       - !type:DepartmentTimeRequirement
@@ -147,7 +147,7 @@
       prototypes: [ VisitorSecurityCadet, VisitorSecurityCadetAlt ]
       roleLoadout: [ RoleSurvivalSecurity ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorSecurityOfficer
@@ -159,7 +159,7 @@
       prototypes: [ VisitorSecurityOfficer, VisitorSecurityOfficerAlt ]
       roleLoadout: [ RoleSurvivalSecurity ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorDetective
@@ -171,7 +171,7 @@
       prototypes: [ VisitorDetective, VisitorDetectiveAlt ]
       roleLoadout: [ RoleSurvivalSecurity ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorWarden
@@ -183,7 +183,7 @@
       prototypes: [ VisitorWarden, VisitorWardenAlt ]
       roleLoadout: [ RoleSurvivalSecurity ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 # Cargo
 
@@ -204,7 +204,7 @@
       raffle:
         settings: short
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorCargoTechnician
@@ -216,7 +216,7 @@
       prototypes: [ VisitorCargoTech, VisitorCargoTechAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorSalvageSpecialist
@@ -228,7 +228,7 @@
       prototypes: [ VisitorSalvageSpecialist, VisitorSalvageSpecialistAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 # Engineering
 
@@ -249,7 +249,7 @@
       raffle:
         settings: short
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorAtmosTech
@@ -261,7 +261,7 @@
       prototypes: [ VisitorAtmosTech, VisitorAtmosTechAlt ]
       roleLoadout: [ RoleSurvivalExtended ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorTechnicalAssistant
@@ -273,7 +273,7 @@
       prototypes: [ VisitorTechnicalAssistant, VisitorTechnicalAssistantAlt ]
       roleLoadout: [ RoleSurvivalExtended ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorEngineer
@@ -285,7 +285,7 @@
       prototypes: [ VisitorEngineer, VisitorEngineerAlt ]
       roleLoadout: [ RoleSurvivalExtended ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 # Medical
 
@@ -306,7 +306,7 @@
       raffle:
         settings: short
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorMedicalIntern
@@ -318,7 +318,7 @@
       prototypes: [ VisitorMedicalIntern, VisitorMedicalInternAlt ]
       roleLoadout: [ RoleSurvivalMedical ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorMedicalDoctor
@@ -330,7 +330,7 @@
       prototypes: [ VisitorMedicalDoctor, VisitorMedicalDoctorAlt , VisitorScrubsPurple, VisitorScrubsGreen, VisitorScrubsBlue]
       roleLoadout: [ RoleSurvivalMedical ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorParamedic
@@ -342,7 +342,7 @@
       prototypes: [ VisitorParamedic, VisitorParamedicAlt ]
       roleLoadout: [ RoleSurvivalMedical ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorVirologist
@@ -354,7 +354,7 @@
       prototypes: [ VisitorVirologist, VisitorVirologistAlt ]
       roleLoadout: [ RoleSurvivalMedical ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorGeneticist
@@ -366,7 +366,7 @@
       prototypes: [ VisitorGeneticist, VisitorGeneticistAlt ]
       roleLoadout: [ RoleSurvivalMedical ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorPsychologist
@@ -378,7 +378,7 @@
       prototypes: [ VisitorPsychologist, VisitorPsychologistAlt ]
       roleLoadout: [ RoleSurvivalMedical ]
     - type: GhostRoleNotifys #DS14 
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorChemist
@@ -390,7 +390,7 @@
       prototypes: [ VisitorChemist, VisitorChemistAlt ]
       roleLoadout: [ RoleSurvivalMedical ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorDentist
@@ -402,7 +402,7 @@
       prototypes: [ VisitorDentist ]
       roleLoadout: [ RoleSurvivalMedical ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 # Science
 
@@ -423,7 +423,7 @@
       raffle:
         settings: short
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorResearchAssistant
@@ -435,7 +435,7 @@
       prototypes: [ VisitorResearchAssistant, VisitorResearchAssistantAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorScientist
@@ -447,7 +447,7 @@
       prototypes: [ VisitorScientist, VisitorScientistAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 # Civilian
 
@@ -468,7 +468,7 @@
       raffle:
         settings: short
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorBartender
@@ -480,7 +480,7 @@
       prototypes: [ VisitorBartender, VisitorBartenderAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorBotanist
@@ -492,7 +492,7 @@
       prototypes: [ VisitorBotanist, VisitorBotanistAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorBoxer
@@ -504,7 +504,7 @@
       prototypes: [ VisitorBoxer, VisitorBoxerAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: GhostRoleNotifys #DS14 
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorChaplain
@@ -517,7 +517,7 @@
       prototypes: [ VisitorChaplain, VisitorChaplainAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorChef
@@ -529,7 +529,7 @@
       prototypes: [ VisitorChef, VisitorChefAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorClown
@@ -545,7 +545,7 @@
       nameSegments:
       - NamesClown
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorJanitor
@@ -557,7 +557,7 @@
       prototypes: [ VisitorJanitor, VisitorJanitorAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorLawyer
@@ -570,7 +570,7 @@
       roleLoadout: [ RoleSurvivalStandard ]
     - type: LawyerStampProvider
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 # - type: randomHumanoidSettings
 #   id: VisitorLawyerCentcom
@@ -593,7 +593,7 @@
       prototypes: [ VisitorLibrarian, VisitorLibrarianAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorMusician
@@ -605,7 +605,7 @@
       prototypes: [ VisitorMusicianFancyAltA, VisitorMusicianFancyAltB, VisitorMusicianFancyAltC, VisitorMusicianFancyAltD, VisitorMusicianFancyAltE, VisitorMusicianFancyAltF, VisitorMusicianFancyAltG, VisitorMusicianFancyAltH, VisitorMusicianFancyAltI, VisitorMusicianRelaxedAltA, VisitorMusicianRelaxedAltB, VisitorMusicianRelaxedAltC, VisitorMusicianRelaxedAltD, VisitorMusicianRelaxedAltE, VisitorMusicianRelaxedAltF, VisitorMusicianMariachi ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorMusicianFancy
@@ -617,7 +617,7 @@
       prototypes: [ VisitorMusicianFancyAltA, VisitorMusicianFancyAltB, VisitorMusicianFancyAltC, VisitorMusicianFancyAltD, VisitorMusicianFancyAltE, VisitorMusicianFancyAltF, VisitorMusicianFancyAltG, VisitorMusicianFancyAltH, VisitorMusicianFancyAltI ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorMusicianRelaxed
@@ -629,7 +629,7 @@
       prototypes: [ VisitorMusicianRelaxedAltA, VisitorMusicianRelaxedAltB, VisitorMusicianRelaxedAltC, VisitorMusicianRelaxedAltD, VisitorMusicianRelaxedAltE, VisitorMusicianRelaxedAltF, VisitorMusicianMariachi ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorMime
@@ -642,7 +642,7 @@
       prototypes: [ VisitorMime, VisitorMimeAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorReporter
@@ -654,7 +654,7 @@
       prototypes: [ VisitorReporter, VisitorReporterAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorServiceWorker
@@ -666,7 +666,7 @@
       prototypes: [ VisitorServiceWorker, VisitorServiceWorkerAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: VisitorZookeeper
@@ -678,7 +678,7 @@
       prototypes: [ VisitorZookeeper, VisitorZookeeperAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: ClownTroupeBanana
@@ -721,7 +721,7 @@
       prototypes: [ ChallengeVictimCaptain, ChallengeVictimCaptainAlt ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
     # - type: RandomMetadata
     #   nameSegments:
     #   - NamesFirst
@@ -750,7 +750,7 @@
       prototypes: [ ChallengeVictimCE, ChallengeVictimCEAlt ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
     # - type: RandomMetadata
     #   nameSegments:
     #   - NamesFirst
@@ -779,7 +779,7 @@
       prototypes: [ ChallengeVictimCMO, ChallengeVictimCMOAlt ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
     # - type: RandomMetadata
     #   nameSegments:
     #   - NamesFirst
@@ -808,7 +808,7 @@
       prototypes: [ ChallengeVictimHOP, ChallengeVictimHOPAlt ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
     # - type: RandomMetadata
     #   nameSegments:
     #   - NamesFirst
@@ -837,7 +837,7 @@
       prototypes: [ ChallengeVictimHOS, ChallengeVictimHOSAlt ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
     # - type: RandomMetadata
     #   nameSegments:
     #   - NamesFirst
@@ -866,7 +866,7 @@
       prototypes: [ ChallengeVictimRD, ChallengeVictimRDAlt ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
     # - type: RandomMetadata
     #   nameSegments:
     #   - NamesFirst
@@ -895,7 +895,7 @@
       prototypes: [ ChallengeVictimQM, ChallengeVictimQMAlt ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
     # - type: RandomMetadata
     #   nameSegments:
     #   - NamesFirst
@@ -928,7 +928,7 @@
       prototypes: [ ChallengeCargoTechGearSuit, ChallengeCargoTechGearCoat ] #!! This is supposed to be for challenge events. Its intentionally missing QOL gear to make interesting scenarios.
       roleLoadout: [ RoleSurvivalVoxSupport ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
     # - type: RandomMetadata
     #   nameSegments:
     #   - NamesFirst
@@ -979,7 +979,7 @@
       prototypes: [ SyndicateFootsoldierTeamLeaderGear ]
       roleLoadout: [ RoleSurvivalSyndicate ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: OperativeGroup
+      groupPrototype: OperativeGroup
 
 - type: randomHumanoidSettings
   id: SyndieSoldier
@@ -1010,7 +1010,7 @@
       prototypes: [ SyndicateFootsoldierGear ]
       roleLoadout: [ RoleSurvivalSyndicate ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: OperativeGroup
+      groupPrototype: OperativeGroup
 
 - type: randomHumanoidSettings
   id: SyndieVisitor
@@ -1037,7 +1037,7 @@
       prototypes: [ SyndicateOperativeGearCivilian ]
       roleLoadout: [ RoleSurvivalSyndicate ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: SyndicateGroup
+      groupPrototype: SyndicateGroup
 
 - type: randomHumanoidSettings
   id: PirateScooner
@@ -1062,7 +1062,7 @@
       prototypes: [ PirateScoonerAltA, PirateScoonerAltB, PirateScoonerAltC, PirateScoonerAltD ]
       roleLoadout: [ RoleSurvivalEVA ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: BigAntagsGroup
+      groupPrototype: BigAntagsGroup
 
 - type: randomHumanoidSettings
   id: PirateCaptainScooner
@@ -1090,7 +1090,7 @@
       prototypes: [ PirateCaptainScooner ]
       roleLoadout: [ RoleSurvivalEVA ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: BigAntagsGroup
+      groupPrototype: BigAntagsGroup
 
 ### Other
 
@@ -1115,7 +1115,7 @@
       prototypes: [ VisitorBlackmarketeer, VisitorBlackmarketeer ]
       roleLoadout: [ RoleSurvivalStandard ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
   id: Cossack
@@ -1142,4 +1142,4 @@
       prototypes: [ CossackGear ]
       roleLoadout: [ RoleSurvivalEVA ]
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: VisitorGroup
+      groupPrototype: VisitorGroup

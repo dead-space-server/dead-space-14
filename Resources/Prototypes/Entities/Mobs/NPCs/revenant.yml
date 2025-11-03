@@ -123,5 +123,5 @@
   # DS14-Languages-end
   # DS14-start
   - type: GhostRoleNotifys
-    GroupPrototype: RevenantPing
+    groupPrototype: RevenantPing
   # DS14-end

@@ -409,7 +409,7 @@
   - type: DrainableSolution
     solution: bloodstream
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: Slimeping
+    groupPrototype: Slimeping
 
 - type: entity
   name: Reagent Slime Spawner

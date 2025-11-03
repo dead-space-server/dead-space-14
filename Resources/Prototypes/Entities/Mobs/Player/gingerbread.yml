@@ -31,5 +31,5 @@
     rootTask:
       task: SimpleHostileCompound
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: EventGroup
+    groupPrototype: EventGroup
   

@@ -240,7 +240,7 @@
       rootTask:
         task: DragonCarpCompound
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: CarpsGroup
+      groupPrototype: CarpsGroup
 
 - type: entity
   id: MobCarpDungeon

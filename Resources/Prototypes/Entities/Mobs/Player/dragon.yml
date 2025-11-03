@@ -174,7 +174,7 @@
       path: /Audio/Items/crowbar.ogg
   - type: NightVision # DS14
   - type: GhostRoleNotifys # DS14
-    GroupPrototype: Dragonping
+    groupPrototype: Dragonping
 
 - type: entity
   parent: BaseMobDragon

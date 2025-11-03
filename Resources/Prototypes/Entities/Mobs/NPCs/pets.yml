@@ -605,7 +605,7 @@
   - type: TTS
     voice: Chen
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: PetsGroup
+    groupPrototype: PetsGroup
 
 - type: entity
   name: Renault
@@ -695,7 +695,7 @@
   - type: Hunger
     baseDecayRate: 0.1 # DS14: not soo hungry
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: PetsGroup
+    groupPrototype: PetsGroup
 
 - type: entity
   parent: MobHamsterHamlet
@@ -811,7 +811,7 @@
   - type: Loadout
     prototypes: [ BoxingKangarooGear ]
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: Kangarooping
+    groupPrototype: Kangarooping
 
 - type: entity
   name: Smile
@@ -895,7 +895,7 @@
       proper: true
       gender: female
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: PetsGroup
+    groupPrototype: PetsGroup
 
 - type: entity
   name: Pun Pun
@@ -938,7 +938,7 @@
       proper: true
       gender: male
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: PunPunping
+    groupPrototype: PunPunping
 
 - type: entity
   name: Tropico

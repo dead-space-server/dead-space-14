@@ -131,7 +131,7 @@
   - type: NightVision # DS14
   - type: ZombieImmune # DS14
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: Ratking
+    groupPrototype: Ratking
 
 - type: entity
   id: MobRatKingBuff

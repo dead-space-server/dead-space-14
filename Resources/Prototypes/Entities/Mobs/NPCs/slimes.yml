@@ -149,7 +149,7 @@
     rootTask:
       task: SimpleHostileCompound
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: Slimeping
+    groupPrototype: Slimeping
 
 - type: entity
   name: blue slime
@@ -180,7 +180,7 @@
       raffle:
         settings: short
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: Slimeping
+      groupPrototype: Slimeping
 
 - type: entity
   name: green slime
@@ -222,7 +222,7 @@
       raffle:
         settings: short
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: Slimeping
+      groupPrototype: Slimeping
 
 - type: entity
   name: yellow slime
@@ -263,4 +263,4 @@
       raffle:
         settings: short
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: Slimeping
+      groupPrototype: Slimeping

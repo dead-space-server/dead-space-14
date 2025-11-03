@@ -660,7 +660,7 @@
             sprite: Mobs/Animals/mothroach/displacement.rsi
             state: neck
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: PetsGroup
+    groupPrototype: PetsGroup
 
 
 # Note that the mallard duck is actually a male drake mallard, with the brown duck being the female variant of the same species, however ss14 lacks sex specific textures
@@ -1365,7 +1365,7 @@
   - type: TTS # DS14
     voice: Ycf
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: Kangarooping
+    groupPrototype: Kangarooping
 
 - type: entity
   name: boxing kangaroo
@@ -1532,7 +1532,7 @@
     clumsySound:
       path: /Audio/Animals/monkey_scream.ogg
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: PetsGroup
+    groupPrototype: PetsGroup
 
 
 - type: entity
@@ -1568,7 +1568,7 @@
   - type: Loadout
     prototypes: [SyndicateOperativeGearMonkey]
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: SyndicateGroup
+    groupPrototype: SyndicateGroup
 
 - type: entity
   id: MobMonkeySyndicateAgent
@@ -1705,7 +1705,7 @@
     description: ghost-role-information-kobold-description
     rules: ghost-role-information-nonantagonist-rules
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: PetsGroup
+    groupPrototype: PetsGroup
 
 - type: entity
   name: kobold
@@ -1751,7 +1751,7 @@
   - type: AutoTraitor
     profile: TraitorReinforcement
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: SyndicateGroup
+    groupPrototype: SyndicateGroup
 
 - type: entity
   id: MobKoboldSyndicateAgentNukeops # Reinforcement exclusive to nukeops uplink
@@ -1961,7 +1961,7 @@
   - type: NecromorfAfterInfection
     necroPrototype: NecroSmall
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: PetsGroup
+    groupPrototype: PetsGroup
 
 - type: entity
   parent: MobMouse
@@ -2653,7 +2653,7 @@
       settings: short
   - type: GhostTakeoverAvailable
   - type: GhostRoleNotifys #Ds14
-    GroupPrototype: SpidersGroup
+    groupPrototype: SpidersGroup
 
 - type: entity
   name: tarantula
@@ -3278,7 +3278,7 @@
         Piercing: 6
         Structural: 15
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: ExplosiveCat
+    groupPrototype: ExplosiveCat
 
 - type: entity
   name: space cat
@@ -3642,7 +3642,7 @@
   - type: NecromorfAfterInfection # DS14
     necroPrototype: NecroSmall
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: PetsGroup
+    groupPrototype: PetsGroup
 
 - type: entity
   name: pig

@@ -25,7 +25,7 @@
     factions:
     - Syndicate
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: SyndicateGroup
+    groupPrototype: SyndicateGroup
 
 - type: entity
   parent: MobHumanSyndicateAgentBase

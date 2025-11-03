@@ -112,7 +112,7 @@
       tags:
         - CannotSuicide
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: EventGroup
+      groupPrototype: EventGroup
 
 # From the uplink injector
 - type: entity
@@ -147,7 +147,7 @@
       rootTask:
         task: SimpleHumanoidHostileCompound
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: Holoparasiteping
+      groupPrototype: Holoparasiteping
 
 # From Wizard deck of cards
 - type: entity
@@ -179,7 +179,7 @@
           color: "#40a7d7"
           shader: unshaded
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: ifritGuard
+      groupPrototype: ifritGuard
 
 - type: entity
   name: HoloClown
@@ -269,7 +269,7 @@
       rootTask:
         task: SimpleHumanoidHostileCompound
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: HoloClownping
+      groupPrototype: HoloClownping
 
 - type: entity
   parent: BaseMentalAction

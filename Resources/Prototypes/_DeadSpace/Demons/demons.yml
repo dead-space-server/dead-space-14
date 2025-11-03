@@ -135,7 +135,7 @@
   - type: Reflect
     reflectProb: 0.25
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: DemonSlaughter
+    groupPrototype: DemonSlaughter
 
 - type: entity
   parent: BaseMobDemonRS
@@ -184,7 +184,7 @@
     description: ghost-role-information-honker-description
     rules: ghost-role-information-honker-rules
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: DemonHonkerping
+    groupPrototype: DemonHonkerping
 
 - type: entity
   parent: BaseMobDemonRS
@@ -220,7 +220,7 @@
   - type: BallisticAmmoProvider
     proto: FireballBullet
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: DemonIfrit
+    groupPrototype: DemonIfrit
 
 - type: entity
   parent: BaseMobDemonRS
@@ -267,7 +267,7 @@
         Piercing: 1
         Heat: 5
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: DemonJaunt
+    groupPrototype: DemonJaunt
 
 - type: entity
   id: FireballBullet

@@ -122,7 +122,7 @@
     - DemonLanguage
     - GeneralLanguage
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: DemonShadowping
+    groupPrototype: DemonShadowping
 
 - type: entity
   name: теневая рука

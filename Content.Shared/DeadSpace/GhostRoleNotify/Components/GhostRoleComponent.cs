@@ -10,6 +10,6 @@ public sealed partial class GhostRoleNotifysComponent : Component
     public GhostRoleNotifysComponent()
     { }
 
-    [DataField("GroupPrototype", required: true)]
+    [DataField(required: true)]
     public string GroupPrototype = string.Empty;
 }

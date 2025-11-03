@@ -34,7 +34,7 @@
     prototype: MobHumanSyndicateAgentSpy
     selectablePrototypes: ["SyndicateAgentMedic", "SyndicateAgentSpy", "SyndicateAgentThief"]
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: SyndicateGroup
+    groupPrototype: SyndicateGroup
 
 - type: entity
   parent: ReinforcementRadio
@@ -54,7 +54,7 @@
   - type: GhostRoleMobSpawner
     prototype: MobHumanSyndicateAgentNukeops
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: Operativeping
+    groupPrototype: Operativeping
 
 - type: entity
   parent: ReinforcementRadio
@@ -74,7 +74,7 @@
     prototype: MobMonkeySyndicateAgent
     selectablePrototypes: ["SyndicateMonkey", "SyndicateKobold"]
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: SyndicateGroup
+    groupPrototype: SyndicateGroup
 
 - type: entity
   parent: ReinforcementRadioSyndicateAncestor
@@ -87,7 +87,7 @@
     prototype: MobMonkeySyndicateAgentNukeops
     selectablePrototypes: ["SyndicateMonkeyNukeops", "SyndicateKoboldNukeops"]
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: SyndicateGroup
+    groupPrototype: SyndicateGroup
 
 - type: entity
   parent: ReinforcementRadio
@@ -108,7 +108,7 @@
   - type: EmitSoundOnUse
     sound: /Audio/Animals/cat_meow.ogg
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: ExplosiveCat
+    groupPrototype: ExplosiveCat
 
 - type: entity
   parent: ReinforcementRadio
@@ -128,4 +128,4 @@
   - type: GhostRoleMobSpawner
     prototype: PlayerBorgSyndicateAssaultBattery
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: SyndicateGroup
+    groupPrototype: SyndicateGroup

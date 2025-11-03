@@ -27,7 +27,7 @@
     prototypes: [PirateGear]
   - type: RandomHumanoidAppearance
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: PirateSkeletonping
+    groupPrototype: PirateSkeletonping
 
 
 - type: entity
@@ -48,7 +48,7 @@
     prototypes: [SkeletonBiker]
   - type: RandomHumanoidAppearance
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: EventGroup
+    groupPrototype: EventGroup
 
 - type: entity
   parent: MobSkeletonPerson
@@ -68,4 +68,4 @@
     prototypes: [LimitedPassengerGear]
   - type: RandomHumanoidAppearance
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: Skeletonping
+    groupPrototype: Skeletonping

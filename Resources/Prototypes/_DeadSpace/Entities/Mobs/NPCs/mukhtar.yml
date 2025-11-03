@@ -117,7 +117,7 @@
   - type: StealTarget
     stealGroup: AnimalMukhtar
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: Mukhtarping
+    groupPrototype: Mukhtarping
 
 - type: startingGear
   id: MobMukhtarGear

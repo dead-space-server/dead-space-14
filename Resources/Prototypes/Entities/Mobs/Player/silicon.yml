@@ -447,7 +447,7 @@
         settings: default
     - type: GhostTakeoverAvailable
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: SyndicateBorgGroup
+      groupPrototype: SyndicateBorgGroup
 
 - type: entity
   id: PlayerBorgSyndicateSaboteurBattery
@@ -482,7 +482,7 @@
         settings: default
     - type: GhostTakeoverAvailable
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: SyndicateBorgGroup
+      groupPrototype: SyndicateBorgGroup
 
 - type: entity
   name: syndicate invasion borg spawner
@@ -536,7 +536,7 @@
       settings: default
   - type: GhostTakeoverAvailable
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: DerelictCyborg
+    groupPrototype: DerelictCyborg
 
 - type: entity
   parent: BorgChassisDerelict
@@ -571,7 +571,7 @@
         settings: default
     - type: GhostTakeoverAvailable
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: DerelictCyborg
+      groupPrototype: DerelictCyborg
 
 - type: entity
   parent: JanitorBorgChassisDerelict
@@ -608,7 +608,7 @@
       settings: default
   - type: GhostTakeoverAvailable
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: DerelictCyborg
+    groupPrototype: DerelictCyborg
 
 - type: entity
   parent: MedicalBorgChassisDerelict
@@ -646,7 +646,7 @@
       settings: default
   - type: GhostTakeoverAvailable
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: DerelictCyborg
+    groupPrototype: DerelictCyborg
 
 - type: entity
   parent: MiningBorgChassisDerelict
@@ -683,7 +683,7 @@
       settings: default
   - type: GhostTakeoverAvailable
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: DerelictCyborg
+    groupPrototype: DerelictCyborg
 
 - type: entity
   parent: SyndicateAssaultBorgChassisDerelict
@@ -719,4 +719,4 @@
       settings: default
   - type: GhostTakeoverAvailable
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: DerelictCyborg
+    groupPrototype: DerelictCyborg

@@ -98,7 +98,7 @@
     - NamesLastERT
     nameFormat: name-format-ert
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: CBURNGroup
+    groupPrototype: CBURNGroup
 
 - type: randomHumanoidSettings
   id: CBURNSoldierSCST
@@ -131,7 +131,7 @@
     - NamesLastERT
     nameFormat: name-format-ert
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: CBURNGroup
+    groupPrototype: CBURNGroup
     
 - type: entity
   id: RandomHumanoidCBURNSoldierSCST

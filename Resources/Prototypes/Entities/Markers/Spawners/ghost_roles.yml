@@ -35,7 +35,7 @@
       - sprite: Mobs/Animals/regalrat.rsi
         state: icon
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: Ratking
+    groupPrototype: Ratking
 
 - type: entity
   id: SpawnPointGhostRemilia
@@ -60,7 +60,7 @@
       - sprite: Mobs/Animals/bat.rsi
         state: bat
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: PetsGroup
+    groupPrototype: PetsGroup
 
 - type: entity
   id: SpawnPointGhostCerberus
@@ -85,7 +85,7 @@
       - sprite: Mobs/Pets/corgi.rsi
         state: narsian
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: PetsGroup
+    groupPrototype: PetsGroup
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -116,7 +116,7 @@
       - sprite: Structures/Wallmounts/signs.rsi
         state: radiation
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: OperativeGroup
+    groupPrototype: OperativeGroup
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -143,7 +143,7 @@
       - sprite: Structures/Wallmounts/signs.rsi
         state: radiation
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: LoneOper
+    groupPrototype: LoneOper
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -167,7 +167,7 @@
       department: Command
       time: 72000 # 20 hours
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: CommanderOperatives
+    groupPrototype: CommanderOperatives
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -191,7 +191,7 @@
       department: Security
       time: 72000 # 20 hours
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: OperativeMedic
+    groupPrototype: OperativeMedic
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -205,7 +205,7 @@
     mindRoles:
     - MindRoleGhostRoleTeamAntagonist
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: Operativeping
+    groupPrototype: Operativeping
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -227,7 +227,7 @@
     - sprite: Mobs/Aliens/Carps/dragon.rsi
       state: alive
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: Dragonping
+    groupPrototype: Dragonping
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -252,7 +252,7 @@
     - sprite: Objects/Weapons/Melee/energykatana.rsi
       state: icon
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: Nijaping
+    groupPrototype: Nijaping
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -278,7 +278,7 @@
     - sprite: Mobs/Aliens/paradox_clone.rsi
       state: preview
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: Paradoxping
+    groupPrototype: Paradoxping
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -310,7 +310,7 @@
     - sprite: Mobs/Silicon/chassis.rsi
       state: derelict_icon
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: DerelictCyborg
+    groupPrototype: DerelictCyborg
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -385,4 +385,4 @@
     - sprite: Clothing/Head/Hats/wizardhat.rsi
       state: icon
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: Wizardping
+    groupPrototype: Wizardping

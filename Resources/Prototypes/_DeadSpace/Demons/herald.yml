@@ -72,4 +72,4 @@
   - type: TTS
     voice: Volibear
   - type: GhostRoleNotifys #DS14
-    GroupPrototype: DemonBoss
+    groupPrototype: DemonBoss

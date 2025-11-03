@@ -137,7 +137,7 @@
       - NamesLastERT
       nameFormat: name-format-ert
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: CBURNGroup
+      groupPrototype: CBURNGroup
 
 - type: entity
   id: RandomHumanoidSpawnerCBURNSoldierNECRO
@@ -193,4 +193,4 @@
       - NamesLastERT
       nameFormat: name-format-ert
     - type: GhostRoleNotifys #DS14
-      GroupPrototype: CBURNGroup
+      groupPrototype: CBURNGroup
