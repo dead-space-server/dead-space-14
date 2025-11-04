@@ -28,7 +28,7 @@ public sealed partial class GhostRoleNotifySystem : EntitySystem
         {
             foreach (var player in _playerManager.Sessions)
             {
-                if (_entityManager.HasComponent<GhostComponent>(player.AttachedEntity))
+                if (player.AttachedEntity != null && player.AttachedEntity.Value.IsValid() && _entityManager.HasComponent<GhostComponent>(player.AttachedEntity))
                 {
                     RaiseNetworkEvent(new PingMessege(component.GroupPrototype), player);
                 }

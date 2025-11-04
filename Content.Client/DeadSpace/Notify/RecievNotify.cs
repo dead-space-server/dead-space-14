@@ -6,6 +6,7 @@ using Content.Client.DeadSpace.NotifySystem.NotifyHelpers;
 using Content.Shared.DeadSpace.CCCCVars;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
+using Robust.Shared.GameObjects;
 
 
 namespace Content.Client.DeadSpace.NotifySystem.RecievNotify;
@@ -17,7 +18,7 @@ public sealed partial class RecievNotifySys : EntitySystem
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     public SoundSpecifier SoundNotify = new SoundPathSpecifier("/Audio/Effects/adminhelp.ogg");
 
-    private DateTime IGameTiming = DateTime.Now;
+    private DateTime IGameTiming = DateTime.MinValue;
 
 
     public override void Initialize()
@@ -31,7 +32,7 @@ public sealed partial class RecievNotifySys : EntitySystem
     {
         if (NotifyHelper.GetValueAccess(messege.ID) && _cfg.GetCVar(CCCCVars.SysNotifyPerm))
         {
-            if (IGameTiming.AddSeconds(_cfg.GetCVar(CCCCVars.SysNotifyCoolDown)) < DateTime.Now)
+            if (DateTime.Now - IGameTiming >= TimeSpan.FromSeconds(_cfg.GetCVar(CCCCVars.SysNotifyCoolDown)))
             {
                 _audio.PlayGlobal(SoundNotify, Filter.Local(), false);
                 IGameTiming = DateTime.Now;
