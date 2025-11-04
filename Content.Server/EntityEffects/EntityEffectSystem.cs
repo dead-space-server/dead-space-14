@@ -768,21 +768,6 @@ public sealed class EntityEffectSystem : EntitySystem
         RemComp<ReplacementAccentComponent>(uid);
         RemComp<MonkeyAccentComponent>(uid);
 
-        // DS14-Languages-start
-        if (TryComp<LanguageComponent>(uid, out var language))
-        {
-            language.KnownLanguages.Add(LanguageSystem.DefaultLanguageId);
-        }
-        else
-        {
-            AddComp(uid, new LanguageComponent
-            {
-                KnownLanguages = { LanguageSystem.DefaultLanguageId },
-                SelectedLanguage = LanguageSystem.DefaultLanguageId
-            });
-        }
-        // DS14-Languages-end
-
         // Stops from adding a ghost role to things like people who already have a mind
         if (TryComp<MindContainerComponent>(uid, out var mindContainer) && mindContainer.HasMind)
         {
