@@ -7,6 +7,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Configuration;
 using Content.Shared.DeadSpace.CCCCVars;
 using Content.Client.DeadSpace.NotifySystem.NotifyHelpers;
+using Content.Client.Options.UI;
 
 namespace Content.Client.Options.UI.Tabs;
 
@@ -16,7 +17,7 @@ public sealed partial class PingTab : Control
 {
     private void AddCheckBox(string checkBoxName, string id, IConfigurationManager cfg, bool savedSelection)
     {
-        CheckBox newCheckBox = new CheckBox() { Text = Loc.GetString(checkBoxName) };
+        CheckBox newCheckBox = new CheckBox() { Text = checkBoxName }; //Loc.GetString(checkBoxName) };
         newCheckBox.Pressed = savedSelection;
         newCheckBox.OnToggled += lol =>
         {
@@ -31,6 +32,7 @@ public sealed partial class PingTab : Control
     {
         var prototypeManager = IoCManager.Resolve<IPrototypeManager>();
         var cfg = IoCManager.Resolve<IConfigurationManager>();
+        NotifyHelper.EnsureInitialized(cfg, prototypeManager);
         RobustXamlLoader.Load(this);
         foreach (var proto in prototypeManager.EnumeratePrototypes<GhostRoleGroupNotify>())
         {

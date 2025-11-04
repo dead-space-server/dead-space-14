@@ -17,7 +17,7 @@ public sealed partial class RecievNotifySys : EntitySystem
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     public SoundSpecifier SoundNotify = new SoundPathSpecifier("/Audio/Effects/adminhelp.ogg");
 
-    public DateTime IGameTiming = DateTime.Now;
+    private DateTime IGameTiming = DateTime.Now;
 
 
     public override void Initialize()
