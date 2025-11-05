@@ -117,8 +117,10 @@
     - type: Bloodstream
       bloodMaxVolume: 300
       bloodReagent: Laughter
-    - type: GhostRoleNotifys #DS14
+    #DS14-start
+    - type: GhostRoleNotifys 
       groupPrototype: Behonkerping
+    #DS14-end
 
 - type: entity
   name: behonker

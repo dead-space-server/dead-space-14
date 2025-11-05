@@ -446,8 +446,10 @@
       raffle:
         settings: default
     - type: GhostTakeoverAvailable
-    - type: GhostRoleNotifys #DS14
+    #DS14-start
+    - type: GhostRoleNotifys 
       groupPrototype: SyndicateBorgGroup
+    #DS14-end
 
 - type: entity
   id: PlayerBorgSyndicateSaboteurBattery
@@ -481,8 +483,10 @@
       raffle:
         settings: default
     - type: GhostTakeoverAvailable
-    - type: GhostRoleNotifys #DS14
+    #DS14-start
+    - type: GhostRoleNotifys 
       groupPrototype: SyndicateBorgGroup
+    #DS14-end
 
 - type: entity
   name: syndicate invasion borg spawner
@@ -535,8 +539,10 @@
     raffle:
       settings: default
   - type: GhostTakeoverAvailable
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: DerelictCyborg
+  #DS14-end
 
 - type: entity
   parent: BorgChassisDerelict
@@ -570,8 +576,10 @@
       raffle:
         settings: default
     - type: GhostTakeoverAvailable
-    - type: GhostRoleNotifys #DS14
+    #DS14-start
+    - type: GhostRoleNotifys 
       groupPrototype: DerelictCyborg
+    #DS14-end
 
 - type: entity
   parent: JanitorBorgChassisDerelict
@@ -607,8 +615,10 @@
     raffle:
       settings: default
   - type: GhostTakeoverAvailable
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: DerelictCyborg
+  #DS14-end
 
 - type: entity
   parent: MedicalBorgChassisDerelict
@@ -645,8 +655,10 @@
     raffle:
       settings: default
   - type: GhostTakeoverAvailable
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: DerelictCyborg
+  #DS14-end
 
 - type: entity
   parent: MiningBorgChassisDerelict
@@ -682,8 +694,10 @@
     raffle:
       settings: default
   - type: GhostTakeoverAvailable
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: DerelictCyborg
+  #DS14-end
 
 - type: entity
   parent: SyndicateAssaultBorgChassisDerelict
@@ -718,5 +732,7 @@
     raffle:
       settings: default
   - type: GhostTakeoverAvailable
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: DerelictCyborg
+  #DS14-end

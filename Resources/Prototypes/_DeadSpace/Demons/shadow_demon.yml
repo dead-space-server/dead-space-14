@@ -121,7 +121,7 @@
     knownLanguages:
     - DemonLanguage
     - GeneralLanguage
-  - type: GhostRoleNotifys #DS14
+  - type: GhostRoleNotifys
     groupPrototype: DemonShadowping
 
 - type: entity

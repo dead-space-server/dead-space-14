@@ -148,8 +148,10 @@
   - type: HTN
     rootTask:
       task: SimpleHostileCompound
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: Slimeping
+  #DS14-end
 
 - type: entity
   name: blue slime
@@ -179,8 +181,10 @@
       - MindRoleGhostRoleTeamAntagonist
       raffle:
         settings: short
-    - type: GhostRoleNotifys #DS14
+    #DS14-start
+    - type: GhostRoleNotifys
       groupPrototype: Slimeping
+    #DS14-end
 
 - type: entity
   name: green slime
@@ -221,8 +225,10 @@
       - MindRoleGhostRoleTeamAntagonist
       raffle:
         settings: short
-    - type: GhostRoleNotifys #DS14
+    #DS14-start
+    - type: GhostRoleNotifys 
       groupPrototype: Slimeping
+    #DS14-end
 
 - type: entity
   name: yellow slime
@@ -262,5 +268,7 @@
       - MindRoleGhostRoleTeamAntagonist
       raffle:
         settings: short
-    - type: GhostRoleNotifys #DS14
+    #DS14-start
+    - type: GhostRoleNotifys 
       groupPrototype: Slimeping
+    #DS14-end

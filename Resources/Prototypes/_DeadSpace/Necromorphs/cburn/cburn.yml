@@ -136,7 +136,7 @@
       - NamesFirstERTLeader
       - NamesLastERT
       nameFormat: name-format-ert
-    - type: GhostRoleNotifys #DS14
+    - type: GhostRoleNotifys 
       groupPrototype: CBURNGroup
 
 - type: entity
@@ -192,5 +192,5 @@
       - NamesFirstERT
       - NamesLastERT
       nameFormat: name-format-ert
-    - type: GhostRoleNotifys #DS14
+    - type: GhostRoleNotifys 
       groupPrototype: CBURNGroup

@@ -264,8 +264,10 @@
     totalIntensity: 10
     intensitySlope: 5
     canCreateVacuum: false
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: Botsping
+  #DS14-end
 
 - type: entity
   parent: MobSiliconBase
@@ -411,8 +413,10 @@
     interactFailureString: petting-failure-mimebot
   - type: Inventory
     templateId: head
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: Botsping
+  #DS14-end
 
 - type: entity
   parent: MobSiliconBase
@@ -484,5 +488,7 @@
     - Supply
   - type: Puller
     needsHands: false
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: Botsping
+  #DS14-end

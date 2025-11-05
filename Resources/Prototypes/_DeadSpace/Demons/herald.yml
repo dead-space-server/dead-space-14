@@ -71,5 +71,7 @@
       Unsexed: Demon
   - type: TTS
     voice: Volibear
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: DemonBoss
+  #DS14-end

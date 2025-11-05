@@ -128,10 +128,12 @@
   - type: Sharp
   - type: TTS
     voice: DrSezavo
-  - type: NightVision # DS14
-  - type: ZombieImmune # DS14
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: NightVision 
+  - type: ZombieImmune 
+  - type: GhostRoleNotifys 
     groupPrototype: Ratking
+  #DS14-end
 
 - type: entity
   id: MobRatKingBuff

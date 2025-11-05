@@ -26,9 +26,10 @@
   - type: Loadout
     prototypes: [PirateGear]
   - type: RandomHumanoidAppearance
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: PirateSkeletonping
-
+  #DS14-end
 
 - type: entity
   name: skeleton biker
@@ -47,8 +48,10 @@
   - type: Loadout
     prototypes: [SkeletonBiker]
   - type: RandomHumanoidAppearance
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: EventGroup
+  #DS14-end
 
 - type: entity
   parent: MobSkeletonPerson
@@ -67,5 +70,7 @@
   - type: Loadout
     prototypes: [LimitedPassengerGear]
   - type: RandomHumanoidAppearance
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: Skeletonping
+  #DS14-end

@@ -172,9 +172,11 @@
     speedModifier: 2.5 # fast because dragon strong
     useSound:
       path: /Audio/Items/crowbar.ogg
-  - type: NightVision # DS14
-  - type: GhostRoleNotifys # DS14
+  #DS14-start
+  - type: NightVision 
+  - type: GhostRoleNotifys 
     groupPrototype: Dragonping
+  #DS14-end
 
 - type: entity
   parent: BaseMobDragon

@@ -604,8 +604,10 @@
   - type: GhostTakeoverAvailable
   - type: TTS
     voice: Chen
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: PetsGroup
+  #DS14-end
 
 - type: entity
   name: Renault
@@ -693,9 +695,11 @@
     - meaty
     - sadness
   - type: Hunger
-    baseDecayRate: 0.1 # DS14: not soo hungry
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+    baseDecayRate: 0.1 # not soo hungry
+  - type: GhostRoleNotifys 
     groupPrototype: PetsGroup
+  #DS14-end
 
 - type: entity
   parent: MobHamsterHamlet
@@ -810,8 +814,10 @@
   - type: GhostTakeoverAvailable
   - type: Loadout
     prototypes: [ BoxingKangarooGear ]
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: Kangarooping
+  #DS14-end
 
 - type: entity
   name: Smile
@@ -894,8 +900,10 @@
     attributes:
       proper: true
       gender: female
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: PetsGroup
+  #DS14-end
 
 - type: entity
   name: Pun Pun
@@ -937,8 +945,10 @@
     attributes:
       proper: true
       gender: male
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: PunPunping
+  #DS14-end
 
 - type: entity
   name: Tropico

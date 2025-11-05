@@ -232,5 +232,7 @@
         Blunt: 0.11
   - type: StaticPrice
     price: 400
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: TomatoKillerping
+  #DS14-end

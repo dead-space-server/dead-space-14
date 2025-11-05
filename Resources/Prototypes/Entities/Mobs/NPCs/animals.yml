@@ -659,8 +659,10 @@
           32:
             sprite: Mobs/Animals/mothroach/displacement.rsi
             state: neck
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: PetsGroup
+  #DS14-end
 
 
 # Note that the mallard duck is actually a male drake mallard, with the brown duck being the female variant of the same species, however ss14 lacks sex specific textures
@@ -1361,11 +1363,13 @@
   - type: HTN
     rootTask:
       task: SimpleHostileCompound
+  #DS14-start
   - type: Sanity # DS14
   - type: TTS # DS14
     voice: Ycf
   - type: GhostRoleNotifys #DS14
     groupPrototype: Kangarooping
+  #DS14-end
 
 - type: entity
   name: boxing kangaroo
@@ -1531,8 +1535,10 @@
         Blunt: 1
     clumsySound:
       path: /Audio/Animals/monkey_scream.ogg
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: PetsGroup
+  #DS14-end
 
 
 - type: entity
@@ -1567,8 +1573,10 @@
   - type: GhostTakeoverAvailable
   - type: Loadout
     prototypes: [SyndicateOperativeGearMonkey]
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: SyndicateGroup
+  #DS14-end
 
 - type: entity
   id: MobMonkeySyndicateAgent
@@ -1704,8 +1712,10 @@
     name: ghost-role-information-kobold-name
     description: ghost-role-information-kobold-description
     rules: ghost-role-information-nonantagonist-rules
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: PetsGroup
+  #DS14-end
 
 - type: entity
   name: kobold
@@ -1750,8 +1760,10 @@
     # make the player a traitor once its taken
   - type: AutoTraitor
     profile: TraitorReinforcement
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: SyndicateGroup
+  #DS14-end
 
 - type: entity
   id: MobKoboldSyndicateAgentNukeops # Reinforcement exclusive to nukeops uplink
@@ -1960,8 +1972,10 @@
         recursive: false
   - type: NecromorfAfterInfection
     necroPrototype: NecroSmall
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: PetsGroup
+  #DS14-end
 
 - type: entity
   parent: MobMouse
@@ -2652,8 +2666,10 @@
     raffle:
       settings: short
   - type: GhostTakeoverAvailable
-  - type: GhostRoleNotifys #Ds14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: SpidersGroup
+  #DS14-end
 
 - type: entity
   name: tarantula
@@ -3277,8 +3293,10 @@
         Slash: 6
         Piercing: 6
         Structural: 15
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: ExplosiveCat
+  #DS14-end
 
 - type: entity
   name: space cat
@@ -3639,10 +3657,12 @@
       behaviors:
       - !type:GibBehavior
         recursive: false
-  - type: NecromorfAfterInfection # DS14
+  #DS14-start
+  - type: NecromorfAfterInfection 
     necroPrototype: NecroSmall
-  - type: GhostRoleNotifys #DS14
+  - type: GhostRoleNotifys 
     groupPrototype: PetsGroup
+  #DS14-end
 
 - type: entity
   name: pig

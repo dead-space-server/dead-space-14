@@ -116,7 +116,7 @@
     normalState: Monkey_burning
   - type: StealTarget
     stealGroup: AnimalMukhtar
-  - type: GhostRoleNotifys #DS14
+  - type: GhostRoleNotifys
     groupPrototype: Mukhtarping
 
 - type: startingGear

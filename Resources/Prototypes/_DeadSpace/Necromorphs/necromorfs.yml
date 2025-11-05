@@ -272,7 +272,7 @@
     name: Некроморф
     description: Вы некроморф, убейте всех своих врагов.
   - type: GhostTakeoverAvailable
-  - type: GhostRoleNotifys #DS14
+  - type: GhostRoleNotifys
     groupPrototype: NecromorfGroup
 
 - type: randomHumanoidSettings
@@ -285,7 +285,7 @@
     name: Некроморф улей
     description: Вы некроморф, убейте всех своих врагов.
   - type: GhostTakeoverAvailable
-  - type: GhostRoleNotifys #DS14
+  - type: GhostRoleNotifys
     groupPrototype: NecromorfGroup
 
 - type: randomHumanoidSettings
@@ -298,7 +298,7 @@
     name: Некроморф беременный
     description: Вы некроморф, убейте всех своих врагов.
   - type: GhostTakeoverAvailable
-  - type: GhostRoleNotifys #DS14
+  - type: GhostRoleNotifys 
     groupPrototype: NecromorfGroup
 
 - type: randomHumanoidSettings
@@ -311,7 +311,7 @@
     name: Некроморф дева
     description: Вы некроморф, убейте всех своих врагов.
   - type: GhostTakeoverAvailable
-  - type: GhostRoleNotifys #DS14
+  - type: GhostRoleNotifys 
     groupPrototype: NecromorfGroup
 
 - type: randomHumanoidSettings
@@ -324,7 +324,7 @@
     name: Некроморф расчленитель
     description: Вы некроморф, убейте всех своих врагов.
   - type: GhostTakeoverAvailable
-  - type: GhostRoleNotifys #DS14
+  - type: GhostRoleNotifys 
     groupPrototype: NecromorfGroup
 
 - type: randomHumanoidSettings
@@ -337,7 +337,7 @@
     name: Некроморф твитчер
     description: Вы некроморф, убейте всех своих врагов.
   - type: GhostTakeoverAvailable
-  - type: GhostRoleNotifys #DS14
+  - type: GhostRoleNotifys 
     groupPrototype: NecromorfGroup
 
 - type: randomHumanoidSettings
@@ -350,7 +350,7 @@
     name: Некроморф собиратель трупов
     description: Вы некроморф, убейте всех своих врагов.
   - type: GhostTakeoverAvailable
-  - type: GhostRoleNotifys #DS14
+  - type: GhostRoleNotifys 
     groupPrototype: CorpseCollectorNecromorfping
 
 - type: entity

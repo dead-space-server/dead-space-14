@@ -34,8 +34,10 @@
       - state: green
       - sprite: Mobs/Animals/regalrat.rsi
         state: icon
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: Ratking
+  #DS14-end
 
 - type: entity
   id: SpawnPointGhostRemilia
@@ -59,8 +61,10 @@
       - state: green
       - sprite: Mobs/Animals/bat.rsi
         state: bat
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys
     groupPrototype: PetsGroup
+  #DS14-end
 
 - type: entity
   id: SpawnPointGhostCerberus
@@ -84,8 +88,10 @@
       - state: green
       - sprite: Mobs/Pets/corgi.rsi
         state: narsian
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: PetsGroup
+  #DS14-end
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -115,8 +121,10 @@
       - state: green
       - sprite: Structures/Wallmounts/signs.rsi
         state: radiation
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys
     groupPrototype: OperativeGroup
+  #DS14-end
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -142,8 +150,10 @@
       - state: green
       - sprite: Structures/Wallmounts/signs.rsi
         state: radiation
-  - type: GhostRoleNotifys #DS14
+  #DS14-start      
+  - type: GhostRoleNotifys 
     groupPrototype: LoneOper
+  #DS14-end
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -166,8 +176,10 @@
     - !type:DepartmentTimeRequirement
       department: Command
       time: 72000 # 20 hours
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: CommanderOperatives
+  #DS14-end
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -190,8 +202,10 @@
     - !type:DepartmentTimeRequirement
       department: Security
       time: 72000 # 20 hours
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: OperativeMedic
+  #DS14-end
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -204,8 +218,10 @@
     rules: ghost-role-information-rules-default-team-antagonist
     mindRoles:
     - MindRoleGhostRoleTeamAntagonist
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: Operativeping
+  #DS14-end
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -226,8 +242,10 @@
     - state: green
     - sprite: Mobs/Aliens/Carps/dragon.rsi
       state: alive
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: Dragonping
+  #DS14-end
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -251,8 +269,10 @@
     - state: green
     - sprite: Objects/Weapons/Melee/energykatana.rsi
       state: icon
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: Nijaping
+  #DS14-end
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -277,8 +297,10 @@
       state: green
     - sprite: Mobs/Aliens/paradox_clone.rsi
       state: preview
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: Paradoxping
+  #DS14-end
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -309,8 +331,10 @@
     - state: green
     - sprite: Mobs/Silicon/chassis.rsi
       state: derelict_icon
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: DerelictCyborg
+  #DS14-end
 
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
@@ -384,5 +408,7 @@
     - state: green
     - sprite: Clothing/Head/Hats/wizardhat.rsi
       state: icon
-  - type: GhostRoleNotifys #DS14
+  #DS14-start
+  - type: GhostRoleNotifys 
     groupPrototype: Wizardping
+  #DS14-end
