@@ -813,11 +813,10 @@ public sealed class HolopadSystem : SharedHolopadSystem
             _ambientSoundSystem.SetAmbience(entity, isEnabled, ambientSound);
     }
 
-    // DS14-start
+
     private void NotifyAdmins(string holoName)
     {
         _chat.SendAdminAnnouncement(Loc.GetString("holopad-chat-notify", ("holopad", holoName)));
         _audioSystem.PlayGlobal("/Audio/Machines/high_tech_confirm.ogg", Filter.Empty().AddPlayers(_adminManager.ActiveAdmins), false, AudioParams.Default.WithVolume(-8f));
     }
-    // DS14-end
 }
