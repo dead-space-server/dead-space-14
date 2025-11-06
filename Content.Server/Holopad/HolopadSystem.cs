@@ -51,7 +51,6 @@ public sealed class HolopadSystem : SharedHolopadSystem
     [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly IAdminManager _adminManager = default!;
     // DS14-end
-    
     private float _updateTimer = 1.0f;
     private const float UpdateTime = 1.0f;
 
