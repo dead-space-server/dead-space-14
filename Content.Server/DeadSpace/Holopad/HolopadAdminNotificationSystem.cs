@@ -5,9 +5,7 @@ using Content.Shared.DeadSpace.Holopad;
 using Robust.Shared.Audio;
 using Robust.Shared.Player;
 using Content.Shared.Telephone;
-using Content.Server.Telephone;
 using Content.Shared.Holopad;
-using NetCord;
 
 namespace Content.Server.DeadSpace.Holopad;
 
@@ -16,7 +14,6 @@ public sealed class HolopadAdminNotificationSystem: EntitySystem
     [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
     [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly IAdminManager _adminManager = default!;
-    [Dependency] private readonly TelephoneSystem _telephoneSystem = default!;
 
     public override void Initialize()
     {
