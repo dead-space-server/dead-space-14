@@ -24,5 +24,6 @@ fax-machine-ui-paper-inserted = Paper in tray
 fax-machine-ui-paper-not-inserted = No paper
 
 fax-machine-chat-notify = Received new fax message from "{$fax}" fax
+holopad-chat-notify = Received new call from "{$holopad}"
 
 fax-machine-printed-paper-name = printed paper
