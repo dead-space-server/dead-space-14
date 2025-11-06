@@ -56,16 +56,6 @@ public sealed partial class HolopadComponent : Component
     /// </summary>
     [DataField]
     public float ControlLockoutCoolDown { get; private set; } = 180f;
-
-    // DS14-start
-
-    /// <summary>
-    /// Should admins be notified on call receive
-    /// </summary>
-    [ViewVariables(VVAccess.ReadWrite)]
-    [DataField]
-    public bool NotifyAdmins { get; set; } = false;
-    // DS14-end
 }
 
 #region: Event messages

@@ -21,14 +21,6 @@ using Robust.Shared.Containers;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using System.Linq;
-// DS14-start
-using Robust.Shared.Audio.Systems;
-using Content.Server.Chat.Managers;
-using Content.Server.Administration.Managers;
-using Robust.Shared.Audio;
-using Robust.Shared.Player;
-// DS14-end
-
 
 namespace Content.Server.Holopad;
 
@@ -46,11 +38,7 @@ public sealed class HolopadSystem : SharedHolopadSystem
     [Dependency] private readonly PopupSystem _popupSystem = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly PvsOverrideSystem _pvs = default!;
-    // DS14-start
-    [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly IAdminManager _adminManager = default!;
-    // DS14-end
+
     private float _updateTimer = 1.0f;
     private const float UpdateTime = 1.0f;
 
@@ -110,13 +98,6 @@ public sealed class HolopadSystem : SharedHolopadSystem
 
         if (!TryComp<TelephoneComponent>(receiver, out var receiverTelephone))
             return;
-    // DS14-start
-        if (TryComp<HolopadComponent>(receiver, out var receverHolopadComp))
-        {
-            if (receverHolopadComp.NotifyAdmins)
-                NotifyAdmins(Name(source));
-        }
-    // DS14-end
 
         LinkHolopadToUser(source, args.Actor);
         _telephoneSystem.CallTelephone((source, sourceTelephone), (receiver, receiverTelephone), args.Actor);
@@ -811,12 +792,5 @@ public sealed class HolopadSystem : SharedHolopadSystem
 
         if (TryComp<AmbientSoundComponent>(entity, out var ambientSound))
             _ambientSoundSystem.SetAmbience(entity, isEnabled, ambientSound);
-    }
-
-
-    private void NotifyAdmins(string holoName)
-    {
-        _chat.SendAdminAnnouncement(Loc.GetString("holopad-chat-notify", ("holopad", holoName)));
-        _audioSystem.PlayGlobal("/Audio/Machines/high_tech_confirm.ogg", Filter.Empty().AddPlayers(_adminManager.ActiveAdmins), false, AudioParams.Default.WithVolume(-8f));
     }
 }
