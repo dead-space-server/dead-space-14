@@ -1010,6 +1010,7 @@
     state: pda-deathsquad
   - type: Pda
     id: CentcomIDCardDeathsquad
+# DS14-start
     penSlot:
       startingItem: Pen
       priority: -1
@@ -1023,7 +1024,7 @@
        pda-deathsquad
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
-
+# DS14-end
 - type: entity
   parent: BasePDA
   id: MusicianPDA
