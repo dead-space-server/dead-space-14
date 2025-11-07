@@ -51,6 +51,7 @@ namespace Content.Client.Administration.UI.Tabs.AdminTab
             IoCManager.Resolve<IClientConsoleHost>().ExecuteCommand(
                 $"openahelp \"{_selectedPlayer.SessionId}\"");
         }
+
         private void SubmitRespawnButtonOnPressed(BaseButton.ButtonEventArgs obj)
         {
             if (_selectedPlayer == null)
