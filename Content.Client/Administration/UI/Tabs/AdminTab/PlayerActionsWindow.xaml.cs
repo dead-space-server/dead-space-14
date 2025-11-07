@@ -21,8 +21,8 @@ namespace Content.Client.Administration.UI.Tabs.AdminTab
 
             SubmitKickButton.OnPressed += SubmitKickButtonOnPressed;
             SubmitAHelpButton.OnPressed += SubmitAhelpButtonOnPressed;
-            PlayerList.OnSelectionChanged += OnListOnOnSelectionChanged;
             SubmitRespawnButton.OnPressed += SubmitRespawnButtonOnPressed;
+            PlayerList.OnSelectionChanged += OnListOnOnSelectionChanged;
         }
 
         private void OnListOnOnSelectionChanged(PlayerInfo? obj)
