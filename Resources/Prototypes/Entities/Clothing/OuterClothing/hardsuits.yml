@@ -1164,7 +1164,7 @@
       Puncturase: 10
       TranexamicAcid: 10
       Omnizine: 10
-  - type: Reflect # DS14
+  - type: Reflect
     reflectProb: 0.10
 # DS14-end
   - type: HardsuitIdentification # DS14
