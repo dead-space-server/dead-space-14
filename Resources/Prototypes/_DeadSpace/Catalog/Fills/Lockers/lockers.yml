@@ -60,7 +60,7 @@
     - id: ClothingHandsGlovesNitrileTaipan
     - id: ClothingMaskSterile
     - id: HandheldGPSBasic
-    - id: SpyCrewMonitor
+    - id: TaipanCrewMonitor
     - id: MedkitFilled
       prob: 0.3
     - id: MedkitAdvancedFilled
@@ -147,7 +147,7 @@
     contents:
     - id: ClothingHandsGlovesColorYellow
     - id: trayScanner
-    - id: RCD
+    - id: RCDSyndicate
     - id: RCDAmmo
 
 # Service
@@ -240,7 +240,7 @@
     - id: DoorRemoteTaipan
     - id: ProtolatheMachineCircuitboardTaipan
     - id: ResearchComputerCircuitboardTaipan
-    - id: EncryptionKeyBinary
+    - id: EncryptionKeyBinarySyndicate
 
 - type: entity
   id: LockerTaipanTechnicalOperationsSupervisorFilled
@@ -260,7 +260,7 @@
       prob: 0.15
     - id: ClothingBeltUtilityEngineering
     - id: ClothingEyesGlassesMeson
-    - id: RCD
+    - id: RCDSyndicate
     - id: RCDAmmo
 
 # Security
@@ -273,7 +273,6 @@
     contents:
     - id: ClothingHeadHelmetSwatSyndicate
     - id: ClothingOuterVestWeb
-    - id: ClothingBeltAssaultTaipan
     - id: ClothingBeltMilitaryWebbing
     - id: ClothingBeltSyndieHolster
     - id: ClothingEyesHudTaipanRecruit

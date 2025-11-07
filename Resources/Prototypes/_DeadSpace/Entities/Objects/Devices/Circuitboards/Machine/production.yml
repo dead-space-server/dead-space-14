@@ -4,13 +4,13 @@
   name: копировальный аппарат (машинная плата)
   description: Из этой машинной платы собирается копировальный аппарат.
   components:
-    - type: Sprite
-      state: science
-    - type: MachineBoard
-      prototype: PhotocopierBase
-      stackRequirements:
-        Plastic : 5
-        Steel : 5
+  - type: Sprite
+    state: science
+  - type: MachineBoard
+    prototype: PhotocopierBase
+    stackRequirements:
+      Plastic: 5
+      Steel: 5
 
 - type: entity
   id: GeneratorRTGMachineCircuitboard
@@ -285,6 +285,19 @@
       MetalRod: 4
 
 - type: entity
+  parent: BaseMachineCircuitboardTaipan
+  id: APECircuitboardTaipan
+  name: М.А.К.А.К. (машинная плата)
+  description: Печатная плата для М.А.К.А.К.
+  components:
+  - type: MachineBoard
+    prototype: MachineAPETaipan
+    stackRequirements:
+      Manipulator: 2
+      Cable: 1
+      Glass: 1
+
+- type: entity
   parent: WeaponEnergyTurretStationMachineCircuitboardBase
   id: WeaponEnergyTurretTaipanAIMachineCircuitboard
   name: охранная турель (машинная плата)
@@ -333,3 +346,15 @@
     stackRequirements:
       Manipulator: 4
       Cable: 1
+
+- type: entity
+  id: CrewMonitoringServerMachineCircuitboardTaipan
+  parent: BaseMachineCircuitboardTaipan
+  name: сервер мониторинга экипажа (машинная плата)
+  description: Печатная плата для сервера мониторинга экипажа.
+  components:
+  - type: MachineBoard
+    prototype: CrewMonitoringServerTaipan
+    stackRequirements:
+      Steel: 1
+      Cable: 2

@@ -11,25 +11,27 @@
   supervisors: job-supervisors-taipan-technical-supervisor
   canBeAntag: false
   requirements:
-  - !type:DepartmentTimeRequirement
-    department: Civilian
-    time: 18000 # 5 hours
   - !type:RoleTimeRequirement
     role: JobBotanist
-    time: 3600 # 1 hour
+    time: 18000 # 5 hours
   access:
   - TaipanService
   - TaipanMaint
   special:
   - !type:AddImplantSpecial
     implants: [ DeathRattleImplantTaipan ]
+  - !type:AddComponentSpecial
+    components:
+    - type: AntagImmune
+    - type: NpcFactionMember
+      factions:
+      - Taipan
 
 - type: startingGear
   id: TaipanBotanistGear
   equipment:
     ears: ClothingHeadsetTaipan
     shoes: ClothingShoesBootsLaceup
-    back: ClothingBackpackSyndicate
     id: TaipanBotanistPDA
     socks: ClothingUnderwearSocksTaipanBotanist
 
