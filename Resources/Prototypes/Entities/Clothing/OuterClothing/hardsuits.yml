@@ -1164,9 +1164,9 @@
       Puncturase: 10
       TranexamicAcid: 10
       Omnizine: 10
-# DS14-end
   - type: Reflect # DS14
     reflectProb: 0.10
+# DS14-end
   - type: HardsuitIdentification # DS14
   - type: Speech # DS14
   - type: TTS # DS14
