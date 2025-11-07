@@ -388,3 +388,7 @@ ui-options-enable-overlay-starting-job = Показывать начальную
 ui-options-overlay-merge-distance = Дальность сложения оверлея
 ui-options-overlay-ghost-fade-distance = Диапазон затухания наложения призрака от мыши
 ui-options-overlay-ghost-hide-distance = Диапазон скрытия наложения призрака от мыши
+
+## Ping menu
+
+ui-options-save-button = Сохранить 

@@ -43,16 +43,14 @@ public sealed class NotifyHelper
             bool value;
             if (!bool.TryParse(boolStr, out value))
             {
-                //throw new ArgumentException($"Некорректное булевое значение {boolStr}");
-                if (!bool.TryParse(word, out value))
-                {
-                    result[word] = false;
-                }
+                result[word] = value;
             }
             else
             {
-                result[word] = value;
+                //throw new ArgumentException($"Некорректное булевое значение {boolStr}");
+                Logger.Debug($"Некорректное булевое значение {boolStr}");
             }
+
         }
 
         return result;
