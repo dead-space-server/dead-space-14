@@ -188,10 +188,10 @@ namespace Content.Client.Administration.UI.Bwoink
                     _console.ExecuteCommand($"follow \"{_currentPlayer.NetEntity}\"");
             };
 
-            Camera.OnPressed += _ =>
+            Respawn.OnPressed += _ =>
             {
                 if (_currentPlayer is not null)
-                    _console.ExecuteCommand($"camera \"{_currentPlayer.Username}\"");
+                    _console.ExecuteCommand($"respawn \"{_currentPlayer.Username}\"");
             };
 
             Camera.OnPressed += _ =>
