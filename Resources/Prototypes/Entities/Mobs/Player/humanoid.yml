@@ -117,6 +117,7 @@
   id: MobHumanDeathSquadUnit
   categories: [ HideSpawnMenu ]
   components:
+  - type: MindShield
   - type: ZombieImmune
   - type: AntagImmune
   - type: AutoImplant
