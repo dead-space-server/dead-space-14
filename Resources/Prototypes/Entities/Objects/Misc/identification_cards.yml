@@ -742,7 +742,7 @@
   - type: Sprite
     sprite: _DeadSpace/Objects/Misc/id_cards.rsi # DS14-Resprite
     layers:
-    - state: deathsquad
+    - state: deathsquad # DS14
   - type: Item
     heldPrefix: blue
   - type: PresetIdCard
