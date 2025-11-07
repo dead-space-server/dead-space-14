@@ -438,7 +438,29 @@
       ]
     },
     {
-      "name": "pda-syndi-agent",
+      "name": "pda-syndi-corpsman",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ]
+      ]
+    },
+    {
+      "name": "pda-syndi-commander",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ]
+      ]
+    },
+    {
+      "name": "pda-syndi-operative",
       "delays": [
         [
           0.3,
@@ -685,6 +707,17 @@
     },
     {
       "name": "pda-seniorservice",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ]
+      ]
+    },
+    {
+       "name": "pda-seniorcourier",
       "delays": [
         [
           0.3,

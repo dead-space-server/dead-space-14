@@ -66,6 +66,9 @@
         type: StoreBoundUserInterface
   - type: Visibility
     layer: 2 #ghost vis layer
+  - type: ActionGrant
+    actions:
+    - ActionRevenantShop
   - type: Store
     categories:
     - RevenantAbilities
@@ -88,3 +91,36 @@
     - KnockdownImmune
   - type: TTS # Corvax-TTS
     voice: Kelthuzad
+  # DS14-Languages-start
+  - type: Language
+    selectedLanguage: GeneralLanguage
+    knownLanguages:
+    - GeneralLanguage
+    - ArachnidLanguage
+    - SlimeLanguage
+    - DionaLanguage
+    - MothLanguage
+    - ReptilianLanguage
+    - VoxLanguage
+    - DemonLanguage
+    - CatLanguage
+    - MachineLanguage
+    - ReptilianLanguage
+    - PlafLanguage
+    - VulpkaninLanguage
+    - XenomorphLanguage
+    cantSpeakLanguages:
+    - ArachnidLanguage
+    - SlimeLanguage
+    - DionaLanguage
+    - MothLanguage
+    - ReptilianLanguage
+    - VoxLanguage
+    - DemonLanguage
+    - CatLanguage
+    - MachineLanguage
+    - ReptilianLanguage
+    - PlafLanguage
+    - VulpkaninLanguage
+    - XenomorphLanguage
+  # DS14-Languages-end
