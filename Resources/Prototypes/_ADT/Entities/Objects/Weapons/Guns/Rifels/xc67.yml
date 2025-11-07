@@ -5,7 +5,7 @@
   description: Прототип новой штурмовой винтовки от создателей знаменитой С-20r. Использует патрон 6.5х39 TSF. Усовершенствованная эргономика позволяет достичь превосходных показателей точности стрельбы.
   components:
   - type: Sprite
-    sprite: _ADT/Objects/Weapons/Guns/Rifels/xc67.rsi
+    sprite: _DeadSpace/Objects/Weapons/Guns/Rifels/xc67.rsi
     layers:
       - state: base
         map: ["enum.GunVisualLayers.Base"]
