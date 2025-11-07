@@ -888,7 +888,7 @@
 - type: entity
   parent: [ BaseCentcommContraband, ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ] # Corvax-Resprite
   id: ClothingHeadHelmetHardsuitDeathsquad
-  name: armored spacesuit helmet
+  name: deathsquad hardsuit helmet
   description: A robust helmet for special operations.
   components:
   - type: BreathMask
