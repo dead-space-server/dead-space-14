@@ -74,7 +74,6 @@
       Dead: XenomorphDead
   - type: Bloodstream
     bloodReagent: AcidicBlood
-    bleedRateModifier: 0.5
   - type: Perishable
     molsPerSecondPerUnitMass: 0.0005
   - type: CombatMode
