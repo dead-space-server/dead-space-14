@@ -66,14 +66,6 @@
 
 - type: entity
   parent: BaseImplantOnlyImplanter
-  id: LearnKoboltLanguageImplanter
-  name: имплант изучения кобальдского языка
-  components:
-  - type: Implanter
-    implant: LearnKoboltLanguageImplant
-
-- type: entity
-  parent: BaseImplantOnlyImplanter
   id: LearnPlafLanguageImplanter
   name: имплант изучения акульего языка
   components:

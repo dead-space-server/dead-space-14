@@ -132,5 +132,5 @@
   - type: Language
     selectedLanguage: GeneralLanguage
     knownLanguages:
-    - KoboltLanguage
+    - ReptilianLanguage
     - GeneralLanguage

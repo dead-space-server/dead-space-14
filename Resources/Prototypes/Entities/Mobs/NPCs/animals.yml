@@ -1557,9 +1557,9 @@
   - type: ReplacementAccent
     accent: kobold
   - type: Language
-    selectedLanguage: KoboltLanguage
+    selectedLanguage: ReptilianLanguage
     knownLanguages:
-    - KoboltLanguage
+    - ReptilianLanguage
   # DS14-Languages-end
   - type: Speech
     speechVerb: Reptilian

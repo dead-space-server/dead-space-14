@@ -96,18 +96,6 @@
 
 - type: entity
   parent: BaseSubdermalImplant
-  id: LearnKoboltLanguageImplant
-  name: имплант изучения кобальдского языка
-  description: Имплант изучения кобальдского языка. Подкожный имплант с простейшим языковым модулем. Подключается к периферийным нервам и подменяет часть сигналов, связанных с речью и слухом. Возможны лёгкие сбои восприятия, самопроизвольное шипение и кратковременные приступы чужого акцента.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: SubdermalImplant
-  - type: LearnLanguageImplant
-    language:
-    - KoboltLanguage
-
-- type: entity
-  parent: BaseSubdermalImplant
   id: LearnPlafLanguageImplant
   name: имплант изучения акульего языка
   description: Имплант изучения акульего языка. Подкожный имплант с простейшим языковым модулем. Подключается к периферийным нервам и подменяет часть сигналов, связанных с речью и слухом. Возможны лёгкие сбои восприятия, учащённое сердцебиение и кратковременное желание укусить собеседника.
@@ -162,7 +150,6 @@
     - DemonLanguage
     - CatLanguage
     - MachineLanguage
-    - KoboltLanguage
     - PlafLanguage
     - VulpkaninLanguage
     - XenomorphLanguage

@@ -232,7 +232,7 @@
 
 - type: language
   id: ArachnidLanguage
-  name: Арахнидский
+  name: Це'хисс
   icon: /Textures/_DeadSpace/LanguageIcons/spider.png
   generateTTSForLexicon: false
   lexiconSound:
@@ -339,7 +339,7 @@
 
 - type: language
   id: DionaLanguage
-  name: Песнь корней
+  name: Шелестящий
   generateTTSForLexicon: false
   lexiconSound:
     collection: DionaLexicon
@@ -988,7 +988,7 @@
 
 - type: language
   id: MachineLanguage
-  name: Машинный
+  name: Двоичный
   icon: /Textures/_DeadSpace/LanguageIcons/machine.png
   generateTTSForLexicon: false
   lexiconSound:
@@ -1023,7 +1023,7 @@
 
 - type: language
   id: KoboltLanguage
-  name: Кобальдский
+  name: Синта-Унати
   icon: /Textures/_DeadSpace/LanguageIcons/lizard.png
   generateTTSForLexicon: false
   lexiconSound:
@@ -1132,7 +1132,7 @@
 
 - type: language
   id: PlafLanguage
-  name: Акулий
+  name: Эве-Пишту
   icon: /Textures/_DeadSpace/LanguageIcons/plaf.png
   lexicon:
   - Гшк
@@ -1238,7 +1238,7 @@
 
 - type: language
   id: VulpkaninLanguage
-  name: Вульпканский
+  name: Канилунц
   icon: /Textures/_DeadSpace/LanguageIcons/vulp.png
   lexicon:
   - Чрр!
@@ -1344,7 +1344,7 @@
 
 - type: language
   id: XenomorphLanguage
-  name: Ксеноморфский
+  name: Эхоглосса
   icon: /Textures/_DeadSpace/LanguageIcons/alien.png
   generateTTSForLexicon: false
   lexiconSound:
