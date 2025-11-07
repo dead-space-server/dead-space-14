@@ -104,3 +104,12 @@
   components:
   - type: Implanter
     implant: LearnAllLanguageImplant
+
+- type: entity
+  parent: BaseImplantOnlyImplanter
+  id: LearnDogLanguageImplanter
+  name: имплант изучения собачьего языка
+  components:
+  - type: Implanter
+    implant: LearnDogLanguageImplant
+  

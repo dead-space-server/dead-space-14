@@ -111,6 +111,20 @@
   - рину
 
 - type: language
+  id: DogLanguage
+  name: Собачий
+  icon: /Textures/_DeadSpace/LanguageIcons/vulp.png
+  generateTTSForLexicon: false
+  lexiconSound:
+    collection: DogLexicon
+  lexicon:
+  - Гав!
+  - Тяв!
+  - Вуф!
+  - Гаф.
+  - Гррр.
+
+- type: language
   id: SlimeLanguage
   name: Пузырчатый
   icon: /Textures/_DeadSpace/LanguageIcons/slime.png

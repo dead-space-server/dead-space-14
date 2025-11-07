@@ -17,6 +17,13 @@ public sealed partial class LanguageComponent : Component
     [ViewVariables(VVAccess.ReadOnly)]
     public HashSet<ProtoId<LanguagePrototype>> CantSpeakLanguages = new();
 
+    /// <summary>
+    ///     Языки, требующие разблокировки для возможности выбора после получения разума в EntityEffectEvent.
+    /// </summary>
+    [DataField]
+    [ViewVariables(VVAccess.ReadOnly)]
+    public HashSet<ProtoId<LanguagePrototype>> UnlockLanguagesAfterMakeSentient = new();
+
     [DataField]
     public string SelectedLanguage = String.Empty;
 

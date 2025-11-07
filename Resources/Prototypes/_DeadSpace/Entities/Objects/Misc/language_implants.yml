@@ -166,3 +166,15 @@
     - PlafLanguage
     - VulpkaninLanguage
     - XenomorphLanguage
+
+- type: entity
+  parent: BaseSubdermalImplant
+  id: LearnDogLanguageImplant
+  name: имплант изучения собачьего языка
+  description: Имплант изучения собачьего языка. Подкожный имплант с простейшим языковым модулем. Подключается к периферийным нервам и подменяет часть сигналов, связанных с речью и слухом. Возможны лёгкие сбои восприятия, самопроизвольное гавканье и ощущение, что нужно вертеть хвостом, даже если его нет.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SubdermalImplant
+  - type: LearnLanguageImplant
+    language:
+    - DogLanguage

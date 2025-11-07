@@ -69,3 +69,8 @@
   parent: BaseImplantRecipe
   id: LearnXenomorphLanguageImplanter
   result: LearnXenomorphLanguageImplanter
+
+- type: latheRecipe
+  parent: BaseImplantRecipe
+  id: LearnDogLanguageImplanter
+  result: LearnDogLanguageImplanter
