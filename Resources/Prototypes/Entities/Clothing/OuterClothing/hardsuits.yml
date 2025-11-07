@@ -1123,7 +1123,6 @@
     sprite: Clothing/OuterClothing/Hardsuits/deathsquad.rsi
   - type: Clothing
     sprite: Clothing/OuterClothing/Hardsuits/deathsquad.rsi
-    unequipDelay: 12
   - type: PressureProtection
     highPressureMultiplier: 0.02
     lowPressureMultiplier: 1000
@@ -1155,7 +1154,8 @@
   - type: HeldSpeedModifier
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitDeathsquad
-  - type: AutoInjectReagentClothingOnAllowedState # DS14-Component
+# DS14-start
+  - type: AutoInjectReagentClothingOnAllowedState
     durationRegenReagents: 100
     allowedStates:
     - Critical
@@ -1164,6 +1164,7 @@
       Puncturase: 10
       TranexamicAcid: 10
       Omnizine: 10
+# DS14-end
   - type: Reflect # DS14
     reflectProb: 0.10
   - type: HardsuitIdentification # DS14
