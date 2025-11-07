@@ -382,7 +382,7 @@ public sealed class FaxSystem : EntitySystem
         var canCopy = isPaperInserted &&
                       component.SendTimeoutRemaining <= 0 &&
                       component.InsertingTimeRemaining <= 0;
-        var state = new FaxUiState(component.FaxName, component.KnownFaxes, canSend, canCopy, isPaperInserted, component.DestinationFaxAddress);
+        var state = new FaxUiState(component.FaxName, component.KnownFaxes, canSend, canCopy, isPaperInserted, component.DestinationFaxAddress, component.FaxHistory); // DS14 edit
         _userInterface.SetUiState(uid, FaxUiKey.Key, state);
     }
 
@@ -563,7 +563,13 @@ public sealed class FaxSystem : EntitySystem
 
         _audioSystem.PlayPvs(component.SendSound, uid);
 
+        // DS14-start FaxHistory
+        var shiftTime = _gameTiming.CurTime;
+        component.FaxHistory.Add((TimeSpan.FromSeconds(shiftTime.TotalSeconds).ToString(@"hh\:mm\:ss"),"Отправлено: "+faxName));
+        // DS14-end
+
         UpdateUserInterface(uid, component);
+
     }
 
     /// <summary>
@@ -584,9 +590,9 @@ public sealed class FaxSystem : EntitySystem
 
         if (component.NotifyAdmins)
             NotifyAdmins(faxName);
-        // DS14-start ReceiveHistory
+        // DS14-start FaxHistory
         var shiftTime = _gameTiming.CurTime;
-        component.ReceiveHistory.Add(((int)shiftTime.TotalSeconds, faxName));
+        component.FaxHistory.Add((TimeSpan.FromSeconds(shiftTime.TotalSeconds).ToString(@"hh\:mm\:ss"),"Получено: "+faxName));
         // DS14-end
 
         component.PrintingQueue.Enqueue(printout);

@@ -148,8 +148,7 @@ public sealed partial class FaxMachineComponent : Component
     /// <summary>
     ///     history of all received faxes (time, sender)
     /// </summary>
-    [DataField]
-    public List<(int, string)> ReceiveHistory = new();
+    public List<(string, string)> FaxHistory = new();
     // DS14-end
 }
 
