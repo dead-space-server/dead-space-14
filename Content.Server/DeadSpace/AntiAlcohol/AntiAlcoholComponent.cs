@@ -1,5 +1,5 @@
 using System;
-using Content.Server.Medical;
+using Content.Shared.Medical;
 using Content.Shared.Body.Components;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
