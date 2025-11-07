@@ -2,6 +2,7 @@ using Content.Shared.DeadSpace.CCCCVars;
 using Robust.Shared.Configuration;
 using Content.Shared.DeadSpace.GhostRoleNotify.Prototypes;
 using Robust.Shared.Prototypes;
+using System.Collections.ObjectModel;
 
 namespace Content.Client.DeadSpace.NotifySystem.NotifyHelpers;
 
@@ -41,7 +42,7 @@ public sealed class NotifyHelper
             string word = parts[i];
             string boolStr = parts[i + 1];
             bool value;
-            if (!bool.TryParse(boolStr, out value))
+            if (bool.TryParse(boolStr, out value))
             {
                 result[word] = value;
             }
@@ -74,14 +75,14 @@ public sealed class NotifyHelper
         }
         return string.Join("/", parts);
     }
-    public static void GetDictionaryFromCCvar(IConfigurationManager cfg)
+    private static void GetDictionaryFromCCvar(IConfigurationManager cfg)
     {
         if (!string.IsNullOrWhiteSpace(cfg.GetCVar(CCCCVars.SysNotifyCvar)))
         {
             DictCvar = StringToPairList(cfg.GetCVar(CCCCVars.SysNotifyCvar));
         }
     }
-    public static void CreateDictionaryForReciveSys(IPrototypeManager prototypeManager)
+    private static void CreateDictionaryForReciveSys(IPrototypeManager prototypeManager)
     {
         foreach (var proto in prototypeManager.EnumeratePrototypes<GhostRoleGroupNotify>())
         {
