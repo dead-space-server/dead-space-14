@@ -206,7 +206,6 @@ namespace Content.Server.Administration.Systems
                         ConfirmationPopup = true
                     });
 
-
                     // Respawn
                     args.Verbs.Add(new Verb
                     {

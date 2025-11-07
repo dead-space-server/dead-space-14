@@ -13,6 +13,7 @@
         <BoxContainer Orientation="Horizontal">
             <controls:ConfirmButton Name="SubmitKickButton" Text="{Loc admin-player-actions-kick}" ConfirmationText="{Loc 'admin-player-actions-confirm'}" Disabled="True"/>
             <Button Name="SubmitAHelpButton" Text="{Loc admin-player-actions-ahelp}" Disabled="True"/>
+            <controls:ConfirmButton Name="SubmitRespawnButton" Text="{Loc admin-player-actions-respawn}" ConfirmationText="{Loc 'admin-player-actions-confirm'}" Disabled="True"/>
         </BoxContainer>
     </BoxContainer>
 </DefaultWindow>

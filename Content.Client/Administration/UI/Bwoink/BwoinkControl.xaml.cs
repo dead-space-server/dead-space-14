@@ -194,6 +194,12 @@ namespace Content.Client.Administration.UI.Bwoink
                     _console.ExecuteCommand($"camera \"{_currentPlayer.Username}\"");
             };
 
+            Camera.OnPressed += _ =>
+            {
+                if (_currentPlayer is not null)
+                    _console.ExecuteCommand($"camera \"{_currentPlayer.Username}\"");
+            };
+
             PopOut.OnPressed += _ =>
             {
                 uiController.PopOut();
@@ -239,6 +245,9 @@ namespace Content.Client.Administration.UI.Bwoink
 
             Kick.Visible = _adminManager.CanCommand("kick");
             Kick.Disabled = !Kick.Visible || disabled;
+
+            Respawn.Visible = _adminManager.CanCommand("respawn");
+            Respawn.Disabled = !Respawn.Visible || disabled;
 
             Camera.Visible = _adminManager.CanCommand("camera");
             Camera.Disabled = !Camera.Visible || disabled;

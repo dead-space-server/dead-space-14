@@ -22,6 +22,7 @@ namespace Content.Client.Administration.UI.Tabs.AdminTab
             SubmitKickButton.OnPressed += SubmitKickButtonOnPressed;
             SubmitAHelpButton.OnPressed += SubmitAhelpButtonOnPressed;
             PlayerList.OnSelectionChanged += OnListOnOnSelectionChanged;
+            SubmitRespawnButton.OnPressed += SubmitRespawnButtonOnPressed;
         }
 
         private void OnListOnOnSelectionChanged(PlayerInfo? obj)
@@ -30,6 +31,7 @@ namespace Content.Client.Administration.UI.Tabs.AdminTab
             var disableButtons = _selectedPlayer == null;
             SubmitKickButton.Disabled = disableButtons;
             SubmitAHelpButton.Disabled = disableButtons;
+            SubmitRespawnButton.Disabled = disableButtons;
         }
 
         private void SubmitKickButtonOnPressed(BaseButton.ButtonEventArgs obj)
@@ -49,6 +51,13 @@ namespace Content.Client.Administration.UI.Tabs.AdminTab
             IoCManager.Resolve<IClientConsoleHost>().ExecuteCommand(
                 $"openahelp \"{_selectedPlayer.SessionId}\"");
         }
+        private void SubmitRespawnButtonOnPressed(BaseButton.ButtonEventArgs obj)
+        {
+            if (_selectedPlayer == null)
+                return;
 
+            IoCManager.Resolve<IClientConsoleHost>().ExecuteCommand(
+                $"respawn \"{_selectedPlayer.Username}\"");
+        }
     }
 }
