@@ -123,10 +123,14 @@
     implants:
     - FreedomImplant
     - DeathAcidifierImplant
+# DS14-start
+    - RadioImplantDeathSquad
     - RadioImplantCentcomm
-  - type: BlobSpeak # Backmen-Component
+    - DeathRattleImplantDeathSquad
+  - type: BlobSpeak
     overrideName: false
     channel: DeathSquad
+# DS14-end
   - type: NpcFactionMember
     factions:
     - CentralCommand
