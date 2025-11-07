@@ -11,7 +11,6 @@ using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.AntiAlcohol
 {
-    // без [RegisterSystem]
     public sealed class AntiAlcoholSystem : EntitySystem
     {
         [Dependency] private readonly IGameTiming _timing = default!;
