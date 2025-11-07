@@ -446,7 +446,7 @@
 - type: entity
   parent: ClothingMaskGasERT
   id: ClothingMaskGasDeathSquad
-  name: armored gas mask
+  name: death squad gas mask
   description: A unique gas mask for the most elite squad.
   components:
   - type: Sprite
