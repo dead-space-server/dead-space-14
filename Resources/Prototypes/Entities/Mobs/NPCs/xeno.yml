@@ -573,6 +573,7 @@
 # DS14-start
     stateAlertDict:
       Alive: XenomorphHealth
+      Critical: XenomorphCrit
       Dead: XenomorphDead
 # DS14-end
   - type: SlowOnDamage
