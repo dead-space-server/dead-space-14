@@ -142,3 +142,6 @@ holopad-station-bridge = Станция - Мостик
 holopad-station-cargo-bay = Станция - Грузовой отсек
 # CentComm
 holopad-centcomm-evac = Центком - Эвакуационный шаттл
+
+# Admin notification
+holopad-chat-notify = Получен новый звонок с "{$holopad}" от {$user}
