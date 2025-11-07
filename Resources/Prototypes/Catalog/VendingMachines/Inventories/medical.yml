@@ -2,7 +2,6 @@
   id: NanoMedPlusInventory
   startingInventory:
     HandheldHealthAnalyzer: 3
-    ToolAlcoTester: 3 # DS14
     Brutepack: 5
     Ointment: 5
     Bloodpack: 5
@@ -13,3 +12,4 @@
     ClothingEyesEyepatchHudMedical: 2
   contrabandInventory:
     FoodApple: 1
+    ToolAlcoTester: 3 # DS14
