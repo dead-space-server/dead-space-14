@@ -915,9 +915,11 @@
         Radiation: 0.80
         Caustic: 0.95
         Poison: 0.80 # DS14
-  - type: ClothingGrantComponent # Sirena-Component
+# DS14-start
+  - type: ClothingGrantComponent
     component: 
       - type: ImmunNecroobelisk
+# DS14-end
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
