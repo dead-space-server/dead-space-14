@@ -1,7 +1,8 @@
+<!--DS14-start-->
 <Control xmlns="https://spacestation14.io"
             xmlns:tabs="clr-namespace:Content.Client.Options.UI.Tabs"
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-         xmlns:ui="clr-namespace:Content.Client.Options.UI"><!--DS14-start-->
+         xmlns:ui="clr-namespace:Content.Client.Options.UI">
     <BoxContainer Orientation="Vertical">
         <BoxContainer Orientation="Vertical" Margin="8 8 8 8" VerticalExpand="True">
             <Label Text="{Loc 'ui-options-tab-ping'}"
@@ -15,4 +16,5 @@
         </BoxContainer>
         <ui:OptionsTabControlRow Name="Control" Access="Public" />
     </BoxContainer>
-</Control><!--DS14-end-->
+</Control>
+<!--DS14-end-->

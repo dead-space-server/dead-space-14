@@ -33,10 +33,10 @@ public sealed class NotifyHelper
     public static ConcurrentDictionary<string, bool> StringToPairList(string input)
     {
         var result = new ConcurrentDictionary<string, bool>();
-        var parts = input.Split("/", StringSplitOptions.RemoveEmptyEntries);
+        var parts = input.Split(";", StringSplitOptions.RemoveEmptyEntries);
 
         if (parts.Length % 2 != 0)
-            throw new ArgumentException("Строка должна содержать чётное число элементов (слово + значение).");
+            throw new ArgumentException($"Нечётное количество элементов в строке '{input}'.");
 
         for (int i = 0; i < parts.Length; i += 2)
         {
@@ -74,7 +74,7 @@ public sealed class NotifyHelper
             parts.Add(word);
             parts.Add(value.ToString());
         }
-        return string.Join("/", parts);
+        return string.Join(";", parts);
     }
     private static void GetDictionaryFromCCvar(IConfigurationManager cfg)
     {

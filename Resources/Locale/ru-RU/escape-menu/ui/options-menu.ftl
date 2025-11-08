@@ -12,7 +12,9 @@ ui-options-apply = Применить
 ui-options-reset-all = Сбросить всё и применить
 ui-options-default = По-умолчанию
 ui-options-value-percent = { TOSTRING($value, "P0") }
-ui-options-tab-ping = Пинг меню #DS14
+#DS14-start
+ui-options-tab-ping = Пинг меню
+#DS14-end
 
 # Misc/General menu
 
