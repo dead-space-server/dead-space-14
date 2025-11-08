@@ -9,9 +9,10 @@ namespace Content.Client.DeadSpace.NotifySystem.NotifyHelpers;
 
 public sealed class NotifyHelper
 {
-    private static ConcurrentDictionary<string, bool> DictCvar = new ConcurrentDictionary<string, bool>();
-    private static ConcurrentDictionary<string, bool> DictAccess = new ConcurrentDictionary<string, bool>();
-    public static bool GetValueAccess(string key)
+    private ConcurrentDictionary<string, bool> DictCvar = new ConcurrentDictionary<string, bool>();
+    private ConcurrentDictionary<string, bool> DictAccess = new ConcurrentDictionary<string, bool>();
+
+    public bool GetValueAccess(string key)
     {
         if (DictAccess.TryGetValue(key, out bool value))
         {
@@ -22,15 +23,15 @@ public sealed class NotifyHelper
             return false;
         }
     }
-    public static void SetValueAccess(string key, bool value)
+    public void SetValueAccess(string key, bool value)
     {
         DictAccess[key] = value;
     }
-    public static ConcurrentDictionary<string, bool> GetDictionaryAccess()
+    public ConcurrentDictionary<string, bool> GetDictionaryAccess()
     {
         return DictAccess;
     }
-    public static ConcurrentDictionary<string, bool> StringToPairList(string input)
+    public ConcurrentDictionary<string, bool> StringToPairList(string input)
     {
         var result = new ConcurrentDictionary<string, bool>();
         var parts = input.Split(";", StringSplitOptions.RemoveEmptyEntries);
@@ -58,7 +59,7 @@ public sealed class NotifyHelper
         return result;
     }
 
-    public static void EnsureInitialized(IConfigurationManager cfg, IPrototypeManager prototypeManager)
+    public void EnsureInitialized(IConfigurationManager cfg, IPrototypeManager prototypeManager)
     {
         if (DictAccess.Count == 0)
         {
@@ -66,7 +67,7 @@ public sealed class NotifyHelper
             CreateDictionaryForReciveSys(prototypeManager);
         }
     }
-    public static string PairListToString(ConcurrentDictionary<string, bool> list)
+    public string PairListToString(ConcurrentDictionary<string, bool> list)
     {
         var parts = new List<string>();
         foreach (var (word, value) in list)
@@ -76,14 +77,14 @@ public sealed class NotifyHelper
         }
         return string.Join(";", parts);
     }
-    private static void GetDictionaryFromCCvar(IConfigurationManager cfg)
+    private void GetDictionaryFromCCvar(IConfigurationManager cfg)
     {
         if (!string.IsNullOrWhiteSpace(cfg.GetCVar(CCCCVars.SysNotifyCvar)))
         {
             DictCvar = StringToPairList(cfg.GetCVar(CCCCVars.SysNotifyCvar));
         }
     }
-    private static void CreateDictionaryForReciveSys(IPrototypeManager prototypeManager)
+    private void CreateDictionaryForReciveSys(IPrototypeManager prototypeManager)
     {
         foreach (var proto in prototypeManager.EnumeratePrototypes<GhostRoleGroupNotify>())
         {
@@ -96,5 +97,15 @@ public sealed class NotifyHelper
                 DictAccess.TryAdd(proto.ID, false);
             }
         }
+    }
+}
+
+public static class NotifyHelperProvider
+{
+    public static NotifyHelper Helper { get; private set; } = new NotifyHelper();
+
+    public static void Initialize(IConfigurationManager cfg, IPrototypeManager prototypeManager)
+    {
+        Helper.EnsureInitialized(cfg, prototypeManager);
     }
 }

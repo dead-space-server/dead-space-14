@@ -114,4 +114,7 @@ public sealed class CCCCVars
     /// </summary>
     public static readonly CVarDef<bool> SysNotifyPerm =
         CVarDef.Create("sysnotify.permission", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    public static readonly CVarDef<string> SysNotifySoundPath =
+        CVarDef.Create("sysnotifys.soundpath", "/Audio/Effects/balloon-pop.ogg", CVar.CLIENTONLY | CVar.ARCHIVE);
 }

@@ -16,7 +16,9 @@ public sealed partial class ReceiveNotifySys : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
-    public SoundSpecifier SoundNotify = new SoundPathSpecifier("/Audio/Effects/adminhelp.ogg");
+    //public SoundSpecifier SoundNotify = new SoundPathSpecifier("/Audio/Effects/adminhelp.ogg");
+
+    private readonly NotifyHelper _helper = NotifyHelperProvider.Helper;
 
     private DateTime _lastNotifyTime = DateTime.MinValue;
 
@@ -25,16 +27,16 @@ public sealed partial class ReceiveNotifySys : EntitySystem
     {
         base.Initialize();
         SubscribeNetworkEvent<PingMessage>(CheckReceiveddNotify);
-        NotifyHelper.EnsureInitialized(_cfg, _prototypeManager);
+        _helper.EnsureInitialized(_cfg, _prototypeManager);
     }
 
     private void CheckReceiveddNotify(PingMessage messege)
     {
-        if (NotifyHelper.GetValueAccess(messege.ID) && _cfg.GetCVar(CCCCVars.SysNotifyPerm))
+        if (_helper.GetValueAccess(messege.ID) && _cfg.GetCVar(CCCCVars.SysNotifyPerm))
         {
             if (DateTime.Now - _lastNotifyTime >= TimeSpan.FromSeconds(_cfg.GetCVar(CCCCVars.SysNotifyCoolDown)))
             {
-                _audio.PlayGlobal(SoundNotify, Filter.Local(), false);
+                _audio.PlayGlobal(new SoundPathSpecifier(_cfg.GetCVar(CCCCVars.SysNotifySoundPath)), Filter.Local(), false);
                 _lastNotifyTime = DateTime.Now;
             }
         }

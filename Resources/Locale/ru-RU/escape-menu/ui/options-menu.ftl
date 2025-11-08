@@ -29,6 +29,7 @@ ui-options-general-accessibility = Специальные возможности
 ui-options-cooldown-ping = Задержка для пинга
 ui-options-ping = Пинг
 ui-options-ping-permission = Получать уведомление о появлении роли
+ui-options-sound-ping = выбор звука пинга
 #DS14-end
 
 ## Audio menu

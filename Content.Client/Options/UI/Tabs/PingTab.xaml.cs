@@ -15,6 +15,7 @@ namespace Content.Client.Options.UI.Tabs;
 
 public sealed partial class PingTab : Control
 {
+    private readonly NotifyHelper _helper = NotifyHelperProvider.Helper;
     private bool _isSaveNeeded = false;
     private void AddCheckBox(string checkBoxName, string id, bool savedSelection)
     {
@@ -23,7 +24,7 @@ public sealed partial class PingTab : Control
         newCheckBox.OnToggled += lol =>
         {
             _isSaveNeeded = true;
-            NotifyHelper.SetValueAccess(id, newCheckBox.Pressed);
+            _helper.SetValueAccess(id, newCheckBox.Pressed);
         };
 
         PingsCont.AddChild(newCheckBox);
@@ -34,7 +35,7 @@ public sealed partial class PingTab : Control
         {
             if (_isSaveNeeded)
             {
-                cfg.SetCVar(CCCCVars.SysNotifyCvar, NotifyHelper.PairListToString(NotifyHelper.GetDictionaryAccess()));
+                cfg.SetCVar(CCCCVars.SysNotifyCvar, _helper.PairListToString(_helper.GetDictionaryAccess()));
                 cfg.SaveToFile();
             }
         };
@@ -43,12 +44,12 @@ public sealed partial class PingTab : Control
     {
         var prototypeManager = IoCManager.Resolve<IPrototypeManager>();
         var cfg = IoCManager.Resolve<IConfigurationManager>();
-        NotifyHelper.EnsureInitialized(cfg, prototypeManager);
+        _helper.EnsureInitialized(cfg, prototypeManager);
         RobustXamlLoader.Load(this);
         AddSaveButton(SaveButton, cfg);
         foreach (var proto in prototypeManager.EnumeratePrototypes<GhostRoleGroupNotify>())
         {
-            AddCheckBox(proto.Name, proto.ID, NotifyHelper.GetValueAccess(proto.ID));
+            AddCheckBox(proto.Name, proto.ID, _helper.GetValueAccess(proto.ID));
         }
         Control.Initialize();
     }

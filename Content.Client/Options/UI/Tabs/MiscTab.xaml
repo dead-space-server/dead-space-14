@@ -32,7 +32,8 @@
                        StyleClasses="LabelKeyText"/>
                 <ui:OptionSlider Name="SliderCooldownForPing" Title="{Loc 'ui-options-cooldown-ping'}" 
                                  Margin="0 0 0 8" />
-                <CheckBox Name="GetPingPermission" Text="{Loc 'ui-options-ping-permission'}" />
+                <CheckBox Name="GetPingPermission" Text="{Loc 'ui-options-ping-permission'}" /> 
+                <ui:OptionDropDown Name="DropDownSoundPing" Title="{Loc 'ui-options-sound-ping'}" />
                 <!--DS14-end-->
                 <!-- <CheckBox Name="ToggleWalk" Text="{Loc 'ui-options-hotkey-toggle-walk'}" /> -->
             </BoxContainer>
