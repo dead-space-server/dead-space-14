@@ -1,7 +1,7 @@
 <DefaultWindow
     xmlns="https://spacestation14.io"
     Title="{Loc 'fax-machine-ui-window'}"
-    MinSize="380 320">
+    MinSize="380 320"> <!-- DS14 FaxHistory -->
     <BoxContainer Orientation="Vertical"
         SeparationOverride="2"
         VerticalExpand="True">

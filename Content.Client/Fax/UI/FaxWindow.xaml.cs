@@ -82,9 +82,11 @@ public sealed partial class FaxWindow : DefaultWindow
             }
         }
         // DS14-start
-        HistoryList.Clear();
+
         if (state.HistoryList.Count != 0)
         {
+            HistoryList.Clear();
+
             foreach (var (key, value) in state.HistoryList)
             {
                 HistoryList.AddText($"{key} | {value}");

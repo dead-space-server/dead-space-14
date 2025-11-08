@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Server.Administration;
 using Content.Server.Administration.Managers;
 using Content.Server.Chat.Managers;
@@ -565,6 +566,10 @@ public sealed class FaxSystem : EntitySystem
 
         // DS14-start FaxHistory
         var shiftTime = _gameTiming.CurTime;
+        if (component.FaxHistory.Count >= 20)
+        {
+            component.FaxHistory.RemoveAt(0);
+        }
         component.FaxHistory.Add((TimeSpan.FromSeconds(shiftTime.TotalSeconds).ToString(@"hh\:mm\:ss"),"Отправлено: "+faxName));
         // DS14-end
 
@@ -591,6 +596,10 @@ public sealed class FaxSystem : EntitySystem
         if (component.NotifyAdmins)
             NotifyAdmins(faxName);
         // DS14-start FaxHistory
+        if (component.FaxHistory.Count >= 20)
+        {
+            component.FaxHistory.RemoveAt(0);
+        }
         var shiftTime = _gameTiming.CurTime;
         component.FaxHistory.Add((TimeSpan.FromSeconds(shiftTime.TotalSeconds).ToString(@"hh\:mm\:ss"),"Получено: "+faxName));
         // DS14-end
