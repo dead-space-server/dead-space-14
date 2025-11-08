@@ -3,13 +3,14 @@ using Robust.Shared.Configuration;
 using Content.Shared.DeadSpace.GhostRoleNotify.Prototypes;
 using Robust.Shared.Prototypes;
 using System.Collections.ObjectModel;
+using System.Collections.Concurrent;
 
 namespace Content.Client.DeadSpace.NotifySystem.NotifyHelpers;
 
 public sealed class NotifyHelper
 {
-    private static Dictionary<string, bool> DictCvar = new Dictionary<string, bool>();
-    private static Dictionary<string, bool> DictAccess = new Dictionary<string, bool>();
+    private static ConcurrentDictionary<string, bool> DictCvar = new ConcurrentDictionary<string, bool>();
+    private static ConcurrentDictionary<string, bool> DictAccess = new ConcurrentDictionary<string, bool>();
     public static bool GetValueAccess(string key)
     {
         if (DictAccess.TryGetValue(key, out bool value))
@@ -25,13 +26,13 @@ public sealed class NotifyHelper
     {
         DictAccess[key] = value;
     }
-    public static Dictionary<string, bool> GetDictionaryAccess()
+    public static ConcurrentDictionary<string, bool> GetDictionaryAccess()
     {
         return DictAccess;
     }
-    public static Dictionary<string, bool> StringToPairList(string input)
+    public static ConcurrentDictionary<string, bool> StringToPairList(string input)
     {
-        var result = new Dictionary<string, bool>();
+        var result = new ConcurrentDictionary<string, bool>();
         var parts = input.Split("/", StringSplitOptions.RemoveEmptyEntries);
 
         if (parts.Length % 2 != 0)
@@ -65,7 +66,7 @@ public sealed class NotifyHelper
             CreateDictionaryForReciveSys(prototypeManager);
         }
     }
-    public static string PairListToString(Dictionary<string, bool> list)
+    public static string PairListToString(ConcurrentDictionary<string, bool> list)
     {
         var parts = new List<string>();
         foreach (var (word, value) in list)
@@ -86,16 +87,13 @@ public sealed class NotifyHelper
     {
         foreach (var proto in prototypeManager.EnumeratePrototypes<GhostRoleGroupNotify>())
         {
-            if (DictCvar.ContainsKey(proto.ID) && !DictAccess.ContainsKey(proto.ID))
+            if (DictCvar.ContainsKey(proto.ID))
             {
-                DictAccess[proto.ID] = DictCvar[proto.ID];
+                DictAccess.AddOrUpdate(proto.ID, DictCvar[proto.ID], (k, oldValue) => DictCvar[proto.ID]);
             }
             else
             {
-                if (!DictAccess.ContainsKey(proto.ID))
-                {
-                    DictAccess[proto.ID] = false;
-                }
+                DictAccess.TryAdd(proto.ID, false);
             }
         }
     }
