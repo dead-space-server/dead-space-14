@@ -1,3 +1,5 @@
+# НЕ ДЕЛАТЬ ДЛЯ ИВЕНТОВ СВОЮ ГРУППУ ЕСТЬ EventGroup
+
 - type: ghostNotifyGroup
   id: DemonBoss
   name: Демон Вестник
