@@ -21,38 +21,30 @@ public sealed class AntiAlcoholSystem : EntitySystem
     {
         base.Initialize();
         
-        // Подписываемся на событие реакции реагента
         SubscribeLocalEvent<AntiAlcoholWatcherComponent, ReactionEntityEvent>(OnReactionEntity);
     }
 
     private void OnReactionEntity(Entity<AntiAlcoholWatcherComponent> ent, ref ReactionEntityEvent args)
     {
-        // Проверяем что это этанол
         if (args.Reagent.ID != ent.Comp.EthanolId)
             return;
 
-        // Проверяем метод (только Ingestion - проглатывание)
         if (args.Method != ReactionMethod.Ingestion)
             return;
 
-        // Проверяем кулдаун
         if (_timing.CurTime < ent.Comp.NextAllowedVomitAt)
             return;
 
-        // Проверяем наличие bloodstream
         if (!TryComp<BloodstreamComponent>(ent, out var bloodstream))
             return;
-
-        // Получаем химический раствор
+    
         Entity<SolutionComponent>? solEnt = null;
         if (!_solutions.ResolveSolution((ent, null), bloodstream.ChemicalSolutionName, ref solEnt, out var solution))
             return;
 
-        // Удаляем этанол из крови
         var ethanolAmount = args.ReagentQuantity.Quantity;
         _solutions.RemoveReagent(solEnt.Value, ent.Comp.EthanolId, ethanolAmount);
 
-        // Шанс вызвать рвоту
         if (_random.Prob(ent.Comp.Probability))
         {
             _vomit.Vomit(ent);
