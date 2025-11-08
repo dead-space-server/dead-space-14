@@ -5,6 +5,8 @@ using Robust.Shared.Audio;
 using Robust.Shared.Player;
 using Content.Shared.Telephone;
 using Content.Shared.Holopad;
+using Robust.Shared.Prototypes;
+using Content.Shared.Tag;
 
 namespace Content.Server.DeadSpace.Holopad;
 
@@ -12,8 +14,10 @@ public sealed class HolopadAdminNotificationSystem: EntitySystem
 {
     [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
     [Dependency] private readonly IChatManager _chat = default!;
+    [Dependency] private readonly TagSystem _tagSystem = default!;
     [Dependency] private readonly IAdminManager _adminManager = default!;
 
+    private static readonly ProtoId<TagPrototype> HolopadAdminNotificationTag = "HolopadAdminNotification";
     public override void Initialize()
     {
             base.Initialize();
@@ -22,8 +26,7 @@ public sealed class HolopadAdminNotificationSystem: EntitySystem
 
     private void onTelephoneCallAttempt(Entity<HolopadComponent> source, ref TelephoneCallAttemptEvent args)
     {
-        var receiver = args.Receiver;
-        if (TryComp<HolopadAdminNotificationComponent>(receiver, out var receverHolopadComp))
+        if (_tagSystem.HasTag(args.Receiver, HolopadAdminNotificationTag))
         {
             string userName = "неизвестный игрок";
 

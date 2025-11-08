@@ -98,6 +98,9 @@
   id: HardsuitSyndie
 
 - type: Tag
+  id: HolopadAdminNotification
+
+- type: Tag
   id: Hypopen
 
 - type: Tag
