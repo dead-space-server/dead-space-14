@@ -11,7 +11,7 @@ using Robust.Shared.GameObjects;
 
 namespace Content.Client.DeadSpace.NotifySystem.RecievNotify;
 
-public sealed partial class ReceiveNotifyySys : EntitySystem
+public sealed partial class ReceiveNotifySys : EntitySystem
 {
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
@@ -28,7 +28,7 @@ public sealed partial class ReceiveNotifyySys : EntitySystem
         NotifyHelper.EnsureInitialized(_cfg, _prototypeManager);
     }
 
-    private void CheckRecievedNotify(PingMessage messege)
+    private void CheckReceiveddNotify(PingMessage messege)
     {
         if (NotifyHelper.GetValueAccess(messege.ID) && _cfg.GetCVar(CCCCVars.SysNotifyPerm))
         {
