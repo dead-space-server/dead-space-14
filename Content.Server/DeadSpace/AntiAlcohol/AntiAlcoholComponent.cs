@@ -1,59 +1,62 @@
-using System;
-using Content.Shared.Medical;
 using Content.Shared.Body.Components;
+using Content.Shared.Body.Systems;
+using Content.Shared.Medical;
+using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
-using Robust.Shared.Containers;
-using Robust.Shared.GameObjects;
-using Robust.Shared.Timing;
 using Robust.Shared.Random;
+using Robust.Shared.Timing;
 
-namespace Content.Server.DeadSpace.AntiAlcohol
+namespace Content.Server.DeadSpace.AntiAlcohol;
+
+public sealed class AntiAlcoholSystem : EntitySystem
 {
-    public sealed class AntiAlcoholSystem : EntitySystem
+    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private readonly VomitSystem _vomit = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+
+    public override void Initialize()
     {
-        [Dependency] private readonly IGameTiming _timing = default!;
-        [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
-        [Dependency] private readonly VomitSystem _vomit = default!;
-        [Dependency] private readonly IRobustRandom _random = default!;
-        [Dependency] private readonly SharedContainerSystem _containers = default!;
+        base.Initialize();
+        
+        // Подписываемся на событие реакции реагента
+        SubscribeLocalEvent<AntiAlcoholWatcherComponent, ReactionEntityEvent>(OnReactionEntity);
+    }
 
-        public override void Update(float frameTime)
+    private void OnReactionEntity(Entity<AntiAlcoholWatcherComponent> ent, ref ReactionEntityEvent args)
+    {
+        // Проверяем что это этанол
+        if (args.Reagent.ID != ent.Comp.EthanolId)
+            return;
+
+        // Проверяем метод (только Ingestion - проглатывание)
+        if (args.Method != ReactionMethod.Ingestion)
+            return;
+
+        // Проверяем кулдаун
+        if (_timing.CurTime < ent.Comp.NextAllowedVomitAt)
+            return;
+
+        // Проверяем наличие bloodstream
+        if (!TryComp<BloodstreamComponent>(ent, out var bloodstream))
+            return;
+
+        // Получаем химический раствор
+        Entity<SolutionComponent>? solEnt = null;
+        if (!_solutions.ResolveSolution((ent, null), bloodstream.ChemicalSolutionName, ref solEnt, out var solution))
+            return;
+
+        // Удаляем этанол из крови
+        var ethanolAmount = args.ReagentQuantity.Quantity;
+        _solutions.RemoveReagent(solEnt.Value, ent.Comp.EthanolId, ethanolAmount);
+
+        // Шанс вызвать рвоту
+        if (_random.Prob(ent.Comp.Probability))
         {
-            var now = _timing.CurTime;
-
-            var q = EntityQueryEnumerator<AntiAlcoholWatcherComponent>();
-            while (q.MoveNext(out var implantUid, out var comp))
-            {
-                if (now < comp.NextAllowedVomitAt)
-                    continue;
-
-                if (!_containers.TryGetContainingContainer(implantUid, out var container))
-                    continue;
-
-                var host = container.Owner;
-
-                if (!TryComp<BloodstreamComponent>(host, out var blood))
-                    continue;
-
-                var chemName = blood.ChemicalSolutionName;
-
-                Entity<SolutionComponent>? solEnt = null;
-                if (!_solutions.ResolveSolution(host, chemName, ref solEnt, out var solution))
-                    continue;
-
-                var ethanolQty = solution.GetReagentQuantity(new ReagentId("Ethanol", null));
-                if (ethanolQty.Float() < comp.Threshold)
-                    continue;
-
-                if (comp.Probability < 1f && _random.NextFloat() > comp.Probability)
-                    continue;
-
-                _vomit.Vomit(host);
-
-                comp.NextAllowedVomitAt = now + TimeSpan.FromSeconds(comp.CooldownSeconds);
-            }
+            _vomit.Vomit(ent);
+            ent.Comp.NextAllowedVomitAt = _timing.CurTime + TimeSpan.FromSeconds(ent.Comp.CooldownSeconds);
         }
     }
 }
