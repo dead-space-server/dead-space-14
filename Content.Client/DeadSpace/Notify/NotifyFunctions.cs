@@ -88,13 +88,13 @@ public sealed class NotifyHelper
         {
             if (DictCvar.ContainsKey(proto.ID) && !DictAccess.ContainsKey(proto.ID))
             {
-                DictAccess.Add(proto.ID, DictCvar[proto.ID]);
+                DictAccess[proto.ID] = DictCvar[proto.ID];
             }
             else
             {
                 if (!DictAccess.ContainsKey(proto.ID))
                 {
-                    DictAccess.TryAdd(proto.ID, false);
+                    DictAccess[proto.ID] = false;
                 }
             }
         }
