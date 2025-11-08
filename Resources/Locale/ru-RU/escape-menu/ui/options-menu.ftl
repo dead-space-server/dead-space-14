@@ -12,7 +12,7 @@ ui-options-apply = Применить
 ui-options-reset-all = Сбросить всё и применить
 ui-options-default = По-умолчанию
 ui-options-value-percent = { TOSTRING($value, "P0") }
-ui-options-tab-ping = Пинг меню
+ui-options-tab-ping = Пинг меню #DS14
 
 # Misc/General menu
 
@@ -23,9 +23,11 @@ ui-options-general-cursor = Курсор
 ui-options-general-speech = Речь
 ui-options-general-storage = Инвентарь
 ui-options-general-accessibility = Специальные возможности
+#DS14-start
 ui-options-cooldown-ping = Задержка для пинга
 ui-options-ping = Пинг
 ui-options-ping-permission = Получать уведомление о появлении роли
+#DS14-end
 
 ## Audio menu
 

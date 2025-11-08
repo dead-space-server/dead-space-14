@@ -24,7 +24,7 @@ public sealed partial class ReceiveNotifySys : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeNetworkEvent<PingMessage>(CheckRecievedNotify);
+        SubscribeNetworkEvent<PingMessage>(CheckReceiveddNotify);
         NotifyHelper.EnsureInitialized(_cfg, _prototypeManager);
     }
 
