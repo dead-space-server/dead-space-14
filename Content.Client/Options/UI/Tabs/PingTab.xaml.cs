@@ -35,6 +35,7 @@ public sealed partial class PingTab : Control
         {
             if (_isSaveNeeded)
             {
+                _isSaveNeeded = false;
                 cfg.SetCVar(CCCCVars.SysNotifyCvar, _helper.PairListToString(_helper.GetDictionaryAccess()));
                 cfg.SaveToFile();
             }

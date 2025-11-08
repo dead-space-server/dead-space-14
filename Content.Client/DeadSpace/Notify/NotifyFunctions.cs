@@ -37,7 +37,10 @@ public sealed class NotifyHelper
         var parts = input.Split(";", StringSplitOptions.RemoveEmptyEntries);
 
         if (parts.Length % 2 != 0)
-            throw new ArgumentException($"Нечётное количество элементов в строке '{input}'.");
+        {
+            Logger.Debug($"Нечётное количество элементов в строке '{input}'.");
+            return result;
+        }
 
         for (int i = 0; i < parts.Length; i += 2)
         {
