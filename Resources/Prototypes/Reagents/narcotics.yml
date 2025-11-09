@@ -39,7 +39,7 @@
         factor: -4
       - !type:SatiateHunger
         factor: -4
-      # DS14-end
+# DS14-end
       - !type:ModifyStatusEffect
         effectProto: StatusEffectStunned
         time: 3
@@ -89,14 +89,12 @@
           types:
             Poison: 1.5
             Cellular: 0.5
-    Narcotic:
-      effects:
       - !type:Jitter
       - !type:SatiateThirst
         factor: -2
       - !type:SatiateHunger
         factor: -2
-      # DS14-end
+# DS14-end
       - !type:ModifyStatusEffect
         effectProto: StatusEffectStunned
         time: 1
@@ -144,8 +142,8 @@
         sprintSpeedModifier: 1.3
       - !type:HealthChange
         conditions:
-          - !type:ReagentThreshold
-            min: 80 #please wait 3 minutes before using another stimpack
+        - !type:ReagentThreshold
+          min: 80 #please wait 3 minutes before using another stimpack
         damage:
           types:
             Poison: 1
@@ -183,19 +181,19 @@
     Medicine:
       metabolismRate: 1.0
       effects:
-        - !type:ResetNarcolepsy
-        - !type:SatiateHunger
-          factor: 1
-        - !type:SatiateThirst
-          factor: 1
-        - !type:HealthChange
-          conditions:
-          - !type:TotalDamage
-            min: 70 # only heals when you're more dead than alive
-          damage: # heals at the same rate as tricordrazine, doesn't heal poison because if you OD'd I'm not giving you a safety net
-            groups:
-              Burn: -1
-              Brute: -1
+      - !type:ResetNarcolepsy
+      - !type:SatiateHunger
+        factor: 1
+      - !type:SatiateThirst
+        factor: 1
+      - !type:HealthChange
+        conditions:
+        - !type:TotalDamage
+          min: 70 # only heals when you're more dead than alive
+        damage: # heals at the same rate as tricordrazine, doesn't heal poison because if you OD'd I'm not giving you a safety net
+          groups:
+            Burn: -1
+            Brute: -1
 
 - type: reagent
   id: THC
