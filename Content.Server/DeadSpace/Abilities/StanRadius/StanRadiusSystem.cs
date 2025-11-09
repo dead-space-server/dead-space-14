@@ -87,9 +87,6 @@ public sealed partial class StunRadiusSystem : EntitySystem
         if (args.Handled)
             return;
 
-        if (!TryComp<TransformComponent>(uid, out var xform))
-            return;
-
         args.Handled = true;
         var entities = _lookup.GetEntitiesInRange(uid, component.RangeStun);
 
@@ -112,7 +109,7 @@ public sealed partial class StunRadiusSystem : EntitySystem
             UpdateState(uid, component);
         }
 
-        Push(uid, component, xform);
+        Push(uid, component, Transform(uid));
 
         if (component.StunRadiusSound != null)
             _audio.PlayPvs(component.StunRadiusSound, uid, AudioParams.Default.WithVolume(3).WithMaxDistance(component.RangeStun * 2));
