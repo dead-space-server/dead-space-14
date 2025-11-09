@@ -5,7 +5,7 @@
     MinHeight="450">
     <GridContainer Columns="1">
         <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
-            <LineEdit Name="Announcer" Access="Public" PlaceHolder="{Loc admin-announce-announcer-placeholder}" Text="{Loc admin-announce-announcer-default}" HorizontalExpand="True" SizeFlagsStretchRatio="1" />
+            <LineEdit Name="Announcer" Access="Public" PlaceHolder="{Loc 'admin-announce-announcer-placeholder'}" Text="{Loc admin-announce-announcer-default}" HorizontalExpand="True" SizeFlagsStretchRatio="1" />
             <LineEdit Name="Sender" Access="Public" PlaceHolder="{Loc 'admin-announce-sender-placeholder'}" Text="{Loc 'admin-announce-sender-default'}" HorizontalExpand="True" SizeFlagsStretchRatio="1" Margin="4,0,0,0" />
         </BoxContainer>
         <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
