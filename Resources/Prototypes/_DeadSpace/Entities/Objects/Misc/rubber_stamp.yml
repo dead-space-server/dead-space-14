@@ -152,9 +152,9 @@
   - type: Stamp
     stampedName: stamp-component-stamped-name-senior-courier
     stampedColor: "#6d4719"
-    stampState: "paper_stamp-senior-salvage"
+    stampState: "paper_stamp-senior-courier"
   - type: Sprite
-    state: stamp-senior-salvage
+    state: stamp-senior-courier
 
 - type: entity
   parent: RubberStampBase
