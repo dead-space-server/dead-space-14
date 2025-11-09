@@ -6,9 +6,6 @@ chat-emote-name-hiss = Шипеть
 chat-emote-name-meow = Мяукнуть
 chat-emote-name-mew = Мявкнуть
 chat-emote-name-purr = Мурлыкать
-# Вульпканин
-chat-emote-name-growl = Рычать
-chat-emote-name-howl = Выть
 # Анимации
 chat-emote-name-workout = Качаться
 chat-emote-name-flip = Сделать сальто
@@ -23,8 +20,6 @@ chat-emote-msg-hiss = шипит
 chat-emote-msg-meow = мяукает
 chat-emote-msg-mew = мявкает
 chat-emote-msg-purr = мурлычет
-chat-emote-msg-growl = рычит
-chat-emote-msg-howl = воет
 chat-emote-msg-workout = качается
 chat-emote-msg-flip = делает сальто
 chat-emote-msg-jump = прыгает

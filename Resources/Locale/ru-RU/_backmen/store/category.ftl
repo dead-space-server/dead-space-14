@@ -8,8 +8,10 @@ store-category-vending-drinks = Напитки
 store-category-vending-games = Игры
 store-category-vending-snack = Закуски
 store-category-vending-youtool = Инструменты
+store-category-vending-wall-medical = Медикаменты
 store-category-HappyHonk = Обеды
-store-category-emag = Контрабанда
+store-category-emag = Нелегальное
+store-category-contraband = Контрабанда
 store-category-lootbox = Лутбоксы
 # Clothing
 store-category-backpacks = Хранение
