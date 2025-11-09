@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Server.Cargo.Components;
+using Content.Server.DeadSpace.Taipan.Components;
 using Content.Server.NameIdentifier;
 using Content.Shared.Access.Components;
 using Content.Shared.Cargo;
@@ -113,7 +114,7 @@ public sealed partial class CargoSystem
 
     public void SetupBountyLabel(EntityUid uid, EntityUid stationId, CargoBountyData bounty, PaperComponent? paper = null, CargoBountyLabelComponent? label = null)
     {
-        if (!Resolve(uid, ref paper, ref label) || !_protoMan.TryIndex<CargoBountyPrototype>(bounty.Bounty, out var prototype))
+        if (!Resolve(uid, ref paper, ref label) || !_protoMan.Resolve<CargoBountyPrototype>(bounty.Bounty, out var prototype))
             return;
 
         label.Id = bounty.Id;
@@ -156,7 +157,7 @@ public sealed partial class CargoSystem
         if (!TryGetBountyFromId(station, component.Id, out var bounty, database))
             return;
 
-        if (!_protoMan.TryIndex(bounty.Value.Bounty, out var bountyPrototype) ||
+        if (!_protoMan.Resolve(bounty.Value.Bounty, out var bountyPrototype) ||
             !IsBountyComplete(container.Owner, bountyPrototype))
             return;
 
@@ -215,6 +216,12 @@ public sealed partial class CargoSystem
 
     private void OnMapInit(EntityUid uid, StationCargoBountyDatabaseComponent component, MapInitEvent args)
     {
+        // DS14-start
+        if (!component.IsTaipan && HasComp<StationTaipanComponent>(uid))
+        {
+            component.IsTaipan = true;
+        }
+        // DS14-end
         FillBountyDatabase(uid, component);
     }
 
@@ -275,7 +282,7 @@ public sealed partial class CargoSystem
 
     public bool IsBountyComplete(EntityUid container, CargoBountyData data, out HashSet<EntityUid> bountyEntities)
     {
-        if (!_protoMan.TryIndex(data.Bounty, out var proto))
+        if (!_protoMan.Resolve(data.Bounty, out var proto))
         {
             bountyEntities = new();
             return false;
@@ -407,7 +414,12 @@ public sealed partial class CargoSystem
         {
             if (component.Bounties.Any(b => b.Bounty == proto.ID))
                 continue;
-            filteredBounties.Add(proto);
+            // DS14-start
+            if (proto.IsTaipan && component.IsTaipan)
+                filteredBounties.Add(proto);
+            else if (!proto.IsTaipan && !component.IsTaipan)
+                filteredBounties.Add(proto);
+            // DS14-end
         }
 
         var pool = filteredBounties.Count == 0 ? allBounties : filteredBounties;

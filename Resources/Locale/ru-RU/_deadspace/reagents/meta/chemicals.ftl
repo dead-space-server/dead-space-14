@@ -1,14 +1,10 @@
 reagent-name-rawuranium = необработанный урановый порошок
 reagent-desc-rawuranium = Порошок урана, содержащий большое количество сторонних минералов и металлов. Требует последующей обработки.
-
 reagent-name-yellowcake = жёлтый кек
 reagent-desc-yellowcake = Урановый порошок, обработанный серной кислотой.
-
 reagent-name-uraniumhexafluoride = фторид урана
-reagent-desc-uraniumhexafluoride =  Светло-серое газообразное бинарное соединение урана со фтором.
-
+reagent-desc-uraniumhexafluoride = Светло-серое газообразное бинарное соединение урана со фтором.
 reagent-name-phenylacetone = фенилацетон
 reagent-desc-phenylacetone = Маслянистая жидкость с резким сладковатым запахом. Важный промежуточный продукт в химическом синтезе.
-
 reagent-name-methylamine = метиламин
 reagent-desc-methylamine = Бесцветная летучая жидкость с резким запахом тухлой рыбы. Широко применяется в производстве лекарств и пестицидов.

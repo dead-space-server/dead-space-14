@@ -11,14 +11,12 @@ using Content.Server.Emp;
 using Content.Server.Explosion.EntitySystems;
 using Content.Server.Fluids.EntitySystems;
 using Content.Server.Ghost.Roles.Components;
-using Content.Server.Medical;
 using Content.Server.Polymorph.Components;
 using Content.Server.Polymorph.Systems;
 using Content.Server.Speech.Components;
 using Content.Server.Spreader;
 using Content.Server.Temperature.Components;
 using Content.Server.Temperature.Systems;
-using Content.Server.Traits.Assorted;
 using Content.Server.Zombies;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
@@ -30,9 +28,11 @@ using Content.Shared.EntityEffects.Effects;
 using Content.Shared.EntityEffects;
 using Content.Shared.Flash;
 using Content.Shared.Maps;
+using Content.Shared.Medical;
 using Content.Shared.Mind.Components;
 using Content.Shared.Popups;
 using Content.Shared.Random;
+using Content.Shared.Traits.Assorted;
 using Content.Shared.Zombies;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
@@ -48,6 +48,8 @@ using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;
 
 using TemperatureCondition = Content.Shared.EntityEffects.EffectConditions.Temperature; // disambiguate the namespace
 using PolymorphEffect = Content.Shared.EntityEffects.Effects.Polymorph;
+using Content.Shared.DeadSpace.Languages.Components;
+using Content.Server.DeadSpace.Languages;
 
 namespace Content.Server.EntityEffects;
 
@@ -766,6 +768,17 @@ public sealed class EntityEffectSystem : EntitySystem
         RemComp<ReplacementAccentComponent>(uid);
         RemComp<MonkeyAccentComponent>(uid);
 
+        // DS14-Languages-start
+        if (TryComp<LanguageComponent>(uid, out var language))
+        {
+            foreach (var langId in language.CantSpeakLanguages)
+            {
+                if (language.UnlockLanguagesAfterMakeSentient.Contains(langId))
+                    language.CantSpeakLanguages.Remove(langId);
+            }
+        }
+        // DS14-Languages-end
+
         // Stops from adding a ghost role to things like people who already have a mind
         if (TryComp<MindContainerComponent>(uid, out var mindContainer) && mindContainer.HasMind)
         {
@@ -963,9 +976,7 @@ public sealed class EntityEffectSystem : EntitySystem
             return;
 
         var targetProto = _random.Pick(plantholder.Seed.MutationPrototypes);
-        _protoManager.TryIndex(targetProto, out SeedPrototype? protoSeed);
-
-        if (protoSeed == null)
+        if (!_protoManager.TryIndex(targetProto, out SeedPrototype? protoSeed))
         {
             Log.Error($"Seed prototype could not be found: {targetProto}!");
             return;

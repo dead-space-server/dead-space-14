@@ -4,6 +4,7 @@ using Content.Shared.Access.Systems;
 using Content.Shared.CCVar;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.CrewManifest;
+using Content.Shared.Roles;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using static Content.Shared.Access.Components.IdCardConsoleComponent;
@@ -34,10 +35,12 @@ namespace Content.Client.Access.UI
         {
             base.Open();
             List<ProtoId<AccessLevelPrototype>> accessLevels;
+            bool isTaipan = false; // DS14
 
             if (EntMan.TryGetComponent<IdCardConsoleComponent>(Owner, out var idCard))
             {
                 accessLevels = idCard.AccessLevels;
+                isTaipan = idCard.IsTaipan; // DS14
             }
             else
             {
@@ -45,7 +48,7 @@ namespace Content.Client.Access.UI
                 _idCardConsoleSystem.Log.Error($"No IdCardConsole component found for {EntMan.ToPrettyString(Owner)}!");
             }
 
-            _window = new IdCardConsoleWindow(this, _prototypeManager, accessLevels)
+            _window = new IdCardConsoleWindow(this, _prototypeManager, accessLevels, isTaipan) // DS14
             {
                 Title = EntMan.GetComponent<MetaDataComponent>(Owner).EntityName
             };
@@ -74,7 +77,7 @@ namespace Content.Client.Access.UI
             _window?.UpdateState(castState);
         }
 
-        public void SubmitData(string newFullName, string newJobTitle, List<ProtoId<AccessLevelPrototype>> newAccessList, string newJobPrototype)
+        public void SubmitData(string newFullName, string newJobTitle, List<ProtoId<AccessLevelPrototype>> newAccessList, ProtoId<JobPrototype> newJobPrototype)
         {
             if (newFullName.Length > _maxNameLength)
                 newFullName = newFullName[.._maxNameLength];

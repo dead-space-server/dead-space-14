@@ -75,6 +75,7 @@
   - SeniorEngineerHead
   - SeniorEngineerJumpsuit
   - StationEngineerBackpack
+  - SeniorEngineerBelt
   - StationEngineerOuterClothing
   - StationEngineerShoes
   - SeniorEngineerID
@@ -139,7 +140,7 @@
   groups:
   - GroupTankHarness
   - SecurityHead
-  - SecurityJumpsuit
+  - SecurityPilotJumpsuit # DS14
   - SecurityBackpack
   - SecurityShoes
   - SecurityBelt

@@ -1,0 +1,50 @@
+- type: job
+  id: TaipanParamedic
+  name: job-name-taipan-paramedic
+  description: job-description-taipan-paramedic
+  playTimeTracker: JobTaipanParamedic
+  setPreference: false
+  overrideConsoleVisibility: true
+  isTaipan: true
+  startingGear: TaipanParamedicGear
+  icon: "JobIconTaipanParamedic"
+  supervisors: job-supervisors-taipan-research-director
+  canBeAntag: false
+  requirements:
+  - !type:DepartmentTimeRequirement
+    department: Medical
+    time: 72000 #20 hrs
+  - !type:RoleTimeRequirement
+    role: JobParamedic
+    time: 36000 # 10 hours
+  access:
+  - TaipanMaint
+  - TaipanExternal
+  - TaipanMedical
+  special:
+  - !type:AddImplantSpecial
+    implants: [ DeathRattleImplantTaipan ]
+  - !type:AddComponentSpecial
+    components:
+    - type: AntagImmune
+    - type: NpcFactionMember
+      factions:
+      - Taipan
+
+- type: startingGear
+  id: TaipanParamedicGear
+  equipment:
+    ears: ClothingHeadsetTaipan
+    outerClothing: ClothingOuterTaipanCoatLabMed
+    shoes: ClothingShoesColorWhite
+    id: TaipanParamedicPDA
+    belt: ClothingBeltMedicalEMTFilled
+    socks: ClothingUnderwearSocksTaipanParamedic
+
+- type: chameleonOutfit
+  id: TaipanParamedicChameleonOutfit
+  job: TaipanParamedic
+  startingGear: TaipanParamedicGear
+  equipment:
+    id: PassengerPDA
+    neck: ClothingNeckGoldmedal

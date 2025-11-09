@@ -18,7 +18,7 @@ public sealed class CCCCVars
     /// </summary>
 
     public static readonly CVarDef<bool> GCFEnabled =
-        CVarDef.Create("gcf_auto.enabled", true);
+        CVarDef.Create("gcf_auto.enabled", false);
 
     /// <summary>
     ///     Notify for admin about GCF Clean.
@@ -57,6 +57,13 @@ public sealed class CCCCVars
 
     public static readonly CVarDef<bool> RadioTTSSoundsEnabled =
         CVarDef.Create("audio.radio_tts_sounds_enabled", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /*
+	* Jukebox
+	*/
+
+    public static readonly CVarDef<float> JukeboxMusicVolume =
+        CVarDef.Create("jukebox.volume", 1f, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /*
     * Taipan

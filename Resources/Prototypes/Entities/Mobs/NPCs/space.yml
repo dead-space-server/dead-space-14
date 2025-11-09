@@ -247,8 +247,14 @@
   - type: MeleeChemicalInjector
     solution: melee
     transferAmount: 4
+  # DS14-Languages-start
   - type: ReplacementAccent
     accent: xeno
+  - type: Language # DS14-Languages
+    selectedLanguage: ArachnidLanguage
+    knownLanguages:
+    - ArachnidLanguage
+  # DS14-Languages-end
   - type: InteractionPopup
     successChance: 0.20
     interactSuccessString: petting-success-tarantula
