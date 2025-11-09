@@ -3,7 +3,7 @@ using Content.Client.UserInterface.Systems.Admin;
 using Content.Client.UserInterface.Systems.Bwoink;
 using Content.Client.UserInterface.Systems.Character;
 using Content.Client.UserInterface.Systems.Crafting;
-using Content.Client.ADT.EmotePanel;
+using Content.Client.UserInterface.Systems.Emotes;
 using Content.Client.UserInterface.Systems.EscapeMenu;
 using Content.Client.UserInterface.Systems.Gameplay;
 using Content.Client.UserInterface.Systems.Guidebook;
@@ -23,7 +23,7 @@ public sealed class GameTopMenuBarUIController : UIController
     [Dependency] private readonly ActionUIController _action = default!;
     [Dependency] private readonly SandboxUIController _sandbox = default!;
     [Dependency] private readonly GuidebookUIController _guidebook = default!;
-    [Dependency] private readonly EmotePanelSystem _emotes = default!; // DS14 emote panel
+    [Dependency] private readonly EmotesUIController _emotes = default!;
 
     private GameTopMenuBar? GameTopMenuBar => UIManager.GetActiveUIWidgetOrNull<GameTopMenuBar>();
 
@@ -46,7 +46,7 @@ public sealed class GameTopMenuBarUIController : UIController
         _ahelp.UnloadButton();
         _action.UnloadButton();
         _sandbox.UnloadButton();
-        _emotes.UnloadButton(); // DS14 emote panel
+        _emotes.UnloadButton();
     }
 
     public void LoadButtons()
@@ -59,6 +59,6 @@ public sealed class GameTopMenuBarUIController : UIController
         _ahelp.LoadButton();
         _action.LoadButton();
         _sandbox.LoadButton();
-        _emotes.LoadButton(); // DS14 emote panel
+        _emotes.LoadButton();
     }
 }

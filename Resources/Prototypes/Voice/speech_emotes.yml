@@ -265,10 +265,11 @@
     requireAll: true
     components:
     - Vocal
-    - Vulpkanin
+    tags:
+    - VulpkaninEmotes
   blacklist:
-    components:
-    - BorgChassis
+    tags:
+    - SiliconEmotes
     - SiliconIPSIPCEmotes
   chatMessages: ["chat-emote-msg-bark"]
   chatTriggers:
@@ -289,10 +290,11 @@
     requireAll: true
     components:
     - Vocal
-    - Vulpkanin
+    tags:
+    - VulpkaninEmotes
   blacklist:
-    components:
-    - BorgChassis
+    tags:
+    - SiliconEmotes
     - SiliconIPSIPCEmotes
   chatMessages: ["chat-emote-msg-snarl"]
   chatTriggers:
@@ -312,10 +314,11 @@
     requireAll: true
     components:
     - Vocal
-    - Vulpkanin
+    tags:
+    - VulpkaninEmotes
   blacklist:
-    components:
-    - BorgChassis
+    tags:
+    - SiliconEmotes
     - SiliconIPSIPCEmotes
   chatMessages: ["chat-emote-msg-whine"]
   chatTriggers:
@@ -333,14 +336,16 @@
   name: chat-emote-name-howl
   category: Vocal
   available: false
+  icon: _DeadSpace/Interface/Emotes/howl.png # DS14
   whitelist:
     requireAll: true
     components:
     - Vocal
-    - Vulpkanin
+    tags:
+    - VulpkaninEmotes
   blacklist:
-    components:
-    - BorgChassis
+    tags:
+    - SiliconEmotes
     - SiliconIPSIPCEmotes
   chatMessages: ["chat-emote-msg-howl"]
   chatTriggers:
@@ -356,15 +361,17 @@
   id: Growl
   name: chat-emote-name-growl
   category: Vocal
+  icon: _DeadSpace/Interface/Emotes/growl.png # DS14
   available: false
   whitelist:
     requireAll: true
     components:
     - Vocal
-    - Vulpkanin
+    tags:
+    - VulpkaninEmotes
   blacklist:
-    components:
-    - BorgChassis
+    tags:
+    - SiliconEmotes
     - SiliconIPSIPCEmotes
   chatMessages: ["chat-emote-msg-growl"]
   chatTriggers:

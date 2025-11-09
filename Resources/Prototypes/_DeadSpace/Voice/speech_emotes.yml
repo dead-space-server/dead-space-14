@@ -9,7 +9,8 @@
     requireAll: true
     components:
     - Vocal
-    - SlimePerson
+    tags:
+    - SlimePersonEmotes
   blacklist:
     tags:
     - SiliconEmotes
@@ -29,7 +30,8 @@
     requireAll: true
     components:
     - Vocal
-    - SlimePerson
+    tags:
+    - SlimePersonEmotes
   blacklist:
     tags:
     - SiliconEmotes
@@ -50,7 +52,8 @@
     requireAll: true
     components:
     - Vocal
-    - CatVocal
+    tags:
+    - CatEmotes
   blacklist:
     tags:
     - SiliconEmotes
@@ -72,7 +75,8 @@
     requireAll: true
     components:
     - Vocal
-    - CatVocal
+    tags:
+    - CatEmotes
   blacklist:
     tags:
     - SiliconEmotes
@@ -99,7 +103,8 @@
     requireAll: true
     components:
     - Vocal
-    - Felinid
+    tags:
+    - FelinidEmotes
   blacklist:
     tags:
     - SiliconEmotes
@@ -121,7 +126,8 @@
     requireAll: true
     components:
     - Vocal
-    - Felinid
+    tags:
+    - FelinidEmotes
   blacklist:
     tags:
     - SiliconEmotes
@@ -134,50 +140,6 @@
     - purrs
     - purring
     - purred
-
-# DS14-remove
-# Vulpkanin emotes
-
-- type: emote
-  id: Growl
-  name: chat-emote-name-growl
-  category: Vocal
-  icon: _DeadSpace/Interface/Emotes/growl.png
-  whitelist:
-    requireAll: true
-    components:
-    - Vocal
-    - Vulpkanin
-  blacklist:
-    tags:
-    - SiliconEmotes
-    - SiliconIPSIPCEmotes
-  chatMessages: ["chat-emote-msg-growl"]
-  chatTriggers:
-    - рычит
-    - growl
-    - growls
-    - growling
-    - growled
-
-- type: emote
-  id: Howl
-  name: chat-emote-name-howl
-  category: Vocal
-  icon: _DeadSpace/Interface/Emotes/howl.png
-  whitelist:
-    requireAll: true
-    components:
-    - Vocal
-    - Vulpkanin
-  blacklist:
-    tags:
-    - SiliconEmotes
-    - SiliconIPSIPCEmotes
-  chatMessages: ["chat-emote-msg-howl"]
-  chatTriggers:
-    - воет
-    - воет на луну
 
 # Remnants of ADT
 
