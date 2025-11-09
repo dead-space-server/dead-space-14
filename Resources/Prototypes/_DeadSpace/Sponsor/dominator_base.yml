@@ -29,6 +29,10 @@
       - id: ClothingUnderSocksDominator
       - id: ToySword
       - id: WeaponDisablerToySponsor
+      - id: JukeboxMK
+      - id: TapeRecorderr
+      - id: TapeEmpty
+        amount: 1
 
 - type: entity
   name: продвинутая аптечка первой помощи
@@ -162,7 +166,7 @@
       sprite: _DeadSpace/Sponsor/vjlados/magboots.rsi
       layers:
       - state: icon
-        map: [ "enum.ToggleVisuals.Layer" ]
+        map: [ "enum.ToggleableVisuals.Layer" ]
     - type: Clothing
       sprite: _DeadSpace/Sponsor/vjlados/magboots.rsi
     - type: ClothingSpeedModifier

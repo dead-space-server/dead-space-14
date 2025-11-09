@@ -24,6 +24,7 @@ cmd-ban-hint-duration-6 = 1 месяц
 cmd-banlist-desc = Список активных банов пользователя.
 cmd-banlist-help = Использование: banlist <name or user ID>
 cmd-banlist-empty = Нет активных банов у пользователя { $user }
+cmd-banlist-hint = <name/user ID>
 cmd-banlistF-hint = <name/user ID>
 cmd-ban_exemption_update-desc = Установить исключение на типы банов игрока.
 cmd-ban_exemption_update-help =
@@ -70,6 +71,7 @@ ban-panel-ip-hwid-tooltip = Оставьте пустым и установит�
 ban-panel-severity = Тяжесть:
 # Ban string
 server-ban-string = { $admin } created a { $severity } severity server ban that expires { $expires } for [{ $name }, { $ip }, { $hwid }], with reason: { $reason }
+ban-panel-expiry-error = err
 ban-panel-erase = Стереть сообщения игрока чата из раунда
 server-ban-string-never = никогда
 server-ban-string-no-pii = { $admin } установил серверный бан { $severity } тяжести, который истечёт { $expires } у { $name } с причиной: { $reason }

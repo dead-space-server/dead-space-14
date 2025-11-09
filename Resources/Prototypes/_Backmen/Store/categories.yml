@@ -1,65 +1,43 @@
-﻿- type: storeCategory
+﻿# Vending
+- type: storeCategory
   id: ChangInventory
-  name: store-category-vendingchang
+  name: store-category-vending-chang
 
 - type: storeCategory
   id: CigaretteMachineInventory
-  name: store-category-vendingcigs
-
-- type: storeCategory
-  id: VendingClothing
-  name: store-category-vendingclothing
-
-- type: storeCategory
-  id: HotDrinksMachineInventory
-  name: store-category-vending-drinks
-
-- type: storeCategory
-  id: RobustSoftdrinksInventory
-  name: store-category-vending-drinks
+  name: store-category-vending-cigs
 
 - type: storeCategory
   id: DiscountDansInventory
-  name: store-category-vendingdiscount
+  name: store-category-vending-discount
 
 - type: storeCategory
   id: DonutInventory
-  name: store-category-vendingdonut
-
-- type: storeCategory
-  id: VendingGames
-  name: store-category-vendinggames
+  name: store-category-vending-donut
 
 - type: storeCategory
   id: GetmoreChocolateCorpInventory
-  name: store-category-vendingsnack
+  name: store-category-vending-snack
 
+- type: storeCategory
+  id: HappyHonkInventory
+  name: store-category-HappyHonk
+
+- type: storeCategory
+  id: VendingGames
+  name: store-category-vending-games
+
+- type: storeCategory
+  id: VendingYouToolInventory
+  name: store-category-vending-youtool
+
+- type: storeCategory
+  id: VendingWallMedicalInventory
+  name: store-category-vending-wall-medical
+
+# Drinks
 - type: storeCategory
   id: BodaInventory
-  name: store-category-vending-drinks
-
-- type: storeCategory
-  id: VendingYouTool
-  name: store-category-vendingyoutool
-
-- type: storeCategory
-  id: ToysInventory
-  name: store-category-vending-drinks
-
-- type: storeCategory
-  id: SpaceUpInventory
-  name: store-category-vending-drinks
-
-- type: storeCategory
-  id: ColaRedInventory
-  name: store-category-vending-drinks
-
-- type: storeCategory
-  id: ShamblersJuiceInventory
-  name: store-category-vending-drinks
-
-- type: storeCategory
-  id: PwrGameInventory
   name: store-category-vending-drinks
 
 - type: storeCategory
@@ -67,58 +45,37 @@
   name: store-category-vending-drinks
 
 - type: storeCategory
+  id: HotDrinksMachineInventory
+  name: store-category-vending-drinks
+
+- type: storeCategory
+  id: PwrGameInventory
+  name: store-category-vending-drinks
+
+- type: storeCategory
+  id: RobustSoftdrinksInventory
+  name: store-category-vending-drinks
+
+- type: storeCategory
+  id: ShamblersJuiceInventory
+  name: store-category-vending-drinks
+
+- type: storeCategory
+  id: SpaceUpInventory
+  name: store-category-vending-drinks
+
+- type: storeCategory
   id: StarkistInventory
   name: store-category-vending-drinks
 
 - type: storeCategory
-  id: HappyHonkInventory
-  name: store-category-HappyHonk
+  id: ToysInventory
+  name: store-category-vending-drinks
 
-- type: storeCategory
-  id: DrinkVendInventoryEmag
-  name: store-category-emag
-
-- type: storeCategory
-  id: HappyHonkInventoryEmag
-  name: store-category-emag
-
-- type: storeCategory
-  id: CigaretteMachineInventoryEmag
-  name: store-category-emag
-
-- type: storeCategory
-  id: HotDrinksMachineInventoryEmag
-  name: store-category-emag
-
-  # Clothing
-
+# Clothing
 - type: storeCategory
   id: ClothingBackpackMachineInventory
   name: store-category-backpacks
-
-- type: storeCategory
-  id: ClothingHeadMachineInventory
-  name: store-category-headwear
-
-- type: storeCategory
-  id: ClothingOuterMachineInventory
-  name: store-category-outerwear
-
-- type: storeCategory
-  id: ClothingJumpsuitMachineInventory
-  name: store-category-jumpsuit
-
-- type: storeCategory
-  id: ClothingJumpskirtMachineInventory
-  name: store-category-jumpskirt
-
-- type: storeCategory
-  id: ClothingShoesMachineInventory
-  name: store-category-shoes
-
-- type: storeCategory
-  id: ClothingNeckMachineInventory
-  name: store-category-neck
 
 - type: storeCategory
   id: ClothingEyesMachineInventory
@@ -129,20 +86,38 @@
   name: store-category-hands
 
 - type: storeCategory
-  id: ClothingEmagMachineInventory
-  name: store-category-emag
+  id: ClothingHeadMachineInventory
+  name: store-category-headwear
+
+- type: storeCategory
+  id: ClothingJumpskirtMachineInventory
+  name: store-category-jumpskirt
+
+- type: storeCategory
+  id: ClothingJumpsuitMachineInventory
+  name: store-category-jumpsuit
+
+- type: storeCategory
+  id: ClothingNeckMachineInventory
+  name: store-category-neck
+
+- type: storeCategory
+  id: ClothingOuterMachineInventory
+  name: store-category-outerwear
+
+- type: storeCategory
+  id: ClothingShoesMachineInventory
+  name: store-category-shoes
 
 # Capes
-
 - type: storeCategory
   id: ClothesMateCapeInventory
   name: store-category-neck
 
-- type: storeCategory
-  id: ClothesMateCapeInventoryEmag
-  name: store-category-emag
-
 # Winterdrobe
+- type: storeCategory
+  id: WinterDrobeOtherInventory
+  name: store-category-other
 
 - type: storeCategory
   id: WinterDrobeOuterInventory
@@ -152,42 +127,84 @@
   id: WinterDrobeScarfsInventory
   name: store-category-scarf
 
+# Emag
 - type: storeCategory
-  id: WinterDrobeOtherInventory
-  name: store-category-other
+  id: CigaretteMachineInventoryEmag
+  name: store-category-emag
+
+- type: storeCategory
+  id: ClothingEmagMachineInventory
+  name: store-category-emag
+
+- type: storeCategory
+  id: ClothesMateCapeInventoryEmag
+  name: store-category-emag
+
+- type: storeCategory
+  id: HappyHonkInventoryEmag
+  name: store-category-emag
+
+- type: storeCategory
+  id: HotDrinksMachineInventoryEmag
+  name: store-category-emag
+
+- type: storeCategory
+  id: RobustSoftdrinksInventoryEmag
+  name: store-category-emag
 
 - type: storeCategory
   id: WinterDrobeInventoryEmag
   name: store-category-emag
 
-   #withard
+# Contraband
+- type: storeCategory
+  id: BodaInventoryContraband
+  name: store-category-contraband
 
 - type: storeCategory
-  id: WizardBooks
-  name: store-category-books
-  priority: 0
+  id: ChangInventoryContraband
+  name: store-category-contraband
 
 - type: storeCategory
-  id: WizardArmor
-  name: store-category-armor
-  priority: 2
+  id: CigaretteMachineInventoryContraband
+  name: store-category-contraband
 
 - type: storeCategory
-  id: WizardUtility
-  name: store-category-utility
-  priority: 3
+  id: DiscountDansInventoryContraband
+  name: store-category-contraband
 
 - type: storeCategory
-  id: WizardBundles
-  name: store-category-bundles
-  priority: 6
+  id: DonutInventoryContraband
+  name: store-category-contraband
 
 - type: storeCategory
-  id: WizardMisc
-  name: store-category-misc
-  priority: 7
+  id: GetmoreChocolateCorpInventoryContraband
+  name: store-category-contraband
 
 - type: storeCategory
-  id: WizardPointless
-  name: store-category-pointless
-  priority: 8
+  id: HappyHonkInventoryContraband
+  name: store-category-contraband
+
+- type: storeCategory
+  id: HotDrinksMachineInventoryContraband
+  name: store-category-contraband
+
+- type: storeCategory
+  id: PwrGameInventoryContraband
+  name: store-category-contraband
+
+- type: storeCategory
+  id: RobustSoftdrinksInventoryContraband
+  name: store-category-contraband
+
+- type: storeCategory
+  id: ShamblersJuiceInventoryContraband
+  name: store-category-contraband
+
+- type: storeCategory
+  id: SpaceUpInventoryContraband
+  name: store-category-contraband
+
+- type: storeCategory
+  id: StarkistInventoryContraband
+  name: store-category-contraband

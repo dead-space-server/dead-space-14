@@ -1,6 +1,6 @@
 ﻿using Content.Server.Inventory;
-using Content.Server.Radio.Components;
 using Content.Shared.Inventory;
+using Content.Shared.Radio.Components;
 using Content.Shared.Silicons.Borgs;
 using Content.Shared.Silicons.Borgs.Components;
 using Robust.Shared.Prototypes;
@@ -31,9 +31,15 @@ public sealed class BorgSwitchableTypeSystem : SharedBorgSwitchableTypeSystem
         // Borg transponder for the robotics console
         if (TryComp(ent, out BorgTransponderComponent? transponder))
         {
+            // DS14-start
+            ResPath rsiPath = prototype.IsTaipan
+                ? new ResPath("_DeadSpace/Mobs/Silicon/chassis.rsi")
+               : new ResPath("Mobs/Silicon/chassis.rsi");
+
             _borgSystem.SetTransponderSprite(
                 (ent.Owner, transponder),
-                new SpriteSpecifier.Rsi(new ResPath("Mobs/Silicon/chassis.rsi"), prototype.SpriteBodyState));
+                new SpriteSpecifier.Rsi(rsiPath, prototype.SpriteBodyState));
+            // DS14-end
 
             _borgSystem.SetTransponderName(
                 (ent.Owner, transponder),
@@ -60,7 +66,7 @@ public sealed class BorgSwitchableTypeSystem : SharedBorgSwitchableTypeSystem
         }
 
         // Configure special components
-        if (Prototypes.TryIndex(ent.Comp.SelectedBorgType, out var previousPrototype))
+        if (Prototypes.Resolve(ent.Comp.SelectedBorgType, out var previousPrototype))
         {
             if (previousPrototype.AddComponents is { } removeComponents)
                 EntityManager.RemoveComponents(ent, removeComponents);

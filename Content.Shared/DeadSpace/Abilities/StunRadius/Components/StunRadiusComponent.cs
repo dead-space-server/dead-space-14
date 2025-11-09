@@ -2,7 +2,6 @@
 
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Robust.Shared.Audio;
 
 namespace Content.Shared.DeadSpace.Abilities.StunRadius.Components;
@@ -20,8 +19,8 @@ public sealed partial class StunRadiusComponent : Component
     [DataField]
     public string EffectPrototype = string.Empty;
 
-    [DataField("actionStunRadius", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string ActionStunRadius = "ActionStunRadius";
+    [DataField]
+    public EntProtoId ActionStunRadius = "ActionStunRadius";
 
     [DataField]
     public EntityUid? ActionStunRadiusEntity;

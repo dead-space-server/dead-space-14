@@ -15,13 +15,12 @@
     - Arachnid
     - Diona
     - Human
-    - Moth
     - Reptilian
+    - Vulpkanin
     # DS14-species-start
     - Demon
     - Shark
     - Tajaran
-    - Vulpkanin
     - Felinid
     - Kobolt
     # DS14-species-end
@@ -187,7 +186,7 @@
     - BoxMimeBeer
 
 - type: loadout
-  id: EmergencyMothMime
+  id: EmergencySpeciesMothMime
   effects:
   - !type:GroupLoadoutEffect
     proto: EffectSpeciesMoth

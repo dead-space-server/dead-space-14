@@ -6,38 +6,56 @@
     requirement:
       !type:RoleTimeRequirement
       role: JobHeadOfSecurity
-      time: 72000 #20 hrs
+      time: 20h
 
 # Jumpsuit
 - type: loadout
   id: HeadofSecurityJumpsuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitHoS
+  groupBy: "jumpsuit"
+
+# DS14-start
+- type: loadout
+  id: HeadofSecurityJumpsuitBlue
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitHoSBlue
+
+- type: loadout
+  id: HeadofSecurityJumpskirtPencil
+  equipment:
+    jumpsuit: ClothingUniformJumpskirtPencilHoS
+# DS14-end
 
 - type: loadout
   id: HeadofSecurityJumpskirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtHoS
+  groupBy: "jumpskirt"
 
 - type: loadout
   id: HeadofSecurityTurtleneck
   equipment:
     jumpsuit: ClothingUniformJumpsuitHoSAlt
+  groupBy: "jumpsuit"
 
 - type: loadout
   id: HeadofSecurityTurtleneckSkirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtHoSAlt
+  groupBy: "jumpskirt"
 
 - type: loadout
   id: HeadofSecurityFormalSuit
   equipment:
     jumpsuit: ClothingUniformJumpsuitHosFormal
+  groupBy: "jumpsuit"
 
 - type: loadout
   id: HeadofSecurityFormalSkirt
   equipment:
     jumpsuit: ClothingUniformJumpskirtHosFormal
+  groupBy: "jumpskirt"
 
 # Head
 - type: loadout
@@ -88,11 +106,6 @@
   id: UnderwearSocksHeadOfSecurity
   equipment:
     socks: ClothingUnderwearSocksHeadOfSecurity
-
-- type: loadout
-  id: UnderwearWomenSocksHeadOfSecurity
-  equipment:
-    socks: ClothingUnderwearWomenSocksHeadOfSecurity
 
 # Underwear
 - type: loadout

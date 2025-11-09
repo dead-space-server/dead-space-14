@@ -19,9 +19,10 @@ using Content.Shared.Ghost;
 using Robust.Shared.Map.Components;
 using Content.Server.Singularity.Components;
 using Robust.Shared.Spawners;
-using Content.Shared.StatusEffect;
 using Robust.Shared.Timing;
 using Content.Shared.Silicons.Borgs.Components;
+using Robust.Shared.Prototypes;
+using Content.Shared.StatusEffect;
 
 namespace Content.Server.DeadSpace.Abilities.StunRadius;
 
@@ -38,6 +39,8 @@ public sealed partial class StunRadiusSystem : EntitySystem
     [Dependency] private readonly StatusEffectsSystem _statusEffect = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
+    private static readonly ProtoId<StatusEffectPrototype> StunEffect = "Stun";
+
     public const float MinGravPulseRange = 0.00001f;
     public const float MinRange = 0.01f;
     public const float MaxStrenghtPush = 15f;
@@ -98,7 +101,7 @@ public sealed partial class StunRadiusSystem : EntitySystem
             if (TryComp<TimedDespawnComponent>(forcePowerEnt, out var timedDespawnComp))
             {
                 TimeSpan durationEffect = TimeSpan.FromSeconds(timedDespawnComp.Lifetime);
-                _statusEffect.TryAddStatusEffect<StunnedComponent>(uid, "Stun", durationEffect, true);
+                _statusEffect.TryAddStatusEffect<StunnedComponent>(uid, StunEffect, durationEffect, true);
             }
         }
 
@@ -174,7 +177,7 @@ public sealed partial class StunRadiusSystem : EntitySystem
             if (!CanGravPulseAffect(entity))
                 continue;
 
-            _stun.TryParalyze(entity, TimeSpan.FromSeconds(component.ParalyzeTime), true);
+            _stun.TryUpdateParalyzeDuration(entity, TimeSpan.FromSeconds(component.ParalyzeTime));
 
             var displacement = epicenter - _transform.GetWorldPosition(entity, xformQuery);
             var distance2 = displacement.LengthSquared();

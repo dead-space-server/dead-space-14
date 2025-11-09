@@ -78,9 +78,7 @@ entities:
     - type: Transform
     - type: Map
       mapPaused: True
-    - type: PhysicsMap
     - type: GridTree
-    - type: MovedGrids
     - type: Broadphase
     - type: OccluderTree
   - uid: 2
@@ -12118,103 +12116,6 @@ entities:
           damping: 33.953922
           stiffness: 304.7697
     - type: RadiationGridResistance
-- proto: ActionToggleInternals
-  entities:
-  - uid: 9
-    components:
-    - type: Transform
-      parent: 8
-    - type: InstantAction
-      originalIconColor: '#FFFFFFFF'
-      container: 8
-  - uid: 11
-    components:
-    - type: Transform
-      parent: 10
-    - type: InstantAction
-      originalIconColor: '#FFFFFFFF'
-      container: 10
-  - uid: 14
-    components:
-    - type: Transform
-      parent: 13
-    - type: InstantAction
-      originalIconColor: '#FFFFFFFF'
-      container: 13
-- proto: ActionToggleJetpack
-  entities:
-  - uid: 12
-    components:
-    - type: Transform
-      parent: 10
-    - type: InstantAction
-      originalIconColor: '#FFFFFFFF'
-      container: 10
-  - uid: 15
-    components:
-    - type: Transform
-      parent: 13
-    - type: InstantAction
-      originalIconColor: '#FFFFFFFF'
-      container: 13
-- proto: ActionToggleLight
-  entities:
-  - uid: 17
-    components:
-    - type: Transform
-      parent: 16
-    - type: InstantAction
-      originalIconColor: '#FFFFFFFF'
-      container: 16
-  - uid: 19
-    components:
-    - type: Transform
-      parent: 18
-    - type: InstantAction
-      originalIconColor: '#FFFFFFFF'
-      container: 18
-  - uid: 21
-    components:
-    - type: Transform
-      parent: 20
-    - type: InstantAction
-      originalIconColor: '#FFFFFFFF'
-      container: 20
-  - uid: 23
-    components:
-    - type: Transform
-      parent: 22
-    - type: InstantAction
-      originalIconColor: '#FFFFFFFF'
-      container: 22
-  - uid: 25
-    components:
-    - type: Transform
-      parent: 24
-    - type: InstantAction
-      originalIconColor: '#FFFFFFFF'
-      container: 24
-  - uid: 27
-    components:
-    - type: Transform
-      parent: 26
-    - type: InstantAction
-      originalIconColor: '#FFFFFFFF'
-      container: 26
-  - uid: 29
-    components:
-    - type: Transform
-      parent: 28
-    - type: InstantAction
-      originalIconColor: '#FFFFFFFF'
-      container: 28
-  - uid: 31
-    components:
-    - type: Transform
-      parent: 30
-    - type: InstantAction
-      originalIconColor: '#FFFFFFFF'
-      container: 30
 - proto: AirAlarm
   entities:
   - uid: 32
@@ -16678,14 +16579,6 @@ entities:
     - type: Transform
       pos: -31.51879,-61.20825
       parent: 2
-    - type: GasTank
-      toggleActionEntity: 9
-    - type: ActionsContainer
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          ents:
-          - 9
   - uid: 580
     components:
     - type: Transform
@@ -66228,77 +66121,21 @@ entities:
     - type: Transform
       pos: -32.516693,-57.438038
       parent: 2
-    - type: HandheldLight
-      toggleActionEntity: 25
-    - type: ContainerContainer
-      containers:
-        cell_slot: !type:ContainerSlot
-          showEnts: False
-          occludes: True
-          ent: null
-        actions: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 25
-    - type: ActionsContainer
   - uid: 26
     components:
     - type: Transform
       pos: -32.77724,-57.239983
       parent: 2
-    - type: HandheldLight
-      toggleActionEntity: 27
-    - type: ContainerContainer
-      containers:
-        cell_slot: !type:ContainerSlot
-          showEnts: False
-          occludes: True
-          ent: null
-        actions: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 27
-    - type: ActionsContainer
   - uid: 28
     components:
     - type: Transform
       pos: 27.562937,-29.514505
       parent: 2
-    - type: HandheldLight
-      toggleActionEntity: 29
-    - type: ContainerContainer
-      containers:
-        cell_slot: !type:ContainerSlot
-          showEnts: False
-          occludes: True
-          ent: null
-        actions: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 29
-    - type: ActionsContainer
   - uid: 30
     components:
     - type: Transform
       pos: 45.4472,-50.26539
       parent: 2
-    - type: HandheldLight
-      toggleActionEntity: 31
-    - type: ContainerContainer
-      containers:
-        cell_slot: !type:ContainerSlot
-          showEnts: False
-          occludes: True
-          ent: null
-        actions: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 31
-    - type: ActionsContainer
   - uid: 9434
     components:
     - type: Transform
@@ -94495,33 +94332,11 @@ entities:
     - type: Transform
       pos: -5.6783614,-56.630463
       parent: 2
-    - type: GasTank
-      toggleActionEntity: 11
-    - type: Jetpack
-      toggleActionEntity: 12
-    - type: ActionsContainer
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          ents:
-          - 12
-          - 11
   - uid: 13
     components:
     - type: Transform
       pos: -5.4092884,-56.300236
       parent: 2
-    - type: GasTank
-      toggleActionEntity: 14
-    - type: Jetpack
-      toggleActionEntity: 15
-    - type: ActionsContainer
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          ents:
-          - 15
-          - 14
   - uid: 13536
     components:
     - type: Transform
@@ -94658,43 +94473,15 @@ entities:
     - type: Transform
       pos: -0.55744004,-50.242683
       parent: 2
-    - type: HandheldLight
-      toggleActionEntity: 21
-    - type: ContainerContainer
-      containers:
-        cell_slot: !type:ContainerSlot
-          showEnts: False
-          occludes: True
-          ent: null
-        actions: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 21
     - type: Physics
       canCollide: True
-    - type: ActionsContainer
   - uid: 22
     components:
     - type: Transform
       pos: 46.70643,-33.07726
       parent: 2
-    - type: HandheldLight
-      toggleActionEntity: 23
-    - type: ContainerContainer
-      containers:
-        cell_slot: !type:ContainerSlot
-          showEnts: False
-          occludes: True
-          ent: null
-        actions: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 23
     - type: Physics
       canCollide: True
-    - type: ActionsContainer
   - uid: 13557
     components:
     - type: Transform
@@ -94715,39 +94502,11 @@ entities:
     - type: Transform
       pos: 36.56211,-3.2625933
       parent: 2
-    - type: HandheldLight
-      toggleActionEntity: 17
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 17
-        cell_slot: !type:ContainerSlot
-          showEnts: False
-          occludes: True
-          ent: null
-    - type: ActionsContainer
   - uid: 18
     components:
     - type: Transform
       pos: 20.602448,-37.864635
       parent: 2
-    - type: HandheldLight
-      toggleActionEntity: 19
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 19
-        cell_slot: !type:ContainerSlot
-          showEnts: False
-          occludes: True
-          ent: null
-    - type: ActionsContainer
   - uid: 13559
     components:
     - type: Transform
@@ -111142,13 +110901,6 @@ entities:
     - type: Transform
       pos: -8.5,-34.5
       parent: 2
-- proto: SpawnMobBandito
-  entities:
-  - uid: 16250
-    components:
-    - type: Transform
-      pos: 27.5,-34.5
-      parent: 2
 - proto: SpawnMobBee
   entities:
   - uid: 16251
@@ -111237,19 +110989,12 @@ entities:
       rot: 3.141592653589793 rad
       pos: -10.5,17.5
       parent: 2
-- proto: SpawnMobCatException
+- proto: SpawnMobCat
   entities:
   - uid: 16266
     components:
     - type: Transform
       pos: -42.5,-33.5
-      parent: 2
-- proto: SpawnMobCatRuntime
-  entities:
-  - uid: 16267
-    components:
-    - type: Transform
-      pos: -42.5,-35.5
       parent: 2
 - proto: SpawnMobCorgi
   entities:
@@ -111257,13 +111002,6 @@ entities:
     components:
     - type: Transform
       pos: -15.5,-46.5
-      parent: 2
-- proto: SpawnMobCrabAtmos
-  entities:
-  - uid: 16269
-    components:
-    - type: Transform
-      pos: -2.5,-2.5
       parent: 2
 - proto: SpawnMobFoxRenault
   entities:
@@ -111379,13 +111117,6 @@ entities:
     components:
     - type: Transform
       pos: 14.5,-37.5
-      parent: 2
-- proto: SpawnMobSmile
-  entities:
-  - uid: 16287
-    components:
-    - type: Transform
-      pos: 34.5,-34.5
       parent: 2
 - proto: SpawnMobWalter
   entities:

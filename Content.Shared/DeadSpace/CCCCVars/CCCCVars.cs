@@ -18,7 +18,7 @@ public sealed class CCCCVars
     /// </summary>
 
     public static readonly CVarDef<bool> GCFEnabled =
-        CVarDef.Create("gcf_auto.enabled", true);
+        CVarDef.Create("gcf_auto.enabled", false);
 
     /// <summary>
     ///     Notify for admin about GCF Clean.
@@ -59,6 +59,13 @@ public sealed class CCCCVars
         CVarDef.Create("audio.radio_tts_sounds_enabled", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /*
+	* Jukebox
+	*/
+
+    public static readonly CVarDef<float> JukeboxMusicVolume =
+        CVarDef.Create("jukebox.volume", 1f, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /*
     * Taipan
     */
 
@@ -77,4 +84,14 @@ public sealed class CCCCVars
     /// </summary>
     public static readonly CVarDef<string> Background =
         CVarDef.Create("ui.background", "Image", CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /*
+    * Player Count Mode
+    */
+
+    /// <summary>
+    /// Whether to use total players or ready players for game mode selection.
+    /// </summary>
+    public static readonly CVarDef<bool> GameModesUseTotalPlayers =
+        CVarDef.Create("game.modes_use_total_players", true, CVar.SERVERONLY | CVar.ARCHIVE);
 }

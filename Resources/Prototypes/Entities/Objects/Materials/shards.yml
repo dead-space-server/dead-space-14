@@ -69,9 +69,11 @@
   - type: Slippery
     slipSound:
       path: /Audio/Effects/glass_step.ogg
-    launchForwardsMultiplier: 0
+    slipData:
+      launchForwardsMultiplier: 0
   - type: TriggerOnStepTrigger
-  - type: DamageUserOnTrigger
+  - type: DamageOnTrigger
+    targetUser: true
     damage:
       types:
         Piercing: 5
@@ -90,7 +92,7 @@
   - type: ToolRefinable
     refineResult:
     - id: SheetGlass1
-  - type: DamageUserOnTrigger
+  - type: DamageOnTrigger
     damage:
       types:
         Piercing: 4.5
@@ -126,7 +128,7 @@
     refineResult:
     - id: SheetGlass1
     - id: PartRodMetal1
-  - type: DamageUserOnTrigger
+  - type: DamageOnTrigger
     damage:
       types:
         Piercing: 5.5
@@ -162,7 +164,7 @@
     refineResult:
     - id: SheetGlass1
     - id: SheetPlasma1
-  - type: DamageUserOnTrigger
+  - type: DamageOnTrigger
     damage:
       types:
         Piercing: 6.5
@@ -199,9 +201,8 @@
         Radiation: 2
   - type: ToolRefinable
     refineResult:
-    - id: SheetGlass1
-    - id: SheetUranium1
-  - type: DamageUserOnTrigger
+    - id: SheetUGlass1
+  - type: DamageOnTrigger
     damage:
       types:
         Piercing: 5
@@ -218,7 +219,7 @@
         reagents:
         - ReagentId: Silicon
           Quantity: 5
-        - ReagentId: Uranium
+        - ReagentId: RawUranium
           Quantity: 5
   - type: Construction
     graph: UraniumShivConstruct
@@ -236,7 +237,7 @@
     refineResult:
     - id: SheetGlass1
     - id: SheetBrass1
-  - type: DamageUserOnTrigger
+  - type: DamageOnTrigger
     damage:
       types:
         Piercing: 5

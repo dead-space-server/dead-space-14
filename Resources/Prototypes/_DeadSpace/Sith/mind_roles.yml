@@ -1,9 +1,0 @@
-- type: entity
-  parent: BaseMindRoleAntag
-  id: MindRoleSith
-  name: Роль Ренегата
-  components:
-  - type: MindRole
-    antagPrototype: Sith
-    exclusiveAntag: true
-  - type: SithRole

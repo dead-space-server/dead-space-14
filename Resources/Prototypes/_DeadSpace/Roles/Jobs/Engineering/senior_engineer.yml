@@ -34,9 +34,18 @@
   id: SeniorEngineerGear
   equipment:
     eyes: ClothingEyesGlassesMeson
-    belt: ClothingBeltUtilityEngineering
+#    belt: ClothingBeltUtilityEngineering
     ears: ClothingHeadsetEngineering
     socks: ClothingUnderwearSocksSeniorEngineer
   storage:
     back:
     - RubberStampSeniorEngineer # DS14
+
+- type: chameleonOutfit
+  id: SeniorEngineerChameleonOutfit
+  job: SeniorEngineer
+  equipment:
+    eyes: ClothingEyesGlassesMeson
+    belt: ClothingBeltUtilityEngineering
+    ears: ClothingHeadsetEngineering
+    socks: ClothingUnderwearSocksSeniorEngineer

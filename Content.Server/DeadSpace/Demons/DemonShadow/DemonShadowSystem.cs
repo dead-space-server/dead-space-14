@@ -33,6 +33,7 @@ using Content.Shared.Interaction;
 using Content.Server.DeadSpace.Abilities.Cocoon;
 using Content.Server.DeadSpace.Demons.DemonShadow.Components;
 using Content.Server.StationEvents.Events;
+using Content.Shared.Ghost;
 
 namespace Content.Server.DeadSpace.Demons.DemonShadow;
 
@@ -55,6 +56,7 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
     [Dependency] private readonly NpcFactionSystem _faction = default!;
     [Dependency] private readonly SharedInteractionSystem _interaction = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly TurfSystem _turf = default!;
 
     public override void Initialize()
     {
@@ -153,7 +155,7 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
         _appearance.SetData(uid, DemonShadowVisuals.DemonShadow, false);
 
         if (TryComp<NpcFactionMemberComponent>(uid, out var factionComp))
-            component.OldFaction = GetFirstElement(factionComp.Factions);
+            component.OldFaction = factionComp.Factions.FirstOrDefault();
 
         Astral(uid, true);
     }
@@ -200,7 +202,7 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
 
     private bool TryUseShadowCrawl(EntityUid uid)
     {
-        var tileref = Transform(uid).Coordinates.GetTileRef();
+        var tileref = _turf.GetTileRef(Transform(uid).Coordinates);
         if (tileref != null)
         {
             if (_physics.GetEntitiesIntersectingBody(uid, (int) CollisionGroup.Impassable).Count > 0)
@@ -316,16 +318,6 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
         }
     }
 
-    static ProtoId<NpcFactionPrototype>? GetFirstElement(HashSet<ProtoId<NpcFactionPrototype>> set)
-    {
-        foreach (var element in set)
-        {
-            return element; // Возвращаем первый элемент, который найдем
-        }
-
-        return null;
-    }
-
     private void DoShadowGrapple(EntityUid uid, DemonShadowComponent component, ShadowGrappleEvent args)
     {
         if (!_gameTiming.IsFirstTimePredicted)
@@ -349,7 +341,7 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
         args.Handled = true;
 
         _beam.TryCreateBeam(uid, target, "ShadowHand");
-        _stun.TryParalyze(target, TimeSpan.FromSeconds(3), true);
+        _stun.TryUpdateParalyzeDuration(target, TimeSpan.FromSeconds(3));
 
         component.TeleportTarget = target;
         component.TimeUtilTeleport = _gameTiming.CurTime + component.TeleportDuration;
@@ -383,6 +375,12 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
             if (Transform(uid).MapID != xform.MapID)
                 continue;
 
+            if (HasComp<GhostComponent>(ent))
+                continue;
+
+            if (TryComp<VisibilityComponent>(ent, out var layer) && layer.Layer != (int)VisibilityFlags.Normal)
+                continue;
+
             lightPosition = _transform.GetMapCoordinates(ent);
 
             if (_examine.InRangeUnOccluded(entityPosition, lightPosition, lightComp.Radius, null) && lightComp.Enabled)
@@ -391,6 +389,7 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
 
         return true;
     }
+
     public void MakeVisible(bool visible)
     {
         var query = EntityQueryEnumerator<DemonShadowComponent, VisibilityComponent>();
@@ -410,5 +409,4 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
             _visibility.RefreshVisibility(uid, vis);
         }
     }
-
 }

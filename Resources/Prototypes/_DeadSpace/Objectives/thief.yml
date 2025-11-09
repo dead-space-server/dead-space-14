@@ -1,8 +1,10 @@
 - type: entity
-  parent: BaseThiefStealAnimalObjective
-  id: PolyStealObjective
+  parent: BaseThiefStealObjective
+  id: WeaponSeniorKinetikStealObjective
   components:
+  - type: NotJobRequirement
+    job: SeniorSalvageSpecialist
   - type: StealCondition
-    stealGroup: AnimalPoly
+    stealGroup: WeaponSeniorKinetik
   - type: Objective
-    difficulty: 1.5
+    difficulty: 2

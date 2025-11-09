@@ -13,7 +13,6 @@
   - type: Hunger
   - type: Thirst
   - type: Sericulture
-    action: ActionSericulture
     productionLength: 2
     entityProduced: MaterialWebSilk1
     hungerCost: 4 # Should total to 25 total silk on full hunger
@@ -31,6 +30,16 @@
         amount: 5
   - type: Reactive
     reactions:
+    # DS14-start
+    - reagents: [ PestKiller ]
+      methods: [ Touch ]
+      effects:
+      - !type:HealthChange
+        scaleByQuantity: true
+        damage:
+          types:
+            Caustic: 2
+    # DS14-end
     - reagents: [Water]
       methods: [Touch]
       effects:
@@ -83,8 +92,8 @@
       - map: [ "enum.HumanoidVisualLayers.LLeg" ]
       - map: [ "underwearb" ] # Sirena-Underwear
       - map: [ "underweart" ] # Sirena-Underwear
-      - map: [ "enum.HumanoidVisualLayers.UndergarmentBottom" ]
-      - map: [ "enum.HumanoidVisualLayers.UndergarmentTop" ]
+      # - map: [ "enum.HumanoidVisualLayers.UndergarmentBottom" ]
+      # - map: [ "enum.HumanoidVisualLayers.UndergarmentTop" ]
       # - map: ["jumpsuit"]
       - map: ["enum.HumanoidVisualLayers.LFoot"]
       - map: ["enum.HumanoidVisualLayers.RFoot"]
@@ -94,17 +103,18 @@
       - map: ["enum.HumanoidVisualLayers.RHand"]
       - map: [ "gloves" ]
       - map: [ "shoes" ]
-      - map: [ "ears" ]
       - map: [ "outerClothing" ]
-      - map: [ "eyes" ]
       - map: [ "belt" ]
       - map: [ "id" ]
       - map: [ "enum.HumanoidVisualLayers.Tail" ] # Mentioned in moth code: This needs renaming lol.
       - map: [ "back" ]
       - map: [ "neck" ]
+      - map: [ "enum.HumanoidVisualLayers.SnoutCover" ]
       - map: [ "enum.HumanoidVisualLayers.FacialHair" ]
       - map: [ "enum.HumanoidVisualLayers.Hair" ] # Do these need to be here? (arachnid hair arachnid hair)
       - map: [ "enum.HumanoidVisualLayers.HeadSide" ]
+      - map: [ "ears" ]
+      - map: [ "eyes" ]
       - map: [ "enum.HumanoidVisualLayers.HeadTop" ]
       - map: [ "mask" ]
       - map: [ "head" ]
@@ -122,11 +132,18 @@
   - type: Inventory
     templateId: arachnid
     speciesId: arachnid
-
   - type: Sanity # DS14
+  # DS14-Languages-start
+  - type: Language
+    selectedLanguage: GeneralLanguage
+    knownLanguages:
+    - GeneralLanguage
+    - ArachnidLanguage
+  # DS14-Languages-end
   # - type: FootPrints # Backmen-footsteps
     # leftBarePrint: "footprint-left-bare-spider"
     # rightBarePrint: "footprint-right-bare-spider"
+
 
 - type: entity
   parent: BaseSpeciesDummy
@@ -136,7 +153,7 @@
   - type: HumanoidAppearance
     species: Arachnid
   - type: Inventory
-    speciesId: arachnid 
+    speciesId: arachnid
 
 
 #>88w88<

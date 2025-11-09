@@ -30,10 +30,9 @@
       - TaipanMedical
       - TaipanProtection
       - TaipanResearchDirector
-      - TaipanScience
+      - TaipanResearch
       - TaipanService
       - TaipanTechnicalOperationsSupervisor
-      - TaipanVault
       - TaipanExternal
       privilegedIdSlot:
         name: id-card-console-privileged-id
@@ -56,6 +55,7 @@
       requiresComplex: true
       requireActiveHand: false
       singleUser: true
+      inHandsOnly: true
     - type: ItemSlots
     - type: ContainerContainer
       containers:

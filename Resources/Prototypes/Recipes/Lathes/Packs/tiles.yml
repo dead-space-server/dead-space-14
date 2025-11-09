@@ -1,7 +1,7 @@
 ## Static
 
 - type: latheRecipePack
-  id: FloorTilesStatic
+  id: FloorDarkTilesStatic
   recipes:
   - FloorTileItemDark
   - FloorTileItemDarkDiagonalMini
@@ -12,7 +12,11 @@
   - FloorTileItemDarkPavement
   - FloorTileItemDarkPavementVertical
   - FloorTileItemDarkOffset
-  - FloorTileItemSteelCheckerDark
+  - FloorTileItemDarkSquiggly # DS14
+
+- type: latheRecipePack
+  id: FloorSteelTilesStatic
+  recipes:
   - FloorTileItemSteel
   - FloorTileItemSteelOffset
   - FloorTileItemSteelDiagonalMini
@@ -22,6 +26,12 @@
   - FloorTileItemSteelMono
   - FloorTileItemSteelPavement
   - FloorTileItemSteelPavementVertical
+  - FloorTileItemSteelCheckerDark
+  - FloorTileItemSteelCheckerLight
+
+- type: latheRecipePack
+  id: FloorWhiteTilesStatic
+  recipes:
   - FloorTileItemWhite
   - FloorTileItemWhiteOffset
   - FloorTileItemWhiteDiagonalMini
@@ -31,55 +41,22 @@
   - FloorTileItemWhiteMono
   - FloorTileItemWhitePavement
   - FloorTileItemWhitePavementVertical
-  - FloorTileItemSteelCheckerLight
+
+- type: latheRecipePack
+  id: FloorMaintsTilesStatic
+  recipes:
   - FloorTileItemGratingMaint
   - FloorTileItemTechmaint
   - FloorTileItemSteelMaint
+  - FloorTileItemTechmaintDark
+
+- type: latheRecipePack
+  id: FloorWoodTilesStatic
+  recipes:
   - FloorTileItemWood
   - FloorTileItemWoodLarge
   - FloorTileItemWoodPattern
-  - FloorTileItemConcrete
-  - FloorTileItemConcreteMono
-  - FloorTileItemConcreteSmooth
-  - FloorTileItemGrayConcrete
-  - FloorTileItemGrayConcreteMono
-  - FloorTileItemGrayConcreteSmooth
-  - FloorTileItemOldConcrete
-  - FloorTileItemOldConcreteMono
-  - FloorTileItemOldConcreteSmooth
-  # DS14-start
-  - FloorTileItemSteelCheckerDark
-  - FloorTileItemSteelCheckerLight
-  - FloorTileItemDark
-  - FloorTileItemDarkDiagonalMini
-  - FloorTileItemDarkDiagonal
-  - FloorTileItemDarkHerringbone
-  - FloorTileItemDarkMini
-  - FloorTileItemDarkMono
-  - FloorTileItemDarkPavement
-  - FloorTileItemDarkPavementVertical
-  - FloorTileItemDarkOffset
-  - FloorTileItemSteel
-  - FloorTileItemSteelOffset
-  - FloorTileItemSteelDiagonalMini
-  - FloorTileItemSteelDiagonal
-  - FloorTileItemSteelHerringbone
-  - FloorTileItemSteelMini
-  - FloorTileItemSteelMono
-  - FloorTileItemSteelPavement
-  - FloorTileItemSteelPavementVertical
-  - FloorTileItemWhite
-  - FloorTileItemWhiteOffset
-  - FloorTileItemWhiteDiagonalMini
-  - FloorTileItemWhiteDiagonal
-  - FloorTileItemWhiteHerringbone
-  - FloorTileItemWhiteMini
-  - FloorTileItemWhiteMono
-  - FloorTileItemWhitePavement
-  - FloorTileItemWhitePavementVertical
-  - FloorTileItemWood
-  - FloorTileItemWoodPattern
-  - FloorTileItemWoodLarge
+# DS14-start
   - FloorTileItemWoodParquet
   - FloorTileItemWoodBlack
   - FloorTileItemWoodDark
@@ -98,8 +75,54 @@
   - FloorTileItemWoodChessDark
   - FloorTileItemWoodChessLight
   - FloorTileItemWoodChessRed
-  - FloorTileItemTechmaint
-  - FloorTileItemDirty
+# DS14-end
+
+- type: latheRecipePack
+  id: FloorConcreteTilesStatic
+  recipes:
+  - FloorTileItemConcrete
+  - FloorTileItemConcreteMono
+  - FloorTileItemConcreteSmooth
+  - FloorTileItemGrayConcrete
+  - FloorTileItemGrayConcreteMono
+  - FloorTileItemGrayConcreteSmooth
+  - FloorTileItemOldConcrete
+  - FloorTileItemOldConcreteMono
+  - FloorTileItemOldConcreteSmooth
+
+- type: latheRecipePack
+  id: CircuitFloorsStatic
+  recipes:
+  - FloorGreenCircuit
+  - FloorBlueCircuit
+  - FloorRedCircuit
+
+- type: latheRecipePack
+  id: FloorMarbleTilesStatic
+  recipes:
+  - FloorTileItemWhiteMarble
+  - FloorTileItemDarkMarble
+
+## Dynamic
+
+- type: latheRecipePack
+  id: FauxTiles
+  recipes:
+  - FauxTileAstroGrass
+  - FauxTileMowedAstroGrass
+  - FauxTileJungleAstroGrass
+  - FauxTileDarkAstroGrass
+  - FauxTileLightAstroGrass
+  - FauxTileAstroIce
+  - FauxTileAstroSnow
+  - FauxTileAstroAsteroidSand
+  - FauxTileDesertAstroSand
+  - FauxTileFairyAstroGrass # DS14
+
+# DS14-start
+- type: latheRecipePack
+  id: SpecialFloorTilesStatic
+  recipes:
   - FloorTileItemElevatorShaft
   - FloorTileItemRockVault
   - FloorTileItemBlue
@@ -115,8 +138,11 @@
   - FloorTileItemMime
   - FloorTileItemKitchen
   - FloorTileItemLaundry
-  - FloorTileItemSteelMaint
-  - FloorTileItemGratingMaint
+  - FloorTileItemStone
+  - FloorTileItemTerracotta
+  - FloorTileItemTerracottaDiagonal
+  - FloorTileItemTerracottaHerringbone
+  - FloorTileItemTerracottaSmall
   - FloorTileItemLino
   - FloorTileItemShuttleWhite
   - FloorTileItemShuttleBlue
@@ -125,6 +151,13 @@
   - FloorTileItemShuttleRed
   - FloorTileItemShuttleGrey
   - FloorTileItemShuttleBlack
+  - FloorTileItemShuttleMonoWhite
+  - FloorTileItemShuttleMonoBlue
+  - FloorTileItemShuttleMonoOrange
+  - FloorTileItemShuttleMonoPurple
+  - FloorTileItemShuttleMonoRed
+  - FloorTileItemShuttleMonoGrey
+  - FloorTileItemShuttleMonoBlack
   - FloorTileItemArcadeBlue
   - FloorTileItemArcadeBlue2
   - FloorTileItemArcadeRed
@@ -133,14 +166,9 @@
   - FloorTileItemCarpetOffice
   - FloorTileItemBoxing
   - FloorTileItemGym
-  - FloorTileItemConcrete
-  - FloorTileItemConcreteMono
-  - FloorTileItemConcreteSmooth
-  - FloorTileItemGrayConcrete
-  - FloorTileItemGrayConcreteMono
-  - FloorTileItemGrayConcreteSmooth
-  - FloorTileItemOldConcrete
-  - FloorTileItemOldConcreteMono
-  - FloorTileItemOldConcreteSmooth
   - FloorTileItemGold
   - FloorTileItemSilver
+  - FloorTileItemDiamond
+  - FloorTileItemPlasma
+  - FloorTileItemUranium
+# DS14-end

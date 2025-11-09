@@ -1,5 +1,5 @@
 - type: entity
-  parent: BaseMachinePowered
+  parent: [BaseMachinePowered, SmallConstructibleMachine]
   id: PhotocopierBase
   name: копировальный аппарат
   description: ЦК закупило их чтобы сэкономить на ручках для юридического отдела.
@@ -43,7 +43,15 @@
       whitelist:
         components:
           - Paper
-    photocopierType: Default
+    allowedFormCategories:
+    - NTCargo
+    - NTCivilian
+    - NTEngineering
+    - NTLaw
+    - NTMedical
+    - NTScience
+    - NTSecurity
+    - NTCommand
   - type: GenericVisualizer
     visuals:
       enum.PhotocopierVisuals.VisualState:
@@ -54,7 +62,11 @@
   - type: ItemSlots
   - type: ContainerContainer
     containers:
+      machine_board: !type:Container
+      machine_parts: !type:Container
       Paper: !type:ContainerSlot
+  - type: Machine
+    board: PhotocopierMachineCircuitboard
 
 - type: entity
   parent: PhotocopierBase
@@ -69,7 +81,16 @@
       whitelist:
         components:
           - Paper
-    photocopierType: Command
+    allowedFormCategories:
+    - NTCargo
+    - NTCivilian
+    - NTEngineering
+    - NTLaw
+    - NTMedical
+    - NTScience
+    - NTSecurity
+    - NTCommand
+    - NTCentcomm
 
 - type: entity
   parent: PhotocopierBase
@@ -84,7 +105,17 @@
       whitelist:
         components:
           - Paper
-    photocopierType: Centcomm
+    allowedFormCategories:
+    - NTCargo
+    - NTCivilian
+    - NTEngineering
+    - NTLaw
+    - NTMedical
+    - NTScience
+    - NTSecurity
+    - NTCommand
+    - NTCentcomm
+    - NTOperator
 
 - type: entity
   parent: PhotocopierBase
@@ -99,7 +130,15 @@
       whitelist:
         components:
           - Paper
-    photocopierType: Syndicate
+    allowedFormCategories:
+    - NTCargo
+    - NTCivilian
+    - NTEngineering
+    - NTLaw
+    - NTMedical
+    - NTScience
+    - NTSecurity
+    - Syndicate
 
 - type: entity
   parent: PhotocopierBase
@@ -114,7 +153,15 @@
       whitelist:
         components:
           - Paper
-    photocopierType: Nukeops
+    allowedFormCategories:
+    - NTCargo
+    - NTCivilian
+    - NTEngineering
+    - NTLaw
+    - NTMedical
+    - NTScience
+    - NTSecurity
+    - Nukeops
 
 - type: entity
   parent: BaseItem

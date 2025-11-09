@@ -1,0 +1,34 @@
+- type: paintableGroup
+  id: TaipanAirlockStandard
+  time: 3
+  cost: 3
+  defaultStyle: basic
+  styles:
+    basic: AirlockTaipan
+    atmospherics: AirlockTaipanAtmospherics
+    cargo: AirlockTaipanCargo
+    command: AirlockTaipanCommand
+    engineering: AirlockTaipanEngineering
+    freezer: AirlockTaipanFreezer
+    maintenance: AirlockTaipanMaint
+    medical: AirlockTaipanMedical
+    science: AirlockTaipanScience
+    service: AirlockTaipanService
+    virology: AirlockTaipanVirology
+
+- type: paintableGroup
+  id: TaipanAirlockGlass
+  time: 3
+  cost: 3
+  defaultStyle: basic
+  styles:
+    basic: AirlockTaipanGlass
+    atmospherics: AirlockTaipanGlassAtmospherics
+    cargo: AirlockTaipanGlassCargo
+    command: AirlockTaipanGlassCommand
+    engineering: AirlockTaipanGlassEngineering
+    maintenance: AirlockTaipanGlassMaint
+    medical: AirlockTaipanGlassMedical
+    science: AirlockTaipanGlassScience
+    service: AirlockTaipanGlassService
+    virology: AirlockTaipanGlassVirology

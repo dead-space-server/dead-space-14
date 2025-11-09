@@ -1,0 +1,36 @@
+- type: entity
+  parent: CustomizableSpawnerBase
+  id: CustomizableSpawnerCentralCommandSpecialOperationsOfficer
+  name: Офицер Специальных Операций
+  suffix: ОСО, Кастомизируемый персонаж
+  components:
+  - type: Sprite
+    layers:
+    - state: timed
+    - sprite: Markers/jobs.rsi
+      state: centcom
+  - type: CustomizableHumanoidSpawner
+    jobPrototype: CentralCommandSpecialOperationsOfficer
+    allowedSpecies:
+    - Human
+
+- type: roleLoadout
+  id: JobCentralCommandSpecialOperationsOfficer
+  groups:
+  # - GroupTankHarness # outerClothing slot occupied by startingGear
+  - CentralCommandSpecialOperationsOfficerLoadout
+  - Survival
+  - GroupSpeciesBreathTool
+  - CentcommOfficerUnderwear
+
+- type: loadoutGroup
+  id: CentralCommandSpecialOperationsOfficerLoadout
+  name: spawner-loadout-centcomm-soo
+  hidden: true
+  loadouts:
+  - CentralCommandSpecialOperationsOfficerLoadout
+
+- type: loadout
+  id: CentralCommandSpecialOperationsOfficerLoadout
+  equipment:
+    back: ClothingBackpackERTLeaderFilledSOO

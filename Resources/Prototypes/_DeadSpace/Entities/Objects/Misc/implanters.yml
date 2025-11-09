@@ -1,0 +1,19 @@
+# DeathSquad implanters
+
+- type: entity
+  id: RadioImplanterDeathSquad
+  name: имплантер
+  suffix: Радио, Эскадрон
+  parent: BaseImplantOnlyImplanter
+  components:
+  - type: Implanter
+    implant: RadioImplantDeathSquad
+
+- type: entity
+  id: DeathRattleImplanterDeathSquad
+  name: имплантер
+  suffix: Предсмертный хрип, Эскадрон
+  parent: BaseImplantOnlyImplanter
+  components:
+  - type: Implanter
+    implant: DeathRattleImplantDeathSquad

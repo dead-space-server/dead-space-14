@@ -1,0 +1,17 @@
+- type: construction
+  id: FloorDrainConstruction
+  graph: FloorDrainGraph
+  startNode: start
+  targetNode: floorDrain
+  category: construction-category-utilities
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+
+- type: construction
+  id: littleDirectionalFan
+  graph: DirFan
+  startNode: start
+  targetNode: littleDirectionalFan
+  category: construction-category-utilities
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false

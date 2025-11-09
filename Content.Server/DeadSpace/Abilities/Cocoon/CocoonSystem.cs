@@ -8,6 +8,7 @@ using Content.Server.Atmos.Components;
 using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.Speech.Muting;
 using Content.Shared.CombatMode.Pacification;
+using Content.Shared.Body.Events;
 
 namespace Content.Server.DeadSpace.Abilities.Cocoon;
 
@@ -16,12 +17,15 @@ public sealed class CocoonSystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly RespiratorSystem _respirator = default!;
-    
+    private ISawmill _sawmill = default!;
+
     const float Factor = 1f;
 
     public override void Initialize()
     {
         base.Initialize();
+
+        _sawmill = Logger.GetSawmill("CocoonSystem");
 
         SubscribeLocalEvent<CocoonComponent, BeingGibbedEvent>(OnGibbed);
         SubscribeLocalEvent<CocoonComponent, InsertIntoCocoonEvent>(OnInsert);
@@ -44,10 +48,18 @@ public sealed class CocoonSystem : EntitySystem
         }
     }
 
-    protected void OnMapInit(EntityUid uid, CocoonComponent component, MapInitEvent args)
+    public bool IsEntityInCocoon(EntityUid uid, EntityUid target, CocoonComponent? component = null)
+    {
+        if (!Resolve(uid, ref component, false))
+            return false;
+
+        return _container.IsEntityInContainer(target);
+    }
+
+    private void OnMapInit(EntityUid uid, CocoonComponent component, MapInitEvent args)
     {
         component.NextTick = _gameTiming.CurTime + TimeSpan.FromSeconds(1);
-        component.Stomach = _container.EnsureContainer<Container>(uid, "stomach");
+        component.Cocoon = _container.EnsureContainer<Container>(uid, "cocoon");
     }
 
     private void OnInsert(EntityUid uid, CocoonComponent component, InsertIntoCocoonEvent args)
@@ -59,17 +71,17 @@ public sealed class CocoonSystem : EntitySystem
 
     private void OnGibbed(EntityUid uid, CocoonComponent component, BeingGibbedEvent args)
     {
-        TryEmptyCocoon(uid);
+        EmptyCocoon(uid);
     }
 
     private void OnShutDown(EntityUid uid, CocoonComponent component, ComponentShutdown args)
     {
-        TryEmptyCocoon(uid);
+        EmptyCocoon(uid);
     }
 
     private void OnDestruction(EntityUid uid, CocoonComponent component, DestructionEventArgs args)
     {
-        TryEmptyCocoon(uid);
+        EmptyCocoon(uid);
     }
 
     public bool TryInsertCocoon(EntityUid uid, EntityUid target, CocoonComponent? component = null)
@@ -85,6 +97,7 @@ public sealed class CocoonSystem : EntitySystem
 
         return true;
     }
+
     public EntityUid? GetPrisoner(EntityUid uid, CocoonComponent? component = null)
     {
         if (!Resolve(uid, ref component))
@@ -92,38 +105,25 @@ public sealed class CocoonSystem : EntitySystem
 
         return component.Prisoner;
     }
-    public bool TryEmptyCocoon(EntityUid uid, CocoonComponent? component = null)
+
+    public void EmptyCocoon(EntityUid uid, CocoonComponent? component = null)
     {
         if (!Resolve(uid, ref component, false))
-            return false;
-
-        if (component.Prisoner == null)
-            return false;
-
-        if (!_container.IsEntityOrParentInContainer(component.Prisoner.Value))
-            return false;
-
-        EmptyCocoon(uid, component);
-
-        return true;
-    }
-    private void EmptyCocoon(EntityUid uid, CocoonComponent? component = null)
-    {
-        if (!Resolve(uid, ref component, false))
-            return;
-
-        _container.EmptyContainer(component.Stomach);
-
-        if (!component.IsHermetically)
             return;
 
         var target = component.Prisoner;
 
         if (target == null)
         {
-            Logger.Error("Prisoner target is null in EmptyCocoon.");
+            _sawmill.Warning("Prisoner target is null in EmptyCocoon.");
             return;
         }
+
+        if (IsEntityInCocoon(uid, target.Value, component))
+            _container.EmptyContainer(component.Cocoon);
+
+        if (!component.IsHermetically)
+            return;
 
         if (HasComp<MutedComponent>(target) && !component.Mute)
             RemComp<MutedComponent>(target.Value);
@@ -136,12 +136,12 @@ public sealed class CocoonSystem : EntitySystem
 
         if (HasComp<PressureImmunityComponent>(target) && !component.Pressure)
         {
-            Logger.Info("Adding BarotraumaComponent back to target.");
+            _sawmill.Info("Adding BarotraumaComponent back to target.");
             RemComp<PressureImmunityComponent>(target.Value);
         }
         else
         {
-            Logger.Warning("BarotraumaComponent is either already present or null.");
+            _sawmill.Warning("BarotraumaComponent is either already present or null.");
         }
     }
 
@@ -163,12 +163,13 @@ public sealed class CocoonSystem : EntitySystem
 
         component.NextTick = _gameTiming.CurTime + TimeSpan.FromSeconds(1);
     }
+
     private void Insert(EntityUid uid, EntityUid target, CocoonComponent? component = null)
     {
         if (!Resolve(uid, ref component, false))
             return;
 
-        _container.Insert(target, component.Stomach);
+        _container.Insert(target, component.Cocoon);
 
         component.Prisoner = target;
 

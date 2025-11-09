@@ -59,7 +59,7 @@ ent-NecroTentacle = некро щупальца
 # Stoper
 
 ent-ObeliskStoper = бета001
-    .desc = Прототип, созданный на основе ксеноартефактов. Останавливает пси-влияние некрообелиск на некоторое время. Одноразовый.
+    .desc = Прототип, созданный на основе ксеноартефактов. Останавливает пси-влияние некрообелиска на некоторое время. Одноразовый.
 ent-CrateObeliskStoper = ящик с бета001
     .desc = Останавливает некрообелиск на некоторое время.
 
@@ -91,7 +91,7 @@ reagent-effect-guidebook-cure-sanity =
 
 ent-SyringeExtractInfectorDead = шприц
     .desc = { ent-BaseSyringe.desc }
-    .suffix = Экстракт заразителя, Не маппить
+    .suffix = Экстракт заразителя, НЕ МАППИТЬ
 entity-name-extract-infector = экстракт заразителя
 reagent-desc-extract-infector = Густой и розовый, пахнет отвратительно. Пробовать не стану!
 reagent-effect-guidebook-cause-infection-dead =
@@ -99,6 +99,19 @@ reagent-effect-guidebook-cause-infection-dead =
         [1] Заражает
        *[other] заражает
     } некроинфецией вызывающей обращение в некроморфа после смерти
+
+# МУТАГЕН
+
+entity-name-stable-mutagen = стабильный мутаген
+reagent-effect-guidebook-mutate-infection-dead =
+    { $chance ->
+        [1] Стимулирует
+       *[other] стимулирует
+    } некроинфецию мутировать
+entity-name-stable-mutagen-infection-dead = стабильный мутаген некроинфекции
+entity-name-stable-not-mutagen-infection-dead = нестабильный мутаген некроинфекции
+reagent-desc-mutagen-infection-dead = Мощный мутаген, вызывающий некроинфекцию, стабилен и опасен.
+reagent-desc-not-mutagen-infection-dead = Мощный мутаген, вызывающий некроинфекцию, не стабилен и крайне опасен.
 
 # Serum enslaved
 
@@ -168,4 +181,3 @@ research-technology-basic-necro-research = Некротехнологии
 
 ent-ActionUnitologObeliskActivate = Запустить схождение обелиска
     .desc = Запустить схождение рядом стоящего обелиска.
-
