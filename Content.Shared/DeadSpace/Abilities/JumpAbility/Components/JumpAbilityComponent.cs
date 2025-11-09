@@ -2,7 +2,6 @@
 
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Robust.Shared.Audio;
 using Robust.Shared.Serialization;
 using Robust.Shared.Map;
@@ -12,19 +11,23 @@ namespace Content.Shared.DeadSpace.Abilities.JumpAbility.Components;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class JumpAbilityComponent : Component
 {
-    [DataField("actionJump", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string ActionJump = "ActionJump";
+    [DataField]
+    [ViewVariables(VVAccess.ReadOnly)]
+    public EntProtoId ActionJump = "ActionJump";
 
-    [DataField("actionJumpEntity")]
+    [DataField]
+    [ViewVariables(VVAccess.ReadOnly)]
     public EntityUid? ActionJumpEntity;
 
     [DataField, ViewVariables(VVAccess.ReadOnly)]
     public EntityCoordinates? Target = null;
 
     [DataField]
+    [ViewVariables(VVAccess.ReadOnly)]
     public float Strenght = 3f;
 
     [DataField]
+    [ViewVariables(VVAccess.ReadOnly)]
     public float JumpDuration = 1f;
 
     [DataField, ViewVariables(VVAccess.ReadOnly)]
@@ -36,7 +39,8 @@ public sealed partial class JumpAbilityComponent : Component
     [ViewVariables(VVAccess.ReadOnly)]
     public TimeSpan TimeUntilNextJump = TimeSpan.Zero;
 
-    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    [DataField]
+    [ViewVariables(VVAccess.ReadOnly)]
     public float Interval = 0.01f;
 
     [DataField]

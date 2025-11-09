@@ -10,6 +10,7 @@ namespace Content.Client.DeadSpace.Abilities.JumpAbility;
 public sealed class JumpAbilitySystem : EntitySystem
 {
     [Dependency] private readonly AnimationPlayerSystem _animation = default!;
+    private const string AnimationKey = "jumpAnimationKeyId";
     public override void Initialize()
     {
         SubscribeLocalEvent<JumpAbilityComponent, ComponentHandleState>(OnHandleState);
@@ -29,9 +30,7 @@ public sealed class JumpAbilitySystem : EntitySystem
 
     public void Jump(EntityUid uid, JumpAbilityComponent component)
     {
-        var animationKey = "jumpAnimationKeyId";
-
-        if (_animation.HasRunningAnimation(uid, animationKey))
+        if (_animation.HasRunningAnimation(uid, AnimationKey))
             return;
 
         var animation = new Animation
@@ -54,7 +53,7 @@ public sealed class JumpAbilitySystem : EntitySystem
             }
         };
 
-        _animation.Play(uid, animation, animationKey);
+        _animation.Play(uid, animation, AnimationKey);
     }
 
 }

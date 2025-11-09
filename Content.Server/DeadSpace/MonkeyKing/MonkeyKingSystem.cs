@@ -17,6 +17,7 @@ using Content.Server.Ghost.Roles.Components;
 using Content.Shared.Tag;
 using Robust.Shared.Prototypes;
 using Content.Shared.NPC.Systems;
+using Content.Shared.NPC.Prototypes;
 
 namespace Content.Server.DeadSpace.MonkeyKing;
 
@@ -35,6 +36,7 @@ public sealed partial class MonkeyKingSystem : EntitySystem
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly NpcFactionSystem _faction = default!;
     private static readonly ProtoId<TagPrototype> MonkeyKingTargetTag = "MonkeyKingTarget";
+    private static readonly ProtoId<NpcFactionPrototype> NewNpcFaction = "AllHostile";
     public override void Initialize()
     {
         base.Initialize();
@@ -162,14 +164,14 @@ public sealed partial class MonkeyKingSystem : EntitySystem
 
         EnsureComp<MonkeyServantComponent>(target);
 
-        if (TryComp<MetaDataComponent>(target, out var entityData))
+        if (EntityManager.TryGetComponent<MetaDataComponent>(target, out var entityData))
         {
             ghostRole.RoleName = entityData.EntityName;
             ghostRole.RoleDescription = Loc.GetString("ghost-role-information-intelligence-description");
         }
 
         _faction.ClearFactions(target, dirty: false);
-        _faction.AddFaction(target, "AllHostile");
+        _faction.AddFaction(target, NewNpcFaction);
 
         if (component.GiveIntelligenceSound != null)
             _audio.PlayPvs(component.GiveIntelligenceSound, uid, AudioParams.Default.WithVolume(3));

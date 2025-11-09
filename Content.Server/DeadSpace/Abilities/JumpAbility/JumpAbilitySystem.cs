@@ -16,6 +16,8 @@ using Content.Server.Gravity;
 using Content.Shared.StatusEffect;
 using Content.Shared.Stunnable;
 using Robust.Shared.Timing;
+using Content.Shared.Gravity;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Abilities.JumpAbility;
 
@@ -29,6 +31,7 @@ public sealed partial class JumpAbilitySystem : EntitySystem
     [Dependency] private readonly StatusEffectsSystem _statusEffect = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    private static readonly ProtoId<StatusEffectPrototype> StunEffect = "Stun";
     public override void Initialize()
     {
         base.Initialize();
@@ -83,7 +86,7 @@ public sealed partial class JumpAbilitySystem : EntitySystem
         args.Handled = true;
 
         TimeSpan durationEffect = TimeSpan.FromSeconds(component.JumpDuration);
-        _statusEffect.TryAddStatusEffect<StunnedComponent>(uid, "Stun", durationEffect, true);
+        _statusEffect.TryAddStatusEffect<StunnedComponent>(uid, StunEffect, durationEffect, true);
 
         if (component.JumpSound != null)
             _audio.PlayPvs(component.JumpSound, uid, AudioParams.Default.WithVolume(3));
@@ -95,7 +98,10 @@ public sealed partial class JumpAbilitySystem : EntitySystem
                 || physics.BodyType == BodyType.Static)
             return;
 
-        if (_gravity.IsWeightless(uid, physics))
+        if (!TryComp<GravityAffectedComponent>(uid, out var gravity))
+            return;
+
+        if (_gravity.IsWeightless((uid, gravity)))
             return;
 
         if (component.Target == null)

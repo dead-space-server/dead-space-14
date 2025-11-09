@@ -1,7 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Robust.Shared.Audio;
 
 namespace Content.Server.DeadSpace.MonkeyKing.Components;
@@ -9,26 +8,26 @@ namespace Content.Server.DeadSpace.MonkeyKing.Components;
 [RegisterComponent]
 public sealed partial class MonkeyKingComponent : Component
 {
-    [DataField("actionArmy", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string ActionArmy = "ActionArmy";
+    [DataField, ViewVariables(VVAccess.ReadOnly)]
+    public EntProtoId ActionArmy = "ActionArmy";
 
-    [DataField]
+    [DataField, ViewVariables(VVAccess.ReadOnly)]
     public EntityUid? ActionArmyEntity;
 
-    [DataField("actionKingBuff", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string ActionKingBuff = "ActionKingBuff";
+    [DataField, ViewVariables(VVAccess.ReadOnly)]
+    public EntProtoId ActionKingBuff = "ActionKingBuff";
 
-    [DataField]
+    [DataField, ViewVariables(VVAccess.ReadOnly)]
     public EntityUid? ActionKingBuffEntity;
 
-    [DataField("actionGiveIntelligence", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string ActionGiveIntelligence = "ActionGiveIntelligence";
+    [DataField, ViewVariables(VVAccess.ReadOnly)]
+    public EntProtoId ActionGiveIntelligence = "ActionGiveIntelligence";
 
-    [DataField]
+    [DataField, ViewVariables(VVAccess.ReadOnly)]
     public EntityUid? ActionGiveIntelligenceEntity;
 
-    [DataField("servantMonkeyProto", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string ServantMonkeyProto = "MobMonkeyServant";
+    [DataField, ViewVariables(VVAccess.ReadOnly)]
+    public EntProtoId ServantMonkeyProto = "MobMonkeyServant";
 
     [DataField]
     public SoundSpecifier? ArmySound = null;
@@ -40,7 +39,7 @@ public sealed partial class MonkeyKingComponent : Component
     public SoundSpecifier? GiveIntelligenceSound = null;
 
     [DataField, ViewVariables(VVAccess.ReadOnly)]
-    public List<string> WeaponList = new List<string>
+    public List<EntProtoId> WeaponList = new List<EntProtoId>
     {
         "RollingPin",
         "Cane",
@@ -72,10 +71,10 @@ public sealed partial class MonkeyKingComponent : Component
         "OxygenTankFilled"
     };
 
-    [DataField]
+    [DataField, ViewVariables(VVAccess.ReadOnly)]
     public float RangeBuff = 15f;
 
-    [DataField]
+    [DataField, ViewVariables(VVAccess.ReadOnly)]
     public float BuffDuration = 10f;
 
     [DataField, ViewVariables(VVAccess.ReadOnly)]
@@ -84,6 +83,6 @@ public sealed partial class MonkeyKingComponent : Component
     [DataField, ViewVariables(VVAccess.ReadOnly)]
     public float GetDamageBuff = 0.5f;
 
-    [DataField]
+    [DataField, ViewVariables(VVAccess.ReadOnly)]
     public float GiveIntelligenceDuration = 2f;
 }
