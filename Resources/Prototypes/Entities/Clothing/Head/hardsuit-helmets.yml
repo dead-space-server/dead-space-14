@@ -229,15 +229,6 @@
 
 #Goliath Hardsuit
 - type: entity
-  parent: ClothingHeadHelmetHardsuitSalvage
-  id: ClothingHeadHelmetHardsuitSeniorSalvage
-  components:
-  - type: Sprite
-    sprite: Clothing/Head/Hardsuits/seniorsalvage.rsi
-  - type: Clothing
-    sprite: Clothing/Head/Hardsuits/seniorsalvage.rsi
-
-- type: entity
   parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
   id: ClothingHeadHelmetHardsuitGoliath
   name: goliath hardsuit helmet

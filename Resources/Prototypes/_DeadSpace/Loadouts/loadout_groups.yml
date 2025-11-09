@@ -56,6 +56,46 @@
   - ServiceJumpskirtNew
 
 # Cargo
+- type: loadoutGroup
+  id: SeniorCourierHead
+  name: loadout-group-senior-courier-head
+  minLimit: 0
+  loadouts:
+  - SeniorCourierBeret
+  - CargoTechnicianHead
+
+- type: loadoutGroup
+  id: SeniorCourierJumpsuit
+  name: loadout-group-senior-courier-jumpsuit
+  loadouts:
+  - SeniorCourierJumpsuit
+  - SeniorCourierJumpskirt
+
+- type: loadoutGroup
+  id: SeniorCourierOuterClothing
+  name: loadout-group-senior-courier-outerclothing
+  minLimit: 0
+  loadouts:
+  - CoatCargoJacket
+  - CargoTechnicianWintercoat
+
+- type: loadoutGroup
+  id: SeniorCourierBelt
+  name: loadout-group-senior-courier-belt
+  minLimit: 0
+  loadouts:
+  - MailBag
+
+- type: loadoutGroup
+  id: SeniorCourierUnderwear
+  name: loadout-group-senior-courier-underwear
+  minLimit: 2
+  hidden: true
+  loadouts:
+  - UnderwearBottomBoxersSeniorCourier
+  - UnderwearTopBraSeniorCourier
+  - UnderwearBottomPantiesSeniorCourier
+
 # Law
 - type: loadoutGroup
   id: MagistratJumpsuit

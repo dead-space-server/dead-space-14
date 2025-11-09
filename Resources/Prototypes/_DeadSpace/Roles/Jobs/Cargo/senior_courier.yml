@@ -1,0 +1,49 @@
+- type: job
+  id: SeniorCourier
+  name: job-name-senior-courier
+  description: job-description-senior-courier
+  playTimeTracker: JobSeniorCourier
+  requirements:
+    - !type:RoleTimeRequirement
+      role: JobCargoTechnician
+      time: 10h
+    - !type:RoleTimeRequirement
+      role: JobSalvageSpecialist
+      time: 10h
+    - !type:DepartmentTimeRequirement
+      department: Cargo
+      time: 60h
+    - !type:AgeRequirement
+      requiredAge: 24
+  startingGear: SeniorCourierGear
+  icon: "JobIconSeniorCourier"
+  supervisors: job-supervisors-qm
+  access:
+  - Cargo
+  - Salvage
+  - Maintenance
+  - External
+  #start-backmen: currency
+  minBankBalance: 150
+  maxBankBalance: 250
+  wageDepartment: Cargo
+  wage: 65
+  #end-backmen: currency
+
+- type: startingGear
+  id: SeniorCourierGear
+  equipment:
+    id: SeniorCourierPDA
+    ears: ClothingHeadsetMining
+    socks: ClothingUnderwearSocksSeniorCourier
+  storage:
+    back:
+    - RubberStampSeniorCourier # DS14
+
+- type: chameleonOutfit
+  id: SeniorCourierChameleonOutfit
+  job: SeniorCourier
+  equipment:
+    ears: ClothingHeadsetMining
+    neck: ClothingNeckCloakSalvagerSupreme
+    socks: ClothingUnderwearSocksSeniorCourier
