@@ -37,6 +37,11 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Content.Server.Administration.Managers;
+using Content.Shared.Ghost;
+using Content.Server.Preferences.Managers;
+using Robust.Server.GameObjects;
+using Robust.Shared.Player;
 
 namespace Content.Server.Ghost
 {
@@ -67,6 +72,11 @@ namespace Content.Server.Ghost
         [Dependency] private readonly IRobustRandom _random = default!;
         [Dependency] private readonly TagSystem _tag = default!;
         [Dependency] private readonly NameModifierSystem _nameMod = default!;
+        // DS14-start
+        [Dependency] private readonly IAdminManager _adminManager = default!;
+        [Dependency] private readonly IServerPreferencesManager _preferencesManager = default!;
+        [Dependency] private readonly SharedPointLightSystem _pointLightSystem = default!;
+        // DS14-end
 
         private EntityQuery<GhostComponent> _ghostQuery;
         private EntityQuery<PhysicsComponent> _physicsQuery;
@@ -173,6 +183,37 @@ namespace Content.Server.Ghost
                     _actions.SetCooldown(component.BooActionEntity, TimeSpan.FromSeconds(1));
                     args.Handled = false;
                 }
+
+                // DS14-start
+                var session = user.PlayerSession;
+
+                if (!_adminManager.IsAdmin(session))
+                    return;
+
+                var userId = user.PlayerSession.UserId;
+                var prefs = _preferencesManager.GetPreferences(userId);
+                Console.WriteLine(userId);
+                var colorOverride = prefs.AdminOOCColor;
+                Console.WriteLine(colorOverride);
+                component.Color = colorOverride;
+
+                if (TryComp<PointLightComponent>(uid, out var pointLight))
+                    _pointLightSystem.SetColor(uid, colorOverride, pointLight);
+
+                // Allow this entity to be seen by other ghosts.
+                var visibility = EnsureComp<VisibilityComponent>(uid);
+
+                if (_gameTicker.RunLevel != GameRunLevel.PostRound)
+                {
+                    _visibilitySystem.AddLayer((uid, visibility), (int) VisibilityFlags.Ghost, false);
+                    _visibilitySystem.RemoveLayer((uid, visibility), (int) VisibilityFlags.Normal, false);
+                    _visibilitySystem.RefreshVisibility(uid, visibilityComponent: visibility);
+                }
+
+                _eye.RefreshVisibilityMask(uid);
+                var time = _gameTiming.CurTime;
+                component.TimeOfDeath = time;
+                // DS14-end
             }
         }
 
