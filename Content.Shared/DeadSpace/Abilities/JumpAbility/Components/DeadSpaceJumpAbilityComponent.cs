@@ -9,7 +9,7 @@ using Robust.Shared.Map;
 namespace Content.Shared.DeadSpace.Abilities.JumpAbility.Components;
 
 [RegisterComponent, NetworkedComponent]
-public sealed partial class JumpAbilityComponent : Component
+public sealed partial class DeadSpaceJumpAbilityComponent : Component
 {
     [DataField]
     [ViewVariables(VVAccess.ReadOnly)]

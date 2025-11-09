@@ -13,14 +13,14 @@ public sealed class JumpAbilitySystem : EntitySystem
     private const string AnimationKey = "jumpAnimationKeyId";
     public override void Initialize()
     {
-        SubscribeLocalEvent<JumpAbilityComponent, ComponentHandleState>(OnHandleState);
+        SubscribeLocalEvent<DeadSpaceJumpAbilityComponent, ComponentHandleState>(OnHandleState);
     }
 
-    private void OnGetState(EntityUid uid, JumpAbilityComponent component, ref ComponentGetState args)
+    private void OnGetState(EntityUid uid, DeadSpaceJumpAbilityComponent component, ref ComponentGetState args)
     {
         args.State = new JumpAnimationComponentState();
     }
-    private void OnHandleState(EntityUid uid, JumpAbilityComponent component, ref ComponentHandleState args)
+    private void OnHandleState(EntityUid uid, DeadSpaceJumpAbilityComponent component, ref ComponentHandleState args)
     {
         if (args.Current is not JumpAnimationComponentState state)
             return;
@@ -28,7 +28,7 @@ public sealed class JumpAbilitySystem : EntitySystem
         Jump(uid, component);
     }
 
-    public void Jump(EntityUid uid, JumpAbilityComponent component)
+    public void Jump(EntityUid uid, DeadSpaceJumpAbilityComponent component)
     {
         if (_animation.HasRunningAnimation(uid, AnimationKey))
             return;

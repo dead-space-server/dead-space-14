@@ -77,7 +77,7 @@
   - type: NpcFactionMember
     factions:
     - AllHostile
-  - type: JumpAbility
+  - type: DeadSpaceJumpAbility
     jumpSound:
       collection: RevSounds
   - type: MonkeyKing
