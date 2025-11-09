@@ -307,7 +307,6 @@
     sprite: Clothing/Eyes/Glasses/ninjavisor.rsi
   - type: FlashImmunity
   - type: PNV # DS14
-    color: "#41af0e"
 
 - type: entity
   parent: ClothingEyesBase
