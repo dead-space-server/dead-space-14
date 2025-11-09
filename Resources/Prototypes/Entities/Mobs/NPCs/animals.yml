@@ -1454,7 +1454,6 @@
     - VimPilot
     - DoorBumpOpener
     - AnomalyHost
-    - MonkeyKingTarget
   - type: Reactive
     groups:
       Flammable: [ Touch ]
@@ -1502,6 +1501,15 @@
         Blunt: 1
     clumsySound:
       path: /Audio/Animals/monkey_scream.ogg
+  # DS14-start
+  - type: Language
+    selectedLanguage: MonkeyLanguage
+    knownLanguages: 
+    - MonkeyLanguage
+  - type: Tag
+    tags:
+    - MonkeyKingTarget # DS14
+  # DS14-end
 
 - type: entity
   name: monkey

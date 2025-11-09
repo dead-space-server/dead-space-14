@@ -33,3 +33,7 @@
     factions:
     - AllHostile
   - type: MonkeyServant
+  - type: Language
+    selectedLanguage: MonkeyLanguage
+    knownLanguages: 
+    - MonkeyLanguage
