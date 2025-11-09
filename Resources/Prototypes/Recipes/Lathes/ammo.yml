@@ -92,6 +92,14 @@
     Plastic: 500
     Uranium: 500
 
+# .25 Caseless
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: MagazinePistolCaselessRifle
+  result: MagazinePistolCaselessRifle
+  materials:
+    Steel: 145
+
 # .30 Rifle
 - type: latheRecipe
   parent: BaseEmptyAmmoRecipe
@@ -452,6 +460,14 @@
     Steel: 80
     Plastic: 80
 
+# .60 anti-materiel
+- type: latheRecipe
+  parent: BaseAmmoBoxRecipe
+  id: MagazineBoxAntiMateriel
+  result: MagazineBoxAntiMateriel
+  materials:
+    Steel: 200
+
 # Encampment ammo
 - type: latheRecipe
   id: MagazineGrenadeEmpty
@@ -495,19 +511,3 @@
     Steel: 150
     Plastic: 100
     Glass: 20
-
-# DS14-start
-
-- type: latheRecipe
-  parent: BaseAmmoRecipe
-  id: MagazineBox357Incendiary
-  result: MagazineBox357Incendiary
-  materials:
-    Plastic: 1000
-
-- type: latheRecipe
-  parent: BaseAmmoRecipe
-  id: SpeedLoader357
-  result: SpeedLoader357
-  materials:
-    Steel: 1500

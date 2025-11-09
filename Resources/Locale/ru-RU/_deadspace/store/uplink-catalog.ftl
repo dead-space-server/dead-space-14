@@ -1,5 +1,9 @@
-uplink-energy-crossbow-name = Энергетический арбалет
+uplink-energy-crossbow-name = Энергетический мини-арбалет
 uplink-energy-crossbow-desc = Маленькое, тихое оружие, которое можно спрятать в карман. Отрявляет и изнемождает жертв.
+uplink-energy-crossbow-large-name = Энергетический арбалет
+uplink-energy-crossbow-large-desc = Полноразмерная версия энергетического арбалета. Мощный, но медленный.
+uplink-mantisblades-name = Клинки богомола
+uplink-mantisblades-desc = От лезвий струится дымчатый аромат киберпсихоза. Готовы пустить под клинок стаю корпоративных крыс?
 uplink-syndiesabre-name = Пластитановая рапира
 uplink-syndiesabre-desc = Набор ножен с рапирой из пластитана способной проникать сквозь броню, лучший выбор элегантнаного убийцы.
 uplink-advanced-magboots-name = Продвинутые магнитные ботинки Синдиката

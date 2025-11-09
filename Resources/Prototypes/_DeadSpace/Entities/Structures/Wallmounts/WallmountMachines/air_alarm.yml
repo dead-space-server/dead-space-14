@@ -1,0 +1,12 @@
+- type: entity
+  id: AirAlarmTaipan
+  parent: AirAlarm
+  name: воздушная сигнализация
+  description: Воздушная сигнализация. Сигнализация... воздуха?
+  suffix: Тайпан
+  components:
+  - type: AccessReader
+    access: [["TaipanAtmospherics"]]
+  - type: ContainerFill
+    containers:
+      board: [ AirAlarmElectronicsTaipan ]

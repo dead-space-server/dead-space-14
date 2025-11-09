@@ -46,6 +46,7 @@
     - id: ZombieOutbreak
     - id: LoneOpsSpawn
     - id: WizardSpawn
+    - id: RenegadeSpawn # DS14
     - id: ShadowDemonInvasion # DS14
     - id: DemonsInvasion # DS14
     - id: BlobSpawn # DS14-Backmen
@@ -174,6 +175,10 @@
   - type: BureaucraticErrorRule
     ignoredJobs:
     - StationAi
+    - ResearchAssistant
+    - MedicalIntern
+    - SecurityCadet
+    - TechnicalAssistant
 
 - type: entity
   id: ClericalError
@@ -215,7 +220,7 @@
     weight: 6.5
     earliestStart: 40
     reoccurrenceDelay: 20
-    minimumPlayers: 20
+    minimumPlayers: 25 # DS14
     duration: null
   - type: SpaceSpawnRule
     spawnDistance: 0
@@ -371,7 +376,7 @@
     duration: 1
     earliestStart: 50 # DS14
     reoccurrenceDelay: 60
-    minimumPlayers: 30 # DS14
+    minimumPlayers: 30
   - type: AntagSelection
     agentName: wizard-round-end-name
     definitions:
@@ -525,6 +530,12 @@
       prob: 0.02
     - id: MobAdultSlimesYellowAngry
       prob: 0.02
+# DS14-start
+    - id: MobAdultSlimesRainbow
+      prob: 0.001
+    - id: MobAdultSlimesGalacticAngry
+      prob: 0.001
+# DS14-end
 
 - type: entity
   id: SnakeSpawn
@@ -593,7 +604,7 @@
   components:
   - type: StationEvent
     earliestStart: 90
-    minimumPlayers: 40
+    minimumPlayers: 30 # DS14
     weight: 1 # Zombies was happening basically every single survival round, so now it's super rare
     duration: 1
   - type: ZombieRule

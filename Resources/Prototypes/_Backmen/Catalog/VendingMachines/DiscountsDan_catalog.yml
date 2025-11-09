@@ -7,7 +7,7 @@
     - DiscountDansInventory
   conditions:
     - !type:ListingLimitedStockCondition
-      stock: 15
+      stock: 3
 
 - type: listing
   id: DiscountDansInventory2
@@ -18,7 +18,7 @@
     - DiscountDansInventory
   conditions:
     - !type:ListingLimitedStockCondition
-      stock: 15
+      stock: 3
 
 - type: listing
   id: DiscountDansInventory3
@@ -29,7 +29,7 @@
     - DiscountDansInventory
   conditions:
     - !type:ListingLimitedStockCondition
-      stock: 15
+      stock: 3
 
 - type: listing
   id: DiscountDansInventory4
@@ -40,7 +40,7 @@
     - DiscountDansInventory
   conditions:
     - !type:ListingLimitedStockCondition
-      stock: 15
+      stock: 4
 
 - type: listing
   id: DiscountDansInventory5
@@ -51,7 +51,7 @@
     - DiscountDansInventory
   conditions:
     - !type:ListingLimitedStockCondition
-      stock: 15
+      stock: 3
 
 - type: listing
   id: DiscountDansInventory6
@@ -62,7 +62,7 @@
     - DiscountDansInventory
   conditions:
     - !type:ListingLimitedStockCondition
-      stock: 15
+      stock: 3
 
 - type: listing
   id: DiscountDansInventory7
@@ -73,5 +73,82 @@
     - DiscountDansInventory
   conditions:
     - !type:ListingLimitedStockCondition
-      stock: 15
+      stock: 2
 
+- type: listing
+  id: DiscountDansInventory8
+  productEntity: FoodSnackNanonachos
+  cost:
+    SpaceCash: 15
+  categories:
+    - DiscountDansInventory
+  conditions:
+    - !type:ListingLimitedStockCondition
+      stock: 3
+
+- type: listing
+  id: DiscountDansInventory9
+  productEntity: FoodSnackNuclearNachos
+  cost:
+    SpaceCash: 20
+  categories:
+    - DiscountDansInventory
+  conditions:
+    - !type:ListingLimitedStockCondition
+      stock: 2
+
+- type: listing
+  id: DiscountDansInventory10
+  productEntity: FoodSnackChipsMeatPie
+  cost:
+    SpaceCash: 15
+  categories:
+    - DiscountDansInventory
+  conditions:
+    - !type:ListingLimitedStockCondition
+      stock: 2
+
+- type: listing
+  id: DiscountDansInventory11
+  productEntity: FoodSnackChipsCherryPie
+  cost:
+    SpaceCash: 15
+  categories:
+    - DiscountDansInventory
+  conditions:
+    - !type:ListingLimitedStockCondition
+      stock: 2
+
+# Contraband
+- type: listing
+  id: DiscountDansContraband1
+  productEntity: FoodSnackDanDanNoodles
+  cost:
+    SpaceCash: 20
+  categories:
+    - DiscountDansInventoryContraband
+  conditions:
+    - !type:ListingLimitedStockCondition
+      stock: 3
+
+- type: listing
+  id: DiscountDansContraband2
+  productEntity: FoodBakedBunHoney
+  cost:
+    SpaceCash: 20
+  categories:
+    - DiscountDansInventoryContraband
+  conditions:
+    - !type:ListingLimitedStockCondition
+      stock: 3
+
+- type: listing
+  id: DiscountDansInventory12
+  productEntity: DiscountDanLighter
+  cost:
+    SpaceCash: 10
+  categories:
+    - DiscountDansInventory
+  conditions:
+    - !type:ListingLimitedStockCondition
+      stock: 1

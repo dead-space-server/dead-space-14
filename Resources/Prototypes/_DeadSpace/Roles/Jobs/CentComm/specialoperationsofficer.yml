@@ -19,6 +19,9 @@
     components:
     - type: AntagImmune
     - type: ZombieImmune
+    - type: NpcFactionMember
+      factions:
+      - CentralCommand
 
 - type: startingGear
   id: CentcomSpecialOperationsOfficerGear
@@ -33,6 +36,7 @@
     neck: ClothingNeckCloakCentcomBlack
     id: CentcomSpecialOperationsOfficerPDA
     ears: ClothingHeadsetDeathSquad
+    belt: ADTClothingBeltSupremeSheathFilled
 
 - type: entity
   parent: ClothingBackpackERTLeader
@@ -73,5 +77,5 @@
     head: ClothingHeadCapCentcomBlack
     eyes: ClothingEyesGlassesSecurity
     gloves: ClothingHandsGlovesCombat
-    outerClothing: ClothingOuterVestWeb
+    outerClothing: ClothingOuterArmorCentcomCarapace
     neck: ClothingNeckCloakCentcomBlack

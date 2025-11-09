@@ -5,16 +5,16 @@
   description: An implant that will inject a dose of stimulants into you.
   categories: [ HideSpawnMenu ]
   components:
-    - type: SubdermalImplant
-      implantAction: ActionActivateAdrenalImplant
+  - type: SubdermalImplant
+    implantAction: ActionActivateAdrenalImplant
 
 - type: entity
   id: AdrenalImplanter
   suffix: adrenal
   parent: BaseImplantOnlyImplanterSyndi
   components:
-    - type: Implanter
-      implant: AdrenalImplant
+  - type: Implanter
+    implant: AdrenalImplant
 
 - type: entity
   parent: BaseItem
@@ -22,11 +22,11 @@
   name: revive autosurgeon
   description: A multi-use auto surgeon for implanting whatever you want into yourself. Rip that station apart and make it part of your.
   components:
-    - type: Sprite
-      sprite: _DeadSpace/Objects/Specific/Autosurgeon/autosurgeon.rsi
-      layers:
-      - state: iconBefore
-    - type: ReviveImplant
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Autosurgeon/autosurgeon.rsi
+    layers:
+    - state: iconBefore
+  - type: ReviveImplant
 
 - type: entity
   parent: BaseItem
@@ -34,7 +34,70 @@
   name: used Autosurgeon
   description: A multi-use auto surgeon for implanting whatever you want into yourself. Rip that station apart and make it part of your.
   components:
-    - type: Sprite
-      sprite: _DeadSpace/Objects/Specific/Autosurgeon/autosurgeon.rsi
-      layers:
-      - state: iconAfter
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Autosurgeon/autosurgeon.rsi
+    layers:
+    - state: iconAfter
+
+- type: entity
+  parent: BaseImplantOnlyImplanterSyndi
+  id: MantisBladesImplanter
+  name: имплантер
+  suffix: клинки богомола
+  components:
+  - type: Implanter
+    implant: MantisBladesImplant
+
+- type: entity
+  parent: BaseSubdermalImplant
+  id: MantisBladesImplant
+  name: военный имплант
+  description: Нелегальный военный имплант, производимый корпорацией Cybersun. Устанавливает в руки пару клинков богомола.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SubdermalImplant
+    implantAction: ActionRetractableItemMantisBladesImplant
+    whitelist:
+      components:
+      - Hands
+
+- type: entity
+  parent: BaseSubdermalImplant
+  id: DeathRattleImplantTaipan
+  name: предсмертный хрип
+  description: Этот имплант информирует всех о физическом состоянии по частоте Тайпана.
+  suffix: Тайпан
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SubdermalImplant
+    permanent: true
+    whitelist:
+      components:
+      - MobState
+  - type: TriggerOnMobstateChange
+    mobState:
+    - Critical
+    - Dead
+  - type: RattleOnTrigger
+    radioChannel: Taipan
+  - type: SuitSensor
+    randomMode: false
+    controlsLocked: true
+    mode: SensorCords
+    activationContainer: "implant"
+  - type: DeviceNetwork
+    deviceNetId: Wireless
+    transmitFrequencyId: SuitSensorTaipan
+  - type: StationLimitedNetwork
+  - type: WirelessNetworkConnection
+    range: 500
+
+- type: entity
+  id: DeathRattleImplanterTaipan
+  parent: BaseImplantOnlyImplanterSyndi
+  name: предсмертный хрип
+  description: Этот имплант информирует всех о физическом состоянии по частоте Тайпана.
+  suffix: Тайпан
+  components:
+  - type: Implanter
+    implant: DeathRattleImplantTaipan

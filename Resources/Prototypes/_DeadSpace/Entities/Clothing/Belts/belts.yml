@@ -1,4 +1,31 @@
 - type: entity
+  parent: ClothingBeltPlant
+  id: ClothingBeltPlantTaipan
+  name: пояс ботаника
+  description: Пояс, используемый для хранения основных принадлежностей для гидропоники. На удивление, не чёрный.
+  suffix: Тайпан
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Belt/plantbelt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Belt/plantbelt.rsi
+
+- type: entity
+  name: сумка для растений
+  id: TaipanPlantBag
+  parent: PlantBag
+  description: Сумка для ботаников, чтобы легко переносить свои огромные урожаи.
+  suffix: Тайпан
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Belt/plant_bag.rsi
+    state: icon
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - belt
+
+- type: entity
   parent: ClothingBeltSheath
   id: ClothingBeltSheathSyndie
   name: ножны синдиката
@@ -26,3 +53,58 @@
         whitelist:
           tags:
           - SyndieSabre
+
+- type: entity
+  parent: ClothingBeltStorageBase
+  id: ClothingBeltUtilityBase
+  abstract: true
+  components:
+  - type: Storage
+    # Don't add more than absolutely needed to this whitelist!
+    # Utility belts shouldn't just be free extra storage.
+    # This is only intended for basic engineering equipment.
+    whitelist:
+      tags:
+      - Powerdrill
+      - Wirecutter
+      - Crowbar
+      - Screwdriver
+      - Flashlight
+      - Wrench
+      - GeigerCounter
+      - Flare
+      - CableCoil
+      - CigPack
+      - Radio
+      - HolofanProjector
+      - Multitool
+      - AppraisalTool
+      - JawsOfLife
+      - GPS
+      - WeldingMask
+      - RemoteSignaller
+      - UtilityKnife
+      components:
+      - StationMap
+      - SprayPainter
+      - SprayPainterAmmo
+      - NetworkConfigurator
+      - RCD
+      - RCDAmmo
+      - Welder
+      - PowerCell
+      - Geiger
+      - TrayScanner
+      - GasAnalyzer
+      - HandLabeler
+
+- type: entity
+  parent: ClothingBeltUtilityBase
+  id: ClothingUtilityWebbing
+  name: РПС для инструментов
+  description: Дизайнеры NanoTrasen ожидали заменить этим старый добрый пояс для инструментов.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Belt/utilitywebbing.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Belt/utilitywebbing.rsi

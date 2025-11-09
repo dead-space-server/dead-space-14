@@ -20,10 +20,15 @@
     slots:
     - neck
   - type: StaticPrice
-    price: 100
+    price: 12
   - type: Tag
     tags:
     - Bedsheet
+  # DS14-start
+  - type: PhysicalComposition
+    materialComposition:
+      Cloth: 100
+  # DS14-end
 
 - type: entity
   id: BedsheetBlack

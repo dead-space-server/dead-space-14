@@ -65,6 +65,7 @@
   - BartenderJumpsuit
   - CommonBackpack
   - BartenderOuterClothing
+  - BartenderGoldenShaker
   - Glasses
   - Survival
   - Trinkets
@@ -207,6 +208,7 @@
 
 - type: roleLoadout
   id: JobMusician
+  canCustomizeName: true
   groups:
   - GroupTankHarness
   - MusicianJumpsuit
@@ -245,6 +247,7 @@
   - CargoTechnicianBackpack
   - CargoTechnicianOuterClothing
   - CargoTechnicianShoes
+  - CargoTechnicianID
   - Glasses
   - Survival
   - Trinkets
@@ -287,6 +290,7 @@
   - GroupTankHarness
   - TechnicalAssistantJumpsuit
   - StationEngineerBackpack
+  - StationEngineerBelt # DS14
   - SurvivalExtended
   - Trinkets
   - GroupSpeciesBreathTool
@@ -299,6 +303,7 @@
   - StationEngineerHead
   - StationEngineerJumpsuit
   - StationEngineerBackpack
+  - StationEngineerBelt # DS14
   - StationEngineerOuterClothing
   - StationEngineerShoes
   - StationEngineerID
@@ -313,6 +318,7 @@
   - GroupTankHarness
   - AtmosphericTechnicianJumpsuit
   - AtmosphericTechnicianBackpack
+  - AtmosphericTechnicianBelt # DS14
   - AtmosphericTechnicianOuterClothing
   - AtmosphericTechnicianShoes
   - SurvivalExtended
