@@ -1129,5 +1129,5 @@ ClothingUnderwearSocksSeniorSalvage: null
 SeniorSalvageIDCard: null
 SeniorSalvagePDA: null
 RubberStampSeniorSalvage: null
-SpawnPointSeniorSalvageSpecialist: null
+SpawnPointSeniorSalvageSpecialist: SpawnPointSeniorCourier
 WeaponSeniorKinetik: WeaponAdvancedKinetik
