@@ -40,12 +40,8 @@ public sealed partial class StunRadiusSystem : EntitySystem
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     private static readonly ProtoId<StatusEffectPrototype> StunEffect = "Stun";
-
-    public const float MinGravPulseRange = 0.00001f;
-    public const float MinRange = 0.01f;
-    public const float MaxStrenghtPush = 15f;
-    public const float MaxStrenghtPull = 1f;
-    public const float OneItemStrenghtMultiply = 10f;
+    private const float MinGravPulseRange = 0.00001f;
+    private const float MinRange = 0.01f;
     public override void Initialize()
     {
         base.Initialize();
