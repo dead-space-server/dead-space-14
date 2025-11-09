@@ -216,7 +216,7 @@ namespace Content.Client.Cargo.UI
             if (!_orderConsoleQuery.TryComp(_owner, out var orderConsole))
                 return;
 
-            Requests.DisposeAllChildren();
+            Requests.RemoveAllChildren();
 
             foreach (var order in orders)
             {
@@ -272,6 +272,10 @@ namespace Content.Client.Cargo.UI
             i++;
             foreach (var account in bank.Accounts.Keys)
             {
+                // DS14-start
+                if (account == console.Account || account == "Taipan")
+                    continue;
+                // DS14-end
                 if (account == console.Account)
                     continue;
                 var accountProto = _protoManager.Index(account);

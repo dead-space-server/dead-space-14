@@ -54,6 +54,14 @@
 
 - type: latheRecipe
   parent: BaseWeaponRecipe
+  id: BorgModuleC20r
+  result: BorgModuleC20r
+  materials:
+    Steel: 550
+    Plastic: 250
+
+- type: latheRecipe
+  parent: BaseWeaponRecipe
   id: WeaponSMGTommyGun
   result: WeaponSMGTommyGun
   materials:
@@ -90,12 +98,30 @@
 
 - type: latheRecipe
   parent: BaseWeaponRecipeLong
+  id: WeaponCarbineSKS
+  result: WeaponCarbineSKS
+  materials:
+    Titanium: 600
+    Plastic: 300
+    Gold: 100
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
   id: ADTWeaponRifleXC67
   result: ADTWeaponRifleXC67
   materials:
-    Steel: 800
+    Titanium: 800
     Plastic: 400
-    Gold: 100
+    Gold: 200
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: WeaponRifleEstoc
+  result: WeaponRifleEstoc
+  materials:
+    Titanium: 800
+    Plastic: 300
+    Gold: 150
 
 - type: latheRecipe
   parent: BaseWeaponRecipeLong
@@ -114,6 +140,15 @@
     Titanium: 1200
     Plastic: 500
     Gold: 200
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: BorgModuleL6C
+  result: BorgModuleL6C
+  materials:
+    Titanium: 1150
+    Plastic: 450
+    Gold: 150
 
 - type: latheRecipe
   parent: BaseWeaponRecipeLong
@@ -136,6 +171,15 @@
 
 - type: latheRecipe
   parent: BaseWeaponRecipe
+  id: BorgModuleSyndicateWeapon
+  result: BorgModuleSyndicateWeapon
+  materials:
+    Titanium: 300
+    Diamond: 100
+    Gold: 100
+
+- type: latheRecipe
+  parent: BaseWeaponRecipe
   id: EnergySword
   result: EnergySword
   materials:
@@ -146,10 +190,30 @@
 
 - type: latheRecipe
   parent: BaseWeaponRecipe
+  id: BorgModuleEsword
+  result: BorgModuleEsword
+  materials:
+    Titanium: 250
+    Diamond: 200
+    Gold: 100
+    Plasma: 50
+
+- type: latheRecipe
+  parent: BaseWeaponRecipe
   id: EnergySwordDouble
   result: EnergySwordDouble
   materials:
     Titanium: 500
+    Diamond: 300
+    Gold: 200
+    Plasma: 100
+
+- type: latheRecipe
+  parent: BaseWeaponRecipe
+  id: BorgModuleDoubleEsword
+  result: BorgModuleDoubleEsword
+  materials:
+    Titanium: 550
     Diamond: 300
     Gold: 200
     Plasma: 100
@@ -169,10 +233,20 @@
   id: WeaponEnergyCrossbow
   result: WeaponEnergyCrossbow
   materials:
-    Titanium: 400
+    Titanium: 500
     Glass: 300
     Gold: 200
     Plasma: 100
+
+- type: latheRecipe
+  parent: BaseWeaponRecipe
+  id: WeaponEnergyCrossbowLarge
+  result: WeaponEnergyCrossbowLarge
+  materials:
+    Titanium: 800
+    Glass: 500
+    Gold: 300
+    Plasma: 200
 
 # Melee
 - type: latheRecipe
@@ -297,20 +371,6 @@
 
 - type: latheRecipe
   parent: BaseAmmoRecipe
-  id: MagazineBoxAntiMateriel
-  result: MagazineBoxAntiMateriel
-  materials:
-    Steel: 1200
-
-- type: latheRecipe
-  parent: BaseAmmoRecipe
-  id: MagazinePistolCaselessRifle
-  result: MagazinePistolCaselessRifle
-  materials:
-    Steel: 300
-
-- type: latheRecipe
-  parent: BaseAmmoRecipe
   id: MagazineTommyGun
   result: MagazineTommyGun
   materials:
@@ -329,6 +389,37 @@
   result: MagazineLightRifleBox
   materials:
     Steel: 1500
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: ADTExtMagazineRifle
+  result: ADTExtMagazineRifle
+  materials:
+    Steel: 600
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: MagazineCarbineSKS
+  result: MagazineCarbineSKS
+  materials:
+    Steel: 325
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: MagazineCarbineSKSIncendiary
+  result: MagazineCarbineSKSIncendiary
+  materials:
+    Steel: 25
+    Plastic: 300
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: MagazineCarbineSKSUranium
+  result: MagazineCarbineSKSUranium
+  materials:
+    Steel: 25
+    Plastic: 150
+    Uranium: 150
 
 # Gloves
 - type: latheRecipe
@@ -394,6 +485,15 @@
   materials:
     Titanium: 500
     Plastic: 400
+    Gold: 300
+
+- type: latheRecipe
+  id: BorgModuleOperative
+  result: BorgModuleOperative
+  completetime: 10
+  materials:
+    Titanium: 500
+    Plastic: 450
     Gold: 300
 
 - type: latheRecipe
@@ -564,6 +664,15 @@
     Plastic: 300
     Gold: 200
 
+- type: latheRecipe
+  id: DrinkShakerSyndie
+  result: DrinkShakerSyndie
+  completetime: 5
+  materials:
+    Steel: 300
+    Plastic: 300
+    Silver: 150
+
 # HUDs
 - type: latheRecipe
   id: ClothingEyesHudTaipanDiagnostic
@@ -647,6 +756,14 @@
     Titanium: 700
     Plastic: 250
 
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: SprayPainterTaipan
+  result: SprayPainterTaipanEmpty
+  materials:
+    Steel: 300
+    Plastic: 100
+
 # Hardsuits
 - type: latheRecipe
   id: ClothingOuterEVASuitSyndicate
@@ -692,7 +809,7 @@
   parent: ClothingOuterEVASuitSyndicate
   result: ClothingOuterHardsuitSyndieElite
   materials:
-    Titanium: 4000
+    Plastitanium: 4000
     Plastic: 1200
     Glass: 600
     Gold: 400
@@ -703,7 +820,7 @@
   parent: ClothingOuterEVASuitSyndicate
   result: ClothingOuterHardsuitSyndieCommander
   materials:
-    Titanium: 5000
+    Plastitanium: 5000
     Plastic: 1500
     Glass: 800
     Gold: 600
@@ -714,7 +831,7 @@
   parent: ClothingOuterEVASuitSyndicate
   result: ClothingOuterHardsuitJuggernaut
   materials:
-    Titanium: 6000
+    Plastitanium: 6000
     Plastic: 2000
     Glass: 1000
     Gold: 800

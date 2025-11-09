@@ -8,7 +8,7 @@
   isTaipan: true
   startingGear: TaipanRecruitGear
   icon: "JobIconTaipanRecruit"
-  supervisors: job-supervisors-taipan-telecommunications-officer
+  supervisors: job-supervisors-taipan-communications-officer
   canBeAntag: false
   requirements:
   - !type:DepartmentTimeRequirement
@@ -21,6 +21,12 @@
   special:
   - !type:AddImplantSpecial
     implants: [ DeathRattleImplantTaipan ]
+  - !type:AddComponentSpecial
+    components:
+    - type: AntagImmune
+    - type: NpcFactionMember
+      factions:
+      - Taipan
 
 - type: startingGear
   id: TaipanRecruitGear
@@ -28,7 +34,6 @@
     ears: ClothingHeadsetTaipan
     shoes: ClothingShoesBootsSyndieFilled
     id: TaipanRecruitPDA
-    back: ClothingBackpackSyndicate
     socks: ClothingUnderwearSocksTaipanRecruit
 
 - type: chameleonOutfit
