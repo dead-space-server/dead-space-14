@@ -397,6 +397,8 @@ ui-options-overlay-merge-distance = Дальность сложения овер
 ui-options-overlay-ghost-fade-distance = Диапазон затухания наложения призрака от мыши
 ui-options-overlay-ghost-hide-distance = Диапазон скрытия наложения призрака от мыши
 
+##DS14-start
 ## Ping menu
 
-ui-options-save-button = Сохранить 
+ui-options-save-button = Сохранить
+##DS14-end 
