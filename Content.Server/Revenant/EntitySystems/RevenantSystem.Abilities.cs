@@ -412,7 +412,7 @@ public sealed partial class RevenantSystem
             return;
 
         if (!_mobThresholdSystem.TryGetThresholdForState(args.Target, MobState.Alive, out var threshold)
-            || threshold.Value > 200)
+            || threshold.Value > 400)
         {
             _popup.PopupEntity(Loc.GetString("revenant-mind-capture-many-damage"), uid);
             return;
