@@ -1,5 +1,4 @@
 using Robust.Shared.GameStates;
-using System;
 using Robust.Shared.Prototypes;
 using Content.Shared.Chemistry.Reagent;
 

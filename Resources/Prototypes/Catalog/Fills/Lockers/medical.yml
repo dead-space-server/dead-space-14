@@ -66,6 +66,7 @@
       - id: UniformScrubsColorPurple
         weight: 0.05
     - id: ClothingMaskSterile
+    - id: ToolAlcoTester # DS14
 
 - type: entity
   parent: LockerMedical

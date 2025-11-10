@@ -1,10 +1,9 @@
-using Content.Shared.Body.Components;
-using Content.Shared.Body.Systems;
-using Content.Shared.Medical;
-using Content.Shared.Chemistry;
-using Content.Shared.Chemistry.Components;
-using Content.Shared.Chemistry.EntitySystems;
+using System;
 using Content.Shared.Chemistry.Reagent;
+using Content.Shared.Medical;
+using Content.Shared.DeadSpace.AntiAlcohol;
+using Content.Shared.EntityEffects;
+using Content.Shared.FixedPoint;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -12,7 +11,6 @@ namespace Content.Server.DeadSpace.AntiAlcohol;
 
 public sealed class AntiAlcoholSystem : EntitySystem
 {
-    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
     [Dependency] private readonly VomitSystem _vomit = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -21,34 +19,41 @@ public sealed class AntiAlcoholSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<AntiAlcoholWatcherComponent, ReactionEntityEvent>(OnReactionEntity);
+        SubscribeLocalEvent<ExecuteEntityEffectEvent<AntiAlcoholImplantEffect>>(OnExecuteAntiAlcoholEffect);
     }
 
-    private void OnReactionEntity(Entity<AntiAlcoholWatcherComponent> ent, ref ReactionEntityEvent args)
+    private void OnExecuteAntiAlcoholEffect(ref ExecuteEntityEffectEvent<AntiAlcoholImplantEffect> args)
     {
-        if (args.Reagent.ID != ent.Comp.EthanolId)
+        if (args.Args is not EntityEffectReagentArgs reagentArgs)
             return;
 
-        if (args.Method != ReactionMethod.Ingestion)
+        if (!TryComp(reagentArgs.TargetEntity, out AntiAlcoholWatcherComponent? watcher))
             return;
 
-        if (_timing.CurTime < ent.Comp.NextAllowedVomitAt)
+        if (reagentArgs.Reagent is not { } reagent)
             return;
 
-        if (!TryComp<BloodstreamComponent>(ent, out var bloodstream))
+        if (reagent.ID != watcher.EthanolId)
             return;
 
-        Entity<SolutionComponent>? solEnt = null;
-        if (!_solutions.ResolveSolution((ent, null), bloodstream.ChemicalSolutionName, ref solEnt, out var solution))
+        if (reagentArgs.Source is not { } solution)
             return;
 
-        var ethanolAmount = args.ReagentQuantity.Quantity;
-        _solutions.RemoveReagent(solEnt.Value, ent.Comp.EthanolId, ethanolAmount);
+        var ethanolAmount = solution.GetTotalPrototypeQuantity(watcher.EthanolId);
+        var threshold = FixedPoint2.New(watcher.Threshold);
+        if (ethanolAmount <= FixedPoint2.Zero || ethanolAmount < threshold)
+            return;
 
-        if (_random.Prob(ent.Comp.Probability))
-        {
-            _vomit.Vomit(ent);
-            ent.Comp.NextAllowedVomitAt = _timing.CurTime + TimeSpan.FromSeconds(ent.Comp.CooldownSeconds);
-        }
+        reagentArgs.Scale = FixedPoint2.Zero;
+        solution.RemoveReagent(watcher.EthanolId, ethanolAmount);
+
+        if (_timing.CurTime < watcher.NextAllowedVomitAt)
+            return;
+
+        if (!_random.Prob(watcher.Probability))
+            return;
+
+        _vomit.Vomit(reagentArgs.TargetEntity);
+        watcher.NextAllowedVomitAt = _timing.CurTime + TimeSpan.FromSeconds(watcher.CooldownSeconds);
     }
 }

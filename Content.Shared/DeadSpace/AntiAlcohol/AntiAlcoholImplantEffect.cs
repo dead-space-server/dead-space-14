@@ -4,8 +4,8 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared.DeadSpace.AntiAlcohol;
 
 /// <summary>
-///     Просто маркер 
-///     <see cref="EntityEffectReagentArgs"/> 
+///     Простая метка для метаболизма спирта: когда эффект срабатывает,
+///     серверный антиалкогольный имплант получает событие с <see cref="EntityEffectReagentArgs"/> 
 /// </summary>
 public sealed partial class AntiAlcoholImplantEffect : EventEntityEffect<AntiAlcoholImplantEffect>
 {
