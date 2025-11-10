@@ -26,7 +26,7 @@
 - type: startingGear
   id: StationEngineerGear
   equipment:
-    id: StationEngineerPDA # DS14
+    id: EngineerPDA # DS14
     eyes: ClothingEyesGlassesMeson
 #    belt: ClothingBeltUtilityEngineering # DS14
     ears: ClothingHeadsetEngineering
