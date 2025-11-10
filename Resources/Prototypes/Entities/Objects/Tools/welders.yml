@@ -25,6 +25,7 @@
     size: Small
     sprite: Objects/Tools/welder.rsi
   - type: ItemToggle
+    onActivate: false # DS14
     predictable: false
     soundActivate:
       collection: WelderOn
@@ -204,8 +205,8 @@
 - type: entity
   parent: [ Welder, BaseXenoborgContraband ]
   id: RefuelingWelder
-  name: refuling welding tool
-  description: "An slow welder that can refuel itself over time."
+  name: refueling welding tool
+  description: "A slow welder that can refuel itself over time."
   components:
   - type: Tool
     speedModifier: 0.5

@@ -1,4 +1,4 @@
-- type: entity
+﻿- type: entity
   id: BaseBorgModule
   parent: BaseItem
   name: borg module
@@ -1217,6 +1217,7 @@
       - item: Emag
       - item: AccessBreaker
       - item: PinpointerSyndicateNuclear
+      - item: PinpointerSyndicateNuclearBomb # DS14
     - type: BorgModuleIcon
       icon: { sprite: Interface/Actions/actions_borg.rsi, state: syndicate-operative-module }
 
@@ -1234,6 +1235,7 @@
     hands:
     - item: CyborgEnergySword
     - item: PinpointerSyndicateNuclear
+    - item: PinpointerSyndicateNuclearBomb # DS14
   - type: BorgModuleIcon
     icon: { sprite: Interface/Actions/actions_borg.rsi, state: syndicate-esword-module }
 
@@ -1268,13 +1270,14 @@
     hands:
     - item: WeaponLightMachineGunL6C
     - item: PinpointerSyndicateNuclear
+    - item: PinpointerSyndicateNuclearBomb # DS14
   - type: BorgModuleIcon
     icon: { sprite: Interface/Actions/actions_borg.rsi, state: syndicate-l6c-module }
 
 - type: entity
   parent: [ BaseBorgModuleSyndicateAssault, BaseProviderBorgModule, BaseSyndicateContraband ]
   id: BorgModuleC20r
-  name: C20-r ROW cyborg module
+  name: C-20r ROW cyborg module
   description: A weapons module that comes with a burst-fire C-20r.
   components:
   - type: Sprite

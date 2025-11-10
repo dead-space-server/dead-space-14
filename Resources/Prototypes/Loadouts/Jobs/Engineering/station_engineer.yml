@@ -95,6 +95,19 @@
   equipment:
     back: ClothingBackpackDuffelEngineering
 
+# DS14-start
+# Belt
+- type: loadout
+  id: StationEngineerBeltUtility
+  equipment:
+    belt: ClothingBeltUtilityEngineering
+
+- type: loadout
+  id: StationEngineerBeltWebbing
+  equipment:
+    belt: ClothingUtilityWebbingEngineering
+# DS14-end
+
 # OuterClothing
 - type: loadout
   id: StationEngineerOuterVest
@@ -118,10 +131,10 @@
     shoes: ClothingShoesBootsWinterEngi
 
 # ID
-- type: loadout
-  id: StationEngineerPDA
-  equipment:
-    id: EngineerPDA
+#- type: loadout
+#  id: StationEngineerPDA
+#  equipment:
+#    id: EngineerPDA
 
 # - type: loadout
 #   id: SeniorEngineerPDA

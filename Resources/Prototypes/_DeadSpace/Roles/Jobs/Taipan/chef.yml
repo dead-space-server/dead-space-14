@@ -1,28 +1,47 @@
 - type: job
   id: TaipanChef
   name: job-name-taipan-chef
-  playTimeTracker: TaipanChef
-  description: Повар из далёкого космоса.
-  startingGear: SyndicateChef
+  description: job-description-taipan-chef
+  playTimeTracker: JobTaipanChef
+  setPreference: false
+  overrideConsoleVisibility: true
+  isTaipan: true
+  startingGear: TaipanChefGear
   icon: "JobIconTaipanChef"
-  supervisors: job-supervisors-taipan-telecommunications-officer
+  supervisors: job-supervisors-taipan-technical-supervisor
   canBeAntag: false
   requirements:
-    - !type:DepartmentTimeRequirement
-      department: Civilian
-      time: 6000
+  - !type:RoleTimeRequirement
+    role: JobChef
+    time: 18000 # 5 hours
+  - !type:RoleTimeRequirement
+    role: JobBartender
+    time: 18000 # 5 hours
   access:
-  - SyndicateAgent
-  - NuclearOperative
-  accessGroups:
-  - AllAccess
+  - TaipanService
+  - TaipanMaint
+  special:
+  - !type:AddImplantSpecial
+    implants: [ DeathRattleImplantTaipan ]
+  - !type:AddComponentSpecial
+    components:
+    - type: AntagImmune
+    - type: NpcFactionMember
+      factions:
+      - Taipan
 
 - type: startingGear
-  id: SyndicateChef
+  id: TaipanChefGear
   equipment:
-    ears: ClothingHeadsetAltTaipan
-    jumpsuit: ClothingUniformJumpsuitTaipanChef
-    back: ClothingBackpackSyndicate
-    outerClothing: ClothingOuterApronTaipanChef
-    shoes: ClothingShoesColorBlack
-    id: SyndiPDAChef
+    ears: ClothingHeadsetTaipan
+    shoes: ClothingShoesBootsLaceup
+    id: TaipanChefPDA
+    socks: ClothingUnderwearSocksTaipanChef
+
+- type: chameleonOutfit
+  id: TaipanChefChameleonOutfit
+  job: TaipanChef
+  startingGear: TaipanChefGear
+  equipment:
+    id: PassengerPDA
+    neck: ClothingNeckGoldmedal

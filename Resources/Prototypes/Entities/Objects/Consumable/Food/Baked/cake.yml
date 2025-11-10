@@ -9,7 +9,6 @@
   - type: FlavorProfile
     flavors:
       - sweet
-  - type: Food
   - type: Sprite
     sprite: Objects/Consumable/Food/Baked/cake.rsi
   - type: SolutionContainerManager
@@ -260,6 +259,7 @@
     tags:
     - Cake
     - Meat
+    - CakeBrain # DS14
   - type: Item
     inhandVisuals:
       left:
@@ -1148,6 +1148,9 @@
           Quantity: 80
         - ReagentId: Sugar
           Quantity: 30
+  - type: Tag # DS14
+    tags:
+    - Suppermatter
   - type: Food
     transferAmount: 12
   - type: Item
@@ -1278,6 +1281,7 @@
     tags:
     - Cake
     - Fruit
+    - BerryDelight # DS14
   - type: Item
     inhandVisuals:
       left:

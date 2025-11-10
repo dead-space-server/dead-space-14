@@ -1,0 +1,12 @@
+- type: entity
+  id: SelectLanguageAction
+  name: Выбрать разговорный язык
+  description: Отрыть панель выбора языка.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 1
+    icon: Interface/Actions/emoc.png
+    checkCanInteract: false
+  - type: InstantAction
+    event: !type:SelectLanguageActionEvent

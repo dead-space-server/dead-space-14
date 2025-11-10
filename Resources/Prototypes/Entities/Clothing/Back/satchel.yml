@@ -14,6 +14,11 @@
   - type: Tag
     tags:
     - MonkeyWearable
+    # DS14-start 
+  - type: PhysicalComposition
+    materialComposition:
+      Cloth: 100
+    # DS14-end
 
 - type: entity
   parent: ClothingBackpackSatchel
@@ -53,6 +58,12 @@
   - type: Storage
     storageOpenSound:
       collection: BikeHorn
+      params:
+        variation: 0.125
+    storageInsertSound:
+      collection: FootstepClown
+      params:
+        variation: 0.125
 
 - type: entity
   parent: ClothingBackpackSatchel
@@ -62,6 +73,9 @@
   components:
   - type: Sprite
     sprite: Clothing/Back/Satchels/mime.rsi
+  - type: Storage
+    storageOpenSound: null
+    storageInsertSound: null
 
 - type: entity
   parent: ClothingBackpackSatchel

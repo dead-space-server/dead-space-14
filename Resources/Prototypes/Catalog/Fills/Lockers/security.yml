@@ -45,9 +45,11 @@
       amount: 2
     - id: NetworkConfigurator
     - id: Binoculars
+   # - id: WeaponEnergyShotgun # DS14
     - id: ClothingNeckBodyCamera # DS14
       amount: 4
     - id: BoxTapeRecorder # DS14
+    - id: CriminalRecordsMonitor
 
 - type: entityTable
   id: FillLockerWardenHarduit
@@ -162,7 +164,8 @@
     - id: ClothingHeadHatDetGadget
     - id: ClothingNeckTieDet
     - id: ClothingOuterVestDetective
-    - id: ClothingOuterCoatDetective
+    - id: ClothingOuterCoatDetectiveLoadout
+    - id: FlippoEngravedLighter
     - id: FlashlightSeclite
     - id: ForensicScanner
     - id: LogProbeCartridge
@@ -174,7 +177,6 @@
     - id: HoloprojectorSecurity
     - id: BoxEvidenceMarkers
     - id: HandLabeler
-    - id: FlippoEngravedLighter # DS14
     - id: ADTtelescopicBaton # ADT
     - id: BoxFolderRed # DS14
     - id: BoxFolderYellow # DS14
@@ -291,7 +293,7 @@
     children:
     - id: WeaponShotgunEnforcer
       amount: 2
-    - id: MagazineShotgun
+    - id: BoxLethalshot
       amount: 4
 
 - type: entity

@@ -28,6 +28,7 @@
   recipeUnlocks:
   - RadarConsoleCircuitboard
   - HandHeldMassScanner
+  - JetBoots # DS14
 
 - type: technology
   id: AdvancedPowercells
@@ -86,6 +87,7 @@
   - SolarControlComputerCircuitboard
   - SolarTrackerElectronics
   - EmitterCircuitboard
+  - GeneratorRTGMachineCircuitboard # DS14-uranium-rework
 
 - type: technology
   id: AtmosphericTech

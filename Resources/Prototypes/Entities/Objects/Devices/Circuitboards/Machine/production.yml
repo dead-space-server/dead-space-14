@@ -475,6 +475,9 @@
         Manipulator: 4
         Glass: 1
         Cable: 1
+    - type: Tag
+      tags:
+      - CloningPodMachineCircuitboard
 
 - type: entity
   id: MedicalScannerMachineCircuitboard
@@ -1061,6 +1064,9 @@
         Manipulator: 1
         Glass: 2
         Cable: 2
+    - type: Tag # DS14
+      tags:
+      - SyndicateMicrowave
 
 - type: entity
   id: FatExtractorMachineCircuitboard
@@ -1349,3 +1355,21 @@
       Steel: 2
       Manipulator: 2
       Cable: 1
+
+- type: entity
+  parent: BaseMachineCircuitboard
+  id: SmartFridgeCircuitboard
+  name: SmartFridge machine board
+  description: A machine printed circuit board for a SmartFridge.
+  components:
+  - type: Sprite
+    state: service
+  - type: MachineBoard
+    prototype: SmartFridge
+    stackRequirements:
+      Glass: 5
+      Manipulator: 2
+    tagRequirements:
+        GlassBeaker:
+          amount: 2
+          defaultPrototype: Beaker

@@ -13,6 +13,13 @@
     Telecrystal: 3
   categories:
   - UplinkWeaponry
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkRevolverPython
@@ -64,6 +71,13 @@
     Telecrystal: 1
   categories:
   - UplinkWeaponry
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkEsword
@@ -92,6 +106,13 @@
     Telecrystal: 2
   categories:
   - UplinkWeaponry
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkThrowingKnivesKit
@@ -268,9 +289,9 @@
   productEntity: ClothingBackpackDuffelSyndicateFilledGrenadeLauncher
   discountCategory: veryRareDiscounts
   discountDownTo:
-    Telecrystal: 40 # DS14-value
+    Telecrystal: 30 # DS14-value
   cost:
-    Telecrystal: 45 # DS14-value
+    Telecrystal: 35 # DS14-value
   categories:
   - UplinkWeaponry
   # DS14-start
@@ -700,6 +721,13 @@
     Telecrystal: 6
   categories:
   - UplinkChemicals
+# DS14-start Hypopen for agents only
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+# DS14-end
 
 - type: listing
   id: UplinkHypoDart
@@ -714,6 +742,13 @@
     Telecrystal: 2
   categories:
   - UplinkChemicals
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkChemistryKitBundle
@@ -792,6 +827,13 @@
     Telecrystal: 4
   categories:
   - UplinkChemicals
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkStimpack
@@ -805,6 +847,11 @@
     Telecrystal: 4
   categories:
   - UplinkChemicals
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
 
 - type: listing
   id: UplinkStimkit
@@ -828,7 +875,7 @@
   # discountDownTo:
   #   Telecrystal: 1
   cost:
-    Telecrystal: 1 # DS14-value
+    Telecrystal: 3 # DS14-value
   categories:
   - UplinkChemicals
   # DS14-start
@@ -862,7 +909,16 @@
           - SurplusBundle
 
 # Deception
-
+- type: listing
+  id: UplinkSyndicateIDCard
+  name: uplink-syndicate-id-card-name
+  description: uplink-syndicate-id-card-desc
+  productEntity: SyndicateIDCard
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkDeception
+  
 - type: listing
   id: UplinkAgentIDCard
   name: uplink-agent-id-card-name
@@ -915,6 +971,13 @@
     Telecrystal: 2
   categories:
   - UplinkDeception
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkBinaryTranslatorKey
@@ -936,6 +999,13 @@
     Telecrystal: 1
   categories:
   - UplinkDeception
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkDecoyDisk
@@ -959,6 +1029,13 @@
     Telecrystal: 2
   categories:
   - UplinkDeception
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkBribe
@@ -972,6 +1049,13 @@
     Telecrystal: 4
   categories:
     - UplinkDeception
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 # - type: listing
 #   id: UplinkGigacancerScanner
@@ -1009,6 +1093,13 @@
     Telecrystal: 4
   categories:
   - UplinkDeception
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 # Disruption
 
@@ -1459,6 +1550,12 @@
   conditions:
   - !type:ListingLimitedStockCondition
     stock: 1
+  # DS14-start
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 # Implants
 
@@ -1686,6 +1783,13 @@
     Telecrystal: 2
   categories:
   - UplinkWearables
+# DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+# DS14-end
 
 - type: listing
   id: UplinkHolster
@@ -1706,6 +1810,13 @@
     Telecrystal: 1
   categories:
   - UplinkWearables
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkChameleon
@@ -1720,6 +1831,13 @@
     Telecrystal: 4
   categories:
     - UplinkWearables
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkClothingNoSlipsShoes
@@ -1733,6 +1851,27 @@
     Telecrystal: 2
   categories:
   - UplinkWearables
+
+# TODO: Revert back to normal thieving gloves when clothes dyeing is added
+- type: listing
+  id: UplinkgClothingThievingGloves
+  name: uplink-clothing-chameleon-thieving-gloves-name
+  description: uplink-clothing-chameleon-thieving-gloves-desc
+  productEntity: ClothingHandsChameleonThief
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+    Telecrystal: 3
+  cost:
+    Telecrystal: 5
+  categories:
+  - UplinkWearables
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkClothingOuterVestWeb
@@ -1786,6 +1925,13 @@
     Telecrystal: 3 # DS14-value
   categories:
   - UplinkWearables
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkHardsuitCarp
@@ -1800,6 +1946,13 @@
     Telecrystal: 4
   categories:
   - UplinkWearables
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkHardsuitSyndie
@@ -1881,13 +2034,8 @@
   description: uplink-clothing-outer-hardsuit-juggernaut-desc
   icon: { sprite: /Textures/Structures/Storage/Crates/syndicate.rsi, state: icon }
   productEntity: CrateCybersunJuggernautBundle
-  # DS14-start
-  discountCategory: veryRareDiscounts
-  discountDownTo:
-    Telecrystal: 20
-  # DS14-end
   cost:
-    Telecrystal: 25 # DS14-value
+    Telecrystal: 38 # DS14-value
   categories:
   - UplinkWearables
   conditions:
@@ -1913,7 +2061,7 @@
     - UplinkWearables
   conditions:
     - !type:StoreWhitelistCondition
-      whitelist:
+      blacklist:
         tags:
           - NukeOpsUplink
 
@@ -1926,6 +2074,13 @@
     Telecrystal: 2
   categories:
   - UplinkWearables
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkBackpackSyndicate
@@ -1948,6 +2103,13 @@
     Telecrystal: 1
   categories:
   - UplinkPointless
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkSnackBox
@@ -1958,6 +2120,13 @@
     Telecrystal: 1
   categories:
   - UplinkPointless
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkRevolverCapGun
@@ -1971,6 +2140,13 @@
     Telecrystal: 4
   categories:
   - UplinkPointless
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkSyndicateStamp
@@ -1984,6 +2160,13 @@
     Telecrystal: 2
   categories:
   - UplinkPointless
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 # - type: listing
 #   id: UplinkCatEars
@@ -2004,6 +2187,13 @@
     Telecrystal: 1
   categories:
   - UplinkPointless
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkOutlawGlasses
@@ -2014,6 +2204,13 @@
     Telecrystal: 1
   categories:
   - UplinkPointless
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkCostumePyjama
@@ -2024,6 +2221,13 @@
     Telecrystal: 4
   categories:
   - UplinkPointless
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkCostumeClown
@@ -2034,6 +2238,13 @@
     Telecrystal: 2
   categories:
   - UplinkPointless
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkCarpSuitBundle
@@ -2044,6 +2255,13 @@
     Telecrystal: 4
   categories:
   - UplinkPointless
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkOperativeSuit
@@ -2054,6 +2272,13 @@
     Telecrystal: 1
   categories:
   - UplinkPointless
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkOperativeSkirt
@@ -2064,6 +2289,13 @@
     Telecrystal: 1
   categories:
   - UplinkPointless
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkBalloon
@@ -2074,6 +2306,13 @@
     Telecrystal: 20
   categories:
   - UplinkPointless
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkScarfSyndieRed
@@ -2084,6 +2323,13 @@
     Telecrystal: 1
   categories:
   - UplinkPointless
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkScarfSyndieGreen
@@ -2094,6 +2340,13 @@
     Telecrystal: 1
   categories:
     - UplinkPointless
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkSyndicateBusinessCard
@@ -2108,6 +2361,10 @@
   conditions:
   - !type:ListingLimitedStockCondition
     stock: 1
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
   # DS14-end
 
 # Job Specific
@@ -2403,6 +2660,13 @@
     Telecrystal: 1
   categories:
   - UplinkPointless
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkSmugglerSatchel
@@ -2416,6 +2680,13 @@
     Telecrystal: 2
   categories:
   - UplinkDeception
+  # DS14-start
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  # DS14-end
 
 - type: listing
   id: UplinkAcolyteArmor

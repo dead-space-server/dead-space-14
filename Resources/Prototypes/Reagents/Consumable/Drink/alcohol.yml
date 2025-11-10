@@ -34,7 +34,6 @@
           min: 10
         type: Add
         time: 5
-        refresh: false
       - !type:PopupMessage
         type: Local
         messages:
@@ -169,6 +168,11 @@
         - !type:OrganType
           type: Dwarf
           shouldHave: false
+# DS14-start
+        - !type:OrganType
+          type: Xenomorph
+          shouldHave: false
+# DS14-end
         damage:
           types:
             Poison: 1
