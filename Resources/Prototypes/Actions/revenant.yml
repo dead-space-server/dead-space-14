@@ -52,7 +52,7 @@
   - type: InstantAction
     event: !type:RevenantMalfunctionActionEvent
 
-# DeadSpace start
+#DS14-start
 
 - type: entity
   id: ActionRevenantBeamFire
@@ -62,6 +62,7 @@
   - type: Action
     icon: Interface/Actions/overloadlight.png
     useDelay: 20
+  - type: TargetAction
   - type: EntityTargetAction
     event: !type:RevenantBeamFireActionEvent
     
@@ -73,6 +74,7 @@
   - type: Action
     useDelay: 45
     icon: { sprite: Clothing/Head/Hats/pyjamasyndicatered.rsi, state: icon }
+  - type: TargetAction
   - type: EntityTargetAction
     canTargetSelf: false
     event: !type:RevenantSleepActionEvent
@@ -85,7 +87,8 @@
   - type: Action
     icon: { sprite: Mobs/Species/Human/organs.rsi, state: brain }
     useDelay: 600
+  - type: TargetAction
   - type: EntityTargetAction
     canTargetSelf: false
     event: !type:RevenantMindCaptureActionEvent
-# DeadSpace end
+#DS14-end

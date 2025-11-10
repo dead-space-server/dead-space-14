@@ -51,9 +51,11 @@
         - state: "lightning_3"
           color: plum
           shader: unshaded
+    #DS14-start
     - type: Electrified
       requirePower: false
       shockDamage: 22.5
+    #DS14-end
     - type: PointLight
       enabled: true
       color: plum

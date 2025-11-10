@@ -4,7 +4,6 @@ using Content.Shared.Revenant;
 using Robust.Shared.Random;
 using Content.Shared.Tag;
 using Content.Shared.Storage.Components;
-using Content.Server.Light.Components;
 using Content.Server.Ghost;
 using Content.Server.Lightning;
 using Content.Server.Silicons.Laws;
@@ -16,7 +15,6 @@ using Content.Shared.Item;
 using Content.Shared.Bed.Sleep;
 using Content.Shared.Mindshield.Components;
 using Content.Shared.Silicons.Laws.Components;
-using Content.Server.Administration.Systems;
 using System.Linq;
 using System.Numerics;
 using Content.Server.Revenant.Components;
@@ -39,12 +37,15 @@ using Content.Shared.Whitelist;
 using Robust.Shared.Prototypes;
 using Content.Shared.Corvax.TTS;
 using Content.Shared.Ghost;
-using Content.Shared.Mind.Components;
+using Robust.Shared.Containers;
+
+using Content.Shared.DeadSpace.Languages.Components;
 
 namespace Content.Server.Revenant.EntitySystems;
 
 public sealed partial class RevenantSystem
 {
+    [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly EmagSystem _emagSystem = default!;
     [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly EntityStorageSystem _entityStorage = default!;
@@ -58,7 +59,6 @@ public sealed partial class RevenantSystem
     [Dependency] private readonly LightningSystem _lightning = default!;
     [Dependency] private readonly IonStormSystem _ionStorm = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly RejuvenateSystem _rejuvenate = default!;
 
     private static readonly ProtoId<TagPrototype> WindowTag = "Window";
 
@@ -405,11 +405,18 @@ public sealed partial class RevenantSystem
         if (args.Handled)
             return;
 
-        if (!HasComp<MindCaptureDefenceComponent>(args.Target))
+        if (HasComp<MindCaptureDefenceComponent>(args.Target))
             return;
 
         if (!HasComp<MobStateComponent>(args.Target) || !_mobState.IsDead(args.Target))
             return;
+
+        if (!_mobThresholdSystem.TryGetThresholdForState(args.Target, MobState.Alive, out var threshold)
+            || threshold.Value > 200)
+        {
+            _popup.PopupEntity(Loc.GetString("revenant-mind-capture-many-damage"), uid);
+            return;
+        }
 
         if (!TryUseAbility(uid, component, component.MindCaptureCost, component.MindCaptureDebuffs))
             return;
@@ -419,10 +426,25 @@ public sealed partial class RevenantSystem
 
         args.Handled = true;
 
-        // Component on target, don`t confuse with revenant comp.
-        var comp = EnsureComp<RevenantMindCapturedComponent>(args.Target);
+        if (_mobThresholdSystem.TryGetThresholdForState(args.Target, MobState.Dead, out var dead))
+            _mobThresholdSystem.SetMobStateThreshold(args.Target, dead.Value + 200, MobState.Dead);
 
-        comp.RevenantUid = uid;
+        if (_mobThresholdSystem.TryGetThresholdForState(args.Target, MobState.Critical, out var crit))
+            _mobThresholdSystem.SetMobStateThreshold(args.Target, crit.Value + 200, MobState.Critical);
+
+        _mobState.ChangeMobState(args.Target, MobState.Alive);
+
+        // Component on target, don`t confuse with revenant comp.
+        var comp = new RevenantMindCapturedComponent(uid);
+        AddComp(args.Target, comp);
+        if (TryComp<LanguageComponent>(args.Target, out var targetLanguage) && TryComp<LanguageComponent>(uid, out var revLanguage))
+        {
+            comp.ReturnCantSpeakLanguages = targetLanguage.CantSpeakLanguages;
+            targetLanguage.CantSpeakLanguages = revLanguage.CantSpeakLanguages;
+
+            comp.ReturnKnownLanguages = targetLanguage.KnownLanguages;
+            targetLanguage.KnownLanguages = revLanguage.KnownLanguages;
+        }
 
         if (TryComp<TTSComponent>(args.Target, out var targetTTS) && TryComp<TTSComponent>(uid, out var revTTS))
         {
@@ -455,8 +477,8 @@ public sealed partial class RevenantSystem
             }
         }
 
-        _rejuvenate.PerformRejuvenate(args.Target);
+        comp.RevenantContainer = _container.EnsureContainer<Container>(args.Target, component.Container);
+        _container.Insert(uid, comp.RevenantContainer);
         _mind.Visit(perMind, args.Target);
-
     }
 }

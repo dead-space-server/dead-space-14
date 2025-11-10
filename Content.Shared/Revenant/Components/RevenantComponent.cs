@@ -193,22 +193,24 @@ public sealed partial class RevenantComponent : Component
     #endregion
 
     #region Sleep Ability 
-    [ViewVariables(VVAccess.ReadWrite), DataField("sleepCost")]
+    [DataField]
     public FixedPoint2 SleepCost = 30;
 
-    [DataField("sleepDebuffs")]
+    [DataField]
     public Vector2 SleepDebuffs = new(2, 10);
 
     [DataField] public EntityUid? SleepAction;
     #endregion
 
     #region Mind Capture Ability
-    [ViewVariables(VVAccess.ReadWrite), DataField("mindCaptureCost")]
+    [DataField]
     public FixedPoint2 MindCaptureCost = 100;
 
-    [DataField("mindCaptureDebuffs")]
-    public Vector2 MindCaptureDebuffs = new(10, 10);
+    [DataField]
+    public Vector2 MindCaptureDebuffs = new(0, 0);
 
+    [DataField]
+    public string Container = "MindCaptureRevenant";
     #endregion
     [DataField]
     public ProtoId<AlertPrototype> EssenceAlert = "Essence";

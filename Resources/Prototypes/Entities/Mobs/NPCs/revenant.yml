@@ -70,6 +70,7 @@
   - type: ActionGrant
     actions:
     - ActionRevenantShop
+    - ActionRevenantSleep #DS14-value
   - type: Store
     categories:
     - RevenantAbilities

@@ -45,9 +45,6 @@ public sealed partial class RevenantSystem : EntitySystem
     [Dependency] private readonly VisibilitySystem _visibility = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
 
-
-    private static readonly EntProtoId RevenantSleepId = "ActionRevenantSleep";
-
     public override void Initialize()
     {
         base.Initialize();
@@ -89,11 +86,6 @@ public sealed partial class RevenantSystem : EntitySystem
 
         //ghost vision
         _eye.RefreshVisibilityMask(uid);
-    }
-
-    private void OnMapInit(EntityUid uid, RevenantComponent component, MapInitEvent args)
-    {
-        _action.AddAction(uid, ref component.SleepAction, RevenantSleepId);
     }
 
     private void OnStatusAdded(EntityUid uid, RevenantComponent component, StatusEffectAddedEvent args)
