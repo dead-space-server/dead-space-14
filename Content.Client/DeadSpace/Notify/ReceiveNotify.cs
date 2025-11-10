@@ -32,7 +32,7 @@ public sealed partial class ReceiveNotifySys : EntitySystem
 
     private void CheckReceiveddNotify(PingMessage messege)
     {
-        if (_helper.GetValueAccess(messege.ID) && _cfg.GetCVar(CCCCVars.SysNotifyPerm))
+        if (_cfg.GetCVar(CCCCVars.SysNotifyPerm) && _helper.GetValueAccess(messege.ID))
         {
             if (DateTime.Now - _lastNotifyTime >= TimeSpan.FromSeconds(_cfg.GetCVar(CCCCVars.SysNotifyCoolDown)))
             {
