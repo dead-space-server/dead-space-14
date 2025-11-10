@@ -1,0 +1,19 @@
+- type: cargoProduct
+  id: MedicalAntiAlcoholTesterCrate
+  icon:
+    sprite: _DeadSpace/Objects/Specific/Medical/alcotester.rsi
+    state: icon
+  product: CrateMedicalAntiAlcoholTesters
+  cost: 2000
+  category: cargoproduct-category-name-medical
+  group: market
+
+- type: cargoProduct
+  id: MedicalAntiAlcoholImplanterCrate
+  icon:
+    sprite: Objects/Specific/Medical/implanter.rsi
+    state: implanter0
+  product: CrateMedicalAntiAlcoholImplanters
+  cost: 3000
+  category: cargoproduct-category-name-medical
+  group: market

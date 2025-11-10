@@ -1,0 +1,22 @@
+- type: entity
+  id: CrateMedicalAntiAlcoholImplanters
+  parent: CratePlastic
+  name: ящик с имплантерами "кодирования"
+  description: Содержит шесть имплантеров для установки импланта "кодирования" и один алкотестер.
+  components:
+  - type: StorageFill
+    contents:
+      - id: AntiAlcoholImplanter
+        amount: 6
+      - id: ToolAlcoTester
+
+- type: entity
+  id: CrateMedicalAntiAlcoholTesters
+  parent: CratePlastic
+  name: ящик с алкотестерами
+  description: Содержит несколько ручных алкотестеров для быстрой проверки членов экипажа на трезвость.
+  components:
+  - type: StorageFill
+    contents:
+      - id: ToolAlcoTester
+        amount: 3
