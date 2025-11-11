@@ -1,13 +1,4 @@
 - type: speechSounds
-  id: Vulpkanin
-  saySound:
-    path: /Audio/_DeadSpace/Voice/Talk/vulp.ogg
-  askSound:
-    path: /Audio/_DeadSpace/Voice/Talk/vulp_ask.ogg
-  exclaimSound:
-    path: /Audio/_DeadSpace/Voice/Talk/vulp_exclaim.ogg
-
-- type: speechSounds
   id: SuperSoldier
   saySound:
     path: /Audio/_DeadSpace/Voice/Talk/supersoldier.ogg
