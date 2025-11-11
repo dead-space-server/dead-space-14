@@ -127,18 +127,22 @@
   equipment:
     underweart: ClothingUnderwearTopBraDetective
 
-# Медаль
+# Medal
 - type: loadoutEffectGroup
-  id: SecurityDetectiveMedal
+  id: DetectiveMasterMedal
   effects:
   - !type:JobRequirementLoadoutEffect
     requirement:
       !type:RoleTimeRequirement
       role: JobDetective
-      time: 270000 # 75 hours
+      time: 100h
+
 
 - type: loadout
   id: DetectiveMedal
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: DetectiveMasterMedal
   storage:
     back:
     - ClothingNeckDetectiveMedal

@@ -92,18 +92,21 @@
   equipment:
     underweart: ClothingUnderwearTopBraSeniorOfficer
 
-# Медаль
+# Medal
 - type: loadoutEffectGroup
-  id: SeniorOfficerMedal
+  id: SeniorOfficerMasterMedal
   effects:
   - !type:JobRequirementLoadoutEffect
     requirement:
       !type:RoleTimeRequirement
       role: JobSeniorOfficer
-      time: 270000 # 75 hours
+      time: 100h
 
 - type: loadout
   id: SeniorOfficerMedal
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: SeniorOfficerMasterMedal
   storage:
     back:
     - ClothingNeckSecuritySeniorOfficerMedal
