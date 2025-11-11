@@ -9,7 +9,7 @@ using Content.Client.Players.PlayTimeTracking;
 using Content.Client.Sprite;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Guidebook;
-using Content.DeadSpace.Interfaces.Client; // DS14-sponsors
+using Content.DeadSpace.Interfaces.Client;
 using Content.Shared.CCVar;
 using Content.Shared.Clothing;
 using Content.Shared.Corvax.CCCVars;
@@ -810,12 +810,7 @@ namespace Content.Client.Lobby.UI
             UpdateAgeEdit();
             UpdateEyePickers();
             UpdateSaveButton();
-            // Corvax-TTS-Start
-            if (_cfgManager.GetCVar(CCCVars.TTSEnabled))
-            {
-                UpdateTTSVoicesControls();
-            }
-            // Corvax-TTS-End
+            UpdateTTSVoicesControls(); // Corvax-TTS
             UpdateMarkings();
             UpdateHairPickers();
             UpdateCMarkingsHair();
@@ -1225,12 +1220,7 @@ namespace Content.Client.Lobby.UI
             }
 
             UpdateGenderControls();
-            // Corvax-TTS-Start
-            if (_cfgManager.GetCVar(CCCVars.TTSEnabled))
-            {
-                UpdateTTSVoicesControls();
-            }
-            // Corvax-TTS-End
+            UpdateTTSVoicesControls(); // Corvax-TTS
             Markings.SetSex(newSex);
             ReloadPreview();
         }
@@ -1240,6 +1230,14 @@ namespace Content.Client.Lobby.UI
             Profile = Profile?.WithGender(newGender);
             ReloadPreview();
         }
+
+        // Corvax-TTS-Start
+        private void SetVoice(string newVoice)
+        {
+            Profile = Profile?.WithVoice(newVoice);
+            IsDirty = true;
+        }
+        // Corvax-TTS-End
 
         private void SetSpecies(string newSpecies)
         {

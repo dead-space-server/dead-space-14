@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Client.Corvax.TTS;
 using Content.Shared.Corvax.TTS;
 using Content.Shared.Preferences;
+using Robust.Shared.Timing;
 
 namespace Content.Client.Lobby.UI;
 
@@ -11,53 +12,42 @@ public sealed partial class HumanoidProfileEditor
 
     private void InitializeVoice()
     {
-        if (VoiceButton == null)
-            return;
-
         _voiceList = _prototypeManager
             .EnumeratePrototypes<TTSVoicePrototype>()
-            .Where(x => x.RoundStart)
-            .OrderBy(x => Loc.GetString(x.Name))
+            .Where(o => o.RoundStart)
+            .OrderBy(o => Loc.GetString(o.Name))
             .ToList();
 
         VoiceButton.OnItemSelected += args =>
         {
             VoiceButton.SelectId(args.Id);
-            var voiceId = VoiceButton.GetItemMetadata(args.Id) as string;
-            if (voiceId != null)
-                SetVoice(voiceId);
+            SetVoice(_voiceList[args.Id].ID);
         };
 
         VoicePlayButton.OnPressed += _ => PlayPreviewTTS();
-
-        UpdateTTSVoicesControls();
     }
 
     private void UpdateTTSVoicesControls()
     {
-        if (Profile == null || VoiceButton == null)
+        if (Profile is null)
             return;
 
         VoiceButton.Clear();
 
-        var firstVoiceChoiceId = -1;
-        var selectedVoice = Profile.Voice;
-
+        var firstVoiceChoiceId = 1;
         for (var i = 0; i < _voiceList.Count; i++)
         {
             var voice = _voiceList[i];
-
             if (!HumanoidCharacterProfile.CanHaveVoice(voice, Profile.Sex))
                 continue;
 
             var name = Loc.GetString(voice.Name);
             VoiceButton.AddItem(name, i);
-            VoiceButton.SetItemMetadata(i, voice.ID);
 
-            if (firstVoiceChoiceId == -1)
+            if (firstVoiceChoiceId == 1)
                 firstVoiceChoiceId = i;
 
-            // Sponsor check (commented out as in original)
+            // Не спонсоры могут прослушивать голоса в лобби
             // if (voice.SponsorOnly)
             // {
             //     if (!IoCManager.Resolve<SponsorsManager>().TryGetInfo(out var sponsor))
@@ -71,27 +61,16 @@ public sealed partial class HumanoidProfileEditor
             // }
         }
 
-        var voiceFound = false;
-        for (var i = 0; i < VoiceButton.ItemCount; i++)
+        var voiceChoiceId = _voiceList.FindIndex(x => x.ID == Profile.Voice);
+        if (!VoiceButton.TrySelectId(voiceChoiceId) &&
+            VoiceButton.TrySelectId(firstVoiceChoiceId))
         {
-            var voiceId = VoiceButton.GetItemMetadata(i) as string;
-            if (voiceId == selectedVoice)
-            {
-                VoiceButton.SelectId(i);
-                voiceFound = true;
-                break;
-            }
+            SetVoice(_voiceList[firstVoiceChoiceId].ID);
         }
 
-        if (!voiceFound && firstVoiceChoiceId != -1)
-        {
-            VoiceButton.SelectId(firstVoiceChoiceId);
-            var firstVoiceId = VoiceButton.GetItemMetadata(firstVoiceChoiceId) as string;
-            if (firstVoiceId != null && string.IsNullOrEmpty(selectedVoice))
-                SetVoice(firstVoiceId);
-        }
-
+        // DS14-TTS-search-start
         VoiceButton.ResetSearch();
+        // DS14-TTS-search-end
     }
 
     private void PlayPreviewTTS()
@@ -100,11 +79,5 @@ public sealed partial class HumanoidProfileEditor
             return;
 
         _entManager.System<TTSSystem>().RequestPreviewTTS(Profile.Voice);
-    }
-
-    private void SetVoice(string newVoice)
-    {
-        Profile = Profile?.WithVoice(newVoice);
-        IsDirty = true;
     }
 }
