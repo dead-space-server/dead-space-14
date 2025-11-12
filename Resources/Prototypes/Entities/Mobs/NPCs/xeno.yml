@@ -123,7 +123,12 @@
     molsPerSecondPerUnitMass: 0.0005
   - type: Speech
     speechVerb: LargeMob
-  - type: NightVision # DS14
+  # DS14-start
+  - type: NightVision
+    color: "#8B000011"
+    animation: true
+    transitionSpeed: 100
+  # DS14-end
 
 - type: entity
   name: praetorian

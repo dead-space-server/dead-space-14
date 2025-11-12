@@ -134,8 +134,11 @@
     prototypes: [DeadSquadNecroGear]
   - type: Hands
   - type: NightVision
+    animation: true
+    transitionSpeed: 100
   - type: Body
     prototype: MobDeadSquadNecro
+    color: "#6E000011"
     requiredLegs: 2
   - type: ImmunNecroobelisk
   - type: ZombieImmune
