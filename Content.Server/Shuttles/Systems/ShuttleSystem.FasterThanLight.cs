@@ -64,10 +64,10 @@ public sealed partial class ShuttleSystem
     /// </summary>
     private const float Buffer = 5f;
 
-    // Lua fallback
+    // Lua-start
     private const float MaxCoord = 20000f;
     private const float CoordRollover = 40000f;
-    // Lua fallbakc
+    // Lua-end
 
     /// <summary>
     /// How many times we try to proximity warp close to something before falling back to map-wideAABB.
