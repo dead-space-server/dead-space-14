@@ -5,10 +5,11 @@ admin-player-actions-kick = Кикнуть
 admin-player-actions-ban = Забанить
 admin-player-actions-ahelp = АХелп
 admin-player-actions-respawn = Респаун
-admin-player-actions-camera = Отрыть камеру // DS14
 admin-player-actions-spawn = Заспавнить тут
 admin-player-spawn-failed = Не удалось найти подходящие координаты
 admin-player-actions-player-panel = Открыть панель игрока
 admin-player-actions-clone = Клонировать
 admin-player-actions-follow = Следовать
 admin-player-actions-confirm = Вы уверены?
+# DS14
+admin-player-actions-camera = Отрыть камеру

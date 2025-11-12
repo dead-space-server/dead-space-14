@@ -193,9 +193,9 @@ namespace Content.Client.Administration.UI.Bwoink
                 if (_currentPlayer is not null)
                     _console.ExecuteCommand($"respawn \"{_currentPlayer.Username}\"");
             };
- 
+
             // DS14-start
-             Camera.OnPressed += _ =>
+            Camera.OnPressed += _ =>
             {
                 if (_currentPlayer is not null)
                     _console.ExecuteCommand($"camera \"{_currentPlayer.Username}\"");
