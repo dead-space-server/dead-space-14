@@ -9,6 +9,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Content.Server.Cargo.Systems;
 using Content.Shared.Cargo.Components;
+using Content.Server.GameTicking;
 
 namespace Content.Server.DeadSpace.StationGoal;
 
@@ -23,6 +24,7 @@ public sealed class StationGoalPaperSystem : EntitySystem
     [Dependency] private readonly IResourceManager _resourceManager = default!;
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly CargoSystem _cargo = default!;
+    [Dependency] private readonly GameTicker _gameTicker = default!;
 
     public override void Initialize()
     {
@@ -89,6 +91,11 @@ public sealed class StationGoalPaperSystem : EntitySystem
             _faxSystem.Receive(uid, printout, null, fax);
 
             wasSent = true;
+        }
+
+        foreach (var rule in goal.Rules)
+        {
+            _gameTicker.AddGameRule(rule);
         }
 
         return wasSent;

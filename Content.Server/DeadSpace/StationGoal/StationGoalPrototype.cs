@@ -19,4 +19,6 @@ public sealed partial class StationGoalPrototype : IPrototype
     public int? ModifyStationBalance;
     [DataField]
     public List<StampDisplayInfo>? ExtraStamps;
+    [DataField]
+    public IReadOnlyList<EntProtoId> Rules { get; private set; } = Array.Empty<EntProtoId>();
 }
