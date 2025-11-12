@@ -135,10 +135,10 @@
   - type: Hands
   - type: NightVision
     animation: true
+    color: "#6E000011"
     transitionSpeed: 100
   - type: Body
     prototype: MobDeadSquadNecro
-    color: "#6E000011"
     requiredLegs: 2
   - type: ImmunNecroobelisk
   - type: ZombieImmune
