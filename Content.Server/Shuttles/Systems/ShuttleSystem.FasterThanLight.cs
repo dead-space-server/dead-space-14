@@ -431,9 +431,9 @@ public sealed partial class ShuttleSystem
         // Reset rotation so they always face the same direction.
         xform.LocalRotation = Angle.Zero;
         _index += width + Buffer;
-        // Lua fallback
+        // Lua-start
         if (_index > MaxCoord) _index -= CoordRollover;
-        // Lua fallback
+        // Lua-end
         comp.StateTime = StartEndTime.FromCurTime(_gameTiming, comp.TravelTime - DefaultArrivalTime);
 
         Enable(uid, component: body);
