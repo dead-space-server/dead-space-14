@@ -30,6 +30,6 @@ public sealed class AghostColorSystem : EntitySystem
         var colorOverride = prefs.AdminOOCColor;
         component.Color = colorOverride;
 
-        Dirty(uid, component); // чтобы клиент получил обновление
+        Dirty(uid, component);
     }
 }
