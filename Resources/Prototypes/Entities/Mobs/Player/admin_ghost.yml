@@ -117,6 +117,7 @@
     successChance: 1
     interactSuccessString: hugging-success-generic
     interactSuccessSound: /Audio/Effects/thudswoosh.ogg
+  - type: AghostColor # DS14
 
 - type: entity
   abstract: true
