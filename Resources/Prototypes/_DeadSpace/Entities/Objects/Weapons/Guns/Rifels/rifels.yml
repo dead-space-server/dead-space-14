@@ -68,7 +68,7 @@
 
 - type: entity
   parent: BaseWeaponRifle
-  id: ADTWeaponRifleXC67
+  id: WeaponRifleXC67
   name: штурмовая винтовка xC-67
   description: Прототип новой штурмовой винтовки от создателей знаменитой С-20r. Использует патрон 6.5х39 TSF. Усовершенствованная эргономика позволяет достичь превосходных показателей точности стрельбы.
   components:

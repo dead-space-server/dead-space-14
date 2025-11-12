@@ -320,7 +320,7 @@
   cost: 15000
   diskAvailable: false
   recipeUnlocks:
-  - ADTWeaponRifleXC67
+  - WeaponRifleXC67
   - WeaponRifleAk
   technologyPrerequisites:
   - TaipanBasicRifles
