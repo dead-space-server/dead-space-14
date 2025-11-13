@@ -14,6 +14,8 @@ namespace Content.Server.DeadSpace.AntiAlcohol;
 
 public sealed partial class AlcoTesterSystem : EntitySystem
 {
+    private static readonly ReagentId EthanolReagentId = new("Ethanol", null);
+
     [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
@@ -73,8 +75,7 @@ public sealed partial class AlcoTesterSystem : EntitySystem
             return;
         }
 
-        var ethanolProto = new ReagentId(uid.Comp.EthanolId, null);
-        var ethanol = solution.GetReagentQuantity(ethanolProto).Float();
+        var ethanol = solution.GetReagentQuantity(EthanolReagentId).Float();
 
         var verdict = ethanol switch
         {
