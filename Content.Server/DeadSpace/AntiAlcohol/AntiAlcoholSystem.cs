@@ -34,19 +34,17 @@ public sealed class AntiAlcoholSystem : EntitySystem
         if (reagentArgs.Reagent is not { } reagent)
             return;
 
-        if (reagent.ID != watcher.EthanolId)
-            return;
-
         if (reagentArgs.Source is not { } solution)
             return;
 
-        var ethanolAmount = solution.GetTotalPrototypeQuantity(watcher.EthanolId);
+        var reagentId = reagent.ID;
+        var ethanolAmount = solution.GetTotalPrototypeQuantity(reagentId);
         var threshold = FixedPoint2.New(watcher.Threshold);
         if (ethanolAmount <= FixedPoint2.Zero || ethanolAmount < threshold)
             return;
 
         reagentArgs.Scale = FixedPoint2.Zero;
-        solution.RemoveReagent(watcher.EthanolId, ethanolAmount);
+        solution.RemoveReagent(reagentId, ethanolAmount);
 
         if (_timing.CurTime < watcher.NextAllowedVomitAt)
             return;
