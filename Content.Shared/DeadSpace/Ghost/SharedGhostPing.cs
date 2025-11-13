@@ -1,6 +1,6 @@
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.Ghost.SharedGhostPing;
+namespace Content.Shared.DeadSpace.Ghost.SharedGhostPing;
 
 [Serializable, NetSerializable]
 public sealed partial class PingMessage : EntityEventArgs

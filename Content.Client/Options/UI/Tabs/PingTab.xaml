@@ -1,4 +1,5 @@
-<!--DS14-start-->
+<!-- Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+-->
 <Control xmlns="https://spacestation14.io"
             xmlns:tabs="clr-namespace:Content.Client.Options.UI.Tabs"
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -17,4 +18,3 @@
         <ui:OptionsTabControlRow Name="Control" Access="Public" />
     </BoxContainer>
 </Control>
-<!--DS14-end-->
