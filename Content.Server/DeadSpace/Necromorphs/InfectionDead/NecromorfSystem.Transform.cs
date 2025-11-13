@@ -53,7 +53,6 @@ using Content.Shared.Zombies;
 using Content.Shared.Sprite;
 using Robust.Shared.Prototypes;
 
-
 namespace Content.Server.DeadSpace.Necromorphs.InfectionDead;
 
 public sealed partial class NecromorfSystem

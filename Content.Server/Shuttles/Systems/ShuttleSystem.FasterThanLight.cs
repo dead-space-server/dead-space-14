@@ -64,6 +64,11 @@ public sealed partial class ShuttleSystem
     /// </summary>
     private const float Buffer = 5f;
 
+    // Lua-start
+    private const float MaxCoord = 20000f;
+    private const float CoordRollover = 40000f;
+    // Lua-end
+
     /// <summary>
     /// How many times we try to proximity warp close to something before falling back to map-wideAABB.
     /// </summary>
@@ -426,6 +431,9 @@ public sealed partial class ShuttleSystem
         // Reset rotation so they always face the same direction.
         xform.LocalRotation = Angle.Zero;
         _index += width + Buffer;
+        // Lua-start
+        if (_index > MaxCoord) _index -= CoordRollover;
+        // Lua-end
         comp.StateTime = StartEndTime.FromCurTime(_gameTiming, comp.TravelTime - DefaultArrivalTime);
 
         Enable(uid, component: body);

@@ -61,6 +61,11 @@
     thresholds:
       0: Alive
       50: Dead
+# DS14-start
+    stateAlertDict:
+      Alive: XenomorphHealth
+      Dead: XenomorphDead
+# DS14-end
   - type: SlowOnDamage
     speedModifierThresholds:
       25: 0.5
@@ -118,7 +123,12 @@
     molsPerSecondPerUnitMass: 0.0005
   - type: Speech
     speechVerb: LargeMob
-  - type: NightVision # DS14
+  # DS14-start
+  - type: NightVision
+    color: "#8B000011"
+    animation: true
+    transitionSpeed: 100
+  # DS14-end
 
 - type: entity
   name: praetorian
@@ -136,6 +146,11 @@
     thresholds:
       0: Alive
       100: Dead
+# DS14-start
+    stateAlertDict:
+      Alive: XenomorphHealth
+      Dead: XenomorphDead
+# DS14-end
   - type: Stamina
     critThreshold: 300
   - type: SlowOnDamage
@@ -169,6 +184,11 @@
     thresholds:
       0: Alive
       80: Dead
+# DS14-start
+    stateAlertDict:
+      Alive: XenomorphHealth
+      Dead: XenomorphDead
+# DS14-end
   - type: SlowOnDamage
     speedModifierThresholds:
       40: 0.7
@@ -206,6 +226,11 @@
     thresholds:
       0: Alive
       300: Dead
+# DS14-start
+    stateAlertDict:
+      Alive: XenomorphHealth
+      Dead: XenomorphDead
+# DS14-end
   - type: SlowOnDamage
     speedModifierThresholds:
       150: 0.7
@@ -245,6 +270,11 @@
     thresholds:
       0: Alive
       100: Dead
+# DS14-start
+    stateAlertDict:
+      Alive: XenomorphHealth
+      Dead: XenomorphDead
+# DS14-end
   - type: MovementSpeedModifier
     baseSprintSpeed: 4
   - type: MeleeWeapon
@@ -327,6 +357,11 @@
     thresholds:
       0: Alive
       50: Dead
+# DS14-start
+    stateAlertDict:
+      Alive: XenomorphHealth
+      Dead: XenomorphDead
+# DS14-end
   - type: SlowOnDamage
     speedModifierThresholds:
       25: 0.7
@@ -541,6 +576,12 @@
       0: Alive
       -1: Critical
       250: Dead
+# DS14-start
+    stateAlertDict:
+      Alive: XenomorphHealth
+      Critical: XenomorphCrit
+      Dead: XenomorphDead
+# DS14-end
   - type: SlowOnDamage
     speedModifierThresholds:
       120: 0.7

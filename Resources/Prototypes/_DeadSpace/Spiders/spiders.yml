@@ -148,7 +148,9 @@
     factions:
     - SpiderTerror
   - type: NightVision
-    color: "#80008022"
+    animation: true
+    transitionSpeed: 100
+    color: "#80008011"
   - type: IntrinsicRadioReceiver
   - type: IntrinsicRadioTransmitter
     channels:
