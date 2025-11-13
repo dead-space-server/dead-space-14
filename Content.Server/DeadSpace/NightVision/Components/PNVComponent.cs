@@ -15,5 +15,9 @@ public sealed partial class PNVComponent : Component
 
     [DataField]
     [ViewVariables(VVAccess.ReadOnly)]
+    public bool Animation = true;
+
+    [DataField]
+    [ViewVariables(VVAccess.ReadOnly)]
     public SoundSpecifier? ActivateSound = null;
 }

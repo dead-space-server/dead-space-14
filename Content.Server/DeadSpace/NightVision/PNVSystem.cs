@@ -19,7 +19,7 @@ public sealed class PNVSystem : EntitySystem
         if (HasComp<NightVisionComponent>(args.Equipee))
             return;
 
-        var nightVisionComp = new NightVisionComponent(comp.Color, comp.ActivateSound);
+        var nightVisionComp = new NightVisionComponent(comp.Color, comp.ActivateSound, comp.Animation);
         comp.HasNightVision = true;
 
         AddComp(args.Equipee, nightVisionComp);

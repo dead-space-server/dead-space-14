@@ -121,7 +121,12 @@
     drawdepth: Mobs
     sprite: _Backmen/Mobs/Aliens/blob.rsi
     state: blobpod
-  - type: NightVision # DS14
+  # DS14-start
+  - type: NightVision
+    animation: true
+    color: "#D4C15A11"
+    transitionSpeed: 100
+  # DS14-end
 
 - type: entity
   id: MobBlobBlobbernaut
@@ -207,11 +212,14 @@
       - map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
         state: nautdamage
         shader: unshaded
-  #DS14-start
-  - type: NightVision 
+  # DS14-start
+  - type: NightVision
+    animation: true
+    color: "#D4C15A11"
+    transitionSpeed: 100
   - type: GhostRoleNotifys 
     groupPrototype: BlobGroup
-  #DS14-end
+  # DS14-end
 
 - type: entity
   id: BaseBlob

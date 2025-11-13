@@ -36,6 +36,7 @@ public sealed partial class AdminNotesLine : BoxContainer
     public AdminNotesLine(SpriteSystem sprites, SharedAdminNote note)
     {
         RobustXamlLoader.Load(this);
+        IoCManager.InjectDependencies(this);
 
         _sawmill = _logManager.GetSawmill("admin.notes");
         _sprites = sprites;
@@ -66,7 +67,7 @@ public sealed partial class AdminNotesLine : BoxContainer
         if (iconPath is null)
         {
             SeverityRect.Visible = false;
-            _sawmill.Warning($"Could not find an icon for note ID {Note.Id}");
+            Logger.WarningS("admin.notes", $"Could not find an icon for note ID {Note.Id}");
         }
         else
         {
