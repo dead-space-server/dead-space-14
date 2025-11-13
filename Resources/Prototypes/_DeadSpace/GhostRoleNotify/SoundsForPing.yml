@@ -21,17 +21,17 @@
 - type: soundForPing
   id: message1
   name: Сообщение1
-  path: /Audio/Effects/message1.ogg
+  path: Audio/_DeadSpace/Effects/GhostPingSounds/message1.ogg
 
 - type: soundForPing
   id: message2
   name: Сообщение2
-  path: /Audio/Effects/message2.ogg
+  path: Audio/_DeadSpace/Effects/GhostPingSounds/message2.ogg
 
 - type: soundForPing
   id: message3
   name: Сообщение3
-  path: /Audio/Effects/message3.ogg
+  path: Audio/_DeadSpace/Effects/GhostPingSounds/message3.ogg
 
 - type: soundForPing
   id: zzzt
