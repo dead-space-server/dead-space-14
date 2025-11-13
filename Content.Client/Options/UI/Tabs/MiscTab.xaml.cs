@@ -45,12 +45,14 @@ public sealed partial class MiscTab : Control
             backgroundEntries.Add(new OptionDropDownCVar<string>.ValueOption(background.ToString()!, Loc.GetString($"ui-options-hud-background-{background.ToString()!.ToLower()}")));
         }
 
-        var sounds = _prototypeManager.EnumeratePrototypes<SoundForPing>().ToList();
+        //DS14-start
+        var sounds = _prototypeManager.EnumeratePrototypes<SoundForPing>().ToList(); 
         var soundPingEntries = new List<OptionDropDownCVar<string>.ValueOption>();
         foreach (var sound in sounds)
         {
             soundPingEntries.Add(new OptionDropDownCVar<string>.ValueOption(sound.Path, sound.Name));
         }
+        //DS-end
         // Channel can be null in replays so.
         // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
         ShowOocPatronColor.Visible = _playerManager.LocalSession?.Channel?.UserData.PatronTier is { };

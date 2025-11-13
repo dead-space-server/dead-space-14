@@ -19,14 +19,12 @@
   rules: ghost-role-information-syndicate-reinforcement-rules
   entityPrototype: MobMonkeySyndicateAgent
 
-
 - type: ghostRole
   id: SyndicateMonkeyNukeops
   name: ghost-role-information-syndicate-monkey-reinforcement-name
   description: ghost-role-information-syndicate-monkey-reinforcement-description
   rules: ghost-role-information-nukeop-reinforcement-rules
   entityPrototype: MobMonkeySyndicateAgentNukeops
-
 
 - type: ghostRole
   id: SyndicateAgentMedic
