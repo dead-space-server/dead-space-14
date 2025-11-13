@@ -5,7 +5,7 @@ using Content.Shared.Ghost;
 using Content.Shared.DeadSpace.GhostRoleNotify.Prototypes;
 using Content.Server.Ghost.Roles;
 using Robust.Server.Player;
-using Content.Shared.Ghost.SharedGhostPing;
+using Content.Shared.DeadSpace.Ghost.SharedGhostPing;
 
 namespace Content.Server.DeadSpace.GhostRoleNotify.GhostRoleNotifySystem;
 

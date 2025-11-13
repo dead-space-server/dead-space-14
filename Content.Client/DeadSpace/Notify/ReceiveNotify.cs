@@ -1,4 +1,4 @@
-using Content.Shared.Ghost.SharedGhostPing;
+using Content.Shared.DeadSpace.Ghost.SharedGhostPing;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Audio;
