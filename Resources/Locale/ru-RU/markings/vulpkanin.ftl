@@ -58,6 +58,8 @@ marking-VulpSnoutAlt = Вульпканин (Альт)
 marking-VulpSnoutSharp = Вульпканин (Резкая)
 marking-VulpSnoutFade = Вульпканин (Градиент)
 marking-VulpSnoutSwift = Вульпканин (Скулы)
+marking-VulpSnoutMuzzle = Морда 2
+marking-VulpSnoutMuzzleAlt = Морда 3
 
 # Head
 
@@ -164,6 +166,9 @@ marking-VulpPointsSharpHandLeft-points_sharp-hand-l = Острые
 marking-VulpPointsSharpArmRight-points_sharp-arm-r = Острые
 marking-VulpPointsSharpLongArmRight-points_sharp-arm-long-r = Длинные острые
 marking-VulpPointsSharpHandRight-points_sharp-hand-r = Острые
+marking-VulpPointsCrestArms = Метка
+marking-VulpPointsFadeArms = Переход
+marking-VulpPointsSharpArms = Острые
 
 # Legs
 
@@ -195,6 +200,9 @@ marking-VulpPointsSharpLegLeft-points_sharp-leg-l = Острые
 marking-VulpPointsSharpFootLeft-points_sharp-foot-l = Острые
 marking-VulpPointsSharpLegRight-points_sharp-leg-r = Острые
 marking-VulpPointsSharpFootRight-points_sharp-foot-r = Острые
+marking-VulpPointsCrestLegs = Метка
+marking-VulpPointsFadeLegs = Переход
+marking-VulpPointsSharpLegs = Острые
 
 # Hair
 
@@ -227,3 +235,8 @@ marking-VulpFacialHairElder = Старец
 marking-VulpFacialHairElderChin = Старец (Подбородок)
 marking-VulpFacialHairKita = Кита
 marking-VulpFacialHairGoatee = Борода (Козлиная на морде)
+
+# Overlay
+
+marking-VulpPointsFeet = Окрас (ступни)
+marking-VulpPointsHands = Окрас (ладони)

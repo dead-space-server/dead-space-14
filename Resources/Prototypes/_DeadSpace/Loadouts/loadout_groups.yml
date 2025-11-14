@@ -250,6 +250,8 @@
   - EmergencyNonBreather
   - EmergencyRobotNonBreather
   - LoadoutSpeciesEVANitrogen
+  - EmergencyBeerBrigmedic
+  - EmergencyMothBrigmedic
 
 - type: loadoutGroup
   id: BrigmedicSocks
