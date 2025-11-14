@@ -1,0 +1,84 @@
+- type: entity
+  abstract: true
+  parent: BaseObjective
+  id: BaseArmutantObjective
+  components:
+  - type: Objective
+    issuer: objective-issuer-armutant
+    difficulty: 2
+
+- type: entity
+  parent: [BaseArmutantObjective, BaseStealObjective]
+  id: StealArtiefactArmutantObjective
+  components:
+  - type: StealCondition
+    verifyMapExistence: false
+    stealGroup: ArtiefactArmutantObjectiveTrue
+    objectiveNoOwnerText: steal-owner-artiefact-armutant
+    descriptionText: steal-target-groups-artiefact-armutant
+  - type: Objective
+    difficulty: 1
+
+- type: stealTargetGroup
+  id: ArtiefactArmutantObjectiveTrue
+  name: steal-target-groups-artiefact-armutant
+  sprite:
+    sprite: _DeadSpace/Armutant/artefact.rsi
+    state: icon_true
+
+- type: entity
+  parent: [BaseArmutantObjective, BaseKeepAliveObjective]
+  id: ProtectedRandomPersonObjective
+  components:
+  - type: Objective
+    difficulty: 0.5
+    unique: false
+    icon:
+      sprite: Effects/hearts.rsi
+      state: hearts
+  - type: TargetObjective
+    title: objective-alive-person-armutant-title
+  - type: PickRandomPerson
+    filters:
+    - !type:BlacklistedJobsMindFilter
+      blacklist:
+      - Passenger
+      - TaipanAtmosTech
+      - TaipanBotanist
+      - TaipanCargotech
+      - TaipanChef
+      - TaipanMedic
+      - TaipanRD
+      - TaipanScience
+      - TaipanTelecommunicationsOfficer
+
+- type: entity
+  parent: [BaseArmutantObjective, BaseKillObjective]
+  id: KillOneTryRandomPersonObjective
+  components:
+  - type: Objective
+    difficulty: 0.5
+    icon:
+      sprite: Objects/Misc/books.rsi
+      state: icon_eye
+    unique: false
+  - type: TargetObjective
+    title: objective-kill-person-armutant-title
+  - type: PickRandomPerson
+    filters:
+    - !type:TargetObjectiveMindFilter
+      blacklist:
+        components:
+        - KillPersonCondition
+    - !type:BlacklistedJobsMindFilter
+      blacklist:
+      - Passenger
+      - TaipanAtmosTech
+      - TaipanBotanist
+      - TaipanCargotech
+      - TaipanChef
+      - TaipanMedic
+      - TaipanRD
+      - TaipanScience
+      - TaipanTelecommunicationsOfficer
+  - type: KillPersonCondition

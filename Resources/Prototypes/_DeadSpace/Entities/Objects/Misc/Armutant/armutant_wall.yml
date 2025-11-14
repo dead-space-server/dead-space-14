@@ -1,0 +1,121 @@
+- type: entity
+  parent: BaseWall
+  id: WallRockChromiteUndestructe
+  name: хромитовая стена
+  suffix: indestructible
+  components:
+    - type: Tag
+      tags:
+        - Wall
+    - type: Sprite
+      sprite: Structures/Walls/rock.rsi
+      layers:
+        - state: rock_chromite
+        - map: [ "enum.EdgeLayer.South" ]
+          state: rock_chromite_south
+        - map: [ "enum.EdgeLayer.East" ]
+          state: rock_chromite_east
+        - map: [ "enum.EdgeLayer.North" ]
+          state: rock_chromite_north
+        - map: [ "enum.EdgeLayer.West" ]
+          state: rock_chromite_west
+    - type: Icon
+      sprite: Structures/Walls/rock.rsi
+      state: rock_chromite
+    - type: IconSmooth
+      key: walls
+      mode: NoSprite
+
+- type: entity
+  parent: BaseWall
+  id: WallRockSnowUndestructe
+  name: снежная скала
+  suffix: indestructible
+  components:
+    - type: Tag
+      tags:
+        - Wall
+    - type: Icon
+      sprite: Structures/Walls/rock.rsi
+      state: rock_snow
+    - type: Sprite
+      sprite: Structures/Walls/rock.rsi
+      layers:
+        - state: rock_snow
+        - map: [ "enum.EdgeLayer.South" ]
+          state: rock_snow_south
+        - map: [ "enum.EdgeLayer.East" ]
+          state: rock_snow_east
+        - map: [ "enum.EdgeLayer.North" ]
+          state: rock_snow_north
+        - map: [ "enum.EdgeLayer.West" ]
+          state: rock_snow_west
+    - type: IconSmooth
+      key: walls
+      mode: NoSprite
+
+- type: entity
+  id: VoidStatue
+  parent: BaseStructure
+  name: статуя воина
+  description: |
+    Перед вами высокая статуя
+    Вы видите неизвестного вам воина
+    Возможно он как-то связан с этим местом
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Armutant/void_statue.rsi
+      state: void_statue
+      drawdepth: Mobs
+      noRot: true
+      offset: "0.0,0.5"
+
+- type: entity
+  id: CursehHeartStatue
+  parent: BaseStructure
+  name: насос пустоты
+  description: |
+    Перед вами большая и пульсирующая структура
+    Возможно оно живое
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Armutant/cursed_heart.rsi
+      state: cursed_heart
+      drawdepth: Mobs
+      noRot: true
+      offset: "0.0,0.5"
+
+- type: entity
+  id: VoidLightStructure
+  parent: BaseStructure
+  name: фонарь пустоты
+  description: |
+    Фонарь, излучающий фиолетовое свечение
+    Кажется оно может светить вечно
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Armutant/void_light.rsi
+      state: void_light
+      drawdepth: Mobs
+    - type: PointLight
+      radius: 5
+      energy: 2
+      softness: 0.9
+      color: "#9052bc"
+
+- type: entity
+  parent: SeatBase
+  id: BenchVoidStructure
+  name: скамейка из гладкого камня
+  description: |
+    Скамейка из гладкого темно-зеленого материала
+    От нее веет холодом
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Armutant/void_bench.rsi
+      state: full
+    - type: Transform
+      anchored: false
+    - type: Rotatable
+    - type: Physics
+      bodyType: Static

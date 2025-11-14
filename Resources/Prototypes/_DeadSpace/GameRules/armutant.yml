@@ -1,0 +1,35 @@
+- type: entity
+  parent: BaseGameRule
+  id: Armutant
+  components:
+  - type: ArmutantRule
+  - type: AntagObjectives
+    objectives:
+    - StealArtiefactArmutantObjective
+    - KillOneTryRandomPersonObjective
+    - ProtectedRandomPersonObjective
+  - type: AntagLoadProfileRule
+    speciesOverrideBlacklist:
+    - Xenomorph
+    - IPC
+    - IPS
+  - type: AntagSelection
+    agentName: armutant-round-end-agent-name
+    definitions:
+    - prefRoles: [ Armutant ]
+      max: 1
+      playerRatio: 30
+      lateJoinAdditional: false
+      allowNonHumans: true
+      multiAntagSetting: NotExclusive
+      components:
+      - type: Armutant
+      mindRoles:
+      - MindRoleArmutant
+      briefing:
+        sound: "/Audio/_DeadSpace/Armutant/sound_music_antag_brainwashed.ogg"
+  - type: GameRule
+    minPlayers: 30
+    delay:
+      min: 1
+      max: 3

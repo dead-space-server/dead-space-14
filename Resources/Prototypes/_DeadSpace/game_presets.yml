@@ -228,3 +228,20 @@
   - SpaceTrafficControlEventScheduler
   - BasicRoundstartVariation
   - SubGamemodesRule # DS14
+
+- type: gamePreset
+  id: ArmutantAndTraitors
+  alias:
+    - armutantandtraitors
+  name: armutant-and-traitors-title
+  description: armutant-and-traitor-description
+  showInVote: true
+  showInAdminVote: true # DS14
+  voteType: rdm # DS14
+  rules:
+    - WageScheduler # backmen: currency
+    - Armutant
+    - Traitor
+    - BasicStationEventScheduler
+    - BasicRoundstartVariation
+    - SubGamemodesRule

@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-4.0",
+  "copyright": "Taker from TGstation https://github.com/tgstation/tgstation/blob/91a7e8e4c158ee9949fe5b0769931b78ec61abeb/icons/obj/weapons/guns/projectiles_impact.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {"name": "hand", "delays": [[0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]]}
+  ]
+}

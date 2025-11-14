@@ -1,0 +1,6 @@
+- type: soundCollection
+  id: ArmutantVoid
+  files:
+  - /Audio/_DeadSpace/Armutant/ambient_sound_void.ogg
+  - /Audio/_DeadSpace/Armutant/ambient_sound_void_2.ogg
+  - /Audio/_DeadSpace/Armutant/ambient_sound_void_3.ogg
