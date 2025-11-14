@@ -48,7 +48,7 @@ public sealed class ZombieBlobSystem : EntitySystem
     private static readonly ProtoId<TagPrototype> CannotSuicideTag = "CannotSuicide";
     private static readonly ProtoId<TagPrototype> BlobTag = "BlobMob";
     private static readonly ProtoId<NpcFactionPrototype> BlobFaction = "Blob";
-    private static readonly ProtoId<LanguagePrototype> BlobLanguage = "BlobLanguage";
+    private static readonly ProtoId<LanguagePrototype> BlobLanguage = "BlobLanguage"; // DS14
 
     private readonly GasMixture _normalAtmos;
 
