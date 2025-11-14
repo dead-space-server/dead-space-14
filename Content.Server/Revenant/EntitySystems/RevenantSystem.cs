@@ -139,10 +139,12 @@ public sealed partial class RevenantSystem : EntitySystem
 
         if (component.Essence <= 0)
         {
+            //DS-14-start
             if (_mind.TryGetMind(uid, out var mindId, out var mind))
                 if (mind.IsVisitingEntity)
                     _mind.UnVisit(mindId, mind);
-            
+            //DS-14-end
+
             Spawn(component.SpawnOnDeathPrototype, Transform(uid).Coordinates);
             QueueDel(uid);
         }

@@ -116,7 +116,8 @@ public sealed partial class RevenantComponent : Component
     public float DefileEffectChance = 0.5f;
     #endregion
 
-    #region Beam Fire Ability
+    //DS14-starta
+    #region Beam Fire Ability  
     /// <summary>
     /// The amount of essence that is needed to use the ability.
     /// </summary>
@@ -134,6 +135,7 @@ public sealed partial class RevenantComponent : Component
     [DataField(customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
     public string BeamEntityId = "LightningRevenant";
     #endregion
+    //DS14-end
 
     #region Blight Ability
     /// <summary>
@@ -192,6 +194,7 @@ public sealed partial class RevenantComponent : Component
     public EntityWhitelist? MalfunctionBlacklist;
     #endregion
 
+    //DS14-start
     #region Sleep Ability 
     [DataField]
     public FixedPoint2 SleepCost = 30;
@@ -212,6 +215,7 @@ public sealed partial class RevenantComponent : Component
     [DataField]
     public string Container = "MindCaptureRevenant";
     #endregion
+    //DS14-end
     [DataField]
     public ProtoId<AlertPrototype> EssenceAlert = "Essence";
 

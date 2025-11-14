@@ -50,7 +50,7 @@
   - !type:ListingLimitedStockCondition
     stock: 1
 
-# DS-14-start
+#DS14-start
 
 - type: listing
   id: RevenantBeamFire
@@ -71,11 +71,11 @@
   description: revenant-mindcapture-desc
   productAction: ActionRevenantMindCapture
   cost:
-    StolenEssence: 140
+    StolenEssence: 200
   categories:
   - RevenantAbilities
   conditions:
   - !type:ListingLimitedStockCondition
     stock: 1
 
-# DS-14-end
+#DS14-end

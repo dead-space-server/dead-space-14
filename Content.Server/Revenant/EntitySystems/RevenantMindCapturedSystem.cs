@@ -1,3 +1,5 @@
+// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+
 using Content.Server.Revenant.Components;
 using Content.Server.Ghost;
 using Content.Shared.Mind;
@@ -10,6 +12,7 @@ using Content.Shared.Corvax.TTS;
 using Content.Shared.Mind.Components;
 using Content.Shared.DeadSpace.Languages.Components;
 using Robust.Shared.Containers;
+using Content.Shared.Mobs;
 
 namespace Content.Server.Revenant.EntitySystems;
 
@@ -42,7 +45,7 @@ public sealed class RevenantMindCapturedSystem : EntitySystem
                 RemCompDeferred(uid, comp);
             }
 
-            if (HasComp<MobStateComponent>(uid) && _mobState.IsDead(uid))
+            if (HasComp<MobStateComponent>(uid) && (_mobState.IsDead(uid) || _mobState.IsCritical(uid)))
             {
                 EndCapture(uid, comp);
                 RemCompDeferred(uid, comp);
@@ -59,6 +62,13 @@ public sealed class RevenantMindCapturedSystem : EntitySystem
     {
         if (!_mind.TryGetMind(comp.RevenantUid, out var mindId, out var mind))
             return;
+
+        if (_mobThresholdSystem.TryGetThresholdForState(uid, MobState.Dead, out var dead))
+            _mobThresholdSystem.SetMobStateThreshold(uid, dead.Value - 200, MobState.Dead);
+
+        if (_mobThresholdSystem.TryGetThresholdForState(uid, MobState.Critical, out var crit))
+            _mobThresholdSystem.SetMobStateThreshold(uid, crit.Value - 200, MobState.Critical);
+
 
         if (_container.IsEntityInContainer(comp.RevenantUid))
             _container.EmptyContainer(comp.RevenantContainer);
@@ -82,6 +92,12 @@ public sealed class RevenantMindCapturedSystem : EntitySystem
 
     private void EndCaptureForce(EntityUid uid, RevenantMindCapturedComponent comp)
     {
+        if (_mobThresholdSystem.TryGetThresholdForState(uid, MobState.Dead, out var dead))
+            _mobThresholdSystem.SetMobStateThreshold(uid, dead.Value - 200, MobState.Dead);
+
+        if (_mobThresholdSystem.TryGetThresholdForState(uid, MobState.Critical, out var crit))
+            _mobThresholdSystem.SetMobStateThreshold(uid, crit.Value - 200, MobState.Critical);
+
         if (_container.IsEntityInContainer(comp.RevenantUid))
             _container.EmptyContainer(comp.RevenantContainer);
 

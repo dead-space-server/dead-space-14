@@ -69,11 +69,13 @@ public sealed partial class RevenantSystem
         SubscribeLocalEvent<RevenantComponent, HarvestEvent>(OnHarvest);
 
         SubscribeLocalEvent<RevenantComponent, RevenantDefileActionEvent>(OnDefileAction);
-        SubscribeLocalEvent<RevenantComponent, RevenantBeamFireActionEvent>(OnBeamFireAction);
+        SubscribeLocalEvent<RevenantComponent, RevenantBeamFireActionEvent>(OnBeamFireAction); //DS14-edit
         SubscribeLocalEvent<RevenantComponent, RevenantBlightActionEvent>(OnBlightAction);
         SubscribeLocalEvent<RevenantComponent, RevenantMalfunctionActionEvent>(OnMalfunctionAction);
+        //DS14-start
         SubscribeLocalEvent<RevenantComponent, RevenantSleepActionEvent>(OnSleepAction);
         SubscribeLocalEvent<RevenantComponent, RevenantMindCaptureActionEvent>(OnMindCaptureAction);
+        //DS-14-end
     }
 
     private void OnInteract(EntityUid uid, RevenantComponent component, UserActivateInWorldEvent args)
@@ -299,20 +301,22 @@ public sealed partial class RevenantSystem
         }
     }
 
-    private void OnBeamFireAction(EntityUid uid, RevenantComponent component, RevenantBeamFireActionEvent args)
+    private void OnBeamFireAction(EntityUid uid, RevenantComponent component, RevenantBeamFireActionEvent args) //DS14-edit
     {
         if (args.Handled)
             return;
 
-        if (!TryUseAbility(uid, component, component.BeamFireCost, component.BeamFireDebuffs))
+        if (!TryUseAbility(uid, component, component.BeamFireCost, component.BeamFireDebuffs)) //DS14-edit
             return;
 
         args.Handled = true;
 
-        if (!HasComp<MobStateComponent>(args.Target) || !_mobState.IsAlive(args.Target))
+        if (!HasComp<MobStateComponent>(args.Target) || !_mobState.IsAlive(args.Target)) //DS14-edit
             return;
 
         var xform = Transform(uid);
+
+        //DS14-start
 
         if (!TryComp<MapGridComponent>(xform.GridUid, out var map))
             return;
@@ -343,6 +347,8 @@ public sealed partial class RevenantSystem
         }
 
         _lightning.ShootLightning(uid, args.Target, component.BeamEntityId);
+
+        //DS14-end
     }
 
     private void OnBlightAction(EntityUid uid, RevenantComponent component, RevenantBlightActionEvent args)
@@ -373,14 +379,17 @@ public sealed partial class RevenantSystem
                 _whitelistSystem.IsBlacklistPass(component.MalfunctionBlacklist, ent))
                 continue;
 
+            //DS14-start
             if (TryComp<IonStormTargetComponent>(ent, out var target) && TryComp<SiliconLawBoundComponent>(ent, out var lawBound))
                 _ionStorm.IonStormTarget((ent, lawBound, target));
+            //DS14-end
 
             _emagSystem.TryEmagEffect(uid, uid, ent);
 
         }
     }
 
+    //DS14-start
     private void OnSleepAction(EntityUid uid, RevenantComponent component, RevenantSleepActionEvent args)
     {
         if (args.Handled)
@@ -411,8 +420,7 @@ public sealed partial class RevenantSystem
         if (!HasComp<MobStateComponent>(args.Target) || !_mobState.IsDead(args.Target))
             return;
 
-        if (!_mobThresholdSystem.TryGetThresholdForState(args.Target, MobState.Alive, out var threshold)
-            || threshold.Value > 400)
+        if (!TryComp<DamageableComponent>(args.Target, out var damageable) || damageable.TotalDamage > 290)
         {
             _popup.PopupEntity(Loc.GetString("revenant-mind-capture-many-damage"), uid);
             return;
@@ -481,4 +489,5 @@ public sealed partial class RevenantSystem
         _container.Insert(uid, comp.RevenantContainer);
         _mind.Visit(perMind, args.Target);
     }
+    //DS14-end
 }
