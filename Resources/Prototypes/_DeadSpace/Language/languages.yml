@@ -127,10 +127,10 @@
 - type: language
   id: BlobLanguage
   name: Блобий
-  icon: /Textures/_DeadSpace/LanguageIcons/vulp.png
+  icon: /Textures/_DeadSpace/LanguageIcons/zombie.png
   generateTTSForLexicon: false
   lexiconSound:
-    collection: DogLexicon
+    collection: ZombieScreams
   lexicon:
   - ГавБлимп!
   - БлимпафТяв!
