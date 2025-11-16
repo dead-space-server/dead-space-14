@@ -217,6 +217,13 @@
   - type: ConditionalSpawner
     prototypes:
     - MobMonkeyPunpun
+  - type: Language
+    knownLanguages:
+    - GeneralLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage
 
 - type: entity
   parent: MarkerBase
