@@ -71,6 +71,12 @@
   id: EncryptionTaipan
 
 - type: Tag
+  id: FlamethrowerBackTank
+
+- type: Tag
+  id: FlamethrowerNozzle
+
+- type: Tag
   id: FelinidFood
 
 - type: Tag
