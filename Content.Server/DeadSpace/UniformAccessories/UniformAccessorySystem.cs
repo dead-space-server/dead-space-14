@@ -1,4 +1,5 @@
-﻿using Content.Shared.DeadSpace.UniformAccessories;
+﻿using System.Linq;
+using Content.Shared.DeadSpace.UniformAccessories;
 using Content.Shared.DeadSpace.UniformAccessories.Components;
 using Content.Shared.Examine;
 using Robust.Shared.Containers;
@@ -28,9 +29,11 @@ public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
             return;
 
         var coordinates = transform.Coordinates;
-        foreach (var accessory in container.ContainedEntities)
+        var accessories = container.ContainedEntities.ToArray();
+
+        foreach (var accessory in accessories)
         {
-            if (_container.Remove(accessory, container))
+            if (_container.Remove(accessory, container, reparent: false))
             {
                 if (TryComp<TransformComponent>(accessory, out var accessoryTransform))
                     accessoryTransform.Coordinates = coordinates;
