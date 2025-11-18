@@ -11,6 +11,7 @@ using Content.Shared.CCVar;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Database;
+using Content.Shared.DeadSpace.AghostColor;
 using Content.Shared.Examine;
 using Content.Shared.Eye;
 using Content.Shared.FixedPoint;
@@ -37,6 +38,8 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Content.Server.Administration.Managers;
+using Content.Server.Preferences.Managers;
 
 namespace Content.Server.Ghost
 {
@@ -67,6 +70,10 @@ namespace Content.Server.Ghost
         [Dependency] private readonly IRobustRandom _random = default!;
         [Dependency] private readonly TagSystem _tag = default!;
         [Dependency] private readonly NameModifierSystem _nameMod = default!;
+        // DS14-start
+        [Dependency] private readonly IAdminManager _adminManager = default!;
+        [Dependency] private readonly IServerPreferencesManager _preferencesManager = default!;
+        // DS14-end
 
         private EntityQuery<GhostComponent> _ghostQuery;
         private EntityQuery<PhysicsComponent> _physicsQuery;
@@ -106,6 +113,8 @@ namespace Content.Server.Ghost
             SubscribeLocalEvent<ToggleGhostVisibilityToAllEvent>(OnToggleGhostVisibilityToAll);
 
             SubscribeLocalEvent<GhostComponent, GetVisMaskEvent>(OnGhostVis);
+
+            SubscribeLocalEvent<GhostComponent, PlayerAttachedEvent>(OnPlayerAttached); // DS14
         }
 
         private void OnGhostVis(Entity<GhostComponent> ent, ref GetVisMaskEvent args)
@@ -609,6 +618,21 @@ namespace Content.Server.Ghost
 
             return true;
         }
+        // DS14-start GhostColoring
+        public void OnPlayerAttached(EntityUid uid, GhostComponent component, PlayerAttachedEvent args)
+        {
+            var session = args.Player;
+
+            if (!_adminManager.IsAdmin(session))
+                return;
+
+            var prefs = _preferencesManager.GetPreferences(session.UserId);
+            var colorOverride = prefs.AdminOOCColor;
+            component.Color = colorOverride;
+
+            Dirty(uid, component);
+        }
+        // DS14-end
     }
 
     public sealed class GhostAttemptHandleEvent(MindComponent mind, bool canReturnGlobal) : HandledEntityEventArgs
