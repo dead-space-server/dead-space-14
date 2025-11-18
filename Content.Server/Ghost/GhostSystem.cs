@@ -11,7 +11,6 @@ using Content.Shared.CCVar;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Database;
-using Content.Shared.DeadSpace.AghostColor;
 using Content.Shared.Examine;
 using Content.Shared.Eye;
 using Content.Shared.FixedPoint;
