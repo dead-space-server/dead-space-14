@@ -379,8 +379,8 @@
       0: Alive
       90: Dead
   - type: MovementSpeedModifier
-    baseWalkSpeed: 2.5
-    baseSprintSpeed: 2.5
+    baseWalkSpeed: 2.7
+    baseSprintSpeed: 2.7
   - type: GhostRole
     allowMovement: true
     allowSpeech: true
@@ -426,7 +426,7 @@
   - type: TargetAction
     range: 10
   - type: WorldTargetAction
-    event: !type:GoliathSummonTentacleAction { entityId: DemonTentacle }
+    event: !type:DemonSummonTentacleAction { entityId: DemonTentacle }
 
 - type: entity
   id: DemonTentacle
@@ -437,6 +437,7 @@
     sprite: _DeadSpace/Demons/tentacle.rsi
     layers:
     - state: demon_tentacle_wiggle
+      scale: 1.3, 1.3
   - type: StunOnContact
     blacklist:
       tags:
@@ -469,6 +470,7 @@
   components:
     - type: Sprite
       state: demon_tentacle_spawn
+      scale: 1.3, 1.3
     - type: SpawnOnDespawn
       prototype: DemonTentacle
 
@@ -479,6 +481,7 @@
   components:
   - type: Sprite
     state: demon_tentacle_retract
+    scale: 1.3, 1.3
   - type: EffectVisuals
   - type: AnimationPlayer
 
