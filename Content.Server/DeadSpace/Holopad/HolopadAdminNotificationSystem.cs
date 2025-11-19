@@ -30,7 +30,7 @@ public sealed class HolopadAdminNotificationSystem: EntitySystem
     {
         if (_tagSystem.HasTag(args.Receiver, HolopadAdminNotificationTag))
         {
-            string userName = "неизвестный игрок";
+            string userName = Loc.GetString("holopad-unknown-player");
 
             if (args.User != null && TryComp<MetaDataComponent>(args.User, out var meta))
             {
