@@ -81,7 +81,7 @@ namespace Content.Server.Atmos.Piping.Trinary.EntitySystems
                 var limitMolesFilter = (pressureDeltaFilter * filterNode.Air.Volume) / (removed.Temperature * Atmospherics.R);
 
                 var availableMoles = removed.GetMoles(filter.FilteredGas.Value);
-                var filteredMoles = Math.Max(Math.Min(limitMolesFilter, availableMoles), 0);
+                var filteredMoles = Math.Min(limitMolesFilter, availableMoles);
 
                 filterNode.Air.AdjustMoles(filter.FilteredGas.Value, filteredMoles);
                 removed.SetMoles(filter.FilteredGas.Value, 0f);

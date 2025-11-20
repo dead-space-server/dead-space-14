@@ -55,7 +55,7 @@ namespace Content.Server.Atmos.Piping.Binary.EntitySystems
 
             // DS14-start
             // Pump mechanism won't do anything if the pressure is too high/too low unless you overclock it.
-            if (!pump.Overclocked && (inputStartingPressure <= pump.LowerThreshold || outputStartingPressure >= pump.HigherThreshold))
+            if ((inputStartingPressure <= pump.LowerThreshold) || (outputStartingPressure >= pump.HigherThreshold) && !pump.Overclocked)
             {
                 pump.Blocked = true;
             }
@@ -79,9 +79,10 @@ namespace Content.Server.Atmos.Piping.Binary.EntitySystems
 
             var pressureDelta = pump.HigherThreshold - outputStartingPressure;
             var limitMoles = (pressureDelta * outlet.Air.Volume) / (inlet.Air.Temperature * Atmospherics.R);
-            var limitRatio = Math.Max(0f, limitMoles / inlet.Air.TotalMoles);
 
-            var removedRatio = Math.Clamp(Math.Min(transferRatio, limitRatio), 0f, 1f);
+            var limitRatio = limitMoles / inlet.Air.TotalMoles;
+
+            var removedRatio = Math.Min(transferRatio, limitRatio);
             var removed = inlet.Air.RemoveRatio(removedRatio);
             // DS14-end
             // Some of the gas from the mixture leaks when overclocked.
