@@ -4,6 +4,8 @@
   name: Shop
   description: Opens the ability shop.
 
+#DS14-start
+
 #- type: entity
 #  parent: BaseAction
 #  id: ActionRevenantDefile
@@ -39,6 +41,8 @@
 #    useDelay: 20
 #  - type: InstantAction
 #    event: !type:RevenantBlightActionEvent
+
+#DS14-end
 
 - type: entity
   parent: BaseAction
