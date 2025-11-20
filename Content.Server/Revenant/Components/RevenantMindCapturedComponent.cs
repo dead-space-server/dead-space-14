@@ -3,6 +3,7 @@
 using Robust.Shared.Prototypes;
 using Content.Shared.DeadSpace.Languages.Prototypes;
 using Robust.Shared.Containers;
+using Content.Shared.FixedPoint;
 
 namespace Content.Server.Revenant.Components;
 
@@ -37,4 +38,10 @@ public sealed partial class RevenantMindCapturedComponent : Component
 
     [ViewVariables(VVAccess.ReadOnly)]
     public BaseContainer RevenantContainer = default!;
+
+    [ViewVariables(VVAccess.ReadOnly)]
+    public FixedPoint2 CritThreshold = default!;
+
+    [ViewVariables(VVAccess.ReadOnly)]
+    public FixedPoint2 DeadThreshold = default!;
 }

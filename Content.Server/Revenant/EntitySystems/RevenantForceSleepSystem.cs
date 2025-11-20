@@ -35,10 +35,10 @@ public sealed class RevenantForcedSleepSystem : EntitySystem
         {
             comp.Accumulator += frameTime;
 
-            if (comp.Accumulator >= comp.StageDelay)
+            if (comp.Accumulator >= comp.PopupDelay)
             {
                 _popup.PopupEntity(Loc.GetString("revenant-sleep-stage"), uid, uid, PopupType.Medium);
-                comp.StageDelay += 10f;
+                comp.PopupDelay += comp.PopupStep;
             }
 
             if (comp.Accumulator < comp.SleepDelay)

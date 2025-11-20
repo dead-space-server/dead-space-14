@@ -14,8 +14,11 @@ public sealed partial class RevenantForcedSleepComponent : Component
     [ViewVariables(VVAccess.ReadWrite)]
     public float SleepDelay = 30f;
 
+    [ViewVariables(VVAccess.ReadOnly)]
+    public float PopupDelay = 10f;
+
     [ViewVariables(VVAccess.ReadWrite)]
-    public float StageDelay = 10f;
+    public float PopupStep = 10f;
 
     [ViewVariables(VVAccess.ReadWrite)]
     public Vector2 DurationOfSleep = new Vector2(5, 10);

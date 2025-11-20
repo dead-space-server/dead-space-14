@@ -222,6 +222,9 @@ public sealed partial class RevenantComponent : Component
 
     [DataField]
     public string Container = "MindCaptureRevenant";
+
+    [DataField]
+    public float HpShift = 0.5f;
     #endregion
 
     #region Beam Fire Ability

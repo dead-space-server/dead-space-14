@@ -406,7 +406,10 @@ public sealed partial class RevenantSystem
         if (!HasComp<MobStateComponent>(args.Target) || !_mobState.IsDead(args.Target))
             return;
 
-        if (!TryComp<DamageableComponent>(args.Target, out var damageable) || damageable.TotalDamage > 290)
+        if (!TryComp<DamageableComponent>(args.Target, out var damageable)
+        || !_mobThresholdSystem.TryGetThresholdForState(args.Target, MobState.Critical, out var crit)
+        || !_mobThresholdSystem.TryGetThresholdForState(args.Target, MobState.Dead, out var dead)
+        || damageable.TotalDamage > dead.Value * (1 / component.HpShift))
         {
             _popup.PopupEntity(Loc.GetString("revenant-mind-capture-many-damage"), uid);
             return;
@@ -420,17 +423,17 @@ public sealed partial class RevenantSystem
 
         args.Handled = true;
 
-        if (_mobThresholdSystem.TryGetThresholdForState(args.Target, MobState.Dead, out var dead))
-            _mobThresholdSystem.SetMobStateThreshold(args.Target, dead.Value + 200, MobState.Dead);
-
-        if (_mobThresholdSystem.TryGetThresholdForState(args.Target, MobState.Critical, out var crit))
-            _mobThresholdSystem.SetMobStateThreshold(args.Target, crit.Value + 200, MobState.Critical);
-
-        _mobState.ChangeMobState(args.Target, MobState.Alive);
-
         // Component on target, don`t confuse with revenant comp.
         var comp = new RevenantMindCapturedComponent(uid);
         AddComp(args.Target, comp);
+
+        comp.DeadThreshold = dead.Value;
+        comp.DeadThreshold = crit.Value;
+        _mobThresholdSystem.SetMobStateThreshold(args.Target, dead.Value * (1 / component.HpShift), MobState.Dead);
+        _mobThresholdSystem.SetMobStateThreshold(args.Target, crit.Value * (1 / component.HpShift), MobState.Critical);
+
+        _mobState.ChangeMobState(args.Target, MobState.Alive);
+
         if (TryComp<LanguageComponent>(args.Target, out var targetLanguage) && TryComp<LanguageComponent>(uid, out var revLanguage))
         {
             comp.ReturnCantSpeakLanguages = targetLanguage.CantSpeakLanguages;
