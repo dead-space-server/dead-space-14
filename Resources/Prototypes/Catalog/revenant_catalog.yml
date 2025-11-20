@@ -1,3 +1,4 @@
+#DS14-edit-start
 #- type: listing
 #  id: RevenantDefile
 #  name: revenant-defile-name
@@ -36,6 +37,7 @@
 #  conditions:
 #  - !type:ListingLimitedStockCondition
 #    stock: 1
+#DS14-edit-end
 
 - type: listing
   id: RevenantMalfunction

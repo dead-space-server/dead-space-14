@@ -40,6 +40,7 @@ using Content.Shared.Ghost;
 using Robust.Shared.Containers;
 
 using Content.Shared.DeadSpace.Languages.Components;
+using Content.Shared.Beam.Components;
 
 namespace Content.Server.Revenant.EntitySystems;
 
@@ -69,12 +70,13 @@ public sealed partial class RevenantSystem
         SubscribeLocalEvent<RevenantComponent, HarvestEvent>(OnHarvest);
 
         SubscribeLocalEvent<RevenantComponent, RevenantDefileActionEvent>(OnDefileAction);
-        SubscribeLocalEvent<RevenantComponent, RevenantBeamFireActionEvent>(OnBeamFireAction); //DS14-edit
+        SubscribeLocalEvent<RevenantComponent, RevenantOverloadLightsActionEvent>(OnOverloadLightsAction);
         SubscribeLocalEvent<RevenantComponent, RevenantBlightActionEvent>(OnBlightAction);
         SubscribeLocalEvent<RevenantComponent, RevenantMalfunctionActionEvent>(OnMalfunctionAction);
         //DS14-start
         SubscribeLocalEvent<RevenantComponent, RevenantSleepActionEvent>(OnSleepAction);
         SubscribeLocalEvent<RevenantComponent, RevenantMindCaptureActionEvent>(OnMindCaptureAction);
+        SubscribeLocalEvent<RevenantComponent, RevenantBeamFireActionEvent>(OnBeamFireAction);
         //DS-14-end
     }
 
@@ -166,7 +168,7 @@ public sealed partial class RevenantSystem
             return;
         }
 
-        if (_physics.GetEntitiesIntersectingBody(uid, (int)CollisionGroup.Impassable).Count > 0)
+        if(_physics.GetEntitiesIntersectingBody(uid, (int) CollisionGroup.Impassable).Count > 0)
         {
             _popup.PopupEntity(Loc.GetString("revenant-in-solid"), uid, uid);
             return;
@@ -301,54 +303,39 @@ public sealed partial class RevenantSystem
         }
     }
 
-    private void OnBeamFireAction(EntityUid uid, RevenantComponent component, RevenantBeamFireActionEvent args) //DS14-edit
+    private void OnOverloadLightsAction(EntityUid uid, RevenantComponent component, RevenantOverloadLightsActionEvent args)
     {
         if (args.Handled)
             return;
 
-        if (!TryUseAbility(uid, component, component.BeamFireCost, component.BeamFireDebuffs)) //DS14-edit
+        if (!TryUseAbility(uid, component, component.OverloadCost, component.OverloadDebuffs))
             return;
 
         args.Handled = true;
 
-        if (!HasComp<MobStateComponent>(args.Target) || !_mobState.IsAlive(args.Target)) //DS14-edit
-            return;
-
         var xform = Transform(uid);
-
-        //DS14-start
-
-        if (!TryComp<MapGridComponent>(xform.GridUid, out var map))
-            return;
-
-        var tiles = _mapSystem.GetTilesIntersecting(
-            xform.GridUid.Value,
-            map,
-            Box2.CenteredAround(_transformSystem.GetWorldPosition(xform),
-            new Vector2(component.DefileRadius * 2, component.DefileRadius)))
-            .ToArray();
-
-        _random.Shuffle(tiles);
-
-        for (var i = 0; i < component.DefileTilePryAmount; i++)
-        {
-            if (!tiles.TryGetValue(i, out var value))
-                continue;
-            _tile.PryTile(value);
-        }
-
         var poweredLights = GetEntityQuery<PoweredLightComponent>();
-        var lookup = _lookup.GetEntitiesInRange(uid, component.DefileRadius, LookupFlags.Approximate | LookupFlags.Static);
-
+        var mobState = GetEntityQuery<MobStateComponent>();
+        var lookup = _lookup.GetEntitiesInRange(uid, component.OverloadRadius);
+        //TODO: feels like this might be a sin and a half
         foreach (var ent in lookup)
         {
-            if (poweredLights.HasComponent(ent))
-                _ghost.DoGhostBooEvent(ent);
+            if (!mobState.HasComponent(ent) || !_mobState.IsAlive(ent))
+                continue;
+
+            var nearbyLights = _lookup.GetEntitiesInRange(ent, component.OverloadZapRadius)
+                .Where(e => poweredLights.HasComponent(e) && !HasComp<RevenantOverloadedLightsComponent>(e) &&
+                            _interact.InRangeUnobstructed(e, uid, -1)).ToArray();
+
+            if (!nearbyLights.Any())
+                continue;
+
+            //get the closest light
+            var allLight = nearbyLights.OrderBy(e =>
+                Transform(e).Coordinates.TryDistance(EntityManager, xform.Coordinates, out var dist) ? component.OverloadZapRadius : dist);
+            var comp = EnsureComp<RevenantOverloadedLightsComponent>(allLight.First());
+            comp.Target = ent; //who they gon fire at?
         }
-
-        _lightning.ShootLightning(uid, args.Target, component.BeamEntityId);
-
-        //DS14-end
     }
 
     private void OnBlightAction(EntityUid uid, RevenantComponent component, RevenantBlightActionEvent args)
@@ -385,7 +372,6 @@ public sealed partial class RevenantSystem
             //DS14-end
 
             _emagSystem.TryEmagEffect(uid, uid, ent);
-
         }
     }
 
@@ -488,6 +474,52 @@ public sealed partial class RevenantSystem
         comp.RevenantContainer = _container.EnsureContainer<Container>(args.Target, component.Container);
         _container.Insert(uid, comp.RevenantContainer);
         _mind.Visit(perMind, args.Target);
+    }
+
+    private void OnBeamFireAction(EntityUid uid, RevenantComponent component, RevenantBeamFireActionEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        if (!TryUseAbility(uid, component, component.BeamFireCost, component.BeamFireDebuffs))
+            return;
+
+        args.Handled = true;
+
+        if (!HasComp<MobStateComponent>(args.Target) || !_mobState.IsAlive(args.Target))
+            return;
+
+        var xform = Transform(uid);
+
+        if (!TryComp<MapGridComponent>(xform.GridUid, out var map))
+            return;
+
+        var tiles = _mapSystem.GetTilesIntersecting(
+            xform.GridUid.Value,
+            map,
+            Box2.CenteredAround(_transformSystem.GetWorldPosition(xform),
+            new Vector2(component.DefileRadius * 2, component.DefileRadius)))
+            .ToArray();
+
+        _random.Shuffle(tiles);
+
+        for (var i = 0; i < component.DefileTilePryAmount; i++)
+        {
+            if (!tiles.TryGetValue(i, out var value))
+                continue;
+            _tile.PryTile(value);
+        }
+
+        var poweredLights = GetEntityQuery<PoweredLightComponent>();
+        var lookup = _lookup.GetEntitiesInRange(uid, component.DefileRadius, LookupFlags.Approximate | LookupFlags.Static);
+
+        foreach (var ent in lookup)
+        {
+            if (poweredLights.HasComponent(ent))
+                _ghost.DoGhostBooEvent(ent);
+        }
+
+        _lightning.ShootLightning(uid, args.Target, component.BeamEntityId);
     }
     //DS14-end
 }

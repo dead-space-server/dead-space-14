@@ -116,26 +116,33 @@ public sealed partial class RevenantComponent : Component
     public float DefileEffectChance = 0.5f;
     #endregion
 
-    //DS14-starta
-    #region Beam Fire Ability  
+    #region Overload Lights Ability
     /// <summary>
     /// The amount of essence that is needed to use the ability.
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("beamFireCost")]
-    public FixedPoint2 BeamFireCost = 40;
+    [ViewVariables(VVAccess.ReadWrite), DataField("overloadCost")]
+    public FixedPoint2 OverloadCost = 40;
 
     /// <summary>
     /// The status effects applied after the ability
     /// the first float corresponds to amount of time the entity is stunned.
     /// the second corresponds to the amount of time the entity is made solid.
     /// </summary>
-    [DataField("beamFireDebuffs")]
-    public Vector2 BeamFireDebuffs = new(2, 6);
+    [DataField("overloadDebuffs")]
+    public Vector2 OverloadDebuffs = new(3, 8);
 
-    [DataField(customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string BeamEntityId = "LightningRevenant";
+    /// <summary>
+    /// The radius around the user that this ability affects
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite), DataField("overloadRadius")]
+    public float OverloadRadius = 5f;
+
+    /// <summary>
+    /// How close to the light the entity has to be in order to be zapped.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite), DataField("overloadZapRadius")]
+    public float OverloadZapRadius = 2f;
     #endregion
-    //DS14-end
 
     #region Blight Ability
     /// <summary>
@@ -195,6 +202,7 @@ public sealed partial class RevenantComponent : Component
     #endregion
 
     //DS14-start
+
     #region Sleep Ability 
     [DataField]
     public FixedPoint2 SleepCost = 30;
@@ -215,7 +223,20 @@ public sealed partial class RevenantComponent : Component
     [DataField]
     public string Container = "MindCaptureRevenant";
     #endregion
+
+    #region Beam Fire Ability
+    [DataField]
+    public FixedPoint2 BeamFireCost = 40;
+
+    [DataField]
+    public Vector2 BeamFireDebuffs = new(2, 6);
+
+    [DataField(customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    public string BeamEntityId = "LightningRevenant";
+    #endregion
+
     //DS14-end
+
     [DataField]
     public ProtoId<AlertPrototype> EssenceAlert = "Essence";
 
