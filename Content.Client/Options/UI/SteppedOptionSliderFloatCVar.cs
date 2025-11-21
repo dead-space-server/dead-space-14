@@ -2,7 +2,7 @@ using Robust.Shared.Configuration;
 
 namespace Content.Client.Options.UI;
 
-// Это изменения МК
+// Это код МК
 public sealed class SteppedOptionSliderFloatCVar : BaseOptionCVar<float>
 {
     public float Scale { get; }
