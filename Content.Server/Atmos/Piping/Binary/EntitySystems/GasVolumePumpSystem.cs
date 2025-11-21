@@ -53,7 +53,7 @@ namespace Content.Server.Atmos.Piping.Binary.EntitySystems
             var previouslyBlocked = pump.Blocked;
             pump.Blocked = false;
 
-            // DS14-start
+            // DS14-start: based on https://github.com/space-wizards/space-station-14/pull/35211
             // Pump mechanism won't do anything if the pressure is too high/too low unless you overclock it.
             if ((inputStartingPressure <= pump.LowerThreshold) || (outputStartingPressure >= pump.HigherThreshold) && !pump.Overclocked)
             {
@@ -72,7 +72,7 @@ namespace Content.Server.Atmos.Piping.Binary.EntitySystems
             if (pump.Blocked)
                 return;
 
-            // DS14-start
+            // DS14-start: based on https://github.com/space-wizards/space-station-14/pull/35211
             // We multiply the transfer rate in L/s by the seconds passed since the last process to get the liters.
             var transferVol = pump.TransferRate * _atmosphereSystem.PumpSpeedup() * args.dt;
             var transferRatio = transferVol / inlet.Air.Volume;

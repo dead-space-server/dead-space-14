@@ -55,7 +55,7 @@ namespace Content.Server.Atmos.Piping.Trinary.EntitySystems
         {
             if (!filter.Enabled
                 || !_nodeContainer.TryGetNodes(uid, filter.InletName, filter.FilterName, filter.OutletName, out PipeNode? inletNode, out PipeNode? filterNode, out PipeNode? outletNode)
-                // DS14-start
+                // DS14-start: based on https://github.com/space-wizards/space-station-14/pull/35211
                 || (outletNode.Air.Pressure >= Atmospherics.MaxOutputPressure && filterNode.Air.Pressure >= Atmospherics.MaxOutputPressure)) // No need to transfer if target is full.
                 // DS14-end
             {
@@ -76,7 +76,7 @@ namespace Content.Server.Atmos.Piping.Trinary.EntitySystems
 
             if (filter.FilteredGas.HasValue)
             {
-                // DS14-start
+                // DS14-start: based on https://github.com/space-wizards/space-station-14/pull/35211
                 var pressureDeltaFilter = Atmospherics.MaxOutputPressure - filterNode.Air.Pressure;
                 var limitMolesFilter = (pressureDeltaFilter * filterNode.Air.Volume) / (removed.Temperature * Atmospherics.R);
 
@@ -116,7 +116,7 @@ namespace Content.Server.Atmos.Piping.Trinary.EntitySystems
             if (args.Handled || !args.Complex)
                 return;
 
-            // DS14-start
+            // DS14-start: based on https://github.com/space-wizards/space-station-14/pull/35211
             if (!EntityManager.TryGetComponent(args.User, out ActorComponent? actor))
                 return;
 
