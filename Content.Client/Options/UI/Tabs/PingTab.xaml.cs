@@ -22,7 +22,7 @@ public sealed partial class PingTab : Control
     {
         CheckBox newCheckBox = new CheckBox() { Text = checkBoxName }; //Loc.GetString(checkBoxName) };
         newCheckBox.Pressed = savedSelection;
-        newCheckBox.OnToggled += lol =>
+        newCheckBox.OnToggled += _ =>
         {
             _isSaveNeeded = true;
             _helper.SetValueAccess(id, newCheckBox.Pressed);

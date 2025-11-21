@@ -8,37 +8,44 @@ using Content.Shared.DeadSpace.CCCCVars;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.GameObjects;
-
+using Robust.Shared.Log;
+using Robust.Shared.Timing;
 
 namespace Content.Client.DeadSpace.NotifySystem.RecievNotify;
 
-public sealed partial class ReceiveNotifySys : EntitySystem
+public sealed partial class ReceiveNotifySystem : EntitySystem
 {
+    [Dependency] private readonly ILogManager _logManager = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     //public SoundSpecifier SoundNotify = new SoundPathSpecifier("/Audio/Effects/adminhelp.ogg");
 
     private readonly NotifyHelper _helper = NotifyHelperProvider.Helper;
+    private ISawmill _sawmill = default!;
 
-    private DateTime _lastNotifyTime = DateTime.MinValue;
+    private TimeSpan _lastNotifyTime;
 
 
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeNetworkEvent<PingMessage>(CheckReceiveddNotify);
+        _sawmill = _logManager.GetSawmill("ReceiveNotifySystem");
+        _lastNotifyTime = _timing.RealTime;
+        SubscribeNetworkEvent<PingMessage>(CheckReceivedNotify);
         _helper.EnsureInitialized(_cfg, _prototypeManager);
     }
 
-    private void CheckReceiveddNotify(PingMessage messege)
+    private void CheckReceivedNotify(PingMessage messege)
     {
         if (_cfg.GetCVar(CCCCVars.SysNotifyPerm) && _helper.GetValueAccess(messege.ID))
         {
-            if (DateTime.Now - _lastNotifyTime >= TimeSpan.FromSeconds(_cfg.GetCVar(CCCCVars.SysNotifyCoolDown)))
+            if (_timing.RealTime - _lastNotifyTime >= TimeSpan.FromSeconds(_cfg.GetCVar(CCCCVars.SysNotifyCoolDown)))
             {
                 _audio.PlayGlobal(new SoundPathSpecifier(_cfg.GetCVar(CCCCVars.SysNotifySoundPath)), Filter.Local(), false);
-                _lastNotifyTime = DateTime.Now;
+                _lastNotifyTime = _timing.RealTime;
             }
         }
     }

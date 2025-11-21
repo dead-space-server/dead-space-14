@@ -5,6 +5,7 @@ using Content.Shared.DeadSpace.GhostRoleNotify.Prototypes;
 using Robust.Shared.Prototypes;
 using System.Collections.ObjectModel;
 using System.Collections.Concurrent;
+using Robust.Shared.Log;
 
 namespace Content.Client.DeadSpace.NotifySystem.NotifyHelpers;
 
@@ -12,6 +13,8 @@ public sealed class NotifyHelper
 {
     private ConcurrentDictionary<string, bool> DictCvar = new ConcurrentDictionary<string, bool>();
     private ConcurrentDictionary<string, bool> DictAccess = new ConcurrentDictionary<string, bool>();
+
+    private ISawmill _sawmill = default!;
 
     public bool GetValueAccess(string key)
     {
@@ -39,7 +42,7 @@ public sealed class NotifyHelper
 
         if (parts.Length % 2 != 0)
         {
-            Logger.Debug($"Нечётное количество элементов в строке '{input}'.");
+            _sawmill.Debug($"Нечётное количество элементов в строке '{input}'.");
             return result;
         }
 

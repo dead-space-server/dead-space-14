@@ -23,7 +23,7 @@ namespace Content.Client.Options.UI
             // DS14-Start
             Tabs.SetTabTitle(5, Loc.GetString("ui-options-tab-ping"));
             Tabs.SetTabTitle(6, Loc.GetString("ui-options-tab-admin"));
-            //DS14-end
+            // DS14-end
 
             UpdateTabs();
         }
