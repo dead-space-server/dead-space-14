@@ -24,12 +24,20 @@ public sealed partial class GraphicsTab : Control
         Control.AddOption(new OptionFullscreen(Control, _cfg, FullscreenCheckBox));
         Control.AddOption(new OptionLightingQuality(Control, _cfg, DropDownLightingQuality));
 
-        Control.AddOptionPercentSlider(
+        #region изменения МК
+
+        Control.AddOptionSliderWithStep(
             CVars.DisplayUIScale,
             UIScaleSlider,
-            0.75f,
-            2.0f,
-            scale: 1.0f);
+            75f,    // minValue: 75%
+            200f,   // maxValue: 200%  
+            scale: 0.01f,  // 1 единица слайдера = 1% (0.01 в CVar)
+            step: 5f,      // Шаг 5%
+            format: (cvar, value) => $"{value:F0}%");
+
+        ResetUIScaleButton.OnPressed += OnResetUIScalePressed;
+
+        #endregion
 
         Control.AddOptionDropDown(
             CCVars.ViewportScalingFilterMode,
@@ -71,6 +79,30 @@ public sealed partial class GraphicsTab : Control
         UpdateViewportWidthRange();
         UpdateViewportSettingsVisibility();
     }
+
+    #region изменения МК
+
+    private void OnResetUIScalePressed(BaseButton.ButtonEventArgs obj)
+    {
+        _cfg.SetCVar(CVars.DisplayUIScale, 0f);
+        UpdateUISliderToAuto();
+    }
+
+    private void UpdateUISliderToAuto()
+    {
+         // Получаем текущий автоматический масштаб для отображения
+        float currentAutoScale = UserInterfaceManager.DefaultUIScale;
+        float displayPercent = currentAutoScale * 100f;
+
+        var roundedPercent = MathF.Round(displayPercent / 5f) * 5f;
+
+        roundedPercent = Math.Clamp(displayPercent, 75f, 200f);
+
+        UIScaleSlider.Slider.Value = roundedPercent;
+        UIScaleSlider.ValueLabel.Text = $"{roundedPercent:F0}% (Auto)";
+    }
+
+    #endregion
 
     private void UpdateViewportSettingsVisibility()
     {
