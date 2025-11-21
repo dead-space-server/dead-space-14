@@ -34,7 +34,7 @@ public sealed partial class AlcoTesterSystem : EntitySystem
 
         if (!HasComp<BloodstreamComponent>(target))
         {
-            _popup.PopupEntity("Нет биологического образца для сканирования.", uid, args.User);
+            _popup.PopupEntity(Loc.GetString("alco-tester-no-biological-sample"), uid, args.User);
             return;
         }
 
@@ -48,11 +48,8 @@ public sealed partial class AlcoTesterSystem : EntitySystem
             BreakOnMove = true,
             BreakOnDamage = true,
         };
-
         if (_doAfter.TryStartDoAfter(doAfterArgs))
         {
-            _popup.PopupEntity("Начинается сканирование...", uid, args.User);
-            args.Handled = true;
         }
     }
 
@@ -63,7 +60,7 @@ public sealed partial class AlcoTesterSystem : EntitySystem
 
         if (!TryComp<BloodstreamComponent>(target, out var bloodstream))
         {
-            _popup.PopupEntity("Нет биологического образца (крови).", uid, ev.User);
+            _popup.PopupEntity(Loc.GetString("alco-tester-no-blood-sample"), uid, ev.User);
             return;
         }
 
@@ -71,7 +68,7 @@ public sealed partial class AlcoTesterSystem : EntitySystem
         if (!_solutions.ResolveSolution(target, bloodstream.ChemicalSolutionName,
             ref solEnt, out var solution))
         {
-            _popup.PopupEntity("Химический раствор не найден.", uid, ev.User);
+            _popup.PopupEntity(Loc.GetString("alco-tester-chemical-solution-not-found"), uid, ev.User);
             return;
         }
 
@@ -85,8 +82,8 @@ public sealed partial class AlcoTesterSystem : EntitySystem
             _ => "Сильное опьянение!"
         };
 
-        var message = $"Этанол: {ethanol:0.###} ед. | {verdict}";
-        _popup.PopupEntity(message, uid, ev.User);
+        var ethanolStr = ethanol.ToString("0.###");
+        _popup.PopupEntity(Loc.GetString("alco-tester-result", ("ethanol", ethanolStr), ("verdict", verdict)), uid, ev.User);
         ev.Handled = true;
     }
 }

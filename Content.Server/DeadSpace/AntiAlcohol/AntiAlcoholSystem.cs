@@ -15,7 +15,6 @@ public sealed class AntiAlcoholSystem : EntitySystem
     [Dependency] private readonly VomitSystem _vomit = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-
     public override void Initialize()
     {
         base.Initialize();
@@ -31,28 +30,34 @@ public sealed class AntiAlcoholSystem : EntitySystem
         if (!TryComp(reagentArgs.TargetEntity, out AntiAlcoholWatcherComponent? watcher))
             return;
 
-        if (reagentArgs.Reagent is not { } reagent)
-            return;
-
-        if (reagentArgs.Source is not { } solution)
+        if (reagentArgs.Reagent is not { } reagent || reagentArgs.Source is not { } solution)
             return;
 
         var reagentId = reagent.ID;
         var ethanolAmount = solution.GetTotalPrototypeQuantity(reagentId);
         var threshold = FixedPoint2.New(watcher.Threshold);
-        if (ethanolAmount <= FixedPoint2.Zero || ethanolAmount < threshold)
+        if (ethanolAmount < threshold)
             return;
 
-        reagentArgs.Scale = FixedPoint2.Zero;
-        solution.RemoveReagent(reagentId, ethanolAmount);
-
-        if (_timing.CurTime < watcher.NextAllowedVomitAt)
+        if (_timing.CurTime < watcher.NextAllowedVomitAt || !_random.Prob(watcher.Probability))
             return;
 
-        if (!_random.Prob(watcher.Probability))
-            return;
-
-        _vomit.Vomit(reagentArgs.TargetEntity);
         watcher.NextAllowedVomitAt = _timing.CurTime + TimeSpan.FromSeconds(watcher.CooldownSeconds);
+        var target = reagentArgs.TargetEntity;
+        var delay = TimeSpan.FromSeconds(0.5);
+        Timer.Spawn(delay, () =>
+        {
+            try
+            {
+                if (Deleted(target))
+                    return;
+
+                _vomit.Vomit(target);
+            }
+            catch (Exception e)
+            {
+                Logger.WarningS("anti_alcohol", $"Failed to force vomit on entity {target}: {e}");
+            }
+        });
     }
 }
