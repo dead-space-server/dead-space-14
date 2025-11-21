@@ -90,7 +90,6 @@ public sealed partial class GraphicsTab : Control
 
     private void UpdateUISliderToAuto()
     {
-        // Получаем текущий автоматический масштаб для отображения
         float currentAutoScale = UserInterfaceManager.DefaultUIScale;
         float displayPercent = currentAutoScale * 100f;
 
