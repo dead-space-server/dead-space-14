@@ -16,24 +16,6 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-atmospherics-engineer
     description: job-description-taipan-atmospherics-engineer
@@ -70,24 +52,6 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-botanist
     description: job-description-taipan-botanist
@@ -121,24 +85,6 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-cargotech
     description: job-description-taipan-cargotech
@@ -169,24 +115,6 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-chef
     description: job-description-taipan-chef
@@ -223,24 +151,6 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-communications-officer
     description: job-description-taipan-communications-officer
@@ -274,24 +184,6 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-medic
     description: job-description-taipan-medic
@@ -325,24 +217,6 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-paramedic
     description: job-description-taipan-paramedic
@@ -373,24 +247,6 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-recruit
     description: job-description-taipan-recruit
@@ -421,24 +277,6 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-research-director
     description: job-description-taipan-research-director
@@ -475,24 +313,6 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-researcher
     description: job-description-taipan-researcher
@@ -526,24 +346,6 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-technician
     description: job-description-taipan-technician
@@ -574,24 +376,6 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-technical-supervisor
     description: job-description-taipan-technical-supervisor
