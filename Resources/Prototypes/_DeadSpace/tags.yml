@@ -50,6 +50,9 @@
   id: CompactDefibrillator
 
 - type: Tag
+  id: Coroner
+
+- type: Tag
   id: DeathNettle
 
 - type: Tag
@@ -147,6 +150,9 @@
 
 - type: Tag
   id: NoodlesCopy
+
+- type: Tag
+  id: Paramedic
 
 - type: Tag
   id: PistolCobra
