@@ -18,7 +18,8 @@
 
                 <!-- Interface -->
                 <Label Text="{Loc 'ui-options-interface-label'}" StyleClasses="LabelKeyText"/>
-                <ui:OptionSlider Name="UIScaleSlider" Title="{Loc 'ui-options-scale-label'}" />
+                <ui:OptionSlider Name="UIScaleSlider" Title="{Loc 'ui-options-scale-label'}"/>
+                <Button Name="ResetUIScaleButton" Text="{Loc 'ui-options-reset-scale'}"/>
                 <CheckBox Name="ViewportStretchCheckBox" Text="{Loc 'ui-options-vp-stretch'}" />
                 <ui:OptionSlider Name="ViewportScaleSlider" Title="{Loc ui-options-vp-scale}" />
                 <ui:OptionSlider Name="ViewportWidthSlider" Title="{Loc ui-options-vp-width}" />
