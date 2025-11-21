@@ -30,7 +30,7 @@ public partial class ChatBox : UIWidget
 
     public ChatSelectChannel SelectedChannel => ChatInput.ChannelSelector.SelectedChannel;
 
-    public readonly Queue<RepeatedMessage> RepeatQueue = new(); // RMC15
+    public readonly Queue<RepeatedMessage> RepeatQueue = new(); // RMC14
     public ChatBox()
     {
         RobustXamlLoader.Load(this);
