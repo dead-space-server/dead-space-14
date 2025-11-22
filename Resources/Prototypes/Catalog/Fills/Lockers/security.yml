@@ -126,6 +126,7 @@
     - id: ClothingHeadHelmetSecurityMedic
     - id: ClothingOuterVestArmorMedSec
     - id: ClothingOuterVestSecurityMedic
+    - id: ClothingEyesHudMedSecAdvanced
     - id: ClothingOuterCoatLabSecurityMedic
       prob: 0.1
     - id: MedkitFilled
