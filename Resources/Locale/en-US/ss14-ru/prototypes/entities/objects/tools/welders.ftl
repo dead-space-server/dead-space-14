@@ -8,3 +8,5 @@ ent-WelderExperimental = experimental welding tool
     .desc = An experimental welder capable of self-fuel generation and less harmful to the eyes.
 ent-WelderMini = emergency welding tool
     .desc = A miniature welder used during emergencies.
+ent-RefuelingWelder = refueling welding tool
+    .desc = A slow welder that can refuel itself over time.

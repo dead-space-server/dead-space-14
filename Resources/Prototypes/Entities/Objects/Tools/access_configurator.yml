@@ -53,6 +53,8 @@
       - Theatre
       - Maintenance
       - External
+      - GenpopEnter
+      - GenpopLeave
       privilegedIdSlot:
         name: id-card-console-privileged-id
         ejectSound: /Audio/Machines/id_swipe.ogg
@@ -74,6 +76,7 @@
       requiresComplex: true
       requireActiveHand: false
       singleUser: true
+      inHandsOnly: true
     - type: ItemSlots
     - type: ContainerContainer
       containers:
@@ -126,6 +129,8 @@
     - Theatre
     - Maintenance
     - External
+    - GenpopEnter
+    - GenpopLeave
     - CentralCommand
     - NuclearOperative
     - SyndicateAgent
@@ -135,8 +140,26 @@
     - AccessReserved1
     - AccessReserved2
     - AccessReserved3
+    - Xenoborg
+# DS14-start
+    - TaipanArmory
+    - TaipanAtmospherics
+    - TaipanCargo
+    - TaipanCommand
+    - TaipanCommunicationsOfficer
+    - TaipanEngineering
+    - TaipanMaint
+    - TaipanMedical
+    - TaipanProtection
+    - TaipanResearchDirector
+    - TaipanResearch
+    - TaipanService
+    - TaipanTechnicalOperationsSupervisor
+    - TaipanExternal
+# DS14-end
     privilegedIdSlot:
       name: id-card-console-privileged-id
+      startingItem: UniversalIDCard
       ejectSound: /Audio/Machines/id_swipe.ogg
       insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
       ejectOnBreak: true

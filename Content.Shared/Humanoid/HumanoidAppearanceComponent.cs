@@ -1,4 +1,4 @@
-using Content.Shared.Corvax.TTS;
+using Content.Shared.DisplacementMap;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Inventory;
@@ -7,6 +7,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
+using Content.Shared.Corvax.TTS;
 
 namespace Content.Shared.Humanoid;
 
@@ -105,14 +106,20 @@ public sealed partial class HumanoidAppearanceComponent : Component
     [DataField]
     public HashSet<HumanoidVisualLayers> HideLayersOnEquip = [HumanoidVisualLayers.Hair];
 
+    // /// <summary>
+    // ///     Which markings the humanoid defaults to when nudity is toggled off.
+    // /// </summary>
+    // [DataField]
+    // public ProtoId<MarkingPrototype>? UndergarmentTop = new ProtoId<MarkingPrototype>("UndergarmentTopTanktop");
+
+    // [DataField]
+    // public ProtoId<MarkingPrototype>? UndergarmentBottom = new ProtoId<MarkingPrototype>("UndergarmentBottomBoxers");
+
     /// <summary>
-    ///     Which markings the humanoid defaults to when nudity is toggled off.
+    ///     The displacement maps that will be applied to specific layers of the humanoid.
     /// </summary>
     [DataField]
-    public ProtoId<MarkingPrototype>? UndergarmentTop = new ProtoId<MarkingPrototype>("UndergarmentTopTanktop");
-
-    [DataField]
-    public ProtoId<MarkingPrototype>? UndergarmentBottom = new ProtoId<MarkingPrototype>("UndergarmentBottomBoxers");
+    public Dictionary<HumanoidVisualLayers, DisplacementData> MarkingsDisplacement = new();
 }
 
 [DataDefinition]

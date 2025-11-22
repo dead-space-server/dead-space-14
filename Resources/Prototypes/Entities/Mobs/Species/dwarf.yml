@@ -17,9 +17,7 @@
     damageRecovery:
       types:
         Asphyxiation: -1.0
-  - type: Sprite
-    noRot: true
-    drawdepth: Mobs
+  - type: ScaleVisuals
     scale: 1, 0.8
   - type: Body
     prototype: Dwarf
@@ -64,16 +62,23 @@
             sprite: Mobs/Species/Human/displacement.rsi
             state: jumpsuit-female
   - type: Sanity # DS14
-  - type: FootPrints # Backmen-footsteps
-    leftBarePrint: "footprint-left-bare-dwarf"
-    rightBarePrint: "footprint-right-bare-dwarf"
+  # DS14-Languages-start
+  - type: Language
+    selectedLanguage: GeneralLanguage
+    knownLanguages:
+    - GeneralLanguage
+  # DS14-Languages-end
+  # - type: FootPrints # Backmen-footsteps
+    # leftBarePrint: "footprint-left-bare-dwarf"
+    # rightBarePrint: "footprint-right-bare-dwarf"
+
 
 - type: entity
   parent: BaseSpeciesDummy
   id: MobDwarfDummy
   categories: [ HideSpawnMenu ]
   components:
-  - type: Sprite
+  - type: ScaleVisuals
     scale: 1, 0.8
   - type: Inventory
     femaleDisplacements:

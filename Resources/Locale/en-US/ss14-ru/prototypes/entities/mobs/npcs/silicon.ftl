@@ -1,5 +1,7 @@
-ent-MobSiliconBase = { "" }
-    .desc = { "" }
+ent-MobRobotic = { ent-BaseMob }
+    .desc = { ent-BaseMob.desc }
+ent-MobSiliconBase = { ent-MobRobotic }
+    .desc = { ent-MobRobotic.desc }
 ent-MobFireBot = firebot
     .desc = A little fire extinguishing bot. He looks rather anxious.
 ent-MobHonkBot = honkbot
@@ -14,3 +16,5 @@ ent-MobMimeBot = mimebot
     .desc = Why not give the mimebot a friendly wave?
 ent-MobSupplyBot = supplybot
     .desc = Delivers cargo!
+ent-MobHugBot = hugbot
+    .desc = Awww, who needs a hug?

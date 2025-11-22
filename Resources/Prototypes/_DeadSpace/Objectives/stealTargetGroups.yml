@@ -1,13 +1,13 @@
 - type: stealTargetGroup
-  id: AnimalPoly
-  name: steal-target-groups-animal-poly
-  sprite:
-    sprite: Mobs/Animals/parrot.rsi
-    state: parrot
-
-- type: stealTargetGroup
   id: PortableCameraMonitor
   name: steal-target-groups-portable-camera-monitor
   sprite:
     sprite: _DeadSpace/Objects/Devices/portable_camera_monitor.rsi
+    state: icon
+
+- type: stealTargetGroup
+  id: WeaponSeniorKinetik
+  name: steal-target-groups-seniorpka
+  sprite:
+    sprite: _DeadSpace/Objects/Weapons/Guns/Basic/seniorpka.rsi
     state: icon

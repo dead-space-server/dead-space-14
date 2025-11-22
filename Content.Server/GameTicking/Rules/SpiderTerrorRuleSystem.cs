@@ -6,7 +6,6 @@ using Content.Server.DeadSpace.Spiders.SpiderTerror.Components;
 using Content.Shared.Mind;
 using Content.Shared.Objectives.Systems;
 using Content.Server.Nuke;
-using Content.Server.Station.Components;
 using Robust.Shared.Audio;
 using Content.Shared.Audio;
 using Content.Server.Station.Systems;
@@ -20,6 +19,10 @@ using Content.Server.Chat.Managers;
 using Content.Server.DeadSpace.Spiders.SpideRoyalGuard.Components;
 using Content.Server.Voting.Managers;
 using Content.Shared.Voting;
+using Content.Shared.Humanoid;
+using Robust.Shared.Player;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Station.Components;
 
 namespace Content.Server.GameTicking.Rules;
 
@@ -35,14 +38,10 @@ public sealed class SpiderTerrorRuleSystem : GameRuleSystem<SpiderTerrorRuleComp
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly IChatManager _chatManager = default!;
     [Dependency] private readonly IVoteManager _voteManager = default!;
-
-    private const int SpidersBreeding = 30;
-    private const int SpidersNukeCode = 55;
     private const float ProgressBreeding = 0.45f;
     private const float ProgressNukeCode = 0.7f;
     private const float ProgressCaptureStation = 0.98f;
-
-    private bool voteSend = false;
+    private bool _voteSend = false;
 
     public override void Initialize()
     {
@@ -56,7 +55,7 @@ public sealed class SpiderTerrorRuleSystem : GameRuleSystem<SpiderTerrorRuleComp
     {
         base.Started(uid, component, gameRule, args);
 
-        voteSend = true;
+        _voteSend = true;
         component.UpdateUtil = _timing.CurTime + component.UpdateDuration;
         component.TimeUtilStartRule = _timing.CurTime + component.DurationStartRule;
     }
@@ -181,13 +180,16 @@ public sealed class SpiderTerrorRuleSystem : GameRuleSystem<SpiderTerrorRuleComp
                 _chatManager.SendAdminAnnouncement(msgTimeErt);
             }
 
+            var spidersCount = GetSpiders(uid, stationUid, component);
+            var peopleCount = GetPeople(uid, stationUid, component);
+
             // Применяем логику в зависимости от стадии и прогресса
-            if (progress >= ProgressBreeding || spiders >= SpidersBreeding)
+            if (progress >= ProgressBreeding || (peopleCount != null && spidersCount != null && peopleCount / spidersCount < component.PeopleOnSpidersBreeding))
             {
                 Breeding(uid, stationUid); // Стадия захвата
             }
 
-            if (progress >= ProgressNukeCode || spiders >= SpidersNukeCode)
+            if (progress >= ProgressNukeCode || (peopleCount != null && spidersCount != null && peopleCount / spidersCount < component.PeopleOnSpidersNukeCode))
             {
                 NuclearCode(uid, stationUid); // Стадия кодов
             }
@@ -260,11 +262,11 @@ public sealed class SpiderTerrorRuleSystem : GameRuleSystem<SpiderTerrorRuleComp
                 Capture(uid, station);
         }
 
-        if (GetSpiderKings() <= 0 && !voteSend)
+        if (GetSpiderKings() <= 0 && !_voteSend)
         {
             _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("spider-terror-centcomm-announcement-spider-kings"), playSound: true, colorOverride: Color.Green);
             _voteManager.CreateStandardVote(null, StandardVoteType.Restart);
-            voteSend = true;
+            _voteSend = true;
         }
 
         if (component.IsBreedingActive(station))
@@ -388,9 +390,9 @@ public sealed class SpiderTerrorRuleSystem : GameRuleSystem<SpiderTerrorRuleComp
             if (mind == null)
                 continue;
 
-            foreach (var objId in mind.AllObjectives)
+            foreach (var objId in mind.Objectives)
             {
-                if (!HasComp<SpiderTerrorConditionsComponent>(objId))
+                if (!HasComp<SpiderTerrorConditionComponent>(objId))
                     continue;
 
                 var result = _objectives.GetProgress(objId, (mindId, mind));
@@ -403,5 +405,46 @@ public sealed class SpiderTerrorRuleSystem : GameRuleSystem<SpiderTerrorRuleComp
         }
 
         return (progress ?? 0f, spiderCount);
+    }
+
+    private float? GetPeople(EntityUid uid, EntityUid stationUid, SpiderTerrorRuleComponent? component = null)
+    {
+        if (!Resolve(uid, ref component))
+            return null;
+
+        float result = 0;
+        var query = EntityQueryEnumerator<HumanoidAppearanceComponent, ActorComponent, MobStateComponent>();
+
+
+        while (query.MoveNext(out var ent, out _, out _, out var state))
+        {
+            var xform = Transform(ent);
+            var station = _station.GetStationInMap(xform.MapID);
+
+            if (!_mobState.IsDead(ent, state) && station == stationUid)
+                result++;
+        }
+
+        return result;
+    }
+
+    private float? GetSpiders(EntityUid uid, EntityUid stationUid, SpiderTerrorRuleComponent? component = null)
+    {
+        if (!Resolve(uid, ref component))
+            return null;
+
+        float result = 0;
+        var query = EntityQueryEnumerator<SpiderTerrorComponent, MobStateComponent>();
+
+        while (query.MoveNext(out var ent, out _, out var state))
+        {
+            var xform = Transform(ent);
+            var station = _station.GetStationInMap(xform.MapID);
+
+            if (!_mobState.IsDead(ent, state) && station == stationUid)
+                result++;
+        }
+
+        return result;
     }
 }

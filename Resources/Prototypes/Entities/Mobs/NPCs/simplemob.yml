@@ -4,7 +4,6 @@
   - BaseMob
   - MobDamageable
   - MobPolymorphable
-  - MobAtmosExposed
   id: BaseSimpleMob
   suffix: AI
   abstract: true
@@ -20,28 +19,27 @@
     baseSprintSpeed : 4
   - type: StatusEffects
     allowed:
-    - SlowedDown
-    - Stutter
     - Electrocution
-    - ForcedSleep
     - TemporaryBlindness
     - Pacified
     - Flashed
     - RadiationProtection
-    - Drowsiness
     - Adrenaline
   - type: Buckle
   - type: StandingState
   - type: Tag
     tags:
     - DoorBumpOpener
+    - StunImmune
   - type: Sanity # DS14
   - type: ExamineBlood # DS14
+  - type: Language # DS14
 
 - type: entity
   abstract: true
   parent:
   - BaseSimpleMob
+  - MobAtmosExposed
   - MobCombat
   - MobBloodstream
   - MobFlammable
@@ -69,8 +67,6 @@
   - type: MobPrice
     price: 1000 # Living critters are valuable in space.
   - type: Perishable
-  - type: Sanity # DS14
-  - type: ExamineBlood # DS14
 
 - type: entity
   parent:
@@ -99,23 +95,17 @@
     baseDecayRate: 0.04
   - type: StatusEffects
     allowed:
-    - Stun
-    - KnockedDown
-    - SlowedDown
-    - Stutter
+    - SeeingRainbows # DS14
+    - Drunk # DS14
     - Electrocution
-    - ForcedSleep
     - TemporaryBlindness
     - Pacified
     - StaminaModifier
     - Flashed
     - RadiationProtection
-    - Drowsiness
     - Adrenaline
   - type: Bloodstream
     bloodMaxVolume: 150
   - type: MobPrice
     price: 150
   - type: FloatingVisuals
-  - type: Sanity # DS14
-  - type: ExamineBlood # DS14

@@ -6,7 +6,10 @@
   requirements:
     - !type:RoleTimeRequirement
       role: JobSecurityOfficer
-      time: 36000 # 10 hours
+      time: 5h
+    - !type:DepartmentTimeRequirement
+      department: Security
+      time: 10h
   weight: 5
   startingGear: WardenGear
   icon: "JobIconWarden"
@@ -14,7 +17,7 @@
   canBeAntag: false
   access:
   - Security
-  - Brigmedic
+  - Brigmedic # DS14
   - Brig
   - Armory
   - Maintenance
@@ -43,3 +46,17 @@
     - Flash
     - HyperLinkBookCorporateLaw
     - HyperLinkBookSOPSecurity
+
+- type: chameleonOutfit
+  id: WardenChameleonOutfit
+  job: Warden
+  hasMindShield: true
+  equipment:
+    head: ClothingHeadHatWarden
+    mask: ClothingMaskGasSecurity
+    outerClothing: ClothingOuterCoatWarden
+    jumpsuit: ClothingUniformJumpsuitWarden
+    neck: Dinkystar
+    belt: ClothingBeltSecurity
+    gloves: ClothingHandsGlovesCombat
+    shoes: ClothingShoesBootsJack

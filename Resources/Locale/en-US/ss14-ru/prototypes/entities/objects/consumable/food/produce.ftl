@@ -1,5 +1,7 @@
 ent-ProduceBase = { ent-BaseItem }
     .desc = { ent-BaseItem.desc }
+ent-ProduceBaseRuminant = { ent-ProduceBase }
+    .desc = { ent-ProduceBase.desc }
 ent-FoodProduceBase = { ent-FoodInjectableBase }
     .desc = { ent-FoodInjectableBase.desc }
 ent-WheatBushel = wheat bushel
@@ -157,3 +159,5 @@ ent-TrashCherryPit = cherry pit
     .desc = { ent-FoodInjectableBase.desc }
 ent-FoodAnomalyBerry = anomaly berry
     .desc = A strange blue fruit. Something about it doesn't seem right.
+ent-FoodBloonion = bloonion bulb
+    .desc = A strange floating bulb.. Nothing worth crying over.

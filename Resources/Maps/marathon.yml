@@ -91,9 +91,7 @@ entities:
     - type: Transform
     - type: Map
       mapPaused: True
-    - type: PhysicsMap
     - type: GridTree
-    - type: MovedGrids
     - type: Broadphase
     - type: OccluderTree
   - uid: 2
@@ -8200,50 +8198,6 @@ entities:
     - type: Transform
       pos: -19.109173,-35.42625
       parent: 2
-- proto: ActionToggleBlock
-  entities:
-  - uid: 12
-    components:
-    - type: Transform
-      parent: 11
-    - type: InstantAction
-      container: 11
-- proto: ActionToggleInternals
-  entities:
-  - uid: 15
-    components:
-    - type: Transform
-      parent: 14
-    - type: InstantAction
-      container: 14
-- proto: ActionToggleJetpack
-  entities:
-  - uid: 16
-    components:
-    - type: Transform
-      parent: 14
-    - type: InstantAction
-      container: 14
-- proto: ActionToggleLight
-  entities:
-  - uid: 18
-    components:
-    - type: Transform
-      parent: 17
-    - type: InstantAction
-      container: 17
-  - uid: 20
-    components:
-    - type: Transform
-      parent: 19
-    - type: InstantAction
-      container: 19
-  - uid: 23042
-    components:
-    - type: Transform
-      parent: 23041
-    - type: InstantAction
-      container: 23041
 - proto: AirAlarm
   entities:
   - uid: 21
@@ -67890,20 +67844,6 @@ entities:
     - type: Transform
       pos: 2.4978046,0.6471896
       parent: 23040
-    - type: HandheldLight
-      toggleActionEntity: 23042
-    - type: ContainerContainer
-      containers:
-        cell_slot: !type:ContainerSlot
-          showEnts: False
-          occludes: True
-          ent: null
-        actions: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 23042
-    - type: ActionsContainer
 - proto: Floodlight
   entities:
   - uid: 10496
@@ -103429,19 +103369,8 @@ entities:
     components:
     - type: Transform
       parent: 13
-    - type: GasTank
-      toggleActionEntity: 15
-    - type: Jetpack
-      toggleActionEntity: 16
     - type: Physics
       canCollide: False
-    - type: ActionsContainer
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          ents:
-          - 16
-          - 15
     - type: InsideEntityStorage
   - uid: 15663
     components:
@@ -103557,22 +103486,8 @@ entities:
     - type: Transform
       pos: -13.95544,-14.276279
       parent: 2
-    - type: HandheldLight
-      toggleActionEntity: 20
-    - type: ContainerContainer
-      containers:
-        cell_slot: !type:ContainerSlot
-          showEnts: False
-          occludes: True
-          ent: null
-        actions: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 20
     - type: Physics
       canCollide: True
-    - type: ActionsContainer
   - uid: 15683
     components:
     - type: Transform
@@ -103627,22 +103542,8 @@ entities:
     - type: Transform
       pos: 2.4391665,31.963726
       parent: 2
-    - type: HandheldLight
-      toggleActionEntity: 18
-    - type: ContainerContainer
-      containers:
-        cell_slot: !type:ContainerSlot
-          showEnts: False
-          occludes: True
-          ent: null
-        actions: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 18
     - type: Physics
       canCollide: True
-    - type: ActionsContainer
   - uid: 15692
     components:
     - type: Transform
@@ -106959,10 +106860,10 @@ entities:
         stampedColor: '#006600FF'
         stampedName: stamp-component-stamped-name-centcom
       content: >-
-        Поздравляем, командование NanoTrasen решило обновить минимальный охранный шаттл службы безопасности станции NT-Raven-GE до версии 08. 
+        Поздравляем, командование NanoTrasen решило обновить минимальный охранный шаттл службы безопасности станции NT-Raven-GE до версии 08.
 
 
-        Обновление добавило атмос-конструкции (очень надеемся, что сотрудник безопасности умеет работать с насосом). 
+        Обновление добавило атмос-конструкции (очень надеемся, что сотрудник безопасности умеет работать с насосом).
 
 
         Так же мы учли недовольства по поводу кнопок, теперь гермозатворы переключает кнопка на консоли управление шаттлом, а в самой консоли управления шаттлом есть кнопка стрельбы пушкой шаттла.
@@ -119436,14 +119337,6 @@ entities:
     - type: Transform
       pos: -39.305992,56.73462
       parent: 2
-    - type: Blocking
-      blockingToggleActionEntity: 12
-    - type: ActionsContainer
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          ents:
-          - 12
 - proto: RiotShield
   entities:
   - uid: 17905
@@ -124099,26 +123992,12 @@ entities:
     - type: Transform
       pos: -16.5,7.5
       parent: 2
-- proto: SpawnMobBandito
-  entities:
-  - uid: 18652
-    components:
-    - type: Transform
-      pos: 26.5,13.5
-      parent: 2
-- proto: SpawnMobCatException
+- proto: SpawnMobCat
   entities:
   - uid: 18653
     components:
     - type: Transform
       pos: -12.5,-15.5
-      parent: 2
-- proto: SpawnMobCatRuntime
-  entities:
-  - uid: 18654
-    components:
-    - type: Transform
-      pos: -14.5,-15.5
       parent: 2
 - proto: SpawnMobCorgi
   entities:
@@ -124126,13 +124005,6 @@ entities:
     components:
     - type: Transform
       pos: 4.5,34.5
-      parent: 2
-- proto: SpawnMobCrabAtmos
-  entities:
-  - uid: 18656
-    components:
-    - type: Transform
-      pos: 17.5,-27.5
       parent: 2
 - proto: SpawnMobFoxRenault
   entities:
@@ -124239,13 +124111,6 @@ entities:
     components:
     - type: Transform
       pos: -57.5,-64.5
-      parent: 2
-- proto: SpawnMobSmile
-  entities:
-  - uid: 18673
-    components:
-    - type: Transform
-      pos: 22.5,12.5
       parent: 2
 - proto: SpawnMobWalter
   entities:

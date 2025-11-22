@@ -20,13 +20,13 @@
     - id: UnknownShuttleMeatZone
     - id: UnknownShuttleMicroshuttle
     - id: UnknownShuttleSpacebus
-    - id: UnknownShuttlePirate # DS14
 
-- type: entityTable
-  id: UnknownShuttlesFreelanceTable
-  table: !type:AllSelector # we need to pass a list of rules, since rules have further restrictions to consider via StationEventComp
-    children:
-    - id: UnknownShuttleSyndieEvacPod
+# DS14: We don't have freelance shuttles
+#- type: entityTable
+#  id: UnknownShuttlesFreelanceTable
+#  table: !type:AllSelector # we need to pass a list of rules, since rules have further restrictions to consider via StationEventComp
+#    children:
+#    - id: UnknownShuttleSyndieEvacPod
 
 - type: entityTable
   id: UnknownShuttlesHostileTable
@@ -35,6 +35,8 @@
     - id: LoneOpsSpawn
     - id: UnknownShuttleManOWar
     - id: UnknownShuttleInstigator
+    - id: UnknownShuttlePirate # DS14
+    - id: UnknownShuttleSyndieEvacPod # DS14
 
 # Shuttle Game Rules
 
@@ -99,8 +101,12 @@
   id: UnknownShuttleSyndieEvacPod
   components:
   - type: StationEvent
-    startAnnouncement: null # It should be silent.
-    weight: 5 # lower because weird freelance roles
+    # DS14-start: now they are antags
+    startAnnouncement: null #dont nark on antags
+    weight: 1 #  lower because antags.
+    earliestStart: 30
+    minimumPlayers: 25
+    # DS14-end
     maxOccurrences: 2 # should be the same as [copies] in shuttle_incoming_event.yml
   - type: LoadMapRule
     preloadedGrid: SyndieEvacPod
@@ -212,8 +218,8 @@
   - type: StationEvent
     startAnnouncement: station-event-unknown-shuttle-incoming #Leaving this one because theyre like primitives and its funnier
     weight: 1 # lower because antags
-    earliestStart: 50 # late to hopefully have enough ghosts to fill all roles quickly. (4) & antags
-    minimumPlayers: 35 # DS14
+    earliestStart: 30 # late to hopefully have enough ghosts to fill all roles quickly. (4) & antags
+    minimumPlayers: 25 # DS14
   - type: LoadMapRule
     preloadedGrid: ManOWar
 
@@ -254,5 +260,8 @@
   components:
   - type: StationEvent
     startAnnouncement: null
+    weight: 1 # lower because antags
+    earliestStart: 40 # late to hopefully have enough ghosts to fill all roles quickly
+    minimumPlayers: 35 # DS14
   - type: LoadMapRule
     preloadedGrid: Pirate

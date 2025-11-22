@@ -11,6 +11,8 @@
   cost: 5000
   recipeUnlocks:
   - WeaponProtoKineticAccelerator
+  - WeaponProtoKineticAcceleratorReapeter # DS14
+  - WeaponProtoKineticAcceleratorShotgun # DS14
   - ShuttleGunKineticCircuitboard
   - BorgModuleMiningWeapon # DS14
   # These are roundstart but not replenishable for salvage
@@ -118,18 +120,8 @@
   - FlashPayload
   - ExplosivePayload
   - ChemicalPayload
-
-- type: technology
-  id: SpecialMeans
-  name: research-technology-special-means
-  icon:
-    sprite: Clothing/Back/Backpacks/electropack.rsi
-    state: icon
-  discipline: Arsenal
-  tier: 1
-  cost: 5000
-  recipeUnlocks:
-  - ClothingBackpackElectropack
+  - CableDetStack1
+  - EmptyDetonator
 
 # Tier 2
 
@@ -157,6 +149,21 @@
   cost: 10000
   recipeUnlocks:
   - WeaponXrayCannon
+  - WeaponIonRifle # DS14
+
+- type: technology
+  id: KineticModifications
+  name: research-technology-kinetic-modifications
+  icon:
+    sprite: Objects/Tools/upgrade.rsi
+    state: display
+  discipline: Arsenal
+  tier: 2
+  cost: 7500
+  recipeUnlocks:
+  - PKAUpgradeDamage
+  - PKAUpgradeRange
+  - PKAUpgradeFireRate
 
 - type: technology
   id: BasicShuttleArmament
@@ -179,8 +186,21 @@
   - ShuttleGunFriendshipCircuitboard
   technologyPrerequisites:
   - SalvageWeapons
-  
+
 # DS14-start
+- type: technology
+  id: SpecialMeans
+  name: research-technology-special-means
+  icon:
+    sprite: Objects/Power/portable_recharger.rsi
+    state: charging
+  discipline: Arsenal
+  tier: 2
+  cost: 10000
+  recipeUnlocks:
+  - PortableRecharger
+  - ClothingBackpackElectropack
+
 - type: technology
   id: NightVisionTechnology
   name: research-technology-night-vision-technology
@@ -193,6 +213,18 @@
   recipeUnlocks:
   - ClothingEyesPNV
 # DS14-end
+
+- type: technology
+  id: DualWieldingTechnology
+  name: research-technology-dual-wielding-technology
+  icon:
+    sprite: Clothing/Back/Specific/harmpack.rsi
+    state: icon
+  discipline: Arsenal
+  tier: 2
+  cost: 10000
+  recipeUnlocks:
+  - ClothingBackpackHarmpack
 
 # Tier 3
 
@@ -207,19 +239,19 @@
   cost: 15000
   recipeUnlocks:
   - WeaponAdvancedLaser
-  - PortableRecharger
+#  - PortableRecharger DS14: Move to SpecialMeans
 
 - type: technology
-  id: ExperimentalBatteryAmmo
-  name: research-technology-experimental-battery-ammo
+  id: ThermalWeaponry
+  name: research-technology-thermal-weaponry
   icon:
-    sprite: Objects/Weapons/Guns/Battery/svalinn.rsi
+    sprite: Objects/Weapons/Guns/Battery/temp_gun.rsi
     state: icon
   discipline: Arsenal
   tier: 3
   cost: 15000
   recipeUnlocks:
-  - WeaponLaserSvalinn
+  - WeaponTemperatureGun
 
 - type: technology
   id: AdvancedShuttleWeapon

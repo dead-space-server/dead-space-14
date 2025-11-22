@@ -4,6 +4,13 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitSecGrey
 
+# DS14-start
+- type: loadout
+  id: SecurityJumpsuitBlue
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitSecBlue
+# DS14-end
+
 - type: loadout
   id: RedJumpskirt
   equipment:
@@ -14,11 +21,6 @@
   id: UnderwearSocksCadet
   equipment:
     socks: ClothingUnderwearSocksCadet
-
-- type: loadout
-  id: UnderwearWomenSocksCadet
-  equipment:
-    socks: ClothingUnderwearWomenSocksCadet
 
 # Underwear
 - type: loadout

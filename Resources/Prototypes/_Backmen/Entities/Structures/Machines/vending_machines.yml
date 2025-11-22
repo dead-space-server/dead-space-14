@@ -3,505 +3,708 @@
   id: BackmenVendingMachineDiscount
   suffix: Backmen, Платный
   components:
-    - type: Store
-      categories:
-        - DiscountDansInventory
-      currencyWhitelist:
-        - SpaceCash
-      balance:
-        SpaceCash: 0
-    - type: BuyStoreBank
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-      singleUser: true
-    - type: ActivatableUIRequiresPower
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
+  - type: Store
+    categories:
+    - DiscountDansInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+    emagCategories:
+    - DiscountDansInventoryContraband
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
 
 - type: entity
   parent: VendingMachineCigs
   id: BackmenVendingMachineCigs
   suffix: Backmen, Платный
   components:
-    - type: Store
-      categories:
-        - CigaretteMachineInventory
-      currencyWhitelist:
-        - SpaceCash
-      balance:
-        SpaceCash: 0
-    - type: BuyStoreBank
-      emagCategories:
-        - CigaretteMachineInventoryEmag
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-      singleUser: true
-    - type: ActivatableUIRequiresPower
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
+  - type: Store
+    categories:
+    - CigaretteMachineInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+    emagCategories:
+    - CigaretteMachineInventoryEmag
+    - CigaretteMachineInventoryContraband
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
 
 - type: entity
   parent: VendingMachineToys
   id: BackmenVendingMachineToys
   suffix: Backmen, Платный
   components:
-    - type: Store
-      categories:
-        - ToysInventory
-      currencyWhitelist:
-        - SpaceCash
-      balance:
-        SpaceCash: 0
-    - type: BuyStoreBank
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-      singleUser: true
-    - type: ActivatableUIRequiresPower
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
+  - type: Store
+    categories:
+    - ToysInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
 
 - type: entity
   parent: VendingMachineCola
   id: BackmenVendingMachineCola
   suffix: Backmen, Платный
   components:
-    - type: Store
-      categories:
-        - RobustSoftdrinksInventory
-      currencyWhitelist:
-        - SpaceCash
-      balance:
-        SpaceCash: 0
-    - type: BuyStoreBank
-      emagCategories:
-        - DrinkVendInventoryEmag
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-      singleUser: true
-    - type: ActivatableUIRequiresPower
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
+  - type: Store
+    categories:
+    - RobustSoftdrinksInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+    emagCategories:
+    - RobustSoftdrinksInventoryEmag
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
 
 - type: entity
   parent: VendingMachineColaBlack
   id: BackmenVendingMachineColaBlack
   suffix: Backmen, Платный
   components:
-    - type: Store
-      categories:
-        - RobustSoftdrinksInventory
-      currencyWhitelist:
-        - SpaceCash
-      balance:
-        SpaceCash: 0
-    - type: BuyStoreBank
-      emagCategories:
-        - DrinkVendInventoryEmag
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-      singleUser: true
-    - type: ActivatableUIRequiresPower
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
+  - type: Store
+    categories:
+    - RobustSoftdrinksInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+    emagCategories:
+    - RobustSoftdrinksInventoryEmag
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
 
 - type: entity
   parent: VendingMachineSoda
   id: BackmenVendingMachineSoda
   suffix: Backmen, Платный
   components:
-    - type: Store
-      categories:
-        - RobustSoftdrinksInventory
-      currencyWhitelist:
-        - SpaceCash
-      balance:
-        SpaceCash: 0
-    - type: BuyStoreBank
-      emagCategories:
-        - DrinkVendInventoryEmag
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-      singleUser: true
-    - type: ActivatableUIRequiresPower
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
+  - type: Store
+    categories:
+    - RobustSoftdrinksInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+    emagCategories:
+    - RobustSoftdrinksInventoryEmag
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
 
 - type: entity
   parent: VendingMachineDonut
   id: BackmenVendingMachineDonut
   suffix: Backmen, Платный
   components:
-    - type: Store
-      categories:
-        - DonutInventory
-      currencyWhitelist:
-        - SpaceCash
-      balance:
-        SpaceCash: 0
-    - type: BuyStoreBank
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-      singleUser: true
-    - type: ActivatableUIRequiresPower
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
+  - type: Store
+    categories:
+    - DonutInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+    emagCategories:
+    - DonutInventoryContraband
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
 
 - type: entity
   parent: VendingMachineChang
   id: BackmenVendingMachineChang
   suffix: Backmen, Платный
   components:
-    - type: Store
-      categories:
-        - ChangInventory
-      currencyWhitelist:
-        - SpaceCash
-      balance:
-        SpaceCash: 0
-    - type: BuyStoreBank
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-      singleUser: true
-    - type: ActivatableUIRequiresPower
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
+  - type: Store
+    categories:
+    - ChangInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
 
 - type: entity
   parent: VendingMachineCoffee
   id: BackmenVendingMachineCoffee
   suffix: Backmen, Платный
   components:
-    - type: Store
-      categories:
-        - HotDrinksMachineInventory
-      currencyWhitelist:
-        - SpaceCash
-      balance:
-        SpaceCash: 0
-    - type: BuyStoreBank
-      emagCategories:
-        - HotDrinksMachineInventoryEmag
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-      singleUser: true
-    - type: ActivatableUIRequiresPower
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
+  - type: Store
+    categories:
+    - HotDrinksMachineInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+    emagCategories:
+    - HotDrinksMachineInventoryEmag
+    - HotDrinksMachineInventoryContraband
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
 
 - type: entity
   parent: VendingMachineSovietSoda
   id: BackmenVendingMachineSovietSoda
   suffix: Backmen, Платный
   components:
-    - type: Store
-      categories:
-        - BodaInventory
-      currencyWhitelist:
-        - SpaceCash
-      balance:
-        SpaceCash: 0
-    - type: BuyStoreBank
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-      singleUser: true
-    - type: ActivatableUIRequiresPower
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
+  - type: Store
+    categories:
+    - BodaInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+    emagCategories:
+    - BodaInventoryContraband
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
 
 - type: entity
   parent: VendingMachineSnack
   id: BackmenVendingMachineSnack
   suffix: Backmen, Платный
   components:
-    - type: Store
-      categories:
-        - GetmoreChocolateCorpInventory
-      currencyWhitelist:
-        - SpaceCash
-      balance:
-        SpaceCash: 0
-    - type: BuyStoreBank
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-      singleUser: true
-    - type: ActivatableUIRequiresPower
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
+  - type: Store
+    categories:
+    - GetmoreChocolateCorpInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+    emagCategories:
+    - GetmoreChocolateCorpInventoryContraband
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
 
 - type: entity
   parent: VendingMachineSnackOrange
   id: BackmenVendingMachineSnackOrange
   suffix: Backmen, Платный
   components:
-    - type: Store
-      categories:
-        - GetmoreChocolateCorpInventory
-      currencyWhitelist:
-        - SpaceCash
-      balance:
-        SpaceCash: 0
-    - type: BuyStoreBank
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-      singleUser: true
-    - type: ActivatableUIRequiresPower
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
+  - type: Store
+    categories:
+    - GetmoreChocolateCorpInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+    emagCategories:
+    - RobustSoftdrinksInventoryEmag
+    - SpaceUpInventoryContraband
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
 
 - type: entity
   parent: VendingMachineSnackGreen
   id: BackmenVendingMachineSnackGreen
   suffix: Backmen, Платный
   components:
-    - type: Store
-      categories:
-        - GetmoreChocolateCorpInventory
-      currencyWhitelist:
-        - SpaceCash
-      balance:
-        SpaceCash: 0
-    - type: BuyStoreBank
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-      singleUser: true
-    - type: ActivatableUIRequiresPower
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
+  - type: Store
+    categories:
+    - GetmoreChocolateCorpInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
 
 - type: entity
   parent: VendingMachineSnackBlue
   id: BackmenVendingMachineSnackBlue
   suffix: Backmen, Платный
   components:
-    - type: Store
-      categories:
-        - GetmoreChocolateCorpInventory
-      currencyWhitelist:
-        - SpaceCash
-      balance:
-        SpaceCash: 0
-    - type: BuyStoreBank
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-      singleUser: true
-    - type: ActivatableUIRequiresPower
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
+  - type: Store
+    categories:
+    - GetmoreChocolateCorpInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
 
 - type: entity
   parent: VendingMachineSnackTeal
   id: BackmenVendingMachineSnackTeal
   suffix: Backmen, Платный
   components:
-    - type: Store
-      categories:
-        - GetmoreChocolateCorpInventory
-      currencyWhitelist:
-        - SpaceCash
-      balance:
-        SpaceCash: 0
-    - type: BuyStoreBank
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-      singleUser: true
-    - type: ActivatableUIRequiresPower
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
+  - type: Store
+    categories:
+    - GetmoreChocolateCorpInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
 
 - type: entity
   parent: VendingMachineSpaceUp
   id: BackmenVendingMachineSpaceUp
   suffix: Backmen, Платный
   components:
-    - type: Store
-      categories:
-        - SpaceUpInventory
-      currencyWhitelist:
-        - SpaceCash
-      balance:
-        SpaceCash: 0
-    - type: BuyStoreBank
-      emagCategories:
-        - DrinkVendInventoryEmag
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-      singleUser: true
-    - type: ActivatableUIRequiresPower
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
+  - type: Store
+    categories:
+    - SpaceUpInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+    emagCategories:
+    - RobustSoftdrinksInventoryEmag
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
 
 - type: entity
   parent: VendingMachineColaRed
   id: BackmenVendingMachineColaRed
   suffix: Backmen, Платный
   components:
-    - type: Store
-      categories:
-        - ColaRedInventory
-      currencyWhitelist:
-        - SpaceCash
-      balance:
-        SpaceCash: 0
-    - type: BuyStoreBank
-      emagCategories:
-        - DrinkVendInventoryEmag
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-      singleUser: true
-    - type: ActivatableUIRequiresPower
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
+  - type: Store
+    categories:
+    - RobustSoftdrinksInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+    emagCategories:
+    - RobustSoftdrinksInventoryEmag
+    - RobustSoftdrinksInventoryContraband
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
 
 - type: entity
   parent: VendingMachineShamblersJuice
   id: BackmenVendingMachineShamblersJuice
   suffix: Backmen, Платный
   components:
-    - type: Store
-      categories:
-        - ShamblersJuiceInventory
-      currencyWhitelist:
-        - SpaceCash
-      balance:
-        SpaceCash: 0
-    - type: BuyStoreBank
-      emagCategories:
-        - DrinkVendInventoryEmag
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-      singleUser: true
-    - type: ActivatableUIRequiresPower
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
+  - type: Store
+    categories:
+    - ShamblersJuiceInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+    emagCategories:
+    - RobustSoftdrinksInventoryEmag
+    - ShamblersJuiceInventoryContraband
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
 
 - type: entity
   parent: VendingMachinePwrGame
   id: BackmenVendingMachinePwrGame
   suffix: Backmen, Платный
   components:
-    - type: Store
-      categories:
-        - PwrGameInventory
-      currencyWhitelist:
-        - SpaceCash
-      balance:
-        SpaceCash: 0
-    - type: BuyStoreBank
-      emagCategories:
-        - DrinkVendInventoryEmag
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-      singleUser: true
-    - type: ActivatableUIRequiresPower
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
+  - type: Store
+    categories:
+    - PwrGameInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+    emagCategories:
+    - RobustSoftdrinksInventoryEmag
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
 
 - type: entity
   parent: VendingMachineDrGibb
   id: BackmenVendingMachineDrGibb
   suffix: Backmen, Платный
   components:
-    - type: Store
-      categories:
-        - DrGibbInventory
-      currencyWhitelist:
-        - SpaceCash
-      balance:
-        SpaceCash: 0
-    - type: BuyStoreBank
-      emagCategories:
-        - DrinkVendInventoryEmag
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-      singleUser: true
-    - type: ActivatableUIRequiresPower
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
+  - type: Store
+    categories:
+    - DrGibbInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+    emagCategories:
+    - RobustSoftdrinksInventoryEmag
+    - RobustSoftdrinksInventoryContraband
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
 
 - type: entity
   parent: VendingMachineStarkist
   id: BackmenVendingMachineStarkist
   suffix: Backmen, Платный
   components:
-    - type: Store
-      categories:
-        - StarkistInventory
-      currencyWhitelist:
-        - SpaceCash
-      balance:
-        SpaceCash: 0
-    - type: BuyStoreBank
-      emagCategories:
-        - DrinkVendInventoryEmag
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-      singleUser: true
-    - type: ActivatableUIRequiresPower
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
+  - type: Store
+    categories:
+    - StarkistInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+    emagCategories:
+    - RobustSoftdrinksInventoryEmag
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
 
 - type: entity
   parent: VendingMachineHappyHonk
   id: BackmenVendingMachineHappyHonk
   suffix: Backmen, Платный
   components:
-    - type: Store
-      categories:
-        - HappyHonkInventory
-      currencyWhitelist:
-        - SpaceCash
-      balance:
-        SpaceCash: 0
-    - type: BuyStoreBank
-      emagCategories:
-        - HappyHonkInventoryEmag
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-      singleUser: true
-    - type: ActivatableUIRequiresPower
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
+  - type: Store
+    categories:
+    - HappyHonkInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+    emagCategories:
+    - HappyHonkInventoryEmag
+    - HappyHonkInventoryContraband
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+
+- type: entity
+  parent: VendingMachineClothing
+  id: BackmenVendingMachineClothing
+  name: ОдеждоМат
+  description: Торговый автомат для одежды.
+  suffix: Backmen, Платный
+  components:
+  - type: Store
+    categories:
+    - ClothingBackpackMachineInventory
+    - ClothingHeadMachineInventory
+    - ClothingOuterMachineInventory
+    - ClothingJumpsuitMachineInventory
+    - ClothingJumpskirtMachineInventory
+    - ClothingShoesMachineInventory
+    - ClothingNeckMachineInventory
+    - ClothingEyesMachineInventory
+    - ClothingHandsMachineInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+    emagCategories:
+    - ClothingEmagMachineInventory
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+
+- type: entity
+  parent: VendingMachineWinter
+  id: BackmenVendingMachineWinter
+  name: Зимнешкаф
+  description: Лучшее место, чтобы насладиться холодом!
+  suffix: Backmen, Платный
+  components:
+  - type: Store
+    categories:
+    - WinterDrobeOuterInventory
+    - WinterDrobeScarfsInventory
+    - WinterDrobeOtherInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+    emagCategories:
+    - WinterDrobeInventoryEmag
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+
+- type: entity
+  parent: VendingMachineClothingCapes
+  id: BackmenVendingMachineClothingCapes
+  name: Плащвенд
+  description: Автомат с различными плащами.
+  suffix: Backmen, Платный
+  components:
+  - type: Store
+    categories:
+    - ClothesMateCapeInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+    emagCategories:
+    - ClothesMateCapeInventoryEmag
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+
+- type: entity
+  parent: VendingMachineWallMedical
+  id: BackmenVendingMachineWallMedical
+  name: НаноМед Мини
+  suffix: Backmen, Платный
+  components:
+  - type: Store
+    categories:
+    - VendingWallMedicalInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+
+- type: entity
+  parent: VendingMachineYouTool
+  id: BackmenVendingMachineYooTool
+  name: ТвоИнструменты
+  suffix: Backmen, Платный
+  components:
+  - type: Store
+    categories:
+    - VendingYouToolInventory
+    currencyWhitelist:
+    - SpaceCash
+    balance:
+      SpaceCash: 0
+  - type: BuyStoreBank
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+    singleUser: true
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface

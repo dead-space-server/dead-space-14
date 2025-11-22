@@ -41,6 +41,11 @@
   - ClothingHeadHatHopcap
   - ClothingUniformJumpsuitHoP
   - ClothingUniformJumpskirtHoP
+  # Generic
+  - ClothingHeadHatBeretCommand
+  - ClothingHeadHatCommandSoft
+  - ClothingUniformJumpskirtCommandGeneric
+  - ClothingUniformJumpsuitCommandGeneric
 
 - type: latheRecipePack
   id: ClothingEngineering
@@ -82,6 +87,25 @@
   - ClothingUniformJumpskirtResearchDirector
   - ClothingUniformJumpsuitScientist
   - ClothingUniformJumpskirtScientist
+  # DS14-start
+  - ClothingHeadHatBeretRobotics
+  - ClothingUniformJumpsuitResearchDirectorShirt
+  - ClothingUniformJumpskirtResearchDirectorShirt
+  - ClothingUniformJumpsuitResearchDirectorSuit
+  - ClothingUniformJumpskirtResearchDirectorSuit
+  - ClothingUniformJumpsuitScientistFormal
+  - ClothingUniformJumpskirtScientistFormal
+  - ClothingUniformJumpsuitScientistTurtle
+  - ClothingUniformJumpskirtScientistTurtle
+  - ClothingUniformJumpsuitRoboticist
+  - ClothingUniformJumpskirtRoboticist
+  - ClothingUniformJumpsuitRoboticistOveralls
+  - ClothingUniformJumpskirtRoboticistOveralls
+  - ClothingUniformJumpsuitRoboticistWhite
+  - ClothingUniformJumpskirtRoboticistWhite
+  - ClothingUniformJumpsuitSeniorResearcherTurtle
+  - ClothingUniformJumpskirtSeniorResearcherTurtle
+  # DS14-end
   - ClothingUniformJumpsuitSeniorResearcher
   - ClothingUniformJumpskirtSeniorResearcher
 
@@ -157,6 +181,7 @@
   - ClothingOuterWinterClown
   - ClothingOuterWinterMime
   - ClothingOuterWinterCoat
+  - ClothingOuterWinterCoatLong # DS14
   - ClothingOuterWinterJani
   - ClothingOuterWinterBar
   - ClothingOuterWinterChef
@@ -172,6 +197,7 @@
   - ClothingOuterWinterViro
   - ClothingOuterWinterSci
   - ClothingOuterWinterRobo
+  - ClothingOuterWinterCoatSeniorResearcher # DS14
   - ClothingOuterWinterSec
   - ClothingOuterWinterClownDownjacket # DS14
 
@@ -217,6 +243,7 @@
   - ClothingUniformJumpskirtCentcomFormalDress
   - ClothingUniformJumpsuitCentcomOfficer
   - ClothingUniformJumpsuitCentcomOfficial
+  - ClothingOuterWinterCentcom # DS14
 
 - type: latheRecipePack
   id: ClothingSyndie
@@ -233,7 +260,6 @@
   - ClothingUniformJumpsuitPyjamaSyndicatePink
   - ClothingHeadPyjamaSyndicateRed
   - ClothingUniformJumpsuitPyjamaSyndicateRed
-  - ClothingOuterWinterCentcom
   - ClothingOuterWinterSyndie
   - ClothingOuterWinterSyndieCap
   - BedsheetSyndie

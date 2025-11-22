@@ -1,0 +1,73 @@
+- type: accessGroup
+  id: TaipanAccess
+  tags:
+  - TaipanArmory
+  - TaipanAtmospherics
+  - TaipanCargo
+  - TaipanCommand
+  - TaipanCommunicationsOfficer
+  - TaipanEngineering
+  - TaipanMaint
+  - TaipanMedical
+  - TaipanProtection
+  - TaipanResearchDirector
+  - TaipanResearch
+  - TaipanService
+  - TaipanTechnicalOperationsSupervisor
+  - TaipanExternal
+
+- type: accessLevel
+  id: TaipanArmory
+  name: Арсенал
+
+- type: accessLevel
+  id: TaipanAtmospherics
+  name: Атмосферный
+
+- type: accessLevel
+  id: TaipanCargo
+  name: Снабжение
+
+- type: accessLevel
+  id: TaipanCommand
+  name: Командование
+
+- type: accessLevel
+  id: TaipanCommunicationsOfficer
+  name: Офицер телекоммуникаций
+
+- type: accessLevel
+  id: TaipanEngineering
+  name: Инженерный
+
+- type: accessLevel
+  id: TaipanMaint
+  name: Технический
+
+- type: accessLevel
+  id: TaipanMedical
+  name: Медицинский
+
+- type: accessLevel
+  id: TaipanProtection
+  name: Охрана
+
+- type: accessLevel
+  id: TaipanResearchDirector
+  name: Директор исследований
+
+- type: accessLevel
+  id: TaipanResearch
+  name: Научный
+
+- type: accessLevel
+  id: TaipanService
+  name: Сервисный
+
+- type: accessLevel
+  id: TaipanTechnicalOperationsSupervisor
+  name: Руководитель техобеспечения
+
+- type: accessLevel
+  id: TaipanExternal
+  name: Внешний

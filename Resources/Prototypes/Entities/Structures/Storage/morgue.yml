@@ -49,6 +49,7 @@
   - type: ContainerContainer
     containers:
       entity_storage: !type:Container
+      paper_label: !type:ContainerSlot # DS14
   - type: Appearance
   - type: GenericVisualizer
     visuals:
@@ -68,11 +69,54 @@
           HasContents: {visible: true, state: morgue_nomob_light}
           HasMob: {visible: true, state: morgue_nosoul_light}
           HasSoul: {visible: true, state: morgue_soul_light}
+      # DS14-start
+      enum.PaperLabelVisuals.HasLabel:
+        enum.PaperLabelVisuals.Layer:
+          True: { visible: true }
+          False: { visible: false }
+      enum.PaperLabelVisuals.LabelType:
+        enum.PaperLabelVisuals.Layer:
+          Paper: { state: paper }
+          Bounty: { state: bounty }
+          CaptainsPaper: { state: captains_paper }
+          Invoice: { state: invoice }
+      # DS14-end
   - type: Transform
     anchored: true
   - type: AntiRottingContainer
   - type: StaticPrice
     price: 200
+  - type: ItemSlots # DS14
+  - type: PaperLabel # DS14
+    labelSlot:
+      insertVerbText: comp-paper-label-insert
+      ejectVerbText: comp-paper-label-eject
+      whitelist:
+        components:
+        - Paper
+      blacklist:
+        tags:
+        - Book
+# DS14-start
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StructuralMetallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 400
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:EmptyContainersBehaviour
+        containers:
+        - entity_storage
+        - paper_label
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalSlam
+# DS14-end
 
 - type: entity
   id: Crematorium
@@ -143,3 +187,22 @@
           False: { visible: false }
   - type: Transform
     anchored: true
+# DS14-start
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StructuralMetallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 400
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:EmptyContainersBehaviour
+        containers:
+        - entity_storage
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalSlam
+# DS14-end

@@ -5,10 +5,10 @@
   playTimeTracker: JobMedicalIntern
   requirements:
     - !type:OverallPlaytimeRequirement
-      time: 3600 # 1 hours
+      time: 1h
     - !type:DepartmentTimeRequirement
       department: Medical
-      time: 54000 # 15 hours
+      time: 15h
       inverted: true # stop playing intern if you're good at med!
   startingGear: MedicalInternGear
   icon: "JobIconMedicalIntern"
@@ -31,3 +31,17 @@
     ears: ClothingHeadsetMedical
     belt: ClothingBeltMedicalFilled
     socks: ClothingUnderwearSocksIntern
+  #storage:
+    #back:
+    #- Stuff
+
+- type: chameleonOutfit
+  id: MedicalInternChameleonOutfit
+  job: MedicalIntern
+  equipment:
+    head: ClothingHeadHatBeretMedic
+    eyes: ClothingEyesHudMedical
+    mask: ClothingMaskSterile
+    neck: ClothingNeckStethoscope
+    outerClothing: ClothingOuterCoatLabOpened
+    gloves: ClothingHandsGlovesLatex

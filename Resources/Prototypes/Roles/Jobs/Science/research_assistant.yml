@@ -5,10 +5,10 @@
   playTimeTracker: JobResearchAssistant
   requirements:
     - !type:OverallPlaytimeRequirement
-      time: 3600 # 1 hours
+      time: 1h
     - !type:DepartmentTimeRequirement
       department: Science
-      time: 54000 # 15 hours
+      time: 15h
       inverted: true # stop playing intern if you're good at science!
   startingGear: ResearchAssistantGear
   icon: "JobIconResearchAssistant"
@@ -30,3 +30,17 @@
     id: ResearchAssistantPDA
     ears: ClothingHeadsetScience
     socks: ClothingUnderwearSocksResearchAssistant
+  #storage:
+    #back:
+    #- Stuff
+
+- type: chameleonOutfit
+  id: ResearchAssistantChameleonOutfit
+  job: ResearchAssistant
+  equipment:
+    head: ClothingHeadHatCardborg
+    eyes: ClothingEyesGlasses
+    mask: ClothingMaskGas
+    neck: ClothingNeckScarfStripedPurple
+    outerClothing: ClothingOuterCoatLab
+    gloves: ClothingHandsGlovesLatex

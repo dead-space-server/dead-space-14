@@ -4,7 +4,7 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared.Nutrition.Components
 {
-    [RegisterComponent, NetworkedComponent, Access(typeof(SharedUtensilSystem))]
+    [RegisterComponent, NetworkedComponent, Access(typeof(IngestionSystem))]
     public sealed partial class UtensilComponent : Component
     {
         [DataField("types")]
@@ -35,6 +35,14 @@ namespace Content.Shared.Nutrition.Components
         /// </summary>
         [DataField("breakSound")]
         public SoundSpecifier BreakSound = new SoundPathSpecifier("/Audio/Items/snap.ogg");
+
+        // DS14-start
+        /// <summary>
+        /// Modifier of time required for use of utensil.  Currently applies only at knife cutting speed.
+        /// </summary>
+        [DataField("speedModifier"), ViewVariables(VVAccess.ReadWrite)]
+        public float SpeedModifier = 1f;
+        // DS14-end
     }
 
     // If you want to make a fancy output on "wrong" composite utensil use (like: you need fork and knife)

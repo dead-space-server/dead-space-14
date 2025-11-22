@@ -1,23 +1,38 @@
 - type: playTimeTracker
-  id: TypanAtmosTech
+  id: Taipan
 
 - type: playTimeTracker
-  id: TypanBotanist
+  id: JobTaipanAtmosphericsEngineer
 
 - type: playTimeTracker
-  id: TypanCargotech
+  id: JobTaipanBotanist
 
 - type: playTimeTracker
-  id: TypanChef
+  id: JobTaipanCargotech
 
 - type: playTimeTracker
-  id: TypanMedic
+  id: JobTaipanChef
 
 - type: playTimeTracker
-  id: TypanRD
+  id: JobTaipanCommunicationsOfficer
 
 - type: playTimeTracker
-  id: TypanScience
+  id: JobTaipanMedic
 
 - type: playTimeTracker
-  id: TypanTelecommunicationsOfficer
+  id: JobTaipanParamedic
+
+- type: playTimeTracker
+  id: JobTaipanRecruit
+
+- type: playTimeTracker
+  id: JobTaipanResearchDirector
+
+- type: playTimeTracker
+  id: JobTaipanResearcher
+
+- type: playTimeTracker
+  id: JobTaipanTechnician
+
+- type: playTimeTracker
+  id: JobTaipanTechnicalOperationsSupervisor

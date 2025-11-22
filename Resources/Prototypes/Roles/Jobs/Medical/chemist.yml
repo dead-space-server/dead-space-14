@@ -6,7 +6,7 @@
   requirements:
     - !type:RoleTimeRequirement
       role: JobMedicalDoctor
-      time: 1800 # 5 hours
+      time: 5h
   startingGear: ChemistGear
   icon: "JobIconChemist"
   supervisors: job-supervisors-cmo
@@ -30,3 +30,16 @@
     pocket1: HandLabeler
     eyes: ClothingEyesGlassesChemical
     socks: ClothingUnderwearSocksChemist
+  #storage:
+    #back:
+    #- Stuff
+
+- type: chameleonOutfit
+  id: ChemistChameleonOutfit
+  job: Chemist
+  equipment:
+    head: ClothingHeadHatBeretMedic
+    mask: ClothingMaskSterile
+    neck: ClothingNeckStethoscope
+    outerClothing: ClothingOuterCoatLabChem
+    gloves: ClothingHandsGlovesLatex

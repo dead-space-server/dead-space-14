@@ -29,10 +29,10 @@
   - HoPUnderwear # DS14-Underwear
 
 # Silicons
-#- type: roleLoadout
-#  id: JobBorg
-#  nameDataset: roleloadout doesn't support both so need to update that first.
-#  canCustomizeName: true
+- type: roleLoadout
+  id: JobBorg
+  nameDataset: NamesBorg
+  canCustomizeName: true
 
 - type: roleLoadout
   id: JobStationAi
@@ -65,6 +65,7 @@
   - BartenderJumpsuit
   - CommonBackpack
   - BartenderOuterClothing
+  - BartenderGoldenShaker
   - Glasses
   - Survival
   - Trinkets
@@ -99,7 +100,7 @@
   - ChefUnderwear # DS14-Underwear
   - ChefHand # DS14
   - ChefGloves # DS14
-  
+
 - type: roleLoadout
   id: JobLibrarian
   groups:
@@ -135,6 +136,7 @@
   - ChaplainJumpsuit
   - CommonBackpack
   - ChaplainOuterClothing
+  - ChaplainBible
   - Glasses
   - Survival
   - Trinkets
@@ -150,6 +152,7 @@
   - JanitorGloves
   - CommonBackpack
   - JanitorOuterClothing
+  - JanitorShoes
   - Glasses
   - Survival
   - Trinkets
@@ -173,6 +176,7 @@
 
 - type: roleLoadout
   id: JobClown
+  canCustomizeName: true
   groups:
   - GroupTankHarness
   - ClownHead
@@ -187,6 +191,7 @@
 
 - type: roleLoadout
   id: JobMime
+  canCustomizeName: true
   groups:
   - GroupTankHarness
   - MimeHead
@@ -203,6 +208,7 @@
 
 - type: roleLoadout
   id: JobMusician
+  canCustomizeName: true
   groups:
   - GroupTankHarness
   - MusicianJumpsuit
@@ -241,6 +247,7 @@
   - CargoTechnicianBackpack
   - CargoTechnicianOuterClothing
   - CargoTechnicianShoes
+#  - CargoTechnicianID # DS14-disabled
   - Glasses
   - Survival
   - Trinkets
@@ -283,6 +290,7 @@
   - GroupTankHarness
   - TechnicalAssistantJumpsuit
   - StationEngineerBackpack
+  - StationEngineerBelt # DS14
   - SurvivalExtended
   - Trinkets
   - GroupSpeciesBreathTool
@@ -295,9 +303,10 @@
   - StationEngineerHead
   - StationEngineerJumpsuit
   - StationEngineerBackpack
+  - StationEngineerBelt # DS14
   - StationEngineerOuterClothing
   - StationEngineerShoes
-  - StationEngineerID
+#  - StationEngineerID # DS14-disabled
   - SurvivalExtended
   - Trinkets
   - GroupSpeciesBreathTool
@@ -309,6 +318,7 @@
   - GroupTankHarness
   - AtmosphericTechnicianJumpsuit
   - AtmosphericTechnicianBackpack
+  - AtmosphericTechnicianBelt # DS14
   - AtmosphericTechnicianOuterClothing
   - AtmosphericTechnicianShoes
   - SurvivalExtended
@@ -345,7 +355,7 @@
   - ScientistOuterClothing
   - ScientistGloves
   - ScientistShoes
-  - ScientistPDA
+#  - ScientistPDA # DS14-disabled
   - Glasses
   - Survival
   - Trinkets
@@ -383,6 +393,7 @@
   - GroupSpeciesBreathToolSecurity
   - HeadofSecuritySocks # DS14-Underwear
   - HeadofSecurityUnderwear # DS14-Underwear
+  - HeadOfSecurityMedal # DS14-Medal
 
 - type: roleLoadout
   id: JobWarden
@@ -400,6 +411,7 @@
   - GroupSpeciesBreathToolSecurity
   - WardenSocks # DS14-Underwear
   - WardenUnderwear # DS14-Underwear
+  - WardenMedal # DS14-Medal
 
 - type: roleLoadout
   id: JobSecurityOfficer
@@ -411,7 +423,7 @@
   - SecurityBackpack
   - SecurityOuterClothing
   - SecurityShoes
-  - SecurityPDA
+#  - SecurityPDA # DS14-disabled
   - SecurityBelt
   - SurvivalSecurity
   - Trinkets
@@ -419,6 +431,7 @@
   - GroupSpeciesBreathToolSecurity
   - SecuritySocks # DS14-Underwear
   - SecurityUnderwear # DS14-Underwear
+  - SecurityOfficerMedal # DS14-Medal
 
 - type: roleLoadout
   id: JobDetective
@@ -436,6 +449,7 @@
   - GroupSpeciesBreathToolSecurity
   - DetectiveSocks # DS14-Underwear
   - DetectiveUnderwear # DS14-Underwear
+  - DetectiveMedal # DS14-Medal
 
 - type: roleLoadout
   id: JobSecurityCadet
@@ -462,7 +476,7 @@
   - ChiefMedicalOfficerOuterClothing
   - ChiefMedicalOfficerNeck
   - ChiefMedicalOfficerShoes
-  # - Glasses
+  # - MedicalEyewear
   - SurvivalMedical
   - Trinkets
   - GroupSpeciesBreathToolMedical
@@ -479,8 +493,8 @@
   - MedicalBackpack
   - MedicalDoctorOuterClothing
   - MedicalShoes
-  - MedicalDoctorPDA
-  - Glasses
+#  - MedicalDoctorPDA # DS14-disabled
+  - MedicalEyewear
   - SurvivalMedical
   - Trinkets
   - GroupSpeciesBreathToolMedical
@@ -509,8 +523,8 @@
   - MedicalBackpack
   - MedicalDoctorOuterClothing
   - MedicalShoes
-  - MedicalDoctorPDA
-  - Glasses
+#  - MedicalDoctorPDA # DS14-disabled
+  # - MedicalEyewear
   - SurvivalMedical
   - Trinkets
   - GroupSpeciesBreathToolMedical
@@ -542,7 +556,7 @@
   - MedicalBackpack
   - ParamedicOuterClothing
   - ParamedicShoes
-  - Glasses
+  - MedicalEyewear
   - SurvivalMedical
   - Trinkets
   - GroupSpeciesBreathToolMedical

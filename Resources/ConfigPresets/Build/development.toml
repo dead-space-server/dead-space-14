@@ -4,6 +4,7 @@ lobbyenabled = false
 # Dev map for faster loading & convenience
 map = "Dev"
 role_timers = false
+role_loadout_timers = false
 
 [events]
 enabled = false
@@ -16,7 +17,7 @@ quick_lottery = true
 generator_enabled = false
 
 [movement]
-mob_pushing = false
+mob_pushing = true
 
 [physics]
 # Makes mapping annoying
@@ -38,6 +39,11 @@ preload_grids = false
 [admin]
 see_own_notes = true
 
+[ic]
+random_characters = true
+random_species_weights = ""
+ssd_sleep_time = 3600
+
 [infolinks]
 discord = "https://discord.gg/ds14"
 wiki = "https://wiki.deadspace14.net/"
@@ -46,5 +52,5 @@ patreon = "https://boosty.to/deadstation14"
 [server]
 rules_file = "DeadSpaceDefaultRuleset"
 
-[typan]
+[taipan]
 enabled = false

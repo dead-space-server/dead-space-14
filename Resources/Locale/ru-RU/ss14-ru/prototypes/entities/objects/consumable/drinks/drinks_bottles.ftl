@@ -1,6 +1,11 @@
 ent-DrinkBottlePlasticBaseFull = { ent-DrinkBase }
     .desc = { ent-DrinkBase.desc }
     .suffix = Полный
+ent-DrinkBottlePlasticSmallBaseFull = { ent-DrinkBase }
+    .suffix = Полный
+    .desc = { ent-DrinkBase.desc }
+ent-DrinkBottleGlassSmallBaseFull = { ent-DrinkBottlePlasticSmallBaseFull }
+    .desc = { ent-DrinkBottlePlasticSmallBaseFull.desc }
 ent-DrinkBottleGlassBaseFull = { ent-DrinkBottlePlasticBaseFull }
     .desc = { ent-DrinkBottlePlasticBaseFull.desc }
 ent-DrinkBottleVisualsOpenable = { "" }
@@ -65,12 +70,7 @@ ent-DrinkTonicWaterBottleFull = бутылка тоника
     .desc = Как газированная вода, но, возможно, агрессивнее? И, зачастую, слаще.
 ent-DrinkSakeBottleFull = бутылочка саке
     .desc = Похоже, сожаление о завтрашнем утре тоже накладывает свой отпечаток на бутылку.
-ent-DrinkJuiceLimeCartonXL = лаймовый сок XL
-    .desc = Кисло-сладкое удовольствие.
-ent-DrinkJuiceOrangeCartonXL = апельсиновый сок XL
-    .desc = Сплошные витамины и наслаждение!
-ent-DrinkCreamCartonXL = молочные сливки XL
-    .desc = Это сливки. Сделанные из молока. Что ещё вы ожидали здесь найти?
+
 ent-DrinkSugarJug = кувшин сахара
     .desc = Некоторые добавляют его в кофе...
     .suffix = Полный, Для напитков

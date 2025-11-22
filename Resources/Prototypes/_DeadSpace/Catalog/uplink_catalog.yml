@@ -1,4 +1,24 @@
 - type: listing
+  id: UplinkEswordDouble
+  name: uplink-esword-double-name
+  description: uplink-esword-double-desc
+  icon: { sprite: /Textures/Objects/Weapons/Melee/e_sword_double.rsi, state: icon }
+  productEntity: EnergySwordDouble
+  cost:
+    Telecrystal: 21
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
   id: UplinkEnergyCrossbow
   name: uplink-energy-crossbow-name
   description: uplink-energy-crossbow-desc
@@ -8,20 +28,20 @@
   categories:
   - UplinkWeaponry
   conditions:
-    - !type:StoreWhitelistCondition
-      blacklist:
-        tags:
-          - NukeOpsUplink
-    - !type:BuyerWhitelistCondition
-      blacklist:
-        components:
-          - SurplusBundle
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
 
 - type: listing
-  id: UplinkEnergyCrossbowNuke
-  name: uplink-energy-crossbow-name
-  description: uplink-energy-crossbow-desc
-  productEntity: WeaponEnergyCrossbow
+  id: UplinkEnergyCrossbowLarge
+  name: uplink-energy-crossbow-large-name
+  description: uplink-energy-crossbow-large-desc
+  productEntity: WeaponEnergyCrossbowLarge
   cost:
     Telecrystal: 20
   categories:
@@ -35,6 +55,40 @@
     blacklist:
       components:
       - SurplusBundle
+
+- type: listing
+  id: UplinkMantisBladesBundle
+  name: uplink-mantisblades-name
+  description: uplink-mantisblades-desc
+  icon: { sprite: _DeadSpace/Objects/Weapons/Melee/mantis_blades.rsi, state: icon }
+  productEntity: MantisBladesImplanter
+  cost:
+    Telecrystal: 20
+  categories:
+  - UplinkWeaponry
+  conditions:
+    - !type:StoreWhitelistCondition
+      whitelist:
+        tags:
+          - NukeOpsUplink
+    - !type:BuyerWhitelistCondition
+      blacklist:
+        components:
+          - SurplusBundle
+
+- type: listing
+  id: UplinkSyndieSabre
+  name: uplink-syndiesabre-name
+  description: uplink-syndiesabre-desc
+  icon: { sprite: _DeadSpace/Objects/Weapons/Melee/syndie_sabre.rsi, state: icon }
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+    Telecrystal: 6
+  productEntity: ClothingBeltSheathSyndieFilled
+  cost:
+    Telecrystal: 10
+  categories:
+  - UplinkWeaponry
 
 - type: listing
   id: UplinkAdvansedMagboots
@@ -63,20 +117,20 @@
   categories:
   - UplinkWeaponry
   conditions:
-    - !type:StoreWhitelistCondition
-      whitelist:
-        tags:
-          - NukeOpsUplink
-    - !type:BuyerWhitelistCondition
-      blacklist:
-        components:
-          - SurplusBundle
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
 
 - type: listing
   id: UplinkXC67Bundle
   name: uplink-xc67-bundle-name
   description: uplink-xc67-bundle-desc
-  icon: { sprite: /Textures/_ADT/Objects/Weapons/Guns/Rifels/xc67.rsi, state: icon}
+  icon: { sprite: /Textures/_ADT/Objects/Weapons/Guns/Rifels/xc67.rsi, state: icon }
   productEntity: ClothingBackpackDuffelSyndicateFilledXC67
   cost:
     Telecrystal: 18
@@ -171,7 +225,7 @@
 - type: listing
   id: UplinkMagazineShothgun
   name: uplink-shotgun-magazine-name
-  description: uplink-Shotgun-magazine-desc
+  description: uplink-shotgun-magazine-desc
   icon: { sprite: /Textures/Objects/Weapons/Guns/Ammunition/Magazine/Shotgun/m12.rsi, state: base }
   productEntity: MagazineShotgun
   cost:
@@ -210,6 +264,11 @@
     Telecrystal: 5
   categories:
   - UplinkPointless
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
 
 - type: listing
   id: UplinkNukeOpsCloak
@@ -222,23 +281,23 @@
   - UplinkPointless
   conditions:
   - !type:StoreWhitelistCondition
-    whitelist:
+    blacklist:
       tags:
       - NukeOpsUplink
 
-- type: listing
-  id: UplinkArkalyseBundle
-  name: uplink-arkalyse-bundle-name
-  description: uplink-arkalyse-bundle-desc
-  icon: { sprite: _DeadSpace/Objects/Specific/Arkalyse/arkalyse_book.rsi, state: icon }
-  productEntity: BoxArkalyse
-  discountCategory: usualDiscounts
-  discountDownTo:
-    Telecrystal: 5
-  cost:
-    Telecrystal: 10
-  categories:
-  - UplinkWeaponry
+# - type: listing
+#   id: UplinkArkalyseBundle
+#   name: uplink-arkalyse-bundle-name
+#   description: uplink-arkalyse-bundle-desc
+#   icon: { sprite: _DeadSpace/Objects/Specific/Arkalyse/arkalyse_book.rsi, state: icon }
+#   productEntity: BoxArkalyse
+#   discountCategory: usualDiscounts
+#   discountDownTo:
+#     Telecrystal: 5
+#   cost:
+#     Telecrystal: 10
+#   categories:
+#   - UplinkWeaponry
 
 - type: listing
   id: UplinkAdrenalineImplanter
@@ -252,7 +311,7 @@
   cost:
     Telecrystal: 8
   categories:
-    - UplinkImplants
+  - UplinkImplants
 
 - type: listing
   id: UplinkReviveAutosurgeon
@@ -266,7 +325,7 @@
   cost:
     Telecrystal: 8
   categories:
-    - UplinkImplants
+  - UplinkImplants
 
 - type: listing
   id: UplinkClothingEyesPNVAdvSyndicate
@@ -276,9 +335,303 @@
   cost:
     Telecrystal: 4
   categories:
-    - UplinkWearables
+  - UplinkWearables
   conditions:
-    - !type:StoreWhitelistCondition
-      whitelist:
-        tags:
-          - NukeOpsUplink
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkTommyGunBundleAgent
+  name: Набор "ПП Томпсона"
+  description: Древняя классика. Содержит ПП Томпсона и 1 дополнительный магазин к нему. "Мистер Анджело? Мистер Сальери передаёт привет."
+  icon: { sprite: /Textures/_DeadSpace/Items/Toys/TommyGun/tommy_gun.rsi, state: icon }
+  productEntity: ClothingBackpackDuffelSyndicateFilledSMGTommyGunAgent
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 11
+  cost:
+    Telecrystal: 15
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkTommyGunBundle
+  name: Набор "ПП Томпсона"
+  description: Древняя классика. Содержит ПП Томпсона и 3 дополнительных магазина к нему.
+  icon: { sprite: /Textures/_DeadSpace/Items/Toys/TommyGun/tommy_gun.rsi, state: icon }
+  productEntity: ClothingBackpackDuffelSyndicateFilledSMGTommyGun
+  cost:
+    Telecrystal: 15
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkMagazineTommyGun
+  name: Магазин для ПП томпсона на 20 патронов.
+  description: Магазин для ПП томпсона на 20 патронов.
+  icon: { sprite: /Textures/_DeadSpace/Items/Toys/TommyGun/magazine.rsi, state: base }
+  productEntity: MagazineTommyGun
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkAmmo
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkMagazineTommyGunDrum
+  name: Барабан для ПП томпсона (9x19 мм)
+  description: Барабан для ПП томпсона на 50 патронов.
+  icon: { sprite: /Textures/_DeadSpace/Items/Toys/TommyGun/round_magazine.rsi, state: base }
+  productEntity: MagazineDrumTommyGun
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkAmmo
+
+- type: listing
+  id: UplinkTommyGunXLAmmoBundle
+  name: набор барабанов для ПП томпсона
+  description: Набор, содержащий 3 барабана для ПП томпсона по цене 2.
+  icon: { sprite: /Textures/_DeadSpace/Items/Toys/TommyGun/round_magazine.rsi, state: base }
+  productEntity: ClothingBackpackDuffelSyndicateFilledSMGTommyGunAmmoXL
+  cost:
+    Telecrystal: 8
+  categories:
+  - UplinkAmmo
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkCarbineSKSBundleAgent
+  name: Набор "СКС"
+  description: Содержит в себе модифицированный самозарядный карабин с пластиковым ложе, а так же 1 дополнительный магазин на 20 патрон
+  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Carbines/sks_scope.rsi, state: icon }
+  productEntity: ClothingBackpackDuffelSyndicateFilledCarbineSKSAgent
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 9
+  cost:
+    Telecrystal: 12
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+        - NukeOpsUplink
+
+- type: listing
+  id: UplinkCarbineSKSBundle
+  name: Набор "СКС"
+  description: Отлично подходит для поддержи первой линии наступления. Содержит в себе модифицированный самозарядный карабин с пластиковым ложе, а так же 4 магазина на 20 патрон
+  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Carbines/sks_scope.rsi, state: icon }
+  productEntity: ClothingBackpackDuffelSyndicateFilledCarbineSKS
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 8
+  cost:
+    Telecrystal: 11
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+        - NukeOpsUplink
+
+- type: listing
+  id: UplinkMagazineCarbineSKSAmmo
+  name: Магазин для СКС
+  description: Магазин для СКС на 20 патрон (7.62х39 мм винтовочные)
+  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Ammunition/Magazine/Carbines/sks_scope.rsi, state: red }
+  productEntity: MagazineCarbineSKS
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkAmmo
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkReagentContainerAmatoxin
+  name: uplink-reagent-container-amatoxin-name
+  description: uplink-reagent-container-amatoxin-desc
+  productEntity: ReagentContainerAmatoxin
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 3
+  categories:
+  - UplinkJob
+  conditions:
+  - !type:BuyerJobCondition
+    whitelist:
+    - Chef
+
+- type: listing
+  id: UplinkShakerSyndie
+  name: uplink-syndie-shaker-name
+  description: uplink-syndie-shaker-desc
+  productEntity: DrinkShakerSyndie
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkChemicals
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkClothingEyesHudSyndicateAgent
+  name: uplink-clothing-eyes-hud-syndicate-agent-name
+  description: uplink-clothing-eyes-hud-syndicate-agent-desc
+  productEntity: ClothingEyesHudSyndicateAgent
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkWearables
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkCyberHypospray
+  name: uplink-cyber-hypospray-name
+  description: uplink-cyber-hypospray-desc
+  productEntity: ADTCyberHypospray
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 6
+  cost:
+    Telecrystal: 8
+  categories:
+  - UplinkChemicals
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkFlippoSyndicateLighter
+  name: uplink-syndicate-flippo-syndicate-lighter-name
+  description: uplink-syndicate-flippo-syndicate-lighter-desc
+  icon: { sprite: /Textures/Objects/Tools/Lighters/lighters.rsi, state: zippo_syndicate_icon_base }
+  productEntity: FlippoSyndicateLighter
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkPointless
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+
+# For the DesertEagle
+- type: listing
+  id: UplinkMagazineEagle
+  name: uplink-magazine-eagle-name
+  description: uplink-magazine-eagle-desc
+  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Ammunition/Magazine/Pistol/magazinedeserteagle.rsi, state: base }
+  productEntity: MagazineEagle
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkAmmo
+  conditions:
+
+- type: listing
+  id: UplinkMagazineEagleAP
+  name: uplink-magazine-eagle-ap-name
+  description: uplink-magazine-eagle-ap-desc
+  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Ammunition/Magazine/Pistol/magazinedeserteagle.rsi, state: red }
+  productEntity: MagazineEagleAP
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 3
+  categories:
+  - UplinkAmmo
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkCombatMedipenNuke
+  name: uplink-combat-medipen-name
+  description: uplink-combat-medipen-desc
+  productEntity: CombatMedipen
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkChemicals
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkStimpackNuke
+  name: uplink-stimpack-name
+  description: uplink-stimpack-desc
+  productEntity: Stimpack
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkChemicals
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkCostumeClownNuke
+  name: uplink-costume-clown-name
+  description: uplink-costume-clown-desc
+  productEntity: ClothingBackpackDuffelSyndicateCostumeClown
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkDeception
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink

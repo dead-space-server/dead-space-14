@@ -9,6 +9,11 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtBrigmedic
 
+- type: loadout
+  id: BrigmedicJumpskirtPencil
+  equipment:
+    jumpsuit: ClothingUniformJumpskirtPencilBrigmedic
+
 # Back
 - type: loadout
   id: BrigmedicBackpack
@@ -30,11 +35,6 @@
   id: UnderwearSocksBrigmedic
   equipment:
     socks: ClothingUnderwearSocksBrigmedic
-
-- type: loadout
-  id: UnderwearWomenSocksBrigmedic
-  equipment:
-    socks: ClothingUnderwearWomenSocksBrigmedic
 
 # Underwear
 - type: loadout
@@ -60,3 +60,19 @@
     proto: FemaleUnderwear
   equipment:
     underweart: ClothingUnderwearTopBraBrigmedic
+
+# Медаль
+- type: loadoutEffectGroup
+  id: BrigMedicMedal
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: JobBrigmedic
+      time: 270000 # 75 hours
+
+- type: loadout
+  id: BrigMedicMedal
+  storage:
+    back:
+    - ClothingNeckSecurityBrigMedicMedal

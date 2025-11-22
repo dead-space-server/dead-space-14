@@ -2,8 +2,10 @@
 - type: roleLoadout
   id: JobBlueShieldOfficer
   groups:
-  - GroupTankHarness
+  # - GroupTankHarness # outerClothing occupied by startingGear
+  - BlueShieldOfficerBackpack
   - BlueShieldOfficerJumpsuit
+  - BlueShieldOfficerNeck
   - Survival
   - Trinkets
   - GroupSpeciesBreathTool
@@ -73,6 +75,7 @@
   - SeniorEngineerHead
   - SeniorEngineerJumpsuit
   - StationEngineerBackpack
+  - SeniorEngineerBelt
   - StationEngineerOuterClothing
   - StationEngineerShoes
   - SeniorEngineerID
@@ -112,6 +115,7 @@
   - GroupSpeciesBreathTool
   - BrigmedicSocks # DS14-Underwear
   - BrigmedicUnderwear # DS14-Underwear
+  - BrigMedicMedal # DS14-Medal
 
 - type: roleLoadout
   id: JobSeniorOfficer
@@ -129,13 +133,14 @@
   - SeniorOfficerNeck
   - SeniorOfficerSocks # DS14-Underwear
   - SeniorOfficerUnderwear # DS14-Underwear
+  - SeniorOfficerMedal # DS14-Medal
 
 - type: roleLoadout
   id: JobSecurityPilot
   groups:
   - GroupTankHarness
   - SecurityHead
-  - SecurityJumpsuit
+  - SecurityPilotJumpsuit # DS14
   - SecurityBackpack
   - SecurityShoes
   - SecurityBelt
@@ -144,6 +149,7 @@
   - GroupSpeciesBreathTool
   - SecuritySocks # DS14-Underwear
   - SecurityUnderwear # DS14-Underwear
+  - SecurityPilotMedal # DS14-Medal
 
 # Medical
 - type: roleLoadout

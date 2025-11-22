@@ -5,7 +5,6 @@ using Content.Server.Popups;
 using Content.Shared.Chemistry.EntitySystems;
 using Robust.Shared.Audio.Systems;
 using Content.Shared.NPC.Systems;
-using Content.Server.Body.Components;
 using Content.Shared.FixedPoint;
 using Content.Shared.DeadSpace.Abilities.Bloodsucker;
 using Content.Shared.DoAfter;
@@ -15,6 +14,7 @@ using Content.Shared.Mobs.Components;
 using Content.Server.DeadSpace.Abilities.Cocoon.Components;
 using Content.Server.DeadSpace.Spiders.SpiderTerror.Components;
 using Content.Server.DeadSpace.Spiders.SpiderTerror;
+using Content.Server.DeadSpace.Abilities.Bloodsucker.Components;
 
 namespace Content.Server.DeadSpace.Abilities.Bloodsucker;
 
@@ -25,7 +25,6 @@ public sealed partial class BloodsuckerSystem : SharedBloodsuckerSystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly BloodstreamSystem _bloodstreamSystem = default!;
     [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
     [Dependency] private readonly SpiderTerrorTombSystem _tomb = default!;
@@ -74,7 +73,7 @@ public sealed partial class BloodsuckerSystem : SharedBloodsuckerSystem
 
         var target = args.Target;
 
-        if (TryComp<SpiderTerrorTombComponent>(target, out var spiderTerrorTombComp))
+        if (TryComp<SpiderTerrorTombComponent>(target, out var spiderTerrorTombComp) && component.CanSuckTomb)
         {
             if (component.HowMuchWillItSuck <= spiderTerrorTombComp.Reagent)
             {
@@ -90,9 +89,9 @@ public sealed partial class BloodsuckerSystem : SharedBloodsuckerSystem
 
         if (TryComp<CocoonComponent>(target, out var cocoonComponent))
         {
-            if (cocoonComponent.Stomach.ContainedEntities.Count > 0)
+            if (cocoonComponent.Cocoon.ContainedEntities.Count > 0)
             {
-                var firstEntity = cocoonComponent.Stomach.ContainedEntities[0];
+                var firstEntity = cocoonComponent.Cocoon.ContainedEntities[0];
                 target = firstEntity;
             }
         }
@@ -120,7 +119,7 @@ public sealed partial class BloodsuckerSystem : SharedBloodsuckerSystem
         if (!isCanSuck)
             return;
 
-        if (_npcFaction.IsEntityFriendly(uid, target))
+        if (_npcFaction.IsEntityFriendly(uid, target) && !HasComp<IgnorFriendlyForSuckBloodComponent>(target))
             return;
 
         if (!HasComp<BodyComponent>(target))
@@ -138,7 +137,7 @@ public sealed partial class BloodsuckerSystem : SharedBloodsuckerSystem
         var searchDoAfter = new DoAfterArgs(EntityManager, uid, TimeSpan.FromSeconds(component.Duration), new BloodsuckerDoAfterEvent(), uid, target: target)
         {
             Broadcast = true,
-            DistanceThreshold = 2,
+            DistanceThreshold = null,
             BreakOnMove = true
         };
 
@@ -158,7 +157,7 @@ public sealed partial class BloodsuckerSystem : SharedBloodsuckerSystem
             if (component.HowMuchWillItSuck <= spiderTerrorTombComp.Reagent)
             {
                 _tomb.AddReagent(target, -component.HowMuchWillItSuck, spiderTerrorTombComp);
-                SetReagentCount(uid, component.HowMuchWillItSuck);
+                AddReagentCount(uid, component.HowMuchWillItSuck);
 
                 if (component.InjectSound != null)
                     _audio.PlayPvs(component.InjectSound, target);
@@ -185,29 +184,28 @@ public sealed partial class BloodsuckerSystem : SharedBloodsuckerSystem
 
         _popup.PopupEntity(Loc.GetString("hypospray-component-feel-prick-message"), target, target);
 
-        SetReagentCount(uid, component.HowMuchWillItSuck, component);
+        AddReagentCount(uid, component.HowMuchWillItSuck, component);
         _popup.PopupEntity(Loc.GetString("У вас есть ") + component.CountReagent.ToString() + Loc.GetString(" питательных веществ"), uid, uid);
 
     }
 
-    private bool TryModifyBloodLevel(EntityUid uid, FixedPoint2 amount, BloodstreamComponent? component = null)
+    public bool TryModifyBloodLevel(EntityUid uid, FixedPoint2 amount, BloodstreamComponent? component = null)
     {
         if (!Resolve(uid, ref component, false))
             return false;
 
-        if (!_solutionContainerSystem.ResolveSolution(uid, component.BloodSolutionName, ref component.BloodSolution))
+        if (!_solutionContainer.ResolveSolution(uid, component.BloodSolutionName, ref component.BloodSolution))
             return false;
 
-        if (amount >= 0)
-            return _solutionContainerSystem.TryAddReagent(component.BloodSolution.Value, component.BloodReagent, amount, out _);
+        _solutionContainer.SplitSolution(component.BloodSolution.Value, -amount);
 
-        var newSol = _solutionContainerSystem.SplitSolution(component.BloodSolution.Value, -amount);
-
-        if (!_solutionContainerSystem.ResolveSolution(uid, component.BloodTemporarySolutionName, ref component.TemporarySolution, out var tempSolution))
+        if (!_solutionContainer.ResolveSolution(uid, component.BloodTemporarySolutionName, ref component.TemporarySolution, out _))
             return true;
 
+        _solutionContainer.UpdateChemicals(component.TemporarySolution.Value);
 
-        _solutionContainerSystem.UpdateChemicals(component.TemporarySolution.Value);
+        var bloodsuckEvent = new ModifyBloodLevelEvent(amount);
+        RaiseLocalEvent(uid, bloodsuckEvent);
 
         return true;
     }

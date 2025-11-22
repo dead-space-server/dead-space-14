@@ -1,3 +1,5 @@
+ent-MobRobotic = { ent-BaseMob }
+    .desc = { ent-BaseMob.desc }
 ent-MobSiliconBase = { "" }
     .desc = { "" }
 ent-MobFireBot = пожарбот
@@ -12,5 +14,7 @@ ent-MobMedibot = медибот
     .desc = Не заменит врача, но лучше, чем ничего.
 ent-MobMimeBot = мимбот
     .desc = Почему бы не помахать мимботу?
-ent-MobSupplyBot = саплайбот
+ent-MobSupplyBot = грузобот
     .desc = Доставляет грузы!
+ent-MobHugBot = обнимашкобот
+    .desc = Ооо, кому-то нужны объятия?

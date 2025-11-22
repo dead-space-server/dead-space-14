@@ -36,6 +36,23 @@
   equipment:
     jumpsuit: ClothingUniformJumpskirtDetectiveGrey
 
+# DS14-start
+- type: loadout
+  id: NoirJumpsuitAlt
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitDetectiveGreyAlt
+
+- type: loadout
+  id: DetectiveJumpsuitAlt
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitDetectiveAlt
+
+- type: loadout
+  id: NoirJumpskirtPencil
+  equipment:
+    jumpsuit: ClothingUniformJumpskirtPencilDetectiveGrey
+# DS14-end
+
 # Back
 - type: loadout
   id: DetectiveSatchel
@@ -85,11 +102,6 @@
   equipment:
     socks: ClothingUnderwearSocksDetective
 
-- type: loadout
-  id: UnderwearWomenSocksDetective
-  equipment:
-    socks: ClothingUnderwearWomenSocksDetective
-
 # Underwear
 - type: loadout
   id: UnderwearBottomBoxersDetective
@@ -114,3 +126,19 @@
     proto: FemaleUnderwear
   equipment:
     underweart: ClothingUnderwearTopBraDetective
+
+# Медаль
+- type: loadoutEffectGroup
+  id: SecurityDetectiveMedal
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: JobDetective
+      time: 270000 # 75 hours
+
+- type: loadout
+  id: DetectiveMedal
+  storage:
+    back:
+    - ClothingNeckDetectiveMedal

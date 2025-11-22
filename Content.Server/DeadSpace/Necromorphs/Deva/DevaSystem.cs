@@ -17,6 +17,8 @@ using Content.Shared.Speech.Components;
 using Robust.Shared.Audio.Systems;
 using Content.Shared.DeadSpace.Necromorphs.Deva;
 using Robust.Shared.Physics.Components;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.Necromorphs.Deva;
 
@@ -34,6 +36,9 @@ public sealed class DevaSystem : EntitySystem
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -76,7 +81,7 @@ public sealed class DevaSystem : EntitySystem
     private void OnState(EntityUid uid, DevaComponent component, MobStateChangedEvent args)
     {
         if (_mobState.IsDead(uid))
-            _cocoon.TryEmptyCocoon(uid);
+            _cocoon.EmptyCocoon(uid);
     }
     private void OnRefresh(EntityUid uid, DevaComponent component, RefreshMovementSpeedModifiersEvent args)
     {
@@ -159,6 +164,14 @@ public sealed class DevaSystem : EntitySystem
         if (!Resolve(uid, ref component))
             return;
 
+        EntityUid? prisonerTarget = _cocoon.GetPrisoner(uid);
+
+        if (prisonerTarget != null && !_cocoon.IsEntityInCocoon(uid, prisonerTarget.Value))
+        {
+            ReleasePrisoner(uid, component);
+            return;
+        }
+
         if (_gameTiming.CurTime <= component.DamageTick)
             return;
 
@@ -168,8 +181,6 @@ public sealed class DevaSystem : EntitySystem
             return;
         }
 
-        EntityUid? prisonerTarget = _cocoon.GetPrisoner(uid);
-
         if (!TryComp<DamageableComponent>(prisonerTarget, out var damageable))
             return;
 
@@ -177,16 +188,18 @@ public sealed class DevaSystem : EntitySystem
 
         if (TryComp<VocalComponent>(prisonerTarget, out var vocal))
         {
-            var random = new Random();
-            int chance = random.Next(0, 5);
+            int chance = _random.Next(0, 5);
+
+            if (vocal.EmoteSounds is not { } sounds)
+                return;
 
             if (chance < 1)
             {
-                _chat.TryPlayEmoteSound(prisonerTarget.Value, vocal.EmoteSounds, "Crying");
+                _chat.TryPlayEmoteSound(prisonerTarget.Value, _proto.Index(sounds), "Crying");
             }
             else
             {
-                _chat.TryPlayEmoteSound(prisonerTarget.Value, vocal.EmoteSounds, "Scream");
+                _chat.TryPlayEmoteSound(prisonerTarget.Value, _proto.Index(sounds), "Scream");
             }
         }
 
@@ -210,7 +223,7 @@ public sealed class DevaSystem : EntitySystem
         if (!Resolve(uid, ref component))
             return;
 
-        _cocoon.TryEmptyCocoon(uid);
+        _cocoon.EmptyCocoon(uid);
         component.IsTrappedVictim = false;
         component.NextTickUtilPrison = _gameTiming.CurTime;
         UpdateDeva(uid, component);

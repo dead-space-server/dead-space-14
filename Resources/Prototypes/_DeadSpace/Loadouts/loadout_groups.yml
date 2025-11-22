@@ -11,10 +11,24 @@
 
 # Command
 - type: loadoutGroup
+  id: BlueShieldOfficerBackpack
+  name: loadout-group-blue-shield-officer-backpack
+  hidden: true
+  loadouts:
+  - BlueShieldOfficerBackpack
+
+- type: loadoutGroup
   id: BlueShieldOfficerJumpsuit
   name: loadout-group-blue-shield-officer-jumpsuit
   loadouts:
   - BlueShieldOfficerJumpsuit
+
+- type: loadoutGroup
+  id: BlueShieldOfficerNeck
+  name: loadout-group-blue-shield-officer-neck
+  loadouts:
+  - BlueShieldOfficerCloak
+  - BlueShieldOfficerMantle
 
 - type: loadoutGroup
   id: BlueShieldOfficerUnderwear
@@ -108,6 +122,13 @@
   - UnderwearTopBraSeniorEngineer
   - UnderwearBottomPantiesSeniorEngineer
 
+- type: loadoutGroup
+  id: SeniorEngineerBelt
+  name: loadout-group-senior-engineer-belt
+  loadouts:
+  - StationEngineerBeltUtility
+  - StationEngineerBeltWebbing
+
 # Science
 - type: loadoutGroup
   id: SeniorResearcherHead
@@ -122,6 +143,9 @@
   loadouts:
   - SeniorResearcherJumpsuit
   - SeniorResearcherJumpskirt
+  - SeniorResearcherJumpsuitTurtleneck
+  - SeniorResearcherJumpskirtTurtleneck
+
 
 - type: loadoutGroup
   id: SeniorResearcherOuterClothing
@@ -129,6 +153,7 @@
   minLimit: 0
   loadouts:
   - SeniorResearcherLabCoat
+  - SeniorResearcherWinterCoat
 
 - type: loadoutGroup
   id: SeniorResearcherPDA
@@ -153,6 +178,7 @@
   loadouts:
   - BrigmedicJumpsuit
   - BrigmedicJumpskirt
+  - BrigmedicJumpskirtPencil
 
 - type: loadoutGroup
   id: BrigmedicBackpack
@@ -168,6 +194,7 @@
   loadouts:
   - SeniorOfficerJumpsuit
   - SeniorOfficerJumpskirt
+  - SeniorOfficerJumpskirtPencil
 
 - type: loadoutGroup
   id: SeniorOfficerBackpack
@@ -201,7 +228,6 @@
   name: loadout-group-senior-officer-socks
   loadouts:
   - UnderwearSocksSeniorOfficer
-  - UnderwearWomenSocksSeniorOfficer
 
 - type: loadoutGroup
   id: SeniorOfficerUnderwear
@@ -224,13 +250,14 @@
   - EmergencyNonBreather
   - EmergencyRobotNonBreather
   - LoadoutSpeciesEVANitrogen
+  - EmergencyBeerBrigmedic
+  - EmergencyMothBrigmedic
 
 - type: loadoutGroup
   id: BrigmedicSocks
   name: loadout-group-brigmedic-socks
   loadouts:
   - UnderwearSocksBrigmedic
-  - UnderwearWomenSocksBrigmedic
 
 - type: loadoutGroup
   id: BrigmedicUnderwear
@@ -241,6 +268,58 @@
   - UnderwearBottomBoxersBrigmedic
   - UnderwearTopBraBrigmedic
   - UnderwearBottomPantiesBrigmedic
+
+- type: loadoutGroup
+  id: SecurityOfficerMedal
+  name: loadout-group-security-officer-medal
+  loadouts:
+  - SecurityOfficerMedal
+
+- type: loadoutGroup
+  id: DetectiveMedal
+  name: loadout-group-detective-medal
+  loadouts:
+  - DetectiveMedal
+
+- type: loadoutGroup
+  id: WardenMedal
+  name: loadout-group-warden-medal
+  loadouts:
+  - WardenMedal
+
+- type: loadoutGroup
+  id: SeniorOfficerMedal
+  name: loadout-group-senior-officer-medal
+  loadouts:
+  - SeniorOfficerMedal
+
+- type: loadoutGroup
+  id: HeadOfSecurityMedal
+  name: loadout-group-head-of-security-medal
+  loadouts:
+  - HeadOfSecurityMedal
+
+- type: loadoutGroup
+  id: BrigMedicMedal
+  name: loadout-group-brigmedic-medal
+  loadouts:
+  - BrigMedicMedal
+
+- type: loadoutGroup
+  id: SecurityPilotMedal
+  name: loadout-group-security-pilot-medal
+  loadouts:
+  - SecurityPilotMedal
+
+- type: loadoutGroup
+  id: SecurityPilotJumpsuit
+  name: loadout-group-security-pilot-jumpsuit
+  loadouts:
+  - SecurityPilotJumpsuit
+  - SecurityJumpsuit
+  - SecurityJumpskirt
+  - SecurityJumpsuitGrey
+  - SecurityJumpskirtGrey
 
 # Medical
 - type: loadoutGroup

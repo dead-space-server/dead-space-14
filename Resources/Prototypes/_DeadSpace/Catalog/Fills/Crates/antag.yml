@@ -1,0 +1,11 @@
+- type: entity
+  id: CrateWizardHardsuitBundle
+  suffix: Скафандр волшебника
+  parent: CrateGenericSteel
+  components:
+  - type: StorageFill
+    contents:
+      - id: ClothingOuterHardsuitWizard
+      - id: ClothingMaskBreath
+      - id: DoubleEmergencyOxygenTankFilled
+      - id: DoubleEmergencyNitrogenTankFilled

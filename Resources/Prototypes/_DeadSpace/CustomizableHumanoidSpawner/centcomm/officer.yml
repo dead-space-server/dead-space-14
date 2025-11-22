@@ -1,0 +1,61 @@
+- type: entity
+  parent: CustomizableSpawnerBase
+  id: CustomizableSpawnerCentralCommandOfficer
+  name: Офицер безопасности ЦК
+  suffix: ОЦК, Призрачная роль, Кастомизируемый персонаж
+  components:
+  - type: Sprite
+    layers:
+    - state: timed
+    - sprite: Markers/jobs.rsi
+      state: centcom
+  - type: CustomizableHumanoidSpawner
+    jobPrototype: CentralCommandOfficer
+    allowedSpecies:
+    - Human
+    - Shark
+    - Demon
+    - Vulpkanin
+    - Tajaran
+  - type: GhostRole
+    name: ghost-role-information-centcomofficer-name
+    description: ghost-role-information-centcomofficer-description
+    rules: ghost-role-information-centcom-personal-rules
+    requirements:
+      - !type:DepartmentTimeRequirement
+        department: Security
+        time: 108000 # 30 hours
+    raffle:
+      settings: short
+
+- type: roleLoadout
+  id: JobCentralCommandOfficer
+  groups:
+  # - GroupTankHarness # outerClothing slot occupied by startingGear
+  - CentralCommandOfficerLoadout
+  - Survival
+  - GroupSpeciesBreathTool
+  - CentcommOfficerUnderwear
+
+- type: loadoutGroup
+  id: CentralCommandOfficerLoadout
+  name: spawner-loadout-centcomm-officer
+  hidden: true
+  loadouts:
+  - CentralCommandOfficerLoadout
+
+- type: loadout
+  id: CentralCommandOfficerLoadout
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCentcomOfficial
+    neck: SecurityWhistle
+    back: ClothingBackpackMilitarySatchel
+    shoes: ClothingShoesBootsJackSecFilled
+    eyes: ClothingEyesGlassesHiddenSecurity
+    suitstorage: WeaponEnergyShotgun
+    pocket1: TelescopicShield
+    pocket2: WeaponPistolX01
+  storage:
+    back:
+    - BoxZiptie
+    - PortableRecharger

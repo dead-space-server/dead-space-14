@@ -1,0 +1,47 @@
+- type: entity
+  parent: CustomizableSpawnerBase
+  id: CustomizableSpawnerCentralCommandOfficial
+  name: Представитель ЦК
+  suffix: ПЦК, Кастомизируемый персонаж
+  components:
+  - type: Sprite
+    layers:
+    - state: timed
+    - sprite: Markers/jobs.rsi
+      state: centcom
+  - type: CustomizableHumanoidSpawner
+    jobPrototype: CentralCommandOfficial
+    allowedSpecies:
+    - Human
+    - Shark
+    - Demon
+    - Vulpkanin
+    - Tajaran
+
+- type: roleLoadout
+  id: JobCentralCommandOfficial
+  groups:
+  # - GroupTankHarness # outerClothing slot occupied by startingGear
+  - CentralCommandOfficialLoadout
+  - Survival
+  - GroupSpeciesBreathTool
+  - CentcommOfficerUnderwear
+
+- type: loadoutGroup
+  id: CentralCommandOfficialLoadout
+  name: spawner-loadout-centcomm-official
+  hidden: true
+  loadouts:
+  - CentralCommandOfficialLoadout
+
+- type: loadout
+  id: CentralCommandOfficialLoadout
+  equipment:
+    neck: ClothingNeckCloakCentcom
+    back: ClothingBackpackSatchelOfficial
+    head: ClothingHeadHatCentcomcap
+    eyes: ClothingEyesGlassesHiddenSecurity
+  storage:
+    back:
+    - PhoneInstrument
+    - DoorRemoteAll

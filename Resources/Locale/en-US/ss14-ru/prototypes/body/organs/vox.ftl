@@ -1,3 +1,13 @@
 ent-OrganVoxLungs = { ent-OrganHumanLungs }
     .desc = The blue, anaerobic lungs of a vox, they intake nitrogen to breathe. Any form of gaseous oxygen is lethally toxic if breathed in.
     .suffix = vox
+ent-OrganVoxStomach = stomach
+    .desc = A stomach that smells of ammonia.
+ent-OrganVoxLiver = liver
+    .desc = Smells flammable.
+ent-OrganVoxHeart = heart
+    .desc = The strange heart of a vox.
+ent-OrganVoxBrain = brain
+    .desc = { ent-OrganHumanBrain.desc }
+ent-OrganVoxKidneys = kidneys
+    .desc = { ent-OrganHumanKidneys.desc }

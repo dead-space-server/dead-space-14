@@ -13,12 +13,27 @@
   - PlushieSpaceLizard
   - ThreeCandles
   - Lighter
+  - FlippoLighter
   - CigPackGreen
   - CigPackRed
   - CigPackBlue
   - CigPackBlack
   - CigarCase
   - CigarGold
+  - BoxFolderBaseThreePapers
+  - BoxFolderPlasticClipboardThreePapers
+  - BoxFolderClipboardThreePapers
+  # DS14-pins-start
+  - ClothingNeckUSSPPin
+  - ClothingNeckDonkPin
+  - ClothingNeckEarthPin
+  - ClothingNeckLogistikaPin
+  - ClothingNeckDeForestPin
+  - ClothingNeckNakamuraPin
+  - ClothingNeckNanoTrasenPin
+  - ClothingNeckSyndicakePin
+  - ClothingNeckVitezstviPin
+  # DS14-pins-end
   - ClothingNeckLGBTPin
   - ClothingNeckAllyPin
   - ClothingNeckAromanticPin
@@ -30,11 +45,19 @@
   - ClothingNeckLesbianPin
   - ClothingNeckNonBinaryPin
   - ClothingNeckPansexualPin
+  - ClothingNeckPluralPin
   - ClothingNeckOmnisexualPin
   - ClothingNeckGenderqueerPin
+  - ClothingNeckGenderfluidPin
   - ClothingNeckTransPin
   - ClothingNeckAutismPin
   - ClothingNeckGoldAutismPin
+  - OffsetCane
+  - OffsetCaneWood
+  - OffsetCaneClown
+  - OffsetCaneMime
+  - OffsetCaneNT
+  - Cane
   - CorporateLaw # Corvax-HyperLink
   - TowelColorBlack
   - TowelColorDarkBlue
@@ -84,6 +107,7 @@
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeer
+  - EmergencyMoth
 
 # nitrogen or oxygen tank, depending on what your species needs
 - type: loadoutGroup
@@ -182,6 +206,7 @@
   minLimit: 0
   loadouts:
   - HoPCloak
+  - HoPAltCloak
   - HoPMantle
 
 - type: loadoutGroup
@@ -206,7 +231,7 @@
   loadouts:
   - ShoesBootsLaceup
   - BrownShoes
-  
+
 - type: loadoutGroup
   id: HoPUnderwear
   name: loadout-group-hop-underwear
@@ -226,6 +251,7 @@
   - GreyJumpskirt
   - AncientJumpsuit
   - RainbowJumpsuit
+  - RainbowJumpskirt
 
 - type: loadoutGroup
   id: PassengerFace
@@ -310,6 +336,13 @@
   - UnderwearBottomPantiesBartender
 
 - type: loadoutGroup
+  id: BartenderGoldenShaker
+  name: loadout-group-bartender-shaker
+  minLimit: 0
+  loadouts:
+  - BartenderGoldenShaker
+
+- type: loadoutGroup
   id: ChefHead
   name: loadout-group-chef-head
   minLimit: 0
@@ -354,7 +387,7 @@
   name: loadout-group-chef-hand
   minLimit: 0
   loadouts:
-  - ChefGoldenKnife  
+  - ChefGoldenKnife
 
 - type: loadoutGroup
   id: ChefGloves
@@ -459,6 +492,18 @@
   - ChaplainNeck
 
 - type: loadoutGroup
+  id: ChaplainBible
+  name: loadout-group-chaplain-bible
+  minLimit: 1
+  loadouts:
+  - Bible
+  - BibleNanoTrasen
+  - BibleDruid
+  - BibleHonk
+  - BibleRatvar
+  - BibleNarsie
+
+- type: loadoutGroup
   id: ChaplainUnderwear
   name: loadout-group-chaplain-underwear
   minLimit: 2
@@ -497,6 +542,14 @@
   minLimit: 0
   loadouts:
   - JanitorWintercoat
+  - JanitorHazardVest
+
+- type: loadoutGroup
+  id: JanitorShoes
+  name: loadout-group-janitor-shoes
+  loadouts:
+  - PurpleShoes
+  - GaloshesShoes
 
 - type: loadoutGroup
   id: JanitorPlunger
@@ -618,10 +671,11 @@
   - EmergencyOxygenClown
   # DS14-species-emergency-start
   - EmergencyNonBreather
-  - EmergencyRobotNonBreather  
+  - EmergencyRobotNonBreather
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerClown
+  - EmergencyMothClown
 
 - type: loadoutGroup
   id: MimeHead
@@ -687,8 +741,9 @@
   - EmergencyOxygenMime
   # DS14-species-emergency-start
   - EmergencyNonBreather
-  - EmergencyRobotNonBreather  
+  - EmergencyRobotNonBreather
   # DS14-species-emergency-end
+  - EmergencySpeciesMothMime
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerMime
 
@@ -862,6 +917,14 @@
   - BlackShoes
   - CargoWinterBoots
 
+# DS14-disabled
+#- type: loadoutGroup
+#  id: CargoTechnicianID
+#  name: loadout-group-cargo-technician-id
+#  loadouts:
+#  - CargoTechnicianPDA
+#  - SeniorCourierPDA
+
 - type: loadoutGroup
   id: CargoTechnicianUnderwear
   name: loadout-group-cargo-technician-underwear
@@ -888,7 +951,7 @@
   - SalvageSpecialistJumpsuitFormal
   - SalvageSpecialistJumpskirt
   - SalvageSpecialistJumpskirtFormal
-  
+
 - type: loadoutGroup
   id: SalvageSpecialistOuterClothing
   name: loadout-group-salvage-specialist-outerclothing
@@ -1017,6 +1080,15 @@
   - StationEngineerSatchel
   - StationEngineerDuffel
 
+# DS14-start
+- type: loadoutGroup
+  id: StationEngineerBelt
+  name: loadout-group-station-engineer-belt
+  loadouts:
+  - StationEngineerBeltUtility
+  - StationEngineerBeltWebbing
+# DS14-end
+
 - type: loadoutGroup
   id: StationEngineerOuterClothing
   name: loadout-group-station-engineer-outerclothing
@@ -1032,12 +1104,13 @@
   - WorkBoots
   - EngineeringWinterBoots
 
-- type: loadoutGroup
-  id: StationEngineerID
-  name: loadout-group-station-engineer-id
-  loadouts:
-  - StationEngineerPDA
-  # - SeniorEngineerPDA
+# DS14-disabled
+#- type: loadoutGroup
+#  id: StationEngineerID
+#  name: loadout-group-station-engineer-id
+#  loadouts:
+#  - StationEngineerPDA
+#  - SeniorEngineerPDA
 
 - type: loadoutGroup
   id: StationEngineerUnderwear
@@ -1073,6 +1146,15 @@
   - AtmosphericTechnicianSatchel
   - AtmosphericTechnicianDuffel
 
+# DS14-start
+- type: loadoutGroup
+  id: AtmosphericTechnicianBelt
+  name: loadout-group-atmospheric-technician-belt
+  loadouts:
+  - AtmosphericTechnicianBeltUtility
+  - AtmosphericTechnicianBeltWebbing
+# DS14-end
+
 - type: loadoutGroup
   id: AtmosphericTechnicianShoes
   name: loadout-group-atmospheric-technician-shoes
@@ -1104,6 +1186,7 @@
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerExtended
+  - EmergencyMothExtended
 
 # Science
 - type: loadoutGroup
@@ -1127,6 +1210,12 @@
   loadouts:
   - ResearchDirectorJumpsuit
   - ResearchDirectorJumpskirt
+  # DS14-rnd-start
+  - ResearchDirectorJumpsuitShirt
+  - ResearchDirectorJumpskirtShirt
+  - ResearchDirectorJumpsuitSuit
+  - ResearchDirectorJumpskirtSuit
+  # DS14-rnd-end
 
 - type: loadoutGroup
   id: ResearchDirectorOuterClothing
@@ -1142,6 +1231,7 @@
   loadouts:
   - BrownShoes
   - ScienceWinterBoots
+  - LeatherShoes # DS14
   - ShoesBootsLaceup
 
 - type: loadoutGroup
@@ -1159,6 +1249,7 @@
   name: loadout-group-scientist-head
   minLimit: 0
   loadouts:
+  - RoboticistBeret # DS14
   - RoboticistCap
   - SkullBandana
   # - ScientificBeret
@@ -1176,6 +1267,16 @@
   loadouts:
   - ScientistJumpsuit
   - ScientistJumpskirt
+  # DS14-start
+  - ScientistJumpsuitFormal
+  - ScientistJumpskirtFormal
+  - ScientistJumpsuitTurtleneck
+  - ScientistJumpskirtTurtleneck
+  - RoboticistJumpsuitOveralls
+  - RoboticistJumpskirtOveralls
+  - RoboticistJumpsuitWhite
+  - RoboticistJumpskirtWhite
+  # DS14-end
   - RoboticistJumpsuit
   - RoboticistJumpskirt
   # - SeniorResearcherJumpsuit
@@ -1188,6 +1289,11 @@
   - ScientistBackpack
   - ScientistSatchel
   - ScientistDuffel
+  # DS14-start
+  - RoboticistBackpack
+  - RoboticistSatchel
+  - RoboticistDuffel
+  # DS14-end
 
 - type: loadoutGroup
   id: ScientistOuterClothing
@@ -1218,12 +1324,13 @@
   - PurpleGloves
   - RobohandsGloves
 
-- type: loadoutGroup
-  id: ScientistPDA
-  name: loadout-group-scientist-id
-  loadouts:
-  - ScientistPDA
-  # - SeniorResearcherPDA
+# DS14-disabled
+#- type: loadoutGroup
+#  id: ScientistPDA
+#  name: loadout-group-scientist-id
+#  loadouts:
+#  - ScientistPDA
+#  - SeniorResearcherPDA
 
 - type: loadoutGroup
   id: ScientistUnderwear
@@ -1267,6 +1374,7 @@
   loadouts:
   - HeadofSecurityJumpsuit
   - HeadofSecurityJumpskirt
+  - HeadofSecurityJumpskirtPencil
   - HeadofSecurityTurtleneck
   - HeadofSecurityTurtleneckSkirt
   - HeadofSecurityFormalSuit
@@ -1302,7 +1410,6 @@
   name: loadout-group-head-of-security-socks
   loadouts:
   - UnderwearSocksHeadOfSecurity
-  - UnderwearWomenSocksHeadOfSecurity
 
 - type: loadoutGroup
   id: HeadofSecurityUnderwear
@@ -1328,6 +1435,7 @@
   loadouts:
   - WardenJumpsuit
   - WardenJumpskirt
+  - WardenJumpskirtPencil # DS14
 
 - type: loadoutGroup
   id: WardenOuterClothing
@@ -1341,7 +1449,6 @@
   name: loadout-group-warden-socks
   loadouts:
   - UnderwearSocksWarden
-  - UnderwearWomenSocksWarden
 
 - type: loadoutGroup
   id: WardenUnderwear
@@ -1378,6 +1485,8 @@
   - SecurityJumpskirt
   - SecurityJumpsuitGrey
   - SecurityJumpskirtGrey
+  - SecurityJumpsuitBlack # DS14
+  - SecurityJumpskirtPencil # DS14
   # - SeniorOfficerJumpsuit
   # - SeniorOfficerJumpskirt
   - TrooperUniform
@@ -1414,19 +1523,19 @@
   - JackBoots
   # - SecurityWinterBoots
 
-- type: loadoutGroup
-  id: SecurityPDA
-  name: loadout-group-security-id
-  loadouts:
-  - SecurityPDA
-  # - SeniorOfficerPDA
+# DS14-disabled
+#- type: loadoutGroup
+#  id: SecurityPDA
+#  name: loadout-group-security-id
+#  loadouts:
+#  - SecurityPDA
+#  - SeniorOfficerPDA
 
 - type: loadoutGroup
   id: SecuritySocks
   name: loadout-group-security-socks
   loadouts:
   - UnderwearSocksSecurityOfficer
-  - UnderwearWomenSocksSecurityOfficer
 
 - type: loadoutGroup
   id: SecurityUnderwear
@@ -1461,6 +1570,9 @@
   - DetectiveJumpskirt
   - NoirJumpsuit
   - NoirJumpskirt
+  - NoirJumpsuitAlt # DS14
+  - DetectiveJumpsuitAlt # DS14
+  - NoirJumpskirtPencil # DS14
 
 - type: loadoutGroup
   id: DetectiveBackpack
@@ -1493,7 +1605,6 @@
   name: loadout-group-detective-socks
   loadouts:
   - UnderwearSocksDetective
-  - UnderwearWomenSocksDetective
 
 - type: loadoutGroup
   id: DetectiveUnderwear
@@ -1517,7 +1628,6 @@
   name: loadout-group-security-cadet-socks
   loadouts:
   - UnderwearSocksCadet
-  - UnderwearWomenSocksCadet
 
 - type: loadoutGroup
   id: SecurityCadetUnderwear
@@ -1543,6 +1653,7 @@
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerSecurity
+  - EmergencyMothSecurity
 
 - type: loadoutGroup
   id: SecurityStar
@@ -1584,7 +1695,7 @@
   - MedicalDoctorBackpack
   - MedicalDoctorSatchel
   - MedicalDoctorDuffel
-  - MedicalDoctorSatchelBlueCat
+  - ChiefMedicalOfficerSatchelBlueCat
 
 - type: loadoutGroup
   id: ChiefMedicalOfficerNeck
@@ -1661,12 +1772,13 @@
   - WhiteShoes
   - MedicalWinterBoots
 
-- type: loadoutGroup
-  id: MedicalDoctorPDA
-  name: loadout-group-medical-doctor-id
-  loadouts:
-  - MedicalDoctorPDA
-  # - SeniorPhysicianPDA
+# DS14-disabled
+#- type: loadoutGroup
+#  id: MedicalDoctorPDA
+#  name: loadout-group-medical-doctor-id
+#  loadouts:
+#  - MedicalDoctorPDA
+#  - SeniorPhysicianPDA
 
 - type: loadoutGroup
   id: MedicalDoctorUnderwear
@@ -1775,6 +1887,17 @@
   - MedicalWinterBoots
 
 - type: loadoutGroup
+  id: MedicalEyewear
+  name: loadout-group-medical-glasses
+  minLimit: 0
+  loadouts:
+  - MedicalHud
+  - MedicalEyePatchHud
+  - Glasses
+  - GlassesJamjar
+  - GlassesJensen
+
+- type: loadoutGroup
   id: ParamedicUnderwear
   name: loadout-group-paramedic-underwear
   minLimit: 2
@@ -1798,6 +1921,7 @@
   # DS14-species-emergency-end
   - LoadoutSpeciesVoxNitrogen
   - EmergencyBeerMedical
+  - EmergencyMothMedical
 
 # Wildcards
 - type: loadoutGroup
@@ -1872,6 +1996,7 @@
   - EmergencyNitrogenSyndicate
   - EmergencyOxygenSyndicate
   - LoadoutSpeciesVoxNitrogen
+  - EmergencyMothSyndicate
 
 - type: loadoutGroup
   id: GroupSpeciesBreathTool

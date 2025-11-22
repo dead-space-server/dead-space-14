@@ -1,0 +1,22 @@
+# Lawyer
+- type: entity
+  parent: AirlockAssembly
+  id: AirlockAssemblyLawyer
+  name: каркас шлюза
+  description: Он открывается, он закрывается, и он может вас раздавить.
+  suffix: Юридический
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/lawyer.rsi
+    state: "assembly"
+
+- type: entity
+  parent: AirlockAssembly
+  id: AirlockAssemblyLawyerGlass
+  name: каркас шлюза
+  description: Он открывается, он закрывается, и он может вас раздавить.
+  suffix: Юридический, Стеклянный
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/lawyer.rsi
+    state: "assembly"
