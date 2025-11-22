@@ -11,6 +11,20 @@
     requiredLegs: 2
   - type: HumanoidAppearance
     species: IPC
+  # DS14-start
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 300
+        restitution: 0.0
+        mask:
+          - MobMask
+        layer:
+          - MobLayer
+  # DS14-end
   - type: DamageVisuals
     damageOverlayGroups:
       Brute:
