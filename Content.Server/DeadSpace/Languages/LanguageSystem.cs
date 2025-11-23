@@ -10,6 +10,7 @@ using Content.Shared.DeadSpace.Languages;
 using Robust.Server.Player;
 using Content.Shared.Chat;
 using System.Linq;
+using Content.Shared.Polymorph;
 
 namespace Content.Server.DeadSpace.Languages;
 
@@ -30,6 +31,7 @@ public sealed class LanguageSystem : EntitySystem
         SubscribeLocalEvent<LanguageComponent, MapInitEvent>(OnComponentMapInit);
         SubscribeLocalEvent<LanguageComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<LanguageComponent, SelectLanguageActionEvent>(OnSelect);
+        SubscribeLocalEvent<LanguageComponent, PolymorphedEvent>(OnPolymorphed);
 
         SubscribeNetworkEvent<SelectLanguageEvent>(OnSelectLanguage);
     }
@@ -42,6 +44,12 @@ public sealed class LanguageSystem : EntitySystem
     private void OnShutdown(EntityUid uid, LanguageComponent component, ComponentShutdown args)
     {
         _actionsSystem.RemoveAction(uid, component.SelectLanguageActionEntity);
+    }
+
+    private void OnPolymorphed(EntityUid uid, LanguageComponent component, PolymorphedEvent args)
+    {
+        var lang = EnsureComp<LanguageComponent>(args.NewEntity);
+        lang.CopyFrom(component);
     }
 
     private void OnSelect(EntityUid uid, LanguageComponent component, SelectLanguageActionEvent args)
