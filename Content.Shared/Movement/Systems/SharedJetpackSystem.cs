@@ -99,8 +99,10 @@ public abstract class SharedJetpackSystem : EntitySystem
 
     private void SetupUser(EntityUid user, EntityUid jetpackUid, JetpackComponent component)
     {
+        // DS14-start
         if (HasComp<ZombieComponent>(user))
             return;
+        // DS14-end
         EnsureComp<JetpackUserComponent>(user, out var userComp);
         component.JetpackUser = user;
 
