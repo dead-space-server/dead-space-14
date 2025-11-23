@@ -4,6 +4,7 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Popups;
+using Content.Shared.Zombies;
 using Robust.Shared.Containers;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
@@ -98,6 +99,8 @@ public abstract class SharedJetpackSystem : EntitySystem
 
     private void SetupUser(EntityUid user, EntityUid jetpackUid, JetpackComponent component)
     {
+        if (HasComp<ZombieComponent>(user))
+            return;
         EnsureComp<JetpackUserComponent>(user, out var userComp);
         component.JetpackUser = user;
 
