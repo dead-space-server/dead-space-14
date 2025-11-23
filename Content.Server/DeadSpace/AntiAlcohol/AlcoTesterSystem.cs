@@ -74,13 +74,14 @@ public sealed partial class AlcoTesterSystem : EntitySystem
 
         var ethanol = solution.GetReagentQuantity(EthanolReagentId).Float();
 
-        var verdict = ethanol switch
+        var verdictKey = ethanol switch
         {
-            < 0.01f => "Трезв(а).",
-            < 0.10f => "Лёгкое опьянение.",
-            < 0.30f => "Среднее опьянение.",
-            _ => "Сильное опьянение!"
+            < 0.01f => "alcohol-verdict-sober",
+            < 0.10f => "alcohol-verdict-light",
+            < 0.30f => "alcohol-verdict-medium",
+            _ => "alcohol-verdict-strong"
         };
+        var verdict = Loc.GetString(verdictKey);
 
         var ethanolStr = ethanol.ToString("0.###");
         _popup.PopupEntity(Loc.GetString("alco-tester-result", ("ethanol", ethanolStr), ("verdict", verdict)), uid, ev.User);

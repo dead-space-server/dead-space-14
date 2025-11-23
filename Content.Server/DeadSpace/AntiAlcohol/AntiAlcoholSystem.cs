@@ -1,5 +1,5 @@
-// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 using System;
+using System.Collections.Generic;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Medical;
 using Content.Shared.DeadSpace.AntiAlcohol;
@@ -15,10 +15,10 @@ public sealed class AntiAlcoholSystem : EntitySystem
     [Dependency] private readonly VomitSystem _vomit = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    private readonly List<(EntityUid Target, TimeSpan ExecuteAt)> _pendingVomit = new();
     public override void Initialize()
     {
         base.Initialize();
-
         SubscribeLocalEvent<ExecuteEntityEffectEvent<AntiAlcoholImplantEffect>>(OnExecuteAntiAlcoholEffect);
     }
 
@@ -36,28 +36,51 @@ public sealed class AntiAlcoholSystem : EntitySystem
         var reagentId = reagent.ID;
         var ethanolAmount = solution.GetTotalPrototypeQuantity(reagentId);
         var threshold = FixedPoint2.New(watcher.Threshold);
+
         if (ethanolAmount < threshold)
             return;
 
-        if (_timing.CurTime < watcher.NextAllowedVomitAt || !_random.Prob(watcher.Probability))
+        if (!_random.Prob(watcher.Probability))
             return;
 
-        watcher.NextAllowedVomitAt = _timing.CurTime + TimeSpan.FromSeconds(watcher.CooldownSeconds);
         var target = reagentArgs.TargetEntity;
-        var delay = TimeSpan.FromSeconds(0.5);
-        Timer.Spawn(delay, () =>
-        {
-            try
-            {
-                if (Deleted(target))
-                    return;
 
-                _vomit.Vomit(target);
-            }
-            catch (Exception e)
-            {
-                Logger.WarningS("anti_alcohol", $"Failed to force vomit on entity {target}: {e}");
-            }
-        });
+
+        var delay = TimeSpan.FromSeconds(watcher.VomitDelaySeconds);
+        var executeAt = _timing.CurTime + delay;
+
+
+        foreach (var pending in _pendingVomit)
+        {
+            if (pending.Target == target)
+                return;
+        }
+
+        _pendingVomit.Add((target, executeAt));
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        if (_pendingVomit.Count == 0)
+            return;
+
+        var now = _timing.CurTime;
+
+        for (int i = _pendingVomit.Count - 1; i >= 0; i--)
+        {
+            var item = _pendingVomit[i];
+
+            if (now < item.ExecuteAt)
+                continue;
+
+            _pendingVomit.RemoveAt(i);
+
+            if (Deleted(item.Target))
+                continue;
+
+            _vomit.Vomit(item.Target);
+        }
     }
 }

@@ -5,3 +5,8 @@ alco-tester-no-blood-sample = Нет биологического образца
 alco-tester-chemical-solution-not-found = Химический раствор не найден.
 
 alco-tester-result = Этанол: { $ethanol } ед. | { $verdict }
+
+alcohol-verdict-sober = Трезв(а).
+alcohol-verdict-light = Лёгкое опьянение.
+alcohol-verdict-medium = Среднее опьянение.
+alcohol-verdict-strong = Сильное опьянение!
