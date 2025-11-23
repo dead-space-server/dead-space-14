@@ -155,12 +155,6 @@
     - StunImmune
   - type: Puller
     needsHands: false
-  # DS14-Languages-start
-  - type: Language
-    selectedLanguage: CarpDragonLanguage
-    knownLanguages:
-    - CarpDragonLanguage
-  # DS14-Languages-end
   - type: RandomMetadata
     nameSegments:
     - NamesDragon
@@ -172,7 +166,16 @@
     speedModifier: 2.5 # fast because dragon strong
     useSound:
       path: /Audio/Items/crowbar.ogg
-  - type: NightVision # DS14
+  # DS14-start
+  - type: Language
+    selectedLanguage: CarpDragonLanguage
+    knownLanguages:
+    - CarpDragonLanguage
+  - type: NightVision
+    color: "#22334411"
+    animation: true
+    transitionSpeed: 100
+  # DS14-end
 
 - type: entity
   parent: BaseMobDragon

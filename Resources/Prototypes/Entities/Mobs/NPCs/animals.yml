@@ -78,7 +78,12 @@
   - type: Tag
     tags:
     - VimPilot
-  - type: NightVision # DS14
+  # DS14-start
+  - type: NightVision
+    color: "#CFE8FF11"
+    animation: true
+    transitionSpeed: 100
+  # DS14-end
 
 - type: entity
   name: bee

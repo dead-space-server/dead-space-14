@@ -1,3 +1,4 @@
+
 uniform highp float Zoom;
 
 uniform highp float CircleRadius; 
@@ -30,7 +31,9 @@ void fragment()
         discard;
     }
 
-    vec4 baseColor = mix(Color, vec4(0.0, 0.0, 0.0, 1.0), clamp(circle, 0.0, 1.0));
+    highp vec4 blv = vec4(0.0, 0.0, 0.0, 1.0);
+
+    vec4 baseColor = mix(Color, blv, clamp(circle, 0.0, 1.0));
 
     COLOR = baseColor;
 }

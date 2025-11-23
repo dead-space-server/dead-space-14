@@ -9,7 +9,7 @@ using Content.Client.Players.PlayTimeTracking;
 using Content.Client.Sprite;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Guidebook;
-using Content.DeadSpace.Interfaces.Client; // DS14-sponsors
+using Content.DeadSpace.Interfaces.Client;
 using Content.Shared.CCVar;
 using Content.Shared.Clothing;
 using Content.Shared.Corvax.CCCVars;
@@ -810,12 +810,7 @@ namespace Content.Client.Lobby.UI
             UpdateAgeEdit();
             UpdateEyePickers();
             UpdateSaveButton();
-            // Corvax-TTS-Start
-            if (_cfgManager.GetCVar(CCCVars.TTSEnabled))
-            {
-                UpdateTTSVoicesControls();
-            }
-            // Corvax-TTS-End
+            UpdateTTSVoicesControls(); // Corvax-TTS
             UpdateMarkings();
             UpdateHairPickers();
             UpdateCMarkingsHair();
@@ -1225,12 +1220,7 @@ namespace Content.Client.Lobby.UI
             }
 
             UpdateGenderControls();
-            // Corvax-TTS-Start
-            if (_cfgManager.GetCVar(CCCVars.TTSEnabled))
-            {
-                UpdateTTSVoicesControls();
-            }
-            // Corvax-TTS-End
+            UpdateTTSVoicesControls(); // Corvax-TTS
             Markings.SetSex(newSex);
             ReloadPreview();
         }
@@ -1665,70 +1655,5 @@ namespace Content.Client.Lobby.UI
             ImportButton.Disabled = false;
             ExportButton.Disabled = false;
         }
-
-        // Corvax-TTS-Start
-        private void InitializeVoice()
-        {
-            if (VoiceButton == null)
-                return;
-
-            VoiceButton.OnItemSelected += args =>
-            {
-                VoiceButton.SelectId(args.Id);
-                var voiceId = VoiceButton.GetItemMetadata(args.Id) as string;
-                if (voiceId != null)
-                {
-                    SetVoice(voiceId);
-                }
-            };
-
-            var voices = _prototypeManager.EnumeratePrototypes<TTSVoicePrototype>()
-                .Where(x => x.RoundStart)
-                .OrderBy(x => x.Name)
-                .ToList();
-
-            var voiceIdx = 0;
-            var selectedVoice = Profile?.Voice;
-
-            for (var i = 0; i < voices.Count; i++)
-            {
-                var voice = voices[i];
-                VoiceButton.AddItem(Loc.GetString(voice.Name), i);
-                VoiceButton.SetItemMetadata(i, voice.ID);
-
-                if (voice.ID == selectedVoice)
-                    voiceIdx = i;
-            }
-
-            if (voices.Count > 0)
-            {
-                VoiceButton.SelectId(voiceIdx);
-                if (string.IsNullOrEmpty(selectedVoice) && Profile != null)
-                {
-                    SetVoice(voices[voiceIdx].ID);
-                }
-            }
-        }
-
-        private void UpdateTTSVoicesControls()
-        {
-            if (Profile == null || VoiceButton == null)
-                return;
-
-            var voice = Profile.Voice;
-            if (voice == null)
-                return;
-
-            for (var i = 0; i < VoiceButton.ItemCount; i++)
-            {
-                var voiceId = VoiceButton.GetItemMetadata(i) as string;
-                if (voiceId == voice)
-                {
-                    VoiceButton.SelectId(i);
-                    break;
-                }
-            }
-        }
-        // Corvax-TTS-End
     }
 }

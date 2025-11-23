@@ -112,7 +112,7 @@ public sealed class LanguageSystem : EntitySystem
         if (String.IsNullOrEmpty(component.SelectedLanguage))
             return name;
 
-        if (_prototypeManager.TryIndex(component.SelectedLanguage, out var languageProto))
+        if (_prototypeManager.TryIndex<LanguagePrototype>(component.SelectedLanguage, out var languageProto))
             name = languageProto.Name;
 
         return name;
