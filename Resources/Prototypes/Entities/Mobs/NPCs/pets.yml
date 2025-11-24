@@ -50,6 +50,17 @@
     - VimPilot
   - type: StealTarget
     stealGroup: AnimalIan
+  # DS14-start
+  - type: Language
+    selectedLanguage: DogLanguage
+    knownLanguages:
+    - GeneralLanguage
+    - DogLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage 
+  # DS14-end
 
 - type: entity
   name: Old Ian
@@ -153,6 +164,17 @@
     - id: MaterialHideCorgi
   - type: StealTarget
     stealGroup: AnimalIan
+  # DS14-start
+  - type: Language
+    selectedLanguage: DogLanguage
+    knownLanguages:
+    - GeneralLanguage
+    - DogLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage     
+  # DS14-end
 
 - type: entity
   name: Runtime
@@ -176,6 +198,17 @@
     - VimPilot
   - type: StealTarget
     stealGroup: AnimalNamedCat
+  # DS14-start    
+  - type: Language
+    selectedLanguage: DogLanguage
+    knownLanguages:
+    - GeneralLanguage
+    - CatLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage   
+  # DS14-end  
 
 - type: entity
   name: Exception
@@ -196,6 +229,17 @@
     - VimPilot
   - type: StealTarget
     stealGroup: AnimalNamedCat
+  # DS14-start
+  - type: Language
+    selectedLanguage: DogLanguage
+    knownLanguages:
+    - GeneralLanguage
+    - CatLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage      
+  # DS14-end
 
 - type: entity
   name: Floppa
@@ -231,6 +275,17 @@
       path: /Audio/_ADT/carakal_purr.ogg
     interactFailureSound:
       path: /Audio/_ADT/carakal_hiss.ogg
+  # DS14-start      
+  - type: Language
+    selectedLanguage: DogLanguage
+    knownLanguages:
+    - GeneralLanguage
+    - CatLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage        
+  # DS14-end
 
 - type: entity
   name: Bandito
@@ -246,6 +301,16 @@
     tags:
     - CannotSuicide
     - VimPilot
+  # DS14-start    
+  - type: Language
+    selectedLanguage: DogLanguage
+    knownLanguages:
+    - GeneralLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage    
+  # DS14-end      
 
 - type: entity
   name: Bingus
@@ -306,6 +371,16 @@
   - type: Speech
     speechSounds: Cat
     speechVerb: SmallMob
+  # DS14-start    
+  - type: Language    
+    knownLanguages:
+    - GeneralLanguage
+    - CatLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage       
+  # DS14-end    
 
 - type: entity
   name: McGriff
@@ -392,7 +467,7 @@
     - VimPilot
   - type: StealTarget
     stealGroup: AnimalMcGriff
-  - type: MessyDrinker
+  - type: MessyDrinker  
 
 - type: entity
   name: Paperwork
@@ -427,6 +502,15 @@
     attributes:
       proper: true
       gender: male
+# DS14-start
+  - type: Language
+    knownLanguages:
+    - GeneralLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage  
+# DS14-end      
 
 - type: entity
   name: Walter
@@ -467,7 +551,6 @@
     spawned:
     - id: FoodMeat
       amount: 3
-  - type: Language # DS14-Languages
   - type: InteractionPopup
     successChance: 0.7
     interactSuccessString: petting-success-dog
@@ -489,6 +572,16 @@
     speechVerb: Canine
     speechSounds: Dog
   - type: MessyDrinker
+# DS14-start
+  - type: Language
+    knownLanguages:
+    - GeneralLanguage
+    - DogLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage  
+# DS14-end        
 
 - type: entity
   name: Morty
@@ -513,6 +606,15 @@
     - VimPilot
   - type: StealTarget
     stealGroup: AnimalMorty
+# DS14-start
+  - type: Language
+    knownLanguages:
+    - GeneralLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage  
+# DS14-end          
 
 - type: entity
   name: Morty
@@ -577,6 +679,15 @@
     tags:
     - CannotSuicide
     - VimPilot
+# DS14-start
+  - type: Language
+    knownLanguages:
+    - GeneralLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage  
+# DS14-end          
 
 - type: entity
   name: Alexander
@@ -606,6 +717,15 @@
   - type: GhostTakeoverAvailable
   - type: TTS
     voice: Chen
+# DS14-start
+  - type: Language
+    knownLanguages:
+    - GeneralLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage  
+# DS14-end          
 
 - type: entity
   name: Renault
@@ -636,6 +756,15 @@
     - VimPilot
   - type: StealTarget
     stealGroup: AnimalRenault
+# DS14-start
+  - type: Language
+    knownLanguages:
+    - GeneralLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage  
+# DS14-end          
 
 - type: entity
   name: Hamlet
@@ -694,6 +823,15 @@
     - sadness
   - type: Hunger
     baseDecayRate: 0.1 # DS14: not soo hungry
+# DS14-start
+  - type: Language
+    knownLanguages:
+    - GeneralLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage  
+# DS14-end          
 
 - type: entity
   parent: MobHamsterHamlet
@@ -777,6 +915,16 @@
     - FootstepSound
   - type: StealTarget
     stealGroup: AnimalShiva
+# DS14-start
+  - type: Language
+    knownLanguages:
+    - GeneralLanguage
+    - ArachnidLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage  
+# DS14-end          
 
 - type: entity
   name: Willow
@@ -808,6 +956,15 @@
   - type: GhostTakeoverAvailable
   - type: Loadout
     prototypes: [ BoxingKangarooGear ]
+# DS14-start
+  - type: Language
+    knownLanguages:
+    - GeneralLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage  
+# DS14-end       
 
 - type: entity
   name: Smile
@@ -888,6 +1045,16 @@
     attributes:
       proper: true
       gender: female
+# DS14-start
+  - type: Language
+    knownLanguages:
+    - GeneralLanguage
+    - SlimeLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage  
+# DS14-end            
 
 - type: entity
   name: Pun Pun
@@ -929,6 +1096,15 @@
     attributes:
       proper: true
       gender: male
+# DS14-start
+  - type: Language
+    knownLanguages:
+    - GeneralLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage  
+# DS14-end          
 
 - type: entity
   name: Tropico
@@ -956,6 +1132,15 @@
 #  - type: AlwaysRevolutionaryConvertible
 #  - type: StealTarget
 #    stealGroup: AnimalTropico
+# DS14-start
+  - type: Language
+    knownLanguages:
+    - GeneralLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage  
+# DS14-end   
 
 - type: entity
   name: Polly the parrot
@@ -977,3 +1162,8 @@
     voice: Gyro
   - type: StealTarget
     stealGroup: AnimalPolly
+# DS14-start
+  - type: Language
+    knownLanguages:
+    - GeneralLanguage
+# DS14-end   

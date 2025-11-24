@@ -322,12 +322,15 @@
         Blunt: 0.4
         Slash: 0.4
         Piercing: 0.6 # DS14-value
-        Heat: 0.9
+        Heat: 0.7 # DS14-value
         Caustic: 0.9
         Stun: 0.65 # DS14-value: 5 stunbaton hits for stun
   - type: ExplosionResistance
     damageCoefficient: 0.9
   - type: GroupExamine
+  - type: ClothingSpeedModifier # DS14
+    walkModifier: 1
+    sprintModifier: 1
 
 - type: entity
   parent: [ ClothingOuterBaseLarge, BaseMajorContraband, AllowSuitStorageClothing ]

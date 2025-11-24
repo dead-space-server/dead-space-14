@@ -14,8 +14,9 @@
         Piercing: 20
     soundHit:
         path: /Audio/Weapons/bladeslice.ogg
+    wideAnimationRotation: -60
   - type: Reflect
-    reflectProb: .1
+    reflectProb: .15
     spread: 45
   - type: DamageOtherOnHit
     damage:

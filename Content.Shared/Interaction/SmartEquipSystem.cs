@@ -153,6 +153,14 @@ public sealed class SmartEquipSystem : EntitySystem
                     _popup.PopupClient(emptyEquipmentSlotString, uid, uid);
                     return;
                 case null:
+                    // DS14-start
+                    if (!storage.QuickEject) // Проверяет состояние quickEject
+                    {
+                        _popup.PopupClient(Loc.GetString("smart-equip-quick-eject-disabled"), uid, uid);
+                        return;
+                    }
+                    // DS14-end
+
                     var removing = storage.Container.ContainedEntities[^1];
                     _container.RemoveEntity(slotItem, removing);
                     _hands.TryPickup(uid, removing, handsComp: hands);

@@ -15,3 +15,4 @@
   - type: Item
     sprite: _DeadSpace/Objects/Devices/taipan_radio.rsi
     heldPrefix: walkietalkie
+  - type: Language

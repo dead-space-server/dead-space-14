@@ -137,8 +137,8 @@
           32:
             sprite: Mobs/Species/Vulpkanin/displacement.rsi
             state: hair
-#  - type: Inventory
-#    speciesId: vulpkanin
+  - type: Inventory
+    speciesId: vulpkanin
 #    displacements:
 #      jumpsuit:
 #        sizeMaps:

@@ -152,6 +152,7 @@ public sealed class CustomizableHumanoidSpawnerSystem : EntitySystem
             var component = (Component)_serialization.CreateCopy(ghostRoleComponent, notNullableOverride: true);
             RemComp(newEntity, component.GetType());
             AddComp(newEntity, component);
+            EnsureComp<GhostTakeoverAvailableComponent>(newEntity);
         }
 
         if (comp.Factions != null)

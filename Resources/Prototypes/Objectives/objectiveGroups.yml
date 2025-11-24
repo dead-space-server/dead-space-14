@@ -68,7 +68,6 @@
     MailStealCollectionObjective: 1                     #cargo
     IDCardsStealCollectionObjective: 1
     LAMPStealCollectionObjective: 0.1                   #only for moth, weight decreased cause boring and insanely easy
-    WeaponSeniorKinetikStealObjective: 1                # DS14
 
 - type: weightedRandom
   id: ThiefObjectiveGroupItem

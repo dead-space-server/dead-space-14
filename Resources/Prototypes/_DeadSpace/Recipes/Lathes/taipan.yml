@@ -107,8 +107,8 @@
 
 - type: latheRecipe
   parent: BaseWeaponRecipeLong
-  id: ADTWeaponRifleXC67
-  result: ADTWeaponRifleXC67
+  id: WeaponRifleXC67
+  result: WeaponRifleXC67
   materials:
     Titanium: 800
     Plastic: 400
