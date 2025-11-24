@@ -46,7 +46,7 @@
   - type: Perishable
   - type: Sanity # DS14
   - type: Inventory
-    speciesId: reptilian # for reptilian masks
+    speciesId: vulpkanin # for vulpkanin helmets
   - type: Vocal
     wilhelm: "/Audio/_DeadSpace/Voice/Felinid/cat_wilhelm.ogg"
     sounds:

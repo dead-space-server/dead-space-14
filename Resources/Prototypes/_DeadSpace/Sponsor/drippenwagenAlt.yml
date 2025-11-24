@@ -7,7 +7,7 @@
   id: drippenwagenAltCrusher
   entity: WeaponDrippenwagenAltCrusher
   sponsorOnly: true
-  whitelistJobs: [SalvageSpecialist, SeniorSalvageSpecialist]
+  whitelistJobs: [SalvageSpecialist]
 
 # Backpack
 - type: entity
@@ -37,7 +37,7 @@
       - id: ClothingShoesBootsMagdrippenwagenAlt
       - id: ClothingOuterCoatdrippenwagenAlt
       - id: PDAdrippenwagenAlt
-      
+
 # Belt
 - type: entity
   parent: ClothingBeltChiefEngineer
@@ -164,7 +164,7 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
-      
+
 # Eyes
 - type: entity
   parent: ClothingEyesHudMultiversal
@@ -260,7 +260,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Icon
-    sprite: _DeadSpace/Sponsor/drippenwagenAlt/pda.rsi 
+    sprite: _DeadSpace/Sponsor/drippenwagenAlt/pda.rsi
   - type: Sprite
     sprite: _DeadSpace/Sponsor/drippenwagenAlt/pda.rsi
 

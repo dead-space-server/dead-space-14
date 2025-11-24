@@ -32,6 +32,7 @@
       - MobSpiderTerrorBuilder
       - MobSpiderTerrorMedic
       - MobSpiderTerrorGuardianLvl2
+      - MobSpiderTerrorSupportLvl1
   - type: Destructible
     thresholds:
     - trigger:
@@ -76,7 +77,6 @@
     spawnedEntities:
       - MobSpiderTerrorRoyalGuard
       - MobSpiderTerrorPrincess
-      - MobSpiderTerrorSupportLvl1
   - type: Destructible
     thresholds:
     - trigger:

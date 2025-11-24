@@ -34,4 +34,15 @@ public sealed partial class LanguageComponent : Component
     [DataField]
     [ViewVariables(VVAccess.ReadOnly)]
     public EntityUid? SelectLanguageActionEntity;
+
+    public void CopyFrom(LanguageComponent other)
+    {
+        KnownLanguages = other.KnownLanguages;
+        CantSpeakLanguages = other.CantSpeakLanguages;
+        UnlockLanguagesAfterMakeSentient = other.UnlockLanguagesAfterMakeSentient;
+        SelectedLanguage = other.SelectedLanguage;
+        SelectLanguageAction = other.SelectLanguageAction;
+        SelectLanguageActionEntity = other.SelectLanguageActionEntity;
+    }
+
 }

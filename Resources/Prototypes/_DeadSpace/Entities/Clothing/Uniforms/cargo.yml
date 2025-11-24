@@ -63,3 +63,25 @@
     sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/cargoformal.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/cargoformal.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitSeniorCourier
+  name: комбинезон ведущего логиста
+  description: Эффектный рабочий комбинезон ведущего логиста с аккуратной голубой рубашкой.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/senior_courier.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/senior_courier.rsi
+
+- type: entity
+  parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtSeniorCourier
+  name: юбка-комбинезон ведущего логиста
+  description: Эффектный рабочий комбинезон с юбкой ведущего логиста с аккуратной голубой рубашкой.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/senior_courier.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpskirt/senior_courier.rsi

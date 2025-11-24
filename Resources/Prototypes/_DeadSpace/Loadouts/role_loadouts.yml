@@ -41,18 +41,20 @@
 
 # Cargo
 - type: roleLoadout
-  id: JobSeniorSalvageSpecialist
+  id: JobSeniorCourier
   groups:
   - GroupTankHarness
-  - SalvageSpecialistJumpsuit
-  - SalvageSpecialistBackpack
-  - SalvageSpecialistOuterClothing
-  - SalvageSpecialistShoes
+  - SeniorCourierHead
+  - SeniorCourierJumpsuit
+  - CargoTechnicianBackpack
+  - SeniorCourierBelt
+  - SeniorCourierOuterClothing
+  - CargoTechnicianShoes
   - Glasses
   - Survival
   - Trinkets
   - GroupSpeciesBreathTool
-  - SalvageSpecialistUnderwear # DS14-Underwear
+  - SeniorCourierUnderwear # DS14-Underwear
 
 # Law
 - type: roleLoadout

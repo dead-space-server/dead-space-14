@@ -213,6 +213,10 @@
         state: nautdamage
         shader: unshaded
   # DS14-start
+  - type: Language
+    knownLanguages: 
+    - BlobLanguage
+    selectedLanguage: BlobLanguage
   - type: NightVision
     animation: true
     color: "#D4C15A11"
@@ -624,7 +628,11 @@
   - type: Tag
     tags:
       - BypassInteractionRangeChecks
-  #DS14-start
+  # DS14-start
+  - type: Language
+    knownLanguages: 
+    - BlobLanguage
+    selectedLanguage: BlobLanguage
   - type: GhostRoleNotifys 
-    groupPrototype: Blob
-  #DS14-end
+    groupPrototype: Blob  
+  # DS14-end

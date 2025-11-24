@@ -148,6 +148,8 @@
     containers:
       station_ai_mind_slot:
       - TaipanAiBrain
+      key_slots:
+      - EncryptionKeyBinary
 
 # The actual brain inside the core
 - type: entity

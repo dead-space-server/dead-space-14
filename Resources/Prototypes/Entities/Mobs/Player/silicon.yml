@@ -349,10 +349,19 @@
       station_ai_brain_slot: !type:Container
       station_ai_mind_slot: !type:ContainerSlot
         showEnts: true
+      key_slots: !type:Container # DS14
   - type: ContainerFill
     containers:
       board:
       - StationAiCoreElectronics
+# DS14-start
+      key_slots:
+      - EncryptionKeyBinary # DS14
+  - type: EncryptionKeyHolder
+    keysUnlocked: false
+    keySlots: 1
+  - type: TelecomServer
+# DS14-end
   - type: StaticPrice
     price: 5000
 

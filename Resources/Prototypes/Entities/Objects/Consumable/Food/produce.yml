@@ -1490,6 +1490,7 @@
   - type: Tag
     tags:
     - Vegetable
+    - FoodChiliPepper # DS14
   - type: FoodSequenceElement
     entries:
       Taco: ChiliPepper

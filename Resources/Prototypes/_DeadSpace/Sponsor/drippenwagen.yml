@@ -7,7 +7,7 @@
   id: drippenwagenProtoKinetic
   entity: WeaponProtoKineticAcceleratordrippenwagen
   sponsorOnly: true
-  whitelistJobs: [SalvageSpecialist, SeniorSalvageSpecialist]
+  whitelistJobs: [SalvageSpecialist]
 
 # Backpack
 - type: entity
