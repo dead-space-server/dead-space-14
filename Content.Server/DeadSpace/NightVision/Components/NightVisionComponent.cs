@@ -13,9 +13,10 @@ public sealed partial class NightVisionComponent : SharedNightVisionComponent
     [ViewVariables(VVAccess.ReadOnly), DataField]
     public EntityUid? ActionToggleNightVisionEntity;
 
-    public NightVisionComponent(Color? color = null, SoundSpecifier? activateSound = null)
+    public NightVisionComponent(Color? color = null, SoundSpecifier? activateSound = null, bool animation = true)
     {
-        Color = color ?? new Color(80f / 255f, 220f / 255f, 70f / 255f, 0.2f);
+        Color = color ?? new Color(80f / 255f, 220f / 255f, 70f / 255f, 0.1f);
         ActivateSound = activateSound;
+        Animation = animation;
     }
 }

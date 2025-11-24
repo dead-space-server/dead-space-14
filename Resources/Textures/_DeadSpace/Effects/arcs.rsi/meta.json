@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-4.0",
+  "copyright": "state 'mantis-precise' by kieru01 (discord) for Space Station 14 server Мёртвый Космос, state 'mantis-wide' by hq._.dishka (discord) (discord) for Space Station 14 server Мёртвый Космос",
+  "size": {
+      "x": 32,
+      "y": 32
+  },
+  "states": [
+    {
+      "name": "mantis-precise",
+      "delays": [
+          [ 0.1, 0.1, 0.1, 0.1 ]
+      ]
+    },
+    {
+      "name": "mantis-wide"
+    }
+  ]
+}

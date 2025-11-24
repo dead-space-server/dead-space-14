@@ -64,7 +64,6 @@ public sealed partial class IdCardConsoleComponent : Component
         "Research",
         "Atmospherics",
         "Engineering",
-        "SeniorSalvage",
         "Salvage",
         "Cargo",
         "Service",

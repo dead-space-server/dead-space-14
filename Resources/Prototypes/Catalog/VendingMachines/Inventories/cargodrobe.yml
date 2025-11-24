@@ -10,7 +10,9 @@
     ClothingHandsGlovesFingerless: 6
     ClothingHeadHatCargosoft: 6
     ClothingHeadBandBrown: 2
+    ClothingHeadHatBeretCargo: 2 # DS14
     ClothingHeadsetCargo: 4
+    ClothingOuterCoatCargoJacket: 2 # DS14
     ClothingOuterWinterCargo: 2
     ClothingOuterWinterMiner: 2
     ClothingNeckScarfStripedBrown: 4

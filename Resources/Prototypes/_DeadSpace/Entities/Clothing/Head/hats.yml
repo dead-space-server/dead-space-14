@@ -1,5 +1,50 @@
 - type: entity
   parent: ClothingHeadBase
+  id: ClothingHeadHatBeretRobotics
+  name: берет робототехника
+  description: Красный берет с белой кокардой. киборги будут в восторге от вашего стиля!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hats/beret_robo.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hats/beret_robo.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatBeretBlueShield
+  name: берет офицера "Синий Щит"
+  description: Серый берет, с кокардой подразделения "Синий Щит".
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hats/beret_blueshield.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hats/beret_blueshield.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatBeretSeniorOfficer
+  name: берет инструктора СБ
+  description: Берет показывающий мастерство и доблесть его владельца.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hats/beret_senior_officer.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hats/beret_senior_officer.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatBeretCargo
+  name: берет грузчика
+  description: Коричневый берет отдела снабжения. Практичный и сдержанный головной убор.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hats/beret_cargo.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hats/beret_cargo.rsi
+
+# Taipan
+- type: entity
+  parent: ClothingHeadBase
   id: ClothingHeadCommunicationsOfficerTaipan
   name: берет офицера телекоммуникаций
   description: Чёрный берет с позолоченной вышивкой, предпочитаемый офицерами телекоммуникаций.

@@ -24,7 +24,6 @@ id-card-access-level-coroner = Коронер
 id-card-access-level-quartermaster = Квартирмейстер
 id-card-access-level-cargo = Отдел снабжения
 id-card-access-level-salvage = Утилизаторы
-id-card-access-level-senior-salvage = Ведущий утилизатор
 id-card-access-level-bar = Бар
 id-card-access-level-kitchen = Кухня
 id-card-access-level-hydroponics = Гидропоника

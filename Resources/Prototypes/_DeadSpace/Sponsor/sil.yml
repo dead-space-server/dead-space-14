@@ -13,7 +13,7 @@
   id: SilWeaponCrusher
   entity: WeaponCrusherSil
   sponsorOnly: true
-  whitelistJobs: [SalvageSpecialist, SeniorSalvageSpecialist]
+  whitelistJobs: [SalvageSpecialist]
 
 # Hardsuit
 - type: entity

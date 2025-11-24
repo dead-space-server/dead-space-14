@@ -101,31 +101,41 @@ public sealed class NightVisionSystem : EntitySystem
 
     private void OnPlayerAttached(EntityUid uid, NightVisionComponent component, LocalPlayerAttachedEvent args)
     {
-        _overlayMan.AddOverlay(_overlay);
+        AddNightVision(component);
     }
 
     private void OnPlayerDetached(EntityUid uid, NightVisionComponent component, LocalPlayerDetachedEvent args)
     {
-        RemNightVosion();
+        RemNightVision();
     }
 
     private void OnNightVisionInit(EntityUid uid, NightVisionComponent component, ComponentInit args)
     {
-        if (_player.LocalEntity == uid)
-            _overlayMan.AddOverlay(_overlay);
+        if (_player.LocalEntity != uid)
+            return;
+
+        AddNightVision(component);
     }
 
     private void OnNightVisionShutdown(EntityUid uid, NightVisionComponent component, ComponentShutdown args)
     {
         if (_player.LocalEntity == uid)
-            RemNightVosion();
+            RemNightVision();
     }
 
-    private void RemNightVosion()
+    private void RemNightVision()
     {
         _overlay.Reset();
         _overlayMan.RemoveOverlay(_overlay);
         _lightManager.DrawLighting = true;
+    }
+
+    private void AddNightVision(NightVisionComponent component)
+    {
+        if (!component.Animation)
+            _overlay.SetTransitionProgress(1f);
+
+        _overlayMan.AddOverlay(_overlay);
     }
 
     private void RoundRestartCleanup(RoundRestartCleanupEvent ev)

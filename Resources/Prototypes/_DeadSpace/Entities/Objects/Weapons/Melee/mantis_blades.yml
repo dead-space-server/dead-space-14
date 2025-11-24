@@ -19,9 +19,9 @@
   - type: Wieldable
     useDelayOnWield: true
     wieldSound:
-      collection: mantis_reflect
+      collection: MantisReflect
     unwieldSound:
-      collection: mantis_reflect
+      collection: MantisReflect
   - type: UseDelay
     delay: 1.5
   - type: ComponentToggler
@@ -31,7 +31,7 @@
       reflectProb: 0.35
       spread: 90
       soundOnReflect:
-        collection: mantis_reflect
+        collection: MantisReflect
     - type: PointLight
       color: "#a02139"
       radius: 3
@@ -47,14 +47,14 @@
       types:
         Slash: 7
         Structural: 20
-    animation: WeaponArcClaw
-    wideAnimation: WeaponArcStatic
+    animation: WeaponArcMantisPrecise
+    wideAnimation: WeaponArcMantisWide
     soundHit:
-      collection: mantis_attack
+      collection: MantisAttack
     soundNoDamage:
-      collection: mantis_attack
+      collection: MantisAttack
     soundSwing:
-      collection: mantis_attack
+      collection: MantisAttack
   - type: SolutionContainerManager
     solutions:
       melee:
@@ -70,7 +70,7 @@
   - type: JumpAbility
     jumpDistance: 1
     jumpSound:
-      collection: mantis_rush
+      collection: MantisRush
   - type: ActionGrant
     actions:
     - ActionMantisJump

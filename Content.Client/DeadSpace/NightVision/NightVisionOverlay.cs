@@ -46,6 +46,11 @@ public sealed class NightVisionOverlay : Overlay
         _readyForPlayback = true;
     }
 
+    public void SetTransitionProgress(float value)
+    {
+        _transitionProgress = value;
+    }
+
     public void SetSoundBeenPlayed(bool state)
     {
         _readyForPlayback = state;
@@ -54,6 +59,11 @@ public sealed class NightVisionOverlay : Overlay
     public bool SoundBeenPlayed()
     {
         return _readyForPlayback;
+    }
+
+    public bool IsRunning()
+    {
+        return _transitionProgress >= 1f && _nightVisionComponent.IsNightVision;
     }
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
@@ -90,12 +100,15 @@ public sealed class NightVisionOverlay : Overlay
 
         float delta = (float)_timing.FrameTime.TotalSeconds;
 
-        if (_nightVisionComponent.IsNightVision)
-            _transitionProgress = MathF.Min(1f, _transitionProgress + _nightVisionComponent.TransitionSpeed * delta);
-        else
-            _transitionProgress = MathF.Max(0f, _transitionProgress - _nightVisionComponent.TransitionSpeed * delta);
+        if (_nightVisionComponent.Animation)
+        {
+            if (_nightVisionComponent.IsNightVision)
+                _transitionProgress = MathF.Min(1f, _transitionProgress + _nightVisionComponent.TransitionSpeed * delta);
+            else
+                _transitionProgress = MathF.Max(0f, _transitionProgress - _nightVisionComponent.TransitionSpeed * delta);
+        }
 
-        _lightManager.DrawLighting = _transitionProgress != 1f;
+        _lightManager.DrawLighting = !IsRunning();
 
         if (_transitionProgress <= 0f)
             return;
@@ -110,7 +123,7 @@ public sealed class NightVisionOverlay : Overlay
         var worldHandle = args.WorldHandle;
         var viewport = args.WorldBounds;
 
-        if (_transitionProgress >= 1f)
+        if (IsRunning())
         {
             _greyscaleShader?.SetParameter("SCREEN_TEXTURE", ScreenTexture);
             worldHandle.UseShader(_greyscaleShader);
@@ -119,7 +132,7 @@ public sealed class NightVisionOverlay : Overlay
 
         _circleMaskShader?.SetParameter("SCREEN_TEXTURE", ScreenTexture);
 
-        if (_transitionProgress >= 1f)
+        if (IsRunning())
             _circleMaskShader?.SetParameter("Color", _nightVisionComponent.Color);
         else
             _circleMaskShader?.SetParameter("Color", PnvOffOverlay);

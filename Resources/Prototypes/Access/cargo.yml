@@ -3,10 +3,6 @@
   name: id-card-access-level-quartermaster
 
 - type: accessLevel
-  id: SeniorSalvage
-  name: id-card-access-level-senior-salvage
-
-- type: accessLevel
   id: Cargo
   name: id-card-access-level-cargo
 
@@ -20,4 +16,3 @@
   - Quartermaster
   - Salvage
   - Cargo
-  - SeniorSalvage

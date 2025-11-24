@@ -1123,3 +1123,14 @@ WarpPointBombing: null
 
 # 2025-11-08
 ADTWeaponRifleXC67: WeaponRifleXC67
+
+# 2025-11-09 - DS14
+SuitStorageSeniorSalvageSpecialistFilled: null
+ClothingOuterHardsuitSeniorSalvage: null
+ClothingHeadHelmetHardsuitSeniorSalvage: null
+ClothingUnderwearSocksSeniorSalvage: null
+SeniorSalvageIDCard: null
+SeniorSalvagePDA: null
+RubberStampSeniorSalvage: null
+SpawnPointSeniorSalvageSpecialist: SpawnPointSeniorCourier
+WeaponSeniorKinetik: WeaponAdvancedKinetik

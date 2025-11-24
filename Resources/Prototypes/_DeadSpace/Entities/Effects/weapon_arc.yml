@@ -1,0 +1,23 @@
+- type: entity
+  id: WeaponArcMantisPrecise
+  parent: WeaponArcStatic
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: WeaponArcVisuals
+      fadeOut: false
+    - type: Sprite
+      sprite: _DeadSpace/Effects/arcs.rsi
+      state: mantis-precise
+      drawdepth: Effects
+    - type: TimedDespawn
+      lifetime: 0.399
+
+- type: entity
+  id: WeaponArcMantisWide
+  parent: WeaponArcStatic
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Effects/arcs.rsi
+      state: mantis-wide
+      drawdepth: Effects

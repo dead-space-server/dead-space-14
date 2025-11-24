@@ -17,13 +17,15 @@ public sealed class FaxUiState : BoundUserInterfaceState
     public bool IsPaperInserted { get; }
     public bool CanSend { get; }
     public bool CanCopy { get; }
+    public List<(string, string)> HistoryList { get; } // DS14
 
     public FaxUiState(string deviceName,
         Dictionary<string, string> peers,
         bool canSend,
         bool canCopy,
         bool isPaperInserted,
-        string? destAddress)
+        string? destAddress,
+        List<(string, string)> historyList) // DS14
     {
         DeviceName = deviceName;
         AvailablePeers = peers;
@@ -31,6 +33,7 @@ public sealed class FaxUiState : BoundUserInterfaceState
         CanSend = canSend;
         CanCopy = canCopy;
         DestinationAddress = destAddress;
+        HistoryList = historyList; // DS14
     }
 }
 
