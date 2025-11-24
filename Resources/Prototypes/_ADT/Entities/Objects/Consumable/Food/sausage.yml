@@ -32,6 +32,7 @@
   - type: Tag
     tags:
     - Cooked
+    - ADTFoodSausageFried
   - type: Sprite
     sprite: _ADT/Objects/Consumable/Food/sausage.rsi
     state: fried

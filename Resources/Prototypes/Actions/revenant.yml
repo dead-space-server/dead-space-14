@@ -4,29 +4,31 @@
   name: Shop
   description: Opens the ability shop.
 
-- type: entity
-  parent: BaseAction
-  id: ActionRevenantDefile
-  name: Defile
-  description: Costs 30 Essence.
-  components:
-  - type: Action
-    useDelay: 15
-    icon: Interface/Actions/defile.png
-  - type: InstantAction
-    event: !type:RevenantDefileActionEvent
+#DS14-start
 
-- type: entity
-  parent: BaseAction
-  id: ActionRevenantOverloadLights
-  name: Overload Lights
-  description: Costs 40 Essence.
-  components:
-  - type: Action
-    icon: Interface/Actions/overloadlight.png
-    useDelay: 20
-  - type: InstantAction
-    event: !type:RevenantOverloadLightsActionEvent
+#- type: entity
+#  parent: BaseAction
+#  id: ActionRevenantDefile
+#  name: Defile
+#  description: Costs 30 Essence.
+#  components:
+#  - type: Action
+#    useDelay: 15
+#    icon: Interface/Actions/defile.png
+#  - type: InstantAction
+#    event: !type:RevenantDefileActionEvent
+
+#- type: entity
+#  parent: BaseAction
+#  id: ActionRevenantOverloadLights
+#  name: Overload Lights
+#  description: Costs 40 Essence.
+#  components:
+#  - type: Action
+#    icon: Interface/Actions/overloadlight.png
+#    useDelay: 20
+#  - type: InstantAction
+#    event: !type:RevenantOverloadLightsActionEvent
 
 #- type: entity
 #  parent: BaseAction
@@ -40,6 +42,8 @@
 #  - type: InstantAction
 #    event: !type:RevenantBlightActionEvent
 
+#DS14-end
+
 - type: entity
   parent: BaseAction
   id: ActionRevenantMalfunction
@@ -51,3 +55,44 @@
     useDelay: 20
   - type: InstantAction
     event: !type:RevenantMalfunctionActionEvent
+
+#DS14-start
+
+- type: entity
+  id: ActionRevenantBeamFire
+  name: Overload Lights
+  description: Costs 40 Essence.
+  components:
+  - type: Action
+    icon: Interface/Actions/overloadlight.png
+    useDelay: 20
+  - type: TargetAction
+  - type: EntityTargetAction
+    event: !type:RevenantBeamFireActionEvent
+    
+- type: entity
+  id: ActionRevenantSleep
+  name: Усыпление
+  description: Цена 30 эссенций.
+  components:
+  - type: Action
+    useDelay: 45
+    icon: { sprite: Clothing/Head/Hats/pyjamasyndicatered.rsi, state: icon }
+  - type: TargetAction
+  - type: EntityTargetAction
+    canTargetSelf: false
+    event: !type:RevenantSleepActionEvent
+
+- type: entity
+  id: ActionRevenantMindCapture
+  name: Захват Разума
+  description: Цена 100 эссенций.
+  components:
+  - type: Action
+    icon: { sprite: Mobs/Species/Human/organs.rsi, state: brain }
+    useDelay: 600
+  - type: TargetAction
+  - type: EntityTargetAction
+    canTargetSelf: false
+    event: !type:RevenantMindCaptureActionEvent
+#DS14-end

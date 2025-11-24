@@ -3239,6 +3239,15 @@
         Slash: 6
         Piercing: 6
         Structural: 15
+  # DS14-start
+  - type: Language
+    knownLanguages:
+    - GeneralLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage
+  # DS14-end
 
 - type: entity
   name: space cat

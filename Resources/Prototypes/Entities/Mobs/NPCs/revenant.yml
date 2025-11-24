@@ -39,6 +39,7 @@
     name: ghost-role-information-revenant-name
     description: ghost-role-information-revenant-description
     rules: ghost-role-information-revenant-rules
+    reregister: false #DS14
     mindRoles:
     - MindRoleGhostRoleSoloAntagonist
     raffle:
@@ -69,6 +70,7 @@
   - type: ActionGrant
     actions:
     - ActionRevenantShop
+    - ActionRevenantSleep #DS14-value
   - type: Store
     categories:
     - RevenantAbilities

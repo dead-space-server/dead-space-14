@@ -201,6 +201,45 @@ public sealed partial class RevenantComponent : Component
     public EntityWhitelist? MalfunctionBlacklist;
     #endregion
 
+    //DS14-start
+
+    #region Sleep Ability 
+    [DataField]
+    public FixedPoint2 SleepCost = 30;
+
+    [DataField]
+    public Vector2 SleepDebuffs = new(2, 10);
+
+    [DataField] public EntityUid? SleepAction;
+    #endregion
+
+    #region Mind Capture Ability
+    [DataField]
+    public FixedPoint2 MindCaptureCost = 100;
+
+    [DataField]
+    public Vector2 MindCaptureDebuffs = new(0, 0);
+
+    [DataField]
+    public string Container = "MindCaptureRevenant";
+
+    [DataField]
+    public float HpShift = 0.5f;
+    #endregion
+
+    #region Beam Fire Ability
+    [DataField]
+    public FixedPoint2 BeamFireCost = 40;
+
+    [DataField]
+    public Vector2 BeamFireDebuffs = new(2, 6);
+
+    [DataField(customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    public string BeamEntityId = "LightningRevenant";
+    #endregion
+
+    //DS14-end
+
     [DataField]
     public ProtoId<AlertPrototype> EssenceAlert = "Essence";
 

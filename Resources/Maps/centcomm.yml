@@ -87002,6 +87002,10 @@ entities:
       currentLabel: Центральное Командование
     - type: NameModifier
       baseName: Квантово-запутанный голопад
+    - type: Tag
+      tags:
+      - HolopadAdminNotification
+      - Structure
   - uid: 11968
     components:
     - type: MetaData

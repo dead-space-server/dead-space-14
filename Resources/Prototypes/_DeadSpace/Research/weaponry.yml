@@ -313,14 +313,14 @@
   id: TaipanAssaultRifles
   name: research-technology-assault-rifles
   icon:
-    sprite: _ADT/Objects/Weapons/Guns/Rifels/xc67.rsi
+    sprite: _DeadSpace/Objects/Weapons/Guns/Rifels/xc67.rsi
     state: icon
   discipline: TaipanWeaponry
   tier: 2
   cost: 15000
   diskAvailable: false
   recipeUnlocks:
-  - ADTWeaponRifleXC67
+  - WeaponRifleXC67
   - WeaponRifleAk
   technologyPrerequisites:
   - TaipanBasicRifles

@@ -1,28 +1,29 @@
-- type: listing
-  id: RevenantDefile
-  name: revenant-defile-name
-  description: revenant-defile-desc
-  productAction: ActionRevenantDefile
-  cost:
-    StolenEssence: 20
-  categories:
-  - RevenantAbilities
-  conditions:
-  - !type:ListingLimitedStockCondition
-    stock: 1
+#DS14-start
+#- type: listing
+#  id: RevenantDefile
+#  name: revenant-defile-name
+#  description: revenant-defile-desc
+#  productAction: ActionRevenantDefile
+#  cost:
+#    StolenEssence: 20
+#  categories:
+#  - RevenantAbilities
+#  conditions:
+# - !type:ListingLimitedStockCondition
+#    stock: 1
 
-- type: listing
-  id: RevenantOverloadLights
-  name: revenant-overload-name
-  description: revenant-overload-desc
-  productAction: ActionRevenantOverloadLights
-  cost:
-    StolenEssence: 40
-  categories:
-  - RevenantAbilities
-  conditions:
-  - !type:ListingLimitedStockCondition
-    stock: 1
+#- type: listing
+#  id: RevenantOverloadLights
+#  name: revenant-overload-name
+#  description: revenant-overload-desc
+#  productAction: ActionRevenantOverloadLights
+#  cost:
+#    StolenEssence: 40
+#  categories:
+#  - RevenantAbilities
+#  conditions:
+#  - !type:ListingLimitedStockCondition
+#    stock: 1
 
 #- type: listing
 #  id: RevenantBlight
@@ -36,6 +37,7 @@
 #  conditions:
 #  - !type:ListingLimitedStockCondition
 #    stock: 1
+#DS14-end
 
 - type: listing
   id: RevenantMalfunction
@@ -49,3 +51,33 @@
   conditions:
   - !type:ListingLimitedStockCondition
     stock: 1
+
+#DS14-start
+
+- type: listing
+  id: RevenantBeamFire
+  name: revenant-beamfire-name
+  description: revenant-beamfire-desc
+  productAction: ActionRevenantBeamFire
+  cost:
+    StolenEssence: 40
+  categories:
+  - RevenantAbilities
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: RevenantMindCapture
+  name: revenant-mindcapture-name
+  description: revenant-mindcapture-desc
+  productAction: ActionRevenantMindCapture
+  cost:
+    StolenEssence: 200
+  categories:
+  - RevenantAbilities
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+#DS14-end

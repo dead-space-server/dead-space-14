@@ -1,6 +1,6 @@
 - type: entity
   id: WeaponProtoKineticAcceleratorReapeter
-  parent: [ WeaponProtoKineticAcceleratorBase, BaseCargoContraband ] 
+  parent: [ WeaponProtoKineticAcceleratorBase, BaseCargoContraband ]
   name: протокинетический повторитель
   description: Поздний, модифицированный прототип протокинетического ускорителя с возможностью накапливать заряды для важной ситуации.
   components:
@@ -59,7 +59,7 @@
 
 - type: entity
   id: WeaponProtoKineticAcceleratorShotgun
-  parent: [ WeaponProtoKineticAcceleratorBase, BaseGunWieldable, BaseCargoContraband ] 
+  parent: [ WeaponProtoKineticAcceleratorBase, BaseGunWieldable, BaseCargoContraband ]
   name: протокинетический дробовик
   description: Новейший модифицированный прототип протокинетического ускорителя, что работает как дробовик
   components:
@@ -121,7 +121,7 @@
 
 - type: entity
   id: WeaponShotgunSawnKinetik
-  parent: [ BaseItem, BaseCargoContraband ] 
+  parent: [ BaseItem, BaseCargoContraband ]
   name: протокинетический обрез
   description: Зачем было резать и так исправное оружие?
   components:
@@ -183,10 +183,10 @@
       upgrades: !type:Container
 
 - type: entity
-  id: WeaponSeniorKinetik
-  parent: [ BaseItem, BaseCargoContraband ] 
+  id: WeaponAdvancedKinetik
+  parent: [ BaseItem, BaseCargoContraband ]
   name: продвинутый протокинетический ускоритель
-  description: Специальная модификация протокинетического ускорителя, представляющая из себя ослабленный в угоду компактности гибрид протокинетических повторителя и дробовика с выбором режима работы между ними. Спроектирован для повышения эффективности работы ведущих утилизаторов объектов NanoTrasen.
+  description: Специальная модификация протокинетического ускорителя, представляющая из себя ослабленный в угоду компактности гибрид протокинетических повторителя и дробовика с выбором режима работы между ними. Спроектирован для повышения эффективности работы утилизаторов объектов NanoTrasen.
   components:
   - type: AmmoCounter
   - type: Appearance
@@ -211,14 +211,14 @@
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/kinetic_accel.ogg
   - type: Sprite
-    sprite: _DeadSpace/Objects/Weapons/Guns/Basic/seniorpka.rsi
+    sprite: _DeadSpace/Objects/Weapons/Guns/Basic/advancedpka.rsi
     layers:
     - state: icon
     - state: animation-icon
       visible: false
       map: [ "empty-icon" ]
   - type: Item
-    sprite: _DeadSpace/Objects/Weapons/Guns/Basic/seniorpka.rsi
+    sprite: _DeadSpace/Objects/Weapons/Guns/Basic/advancedpka.rsi
     shape:
     - 0,0,2,1
     size: Large
@@ -226,7 +226,7 @@
     rechargeSound:
       path: /Audio/Weapons/Guns/MagIn/kinetic_reload.ogg
   - type: Clothing
-    sprite: _DeadSpace/Objects/Weapons/Guns/Basic/seniorpka.rsi
+    sprite: _DeadSpace/Objects/Weapons/Guns/Basic/advancedpka.rsi
     quickEquip: false
     slots:
     - suitStorage
@@ -252,5 +252,3 @@
   - type: Battery
     maxCharge: 100
     startingCharge: 100
-  - type: StealTarget
-    stealGroup: WeaponSeniorKinetik

@@ -105,6 +105,15 @@
   - type: Sprite
     sprite: _DeadSpace/Clothing/Underwear/Cargo/salvage_specialist/man.rsi
 
+- type: entity
+  parent: ClothingUnderwearBottomBase
+  id: ClothingUnderwearBottomBoxersSeniorCourier
+  name: боксеры ведущего логиста
+  description: Cтандартное нижнее бельё ведущего логиста.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Underwear/Cargo/senior_courier/man.rsi
+
 ## Civilian
 - type: entity
   parent: ClothingUnderwearBottomBase
@@ -701,6 +710,15 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/Underwear/Cargo/salvage_specialist/women/pants.rsi
+
+- type: entity
+  parent: ClothingUnderwearBottomBase
+  id: ClothingUnderwearBottomPantiesSeniorCourier
+  name: стринги ведущего логиста
+  description: Cтандартное нижнее бельё ведущего логиста.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Underwear/Cargo/senior_courier/women/pants.rsi
 
 ## Civilian
 - type: entity

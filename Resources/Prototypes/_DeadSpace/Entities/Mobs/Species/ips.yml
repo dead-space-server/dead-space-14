@@ -11,6 +11,18 @@
     requiredLegs: 2
   - type: HumanoidAppearance
     species: IPS
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 300
+        restitution: 0.0
+        mask:
+          - MobMask
+        layer:
+          - MobLayer
   - type: DamageVisuals
     damageOverlayGroups:
       Brute:

@@ -1,6 +1,8 @@
 - type: vendingMachineInventory
   id: AutoDrobeInventory
   startingInventory:
+    ClothingMaskClown: 2 #DS14
+    ClothingMaskMime: 2 #DS14
     ClothingHeadHatJester: 1
     ClothingUniformJumpsuitJester: 1
     ClothingHeadHatJesterAlt: 1

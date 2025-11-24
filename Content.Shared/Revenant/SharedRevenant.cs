@@ -58,6 +58,19 @@ public sealed partial class RevenantMalfunctionActionEvent : InstantActionEvent
 {
 }
 
+//DS14-start
+public sealed partial class RevenantSleepActionEvent : EntityTargetActionEvent
+{
+}
+
+public sealed partial class RevenantMindCaptureActionEvent : EntityTargetActionEvent
+{
+}
+
+public sealed partial class RevenantBeamFireActionEvent : EntityTargetActionEvent
+{
+}
+//DS14-end
 
 [NetSerializable, Serializable]
 public enum RevenantVisuals : byte

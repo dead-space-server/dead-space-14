@@ -114,6 +114,15 @@
   - type: Sprite
     sprite: _DeadSpace/Clothing/Underwear/Cargo/salvage_specialist/women/bra.rsi
 
+- type: entity
+  parent: ClothingUnderwearTopBase
+  id: ClothingUnderwearTopBraSeniorCourier
+  name: бра ведущего логиста
+  description: Стандартное нижнее бельё ведущего логиста.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Underwear/Cargo/senior_courier/women/bra.rsi
+
 ## Civilian
 - type: entity
   parent: ClothingUnderwearTopBase

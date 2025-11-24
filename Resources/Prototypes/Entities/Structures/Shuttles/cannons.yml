@@ -324,6 +324,7 @@
     containers:
       machine_board: !type:Container
       machine_parts: !type:Container
+      upgrades: !type:Container # DS14
   - type: Destructible
     thresholds:
     - trigger:
@@ -360,6 +361,12 @@
     count: 5
   - type: Machine
     board: ShuttleGunKineticCircuitboard
+# DS14-start
+  - type: UpgradeableGun
+    whitelist:
+      tags:
+      - PKAUpgrade
+# DS14-end
 
 - type: entity
   parent: ShuttleGunBase

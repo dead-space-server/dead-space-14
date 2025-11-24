@@ -4,7 +4,6 @@ using Content.Shared.Clothing.Components;
 using Content.Shared.Clothing.EntitySystems;
 using Content.Shared.DeadSpace.UniformAccessories;
 using Content.Shared.DeadSpace.UniformAccessories.Components;
-using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Item;
 using Robust.Client.GameObjects;
@@ -37,7 +36,7 @@ public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
     private void OnHolderGetEquipmentVisuals(Entity<UniformAccessoryHolderComponent> ent,
         ref GetEquipmentVisualsEvent args)
     {
-        if (TryComp(_player.LocalEntity, out HumanoidAppearanceComponent? humanoid) && ShouldHideAccessories(humanoid))
+        if (ShouldHideAccessories(ent.Owner))
             return;
 
         var clothingSprite = CompOrNull<SpriteComponent>(ent);
@@ -289,8 +288,16 @@ public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
         }
     }
 
-    private bool ShouldHideAccessories(HumanoidAppearanceComponent humanoid)
+    private bool ShouldHideAccessories(EntityUid holder)
     {
+        if (TryComp<FoldableClothingComponent>(holder, out var fold) &&
+            TryComp<ClothingComponent>(holder, out var clothing))
+        {
+            if (!string.IsNullOrEmpty(fold.FoldedEquippedPrefix) &&
+                clothing.EquippedPrefix == fold.FoldedEquippedPrefix)
+                return true;
+        }
+
         return false;
     }
 

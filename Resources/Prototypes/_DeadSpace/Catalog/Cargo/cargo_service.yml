@@ -1,4 +1,14 @@
 - type: cargoProduct
+  id: CargoCrateFlowers
+  icon:
+    sprite: _DeadSpace/Objects/Misc/flowers.rsi
+    state: yellow_flower
+  product: CrateFlowers
+  cost: 2400
+  category: cargoproduct-category-name-service
+  group: market
+
+- type: cargoProduct
   id: CrateServiceBoxGrenadeCleanadeJanitorial
   icon:
     sprite: Objects/Weapons/Guns/Ammunition/Explosives/explosives.rsi
