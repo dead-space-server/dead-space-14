@@ -50,10 +50,8 @@ ent-ClothingUnderwearBottomBoxersCBURN = боксеры РХБЗЗ
     .desc = Cтандартное нижнее бельё РХБЗЗ.
 ent-ClothingUnderwearBottomBoxersCentcomm = боксеры центрального командования
     .desc = Cтандартное нижнее бельё центрального командования.
-# DS14-start
 ent-ClothingUnderwearBottomBoxersDeathSquad = чёрные боксеры 
     .desc = Cтандартное нижнее бельё крутых парней.
-# DS14-end
 ent-ClothingUnderwearBottomBoxersERT = боксеры ОБР
     .desc = Cтандартное нижнее бельё ОБР.
 ent-ClothingUnderwearBottomBoxersBlueShieldOfficer = боксеры ОСЩ
