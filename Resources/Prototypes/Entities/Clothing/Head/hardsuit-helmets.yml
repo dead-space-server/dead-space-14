@@ -995,8 +995,10 @@
   - type: Clothing
     sprite: Clothing/Head/Hardsuits/deathsquad.rsi
   - type: PointLight # Corvax-Resprite
-    radius: 7 # DS-14-value
+# DS14-start
+    radius: 7
     energy: 5
+# DS14-end
     color: cyan
   - type: PressureProtection
     highPressureMultiplier: 0.08
