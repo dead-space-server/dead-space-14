@@ -833,7 +833,7 @@
     - GeneralLanguage
     unlockLanguagesAfterMakeSentient:
     - GeneralLanguage
-    - type: GhostRoleNotifys 
+  - type: GhostRoleNotifys 
     groupPrototype: PetsGroup
 # DS14-end
 
