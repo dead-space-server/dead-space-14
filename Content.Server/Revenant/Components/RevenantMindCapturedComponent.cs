@@ -10,9 +10,11 @@ namespace Content.Server.Revenant.Components;
 [RegisterComponent]
 public sealed partial class RevenantMindCapturedComponent : Component
 {
-    public RevenantMindCapturedComponent(EntityUid revenant)
+    public RevenantMindCapturedComponent(EntityUid revenant, FixedPoint2 deadThreshold, FixedPoint2 critThreshold)
     {
         RevenantUid = revenant;
+        DeadThreshold = deadThreshold;
+        CritThreshold = critThreshold;
     }
 
     [ViewVariables(VVAccess.ReadOnly)]
@@ -40,8 +42,9 @@ public sealed partial class RevenantMindCapturedComponent : Component
     public BaseContainer RevenantContainer = default!;
 
     [ViewVariables(VVAccess.ReadOnly)]
-    public FixedPoint2 CritThreshold = default!;
+    public FixedPoint2 DeadThreshold = default!;
 
     [ViewVariables(VVAccess.ReadOnly)]
-    public FixedPoint2 DeadThreshold = default!;
+    public FixedPoint2 CritThreshold = default!;
+
 }
