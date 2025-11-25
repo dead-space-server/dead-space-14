@@ -15,6 +15,13 @@
   equipment:
     neck: ClothingNeckTieDet
 
+# DS14-start
+- type: loadout
+  id: DetectiveTieRed
+  equipment:
+    neck: ClothingNeckTieRed
+# DS14-end
+
 # Jumpsuit
 - type: loadout
   id: DetectiveJumpsuit

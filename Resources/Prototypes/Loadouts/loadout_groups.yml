@@ -1561,6 +1561,7 @@
   minLimit: 0
   loadouts:
   - DetectiveTie
+  - DetectiveTieRed # DS14
 
 - type: loadoutGroup
   id: DetectiveJumpsuit
