@@ -41,10 +41,16 @@ public sealed class GoliathTentacleSystem : EntitySystem
         spawnPos.Add(coords);
 
         var dirs = new List<Direction>();
-        dirs.AddRange(args.OffsetDirections);
+        if (args.OffsetDirections != null)
+            dirs.AddRange(args.OffsetDirections);
 
-        for (var i = 0; i < 3; i++)
+        // Используем extraSpawns для определения количества дополнительных спавнов
+        var spawnCount = args.ExtraSpawns;
+        for (var i = 0; i < spawnCount; i++)
         {
+            if (dirs.Count == 0)
+                break;
+
             var dir = _random.PickAndTake(dirs);
             spawnPos.Add(coords.Offset(dir));
         }

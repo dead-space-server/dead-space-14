@@ -14,14 +14,8 @@ public sealed partial class GoliathSummonTentacleAction : WorldTargetActionEvent
     /// <summary>
     /// Directions determining where the entities will spawn.
     /// </summary>
-    [DataField]
-    public List<Direction> OffsetDirections = new()
-    {
-        Direction.North,
-        Direction.South,
-        Direction.East,
-        Direction.West,
-    };
+    [DataField("offsetDirections")]
+    public List<Direction>? OffsetDirections { get; set; }
 
     /// <summary>
     /// How many entities will spawn beyond the original one at the target location?

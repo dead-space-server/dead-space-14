@@ -105,7 +105,7 @@
   components:
   - type: Sprite
     drawdepth: Mobs
-    sprite: _ADT/Mobs/Aliens/nar_si_big_demons.rsi
+    sprite: _DeadSpace/Demons/nar_si_big_demons.rsi
   - type: Vocal
     sounds:
       Male: DemonADT
@@ -426,7 +426,10 @@
   - type: TargetAction
     range: 10
   - type: WorldTargetAction
-    event: !type:DemonSummonTentacleAction { entityId: DemonTentacle }
+    event: !type:GoliathSummonTentacleAction  { entityId: DemonTentacle }
+    offsetDirections:
+      - North
+    extraSpawns: 1
 
 - type: entity
   id: DemonTentacle
