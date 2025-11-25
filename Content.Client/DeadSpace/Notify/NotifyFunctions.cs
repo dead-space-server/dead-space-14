@@ -6,15 +6,28 @@ using Robust.Shared.Prototypes;
 using System.Collections.ObjectModel;
 using System.Collections.Concurrent;
 using Robust.Shared.Log;
+using Robust.Shared.IoC;
 
 namespace Content.Client.DeadSpace.NotifySystem.NotifyHelpers;
 
-public sealed class NotifyHelper
+public sealed class NotifyHelper : INotifyHelper
 {
+    //[Dependency] private readonly ILogManager _logManager = default!;
+    //[Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    //[Dependency] private readonly IConfigurationManager _cfg = default!;
+
+    ILogManager _logManager = IoCManager.Resolve<ILogManager>();
+    IPrototypeManager _prototypeManager = IoCManager.Resolve<IPrototypeManager>();
+    IConfigurationManager _cfg = IoCManager.Resolve<IConfigurationManager>();
     private ConcurrentDictionary<string, bool> DictCvar = new ConcurrentDictionary<string, bool>();
     private ConcurrentDictionary<string, bool> DictAccess = new ConcurrentDictionary<string, bool>();
 
-    private ISawmill _sawmill = default!;
+    public ISawmill _sawmill = default!;
+    public NotifyHelper()
+    {
+        _sawmill = _logManager.GetSawmill("NotifyHelper");
+    }
+
 
     public bool GetValueAccess(string key)
     {
@@ -57,8 +70,9 @@ public sealed class NotifyHelper
             }
             else
             {
+                result[word] = false;
                 //throw new ArgumentException($"Некорректное булевое значение {boolStr}");
-                Logger.Debug($"Некорректное булевое значение {boolStr}");
+                _sawmill.Debug($"Некорректное булевое значение {boolStr}");
             }
 
         }
@@ -66,12 +80,12 @@ public sealed class NotifyHelper
         return result;
     }
 
-    public void EnsureInitialized(IConfigurationManager cfg, IPrototypeManager prototypeManager)
+    public void EnsureInitialized()
     {
         if (DictAccess.Count == 0)
         {
-            GetDictionaryFromCCvar(cfg);
-            CreateDictionaryForReciveSys(prototypeManager);
+            GetDictionaryFromCCvar();
+            CreateDictionaryForReciveSys();
         }
     }
     public string PairListToString(ConcurrentDictionary<string, bool> list)
@@ -84,16 +98,16 @@ public sealed class NotifyHelper
         }
         return string.Join(";", parts);
     }
-    private void GetDictionaryFromCCvar(IConfigurationManager cfg)
+    private void GetDictionaryFromCCvar()
     {
-        if (!string.IsNullOrWhiteSpace(cfg.GetCVar(CCCCVars.SysNotifyCvar)))
+        if (!string.IsNullOrWhiteSpace(_cfg.GetCVar(CCCCVars.SysNotifyCvar)))
         {
-            DictCvar = StringToPairList(cfg.GetCVar(CCCCVars.SysNotifyCvar));
+            DictCvar = StringToPairList(_cfg.GetCVar(CCCCVars.SysNotifyCvar));
         }
     }
-    private void CreateDictionaryForReciveSys(IPrototypeManager prototypeManager)
+    private void CreateDictionaryForReciveSys()
     {
-        foreach (var proto in prototypeManager.EnumeratePrototypes<GhostRoleGroupNotify>())
+        foreach (var proto in _prototypeManager.EnumeratePrototypes<GhostRoleGroupNotify>())
         {
             if (DictCvar.ContainsKey(proto.ID))
             {
@@ -104,15 +118,5 @@ public sealed class NotifyHelper
                 DictAccess.TryAdd(proto.ID, false);
             }
         }
-    }
-}
-
-public static class NotifyHelperProvider
-{
-    public static NotifyHelper Helper { get; private set; } = new NotifyHelper();
-
-    public static void Initialize(IConfigurationManager cfg, IPrototypeManager prototypeManager)
-    {
-        Helper.EnsureInitialized(cfg, prototypeManager);
     }
 }

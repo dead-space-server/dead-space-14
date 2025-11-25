@@ -6,8 +6,6 @@ using Robust.Shared.Audio;
 using Content.Client.DeadSpace.NotifySystem.NotifyHelpers;
 using Content.Shared.DeadSpace.CCCCVars;
 using Robust.Shared.Configuration;
-using Robust.Shared.Prototypes;
-using Robust.Shared.GameObjects;
 using Robust.Shared.Log;
 using Robust.Shared.Timing;
 
@@ -19,11 +17,11 @@ public sealed partial class ReceiveNotifySystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
 
     [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private readonly INotifyHelper _helper = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     //public SoundSpecifier SoundNotify = new SoundPathSpecifier("/Audio/Effects/adminhelp.ogg");
 
-    private readonly NotifyHelper _helper = NotifyHelperProvider.Helper;
+    //private readonly NotifyHelper _helper = NotifyHelperProvider.Helper;
     private ISawmill _sawmill = default!;
 
     private TimeSpan _lastNotifyTime;
@@ -35,7 +33,7 @@ public sealed partial class ReceiveNotifySystem : EntitySystem
         _sawmill = _logManager.GetSawmill("ReceiveNotifySystem");
         _lastNotifyTime = _timing.RealTime;
         SubscribeNetworkEvent<PingMessage>(CheckReceivedNotify);
-        _helper.EnsureInitialized(_cfg, _prototypeManager);
+        _helper.EnsureInitialized();
     }
 
     private void CheckReceivedNotify(PingMessage messege)
