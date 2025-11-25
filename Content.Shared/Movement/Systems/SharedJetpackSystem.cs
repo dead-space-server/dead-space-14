@@ -99,10 +99,6 @@ public abstract class SharedJetpackSystem : EntitySystem
 
     private void SetupUser(EntityUid user, EntityUid jetpackUid, JetpackComponent component)
     {
-        // DS14-start
-        if (HasComp<ZombieComponent>(user))
-            return;
-        // DS14-end
         EnsureComp<JetpackUserComponent>(user, out var userComp);
         component.JetpackUser = user;
 
@@ -175,7 +171,10 @@ public abstract class SharedJetpackSystem : EntitySystem
                 return;
             user = container.Owner;
         }
-
+        // DS14-start
+        if (HasComp<ZombieComponent>(user))
+            return;
+        // DS14-end
         if (enabled)
         {
             SetupUser(user.Value, uid, component);
