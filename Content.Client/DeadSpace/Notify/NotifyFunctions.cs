@@ -55,7 +55,7 @@ public sealed class NotifyHelper : INotifyHelper
 
         if (parts.Length % 2 != 0)
         {
-            _sawmill.Debug($"Нечётное количество элементов в строке '{input}'.");
+            _sawmill.Error($"Нечётное количество элементов в строке '{input}'.");
             return result;
         }
 
@@ -72,7 +72,7 @@ public sealed class NotifyHelper : INotifyHelper
             {
                 result[word] = false;
                 //throw new ArgumentException($"Некорректное булевое значение {boolStr}");
-                _sawmill.Debug($"Некорректное булевое значение {boolStr}");
+                _sawmill.Error($"Некорректное булевое значение {boolStr}");
             }
 
         }
