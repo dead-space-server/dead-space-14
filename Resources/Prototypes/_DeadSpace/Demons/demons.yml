@@ -342,11 +342,11 @@
     angle: 45
     wideAnimation: WeaponArcStatic
     soundHit:
-      collection: mantis_attack
+      collection: MantisAttack
     soundNoDamage:
-      collection: mantis_attack
+      collection: MantisAttack
     soundSwing:
-      collection: mantis_attack
+      collection: MantisAttack
     animation: WeaponArcClaw
     damage:
       types:
@@ -357,7 +357,7 @@
   - type: JumpAbility
     jumpDistance: 8
     jumpSound:
-      collection: mantis_rush
+      collection: MantisRush
 
 - type: entity
   parent: BaseMobDemonADT
