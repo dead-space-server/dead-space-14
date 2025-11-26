@@ -86,6 +86,9 @@ public sealed partial class NecroobeliskComponent : Component
     [DataField("active")]
     public bool IsActive = true;
 
+    [DataField]
+    public bool EndAfterDestroy = false;
+
     [DataField("canConvergence")]
     public bool IsCanStartConvergence = true;
 

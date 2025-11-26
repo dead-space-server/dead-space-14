@@ -64,6 +64,7 @@ public sealed class CorpseCollectorAbilitiesSystem : SharedCorpseCollectorSystem
     {
         _actions.AddAction(uid, ref component.ActionAbsorptionDeadNecroEntity, component.ActionAbsorptionDeadNecro, uid);
         _actions.AddAction(uid, ref component.ActionSpawnPointEntity, component.ActionSpawnPointNecro, uid);
+        UpdateState(uid, component);
     }
 
     private void OnShutdown(EntityUid uid, CorpseCollectorComponent component, ComponentShutdown args)
