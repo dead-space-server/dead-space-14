@@ -38,17 +38,26 @@ public sealed class NightVisionSystem : EntitySystem
     public override void FrameUpdate(float frameTime)
     {
         base.FrameUpdate(frameTime);
-        var query = EntityQueryEnumerator<NightVisionComponent>();
-        while (query.MoveNext(out var uid, out var component))
+
+        var player = _player.LocalEntity;
+        if (player != null &&
+            TryComp<NightVisionComponent>(player, out var component))
         {
+            // Свет выключен, если ПНВ активно и анимация (если есть) — завершена
+            _lightManager.DrawLighting = !_overlay.IsRunning();
+
             if (_overlay.SoundBeenPlayed()
                 && component.IsNightVision
                 && !EntityManager.EntityExists(component.SoundEntity)
                 && _overlay.GetTransitionProgress() >= 1f)
             {
-                component.SoundEntity = _audio.PlayLocal(component.ActivateSound, uid, uid)?.Entity;
+                component.SoundEntity = _audio.PlayLocal(component.ActivateSound, player, player)?.Entity;
                 _overlay.SetSoundBeenPlayed(false);
             }
+        }
+        else
+        {
+            _lightManager.DrawLighting = true;
         }
     }
 

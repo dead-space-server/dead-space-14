@@ -12,7 +12,6 @@ public sealed class NightVisionOverlay : Overlay
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly ILightManager _lightManager = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     public override bool RequestScreenTexture => true;
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
@@ -84,8 +83,6 @@ public sealed class NightVisionOverlay : Overlay
 
         _nightVisionComponent = nvComp;
 
-        _lightManager.DrawLighting = true;
-
         return _nightVisionComponent.IsNightVision || _transitionProgress > 0f;
     }
 
@@ -107,11 +104,6 @@ public sealed class NightVisionOverlay : Overlay
             else
                 _transitionProgress = MathF.Max(0f, _transitionProgress - _nightVisionComponent.TransitionSpeed * delta);
         }
-
-        _lightManager.DrawLighting = !IsRunning();
-
-        if (_transitionProgress <= 0f)
-            return;
 
         // Прекращаем рисовать только если эффект выключен и анимация закончена
         if (!_nightVisionComponent.IsNightVision && _transitionProgress <= 0f)
