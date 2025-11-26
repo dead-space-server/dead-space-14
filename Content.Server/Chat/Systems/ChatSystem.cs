@@ -378,6 +378,7 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         if (playSound)
         {
+            // DS14-announce-start
             var soundToPlay = announcementSound;
             if (soundToPlay == null && sender == Loc.GetString("chat-manager-sender-announcement"))
                 soundToPlay = CentComAnnouncementSound; // Corvax-Announcements: Support custom alert sound from admin panel
@@ -411,9 +412,9 @@ public sealed partial class ChatSystem : SharedChatSystem
             {
                 var ev = new AnnounceSpokeEvent(chosenVoice, originalMessage, lexiconMessage, languageId, chosenVoiceAuthor);
                 RaiseLocalEvent(ev);
+            // DS14-announce-end
             }
         }
-
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Global station announcement from {sender}: {message}");
     }
 
