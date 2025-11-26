@@ -46,15 +46,8 @@
   - type: Sprite
     sprite: Objects/Weapons/Guns/Ammunition/Boxes/magnum.rsi
     layers:
-      - state: base
+      - state: capbase # DS14
         map: ["enum.GunVisualLayers.Base"]
       - state: mag-cap-1
         map: ["enum.GunVisualLayers.Mag"]
-      - state: capbase
-# DS14-start
-  - type: MagazineVisuals
-    magState: mag
-    steps: 4
-    zeroVisible: false
-  - type: Appearance
-# DS14-end
+#      - state: capbase # DS14
