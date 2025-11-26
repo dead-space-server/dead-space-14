@@ -68,7 +68,7 @@
   id: JobIconERTChaplain
   icon:
     sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
-    state: Chaplain
+    state: chaplain
 
 # Taipan
 - type: jobIcon

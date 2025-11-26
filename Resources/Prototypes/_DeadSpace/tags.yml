@@ -152,9 +152,6 @@
   id: NoodlesCopy
 
 - type: Tag
-  id: Radiance
-
-- type: Tag
   id: PistolCobra
 
 - type: Tag
@@ -165,6 +162,9 @@
 
 - type: Tag
   id: Plasteel
+
+- type: Tag
+  id: Radiance
 
 - type: Tag
   id: RealCapfruit

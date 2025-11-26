@@ -1,3 +1,3 @@
 ent-RandomHumanoidSpawnerERTSecurityChaplain = ОБР священник
     .desc = { "" }
-    .suffix = ОБР, Призрачная роль, Второстепенное
+    .suffix = ОБР, Призрачная роль, Помощь, ОБР

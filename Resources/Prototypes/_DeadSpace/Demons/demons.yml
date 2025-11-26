@@ -357,7 +357,7 @@
   - type: JumpAbility
     jumpDistance: 8
     jumpSound:
-      collection: mantis_rush
+      collection: /Audio/_DeadSpace/Weapons/Melee/MantisBlades/rush.ogg
 
 - type: entity
   parent: BaseMobDemonADT
@@ -426,11 +426,12 @@
   - type: TargetAction
     range: 10
   - type: WorldTargetAction
-    event: !type:GoliathSummonTentacleAction  { entityId: DemonTentacle }
-    offsetDirections:
-      - North
-    extraSpawns: 1
-
+    event: !type:GoliathSummonTentacleAction
+      entityId: DemonTentacle
+      offsetDirections:
+        - North
+      extraSpawns: 0
+    
 - type: entity
   id: DemonTentacle
   parent: GoliathTentacle
