@@ -357,7 +357,7 @@
   - type: JumpAbility
     jumpDistance: 8
     jumpSound:
-      collection: /Audio/_DeadSpace/Weapons/Melee/MantisBlades/rush.ogg
+      collection: mantis_rush
 
 - type: entity
   parent: BaseMobDemonADT
