@@ -92,7 +92,7 @@ public sealed class StationGoalPaperSystem : EntitySystem
 
             wasSent = true;
         }
-
+        // Add goal gamerules
         foreach (var rule in goal.Rules)
         {
             _gameTicker.AddGameRule(rule);

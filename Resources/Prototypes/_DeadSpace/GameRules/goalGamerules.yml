@@ -1,0 +1,6 @@
+- type: entity
+  parent: BaseGameRule
+  id: GoalSpawnSyndieShuttle
+  components:
+  - type: LoadOnStationMapRule
+    gridPath: /Maps/Shuttles/ShuttleEvent/striker.yml
