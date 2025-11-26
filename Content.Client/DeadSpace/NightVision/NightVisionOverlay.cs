@@ -62,8 +62,11 @@ public sealed class NightVisionOverlay : Overlay
 
     public bool IsRunning()
     {
-        return _transitionProgress >= 1f && _nightVisionComponent.IsNightVision;
+        return _nightVisionComponent != null
+            && _nightVisionComponent.IsNightVision
+            && _transitionProgress >= 1f;
     }
+
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
     {
