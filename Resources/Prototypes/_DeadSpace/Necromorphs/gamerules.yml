@@ -61,8 +61,8 @@
     definitions:
     - prefRoles: [ UniHead ]
       fallbackRoles: [ Uni, UniEnslaved ]
-      max: 4
-      min: 4
+      max: 3
+      min: 3
       playerRatio: 10
       briefing:
         text: uni-head-role-greeting
