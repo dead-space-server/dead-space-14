@@ -1,5 +1,5 @@
 - type: entity
-  id: MonkeyKing
+  id: MonkeyKingSpawn
   parent: BaseStationEventShortDelay
   components:
   - type: StationEvent

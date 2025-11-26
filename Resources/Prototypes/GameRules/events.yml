@@ -34,6 +34,7 @@
     - id: RevenantSpawn
     - !type:NestedSelector
       tableId: DerelictBorgEventTable
+    - type: MonkeyKingSpawn # DS14
 
 - type: entityTable
   id: ModerateAntagEventsTable
