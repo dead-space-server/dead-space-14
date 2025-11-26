@@ -22,11 +22,13 @@ namespace Content.Client.Administration.UI
         public Action<string>? OnVoiceChange; // Corvax-TTS
         private static readonly ProtoId<LanguagePrototype> FirstLanguageId = "GeneralLanguage"; // DS14-Languages
 
-        private LineEdit _colorHexEdit; // DS14-announce
-        private Button _colorPreviewBtn; // DS14-announce
-        private LineEdit _soundPathEdit; // DS14-announce
-        private LineEdit _soundVolumeEdit; // DS14-announce
-        private LineEdit _senderEdit; // DS14-announce
+        // DS14-announce-start
+        private LineEdit _colorHexEdit;
+        private Button _colorPreviewBtn;
+        private LineEdit _soundPathEdit;
+        private LineEdit _soundVolumeEdit;
+        private LineEdit _senderEdit;
+        // DS14-announce-end
 
         public AdminAnnounceWindow()
         {
@@ -42,9 +44,7 @@ namespace Content.Client.Administration.UI
             _colorHexEdit.OnTextChanged += OnColorTextChanged;
             UpdateColorPreview();
             // DS14-announce-end
-
-            Announcement.Placeholder =
-                new Rope.Leaf(_localization.GetString("admin-announce-announcement-placeholder"));
+            Announcement.Placeholder = new Rope.Leaf(_localization.GetString("admin-announce-announcement-placeholder"));
             AnnounceMethod.AddItem(_localization.GetString("admin-announce-type-station"));
             AnnounceMethod.SetItemMetadata(0, AdminAnnounceType.Station);
             AnnounceMethod.AddItem(_localization.GetString("admin-announce-type-server"));
@@ -131,8 +131,7 @@ namespace Content.Client.Administration.UI
         private void AnnounceMethodOnOnItemSelected(OptionButton.ItemSelectedEventArgs args)
         {
             AnnounceMethod.SelectId(args.Id);
-            Announcer.Editable = ((AdminAnnounceType?)args.Button.SelectedMetadata ?? AdminAnnounceType.Station) ==
-                                 AdminAnnounceType.Station;
+            Announcer.Editable = ((AdminAnnounceType?)args.Button.SelectedMetadata ?? AdminAnnounceType.Station) == AdminAnnounceType.Station;
         }
 
         // Corvax-TTS-Start

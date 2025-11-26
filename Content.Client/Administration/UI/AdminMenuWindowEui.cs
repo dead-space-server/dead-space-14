@@ -29,10 +29,12 @@ namespace Content.Client.Administration.UI
                 LanguageId = (string)(_window.LanguageSelector.SelectedMetadata ?? ""), // DS14-Languages
                 EnableTTS = _window.EnableTTS.Pressed,
                 CustomTTS = _window.CustomTTS.Pressed,
-                ColorHex = _window.ColorHexText, // DS14-announce-color
-                SoundPath = _window.SoundPathText, // DS14-announce-audio
-                SoundVolume = _window.SoundVolumeValue, // DS14-announce-volume
-                Sender = _window.SenderText // DS14-announce-sender
+                // DS14-announce-start
+                ColorHex = _window.ColorHexText,
+                SoundPath = _window.SoundPathText,
+                SoundVolume = _window.SoundVolumeValue,
+                Sender = _window.SenderText,
+                // DS14-announce-end
             });
 
         }
