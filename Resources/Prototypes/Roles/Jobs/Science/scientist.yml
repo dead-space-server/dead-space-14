@@ -6,7 +6,7 @@
   requirements:
     - !type:DepartmentTimeRequirement
       department: Science
-      time: 18000 # 5 hours
+      time: 5h
   startingGear: ScientistGear
   icon: "JobIconScientist"
   supervisors: job-supervisors-rd
@@ -23,6 +23,7 @@
 - type: startingGear
   id: ScientistGear
   equipment:
+    id: SciencePDA # DS14
     ears: ClothingHeadsetScience
     socks: ClothingUnderwearSocksScientist
   #storage:

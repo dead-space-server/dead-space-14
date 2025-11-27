@@ -15,3 +15,82 @@
     energy: 1
     softness: 1
   - type: Marker
+
+- type: entity
+  id: MarkerLightSourceCyan
+  parent: MarkerLightSource
+  suffix: Спавнер, Голубой
+  components:
+  - type: PointLight
+    color: "#47f8ff"
+
+- type: entity
+  id: MarkerLightSourceBlue
+  parent: MarkerLightSource
+  suffix: Спавнер, Синий
+  components:
+  - type: PointLight
+    color: "#39a1ff"
+
+- type: entity
+  id: MarkerLightSourceYellow
+  parent: MarkerLightSource
+  suffix: Спавнер, Жёлтый
+  components:
+  - type: PointLight
+    color: "#ffde46"
+
+- type: entity
+  id: MarkerLightSourcePink
+  parent: MarkerLightSource
+  suffix: Спавнер, Розовый
+  components:
+  - type: PointLight
+    color: "#ff66cc"
+
+- type: entity
+  id: MarkerLightSourceOrange
+  parent: MarkerLightSource
+  suffix: Спавнер, Оранжевый
+  components:
+  - type: PointLight
+    color: "#ff8227"
+
+- type: entity
+  id: MarkerLightSourceRed
+  parent: MarkerLightSource
+  suffix: Спавнер, Красный
+  components:
+  - type: PointLight
+    color: "#fb4747"
+
+- type: entity
+  id: MarkerLightSourceGreen
+  parent: MarkerLightSource
+  suffix: Спавнер, Зелёный
+  components:
+  - type: PointLight
+    color: "#52ff39"
+
+- type: entity
+  id: MarkerLightSourceExterior
+  parent: MarkerLightSource
+  suffix: Спавнер, Экстерьер
+  components:
+  - type: PointLight
+    radius: 12
+    energy: 4.5
+    softness: 0.5
+    color: "#B4FCF0"
+
+- type: entity
+  id: MarkerDimLightSource
+  parent: MarkerLightSource
+  suffix: Спавнер, Тусклый
+  components:
+  - type: PointLight
+    enabled: true
+    radius: 5
+    energy: 0.5
+    softness: 3
+    color: "#ba473f"

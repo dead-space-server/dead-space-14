@@ -23,6 +23,7 @@
   - !type:AddComponentSpecial
     components:
     - type: BibleUser #Lets them heal with bibles
+    - type: MindCaptureDefence #DS14
 
 - type: startingGear
   id: ChaplainGear

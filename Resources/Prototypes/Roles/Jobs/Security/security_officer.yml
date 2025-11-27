@@ -6,7 +6,7 @@
   requirements:
     - !type:DepartmentTimeRequirement
       department: Security
-      time: 36000 # 10 hours
+      time: 10h
   startingGear: SecurityOfficerGear
   icon: "JobIconSecurityOfficer"
   supervisors: job-supervisors-hos
@@ -31,6 +31,7 @@
 - type: startingGear
   id: SecurityOfficerGear
   equipment:
+    id: SecurityPDA # DS14
     eyes: ClothingEyesGlassesSecurity
     ears: ClothingHeadsetSecurity
   storage:

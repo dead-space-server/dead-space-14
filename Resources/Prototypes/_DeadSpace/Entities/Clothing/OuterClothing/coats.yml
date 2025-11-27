@@ -209,3 +209,14 @@
     sprite: _DeadSpace/Clothing/OuterClothing/Coats/senior_officer_leather.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/OuterClothing/Coats/senior_officer_leather.rsi
+
+- type: entity
+  parent: ClothingOuterStorageFoldableBase
+  id: ClothingOuterCoatCargoJacket
+  name: куртка грузчика
+  description: Практичная куртка для работников отдела снабжения, обеспечивающая комфорт и защиту в любых условиях.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/OuterClothing/Coats/cargo_jacket.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/OuterClothing/Coats/cargo_jacket.rsi

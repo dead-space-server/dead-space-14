@@ -41,3 +41,16 @@
     sprite: _DeadSpace/Clothing/Neck/comantle.rsi
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckMantleTechnicalOperationsSupervisor
+  name: мантия руководителя техобеспечения
+  description: Строгая мантия с кроваво-красными элементами и золотой окаймовкой.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/technical_supervisormantle.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Neck/technical_supervisormantle.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag

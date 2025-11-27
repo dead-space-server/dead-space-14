@@ -217,6 +217,15 @@
   - type: ConditionalSpawner
     prototypes:
     - MobMonkeyPunpun
+  # DS14-start
+  - type: Language
+    knownLanguages:
+    - GeneralLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage
+  # DS14-end
 
 - type: entity
   parent: MarkerBase
@@ -245,7 +254,7 @@
     - state: ai
   - type: ConditionalSpawner
     prototypes:
-    - MobPossumMortyOld
+    - MobPossumMorty
 
 - type: entity
   parent: MarkerBase

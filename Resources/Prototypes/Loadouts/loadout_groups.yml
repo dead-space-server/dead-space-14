@@ -20,6 +20,9 @@
   - CigPackBlack
   - CigarCase
   - CigarGold
+  - BoxFolderBaseThreePapers
+  - BoxFolderPlasticClipboardThreePapers
+  - BoxFolderClipboardThreePapers
   # DS14-pins-start
   - ClothingNeckUSSPPin
   - ClothingNeckDonkPin
@@ -333,6 +336,13 @@
   - UnderwearBottomPantiesBartender
 
 - type: loadoutGroup
+  id: BartenderGoldenShaker
+  name: loadout-group-bartender-shaker
+  minLimit: 0
+  loadouts:
+  - BartenderGoldenShaker
+
+- type: loadoutGroup
   id: ChefHead
   name: loadout-group-chef-head
   minLimit: 0
@@ -487,10 +497,11 @@
   minLimit: 1
   loadouts:
   - Bible
-  - BibleDruid
   - BibleNanoTrasen
-  - BibleSatanic
-  - BibleTanakh
+  - BibleDruid
+  - BibleHonk
+  - BibleRatvar
+  - BibleNarsie
 
 - type: loadoutGroup
   id: ChaplainUnderwear
@@ -906,6 +917,14 @@
   - BlackShoes
   - CargoWinterBoots
 
+# DS14-disabled
+#- type: loadoutGroup
+#  id: CargoTechnicianID
+#  name: loadout-group-cargo-technician-id
+#  loadouts:
+#  - CargoTechnicianPDA
+#  - SeniorCourierPDA
+
 - type: loadoutGroup
   id: CargoTechnicianUnderwear
   name: loadout-group-cargo-technician-underwear
@@ -1085,12 +1104,13 @@
   - WorkBoots
   - EngineeringWinterBoots
 
-- type: loadoutGroup
-  id: StationEngineerID
-  name: loadout-group-station-engineer-id
-  loadouts:
-  - StationEngineerPDA
-  # - SeniorEngineerPDA
+# DS14-disabled
+#- type: loadoutGroup
+#  id: StationEngineerID
+#  name: loadout-group-station-engineer-id
+#  loadouts:
+#  - StationEngineerPDA
+#  - SeniorEngineerPDA
 
 - type: loadoutGroup
   id: StationEngineerUnderwear
@@ -1304,12 +1324,13 @@
   - PurpleGloves
   - RobohandsGloves
 
-- type: loadoutGroup
-  id: ScientistPDA
-  name: loadout-group-scientist-id
-  loadouts:
-  - ScientistPDA
-  # - SeniorResearcherPDA
+# DS14-disabled
+#- type: loadoutGroup
+#  id: ScientistPDA
+#  name: loadout-group-scientist-id
+#  loadouts:
+#  - ScientistPDA
+#  - SeniorResearcherPDA
 
 - type: loadoutGroup
   id: ScientistUnderwear
@@ -1502,12 +1523,13 @@
   - JackBoots
   # - SecurityWinterBoots
 
-- type: loadoutGroup
-  id: SecurityPDA
-  name: loadout-group-security-id
-  loadouts:
-  - SecurityPDA
-  # - SeniorOfficerPDA
+# DS14-disabled
+#- type: loadoutGroup
+#  id: SecurityPDA
+#  name: loadout-group-security-id
+#  loadouts:
+#  - SecurityPDA
+#  - SeniorOfficerPDA
 
 - type: loadoutGroup
   id: SecuritySocks
@@ -1750,12 +1772,13 @@
   - WhiteShoes
   - MedicalWinterBoots
 
-- type: loadoutGroup
-  id: MedicalDoctorPDA
-  name: loadout-group-medical-doctor-id
-  loadouts:
-  - MedicalDoctorPDA
-  # - SeniorPhysicianPDA
+# DS14-disabled
+#- type: loadoutGroup
+#  id: MedicalDoctorPDA
+#  name: loadout-group-medical-doctor-id
+#  loadouts:
+#  - MedicalDoctorPDA
+#  - SeniorPhysicianPDA
 
 - type: loadoutGroup
   id: MedicalDoctorUnderwear

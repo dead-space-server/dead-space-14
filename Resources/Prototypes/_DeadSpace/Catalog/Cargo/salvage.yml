@@ -1,0 +1,10 @@
+- type: entity
+  parent: CrateGenericSteel
+  id: CrateAdvancedKinetik
+  name: ящик с продвинутым протокинетическим ускорителем
+  description: Содержит продвинутый протокинетический ускоритель.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage:
+        id: WeaponAdvancedKinetik

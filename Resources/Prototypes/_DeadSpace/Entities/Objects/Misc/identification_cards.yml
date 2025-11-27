@@ -25,7 +25,57 @@
     job: CargoTechnician
     name: Ларго
 
-# ID карты Тайпана
+# Station
+
+- type: entity
+  parent: IDCardStandard
+  id: SeniorCourierIDCard
+  name: senior courier ID card
+  components:
+  - type: Sprite
+    layers:
+    - state: default
+    - state: idseniorcargo
+  - type: PresetIdCard
+    job: SeniorCourier
+
+- type: entity
+  parent: IDCardStandard
+  id: SeniorServiceIDCard
+  name: senior service ID card
+  components:
+  - type: Sprite
+    layers:
+    - state: default
+    - state: idseniorservice
+  - type: PresetIdCard
+    job: SeniorAdministrator
+
+- type: entity
+  parent: IDCardStandard
+  id: CoronerIDCard
+  name: coroner ID card
+  components:
+  - type: Sprite
+    layers:
+    - state: default
+    - state: idcoroner
+  - type: PresetIdCard
+    job: Coroner
+
+- type: entity
+  parent: IDCardStandard
+  id: SecurityPilotIDCard
+  name: security pilot ID card
+  components:
+  - type: Sprite
+    layers:
+    - state: default
+    - state: idsecuritypilot
+  - type: PresetIdCard
+    job: SecurityPilot
+
+# Taipan
 
 - type: entity
   parent: Clothing

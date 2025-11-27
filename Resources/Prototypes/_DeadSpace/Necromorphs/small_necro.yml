@@ -28,6 +28,9 @@
     damageModifierSet: Necromorf
   - type: Necromorf
   - type: NightVision
+    animation: true
+    color: "#6E000011"
+    transitionSpeed: 100
   - type: ImmunNecroobelisk
   - type: ZombieImmune
   - type: IgnoreKudzu

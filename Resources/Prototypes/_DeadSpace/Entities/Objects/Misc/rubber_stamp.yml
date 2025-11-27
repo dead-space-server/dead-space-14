@@ -131,7 +131,7 @@
     state: stamp-senior-researcher
 
 - type: entity
-  name: senior physician rubber stamp 
+  name: senior physician rubber stamp
   parent: RubberStampBase
   id: RubberStampSeniorPhysician
   categories: [ DoNotMap ]
@@ -144,22 +144,22 @@
     state: stamp-senior-physician
 
 - type: entity
-  name: senior salvage rubber stamp 
+  name: senior courier rubber stamp
   parent: RubberStampBase
-  id: RubberStampSeniorSalvage
+  id: RubberStampSeniorCourier
   categories: [ DoNotMap ]
   components:
   - type: Stamp
-    stampedName: stamp-component-stamped-name-senior-salvage
+    stampedName: stamp-component-stamped-name-senior-courier
     stampedColor: "#6d4719"
-    stampState: "paper_stamp-senior-salvage"
+    stampState: "paper_stamp-senior-courier"
   - type: Sprite
-    state: stamp-senior-salvage
+    state: stamp-senior-courier
 
 - type: entity
   parent: RubberStampBase
   id: RubberStampCentcomSpecialOperationOfficer
-  name: special operation officer rubber stamp 
+  name: special operation officer rubber stamp
   categories: [ DoNotMap ]
   components:
   - type: Stamp

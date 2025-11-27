@@ -489,6 +489,8 @@
         - CrateMask #this is so they can go under plastic flaps
         layer:
         - MachineLayer
+  - type: Paintable
+    group: null
 
 - type: entity
   id: CrateLockBoxEngineering
@@ -589,11 +591,11 @@
     layers:
     - state: base
     - state: overlay
-      color: "#c12d30"
+      color: "#2788ce"
     - state: closed
       map: ["enum.StorageVisualLayers.Door"]
     - state: overlay-closed
-      color: "#c12d30"
+      color: "#2788ce"
       map: [ lid_overlay ]
     - state: welded
       visible: false

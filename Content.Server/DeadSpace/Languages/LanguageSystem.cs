@@ -10,6 +10,7 @@ using Content.Shared.DeadSpace.Languages;
 using Robust.Server.Player;
 using Content.Shared.Chat;
 using System.Linq;
+using Content.Shared.Polymorph;
 
 namespace Content.Server.DeadSpace.Languages;
 
@@ -30,6 +31,7 @@ public sealed class LanguageSystem : EntitySystem
         SubscribeLocalEvent<LanguageComponent, MapInitEvent>(OnComponentMapInit);
         SubscribeLocalEvent<LanguageComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<LanguageComponent, SelectLanguageActionEvent>(OnSelect);
+        SubscribeLocalEvent<LanguageComponent, PolymorphedEvent>(OnPolymorphed);
 
         SubscribeNetworkEvent<SelectLanguageEvent>(OnSelectLanguage);
     }
@@ -42,6 +44,12 @@ public sealed class LanguageSystem : EntitySystem
     private void OnShutdown(EntityUid uid, LanguageComponent component, ComponentShutdown args)
     {
         _actionsSystem.RemoveAction(uid, component.SelectLanguageActionEntity);
+    }
+
+    private void OnPolymorphed(EntityUid uid, LanguageComponent component, PolymorphedEvent args)
+    {
+        var lang = EnsureComp<LanguageComponent>(args.NewEntity);
+        lang.CopyFrom(component);
     }
 
     private void OnSelect(EntityUid uid, LanguageComponent component, SelectLanguageActionEvent args)
@@ -66,6 +74,9 @@ public sealed class LanguageSystem : EntitySystem
 
     public string ReplaceWordsWithLexicon(string message, ProtoId<LanguagePrototype> languageId)
     {
+        if (String.IsNullOrEmpty(languageId))
+            return message;
+
         if (!_prototypeManager.TryIndex(languageId, out var languageProto))
             return message;
 
@@ -86,6 +97,35 @@ public sealed class LanguageSystem : EntitySystem
         return string.Join(' ', words);
     }
 
+    public string GetLangName(ProtoId<LanguagePrototype>? languageId)
+    {
+        var name = "Неизвестно";
+
+        if (String.IsNullOrEmpty(languageId))
+            return name;
+
+        if (_prototypeManager.TryIndex(languageId, out var languageProto))
+            name = languageProto.Name;
+
+        return name;
+    }
+
+    public string GetLangName(EntityUid uid, LanguageComponent? component = null)
+    {
+        var name = "Неизвестно";
+
+        if (!Resolve(uid, ref component, false))
+            return name;
+
+        if (String.IsNullOrEmpty(component.SelectedLanguage))
+            return name;
+
+        if (_prototypeManager.TryIndex<LanguagePrototype>(component.SelectedLanguage, out var languageProto))
+            name = languageProto.Name;
+
+        return name;
+    }
+
     public HashSet<ProtoId<LanguagePrototype>>? GetKnownLanguages(EntityUid entity)
     {
         if (!TryComp<LanguageComponent>(entity, out var component))
@@ -98,7 +138,7 @@ public sealed class LanguageSystem : EntitySystem
     {
         var languages = GetKnownLanguages(receiver);
 
-        if (languages == null) // если нет язков, значит знает всё
+        if (languages == null) // если нет языков, значит знает всё
             return true;
 
         return languages.Contains(senderLanguageId);
@@ -106,6 +146,9 @@ public sealed class LanguageSystem : EntitySystem
 
     public bool NeedGenerateTTS(EntityUid sourceUid, ProtoId<LanguagePrototype> prototypeId, bool isWhisper)
     {
+        if (String.IsNullOrEmpty(prototypeId))
+            return false;
+
         if (!_prototypeManager.TryIndex(prototypeId, out var languageProto))
             return false;
 
@@ -125,6 +168,9 @@ public sealed class LanguageSystem : EntitySystem
 
     public bool NeedGenerateDirectTTS(EntityUid uid, ProtoId<LanguagePrototype> prototypeId)
     {
+        if (String.IsNullOrEmpty(prototypeId))
+            return false;
+
         if (!_prototypeManager.TryIndex(prototypeId, out var languageProto))
             return false;
 
@@ -140,6 +186,9 @@ public sealed class LanguageSystem : EntitySystem
     public bool NeedGenerateGlobalTTS(ProtoId<LanguagePrototype> prototypeId, out List<ICommonSession> understandings)
     {
         understandings = GetUnderstanding(prototypeId);
+
+        if (String.IsNullOrEmpty(prototypeId))
+            return false;
 
         if (!_prototypeManager.TryIndex(prototypeId, out var languageProto))
             return false;
@@ -184,7 +233,7 @@ public sealed class LanguageSystem : EntitySystem
             if (session.AttachedEntity == null)
                 continue;
 
-            if (!HasComp<LanguageComponent>(session.AttachedEntity) || KnowsLanguage(session.AttachedEntity.Value, languageId)) // если нет язков, значит знает всё
+            if (KnowsLanguage(session.AttachedEntity.Value, languageId))
                 understanding.Add(session);
         }
 

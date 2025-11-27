@@ -185,9 +185,9 @@
   - type: StunRadius
     actionStunRadius: ActionStunRadiusSpider
     paralyzeTime: 3 # Время стана
-    launchForwardsMultiplier: 1 # Длинна слодьжения после стана
     rangeStun: 5 # Радиус способности
     ignorAlien: true # Не трогать союзников
+    stunBorg: false
     stunRadiusSound:
       path: /Audio/Animals/space_dragon_roar.ogg #Звуки способности
   - type: Puller
@@ -205,7 +205,7 @@
       SpiderTomb: 50
       TelecomServerSpiderTerror: 200
       CocoonKingBloodSpider: 250
-      CocoonSpider: 10
+      CocoonSpider: 50
   - type: SpiderKing
   - type: Damageable
     damageModifierSet: HeadSpiderTerror
