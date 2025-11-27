@@ -10,4 +10,9 @@ public sealed partial class LoadOnStationMapRuleComponent : Component
     /// </summary>
     [DataField]
     public ResPath? GridPath;
+    /// <summary>
+    /// Radius out of the station.
+    /// </summary>
+    [DataField]
+    public float Radius;
 }
