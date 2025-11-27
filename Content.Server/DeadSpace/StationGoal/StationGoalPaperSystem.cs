@@ -8,8 +8,8 @@ using Robust.Shared.ContentPack;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Content.Server.Cargo.Systems;
-using Content.Shared.Cargo.Components;
 using Content.Server.GameTicking;
+using Content.Shared.Cargo.Components;
 
 namespace Content.Server.DeadSpace.StationGoal;
 
