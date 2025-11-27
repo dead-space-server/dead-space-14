@@ -7,27 +7,32 @@ using System.Collections.ObjectModel;
 using System.Collections.Concurrent;
 using Robust.Shared.Log;
 using Robust.Shared.IoC;
+using System.Collections.Generic;
 
 namespace Content.Client.DeadSpace.NotifySystem.NotifyHelpers;
 
 public sealed class NotifyHelper : INotifyHelper
 {
-    //[Dependency] private readonly ILogManager _logManager = default!;
-    //[Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    //[Dependency] private readonly IConfigurationManager _cfg = default!;
+    private readonly ILogManager _logManager;
+    private readonly IPrototypeManager _prototypeManager;
+    private readonly IConfigurationManager _cfg;
+    private readonly ISawmill _sawmill;
 
-    ILogManager _logManager = IoCManager.Resolve<ILogManager>();
-    IPrototypeManager _prototypeManager = IoCManager.Resolve<IPrototypeManager>();
-    IConfigurationManager _cfg = IoCManager.Resolve<IConfigurationManager>();
-    private ConcurrentDictionary<string, bool> DictCvar = new ConcurrentDictionary<string, bool>();
-    private ConcurrentDictionary<string, bool> DictAccess = new ConcurrentDictionary<string, bool>();
-
-    public ISawmill _sawmill = default!;
-    public NotifyHelper()
+    public NotifyHelper(ILogManager logManager, IPrototypeManager prototypeManager, IConfigurationManager cfg)
     {
+        _logManager = logManager;
+        _prototypeManager = prototypeManager;
+        _cfg = cfg;
         _sawmill = _logManager.GetSawmill("NotifyHelper");
     }
 
+    // Остальной код
+
+    //ILogManager _logManager = IoCManager.Resolve<ILogManager>();
+    //IPrototypeManager _prototypeManager = IoCManager.Resolve<IPrototypeManager>();
+    //IConfigurationManager _cfg = IoCManager.Resolve<IConfigurationManager>();
+    private ConcurrentDictionary<string, bool> DictCvar = new ConcurrentDictionary<string, bool>();
+    private ConcurrentDictionary<string, bool> DictAccess = new ConcurrentDictionary<string, bool>();
 
     public bool GetValueAccess(string key)
     {
@@ -44,41 +49,34 @@ public sealed class NotifyHelper : INotifyHelper
     {
         DictAccess[key] = value;
     }
-    public ConcurrentDictionary<string, bool> GetDictionaryAccess()
+    public IReadOnlyDictionary<string, bool> GetDictionaryAccess()
     {
         return DictAccess;
     }
+
     public ConcurrentDictionary<string, bool> StringToPairList(string input)
     {
         var result = new ConcurrentDictionary<string, bool>();
         var parts = input.Split(";", StringSplitOptions.RemoveEmptyEntries);
-
-        if (parts.Length % 2 != 0)
-        {
-            _sawmill.Error($"Нечётное количество элементов в строке '{input}'.");
-            return result;
-        }
-
         for (int i = 0; i < parts.Length; i += 2)
         {
+            if (i + 1 >= parts.Length)
+            {
+                _sawmill.Error($"Отсутствует булевое значение для ключа '{parts[i]}'. Пропускаю.");
+                break;
+            }
             string word = parts[i];
             string boolStr = parts[i + 1];
-            bool value;
-            if (bool.TryParse(boolStr, out value))
+            if (!bool.TryParse(boolStr, out var value))
             {
-                result[word] = value;
+                _sawmill.Error($"Некорректное булевое значение '{boolStr}' для '{word}'. Использую false.");
+                value = false;
             }
-            else
-            {
-                result[word] = false;
-                //throw new ArgumentException($"Некорректное булевое значение {boolStr}");
-                _sawmill.Error($"Некорректное булевое значение {boolStr}");
-            }
-
+            result[word] = value;
         }
-
         return result;
     }
+
 
     public void EnsureInitialized()
     {
@@ -88,8 +86,18 @@ public sealed class NotifyHelper : INotifyHelper
             CreateDictionaryForReciveSys();
         }
     }
-    public string PairListToString(ConcurrentDictionary<string, bool> list)
+    private Dictionary<string, bool> CreateSnapShot(IReadOnlyDictionary<string, bool> list)
     {
+        Dictionary<string, bool> result = new Dictionary<string, bool>();
+        foreach (var (word, value) in list)
+        {
+            result[word] = value;
+        }
+        return result;
+    }
+    public string PairListToString(IReadOnlyDictionary<string, bool> list)
+    {
+        Dictionary<string, bool> snapshot = CreateSnapShot(list);
         var parts = new List<string>();
         foreach (var (word, value) in list)
         {
