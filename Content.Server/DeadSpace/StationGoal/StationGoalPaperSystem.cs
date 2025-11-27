@@ -63,14 +63,7 @@ public sealed class StationGoalPaperSystem : EntitySystem
                     wasModifiedOnce = ModifyStationBalance(station, goal.ModifyStationBalance.Value);
             }
 
-            var stamps = new List<StampDisplayInfo>
-            {
-                new()
-                {
-                    StampedName = Loc.GetString("stamp-component-stamped-name-centcom"),
-                    StampedColor = Color.FromHex("#006600")
-                }
-            };
+            var stamps = new List<StampDisplayInfo>{};
 
             if (goal.ExtraStamps != null)
             {
