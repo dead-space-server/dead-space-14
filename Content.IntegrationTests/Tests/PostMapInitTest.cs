@@ -63,6 +63,7 @@ namespace Content.IntegrationTests.Tests
             {"/Maps/cluster.yml", ["RubberStampMime"]},
             {"/Maps/corvax_avrit.yml", ["ClothingHeadHatCatEars", "ClothingHeadHatDogEars"]},
             {"/Maps/corvax_paper.yml", ["ClothingHeadHatCatEars"]},
+            {"/Maps/corvax_pilgrim.yml", ["ClothingHeadHatCatEars", "BoxFolderCentCom"]},
             {"/Maps/ds_box.yml", ["RubberStampSyndicate"]},
             {"/Maps/ds_silly.yml", ["RubberStampClown", "RubberStampMime"]},
             {"/Maps/ds_silly_snow.yml", ["RubberStampClown", "RubberStampMime"]},
