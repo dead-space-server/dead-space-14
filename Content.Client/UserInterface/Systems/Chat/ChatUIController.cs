@@ -753,7 +753,7 @@ public sealed partial class ChatUIController : UIController
         {
             var locWarning = Loc.GetString("chat-manager-max-message-length",
                 ("maxMessageLength", MaxMessageLength));
-            box.AddLine(locWarning, Color.Orange);
+            box.AddLine(locWarning, Color.Orange, default, locWarning, ChatChannel.Server, true); // RMC14
             return;
         }
 

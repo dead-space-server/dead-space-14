@@ -5,6 +5,7 @@ using Content.Server.DeviceNetwork.Systems;
 using Content.Server.NodeContainer.EntitySystems;
 using Content.Server.NodeContainer.Nodes;
 using Content.Server.Power.Components;
+using Content.Shared.Atmos;
 using Content.Shared.Atmos.Piping.Binary.Components;
 using Content.Shared.Atmos.Piping.Binary.Systems;
 using Content.Shared.Atmos.Piping.Components;
@@ -52,26 +53,38 @@ namespace Content.Server.Atmos.Piping.Binary.EntitySystems
             var previouslyBlocked = pump.Blocked;
             pump.Blocked = false;
 
+            // DS14-start: based on https://github.com/space-wizards/space-station-14/pull/35211
             // Pump mechanism won't do anything if the pressure is too high/too low unless you overclock it.
-            if ((inputStartingPressure < pump.LowerThreshold) || (outputStartingPressure > pump.HigherThreshold) && !pump.Overclocked)
+            if ((inputStartingPressure <= pump.LowerThreshold) || (outputStartingPressure >= pump.HigherThreshold) && !pump.Overclocked)
             {
                 pump.Blocked = true;
             }
 
             // Overclocked pumps can only force gas a certain amount.
-            if ((outputStartingPressure - inputStartingPressure > pump.OverclockThreshold) && pump.Overclocked)
+            if ((outputStartingPressure - inputStartingPressure >= pump.OverclockThreshold) && pump.Overclocked)
             {
                 pump.Blocked = true;
             }
+            // DS14-end
 
             if (previouslyBlocked != pump.Blocked)
                 UpdateAppearance(uid, pump);
             if (pump.Blocked)
                 return;
 
+            // DS14-start: based on https://github.com/space-wizards/space-station-14/pull/35211
             // We multiply the transfer rate in L/s by the seconds passed since the last process to get the liters.
-            var removed = inlet.Air.RemoveVolume(pump.TransferRate * _atmosphereSystem.PumpSpeedup() * args.dt);
+            var transferVol = pump.TransferRate * _atmosphereSystem.PumpSpeedup() * args.dt;
+            var transferRatio = transferVol / inlet.Air.Volume;
 
+            var pressureDelta = pump.HigherThreshold - outputStartingPressure;
+            var limitMoles = (pressureDelta * outlet.Air.Volume) / (inlet.Air.Temperature * Atmospherics.R);
+
+            var limitRatio = limitMoles / inlet.Air.TotalMoles;
+
+            var removedRatio = Math.Min(transferRatio, limitRatio);
+            var removed = inlet.Air.RemoveRatio(removedRatio);
+            // DS14-end
             // Some of the gas from the mixture leaks when overclocked.
             if (pump.Overclocked)
             {

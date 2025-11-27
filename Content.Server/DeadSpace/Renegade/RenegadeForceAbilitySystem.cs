@@ -23,6 +23,7 @@ using Content.Shared.Interaction;
 using Robust.Shared.Spawners;
 using Content.Shared.Alert;
 using Content.Shared.Item;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Renegade;
 
@@ -38,7 +39,7 @@ public sealed class RenegadeForceAbilitySystem : EntitySystem
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly AlertsSystem _alerts = default!;
-
+    private static readonly ProtoId<StatusEffectPrototype> StunEffect = "Stun";
     public const float MinGravPulseRange = 0.00001f;
     public const float MinRange = 0.01f;
     public const float MaxStrenghtPush = 15f;
@@ -220,7 +221,7 @@ public sealed class RenegadeForceAbilitySystem : EntitySystem
         if (TryComp<TimedDespawnComponent>(forcePowerEnt, out var timedDespawnComp))
         {
             TimeSpan durationEffect = TimeSpan.FromSeconds(timedDespawnComp.Lifetime * component.NumberOfPulses);
-            _statusEffect.TryAddStatusEffect<StunnedComponent>(uid, "Stun", durationEffect, true);
+            _statusEffect.TryAddStatusEffect<StunnedComponent>(uid, StunEffect, durationEffect, true);
         }
 
         Force(uid, component, xform);

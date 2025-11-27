@@ -44,6 +44,7 @@ public sealed partial class RevenantSystem : EntitySystem
     [Dependency] private readonly TagSystem _tag = default!;
     [Dependency] private readonly VisibilitySystem _visibility = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -138,6 +139,12 @@ public sealed partial class RevenantSystem : EntitySystem
 
         if (component.Essence <= 0)
         {
+            //DS14-start
+            if (_mind.TryGetMind(uid, out var mindId, out var mind))
+                if (mind.IsVisitingEntity)
+                    _mind.UnVisit(mindId, mind);
+            //DS14-end
+
             Spawn(component.SpawnOnDeathPrototype, Transform(uid).Coordinates);
             QueueDel(uid);
         }

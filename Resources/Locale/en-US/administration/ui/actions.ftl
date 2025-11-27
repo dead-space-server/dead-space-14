@@ -12,3 +12,5 @@ admin-player-actions-player-panel = Open Player Panel
 admin-player-actions-clone = Clone
 admin-player-actions-follow = Follow
 admin-player-actions-confirm = Are you sure?
+# DS14
+admin-player-actions-camera = Open camera

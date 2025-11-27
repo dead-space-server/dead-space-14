@@ -1,0 +1,39 @@
+- type: entity
+  name: слуга короля обезьян
+  id: MobMonkeyServant
+  parent: MobMonkey
+  description: Преданная и умная помощница монарха, обладающая ловкостью и хитростью. Она выполняет важные поручения и использует свою сообразительность для достижения целей короля. Верная своему хозяину, она всегда готова прийти на помощь и защитить интересы правителя.
+  components:
+  - type: NameIdentifier
+    group: Monkey
+  - type: Speech
+    speechSounds: Monkey
+    speechVerb: Monkey
+  - type: MonkeyAccent
+  - type: SentienceTarget
+    flavorKind: station-event-random-sentience-flavor-primate
+  - type: AlwaysRevolutionaryConvertible
+  - type: GhostRole
+    prob: 0.05
+    makeSentient: true
+    name: ghost-role-information-monkey-servant-name
+    description: ghost-role-information-monkey-servant-description
+    rules: ghost-role-information-antagonist-rules
+  - type: GhostTakeoverAvailable
+  - type: Clumsy
+    gunShootFailDamage:
+      types:
+        Blunt: 5
+        Piercing: 4
+      groups:
+        Burn: 3
+    clumsySound:
+      path: /Audio/Animals/monkey_scream.ogg
+  - type: NpcFactionMember
+    factions:
+    - AllHostile
+  - type: MonkeyServant
+  - type: Language
+    selectedLanguage: MonkeyLanguage
+    knownLanguages: 
+    - MonkeyLanguage

@@ -51,6 +51,11 @@
         - state: "lightning_3"
           color: plum
           shader: unshaded
+    #DS14-start
+    - type: Electrified
+      requirePower: false
+      shockDamage: 22.5
+    #DS14-end
     - type: PointLight
       enabled: true
       color: plum
@@ -60,7 +65,7 @@
       castShadows: false
     - type: Lightning
       canArc: false
-      shockDamage: 30
+      #shockDamage: 30 #DS14
 
 - type: entity
   name: charged lightning
