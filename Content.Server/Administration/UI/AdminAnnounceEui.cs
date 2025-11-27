@@ -6,6 +6,7 @@ using Content.Server.EUI;
 using Content.Shared.Administration;
 using Content.Shared.Eui;
 using Robust.Shared.Audio;
+using Robust.Shared.ContentPack;
 
 namespace Content.Server.Administration.UI
 {
@@ -13,6 +14,7 @@ namespace Content.Server.Administration.UI
     {
         [Dependency] private readonly IAdminManager _adminManager = default!;
         [Dependency] private readonly IChatManager _chatManager = default!;
+        [Dependency] private readonly IResourceManager _resourceManager = default!; // DS14-announce
         private readonly ChatSystem _chatSystem;
 
         public AdminAnnounceEui()
@@ -50,7 +52,7 @@ namespace Content.Server.Administration.UI
                     {
                         color = Color.FromHex(doAnnounce.ColorHex);
                     }
-                    catch
+                    catch (FormatException)
                     {
                         color = Color.FromHex("#1d8bad");
                     }
@@ -58,11 +60,16 @@ namespace Content.Server.Administration.UI
                     SoundSpecifier? sound = null;
                     if (!string.IsNullOrWhiteSpace(doAnnounce.SoundPath))
                     {
-                        var audioParams = AudioParams.Default.WithVolume(doAnnounce.SoundVolume).AddVolume(-8);
-                        sound = new SoundPathSpecifier(doAnnounce.SoundPath)
+                        var path = doAnnounce.SoundPath.Trim();
+                        if (path.StartsWith("/Audio/", StringComparison.OrdinalIgnoreCase) &&
+                            _resourceManager.TryContentFileRead(path, out _))
                         {
-                            Params = audioParams
-                        };
+                            var audioParams = AudioParams.Default.WithVolume(doAnnounce.SoundVolume).AddVolume(-8);
+                            sound = new SoundPathSpecifier(path)
+                            {
+                                Params = audioParams
+                            };
+                        }
                     }
                     // DS14-announce-end
 

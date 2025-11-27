@@ -342,6 +342,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         EntityUid? author = null,
         string? voice = null,
         bool usePresetTTS = false,
+        bool isCentcommSender = false, // DS14-announce
         string? languageId = null // DS14-Languages
         )
     {
@@ -380,7 +381,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         {
             // DS14-announce-start
             var soundToPlay = announcementSound;
-            if (soundToPlay == null && sender == Loc.GetString("chat-manager-sender-announcement"))
+            if (soundToPlay == null && isCentcommSender) // DS14-announce
                 soundToPlay = CentComAnnouncementSound; // Corvax-Announcements: Support custom alert sound from admin panel
 
             _audio.PlayGlobal(

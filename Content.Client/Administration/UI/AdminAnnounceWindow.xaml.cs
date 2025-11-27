@@ -23,11 +23,13 @@ namespace Content.Client.Administration.UI
         private static readonly ProtoId<LanguagePrototype> FirstLanguageId = "GeneralLanguage"; // DS14-Languages
 
         // DS14-announce-start
-        private LineEdit _colorHexEdit;
-        private Button _colorPreviewBtn;
-        private LineEdit _soundPathEdit;
-        private LineEdit _soundVolumeEdit;
-        private LineEdit _senderEdit;
+        private LineEdit? _colorHexEdit;
+        private Button? _colorPreviewBtn;
+        private LineEdit? _soundPathEdit;
+        private LineEdit? _soundVolumeEdit;
+        private LineEdit? _senderEdit;
+
+        private const int MaxSenderLength = 32;
         // DS14-announce-end
 
         public AdminAnnounceWindow()
@@ -41,7 +43,11 @@ namespace Content.Client.Administration.UI
             _soundPathEdit = FindControl<LineEdit>("SoundPath");
             _soundVolumeEdit = FindControl<LineEdit>("SoundVolume");
             _senderEdit = FindControl<LineEdit>("Sender");
+
             _colorHexEdit.OnTextChanged += OnColorTextChanged;
+            _soundPathEdit.OnTextChanged += OnSoundPathChanged;
+            _soundVolumeEdit.OnTextChanged += OnSoundVolumeChanged;
+            _senderEdit.OnTextChanged += OnSenderChanged;
             UpdateColorPreview();
             // DS14-announce-end
             Announcement.Placeholder = new Rope.Leaf(_localization.GetString("admin-announce-announcement-placeholder"));
@@ -57,7 +63,7 @@ namespace Content.Client.Administration.UI
             var protoManager = IoCManager.Resolve<IPrototypeManager>(); // DS14-Languages
 
             // Corvax-TTS-Start
-            _voices = protoManager // DS14-Languages
+            _voices = protoManager
                 .EnumeratePrototypes<TTSVoicePrototype>()
                 .OrderBy(o => Loc.GetString(o.Name))
                 .ToList();
@@ -93,11 +99,23 @@ namespace Content.Client.Administration.UI
         // DS14-announce-start
         private void OnColorTextChanged(LineEdit.LineEditEventArgs args)
         {
+            if (_colorHexEdit == null)
+                return;
+            var t = _colorHexEdit.Text.Trim();
+            if (t.StartsWith('#'))
+                t = t[1..];
+            if (t.Length > 6)
+                t = t[..6];
+            t = new string(t.Where(Uri.IsHexDigit).ToArray());
+            if (_colorHexEdit.Text != t)
+                _colorHexEdit.Text = t;
             UpdateColorPreview();
         }
 
         private void UpdateColorPreview()
         {
+            if (_colorPreviewBtn == null || _colorHexEdit == null)
+                return;
             try
             {
                 var color = Color.FromHex(_colorHexEdit.Text);
@@ -109,17 +127,38 @@ namespace Content.Client.Administration.UI
             }
         }
 
-        public string ColorHexText => _colorHexEdit.Text;
-        public string SoundPathText => _soundPathEdit.Text;
-        public string SenderText => _senderEdit.Text;
-        public float SoundVolumeValue
+        private void OnSoundPathChanged(LineEdit.LineEditEventArgs args)
         {
-            get
+            if (_soundPathEdit == null)
+                return;
+            var filtered = new string(_soundPathEdit.Text
+                .Where(c => char.IsLetterOrDigit(c) || c is '/' or '.' or '_' or '-')
+                .ToArray());
+            if (_soundPathEdit.Text != filtered)
+                _soundPathEdit.Text = filtered;
+        }
+
+        private void OnSoundVolumeChanged(LineEdit.LineEditEventArgs args)
+        {
+            if (_soundVolumeEdit == null)
+                return;
+            if (float.TryParse(_soundVolumeEdit.Text, out var vol))
             {
-                if (float.TryParse(_soundVolumeEdit.Text, out var volume))
-                    return Math.Clamp(volume, 1f, 10f);
-                return 5f;
+                vol = Math.Clamp(vol, 1f, 10f);
+                _soundVolumeEdit.Text = vol.ToString();
             }
+        }
+
+        private void OnSenderChanged(LineEdit.LineEditEventArgs args)
+        {
+            if (_senderEdit == null)
+                return;
+            var t = _senderEdit.Text;
+            t = new string(t.Where(c => !char.IsControl(c)).ToArray());
+            if (t.Length > MaxSenderLength)
+                t = t[..MaxSenderLength];
+            if (_senderEdit.Text != t)
+                _senderEdit.Text = t;
         }
         // DS14-announce-end
 
@@ -147,5 +186,22 @@ namespace Content.Client.Administration.UI
             LanguageSelector.SelectId(args.Id);
         }
         // DS14-Languages-end
+
+        // DS14-announce-start
+        public string ColorHexText => _colorHexEdit?.Text ?? "";
+        public string SoundPathText => _soundPathEdit?.Text ?? "";
+        public string SenderText => _senderEdit?.Text ?? "";
+
+        public float SoundVolumeValue
+        {
+            get
+            {
+                if (_soundVolumeEdit != null &&
+                    float.TryParse(_soundVolumeEdit.Text, out var volume))
+                    return Math.Clamp(volume, 1f, 10f);
+                return 5f;
+            }
+        }
+        // DS14-announce-end
     }
 }
