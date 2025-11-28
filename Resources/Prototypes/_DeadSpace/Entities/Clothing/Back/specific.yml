@@ -18,7 +18,6 @@
     quickEquip: false
     slots:
     - suitStorage
-    proto: BulletFireShot
   - type: ActivatableUI
     key: enum.SharedGasTankUiKey.Key
   - type: UserInterface
@@ -43,6 +42,9 @@
         whitelist:
           tags:
           - FlamethrowerNozzle
+  - type: SolutionAmmoProvider
+    solutionId: tank
+    proto: BulletFireShot
 
 - type: entity
   parent: ClothingBackpackSyndieFlametank
