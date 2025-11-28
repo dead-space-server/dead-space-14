@@ -63,7 +63,7 @@ namespace Content.Client.Administration.UI
             var protoManager = IoCManager.Resolve<IPrototypeManager>(); // DS14-Languages
 
             // Corvax-TTS-Start
-            _voices = protoManager
+            _voices = protoManager // DS14-Languages
                 .EnumeratePrototypes<TTSVoicePrototype>()
                 .OrderBy(o => Loc.GetString(o.Name))
                 .ToList();

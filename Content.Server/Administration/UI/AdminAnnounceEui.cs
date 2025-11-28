@@ -46,6 +46,7 @@ namespace Content.Server.Administration.UI
                         break;
                     }
 
+                    // DS14-announce-start
                     Color color;
                     var hex = doAnnounce.ColorHex?.Trim();
 
@@ -88,7 +89,6 @@ namespace Content.Server.Administration.UI
                         // TODO: Per-station announcement support
                         case AdminAnnounceType.Station:
                         {
-                            // DS14-announce-start
                             var sender = string.IsNullOrEmpty(doAnnounce.Announcer)
                                 ? Loc.GetString("chat-manager-sender-announcement")
                                 : doAnnounce.Announcer;
