@@ -2,7 +2,7 @@
     xmlns="https://spacestation14.io"
     Title="{Loc admin-announce-title}"
     MinWidth="650"
-    MinHeight="450">
+    MinHeight="450"><!-- DS14 -->
     <GridContainer Columns="1">
         <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
         <!-- DS14-start -->

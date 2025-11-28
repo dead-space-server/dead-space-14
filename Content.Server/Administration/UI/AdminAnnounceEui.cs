@@ -14,7 +14,7 @@ namespace Content.Server.Administration.UI
     {
         [Dependency] private readonly IAdminManager _adminManager = default!;
         [Dependency] private readonly IChatManager _chatManager = default!;
-        [Dependency] private readonly IResourceManager _resourceManager = default!; // DS14-announce
+        [Dependency] private readonly IResourceManager _resourceManager = default!;
         private readonly ChatSystem _chatSystem;
 
         public AdminAnnounceEui()
@@ -46,7 +46,6 @@ namespace Content.Server.Administration.UI
                         break;
                     }
 
-                    // DS14-announce-start
                     Color color;
                     var hex = doAnnounce.ColorHex?.Trim();
 
@@ -79,7 +78,6 @@ namespace Content.Server.Administration.UI
                             };
                         }
                     }
-                    // DS14-announce-end
 
                     switch (doAnnounce.AnnounceType)
                     {
@@ -89,6 +87,7 @@ namespace Content.Server.Administration.UI
 
                         // TODO: Per-station announcement support
                         case AdminAnnounceType.Station:
+                        {
                             // DS14-announce-start
                             var sender = string.IsNullOrEmpty(doAnnounce.Announcer)
                                 ? Loc.GetString("chat-manager-sender-announcement")
@@ -101,19 +100,46 @@ namespace Content.Server.Administration.UI
                                     $"\n{Loc.GetString("comms-console-announcement-sent-by")} {doAnnounce.Sender}";
                             }
 
-                            _chatSystem.DispatchGlobalAnnouncement(
-                                message: announcementWithSender,
-                                sender: sender,
-                                playSound: true,
-                                announcementSound: sound,
-                                colorOverride: color,
-                                originalMessage: doAnnounce.Announcement,
-                                voice: doAnnounce.EnableTTS && doAnnounce.CustomTTS ? doAnnounce.Voice : null,
-                                usePresetTTS: doAnnounce.EnableTTS && !doAnnounce.CustomTTS,
-                                languageId: doAnnounce.LanguageId // DS14-Languages
-                            // DS14-announce-end
-                            );
+                            if (doAnnounce.EnableTTS && !doAnnounce.CustomTTS)
+                            {
+                                _chatSystem.DispatchGlobalAnnouncement(
+                                    message: announcementWithSender,
+                                    sender: sender,
+                                    colorOverride: color,
+                                    playSound: true,
+                                    announcementSound: sound,
+                                    originalMessage: doAnnounce.Announcement,
+                                    usePresetTTS: true,
+                                    languageId: doAnnounce.LanguageId // DS14-Languages
+                                );
+                            }
+                            else if (doAnnounce.EnableTTS)
+                            {
+                                _chatSystem.DispatchGlobalAnnouncement(
+                                    message: announcementWithSender,
+                                    sender: sender,
+                                    colorOverride: color,
+                                    playSound: true,
+                                    announcementSound: sound,
+                                    originalMessage: doAnnounce.Announcement,
+                                    voice: doAnnounce.Voice,
+                                    languageId: doAnnounce.LanguageId // DS14-Languages
+                                );
+                            }
+                            else
+                            {
+                                _chatSystem.DispatchGlobalAnnouncement(
+                                    message: announcementWithSender,
+                                    sender: sender,
+                                    colorOverride: color,
+                                    playSound: true,
+                                    announcementSound: sound,
+                                    languageId: doAnnounce.LanguageId // DS14-Languages
+                                );
+                            }
                             break;
+                        }
+                            // DS14-announce-end
                     }
 
                     StateDirty();
