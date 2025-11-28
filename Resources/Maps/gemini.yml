@@ -84041,8 +84041,6 @@ entities:
     - type: Transform
       pos: 2.4978046,0.6471896
       parent: 27383
-    - type: HandheldLight
-      toggleActionEntity: 27385
     - type: ContainerContainer
       containers:
         cell_slot: !type:ContainerSlot
