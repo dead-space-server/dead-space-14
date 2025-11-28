@@ -74,9 +74,8 @@
   id: WeaponShotgunBulldog
   result: WeaponShotgunBulldog
   materials:
-    Steel: 600
+    Titanium: 600
     Plastic: 300
-    Wood: 200
 
 - type: latheRecipe
   parent: BaseWeaponRecipeLong

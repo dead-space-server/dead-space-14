@@ -10,6 +10,6 @@
   tier: 2
   cost: 15000
   recipeUnlocks:
-  - PhotonShotgun 
+  - PhotonShotgun
   - CartridgeLaserRifle
   - EnergyCartridge
