@@ -55,6 +55,5 @@
 - type: soundCollection
   id: DemonScreamsNarSi
   files:
-    - /Audio/_DeadSpace/Demons/scream_01_adt.ogg
-    - /Audio/_DeadSpace/Demons/scream_02_adt.ogg
-    - /Audio/_DeadSpace/Demons/scream_03.ogg
+    - /Audio/_DeadSpace/Demons/scream_01_narsi.ogg
+    - /Audio/_DeadSpace/Demons/scream_02_narsi.ogg
