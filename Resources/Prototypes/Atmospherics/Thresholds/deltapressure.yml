@@ -9,9 +9,8 @@
   - type: DeltaPressure
     minPressure: 300000
     minPressureDelta: 200000
-    scalingType: Linear
-    scalingPower: 0
-    RandomDamageChance: 0
+    scalingType: Log
+    scalingPower: 0.1
 
 ## For quarter reinforced plasma windows
 - type: entity
@@ -19,10 +18,10 @@
   id: BaseDeltaPressureReinforcedPlasmaQuarter
   components:
   - type: DeltaPressure
-    minPressure: 37500
-    minPressureDelta: 25000
-    scalingType: Threshold
-    RandomDamageChance: 0
+    minPressure: 375000
+    minPressureDelta: 250000
+    scalingType: Log
+    scalingPower: 0.1
 
 ## For plasma windows
 - type: entity
