@@ -42,18 +42,18 @@
     - /Audio/_DeadSpace/Demons/laugh_01.ogg
 
 - type: emoteSounds
-  id: DemonADT
+  id: DemonNarSi
   params:
     variation: 0.125
     volume: 2
   sounds:
     Scream:
-      collection: DemonScreamsADT
+      collection: DemonScreamsNarSi
     Laugh:
       collection: DemonLaughs
 
 - type: soundCollection
-  id: DemonScreamsADT
+  id: DemonScreamsNarSi
   files:
     - /Audio/_DeadSpace/Demons/scream_01_adt.ogg
     - /Audio/_DeadSpace/Demons/scream_02_adt.ogg

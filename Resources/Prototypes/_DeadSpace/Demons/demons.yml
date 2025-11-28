@@ -100,7 +100,7 @@
 
 - type: entity
   parent: BaseMobDemonRS
-  id: BaseMobDemonADT
+  id: BaseMobDemonNarSi
   abstract: true
   components:
   - type: Sprite
@@ -108,9 +108,9 @@
     sprite: _DeadSpace/Demons/nar_si_big_demons.rsi
   - type: Vocal
     sounds:
-      Male: DemonADT
-      Female: DemonADT
-      Unsexed: DemonADT
+      Male: DemonNarSi
+      Female: DemonNarSi
+      Unsexed: DemonNarSi
 
 - type: entity
   parent: BaseMobDemonRS
@@ -307,7 +307,7 @@
         Heat: 5
 
 - type: entity
-  parent: BaseMobDemonADT
+  parent: BaseMobDemonNarSi
   id: MobDemonBloodyArms
   components:
   - type: Sprite
@@ -360,7 +360,7 @@
       collection: MantisRush
 
 - type: entity
-  parent: BaseMobDemonADT
+  parent: BaseMobDemonNarSi
   id: MobDemonSnake
   components:
   - type: Sprite
@@ -490,7 +490,7 @@
   - type: AnimationPlayer
 
 - type: entity
-  parent: BaseMobDemonADT
+  parent: BaseMobDemonNarSi
   id: MobDemonMouth
   components:
   - type: Sprite
