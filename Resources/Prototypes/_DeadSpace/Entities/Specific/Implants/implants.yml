@@ -47,6 +47,18 @@
   components:
   - type: Implanter
     implant: MantisBladesImplant
+  - type: Item
+    sprite: _DeadSpace/Objects/Specific/Medical/mantis_implanter.rsi
+    heldPrefix: implanter
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Medical/mantis_implanter.rsi
+    state: implanter1
+    layers:
+    - state: implanter0
+      map: [ "implantFull" ]
+      visible: true
+    - state: implanter1
+      map: [ "implantOnly" ]
 
 - type: entity
   parent: BaseSubdermalImplant

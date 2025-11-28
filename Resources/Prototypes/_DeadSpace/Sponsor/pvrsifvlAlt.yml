@@ -7,7 +7,7 @@
   id: ProtoKineticpvrsifvlAlt
   entity: WeaponCrusherpvrsifvlAlt
   sponsorOnly: true
-  whitelistJobs: [SalvageSpecialist, SeniorSalvageSpecialist, Quartermaster]
+  whitelistJobs: [SalvageSpecialist, Quartermaster]
 
 - type: sponsorLoadout
   id: pvrsifvlAltHypospray

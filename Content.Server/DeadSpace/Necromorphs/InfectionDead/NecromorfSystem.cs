@@ -43,6 +43,7 @@ public sealed partial class NecromorfSystem : SharedInfectionDeadSystem
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    private static readonly Color NecromorphVisionColor = new(110f / 255f, 0f, 0f, 0.067f);
 
     public override void Initialize()
     {
@@ -163,7 +164,10 @@ public sealed partial class NecromorfSystem : SharedInfectionDeadSystem
             AddComp<InsulatedComponent>(uid);
 
         if (!HasComp<NightVisionComponent>(uid) && VirusEffectsConditions.HasEffect(component.StrainData.Effects, VirusEffects.NightVision))
-            AddComp<NightVisionComponent>(uid);
+        {
+            var nvComp = new NightVisionComponent(NecromorphVisionColor);
+            AddComp(uid, nvComp);
+        }
 
         if (!HasComp<ReleaseGasPerSecondComponent>(uid) && VirusEffectsConditions.HasEffect(component.StrainData.Effects, VirusEffects.EmitGas))
         {

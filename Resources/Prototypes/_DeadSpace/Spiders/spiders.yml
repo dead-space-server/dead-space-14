@@ -148,7 +148,9 @@
     factions:
     - SpiderTerror
   - type: NightVision
-    color: "#80008022"
+    animation: true
+    transitionSpeed: 100
+    color: "#80008011"
   - type: IntrinsicRadioReceiver
   - type: IntrinsicRadioTransmitter
     channels:
@@ -890,9 +892,9 @@
   - type: StunRadius
     actionStunRadius: ActionStunRadiusSpider
     paralyzeTime: 3 # Время стана
-    launchForwardsMultiplier: 1 # Длинна слодьжения после стана
     rangeStun: 5 # Радиус способности
     ignorAlien: true # Не трогать союзников
+    stunBorg: false
     stunRadiusSound:
       path: /Audio/Animals/space_dragon_roar.ogg # Звуки способности
   - type: Puller

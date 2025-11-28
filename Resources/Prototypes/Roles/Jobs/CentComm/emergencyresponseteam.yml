@@ -107,7 +107,7 @@
   playTimeTracker: JobERTChaplain
   setPreference: false
   startingGear: ERTChaplainGear
-  icon: "JobIconNanotrasen"
+  icon: "JobIconERTChaplain" # DS14
   supervisors: job-supervisors-centcom
   canBeAntag: false
   accessGroups:
@@ -118,39 +118,47 @@
   - !type:AddComponentSpecial
     components:
     - type: BibleUser #Lets them heal with bibles
+    - type: MindCaptureDefence #DS14
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant, TrackingImplant ]
 
+# DS14-start
 - type: startingGear
   id: ERTChaplainGear
   equipment:
     jumpsuit: ClothingUniformJumpsuitERTChaplain
     back: ClothingBackpackERTChaplain
-    shoes: ClothingShoesLeather
-    head: ClothingHeadHatFez
-    eyes: ClothingEyesGlasses
+    mask: ClothingMaskGasERT
+    eyes: ClothingEyesHudAdvanced
     neck: ClothingNeckStoleChaplain
+    ears: ClothingHeadsetCentCom
     gloves: ClothingHandsGlovesCombat
-    outerClothing: ClothingOuterArmorBasicSlim
-    id: ERTChaplainPDA
-    ears: ClothingHeadsetAltCentCom
-    belt: ClothingBeltStorageWaistbag
-    pocket1: Flare
-    pocket2: DrinkWaterBottleFull
+    outerClothing: ClothingOuterHardsuitERTChaplain
+    suitstorage: HolyCrossbow
+    shoes: ADTClothingShoesBootsMagERT
+    id: ERTChaplainIDCard
+    belt: RadianceSheathFilled
+    pocket1: DoubleEmergencyOxygenTankFilled
+    pocket2: Bible
   storage:
     back:
-    - BoxCandle
-    - BoxBodyBag
-    - DrinkWaterMelonJuiceJug
-    - Lantern
-    - Lantern
-    - Bible
+    - WeaponDisabler
     - CrowbarRed
-    - FoodBakedBunHotX
-    - FoodBakedBunHotX
-    - FoodBakedBunHotX
-    - FoodBakedBunHotX
-    - Lighter
+    - EmergencyMedipen
+    - BoxMRE
+    - CrayonWhite
+    - Candle
+    - Candle
+    - Candle
+    - DrinkWaterBottleFull
+    - DrinkWaterBottleFull
+    - PresentQuiver
+    - PresentQuiver
+    - PresentQuiver
+    - PresentQuiver
+    - PresentQuiver
+    - Censer
+# DS14-end
 
 # - type: startingGear
 #   id: ERTChaplainGearEVA

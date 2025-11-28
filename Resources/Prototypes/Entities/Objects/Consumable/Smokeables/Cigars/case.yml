@@ -38,6 +38,17 @@
   - type: Storage
     grid:
     - 0,0,3,1
+# DS14-start
+    whitelist:
+      tags:
+      - Cigarette
+      - Cigar
+      - Burnt
+      - Smokable
+      - CigFilter
+      - RollingPaper
+      - Paper
+# DS14-end
   - type: Item
     sprite: Objects/Consumable/Smokeables/Cigars/case.rsi
     size: Normal
@@ -75,3 +86,7 @@
     contents:
     - id: CigarGold
       amount: 8
+# DS14-start
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Consumable/Smokeables/Cigars/case.rsi
+# DS14-end

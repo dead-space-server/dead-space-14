@@ -3,7 +3,7 @@
   kind: source
   path: "/Textures/_DeadSpace/Shaders/colored_circle_mask.swsl"
   params:
-    CircleRadius: 7.0
+    CircleRadius: 10
     CircleMinDist: 0.3
     CirclePow: 4
     CircleMax: 4.0

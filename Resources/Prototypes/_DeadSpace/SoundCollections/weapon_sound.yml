@@ -1,0 +1,25 @@
+- type: soundCollection
+  id: HolyCrossbowSound
+  files:
+   - /Audio/_DeadSpace/Weapons/Guns/HolyCrossbow/shot_1.ogg
+   - /Audio/_DeadSpace/Weapons/Guns/HolyCrossbow/shot_2.ogg
+   - /Audio/_DeadSpace/Weapons/Guns/HolyCrossbow/shot_3.ogg
+
+- type: soundCollection
+  id: RadianceHitSoundOn
+  files:
+   - /Audio/_DeadSpace/Weapons/Melee/Radiance/fire_hit_1.ogg
+   - /Audio/_DeadSpace/Weapons/Melee/Radiance/fire_hit_2.ogg
+   - /Audio/_DeadSpace/Weapons/Melee/Radiance/fire_hit_3.ogg
+  
+- type: soundCollection
+  id: RadianceHitSoundOff
+  files:
+   - /Audio/_DeadSpace/Weapons/Melee/Radiance/hit_1.ogg
+   - /Audio/_DeadSpace/Weapons/Melee/Radiance/hit_2.ogg
+   - /Audio/_DeadSpace/Weapons/Melee/Radiance/hit_3.ogg
+
+- type: soundCollection
+  id: RadianceOn
+  files:
+   - /Audio/_DeadSpace/Weapons/Melee/Radiance/on_sound.ogg

@@ -45,7 +45,7 @@
   components:
   - type: StorageFill
     contents:
-      - id: ADTWeaponRifleXC67
+      - id: WeaponRifleXC67
       - id: ADTExtMagazineRifle
         amount: 2
 

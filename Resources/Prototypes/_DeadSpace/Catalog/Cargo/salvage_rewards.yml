@@ -1,0 +1,11 @@
+# Max Rank
+
+- type: cargoProduct
+  id: CargoAdvancedKinetik
+  icon:
+    sprite: _DeadSpace/Objects/Weapons/Guns/Basic/advancedpka.rsi
+    state: icon
+  product: CrateAdvancedKinetik
+  cost: 10000
+  category: cargoproduct-category-name-cargo
+  group: SalvageJobRewardMAX

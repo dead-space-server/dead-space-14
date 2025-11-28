@@ -1,0 +1,1 @@
+demon-tentacle-ability-use-popup = { CAPITALIZE($entity) } выпускает свою силу!

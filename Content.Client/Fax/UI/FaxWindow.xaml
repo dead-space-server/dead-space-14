@@ -1,7 +1,7 @@
 <DefaultWindow
     xmlns="https://spacestation14.io"
     Title="{Loc 'fax-machine-ui-window'}"
-    MinSize="380 220">
+    MinSize="380 320"> <!-- DS14 FaxHistory -->
     <BoxContainer Orientation="Vertical"
         SeparationOverride="2"
         VerticalExpand="True">
@@ -109,6 +109,11 @@
                 </BoxContainer>
 
                 <!-- It would be cool to add a display of the inserted file here. -->
+                <!-- DS14-start FaxHistory -->
+                <PanelContainer StyleClasses="LowDivider" Margin="0 4 0 4"/>
+                <Label Text="История факсов"></Label>
+                <OutputPanel Name="HistoryList" HorizontalExpand="True" VerticalExpand="True" Margin="8 8 8 4" ShowScrollDownButton="True" MinWidth="360" MinHeight="100"></OutputPanel>
+                <!-- DS14-end FaxHistory -->
             </BoxContainer>
         </PanelContainer>
 

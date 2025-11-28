@@ -25,8 +25,8 @@ public sealed partial class FaxWindow : DefaultWindow
 
         PaperButtonPressed += OnPaperButtonPressed;
 
-        FileButton.OnPressed += _ => FileButtonPressed?.Invoke(); 
-        PaperButton.OnPressed += _ => PaperButtonPressed?.Invoke(); 
+        FileButton.OnPressed += _ => FileButtonPressed?.Invoke();
+        PaperButton.OnPressed += _ => PaperButtonPressed?.Invoke();
         CopyButton.OnPressed += _ => CopyButtonPressed?.Invoke();
         SendButton.OnPressed += _ => SendButtonPressed?.Invoke();
         RefreshButton.OnPressed += _ => RefreshButtonPressed?.Invoke();
@@ -81,6 +81,19 @@ public sealed partial class FaxWindow : DefaultWindow
                     PeerSelector.Select(id);
             }
         }
+        // DS14-start
+
+        if (state.HistoryList.Count != 0)
+        {
+            HistoryList.Clear();
+
+            foreach (var (key, value) in state.HistoryList)
+            {
+                HistoryList.AddText($"{key} | {value}");
+            }
+
+        }
+        // DS14-end
     }
 
     private int AddPeerSelect(string name, string address)

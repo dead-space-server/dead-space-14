@@ -7,7 +7,7 @@
   - CargoTechnician
   - Quartermaster
   - SalvageSpecialist
-  - SeniorSalvageSpecialist
+  - SeniorCourier
   accountNumber: 1315 #backmen: currency
 
 - type: department

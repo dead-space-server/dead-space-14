@@ -12,7 +12,6 @@ public sealed class NightVisionOverlay : Overlay
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly ILightManager _lightManager = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     public override bool RequestScreenTexture => true;
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
@@ -46,6 +45,11 @@ public sealed class NightVisionOverlay : Overlay
         _readyForPlayback = true;
     }
 
+    public void SetTransitionProgress(float value)
+    {
+        _transitionProgress = value;
+    }
+
     public void SetSoundBeenPlayed(bool state)
     {
         _readyForPlayback = state;
@@ -55,6 +59,14 @@ public sealed class NightVisionOverlay : Overlay
     {
         return _readyForPlayback;
     }
+
+    public bool IsRunning()
+    {
+        return _nightVisionComponent != null
+            && _nightVisionComponent.IsNightVision
+            && _transitionProgress >= 1f;
+    }
+
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
     {
@@ -74,8 +86,6 @@ public sealed class NightVisionOverlay : Overlay
 
         _nightVisionComponent = nvComp;
 
-        _lightManager.DrawLighting = true;
-
         return _nightVisionComponent.IsNightVision || _transitionProgress > 0f;
     }
 
@@ -90,15 +100,13 @@ public sealed class NightVisionOverlay : Overlay
 
         float delta = (float)_timing.FrameTime.TotalSeconds;
 
-        if (_nightVisionComponent.IsNightVision)
-            _transitionProgress = MathF.Min(1f, _transitionProgress + _nightVisionComponent.TransitionSpeed * delta);
-        else
-            _transitionProgress = MathF.Max(0f, _transitionProgress - _nightVisionComponent.TransitionSpeed * delta);
-
-        _lightManager.DrawLighting = _transitionProgress != 1f;
-
-        if (_transitionProgress <= 0f)
-            return;
+        if (_nightVisionComponent.Animation)
+        {
+            if (_nightVisionComponent.IsNightVision)
+                _transitionProgress = MathF.Min(1f, _transitionProgress + _nightVisionComponent.TransitionSpeed * delta);
+            else
+                _transitionProgress = MathF.Max(0f, _transitionProgress - _nightVisionComponent.TransitionSpeed * delta);
+        }
 
         // Прекращаем рисовать только если эффект выключен и анимация закончена
         if (!_nightVisionComponent.IsNightVision && _transitionProgress <= 0f)
@@ -110,7 +118,7 @@ public sealed class NightVisionOverlay : Overlay
         var worldHandle = args.WorldHandle;
         var viewport = args.WorldBounds;
 
-        if (_transitionProgress >= 1f)
+        if (IsRunning())
         {
             _greyscaleShader?.SetParameter("SCREEN_TEXTURE", ScreenTexture);
             worldHandle.UseShader(_greyscaleShader);
@@ -119,7 +127,7 @@ public sealed class NightVisionOverlay : Overlay
 
         _circleMaskShader?.SetParameter("SCREEN_TEXTURE", ScreenTexture);
 
-        if (_transitionProgress >= 1f)
+        if (IsRunning())
             _circleMaskShader?.SetParameter("Color", _nightVisionComponent.Color);
         else
             _circleMaskShader?.SetParameter("Color", PnvOffOverlay);

@@ -1,0 +1,53 @@
+# Head
+- type: loadout
+  id: SeniorCourierBeret
+  equipment:
+    head: ClothingHeadHatBeretCargo
+
+# Jumpsuit
+- type: loadout
+  id: SeniorCourierJumpsuit
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitSeniorCourier
+
+- type: loadout
+  id: SeniorCourierJumpskirt
+  equipment:
+    jumpsuit: ClothingUniformJumpskirtSeniorCourier
+
+# OuterClothing
+- type: loadout
+  id: CoatCargoJacket
+  equipment:
+    outerClothing: ClothingOuterCoatCargoJacket
+
+# Belt
+- type: loadout
+  id: MailBag
+  equipment:
+    belt: MailBag
+
+# Underwear
+- type: loadout
+  id: UnderwearBottomBoxersSeniorCourier
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: MaleUnderwear
+  equipment:
+    underwearb: ClothingUnderwearBottomBoxersSeniorCourier
+
+- type: loadout
+  id: UnderwearBottomPantiesSeniorCourier
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: FemaleUnderwear
+  equipment:
+    underwearb: ClothingUnderwearBottomPantiesSeniorCourier
+
+- type: loadout
+  id: UnderwearTopBraSeniorCourier
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: FemaleUnderwear
+  equipment:
+    underweart: ClothingUnderwearTopBraSeniorCourier

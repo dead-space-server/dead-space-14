@@ -18,6 +18,9 @@
     size: Normal
     sprite: _ADT/Objects/Weapons/Melee/white_bouquet.rsi
   - type: DisarmMalus
+  - type: Construction
+    graph: WhiteCraftFlower
+    node: whiteCraftFlower
 
 - type: entity
   parent: BaseItem
@@ -38,6 +41,9 @@
     size: Normal
     sprite: _ADT/Objects/Weapons/Melee/rose_bouquet.rsi
   - type: DisarmMalus
+  - type: Construction
+    graph: PinkCraftFlower
+    node: pinkCraftFlower
 
 - type: entity
   parent: BaseItem
@@ -58,6 +64,9 @@
     size: Normal
     sprite: _ADT/Objects/Weapons/Melee/yellow_bouquet.rsi
   - type: DisarmMalus
+  - type: Construction
+    graph: YellowCraftFlower
+    node: yellowCraftFlower
 
 - type: entity
   parent: BaseItem
@@ -78,6 +87,9 @@
     size: Normal
     sprite: _ADT/Objects/Weapons/Melee/black_bouquet.rsi
   - type: DisarmMalus
+  - type: Construction
+    graph: DarkCraftFlower
+    node: darkCraftFlower
 
 - type: entity
   parent: BaseItem
@@ -98,6 +110,32 @@
     size: Normal
     sprite: _ADT/Objects/Weapons/Melee/liliac_bouquet.rsi
   - type: DisarmMalus
+  - type: Construction
+    graph: PurpleCraftFlower
+    node: purpleCraftFlower
+
+- type: entity
+  parent: BaseItem
+  id: ObjectWeaponsMeleeRedBouquet
+  name: красный букет
+  description: Букет из красных роз, очень оригинально!
+  components:
+  - type: Sharp
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Melee/red_bouquet.rsi
+    state: icon
+  - type: MeleeWeapon
+    attackRate: 1.0
+    damage:
+      types:
+        Slash: 1
+  - type: Item
+    size: Normal
+    sprite: _DeadSpace/Objects/Weapons/Melee/red_bouquet.rsi
+  - type: DisarmMalus
+  - type: Construction
+    graph: RedCraftFlower
+    node: redCraftFlower
 
 - type: entity
   parent: BaseItem
@@ -118,3 +156,6 @@
     size: Normal
     sprite: _ADT/Objects/Weapons/Melee/bouquet_with_beer.rsi
   - type: DisarmMalus
+  - type: Construction
+    graph: BouquetCraftBeer
+    node: bouquetCraftBeer

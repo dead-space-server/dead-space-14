@@ -56,7 +56,7 @@
             TechnicalAssistant: [ 4, 4 ]
             # sup
             Quartermaster: [ 1, 1 ]
-            SeniorSalvageSpecialist: [ 1, 1 ]
+            SeniorCourier: [ 1, 1 ]
             SalvageSpecialist: [ 3, 3 ]
             CargoTechnician: [ 3, 3 ]
             # civ

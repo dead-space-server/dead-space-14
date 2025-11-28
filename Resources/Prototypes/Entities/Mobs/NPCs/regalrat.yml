@@ -129,8 +129,13 @@
   - type: Sharp
   - type: TTS
     voice: DrSezavo
-  - type: NightVision # DS14
-  - type: ZombieImmune # DS14
+  # DS14-start
+  - type: NightVision
+    animation: true
+    color: "#7A886611"
+    transitionSpeed: 100
+  - type: ZombieImmune
+  # DS14-end
 
 - type: entity
   id: MobRatKingBuff
@@ -208,7 +213,12 @@
     - map: [ "enum.DamageStateVisualLayers.BaseUnshaded"]
       state: eyes
       shader: unshaded
-  - type: NightVision # DS14
+  # DS14-start
+  - type: NightVision
+    color: "#7A886611"
+    animation: true
+    transitionSpeed: 100
+  # DS14-end
   - type: SpriteMovement
     movementLayers:
       movement:

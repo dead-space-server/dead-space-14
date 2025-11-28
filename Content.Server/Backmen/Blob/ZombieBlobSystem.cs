@@ -12,6 +12,8 @@ using Content.Server.Speech.Components;
 using Content.Server.Temperature.Components;
 using Content.Shared.Atmos;
 using Content.Shared.Backmen.Blob.Components;
+using Content.Shared.DeadSpace.Languages.Components;
+using Content.Shared.DeadSpace.Languages.Prototypes;
 using Content.Shared.Mobs;
 using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Prototypes;
@@ -46,6 +48,7 @@ public sealed class ZombieBlobSystem : EntitySystem
     private static readonly ProtoId<TagPrototype> CannotSuicideTag = "CannotSuicide";
     private static readonly ProtoId<TagPrototype> BlobTag = "BlobMob";
     private static readonly ProtoId<NpcFactionPrototype> BlobFaction = "Blob";
+    private static readonly ProtoId<LanguagePrototype> BlobLanguage = "BlobLanguage"; // DS14
 
     private readonly GasMixture _normalAtmos;
 
@@ -138,6 +141,14 @@ public sealed class ZombieBlobSystem : EntitySystem
             component.OldColdDamageThreshold = temperatureComponent.ColdDamageThreshold;
             temperatureComponent.ColdDamageThreshold = 0;
         }
+
+        // DS14-start
+        var lang = EnsureComp<LanguageComponent>(uid);
+
+        lang.KnownLanguages.Clear();
+        lang.KnownLanguages.Add(BlobLanguage);
+        lang.SelectedLanguage = BlobLanguage;
+        // DS14-end
 
         if (TryComp<FixturesComponent>(uid, out var fixturesComp))
         {

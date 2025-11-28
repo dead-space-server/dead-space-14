@@ -1,90 +1,160 @@
 - type: stationGoal
   id: SolarPanels
   text: "/Paperwork/StationGoal/SolarPanels.xml"
+  extraStamps:
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"
 
 - type: stationGoal
   id: Artifacts
   text: "/Paperwork/StationGoal/Artifacts.xml"
+  extraStamps:
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"
 
 - type: stationGoal
   id: Bank
   text: "/Paperwork/StationGoal/Bank.xml"
+  extraStamps:
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"
 
 - type: stationGoal
   id: Zoo
   text: "/Paperwork/StationGoal/Zoo.xml"
+  extraStamps:
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"
 
 - type: stationGoal
   id: BiggerDorms
   text: "/Paperwork/StationGoal/BiggerDorms.xml"
+  extraStamps:
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"
 
 - type: stationGoal
   id: Fight
   text: "/Paperwork/StationGoal/Fight.xml"
+  extraStamps:
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"
 
 - type: stationGoal
   id: ObservationPoint
   text: "/Paperwork/StationGoal/ObservationPoint.xml"
+  extraStamps:
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"
 
 - type: stationGoal
   id: BornToKill
   text: "/Paperwork/StationGoal/BornToKill.xml"
+  extraStamps:
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"
 
 - type: stationGoal
   id: Chill
   text: "/Paperwork/StationGoal/Chill.xml"
   modifyStationBalance: -7500
+  extraStamps:
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"
 
 - type: stationGoal
   id: Borgs
   text: "/Paperwork/StationGoal/Borgs.xml"
+  extraStamps:
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"
 
 - type: stationGoal
   id: Bar
   text: "/Paperwork/StationGoal/Bar.xml"
+  extraStamps:
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"
 
 - type: stationGoal
   id: MiningOutpost
   text: "/Paperwork/StationGoal/MiningOutpost.xml"
+  extraStamps:
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"
 
 - type: stationGoal
   id: MilitaryShuttle
   text: "/Paperwork/StationGoal/MilitaryShuttle.xml"
   modifyStationBalance: 30000
+  extraStamps:
+  - stampedName: Департамент Вооруженных Сил NanoTrasen
+    stampedColor: "#505050"
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"
 
 - type: stationGoal
   id: OrbitalBunker
   text: "/Paperwork/StationGoal/OrbitalBunker.xml"
   modifyStationBalance: 30000
+  extraStamps:
+    - stampedName: Департамент Вооруженных Сил NanoTrasen
+      stampedColor: "#505050"
+    - stampedName: stamp-component-stamped-name-centcom
+      stampedColor: "#006600"
 
 - type: stationGoal
   id: Anomalies
   text: "/Paperwork/StationGoal/Anomalies.xml"
+  extraStamps:
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"
 
 - type: stationGoal
   id: HydroponicsInVacuum
   text: "/Paperwork/StationGoal/HydroponicsInVacuum.xml"
+  extraStamps:
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"
 
 - type: stationGoal
   id: ShuttleMedical
   text: "/Paperwork/StationGoal/ShuttleMedical.xml"
+  extraStamps:
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"
 
 - type: stationGoal
   id: ShuttleMiner
   text: "/Paperwork/StationGoal/ShuttleMiner.xml"
+  extraStamps:
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"
 
 - type: stationGoal
   id: ShuttleRND
   text: "/Paperwork/StationGoal/ShuttleRND.xml"
+  extraStamps:
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"
 
 - type: stationGoal
   id: ShuttleDock
   text: "/Paperwork/StationGoal/ShuttleDock.xml"
+  extraStamps:
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"
 
 - type: stationGoal
   id: Museum
   text: "/Paperwork/StationGoal/Museum.xml"
+  extraStamps:
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"
 
 - type: stationGoal
   id: Satellite
   text: "/Paperwork/StationGoal/Satellite.xml"
+  extraStamps:
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"

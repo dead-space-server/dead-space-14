@@ -1,0 +1,98 @@
+- type: entity
+  name: омнизиновый банан
+  parent: FoodProduceBase
+  id: BigBananaMonkeyKing
+  description: Это большой банан с омнизином
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Hydroponics/banana.rsi
+    scale: 1.5, 1.5
+  - type: Food
+    trash:
+    - TrashBananaPeel
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 11
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 4
+        - ReagentId: Vitamin
+          Quantity: 2
+        - ReagentId: Omnizine
+          Quantity: 5
+
+- type: entity
+  categories: [ HideSpawnMenu ]
+  parent: BaseBullet
+  id: ProjectileMonkeyKingBanana
+  name: наэлектризованный банан короля
+  description: Он очень большой!
+  components:
+  - type: PointLight
+    color: "#c5e222"
+    radius: 3.0
+    energy: 5.0
+  - type: Fixtures
+    fixtures:
+      projectile:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.3,0.3,0.3"
+        hard: false
+        mask:
+        - Impassable
+      fly-by: &flybyfixture
+        shape: !type:PhysShapeCircle
+          radius: 1.5
+        layer:
+        - Impassable
+        hard: False
+  - type: Sprite
+    sprite: Objects/Specific/Hydroponics/banana.rsi
+    scale: 2, 2
+    layers:
+    - state: produce
+      shader: unshaded
+  - type: IgnitionSource
+    temperature: 1000
+    ignited: true
+  - type: Electrified
+    shockNoises:
+      collection: MonkeyKingAttackSounds
+    requirePower: false
+  - type: Physics
+    canCollide: false
+  - type: TimedDespawn
+    lifetime: 5
+  - type: Projectile
+    impactEffect: BulletImpactEffect
+    damage:
+      types:
+        Piercing: 14
+    soundHit:
+      collection: MonkeyKingAttackSounds
+  # - type: TriggerOnCollide
+  #   fixtureID: projectile
+  # - type: SpawnOnTrigger
+  #   proto: TrashBananaPeelBig1
+
+- type: entity
+  categories: [ HideSpawnMenu ]
+  id: MonkeyKingBananaGun
+  name: пушка короля
+  description: Она очень опасна!
+  components:
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 15
+    rechargeSound:
+      collection: RevSounds
+  - type: BasicEntityAmmoProvider
+    proto: ProjectileMonkeyKingBanana
+    capacity: 1
+    count: 1
+  - type: Gun
+    soundGunshot:
+      path: /Audio/_DeadSpace/MonkeyKing/banana1.ogg
+    soundEmpty: null
+    projectileSpeed: 5

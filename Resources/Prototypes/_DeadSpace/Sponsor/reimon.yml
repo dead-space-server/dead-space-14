@@ -14,7 +14,7 @@
   id: ReimonWeaponCrusher
   entity: WeaponCrusherReimon
   sponsorOnly: true
-  whitelistJobs: [SalvageSpecialist, SeniorSalvageSpecialist]
+  whitelistJobs: [SalvageSpecialist]
 
 # Backpack
 - type: entity
