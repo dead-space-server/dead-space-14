@@ -407,7 +407,7 @@
 - type: entity
   id: ActionDemonTentacle
   parent: BaseAction
-  name: "[color=red]На повал[/color]"
+  name: "[color=red]Наповал[/color]"
   description: Вы опускаете свой язык в пол, заставляя бедолаг падать на пол
   components:
   - type: Action
@@ -558,7 +558,7 @@
   parent: BaseAction
   id: ActionDemonBreath
   name: "[color=red]Плевок слюной[/color]"
-  description: Запустите раз в 15 секунд слюну изо всех сил в жертву, чтобы она не смогла сбежать.
+  description: Каждые 15 секунд с силой выплёвывайте слюну в жертву, чтобы не дать ей сбежать.
   components:
   - type: Action
     icon: { sprite : _DeadSpace/Objects/Weapons/Throwable/demon_bola.rsi, state: icon }
@@ -574,7 +574,7 @@
   categories: [ HideSpawnMenu ]
   id: DemonBreathGun
   name: Плевок слюной
-  description: Вы плюёте в своего недруга своими слюнями, заставляя того падать на пол и быть замедлённым, пока тот не скинет с себя это, нечто.
+  description: Вы плюёте в своего недруга своими слюнями, заставляя того падать на пол и быть замедленным, пока тот не скинет с себя это, нечто.
   components:
   - type: RechargeBasicEntityAmmo
     rechargeCooldown: 15

@@ -47,7 +47,7 @@ ghost-role-information-herald-rules =
     Вам разрешается помнить знания об игре в целом, например, как готовить, как использовать предметы и т.д.
     Вам [color=red]НЕ[/color] разрешается помнить, имя, внешность и т.д. вашего предыдущего персонажа.
     Вы антагонист, найдите и убейте всех выживших
-ghost-role-information-bloodarms-name = кроворукий демон
+ghost-role-information-bloodarms-name = кроваворукий демон
 ghost-role-information-bloodarms-description = Вы демоническое отродье, да воцарится ад!
 ghost-role-information-bloodarms-rules =
     Вы не помните ничего из своей предыдущей жизни, если администратор не сказал вам обратное.
