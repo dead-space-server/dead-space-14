@@ -59,7 +59,7 @@
     cantSpeakLanguages:
     - GeneralLanguage
     unlockLanguagesAfterMakeSentient:
-    - GeneralLanguage 
+    - GeneralLanguage
   # DS14-end
 
 - type: entity
@@ -173,7 +173,7 @@
     cantSpeakLanguages:
     - GeneralLanguage
     unlockLanguagesAfterMakeSentient:
-    - GeneralLanguage     
+    - GeneralLanguage
   # DS14-end
 
 - type: entity
@@ -198,7 +198,7 @@
     - VimPilot
   - type: StealTarget
     stealGroup: AnimalNamedCat
-  # DS14-start    
+  # DS14-start
   - type: Language
     selectedLanguage: DogLanguage
     knownLanguages:
@@ -207,8 +207,8 @@
     cantSpeakLanguages:
     - GeneralLanguage
     unlockLanguagesAfterMakeSentient:
-    - GeneralLanguage   
-  # DS14-end  
+    - GeneralLanguage
+  # DS14-end
 
 - type: entity
   name: Exception
@@ -238,7 +238,7 @@
     cantSpeakLanguages:
     - GeneralLanguage
     unlockLanguagesAfterMakeSentient:
-    - GeneralLanguage      
+    - GeneralLanguage
   # DS14-end
 
 - type: entity
@@ -275,7 +275,7 @@
       path: /Audio/_ADT/carakal_purr.ogg
     interactFailureSound:
       path: /Audio/_ADT/carakal_hiss.ogg
-  # DS14-start      
+  # DS14-start
   - type: Language
     selectedLanguage: DogLanguage
     knownLanguages:
@@ -284,7 +284,7 @@
     cantSpeakLanguages:
     - GeneralLanguage
     unlockLanguagesAfterMakeSentient:
-    - GeneralLanguage        
+    - GeneralLanguage
   # DS14-end
 
 - type: entity
@@ -301,7 +301,7 @@
     tags:
     - CannotSuicide
     - VimPilot
-  # DS14-start    
+  # DS14-start
   - type: Language
     selectedLanguage: DogLanguage
     knownLanguages:
@@ -309,8 +309,8 @@
     cantSpeakLanguages:
     - GeneralLanguage
     unlockLanguagesAfterMakeSentient:
-    - GeneralLanguage    
-  # DS14-end      
+    - GeneralLanguage
+  # DS14-end
 
 - type: entity
   name: Bingus
@@ -371,16 +371,16 @@
   - type: Speech
     speechSounds: Cat
     speechVerb: SmallMob
-  # DS14-start    
-  - type: Language    
+  # DS14-start
+  - type: Language
     knownLanguages:
     - GeneralLanguage
     - CatLanguage
     cantSpeakLanguages:
     - GeneralLanguage
     unlockLanguagesAfterMakeSentient:
-    - GeneralLanguage       
-  # DS14-end    
+    - GeneralLanguage
+  # DS14-end
 
 - type: entity
   name: McGriff
@@ -467,7 +467,7 @@
     - VimPilot
   - type: StealTarget
     stealGroup: AnimalMcGriff
-  - type: MessyDrinker  
+  - type: MessyDrinker
 
 - type: entity
   name: Paperwork
@@ -509,8 +509,8 @@
     cantSpeakLanguages:
     - GeneralLanguage
     unlockLanguagesAfterMakeSentient:
-    - GeneralLanguage  
-# DS14-end      
+    - GeneralLanguage
+# DS14-end
 
 - type: entity
   name: Walter
@@ -580,8 +580,8 @@
     cantSpeakLanguages:
     - GeneralLanguage
     unlockLanguagesAfterMakeSentient:
-    - GeneralLanguage  
-# DS14-end        
+    - GeneralLanguage
+# DS14-end
 
 - type: entity
   name: Morty
@@ -613,8 +613,8 @@
     cantSpeakLanguages:
     - GeneralLanguage
     unlockLanguagesAfterMakeSentient:
-    - GeneralLanguage  
-# DS14-end          
+    - GeneralLanguage
+# DS14-end
 
 - type: entity
   name: Morty
@@ -686,8 +686,8 @@
     cantSpeakLanguages:
     - GeneralLanguage
     unlockLanguagesAfterMakeSentient:
-    - GeneralLanguage  
-# DS14-end          
+    - GeneralLanguage
+# DS14-end
 
 - type: entity
   name: Alexander
@@ -724,8 +724,8 @@
     cantSpeakLanguages:
     - GeneralLanguage
     unlockLanguagesAfterMakeSentient:
-    - GeneralLanguage  
-# DS14-end          
+    - GeneralLanguage
+# DS14-end
 
 - type: entity
   name: Renault
@@ -763,8 +763,8 @@
     cantSpeakLanguages:
     - GeneralLanguage
     unlockLanguagesAfterMakeSentient:
-    - GeneralLanguage  
-# DS14-end          
+    - GeneralLanguage
+# DS14-end
 
 - type: entity
   name: Hamlet
@@ -830,8 +830,8 @@
     cantSpeakLanguages:
     - GeneralLanguage
     unlockLanguagesAfterMakeSentient:
-    - GeneralLanguage  
-# DS14-end          
+    - GeneralLanguage
+# DS14-end
 
 - type: entity
   parent: MobHamsterHamlet
@@ -923,8 +923,8 @@
     cantSpeakLanguages:
     - GeneralLanguage
     unlockLanguagesAfterMakeSentient:
-    - GeneralLanguage  
-# DS14-end          
+    - GeneralLanguage
+# DS14-end
 
 - type: entity
   name: Willow
@@ -963,8 +963,8 @@
     cantSpeakLanguages:
     - GeneralLanguage
     unlockLanguagesAfterMakeSentient:
-    - GeneralLanguage  
-# DS14-end       
+    - GeneralLanguage
+# DS14-end
 
 - type: entity
   name: Smile
@@ -1053,8 +1053,10 @@
     cantSpeakLanguages:
     - GeneralLanguage
     unlockLanguagesAfterMakeSentient:
-    - GeneralLanguage  
-# DS14-end            
+    - GeneralLanguage
+  - type: StealTarget
+    stealGroup: SmileExtract
+# DS14-end
 
 - type: entity
   name: Pun Pun
@@ -1103,8 +1105,8 @@
     cantSpeakLanguages:
     - GeneralLanguage
     unlockLanguagesAfterMakeSentient:
-    - GeneralLanguage  
-# DS14-end          
+    - GeneralLanguage
+# DS14-end
 
 - type: entity
   name: Tropico
@@ -1139,8 +1141,8 @@
     cantSpeakLanguages:
     - GeneralLanguage
     unlockLanguagesAfterMakeSentient:
-    - GeneralLanguage  
-# DS14-end   
+    - GeneralLanguage
+# DS14-end
 
 - type: entity
   name: Polly the parrot
@@ -1166,4 +1168,4 @@
   - type: Language
     knownLanguages:
     - GeneralLanguage
-# DS14-end   
+# DS14-end
