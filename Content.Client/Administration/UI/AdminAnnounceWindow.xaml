@@ -12,7 +12,7 @@
         <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
             <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SizeFlagsStretchRatio="1.7">
                 <Button Name="ColorPreview" Access="Public" Text=" " HorizontalExpand="False" MinSize="30, 30" Margin="0,0,4,0" />
-                <LineEdit Name="ColorHex" Access="Public" PlaceHolder="{Loc admin-announce-color-placeholder}" Text="#1d8bad" HorizontalExpand="True" />
+                <LineEdit Name="ColorHex" Access="Public" PlaceHolder="{Loc admin-announce-color-placeholder}" Text="1d8bad" HorizontalExpand="True" />
             </BoxContainer>
             <LineEdit Name="SoundPath" Access="Public" PlaceHolder="{Loc admin-announce-sound-placeholder}" Text="/Audio/_DeadSpace/Announcements/centcomm.ogg" HorizontalExpand="True" SizeFlagsStretchRatio="7" Margin="4,0,0,0" />
             <LineEdit Name="SoundVolume" Access="Public" PlaceHolder="{Loc admin-announce-volume-placeholder}" Text="5" HorizontalExpand="True" SizeFlagsStretchRatio="1.3" Margin="4,0,0,0" />

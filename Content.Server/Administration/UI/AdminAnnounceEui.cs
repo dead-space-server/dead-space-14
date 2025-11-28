@@ -48,13 +48,21 @@ namespace Content.Server.Administration.UI
 
                     // DS14-announce-start
                     Color color;
+                    var hex = doAnnounce.ColorHex?.Trim();
+
+                    if (string.IsNullOrWhiteSpace(hex))
+                        hex = "1d8bad";
+
+                    if (!hex.StartsWith('#'))
+                        hex = "#" + hex;
+
                     try
                     {
-                        color = Color.FromHex(doAnnounce.ColorHex);
+                        color = Color.FromHex(hex);
                     }
                     catch (FormatException)
                     {
-                        color = Color.FromHex("#1d8bad");
+                        color = Color.FromHex("1d8bad");
                     }
 
                     SoundSpecifier? sound = null;

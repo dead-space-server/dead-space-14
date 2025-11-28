@@ -101,14 +101,20 @@ namespace Content.Client.Administration.UI
         {
             if (_colorHexEdit == null)
                 return;
+
             var t = _colorHexEdit.Text.Trim();
+
             if (t.StartsWith('#'))
                 t = t[1..];
+
+            t = new string(t.Where(Uri.IsHexDigit).ToArray());
+
             if (t.Length > 6)
                 t = t[..6];
-            t = new string(t.Where(Uri.IsHexDigit).ToArray());
+
             if (_colorHexEdit.Text != t)
                 _colorHexEdit.Text = t;
+
             UpdateColorPreview();
         }
 
@@ -116,9 +122,20 @@ namespace Content.Client.Administration.UI
         {
             if (_colorPreviewBtn == null || _colorHexEdit == null)
                 return;
+
+            var t = _colorHexEdit.Text.Trim();
+
+            if (t.Length != 3 && t.Length != 6)
+            {
+                _colorPreviewBtn.ModulateSelfOverride = null;
+                return;
+            }
+
+            var hex = "#" + t;
+
             try
             {
-                var color = Color.FromHex(_colorHexEdit.Text);
+                var color = Color.FromHex(hex);
                 _colorPreviewBtn.ModulateSelfOverride = color;
             }
             catch
@@ -188,7 +205,18 @@ namespace Content.Client.Administration.UI
         // DS14-Languages-end
 
         // DS14-announce-start
-        public string ColorHexText => _colorHexEdit?.Text ?? "";
+        public string ColorHexText
+        {
+            get
+            {
+                var t = _colorHexEdit?.Text.Trim() ?? "";
+
+                if (t.Length == 3 || t.Length == 6)
+                    return t;
+
+                return "";
+            }
+        }
         public string SoundPathText => _soundPathEdit?.Text ?? "";
         public string SenderText => _senderEdit?.Text ?? "";
 
