@@ -13,3 +13,59 @@
   targetNode: jetpack
   category: construction-category-tools
   objectType: Item
+
+- type: construction
+  id: BouquetCraftBeer
+  graph: BouquetCraftBeer
+  startNode: start
+  targetNode: bouquetCraftBeer
+  category: construction-category-misc
+  objectType: Item
+
+- type: construction
+  id: WhiteCraftFlower
+  graph: WhiteCraftFlower
+  startNode: start
+  targetNode: whiteCraftFlower
+  category: construction-category-misc
+  objectType: Item
+
+- type: construction
+  id: PinkCraftFlower
+  graph: PinkCraftFlower
+  startNode: start
+  targetNode: pinkCraftFlower
+  category: construction-category-misc
+  objectType: Item
+
+- type: construction
+  id: YellowCraftFlower
+  graph: YellowCraftFlower
+  startNode: start
+  targetNode: yellowCraftFlower
+  category: construction-category-misc
+  objectType: Item
+
+- type: construction
+  id: DarkCraftFlower
+  graph: DarkCraftFlower
+  startNode: start
+  targetNode: darkCraftFlower
+  category: construction-category-misc
+  objectType: Item
+
+- type: construction
+  id: PurpleCraftFlower
+  graph: PurpleCraftFlower
+  startNode: start
+  targetNode: purpleCraftFlower
+  category: construction-category-misc
+  objectType: Item
+
+- type: construction
+  id: RedCraftFlower
+  graph: RedCraftFlower
+  startNode: start
+  targetNode: redCraftFlower
+  category: construction-category-misc
+  objectType: Item

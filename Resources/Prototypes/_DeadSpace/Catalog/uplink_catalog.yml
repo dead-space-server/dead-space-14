@@ -130,7 +130,7 @@
   id: UplinkXC67Bundle
   name: uplink-xc67-bundle-name
   description: uplink-xc67-bundle-desc
-  icon: { sprite: /Textures/_ADT/Objects/Weapons/Guns/Rifels/xc67.rsi, state: icon }
+  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Rifels/xc67.rsi, state: icon }
   productEntity: ClothingBackpackDuffelSyndicateFilledXC67
   cost:
     Telecrystal: 18

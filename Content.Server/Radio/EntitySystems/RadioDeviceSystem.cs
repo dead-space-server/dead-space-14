@@ -13,6 +13,7 @@ using Content.Shared.Speech.Components;
 using Content.Shared.Chat;
 using Robust.Shared.Prototypes;
 using Content.Shared.Radio.EntitySystems;
+using Content.Shared.DeadSpace.Languages.Components;
 
 namespace Content.Server.Radio.EntitySystems;
 
@@ -179,6 +180,12 @@ public sealed class RadioDeviceSystem : SharedRadioDeviceSystem
         var name = Loc.GetString("speech-name-relay",
             ("speaker", Name(uid)),
             ("originalName", nameEv.VoiceName));
+
+        // DS14-start
+        // не совсем грамотная и верная реализация, но быстрая.
+        if (TryComp<LanguageComponent>(args.MessageSource, out var languageSource) && TryComp<LanguageComponent>(uid, out var language))
+            language.SelectedLanguage = languageSource.SelectedLanguage;
+        // DS14-end
 
         // log to chat so people can identity the speaker/source, but avoid clogging ghost chat if there are many radios
         _chat.TrySendInGameICMessage(uid, args.Message, InGameICChatType.Whisper, ChatTransmitRange.GhostRangeLimit, nameOverride: name, checkRadioPrefix: false);

@@ -61,11 +61,23 @@ public sealed class StationGoalPaperSystem : EntitySystem
                     wasModifiedOnce = ModifyStationBalance(station, goal.ModifyStationBalance.Value);
             }
 
-            var printout = new FaxPrintout(text, Loc.GetString("station-goal-paper-name"), null, "PaperPrintedCentcomm", "paper_stamp-centcom",
-                new List<StampDisplayInfo>
+            var stamps = new List<StampDisplayInfo>{};
+
+            if (goal.ExtraStamps != null)
+            {
+                foreach (var stamp in goal.ExtraStamps)
                 {
-                    new() { StampedName = Loc.GetString("stamp-component-stamped-name-centcom"), StampedColor = Color.FromHex("#006600") },
-                });
+                    stamps.Add(stamp);
+                }
+            }
+
+            var printout = new FaxPrintout(
+                text,
+                Loc.GetString("station-goal-paper-name"),
+                null,
+                "PaperPrintedCentcomm",
+                "paper_stamp-centcom",
+                stamps);
 
             _faxSystem.Receive(uid, printout, null, fax);
 

@@ -61,6 +61,9 @@ namespace Content.Shared.Storage
         [DataField]
         public bool QuickInsert; // Can insert storables by clicking them with the storage entity
 
+        [DataField]
+        public bool QuickEject = true; // DS14
+
         /// <summary>
         /// Minimum delay between quick/area insert actions.
         /// </summary>

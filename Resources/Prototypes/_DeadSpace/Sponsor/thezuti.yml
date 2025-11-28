@@ -14,13 +14,13 @@
   id: TheZuTiWeaponCrusher
   entity: WeaponCrusherTheZuTi
   sponsorOnly: true
-  whitelistJobs: [SalvageSpecialist, SeniorSalvageSpecialist]
+  whitelistJobs: [SalvageSpecialist]
 
 - type: sponsorLoadout
   id: TheZuTiWeaponKinetic
   entity: WeaponProtoKineticAcceleratorTheZuTi
   sponsorOnly: true
-  whitelistJobs: [SalvageSpecialist, SeniorSalvageSpecialist]
+  whitelistJobs: [SalvageSpecialist]
 
 # Backpack
 - type: entity

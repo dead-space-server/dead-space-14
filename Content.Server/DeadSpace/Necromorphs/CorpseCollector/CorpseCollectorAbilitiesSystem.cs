@@ -12,7 +12,6 @@ using Robust.Shared.Map;
 using Content.Shared.DeadSpace.Necromorphs.CorpseCollector;
 using Content.Shared.DeadSpace.Necromorphs.CorpseCollector.Components;
 using Content.Shared.Inventory;
-using Content.Server.Inventory;
 using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Ghost.Roles;
@@ -64,6 +63,7 @@ public sealed class CorpseCollectorAbilitiesSystem : SharedCorpseCollectorSystem
     {
         _actions.AddAction(uid, ref component.ActionAbsorptionDeadNecroEntity, component.ActionAbsorptionDeadNecro, uid);
         _actions.AddAction(uid, ref component.ActionSpawnPointEntity, component.ActionSpawnPointNecro, uid);
+        UpdateState(uid, component);
     }
 
     private void OnShutdown(EntityUid uid, CorpseCollectorComponent component, ComponentShutdown args)
@@ -267,7 +267,8 @@ public sealed class CorpseCollectorAbilitiesSystem : SharedCorpseCollectorSystem
             _appearance.SetData(uid, CorpseCollectorVisuals.lvl2, false);
             _appearance.SetData(uid, CorpseCollectorVisuals.lvl3, false);
             _appearance.SetData(uid, CorpseCollectorVisuals.lvl1, true);
-            _damage.SetDamageModifierSetId(uid, "CorpseCollectorLvl1");
+            if (TryComp<DamageableComponent>(uid, out var damageable))
+                _damage.SetDamageModifierSetId(uid, "CorpseCollectorLvl1", damageable);
             _actions.RemoveAction(uid, component.ActionSpawnLeviathanEntity);
         }
         if (countAbsorptions > shag && countAbsorptions < shag * 2)
@@ -275,7 +276,8 @@ public sealed class CorpseCollectorAbilitiesSystem : SharedCorpseCollectorSystem
             _appearance.SetData(uid, CorpseCollectorVisuals.lvl2, true);
             _appearance.SetData(uid, CorpseCollectorVisuals.lvl3, false);
             _appearance.SetData(uid, CorpseCollectorVisuals.lvl1, false);
-            _damage.SetDamageModifierSetId(uid, "CorpseCollectorLvl2");
+            if (TryComp<DamageableComponent>(uid, out var damageable))
+                _damage.SetDamageModifierSetId(uid, "CorpseCollectorLvl2", damageable);
             _actions.RemoveAction(uid, component.ActionSpawnLeviathanEntity);
         }
         if (countAbsorptions > shag * 2)
@@ -283,7 +285,8 @@ public sealed class CorpseCollectorAbilitiesSystem : SharedCorpseCollectorSystem
             _appearance.SetData(uid, CorpseCollectorVisuals.lvl2, false);
             _appearance.SetData(uid, CorpseCollectorVisuals.lvl3, true);
             _appearance.SetData(uid, CorpseCollectorVisuals.lvl1, false);
-            _damage.SetDamageModifierSetId(uid, "CorpseCollectorLvl3");
+            if (TryComp<DamageableComponent>(uid, out var damageable))
+                _damage.SetDamageModifierSetId(uid, "CorpseCollectorLvl3", damageable);
             _actions.AddAction(uid, ref component.ActionSpawnLeviathanEntity, component.ActionSpawnLeviathan, uid);
         }
     }

@@ -125,6 +125,20 @@
   - Гррр.
 
 - type: language
+  id: BlobLanguage
+  name: Блобий
+  icon: /Textures/_DeadSpace/LanguageIcons/zombie.png
+  generateTTSForLexicon: false
+  lexiconSound:
+    collection: ZombieScreams
+  lexicon:
+  - ГавБлимп!
+  - БлимпафТяв!
+  - БламплБлампф!
+  - ГаГафф.
+  - ГБлупррр.
+
+- type: language
   id: SlimeLanguage
   name: Пузырчатый
   icon: /Textures/_DeadSpace/LanguageIcons/slime.png

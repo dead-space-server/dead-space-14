@@ -116,33 +116,6 @@
 
 - type: entity
   parent: BasePDA
-  id: SeniorSalvagePDA
-  name: senior salvage PDA
-  description: Smells like ash.
-  components:
-  - type: Pda
-    id: SeniorSalvageIDCard
-  - type: Appearance
-    appearanceDataInit:
-     enum.PdaVisuals.PdaType:
-       !type:String
-       pda-seniorminer
-  - type: PdaBorderColor
-    borderColor: "#735321"
-    accentHColor: "#62237F"
-    accentVColor: "#62237F"
-  - type: Icon
-    state: pda-seniorminer
-  - type: CartridgeLoader
-    uiKey: enum.PdaUiKey.Key
-    preinstalled:
-      - CrewManifestCartridge
-      - NotekeeperCartridge
-      - NewsReaderCartridge
-      - AstroNavCartridge
-
-- type: entity
-  parent: BasePDA
   id: SeniorServicePDA
   name: senior service PDA
   description: Smells like service dep.

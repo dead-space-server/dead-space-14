@@ -42,8 +42,6 @@
         Slash: 5
   - type: TypingIndicator
     proto: felinid
-  - type: Thieving
-    stripTimeReduction: 1
   - type: OwOAccent
   - type: Speech
   - type: DamageOnHighSpeedImpact

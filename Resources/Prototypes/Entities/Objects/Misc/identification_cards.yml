@@ -30,7 +30,7 @@
     materialComposition:
       Steel: 50
   # DS14-end
-    
+
 #IDs with layers
 
 - type: entity
@@ -469,54 +469,6 @@
     - state: idbrigmedic
   - type: PresetIdCard
     job: Brigmedic
-
-- type: entity
-  parent: IDCardStandard
-  id: CoronerIDCard # DS14
-  name: coroner ID card
-  components:
-  - type: Sprite
-    layers:
-    - state: default
-    - state: idcoroner
-  - type: PresetIdCard
-    job: Coroner
-
-- type: entity
-  parent: IDCardStandard
-  id: SecurityPilotIDCard # DS14
-  name: coroner ID card
-  components:
-  - type: Sprite
-    layers:
-    - state: default
-    - state: idsecuritypilot
-  - type: PresetIdCard
-    job: SecurityPilot
-
-- type: entity
-  parent: IDCardStandard
-  id: SeniorSalvageIDCard # DS14
-  name: coroner ID card
-  components:
-  - type: Sprite
-    layers:
-    - state: default
-    - state: idseniorcargo
-  - type: PresetIdCard
-    job: SeniorSalvageSpecialist
-
-- type: entity
-  parent: IDCardStandard
-  id: SeniorServiceIDCard # DS14
-  name: coroner ID card
-  components:
-  - type: Sprite
-    layers:
-    - state: default
-    - state: idseniorservice
-  - type: PresetIdCard
-    job: SeniorAdministrator
 
 - type: entity
   parent: IDCardStandard

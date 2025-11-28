@@ -1,4 +1,7 @@
 - type: Tag
+  id: ADTFoodSausageFried
+
+- type: Tag
   id: AmbrosiaDeus
 
 - type: Tag
@@ -27,6 +30,12 @@
 
 - type: Tag
   id: BorgSecTorso
+
+- type: Tag
+  id: DarkFlower
+
+- type: Tag
+  id: DrinkBeerBottleFull
 
 - type: Tag
   id: CakeBrain
@@ -83,6 +92,12 @@
   id: FittableInBackpackCase
 
 - type: Tag
+  id: FoodCheeseSlice
+
+- type: Tag
+  id: FoodChiliPepper
+
+- type: Tag
   id: GiantSpiderSpace
 
 - type: Tag
@@ -99,6 +114,9 @@
 
 - type: Tag
   id: HardsuitSyndie
+
+- type: Tag
+  id: HolopadAdminNotification
 
 - type: Tag
   id: Hypopen
@@ -147,6 +165,15 @@
 
 - type: Tag
   id: MukhtarWearable
+
+- type: Tag
+  id: PinkFlower
+
+- type: Tag
+  id: PurpleFlower
+
+- type: Tag
+  id: RedFlower
 
 - type: Tag
   id: Necro
@@ -282,3 +309,11 @@
 
 - type: Tag
   id: WeldingMaskWhite
+
+- type: Tag
+  id: WhiteFlower
+
+- type: Tag
+  id: YellowFlower
+
+  # Обязательно в алфавитном порядке
