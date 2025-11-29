@@ -7,7 +7,8 @@ using Robust.Server.GameObjects;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
 using Content.Server.GameTicking.Rules;
-
+using Content.Server.Shuttles.Components;
+using Content.Server.Shuttles.Systems;
 using Content.Server.Station.Systems;
 using Content.Server.GameTicking;
 using Content.Server.Station.Components;
@@ -16,12 +17,12 @@ using Robust.Shared.Map;
 
 namespace Content.Server.DeadSpace.GoalGamerules;
 
-public sealed class LoadOnStationMapRuleSystem : StationEventSystem<LoadOnStationMapRuleComponent>
+public sealed class DockOnStationMapRuleSystem : StationEventSystem<DockOnStationMapRuleComponent>
 {
     [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
     [Dependency] private readonly StationSystem _station = default!;
-
-    protected override void Added(EntityUid uid, LoadOnStationMapRuleComponent comp, GameRuleComponent rule, GameRuleAddedEvent args)
+    [Dependency] private readonly EntityManager _entityManager = default!;
+    protected override void Added(EntityUid uid, DockOnStationMapRuleComponent comp, GameRuleComponent rule, GameRuleAddedEvent args)
     {
         if (comp.GridPath is not {} gridPath)
         {
@@ -31,7 +32,7 @@ public sealed class LoadOnStationMapRuleSystem : StationEventSystem<LoadOnStatio
         }
 
         MapId mapId = MapId.Nullspace;
-        Vector2 stationPos = Vector2.Zero;
+        EntityUid stationGrid = EntityUid.Invalid;
 
         foreach (var stationUid in _station.GetStations())
         {
@@ -46,32 +47,34 @@ public sealed class LoadOnStationMapRuleSystem : StationEventSystem<LoadOnStatio
                     if (xform.MapID != MapId.Nullspace)
                     {
                         mapId = xform.MapID;
-                        stationPos = xform.LocalPosition;
+                        stationGrid = stationDataGrid;
                         break;
                     }
                 }
             }
         }
 
-        Random random = new Random();
-        Vector2 vector2d = new Vector2(random.Next(-500,500),random.Next(-500,500));
-        vector2d.Normalize();
-        vector2d *= comp.Radius;
-        vector2d += stationPos;
-
         var opts = DeserializationOptions.Default with { InitializeMaps = true };
-        if (!_mapLoader.TryLoadGrid(mapId, gridPath, out var result, opts, vector2d, random.Next(360) ))
+        _entityManager.System<MapLoaderSystem>().TryLoadGrid(mapId, gridPath, out var shuttle);
+        if (_entityManager.Deleted(shuttle))
         {
-            Log.Error($"[LoadOnStationMapRule] Cannot load grid from {gridPath}");
-            ForceEndSelf(uid, rule);
+            Log.Error("Ошибка: Шаттл не существует или был удалён.");
+            return;
+        }
+        if (!_entityManager.TryGetComponent(shuttle, out ShuttleComponent? shuttleComponent))
+        {
+            Log.Error("Ошибка: Не найден ShuttleComponent у заспавненного шаттла.");
             return;
         }
 
-        var grid = result.Value.Owner;
+        if (!_entityManager.System<ShuttleSystem>().TryFTLDock(shuttle.Value, shuttleComponent, stationGrid, out _))
+        {
+            Log.Error("Ошибка: Стыковка не выполнена.");
+        }
 
         Log.Info($"[LoadOnStationMapRule] Loaded grid from {gridPath} onto station map {mapId}");
 
-        var ev = new RuleLoadedGridsEvent(mapId, new List<EntityUid> { grid });
+        var ev = new RuleLoadedGridsEvent(mapId, new List<EntityUid> { shuttle.Value.Owner });
         RaiseLocalEvent(uid, ref ev);
 
         base.Added(uid, comp, rule, args);
