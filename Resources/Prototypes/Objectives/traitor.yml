@@ -282,6 +282,15 @@
   - type: StealCondition
     stealGroup: HandTeleporter
 
+# DS14-start
+- type: entity
+  parent: BaseRDStealObjective
+  id: TabletRDStealObjective
+  components:
+  - type: StealCondition
+    stealGroup: TabletRD
+# DS14-end
+
 ## hos
 
 - type: entity # DS14 objective
