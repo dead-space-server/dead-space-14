@@ -121,6 +121,7 @@ ent-ERTSecurityGammaIDCard = { ent-ERTSecurityIDCard }
     .desc = { ent-ERTSecurityIDCard.desc }
 ent-CentcomIDCardDeathsquad = ID-карта
     .desc = { ent-CentcomIDCard.desc }
+    .suffix = Эскадрон смерти
 ent-AgentIDCard = { ent-PassengerIDCard }
     .suffix = Агентская
     .desc = { ent-PassengerIDCard.desc }
