@@ -2,7 +2,7 @@
   parent: [BaseItem, BaseGrandTheftContraband]
   id: TabletRD
   name: планшет исследований
-  description: Планшет, содержащий информацию о исследованных технологиях. Позволяет исследовать технологии из любой точки станции.
+  description: Планшет, позволяющий исследовать новые технологии из любой точки станции!
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Misc/tabletRD.rsi
