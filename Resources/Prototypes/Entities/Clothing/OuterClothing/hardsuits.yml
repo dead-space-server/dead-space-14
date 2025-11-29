@@ -920,8 +920,8 @@
     damageCoefficient: 0.6
   - type: ZombificationResistance
     zombificationResistanceCoefficient: 0.7
-  - type: ToggleableClothing
 #DS14-end
+  - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitERTLeader
   - type: HardsuitIdentification # DS14
   - type: Speech # DS14
