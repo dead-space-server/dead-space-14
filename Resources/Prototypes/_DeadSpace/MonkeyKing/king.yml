@@ -111,6 +111,10 @@
     action: ActionMonkeyKingBanana
     gunProto: MonkeyKingBananaGun
   - type: Insulated
+  - type: Language
+    selectedLanguage: MonkeyLanguage
+    knownLanguages: 
+    - MonkeyLanguage
 
 - type: entity
   id: SpawnPointGhostMonkeyKing
