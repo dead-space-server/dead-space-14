@@ -892,7 +892,7 @@
 #CENTCOMM / ERT HARDSUITS
 #ERT Leader Hardsuit
 - type: entity
-  parent: [ BaseCentcommContraband, ClothingOuterHardsuitSyndieCommander ]
+  parent: [ BaseCentcommContraband, ClothingOuterHardsuitSyndieCommander ] #DS14
   id: ClothingOuterHardsuitERTLeader
   name: ERT leader's hardsuit
   description: A protective hardsuit worn by the leader of an emergency response team.
@@ -901,6 +901,7 @@
     sprite: Clothing/OuterClothing/Hardsuits/ERTSuits/ertleader.rsi
   - type: Clothing
     sprite: Clothing/OuterClothing/Hardsuits/ERTSuits/ertleader.rsi
+#DS14-start
   - type: Armor
     modifiers:
       coefficients:
@@ -920,6 +921,7 @@
   - type: ZombificationResistance
     zombificationResistanceCoefficient: 0.7
   - type: ToggleableClothing
+#DS14-end
     clothingPrototype: ClothingHeadHelmetHardsuitERTLeader
   - type: HardsuitIdentification # DS14
   - type: Speech # DS14
@@ -942,7 +944,7 @@
 
 #ERT Engineer Hardsuit
 - type: entity
-  parent: [ BaseCentcommContraband, ClothingOuterHardsuitSyndie ]
+  parent: [ BaseCentcommContraband, ClothingOuterHardsuitSyndie ] #DS14
   id: ClothingOuterHardsuitERTEngineer
   name: ERT engineer's hardsuit
   description: A protective hardsuit worn by the engineers of an emergency response team.
@@ -951,6 +953,7 @@
     sprite: Clothing/OuterClothing/Hardsuits/ERTSuits/ertengineer.rsi
   - type: Clothing
     sprite: Clothing/OuterClothing/Hardsuits/ERTSuits/ertengineer.rsi
+#DS14-start
   - type: Armor
     modifiers:
       coefficients:
@@ -966,6 +969,7 @@
     sprintModifier: 0.85
   - type: ExplosionResistance
     damageCoefficient: 0.2
+#DS14-end
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitERTEngineer
   - type: FireProtection
@@ -977,7 +981,7 @@
 
 #ERT Medic Hardsuit
 - type: entity
-  parent: [ BaseCentcommContraband, ClothingOuterHardsuitSyndieMedic ]
+  parent: [ BaseCentcommContraband, ClothingOuterHardsuitSyndieMedic ] #DS14
   id: ClothingOuterHardsuitERTMedical
   name: ERT medic's hardsuit
   description: A protective hardsuit worn by the medics of an emergency response team.
@@ -986,6 +990,7 @@
     sprite: Clothing/OuterClothing/Hardsuits/ERTSuits/ertmedical.rsi
   - type: Clothing
     sprite: Clothing/OuterClothing/Hardsuits/ERTSuits/ertmedical.rsi
+#DS14-start
   - type: Armor
     modifiers:
       coefficients:
@@ -1005,6 +1010,7 @@
     damageCoefficient: 0.5
   - type: ZombificationResistance
     zombificationResistanceCoefficient: 0.55
+#DS14-end
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitERTMedical
   - type: HardsuitIdentification # DS14
@@ -1014,7 +1020,7 @@
 
 #ERT Security Hardsuit
 - type: entity
-  parent: [ BaseCentcommContraband, ClothingOuterHardsuitSyndie ]
+  parent: [ BaseCentcommContraband, ClothingOuterHardsuitSyndie ] #DS14
   id: ClothingOuterHardsuitERTSecurity
   name: ERT security's hardsuit
   description: A protective hardsuit worn by the security officers of an emergency response team.
@@ -1023,6 +1029,7 @@
     sprite: Clothing/OuterClothing/Hardsuits/ERTSuits/ertsecurity.rsi
   - type: Clothing
     sprite: Clothing/OuterClothing/Hardsuits/ERTSuits/ertsecurity.rsi
+#DS14-start
   - type: Armor
     modifiers:
       coefficients:
@@ -1038,6 +1045,7 @@
     sprintModifier: 0.9
   - type: ExplosionResistance
     damageCoefficient: 0.5
+#DS14-end
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitERTSecurity
   - type: Tag
