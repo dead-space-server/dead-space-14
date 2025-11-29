@@ -194,6 +194,14 @@ namespace Content.Client.Administration.UI.Bwoink
                     _console.ExecuteCommand($"respawn \"{_currentPlayer.Username}\"");
             };
 
+            // DS14-start
+            Camera.OnPressed += _ =>
+            {
+                if (_currentPlayer is not null)
+                    _console.ExecuteCommand($"camera \"{_currentPlayer.Username}\"");
+            };
+            // DS14-end
+
             PopOut.OnPressed += _ =>
             {
                 uiController.PopOut();
@@ -242,6 +250,11 @@ namespace Content.Client.Administration.UI.Bwoink
 
             Respawn.Visible = _adminManager.CanCommand("respawn");
             Respawn.Disabled = !Respawn.Visible || disabled;
+
+            // DS14-start 
+            Camera.Visible = _adminManager.CanCommand("camera");
+            Camera.Disabled = !Camera.Visible || disabled;
+            // DS14-end
 
             Follow.Visible = _adminManager.CanCommand("follow");
             Follow.Disabled = !Follow.Visible || disabled;

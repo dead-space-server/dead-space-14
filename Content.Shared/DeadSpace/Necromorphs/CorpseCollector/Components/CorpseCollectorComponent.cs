@@ -57,6 +57,7 @@ public sealed partial class CorpseCollectorComponent : Component
     [ViewVariables(VVAccess.ReadWrite)]
     public int MaxAbsorptions = 10;
 
+    [DataField]
     [ViewVariables(VVAccess.ReadWrite)]
     public int CountAbsorptions = 0;
 

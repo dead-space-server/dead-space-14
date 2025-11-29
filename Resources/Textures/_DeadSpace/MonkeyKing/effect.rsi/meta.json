@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "size": {
+    "x": 200,
+    "y": 160
+  },
+  "license": "CC-BY-SA-4.0",
+  "copyright": "Made by kloopre (discord)",
+  "states": [
+    {
+      "name": "boom",
+      "delays": [
+        [
+          0.2,
+		  0.2,
+		  0.2,
+		  0.2,
+		  0.2
+        ]
+      ]
+    }
+  ]
+}

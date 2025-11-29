@@ -1,0 +1,83 @@
+- type: entity
+  id: ActionJump
+  name: Прыгает в точку
+  description: Прыжок в выбранную точку.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 10
+    icon:
+      sprite: Interface/Actions/actions_mecha.rsi
+      state: mech_savannah
+    itemIconStyle: NoItem
+    priority: -1
+  - type: TargetAction
+    range: 0
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:JumpToPointActionEvent
+
+- type: entity
+  id: ActionGiveIntelligence
+  name: Наделить разумом
+  description: Даёт цели разум, цель присоединяется к восстанию.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 5
+    icon: _DeadSpace/Renegade/actions/submission.png
+  - type: TargetAction
+  - type: EntityTargetAction
+    event: !type:GiveIntelligenceActionEvent
+
+- type: entity
+  id: ActionArmy
+  name: Призвать обезьяну
+  description: Призывает обезьяну со случайным оружием.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 20
+    icon: _DeadSpace/MonkeyKing/icons/army.png
+  - type: InstantAction
+    event: !type:ArmyEvent
+
+- type: entity
+  id: ActionKingBuff
+  name: Воодушивить союзников
+  description: Увеличивает характеристики ближайших обезьян.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 30
+    icon: _DeadSpace/MonkeyKing/icons/flag.png
+  - type: InstantAction
+    event: !type:KingBuffActionEvent
+
+- type: entity
+  id: ActionStunRadiusMonkeyKing
+  name: Удар
+  description: Нанести сокрушительный удар, ударная волна которого снесёт всё на своём пути.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 30
+    icon: _DeadSpace/MonkeyKing/icons/attack.png
+  - type: InstantAction
+    event: !type:StunRadiusActionEvent
+
+- type: entity
+  id: ActionMonkeyKingBanana
+  name: "[color=yellow]Банан![/color]"
+  description: Сбейте своих врагов с ног большим бананом!
+  components:
+  - type: Action
+    useDelay: 10
+    icon: { sprite : Objects/Specific/Hydroponics/banana.rsi, state: produce }
+    itemIconStyle: BigAction
+    priority: 2
+  - type: TargetAction
+    range: 0
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:ActionGunShootEvent

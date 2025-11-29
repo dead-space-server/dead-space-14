@@ -17,6 +17,7 @@ using Content.Server.Beam;
 using Content.Server.GameTicking.Rules.Components;
 using Content.Server.Station.Systems;
 using Content.Shared.Audio;
+using Content.Server.RoundEnd;
 
 namespace Content.Server.DeadSpace.Necromorphs.Necroobelisk;
 
@@ -29,6 +30,7 @@ public sealed class NecroobeliskSystem : SharedNecroobeliskSystem
     [Dependency] private readonly IAdminManager _adminManager = default!;
     [Dependency] private readonly ChatSystem _chatSystem = default!;
     [Dependency] private readonly BeamSystem _beam = default!;
+    [Dependency] private readonly RoundEndSystem _roundEnd = default!;
 
     public override void Initialize()
     {
@@ -80,7 +82,16 @@ public sealed class NecroobeliskSystem : SharedNecroobeliskSystem
 
     private void OnDestruction(EntityUid uid, NecroobeliskComponent component, DestructionEventArgs args)
     {
-        GlobalWarn(uid, component, "uni-centcomm-announcement-obelisk-was-destroyed", Color.Green);
+        if (!component.EndAfterDestroy)
+            return;
+
+        _roundEnd.RequestRoundEnd(
+            TimeSpan.FromMinutes(1),
+            requester: null,
+            checkCooldown: false,
+            text: "uni-centcomm-announcement-obelisk-was-destroyed",
+            name: "round-end-system-shuttle-sender-announcement"
+        );
     }
 
     private void OnMapInit(EntityUid uid, NecroobeliskComponent component, MapInitEvent args)
