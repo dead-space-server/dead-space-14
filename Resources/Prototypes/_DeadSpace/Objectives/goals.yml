@@ -172,7 +172,7 @@
 
 - type: stationGoal
   id: PlanetResearch
-  text:
+  text: "/Paperwork/StationGoal/PlanetResearch.xml"
   extraStamps:
   - stampedName: stamp-component-stamped-name-centcom
     stampedColor: "#006600"
