@@ -87,6 +87,9 @@
     factions:
     - SimpleHostile
   - type: NightVision
+    animation: true
+    transitionSpeed: 100
+    color: "#DC143C11"
   - type: AutoDeleteOnDeath
   - type: ZombieImmune
   - type: ImmunitetInfectionDead

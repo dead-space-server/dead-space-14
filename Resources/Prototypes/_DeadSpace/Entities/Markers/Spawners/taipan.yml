@@ -16,39 +16,22 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-atmospherics-engineer
     description: job-description-taipan-atmospherics-engineer
     rules: ghost-role-information-taipan-personal-rules
     job: TaipanAtmosphericsEngineer
+    reregister: false
     requirements:
     - !type:RoleTimeRequirement
       role: JobAtmosphericTechnician
-      time: 18000 #5 hrs
+      time: 5h
     - !type:RoleTimeRequirement
       role: JobTaipanTechnician
-      time: 18000 #5 hrs
+      time: 5h
     - !type:DepartmentTimeRequirement
       department: Taipan
-      time: 36000 #10 hrs
+      time: 10h
     raffle:
       settings: default
 
@@ -70,36 +53,19 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-botanist
     description: job-description-taipan-botanist
     rules: ghost-role-information-taipan-personal-rules
     job: TaipanBotanist
+    reregister: false
     requirements:
     - !type:DepartmentTimeRequirement
       department: Civilian
-      time: 18000 # 5 hours
+      time: 5h
     - !type:RoleTimeRequirement
       role: JobBotanist
-      time: 3600 # 1 hour
+      time: 1h
     raffle:
       settings: default
 
@@ -121,33 +87,16 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-cargotech
     description: job-description-taipan-cargotech
     rules: ghost-role-information-taipan-personal-rules
     job: TaipanCargotech
+    reregister: false
     requirements:
     - !type:RoleTimeRequirement
       role: JobSalvageSpecialist
-      time: 36000 # 10 hours
+      time: 10h
     raffle:
       settings: default
 
@@ -169,39 +118,22 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-chef
     description: job-description-taipan-chef
     rules: ghost-role-information-taipan-personal-rules
     job: TaipanChef
+    reregister: false
     requirements:
     - !type:DepartmentTimeRequirement
       department: Civilian
-      time: 18000 # 5 hours
+      time: 5h
     - !type:RoleTimeRequirement
       role: JobChef
-      time: 3600 # 1 hour
+      time: 1h
     - !type:RoleTimeRequirement
       role: JobBartender
-      time: 3600 # 1 hour
+      time: 1h
     raffle:
       settings: default
 
@@ -223,36 +155,19 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-communications-officer
     description: job-description-taipan-communications-officer
     rules: ghost-role-information-taipan-personal-rules
     job: TaipanCommunicationsOfficer
+    reregister: false
     requirements:
     - !type:RoleTimeRequirement
       role: JobTaipanRecruit
-      time: 36000 # 10 hours
+      time: 10h
     - !type:DepartmentTimeRequirement
       department: Taipan
-      time: 360000 # 100 hours
+      time: 100h
     raffle:
       settings: default
 
@@ -274,36 +189,19 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-medic
     description: job-description-taipan-medic
     rules: ghost-role-information-taipan-personal-rules
     job: TaipanMedic
+    reregister: false
     requirements:
     - !type:DepartmentTimeRequirement
       department: Medical
-      time: 36000 # 10 hours
+      time: 10h
     - !type:RoleTimeRequirement
       role: JobChemist
-      time: 18000 # 5 hours
+      time: 5h
     raffle:
       settings: default
 
@@ -325,33 +223,16 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-paramedic
     description: job-description-taipan-paramedic
     rules: ghost-role-information-taipan-personal-rules
     job: TaipanParamedic
+    reregister: false
     requirements:
     - !type:RoleTimeRequirement
       role: JobTaipanMedic
-      time: 36000 # 10 hours
+      time: 10h
     raffle:
       settings: default
 
@@ -373,33 +254,16 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-recruit
     description: job-description-taipan-recruit
     rules: ghost-role-information-taipan-personal-rules
     job: TaipanRecruit
+    reregister: false
     requirements:
     - !type:DepartmentTimeRequirement
       department: Security
-      time: 36000 # 10 hours
+      time: 10h
     raffle:
       settings: default
 
@@ -421,39 +285,22 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-research-director
     description: job-description-taipan-research-director
     rules: ghost-role-information-taipan-personal-rules
     job: TaipanResearchDirector
+    reregister: false
     requirements:
     - !type:DepartmentTimeRequirement
       department: Taipan
-      time: 216000 # 60 hours
+      time: 60h
     - !type:RoleTimeRequirement
       role: JobTaipanResearcher
-      time: 72000 # 20 hours
+      time: 20h
     - !type:RoleTimeRequirement
       role: JobTaipanMedic
-      time: 36000 # 10 hours
+      time: 10h
     raffle:
       settings: default
 
@@ -475,36 +322,19 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-researcher
     description: job-description-taipan-researcher
     rules: ghost-role-information-taipan-personal-rules
     job: TaipanResearcher
+    reregister: false
     requirements:
     - !type:DepartmentTimeRequirement
       department: Science
-      time: 36000 # 10 hours
+      time: 10h
     - !type:RoleTimeRequirement
       role: JobChemist
-      time: 18000 # 5 hours
+      time: 5h
     raffle:
       settings: default
 
@@ -526,33 +356,16 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-technician
     description: job-description-taipan-technician
     rules: ghost-role-information-taipan-personal-rules
     job: TaipanTechnician
+    reregister: false
     requirements:
     - !type:DepartmentTimeRequirement
       department: Engineering
-      time: 36000 #10 hrs
+      time: 10h
     raffle:
       settings: default
 
@@ -574,38 +387,21 @@
     - TaipanRole
     factions:
     - Taipan
-    allowedSpecies:
-    - Arachnid
-    - Diona
-    - Dwarf
-    - Human
-    - Moth
-    - Reptilian
-    - SlimePerson
-    - Vox
-    - Demon
-    - Shark
-    - Tajaran
-    - Vulpkanin
-    - Felinid
-    - Kobolt
-    - Xenomorph
-#    - IPC
-#    - IPS
   - type: GhostRole
     name: job-name-taipan-technical-supervisor
     description: job-description-taipan-technical-supervisor
     rules: ghost-role-information-taipan-personal-rules
     job: TaipanTechnicalOperationsSupervisor
+    reregister: false
     requirements:
     - !type:RoleTimeRequirement
       role: JobTaipanCargotech
-      time: 36000 # 10 hours
+      time: 10h
     - !type:RoleTimeRequirement
       role: JobTaipanAtmosphericsEngineer
-      time: 18000 # 5 hours
+      time: 5h
     - !type:DepartmentTimeRequirement
       department: Taipan
-      time: 144000 # 40 hours
+      time: 40h
     raffle:
       settings: default

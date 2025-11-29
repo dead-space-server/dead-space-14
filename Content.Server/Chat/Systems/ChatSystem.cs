@@ -38,6 +38,7 @@ using Content.Shared.Dataset;
 using Content.DeadSpace.Interfaces.Server;
 using Content.Shared.DeadSpace.Languages.Components;
 using Content.Server.DeadSpace.Languages;
+using Content.Shared._RMC14.Chat;
 using Robust.Server.Console;
 using Content.Shared.DeadSpace.Languages.Prototypes;
 
@@ -349,15 +350,18 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         sender ??= Loc.GetString("chat-manager-sender-announcement");
 
-        var wrappedMessage = Loc.GetString("chat-manager-sender-announcement-wrap-message", ("sender", sender), ("message", FormattedMessage.EscapeText(message)));
+        // DS14-Languages-start
+        string lexiconMessage = _language.ReplaceWordsWithLexicon(message, languageId);
+
+        string langName = _language.GetLangName(languageId);
+
+        var wrappedMessage = Loc.GetString("chat-manager-sender-announcement-wrap-message-lang", ("sender", sender), ("language", langName), ("message", FormattedMessage.EscapeText(message)));
 
         // DS14-chat-filter-start
         if (_chatFilter != null && _chatFilter.NotAllowedMessage(wrappedMessage))
             return;
         // DS14-chat-filter-end
 
-        // DS14-Languages-start
-        string lexiconMessage = _language.ReplaceWordsWithLexicon(message, languageId);
         var understanding = _language.GetUnderstanding(languageId);
 
         var lexiconWrappedMessage = Loc.GetString("chat-manager-sender-announcement-wrap-message", ("sender", sender), ("message", FormattedMessage.EscapeText(lexiconMessage)));
@@ -476,7 +480,6 @@ public sealed partial class ChatSystem : SharedChatSystem
     #endregion
 
     #region Private API
-
     private void SendEntitySpeak(
         EntityUid source,
         string originalMessage,
@@ -508,33 +511,46 @@ public sealed partial class ChatSystem : SharedChatSystem
             RaiseLocalEvent(source, nameEv);
             name = nameEv.VoiceName;
             // Check for a speech verb override
-            if (nameEv.SpeechVerb != null && _prototypeManager.TryIndex(nameEv.SpeechVerb, out var proto))
+            if (nameEv.SpeechVerb != null && _prototypeManager.Resolve(nameEv.SpeechVerb, out var proto))
                 speech = proto;
         }
 
         name = FormattedMessage.EscapeText(name);
 
-        var wrappedMessage = Loc.GetString(speech.Bold ? "chat-manager-entity-say-bold-wrap-message" : "chat-manager-entity-say-wrap-message",
+        // DS14-Languages-start
+        string verb = Loc.GetString(_random.Pick(speech.SpeechVerbStrings));
+        string lexiconMessage = message;
+
+        if (TryComp<LanguageComponent>(source, out var language))
+            lexiconMessage = _language.ReplaceWordsWithLexicon(message, language.SelectedLanguage);
+
+        string langName = _language.GetLangName(source, language);
+
+        var wrappedMessage = Loc.GetString(speech.Bold ? "chat-manager-entity-say-bold-wrap-message-lang" : "chat-manager-entity-say-wrap-message-lang",
             ("entityName", name),
-            ("verb", Loc.GetString(_random.Pick(speech.SpeechVerbStrings))),
+            ("verb", verb),
+            ("language", langName),
             ("fontType", speech.FontId),
             ("fontSize", speech.FontSize),
             ("message", FormattedMessage.EscapeText(message)));
 
-        // DS14-Languages-start
-        TryComp<LanguageComponent>(source, out var language);
+        var wrappedMessageUnk = Loc.GetString(speech.Bold ? "chat-manager-entity-say-bold-wrap-message" : "chat-manager-entity-say-wrap-message",
+            ("entityName", name),
+            ("verb", verb),
+            ("fontType", speech.FontId),
+            ("fontSize", speech.FontSize),
+            ("message", FormattedMessage.EscapeText(message)));
 
-        string lexiconMessage = message;
         string lexiconWrappedMessage = wrappedMessage;
 
         if (language != null)
         {
-            lexiconMessage = _language.ReplaceWordsWithLexicon(message, language.SelectedLanguage.Id);
+            lexiconMessage = _language.ReplaceWordsWithLexicon(message, language.SelectedLanguage);
 
-            lexiconWrappedMessage = wrappedMessage.Replace(FormattedMessage.EscapeText(message), FormattedMessage.EscapeText(lexiconMessage));
+            lexiconWrappedMessage = wrappedMessageUnk.Replace(FormattedMessage.EscapeText(message), FormattedMessage.EscapeText(lexiconMessage));
         }
 
-        var selectedLanguage = language != null ? language.SelectedLanguage.Id : string.Empty;
+        var selectedLanguage = language != null ? language.SelectedLanguage : string.Empty;
 
         SendInVoiceRange(ChatChannel.Local, message, wrappedMessage, source, range, null, lexiconMessage, lexiconWrappedMessage, selectedLanguage);
 
@@ -600,25 +616,34 @@ public sealed partial class ChatSystem : SharedChatSystem
         }
         name = FormattedMessage.EscapeText(name);
 
-        var wrappedMessage = Loc.GetString("chat-manager-entity-whisper-wrap-message",
+        // DS14-Languages-start
+        string lexiconMessage = message;
+
+        if (TryComp<LanguageComponent>(source, out var language))
+            lexiconMessage = _language.ReplaceWordsWithLexicon(message, language.SelectedLanguage);
+
+        string langName = _language.GetLangName(source, language);
+
+        var wrappedMessage = Loc.GetString("chat-manager-entity-whisper-wrap-message-lang",
+            ("entityName", name), ("language", langName), ("message", FormattedMessage.EscapeText(message)));
+
+        var wrappedobfuscatedMessage = Loc.GetString("chat-manager-entity-whisper-wrap-message-lang",
+            ("entityName", nameIdentity), ("language", langName), ("message", FormattedMessage.EscapeText(obfuscatedMessage)));
+
+        var wrappedMessageUnk = Loc.GetString("chat-manager-entity-whisper-wrap-message",
             ("entityName", name), ("message", FormattedMessage.EscapeText(message)));
 
-        var wrappedobfuscatedMessage = Loc.GetString("chat-manager-entity-whisper-wrap-message",
+        var wrappedobfuscatedMessageUnk = Loc.GetString("chat-manager-entity-whisper-wrap-message",
             ("entityName", nameIdentity), ("message", FormattedMessage.EscapeText(obfuscatedMessage)));
 
         var wrappedUnknownMessage = Loc.GetString("chat-manager-entity-whisper-unknown-wrap-message",
             ("message", FormattedMessage.EscapeText(obfuscatedMessage)));
 
-        // DS14-Languages-start
-        string lexiconMessage = message;
-
-        if (TryComp<LanguageComponent>(source, out var language))
-            lexiconMessage = _language.ReplaceWordsWithLexicon(message, language.SelectedLanguage.Id);
 
         var newObfuscatedMessage = ObfuscateMessageReadability(lexiconMessage, 0.2f);
 
-        var newWrappedMessage = wrappedMessage.Replace(FormattedMessage.EscapeText(message), FormattedMessage.EscapeText(lexiconMessage));
-        var newWrappedobfuscatedMessage = wrappedobfuscatedMessage.Replace(FormattedMessage.EscapeText(obfuscatedMessage), FormattedMessage.EscapeText(newObfuscatedMessage));
+        var newWrappedMessage = wrappedMessageUnk.Replace(FormattedMessage.EscapeText(message), FormattedMessage.EscapeText(lexiconMessage));
+        var newWrappedobfuscatedMessage = wrappedobfuscatedMessageUnk.Replace(FormattedMessage.EscapeText(obfuscatedMessage), FormattedMessage.EscapeText(newObfuscatedMessage));
         var newWrappedUnknownMessage = wrappedUnknownMessage.Replace(FormattedMessage.EscapeText(obfuscatedMessage), FormattedMessage.EscapeText(newObfuscatedMessage));
 
         // DS14-Languages-end
@@ -636,7 +661,7 @@ public sealed partial class ChatSystem : SharedChatSystem
                 continue; // Won't get logged to chat, and ghosts are too far away to see the pop-up, so we just won't send it to them.
 
             // DS14-Languages-start
-            if (language != null && !_language.KnowsLanguage(listener, language.SelectedLanguage.Id))
+            if (language != null && !_language.KnowsLanguage(listener, language.SelectedLanguage))
             {
                 if (data.Range <= WhisperClearRange || data.Observer)
                     _chatManager.ChatMessageToOne(ChatChannel.Whisper, lexiconMessage, newWrappedMessage, source, false, session.Channel);
@@ -660,9 +685,9 @@ public sealed partial class ChatSystem : SharedChatSystem
                 _chatManager.ChatMessageToOne(ChatChannel.Whisper, obfuscatedMessage, wrappedUnknownMessage, source, false, session.Channel);
         }
 
-        _replay.RecordServerMessage(new ChatMessage(ChatChannel.Whisper, message, wrappedMessage, GetNetEntity(source), null, MessageRangeHideChatForReplay(range)));
+        _replay.RecordServerMessage(new ChatMessage(ChatChannel.Whisper, message, wrappedMessage, GetNetEntity(source), null, MessageRangeHideChatForReplay(range), repeatCheckSender: !HasComp<ChatRepeatIgnoreSenderComponent>(source))); // RMC14
 
-        var selectedLanguage = language != null ? language.SelectedLanguage.Id : string.Empty; // DS14-Languages
+        var selectedLanguage = language != null ? language.SelectedLanguage : string.Empty; // DS14-Languages
         var ev = new EntitySpokeEvent(source, message, originalMessage, lexiconMessage, selectedLanguage, channel, obfuscatedMessage); // DS14-Languages
 
         RaiseLocalEvent(source, ev, true);
@@ -856,7 +881,7 @@ public sealed partial class ChatSystem : SharedChatSystem
             _chatManager.ChatMessageToOne(channel, totalMessage, totalWrappedMessage, source, entHideChat, session.Channel, author: author);
         }
 
-        _replay.RecordServerMessage(new ChatMessage(channel, message, wrappedMessage, GetNetEntity(source), null, MessageRangeHideChatForReplay(range)));
+        _replay.RecordServerMessage(new ChatMessage(channel, message, wrappedMessage, GetNetEntity(source), null, MessageRangeHideChatForReplay(range),repeatCheckSender: !HasComp<ChatRepeatIgnoreSenderComponent>(source))); // RMC14
     }
 
     /// <summary>

@@ -75,7 +75,7 @@ job-name-blue-shield-officer = Офицер "Синий Щит"
 job-name-magistrat = Магистрат
 job-name-coroner = Коронер
 job-name-security-pilot = Пилот СБ
-job-name-senior-salvagespec = Ведущий утилизатор
+job-name-senior-courier = Ведущий логист
 job-name-senior-administrator = Менеджер
 job-name-station-ai = Станционный ИИ
 # unused jobs
@@ -167,7 +167,7 @@ JobBlueShieldOfficer = Офицер "Синий Щит"
 JobMagistrat = Магистрат
 JobCoroner = Коронер
 JobSecurityPilot = Пилот СБ
-JobSeniorSalvageSpecialist = Ведущий утилизатор
+JobSeniorCourier = Ведущий логист
 JobSeniorAdministrator = Менеджер
 JobStationAi = Станционный ИИ
 JobVisitor = Посетитель

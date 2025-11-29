@@ -57,6 +57,7 @@
     damageOverlay:
       sprite: _DeadSpace/Structures/obelisk_cracks.rsi
   - type: Necroobelisk
+    endAfterDestroy: true
   - type: WarpPoint
     follow: true
 
@@ -74,6 +75,7 @@
     sound: /Audio/_DeadSpace/Necromorfs/marker_black.ogg
     stoper: false
     rangeSanity: 30
+    endAfterDestroy: true
   - type: Destructible
     thresholds:
     - trigger:
@@ -103,6 +105,7 @@
     sound: /Audio/_DeadSpace/Necromorfs/marker_black.ogg
     stoper: false
     warn: false
+    endAfterDestroy: false
 
 - type: entity
   parent: StructureObelisk
@@ -117,6 +120,7 @@
       map: [ "enum.DamageStateVisualLayers.Base" ]
   - type: Necroobelisk
     warn: false
+    endAfterDestroy: false
 
 - type: entity
   id: UnitologyLighthouse

@@ -42,10 +42,6 @@ public sealed class HarvestDoAfterCancelled : EntityEventArgs
 {
 }
 
-public sealed partial class RevenantShopActionEvent : InstantActionEvent
-{
-}
-
 public sealed partial class RevenantDefileActionEvent : InstantActionEvent
 {
 }
@@ -62,6 +58,21 @@ public sealed partial class RevenantMalfunctionActionEvent : InstantActionEvent
 {
 }
 
+//DS14-start
+public sealed partial class RevenantSleepActionEvent : EntityTargetActionEvent
+{
+}
+
+public sealed partial class RevenantMindCaptureActionEvent : EntityTargetActionEvent
+{
+    [DataField]
+    public float ThresholdModifier = 3f;
+}
+
+public sealed partial class RevenantBeamFireActionEvent : EntityTargetActionEvent
+{
+}
+//DS14-end
 
 [NetSerializable, Serializable]
 public enum RevenantVisuals : byte

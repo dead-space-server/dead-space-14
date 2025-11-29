@@ -1,0 +1,319 @@
+- type: constructionGraph
+  id: BouquetCraftBeer
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: bouquetCraftBeer
+      steps:
+      - tag: DrinkBeerBottleFull
+        name: construction-graph-tag-beer-bottle
+        icon:
+          sprite: Objects/Consumable/Drinks/beer.rsi
+          state: icon
+        doAfter: 2
+      - tag: DrinkBeerBottleFull
+        name: construction-graph-tag-beer-bottle
+        icon:
+          sprite: Objects/Consumable/Drinks/beer.rsi
+          state: icon
+        doAfter: 2
+      - tag: ADTFoodSausageFried
+        name: construction-graph-tag-fried-sausage
+        icon:
+          sprite: _ADT/Objects/Consumable/Food/sausage.rsi
+          state: fried
+        doAfter: 2
+      - tag: ADTFoodSausageFried
+        name: construction-graph-tag-fried-sausage
+        icon:
+          sprite: _ADT/Objects/Consumable/Food/sausage.rsi
+          state: fried
+        doAfter: 2
+      - tag: FoodCheeseSlice
+        name: construction-graph-tag-cheese-slice
+        icon:
+          sprite: Objects/Consumable/Food/ingredients.rsi
+          state: cheesewedge
+        doAfter: 2
+      - tag: FoodChiliPepper
+        name: construction-graph-tag-chili-pepper
+        icon:
+          sprite: Objects/Specific/Hydroponics/chili.rsi
+          state: produce
+        doAfter: 2
+      - tag: FoodChiliPepper
+        name: construction-graph-tag-chili-pepper
+        icon:
+          sprite: Objects/Specific/Hydroponics/chili.rsi
+          state: produce
+        doAfter: 2
+      - material: Plastic
+        amount: 2
+        doAfter: 2
+  - node: bouquetCraftBeer
+    entity: ADTObjectWeaponsMeleeBouquetWithBeer
+
+- type: constructionGraph
+  id: RedCraftFlower
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: redCraftFlower
+      steps:
+      - tag: RedFlower
+        name: construction-graph-tag-red-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: red_flower
+        doAfter: 2
+      - tag: RedFlower
+        name: construction-graph-tag-red-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: red_flower
+        doAfter: 2
+      - tag: RedFlower
+        name: construction-graph-tag-red-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: red_flower
+        doAfter: 2
+      - tag: RedFlower
+        name: construction-graph-tag-red-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: red_flower
+        doAfter: 2
+      - tag: RedFlower
+        name: construction-graph-tag-red-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: red_flower
+        doAfter: 2
+      - material: Plastic
+        amount: 2
+        doAfter: 2
+  - node: redCraftFlower
+    entity: ObjectWeaponsMeleeRedBouquet
+
+- type: constructionGraph
+  id: WhiteCraftFlower
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: whiteCraftFlower
+      steps:
+      - tag: WhiteFlower
+        name: construction-graph-tag-white-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: white_flower
+        doAfter: 2
+      - tag: WhiteFlower
+        name: construction-graph-tag-white-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: white_flower
+        doAfter: 2
+      - tag: WhiteFlower
+        name: construction-graph-tag-white-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: white_flower
+        doAfter: 2
+      - tag: WhiteFlower
+        name: construction-graph-tag-white-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: white_flower
+        doAfter: 2
+      - tag: WhiteFlower
+        name: construction-graph-tag-white-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: white_flower
+        doAfter: 2
+      - material: Plastic
+        amount: 2
+        doAfter: 2
+  - node: whiteCraftFlower
+    entity: ADTObjectWeaponsMeleeWhiteBouquet
+
+- type: constructionGraph
+  id: PinkCraftFlower
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: pinkCraftFlower
+      steps:
+      - tag: PinkFlower
+        name: construction-graph-tag-pink-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: pink_flower
+        doAfter: 2
+      - tag: PinkFlower
+        name: construction-graph-tag-pink-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: pink_flower
+        doAfter: 2
+      - tag: PinkFlower
+        name: construction-graph-tag-pink-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: pink_flower
+        doAfter: 2
+      - tag: PinkFlower
+        name: construction-graph-tag-pink-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: pink_flower
+        doAfter: 2
+      - tag: PinkFlower
+        name: construction-graph-tag-pink-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: pink_flower
+        doAfter: 2
+      - material: Plastic
+        amount: 2
+        doAfter: 2
+  - node: pinkCraftFlower
+    entity: ADTObjectWeaponsMeleeRoseBouquet
+
+- type: constructionGraph
+  id: YellowCraftFlower
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: yellowCraftFlower
+      steps:
+      - tag: YellowFlower
+        name: construction-graph-tag-yellow-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: yellow_flower
+        doAfter: 2
+      - tag: YellowFlower
+        name: construction-graph-tag-yellow-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: yellow_flower
+        doAfter: 2
+      - tag: YellowFlower
+        name: construction-graph-tag-yellow-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: yellow_flower
+        doAfter: 2
+      - tag: YellowFlower
+        name: construction-graph-tag-yellow-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: yellow_flower
+        doAfter: 2
+      - tag: YellowFlower
+        name: construction-graph-tag-yellow-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: yellow_flower
+        doAfter: 2
+      - material: Plastic
+        amount: 2
+        doAfter: 2
+  - node: yellowCraftFlower
+    entity: ADTObjectWeaponsMeleeYellowBouquet
+
+- type: constructionGraph
+  id: DarkCraftFlower
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: darkCraftFlower
+      steps:
+      - tag: DarkFlower
+        name: construction-graph-tag-dark-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: dark_flower
+        doAfter: 2
+      - tag: DarkFlower
+        name: construction-graph-tag-dark-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: dark_flower
+        doAfter: 2
+      - tag: DarkFlower
+        name: construction-graph-tag-dark-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: dark_flower
+        doAfter: 2
+      - tag: DarkFlower
+        name: construction-graph-tag-dark-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: dark_flower
+        doAfter: 2
+      - tag: DarkFlower
+        name: construction-graph-tag-dark-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: dark_flower
+        doAfter: 2
+      - material: Plastic
+        amount: 2
+        doAfter: 2
+  - node: darkCraftFlower
+    entity: ADTObjectWeaponsMeleeBlackBouquet
+
+- type: constructionGraph
+  id: PurpleCraftFlower
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: purpleCraftFlower
+      steps:
+      - tag: PurpleFlower
+        name: construction-graph-tag-purple-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: purple_flower
+        doAfter: 2
+      - tag: PurpleFlower
+        name: construction-graph-tag-purple-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: purple_flower
+        doAfter: 2
+      - tag: PurpleFlower
+        name: construction-graph-tag-purple-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: purple_flower
+        doAfter: 2
+      - tag: PurpleFlower
+        name: construction-graph-tag-purple-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: purple_flower
+        doAfter: 2
+      - tag: PurpleFlower
+        name: construction-graph-tag-purple-flower
+        icon:
+          sprite: _DeadSpace/Objects/Misc/flowers.rsi
+          state: purple_flower
+        doAfter: 2
+      - material: Plastic
+        amount: 2
+        doAfter: 2
+  - node: purpleCraftFlower
+    entity: ADTObjectWeaponsMeleeLiliacBouquet

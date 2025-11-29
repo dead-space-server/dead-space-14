@@ -39,6 +39,7 @@
     name: ghost-role-information-revenant-name
     description: ghost-role-information-revenant-description
     rules: ghost-role-information-revenant-rules
+    reregister: false #DS14
     mindRoles:
     - MindRoleGhostRoleSoloAntagonist
     raffle:
@@ -66,6 +67,10 @@
         type: StoreBoundUserInterface
   - type: Visibility
     layer: 2 #ghost vis layer
+  - type: ActionGrant
+    actions:
+    - ActionRevenantShop
+    - ActionRevenantSleep #DS14-value
   - type: Store
     categories:
     - RevenantAbilities
@@ -102,7 +107,7 @@
     - DemonLanguage
     - CatLanguage
     - MachineLanguage
-    - KoboltLanguage
+    - ReptilianLanguage
     - PlafLanguage
     - VulpkaninLanguage
     - XenomorphLanguage
@@ -116,7 +121,7 @@
     - DemonLanguage
     - CatLanguage
     - MachineLanguage
-    - KoboltLanguage
+    - ReptilianLanguage
     - PlafLanguage
     - VulpkaninLanguage
     - XenomorphLanguage

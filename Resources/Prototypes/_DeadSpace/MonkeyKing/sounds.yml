@@ -1,0 +1,24 @@
+- type: soundCollection
+  id: ArmySounds
+  files:
+    - /Audio/_DeadSpace/MonkeyKing/priziv1.ogg
+
+- type: soundCollection
+  id: MonkeyKingAttackSounds
+  files:
+    - /Audio/_DeadSpace/MonkeyKing/kulak1.ogg
+    - /Audio/_DeadSpace/MonkeyKing/kulak2.ogg
+    - /Audio/_DeadSpace/MonkeyKing/kulak3.ogg
+    - /Audio/_DeadSpace/MonkeyKing/kulak4.ogg
+    - /Audio/_DeadSpace/MonkeyKing/kulak5.ogg
+    - /Audio/_DeadSpace/MonkeyKing/kulak6.ogg
+    - /Audio/_DeadSpace/MonkeyKing/kulak7.ogg
+    - /Audio/_DeadSpace/MonkeyKing/kulak8.ogg
+    - /Audio/_DeadSpace/MonkeyKing/kulak1.ogg
+
+- type: soundCollection
+  id: RevSounds
+  files:
+    - /Audio/_DeadSpace/MonkeyKing/rev1.ogg
+    - /Audio/_DeadSpace/MonkeyKing/rev3.ogg
+    - /Audio/_DeadSpace/MonkeyKing/rev2.ogg

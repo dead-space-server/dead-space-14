@@ -5,7 +5,6 @@ using Content.Server.Body.Components;
 using Content.Server.Chat.Managers;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Humanoid;
-using Content.Server.IdentityManagement;
 using Content.Server.Inventory;
 using Content.Server.Mind;
 using Content.Server.NPC;
@@ -48,11 +47,11 @@ using Content.Shared.DeadSpace.Languages.Components;
 using Content.Shared.Interaction.Components;
 using Content.Shared.DeadSpace.Languages.Prototypes;
 using Content.Shared.Body.Components;
+using Content.Shared.IdentityManagement;
 using Robust.Server.Player;
 using Content.Shared.Zombies;
 using Content.Shared.Sprite;
 using Robust.Shared.Prototypes;
-
 
 namespace Content.Server.DeadSpace.Necromorphs.InfectionDead;
 

@@ -20,6 +20,7 @@
       - CannotSuicide
       - DoorBumpOpener
       - FootstepSound
+      - Demon
   - type: Prying
     pryPowered: true
     force: true
@@ -86,6 +87,30 @@
   - type: TTS
     voice: Avozu
   - type: NoSlip
+  - type: Reactive
+    reactions:
+    - reagents: [ Holywater ]
+      methods: [ Touch ]
+      effects:
+      - !type:HealthChange
+        scaleByQuantity: true
+        damage:
+          types:
+            Holy: 5
+
+- type: entity
+  parent: BaseMobDemonRS
+  id: BaseMobDemonNarSi
+  abstract: true
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Demons/nar_si_big_demons.rsi
+  - type: Vocal
+    sounds:
+      Male: DemonNarSi
+      Female: DemonNarSi
+      Unsexed: DemonNarSi
 
 - type: entity
   parent: BaseMobDemonRS
@@ -104,7 +129,7 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      200: Dead
+      220: Dead
   - type: StunAttack
   - type: Damageable
     damageModifierSet: SlaughterDemon
@@ -136,6 +161,21 @@
     reflectProb: 0.25
 
 - type: entity
+  parent: MobDemonSlaughter
+  id: MobDemonSlaughterBow
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: bow_demon
+  - type: GhostRole
+    allowMovement: true
+    makeSentient: true
+    name: ghost-role-information-slaughter-name
+    description: ghost-role-information-slaughter-description
+    rules: ghost-role-information-slaughter-rules
+
+- type: entity
   parent: BaseMobDemonRS
   id: MobDemonHonker
   components:
@@ -149,6 +189,11 @@
         Base: honk_demon
       Dead:
         Base: honk_demon
+  - type: Vocal
+    sounds:
+      Male: DemonHonk
+      Female: DemonHonk
+      Unsexed: DemonHonk
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -260,6 +305,322 @@
         Blunt: 7
         Piercing: 1
         Heat: 5
+
+- type: entity
+  parent: BaseMobDemonNarSi
+  id: MobDemonBloodyArms
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: bloody_army_soldier    
+      scale: 0.7, 0.7
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: bloody_army_soldier
+      Dead:
+        Base: bloody_army_soldier_dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      125: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.5
+    baseSprintSpeed: 5.5
+  - type: GhostRole
+    allowMovement: true
+    allowSpeech: true
+    makeSentient: true
+    name: ghost-role-information-bloodarms-name
+    description: ghost-role-information-bloodarms-description
+    rules: ghost-role-information-bloodarms-rules
+  - type: MeleeWeapon
+    attackRate: 3
+    altDisarm: false
+    hidden: true
+    angle: 45
+    wideAnimation: WeaponArcStatic
+    soundHit:
+      collection: MantisAttack
+    soundNoDamage:
+      collection: MantisAttack
+    soundSwing:
+      collection: MantisAttack
+    animation: WeaponArcClaw
+    damage:
+      types:
+        Slash: 5
+        Piercing: 5
+  - type: Prying
+    speedModifier: 4
+  - type: JumpAbility
+    jumpDistance: 8
+    jumpSound:
+      collection: MantisRush
+
+- type: entity
+  parent: BaseMobDemonNarSi
+  id: MobDemonSnake
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: dark_rattlesnake  
+      scale: 0.7, 0.7
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: dark_rattlesnake
+      Dead:
+        Base: dark_rattlesnake_dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      90: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.7
+    baseSprintSpeed: 2.7
+  - type: GhostRole
+    allowMovement: true
+    allowSpeech: true
+    makeSentient: true
+    name: ghost-role-information-demonsnake-name
+    description: ghost-role-information-demonsnake-description
+    rules: ghost-role-information-demonsnake-rules
+  - type: MeleeWeapon
+    altDisarm: false
+    hidden: true
+    angle: 45
+    soundHit:
+        path: /Audio/Effects/demon_attack1.ogg
+    animation: WeaponArcClaw
+    damage:
+      types:
+        Slash: 5
+        Blunt: 7
+        Piercing: 1
+        Heat: 5
+  - type: NPCUseActionOnTarget
+    actionId: ActionDemonTentacle
+
+- type: entity
+  id: ActionDemonTentacle
+  parent: BaseAction
+  name: "[color=red]Наповал[/color]"
+  description: Вы опускаете свой язык в пол, заставляя бедолаг падать на пол
+  components:
+  - type: Action
+    raiseOnUser: true
+    icon:
+      sprite: _DeadSpace/Demons/tentacle.rsi
+      state: demon_tentacle_spawn
+    iconOn:
+      sprite: _DeadSpace/Demons/tentacle.rsi
+      state: demon_tentacle_wiggle
+    sound:
+      path: "/Audio/_DeadSpace/Demons/scream_snake.ogg"
+      params:
+        volume: -5
+    useDelay: 8
+  - type: TargetAction
+    range: 10
+  - type: WorldTargetAction
+    event: !type:GoliathSummonTentacleAction
+      entityId: DemonTentacle
+      offsetDirections:
+        - North
+      extraSpawns: 0
+    
+- type: entity
+  id: DemonTentacle
+  parent: GoliathTentacle
+  name: tentacle
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Demons/tentacle.rsi
+    layers:
+    - state: demon_tentacle_wiggle
+      scale: 1.3, 1.3
+  - type: StunOnContact
+    blacklist:
+      tags:
+      - Demon
+  - type: SpawnOnDespawn
+    prototype: EffectDemonTentacleRetract
+
+- type: entity
+  id: BaseEffectDemonTentacleSpawn
+  categories: [ HideSpawnMenu ]
+  name: tentacle
+  abstract: true
+  components:
+  - type: Transform
+    anchored: True
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    sprite: _DeadSpace/Demons/tentacle.rsi
+  - type: InteractionOutline
+  - type: TimedDespawn
+    lifetime: 0.7
+
+- type: entity
+  id: EffectDemonTentacleSpawn
+  parent: BaseEffectDemonTentacleSpawn
+  categories: [ HideSpawnMenu ]
+  name: tentacle
+  components:
+    - type: Sprite
+      state: demon_tentacle_spawn
+      scale: 1.3, 1.3
+    - type: SpawnOnDespawn
+      prototype: DemonTentacle
+
+- type: entity
+  id: EffectDemonTentacleRetract
+  parent: BaseEffectDemonTentacleSpawn
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    state: demon_tentacle_retract
+    scale: 1.3, 1.3
+  - type: EffectVisuals
+  - type: AnimationPlayer
+
+- type: entity
+  parent: BaseMobDemonNarSi
+  id: MobDemonMouth
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: demonic_mouth
+      scale: 0.7, 0.7
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: demonic_mouth
+      Dead:
+        Base: demonic_mouth_dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      265: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3
+    baseSprintSpeed: 3
+  - type: GhostRole
+    allowMovement: true
+    allowSpeech: true
+    makeSentient: true
+    name: ghost-role-information-mouthdemon-name
+    description: ghost-role-information-mouthdemon-description
+    rules: ghost-role-information-mouthdemon-rules
+  - type: MeleeWeapon
+    altDisarm: false
+    hidden: true
+    angle: 45
+    soundHit:
+        path: /Audio/Effects/demon_attack1.ogg
+    animation: WeaponArcClaw
+    damage:
+      types:
+        Slash: 5
+        Blunt: 3
+        Piercing: 1
+  - type: Devourer
+    whitelist:
+      components:
+      - Door
+      tags:
+      - Wall
+  - type: Puller
+    needsHands: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 600
+        restitution: 0.0
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: ActionGun
+    action: ActionDemonBreath
+    gunProto: DemonBreathGun
+
+- type: entity
+  parent: BaseAction
+  id: ActionDemonBreath
+  name: "[color=red]Плевок слюной[/color]"
+  description: Каждые 15 секунд с силой выплёвывайте слюну в жертву, чтобы не дать ей сбежать.
+  components:
+  - type: Action
+    icon: { sprite : _DeadSpace/Objects/Weapons/Throwable/demon_bola.rsi, state: icon }
+    itemIconStyle: BigAction
+    priority: 2
+  - type: TargetAction
+    checkCanAccess: false
+    range: 0
+  - type: WorldTargetAction
+    event: !type:ActionGunShootEvent
+    
+- type: entity
+  categories: [ HideSpawnMenu ]
+  id: DemonBreathGun
+  name: Плевок слюной
+  description: Вы плюёте в своего недруга своими слюнями, заставляя того падать на пол и быть замедленным, пока тот не скинет с себя это, нечто.
+  components:
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 15
+  - type: BasicEntityAmmoProvider
+    proto: DemonBola
+    capacity: 1
+    count: 1
+  - type: Gun
+    projectileSpeed: 15
+    soundGunshot:
+      path: /Audio/_DeadSpace/Effects/Species/demon_bola_throw.ogg
+
+- type: entity
+  name: слюна демона
+  id: DemonBola
+  categories: [ HideSpawnMenu ]
+  parent: BaseItem
+  description: Фу! Какое оно мерзкое! 
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Throwable/demon_bola.rsi
+    state: icon
+  - type: StunOnCollide
+    stunAmount: 1
+    knockdownAmount: 1
+  - type: EmitSoundOnThrow
+    sound: 
+      path: "/Audio/_DeadSpace/Effects/Species/demon_bola_throw.ogg"
+      params:
+        volume: -5
+        variation: 0.125
+  - type: EmitSoundOnLand
+    sound:
+      path: "/Audio/_DeadSpace/Effects/Species/demon_bola_snap.ogg"
+      params:
+        volume: -5
+        variation: 0.125
+  - type: DamageOtherOnHit
+    damage:
+      types:
+        Caustic: 15
+        Structural: 30
+  - type: TimedDespawn
+    lifetime: 13
+  - type: EmbeddableProjectile
+    sound: /Audio/Weapons/star_hit.ogg
 
 - type: entity
   id: FireballBullet

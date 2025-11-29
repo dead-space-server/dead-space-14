@@ -18,7 +18,7 @@
       coefficients:
         Blunt: 0.70
         Slash: 0.70
-        Piercing: 0.70 
+        Piercing: 0.70
         Heat: 0.80
   - type: ExplosionResistance
     damageCoefficient: 0.9
@@ -39,6 +39,15 @@
     sprite: _DeadSpace/Sponsor/Wisdom/TraumaTeam/helmetmed.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Wisdom/TraumaTeam/helmetmed.rsi
+  - type: ToggleableVisuals
+    spriteLayer: light
+    clothingVisuals:
+      head:
+      - state: equipped-head-light
+        shader: unshaded
+      head-vox:
+      - state: equipped-head-light-vox
+        shader: unshaded
   - type: PointLight
     color: "#ebebeb"
   - type: PressureProtection
@@ -97,6 +106,15 @@
     sprite: _DeadSpace/Sponsor/Wisdom/TraumaTeam/helmetsec.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Wisdom/TraumaTeam/helmetsec.rsi
+  - type: ToggleableVisuals
+    spriteLayer: light
+    clothingVisuals:
+      head:
+      - state: equipped-head-light
+        shader: unshaded
+      head-vox:
+      - state: equipped-head-light-vox
+        shader: unshaded
   - type: PointLight
     color: "#ebebeb"
   - type: PressureProtection

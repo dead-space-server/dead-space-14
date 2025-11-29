@@ -43,7 +43,7 @@ public sealed class GoliathTentacleSystem : EntitySystem
         var dirs = new List<Direction>();
         dirs.AddRange(args.OffsetDirections);
 
-        for (var i = 0; i < 3; i++)
+        for (var i = 0; i < args.ExtraSpawns; i++) //DS14
         {
             var dir = _random.PickAndTake(dirs);
             spawnPos.Add(coords.Offset(dir));

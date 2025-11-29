@@ -43,13 +43,10 @@
   id: Unitology
   components:
   - type: GameRule
-    minPlayers: 40
+    minPlayers: 2
   - type: AntagLoadProfileRule
     speciesOverride: Human
     speciesOverrideBlacklist:
-    #Species that do not work with nukies should be included in this list.
-    #Once the issues are fixed the species should be removed from this list to be enabled.
-    #Balance concerns are not a valid reason to disable a species, except for high-impact Nukie-specific exploits.
     - IPS
     - IPC
     - Diona
@@ -64,9 +61,9 @@
     definitions:
     - prefRoles: [ UniHead ]
       fallbackRoles: [ Uni, UniEnslaved ]
-      max: 2
-      min: 2
-      playerRatio: 15
+      max: 3
+      min: 3
+      playerRatio: 10
       briefing:
         text: uni-head-role-greeting
         color: CornflowerBlue
@@ -160,3 +157,21 @@
     minimumPlayers: 30
     willNotStartRandomly: true
   - type: NecroobeliskArtefactRule
+
+- type: preloadedGrid
+  id: CBURNSCNTShuttle
+  path: /Maps/Shuttles/ShuttleEvent/cburn_scnt.yml
+  copies: 1
+
+- type: entity
+  parent: BaseGameRule
+  id: ShuttleCBURNSCNT
+  components:
+  - type: StationEvent
+    startAnnouncement: station-event-response-team-arrival
+    startAudio:
+      path: /Audio/_DeadSpace/Announcements/centcomm.ogg # DS14-Announcements
+    willNotStartRandomly: true
+  - type: RuleGrids
+  - type: LoadMapRule
+    preloadedGrid: CBURNSCNTShuttle

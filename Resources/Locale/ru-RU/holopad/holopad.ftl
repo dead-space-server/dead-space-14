@@ -142,3 +142,7 @@ holopad-station-bridge = Станция - Мостик
 holopad-station-cargo-bay = Станция - Грузовой отсек
 # CentComm
 holopad-centcomm-evac = Центком - Эвакуационный шаттл
+
+# DS14 Admin notification
+holopad-chat-notify = Получен новый звонок с "{$holopad}" от {$user}
+holopad-unknown-player = неизвестный игрок

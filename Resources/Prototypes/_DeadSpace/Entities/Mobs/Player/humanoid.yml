@@ -1,0 +1,29 @@
+- type: entity
+  id: RandomHumanoidSpawnerERTSecurityChaplain
+  parent: RandomHumanoidSpawnerERTSecurityRed
+  name: ОБР Священник
+  components:
+    - type: RandomHumanoidSpawner
+      settings: ERTSecurityChaplain
+
+- type: randomHumanoidSettings
+  id: ERTSecurityChaplain
+  parent: EventHumanoidERT
+  components:
+    - type: GhostRole
+      name: ghost-role-information-ert-chaplain-name
+      description: ghost-role-information-ert-security-description
+      rules: ghost-role-information-nonantagonist-rules
+      requirements:
+        - !type:DepartmentTimeRequirement
+          department: Civilian
+          time: 3600 # 1 hours
+        - !type:DepartmentTimeRequirement
+          department: Security
+          time: 72000 # 20 hours
+      raffle:
+        settings: short
+      job: ERTChaplain
+    - type: BibleUser
+    - type: Loadout
+      prototypes: [ ERTChaplainGear ]

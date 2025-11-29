@@ -28,16 +28,16 @@
     raiseOnAction: true
     itemIconStyle: BigAction
     icon:
-      sprite: _DeadSpace/Objects/Weapons/Melee/mantis_blades.rsi
-      state: icon
+      sprite: _DeadSpace/Actions/mantisblades_actions.rsi
+      state: mantis-toggle
   - type: InstantAction
     event: !type:OnRetractableItemActionEvent
   - type: RetractableItemAction
     spawnedPrototype: MantisBladesSyndicate
     summonSounds:
-      collection: mantis_extend
+      collection: MantisExtend
     retractSounds:
-      collection: mantis_retract
+      collection: MantisRetract
 
 - type: entity
   parent: BaseAction
@@ -47,8 +47,9 @@
   components:
   - type: Action
     useDelay: 2
+    itemIconStyle: NoItem
     icon:
-      sprite: Interface/Actions/jump.rsi
-      state: icon
+      sprite: _DeadSpace/Actions/mantisblades_actions.rsi
+      state: mantis-dash
   - type: InstantAction
     event: !type:GravityJumpEvent {}

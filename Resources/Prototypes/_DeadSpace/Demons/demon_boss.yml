@@ -16,6 +16,7 @@
       - CannotSuicide
       - DoorBumpOpener
       - FootstepSound
+      - Demon
   - type: Prying
     pryPowered: true
     force: true
@@ -90,6 +91,16 @@
   - type: Damageable
     damageModifierSet: SlaughterDemon
     damageContainer: BiologicalMetaphysical
+  - type: Reactive
+    reactions:
+    - reagents: [ Holywater ]
+      methods: [ Touch ]
+      effects:
+      - !type:HealthChange
+        scaleByQuantity: true
+        damage:
+          types:
+            Holy: 5
 
 - type: entity
   parent: BaseMobDemonBoss

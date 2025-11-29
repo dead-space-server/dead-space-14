@@ -90,12 +90,24 @@
   id: ClothingOuterWinterCoatSeniorResearcher
   result: ClothingOuterWinterCoatSeniorResearcher
 
+# Outer
+
+- type: latheRecipe
+  parent: BaseCoatRecipe
+  id: ClothingOuterCoatCargoJacket
+  result: ClothingOuterCoatCargoJacket
+
 # Hats
 
 - type: latheRecipe
   parent: BaseHatRecipe
   id: ClothingHeadHatBeretRobotics
   result: ClothingHeadHatBeretRobotics
+
+- type: latheRecipe
+  parent: BaseHatRecipe
+  id: ClothingHeadHatBeretCargo
+  result: ClothingHeadHatBeretCargo
 
 # Taipan
 # Jumpsuit

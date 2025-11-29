@@ -24,6 +24,9 @@
   - type: Tag
     tags:
     - Radio
+  # DS14-start
+  - type: Language
+  # DS14-end
 
 - type: entity
   name: security radio
@@ -42,3 +45,6 @@
   - type: Item
     sprite: Objects/Devices/securityhandy.rsi
     heldPrefix: walkietalkie
+  # DS14-start
+  - type: Language
+  # DS14-end

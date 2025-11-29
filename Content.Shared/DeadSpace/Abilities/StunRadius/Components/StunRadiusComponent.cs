@@ -10,19 +10,29 @@ namespace Content.Shared.DeadSpace.Abilities.StunRadius.Components;
 [AutoGenerateComponentState]
 public sealed partial class StunRadiusComponent : Component
 {
+    [ViewVariables(VVAccess.ReadOnly)]
+    public TimeSpan TimeUntilEndAnimation = TimeSpan.Zero;
+
+    [DataField, ViewVariables(VVAccess.ReadOnly)]
+    public float DurationAnimation = 0f;
+
+    [DataField]
+    public string EffectPrototype = string.Empty;
+
     [DataField]
     public EntProtoId ActionStunRadius = "ActionStunRadius";
 
     [DataField]
     public EntityUid? ActionStunRadiusEntity;
 
-    [DataField, AutoNetworkedField, Access(Other = AccessPermissions.ReadWrite)]
+    [ViewVariables(VVAccess.ReadWrite)]
+    [DataField, AutoNetworkedField]
+    [Access(Other = AccessPermissions.ReadWrite)]
     public float ParalyzeTime = 3f;
 
-    [DataField, AutoNetworkedField, Access(Other = AccessPermissions.ReadWrite)]
-    public float LaunchForwardsMultiplier = 1f;
-
-    [DataField, AutoNetworkedField, Access(Other = AccessPermissions.ReadWrite)]
+    [ViewVariables(VVAccess.ReadWrite)]
+    [DataField, AutoNetworkedField]
+    [Access(Other = AccessPermissions.ReadWrite)]
     public float RangeStun = 5f;
 
     [DataField]
@@ -31,6 +41,26 @@ public sealed partial class StunRadiusComponent : Component
     [DataField]
     public bool IgnorAlien = true;
 
+    public bool IsRunning = false;
+
+    [DataField, ViewVariables(VVAccess.ReadOnly)]
+    public float BaseRadialAcceleration = -10f;
+
+    [DataField, ViewVariables(VVAccess.ReadOnly)]
+    public float BaseTangentialAcceleration = 0f;
+
+    [DataField]
+    public float Strenght = 0f;
+
+    #region Visualizer
+    [DataField]
+    public string State = string.Empty;
+
+    [DataField]
+    public string StunState = string.Empty;
+    #endregion
+
     [DataField]
     public bool StunBorg = false;
+
 }
