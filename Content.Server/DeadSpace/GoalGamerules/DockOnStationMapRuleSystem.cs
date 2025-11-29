@@ -69,7 +69,7 @@ public sealed class DockOnStationMapRuleSystem : StationEventSystem<DockOnStatio
 
         if (!_entityManager.System<ShuttleSystem>().TryFTLDock(shuttle.Value, shuttleComponent, stationGrid, out _))
         {
-            Log.Error("Ошибка: Стыковка не выполнена.");
+            Log.Warning("Предупреждение: Стыковка не выполнена.");
         }
 
         Log.Info($"[LoadOnStationMapRule] Loaded grid from {gridPath} onto station map {mapId}");
