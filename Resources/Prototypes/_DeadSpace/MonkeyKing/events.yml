@@ -1,0 +1,21 @@
+- type: entity
+  id: MonkeyKingSpawn
+  parent: BaseStationEventShortDelay
+  components:
+  - type: StationEvent
+    startAnnouncement: station-event-monkey-king-start-announcement
+    startAudio:
+      path: /Audio/_DeadSpace/Announcements/lifesigns.ogg # DS14-Announcements
+      params:
+        volume: -2
+    earliestStart: 15
+    weight: 6
+    duration: 50
+    minimumPlayers: 30
+  - type: VentCrittersRule
+    entries:
+    - id: MobMonkeyServant
+      prob: 0.02
+    specialEntries:
+    - id: SpawnPointGhostMonkeyKing
+      prob: 0.001

@@ -18,7 +18,7 @@
     icon: _DeadSpace/Renegade/actions/submission.png
   - type: NumberObjective
     min: 1
-    max: 6
+    max: 3
     title: objective-condition-submission-title
   - type: UnitologySubmissionCondition
 
@@ -29,8 +29,8 @@
   - type: Objective
     icon: _DeadSpace/Interface/Actions/infector.png
   - type: NumberObjective
-    min: 10
-    max: 25
+    min: 5
+    max: 15
     title: objective-condition-infect-title
   - type: UnitologyInfectCondition
 

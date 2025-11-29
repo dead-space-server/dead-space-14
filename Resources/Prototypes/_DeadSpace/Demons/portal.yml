@@ -1,3 +1,16 @@
+- type: damageModifierSet
+  id: DemonPortalDeff
+  coefficients:
+    Blunt: 0.7
+    Slash: 0.5
+    Piercing: 0.7
+    Shock: 1.2
+    Structural: 0.5
+    Holy: 0.5
+  flatReductions:
+    Blunt: 5
+    Heat: 5
+
 - type: entity
   id: DemonPortal
   name: демонический портал
@@ -38,13 +51,13 @@
     text: демонический портал
     enabled: true
   - type: Damageable
-    damageContainer: Inorganic
-    damageModifierSet: Metallic
+    damageContainer: BiologicalMetaphysical
+    damageModifierSet: DemonPortalDeff
   - type: Destructible
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 200
+        damage: 275
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
@@ -52,3 +65,12 @@
     sound:
       path: /Audio/Weapons/Guns/Gunshots/rocket_launcher.ogg
   - type: DemonPortal
+    demonSpawnIdArray:
+      - MobDemonSlaughter
+      - MobDemonSlaughterBow
+      - MobDemonHonker
+      - MobDemonIfrit
+      - MobDemonJaunt
+      - MobDemonMouth
+      - MobDemonSnake
+      - MobDemonBloodyArms 

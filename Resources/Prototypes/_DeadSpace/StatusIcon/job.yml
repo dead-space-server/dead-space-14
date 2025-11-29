@@ -63,6 +63,13 @@
     sprite: /Textures/Interface/Misc/job_icons.rsi
     state: ERTLeader
 
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconERTChaplain
+  icon:
+    sprite: /Textures/_DeadSpace/Interface/Misc/job_icons.rsi
+    state: ertchaplain
+
 # Taipan
 - type: jobIcon
   id: JobIconTaipanAtmosphericsEngineer

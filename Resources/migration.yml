@@ -1048,9 +1048,6 @@ Fulton0: null
 
 # 2025-09-01 - DS14
 CentcomComputerComms: CentcommComputerComms
-VendingMachineClothing: BackmenVendingMachineClothing
-VendingMachineWinter: BackmenVendingMachineWinter
-VendingMachineClothingCapes: BackmenVendingMachineClothingCapes
 
 # 2025-09-06 - DS14
 BorgModuleTreatment: null
@@ -1116,7 +1113,6 @@ PrefilledSyringe: Syringe
 BibleTanakh: null
 BibleSatanic: null
 
-
 # 2025-10-08
 ClothingBeltAssault: ClothingBeltMilitaryWebbing
 WarpPointBombing: null
@@ -1134,3 +1130,41 @@ SeniorSalvagePDA: null
 RubberStampSeniorSalvage: null
 SpawnPointSeniorSalvageSpecialist: SpawnPointSeniorCourier
 WeaponSeniorKinetik: WeaponAdvancedKinetik
+
+# 2025-11-26 - DS14
+BookDAM: null
+BookDione: null
+BookFaks: null
+BookMirt: null
+BookNakamura: null
+BookNooc: null
+BookShips: null
+BookUmpor: null
+BookVitz: null
+BookZP: null
+ClothingNeckAtharaPin: null
+ClothingNeckCorvaxPin: null
+ClothingNeckEchoPin: null
+ClothingNeckElysiumPin: null
+ClothingNeckMainPin: null
+ClothingNeckNebulaPin: null
+ClothingNeckNovaPin: null
+ClothingNeckSolarisPin: null
+ClothingNeckWhiteListPin: null
+PrintedDocumentComplaintViolationLaborRules: null
+PrintedDocumentOrderDismissal: null
+PrintedDocumentPermissionToCarryWeapons: null
+PrintedDocumentPrescriptionDrugAuthorization: null
+PrintedDocumentReportStation: null
+PrintedDocumentSentence: null
+PrintedDocumentSentences: null
+OpporozidoneBeakerSmall: null
+PrinterDocMachineCircuitboard: null
+SpawnPointSurgeon: null
+VendingMachinePride: null
+ClothingHeadHatBeretSecurityPilot: null
+ClothingOuterWinterPilot: null
+ClothingUniformJumpsuitPilot: null
+ClothingUniformJumpsuitCapTurtleneck: null
+ClothingUniformJumpsuitHoPTurtleneck: null
+ClothingUniformJumpsuitHoSBlack: null

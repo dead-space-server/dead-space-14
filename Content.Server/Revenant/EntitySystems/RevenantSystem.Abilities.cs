@@ -403,13 +403,22 @@ public sealed partial class RevenantSystem
         if (HasComp<MindCaptureDefenceComponent>(args.Target))
             return;
 
-        if (!HasComp<MobStateComponent>(args.Target) || !_mobState.IsDead(args.Target))
+        if (HasComp<CorporealComponent>(uid))
+        {
+            _popup.PopupEntity(Loc.GetString("revenant-mind-capture-corporeal"), uid);
             return;
+        }
+
+        if (!HasComp<MobStateComponent>(args.Target) || !_mobState.IsDead(args.Target))
+        {
+            _popup.PopupEntity(Loc.GetString("revenant-mind-capture-is-dead"), uid);
+            return;
+        }
 
         if (!TryComp<DamageableComponent>(args.Target, out var damageable)
         || !_mobThresholdSystem.TryGetThresholdForState(args.Target, MobState.Critical, out var crit)
         || !_mobThresholdSystem.TryGetThresholdForState(args.Target, MobState.Dead, out var dead)
-        || damageable.TotalDamage > dead.Value * (1 / component.HpShift))
+        || damageable.TotalDamage > crit.Value * args.ThresholdModifier)
         {
             _popup.PopupEntity(Loc.GetString("revenant-mind-capture-many-damage"), uid);
             return;
@@ -424,13 +433,11 @@ public sealed partial class RevenantSystem
         args.Handled = true;
 
         // Component on target, don`t confuse with revenant comp.
-        var comp = new RevenantMindCapturedComponent(uid);
+        var comp = new RevenantMindCapturedComponent(uid, dead.Value, crit.Value);
         AddComp(args.Target, comp);
 
-        comp.DeadThreshold = dead.Value;
-        comp.DeadThreshold = crit.Value;
-        _mobThresholdSystem.SetMobStateThreshold(args.Target, dead.Value * (1 / component.HpShift), MobState.Dead);
-        _mobThresholdSystem.SetMobStateThreshold(args.Target, crit.Value * (1 / component.HpShift), MobState.Critical);
+        _mobThresholdSystem.SetMobStateThreshold(args.Target, dead.Value * args.ThresholdModifier, MobState.Dead);
+        _mobThresholdSystem.SetMobStateThreshold(args.Target, crit.Value * args.ThresholdModifier, MobState.Critical);
 
         _mobState.ChangeMobState(args.Target, MobState.Alive);
 
@@ -460,7 +467,7 @@ public sealed partial class RevenantSystem
             if (TryComp<GhostComponent>(tarMind.VisitingEntity, out var tarGhostComp))
             {
                 comp.TargetUid = tarMind.VisitingEntity.Value;
-                _ghost.SetCanReturnToBody(tarGhostComp, false);
+                _ghost.SetCanReturnToBody((tarMind.VisitingEntity.Value, tarGhostComp), false);
             }
             else
             {
@@ -469,7 +476,7 @@ public sealed partial class RevenantSystem
                 if (TryComp<GhostComponent>(ghost, out var tarGhostCompEnsured))
                 {
                     comp.TargetUid = ghost.Value;
-                    _ghost.SetCanReturnToBody(tarGhostCompEnsured, false);
+                    _ghost.SetCanReturnToBody((ghost.Value, tarGhostCompEnsured), false);
                 }
             }
         }

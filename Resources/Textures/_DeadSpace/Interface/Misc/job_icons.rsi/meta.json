@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "created by andrew_fenriz (discord) for DS14",
+  "copyright": "created by andrew_fenriz (discord) for DS14; ertchaplain created by thezuti (discord) for DS14",
   "size": {
     "x": 8,
     "y": 8
@@ -45,6 +45,9 @@
     },
     {
       "name": "technicalsupervisor"
+    },
+    {
+      "name": "ertchaplain"
     }
   ]
 }

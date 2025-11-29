@@ -1,0 +1,17 @@
+- type: entity
+  id: StunRadiusEffect
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: /Textures/_DeadSpace/MonkeyKing/effect.rsi
+    drawdepth: Effects
+    layers:
+    - state: "boom"
+      shader: unshaded
+  - type: Physics
+    canCollide: false
+  - type: TimedDespawn
+    lifetime: 1
+  - type: Tag
+    tags:
+      - HideContextMenu

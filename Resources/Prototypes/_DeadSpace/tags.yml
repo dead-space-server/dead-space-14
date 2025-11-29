@@ -68,6 +68,9 @@
   id: DonkCo
 
 - type: Tag
+  id: Demon
+
+- type: Tag
   id: EnergyCartridge
 
 - type: Tag
@@ -186,6 +189,9 @@
 
 - type: Tag
   id: Plasteel
+
+- type: Tag
+  id: Radiance
 
 - type: Tag
   id: RealCapfruit

@@ -34,6 +34,7 @@
     - id: RevenantSpawn
     - !type:NestedSelector
       tableId: DerelictBorgEventTable
+    - id: MonkeyKingSpawn # DS14 возможно временно тут, может быть будет перенесён в ModerateAntag, нужно чтобы игроки наигрались
 
 - type: entityTable
   id: ModerateAntagEventsTable

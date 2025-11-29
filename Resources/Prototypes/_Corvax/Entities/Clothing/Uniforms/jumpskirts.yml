@@ -34,6 +34,17 @@
 
 - type: entity
   parent: ClothingUniformSkirtBase
+  id: ClothingUniformJumpskirtElegantMaid
+  name: elegant maid uniform
+  description: Call me master and bring me some beer.
+  components:
+  - type: Sprite
+    sprite: _Corvax/Clothing/Uniforms/Jumpskirt/elegantmaid.rsi
+  - type: Clothing
+    sprite: _Corvax/Clothing/Uniforms/Jumpskirt/elegantmaid.rsi
+
+- type: entity
+  parent: ClothingUniformSkirtBase
   id: ClothingUniformJumpskirtSchool
   name: school skirt
   description: Stylish and comfortable school skirt.

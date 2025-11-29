@@ -105,13 +105,13 @@ public sealed partial class UnitologyRuleComponent : Component
     public TimeSpan DamageTick;
 
     [DataField]
-    public float DurationArrivalObelisk = 40f;
+    public float DurationArrivalObelisk = 60f;
 
     [DataField]
-    public float TimeUntilUniWarning = 20f;
+    public float TimeUntilUniWarning = 15f;
 
     [DataField]
-    public float TimeUntilObeliskWarning = 10f;
+    public float TimeUntilObeliskWarning = 5f;
 
     [DataField]
     public float TimeAfterTheExplosion = 2f;

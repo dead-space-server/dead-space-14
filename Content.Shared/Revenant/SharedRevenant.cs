@@ -65,6 +65,8 @@ public sealed partial class RevenantSleepActionEvent : EntityTargetActionEvent
 
 public sealed partial class RevenantMindCaptureActionEvent : EntityTargetActionEvent
 {
+    [DataField]
+    public float ThresholdModifier = 3f;
 }
 
 public sealed partial class RevenantBeamFireActionEvent : EntityTargetActionEvent
