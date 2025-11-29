@@ -1,0 +1,17 @@
+﻿- type: entity
+  parent: [BoxVial, BaseSyndicateContraband]
+  id: VestineSynthesisKit
+  name: набор вестина
+  description: Стартовый набор начинающего химика, включающий в себя шесть пробирок вестина для всех ваших преступных нужд!
+  components:
+  - type: Storage
+    grid:
+    - 0,0,3,2
+  - type: StorageFill
+    contents:
+    - id: Beaker
+      amount: 2
+    - id: Dropper
+    - id: ClothingEyesGlassesChemical
+    - id: VestineChemistryVial
+      amount: 5

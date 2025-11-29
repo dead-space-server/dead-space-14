@@ -77,10 +77,9 @@
 # DS14-start: Ephedrine rebalance
     Narcotic:
       effects:
-      - !type:HealthChange
-        damage:
-          types:
-            Poison: 2
+      - !type:MovespeedModifier
+        walkSpeedModifier: 1.1
+        sprintSpeedModifier: 1.1
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
@@ -95,13 +94,6 @@
       - !type:SatiateHunger
         factor: -2
 # DS14-end
-      - !type:ModifyStatusEffect
-        effectProto: StatusEffectStunned
-        time: 1
-        type: Remove
-      - !type:ModifyKnockdown
-        time: 1
-        type: Remove
       - !type:ModifyStatusEffect
         conditions:
         - !type:ReagentThreshold

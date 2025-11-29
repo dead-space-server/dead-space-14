@@ -635,3 +635,19 @@
     whitelist:
       tags:
       - NukeOpsUplink
+
+- type: listing
+  id: UplinkVestineKitBundle
+  name: uplink-vestine-kit-name
+  description: uplink-vestine-kit-desc
+  icon: { sprite: /Textures/Objects/Storage/boxicons.rsi, state: vials }
+  productEntity: VestineSynthesisKit
+  cost:
+    Telecrystal: 6
+  categories:
+  - UplinkChemicals
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
