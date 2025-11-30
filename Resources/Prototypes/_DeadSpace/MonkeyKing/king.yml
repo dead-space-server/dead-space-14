@@ -115,6 +115,8 @@
     selectedLanguage: MonkeyLanguage
     knownLanguages: 
     - MonkeyLanguage
+  - type: TTS
+    voice: Pudge
 
 - type: entity
   id: SpawnPointGhostMonkeyKing
