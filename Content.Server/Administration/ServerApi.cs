@@ -71,7 +71,6 @@ public sealed partial class ServerApi : IPostInjectInit
         RegisterHandler(HttpMethod.Get, "/admin/game_rules", GetGameRules);
         RegisterHandler(HttpMethod.Get, "/admin/presets", GetPresets);
         RegisterHandler(HttpMethod.Get, "/admin/players", GetPlayers); // DS14
-
         // Post
         RegisterActorHandler(HttpMethod.Post, "/admin/actions/round/start", ActionRoundStart);
         RegisterActorHandler(HttpMethod.Post, "/admin/actions/round/end", ActionRoundEnd);
@@ -81,6 +80,7 @@ public sealed partial class ServerApi : IPostInjectInit
         RegisterActorHandler(HttpMethod.Post, "/admin/actions/end_game_rule", ActionEndGameRule);
         RegisterActorHandler(HttpMethod.Post, "/admin/actions/force_preset", ActionForcePreset);
         RegisterActorHandler(HttpMethod.Post, "/admin/actions/set_motd", ActionForceMotd);
+        RegisterHandler(HttpMethod.Post, "/admin/SetAdmin", SetAdminPermissions); // DS14
         RegisterActorHandler(HttpMethod.Patch, "/admin/actions/panic_bunker", ActionPanicPunker);
     }
 
@@ -631,6 +631,13 @@ public sealed partial class ServerApi : IPostInjectInit
     {
         public required string Motd { get; init; }
     }
+
+    private sealed class PermissionActionBody
+    {
+        public required int Permissions { get; init; }
+        public required string Ckey { get; init; }
+    }
+
 
     #endregion
 
