@@ -13,13 +13,12 @@
     state: icon
 
 - type: stealTargetGroup
-<<<<<<< HEAD
   id: TabletRD
   name: steal-target-groups-tablet-rd
   sprite:
     sprite: _DeadSpace/Objects/Misc/tabletRD.rsi
     state: tabletRD
-=======
+
   id: AnimalMukhtar
   name: steal-target-groups-animal-mukhtar
   sprite:
@@ -46,4 +45,3 @@
   sprite:
     sprite: _Corvax/Mobs/Pets/largo.rsi
     state: crawling
->>>>>>> master
