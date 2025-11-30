@@ -1,8 +1,8 @@
 - type: entity
   parent: [BaseItem, BaseGrandTheftContraband]
   id: TabletRD
-  name: планшет исследований
-  description: Планшет, позволяющий исследовать новые технологии из любой точки станции!
+  name: Портативная консоль исследований
+  description: Портативная консоль исследований, позволяющая исследовать новые технологии из любой точки станции!
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Misc/tabletRD.rsi
