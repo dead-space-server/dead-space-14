@@ -45,7 +45,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.DeadSpace.Abilities.Egg.Components;
 using Content.Shared.DeadSpace.Abilities.Egg;
 using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;
-
+using Content.Shared.Humanoid;
 using TemperatureCondition = Content.Shared.EntityEffects.EffectConditions.Temperature; // disambiguate the namespace
 using PolymorphEffect = Content.Shared.EntityEffects.Effects.Polymorph;
 using Content.Shared.DeadSpace.Languages.Components;
@@ -780,7 +780,7 @@ public sealed class EntityEffectSystem : EntitySystem
         // DS14-Languages-end
 
         // Stops from adding a ghost role to things like people who already have a mind
-        if (TryComp<MindContainerComponent>(uid, out var mindContainer) && mindContainer.HasMind)
+        if (TryComp<MindContainerComponent>(uid, out var mindContainer) && mindContainer.HasMind || HasComp<HumanoidAppearanceComponent>(uid)) // DS14
         {
             return;
         }
