@@ -13,6 +13,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
+using Content.Client.DeadSpace.Lobby;
 
 namespace Content.Client.Lobby
 {
@@ -28,6 +29,7 @@ namespace Content.Client.Lobby
         [Dependency] private readonly IConfigurationManager _cfg = default!;
 
         private ClientGameTicker _gameTicker = default!;
+        private LobbyTimerSoundSystem _timerSoundSystem = default!; // DS14-lobby-timer-sounds
 
         protected override Type? LinkedScreenType { get; } = typeof(LobbyGui);
         public LobbyGui? Lobby;
@@ -43,6 +45,7 @@ namespace Content.Client.Lobby
 
             var chatController = _userInterfaceManager.GetUIController<ChatUIController>();
             _gameTicker = _entityManager.System<ClientGameTicker>();
+            _timerSoundSystem = _entityManager.System<LobbyTimerSoundSystem>(); // DS14-lobby-timer-sounds
 
             chatController.SetMainChat(true);
 
@@ -143,13 +146,16 @@ namespace Content.Client.Lobby
                 {
                     text = Loc.GetString(seconds < -5 ? "lobby-state-right-now-question" : "lobby-state-right-now-confirmation");
                 }
-                else if (difference.TotalHours >= 1)
-                {
-                    text = $"{Math.Floor(difference.TotalHours)}:{difference.Minutes:D2}:{difference.Seconds:D2}";
-                }
                 else
                 {
-                    text = $"{difference.Minutes}:{difference.Seconds:D2}";
+                    // DS14-lobby-timer-sounds-start
+                    // Тут небольшой рефакторинг, чтобы чуть оптимизировать и засунуть вызов update в тело else
+                    text = difference.TotalHours >= 1
+                        ? $"{Math.Floor(difference.TotalHours)}:{difference.Minutes:D2}:{difference.Seconds:D2}"
+                        : $"{difference.Minutes}:{difference.Seconds:D2}";
+
+                    _timerSoundSystem.Update();
+                    // DS14-lobby-timer-sounds-end
                 }
             }
 
