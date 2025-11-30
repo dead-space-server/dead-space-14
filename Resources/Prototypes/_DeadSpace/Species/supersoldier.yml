@@ -1,0 +1,9 @@
+- type: species
+  id: SuperSoldier
+  name: супер солдат
+  roundStart: false
+  prototype: MobSuperSoldier
+  sprites: MobHumanSprites
+  markingLimits: MobHumanMarkingLimits
+  dollPrototype: MobHumanDummy
+  skinColoration: HumanToned

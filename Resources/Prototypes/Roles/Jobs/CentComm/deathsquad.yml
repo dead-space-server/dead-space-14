@@ -1,11 +1,11 @@
 - type: job
   id: DeathSquad
-  name: job-name-deathsquad
+  name: job-name-unknown # DS14
   description: job-description-deathsquad
   playTimeTracker: JobDeathSquad
   setPreference: false
   startingGear: DeathSquadGear
-  icon: "JobIconNanotrasen"
+  icon: "JobIconUnknown" # DS14
   supervisors: job-supervisors-centcom
   canBeAntag: false
   accessGroups:

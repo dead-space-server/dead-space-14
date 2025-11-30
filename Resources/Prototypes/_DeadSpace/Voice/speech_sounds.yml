@@ -1,0 +1,8 @@
+- type: speechSounds
+  id: SuperSoldier
+  saySound:
+    path: /Audio/_DeadSpace/Voice/Talk/supersoldier.ogg
+  askSound:
+    path: /Audio/_DeadSpace/Voice/Talk/supersoldier_ask.ogg
+  exclaimSound:
+    path: /Audio/_DeadSpace/Voice/Talk/supersoldier_exclaim.ogg

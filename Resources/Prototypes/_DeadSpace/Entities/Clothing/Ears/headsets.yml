@@ -42,9 +42,7 @@
   - type: ContainerFill
     containers:
       key_slots:
-      - EncryptionKeyCentCom
       - EncryptionKeyStationMaster
-      - EncryptionKeyDeathSquad
   - type: Sprite
     sprite: Clothing/Ears/Headsets/base.rsi
   - type: Clothing

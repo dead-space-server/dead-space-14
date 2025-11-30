@@ -1229,6 +1229,19 @@
   - type: HeldSpeedModifier
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitDeathsquad
+# DS14-start
+  - type: AutoInjectReagentClothingOnAllowedState
+    durationRegenReagents: 100
+    allowedStates:
+    - Critical
+    reagents:
+      DexalinPlus: 10
+      Puncturase: 10
+      TranexamicAcid: 10
+      Omnizine: 10
+  - type: Reflect
+    reflectProb: 0.10
+# DS14-end
   - type: HardsuitIdentification # DS14
   - type: Speech # DS14
   - type: TTS # DS14

@@ -9,7 +9,7 @@
     gloves: ClothingHandsGlovesCombat
     outerClothing: ClothingOuterHardsuitDeathsquad
     suitstorage: JetpackVoidFilled
-    shoes: ClothingShoesBootsMagAdv
+    shoes: ClothingShoesBootsMagDeathSquad # DS14-Shoes
     id: DeathsquadPDA
     pocket1: EnergySword
     pocket2: DoubleEmergencyOxygenTankFilled
@@ -39,5 +39,5 @@
 - type: entity
   parent: ClothingBeltSecurityWebbing
   id: ClothingBeltDeathSquadWebbingFilled
-  name: РПС эскадрона смерти
-  description: РПС члена отряда элитной эвакуации.
+  name: штурмовой РПС
+  description: РПС члена отряда... какого-то отряда?

@@ -118,17 +118,22 @@
     - MobHumanDeathSquadUnit
 
 - type: entity
-  parent: MobHuman
+  parent: MobSuperSoldier  # DS14
   id: MobHumanDeathSquadUnit
   categories: [ HideSpawnMenu ]
   components:
-  - type: MindShield
   - type: ZombieImmune
   - type: AntagImmune
   - type: AutoImplant
     implants:
     - FreedomImplant
     - DeathAcidifierImplant
+# DS14-start
+    - RadioImplantCentcomm
+  - type: BlobSpeak
+    overrideName: false
+    channel: DeathSquad
+# DS14-end
   - type: NpcFactionMember
     factions:
     - CentralCommand

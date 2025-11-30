@@ -225,7 +225,7 @@
   id: ShuttleDeathSquad
   components:
   - type: StationEvent
-    startAnnouncement: station-event-response-team-arrival
+    startAnnouncement: station-event-deathsquad-shuttle-incoming
     startAudio:
       path: /Audio/_DeadSpace/Announcements/centcomm.ogg # DS14-Announcements
     willNotStartRandomly: true

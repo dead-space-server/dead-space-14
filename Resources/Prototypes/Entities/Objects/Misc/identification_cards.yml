@@ -692,12 +692,15 @@
   name: death squad ID card
   components:
   - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/id_cards.rsi # DS14-Resprite
     layers:
-    - state: centcom
+    - state: deathsquad # DS14
   - type: Item
     heldPrefix: blue
   - type: PresetIdCard
     job: DeathSquad
+  - type: Tag # DS14
+    tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
   name: passenger ID card

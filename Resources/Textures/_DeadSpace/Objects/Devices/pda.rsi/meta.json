@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "recolored by andrew_fenriz and semkagamez (discord) for Space Statiom 14 server Мёртвый Космос",
+  "copyright": "Deathsquad states resprite by permissioner(discord) for Space Station 14 server Мёртвый Космос, recolored by andrew_fenriz and semkagamez (discord) for Space Station 14 server Мёртвый Космос",
   "size": {
     "x": 32,
     "y": 32
@@ -11,7 +11,14 @@
       "name": "id_overlay"
     },
     {
+      "name": "id_overlay_wide"
+    },
+    {
       "name": "equipped-BELT",
+      "directions": 4
+    },
+    {
+      "name": "equipped-IDCARD",
       "directions": 4
     },
     {
@@ -27,6 +34,20 @@
     },
     {
       "name": "light_overlay"
+    },
+    {
+      "name": "light_overlay_wide"
+    },
+    {
+      "name": "pda-deathsquad",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ]
+      ]
     },
     {
       "name": "pda",
@@ -170,10 +191,6 @@
           1.2
         ]
       ]
-    },
-    {
-      "name": "equipped-IDCARD",
-      "directions": 4
     }
   ]
 }

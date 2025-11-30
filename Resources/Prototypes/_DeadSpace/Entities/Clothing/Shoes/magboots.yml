@@ -1,0 +1,21 @@
+- type: entity
+  parent: ClothingShoesBase
+  id: ClothingShoesBootsMagDeathSquad
+  name: чёрные магнитные ботинки
+  suffix: Эскадрон Смерти
+  description: Магнитные ботинки, специально разработанные для непрерывной работы без снижения эффективности.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Shoes/Boots/magboots-deathsquad.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Shoes/Boots/magboots-deathsquad.rsi
+  - type: NoSlip
+  - type: Magboots
+  - type: ClothingSpeedModifier
+    walkModifier: 1
+    sprintModifier: 1
+  - type: Appearance
+  - type: StaticPrice
+    price: 400

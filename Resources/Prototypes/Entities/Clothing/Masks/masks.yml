@@ -453,6 +453,11 @@
     sprite: Clothing/Mask/squadron.rsi
   - type: Clothing
     sprite: Clothing/Mask/squadron.rsi
+# DS14-start
+  - type: AddAccentClothing
+    accent: ReplacementAccent
+    replacement: unreadable
+# DS14-end
   - type: HideLayerClothing
     slots:
     - Hair

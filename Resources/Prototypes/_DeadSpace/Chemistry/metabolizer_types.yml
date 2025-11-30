@@ -1,3 +1,7 @@
 - type: metabolizerType
+  id: SuperSoldier
+  name: metabolizer-type-supersoldier
+
+- type: metabolizerType
   id: EggSpider
   name: metabolizer-type-egg-spider

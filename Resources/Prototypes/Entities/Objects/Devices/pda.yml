@@ -993,12 +993,39 @@
   id: DeathsquadPDA
   suffix: Death Squad
   components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Devices/pda.rsi # DS14-Resprite
+    layers:
+    - map: [ "enum.PdaVisualLayers.Base" ]
+      state: "pda-deathsquad"
+    - state: "light_overlay"
+      map: [ "enum.PdaVisualLayers.Flashlight" ]
+      shader: "unshaded"
+      visible: false
+    - state: "id_overlay"
+      map: [ "enum.PdaVisualLayers.IdLight" ]
+      shader: "unshaded"
+      visible: false
+  - type: Icon
+    sprite: _DeadSpace/Objects/Devices/pda.rsi # DS14-Resprite
+    state: pda-deathsquad
   - type: Pda
     id: CentcomIDCardDeathsquad
-  - type: Tag #  Ignore Chameleon tags
-    tags:
-    - DoorBumpOpener
-
+# DS14-start
+    penSlot:
+      startingItem: Pen
+      priority: -1
+      whitelist:
+        tags:
+        - Write
+  - type: Appearance
+    appearanceDataInit:
+     enum.PdaVisuals.PdaType:
+       !type:String
+       pda-deathsquad
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+# DS14-end
 - type: entity
   parent: BasePDA
   id: MusicianPDA

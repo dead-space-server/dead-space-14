@@ -245,6 +245,12 @@
         effectProto: StatusEffectSeeingRainbow
         time: 10
         type: Add
+# DS-14-start
+        conditions:
+        - !type:OrganType
+          type: SuperSoldier
+          shouldHave: false
+# DS-14-end 
       - !type:ChemVomit # Vomiting is a symptom of brain damage
         probability: 0.05
       - !type:Drunk # Headaches and slurring are major symptoms of brain damage, this is close enough
@@ -308,10 +314,16 @@
         - !type:ReagentThreshold
           reagent: Nocturine
           min: 8
+# DS-14-start
+        - !type:OrganType
+          type: SuperSoldier
+          shouldHave: false
+# DS-14-end
         effectProto: StatusEffectForcedSleeping
         time: 6
         delay: 5
         type: Update
+
 
 - type: reagent
   id: MuteToxin
@@ -331,6 +343,12 @@
         component: Muted
         type: Add
         time: 10
+# DS-14-start
+        conditions:
+        - !type:OrganType
+          type: SuperSoldier
+          shouldHave: false
+# DS-14-end
 
 - type: reagent
   id: NorepinephricAcid
@@ -403,6 +421,12 @@
         - norepinephricacid-effect-eyes-itch
         - norepinephricacid-effect-vision-fade
         - norepinephricacid-effect-vision-fail
+# DS-14-start
+        conditions:
+        - !type:OrganType
+          type: SuperSoldier
+          shouldHave: false
+# DS-14-end
       - !type:PopupMessage
         type: Local
         visualType: MediumCaution
@@ -412,6 +436,12 @@
         - norepinephricacid-effect-eye-pain
         - norepinephricacid-effect-darkness
         - norepinephricacid-effect-blindness
+# DS-14-start
+        conditions:
+        - !type:OrganType
+          type: SuperSoldier
+          shouldHave: false
+# DS-14-end
       - !type:Emote
         emote: Scream
         probability: 0.08

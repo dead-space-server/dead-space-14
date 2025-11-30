@@ -1,3 +1,3 @@
-ent-ClothingBeltDeathSquadWebbingFilled = РПС эскадрона смерти
-    .desc = РПС члена отряда элитной эвакуации.
-
+ent-ClothingBeltDeathSquadWebbingFilled = штурмовой РПС
+    .desc = РПС члена отряда... какого-то отряда?
+    .suffix = Эскадрон смерти

@@ -74,6 +74,12 @@
         effectProto: StatusEffectDrowsiness
         time: 4
         type: Add
+# DS-14-start
+        conditions:
+        - !type:OrganType
+          type: SuperSoldier
+          shouldHave: false
+# DS-14-end
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
@@ -683,6 +689,12 @@
         component: Pacified
         type: Add
         time: 4
+# DS-14-start
+        conditions:
+        - !type:OrganType
+          type: SuperSoldier
+          shouldHave: false
+# DS-14-end
 
 - type: reagent
   id: Honk

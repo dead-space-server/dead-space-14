@@ -35,8 +35,14 @@
     outerClothing: ClothingOuterVestWeb
     neck: ClothingNeckCloakCentcomBlack
     id: CentcomSpecialOperationsOfficerPDA
-    ears: ClothingHeadsetDeathSquad
-    belt: ADTClothingBeltSupremeSheathFilled
+    ears: ClothingHeadsetSpecialOperationsOfficer
+  #   underwearb: ClothingUnderwearBottomBoxersWhite # DS14-Underwear
+  # underweart: ClothingUnderwearTopBraWhite # DS14-Underwear
+  # underwearb: ClothingUnderwearBottomPantiesWhite # DS14-Underwear
+  # innerClothingSkirt: ClothingUniformJumpskirtPencilSpecialOperationsOfficer
+  # storage:
+  #   back:
+  #   -
 
 - type: entity
   parent: ClothingBackpackERTLeader
@@ -79,3 +85,23 @@
     gloves: ClothingHandsGlovesCombat
     outerClothing: ClothingOuterArmorCentcomCarapace
     neck: ClothingNeckCloakCentcomBlack
+
+- type: entity
+  parent: ClothingHeadset
+  id: ClothingHeadsetSpecialOperationsOfficer
+  name: гарнитура Офицера СО
+  description: Уникальный образец гарнитуры c доступом во все каналы. Собственность Офицера Специальных Операций.
+  suffix: СОБСТВЕННОСТЬ ОСО
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - EncryptionKeyCentCom
+      - EncryptionKeyStationMaster
+      - EncryptionKeyDeathSquad
+  - type: Sprite
+    sprite: Clothing/Ears/Headsets/base.rsi
+  - type: Clothing
+    sprite: Clothing/Ears/Headsets/base.rsi
+  - type: Headset
+    color: "#CF1CFF"

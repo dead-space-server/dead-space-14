@@ -986,6 +986,10 @@
   - type: Clothing
     sprite: Clothing/Head/Hardsuits/deathsquad.rsi
   - type: PointLight # Corvax-Resprite
+# DS14-start
+    radius: 7
+    energy: 5
+# DS14-end
     color: cyan
   - type: PressureProtection
     highPressureMultiplier: 0.08
@@ -1002,6 +1006,11 @@
         Radiation: 0.80
         Caustic: 0.95
         Poison: 0.80 # DS14
+# DS14-start
+  - type: ClothingGrantComponent
+    component: 
+      - type: ImmunNecroobelisk
+# DS14-end
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
