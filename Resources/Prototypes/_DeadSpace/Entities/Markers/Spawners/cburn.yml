@@ -1,0 +1,29 @@
+- type: entity
+  name: боец РХБЗЗ
+  id: CBURNAgentSpawner
+  parent: MarkerBase
+  suffix: Спавнер
+  components:
+  - type: Sprite
+    layers:
+      - state: red
+      - sprite: Markers/jobs.rsi
+        state: cburn
+  - type: RandomSpawner
+    prototypes:
+    - RandomHumanoidSpawnerCBURNAgent
+
+- type: entity
+  name: лидер РХБЗЗ
+  id: CBURNLeaderSpawner
+  parent: MarkerBase
+  suffix: Спавнер
+  components:
+  - type: Sprite
+    layers:
+      - state: red
+      - sprite: Markers/jobs.rsi
+        state: cburn
+  - type: RandomSpawner
+    prototypes:
+    - RandomHumanoidSpawnerCBURNLeader
