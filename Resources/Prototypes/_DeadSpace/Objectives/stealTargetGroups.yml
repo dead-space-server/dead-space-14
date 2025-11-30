@@ -18,7 +18,8 @@
   sprite:
     sprite: _DeadSpace/Objects/Misc/tabletRD.rsi
     state: tabletRD
-
+    
+- type: stealTargetGroup
   id: AnimalMukhtar
   name: steal-target-groups-animal-mukhtar
   sprite:
