@@ -108,3 +108,33 @@
     sprite: _DeadSpace/Clothing/Belt/utilitywebbing.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/Belt/utilitywebbing.rsi
+
+- type: entity
+  parent: [ClothingBeltBase, ClothingSlotBase]
+  id: RadianceSheath
+  name: ножны покояния
+  description: Эти ножны, то, что заставляет грешника дрожать в страхе при виде всего лишь рукояти святого мяча. Возле большой буквы S видно надпись "S - это sanity. А sanity, это S"
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Belt/radic_sheath.rsi
+    state: sheath
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Belt/radic_sheath.rsi
+  - type: ItemSlots
+    slots:
+      item:
+        name: Sabre
+        insertVerbText: sheath-insert-verb
+        ejectVerbText: sheath-eject-verb
+        insertSound: /Audio/Items/sheath.ogg
+        ejectSound: /Audio/Items/unsheath.ogg
+        whitelist:
+          tags:
+          - Radiance
+  - type: ItemMapper
+    mapLayers:
+      sheath-sabre:
+        whitelist:
+          tags:
+          - Radiance
+  - type: Appearance

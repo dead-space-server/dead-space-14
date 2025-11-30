@@ -68,6 +68,9 @@
   id: DonkCo
 
 - type: Tag
+  id: Demon
+
+- type: Tag
   id: EnergyCartridge
 
 - type: Tag
@@ -78,6 +81,12 @@
 
 - type: Tag
   id: EncryptionTaipan
+
+- type: Tag
+  id: FlamethrowerBackTank
+
+- type: Tag
+  id: FlamethrowerNozzle
 
 - type: Tag
   id: FelinidFood
@@ -186,6 +195,9 @@
 
 - type: Tag
   id: Plasteel
+
+- type: Tag
+  id: Radiance
 
 - type: Tag
   id: RealCapfruit

@@ -1,15 +1,18 @@
-# Медаль
+# Medal
 - type: loadoutEffectGroup
-  id: SecurityPilotMedal
+  id: SecurityPilotMasterMedal
   effects:
   - !type:JobRequirementLoadoutEffect
     requirement:
       !type:RoleTimeRequirement
       role: JobSecurityPilot
-      time: 270000 # 75 hours
+      time: 100h
 
 - type: loadout
   id: SecurityPilotMedal
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: SecurityPilotMasterMedal
   storage:
     back:
     - ClothingNeckSecurityPilotMedal

@@ -111,6 +111,12 @@
     action: ActionMonkeyKingBanana
     gunProto: MonkeyKingBananaGun
   - type: Insulated
+  - type: Language
+    selectedLanguage: MonkeyLanguage
+    knownLanguages: 
+    - MonkeyLanguage
+  - type: TTS
+    voice: Pudge
 
 - type: entity
   id: SpawnPointGhostMonkeyKing

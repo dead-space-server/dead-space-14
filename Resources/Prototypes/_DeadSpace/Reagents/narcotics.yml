@@ -1,0 +1,39 @@
+- type: reagent
+  id: Phenylacetone
+  name: reagent-name-phenylacetone
+  desc: reagent-desc-phenylacetone
+  physicalDesc: reagent-physical-desc-oily
+  flavor: bitter
+  color: "#FFA500"
+  boilingPoint: 216.0
+  meltingPoint: -15.0
+  metabolisms:
+    Poison:
+      effects:
+      - !type:HealthChange
+        damage:
+          types:
+            Cellular: 1
+      - !type:Jitter
+
+- type: reagent
+  id: Methylamine
+  name: reagent-name-methylamine
+  desc: reagent-desc-methylamine
+  physicalDesc: reagent-physical-desc-gaseous
+  flavor: fishy
+  color: "#cccccc"
+  boilingPoint: -6.6
+  meltingPoint: -93.5
+  metabolisms:
+    Poison:
+      effects:
+      - !type:HealthChange
+        damage:
+          types:
+            Poison: 0.5
+      - !type:PopupMessage
+        visualType: Small
+        messages: ["ammonia-smell"]
+        type: Local
+        probability: 0.05

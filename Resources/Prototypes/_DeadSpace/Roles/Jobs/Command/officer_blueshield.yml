@@ -37,6 +37,14 @@
   - Medical
   - Engineering
   - Cargo
+  - Janitor
+  - Theatre
+  - Bar
+  - Kitchen
+  - Chapel
+  - Coroner
+  - Hydroponics
+  - Salvage
   #start-backmen: currency
   minBankBalance: 800
   maxBankBalance: 1200

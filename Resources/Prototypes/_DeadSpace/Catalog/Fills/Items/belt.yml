@@ -65,3 +65,13 @@
       - id: Wirecutter
       - id: Welder
       - id: Multitool
+
+- type: entity
+  id: RadianceSheathFilled
+  parent: RadianceSheath
+  suffix: Filled
+  components:
+  - type: ContainerFill
+    containers:
+      item:
+      - Radiance

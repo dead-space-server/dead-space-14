@@ -1,0 +1,32 @@
+﻿- type: entity
+  parent: BaseItem
+  id: SyndieFlamethrower
+  name: огнемёт
+  description: Огнемёт пневматический высокого давления. Лучшая ветвь эволюции главного орудия военных преступлений Эры Земли.
+  components:
+  - type: Tag
+    tags:
+    - FlamethrowerNozzle
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Guns/Basic/syndie_flamethrower.rsi
+    state: icon
+  - type: Item
+    sprite: _DeadSpace/Objects/Weapons/Guns/Basic/syndie_flamethrower.rsi
+    size: Ginormous
+  - type: Gun
+    cameraRecoilScalar: 0
+    fireRate: 3.5
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/_DeadSpace/Weapons/Guns/Gunshots/flamethrower.ogg
+  - type: Appearance
+  - type: ClothingSlotAmmoProvider
+  - type: SlotBasedConnectedContainer
+    targetSlot: suitStorage
+    containerWhitelist:
+      tags:
+      - FlamethrowerBackTank
+  - type: UseDelay
+    delay: 0.75

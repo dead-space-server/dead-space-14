@@ -366,6 +366,7 @@
     dynamicPacks:
     - Chemistry
     - TaipanMedical
+    - LanguageImplanters
   - type: Machine
     board: MedicalTechFabCircuitboardTaipan
   - type: OreSiloClient

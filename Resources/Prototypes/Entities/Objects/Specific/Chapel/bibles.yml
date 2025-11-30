@@ -127,6 +127,15 @@
     sprite: Objects/Specific/Chapel/tomeofnarsie.rsi
   - type: Item
     sprite: Objects/Specific/Chapel/tomeofnarsie.rsi
+# DS14-start
+  - type: MeleeWeapon
+    soundHit:
+      collection: Punch
+    damage:
+      types:
+        Holy: -16.66
+        Blunt: 1
+# DS14-end
 
 - type: entity
   id: BibleNanoTrasen

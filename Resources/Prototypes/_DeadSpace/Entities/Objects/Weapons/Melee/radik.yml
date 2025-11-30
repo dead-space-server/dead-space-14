@@ -1,0 +1,116 @@
+- type: entity
+  name: святой меч
+  parent: BaseSword
+  id: Radiance
+  suffix: Радик
+  description: Божественный меч, окружающий своего владельца ярким сиянием. Вся нечисть, только завидев этот клинок, помирает от святого пламени этого же дивного меча. В рукояти вы можете заметить сосуд, в котором виднеется святая вода.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Melee/radic64.rsi
+    layers:
+    - state: icon
+      scale: 0.8, 0.8
+    - state: flame
+      visible: false
+      shader: unshaded
+      map: ["enum.ToggleableVisuals.Layer"]
+      scale: 0.8, 0.8
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Item
+    sprite: _DeadSpace/Objects/Weapons/Melee/radic.rsi
+    size: Large
+    shape:
+    - 0,0,1,4
+  - type: ItemToggle
+    onActivate: false 
+    predictable: false
+    soundActivate:
+      collection: RadianceOn
+      params:
+        variation: 0.125
+        volume: -5
+    soundDeactivate:
+      collection: WelderOff
+      params:
+        variation: 0.125
+        volume: -5
+  - type: ItemToggleMeleeWeapon
+    activatedSoundOnHit:
+      collection: RadianceHitSoundOn
+      params:
+        variation: 0.250
+        volume: -5
+    activatedSoundOnHitNoDamage:
+      collection: RadianceHitSoundOn
+      params:
+        variation: 0.250
+        volume: -5
+    deactivatedSoundOnHitNoDamage:
+      collection: RadianceHitSoundOff
+      params:
+        variation: 0.250
+        volume: -5
+    activatedDamage:
+        types:
+            Heat: 30
+            Holy: 30
+  - type: ItemToggleSize
+    activatedSize: Ginormous
+  - type: ItemToggleHot
+  - type: ComponentToggler
+    components:
+    - type: DisarmMalus
+      malus: 0.6
+  - type: ToggleableVisuals
+    spriteLayer: flame
+    inhandVisuals:
+      left:
+      - state: inhand-left-flame
+        shader: unshaded
+      right:
+      - state: inhand-right-flame
+        shader: unshaded
+  - type: UseDelay
+  - type: MeleeWeapon
+    wideAnimationRotation: -180
+    damage:
+      types:
+        Slash: 20
+    soundHit:
+      collection: RadianceHitSoundOff
+      params:
+        variation: 0.250
+        volume: -8
+  - type: RefillableSolution
+    solution: Holywater
+  - type: SolutionContainerManager
+    solutions:
+      Holywater:
+        reagents:
+        - ReagentId: Holywater
+          Quantity: 25
+        maxVol: 25
+  - type: PointLight
+    enabled: false
+    radius: 5.5
+    color: orange
+    netsync: false
+  - type: ItemTogglePointLight
+  - type: Appearance
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 200
+  - type: IgnitionSource
+    temperature: 700
+  - type: Welder
+    fuelSolutionName: Holywater
+    fuelReagent: Holywater
+  - type: Damageable
+  - type: Tag
+    tags:
+      - Radiance

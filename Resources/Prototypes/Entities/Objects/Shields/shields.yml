@@ -404,7 +404,30 @@
           Blunt: 1
           Slash: 1
           Piercing: 1
-      #Have it break into brass when clock cult is in
+# DS14-start
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 100
+          behaviors:
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+        - trigger:
+            !type:DamageTrigger
+            damage: 80
+          behaviors:
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+            - !type:PlaySoundBehavior
+              sound:
+                collection: MetalBreak
+            - !type:SpawnEntitiesBehavior
+              spawn:
+                SheetBrass:
+                  min: 1
+                  max: 2
+# DS14-end
 
 - type: entity
   name: mirror shield
@@ -632,7 +655,7 @@
                 collection: MetalGlassBreak
             - !type:SpawnEntitiesBehavior
               spawn:
-                SheetSteel:
+                SheetPlasteel: # DS14
                   min: 1
                   max: 1
                 SheetGlass:

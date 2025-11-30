@@ -8,7 +8,7 @@
     state: seedextractor
   discipline: TaipanLifeSupport
   tier: 1
-  cost: 7500
+  cost: 10000
   diskAvailable: false
   recipeUnlocks:
   - SeedExtractorMachineCircuitboard
@@ -23,7 +23,7 @@
     state: icon
   discipline: TaipanLifeSupport
   tier: 1
-  cost: 7500
+  cost: 10000
   diskAvailable: false
   recipeUnlocks:
   - SynthesizerInstrument
@@ -38,7 +38,7 @@
     state: display
   discipline: TaipanLifeSupport
   tier: 1
-  cost: 7500
+  cost: 10000
   diskAvailable: false
   recipeUnlocks:
   - FatExtractorMachineCircuitboard
@@ -53,7 +53,7 @@
     state: astroice
   discipline: TaipanLifeSupport
   tier: 1
-  cost: 7500
+  cost: 10000
   diskAvailable: false
   recipeUnlocks:
   - FauxTileAstroGrass
@@ -71,7 +71,7 @@
     state: hypo
   discipline: TaipanLifeSupport
   tier: 1
-  cost: 7500
+  cost: 10000
   diskAvailable: false
   recipeUnlocks:
   - ADTCyberHypospray
@@ -84,7 +84,7 @@
     state: base
   discipline: TaipanLifeSupport
   tier: 1
-  cost: 7500
+  cost: 10000
   diskAvailable: false
   recipeUnlocks:
   - DrinkShakerSyndie
@@ -99,7 +99,7 @@
     state: icon
   discipline: TaipanLifeSupport
   tier: 2
-  cost: 15000
+  cost: 25000
   diskAvailable: false
   recipeUnlocks:
   - AbominationCube
@@ -116,7 +116,7 @@
     state: icon
   discipline: TaipanLifeSupport
   tier: 2
-  cost: 15000
+  cost: 25000
   diskAvailable: false
   recipeUnlocks:
   - StasisBedMachineCircuitboard
@@ -132,7 +132,7 @@
     state: medical
   discipline: TaipanLifeSupport
   tier: 2
-  cost: 15000
+  cost: 25000
   diskAvailable: false
   recipeUnlocks:
   - BorgModuleAdvancedChemical
@@ -145,7 +145,7 @@
     state: advmop
   discipline: TaipanLifeSupport
   tier: 2
-  cost: 15000
+  cost: 25000
   diskAvailable: false
   recipeUnlocks:
   - AdvMopItem
@@ -161,7 +161,7 @@
     state: icon
   discipline: TaipanLifeSupport
   tier: 2
-  cost: 15000
+  cost: 25000
   diskAvailable: false
   recipeUnlocks:
   - WeaponSprayNozzle
@@ -175,7 +175,7 @@
     state: display
   discipline: TaipanLifeSupport
   tier: 2
-  cost: 15000
+  cost: 25000
   diskAvailable: false
   recipeUnlocks:
   - CargoTelepadMachineCircuitboardTaipan
@@ -188,7 +188,7 @@
     state: pen
   discipline: TaipanLifeSupport
   tier: 2
-  cost: 15000
+  cost: 25000
   diskAvailable: false
   recipeUnlocks:
   - Hypopen
@@ -202,7 +202,7 @@
     state: icon
   discipline: TaipanLifeSupport
   tier: 2
-  cost: 15000
+  cost: 25000
   diskAvailable: false
   recipeUnlocks:
   - ClothingOuterVestWeb
@@ -216,7 +216,7 @@
     state: icon
   discipline: TaipanLifeSupport
   tier: 2
-  cost: 15000
+  cost: 25000
   diskAvailable: false
   recipeUnlocks:
   - ClothingBackpackChameleon
@@ -231,6 +231,29 @@
   - ClothingUniformJumpsuitChameleon
   - ChameleonPDA
 
+- type: technology
+  id: TaipanLanguageImplants
+  name: research-technology-language-implants
+  icon:
+    sprite: Objects/Specific/Medical/syndi_implanter.rsi
+    state: implanter1
+  discipline: TaipanLifeSupport
+  tier: 2
+  cost: 25000
+  recipeUnlocks:
+  - LearnSlimeLanguageImplanter
+  - LearnArachnidLanguageImplanter
+  - LearnMothLanguageImplanter
+  - LearnReptilianLanguageImplanter
+  - LearnVoxLanguageImplanter
+  - LearnDemonLanguageImplanter
+  - LearnCatLanguageImplanter
+  - LearnMachineLanguageImplanter
+  - LearnPlafLanguageImplanter
+  - LearnVulpkaninLanguageImplanter
+  - LearnXenomorphLanguageImplanter
+  - LearnDogLanguageImplanter
+
 # Tier 3
 
 - type: technology
@@ -241,7 +264,7 @@
     state: pod_0
   discipline: TaipanLifeSupport
   tier: 3
-  cost: 30000
+  cost: 50000
   diskAvailable: false
   recipeUnlocks:
   - CloningPodMachineCircuitboard
@@ -256,7 +279,7 @@
     state: hypo
   discipline: TaipanLifeSupport
   tier: 3
-  cost: 30000
+  cost: 50000
   diskAvailable: false
   recipeUnlocks:
   - SyndiHypo
@@ -269,7 +292,7 @@
     state: icon
   discipline: TaipanLifeSupport
   tier: 3
-  cost: 30000
+  cost: 50000
   diskAvailable: false
   recipeUnlocks:
   - DefibrillatorSyndicate

@@ -110,7 +110,7 @@
   id: TelescopicShield
   result: TelescopicShield
   materials:
-    Steel: 300
+    Plasteel: 300 # DS14
     Glass: 800
 
 # Targets
