@@ -24,20 +24,20 @@ public sealed partial class GraphicsTab : Control
         Control.AddOption(new OptionFullscreen(Control, _cfg, FullscreenCheckBox));
         Control.AddOption(new OptionLightingQuality(Control, _cfg, DropDownLightingQuality));
 
-        Control.AddOptionDropDown(
+        #region изменения МК
+
+        Control.AddOptionSliderWithStep(
             CVars.DisplayUIScale,
-            DropDownUIScale,
-            [
-                new OptionDropDownCVar<float>.ValueOption(
-                    0f,
-                    Loc.GetString("ui-options-scale-auto", ("scale", UserInterfaceManager.DefaultUIScale))),
-                new OptionDropDownCVar<float>.ValueOption(0.75f, Loc.GetString("ui-options-scale-75")),
-                new OptionDropDownCVar<float>.ValueOption(1.00f, Loc.GetString("ui-options-scale-100")),
-                new OptionDropDownCVar<float>.ValueOption(1.25f, Loc.GetString("ui-options-scale-125")),
-                new OptionDropDownCVar<float>.ValueOption(1.50f, Loc.GetString("ui-options-scale-150")),
-                new OptionDropDownCVar<float>.ValueOption(1.75f, Loc.GetString("ui-options-scale-175")),
-                new OptionDropDownCVar<float>.ValueOption(2.00f, Loc.GetString("ui-options-scale-200")),
-            ]);
+            UIScaleSlider,
+            75f,    // minValue: 75%
+            200f,   // maxValue: 200%  
+            scale: 0.01f,  // 1 единица слайдера = 1% (0.01 в CVar)
+            step: 5f,      // Шаг 5%
+            format: (cvar, value) => $"{value:F0}%");
+
+        ResetUIScaleButton.OnPressed += OnResetUIScalePressed;
+
+        #endregion
 
         Control.AddOptionDropDown(
             CCVars.ViewportScalingFilterMode,
@@ -79,6 +79,29 @@ public sealed partial class GraphicsTab : Control
         UpdateViewportWidthRange();
         UpdateViewportSettingsVisibility();
     }
+
+    #region изменения МК
+
+    private void OnResetUIScalePressed(BaseButton.ButtonEventArgs obj)
+    {
+        _cfg.SetCVar(CVars.DisplayUIScale, 0f);
+        UpdateUISliderToAuto();
+    }
+
+    private void UpdateUISliderToAuto()
+    {
+        float currentAutoScale = UserInterfaceManager.DefaultUIScale;
+        float displayPercent = currentAutoScale * 100f;
+
+        var roundedPercent = MathF.Round(displayPercent / 5f) * 5f;
+
+        roundedPercent = Math.Clamp(displayPercent, 75f, 200f);
+
+        UIScaleSlider.Slider.Value = roundedPercent;
+        UIScaleSlider.ValueLabel.Text = $"{roundedPercent:F0}% (Auto)";
+    }
+
+    #endregion
 
     private void UpdateViewportSettingsVisibility()
     {

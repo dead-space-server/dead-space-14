@@ -175,6 +175,46 @@ public sealed partial class OptionsTabControlRow : Control
         return AddOption(new OptionDropDownCVar<T>(this, _cfg, cVar, dropDown, options));
     }
 
+    #region изменения МК
+
+    public SteppedOptionSliderFloatCVar AddOptionSliderWithStep(
+            CVarDef<float> cVar,
+            float minValue,
+            float maxValue,
+            float scale,
+            float step,
+            Func<SteppedOptionSliderFloatCVar, float, string>? format = null)
+    {
+        format ??= (_, value) => $"{value:P0}";
+
+        var sliderControl = new OptionSlider();
+        var option = new SteppedOptionSliderFloatCVar(this, _cfg, cVar, sliderControl, minValue, maxValue, scale, step, format);
+
+        AddOption(option);
+        AddChild(sliderControl);
+
+        return option;
+    }
+
+    public SteppedOptionSliderFloatCVar AddOptionSliderWithStep(
+        CVarDef<float> cVar,
+        OptionSlider sliderControl,
+        float minValue,
+        float maxValue,
+        float scale,
+        float step,
+        Func<SteppedOptionSliderFloatCVar, float, string>? format = null)
+    {
+        format ??= (_, value) => $"{value:P0}";
+
+        var option = new SteppedOptionSliderFloatCVar(this, _cfg, cVar, sliderControl, minValue, maxValue, scale, step, format);
+        AddOption(option);
+
+        return option;
+    }
+
+    #endregion 
+
     /// <summary>
     /// Initializes the control row. This should be called after all options have been added.
     /// </summary>

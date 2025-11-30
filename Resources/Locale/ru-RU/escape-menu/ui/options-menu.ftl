@@ -71,6 +71,7 @@ ui-options-scale-125 = 125%
 ui-options-scale-150 = 150%
 ui-options-scale-175 = 175%
 ui-options-scale-200 = 200%
+ui-options-reset-scale = Размер интерфейса по умолчанию
 ui-options-hud-theme = Тема HUD:
 ui-options-hud-theme-default = По умолчанию
 ui-options-hud-theme-plasmafire = Плазма
