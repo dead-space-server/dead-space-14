@@ -32,9 +32,9 @@ namespace Content.Shared.Bed.Components
         public TimeSpan NextHealTime = TimeSpan.Zero; //Next heal
 
         /// <summary>
-        /// Action for the attached entity to be able to sleep.
+        /// DS14-edited: Action for the attached entity to be able to sleep.
         /// </summary>
         [DataField, AutoNetworkedField]
-        public EntityUid? SleepAction;
+        public Dictionary<EntityUid, EntityUid> SleepAction = new();
     }
 }

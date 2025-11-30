@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Numerics;
 using Content.Shared.Alert;
 using Content.Shared.Buckle.Components;
@@ -130,6 +131,16 @@ public abstract partial class SharedBuckleSystem
             return;
         }
 
+        // DS14-start
+        if (strapComp.MaxCapacity > 1)
+        {
+            if (xform.ParentUid != strapUid || _container.IsEntityInContainer(buckle))
+            {
+                Unbuckle(buckle, (strapUid, strapComp), null);
+            }
+            return;
+        }
+        // DS14-end
         if (xform.ParentUid != strapUid || _container.IsEntityInContainer(buckle))
         {
             Unbuckle(buckle, (strapUid, strapComp), null);
@@ -234,6 +245,14 @@ public abstract partial class SharedBuckleSystem
             return false;
 
         // Does it pass the Whitelist
+        // DS14-start
+        if (strapComp.MaxCapacity > 0 && strapComp.BuckledEntities.Count >= strapComp.MaxCapacity)
+        {
+            if (popup)
+                _popup.PopupClient(Loc.GetString("buckle-component-no-space-message"), user, PopupType.Medium);
+            return false;
+        }
+        // DS14-end
         if (_whitelistSystem.IsWhitelistFail(strapComp.Whitelist, buckleUid) ||
             _whitelistSystem.IsBlacklistPass(strapComp.Blacklist, buckleUid))
         {
@@ -351,6 +370,17 @@ public abstract partial class SharedBuckleSystem
         return true;
     }
 
+    // DS14-start
+    private Vector2 GetBuckleOffset(Entity<StrapComponent> strap, int positionIndex)
+    {
+        if (positionIndex < 0)
+            return strap.Comp.BuckleOffset;
+
+        return strap.Comp.MultiBuckleOffsets.TryGetValue(positionIndex, out var customOffset)
+            ? customOffset
+            : strap.Comp.BuckleOffset;
+    }
+    // DS14-end
     private void Buckle(Entity<BuckleComponent> buckle, Entity<StrapComponent> strap, EntityUid? user)
     {
         if (user == buckle.Owner)
@@ -359,17 +389,19 @@ public abstract partial class SharedBuckleSystem
             _adminLogger.Add(LogType.Action, LogImpact.Low, $"{ToPrettyString(user):player} buckled {ToPrettyString(buckle)} to {ToPrettyString(strap)}");
 
         _audio.PlayPredicted(strap.Comp.BuckleSound, strap, user);
-
+        // DS14-start
         SetBuckledTo(buckle, strap!);
-        Appearance.SetData(strap, StrapVisuals.State, true);
+        Appearance.SetData(strap, StrapVisuals.State, strap.Comp.BuckledEntities.Count > 0);
         Appearance.SetData(buckle, BuckleVisuals.Buckled, true);
 
         _rotationVisuals.SetHorizontalAngle(buckle.Owner, strap.Comp.Rotation);
 
+        var positionIndex = strap.Comp.BuckledEntities.Count - 1;
+        var buckleOffset = GetBuckleOffset(strap, positionIndex);
         var xform = Transform(buckle);
-        var coords = new EntityCoordinates(strap, strap.Comp.BuckleOffset);
+        var coords = new EntityCoordinates(strap, buckleOffset);
         _transform.SetCoordinates(buckle, xform, coords, rotation: Angle.Zero);
-
+        // DS14-end
         _joints.SetRelay(buckle, strap);
 
         switch (strap.Comp.Position)

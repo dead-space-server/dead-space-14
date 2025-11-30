@@ -1,0 +1,84 @@
+- type: entity
+  parent: Bed
+  id: BedWood
+  name: деревянная кровать
+  description: Удобная деревянная кровать.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/Beds/bed.rsi
+    state: bed-WOOD
+  - type: Construction
+    graph: bed
+    node: bedwood
+
+- type: entity
+  parent: Bed
+  id: BedGold
+  name: золотая кровать
+  description: Удобная золотая кровать.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/Beds/bed.rsi
+    state: bed-GOLD
+  - type: Construction
+    graph: bed
+    node: bedgold
+
+- type: entity
+  parent: Bed
+  id: DoubleBedSteel
+  name: стальная двухспальная кровать
+  description: Просторная кровать с мягким матрасом. Сон на такой - сплошное удовольствие.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/Beds/doublebed.rsi
+    state: doublebed
+  - type: Construction
+    graph: bed
+    node: doublebedsteel
+  - type: Strap
+    position: Down
+    rotation: -90
+    maxCapacity: 2
+    multiBuckleOffsets:
+      0: "0,0.18"
+      1: "0,-0.18"
+
+- type: entity
+  parent: DoubleBedSteel
+  id: DoubleBedWood
+  name: деревянная двухспальная кровать
+  description: Просторная кровать с мягким матрасом. Сон на такой - сплошное удовольствие.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/Beds/doublebed.rsi
+    state: doublebed-WOOD
+  - type: Construction
+    graph: bed
+    node: doublebedwood
+
+- type: entity
+  parent: DoubleBedSteel
+  id: DoubleBedGold
+  name: золотая двухспальная кровать
+  description: Просторная кровать с мягким матрасом. Сон на такой - сплошное удовольствие.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/Beds/doublebed.rsi
+    state: doublebed-GOLD
+  - type: Construction
+    graph: bed
+    node: doublebedgold
+
+- type: entity
+  parent: DoubleBedSteel
+  id: DoubleMattress
+  name: двухспальный матрас
+  description: Лучше спать на нём, чем на полу, я полагаю.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/Beds/doublebed.rsi
+    state: doublemattress
+  - type: Construction
+    graph: bed
+    node: doublemattress
