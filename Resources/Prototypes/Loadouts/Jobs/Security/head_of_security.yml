@@ -132,18 +132,21 @@
   equipment:
     underweart: ClothingUnderwearTopBraHeadofSecurity
 
-# Медаль
+# Medal
 - type: loadoutEffectGroup
-  id: HeadofSecurityMedal
+  id: HoSMasterMedal
   effects:
   - !type:JobRequirementLoadoutEffect
     requirement:
       !type:RoleTimeRequirement
       role: JobHeadOfSecurity
-      time: 270000 # 75 hours
+      time: 100h
 
 - type: loadout
   id: HeadOfSecurityMedal
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: HoSMasterMedal
   storage:
     back:
     - ClothingNeckSecurityHeadOfSecurityMedal

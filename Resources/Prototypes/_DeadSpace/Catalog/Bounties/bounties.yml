@@ -2,7 +2,7 @@
   id: TaipanBountyBerryDelight
   isTaipan: true
   idPrefix: SYN
-  reward: 6000
+  reward: 2000
   description: bounty-description-taipan-berry-delight
   entries:
   - name: bounty-item-taipan-berry-delight
@@ -15,7 +15,7 @@
   id: TaipanBountySuppermatter
   isTaipan: true
   idPrefix: SYN
-  reward: 15000
+  reward: 3000
   description: bounty-description-taipan-suppermatter
   entries:
   - name: bounty-item-taipan-suppermatter
@@ -28,7 +28,7 @@
   id: TaipanBountyCakeBrain
   isTaipan: true
   idPrefix: SYN
-  reward: 8000
+  reward: 2500
   description: bounty-description-taipan-brain-cake
   entries:
   - name: bounty-item-taipan-brain-cake
@@ -41,7 +41,7 @@
   id: TaipanBountyCaviarHolo
   isTaipan: true
   idPrefix: SYN
-  reward: 9500
+  reward: 3000
   description: bounty-description-taipan-holocarp-caviar
   entries:
   - name: bounty-item-taipan-holocarp-caviar
@@ -54,7 +54,7 @@
   id: TaipanBountySoupEyeball
   isTaipan: true
   idPrefix: SYN
-  reward: 7200
+  reward: 2000
   description: bounty-description-taipan-eyed-soup
   entries:
   - name: bounty-item-taipan-eyed-soup
@@ -67,7 +67,7 @@
   id: TaipanBountyJellyAmanita
   isTaipan: true
   idPrefix: SYN
-  reward: 8500
+  reward: 2500
   description: bounty-description-taipan-fly-agaric-jelly
   entries:
   - name: bounty-item-taipan-fly-agaric-jelly
@@ -80,7 +80,7 @@
   id: TaipanBountyMeatAnomaly
   isTaipan: true
   idPrefix: SYN
-  reward: 11000
+  reward: 5000
   description: bounty-description-taipan-anomaly-steak
   entries:
   - name: bounty-item-taipan-anomaly-steak
@@ -93,7 +93,7 @@
   id: TaipanBountyNoodlesCopy
   isTaipan: true
   idPrefix: SYN
-  reward: 7000
+  reward: 2000
   description: bounty-description-taipan-copypasta
   entries:
   - name: bounty-item-taipan-copypasta
@@ -106,7 +106,7 @@
   id: TaipanBountyBloodRed
   isTaipan: true
   idPrefix: SYN
-  reward: 12000
+  reward: 6000
   description: bounty-description-taipan-bloodred
   entries:
   - name: bounty-item-taipan-bloodred
@@ -132,7 +132,7 @@
   id: TaipanBountyGoldenApple
   isTaipan: true
   idPrefix: SYN
-  reward: 5000
+  reward: 1500
   description: bounty-description-taipan-golden-apple
   entries:
   - name: bounty-item-taipan-golden-apple
@@ -145,7 +145,7 @@
   id: TaipanBountyKoibean
   isTaipan: true
   idPrefix: SYN
-  reward: 7000
+  reward: 2000
   description: bounty-description-taipan-koibean
   entries:
   - name: bounty-item-taipan-koibean
@@ -158,7 +158,7 @@
   id: TaipanBountyRealCapfruit
   isTaipan: true
   idPrefix: SYN
-  reward: 8500
+  reward: 2500
   description: bounty-description-taipan-capfruit
   entries:
   - name: bounty-item-taipan-capfruit
@@ -171,7 +171,7 @@
   id: TaipanBountyMeatWheat
   isTaipan: true
   idPrefix: SYN
-  reward: 9000
+  reward: 2500
   description: bounty-description-taipan-meatwheat
   entries:
   - name: bounty-item-taipan-meatwheat
@@ -184,7 +184,7 @@
   id: TaipanBountyDeathNettle
   isTaipan: true
   idPrefix: SYN
-  reward: 9500
+  reward: 2500
   description: bounty-description-taipan-death-nettles
   entries:
   - name: bounty-item-taipan-death-nettles
@@ -197,7 +197,7 @@
   id: TaipanBountyAmbrosiaDeus
   isTaipan: true
   idPrefix: SYN
-  reward: 10500
+  reward: 3000
   description: bounty-description-taipan-ambrosia-deus
   entries:
   - name: bounty-item-taipan-ambrosia-deus
@@ -210,7 +210,7 @@
   id: TaipanBountyChameleonProjector
   isTaipan: true
   idPrefix: SYN
-  reward: 14000
+  reward: 9000
   description: bounty-description-taipan-chameleon-projector
   entries:
   - name: bounty-item-taipan-chameleon-projector
@@ -223,7 +223,7 @@
   id: TaipanBountyHypopen
   isTaipan: true
   idPrefix: SYN
-  reward: 8000
+  reward: 7000
   description: bounty-description-taipan-hypopen
   entries:
   - name: bounty-item-taipan-hypopen
@@ -236,7 +236,7 @@
   id: TaipanBountySyndiHypo
   isTaipan: true
   idPrefix: SYN
-  reward: 9500
+  reward: 8000
   description: bounty-description-taipan-syndihypo
   entries:
   - name: bounty-item-taipan-syndihypo
@@ -249,7 +249,7 @@
   id: TaipanBountySpaceCarpCube
   isTaipan: true
   idPrefix: SYN
-  reward: 7000
+  reward: 4000
   description: bounty-description-taipan-space-carp-cube
   entries:
   - name: bounty-item-taipan-space-carp-cube
@@ -262,7 +262,7 @@
   id: TaipanBountyDonkCo
   isTaipan: true
   idPrefix: SYN
-  reward: 11000
+  reward: 2000
   description: bounty-description-taipan-donkco
   entries:
   - name: bounty-item-taipan-donkco
@@ -275,7 +275,7 @@
   id: TaipanBountyCloningPod
   isTaipan: true
   idPrefix: SYN
-  reward: 12000
+  reward: 9000
   description: bounty-description-taipan-cloning-pod
   entries:
   - name: bounty-item-taipan-cloning-pod
@@ -288,7 +288,7 @@
   id: TaipanBountyEnergySwordDouble
   isTaipan: true
   idPrefix: SYN
-  reward: 13500
+  reward: 10000
   description: bounty-description-taipan-sword-double
   entries:
   - name: bounty-item-taipan-sword-double
@@ -301,7 +301,7 @@
   id: TaipanBountyEnergySword
   isTaipan: true
   idPrefix: SYN
-  reward: 12500
+  reward: 11000
   description: bounty-description-taipan-esword
   entries:
   - name: bounty-item-taipan-esword
@@ -314,7 +314,7 @@
   id: TaipanBountyTommyGun
   isTaipan: true
   idPrefix: SYN
-  reward: 11000
+  reward: 7000
   description: bounty-description-taipan-tommygun
   entries:
   - name: bounty-item-taipan-tommygun
@@ -327,7 +327,7 @@
   id: TaipanBountyChinaLake
   isTaipan: true
   idPrefix: SYN
-  reward: 9000
+  reward: 8000
   description: bounty-description-taipan-china
   entries:
   - name: bounty-item-taipan-china
@@ -340,7 +340,7 @@
   id: TaipanBountyShotgunBulldog
   isTaipan: true
   idPrefix: SYN
-  reward: 9500
+  reward: 8500
   description: bounty-description-taipan-shotgun-bulldog
   entries:
   - name: bounty-item-taipan-shotgun-bulldog
@@ -353,7 +353,7 @@
   id: TaipanBountySubMachineGunC20r
   isTaipan: true
   idPrefix: SYN
-  reward: 10000
+  reward: 9000
   description: bounty-description-taipan-c20r
   entries:
   - name: bounty-item-taipan-c20r
@@ -366,7 +366,7 @@
   id: TaipanBountyRevolverPython
   isTaipan: true
   idPrefix: SYN
-  reward: 9500
+  reward: 5500
   description: bounty-description-taipan-python
   entries:
   - name: bounty-item-taipan-python
@@ -379,7 +379,7 @@
   id: TaipanBountyPistolCobra
   isTaipan: true
   idPrefix: SYN
-  reward: 9000
+  reward: 7500
   description: bounty-description-taipan-cobra
   entries:
   - name: bounty-item-taipan-cobra
@@ -392,7 +392,7 @@
   id: TaipanBountyPistolDesertEagle
   isTaipan: true
   idPrefix: SYN
-  reward: 11500
+  reward: 9000
   description: bounty-description-taipan-deserteagle
   entries:
   - name: bounty-item-taipan-deserteagle
@@ -405,7 +405,7 @@
   id: TaipanBountyLightMachineGunL6
   isTaipan: true
   idPrefix: SYN
-  reward: 13000
+  reward: 11000
   description: bounty-description-taipan-gunl6
   entries:
   - name: bounty-item-taipan-gunl6
@@ -418,7 +418,7 @@
   id: TaipanBountySniperHristov
   isTaipan: true
   idPrefix: SYN
-  reward: 15000
+  reward: 11000
   description: bounty-description-taipan-gun-hristov
   entries:
   - name: bounty-item-taipan-gun-hristov

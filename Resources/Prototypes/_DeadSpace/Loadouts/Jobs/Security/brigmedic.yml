@@ -61,18 +61,21 @@
   equipment:
     underweart: ClothingUnderwearTopBraBrigmedic
 
-# Медаль
+# Medal
 - type: loadoutEffectGroup
-  id: BrigMedicMedal
+  id: BrigMedicMasterMedal
   effects:
   - !type:JobRequirementLoadoutEffect
     requirement:
       !type:RoleTimeRequirement
       role: JobBrigmedic
-      time: 270000 # 75 hours
+      time: 100h
 
 - type: loadout
   id: BrigMedicMedal
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: BrigMedicMasterMedal
   storage:
     back:
     - ClothingNeckSecurityBrigMedicMedal

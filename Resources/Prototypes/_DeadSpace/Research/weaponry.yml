@@ -8,7 +8,7 @@
     state: icon
   discipline: TaipanWeaponry
   tier: 1
-  cost: 7500
+  cost: 10000
   diskAvailable: false
   recipeUnlocks:
   - WeaponProtoKineticAccelerator
@@ -23,7 +23,7 @@
     state: incendiarydisplay
   discipline: TaipanWeaponry
   tier: 1
-  cost: 7500
+  cost: 10000
   diskAvailable: false
   recipeUnlocks:
   - BoxShotgunIncendiary
@@ -48,7 +48,7 @@
     state: beanbag
   discipline: TaipanWeaponry
   tier: 1
-  cost: 7500
+  cost: 10000
   diskAvailable: false
   recipeUnlocks:
   - MagazineShotgunBeanbag
@@ -64,7 +64,7 @@
     state: uranium
   discipline: TaipanWeaponry
   tier: 1
-  cost: 7500
+  cost: 10000
   diskAvailable: false
   recipeUnlocks:
   - MagazineRifleUranium
@@ -87,7 +87,7 @@
     state: icon
   discipline: TaipanWeaponry
   tier: 1
-  cost: 7500
+  cost: 10000
   diskAvailable: false
   recipeUnlocks:
   - Truncheon
@@ -103,7 +103,7 @@
     state: payload-explosive-armed
   discipline: TaipanWeaponry
   tier: 1
-  cost: 7500
+  cost: 10000
   diskAvailable: false
   recipeUnlocks:
   - SignallerAdvanced
@@ -122,7 +122,7 @@
     state: icon
   discipline: TaipanWeaponry
   tier: 1
-  cost: 7500
+  cost: 10000
   diskAvailable: false
   recipeUnlocks:
   - ClothingBackpackElectropack
@@ -135,7 +135,7 @@
     state: icon
   discipline: TaipanWeaponry
   tier: 1
-  cost: 7500
+  cost: 10000
   diskAvailable: false
   recipeUnlocks:
   - WeaponPistolViper
@@ -149,7 +149,7 @@
     state: syndicateknuckleduster
   discipline: TaipanWeaponry
   tier: 1
-  cost: 7500
+  cost: 10000
   diskAvailable: false
   recipeUnlocks:
   - ClothingHandsKnuckleDustersSyndicate
@@ -163,7 +163,7 @@
     state: icon
   discipline: TaipanWeaponry
   tier: 1
-  cost: 7500
+  cost: 10000
   diskAvailable: false
   recipeUnlocks:
   - ClothingHandsGlovesNorthStar
@@ -177,7 +177,7 @@
     state: base
   discipline: TaipanWeaponry
   tier: 1
-  cost: 7500
+  cost: 10000
   diskAvailable: false
   recipeUnlocks:
   - WeaponSniperMosin
@@ -192,7 +192,7 @@
     state: base
   discipline: TaipanWeaponry
   tier: 2
-  cost: 15000
+  cost: 25000
   diskAvailable: false
   recipeUnlocks:
   - PowerCageRechargerCircuitboard
@@ -219,7 +219,7 @@
     state: icon
   discipline: TaipanWeaponry
   tier: 2
-  cost: 15000
+  cost: 25000
   diskAvailable: false
   recipeUnlocks:
   - ClothingEyesPNVAdvSyndicate
@@ -232,7 +232,7 @@
     state: icon
   discipline: TaipanWeaponry
   tier: 2
-  cost: 15000
+  cost: 25000
   diskAvailable: false
   recipeUnlocks:
   - WeaponPistolCobra
@@ -248,7 +248,7 @@
     state: icon
   discipline: TaipanWeaponry
   tier: 2
-  cost: 15000
+  cost: 25000
   diskAvailable: false
   recipeUnlocks:
   - GrenadeShrapnel
@@ -269,7 +269,7 @@
     state: base
   discipline: TaipanWeaponry
   tier: 2
-  cost: 15000
+  cost: 25000
   diskAvailable: false
   recipeUnlocks:
   - WeaponSniperHristov
@@ -285,7 +285,7 @@
     state: icon
   discipline: TaipanWeaponry
   tier: 2
-  cost: 15000
+  cost: 25000
   diskAvailable: false
   recipeUnlocks:
   - WeaponSubMachineGunC20r
@@ -302,7 +302,7 @@
     state: icon
   discipline: TaipanWeaponry
   tier: 2
-  cost: 15000
+  cost: 25000
   diskAvailable: false
   recipeUnlocks:
   - WeaponCarbineSKS
@@ -317,7 +317,7 @@
     state: icon
   discipline: TaipanWeaponry
   tier: 2
-  cost: 15000
+  cost: 25000
   diskAvailable: false
   recipeUnlocks:
   - WeaponRifleXC67
@@ -333,7 +333,7 @@
     state: icon
   discipline: TaipanWeaponry
   tier: 2
-  cost: 15000
+  cost: 25000
   diskAvailable: false
   recipeUnlocks:
   - WeaponShotgunBulldog
@@ -348,7 +348,7 @@
     state: icon
   discipline: TaipanWeaponry
   tier: 3
-  cost: 30000
+  cost: 50000
   diskAvailable: false
   recipeUnlocks:
   - HolyHandGrenade
@@ -366,7 +366,7 @@
     state: icon
   discipline: TaipanWeaponry
   tier: 3
-  cost: 30000
+  cost: 50000
   diskAvailable: false
   recipeUnlocks:
   - WeaponLightMachineGunL6
@@ -382,7 +382,7 @@
     state: icon
   discipline: TaipanWeaponry
   tier: 3
-  cost: 30000
+  cost: 50000
   diskAvailable: false
   recipeUnlocks:
   - WeaponLauncherChinaLake
@@ -397,7 +397,7 @@
     state: icon-1
   discipline: TaipanWeaponry
   tier: 3
-  cost: 30000
+  cost: 50000
   diskAvailable: false
   recipeUnlocks:
   - WeaponEnergyCrossbow

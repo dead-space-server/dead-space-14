@@ -254,7 +254,7 @@
     - id: CargoSaleComputerCircuitboardTaipan
     - id: SalvageMagnetMachineCircuitboard
     - id: DoorRemoteTaipan
-    - id: MailTeleporterMachineCircuitboard
+    - id: OmnitoolSyndicate
     - id: AccessConfiguratorTaipan
     - id: CigarCase
       prob: 0.15

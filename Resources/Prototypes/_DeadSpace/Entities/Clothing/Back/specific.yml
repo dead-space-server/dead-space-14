@@ -1,0 +1,70 @@
+﻿- type: entity
+  parent: ClothingBackpackWaterTank
+  id: ClothingBackpackSyndieFlametank
+  name: огнемётный ранец
+  description: Комбинированный огнемётный ранец с жидким топливом и встроенным кислородным баллоном.
+  components:
+  - type: Tag
+    tags:
+    - FlamethrowerBackTank
+    - GasTank
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Tanks/Flamethrower/syndie_flametank.rsi
+    state: icon
+  - type: Item
+    size: Ginormous
+  - type: Clothing
+    sprite: _DeadSpace/Objects/Tanks/Flamethrower/syndie_flametank.rsi
+    quickEquip: false
+    slots:
+    - suitStorage
+  - type: ActivatableUI
+    key: enum.SharedGasTankUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.TransferAmountUiKey.Key:
+        type: TransferAmountBoundUserInterface
+      enum.SharedGasTankUiKey.Key:
+        type: GasTankBoundUserInterface
+  - type: GasTank
+    outputPressure: 21.3
+    air:
+      volume: 5
+      temperature: 293.15
+    tankLowPressure: 30.0
+  - type: Explosive
+    explosionType: MicroBomb
+    maxIntensity: 20
+  - type: ItemSlots
+    slots:
+      item:
+        priority: 2
+        whitelist:
+          tags:
+          - FlamethrowerNozzle
+  - type: SolutionAmmoProvider
+    solutionId: tank
+    proto: BulletFireShot
+
+- type: entity
+  parent: ClothingBackpackSyndieFlametank
+  id: ClothingBackpackSyndieFlametankFilled
+  suffix: Заполненный
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        maxVol: 1000
+        reagents:
+        - ReagentId: Phlogiston
+          Quantity: 100
+        - ReagentId: Napalm
+          Quantity: 900
+  - type: GasTank
+    outputPressure: 101.3
+    air:
+      volume: 5
+      moles:
+      - 0.451303391 # 22% oxygen
+      - 1.600075659 # 78% nitrogen
+      temperature: 293.15

@@ -134,3 +134,59 @@
   components:
   - type: LimitedCharges
     lastCharges: -1
+
+- type: entity
+  name: омнитул Синдиката
+  parent: Omnitool
+  id: OmnitoolSyndicate
+  description: Многофункциональный инструмент, объединяющий в себе функции нескольких специализированных инструментов. Позволяет выполнять широкий спектр задач.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Tools/omnitool.rsi
+    state: omnitool-screwing
+  - type: Item
+    sprite: _DeadSpace/Objects/Tools/omnitool.rsi
+    size: Small
+  - type: MultipleTool
+    statusShowBehavior: true
+    entries:
+    - behavior: Screwing
+      sprite:
+        sprite: _DeadSpace/Objects/Tools/omnitool.rsi
+        state: omnitool-screwing
+      useSound:
+        path: /Audio/Items/drill_use.ogg
+      changeSound:
+        path: /Audio/Items/change_drill.ogg
+    - behavior: Prying
+      sprite:
+        sprite: _DeadSpace/Objects/Tools/omnitool.rsi
+        state: omnitool-prying
+      useSound:
+        path: /Audio/Items/jaws_pry.ogg
+      changeSound:
+        path: /Audio/Items/change_drill.ogg
+    - behavior: Anchoring
+      sprite:
+        sprite: _DeadSpace/Objects/Tools/omnitool.rsi
+        state: omnitool-wrenching
+      useSound:
+        path: /Audio/Items/ratchet.ogg
+      changeSound:
+        path: /Audio/Items/change_drill.ogg
+    - behavior: Cutting
+      sprite:
+        sprite: _DeadSpace/Objects/Tools/omnitool.rsi
+        state: omnitool-snipping
+      useSound:
+        path: /Audio/Items/jaws_cut.ogg
+      changeSound:
+        path: /Audio/Items/change_drill.ogg
+    - behavior: Pulsing
+      sprite:
+        sprite: _DeadSpace/Objects/Tools/omnitool.rsi
+        state: omnitool-pulsing
+    - behavior: Slicing
+      sprite:
+        sprite: _DeadSpace/Objects/Tools/omnitool.rsi
+        state: omnitool-slicing

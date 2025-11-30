@@ -1,4 +1,11 @@
 - type: stealTargetGroup
+  id: SmileExtract
+  name: steal-target-groups-smile-extract
+  sprite:
+    sprite: Mobs/Aliens/slimes.rsi
+    state: rainbow_slime_extract
+
+- type: stealTargetGroup
   id: PortableCameraMonitor
   name: steal-target-groups-portable-camera-monitor
   sprite:
@@ -6,8 +13,37 @@
     state: icon
 
 - type: stealTargetGroup
+<<<<<<< HEAD
   id: TabletRD
   name: steal-target-groups-tablet-rd
   sprite:
     sprite: _DeadSpace/Objects/Misc/tabletRD.rsi
     state: tabletRD
+=======
+  id: AnimalMukhtar
+  name: steal-target-groups-animal-mukhtar
+  sprite:
+    sprite: _DeadSpace/Mobs/Pets/mukhtar.rsi
+    state: mukhtar
+
+- type: stealTargetGroup
+  id: AnimalPolly
+  name: steal-target-groups-animal-polly
+  sprite:
+    sprite: Mobs/Animals/parrot/parrot.rsi
+    state: parrot
+
+- type: stealTargetGroup
+  id: AnimalXenoMaid
+  name: steal-target-groups-animal-xeno-maid
+  sprite:
+    sprite: _DeadSpace/Mobs/Pets/xenomaid.rsi
+    state: maid
+
+- type: stealTargetGroup
+  id: AnimalLargo
+  name: steal-target-groups-animal-largo
+  sprite:
+    sprite: _Corvax/Mobs/Pets/largo.rsi
+    state: crawling
+>>>>>>> master

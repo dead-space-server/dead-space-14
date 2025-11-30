@@ -306,14 +306,14 @@
   reactants:
     Ephedrine:
       amount: 1
-    Carbon:
+# DS14-start: Desoxy rebalance
+    Methylamine:
       amount: 1
-    Iodine:
+    Phenylacetone:
       amount: 1
-    Phosphorus:
-     amount: 1
   products:
-    Desoxyephedrine: 4 #I kinda remember having to heat this up, and if you heated it up too much, it went boom, I can't remember the specific values tho.
+    Desoxyephedrine: 3 #I kinda remember having to heat this up, and if you heated it up too much, it went boom, I can't remember the specific values tho.
+# DS14-end
 
 - type: reaction
   id: Stimulants
@@ -342,7 +342,7 @@
     Diethylamine:
      amount: 1
   products:
-    Ephedrine: 4
+    Ephedrine: 2 # DS14-value
 
 - type: reaction
   id: MuteToxin

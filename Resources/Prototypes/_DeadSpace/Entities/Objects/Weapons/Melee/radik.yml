@@ -110,21 +110,7 @@
   - type: Welder
     fuelSolutionName: Holywater
     fuelReagent: Holywater
-  - type: DamageContacts
-    damage:
-      types:
-        Holy: 2
   - type: Damageable
-  - type: Fixtures
-    fixtures:
-      fix1:
-        hard: false
-        density: 7
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-7.5,-7.5,7.5,7.5"
-        layer:
-        - MidImpassable
   - type: Tag
     tags:
       - Radiance
