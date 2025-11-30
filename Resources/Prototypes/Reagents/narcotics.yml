@@ -20,7 +20,7 @@
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
-          min: 15
+          min: 20
         damage:
           types:
             Poison: 1.5

@@ -342,7 +342,7 @@
     Diethylamine:
      amount: 1
   products:
-    Ephedrine: 2 # DS14-value
+    Ephedrine: 4
 
 - type: reaction
   id: MuteToxin
@@ -420,7 +420,7 @@
   id: Diphenylmethylamine
   impact: Medium
   reactants:
-    Ethyloxyephedrine:
+    Methylamine: # DS14
       amount: 1
     SodiumCarbonate:
       amount: 1

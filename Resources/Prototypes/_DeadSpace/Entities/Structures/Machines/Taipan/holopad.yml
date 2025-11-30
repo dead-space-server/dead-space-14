@@ -41,7 +41,6 @@
     transmissionRange: Map
     compatibleRanges:
     - Map
-    - Unlimited
     ignoreTelephonesOnSameGrid: true
 
 - type: entity
