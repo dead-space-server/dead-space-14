@@ -140,6 +140,7 @@
       - CigFilter
       - RollingPaper
       - Paper
+      - Lighter
 # DS14-end
   - type: ItemCounter
     count:

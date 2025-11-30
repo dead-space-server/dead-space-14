@@ -48,6 +48,7 @@
       - CigFilter
       - RollingPaper
       - Paper
+      - Lighter
 # DS14-end
   - type: Item
     sprite: Objects/Consumable/Smokeables/Cigars/case.rsi

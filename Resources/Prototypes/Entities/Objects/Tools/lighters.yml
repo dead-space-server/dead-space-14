@@ -89,6 +89,11 @@
     color: orange
   - type: ItemTogglePointLight
   - type: PhysicalComposition
+# DS14-start
+  - type: Tag
+    tags:
+    - Lighter
+# DS14-end
 
 - type: entity
   name: cheap lighter
@@ -211,6 +216,11 @@
   - type: UseDelay
   - type: IgnitionSource
     ignited: false
+# DS14-start
+  - type: Tag
+    tags:
+    - Lighter
+# DS14-end
 
 - type: entity
   name: flippo engraved lighter
@@ -609,6 +619,7 @@
     tags:
     - DonkPocket
     - Meat
+    - Lighter # DS14
   - type: SolutionContainerManager
     solutions:
       Welder:

@@ -97,10 +97,37 @@
       - state: equipped-head
       - state: equipped-head-unshaded
         shader: unshaded
+      head-vox:
+      - state: equipped-head
+      - state: equipped-head-unshaded
+        shader: unshaded
+      head-vulpkanin:
+      - state: equipped-head
+      - state: equipped-head-unshaded
+        shader: unshaded
+      head-reptilian:
+      - state: equipped-head
+      - state: equipped-head-unshaded
+        shader: unshaded
   - type: ToggleableLightVisuals
     spriteLayer: light
     clothingVisuals:
       head:
+      - state: on-equipped-HELMET-unshaded
+        shader: unshaded
+      - state: equipped-head-light
+        shader: unshaded
+      head-vox:
+      - state: on-equipped-HELMET-unshaded
+        shader: unshaded
+      - state: equipped-head-light
+        shader: unshaded
+      head-vulpkanin:
+      - state: on-equipped-HELMET-unshaded
+        shader: unshaded
+      - state: equipped-head-light
+        shader: unshaded
+      head-reptilian:
       - state: on-equipped-HELMET-unshaded
         shader: unshaded
       - state: equipped-head-light

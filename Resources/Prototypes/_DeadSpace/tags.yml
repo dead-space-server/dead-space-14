@@ -137,6 +137,9 @@
   id: LauncherChinaLake
 
 - type: Tag
+  id: Lighter
+
+- type: Tag
   id: LightMachineGunL6
 
 - type: Tag

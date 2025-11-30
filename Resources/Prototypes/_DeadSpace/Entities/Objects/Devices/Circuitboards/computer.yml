@@ -85,7 +85,7 @@
 - type: entity
   parent: BaseComputerCircuitboardTaipan
   id: IDComputerCircuitboardTaipan
-  name: консоль ID карт (консольная плата)
+  name: консоль ID-карт (консольная плата)
   description: Консольная плата для консоли ID карт.
   components:
   - type: ComputerBoard

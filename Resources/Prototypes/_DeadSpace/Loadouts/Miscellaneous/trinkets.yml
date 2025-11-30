@@ -7,6 +7,7 @@
   storage:
     back:
     - FlippoLighter
+  groupBy: "smokeables"
 
 # Pins
 - type: loadout
@@ -14,51 +15,60 @@
   storage:
     back:
     - ClothingNeckUSSPPin
+  groupBy: "pin"
 
 - type: loadout
   id: ClothingNeckDonkPin
   storage:
     back:
     - ClothingNeckDonkPin
+  groupBy: "pin"
 
 - type: loadout
   id: ClothingNeckEarthPin
   storage:
     back:
     - ClothingNeckEarthPin
+  groupBy: "pin"
 
 - type: loadout
   id: ClothingNeckLogistikaPin
   storage:
     back:
     - ClothingNeckLogistikaPin
+  groupBy: "pin"
 
 - type: loadout
   id: ClothingNeckDeForestPin
   storage:
     back:
     - ClothingNeckDeForestPin
+  groupBy: "pin"
 
 - type: loadout
   id: ClothingNeckNakamuraPin
   storage:
     back:
     - ClothingNeckNakamuraPin
+  groupBy: "pin"
 
 - type: loadout
   id: ClothingNeckNanoTrasenPin
   storage:
     back:
     - ClothingNeckNanoTrasenPin
+  groupBy: "pin"
 
 - type: loadout
   id: ClothingNeckSyndicakePin
   storage:
     back:
     - ClothingNeckSyndicakePin
+  groupBy: "pin"
 
 - type: loadout
   id: ClothingNeckVitezstviPin
   storage:
     back:
     - ClothingNeckVitezstviPin
+  groupBy: "pin"

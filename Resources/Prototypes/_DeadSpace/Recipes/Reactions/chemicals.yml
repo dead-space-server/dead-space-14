@@ -37,10 +37,11 @@
   id: Methylamine
   impact: Low
   reactants:
-    Iodine:
+    Ammonia:
       amount: 1
-    Diethylamine:
+    Plasma:
       amount: 1
+      catalyst: true
     ChloralHydrate:
       amount: 1
   products:
@@ -51,14 +52,11 @@
   impact: Medium
   minTemp: 400
   reactants:
-    Acetone:
+    Benzene:
       amount: 1
     Phenol:
       amount: 1
-    SulfuricAcid:
+    Iodine:
       amount: 1
-    Plasma:
-      amount: 5
-      catalyst: true
   products:
     Phenylacetone: 2
