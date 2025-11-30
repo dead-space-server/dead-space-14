@@ -18,12 +18,13 @@
     tags:
     - DoorBumpOpener
 
-- type: entity
-  parent: MobParadox
-  id: MobParadoxTimed # visual effect when gibbing on round end
-  components:
-  - type: TimedDespawn
-    lifetime: 10
+# DS 14
+# - type: entity
+#   parent: MobParadox
+#   id: MobParadoxTimed # visual effect when gibbing on round end
+#   components:
+#   - type: TimedDespawn
+#     lifetime: 10
 
 # guidebook dummy
 
