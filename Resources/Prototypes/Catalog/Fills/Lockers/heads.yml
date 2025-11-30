@@ -231,6 +231,7 @@
     - id: RubberStampCMO
     - id: MedTekCartridge
     - id: ADTtelescopicBaton # ADT
+    - id: ToolAlcoTester # DS14
 
 # Hardsuit table, used for suit storage as well
 - type: entityTable

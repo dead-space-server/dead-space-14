@@ -161,6 +161,7 @@
   metabolisms:
     Alcohol:
       effects:
+      - !type:AntiAlcoholImplantEffect # DS14
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
@@ -168,11 +169,11 @@
         - !type:OrganType
           type: Dwarf
           shouldHave: false
-# DS14-start
+        # DS14-start
         - !type:OrganType
           type: Xenomorph
           shouldHave: false
-# DS14-end
+        # DS14-end
         damage:
           types:
             Poison: 1

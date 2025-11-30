@@ -1,0 +1,27 @@
+- type: entity
+  id: AntiAlcoholImplanter
+  parent: BaseImplantOnlyImplanter
+  name: имплантер "кодирования"
+  description: Предзагруженный имплантер, устанавливающий имплант, не позволяющий пациенту напиваться.
+  components:
+  - type: Implanter
+    implant: AntiAlcoholImplant
+    implantTime: 4               
+    drawTime: 2
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: Objects/Specific/Medical/implanter.rsi
+    state: implanter0
+
+
+- type: entity
+  id: AntiAlcoholImplant
+  parent: BaseSubdermalImplant
+  name: имплант "кодирования"
+  description: Подкожный имплант, быстро очищающий кровь от этанола и препятствующий опьянению.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SubdermalImplant
+    implantComponents:
+    - type: AntiAlcoholWatcher

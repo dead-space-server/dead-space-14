@@ -47,6 +47,7 @@
   - WhiteCane
   - OffsetCane
   - OffsetCaneWood
+  - ToolAlcoTester # DS14
 
 - type: latheRecipePack
   id: RollerBedsStatic

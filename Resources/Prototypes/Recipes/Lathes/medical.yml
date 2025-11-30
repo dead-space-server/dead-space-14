@@ -93,6 +93,20 @@
     Glass: 500
     Steel: 500
 
+# DS14-start
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: ToolAlcoTester
+  result: ToolAlcoTester
+  categories:
+  - Tools
+  completetime: 2
+  materials:
+    Steel: 100
+    Glass: 100
+    Plastic: 200
+# DS14-end
+
 - type: latheRecipe
   id: ClothingHandsGlovesLatex
   result: ClothingHandsGlovesLatex

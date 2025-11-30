@@ -1,0 +1,15 @@
+- type: entity
+  id: ToolAlcoTester
+  name: алкотестер
+  description: Ручной анализатор содержания этанола в крови цели.
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Medical/alcotester.rsi
+    layers:
+    - state: icon
+  - type: Item
+    size: Small
+  - type: InteractionOutline
+  - type: AlcoTester
+    ethanolId: Ethanol
