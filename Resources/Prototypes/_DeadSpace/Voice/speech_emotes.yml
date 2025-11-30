@@ -4,11 +4,13 @@
   id: Bubbling
   name: chat-emote-name-bubbling
   category: Vocal
+  icon: _DeadSpace/Interface/Emotes/bubbling.png
   whitelist:
     requireAll: true
     components:
     - Vocal
-    - SlimePerson
+    tags:
+    - SlimePersonEmotes
   blacklist:
     tags:
     - SiliconEmotes
@@ -23,11 +25,13 @@
   id: Pop
   name: chat-emote-name-pop
   category: Vocal
+  icon: _DeadSpace/Interface/Emotes/pop.png
   whitelist:
     requireAll: true
     components:
     - Vocal
-    - SlimePerson
+    tags:
+    - SlimePersonEmotes
   blacklist:
     tags:
     - SiliconEmotes
@@ -43,11 +47,13 @@
   id: Hiss
   name: chat-emote-name-hiss
   category: Vocal
+  icon: _DeadSpace/Interface/Emotes/hiss.png
   whitelist:
     requireAll: true
     components:
     - Vocal
-    - CatVocal
+    tags:
+    - CatEmotes
   blacklist:
     tags:
     - SiliconEmotes
@@ -64,11 +70,13 @@
   id: Meow
   name: chat-emote-name-meow
   category: Vocal
+  icon: _DeadSpace/Interface/Emotes/meow.png
   whitelist:
     requireAll: true
     components:
     - Vocal
-    - CatVocal
+    tags:
+    - CatEmotes
   blacklist:
     tags:
     - SiliconEmotes
@@ -90,11 +98,13 @@
   id: Mew
   name: chat-emote-name-mew
   category: Vocal
+  icon: _DeadSpace/Interface/Emotes/mew.png
   whitelist:
     requireAll: true
     components:
     - Vocal
-    - Felinid
+    tags:
+    - FelinidEmotes
   blacklist:
     tags:
     - SiliconEmotes
@@ -111,11 +121,13 @@
   id: Purr
   name: chat-emote-name-purr
   category: Vocal
+  icon: _DeadSpace/Interface/Emotes/purr.png
   whitelist:
     requireAll: true
     components:
     - Vocal
-    - Felinid
+    tags:
+    - FelinidEmotes
   blacklist:
     tags:
     - SiliconEmotes

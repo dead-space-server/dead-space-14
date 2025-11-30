@@ -1,0 +1,47 @@
+# Attempted to keep the files in alphabetical order so its easier to audit.
+# Finding individual authors is an unfeasible task. If you can reference the author please do so.
+
+- files: ["bubbling.png"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from itch.io and recolored by andrew_fenriz (discord) for Space Station 14 server Мёртвый Космос"
+  source: "https://github.com/AndrewFenriz"
+
+- files: ["pop.png"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from itch.io and recolored by andrew_fenriz (discord) for Space Station 14 server Мёртвый Космос"
+  source: "https://github.com/AndrewFenriz"
+
+- files: ["growl.png"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Created by andrew_fenriz (discord) for Space Station 14 server Мёртвый Космос"
+  source: "https://github.com/AndrewFenriz"
+
+- files: ["howl.png"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Created by andrew_fenriz (discord) for Space Station 14 server Мёртвый Космос"
+  source: "https://github.com/AndrewFenriz"
+
+- files: ["hiss.png"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Created by andrew_fenriz (discord) for Space Station 14 server Мёртвый Космос"
+  source: "https://github.com/AndrewFenriz"
+
+- files: ["meow.png"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Created by andrew_fenriz (discord) for Space Station 14 server Мёртвый Космос"
+  source: "https://github.com/AndrewFenriz"
+
+- files: ["mew.png"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Created by andrew_fenriz (discord) for Space Station 14 server Мёртвый Космос"
+  source: "https://github.com/HacksLua"
+
+- files: ["purr.png"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Created by andrew_fenriz (discord) for Space Station 14 server Мёртвый Космос"
+  source: "https://github.com/AndrewFenriz"
+
+- files: ["sneeze.png"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Created by Sarahon, resprited by andrew_fenriz (discord) for Space Station 14 server Мёртвый Космос"
+  source: "https://github.com/AndrewFenriz"

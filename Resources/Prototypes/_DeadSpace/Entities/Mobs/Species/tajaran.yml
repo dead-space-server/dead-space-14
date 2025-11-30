@@ -55,7 +55,13 @@
       Unsexed: MaleTajaran
   # - type: Speech
   #   speechSounds: Tajaran
-  - type: CatVocal # For cat emotes
+  - type: Tag
+    tags:
+    - CatEmotes
+    - CanPilot
+    - FootstepSound
+    - DoorBumpOpener
+    - AnomalyHost
   - type: Language
     selectedLanguage: GeneralLanguage
     knownLanguages:

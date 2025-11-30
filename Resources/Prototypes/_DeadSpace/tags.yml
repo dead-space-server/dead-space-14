@@ -41,6 +41,9 @@
   id: CakeBrain
 
 - type: Tag
+  id: CatEmotes
+
+- type: Tag
   id: CaviarHolo
 
 - type: Tag
@@ -90,6 +93,9 @@
 
 - type: Tag
   id: FelinidFood
+
+- type: Tag
+  id: FelinidEmotes
 
 - type: Tag
   id: FittableInBackpackCase
@@ -212,6 +218,9 @@
   id: SiliconIPSIPCEmotes
 
 - type: Tag
+  id: SlimePersonEmotes
+
+- type: Tag
   id: SMGTommyGun
 
 - type: Tag
@@ -300,6 +309,9 @@
 
 - type: Tag
   id: TrashBagBlue
+
+- type: Tag
+  id: VulpkaninEmotes
 
 - type: Tag
   id: WeldingMaskFlame

@@ -53,17 +53,6 @@
 
 - type: entity
   parent: BaseAction
-  id: ActionOpenEmotes
-  name: Open emote panel
-  components:
-  - type: Action
-    icon: Interface/Actions/emotes.png
-    checkCanInteract: false
-  - type: InstantAction
-    event: !type:OpenEmotesActionEvent
-
-- type: entity
-  parent: BaseAction
   id: ActionScream
   name: Scream
   description: AAAAAAAAAAAAAAAAAAAAAAAAA
