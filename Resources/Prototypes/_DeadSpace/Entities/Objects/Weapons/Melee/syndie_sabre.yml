@@ -7,11 +7,13 @@
   - type: Sprite
     sprite: _DeadSpace/Objects/Weapons/Melee/syndie_sabre.rsi
   - type: MeleeWeapon
-    attackRate: 1
+    ResistanceBypass: true # DS14
+    attackRate: 1.1
     damage:
       types:
-        Slash: 12
-        Piercing: 20
+        Slash: 3
+        Piercing: 9
+        Structural: 8 # DS14
     soundHit:
         path: /Audio/Weapons/bladeslice.ogg
     wideAnimationRotation: -60
@@ -19,6 +21,7 @@
     reflectProb: .15
     spread: 45
   - type: DamageOtherOnHit
+    ignoreResistances: true # DS14
     damage:
       types:
         Slash: 10

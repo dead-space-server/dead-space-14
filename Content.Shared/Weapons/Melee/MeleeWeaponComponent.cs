@@ -68,7 +68,7 @@ public sealed partial class MeleeWeaponComponent : Component
     /// <summary>
     /// If true, attacks will bypass armor resistances.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField("ResistanceBypass"), AutoNetworkedField]
     public bool ResistanceBypass = false;
 
     /// <summary>
