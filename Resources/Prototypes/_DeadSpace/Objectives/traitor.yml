@@ -1,0 +1,8 @@
+## rd
+
+- type: entity
+  parent: BaseRDStealObjective
+  id: TabletRDStealObjective
+  components:
+  - type: StealCondition
+    stealGroup: TabletRD
