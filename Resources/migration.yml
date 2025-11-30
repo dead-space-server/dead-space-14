@@ -1104,7 +1104,6 @@ LedLightTubeBlue: LightTubeCrystalBlue
 LedLightTubeYellow: LightTubeCrystalYellow
 LedLightTubeViolet: LightBulbCrystalPink
 SpawnMobCrabAtmos: null
-SpawnMobSmile: null
 
 # 2025-08-29
 PrefilledSyringe: Syringe
