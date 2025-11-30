@@ -82,6 +82,7 @@
   - type: ShowJobIcons
   - type: Tag
     tags:
+    - HudCommand # DS14
     - PetWearable
     - WhitelistChameleon
 

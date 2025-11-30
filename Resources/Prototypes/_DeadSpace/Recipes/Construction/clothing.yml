@@ -13,3 +13,11 @@
   targetNode: clothingCraftArmor
   category: construction-category-clothing
   objectType: Item
+
+- type: construction
+  id: ClothingEyesHudMedCommand
+  graph: HudMedCom
+  startNode: start
+  targetNode: medcomHud
+  category: construction-category-clothing
+  objectType: Item
