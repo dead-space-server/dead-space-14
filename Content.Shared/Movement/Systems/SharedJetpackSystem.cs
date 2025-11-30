@@ -4,6 +4,7 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Popups;
+using Content.Shared.Zombies;
 using Robust.Shared.Containers;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
@@ -170,7 +171,10 @@ public abstract class SharedJetpackSystem : EntitySystem
                 return;
             user = container.Owner;
         }
-
+        // DS14-start
+        if (HasComp<ZombieComponent>(user))
+            return;
+        // DS14-end
         if (enabled)
         {
             SetupUser(user.Value, uid, component);
