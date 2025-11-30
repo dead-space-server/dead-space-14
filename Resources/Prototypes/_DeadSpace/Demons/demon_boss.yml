@@ -140,6 +140,10 @@
       Male: Demon
       Female: Demon
       Unsexed: Demon
+  #DS14-start
+  - type: GhostRoleNotifys 
+    groupPrototype: DemonBoss
+  #DS14-end
 
 - type: entity
   parent: BaseMobDemonBoss

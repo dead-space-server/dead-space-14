@@ -273,6 +273,8 @@
     name: Некроморф
     description: Вы некроморф, убейте всех своих врагов.
   - type: GhostTakeoverAvailable
+  - type: GhostRoleNotifys
+    groupPrototype: NecromorfGroup
 
 - type: randomHumanoidSettings
   id: HiveNecromorf
@@ -284,6 +286,8 @@
     name: Некроморф улей
     description: Вы некроморф, убейте всех своих врагов.
   - type: GhostTakeoverAvailable
+  - type: GhostRoleNotifys
+    groupPrototype: NecromorfGroup
 
 - type: randomHumanoidSettings
   id: PregnantNecromorf
@@ -295,6 +299,8 @@
     name: Некроморф беременный
     description: Вы некроморф, убейте всех своих врагов.
   - type: GhostTakeoverAvailable
+  - type: GhostRoleNotifys 
+    groupPrototype: NecromorfGroup
 
 - type: randomHumanoidSettings
   id: DevaNecromorf
@@ -306,6 +312,8 @@
     name: Некроморф дева
     description: Вы некроморф, убейте всех своих врагов.
   - type: GhostTakeoverAvailable
+  - type: GhostRoleNotifys 
+    groupPrototype: NecromorfGroup
 
 - type: randomHumanoidSettings
   id: SlasherNecromorf
@@ -317,6 +325,8 @@
     name: Некроморф расчленитель
     description: Вы некроморф, убейте всех своих врагов.
   - type: GhostTakeoverAvailable
+  - type: GhostRoleNotifys 
+    groupPrototype: NecromorfGroup
 
 - type: randomHumanoidSettings
   id: TwitcherNecromorf
@@ -328,6 +338,8 @@
     name: Некроморф твитчер
     description: Вы некроморф, убейте всех своих врагов.
   - type: GhostTakeoverAvailable
+  - type: GhostRoleNotifys 
+    groupPrototype: NecromorfGroup
 
 - type: randomHumanoidSettings
   id: CorpseCollectorNecromorf
@@ -339,6 +351,8 @@
     name: Некроморф собиратель трупов
     description: Вы некроморф, убейте всех своих врагов.
   - type: GhostTakeoverAvailable
+  - type: GhostRoleNotifys 
+    groupPrototype: CorpseCollectorNecromorfping
 
 - type: entity
   id: RandomNecromorfSpawner

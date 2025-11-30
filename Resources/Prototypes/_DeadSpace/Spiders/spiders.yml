@@ -176,6 +176,8 @@
     knownLanguages:
     - ArachnidLanguage
   - type: NoSlip
+  - type: GhostRoleNotifys 
+    groupPrototype: SpiderTerrorBase
 
 - type: entity
   name: паук королевской крови
@@ -211,6 +213,8 @@
     bloodCosts: # Цены
       MobSpiderTerrorRoyalGuard: 100
       MobSpiderTerrorPrincess: 150
+  - type: GhostRoleNotifys 
+    groupPrototype: SpiderTerrorKing
 
 - type: entity
   name: героический паук королевской крови
@@ -233,6 +237,8 @@
     name: Героический паук ужаса королевской крови
     description: Паук Ужаса.
     rules: ghost-role-information-rules-team-antagonist
+  - type: GhostRoleNotifys 
+    groupPrototype: SpiderTerrorGeroick
 
 - type: entity
   name: паук страж

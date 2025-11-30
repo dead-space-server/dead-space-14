@@ -1,0 +1,19 @@
+<!-- Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT-->
+<Control xmlns="https://spacestation14.io"
+            xmlns:tabs="clr-namespace:Content.Client.Options.UI.Tabs"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:ui="clr-namespace:Content.Client.Options.UI">
+    <BoxContainer Orientation="Vertical">
+        <BoxContainer Orientation="Vertical" Margin="8 8 8 8" VerticalExpand="True">
+            <Label Text="{Loc 'ui-options-tab-ping'}"
+                   StyleClasses="LabelKeyText"/>
+            <Button Name="SaveButton" Text="{Loc 'ui-options-save-button'}" />
+            <ScrollContainer VerticalExpand="True">
+                <BoxContainer Name="PingsCont" Orientation="Vertical" Margin="0 3 0 0">
+                    <!-- Keybind buttons are added here in the C# code -->
+                </BoxContainer>
+            </ScrollContainer>
+        </BoxContainer>
+        <ui:OptionsTabControlRow Name="Control" Access="Public" />
+    </BoxContainer>
+</Control>

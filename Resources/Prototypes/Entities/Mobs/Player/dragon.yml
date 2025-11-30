@@ -175,6 +175,8 @@
     color: "#22334411"
     animation: true
     transitionSpeed: 100
+  - type: GhostRoleNotifys 
+    groupPrototype: Dragonping
   # DS14-end
 
 - type: entity

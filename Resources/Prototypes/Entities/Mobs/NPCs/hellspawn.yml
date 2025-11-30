@@ -102,3 +102,7 @@
     energy: 4.5
     color: "#ff4242"
     castShadows: false
+  #DS14-start
+  - type: GhostRoleNotifys 
+    groupPrototype: HellSpawnping
+  #DS14-end

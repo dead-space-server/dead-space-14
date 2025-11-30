@@ -12,6 +12,9 @@ ui-options-apply = Применить
 ui-options-reset-all = Сбросить всё и применить
 ui-options-default = По-умолчанию
 ui-options-value-percent = { TOSTRING($value, "P0") }
+#DS14-start
+ui-options-tab-ping = Пинг меню
+#DS14-end
 
 # Misc/General menu
 
@@ -22,6 +25,12 @@ ui-options-general-cursor = Курсор
 ui-options-general-speech = Речь
 ui-options-general-storage = Инвентарь
 ui-options-general-accessibility = Специальные возможности
+#DS14-start
+ui-options-cooldown-ping = Задержка для пинга
+ui-options-ping = Пинг
+ui-options-ping-permission = Получать уведомление о появлении роли
+ui-options-sound-ping = выбор звука пинга
+#DS14-end
 
 ## Audio menu
 
@@ -387,3 +396,9 @@ ui-options-enable-overlay-starting-job = Показывать начальную
 ui-options-overlay-merge-distance = Дальность сложения оверлея
 ui-options-overlay-ghost-fade-distance = Диапазон затухания наложения призрака от мыши
 ui-options-overlay-ghost-hide-distance = Диапазон скрытия наложения призрака от мыши
+
+##DS14-start
+## Ping menu
+
+ui-options-save-button = Сохранить
+##DS14-end 

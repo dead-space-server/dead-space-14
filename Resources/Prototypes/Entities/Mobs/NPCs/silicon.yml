@@ -1,4 +1,4 @@
-# Used for generic robotic entities (like Hivelords)
+ # Used for generic robotic entities (like Hivelords)
 - type: entity
   save: false
   abstract: true
@@ -221,6 +221,8 @@
       path: /Audio/Items/bikehorn.ogg
       params:
         variation: 0.125
+  - type: GhostRoleNotifys #DS14
+    groupPrototype: Botsping
 
 - type: entity
   parent: MobHonkBot
@@ -262,6 +264,10 @@
     totalIntensity: 10
     intensitySlope: 5
     canCreateVacuum: false
+  #DS14-start
+  - type: GhostRoleNotifys 
+    groupPrototype: Botsping
+  #DS14-end
 
 - type: entity
   parent: MobSiliconBase
@@ -407,6 +413,10 @@
     interactFailureString: petting-failure-mimebot
   - type: Inventory
     templateId: head
+  #DS14-start
+  - type: GhostRoleNotifys 
+    groupPrototype: Botsping
+  #DS14-end
 
 - type: entity
   parent: MobSiliconBase
@@ -478,6 +488,10 @@
     - Supply
   - type: Puller
     needsHands: false
+  #DS14-start
+  - type: GhostRoleNotifys 
+    groupPrototype: Botsping
+  #DS14-end
 
 - type: entity
   parent: [ MobSiliconBase, MobCombat ]

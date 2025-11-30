@@ -95,6 +95,10 @@
       - MindShieldImplant
       - DeathRattleImplantCentcomm
       - TrackingImplant
+    #DS14-start
+    - type: GhostRoleNotifys 
+      groupPrototype: ERTGroup
+    #DS14-end
 
 - type: randomHumanoidSettings
   id: EventHumanoidERTZombieImmune
@@ -151,6 +155,8 @@
     prototypes: [ DeathSquadGear ]
   - type: TTS
     voice: Garithos
+  - type: GhostRoleNotifys #DS14
+    groupPrototype: DeathSquadGroup
 
 # ERT
 ## Leader
@@ -836,3 +842,5 @@
         settings: default
     - type: GhostTakeoverAvailable
     - type: Cluwne
+    - type: GhostRoleNotifys #DS14
+      groupPrototype: EventGroup

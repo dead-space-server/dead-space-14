@@ -124,6 +124,8 @@
     knownLanguages:
     - DemonLanguage
     - GeneralLanguage
+  - type: GhostRoleNotifys
+    groupPrototype: DemonShadowping
 
 - type: entity
   name: теневая рука

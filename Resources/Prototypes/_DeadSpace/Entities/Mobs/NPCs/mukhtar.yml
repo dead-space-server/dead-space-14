@@ -121,6 +121,8 @@
     normalState: Monkey_burning
   - type: StealTarget
     stealGroup: AnimalMukhtar
+  - type: GhostRoleNotifys
+    groupPrototype: Mukhtarping
 
 - type: startingGear
   id: MobMukhtarGear

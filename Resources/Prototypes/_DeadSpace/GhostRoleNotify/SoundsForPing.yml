@@ -1,0 +1,54 @@
+- type: soundForPing
+  id: Ballon_pop
+  name: Лопнувший шарик 
+  path: /Audio/Effects/balloon-pop.ogg
+
+- type: soundForPing
+  id: Ahelp
+  name: Ахелп 
+  path: /Audio/Effects/adminhelp.ogg
+
+- type: soundForPing
+  id: Chime
+  name: Звук появления из коробки
+  path: /Audio/Effects/chime.ogg
+
+- type: soundForPing
+  id: Thunk
+  name: Тунк
+  path: /Audio/Effects/thunk.ogg
+
+- type: soundForPing
+  id: message1
+  name: Сообщение1
+  path: Audio/_DeadSpace/Effects/GhostPingSounds/message1.ogg
+
+- type: soundForPing
+  id: message2
+  name: Сообщение2
+  path: Audio/_DeadSpace/Effects/GhostPingSounds/message2.ogg
+
+- type: soundForPing
+  id: message3
+  name: Сообщение3
+  path: Audio/_DeadSpace/Effects/GhostPingSounds/message3.ogg
+
+- type: soundForPing
+  id: zzzt
+  name: Зззт
+  path: /Audio/Effects/zzzt.ogg
+
+- type: soundForPing
+  id: Water
+  name: Падение в воду
+  path: /Audio/Effects/waterswirl.ogg
+
+- type: soundForPing
+  id: Sadtrombone
+  name: Грустный трамбон
+  path: /Audio/Effects/sadtrombone.ogg
+
+- type: soundForPing
+  id: Pop
+  name: Поп
+  path: /Audio/Effects/pop_high.ogg

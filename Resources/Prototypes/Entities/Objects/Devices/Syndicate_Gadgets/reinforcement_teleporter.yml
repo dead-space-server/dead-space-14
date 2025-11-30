@@ -33,6 +33,10 @@
   - type: GhostRoleMobSpawner
     prototype: MobHumanSyndicateAgentSpy
     selectablePrototypes: ["SyndicateAgentMedic", "SyndicateAgentSpy", "SyndicateAgentThief"]
+  #DS14-start
+  - type: GhostRoleNotifys 
+    groupPrototype: SyndicateGroup
+  #DS14-end
 
 - type: entity
   parent: ReinforcementRadio
@@ -50,7 +54,11 @@
     raffle:
       settings: default
   - type: GhostRoleMobSpawner
-    prototype: MobHumanSyndicateAgentNukeops
+    prototype: MobHumanSyndicateAgentNukeops  
+    #DS14-start
+  - type: GhostRoleNotifys 
+    groupPrototype: Operativeping
+    #DS14-end
 
 - type: entity
   parent: ReinforcementRadio
@@ -69,6 +77,10 @@
   - type: GhostRoleMobSpawner
     prototype: MobMonkeySyndicateAgent
     selectablePrototypes: ["SyndicateMonkey", "SyndicateKobold"]
+  #DS14-start
+  - type: GhostRoleNotifys 
+    groupPrototype: SyndicateGroup
+  #DS14-end
 
 - type: entity
   parent: ReinforcementRadioSyndicateAncestor
@@ -80,6 +92,10 @@
   - type: GhostRoleMobSpawner
     prototype: MobMonkeySyndicateAgentNukeops
     selectablePrototypes: ["SyndicateMonkeyNukeops", "SyndicateKoboldNukeops"]
+  #DS14-start
+  - type: GhostRoleNotifys
+    groupPrototype: SyndicateGroup
+  #DS14-end
 
 - type: entity
   parent: ReinforcementRadio
@@ -99,6 +115,10 @@
     prototype: MobCatSyndy
   - type: EmitSoundOnUse
     sound: /Audio/Animals/cat_meow.ogg
+  #DS14-start
+  - type: GhostRoleNotifys 
+    groupPrototype: ExplosiveCat
+  #DS14-end
 
 - type: entity
   parent: ReinforcementRadio
@@ -118,3 +138,7 @@
       job: Borg
     - type: GhostRoleMobSpawner
       prototype: PlayerBorgSyndicateAssaultBattery
+    #DS14-start
+    - type: GhostRoleNotifys 
+      groupPrototype: SyndicateGroup
+    #DS14-end

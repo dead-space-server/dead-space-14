@@ -1,0 +1,197 @@
+# НЕ ДЕЛАТЬ ДЛЯ ИВЕНТОВ СВОЮ ГРУППУ ЕСТЬ EventGroup
+
+- type: ghostNotifyGroup
+  id: DemonBoss
+  name: Демон Вестник
+
+- type: ghostNotifyGroup
+  id: DemonSlaughter
+  name: Бронированный демон
+
+- type: ghostNotifyGroup
+  id: DemonHonkerping
+  name: Демон-клоун
+
+- type: ghostNotifyGroup
+  id: DemonJaunt
+  name: Гуляющий демон
+
+- type: ghostNotifyGroup
+  id: DemonShadowping
+  name: Теневой демон
+
+- type: ghostNotifyGroup
+  id: HellSpawnping
+  name: Адское отродье
+  
+- type: ghostNotifyGroup
+  id: Sithping
+  name: Ситх
+ 
+- type: ghostNotifyGroup
+  id: SpiderTerrorBase
+  name: Паук-страж ужаса
+
+- type: ghostNotifyGroup
+  id: SpiderTerrorKing
+  name: Паук королевской крови
+
+- type: ghostNotifyGroup
+  id: SpiderTerrorGeroick
+  name: Героический паук королевской крови
+
+- type: ghostNotifyGroup
+  id: Blob
+  name: Блоб
+
+- type: ghostNotifyGroup
+  id: PirateSkeletonping
+  name: Скелет-пират
+
+- type: ghostNotifyGroup
+  id: Skeletonping
+  name: Скелет 
+
+- type: ghostNotifyGroup
+  id: BlobBlobernaut
+  name: Блобернаут
+
+- type: ghostNotifyGroup
+  id: Largoping
+  name: Ларго
+
+- type: ghostNotifyGroup
+  id: Mukhtarping
+  name: Мухтар
+
+- type: ghostNotifyGroup
+  id: Kangarooping
+  name: Кенгуру
+
+- type: ghostNotifyGroup
+  id: PunPunping
+  name: Пун-Пун
+
+- type: ghostNotifyGroup
+  id: PetsGroup
+  name: Питомцы
+
+- type: ghostNotifyGroup
+  id: Ratking
+  name: Король крыс
+
+- type: ghostNotifyGroup
+  id: SyndicateBorgGroup
+  name: Борги Синдиката
+
+- type: ghostNotifyGroup
+  id: NecromorfGroup
+  name: Некроморфы
+
+- type: ghostNotifyGroup
+  id: CorpseCollectorNecromorfping
+  name: Собиратель трупов
+
+- type: ghostNotifyGroup
+  id: CBURNGroup
+  name: Рхбзз
+
+- type: ghostNotifyGroup
+  id: Dragonping
+  name: Космический дракон
+
+- type: ghostNotifyGroup
+  id: Nijaping
+  name: Космический ниндзя
+
+- type: ghostNotifyGroup
+  id: Paradoxping
+  name: Парадоксальный клон
+
+- type: ghostNotifyGroup
+  id: DerelictCyborg
+  name: Неисправный борг
+
+- type: ghostNotifyGroup
+  id: Wizardping
+  name: Маг
+
+- type: ghostNotifyGroup
+  id: RevenantPing
+  name: Ревенант
+
+- type: ghostNotifyGroup
+  id: Behonkerping
+  name: Бехонкер
+
+- type: ghostNotifyGroup
+  id: ExplosiveCat
+  name: Взрывной котёнок
+
+- type: ghostNotifyGroup
+  id: Holoparasiteping
+  name: Голопаразит
+
+- type: ghostNotifyGroup
+  id: HoloClownping
+  name: Голоклоун
+
+- type: ghostNotifyGroup
+  id: ifritGuard
+  name: Ифрит
+
+- type: ghostNotifyGroup
+  id: SpidersGroup
+  name: Паук
+
+- type: ghostNotifyGroup
+  id: Slimeping
+  name: Слаймы
+
+- type: ghostNotifyGroup
+  id: LoneOper
+  name: Одинокий ядерный оперативник
+
+- type: ghostNotifyGroup
+  id: CommanderOperatives
+  name: Командир ЯО
+
+- type: ghostNotifyGroup
+  id: OperativeMedic
+  name: Медик ядерных оперативников
+
+- type: ghostNotifyGroup
+  id: Operativeping
+  name: Ядерный оперативник
+
+- type: ghostNotifyGroup
+  id: CarpsGroup
+  name: Космический карп
+
+- type: ghostNotifyGroup
+  id: TomatoKillerping
+  name: Томат-убийца
+
+- type: ghostNotifyGroup
+  id: Botsping
+  name: Боты
+
+- type: ghostNotifyGroup
+  id: SyndicateGroup
+  name: Агенты Синдиката (подкрепления)
+
+- type: ghostNotifyGroup
+  id: ERTGroup
+  name: Обр
+
+- type: ghostNotifyGroup
+  id: DeathSquadGroup
+  name: Эскадрон Смерти
+
+- type: ghostNotifyGroup
+  id: EventGroup
+  name: Ивенты
+
+- type: ghostNotifyGroup
+  id: VisitorGroup
+  name: Посетители

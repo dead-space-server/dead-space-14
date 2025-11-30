@@ -88,4 +88,6 @@
       necroPrototype: NecroBrute
     - type: StealTarget
       stealGroup: AnimalLargo
+    - type: GhostRoleNotifys
+      groupPrototype: Largoping
     # DS14-end

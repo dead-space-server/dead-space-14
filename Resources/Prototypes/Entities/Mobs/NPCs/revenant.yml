@@ -126,3 +126,7 @@
     - VulpkaninLanguage
     - XenomorphLanguage
   # DS14-Languages-end
+  # DS14-start
+  - type: GhostRoleNotifys
+    groupPrototype: RevenantPing
+  # DS14-end

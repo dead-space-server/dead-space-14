@@ -30,4 +30,8 @@
   - type: HTN
     rootTask:
       task: SimpleHostileCompound
+  #DS14-start
+  - type: GhostRoleNotifys 
+    groupPrototype: EventGroup
+  #DS14-end
   

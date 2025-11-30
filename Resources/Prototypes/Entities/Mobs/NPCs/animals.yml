@@ -657,6 +657,10 @@
           32:
             sprite: Mobs/Animals/mothroach/displacement.rsi
             state: neck
+  #DS14-start
+  - type: GhostRoleNotifys 
+    groupPrototype: PetsGroup
+  #DS14-end
 
 
 # Note that the mallard duck is actually a male drake mallard, with the brown duck being the female variant of the same species, however ss14 lacks sex specific textures
@@ -1338,9 +1342,13 @@
   - type: HTN
     rootTask:
       task: SimpleHostileCompound
+  #DS14-start
   - type: Sanity # DS14
   - type: TTS # DS14
     voice: Ycf
+  - type: GhostRoleNotifys #DS14
+    groupPrototype: Kangarooping
+  #DS14-end
 
 - type: entity
   name: boxing kangaroo
@@ -1511,11 +1519,13 @@
     selectedLanguage: MonkeyLanguage
     knownLanguages: 
     - MonkeyLanguage
+  - type: GhostRoleNotifys 
+    groupPrototype: PetsGroup
   - type: Tag
     tags:
     - MonkeyKingTarget # DS14
   # DS14-end
-
+  
 - type: entity
   name: monkey
   id: MobBaseSyndicateMonkey
@@ -1548,6 +1558,10 @@
   - type: GhostTakeoverAvailable
   - type: Loadout
     prototypes: [SyndicateOperativeGearMonkey]
+  #DS14-start
+  - type: GhostRoleNotifys 
+    groupPrototype: SyndicateGroup
+  #DS14-end
 
 - type: entity
   id: MobMonkeySyndicateAgent
@@ -1682,6 +1696,10 @@
     name: ghost-role-information-kobold-name
     description: ghost-role-information-kobold-description
     rules: ghost-role-information-nonantagonist-rules
+  #DS14-start
+  - type: GhostRoleNotifys 
+    groupPrototype: PetsGroup
+  #DS14-end
 
 - type: entity
   name: kobold
@@ -1726,6 +1744,10 @@
     # make the player a traitor once its taken
   - type: AutoTraitor
     profile: TraitorReinforcement
+  #DS14-start
+  - type: GhostRoleNotifys 
+    groupPrototype: SyndicateGroup
+  #DS14-end
 
 - type: entity
   id: MobKoboldSyndicateAgentNukeops # Reinforcement exclusive to nukeops uplink
@@ -1928,6 +1950,10 @@
         recursive: false
   - type: NecromorfAfterInfection
     necroPrototype: NecroSmall
+  #DS14-start
+  - type: GhostRoleNotifys 
+    groupPrototype: PetsGroup
+  #DS14-end
 
 - type: entity
   parent: MobMouse
@@ -2626,6 +2652,10 @@
     raffle:
       settings: short
   - type: GhostTakeoverAvailable
+  #DS14-start
+  - type: GhostRoleNotifys 
+    groupPrototype: SpidersGroup
+  #DS14-end
 
 - type: entity
   name: tarantula
@@ -3256,6 +3286,8 @@
     - GeneralLanguage
     unlockLanguagesAfterMakeSentient:
     - GeneralLanguage
+  - type: GhostRoleNotifys 
+    groupPrototype: ExplosiveCat
   # DS14-end
 
 - type: entity
@@ -3611,8 +3643,12 @@
       behaviors:
       - !type:GibBehavior
         recursive: false
-  - type: NecromorfAfterInfection # DS14
+  #DS14-start
+  - type: NecromorfAfterInfection 
     necroPrototype: NecroSmall
+  - type: GhostRoleNotifys 
+    groupPrototype: PetsGroup
+  #DS14-end
 
 - type: entity
   name: pig

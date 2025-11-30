@@ -29,6 +29,7 @@ using Content.Shared.Chat;
 using Content.Shared.IoC;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Players.RateLimiting;
+using Content.Client.DeadSpace.NotifySystem.NotifyHelpers;
 
 namespace Content.Client.IoC
 {
@@ -38,6 +39,7 @@ namespace Content.Client.IoC
         {
             SharedContentIoC.Register(collection);
             collection.Register<IParallaxManager, ParallaxManager>();
+            collection.Register<INotifyHelper, NotifyHelper>(); //DS14
             collection.Register<GeneratedParallaxCache>();
             collection.Register<IChatManager, ChatManager>();
             collection.Register<ISharedChatManager, ChatManager>();

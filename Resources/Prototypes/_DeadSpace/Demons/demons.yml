@@ -159,6 +159,10 @@
     rules: ghost-role-information-slaughter-rules
   - type: Reflect
     reflectProb: 0.25
+  #DS14-start
+  - type: GhostRoleNotifys 
+    groupPrototype: DemonSlaughter
+  #DS14-end
 
 - type: entity
   parent: MobDemonSlaughter
@@ -226,6 +230,10 @@
     name: ghost-role-information-honker-name
     description: ghost-role-information-honker-description
     rules: ghost-role-information-honker-rules
+  #DS14-start
+  - type: GhostRoleNotifys #DS14
+    groupPrototype: DemonHonkerping
+  #DS14-end
 
 - type: entity
   parent: BaseMobDemonRS
@@ -260,6 +268,10 @@
     soundGunshot: /Audio/Magic/fireball.ogg
   - type: BallisticAmmoProvider
     proto: FireballBullet
+  #DS14-start
+  - type: GhostRoleNotifys #DS14
+    groupPrototype: DemonIfrit
+  #DS14-end
 
 - type: entity
   parent: BaseMobDemonRS
@@ -305,7 +317,11 @@
         Blunt: 7
         Piercing: 1
         Heat: 5
-
+  #DS14-start
+  - type: GhostRoleNotifys
+    groupPrototype: DemonJaunt
+  #DS14-end
+  
 - type: entity
   parent: BaseMobDemonNarSi
   id: MobDemonBloodyArms

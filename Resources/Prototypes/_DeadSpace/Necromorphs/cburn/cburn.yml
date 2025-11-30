@@ -136,6 +136,8 @@
       - NamesFirstERTLeader
       - NamesLastERT
       nameFormat: name-format-ert
+    - type: GhostRoleNotifys 
+      groupPrototype: CBURNGroup
 
 - type: entity
   id: RandomHumanoidSpawnerCBURNSoldierNECRO
@@ -190,3 +192,5 @@
       - NamesFirstERT
       - NamesLastERT
       nameFormat: name-format-ert
+    - type: GhostRoleNotifys 
+      groupPrototype: CBURNGroup

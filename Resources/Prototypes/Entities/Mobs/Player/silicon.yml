@@ -611,6 +611,10 @@
         settings: default
       job: Borg
     - type: GhostTakeoverAvailable
+    #DS14-start
+    - type: GhostRoleNotifys 
+      groupPrototype: SyndicateBorgGroup
+    #DS14-end
 
 - type: entity
   id: PlayerBorgSyndicateSaboteurBattery
@@ -645,6 +649,10 @@
         settings: default
       job: Borg
     - type: GhostTakeoverAvailable
+    #DS14-start
+    - type: GhostRoleNotifys 
+      groupPrototype: SyndicateBorgGroup
+    #DS14-end
 
 - type: entity
   name: syndicate invasion borg spawner
@@ -699,6 +707,10 @@
     reregister: false
     job: Borg
   - type: GhostTakeoverAvailable
+  #DS14-start
+  - type: GhostRoleNotifys 
+    groupPrototype: DerelictCyborg
+  #DS14-end
 
 - type: entity
   parent: BorgChassisDerelict
@@ -734,6 +746,10 @@
       reregister: false
       job: Borg
     - type: GhostTakeoverAvailable
+    #DS14-start
+    - type: GhostRoleNotifys 
+      groupPrototype: DerelictCyborg
+    #DS14-end
 
 - type: entity
   parent: JanitorBorgChassisDerelict
@@ -771,6 +787,10 @@
     reregister: false
     job: Borg
   - type: GhostTakeoverAvailable
+  #DS14-start
+  - type: GhostRoleNotifys 
+    groupPrototype: DerelictCyborg
+  #DS14-end
 
 - type: entity
   parent: MedicalBorgChassisDerelict
@@ -809,6 +829,10 @@
     reregister: false
     job: Borg
   - type: GhostTakeoverAvailable
+  #DS14-start
+  - type: GhostRoleNotifys 
+    groupPrototype: DerelictCyborg
+  #DS14-end
 
 - type: entity
   parent: MiningBorgChassisDerelict
@@ -846,6 +870,10 @@
     reregister: false
     job: Borg
   - type: GhostTakeoverAvailable
+  #DS14-start
+  - type: GhostRoleNotifys 
+    groupPrototype: DerelictCyborg
+  #DS14-end
 
 - type: entity
   parent: SyndicateAssaultBorgChassisDerelict
@@ -882,3 +910,7 @@
     reregister: false
     job: Borg
   - type: GhostTakeoverAvailable
+  #DS14-start
+  - type: GhostRoleNotifys 
+    groupPrototype: DerelictCyborg
+  #DS14-end

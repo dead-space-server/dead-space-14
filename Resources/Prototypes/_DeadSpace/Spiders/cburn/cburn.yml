@@ -97,6 +97,8 @@
     - NamesFirstERTLeader
     - NamesLastERT
     nameFormat: name-format-ert
+  - type: GhostRoleNotifys 
+    groupPrototype: CBURNGroup
 
 - type: randomHumanoidSettings
   id: CBURNSoldierSCST
@@ -128,7 +130,9 @@
     - NamesFirstERT
     - NamesLastERT
     nameFormat: name-format-ert
-
+  - type: GhostRoleNotifys 
+    groupPrototype: CBURNGroup
+    
 - type: entity
   id: RandomHumanoidCBURNSoldierSCST
   name: боец ОППУ, ghost role
