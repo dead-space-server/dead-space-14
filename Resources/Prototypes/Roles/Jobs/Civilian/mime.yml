@@ -16,6 +16,7 @@
   - !type:AddComponentSpecial
     components:
     # - type: CustomNameOnSpawn
+    - type: ChangeNameOnSpawn
     - type: MimePowers
       preventWriting: true
     - type: FrenchAccent
