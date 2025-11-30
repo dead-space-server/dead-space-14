@@ -6,6 +6,7 @@
   components:
   - type: TelecomExempt
   - type: RadioMicrophone
+    toggleOnInteract: false #DS-14-radio-mode
     broadcastChannel: Handheld
   - type: RadioSpeaker
     channels:
@@ -21,6 +22,15 @@
   - type: Item
     sprite: Objects/Devices/communication.rsi
     heldPrefix: walkietalkie
+  - type: ActivatableUI #DS-14-radio-mode-start
+    key: enum.RadioSettingsUiKey.Key
+    requireActiveHand: false
+    inHandsOnly: true
+  - type: UserInterface
+    interfaces:
+      enum.RadioSettingsUiKey.Key:
+        type: RadioSettingsBoundUserInterface
+  - type: RadioSettings #DS-14-radio-mode-end
   - type: Tag
     tags:
     - Radio
