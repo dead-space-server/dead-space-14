@@ -1,0 +1,17 @@
+- type: entity
+  parent: BaseGameRule
+  id: GoalSpawnSyndieShuttle
+  components:
+  - type: LoadOnStationMapRule
+    gridPath: /Maps/Shuttles/ShuttleEvent/striker.yml
+    radius: 150
+
+- type: entity
+  parent: BaseGameRule
+  id: GoalSpawnRNDPlanet
+  components:
+  - type: LoadOnStationMapRule
+    gridPath: /Maps/Goals/goalRNDgrid.yml
+    radius: 300
+  - type: DockOnStationMapRule
+    gridPath: /Maps/Shuttles/ShuttleEvent/striker.yml

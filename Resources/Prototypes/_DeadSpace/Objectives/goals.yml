@@ -98,10 +98,10 @@
   text: "/Paperwork/StationGoal/OrbitalBunker.xml"
   modifyStationBalance: 30000
   extraStamps:
-    - stampedName: Департамент Вооруженных Сил NanoTrasen
-      stampedColor: "#505050"
-    - stampedName: stamp-component-stamped-name-centcom
-      stampedColor: "#006600"
+  - stampedName: Департамент Вооруженных Сил NanoTrasen
+    stampedColor: "#505050"
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"
 
 - type: stationGoal
   id: Anomalies
@@ -158,3 +158,23 @@
   extraStamps:
   - stampedName: stamp-component-stamped-name-centcom
     stampedColor: "#006600"
+
+- type: stationGoal
+  id: ShuttleSyndie
+  text: "/Paperwork/StationGoal/ShuttleSyndie.xml"
+  extraStamps:
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"
+  - stampedName: Vítězství
+    stampedColor: "#431C22"
+  rules:
+  - GoalSpawnSyndieShuttle
+
+- type: stationGoal
+  id: PlanetResearch
+  text: "/Paperwork/StationGoal/PlanetResearch.xml"
+  extraStamps:
+  - stampedName: stamp-component-stamped-name-centcom
+    stampedColor: "#006600"
+  rules:
+    - GoalSpawnRNDPlanet
