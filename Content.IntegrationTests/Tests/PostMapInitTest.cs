@@ -59,7 +59,7 @@ namespace Content.IntegrationTests.Tests
             {"/Maps/Shuttles/ShuttleEvent/honki.yml", ["GoldenBikeHorn", "RubberStampClown"]},
             {"/Maps/Shuttles/ShuttleEvent/syndie_evacpod.yml", ["RubberStampSyndicate"]},
             // DS14-start: Add our custom maps to whitelist
-            {"/Maps/barratry.yml", ["RubberStampCaptain"]},
+            {"/Maps/barratry.yml", ["RubberStampCaptain", "RubberStampSeniorSalvage", "RubberStampSeniorAdministrator"]},
             {"/Maps/cluster.yml", ["RubberStampMime"]},
             {"/Maps/corvax_avrit.yml", ["ClothingHeadHatCatEars", "ClothingHeadHatDogEars"]},
             {"/Maps/corvax_glacier.yml", ["ClothingHeadHatCatEarsValid"]},
