@@ -13,6 +13,13 @@
     state: icon
 
 - type: stealTargetGroup
+  id: TabletRD
+  name: steal-target-groups-tablet-rd
+  sprite:
+    sprite: _DeadSpace/Objects/Misc/tabletRD.rsi
+    state: tabletRD
+    
+- type: stealTargetGroup
   id: AnimalMukhtar
   name: steal-target-groups-animal-mukhtar
   sprite:
