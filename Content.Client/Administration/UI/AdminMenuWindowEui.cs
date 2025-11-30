@@ -28,7 +28,13 @@ namespace Content.Client.Administration.UI
                 Voice = (string) (_window.VoiceSelector.SelectedMetadata ?? ""),
                 LanguageId = (string)(_window.LanguageSelector.SelectedMetadata ?? ""), // DS14-Languages
                 EnableTTS = _window.EnableTTS.Pressed,
-                CustomTTS = _window.CustomTTS.Pressed
+                CustomTTS = _window.CustomTTS.Pressed,
+                // DS14-announce-start
+                ColorHex = _window.ColorHexText,
+                SoundPath = _window.SoundPathText,
+                SoundVolume = _window.SoundVolumeValue,
+                Sender = _window.SenderText,
+                // DS14-announce-end
             });
 
         }

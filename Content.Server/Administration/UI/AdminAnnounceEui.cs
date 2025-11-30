@@ -5,6 +5,8 @@ using Content.Server.Chat.Systems;
 using Content.Server.EUI;
 using Content.Shared.Administration;
 using Content.Shared.Eui;
+using Robust.Shared.Audio;
+using Robust.Shared.ContentPack;
 
 namespace Content.Server.Administration.UI
 {
@@ -12,6 +14,7 @@ namespace Content.Server.Administration.UI
     {
         [Dependency] private readonly IAdminManager _adminManager = default!;
         [Dependency] private readonly IChatManager _chatManager = default!;
+        [Dependency] private readonly IResourceManager _resourceManager = default!;
         private readonly ChatSystem _chatSystem;
 
         public AdminAnnounceEui()
@@ -43,22 +46,100 @@ namespace Content.Server.Administration.UI
                         break;
                     }
 
+                    // DS14-announce-start
+                    Color color;
+                    var hex = doAnnounce.ColorHex?.Trim();
+
+                    if (string.IsNullOrWhiteSpace(hex))
+                        hex = "1d8bad";
+
+                    if (!hex.StartsWith('#'))
+                        hex = "#" + hex;
+
+                    try
+                    {
+                        color = Color.FromHex(hex);
+                    }
+                    catch (FormatException)
+                    {
+                        color = Color.FromHex("1d8bad");
+                    }
+
+                    SoundSpecifier? sound = null;
+                    if (!string.IsNullOrWhiteSpace(doAnnounce.SoundPath))
+                    {
+                        var path = doAnnounce.SoundPath.Trim();
+                        if (path.StartsWith("/Audio/", StringComparison.OrdinalIgnoreCase) &&
+                            _resourceManager.TryContentFileRead(path, out _))
+                        {
+                            var audioParams = AudioParams.Default.WithVolume(doAnnounce.SoundVolume).AddVolume(-8);
+                            sound = new SoundPathSpecifier(path)
+                            {
+                                Params = audioParams
+                            };
+                        }
+                    }
+
                     switch (doAnnounce.AnnounceType)
                     {
                         case AdminAnnounceType.Server:
-                            _chatManager.DispatchServerAnnouncement(doAnnounce.Announcement);
+                            _chatManager.DispatchServerAnnouncement(doAnnounce.Announcement, color); // DS14
                             break;
+
                         // TODO: Per-station announcement support
                         case AdminAnnounceType.Station:
+                        {
+                            var sender = string.IsNullOrEmpty(doAnnounce.Announcer)
+                                ? Loc.GetString("chat-manager-sender-announcement")
+                                : doAnnounce.Announcer;
+
+                            var announcementWithSender = doAnnounce.Announcement;
+                            if (!string.IsNullOrEmpty(doAnnounce.Sender))
+                            {
+                                announcementWithSender +=
+                                    $"\n{Loc.GetString("comms-console-announcement-sent-by")} {doAnnounce.Sender}";
+                            }
+
                             if (doAnnounce.EnableTTS && !doAnnounce.CustomTTS)
-                                _chatSystem.DispatchGlobalAnnouncement(doAnnounce.Announcement, doAnnounce.Announcer, colorOverride: Color.Gold,
-                                    originalMessage: doAnnounce.Announcement, usePresetTTS: true, languageId: doAnnounce.LanguageId); // DS14-Languages
+                            {
+                                _chatSystem.DispatchGlobalAnnouncement(
+                                    message: announcementWithSender,
+                                    sender: sender,
+                                    colorOverride: color,
+                                    playSound: true,
+                                    announcementSound: sound,
+                                    originalMessage: doAnnounce.Announcement,
+                                    usePresetTTS: true,
+                                    languageId: doAnnounce.LanguageId // DS14-Languages
+                                );
+                            }
                             else if (doAnnounce.EnableTTS)
-                                _chatSystem.DispatchGlobalAnnouncement(doAnnounce.Announcement, doAnnounce.Announcer, colorOverride: Color.Gold,
-                                    originalMessage: doAnnounce.Announcement, voice: doAnnounce.Voice, languageId: doAnnounce.LanguageId); // DS14-Languages
+                            {
+                                _chatSystem.DispatchGlobalAnnouncement(
+                                    message: announcementWithSender,
+                                    sender: sender,
+                                    colorOverride: color,
+                                    playSound: true,
+                                    announcementSound: sound,
+                                    originalMessage: doAnnounce.Announcement,
+                                    voice: doAnnounce.Voice,
+                                    languageId: doAnnounce.LanguageId // DS14-Languages
+                                );
+                            }
                             else
-                                _chatSystem.DispatchGlobalAnnouncement(doAnnounce.Announcement, doAnnounce.Announcer, colorOverride: Color.Gold, languageId: doAnnounce.LanguageId); // DS14-Languages
+                            {
+                                _chatSystem.DispatchGlobalAnnouncement(
+                                    message: announcementWithSender,
+                                    sender: sender,
+                                    colorOverride: color,
+                                    playSound: true,
+                                    announcementSound: sound,
+                                    languageId: doAnnounce.LanguageId // DS14-Languages
+                                );
+                            }
                             break;
+                        }
+                            // DS14-announce-end
                     }
 
                     StateDirty();

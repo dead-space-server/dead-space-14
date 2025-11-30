@@ -1,31 +1,46 @@
 <DefaultWindow
     xmlns="https://spacestation14.io"
     Title="{Loc admin-announce-title}"
-    MinWidth="650">
+    MinWidth="650"
+    MinHeight="450"><!-- DS14 -->
     <GridContainer Columns="1">
         <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
-            <LineEdit Name="Announcer" Access="Public" PlaceHolder="{Loc admin-announce-announcer-placeholder}" Text="{Loc admin-announce-announcer-default}" HorizontalExpand="True" SizeFlagsStretchRatio="2"/>
-            <Control HorizontalExpand="True" SizeFlagsStretchRatio="1" />
-            <OptionButton Name="AnnounceMethod" Access="Public" HorizontalExpand="True" SizeFlagsStretchRatio="2"/>
+        <!-- DS14-start -->
+            <LineEdit Name="Announcer" Access="Public" PlaceHolder="{Loc admin-announce-announcer-placeholder}" Text="{Loc admin-announce-announcer-default}" HorizontalExpand="True" SizeFlagsStretchRatio="1" />
+            <LineEdit Name="Sender" Access="Public" PlaceHolder="{Loc admin-announce-sender-placeholder}" Text="{Loc admin-announce-sender-default}" HorizontalExpand="True" SizeFlagsStretchRatio="1" Margin="4,0,0,0" />
+        </BoxContainer>
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+            <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SizeFlagsStretchRatio="1.7">
+                <Button Name="ColorPreview" Access="Public" Text=" " HorizontalExpand="False" MinSize="30, 30" Margin="0,0,4,0" />
+                <LineEdit Name="ColorHex" Access="Public" PlaceHolder="{Loc admin-announce-color-placeholder}" Text="1d8bad" HorizontalExpand="True" />
+            </BoxContainer>
+            <LineEdit Name="SoundPath" Access="Public" PlaceHolder="{Loc admin-announce-sound-placeholder}" Text="/Audio/_DeadSpace/Announcements/centcomm.ogg" HorizontalExpand="True" SizeFlagsStretchRatio="7" Margin="4,0,0,0" />
+            <LineEdit Name="SoundVolume" Access="Public" PlaceHolder="{Loc admin-announce-volume-placeholder}" Text="5" HorizontalExpand="True" SizeFlagsStretchRatio="1.3" Margin="4,0,0,0" />
+        <!-- DS14-end -->
         </BoxContainer>
         <TextEdit Name="Announcement" Access="Public" VerticalExpand="True" MinHeight="100" />
 
         <GridContainer Rows="1">
-            <CheckBox Name="EnableTTS" Access="Public" Text="{Loc 'admin-announce-enable-tts'}" Pressed="True" />
-            <CheckBox Name="CustomTTS" Access="Public" Text="{Loc 'admin-announce-custom-centcomm-tts'}" />
+            <CheckBox Name="EnableTTS" Access="Public" Text="{Loc admin-announce-enable-tts}" Pressed="True" />
+            <CheckBox Name="CustomTTS" Access="Public" Text="{Loc admin-announce-custom-centcomm-tts}" />
             <OptionButton Name="VoiceSelector" Access="Public" HorizontalExpand="True" />
             <OptionButton Name="LanguageSelector" Access="Public" HorizontalExpand="True" />
         </GridContainer>
 
         <GridContainer Rows="1">
-            <CheckBox Name="KeepWindowOpen" Access="Public" Text="{Loc 'admin-announce-keep-open'}" />
-            <Button Name="AnnounceButton" Access="Public" Disabled="True" Text="{Loc 'admin-announce-button'}" HorizontalExpand="True" />
+            <CheckBox Name="KeepWindowOpen" Access="Public" Text="{Loc admin-announce-keep-open}" />
+            <!-- DS14-start -->
+            <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+            <Button Name="AnnounceButton" Access="Public" Disabled="True" Text="{Loc admin-announce-button}" HorizontalExpand="True" />
+            <OptionButton Name="AnnounceMethod" Access="Public" HorizontalExpand="True" Margin="4,0,0,0"/>
+            </BoxContainer>
+            <!-- DS14-end -->
         </GridContainer>
         <!-- Footer -->
         <BoxContainer Orientation="Vertical">
             <PanelContainer StyleClasses="LowDivider" />
             <BoxContainer Orientation="Horizontal" Margin="0 2 0 0" VerticalAlignment="Bottom">
-                <Label Text="{Loc 'admin-announce-footer'}" StyleClasses="WindowFooterText" />
+                <Label Text="{Loc admin-announce-footer}" StyleClasses="WindowFooterText" />
             </BoxContainer>
         </BoxContainer>
     </GridContainer>
