@@ -1,6 +1,8 @@
 using Content.Client.Effects;
+using Content.Client.Humanoid;
 using Content.Client.Smoking;
 using Content.Shared.Chemistry.Components;
+using Content.Shared.Humanoid;
 using Content.Shared.Polymorph.Components;
 using Content.Shared.Polymorph.Systems;
 using Robust.Client.GameObjects;
@@ -12,9 +14,11 @@ public sealed class ChameleonProjectorSystem : SharedChameleonProjectorSystem
 {
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private readonly HumanoidAppearanceSystem _humanoid = default!; // DeadSpace14 ChameleonAlive
 
     private EntityQuery<AppearanceComponent> _appearanceQuery;
     private EntityQuery<SpriteComponent> _spriteQuery;
+    private EntityQuery<HumanoidAppearanceComponent> _humanoidQuery; // DeadSpace14 ChameleonAlive
 
     public override void Initialize()
     {
@@ -22,6 +26,7 @@ public sealed class ChameleonProjectorSystem : SharedChameleonProjectorSystem
 
         _appearanceQuery = GetEntityQuery<AppearanceComponent>();
         _spriteQuery = GetEntityQuery<SpriteComponent>();
+        _humanoidQuery = GetEntityQuery<HumanoidAppearanceComponent>(); // DeadSpace14 ChameleonAlive
 
         SubscribeLocalEvent<ChameleonDisguiseComponent, AfterAutoHandleStateEvent>(OnHandleState);
 
@@ -32,10 +37,17 @@ public sealed class ChameleonProjectorSystem : SharedChameleonProjectorSystem
 
     private void OnHandleState(Entity<ChameleonDisguiseComponent> ent, ref AfterAutoHandleStateEvent args)
     {
+        CopyComp<HumanoidAppearanceComponent>(ent); // DeadSpace14 ChameleonAlive
         CopyComp<SpriteComponent>(ent);
         CopyComp<GenericVisualizerComponent>(ent);
         CopyComp<SolutionContainerVisualsComponent>(ent);
         CopyComp<BurnStateVisualsComponent>(ent);
+
+        if (_humanoidQuery.TryComp(ent, out var humanoid)  // DeadSpace14 ChameleonAlive start
+            && _spriteQuery.TryComp(ent, out var sprite))
+        {
+            _humanoid.UpdateSprite((ent.Owner, humanoid, sprite));
+        }  // DeadSpace14 ChameleonAlive end
 
         // reload appearance to hopefully prevent any invisible layers
         if (_appearanceQuery.TryComp(ent, out var appearance))

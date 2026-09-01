@@ -8,7 +8,7 @@ namespace Content.Shared.Polymorph.Components;
 /// Component added to disguise entities.
 /// Used by client to copy over appearance from the disguise's source entity.
 /// </summary>
-[RegisterComponent, NetworkedComponent, Access(typeof(SharedChameleonProjectorSystem))]
+[RegisterComponent, NetworkedComponent] // DeadSpace access for SharedChameleonAliveSystem
 [AutoGenerateComponentState(true)]
 public sealed partial class ChameleonDisguiseComponent : Component
 {
