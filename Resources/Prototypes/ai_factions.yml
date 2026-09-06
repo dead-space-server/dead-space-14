@@ -1,6 +1,7 @@
 - type: npcFaction
   id: Dragon
   hostile:
+  - AshWalker
   - NanoTrasen
   - Syndicate
   - Xeno
@@ -57,6 +58,7 @@
 - type: npcFaction
   id: SimpleHostile
   hostile:
+  - AshWalker
   - NanoTrasen
   - Syndicate
   - Passive
@@ -160,6 +162,7 @@
 - type: npcFaction
   id: Xeno
   hostile:
+  - AshWalker
   - NanoTrasen
   - Syndicate
   - Passive
@@ -180,6 +183,7 @@
 - type: npcFaction
   id: Zombie
   hostile:
+  - AshWalker
   - NanoTrasen
   - SimpleNeutral
   - SimpleHostile
@@ -216,6 +220,7 @@
 - type: npcFaction
   id: AllHostile
   hostile:
+  - AshWalker
   - NanoTrasen
   - Dragon
   - Mouse

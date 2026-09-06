@@ -1,0 +1,19 @@
+ent-MobAshWalker = ash walker
+    .desc = A digitigrade reptilian native to Lavaland.
+ent-AshWalkerEgg = ash walker egg
+    .desc = A large yellow egg. A humanoid silhouette stirs beneath its shell.
+ent-ClothingUniformAshWalker = ash walker uniform
+    .desc = Simple tribal clothing, made for life among the ashes.
+ghost-role-information-ash-walker-name = Ash Walker
+ghost-role-information-ash-walker-description = You are a native of Lavaland. Hunt, gather supplies and defend your tribe and the sacred grounds of the Necropolis. You speak the reptilian language, do not need to breathe and cannot use conventional guns or footwear. Lava and ash storms remain dangerous.
+ghost-role-information-ash-walker-rules = You are a [color=red][bold]Team Antagonist[/bold][/color]. Your tribe consists of the other ash walkers from your Lavaland. Support your kin and defend your settlement and its lands. Your relations with outsiders develop in play; destroying the station is not your objective. Do not use knowledge from a previous life.
+ash-walker-cannot-equip-footwear = This footwear does not fit your digitigrade legs.
+ash-walker-cannot-shoot = Your fingers do not fit this weapon's trigger mechanism.
+ent-CrateAshWalkerHunting = ash walker hunting crate
+    .desc = Bone armor, knives, bows and arrows for three hunters.
+ent-CrateAshWalkerTools = ash walker workshop crate
+    .desc = Mining and building tools, buckets, materials and spare light batteries for a small settlement.
+ent-CrateAshWalkerSupplies = ash walker provisions crate
+    .desc = Eighteen bottles of drinking water and twelve cooked steaks for the settlement's first hunts.
+ent-CrateAshWalkerMedical = ash walker medical crate
+    .desc = Bandages, ointment, trauma supplies, blood packs and emergency injectors for three hunters.

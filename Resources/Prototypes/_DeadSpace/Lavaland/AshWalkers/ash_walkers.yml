@@ -1,0 +1,143 @@
+- type: entity
+  parent: MobReptilian
+  id: MobAshWalker
+  name: ash walker
+  description: A digitigrade reptilian native to Lavaland.
+  components:
+  - type: AshWalker
+    gunWhitelist:
+      tags:
+      - AshWalkerUsableGun
+    footwearWhitelist:
+      tags:
+      - AshWalkerWearableFootwear
+  - type: AshWalkerTribeMember
+  - type: HumanoidAppearance
+    customBaseLayers:
+      LLeg:
+        id: MobAshWalkerLLeg
+      RLeg:
+        id: MobAshWalkerRLeg
+      LFoot:
+        id: MobAshWalkerFoot
+      RFoot:
+        id: MobAshWalkerFoot
+  - type: RandomHumanoidAppearance
+    randomizeName: true
+  - type: Language
+    selectedLanguage: ReptilianLanguage
+    knownLanguages:
+    - ReptilianLanguage
+  - type: NpcFactionMember
+    factions:
+    - AshWalker
+  - type: Loadout
+    prototypes:
+    - AshWalkerStartingGear
+
+- type: humanoidBaseSprite
+  id: MobAshWalkerLLeg
+  baseSprite:
+    sprite: _DeadSpace/Lavaland/AshWalkers/legs.rsi
+    state: digitigrade_1_l_leg
+
+- type: humanoidBaseSprite
+  id: MobAshWalkerRLeg
+  baseSprite:
+    sprite: _DeadSpace/Lavaland/AshWalkers/legs.rsi
+    state: digitigrade_1_r_leg
+
+- type: humanoidBaseSprite
+  id: MobAshWalkerFoot
+
+- type: npcFaction
+  id: AshWalker
+  hostile:
+  - SimpleHostile
+  - Xeno
+  - Zombie
+  - AllHostile
+  - Dragon
+
+- type: Tag
+  id: AshWalkerUsableGun
+
+- type: Tag
+  id: AshWalkerWearableFootwear
+
+- type: entity
+  parent: BaseStructure
+  id: AshWalkerEgg
+  name: ash walker egg
+  description: A large yellow egg. A humanoid silhouette stirs beneath its shell.
+  components:
+  - type: AshWalkerEgg
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/egg.rsi
+    state: large_egg
+    noRot: true
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeCircle
+          radius: 0.3
+        density: 60
+        hard: false
+        mask:
+        - SmallMobMask
+        layer:
+        - SmallMobLayer
+  - type: Pullable
+  - type: Damageable
+    damageContainer: Biological
+    damageModifierSet: Wood
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [Destruction]
+  - type: GhostRole
+    name: ghost-role-information-ash-walker-name
+    description: ghost-role-information-ash-walker-description
+    rules: ghost-role-information-ash-walker-rules
+    makeSentient: false
+    reregister: false
+    mindRoles:
+    - MindRoleGhostRoleTeamAntagonist
+  - type: GhostRoleMobSpawner
+    prototype: MobAshWalker
+    availableTakeovers: 1
+    deleteOnSpawn: true
+
+- type: entity
+  parent: ClothingUniformJumpsuitGladiator
+  id: ClothingUniformAshWalker
+  name: ash walker uniform
+  description: Simple tribal clothing, made for life among the ashes.
+  components:
+  - type: SuitSensor
+    controlsLocked: true
+    randomMode: false
+    mode: SensorOff
+
+- type: startingGear
+  id: AshWalkerStartingGear
+  equipment:
+    jumpsuit: ClothingUniformAshWalker
+    head: ClothingHeadHatGladiator
+    back: ClothingBackpackSatchelLeather
+  inhand:
+  - SpearBone
+  storage:
+    back:
+    - DrinkWaterBottleFull
+    - FoodMeatCooked
+    - Gauze5
+    - Ointment5
+    - FlashlightLantern

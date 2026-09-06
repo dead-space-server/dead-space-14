@@ -588,7 +588,7 @@ public sealed class GhostRoleSystem : EntitySystem
         }
         // DS14-end
 
-        if (!_ghostRoles.TryGetValue(identifier, out var role) || !IsRoleOnValidMap(role.Owner))
+        if (!_ghostRoles.TryGetValue(identifier, out var role) || !IsRoleAvailable(role.Owner))
             return false;
 
         var ev = new TakeGhostRoleEvent(player);
@@ -610,7 +610,7 @@ public sealed class GhostRoleSystem : EntitySystem
             return;
 
         // DS14-start: avoid parenting observers to nullspace targets.
-        if (!IsRoleOnValidMap(role.Owner))
+        if (!IsRoleAvailable(role.Owner))
             return;
         // DS14-end
 
@@ -656,7 +656,7 @@ public sealed class GhostRoleSystem : EntitySystem
             if (metaQuery.GetComponent(uid).EntityPaused)
                 continue;
 
-            if (!IsRoleOnValidMap(uid))
+            if (!IsRoleAvailable(uid))
                 continue;
 
             count++;
@@ -683,7 +683,7 @@ public sealed class GhostRoleSystem : EntitySystem
                 continue;
 
             // DS14-start: hidden roles on invalid maps are not safely available.
-            if (!IsRoleOnValidMap(uid))
+            if (!IsRoleAvailable(uid))
                 continue;
             // DS14-end
 
@@ -862,19 +862,26 @@ public sealed class GhostRoleSystem : EntitySystem
                       !component.Taken &&
                       !MetaData(uid).EntityPaused;
 
-        canTake &= IsRoleOnValidMap(uid);
+        canTake &= IsRoleAvailable(uid);
         return canTake;
 
     }
 
-    private bool IsRoleOnValidMap(EntityUid uid)
+    private bool IsRoleAvailable(EntityUid uid)
     {
-        if (!TryComp(uid, out TransformComponent? xform))
+        if (TerminatingOrDeleted(uid) ||
+            EntityManager.IsQueuedForDeletion(uid) ||
+            !TryComp(uid, out TransformComponent? xform))
             return false;
 
-        return xform.MapUid != null &&
-               xform.MapID != MapId.Nullspace &&
-               !_prison.IsPrisonMap(xform.MapID);
+        if (xform.MapUid == null ||
+            xform.MapID == MapId.Nullspace ||
+            _prison.IsPrisonMap(xform.MapID))
+            return false;
+
+        var ev = new GhostRoleAvailabilityEvent();
+        RaiseLocalEvent(uid, ev);
+        return !ev.Cancelled;
     }
     // DS14-end
 
