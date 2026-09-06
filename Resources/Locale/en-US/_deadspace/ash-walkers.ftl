@@ -5,7 +5,7 @@ ent-AshWalkerEgg = ash walker egg
 ent-ClothingUniformAshWalker = ash walker uniform
     .desc = Simple tribal clothing, made for life among the ashes.
 ghost-role-information-ash-walker-name = Ash Walker
-ghost-role-information-ash-walker-description = You are a native of Lavaland. Hunt, gather supplies and defend your tribe and the sacred grounds of the Necropolis. You speak the reptilian language, do not need to breathe and cannot use conventional guns or footwear. Lava and ash storms remain dangerous.
+ghost-role-information-ash-walker-description = You are a native of Lavaland. Hunt, feed the nest, and protect your tribe. You speak the reptilian language, do not need to breathe, and are immune to pressure and ash storms. Your scales reduce wounds, heat, cold, poison, and radiation damage. Lava and intense fire are still dangerous. You cannot use ordinary firearms or footwear.
 ghost-role-information-ash-walker-rules = You are a [color=red][bold]Team Antagonist[/bold][/color]. Your tribe consists of the other ash walkers from your Lavaland. Support your kin and defend your settlement and its lands. Your relations with outsiders develop in play; destroying the station is not your objective. Do not use knowledge from a previous life.
 ash-walker-cannot-equip-footwear = This footwear does not fit your digitigrade legs.
 ash-walker-cannot-shoot = Your fingers do not fit this weapon's trigger mechanism.
@@ -17,3 +17,18 @@ ent-CrateAshWalkerSupplies = ash walker provisions crate
     .desc = Eighteen bottles of drinking water and twelve cooked steaks for the settlement's first hunts.
 ent-CrateAshWalkerMedical = ash walker medical crate
     .desc = Bandages, ointment, trauma supplies, blood packs and emergency injectors for three hunters.
+ent-AshWalkerNest = necropolis nest
+    .desc = A living tendril that nurtures the tribe's eggs. It feeds on intact corpses offered by ash walkers. The ground nearby will collapse if the nest dies!
+ent-AshWalkerEggIncubating = { ent-AshWalkerEgg }
+    .desc = { ent-AshWalkerEgg.desc }
+ent-AshWalkerNestCollapse = collapsing nest
+    .desc = The dying tendril is pulling the ground down. Move away!
+ent-AshWalkerWaterSource = stone spring
+    .desc = An underground aquifer continuously fills this basin with clean water. Drink here or fill your bottles and buckets.
+ash-walker-nest-sacrifice = Offer a sacrifice to the nest
+ash-walker-nest-sacrifice-hint = Pull an intact corpse up to the nest. It accepts large Lavaland prey and humanoid bodies, except ash walkers. Small, summoned, legion-infested and butchered creatures are unsuitable. The nest must have room for the entire offering.
+ash-walker-nest-consumed = The nest consumes { $body }, nourishing its eggs with fresh flesh!
+ash-walker-nest-status = Flesh: [color=red]{ $flesh }/{ $capacity }[/color]. Egg cost: { $cost }. Tribal eggs: { $eggs }/{ $limit }.
+ash-walker-nest-instructions = The nest accepts intact dead prey brought to its roots. The ritual requires stillness; injury interrupts the offering. The victim's equipment will remain on the ground. Immature eggs will die with the nest.
+ash-walker-egg-incubating = Its shell is still soft. The egg draws strength from the nest and is not ready to hatch.
+ash-walker-egg-matured = The shell hardens. The egg is ready to hatch!

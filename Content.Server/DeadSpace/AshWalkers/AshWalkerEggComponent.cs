@@ -1,4 +1,11 @@
 namespace Content.Server.DeadSpace.AshWalkers;
 
-[RegisterComponent]
-public sealed partial class AshWalkerEggComponent : Component;
+[RegisterComponent, Access(typeof(AshWalkerSystem), typeof(AshWalkerNestSystem))]
+public sealed partial class AshWalkerEggComponent : Component
+{
+    [DataField]
+    public EntityUid? HomeMap;
+
+    [DataField]
+    public EntityUid? Nest;
+}

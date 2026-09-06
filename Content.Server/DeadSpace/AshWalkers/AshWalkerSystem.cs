@@ -19,6 +19,7 @@ public sealed class AshWalkerSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<AshWalkerComponent, ComponentInit>(OnInit);
+        SubscribeLocalEvent<AshWalkerEggComponent, MapInitEvent>(OnEggMapInit);
         SubscribeLocalEvent<AshWalkerEggComponent, GhostRoleAvailabilityEvent>(OnRoleAvailability);
         SubscribeLocalEvent<AshWalkerTribeMemberComponent, GhostRoleSpawnerUsedEvent>(OnSpawnerUsed);
         Subs.CVar(_cfg, CCCCVars.AshWalkersEnabled, _ => _ghostRoles.UpdateAllEui());
@@ -30,16 +31,23 @@ public sealed class AshWalkerSystem : EntitySystem
         RemComp<InternalsComponent>(ent);
     }
 
+    private void OnEggMapInit(Entity<AshWalkerEggComponent> ent, ref MapInitEvent args)
+    {
+        ent.Comp.HomeMap = Transform(ent).MapUid;
+    }
+
     private void OnRoleAvailability(Entity<AshWalkerEggComponent> ent, ref GhostRoleAvailabilityEvent args)
     {
         if (!_cfg.GetCVar(CCCCVars.AshWalkersEnabled) ||
+            HasComp<AshWalkerIncubatingEggComponent>(ent) ||
+            Transform(ent).MapUid != ent.Comp.HomeMap ||
             !HasComp<LavalandMapComponent>(Transform(ent).MapUid))
             args.Cancel();
     }
 
     private void OnSpawnerUsed(Entity<AshWalkerTribeMemberComponent> ent, ref GhostRoleSpawnerUsedEvent args)
     {
-        if (HasComp<AshWalkerEggComponent>(args.Spawner))
-            ent.Comp.HomeMap = Transform(args.Spawner).MapUid;
+        if (TryComp<AshWalkerEggComponent>(args.Spawner, out var egg))
+            ent.Comp.HomeMap = egg.HomeMap;
     }
 }

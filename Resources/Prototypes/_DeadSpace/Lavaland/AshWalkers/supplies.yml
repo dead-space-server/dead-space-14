@@ -1,0 +1,19 @@
+- type: entity
+  parent: DrinkFlaskOld
+  id: DrinkFlaskOldWater
+  suffix: Water
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        reagents:
+        - ReagentId: Water
+          Quantity: 30
+
+- type: entity
+  parent: AloeCream
+  id: AloeCream5
+  suffix: 5
+  components:
+  - type: Stack
+    count: 5
