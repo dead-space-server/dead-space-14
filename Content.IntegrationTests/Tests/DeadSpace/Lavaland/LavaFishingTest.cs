@@ -137,7 +137,7 @@ public sealed class LavaFishingTest : InteractionTest
         await Server.WaitAssertion(() => Assert.That(HandSys.TryPickupAnyHand(SPlayer, ToServer(rodNet)), Is.True));
         await RunTicks(10);
         var rodUid = ToServer(rodNet);
-        var floatCoordinates = new EntityCoordinates(MapData.Grid, 2.5f, 0.5f);
+        var floatCoordinates = new EntityCoordinates(MapData.Grid, fromBoat ? 5.4f : 4.4f, 1.1f);
         await Server.WaitPost(() =>
         {
             var rod = SEntMan.GetComponent<LavaFishingRodComponent>(rodUid);
@@ -158,6 +158,7 @@ public sealed class LavaFishingTest : InteractionTest
             var rod = SEntMan.GetComponent<LavaFishingRodComponent>(rodUid);
             Assert.That(rod.Phase, Is.EqualTo(LavaFishingPhase.Waiting));
             Assert.That(rod.Float, Is.Not.Null);
+            Assert.That(rod.Spot, Is.EqualTo(floatCoordinates));
             rod.NextPhase = STiming.CurTime;
             SEntMan.Dirty(rodUid, rod);
         });

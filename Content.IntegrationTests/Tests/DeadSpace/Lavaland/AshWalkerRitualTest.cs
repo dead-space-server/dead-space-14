@@ -83,6 +83,11 @@ public sealed class AshWalkerRitualTest : InteractionTest
         await Server.WaitAssertion(() =>
         {
             var rituals = Server.System<RitualSystem>();
+            var interrupted = SEntMan.SpawnEntity("MobAshWalker", Transform.GetMoverCoordinates(SPlayer));
+            SEntMan.GetComponent<AshWalkerTribeMemberComponent>(interrupted).HomeMap = MapData.MapUid;
+            Assert.That(rituals.TryBeginRitual((rune, SEntMan.GetComponent<AshWalkerRuneComponent>(rune)), interrupted, offering), Is.True);
+            SEntMan.DeleteEntity(interrupted);
+            Assert.That(SEntMan.IsQueuedForDeletion(offering), Is.False);
             Assert.That(rituals.TryBeginRitual((rune, SEntMan.GetComponent<AshWalkerRuneComponent>(rune)), SPlayer, offering), Is.True);
             Assert.That(rituals.TryBeginRitual((rune, SEntMan.GetComponent<AshWalkerRuneComponent>(rune)), SPlayer, offering), Is.False);
         });

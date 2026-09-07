@@ -21,7 +21,6 @@ public sealed class LavaFishingSystem : SharedLavaFishingSystem
     private const double RestockSeconds = 120;
 
     [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly SharedContainerSystem _containers = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
@@ -41,7 +40,7 @@ public sealed class LavaFishingSystem : SharedLavaFishingSystem
     protected override void BeginFishing(Entity<LavaFishingRodComponent> ent, EntityUid fisher, EntityCoordinates spot)
     {
         if (ent.Comp.Rewards.Count == 0 || _turf.GetTileRef(spot) is not { } tile ||
-            !TryComp<MapGridComponent>(tile.GridUid, out var grid))
+            !HasComp<MapGridComponent>(tile.GridUid))
             return;
 
         var gridUid = tile.GridUid;
@@ -95,7 +94,7 @@ public sealed class LavaFishingSystem : SharedLavaFishingSystem
         ent.Comp.Bait--;
         ent.Comp.Fisher = fisher;
         ent.Comp.Origin = _transform.ToCoordinates(gridUid, _transform.GetMapCoordinates(fisher));
-        ent.Comp.Spot = _map.ToCenterCoordinates(tile, grid);
+        ent.Comp.Spot = _transform.ToCoordinates(gridUid, _transform.ToMapCoordinates(spot));
         ent.Comp.Phase = LavaFishingPhase.Waiting;
         ent.Comp.NextPhase = _timing.CurTime + TimeSpan.FromSeconds(_random.Next(5, 11));
         ent.Comp.Difficulty = reward.Difficulty;

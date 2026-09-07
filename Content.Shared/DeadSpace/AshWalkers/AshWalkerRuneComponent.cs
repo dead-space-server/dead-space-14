@@ -1,3 +1,4 @@
+using Content.Shared.DoAfter;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -18,8 +19,8 @@ public sealed partial class AshWalkerRuneComponent : Component
     [DataField, AutoNetworkedField]
     public EntityUid? HomeMap;
 
-    [DataField, AutoNetworkedField]
-    public EntityUid? Invoker;
+    [DataField]
+    public DoAfterId? Invocation;
 
     [DataField]
     public AshWalkerRite Rite;

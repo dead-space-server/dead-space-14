@@ -104,7 +104,7 @@ public sealed class AshWalkerRitualSystem : SharedAshWalkerRitualSystem
 
     public bool TryBeginRitual(Entity<AshWalkerRuneComponent> rune, EntityUid user, EntityUid? preferred = null)
     {
-        if (!CanUseRune(rune, user) || rune.Comp.Invoker != null)
+        if (!CanUseRune(rune, user) || _doAfter.IsRunning(rune.Comp.Invocation) || _pendingReturns.ContainsKey(rune))
             return false;
 
         var nearby = _lookup.GetEntitiesInRange(Transform(rune).Coordinates, OfferingRange);
@@ -131,26 +131,19 @@ public sealed class AshWalkerRitualSystem : SharedAshWalkerRitualSystem
             request.Mind = GetNetEntity(mind);
         }
 
-        if (!_doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, rune.Comp.RitualTime, request, rune, target: rune)
-            { BreakOnMove = true, BreakOnDamage = true, NeedHand = true }))
-            return false;
-
-        rune.Comp.Invoker = user;
-        Dirty(rune);
-        return true;
+        return _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, rune.Comp.RitualTime, request, rune, target: rune)
+            { BreakOnMove = true, BreakOnDamage = true, NeedHand = true }, out rune.Comp.Invocation);
     }
 
     private void OnRitual(Entity<AshWalkerRuneComponent> ent, ref AshWalkerRitualDoAfterEvent args)
     {
-        if (args.Handled || ent.Comp.Invoker != args.User)
+        if (args.Handled || ent.Comp.Invocation != args.DoAfter.Id)
             return;
 
         args.Handled = true;
+        ent.Comp.Invocation = null;
         if (args.Cancelled || !ValidateOfferings(ent, args.User, args))
-        {
-            ReleaseRune(ent);
             return;
-        }
 
         if (ent.Comp.Rite == AshWalkerRite.Return)
         {
@@ -158,10 +151,7 @@ public sealed class AshWalkerRitualSystem : SharedAshWalkerRitualSystem
                 !IsReturnSubject(ent, GetEntity(subject), out var currentMind) || currentMind != GetEntity(mind) ||
                 !_players.TryGetSessionById(Comp<MindComponent>(currentMind).UserId, out var session) ||
                 !TryGetTonic(ent, args.User, out _))
-            {
-                ReleaseRune(ent);
                 return;
-            }
 
             var request = new AshWalkerReturnEui(this, ent, args.User, args, _timing.CurTime + TimeSpan.FromSeconds(30));
             _pendingReturns.Add(ent, request);
@@ -171,10 +161,7 @@ public sealed class AshWalkerRitualSystem : SharedAshWalkerRitualSystem
         }
 
         if (ent.Comp.Effect is not { } effect)
-        {
-            ReleaseRune(ent);
             return;
-        }
 
         var applied = false;
         foreach (var recipient in _lookup.GetEntitiesInRange(Transform(ent).Coordinates, 2f))
@@ -192,7 +179,6 @@ public sealed class AshWalkerRitualSystem : SharedAshWalkerRitualSystem
             ConsumeOfferings(ent, args.User, args);
         else
             Fail(ent, args.User, "ash-walker-rune-already-blessed");
-        ReleaseRune(ent);
     }
 
     private bool ValidateOfferings(Entity<AshWalkerRuneComponent> rune, EntityUid user, AshWalkerRitualDoAfterEvent request)
@@ -266,17 +252,11 @@ public sealed class AshWalkerRitualSystem : SharedAshWalkerRitualSystem
             !IsReturnSubject((prompt.Rune, rune), GetEntity(subjectNet), out var mind) || mind != GetEntity(mindNet) ||
             Comp<MindComponent>(mind).UserId != prompt.Player.UserId ||
             !TryGetTonic(prompt.Rune, prompt.Invoker, out var tonic))
-        {
-            ReleaseRune((prompt.Rune, rune));
             return;
-        }
 
         var subject = GetEntity(subjectNet);
         if (!_thresholds.TryGetThresholdForState(subject, MobState.Critical, out var critical))
-        {
-            ReleaseRune((prompt.Rune, rune));
             return;
-        }
 
         EnsureComp<AshWalkerReturnedComponent>(mind);
         _solutions.RemoveReagent(tonic, "AshWalkerBloodTonic", FixedPoint2.New(10));
@@ -292,7 +272,6 @@ public sealed class AshWalkerRitualSystem : SharedAshWalkerRitualSystem
         _popup.PopupEntity(Loc.GetString("ash-walker-rune-returned"), subject, PopupType.Medium);
         _adminLog.Add(LogType.Action, LogImpact.High,
             $"{ToPrettyString(prompt.Invoker):user} returned {ToPrettyString(subject):subject} with {ToPrettyString(prompt.Rune):rune}.");
-        ReleaseRune((prompt.Rune, rune));
     }
 
     private void ConsumeOfferings(Entity<AshWalkerRuneComponent> rune, EntityUid user, AshWalkerRitualDoAfterEvent request)
@@ -317,12 +296,6 @@ public sealed class AshWalkerRitualSystem : SharedAshWalkerRitualSystem
             QueueDel(offering);
         }
         _audio.PlayPvs(new SoundCollectionSpecifier("gib"), rune);
-    }
-
-    private void ReleaseRune(Entity<AshWalkerRuneComponent> rune)
-    {
-        rune.Comp.Invoker = null;
-        Dirty(rune);
     }
 
     private bool Fail(EntityUid rune, EntityUid user, string message)
