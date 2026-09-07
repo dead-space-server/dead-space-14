@@ -5,6 +5,7 @@ using Content.IntegrationTests.Tests.Interaction;
 using Content.Server.DeadSpace.AshWalkers;
 using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Server.Station.Events;
+using Content.Shared.DeadSpace.AshWalkers;
 using Content.Shared.DeadSpace.CCCCVars;
 using Content.Shared.Parallax.Biomes;
 using Content.Shared.Station.Components;
@@ -117,6 +118,14 @@ public sealed class AshWalkerReservationTest : InteractionTest
                     if (xform.GridUid == grid)
                         Assert.That(egg.HomeMap, Is.EqualTo(map));
                 }
+                var gutlunchSexes = new List<bool>();
+                var gutlunches = SEntMan.EntityQueryEnumerator<GutlunchComponent, TransformComponent>();
+                while (gutlunches.MoveNext(out _, out var gutlunch, out var xform))
+                {
+                    if (xform.GridUid == grid)
+                        gutlunchSexes.Add(gutlunch.IsMale);
+                }
+                Assert.That(gutlunchSexes, Is.EquivalentTo(new[] { true, false }));
                 CheckReservation();
                 Transform.SetCoordinates(SPlayer, new EntityCoordinates(grid, Vector2.Zero));
             });

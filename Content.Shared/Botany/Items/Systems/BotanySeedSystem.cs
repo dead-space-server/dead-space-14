@@ -84,7 +84,6 @@ public sealed partial class BotanySeedSystem : EntitySystem
             _itemSlots.TryEjectToHands(args.Seed, paperLabel.LabelSlot, args.User);
 
         _plantTray.PlantingPlantInTray(ent.Owner, plantUid, args.Seed.Comp.HealthOverride);
-        PredictedQueueDel(args.Seed);
 
         if (plantData.PlantLogImpact != null)
         {
@@ -92,5 +91,7 @@ public sealed partial class BotanySeedSystem : EntitySystem
                 plantData.PlantLogImpact.Value,
                 $"{ToPrettyString(args.User):player} planted {Loc.GetString(plantData.Name):seed} at Pos:{Transform(ent.Owner).Coordinates}.");
         }
+
+        PredictedDel(args.Seed.Owner);
     }
 }

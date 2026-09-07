@@ -106,6 +106,8 @@ ash-walker-recipe-book-content =
 
     { ash-walker-recipe-book-settlement }
 
+    { ash-walker-recipe-book-husbandry }
+
 ash-walker-recipe-book-settlement =
     { "[" }bold]Грибы и грядки[/bold]
     Полипор даёт прочные волокна. Лист порцини годится в пищу и для перевязок. Иноцибе сырой ядовит: ешь только поджаренную шляпку. Угольник светится и даёт железистый сок. Плод кактуса утоляет жажду и охлаждает ожоги.

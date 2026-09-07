@@ -2,7 +2,7 @@
   id: LavalandSurface
   layers:
   - !type:BiomeEntityLayer
-    threshold: 0.72
+    threshold: 0.97
     noise:
       seed: 47
       noiseType: OpenSimplex2
@@ -18,7 +18,7 @@
     - LavalandCactusWild
 
   - !type:BiomeEntityLayer
-    threshold: 0.75
+    threshold: 0.95
     noise:
       seed: 48
       noiseType: OpenSimplex2
@@ -30,7 +30,7 @@
     - LavalandBasaltBoulder
 
   - !type:BiomeEntityLayer
-    threshold: 0.92
+    threshold: 0.96
     noise:
       seed: 13
       noiseType: OpenSimplex2

@@ -159,7 +159,7 @@ public sealed class AshWalkerSettlementTest
             entMan.EventBus.RaiseLocalEvent(seed, new AfterInteractEvent(user, seed, garden, map.GridCoords, true));
             Assert.That(trays.TryGetPlant(garden, out var planted), Is.True);
             Assert.That(planted, Is.Not.EqualTo(plant));
-            Assert.That(entMan.IsQueuedForDeletion(seed), Is.True);
+            Assert.That(entMan.Deleted(seed), Is.True);
             var nutrition = entMan.GetComponent<PlantTrayComponent>(garden).NutritionLevel;
             entMan.EventBus.RaiseLocalEvent(produce[1], new AfterInteractEvent(user, produce[1], garden, map.GridCoords, true));
             Assert.That(entMan.GetComponent<PlantTrayComponent>(garden).NutritionLevel, Is.GreaterThan(nutrition));

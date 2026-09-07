@@ -109,6 +109,11 @@ public sealed class AnimalHusbandrySystem : EntitySystem
         if (!IsValidPartner(uid, partner, component))
             return false;
 
+        var attempt = new ReproductionAttemptEvent(partner);
+        RaiseLocalEvent(uid, ref attempt);
+        if (attempt.Cancelled)
+            return false;
+
         // if the partner is valid, yet it fails the random check
         // invalidate the entity from further attempts this tick
         // in order to reduce total possible pairs.
@@ -135,6 +140,8 @@ public sealed class AnimalHusbandrySystem : EntitySystem
 
         component.GestationEndTime = _timing.CurTime + component.GestationDuration;
         component.Gestating = true;
+        var started = new ReproductionStartedEvent(partner);
+        RaiseLocalEvent(uid, ref started);
         _adminLog.Add(LogType.Action,
             $"{ToPrettyString(uid)} (carrier) and {ToPrettyString(partner)} (partner) successfully bred.");
         return true;
@@ -165,7 +172,7 @@ public sealed class AnimalHusbandrySystem : EntitySystem
         }
 
         // Check minimum hunger requirement
-        if (component!.MinHungerThreshold is { } minHunger)
+        if (component?.MinHungerThreshold is { } minHunger)
         {
             if (!satiation.Has(SatiationSystem.Hunger) ||
                 _satiation.IsValueInRange((uid, satiation), SatiationSystem.Hunger, below: minHunger))
@@ -173,7 +180,7 @@ public sealed class AnimalHusbandrySystem : EntitySystem
         }
 
         // Check minimum thirst requirement
-        if (component.MinThirstThreshold is { } minThirst)
+        if (component?.MinThirstThreshold is { } minThirst)
         {
             if (!satiation.Has(SatiationSystem.Thirst) ||
                 _satiation.IsValueInRange((uid, satiation), SatiationSystem.Thirst, below: minThirst))
@@ -204,8 +211,23 @@ public sealed class AnimalHusbandrySystem : EntitySystem
     /// </summary>
     public void Birth(EntityUid uid, ReproductiveComponent? component = null)
     {
-        if (!Resolve(uid, ref component))
+        if (!Resolve(uid, ref component) || !component.Gestating)
             return;
+
+        if (!_mobState.IsAlive(uid))
+        {
+            component.Gestating = false;
+            component.GestationEndTime = null;
+            return;
+        }
+
+        var attempt = new BeforeAnimalBirthEvent();
+        RaiseLocalEvent(uid, ref attempt);
+        if (attempt.Cancelled)
+        {
+            component.GestationEndTime = _timing.CurTime + component.MinBreedAttemptInterval;
+            return;
+        }
 
         // this is kinda wack but it's the only sound associated with most animals
         if (TryComp<InteractionPopupComponent>(uid, out var interactionPopup))
