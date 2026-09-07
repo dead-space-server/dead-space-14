@@ -24,6 +24,7 @@ public sealed class SpreaderSystem : EntitySystem
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly TagSystem _tag = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private readonly MetaDataSystem _metadata = default!;
 
     /// <summary>
     /// Cached maximum number of updates per spreader prototype. This is applied per-grid.
@@ -31,10 +32,10 @@ public sealed class SpreaderSystem : EntitySystem
     private Dictionary<string, int> _prototypeUpdates = default!;
 
     /// <summary>
-    /// Remaining number of updates per grid & prototype.
+    /// Remaining number of updates per prototype on the grid being processed.
     /// </summary>
-    // TODO PERFORMANCE Assign each prototype to an index and convert dictionary to array
-    private readonly Dictionary<EntityUid, Dictionary<string, int>> _gridUpdates = [];
+    private readonly Dictionary<string, int> _updates = [];
+    private readonly List<EntityUid> _spreaders = [];
 
     private EntityQuery<EdgeSpreaderComponent> _query;
 
@@ -47,9 +48,15 @@ public sealed class SpreaderSystem : EntitySystem
     {
         SubscribeLocalEvent<AirtightChanged>(OnAirtightChanged);
         SubscribeLocalEvent<GridInitializeEvent>(OnGridInit);
+        SubscribeLocalEvent<SpreaderGridComponent, TileChangedEvent>(OnTileChanged);
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypeReload);
 
         SubscribeLocalEvent<EdgeSpreaderComponent, EntityTerminatingEvent>(OnTerminating);
+        SubscribeLocalEvent<ActiveEdgeSpreaderComponent, ComponentStartup>(OnActiveStartup);
+        SubscribeLocalEvent<ActiveEdgeSpreaderComponent, ComponentShutdown>(OnActiveShutdown);
+        SubscribeLocalEvent<ActiveEdgeSpreaderComponent, ComponentRemove>(OnActiveRemove);
+        SubscribeLocalEvent<ActiveEdgeSpreaderComponent, GridUidChangedEvent>(OnGridChanged);
+        SubscribeLocalEvent<ActiveEdgeSpreaderComponent, MetaFlagRemoveAttemptEvent>(OnMetaFlagRemoveAttempt);
         SetupPrototypes();
 
         _query = GetEntityQuery<EdgeSpreaderComponent>();
@@ -80,81 +87,115 @@ public sealed class SpreaderSystem : EntitySystem
         EnsureComp<SpreaderGridComponent>(ev.EntityUid);
     }
 
+    private void OnTileChanged(Entity<SpreaderGridComponent> entity, ref TileChangedEvent args)
+    {
+        foreach (var change in args.Changes)
+        {
+            if (!_turf.IsSpace(change.OldTile) || _turf.IsSpace(change.NewTile))
+                continue;
+
+            ActivateSpreadableNeighbors(entity, (entity, change.GridIndices));
+        }
+    }
+
     private void OnTerminating(Entity<EdgeSpreaderComponent> entity, ref EntityTerminatingEvent args)
     {
         ActivateSpreadableNeighbors(entity);
     }
 
+    private void OnActiveStartup(Entity<ActiveEdgeSpreaderComponent> entity, ref ComponentStartup args)
+    {
+        _metadata.AddFlag(entity, MetaDataFlags.ExtraTransformEvents);
+        SetSpreaderGrid(entity, Transform(entity).GridUid);
+    }
+
+    private void OnActiveShutdown(Entity<ActiveEdgeSpreaderComponent> entity, ref ComponentShutdown args)
+    {
+        SetSpreaderGrid(entity, null);
+    }
+
+    private void OnGridChanged(Entity<ActiveEdgeSpreaderComponent> entity, ref GridUidChangedEvent args)
+    {
+        if (entity.Comp.LifeStage <= ComponentLifeStage.Running)
+            SetSpreaderGrid(entity, args.NewGrid);
+    }
+
+    private void OnActiveRemove(Entity<ActiveEdgeSpreaderComponent> entity, ref ComponentRemove args)
+    {
+        _metadata.RemoveFlag(entity, MetaDataFlags.ExtraTransformEvents);
+    }
+
+    private void OnMetaFlagRemoveAttempt(Entity<ActiveEdgeSpreaderComponent> entity, ref MetaFlagRemoveAttemptEvent args)
+    {
+        if (entity.Comp.LifeStage <= ComponentLifeStage.Running)
+            args.ToRemove &= ~MetaDataFlags.ExtraTransformEvents;
+    }
+
+    private void SetSpreaderGrid(Entity<ActiveEdgeSpreaderComponent> entity, EntityUid? gridUid)
+    {
+        if (entity.Comp.Grid == gridUid)
+            return;
+
+        if (TryComp<SpreaderGridComponent>(entity.Comp.Grid, out var oldGrid))
+            oldGrid.ActiveSpreaders.Remove(entity);
+
+        entity.Comp.Grid = gridUid;
+        if (gridUid != null && !TerminatingOrDeleted(gridUid.Value))
+            EnsureComp<SpreaderGridComponent>(gridUid.Value).ActiveSpreaders.Add(entity);
+    }
+
     /// <inheritdoc/>
     public override void Update(float frameTime)
     {
-        // Check which grids are valid for spreading
         var spreadGrids = EntityQueryEnumerator<SpreaderGridComponent>();
+        var xforms = GetEntityQuery<TransformComponent>();
+        var metadata = GetEntityQuery<MetaDataComponent>();
+        var activeQuery = GetEntityQuery<ActiveEdgeSpreaderComponent>();
 
-        _gridUpdates.Clear();
         while (spreadGrids.MoveNext(out var uid, out var grid))
         {
             grid.UpdateAccumulator -= frameTime;
             if (grid.UpdateAccumulator > 0)
                 continue;
 
-            _gridUpdates[uid] = _prototypeUpdates.ShallowClone();
             grid.UpdateAccumulator += SpreadCooldownSeconds;
-        }
-
-        if (_gridUpdates.Count == 0)
-            return;
-
-        var query = EntityQueryEnumerator<ActiveEdgeSpreaderComponent>();
-        var xforms = GetEntityQuery<TransformComponent>();
-        var spreaderQuery = GetEntityQuery<EdgeSpreaderComponent>();
-
-        var spreaders = new List<(EntityUid Uid, ActiveEdgeSpreaderComponent Comp)>(Count<ActiveEdgeSpreaderComponent>());
-
-        // Build a list of all existing Edgespreaders, shuffle them
-        while (query.MoveNext(out var uid, out var comp))
-        {
-            spreaders.Add((uid, comp));
-        }
-
-        _robustRandom.Shuffle(spreaders);
-
-        // Remove the EdgeSpreaderComponent from any entity
-        // that doesn't meet a few trivial prerequisites
-        foreach (var (uid, comp) in spreaders)
-        {
-            // Get xform first, as entity may have been deleted due to interactions triggered by other spreaders.
-            if (!xforms.TryGetComponent(uid, out var xform))
+            if (grid.ActiveSpreaders.Count == 0)
                 continue;
 
-            if (xform.GridUid == null)
+            _updates.Clear();
+            _spreaders.Clear();
+            _spreaders.AddRange(grid.ActiveSpreaders);
+            _robustRandom.Shuffle(_spreaders);
+
+            foreach (var spreaderUid in _spreaders)
             {
-                RemComp(uid, comp);
-                continue;
+                if (!activeQuery.TryGetComponent(spreaderUid, out var active) || active.Grid != uid ||
+                    !metadata.TryGetComponent(spreaderUid, out var meta) || meta.EntityPaused ||
+                    TerminatingOrDeleted(spreaderUid, meta) ||
+                    !xforms.TryGetComponent(spreaderUid, out var xform) || xform.GridUid != uid)
+                {
+                    continue;
+                }
+
+                if (!_query.TryGetComponent(spreaderUid, out var spreader))
+                {
+                    RemComp<ActiveEdgeSpreaderComponent>(spreaderUid);
+                    continue;
+                }
+
+                if ((!_updates.TryGetValue(spreader.Id, out var updates) &&
+                     !_prototypeUpdates.TryGetValue(spreader.Id, out updates)) || updates < 1)
+                {
+                    continue;
+                }
+
+                var previousUpdates = updates;
+                Spread(spreaderUid, xform, spreader.Id, ref updates);
+                _updates[spreader.Id] = Math.Min(updates, previousUpdates - 1);
             }
-
-            if (!_gridUpdates.TryGetValue(xform.GridUid.Value, out var groupUpdates))
-                continue;
-
-            if (!spreaderQuery.TryGetComponent(uid, out var spreader))
-            {
-                RemComp(uid, comp);
-                continue;
-            }
-
-            if (!groupUpdates.TryGetValue(spreader.Id, out var updates) || updates < 1)
-                continue;
-
-            // Edge detection logic is to be handled
-            // by the subscribing system, see KudzuSystem
-            // for a simple example
-            Spread(uid, xform, spreader.Id, ref updates);
-
-            if (updates < 1)
-                groupUpdates.Remove(spreader.Id);
-            else
-                groupUpdates[spreader.Id] = updates;
         }
+
+        _spreaders.Clear();
     }
 
     private void Spread(EntityUid uid, TransformComponent xform, ProtoId<EdgeSpreaderPrototype> prototype, ref int updates)
