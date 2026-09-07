@@ -61,7 +61,7 @@ namespace Content.Client.Atmos.UI
         public void SetGasFiltered(string? id, string name)
         {
             // ds-14-start
-            if (!ToggleStatusButton.Disabled)
+            if (!SelectGasButton.Disabled)
                 return;
             // ds-14-end
             CurrentGasId = id;
@@ -92,6 +92,11 @@ namespace Content.Client.Atmos.UI
                 Metadata = id,
                 Text = name
             };
+        }
+
+        public void SetSelectGasButtonDisabled()
+        {
+            SelectGasButton.Disabled = true;
         }
 
         private void GasListOnItemSelected(ItemList.ItemListSelectedEventArgs obj)
