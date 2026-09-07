@@ -1,0 +1,42 @@
+- type: construction
+  id: AshWalkerFishingRod
+  graph: AshWalkerFishingRod
+  startNode: start
+  targetNode: rod
+  category: construction-category-tools
+  objectType: Item
+
+- type: constructionGraph
+  id: AshWalkerFishingRod
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: rod
+      steps:
+      - material: Bones
+        amount: 3
+        doAfter: 2
+      - material: LavalandWatcherSinew
+        amount: 2
+        doAfter: 2
+      - material: GoliathHide
+        amount: 1
+        doAfter: 2
+  - node: rod
+    entity: AshWalkerFishingRod
+
+- type: constructionGraph
+  id: AshWalkerCookFish
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: cooked
+      completed:
+      - !type:PlaySound
+        sound: { path: /Audio/Effects/sizzle.ogg }
+      steps:
+      - minTemperature: 335
+  - node: cooked
+    entity: AshWalkerFishCooked

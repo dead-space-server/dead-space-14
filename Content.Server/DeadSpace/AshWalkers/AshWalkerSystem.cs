@@ -48,6 +48,9 @@ public sealed class AshWalkerSystem : EntitySystem
     private void OnSpawnerUsed(Entity<AshWalkerTribeMemberComponent> ent, ref GhostRoleSpawnerUsedEvent args)
     {
         if (TryComp<AshWalkerEggComponent>(args.Spawner, out var egg))
+        {
             ent.Comp.HomeMap = egg.HomeMap;
+            Dirty(ent);
+        }
     }
 }

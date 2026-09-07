@@ -110,6 +110,10 @@ ash-walker-recipe-book-content =
 
     { ash-walker-recipe-book-trophies }
 
+    { ash-walker-recipe-book-rituals }
+
+    { ash-walker-recipe-book-fishing }
+
 ash-walker-recipe-book-settlement =
     { "[" }bold]Mushrooms and gardens[/bold]
     Polypore provides tough fibres. Porcini leaves make food and dressings. Raw inocybe is poisonous: eat only the roasted cap. Ember stems glow and provide iron-rich juice. Cactus fruit quenches thirst and cools burns.

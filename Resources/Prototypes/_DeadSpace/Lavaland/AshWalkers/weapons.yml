@@ -4,6 +4,7 @@
   name: bone dagger
   description: A sharpened bone with a comfortable grip, suited to skinning prey and cutting sinew.
   components:
+  - type: AshWalkerRitualDagger
   - type: Sprite
     sprite: _DeadSpace/Lavaland/AshWalkers/bone_dagger.rsi
     state: icon

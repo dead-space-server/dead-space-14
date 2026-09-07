@@ -1,0 +1,114 @@
+- type: entityTable
+  id: AshWalkerFishingMaterials
+  table: !type:GroupSelector
+    children:
+    - id: SteelOre1
+      weight: 20
+    - id: SilverOre1
+      weight: 8
+    - id: GoldOre1
+      weight: 4
+    - id: DiamondOre1
+      weight: 1
+    - id: SheetSteel10
+      weight: 12
+    - id: SheetGlass10
+      weight: 10
+    - id: MaterialWoodPlank10
+      weight: 12
+    - id: MaterialBones1
+      weight: 16
+    - id: MaterialGoliathHide1
+      weight: 5
+    - id: ShardGlass
+      weight: 12
+
+- type: entityTable
+  id: AshWalkerFishingTools
+  table: !type:GroupSelector
+    children:
+    - id: Bucket
+      weight: 15
+    - id: Lantern
+      weight: 15
+    - id: Soap
+      weight: 15
+    - id: GlowstickGreen
+      weight: 15
+    - id: CrayonBox
+      weight: 10
+    - id: CowToolboxFilled
+      weight: 10
+    - id: ClothingBeltUtilityFilled
+      weight: 8
+    - id: MiningDrill
+      weight: 6
+    - id: AdvancedMineralScanner
+      weight: 6
+
+- type: entityTable
+  id: AshWalkerFishingCurios
+  table: !type:GroupSelector
+    children:
+    - id: PlushieCarp
+    - id: PlushieGhost
+    - id: PlushieBee
+    - id: ToyMouse
+    - id: ToyIan
+    - id: ToyRubberDuck
+    - id: TennisBall
+    - id: DiceBag
+    - id: HarmonicaInstrument
+    - id: BanjoInstrument
+    - id: OcarinaInstrument
+    - id: PanFluteInstrument
+    - id: MusicBoxInstrument
+    - id: PonderingOrb
+    - id: Skub
+    - id: ClothingNeckBling
+    - id: ClothingEyesGlassesSunglasses
+    - id: ClothingHeadHatUshanka
+    - id: ClothingHeadHatFlowerWreath
+    - id: ClothingUniformJumpsuitAncient
+    - id: BedsheetCosmos
+    - id: RGBStaff
+
+- type: entityTable
+  id: AshWalkerFishingMedicine
+  table: !type:GroupSelector
+    children:
+    - id: Ointment
+      weight: 22
+    - id: Gauze
+      weight: 22
+    - id: AloeCream
+      weight: 16
+    - id: Tourniquet
+      weight: 12
+    - id: BruteAutoInjector
+      weight: 8
+    - id: BurnAutoInjector
+      weight: 8
+    - id: CombatMedipen
+      weight: 4
+    - id: MedkitAdvancedFilled
+      weight: 8
+
+- type: entityTable
+  id: AshWalkerFishingTreasures
+  table: !type:GroupSelector
+    children:
+    - id: OreBagOfHolding
+      weight: 20
+    - id: BluespaceBeaker
+      weight: 20
+    - id: BluespaceVial
+      weight: 15
+    - id: ChemistryBottleOmnizine
+      weight: 15
+    - id: ClothingEyesHudOmni
+      weight: 10
+    - id: ResearchDisk10000
+      weight: 10
+    - id: LavalandShelterCapsule
+      weight: 10

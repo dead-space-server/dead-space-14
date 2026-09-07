@@ -5,6 +5,7 @@ using Content.Shared.DeadSpace.Lavaland.Components;
 using Content.Shared.Examine;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
+using Content.Shared.StatusEffectNew;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Whitelist;
@@ -14,6 +15,7 @@ namespace Content.Shared.DeadSpace.AshWalkers;
 public sealed class SharedAshWalkerSystem : EntitySystem
 {
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private readonly StatusEffectsSystem _status = default!;
 
     public override void Initialize()
     {
@@ -54,10 +56,15 @@ public sealed class SharedAshWalkerSystem : EntitySystem
             return;
 
         var damage = new DamageSpecifier(args.Damage);
+        var multiplier = walker.FaunaDamageMultiplier;
+        if (args.Origin is { } hunter && _status.TryGetStatusEffect(hunter, "AshWalkerHuntEffect", out var effect) &&
+            TryComp<AshWalkerRitualEffectComponent>(effect, out var ritual))
+            multiplier *= ritual.HuntMultiplier;
+
         foreach (var (type, amount) in args.Damage.DamageDict)
         {
             if (amount > 0)
-                damage.DamageDict[type] = amount * walker.FaunaDamageMultiplier;
+                damage.DamageDict[type] = amount * multiplier;
         }
 
         args.Damage = damage;

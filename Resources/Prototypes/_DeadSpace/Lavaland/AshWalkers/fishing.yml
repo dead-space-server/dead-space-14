@@ -1,0 +1,177 @@
+- type: entity
+  parent: BaseItem
+  id: AshWalkerFishingRod
+  name: bone fishing rod
+  description: A bone rod with a hide-bound grip, a bone hook and a heat-resistant sinew line.
+  components:
+  - type: LavaFishingRod
+    rewards:
+    - table: !type:EntSelector
+        id: AshWalkerLavaFish
+      weight: 25
+      difficulty: 0.75
+    - table: !type:EntSelector
+        id: AshWalkerArmoredFish
+      weight: 12
+      difficulty: 1.05
+    - table: !type:EntSelector
+        id: AshWalkerSoulFish
+      weight: 3
+      difficulty: 1.45
+    - table: !type:NestedSelector
+        tableId: AshWalkerFishingMaterials
+      weight: 20
+      difficulty: 0.8
+      fish: false
+    - table: !type:NestedSelector
+        tableId: AshWalkerFishingTools
+      weight: 15
+      difficulty: 0.95
+      fish: false
+    - table: !type:NestedSelector
+        tableId: AshWalkerFishingCurios
+      weight: 12
+      difficulty: 0.7
+      fish: false
+    - table: !type:NestedSelector
+        tableId: AshWalkerFishingMedicine
+      weight: 10
+      difficulty: 1
+      fish: false
+    - table: !type:NestedSelector
+        tableId: AshWalkerFishingTreasures
+      weight: 3
+      difficulty: 1.3
+      fish: false
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/fishing.rsi
+    layers:
+    - state: fishing_rod_bone
+    - state: reel_bone
+  - type: Item
+    size: Large
+    inhandVisuals:
+      left:
+      - sprite: _DeadSpace/Lavaland/AshWalkers/fishing_rod_left.rsi
+        state: rod
+      - sprite: _DeadSpace/Lavaland/AshWalkers/fishing_rod_left.rsi
+        state: reel_overlay
+        color: "#BEAD8C"
+      - sprite: _DeadSpace/Lavaland/AshWalkers/fishing_rod_left.rsi
+        state: line_overlay
+        color: "#A86C51"
+      - sprite: _DeadSpace/Lavaland/AshWalkers/fishing_rod_left.rsi
+        state: hook_overlay
+      right:
+      - sprite: _DeadSpace/Lavaland/AshWalkers/fishing_rod_right.rsi
+        state: rod
+      - sprite: _DeadSpace/Lavaland/AshWalkers/fishing_rod_right.rsi
+        state: reel_overlay
+        color: "#BEAD8C"
+      - sprite: _DeadSpace/Lavaland/AshWalkers/fishing_rod_right.rsi
+        state: line_overlay
+        color: "#A86C51"
+      - sprite: _DeadSpace/Lavaland/AshWalkers/fishing_rod_right.rsi
+        state: hook_overlay
+  - type: ContainerContainer
+    containers:
+      fishing_catch: !type:ContainerSlot
+  - type: Construction
+    graph: AshWalkerFishingRod
+    node: rod
+
+- type: entity
+  id: LavaFishingFloat
+  name: fishing float
+  categories: [HideSpawnMenu]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/fishing.rsi
+    state: float
+    drawdepth: Objects
+    noRot: true
+  - type: TimedDespawn
+    lifetime: 65
+
+- type: entity
+  parent: FoodMeatBase
+  id: AshWalkerLavaFish
+  name: lava eel
+  description: A small eel with a heat-resistant skin. Its flesh is edible after cooking.
+  components:
+  - type: FlavorProfile
+    flavors: [fishy]
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 20
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 4
+        - ReagentId: UncookedAnimalProteins
+          Quantity: 8
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/fish.rsi
+    state: lava_loop
+  - type: Item
+    inhandVisuals:
+      left: []
+      right: []
+  - type: Tag
+    tags: [Meat, Raw]
+  - type: Construction
+    graph: AshWalkerCookFish
+    node: start
+    defaultTarget: cooked
+
+- type: entity
+  parent: AshWalkerLavaFish
+  id: AshWalkerArmoredFish
+  name: armored lava fish
+  description: A stocky fish with thick overlapping scales. Tough to catch, but nourishing.
+  components:
+  - type: Sprite
+    state: armorfish
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 20
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 8
+        - ReagentId: UncookedAnimalProteins
+          Quantity: 8
+
+- type: entity
+  parent: AshWalkerLavaFish
+  id: AshWalkerSoulFish
+  name: pale lava fish
+  description: A rare pale fish valued by the tribe. Offered whole, it can replace one carcass in a rite of return.
+  components:
+  - type: AshWalkerOffering
+    requiredReagents:
+      Nutriment: 4
+      UncookedAnimalProteins: 8
+  - type: Sprite
+    state: soulfish
+
+- type: entity
+  parent: FoodMeatCooked
+  id: AshWalkerFishCooked
+  name: roasted lava fish
+  description: Firm fish flesh with a crisp, smoky skin.
+  components:
+  - type: FlavorProfile
+    flavors: [fishy]
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/fish.rsi
+    layers:
+    - state: lava_loop
+      color: "#C89255"
+  - type: Item
+    inhandVisuals:
+      left: []
+      right: []
+  - type: Construction
+    graph: AshWalkerCookFish
+    node: cooked

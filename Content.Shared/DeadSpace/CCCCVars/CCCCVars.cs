@@ -125,7 +125,7 @@ public sealed class CCCCVars
         CVarDef.Create("lavaland.auto_generate", true, CVar.SERVERONLY);
 
     public static readonly CVarDef<bool> AshWalkersEnabled =
-        CVarDef.Create("lavaland.ash_walkers_enabled", true, CVar.SERVERONLY);
+        CVarDef.Create("lavaland.ash_walkers_enabled", true, CVar.SERVER | CVar.REPLICATED);
 
     /*
     * Prison
