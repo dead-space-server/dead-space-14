@@ -18,5 +18,5 @@
   storage:
     back:
     - ThiefBeacon
-    - DirtyCash50000 # DS14: стартовые 50 000 dCR в рюкзаке
+    - SatchelThief
     - ClothingHandsChameleonThief # DS14
