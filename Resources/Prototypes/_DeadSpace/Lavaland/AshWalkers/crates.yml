@@ -84,3 +84,34 @@
           amount: 3
         - id: EmergencyMedipen
           amount: 3
+
+- type: entity
+  parent: CratePirate
+  id: CrateAshWalkerFarming
+  name: ash walker farming crate
+  description: Lavaland spores and seeds, a sieve, a mortar, bowls and tools for tending the settlement's gardens.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: LavalandPolyporeSeeds
+          amount: 2
+        - id: LavalandPorciniSeeds
+          amount: 2
+        - id: LavalandInocybeSeeds
+          amount: 2
+        - id: LavalandEmberSeeds
+          amount: 2
+        - id: LavalandCactusSeeds
+          amount: 2
+        - id: AshWalkerSeedSieve
+        - id: AshWalkerMortar
+        - id: AshWalkerMushroomBowl
+          amount: 3
+        - id: AshWalkerMushroomLantern
+          amount: 3
+        - id: Bucket
+        - id: HydroponicsToolMiniHoe
+        - id: HydroponicsToolSpade
+        - id: MaterialWoodPlank

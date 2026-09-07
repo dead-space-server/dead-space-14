@@ -666,35 +666,38 @@ public sealed class LavalandSystem : EntitySystem
         {
             cancellation.ThrowIfCancellationRequested();
 
-            if (!TryPickCustomGridPosition(mapUid, terrainGrid, planet, entry, random, placed, out var position))
-            {
-                Log.Warning($"Failed to place Lavaland custom grid {entry.Path} for planet {planet.ID}.");
-                continue;
-            }
-
-            var footprint = Math.Max(1, entry.FootprintRadius);
-            var footprintBounds = GetCustomGridFootprintBounds(position, footprint);
-            PrepareCustomGridTerrain(mapUid, terrainGrid, biome, planet, random, footprintBounds);
-
             if (!_mapLoader.TryLoadGrid(mapId, entry.Path, out var customGrid))
             {
-                Log.Error($"Failed to load Lavaland custom grid {entry.Path} for planet {planet.ID} at {position}.");
+                Log.Error($"Failed to load Lavaland custom grid {entry.Path} for planet {planet.ID}.");
                 continue;
             }
 
-            if (customGrid == null || TerminatingOrDeleted(customGrid.Value.Owner))
+            if (TerminatingOrDeleted(customGrid.Value))
             {
-                Log.Error($"Lavaland custom grid loader returned no grid for {entry.Path} on planet {planet.ID} at {position}.");
+                Log.Error($"Lavaland custom grid {entry.Path} was deleted during loading for planet {planet.ID}.");
                 continue;
             }
+
+            var bounds = new Box2Rotated(customGrid.Value.Comp.LocalAABB, Transform(customGrid.Value).LocalRotation, Vector2.Zero)
+                .CalcBoundingBox();
+            var extents = Vector2.Max(Vector2.Abs(bounds.BottomLeft), Vector2.Abs(bounds.TopRight));
+            var footprint = Math.Max(Math.Max(1, entry.FootprintRadius), (int) MathF.Ceiling(MathF.Max(extents.X, extents.Y)));
+            if (!TryPickCustomGridPosition(mapUid, terrainGrid, customGrid.Value, planet, entry, footprint, random, placed, out var position))
+            {
+                Log.Warning($"Failed to place Lavaland custom grid {entry.Path} for planet {planet.ID}.");
+                Del(customGrid.Value);
+                continue;
+            }
+
+            var footprintBounds = GetCustomGridFootprintBounds(position, footprint);
+            PrepareCustomGridTerrain(mapUid, terrainGrid, biome, planet, random, footprintBounds);
 
             if (!string.IsNullOrWhiteSpace(entry.Name))
                 _metadata.SetEntityName(customGrid.Value, entry.Name);
 
             _transform.SetMapCoordinates(customGrid.Value.Owner, new MapCoordinates(new Vector2(position.X, position.Y), mapId));
             var exclusion = EnsureComp<LavalandFtlExclusionComponent>(customGrid.Value.Owner);
-            var gridRadius = customGrid.Value.Comp.LocalAABB.Size.Length() * 0.5f;
-            exclusion.Range = Math.Max(Math.Max(1, entry.FootprintRadius), gridRadius) + 16f;
+            exclusion.Range = Math.Max(footprint, extents.Length()) + 16f;
             placed.Add(position);
             loaded++;
         }
@@ -705,16 +708,20 @@ public sealed class LavalandSystem : EntitySystem
     private bool TryPickCustomGridPosition(
         EntityUid mapUid,
         MapGridComponent terrainGrid,
+        EntityUid customGrid,
         LavalandPlanetPrototype planet,
         LavalandCustomGridEntry entry,
+        int footprint,
         Random random,
         List<Vector2i> placed,
         out Vector2i position)
     {
         position = default;
 
-        var footprint = Math.Max(1, entry.FootprintRadius);
         var mapLimit = GetCustomGridPlacementLimit(planet, footprint);
+        if (mapLimit < 1)
+            return false;
+
         var minSeparation = Math.Max(1, entry.MinSeparation ?? Math.Max(planet.MinStructureSeparation, footprint * 2));
         var exclusionPadding = Math.Max(footprint, minSeparation);
         var reservedDistance = GetTerminalReservedDistance(planet) + exclusionPadding;
@@ -736,7 +743,7 @@ public sealed class LavalandSystem : EntitySystem
 
             if (IsInsideStructureExclusion(candidate, planet, exclusionPadding) ||
                 !IsSeparatedFromPlaced(candidate, placed, minSeparationSquared) ||
-                HasNearbyNonTerrainGrid(mapUid, new Vector2(candidate.X, candidate.Y), footprint + minSeparation) ||
+                HasNearbyNonTerrainGrid(mapUid, customGrid, new Vector2(candidate.X, candidate.Y), footprint + minSeparation) ||
                 HasPersistentAnchoredEntityInFootprint(mapUid, terrainGrid, candidate, footprint))
             {
                 continue;
@@ -881,7 +888,7 @@ public sealed class LavalandSystem : EntitySystem
         if (planet.BoundaryEnabled)
             edgePadding += Math.Max(0, planet.BoundaryLavaWidth) + Math.Max(1, planet.BoundaryWallWidth);
 
-        return Math.Max(1, planet.MapHalfSize - edgePadding);
+        return Math.Max(0, planet.MapHalfSize - edgePadding);
     }
 
     private static Box2i GetCustomGridFootprintBounds(Vector2i center, int radius)
@@ -935,7 +942,7 @@ public sealed class LavalandSystem : EntitySystem
         return new Box2(bounds.Left, bounds.Bottom, bounds.Right, bounds.Top);
     }
 
-    private bool HasNearbyNonTerrainGrid(EntityUid terrainGridUid, Vector2 center, float radius)
+    private bool HasNearbyNonTerrainGrid(EntityUid terrainGridUid, EntityUid ignoredGrid, Vector2 center, float radius)
     {
         _nearbyGrids.Clear();
 
@@ -945,7 +952,7 @@ public sealed class LavalandSystem : EntitySystem
 
         foreach (var grid in _nearbyGrids)
         {
-            if (grid.Owner != terrainGridUid)
+            if (grid.Owner != terrainGridUid && grid.Owner != ignoredGrid)
                 return true;
         }
 

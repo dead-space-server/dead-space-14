@@ -102,7 +102,7 @@
       - material: Bones
         amount: 2
         doAfter: 2
-      - material: GoliathHide
+      - material: AshWalkerLeather
         amount: 1
         doAfter: 2
   - node: loincloth
@@ -130,7 +130,7 @@
     edges:
     - to: belt
       steps:
-      - material: GoliathHide
+      - material: AshWalkerLeather
         amount: 1
         doAfter: 2
       - material: LavalandWatcherSinew
@@ -150,6 +150,9 @@
       - material: GoliathHide
         amount: 2
         doAfter: 3
+      - material: AshWalkerLeather
+        amount: 1
+        doAfter: 2
       - material: LavalandWatcherSinew
         amount: 2
         doAfter: 2

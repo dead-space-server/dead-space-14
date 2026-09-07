@@ -22,7 +22,7 @@
   parent: BookBase
   id: BookAshWalkerRecipes
   name: hunter's craft book
-  description: A smoke-stained book bound in hide. Its drawings show how to turn a successful hunt into weapons and clothing.
+  description: A smoke-stained book bound in hide. An old craft master's notes on hunting, crafting, healing and mushroom gardens.
   components:
   - type: Sprite
     layers:

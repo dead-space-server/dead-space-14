@@ -1,0 +1,453 @@
+- type: entity
+  parent: BasePlant
+  id: BaseLavalandPlant
+  abstract: true
+  components:
+  - type: Sprite
+    noRot: true
+    scale: 0.5625, 0.5625
+    offset: 0, -0.21875
+  - type: Plant
+    lifespan: 200
+    oldAgeDamage: 0
+    maturation: 4
+    growthStages: 1
+    potency: 20
+    endurance: 100
+  - type: PlantHarvest
+    harvestRepeat: Repeat
+  - type: PlantGrowth
+    waterConsumption: 0.5
+    nutrientConsumption: 0.25
+  - type: PlantWeedPest
+    pestGrowthChance: 0
+  - type: PlantAtmospheric
+    lowHeatTolerance: 230
+    highHeatTolerance: 400
+    lowPressureTolerance: 0
+    highPressureTolerance: 300
+
+- type: entity
+  parent: hydroponicsSoil
+  id: BaseLavalandWildPlant
+  abstract: true
+  components:
+  - type: PlantTray
+    trayConsumptionMultiplier: 0
+    weedGrowthChance: 0
+
+- type: entity
+  parent: BaseLavalandPlant
+  id: LavalandPolyporePlant
+  name: ash polypore
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/polypore.rsi
+  - type: Plant
+    production: 8
+    yield: 3
+  - type: PlantData
+    name: ash-walker-plant-polypore
+    noun: seeds-noun-spores
+    packetPrototype: LavalandPolyporeSeeds
+    productPrototypes: [FoodLavalandPolypore]
+  - type: PlantChemicals
+    chemicals:
+      Nutriment:
+        min: 2
+        max: 2
+        potencyDivisor: 20
+      Ethanol:
+        min: 1
+        max: 1
+        potencyDivisor: 20
+
+- type: entity
+  parent: BaseLavalandWildPlant
+  id: LavalandPolyporeWild
+  name: wild ash polypore
+  description: A hardy Lavaland plant rooted in a patch of fertile ash.
+  components:
+  - type: LavalandWildPlant
+    plant: LavalandPolyporePlant
+
+- type: entity
+  parent: SeedBase
+  id: LavalandPolyporeSeeds
+  name: ash polypore spores
+  components:
+  - type: Seed
+    plantId: LavalandPolyporePlant
+
+- type: entity
+  parent: FoodProduceBase
+  id: FoodLavalandPolypore
+  name: polypore shavings
+  description: Fibrous strips of mushroom. They can be pressed into timber, shaped into bowls or used for dressings.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/polypore.rsi
+    state: produce
+  - type: Produce
+    plantId: LavalandPolyporePlant
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 30
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 2
+        - ReagentId: Ethanol
+          Quantity: 1
+  - type: Extractable
+    grindableSolutionName: food
+  - type: Tag
+    tags:
+    - Mushroom
+    - LavalandPolypore
+
+- type: entity
+  parent: BaseLavalandPlant
+  id: LavalandPorciniPlant
+  name: leafy ash mushroom
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/porcini.rsi
+  - type: Plant
+    production: 7
+    yield: 3
+  - type: PlantData
+    name: ash-walker-plant-porcini
+    noun: seeds-noun-spores
+    packetPrototype: LavalandPorciniSeeds
+    productPrototypes: [FoodLavalandPorcini]
+  - type: PlantChemicals
+    chemicals:
+      Nutriment:
+        min: 3
+        max: 3
+        potencyDivisor: 20
+      Vitamin:
+        min: 2
+        max: 2
+        potencyDivisor: 20
+
+- type: entity
+  parent: BaseLavalandWildPlant
+  id: LavalandPorciniWild
+  name: wild leafy ash mushroom
+  description: A hardy Lavaland plant rooted in a patch of fertile ash.
+  components:
+  - type: LavalandWildPlant
+    plant: LavalandPorciniPlant
+
+- type: entity
+  parent: SeedBase
+  id: LavalandPorciniSeeds
+  name: leafy ash mushroom spores
+  components:
+  - type: Seed
+    plantId: LavalandPorciniPlant
+
+- type: entity
+  parent: FoodProduceBase
+  id: FoodLavalandPorcini
+  name: porcini leaf
+  description: A fleshy, edible mushroom leaf. It can be cooked, composted or made into a wound dressing.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/porcini.rsi
+    state: produce
+  - type: Produce
+    plantId: LavalandPorciniPlant
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 30
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 3
+        - ReagentId: Vitamin
+          Quantity: 2
+  - type: Extractable
+    grindableSolutionName: food
+  - type: Tag
+    tags:
+    - Mushroom
+    - LavalandPorcini
+  - type: Construction
+    graph: CookLavalandPorcini
+    node: raw
+    defaultTarget: cooked
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 1
+        mask: [ItemMask]
+        restitution: 0.3
+        friction: 0.2
+  - type: Temperature
+    currentTemperature: 293.15
+  - type: AtmosExposed
+  - type: InternalTemperature
+    thickness: 0.02
+    area: 0.02
+    conductivity: 0.43
+
+- type: entity
+  parent: BaseLavalandPlant
+  id: LavalandInocybePlant
+  name: ash inocybe
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/inocybe.rsi
+  - type: Plant
+    production: 8
+    yield: 3
+  - type: PlantData
+    name: ash-walker-plant-inocybe
+    noun: seeds-noun-spores
+    packetPrototype: LavalandInocybeSeeds
+    productPrototypes: [FoodLavalandInocybe]
+  - type: PlantChemicals
+    chemicals:
+      Nutriment:
+        min: 2
+        max: 2
+        potencyDivisor: 20
+      Amatoxin:
+        min: 2
+        max: 2
+        potencyDivisor: 20
+      SpaceDrugs:
+        min: 1
+        max: 1
+        potencyDivisor: 20
+
+- type: entity
+  parent: BaseLavalandWildPlant
+  id: LavalandInocybeWild
+  name: wild ash inocybe
+  description: A hardy Lavaland plant rooted in a patch of fertile ash.
+  components:
+  - type: LavalandWildPlant
+    plant: LavalandInocybePlant
+
+- type: entity
+  parent: SeedBase
+  id: LavalandInocybeSeeds
+  name: ash inocybe spores
+  components:
+  - type: Seed
+    plantId: LavalandInocybePlant
+
+- type: entity
+  parent: FoodProduceBase
+  id: FoodLavalandInocybe
+  name: inocybe cap
+  description: A bitter mushroom cap. Poisonous when raw; thorough cooking makes it edible.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/inocybe.rsi
+    state: produce
+  - type: Produce
+    plantId: LavalandInocybePlant
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 30
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 2
+        - ReagentId: Amatoxin
+          Quantity: 2
+        - ReagentId: SpaceDrugs
+          Quantity: 1
+  - type: Extractable
+    grindableSolutionName: food
+  - type: Tag
+    tags:
+    - Mushroom
+    - LavalandInocybe
+  - type: Construction
+    graph: CookLavalandInocybe
+    node: raw
+    defaultTarget: cooked
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 1
+        mask: [ItemMask]
+        restitution: 0.3
+        friction: 0.2
+  - type: Temperature
+    currentTemperature: 293.15
+  - type: AtmosExposed
+  - type: InternalTemperature
+    thickness: 0.02
+    area: 0.02
+    conductivity: 0.43
+
+- type: entity
+  parent: BaseLavalandPlant
+  id: LavalandEmberPlant
+  name: ember mushroom
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/ember.rsi
+  - type: Plant
+    production: 10
+    yield: 2
+  - type: PlantData
+    name: ash-walker-plant-ember
+    noun: seeds-noun-spores
+    packetPrototype: LavalandEmberSeeds
+    productPrototypes: [FoodLavalandEmber]
+  - type: PlantChemicals
+    chemicals:
+      Nutriment:
+        min: 1
+        max: 1
+        potencyDivisor: 20
+      Iron:
+        min: 4
+        max: 4
+        potencyDivisor: 20
+      Vitamin:
+        min: 1
+        max: 1
+        potencyDivisor: 20
+  - type: PointLight
+    radius: 1.5
+    energy: 1
+    color: "#DBAD55"
+
+- type: entity
+  parent: BaseLavalandWildPlant
+  id: LavalandEmberWild
+  name: wild ember mushroom
+  description: A hardy Lavaland plant rooted in a patch of fertile ash.
+  components:
+  - type: LavalandWildPlant
+    plant: LavalandEmberPlant
+
+- type: entity
+  parent: SeedBase
+  id: LavalandEmberSeeds
+  name: ember mushroom spores
+  components:
+  - type: Seed
+    plantId: LavalandEmberPlant
+
+- type: entity
+  parent: FoodProduceBase
+  id: FoodLavalandEmber
+  name: ember mushroom stem
+  description: A faintly glowing stem rich in iron. Its ground juice helps replenish lost blood.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/ember.rsi
+    state: produce
+  - type: Produce
+    plantId: LavalandEmberPlant
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 30
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 1
+        - ReagentId: Iron
+          Quantity: 4
+        - ReagentId: Vitamin
+          Quantity: 1
+  - type: Extractable
+    grindableSolutionName: food
+  - type: Tag
+    tags:
+    - Mushroom
+    - LavalandEmber
+  - type: PointLight
+    radius: 1
+    energy: 0.5
+    color: "#DBAD55"
+
+- type: entity
+  parent: BaseLavalandPlant
+  id: LavalandCactusPlant
+  name: ash cactus
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/cactus.rsi
+  - type: Plant
+    production: 9
+    yield: 2
+  - type: PlantData
+    name: ash-walker-plant-cactus
+    noun: seeds-noun-seeds
+    packetPrototype: LavalandCactusSeeds
+    productPrototypes: [FoodLavalandCactus]
+  - type: PlantChemicals
+    chemicals:
+      Nutriment:
+        min: 2
+        max: 2
+        potencyDivisor: 20
+      Water:
+        min: 8
+        max: 8
+        potencyDivisor: 20
+      Vitamin:
+        min: 2
+        max: 2
+        potencyDivisor: 20
+
+- type: entity
+  parent: BaseLavalandWildPlant
+  id: LavalandCactusWild
+  name: wild ash cactus
+  description: A hardy Lavaland plant rooted in a patch of fertile ash.
+  components:
+  - type: LavalandWildPlant
+    plant: LavalandCactusPlant
+
+- type: entity
+  parent: SeedBase
+  id: LavalandCactusSeeds
+  name: ash cactus seeds
+  components:
+  - type: Seed
+    plantId: LavalandCactusPlant
+
+- type: entity
+  parent: FoodProduceBase
+  id: FoodLavalandCactus
+  name: ash cactus fruit
+  description: A juicy fruit beneath a tough red skin. Its pulp can be worked into a soothing burn dressing.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/cactus.rsi
+    state: produce
+  - type: Produce
+    plantId: LavalandCactusPlant
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 30
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 2
+        - ReagentId: Water
+          Quantity: 8
+        - ReagentId: Vitamin
+          Quantity: 2
+  - type: Extractable
+    grindableSolutionName: food
+  - type: Tag
+    tags:
+    - Fruit
+    - LavalandCactus

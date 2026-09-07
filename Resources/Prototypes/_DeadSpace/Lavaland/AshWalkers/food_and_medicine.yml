@@ -1,0 +1,128 @@
+- type: entity
+  parent: FoodSpaceshroomCooked
+  id: FoodLavalandPorciniCooked
+  name: roasted porcini leaf
+  description: A hearty mushroom leaf, browned over the coals.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/porcini.rsi
+    state: produce
+    color: "#C58C5A"
+  - type: Construction
+    graph: CookLavalandPorcini
+    node: cooked
+
+- type: entity
+  parent: FoodSpaceshroomCooked
+  id: FoodLavalandInocybeCooked
+  name: roasted inocybe cap
+  description: Thorough cooking has driven the toxins from this mushroom cap.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/inocybe.rsi
+    state: produce
+    color: "#C58C5A"
+  - type: Construction
+    graph: CookLavalandInocybe
+    node: cooked
+
+- type: stack
+  parent: BaseMediumStack
+  id: AshWalkerWoundDressing
+  name: stack-ash-walker-wound-dressing
+  icon: { sprite: /Textures/_DeadSpace/Lavaland/AshWalkers/porcini.rsi, state: produce }
+  spawn: AshWalkerWoundDressing
+
+- type: entity
+  parent: Gauze1
+  id: AshWalkerWoundDressing
+  name: fungal wound dressing
+  description: A crushed porcini leaf bound in clean fungal fibres. Soothes bruises and open wounds while slowing bleeding.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/porcini.rsi
+    state: produce
+  - type: Healing
+    delay: 3
+    damage:
+      types:
+        Blunt: -4
+        Slash: -4
+        Piercing: -4
+    bloodlossModifier: -5
+  - type: Stack
+    stackType: AshWalkerWoundDressing
+    count: 1
+  - type: Construction
+    graph: AshWalkerWoundDressing
+    node: dressing
+
+- type: stack
+  parent: BaseMediumStack
+  id: AshWalkerBurnDressing
+  name: stack-ash-walker-burn-dressing
+  icon: { sprite: /Textures/_DeadSpace/Lavaland/AshWalkers/cactus.rsi, state: produce }
+  spawn: AshWalkerBurnDressing
+
+- type: entity
+  parent: BaseHealingItem
+  id: AshWalkerBurnDressing
+  name: cactus burn dressing
+  description: Cool cactus pulp wrapped in a fleshy mushroom leaf. Eases heat and acid burns.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/cactus.rsi
+    state: produce
+  - type: Tag
+    tags: [Ointment]
+  - type: Healing
+    delay: 3
+    damageContainers: [Biological]
+    damage:
+      types:
+        Heat: -12
+        Caustic: -3
+    healingBeginSound:
+      path: /Audio/Items/Medical/ointment_begin.ogg
+    healingEndSound:
+      path: /Audio/Items/Medical/ointment_end.ogg
+  - type: Stack
+    stackType: AshWalkerBurnDressing
+    count: 1
+  - type: Construction
+    graph: AshWalkerBurnDressing
+    node: dressing
+
+- type: reagent
+  id: AshWalkerBloodTonic
+  name: reagent-name-ash-walker-blood-tonic
+  desc: reagent-desc-ash-walker-blood-tonic
+  group: Medicine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: bitter
+  color: "#A75E37"
+  metabolisms:
+    Medicine:
+      effects:
+      - !type:ModifyBloodLevel
+        amount: 1
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentCondition
+          reagent: AshWalkerBloodTonic
+          min: 20
+        damage:
+          types:
+            Poison: 0.5
+
+- type: reaction
+  id: AshWalkerBloodTonic
+  reactants:
+    Iron:
+      amount: 1
+    Vitamin:
+      amount: 1
+    Water:
+      amount: 2
+  products:
+    AshWalkerBloodTonic: 4

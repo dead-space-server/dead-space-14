@@ -1,0 +1,236 @@
+- type: entity
+  parent: BaseStructure
+  id: AshWalkerHearth
+  name: stone hearth
+  description: A cooking hearth lined with basalt. Feed it wooden planks or pressed fungal timber, then lay food or scraped hides over the coals.
+  components:
+  - type: AshWalkerHearth
+  - type: Sprite
+    sprite: Structures/Decoration/bonfire.rsi
+    noRot: true
+    layers:
+    - state: bonfire_extinguished
+      map: [base]
+    - state: burning
+      map: [fire]
+      visible: false
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.AshWalkerHearthVisuals.Burning:
+        base:
+          True: { visible: false }
+          False: { visible: true }
+        fire:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        hard: false
+        layer: [HighImpassable]
+        mask: [ItemMask]
+  - type: PlaceableSurface
+    placeCentered: true
+  - type: ItemPlacer
+    maxEntities: 4
+    whitelist:
+      requireAll: true
+      components: [Item, Temperature]
+  - type: PointLight
+    enabled: false
+    radius: 4
+    energy: 2
+    color: "#FF9C40"
+  - type: AmbientSound
+    enabled: false
+    volume: -6
+    range: 5
+    sound:
+      path: /Audio/Ambience/Objects/fireplace.ogg
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Rock
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [Destruction]
+  - type: Construction
+    graph: AshWalkerHearth
+    node: hearth
+
+- type: entity
+  parent: hydroponicsSoil
+  id: AshWalkerSoil
+  name: ash garden bed
+  description: A shallow bed of fertile ash held by stones. Plant spores or seeds, water it and compost spare produce to replenish its nutrients.
+  components:
+  - type: PlantTray
+    waterLevel: 40
+    nutritionLevel: 40
+    trayConsumptionMultiplier: 1
+  - type: Construction
+    graph: AshWalkerSoil
+    node: soil
+
+- type: entity
+  parent: MortarAndPestle
+  id: AshWalkerMortar
+  name: basalt mortar and pestle
+  description: A hollowed stone and a rounded pestle for grinding mushrooms and fruit into juice.
+  components:
+  - type: Construction
+    graph: AshWalkerMortar
+    node: mortar
+
+- type: entity
+  parent: BaseItem
+  id: AshWalkerSeedSieve
+  name: spore sieve
+  description: A porous fungal bowl for separating viable spores and seeds from freshly harvested produce.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/mushroom_bowl.rsi
+    layers:
+    - state: icon
+      color: "#B7A784"
+    - sprite: Objects/Specific/Hydroponics/seeds.rsi
+      state: seed
+      scale: 0.5,0.5
+  - type: Item
+    size: Small
+  - type: SeedExtractor
+    baseSeeds:
+      min: 1
+      max: 1
+  - type: Construction
+    graph: AshWalkerSeedSieve
+    node: sieve
+
+- type: entity
+  parent: DrinkBase
+  id: AshWalkerMushroomBowl
+  name: mushroom bowl
+  description: A bowl pressed from tough fungal fibres. Holds water, broth and medicinal juice.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/mushroom_bowl.rsi
+  - type: Item
+    size: Small
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 50
+  - type: Construction
+    graph: AshWalkerMushroomBowl
+    node: bowl
+
+- type: entity
+  parent: BaseItem
+  id: AshWalkerMushroomLantern
+  name: ember mushroom lamp
+  description: Living ember stems nestled in a porous fungal bowl. Their steady glow needs no batteries.
+  components:
+  - type: Sprite
+    layers:
+    - sprite: _DeadSpace/Lavaland/AshWalkers/mushroom_bowl.rsi
+      state: icon
+    - sprite: _DeadSpace/Lavaland/AshWalkers/ember.rsi
+      state: produce
+      shader: unshaded
+  - type: Item
+    size: Small
+  - type: PointLight
+    radius: 3
+    energy: 1.5
+    color: "#DBAD55"
+  - type: Construction
+    graph: AshWalkerMushroomLantern
+    node: lamp
+
+- type: entity
+  parent: FloraRockSolid
+  id: LavalandBasaltBoulder
+  name: basalt boulder
+  description: A weathered block of basalt. Break it with a pickaxe to obtain building stone.
+  components:
+  - type: Damageable
+    damageModifierSet: Rock
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          MaterialBasalt1:
+            min: 4
+            max: 6
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Effects/break_stone.ogg
+      - !type:DoActsBehavior
+        acts: [Destruction]
+
+- type: entity
+  parent: WallSandstone
+  id: WallAshWalkerBasalt
+  name: basalt wall
+  description: Closely fitted basalt blocks, sturdy enough to shelter a settlement.
+  components:
+  - type: Sprite
+    color: "#77716E"
+  - type: Damageable
+    damageModifierSet: Rock
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          MaterialBasalt1:
+            min: 2
+            max: 2
+      - !type:DoActsBehavior
+        acts: [Destruction]
+  - type: Construction
+    graph: WallAshWalkerBasalt
+    node: wall
+
+- type: entity
+  parent: IronstoneDoor
+  id: DoorAshWalkerBasalt
+  name: basalt gate
+  description: A heavy stone gate bound with sinew. It opens by hand and needs no electricity.
+  components:
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          MaterialBasalt1:
+            min: 3
+            max: 3
+      - !type:DoActsBehavior
+        acts: [Destruction]
+  - type: Construction
+    graph: DoorAshWalkerBasalt
+    node: gate
+
+- type: entity
+  parent: ClothingBackpackSatchelLeather
+  id: ClothingBackpackAshWalkerCrafted
+  name: hide satchel
+  description: A roomy satchel sewn from dried goliath hide and watcher sinew.
+  components:
+  - type: Construction
+    graph: ClothingBackpackAshWalkerCrafted
+    node: satchel
