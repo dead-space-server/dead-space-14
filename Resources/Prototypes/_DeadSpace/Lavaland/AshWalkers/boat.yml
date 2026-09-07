@@ -1,0 +1,98 @@
+- type: entity
+  parent: BaseVehicleStrap
+  id: LavaBoat
+  name: hide boat
+  description: A shallow hull of goliath hide stretched over a bone frame. Its cargo net keeps equipment and hunting trophies out of the lava.
+  components:
+  - type: LavaBoat
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/lava_boat.rsi
+    state: goliath_boat
+    drawdepth: Objects
+  - type: GravityAffected
+  - type: Pullable
+    pullRange: 2
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeCircle
+          radius: 0.4
+        density: 120
+        restitution: 0
+        mask:
+        - MobMask
+        layer:
+        - TableLayer
+  - type: Vehicle
+    transferDamage: false
+  - type: Strap
+    size: 100
+    buckleOffset: "0, 0.05"
+    buckleSound:
+      path: /Audio/Items/Handcuffs/rope_end.ogg
+    unbuckleSound:
+      path: /Audio/Items/Handcuffs/rope_takeoff.ogg
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2
+    baseSprintSpeed: 3
+  - type: Damageable
+    damageModifierSet: Wood
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 250
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WoodDestroy
+      - !type:DoActsBehavior
+        acts: [Destruction]
+  - type: EntityStorage
+    capacity: 12
+    maxSize: 2
+    airtight: false
+    isCollidableWhenOpen: true
+    enteringRange: 1
+    openSound:
+      path: /Audio/Items/Handcuffs/rope_takeoff.ogg
+    closeSound:
+      path: /Audio/Items/Handcuffs/rope_end.ogg
+  - type: ContainerContainer
+    containers:
+      entity_storage: !type:Container
+  - type: Appearance
+  - type: Construction
+    graph: LavaBoat
+    node: boat
+  - type: Tag
+    tags: []
+
+- type: entity
+  parent: BaseItem
+  id: BoneOar
+  name: bone oar
+  description: A broad bone blade lashed to a long shaft. Keep it in hand to row a hide boat across the lava.
+  components:
+  - type: BoneOar
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_oar.rsi
+    state: oar
+  - type: Item
+    size: Large
+    inhandVisuals:
+      left:
+      - sprite: _DeadSpace/Lavaland/AshWalkers/bone_oar_left.rsi
+        state: oar
+      right:
+      - sprite: _DeadSpace/Lavaland/AshWalkers/bone_oar_right.rsi
+        state: oar
+  - type: MeleeWeapon
+    attackRate: 0.8
+    damage:
+      types:
+        Blunt: 12
+    soundHit:
+      path: /Audio/Weapons/genhit1.ogg
+  - type: Construction
+    graph: BoneOar
+    node: oar

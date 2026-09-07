@@ -156,9 +156,8 @@ public sealed class StepTriggerSystem : EntitySystem
         if (!args.OtherFixture.Hard)
             return;
 
-        if (!CanTrigger(uid, otherUid, component))
-            return;
-
+        // Temporary immunity can end while the entities remain in contact.
+        // UpdateColliding checks whether a tracked contact may trigger.
         EnsureComp<StepTriggerActiveComponent>(uid);
 
         if (component.Colliding.Add(otherUid))
@@ -174,10 +173,10 @@ public sealed class StepTriggerSystem : EntitySystem
         if (!component.Colliding.Remove(otherUid))
             return;
 
-        component.CurrentlySteppedOn.Remove(otherUid);
+        var wasSteppedOn = component.CurrentlySteppedOn.Remove(otherUid);
         Dirty(uid, component);
 
-        if (component.StepOn)
+        if (component.StepOn && wasSteppedOn)
         {
             var evStepOff = new StepTriggeredOffEvent(uid, otherUid);
             RaiseLocalEvent(uid, ref evStepOff);
@@ -234,6 +233,8 @@ public sealed class StepTriggerSystem : EntitySystem
             return;
 
         component.Active = active;
+        if (active && component.Colliding.Count != 0)
+            EnsureComp<StepTriggerActiveComponent>(uid);
         Dirty(uid, component);
     }
 }

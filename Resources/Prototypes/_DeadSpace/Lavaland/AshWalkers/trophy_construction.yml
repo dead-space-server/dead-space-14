@@ -1,0 +1,47 @@
+- type: construction
+  id: LavaBoat
+  graph: LavaBoat
+  startNode: start
+  targetNode: boat
+  category: construction-category-tools
+  objectType: Structure
+
+- type: construction
+  id: BoneOar
+  graph: BoneOar
+  startNode: start
+  targetNode: oar
+  category: construction-category-tools
+  objectType: Item
+
+- type: construction
+  id: ClothingOuterArmorDrakeAshWalker
+  graph: ClothingOuterArmorDrakeAshWalker
+  startNode: start
+  targetNode: armor
+  category: construction-category-clothing
+  objectType: Item
+
+- type: construction
+  id: ShieldColossusAshWalker
+  graph: ShieldColossusAshWalker
+  startNode: start
+  targetNode: shield
+  category: construction-category-weapons
+  objectType: Item
+
+- type: construction
+  id: HammerHierophantAshWalker
+  graph: HammerHierophantAshWalker
+  startNode: start
+  targetNode: hammer
+  category: construction-category-weapons
+  objectType: Item
+
+- type: construction
+  id: DaggerBloodAshWalker
+  graph: DaggerBloodAshWalker
+  startNode: start
+  targetNode: dagger
+  category: construction-category-weapons
+  objectType: Item
