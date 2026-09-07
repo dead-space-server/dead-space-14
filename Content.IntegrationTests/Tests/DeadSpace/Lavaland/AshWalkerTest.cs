@@ -195,7 +195,7 @@ public sealed class AshWalkerTest
             var hit = new DamageSpecifier { DamageDict = { ["Blunt"] = 10, ["Piercing"] = 10 } };
             Assert.That(damage.TryChangeDamage(prey, hit, out var ordinaryHit, origin: reptilian), Is.True);
             Assert.That(damage.TryChangeDamage(prey, hit, out var hunterHit, origin: walker), Is.True);
-            Assert.That(hunterHit.GetTotal().Float(), Is.EqualTo(ordinaryHit.GetTotal().Float() * 1.5f).Within(0.01));
+            Assert.That(hunterHit.GetTotal().Float(), Is.EqualTo(ordinaryHit.GetTotal().Float() * 2.5f).Within(0.01));
             Assert.That(hit.GetTotal().Float(), Is.EqualTo(20));
             Assert.That(damage.TryChangeDamage(reptilian, hit, out ordinaryHit, origin: reptilian), Is.True);
             Assert.That(damage.TryChangeDamage(reptilian, hit, out hunterHit, origin: walker), Is.True);

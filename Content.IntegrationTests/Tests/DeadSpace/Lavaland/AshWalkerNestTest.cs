@@ -315,11 +315,13 @@ public sealed class AshWalkerNestTest
         await server.WaitAssertion(() =>
         {
             Assert.That(entMan.GetComponent<DamageableComponent>(walker).TotalDamage.Float(), Is.Zero);
-            damage.TryChangeDamage(walker, new DamageSpecifier { DamageDict = { ["Blunt"] = 130 } }, true);
+            damage.TryChangeDamage(walker, new DamageSpecifier { DamageDict = { ["Blunt"] = 170 } }, true);
             Assert.That(entMan.GetComponent<MobStateComponent>(walker).CurrentState, Is.EqualTo(MobState.Alive));
             damage.TryChangeDamage(walker, new DamageSpecifier { DamageDict = { ["Heat"] = 10 } });
-            Assert.That(entMan.GetComponent<DamageableComponent>(walker).Damage.DamageDict["Heat"].Float(), Is.EqualTo(6));
-            damage.TryChangeDamage(walker, new DamageSpecifier { DamageDict = { ["Blunt"] = 160 } }, true);
+            Assert.That(entMan.GetComponent<DamageableComponent>(walker).Damage.DamageDict["Heat"].Float(), Is.EqualTo(5));
+            damage.TryChangeDamage(walker, new DamageSpecifier { DamageDict = { ["Blunt"] = 50 } }, true);
+            Assert.That(entMan.GetComponent<MobStateComponent>(walker).CurrentState, Is.EqualTo(MobState.Critical));
+            damage.TryChangeDamage(walker, new DamageSpecifier { DamageDict = { ["Blunt"] = 130 } }, true);
             Assert.That(entMan.GetComponent<MobStateComponent>(walker).CurrentState, Is.EqualTo(MobState.Dead));
         });
         await pair.CleanReturnAsync();

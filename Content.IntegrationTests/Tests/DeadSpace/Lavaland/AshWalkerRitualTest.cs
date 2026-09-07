@@ -100,7 +100,7 @@ public sealed class AshWalkerRitualTest : InteractionTest
             var hit = new DamageSpecifier { DamageDict = { ["Blunt"] = 10 } };
             Server.System<DamageableSystem>().SetDamageModifierSetId(watcher, null);
             Server.System<DamageableSystem>().TryChangeDamage(watcher, hit, out var dealt, origin: SPlayer, ignoreGlobalModifiers: true);
-            Assert.That((float) dealt.GetTotal(), Is.EqualTo(17.25f).Within(0.02f));
+            Assert.That((float) dealt.GetTotal(), Is.EqualTo(28.75f).Within(0.02f));
             SEntMan.DeleteEntity(watcher);
             SEntMan.DeleteEntity(rune);
             rune = SEntMan.SpawnEntity("AshWalkerMendingRune", new EntityCoordinates(MapData.Grid, 1.5f, 0.5f));

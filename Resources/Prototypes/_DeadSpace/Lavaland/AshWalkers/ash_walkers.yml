@@ -5,7 +5,7 @@
   description: A digitigrade reptilian native to Lavaland.
   components:
   - type: AshWalker
-    faunaDamageMultiplier: 1.5
+    faunaDamageMultiplier: 2.5
     gunWhitelist:
       tags:
       - AshWalkerUsableGun
@@ -33,12 +33,12 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      140: PreCritical
-      170: Critical
-      280: Dead
+      180: PreCritical
+      220: Critical
+      350: Dead
   - type: Stamina
-    baseCritThreshold: 140
-    decay: 4.5
+    baseCritThreshold: 180
+    decay: 6
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.75
     baseSprintSpeed: 4.95
@@ -72,13 +72,13 @@
 - type: damageModifierSet
   id: AshWalker
   coefficients:
-    Blunt: 0.85
-    Slash: 0.85
-    Piercing: 0.85
-    Heat: 0.6
-    Cold: 0.6
-    Poison: 0.75
-    Radiation: 0.75
+    Blunt: 0.75
+    Slash: 0.75
+    Piercing: 0.75
+    Heat: 0.5
+    Cold: 0.5
+    Poison: 0.6
+    Radiation: 0.6
 
 - type: humanoidBaseSprite
   id: MobAshWalkerLLeg
