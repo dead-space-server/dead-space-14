@@ -7,6 +7,9 @@ namespace Content.Shared.DeadSpace.AshWalkers;
 public sealed partial class AshWalkerComponent : Component
 {
     [DataField, AutoNetworkedField]
+    public float FaunaDamageMultiplier = 1.5f;
+
+    [DataField, AutoNetworkedField]
     public EntityWhitelist GunWhitelist = new();
 
     [DataField, AutoNetworkedField]

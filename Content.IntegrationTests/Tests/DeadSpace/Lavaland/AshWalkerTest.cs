@@ -6,6 +6,8 @@ using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
 using Content.Shared.Body.Components;
+using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.AshWalkers;
 using Content.Shared.DeadSpace.CCCCVars;
 using Content.Shared.DeadSpace.Languages.Components;
@@ -114,7 +116,7 @@ public sealed class AshWalkerTest
                     Is.EqualTo("ClothingUniformAshWalker"));
                 Assert.That(inventory.TryGetSlotEntity(member, "back", out var bag), Is.True);
                 Assert.That(entMan.GetComponent<StorageComponent>(bag!.Value).Container.ContainedEntities,
-                    Has.Count.EqualTo(5));
+                    Has.Count.EqualTo(6));
 
                 transform.SetCoordinates(member, other.GridCoords);
                 Assert.That(entMan.GetComponent<AshWalkerTribeMemberComponent>(member).HomeMap,
@@ -179,6 +181,30 @@ public sealed class AshWalkerTest
             entMan.EventBus.RaiseLocalEvent(bow, ref shot);
             Assert.That(shot.Cancelled, Is.False);
             Assert.That(factions.IsFactionHostile(HostileFaction, TribeFaction), Is.True);
+
+            var armor = entMan.SpawnEntity("ClothingOuterArmorBoneAshWalker", map.GridCoords);
+            Assert.That(inventory.CanEquip(walker, armor, "outerClothing", out _), Is.True);
+            Assert.That(inventory.CanEquip(reptilian, armor, "outerClothing", out reason), Is.False);
+            Assert.That(reason, Is.EqualTo("ash-walker-clothing-cannot-equip"));
+            Assert.That(inventory.CanEquip(walker, reptilian, armor, "outerClothing", out reason), Is.False);
+            Assert.That(reason, Is.EqualTo("ash-walker-clothing-cannot-equip"));
+            Assert.That(inventory.CanEquip(reptilian, walker, armor, "outerClothing", out _), Is.True);
+
+            var damage = server.System<DamageableSystem>();
+            var prey = entMan.SpawnEntity("MobLavalandGoliath", map.GridCoords);
+            var hit = new DamageSpecifier { DamageDict = { ["Blunt"] = 10, ["Piercing"] = 10 } };
+            Assert.That(damage.TryChangeDamage(prey, hit, out var ordinaryHit, origin: reptilian), Is.True);
+            Assert.That(damage.TryChangeDamage(prey, hit, out var hunterHit, origin: walker), Is.True);
+            Assert.That(hunterHit.GetTotal().Float(), Is.EqualTo(ordinaryHit.GetTotal().Float() * 1.5f).Within(0.01));
+            Assert.That(hit.GetTotal().Float(), Is.EqualTo(20));
+            Assert.That(damage.TryChangeDamage(reptilian, hit, out ordinaryHit, origin: reptilian), Is.True);
+            Assert.That(damage.TryChangeDamage(reptilian, hit, out hunterHit, origin: walker), Is.True);
+            Assert.That(hunterHit.GetTotal(), Is.EqualTo(ordinaryHit.GetTotal()));
+
+            var healing = new DamageSpecifier { DamageDict = { ["Blunt"] = -2 } };
+            Assert.That(damage.TryChangeDamage(prey, healing, out var ordinaryHealing, origin: reptilian), Is.True);
+            Assert.That(damage.TryChangeDamage(prey, healing, out var hunterHealing, origin: walker), Is.True);
+            Assert.That(hunterHealing.GetTotal(), Is.EqualTo(ordinaryHealing.GetTotal()));
         });
 
         await pair.CleanReturnAsync();

@@ -1,0 +1,105 @@
+- type: construction
+  id: ClothingOuterArmorBoneAshWalker
+  graph: ClothingOuterArmorBoneAshWalker
+  startNode: start
+  targetNode: armor
+  category: construction-category-clothing
+  objectType: Item
+
+- type: construction
+  id: ClothingHeadHelmetBoneAshWalker
+  graph: ClothingHeadHelmetBoneAshWalker
+  startNode: start
+  targetNode: helmet
+  category: construction-category-clothing
+  objectType: Item
+
+- type: construction
+  id: DaggerBone
+  graph: DaggerBone
+  startNode: start
+  targetNode: dagger
+  category: construction-category-weapons
+  objectType: Item
+
+- type: construction
+  id: AxeBone
+  graph: AxeBone
+  startNode: start
+  targetNode: axe
+  category: construction-category-weapons
+  objectType: Item
+
+- type: construction
+  id: ClothingHandsGlovesBoneBracers
+  graph: ClothingHandsGlovesBoneBracers
+  startNode: start
+  targetNode: bracers
+  category: construction-category-clothing
+  objectType: Item
+
+- type: construction
+  id: ClothingNeckBoneTalisman
+  graph: ClothingNeckBoneTalisman
+  startNode: start
+  targetNode: talisman
+  category: construction-category-clothing
+  objectType: Item
+
+- type: construction
+  id: ClothingUniformSkullArmor
+  graph: ClothingUniformSkullArmor
+  startNode: start
+  targetNode: loincloth
+  category: construction-category-clothing
+  objectType: Item
+
+- type: construction
+  id: SinewCuffs
+  graph: SinewCuffs
+  startNode: start
+  targetNode: cuffs
+  category: construction-category-tools
+  objectType: Item
+
+- type: construction
+  id: ClothingBeltAshWalker
+  graph: ClothingBeltAshWalker
+  startNode: start
+  targetNode: belt
+  category: construction-category-clothing
+  objectType: Item
+
+- type: construction
+  id: ClothingOuterCloakGoliath
+  graph: ClothingOuterCloakGoliath
+  startNode: start
+  targetNode: cloak
+  category: construction-category-clothing
+  objectType: Item
+
+- type: construction
+  id: SpearBoneSinew
+  name: ash-walker-construction-spear-name
+  description: ash-walker-construction-spear-description
+  graph: SpearBone
+  startNode: startSinew
+  targetNode: spear
+  category: construction-category-weapons
+  objectType: Item
+
+- type: construction
+  id: BowBone
+  graph: BowBone
+  startNode: start
+  targetNode: bow
+  category: construction-category-weapons
+  objectType: Item
+
+- type: construction
+  id: ArrowBone
+  graph: ArrowBone
+  startNode: start
+  targetNode: arrow
+  category: construction-category-weapons
+  objectType: Item

@@ -5,6 +5,7 @@
   description: A digitigrade reptilian native to Lavaland.
   components:
   - type: AshWalker
+    faunaDamageMultiplier: 1.5
     gunWhitelist:
       tags:
       - AshWalkerUsableGun
@@ -185,3 +186,4 @@
     - Gauze5
     - AloeCream5
     - Lantern
+    - BookAshWalkerRecipes

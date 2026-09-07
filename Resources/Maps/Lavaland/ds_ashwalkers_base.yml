@@ -721,7 +721,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 4.0970364,0.46432567
       parent: 1
-- proto: ClothingOuterArmorBone
+- proto: ClothingOuterArmorBoneAshWalker
   entities:
   - uid: 250
     components:
