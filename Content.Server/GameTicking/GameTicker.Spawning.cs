@@ -4,7 +4,6 @@ using System.Numerics;
 using Content.Server.Administration.Managers;
 using Content.Server.Administration.Systems;
 using Content.Server.GameTicking.Events;
-using Content.Server.Ghost;
 using Content.Server.Spawners.Components;
 using Content.Server.Speech.Components;
 using Content.Server.Station.Components;
@@ -211,6 +210,15 @@ namespace Content.Server.GameTicking
                 }
 
                 character = HumanoidCharacterProfile.RandomWithSpecies(speciesId);
+            }
+
+            var attempt = new PlayerSpawnAttemptEvent(player, character, station, jobId);
+            RaiseLocalEvent(ref attempt);
+            if (attempt.Cancelled)
+            {
+                if (attempt.Reason != null)
+                    _chatManager.DispatchServerMessage(player, attempt.Reason);
+                return;
             }
 
             // We raise this event to allow other systems to handle spawning this player themselves. (e.g. late-join wizard, etc)

@@ -9,4 +9,5 @@ public interface IServerSponsorsManager : ISharedSponsorsManager
     bool TryGetInfo(NetUserId userId, [NotNullWhen(true)] out ISponsorInfo? sponsor);
     bool TryCalcAntagPriority(NetUserId userId);
     bool HasEvacuationSupport(NetUserId userId);
+    bool HasNewLife(NetUserId userId);
 }
