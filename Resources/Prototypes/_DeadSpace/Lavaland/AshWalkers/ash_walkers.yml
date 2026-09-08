@@ -28,6 +28,10 @@
       260: 0.9
       240: 0.8
       220: 0.7
+  - type: SlowOnDamage
+    speedModifierThresholds:
+      120: 0.7
+      160: 0.5
   - type: Damageable
     damageModifierSet: AshWalker
   - type: MobThresholds
