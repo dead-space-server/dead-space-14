@@ -23,6 +23,10 @@
   - type: TemperatureDamage
     heatDamageThreshold: 500
     coldDamageThreshold: 260
+  - type: SlowOnDamage
+    speedModifierThresholds:
+      120: 0.7
+      160: 0.5
   - type: TemperatureSpeed
     thresholds:
       260: 0.9
