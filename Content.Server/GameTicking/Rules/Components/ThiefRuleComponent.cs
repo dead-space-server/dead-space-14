@@ -15,5 +15,5 @@ public sealed partial class ThiefRuleComponent : Component
     /// that the thief must insert into their PDA's tool slot to unlock ВорПРО.
     /// </summary>
     [DataField]
-    public ProtoId<EntityPrototype>? UnlockTool = default!;
+    public EntProtoId? UnlockTool;
 }

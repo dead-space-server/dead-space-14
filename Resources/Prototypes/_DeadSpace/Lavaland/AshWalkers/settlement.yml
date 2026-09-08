@@ -160,7 +160,12 @@
   description: A weathered block of basalt. Break it with a pickaxe to obtain building stone.
   components:
   - type: Damageable
+    damageContainer: StructuralInorganic
     damageModifierSet: Rock
+  - type: Gatherable
+    toolWhitelist:
+      tags:
+      - Pickaxe
   - type: Destructible
     thresholds:
     - trigger: !type:DamageTrigger
@@ -169,8 +174,8 @@
       - !type:SpawnEntitiesBehavior
         spawn:
           MaterialBasalt1:
-            min: 4
-            max: 6
+            min: 12
+            max: 16
       - !type:PlaySoundBehavior
         sound:
           path: /Audio/Effects/break_stone.ogg

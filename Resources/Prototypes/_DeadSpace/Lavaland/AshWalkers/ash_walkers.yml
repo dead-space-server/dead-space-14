@@ -98,11 +98,24 @@
 - type: npcFaction
   id: AshWalker
   hostile:
+  - NanoTrasen
+  - Syndicate
+  - SyndicateAgent
   - SimpleHostile
   - Xeno
   - Zombie
   - AllHostile
   - Dragon
+  - Revolutionary
+  - Revenant
+  - Ninja
+  - Wizard
+  - Xenoborg
+  - CentralCommand
+  - Taipan
+  - Necromorfs
+  - SpiderTerror
+  - Blob
 
 - type: Tag
   id: AshWalkerUsableGun
@@ -187,3 +200,4 @@
     - AloeCream5
     - Lantern
     - BookAshWalkerRecipes
+    - BookAshWalkerGuide

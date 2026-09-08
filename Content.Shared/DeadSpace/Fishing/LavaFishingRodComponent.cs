@@ -38,10 +38,10 @@ public sealed partial class LavaFishingRodComponent : Component
     [DataField, AutoNetworkedField]
     public LavaFishingPhase Phase;
 
-    [DataField, AutoNetworkedField]
+    [AutoNetworkedField]
     public EntityCoordinates Origin;
 
-    [DataField, AutoNetworkedField]
+    [AutoNetworkedField]
     public EntityCoordinates Spot;
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]

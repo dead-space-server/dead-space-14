@@ -3,6 +3,7 @@
   friendly:
   - Necromorfs
   hostile:
+  - AshWalker
   - Revolutionary
   - NanoTrasen
   - SimpleNeutral

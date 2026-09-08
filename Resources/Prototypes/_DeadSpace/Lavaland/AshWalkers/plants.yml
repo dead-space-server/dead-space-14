@@ -178,6 +178,7 @@
   - type: Construction
     graph: CookLavalandPorcini
     node: raw
+    deconstructionTarget: null
     defaultTarget: cooked
   - type: Fixtures
     fixtures:
@@ -274,6 +275,7 @@
   - type: Construction
     graph: CookLavalandInocybe
     node: raw
+    deconstructionTarget: null
     defaultTarget: cooked
   - type: Fixtures
     fixtures:

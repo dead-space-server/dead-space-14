@@ -32,13 +32,3 @@ ash-walker-return-title = Return to the tribe
 ash-walker-return-accept = Return
 ash-walker-return-decline = Remain
 ash-walker-return-message = Your tribesmates have prepared offerings to return you to your body. Accept their call? You will retain wounds and suffer a minute of weakness. This rite cannot return you again this round.
-
-ash-walker-recipe-book-rituals =
-    { "[" }bold]Runes and offerings[/bold]
-    Hold a bone dagger or blood claw. Their actions let you choose a rune and draw it in four seconds on clear solid ground on your home Lavaland. A dagger can also erase a rune.
-    Leave offerings within one and a half tiles of the rune. Drag a body onto the sign or activate the rune to begin. Movement and damage interrupt the rite; offerings remain until it succeeds.
-    Hunt: one intact goliath, eight seconds. Tribesmates within two tiles gain 15% additional damage against fauna for four minutes. Walls block the blessing. Identical blessings do not stack.
-    Mending: one intact watcher of any kind, eight seconds. Nearby living tribesmates heal 2 points of physical or burn damage every three seconds, for three minutes and at most 80 points each. Identical blessings do not stack. The rite does not cure poison, restore blood or heal the dead.
-    Return: a fallen tribesmate, two intact goliaths, basilisks or watchers, and 10 units of blood tonic in an open vessel. A pale lava fish replaces one carcass. After twenty seconds, the spirit has thirty seconds to accept; remain near the rune until they answer.
-    Only a tribesmate with a surviving body and head can return. They awaken wounded and move more slowly for one minute. Each spirit can return this way once per round. If the spirit declines or the body is moved away, offerings remain.
-    A carcass can be butchered, fed to the nest or offered to a rune. Domestic animals are not accepted by these rites.

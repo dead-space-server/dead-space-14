@@ -24,7 +24,7 @@ public sealed class GutlunchInteractionTest : InteractionTest
         var serverMeat = ToServer(meat);
         await RunTicks(5);
         await ClickAndAssertPredicted();
-        await RunTicks(60);
+        await AwaitDoAfters();
         await Server.WaitAssertion(() =>
         {
             Assert.That(SEntMan.Deleted(serverMeat), Is.True);
@@ -34,7 +34,7 @@ public sealed class GutlunchInteractionTest : InteractionTest
         var bowl = await PlaceInHands("AshWalkerMushroomBowl");
         await RunTicks(5);
         await ClickAndAssertPredicted();
-        await RunTicks(120);
+        await AwaitDoAfters();
         await Server.WaitAssertion(() =>
         {
             var solutions = Server.System<SharedSolutionContainerSystem>();
@@ -78,5 +78,7 @@ public sealed class GutlunchInteractionTest : InteractionTest
             Assert.That(Client.System<SharedHandsSystem>().GetActiveItem(CPlayer), Is.Not.Null);
         });
         await SetKey(EngineKeyFunctions.Use, BoundKeyState.Up);
+        await RunTicks(5);
+        await Server.WaitAssertion(() => Assert.That(ActiveDoAfters, Is.Not.Empty));
     }
 }

@@ -11,6 +11,7 @@
   - type: Construction
     graph: CookLavalandPorcini
     node: cooked
+    deconstructionTarget: null
 
 - type: entity
   parent: FoodSpaceshroomCooked
@@ -25,6 +26,7 @@
   - type: Construction
     graph: CookLavalandInocybe
     node: cooked
+    deconstructionTarget: null
 
 - type: stack
   parent: BaseMediumStack

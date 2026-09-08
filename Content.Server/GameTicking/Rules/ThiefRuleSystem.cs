@@ -20,7 +20,7 @@ public sealed class ThiefRuleSystem : GameRuleSystem<ThiefRuleComponent>
 
     // DS14: one of these tools (all fit in a utility tool belt) is chosen at random
     // each round as the exact tool the thief must insert to unlock ВорПРО.
-    private static readonly ProtoId<EntityPrototype>[] UnlockToolOptions =
+    private static readonly EntProtoId[] UnlockToolOptions =
     {
         "Screwdriver", "Wrench", "Crowbar", "Wirecutter", "Multitool", "PowerDrill",
         "Welder", "RemoteSignaller",

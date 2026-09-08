@@ -22,7 +22,7 @@
   parent: BookBase
   id: BookAshWalkerRecipes
   name: hunter's craft book
-  description: A smoke-stained book bound in hide. An old craft master's notes on hunting, crafting, healing and mushroom gardens.
+  description: A hide-bound collection of recipes for the tribe's weapons, clothing, tools and remedies.
   components:
   - type: Sprite
     layers:
@@ -35,3 +35,21 @@
       color: "#E4D4A8"
   - type: Paper
     content: ash-walker-recipe-book-content
+
+- type: entity
+  parent: BookAshWalkerRecipes
+  id: BookAshWalkerGuide
+  name: ash walker's guide
+  description: A worn book bound in dark hide. Notes on hunting, husbandry and the tribe's rites share its smoke-stained pages.
+  components:
+  - type: Sprite
+    layers:
+    - state: paper
+    - state: cover_old
+      color: "#593731"
+    - state: decor_spine
+      color: "#CBBF82"
+    - state: icon_skull
+      color: "#D6A080"
+  - type: Paper
+    content: ash-walker-guide-book-content

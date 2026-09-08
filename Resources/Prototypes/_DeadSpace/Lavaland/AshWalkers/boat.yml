@@ -52,7 +52,7 @@
     maxSize: 2
     airtight: false
     isCollidableWhenOpen: true
-    enteringRange: 1
+    enteringRange: 1.5
     openSound:
       path: /Audio/Items/Handcuffs/rope_takeoff.ogg
     closeSound:
@@ -64,6 +64,8 @@
   - type: Construction
     graph: LavaBoat
     node: boat
+    containers:
+    - entity_storage
   - type: Tag
     tags: []
 

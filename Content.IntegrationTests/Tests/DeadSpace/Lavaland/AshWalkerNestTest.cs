@@ -223,12 +223,19 @@ public sealed class AshWalkerNestTest
         EntityUid walker = default;
         EntityUid corpse = default;
         EntityUid egg = default;
+        EntityUid existingEgg = default;
 
         await server.WaitAssertion(() =>
         {
+            var maps = server.System<SharedMapSystem>();
+            for (var x = -3; x <= 3; x++)
+            for (var y = -3; y <= 3; y++)
+                maps.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(x, y), map.Tile.Tile);
+
             entMan.AddComponent<LavalandMapComponent>(map.MapUid).Planet = "Lavaland";
             var nestUid = entMan.SpawnEntity("TestAshWalkerNestSlow", new EntityCoordinates(map.Grid, 0.5f, 0.5f));
             nest = (nestUid, entMan.GetComponent<AshWalkerNestComponent>(nestUid));
+            existingEgg = entMan.SpawnEntity("AshWalkerEgg", new EntityCoordinates(map.Grid, -1.5f, 0.5f));
             walker = entMan.SpawnEntity("MobAshWalker", new EntityCoordinates(map.Grid, 1.5f, 0.5f));
             SetTribe(entMan, walker, map.GridCoords);
             corpse = entMan.SpawnEntity("MobHuman", new EntityCoordinates(map.Grid, 0.5f, 1.5f));
@@ -252,10 +259,7 @@ public sealed class AshWalkerNestTest
         {
             Assert.That(nest.Comp.Flesh, Is.EqualTo(2));
             Assert.That(entMan.Deleted(corpse), Is.False);
-            var maps = server.System<SharedMapSystem>();
-            for (var x = -3; x <= 3; x++)
-            for (var y = -3; y <= 3; y++)
-                maps.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(x, y), map.Tile.Tile);
+            entMan.DeleteEntity(existingEgg);
         });
 
         await pair.RunTicksSync(70);

@@ -31,6 +31,41 @@ public sealed class AshWalkerTest
     private const string TribeFaction = "AshWalker";
 
     [Test]
+    public async Task TurretsAndHostileCreaturesRecognizeAshWalkers()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = false });
+        var server = pair.Server;
+        var entMan = server.EntMan;
+        var factions = server.System<NpcFactionSystem>();
+        var map = await pair.CreateTestMap();
+        EntityUid walker = default;
+        await server.WaitPost(() => walker = entMan.SpawnEntity("MobAshWalker", map.GridCoords));
+        foreach (var prototype in new[]
+                 {
+                     "WeaponTurretNanoTrasen", "WeaponTurretSyndicate", "WeaponTurretCentralCommand",
+                     "WeaponTurretTaipan", "WeaponTurretHostile", "WeaponTurretAllHostile",
+                     "MobNecromorfBrute", "MobSpiderTerrorWarrior", "MobLavalandGoliath",
+                 })
+        {
+            EntityUid hostile = default;
+            await server.WaitPost(() => hostile = entMan.SpawnEntity(prototype, map.GridCoords));
+            await pair.RunSeconds(0.3f);
+            await server.WaitAssertion(() =>
+            {
+                Assert.That(factions.GetNearbyHostiles(hostile, 5), Does.Contain(walker), prototype);
+                entMan.DeleteEntity(hostile);
+            });
+        }
+        await server.WaitAssertion(() =>
+        {
+            var animal = entMan.SpawnEntity("MobGubbuck", map.GridCoords);
+            Assert.That(factions.GetNearbyHostiles(animal, 5), Does.Not.Contain(walker));
+            Assert.That(factions.GetNearbyHostiles(walker, 5), Does.Not.Contain(animal));
+        });
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task EggsRequireLavalandAndSpawnOneTribeMemberEach()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
@@ -116,7 +151,7 @@ public sealed class AshWalkerTest
                     Is.EqualTo("ClothingUniformAshWalker"));
                 Assert.That(inventory.TryGetSlotEntity(member, "back", out var bag), Is.True);
                 Assert.That(entMan.GetComponent<StorageComponent>(bag!.Value).Container.ContainedEntities,
-                    Has.Count.EqualTo(6));
+                    Has.Count.EqualTo(7));
 
                 transform.SetCoordinates(member, other.GridCoords);
                 Assert.That(entMan.GetComponent<AshWalkerTribeMemberComponent>(member).HomeMap,

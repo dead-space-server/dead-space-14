@@ -52,8 +52,9 @@ public sealed class LavaBoatTest : InteractionTest
         await AddAtmosphere();
         await SpawnTarget("LavaBoat");
         await DeleteHeldEntity();
+        await Pair.RunUntilSynced();
         await PressKey(EngineKeyFunctions.Use);
-        await RunTicks(5);
+        await RunSeconds(0.5f);
         await Server.WaitAssertion(() =>
             Assert.That(SEntMan.GetComponent<VehicleComponent>(STarget!.Value).Operator, Is.EqualTo(SPlayer)));
     }
@@ -158,7 +159,7 @@ public sealed class LavaBoatTest : InteractionTest
             Server.System<DamageableSystem>().TryChangeDamage(boat,
                 new DamageSpecifier { DamageDict = { ["Blunt"] = 1000 } }, true);
         });
-        await RunTicks(5);
+        await RunSeconds(1);
         await Server.WaitAssertion(() =>
         {
             Assert.That(SEntMan.Deleted(STarget!.Value), Is.True);
@@ -173,6 +174,34 @@ public sealed class LavaBoatTest : InteractionTest
                 Assert.That(SEntMan.GetComponent<TransformComponent>(SPlayer).LocalPosition.X, Is.LessThan(1));
                 Assert.That(SEntMan.GetComponent<TransformComponent>(body).LocalPosition.X, Is.LessThan(1));
             }
+        });
+    }
+
+    [Test]
+    public async Task CargoLoadsAcrossShoreRangeButNotThroughWalls()
+    {
+        await PrepareBoat();
+        await Server.WaitAssertion(() =>
+        {
+            var boat = STarget!.Value;
+            var storage = Server.System<SharedEntityStorageSystem>();
+            var contents = SEntMan.GetComponent<EntityStorageComponent>(boat).Contents;
+            var shore = new EntityCoordinates(MapData.Grid, -0.8f, 0.5f);
+            var cargo = SEntMan.SpawnEntity("MaterialBones1", shore);
+            Assert.That(storage.TryOpenStorage(SPlayer, boat), Is.True);
+            Assert.That(storage.TryCloseStorage(boat, SPlayer), Is.True);
+            Assert.That(contents.Contains(cargo), Is.True);
+            Assert.That(storage.TryOpenStorage(SPlayer, boat), Is.True);
+            Assert.That(contents.Contains(cargo), Is.False);
+            Assert.That(storage.TryCloseStorage(boat, SPlayer), Is.True);
+            Assert.That(contents.Contains(cargo), Is.True);
+
+            Assert.That(storage.TryOpenStorage(SPlayer, boat), Is.True);
+            Transform.SetCoordinates(cargo, shore);
+            var wall = SEntMan.SpawnEntity("WallSolid", new EntityCoordinates(MapData.Grid, -0.5f, 0.5f));
+            Assert.That(storage.TryCloseStorage(boat, SPlayer), Is.True);
+            Assert.That(contents.Contains(cargo), Is.False);
+            SEntMan.DeleteEntity(wall);
         });
     }
 }

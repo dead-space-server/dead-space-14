@@ -177,8 +177,17 @@ public sealed class LavaBoatSystem : EntitySystem
 
     private void OnInsertAttempt(Entity<LavaBoatComponent> ent, ref EntityStorageInsertedIntoAttemptEvent args)
     {
-        if (HasComp<MobStateComponent>(args.ItemToInsert) && !_mobState.IsDead(args.ItemToInsert))
+        var cargo = args.ItemToInsert;
+        if (HasComp<MobStateComponent>(cargo) && !_mobState.IsDead(cargo) ||
+            !CanReachFromBoat(ent, Transform(cargo).Coordinates, cargo))
             args.Cancelled = true;
+    }
+
+    private bool CanReachFromBoat(EntityUid boat, EntityCoordinates coordinates, EntityUid? target = null)
+    {
+        return _interaction.InRangeUnobstructed(_transform.GetMapCoordinates(boat),
+            _transform.ToMapCoordinates(coordinates), range: ShoreRange,
+            predicate: uid => uid == boat || uid == target);
     }
 
     private void OnExamined(Entity<LavaBoatComponent> ent, ref ExaminedEvent args)
@@ -276,7 +285,7 @@ public sealed class LavaBoatSystem : EntitySystem
             var distance = Vector2.DistanceSquared(_transform.GetWorldPosition(xform), _transform.ToMapCoordinates(candidate).Position);
             if (distance >= closest || distance > ShoreRange * ShoreRange || !IsSafe(candidate) ||
                 _turf.IsTileBlocked(tile, CollisionGroup.MobMask) ||
-                !_interaction.InRangeUnobstructed(boat, candidate, range: ShoreRange))
+                !CanReachFromBoat(boat, candidate))
                 continue;
 
             coordinates = candidate;

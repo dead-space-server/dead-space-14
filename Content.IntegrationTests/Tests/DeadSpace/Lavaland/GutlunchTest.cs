@@ -178,7 +178,7 @@ public sealed class GutlunchTest
             birthTime = pregnancy.GestationEndTime;
             maps.SetPaused(map.MapUid, true);
         });
-        await pair.RunTicksSync(100);
+        await pair.RunSeconds(4);
         await server.WaitAssertion(() =>
         {
             Assert.That(pregnancy.Gestating, Is.True);
@@ -186,9 +186,9 @@ public sealed class GutlunchTest
             maps.SetPaused(map.MapUid, false);
             Assert.That(pregnancy.GestationEndTime, Is.GreaterThan(birthTime));
         });
-        await pair.RunTicksSync(20);
+        await pair.RunSeconds(1);
         await server.WaitAssertion(() => Assert.That(pregnancy.Gestating, Is.True));
-        await pair.RunTicksSync(30);
+        await pair.RunSeconds(2);
         await server.WaitAssertion(() =>
         {
             Assert.That(pregnancy.Gestating, Is.False);
