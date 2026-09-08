@@ -1,0 +1,87 @@
+- type: startingGear
+  id: SyndicateEvacuationMedic
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitParamedicSyndie
+    back: ClothingBackpackBrigmedic
+    mask: ClothingMaskGasSyndicate
+    eyes: ClothingEyesHudMedical
+    ears: ClothingHeadsetAltSyndicate
+    gloves: ClothingHandsGlovesCombat
+    outerClothing: ClothingOuterHardsuitSyndicateEvacuation
+    shoes: ClothingShoesBootsMag
+    id: SyndicateEvacuationIDCard
+    belt: ClothingBeltSyndicateEvacuation
+    pocket1: PinpointerSyndicateEvacuation
+    pocket2: DoubleEmergencyOxygenTankFilled
+  storage:
+    back:
+    - CrowbarRed
+    - BoxMRE
+    - MedkitFilled
+    - EmergencyRollerBedSpawnFolded
+    - BodyBagFolded
+    - HandheldGPSBasic
+
+- type: startingGear
+  parent: SyndicateEvacuationMedic
+  id: SyndicateEvacuationEscort
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitRecruitSyndie
+    eyes: ClothingEyesGlassesSunglasses
+
+- type: randomHumanoidSettings
+  id: EventHumanoidSyndicateEvacuationMedic
+  parent: EventHumanoidERT
+  randomizeName: true
+  components:
+  - type: AutoImplant
+    implants: [ MindShieldImplant ]
+  - type: GhostRole
+    name: syndicate-evacuation-medic-name
+    description: syndicate-evacuation-medic-description
+    rules: syndicate-evacuation-rules
+    mindRoles: [ MindRoleGhostRoleTeamAntagonist ]
+    requirements:
+    - !type:DepartmentTimeRequirement
+      department: Medical
+      time: 36000
+    raffle:
+      settings: short
+  - type: Loadout
+    prototypes: [ SyndicateEvacuationMedic ]
+  - type: NpcFactionMember
+    factions: [ Syndicate ]
+
+- type: randomHumanoidSettings
+  parent: EventHumanoidSyndicateEvacuationMedic
+  id: EventHumanoidSyndicateEvacuationEscort
+  components:
+  - type: GhostRole
+    name: syndicate-evacuation-escort-name
+    description: syndicate-evacuation-escort-description
+    rules: syndicate-evacuation-rules
+    mindRoles: [ MindRoleGhostRoleTeamAntagonist ]
+    requirements:
+    - !type:DepartmentTimeRequirement
+      department: Security
+      time: 36000
+    raffle:
+      settings: short
+  - type: Loadout
+    prototypes: [ SyndicateEvacuationEscort ]
+
+- type: entity
+  parent: RandomHumanoidSpawnerERTMedicalAmber
+  id: RandomHumanoidSpawnerSyndicateEvacuationMedic
+  name: syndicate extraction medic
+  components:
+  - type: RandomHumanoidSpawner
+    settings: EventHumanoidSyndicateEvacuationMedic
+
+- type: entity
+  parent: RandomHumanoidSpawnerERTMedicalAmber
+  id: RandomHumanoidSpawnerSyndicateEvacuationEscort
+  name: syndicate extraction escort
+  components:
+  - type: RandomHumanoidSpawner
+    settings: EventHumanoidSyndicateEvacuationEscort

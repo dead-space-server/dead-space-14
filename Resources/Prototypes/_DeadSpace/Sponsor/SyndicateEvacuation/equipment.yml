@@ -1,0 +1,109 @@
+- type: entity
+  parent: [ ClothingOuterHardsuitBrigmedic, BaseSyndicateContraband ]
+  id: ClothingOuterHardsuitSyndicateEvacuation
+  name: extraction crew hardsuit
+  description: A pressure suit with moderate ballistic protection for casualty recovery.
+  components:
+  - type: Sprite
+    sprite: Clothing/OuterClothing/Hardsuits/syndiemedic.rsi
+  - type: Clothing
+    sprite: Clothing/OuterClothing/Hardsuits/syndiemedic.rsi
+  - type: StaminaResistance
+    damageCoefficient: 0.7
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitSyndicateEvacuation
+  - type: Tag
+    tags: []
+
+- type: entity
+  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase, BaseSyndicateContraband ]
+  id: ClothingHeadHelmetHardsuitSyndicateEvacuation
+  name: extraction crew hardsuit helmet
+  description: A sealed helmet with a work light.
+  components:
+  - type: Sprite
+    sprite: Clothing/Head/Hardsuits/syndiemedic.rsi
+  - type: Clothing
+    sprite: Clothing/Head/Hardsuits/syndiemedic.rsi
+  - type: PointLight
+    color: white
+  - type: PressureProtection
+    highPressureMultiplier: 0.08
+    lowPressureMultiplier: 1000
+  - type: FireProtection
+    reduction: 0.2
+  - type: Tag
+    tags: []
+
+- type: entity
+  parent: [ PinpointerBase, BaseSyndicateContraband ]
+  id: PinpointerSyndicateEvacuation
+  name: extraction target pinpointer
+  description: Tracks the patient assigned to this extraction team.
+  components:
+  - type: Pinpointer
+    updateTargetName: true
+
+- type: entity
+  parent: [ ClothingBeltStorageBase, BaseSyndicateContraband ]
+  id: ClothingBeltSyndicateEvacuation
+  name: extraction crew webbing
+  description: A rescue rig with medical equipment and a sidearm.
+  components:
+  - type: Sprite
+    sprite: Clothing/Belt/mercwebbing.rsi
+  - type: Clothing
+    sprite: Clothing/Belt/mercwebbing.rsi
+  - type: StorageFill
+    contents:
+    - id: WeaponPistolMk58
+    - id: MagazinePistol
+    - id: DefibrillatorCompact
+    - id: HandheldHealthAnalyzer
+    - id: EmergencyMedipen
+
+- type: accessLevel
+  id: SyndicateEvacuation
+  name: syndicate-evacuation-access
+
+- type: entity
+  parent: [ IDCardStandard, BaseSyndicateContraband ]
+  id: SyndicateEvacuationIDCard
+  name: extraction crew ID card
+  components:
+  - type: IdCard
+    jobTitle: syndicate-evacuation-job-title
+    jobIcon: JobIconParamedic
+  - type: Access
+    tags:
+    - SyndicateEvacuation
+    - SyndicateAgent
+    - Maintenance
+    - External
+  - type: Sprite
+    layers:
+    - state: black
+    - state: syndi
+
+- type: entity
+  parent: ErtComputerShuttle
+  id: ErtSyndicateEvacuationComputerShuttle
+  name: extraction shuttle departure console
+  description: Ends the mission and sends the shuttle away with everyone aboard. Departure is final.
+  components:
+  - type: Computer
+    board: ErtSyndicateEvacuationComputerShuttleCircuitboard
+  - type: AccessReader
+    access: [[ SyndicateEvacuation ]]
+  - type: StationAiWhitelist
+    enabled: false
+
+- type: entity
+  parent: BaseComputerCircuitboard
+  id: ErtSyndicateEvacuationComputerShuttleCircuitboard
+  name: extraction shuttle departure console board
+  components:
+  - type: Sprite
+    state: cpu_command
+  - type: ComputerBoard
+    prototype: ErtSyndicateEvacuationComputerShuttle

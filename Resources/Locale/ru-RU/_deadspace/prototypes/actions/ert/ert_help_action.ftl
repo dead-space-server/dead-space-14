@@ -1,1 +1,11 @@
 ert-critical-force-antagonist-denied = CriticalForce не может помочь антагонистам.
+ert-critical-force-call-title = Медицинская эвакуация CriticalForce
+ert-critical-force-call-prompt = Запросить медицинскую эвакуацию? После принятия заявки вызов будет израсходован. Доступен один принятый вызов за смену.
+ert-critical-force-call-unavailable = Вызов доступен только носителю установленного импланта в критическом состоянии.
+ert-critical-force-call-used = Доступный вызов медицинской эвакуации уже израсходован.
+ert-critical-force-call-off-station = Медицинская эвакуация доступна только на территории станции.
+ert-critical-force-call-failed = Заявка не принята: {$reason} Вызов не израсходован.
+ert-critical-force-call-accepted = Заявка принята. Ожидайте формирования медицинского отряда.
+ert-call-fail-patient-assigned = Для этого пациента уже запрошен или отправлен отряд.
+yes-no-window-yes = Да
+yes-no-window-no = Нет

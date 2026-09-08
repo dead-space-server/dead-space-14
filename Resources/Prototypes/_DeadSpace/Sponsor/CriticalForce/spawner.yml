@@ -11,36 +11,28 @@
     jumpsuit: ClothingJumpsuitCriticalForce
     back: ClothingBackpackCriticalForce
     mask: ClothingMaskGasOfficerCriticalForce
-    eyes: ClothingEyesHudAdvanced
+    eyes: ClothingEyesHudMedical
     ears: ClothingHeadsetAltCriticalForce
     gloves: ClothingHandsGlovesCombatCriticalForce
     outerClothing: ClothingOuterHardsuitOfficerCriticalForce
     shoes: ClothingShoesMagBootsCriticalForce
     id: CriticalForceOfficerEMTIDCard
     belt: ClothingBeltWisdomCriticalForceSec
+    pocket1: PinpointerVipClient
     pocket2: DoubleEmergencyOxygenTankFilled
   storage:
     back:
-    - JawsOfLife
-    - EmergencyMedipen
-    - KukriKnife
+    - CrowbarRed
     - BoxMRE
-    - WeaponSubMachineGunDrozd
-    - DefibrillatorCompact
-    - MedkitCombatFilled
+    - MedkitFilled
     - EmergencyRollerBedSpawnFolded
     - BodyBagFolded
     - HandheldGPSBasic
-    - PinpointerVipClient
-    - Syringe
-    - InjectorCaseStimFilled
-    - InjectorCaseFilled
-    - HandheldHealthAnalyzer
 
 - type: entity
-  parent: ClothingBeltMilitaryWebbing
+  parent: ClothingBeltStorageBase
   id: ClothingBeltWisdomCriticalForceSec 
-  name: РПС CriticalForce безопасника
+  name: разгрузка спасателя CriticalForce
   description: Разгрузочный жилет, необходимый для спасения жизней в экстремальных условиях.
   components:
   - type: Storage
@@ -52,9 +44,11 @@
     size: Huge
   - type: StorageFill
     contents:
-      - id: MagazinePistolSubMachineGun
-        amount: 4
-      - id: ChemistryBottleNecrosol
+      - id: WeaponPistolMk58
+      - id: MagazinePistol
+      - id: DefibrillatorCompact
+      - id: HandheldHealthAnalyzer
+      - id: EmergencyMedipen
 
 - type: entity
   parent: IDCardStandard
@@ -67,9 +61,13 @@
     jobTitle: job-title-tti-officer
     jobIcon: JobIconCriticalForce
   - type: Access
-    groups:
-    - GroupCounterpartyNT
-    - General
+    tags:
+    - CounterpartyNT
+    - Medical
+    - Paramedic
+    - Coroner
+    - Maintenance
+    - External
   - type: Sprite
     layers:
     - state: silver
@@ -79,9 +77,12 @@
   id: EventHumanoidCriticalForceOfficer
   parent: EventHumanoidERT
   components:
+    - type: AutoImplant
+      implants:
+      - MindShieldImplant
     - type: GhostRole
       name: Офицер CriticalForce
-      description: Вы зафискировали смерть спонсора на активе НТ! Немедленно бросить все свои силы на его спасение!
+      description: Стабилизируйте указанного пациента и организуйте медицинскую эвакуацию. Согласуйте действия с медотделом и службой безопасности станции.
       rules: ghost-role-information-tti-rules
       requirements:
         - !type:DepartmentTimeRequirement

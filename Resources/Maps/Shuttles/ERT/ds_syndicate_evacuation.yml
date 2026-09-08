@@ -26,7 +26,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: CF - Septofil AV-29
+      name: Syndicate Medical Extraction
     - type: Transform
       pos: 0,0
     - type: MapGrid
@@ -68,17 +68,17 @@ entities:
         version: 2
         nodes:
         - node:
-            color: '#00786DFF'
+            color: '#8C3434FF'
             id: BotGreyscale
           decals:
             41: -2,-1
         - node:
-            color: '#00786DFF'
+            color: '#8C3434FF'
             id: BoxGreyscale
           decals:
             287: 1,1
         - node:
-            color: '#00786DFF'
+            color: '#8C3434FF'
             id: BrickTileWhiteBox
           decals:
             48: 0,2
@@ -88,7 +88,7 @@ entities:
           decals:
             290: 2,-1
         - node:
-            color: '#00786DFF'
+            color: '#8C3434FF'
             id: BrickTileWhiteCornerNe
           decals:
             28: 1,4
@@ -98,7 +98,7 @@ entities:
           decals:
             212: 1,6
         - node:
-            color: '#00786DFF'
+            color: '#8C3434FF'
             id: BrickTileWhiteCornerNw
           decals:
             24: -1,4
@@ -109,13 +109,13 @@ entities:
             213: -1,6
             288: 2,-1
         - node:
-            color: '#00786DFF'
+            color: '#8C3434FF'
             id: BrickTileWhiteCornerSe
           decals:
             29: 1,3
             236: 1,-1
         - node:
-            color: '#00786DFF'
+            color: '#8C3434FF'
             id: BrickTileWhiteCornerSw
           decals:
             23: -1,3
@@ -131,7 +131,7 @@ entities:
           decals:
             129: -1,1
         - node:
-            color: '#00786DFF'
+            color: '#8C3434FF'
             id: BrickTileWhiteEndN
           decals:
             25: 0,5
@@ -144,7 +144,7 @@ entities:
             227: -1,-2
             228: 1,-2
         - node:
-            color: '#00786DFF'
+            color: '#8C3434FF'
             id: BrickTileWhiteEndS
           decals:
             21: 0,-2
@@ -162,7 +162,7 @@ entities:
           decals:
             131: -2,1
         - node:
-            color: '#00786DFF'
+            color: '#8C3434FF'
             id: BrickTileWhiteInnerNe
           decals:
             27: 0,4
@@ -173,7 +173,7 @@ entities:
           decals:
             34: -1,-3
         - node:
-            color: '#00786DFF'
+            color: '#8C3434FF'
             id: BrickTileWhiteInnerNw
           decals:
             26: 0,4
@@ -184,7 +184,7 @@ entities:
           decals:
             36: 1,-3
         - node:
-            color: '#00786DFF'
+            color: '#8C3434FF'
             id: BrickTileWhiteInnerSe
           decals:
             261: 0,-1
@@ -196,7 +196,7 @@ entities:
           decals:
             215: -1,6
         - node:
-            color: '#00786DFF'
+            color: '#8C3434FF'
             id: BrickTileWhiteInnerSw
           decals:
             240: -1,0
@@ -208,7 +208,7 @@ entities:
           decals:
             217: 1,6
         - node:
-            color: '#00786DFF'
+            color: '#8C3434FF'
             id: BrickTileWhiteLineE
           decals:
             270: 0,1
@@ -219,7 +219,7 @@ entities:
             33: -1,-2
             125: 1,-2
         - node:
-            color: '#00786DFF'
+            color: '#8C3434FF'
             id: BrickTileWhiteLineN
           decals:
             232: -1,0
@@ -232,7 +232,7 @@ entities:
           decals:
             35: 0,-3
         - node:
-            color: '#00786DFF'
+            color: '#8C3434FF'
             id: BrickTileWhiteLineS
           decals:
             257: -2,0
@@ -244,7 +244,7 @@ entities:
             124: 0,-3
             216: 0,6
         - node:
-            color: '#00786DFF'
+            color: '#8C3434FF'
             id: BrickTileWhiteLineW
           decals:
             269: 0,1
@@ -260,7 +260,7 @@ entities:
           decals:
             43: -3,0
         - node:
-            color: '#00786DFF'
+            color: '#8C3434FF'
             id: DeliveryGreyscale
           decals:
             47: 0,2
@@ -275,7 +275,7 @@ entities:
           decals:
             291: 2,-1
         - node:
-            color: '#00786DFF'
+            color: '#8C3434FF'
             id: WoodTrimThinBoxWhite
           decals:
             73: 2,1
@@ -516,14 +516,14 @@ entities:
       parent: 2
     - type: Physics
       canCollide: False
-- proto: AirlockCounterpartyNTLocked
+- proto: AirlockSyndicateLocked
   entities:
   - uid: 16
     components:
     - type: Transform
       pos: 0.5,2.5
       parent: 1
-- proto: AirlockShuttleCounterpartyNTLocked
+- proto: AirlockExternalShuttleSyndicateLocked
   entities:
   - uid: 17
     components:
@@ -969,7 +969,7 @@ entities:
     - type: Transform
       pos: -0.42488098,-2.2972043
       parent: 1
-- proto: ComputerCrewMonitoring
+- proto: ComputerPowerMonitoring
   entities:
   - uid: 77
     components:
@@ -1008,7 +1008,7 @@ entities:
     - type: Transform
       pos: 1.6394539,1.5590289
       parent: 1
-- proto: ErtCounterpartyComputerShuttle
+- proto: ErtSyndicateEvacuationComputerShuttle
   entities:
   - uid: 76
     components:

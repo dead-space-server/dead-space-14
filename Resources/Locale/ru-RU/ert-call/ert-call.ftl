@@ -31,5 +31,5 @@ ert-objective-issuer = Миссия
 ert-mission-objective-default = Обеспечить безопасность станции
 
 # Critical Force
-ert-critical-force-reason = Спасти {$name}
+ert-critical-force-reason = Стабилизация и медицинская эвакуация: {$name}
 ert-critical-force-unknown-player = неизвестного
