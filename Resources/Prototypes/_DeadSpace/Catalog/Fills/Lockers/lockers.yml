@@ -350,3 +350,24 @@
     containers:
       entity_storage: !type:NestedSelector
         tableId: MaintenanceLockerLoot
+
+# Critical Force
+- type: entity
+  id: LockerSteelFilledCF
+  parent: LockerSteel
+  name: secure closet
+  suffix: CF, Заполненный
+  components:
+  - type: StorageFill
+    contents:
+    - id: NitrogenTankFilled
+    - id: OxygenTankFilled
+    - id: ClothingShoesColorWhite
+    - id: ClothingMaskBreath
+    - id: ClothingOuterHardsuitEVA
+    - id: ClothingHeadHelmetEVALarge
+    - id: MiningDrill
+    - id: FireExtinguisher
+    - id: ToolboxEmergencyFilled
+    - id: JetpackMiniFilled
+      amount: 3
