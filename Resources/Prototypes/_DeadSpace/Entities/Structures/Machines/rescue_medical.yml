@@ -9,3 +9,15 @@
     pack: NanoMedRescueInventory
   - type: AccessReader
     access: [[Medical], [SyndicateEvacuation]]
+
+- type: entity
+  parent: VendingMachineWallMedical
+  id: VendingMachineWallMedicalRescue
+  name: NanoMed Plus
+  suffix: Medical evacuation
+  description: A medical dispenser stocked for casualty recovery.
+  components:
+  - type: VendingMachine
+    pack: NanoMedRescueInventory
+  - type: AccessReader
+    access: [[Medical], [SyndicateEvacuation]]

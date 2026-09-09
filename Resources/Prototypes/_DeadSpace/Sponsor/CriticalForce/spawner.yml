@@ -6,33 +6,80 @@
     state: tti
 
 - type: startingGear
-  id: CriticalForceOfficerEMT
+  id: CriticalForceOfficerMedic
   equipment:
     jumpsuit: ClothingJumpsuitCriticalForce
     back: ClothingBackpackCriticalForce
     mask: ClothingMaskGasOfficerCriticalForce
-    eyes: ClothingEyesHudMedical
+    eyes: ClothingEyesHudMedSec
     ears: ClothingHeadsetAltCriticalForce
     gloves: ClothingHandsGlovesCombatCriticalForce
-    outerClothing: ClothingOuterHardsuitOfficerCriticalForce
-    suitstorage: WeaponSubMachineGunC20r
+    outerClothing: ClothingOuterHardsuitCriticalForceMedic
+    suitstorage: WeaponPistolMk58
     shoes: ClothingShoesMagBootsCriticalForce
     id: CriticalForceOfficerEMTIDCard
-    belt: ClothingBeltWisdomCriticalForceSec
+    belt: ClothingBeltWisdomCriticalForceEMT
     pocket1: PinpointerVipClient
     pocket2: DoubleEmergencyOxygenTankFilled
   storage:
     back:
-    - CrowbarRed
-    - BoxMRE
-    - MedkitFilled
-    - EmergencyRollerBedSpawnFolded
-    - BodyBagFolded
+    - MedkitAdvancedFilled
+    - JawsOfLife
+    - KukriKnife
     - HandheldGPSBasic
+    - EmergencyRollerBedSpawnFolded
+    - DefibrillatorCompact
+    - HandheldHealthAnalyzer
+    - BodyBagFolded
+    belt:
+    - MagazinePistol
+    - MagazinePistol
+    - JetInjector
+    - ChemistryBottleOmnizine
+    - ChemistryBottleBicaridine
+    - ChemistryBottleDexalinPlus
+    - ChemistryBottleEpinephrine
+    - ChemistryBottleDermaline
+    - PillCanisterIron
+    - PillCanisterDylovene
+    - PillCanisterHyronalin
+    - EmergencyMedipen
+    - EmergencyMedipen
+
+- type: startingGear
+  id: CriticalForceOfficerSecurity
+  equipment:
+    jumpsuit: ClothingJumpsuitCriticalForce
+    back: ClothingBackpackCriticalForce
+    mask: ClothingMaskGasOfficerCriticalForce
+    eyes: ClothingEyesHudMedSec
+    ears: ClothingHeadsetAltCriticalForce
+    gloves: ClothingHandsGlovesCombatCriticalForce
+    outerClothing: ClothingOuterHardsuitCriticalForceSecurity
+    suitstorage: WeaponSubMachineGunDrozd
+    shoes: ClothingShoesMagBootsCriticalForce
+    id: CriticalForceOfficerEMTIDCard
+    belt: ClothingBeltWisdomCriticalForceEMT
+    pocket1: PinpointerVipClient
+    pocket2: DoubleEmergencyOxygenTankFilled
+  storage:
+    back:
+    - MedkitCombatFilled
+    - JawsOfLife
+    - KukriKnife
+    - HandheldGPSBasic
+    belt:
+    - MagazinePistolSubMachineGun
+    - MagazinePistolSubMachineGun
+    - MagazinePistolSubMachineGun
+    - MagazinePistolSubMachineGun
+    - Zipties
+    - Zipties
 
 - type: entity
   parent: ClothingBeltStorageBase
-  id: ClothingBeltWisdomCriticalForceSec 
+  id: ClothingBeltWisdomCriticalForceEMT
+  categories: [ HideSpawnMenu ]
   name: разгрузка спасателя CriticalForce
   description: Разгрузочный жилет, необходимый для спасения жизней в экстремальных условиях.
   components:
@@ -43,13 +90,6 @@
     sprite: _DeadSpace/Sponsor/Wisdom/belt.rsi
   - type: Item
     size: Huge
-  - type: StorageFill
-    contents:
-      - id: WeaponPistolMk58
-      - id: MagazinePistol
-      - id: MagazinePistolSubMachineGun
-      - id: HandheldHealthAnalyzer
-      - id: EmergencyMedipen
 
 - type: entity
   parent: IDCardStandard
@@ -75,7 +115,7 @@
     - state: idbrigmedic
 
 - type: randomHumanoidSettings
-  id: EventHumanoidCriticalForceOfficer
+  id: EventHumanoidCriticalForceMedic
   parent: EventHumanoidERT
   components:
     - type: AutoImplant
@@ -95,7 +135,38 @@
       raffle:
         settings: short
     - type: Loadout
-      prototypes: [ CriticalForceOfficerEMT ]
+      prototypes: [ CriticalForceOfficerMedic ]
+    - type: RandomMetadata
+      nameSegments:
+      - NamesCriticalForceOfficerEMT
+      - NamesLastERT
+      nameFormat: name-format-ert
+    - type: NpcFactionMember
+      factions:
+      - NanoTrasen
+
+- type: randomHumanoidSettings
+  id: EventHumanoidCriticalForceSecurity
+  parent: EventHumanoidERT
+  components:
+    - type: AutoImplant
+      implants:
+      - MindShieldImplant
+    - type: GhostRole
+      name: Офицер CriticalForce
+      description: Стабилизируйте указанного пациента и организуйте медицинскую эвакуацию. Согласуйте действия с медотделом и службой безопасности станции.
+      rules: ghost-role-information-tti-rules
+      requirements:
+        - !type:DepartmentTimeRequirement
+          department: Medical
+          time: 36000 # 10 hours
+        - !type:DepartmentTimeRequirement
+          department: Security
+          time: 36000 # 10 hours
+      raffle:
+        settings: short
+    - type: Loadout
+      prototypes: [ CriticalForceOfficerSecurity ]
     - type: RandomMetadata
       nameSegments:
       - NamesCriticalForceOfficerEMT
@@ -106,10 +177,19 @@
       - NanoTrasen
 
 - type: entity
-  id: RandomHumanoidSpawnerCriticalForceOfficerEMT
+  id: RandomHumanoidSpawnerCriticalForceMedic
   # categories: [ HideSpawnMenu ]
   parent: RandomHumanoidSpawnerERTMedicalAmber
   name: Офицер Критикал-Форс
   components:
     - type: RandomHumanoidSpawner
-      settings: EventHumanoidCriticalForceOfficer
+      settings: EventHumanoidCriticalForceMedic
+
+- type: entity
+  id: RandomHumanoidSpawnerCriticalForceSecurity
+  # categories: [ HideSpawnMenu ]
+  parent: RandomHumanoidSpawnerERTMedicalAmber
+  name: Офицер Критикал-Форс
+  components:
+    - type: RandomHumanoidSpawner
+      settings: EventHumanoidCriticalForceSecurity
