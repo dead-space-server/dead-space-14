@@ -74,14 +74,13 @@ public sealed class GasFilterBoundUserInterface(EntityUid owner, Enum uiKey) : B
 
         if (_window.SelectedGas is null)
         {
-            _window.SetSelectGasButtonDisabled();
             SendPredictedMessage(new GasFilterSelectGasMessage(null));
         }
         else
         {
             if (!Enum.TryParse<Gas>(_window.SelectedGas, out var gas))
                 return;
-            _window.SetSelectGasButtonDisabled();
+
             SendPredictedMessage(new GasFilterSelectGasMessage(gas));
         }
     }
