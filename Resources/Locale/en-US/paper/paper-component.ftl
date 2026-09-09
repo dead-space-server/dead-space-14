@@ -52,12 +52,23 @@ paper-ui-toolbar-bullet = List
 paper-ui-toolbar-preview = Preview
 paper-ui-toolbar-edit = Edit
 
-# DS14-start: insert-data helper panel
+paper-ui-insert-title = Insert information
+paper-ui-insert-document = Document details
+paper-ui-insert-hint = Choose information to insert at the cursor.
+paper-ui-insert-refresh = Refresh
 paper-ui-insert-loading = Loading...
-paper-ui-insert-unknown = unknown
-paper-ui-insert-station = Station: { $station }
-paper-ui-insert-datetime = Time and date: { $datetime }
-paper-ui-insert-name = Your name: { $name }
-paper-ui-insert-job = Your job: { $job }
-paper-ui-insert-manifest-search = Search the manifest...
-# DS14-end
+paper-ui-insert-unknown = Unavailable
+paper-ui-insert-station = Station
+paper-ui-insert-datetime = Time and date
+paper-ui-insert-name = Your name
+paper-ui-insert-job = Job title
+paper-ui-insert-manifest = Crew manifest
+paper-ui-insert-manifest-search = Name or job title...
+paper-ui-insert-person-name = Name
+paper-ui-insert-person-job = Job title
+paper-ui-insert-person-both = Name and job
+paper-ui-insert-count = { $shown } / { $total }
+paper-ui-insert-requires-pda = A PDA with the crew manifest program is required.
+paper-ui-insert-unavailable = The crew manifest is currently unavailable.
+paper-ui-insert-empty = The crew manifest has no entries yet.
+paper-ui-insert-no-results = No matching crew members. Try another search.

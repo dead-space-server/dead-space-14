@@ -5,7 +5,6 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.Paper;
 
-// DS14-start
 [Serializable, NetSerializable]
 public sealed class PaperInsertDataRequestMessage : BoundUserInterfaceMessage
 {
@@ -16,26 +15,33 @@ public sealed class PaperInsertDataResponseMessage : BoundUserInterfaceMessage
 {
     public readonly string? StationName;
 
-    public readonly string RoundDateTime;
-
     public readonly string CharacterName;
 
     public readonly string? CharacterJob;
 
     public readonly List<CrewManifestEntry> Manifest;
 
+    public readonly PaperInsertManifestStatus ManifestStatus;
+
     public PaperInsertDataResponseMessage(
         string? stationName,
-        string roundDateTime,
         string characterName,
         string? characterJob,
-        List<CrewManifestEntry> manifest)
+        List<CrewManifestEntry> manifest,
+        PaperInsertManifestStatus manifestStatus)
     {
         StationName = stationName;
-        RoundDateTime = roundDateTime;
         CharacterName = characterName;
         CharacterJob = characterJob;
         Manifest = manifest;
+        ManifestStatus = manifestStatus;
     }
 }
-// DS14-end
+
+[Serializable, NetSerializable]
+public enum PaperInsertManifestStatus : byte
+{
+    Available,
+    RequiresPda,
+    Unavailable,
+}

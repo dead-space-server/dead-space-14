@@ -46,12 +46,23 @@ paper-ui-toolbar-bullet = Список
 paper-ui-toolbar-preview = Просмотр
 paper-ui-toolbar-edit = Редактирование
 
-# DS14-start: insert-data helper panel
+paper-ui-insert-title = Вставка данных
+paper-ui-insert-document = Данные документа
+paper-ui-insert-hint = Выберите данные для вставки на месте курсора.
+paper-ui-insert-refresh = Обновить
 paper-ui-insert-loading = Загрузка...
-paper-ui-insert-unknown = неизвестно
-paper-ui-insert-station = Станция: { $station }
-paper-ui-insert-datetime = Время и дата: { $datetime }
-paper-ui-insert-name = Ваше имя: { $name }
-paper-ui-insert-job = Ваша должность: { $job }
-paper-ui-insert-manifest-search = Поиск по манифесту...
-# DS14-end
+paper-ui-insert-unknown = Нет данных
+paper-ui-insert-station = Станция
+paper-ui-insert-datetime = Время и дата
+paper-ui-insert-name = Ваше имя
+paper-ui-insert-job = Должность
+paper-ui-insert-manifest = Манифест экипажа
+paper-ui-insert-manifest-search = Имя или должность...
+paper-ui-insert-person-name = Имя
+paper-ui-insert-person-job = Должность
+paper-ui-insert-person-both = Имя и должность
+paper-ui-insert-count = { $shown } / { $total }
+paper-ui-insert-requires-pda = Нужен КПК с программой манифеста.
+paper-ui-insert-unavailable = Манифест сейчас недоступен.
+paper-ui-insert-empty = В манифесте пока нет записей.
+paper-ui-insert-no-results = Никого не найдено. Измените запрос.
