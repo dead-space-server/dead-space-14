@@ -469,7 +469,7 @@
   icon: { sprite: _DeadSpace/Objects/Specific/Arkalyse/arkalyse_book.rsi, state: icon }
   productEntity: BoxArkalyse
   cost:
-    Telecrystal: 20 # DS14-value
+    Telecrystal: 20
   categories:
   - UplinkWeaponry
   conditions:
