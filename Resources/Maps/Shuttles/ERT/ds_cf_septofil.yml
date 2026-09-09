@@ -1,16 +1,16 @@
 meta:
   format: 7
-  category: Map
+  category: Grid
   engineVersion: 276.0.0
   forkId: ""
   forkVersion: ""
-  time: 09/09/2026 09:36:19
-  entityCount: 207
-maps:
-- 43
+  time: 09/09/2026 15:24:02
+  entityCount: 206
+maps: []
 grids:
 - 1
-orphans: []
+orphans:
+- 1
 nullspace: []
 tilemap:
   2: Space
@@ -27,7 +27,7 @@ entities:
       name: CF - Tepors N831
     - type: Transform
       pos: -0.43051344,-0.38280258
-      parent: 43
+      parent: invalid
     - type: MapGrid
       chunks:
         0,0:
@@ -164,16 +164,6 @@ entities:
       chunkHistory: {}
     - type: ExplosionAirtightGrid
     - type: ViewSubscriber
-  - uid: 43
-    components:
-    - type: MetaData
-      name: Map Entity
-    - type: Transform
-    - type: Map
-      mapPaused: True
-    - type: GridTree
-    - type: Broadphase
-    - type: OccluderTree
 - proto: AirAlarm
   entities:
   - uid: 131
@@ -668,6 +658,9 @@ entities:
     - type: Transform
       pos: 1.5,0.5
       parent: 1
+    - type: MaterialStorage
+      storage:
+        Biomass: 300
 - proto: ClothingBeltUtilityEngineering
   entities:
   - uid: 93
@@ -1130,15 +1123,6 @@ entities:
           showEnts: False
           occludes: True
           ent: null
-- proto: MaterialBiomass
-  entities:
-  - uid: 204
-    components:
-    - type: Transform
-      pos: 1.511761,0.49146706
-      parent: 1
-    - type: Physics
-      canCollide: False
 - proto: MedicalBed
   entities:
   - uid: 20
