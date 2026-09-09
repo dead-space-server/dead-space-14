@@ -1,0 +1,19 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from tgstation. Licensed under CC-BY-SA-3.0.",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "digitigrade_1_r_leg",
+            "directions": 4
+        },
+        {
+            "name": "digitigrade_1_l_leg",
+            "directions": 4
+        }
+    ]
+}

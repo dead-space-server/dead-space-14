@@ -458,3 +458,15 @@
     state: sheetruntime
   - type: Clothing
     sprite: Clothing/Neck/Bedsheets/black.rsi
+
+- type: entity
+  parent: BedsheetBase
+  id: BedsheetComfort
+  name: комфортное одеяло
+  description: Тёплое мягкое одеяло.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/bedsheets.rsi
+    state: comfi
+  - type: Clothing
+    sprite: Clothing/Neck/Bedsheets/white.rsi

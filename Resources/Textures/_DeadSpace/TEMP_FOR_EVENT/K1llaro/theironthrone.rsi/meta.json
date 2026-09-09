@@ -1,0 +1,16 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from https://github.com/ss220club/Paradise-SS220, edited by mtf0036(discord) for SS14 Мёртвый Космос",
+    "size": {
+        "x": 64,
+        "y": 64
+    },
+    "states": [
+        {
+            "name": "iron_throne",
+            "directions": 4
+        }
+    ]
+}
+

@@ -1,0 +1,11 @@
+- type: entity
+  parent: Bed
+  id: Futon
+  name: Футон
+  description: Традиционный японский матрас.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/bed.rsi
+    state: bed-1
+  - type: Damageable
+    damageModifierSet: Inflatable

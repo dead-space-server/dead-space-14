@@ -97,6 +97,12 @@ public sealed partial class CrimeHistoryWindow : FancyWindow
         {
             var time = entry.AddTime;
             var line = $"{time.Hours:00}:{time.Minutes:00}:{time.Seconds:00} - {entry.Crime}";
+
+            // DS14-start: append the sentence when this history line came from an arrest
+            if (!string.IsNullOrWhiteSpace(entry.Sentence))
+                line += " " + Loc.GetString("criminal-records-history-sentence", ("sentence", entry.Sentence));
+            // DS14-end
+
             History.AddItem(line);
         }
 

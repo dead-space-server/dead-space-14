@@ -355,3 +355,17 @@
     stackRequirements:
       Steel: 1
       Cable: 2
+
+- type: entity
+  parent: BaseMachineCircuitboard
+  id: GasElectrolyzerMachineCircuitBoard
+  name: газовый электролизер (машинная плата)
+  description: Печатная плата для газового электролизера.
+  components:
+  - type: Sprite
+    state: engineering
+  - type: MachineBoard
+    prototype: GasElectrolyzer
+    stackRequirements:
+      Manipulator: 1
+      Cable: 2

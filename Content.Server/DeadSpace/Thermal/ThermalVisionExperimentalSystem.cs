@@ -56,14 +56,12 @@ public sealed class ThermalVisionExperimentalSystem : EntitySystem
         var uses = (int)(charge / EnergyPerUse);
         string color;
 
-        if (uses >= 7)
-            color = "green";
-        else if (uses >= 5)
-            color = "yellow";
-        else if (uses >= 3)
-            color = "orange";
-        else
+        if (uses == 0)
             color = "red";
+        else if (uses <= 5)
+            color = "yellow";
+        else
+            color = "green";
 
         args.PushMarkup(Loc.GetString("thermal-visor-experimental-examine-charges",
             ("color", color),

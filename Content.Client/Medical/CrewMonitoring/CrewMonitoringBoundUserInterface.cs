@@ -31,6 +31,7 @@ public sealed class CrewMonitoringBoundUserInterface : BoundUserInterface
 
         _menu = this.CreateWindow<CrewMonitoringWindow>();
         _menu.Set(stationName, gridUid);
+        _menu.PingModeSelected += OnPingModeSelected; // DS14
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
@@ -42,7 +43,15 @@ public sealed class CrewMonitoringBoundUserInterface : BoundUserInterface
             case CrewMonitoringState st:
                 EntMan.TryGetComponent<TransformComponent>(Owner, out var xform);
                 _menu?.ShowSensors(st.Sensors, Owner, xform?.Coordinates);
+                _menu?.SetPingMode(st.PingMode); // DS14
                 break;
         }
     }
+
+    // DS14-start
+    private void OnPingModeSelected(CrewMonitoringConsolePingMode mode)
+    {
+        SendMessage(new CrewMonitoringSetPingModeMessage(mode));
+    }
+    // DS14-end
 }

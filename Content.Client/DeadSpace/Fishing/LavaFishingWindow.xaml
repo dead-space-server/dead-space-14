@@ -1,0 +1,27 @@
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      xmlns:fishing="clr-namespace:Content.Client.DeadSpace.Fishing"
+                      Title="{Loc lava-fishing-window-title}"
+                      MinSize="360 330" SetSize="420 380">
+    <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="8">
+        <Label Name="StatusLabel" StyleClasses="LabelKeyText" />
+        <PanelContainer StyleClasses="PanelInsetDeep">
+            <fishing:LavaFishingBar Name="ReelingBar" Margin="4" MinHeight="32" />
+        </PanelContainer>
+        <BoxContainer Orientation="Vertical" SeparationOverride="4">
+            <BoxContainer Orientation="Horizontal" SeparationOverride="12">
+                <Label Text="{Loc lava-fishing-window-catch}" HorizontalExpand="True" />
+                <Label Name="ProgressLabel" />
+            </BoxContainer>
+            <ProgressBar Name="CatchProgress" MinValue="0" MaxValue="1" Value="0" />
+        </BoxContainer>
+        <ScrollContainer Name="HintsScroll" HScrollEnabled="False" VerticalExpand="True">
+            <BoxContainer Name="HintsContent" Orientation="Vertical" SeparationOverride="6">
+                <RichTextLabel Name="ControlsHint" />
+                <RichTextLabel Name="GoalHint" />
+                <RichTextLabel Name="FinishHint" />
+            </BoxContainer>
+        </ScrollContainer>
+        <Button Name="CancelButton" Text="{Loc lava-fishing-cancel}" />
+    </BoxContainer>
+</controls:FancyWindow>

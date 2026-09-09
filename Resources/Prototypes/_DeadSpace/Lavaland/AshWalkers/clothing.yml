@@ -1,0 +1,206 @@
+- type: entity
+  parent: ClothingOuterArmorBone
+  id: ClothingOuterArmorBoneAshWalker
+  name: ash walker bone armor
+  description: Dense bone plates bound to fit an ash walker's powerful frame.
+  components:
+  - type: AshWalkerClothing
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.5
+        Slash: 0.65
+        Piercing: 0.35
+        Heat: 0.75
+        Caustic: 0.8
+  - type: ClothingSpeedModifier
+    walkModifier: 0.85
+    sprintModifier: 0.85
+  - type: Construction
+    graph: ClothingOuterArmorBoneAshWalker
+    node: armor
+
+- type: entity
+  parent: ClothingHeadHelmetBone
+  id: ClothingHeadHelmetBoneAshWalker
+  name: ash walker bone helmet
+  description: A reinforced skull helmet fitted for an ash walker's head.
+  components:
+  - type: AshWalkerClothing
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.85
+        Slash: 0.85
+        Piercing: 0.85
+        Heat: 0.85
+  - type: Construction
+    graph: ClothingHeadHelmetBoneAshWalker
+    node: helmet
+
+- type: entity
+  parent: ClothingHandsBase
+  id: ClothingHandsGlovesBoneBracers
+  name: bone bracers
+  description: Overlapping bone plates tied around the forearms. They soften blows without covering the fingers.
+  components:
+  - type: AshWalkerClothing
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_bracers.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_bracers.rsi
+  - type: Item
+    sprite: Clothing/Hands/Gloves/fingerless.rsi
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: "#CBBF82"
+      right:
+      - state: inhand-right
+        color: "#CBBF82"
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.85
+        Piercing: 0.9
+  - type: Construction
+    graph: ClothingHandsGlovesBoneBracers
+    node: bracers
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckBoneTalisman
+  name: bone talisman
+  description: A hunter's charm carved from bone and bound with sinew. The old gods favor those who return from the hunt.
+  components:
+  - type: AshWalkerClothing
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_talisman.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_talisman.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.9
+        Caustic: 0.8
+  - type: ExplosionResistance
+    damageCoefficient: 0.9
+  - type: Construction
+    graph: ClothingNeckBoneTalisman
+    node: talisman
+
+- type: entity
+  parent: ClothingUniformAshWalker
+  id: ClothingUniformSkullArmor
+  name: skull-plated loincloth
+  description: A hide loincloth reinforced with a carved skull plate to protect the groin.
+  components:
+  - type: AshWalkerClothing
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/skull_codpiece.rsi
+  - type: Clothing
+    clothingVisuals:
+      jumpsuit:
+      - state: equipped-INNERCLOTHING
+        sprite: Clothing/Uniforms/Jumpsuit/gladiator.rsi
+      - state: equipped-INNERCLOTHING
+        sprite: _DeadSpace/Lavaland/AshWalkers/skull_codpiece.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.9
+  - type: Construction
+    graph: ClothingUniformSkullArmor
+    node: loincloth
+
+- type: entity
+  parent: ClothingBeltStorageBase
+  id: ClothingBeltAshWalker
+  name: hunter's belt
+  description: Hide pouches sewn with watcher sinew. Keeps knives, provisions, bindings and small tools close at hand.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/hunter_belt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Lavaland/AshWalkers/hunter_belt.rsi
+  - type: Storage
+    grid:
+    - 0,0,4,1
+    whitelist:
+      tags:
+      - Knife
+      - Flashlight
+      - Gauze
+      - Ointment
+      - Arrow
+      components:
+      - Edible
+      - Handcuff
+      - Tool
+      - Stack
+  - type: Construction
+    graph: ClothingBeltAshWalker
+    node: belt
+
+- type: entity
+  parent: [ClothingOuterBaseToggleable, AllowSuitStorageClothing, BaseMinorContraband]
+  id: ClothingOuterCloakGoliath
+  name: goliath hide cloak
+  description: A thick cloak lined with a goliath's rocky plates. Its hide resists claws and heat, while the attached hood protects the head.
+  components:
+  - type: AshWalkerClothing
+  - type: Sprite
+    sprite: Clothing/Neck/Cloaks/goliathcloak.rsi
+  - type: Item
+    sprite: Clothing/Neck/Cloaks/goliathcloak.rsi
+    size: Huge
+  - type: Clothing
+    sprite: Clothing/Neck/Cloaks/goliathcloak.rsi
+    clothingVisuals:
+      outerClothing:
+      - state: equipped-NECK
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHoodGoliath
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.55
+        Slash: 0.6
+        Piercing: 0.7
+        Heat: 0.5
+        Caustic: 0.6
+  - type: TemperatureProtection
+    heatingCoefficient: 0.05
+    coolingCoefficient: 0.2
+  - type: FireProtection
+    reduction: 0.3
+  - type: ClothingSpeedModifier
+    walkModifier: 0.95
+    sprintModifier: 0.95
+  - type: HeldSpeedModifier
+  - type: GroupExamine
+  - type: Construction
+    graph: ClothingOuterCloakGoliath
+    node: cloak
+
+- type: entity
+  parent: ClothingHeadHatHoodGoliathCloak
+  id: ClothingHeadHoodGoliath
+  name: goliath hide hood
+  description: A thick hide hood that shields the head from glancing blows and searing heat.
+  categories: [HideSpawnMenu]
+  components:
+  - type: AshWalkerClothing
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.9
+        Heat: 0.8
+        Caustic: 0.8

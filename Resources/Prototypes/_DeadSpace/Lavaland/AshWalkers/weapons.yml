@@ -1,0 +1,139 @@
+- type: entity
+  parent: BaseKnife
+  id: DaggerBone
+  name: bone dagger
+  description: A sharpened bone with a comfortable grip, suited to skinning prey and cutting sinew.
+  components:
+  - type: AshWalkerRitualDagger
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_dagger.rsi
+    state: icon
+  - type: Item
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_dagger.rsi
+  - type: Sharp
+    butcherDelayModifier: 0.7
+  - type: MeleeWeapon
+    damage:
+      types:
+        Slash: 10
+        Piercing: 3
+  - type: DamageOtherOnHit
+    damage:
+      types:
+        Piercing: 10
+  - type: Construction
+    graph: DaggerBone
+    node: dagger
+
+- type: entity
+  parent: [BaseItem, BaseMinorContraband]
+  id: AxeBone
+  name: bone axe
+  description: Heavy bone plates lashed to a sturdy haft. A two-handed grip gives its edge the weight to split timber and thick hides.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_axe.rsi
+    state: icon
+  - type: Item
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_axe.rsi
+    size: Ginormous
+  - type: Clothing
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_axe.rsi
+    quickEquip: false
+    slots:
+    - back
+    - suitStorage
+    clothingVisuals:
+      suitstorage:
+      - state: equipped-BACKPACK
+  - type: Sharp
+  - type: MeleeWeapon
+    wideAnimationRotation: 135
+    swingLeft: true
+    attackRate: 0.7
+    damage:
+      types:
+        Blunt: 3
+        Slash: 10
+        Structural: 15
+    soundHit:
+      path: /Audio/Weapons/bladeslice.ogg
+  - type: Wieldable
+  - type: IncreaseDamageOnWield
+    damage:
+      types:
+        Blunt: 3
+        Slash: 12
+        Structural: 25
+  - type: UseDelay
+    delay: 1
+  - type: Construction
+    graph: AxeBone
+    node: axe
+
+- type: entity
+  parent: Handcuffs
+  id: SinewCuffs
+  name: sinew restraints
+  description: Tough strands of watcher sinew tied into a pair of reusable restraints.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/sinew_cuffs.rsi
+    state: icon
+  - type: Item
+    sprite: Objects/Misc/cablecuffs.rsi
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: "#9B3E26"
+      right:
+      - state: inhand-right
+        color: "#9B3E26"
+  - type: Handcuff
+    breakoutTime: 30
+    cuffedRSI: Objects/Misc/cablecuffs.rsi
+    color: "#9B3E26"
+    startCuffSound:
+      path: /Audio/Items/Handcuffs/rope_start.ogg
+    endCuffSound:
+      path: /Audio/Items/Handcuffs/rope_end.ogg
+    startUncuffSound:
+      path: /Audio/Items/Handcuffs/rope_start.ogg
+    endUncuffSound:
+      path: /Audio/Items/Handcuffs/rope_end.ogg
+    startBreakoutSound:
+      path: /Audio/Items/Handcuffs/rope_takeoff.ogg
+  - type: Construction
+    graph: SinewCuffs
+    node: cuffs
+
+- type: entity
+  parent: BowImprovised
+  id: BowBone
+  name: bone shortbow
+  description: A composite bow made from curved bones and watcher sinew. Its limbs need both hands to draw.
+  components:
+  - type: Construction
+    graph: BowBone
+    node: bow
+
+- type: entity
+  parent: BaseArrow
+  id: ArrowBone
+  name: bone arrow
+  description: A slender bone shaft with a carved point and vanes. It can be recovered after a shot.
+  components:
+  - type: Sprite
+    layers:
+    - state: tail
+      color: "#8E6549"
+    - state: rod
+      color: "#D8C9A4"
+    - state: tip
+      color: "#EFE2C7"
+    - state: solution1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+  - type: Construction
+    graph: ArrowBone
+    node: arrow

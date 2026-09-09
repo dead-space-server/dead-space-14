@@ -3,12 +3,14 @@
   id: Thief
   components:
   - type: ThiefRule
-  # DS14-start: instead of random steal objectives the thief has a single goal —
-  # earn a million dirty credits through the ВорПРО program, then escape.
-  - type: AntagObjectives
-    objectives:
-    - EarnCreditsThiefObjective
-    - EscapeThiefShuttleObjective
+  - type: AntagRandomObjectives
+    sets:
+    - groups: ThiefBigObjectiveGroups
+      prob: 0.7
+      maxPicks: 1
+    - groups: ThiefObjectiveGroups
+      maxPicks: 10
+    maxDifficulty: 2.5
   - type: AntagSelection
     agentName: thief-round-end-agent-name
     selectionTime: IntraPlayerSpawn

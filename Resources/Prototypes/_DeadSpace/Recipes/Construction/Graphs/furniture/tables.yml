@@ -1,0 +1,54 @@
+- type: constructionGraph
+  id: TableAsia
+  start: start
+  graph:
+  - node: start
+    actions:
+    - !type:DeleteEntity {}
+    edges:
+    - to: asia
+      steps:
+      - material: WoodPlank
+        amount: 2
+        doAfter: 2
+  - node: asia
+    entity: TableAsia
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: MaterialWoodPlank1
+        amount: 2
+      steps:
+      - tool: Screwing
+        doAfter: 2
+
+- type: constructionGraph
+  id: TablePlasmaGlassArmored
+  start: start
+  graph:
+  - node: start
+    actions:
+    - !type:DeleteEntity {}
+    edges:
+    - to: armored
+      steps:
+      - material: MetalRod
+        amount: 2
+      - material: ReinforcedPlasmaGlass
+        amount: 2
+        doAfter: 2
+  - node: armored
+    entity: TablePlasmaGlassArmored
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: PartRodMetal1
+        amount: 2
+      - !type:SpawnPrototype
+        prototype: SheetRPGlass1
+        amount: 2
+      steps:
+      - tool: Screwing
+        doAfter: 2

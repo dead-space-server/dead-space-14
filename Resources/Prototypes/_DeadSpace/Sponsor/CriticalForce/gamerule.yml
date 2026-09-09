@@ -8,14 +8,14 @@
 - type: ertTeam
   id: CriticalForce
   name: Critical Force
-  description: 
-    Спасательный отряд для спонсоров актива.
+  description: Медицинская эвакуация клиента со станции.
   announceOnApproval: false
   rule: SpawnCriticalForceShuttle
   spawnWindow:
-    min: 1m
-    max: 3m
+    min: 2m
+    max: 4m
   price: 0
+  dispatchPerTarget: true
   spawns:
     - id: RandomHumanoidSpawnerCriticalForceOfficerEMT
-      amount: 3
+      amount: 2

@@ -47,8 +47,8 @@
         type: RadarConsoleBoundUserInterface
       enum.CrewMonitoringUIKey.Key:
         type: CrewMonitoringBoundUserInterface
-      enum.GeneralStationRecordConsoleKey.Key:
-        type: GeneralStationRecordConsoleBoundUserInterface
+      enum.CriminalRecordsConsoleKey.Key: # DS14
+        type: CriminalRecordsConsoleBoundUserInterface # DS14
       enum.SiliconLawsUiKey.Key:
         type: SiliconLawBoundUserInterface
       enum.CommunicationsConsoleUiKey.Key:
@@ -65,12 +65,13 @@
         toggleAction: AIActionAGhostShowRadar
       enum.CrewMonitoringUIKey.Key:
         toggleAction: AIActionAGhostShowCrewMonitoring
-      enum.GeneralStationRecordConsoleKey.Key:
-        toggleAction: AIActionAGhostShowStationRecords
+      enum.CriminalRecordsConsoleKey.Key: # DS14
+        toggleAction: AIActionAGhostShowCriminalRecords # DS14
       enum.CommunicationsConsoleUiKey.Key:
         toggleAction: AIActionAGhostShowCommunications
   - type: CrewMonitoringConsole
-  - type: GeneralStationRecordConsole
+  - type: CriminalRecordsConsole # DS14
+    hasPrinter: false
   - type: DeviceNetwork
     deviceNetId: Wireless
     receiveFrequencyId: CrewMonitor
@@ -78,6 +79,21 @@
   - type: StationLimitedNetwork # DS14
   - type: RadarConsole
     followEntity: false
+  # DS14-start
+    advanced: true
+    allowedComponents:
+      - component: Projectile
+        color: "#FF0000"
+      - component: MobState
+        color: "#FFFFFF"
+      - component: Item
+        color: "#FFD700"
+    blacklistComponents:
+      - CartridgeAmmo
+    blacklistTags:
+      - Ore
+      - Trash
+  # DS14-end
   - type: CommunicationsConsole
     canShuttle: false
     title: comms-console-announcement-title-station-ai

@@ -1,0 +1,41 @@
+- type: entity
+  id: SpawnMobLavalandGoliath
+  parent: MarkerBase
+  name: Спавнер голиаф
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: goliath
+      sprite: _DeadSpace/Lavaland/Mobs/lavaland_monsters.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - MobLavalandGoliath
+
+- type: entity
+  id: SpawnMobLavalandBasilisk
+  parent: MarkerBase
+  name: Спавнер василиск
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: basilisk
+      sprite: Mobs/Aliens/Asteroid/basilisk.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - MobLavalandBasilisk
+
+- type: entity
+  id: SpawnMobLavalandHivelord
+  parent: MarkerBase
+  name: Спавнер рой
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: hivelord
+      sprite: _DeadSpace/Lavaland/Mobs/lavaland_monsters.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - MobLavalandHivelord

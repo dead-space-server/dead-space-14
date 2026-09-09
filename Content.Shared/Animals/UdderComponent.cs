@@ -14,6 +14,12 @@ namespace Content.Shared.Animals;
 [RegisterComponent, AutoGenerateComponentState, AutoGenerateComponentPause, NetworkedComponent]
 public sealed partial class UdderComponent : Component
 {
+    [DataField, AutoNetworkedField]
+    public bool AutoGenerate = true;
+
+    [DataField]
+    public bool MilkOnInteract;
+
     /// <summary>
     ///     The reagent to produce.
     /// </summary>

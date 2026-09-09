@@ -74,6 +74,11 @@ public abstract class SharedStrippableSystem : EntitySystem
         if (args.Hands == null || !args.CanAccess || !args.CanInteract || args.Target == args.User)
             return;
 
+        // DS14-start: don't offer to strip a target that can't be stripped (e.g. a stasis cocoon).
+        if (args.Target is { Valid: true } target && TryComp<HandsComponent>(target, out var targetHands) && !targetHands.CanBeStripped)
+            return;
+        // DS14-end
+
         Verb verb = new()
         {
             Text = Loc.GetString("strip-verb-get-data-text"),
@@ -88,6 +93,11 @@ public abstract class SharedStrippableSystem : EntitySystem
     {
         if (args.Hands == null || !args.CanAccess || !args.CanInteract || args.Target == args.User)
             return;
+
+        // DS14-start: don't offer to strip a target that can't be stripped (e.g. a stasis cocoon).
+        if (args.Target is { Valid: true } target && TryComp<HandsComponent>(target, out var targetHands) && !targetHands.CanBeStripped)
+            return;
+        // DS14-end
 
         ExamineVerb verb = new()
         {
@@ -169,6 +179,11 @@ public abstract class SharedStrippableSystem : EntitySystem
     {
         if (!Resolve(user, ref user.Comp))
             return false;
+
+        // DS14-start: a stasis cocoon blocks inventory slots as well as hands.
+        if (TryComp<HandsComponent>(target, out var targetHands) && !targetHands.CanBeStripped)
+            return false;
+        // DS14-end
 
         if (!_handsSystem.TryGetActiveItem(user, out var activeItem) || activeItem != held)
             return false;
@@ -276,6 +291,11 @@ public abstract class SharedStrippableSystem : EntitySystem
         EntityUid item,
         string slot)
     {
+        // DS14-start: re-check during the strip do-after so entering a cocoon cancels it.
+        if (TryComp<HandsComponent>(target, out var targetHands) && !targetHands.CanBeStripped)
+            return false;
+        // DS14-end
+
         if (!_inventorySystem.TryGetSlotEntity(target, slot, out var slotItem))
         {
             _popupSystem.PopupCursor(Loc.GetString("strippable-component-item-slot-free-message", ("owner", Identity.Entity(target, EntityManager))));
@@ -752,6 +772,15 @@ public abstract class SharedStrippableSystem : EntitySystem
 
         if (!HasComp<StrippingComponent>(user))
             return false;
+
+        // DS14-start: don't let anyone open the stripping UI on a target that
+        // can't be stripped (e.g. a changeling in a stasis cocoon).
+        if (TryComp<HandsComponent>(target.Owner, out var targetHands) && !targetHands.CanBeStripped)
+        {
+            _popupSystem.PopupCursor(Loc.GetString("strip-cannot-strip"), user);
+            return false;
+        }
+        // DS14-end
 
         _ui.OpenUi(target.Owner, StrippingUiKey.Key, user);
         return true;

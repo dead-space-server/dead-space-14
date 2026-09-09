@@ -59,7 +59,7 @@ public sealed partial class BotanySeedSystem : EntitySystem
 
         if (_plantTray.TryGetPlant(ent.AsNullable(), out _))
         {
-            _popup.PopupCursor(
+            _popup.PopupPredictedCursor(
                 Loc.GetString("plant-component-already-seeded-popup", ("name", MetaData(ent.Owner).EntityName)),
                 args.User,
                 PopupType.Medium);
@@ -74,7 +74,7 @@ public sealed partial class BotanySeedSystem : EntitySystem
 
         var name = Loc.GetString(plantData.Name);
         var noun = Loc.GetString(plantData.Noun);
-        _popup.PopupCursor(Loc.GetString("plant-component-plant-success-popup",
+        _popup.PopupPredictedCursor(Loc.GetString("plant-component-plant-success-popup",
                 ("seedName", name),
                 ("seedNoun", noun)),
             args.User,
@@ -84,7 +84,6 @@ public sealed partial class BotanySeedSystem : EntitySystem
             _itemSlots.TryEjectToHands(args.Seed, paperLabel.LabelSlot, args.User);
 
         _plantTray.PlantingPlantInTray(ent.Owner, plantUid, args.Seed.Comp.HealthOverride);
-        PredictedQueueDel(args.Seed);
 
         if (plantData.PlantLogImpact != null)
         {
@@ -92,5 +91,7 @@ public sealed partial class BotanySeedSystem : EntitySystem
                 plantData.PlantLogImpact.Value,
                 $"{ToPrettyString(args.User):player} planted {Loc.GetString(plantData.Name):seed} at Pos:{Transform(ent.Owner).Coordinates}.");
         }
+
+        PredictedDel(args.Seed.Owner);
     }
 }

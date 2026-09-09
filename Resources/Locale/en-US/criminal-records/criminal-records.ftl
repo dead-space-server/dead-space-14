@@ -24,6 +24,17 @@ criminal-records-console-suspected-reason = Suspected Reason
 criminal-records-console-reason = Reason
 criminal-records-console-reason-placeholder = For example: {$placeholder}
 
+## DS14: Print button and arrest dialog
+
+criminal-records-console-print-button = Print
+criminal-records-console-detained-articles = Articles
+criminal-records-console-detained-articles-placeholder = E.g.: art. 4.1 Theft, art. 6.2 Assault on an officer
+criminal-records-console-detained-sentence = Sentence
+criminal-records-console-detained-sentence-placeholder = E.g.: 15 minutes of confinement
+
+paperwork-form-title-criminal-arrest-warrant = Arrest Warrant
+paperwork-form-title-criminal-verdict = Verdict
+
 ## Crime History
 
 criminal-records-console-crime-history = Crime History
@@ -60,5 +71,6 @@ criminal-records-job-filter = Job
 criminal-records-species-filter = Species
 
 ## Arrest auto history lines
+criminal-records-history-sentence = — SENTENCE: { $sentence }
 criminal-records-console-auto-history = ARRESTED: {$reason}
 criminal-records-console-unspecified-reason = <unspecified reason>

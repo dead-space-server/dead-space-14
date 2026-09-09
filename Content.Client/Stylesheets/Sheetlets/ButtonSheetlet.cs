@@ -18,11 +18,11 @@ public sealed class ButtonSheetlet<T> : Sheetlet<T> where T : PalettedStylesheet
         IButtonConfig buttonCfg = sheet;
         IIconConfig iconCfg = sheet;
         // DS14: Classic retains the exact pre-redesign disabled label color.
-        var disabledText = DeadSpaceStylePalette.ClassicChrome
-            ? Color.FromHex("#E5E5E581")
-            : DeadSpaceStylePalette.LightChrome
-                ? DeadSpaceStylePalette.TextMuted
-                : sheet.PrimaryPalette.TextDark.WithAlpha(0.6f);
+        var disabledText = sheet is NanotrasenStylesheet
+            ? DeadSpaceStylePalette.ClassicChrome
+                ? Color.FromHex("#E5E5E581")
+                : DeadSpaceStylePalette.TextMuted
+            : sheet.PrimaryPalette.TextDark.WithAlpha(0.6f);
 
         var crossTex = sheet.GetTextureOr(iconCfg.CrossIconPath, NanotrasenStylesheet.TextureRoot);
         var refreshTex = sheet.GetTextureOr(iconCfg.RefreshIconPath, NanotrasenStylesheet.TextureRoot);

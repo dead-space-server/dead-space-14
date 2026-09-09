@@ -1,0 +1,29 @@
+- type: constructionGraph
+  id: PaperWindow
+  start: start
+  graph:
+  - node: start
+    actions:
+    - !type:DeleteEntity {}
+    edges:
+    - to: window
+      steps:
+      - material: WoodPlank
+        amount: 1
+      - material: Paper
+        amount: 2
+        doAfter: 2
+  - node: window
+    entity: PaperWindow
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: MaterialWoodPlank1
+        amount: 1
+      - !type:SpawnPrototype
+        prototype: SheetPaper1
+        amount: 2
+      steps:
+      - tool: Screwing
+        doAfter: 2

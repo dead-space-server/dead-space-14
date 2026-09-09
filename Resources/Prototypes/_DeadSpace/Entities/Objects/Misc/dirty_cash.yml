@@ -63,4 +63,16 @@
   - type: EmitSoundOnLand
     sound:
       path: /Audio/_DeadSpace/Items/Handing/paper_drop.ogg
+
+# Starter pile of 50 000 dCR, given to thieves in their starter gear.
+- type: entity
+  parent: DirtyCash
+  id: DirtyCash50000
+  suffix: 50000
+  components:
+  - type: Icon
+    sprite: Objects/Economy/cash.rsi
+    state: cash_50000
+  - type: Stack
+    count: 50000
 # DS14-end

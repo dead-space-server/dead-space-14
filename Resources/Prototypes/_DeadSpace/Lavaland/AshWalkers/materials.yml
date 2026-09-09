@@ -1,0 +1,110 @@
+- type: entity
+  parent: MaterialWoodPlank1
+  id: MaterialFungalWood3
+  name: pressed fungal timber
+  suffix: 3
+  description: Tough polypore fibres pressed into light boards. Suitable for building and fuel.
+  components:
+  - type: Stack
+    count: 3
+  - type: Construction
+    graph: MaterialFungalWood3
+    node: wood
+
+- type: entity
+  parent: MaterialCloth1
+  id: MaterialFungalCloth2
+  name: woven fungal cloth
+  suffix: 2
+  description: Soft strips woven from polypore fibres.
+  components:
+  - type: Stack
+    count: 2
+  - type: Construction
+    graph: MaterialFungalCloth2
+    node: cloth
+
+- type: entity
+  parent: FloorTileItemStone
+  id: FloorTileAshWalkerStone4
+  name: basalt floor tiles
+  suffix: 4
+  components:
+  - type: Stack
+    count: 4
+  - type: Construction
+    graph: FloorTileAshWalkerStone4
+    node: tiles
+
+- type: stack
+  parent: BaseMediumStack
+  id: Basalt
+  name: stack-basalt
+  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: iron }
+  spawn: MaterialBasalt1
+
+- type: entity
+  parent: MaterialBase
+  id: MaterialBasalt1
+  name: basalt blocks
+  suffix: 1
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ore.rsi
+    state: iron
+    color: "#8E8782"
+  - type: Item
+    sprite: Objects/Materials/ore.rsi
+    heldPrefix: iron
+  - type: Stack
+    stackType: Basalt
+    count: 1
+
+- type: stack
+  parent: BaseMediumStack
+  id: AshWalkerLeather
+  name: stack-ash-walker-leather
+  icon: { sprite: /Textures/Objects/Materials/hide.rsi, state: goliath_hide }
+  spawn: MaterialAshWalkerLeather1
+
+- type: entity
+  parent: MaterialBase
+  id: MaterialAshWalkerLeather1
+  name: cured goliath leather
+  suffix: 1
+  description: A piece of goliath hide, scraped clean and dried over warm coals. Ready for sewing.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/hide.rsi
+    state: goliath_hide
+    color: "#B18050"
+  - type: Item
+    sprite: Objects/Materials/hide.rsi
+    heldPrefix: goliathhide
+  - type: Stack
+    stackType: AshWalkerLeather
+    count: 1
+  - type: Construction
+    graph: DryAshWalkerHide
+    node: leather
+
+- type: entity
+  parent: BaseItem
+  id: AshWalkerScrapedHide
+  name: scraped goliath hide
+  description: A cleaned, still-damp hide. Dry it over the hearth before sewing it into useful leather.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/hide.rsi
+    state: goliath_hide
+  - type: Item
+    size: Normal
+    sprite: Objects/Materials/hide.rsi
+    heldPrefix: goliathhide
+  - type: Temperature
+    currentTemperature: 293.15
+  - type: AtmosExposed
+  - type: Construction
+    graph: DryAshWalkerHide
+    node: wet
+    defaultTarget: leather

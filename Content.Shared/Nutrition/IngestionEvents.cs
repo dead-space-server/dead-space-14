@@ -24,6 +24,8 @@ public record struct IngestibleEvent(bool Cancelled = false);
 [ByRefEvent]
 public record struct EdibleEvent(EntityUid User)
 {
+    public bool RequireUtensils = true;
+
     public Entity<SolutionComponent>? Solution = null;
 
     public TimeSpan Time = TimeSpan.Zero;

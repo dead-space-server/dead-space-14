@@ -11,6 +11,8 @@ using Content.Shared.Bed.Sleep;
 using Content.Shared.Body.Systems;
 using Content.Shared.Cloning.Events;
 using Content.Shared.Chat;
+using Content.Shared.Damage.Components; // DS14
+using Content.Shared.Damage.Prototypes; // DS14
 using Content.Shared.Damage.Systems;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
@@ -35,6 +37,10 @@ namespace Content.Server.Zombies
 {
     public sealed partial class ZombieSystem : SharedZombieSystem
     {
+        // DS14-start
+        private static readonly ProtoId<DamageContainerPrototype> SiliconDamageContainer = "Silicon";
+        // DS14-end
+
         [Dependency] private readonly IGameTiming _timing = default!;
         [Dependency] private readonly IPrototypeManager _protoManager = default!;
         [Dependency] private readonly IRobustRandom _random = default!;
@@ -265,6 +271,12 @@ namespace Content.Server.Zombies
 
                 if (_mobState.IsAlive(uid, mobState))
                 {
+                    // DS14-start
+                    if (TryComp<DamageableComponent>(uid, out var damageable) &&
+                        damageable.DamageContainerID == SiliconDamageContainer)
+                        continue;
+                    // DS14-end
+
                     _damageable.TryChangeDamage(args.User, entity.Comp.HealingOnBite, true, false);
 
                     // If we cannot infect the living target, the zed will just heal itself.

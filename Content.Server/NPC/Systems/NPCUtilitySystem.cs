@@ -173,6 +173,9 @@ public sealed class NPCUtilitySystem : EntitySystem
         var owner = blackboard.GetValue<EntityUid>(NPCBlackboard.Owner);
         switch (consideration)
         {
+            case CanIngestCon:
+                return _ingestion.CanIngest(owner, targetUid) ? 1f : 0f;
+
             case FoodValueCon foodValueConsideration:
             {
                 // do we have a mouth available? Is the food item opened?

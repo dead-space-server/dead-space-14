@@ -11,7 +11,7 @@
   - type: Storage
     maxItemSize: Huge
     grid:
-    - 0,0,15,10
+    - 0,0,13,5
     storageOpenSound:
       collection: CrystalBagOpening
       params:
@@ -69,22 +69,147 @@
       - id: PillCanisterBicaridine
       - id: PillCanisterDylovene
       - id: PillCanisterDermaline
-      - id: PillCanisterDexalin
       - id: PillCanisterHyronalin
       - id: ClothingHandsGlovesHolyPainSecond
       - id: SyringeHolyPain
-      - id: SyringeHolyPain
-      - id: SyringeHolyPain
-      - id: SyringeHolyPain
-      - id: SyringeHolyPain
       - id: ClothingEyesGlassesHolyPain
       - id: BluespaceBeakerHolyPain
+      - id: ClothingShoesBootsHolyPain
+      - id: JetInjectorHolyPain
+      - id: JawsOfLife
+      - id: PowerDrill
+      - id: WelderExperimental
+      - id: Multitool
+      - id: MedkitAdvancedFilled
   - type: Tag
     tags: []
   - type: HardsuitIdentification
     nonlethal: true
     wrongOwnerSound:
       path: /Audio/_DeadSpace/Sponsor/HolyPain/CrystalBag/BagDelete.ogg
+  - type: ToggleableClothing
+    clothingPrototype: ClothingOuterHardsuitHolyPain
+    requiredSlot: BACK
+    slot: outerClothing
+  - type: ContainerContainer
+    containers:
+      toggleable-clothing: !type:ContainerSlot {}
+      storagebase: !type:Container
+        ents: []
+
+# RIG hardsuit
+- type: entity
+  parent: ClothingOuterHardsuitSecurity
+  id: ClothingOuterHardsuitHolyPain
+  name: доспех HolyPain
+  description: Адский кузнец, по горло набитый чужими дугами, без устали бьёт молотом под непрестанные вопли слабых. Вопросы морали и судьбы его не интересуют. Совестью пусть мучаются те, кому больше нечем заняться.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/HolyPain/hardsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/HolyPain/hardsuit.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitHolyPain
+  - type: Item
+    size: Huge
+  - type: ClothingSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.5
+        Slash: 0.5
+        Piercing: 0.6
+        Heat: 0.5
+        Radiation: 0.5
+        Caustic: 0.5
+  - type: HardsuitSpeedBuff
+  - type: PowerCellDraw
+    drawRate: 3.6
+    enabled: false
+  - type: PowerCellSlot
+    cellSlotId: cell_slot
+    fitsInCharger: false
+  - type: ContainerContainer
+    containers:
+      cell_slot: !type:ContainerSlot
+      toggleable-clothing: !type:ContainerSlot {}
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: PowerCellMicroreactor
+        disableEject: true
+        whitelist:
+          tags:
+          - PowerCell
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+- type: entity
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  id: ClothingHeadHelmetHardsuitHolyPain
+  name: энергошлем HolyPain
+  description: Если вы хотите познать секреты вселенной — мыслите единицами измерения энергии, частоты и вибрации...
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/HolyPain/helmet.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/HolyPain/helmet.rsi
+  - type: PointLight
+    color: "#2b7cd9"
+    radius: 7
+    energy: 8
+  - type: PressureProtection
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Jet-magboots
+- type: entity
+  parent: [ClothingShoesBootsMag, ClothingSlotBase, BaseJetpack]
+  id: ClothingShoesBootsHolyPain
+  name: сапоги HolyPain
+  description: Сапоги, разработанные для аэродинамических прыжков, ударов и громких воплей слабаков.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/HolyPain/boots.rsi
+    layers:
+    - state: icon
+      map: [ "enum.ToggleableVisuals.Layer" ]
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/HolyPain/boots.rsi
+  - type: Item
+    sprite: _DeadSpace/Sponsor/HolyPain/boots.rsi
+  - type: ClothingSpeedModifier
+    walkModifier: 1
+    sprintModifier: 1
+  - type: GasTank
+    outputPressure: 42.6
+    air:
+      volume: 5
+      temperature: 293.15
+      moles:
+      - 1.025689525
+      - 1.025689525
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Jet injector
+- type: entity
+  parent: JetInjector
+  id: JetInjectorHolyPain
+  name: бронзовый струйный инъектор
+  description: Уникальный инъектор, украшенный изумрудом, с гравировкой в честь HolyPain на бронзовых частях.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/HolyPain/jet_injector.rsi
+  - type: Item
+    sprite: _DeadSpace/Sponsor/HolyPain/jet_injector.rsi
 
 - type: entity
   parent: ClothingHandsGlovesCombat
@@ -174,6 +299,8 @@
     sprite: _DeadSpace/Sponsor/HolyPain/beaker_bluespace.rsi
     layers:
       - state: beakerbluespace
+  - type: Item
+    sprite: _DeadSpace/Sponsor/HolyPain/beaker_bluespace.rsi
   - type: SolutionContainerVisuals
     maxFillLevels: 0
   - type: SolutionContainerManager

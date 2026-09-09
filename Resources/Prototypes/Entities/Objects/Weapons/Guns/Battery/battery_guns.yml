@@ -710,12 +710,8 @@
   - type: Clothing
     sprite: Objects/Weapons/Guns/Battery/antiquelasergun.rsi
   - type: Gun
-    fireRate: 1 # DS14-value
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/laser_cannon.ogg
-  - type: Battery
-    maxCharge: 500 # DS14-value: 10 primary shots
-    startingCharge: 500 # DS14-value: 10 primary shots
   - type: BatteryAmmoProvider
     proto: RedMediumLaser
     fireCost: 100

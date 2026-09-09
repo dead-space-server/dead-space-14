@@ -1,0 +1,27 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from https://github.com/tgstation/tgstation at commit 57cd1d59ca019dd0e7811ac451f295f818e573da. Modified by ripentropy (Discord) for Space Station 14 Server Мёртвый Космос",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "tempGate",
+            "directions": 4
+        },
+        {
+            "name": "tempGateOn",
+            "directions": 4
+        },
+        {
+            "name": "tempPump",
+            "directions": 4
+        },
+        {
+            "name": "tempPumpOn",
+            "directions": 4
+        }
+    ]
+}

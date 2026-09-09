@@ -4,8 +4,11 @@ using System.Linq;
 using Content.Client.DeadSpace.Stylesheets; // DS14
 using Content.Client.Stylesheets.Stylesheets;
 using Content.Shared.DeadSpace.CCCCVars; // DS14
+using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
+using Robust.Client.UserInterface.Controls;
+using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Configuration; // DS14
 using Robust.Shared.Reflection;
 
@@ -60,6 +63,8 @@ namespace Content.Client.Stylesheets
             SheetSpace = new StyleSpace(_resCache).Stylesheet; // TODO: REMOVE (obsolete)
 
             _userInterfaceManager.Stylesheet = SheetNanotrasen;
+            ApplyDebugConsoleTheme(_userInterfaceManager.RootControl); // DS14
+            _userInterfaceManager.WindowRoot.OnChildAdded += ApplyDebugConsoleTheme; // DS14
             _configuration.OnValueChanged(CCCCVars.InterfaceStyle, OnInterfaceStyleChanged); // DS14
 
             // warn about unused sheetlets
@@ -86,6 +91,7 @@ namespace Content.Client.Stylesheets
             SheetNanotrasen = baseSheet.Stylesheet;
             Stylesheets[baseSheet.StylesheetName] = SheetNanotrasen;
             _userInterfaceManager.Stylesheet = SheetNanotrasen;
+            ApplyDebugConsoleTheme(_userInterfaceManager.RootControl);
         }
 
         private void SelectInterfaceStyle(string theme)
@@ -95,6 +101,24 @@ namespace Content.Client.Stylesheets
 
             _logManager.GetSawmill("style")
                 .Warning($"Unknown DS14 interface style '{theme}', using '{DeadSpaceStylePalette.CurrentTheme}'.");
+        }
+
+        private static void ApplyDebugConsoleTheme(Control control)
+        {
+            if (control is DebugConsole console)
+            {
+                console.FindControl<OutputPanel>("Output").StyleBoxOverride = new StyleBoxFlat
+                {
+                    BackgroundColor = DeadSpaceStylePalette.SurfaceTranscript,
+                    ContentMarginLeftOverride = 3,
+                    ContentMarginRightOverride = 3,
+                    ContentMarginTopOverride = 3,
+                    ContentMarginBottomOverride = 3,
+                };
+            }
+
+            foreach (var child in control.Children)
+                ApplyDebugConsoleTheme(child);
         }
         // DS14-end
 

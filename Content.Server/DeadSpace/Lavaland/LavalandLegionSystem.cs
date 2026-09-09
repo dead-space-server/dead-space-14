@@ -138,7 +138,8 @@ public sealed class LavalandLegionSystem : EntitySystem
             return false;
 
         EnsureComp<LavalandLegionInfestedComponent>(target);
-        Spawn(head.Comp.InfestPrototype, targetCoordinates, rotation: _transform.GetWorldRotation(targetXform));
+        var legion = Spawn(head.Comp.InfestPrototype, targetCoordinates, rotation: _transform.GetWorldRotation(targetXform));
+        EnsureComp<LavalandLegionInfestedComponent>(legion);
         QueueDel(target);
         QueueDel(head.Owner);
 

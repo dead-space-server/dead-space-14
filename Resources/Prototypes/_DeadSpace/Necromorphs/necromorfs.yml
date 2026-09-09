@@ -3,6 +3,7 @@
   friendly:
   - Necromorfs
   hostile:
+  - AshWalker
   - Revolutionary
   - NanoTrasen
   - SimpleNeutral
@@ -790,3 +791,37 @@
     state: full
   - type: RandomHumanoidSpawner
     settings: CorpseCollectorNecromorf
+
+- type: necromorf
+  id: NecroDragon
+  isAnimal: true
+  slowOnDamage: false
+  movementSpeedMultiply: 1
+  thresholdMultiply: 1.5
+  damage:
+    groups:
+      Brute: 35
+    types:
+      Structural: 50
+  damageModifierSet: Necromorf
+  isCanSpawnInfectionDead: false
+  useInventory: false
+  sprite: _DeadSpace/Necromorfs/dragon.rsi
+  state: alive
+  components:
+  - type: Language
+    selectedLanguage: NecromorfLanguage
+    knownLanguages:
+    - NecromorfLanguage
+  - type: Vocal
+    sounds:
+      Male: NecroOther
+      Female: NecroOther
+      Unsexed: NecroOther
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Unitolog
+  - type: ActiveRadio
+    channels:
+    - Unitolog
+  - type: IntrinsicRadioReceiver

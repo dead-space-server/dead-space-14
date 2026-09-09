@@ -2,6 +2,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Server.Administration.Logs;
 using Content.Server.CartridgeLoader;
+using Content.Server.DeadSpace.Thief.Cartridges;
 using Content.Server.GameTicking;
 using Content.Server.Popups;
 using Content.Shared.CartridgeLoader;
@@ -11,9 +12,9 @@ using Content.Shared.DeadSpace.Thief.Prototypes;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
-using Content.Shared.MassMedia.Systems;
 using Content.Shared.Mind;
 using Content.Shared.Objectives.Components;
+using Content.Shared.PDA;
 using Content.Shared.Popups;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Components;
@@ -32,9 +33,10 @@ namespace Content.Server.DeadSpace.Thief.Cartridges;
 /// <summary>
 /// DS14: Server logic of the ВорПРО program — the thief's PDA program.
 ///
-/// The program is unlocked by writing a special news comment containing the round's
-/// code word (see <see cref="GameTicking.Rules.ThiefRuleSystem"/>) under any station
-/// news article. It provides two tabs: "Запросы" (requests) and "Аплинк" (uplink).
+/// The program is unlocked by inserting a tool (an item that fits in a utility tool
+/// belt) into the PDA's tool slot: only thieves receive the program. When the tool is
+/// taken out of the PDA again, the program is deleted. It provides two tabs:
+/// "Запросы" (requests) and "Аплинк" (uplink).
 ///
 /// Requests: the thief accepts a request for N items of a steal target group, brings the items
 /// to their linked thief beacon and sells them for dirty credits. Delivering before the deadline
@@ -69,6 +71,9 @@ public sealed class ThiefProgramSystem : EntitySystem
     /// <summary>Regular credit bill used when exchanging dirty credits 1:1.</summary>
     public static readonly EntProtoId CleanCashProto = "SpaceCash";
 
+    /// <summary>The ВорПРО program entity that gets installed onto the thief's PDA.</summary>
+    public static readonly EntProtoId ThiefProgramId = "ThiefPdaProgram";
+
     private static readonly SoundPathSpecifier SellSound = new("/Audio/Machines/high_tech_confirm.ogg");
     private static readonly SoundPathSpecifier ErrorSound = new("/Audio/Machines/beep.ogg");
 
@@ -87,9 +92,12 @@ public sealed class ThiefProgramSystem : EntitySystem
         SubscribeLocalEvent<ThiefPdaProgramComponent, CartridgeMessageEvent>(OnUiMessage);
         SubscribeLocalEvent<ThiefPdaProgramComponent, CartridgeUiReadyEvent>(OnUiReady);
 
-        // Broadcast subscription: check every news comment posted by players
-        // for the round's code word.
-        SubscribeLocalEvent<NewsCommentPostedEvent>(OnCommentPosted);
+        // DS14: Wire unsubscribe too — the ВорПРО unlock (insert the tool into the PDA's
+        // tool slot) is disabled for normal players (kept for the future thief rework).
+        // // Broadcast subscription: inserting a tool into a PDA's tool slot installs the
+        // // ВорПРО program (only for thieves), taking it out deletes the program again.
+        // SubscribeLocalEvent<EntInsertedIntoContainerMessage>(OnPdaToolInserted);
+        // SubscribeLocalEvent<EntRemovedFromContainerMessage>(OnPdaToolRemoved);
     }
 
     public override void Update(float frameTime)
@@ -120,65 +128,100 @@ public sealed class ThiefProgramSystem : EntitySystem
     #region Unlock
 
     /// <summary>
-    /// Checks comments posted under news articles. When a thief writes a comment
-    /// containing the current round's code word, the ВорПРО program is installed onto
-    /// their PDA.
+    /// Installs the ВорПРО program when a tool that fits in a utility tool belt is
+    /// inserted into the thief's PDA tool slot. Only thieves get the program; the
+    /// PDA itself already refuses tool insertion unless it is marked as the thief's own.
     /// </summary>
-    private void OnCommentPosted(ref NewsCommentPostedEvent args)
+    private void OnPdaToolInserted(EntInsertedIntoContainerMessage args)
     {
-        var codeWord = GetActiveCodeWord();
-        if (string.IsNullOrWhiteSpace(codeWord))
+        var pda = args.Container.Owner;
+
+        // Only the thief's marked PDA tool slot triggers the unlock, and it must have a cartridge loader.
+        if (args.Container.ID != PdaComponent.PdaToolSlotId ||
+            !HasComp<ThiefPdaComponent>(pda) ||
+            !TryComp<CartridgeLoaderComponent>(pda, out var loader))
+        {
+            return;
+        }
+
+        var user = GetLoaderUser(pda);
+        if (user == null)
             return;
 
-        if (!args.Content.Contains(codeWord, StringComparison.OrdinalIgnoreCase))
-            return;
-
-        var user = args.Author;
-        if (!user.IsValid())
-            return;
-
-        var mindId = _mind.GetMind(user);
+        var mindId = _mind.GetMind(user.Value);
         if (mindId == null || !_roles.MindHasRole<ThiefRoleComponent>(mindId.Value))
             return;
 
-        // Find the commenter's PDA (cartridge loader) somewhere in their inventory.
-        var contained = new List<EntityUid>();
-        CollectContainedEntities(user, contained);
-
-        foreach (var ent in contained)
+        // Only the round's single randomly-chosen tool unlocks ВорПРО.
+        var unlockTool = GetUnlockTool();
+        if (unlockTool == null || MetaData(args.Entity).EntityPrototype?.ID != unlockTool)
         {
-            if (!TryComp<CartridgeLoaderComponent>(ent, out var loader))
-                continue;
-
-            foreach (var program in _cartridgeLoader.GetInstalled(ent))
-            {
-                if (HasComp<ThiefPdaProgramComponent>(program))
-                    return; // already unlocked
-            }
-
-            if (_cartridgeLoader.InstallProgram(ent, "ThiefPdaProgram", deinstallable: true, loader: loader))
-            {
-                _popup.PopupEntity(Loc.GetString("thief-program-unlocked"), ent, Filter.Entities(user), true, PopupType.Medium);
-                _adminLogger.Add(LogType.PdaInteract, LogImpact.Medium,
-                    $"{ToPrettyString(user):actor} unlocked ВорПРО on {ToPrettyString(ent):loader} with a news comment code word '{codeWord}'");
-            }
-
+            _popup.PopupEntity(Loc.GetString("thief-program-wrong-tool"), pda, Filter.Entities(user.Value), true, PopupType.Medium);
             return;
         }
+
+        // Already unlocked.
+        foreach (var program in _cartridgeLoader.GetInstalled(pda))
+        {
+            if (HasComp<ThiefPdaProgramComponent>(program))
+                return;
+        }
+
+        if (!_cartridgeLoader.InstallProgram(pda, ThiefProgramId, deinstallable: true, loader: loader))
+            return;
+
+        _popup.PopupEntity(Loc.GetString("thief-program-unlocked"), pda, Filter.Entities(user.Value), true, PopupType.Medium);
+        _audio.PlayPvs(SellSound, pda);
+        _adminLogger.Add(LogType.PdaInteract, LogImpact.Medium,
+            $"{ToPrettyString(user.Value):actor} unlocked ВорПРО on {ToPrettyString(pda):loader} by inserting {ToPrettyString(args.Entity):tool} into the PDA tool slot");
     }
 
-    private string? GetActiveCodeWord()
+    /// <summary>
+    /// DS14: Returns the entity prototype ID of the round's chosen unlock tool, or null.
+    /// </summary>
+    private string? GetUnlockTool()
     {
         foreach (var rule in _gameTicker.GetActiveGameRules())
         {
             if (TryComp<GameTicking.Rules.Components.ThiefRuleComponent>(rule, out var ruleComp) &&
-                !string.IsNullOrWhiteSpace(ruleComp.CodeWord))
+                ruleComp.UnlockTool is { } unlockTool)
             {
-                return ruleComp.CodeWord;
+                return unlockTool;
             }
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// Deletes the ВорПРО program when the tool is removed from the PDA's tool slot.
+    /// </summary>
+    private void OnPdaToolRemoved(EntRemovedFromContainerMessage args)
+    {
+        var pda = args.Container.Owner;
+
+        if (args.Container.ID != PdaComponent.PdaToolSlotId ||
+            !TryComp<CartridgeLoaderComponent>(pda, out var loader))
+        {
+            return;
+        }
+        foreach (var program in _cartridgeLoader.GetInstalled(pda))
+        {
+            if (!HasComp<ThiefPdaProgramComponent>(program))
+                continue;
+
+            var user = GetLoaderUser(pda);
+            _cartridgeLoader.UninstallProgram(pda, program, loader);
+
+            if (user != null)
+            {
+                _popup.PopupEntity(Loc.GetString("thief-program-removed"), pda, Filter.Entities(user.Value), true, PopupType.Medium);
+                _adminLogger.Add(LogType.PdaInteract, LogImpact.Medium,
+                    $"{ToPrettyString(user.Value):actor} removed {ToPrettyString(args.Entity):tool} from {ToPrettyString(pda):loader} and ВорПРО was deleted");
+            }
+
+            return;
+        }
     }
 
     #endregion

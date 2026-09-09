@@ -1,0 +1,117 @@
+- type: entity
+  parent: CratePirate
+  id: CrateAshWalkerHunting
+  name: ash walker hunting crate
+  description: Bone armor, knives, bows and arrows for three hunters.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: ClothingOuterArmorBoneAshWalker
+          amount: 3
+        - id: ClothingHeadHelmetBoneAshWalker
+          amount: 3
+        - id: KitchenKnife
+          amount: 3
+        - id: BowImprovised
+          amount: 3
+        - id: ArrowImprovised
+          amount: 12
+
+- type: entity
+  parent: CratePirate
+  id: CrateAshWalkerTools
+  name: ash walker workshop crate
+  description: Mining and building tools, buckets, materials and spare light batteries for a small settlement.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: Pickaxe
+          amount: 3
+        - id: Shovel
+        - id: HydroponicsToolHatchet
+        - id: Bucket
+          amount: 2
+        - id: Crowbar
+        - id: Wrench
+        - id: Screwdriver
+        - id: Wirecutter
+        - id: Welder
+        - id: ClothingHeadHatWelding
+        - id: MaterialWoodPlank
+          amount: 3
+        - id: MaterialCloth
+        - id: MaterialBones10
+        - id: SheetSteel
+        - id: PowerCellMedium
+          amount: 3
+
+- type: entity
+  parent: CratePirate
+  id: CrateAshWalkerSupplies
+  name: ash walker provisions crate
+  description: Eighteen bottles of drinking water and twelve cooked steaks for the settlement's first hunts.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: DrinkWaterBottleFull
+          amount: 18
+        - id: FoodMeatCooked
+          amount: 12
+
+- type: entity
+  parent: CratePirate
+  id: CrateAshWalkerMedical
+  name: ash walker medical crate
+  description: Bandages, ointment, trauma supplies, blood packs and emergency injectors for three hunters.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: Gauze
+          amount: 3
+        - id: Ointment
+          amount: 3
+        - id: Brutepack
+          amount: 3
+        - id: Bloodpack
+          amount: 3
+        - id: EmergencyMedipen
+          amount: 3
+
+- type: entity
+  parent: CratePirate
+  id: CrateAshWalkerFarming
+  name: ash walker farming crate
+  description: Lavaland spores and seeds, a sieve, a mortar, bowls and tools for tending the settlement's gardens.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: LavalandPolyporeSeeds
+          amount: 2
+        - id: LavalandPorciniSeeds
+          amount: 2
+        - id: LavalandInocybeSeeds
+          amount: 2
+        - id: LavalandEmberSeeds
+          amount: 2
+        - id: LavalandCactusSeeds
+          amount: 2
+        - id: AshWalkerSeedSieve
+        - id: AshWalkerMortar
+        - id: AshWalkerMushroomBowl
+          amount: 3
+        - id: AshWalkerMushroomLantern
+          amount: 3
+        - id: Bucket
+        - id: HydroponicsToolMiniHoe
+        - id: HydroponicsToolSpade
+        - id: MaterialWoodPlank

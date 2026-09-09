@@ -44,7 +44,7 @@
   parent: ClothingOuterHardsuitSecurityRed
   id: ClothingOuterHardsuitERTAmberLeader
   name: скафандр лидера Эмбер
-  description: Защитный скафандр, используемый лидерами отряда быстрого реагирования. 
+  description: Защитный скафандр, используемый лидерами отряда быстрого реагирования.
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/ERT/ERT_Amber/ERT_rig/Suit/ert_leader.rsi
@@ -53,6 +53,17 @@
     equipSound: /Audio/_DeadSpace/Misc/rig_equip.ogg
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetERTAmberLeader
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.55
+        Slash: 0.55
+        Piercing: 0.5
+        Heat: 0.55
+        Caustic: 0.55
+  - type: ClothingSpeedModifier
+    walkModifier: 0.90
+    sprintModifier: 0.90
 
 - type: entity
   parent: [ClothingHeadHelmetHardsuitSecurityRed]
@@ -103,7 +114,7 @@
   parent: ClothingOuterRIGSecurityAdvanced
   id: ClothingOuterHardsuitERTAmberSecurity
   name: скафандр офицера Эмбер
-  description: Защитный скафандр, используемый лидерами отряда быстрого реагирования. 
+  description: Защитный скафандр, используемый лидерами отряда быстрого реагирования.
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/ERT/ERT_Amber/ERT_rig/Suit/ert_security.rsi
@@ -112,6 +123,17 @@
     equipSound: /Audio/_DeadSpace/Misc/rig_equip.ogg
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetERTAmberSecurity
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
+        Caustic: 0.6
+  - type: ClothingSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9
 
 - type: entity
   parent: [ClothingHeadHelmetRIGSecurityAdvanced]
@@ -162,7 +184,7 @@
   parent: ClothingOuterRIGSecurity
   id: ClothingOuterHardsuitERTAmberMedic
   name: скафандр медика Эмбер
-  description: Защитный скафандр, используемый медиками отряда быстрого реагирования. 
+  description: Защитный скафандр, используемый медиками отряда быстрого реагирования.
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/ERT/ERT_Amber/ERT_rig/Suit/ert_medic.rsi
@@ -171,6 +193,17 @@
     equipSound: /Audio/_DeadSpace/Misc/rig_equip.ogg
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetERTAmberMedic
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.7
+        Slash: 0.7
+        Piercing: 0.7
+        Heat: 0.7
+        Caustic: 0.6
+  - type: ClothingSpeedModifier
+    walkModifier: 0.95
+    sprintModifier: 0.95
 
 - type: entity
   parent: [ClothingHeadHelmetHardsuitMedChemEVA]
@@ -222,7 +255,7 @@
   parent: ClothingOuterRIGSecurity
   id: ClothingOuterHardsuitERTAmberEngineer
   name: скафандр инженера Эмбер
-  description: Защитный скафандр, используемый инженерами отряда быстрого реагирования. 
+  description: Защитный скафандр, используемый инженерами отряда быстрого реагирования.
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/ERT/ERT_Amber/ERT_rig/Suit/ert_engineer.rsi
@@ -239,10 +272,13 @@
         Blunt: 0.6
         Slash: 0.6
         Piercing: 0.6
-        Heat: 0.65
+        Heat: 0.55
         Shock: 0.8
         Caustic: 0.5
         Radiation: 0.2
+  - type: ClothingSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9
 
 - type: entity
   parent: [ClothingHeadHelmetRIGEngineer]
@@ -322,7 +358,7 @@
   parent: ClothingOuterRIGSecurityAdvanced
   id: ClothingOuterHardsuitERTAmberJanitor
   name: скафандр уборщика Эмбер
-  description: Защитный скафандр, используемый элитными уборщиками отряда быстрого реагирования. 
+  description: Защитный скафандр, используемый элитными уборщиками отряда быстрого реагирования.
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/ERT/ERT_Amber/ERT_rig/Suit/ert_janitor.rsi
@@ -331,6 +367,17 @@
     equipSound: /Audio/_DeadSpace/Misc/rig_equip.ogg
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetERTAmberJanitor
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
+        Caustic: 0.6
+  - type: ClothingSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9
 
 - type: entity
   parent: [ClothingHeadHelmetRIGSecurityAdvanced]

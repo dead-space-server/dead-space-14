@@ -1,0 +1,34 @@
+- type: entity
+  parent: BaseWallmountMachine
+  id: MusicalLoudspeaker
+  name: музыкальный динамик
+  description: Настенный динамик с передатчиком, гонящим заводской плейлист по всей комнате.
+  components:
+  - type: WallMount
+    arc: 360
+  - type: Sprite
+    drawdepth: WallMountedItems
+    sprite: _DeadSpace/Structures/Wallmounts/musical_loudspeaker.rsi
+    state: base
+  - type: Appearance
+  - type: MusicalLoudspeaker
+    range: 17
+    volume: 1
+    songs:
+    - path: /Audio/_DeadSpace/Music/_IvanKuvalda/french.ogg
+    - path: /Audio/_DeadSpace/Music/_IvanKuvalda/games.ogg
+    - path: /Audio/_DeadSpace/Music/_IvanKuvalda/toonfoolery.ogg
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
+  - type: Electrified
+    enabled: false
+    usesApcPower: true

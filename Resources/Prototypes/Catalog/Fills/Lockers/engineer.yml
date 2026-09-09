@@ -159,6 +159,7 @@
     - id: RCD
     - id: RCDAmmo
     - id: AirGrenade
+    - id: BoxGasGrenadeKit # DS14
     - id: ClothingHandsGlovesAtmos # DS14
     - id: ClothingOuterCoatAtmosWorking # DS14
       prob: 0.75

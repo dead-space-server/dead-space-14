@@ -19,8 +19,45 @@ namespace Content.Client.IconSmoothing
         [Dependency] private readonly SharedMapSystem _mapSystem = default!;
         [Dependency] private readonly SpriteSystem _sprite = default!;
 
-        private readonly Queue<EntityUid> _dirtyEntities = new();
-        private readonly Queue<EntityUid> _anchorChangedEntities = new();
+        // DS14-start
+        internal const int MaxQueueWorkPerFrame = 256;
+        private const int MaxAnchorChangesPerFrame = MaxQueueWorkPerFrame / 2;
+
+        internal sealed class PendingEntityQueue
+        {
+            private readonly Queue<EntityUid> _queue = new();
+            private readonly HashSet<EntityUid> _queued = new();
+
+            internal int Count => _queue.Count;
+
+            internal void Enqueue(EntityUid uid)
+            {
+                if (_queued.Add(uid))
+                    _queue.Enqueue(uid);
+            }
+
+            internal bool TryDequeue(ref int work, int maxWork, out EntityUid uid)
+            {
+                if (work >= maxWork)
+                {
+                    uid = default;
+                    return false;
+                }
+
+                if (!_queue.TryDequeue(out uid))
+                    return false;
+
+                _queued.Remove(uid);
+                work++;
+                return true;
+            }
+        }
+        // DS14-end
+
+        // DS14-start
+        private readonly PendingEntityQueue _dirtyEntities = new();
+        private readonly PendingEntityQueue _anchorChangedEntities = new();
+        // DS14-end
 
         private int _generation;
 
@@ -98,7 +135,7 @@ namespace Content.Client.IconSmoothing
 
         private void OnShutdown(EntityUid uid, IconSmoothComponent component, ComponentShutdown args)
         {
-            _dirtyEntities.Enqueue(uid);
+            QueueDirty(uid); // DS14
             DirtyNeighbours(uid, component);
         }
 
@@ -109,8 +146,10 @@ namespace Content.Client.IconSmoothing
             var xformQuery = GetEntityQuery<TransformComponent>();
             var smoothQuery = GetEntityQuery<IconSmoothComponent>();
 
-            // first process anchor state changes.
-            while (_anchorChangedEntities.TryDequeue(out var uid))
+            // DS14-start
+            // Keep map-load, PVS, and construction bursts within one frame budget.
+            var work = 0;
+            while (_anchorChangedEntities.TryDequeue(ref work, MaxAnchorChangesPerFrame, out var uid))
             {
                 if (!xformQuery.TryGetComponent(uid, out var xform))
                     continue;
@@ -125,6 +164,7 @@ namespace Content.Client.IconSmoothing
 
                 DirtyNeighbours(uid, comp: null, xform, smoothQuery);
             }
+            // DS14-end
 
             // Next, update actual sprites.
             if (_dirtyEntities.Count == 0)
@@ -134,11 +174,12 @@ namespace Content.Client.IconSmoothing
 
             var spriteQuery = GetEntityQuery<SpriteComponent>();
 
-            // Performance: This could be spread over multiple updates, or made parallel.
-            while (_dirtyEntities.TryDequeue(out var uid))
+            // DS14-start
+            while (_dirtyEntities.TryDequeue(ref work, MaxQueueWorkPerFrame, out var uid))
             {
                 CalculateNewSprite(uid, spriteQuery, smoothQuery, xformQuery);
             }
+            // DS14-end
         }
 
         public void DirtyNeighbours(EntityUid uid, IconSmoothComponent? comp = null, TransformComponent? transform = null, EntityQuery<IconSmoothComponent>? smoothQuery = null)
@@ -147,7 +188,7 @@ namespace Content.Client.IconSmoothing
             if (!smoothQuery.Value.Resolve(uid, ref comp) || !comp.Running)
                 return;
 
-            _dirtyEntities.Enqueue(uid);
+            QueueDirty(uid); // DS14
 
             if (!Resolve(uid, ref transform))
                 return;
@@ -196,15 +237,27 @@ namespace Content.Client.IconSmoothing
             // require one less component fetch/check.
             while (entities.MoveNext(out var entity))
             {
-                _dirtyEntities.Enqueue(entity.Value);
+                QueueDirty(entity.Value); // DS14
             }
         }
 
         private void OnAnchorChanged(EntityUid uid, IconSmoothComponent component, ref AnchorStateChangedEvent args)
         {
             if (!args.Detaching)
-                _anchorChangedEntities.Enqueue(uid);
+                QueueAnchorChanged(uid); // DS14
         }
+
+        // DS14-start
+        private void QueueDirty(EntityUid uid)
+        {
+            _dirtyEntities.Enqueue(uid);
+        }
+
+        private void QueueAnchorChanged(EntityUid uid)
+        {
+            _anchorChangedEntities.Enqueue(uid);
+        }
+        // DS14-end
 
         private void CalculateNewSprite(EntityUid uid,
             EntityQuery<SpriteComponent> spriteQuery,

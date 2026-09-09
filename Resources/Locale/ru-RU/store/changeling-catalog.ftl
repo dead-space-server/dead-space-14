@@ -41,3 +41,9 @@ changeling-catalog-voice-mindshield-desc = Измените волны нейр�
 
 changeling-catalog-night-vision-name = Ночное зрение
 changeling-catalog-night-vision-desc = Измените фоторецепторы и обострите чувства, чтобы видеть в полной темноте.
+
+changeling-catalog-adrenaline-name = Адреналин
+changeling-catalog-adrenaline-desc = Ваше тело адаптируется, вырабатывая ускоряющий вас токсин. Используйте его, чтобы загнать жертву в угол. Требует 25 химикатов. Откат: 90 секунд.
+
+changeling-catalog-cocoon-name = Кокон
+changeling-catalog-cocoon-desc = Ваше тело обволакивается тонким слоем плоти жертв, который служит вашей последней защитой от чужих рук. После покупки при входе в стазис вокруг вас образуется кокон. Кокон не защищает от урона, но мешает обыскивать вас в стазисе. Его можно передвигать.

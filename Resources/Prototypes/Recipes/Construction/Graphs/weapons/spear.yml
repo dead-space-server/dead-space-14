@@ -124,6 +124,20 @@
             - material: WebSilk
               amount: 1
               doAfter: 1
+    - node: startSinew
+      edges:
+        - to: spear
+          completed:
+          - !type:AdminLog
+            message: "Construction"
+            impact: High
+          steps:
+            - material: Bones
+              amount: 4
+              doAfter: 2
+            - material: LavalandWatcherSinew
+              amount: 1
+              doAfter: 1
     - node: spear
       entity: SpearBone
 

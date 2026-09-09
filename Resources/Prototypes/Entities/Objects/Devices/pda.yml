@@ -45,6 +45,48 @@
       whitelist:
         components:
         - IdCard
+    # DS14-start: slot used to register the thief's ВорПРО program.
+    # Accepts the same tools that fit into a utility tool belt.
+    toolSlot:
+      priority: -3
+      name: device-pda-slot-component-slot-name-tool
+      ejectSound: /Audio/Items/unsheath.ogg
+      insertSound: /Audio/Items/sheath.ogg
+      whitelist:
+        tags:
+        - Powerdrill
+        - Wirecutter
+        - Crowbar
+        - Screwdriver
+        - Flashlight
+        - Wrench
+        - GeigerCounter
+        - Flare
+        - CableCoil
+        - CigPack
+        - Radio
+        - HolofanProjector
+        - Multitool
+        - AppraisalTool
+        - JawsOfLife
+        - GPS
+        - WeldingMask
+        - RemoteSignaller
+        - UtilityKnife
+        components:
+        - StationMap
+        - SprayPainter
+        - SprayPainterAmmo
+        - NetworkConfigurator
+        - RCD
+        - RCDAmmo
+        - Welder
+        - PowerCell
+        - Geiger
+        - TrayScanner
+        - GasAnalyzer
+        - HandLabeler
+    # DS14-end
   - type: PdaVisuals
   - type: Item
     size: Small
@@ -53,6 +95,7 @@
       PDA-id: !type:ContainerSlot {}
       PDA-pen: !type:ContainerSlot {}
       PDA-pai: !type:ContainerSlot {}
+      PDA-tool: !type:ContainerSlot {}
       Cartridge-Slot: !type:ContainerSlot {}
       program-container: !type:Container
   - type: ItemSlots

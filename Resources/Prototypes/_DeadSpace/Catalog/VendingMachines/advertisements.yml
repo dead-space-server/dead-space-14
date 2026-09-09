@@ -9,3 +9,9 @@
   values:
     prefix: advertisement-captaindrobe-
     count: 7
+
+- type: localizedDataset
+  id: ToxinVendAds
+  values:
+    prefix: advertisement-toxinvend-
+    count: 8

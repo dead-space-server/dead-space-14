@@ -1,0 +1,13 @@
+- type: entity
+  parent: MarkerBase
+  id: SpawnMobCleanBotChistoTyan
+  name: спавнер чисто-тян
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - sprite: _DeadSpace/Mobs/Silicon/Bots/chistotyan.rsi
+      state: stand-still
+  - type: ConditionalSpawner
+    prototypes:
+    - MobCleanBotChistoTyan

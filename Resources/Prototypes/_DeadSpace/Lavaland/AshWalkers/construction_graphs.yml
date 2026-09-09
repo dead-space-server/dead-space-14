@@ -1,0 +1,191 @@
+- type: constructionGraph
+  id: ClothingOuterArmorBoneAshWalker
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: armor
+      steps:
+      - material: Bones
+        amount: 6
+        doAfter: 2
+  - node: armor
+    entity: ClothingOuterArmorBoneAshWalker
+
+- type: constructionGraph
+  id: ClothingHeadHelmetBoneAshWalker
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: helmet
+      steps:
+      - material: Bones
+        amount: 4
+        doAfter: 1
+  - node: helmet
+    entity: ClothingHeadHelmetBoneAshWalker
+
+- type: constructionGraph
+  id: DaggerBone
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: dagger
+      steps:
+      - material: Bones
+        amount: 2
+        doAfter: 2
+  - node: dagger
+    entity: DaggerBone
+
+- type: constructionGraph
+  id: AxeBone
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: axe
+      steps:
+      - material: Bones
+        amount: 6
+        doAfter: 3
+      - material: LavalandWatcherSinew
+        amount: 3
+        doAfter: 2
+  - node: axe
+    entity: AxeBone
+
+- type: constructionGraph
+  id: ClothingHandsGlovesBoneBracers
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: bracers
+      steps:
+      - material: Bones
+        amount: 2
+        doAfter: 2
+      - material: LavalandWatcherSinew
+        amount: 1
+        doAfter: 1
+  - node: bracers
+    entity: ClothingHandsGlovesBoneBracers
+
+- type: constructionGraph
+  id: ClothingNeckBoneTalisman
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: talisman
+      steps:
+      - material: Bones
+        amount: 2
+        doAfter: 2
+      - material: LavalandWatcherSinew
+        amount: 1
+        doAfter: 1
+  - node: talisman
+    entity: ClothingNeckBoneTalisman
+
+- type: constructionGraph
+  id: ClothingUniformSkullArmor
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: loincloth
+      steps:
+      - material: Bones
+        amount: 2
+        doAfter: 2
+      - material: AshWalkerLeather
+        amount: 1
+        doAfter: 2
+  - node: loincloth
+    entity: ClothingUniformSkullArmor
+
+- type: constructionGraph
+  id: SinewCuffs
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: cuffs
+      steps:
+      - material: LavalandWatcherSinew
+        amount: 1
+        doAfter: 2
+  - node: cuffs
+    entity: SinewCuffs
+
+- type: constructionGraph
+  id: ClothingBeltAshWalker
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: belt
+      steps:
+      - material: AshWalkerLeather
+        amount: 1
+        doAfter: 2
+      - material: LavalandWatcherSinew
+        amount: 2
+        doAfter: 2
+  - node: belt
+    entity: ClothingBeltAshWalker
+
+- type: constructionGraph
+  id: ClothingOuterCloakGoliath
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: cloak
+      steps:
+      - material: GoliathHide
+        amount: 2
+        doAfter: 3
+      - material: AshWalkerLeather
+        amount: 1
+        doAfter: 2
+      - material: LavalandWatcherSinew
+        amount: 2
+        doAfter: 2
+  - node: cloak
+    entity: ClothingOuterCloakGoliath
+
+- type: constructionGraph
+  id: BowBone
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: bow
+      steps:
+      - material: Bones
+        amount: 4
+        doAfter: 3
+      - material: LavalandWatcherSinew
+        amount: 2
+        doAfter: 2
+  - node: bow
+    entity: BowBone
+
+- type: constructionGraph
+  id: ArrowBone
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: arrow
+      steps:
+      - material: Bones
+        amount: 1
+        doAfter: 1
+  - node: arrow
+    entity: ArrowBone

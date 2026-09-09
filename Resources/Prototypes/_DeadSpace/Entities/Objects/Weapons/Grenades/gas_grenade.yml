@@ -1,0 +1,90 @@
+- type: entity
+  parent: BaseItem
+  abstract: true
+  id: GasGrenadeShellBase
+  name: газовый снаряд
+  description: Баллон для газовой гранаты использующий небольшое блюспейс-расширение внутреннего пространства. Его можно заправить в канистре. Открывать клапан не советуется. Может весело ускользнуть из рук.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Grenede/gas_grenede.rsi
+    state: red_tank_icon
+  - type: Item
+    size: Small
+  - type: GasTank
+    outputPressure: 505.325
+    air:
+      volume: 1000
+  - type: GasGrenadeShell
+  - type: Tag
+    tags:
+    - GasGrenadeShell
+  - type: Appearance
+
+- type: entity
+  parent: GasGrenadeShellBase
+  id: GasGrenadeShellRed
+  name: красный газовый снаряд
+  components:
+  - type: Sprite
+    state: red_tank_icon
+  - type: Tag
+    tags:
+    - GasGrenadeShell
+    - GasGrenadeShellRed
+
+- type: entity
+  parent: GasGrenadeShellBase
+  id: GasGrenadeShellBlue
+  name: синий газовый снаряд
+  components:
+  - type: Sprite
+    state: blue_tank_icon
+  - type: Tag
+    tags:
+    - GasGrenadeShell
+    - GasGrenadeShellBlue
+
+- type: entity
+  parent: TimerGrenadeBase
+  id: GasGrenade
+  name: газовая граната
+  description: Граната с двумя газовыми снарядами. Режим смешивания, смешивает газы снарядов и выпускает их. Режим впуска, просто выбрасывает содержимое обоих снарядов в атмосферу.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Grenede/gas_grenede.rsi
+    layers:
+    - state: empty
+      map: [ "enum.TriggerVisualLayers.Base" ]
+  - type: ItemMapper
+    sprite: _DeadSpace/Objects/Weapons/Grenede/gas_grenede.rsi
+    mapLayers:
+      red_tank:
+        whitelist:
+          tags: [ GasGrenadeShellRed ]
+      blue_tank:
+        whitelist:
+          tags: [ GasGrenadeShellBlue ]
+  - type: GenericVisualizer
+    visuals:
+      enum.GasGrenadeVisuals.State:
+        enum.TriggerVisualLayers.Base:
+          MixIdle: { state: empty }
+          SprayIdle: { state: alt_empty }
+          Releasing: { state: active }
+  - type: TimerTrigger
+    delay: 5
+  - type: ContainerContainer
+    containers:
+      shell1: !type:ContainerSlot
+      shell2: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      shell1:
+        name: gas-grenade-slot-shell
+        whitelist:
+          tags: [ GasGrenadeShell ]
+      shell2:
+        name: gas-grenade-slot-shell
+        whitelist:
+          tags: [ GasGrenadeShell ]
+  - type: GasGrenade

@@ -2,6 +2,7 @@ using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.DoAfter;
 using Content.Shared.IdentityManagement;
+using Content.Shared.Interaction;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
@@ -26,6 +27,7 @@ public sealed class UdderSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
 
     public override void Initialize()
     {
@@ -35,6 +37,7 @@ public sealed class UdderSystem : EntitySystem
         SubscribeLocalEvent<UdderComponent, GetVerbsEvent<AlternativeVerb>>(AddMilkVerb);
         SubscribeLocalEvent<UdderComponent, MilkingDoAfterEvent>(OnDoAfter);
         SubscribeLocalEvent<UdderComponent, EntRemovedFromContainerMessage>(OnEntRemoved);
+        SubscribeLocalEvent<UdderComponent, InteractUsingEvent>(OnInteractUsing);
     }
 
     private void OnMapInit(EntityUid uid, UdderComponent component, MapInitEvent args)
@@ -58,7 +61,7 @@ public sealed class UdderSystem : EntitySystem
         var query = EntityQueryEnumerator<UdderComponent>();
         while (query.MoveNext(out var uid, out var udder))
         {
-            if (_timing.CurTime < udder.NextGrowth)
+            if (!udder.AutoGenerate || _timing.CurTime < udder.NextGrowth)
                 continue;
 
             udder.NextGrowth += udder.GrowthDelay;
@@ -89,18 +92,48 @@ public sealed class UdderSystem : EntitySystem
         }
     }
 
+    private void OnInteractUsing(Entity<UdderComponent> ent, ref InteractUsingEvent args)
+    {
+        if (args.Handled || !ent.Comp.MilkOnInteract || !HasComp<RefillableSolutionComponent>(args.Used) ||
+            !HasComp<DrainableSolutionComponent>(args.Used))
+            return;
+
+        args.Handled = true;
+        AttemptMilk(ent.AsNullable(), args.User, args.Used);
+    }
+
+    private bool CanMilk(EntityUid udder, EntityUid user, EntityUid container)
+    {
+        return _mobState.IsAlive(udder) &&
+               (!TryComp<OpenableComponent>(container, out var openable) || openable.Opened) &&
+               _interaction.InRangeAndAccessible(user, udder) &&
+               _interaction.InRangeAndAccessible(user, container);
+    }
+
     private void AttemptMilk(Entity<UdderComponent?> udder, EntityUid userUid, EntityUid containerUid)
     {
         if (!Resolve(udder, ref udder.Comp))
             return;
-        // ds-14-start
-        if (!_mobState.IsAlive(udder.Owner)) {
-            _popupSystem.PopupEntity(Loc.GetString("udder-system-dead"), userUid, PopupType.Small);
+        if (!_mobState.IsAlive(udder.Owner))
+        {
+            _popupSystem.PopupClient(Loc.GetString("udder-system-dead"), udder, userUid);
             return;
         }
-        // ds-14-end
+
+        if (TryComp<OpenableComponent>(containerUid, out var openable) && !openable.Opened)
+        {
+            _popupSystem.PopupClient(Loc.GetString("udder-system-container-closed"), udder, userUid);
+            return;
+        }
+
+        if (!CanMilk(udder, userUid, containerUid) ||
+            !_solutionContainerSystem.TryGetRefillableSolution(containerUid, out _, out var targetSolution) ||
+            targetSolution.AvailableVolume == 0)
+            return;
+
         var doargs = new DoAfterArgs(EntityManager, userUid, 5, new MilkingDoAfterEvent(), udder, udder, used: containerUid)
         {
+            NeedHand = true,
             BreakOnMove = true,
             BreakOnDamage = true,
             MovementThreshold = 1.0f,
@@ -111,7 +144,8 @@ public sealed class UdderSystem : EntitySystem
 
     private void OnDoAfter(Entity<UdderComponent> entity, ref MilkingDoAfterEvent args)
     {
-        if (args.Cancelled || args.Handled || args.Args.Used == null)
+        if (args.Cancelled || args.Handled || args.Args.Used == null ||
+            !CanMilk(entity, args.Args.User, args.Args.Used.Value))
             return;
 
         if (!_solutionContainerSystem.ResolveSolution(entity.Owner, entity.Comp.SolutionName, ref entity.Comp.Solution, out var solution))
@@ -129,6 +163,9 @@ public sealed class UdderSystem : EntitySystem
 
         if (quantity > targetSolution.AvailableVolume)
             quantity = targetSolution.AvailableVolume;
+
+        if (quantity == 0)
+            return;
 
         var split = _solutionContainerSystem.SplitSolution(entity.Comp.Solution.Value, quantity);
         _solutionContainerSystem.TryAddSolution(targetSoln.Value, split);
@@ -148,20 +185,7 @@ public sealed class UdderSystem : EntitySystem
         var used = args.Using.Value;
         AlternativeVerb verb = new()
         {
-            Act = () =>
-            {
-                // ds-14-start
-                if (!_mobState.IsAlive(uid)) {
-                    _popupSystem.PopupEntity(Loc.GetString("udder-system-dead"), user, PopupType.Small);
-                    return;
-                }
-                if (TryComp<OpenableComponent>(used, out var openable) && !openable.Opened) {
-                    _popupSystem.PopupClient(Loc.GetString("udder-system-container-closed"), uid, user);
-                    return;
-                }
-                // ds-14-end
-                AttemptMilk(uid, user, used);
-            },
+            Act = () => AttemptMilk(uid, user, used),
             Text = Loc.GetString("udder-system-verb-milk"),
             Priority = 2
         };

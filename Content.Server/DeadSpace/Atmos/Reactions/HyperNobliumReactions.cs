@@ -19,9 +19,9 @@ public sealed partial class HyperNobliumProductionReaction : IGasReactionEffect
     private const float ConversionDivisor = 6f;
     private const float EnergyPerNob = 200_000f;
     private const float ExplosionThresholdNob = 0.5f;
-    private const float ExplosionIntensityPerNob = 3f;
-    private const float MaxExplosionIntensity = 50f;
-    private const float ExplosionSlope = 3f;
+    private const float ExplosionIntensityPerNob = 6f;
+    private const float MaxExplosionIntensity = 100f;
+    private const float ExplosionSlope = 1.5f;
     private const float MaxTileIntensity = 8f;
     private const string ExplosionPrototype = "Default";
 

@@ -71,38 +71,38 @@ public sealed class FloorTileSystem : EntitySystem
         var physicQuery = GetEntityQuery<PhysicsComponent>();
         var transformQuery = GetEntityQuery<TransformComponent>();
 
-        var map = _transform.ToMapCoordinates(location);
+        TryComp<MapGridComponent>(location.EntityId, out var mapGrid);
 
-        // Disallow placement close to grids.
-        // FTLing close is okay but this makes alignment too finnicky.
-        // While you may already have a tile close you want to replace when we get half-tiles that may also be finnicky
-        // so we're just gon with this for now.
-        const bool inRange = true;
-        var state = (inRange, location.EntityId);
-        _mapManager.FindGridsIntersecting(map.MapId, new Box2(map.Position - CheckRange, map.Position + CheckRange), ref state,
-            static (EntityUid entityUid, MapGridComponent grid, ref (bool weh, EntityUid EntityId) tuple) =>
-            {
-                if (tuple.EntityId == entityUid)
-                    return true;
-
-                tuple.weh = false;
-                return false;
-            });
-
-        if (!state.inRange)
+        // Replacing an existing tile does not expand the grid into its neighbours.
+        if (mapGrid == null || _map.GetTileRef(location.EntityId, mapGrid, location).Tile.IsEmpty)
         {
-            if (_netManager.IsClient && _timing.IsFirstTimePredicted)
-                _popup.PopupEntity(Loc.GetString("invalid-floor-placement"), args.User);
+            var state = (InRange: true, Grid: location.EntityId);
+            _mapManager.FindGridsIntersecting(locationMap.MapId,
+                new Box2(locationMap.Position - CheckRange, locationMap.Position + CheckRange), ref state,
+                static (EntityUid entityUid, MapGridComponent grid, ref (bool InRange, EntityUid Grid) state) =>
+                {
+                    if (state.Grid == entityUid)
+                        return true;
 
-            return;
+                    state.InRange = false;
+                    return false;
+                });
+
+            if (!state.InRange)
+            {
+                if (_netManager.IsClient && _timing.IsFirstTimePredicted)
+                    _popup.PopupEntity(Loc.GetString("invalid-floor-placement"), args.User);
+
+                return;
+            }
         }
 
         var userPos = _transform.ToMapCoordinates(transformQuery.GetComponent(args.User).Coordinates).Position;
-        var dir = userPos - map.Position;
+        var dir = userPos - locationMap.Position;
         var canAccessCenter = false;
         if (dir.LengthSquared() > 0.01)
         {
-            var ray = new CollisionRay(map.Position, dir.Normalized(), (int) CollisionGroup.Impassable);
+            var ray = new CollisionRay(locationMap.Position, dir.Normalized(), (int) CollisionGroup.Impassable);
             var results = _physics.IntersectRay(locationMap.MapId, ray, dir.Length(), returnOnFirstHit: true);
             canAccessCenter = !results.Any();
         }
@@ -124,8 +124,6 @@ public sealed class FloorTileSystem : EntitySystem
                 }
             }
         }
-        TryComp<MapGridComponent>(location.EntityId, out var mapGrid);
-
         foreach (var currentTile in component.Outputs)
         {
             var currentTileDefinition = (ContentTileDefinition) _tileDefinitionManager[currentTile];

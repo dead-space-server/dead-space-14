@@ -4,7 +4,7 @@ criminal-records-console-select-record-info = Выбрать запись.
 criminal-records-console-no-records = Записи не найдены!
 criminal-records-console-no-record-found = Записи о выбранном сотруднике не найдены.
 criminal-records-console-flavor-left = Сперва арест! Затем вопросы.
-criminal-records-console-flavor-right = v2.1
+criminal-records-console-flavor-right = v2.2
 criminal-records-console-show-all = Все
 
 ## Status
@@ -22,6 +22,17 @@ criminal-records-console-wanted-reason = [color=gray]Причина розыск
 criminal-records-console-suspected-reason = [color=gray]Причина подозрения[/color]
 criminal-records-console-reason = Причина
 criminal-records-console-reason-placeholder = Пример: { $placeholder }
+
+## DS14: Print button and arrest dialog
+
+criminal-records-console-print-button = Распечатать
+criminal-records-console-detained-articles = Статьи
+criminal-records-console-detained-articles-placeholder = Например: ст. 305 Кража, ст. 200 Сопротивление аресту
+criminal-records-console-detained-sentence = Наказание
+criminal-records-console-detained-sentence-placeholder = Например: 15 минут заключения
+
+paperwork-form-title-criminal-arrest-warrant = Ордер на арест
+paperwork-form-title-criminal-verdict = Приговор
 
 ## Crime History
 
@@ -59,5 +70,6 @@ criminal-records-species-filter = Раса
 
 ## Arrest auto history lines
 
+criminal-records-history-sentence = — ПРИГОВОР: { $sentence }
 criminal-records-console-auto-history = АРЕСТОВАН: { $reason }
 criminal-records-console-unspecified-reason = <причина не указана>

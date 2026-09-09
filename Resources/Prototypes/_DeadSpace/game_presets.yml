@@ -371,3 +371,36 @@
   rules:
     - DeathMatch31
 
+- type: gamePreset
+  id: LowpopExtended
+  alias:
+    - lowex
+  name: lowpop-extended-title
+  showInVote: true
+  showInAdminVote: true # DS14
+  voteType: calm # DS14
+  description: lowpop-extended-description
+  rules:
+  - WageScheduler # backmen: currency
+  - BasicStationEventScheduler
+  - MeteorSwarmScheduler
+  - SpaceTrafficControlEventScheduler
+  - BasicRoundstartVariation
+  - SubGamemodesRuleNoWizardNoXenoborg # DS14
+
+- type: gamePreset
+  id: SecretLowpopExtended
+  alias:
+    - slowex
+  name: secret-title
+  showInVote: false
+  showInAdminVote: false # DS14
+  voteType: admin # DS14
+  description: secret-description
+  rules:
+  - WageScheduler # backmen: currency
+  - BasicStationEventScheduler
+  - MeteorSwarmScheduler
+  - SpaceTrafficControlEventScheduler
+  - BasicRoundstartVariation
+  - SubGamemodesRuleNoWizardNoXenoborg # DS14

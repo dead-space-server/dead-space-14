@@ -1,0 +1,8 @@
+{ 
+    "version": 1, 
+    "license": "CC-BY-SA-3.0", 
+    "copyright": "Created by amaliz (Discord) for Space Station 14 Мёртвый Космос", 
+    "size": { "x": 32, "y": 32 }, 
+    "states": [ { "name": "full", "directions": 4 }, 
+    { "name": "state-0", "directions": 4 }, 
+    { "name": "state-1", "directions": 4 } ] }

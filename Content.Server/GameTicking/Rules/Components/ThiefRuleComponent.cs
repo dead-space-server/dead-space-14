@@ -7,14 +7,13 @@ namespace Content.Server.GameTicking.Rules.Components;
 /// <summary>
 /// Stores data for <see cref="ThiefRuleSystem"/>.
 /// </summary>
-[RegisterComponent, Access(typeof(ThiefRuleSystem))]
+[RegisterComponent, Access(typeof(ThiefRuleSystem), typeof(Content.Server.DeadSpace.Thief.Cartridges.ThiefProgramSystem))]
 public sealed partial class ThiefRuleComponent : Component
 {
     /// <summary>
-    /// DS14: The code word that unlocks the ВорПРО program on the thief's PDA.
-    /// Generated once per round from the adjectives.ftl locale dataset when the first
-    /// thief is selected. The thief must write it into a news comment to activate the program.
+    /// DS14: A single tool, picked randomly once per round from the utility tool belt,
+    /// that the thief must insert into their PDA's tool slot to unlock ВорПРО.
     /// </summary>
     [DataField]
-    public string CodeWord = string.Empty;
+    public EntProtoId? UnlockTool;
 }

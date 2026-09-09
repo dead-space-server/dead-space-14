@@ -118,14 +118,12 @@ public sealed class ThermalVisionExperimentalSystem : EntitySystem
         var uses = (int)(charge / EnergyPerUse);
 
         string stateSuffix;
-        if (uses >= 7)
-            stateSuffix = "green";
-        else if (uses >= 5)
-            stateSuffix = "yellow";
-        else if (uses >= 3)
-            stateSuffix = "orange";
-        else
+        if (uses == 0)
             stateSuffix = "red";
+        else if (uses <= 5)
+            stateSuffix = "yellow";
+        else
+            stateSuffix = "green";
 
         if (sprite.LayerMapTryGet("indicator_icon", out var indicatorLayer))
         {
@@ -137,10 +135,17 @@ public sealed class ThermalVisionExperimentalSystem : EntitySystem
 
 public sealed class ThermalVisionExperimentalOverlay : Overlay
 {
+    // #b6225a
+    private const float TintR = 0.7137255f;
+    private const float TintG = 0.1333333f;
+    private const float TintB = 0.3529412f;
+
     private readonly IEntityManager _entityManager;
     private readonly ShaderInstance _vignetteShader;
     private readonly SpriteSystem _spriteSys;
     private readonly EntityLookupSystem _lookup;
+    private readonly SharedTransformSystem _xformSys;
+    private readonly HashSet<Entity<ThermalVisibleComponent>> _visibleEntities = [];
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace | OverlaySpace.ScreenSpace;
 
@@ -149,8 +154,9 @@ public sealed class ThermalVisionExperimentalOverlay : Overlay
         _entityManager = entityManager;
         _spriteSys = spriteSys;
         _lookup = lookup;
+        _xformSys = _entityManager.System<SharedTransformSystem>();
         var protoMan = IoCManager.Resolve<IPrototypeManager>();
-        var shaderProto = protoMan.Index(new ProtoId<ShaderPrototype>("ThermalMask"));
+        var shaderProto = protoMan.Index(new ProtoId<ShaderPrototype>("ThermalMaskExperimental"));
         _vignetteShader = shaderProto.InstanceUnique();
     }
 
@@ -189,18 +195,15 @@ public sealed class ThermalVisionExperimentalOverlay : Overlay
             return;
 
         var worldHandle = (DrawingHandleWorld)args.DrawingHandle;
-        var xformSys = _entityManager.System<SharedTransformSystem>();
         var eyeRot = args.Viewport.Eye?.Rotation ?? Angle.Zero;
 
         var fadeTime = Math.Min(comp2.PulseDuration, 1f);
         var alpha = comp2.CurrentPulseTime > fadeTime ? 1f : Math.Clamp(comp2.CurrentPulseTime / fadeTime, 0f, 1f);
 
-        var entities = _lookup.GetEntitiesIntersecting(args.MapId, args.WorldBounds.Enlarged(1f));
-        foreach (var uid in entities)
+        _visibleEntities.Clear();
+        _lookup.GetEntitiesIntersecting(args.MapId, args.WorldBounds.Enlarged(1f), _visibleEntities);
+        foreach (var (uid, _) in _visibleEntities)
         {
-            if (!_entityManager.TryGetComponent<ThermalVisibleComponent>(uid, out _))
-                continue;
-
             if (!_entityManager.TryGetComponent<SpriteComponent>(uid, out var sprite))
                 continue;
 
@@ -237,14 +240,14 @@ public sealed class ThermalVisionExperimentalOverlay : Overlay
             if (drawUid == EntityUid.Invalid)
                 continue;
 
-            var worldPos = xformSys.GetWorldPosition(drawXform);
-            var worldRot = xformSys.GetWorldRotation(drawXform);
+            var worldPos = _xformSys.GetWorldPosition(drawXform);
+            var worldRot = _xformSys.GetWorldRotation(drawXform);
 
             var oldColor = drawSprite.Color;
             _spriteSys.SetColor((drawUid, drawSprite), new Color(
-                oldColor.R * alpha,
-                oldColor.G * 0.5f * alpha,
-                oldColor.B * 0.5f * alpha,
+                oldColor.R * TintR * alpha,
+                oldColor.G * TintG * alpha,
+                oldColor.B * TintB * alpha,
                 oldColor.A * alpha));
             _spriteSys.RenderSprite((drawUid, drawSprite), worldHandle, eyeRot, worldRot, worldPos);
             _spriteSys.SetColor((drawUid, drawSprite), oldColor);

@@ -29,6 +29,14 @@ public sealed partial record CriminalRecord
     [DataField]
     public string? InitiatorName;
 
+    // DS14-start
+    [DataField]
+    public string? Articles;
+
+    [DataField]
+    public string? Sentence;
+    // DS14-end
+
     /// <summary>
     /// Criminal history of the person.
     /// This should have charges and time served added after someone is detained.
@@ -41,4 +49,4 @@ public sealed partial record CriminalRecord
 /// A line of criminal activity and the time it was added at.
 /// </summary>
 [Serializable, NetSerializable]
-public record struct CrimeHistory(TimeSpan AddTime, string Crime, string? InitiatorName);
+public record struct CrimeHistory(TimeSpan AddTime, string Crime, string? InitiatorName, string? Sentence = null); // DS14: added Sentence

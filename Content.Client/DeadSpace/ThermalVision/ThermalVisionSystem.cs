@@ -98,6 +98,8 @@ public sealed class ThermalVisionOverlay : Overlay
     private readonly ShaderInstance _vignetteShader;
     private readonly SpriteSystem _spriteSys;
     private readonly EntityLookupSystem _lookup;
+    private readonly SharedTransformSystem _xformSys;
+    private readonly HashSet<Entity<ThermalVisibleComponent>> _visibleEntities = [];
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace | OverlaySpace.ScreenSpace;
 
@@ -106,6 +108,7 @@ public sealed class ThermalVisionOverlay : Overlay
         _entityManager = entityManager;
         _spriteSys = spriteSys;
         _lookup = lookup;
+        _xformSys = _entityManager.System<SharedTransformSystem>();
         var protoMan = IoCManager.Resolve<IPrototypeManager>();
         var shaderProto = protoMan.Index(new ProtoId<ShaderPrototype>("ThermalMask"));
         _vignetteShader = shaderProto.InstanceUnique();
@@ -139,15 +142,12 @@ public sealed class ThermalVisionOverlay : Overlay
         }
 
         var worldHandle = (DrawingHandleWorld)args.DrawingHandle;
-        var xformSys = _entityManager.System<SharedTransformSystem>();
         var eyeRot = args.Viewport.Eye?.Rotation ?? Angle.Zero;
 
-        var entities = _lookup.GetEntitiesIntersecting(args.MapId, args.WorldBounds.Enlarged(1f));
-        foreach (var uid in entities)
+        _visibleEntities.Clear();
+        _lookup.GetEntitiesIntersecting(args.MapId, args.WorldBounds.Enlarged(1f), _visibleEntities);
+        foreach (var (uid, _) in _visibleEntities)
         {
-            if (!_entityManager.TryGetComponent<ThermalVisibleComponent>(uid, out _))
-                continue;
-
             if (!_entityManager.TryGetComponent<SpriteComponent>(uid, out var sprite))
                 continue;
 
@@ -184,8 +184,8 @@ public sealed class ThermalVisionOverlay : Overlay
             if (drawUid == EntityUid.Invalid)
                 continue;
 
-            var worldPos = xformSys.GetWorldPosition(drawXform);
-            var worldRot = xformSys.GetWorldRotation(drawXform);
+            var worldPos = _xformSys.GetWorldPosition(drawXform);
+            var worldRot = _xformSys.GetWorldRotation(drawXform);
 
             var oldColor = drawSprite.Color;
             _spriteSys.SetColor((drawUid, drawSprite), new Color(

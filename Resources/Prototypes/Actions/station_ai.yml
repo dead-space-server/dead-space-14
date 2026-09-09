@@ -109,6 +109,18 @@
     event: !type:ToggleIntrinsicUIEvent { key: enum.GeneralStationRecordConsoleKey.Key }
 
 - type: entity
+  id: AIActionAGhostShowCriminalRecords
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    icon:
+      sprite: Interface/Actions/actions_ai.rsi
+      state: station_records
+    priority: -5
+  - type: InstantAction
+    event: !type:ToggleIntrinsicUIEvent { key: enum.CriminalRecordsConsoleKey.Key }
+
+- type: entity
   id: AIActionAGhostShowRadar
   components:
   - type: Action

@@ -57,7 +57,7 @@
             <Button Name="ShiftButton" Text="&#8801;" MinSize="32 30" StyleClasses="OpenBoth" ToolTip="{Loc 'paper-ui-toolbar-shift'}"/>
             <Button Name="ConfusionButton" Text="&#8776;" MinSize="32 30" StyleClasses="OpenBoth" ToolTip="{Loc 'paper-ui-toolbar-confusion'}"/>
             <Button Name="CyrillicConfusionButton" Text="Ж" MinSize="32 30" StyleClasses="OpenBoth" ToolTip="{Loc 'paper-ui-toolbar-cyrillic-confusion'}"/>
-            <!-- DS14-start: keep the chosen data color inside globally styled interactive chrome. -->
+            <!-- DS14-start -->
             <Button Name="ColorButton" MinSize="30 30" StyleClasses="OpenBoth" ToolTip="{Loc 'paper-ui-toolbar-color'}">
                 <TextureRect
                     Name="ColorSwatch"
@@ -68,6 +68,7 @@
                     VerticalAlignment="Center" />
             </Button>
             <!-- DS14-end -->
+            <Button Name="InsertButton" Text="{Loc 'paper-ui-toolbar-insert'}" MinSize="0 30" StyleClasses="OpenBoth" ToolTip="{Loc 'paper-ui-toolbar-insert-tooltip'}"/>
             <OptionButton Name="FormatDropdown" MinWidth="130" ToolTip="{Loc 'paper-ui-toolbar-format'}"/>
             <!-- DS14-start -->
             <OptionButton Name="FontDropdown" MinWidth="110" ToolTip="{Loc 'paper-ui-toolbar-font'}"/>

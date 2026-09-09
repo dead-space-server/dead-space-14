@@ -260,7 +260,8 @@ public sealed class PullingSystem : EntitySystem
 
     private void AddPullVerbs(EntityUid uid, PullableComponent component, GetVerbsEvent<Verb> args)
     {
-        if (!args.CanAccess || !args.CanInteract)
+        if (!args.CanInteract || !args.CanAccess &&
+            !_interaction.InRangeAndAccessible(args.User, uid, component.PullRange))
             return;
 
         // Are they trying to pull themselves up by their bootstraps?
@@ -429,6 +430,11 @@ public sealed class PullingSystem : EntitySystem
         }
 
         TryStopPull(pullerComp.Pulling.Value, pullableComp, user: player);
+    }
+
+    public float GetPullRange(EntityUid uid, PullableComponent? component = null)
+    {
+        return Resolve(uid, ref component, false) ? component.PullRange : SharedInteractionSystem.InteractionRange;
     }
 
     public bool CanPull(EntityUid puller, EntityUid pullableUid, PullerComponent? pullerComp = null)

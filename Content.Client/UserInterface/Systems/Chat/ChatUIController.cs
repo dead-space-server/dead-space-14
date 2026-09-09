@@ -282,7 +282,7 @@ public sealed partial class ChatUIController : UIController
                  && style is StyleBoxFlat propStyleBoxFlat)
             color = propStyleBoxFlat.BackgroundColor;
         else
-            color = DeadSpaceStylePalette.SurfaceDark.WithAlpha(221f / 255f); // DS14
+            color = DeadSpaceStylePalette.SurfaceTranscript.WithAlpha(221f / 255f); // DS14
 
         panel.PanelOverride = new StyleBoxFlat
         {

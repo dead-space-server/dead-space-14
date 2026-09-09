@@ -11,10 +11,10 @@ public sealed class ChannelFilterButton : ChatPopupButton<ChannelFilterPopup>
     // DS14-start
     private static Color ColorNormal => DeadSpaceStylePalette.ClassicChrome
         ? Color.FromHex("#7B7E9E")
-        : DeadSpaceStylePalette.TextInactive;
+        : DeadSpaceStylePalette.TextOnTranscriptMuted;
     private static Color ColorHovered => DeadSpaceStylePalette.ClassicChrome
         ? Color.FromHex("#9699BB")
-        : DeadSpaceStylePalette.Text;
+        : DeadSpaceStylePalette.TextOnTranscript;
     private static Color ColorPressed => DeadSpaceStylePalette.ClassicChrome
         ? Color.FromHex("#789B8C")
         : DeadSpaceStylePalette.Cyan;
