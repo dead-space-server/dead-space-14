@@ -2,16 +2,16 @@
 - type: entity
   parent: ClothingBackpack
   id: ClothingBackpackMysticalRay
-  name: рюкзак TraumaTec
+  name: рюкзак CriticalForce
   description: Этот рюкзак предназначен для хранения медицинских принадлежностей и инструментов, необходимых для быстрого реагирования в экстренных ситуациях.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/Wisdom/backpack.rsi
+    sprite: _DeadSpace/Sponsor/CriticalForce/backpack.rsi
   - type: Storage
     maxItemSize: Huge
     grid:
-    - 0,0,15,5
+    - 0,0,15,6
   - type: StorageFill
     contents:
     - id: ClothingBeltMysticalRay
@@ -35,6 +35,15 @@
     - id: PaperMysticalRayUSSP
     - id: PaperMysticalRay
     - id: OtherMysticalRay
+    - id: ClothingHeadHatMysticalRay
+    - id: ClothingUnderwearTopBraMysticalRay
+    - id: ClothingUnderwearSocksMysticalRay
+    - id: ClothingUnderwearBottomPantsMysticalRay
+    - id: ClothingUnderwearBottomBoxersMysticalRay
+    - id: telescopicBatonMysticalRay
+    - id: PlushieMysticalRay
+    - id: MedkitAdvancedFilled
+    - id: DoubleEmergencyOxygenTankMysticalRay
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -42,7 +51,7 @@
 - type: entity
   parent: ClothingBeltStorageBase
   id: ClothingBeltMysticalRay
-  name: РПС TraumaTec
+  name: РПС CriticalForce
   description: Разгрузочный жилет с медикаментами, необходимыми для оказания помощи и спасения жизней в экстремальных условиях.
   categories: [ HideSpawnMenu ]
   components:
@@ -57,6 +66,9 @@
       - id: PowerDrillMysticalRay
       - id: WelderExperimentalMysticalRay
       - id: JawsOfLifeMysticalRay
+      - id: RCDMysticalRay
+      - id: HolofanProjectorMysticalRay
+      - id: MultitoolMysticalRay
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -64,14 +76,14 @@
 - type: entity
   parent: ClothingOuterHardsuitSecurity
   id: ClothingOuterHardsuitMysticalRay
-  name: скафандр TraumaTec
+  name: скафандр CriticalForce
   description: Скафандр с биокодированием, обеспечивающий защиту в критических ситуациях.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/Wisdom/hardsuit.rsi
+    sprite: _DeadSpace/Sponsor/CriticalForce/hardsuit.rsi
   - type: Clothing
-    sprite: _DeadSpace/Sponsor/Wisdom/hardsuit.rsi
+    sprite: _DeadSpace/Sponsor/CriticalForce/hardsuit.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitMysticalRay
   - type: Item
@@ -94,27 +106,14 @@
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase, ShowMedicalIcons]
+  parent: ClothingHeadHelmetHardsuitOfficerCriticalForce
   id: ClothingHeadHelmetHardsuitMysticalRay
   categories: [ HideSpawnMenu ]
-  name: шлем скафандра TraumaTec
+  name: шлем скафандра CriticalForce
   description: Шлем с встроенным медицинским визором, который обеспечивает защиту и освещение для работы в темных условиях.
   components:
-  - type: Sprite
-    sprite: _DeadSpace/Sponsor/MysticalRay/helmet.rsi
-  - type: Clothing
-    sprite: _DeadSpace/Sponsor/MysticalRay/helmet.rsi
   - type: PointLight
     color: "#ebebeb"
-  - type: PressureProtection
-    highPressureMultiplier: 0.08
-    lowPressureMultiplier: 1000
-  - type: ShowHealthBars
-    damageContainers:
-    - Biological
-    - Inorganic
-    - Silicon
-  - type: EyeProtection
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -122,14 +121,14 @@
 - type: entity
   parent: ClothingHandsGlovesCombat
   id: ClothingHandsGlovesMysticalRay
-  name: защитные перчатки TraumaTec
+  name: защитные перчатки CriticalForce
   description: Перчатки, обеспечивающие защиту рук в опасных условиях, идеальны для оказания первой помощи. Изолированы.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/Wisdom/gloves.rsi
+    sprite: _DeadSpace/Sponsor/CriticalForce/gloves.rsi
   - type: Clothing
-    sprite: _DeadSpace/Sponsor/Wisdom/gloves.rsi
+    sprite: _DeadSpace/Sponsor/CriticalForce/gloves.rsi
   - type: Fiber
     fiberMaterial: fibers-insulative
     fiberColor: fibers-red
@@ -140,14 +139,14 @@
 - type: entity
   parent: ClothingUniformSkirtBase
   id: ClothingUniformJumpsuitMysticalRay
-  name: комбинезон TraumaTec
+  name: комбинезон CriticalForce
   description: Стильный и функциональный комбинезон, который обеспечивает комфорт и свободу передвижения во время спасательных операций.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/Wisdom/jumpsuit.rsi
+    sprite: _DeadSpace/Sponsor/CriticalForce/jumpsuit.rsi
   - type: Clothing
-    sprite: _DeadSpace/Sponsor/Wisdom/jumpsuit.rsi
+    sprite: _DeadSpace/Sponsor/CriticalForce/jumpsuit.rsi
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -155,20 +154,20 @@
 - type: entity
   parent: ClothingShoesBootsMag
   id: ClothingShoesBootsMagMysticalRay
-  name: магнитные ботинки TraumaTec
+  name: магнитные ботинки CriticalForce
   description: Ботинки, обеспечивающие отличное сцепление с поверхностями для выполнения задач в условиях невесомости.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/Wisdom/magboots.rsi
+    sprite: _DeadSpace/Sponsor/CriticalForce/magboots.rsi
     layers:
     - state: icon
       map: [ "enum.ToggleableVisuals.Layer" ]
   - type: Clothing
-    sprite: _DeadSpace/Sponsor/Wisdom/magboots.rsi
+    sprite: _DeadSpace/Sponsor/CriticalForce/magboots.rsi
   - type: ClothingSpeedModifier
-    walkModifier: 0.95
-    sprintModifier: 0.9
+    walkModifier: 1.0
+    sprintModifier: 1.0
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -176,31 +175,47 @@
 - type: entity
   parent: ClothingMaskGas
   id: ClothingMaskMysticalRay
-  name: противогаз TraumaTec
-  description: Противогаз, защищающий от токсичных веществ и обеспечивающий дыхание в неблагоприятных условиях.
+  name: Заслон CriticalForce
+  description: Вы недостойны смотреть ему в глаза.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/Wisdom/gasmask.rsi
+    sprite: _DeadSpace/Sponsor/MysticalRay/unknown.rsi
+    scale: 0.5, 0.5
   - type: Clothing
-    sprite: _DeadSpace/Sponsor/Wisdom/gasmask.rsi
+    sprite: _DeadSpace/Sponsor/MysticalRay/unknown.rsi
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
+
+# Кепарик оуе)
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatMysticalRay
+  name: Кепка CriticalForce
+  description: Это прочная бейсболка белого цвета.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MysticalRay/soft.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/MysticalRay/soft.rsi
+  - type: Tag
+    tags: [ ]
 
 # Headset
 - type: entity
   parent: ClothingHeadset
   id: ClothingHeadsetMysticalRay
-  name: гарнитура TraumaTec
+  name: гарнитура CriticalForce
   description: Гарнитура, обеспечивающая связь и возможность получения критической информации в полевых условиях.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/Wisdom/headset.rsi
+    sprite: _DeadSpace/Sponsor/MysticalRay/headset.rsi
   - type: Clothing
-    sprite: _DeadSpace/Sponsor/Wisdom/headset.rsi
+    sprite: _DeadSpace/Sponsor/MysticalRay/headset.rsi
   - type: Headset
-    color: "#1d8bad"
+    color: "#4e956e"
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -208,7 +223,7 @@
 - type: entity
   parent: BaseMedicalPDA
   id: PDAMysticalRay
-  name: КПК TraumaTec
+  name: КПК CriticalForce
   description: Персональный цифровой помощник с встроенными GPS и медицинским сканером для отслеживания состояния пациентов.
   categories: [ HideSpawnMenu ]
   components:
@@ -233,7 +248,7 @@
 - type: entity
   parent: ClothingOuterStorageBase
   id: ClothingOuterCoatMysticalRay
-  name: защитная куртка TraumaTec
+  name: защитная куртка CriticalForce
   description: Укреплённая куртка, защищающая владельца во время спасательных операций.
   categories: [ HideSpawnMenu ]
   components:
@@ -241,14 +256,18 @@
     sprite: _DeadSpace/Sponsor/Wisdom/coat.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Wisdom/coat.rsi
+  - type: Item
+    size: Normal
+    shape:
+    - 0,0,1,1
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
 # Holster
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: ClothingNeckBase
   id: ClothingBeltHolsterMysticalRay
-  name: набедренная сумка TraumaTec
+  name: набедренная сумка CriticalForce
   description: Набедренная сумка для удобного ношения дефибриллятора.
   categories: [ HideSpawnMenu ]
   components:
@@ -258,15 +277,6 @@
     sprite: _DeadSpace/Sponsor/Wisdom/hipbag.rsi
     slots:
     - neck
-  - type: Storage
-    grid:
-    - 0,0,3,1
-    maxItemSize: Large
-    whitelist:
-      components:
-      - Defibrillator
-  - type: Item
-    size: Normal
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -274,8 +284,8 @@
 - type: entity
   parent: BaseItem
   id: WhistleMysticalRay
-  name: свисток TraumaTec
-  description: Внимание! Белый металлический свисток с эмблемой TraumaTec.
+  name: свисток CriticalForce
+  description: Внимание! Белый металлический свисток с эмблемой CriticalForce.
   categories: [ HideSpawnMenu ]
   components:
   - type: Item
@@ -301,8 +311,8 @@
 - type: entity
   parent: ClothingEyesHudAdvanced
   id: ClothingEyesHudMedicalMysticalRay
-  name: зелёные очки TraumaTec
-  description: Зелёные очки TraumaTec. Имеют встроенный мед визор.
+  name: красные очки CriticalForce
+  description: Красные очки CriticalForce. Имеют встроенный мед визор.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -319,7 +329,7 @@
 - type: entity
   parent: JetpackVoidFilled
   id: JetpackVoidFilleddMysticalRay
-  name: пустотный джетпак TraumaTec
+  name: пустотный джетпак CriticalForce
   description: Джетпак для покорение даже самых тёмный уголков космоса.
   categories: [ HideSpawnMenu ]
   components:
@@ -339,8 +349,8 @@
 # Defibrillator
 - type: entity
   parent: DefibrillatorCompact
-  name: портативный дефибриллятор TraumaTec
-  description: Высокотехнологичный портативный дефибриллятор с эмблеймой TraumaTec.
+  name: портативный дефибриллятор CriticalForce
+  description: Высокотехнологичный портативный дефибриллятор с эмблеймой CriticalForce.
   id: DefibrillatorMysticalRay
   categories: [ HideSpawnMenu ]
   components:
@@ -351,7 +361,7 @@
 
 # Hypo
 - type: entity
-  name: Тактический гипоспрей TraumaTec  "Жало"
+  name: гипоспрей CriticalForce "SecondWind"
   parent: BaseItem
   description: Особая разработка для лечения в особых задачах.
   categories: [ HideSpawnMenu ]
@@ -397,8 +407,8 @@
 
 # Other
 - type: entity
-  name: имплант TraumaTec
-  description: Имплант TraumaTec.
+  name: имплант CriticalForce
+  description: Имплант CriticalForce.
   parent: BaseItem
   id: OtherMysticalRay
   categories: [ HideSpawnMenu ]
@@ -415,12 +425,132 @@
     - type: TTS
       voice: Glowtron
 
+#melee
+- type: entity
+  parent: BaseItem
+  id: telescopicBatonMysticalRay
+  categories: [ HideSpawnMenu ]
+  name: телескопическая дубинка
+  description: Не очень большая и не очень опасная, выдвижная дубинка. Может храниться в карманах в сложенном состоянии.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MysticalRay/melee.rsi
+    layers:
+    - state: telescope_off
+      map: [ "enum.ToggleableVisuals.Layer" ]
+  - type: SwitchableWeapon
+    openSound: "/Audio/_ADT/open_telescopic_baton.ogg"
+    closeSound: "/Audio/_ADT/close_telescopic_baton.ogg"
+    damageOpen:
+      types:
+        Blunt: 3
+    damageFolded:
+      types:
+        Blunt: 0
+    staminaDamageFolded: 0
+    staminaDamageOpen: 30
+  - type: StaminaDamageOnHit
+    damage: 0
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 3
+  - type: Item
+    size: Small
+    sprite: _DeadSpace/Sponsor/MysticalRay/melee.rsi
+  - type: UseDelay
+    delay: 1
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+     enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: {state: telescope_on}
+          False: {state: telescope_off}
+
+  #Underwearable
+- type: entity
+  parent: ClothingUnderwearTopBase
+  id: ClothingUnderwearTopBraMysticalRay
+  name:  бра CriticalForce
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MysticalRay/under/bra.rsi
+
+- type: entity
+  parent: ClothingUnderwearSocksBase
+  id: ClothingUnderwearSocksMysticalRay
+  name: носки CriticalForce
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MysticalRay/under/socks.rsi
+
+- type: entity
+  parent: ClothingUnderwearBottomBase
+  id: ClothingUnderwearBottomPantsMysticalRay
+  name: стринги CriticalForce
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MysticalRay/under/pants.rsi
+
+- type: entity
+  parent: ClothingUnderwearBottomBase
+  id: ClothingUnderwearBottomBoxersMysticalRay
+  name: боксеры CriticalForce
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MysticalRay/under/boxers.rsi
+
+- type: entity
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieMysticalRay
+  categories: [ HideSpawnMenu ]
+  name: плюшевый MysticalRay
+  description: Злой и вечно недовольный обстановкой.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MysticalRay/toy.rsi
+    state: toy
+  - type: TTS
+    voice: Glowtron
+  - type: SpeakOnTrigger
+    pack: PlushieMysticalRaypeech
+
+# tank.rsi
+- type: entity
+  parent: DoubleEmergencyOxygenTank
+  id: DoubleEmergencyOxygenTankMysticalRay
+  name: двойной аварийный кислородный баллон CriticalForce
+  categories: [ HideSpawnMenu ] 
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MysticalRay/tank.rsi
+  - type: Item
+    sprite: _DeadSpace/Sponsor/MysticalRay/tank.rsi
+    storedSprite:
+      state: storage
+      sprite: _DeadSpace/Sponsor/MysticalRay/tank.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/MysticalRay/tank.rsi
+  - type: GasTank
+    outputPressure: 21.3
+    air:
+      # 15 minutes
+      volume: 2.5
+      moles:
+        Oxygen: 1.025689525 # oxygen
+      temperature: 293.15
+
 # instruments
 # drill
 - type: entity
   parent: BaseItem
   id: PowerDrillMysticalRay
-  name: тактическая электродрель TraumaTec
+  name: тактическая электродрель CriticalForce
   description: Более компактная и также более эффективная вариация электродрели.
   categories: [ HideSpawnMenu ]
   components:
@@ -473,7 +603,7 @@
 - type: entity
   parent: JawsOfLife
   id: JawsOfLifeMysticalRay
-  name: тактические челюсти TraumaTec
+  name: тактические челюсти CriticalForce
   description: Косметическая модификация челюстей жизни.
   categories: [ HideSpawnMenu ]
   components:
@@ -501,16 +631,12 @@
           state: syn_jaws_cutter
         useSound: /Audio/Items/jaws_cut.ogg
         changeSound: /Audio/Items/change_jaws.ogg
-  - type: MeleeWeapon
-    damage:
-      types:
-        Blunt: 14
 
 #WelderExperimental
 - type: entity
   parent: WelderExperimental
   id: WelderExperimentalMysticalRay
-  name: тактический сварочный аппарат TraumaTec
+  name: тактический сварочный аппарат CriticalForce
   description: Косметическая модификация экспериментального сварочного аппарат.
   categories: [ HideSpawnMenu ]
   components:
@@ -518,6 +644,56 @@
     sprite: _DeadSpace/Sponsor/MysticalRay/tools_welder.rsi
   - type: Item
     sprite: _DeadSpace/Sponsor/MysticalRay/tools_welder.rsi
+
+# tools_multitool.rsi
+- type: entity
+  parent: Multitool
+  id: MultitoolMysticalRay
+  name: мультитул CriticalForce
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MysticalRay/tools_multitool.rsi
+  - type: Item
+    sprite: _DeadSpace/Sponsor/MysticalRay/tools_multitool.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/MysticalRay/tools_multitool.rsi
+
+# tools_holofanprojector.rsi
+- type: entity
+  parent: HolofanProjector
+  id: HolofanProjectorMysticalRay
+  name: атмос-проектор CriticalForce
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MysticalRay/tools_holofanprojector.rsi
+    state: icon
+  - type: LimitedHolosignProjector
+    signProto: HoloFanMysticalRay
+
+# tools_holo.rsi
+- type: entity
+  parent: HoloFan
+  id: HoloFanMysticalRay
+  name: атмос-поле CriticalForce
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MysticalRay/tools_holo.rsi
+    state: icon
+
+# tools_rcd.rci
+- type: entity
+  parent: RCD
+  id: RCDMysticalRay
+  name: РСУ CriticalForce
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MysticalRay/tools_rcd.rsi
+    layers:
+    - state: icon
 
 #Документ
 - type: entity

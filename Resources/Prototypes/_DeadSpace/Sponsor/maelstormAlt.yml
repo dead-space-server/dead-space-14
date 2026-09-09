@@ -119,6 +119,7 @@
   parent: [ClothingOuterStorageFoldableBaseOpened, ClothingOuterCoatMaelstormAlt]
   id: ClothingOuterCoatMaelstormAltOpened
   name: зимняя парадная шинель НКВБ
+  categories: [ HideSpawnMenu ]
 
 # Перчи
 - type: entity

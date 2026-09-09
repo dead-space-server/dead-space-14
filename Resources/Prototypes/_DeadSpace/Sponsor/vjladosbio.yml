@@ -169,6 +169,7 @@
   id: ClothingUnderwearBottomVjladosBioMan
   name: классические боксёры
   description: Принадлежат члену экипажа, находящемуся под покровительством спонсорской организации.
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/vjlados/bio/under/man.rsi
@@ -178,6 +179,7 @@
   id: ClothingUnderwearTopVjladosBio
   name: классическое бра
   description: Принадлежат члену экипажа, находящемуся под покровительством спонсорской организации.
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/vjlados/bio/under/women/bra.rsi
@@ -300,6 +302,7 @@
   parent: ClothingHeadset
   id: ClothingHeadsetVjlados
   name: гарнитура ксеноида
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/vjlados/bio/headset.rsi

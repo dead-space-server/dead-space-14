@@ -21,6 +21,7 @@
   parent: ClothingBackpackDragonFoxMadParadox
   id: ClothingBackpackDragonFoxMadParadoxFilled
   suffix: Заполненный, Mad Paradox
+  categories: [ HideSpawnMenu ]
   components:
   - type: StorageFill
     contents:

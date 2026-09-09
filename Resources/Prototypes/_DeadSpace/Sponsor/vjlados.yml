@@ -45,7 +45,7 @@
   id: ClothingBackpackVjladosSilver
   name: чёрный рюкзак с шипами
   description: Этот аксессуар выражает непокорный дух и стиль.
-  # categories: [ HideSpawnMenu ]
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/vjlados/backpacksilver.rsi

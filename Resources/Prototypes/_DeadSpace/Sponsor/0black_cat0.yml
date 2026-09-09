@@ -9,7 +9,7 @@
   id: ClothingBackpack0black_cat0
   name: рюкзак темного воителя
   description: Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
-  # categories: [ HideSpawnMenu ]
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/0black_cat0/backpack.rsi

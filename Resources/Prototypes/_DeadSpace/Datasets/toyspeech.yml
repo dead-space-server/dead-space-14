@@ -347,6 +347,12 @@
     count: 6
 
 - type: localizedDataset
+  id: PlushieMysticalRaypeech
+  values:
+    prefix: plushies-mystical-
+    count: 3
+
+- type: localizedDataset
   id: PlushieWalkflisSpeech
   values:
     prefix: plushies-walkflis-
