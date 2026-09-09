@@ -4,8 +4,8 @@ meta:
   engineVersion: 276.0.0
   forkId: ""
   forkVersion: ""
-  time: 09/09/2026 15:24:02
-  entityCount: 206
+  time: 09/09/2026 17:34:40
+  entityCount: 205
 maps: []
 grids:
 - 1
@@ -267,15 +267,6 @@ entities:
     - type: Transform
       pos: 0.5,-1.5
       parent: 1
-- proto: BoxBodyBag
-  entities:
-  - uid: 75
-    components:
-    - type: Transform
-      pos: 3.6398392,-1.3029536
-      parent: 1
-    - type: Physics
-      canCollide: False
 - proto: BoxMRE
   entities:
   - uid: 137
@@ -660,7 +651,10 @@ entities:
       parent: 1
     - type: MaterialStorage
       storage:
-        Biomass: 300
+        Biomass: 500
+    missingComponents:
+    - Construction
+    - Anchorable
 - proto: ClothingBeltUtilityEngineering
   entities:
   - uid: 93
@@ -673,6 +667,16 @@ entities:
 - proto: ClothingHeadHelmetEVALarge
   entities:
   - uid: 140
+    components:
+    - type: Transform
+      parent: 139
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 139
+- proto: ClothingMaskBreath
+  entities:
+  - uid: 75
     components:
     - type: Transform
       parent: 139
@@ -829,6 +833,14 @@ entities:
       parent: 1
     - type: AtmosPipeColor
       color: '#0055CCFF'
+  - uid: 43
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 2.5,2.5
+      parent: 1
+    - type: AtmosPipeColor
+      color: '#990000FF'
   - uid: 107
     components:
     - type: Transform
@@ -837,14 +849,6 @@ entities:
       parent: 1
     - type: AtmosPipeColor
       color: '#0055CCFF'
-  - uid: 109
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 2.5,2.5
-      parent: 1
-    - type: AtmosPipeColor
-      color: '#990000FF'
   - uid: 110
     components:
     - type: Transform
@@ -1066,6 +1070,16 @@ entities:
       parent: 1
     - type: Physics
       canCollide: False
+- proto: HospitalCurtains
+  entities:
+  - uid: 204
+    components:
+    - type: Transform
+      pos: 1.5,-1.5
+      parent: 1
+    - type: Door
+      secondsUntilStateChange: -612.70435
+      state: Opening
 - proto: JetpackMiniFilled
   entities:
   - uid: 142
@@ -1102,14 +1116,16 @@ entities:
         immutable: False
         temperature: 293.14673
         moles:
-          Oxygen: 1.7459903
-          Nitrogen: 6.568249
+          Oxygen: 1.8856695
+          Nitrogen: 7.0937095
     - type: ContainerContainer
       containers:
         entity_storage: !type:Container
           showEnts: False
           occludes: True
           ents:
+          - 75
+          - 157
           - 140
           - 141
           - 142
@@ -1118,7 +1134,6 @@ entities:
           - 145
           - 148
           - 156
-          - 157
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
@@ -1137,16 +1152,6 @@ entities:
     - type: Transform
       pos: 1.5,-1.5
       parent: 1
-- proto: MedkitAdvancedFilled
-  entities:
-  - uid: 205
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 3.5369647,-1.4112557
-      parent: 1
-    - type: Physics
-      canCollide: False
 - proto: MiningDrill
   entities:
   - uid: 156
