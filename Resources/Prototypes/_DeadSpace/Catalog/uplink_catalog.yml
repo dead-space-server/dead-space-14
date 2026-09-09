@@ -547,7 +547,7 @@
   icon: { sprite: /Textures/_DeadSpace/Items/Toys/TommyGun/tommy_gun.rsi, state: icon }
   productEntity: ClothingBackpackDuffelSyndicateFilledSMGTommyGun
   cost:
-    Telecrystal: 12 # DS14-value
+    Telecrystal: 12
   categories:
   - UplinkWeaponry
   conditions:
