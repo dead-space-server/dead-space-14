@@ -91,9 +91,10 @@ namespace Content.Client.Lobby.UI
         private AntagPrototype? _antagPreviewOverride;
         private RoleLoadout? _antagPreviewLoadout;
         private readonly HashSet<ProtoId<AntagPrototype>> _favoriteAntags = new();
-        private readonly HashSet<ProtoId<AntagPrototype>> _displayedFavoriteAntags = new();
         private readonly Dictionary<ProtoId<AntagPrototype>, List<Button>> _favoriteAntagButtons = new();
+        private readonly Dictionary<ProtoId<AntagPrototype>, (Control Row, Button Button)> _favoriteAntagRows = new();
         private BoxContainer? _favoriteAntagContents;
+        private Control? _favoriteAntagCategory;
         private bool _antagFavoritesInitialized;
         private static readonly ProtoId<AntagMenuPrototype> DefaultAntagMenu = "Default";
         // DS14-end
@@ -765,13 +766,14 @@ namespace Content.Client.Lobby.UI
         {
             AntagList.RemoveAllChildren();
             _favoriteAntagContents = null;
+            _favoriteAntagCategory = null;
             _favoriteAntagButtons.Clear();
+            _favoriteAntagRows.Clear();
 
             // DS14-start
             if (!_antagFavoritesInitialized && _preferencesManager.Preferences is not null)
             {
                 _favoriteAntags.UnionWith(_preferencesManager.Preferences.FavoriteAntags);
-                _displayedFavoriteAntags.UnionWith(_favoriteAntags);
                 _antagFavoritesInitialized = true;
             }
 
@@ -797,13 +799,13 @@ namespace Content.Client.Lobby.UI
                 return;
             }
 
-            if (_displayedFavoriteAntags.Count > 0)
+            if (_favoriteAntags.Count > 0)
             {
                 AntagList.AddChild(CreateAntagCategory(
                     Loc.GetString("antag-menu-category-favorites"),
                     new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/examine-star.png")),
                     DeadSpaceStylePalette.Amber,
-                    _displayedFavoriteAntags.OrderBy(id => id.Id).ToList(),
+                    _favoriteAntags.OrderBy(id => id.Id).ToList(),
                     Array.Empty<AntagSubcategory>(),
                     0,
                     true));
@@ -844,7 +846,7 @@ namespace Content.Client.Lobby.UI
         }
 
         // DS14-start
-        private Control CreateAntagSelector(AntagPrototype antag, Color outlineColor)
+        private Control CreateAntagSelector(AntagPrototype antag, Color outlineColor, bool favorite = false)
         {
             var row = new BoxContainer
             {
@@ -886,14 +888,11 @@ namespace Content.Client.Lobby.UI
                 if (!added)
                     _favoriteAntags.Remove(antag.ID);
 
-                // Keep removed entries visible in the favorites category until reconnecting.
-                var newlyDisplayed = added && _displayedFavoriteAntags.Add(antag.ID);
-
-                if (newlyDisplayed && string.IsNullOrWhiteSpace(AntagSearch.Text))
+                if (added && string.IsNullOrWhiteSpace(AntagSearch.Text))
                 {
                     if (_favoriteAntagContents != null)
                     {
-                        _favoriteAntagContents.AddChild(CreateAntagSelector(antag, DeadSpaceStylePalette.Amber));
+                        _favoriteAntagContents.AddChild(CreateAntagSelector(antag, DeadSpaceStylePalette.Amber, true));
                     }
                     else
                     {
@@ -901,12 +900,23 @@ namespace Content.Client.Lobby.UI
                             Loc.GetString("antag-menu-category-favorites"),
                             new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/examine-star.png")),
                             DeadSpaceStylePalette.Amber,
-                            _displayedFavoriteAntags.OrderBy(id => id.Id).ToList(),
+                            _favoriteAntags.OrderBy(id => id.Id).ToList(),
                             Array.Empty<AntagSubcategory>(),
                             0,
                             true);
                         AntagList.AddChild(favoritesCategory);
                         favoritesCategory.SetPositionInParent(0);
+                    }
+                }
+                else if (!added && _favoriteAntagRows.Remove(antag.ID, out var entry))
+                {
+                    _favoriteAntagContents?.RemoveChild(entry.Row);
+                    _favoriteAntagButtons[antag.ID].Remove(entry.Button);
+                    if (_favoriteAntagRows.Count == 0 && _favoriteAntagCategory != null)
+                    {
+                        AntagList.RemoveChild(_favoriteAntagCategory);
+                        _favoriteAntagCategory = null;
+                        _favoriteAntagContents = null;
                     }
                 }
 
@@ -1029,6 +1039,8 @@ namespace Content.Client.Lobby.UI
                 },
             };
             outline.AddChild(row);
+            if (favorite)
+                _favoriteAntagRows.Add(antag.ID, (outline, favoriteButton));
             return outline;
         }
 
@@ -1059,7 +1071,7 @@ namespace Content.Client.Lobby.UI
                 }
 
                 if (antag.SetPreference)
-                    contents.AddChild(CreateAntagSelector(antag, outlineColor));
+                    contents.AddChild(CreateAntagSelector(antag, outlineColor, favoritesCategory));
             }
 
             foreach (var subcategory in subcategories)
@@ -1126,6 +1138,8 @@ namespace Content.Client.Lobby.UI
                 },
             };
             outline.AddChild(collapsible);
+            if (favoritesCategory)
+                _favoriteAntagCategory = outline;
             return outline;
         }
 

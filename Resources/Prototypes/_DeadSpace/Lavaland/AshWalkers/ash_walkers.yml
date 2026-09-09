@@ -17,6 +17,8 @@
     statusEffects:
     - StatusEffectPressureImmunity
   - type: LavalandWeatherImmune
+  - type: VirusImmun
+    immunAll: true
   - type: TemperatureProtection
     heatingCoefficient: 0.25
     coolingCoefficient: 0.1

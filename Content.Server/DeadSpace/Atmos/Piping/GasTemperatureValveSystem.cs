@@ -32,13 +32,17 @@ public sealed class GasTemperatureValveSystem : SharedGasTemperatureValveSystem
             return;
         }
 
-        if (inlet.Air.TotalMoles + outlet.Air.TotalMoles <= 0f)
+        var inletHasGas = inlet.Air.TotalMoles > 0f;
+        var outletHasGas = outlet.Air.TotalMoles > 0f;
+        if (!inletHasGas && !outletHasGas)
         {
             SetOpen(ent, inlet, outlet, false);
             return;
         }
 
-        var temperature = MathF.Max(inlet.Air.Temperature, outlet.Air.Temperature);
+        var temperature = inletHasGas ? inlet.Air.Temperature : outlet.Air.Temperature;
+        if (inletHasGas && outletHasGas)
+            temperature = MathF.Max(inlet.Air.Temperature, outlet.Air.Temperature);
         var threshold = MathF.Min(ent.Comp.Threshold, GasTemperatureValveComponent.MaxThreshold);
         var shouldOpen = ent.Comp.PassWhenBelow ? temperature < threshold : temperature > threshold;
 

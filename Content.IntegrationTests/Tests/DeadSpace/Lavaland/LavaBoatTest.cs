@@ -1,5 +1,7 @@
 using Content.IntegrationTests.Tests.Interaction;
+using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
+using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
@@ -50,6 +52,11 @@ public sealed class LavaBoatTest : InteractionTest
             TargetCoords = SEntMan.GetNetCoordinates(shore);
         });
         await AddAtmosphere();
+        await Server.WaitPost(() =>
+        {
+            var atmos = SEntMan.EnsureComponent<GridAtmosphereComponent>(MapData.Grid);
+            Server.System<AtmosphereSystem>().RebuildGridAtmosphere((MapData.Grid, atmos, MapData.Grid.Comp));
+        });
         await SpawnTarget("LavaBoat");
         await DeleteHeldEntity();
         await Pair.RunUntilSynced();
@@ -154,6 +161,8 @@ public sealed class LavaBoatTest : InteractionTest
             Assert.That(storage.TryCloseStorage(boat, SPlayer), Is.True);
             Assert.That(SEntMan.GetComponent<EntityStorageComponent>(boat).Contents.Count, Is.EqualTo(2));
             Transform.SetCoordinates(boat, new EntityCoordinates(MapData.Grid, boatX, 0.5f));
+            Assert.That(Server.System<AtmosphereSystem>().GetContainingMixture(SPlayer)?.GetMoles(Gas.Oxygen),
+                Is.GreaterThan(1f));
             Assert.That(storage.TryOpenStorage(SPlayer, boat, silent: true), Is.False);
             Assert.That(SEntMan.GetComponent<EntityStorageComponent>(boat).Contents.Count, Is.EqualTo(2));
             Server.System<DamageableSystem>().TryChangeDamage(boat,

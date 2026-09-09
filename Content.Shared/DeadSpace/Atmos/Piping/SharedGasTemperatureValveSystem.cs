@@ -18,6 +18,9 @@ public abstract class SharedGasTemperatureValveSystem : EntitySystem
 
     private void OnChangeThreshold(Entity<GasTemperatureValveComponent> ent, ref GasTemperatureValveChangeThresholdMessage args)
     {
+        if (!float.IsFinite(args.Threshold))
+            return;
+
         ent.Comp.Threshold = Math.Clamp(args.Threshold, Atmospherics.TCMB, GasTemperatureValveComponent.MaxThreshold);
         Dirty(ent);
         UpdateUi(ent);
