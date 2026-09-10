@@ -8,7 +8,7 @@
     layers:
     - state: timed
     - sprite: Markers/jobs.rsi
-      state: blueshield-low
+      state: redsword
   - type: CustomizableHumanoidSpawner
     jobPrototype: CentralCommandRedSwordOfficer
     allowedSpecies:

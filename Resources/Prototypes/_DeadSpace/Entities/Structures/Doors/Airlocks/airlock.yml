@@ -21,3 +21,57 @@
     sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/lawyer.rsi
   - type: Wires
     layoutId: AirlockSecurity
+
+# CentComm
+- type: entity
+  parent: AirlockHatch
+  id: AirlockHatchCentralCommandLocked
+  name: герметичный люк
+  description: Он открывается, он закрывается и он может вас раздавить.
+  suffix: Центральное Командование, Закрыт
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsCentralCommand ]
+
+- type: entity
+  parent: BlastDoorWindowsOpen
+  id: BlastDoorCentralCommandOpen
+  suffix: Открытый, Центральное Командование
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsCentralCommand ]
+
+- type: entity
+  parent: HighSecDoor
+  id: HighSecBlueShieldLocked
+  name: бронированная дверь
+  description: Удерживает плохих снаружи, а хороших внутри.
+  suffix: Офицер "Синий Щит", Закрыт
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsBlueShield ]
+
+- type: entity
+  parent: AirlockHatch
+  id: AirlockHatchBlueShieldLocked
+  name: герметичный люк
+  description: Он открывается, он закрывается и он может вас раздавить.
+  suffix: Офицер "Синий Щит", Закрыт
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsBlueShield ]
+
+- type: entity
+  parent: AirlockCentralCommandGlass
+  id: AirlockBlueShieldGlassLocked
+  name: стеклянный шлюз
+  description: Он открывается, он закрывается и он может вас раздавить.
+  suffix: Офицер "Синий Щит", Закрыт
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsBlueShield ]

@@ -71,16 +71,3 @@
   - type: ContainerFill
     containers:
       board: [ DoorElectronicsSOD ]
-
-
-# CentComm
-- type: entity
-  parent: AirlockHatch
-  id: AirlockHatchCentralCommandLocked
-  name: герметичный люк
-  description: Он открывается, он закрывается и он может вас раздавить.
-  suffix: Центральное Командование, Закрыт
-  components:
-  - type: ContainerFill
-    containers:
-      board: [ DoorElectronicsCentralCommand ]

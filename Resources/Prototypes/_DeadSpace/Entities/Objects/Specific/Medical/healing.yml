@@ -51,3 +51,20 @@
   - type: Stack
     stackType: Nanopaste
     count: 5
+
+- type: entity
+  parent: PrefilledSyringe
+  id: SyringeLexorin
+  name: инъекция "Блаженный Сон"
+  description: Смертельная инъекция содержащая в себе лексорин. В связи с поправкой в ОПРС было принято решение о переименовывание данной инъекции в "блаженный сон".
+  suffix: Лексорин
+  components:
+  - type: Label
+    currentLabel: reagent-name-lexorin
+  - type: SolutionContainerManager
+    solutions:
+      injector:
+        maxVol: 15
+        reagents:
+          - ReagentId: Lexorin
+            Quantity: 15
