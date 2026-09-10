@@ -277,7 +277,6 @@
   categories: [ HideSpawnMenu ]
   name: однолямочный  рюкзак
   description: Однолямочный рюкзак для хранения вещей. Окрашен в зелёный хаки.
-  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/backpack.rsi
