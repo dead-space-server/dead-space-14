@@ -31,4 +31,9 @@ public sealed partial class BiomeDecalLayer : IBiomeWorldLayer
 
     [DataField(required: true)]
     public List<ProtoId<DecalPrototype>> Decals = new();
+
+    // DS14-start
+    [DataField]
+    public Color Color = Color.White;
+    // DS14-end
 }

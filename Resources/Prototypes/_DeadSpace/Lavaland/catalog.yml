@@ -206,6 +206,14 @@
     LavalandMiningPoint: 25000
 
 - type: listing
+  id: LavalandMiningPKAUpgradeExplosive
+  productEntity: PKAUpgradeExplosiveLavaland
+  categories:
+  - LavalandMiningTools
+  cost:
+    LavalandMiningPoint: 6500
+
+- type: listing
   id: LavalandMiningPKAUpgradeDamage
   productEntity: PKAUpgradeDamage
   categories:

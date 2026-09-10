@@ -1,0 +1,34 @@
+- type: entity
+  id: LavalandSensorTablet
+  parent: BaseHandheldComputer
+  name: планшет разведки лаваленда
+  description: Показывает координаты шахтёров, передающих данные костюмных датчиков.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Devices/patroltablet.rsi
+    state: tablet
+  - type: Item
+    size: Normal
+    sprite: _DeadSpace/Objects/Devices/patroltablet.rsi
+    heldPrefix: null
+  - type: ActivatableUI
+    key: enum.LavalandSensorTabletUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.LavalandSensorTabletUiKey.Key:
+        type: LavalandSensorTabletBoundUserInterface
+  - type: ScaleVisuals
+    scale: 0.65,0.65
+  - type: LavalandSensorTablet
+    scanRadius: 10
+    livingColor: White
+    deadColor: Black
+    faunaColor: Red
+    oreColor: Gold
+    lavaColor: OrangeRed
+    floorColor: "#50372d"
+    rockColor: "#96694b"
+    mobPointSize: 0.65
+    terrainPointSize: 0.52
+  - type: StaticPrice
+    price: 1000

@@ -22,6 +22,11 @@ public sealed partial class UpgradeableGunComponent : Component
     [DataField]
     public EntityWhitelist Whitelist = new();
 
+    // DS14-start
+    [DataField]
+    public EntityWhitelist? Blacklist;
+    // DS14-end
+
     /// <summary>
     /// Sound played when upgrade is inserted.
     /// </summary>

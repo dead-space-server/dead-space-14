@@ -17,6 +17,11 @@ public sealed partial class LavalandBossComponent : Component
     public SoundSpecifier? Music;
 
     [DataField]
+    public List<SoundSpecifier> MusicPool = new();
+
+    public SoundSpecifier? SelectedMusic;
+
+    [DataField]
     public SoundSpecifier? DeathSound;
 
     [DataField]

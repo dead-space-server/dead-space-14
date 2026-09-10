@@ -270,6 +270,34 @@ public abstract class SharedBiomeSystem : EntitySystem
             }
 
             var noiseValue = noiseCopy.GetNoise(indices.X, indices.Y, i);
+            // DS14-start
+            // Keep only the strongest candidate in the configured neighborhood. This gives
+            // sparse deterministic placement without clusters or chunk-boundary seams.
+            if (biomeLayer.MinimumDistance > 0)
+            {
+                for (var x = -biomeLayer.MinimumDistance; x <= biomeLayer.MinimumDistance; x++)
+                {
+                    for (var y = -biomeLayer.MinimumDistance; y <= biomeLayer.MinimumDistance; y++)
+                    {
+                        if (x == 0 && y == 0)
+                            continue;
+
+                        var neighborX = indices.X + x;
+                        var neighborY = indices.Y + y;
+                        var neighborBase = noiseCopy.GetNoise(neighborX, neighborY);
+                        neighborBase = invert ? neighborBase * -1 : neighborBase;
+                        if (neighborBase < layer.Threshold)
+                            continue;
+
+                        if (noiseCopy.GetNoise(neighborX, neighborY, i) > noiseValue)
+                        {
+                            entity = null;
+                            return false;
+                        }
+                    }
+                }
+            }
+            // DS14-end
             entity = Pick(biomeLayer.Entities, (noiseValue + 1f) / 2f);
             return true;
         }
@@ -289,7 +317,7 @@ public abstract class SharedBiomeSystem : EntitySystem
     /// Tries to get the relevant decals for this tile.
     /// </summary>
     public bool TryGetDecals(Vector2i indices, List<IBiomeLayer> layers, int seed, Entity<MapGridComponent>? grid,
-        [NotNullWhen(true)] out List<(string ID, Vector2 Position)>? decals)
+        [NotNullWhen(true)] out List<(string ID, Vector2 Position, Color Color)>? decals) // DS14
     {
         if (!TryGetBiomeTile(indices, layers, seed, grid, out var tileRef))
         {
@@ -344,7 +372,7 @@ public abstract class SharedBiomeSystem : EntitySystem
                 return false;
             }
 
-            decals = new List<(string ID, Vector2 Position)>();
+            decals = new List<(string ID, Vector2 Position, Color Color)>(); // DS14
 
             for (var x = 0; x < decalLayer.Divisions; x++)
             {
@@ -357,7 +385,7 @@ public abstract class SharedBiomeSystem : EntitySystem
                     if (decalValue < decalLayer.Threshold)
                         continue;
 
-                    decals.Add((Pick(decalLayer.Decals, (noiseCopy.GetNoise(indices.X, indices.Y, x + y * decalLayer.Divisions) + 1f) / 2f), index));
+                    decals.Add((Pick(decalLayer.Decals, (noiseCopy.GetNoise(indices.X, indices.Y, x + y * decalLayer.Divisions) + 1f) / 2f), index, decalLayer.Color)); // DS14
                 }
             }
 
@@ -377,7 +405,7 @@ public abstract class SharedBiomeSystem : EntitySystem
     /// </summary>
     [Obsolete("Use the Entity<MapGridComponent>? overload")]
     public bool TryGetDecals(Vector2i indices, List<IBiomeLayer> layers, int seed, MapGridComponent grid,
-        [NotNullWhen(true)] out List<(string ID, Vector2 Position)>? decals)
+        [NotNullWhen(true)] out List<(string ID, Vector2 Position, Color Color)>? decals) // DS14
     {
         return TryGetDecals(indices, layers, seed, grid == null ? null : (grid.Owner, grid), out decals);
     }

@@ -1,6 +1,24 @@
 - type: biomeTemplate
   id: LavalandSurface
   layers:
+  # Fiery flowers are visual decals and never replace traversable ground.
+  - !type:BiomeDecalLayer
+    divisions: 2
+    threshold: 0.84
+    noise:
+      seed: 51
+      noiseType: OpenSimplex2
+      frequency: 0.32
+    allowedTiles:
+    - FloorBasalt
+    - FloorLavalandAsh
+    - FloorLavalandPaleGrass
+    color: "#ff6b24"
+    decals:
+    - FlowersBROne
+    - FlowersBRTwo
+    - FlowersBRThree
+
   - !type:BiomeEntityLayer
     threshold: 0.97
     noise:
@@ -10,6 +28,7 @@
     allowedTiles:
     - FloorBasalt
     - FloorLavalandAsh
+    - FloorLavalandPaleGrass
     entities:
     - LavalandPolyporeWild
     - LavalandPorciniWild
@@ -26,6 +45,7 @@
     allowedTiles:
     - FloorBasalt
     - FloorLavalandAsh
+    - FloorLavalandPaleGrass
     entities:
     - LavalandBasaltBoulder
 
@@ -38,6 +58,7 @@
     allowedTiles:
     - FloorBasalt
     - FloorLavalandAsh
+    - FloorLavalandPaleGrass
     entities:
     - BasaltRandom
 
@@ -50,30 +71,32 @@
     allowedTiles:
     - FloorBasalt
     - FloorLavalandAsh
+    - FloorLavalandPaleGrass
     entities:
     - LavalandBasaltBoulder
     - FloraStalagmite
 
+  # Ash trees use deterministic spacing: they occur throughout open terrain,
+  # while the biome system prevents neighboring trees from forming clusters.
   - !type:BiomeEntityLayer
-    threshold: 0.38
+    threshold: 0.20
+    minimumDistance: 3
     noise:
-      seed: 4
+      seed: 52
       noiseType: OpenSimplex2
-      frequency: 0.018
-      fractalType: Ridged
-      octaves: 2
-      lacunarity: 1.8
-      gain: 0.45
+      frequency: 0.85
     allowedTiles:
     - FloorBasalt
     - FloorLavalandAsh
+    - FloorLavalandPaleGrass
     entities:
-    - FloorLavaEntity
+    - FloraTreeLavalandAsh
 
   - !type:BiomeEntityLayer
     allowedTiles:
     - FloorBasalt
     - FloorLavalandAsh
+    - FloorLavalandPaleGrass
     threshold: -0.28
     noise:
       seed: 0
@@ -105,3 +128,15 @@
       lacunarity: 2
       gain: 0.45
     tile: FloorLavalandAsh
+
+  - !type:BiomeTileLayer
+    threshold: 0.68
+    noise:
+      seed: 53
+      noiseType: OpenSimplex2
+      frequency: 0.025
+      fractalType: FBm
+      octaves: 2
+      lacunarity: 2
+      gain: 0.42
+    tile: FloorLavalandPaleGrass

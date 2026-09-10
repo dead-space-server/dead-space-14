@@ -1,0 +1,66 @@
+- type: entity
+  id: LavalandBluespaceWell
+  parent: BaseMachine
+  name: блюспейс колодец
+  description: Собирает оставленную на лаваленде руду. Альт-клик выгружает содержимое.
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Structures/Machines/bluespace_well.rsi
+    state: icon
+  - type: LavalandBluespaceWell
+    requiredOre: 1000
+    collectionDelay: 60
+    scanInterval: 5
+    returnDelay: 60
+    waveCheckInterval: 1800
+    waveChance: 0.35
+    waveWarningDuration: 60
+    waveWarningSound:
+      path: /Audio/_DeadSpace/Announcements/attention.ogg
+    waveDuration: 180
+    waveMinDistance: 12
+    waveMaxDistance: 20
+    waveTendrils:
+    - LavalandNecropolisTendrilGoliath
+    - LavalandNecropolisTendrilGoliath
+    - LavalandNecropolisTendrilWatcher
+    - LavalandNecropolisTendrilLegion
+    waveMusic:
+    - path: /Audio/_DeadSpace/Lavaland/Bosses/title1.ogg
+    - path: /Audio/_DeadSpace/Lavaland/Bosses/drake_fight.ogg
+    - path: /Audio/_DeadSpace/Lavaland/Bosses/bubblegum_fight.ogg
+    - path: /Audio/_DeadSpace/Lavaland/Bosses/colossus_fight.ogg
+    oreTypes: [SteelOre, Coal, GoldOre, SilverOre, PlasmaOre, SpaceQuartz, UraniumOre, BananiumOre, DiamondOre, SaltOre, MagmiteOre, BluespaceCrystalOre]
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Metallic
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:EmptyAllContainersBehaviour
+      - !type:DoActsBehavior
+        acts: [Destruction]
+
+- type: entity
+  id: LavalandBluespaceWellFlatpack
+  parent: BaseFlatpack
+  name: упаковка блюспейс колодца
+  components:
+  - type: Flatpack
+    entity: LavalandBluespaceWell
+
+- type: entity
+  id: LavalandWellTeleportSmoke
+  name: блюспейс дым
+  components:
+  - type: TimedDespawn
+    lifetime: 2
+  - type: Sprite
+    sprite: Effects/chemsmoke.rsi
+    state: chemsmoke
+    drawdepth: Effects
+    color: "#66bfffaa"

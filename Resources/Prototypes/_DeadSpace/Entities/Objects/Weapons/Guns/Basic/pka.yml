@@ -164,6 +164,9 @@
     node: shotgunsawnkinetik
     deconstructionTarget: null
   - type: UpgradeableGun
+    blacklist:
+      components:
+      - ExplosivePkaUpgrade
     whitelist:
       tags:
       - PKAUpgrade

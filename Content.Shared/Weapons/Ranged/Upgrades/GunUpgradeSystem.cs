@@ -44,6 +44,10 @@ public sealed class GunUpgradeSystem : EntitySystem
     {
         foreach (var upgrade in GetCurrentUpgrades(ent))
         {
+            // DS14-start
+            if (!_entityWhitelist.CheckBoth(upgrade.Owner, blacklist: ent.Comp.Blacklist))
+                continue;
+            // DS14-end
             RaiseLocalEvent(upgrade, ref args);
         }
     }
@@ -77,6 +81,11 @@ public sealed class GunUpgradeSystem : EntitySystem
 
         if (_entityWhitelist.IsWhitelistFail(ent.Comp.Whitelist, args.Used))
             return;
+
+        // DS14-start
+        if (!_entityWhitelist.CheckBoth(args.Used, blacklist: ent.Comp.Blacklist))
+            return;
+        // DS14-end
 
         if (GetCurrentUpgradeTags(ent).ToHashSet().IsSupersetOf(upgradeComponent.Tags))
         {

@@ -225,6 +225,9 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         var bossComponent = EnsureComp<LavalandBossComponent>(boss);
         bossComponent.Arena = grid.Owner;
         bossComponent.MaxHealth = Math.Max(1f, bossComponent.MaxHealth);
+        bossComponent.SelectedMusic = bossComponent.MusicPool.Count > 0
+            ? bossComponent.MusicPool[random.Next(bossComponent.MusicPool.Count)]
+            : bossComponent.Music;
         SetBossAiEnabled(boss, false);
 
         var arena = AddComp<LavalandBossArenaComponent>(grid.Owner);
@@ -725,13 +728,13 @@ public sealed class LavalandBossArenaSystem : EntitySystem
     {
         if (!arena.FightStarted ||
             !TryComp<LavalandBossComponent>(arena.Boss, out var boss) ||
-            boss.Music == null)
+            boss.SelectedMusic == null)
         {
             return;
         }
 
-        var audioParams = boss.Music.Params.WithLoop(true);
-        RaiseNetworkEvent(new LavalandBossMusicStartEvent(arena.ArenaId, _audio.ResolveSound(boss.Music), audioParams), session.Channel);
+        var audioParams = boss.SelectedMusic.Params.WithLoop(true);
+        RaiseNetworkEvent(new LavalandBossMusicStartEvent(arena.ArenaId, _audio.ResolveSound(boss.SelectedMusic), audioParams), session.Channel);
     }
 
     private void SendHideAndStop(ICommonSession session, int arenaId)

@@ -1,0 +1,47 @@
+- type: entity
+  id: LavalandObjectiveFolder
+  parent: BoxFolderYellowEmpty
+  name: папка экспедиционного задания
+  description: Запечатанные распоряжения для ведущего утилизатора.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:GroupSelector
+        children:
+        - id: LavalandObjectivePaperOre
+        - id: LavalandObjectivePaperMorkite
+
+- type: entity
+  id: LavalandObjectivePaperOre
+  parent: Paper
+  name: "задание: блюспейс-доставка"
+  components:
+  - type: Paper
+    content: lavaland-objective-paper-ore
+
+- type: entity
+  id: LavalandObjectivePaperMorkite
+  parent: Paper
+  name: "задание: добыча моркита"
+  components:
+  - type: Paper
+    content: lavaland-objective-paper-morkite
+  - type: LavalandMorkiteMission
+    extractorPrototype: LavalandMorkiteExtractor
+    extractorCount: 4
+    spawnDistance: 20
+
+- type: entity
+  id: LavalandMorkiteExtractor
+  parent: BaseMachine
+  name: добытчик моркита
+  description: Извлекает моркит из глубин Лаваленда при подключении к трубопроводу.
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Structures/Machines/morkite_extractor.rsi
+    state: icon
+  - type: LavalandMorkiteExtractor
+    requiredExtractionTime: 480
+    outputPerSecond: 0.20833334
