@@ -35,6 +35,7 @@
       - id: Gauze
       - id: PillCanisterIron
       - id: PillCanisterCopper
+      - id: PillCanisterBicaridine #DS14
 
 - type: entity
   id: MedkitToxinFilled
