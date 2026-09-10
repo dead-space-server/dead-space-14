@@ -251,6 +251,13 @@
                                     StyleClasses="DeadSpaceAction DeadSpaceReady"
                                     HorizontalAlignment="Stretch"
                                     MinSize="250 50"/>
+                            <Button Name="AshWalkerCancelButton"
+                                    Access="Public"
+                                    Visible="False"
+                                    Text="{Loc 'ash-walker-lobby-cancel'}"
+                                    StyleClasses="DeadSpaceAction"
+                                    HorizontalAlignment="Stretch"
+                                    MinSize="250 42"/>
                             <cc:UICommandButton Command="observe"
                                                 Name="ObserveButton"
                                                 Access="Public"

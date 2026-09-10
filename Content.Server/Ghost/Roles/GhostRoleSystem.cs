@@ -588,7 +588,7 @@ public sealed class GhostRoleSystem : EntitySystem
         }
         // DS14-end
 
-        if (!_ghostRoles.TryGetValue(identifier, out var role) || !IsRoleAvailable(role.Owner))
+        if (!_ghostRoles.TryGetValue(identifier, out var role) || !IsRoleAvailable(role.Owner, player))
             return false;
 
         var ev = new TakeGhostRoleEvent(player);
@@ -819,7 +819,7 @@ public sealed class GhostRoleSystem : EntitySystem
     private void OnSpawnerTakeRole(EntityUid uid, GhostRoleMobSpawnerComponent component, ref TakeGhostRoleEvent args)
     {
         if (!TryComp(uid, out GhostRoleComponent? ghostRole) ||
-            !CanTakeGhost(uid, ghostRole))
+            !CanTakeGhost(uid, ghostRole, args.Player))
         {
             args.TookRole = false;
             return;
@@ -855,19 +855,19 @@ public sealed class GhostRoleSystem : EntitySystem
         args.TookRole = true;
     }
 
-    private bool CanTakeGhost(EntityUid uid, GhostRoleComponent? component = null)
+    public bool CanTakeGhost(EntityUid uid, GhostRoleComponent? component = null, ICommonSession? player = null)
     {
         // DS14-start
         var canTake = Resolve(uid, ref component, false) &&
                       !component.Taken &&
                       !MetaData(uid).EntityPaused;
 
-        canTake &= IsRoleAvailable(uid);
+        canTake &= IsRoleAvailable(uid, player);
         return canTake;
 
     }
 
-    private bool IsRoleAvailable(EntityUid uid)
+    private bool IsRoleAvailable(EntityUid uid, ICommonSession? player = null)
     {
         if (TerminatingOrDeleted(uid) ||
             EntityManager.IsQueuedForDeletion(uid) ||
@@ -879,7 +879,7 @@ public sealed class GhostRoleSystem : EntitySystem
             _prison.IsPrisonMap(xform.MapID))
             return false;
 
-        var ev = new GhostRoleAvailabilityEvent();
+        var ev = new GhostRoleAvailabilityEvent(player);
         RaiseLocalEvent(uid, ev);
         return !ev.Cancelled;
     }
@@ -888,7 +888,7 @@ public sealed class GhostRoleSystem : EntitySystem
     private void OnTakeoverTakeRole(EntityUid uid, GhostTakeoverAvailableComponent component, ref TakeGhostRoleEvent args)
     {
         if (!TryComp(uid, out GhostRoleComponent? ghostRole) ||
-            !CanTakeGhost(uid, ghostRole))
+            !CanTakeGhost(uid, ghostRole, args.Player))
         {
             args.TookRole = false;
             return;

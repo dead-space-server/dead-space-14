@@ -381,6 +381,13 @@ namespace Content.Client.LateJoin
 
         private void JobsAvailableUpdated(IReadOnlyDictionary<NetEntity, Dictionary<ProtoId<JobPrototype>, int?>> updatedJobs)
         {
+            if (!_jobButtons.Keys.ToHashSet().SetEquals(updatedJobs.Keys) ||
+                updatedJobs.Any(station => station.Value.Keys.Any(job => !_jobButtons[station.Key].ContainsKey(job))))
+            {
+                RebuildUI();
+                return;
+            }
+
             foreach (var stationEntries in updatedJobs)
             {
                 if (_jobButtons.ContainsKey(stationEntries.Key))
@@ -398,8 +405,18 @@ namespace Content.Client.LateJoin
                                 if (matchingJobButton.Amount != updatedJobValue)
                                 {
                                     matchingJobButton.RefreshLabel(updatedJobValue);
-                                    matchingJobButton.Disabled |= matchingJobButton.Amount == 0;
+                                    matchingJobButton.Disabled = matchingJobButton.Amount == 0 ||
+                                        !_jobRequirements.IsAllowed(_prototypeManager.Index<JobPrototype>(matchingJobButton.JobId),
+                                            (HumanoidCharacterProfile?)_preferencesManager.Preferences?.SelectedCharacter, out _);
                                 }
+                            }
+                        }
+                        else
+                        {
+                            foreach (var matchingJobButton in existingJobEntry.Value)
+                            {
+                                matchingJobButton.RefreshLabel(0);
+                                matchingJobButton.Disabled = true;
                             }
                         }
                     }

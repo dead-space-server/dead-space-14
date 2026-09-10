@@ -5,7 +5,10 @@ using Content.Shared.DeadSpace.Lavaland.Components;
 using Content.Shared.Examine;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
+using Content.Shared.Popups;
+using Content.Shared.Shuttles.Components;
 using Content.Shared.StatusEffectNew;
+using Content.Shared.UserInterface;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Whitelist;
@@ -16,16 +19,39 @@ public sealed class SharedAshWalkerSystem : EntitySystem
 {
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
     [Dependency] private readonly StatusEffectsSystem _status = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<AshWalkerComponent, IsEquippingTargetAttemptEvent>(OnEquipAttempt);
+        SubscribeLocalEvent<AshWalkerComponent, UserOpenActivatableUIAttemptEvent>(OnOpenUiAttempt);
+        SubscribeLocalEvent<BoundUserInterfaceMessageAttempt>(OnUiMessageAttempt);
         SubscribeLocalEvent<GunComponent, AttemptShootEvent>(OnShootAttempt);
         SubscribeLocalEvent<LavalandFaunaComponent, DamageModifyEvent>(OnFaunaDamageModify);
         SubscribeLocalEvent<AshWalkerClothingComponent, BeingEquippedAttemptEvent>(OnClothingEquipAttempt);
         SubscribeLocalEvent<AshWalkerClothingComponent, ExaminedEvent>(OnClothingExamined);
+    }
+
+    private void OnOpenUiAttempt(Entity<AshWalkerComponent> ent, ref UserOpenActivatableUIAttemptEvent args)
+    {
+        if (args.Cancelled || !_ui.HasUi(args.Target, ShuttleConsoleUiKey.Key))
+            return;
+
+        args.Cancel();
+        if (!args.Silent)
+            _popup.PopupClient(Loc.GetString("ash-walker-cannot-pilot"), args.Target, ent);
+    }
+
+    private void OnUiMessageAttempt(BoundUserInterfaceMessageAttempt args)
+    {
+        if (args.Cancelled || args.UiKey is not ShuttleConsoleUiKey.Key || !HasComp<AshWalkerComponent>(args.Actor))
+            return;
+
+        args.Cancel();
+        _popup.PopupClient(Loc.GetString("ash-walker-cannot-pilot"), args.Target, args.Actor);
     }
 
     private void OnEquipAttempt(Entity<AshWalkerComponent> ent, ref IsEquippingTargetAttemptEvent args)

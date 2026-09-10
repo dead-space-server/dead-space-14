@@ -8,4 +8,6 @@ namespace Content.Server.Station.Components;
 [RegisterComponent, Access(typeof(StationSpawningSystem))]
 public sealed partial class StationSpawningComponent : Component
 {
+    [DataField]
+    public bool AllowRandomSpawn = true;
 }

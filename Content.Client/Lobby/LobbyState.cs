@@ -2,6 +2,7 @@
 using Content.Client.Audio;
 // DS14-end
 using Content.Client._Donate.UI;
+using Content.Client.DeadSpace.AshWalkers;
 using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.GameTicking.Managers;
 using Content.Client.LateJoin;
@@ -35,6 +36,7 @@ namespace Content.Client.Lobby
         [Dependency] private readonly IPrototypeManager _protoMan = default!;
 
         private ClientGameTicker _gameTicker = default!;
+        private AshWalkerLobbySystem _ashWalkers = default!;
         // DS14-start
         private ContentAudioSystem _contentAudioSystem = default!;
         // DS14-end
@@ -53,6 +55,8 @@ namespace Content.Client.Lobby
 
             var chatController = _userInterfaceManager.GetUIController<ChatUIController>();
             _gameTicker = _entityManager.System<ClientGameTicker>();
+            _ashWalkers = _entityManager.System<AshWalkerLobbySystem>();
+            _ashWalkers.StateChanged += UpdateLobbyUi;
             // DS14-start
             _contentAudioSystem = _entityManager.System<ContentAudioSystem>();
             _contentAudioSystem.LobbySoundtrackChanged += UpdateLobbySoundtrackInfo;
@@ -69,6 +73,8 @@ namespace Content.Client.Lobby
             Lobby.CharacterSetup.OnPressed += OnSetupPressed;
             Lobby.ReadyButton.OnPressed += OnReadyPressed;
             Lobby.ReadyButton.OnToggled += OnReadyToggled;
+            Lobby.AshWalkerCancelButton.OnPressed += OnAshWalkerCancel;
+            _ashWalkers.RequestState();
 
             Lobby.DonateButton.OnPressed += OnDonatePressed;
 
@@ -97,6 +103,7 @@ namespace Content.Client.Lobby
             _gameTicker.InfoBlobUpdated -= UpdateLobbyUi;
             _gameTicker.LobbyStatusUpdated -= LobbyStatusUpdated;
             _gameTicker.LobbyLateJoinStatusUpdated -= LobbyLateJoinStatusUpdated;
+            _ashWalkers.StateChanged -= UpdateLobbyUi;
             // DS14-start
             _contentAudioSystem.LobbySoundtrackChanged -= UpdateLobbySoundtrackInfo;
             // DS14-end
@@ -106,6 +113,7 @@ namespace Content.Client.Lobby
             Lobby!.CharacterSetup.OnPressed -= OnSetupPressed;
             Lobby!.ReadyButton.OnPressed -= OnReadyPressed;
             Lobby!.ReadyButton.OnToggled -= OnReadyToggled;
+            Lobby.AshWalkerCancelButton.OnPressed -= OnAshWalkerCancel;
 
             Lobby.DonateButton.OnPressed -= OnDonatePressed;
 
@@ -120,18 +128,25 @@ namespace Content.Client.Lobby
 
         private void OnSetupPressed(BaseButton.ButtonEventArgs args)
         {
+            if (_ashWalkers.Waiting)
+                _ashWalkers.Cancel();
             SetReady(false);
             Lobby?.SwitchState(LobbyGui.LobbyGuiState.CharacterSetup);
         }
 
         private void OnReadyPressed(BaseButton.ButtonEventArgs args)
         {
-            if (!_gameTicker.IsGameStarted)
+            if (!_gameTicker.IsGameStarted || _ashWalkers.Waiting)
             {
                 return;
             }
 
             new LateJoinGui().OpenCentered();
+        }
+
+        private void OnAshWalkerCancel(BaseButton.ButtonEventArgs args)
+        {
+            _ashWalkers.Cancel();
         }
 
         private void OnReadyToggled(BaseButton.ButtonToggledEventArgs args)
@@ -194,7 +209,7 @@ namespace Content.Client.Lobby
         private void LobbyLateJoinStatusUpdated()
         {
             ApplyReadyButtonStyle(); // DS14
-            Lobby!.ReadyButton.Disabled = _gameTicker.DisallowedLateJoin;
+            Lobby!.ReadyButton.Disabled = _gameTicker.DisallowedLateJoin || _ashWalkers.Waiting;
         }
 
         private void UpdateLobbyUi()
@@ -206,6 +221,7 @@ namespace Content.Client.Lobby
                 Lobby!.ReadyButton.Text = Loc.GetString("lobby-state-ready-button-join-state");
                 Lobby!.ReadyButton.ToggleMode = false;
                 Lobby!.ReadyButton.Pressed = false;
+                Lobby.ReadyButton.Disabled = _gameTicker.DisallowedLateJoin;
                 Lobby!.ObserveButton.Disabled = false;
             }
             else
@@ -218,6 +234,15 @@ namespace Content.Client.Lobby
                 Lobby!.ReadyButton.ToggleMode = true;
                 Lobby!.ReadyButton.Disabled = false;
                 Lobby!.ObserveButton.Disabled = true;
+            }
+
+            Lobby!.AshWalkerCancelButton.Visible = _ashWalkers.Waiting;
+            Lobby.ReadyButton.ToolTip = _ashWalkers.Waiting ? Loc.GetString("ash-walker-lobby-preparing-description") : null;
+            if (_ashWalkers.Waiting)
+            {
+                Lobby.ReadyButton.Text = Loc.GetString("ash-walker-lobby-preparing");
+                Lobby.ReadyButton.ToggleMode = false;
+                Lobby.ReadyButton.Disabled = true;
             }
 
             if (_gameTicker.ServerInfoBlob != null)

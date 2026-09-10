@@ -9,6 +9,18 @@ ghost-role-information-ash-walker-description = You are a native of Lavaland. Hu
 ghost-role-information-ash-walker-rules = You are a [color=red][bold]Team Antagonist[/bold][/color]. Your tribe consists of the other ash walkers from your Lavaland. Support your kin and defend your settlement and its lands. Your relations with outsiders develop in play; destroying the station is not your objective. Do not use knowledge from a previous life.
 ash-walker-cannot-equip-footwear = This footwear does not fit your digitigrade legs.
 ash-walker-cannot-shoot = Your fingers do not fit this weapon's trigger mechanism.
+ash-walker-cannot-pilot = You do not know how to pilot shuttles.
+
+job-name-ash-walker = Ash Walker
+job-description-ash-walker = Live on Lavaland, hunt, learn your tribe's crafts and protect your kin. You will hatch from an available egg as an ash walker.
+job-supervisors-ash-walker = your tribe
+department-Lavaland = Lavaland
+department-Lavaland-description = Inhabitants of the ash wastes.
+ent-AshWalkerStation = Lavaland
+ash-walker-job-unavailable = There is no ash walker egg available. Choose another role or wait for a new egg.
+ash-walker-lobby-preparing = Preparing Lavaland
+ash-walker-lobby-preparing-description = You will automatically hatch once Lavaland is ready, if an egg is available. You can cancel the wait.
+ash-walker-lobby-cancel = Cancel waiting
 ash-walker-clothing-cannot-equip = This equipment only fits ash walkers.
 ash-walker-clothing-examine = Fitted to an ash walker's build. Other creatures cannot wear it.
 ent-ClothingOuterArmorBoneAshWalker = ash walker bone armor

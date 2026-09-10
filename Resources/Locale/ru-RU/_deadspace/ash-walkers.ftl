@@ -9,6 +9,18 @@ ghost-role-information-ash-walker-description = Вы — житель Лавал
 ghost-role-information-ash-walker-rules = Вы — [color=red][bold]командный антагонист[/bold][/color]. Ваше племя — другие пеплоходцы вашего Лаваленда. Помогайте соплеменникам, защищайте поселение и его земли. Отношения с пришельцами определяются происходящим в игре; у вас нет задачи уничтожить станцию. Не используйте сведения из прежней жизни.
 ash-walker-cannot-equip-footwear = Эта обувь не подходит для ваших пальцеходящих ног.
 ash-walker-cannot-shoot = Ваши пальцы не подходят для спускового механизма этого оружия.
+ash-walker-cannot-pilot = Вы не умеете управлять шаттлами.
+
+job-name-ash-walker = Пеплоходец
+job-description-ash-walker = Живите на Лаваленде, охотьтесь, осваивайте ремёсла и берегите своё племя. Вы появитесь из свободного яйца в облике пеплоходца.
+job-supervisors-ash-walker = своему племени
+department-Lavaland = Лаваленд
+department-Lavaland-description = Обитатели пепельных пустошей.
+ent-AshWalkerStation = Лаваленд
+ash-walker-job-unavailable = Сейчас нет доступного яйца пеплоходца. Выберите другую роль или дождитесь нового яйца.
+ash-walker-lobby-preparing = Подготовка Лаваленда
+ash-walker-lobby-preparing-description = Вы автоматически появитесь из яйца после подготовки Лаваленда, если хватит свободных яиц. Ожидание можно отменить.
+ash-walker-lobby-cancel = Отменить ожидание
 ash-walker-clothing-cannot-equip = Это снаряжение подходит только пеплоходцам.
 ash-walker-clothing-examine = Подогнано под телосложение пеплоходца. Другим существам его не носить.
 ent-ClothingOuterArmorBoneAshWalker = костяная броня пеплоходца

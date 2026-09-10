@@ -1,6 +1,7 @@
 - type: jobWeight
   id: Default
   weights:
+    AshWalker: 0
     CargoTechnician: 0
     Quartermaster: 10
     SalvageSpecialist: 0

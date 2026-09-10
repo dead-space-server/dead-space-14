@@ -356,9 +356,11 @@ public sealed class NPCUtilitySystem : EntitySystem
 
                 return _examine.InRangeUnOccluded(owner, targetUid, radius + bufferRange, null) ? 1f : 0f;
             }
-            case TargetIsAliveCon:
+            case TargetIsAliveCon con:
             {
-                return _mobState.IsAlive(targetUid) ? 1f : 0f;
+                return _mobState.IsAlive(targetUid) || con.IncludePreCritical && _mobState.IsPreCritical(targetUid)
+                    ? 1f
+                    : 0f;
             }
             case TargetIsCritCon:
             {
