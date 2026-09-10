@@ -34,8 +34,9 @@
     - id: ClothingShoesBootsMagDragonFoxMadParadox
     - id: PlushieDragonFoxMedTech
     - id: PlushieDragonFoxMadParadox
+    - id: PlushieDragonFoxMadParadox2
     - id: ClothingBeltDragonFoxMadParadox
-    - id: ClothingOuterHardsuitDragonFoxMadParadox
+    - id: CaseDragonFoxMadParadox
     - id: ClothingHeadsetDragonFoxMadParadox
     - id: JetpackVoidFilleddDragonFoxMadParadox
     - id: MedkitAdvancedFilled
@@ -168,15 +169,22 @@
         Radiation: 0.5
         Caustic: 0.5
         Stun: 0.65
+        Cold: 0.4
   - type: ExplosionResistance
     damageCoefficient: 0.5
   - type: ClothingSpeedModifier
     walkModifier: 0.9
     sprintModifier: 0.9
+  - type: FireProtection
+    reduction: 0.6
+  - type: ZombificationResistance
+    zombificationResistanceCoefficient: 0.7
   - type: HardsuitSpeedBuff
   - type: PowerCellDraw
     drawRate: 3.6 # 100 seconds on the default cell
     enabled: false
+  - type: HardsuitIdentification
+    nonlethal: true
   - type: PowerCellSlot
     cellSlotId: cell_slot
     # throwing in a recharger would bypass glove charging mechanic
@@ -205,6 +213,167 @@
     netsync: true
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
+
+# hardsuit.rsi
+- type: entity
+  parent: ClothingOuterHardsuitSecurity
+  id: ClothingOuterHardsuitDragonFoxMadParadox2
+  name: броня Antium Ana Wao
+  description: Если вам нужна первоклассная защита, усовершенствованная с помощью новейших технологий, обратите внимание на комплект брони Antium. Этот костюм, разработанный отмеченной наградами командой инженеров Quirinus Tech, полностью закрывает тело, защищая владельца от опасных условий и угроз на поле боя. Вместо традиционной ламинированной лицевой панели в шлеме используется набор датчиков, обеспечивающих беспрепятственный обзор.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/DragonFox/MadParadox/hardsuit2.rsi
+    layers:
+    - state: icon
+    - state: icon-unshaded
+      shader: unshaded
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/DragonFox/MadParadox/hardsuit2.rsi
+    clothingVisuals:
+      outerClothing:
+      - state: equipped-OUTERCLOTHING
+      - state: equipped-OUTERCLOTHING-unshaded
+        shader: unshaded
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitDragonFoxMadParadox2
+  - type: Item
+    size: Huge
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.5
+        Slash: 0.5
+        Piercing: 0.4
+        Heat: 0.5
+        Radiation: 0.5
+        Caustic: 0.5
+        Stun: 0.65
+        Cold: 0.4
+  - type: ExplosionResistance
+    damageCoefficient: 0.5
+  - type: ClothingSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9
+  - type: FireProtection
+    reduction: 0.6
+  - type: ZombificationResistance
+    zombificationResistanceCoefficient: 0.7
+  - type: HardsuitSpeedBuff
+  - type: PowerCellDraw
+    drawRate: 3.6 # 100 seconds on the default cell
+    enabled: false
+  - type: HardsuitIdentification
+    nonlethal: true
+  - type: PowerCellSlot
+    cellSlotId: cell_slot
+    # throwing in a recharger would bypass glove charging mechanic
+    fitsInCharger: false
+  - type: ContainerContainer
+    containers:
+      cell_slot: !type:ContainerSlot
+      toggleable-clothing: !type:ContainerSlot {}
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: PowerCellMedium
+        disableEject: true
+        whitelist:
+          tags:
+            - PowerCell
+  - type: Tag
+    tags: [ ]
+
+# helmet.rsi
+- type: entity
+  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  categories: [ HideSpawnMenu ]
+  id: ClothingHeadHelmetHardsuitDragonFoxMadParadox2
+  name: шлем Antium Ana Wao
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/DragonFox/MadParadox/hardsuit_helmet2.rsi
+    layers:
+    - state: icon
+    - state: icon-unshaded
+      shader: unshaded
+    - state: light-overlay
+      visible: false
+      shader: unshaded
+      map: [ "light" ]
+  - type: HandheldLight
+    addPrefix: false
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/DragonFox/MadParadox/hardsuit_helmet2.rsi
+    clothingVisuals:
+      head:
+      - state: equipped-head
+      - state: equipped-head-unshaded
+        shader: unshaded
+  - type: PointLight
+    color: "#f2e492"
+    radius: 7
+    energy: 3
+  - type: PressureProtection
+    highPressureMultiplier: 0.08
+    lowPressureMultiplier: 1000
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.9
+        Heat: 0.9
+  - type: ToggleableVisuals
+    spriteLayer: light
+    clothingVisuals:
+      head:
+      - state: equipped-head-light
+        shader: unshaded
+  - type: Tag
+    tags: [ ]
+
+- type: entity
+  id: CaseDragonFoxMadParadox
+  name: кейс
+  description: Прочный военный кейс.
+  parent: BaseERTloadoutPrimary
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/case_gr.rsi
+    state: closed
+  - type: ThiefUndeterminedBackpack
+    possibleSets:
+    - DragonFoxMadParadox
+    - DragonFoxMadParadox2
+  - type: ActivatableUI
+    key: enum.ThiefBackpackUIKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.ThiefBackpackUIKey.Key:
+        type: ThiefBackpackBoundUserInterface
+
+- type: thiefBackpackSet
+  id: DragonFoxMadParadox
+  name: ert-loadout-category-dr-name
+  description: ert-loadout-category-dr-description
+  sprite:
+    sprite: _DeadSpace/Sponsor/DragonFox/MadParadox/hardsuit.rsi
+    state: icon
+  content:
+  - ClothingOuterHardsuitDragonFoxMadParadox
+
+- type: thiefBackpackSet
+  id: DragonFoxMadParadox2
+  name: ert-loadout-category-dr2-name
+  description: ert-loadout-category-dr2-description
+  sprite:
+    sprite: _DeadSpace/Sponsor/DragonFox/MadParadox/hardsuit2.rsi
+    state: icon
+  content:
+  - ClothingOuterHardsuitDragonFoxMadParadox2
 
 # Magboots
 - type: entity
@@ -728,6 +897,24 @@
     color: "#9f2489"
     enabled: false
     radius: 4
+
+# toy
+- type: entity
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieDragonFoxMadParadox2
+  name: плюшевый Vanduul
+  description: Не все Вандуулы жаждут сражений, некоторые хотят, чтобы их обнимали. Этот плюшевый игрушка, искусно изготовленный из высококачественного полиэстера, покорит ваше сердце своей прочной пластиковой броней, фетровыми наплечниками золотыми деталями.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/DragonFox/MadParadox/toy.rsi
+    state: toy
+  - type: TTS
+    voice: Abaddon
+  - type: SpeakOnTrigger
+    pack: PlushieDragonFoxMadParadoxSpeech
+  - type: EmitSoundOnLand
+    sound:
+      collection: DemonScreams
 
 - type: entity
   parent: PaperPrintedCentcomm
