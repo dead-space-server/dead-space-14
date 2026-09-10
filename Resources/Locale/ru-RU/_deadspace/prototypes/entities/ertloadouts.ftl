@@ -262,3 +262,14 @@ ert-loadout-category-truncheon-description =
 ert-loadout-category-truncheonsec-name = Боевое мачете
 ert-loadout-category-truncheonsec-description =
     Содержит электрошоковое мачете для обездвиживания или убийства людей. Имеет нелетальный и летальный режимы. Является улучшением шоковой дубинки для действительно трудных ситуаций
+ert-loadout-category-holy-sword-name = Святой меч 
+ert-loadout-category-holy-sword-description =
+    Святой меч, наносящий колоссальный
+    урон всем несвятым существам.
+    Подпитывается святой водой.
+ert-loadout-category-holy-fire-name = Иньектор "Святое Пламя"
+ert-loadout-category-holy-fire-description =
+    Святая эссенция в герметизации,
+    поданная в форма иньектора.
+    Вколовший в себя способен лечить 
+    ближнего своего с помощью пламени.

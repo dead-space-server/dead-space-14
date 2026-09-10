@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Made by kieru01 (discord) for Space Station 14 server Мёртвый Космос",
+  "size": {
+    "x": 64,
+    "y": 64
+  },
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "flame",
+      "delays": [
+        [
+          0.15,
+          0.15,
+          0.15,
+          0.15
+        ]
+      ]
+    }
+  ]
+}

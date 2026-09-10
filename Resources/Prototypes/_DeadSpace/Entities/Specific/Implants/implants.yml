@@ -287,3 +287,38 @@
           components:
           - Implanter
   - type: Appearance
+
+- type: entity
+  parent: BaseImplantOnlyImplanterSyndi
+  id: HolyFireImplanter
+  name: святая эссенция
+  description: Необычной формы имплантер с чем-то внутри. Думаю, не стоит его вкалывать просто так.
+  suffix: священный огонь
+  components:
+  - type: Implanter
+    implant: HolyFireImplant
+  - type: Item
+    sprite: _DeadSpace/Objects/Specific/Medical/holy_fire.rsi
+    heldPrefix: implanter
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Medical/holy_fire.rsi
+    state: implanter1
+    layers:
+    - state: implanter0
+      map: [ "implantFull" ]
+      visible: true
+    - state: implanter1
+      map: [ "implantOnly" ]
+
+- type: entity
+  parent: BaseSubdermalImplant
+  id: HolyFireImplant
+  name: имплант
+  description: Имплант с чем-то сверхестественным, даёт пользователю возможность призывать святое пламя для лечения окружающих.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SubdermalImplant
+    implantAction: ActionRetractableItemHolyFireImplant
+    whitelist:
+      components:
+      - Hands

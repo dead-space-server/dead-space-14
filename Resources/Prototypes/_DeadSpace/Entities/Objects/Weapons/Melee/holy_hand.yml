@@ -1,0 +1,32 @@
+- type: entity
+  id: WeaponHolyFire
+  parent: BaseItem
+  name: святой огонь
+  description: Святой огонь, посланный носителю свыше для помощи ближнему.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Melee/holy_hand.rsi
+    state: icon
+  - type: Item
+    sprite: _DeadSpace/Objects/Weapons/Melee/holy_hand.rsi
+  - type: PointLight
+    color: orange
+    radius: 2.5
+    energy: 1  
+  - type: MeleeWeapon
+    attackRate: 1
+    damage:
+      types:
+        Blunt: -2
+        Piercing: -2
+        Slash: -2
+        Heat: -2
+        Cold: -2
+        Shock: -2
+        Radiation: -2
+        Poison: -2
+        Holy: 10
+    soundHit:
+      collection: HolyFireHeal
+  - type: Sharp

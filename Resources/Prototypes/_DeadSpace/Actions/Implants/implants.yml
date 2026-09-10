@@ -107,3 +107,26 @@
     checkCanInteract: false
   - type: InstantAction
     event: !type:ActivateSandevistanImplantEvent
+
+- type: entity
+  parent: BaseAction
+  id: ActionRetractableItemHolyFireImplant
+  name: "[color=blue]Использовать святое пламя[/color]"
+  description: Помоги ближнему своему этим даром.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 1
+    raiseOnAction: true
+    itemIconStyle: BigAction
+    icon:
+      sprite: _DeadSpace/Actions/holy_fire.rsi
+      state: activate
+  - type: InstantAction
+    event: !type:OnRetractableItemActionEvent
+  - type: RetractableItemAction
+    spawnedPrototype: WeaponHolyFire
+    summonSounds:
+      collection: HolyFireHeal
+    retractSounds:
+      collection: HolyFireRemove

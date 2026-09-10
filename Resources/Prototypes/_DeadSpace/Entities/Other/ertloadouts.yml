@@ -92,6 +92,27 @@
       enum.ThiefBackpackUIKey.Key:
         type: ThiefBackpackBoundUserInterface
 
+## Priest
+
+- type: entity
+  id: ERTloadoutPriestItems
+  name: коробка неопределённости
+  description: Коробка со святыми вещами. Принадлежит священнику.
+  suffix: Священник, Чудеса
+  parent: BaseERTloadoutSecondary
+  components:
+  - type: Sprite
+    state: priest
+  - type: ThiefUndeterminedBackpack
+    possibleSets:
+    - MihaelESwordSet
+    - HolyFireImplanterSet
+  - type: ActivatableUI
+    key: enum.ThiefBackpackUIKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.ThiefBackpackUIKey.Key:
+        type: ThiefBackpackBoundUserInterface
 
 ## Amber
 - type: entity
@@ -1443,3 +1464,26 @@
     state: stunbaton_nocell
   content:
   - Truncheonsec
+
+# Priest
+
+- type: thiefBackpackSet
+  id: MihaelESwordSet
+  name: ert-loadout-category-holy-sword-name
+  description: ert-loadout-category-holy-sword-description
+  sprite:
+    sprite: _DeadSpace/Objects/Weapons/Melee/mihael64.rsi
+    state: flame
+  content:
+  - EnergySwordHoly
+
+- type: thiefBackpackSet
+  id: HolyFireImplanterSet
+  name: ert-loadout-category-holy-fire-name
+  description: ert-loadout-category-holy-fire-description
+  sprite:
+    sprite: _DeadSpace/Objects/Weapons/Melee/holy_hand.rsi
+    state: icon
+  content:
+  - HolyFireImplanter
+

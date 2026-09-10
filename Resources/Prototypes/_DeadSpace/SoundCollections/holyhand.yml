@@ -1,0 +1,9 @@
+- type: soundCollection
+  id: HolyFireHeal
+  files:
+  - /Audio/_DeadSpace/Weapons/Melee/HolyHand/heal.ogg
+
+- type: soundCollection
+  id: HolyFireRemove
+  files:
+  - /Audio/_DeadSpace/Weapons/Melee/HolyHand/remove.ogg
