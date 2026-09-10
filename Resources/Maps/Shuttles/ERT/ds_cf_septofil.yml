@@ -4,8 +4,8 @@ meta:
   engineVersion: 276.0.0
   forkId: ""
   forkVersion: ""
-  time: 09/09/2026 20:59:11
-  entityCount: 195
+  time: 09/10/2026 07:53:39
+  entityCount: 207
 maps: []
 grids:
 - 1
@@ -139,7 +139,8 @@ entities:
             1: 8226
           0,-2:
             1: 1
-            0: 61156
+            0: 28388
+            2: 32768
           -1,-2:
             1: 2176
           -1,-1:
@@ -155,6 +156,11 @@ entities:
         - volume: 2500
           immutable: True
           moles: {}
+        - volume: 2500
+          temperature: 293.15
+          moles:
+            Oxygen: 21.813705
+            Nitrogen: 82.06108
         chunkSize: 4
     - type: GasTileOverlay
     - type: RadiationGridResistance
@@ -664,6 +670,56 @@ entities:
       parent: 1
     - type: Physics
       canCollide: False
+- proto: ClothingHeadHelmetEVALarge
+  entities:
+  - uid: 140
+    components:
+    - type: Transform
+      parent: 139
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 139
+- proto: ClothingMaskBreath
+  entities:
+  - uid: 75
+    components:
+    - type: Transform
+      parent: 139
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 139
+- proto: ClothingOuterHardsuitEVA
+  entities:
+  - uid: 157
+    components:
+    - type: Transform
+      parent: 139
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 139
+- proto: ClothingShoesColorWhite
+  entities:
+  - uid: 141
+    components:
+    - type: Transform
+      parent: 139
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 139
+- proto: ClothingUniformJumpsuitColorGrey
+  entities:
+  - uid: 148
+    components:
+    - type: Transform
+      parent: 139
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 139
 - proto: ComputerCloningConsole
   entities:
   - uid: 138
@@ -724,6 +780,16 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 2.5,1.5
       parent: 1
+- proto: FireExtinguisher
+  entities:
+  - uid: 205
+    components:
+    - type: Transform
+      parent: 139
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 139
 - proto: Firelock
   entities:
   - uid: 198
@@ -1010,11 +1076,29 @@ entities:
       pos: 1.5,-1.5
       parent: 1
     - type: Door
-      secondsUntilStateChange: -641.0612
+      secondsUntilStateChange: -700.25665
       state: Opening
-- proto: LockerSteelFilledCF
+- proto: JetpackMiniFilled
   entities:
-  - uid: 75
+  - uid: 142
+    components:
+    - type: Transform
+      parent: 139
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 139
+  - uid: 143
+    components:
+    - type: Transform
+      parent: 139
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 139
+- proto: LockerSteel
+  entities:
+  - uid: 139
     components:
     - type: Transform
       anchored: True
@@ -1024,6 +1108,36 @@ entities:
       accessListsOriginal: []
     - type: Physics
       bodyType: Static
+    - type: EntityStorage
+      air:
+        volume: 200
+        immutable: False
+        temperature: 293.14673
+        moles:
+          Oxygen: 1.8968438
+          Nitrogen: 7.1357465
+    - type: ContainerContainer
+      containers:
+        entity_storage: !type:Container
+          showEnts: False
+          occludes: True
+          ents:
+          - 205
+          - 109
+          - 145
+          - 144
+          - 156
+          - 75
+          - 157
+          - 140
+          - 141
+          - 142
+          - 143
+          - 148
+        paper_label: !type:ContainerSlot
+          showEnts: False
+          occludes: True
+          ent: null
 - proto: MedicalBed
   entities:
   - uid: 20
@@ -1038,6 +1152,26 @@ entities:
     - type: Transform
       pos: 1.5,-1.5
       parent: 1
+- proto: MiningDrill
+  entities:
+  - uid: 156
+    components:
+    - type: Transform
+      parent: 139
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 139
+- proto: NitrogenTankFilled
+  entities:
+  - uid: 144
+    components:
+    - type: Transform
+      parent: 139
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 139
 - proto: OxygenCanister
   entities:
   - uid: 31
@@ -1048,6 +1182,16 @@ entities:
       parent: 1
     - type: Physics
       bodyType: Static
+- proto: OxygenTankFilled
+  entities:
+  - uid: 145
+    components:
+    - type: Transform
+      parent: 139
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 139
 - proto: PinpointerUniversal
   entities:
   - uid: 122
@@ -1244,6 +1388,16 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 5.5,-5.5
       parent: 1
+- proto: ToolboxEmergencyFilled
+  entities:
+  - uid: 109
+    components:
+    - type: Transform
+      parent: 139
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 139
 - proto: VendingMachineWallMedicalRescue
   entities:
   - uid: 76
