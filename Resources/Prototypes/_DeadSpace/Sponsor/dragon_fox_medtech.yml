@@ -292,7 +292,6 @@
   parent: ClothingHeadsetAltFreelancer
   id: ClothingHeadsetMedTech
   name: полноразмерная гарнитура MedTech
-  categories: [ HideSpawnMenu ]
   description: Стильная гарнитура, необходимая для связи с сотрудниками MedTech.
   components:
   - type: ContainerFill

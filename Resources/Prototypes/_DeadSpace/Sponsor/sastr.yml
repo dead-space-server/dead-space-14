@@ -770,7 +770,7 @@
 - type: entity
   parent: Multitool
   id: Multitoolsastr
-  name: мультитул Klecsh //
+  name: мультитул mil.PULSE // gen.1
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
