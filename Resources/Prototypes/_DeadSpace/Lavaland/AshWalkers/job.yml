@@ -43,6 +43,8 @@
   - type: StationJobs
     availableJobs:
       AshWalker: [0, 0]
+    jobList:
+      AshWalker: 0
     extendedAccessThreshold: -1
 
 - type: entity
