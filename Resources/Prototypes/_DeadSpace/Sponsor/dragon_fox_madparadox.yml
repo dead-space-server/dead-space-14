@@ -309,7 +309,7 @@
       head:
       - state: equipped-head
       - state: equipped-head-unshaded
-        shader: unshaded
+        shader: unshaded 
   - type: PointLight
     color: "#f2e492"
     radius: 7
