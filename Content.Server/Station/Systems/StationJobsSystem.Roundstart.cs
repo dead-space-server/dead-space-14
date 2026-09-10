@@ -103,6 +103,8 @@ public sealed partial class StationJobsSystem
         foreach (var station in stations)
         {
             stationJobs.Add(station, GetJobs(station).ToDictionary(x => x.Key, x => x.Value));
+            var available = new StationJobsGetAvailableJobsEvent(station, profiles, stationJobs[station]);
+            RaiseLocalEvent(ref available);
             stationMinimumJobs.Add(
                 station,
                 useRoundStartJobs
@@ -167,18 +169,14 @@ public sealed partial class StationJobsSystem
             }
         }
 
-        // Phase two: each remaining player gets their highest available preference. Shuffle the player order and
-        // equal-priority jobs so contention is still fair, while preserving station-by-station allocation.
-        foreach (var station in stations)
-        {
-            var players = profiles.Keys.ToList();
-            _random.Shuffle(players);
+        // Compare preferences across stations so an optional station job cannot displace a preferred off-station role.
+        var players = profiles.Keys.ToList();
+        _random.Shuffle(players);
 
-            foreach (var player in players)
-            {
-                if (TryPickJob(player, station, stationJobs, playerCandidates, out var job))
-                    AssignPlayer(player, job, station, stationJobs, jobCandidates, playerCandidates, profiles, assigned);
-            }
+        foreach (var player in players)
+        {
+            if (TryPickJob(player, stations, stationJobs, playerCandidates, out var job, out var station))
+                AssignPlayer(player, job, station, stationJobs, jobCandidates, playerCandidates, profiles, assigned);
         }
 
         return assigned;
@@ -226,18 +224,26 @@ public sealed partial class StationJobsSystem
 
     private bool TryPickJob(
         NetUserId player,
-        EntityUid station,
+        IReadOnlyList<EntityUid> stations,
         Dictionary<EntityUid, Dictionary<ProtoId<JobPrototype>, int?>> stationJobs,
         Dictionary<NetUserId, Dictionary<JobPriority, List<ProtoId<JobPrototype>>>> playerCandidates,
-        out ProtoId<JobPrototype> job)
+        out ProtoId<JobPrototype> job,
+        out EntityUid station)
     {
         for (var priority = JobPriority.High; priority > JobPriority.Never; priority--)
         {
-            if (TryPickJob(player, station, priority, stationJobs, playerCandidates, out job))
+            foreach (var candidate in stations)
+            {
+                if (!TryPickJob(player, candidate, priority, stationJobs, playerCandidates, out job))
+                    continue;
+
+                station = candidate;
                 return true;
+            }
         }
 
         job = default;
+        station = default;
         return false;
     }
 

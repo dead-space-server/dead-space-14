@@ -1,0 +1,57 @@
+- type: job
+  id: AshWalker
+  name: job-name-ash-walker
+  description: job-description-ash-walker
+  playTimeTracker: JobAshWalker
+  jobEntity: MobAshWalker
+  icon: JobIconAshWalker
+  supervisors: job-supervisors-ash-walker
+  canBeAntag: false
+  applyTraits: false
+  overrideConsoleVisibility: false
+
+- type: playTimeTracker
+  id: JobAshWalker
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconAshWalker
+  icon:
+    sprite: _DeadSpace/Lavaland/AshWalkers/egg.rsi
+    state: large_egg
+  jobName: job-name-ash-walker
+  allowSelection: false
+
+- type: department
+  id: Lavaland
+  name: department-Lavaland
+  description: department-Lavaland-description
+  color: "#b86c39"
+  weight: -20
+  roles:
+  - AshWalker
+
+- type: entity
+  id: AshWalkerStation
+  parent: [BaseStation, BaseStationJobsSpawning]
+  name: Lavaland
+  categories: [HideSpawnMenu]
+  components:
+  - type: AshWalkerStation
+  - type: StationSpawning
+    allowRandomSpawn: false
+  - type: StationJobs
+    availableJobs:
+      AshWalker: [0, 0]
+    jobList:
+      AshWalker: 0
+    extendedAccessThreshold: -1
+
+- type: entity
+  id: MindRoleAshWalker
+  parent: MindRoleJob
+  name: Ash Walker Role
+  components:
+  - type: JobRole
+  - type: MindRole
+    jobPrototype: AshWalker

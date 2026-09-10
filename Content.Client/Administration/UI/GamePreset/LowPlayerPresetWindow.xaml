@@ -1,0 +1,12 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               Title="{Loc game-preset-low-player-window-title}"
+               MinSize="400 300"
+               SetSize="500 400">
+    <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="8">
+        <Label Text="{Loc game-preset-low-player-window-description}" StyleClasses="LabelSubText" />
+        <ScrollContainer VerticalExpand="True">
+            <BoxContainer Name="PresetList" Orientation="Vertical" SeparationOverride="2" />
+        </ScrollContainer>
+        <Button Name="SaveButton" Text="{Loc game-preset-save-button}" />
+    </BoxContainer>
+</DefaultWindow>

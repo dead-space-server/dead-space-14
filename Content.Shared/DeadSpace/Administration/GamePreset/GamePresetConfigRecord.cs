@@ -17,4 +17,7 @@ public sealed class GamePresetConfigRecord
     public bool PreventRepeatMode { get; set; }
     public bool CheckPlayerLimit { get; set; }
     public string WhitelistModesJson { get; set; } = string.Empty;
+    public bool EnableLowPlayerPreset { get; set; }
+    public int LowPlayerThreshold { get; set; }
+    public string? LowPlayerPresetId { get; set; }
 }

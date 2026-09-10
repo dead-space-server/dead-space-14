@@ -945,9 +945,21 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("INTEGER")
                         .HasColumnName("disable_ooc_during_vote");
 
+                    b.Property<bool>("EnableLowPlayerPreset")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("enable_low_player_preset");
+
                     b.Property<bool>("Enabled")
                         .HasColumnType("INTEGER")
                         .HasColumnName("enabled");
+
+                    b.Property<string>("LowPlayerPresetId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("low_player_preset_id");
+
+                    b.Property<int>("LowPlayerThreshold")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("low_player_threshold");
 
                     b.Property<int>("MaxRdmRow")
                         .HasColumnType("INTEGER")

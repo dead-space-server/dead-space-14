@@ -102,3 +102,11 @@ game-preset-settings-prevent-repeat-tooltip =
     не будет участвовать в следующем.
 
 game-preset-settings-whitelist-tooltip = Режимы из этого списка будут игнорировать эту настройку.
+
+game-preset-settings-enable-low-player = Запускать пресет при лоупопе
+game-preset-settings-enable-low-player-tooltip = Если игроков на сервере не больше указанного числа, будет запущен выбранный пресет вместо обычного голосования.
+game-preset-settings-select-low-player-preset = Выбрать пресет
+game-preset-settings-no-preset-selected = Не выбрано
+game-preset-low-player-window-title = Выбор пресета для лоупопа
+game-preset-low-player-window-description = Выберите пресет, который будет запускаться в лоупоп.
+game-preset-low-player-preset = Запущен пресет для лоупопа: { $preset }

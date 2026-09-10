@@ -427,7 +427,10 @@ namespace Content.Server.Database
                 DisableOocDuringVote = entity.DisableOocDuringVote,
                 PreventRepeatMode = entity.PreventRepeatMode,
                 CheckPlayerLimit = entity.CheckPlayerLimit,
-                WhitelistModesJson = entity.WhitelistModesJson
+                WhitelistModesJson = entity.WhitelistModesJson,
+                EnableLowPlayerPreset = entity.EnableLowPlayerPreset,
+                LowPlayerThreshold = entity.LowPlayerThreshold,
+                LowPlayerPresetId = entity.LowPlayerPresetId
             };
         }
 
@@ -452,6 +455,9 @@ namespace Content.Server.Database
             entity.PreventRepeatMode = config.PreventRepeatMode;
             entity.CheckPlayerLimit = config.CheckPlayerLimit;
             entity.WhitelistModesJson = config.WhitelistModesJson;
+            entity.EnableLowPlayerPreset = config.EnableLowPlayerPreset;
+            entity.LowPlayerThreshold = config.LowPlayerThreshold;
+            entity.LowPlayerPresetId = config.LowPlayerPresetId;
             await db.DbContext.SaveChangesAsync(cancel);
         }
         //DS14-End

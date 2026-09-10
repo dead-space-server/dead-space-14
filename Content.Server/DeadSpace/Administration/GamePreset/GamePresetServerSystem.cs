@@ -59,6 +59,9 @@ public sealed class GamePresetServerSystem : EntitySystem
     private bool _oocStateChangedExternally;
     private bool _ourOocChange;
     private bool _currentPresetProcessed;
+    private bool _enableLowPlayerPreset;
+    private int _lowPlayerThreshold;
+    private string? _lowPlayerPresetId;
 
     private readonly List<string> _pendingAlerts = new();
     private readonly HashSet<string> _alertedKeys = new();
@@ -115,6 +118,9 @@ public sealed class GamePresetServerSystem : EntitySystem
                 _checkPlayerLimit = record.CheckPlayerLimit;
                 _rdmStreak = 0;
                 _currentPresetProcessed = false;
+                _enableLowPlayerPreset = record.EnableLowPlayerPreset;
+                _lowPlayerThreshold = record.LowPlayerThreshold;
+                _lowPlayerPresetId = record.LowPlayerPresetId;
 
                 if (!string.IsNullOrEmpty(record.CustomPresetsJson))
                 {
@@ -161,7 +167,10 @@ public sealed class GamePresetServerSystem : EntitySystem
                 PreventRepeatMode = _preventRepeatMode,
                 CheckPlayerLimit = _checkPlayerLimit,
                 CustomPresetsJson = JsonSerializer.Serialize(_customPresets),
-                WhitelistModesJson = JsonSerializer.Serialize(_whitelistModeIds)
+                WhitelistModesJson = JsonSerializer.Serialize(_whitelistModeIds),
+                EnableLowPlayerPreset = _enableLowPlayerPreset,
+                LowPlayerThreshold = _lowPlayerThreshold,
+                LowPlayerPresetId = _lowPlayerPresetId,
             };
             await _db.UpsertGamePresetConfigAsync(record);
         }
@@ -251,6 +260,9 @@ public sealed class GamePresetServerSystem : EntitySystem
         _disableOocDuringVote = msg.DisableOocDuringVote;
         _preventRepeatMode = msg.PreventRepeatMode;
         _checkPlayerLimit = msg.CheckPlayerLimit;
+        _enableLowPlayerPreset = msg.EnableLowPlayerPreset;
+        _lowPlayerThreshold = msg.LowPlayerThreshold;
+        _lowPlayerPresetId = msg.LowPlayerPresetId;
         _whitelistModeIds = msg.WhitelistModeIds ?? new List<string>();
         SendUpdate();
         _ = SaveToDatabaseAsync();
@@ -346,6 +358,24 @@ public sealed class GamePresetServerSystem : EntitySystem
         {
             _chatManager.SendAdminAlert(Loc.GetString("game-preset-vote-no-presets"));
             return;
+        }
+
+        if (_enableLowPlayerPreset &&
+            _playerManager.PlayerCount <= _lowPlayerThreshold &&
+            !string.IsNullOrEmpty(_lowPlayerPresetId))
+        {
+            var lowPresetId = _lowPlayerPresetId;
+            _chatManager.SendAdminAlert(
+                Loc.GetString("game-preset-low-player-preset",
+                    ("preset", GetPresetDisplayName(lowPresetId))));
+
+            if (ForceVoteForPreset(lowPresetId, manual: false))
+            {
+                _currentPresetProcessed = true;
+                _ = SaveToDatabaseAsync();
+                SendUpdate();
+                return;
+            }
         }
 
         if (_currentPresetProcessed)
@@ -1182,7 +1212,10 @@ public sealed class GamePresetServerSystem : EntitySystem
             _ticker.RunLevel == GameRunLevel.PreRoundLobby,
             _preventRepeatMode,
             _checkPlayerLimit,
-            _whitelistModeIds);
+            _whitelistModeIds,
+            _enableLowPlayerPreset,
+            _lowPlayerThreshold,
+            _lowPlayerPresetId);
 
         if (session != null)
             RaiseNetworkEvent(response, session);

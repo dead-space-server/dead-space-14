@@ -1,7 +1,7 @@
 <DefaultWindow xmlns="https://spacestation14.io"
                Title="{Loc game-preset-settings-window-title}"
-               MinSize="320 250"
-               SetSize="420 300">
+               MinSize="420 380"
+               SetSize="420 380">
     <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="8">
         <CheckBox Name="EnableMaxRdmRowCheckBox" Text="{Loc game-preset-settings-enable-max-rdm-row}" ToolTip="{Loc game-preset-rdm-counter-tooltip}" />
         <SpinBox Name="MaxRdmRowSpinBox" Value="2" MinWidth="60" HorizontalExpand="True" />
@@ -15,6 +15,23 @@
             <Button Name="WhitelistButton" Text="{Loc game-preset-settings-whitelist}" ToolTip="{Loc game-preset-settings-whitelist-tooltip}" />
         </BoxContainer>
         <CheckBox Name="CheckPlayerLimitCheckBox" Text="{Loc game-preset-settings-check-player-limit}" ToolTip="{Loc game-preset-settings-check-player-limit-tooltip}" />
+        <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+            <CheckBox Name="EnableLowPlayerCheckBox"
+                      Text="{Loc game-preset-settings-enable-low-player}"
+                      ToolTip="{Loc game-preset-settings-enable-low-player-tooltip}"
+                      HorizontalExpand="True" />
+            <SpinBox Name="LowPlayerThresholdSpinBox"
+                     Value="0"
+                     MinWidth="60"
+                     HorizontalExpand="True" />
+        </BoxContainer>
+        <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+            <Button Name="SelectLowPlayerPresetButton"
+                    Text="{Loc game-preset-settings-select-low-player-preset}" />
+            <Label Name="SelectedLowPlayerPresetLabel"
+                   Text="{Loc game-preset-settings-no-preset-selected}"
+                   HorizontalExpand="True" />
+        </BoxContainer>
         <Button Name="SaveSettingsButton" Text="{Loc game-preset-save-button}" HorizontalExpand="True" />
     </BoxContainer>
 </DefaultWindow>

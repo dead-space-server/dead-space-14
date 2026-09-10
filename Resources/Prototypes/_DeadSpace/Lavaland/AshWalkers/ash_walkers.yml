@@ -172,8 +172,10 @@
     rules: ghost-role-information-ash-walker-rules
     makeSentient: false
     reregister: false
+    job: AshWalker
     mindRoles:
     - MindRoleGhostRoleTeamAntagonist
+    - MindRoleAshWalker
   - type: GhostRoleMobSpawner
     prototype: MobAshWalker
     availableTakeovers: 1

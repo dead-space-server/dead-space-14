@@ -1,5 +1,4 @@
 using Content.Server.Body.Components;
-using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Events;
 using Content.Shared.Body.Components;
@@ -20,7 +19,6 @@ public sealed class AshWalkerSystem : EntitySystem
 
         SubscribeLocalEvent<AshWalkerComponent, ComponentInit>(OnInit);
         SubscribeLocalEvent<AshWalkerEggComponent, MapInitEvent>(OnEggMapInit);
-        SubscribeLocalEvent<AshWalkerEggComponent, GhostRoleAvailabilityEvent>(OnRoleAvailability);
         SubscribeLocalEvent<AshWalkerTribeMemberComponent, GhostRoleSpawnerUsedEvent>(OnSpawnerUsed);
         Subs.CVar(_cfg, CCCCVars.AshWalkersEnabled, _ => _ghostRoles.UpdateAllEui());
     }
@@ -34,15 +32,6 @@ public sealed class AshWalkerSystem : EntitySystem
     private void OnEggMapInit(Entity<AshWalkerEggComponent> ent, ref MapInitEvent args)
     {
         ent.Comp.HomeMap = Transform(ent).MapUid;
-    }
-
-    private void OnRoleAvailability(Entity<AshWalkerEggComponent> ent, ref GhostRoleAvailabilityEvent args)
-    {
-        if (!_cfg.GetCVar(CCCCVars.AshWalkersEnabled) ||
-            HasComp<AshWalkerIncubatingEggComponent>(ent) ||
-            Transform(ent).MapUid != ent.Comp.HomeMap ||
-            !HasComp<LavalandMapComponent>(Transform(ent).MapUid))
-            args.Cancel();
     }
 
     private void OnSpawnerUsed(Entity<AshWalkerTribeMemberComponent> ent, ref GhostRoleSpawnerUsedEvent args)
