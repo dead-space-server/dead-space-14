@@ -3,8 +3,8 @@ meta:
   category: Grid
   engineVersion: 276.0.0
   forkId: dsfobos
-  forkVersion: 0e537a4fba8972aaf2e32139b8cee8016626f77d
-  time: 08/24/2026 03:46:03
+  forkVersion: 09d881ad2ddcaf41085f266d6f216dac0cfd9539
+  time: 09/04/2026 20:43:23
   entityCount: 1860
 maps: []
 grids:
@@ -45,7 +45,6 @@ entities:
       name: NT-Consonance
     - type: Transform
       pos: -0.46351686,-0.53125
-      parent: invalid
     - type: MapGrid
       chunks:
         0,0:
@@ -10836,6 +10835,8 @@ entities:
       rot: 3.141592653589793 rad
       pos: 0.5,14.5
       parent: 1
+    - type: Anchorable
+      flags: Anchorable
 - proto: ShuttleWindow
   entities:
   - uid: 257
