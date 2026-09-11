@@ -161,6 +161,11 @@ public sealed class CentCommTransferTest
             // Advance only the preparation deadline; the actual transition uses the normal FTL system.
             transfer.StartAt = server.Timing.CurTime;
             system.Update(0);
+            var starting = em.GetComponent<FTLComponent>(map.Grid);
+            Assert.That(starting.State, Is.EqualTo(FTLState.Starting));
+            Assert.That(starting.StartupTime, Is.EqualTo(server.System<ShuttleSystem>().DefaultStartupTime));
+            Assert.That(server.Transform(map.Grid).MapUid, Is.EqualTo(map.MapUid));
+            starting.StateTime = StartEndTime.FromCurTime(server.Timing, TimeSpan.Zero);
         });
 
         await pair.RunTicksSync(3);

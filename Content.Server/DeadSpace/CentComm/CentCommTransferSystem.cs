@@ -148,6 +148,7 @@ public sealed class CentCommTransferSystem : EntitySystem
         var announcement = Loc.GetString("centcomm-transfer-announcement");
         _chat.DispatchAdminFilteredAnnouncement(_ruleStation.GetEventPlayers(grid), announcement,
             sender: Loc.GetString("chat-manager-sender-announcement"),
+            colorOverride: Color.FromHex("#1d8bad"),
             announcementSound: new SoundPathSpecifier("/Audio/Misc/gamma.ogg"),
             originalMessage: announcement, voice: "Announcer");
         _log.Add(LogType.AdminMessage, LogImpact.High,
@@ -207,7 +208,7 @@ public sealed class CentCommTransferSystem : EntitySystem
             }
 
             transfer.JumpStarted = true;
-            _shuttle.FTLToCoordinates(grid, shuttle, transfer.Origin, transfer.Rotation, startupTime: 0f);
+            _shuttle.FTLToCoordinates(grid, shuttle, transfer.Origin, transfer.Rotation);
             StateChanged?.Invoke();
         }
 
