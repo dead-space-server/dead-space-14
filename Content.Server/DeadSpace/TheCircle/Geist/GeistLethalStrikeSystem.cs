@@ -17,6 +17,7 @@ public sealed class GeistLethalStrikeSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<GeistLethalStrikeComponent, UseInHandEvent>(OnUseInHand);
+        SubscribeLocalEvent<GeistLethalStrikeComponent, GetMeleeDamageEvent>(OnGetMeleeDamage);
         SubscribeLocalEvent<GeistLethalStrikeComponent, MeleeHitEvent>(OnMeleeHit);
     }
 
@@ -41,6 +42,12 @@ public sealed class GeistLethalStrikeSystem : EntitySystem
 
         ent.Comp.Armed = true;
         _popup.PopupEntity(Loc.GetString("geist-lethal-strike-armed"), args.User, args.User, PopupType.MediumCaution);
+    }
+
+    private void OnGetMeleeDamage(Entity<GeistLethalStrikeComponent> ent, ref GetMeleeDamageEvent args)
+    {
+        if (ent.Comp.Armed && ent.Comp.IgnoreResistances)
+            args.ResistanceBypass = true;
     }
 
     private void OnMeleeHit(Entity<GeistLethalStrikeComponent> ent, ref MeleeHitEvent args)

@@ -57,3 +57,5 @@ thecircle-list-start = Члены ударного отряда "Круг" бы�
 thecircle-initial-name = [color=#5e9cff]{ $name }[/color] был одним из террористов "Круг" / [color=gray]{ $user }[/color]
 thecircle-crewmajor = [color=green]Победа экипажа[/color]
 thecircle-opsmajor = [color=#5e9cff]Успех отряда "Круг"[/color]
+circle-fighter-introduction = ОПЕРАЦИЯ «НОВОЕ СБЛИЖЕНИЕ»
+    Боец Круга, выполните поставленную задачу и обеспечьте победу отряда.

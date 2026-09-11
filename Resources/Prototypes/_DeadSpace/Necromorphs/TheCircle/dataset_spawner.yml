@@ -31,6 +31,14 @@
       time: 72000 
     raffle:
       settings: default
+  - type: GhostRoleIntroduction
+    text: circle-fighter-introduction
+    sound:
+      path: /Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg
+    duration: 9
+    fadeFromBlackDuration: 3
+    textDelay: 0.8
+    charactersPerSecond: 26
   - type: Sprite
     sprite: Markers/jobs.rsi
     layers:
@@ -63,6 +71,14 @@
     - !type:RoleTimeRequirement
       role: JobAtmosphericTechnician
       time: 90000 # 25 hours
+  - type: GhostRoleIntroduction
+    text: circle-fighter-introduction
+    sound:
+      path: /Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg
+    duration: 9
+    fadeFromBlackDuration: 3
+    textDelay: 0.8
+    charactersPerSecond: 26
   - type: Sprite
     sprite: Markers/jobs.rsi
     layers:
@@ -88,6 +104,14 @@
     - !type:DepartmentTimeRequirement
       department: Security
       time: 216000 # 60 hours
+  - type: GhostRoleIntroduction
+    text: circle-fighter-introduction
+    sound:
+      path: /Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg
+    duration: 9
+    fadeFromBlackDuration: 3
+    textDelay: 0.8
+    charactersPerSecond: 26
   - type: Sprite
     sprite: Markers/jobs.rsi
     layers:
@@ -113,6 +137,14 @@
     - !type:DepartmentTimeRequirement
       department: Security
       time: 216000 # 60 hours
+  - type: GhostRoleIntroduction
+    text: circle-fighter-introduction
+    sound:
+      path: /Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg
+    duration: 9
+    fadeFromBlackDuration: 3
+    textDelay: 0.8
+    charactersPerSecond: 26
   - type: Sprite
     sprite: Markers/jobs.rsi
     layers:
@@ -141,6 +173,14 @@
     - !type:RoleTimeRequirement
       role: JobChemist
       time: 162000 # 45 hours
+  - type: GhostRoleIntroduction
+    text: circle-fighter-introduction
+    sound:
+      path: /Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg
+    duration: 9
+    fadeFromBlackDuration: 3
+    textDelay: 0.8
+    charactersPerSecond: 26
   - type: Sprite
     sprite: Markers/jobs.rsi
     layers:
@@ -172,6 +212,14 @@
     - !type:DepartmentTimeRequirement
       department: Engineering
       time: 216000 # 60 hours
+  - type: GhostRoleIntroduction
+    text: circle-fighter-introduction
+    sound:
+      path: /Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg
+    duration: 9
+    fadeFromBlackDuration: 3
+    textDelay: 0.8
+    charactersPerSecond: 26
   - type: Sprite
     sprite: Markers/jobs.rsi
     layers:
@@ -194,6 +242,14 @@
     - !type:DepartmentTimeRequirement
       department: Security
       time: 216000 # 60 hours
+  - type: GhostRoleIntroduction
+    text: circle-fighter-introduction
+    sound:
+      path: /Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg
+    duration: 9
+    fadeFromBlackDuration: 3
+    textDelay: 0.8
+    charactersPerSecond: 26
   - type: Sprite
     sprite: Markers/jobs.rsi
     layers:
