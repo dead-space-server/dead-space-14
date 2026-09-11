@@ -33,7 +33,7 @@ public sealed partial class LegionComponent : Component
 [RegisterComponent]
 public sealed partial class LegionKnifeComponent : Component
 {
-    [DataField] public float Vampirism = 0.4f;
+    [DataField] public float Vampirism = 1.1f;
     [DataField] public float BloodRestore = 25f;
     [DataField] public float SecondPerkVampirism = 0.1f;
     [DataField] public TimeSpan SecondHitDamageDuration = TimeSpan.FromSeconds(5);

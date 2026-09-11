@@ -81,6 +81,7 @@
       description: antag-gear-selector-geist-description
       spritePrototype: ClothingHeadHelmetUnitologyGeist
       startingGear: TheCircleGeistGear
+      roleLoadout: RoleTheCircleShockTrooper
       briefing:
         text: antag-gear-selector-geist-briefing
         color: CornflowerBlue

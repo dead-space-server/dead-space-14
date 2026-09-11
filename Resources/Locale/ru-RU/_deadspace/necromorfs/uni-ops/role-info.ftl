@@ -39,6 +39,7 @@ roles-antag-thecircle-shock-trooper-start =
 
 antag-gear-selector-geist-name = Гейст
 antag-gear-selector-geist-description = Скрытный шок-трупер с прежним снаряжением, невидимостью и ловушками.
+loadout-group-the-circle-geist-style = Стиль снаряжения Гейста
 antag-gear-selector-legion-name = Легионер
 antag-gear-selector-legion-description = Быстрый боец без огнестрела, вооружённый вампирическим ножом и способностью «Бешенство».
 antag-gear-selector-survival-name = Отсроченный шок

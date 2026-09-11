@@ -181,6 +181,15 @@
     id: UnitologyGeistIDCard
 
 - type: entity
+  parent: UnitologyPDA
+  id: UnitologyLegionPDA
+  suffix: Легионер
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Pda
+    id: UnitologyLegionIDCard
+
+- type: entity
   parent: SyndicateIDCard
   id: UnitologyIDCard
   description: ID-карта, которая может воровать доступы с другой ID-карты.
@@ -291,6 +300,16 @@
     - SyndicateAgent
     - NuclearOperative
 
+- type: entity
+  parent: UnitologyGeistIDCard
+  id: UnitologyLegionIDCard
+  name: ID-карта Легионера
+  suffix: Легионер
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IdCard
+    jobIcon: JobIconUnitologyLegion
+
 - type: jobIcon
   parent: JobIcon
   id: JobIconUnitology
@@ -344,6 +363,14 @@
   icon:
     sprite: /Textures/_DeadSpace/Necromorfs/TheCircle/Mics/etc/icon.rsi
     state: circle_geist
+  allowSelection: false
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconUnitologyLegion
+  icon:
+    sprite: /Textures/_DeadSpace/Necromorfs/TheCircle/Mics/etc/icon.rsi
+    state: circle_legion
   allowSelection: false
 
 ## РПС
@@ -679,6 +706,12 @@
   - type: MovementSpeedModifier
     baseWalkSpeed: 4.5
     baseSprintSpeed: 4.5
+  - type: MovementSound
+    sound:
+      path: /Audio/_DeadSpace/Necromorfs/TheCircle/remote-car-movement.ogg
+      params:
+        loop: true
+        maxDistance: 12
   - type: Tag
     tags:
     - DoorBumpOpener
@@ -715,3 +748,26 @@
 
 - type: Tag
   id: TheCircleRemoteCar
+
+- type: entity
+  parent: ClothingNeckUnitologyGeistMantle
+  id: ClothingNeckUnitologyGeistMantleNew
+  name: порваный плащ нового образца
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Necromorfs/TheCircle/Gear/accessories/geist-mantle-new.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Necromorfs/TheCircle/Gear/accessories/geist-mantle-new.rsi
+
+- type: entity
+  parent: ClothingMaskGasUnitology
+  id: ClothingUnitologyLegionGasMask
+  name: маска Легионера
+  description: Тихо ... в подъезде. Анонимно.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Necromorfs/TheCircle/Gear/accessories/legion-hood.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Necromorfs/TheCircle/Gear/accessories/legion-hood.rsi
+  - type: IngestionBlocker
+    enabled: false

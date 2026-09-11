@@ -10,9 +10,12 @@ using Content.Server.GameTicking.Rules;
 using Content.Server.Humanoid;
 using Content.Server.Mind;
 using Content.Server.Preferences.Managers;
+using Content.Shared.Clothing;
 using Content.Shared.DeadSpace.AntagGearSelector;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Preferences;
+using Content.Shared.Preferences.Loadouts;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -23,6 +26,7 @@ public sealed class AntagGearSelectorSystem : EntitySystem
 {
     [Dependency] private readonly EuiManager _eui = default!;
     [Dependency] private readonly StationSpawningSystem _stationSpawning = default!;
+    [Dependency] private readonly LoadoutSystem _loadout = default!;
     [Dependency] private readonly AntagSelectionSystem _antagSelection = default!;
     [Dependency] private readonly RandomMetadataSystem _randomMetadata = default!;
     [Dependency] private readonly MetaDataSystem _metadata = default!;
@@ -32,6 +36,7 @@ public sealed class AntagGearSelectorSystem : EntitySystem
     [Dependency] private readonly IServerPreferencesManager _preferences = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IPrototypeManager _prototypes = default!;
 
     private readonly HashSet<EntityUid> _selected = new();
     private readonly Dictionary<EntityUid, PendingSelection> _pending = new();
@@ -123,9 +128,9 @@ public sealed class AntagGearSelectorSystem : EntitySystem
             return false;
 
         var gear = selector.Gear[gearIndex];
-        ApplyEntry(body, gear);
+        ApplyEntry(body, gear, session);
         if (gear.Perks.Count > 0)
-            ApplyEntry(body, gear.Perks[perkIndex]);
+            ApplyEntry(body, gear.Perks[perkIndex], session);
         if (gear.Briefing is { } briefing)
             _antagSelection.SendBriefing(session, briefing);
         _selected.Add(target);
@@ -175,7 +180,7 @@ public sealed class AntagGearSelectorSystem : EntitySystem
         return true;
     }
 
-    private void ApplyEntry(EntityUid target, AntagGearSelectorEntry entry)
+    private void ApplyEntry(EntityUid target, AntagGearSelectorEntry entry, ICommonSession session)
     {
         EntityManager.AddComponents(target, entry.Components);
         if (TryComp<RandomMetadataComponent>(target, out var random))
@@ -188,6 +193,16 @@ public sealed class AntagGearSelectorSystem : EntitySystem
         }
         if (entry.StartingGear is { } gear)
             _stationSpawning.EquipStartingGear(target, gear, raiseEvent: false);
+
+        if (entry.RoleLoadout is not { } roleLoadout ||
+            !_prototypes.TryIndex(roleLoadout, out RoleLoadoutPrototype? roleLoadoutPrototype))
+            return;
+
+        var profile = _preferences.GetPreferences(session.UserId).SelectedCharacter as HumanoidCharacterProfile;
+        if (profile != null && profile.Loadouts.TryGetValue(roleLoadout, out var selectedLoadout))
+            _loadout.Equip(target, null, selectedLoadout, roleLoadoutPrototype);
+        else
+            _loadout.Equip(target, null, [roleLoadout]);
     }
 
     private sealed record PendingSelection(
