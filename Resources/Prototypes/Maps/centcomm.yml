@@ -8,7 +8,10 @@
       stationProto: NanotrasenCentralCommand
       components:
         - type: StationNameSetup
-          mapNameTemplate: '{0} Central Command {1}'
-          nameGenerator:
-            !type:NanotrasenNameGenerator
-            prefixCreator: 'TG'
+          # DS14-start
+          # mapNameTemplate: '{0} Central Command {1}'
+          # nameGenerator:
+          #   !type:NanotrasenNameGenerator
+          #   prefixCreator: 'TG'
+          mapNameTemplate: 'NT-14-Indigo "Секторальный Штаб ЦК"'
+          # DS14-end
