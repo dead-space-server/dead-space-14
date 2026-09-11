@@ -30,7 +30,7 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
         UpdateSprite((uid, component, Comp<SpriteComponent>(uid)));
     }
 
-    private void UpdateSprite(Entity<HumanoidAppearanceComponent, SpriteComponent> entity)
+    public void UpdateSprite(Entity<HumanoidAppearanceComponent, SpriteComponent> entity) // DeadSpace14 ChameleonAlive
     {
         UpdateLayers(entity);
         ApplyMarkingSet(entity);
