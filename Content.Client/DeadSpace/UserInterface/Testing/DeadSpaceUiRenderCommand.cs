@@ -10,6 +10,9 @@ using Content.Client.Administration.UI.Tabs.AdminTab;
 using Content.Client.Cargo.UI;
 using Content.Client.Chemistry.UI;
 using Content.Client.Communications.UI;
+using Content.Client.DeadSpace.CentComm;
+using Content.Shared.DeadSpace.CentComm;
+using Content.Shared.Weather;
 using Content.Client.Communications.UI.Widgets;
 using Content.Client.DeadSpace.Photocopier.UI;
 using Content.Client.DeadSpace.Stylesheets;
@@ -72,7 +75,7 @@ public sealed class DeadSpaceUiRenderCommand : IConsoleCommand
 
     public string Command => "ds14_ui_render";
     public string Description => "Render a deterministic DS14 UI fixture to user data and quit.";
-    public string Help => "ds14_ui_render <palette|dropdowns|list-container|vending|smart-fridge|store|lathe|reagent-dispenser|cargo|atmos-power|pda|pda-overflow|photocopier|admin|ahelp|debug-console|appearance-traits|server-list|late-join|role-priorities|options-general|options-footer|ert-admin|ert-admin-pending|ert-admin-manual|ert-admin-codes|fax|communications|chat> [output-name]";
+    public string Help => "ds14_ui_render <palette|dropdowns|list-container|vending|smart-fridge|store|lathe|reagent-dispenser|cargo|atmos-power|pda|pda-overflow|photocopier|admin|ahelp|debug-console|appearance-traits|server-list|late-join|role-priorities|options-general|options-footer|ert-admin|ert-admin-pending|ert-admin-manual|ert-admin-codes|fax|communications|centcomm-transfer|chat> [output-name]";
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
@@ -133,9 +136,24 @@ public sealed class DeadSpaceUiRenderCommand : IConsoleCommand
             "ert-admin-codes" => CreateErtAdminFixture(mainTab: 1, requestTab: 0),
             "fax" => CreateFaxFixture(),
             "communications" => CreateCommunicationsFixture(),
+            "centcomm-transfer" => CreateCentCommTransferFixture(),
             "chat" => CreateChatFixture(),
             _ => throw new ArgumentException($"Unknown fixture '{fixture}'.", nameof(fixture)),
         };
+    }
+
+    private static BaseWindow CreateCentCommTransferFixture()
+    {
+        var prototypes = IoCManager.Resolve<IPrototypeManager>();
+        var window = new CentCommTransferWindow();
+        window.SetState(new CentCommTransferState(
+            prototypes.EnumeratePrototypes<Content.Client.Parallax.Data.ParallaxPrototype>().Select(proto => proto.ID).Order().ToArray(),
+            prototypes.EnumeratePrototypes<WeatherPrototype>().Select(proto => proto.ID).Order().ToArray(),
+            true, Loc.GetString("centcomm-transfer-ready")));
+        window.FindControl<OptionButton>("TemperatureSelector").SelectId((int) CentCommTemperature.Custom);
+        window.FindControl<BoxContainer>("CustomTemperatureRow").Visible = true;
+        window.FindControl<FloatSpinBox>("CelsiusInput").Value = -20;
+        return window;
     }
 
     private static BaseWindow CreateVendingFixture()
