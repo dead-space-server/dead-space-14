@@ -154,7 +154,7 @@
   name: food-sequence-content-chicken
   sprites:
   - sprite: Objects/Consumable/Food/burger_sequence.rsi
-    state: chicken-fried
+    state: bird-cooked
   tags:
   - Cooked
   - Meat
