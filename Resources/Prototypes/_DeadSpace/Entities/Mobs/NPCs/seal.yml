@@ -1,0 +1,252 @@
+- type: entity
+  parent: SimpleMobBase
+  id: MobSeal
+  name: seal
+  description: A plump seal with a very important expression. You get the feeling that these are agents of Central Command...
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Mobs/Animals/Seal/seal.rsi
+    layers:
+    - state: seal_idle
+      map: ["enum.DamageStateVisualLayers.Base", "movement"]
+    - map: ["suitstorage"]
+      visible: false
+    - map: ["mask"]
+      visible: false
+    - map: ["head"]
+      visible: false
+  - type: SpriteMovement
+    equipmentAnimationLayer: movement
+    movementLayers:
+      movement:
+        state: seal_walk
+    noMovementLayers:
+      movement:
+        state: seal_idle
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: seal_idle
+      Critical:
+        Base: seal_dead
+      Dead:
+        Base: seal_dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 1.5
+    baseSprintSpeed: 3
+  - type: CarrySize
+    size: Large
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.4
+        density: 150
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      100: Critical
+      150: Dead
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/Effects/bite.ogg
+    damage:
+      types:
+        Piercing: 5
+  - type: Butcherable
+    spawned:
+    - id: FoodMeat
+      amount: 3
+  - type: InteractionPopup
+    successChance: 1
+    interactSuccessString: petting-success-seal
+    interactFailureString: petting-failure-generic
+    interactSuccessSpawn: EffectHearts
+    interactSuccessSound:
+      path: /Audio/_LW/Plushie/frfrfr.ogg
+  - type: Inventory
+    speciesId: seal
+    templateId: seal
+  - type: InventorySlots
+  - type: Strippable
+  - type: UserInterface
+    interfaces:
+      enum.StrippingUiKey.Key:
+        type: StrippableBoundUserInterface
+  - type: SentienceTarget
+    flavorKind: station-event-random-sentience-flavor-organic
+  - type: Language
+    knownLanguages:
+    - GeneralLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage
+  - type: Grammar
+    attributes:
+      gender: male
+  - type: Tag
+    tags:
+    - CannotSuicide
+    - VimPilot
+
+- type: entity
+  parent: MobSeal
+  id: MobSealPup
+  name: seal pup
+  description: A small, chubby bundle of happiness. It will grow into an excellent seal!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Mobs/Animals/Seal/pup.rsi
+    layers:
+    - state: lilseal_idle
+      map: ["enum.DamageStateVisualLayers.Base", "movement"]
+    - map: ["suitstorage"]
+      visible: false
+    - map: ["mask"]
+      visible: false
+  - type: SpriteMovement
+    movementLayers:
+      movement:
+        state: lilseal_walk
+    noMovementLayers:
+      movement:
+        state: lilseal_idle
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: lilseal_idle
+      Critical:
+        Base: lilseal_dead
+      Dead:
+        Base: lilseal_dead
+  - type: CarrySize
+    size: Small
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 100
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      50: Critical
+      100: Dead
+  - type: Butcherable
+    spawned:
+    - id: FoodMeat
+      amount: 1
+  - type: Inventory
+    speciesId: sealPup
+    templateId: sealPup
+
+- type: entity
+  parent: MobSeal
+  id: MobSealDeathsquad
+  name: strange seal
+  description: An extremely strange seal... Wait, are those implants?...
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Mobs/Animals/Seal/deathsquad.rsi
+    layers:
+    - state: DQseal_idle
+      map: ["enum.DamageStateVisualLayers.Base", "movement"]
+    - map: ["suitstorage"]
+      visible: false
+    - map: ["mask"]
+      visible: false
+    - map: ["head"]
+      visible: false
+  - type: SpriteMovement
+    movementLayers:
+      movement:
+        state: DQseal_walk
+    noMovementLayers:
+      movement:
+        state: DQseal_idle
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: DQseal_idle
+      Critical:
+        Base: DQseal_dead
+      Dead:
+        Base: DQseal_dead
+
+- type: entity
+  parent: MobSeal
+  id: MobSealCargo
+  suffix: Cargo, Ghost role
+  components:
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: ghost-role-information-seal-name
+    description: ghost-role-information-seal-description
+    rules: ghost-role-information-nonantagonist-rules
+  - type: GhostTakeoverAvailable
+
+- type: entity
+  parent: MobSealPup
+  id: MobSealPupCargo
+  suffix: Cargo, Ghost role
+  components:
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: ghost-role-information-seal-pup-name
+    description: ghost-role-information-seal-pup-description
+    rules: ghost-role-information-nonantagonist-rules
+  - type: GhostTakeoverAvailable
+
+- type: entity
+  parent: MarkerBase
+  id: SpawnMobSeal
+  name: seal spawner
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - sprite: _DeadSpace/Mobs/Animals/Seal/seal.rsi
+      state: seal_idle
+  - type: ConditionalSpawner
+    prototypes:
+    - MobSeal
+
+- type: entity
+  parent: SpawnMobSeal
+  id: SpawnMobSealPup
+  name: seal pup spawner
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - sprite: _DeadSpace/Mobs/Animals/Seal/pup.rsi
+      state: lilseal_idle
+  - type: ConditionalSpawner
+    prototypes:
+    - MobSealPup
+
+- type: entity
+  parent: SpawnMobSeal
+  id: SpawnMobSealDeathsquad
+  name: strange seal spawner
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - sprite: _DeadSpace/Mobs/Animals/Seal/deathsquad.rsi
+      state: DQseal_idle
+  - type: ConditionalSpawner
+    prototypes:
+    - MobSealDeathsquad

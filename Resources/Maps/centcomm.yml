@@ -26489,76 +26489,8 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 48.5,-125.5
       parent: 2
-- proto: AirlockExternalGlassShuttleCentcommERTLocked
+- proto: AirlockExternalGlassShuttleCentcommERTBSAALocked # DS14
   entities:
-  - uid: 544
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -6.5,-221.5
-      parent: 2
-    - type: Tag
-      tags:
-      - ForceNoFixRotations
-      - DockCentcommERTGammaShuttle
-      - DockCentcommERTRedShuttle
-      - DockCentcommERTAmberShuttle
-      - DockCentcommERTEngineersShuttle
-  - uid: 545
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 27.5,-221.5
-      parent: 2
-    - type: Tag
-      tags:
-      - ForceNoFixRotations
-      - DockCentcommERTCburnShuttle
-      - DockCentcommERTSierraShuttle
-      - DockCentcommERTJanitorsShuttle
-  - uid: 546
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -6.5,-223.5
-      parent: 2
-    - type: Tag
-      tags:
-      - ForceNoFixRotations
-      - DockCentcommERTGammaShuttle
-      - DockCentcommERTRedShuttle
-      - DockCentcommERTAmberShuttle
-      - DockCentcommERTEngineersShuttle
-  - uid: 547
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 27.5,-223.5
-      parent: 2
-    - type: Tag
-      tags:
-      - ForceNoFixRotations
-      - DockCentcommERTCburnShuttle
-      - DockCentcommERTSierraShuttle
-      - DockCentcommERTJanitorsShuttle
-  - uid: 548
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 50.5,-170.5
-      parent: 2
-  - uid: 549
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 50.5,-168.5
-      parent: 2
-  - uid: 550
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 50.5,-125.5
-      parent: 2
   - uid: 551
     components:
     - type: Transform
@@ -26582,6 +26514,56 @@ entities:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 47.5,-196.5
+      parent: 2
+- proto: AirlockExternalGlassShuttleCentcommERTCburnLocked # DS14
+  entities:
+  - uid: 545
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 27.5,-221.5
+      parent: 2
+  - uid: 547
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 27.5,-223.5
+      parent: 2
+- proto: AirlockExternalGlassShuttleCentcommERTFieldOfficerLocked # DS14
+  entities:
+  - uid: 548
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 50.5,-170.5
+      parent: 2
+  - uid: 549
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 50.5,-168.5
+      parent: 2
+- proto: AirlockExternalGlassShuttleCentcommERTGammaLocked # DS14
+  entities:
+  - uid: 544
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -6.5,-221.5
+      parent: 2
+  - uid: 546
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -6.5,-223.5
+      parent: 2
+- proto: AirlockExternalGlassShuttleCentcommERTOfficialLocked # DS14
+  entities:
+  - uid: 550
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 50.5,-125.5
       parent: 2
 - proto: AirlockExternalGlassShuttleEmergencyLocked
   entities:

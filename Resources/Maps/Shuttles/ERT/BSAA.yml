@@ -3,9 +3,9 @@ meta:
   category: Grid
   engineVersion: 276.0.0
   forkId: dsfobos
-  forkVersion: e4e81a8d01ea5162602d3066c51898ac2fdf578c
-  time: 09/07/2026 23:02:31
-  entityCount: 2047
+  forkVersion: 7b0034583bdccfb39343f07f6b0e31be4472a7d3
+  time: 09/11/2026 09:36:00
+  entityCount: 2048
 maps: []
 grids:
 - 1
@@ -28,6 +28,7 @@ entities:
       name: NT-USSP-Defector
     - type: Transform
       pos: -0.49218178,-0.484375
+      parent: invalid
     - type: MapGrid
       chunks:
         0,0:
@@ -6384,6 +6385,13 @@ entities:
       canCollide: False
     - type: InsideEntityStorage
       storage: 459
+- proto: ErtSpawnPoint
+  entities:
+  - uid: 2048
+    components:
+    - type: Transform
+      pos: 0.5,10.5
+      parent: 1
 - proto: ExGrenade
   entities:
   - uid: 1218
@@ -6769,7 +6777,6 @@ entities:
     - type: GasMixer
       inletTwoConcentration: 0.22000003
       inletOneConcentration: 0.78
-      enabled: True
     - type: AtmosPipeLayers
       pipeLayer: Secondary
     - type: AtmosPipeColor
