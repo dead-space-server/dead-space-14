@@ -11,7 +11,7 @@ public sealed class KudzuGrowthRule : StationEventSystem<KudzuGrowthRuleComponen
         base.Started(uid, component, gameRule, args);
 
         // Pick a place to plant the kudzu.
-        if (!TryFindRandomTile(out var targetTile, out _, out var targetGrid, out var targetCoords))
+        if (!TryFindRandomTile(out var targetTile, out _, out var targetGrid, out var targetCoords, rule: uid)) // DS14
             return;
         Spawn("Kudzu", targetCoords);
         Sawmill.Info($"Spawning a Kudzu at {targetTile} on {targetGrid}");

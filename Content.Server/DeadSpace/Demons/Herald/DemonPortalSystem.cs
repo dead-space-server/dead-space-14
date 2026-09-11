@@ -16,7 +16,7 @@ namespace Content.Server.DeadSpace.Demons.Herald;
 
 public sealed class DemonPortalSystem : EntitySystem
 {
-    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly Content.Server.DeadSpace.CentComm.GameRuleStationSystem _ruleStation = default!;
     [Dependency] private readonly NavMapSystem _navMap = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
@@ -53,7 +53,7 @@ public sealed class DemonPortalSystem : EntitySystem
     private void OnDestr(EntityUid uid, DemonPortalComponent component, DestructionEventArgs args)
     {
         var location = Transform(uid).Coordinates;
-        _chat.DispatchGlobalAnnouncement(Loc.GetString("demon-portal-destroyed", ("location", location)), playSound: true, colorOverride: Color.Green);
+        _ruleStation.Announce(uid, Loc.GetString("demon-portal-destroyed", ("location", location)), playSound: true, colorOverride: Color.Green);
     }
 
     private void SpawnDemon(DemonPortalComponent comp, TransformComponent xform)
@@ -69,8 +69,8 @@ public sealed class DemonPortalSystem : EntitySystem
         var msg = Loc.GetString("carp-rift-warning",
             ("location", FormattedMessage.RemoveMarkupOrThrow(_navMap.GetNearestBeaconString((uid, xform)))));
 
-        _chat.DispatchGlobalAnnouncement(msg, playSound: false, colorOverride: Color.Red);
-        _audio.PlayGlobal("/Audio/Misc/notice1.ogg", Filter.Broadcast(), true);
+        _ruleStation.Announce(uid, msg, playSound: false, colorOverride: Color.Red);
+        _audio.PlayGlobal("/Audio/Misc/notice1.ogg", _ruleStation.GetEventPlayers(uid), true);
         _navMap.SetBeaconEnabled(uid, true);
         comp.AnnounceTime = _gameTiming.CurTime + comp.AnnounceDuration;
     }

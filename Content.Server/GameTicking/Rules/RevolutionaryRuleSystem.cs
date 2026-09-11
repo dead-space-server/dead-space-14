@@ -74,7 +74,6 @@ public sealed class RevolutionaryRuleSystem : GameRuleSystem<RevolutionaryRuleCo
     [Dependency] private readonly StationSystem _stationSystem = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly ActionsSystem _actions = default!;
-    [Dependency] private readonly ChatSystem _chatSystem = default!;
     [Dependency] private readonly IServerDbManager _db = default!;
     [Dependency] private readonly ErtResponseSystem _ertResponseSystem = default!;
 
@@ -198,7 +197,7 @@ public sealed class RevolutionaryRuleSystem : GameRuleSystem<RevolutionaryRuleCo
             return;
         }
 
-        _chatSystem.DispatchGlobalAnnouncement(
+        RuleStation.Announce(uid,
             Loc.GetString("rev-alert-stage-massacre-end-with-rev-won"),
             colorOverride: Color.Red,
             usePresetTTS: true);
@@ -449,10 +448,11 @@ public sealed class RevolutionaryRuleSystem : GameRuleSystem<RevolutionaryRuleCo
         var headRevNames = _antag.GetAntagIdentifiers(uid)
             .Select(entry => entry.Item3)
             .ToList();
-        _chatSystem.DispatchGlobalAnnouncement(
+        RuleStation.Announce(uid,
             Loc.GetString(
                 "rev-alert-stage-massacre-start",
                 ("headRevsNames", string.Join(", ", headRevNames))),
+            sender: Loc.GetString("chat-manager-sender-announcement"),
             colorOverride: Color.Red,
             usePresetTTS: true);
 
@@ -501,11 +501,12 @@ public sealed class RevolutionaryRuleSystem : GameRuleSystem<RevolutionaryRuleCo
         component.RevolutionaryBodies.Clear();
         component.HeadRevolutionaryMinds.Clear();
 
-        _chatSystem.DispatchGlobalAnnouncement(
+        RuleStation.Announce(uid,
             Loc.GetString("rev-alert-stage-massacre-end-with-rev-lost"),
+            sender: Loc.GetString("chat-manager-sender-announcement"),
             colorOverride: Color.Green,
             usePresetTTS: true);
-        _roundEnd.DoRoundEndBehavior(RoundEndBehavior.ShuttleCall, component.ShuttleCallTime);
+        _roundEnd.DoRoundEndBehavior(RoundEndBehavior.ShuttleCall, component.ShuttleCallTime, announcementSource: uid);
         GameTicker.EndGameRule(uid, gameRule);
     }
 

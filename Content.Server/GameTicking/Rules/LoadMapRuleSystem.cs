@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Server.GameTicking.Rules.Components;
 using Content.Server.GridPreloader;
+using Content.Server.Shuttles.Systems;
 using Content.Server.StationEvents.Events;
 using Content.Shared.GameTicking.Components;
 using Robust.Server.GameObjects;
@@ -19,6 +20,7 @@ public sealed class LoadMapRuleSystem : StationEventSystem<LoadMapRuleComponent>
     [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] private readonly GridPreloaderSystem _gridPreloader = default!;
+    [Dependency] private readonly ShuttleSystem _shuttles = default!; // DS14
 
     protected override void Added(EntityUid uid, LoadMapRuleComponent comp, GameRuleComponent rule, GameRuleAddedEvent args)
     {
@@ -96,6 +98,34 @@ public sealed class LoadMapRuleSystem : StationEventSystem<LoadMapRuleComponent>
             ForceEndSelf(uid, rule);
             return;
         }
+
+        // DS14-start
+        if (RuleStation.GetTargetStation(uid) is { } station)
+        {
+            if (StationSystem.GetLargestGrid(station) is not { } targetGrid)
+            {
+                QueueDel(_map.GetMapOrInvalid(mapId));
+                ForceEndSelf(uid, rule);
+                return;
+            }
+
+            var sourceMap = _map.GetMapOrInvalid(mapId);
+            foreach (var grid in grids)
+            {
+                if (_shuttles.TryFTLProximity(grid, targetGrid))
+                    continue;
+
+                foreach (var loadedGrid in grids)
+                    QueueDel(loadedGrid);
+                QueueDel(sourceMap);
+                ForceEndSelf(uid, rule);
+                return;
+            }
+
+            mapId = Transform(targetGrid).MapID;
+            QueueDel(sourceMap);
+        }
+        // DS14-end
 
         var ev = new RuleLoadedGridsEvent(mapId, grids);
         RaiseLocalEvent(uid, ref ev);

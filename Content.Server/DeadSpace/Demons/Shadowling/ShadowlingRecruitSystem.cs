@@ -23,6 +23,7 @@ namespace Content.Server.DeadSpace.Demons.Shadowling;
 
 public sealed class ShadowlingRecruitSystem : EntitySystem
 {
+    [Dependency] private readonly Content.Server.DeadSpace.CentComm.GameRuleStationSystem _ruleStation = default!;
     [Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
@@ -31,7 +32,6 @@ public sealed class ShadowlingRecruitSystem : EntitySystem
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly RoleSystem _role = default!;
     [Dependency] private readonly AntagSelectionSystem _antag = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly PrisonSystem _prison = default!;
 
     private const string ShadowlingChannel = "Shadowling";
@@ -352,8 +352,8 @@ public sealed class ShadowlingRecruitSystem : EntitySystem
                 {
                     alertRuleComp.AlertAnnounced = true;
                     var message = Loc.GetString("shadowling-alert-announcement");
-                    var sender = Loc.GetString("shadowling-alert-sender");
-                    _chat.DispatchGlobalAnnouncement(message, sender,
+
+                    _ruleStation.Announce(uid, message, sender: Loc.GetString("shadowling-alert-sender"),
                         colorOverride: Color.FromHex("#aa0000"),
                         announcementSound: new SoundCollectionSpecifier("ShadowlingAnnouncement"));
                 }

@@ -14,7 +14,7 @@ namespace Content.Server.CriminalRecords.Systems;
 
 public sealed class CriminalRecordsHackerSystem : SharedCriminalRecordsHackerSystem
 {
-    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly Content.Server.DeadSpace.CentComm.GameRuleStationSystem _ruleStation = default!; // DS14
     [Dependency] private readonly CriminalRecordsSystem _criminalRecords = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
@@ -46,7 +46,7 @@ public sealed class CriminalRecordsHackerSystem : SharedCriminalRecordsHackerSys
             // main damage with this is existing arrest warrants are lost and to anger beepsky
         }
 
-        _chat.DispatchGlobalAnnouncement(Loc.GetString(ent.Comp.Announcement), playSound: true, colorOverride: Color.Red);
+        _ruleStation.Announce(ent.Owner, Loc.GetString(ent.Comp.Announcement), playSound: true, colorOverride: Color.Red); // DS14
 
         // once is enough
         RemComp<CriminalRecordsHackerComponent>(ent);

@@ -36,11 +36,20 @@
 - type: entity
   id: NanotrasenCentralCommand
   parent:
+    # DS14-start
+    - BaseStationCargo
+    - BaseStationRecords
+    # DS14-end
     - BaseStation
     - BaseStationAlertLevels
     - BaseStationNanotrasen
   categories: [ HideSpawnMenu ]
   components:
+    # DS14-start
+    - type: CentCommStation
+    - type: StationJobs
+      availableJobs: {}
+    # DS14-end
     - type: Transform
 
 - type: entity

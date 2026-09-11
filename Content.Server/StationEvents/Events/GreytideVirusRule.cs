@@ -44,7 +44,7 @@ public sealed class GreytideVirusRule : StationEventSystem<GreytideVirusRuleComp
         if (virusComp.Severity == null)
             return;
 
-        if (!TryGetRandomStation(out var chosenStation))
+        if (!TryGetRandomStation(out var chosenStation, rule: uid)) // DS14
             return;
 
         // pick random access groups

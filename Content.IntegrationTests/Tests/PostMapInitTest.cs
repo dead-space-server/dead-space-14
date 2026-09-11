@@ -41,7 +41,7 @@ namespace Content.IntegrationTests.Tests
 
         private static readonly string[] Grids =
         {
-            "/Maps/centcomm.yml",
+            // "/Maps/centcomm.yml", // DS14: CentComm is covered by GameMaps as a full station map.
             AdminTestArenaSystem.ArenaMapPath
         };
 
@@ -91,7 +91,7 @@ namespace Content.IntegrationTests.Tests
             .Select(glob => new Regex(GlobToRegex(glob), RegexOptions.IgnoreCase | RegexOptions.Compiled))
             .ToArray();
 
-        // DS14-start: Add our custom game maps 
+        // DS14-start: Add our custom game maps
         private static readonly string[] GameMaps =
         {
             "Dev",

@@ -35,7 +35,6 @@ public sealed class SpiderTerrorRuleSystem : GameRuleSystem<SpiderTerrorRuleComp
     [Dependency] private readonly SharedMindSystem _mindSystem = default!;
     [Dependency] private readonly SharedObjectivesSystem _objectives = default!;
     [Dependency] private readonly NukeCodeSendQueueSystem _nukeCodeQueue = default!; // DS14
-    [Dependency] private readonly ChatSystem _chatSystem = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly AlertLevelSystem _alertLevel = default!;
@@ -166,6 +165,7 @@ public sealed class SpiderTerrorRuleSystem : GameRuleSystem<SpiderTerrorRuleComp
     private void OnShuttleCallAttempt(ref CommunicationConsoleCallShuttleAttemptEvent ev)
     {
         bool isCanCall = true;
+        EntityUid? affectedStation = null;
 
         var queryRule = EntityQueryEnumerator<SpiderTerrorRuleComponent>();
         var component = new SpiderTerrorRuleComponent();
@@ -182,6 +182,7 @@ public sealed class SpiderTerrorRuleSystem : GameRuleSystem<SpiderTerrorRuleComp
                     if (ruleComp.IsBreedingActive(stationUid))
                     {
                         isCanCall = false;
+                        affectedStation = stationUid;
                         component = ruleComp;
                         break;
                     }
@@ -194,9 +195,9 @@ public sealed class SpiderTerrorRuleSystem : GameRuleSystem<SpiderTerrorRuleComp
 
         if (!isCanCall)
         {
-            if (component.SendMessageConsole)
+            if (component.SendMessageConsole && affectedStation is { } station)
             {
-                _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("spider-terror-centcomm-announcement-shuttle-cancelled"), playSound: true, colorOverride: Color.LightSeaGreen);
+                RuleStation.Announce(station, Loc.GetString("spider-terror-centcomm-announcement-shuttle-cancelled"), playSound: true, colorOverride: Color.LightSeaGreen);
                 component.SendMessageConsole = false;
                 component.TimeUtilSendMessage = _timing.CurTime + component.DurationSendMessage;
             }
@@ -291,7 +292,7 @@ public sealed class SpiderTerrorRuleSystem : GameRuleSystem<SpiderTerrorRuleComp
 
         if (GetSpiderKings() <= 0 && !_voteSend)
         {
-            _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("spider-terror-centcomm-announcement-spider-kings"), playSound: true, colorOverride: Color.Green);
+            RuleStation.Announce(station, Loc.GetString("spider-terror-centcomm-announcement-spider-kings"), playSound: true, colorOverride: Color.Green);
             _voteManager.CreateStandardVote(null, StandardVoteType.Restart);
             _voteSend = true;
         }
@@ -301,7 +302,7 @@ public sealed class SpiderTerrorRuleSystem : GameRuleSystem<SpiderTerrorRuleComp
 
         component.StartBreeding(station);
 
-        _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("spider-terror-centcomm-announcement-station-was-breeding"), playSound: true, colorOverride: Color.Red);
+        RuleStation.Announce(station, Loc.GetString("spider-terror-centcomm-announcement-station-was-breeding"), sender: Loc.GetString("chat-manager-sender-announcement"), playSound: true, colorOverride: Color.Red);
         _alertLevel.SetLevel(station, "sierra", true, true, true);
 
         if (!TryComp<StationBankAccountComponent>(station, out var stationAccount))

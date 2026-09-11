@@ -5,6 +5,7 @@ namespace Content.Server.Antag.Mimic;
 /// <summary>
 /// Replaces the relevant entities with mobs when the game rule is started.
 /// </summary>
+[Content.Server.DeadSpace.CentComm.AllowedGameRuleOnCentComm] // DS14
 [RegisterComponent]
 public sealed partial class MobReplacementRuleComponent : Component
 {

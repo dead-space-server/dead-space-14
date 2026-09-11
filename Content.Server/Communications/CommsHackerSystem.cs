@@ -14,7 +14,7 @@ namespace Content.Server.Communications;
 
 public sealed class CommsHackerSystem : SharedCommsHackerSystem
 {
-    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly Content.Server.DeadSpace.CentComm.GameRuleStationSystem _ruleStation = default!; // DS14
     [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
@@ -78,8 +78,8 @@ public sealed class CommsHackerSystem : SharedCommsHackerSystem
     /// </summary>
     public void CallInThreat(NinjaHackingThreatPrototype ninjaHackingThreat)
     {
-        _gameTicker.StartGameRule(ninjaHackingThreat.Rule, out _);
-        _chat.DispatchGlobalAnnouncement(Loc.GetString(ninjaHackingThreat.Announcement), playSound: true, colorOverride: Color.Red);
+        _gameTicker.StartGameRule(ninjaHackingThreat.Rule, out var rule); // DS14
+        _ruleStation.Announce(rule, Loc.GetString(ninjaHackingThreat.Announcement), playSound: true, colorOverride: Color.Red); // DS14
     }
 }
 

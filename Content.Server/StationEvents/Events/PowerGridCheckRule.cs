@@ -23,7 +23,7 @@ namespace Content.Server.StationEvents.Events
         {
             base.Started(uid, component, gameRule, args);
 
-            if (!TryGetRandomStation(out var chosenStation))
+            if (!TryGetRandomStation(out var chosenStation, rule: uid)) // DS14
                 return;
 
             component.AffectedStation = chosenStation.Value;
@@ -74,7 +74,7 @@ namespace Content.Server.StationEvents.Events
             component.AnnounceCancelToken = new CancellationTokenSource();
             Timer.Spawn(3000, () =>
             {
-                Audio.PlayGlobal(component.PowerOnSound, Filter.Broadcast(), true, AudioParams.Default.WithVolume(-2f)); // DS14-Announcements
+                Audio.PlayGlobal(component.PowerOnSound, RuleStation.GetEventPlayers(uid), true, AudioParams.Default.WithVolume(-2f)); // DS14
             }, component.AnnounceCancelToken.Token);
             component.Unpowered.Clear();
         }

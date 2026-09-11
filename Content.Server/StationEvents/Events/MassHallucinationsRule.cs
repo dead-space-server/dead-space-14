@@ -20,6 +20,11 @@ public sealed class MassHallucinationsRule : StationEventSystem<MassHallucinatio
         var query = EntityQueryEnumerator<MindContainerComponent, HumanoidAppearanceComponent>();
         while (query.MoveNext(out var ent, out _, out _))
         {
+            // DS14-start
+            if (!RuleStation.IsTarget(uid, ent))
+                continue;
+            // DS14-end
+
             if (!EnsureComp<ParacusiaComponent>(ent, out var paracusia))
             {
                 _paracusia.SetSounds(ent, component.Sounds, paracusia);

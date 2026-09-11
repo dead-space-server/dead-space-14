@@ -82,6 +82,7 @@ public sealed class ApprovedErtRequestData
 // Работает для одной станции, потому что пока нет смысла делать для множества
 public sealed class ErtResponseSystem : SharedErtResponseSystem
 {
+    [Dependency] private readonly Content.Server.DeadSpace.CentComm.GameRuleStationSystem _ruleStation = default!;
     [Dependency] private readonly ChatSystem _chatSystem = default!;
     [Dependency] private readonly StationSystem _stationSystem = default!;
     [Dependency] private readonly IChatManager _chatManager = default!;
@@ -368,7 +369,7 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
 
         if (msg.SendNotification)
         {
-            _chatSystem.DispatchGlobalAnnouncement(
+            _chatSystem.DispatchAdminFilteredAnnouncement(_ruleStation.GetStationPlayers(),
                 Loc.GetString("ert-console-request-rejected-announcement"),
                 sender: Loc.GetString("ert-response-cso-sender"),
                 announcementSound: DecisionSound,
@@ -722,7 +723,7 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
 
             if (prototype.CancelMessage != null && !settings.SuppressAnnouncements)
             {
-                _chatSystem.DispatchGlobalAnnouncement(
+                _chatSystem.DispatchAdminFilteredAnnouncement(_ruleStation.GetStationPlayers(),
                     message: prototype.CancelMessage,
                     sender: Loc.GetString("chat-manager-sender-announcement"),
                     colorOverride: Color.FromHex("#1d8bad"),
@@ -889,7 +890,7 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
 
         if (announce && !string.IsNullOrEmpty(prototype.StartAnnouncement))
         {
-            _chatSystem.DispatchGlobalAnnouncement(
+            _chatSystem.DispatchAdminFilteredAnnouncement(_ruleStation.GetStationPlayers(),
                 message: Loc.GetString(prototype.StartAnnouncement),
                 sender: string.IsNullOrEmpty(prototype.Sender)
                     ? Loc.GetString("chat-manager-sender-announcement")
@@ -1085,7 +1086,7 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
         if (!prototype.AnnounceOnApproval)
             return;
 
-        _chatSystem.DispatchGlobalAnnouncement(
+        _chatSystem.DispatchAdminFilteredAnnouncement(_ruleStation.GetStationPlayers(),
             message: string.IsNullOrEmpty(prototype.Notification)
                 ? Loc.GetString("ert-response-caused-messager", ("team", prototype.Name))
                 : Loc.GetString(prototype.Notification),
@@ -1101,7 +1102,7 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
 
     private void AnnounceChangedApprovedTeam(ErtTeamPrototype prototype)
     {
-        _chatSystem.DispatchGlobalAnnouncement(
+        _chatSystem.DispatchAdminFilteredAnnouncement(_ruleStation.GetStationPlayers(),
             message: Loc.GetString("ert-response-team-changed-announcement", ("team", FormatTeamNameForAnnouncement(prototype))),
             sender: Loc.GetString("ert-response-cso-sender"),
             colorOverride: Color.FromHex("#1d8bad"),
@@ -1123,7 +1124,7 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
 
     private void AnnounceConsoleRequestReceived()
     {
-        _chatSystem.DispatchGlobalAnnouncement(
+        _chatSystem.DispatchAdminFilteredAnnouncement(_ruleStation.GetStationPlayers(),
             message: Loc.GetString("ert-console-request-submitted-announcement"),
             sender: Loc.GetString("ert-response-cso-sender"),
             colorOverride: Color.FromHex("#1d8bad"),
@@ -1135,7 +1136,7 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
 
     private void PlayGlobalSound(SoundSpecifier sound)
     {
-        _audio.PlayGlobal(sound, Filter.Broadcast(), true);
+        _audio.PlayGlobal(sound, _ruleStation.GetStationPlayers(), true);
     }
 }
 

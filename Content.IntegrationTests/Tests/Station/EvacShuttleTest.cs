@@ -1,5 +1,8 @@
 using System.Linq;
 using Content.Server.GameTicking;
+using Content.Server.DeadSpace.CentComm;
+using Content.Server.Station.Components;
+using Content.Server.StationEvents.Components;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
 using Content.Shared.CCVar;
@@ -42,7 +45,7 @@ public sealed class EvacShuttleTest
 
         Assert.That(entMan.Count<StationCentcommComponent>(), Is.EqualTo(1));
         Assert.That(entMan.Count<StationEmergencyShuttleComponent>(), Is.EqualTo(1));
-        Assert.That(entMan.Count<StationDataComponent>(), Is.EqualTo(1));
+        Assert.That(entMan.Count<StationDataComponent>(), Is.EqualTo(2)); // DS14: station and CentComm.
         Assert.That(entMan.Count<EmergencyShuttleComponent>(), Is.EqualTo(1));
         Assert.That(entMan.Count<FTLMapComponent>(), Is.EqualTo(0));
 
@@ -63,6 +66,17 @@ public sealed class EvacShuttleTest
         var centcommMap = station.Comp.MapEntity!.Value;
         Assert.That(entMan.HasComponent<MapComponent>(centcommMap));
         Assert.That(server.Transform(centcomm).MapUid, Is.EqualTo(centcommMap));
+
+        // DS14-start
+        var centralStation = entMan.GetComponent<StationMemberComponent>(centcomm).Station;
+        Assert.That(entMan.HasComponent<CentCommStationComponent>(centralStation), Is.True);
+        Assert.That(entMan.HasComponent<StationEventEligibleComponent>(centralStation), Is.False);
+        await pair.WaitCommand("addgamerulecentcomm MassHallucinations");
+        var rule = entMan.AllComponentsList<GameRuleTargetStationComponent>().Single(entry => entry.Component.Station == centralStation);
+        Assert.That(rule.Component.Station, Is.EqualTo(centralStation));
+        Assert.That(entMan.HasComponent<MassHallucinationsRuleComponent>(rule.Uid), Is.True);
+        await pair.WaitCommand($"endgamerule {entMan.GetNetEntity(rule.Uid)}");
+        // DS14-end
 
         var salternXform = server.Transform(saltern);
         Assert.That(salternXform.MapUid, Is.Not.Null);

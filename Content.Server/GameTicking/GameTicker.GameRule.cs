@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Server.Administration;
 using Content.Server.DeadSpace.Administration.GameRules;
+using Content.Server.DeadSpace.CentComm;
 using Content.Server.GameTicking.Rules.Components;
 using Content.Shared.Administration;
 using Content.Shared.Database;
@@ -68,7 +69,7 @@ public sealed partial class GameTicker
     /// start it yet, instead waiting until the rule is actually started by other code (usually roundstart)
     /// </summary>
     /// <returns>The entity for the added gamerule</returns>
-    public EntityUid AddGameRule(string ruleId)
+    public EntityUid AddGameRule(string ruleId, EntityUid? targetStation = null) // DS14
     {
         // DS14-start
         // No gameplay rule may mutate the world after the immutable round result is created.
@@ -80,6 +81,12 @@ public sealed partial class GameTicker
         // DS14-end
 
         var ruleEntity = Spawn(ruleId, MapCoordinates.Nullspace);
+        // DS14-start
+        // Added handlers can announce, infect players or pick spawn locations immediately.
+        if (targetStation is { } target)
+            EnsureComp<GameRuleTargetStationComponent>(ruleEntity).Station = target;
+        EntityManager.System<GameRuleStationSystem>().EnsureEventTarget(ruleEntity);
+        // DS14-end
         _sawmill.Info($"Added game rule {ToPrettyString(ruleEntity)}");
         _adminLogger.Add(LogType.EventStarted, $"Added game rule {ToPrettyString(ruleEntity)}");
         var str = Loc.GetString("station-event-system-run-event", ("eventName", ToPrettyString(ruleEntity)));

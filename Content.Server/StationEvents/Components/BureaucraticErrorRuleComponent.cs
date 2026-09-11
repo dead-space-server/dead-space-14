@@ -4,6 +4,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.StationEvents.Components;
 
+[Content.Server.DeadSpace.CentComm.AllowedGameRuleOnCentComm] // DS14
 [RegisterComponent, Access(typeof(BureaucraticErrorRule))]
 public sealed partial class BureaucraticErrorRuleComponent : Component
 {

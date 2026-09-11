@@ -25,7 +25,7 @@ public sealed class BluespaceArtifactRule : StationEventSystem<BluespaceArtifact
         var amountToSpawn = 1;
         for (var i = 0; i < amountToSpawn; i++)
         {
-            if (!TryFindRandomTile(out _, out _, out _, out var coords))
+            if (!TryFindRandomTile(out _, out _, out _, out var coords, rule: uid)) // DS14
                 return;
 
             Spawn(component.ArtifactSpawnerPrototype, coords);

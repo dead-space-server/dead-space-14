@@ -36,7 +36,7 @@ public sealed class BlobRuleSystem : GameRuleSystem<BlobRuleComponent>
 {
     [Dependency] private readonly IAdminManager _admin = default!; // DS14
     [Dependency] private readonly RoundEndSystem _roundEndSystem = default!;
-    [Dependency] private readonly ChatSystem _chatSystem = default!;
+    // [Dependency] private readonly ChatSystem _chatSystem = default!; // DS14: announcements use RuleStation.
     [Dependency] private readonly NukeCodeSendQueueSystem _nukeCodeQueue = default!; // DS14
     [Dependency] private readonly StationSystem _stationSystem = default!;
     [Dependency] private readonly ObjectivesSystem _objectivesSystem = default!;
@@ -96,22 +96,24 @@ public sealed class BlobRuleSystem : GameRuleSystem<BlobRuleComponent>
                 continue;
             }
 
+            // DS14-start
+            if (!CheckBlobInStation(ent, out var stationUid))
+                continue;
+            // DS14-end
+
             if (component.Stage != BlobStage.TheEnd && comp.BlobTiles.Count >= 50) // DS14
             {
                 if (_roundEndSystem.ExpectedCountdownEnd != null)
                 {
-                    _roundEndSystem.CancelRoundEndCountdown(forceRecall: true);
-                    _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("blob-alert-recall-shuttle"),
-                        Loc.GetString("Station"),
+                    _roundEndSystem.CancelRoundEndCountdown(forceRecall: true, announcementSource: stationUid); // DS14
+                    // DS14-start
+                    RuleStation.Announce(stationUid.Value, Loc.GetString("blob-alert-recall-shuttle"),
+                        Name(stationUid.Value),
+                        // DS14-end
                         false,
                         null,
                         Color.Red);
                 }
-            }
-
-            if (!CheckBlobInStation(ent, out var stationUid))
-            {
-                continue;
             }
 
             CheckChangeStage((ent, comp), stationUid.Value, component);
@@ -193,8 +195,10 @@ public sealed class BlobRuleSystem : GameRuleSystem<BlobRuleComponent>
             case BlobStage.Default when blobCore.Comp.BlobTiles.Count > 20:
                 blobRuleComp.Stage = BlobStage.Begin;
 
-                _chatSystem.DispatchGlobalAnnouncement(Loc.GetString("blob-alert-detect"),
-                    Loc.GetString("Station"), true, BlobDetectAudio, Color.Red);
+                // DS14-start
+                RuleStation.Announce(stationUid, Loc.GetString("blob-alert-detect"),
+                    Name(stationUid), true, BlobDetectAudio, Color.Red);
+                // DS14-end
 
                 if (_alertLevel.GetLevel(stationUid) == "green" || _alertLevel.GetLevel(stationUid) == "blue" || _alertLevel.GetLevel(stationUid) == "violet" || _alertLevel.GetLevel(stationUid) == "yellow")
                     _alertLevel.SetLevel(stationUid, "red", false, true, true, true);

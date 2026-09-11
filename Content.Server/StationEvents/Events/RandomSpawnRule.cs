@@ -10,7 +10,7 @@ public sealed class RandomSpawnRule : StationEventSystem<RandomSpawnRuleComponen
     {
         base.Started(uid, comp, gameRule, args);
 
-        if (TryFindRandomTile(out _, out _, out _, out var coords))
+        if (TryFindRandomTile(out _, out _, out _, out var coords, rule: uid)) // DS14
         {
             Sawmill.Info($"Spawning {comp.Prototype} at {coords}");
             Spawn(comp.Prototype, coords);

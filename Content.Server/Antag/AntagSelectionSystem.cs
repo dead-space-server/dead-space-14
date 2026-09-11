@@ -1028,6 +1028,11 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
         if (_prison.IsUserPrisoner(session.UserId))
             return false;
 
+        // DS14-start
+        if (session.AttachedEntity is { } body && !HasComp<GhostComponent>(body) && !RuleStation.IsTarget(ent.Owner, body))
+            return false;
+        // DS14-end
+
         if (ent.Comp.AssignedSessions.Contains(session))
             return false;
 

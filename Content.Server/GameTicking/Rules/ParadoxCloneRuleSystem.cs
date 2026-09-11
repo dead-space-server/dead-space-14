@@ -43,14 +43,14 @@ public sealed class ParadoxCloneRuleSystem : GameRuleSystem<ParadoxCloneRuleComp
         // DS14-start
         if (component.OriginalBody is { } originalBody)
         {
-            if (TryGetValidCloneTarget(originalBody, out _))
+            if (TryGetValidCloneTarget(originalBody, out _, uid))
                 return;
 
             Log.Info("The overridden paradox clone target is not a valid station employee. A different target will be selected when the role is claimed.");
         }
 
         // check if we got enough potential cloning targets, otherwise cancel the gamerule so that the ghost role does not show up
-        var allHumans = GetValidCloneTargets();
+        var allHumans = GetValidCloneTargets(uid);
 
         if (allHumans.Count == 0)
         {
@@ -109,7 +109,7 @@ public sealed class ParadoxCloneRuleSystem : GameRuleSystem<ParadoxCloneRuleComp
             if (attempt == 1 && ent.Comp.OriginalBody is { } overriddenBody)
             {
                 attempts++;
-                if (!TryGetValidCloneTarget(overriddenBody, out originalMind))
+                if (!TryGetValidCloneTarget(overriddenBody, out originalMind, ent.Owner))
                 {
                     Log.Warning("The overridden paradox clone target is no longer a valid station employee. Retrying with a different target.");
                     ent.Comp.OriginalMind = null;
@@ -117,7 +117,7 @@ public sealed class ParadoxCloneRuleSystem : GameRuleSystem<ParadoxCloneRuleComp
                     continue;
                 }
             }
-            else if (!TryPickRandomCloneTarget(attemptedMinds, out originalMind))
+            else if (!TryPickRandomCloneTarget(attemptedMinds, out originalMind, ent.Owner))
             {
                 break;
             }
@@ -161,16 +161,16 @@ public sealed class ParadoxCloneRuleSystem : GameRuleSystem<ParadoxCloneRuleComp
     }
 
     // DS14-start
-    private HashSet<Entity<MindComponent>> GetValidCloneTargets()
+    private HashSet<Entity<MindComponent>> GetValidCloneTargets(EntityUid? rule = null)
     {
         var allHumans = _mind.GetAliveHumans();
-        allHumans.RemoveWhere(mind => !IsValidCloneTarget(mind));
+        allHumans.RemoveWhere(mind => !IsValidCloneTarget(mind, rule));
         return allHumans;
     }
 
-    private bool TryGetValidCloneTarget(EntityUid body, out Entity<MindComponent> mind)
+    private bool TryGetValidCloneTarget(EntityUid body, out Entity<MindComponent> mind, EntityUid? rule = null)
     {
-        foreach (var candidate in GetValidCloneTargets())
+        foreach (var candidate in GetValidCloneTargets(rule))
         {
             if (candidate.Comp.OwnedEntity != body)
                 continue;
@@ -183,9 +183,9 @@ public sealed class ParadoxCloneRuleSystem : GameRuleSystem<ParadoxCloneRuleComp
         return false;
     }
 
-    private bool TryPickRandomCloneTarget(HashSet<EntityUid> attemptedMinds, out Entity<MindComponent> mind)
+    private bool TryPickRandomCloneTarget(HashSet<EntityUid> attemptedMinds, out Entity<MindComponent> mind, EntityUid? rule = null)
     {
-        var candidates = GetValidCloneTargets();
+        var candidates = GetValidCloneTargets(rule);
         candidates.RemoveWhere(candidate => attemptedMinds.Contains(candidate.Owner));
 
         if (candidates.Count == 0)
@@ -198,12 +198,17 @@ public sealed class ParadoxCloneRuleSystem : GameRuleSystem<ParadoxCloneRuleComp
         return true;
     }
 
-    internal bool IsValidCloneTarget(Entity<MindComponent> mind)
+    internal bool IsValidCloneTarget(Entity<MindComponent> mind, EntityUid? rule = null)
     {
-        if (_roles.MindHasRole<GhostRoleMarkerRoleComponent>(mind.Owner))
+        if (rule is { } uid && (mind.Comp.OwnedEntity is not { } body || !RuleStation.IsTarget(uid, body)))
             return false;
 
-        return _jobs.MindTryGetJob(mind.Owner, out var job) && job.SetPreference;
+        // CentComm jobs are staffed through special roles rather than normal job preferences.
+        var onCentcomm = rule is { } source && RuleStation.IsCentCommRule(source);
+        if (!onCentcomm && _roles.MindHasRole<GhostRoleMarkerRoleComponent>(mind.Owner))
+            return false;
+
+        return _jobs.MindTryGetJob(mind.Owner, out var job) && (onCentcomm || job.SetPreference);
     }
     // DS14-end
 }

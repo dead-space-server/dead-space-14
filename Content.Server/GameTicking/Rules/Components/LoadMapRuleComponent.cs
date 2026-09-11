@@ -9,6 +9,7 @@ namespace Content.Server.GameTicking.Rules.Components;
 /// This is used for a game rule that loads a map when activated.
 /// Works with <see cref="RuleGridsComponent"/>.
 /// </summary>
+[Content.Server.DeadSpace.CentComm.AllowedGameRuleOnCentComm] // DS14
 [RegisterComponent, Access(typeof(LoadMapRuleSystem))]
 public sealed partial class LoadMapRuleComponent : Component
 {
