@@ -80,12 +80,13 @@ namespace Content.Server.Nuke
 
             if (wasSent)
             {
-                // DS14-Start: nuke-code queue announcements include the selected station name.
+                // DS14-Start: announce nuclear-code dispatch globally, with the selected station name.
                 var msg = Loc.GetString(
                     announcement ?? "nuke-component-announcement-send-codes",
                     ("station", Name(station)));
+                // _chatSystem.DispatchStationAnnouncement(station, msg, colorOverride: Color.Red);
+                _chatSystem.DispatchGlobalAnnouncement(msg, colorOverride: Color.Red);
                 // DS14-End
-                _chatSystem.DispatchStationAnnouncement(station, msg, colorOverride: Color.Red);
             }
 
             return wasSent;

@@ -2,30 +2,97 @@
 
 using System.Linq;
 using Content.Server.AlertLevel;
+using Content.Server.Antag;
+using Content.Server.Antag.Components;
 using Content.Server.Atmos.Components;
 using Content.Server.Communications;
 using Content.Server.DeadSpace.CentComm;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules.Components;
 using Content.Server.Mind;
+using Content.Server.Shuttles.Systems;
+using Content.Server.Spawners.Components;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Server.StationEvents.Components;
+using Content.Shared.Atmos;
 using Content.Shared.Communications;
+using Content.Shared.Containers.ItemSlots;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Parallax;
-using Content.Shared.Prototypes;
+using Content.Shared.Shuttles.Components;
+using Content.Shared.Station;
 using Content.Shared.Station.Components;
 using Content.Shared.Traits.Assorted;
+using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.IntegrationTests.Tests.DeadSpace.CentComm;
 
 [TestFixture]
 public sealed class CentCommTest
 {
+    [TestPrototypes]
+    private const string Prototypes = @"
+- type: entity
+  id: CentCommTestStation
+  parent: TestStation
+  components:
+  - type: CentCommStation
+
+- type: entity
+  id: CentCommTestMapEvent
+  parent: BaseGameRule
+  components:
+  - type: StationEvent
+  - type: RuleGrids
+  - type: LoadMapRule
+    mapPath: /centcomm-test-outpost.yml
+
+- type: entity
+  id: CentCommTestOutpostEvent
+  parent: CentCommTestMapEvent
+  components:
+  - type: AntagSelection
+    definitions:
+    - spawnerPrototype: CentCommTestAntagSpawner
+      pickPlayer: false
+
+- type: entity
+  id: CentCommTestInheritedOutpostEvent
+  parent: CentCommTestOutpostEvent
+
+- type: entity
+  id: CentCommTestAntagSpawner
+  components:
+  - type: GhostRoleAntagSpawner
+
+- type: entity
+  id: CentCommTestNonEventRule
+  parent: BaseGameRule
+  components:
+  - type: LoadMapRule
+
+- type: entity
+  id: CentCommTestAbstractEvent
+  parent: CentCommTestMapEvent
+  abstract: true
+
+- type: entity
+  id: CentCommTestDelayedPowerEvent
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+    delay:
+      min: 60
+      max: 60
+  - type: StationEvent
+  - type: PowerGridCheckRule
+";
+
     [Test]
     public async Task AnnouncementsReachDistantSpaceOnlyOnTheTargetMap()
     {
@@ -48,7 +115,7 @@ public sealed class CentCommTest
             minds.ControlMob(listeners[1].UserId, elsewhere);
 
             var ticker = server.System<GameTicker>();
-            var rule = ticker.AddGameRule("PowerGridCheck");
+            var rule = ticker.AddGameRule("CentCommTestDelayedPowerEvent");
             var targets = server.System<GameRuleStationSystem>();
             Assert.That(targets.GetTargetStation(rule), Is.EqualTo(station), "Target is selected before the announcement.");
             Assert.That(targets.GetEventPlayers(rule).Recipients, Does.Contain(listeners[0]));
@@ -73,22 +140,25 @@ public sealed class CentCommTest
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
         var server = pair.Server;
         var map = await pair.CreateTestMap();
-        var prototypes = server.ProtoMan;
         var centcomm = server.System<CentCommSystem>();
 
         await server.WaitAssertion(() =>
         {
-            var environments = prototypes.EnumeratePrototypes<CentCommEnvironmentPrototype>().ToList();
-            Assert.That(environments.Any(environment => environment.Atmosphere != null));
-            Assert.That(environments.Any(environment => environment.Atmosphere == null));
+            var parallax = server.ProtoMan.EnumeratePrototypes<ServerParallaxPrototype>().First().ID;
+            var mixture = new GasMixture(Atmospherics.CellVolume) { Temperature = 280f };
+            mixture.SetMoles(Gas.Oxygen, 10f);
+            var environments = new[]
+            {
+                new CentCommEnvironmentPrototype { Parallax = parallax, Atmosphere = mixture },
+                new CentCommEnvironmentPrototype { Parallax = parallax },
+            };
 
-            foreach (var environment in environments.OrderBy(environment => environment.Atmosphere == null))
+            foreach (var environment in environments)
             {
                 centcomm.ApplyEnvironment(map.MapUid, environment);
                 var atmosphere = server.EntMan.GetComponent<MapAtmosphereComponent>(map.MapUid);
                 Assert.That(server.EntMan.GetComponent<ParallaxComponent>(map.MapUid).Parallax,
                     Is.EqualTo(environment.Parallax));
-                Assert.That(pair.Client.ProtoMan.HasIndex<Content.Client.Parallax.Data.ParallaxPrototype>(environment.Parallax));
                 Assert.That(atmosphere.Space, Is.EqualTo(environment.Atmosphere == null));
                 Assert.That(atmosphere.Mixture.Immutable, Is.True);
                 if (environment.Atmosphere is { } expected)
@@ -96,14 +166,22 @@ public sealed class CentCommTest
                     Assert.That(atmosphere.Mixture.Temperature, Is.EqualTo(expected.Temperature));
                     Assert.That(atmosphere.Mixture.ToArray(), Is.EqualTo(expected.ToArray()));
                 }
+                else
+                {
+                    Assert.That(atmosphere.Mixture.TotalMoles, Is.Zero);
+                }
             }
         });
 
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task RuleAllowlistRejectsModesAndExcludedEvents()
+    [TestCase("CentCommTestMapEvent", true)]
+    [TestCase("CentCommTestOutpostEvent", false)]
+    [TestCase("CentCommTestInheritedOutpostEvent", false)]
+    [TestCase("CentCommTestNonEventRule", false)]
+    [TestCase("CentCommTestAbstractEvent", false)]
+    public async Task RuleAllowlistRejectsOutpostsAndNonRunnableEvents(string ruleId, bool allowed)
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -111,17 +189,7 @@ public sealed class CentCommTest
 
         await server.WaitAssertion(() =>
         {
-            foreach (var id in new[] { "ZombieOutbreak", "LoneOpsSpawn", "NinjaSpawn", "RenegadeSpawn", "ImmovableRodSpawn", "BlobSpawn", "WizardSpawn", "SleeperAgents", "ShadowlingMidround" })
-                Assert.That(centcomm.IsAllowedRule(server.ProtoMan.Index<EntityPrototype>(id)), Is.False, id);
-
-            foreach (var prototype in server.System<GameTicker>().GetAllGameRulePrototypes())
-            {
-                if (!prototype.HasComponent<StationEventComponent>(server.EntMan.ComponentFactory))
-                    Assert.That(centcomm.IsAllowedRule(prototype), Is.False, prototype.ID);
-            }
-
-            foreach (var id in new[] { "GasLeak", "SolarFlare", "MouseMigration", "DragonSpawn", "ParadoxCloneSpawn", "GameRuleMeteorSwarmSmall" })
-                Assert.That(centcomm.IsAllowedRule(server.ProtoMan.Index<EntityPrototype>(id)), Is.True, id);
+            Assert.That(centcomm.IsAllowedRule(server.ProtoMan.Index<EntityPrototype>(ruleId)), Is.EqualTo(allowed));
         });
 
         await pair.CleanReturnAsync();
@@ -137,7 +205,6 @@ public sealed class CentCommTest
         var em = server.EntMan;
         var ticker = server.System<GameTicker>();
         var stations = server.System<StationSystem>();
-        var centcomm = server.System<CentCommSystem>();
         EntityUid centralRule = default;
         EntityUid normalRule = default;
         EntityUid centralStation = default;
@@ -152,8 +219,8 @@ public sealed class CentCommTest
             em.AddComponent<StationEventEligibleComponent>(otherStation);
             Assert.That(em.HasComponent<StationEventEligibleComponent>(centralStation), Is.False);
 
-            centralRule = ticker.AddGameRule("PowerGridCheck", centralStation);
-            normalRule = ticker.AddGameRule("PowerGridCheck");
+            centralRule = ticker.AddGameRule("CentCommTestDelayedPowerEvent", centralStation);
+            normalRule = ticker.AddGameRule("CentCommTestDelayedPowerEvent");
             ticker.StartGameRule(centralRule);
             ticker.StartGameRule(normalRule);
             Assert.That(em.HasComponent<DelayedStartRuleComponent>(centralRule), Is.True);
@@ -177,22 +244,112 @@ public sealed class CentCommTest
             ticker.EndGameRule(hallucinations);
             Assert.That(em.HasComponent<ParacusiaComponent>(centralHuman), Is.False);
 
-            // A rule that loads a shuttle must move its grids to CentComm as well.
-            var raid = ticker.AddGameRule("PirateRaid", centralStation);
-            var raidGrids = em.GetComponent<RuleGridsComponent>(raid);
-            Assert.That(raidGrids.Map, Is.EqualTo(centcommMap.MapId));
-            Assert.That(raidGrids.MapGrids, Is.Not.Empty);
-            foreach (var grid in raidGrids.MapGrids)
-                Assert.That(server.Transform(grid).MapUid, Is.EqualTo(centcommMap.MapUid));
-
             // Removing the explicit target must not fall back to another station.
             em.DeleteEntity(centralStation);
-            var abandonedRule = ticker.AddGameRule("PowerGridCheck", centralStation);
+            var abandonedRule = ticker.AddGameRule("CentCommTestDelayedPowerEvent", centralStation);
             ticker.StartGameRule(abandonedRule);
             ticker.StartGameRule(abandonedRule);
             Assert.That(em.GetComponent<PowerGridCheckRuleComponent>(abandonedRule).AffectedStation, Is.Not.EqualTo(otherStation));
         });
 
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task CentCommStationInitializationPreservesCoordinateDiskAccess()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var server = pair.Server;
+        var em = server.EntMan;
+        var centcommMap = await pair.CreateTestMap();
+        var shuttleMap = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var shuttles = server.System<ShuttleSystem>();
+            Assert.That(shuttles.TryAddFTLDestination(centcommMap.MapId, true, out _), Is.True);
+            Assert.That(shuttles.TryAddFTLDestination(shuttleMap.MapId, true, false, false, out _), Is.True);
+            var station = new StationConfig
+            {
+                StationPrototype = "CentCommTestStation",
+                StationComponentOverrides = new(),
+            };
+            server.System<StationSystem>().InitializeNewStation(station, new[] { centcommMap.Grid.Owner });
+
+            var console = em.SpawnEntity("ComputerShuttle", shuttleMap.GridCoords);
+            Assert.That(shuttles.CanFTLTo(shuttleMap.Grid, centcommMap.MapId, console), Is.False);
+
+            var disk = em.SpawnEntity("CoordinatesDisk", shuttleMap.GridCoords);
+            var coordinates = em.GetComponent<ShuttleDestinationCoordinatesComponent>(disk);
+            coordinates.Destination = shuttleMap.MapUid;
+            var slots = server.System<ItemSlotsSystem>();
+            Assert.That(slots.TryInsert(console, SharedShuttleConsoleComponent.DiskSlotName, disk, null), Is.True);
+            Assert.That(shuttles.CanFTLTo(shuttleMap.Grid, centcommMap.MapId, console), Is.False,
+                "A disk for another destination must not grant access to CentComm.");
+
+            coordinates.Destination = centcommMap.MapUid;
+            Assert.That(shuttles.CanFTLTo(shuttleMap.Grid, centcommMap.MapId, console), Is.True);
+            Assert.That(slots.TryEject(console, SharedShuttleConsoleComponent.DiskSlotName, null, out _), Is.True);
+            Assert.That(shuttles.CanFTLTo(shuttleMap.Grid, centcommMap.MapId, console), Is.False);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task LoadedMapsRelocateOnlyForCentComm(bool targetCentComm)
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var server = pair.Server;
+        var em = server.EntMan;
+        var stationMap = await pair.CreateTestMap();
+        var templateMap = await pair.CreateTestMap();
+        EntityUid loadedMap = default;
+        EntityUid? spawner = null;
+
+        await server.WaitAssertion(() =>
+        {
+            var mapSystem = server.System<SharedMapSystem>();
+            var spawnPoint = em.SpawnEntity(null, templateMap.GridCoords);
+            em.AddComponent<SpawnPointComponent>(spawnPoint);
+            Assert.That(server.System<MapLoaderSystem>().TrySaveMap(templateMap.MapId,
+                new ResPath("/centcomm-test-outpost.yml")), Is.True);
+            mapSystem.DeleteMap(templateMap.MapId);
+
+            var station = em.SpawnEntity(targetCentComm ? "CentCommTestStation" : "TestStation", MapCoordinates.Nullspace);
+            server.System<StationSystem>().AddGridToStation(station, stationMap.Grid);
+            if (!targetCentComm)
+                em.AddComponent<StationEventEligibleComponent>(station);
+
+            var ruleId = targetCentComm ? "CentCommTestMapEvent" : "CentCommTestOutpostEvent";
+            var rule = server.System<GameTicker>().AddGameRule(ruleId, targetCentComm ? station : null);
+            Assert.That(server.System<GameRuleStationSystem>().GetTargetStation(rule), Is.EqualTo(station));
+            var grids = em.GetComponent<RuleGridsComponent>(rule);
+            Assert.That(grids.Map, Is.Not.Null);
+            Assert.That(grids.MapGrids, Is.Not.Empty);
+            loadedMap = mapSystem.GetMapOrInvalid(grids.Map!.Value);
+            Assert.That(loadedMap == stationMap.MapUid, Is.EqualTo(targetCentComm));
+            foreach (var grid in grids.MapGrids)
+                Assert.That(server.Transform(grid).MapUid, Is.EqualTo(loadedMap));
+
+            if (!targetCentComm)
+            {
+                var selection = em.GetComponent<AntagSelectionComponent>(rule);
+                server.System<AntagSelectionSystem>().MakeAntag((rule, selection), null, selection.Definitions.Single());
+                spawner = em.AllComponentsList<GhostRoleAntagSpawnerComponent>()
+                    .Single(entry => entry.Component.Rule == rule).Uid;
+                Assert.That(server.Transform(spawner.Value).MapUid, Is.EqualTo(loadedMap));
+            }
+        });
+
+        await pair.RunTicksSync(1);
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(em.EntityExists(loadedMap), Is.True, "The loaded map must survive deferred deletion.");
+            if (spawner is { } antag)
+                Assert.That(server.Transform(antag).MapUid, Is.EqualTo(loadedMap));
+        });
         await pair.CleanReturnAsync();
     }
 
@@ -217,16 +374,18 @@ public sealed class CentCommTest
             comms.UpdateCommsConsoleInterface(console, comp);
             var ui = server.System<SharedUserInterfaceSystem>();
             Assert.That(ui.TryGetUiState<CommunicationsConsoleInterfaceState>(console, CommunicationsConsoleUiKey.Key, out var state));
-            Assert.That(state!.AlertLevels, Does.Contain("blue"));
+            var originalLevel = alerts.GetLevel(station);
+            var otherLevel = alerts.GetLevel(otherStation);
+            var requestedLevel = state!.AlertLevels!.First(level => level != originalLevel);
 
-            em.EventBus.RaiseLocalEvent(console, new CommunicationsConsoleSelectAlertLevelMessage("blue") { Actor = actor });
-            Assert.That(alerts.GetLevel(station), Is.EqualTo("green"));
+            em.EventBus.RaiseLocalEvent(console, new CommunicationsConsoleSelectAlertLevelMessage(requestedLevel) { Actor = actor });
+            Assert.That(alerts.GetLevel(station), Is.EqualTo(originalLevel));
 
             var access = em.AddComponent<Content.Shared.Access.Components.AccessComponent>(actor);
             access.Tags.Add("CentralCommand");
-            em.EventBus.RaiseLocalEvent(console, new CommunicationsConsoleSelectAlertLevelMessage("blue") { Actor = actor });
-            Assert.That(alerts.GetLevel(station), Is.EqualTo("blue"));
-            Assert.That(alerts.GetLevel(otherStation), Is.EqualTo("green"));
+            em.EventBus.RaiseLocalEvent(console, new CommunicationsConsoleSelectAlertLevelMessage(requestedLevel) { Actor = actor });
+            Assert.That(alerts.GetLevel(station), Is.EqualTo(requestedLevel));
+            Assert.That(alerts.GetLevel(otherStation), Is.EqualTo(otherLevel));
         });
 
         await pair.CleanReturnAsync();
