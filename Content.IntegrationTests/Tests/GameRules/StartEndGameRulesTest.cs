@@ -28,7 +28,7 @@ public sealed class StartEndGameRulesTest
 
         await server.WaitAssertion(() =>
         {
-            var rules = gameTicker.GetAllGameRulePrototypes().ToList();
+            var rules = gameTicker.GetAllGameRulePrototypes().Where(rule => !pair.IsTestPrototype(rule)).ToList(); // DS14
             rules.Sort((x, y) => string.Compare(x.ID, y.ID, StringComparison.Ordinal));
 
             // Start all rules
