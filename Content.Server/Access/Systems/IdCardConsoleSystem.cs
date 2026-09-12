@@ -2,6 +2,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Server.Chat.Systems;
 using Content.Server.Containers;
+using Content.Server.DeadSpace.CentComm;
+using Content.Server.Station.Systems;
 using Content.Server.StationRecords.Systems;
 using Content.Shared.Access.Components;
 using static Content.Shared.Access.Components.IdCardConsoleComponent;
@@ -14,6 +16,7 @@ using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
+using Content.Shared.DeadSpace.Access;
 using Content.Shared.Roles;
 using Content.Shared.StationRecords;
 using Content.Shared.Throwing;
@@ -39,6 +42,7 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
     [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly StationSystem _station = default!; // DS14
 
     public override void Initialize()
     {
@@ -50,6 +54,7 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
         SubscribeLocalEvent<IdCardConsoleComponent, ComponentStartup>(UpdateUserInterface);
         SubscribeLocalEvent<IdCardConsoleComponent, EntInsertedIntoContainerMessage>(UpdateUserInterface);
         SubscribeLocalEvent<IdCardConsoleComponent, EntRemovedFromContainerMessage>(UpdateUserInterface);
+        SubscribeLocalEvent<IdCardConsoleComponent, BoundUIOpenedEvent>(UpdateUserInterface); // DS14
         SubscribeLocalEvent<IdCardConsoleComponent, DamageChangedEvent>(OnDamageChanged);
 
         // Intercept the event before anyone can do anything with it!
@@ -73,10 +78,21 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
             return;
 
         var privilegedIdName = string.Empty;
+        // DS14-start
+        string? privilegedFullName = null;
+        string? privilegedJobTitle = null;
+        // DS14-end
         List<ProtoId<AccessLevelPrototype>>? possibleAccess = null;
         if (component.PrivilegedIdSlot.Item is { Valid: true } item)
         {
             privilegedIdName = Comp<MetaDataComponent>(item).EntityName;
+            // DS14-start
+            if (TryComp<IdCardComponent>(item, out var authorizationCard))
+            {
+                privilegedFullName = authorizationCard.FullName;
+                privilegedJobTitle = authorizationCard.LocalizedJobTitle;
+            }
+            // DS14-end
             possibleAccess = _accessReader.FindAccessTags(item).ToList();
         }
 
@@ -94,7 +110,8 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
                 possibleAccess,
                 string.Empty,
                 privilegedIdName,
-                string.Empty);
+                string.Empty,
+                GetAvailableAccess(uid, component).ToList(), privilegedFullName, privilegedJobTitle); // DS14
         }
         else
         {
@@ -119,11 +136,33 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
                 possibleAccess,
                 jobProto,
                 privilegedIdName,
-                Name(targetId));
+                Name(targetId),
+                GetAvailableAccess(uid, component).ToList(), privilegedFullName, privilegedJobTitle); // DS14
         }
 
         _userInterface.SetUiState(uid, IdCardConsoleUiKey.Key, newState);
     }
+
+    // DS14-start
+    private HashSet<ProtoId<AccessLevelPrototype>> GetAvailableAccess(EntityUid uid, IdCardConsoleComponent component)
+    {
+        var access = component.AccessLevels.ToHashSet();
+        var onCentComm = HasComp<CentCommStationComponent>(_station.GetOwningStation(uid));
+        foreach (var category in _prototype.EnumeratePrototypes<IdCardAccessCategoryPrototype>())
+        {
+            if (!category.CentCommOnly)
+                continue;
+
+            if (onCentComm)
+                access.UnionWith(category.AccessLevels);
+            else
+                access.ExceptWith(category.AccessLevels);
+        }
+
+        access.RemoveWhere(id => !_prototype.Resolve(id, out var level) || !level.CanAddToIdCard);
+        return access;
+    }
+    // DS14-end
 
     /// <summary>
     /// Called whenever an access button is pressed, adding or removing that access from the target ID card.
@@ -142,6 +181,22 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
 
         if (component.TargetIdSlot.Item is not { Valid: true } targetId || !PrivilegedIdIsAuthorized(uid, component, out var privilegedId))
             return;
+
+        // DS14-start
+        // Validate changes before mutating the identity or consuming a vacancy. Unchanged hidden access is preserved.
+        var oldTags = _access.TryGetTags(targetId)?.ToHashSet() ?? new HashSet<ProtoId<AccessLevelPrototype>>();
+        var requestedTags = newAccessList.ToHashSet();
+        var difference = oldTags.ToHashSet();
+        difference.SymmetricExceptWith(requestedTags);
+        var availableAccess = GetAvailableAccess(uid, component);
+        var privilegedPerms = _accessReader.FindAccessTags(privilegedId.Value);
+        if (!difference.IsSubsetOf(availableAccess) || !difference.IsSubsetOf(privilegedPerms))
+        {
+            _adminLogger.Add(LogType.Action, LogImpact.High,
+                $"{ToPrettyString(player):player} tried to change unavailable access on {ToPrettyString(targetId):entity} via {ToPrettyString(uid):entity}");
+            return;
+        }
+        // DS14-end
 
         // DS14-start: validate and authorize a requested job before mutating any part of the ID.
         JobPrototype? job = null;
@@ -190,32 +245,13 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
             RaiseLocalEvent(new IdCardJobAssignedEvent(player, targetId, newJobProto));
         // DS14-end
 
-        if (!newAccessList.TrueForAll(x => component.AccessLevels.Contains(x)))
-        {
-            var unknownTags = newAccessList.Where(x => !component.AccessLevels.Contains(x)).ToList();
-            _sawmill.Warning($"User {ToPrettyString(player)} tried to write unknown access tags to {ToPrettyString(targetId)}.");
-            _adminLogger.Add(LogType.Action, LogImpact.High,
-                $"{ToPrettyString(player):player} tried to write unknown access tags to {ToPrettyString(targetId):entity} via {ToPrettyString(uid):entity}: [{string.Join(", ", unknownTags)}]");
+        // DS14-start
+        // The old full-list check rejected existing access that this console cannot edit:
+        // if (!newAccessList.TrueForAll(x => component.AccessLevels.Contains(x)))
+        // Authorization now checks the difference before any card data is written.
+        if (difference.Count == 0)
             return;
-        }
-
-        var oldTags = _access.TryGetTags(targetId)?.ToList() ?? new List<ProtoId<AccessLevelPrototype>>();
-
-        if (oldTags.SequenceEqual(newAccessList))
-            return;
-
-        // I hate that C# doesn't have an option for this and don't desire to write this out the hard way.
-        // var difference = newAccessList.Difference(oldTags);
-        var difference = newAccessList.Union(oldTags).Except(newAccessList.Intersect(oldTags)).ToHashSet();
-        var privilegedPerms = _accessReader.FindAccessTags(privilegedId.Value);
-        if (!difference.IsSubsetOf(privilegedPerms))
-        {
-            var forbiddenTags = difference.Except(privilegedPerms).ToList();
-            _sawmill.Warning($"User {ToPrettyString(player)} tried to modify permissions they could not give/take on {ToPrettyString(targetId)}!");
-            _adminLogger.Add(LogType.Action, LogImpact.High,
-                $"{ToPrettyString(player):player} tried to modify access tags they could not give/take on {ToPrettyString(targetId):entity} via {ToPrettyString(uid):entity}: [{string.Join(", ", forbiddenTags)}]");
-            return;
-        }
+        // DS14-end
 
         var addedTags = newAccessList.Except(oldTags).Select(tag => "+" + tag).ToList();
         var removedTags = oldTags.Except(newAccessList).Select(tag => "-" + tag).ToList();

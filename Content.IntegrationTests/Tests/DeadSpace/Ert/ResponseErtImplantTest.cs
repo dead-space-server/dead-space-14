@@ -15,7 +15,6 @@ using Content.Shared.Actions.Components;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.ERT;
-using Content.Shared.GameTicking;
 using Content.Shared.Implants;
 using Content.Shared.Implants.Components;
 using Content.Shared.Inventory;
@@ -43,8 +42,17 @@ public sealed class ResponseErtImplantTest : InteractionTest
     [TearDown]
     public async Task CleanupResponseRequests()
     {
-        // The dummy ticker skips round cleanup when pooled servers restart.
-        await Server.WaitPost(() => SEntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent()));
+        // DS14-start
+        // A global round-cleanup event also wipes minds without performing the rest of the ticker's restart.
+        await Server.WaitAssertion(() =>
+        {
+            var attached = ServerSession.AttachedEntity;
+            Server.System<ErtResponseSystem>().ResetRoundState();
+            Server.System<ResponseErtImplantSystem>().ResetRoundState();
+            Assert.That(ServerSession.AttachedEntity, Is.EqualTo(attached));
+        });
+        await Pair.ReallyBeIdle();
+        // DS14-end
     }
 
     private async Task Prepare()

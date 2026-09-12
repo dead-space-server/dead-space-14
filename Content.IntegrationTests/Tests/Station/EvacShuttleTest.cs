@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Server.GameTicking;
 using Content.Server.DeadSpace.CentComm;
 using Content.Server.Station.Components;
+using Content.Server.Station.Systems;
 using Content.Server.StationEvents.Components;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
@@ -45,7 +46,6 @@ public sealed class EvacShuttleTest
 
         Assert.That(entMan.Count<StationCentcommComponent>(), Is.EqualTo(1));
         Assert.That(entMan.Count<StationEmergencyShuttleComponent>(), Is.EqualTo(1));
-        Assert.That(entMan.Count<StationDataComponent>(), Is.EqualTo(2)); // DS14: station and CentComm.
         Assert.That(entMan.Count<EmergencyShuttleComponent>(), Is.EqualTo(1));
         Assert.That(entMan.Count<FTLMapComponent>(), Is.EqualTo(0));
 
@@ -53,7 +53,10 @@ public sealed class EvacShuttleTest
         var data = entMan.GetComponent<StationDataComponent>(station);
         var shuttleData = entMan.GetComponent<StationEmergencyShuttleComponent>(station);
 
-        var saltern = data.Grids.Single();
+        // DS14-start: auxiliary grids may be added to a station.
+        // var saltern = data.Grids.Single();
+        var saltern = server.System<StationSystem>().GetLargestGrid((station.Owner, data))!.Value;
+        // DS14-end
         Assert.That(entMan.HasComponent<MapGridComponent>(saltern));
 
         var shuttle = shuttleData.EmergencyShuttle!.Value;
@@ -71,6 +74,8 @@ public sealed class EvacShuttleTest
         var centralStation = entMan.GetComponent<StationMemberComponent>(centcomm).Station;
         Assert.That(entMan.HasComponent<CentCommStationComponent>(centralStation), Is.True);
         Assert.That(entMan.HasComponent<StationEventEligibleComponent>(centralStation), Is.False);
+        Assert.That(server.System<ShuttleSystem>().CanFTLTo(saltern, server.Transform(centcomm).MapID, saltern), Is.False,
+            "Normal CentComm loading must not allow FTL from the station without a coordinate disk.");
         await pair.WaitCommand("addgamerulecentcomm MassHallucinations");
         var rule = entMan.AllComponentsList<GameRuleTargetStationComponent>().Single(entry => entry.Component.Station == centralStation);
         Assert.That(rule.Component.Station, Is.EqualTo(centralStation));

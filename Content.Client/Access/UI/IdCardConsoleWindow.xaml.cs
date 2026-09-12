@@ -1,4 +1,6 @@
 using System.Linq;
+using System.Numerics;
+using Content.Client.DeadSpace.Access;
 using Content.Shared.Access;
 using Content.Shared.Access.Systems;
 using Content.Shared.CCVar;
@@ -27,19 +29,20 @@ namespace Content.Client.Access.UI
         private int _maxNameLength;
         private int _maxIdJobLength;
 
-        private AccessLevelControl _accessButtons = new();
-        private readonly List<string> _jobPrototypeIds = new();
         // DS14-start
+        // private AccessLevelControl _accessButtons = new();
+        private readonly IdCardAccessEditor _accessButtons = new();
+        private readonly List<string> _jobPrototypeIds = new() { string.Empty };
+        private HashSet<ProtoId<AccessLevelPrototype>> _currentAccess = new();
         private readonly List<ProtoId<AccessLevelPrototype>> _basicAccessLevels;
         private readonly List<ProtoId<AccessLevelPrototype>> _extendedAccessLevels;
         // DS14-end
 
         private string? _lastFullName;
         private string? _lastJobTitle;
-        private string? _lastJobProto;
+        // private string? _lastJobProto; // DS14: job assignments are submitted only on explicit selection.
 
-        // The job that will be picked if the ID doesn't have a job on the station.
-        private static ProtoId<JobPrototype> _defaultJob = "Passenger";
+        // private static ProtoId<JobPrototype> _defaultJob = "Passenger"; // DS14: preserve hidden/current professions.
 
         public IdCardConsoleWindow(IdCardConsoleBoundUserInterface owner, IPrototypeManager prototypeManager,
             List<ProtoId<AccessLevelPrototype>> accessLevels,
@@ -50,6 +53,12 @@ namespace Content.Client.Access.UI
         {
             RobustXamlLoader.Load(this);
             IoCManager.InjectDependencies(this);
+            // DS14-start
+            var root = UserInterfaceManager.RootControl;
+            var viewport = (Vector2) root.Window.RenderTarget.Size / root.UIScale;
+            SetSize = Vector2.Min(new Vector2(880, 640), Vector2.Max(viewport - new Vector2(32), new Vector2(640, 400)));
+            MinSize = Vector2.Min(new Vector2(700, 460), SetSize);
+            // DS14-end
             _logMill = _logManager.GetSawmill(SharedIdCardConsoleSystem.Sawmill);
 
             _owner = owner;
@@ -65,7 +74,7 @@ namespace Content.Client.Access.UI
             FullNameLineEdit.IsValid = s => s.Length <= _maxNameLength;
             FullNameLineEdit.OnTextChanged += _ =>
             {
-                FullNameSaveButton.Disabled = FullNameSaveButton.Text == _lastFullName;
+                FullNameSaveButton.Disabled = FullNameLineEdit.Text == _lastFullName; // DS14
             };
             FullNameSaveButton.OnPressed += _ => SubmitData();
 
@@ -86,6 +95,7 @@ namespace Content.Client.Access.UI
 
             jobs.Sort((x, y) => string.Compare(x.LocalizedName, y.LocalizedName, StringComparison.CurrentCulture));
 
+            JobPresetOptionButton.AddItem(Loc.GetString("id-card-console-window-no-job-preset"), 0); // DS14
             foreach (var job in jobs)
             {
                 _jobPrototypeIds.Add(job.ID);
@@ -94,13 +104,13 @@ namespace Content.Client.Access.UI
 
             SelectAllButton.OnPressed += _ =>
             {
-                SetAllAccess(true);
+                SetAllAccess(true, currentCategoryOnly: true); // DS14
                 SubmitData();
             };
 
             DeselectAllButton.OnPressed += _ =>
             {
-                SetAllAccess(false);
+                SetAllAccess(false, currentCategoryOnly: true); // DS14
                 SubmitData();
             };
 
@@ -108,10 +118,7 @@ namespace Content.Client.Access.UI
             _accessButtons.Populate(accessLevels, prototypeManager);
             AccessLevelControlContainer.AddChild(_accessButtons);
 
-            foreach (var (id, button) in _accessButtons.ButtonsList)
-            {
-                button.OnPressed += _ => SubmitData();
-            }
+            _accessButtons.AccessChanged += () => SubmitData(); // DS14: also covers controls rebuilt after changing station.
 
             // DS14-Start
             BasicAccessButton.Visible = _basicAccessLevels.Count > 0;
@@ -123,9 +130,14 @@ namespace Content.Client.Access.UI
         }
 
         /// <param name="enabled">If true, every individual access button will be pressed. If false, each will be depressed.</param>
-        private void SetAllAccess(bool enabled)
+        private void SetAllAccess(bool enabled, bool currentCategoryOnly = false) // DS14
         {
-            foreach (var button in _accessButtons.ButtonsList.Values)
+            // DS14-start
+            var buttons = currentCategoryOnly
+                ? _accessButtons.CurrentAccessLevels.Select(id => _accessButtons.ButtonsList[id])
+                : _accessButtons.ButtonsList.Values;
+            // DS14-end
+            foreach (var button in buttons) // DS14
             {
                 if (!button.Disabled && button.Pressed != enabled)
                     button.Pressed = enabled;
@@ -134,6 +146,10 @@ namespace Content.Client.Access.UI
 
         private void SelectJobPreset(OptionButton.ItemSelectedEventArgs args)
         {
+            // DS14-start
+            if (args.Id <= 0 || args.Id >= _jobPrototypeIds.Count)
+                return;
+            // DS14-end
             if (!_prototypeManager.TryIndex(_jobPrototypeIds[args.Id], out JobPrototype? job))
             {
                 return;
@@ -169,7 +185,7 @@ namespace Content.Client.Access.UI
                 }
             }
 
-            SubmitData();
+            SubmitData(job.ID); // DS14: only this action assigns a different profession.
         }
 
         public void UpdateState(IdCardConsoleBoundUserInterfaceState state)
@@ -178,19 +194,27 @@ namespace Content.Client.Access.UI
                 ? Loc.GetString("id-card-console-window-eject-button")
                 : Loc.GetString("id-card-console-window-insert-button");
 
-            PrivilegedIdLabel.Text = state.PrivilegedIdName;
+            // DS14-start
+            UpdateCardPresentation(PrivilegedIdLabel, PrivilegedIdJobLabel, state.IsPrivilegedIdPresent,
+                state.PrivilegedIdFullName, state.PrivilegedIdJobTitle, state.PrivilegedIdName);
+            // DS14-end
 
             TargetIdButton.Text = state.IsTargetIdPresent
                 ? Loc.GetString("id-card-console-window-eject-button")
                 : Loc.GetString("id-card-console-window-insert-button");
 
-            TargetIdLabel.Text = state.TargetIdName;
+            // DS14-start
+            UpdateCardPresentation(TargetIdLabel, TargetIdJobLabel, state.IsTargetIdPresent,
+                state.TargetIdFullName, state.TargetIdJobTitle, state.TargetIdName);
+            // DS14-end
 
             var interfaceEnabled =
                 state.IsPrivilegedIdPresent && state.IsPrivilegedIdAuthorized && state.IsTargetIdPresent;
 
-            var fullNameDirty = _lastFullName != null && FullNameLineEdit.Text != state.TargetIdFullName;
-            var jobTitleDirty = _lastJobTitle != null && JobTitleLineEdit.Text != state.TargetIdJobTitle;
+            // DS14-start
+            var fullNameDirty = _lastFullName != null && FullNameLineEdit.Text != _lastFullName;
+            var jobTitleDirty = _lastJobTitle != null && JobTitleLineEdit.Text != _lastJobTitle;
+            // DS14-end
 
             FullNameLabel.Modulate = interfaceEnabled ? Color.White : Color.Gray;
             FullNameLineEdit.Editable = interfaceEnabled;
@@ -220,10 +244,15 @@ namespace Content.Client.Access.UI
                 DismissButton.Disabled = !interfaceEnabled;
             // DS14-end
 
-            _accessButtons.UpdateState(state.TargetIdAccessList?.ToList() ??
-                                       new List<ProtoId<AccessLevelPrototype>>(),
-                                       state.AllowedModifyAccessList?.ToList() ??
-                                       new List<ProtoId<AccessLevelPrototype>>());
+            // DS14-start
+            SelectAllButton.Disabled = !interfaceEnabled;
+            DeselectAllButton.Disabled = !interfaceEnabled;
+            _currentAccess = state.TargetIdAccessList?.ToHashSet() ?? new();
+            _accessButtons.Populate(state.AvailableAccessList, _prototypeManager);
+            _accessButtons.UpdateState(_currentAccess.ToList(), interfaceEnabled
+                ? state.AllowedModifyAccessList?.ToList() ?? new()
+                : new());
+            // DS14-end
 
             var jobIndex = _jobPrototypeIds.IndexOf(state.TargetIdJobPrototype);
             // If the job index is < 0 that means they don't have a job registered in the station records
@@ -231,7 +260,7 @@ namespace Content.Client.Access.UI
             // For example, a new ID from a box would have no job index.
             if (jobIndex < 0)
             {
-                jobIndex = _jobPrototypeIds.IndexOf(_defaultJob);
+                jobIndex = 0; // DS14: display a placeholder instead of silently assigning Passenger.
             }
 
             // DS14-start
@@ -247,8 +276,21 @@ namespace Content.Client.Access.UI
 
             _lastFullName = state.TargetIdFullName;
             _lastJobTitle = state.TargetIdJobTitle;
-            _lastJobProto = state.TargetIdJobPrototype;
+            // _lastJobProto = state.TargetIdJobPrototype; // DS14
         }
+
+        // DS14-start
+        private static void UpdateCardPresentation(RichTextLabel ownerLabel, Label jobLabel, bool present,
+            string? owner, string? job, string entityName)
+        {
+            ownerLabel.SetMessage(!present ? Loc.GetString("id-card-console-window-empty-slot")
+                : string.IsNullOrWhiteSpace(owner) ? Loc.GetString("id-card-console-window-no-owner") : owner);
+            ownerLabel.ToolTip = present ? entityName : null;
+            jobLabel.Text = !present ? Loc.GetString("id-card-console-window-insert-hint")
+                : string.IsNullOrWhiteSpace(job) ? Loc.GetString("id-card-console-window-no-job") : job;
+            jobLabel.ToolTip = jobLabel.Text;
+        }
+        // DS14-end
 
         // DS14-Start
         private void SetAccessPreset(List<ProtoId<AccessLevelPrototype>> targetList)
@@ -268,18 +310,28 @@ namespace Content.Client.Access.UI
         }
         // DS14-End
 
-        private void SubmitData()
+        private void SubmitData(ProtoId<JobPrototype>? selectedJob = null) // DS14
         {
-            // Don't send this if it isn't dirty.
-            var jobProtoDirty = _lastJobProto != null &&
-                                _jobPrototypeIds[JobPresetOptionButton.SelectedId] != _lastJobProto;
+            // DS14-start
+            // Keep access that is hidden or not editable by the inserted authorization card.
+            var access = _currentAccess.ToHashSet();
+            foreach (var (id, button) in _accessButtons.ButtonsList)
+            {
+                if (button.Disabled)
+                    continue;
+
+                if (button.Pressed)
+                    access.Add(id);
+                else
+                    access.Remove(id);
+            }
+            // DS14-end
 
             _owner.SubmitData(
                 FullNameLineEdit.Text,
                 JobTitleLineEdit.Text,
-                // Iterate over the buttons dictionary, filter by `Pressed`, only get key from the key/value pair
-                _accessButtons.ButtonsList.Where(x => x.Value.Pressed).Select(x => x.Key).ToList(),
-                jobProtoDirty ? _jobPrototypeIds[JobPresetOptionButton.SelectedId] : string.Empty);
+                access.ToList(), // DS14
+                selectedJob ?? new ProtoId<JobPrototype>(string.Empty)); // DS14
         }
     }
 }

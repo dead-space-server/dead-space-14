@@ -42,7 +42,7 @@ public sealed class CrewMonitoringBoundUserInterface : BoundUserInterface
         {
             case CrewMonitoringState st:
                 EntMan.TryGetComponent<TransformComponent>(Owner, out var xform);
-                _menu?.ShowSensors(st.Sensors, Owner, xform?.Coordinates);
+                _menu?.ShowSensors(st.Sensors, Owner, xform?.Coordinates, st.Serverless); // DS14
                 _menu?.SetPingMode(st.PingMode); // DS14
                 break;
         }

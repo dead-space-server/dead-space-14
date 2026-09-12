@@ -229,8 +229,12 @@ namespace Content.Server.RoundEnd
                 null,
                 Color.Gold);
 
-            if (!_autoCalledBefore) _audio.PlayGlobal("/Audio/_DeadSpace/Announcements/emergency_s_called.ogg", recipients, true, AudioParams.Default.AddVolume(-4)); // DS14-Announcements: Custom sound for auto-called
-            else _audio.PlayGlobal("/Audio/_DeadSpace/Announcements/crew_s_called.ogg", recipients, true, AudioParams.Default.AddVolume(-2)); // DS14-Announcements
+            // DS14-start
+            if (!_autoCalledBefore)
+                _audio.PlayGlobal("/Audio/_DeadSpace/Announcements/emergency_s_called.ogg", Filter.Broadcast(), true, AudioParams.Default.AddVolume(-4));
+            else
+                _audio.PlayGlobal("/Audio/_DeadSpace/Announcements/crew_s_called.ogg", Filter.Broadcast(), true, AudioParams.Default.AddVolume(-2));
+            // DS14-end
 
             LastCountdownStart = _gameTiming.CurTime;
             ExpectedCountdownEnd = _gameTiming.CurTime + countdownTime;

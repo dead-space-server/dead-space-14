@@ -15,11 +15,13 @@ public sealed class CrewMonitoringState : BoundUserInterfaceState
     public List<SuitSensorStatus> Sensors;
 
     public CrewMonitoringConsolePingMode PingMode; // DS14
+    public bool Serverless; // DS14
 
-    public CrewMonitoringState(List<SuitSensorStatus> sensors, CrewMonitoringConsolePingMode pingMode) // DS14
+    public CrewMonitoringState(List<SuitSensorStatus> sensors, CrewMonitoringConsolePingMode pingMode, bool serverless = false) // DS14
     {
         Sensors = sensors;
         PingMode = pingMode; // DS14
+        Serverless = serverless; // DS14
     }
 }
 

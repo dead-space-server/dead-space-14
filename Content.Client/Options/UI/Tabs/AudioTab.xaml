@@ -2,42 +2,52 @@
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          xmlns:ui="clr-namespace:Content.Client.Options.UI">
     <BoxContainer Orientation="Vertical">
-        <BoxContainer Orientation="Vertical" Margin="8 8 8 8" VerticalExpand="True">
-            <!-- DS14-start -->
-            <Label Text="{Loc 'ui-options-volume-label'}"
-                   StyleClasses="DeadSpaceSectionTitle"/>
-            <!-- DS14-end -->
-            <BoxContainer Orientation="Vertical" Margin="0 3 0 0">
-                <ui:OptionSlider Name="SliderVolumeMaster" Title="{Loc 'ui-options-master-volume'}"
-                                 Margin="0 0 0 8" />
-                <ui:OptionSlider Name="SliderVolumeMidi" Title="{Loc 'ui-options-midi-volume'}" />
-                <ui:OptionSlider Name="SliderVolumeAmbientMusic" Title="{Loc 'ui-options-ambient-music-volume'}" />
-                <ui:OptionSlider Name="SliderVolumeAmbience" Title="{Loc 'ui-options-ambience-volume'}" />
-                <ui:OptionSlider Name="SliderVolumeLobby" Title="{Loc 'ui-options-lobby-volume'}" />
-                <ui:OptionSlider Name="SliderVolumeInterface" Title="{Loc 'ui-options-interface-volume'}" />
-                <ui:OptionSlider Name="SliderVolumeAlertLevel" Title="{Loc 'ui-options-alert-level-volume'}" /> <!-- DS14 -->
-                <ui:OptionSlider Name="SliderVolumeItemSounds" Title="{Loc 'ui-options-item-sounds-volume'}" /> <!-- DS14 -->
-                <ui:OptionSlider Name="SliderVolumeAllertSounds" Title="{Loc 'ui-options-allert-sounds-volume'}" /> <!-- DS14 -->
-                <ui:OptionSlider Name="SliderVolumeAdminSounds" Title="{Loc 'ui-options-allert-Admin-volume'}" /> <!-- DS14 -->
-                <ui:OptionSlider Name="SliderVolumeBossMusic" Title="{Loc 'ui-options-boss-music-volume'}" />
-                <ui:OptionSlider Name="SliderMaxAmbienceSounds" Title="{Loc 'ui-options-ambience-max-sounds'}"
-                                 Margin="0 0 0 8" />
-                <ui:OptionSlider Name="SliderVolumeTts" Title="{Loc 'ui-options-tts-volume'}"/>
-                <ui:OptionSlider Name="SliderVolumeTtsRadio" Title="{Loc 'ui-options-tts-radio-volume'}"
-                                 Margin="0 0 0 8" />
-                <ui:OptionSlider Name="SliderVolumeJukeboxMusic" Title="Громкость музыкальных плееров"
-                                 Margin="0 0 0 8" />
-                <ui:OptionSlider Name="SliderVolumeJukeboxAuto" Title="Громкость музыкальных автоматов"
-                                 Margin="0 0 0 8" />
-                <CheckBox Name="LobbyMusicCheckBox" Text="{Loc 'ui-options-lobby-music'}" />
-                <CheckBox Name="RestartSoundsCheckBox" Text="{Loc 'ui-options-restart-sounds'}" />
-                <CheckBox Name="EventMusicCheckBox" Text="{Loc 'ui-options-event-music'}" />
-                <CheckBox Name="BossMusicCheckBox" Text="{Loc 'ui-options-boss-music'}" />
-                <CheckBox Name="AdminSoundsCheckBox" Text="{Loc 'ui-options-admin-sounds'}" />
-                <CheckBox Name="BwoinkSoundCheckBox" Text="{Loc 'ui-options-bwoink-sound'}" />
-                <CheckBox Name="RadioTTSSoundsCheckBox" Text="{Loc 'ui-options-radio-tts-sounds'}" />
+        <ScrollContainer VerticalExpand="True" HorizontalExpand="True"> <!-- DS14 -->
+            <BoxContainer Orientation="Vertical" Margin="8 8 8 8" VerticalExpand="True">
+                <!-- DS14-start -->
+                <Label Text="{Loc 'ui-options-volume-label'}"
+                       StyleClasses="DeadSpaceSectionTitle"/>
+                <!-- DS14-end -->
+                <BoxContainer Orientation="Vertical" Margin="0 3 0 0">
+                    <ui:OptionSlider Name="SliderVolumeMaster" Title="{Loc 'ui-options-master-volume'}"
+                                     Margin="0 0 0 8" />
+                    <ui:OptionSlider Name="SliderVolumeMidi" Title="{Loc 'ui-options-midi-volume'}" />
+                    <ui:OptionSlider Name="SliderVolumeAmbientMusic" Title="{Loc 'ui-options-ambient-music-volume'}" />
+                    <ui:OptionSlider Name="SliderVolumeAmbience" Title="{Loc 'ui-options-ambience-volume'}" />
+                    <ui:OptionSlider Name="SliderVolumeLobby" Title="{Loc 'ui-options-lobby-volume'}" />
+                    <ui:OptionSlider Name="SliderVolumeInterface" Title="{Loc 'ui-options-interface-volume'}" />
+                    <ui:OptionSlider Name="SliderVolumeAlertLevel" Title="{Loc 'ui-options-alert-level-volume'}" /> <!-- DS14 -->
+                    <ui:OptionSlider Name="SliderVolumeItemSounds" Title="{Loc 'ui-options-item-sounds-volume'}" /> <!-- DS14 -->
+                    <ui:OptionSlider Name="SliderVolumeAllertSounds" Title="{Loc 'ui-options-allert-sounds-volume'}" /> <!-- DS14 -->
+                    <ui:OptionSlider Name="SliderVolumeAdminSounds" Title="{Loc 'ui-options-allert-Admin-volume'}" /> <!-- DS14 -->
+                    <ui:OptionSlider Name="SliderVolumeBossMusic" Title="{Loc 'ui-options-boss-music-volume'}" />
+                    <ui:OptionSlider Name="SliderMaxAmbienceSounds" Title="{Loc 'ui-options-ambience-max-sounds'}"
+                                     Margin="0 0 0 8" />
+                    <ui:OptionSlider Name="SliderVolumeTts" Title="{Loc 'ui-options-tts-volume'}"/>
+                    <ui:OptionSlider Name="SliderVolumeTtsRadio" Title="{Loc 'ui-options-tts-radio-volume'}"
+                                     Margin="0 0 0 8" />
+                    <ui:OptionSlider Name="SliderVolumeJukeboxMusic" Title="Громкость музыкальных плееров"
+                                     Margin="0 0 0 8" />
+                    <ui:OptionSlider Name="SliderVolumeJukeboxAuto" Title="Громкость музыкальных автоматов"
+                                     Margin="0 0 0 8" />
+                    <CheckBox Name="LobbyMusicCheckBox" Text="{Loc 'ui-options-lobby-music'}" />
+                    <CheckBox Name="RestartSoundsCheckBox" Text="{Loc 'ui-options-restart-sounds'}" />
+                    <CheckBox Name="EventMusicCheckBox" Text="{Loc 'ui-options-event-music'}" />
+                    <CheckBox Name="BossMusicCheckBox" Text="{Loc 'ui-options-boss-music'}" />
+                    <CheckBox Name="AdminSoundsCheckBox" Text="{Loc 'ui-options-admin-sounds'}" />
+                    <CheckBox Name="BwoinkSoundCheckBox" Text="{Loc 'ui-options-bwoink-sound'}" />
+                    <CheckBox Name="RadioTTSSoundsCheckBox" Text="{Loc 'ui-options-radio-tts-sounds'}" />
+                    <!-- DS14-start -->
+                    <Label Text="{Loc 'ui-options-audio-environment'}" StyleClasses="DeadSpaceSectionTitle" Margin="0 12 0 4" />
+                    <CheckBox Name="AreaEchoCheckBox" Text="{Loc 'ui-options-audio-room-echo'}" />
+                    <CheckBox Name="AreaEchoQualityCheckBox" Text="{Loc 'ui-options-audio-room-echo-high-quality'}"
+                              ToolTip="{Loc 'ui-options-audio-room-echo-high-quality-tooltip'}" />
+                    <CheckBox Name="SpaceMufflingCheckBox" Text="{Loc 'ui-options-audio-space-muffling'}"
+                              ToolTip="{Loc 'ui-options-audio-space-muffling-tooltip'}" />
+                    <!-- DS14-end -->
+                </BoxContainer>
             </BoxContainer>
-        </BoxContainer>
+        </ScrollContainer> <!-- DS14 -->
         <ui:OptionsTabControlRow Name="Control" Access="Public" />
     </BoxContainer>
 </Control>

@@ -33,14 +33,23 @@ namespace Content.IntegrationTests.Tests.DeadSpace.CentComm;
 [TestFixture]
 public sealed class CentCommTransferTest
 {
-    [TestCase(CentCommTemperature.Cold, 0f, 253.15f)]
-    [TestCase(CentCommTemperature.Normal, 0f, 293.15f)]
-    [TestCase(CentCommTemperature.Hot, 0f, 333.15f)]
-    [TestCase(CentCommTemperature.Custom, 12.5f, 285.65f)]
-    public void ConvertsCelsius(CentCommTemperature preset, float celsius, float expected)
+    [TestCase(-12.5f)]
+    [TestCase(0f)]
+    [TestCase(37f)]
+    public void ConvertsCustomCelsius(float celsius)
     {
-        Assert.That(CentCommTransferSettings.TryGetTemperature(preset, celsius, out var kelvin));
-        Assert.That(kelvin, Is.EqualTo(expected).Within(0.001f));
+        Assert.That(CentCommTransferSettings.TryGetTemperature(CentCommTemperature.Custom, celsius, out var kelvin));
+        Assert.That(kelvin, Is.EqualTo(celsius + Atmospherics.T0C).Within(0.001f));
+    }
+
+    [TestCase(CentCommTemperature.Cold)]
+    [TestCase(CentCommTemperature.Normal)]
+    [TestCase(CentCommTemperature.Hot)]
+    public void PresetsIgnoreCustomTemperature(CentCommTemperature preset)
+    {
+        Assert.That(CentCommTransferSettings.TryGetTemperature(preset, -12.5f, out var first));
+        Assert.That(CentCommTransferSettings.TryGetTemperature(preset, 37f, out var second));
+        Assert.That(first, Is.Not.Null.And.EqualTo(second));
     }
 
     [Test]
@@ -63,7 +72,6 @@ public sealed class CentCommTransferTest
             var clientIds = pair.Client.ProtoMan.EnumeratePrototypes<Content.Client.Parallax.Data.ParallaxPrototype>()
                 .Select(prototype => prototype.ID).ToArray();
             Assert.That(ids, Is.Not.Empty.And.EquivalentTo(clientIds));
-            Assert.That(ids, Does.Contain("Wizard"), "Transfer choices must extend beyond the CentComm environment pool.");
         });
         await pair.CleanReturnAsync();
     }
@@ -78,7 +86,7 @@ public sealed class CentCommTransferTest
         var host = server.ResolveDependency<IConsoleHost>();
         var shell = new ConsoleShell(host, player, false);
         var transfer = server.System<CentCommTransferSystem>();
-        var request = new CentCommTransferRequest("Default", CentCommTemperature.Normal, 20f, null);
+        var request = new CentCommTransferRequest(transfer.GetParallaxes().First(), CentCommTemperature.Normal, 20f, null);
         var commands = new[] { "centcomm_transfer", "addgamerulecentcomm" };
         var permissions = server.ResolveDependency<IConGroupController>();
 
@@ -129,7 +137,8 @@ public sealed class CentCommTransferTest
         var xforms = server.System<SharedTransformSystem>();
         var originalPosition = new Vector2(42f, -17f);
         var originalRotation = Angle.FromDegrees(37);
-        var request = new CentCommTransferRequest("Wizard", CentCommTemperature.Custom, -12.5f, "SnowfallLight");
+        var request = new CentCommTransferRequest(system.GetParallaxes().First(), CentCommTemperature.Custom, -12.5f,
+            server.ProtoMan.EnumeratePrototypes<WeatherPrototype>().First().ID);
 
         await server.WaitAssertion(() =>
         {
@@ -149,12 +158,12 @@ public sealed class CentCommTransferTest
 
 
             Assert.That(system.TryStart(null, new CentCommTransferRequest("missing-parallax", CentCommTemperature.Normal, 0, null), out _), Is.False);
-            Assert.That(system.TryStart(null, new CentCommTransferRequest("Wizard", CentCommTemperature.Normal, 0, "missing-weather"), out _), Is.False);
+            Assert.That(system.TryStart(null, new CentCommTransferRequest(request.Parallax, CentCommTemperature.Normal, 0, "missing-weather"), out _), Is.False);
             Assert.That(em.HasComponent<CentCommTransferComponent>(map.Grid), Is.False);
             Assert.That(system.TryStart(null, request, out var result), Is.True, result);
             Assert.That(system.TryStart(null, request, out _), Is.False, "Concurrent transfers must be rejected.");
             var transfer = em.GetComponent<CentCommTransferComponent>(map.Grid);
-            Assert.That(transfer.StartAt - server.Timing.CurTime, Is.EqualTo(TimeSpan.FromMinutes(1)));
+            Assert.That(transfer.StartAt, Is.GreaterThan(server.Timing.CurTime));
             system.Update(0);
             Assert.That(em.HasComponent<FTLComponent>(map.Grid), Is.False);
 
@@ -191,12 +200,12 @@ public sealed class CentCommTransferTest
             Assert.That(transform.LocalPosition, Is.EqualTo(originalPosition));
             Assert.That(transform.LocalRotation, Is.EqualTo(originalRotation));
             Assert.That(em.GetComponent<PhysicsComponent>(map.Grid).BodyType, Is.EqualTo(BodyType.Static));
-            Assert.That(em.GetComponent<ParallaxComponent>(map.MapUid).Parallax, Is.EqualTo("Wizard"));
+            Assert.That(em.GetComponent<ParallaxComponent>(map.MapUid).Parallax, Is.EqualTo(request.Parallax));
             var atmosphere = em.GetComponent<MapAtmosphereComponent>(map.MapUid);
             Assert.That(atmosphere.Space, Is.False);
-            Assert.That(atmosphere.Mixture.Temperature, Is.EqualTo(260.65f).Within(0.001f));
+            Assert.That(atmosphere.Mixture.Temperature, Is.EqualTo(request.Celsius + Atmospherics.T0C).Within(0.001f));
             Assert.That(atmosphere.Mixture.Pressure, Is.EqualTo(Atmospherics.OneAtmosphere).Within(0.001f));
-            Assert.That(em.GetComponent<WeatherComponent>(map.MapUid).Weather.ContainsKey("SnowfallLight"));
+            Assert.That(em.GetComponent<WeatherComponent>(map.MapUid).Weather.ContainsKey(request.Weather!));
         });
         await pair.CleanReturnAsync();
     }

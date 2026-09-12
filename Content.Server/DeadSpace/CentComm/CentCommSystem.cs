@@ -1,7 +1,9 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Linq;
+using Content.Server.Antag.Components;
 using Content.Server.Atmos.EntitySystems;
+using Content.Server.GameTicking.Rules.Components;
 using Content.Server.Station.Events;
 using Content.Server.Station.Systems;
 using Content.Server.StationEvents.Components;
@@ -56,6 +58,11 @@ public sealed class CentCommSystem : EntitySystem
     {
         if (prototype.Abstract || !prototype.HasComponent<GameRuleComponent>(EntityManager.ComponentFactory) ||
             !prototype.HasComponent<StationEventComponent>(EntityManager.ComponentFactory))
+            return false;
+
+        // Antagonists with their own loaded bases must never be summoned to CentComm, including inherited rules.
+        if (prototype.HasComponent<LoadMapRuleComponent>(EntityManager.ComponentFactory) &&
+            prototype.HasComponent<AntagSelectionComponent>(EntityManager.ComponentFactory))
             return false;
 
         // These events share spawning components with otherwise supported events. Include inherited variants.

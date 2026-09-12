@@ -100,7 +100,8 @@ public sealed class LoadMapRuleSystem : StationEventSystem<LoadMapRuleComponent>
         }
 
         // DS14-start
-        if (RuleStation.GetTargetStation(uid) is { } station)
+        // Ordinary events keep their outposts on the loaded map; only CentComm events relocate grids.
+        if (RuleStation.IsCentCommRule(uid) && RuleStation.GetTargetStation(uid) is { } station)
         {
             if (StationSystem.GetLargestGrid(station) is not { } targetGrid)
             {
