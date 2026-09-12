@@ -15,7 +15,6 @@ using Content.Server.Spawners.Components;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Server.StationEvents.Components;
-using Content.Shared.Atmos;
 using Content.Shared.Communications;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.GameTicking.Components;
@@ -37,6 +36,23 @@ public sealed class CentCommTest
 {
     [TestPrototypes]
     private const string Prototypes = @"
+- type: parallax
+  id: CentCommTestParallax
+  layers: []
+
+- type: centCommEnvironment
+  id: CentCommTestAtmosphere
+  parallax: CentCommTestParallax
+  atmosphere:
+    volume: 2500
+    temperature: 280
+    moles:
+      Oxygen: 10
+
+- type: centCommEnvironment
+  id: CentCommTestVacuum
+  parallax: CentCommTestParallax
+
 - type: entity
   id: CentCommTestStation
   parent: TestStation
@@ -144,13 +160,10 @@ public sealed class CentCommTest
 
         await server.WaitAssertion(() =>
         {
-            var parallax = server.ProtoMan.EnumeratePrototypes<ServerParallaxPrototype>().First().ID;
-            var mixture = new GasMixture(Atmospherics.CellVolume) { Temperature = 280f };
-            mixture.SetMoles(Gas.Oxygen, 10f);
             var environments = new[]
             {
-                new CentCommEnvironmentPrototype { Parallax = parallax, Atmosphere = mixture },
-                new CentCommEnvironmentPrototype { Parallax = parallax },
+                server.ProtoMan.Index<CentCommEnvironmentPrototype>("CentCommTestAtmosphere"),
+                server.ProtoMan.Index<CentCommEnvironmentPrototype>("CentCommTestVacuum"),
             };
 
             foreach (var environment in environments)

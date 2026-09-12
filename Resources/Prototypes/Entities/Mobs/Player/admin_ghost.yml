@@ -111,6 +111,7 @@
     - general
   # DS14-end
   - type: CrewMonitoringConsole
+    adminMonitor: true # DS14
   - type: GeneralStationRecordConsole
     canDeleteEntries: true
   - type: DeviceNetwork
