@@ -3,6 +3,7 @@
 - type: entity
   parent: EncryptionKey
   id: EncryptionKeyCriticalForce
+  categories: [ HideSpawnMenu ]
   name: ключ шифрования CriticalForce
   description: Ключ шифрования CriticalForce.
   components:
@@ -45,9 +46,9 @@
 - type: entity
   parent: BaseSubdermalImplant
   id: TrackingImplantCriticalForce
+  categories: [ HideSpawnMenu ]
   name: имплант медицинского вызова CriticalForce
   description: Передаёт запрос на медицинскую эвакуацию при критическом состоянии носителя. Рассчитан на один принятый вызов.
-  categories: [ HideSpawnMenu ]
   components:
   - type: SubdermalImplant
     implantAction: ActionCallErtHelp
