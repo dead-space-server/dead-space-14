@@ -4,7 +4,7 @@ meta:
   engineVersion: 272.0.1
   forkId: dsfobos
   forkVersion: e852d25ca1b2bb7703ba9a66be72f72887ca1c46
-  time: 05/18/2026 16:56:21
+  time: 09/12/2026 16:56:21
   entityCount: 1194
 maps: []
 grids:
@@ -6490,6 +6490,10 @@ entities:
       rot: 3.141592653589793 rad
       pos: 0.5,12.5
       parent: 1
+    - type: Anchorable
+      flags: Anchorable
+    missingComponents:
+    - Construction
 - proto: ShuttleWindow
   entities:
   - uid: 96
