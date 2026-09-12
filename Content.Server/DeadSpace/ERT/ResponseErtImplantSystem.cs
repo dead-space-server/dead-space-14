@@ -43,7 +43,7 @@ public sealed class ResponseErtImplantSystem : EntitySystem
         SubscribeLocalEvent<ResponseErtImplantComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<ResponseErtImplantComponent, ImplantRelayEvent<MobStateChangedEvent>>(OnMobStateChanged);
         SubscribeLocalEvent<ResponseErtImplantComponent, CallErtHelpActionEvent>(OnCallHelp);
-        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(_ => ResetRoundState());
     }
 
     private void OnImplanted(Entity<ResponseErtImplantComponent> ent, ref ImplantImplantedEvent args)
@@ -196,7 +196,7 @@ public sealed class ResponseErtImplantSystem : EntitySystem
             confirmation.Close();
     }
 
-    private void OnRoundRestart(RoundRestartCleanupEvent args)
+    internal void ResetRoundState()
     {
         _usedPlayers.Clear();
         foreach (var implant in _confirmations.Keys.ToArray())
