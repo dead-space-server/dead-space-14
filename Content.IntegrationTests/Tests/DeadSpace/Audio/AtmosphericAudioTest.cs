@@ -24,13 +24,11 @@ public sealed class AtmosphericAudioTest : InteractionTest
     public async Task PressureChangesMuffleTheSameFloorAndSelfFootsteps()
     {
         var atmos = Server.System<AtmosphereSystem>();
-        Entity<GridAtmosphereComponent> serverGrid = default;
-        await Server.WaitPost(() =>
-        {
-            serverGrid = (MapData.Grid.Owner, SEntMan.EnsureComponent<GridAtmosphereComponent>(MapData.Grid));
-        });
+        await Server.WaitPost(() => SEntMan.EnsureComponent<GridAtmosphereComponent>(MapData.Grid));
         // GridAtmosphere initializes its gas overlay and revalidates the existing floor on atmos ticks.
         await RunTicks(60);
+        Entity<GridAtmosphereComponent> serverGrid =
+            (MapData.Grid.Owner, SEntMan.GetComponent<GridAtmosphereComponent>(MapData.Grid));
         var wasSimulated = serverGrid.Comp.Simulated;
         await Server.WaitPost(() => atmos.SetAtmosphereSimulation(serverGrid, false));
 
