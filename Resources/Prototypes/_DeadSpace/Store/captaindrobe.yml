@@ -64,16 +64,21 @@
   priority: 12
 
 - type: storeCategory
+  id: CaptainDrobeSheath
+  name: Ножны
+  priority: 13
+
+- type: storeCategory
   id: CaptainDrobeGloves
   name: Перчатки
-  priority: 13
+  priority: 14
 
 - type: storeCategory
   id: CaptainDrobeShoes
   name: Обувь
-  priority: 14
+  priority: 15
 
 - type: storeCategory
   id: CaptainDrobeSocks
   name: Носки
-  priority: 15
+  priority: 16
