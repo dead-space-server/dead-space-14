@@ -701,15 +701,7 @@
       collection: splinter-blade-attack
     soundNoDamage:
       collection: splinter-blade-miss
-  - type: SolutionContainerManager
-    solutions:
-      melee:
-        reagents:
-        - ReagentId: ExtractInfectorDead
-          Quantity: 999999
-  - type: MeleeChemicalInjector
-    solution: melee
-    transferAmount: 1.5
+
   - type: Sharp
   - type: ComponentToggler
     components:
@@ -1108,9 +1100,31 @@
         # GeistLethalStrike adds bonus damage to the blade's regular hit.
         Slash: 42
         Structural: 380
+      armorPiercingLevels:
+        Slash: 5
   - type: Reflect
     reflectProb: 0.15
     spread: 90
   - type: Sharp
   - type: Execution
     doAfterDuration: 4
+
+- type: entity
+  parent: BaseKnife
+  id: WeaponUnitologyLegionKnife
+  name: нож Легионера
+  description: Игнорирует защиту и возвращает владельцу часть отнятой жизни.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/melee/legion-knife.rsi
+    state: icon
+  - type: Item
+    sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/melee/legion-knife-inhands.rsi
+  - type: MeleeWeapon
+    angle: 0
+    wideAnimationRotation: 55
+    resistanceBypass: true
+    damage:
+      types:
+        Slash: 25
+  - type: LegionKnife

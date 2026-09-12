@@ -4,6 +4,7 @@ roles-antag-thecircle-medic-name = Отряд "Круг" - Cерафим
 roles-antag-thecircle-engineer-name = Отряд "Круг" - Зодчий
 roles-antag-thecircle-commander-name = Отряд "Круг" - Кардинал
 roles-antag-thecircle-geist-name = Отряд "Круг" - Гейст
+roles-antag-thecircle-shock-trooper-name = Отряд "Круг" - Шок Трупер
 
 roles-antag-thecircle-light-objective = Помогите своему ударному отряду радикальных юнитологов своей скоростью, выбегая вперёд, заставляя недругов тратить ресурсы на вас!
 roles-antag-thecircle-heavy-objective = Идите вперёд не боясь ран, не мешая Вестникам, ведь вы - тяжёлый боец ударного отряда радикальных юнитологов!
@@ -11,6 +12,7 @@ roles-antag-thecircle-medic-objective = Обеспечте свой ударны
 roles-antag-thecircle-engineer-objective = С помощью С4 и РСУ пробейте путь к обелиску своему ударному отряду радикальных юнитологов!
 roles-antag-thecircle-commander-objective = Вы - глава ударного отряда радикальных юнитологов, сделайте всё возможное, да бы выкрасть обелиск-артефакт со станции, и призвать на этой же станции нового бога!
 roles-antag-thecircle-geist-objective = Используйте скрытность и ловушки, чтобы устранять противников и прокладывать путь отряду «Круг». Вы можете вылететь раньше своей команды, после разрешение Кардинала конечно.
+roles-antag-thecircle-shock-trooper-objective = Выберите спеца...
 
 roles-antag-thecircle-engineer-start = 
     Вы - Инженер отряда "Круг".
@@ -31,6 +33,21 @@ roles-antag-thecircle-light-start =
 roles-antag-thecircle-geist-start =
     Вы - Шок Трупер "Гейст" ударного отряда «Круг».
     Используйте скрытность, ловушки и внезапные атаки для поддержки своего отряда.
+roles-antag-thecircle-shock-trooper-start =
+    Вы - Шок-трупер ударного отряда «Круг».
+    Устройте кровавую баню на станции.
+
+antag-gear-selector-geist-name = Гейст
+antag-gear-selector-geist-description = Скрытный шок-трупер с прежним снаряжением, невидимостью и ловушками.
+loadout-group-the-circle-geist-style = Стиль снаряжения Гейста
+antag-gear-selector-legion-name = Легионер
+antag-gear-selector-legion-description = Быстрый боец без огнестрела, вооружённый вампирическим ножом и способностью «Бешенство».
+antag-gear-selector-survival-name = Отсроченный шок
+antag-gear-selector-survival-description = После 100 полученного урона не позволяет перейти в шок до 150 урона в течение 10 секунд. Для реализации шанса на восстановление требуется ранить пятерых людей.
+antag-gear-selector-predator-name = Хищник
+antag-gear-selector-predator-description = После ударов по пяти разным людям даёт ещё +10% скорости и +10% вампиризма.
+antag-gear-selector-geist-briefing = Вы выбрали Гейста. Используйте скрытность, ловушки и внезапные атаки, чтобы открыть путь Кругу.
+antag-gear-selector-legion-briefing = Вы выбрали Легионера. У вас нет огнестрела: полагайтесь на нож, вампиризм и бешенство. Первый удар запускает охотничьи импульсы, второй прекращает их, третий по той же цели завершает бешенство.
 roles-antag-thecircle-commander-start = 
     Вы - Командир отряда "Круг".
     Вы максимально серьёзная роль, потому отыгрыш также важен! 

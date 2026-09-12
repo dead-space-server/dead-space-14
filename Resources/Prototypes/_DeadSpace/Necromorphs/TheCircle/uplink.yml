@@ -481,19 +481,6 @@
     stock: 1
 
 - type: listing
-  id: UniPhoneUplinkGeistHardsuit
-  name: Скафандр «Морс» / Скафандр Гейста
-  icon: { sprite: _DeadSpace/Necromorfs/TheCircle/HardSuit/geist.rsi, state: icon }
-  productEntity: ClothingOuterHardsuitUnitologyGeist
-  cost:
-    Telecrystal: 14
-  categories:
-   - UniPhoneUplinkGear
-  conditions:
-  - !type:ListingLimitedStockCondition
-    stock: 1
-
-- type: listing
   id: UniPhoneUplinkDreadnoughtBundle
   name: комплект Дредноута «Бастион»
   description: Скафандр «Бастион», пулемёт «Вихрь», шесть коробов, имплант растворения после смерти и имплант удержания оружия.
@@ -701,7 +688,7 @@
   icon: { sprite: Objects/Specific/Chemistry/syringe.rsi, state: syringe1 }
   productEntity: SyringeExtractInfectorDead
   cost:
-    Telecrystal: 4
+    Telecrystal: 16
   categories:
     - UniPhoneUplinkOther
 

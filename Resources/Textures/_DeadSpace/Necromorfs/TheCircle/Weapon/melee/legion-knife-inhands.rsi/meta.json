@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "license": "AGPL-3.0-or-later",
+  "copyright": "Mojave Sun contributors; extracted from Mojave Sun in-hand DMI files via Scrubby, commit 0a47c4af16c4ca46fb9a2dc7ac0f43be7bb2b723",
+  "size": { "x": 32, "y": 32 },
+  "states": [
+    { "name": "inhand-left", "directions": 4 },
+    { "name": "inhand-right", "directions": 4 }
+  ]
+}

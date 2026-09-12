@@ -240,6 +240,15 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
             return;
         }
 
+        // DS14-start: Legionnaire knife RMB activates rage instead of making a wide attack.
+        if (HasComp<Content.Shared.DeadSpace.TheCircle.Legion.LegionKnifeComponent>(weaponUid))
+        {
+            var ev = new Content.Shared.DeadSpace.TheCircle.Legion.LegionKnifeRageAttemptEvent(user);
+            RaiseLocalEvent(weaponUid, ev);
+            return;
+        }
+        // DS14-end
+
         AttemptAttack(user, weaponUid, weapon, msg, args.SenderSession);
     }
 

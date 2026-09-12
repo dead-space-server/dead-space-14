@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "license": "AGPL-3.0-or-later",
+  "copyright": "Mojave Sun contributors; extracted from mojave/icons/objects/melee/melee_inventory.dmi via Scrubby, commit 0a47c4af16c4ca46fb9a2dc7ac0f43be7bb2b723",
+  "size": { "x": 40, "y": 32 },
+  "states": [ { "name": "icon" } ]
+}

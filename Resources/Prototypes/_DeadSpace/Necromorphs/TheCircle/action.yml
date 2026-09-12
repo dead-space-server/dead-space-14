@@ -52,3 +52,26 @@
     itemIconStyle: BigAction
   - type: InstantAction
     event: !type:DreadnoughtLastStandActionEvent
+
+- type: entity
+  parent: BaseMentalAction
+  id: ActionLegionRage
+  name: бешенство Легионера
+  description: Ускоряет Легионера на 35%. Удары продлевают бешенство, но третий удар по одной цели завершит его.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    icon:
+      sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/melee/legion-knife.rsi
+      state: icon
+    itemIconStyle: BigAction
+  - type: InstantAction
+    event: !type:LegionRageActionEvent
+
+- type: alert
+  id: LegionRage
+  icons:
+  - sprite: /Textures/_DeadSpace/Necromorfs/TheCircle/Weapon/melee/legion-knife.rsi
+    state: icon
+  name: Бешенство Легионера
+  description: Показывает оставшееся время бешенства.

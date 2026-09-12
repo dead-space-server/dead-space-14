@@ -557,11 +557,16 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
         var componentsBeforeAssignment = SnapshotComponents(entitiesBeforeAssignment);
         // DS14-end
 
-        EntityManager.AddComponents(player, def.Components);
+        // DS14-start: selector-backed antagonists receive their components after the player chooses a body.
+        var deferredGearSelection = TryComp<Content.Server.DeadSpace.AntagGearSelector.AntagGearSelectorComponent>(ent, out var gearSelector) &&
+                                    def.PrefRoles.Any(gearSelector.Roles.Contains);
+        if (!deferredGearSelection)
+            EntityManager.AddComponents(player, def.Components);
+        // DS14-end
 
         // Equip the entity's RoleLoadout and LoadoutGroup
         List<ProtoId<StartingGearPrototype>> gear = new();
-        if (def.StartingGear is not null)
+        if (!deferredGearSelection && def.StartingGear is not null) // DS14
             gear.Add(def.StartingGear.Value);
 
         // DS14-start
@@ -586,10 +591,13 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
             }
         }
 
-        if (selectedAntagLoadout != null && selectedAntagLoadoutPrototype != null)
-            _loadout.Equip(player, gear, selectedAntagLoadout, selectedAntagLoadoutPrototype);
-        else
-            _loadout.Equip(player, gear, def.RoleLoadout);
+        if (!deferredGearSelection) // DS14
+        {
+            if (selectedAntagLoadout != null && selectedAntagLoadoutPrototype != null)
+                _loadout.Equip(player, gear, selectedAntagLoadout, selectedAntagLoadoutPrototype);
+            else
+                _loadout.Equip(player, gear, def.RoleLoadout);
+        } // DS14
         // DS14-end
 
         if (session != null)
@@ -612,7 +620,11 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
             // DS14-end
             _role.MindAddRoles(curMind.Value, def.MindRoles, null, true);
             ent.Comp.AssignedMinds.Add((curMind.Value, Name(player)));
-            SendBriefing(session, def.Briefing);
+            // DS14-start: selector-backed antagonists get the proper role briefing
+            // only after their fighter and perk have been selected.
+            if (!deferredGearSelection)
+                SendBriefing(session, def.Briefing);
+            // DS14-end
 
             Log.Debug($"Assigned {ToPrettyString(curMind)} as antagonist: {ToPrettyString(ent)}");
             _adminLogger.Add(LogType.AntagSelection, $"Assigned {ToPrettyString(curMind)} as antagonist: {ToPrettyString(ent)}");

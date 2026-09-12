@@ -72,6 +72,53 @@
     windowUntilSpawnMoon:
       min: 15m
       max: 15m
+  - type: AntagGearSelector
+    selectionTimeout: 1m
+    roles:
+    - CircleShockTrooper
+    gear:
+    - name: antag-gear-selector-geist-name
+      description: antag-gear-selector-geist-description
+      spritePrototype: ClothingHeadHelmetUnitologyGeist
+      startingGear: TheCircleGeistGear
+      roleLoadout: RoleTheCircleShockTrooper
+      briefing:
+        text: antag-gear-selector-geist-briefing
+        color: CornflowerBlue
+        sound: "/Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg"
+      components:
+      - type: TheCircleGeist
+      - type: RandomMetadata
+        nameSegments:
+        - UnitologyGeistFirst
+        - UnitologyFighterSecond
+        nameFormat: name-format-nuclear-operation
+    - name: antag-gear-selector-legion-name
+      description: antag-gear-selector-legion-description
+      spritePrototype: ClothingHeadHelmetUnitologyLegion
+      startingGear: TheCircleLegionGear
+      briefing:
+        text: antag-gear-selector-legion-briefing
+        color: Crimson
+        sound: "/Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg"
+      components:
+      - type: Legion
+      - type: RandomMetadata
+        nameSegments:
+        - UnitologyLegionFirst
+        - UnitologyFighterSecond
+        nameFormat: name-format-nuclear-operation
+      perks:
+      - name: antag-gear-selector-survival-name
+        description: antag-gear-selector-survival-description
+        spritePrototype: WeaponUnitologyLegionKnife
+        components:
+        - type: LegionSurvivalPerk
+      - name: antag-gear-selector-predator-name
+        description: antag-gear-selector-predator-description
+        spritePrototype: WeaponUnitologyLegionKnife
+        components:
+        - type: LegionPredatorPerk
   - type: LoadMapRule
     mapPath: /Maps/Nonstations/ds_thecircle_outpost_docked.yml
   - type: AntagSelection
@@ -371,22 +418,20 @@
         - GeneralLanguage
       mindRoles:
       - MindRoleCircleEngineer
-    - prefRoles: [ CircleGeist ]
+    - prefRoles: [ CircleShockTrooper ]
       fallbackRoles: []
-      spawnerPrototype: SpawnPointCircleGeist
-      startingGear: TheCircleGeistGear
+      spawnerPrototype: SpawnPointCircleShockTrooper
       playerRatio: 12
       roleLoadout:
         - RoleSurvivalTheCircleGeist
       briefing:
-        text: roles-antag-thecircle-geist-start
+        text: roles-antag-thecircle-shock-trooper-start
         color: CornflowerBlue
         sound: "/Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg"
       components:
       - type: Skill
         group: ALL
       - type: ObeliskActivateAbility
-      - type: TheCircleGeist
       - type: AutoImplant
         implants:
         - DeathAcidifierImplant
@@ -400,11 +445,6 @@
       - type: Unitology
       - type: ImmunNecroobelisk
       - type: IgnoreKudzu
-      - type: RandomMetadata
-        nameSegments:
-        - UnitologyGeistFirst
-        - UnitologyFighterSecond
-        nameFormat: name-format-nuclear-operation
       - type: NpcFactionMember
         factions:
         - Syndicate
@@ -415,6 +455,6 @@
         - NecromorfLanguage
         - GeneralLanguage
       mindRoles:
-      - MindRoleCircleGeist
+      - MindRoleCircleShockTrooper
   - type: DynamicRuleCost
     cost: 200

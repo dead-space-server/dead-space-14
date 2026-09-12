@@ -1,6 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Shared.DeadSpace.ThermalVision;
+using Content.Shared.DeadSpace.TheCircle.Legion;
 using Content.Shared.Inventory;
 using Robust.Client.Audio;
 using Robust.Client.GameObjects;
@@ -31,6 +32,10 @@ public sealed class ThermalVisorSystem : EntitySystem
         SubscribeLocalEvent<ThermalVisionComponent, ComponentShutdown>(OnActiveShutdown);
         SubscribeLocalEvent<ThermalVisionComponent, LocalPlayerAttachedEvent>(OnPlayerAttached);
         SubscribeLocalEvent<ThermalVisionComponent, LocalPlayerDetachedEvent>(OnPlayerDetached);
+        SubscribeLocalEvent<LegionComponent, ComponentInit>(OnLegionInit);
+        SubscribeLocalEvent<LegionComponent, ComponentShutdown>(OnLegionShutdown);
+        SubscribeLocalEvent<LegionComponent, LocalPlayerAttachedEvent>(OnLegionAttached);
+        SubscribeLocalEvent<LegionComponent, LocalPlayerDetachedEvent>(OnLegionDetached);
 
         _overlay = new ThermalVisionOverlay(EntityManager, _spriteSys, _lookup);
     }
@@ -45,7 +50,16 @@ public sealed class ThermalVisorSystem : EntitySystem
     {
         base.FrameUpdate(frameTime);
         var player = _player.LocalEntity;
-        if (player == null || !TryComp<ThermalVisionComponent>(player, out var comp))
+        if (player == null)
+            return;
+
+        var pulseTarget = TryComp<LegionComponent>(player, out var legion) && legion.RevealPulseActive ? 1f : 0f;
+        _overlay.LegionAlpha = Math.Clamp(
+            _overlay.LegionAlpha + (pulseTarget - _overlay.LegionAlpha) * frameTime * 8f,
+            0f,
+            1f);
+
+        if (!TryComp<ThermalVisionComponent>(player, out var comp))
             return;
 
         if (comp.IsActive && !_wasActive)
@@ -81,6 +95,27 @@ public sealed class ThermalVisorSystem : EntitySystem
         RemVision();
     }
 
+    private void OnLegionInit(EntityUid uid, LegionComponent component, ComponentInit args)
+    {
+        if (_player.LocalEntity == uid)
+            AddVision();
+    }
+
+    private void OnLegionShutdown(EntityUid uid, LegionComponent component, ComponentShutdown args)
+    {
+        if (_player.LocalEntity == uid && !HasComp<ThermalVisionComponent>(uid))
+            RemVision();
+    }
+
+    private void OnLegionAttached(EntityUid uid, LegionComponent component, LocalPlayerAttachedEvent args) => AddVision();
+
+    private void OnLegionDetached(EntityUid uid, LegionComponent component, LocalPlayerDetachedEvent args)
+    {
+        _overlay.LegionAlpha = 0f;
+        if (!HasComp<ThermalVisionComponent>(uid))
+            RemVision();
+    }
+
     private void AddVision()
     {
         _overlayMan.AddOverlay(_overlay);
@@ -94,6 +129,7 @@ public sealed class ThermalVisorSystem : EntitySystem
 
 public sealed class ThermalVisionOverlay : Overlay
 {
+    public float LegionAlpha;
     private readonly IEntityManager _entityManager;
     private readonly ShaderInstance _vignetteShader;
     private readonly SpriteSystem _spriteSys;
@@ -117,13 +153,14 @@ public sealed class ThermalVisionOverlay : Overlay
     protected override bool BeforeDraw(in OverlayDrawArgs args)
     {
         var player = IoCManager.Resolve<IPlayerManager>().LocalEntity;
-        if (player == null || !_entityManager.TryGetComponent<ThermalVisionComponent>(player.Value, out var comp))
+        if (player == null)
             return false;
 
         if (!_entityManager.TryGetComponent<EyeComponent>(player.Value, out var eye) || args.Viewport.Eye != eye.Eye)
             return false;
 
-        return comp.IsActive;
+        var thermalActive = _entityManager.TryGetComponent<ThermalVisionComponent>(player.Value, out var comp) && comp.IsActive;
+        return thermalActive || LegionAlpha > 0.01f;
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -131,7 +168,8 @@ public sealed class ThermalVisionOverlay : Overlay
         if (args.Space == OverlaySpace.ScreenSpace)
         {
             var player = IoCManager.Resolve<IPlayerManager>().LocalEntity;
-            if (player == null || !_entityManager.TryGetComponent<ThermalVisionComponent>(player.Value, out var comp) || !comp.UseShader)
+            if (player == null || !_entityManager.TryGetComponent<ThermalVisionComponent>(player.Value, out var comp) ||
+                !comp.IsActive || !comp.UseShader)
                 return;
 
             var screenHandle = (DrawingHandleScreen)args.DrawingHandle;
@@ -192,7 +230,7 @@ public sealed class ThermalVisionOverlay : Overlay
                 oldColor.R,
                 oldColor.G * 0.5f,
                 oldColor.B * 0.5f,
-                oldColor.A));
+                oldColor.A * (LegionAlpha > 0.01f ? LegionAlpha : 1f)));
             _spriteSys.RenderSprite((drawUid, drawSprite), worldHandle, eyeRot, worldRot, worldPos);
             _spriteSys.SetColor((drawUid, drawSprite), oldColor);
         }
