@@ -410,7 +410,7 @@ namespace Content.Client.RoundEnd
                 VerticalExpand = true,
             };
 
-            content.AddChild(MakeManifestName(playerInfo, playerInfo.Antag));
+            content.AddChild(MakeManifestName(playerInfo, playerInfo.Antag)); // DS-14
 
             var roleText = GetPlayerManifestRoleText(playerInfo);
 
@@ -594,7 +594,7 @@ namespace Content.Client.RoundEnd
                 Orientation = LayoutOrientation.Horizontal,
                 HorizontalExpand = true,
             };
-            nameRow.AddChild(MakeManifestName(playerInfo, true));
+            nameRow.AddChild(MakeManifestName(playerInfo, true)); // DS-14
             if (playerInfo.IsDead)
             {
                 var badgeLabel = new RichTextLabel
