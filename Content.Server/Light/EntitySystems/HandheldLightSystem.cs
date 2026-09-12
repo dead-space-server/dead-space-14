@@ -1,5 +1,6 @@
 using Content.Server.Actions;
 using Content.Server.Popups;
+using Content.Shared._CM14.Attachable.Components;
 using Content.Shared.Actions;
 using Content.Shared.Interaction;
 using Content.Shared.Light;
@@ -67,6 +68,10 @@ namespace Content.Server.Light.EntitySystems
 
         private void OnGetActions(EntityUid uid, HandheldLightComponent component, GetItemActionsEvent args)
         {
+            if (TryComp(uid, out AttachableToggleableComponent? attachable) &&
+                attachable.AttachedOnly && !attachable.Attached)
+                return;
+
             args.AddAction(ref component.ToggleActionEntity, component.ToggleAction);
         }
 
@@ -74,6 +79,13 @@ namespace Content.Server.Light.EntitySystems
         {
             if (args.Handled)
                 return;
+
+            if (TryComp(ent.Owner, out AttachableToggleableComponent? attachable) &&
+                attachable.AttachedOnly && !attachable.Attached)
+            {
+                args.Handled = true;
+                return;
+            }
 
             if (ent.Comp.Activated)
                 TurnOff(ent);
@@ -126,6 +138,13 @@ namespace Content.Server.Light.EntitySystems
         {
             if (args.Handled || !args.Complex || !ent.Comp.ToggleOnInteract)
                 return;
+
+            if (TryComp(ent.Owner, out AttachableToggleableComponent? attachable) &&
+                attachable.AttachedOnly && !attachable.Attached)
+            {
+                args.Handled = true;
+                return;
+            }
 
             if (ToggleStatus(args.User, ent))
                 args.Handled = true;

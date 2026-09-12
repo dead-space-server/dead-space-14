@@ -664,3 +664,22 @@ binds:
   type: State
   key: MouseMiddle
   canFocus: true
+- function: CMActivateAttachableBarrel
+  type: State
+  key: Z
+  mod1: Shift
+- function: CMActivateAttachableRail
+  type: State
+  key: C
+  mod1: Shift
+- function: CMActivateAttachableStock
+  type: State
+  key: X
+  mod1: Shift
+- function: CMActivateAttachableUnderbarrel
+  type: State
+  key: V
+  mod1: Shift
+- function: CMUniqueAction
+  type: State
+  key: Space

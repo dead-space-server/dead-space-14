@@ -1,0 +1,11 @@
+- type: entity
+  id: CMActionToggleAttachable
+  name: Toggle Attachable
+  description: Toggle an attachable. If you're seeing this, someone forgot to set the description properly.
+  components:
+  - type: Action
+    icon:
+      sprite: _CM14/Actions/scope_actions.rsi
+      state: sniperscope
+  - type: InstantAction
+    event: !type:AttachableToggleActionEvent

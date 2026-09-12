@@ -1,0 +1,5 @@
+- type: soundCollection
+  id: CMSilencedShoot
+  files:
+  - /Audio/_CM14/Weapons/Guns/Gunshots/gun_silenced_shot1.ogg
+  - /Audio/_CM14/Weapons/Guns/Gunshots/gun_silenced_shot2.ogg

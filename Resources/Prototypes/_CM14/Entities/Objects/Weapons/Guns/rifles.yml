@@ -1,0 +1,90 @@
+- type: entity
+  parent: [BaseWeaponRifle, CMBaseAttachableHolder]
+  id: CMWeaponRifleM41A
+  name: M41A Pulse Rifle
+  description: The M41A Pulse Rifle is the standard-issue assault rifle of the United States Colonial Marines. It features an integrated ammunition counter and accepts a variety of attachments. Uses 10x24mm caseless rounds.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Guns/Rifels/xc67.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Clothing
+    sprite: _DeadSpace/Objects/Weapons/Guns/Rifels/xc67.rsi
+    quickEquip: false
+    slots:
+    - Back
+    - suitStorage
+  - type: GunRequiresWield
+  - type: AmmoCounter
+  - type: Gun
+    fireRate: 8
+    selectedMode: FullAuto
+    availableModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/ltrifle.ogg
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMMagazineCaseless10x24
+        insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
+        ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
+        priority: 1
+        insertOnInteract: true
+        whitelist:
+          tags:
+          - CMMagazineCaseless10x24
+        whitelistFailPopup: gun-magazine-whitelist-fail
+      gun_chamber:
+        name: Chamber
+        priority: 2
+        insertOnInteract: false
+        whitelist:
+          tags:
+          - CMCartridgeCaseless10x24
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+  - type: MagazineVisuals
+    magState: mag
+    steps: 1
+    zeroVisible: true
+  - type: Appearance
+  - type: AttachableHolderVisuals
+    offsets:
+      cm-aslot-barrel: 0.75, -0.03125
+      cm-aslot-rail: -0.03125, 0.185
+      cm-aslot-stock: -0.5625, -0.03125
+      cm-aslot-underbarrel: 0.34375, -0.34375
+  - type: AttachableHolder
+    slots:
+      cm-aslot-barrel:
+        tags:
+        - CMAttachableExtendedBarrel
+        - CMAttachableCompensator
+        - CMAttachableSuppressor
+      cm-aslot-rail:
+        tags:
+        - CMAttachableFlashlight
+        - CMAttachableSmartScope
+        - CMAttachableScope
+      cm-aslot-stock:
+        tags:
+        - CMAttachableStock
+      cm-aslot-underbarrel:
+        tags:
+        - CMAttachmentUnderbarrel
+
+- type: Tag
+  id: CMCartridgeCaseless10x24
+- type: Tag
+  id: CMMagazineCaseless10x24
+- type: Tag
+  id: CMShellShotgun
