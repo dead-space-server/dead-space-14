@@ -4,7 +4,9 @@
 
 using System.Numerics;
 using Content.Client.DeadSpace.Audio;
-using Content.IntegrationTests.Tests.Atmos;
+using Content.IntegrationTests.Tests.Interaction;
+using Content.Server.Atmos.Components;
+using Content.Server.Atmos.EntitySystems;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Atmos.EntitySystems;
@@ -16,15 +18,23 @@ using Robust.Shared.Maths;
 
 namespace Content.IntegrationTests.Tests.DeadSpace.Audio;
 
-public sealed class AtmosphericAudioTest : AtmosTest
+public sealed class AtmosphericAudioTest : InteractionTest
 {
     [Test]
     public async Task PressureChangesMuffleTheSameFloorAndSelfFootsteps()
     {
-        var wasSimulated = ProcessEnt.Comp1.Simulated;
-        await Server.WaitPost(() => SAtmos.SetAtmosphereSimulation(ProcessEnt, false));
+        var atmos = Server.System<AtmosphereSystem>();
+        Entity<GridAtmosphereComponent> serverGrid = default;
+        await Server.WaitPost(() =>
+        {
+            serverGrid = (MapData.Grid.Owner, SEntMan.EnsureComponent<GridAtmosphereComponent>(MapData.Grid));
+        });
+        // GridAtmosphere initializes its gas overlay and revalidates the existing floor on atmos ticks.
+        await RunTicks(60);
+        var wasSimulated = serverGrid.Comp.Simulated;
+        await Server.WaitPost(() => atmos.SetAtmosphereSimulation(serverGrid, false));
 
-        var grid = CEntMan.GetEntity(SEntMan.GetNetEntity(ProcessEnt));
+        var grid = CEntMan.GetEntity(SEntMan.GetNetEntity(serverGrid));
         var cfg = Client.ResolveDependency<IConfigurationManager>();
         var oldSetting = cfg.GetCVar(AreaEchoCVars.SpaceMuffling);
         await Client.WaitPost(() => cfg.SetCVar(AreaEchoCVars.SpaceMuffling, true));
@@ -39,14 +49,15 @@ public sealed class AtmosphericAudioTest : AtmosTest
             {
                 await Server.WaitAssertion(() =>
                 {
-                    var mixture = SAtmos.GetTileMixture(ProcessEnt, null, Vector2i.Zero)
+                    var mixture = atmos.GetTileMixture(serverGrid.Owner, MapData.MapUid, Vector2i.Zero)
                                   ?? throw new AssertionException("The test floor has no gas mixture.");
                     mixture.Clear();
                     mixture.Temperature = Atmospherics.T20C;
                     mixture.SetMoles(Gas.Nitrogen,
                         fraction * Atmospherics.OneAtmosphere * mixture.Volume /
                         (Atmospherics.R * mixture.Temperature));
-                    SAtmos.InvalidateVisuals((ProcessEnt.Owner, ProcessEnt.Comp2), Vector2i.Zero);
+                    atmos.InvalidateVisuals((serverGrid.Owner,
+                        SEntMan.GetComponent<GasTileOverlayComponent>(serverGrid)), Vector2i.Zero);
                 });
 
                 await RunTicks(60);
@@ -95,7 +106,7 @@ public sealed class AtmosphericAudioTest : AtmosTest
         finally
         {
             await Client.WaitPost(() => cfg.SetCVar(AreaEchoCVars.SpaceMuffling, oldSetting));
-            await Server.WaitPost(() => SAtmos.SetAtmosphereSimulation(ProcessEnt, wasSimulated));
+            await Server.WaitPost(() => atmos.SetAtmosphereSimulation(serverGrid, wasSimulated));
         }
     }
 }

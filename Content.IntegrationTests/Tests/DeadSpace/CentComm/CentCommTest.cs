@@ -66,7 +66,6 @@ public sealed class CentCommTest
   - type: StationEvent
   - type: RuleGrids
   - type: LoadMapRule
-    mapPath: /centcomm-test-outpost.yml
 
 - type: entity
   id: CentCommTestOutpostEvent
@@ -204,7 +203,10 @@ public sealed class CentCommTest
 
         await server.WaitAssertion(() =>
         {
-            Assert.That(centcomm.IsAllowedRule(server.ProtoMan.Index<EntityPrototype>(ruleId)), Is.EqualTo(allowed));
+            Assert.That(server.ProtoMan.HasMapping<EntityPrototype>(ruleId), Is.True);
+            var runnable = server.ProtoMan.TryIndex<EntityPrototype>(ruleId, out var prototype) &&
+                           centcomm.IsAllowedRule(prototype);
+            Assert.That(runnable, Is.EqualTo(allowed));
         });
 
         await pair.CleanReturnAsync();
@@ -321,6 +323,7 @@ public sealed class CentCommTest
         var stationMap = await pair.CreateTestMap();
         var templateMap = await pair.CreateTestMap();
         EntityUid loadedMap = default;
+        EntityUid ruleEntity = default;
         EntityUid? spawner = null;
 
         await server.WaitAssertion(() =>
@@ -331,14 +334,30 @@ public sealed class CentCommTest
             Assert.That(server.System<MapLoaderSystem>().TrySaveMap(templateMap.MapId,
                 new ResPath("/centcomm-test-outpost.yml")), Is.True);
             mapSystem.DeleteMap(templateMap.MapId);
+        });
 
+        const string loadedRule = "CentCommTestLoadedMapEvent";
+        var parentRule = targetCentComm ? "CentCommTestMapEvent" : "CentCommTestOutpostEvent";
+        var loadedPrototype = $@"
+- type: entity
+  id: {loadedRule}
+  parent: {parentRule}
+  components:
+  - type: LoadMapRule
+    mapPath: /centcomm-test-outpost.yml
+";
+        await pair.LoadPrototypes([loadedPrototype]);
+
+        await server.WaitAssertion(() =>
+        {
+            var mapSystem = server.System<SharedMapSystem>();
             var station = em.SpawnEntity(targetCentComm ? "CentCommTestStation" : "TestStation", MapCoordinates.Nullspace);
             server.System<StationSystem>().AddGridToStation(station, stationMap.Grid);
             if (!targetCentComm)
                 em.AddComponent<StationEventEligibleComponent>(station);
 
-            var ruleId = targetCentComm ? "CentCommTestMapEvent" : "CentCommTestOutpostEvent";
-            var rule = server.System<GameTicker>().AddGameRule(ruleId, targetCentComm ? station : null);
+            var rule = server.System<GameTicker>().AddGameRule(loadedRule, targetCentComm ? station : null);
+            ruleEntity = rule;
             Assert.That(server.System<GameRuleStationSystem>().GetTargetStation(rule), Is.EqualTo(station));
             var grids = em.GetComponent<RuleGridsComponent>(rule);
             Assert.That(grids.Map, Is.Not.Null);
@@ -365,6 +384,13 @@ public sealed class CentCommTest
             if (spawner is { } antag)
                 Assert.That(server.Transform(antag).MapUid, Is.EqualTo(loadedMap));
         });
+
+        await server.WaitPost(() =>
+        {
+            em.DeleteEntity(ruleEntity);
+            server.ProtoMan.RemoveString(loadedPrototype);
+        });
+        await pair.Client.WaitPost(() => pair.Client.ProtoMan.RemoveString(loadedPrototype));
         await pair.CleanReturnAsync();
     }
 

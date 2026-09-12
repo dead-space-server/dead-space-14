@@ -45,6 +45,7 @@ public sealed class ResponseErtImplantTest : InteractionTest
     {
         // The dummy ticker skips round cleanup when pooled servers restart.
         await Server.WaitPost(() => SEntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent()));
+        await Pair.ReallyBeIdle(); // DS14: finish round cleanup notifications before the base tears down the map and pair.
     }
 
     private async Task Prepare()

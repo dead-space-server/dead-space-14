@@ -47,7 +47,7 @@ public sealed class AreaEchoTest
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
-            Connected = false,
+            Connected = true,
             Dirty = true,
         });
         var client = pair.Client;
