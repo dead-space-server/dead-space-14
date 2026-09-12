@@ -41,6 +41,7 @@ public static class DeadSpaceStylePalette
     public static Color ControlHover => _current.ControlHover;
     public static Color ControlPressed => _current.ControlPressed;
     public static Color ControlDisabled => _current.ControlDisabled;
+    public static Color ControlDisabledPressed => _current.ControlDisabledPressed;
     public static Color Action => _current.Action;
     public static Color ActionHover => _current.ActionHover;
     public static Color ActionPressed => _current.ActionPressed;
@@ -73,6 +74,7 @@ public static class DeadSpaceStylePalette
     public static Color Text => _current.Text;
     public static Color TextInactive => _current.TextInactive;
     public static Color TextMuted => _current.TextMuted;
+    public static Color TextDisabled => _current.TextDisabled;
     public static Color TextPlaceholder => _current.TextPlaceholder;
     public static Color TextOnTranscript => _current.TextOnTranscript;
     public static Color TextOnTranscriptMuted => _current.TextOnTranscriptMuted;
@@ -145,19 +147,19 @@ public static class DeadSpaceStylePalette
             // Controls must remain distinct from SurfaceHeader even without a permanent border.
             Control = Neutral("#35434F"),
             ControlHover = Neutral("#405160"),
-            ControlPressed = Neutral("#4C6374"),
-            // Disabled controls are deliberately lighter than enabled controls. Dense machine recipe lists
-            // otherwise make an unavailable row disappear into the surrounding dark surface.
-            ControlDisabled = Neutral("#333B44"),
+            ControlPressed = Neutral("#73592F"),
+            // Unselected controls are cool, selected controls are warm, and unavailable controls are neutral.
+            ControlDisabled = Neutral("#292B2E"),
+            ControlDisabledPressed = Neutral("#453B2D"),
             Action = Neutral("#303E4A"),
             ActionHover = Neutral("#3E5261"),
-            ActionPressed = Neutral("#4C6576"),
-            ActionDisabled = Neutral("#333B44"),
+            ActionPressed = Neutral("#73592F"),
+            ActionDisabled = Neutral("#292B2E"),
             ListItem = Neutral("#212B35"),
             ListItemAlternate = Neutral("#283440"),
             ListItemHover = Neutral("#33424F"),
-            ListItemPressed = Neutral("#3D5060"),
-            Input = Neutral("#111A23"),
+            ListItemPressed = Neutral("#5B492F"),
+            Input = Neutral("#263440"),
             Border = Color.FromHex("#49545F"),
             BorderDark = Color.FromHex("#2B343D"),
             BorderHeader = Color.FromHex("#6B573D"),
@@ -178,6 +180,7 @@ public static class DeadSpaceStylePalette
             Text = Color.FromHex("#F0F2F4"),
             TextInactive = Color.FromHex("#C4C9CF"),
             TextMuted = Color.FromHex("#A9B0B8"),
+            TextDisabled = Color.FromHex("#92969D"),
             TextPlaceholder = Color.FromHex("#89939E"),
             TextOnTranscript = Color.FromHex("#F0F2F4"),
             TextOnTranscriptMuted = Color.FromHex("#B6C0CA"),
@@ -240,16 +243,17 @@ public static class DeadSpaceStylePalette
             // intentionally authored for a dark background and cannot be recolored safely by a stylesheet.
             SurfaceTranscript = Color.FromHex("#111A23"),
             ModalScrim = Color.FromHex("#10131888"),
-            // A neutral mid-grey gives controls hierarchy without the washed-out blue cast of the old fill.
-            Control = Color.FromHex("#A8AEB2"),
+            // Cool enabled controls contrast with warm selections and neutral disabled controls.
+            Control = Color.FromHex("#A9B8C4"),
             ControlHover = Color.FromHex("#C9BEAD"),
-            ControlPressed = Color.FromHex("#B69A70"),
+            ControlPressed = Color.FromHex("#CDAE77"),
             // The light neutral fill is intentionally separated from the darker enabled control fill.
-            ControlDisabled = Color.FromHex("#E2E6E9"),
+            ControlDisabled = Color.FromHex("#E1E1E1"),
+            ControlDisabledPressed = Color.FromHex("#D8CBB6"),
             Action = Color.FromHex("#9FA6AB"),
             ActionHover = Color.FromHex("#C4B69F"),
-            ActionPressed = Color.FromHex("#AB8C5F"),
-            ActionDisabled = Color.FromHex("#E2E6E9"),
+            ActionPressed = Color.FromHex("#CDAE77"),
+            ActionDisabled = Color.FromHex("#E1E1E1"),
             ListItem = Color.FromHex("#DCE0E3"),
             ListItemAlternate = Color.FromHex("#CCD3D8"),
             ListItemHover = Color.FromHex("#E3D8C8"),
@@ -275,6 +279,7 @@ public static class DeadSpaceStylePalette
             Text = Color.FromHex("#171C21"),
             TextInactive = Color.FromHex("#303840"),
             TextMuted = Color.FromHex("#46515B"),
+            TextDisabled = Color.FromHex("#6F7378"),
             TextPlaceholder = Color.FromHex("#626D77"),
             TextOnTranscript = Color.FromHex("#F0F2F4"),
             TextOnTranscriptMuted = Color.FromHex("#B6C0CA"),
@@ -355,6 +360,7 @@ public static class DeadSpaceStylePalette
             ControlHover = Palettes.Navy.HoveredElement,
             ControlPressed = Palettes.Navy.PressedElement,
             ControlDisabled = Palettes.Navy.DisabledElement,
+            ControlDisabledPressed = Palettes.Navy.DisabledElement,
             Action = Palettes.Navy.Element,
             ActionHover = Palettes.Navy.HoveredElement,
             ActionPressed = Palettes.Navy.PressedElement,
@@ -384,6 +390,7 @@ public static class DeadSpaceStylePalette
             Text = Color.White,
             TextInactive = Color.FromHex("#99A7B3"),
             TextMuted = Color.FromHex("#757575"),
+            TextDisabled = Color.FromHex("#E5E5E581"),
             TextPlaceholder = Color.FromHex("#5A5A5A"),
             TextOnTranscript = Color.White,
             TextOnTranscriptMuted = Color.FromHex("#99A7B3"),
@@ -437,6 +444,7 @@ public static class DeadSpaceStylePalette
         public Color ControlHover { get; init; }
         public Color ControlPressed { get; init; }
         public Color ControlDisabled { get; init; }
+        public Color ControlDisabledPressed { get; init; }
         public Color Action { get; init; }
         public Color ActionHover { get; init; }
         public Color ActionPressed { get; init; }
@@ -466,6 +474,7 @@ public static class DeadSpaceStylePalette
         public Color Text { get; init; }
         public Color TextInactive { get; init; }
         public Color TextMuted { get; init; }
+        public Color TextDisabled { get; init; }
         public Color TextPlaceholder { get; init; }
         public Color TextOnTranscript { get; init; }
         public Color TextOnTranscriptMuted { get; init; }

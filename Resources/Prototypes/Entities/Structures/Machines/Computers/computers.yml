@@ -608,6 +608,47 @@
   description: Terminal for programming Nanotrasen employee ID cards to access parts of the station.
   components:
   - type: IdCardConsole
+    # DS14-start
+    accessLevels:
+    - Captain
+    - HeadOfPersonnel
+    - HeadOfSecurity
+    - ChiefEngineer
+    - ResearchDirector
+    - ChiefMedicalOfficer
+    - Quartermaster
+    - Command
+    - BlueShield
+    - Cryogenics
+    - Lawyer
+    - Armory
+    - Detective
+    - Brigmedic
+    - Security
+    - Brig
+    - GenpopEnter
+    - GenpopLeave
+    - Chemistry
+    - Paramedic
+    - Coroner
+    - Virology
+    - Medical
+    - Research
+    - Atmospherics
+    - Engineering
+    - SeniorSalvage
+    - Salvage
+    - Cargo
+    - Service
+    - Bar
+    - Chapel
+    - Hydroponics
+    - Janitor
+    - Kitchen
+    - Theatre
+    - Maintenance
+    - External
+    # DS14-end
     basicAccessLevels:
     - Coroner
     - Medical

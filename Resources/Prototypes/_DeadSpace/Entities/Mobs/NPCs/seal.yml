@@ -1,6 +1,6 @@
 - type: entity
-  parent: SimpleMobBase
-  id: MobSeal
+  id: BaseMobSeal
+  abstract: true
   name: seal
   description: A plump seal with a very important expression. You get the feeling that these are agents of Central Command...
   components:
@@ -97,6 +97,10 @@
     - VimPilot
 
 - type: entity
+  parent: [BaseMobSeal, SimpleMobBase]
+  id: MobSeal
+
+- type: entity
   parent: MobSeal
   id: MobSealPup
   name: seal pup
@@ -104,6 +108,8 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Mobs/Animals/Seal/pup.rsi
+    # The pup is drawn at the bottom of each 32x32 frame. Move all layers onto its collider.
+    offset: 0,0.375
     layers:
     - state: lilseal_idle
       map: ["enum.DamageStateVisualLayers.Base", "movement"]
@@ -133,8 +139,12 @@
       fix1:
         shape:
           !type:PhysShapeCircle
-          radius: 0.2
+          radius: 0.35
         density: 100
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -149,7 +159,7 @@
     templateId: sealPup
 
 - type: entity
-  parent: MobSeal
+  parent: [BaseMobSeal, SimpleSpaceMobBase]
   id: MobSealDeathsquad
   name: strange seal
   description: An extremely strange seal... Wait, are those implants?...
@@ -180,6 +190,35 @@
         Base: DQseal_dead
       Dead:
         Base: DQseal_dead
+  - type: AutoImplant
+    implants:
+    - SandevistanImplantDeathsquadSeal
+  - type: Damageable
+    damageModifierSet: SealDeathsquad
+  - type: Bloodstream
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: Blood
+        Quantity: 150
+  - type: TemperatureDamage
+    heatDamageThreshold: 100000
+    coldDamageThreshold: -1
+    heatDamage:
+      types: {}
+    coldDamage:
+      types: {}
+  - type: Flammable
+    maximumFireStacks: 0
+    firestacksOnIgnite: 0
+    fireSpread: false
+    damage:
+      types: {}
+
+- type: damageModifierSet
+  id: SealDeathsquad
+  coefficients:
+    Heat: 0
+    Cold: 0
 
 - type: entity
   parent: MobSeal

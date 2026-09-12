@@ -40,47 +40,7 @@ public sealed partial class IdCardConsoleComponent : Component
     // Put this on shared so we just send the state once in PVS range rather than every time the UI updates.
 
     [DataField, AutoNetworkedField]
-    public List<ProtoId<AccessLevelPrototype>> AccessLevels = new() // DS14 access levels sort
-    {
-        "Captain",
-        "HeadOfPersonnel",
-        "HeadOfSecurity",
-        "ChiefEngineer",
-        "ResearchDirector",
-        "ChiefMedicalOfficer",
-        "Quartermaster",
-        "Command",
-        "BlueShield",
-        "Cryogenics",
-        "Lawyer",
-        "Armory",
-        "Detective",
-        "Brigmedic",
-        "Security",
-        "Brig",
-        "GenpopEnter",
-        "GenpopLeave",
-        "Chemistry",
-        "Paramedic",
-        "Coroner",
-        "Virology", // DS14
-        "Medical",
-        "Research",
-        "Atmospherics",
-        "Engineering",
-        "SeniorSalvage",
-        "Salvage",
-        "Cargo",
-        "Service",
-        "Bar",
-        "Chapel",
-        "Hydroponics",
-        "Janitor",
-        "Kitchen",
-        "Theatre",
-        "Maintenance",
-        "External",
-    };
+    public List<ProtoId<AccessLevelPrototype>> AccessLevels = new(); // DS14: configured by console prototypes.
 
     // DS14-start
     [DataField("isTaipan")]
@@ -106,6 +66,11 @@ public sealed partial class IdCardConsoleComponent : Component
         public readonly List<ProtoId<AccessLevelPrototype>>? TargetIdAccessList;
         public readonly List<ProtoId<AccessLevelPrototype>>? AllowedModifyAccessList;
         public readonly ProtoId<JobPrototype> TargetIdJobPrototype;
+        public readonly List<ProtoId<AccessLevelPrototype>> AvailableAccessList; // DS14
+        // DS14-start
+        public readonly string? PrivilegedIdFullName;
+        public readonly string? PrivilegedIdJobTitle;
+        // DS14-end
 
         public IdCardConsoleBoundUserInterfaceState(bool isPrivilegedIdPresent,
             bool isPrivilegedIdAuthorized,
@@ -116,9 +81,17 @@ public sealed partial class IdCardConsoleComponent : Component
             List<ProtoId<AccessLevelPrototype>>? allowedModifyAccessList,
             ProtoId<JobPrototype> targetIdJobPrototype,
             string privilegedIdName,
-            string targetIdName)
+            string targetIdName,
+            List<ProtoId<AccessLevelPrototype>> availableAccessList,
+            string? privilegedIdFullName = null,
+            string? privilegedIdJobTitle = null) // DS14
         {
             IsPrivilegedIdPresent = isPrivilegedIdPresent;
+            AvailableAccessList = availableAccessList; // DS14
+            // DS14-start
+            PrivilegedIdFullName = privilegedIdFullName;
+            PrivilegedIdJobTitle = privilegedIdJobTitle;
+            // DS14-end
             IsPrivilegedIdAuthorized = isPrivilegedIdAuthorized;
             IsTargetIdPresent = isTargetIdPresent;
             TargetIdFullName = targetIdFullName;

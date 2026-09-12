@@ -34,6 +34,9 @@ namespace Content.IntegrationTests.Tests.DeadSpace.CentComm;
 [TestFixture]
 public sealed class CentCommTest
 {
+    private static readonly ProtoId<CentCommEnvironmentPrototype> AtmosphereEnvironment = "CentCommTestAtmosphere";
+    private static readonly ProtoId<CentCommEnvironmentPrototype> VacuumEnvironment = "CentCommTestVacuum";
+
     [TestPrototypes]
     private const string Prototypes = @"
 - type: parallax
@@ -162,8 +165,8 @@ public sealed class CentCommTest
         {
             var environments = new[]
             {
-                server.ProtoMan.Index<CentCommEnvironmentPrototype>("CentCommTestAtmosphere"),
-                server.ProtoMan.Index<CentCommEnvironmentPrototype>("CentCommTestVacuum"),
+                server.ProtoMan.Index(AtmosphereEnvironment),
+                server.ProtoMan.Index(VacuumEnvironment),
             };
 
             foreach (var environment in environments)

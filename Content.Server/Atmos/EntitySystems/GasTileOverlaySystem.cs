@@ -4,6 +4,7 @@ using Content.Shared.Atmos.Components;
 using Content.Shared.Atmos.EntitySystems;
 using Content.Shared.CCVar;
 using Content.Shared.Chunking;
+using Content.Shared.DeadSpace.Audio;
 using Content.Shared.GameTicking;
 using Content.Shared.Rounding;
 using JetBrains.Annotations;
@@ -182,7 +183,7 @@ namespace Content.Server.Atmos.EntitySystems
             else
                 byteTemp = new(mixture.Temperature);
 
-            var data = new GasOverlayData(0, new byte[VisibleGasId.Length], byteTemp);
+            var data = new GasOverlayData(0, new byte[VisibleGasId.Length], byteTemp, AtmosphericAudio.EncodePressure(mixture?.Pressure ?? 0f)); // DS14
 
             for (var i = 0; i < VisibleGasId.Length; i++)
             {
@@ -232,18 +233,28 @@ namespace Content.Server.Atmos.EntitySystems
             else if (!tile.Space && tile.Air != null)
                 newByteTemp = new(tile.Air.Temperature);
 
+            var pressure = tile.Air == null ? (byte) 0 : AtmosphericAudio.EncodePressure(tile.Air.Pressure); // DS14
+
             if (oldData.Equals(default))
             {
                 changed = true;
-                oldData = new GasOverlayData(tile.Hotspot.State, new byte[VisibleGasId.Length], newByteTemp);
+                oldData = new GasOverlayData(tile.Hotspot.State, new byte[VisibleGasId.Length], newByteTemp, pressure); // DS14
             }
             else if (oldData.FireState != tile.Hotspot.State ||
                      Math.Abs(oldData.ByteGasTemperature.Value - newByteTemp.Value) > 1 || // Dirty Temperature when there is more then 1 byte difference. That should measure up to minimum 4 degreese difference, 6 degreese on average.
                      (oldData.ByteGasTemperature.Value != newByteTemp.Value && newByteTemp.Value > ThermalByte.TempResolution)) // change of special ThermalByte value
             {
                 changed = true;
-                oldData = new GasOverlayData(tile.Hotspot.State, oldData.Opacity, newByteTemp);
+                oldData = new GasOverlayData(tile.Hotspot.State, oldData.Opacity, newByteTemp, pressure); // DS14
             }
+
+            // DS14-start: pressure-only changes must preserve the existing temperature update threshold.
+            if (oldData.ByteGasPressure != pressure)
+            {
+                changed = true;
+                oldData = new GasOverlayData(oldData.FireState, oldData.Opacity, oldData.ByteGasTemperature, pressure);
+            }
+            // DS14-end
 
             if (tile is {Air: not null, NoGridTile: false})
             {

@@ -224,6 +224,18 @@
     popup: sandevistan-implant-activated
 
 - type: entity
+  parent: SandevistanImplant
+  id: SandevistanImplantDeathsquadSeal
+  components:
+  - type: SandevistanImplant
+    applyImplantTrauma: false
+    softcapPopups: []
+    softcapShouts: []
+    endWarningPopups: []
+    recoveryPopups: []
+    popup: null
+
+- type: entity
   id: SandevistanImplanter
   suffix: Сандевистан
   parent: BaseImplantOnlyImplanter
