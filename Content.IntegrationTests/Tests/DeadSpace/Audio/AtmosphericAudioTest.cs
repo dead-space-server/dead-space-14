@@ -46,7 +46,7 @@ public sealed class AtmosphericAudioTest : AtmosTest
                     mixture.SetMoles(Gas.Nitrogen,
                         fraction * Atmospherics.OneAtmosphere * mixture.Volume /
                         (Atmospherics.R * mixture.Temperature));
-                    SAtmos.InvalidateVisuals(ProcessEnt, Vector2i.Zero);
+                    SAtmos.InvalidateVisuals((ProcessEnt.Owner, ProcessEnt.Comp2), Vector2i.Zero);
                 });
 
                 await RunTicks(60);
