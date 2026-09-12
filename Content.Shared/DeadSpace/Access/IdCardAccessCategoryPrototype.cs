@@ -6,7 +6,7 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared.DeadSpace.Access;
 
 /// <summary>Console presentation categories; these do not grant access like access groups do.</summary>
-[Prototype("idCardAccessCategory")]
+[Prototype]
 public sealed partial class IdCardAccessCategoryPrototype : IPrototype
 {
     [IdDataField] public string ID { get; private set; } = default!;
