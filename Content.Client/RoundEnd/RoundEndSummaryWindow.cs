@@ -4,7 +4,7 @@ using Content.Client.DeadSpace.RoundEnd;
 using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.Message;
 using Content.Client.UserInterface.Controls;
-using Content.Shared.DeadSpace.Arena; 
+using Content.Shared.DeadSpace.Arena;
 using Content.Shared.DeadSpace.RoundEnd;
 using Content.Shared.GameTicking;
 using Robust.Client.GameObjects;
@@ -410,13 +410,7 @@ namespace Content.Client.RoundEnd
                 VerticalExpand = true,
             };
 
-            content.AddChild(new Label
-            {
-                Text = playerInfo.PlayerICName ?? Loc.GetString("generic-unknown-title"),
-                StyleClasses = { playerInfo.Antag ? "LabelBig" : "LabelHeading" },
-                ClipText = true,
-                HorizontalExpand = true,
-            });
+            content.AddChild(MakeManifestName(playerInfo, playerInfo.Antag));
 
             var roleText = GetPlayerManifestRoleText(playerInfo);
 
@@ -525,6 +519,48 @@ namespace Content.Client.RoundEnd
             return panel;
         }
 
+        // DS-14-Start
+        private static Control MakeManifestName(RoundEndMessageEvent.RoundEndPlayerInfo playerInfo, bool antag)
+        {
+            var name = playerInfo.PlayerICName ?? Loc.GetString("generic-unknown-title");
+            var container = new BoxContainer
+            {
+                Orientation = LayoutOrientation.Vertical,
+                HorizontalExpand = true,
+            };
+
+            if (!string.IsNullOrWhiteSpace(playerInfo.PlayerPseudonym))
+            {
+                container.AddChild(new Label
+                {
+                    Text = playerInfo.PlayerPseudonym,
+                    StyleClasses = { antag ? "LabelBig" : "LabelHeading" },
+                    ClipText = true,
+                    HorizontalExpand = true,
+                });
+                container.AddChild(new Label
+                {
+                    Text = name,
+                    StyleClasses = { "LabelSubText" },
+                    ClipText = true,
+                    HorizontalExpand = true,
+                });
+            }
+            else
+            {
+                container.AddChild(new Label
+                {
+                    Text = name,
+                    StyleClasses = { antag ? "LabelBig" : "LabelHeading" },
+                    ClipText = true,
+                    HorizontalExpand = true,
+                });
+            }
+
+            return container;
+        }
+        // DS-14-End
+
         private Control MakeAntagManifestCard(RoundEndMessageEvent.RoundEndPlayerInfo playerInfo)
         {
             var panel = new PanelContainer
@@ -558,13 +594,7 @@ namespace Content.Client.RoundEnd
                 Orientation = LayoutOrientation.Horizontal,
                 HorizontalExpand = true,
             };
-            nameRow.AddChild(new Label
-            {
-                Text = playerInfo.PlayerICName ?? Loc.GetString("generic-unknown-title"),
-                StyleClasses = { "LabelBig" },
-                ClipText = true,
-                HorizontalExpand = true,
-            });
+            nameRow.AddChild(MakeManifestName(playerInfo, true));
             if (playerInfo.IsDead)
             {
                 var badgeLabel = new RichTextLabel
