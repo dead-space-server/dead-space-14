@@ -44,7 +44,14 @@ public sealed class AreaEchoSystem : EntitySystem
     // Full-height boundaries, including glass doors, but excluding people and ordinary machinery.
     private const int BoundaryMask = (int) (CollisionGroup.Impassable | CollisionGroup.InteractImpassable);
     private static readonly ProtoId<AudioPresetPrototype>[] Presets =
-        ["Hallway", "Auditorium", "ConcertHall", "Hangar"];
+        ["Hallway", "Auditorium", "ConcertHall", "Hangar", "Drugged"];
+    private const int DrugPreset = 4;
+
+    /// <summary>
+    /// When set, applies the strong "Drugged" reverb to every audible positional sound,
+    /// regardless of the measured room. Used for the drug echo effect.
+    /// </summary>
+    public bool DrugEchoOverride { get; set; }
 
     private readonly Dictionary<(EntityUid Grid, Vector2i Tile, EntityUid Source), int> _rooms = new();
     private readonly Dictionary<int, (EntityUid Auxiliary, EntityUid Effect)> _effects = new();
@@ -138,8 +145,17 @@ public sealed class AreaEchoSystem : EntitySystem
         if (sound.Comp1.Auxiliary != null && !ownsEffect)
             return;
 
-        if (!TryGetRoomPreset(sound, listener, out var preset))
+        var preset = -1;
+        if (DrugEchoOverride)
+        {
+            if (!IsAudiblePositional(sound, listener))
+                return;
+            preset = DrugPreset;
+        }
+        else if (!TryGetRoomPreset(sound, listener, out preset))
+        {
             return;
+        }
 
         if (preset < 0)
         {
@@ -158,14 +174,21 @@ public sealed class AreaEchoSystem : EntitySystem
         _applied[sound] = (sound.Comp1, auxiliary);
     }
 
+    private static bool IsAudiblePositional(Entity<AudioComponent, TransformComponent> sound, MapCoordinates listener)
+    {
+        var xform = sound.Comp2;
+        // Playing is a native playback flag; short sounds need their send before that flag becomes true.
+        return sound.Comp1.Loaded && !sound.Comp1.Global && sound.Comp1.State == AudioState.Playing &&
+               xform.MapID != MapId.Nullspace && xform.MapID == listener.MapId;
+    }
+
     internal bool TryGetRoomPreset(Entity<AudioComponent, TransformComponent> sound,
         MapCoordinates listener, out int preset)
     {
         preset = -1;
         var xform = sound.Comp2;
         // Playing is a native playback flag; short sounds need their send before that flag becomes true.
-        if (!sound.Comp1.Loaded || sound.Comp1.Global || sound.Comp1.State != AudioState.Playing ||
-            xform.MapID == MapId.Nullspace || xform.MapID != listener.MapId)
+        if (!IsAudiblePositional(sound, listener))
             return true;
 
         var position = _transform.GetWorldPosition(xform);
