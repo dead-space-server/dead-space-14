@@ -1,0 +1,15 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from https://github.com/ParadiseSS13/Paradise and edited by mtf0036 (discord) for Space Station 14 Мёртвый Космос.",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "nt_tribune",
+            "directions": 4
+        }
+    ]
+}
