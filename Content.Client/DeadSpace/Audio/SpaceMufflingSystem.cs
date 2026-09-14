@@ -2,6 +2,7 @@
 
 using System.Numerics;
 using Content.Client.Atmos.Components;
+using Content.Client.Ghost;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Atmos.EntitySystems;
 using Content.Shared.DeadSpace.Audio;
@@ -19,6 +20,7 @@ namespace Content.Client.DeadSpace.Audio;
 public sealed class SpaceMufflingSystem : EntitySystem
 {
     [Dependency] private readonly AudioSystem _audio = default!;
+    [Dependency] private readonly GhostSystem _ghost = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly SharedMapSystem _maps = default!;
@@ -26,6 +28,8 @@ public sealed class SpaceMufflingSystem : EntitySystem
 
     private float _maxRayLength;
     private bool _enabled;
+
+    internal bool ListenerIsGhost => _ghost.IsGhost;
 
     public override void Initialize()
     {
@@ -52,7 +56,7 @@ public sealed class SpaceMufflingSystem : EntitySystem
         }
 
         // AudioSystem calls this on worker threads. Keep endpoint queries read-only and scratch state local.
-        if (_enabled)
+        if (_enabled && !ListenerIsGhost)
             occlusion += MathF.Max(GetAtmosphericOcclusion(listener),
                 GetAtmosphericOcclusion(new MapCoordinates(listener.Position + delta, listener.MapId)));
 

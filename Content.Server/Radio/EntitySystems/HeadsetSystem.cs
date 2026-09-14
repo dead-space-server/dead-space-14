@@ -11,9 +11,6 @@ using Content.Shared.Silicons.StationAi;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Content.Server.DeadSpace.Languages;
-using Content.Shared.Corvax.TTS;
-using Robust.Server.Audio;
-using Robust.Shared.Audio;
 
 namespace Content.Server.Radio.EntitySystems;
 
@@ -21,7 +18,6 @@ public sealed class HeadsetSystem : SharedHeadsetSystem
 {
     [Dependency] private readonly INetManager _netMan = default!;
     [Dependency] private readonly RadioSystem _radio = default!;
-    [Dependency] private readonly AudioSystem _audio = default!; // DS14-TTS
     [Dependency] private readonly LanguageSystem _language = default!; // DS14-Languages
     [Dependency] private readonly IAdminManager _admin = default!; // DS14
     [Dependency] private readonly GameTicker _gameTicker = default!; // DS14
@@ -125,7 +121,6 @@ public sealed class HeadsetSystem : SharedHeadsetSystem
             chatMsg: args.ChatMsg,
             lexiconChatMsg: args.LexiconChatMsg,
             languageId: args.LanguageId,
-            receiveSound: component.RadioReceiveSoundPath,
             true,
             args: args);
     }
@@ -138,7 +133,6 @@ public sealed class HeadsetSystem : SharedHeadsetSystem
             chatMsg: args.ChatMsg,
             lexiconChatMsg: args.LexiconChatMsg,
             languageId: args.LanguageId,
-            null,
             false,
             args: args);
     }
@@ -149,7 +143,6 @@ public sealed class HeadsetSystem : SharedHeadsetSystem
     MsgChatMessage chatMsg, // DS14
     MsgChatMessage lexiconChatMsg,
     string? languageId,
-    SoundSpecifier? receiveSound,
     bool sendMessage,
     RadioReceiveEvent args)
     {
@@ -169,9 +162,6 @@ public sealed class HeadsetSystem : SharedHeadsetSystem
         if (languageId != null && !_language.KnowsLanguage(receiver, languageId))
             msg = lexiconChatMsg;
 
-        if (receiveSound != null)
-            _audio.PlayPvs(receiveSound, receiver, AudioParams.Default.WithVolume(-10f));
-
         if (actor != null) // DS14
         {
             // DS14-start
@@ -183,7 +173,7 @@ public sealed class HeadsetSystem : SharedHeadsetSystem
                 _netMan.ServerSendMessage(msg, actor.PlayerSession.Channel);
             }
             // DS14-end
-            if (receiver != messageSource && TryComp(messageSource, out TTSComponent? _))
+            if (receiver != messageSource) // DS14: cue-only reports also need the authorized listener list.
             {
                 args.Receivers.Add(receiver);
             }

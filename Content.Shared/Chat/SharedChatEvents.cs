@@ -71,6 +71,7 @@ public sealed class EntitySpokeEvent : EntityEventArgs
     ///     message gets sent on this channel, this should be set to null to prevent duplicate messages.
     /// </summary>
     public RadioChannelPrototype? Channel;
+    public readonly bool IsRadioSpeech; // DS14: Preserve radio intent after a transmitter consumes Channel.
 
     public EntitySpokeEvent(EntityUid source, string message, string originalMessage, string lexiconMessage, ProtoId<LanguagePrototype> languageId, RadioChannelPrototype? channel, string? obfuscatedMessage)
     {
@@ -80,6 +81,7 @@ public sealed class EntitySpokeEvent : EntityEventArgs
         LexiconMessage = lexiconMessage; // DS14-Languages
         LanguageId = languageId; // DS14-Languages
         Channel = channel;
+        IsRadioSpeech = channel != null; // DS14
         ObfuscatedMessage = obfuscatedMessage;
     }
 }

@@ -109,8 +109,7 @@ public sealed class RadioSystem : EntitySystem
 
             // DS14-TTS-Start
             if (uid != args.MessageSource &&
-                !args.Receivers.Contains(uid) &&
-                HasComp<TTSComponent>(args.MessageSource))
+                !args.Receivers.Contains(uid)) // DS14: route radio cues even when the sender has no TTS voice.
             {
                 args.Receivers.Add(uid);
             }

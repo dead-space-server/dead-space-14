@@ -44,6 +44,8 @@
                               ToolTip="{Loc 'ui-options-audio-room-echo-high-quality-tooltip'}" />
                     <CheckBox Name="SpaceMufflingCheckBox" Text="{Loc 'ui-options-audio-space-muffling'}"
                               ToolTip="{Loc 'ui-options-audio-space-muffling-tooltip'}" />
+                    <CheckBox Name="RadioCuesCheckBox" Text="{Loc 'ui-options-audio-radio-cues'}"
+                              ToolTip="{Loc 'ui-options-audio-radio-cues-tooltip'}" />
                     <!-- DS14-end -->
                 </BoxContainer>
             </BoxContainer>

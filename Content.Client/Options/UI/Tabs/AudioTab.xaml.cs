@@ -125,6 +125,7 @@ public sealed partial class AudioTab : Control
         Control.AddOptionCheckBox(AreaEchoCVars.Enabled, AreaEchoCheckBox);
         Control.AddOptionCheckBox(AreaEchoCVars.HighQuality, AreaEchoQualityCheckBox);
         Control.AddOptionCheckBox(AreaEchoCVars.SpaceMuffling, SpaceMufflingCheckBox);
+        Control.AddOptionCheckBox(AreaEchoCVars.RadioCues, RadioCuesCheckBox);
         // DS14-end
 
         Control.Initialize();

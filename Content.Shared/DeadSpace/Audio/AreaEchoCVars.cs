@@ -15,4 +15,7 @@ public sealed class AreaEchoCVars
 
     public static readonly CVarDef<bool> SpaceMuffling =
         CVarDef.Create("deadspace.audio.space_muffling", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    public static readonly CVarDef<bool> RadioCues =
+        CVarDef.Create("deadspace.audio.radio_cues", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 }
