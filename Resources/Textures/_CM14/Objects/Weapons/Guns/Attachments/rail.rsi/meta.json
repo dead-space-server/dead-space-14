@@ -1,0 +1,177 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/44751f0cc11332a5ba4f05ef91b2d72a0b08082b/icons/obj/items/weapons/guns/attachments/rail.dmi, edited iffbarrel & iffbarrel_a & type88_scope by SG6732, magnetic magnetic_a made by Sigma Draconis, XM43E1 scope by github noctyrnal, reddot and reflex by VictorJob",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "flashlight"
+    },
+    {
+      "name": "flashlight-on"
+    },
+    {
+      "name": "reddot"
+    },
+    {
+      "name": "reddot_small"
+    },
+    {
+      "name": "reflex"
+    },
+    {
+      "name": "magnetic"
+    },
+    {
+      "name": "iffbarrel",
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "miniscope"
+    },
+    {
+      "name": "sniperscope"
+    },
+    {
+      "name": "miniscope-nsg23"
+    },
+    {
+      "name": "rxfm5_eva_scope"
+    },
+    {
+      "name": "flashlight_a"
+    },
+    {
+      "name": "flashlight_a-on"
+    },
+    {
+      "name": "reddot_a"
+    },
+    {
+      "name": "reddot_small_a"
+    },
+    {
+      "name": "reflex_a"
+    },
+    {
+      "name": "magnetic_a"
+    },
+    {
+      "name": "iffbarrel_a"
+    },
+    {
+      "name": "miniscope_a"
+    },
+    {
+      "name": "sniperscope_a"
+    },
+    {
+      "name": "miniscope-nsg23_a"
+    },
+    {
+      "name": "rxfm5_eva_scope_a"
+    },
+    {
+      "name": "slavicscope"
+    },
+    {
+      "name": "boomslang-scope"
+    },
+    {
+      "name": "s_boomslang-scope"
+    },
+    {
+      "name": "u_boomslang-scope"
+    },
+    {
+      "name": "c_boomslang-scope"
+    },
+    {
+      "name": "d_boomslang-scope"
+    },
+    {
+      "name": "huntingscope"
+    },
+    {
+      "name": "huntingscope_a"
+    },
+    {
+      "name": "vulture_scope"
+    },
+    {
+      "name": "d_vulture_scope"
+    },
+    {
+      "name": "s_vulture_scope"
+    },
+    {
+      "name": "c_vulture_scope"
+    },
+    {
+      "name": "u_vulture_scope"
+    },
+    {
+      "name": "miniscope_fp9000"
+    },
+    {
+      "name": "miniscope_fp9000_a"
+    },
+    {
+      "name": "scope"
+    },
+    {
+      "name": "scope2"
+    },
+    {
+      "name": "pmcscope"
+    },
+    {
+      "name": "autoloader"
+    },
+    {
+      "name": "autoloader_a"
+    },
+    {
+      "name": "collisight"
+    },
+    {
+      "name": "collisight_a"
+    },
+    {
+      "name": "m96s-scope"
+    },
+    {
+      "name": "u_boomslang-scope_a"
+    },
+    {
+      "name": "s_boomslang-scope_a"
+    },
+    {
+      "name": "d_boomslang-scope_a"
+    },
+    {
+      "name": "c_boomslang-scope_a"
+    },
+    {
+      "name": "boomslang-scope_a"
+    },
+    {
+      "name": "xm43e1_scope"
+    },
+    {
+      "name": "type88_scope"
+    }
+  ]
+}

@@ -24,6 +24,8 @@ using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
+using Content.Shared._CM14.Attachable;
+using Content.Shared._CM14.Attachable.Components;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -44,6 +46,7 @@ namespace Content.Shared.Weapons.Ranged.Systems;
 public abstract partial class SharedGunSystem : EntitySystem
 {
     [Dependency] private readonly ActionBlockerSystem _actionBlockerSystem = default!;
+    [Dependency] private readonly AttachableHolderSystem _attachableHolder = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
     [Dependency] private readonly INetManager _netManager = default!;
     [Dependency] private readonly ItemSlotsSystem _slots = default!;
@@ -159,8 +162,15 @@ public abstract partial class SharedGunSystem : EntitySystem
             return;
         }
 
-        if (gun.Owner != GetEntity(msg.Gun))
-            return;
+        var msgGun = GetEntity(msg.Gun);
+        if (gun.Owner != msgGun)
+        {
+            if (!TryComp<AttachableHolderComponent>(msgGun, out var holderComp) ||
+                holderComp.SupercedingAttachable != gun.Owner)
+            {
+                return;
+            }
+        }
 
         // DS14-start
         var akimbo = new AkimboSelectGunEvent(user.Value, gun.Owner);
@@ -214,7 +224,13 @@ public abstract partial class SharedGunSystem : EntitySystem
         }
 
         if (userGun != (gunUid, gun))
-            return;
+        {
+            if (!TryComp<AttachableHolderComponent>(gunUid, out var holderComp) ||
+                holderComp.SupercedingAttachable != userGun.Owner)
+            {
+                return;
+            }
+        }
 
         StopShooting(userGun);
     }
@@ -236,6 +252,12 @@ public abstract partial class SharedGunSystem : EntitySystem
     public bool TryGetGun(EntityUid entity, out Entity<GunComponent> gun)
     {
         gun = default;
+
+        if (_attachableHolder.TryGetInhandSupercedingGun(entity, out var supercedingUid, out var supercedingGun))
+        {
+            gun = (supercedingUid, supercedingGun);
+            return true;
+        }
 
         if (_hands.GetActiveItem(entity) is { } held &&
             TryComp(held, out GunComponent? gunComp))

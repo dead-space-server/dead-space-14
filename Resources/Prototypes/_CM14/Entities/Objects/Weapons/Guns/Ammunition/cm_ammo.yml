@@ -1,0 +1,9 @@
+- type: entity
+  parent: MagazineCaselessRifle
+  id: CMMagazineCaseless10x24
+  name: "M41A magazine (10x24mm caseless)"
+  description: A 30-round magazine for the M41A Pulse Rifle. Filled with 10x24mm caseless rounds.
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineCaseless10x24
