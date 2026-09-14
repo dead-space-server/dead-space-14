@@ -104,3 +104,40 @@
         Heat: 0.9
   - type: Tag
     tags: []
+
+- type: entity
+  parent: [ClothingMaskGas, BaseSecurityContraband]
+  id: ClothingMaskGasCentcomSecurity
+  name: противогаз офицера ЦК
+  description: Стандартный противогаз Офицеров Центрального Командования
+  components:
+  - type: Item
+    size: Tiny
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Mask/gascentcom.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Mask/gascentcom.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.95
+        Slash: 0.95
+        Piercing: 0.95
+        Heat: 0.95
+  - type: Tag
+    tags:
+    - HamsterWearable
+  # DS14-start
+  - type: SpecialDeathSound
+    sound:
+      path: /Audio/_DeadSpace/Voice/Death/sec_death.ogg
+  - type: ActionGrant
+    actions:
+    - ActionGasMaskDispatch
+  - type: ItemActionGrant
+    actions:
+    - ActionGasMaskDispatch
+    activeIfWorn: true
+  - type: GasMaskDispatch
+    channel: CentCom
+  # DS14-end
