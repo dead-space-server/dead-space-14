@@ -179,6 +179,12 @@
     sprite: _DeadSpace/Objects/Weapons/Guns/Shotguns/bread.rsi
   - type: Item
     sprite: _DeadSpace/Objects/Weapons/Guns/Shotguns/bread.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Objects/Weapons/Guns/Shotguns/bread.rsi
+    quickEquip: false
+    slots:
+    - Back
+    - suitStorage
   - type: GunRequiresWield
   - type: Gun
     fireRate: 3
