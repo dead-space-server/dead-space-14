@@ -13,7 +13,7 @@
 - type: entity
   parent: Bed
   id: BedWood
-  name: Деревянная кровать
+  name: деревянная кровать
   description: Неудобная кровать из дерева, не показывайте её ортопеду.
   components:
   - type: Sprite
