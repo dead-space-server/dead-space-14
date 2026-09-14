@@ -1205,7 +1205,7 @@
 
 - type: listing
   id: UplinkNukeHristov
-  name: Пресет "Христов"
+  name: Пресет "AWP|Dragon lore"
   description: Используемый опытным оперативником набор вещей, основа которого - Христов.
   productEntity: CrateBundleNukeHristov
   icon: { sprite: /Textures/Objects/Weapons/Guns/Snipers/heavy_sniper.rsi, state: icon }
