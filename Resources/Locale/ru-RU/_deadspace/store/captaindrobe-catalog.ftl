@@ -241,3 +241,16 @@ captaindrobe-under-nylon-desc = Стандартные колготки.
 
 captaindrobe-under-nylon-white = белые колготки
 captaindrobe-under-nylon-white-desc = Стандартные белые колготки.
+
+# Ножны
+## Синий
+captaindrobe-sheath = сабельные ножны
+captaindrobe-sheath-desc = Украшенные ножны, предназначенные для хранения офицерского клинка.
+
+## Белый
+captaindrobe-sheath-white = белые сабельные ножны
+captaindrobe-sheath-white-desc = Украшенные ножны, предназначенные для хранения офицерского клинка.
+
+## Чёрный
+captaindrobe-sheath-black = чёрные сабельные ножны
+captaindrobe-sheath-black-desc = Украшенные ножны, предназначенные для хранения офицерского клинка.
