@@ -1,9 +1,9 @@
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Explosion.EntitySystems;
 using Content.Shared.Atmos;
-using Content.Shared.DeadSpace.Cannabis;
+using Content.Shared.DeadSpace.Smokables;
 
-namespace Content.Server.DeadSpace.Cannabis.Systems;
+namespace Content.Server.DeadSpace.Smokables.Systems;
 
 public sealed class TritiumCannabisSystem : EntitySystem
 {
