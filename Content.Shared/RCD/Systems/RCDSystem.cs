@@ -59,7 +59,7 @@ public sealed class RCDSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<RCDComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<RCDComponent, ComponentStartup>(OnStartup); // DS14 - RCD may be added after MapInit.
         SubscribeLocalEvent<RCDComponent, ExaminedEvent>(OnExamine);
         SubscribeLocalEvent<RCDComponent, AfterInteractEvent>(OnAfterInteract);
         SubscribeLocalEvent<RCDComponent, RCDDoAfterEvent>(OnDoAfter);
@@ -70,8 +70,13 @@ public sealed class RCDSystem : EntitySystem
 
     #region Event handling
 
-    private void OnMapInit(EntityUid uid, RCDComponent component, MapInitEvent args)
+    private void OnStartup(EntityUid uid, RCDComponent component, ComponentStartup args)
     {
+        // DS14-start: dynamically added networked RCD state is initialized by the server.
+        if (_net.IsClient)
+            return;
+        // DS14-end
+
         // On init, set the RCD to its first available recipe
         if (component.AvailablePrototypes.Count > 0)
         {

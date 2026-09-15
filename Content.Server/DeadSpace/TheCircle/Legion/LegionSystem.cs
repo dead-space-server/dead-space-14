@@ -2,6 +2,7 @@
 
 using System.Linq;
 using Content.Server.Body.Systems;
+using Content.Shared.Actions.Events;
 using Content.Shared.Alert;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
@@ -41,6 +42,7 @@ public sealed class LegionSystem : EntitySystem
     [Dependency] private readonly SharedDoorSystem _doors = default!;
     [Dependency] private readonly MovementModStatusSystem _movementStatus = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly NpcFactionSystem _factions = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
@@ -56,7 +58,6 @@ public sealed class LegionSystem : EntitySystem
         SubscribeLocalEvent<LegionComponent, PreventCollideEvent>(OnPreventCollide);
         SubscribeLocalEvent<LegionKnifeComponent, MeleeHitEvent>(OnKnifeHit);
         SubscribeLocalEvent<LegionKnifeComponent, LegionKnifeRageAttemptEvent>(OnKnifeRageAttempt);
-        SubscribeLocalEvent<LegionSurvivalPerkComponent, DamageChangedEvent>(OnSurvivalDamage);
         SubscribeLocalEvent<LegionSurvivalPerkComponent, UpdateMobStateEvent>(OnSurvivalMobState,
             after: [typeof(MobThresholdSystem)]);
     }
@@ -73,6 +74,11 @@ public sealed class LegionSystem : EntitySystem
         ent.Comp.Hits.Clear();
         ent.Comp.RevealStarted = false;
         ent.Comp.RevealPulseActive = false;
+        if (TryComp<LegionSurvivalPerkComponent>(ent, out var survival))
+        {
+            survival.HitCount = 0;
+            survival.Activated = false;
+        }
         // Heartbeat is intentionally non-positional: the source asset is stereo and only the Legionnaire hears it.
         ent.Comp.HeartbeatStream = _audio.PlayGlobal(
             ent.Comp.HeartbeatSound,
@@ -131,10 +137,6 @@ public sealed class LegionSystem : EntitySystem
         if (!args.IsHit || args.HitEntities.Count == 0 || !TryComp<LegionComponent>(args.User, out var legion))
             return;
 
-        var vampirism = knife.Comp.Vampirism;
-        if (TryComp<LegionPredatorPerkComponent>(args.User, out var predator) && predator.Activated)
-            vampirism += predator.VampirismBonus;
-
         var victimsHit = 0;
         foreach (var target in args.HitEntities)
         {
@@ -145,10 +147,10 @@ public sealed class LegionSystem : EntitySystem
                 continue;
 
             victimsHit++;
-            CountPerkVictim(args.User, target);
             if (!legion.Active)
                 continue;
 
+            CountPerkHit(args.User);
             var count = legion.Hits.GetValueOrDefault(target) + 1;
             legion.Hits[target] = count;
             if (count == 1 && TryComp<BloodstreamComponent>(target, out var blood))
@@ -160,8 +162,6 @@ public sealed class LegionSystem : EntitySystem
             else if (count == 2)
             {
                 _damageOverTime[target] = (_timing.CurTime + knife.Comp.SecondHitDamageDuration, args.User);
-                legion.RevealStarted = false;
-                DisableReveal(args.User);
             }
             else if (count >= 3)
                 EndRage((args.User, legion));
@@ -177,6 +177,10 @@ public sealed class LegionSystem : EntitySystem
 
         if (victimsHit > 0)
         {
+            var vampirism = knife.Comp.Vampirism;
+            if (TryComp<LegionPredatorPerkComponent>(args.User, out var predator) && predator.Activated)
+                vampirism += predator.VampirismBonus;
+
             _damage.HealDistributed(args.User, FixedPoint2.New(-25f * vampirism * victimsHit), origin: args.User);
 
             if (TryComp<BloodstreamComponent>(args.User, out var bloodstream))
@@ -196,35 +200,34 @@ public sealed class LegionSystem : EntitySystem
         return !_factions.IsEntityFriendly(user, target);
     }
 
-    private void CountPerkVictim(EntityUid user, EntityUid target)
+    private void CountPerkHit(EntityUid user)
     {
-        if (TryComp<LegionSurvivalPerkComponent>(user, out var survival))
-            survival.Victims.Add(target);
+        if (TryComp<LegionSurvivalPerkComponent>(user, out var survival) && !survival.Activated)
+        {
+            survival.HitCount++;
+            if (survival.HitCount >= survival.RequiredHits)
+            {
+                survival.Activated = true;
+                _mobState.UpdateMobState(user);
+            }
+        }
 
         if (!TryComp<LegionPredatorPerkComponent>(user, out var predator) || predator.Activated)
             return;
 
-        predator.Victims.Add(target);
-        if (predator.Victims.Count < predator.RequiredVictims)
+        predator.HitCount++;
+        if (predator.HitCount < predator.RequiredHits)
             return;
 
         predator.Activated = true;
         _movement.RefreshMovementSpeedModifiers(user);
     }
 
-    private void OnSurvivalDamage(Entity<LegionSurvivalPerkComponent> ent, ref DamageChangedEvent args)
-    {
-        if (!args.DamageIncreased || args.DamageDelta == null)
-            return;
-
-        ent.Comp.DamageTaken += (float) args.DamageDelta.GetTotal();
-        if (ent.Comp.DamageTaken >= ent.Comp.TriggerDamage && ent.Comp.ActiveUntil == null)
-            ent.Comp.ActiveUntil = _timing.CurTime + ent.Comp.Window;
-    }
-
     private void OnSurvivalMobState(Entity<LegionSurvivalPerkComponent> ent, ref UpdateMobStateEvent args)
     {
-        if (ent.Comp.ActiveUntil > _timing.CurTime && ent.Comp.DamageTaken < ent.Comp.EndDamage)
+        if (ent.Comp.Activated &&
+            TryComp<DamageableComponent>(ent, out var damageable) &&
+            damageable.TotalDamage.Float() < ent.Comp.EndDamage)
             args.State = MobState.Alive;
     }
 
@@ -236,7 +239,16 @@ public sealed class LegionSystem : EntitySystem
         while (query.MoveNext(out var uid, out var legion))
         {
             if (!legion.Active)
+            {
+                if (legion.CooldownEndsAt != default && now >= legion.CooldownEndsAt)
+                {
+                    legion.CooldownEndsAt = default;
+                    _alerts.ClearAlert(uid, legion.RageAlert);
+                    Dirty(uid, legion);
+                }
+
                 continue;
+            }
 
             if (now >= legion.EndsAt)
             {
@@ -284,7 +296,14 @@ public sealed class LegionSystem : EntitySystem
         ent.Comp.CooldownEndsAt = _timing.CurTime + ent.Comp.Cooldown;
         ent.Comp.HeartbeatStream = _audio.Stop(ent.Comp.HeartbeatStream);
         DisableReveal(ent);
-        _alerts.ClearAlert(ent.Owner, ent.Comp.RageAlert);
+        if (TryComp<LegionSurvivalPerkComponent>(ent, out var survival))
+        {
+            survival.HitCount = 0;
+            survival.Activated = false;
+            _mobState.UpdateMobState(ent);
+        }
+        _alerts.ShowAlert(ent.Owner, ent.Comp.RageAlert,
+            cooldown: (_timing.CurTime, ent.Comp.CooldownEndsAt), autoRemove: false);
         Dirty(ent, ent.Comp);
         _movement.RefreshMovementSpeedModifiers(ent);
     }

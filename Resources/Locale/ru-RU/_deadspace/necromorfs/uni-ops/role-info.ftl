@@ -43,9 +43,9 @@ loadout-group-the-circle-geist-style = Стиль снаряжения Гейс�
 antag-gear-selector-legion-name = Легионер
 antag-gear-selector-legion-description = Быстрый боец без огнестрела, вооружённый вампирическим ножом и способностью «Бешенство».
 antag-gear-selector-survival-name = Отсроченный шок
-antag-gear-selector-survival-description = После 100 полученного урона не позволяет перейти в шок до 150 урона в течение 10 секунд. Для реализации шанса на восстановление требуется ранить пятерых людей.
+antag-gear-selector-survival-description = После пяти успешных ударов по людям за одно бешенство временно повышает границу состояния Alive со 100 до 150 урона. После завершения бешенства граница возвращается к 100. Повторные удары по одной цели учитываются.
 antag-gear-selector-predator-name = Хищник
-antag-gear-selector-predator-description = После ударов по пяти разным людям даёт ещё +10% скорости и +10% вампиризма.
+antag-gear-selector-predator-description = После пяти успешных ударов по людям во время бешенства даёт ещё +10% скорости и +10% вампиризма. Повторные удары по одной цели учитываются.
 antag-gear-selector-geist-briefing = Вы выбрали Гейста. Используйте скрытность, ловушки и внезапные атаки, чтобы открыть путь Кругу.
 antag-gear-selector-legion-briefing = Вы выбрали Легионера. У вас нет огнестрела: полагайтесь на нож, вампиризм и бешенство. Первый удар запускает охотничьи импульсы, второй прекращает их, третий по той же цели завершает бешенство.
 roles-antag-thecircle-commander-start = 
@@ -57,5 +57,4 @@ thecircle-list-start = Члены ударного отряда "Круг" бы�
 thecircle-initial-name = [color=#5e9cff]{ $name }[/color] был одним из террористов "Круг" / [color=gray]{ $user }[/color]
 thecircle-crewmajor = [color=green]Победа экипажа[/color]
 thecircle-opsmajor = [color=#5e9cff]Успех отряда "Круг"[/color]
-circle-fighter-introduction = ОПЕРАЦИЯ «НОВОЕ СБЛИЖЕНИЕ»
-    Боец Круга, выполните поставленную задачу и обеспечьте победу отряда.
+circle-fighter-introduction = Боец Круга, выполните поставленную задачу и обеспечьте победу отряда.

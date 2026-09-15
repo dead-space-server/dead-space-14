@@ -197,6 +197,7 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(ContentKeyFunctions.SaveItemLocation);
             AddButton(ContentKeyFunctions.ToggleItemPriority); // DS14
             AddButton(ContentKeyFunctions.UseWorldTargetAction); // DS14
+            AddButton(DeadSpaceKeys.SwitchComponentMode); // DS14
 
             AddHeader("ui-options-header-interaction-adv");
             AddButton(ContentKeyFunctions.SmartEquipBackpack);

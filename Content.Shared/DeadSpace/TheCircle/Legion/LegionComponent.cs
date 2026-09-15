@@ -33,7 +33,7 @@ public sealed partial class LegionComponent : Component
 [RegisterComponent]
 public sealed partial class LegionKnifeComponent : Component
 {
-    [DataField] public float Vampirism = 1.1f;
+    [DataField] public float Vampirism = 1.25f;
     [DataField] public float BloodRestore = 25f;
     [DataField] public float SecondPerkVampirism = 0.1f;
     [DataField] public TimeSpan SecondHitDamageDuration = TimeSpan.FromSeconds(5);
@@ -43,22 +43,19 @@ public sealed partial class LegionKnifeComponent : Component
 [RegisterComponent]
 public sealed partial class LegionSurvivalPerkComponent : Component
 {
-    [DataField] public float TriggerDamage = 100f;
     [DataField] public float EndDamage = 150f;
-    [DataField] public TimeSpan Window = TimeSpan.FromSeconds(10);
-    [DataField] public int RequiredVictims = 5;
-    [ViewVariables] public float DamageTaken;
-    [ViewVariables] public TimeSpan? ActiveUntil;
-    [ViewVariables] public HashSet<EntityUid> Victims = new();
+    [DataField] public int RequiredHits = 5;
+    [ViewVariables] public int HitCount;
+    [ViewVariables] public bool Activated;
 }
 
 [RegisterComponent]
 public sealed partial class LegionPredatorPerkComponent : Component
 {
-    [DataField] public int RequiredVictims = 5;
+    [DataField] public int RequiredHits = 5;
     [DataField] public float SpeedBonus = 0.1f;
     [DataField] public float VampirismBonus = 0.1f;
-    [ViewVariables] public HashSet<EntityUid> Victims = new();
+    [ViewVariables] public int HitCount;
     [ViewVariables] public bool Activated;
 }
 

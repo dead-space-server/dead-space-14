@@ -425,3 +425,4 @@ ui-options-admin-overlay-ghost-fade-distance = Ghost overlay fade range from mou
 ui-options-admin-overlay-ghost-hide-distance = Ghost overlay hide range from mouse
 
 ui-options-function-use-world-target-action = Use targeted ability
+ui-options-function-switch-component-mode = Switch held item component mode

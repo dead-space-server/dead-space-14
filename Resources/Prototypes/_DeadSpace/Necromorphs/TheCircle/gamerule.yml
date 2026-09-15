@@ -103,6 +103,8 @@
         sound: "/Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg"
       components:
       - type: Legion
+      - type: GunUsageBlocker
+      - type: WeaponRetention
       - type: RandomMetadata
         nameSegments:
         - UnitologyLegionFirst
@@ -136,6 +138,19 @@
       roleLoadout:
         - RoleSurvivalTheCircle
       components:
+      - type: GhostRoleIntroduction
+        operationNames: [ОПЕРАЦИЯ «НОВОЕ СБЛИЖЕНИЕ», ОПЕРАЦИЯ «ПРОБУЖДЕНИЕ», ОПЕРАЦИЯ «ПЕРЕХВАТ»]
+        textLoc: roles-antag-thecircle-commander-start
+        textColor: '#9db7ff'
+        font: /Fonts/Bedstead/Bedstead.otf
+        fontSize: 18
+        operationFontSize: 26
+        sound:
+          path: /Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg
+        duration: 12
+        fadeFromBlackDuration: 3
+        textDelay: 0.8
+        charactersPerSecond: 50
       - type: Skill
         group: ALL
       - type: ObeliskActivateAbility
@@ -178,6 +193,19 @@
       roleLoadout:
         - RoleSurvivalTheCircle
       components:
+      - type: GhostRoleIntroduction
+        operationNames: [ОПЕРАЦИЯ «НОВОЕ СБЛИЖЕНИЕ», ОПЕРАЦИЯ «ПРОБУЖДЕНИЕ», ОПЕРАЦИЯ «ПЕРЕХВАТ»]
+        textLoc: roles-antag-thecircle-medic-start
+        textColor: '#9db7ff'
+        font: /Fonts/Bedstead/Bedstead.otf
+        fontSize: 18
+        operationFontSize: 26
+        sound:
+          path: /Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg
+        duration: 12
+        fadeFromBlackDuration: 3
+        textDelay: 0.8
+        charactersPerSecond: 50
       - type: Skill
         group: ALL
       - type: ObeliskActivateAbility
@@ -222,6 +250,19 @@
         color: CornflowerBlue
         sound: "/Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg"
       components:
+      - type: GhostRoleIntroduction
+        operationNames: [ОПЕРАЦИЯ «НОВОЕ СБЛИЖЕНИЕ», ОПЕРАЦИЯ «ПРОБУЖДЕНИЕ», ОПЕРАЦИЯ «ПЕРЕХВАТ»]
+        textLoc: roles-antag-thecircle-heavy-start
+        textColor: '#9db7ff'
+        font: /Fonts/Bedstead/Bedstead.otf
+        fontSize: 18
+        operationFontSize: 26
+        sound:
+          path: /Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg
+        duration: 12
+        fadeFromBlackDuration: 3
+        textDelay: 0.8
+        charactersPerSecond: 50
       - type: Skill
         group: ALL
       - type: CircleDeacon
@@ -264,6 +305,19 @@
         color: CornflowerBlue
         sound: "/Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg"
       components:
+      - type: GhostRoleIntroduction
+        operationNames: [ОПЕРАЦИЯ «НОВОЕ СБЛИЖЕНИЕ», ОПЕРАЦИЯ «ПРОБУЖДЕНИЕ», ОПЕРАЦИЯ «ПЕРЕХВАТ»]
+        textLoc: roles-antag-thecircle-light-start
+        textColor: '#9db7ff'
+        font: /Fonts/Bedstead/Bedstead.otf
+        fontSize: 18
+        operationFontSize: 26
+        sound:
+          path: /Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg
+        duration: 12
+        fadeFromBlackDuration: 3
+        textDelay: 0.8
+        charactersPerSecond: 50
       - type: Skill
         group: ALL
       - type: ObeliskActivateAbility
@@ -306,6 +360,19 @@
         color: CornflowerBlue
         sound: "/Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg"
       components:
+      - type: GhostRoleIntroduction
+        operationNames: [ОПЕРАЦИЯ «НОВОЕ СБЛИЖЕНИЕ», ОПЕРАЦИЯ «ПРОБУЖДЕНИЕ», ОПЕРАЦИЯ «ПЕРЕХВАТ»]
+        textLoc: roles-antag-thecircle-heavy-start
+        textColor: '#9db7ff'
+        font: /Fonts/Bedstead/Bedstead.otf
+        fontSize: 18
+        operationFontSize: 26
+        sound:
+          path: /Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg
+        duration: 12
+        fadeFromBlackDuration: 3
+        textDelay: 0.8
+        charactersPerSecond: 50
       - type: Skill
         group: ALL
       - type: CircleDeacon
@@ -348,6 +415,19 @@
         color: CornflowerBlue
         sound: "/Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg"
       components:
+      - type: GhostRoleIntroduction
+        operationNames: [ОПЕРАЦИЯ «НОВОЕ СБЛИЖЕНИЕ», ОПЕРАЦИЯ «ПРОБУЖДЕНИЕ», ОПЕРАЦИЯ «ПЕРЕХВАТ»]
+        textLoc: roles-antag-thecircle-light-start
+        textColor: '#9db7ff'
+        font: /Fonts/Bedstead/Bedstead.otf
+        fontSize: 18
+        operationFontSize: 26
+        sound:
+          path: /Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg
+        duration: 12
+        fadeFromBlackDuration: 3
+        textDelay: 0.8
+        charactersPerSecond: 50
       - type: Skill
         group: ALL
       - type: ObeliskActivateAbility
@@ -389,9 +469,25 @@
         color: CornflowerBlue
         sound: "/Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg"
       components:
+      - type: GhostRoleIntroduction
+        operationNames: [ОПЕРАЦИЯ «НОВОЕ СБЛИЖЕНИЕ», ОПЕРАЦИЯ «ПРОБУЖДЕНИЕ», ОПЕРАЦИЯ «ПЕРЕХВАТ»]
+        textLoc: roles-antag-thecircle-engineer-start
+        textColor: '#9db7ff'
+        font: /Fonts/Bedstead/Bedstead.otf
+        fontSize: 18
+        operationFontSize: 26
+        sound:
+          path: /Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg
+        duration: 12
+        fadeFromBlackDuration: 3
+        textDelay: 0.8
+        charactersPerSecond: 50
       - type: Skill
         group: ALL
       - type: ObeliskActivateAbility
+      - type: AutoImplant
+        implants:
+        - ArchitectIntegratedArmImplant
       - type: IntrinsicRadioTransmitter
         channels:
         - Unitolog
@@ -429,6 +525,19 @@
         color: CornflowerBlue
         sound: "/Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg"
       components:
+      - type: GhostRoleIntroduction
+        operationNames: [ОПЕРАЦИЯ «НОВОЕ СБЛИЖЕНИЕ», ОПЕРАЦИЯ «ПРОБУЖДЕНИЕ», ОПЕРАЦИЯ «ПЕРЕХВАТ»]
+        textLoc: roles-antag-thecircle-shock-trooper-start
+        textColor: '#9db7ff'
+        font: /Fonts/Bedstead/Bedstead.otf
+        fontSize: 18
+        operationFontSize: 26
+        sound:
+          path: /Audio/_DeadSpace/Necromorfs/TheCircle/the-circle-start.ogg
+        duration: 12
+        fadeFromBlackDuration: 3
+        textDelay: 0.8
+        charactersPerSecond: 50
       - type: Skill
         group: ALL
       - type: ObeliskActivateAbility

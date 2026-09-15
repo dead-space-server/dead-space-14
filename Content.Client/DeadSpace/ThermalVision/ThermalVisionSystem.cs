@@ -53,7 +53,11 @@ public sealed class ThermalVisorSystem : EntitySystem
         if (player == null)
             return;
 
-        var pulseTarget = TryComp<LegionComponent>(player, out var legion) && legion.RevealPulseActive ? 1f : 0f;
+        var legionActive = TryComp<LegionComponent>(player, out var legion) && legion.Active;
+        if (!legionActive)
+            _overlay.LegionAlpha = 0f;
+
+        var pulseTarget = legionActive && legion!.RevealPulseActive ? 1f : 0f;
         _overlay.LegionAlpha = Math.Clamp(
             _overlay.LegionAlpha + (pulseTarget - _overlay.LegionAlpha) * frameTime * 8f,
             0f,
@@ -157,7 +161,8 @@ public sealed class ThermalVisionOverlay : Overlay
             return false;
 
         var thermalActive = _entityManager.TryGetComponent<ThermalVisionComponent>(player.Value, out var comp) && comp.IsActive;
-        return thermalActive || LegionAlpha > 0.01f;
+        var legionActive = _entityManager.TryGetComponent<LegionComponent>(player.Value, out var legion) && legion.Active;
+        return thermalActive || (legionActive && LegionAlpha > 0.01f);
     }
 
     protected override void Draw(in OverlayDrawArgs args)

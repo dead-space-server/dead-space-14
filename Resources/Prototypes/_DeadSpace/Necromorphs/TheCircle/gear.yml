@@ -587,7 +587,6 @@
     contents:
       - id: C4
         amount: 6
-      - id: RCDTheCircleEngineer
       - id: MobTheCircleRemoteCar
         amount: 2
       - id: TheCircleRemoteCarController

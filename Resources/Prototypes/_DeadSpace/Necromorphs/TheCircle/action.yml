@@ -74,4 +74,4 @@
   - sprite: /Textures/_DeadSpace/Necromorfs/TheCircle/Weapon/melee/legion-knife.rsi
     state: icon
   name: Бешенство Легионера
-  description: Показывает оставшееся время бешенства.
+  description: Показывает оставшееся время бешенства или его отката.
