@@ -9,6 +9,8 @@ using Content.Shared.Medical;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Speech.Muting;
+using Content.Shared.StatusEffectNew;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Random;
@@ -25,6 +27,7 @@ public sealed class CriticalSufferingSystem : EntitySystem
     [Dependency] private readonly MobThresholdSystem _thresholds = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly VomitSystem _vomit = default!;
+    [Dependency] private readonly StatusEffectsSystem _effects = default!;
 
     private static readonly SoundSpecifier MaleGasp = new SoundCollectionSpecifier("CriticalSufferingMaleGasp");
     private static readonly SoundSpecifier FemaleGasp = new SoundCollectionSpecifier("CriticalSufferingFemaleGasp");
@@ -184,6 +187,9 @@ public sealed class CriticalSufferingSystem : EntitySystem
 
     private void PlayVoice(EntityUid uid, CriticalSymptom symptom, MobState state)
     {
+        if (_effects.HasEffectComp<MutedStatusEffectComponent>(uid))
+            return;
+
         if (!TryComp<HumanoidAppearanceComponent>(uid, out var appearance))
             return;
 
