@@ -61,7 +61,7 @@ public sealed class RCDSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<RCDComponent, ComponentStartup>(OnStartup); // DS14 - RCD may be added after MapInit.
+        SubscribeLocalEvent<RCDComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<RCDComponent, ExaminedEvent>(OnExamine);
         SubscribeLocalEvent<RCDComponent, AfterInteractEvent>(OnAfterInteract);
         SubscribeLocalEvent<RCDComponent, RCDDoAfterEvent>(OnDoAfter);
@@ -85,25 +85,30 @@ public sealed class RCDSystem : EntitySystem
 
     #region Event handling
 
-    private void OnStartup(EntityUid uid, RCDComponent component, ComponentStartup args)
+    private void OnMapInit(EntityUid uid, RCDComponent component, MapInitEvent args)
     {
-        // DS14-start: dynamically added networked RCD state is initialized by the server.
+        InitializeDevice((uid, component));
+    }
+
+    // DS14-start
+    public void InitializeDevice(Entity<RCDComponent> ent)
+    {
         if (_net.IsClient)
             return;
-        // DS14-end
 
         // On init, set the RCD to its first available recipe
-        if (component.AvailablePrototypes.Count > 0)
+        if (ent.Comp.AvailablePrototypes.Count > 0)
         {
-            component.ProtoId = component.AvailablePrototypes.ElementAt(0);
-            Dirty(uid, component);
+            ent.Comp.ProtoId = ent.Comp.AvailablePrototypes.ElementAt(0);
+            Dirty(ent);
 
             return;
         }
 
         // The RCD has no valid recipes somehow? Get rid of it
-        QueueDel(uid);
+        QueueDel(ent);
     }
+    // DS14-end
 
     private void OnRCDSystemMessage(EntityUid uid, RCDComponent component, RCDSystemMessage args)
     {

@@ -2,6 +2,8 @@
 using Content.Shared.DeadSpace;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Popups;
+using Content.Shared.RCD.Components;
+using Content.Shared.RCD.Systems;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
@@ -20,6 +22,7 @@ public sealed class ComponentModeSwitcherSystem : EntitySystem
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly RCDSystem _rcd = default!;
     [Dependency] private readonly ISerializationManager _serialization = default!;
 
     public override void Initialize()
@@ -62,6 +65,7 @@ public sealed class ComponentModeSwitcherSystem : EntitySystem
             EntityManager.RemoveComponents(ent.Owner, mode.Components);
 
         EntityManager.AddComponents(ent.Owner, ent.Comp.Modes[ent.Comp.CurrentMode].Components, true);
+        InitializeAddedComponents(ent.Owner);
         Dirty(ent);
     }
 
@@ -84,6 +88,8 @@ public sealed class ComponentModeSwitcherSystem : EntitySystem
 
         if (ent.Comp.PreserveState && ent.Comp.SavedStates.TryGetValue(next, out var saved))
             RestoreState(ent.Owner, saved);
+        else
+            InitializeAddedComponents(ent.Owner);
 
         ent.Comp.CurrentMode = next;
         Dirty(ent);
@@ -95,6 +101,12 @@ public sealed class ComponentModeSwitcherSystem : EntitySystem
         var ev = new ComponentModeChangedEvent(previous, next, mode.Name, user);
         RaiseLocalEvent(ent.Owner, ref ev);
         return true;
+    }
+
+    private void InitializeAddedComponents(EntityUid uid)
+    {
+        if (TryComp<RCDComponent>(uid, out var rcd))
+            _rcd.InitializeDevice((uid, rcd));
     }
 
     private void RestoreState(EntityUid uid, ComponentRegistry state)

@@ -11,6 +11,7 @@ using Content.Shared.Movement.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.NPC.Components;
+using Content.Shared.NPC.Prototypes;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Standing;
 using Content.Shared.Stunnable;
@@ -44,6 +45,7 @@ public sealed class ArchitectArmSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     private static readonly SoundSpecifier ImpactSound = new SoundCollectionSpecifier("MetalSlam");
+    private static readonly ProtoId<NpcFactionPrototype> NecromorfsFaction = "Necromorfs";
 
     public override void Initialize()
     {
@@ -260,7 +262,7 @@ public sealed class ArchitectArmSystem : EntitySystem
         if (ent.Comp.Captured != null ||
             other == ent.Owner ||
             TryComp<NpcFactionMemberComponent>(other, out var faction) &&
-            _factions.IsMember((other, faction), "Necromorfs"))
+            _factions.IsMember((other, faction), NecromorfsFaction))
             return;
 
         ent.Comp.Captured = other;

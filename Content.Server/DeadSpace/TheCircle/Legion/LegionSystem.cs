@@ -9,6 +9,7 @@ using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
+using Content.Shared.Damage.Prototypes;
 using Content.Shared.DeadSpace.TheCircle.Legion;
 using Content.Shared.Doors.Components;
 using Content.Shared.Doors.Systems;
@@ -33,6 +34,8 @@ namespace Content.Server.DeadSpace.TheCircle.Legion;
 public sealed class LegionSystem : EntitySystem
 {
     private static readonly EntProtoId DoorSlow = "TaserSlowdownStatusEffect";
+    private static readonly HashSet<ProtoId<DamageContainerPrototype>> SyntheticDamageContainers =
+        ["Silicon", "Inorganic", "StructuralInorganic"];
     private static readonly DamageSpecifier SecondHitDamage = new() { DamageDict = { ["Slash"] = 2 } };
 
     [Dependency] private readonly AlertsSystem _alerts = default!;
@@ -138,6 +141,7 @@ public sealed class LegionSystem : EntitySystem
             return;
 
         var victimsHit = 0;
+        var organicVictimsHit = 0;
         foreach (var target in args.HitEntities)
         {
             if (target == args.User || !HasComp<DamageableComponent>(target))
@@ -147,6 +151,8 @@ public sealed class LegionSystem : EntitySystem
                 continue;
 
             victimsHit++;
+            if (!IsSynthetic(target))
+                organicVictimsHit++;
             if (!legion.Active)
                 continue;
 
@@ -175,20 +181,27 @@ public sealed class LegionSystem : EntitySystem
             Dirty(args.User, legion);
         }
 
-        if (victimsHit > 0)
+        if (organicVictimsHit > 0)
         {
             var vampirism = knife.Comp.Vampirism;
             if (TryComp<LegionPredatorPerkComponent>(args.User, out var predator) && predator.Activated)
                 vampirism += predator.VampirismBonus;
 
-            _damage.HealDistributed(args.User, FixedPoint2.New(-25f * vampirism * victimsHit), origin: args.User);
+            _damage.HealDistributed(args.User, FixedPoint2.New(-25f * vampirism * organicVictimsHit), origin: args.User);
 
             if (TryComp<BloodstreamComponent>(args.User, out var bloodstream))
             {
-                _bloodstream.TryModifyBloodLevel(args.User, knife.Comp.BloodRestore * victimsHit);
+                _bloodstream.TryModifyBloodLevel(args.User, knife.Comp.BloodRestore * organicVictimsHit);
                 _bloodstream.TryModifyBleedAmount((args.User, bloodstream), -bloodstream.BleedAmount);
             }
         }
+    }
+
+    private bool IsSynthetic(EntityUid target)
+    {
+        return TryComp<DamageableComponent>(target, out var damageable) &&
+               damageable.DamageContainerID is { } container &&
+               SyntheticDamageContainers.Contains(container);
     }
 
     private bool IsValidRageVictim(EntityUid user, EntityUid target)
