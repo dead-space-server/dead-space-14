@@ -103,6 +103,7 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
 
         var proto = _prototypeManager.Index<HumanoidSpeciesSpriteLayer>(protoId);
         component.BaseLayers[key] = proto;
+        layer.Visible = proto.BaseSprite != null && !IsHidden(component, key); // DS14 - hide stale species sprites on marking-only anchors.
 
         if (proto.MatchSkin)
             layer.Color = component.SkinColor.WithAlpha(proto.LayerAlpha);
@@ -362,7 +363,8 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
         var clothingLayer = int.MaxValue;
         _sprite.LayerMapTryGet((entity.Owner, sprite), "jumpsuit", out clothingLayer, false);
 
-        if (targetLayer < clothingLayer)
+        // Head replacements must stay below screen/eye layers, while full-body markings still need the raised anchor.
+        if (targetLayer < clothingLayer && markingPrototype.BodyPart != HumanoidVisualLayers.Head)
         {
             foreach (var bodyLayer in humanoid.BaseLayers.Keys)
             {

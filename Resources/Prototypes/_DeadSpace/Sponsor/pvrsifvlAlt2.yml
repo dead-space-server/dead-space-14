@@ -137,7 +137,7 @@
 
 # helmet.rsi
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   categories: [ HideSpawnMenu ]
   id: ClothingHeadHelmetHardsuitPvrsifvlAlt2
   name: шлем диверсионно-разведывательного скафандра mil.HAZE // gen.1
@@ -655,9 +655,8 @@
   - type: Sprite
     sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/tools_holofanprojector.rsi
     state: icon
-  - type: HolosignProjector
+  - type: LimitedHolosignProjector
     signProto: HoloFanPvrsifvlAlt2
-    chargeUse: 120
 
 # tools_holo.rsi
 - type: entity

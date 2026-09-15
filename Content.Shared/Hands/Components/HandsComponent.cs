@@ -156,6 +156,7 @@ public sealed class HandsComponentState : ComponentState
     public readonly Dictionary<string, Hand> Hands;
     public readonly List<string> SortedHands;
     public readonly string? ActiveHandId;
+    public readonly bool CanBeStripped; // DS14
 
     public HandsComponentState(HandsComponent handComp)
     {
@@ -163,6 +164,7 @@ public sealed class HandsComponentState : ComponentState
         Hands = new(handComp.Hands);
         SortedHands = new(handComp.SortedHands);
         ActiveHandId = handComp.ActiveHandId;
+        CanBeStripped = handComp.CanBeStripped; // DS14
     }
 }
 

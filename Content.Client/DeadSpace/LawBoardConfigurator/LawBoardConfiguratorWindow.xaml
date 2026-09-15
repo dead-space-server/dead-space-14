@@ -1,6 +1,5 @@
 <controls:FancyWindow
     xmlns="https://spacestation14.io"
-    xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
     Title="{Loc silicon-law-ui-title}"
@@ -8,10 +7,7 @@
     SetSize="920 620"
 >
     <BoxContainer Orientation="Vertical" Margin="8" HorizontalExpand="True" VerticalExpand="True">
-        <PanelContainer Margin="0 0 0 8">
-            <PanelContainer.PanelOverride>
-                <gfx:StyleBoxFlat BackgroundColor="#241538" />
-            </PanelContainer.PanelOverride>
+        <PanelContainer Margin="0 0 0 8" StyleClasses="DeadSpaceSectionHeader">
             <BoxContainer Orientation="Vertical" Margin="12 8 12 8" HorizontalAlignment="Center">
                 <Label Text="{Loc law-board-configurator-ui-title}" />
             </BoxContainer>
@@ -26,30 +22,21 @@
 
         <customControls:HSeparator StyleClasses="LowDivider" Margin="0 0 0 8"/>
 
-        <PanelContainer Name="NoBoardPanel" VerticalExpand="True" Visible="False">
-            <PanelContainer.PanelOverride>
-                <gfx:StyleBoxFlat BackgroundColor="#1A1426" />
-            </PanelContainer.PanelOverride>
+        <PanelContainer Name="NoBoardPanel" VerticalExpand="True" Visible="False" StyleClasses="DeadSpaceInset">
             <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" HorizontalAlignment="Center" VerticalAlignment="Center" SeparationOverride="4">
                 <Label Text="{Loc law-board-configurator-requires-board}" />
             </BoxContainer>
         </PanelContainer>
 
         <BoxContainer Name="BoardEditorContainer" Orientation="Vertical" VerticalExpand="True">
-            <PanelContainer Margin="0 0 0 8">
-                <PanelContainer.PanelOverride>
-                    <gfx:StyleBoxFlat BackgroundColor="#201730" />
-                </PanelContainer.PanelOverride>
+            <PanelContainer Margin="0 0 0 8" StyleClasses="DeadSpaceSectionHeader">
                 <BoxContainer Orientation="Horizontal" Margin="8 6 8 6">
                     <Label Text="{Loc law-board-configurator-ui-board-name}" Margin="0 3 8 0" />
                     <LineEdit Name="BoardNameInput" HorizontalExpand="True" />
                 </BoxContainer>
             </PanelContainer>
 
-            <PanelContainer VerticalExpand="True">
-                <PanelContainer.PanelOverride>
-                    <gfx:StyleBoxFlat BackgroundColor="#1A1426" />
-                </PanelContainer.PanelOverride>
+            <PanelContainer VerticalExpand="True" StyleClasses="DeadSpaceSurfaceDark">
                 <ScrollContainer VerticalExpand="True" HorizontalExpand="True" HScrollEnabled="False" ReturnMeasure="True" Margin="6">
                     <BoxContainer Orientation="Vertical" Name="LawContainer" HorizontalExpand="True" />
                 </ScrollContainer>

@@ -5,6 +5,15 @@
   description: Пластиковый талон с номером в очереди.
   components:
   - type: QueueTicket
+  - type: Item
+    size: Tiny
+    inhandVisuals:
+      left:
+      - sprite: Objects/Misc/bureaucracy.rsi
+        state: paper-inhand-left
+      right:
+      - sprite: Objects/Misc/bureaucracy.rsi
+        state: paper-inhand-right
   - type: Sprite
     sprite: _DeadSpace/Objects/Misc/queue_ticket.rsi
     layers:

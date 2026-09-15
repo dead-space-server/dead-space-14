@@ -121,7 +121,12 @@ public abstract partial class SharedXenoArtifactSystem
         foreach (var nodeIndex in GetAllNodeIndices((ent, ent)))
         {
             var artifactComponent = ent.Comp2;
-            var curNode = GetNode((ent, artifactComponent), nodeIndex);
+            // DS14-start
+            if (!TryGetNode((ent, artifactComponent), nodeIndex, out var curNodeEntity))
+                continue;
+
+            var curNode = curNodeEntity.Value;
+            // DS14-end
             if (!curNode.Comp.Locked || !CanUnlockNode((curNode, curNode)))
                 continue;
 

@@ -422,6 +422,7 @@ public sealed class RevolutionaryRuleSystemTest
         {
             Connected = false,
             Dirty = true,
+            Fresh = true,
         });
 
         var server = pair.Server;

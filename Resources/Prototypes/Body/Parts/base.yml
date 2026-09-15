@@ -39,6 +39,11 @@
     vital: true
   - type: Input
     context: "ghost"
+  # DS14-start: pre-NuBody equivalent of upstream OrganBaseHead.
+  - type: Tag
+    tags:
+    - Head
+  # DS14-end
 
 - type: entity
   id: BaseLeftArm

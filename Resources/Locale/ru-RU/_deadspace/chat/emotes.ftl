@@ -29,3 +29,5 @@ chat-emote-msg-turn = кружится
 chat-emote-msg-start-tail = виляет хвостом
 chat-emote-msg-stop-tail = хвост замирает
 chat-emote-msg-teeth-clack = клацает зубами
+# Для ивента
+chat-emote-name-spingun-nss = крутит револьвер на пальце

@@ -1,0 +1,12 @@
+ent-ChangelingFleshClothingBack = рюкзак из плоти генокрада
+ent-ChangelingFleshClothingBelt = пояс из плоти генокрада
+ent-ChangelingFleshClothingEars = гарнитура из плоти генокрада
+ent-ChangelingFleshClothingEyes = очки из плоти генокрада
+ent-ChangelingFleshClothingGloves = перчатки из плоти генокрада
+ent-ChangelingFleshClothingHead = головной убор из плоти генокрада
+ent-ChangelingFleshClothingMask = маска из плоти генокрада
+ent-ChangelingFleshClothingNeck = галстук из плоти генокрада
+ent-ChangelingFleshClothingInner = комбинезон из плоти генокрада
+ent-ChangelingFleshClothingOuter = жилет из плоти генокрада
+ent-ChangelingFleshClothingFeet = обувь из плоти генокрада
+ent-ChangelingFleshClothingSuitStorage = газовый баллон из плоти генокрада

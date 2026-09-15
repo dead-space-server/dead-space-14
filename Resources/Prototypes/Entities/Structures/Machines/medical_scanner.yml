@@ -31,12 +31,14 @@
           Green: {state: "occupied"}
           Yellow: {state: "occupied"}
         terminalLayer:
-          Off: {state: "off_unlit"}
-          Open: {state: "idle_unlit"}
-          Red: {state: "red_unlit"}
-          Death: {state: "off_unlit"}
-          Green: {state: "idle_unlit"}
-          Yellow: {state: "maint_unlit"}
+#DS14-start
+          Off: {state: "occupied_unlit"}
+          Open: {state: "occupied_unlit"}
+          Red: {state: "occupied_unlit"}
+          Death: {state: "occupied_unlit"}
+          Green: {state: "occupied_unlit"}
+          Yellow: {state: "occupied_unlit"}
+#DS14-end
   - type: Physics
     bodyType: Static
   - type: Construction

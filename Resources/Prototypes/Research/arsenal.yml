@@ -15,6 +15,9 @@
   - WeaponProtoKineticAcceleratorShotgun # DS14
   - ShuttleGunKineticCircuitboard
   - BorgModuleMiningWeapon # DS14
+  - PKAUpgradeDamage # DS14
+  - PKAUpgradeRange # DS14
+  - PKAUpgradeFireRate # DS14
   # These are roundstart but not replenishable for salvage
 
 - type: technology
@@ -30,9 +33,7 @@
   - BoxShotgunIncendiary
   - MagazineRifleIncendiary
   - MagazinePistolIncendiary
-  - MagazinePistolHighCapacityincendiary #DS14
   - MagazinePistolSubMachineGunIncendiary
-  - MagazinePistolSubMachineGunExtendedIncendiary #DS14
   - MagazinePistolSubMachineGunTopMountedIncendiary # DS14
   - MagazineLightRifleIncendiary
   - SpeedLoaderMagnumIncendiary
@@ -43,17 +44,18 @@
   - MagazineBoxRifleIncendiary
   - MagazineBox357Incendiary # ADT
 
-- type: technology
-  id: WeaponizedLaserManipulation
-  name: research-technology-weaponized-laser-manipulation
-  icon:
-    sprite: Objects/Weapons/Guns/Battery/laser_gun.rsi
-    state: icon
-  discipline: Arsenal
-  tier: 1
-  cost: 7500
-  recipeUnlocks:
-  - WeaponLaserCarbine
+# DS14: WeaponLaserCarbine is a round-start Security TechFab recipe.
+#- type: technology
+#  id: WeaponizedLaserManipulation
+#  name: research-technology-weaponized-laser-manipulation
+#  icon:
+#    sprite: Objects/Weapons/Guns/Battery/laser_gun.rsi
+#    state: icon
+#  discipline: Arsenal
+#  tier: 1
+#  cost: 7500
+#  recipeUnlocks:
+#  - WeaponLaserCarbine
 
 - type: technology
   id: NonlethalAmmunition
@@ -69,6 +71,8 @@
   - BoxShellTranquilizer
   - BoxBeanbag
   - WeaponDisabler
+  - Bola # DS14
+  - EnergyBola # DS14
 
 - type: technology
   id: UraniumMunitions
@@ -82,9 +86,7 @@
   recipeUnlocks:
   - MagazineRifleUranium
   - MagazinePistolUranium
-  - MagazinePistolHighCapacityUranium #DS14
   - MagazinePistolSubMachineGunUranium
-  - MagazinePistolSubMachineGunExtendedUranium #DS14
   - MagazinePistolSubMachineGunTopMountedUranium # DS14
   - MagazineLightRifleUranium
   - SpeedLoaderMagnumUranium
@@ -144,33 +146,9 @@
   recipeUnlocks:
   - WeaponLaserCannon
   - WeaponLaserRifle # DS14
-
-- type: technology
-  id: WaveParticleHarnessing
-  name: research-technology-wave-particle-harnessing
-  icon:
-    sprite: Objects/Weapons/Guns/Battery/xray.rsi
-    state: icon
-  discipline: Arsenal
-  tier: 2
-  cost: 10000
-  recipeUnlocks:
-  - WeaponXrayCannon
+  - WeaponXrayCannon # DS14
   - WeaponIonRifle # DS14
-
-- type: technology
-  id: KineticModifications
-  name: research-technology-kinetic-modifications
-  icon:
-    sprite: Objects/Tools/upgrade.rsi
-    state: display
-  discipline: Arsenal
-  tier: 2
-  cost: 7500
-  recipeUnlocks:
-  - PKAUpgradeDamage
-  - PKAUpgradeRange
-  - PKAUpgradeFireRate
+  - WeaponTemperatureGun # DS14
 
 - type: technology
   id: BasicShuttleArmament
@@ -209,18 +187,6 @@
   - ClothingBackpackElectropack
 
 - type: technology
-  id: NightVisionTechnology
-  name: research-technology-night-vision-technology
-  icon:
-    sprite: _DeadSpace/Clothing/Eyes/Hud/pnv.rsi
-    state: icon
-  discipline: Arsenal
-  tier: 2
-  cost: 7500
-  recipeUnlocks:
-  - ClothingEyesPNV
-
-- type: technology
   id: SecurityTurretsTechnology
   name: research-technology-security-turrets-technology
   icon:
@@ -246,19 +212,72 @@
   - BorgModuleSecurityJump
 # DS14-end
 
-- type: technology
-  id: DualWieldingTechnology
-  name: research-technology-dual-wielding-technology
-  icon:
-    sprite: Clothing/Back/Specific/harmpack.rsi
-    state: icon
-  discipline: Arsenal
-  tier: 2
-  cost: 10000
-  recipeUnlocks:
-  - ClothingBackpackHarmpack
-
 # Tier 3
+
+# DS14-start: removed research branches kept commented for history; recipes moved above.
+#- type: technology
+#  id: WaveParticleHarnessing
+#  name: research-technology-wave-particle-harnessing
+#  icon:
+#    sprite: Objects/Weapons/Guns/Battery/xray.rsi
+#    state: icon
+#  discipline: Arsenal
+#  tier: 2
+#  cost: 10000
+#  recipeUnlocks:
+#  - WeaponXrayCannon
+#  - WeaponIonRifle
+
+#- type: technology
+#  id: KineticModifications
+#  name: research-technology-kinetic-modifications
+#  icon:
+#    sprite: Objects/Tools/upgrade.rsi
+#    state: display
+#  discipline: Arsenal
+#  tier: 2
+#  cost: 7500
+#  recipeUnlocks:
+#  - PKAUpgradeDamage
+#  - PKAUpgradeRange
+#  - PKAUpgradeFireRate
+
+#- type: technology
+#  id: NightVisionTechnology
+#  name: research-technology-night-vision-technology
+#  icon:
+#    sprite: _DeadSpace/Clothing/Eyes/Hud/pnv.rsi
+#    state: icon
+#  discipline: Arsenal
+#  tier: 2
+#  cost: 7500
+#  recipeUnlocks:
+#  - ClothingEyesPNV
+
+#- type: technology
+#  id: DualWieldingTechnology
+#  name: research-technology-dual-wielding-technology
+#  icon:
+#    sprite: Clothing/Back/Specific/harmpack.rsi
+#    state: icon
+#  discipline: Arsenal
+#  tier: 2
+#  cost: 10000
+#  recipeUnlocks:
+#  - ClothingBackpackHarmpack
+
+#- type: technology
+#  id: ThermalWeaponry
+#  name: research-technology-thermal-weaponry
+#  icon:
+#    sprite: Objects/Weapons/Guns/Battery/temp_gun.rsi
+#    state: icon
+#  discipline: Arsenal
+#  tier: 3
+#  cost: 15000
+#  recipeUnlocks:
+#  - WeaponTemperatureGun
+# DS14-end
 
 - type: technology
   id: PortableMicrofusionWeaponry
@@ -272,18 +291,6 @@
   recipeUnlocks:
   - WeaponAdvancedLaser
 #  - PortableRecharger DS14: Move to SpecialMeans
-
-- type: technology
-  id: ThermalWeaponry
-  name: research-technology-thermal-weaponry
-  icon:
-    sprite: Objects/Weapons/Guns/Battery/temp_gun.rsi
-    state: icon
-  discipline: Arsenal
-  tier: 3
-  cost: 15000
-  recipeUnlocks:
-  - WeaponTemperatureGun
 
 - type: technology
   id: AdvancedShuttleWeapon

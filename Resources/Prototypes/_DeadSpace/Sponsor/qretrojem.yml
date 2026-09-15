@@ -81,7 +81,7 @@
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: ClothingHeadHelmetHardsuitSyndieMedic
+  parent: [ClothingHeadHelmetHardsuitSyndieMedic]
   id: ClothingHeadHelmetHardsuitQretrojem
   categories: [ HideSpawnMenu ]
   name: шлем последователя Церкви Юнитологии

@@ -2,6 +2,7 @@
 
 using System.Numerics;
 using Content.Server.Popups;
+using Content.Shared.Popups;
 using Content.Server.Stunnable;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Administration.Logs;
@@ -178,7 +179,7 @@ public sealed class CarrySystem : EntitySystem
         var started = _doAfter.TryStartDoAfter(doAfter);
         if (started)
         {
-            _popup.PopupEntity(Loc.GetString("carry-popup-being-picked-up", ("user", Identity.Entity(carrier, EntityManager))), target, target);
+            _popup.PopupEntity(Loc.GetString("carry-popup-being-picked-up", ("user", Identity.Entity(carrier, EntityManager))), target, target, PopupType.MediumCaution);
         }
         return started;
     }

@@ -90,6 +90,153 @@
   groupBy: "plushie"
 
 - type: loadout
+  id: Akiplushie1
+  storage:
+    back:
+    - Akiplushie1
+  groupBy: "plushie"
+
+- type: loadout
+  id: Akiplushie2
+  storage:
+    back:
+    - Akiplushie2
+  groupBy: "plushie"
+
+- type: loadout
+  id: Akiplushie3
+  storage:
+    back:
+    - Akiplushie3
+  groupBy: "plushie"
+
+- type: loadout
+  id: Akiplushie4
+  storage:
+    back:
+    - Akiplushie4
+  groupBy: "plushie"
+
+- type: loadout
+  id: Akiplushie5
+  storage:
+    back:
+    - Akiplushie5
+  groupBy: "plushie"
+
+- type: loadout
+  id: Akiplushie6
+  storage:
+    back:
+    - Akiplushie6
+  groupBy: "plushie"
+
+- type: loadout
+  id: Akiplushie7
+  storage:
+    back:
+    - Akiplushie7
+  groupBy: "plushie"
+
+- type: loadout
+  id: Akiplushie8
+  storage:
+    back:
+    - Akiplushie8
+  groupBy: "plushie"
+
+- type: loadout
+  id: Akiplushie9
+  storage:
+    back:
+    - Akiplushie9
+  groupBy: "plushie"
+
+- type: loadout
+  id: Akiplushie10
+  storage:
+    back:
+    - Akiplushie10
+  groupBy: "plushie"
+
+- type: loadout
+  id: Akiplushie11
+  storage:
+    back:
+    - Akiplushie11
+  groupBy: "plushie"
+
+- type: loadout
+  id: Akiplushie12
+  storage:
+    back:
+    - Akiplushie12
+  groupBy: "plushie"
+
+- type: loadout
+  id: Akiplushie13
+  storage:
+    back:
+    - Akiplushie13
+  groupBy: "plushie"
+
+- type: loadout
+  id: Akiplushie14
+  storage:
+    back:
+    - Akiplushie14
+  groupBy: "plushie"
+
+- type: loadout
+  id: Akiplushie15
+  storage:
+    back:
+    - Akiplushie15
+  groupBy: "plushie"
+
+- type: loadout
+  id: Akiplushie16
+  storage:
+    back:
+    - Akiplushie16
+  groupBy: "plushie"
+
+- type: loadout
+  id: Akiplushie17
+  storage:
+    back:
+    - Akiplushie17
+  groupBy: "plushie"
+
+- type: loadout
+  id: Akiplushie18
+  storage:
+    back:
+    - Akiplushie18
+  groupBy: "plushie"
+
+- type: loadout
+  id: Akiplushie19
+  storage:
+    back:
+    - Akiplushie19
+  groupBy: "plushie"
+
+- type: loadout
+  id: Akiplushie20
+  storage:
+    back:
+    - Akiplushie20
+  groupBy: "plushie"
+
+- type: loadout
+  id: Akiplushie21
+  storage:
+    back:
+    - Akiplushie21
+  groupBy: "plushie"
+
+- type: loadout
   id: PlushieJokerge
   storage:
     back:
@@ -753,4 +900,53 @@
   storage:
     back:
     -  PlushieDajidanNikita
+  groupBy: "plushie"
+
+- type: loadout
+  id: PlushieGuitarwhispersNick
+  storage:
+    back:
+    - PlushieGuitarwhispersNick
+  groupBy: "plushie"
+
+- type: loadout
+  id: PlushieMuenraiSiiri
+  storage:
+    back:
+    - PlushieMuenraiSiiri
+  groupBy: "plushie"
+
+- type: loadout
+  id: PlushieKieruAngel
+  storage:
+    back:
+    - PlushieKieruAngel
+  groupBy: "plushie"
+
+- type: loadout
+  id: PlushieImarabErmina
+  storage:
+    back:
+    - PlushieImarabErmina
+  groupBy: "plushie"
+
+- type: loadout
+  id: PlushieZutiKuz
+  storage:
+    back:
+    - PlushieZutiKuz
+  groupBy: "plushie"
+
+- type: loadout
+  id: PlushieZutiIgna
+  storage:
+    back:
+    - PlushieZutiIgna
+  groupBy: "plushie"
+
+- type: loadout
+  id: PlushieSastrBon
+  storage:
+    back:
+    - PlushieSastrBon
   groupBy: "plushie"

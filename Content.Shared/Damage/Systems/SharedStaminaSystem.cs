@@ -3,6 +3,7 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.Alert;
 using Content.Shared.CCVar;
 using Content.Shared.CombatMode;
+using Content.Shared.Cuffs;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Events;
 using Content.Shared.Database;
@@ -64,6 +65,8 @@ public abstract partial class SharedStaminaSystem : EntitySystem
         SubscribeLocalEvent<StaminaComponent, AfterAutoHandleStateEvent>(OnStamHandleState);
         SubscribeLocalEvent<StaminaComponent, DisarmedEvent>(OnDisarmed);
         SubscribeLocalEvent<StaminaComponent, RejuvenateEvent>(OnRejuvenate);
+        // DS14 - current engine baseline requires explicit event subscriptions.
+        SubscribeLocalEvent<StaminaComponent, CheckIncapacitatedCuffEvent>(OnIncapCuffCheck);
 
         SubscribeLocalEvent<StaminaDamageOnEmbedComponent, EmbedEvent>(OnProjectileEmbed);
 
@@ -129,6 +132,12 @@ public abstract partial class SharedStaminaSystem : EntitySystem
         _status.TryRemoveStatusEffect(entity, StaminaLow);
         UpdateStaminaVisuals(entity);
         Dirty(entity);
+    }
+
+    private void OnIncapCuffCheck(Entity<StaminaComponent> ent, ref CheckIncapacitatedCuffEvent args)
+    {
+        if (ent.Comp.Critical)
+            args.Incapacitated = true;
     }
 
     private void OnDisarmed(EntityUid uid, StaminaComponent component, ref DisarmedEvent args)
@@ -246,7 +255,10 @@ public abstract partial class SharedStaminaSystem : EntitySystem
     /// <summary>
     /// Tries to take stamina damage without raising the entity over the crit threshold.
     /// </summary>
-    public bool TryTakeStamina(EntityUid uid, float value, StaminaComponent? component = null, EntityUid? source = null, EntityUid? with = null, bool visual = false)
+    // DS14-start
+    public bool TryTakeStamina(EntityUid uid, float value, StaminaComponent? component = null, EntityUid? source = null,
+        EntityUid? with = null, bool visual = false, bool ignoreResist = false)
+    // DS14-end
     {
         // Something that has no Stamina component automatically passes stamina checks
         if (!Resolve(uid, ref component, false))
@@ -257,7 +269,9 @@ public abstract partial class SharedStaminaSystem : EntitySystem
         if (oldStam + value >= component.CritThreshold || component.Critical)
             return false;
 
-        TakeStaminaDamage(uid, value, component, source, with, visual: visual);
+        // DS14-start
+        TakeStaminaDamage(uid, value, component, source, with, visual: visual, ignoreResist: ignoreResist);
+        // DS14-end
         return true;
     }
 

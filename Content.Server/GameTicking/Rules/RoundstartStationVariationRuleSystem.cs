@@ -1,5 +1,6 @@
 ﻿using Content.Server.GameTicking.Rules.Components;
 using Content.Server.Shuttles.Systems;
+using Content.Server.DeadSpace.CentComm;
 using Content.Server.Station.Components;
 using Content.Server.Station.Events;
 using Content.Shared.GameTicking.Components;
@@ -44,9 +45,15 @@ public sealed class RoundstartStationVariationRuleSystem : GameRuleSystem<Rounds
 
         // raise the event on any passes that have been added
         var passEv = new StationVariationPassEvent(ev.Station);
+        var isCentComm = HasComp<CentCommStationComponent>(ev.Station); // DS14
         var passQuery = EntityQueryEnumerator<StationVariationPassRuleComponent, GameRuleComponent>();
-        while (passQuery.MoveNext(out var uid, out _, out _))
+        while (passQuery.MoveNext(out var uid, out var pass, out _)) // DS14
         {
+            // DS14-start
+            if (isCentComm && !pass.ApplyToCentComm)
+                continue;
+            // DS14-end
+
             // TODO: for some reason, ending a game rule just gives it a marker comp,
             // and doesnt delete it
             // so we have to check here that it isnt an ended game rule (which could happen if a preset failed to start

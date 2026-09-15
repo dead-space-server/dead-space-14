@@ -117,7 +117,7 @@ public abstract partial class SharedPuddleSystem : EntitySystem
         _standoutReagents = [.. _prototypeManager.EnumeratePrototypes<ReagentPrototype>().Where(x => x.Standsout).Select(x => x.ID)];
     }
 
-    private void OnSolutionUpdate(Entity<PuddleComponent> entity, ref SolutionContainerChangedEvent args)
+    protected virtual void OnSolutionUpdate(Entity<PuddleComponent> entity, ref SolutionContainerChangedEvent args)
     {
         if (args.SolutionId != entity.Comp.SolutionName)
             return;
@@ -165,7 +165,7 @@ public abstract partial class SharedPuddleSystem : EntitySystem
             {
                 if (CanFullyEvaporate(solution))
                     args.PushMarkup(Loc.GetString("puddle-component-examine-evaporating"));
-                else if (solution.GetTotalPrototypeQuantity(GetEvaporatingReagents(solution)) > FixedPoint2.Zero)
+                else if (HasEvaporatingReagents(solution))
                     args.PushMarkup(Loc.GetString("puddle-component-examine-evaporating-partial"));
                 else
                     args.PushMarkup(Loc.GetString("puddle-component-examine-evaporating-no"));

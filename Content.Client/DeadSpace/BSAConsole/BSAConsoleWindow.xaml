@@ -1,0 +1,91 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+               xmlns:bsa="clr-namespace:Content.Client.DeadSpace.BSAConsole"
+               x:Class="Content.Client.DeadSpace.BSAConsole.BSAConsoleWindow"
+               Title="BSA Console"
+               MinWidth="700"
+               MinHeight="500">
+    <BoxContainer Orientation="Horizontal" Margin="0" SeparationOverride="0" VerticalExpand="True">
+
+        <!-- LEFT SIDEBAR -->
+        <PanelContainer MinWidth="180" MaxWidth="180">
+            <PanelContainer.PanelOverride>
+                <gfx:StyleBoxFlat BackgroundColor="#191920FF" BorderColor="#2a2a35" BorderThickness="1" />
+            </PanelContainer.PanelOverride>
+            <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="6">
+                <Label Text="BSA CONSOLE" FontColorOverride="#54D98C" HorizontalAlignment="Center" Margin="0 4 0 2" />
+                <PanelContainer MinHeight="1" Margin="0 2">
+                    <PanelContainer.PanelOverride>
+                        <gfx:StyleBoxFlat BackgroundColor="#2a2a35" />
+                    </PanelContainer.PanelOverride>
+                </PanelContainer>
+
+                <Label Text="ОРУДИЕ" FontColorOverride="#3C3C50" Margin="0 2 0 0" />
+                <Label Name="BSAConnectionLabel" Text="ПОДКЛЮЧИ" FontColorOverride="#D95454" />
+
+                <PanelContainer Name="StatusPanel" MinHeight="28" Margin="0 4 0 0">
+                    <PanelContainer.PanelOverride>
+                        <gfx:StyleBoxFlat BackgroundColor="#1A2A1A" BorderColor="#2A4A2A" BorderThickness="1" />
+                    </PanelContainer.PanelOverride>
+                    <Label Name="CooldownLabel" Text="ГОТОВА" FontColorOverride="#54D98C" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </PanelContainer>
+                <ProgressBar Name="CooldownBar" MinValue="0" MaxValue="60" Value="0" MinHeight="8" Margin="0 0 0 2" />
+
+                <PanelContainer MinHeight="1" Margin="0 4">
+                    <PanelContainer.PanelOverride>
+                        <gfx:StyleBoxFlat BackgroundColor="#2a2a35" />
+                    </PanelContainer.PanelOverride>
+                </PanelContainer>
+
+                <Label Text="ДИСК" FontColorOverride="#3C3C50" Margin="0 2 0 0" />
+                <Label Name="DiskStatusLabel" Text="ДИСК НЕ ВСТАВЛЕН" FontColorOverride="#D9A83C" />
+                <Button Name="EjectDiskButton" Text="ИЗВЛЕЧЬ" MinHeight="22" Visible="False" />
+
+                <PanelContainer MinHeight="1" Margin="0 4">
+                    <PanelContainer.PanelOverride>
+                        <gfx:StyleBoxFlat BackgroundColor="#2a2a35" />
+                    </PanelContainer.PanelOverride>
+                </PanelContainer>
+
+                <Label Name="SelectedGridLabel" Text="" FontColorOverride="#54D98C" Visible="False" />
+                <Label Name="ErrorLabel" Text="" FontColorOverride="#D95454" Visible="False" />
+            </BoxContainer>
+        </PanelContainer>
+
+        <!-- CENTER -->
+        <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="0">
+            <Button Name="ViewModeButton" Text="РЕЖИМ: СКАНЕР МАСС" MinHeight="28" HorizontalExpand="True" Margin="0" />
+
+            <!-- Center viewport area with crosshair overlay -->
+            <PanelContainer VerticalExpand="True" HorizontalExpand="True">
+                <bsa:BSANavMapControl Name="RadarScreen"
+                                      VerticalExpand="True"
+                                      HorizontalExpand="True" />
+                <bsa:BSAGridNavMapControl Name="GridMapScreen"
+                                          VerticalExpand="True"
+                                          HorizontalExpand="True"
+                                          Visible="False" />
+                <bsa:CrosshairOverlay Name="Crosshair"
+                                      VerticalExpand="True"
+                                      HorizontalExpand="True" />
+            </PanelContainer>
+
+            <!-- Bottom bar: coordinates + fire -->
+            <PanelContainer>
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#191920FF" BorderColor="#2a2a35" BorderThickness="1" />
+                </PanelContainer.PanelOverride>
+                <BoxContainer Orientation="Horizontal" Margin="6" SeparationOverride="6" VerticalAlignment="Center">
+                    <Label Text="X" FontColorOverride="#54D98C" VerticalAlignment="Center" />
+                    <LineEdit Name="CoordinateX" MinWidth="80" MaxWidth="100" PlaceHolder="0" />
+                    <Label Text="Y" FontColorOverride="#54D98C" VerticalAlignment="Center" />
+                    <LineEdit Name="CoordinateY" MinWidth="80" MaxWidth="100" PlaceHolder="0" />
+                    <Control HorizontalExpand="True" />
+                    <Button Name="FireButton" Text="ВЫСТРЕЛ" MinWidth="120" MinHeight="32" HorizontalAlignment="Right" />
+                </BoxContainer>
+            </PanelContainer>
+        </BoxContainer>
+
+    </BoxContainer>
+</DefaultWindow>

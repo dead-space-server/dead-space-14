@@ -6,6 +6,7 @@
   - type: Sprite
     noRot: true
     drawdepth: Mobs
+  - type: ScaleVisuals
     scale: 0.8, 0.8
   - type: CarrySize
     size: Small

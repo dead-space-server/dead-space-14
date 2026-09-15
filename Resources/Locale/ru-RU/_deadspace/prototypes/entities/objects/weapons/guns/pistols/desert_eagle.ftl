@@ -6,5 +6,5 @@ ent-MagazineEagleAP = пистолетный магазин пустынного
     .desc = { ent-BaseMagazineEagle.desc }
 ent-DesertEagleBase = { ent-BaseItem }
     .desc = { ent-BaseItem.desc }
-ent-WeaponPistolDesertEagle = пустынный орёл
+ent-WeaponPistolDesertEagle = Пустынный Орёл
     .desc = Вот он, воплощение силы и свободы — Пустынный орёл! Одно только упоминание этого оружия вызывает волну бесшабашности и адреналина.

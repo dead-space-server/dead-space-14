@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-4.0",
+  "copyright": "Taken from Corvax SS14 server at commit https://github.com/space-syndicate/space-station-14-next/commit/7b4b3c3924167ce6ed4f13ebc980a165b7c0908a",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "execution-chair",
+      "directions": 4
+    }
+  ]
+}

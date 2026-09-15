@@ -153,7 +153,7 @@
 
 # Helmet
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuitReimon
   name: шлем пустотного скафандра Minaris
   description: Для защиты от космоса офицера-исследователя компании Minaris Technical. Выполнен из дорогих материалов и экспериментальных сплавов.

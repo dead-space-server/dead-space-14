@@ -23,6 +23,7 @@ using Content.Server.NodeContainer.NodeGroups;
 using Content.Server.Players.JobWhitelist;
 using Content.Server.Players.PlayTimeTracking;
 using Content.Server.Players.RateLimiting;
+using Content.Server.Players.Whitelist;
 using Content.Server.Preferences.Managers;
 using Content.Server.ServerInfo;
 using Content.Server.ServerUpdates;
@@ -93,9 +94,9 @@ internal static class ServerContentIoC
         deps.Register<DiscordChatWebhook>();
         deps.Register<ServerFeedbackManager>();
         deps.Register<ISharedFeedbackManager, ServerFeedbackManager>();
-
         // Jukebox-port-edit
         deps.Register<ServerJukeboxSongsSyncManager>();
         // Jukebox-port-edit
+        deps.Register<WhitelistManager>();
     }
 }

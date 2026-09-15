@@ -1,8 +1,10 @@
 using System.Linq;
 using System.Numerics;
+using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.GameTicking.Managers;
 using Content.Client.Message;
 using Content.Client.Stylesheets;
+using Content.Client.Stylesheets.Palette;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.Administration;
 using Content.Shared.DeadSpace.PatrolTablet;
@@ -137,7 +139,7 @@ public sealed class CreateSquadDialog : DefaultWindow
         rootBox.AddChild(new Label
         {
             Text = Loc.GetString("patrol-tablet-squad-name-label"),
-            FontColorOverride = Color.FromHex("#00A2E8"),
+            StyleClasses = { DeadSpaceStyleClass.SectionTitle },
         });
 
         _nameInput = new LineEdit
@@ -150,7 +152,7 @@ public sealed class CreateSquadDialog : DefaultWindow
         rootBox.AddChild(new Label
         {
             Text = Loc.GetString("patrol-tablet-icon-label"),
-            FontColorOverride = Color.FromHex("#00A2E8"),
+            StyleClasses = { DeadSpaceStyleClass.SectionTitle },
         });
 
         var iconGrid = new GridContainer
@@ -258,24 +260,13 @@ public sealed partial class OfficerEntryControl : PanelContainer
 
         MinHeight = 36;
         Margin = new Thickness(0, 0, 0, 2);
+        AddStyleClass(DeadSpaceStyleClass.ListItem);
 
         BuildUI();
     }
 
     private void BuildUI()
     {
-        var styleBox = new StyleBoxFlat
-        {
-            BackgroundColor = Color.FromHex("#1a1a2e"),
-            BorderColor = Color.FromHex("#3F48CC"),
-            BorderThickness = new Thickness(1),
-            ContentMarginTopOverride = 6,
-            ContentMarginBottomOverride = 6,
-            ContentMarginLeftOverride = 8,
-            ContentMarginRightOverride = 8,
-        };
-        PanelOverride = styleBox;
-
         var mainBox = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Horizontal,
@@ -307,7 +298,6 @@ public sealed partial class OfficerEntryControl : PanelContainer
         var nameLabel = new Label
         {
             Text = _officer.Name,
-            FontColorOverride = Color.FromHex("#ffffff"),
             StyleClasses = { StyleClass.LabelKeyText },
             HorizontalExpand = true,
         };
@@ -316,7 +306,7 @@ public sealed partial class OfficerEntryControl : PanelContainer
         var jobLabel = new Label
         {
             Text = _officer.JobTitle,
-            FontColorOverride = Color.FromHex("#aaaaaa"),
+            StyleClasses = { DeadSpaceStyleClass.Subtitle },
             HorizontalExpand = true,
         };
         infoBox.AddChild(jobLabel);
@@ -351,6 +341,7 @@ public sealed partial class SquadEntryControl : PanelContainer
         _onRenameSquad = onRenameSquad;
         MinHeight = 44;
         Margin = new Thickness(0, 0, 0, 2);
+        AddStyleClass(DeadSpaceStyleClass.ListItem);
 
         BuildUI();
     }
@@ -364,18 +355,6 @@ public sealed partial class SquadEntryControl : PanelContainer
 
     private void BuildUI()
     {
-        var styleBox = new StyleBoxFlat
-        {
-            BackgroundColor = Color.FromHex("#1a1a2e"),
-            BorderColor = Color.FromHex("#3F48CC"),
-            BorderThickness = new Thickness(1),
-            ContentMarginTopOverride = 4,
-            ContentMarginBottomOverride = 4,
-            ContentMarginLeftOverride = 8,
-            ContentMarginRightOverride = 8,
-        };
-        PanelOverride = styleBox;
-
         var outerBox = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
@@ -397,7 +376,7 @@ public sealed partial class SquadEntryControl : PanelContainer
         var expandArrow = new Label
         {
             Text = _expanded ? "▼" : "▶",
-            FontColorOverride = Color.FromHex("#00A2E8"),
+            FontColorOverride = DeadSpaceStylePalette.CyanBright,
             VerticalAlignment = VAlignment.Center,
             MinSize = new Vector2(16, 0),
         };
@@ -418,7 +397,6 @@ public sealed partial class SquadEntryControl : PanelContainer
         var nameLabel = new Label
         {
             Text = _squad.Name,
-            FontColorOverride = Color.FromHex("#ffffff"),
             HorizontalExpand = true,
         };
         topRowHBox.AddChild(nameLabel);
@@ -506,7 +484,7 @@ public sealed partial class SquadEntryControl : PanelContainer
             Text = _squad.AssignedCount > 0
                 ? Loc.GetString("patrol-tablet-squad-count", ("count", _squad.AssignedCount))
                 : Loc.GetString("patrol-tablet-squad-empty"),
-            FontColorOverride = _squad.AssignedCount > 0 ? Color.FromHex("#00ff88") : Color.FromHex("#666666"),
+            FontColorOverride = _squad.AssignedCount > 0 ? Palettes.Green.Text : DeadSpaceStylePalette.TextMuted,
             VerticalAlignment = VAlignment.Center,
         };
         bottomRow.AddChild(countLabel);
@@ -528,7 +506,7 @@ public sealed partial class SquadEntryControl : PanelContainer
                 var memberLabel = new Label
                 {
                     Text = "• " + memberName,
-                    FontColorOverride = Color.FromHex("#cccccc"),
+                    StyleClasses = { DeadSpaceStyleClass.Subtitle },
                 };
                 memberBox.AddChild(memberLabel);
             }
@@ -540,7 +518,7 @@ public sealed partial class SquadEntryControl : PanelContainer
             var emptyLabel = new Label
             {
                 Text = Loc.GetString("patrol-tablet-squad-empty"),
-                FontColorOverride = Color.FromHex("#666666"),
+                StyleClasses = { DeadSpaceStyleClass.Subtitle },
                 Margin = new Thickness(24, 2, 0, 0),
             };
             outerBox.AddChild(emptyLabel);

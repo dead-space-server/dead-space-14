@@ -1,0 +1,716 @@
+- type: entity
+  id: AirlockSerpentAssembly
+  parent: AirlockAssembly
+  name: каркас шлюза
+  description: Он открывается, он закрывается, и он может вас раздавить.
+  suffix: Серпент
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_basic.rsi
+    state: assembly
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: Construction
+    graph: AirlockTaipan
+    node: assembly
+
+- type: entity
+  parent: AirlockSerpentAssembly
+  id: AirlockSerpentGlassAssembly
+  name: каркас шлюза
+  description: Он открывается, он закрывается, и он может вас раздавить.
+  suffix: Серпент, Стеклянный
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass.rsi
+    state: assembly
+
+- type: entity
+  parent: Airlock
+  id: AirlockSerpent
+  name: шлюз
+  description: Он открывается, он закрывается, и он может вас раздавить.
+  suffix: Серпент
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_basic.rsi
+    snapCardinals: true
+    layers:
+    - state: closed
+      map: ["enum.DoorVisualLayers.Base"]
+    - state: closed_unlit
+      shader: unshaded
+      map: ["enum.DoorVisualLayers.BaseUnlit"]
+      visible: false
+    - state: welded
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: bolted_unlit
+      shader: unshaded
+      map: ["enum.DoorVisualLayers.BaseBolted"]
+    - state: emergency_unlit
+      map: ["enum.DoorVisualLayers.BaseEmergencyAccess"]
+      shader: unshaded
+    - state: panel_open
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+      visible: false
+    - state: electrified_ai
+      sprite: Interface/Misc/ai_hud.rsi
+      shader: unshaded
+      visible: false
+      map: ["enum.ElectrifiedLayers.HUD"]
+    - state: electrified
+      sprite: Effects/electricity.rsi
+      shader: unshaded
+      visible: false
+      map: ["enum.ElectrifiedLayers.Sparks"]
+  - type: Paintable
+    group: SerpentAirlockStandard
+  - type: Construction
+    graph: AirlockTaipan
+    node: airlock
+    containers:
+    - board
+  - type: StaticPrice
+    price: 235
+
+- type: entity
+  parent: AirlockGlass
+  id: AirlockSerpentGlass
+  name: стеклянный шлюз
+  description: Он открывается, он закрывается, и он может вас раздавить.
+  suffix: Серпент, Стеклянный
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass.rsi
+  - type: Paintable
+    group: SerpentAirlockGlass
+  - type: Construction
+    graph: AirlockTaipan
+    node: glassAirlock
+  - type: StaticPrice
+    price: 235
+
+- type: entity
+  parent: AirlockSerpent
+  id: AirlockSerpentService
+  suffix: Серпент, Сервисный
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_service.rsi
+  - type: Wires
+    layoutId: AirlockService
+
+- type: entity
+  parent: AirlockSerpentService
+  id: AirlockSerpentServiceLocked
+  suffix: Серпент, Сервисный, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsService ]
+
+- type: entity
+  parent: AirlockSerpentGlass
+  id: AirlockSerpentGlassService
+  suffix: Серпент, Сервисный, Стеклянный
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_service.rsi
+  - type: Wires
+    layoutId: AirlockService
+
+- type: entity
+  parent: AirlockSerpentGlassService
+  id: AirlockSerpentGlassServiceLocked
+  suffix: Серпент, Сервисный, Стеклянный, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsService ]
+
+- type: entity
+  parent: AirlockSerpent
+  id: AirlockSerpentFreezer
+  suffix: Серпент, Холодильник
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_freezer.rsi
+  - type: Wires
+    layoutId: AirlockService
+
+- type: entity
+  parent: AirlockSerpentFreezer
+  id: AirlockSerpentFreezerLocked
+  suffix: Серпент, Холодильник, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsService ]
+
+- type: entity
+  parent: AirlockSerpent
+  id: AirlockSerpentEngineering
+  suffix: Серпент, Инженерный
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_engineering.rsi
+  - type: Wires
+    layoutId: AirlockEngineering
+
+- type: entity
+  parent: AirlockSerpentEngineering
+  id: AirlockSerpentEngineeringLocked
+  suffix: Серпент, Инженерный, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsEngineering ]
+
+- type: entity
+  parent: AirlockSerpentGlass
+  id: AirlockSerpentGlassEngineering
+  suffix: Серпент, Инженерный, Стеклянный
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_engineering.rsi
+  - type: Wires
+    layoutId: AirlockEngineering
+
+- type: entity
+  parent: AirlockSerpentGlassEngineering
+  id: AirlockSerpentGlassEngineeringLocked
+  suffix: Серпент, Инженерный, Стеклянный, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsEngineering ]
+
+- type: entity
+  parent: AirlockSerpentEngineering
+  id: AirlockSerpentAtmospherics
+  suffix: Серпент, Атмосферный
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_atmospherics.rsi
+
+- type: entity
+  parent: AirlockSerpentAtmospherics
+  id: AirlockSerpentAtmosphericsLocked
+  suffix: Серпент, Атмосферный, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsAtmospherics ]
+
+- type: entity
+  parent: AirlockSerpentGlassEngineering
+  id: AirlockSerpentGlassAtmospherics
+  suffix: Серпент, Атмосферный, Стеклянный
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_atmospherics.rsi
+
+- type: entity
+  parent: AirlockSerpentGlassAtmospherics
+  id: AirlockSerpentGlassAtmosphericsLocked
+  suffix: Серпент, Атмосферный, Стеклянный, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsAtmospherics ]
+
+- type: entity
+  parent: AirlockSerpent
+  id: AirlockSerpentCargo
+  suffix: Серпент, Снабжение
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_cargo.rsi
+  - type: Wires
+    layoutId: AirlockCargo
+
+- type: entity
+  parent: AirlockSerpentCargo
+  id: AirlockSerpentCargoLocked
+  suffix: Серпент, Снабжение, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsCargo ]
+
+- type: entity
+  parent: AirlockSerpentGlass
+  id: AirlockSerpentGlassCargo
+  suffix: Серпент, Снабжение, Стеклянный
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_cargo.rsi
+  - type: Wires
+    layoutId: AirlockCargo
+
+- type: entity
+  parent: AirlockSerpentGlassCargo
+  id: AirlockSerpentGlassCargoLocked
+  suffix: Серпент, Снабжение, Стеклянный, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsCargo ]
+
+- type: entity
+  parent: AirlockSerpent
+  id: AirlockSerpentMaint
+  suffix: Серпент, Технический
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_maint.rsi
+
+- type: entity
+  parent: AirlockSerpentMaint
+  id: AirlockSerpentMaintLocked
+  suffix: Серпент, Технический, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsMaintenance ]
+
+- type: entity
+  parent: AirlockSerpentGlass
+  id: AirlockSerpentGlassMaint
+  suffix: Серпент, Технический, Стеклянный
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_maint.rsi
+
+- type: entity
+  parent: AirlockSerpentGlassMaint
+  id: AirlockSerpentGlassMaintLocked
+  suffix: Серпент, Технический, Стеклянный, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsMaintenance ]
+
+- type: entity
+  parent: AirlockSerpent
+  id: AirlockSerpentMedical
+  suffix: Серпент, Медицинский
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_medical.rsi
+  - type: Wires
+    layoutId: AirlockMedical
+
+- type: entity
+  parent: AirlockSerpentMedical
+  id: AirlockSerpentMedicalLocked
+  suffix: Серпент, Медицинский, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsMedical ]
+
+- type: entity
+  parent: AirlockSerpentGlass
+  id: AirlockSerpentGlassMedical
+  suffix: Серпент, Медицинский, Стеклянный
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_medical.rsi
+  - type: Wires
+    layoutId: AirlockMedical
+
+- type: entity
+  parent: AirlockSerpentGlassMedical
+  id: AirlockSerpentGlassMedicalLocked
+  suffix: Серпент, Медицинский, Стеклянный, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsMedical ]
+
+- type: entity
+  parent: AirlockSerpentMedical
+  id: AirlockSerpentVirology
+  suffix: Серпент, Вирусология
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_virology.rsi
+
+- type: entity
+  parent: AirlockSerpentVirology
+  id: AirlockSerpentVirologyLocked
+  suffix: Серпент, Вирусология, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsMedicalVirology ]
+
+- type: entity
+  parent: AirlockSerpentGlassMedical
+  id: AirlockSerpentGlassVirology
+  suffix: Серпент, Вирусология, Стеклянный
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_virology.rsi
+
+- type: entity
+  parent: AirlockSerpentGlassVirology
+  id: AirlockSerpentGlassVirologyLocked
+  suffix: Серпент, Вирусология, Стеклянный, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsMedicalVirology ]
+
+- type: entity
+  parent: AirlockSerpentMedical
+  id: AirlockSerpentChemistry
+  suffix: Серпент, Химия
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_medical.rsi
+
+- type: entity
+  parent: AirlockSerpentChemistry
+  id: AirlockSerpentChemistryLocked
+  suffix: Серпент, Химия, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsChemistry ]
+
+- type: entity
+  parent: AirlockSerpentGlassMedical
+  id: AirlockSerpentGlassChemistry
+  suffix: Серпент, Химия, Стеклянный
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_medical.rsi
+
+- type: entity
+  parent: AirlockSerpentGlassChemistry
+  id: AirlockSerpentGlassChemistryLocked
+  suffix: Серпент, Химия, Стеклянный, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsChemistry ]
+
+- type: entity
+  parent: AirlockSerpent
+  id: AirlockSerpentScience
+  suffix: Серпент, Научный
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_science.rsi
+  - type: Wires
+    layoutId: AirlockScience
+
+- type: entity
+  parent: AirlockSerpentScience
+  id: AirlockSerpentScienceLocked
+  suffix: Серпент, Научный, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsResearch ]
+
+- type: entity
+  parent: AirlockSerpentGlass
+  id: AirlockSerpentGlassScience
+  suffix: Серпент, Научный, Стеклянный
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_science.rsi
+  - type: Wires
+    layoutId: AirlockScience
+
+- type: entity
+  parent: AirlockSerpentGlassScience
+  id: AirlockSerpentGlassScienceLocked
+  suffix: Серпент, Научный, Стеклянный, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsResearch ]
+
+- type: entity
+  parent: AirlockSerpent
+  id: AirlockSerpentCommand
+  suffix: Серпент, Командование
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_command.rsi
+  - type: WiresPanelSecurity
+    securityLevel: medSecurity
+  - type: Wires
+    layoutId: AirlockCommand
+
+- type: entity
+  parent: AirlockSerpentCommand
+  id: AirlockSerpentCommandLocked
+  suffix: Серпент, Командование, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsCommand ]
+
+- type: entity
+  parent: AirlockSerpentGlass
+  id: AirlockSerpentGlassCommand
+  suffix: Серпент, Командование, Стеклянный
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_command.rsi
+  - type: WiresPanelSecurity
+    securityLevel: medSecurity
+  - type: Wires
+    layoutId: AirlockCommand
+
+- type: entity
+  parent: AirlockSerpentGlassCommand
+  id: AirlockSerpentGlassCommandLocked
+  suffix: Серпент, Командование, Стеклянный, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsCommand ]
+
+- type: entity
+  parent: AirlockSerpent
+  id: AirlockSerpentSecurity
+  suffix: Серпент, Служба безопасности
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_basic.rsi
+  - type: Wires
+    layoutId: AirlockSecurity
+
+- type: entity
+  parent: AirlockSerpentSecurity
+  id: AirlockSerpentSecurityLocked
+  suffix: Серпент, Служба безопасности, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsSecurity ]
+
+- type: entity
+  parent: AirlockSerpentGlass
+  id: AirlockSerpentGlassSecurity
+  suffix: Серпент, Служба безопасности, Стеклянный
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass.rsi
+  - type: Wires
+    layoutId: AirlockSecurity
+
+- type: entity
+  parent: AirlockSerpentGlassSecurity
+  id: AirlockSerpentGlassSecurityLocked
+  suffix: Серпент, Служба безопасности, Стеклянный, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsSecurity ]
+
+- type: entity
+  parent: AirlockSerpentCargo
+  id: AirlockSerpentMining
+  suffix: Серпент, Шахтёрский
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_cargo.rsi
+  - type: Paintable
+    group: null
+  - type: Construction
+    graph: MiningAirlock
+    node: airlock
+
+- type: entity
+  parent: AirlockSerpentMining
+  id: AirlockSerpentMiningLocked
+  suffix: Серпент, Шахтёрский, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsSalvage ]
+
+- type: entity
+  parent: AirlockSerpentGlassCargo
+  id: AirlockSerpentGlassMining
+  suffix: Серпент, Шахтёрский, Стеклянный
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_cargo.rsi
+  - type: Paintable
+    group: null
+  - type: Construction
+    graph: MiningAirlock
+    node: glassAirlock
+
+- type: entity
+  parent: AirlockSerpentGlassMining
+  id: AirlockSerpentGlassMiningLocked
+  suffix: Серпент, Шахтёрский, Стеклянный, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsSalvage ]
+
+- type: entity
+  parent: AirlockSerpent
+  id: AirlockSerpentHydroponics
+  suffix: Серпент, Гидропоника
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_service.rsi
+  - type: Wires
+    layoutId: AirlockService
+
+- type: entity
+  parent: AirlockSerpentHydroponics
+  id: AirlockSerpentHydroponicsLocked
+  suffix: Серпент, Гидропоника, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsHydroponics ]
+
+- type: entity
+  parent: AirlockSerpentGlass
+  id: AirlockSerpentGlassHydroponics
+  suffix: Серпент, Гидропоника, Стеклянный
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_service.rsi
+  - type: Wires
+    layoutId: AirlockService
+
+- type: entity
+  parent: AirlockSerpentGlassHydroponics
+  id: AirlockSerpentGlassHydroponicsLocked
+  suffix: Серпент, Гидропоника, Стеклянный, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsHydroponics ]
+
+- type: entity
+  parent: AirlockHatch
+  id: AirlockSerpentHatch
+  name: герметичный люк
+  description: Он открывается, он закрывается, он может раздавить вас, а за ним лишь космос.
+  suffix: Серпент, Внешний
+  components:
+  - type: Door
+    crushDamage:
+      types:
+        Blunt: 15
+    openSound:
+      path: /Audio/Machines/airlock_ext_open.ogg
+    closeSound:
+      path: /Audio/Machines/airlock_ext_close.ogg
+    denySound:
+      path: /Audio/Machines/airlock_deny.ogg
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_hatch.rsi
+  - type: Wires
+    layoutId: AirlockExternal
+
+- type: entity
+  parent: AirlockSerpentHatch
+  id: AirlockSerpentHatchLocked
+  suffix: Серпент, Внешний, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsExternal ]
+
+- type: entity
+  parent: AirlockSerpentHatch
+  id: AirlockSerpentHatchGlass
+  suffix: Серпент, Внешний, Стеклянный
+  components:
+  - type: Door
+    occludes: false
+  - type: Occluder
+    enabled: false
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/taipan_glass_hatch.rsi
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        density: 100
+        mask:
+        - FullTileMask
+        layer:
+        - GlassAirlockLayer
+
+- type: entity
+  parent: AirlockSerpentHatchGlass
+  id: AirlockSerpentHatchGlassLocked
+  suffix: Серпент, Внешний, Стеклянный, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsExternal ]
+
+- type: entity
+  parent: HighSecDoor
+  id: AirlockSerpentHighSec
+  name: бронированная дверь
+  description: Удерживает плохих снаружи, а хороших внутри.
+  suffix: Серпент
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/taipan_highsec.rsi
+    layers:
+    - state: closed
+      map: ["enum.DoorVisualLayers.Base"]
+    - state: closed_unlit
+      shader: unshaded
+      map: ["enum.DoorVisualLayers.BaseUnlit"]
+      visible: false
+    - state: welded
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: bolted_unlit
+      shader: unshaded
+      map: ["enum.DoorVisualLayers.BaseBolted"]
+    - state: emergency_unlit
+      map: ["enum.DoorVisualLayers.BaseEmergencyAccess"]
+      shader: unshaded
+    - state: panel_open
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+      visible: false
+    - state: electrified_ai
+      sprite: Interface/Misc/ai_hud.rsi
+      shader: unshaded
+      visible: false
+      map: ["enum.ElectrifiedLayers.HUD"]
+    - state: electrified
+      sprite: Effects/electricity.rsi
+      shader: unshaded
+      visible: false
+      map: ["enum.ElectrifiedLayers.Sparks"]
+
+- type: entity
+  parent: AirlockSerpentHighSec
+  id: AirlockSerpentHighSecLocked
+  suffix: Серпент, Командование, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsCommand ]

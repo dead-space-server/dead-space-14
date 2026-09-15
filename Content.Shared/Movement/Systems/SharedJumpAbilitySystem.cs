@@ -8,7 +8,11 @@ using Content.Shared.Standing;
 using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Map;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
+using Robust.Shared.Physics.Systems;
 
 namespace Content.Shared.Movement.Systems;
 
@@ -21,6 +25,11 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly StandingStateSystem _standing = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+    // DS14-start
+    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private readonly RayCastSystem _rayCast = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    // DS14-end
 
     public override void Initialize()
     {
@@ -80,6 +89,17 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
         var throwing = xform.LocalRotation.ToWorldVec() * entity.Comp.JumpDistance;
         var direction = xform.Coordinates.Offset(throwing); // to make the character jump in the direction he's looking
 
+        // DS14-start
+        if (entity.Comp.RequireUnobstructedPath && IsJumpPathBlocked(args.Performer, xform, direction))
+        {
+            if (entity.Comp.JumpFailedPopup != null)
+                _popup.PopupClient(Loc.GetString(entity.Comp.JumpFailedPopup.Value), args.Performer, args.Performer);
+
+            args.Handled = true;
+            return;
+        }
+        // DS14-end
+
         _throwing.TryThrow(args.Performer, direction, entity.Comp.JumpThrowSpeed);
 
         _audio.PlayPredicted(entity.Comp.JumpSound, args.Performer, args.Performer);
@@ -94,6 +114,52 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
         args.Handled = true;
     }
 
+    // DS14-start
+    private bool IsJumpPathBlocked(EntityUid performer, TransformComponent xform, EntityCoordinates destination)
+    {
+        if (!TryComp<FixturesComponent>(performer, out var fixtures) ||
+            !TryComp<PhysicsComponent>(performer, out var body) ||
+            !body.Hard)
+        {
+            return false;
+        }
+
+        var start = _transform.GetMapCoordinates(performer, xform);
+        var end = _transform.ToMapCoordinates(destination);
+        if (start.MapId != end.MapId)
+            return true;
+
+        var translation = end.Position - start.Position;
+        var origin = _physics.GetPhysicsTransform(performer, xform);
+
+        foreach (var fixture in fixtures.Fixtures.Values)
+        {
+            if (!fixture.Hard)
+                continue;
+
+            var filter = new QueryFilter
+            {
+                LayerBits = fixture.CollisionLayer,
+                MaskBits = fixture.CollisionMask,
+                IsIgnored = uid => uid == performer,
+            };
+
+            if (_rayCast.CastShape(
+                    start.MapId,
+                    fixture.Shape,
+                    origin,
+                    translation,
+                    filter,
+                    RayCastSystem.RayCastClosestCallback).Hit)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    // DS14-end
+
     private void OnClone(Entity<JumpAbilityComponent> ent, ref CloningEvent args)
     {
         if (!args.Settings.EventComponents.Contains(Factory.GetRegistration(ent.Comp.GetType()).Name))
@@ -106,6 +172,7 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
         targetComp.CollideKnockdown = ent.Comp.CollideKnockdown;
         targetComp.JumpDistance = ent.Comp.JumpDistance;
         targetComp.JumpThrowSpeed = ent.Comp.JumpThrowSpeed;
+        targetComp.RequireUnobstructedPath = ent.Comp.RequireUnobstructedPath; // DS14
         AddComp(args.CloneUid, targetComp, true);
     }
 }

@@ -43,7 +43,7 @@
 
                 <PanelContainer Name="TopPanel"
                                 MinWidth="722"
-                                StyleClasses="DS14MenuTopShell"
+                                StyleClasses="DeadSpaceWindowTop"
                                 HorizontalExpand="True"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Top">
@@ -59,30 +59,30 @@
                             <Button Name="ShowGUI"
                                     Text="Ø"
                                     ToolTip="{Loc 'ui-lobby-minimize-button'}"
-                                    StyleClasses="DS14MenuTopButton"
+                                    StyleClasses="DeadSpaceTopAction"
                                     MinWidth="52"
                                     VerticalAlignment="Stretch"/>
                             <Button Name="Rules"
                                     Text="{Loc 'server-info-rules-button'}"
-                                    StyleClasses="DS14MenuTopButton"
+                                    StyleClasses="DeadSpaceTopAction"
                                     MinWidth="100"
                                     VerticalAlignment="Stretch"/>
                             <Button Name="Guidebook"
                                     Text="{Loc 'server-info-guidebook-button'}"
-                                    StyleClasses="DS14MenuTopButton"
+                                    StyleClasses="DeadSpaceTopAction"
                                     MinWidth="118"
                                     VerticalAlignment="Stretch"/>
                             <changelog:ChangelogButton Name="Changelog"
-                                                       StyleClasses="DS14MenuTopButton"
+                                                       StyleClasses="DeadSpaceTopAction"
                                                        MinWidth="118"
                                                        VerticalAlignment="Stretch"/>
                             <Button Name="Wiki"
                                     Text="{Loc 'server-info-wiki-button'}"
-                                    StyleClasses="DS14MenuTopButton"
+                                    StyleClasses="DeadSpaceTopAction"
                                     MinWidth="64"
                                     VerticalAlignment="Stretch"/>
                             <vote:VoteCallMenuButton Name="CallVoteButton"
-                                                     StyleClasses="DS14MenuTopButton"
+                                                     StyleClasses="DeadSpaceTopAction"
                                                      MinWidth="118"
                                                      VerticalAlignment="Stretch"/>
                         </BoxContainer>
@@ -108,28 +108,28 @@
                                       LayoutContainer.GrowVertical="Both">
                             <Button Name="Boosty"
                                     Text="Boosty"
-                                    StyleClasses="DS14MenuTopButton"
+                                    StyleClasses="DeadSpaceTopAction"
                                     MinWidth="88"
                                     VerticalAlignment="Stretch"/>
                             <Button Name="Discord"
                                     Text="Discord"
-                                    StyleClasses="DS14MenuTopButton"
+                                    StyleClasses="DeadSpaceTopAction"
                                     MinWidth="88"
                                     VerticalAlignment="Stretch"/>
                             <Button Name="Telegram"
                                     Text="Telegram"
-                                    StyleClasses="DS14MenuTopButton"
+                                    StyleClasses="DeadSpaceTopAction"
                                     MinWidth="100"
                                     VerticalAlignment="Stretch"/>
                             <Button Name="Site"
                                     Text="{Loc 'server-info-website-button'}"
-                                    StyleClasses="DS14MenuTopButton"
+                                    StyleClasses="DeadSpaceTopAction"
                                     MinWidth="120"
                                     VerticalAlignment="Stretch"/>
                             <Button Name="AHelpButton"
                                     Access="Public"
                                     Text="{Loc 'ui-lobby-ahelp-button'}"
-                                    StyleClasses="DS14MenuTopButton"
+                                    StyleClasses="DeadSpaceTopAction"
                                     MinWidth="82"
                                     VerticalAlignment="Stretch"/>
                         </BoxContainer>
@@ -146,7 +146,7 @@
             </BoxContainer>
 
             <PanelContainer Name="BottomContainer"
-                            StyleClasses="DS14MenuShell"
+                            StyleClasses="DeadSpaceWindow"
                             MinHeight="300"
                             HorizontalExpand="True"
                             VerticalExpand="True">
@@ -158,7 +158,7 @@
 
                     <PanelContainer Name="LeftPanel"
                                     MinWidth="400"
-                                    StyleClasses="DS14MenuPanel"
+                                    StyleClasses="DeadSpaceSurface"
                                     HorizontalExpand="True"
                                     VerticalExpand="True">
                         <BoxContainer Orientation="Vertical"
@@ -166,14 +166,14 @@
                                       VerticalExpand="True"
                                       VerticalAlignment="Stretch"
                                       SeparationOverride="8">
-                            <PanelContainer StyleClasses="DS14MenuHeader">
+                            <PanelContainer StyleClasses="DeadSpaceSectionHeader">
                                 <BoxContainer Orientation="Vertical"
                                               SeparationOverride="2">
                                     <Label Text="{Loc 'ui-lobby-server-info-block'}"
-                                           StyleClasses="DS14MenuTitle"/>
+                                           StyleClasses="DeadSpaceTitle"/>
                                     <Label Name="StationTime"
                                            Access="Public"
-                                           StyleClasses="DS14MenuSubtitle"
+                                           StyleClasses="DeadSpaceSubtitle"
                                            HorizontalAlignment="Left"/>
                                 </BoxContainer>
                             </PanelContainer>
@@ -193,7 +193,7 @@
                                            Access="Public"
                                            HorizontalAlignment="Left" />
 
-                            <PanelContainer StyleClasses="DS14MenuAccentDim" />
+                            <PanelContainer StyleClasses="DeadSpaceAccentDim" />
 
                             <lobbyUi:ServerListBox Name="ServerListBox"
                                                    Access="Public"
@@ -202,7 +202,7 @@
                                                    HorizontalExpand="True"
                                                    HorizontalAlignment="Stretch"/>
 
-                            <PanelContainer StyleClasses="DS14MenuAccentDim" />
+                            <PanelContainer StyleClasses="DeadSpaceAccentDim" />
 
                             <RichTextLabel Name="LobbySong"
                                            Access="Public"
@@ -211,7 +211,7 @@
                     </PanelContainer>
 
                     <PanelContainer Name="CenterPanel"
-                                    StyleClasses="DS14MenuPanel"
+                                    StyleClasses="DeadSpaceSurface"
                                     MinWidth="400"
                                     HorizontalExpand="True"
                                     VerticalExpand="True">
@@ -223,18 +223,18 @@
                                       SeparationOverride="8">
                             <PanelContainer Name="StripeBack"
                                             Access="Public"
-                                            StyleClasses="DS14MenuRoundStatus"
+                                            StyleClasses="DeadSpaceRoundStatus"
                                             HorizontalAlignment="Center">
                                 <BoxContainer Orientation="Vertical"
                                               HorizontalAlignment="Center"
                                               SeparationOverride="2">
                                     <Label Text="{Loc 'lobby-state-round-start-title'}"
-                                           StyleClasses="DS14MenuRoundStatusTitle"
+                                           StyleClasses="DeadSpaceRoundStatusTitle"
                                            HorizontalAlignment="Center"/>
                                     <Label Name="StartTime"
                                            Access="Public"
                                            Align="Center"
-                                           StyleClasses="DS14MenuRoundStatusTime"
+                                           StyleClasses="DeadSpaceRoundStatusTime"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"/>
                                 </BoxContainer>
@@ -248,45 +248,52 @@
                                     Access="Public"
                                     ToggleMode="True"
                                     Text="{Loc 'ui-lobby-ready-up-button'}"
-                                    StyleClasses="DS14MenuAction DS14MenuReadyButton"
+                                    StyleClasses="DeadSpaceAction DeadSpaceReady"
                                     HorizontalAlignment="Stretch"
                                     MinSize="250 50"/>
+                            <Button Name="AshWalkerCancelButton"
+                                    Access="Public"
+                                    Visible="False"
+                                    Text="{Loc 'ash-walker-lobby-cancel'}"
+                                    StyleClasses="DeadSpaceAction"
+                                    HorizontalAlignment="Stretch"
+                                    MinSize="250 42"/>
                             <cc:UICommandButton Command="observe"
                                                 Name="ObserveButton"
                                                 Access="Public"
                                                 Text="{Loc 'ui-lobby-observe-button'}"
                                                 WindowType="{x:Type lobbyUi:ObserveWarningWindow}"
-                                                StyleClasses="DS14MenuAction"
+                                                StyleClasses="DeadSpaceAction"
                                                 HorizontalAlignment="Stretch"
                                                 MinSize="250 50"/>
                             <Button Name="DonateButton"
                                     Access="Public"
                                     Text="MK TERMINAL"
-                                    StyleClasses="DS14MenuAction"
+                                    StyleClasses="DeadSpaceAction"
                                     HorizontalAlignment="Stretch"
                                     MinSize="250 50"/>
                             <Button Name="CharacterSetup"
                                     Access="Public"
                                     Text="{Loc 'lobby-character-preview-panel-character-setup-button'}"
-                                    StyleClasses="DS14MenuAction"
+                                    StyleClasses="DeadSpaceAction"
                                     HorizontalAlignment="Stretch"
                                     MinSize="250 50"/>
                             <Button Name="OptionsButton"
                                     Access="Public"
                                     Text="{Loc 'ui-lobby-options-button'}"
-                                    StyleClasses="DS14MenuAction"
+                                    StyleClasses="DeadSpaceAction"
                                     HorizontalAlignment="Stretch"
                                     MinSize="250 50"/>
                             <Button Name="LeaveButton"
                                     Access="Public"
                                     Text="{Loc 'ui-lobby-leave-button'}"
-                                    StyleClasses="DS14MenuAction"
+                                    StyleClasses="DeadSpaceAction"
                                     HorizontalAlignment="Stretch"
                                     MinSize="250 50" />
                         </BoxContainer>
                     </PanelContainer>
 
-                    <PanelContainer StyleClasses="DS14MenuPanel"
+                    <PanelContainer StyleClasses="DeadSpaceSurface"
                                     Name="RightPanel"
                                     MinWidth="400"
                                     HorizontalExpand="True"
@@ -297,16 +304,16 @@
                                       HorizontalExpand="True"
                                       HorizontalAlignment="Stretch"
                                       SeparationOverride="8">
-                            <PanelContainer StyleClasses="DS14MenuHeader">
+                            <PanelContainer StyleClasses="DeadSpaceSectionHeader">
                                 <BoxContainer Orientation="Vertical"
                                               SeparationOverride="2">
                                     <Label Text="COMMS"
-                                           StyleClasses="DS14MenuTitle"/>
+                                           StyleClasses="DeadSpaceTitle"/>
                                     <Label Text="{Loc 'ui-lobby-online-players-block'}"
-                                           StyleClasses="DS14MenuSubtitle"/>
+                                           StyleClasses="DeadSpaceSubtitle"/>
                                 </BoxContainer>
                             </PanelContainer>
-                            <PanelContainer StyleClasses="DS14MenuInset"
+                            <PanelContainer StyleClasses="DeadSpaceInset"
                                             VerticalExpand="True"
                                             HorizontalExpand="True">
                                 <widgets:ChatBox Name="Chat"

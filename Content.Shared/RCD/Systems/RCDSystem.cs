@@ -27,6 +27,7 @@ using System.Linq;
 
 namespace Content.Shared.RCD.Systems;
 
+// DS14 - pre-v288 engine
 public sealed class RCDSystem : EntitySystem
 {
     [Dependency] private readonly INetManager _net = default!;
@@ -52,6 +53,7 @@ public sealed class RCDSystem : EntitySystem
     private readonly ProtoId<RCDPrototype> _deconstructTileProto = "DeconstructTile";
     private readonly ProtoId<RCDPrototype> _deconstructLatticeProto = "DeconstructLattice";
     private static readonly ProtoId<TagPrototype> CatwalkTag = "Catwalk";
+    private static readonly LocId DefaultPrototypeNameLocId = "generic-unknown-title";
 
     private HashSet<EntityUid> _intersectingEntities = new();
 
@@ -66,6 +68,19 @@ public sealed class RCDSystem : EntitySystem
         SubscribeLocalEvent<RCDComponent, DoAfterAttemptEvent<RCDDoAfterEvent>>(OnDoAfterAttempt);
         SubscribeLocalEvent<RCDComponent, RCDSystemMessage>(OnRCDSystemMessage);
         SubscribeNetworkEvent<RCDConstructionGhostRotationEvent>(OnRCDconstructionGhostRotationEvent);
+    }
+
+    /// <summary>
+    /// Gets the display name of a given RCDPrototype.
+    /// </summary>
+    public string GetPrototypeName(RCDPrototype prototype)
+    {
+        if (prototype.SetName != null)
+            return Loc.GetString(prototype.SetName);
+        else if (prototype.Prototype != null) // DS14 - current engine baseline has no EntitySystem.ProtoMan shortcut.
+            return _protoManager.Index(prototype.Prototype).Name; // already localized
+        else
+            return Loc.GetString(DefaultPrototypeNameLocId);
     }
 
     #region Event handling
@@ -114,18 +129,14 @@ public sealed class RCDSystem : EntitySystem
 
         var prototype = _protoManager.Index(component.ProtoId);
 
-        var msg = Loc.GetString("rcd-component-examine-mode-details", ("mode", Loc.GetString(prototype.SetName)));
+        var displayName = GetPrototypeName(prototype);
+
+        string msg;
 
         if (prototype.Mode == RcdMode.ConstructTile || prototype.Mode == RcdMode.ConstructObject)
-        {
-            var name = Loc.GetString(prototype.SetName);
-
-            if (prototype.Prototype != null &&
-                _protoManager.TryIndex(prototype.Prototype, out var proto)) // don't use Resolve because this can be a tile
-                name = proto.Name;
-
-            msg = Loc.GetString("rcd-component-examine-build-details", ("name", name));
-        }
+            msg = Loc.GetString("rcd-component-examine-build-details", ("name", displayName));
+        else
+            msg = Loc.GetString("rcd-component-examine-mode-details", ("mode", displayName));
 
         args.PushMarkup(msg);
     }
@@ -220,6 +231,16 @@ public sealed class RCDSystem : EntitySystem
         }
 
         #endregion
+
+        // DS14-start
+        if (prototype.Mode != RcdMode.Deconstruct)
+        {
+            var constructionEffect = delay <= 0
+                ? component.InstantConstructionEffect
+                : component.ConstructionEffect;
+            effectPrototype = constructionEffect ?? effectPrototype;
+        }
+        // DS14-end
 
         // Try to start the do after
         var effect = Spawn(effectPrototype, _mapSystem.ToCenterCoordinates(tile, mapGrid));

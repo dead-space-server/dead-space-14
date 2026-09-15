@@ -75,7 +75,7 @@
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: ClothingHeadHelmetHardsuitSyndieMedic
+  parent: [ClothingHeadHelmetHardsuitSyndieMedic]
   id: ClothingHeadHelmetHardsuitPrometheus
   categories: [ HideSpawnMenu ]
   name: тёмно-синий шлем скафандра агента

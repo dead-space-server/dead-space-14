@@ -1,5 +1,5 @@
 - type: entity
-  parent: ClothingHeadHelmetHardsuitSalvage
+  parent: [ClothingHeadHelmetHardsuitSalvage]
   id: ClothingHeadHelmetHardsuitQM
   categories: [ HideSpawnMenu ]
   name: шлем скафандра квартирмейстера

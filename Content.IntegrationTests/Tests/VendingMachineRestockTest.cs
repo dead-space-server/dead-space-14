@@ -11,6 +11,7 @@ using Content.Shared.EntityTable;
 using Content.Shared.Prototypes;
 using Content.Shared.Storage.EntitySystems;
 using Content.Shared.VendingMachines;
+using Content.Shared.VendingMachines.Components;
 using Content.Shared.Wires;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -96,7 +97,7 @@ namespace Content.IntegrationTests.Tests
     - BigTestInventory
 
 - type: entity
-  parent: VendingMachine
+  parent: BaseVendingMachine
   id: VendingMachineTest
   name: Test Ramen
   components:
@@ -104,6 +105,7 @@ namespace Content.IntegrationTests.Tests
     layoutId: Vending
   - type: VendingMachine
     pack: TestInventory
+  - type: VendingMachineEject
   - type: Sprite
     sprite: error.rsi
 ";
@@ -258,7 +260,7 @@ namespace Content.IntegrationTests.Tests
                 });
 
                 // Empty the inventory.
-                systemMachine.EjectRandom(machine, false, true, machineComponent);
+                systemMachine.EjectRandom((machine, machineComponent), false, true);
                 Assert.That(systemMachine.GetAvailableInventory(machine, machineComponent), Has.Count.EqualTo(0),
                     "Machine inventory is not empty after ejecting.");
 

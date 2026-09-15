@@ -15,8 +15,7 @@
             <Button Name="DoneBtn"
                     Access="Public"
                     ToolTip=""
-                    Text="{Loc wageconsole-done}"
-                    StyleClasses="LabelSubText"/>
+                    Text="{Loc wageconsole-done}"/>
         </BoxContainer>
     </BoxContainer>
 </controls:FancyWindow>

@@ -2,6 +2,20 @@
   id: hydrated-ghost
   login: hydrated
   spritePath: _DeadSpace/Ghosts/hydrated.rsi
+  color: "#FFFFFF"
   alpha: 0.7
   name: Hydrated
   description: O_0
+
+- type: customGhost
+  id: cyberbobeks-ghost
+  login: CyberBobeks
+  spritePath: _DeadSpace/Ghosts/hydrated.rsi
+  color: "#980002"
+  alpha: 1.0
+  name: CyberBobeks
+  description: |-
+    Пытаюсь сделать больно, чтобы чувствовать хоть что-то...
+    Я давно свел все счёты, пока длилась эта осень...
+    Не хочу быть таким слабым, мой секрет стал слишком прост...
+    Во мне сотни этих лезвий, хочешь, добавляй ещё)))

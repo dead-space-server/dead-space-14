@@ -1,5 +1,4 @@
 ﻿<controls:FancyWindow xmlns="https://spacestation14.io"
-            xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
             xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
             SetSize="600 600"
             MinSize="600 600">
@@ -22,12 +21,12 @@
             <Label Name="ShuttleStatusLabel"
                    Text="{Loc 'cargo-console-menu-shuttle-status-away-text'}" />
         </BoxContainer>
-        <Label Text="{Loc 'cargo-console-menu-orders-label'}" />
+        <!-- DS14-start -->
+        <Label Text="{Loc 'cargo-console-menu-orders-label'}" StyleClasses="DeadSpaceSectionTitle" />
         <PanelContainer VerticalExpand="True"
-                        SizeFlagsStretchRatio="6">
-            <PanelContainer.PanelOverride>
-                <gfx:StyleBoxFlat BackgroundColor="#000000" />
-            </PanelContainer.PanelOverride>
+                        SizeFlagsStretchRatio="6"
+                        StyleClasses="BackgroundDark">
+            <!-- DS14-end -->
             <ScrollContainer VerticalExpand="True">
                 <BoxContainer Name="Orders"
                               Orientation="Vertical"

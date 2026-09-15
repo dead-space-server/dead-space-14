@@ -3,10 +3,9 @@
     xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls">
     <!-- DS14-start -->
-    <PanelContainer StyleClasses="DS14MenuShell">
-        <BoxContainer Orientation="Vertical"
-                      Margin="8"
-                      SeparationOverride="8">
+    <BoxContainer Orientation="Vertical"
+                  Margin="8"
+                  SeparationOverride="8">
             <SplitContainer Orientation="Horizontal"
                             VerticalExpand="True">
                 <cc:PlayerListControl Access="Public"
@@ -27,53 +26,44 @@
                 <CheckBox Name="AdminOnly"
                           Access="Public"
                           Text="{Loc 'admin-ahelp-admin-only'}"
-                          ToolTip="{Loc 'admin-ahelp-admin-only-tooltip'}"
-                          StyleClasses="DS14MenuProfileControl" />
+                          ToolTip="{Loc 'admin-ahelp-admin-only-tooltip'}" />
                 <CheckBox Name="PlaySound"
                           Access="Public"
                           Text="{Loc 'admin-bwoink-play-sound'}"
-                          Pressed="True"
-                          StyleClasses="DS14MenuProfileControl" />
+                          Pressed="True" />
                 <Button Visible="True"
                         Name="PopOut"
                         Access="Public"
                         Text="{Loc 'admin-logs-pop-out'}"
-                        StyleClasses="DS14MenuProfileControl"
                         HorizontalAlignment="Left" />
                 <Control HorizontalExpand="True" />
                 <Button Visible="False"
                         Name="Bans"
-                        Text="{Loc 'admin-player-actions-bans'}"
-                        StyleClasses="DS14MenuProfileControl" />
+                        Text="{Loc 'admin-player-actions-bans'}" />
                 <Button Visible="False"
                         Access="Public"
                         Name="Notes"
-                        Text="{Loc 'admin-player-actions-notes'}"
-                        StyleClasses="DS14MenuProfileControl" />
+                        Text="{Loc 'admin-player-actions-notes'}" />
                 <controls:ConfirmButton Visible="False"
                                         Name="Kick"
                                         Text="{Loc 'admin-player-actions-kick'}"
                                         ConfirmationText="{Loc 'admin-player-actions-confirm'}"
-                                        StyleClasses="DS14MenuProfileControlDanger" />
+                                        StyleClasses="DeadSpaceControlDanger" />
                 <Button Visible="False"
                         Name="Ban"
                         Text="{Loc 'admin-player-actions-ban'}"
-                        StyleClasses="DS14MenuProfileControlDanger" />
+                        StyleClasses="DeadSpaceControlDanger" />
                 <controls:ConfirmButton Visible="False"
                                         Name="Respawn"
                                         Text="{Loc 'admin-player-actions-respawn'}"
-                                        ConfirmationText="{Loc 'admin-player-actions-confirm'}"
-                                        StyleClasses="DS14MenuProfileControl" />
+                                        ConfirmationText="{Loc 'admin-player-actions-confirm'}" />
                 <Button Visible="False"
                         Name="Camera"
-                        Text="{Loc 'admin-player-actions-camera'}"
-                        StyleClasses="DS14MenuProfileControl" />
+                        Text="{Loc 'admin-player-actions-camera'}" />
                 <Button Visible="False"
                         Name="Follow"
-                        Text="{Loc 'admin-player-actions-follow'}"
-                        StyleClasses="DS14MenuProfileControl" />
+                        Text="{Loc 'admin-player-actions-follow'}" />
             </BoxContainer>
-        </BoxContainer>
-    </PanelContainer>
+    </BoxContainer>
     <!-- DS14-end -->
 </Control>

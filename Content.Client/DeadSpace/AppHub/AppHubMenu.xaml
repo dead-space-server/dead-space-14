@@ -1,59 +1,38 @@
 <DefaultWindow xmlns="https://spacestation14.io"
                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-               xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
                x:Class="Content.Client.DeadSpace.AppHub.AppHubMenu"
                Title="NT Software Hub"
                MinWidth="800"
                MinHeight="600">
     <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="6">
-        <PanelContainer>
-            <PanelContainer.PanelOverride>
-                <gfx:StyleBoxFlat BackgroundColor="#003366" />
-            </PanelContainer.PanelOverride>
+        <PanelContainer StyleClasses="DeadSpaceSectionHeader">
             <BoxContainer Orientation="Horizontal" Margin="8 4" SeparationOverride="12">
                 <Label Name="StatusNetwork" Text="Сеть: Подключено" FontColorOverride="#88FF88" />
-                <PanelContainer MinWidth="1" MinHeight="16" VerticalAlignment="Center">
-                    <PanelContainer.PanelOverride>
-                        <gfx:StyleBoxFlat BackgroundColor="#88FF88" />
-                    </PanelContainer.PanelOverride>
-                </PanelContainer>
+                <PanelContainer MinWidth="1" MinHeight="16" VerticalAlignment="Center" StyleClasses="positive" />
                 <Label Name="StatusPda" Text="Нет КПК" FontColorOverride="#FF8888" HorizontalExpand="True" HorizontalAlignment="Right" />
             </BoxContainer>
         </PanelContainer>
         <BoxContainer Orientation="Horizontal" VerticalExpand="True" SeparationOverride="10">
             <BoxContainer Name="SidePanel" Orientation="Vertical" MinWidth="180" SeparationOverride="6">
-                <PanelContainer>
-                    <PanelContainer.PanelOverride>
-                        <gfx:StyleBoxFlat BackgroundColor="#0d0d0dFF" BorderColor="#555555FF" BorderThickness="1" />
-                    </PanelContainer.PanelOverride>
+                <PanelContainer StyleClasses="DeadSpaceSurfaceDark">
                     <BoxContainer Orientation="Vertical" Margin="6" SeparationOverride="6">
-                        <Label Text="КАТЕГОРИИ" StyleClasses="LabelSubText" Margin="2 0" FontColorOverride="#FFD700" />
-                        <PanelContainer MinHeight="1" Margin="0 2">
-                            <PanelContainer.PanelOverride>
-                                <gfx:StyleBoxFlat BackgroundColor="#555555FF" />
-                            </PanelContainer.PanelOverride>
-                        </PanelContainer>
+                        <Label Text="КАТЕГОРИИ" StyleClasses="DeadSpaceSectionTitle" Margin="2 0" />
+                        <PanelContainer MinHeight="1" Margin="0 2" StyleClasses="DeadSpaceAccentDim" />
                     </BoxContainer>
                 </PanelContainer>
                 <Button Name="CategoryAll" Text="Все категории" TextAlign="Left" MinHeight="32" Margin="4 0" />
                 <Button Name="CategoryTools" Text="Инструменты" TextAlign="Left" MinHeight="32" Margin="4 0" />
                 <Button Name="CategoryEquipment" Text="Оборудование" TextAlign="Left" MinHeight="32" Margin="4 0" />
                 <Button Name="CategoryGames" Text="Игры" TextAlign="Left" MinHeight="32" Margin="4 0" />
-                <PanelContainer Margin="0 20 0 0" MinHeight="80">
-                    <PanelContainer.PanelOverride>
-                        <gfx:StyleBoxFlat BackgroundColor="#0d0d0dFF" BorderColor="#555555FF" BorderThickness="1" />
-                    </PanelContainer.PanelOverride>
+                <PanelContainer Margin="0 20 0 0" MinHeight="80" StyleClasses="DeadSpaceInset">
                     <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="6" VerticalAlignment="Center">
-                        <Label Text="ПАМЯТЬ КПК" StyleClasses="LabelSubText" HorizontalAlignment="Center" FontColorOverride="#88AAAA" />
-                        <Label Name="MemoryLabel" Text="0 / 0" HorizontalAlignment="Center" FontColorOverride="#FFFFFF" StyleClasses="LabelBig" />
+                        <Label Text="ПАМЯТЬ КПК" StyleClasses="DeadSpaceSubtitle" HorizontalAlignment="Center" />
+                        <Label Name="MemoryLabel" Text="0 / 0" HorizontalAlignment="Center" StyleClasses="LabelBig" />
                         <ProgressBar Name="MemoryBar" MinValue="0" MaxValue="8" Value="0" MinHeight="24" />
                     </BoxContainer>
                 </PanelContainer>
             </BoxContainer>
-            <PanelContainer VerticalExpand="True" HorizontalExpand="True">
-                <PanelContainer.PanelOverride>
-                    <gfx:StyleBoxFlat BackgroundColor="#0d0d0dFF" BorderColor="#555555FF" BorderThickness="1" />
-                </PanelContainer.PanelOverride>
+            <PanelContainer VerticalExpand="True" HorizontalExpand="True" StyleClasses="DeadSpaceSurfaceDark">
                 <ScrollContainer VerticalExpand="True" HScrollEnabled="False" Margin="6">
                     <BoxContainer Name="ProgramListContainer" Orientation="Vertical" SeparationOverride="6" Margin="4" />
                 </ScrollContainer>

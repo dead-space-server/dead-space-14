@@ -112,7 +112,7 @@
     size: Huge
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuitDominator
   categories: [ HideSpawnMenu ]
   name: зелёный шлем

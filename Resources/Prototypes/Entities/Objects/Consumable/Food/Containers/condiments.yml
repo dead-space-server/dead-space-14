@@ -623,3 +623,28 @@
   - type: Tag
     tags:
       - PepperShaker
+
+#DS14-Start
+- type: entity
+  parent: BaseFoodCondimentBottle
+  id: FoodCondimentBottleSoysauce
+  name: бутылка соевого соуса
+  description: Бутылка солёной приправы на основе сои.
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        reagents:
+        - ReagentId: Soysauce
+          Quantity: 30
+  - type: Sprite
+    layers:
+    - state: bottle-empty
+      map: ["enum.OpenableVisuals.Layer"]
+    - state: label-s
+    - state: bottle-alpha-6
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: true
+  - type: Icon
+    state: bottle-soy
+#DS14-End

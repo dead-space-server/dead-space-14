@@ -1,0 +1,61 @@
+#DS14
+- type: entity
+  id: ExecutionChair
+  parent: BaseStructureDynamic
+  name: электрический стул
+  description: Выглядит комфортно, особенно если вы враг корпорации.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/execution_chair.rsi
+    state: execution-chair
+    noRot: true
+  - type: Rotatable
+  - type: InteractionOutline
+  - type: Strap
+    position: Stand
+    buckleOffset: "0,-0.05"
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 100
+        mask:
+        - TableMask
+  - type: ExecutionChair
+  - type: DeviceLinkSink
+    ports:
+    - Trigger
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      input:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+  - type: PowerConsumer
+    voltage: High
+    drawRate: 1500
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Anchorable
+  - type: Damageable
+    damageModifierSet: Metallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          SheetSteel:
+            min: 5
+            max: 5

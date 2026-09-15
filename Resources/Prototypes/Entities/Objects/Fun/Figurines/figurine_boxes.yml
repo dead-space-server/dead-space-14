@@ -161,6 +161,9 @@
       - id: SyndicateFlippo
         orGroup: Lighterbox
         weight: 0.15
+      - id: SpiderclanFlippo
+        orGroup: Lighterbox
+        weight: 0.15
   #DS14-Start
   - type: EmitSoundOnPickup
     sound:

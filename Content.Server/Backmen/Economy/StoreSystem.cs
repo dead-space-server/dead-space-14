@@ -7,6 +7,7 @@ using Content.Shared.Backmen.Store;
 using Content.Shared.Store;
 using Content.Shared.Store.Components;
 using Content.Shared.VendingMachines;
+using Content.Shared.VendingMachines.Components; // DS14 - vending machine refactor adaptation
 
 namespace Content.Server.Store.Systems;
 
@@ -26,13 +27,10 @@ public sealed partial class StoreSystem
 
     private void PlayEject(EntityUid uid)
     {
-        if (TryComp<VendingMachineComponent>(uid, out var vendComponent))
-        {
-            vendComponent.NextItemToEject = null;
-            vendComponent.ThrowNextItem = false;
-            _vendingMachineSystem.TryUpdateVisualState((uid, vendComponent));
-            _audio.PlayPvs(vendComponent.SoundVend, uid);
-        }
+        // DS14 start - vending machine refactor adaptation
+        if (TryComp<VendingMachineEjectComponent>(uid, out var ejectComponent))
+            _audio.PlayPvs(ejectComponent.SoundVend, uid);
+        // DS14 end
     }
 
     private bool HandleBankTransaction(EntityUid uid, StoreComponent component, StoreBuyListingMessage msg, ListingDataWithCostModifiers listing)

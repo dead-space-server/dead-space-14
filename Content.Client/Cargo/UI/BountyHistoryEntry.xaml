@@ -2,7 +2,9 @@
                 xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
                 Margin="10 10 10 0"
                 HorizontalExpand="True">
-    <PanelContainer StyleClasses="AngleRect" HorizontalExpand="True">
+    <!-- DS14-start -->
+    <PanelContainer StyleClasses="BackgroundPanel" HorizontalExpand="True">
+        <!-- DS14-end -->
         <BoxContainer Orientation="Vertical"
                       HorizontalExpand="True">
             <BoxContainer Orientation="Horizontal">

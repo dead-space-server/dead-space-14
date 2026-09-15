@@ -16,3 +16,5 @@ ent-ActionAGhostShowCrewMonitoring = Crew Monitoring Interface
     .desc = View a Crew Monitoring Interface.
 ent-ActionAGhostShowStationRecords = Station Records Interface
     .desc = View a Station Records Interface.
+ent-ActionAGhostShowCriminalRecords = Criminal Records Interface
+    .desc = View a Criminal Records Interface.

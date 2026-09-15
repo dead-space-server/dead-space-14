@@ -99,8 +99,29 @@
   id: MagistratJumpsuit
   name: loadout-group-magistrat-jumpsuit
   loadouts:
+  - MagistratJumpsuit
   - LawyerJumpsuit
   - LawyerJumpskirt
+
+- type: loadoutGroup
+  id: MagistratHead
+  name: loadout-group-magistrat-head
+  loadouts:
+  - MagistratWig
+
+- type: loadoutGroup
+  id: MagistratBackpack
+  name: loadout-group-magistrat-backpack
+  hidden: true
+  loadouts:
+  - MagistratBackpack
+
+- type: loadoutGroup
+  id: MagistratOuterClothing
+  name: loadout-group-magistrat-outerclothing
+  loadouts:
+  - MagistratRobe
+  - MagistratRobesJudge
 
 - type: loadoutGroup
   id: MagistratUnderwear
@@ -116,8 +137,21 @@
   id: IAAJumpsuit
   name: loadout-group-iaa-jumpsuit
   loadouts:
-  - LawyerJumpsuit
-  - LawyerJumpskirt
+  - IAAJumpsuit
+
+- type: loadoutGroup
+  id: IAAOuterClothing
+  name: loadout-group-iaa-outerclothing
+  loadouts:
+  - IAASuitJacket
+
+- type: loadoutGroup
+  id: IAAGloves
+  name: loadout-group-iaa-gloves
+  minLimit: 0
+  loadouts:
+  - IAAGlovesWhite
+  - IAAWatchGold
 
 - type: loadoutGroup
   id: IAAUnderwear
@@ -486,6 +520,13 @@
   - UnderwearBottomBoxersVirologist
   - UnderwearTopBraVirologist
   - UnderwearBottomPantiesVirologist
+
+- type: loadoutGroup
+  id: ChemistHead
+  name: loadout-group-chemist-head
+  minLimit: 0
+  loadouts:
+  - ChemistHead
 
 - type: loadoutGroup
   id: MedicalShoesChemist

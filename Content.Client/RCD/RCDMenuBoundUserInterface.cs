@@ -12,22 +12,23 @@ using Robust.Shared.Utility;
 namespace Content.Client.RCD;
 
 [UsedImplicitly]
+// DS14 - pre-v288 engine
 public sealed class RCDMenuBoundUserInterface : BoundUserInterface
 {
     private const string TopLevelActionCategory = "Main";
 
-    private static readonly Dictionary<string, (string Tooltip, SpriteSpecifier Sprite)> PrototypesGroupingInfo
-        = new Dictionary<string, (string Tooltip, SpriteSpecifier Sprite)>
+    // DS14-start
+    private static readonly Dictionary<string, (string Tooltip, int Order, SpriteSpecifier Sprite)> PrototypesGroupingInfo
+        = new Dictionary<string, (string Tooltip, int Order, SpriteSpecifier Sprite)>
         {
-            ["WallsAndFlooring"] = ("rcd-component-walls-and-flooring", new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/Radial/RCD/walls_and_flooring.png"))),
-            ["WindowsAndGrilles"] = ("rcd-component-windows-and-grilles", new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/Radial/RCD/windows_and_grilles.png"))),
-            ["Airlocks"] = ("rcd-component-airlocks", new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/Radial/RCD/airlocks.png"))),
-            ["Electrical"] = ("rcd-component-electrical", new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/Radial/RCD/multicoil.png"))),
-            ["Lighting"] = ("rcd-component-lighting", new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/Radial/RCD/lighting.png"))),
-            // DS14-start
-            ["NecromorphTriggers"] = ("rcd-component-necromorph-triggers", new SpriteSpecifier.Rsi(new ResPath("/Textures/Tiles/Misc/floortrap.rsi"), "floortrapspawn")),
-            // DS14-end
+            ["WallsAndFlooring"] = ("rcd-component-walls-and-flooring", 0, new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/Radial/RCD/walls_and_flooring.png"))),
+            ["WindowsAndGrilles"] = ("rcd-component-windows-and-grilles", 1, new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/Radial/RCD/windows_and_grilles.png"))),
+            ["Airlocks"] = ("rcd-component-airlocks", 2, new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/Radial/RCD/airlocks.png"))),
+            ["Electrical"] = ("rcd-component-electrical", 3, new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/Radial/RCD/multicoil.png"))),
+            ["Lighting"] = ("rcd-component-lighting", 4, new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/Radial/RCD/lighting.png"))),
+            ["NecromorphTriggers"] = ("rcd-component-necromorph-triggers", 5, new SpriteSpecifier.Rsi(new ResPath("/Textures/Tiles/Misc/floortrap.rsi"), "floortrapspawn")),
         };
+    // DS14-end
 
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly ISharedPlayerManager _playerManager = default!;
@@ -66,7 +67,8 @@ public sealed class RCDMenuBoundUserInterface : BoundUserInterface
                 var topLevelActionOption = new RadialMenuActionOption<RCDPrototype>(HandleMenuOptionClick, prototype)
                 {
                     IconSpecifier = RadialMenuIconSpecifier.With(prototype.Sprite),
-                    ToolTip = GetTooltip(prototype)
+                    ToolTip = GetTooltip(prototype),
+                    Order = prototype.MenuOrder, // DS14
                 };
                 topLevelActions.Add(topLevelActionOption);
                 continue;
@@ -84,7 +86,8 @@ public sealed class RCDMenuBoundUserInterface : BoundUserInterface
             var actionOption = new RadialMenuActionOption<RCDPrototype>(HandleMenuOptionClick, prototype)
             {
                 IconSpecifier = RadialMenuIconSpecifier.With(prototype.Sprite),
-                ToolTip = GetTooltip(prototype)
+                ToolTip = GetTooltip(prototype),
+                Order = prototype.MenuOrder, // DS14
             };
             list.Add(actionOption);
         }
@@ -97,7 +100,8 @@ public sealed class RCDMenuBoundUserInterface : BoundUserInterface
             models[i] = new RadialMenuNestedLayerOption(list)
             {
                 IconSpecifier = RadialMenuIconSpecifier.With(groupInfo.Sprite),
-                ToolTip = Loc.GetString(groupInfo.Tooltip)
+                ToolTip = Loc.GetString(groupInfo.Tooltip),
+                Order = groupInfo.Order, // DS14
             };
             i++;
         }
@@ -121,20 +125,12 @@ public sealed class RCDMenuBoundUserInterface : BoundUserInterface
         if (_playerManager.LocalSession?.AttachedEntity == null)
             return;
 
-        var msg = Loc.GetString("rcd-component-change-mode", ("mode", Loc.GetString(proto.SetName)));
+        var rcdName = GetPrototypeName(proto); // DS14
+
+        var msg = Loc.GetString("rcd-component-change-mode", ("mode", rcdName));
 
         if (proto.Mode is RcdMode.ConstructTile or RcdMode.ConstructObject)
-        {
-            var name = Loc.GetString(proto.SetName);
-
-            if (proto.Prototype != null &&
-                _prototypeManager.TryIndex(proto.Prototype, out var entProto)) // don't use Resolve because this can be a tile
-            {
-                name = entProto.Name;
-            }
-
-            msg = Loc.GetString("rcd-component-change-build-mode", ("name", name));
-        }
+            msg = Loc.GetString("rcd-component-change-build-mode", ("name", rcdName));
 
         // Popup message
         var popup = EntMan.System<PopupSystem>();
@@ -143,23 +139,24 @@ public sealed class RCDMenuBoundUserInterface : BoundUserInterface
 
     private string GetTooltip(RCDPrototype proto)
     {
-        string tooltip;
-
-        if (proto.Mode is RcdMode.ConstructTile or RcdMode.ConstructObject
-            && proto.Prototype != null
-            && _prototypeManager.TryIndex(proto.Prototype, out var entProto)) // don't use Resolve because this can be a tile
-        {
-            tooltip = Loc.GetString(entProto.Name);
-        }
-        else
-        {
-            tooltip = Loc.GetString(proto.SetName);
-        }
-
+        var tooltip = GetPrototypeName(proto); // DS14
         tooltip = OopsConcat(char.ToUpper(tooltip[0]).ToString(), tooltip.Remove(0, 1));
 
         return tooltip;
     }
+
+    // DS14-start: RCDSystem is not registered client-side on the current engine baseline.
+    private string GetPrototypeName(RCDPrototype prototype)
+    {
+        if (prototype.SetName != null)
+            return Loc.GetString(prototype.SetName);
+
+        if (prototype.Prototype != null)
+            return _prototypeManager.Index(prototype.Prototype).Name;
+
+        return Loc.GetString("generic-unknown-title");
+    }
+    // DS14-end
 
     private static string OopsConcat(string a, string b)
     {

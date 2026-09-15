@@ -27,6 +27,7 @@
   parent: MobStatusEffectBase
   id: PainNumbnessTraitStatusEffect
   components:
+  - type: CloneableStatusEffect
   - type: StatusEffect
     whitelist:
       components:
@@ -38,6 +39,8 @@
   parent: BloodstreamStatusEffectBase
   id: StatusEffectHemophiliaTrait
   components:
+  - type: CloneableStatusEffect
+  - type: ChangelingCloneableStatusEffect
   - type: HemophiliaStatusEffect
 
 - type: entity
@@ -62,6 +65,18 @@
   parent: [ PainNumbnessTraitStatusEffect, MobStatusEffectDebuff ]
   id: StatusEffectPainNumbness
   name: pain numbness
+
+# Ignore movement slowdown from damage thresholds.
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectAdrenaline
+  name: adrenaline
+  components:
+  - type: IgnoreSlowOnDamage
+  - type: StatusEffectAlert
+    alert: Adrenaline
+  - type: ExaminableStatusEffect
+    messageId: status-effect-examine-adrenaline
 
 - type: entity
   parent: MobStatusEffectBase

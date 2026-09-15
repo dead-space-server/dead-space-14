@@ -30,6 +30,7 @@ using Robust.Shared.Configuration;
 using Content.Server.DeadSpace.Languages;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using Content.Shared.GameTicking; //DS14
 
 namespace Content.Server.Communications
 {
@@ -75,6 +76,8 @@ namespace Content.Server.Communications
             SubscribeLocalEvent<CommunicationsConsoleComponent, EmagCommunicationsConsoleUnlockMessage>(OnUnlockEmagInterface);
             SubscribeLocalEvent<CommunicationsConsoleComponent, BoundUIOpenedEvent>(OnBoundUiOpened);
             SubscribeLocalEvent<CommunicationsConsoleComponent, BoundUIClosedEvent>(OnBoundUiClosed);
+
+            SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRestartRound);
             // DS14-end
 
             // On console init, set cooldown
@@ -160,7 +163,8 @@ namespace Content.Server.Communications
         {
             var stationUid = _stationSystem.GetOwningStation(uid);
             List<string>? levels = null;
-            string currentLevel = default!;
+            var currentLevel = string.Empty;
+            var currentLevelColor = Color.White; // DS14 - send server-only alert prototype color to the client UI.
             float currentDelay = 0;
 
             if (stationUid != null)
@@ -181,6 +185,8 @@ namespace Content.Server.Communications
                     }
 
                     currentLevel = alertComp.CurrentLevel;
+                    if (alertComp.AlertLevels.Levels.TryGetValue(currentLevel, out var currentLevelDetails))
+                        currentLevelColor = currentLevelDetails.Color; // DS14
                     currentDelay = _alertLevelSystem.GetAlertLevelDelay(stationUid.Value, alertComp);
                 }
             }
@@ -189,6 +195,7 @@ namespace Content.Server.Communications
                 CanCallOrRecall(comp),
                 levels,
                 currentLevel,
+                currentLevelColor, // DS14
                 currentDelay,
                 _roundEndSystem.ExpectedCountdownEnd
             ));
@@ -393,6 +400,11 @@ namespace Content.Server.Communications
             _adminLogger.Add(LogType.Action, LogImpact.High, $"{ToPrettyString(message.Actor):player} has recalled the shuttle.");
         }
         // DS14-start
+        private void OnRestartRound(RoundRestartCleanupEvent ev)
+        {
+            _cfg.SetCVar(CCVars.EvacLocked, false);
+        }
+
         private void OnBoundUiOpened(EntityUid uid, CommunicationsConsoleComponent component, BoundUIOpenedEvent args)
         {
             if (!args.UiKey.Equals(CommunicationsConsoleUiKey.Key))

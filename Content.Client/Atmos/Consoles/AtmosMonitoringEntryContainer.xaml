@@ -19,31 +19,29 @@
 
             <!-- Panel that appears on selecting the device -->
         
-            <PanelContainer HorizontalExpand="True" Margin="-8 0 -14 -4" Access="Public">
-                <PanelContainer.PanelOverride>
-                    <gfx:StyleBoxFlat BackgroundColor="#25252a"/>
-                </PanelContainer.PanelOverride>
+            <!-- DS14-start -->
+            <PanelContainer HorizontalExpand="True" Margin="-8 0 -14 -4" Access="Public" StyleClasses="DeadSpaceSurfaceDark">
+            <!-- DS14-end -->
                 <BoxContainer Name="MainDataContainer" HorizontalExpand="True" VerticalExpand="True" Orientation="Vertical">
                     <Control>
                         <BoxContainer HorizontalExpand="True" VerticalExpand="True" Orientation="Vertical">
                             <BoxContainer HorizontalExpand="True" Orientation="Horizontal">
-                                <Label Name="TemperatureHeaderLabel" Text="{Loc 'atmos-alerts-window-temperature-label'}" HorizontalAlignment="Center" HorizontalExpand="True" FontColorOverride="#a9a9a9" Margin="0 2 0 0" SetHeight="24"></Label>
-                                <Label Name="PressureHeaderLabel" Text="{Loc 'atmos-alerts-window-pressure-label'}" HorizontalAlignment="Center" HorizontalExpand="True" FontColorOverride="#a9a9a9" Margin="0 2 0 0" SetHeight="24"></Label>
-                                <Label Name="TotalMolHeaderLabel" Text="{Loc 'atmos-alerts-window-total-mol-label'}" HorizontalAlignment="Center" HorizontalExpand="True" FontColorOverride="#a9a9a9" Margin="0 2 0 0" SetHeight="24"></Label>
+                                <Label Name="TemperatureHeaderLabel" Text="{Loc 'atmos-alerts-window-temperature-label'}" HorizontalAlignment="Center" HorizontalExpand="True" Margin="0 2 0 0" SetHeight="24"></Label>
+                                <Label Name="PressureHeaderLabel" Text="{Loc 'atmos-alerts-window-pressure-label'}" HorizontalAlignment="Center" HorizontalExpand="True" Margin="0 2 0 0" SetHeight="24"></Label>
+                                <Label Name="TotalMolHeaderLabel" Text="{Loc 'atmos-alerts-window-total-mol-label'}" HorizontalAlignment="Center" HorizontalExpand="True" Margin="0 2 0 0" SetHeight="24"></Label>
                             </BoxContainer>
-                            <PanelContainer HorizontalExpand="True">
-                                <PanelContainer.PanelOverride>
-                                    <gfx:StyleBoxFlat BackgroundColor="#202023"/>
-                                </PanelContainer.PanelOverride>
+                            <!-- DS14-start -->
+                            <PanelContainer HorizontalExpand="True" StyleClasses="DeadSpaceInset">
+                            <!-- DS14-end -->
                                 <BoxContainer HorizontalExpand="True" Orientation="Horizontal">
-                                    <Label Name="TemperatureLabel" Text="???" HorizontalAlignment="Center" HorizontalExpand="True" FontColorOverride="#a9a9a9" Margin="0 2 0 0" SetHeight="24"></Label>
-                                    <Label Name="PressureLabel" Text="???" HorizontalAlignment="Center" HorizontalExpand="True" FontColorOverride="#a9a9a9" Margin="0 2 0 0" SetHeight="24"></Label>
-                                    <Label Name="TotalMolLabel" Text="???" HorizontalAlignment="Center" HorizontalExpand="True" FontColorOverride="#a9a9a9" Margin="0 2 0 0" SetHeight="24"></Label>
+                                    <Label Name="TemperatureLabel" Text="???" HorizontalAlignment="Center" HorizontalExpand="True" Margin="0 2 0 0" SetHeight="24"></Label>
+                                    <Label Name="PressureLabel" Text="???" HorizontalAlignment="Center" HorizontalExpand="True" Margin="0 2 0 0" SetHeight="24"></Label>
+                                    <Label Name="TotalMolLabel" Text="???" HorizontalAlignment="Center" HorizontalExpand="True" Margin="0 2 0 0" SetHeight="24"></Label>
                                 </BoxContainer>
                             </PanelContainer>
                             <BoxContainer HorizontalExpand="True" Orientation="Horizontal" Margin="8 0">
                                 <TextureRect Name="ArrowTexture" VerticalAlignment="Center" SetSize="12 12" Stretch="KeepAspectCentered" Margin="3 0" TexturePath="/Textures/Interface/Nano/triangle_right.png"></TextureRect>
-                                <Label Name="GasesHeaderLabel" Text="{Loc 'atmos-monitoring-window-label-gases'}" HorizontalAlignment="Left" HorizontalExpand="True" FontColorOverride="#a9a9a9" Margin="4 0 0 0" SetHeight="24"></Label>
+                                <Label Name="GasesHeaderLabel" Text="{Loc 'atmos-monitoring-window-label-gases'}" HorizontalAlignment="Left" HorizontalExpand="True" Margin="4 0 0 0" SetHeight="24"></Label>
                             </BoxContainer>
                     
                         </BoxContainer>
@@ -53,10 +51,9 @@
                     <Control Name="FocusContainer" ReservesSpace="False"  Visible="False">
                         <!-- Main container for displaying atmospheric data -->
                         <BoxContainer HorizontalExpand="True" VerticalExpand="True" Orientation="Vertical">
-                            <PanelContainer HorizontalExpand="True">
-                                <PanelContainer.PanelOverride>
-                                    <gfx:StyleBoxFlat BackgroundColor="#202023"/>
-                                </PanelContainer.PanelOverride>
+                            <!-- DS14-start -->
+                            <PanelContainer HorizontalExpand="True" StyleClasses="DeadSpaceInset">
+                            <!-- DS14-end -->
 
                                 <!-- Gas entries added via C# code -->
                                 <GridContainer Name="GasGridContainer" HorizontalExpand="True" Columns = "4"></GridContainer>
@@ -66,7 +63,7 @@
                 </BoxContainer>
 
                 <!-- If the alarm is inactive, this is label is displayed instead -->
-                <Label Name="NoDataLabel" Text="{Loc 'atmos-alerts-window-no-data-available'}" HorizontalAlignment="Center" Margin="0 15" FontColorOverride="#a9a9a9" ReservesSpace="False" Visible="False"></Label>
+                <Label Name="NoDataLabel" Text="{Loc 'atmos-alerts-window-no-data-available'}" HorizontalAlignment="Center" Margin="0 15" ReservesSpace="False" Visible="False"></Label>
                 
             </PanelContainer>
         </BoxContainer>

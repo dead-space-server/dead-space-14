@@ -1,4 +1,5 @@
 device-pda-slot-component-slot-name-cartridge = Картридж
+device-pda-slot-component-slot-name-tool = Инструмент
 default-program-name = Программа
 notekeeper-program-name = Заметки
 nano-task-program-name = НаноДела
@@ -111,3 +112,4 @@ messenger-block = Блок
 messenger-unblock = Разблок
 messenger-disable-chat = Отключить чат
 messenger-enable-chat = Включить чат
+messenger-unread-header = Новые сообщения

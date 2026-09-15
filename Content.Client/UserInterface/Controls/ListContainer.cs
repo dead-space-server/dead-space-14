@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Numerics;
 using JetBrains.Annotations;
-using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Input;
@@ -389,20 +388,12 @@ public sealed class ListContainerButton : ContainerButton, IEntityControl
     public readonly ListData Data;
 
     public readonly int Index;
-    // public PanelContainer Background;
 
     public ListContainerButton(ListData data, int index)
     {
         AddStyleClass(StyleClassButton);
         Data = data;
         Index = index;
-        StyleBoxOverride = new StyleBoxFlat(Color.White);
-        // AddChild(Background = new PanelContainer
-        // {
-        //     HorizontalExpand = true,
-        //     VerticalExpand = true,
-        //     PanelOverride = new StyleBoxFlat {BackgroundColor = new Color(55, 55, 68)}
-        // });
     }
 
     public EntityUid? UiEntity => (Data as EntityListData)?.Uid;

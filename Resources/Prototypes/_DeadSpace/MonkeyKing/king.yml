@@ -14,6 +14,7 @@
     baseWalkSpeed: 5
     baseSprintSpeed: 5
   - type: PassiveDamage
+    intervalHaltOnDamageTaken: 5s
     allowedStates:
     - Alive
     - Critical
@@ -90,7 +91,7 @@
     baseRadialAcceleration: -10
     durationAnimation: 1
     state: crawling
-    stunState: stunradius
+    stunState: crawling #заглушка РП, нужно дорисовать анимацию
     effectPrototype: StunRadiusEffect
     actionStunRadius: ActionStunRadiusMonkeyKing
     strenght: 1
@@ -112,7 +113,7 @@
   - type: Insulated
   - type: Language
     selectedLanguage: MonkeyLanguage
-    knownLanguages: 
+    knownLanguages:
     - MonkeyLanguage
   - type: TTS
     voice: Pudge
@@ -131,7 +132,7 @@
     - MindRoleGhostRoleFreeAgent
     requirements:
     - !type:OverallPlaytimeRequirement
-      time: 216000 # 60 hours
+      time: 288000 # 80 hours
     raffle:
       settings: default
   - type: GhostRoleMobSpawner

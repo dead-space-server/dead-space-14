@@ -265,3 +265,35 @@
     sprite: _DeadSpace/Clothing/OuterClothing/Coats/Alt_paramedic.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/OuterClothing/Coats/Alt_paramedic.rsi
+
+- type: entity
+  parent: ClothingOuterStorageFoldableBase
+  id: ClothingOuterCoatSuitJacketBlack
+  name: чёрный пиджак
+  description: Классический чёрный пиджак. Придаёт вид человека, который точно знает, какой пункт СРП вы только что нарушили.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/OuterClothing/Coats/suit_jacket.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/OuterClothing/Coats/suit_jacket.rsi
+
+- type: entity
+  parent: [ClothingOuterStorageFoldableBaseOpened, ClothingOuterCoatSuitJacketBlack]
+  id: ClothingOuterCoatSuitJacketBlackOpened
+  name: чёрный пиджак
+
+- type: entity
+  parent: ClothingOuterStorageFoldableBase
+  id: ClothingOuterCoatSuitJacketCC
+  name: пиджак агента Центком
+  description: Дорогущий пиджак сотрудника ЦК. Придаёт вид человека, который одним росчерком пера рушит жизни людей.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/OuterClothing/Coats/suit_jacket_cc.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/OuterClothing/Coats/suit_jacket_cc.rsi
+
+- type: entity
+  parent: [ClothingOuterStorageFoldableBaseOpened, ClothingOuterCoatSuitJacketCC]
+  id: ClothingOuterCoatSuitJacketCCOpened
+  name: пиджак агента Центком

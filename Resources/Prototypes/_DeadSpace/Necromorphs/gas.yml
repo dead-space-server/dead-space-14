@@ -60,8 +60,12 @@
   suffix: НЕКРОИНФЕКЦИЯ
   components:
     - type: Sprite
+      sprite: _DeadSpace/Structures/Storage/canister.rsi
       layers:
-        - state: yellow
+        - state: necro
+        - state: paper
+          visible: false
+          map: [ "enum.PaperLabelVisuals.Layer" ]
     - type: GasCanister
       gasMixture:
         volume: 1000

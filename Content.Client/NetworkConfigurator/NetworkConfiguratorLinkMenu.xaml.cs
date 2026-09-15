@@ -17,8 +17,6 @@ public sealed partial class NetworkConfiguratorLinkMenu : FancyWindow
 {
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
 
-    private const string PanelBgColor = "#202023";
-
     private readonly LinksRender _links;
 
     private readonly List<SourcePortPrototype> _sources = new();
@@ -37,15 +35,6 @@ public sealed partial class NetworkConfiguratorLinkMenu : FancyWindow
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
-
-        var footerStyleBox = new StyleBoxFlat()
-        {
-            BorderThickness = new Thickness(0, 2, 0, 0),
-            BorderColor = Color.FromHex("#5A5A5A")
-        };
-
-        FooterPanel.PanelOverride = footerStyleBox;
-        MainPanel.PanelOverride = new StyleBoxFlat(Color.FromHex(PanelBgColor));
 
         ButtonClear.AddStyleClass("negative");
         ButtonLinkDefault.Disabled = true;

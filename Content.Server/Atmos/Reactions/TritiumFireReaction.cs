@@ -9,6 +9,10 @@ namespace Content.Server.Atmos.Reactions
     [DataDefinition]
     public sealed partial class TritiumFireReaction : IGasReactionEffect
     {
+        // DS14-start
+        private const float TritiumRadiationPerMole = 1f;
+        private const float MaxTritiumRadiation = 2f;
+        // DS14-end
         public ReactionResult React(GasMixture mixture, IGasMixtureHolder? holder, AtmosphereSystem atmosphereSystem, float heatScale)
         {
             var energyReleased = 0f;
@@ -42,7 +46,9 @@ namespace Content.Server.Atmos.Reactions
             {
                 energyReleased += (Atmospherics.FireHydrogenEnergyReleased * burnedFuel);
 
-                // TODO ATMOS Radiation pulse here!
+                // DS14-start
+                atmosphereSystem.EmitRadiationPulse(holder, MathF.Min(burnedFuel * TritiumRadiationPerMole, MaxTritiumRadiation));
+                // DS14-end
 
                 // Conservation of mass is important.
                 mixture.AdjustMoles(Gas.WaterVapor, burnedFuel);

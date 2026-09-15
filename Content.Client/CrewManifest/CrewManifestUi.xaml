@@ -5,9 +5,7 @@
                SetSize="500 800">
     <BoxContainer Orientation="Vertical" VerticalExpand="True" HorizontalExpand="True">
         <controls:StripeBack Name="StationNameContainer">
-            <PanelContainer>
-                <Label Name="StationName" Align="Center" />
-            </PanelContainer>
+            <Label Name="StationName" Align="Center" /> <!-- DS14 -->
         </controls:StripeBack>
         <BoxContainer HorizontalExpand="True" VerticalExpand="True">
             <ScrollContainer HorizontalExpand="True" VerticalExpand="True">

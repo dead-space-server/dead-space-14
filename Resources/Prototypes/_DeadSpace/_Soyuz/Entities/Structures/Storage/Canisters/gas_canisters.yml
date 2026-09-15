@@ -1,0 +1,328 @@
+# Для удобства создал отдельный parent с измененным путём спрайта
+- type: entity
+  abstract: true
+  parent: GasCanister
+  id: GasCanisterSoyuz
+  name: СОВЕТСКАЯ канистра кислорода
+  description: Вы точно не должны видеть эту канистру.
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/_Soyuz/Structures/Storage/canisters.rsi
+      noRot: true
+      layers:
+        - state: hydrogen
+        - state: paper
+          visible: false
+          map: [ "enum.PaperLabelVisuals.Layer" ]
+    - type: Destructible
+      thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 600
+        behaviors:
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+      - trigger:
+          !type:DamageTrigger
+          damage: 300
+        behaviors:
+        - !type:PlaySoundBehavior
+          sound:
+            collection: MetalBreak
+        - !type:SpawnEntitiesBehavior
+          spawn:
+            GasCanisterBrokenBase:
+              min: 1
+              max: 1
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
+        - !type:DumpCanisterBehavior
+
+- type: entity
+  parent: GasCanisterSoyuz
+  id: FixiriumCanister
+  name: канистра фиксириума
+  description: Канистра, в которой может содержаться газ любого вида. В этой, предположительно, содержится фиксириум. Можно прикрепить к порту коннектора с помощью гаечного ключа.
+  components:
+    - type: Sprite
+      layers:
+        - state: fixirium
+    - type: GasCanister
+      gasMixture:
+        volume: 1500
+        moles:
+          Fixirium: 2769.36
+        temperature: 293.15
+    - type: Destructible
+      thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 600
+        behaviors:
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+      - trigger:
+          !type:DamageTrigger
+          damage: 300
+        behaviors:
+        - !type:PlaySoundBehavior
+          sound:
+            collection: MetalBreak
+        - !type:SpawnEntitiesBehavior
+          spawn:
+            FixiriumCanisterBroken:
+              min: 1
+              max: 1
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
+        - !type:DumpCanisterBehavior
+
+- type: entity
+  parent: GasCanisterSoyuz
+  id: HydrogenCanister
+  name: канистра водорода
+  description: Канистра, в которой может содержаться газ любого вида. В этой, предположительно, содержится водород. Можно прикрепить к порту коннектора с помощью гаечного ключа.
+  components:
+    - type: Sprite
+      layers:
+        - state: hydrogen
+    - type: GasCanister
+      gasMixture:
+        volume: 1500
+        moles:
+          Hydrogen: 2769.36
+        temperature: 293.15
+    - type: Destructible
+      thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 600
+        behaviors:
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+      - trigger:
+          !type:DamageTrigger
+          damage: 300
+        behaviors:
+        - !type:PlaySoundBehavior
+          sound:
+            collection: MetalBreak
+        - !type:SpawnEntitiesBehavior
+          spawn:
+            HydrogenCanisterBroken:
+              min: 1
+              max: 1
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
+        - !type:DumpCanisterBehavior
+
+- type: entity
+  parent: GasCanisterSoyuz
+  id: NitriatiumCanister
+  name: канистра нитриатиума
+  description: Канистра, в которой может содержаться газ любого вида. В этой, предположительно, содержится нитриатиум. Можно прикрепить к порту коннектора с помощью гаечного ключа.
+  components:
+    - type: Sprite
+      layers:
+        - state: nitriatium
+    - type: GasCanister
+      gasMixture:
+        volume: 1500
+        moles:
+          Nitriatium: 2769.36
+        temperature: 293.15
+    - type: Destructible
+      thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 600
+        behaviors:
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+      - trigger:
+          !type:DamageTrigger
+          damage: 300
+        behaviors:
+        - !type:PlaySoundBehavior
+          sound:
+            collection: MetalBreak
+        - !type:SpawnEntitiesBehavior
+          spawn:
+            NitriatiumCanisterBroken:
+              min: 1
+              max: 1
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
+        - !type:DumpCanisterBehavior
+
+- type: entity
+  parent: GasCanisterSoyuz
+  id: HiliumCanister
+  name: канистра хилиума
+  description: Канистра, в которой может содержаться газ любого вида. В этой, предположительно, содержится хилиум. Можно прикрепить к порту коннектора с помощью гаечного ключа.
+  components:
+    - type: Sprite
+      layers:
+        - state: hilium
+    - type: GasCanister
+      gasMixture:
+        volume: 1500
+        moles:
+          Hilium: 2769.36
+        temperature: 293.15
+    - type: Destructible
+      thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 600
+        behaviors:
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+      - trigger:
+          !type:DamageTrigger
+          damage: 300
+        behaviors:
+        - !type:PlaySoundBehavior
+          sound:
+            collection: MetalBreak
+        - !type:SpawnEntitiesBehavior
+          spawn:
+            HiliumCanisterBroken:
+              min: 1
+              max: 1
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
+        - !type:DumpCanisterBehavior
+
+- type: entity
+  parent: GasCanisterSoyuz
+  id: BrizidiumCanister
+  name: канистра бризидиума
+  description: Канистра, в которой может содержаться газ любого вида. В этой, предположительно, содержится бризидиум. Можно прикрепить к порту коннектора с помощью гаечного ключа.
+  components:
+    - type: Sprite
+      layers:
+        - state: brizidium
+    - type: GasCanister
+      gasMixture:
+        volume: 1500
+        moles:
+          Brizidium: 2769.36
+        temperature: 293.15
+    - type: Destructible
+      thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 600
+        behaviors:
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+      - trigger:
+          !type:DamageTrigger
+          damage: 300
+        behaviors:
+        - !type:PlaySoundBehavior
+          sound:
+            collection: MetalBreak
+        - !type:SpawnEntitiesBehavior
+          spawn:
+            BrizidiumCanisterBroken:
+              min: 1
+              max: 1
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
+        - !type:DumpCanisterBehavior
+
+- type: entity
+  parent: GasCanisterSoyuz
+  id: IpritCanister
+  name: канистра иприта
+  description: Канистра, в которой может содержаться газ любого вида. В этой, предположительно, содержится иприт. Можно прикрепить к порту коннектора с помощью гаечного ключа.
+  components:
+    - type: Sprite
+      layers:
+        - state: iprit
+    - type: GasCanister
+      gasMixture:
+        volume: 1500
+        moles:
+          Iprit: 2769.36
+        temperature: 293.15
+    - type: Destructible
+      thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 600
+        behaviors:
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+      - trigger:
+          !type:DamageTrigger
+          damage: 300
+        behaviors:
+        - !type:PlaySoundBehavior
+          sound:
+            collection: MetalBreak
+        - !type:SpawnEntitiesBehavior
+          spawn:
+            IpritCanisterBroken:
+              min: 1
+              max: 1
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
+        - !type:DumpCanisterBehavior
+
+- type: entity
+  parent: GasCanisterBrokenBase
+  id: FixiriumCanisterBroken
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/_Soyuz/Structures/Storage/canisters.rsi
+      state: fixirium-1
+
+- type: entity
+  parent: GasCanisterBrokenBase
+  id: HydrogenCanisterBroken
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/_Soyuz/Structures/Storage/canisters.rsi
+      state: hydrogen-1
+
+- type: entity
+  parent: GasCanisterBrokenBase
+  id: NitriatiumCanisterBroken
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/_Soyuz/Structures/Storage/canisters.rsi
+      state: nitriatium-1
+
+- type: entity
+  parent: GasCanisterBrokenBase
+  id: HiliumCanisterBroken
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/_Soyuz/Structures/Storage/canisters.rsi
+      state: hilium-1
+
+- type: entity
+  parent: GasCanisterBrokenBase
+  id: BrizidiumCanisterBroken
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/_Soyuz/Structures/Storage/canisters.rsi
+      state: brizidium-1
+
+- type: entity
+  parent: GasCanisterBrokenBase
+  id: IpritCanisterBroken
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/_Soyuz/Structures/Storage/canisters.rsi
+      state: iprit-1

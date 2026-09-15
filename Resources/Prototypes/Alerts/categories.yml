@@ -35,6 +35,9 @@
   id: Battery
 
 - type: alertCategory
+  id: Chemicals
+
+- type: alertCategory
   id: BlobResource
 
 - type: alertCategory

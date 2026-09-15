@@ -1,0 +1,371 @@
+# SPDX-FileCopyrightText: 2026 Kofeecheks
+# SPDX-License-Identifier: LicenseRef-Kofeecheks
+
+- type: reagent
+  id: Fixirium
+  name: reagent-name-fixirium
+  desc: reagent-desc-fixirium
+  physicalDesc: reagent-physical-desc-gaseous
+  flavor: bitter
+  color: "#d3d3d3"
+  boilingPoint: -170.0
+  meltingPoint: -210.0
+  metabolisms:
+    Medicine:
+      effects:
+      - !type:Oxygenate
+        factor: 8
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [ Human, Animal, Rat, Plant ]
+      - !type:HealthChange
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [ Vox ]
+        damage:
+          types:
+            Poison: 0.7
+      - !type:AdjustAlert
+        alertType: Toxins
+        minScale: 0.5
+        clear: true
+        time: 5
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [ Vox ]
+    Gas:
+      effects:
+      - !type:Oxygenate
+        factor: 8
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [ Human, Animal, Rat, Plant ]
+      - !type:ModifyLungGas
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [ Vox ]
+          inverted: true
+        ratios:
+          CarbonDioxide: 1.0
+          Fixirium: -1.0
+      - !type:HealthChange
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [ Vox ]
+        damage:
+          types:
+            Poison: 0.7
+      - !type:AdjustAlert
+        alertType: Toxins
+        minScale: 0.5
+        clear: true
+        time: 5
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [ Vox ]
+
+- type: reagent
+  id: Nitriatium
+  name: reagent-name-nitriatium
+  desc: reagent-desc-nitriatium
+  physicalDesc: reagent-physical-desc-gaseous
+  flavor: bitter
+  color: "#c7a87a"
+  boilingPoint: -20.0
+  meltingPoint: -80.0
+  metabolisms:
+    Narcotic:
+      effects:
+      - !type:MovementSpeedModifier
+        walkSpeedModifier: 1.5
+        sprintSpeedModifier: 1.5
+        time: 5
+      - !type:Jitter
+      - !type:AdjustStaminaDamage
+        amount: -1
+      - !type:AddReagentToBloodstream
+        reagent: NitrosylPlasmide
+        quantity: 1
+        conditions:
+        - !type:ReagentCondition
+          reagent: Nitriatium
+          min: 5
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentCondition
+          reagent: Nitriatium
+          min: 10
+        damage:
+          types:
+            Asphyxiation: 1.5
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentCondition
+          reagent: Nitriatium
+          min: 20
+        damage:
+          types:
+            Asphyxiation: 5
+    Gas:
+      effects:
+      - !type:MovementSpeedModifier
+        walkSpeedModifier: 1.5
+        sprintSpeedModifier: 1.5
+        time: 5
+      - !type:Jitter
+      - !type:AdjustStaminaDamage
+        amount: -1
+      - !type:AddReagentToBloodstream
+        reagent: NitrosylPlasmide
+        quantity: 1
+        conditions:
+        - !type:ReagentCondition
+          reagent: Nitriatium
+          min: 5
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentCondition
+          reagent: Nitriatium
+          min: 10
+        damage:
+          types:
+            Asphyxiation: 1.5
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentCondition
+          reagent: Nitriatium
+          min: 20
+        damage:
+          types:
+            Asphyxiation: 5
+
+- type: reagent
+  id: Hilium
+  name: reagent-name-hilium
+  desc: reagent-desc-hilium
+  physicalDesc: reagent-physical-desc-gaseous
+  flavor: medicine
+  color: "#b7ff8a"
+  boilingPoint: -140.0
+  meltingPoint: -180.0
+  metabolisms:
+    Medicine:
+      effects:
+      - !type:EvenHealthChange
+        minScale: 0.2
+        damage:
+          Brute: -1.0
+          Burn: -0.8
+      - !type:HealthChange
+        minScale: 0.2
+        damage:
+          types:
+            Poison: -0.48
+      - !type:ModifyStatusEffect
+        minScale: 0.6
+        effectProto: StatusEffectDrowsiness
+        type: Update
+        time: 2
+      - !type:ModifyStatusEffect
+        minScale: 1.8
+        effectProto: StatusEffectForcedSleeping
+        type: Update
+        time: 2
+    Gas:
+      effects:
+      - !type:EvenHealthChange
+        minScale: 0.2
+        damage:
+          Brute: -1.0
+          Burn: -0.8
+      - !type:HealthChange
+        minScale: 0.2
+        damage:
+          types:
+            Poison: -0.48
+      - !type:ModifyStatusEffect
+        minScale: 0.6
+        effectProto: StatusEffectDrowsiness
+        type: Update
+        time: 2
+      - !type:ModifyStatusEffect
+        minScale: 1.8
+        effectProto: StatusEffectForcedSleeping
+        type: Update
+        time: 2
+
+- type: reagent
+  id: Brizidium
+  name: reagent-name-brizidium
+  desc: reagent-desc-brizidium
+  physicalDesc: reagent-physical-desc-gaseous
+  flavor: bitter
+  color: "#ffffff"
+  boilingPoint: -40.0
+  meltingPoint: -110.0
+  metabolisms:
+    Narcotic:
+      effects:
+      - !type:ModifyStatusEffect
+        minScale: 0.9
+        effectProto: StatusEffectForcedSleeping
+        type: Update
+        time: 2
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [ Slime ]
+      - !type:ModifyStatusEffect
+        minScale: 0.7
+        effectProto: StatusEffectSeeingRainbow
+        type: Add
+        time: 4
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [ Slime ]
+          inverted: true
+      - !type:Drunk
+        minScale: 0.7
+        boozePower: 120
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [ Slime ]
+          inverted: true
+      - !type:Vomit
+        minScale: 1.2
+        probability: 0.08
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [ Slime ]
+          inverted: true
+      - !type:HealthChange
+        probability: 0.33
+        conditions:
+        - !type:ReagentCondition
+          reagent: Brizidium
+          min: 2
+        - !type:MetabolizerTypeCondition
+          type: [ Slime ]
+          inverted: true
+        damage:
+          types:
+            Cellular: 3
+    Gas:
+      effects:
+      - !type:ModifyStatusEffect
+        minScale: 0.9
+        effectProto: StatusEffectForcedSleeping
+        type: Update
+        time: 2
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [ Slime ]
+      - !type:ModifyStatusEffect
+        minScale: 0.7
+        effectProto: StatusEffectSeeingRainbow
+        type: Add
+        time: 4
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [ Slime ]
+          inverted: true
+      - !type:Drunk
+        minScale: 0.7
+        boozePower: 120
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [ Slime ]
+          inverted: true
+      - !type:Vomit
+        minScale: 1.2
+        probability: 0.08
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [ Slime ]
+          inverted: true
+      - !type:HealthChange
+        probability: 0.33
+        conditions:
+        - !type:ReagentCondition
+          reagent: Brizidium
+          min: 2
+        - !type:MetabolizerTypeCondition
+          type: [ Slime ]
+          inverted: true
+        damage:
+          types:
+            Cellular: 3
+
+- type: reagent
+  id: Iprit
+  name: reagent-name-iprit
+  desc: reagent-desc-iprit
+  physicalDesc: reagent-physical-desc-gaseous
+  flavor: bitter
+  color: "#c2a23a"
+  boilingPoint: 217.0
+  meltingPoint: 14.0
+  metabolisms:
+    Poison:
+      effects:
+      - !type:Oxygenate
+        minScale: 0.3
+        factor: -6
+      - !type:HealthChange
+        minScale: 0.3
+        damage:
+          types:
+            Poison: 0.45
+      - !type:Emote
+        emote: Cough
+        probability: 0.12
+      - !type:Emote
+        emote: Crying
+        probability: 0.08
+      - !type:Vomit
+        minScale: 0.8
+        probability: 0.15
+      - !type:EyeDamage
+        minScale: 0.5
+        amount: 1
+      - !type:GenericStatusEffect
+        minScale: 0.8
+        key: TemporaryBlindness
+        component: TemporaryBlindness
+        time: 2
+      - !type:MovementSpeedModifier
+        minScale: 0.5
+        walkSpeedModifier: 0.55
+        sprintSpeedModifier: 0.55
+        time: 2
+    Gas:
+      effects:
+      - !type:Oxygenate
+        minScale: 0.3
+        factor: -6
+      - !type:HealthChange
+        minScale: 0.3
+        damage:
+          types:
+            Poison: 0.45
+      - !type:Emote
+        emote: Cough
+        probability: 0.12
+      - !type:Emote
+        emote: Crying
+        probability: 0.08
+      - !type:Vomit
+        minScale: 0.8
+        probability: 0.15
+      - !type:EyeDamage
+        minScale: 0.5
+        amount: 1
+      - !type:GenericStatusEffect
+        minScale: 0.8
+        key: TemporaryBlindness
+        component: TemporaryBlindness
+        time: 2
+      - !type:MovementSpeedModifier
+        minScale: 0.5
+        walkSpeedModifier: 0.55
+        sprintSpeedModifier: 0.55
+        time: 2

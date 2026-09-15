@@ -143,7 +143,7 @@
 - type: entity
   parent: DesertEagleBase
   id: WeaponPistolDesertEagle
-  name: пустынный орёл
+  name: Пустынный Орёл
   description: Вот он, воплощение силы и свободы — Пустынный орёл! Одно только упоминание этого оружия вызывает волну **бесшабашности** и адреналина
   components:
   - type: Sprite
@@ -165,8 +165,9 @@
 - type: entity
   parent: DesertEagleBase
   id: WeaponPistolGoldDesertEagle
-  name: золотой пустынный орёл
+  name: золотой Пустынный Орёл
   description:  Позолочённый корпус из 18-каратного золота ложится очень хорошо, сочетая в себе элегантность и удобства. Убей своих врагов со стилем!
+  suffix: Пистолет
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Weapons/Guns/Pistols/golddeserteagle.rsi

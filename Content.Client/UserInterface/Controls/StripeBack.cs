@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client.DeadSpace.Stylesheets;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface.Controls;
 
@@ -8,7 +9,11 @@ namespace Content.Client.UserInterface.Controls
     {
         private const float PadSize = 4;
         private const float EdgeSize = 2;
-        private static readonly Color EdgeColor = Color.FromHex("#525252ff");
+        // DS14-start
+        private static Color EdgeColor => DeadSpaceStylePalette.ClassicChrome
+            ? Color.FromHex("#525252FF")
+            : DeadSpaceStylePalette.AccentDim;
+        // DS14-end
 
         private bool _hasTopEdge = true;
         private bool _hasBottomEdge = true;

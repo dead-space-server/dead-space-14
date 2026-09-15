@@ -1,5 +1,7 @@
 using Content.Shared.Objectives;
 using Content.Shared.DeadSpace.Skills;
+using Content.Shared.Roles;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.CharacterInfo;
@@ -19,22 +21,22 @@ public sealed class RequestCharacterInfoEvent : EntityEventArgs
 public sealed class CharacterInfoEvent : EntityEventArgs
 {
     public readonly NetEntity NetEntity;
-    public readonly string JobTitle;
+    public readonly ProtoId<JobPrototype>? Job;
     public readonly Dictionary<string, List<ObjectiveInfo>> Objectives;
-    public readonly List<SkillInfo> Skills; // <- добавляем список навыков
+    public readonly List<SkillInfo> Skills; // DS14-Skills
     public readonly string? Briefing;
 
     public CharacterInfoEvent(
         NetEntity netEntity,
-        string jobTitle,
         Dictionary<string, List<ObjectiveInfo>> objectives,
-        List<SkillInfo> skills, // <- новый параметр
-        string? briefing)
+        List<SkillInfo> skills, // DS14-Skills
+        string? briefing,
+        ProtoId<JobPrototype>? job)
     {
         NetEntity = netEntity;
-        JobTitle = jobTitle;
         Objectives = objectives;
         Skills = skills;
         Briefing = briefing;
+        Job = job;
     }
 }

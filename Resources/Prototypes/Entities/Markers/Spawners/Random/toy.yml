@@ -39,6 +39,8 @@
     - id: PlushieArachind
     - id: PlushiePenguin
     - id: PlushieVulp
+    - id: PlushieSheep
+    - id: PlushieSpaceSheep
     - !type:GroupSelector
       children:
       - id: PlushieBee
@@ -58,6 +60,31 @@
       - id: PlushieSharkBlue
       - id: PlushieSharkGrey
       - id: PlushieSharkPink
+    # DS14-start
+    - !type:GroupSelector # Seal variants share one table weight.
+      children:
+      - id: Akiplushie1
+      - id: Akiplushie2
+      - id: Akiplushie3
+      - id: Akiplushie4
+      - id: Akiplushie5
+      - id: Akiplushie6
+      - id: Akiplushie7
+      - id: Akiplushie8
+      - id: Akiplushie9
+      - id: Akiplushie10
+      - id: Akiplushie11
+      - id: Akiplushie12
+      - id: Akiplushie13
+      - id: Akiplushie14
+      - id: Akiplushie15
+      - id: Akiplushie16
+      - id: Akiplushie17
+      - id: Akiplushie18
+      - id: Akiplushie19
+      - id: Akiplushie20
+      - id: Akiplushie21
+    # DS14-end
     - !type:GroupSelector # Toy plushies
       children:
       - id: ToyIan

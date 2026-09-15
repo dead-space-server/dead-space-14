@@ -8,7 +8,7 @@
     <BoxContainer Orientation="Vertical"
                   VerticalExpand="True">
 
-        <PanelContainer StyleClasses="BackgroundPanelDark"
+        <PanelContainer StyleClasses="DeadSpaceSurfaceFlat"
                         Margin="5"
                         VerticalExpand="True">
 
@@ -19,6 +19,7 @@
 
                 <!-- LEFT: TEAM LIST -->
                 <PanelContainer MinWidth="300"
+                                StyleClasses="DeadSpaceInset"
                                 Margin="5">
                     <BoxContainer Orientation="Vertical"
                                   VerticalExpand="True">
@@ -44,14 +45,12 @@
                            Access="Public"
                            Margin="0 0 0 5" />
 
-                    <Label Text="{Loc 'ert-response-team-description'}" />
+                    <Label Text="{Loc 'ert-response-team-description'}"
+                           StyleClasses="DeadSpaceSectionTitle" />
 
-                    <PanelContainer StyleClasses="BackgroundPanelDark"
-                                    VerticalExpand="True">
-                        <RichTextLabel Name="TeamDescriptionLabel"
-                                       VerticalExpand="True"
-                                       Margin="5"/>
-                    </PanelContainer>
+                    <RichTextLabel Name="TeamDescriptionLabel"
+                                   VerticalExpand="True"
+                                   Margin="5"/>
 
                     <Control MinSize="0 10" />
 
@@ -77,4 +76,3 @@
 
     </BoxContainer>
 </DefaultWindow>
-

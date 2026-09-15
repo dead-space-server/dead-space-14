@@ -8,20 +8,32 @@
   boundaryWallWidth: 6
   boundaryTile: FloorChromite
   boundaryWallEntity: WallRockChromitePrisonBoundary
-  landingPadRadius: 56
+  landingPadRadius: 24
   landingPadTile: FloorSnowDug
   residenceReservationEnabled: true
-  residenceReservationSize: 52
+  residenceReservationSize: 96
+  randomizeResidencePositions: true
+  residenceMinSeparation: 160
+  residencePlacementAttempts: 256
+  residenceMapEdgePadding: 20
   residenceTile: FloorSnowDug
-  residenceGridPath: /Maps/_DeadSpace/Prison/jail.yml
-  residenceGridOffset: 8,16
-  residenceGridName: Prison Quarters
-  ftlEnabled: true
+  residences:
+  - gridPath: /Maps/_DeadSpace/Prison/jail.yml
+    gridOffset: -48,16
+    reservationSize: 64,80
+    reservationOffset: -8,-16
+    gridName: Slag Base
+  - gridPath: /Maps/_DeadSpace/Prison/jail_frontier.yml
+    gridOffset: 48,16
+    reservationSize: 64,80
+    reservationOffset: -8,-16
+    gridName: Frontier Base
+  ftlEnabled: false
   ftlBeaconsOnly: true
   ftlBeaconName: Prison Landing Zone
   ftlBeaconOffset: -112,-112
-  ftlFallbackMinOffset: 8
-  ftlFallbackMaxOffset: 40
+  ftlFallbackMinOffset: 6
+  ftlFallbackMaxOffset: 16
   markerLayers:
   - PrisonOreIron
   - PrisonOreCoal
@@ -48,7 +60,7 @@
   faunaMapEdgePadding: 12
   faunaMinPlayerDistance: 18
   faunaResidenceExclusionPadding: 8
-  faunaLandingExclusionRadius: 64
+  faunaLandingExclusionRadius: 30
   faunaSectorSize: 32
   faunaSectorCooldown: 360
   faunaSpawns:

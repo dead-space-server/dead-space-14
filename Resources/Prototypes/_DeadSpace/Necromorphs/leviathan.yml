@@ -295,6 +295,7 @@
   #   description: Некроморф
   # - type: GhostTakeoverAvailable
   - type: PassiveDamage
+    intervalHaltOnDamageTaken: 5s
     allowedStates:
     - Alive
     - Critical

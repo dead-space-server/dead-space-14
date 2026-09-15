@@ -7,17 +7,14 @@
     <BoxContainer Orientation="Vertical"
                   HorizontalExpand="True"
                   VerticalExpand="True">
-        <PanelContainer Margin="0 0 0 5">
+        <PanelContainer Name="CodeStatusDisplay" Margin="0 0 0 5">
             <PanelContainer.PanelOverride>
                 <gfx:StyleBoxFlat BackgroundColor="#001c00" />
             </PanelContainer.PanelOverride>
-            <Label Name="FirstStatusLabel"/>
-        </PanelContainer>
-        <PanelContainer Margin="0 0 0 5">
-            <PanelContainer.PanelOverride>
-                <gfx:StyleBoxFlat BackgroundColor="#001c00" />
-            </PanelContainer.PanelOverride>
-            <Label Name="SecondStatusLabel"/>
+            <BoxContainer Orientation="Vertical" SeparationOverride="5">
+                <Label Name="FirstStatusLabel"/>
+                <Label Name="SecondStatusLabel"/>
+            </BoxContainer>
         </PanelContainer>
         <BoxContainer Orientation="Horizontal"
                       HorizontalAlignment="Center">

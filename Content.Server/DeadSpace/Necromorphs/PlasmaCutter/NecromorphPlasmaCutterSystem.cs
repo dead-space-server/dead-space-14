@@ -18,9 +18,11 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Speech.Muting;
+using Content.Shared.StatusEffectNew;
 using Content.Shared.Weapons.Hitscan.Events;
 using Robust.Shared.Containers;
 using Robust.Shared.Physics.Systems;
+using Robust.Shared.Prototypes;
 using System.Linq;
 using System.Numerics;
 
@@ -28,12 +30,15 @@ namespace Content.Server.DeadSpace.Necromorphs.PlasmaCutter;
 
 public sealed class NecromorphPlasmaCutterSystem : EntitySystem
 {
+    private static readonly EntProtoId MutedEffect = "StatusEffectNecromorphPlasmaCutterMuted";
+
     [Dependency] private readonly SharedBodySystem _body = default!;
     [Dependency] private readonly SharedContainerSystem _containers = default!;
     [Dependency] private readonly DamageableSystem _damage = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
 
     public override void Initialize()
     {
@@ -157,10 +162,10 @@ public sealed class NecromorphPlasmaCutterSystem : EntitySystem
             DamageDict = { ["Heat"] = FixedPoint2.New(damageAmount) }
         };
 
-        var wasMutedForDamage = HasComp<MutedComponent>(target);
-        EnsureComp<MutedComponent>(target);
+        var wasMutedForDamage = _statusEffects.HasStatusEffect(target, MutedEffect);
+        _statusEffects.TrySetStatusEffectDuration(target, MutedEffect);
         _damage.TryChangeDamage(target, damage, true, false);
         if (!wasMutedForDamage)
-            RemCompDeferred<MutedComponent>(target);
+            _statusEffects.TryRemoveStatusEffect(target, MutedEffect);
     }
 }

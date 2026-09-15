@@ -127,8 +127,6 @@
     allowed:
     - Electrocution
     - RatvarianLanguage
-    - PressureImmunity
-    - Muted
     - TemporaryBlindness
     - Pacified
     - Flashed
@@ -245,15 +243,27 @@
   - MobAtmosStandard
   - MobFlammable
   - BaseMobSpecies
+  # DS14-start: apply upstream satiation through the current shared organic-species base.
+  - BaseHungerThirstSlowdown
+  # DS14-end
   id: BaseMobSpeciesOrganic
   abstract: true
   components:
+  # DS14-start: apply upstream satiation through the current shared organic-species base.
+  - type: Satiation
+    satiations:
+      Hunger:
+        prototype: NormalSatiationHunger
+      Thirst:
+        prototype: NormalSatiationThirst
+  # DS14-end
   - type: Barotrauma
     damage:
       types:
         Blunt: 0.50 #per second, scales with pressure and other constants.
         Heat: 0.1
   - type: PassiveDamage # Slight passive regen. Assuming one damage type, comes out to about 4 damage a minute.
+    intervalHaltOnDamageTaken: 5s
     allowedStates:
     - Alive
     damageCap: 20

@@ -18,8 +18,6 @@
     prototype: SharkBody
     requiredLegs: 2
   - type: RoarAccent
-  - type: Hunger
-  - type: Thirst
   - type: Inventory
     templateId: plafs
     speciesId: plaf

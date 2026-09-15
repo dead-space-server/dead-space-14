@@ -469,4 +469,22 @@ public abstract partial class SharedHandsSystem
 
         return freeable;
     }
+
+    // DS14-start: allows other systems to toggle whether an entity's hands can
+    // be stripped (used by the changeling stasis cocoon ability). Handles the
+    // HandsComponent access restriction.
+    /// <summary>
+    ///     Sets whether the entity's hands can be stripped by others.
+    ///     When false, the strip verb is hidden and strip operations are blocked.
+    ///     Used by the changeling stasis cocoon ability.
+    /// </summary>
+    public void SetCanBeStripped(Entity<HandsComponent> hands, bool canBeStripped)
+    {
+        if (hands.Comp.CanBeStripped == canBeStripped)
+            return;
+
+        hands.Comp.CanBeStripped = canBeStripped;
+        Dirty(hands);
+    }
+    // DS14-end
 }

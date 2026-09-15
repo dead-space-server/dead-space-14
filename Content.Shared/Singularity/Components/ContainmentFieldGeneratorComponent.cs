@@ -7,7 +7,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototy
 
 namespace Content.Shared.Singularity.Components;
 
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState] // DS14
 public sealed partial class ContainmentFieldGeneratorComponent : Component
 {
         private int _powerBuffer;
@@ -107,6 +107,19 @@ public sealed partial class ContainmentFieldGeneratorComponent : Component
     [ViewVariables(VVAccess.ReadWrite)]
     [DataField("createdField", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
     public string CreatedField = "ContainmentField";
+
+    // DS14-start
+    [AutoNetworkedField]
+    public float HackDurationSeconds = 60f;
+
+    [AutoNetworkedField]
+    public TimeSpan? HackEndTime;
+
+    [AutoNetworkedField]
+    public TimeSpan? StabilizationEndTime;
+
+    public int StabilizationHits;
+    // DS14-end
 }
 
 [Serializable, NetSerializable]

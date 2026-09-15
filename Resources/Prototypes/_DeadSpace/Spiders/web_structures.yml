@@ -111,9 +111,7 @@
           "/Audio/Weapons/slash.ogg"
   - type: Damageable
     damageModifierSet: Web
-  - type: Tag
-    tags:
-      - Wall
+  - type: Wall
   - type: Sprite
     sprite: Structures/Walls/web.rsi
   - type: Icon
@@ -146,9 +144,7 @@
   parent: BaseStructure
   id: SpiderTomb
   components:
-  - type: Tag
-    tags:
-    - Wall
+  - type: Wall
   - type: Physics
     bodyType: Static
   - type: Sprite

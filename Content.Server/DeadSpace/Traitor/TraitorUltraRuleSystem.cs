@@ -73,7 +73,6 @@ public sealed class TraitorUltraRuleSystem : GameRuleSystem<TraitorUltraRuleComp
     [Dependency] private readonly AntagSelectionSystem _antag = default!;
     [Dependency] private readonly ActionsSystem _actions = default!;
     [Dependency] private readonly BankManagerSystem _bankManager = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly ISharedChatManager _chatManager = default!;
     [Dependency] private readonly SharedCargoSystem _cargo = default!;
     [Dependency] private readonly EuiManager _eui = default!;
@@ -1820,9 +1819,8 @@ public sealed class TraitorUltraRuleSystem : GameRuleSystem<TraitorUltraRuleComp
             ("agent", name ?? Loc.GetString("generic-unknown-title")),
             ("reward", state.BountyReward));
 
-        _chat.DispatchGlobalAnnouncement(
+        RuleStation.Announce(mind?.OwnedEntity ?? rule,
             announcement,
-            sender: LocalizeCorporation(state.OriginalCorporation),
             playSound: true,
             announcementSound: component.BountyAnnouncementSound,
             colorOverride: Color.OrangeRed,
@@ -2445,14 +2443,7 @@ public sealed class TraitorUltraRuleSystem : GameRuleSystem<TraitorUltraRuleComp
 
     private string GetBountyAnnouncementLocId(string? locId)
     {
-        return locId switch
-        {
-            "traitor-corporations-dataset-1" => "traitor-ultra-bounty-announcement-cybersun",
-            "traitor-corporations-dataset-2" => "traitor-ultra-bounty-announcement-gorlex",
-            "traitor-corporations-dataset-3" => "traitor-ultra-bounty-announcement-interdyne",
-            "traitor-corporations-dataset-7" => "traitor-ultra-bounty-announcement-donk",
-            _ => "traitor-ultra-bounty-announcement",
-        };
+        return "traitor-ultra-bounty-announcement";
     }
 
     private string? PickRandomAnnouncementVoice()

@@ -1,3 +1,4 @@
+using Content.Client.DeadSpace.Stylesheets;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Kitchen.Components;
 using JetBrains.Annotations;
@@ -101,14 +102,18 @@ namespace Content.Client.Kitchen.UI
             }
 
             //Set the "micowave light" ui color to indicate if the microwave is busy or not
+            // DS14-start
+            _menu.IngredientsPanel.RemoveStyleClass("BackgroundDark");
+            _menu.IngredientsPanel.RemoveStyleClass(DeadSpaceStyleClass.SurfaceWarning);
             if (cState.IsMicrowaveBusy && cState.ContainedSolids.Length > 0)
             {
-                _menu.IngredientsPanel.PanelOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#947300") };
+                _menu.IngredientsPanel.AddStyleClass(DeadSpaceStyleClass.SurfaceWarning);
             }
             else
             {
-                _menu.IngredientsPanel.PanelOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#1B1B1E") };
+                _menu.IngredientsPanel.AddStyleClass("BackgroundDark");
             }
+            // DS14-end
         }
 
         private void RefreshContentsDisplay(EntityUid[] containedSolids)

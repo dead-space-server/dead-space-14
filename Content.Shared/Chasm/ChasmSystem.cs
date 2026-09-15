@@ -1,5 +1,6 @@
 ﻿using System.Numerics; //DS14
 using Content.Shared.ActionBlocker;
+using Content.Shared.Chat;
 using Content.Shared.Movement.Events;
 using Content.Shared.StepTrigger.Systems;
 using Content.Shared.Weapons.Misc;
@@ -19,6 +20,7 @@ public sealed class ChasmSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly ActionBlockerSystem _blocker = default!;
+    [Dependency] private readonly SharedChatSystem _chat = default!; // DS14 - pre-v288 engine
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedGrapplingGunSystem _grapple = default!;
@@ -94,7 +96,12 @@ public sealed class ChasmSystem : EntitySystem
         StartFalling(uid, component, args.Tripper);
     }
 
-    public void StartFalling(EntityUid chasm, ChasmComponent component, EntityUid tripper, bool playSound = true)
+    public void StartFalling(
+        EntityUid chasm,
+        ChasmComponent component,
+        EntityUid tripper,
+        bool playSound = true,
+        bool playEmote = true)
     {
         if (HasComp<ChasmFallingComponent>(tripper))
             return;
@@ -112,6 +119,9 @@ public sealed class ChasmSystem : EntitySystem
 
         if (playSound && _net.IsServer)
             _audio.PlayPvs(component.FallingSound, chasm);
+
+        if (playEmote && component.Emote is { } emote)
+            _chat.TryEmoteWithChat(tripper, emote);
     }
 
     private void OnStepTriggerAttempt(EntityUid uid, ChasmComponent component, ref StepTriggerAttemptEvent args)

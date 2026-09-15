@@ -23,10 +23,13 @@
 
   # Visual
   inventoryTemplateId: borgShort
-  spriteBodyState: robot
-  spriteHasMindState: robot_e
-  spriteNoMindState: robot_e_r
-  spriteToggleLightState: robot_l
+  # DS14-start
+  spriteBodyState: universal
+  spriteBodyMovementState: universal_walking
+  spriteHasMindState: universal_e
+  spriteNoMindState: universal_e_r
+  spriteToggleLightState: universal_l
+  # DS14-end
 
   # Pet
   petSuccessString: petting-success-generic-cyborg

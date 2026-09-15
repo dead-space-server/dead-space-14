@@ -312,6 +312,11 @@ namespace Content.Server.Administration.Systems
 
         private void OnClientTypingUpdated(BwoinkClientTypingUpdated msg, EntitySessionEventArgs args)
         {
+            // DS14-start: prisoners cannot open an ahelp conversation, including its typing indicator.
+            if (_prison.IsUserPrisoner(args.SenderSession.UserId))
+                return;
+            // DS14-end
+
             if (_typingUpdateTimestamps.TryGetValue(args.SenderSession.UserId, out var tuple) &&
                 tuple.Typing == msg.Typing &&
                 tuple.Timestamp + TimeSpan.FromSeconds(1) > _timing.RealTime)

@@ -58,6 +58,14 @@ public sealed partial class CCVars
     public static readonly CVarDef<bool> AdminOverlayStartingJob =
         CVarDef.Create("ui.admin_overlay_starting_job", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 
+    // DS14-start
+    /// <summary>
+    /// If true, entering observer mode automatically enables the admin overlay.
+    /// </summary>
+    public static readonly CVarDef<bool> AdminOverlayAutoEnableOnObserver =
+        CVarDef.Create("ui.admin_overlay_auto_enable_on_observer", false, CVar.CLIENTONLY | CVar.ARCHIVE);
+    // DS14-end
+
     /// <summary>
     /// Determines how antagonist status/roletype is displayed Before character names on the Player Tab
     /// Off: No symbol is shown.
@@ -120,4 +128,10 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<int> AdminOverlayStackMax =
         CVarDef.Create("ui.admin_overlay_stack_max", 3, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// The default state for showing admin overlays in the strip menu.
+    /// </summary>
+    public static readonly CVarDef<bool> AdminStripMenuOverlayDefault =
+        CVarDef.Create("ui.admin_strip_menu_overlay_default", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 }

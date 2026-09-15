@@ -4,6 +4,7 @@ permissions:
 
 concurrency:
   group: changelog-update
+  queue: max
   cancel-in-progress: false
 
 on:

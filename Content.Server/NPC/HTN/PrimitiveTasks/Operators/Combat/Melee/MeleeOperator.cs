@@ -27,10 +27,10 @@ public sealed partial class MeleeOperator : HTNOperator, IHtnConditionalShutdown
     public string TargetKey = default!;
 
     /// <summary>
-    /// Minimum damage state that the target has to be in for us to consider attacking.
+    /// Most injured state in which the target is still eligible for attack.
     /// </summary>
     [DataField("targetState")]
-    public MobState TargetState = MobState.Alive;
+    public MobState TargetState = MobState.PreCritical;
 
     // Like movement we add a component and pass it off to the dedicated system.
 

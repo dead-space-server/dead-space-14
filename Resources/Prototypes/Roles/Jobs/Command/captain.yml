@@ -23,7 +23,6 @@
       time: 140h
     - !type:AgeRequirement
       requiredAge: 26
-  weight: 20
   startingGear: CaptainGear
   icon: "JobIconCaptain"
   joinNotifyCrew: true

@@ -90,9 +90,8 @@
 
 - type: entity
   parent: ClothingBackpackSatchelTaipanBundle
-  id: ClothingBackpackSatchelTaipanBundleХС67
+  id: ClothingBackpackSatchelTaipanBundleXC67 # DS14
   description: Cодержит самое необходимое для оперативника.
-  suffix: всё для 67 без 67
   components:
   - type: EntityTableContainerFill
     containers:

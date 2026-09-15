@@ -3,7 +3,9 @@
               Margin="10 10 10 0"
               HorizontalExpand="True"
               Visible="True">
-    <PanelContainer StyleClasses="AngleRect" HorizontalExpand="True">
+    <!-- DS14-start -->
+    <PanelContainer StyleClasses="BackgroundPanel" HorizontalExpand="True">
+        <!-- DS14-end -->
         <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
             <BoxContainer HorizontalExpand="True" Orientation="Vertical" MaxWidth="380">
                 <RichTextLabel Name="NameLabel" StyleClasses="LabelKeyText"/>

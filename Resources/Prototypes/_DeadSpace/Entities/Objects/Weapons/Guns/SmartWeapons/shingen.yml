@@ -1,0 +1,152 @@
+- type: entity
+  name: TKI-20 «Сингэн»
+  parent: [BaseWeaponSubMachineGun, BaseSecurityContraband]
+  id: WeaponSmartShingen
+  description: Первый прототип умного пистолета-пулемёта, разработанный компанией Cybersun Industries. Крайне рекомендуется использовать с имплантом «Смартлинк».
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Guns/Smart/shingen2.rsi
+    layers:
+      - state: base
+        map: ["enum.GunVisualLayers.Base"]
+      - state: mag-0
+        map: ["enum.GunVisualLayers.Mag"]
+  - type: Clothing
+    sprite: _DeadSpace/Objects/Weapons/Guns/Smart/shingen1.rsi
+  - type: Wieldable
+    unwieldOnUse: false
+  - type: GunWieldBonus
+    minAngle: -23
+    maxAngle: -21
+  - type: Gun
+    minAngle: 21
+    maxAngle: 32
+    fireRate: 7.5
+    burstFireRate: 20
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/atreides.ogg
+    selectedMode: FullAuto
+    availableModes:
+    - Burst
+    - FullAuto
+    - SemiAuto
+    shotsPerBurst: 3
+    burstCooldown: 0.375
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: MagazineSmartWeaponShingen
+        insertSound: /Audio/Weapons/Guns/MagIn/smg_magin.ogg
+        ejectSound: /Audio/Weapons/Guns/MagOut/smg_magout.ogg
+        priority: 2
+        whitelist:
+          tags:
+            - MagazineSmartWeaponShingen
+        whitelistFailPopup: gun-magazine-whitelist-fail
+      gun_chamber:
+        name: Chamber
+        priority: 1
+        whitelist:
+          tags:
+            - CartridgePistol
+  - type: MagazineVisuals
+    magState: mag
+    steps: 1
+    zeroVisible: true
+  - type: Appearance
+  - type: Item
+    sprite: _DeadSpace/Objects/Weapons/Guns/Smart/shingen1.rsi
+    size: Normal
+    shape:
+      - 0,0,3,1
+  - type: SmartWeapon
+    crosshairColor: "#f84a3e"
+    targetHighlightColor: "#FF0000"
+    targetMarkerCrossColor: "#00FFFF"
+    debugZoneColor: "#20ff027f"
+    ammoDigitsColor: "#ffba78"
+    magnetismDelay: 0.01
+    magnetismUpdateInterval: 0.002
+    magnetismMaxAngle: 5
+    crosshairAlpha: 0.7
+    cornerStickTexture: /Textures/_DeadSpace/Interface/SmartWeapon/corner_stick.png
+    crossTexture: /Textures/_DeadSpace/Interface/SmartWeapon/cross.png
+    targetLockSound: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/target_on.ogg
+    targetLostSound: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/target_off.ogg
+    crosshairInnerTexture: /Textures/_DeadSpace/Interface/SmartWeapon/ring_inner.png
+    crosshairOuterTexture: /Textures/_DeadSpace/Interface/SmartWeapon/ring_outer.png
+
+- type: entity
+  parent: [ BaseStorageItem, BaseBagOpenClose ]
+  id: ShingenCase
+  name: кейс TKI-20 «Сингэн»
+  description: Фирменный кейс Cybersun для TKI-20 «Сингэн».
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Guns/Smart/case.rsi
+    layers:
+    - state: open
+      map: [ "openLayer" ]
+      visible: false
+    - state: sl
+      map: [ "sl" ]
+      visible: false
+    - state: sg
+      map: [ "sg" ]
+      visible: false
+    - state: mg
+      map: [ "mg" ]
+      visible: false
+    - state: closed
+      map: [ "closeLayer" ]
+  - type: Item
+    size: Large
+    sprite: _DeadSpace/Objects/Weapons/Guns/Smart/case.rsi
+    inhandVisuals:
+      left:
+      - state: inhand-left
+      right:
+      - state: inhand-right
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+      - 0,0,5,1
+      - 0,1,5,1
+      - 2,2,3,2
+  - type: ItemMapper
+    mapLayers:
+      sl:
+        whitelist:
+          components:
+          - Implanter
+      sg:
+        whitelist:
+          components:
+          - SmartWeapon
+      mg:
+        whitelist:
+          components:
+          - BallisticAmmoProvider
+  - type: StorageFill
+    contents:
+    - id: MagazineSmartWeaponShingen
+    - id: WeaponSmartShingen
+    - id: MagazineSmartWeaponShingen
+    - id: SmartLinkImplanter
+  - type: Appearance
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/evidence_bag_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/evidence_bag_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/evidence_bag_drop.ogg
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 10
+    attackRate: 1
+    angle: 120

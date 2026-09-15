@@ -1,0 +1,9 @@
+uniform highp float progress;
+
+void fragment()
+{
+    highp vec4 base = zTexture(UV);
+    highp float brightness = max(base.r, max(base.g, base.b));
+    highp vec3 warning = vec3(brightness, brightness * 0.08, brightness * 0.04);
+    COLOR = vec4(mix(base.rgb, warning, clamp(progress, 0.0, 1.0)), base.a);
+}

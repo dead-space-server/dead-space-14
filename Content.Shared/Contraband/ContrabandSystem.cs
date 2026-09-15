@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Content.Shared.Access.Systems;
 using Content.Shared.CCVar;
 using Content.Shared.Examine;
@@ -5,9 +7,9 @@ using Content.Shared.Localizations;
 using Content.Shared.Roles;
 using Content.Shared.Verbs;
 using Robust.Shared.Configuration;
+using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
-using System.Linq;
 
 namespace Content.Shared.Contraband;
 
@@ -139,6 +141,73 @@ public sealed class ContrabandSystem : EntitySystem
     private void SetContrabandExamineOnlyInHUD(bool val)
     {
         _contrabandExamineOnlyInHudEnabled = val;
+    }
+
+    /// <summary>
+    /// Determines if an item is contraband for a given player. If no player is provided, will just return if the item
+    /// is contraband in general.
+    /// </summary>
+    /// <param name="contraband">The entity that we are checking for contraband.</param>
+    /// <param name="player">The player that we are checking if they are allowed to have this contraband.</param>
+    /// <param name="contraProtoId">The contraband ProtoId if the item is contraband.</param>
+    /// <returns></returns>
+    public bool IsContraband(Entity<ContrabandComponent?> contraband, EntityUid? player, [NotNullWhen(true)] out ProtoId<ContrabandSeverityPrototype>? contraProtoId)
+    {
+        contraProtoId = null;
+
+        if (!Resolve(contraband.Owner, ref contraband.Comp, false))
+            return false;
+
+        contraProtoId = contraband.Comp.Severity;
+
+        if (player == null)
+            return true;
+
+        List<ProtoId<DepartmentPrototype>> departments = new();
+        var jobId = "";
+        if (_id.TryFindIdCard(player.Value, out var id))
+        {
+            departments = id.Comp.JobDepartments;
+            if (id.Comp.LocalizedJobTitle is not null)
+                jobId = id.Comp.LocalizedJobTitle;
+        }
+
+        // DS14: use the injected prototype manager for the current engine branch.
+        var jobs = contraband.Comp.AllowedJobs.Select(p => _proto.Index(p).LocalizedName).ToArray();
+        // if it is fully restricted, you're department-less, or your department isn't in the allowed list, you cannot carry it. Otherwise, you can.
+        if (departments.Intersect(contraband.Comp.AllowedDepartments).Any() || jobs.Contains(jobId))
+            return false;
+
+        return true;
+    }
+
+    /// <summary>
+    /// Checks if a storage has contraband.
+    /// </summary>
+    /// <param name="contraband">The entity that we are checking for contraband.</param>
+    /// <param name="player">The player that we are checking if they are allowed to have certain contraband.</param>
+    /// <param name="contrabandList">All contraband prototypes present in storage.</param>
+    public bool ContainerHasContraband(Entity<ContainerManagerComponent?> contraband, EntityUid? player, out List<ProtoId<ContrabandSeverityPrototype>> contrabandList)
+    {
+        contrabandList = [];
+
+        if (!Resolve(contraband.Owner, ref contraband.Comp, false))
+            return false;
+
+        foreach (var container in contraband.Comp.Containers.Values)
+        {
+            foreach (var ent in container.ContainedEntities)
+            {
+                if (IsContraband(ent, player, out var itemContraId))
+                    contrabandList.Add((ProtoId<ContrabandSeverityPrototype>)itemContraId);
+
+                ContainerHasContraband(ent, player, out var itemContraList);
+
+                contrabandList = contrabandList.Concat(itemContraList).ToList();
+            }
+        }
+
+        return contrabandList.Any();
     }
 }
 

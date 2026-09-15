@@ -40,6 +40,8 @@
     bluntStaminaDamageFactor: 2.0
     angle: 60
     animation: WeaponArcThrust
+    undamagedAlertThreshold: 0
+    # DS14: charge and toggle stamina handling remains in the legacy StunbatonSystem.
   - type: StaminaDamageOnHit
     damage: 35
     sound: /Audio/Weapons/egloves.ogg
@@ -101,6 +103,7 @@
   - type: EmitSoundOnLand
     sound:
       path: /Audio/_DeadSpace/Items/Handing/batton/stun_baton_drop.ogg
+  - type: ShieldBashTool
   #DS14-End
 
 - type: entity
@@ -116,15 +119,22 @@
     wideAnimationRotation: -135
     damage:
       types:
-        Blunt: 30 #DS14
+        Blunt: 25 # DS14-value
     soundHit:
       collection: MetalThud
     bluntStaminaDamageFactor: 1.5
+  # DS14-start
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+  # DS14-end
   - type: Item
     size: Normal
   - type: Tag
     tags:
     - Truncheon
+    - ParryStandardWeapon # DS14
   - type: Clothing
     sprite: Objects/Weapons/Melee/truncheon.rsi
     quickEquip: false
@@ -149,6 +159,7 @@
   - type: EmitSoundOnLand
     sound:
       path: /Audio/_DeadSpace/Items/Handing/batton/telescopic_baton_drop.ogg
+  - type: ShieldBashTool
   #DS14-End
 
 - type: entity

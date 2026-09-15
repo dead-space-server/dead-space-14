@@ -8,6 +8,9 @@
   id: AmbrosiaDeus
 
 - type: Tag
+  id: AmeJar
+
+- type: Tag
   id: AnimateSpellBlacklist
 
 - type: Tag
@@ -128,6 +131,12 @@
   id: DockCentcommERTOfficialShuttle
 
 - type: Tag
+  id: DockCentcommERTFieldOfficerShuttle
+
+- type: Tag
+  id: SealWearable
+
+- type: Tag
   id: DonkCo
 
 - type: Tag
@@ -147,6 +156,15 @@
 
 - type: Tag
   id: EnergySwordDouble
+
+- type: Tag
+  id: ParryEnergySword
+
+- type: Tag
+  id: ParryAll
+
+- type: Tag
+  id: ParryStandardWeapon
 
 - type: Tag
   id: EncryptionTaipan
@@ -182,7 +200,19 @@
   id: FoodChiliPepper
 
 - type: Tag
+  id: FoodDoughSmallFlat
+
+- type: Tag
+  id: FoodDoughSmallSlice
+
+- type: Tag
+  id: FoodMeatSmallBall
+
+- type: Tag
   id: GasTank
+
+- type: Tag
+  id: GasTankBorg
 
 - type: Tag
   id: GiantSpiderSpace
@@ -252,6 +282,9 @@
 
 - type: Tag
   id: MagazineCarbineSKS
+
+- type: Tag
+  id: MagazineSmartWeaponShingen
 
 - type: Tag
   id: Magmite
@@ -478,5 +511,14 @@
 
 - type: Tag
   id: YellowFlower
+
+- type: Tag
+  id: GasGrenadeShell
+
+- type: Tag
+  id: GasGrenadeShellRed
+
+- type: Tag
+  id: GasGrenadeShellBlue
 
   # Обязательно в алфавитном порядке

@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "license": "CC0-1.0",
+  "copyright": "made by ayanami_prime (discord) for Space Station 14 server Мёртвый Космос",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "ready"
+    },
+    {
+      "name": "screen"
+    }
+  ]
+}

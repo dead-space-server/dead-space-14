@@ -1,3 +1,4 @@
+using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Kitchen;
@@ -72,22 +73,31 @@ namespace Content.Client.Kitchen.UI
             {
                 case ReagentGrinderWorkStartedMessage workStarted:
                     GrindButton.Disabled = true;
-                    GrindButton.Modulate = workStarted.GrinderProgram == GrinderProgram.Grind ? Color.Green : Color.White;
+                    SetProgramActive(GrindButton, workStarted.GrinderProgram == GrinderProgram.Grind); // DS14
                     JuiceButton.Disabled = true;
-                    JuiceButton.Modulate = workStarted.GrinderProgram == GrinderProgram.Juice ? Color.Green : Color.White;
+                    SetProgramActive(JuiceButton, workStarted.GrinderProgram == GrinderProgram.Juice); // DS14
                     BeakerContentBox.EjectButton.Disabled = true;
                     ChamberContentBox.EjectButton.Disabled = true;
                     break;
                 case ReagentGrinderWorkCompleteMessage:
                     GrindButton.Disabled = false;
                     JuiceButton.Disabled = false;
-                    GrindButton.Modulate = Color.White;
-                    JuiceButton.Modulate = Color.White;
+                    SetProgramActive(GrindButton, false); // DS14
+                    SetProgramActive(JuiceButton, false); // DS14
                     BeakerContentBox.EjectButton.Disabled = false;
                     ChamberContentBox.EjectButton.Disabled = false;
                     break;
             }
         }
+
+        // DS14-start: status colors and disabled pseudo-states are owned by the shared button sheetlet.
+        private static void SetProgramActive(Button button, bool active)
+        {
+            button.RemoveStyleClass(StyleClass.Positive);
+            if (active)
+                button.AddStyleClass(StyleClass.Positive);
+        }
+        // DS14-end
 
         private void RefreshContentsDisplay(IList<ReagentQuantity>? reagents, IReadOnlyList<EntityUid> containedSolids, bool isBeakerAttached)
         {

@@ -33,3 +33,13 @@
 - type: font
   id: Monospace
   path: /EngineFonts/NotoSans/NotoSansMono-Regular.ttf
+
+# DS14-start
+- type: font
+  id: Bedstead
+  path: /Fonts/Bedstead/Bedstead.otf
+
+- type: font
+  id: ComicSans
+  path: /Fonts/Comic Sans/Comic Sans MS.ttf
+# DS14-end

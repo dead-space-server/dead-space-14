@@ -24,6 +24,15 @@ public sealed partial class MiscTab : Control
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
 
+        // DS14-start
+        var interfaceStyleEntries = new List<OptionDropDownCVar<string>.ValueOption>
+        {
+            new(CCCCVars.InterfaceStyleDark, Loc.GetString("ui-options-interface-style-dark")),
+            new(CCCCVars.InterfaceStyleLight, Loc.GetString("ui-options-interface-style-light")),
+            new(CCCCVars.InterfaceStyleClassic, Loc.GetString("ui-options-interface-style-classic")),
+        };
+        // DS14-end
+
         var themes = _prototypeManager.EnumeratePrototypes<HudThemePrototype>().ToList();
         themes.Sort();
         var themeEntries = new List<OptionDropDownCVar<string>.ValueOption>();
@@ -48,6 +57,9 @@ public sealed partial class MiscTab : Control
         // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
         ShowOocPatronColor.Visible = _playerManager.LocalSession?.Channel?.UserData.PatronTier is { };
 
+        // DS14-start
+        Control.AddOptionDropDown(CCCCVars.InterfaceStyle, DropDownInterfaceStyle, interfaceStyleEntries);
+        // DS14-end
         Control.AddOptionDropDown(CVars.InterfaceTheme, DropDownHudTheme, themeEntries);
         Control.AddOptionDropDown(CCVars.UILayout, DropDownHudLayout, layoutEntries);
         Control.AddOptionDropDown(CCCCVars.Background, BackgroundHudLayout, backgroundEntries);

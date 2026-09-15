@@ -1,0 +1,95 @@
+- type: entity
+  name: газодобытчик водорода
+  parent: GasMinerBase
+  id: GasMinerHydrogen
+  components:
+    - type: GasMiner
+      spawnGas: Hydrogen
+
+- type: entity
+  name: газодобытчик фиксириума
+  parent: GasMinerBase
+  id: GasMinerFixirium
+  components:
+    - type: GasMiner
+      spawnGas: Fixirium
+
+- type: entity
+  name: газодобытчик нитриатиума
+  parent: GasMinerBase
+  id: GasMinerNitriatium
+  components:
+    - type: GasMiner
+      spawnGas: Nitriatium
+
+- type: entity
+  name: газодобытчик хилиума
+  parent: GasMinerBase
+  id: GasMinerHilium
+  components:
+    - type: GasMiner
+      spawnGas: Hilium
+
+- type: entity
+  name: газодобытчик бризидиума
+  parent: GasMinerBase
+  id: GasMinerBrizidium
+  components:
+    - type: GasMiner
+      spawnGas: Brizidium
+
+- type: entity
+  name: газодобытчик иприта
+  parent: GasMinerBase
+  id: GasMinerIprit
+  components:
+    - type: GasMiner
+      spawnGas: Iprit
+
+- type: entity
+  name: газодобытчик гипер-ноблиума
+  parent: GasMinerBase
+  id: GasMinerHyperNoblium
+  components:
+    - type: GasMiner
+      spawnGas: HyperNoblium
+
+- type: entity
+  name: газодобытчик прото-нитрата
+  parent: GasMinerBase
+  id: GasMinerProtoNitrate
+  components:
+    - type: GasMiner
+      spawnGas: ProtoNitrate
+
+- type: entity
+  name: газодобытчик гелия
+  parent: GasMinerBase
+  id: GasMinerHelium
+  components:
+    - type: GasMiner
+      spawnGas: Helium
+
+- type: entity
+  name: газодобытчик галона
+  parent: GasMinerBase
+  id: GasMinerHalon
+  components:
+    - type: GasMiner
+      spawnGas: Halon
+
+- type: entity
+  name: газодобытчик заукера
+  parent: GasMinerBase
+  id: GasMinerZauker
+  components:
+    - type: GasMiner
+      spawnGas: Zauker
+
+- type: entity
+  name: газодобытчик анти-ноблиума
+  parent: GasMinerBase
+  id: GasMinerAntinoblium
+  components:
+    - type: GasMiner
+      spawnGas: Antinoblium

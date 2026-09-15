@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Client.CharacterInfo;
 using Content.Client.DeadSpace.Skill;
+using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.Gameplay;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Controls;
@@ -141,14 +142,17 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
             return;
         }
 
-        var (entity, job, objectives, skills, briefing, entityName) = data;
+        var (entity, objectives, skills, briefing, jobId, entityName) = data;
 
         _window.SpriteView.SetEntity(entity);
 
         UpdateRoleType();
 
+        _prototypeManager.Resolve(jobId, out JobPrototype? job);
         _window.NameLabel.Text = entityName;
-        _window.SubText.Text = job;
+        _window.SubText.Text = job != null
+            ? Loc.GetString(job.Name)
+            : Loc.GetString("character-info-no-profession");
         _window.Objectives.RemoveAllChildren();
         _window.ObjectivesLabel.Visible = objectives.Any();
 
@@ -168,13 +172,13 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
                 var objectiveControl = new CharacterObjectiveControl
                 {
                     Orientation = BoxContainer.LayoutOrientation.Vertical,
-                    Modulate = Color.Gray
+                    Modulate = DeadSpaceStylePalette.TextPlaceholder // DS14
                 };
 
                 objectiveControl.AddChild(new Label
                 {
                     Text = groupId,
-                    Modulate = Color.LightSkyBlue
+                    StyleClasses = { DeadSpaceStyleClass.SectionTitle } // DS14
                 });
 
                 foreach (var condition in conditions)
@@ -214,7 +218,7 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
             var objectiveControl = new CharacterObjectiveControl
             {
                 Orientation = BoxContainer.LayoutOrientation.Vertical,
-                Modulate = Color.Gray
+                Modulate = DeadSpaceStylePalette.TextPlaceholder // DS14
             };
 
 
@@ -254,7 +258,7 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
         {
             var briefingControl = new ObjectiveBriefingControl();
             var text = new FormattedMessage();
-            text.PushColor(Color.Yellow);
+            text.PushColor(DeadSpaceStylePalette.Amber); // DS14
             text.AddText(briefing);
             briefingControl.Label.SetMessage(text);
             _window.Objectives.AddChild(briefingControl);
@@ -290,7 +294,7 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
             Log.Error($"Player '{_player.LocalSession}' has invalid Role Type '{mind.RoleType}'. Displaying default instead");
 
         _window.RoleType.Text = Loc.GetString(proto?.Name ?? "role-type-crew-aligned-name");
-        _window.RoleType.FontColorOverride = proto?.Color ?? Color.White;
+        _window.RoleType.FontColorOverride = proto?.Color ?? DeadSpaceStylePalette.Text; // DS14
     }
 
     private void CharacterDetached(EntityUid uid)

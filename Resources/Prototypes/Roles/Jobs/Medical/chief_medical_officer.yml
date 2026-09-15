@@ -16,7 +16,6 @@
       time: 40h
     - !type:AgeRequirement
       requiredAge: 24
-  weight: 10
   startingGear: CMOGear
   icon: "JobIconChiefMedicalOfficer"
   supervisors: job-supervisors-captain

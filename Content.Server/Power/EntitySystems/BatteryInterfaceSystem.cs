@@ -23,6 +23,8 @@ namespace Content.Server.Power.EntitySystems;
 /// </remarks>
 public sealed class BatteryInterfaceSystem : EntitySystem
 {
+    private static readonly Enum BatteryUiKeyBoxed = BatteryUiKey.Key; // DS14
+
     [Dependency] private readonly IAdminLogManager _adminLog = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSystem = null!;
     [Dependency] private readonly SharedBatterySystem _battery = null!;
@@ -34,7 +36,7 @@ public sealed class BatteryInterfaceSystem : EntitySystem
         UpdatesAfter.Add(typeof(PowerNetSystem));
 
         Subs.BuiEvents<BatteryInterfaceComponent>(
-            BatteryUiKey.Key,
+            BatteryUiKeyBoxed, // DS14
             subs =>
             {
                 subs.Event<BatterySetInputBreakerMessage>(HandleSetInputBreaker);
@@ -89,13 +91,13 @@ public sealed class BatteryInterfaceSystem : EntitySystem
         BatteryComponent battery,
         PowerNetworkBatteryComponent netBattery)
     {
-        if (!_uiSystem.IsUiOpen(uid, BatteryUiKey.Key))
+        if (!_uiSystem.IsUiOpen(uid, BatteryUiKeyBoxed)) // DS14
             return;
 
         var currentCharge = _battery.GetCharge((uid, battery));
         _uiSystem.SetUiState(
             uid,
-            BatteryUiKey.Key,
+            BatteryUiKeyBoxed, // DS14
             new BatteryBuiState
             {
                 Capacity = battery.MaxCharge,

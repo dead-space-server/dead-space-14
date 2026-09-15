@@ -14,17 +14,19 @@ using Content.Shared.Mobs.Systems;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Random;
 using Robust.Server.GameObjects;
+using Robust.Shared.Prototypes;
 using Content.Server.DeadSpace.MartialArts.CQC.Components;
 using Content.Shared.DeadSpace.MartialArts.CQC;
 using Content.Shared.Actions;
-using Content.Shared.Speech.Muting;
-using Robust.Shared.Timing;
+using Content.Shared.StatusEffectNew;
 using Content.Shared.DeadSpace.MartialArts.CQC.Components;
 
 namespace Content.Server.DeadSpace.MartialArts.CQC;
 
 public sealed class CQCSystem : CQCSharedSystem
 {
+    private static readonly EntProtoId MutedEffect = "StatusEffectCQCMuted";
+
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly StaminaSystem _stamina = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
@@ -36,7 +38,7 @@ public sealed class CQCSystem : CQCSharedSystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] private readonly SharedActionsSystem _action = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
 
     private readonly HashSet<EntityUid> _receivers = new();
     public override void Initialize()
@@ -49,23 +51,6 @@ public sealed class CQCSystem : CQCSharedSystem
         SubscribeLocalEvent<CQCComponent, MeleeHitEvent>(OnMeleeHitEvent);
         SubscribeLocalEvent<CQCComponent, CQCConcentrationEvent>(CQCConcentration);
         SubscribeLocalEvent<CQCStepPunchComponent, CQCStepPunchEvent>(CQCStepPunch);
-    }
-
-    public override void Update(float frameTime)
-    {
-        base.Update(frameTime);
-
-        var query = EntityQueryEnumerator<CQCMutedComponent>();
-        while (query.MoveNext(out var uid, out var cqcMuted))
-        {
-            if (_timing.CurTime < cqcMuted.MuteEndTime)
-                continue;
-
-            if (cqcMuted.AddedMutedComponent)
-                RemComp<MutedComponent>(uid);
-
-            RemComp<CQCMutedComponent>(uid);
-        }
     }
 
     private void SelectCombo(Entity<CQCComponent> ent, CQCList combo)
@@ -141,14 +126,7 @@ public sealed class CQCSystem : CQCSharedSystem
                 break;
 
             case CQCList.MuteAttack:
-                if (!TryComp<CQCMutedComponent>(hitEntity, out var muted))
-                {
-                    muted = AddComp<CQCMutedComponent>(hitEntity);
-                    muted.AddedMutedComponent = !HasComp<MutedComponent>(hitEntity);
-                }
-
-                EnsureComp<MutedComponent>(hitEntity);
-                muted.MuteEndTime = _timing.CurTime + ent.Comp.Params.ParalyzeTimeMuteAtack;
+                _statusEffects.TrySetStatusEffectDuration(hitEntity, MutedEffect, ent.Comp.Params.ParalyzeTimeMuteAtack);
                 DamageHit(hitEntity, ent.Comp.Params.DamageTypeForMuteAtack, ent.Comp.Params.HitDamageForMuteAtack, ent.Comp.Params.IgnoreResist, out _);
                 _stamina.TakeStaminaDamage(hitEntity, ent.Comp.Params.StaminaDamageMuteAtack);
                 break;

@@ -1,0 +1,28 @@
+- type: entity
+  parent: BaseMagazinePistolSubMachineGun
+  id: MagazineSmartWeaponShingen
+  name: магазин (9x19 мм Smart™)
+  description: Магазин на 40 патронов калибра 9x19 мм Smart™ с интегрированной системой сопряжения с имплантом «Смартлинк». Каждый патрон несёт микрочип коррекции траектории, позволяя оружию вести огонь с самонаведением. Собственность Cybersun Industries.
+  components:
+  - type: BallisticAmmoProvider
+    proto: CartridgeShingen
+    soundInsert:
+      path: /Audio/Weapons/Guns/MagIn/bullet_insert.ogg
+    capacity: 40
+  - type: Sprite
+    scale: 1, 1
+    sprite: _DeadSpace/Objects/Weapons/Guns/Ammunition/Magazine/Smart/shingen.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left-mag
+      right:
+      - state: inhand-right-mag
+    shape:
+      - 0,0,1,0
+  - type: Tag
+    tags:
+      - MagazineSmartWeaponShingen

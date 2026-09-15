@@ -63,7 +63,7 @@
     clothingPrototype: ClothingHeadHelmetRIGNukeOps
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetRIGNukeOps
   name: шлем упрощённого скафандра синдиката
   description: Disturbed - The Night.
@@ -158,7 +158,7 @@
     clothingPrototype: ClothingHeadHelmetRIGNukeOpsElite
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetRIGNukeOpsElite
   name: шлем лёгкого элитного скафандра синдиката
   description: Честно, тут должно быть что-то написано.

@@ -159,6 +159,7 @@
     id: UnitologyEngineerIDCard
   - type: Emag
     emagType: Access
+  - type: ContainmentFieldHack
   - type: LimitedCharges
   - type: AutoRecharge
 

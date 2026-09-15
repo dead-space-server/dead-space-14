@@ -2,6 +2,7 @@ using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.DeadSpace.Lavaland.Components;
+using Content.Server.Guardian;
 using Content.Server.NPC.HTN;
 using Content.Server.Parallax;
 using Content.Server.Tiles;
@@ -21,8 +22,10 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Parallax.Biomes;
+using Content.Shared.PAI;
 using Robust.Server.Player;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
@@ -69,6 +72,7 @@ public sealed class LavalandBossArenaSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
+    [Dependency] private readonly SharedContainerSystem _container = default!; // DS14
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly ITileDefinitionManager _tileDefinition = default!;
     [Dependency] private readonly MetaDataSystem _metadata = default!;
@@ -605,10 +609,7 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         foreach (var session in _players.Sessions)
         {
             if (session.AttachedEntity is not { Valid: true } attached ||
-                !Exists(attached) ||
-                HasComp<GhostComponent>(attached) ||
-                IsDead(attached) ||
-                !IsEntityInsideInnerArena(attached, arena.Comp))
+                !IsCountedParticipant(attached, arena.Comp))
             {
                 continue;
             }
@@ -1010,10 +1011,18 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         return false;
     }
 
-    private bool IsCombatParticipant(EntityUid uid, LavalandBossArenaComponent arena)
+    internal bool IsCountedParticipant(EntityUid uid, LavalandBossArenaComponent arena)
+    {
+        return !HasComp<GuardianComponent>(uid) &&
+               !HasComp<PAIComponent>(uid) &&
+               IsCombatParticipant(uid, arena);
+    }
+
+    internal bool IsCombatParticipant(EntityUid uid, LavalandBossArenaComponent arena)
     {
         return Exists(uid) &&
                !HasComp<GhostComponent>(uid) &&
+               !_container.IsEntityOrParentInContainer(uid) && // DS14
                !IsDead(uid) &&
                IsEntityInsideInnerArena(uid, arena);
     }

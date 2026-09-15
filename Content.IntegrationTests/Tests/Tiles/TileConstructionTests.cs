@@ -1,10 +1,55 @@
 using Content.IntegrationTests.Tests.Interaction;
+using Content.Shared.Stacks;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Maths;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Systems;
 
 namespace Content.IntegrationTests.Tests.Tiles;
 
 public sealed class TileConstructionTests : InteractionTest
 {
+    [TestCase("FloorBasalt")]
+    [TestCase("FloorCave")]
+    public async Task StoneFloorOnOverlappingGridsRestoresNaturalGround(string ground)
+    {
+        await Server.WaitPost(() =>
+        {
+            var physics = Server.System<SharedPhysicsSystem>();
+            physics.SetBodyType(MapData.Grid, BodyType.Static);
+            var terrain = MapMan.CreateGridEntity(MapId);
+            physics.SetBodyType(terrain, BodyType.Static);
+            MapSystem.SetTile(terrain, terrain.Comp, new Vector2i(1, 0), MapData.Tile.Tile);
+            TargetCoords = SEntMan.GetNetCoordinates(new EntityCoordinates(MapData.Grid, 1.5f, 0.5f));
+        });
+        await Server.WaitPost(() => MapSystem.SetTile(MapData.Grid, MapData.Grid.Comp,
+            new Vector2i(1, 0), new Tile(TileMan[ground].TileId)));
+        await Pair.RunUntilSynced();
+        await InteractUsing("FloorTileAshWalkerStone4", 4);
+        await AssertFloor("FloorStone");
+        await Server.WaitAssertion(() =>
+            Assert.That(SEntMan.GetComponent<StackComponent>(HandSys.GetActiveItem(SPlayer)!.Value).Count, Is.EqualTo(3)));
+        await Interact();
+        await Server.WaitAssertion(() =>
+            Assert.That(SEntMan.GetComponent<StackComponent>(HandSys.GetActiveItem(SPlayer)!.Value).Count, Is.EqualTo(3)));
+        await InteractUsing(Pry);
+        await AssertFloor(ground);
+        await AssertEntityLookup(("FloorTileItemStone", 1));
+
+        await Server.WaitPost(() => MapSystem.SetTile(MapData.Grid, MapData.Grid.Comp, new Vector2i(1, 0), Tile.Empty));
+        await InteractUsing(Rod);
+        await AssertFloor("Space");
+        await Server.WaitAssertion(() => Assert.That(HandSys.GetActiveItem(SPlayer), Is.Not.Null));
+
+        async Task AssertFloor(string expected)
+        {
+            await Server.WaitAssertion(() =>
+                Assert.That(MapSystem.GetTileRef(MapData.Grid, MapData.Grid.Comp,
+                    SEntMan.GetCoordinates(TargetCoords)).Tile.TypeId, Is.EqualTo(TileMan[expected].TileId)));
+        }
+    }
+
     /// <summary>
     /// Test placing and cutting a single lattice.
     /// </summary>

@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client.DeadSpace.Stylesheets;
 using Content.Shared.Chat;
 
 namespace Content.Client.UserInterface.Systems.Chat.Controls;
@@ -8,6 +9,7 @@ public sealed class ChannelSelectorButton : ChatPopupButton<ChannelSelectorPopup
     public event Action<ChatSelectChannel>? OnChannelSelect;
 
     public ChatSelectChannel SelectedChannel { get; private set; }
+    private Shared.Radio.RadioChannelPrototype? _selectedRadio; // DS14
 
     private const int SelectorDropdownOffset = 38;
 
@@ -64,13 +66,22 @@ public sealed class ChannelSelectorButton : ChatPopupButton<ChannelSelectorPopup
             ChatSelectChannel.OOC => Color.LightSkyBlue,
             ChatSelectChannel.Dead => Color.MediumPurple,
             ChatSelectChannel.Admin => Color.HotPink,
-            _ => Color.DarkGray
+            _ => DeadSpaceStylePalette.TextOnTranscriptMuted // DS14
         };
     }
 
     public void UpdateChannelSelectButton(ChatSelectChannel channel, Shared.Radio.RadioChannelPrototype? radio)
     {
+        _selectedRadio = radio; // DS14
         Text = radio != null ? Loc.GetString(radio.Name) : ChannelSelectorName(channel);
         Modulate = radio?.Color ?? ChannelSelectColor(channel);
     }
+
+    // DS14-start
+    protected override void StylePropertiesChanged()
+    {
+        base.StylePropertiesChanged();
+        Modulate = _selectedRadio?.Color ?? ChannelSelectColor(SelectedChannel);
+    }
+    // DS14-end
 }

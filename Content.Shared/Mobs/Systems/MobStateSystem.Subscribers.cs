@@ -1,6 +1,7 @@
 ﻿using Content.Shared.Bed.Sleep;
 using Content.Shared.Buckle.Components;
 using Content.Shared.CombatMode.Pacification;
+using Content.Shared.Cuffs;
 using Content.Shared.Damage;
 using Content.Shared.Damage.ForceSay;
 using Content.Shared.Damage.Systems;
@@ -64,6 +65,9 @@ public partial class MobStateSystem
             after: [typeof(SharedJetpackSystem), typeof(MovementIgnoreGravitySystem), typeof(SharedGrapplingGunSystem)]);
 
         SubscribeLocalEvent<MobStateComponent, UnbuckleAttemptEvent>(OnUnbuckleAttempt);
+        SubscribeLocalEvent<MobStateComponent, AfterAutoHandleStateEvent>(OnAfterAutoHandleState); // DS14
+        // DS14 - current engine baseline requires explicit event subscriptions.
+        SubscribeLocalEvent<MobStateComponent, CheckIncapacitatedCuffEvent>(OnIncapCuffCheck);
     }
 
     private void OnUnbuckleAttempt(Entity<MobStateComponent> ent, ref UnbuckleAttemptEvent args)
@@ -193,6 +197,20 @@ public partial class MobStateSystem
     }
 
     #region Event Subscribers
+
+    // DS14-start
+    // Adapted to the explicit subscription model used by this branch.
+    private void OnAfterAutoHandleState(Entity<MobStateComponent> ent, ref AfterAutoHandleStateEvent args)
+    {
+        if (ent.Comp.LastReceivedState == ent.Comp.CurrentState)
+            return;
+
+        var ev = new MobStateChangedEvent(ent, ent.Comp, ent.Comp.LastReceivedState, ent.Comp.CurrentState);
+        OnStateChanged(ent, ent.Comp, ent.Comp.LastReceivedState, ent.Comp.CurrentState);
+        RaiseLocalEvent(ent, ev, true);
+        ent.Comp.LastReceivedState = ent.Comp.CurrentState;
+    }
+    // DS14-end
 
     private void OnSleepAttempt(EntityUid target, MobStateComponent component, ref TryingToSleepEvent args)
     {
@@ -341,6 +359,12 @@ public partial class MobStateSystem
 
         ent.Comp.HeldMoveButtons = newMovement;
         Dirty(ent.Owner, ent.Comp);
+    }
+
+    private void OnIncapCuffCheck(Entity<MobStateComponent> ent, ref CheckIncapacitatedCuffEvent args)
+    {
+        if (IsIncapacitated(ent, ent.Comp))
+            args.Incapacitated = true;
     }
 
     #endregion

@@ -78,7 +78,8 @@
           Burn: -0.7
           Airloss: -0.5
           Brute: -0.8
-      - !type:SatiateThirst
+      - !type:Satiate
+        satiationType: Thirst
         factor: 4
 
 - type: reagent

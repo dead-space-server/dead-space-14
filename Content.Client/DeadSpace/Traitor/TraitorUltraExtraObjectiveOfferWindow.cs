@@ -24,8 +24,6 @@ public sealed class TraitorUltraExtraObjectiveOfferWindow : DefaultWindow
     {
         MinSize = new Vector2(620, 245);
         SetSize = new Vector2(690, 285);
-        HeaderClass = DeadSpaceMenuSheetlet.Header;
-        TitleClass = DeadSpaceMenuSheetlet.Title;
 
         BodyLabel = MakeTextLabel(new Thickness(10, 8, 10, 2));
         ObjectiveLabel = MakeTextLabel(new Thickness(10, 0, 10, 0));
@@ -36,26 +34,22 @@ public sealed class TraitorUltraExtraObjectiveOfferWindow : DefaultWindow
             HorizontalExpand = true,
             MinHeight = 30,
             TextAlign = Label.AlignMode.Center,
-            StyleClasses = { DeadSpaceMenuSheetlet.ProfileControl, DeadSpaceMenuSheetlet.ProfileControlPositive },
+            StyleClasses = { DeadSpaceStyleClass.ControlPositive },
         };
         DeclineButton = new Button
         {
             HorizontalExpand = true,
             MinHeight = 30,
             TextAlign = Label.AlignMode.Center,
-            StyleClasses = { DeadSpaceMenuSheetlet.ProfileControl, StyleClass.Negative },
+            StyleClasses = { StyleClass.Negative },
         };
 
-        var shell = new PanelContainer
-        {
-            HorizontalExpand = true,
-            StyleClasses = { DeadSpaceMenuSheetlet.Shell },
-        };
-
-        shell.AddChild(new BoxContainer
+        var content = new BoxContainer
         {
             Orientation = LayoutOrientation.Vertical,
             SeparationOverride = 6,
+            HorizontalExpand = true,
+            Margin = new Thickness(10),
             Children =
             {
                 BodyLabel,
@@ -74,9 +68,9 @@ public sealed class TraitorUltraExtraObjectiveOfferWindow : DefaultWindow
                     }
                 }
             }
-        });
+        };
 
-        Contents.AddChild(shell);
+        Contents.AddChild(content);
     }
 
     private static RichTextLabel MakeTextLabel(Thickness margin)

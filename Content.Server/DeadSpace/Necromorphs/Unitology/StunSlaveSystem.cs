@@ -8,13 +8,18 @@ using Robust.Shared.Timing;
 using Content.Shared.StatusEffect;
 using Content.Shared.Speech.Muting;
 using Content.Shared.Examine;
+using Robust.Shared.Prototypes;
+using NewStatusEffectsSystem = Content.Shared.StatusEffectNew.StatusEffectsSystem;
 
 namespace Content.Server.DeadSpace.Necromorphs.Unitology;
 
 public sealed class StunSlaveSystem : EntitySystem
 {
+    private static readonly EntProtoId MutedEffect = "StatusEffectUnitologySlaveMuted";
+
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffect = default!;
+    [Dependency] private readonly NewStatusEffectsSystem _newStatusEffects = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     public override void Initialize()
     {
@@ -64,8 +69,7 @@ public sealed class StunSlaveSystem : EntitySystem
 
         _popup.PopupEntity(Loc.GetString("Вас парализовали."), uid, uid);
 
-        if (!HasComp<MutedComponent>(uid))
-            AddComp<MutedComponent>(uid);
+        _newStatusEffects.TrySetStatusEffectDuration(uid, MutedEffect);
 
         component.TimeUtil = _timing.CurTime + TimeSpan.FromSeconds(component.Duration);
     }
@@ -76,8 +80,7 @@ public sealed class StunSlaveSystem : EntitySystem
 
         _popup.PopupEntity(Loc.GetString("Вы снова можете двигаться."), uid, uid);
 
-        if (HasComp<MutedComponent>(uid))
-            RemComp<MutedComponent>(uid);
+        _newStatusEffects.TryRemoveStatusEffect(uid, MutedEffect);
 
     }
 }

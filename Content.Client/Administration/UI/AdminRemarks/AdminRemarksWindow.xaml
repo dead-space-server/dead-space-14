@@ -4,21 +4,19 @@
                 Title="{Loc admin-remarks-title}"
                 SetSize="600 400">
     <!-- DS14-start -->
-    <PanelContainer StyleClasses="DS14MenuShell">
-        <PanelContainer StyleClasses="DS14MenuPanelDark">
-            <PanelContainer StyleClasses="DS14MenuInset"
-                            VerticalExpand="True"
-                            HorizontalExpand="True">
-                <ScrollContainer VerticalExpand="True"
-                                 HorizontalExpand="True"
-                                 HScrollEnabled="False">
-                    <BoxContainer Orientation="Vertical"
-                                  Name="NotesContainer"
-                                  Access="Public"
-                                  VerticalExpand="True"
-                                  SeparationOverride="4" />
-                </ScrollContainer>
-            </PanelContainer>
+    <PanelContainer StyleClasses="DeadSpaceSurfaceDark">
+        <PanelContainer StyleClasses="DeadSpaceInset"
+                        VerticalExpand="True"
+                        HorizontalExpand="True">
+            <ScrollContainer VerticalExpand="True"
+                             HorizontalExpand="True"
+                             HScrollEnabled="False">
+                <BoxContainer Orientation="Vertical"
+                              Name="NotesContainer"
+                              Access="Public"
+                              VerticalExpand="True"
+                              SeparationOverride="4" />
+            </ScrollContainer>
         </PanelContainer>
     </PanelContainer>
     <!-- DS14-end -->

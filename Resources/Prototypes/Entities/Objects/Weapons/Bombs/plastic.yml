@@ -15,6 +15,7 @@
     blacklist: # can't stick it to other items
       components:
       - Item
+      - Clothing
   - type: Damageable
     damageContainer: Inorganic
   - type: Destructible

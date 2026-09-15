@@ -1,0 +1,122 @@
+- type: entity
+  parent: ClothingBackpackSatchelBig
+  id: ClothingBackpackElite
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingUniformJumpsuitUnitology
+    - id: ClothingHandsGlovesCombatUnitology
+    - id: BoxSurvivalElite
+    - id: RadioElite
+    - id: ClothingNeckUnitologyGeistMantle 
+    - id: PDAElite
+    - id: ADTClothingMaskGasIlisium 
+    - id: ClothingHeadHat3eilado 
+    - id: ClothingOuterCoatMaelstormAltOpened
+    - id: ClothingShoesSwat
+    - id: ADTClothingHeadMVD 
+    - id: ADTClothingHeadHatBlackOrientalEars
+    - id: WeaponDisablerToySponsor
+    - id: ClusterChinesePetardDragonFox
+    - id: PosterScrollRichesDragonFox
+    - id: PaperElite
+
+- type: entity
+  parent: BoxSurvivalTaipan
+  id: BoxSurvivalElite
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    layers:
+    - state: box_of_doom
+    - state: nitrogentank
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: ClothingMaskCluwneElite
+        - id: EmergencyFunnyOxygenTankFilled
+        - id: EmergencyMedipen
+        - id: Flare
+        - id: FoodSnackNanonachos
+        - id: DrinkChangelingStingCan
+
+- type: entity
+  parent: ClothingMaskClownBase
+  id: ClothingMaskCluwneElite
+  name: лицо и волосы клувеня
+  description: Проклятые лицо и волосы клувеня.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Clothing/Mask/cluwne.rsi
+  - type: Clothing
+    sprite: Clothing/Mask/cluwne.rsi
+  - type: AddAccentClothing
+    accent: StutteringAccent
+
+- type: entity
+  parent: [ BasePDA, BaseSyndicateContraband ]
+  id: PDAElite
+  name: тактический планшет
+  description: В теории, на нём можно запустить DOOM1984-...
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Necromorfs/TheCircle/Gear/accessories/pda.rsi
+    layers:
+    - map: [ "enum.PdaVisualLayers.Base" ]
+      state: "pda"
+    - state: "light_overlay"
+      map: [ "enum.PdaVisualLayers.Flashlight" ]
+      shader: "unshaded"
+      visible: false
+    - state: "id_overlay"
+      map: [ "enum.PdaVisualLayers.IdLight" ]
+      shader: "unshaded"
+      visible: false
+  - type: PdaBorderColor
+    borderColor: "#6f695b"
+  - type: Icon
+    sprite: _DeadSpace/Necromorfs/TheCircle/Gear/accessories/pda.rsi
+    state: pda
+  - type: CartridgeLoader
+    uiKey: enum.PdaUiKey.Key
+    preinstalled:
+      - NotekeeperCartridge
+      - NanoTaskCartridge
+      - BankCartridge
+      - MessengerCartridge
+
+- type: entity
+  parent: BaseItem
+  id: RadioElite
+  name: старое радио
+  description: Подозрительно выглядящее старое радио...
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Devices/communication.rsi
+    layers:
+    - state: old-radio
+  - type: Item
+    sprite: Objects/Devices/communication.rsi
+    heldPrefix: old-radio
+
+#Документ
+- type: entity
+  parent: PaperPrintedCentcomm
+  id: PaperElite
+  name: распечатанный документ
+  description: Лист бумаги с заголовком центкома. Страшно даже смотреть на него.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Paper
+    stampState: paper_stamp-centcom
+    stampedBy:
+    - stampedColor: '#006600FF'
+      stampedName: Центральное Командование
+    - stampedColor: '#00BE00FF'
+      stampedName: Одобрено
+    content: paper-law-elite

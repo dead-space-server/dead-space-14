@@ -17,6 +17,9 @@ public sealed partial class CustomGhostPrototype : IPrototype
     public ResPath SpritePath;
 
     [DataField]
+    public Color Color = Color.White;
+
+    [DataField]
     public float Alpha = -1;
 
     [DataField]
@@ -30,5 +33,5 @@ public sealed partial class CustomGhostPrototype : IPrototype
 public enum CustomGhostAppearance
 {
     Sprite,
-    AlphaOverride
+    ColorOverride
 }

@@ -39,6 +39,7 @@
   - type: Physics
     bodyType: KinematicController
   - type: Vehicle
+    canAttack: true
   - type: StrapVehicle
   - type: Strap
     position: Stand
@@ -160,6 +161,7 @@
         layer:
         - TableLayer
 #DS14-end
+  - type: VehicleHandBlocker
   - type: Sprite
     sprite: Objects/Vehicles/janicart.rsi
     drawdepth: Mobs # fixes layering like magic.

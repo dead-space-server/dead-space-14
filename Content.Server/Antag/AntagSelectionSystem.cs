@@ -33,6 +33,7 @@ using Content.Shared.Humanoid;
 using Content.Shared.Implants;
 using Content.Shared.Implants.Components;
 using Content.Shared.Mind;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Players;
 using Content.Shared.Preferences;
 using Content.Shared.Preferences.Loadouts;
@@ -49,7 +50,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
-using Content.DeadSpace.Interfaces.Server; // DS14-sponsors
+using Content.DeadSpace.Interfaces.Server;
 
 namespace Content.Server.Antag;
 
@@ -76,6 +77,7 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
     [Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly SharedSubdermalImplantSystem _subdermalImplant = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
     // DS14-end
     private IServerSponsorsManager? _sponsorsManager; // DS14-sponsors
 
@@ -1038,6 +1040,11 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
         if (_prison.IsUserPrisoner(session.UserId))
             return false;
 
+        // DS14-start
+        if (session.AttachedEntity is { } body && !HasComp<GhostComponent>(body) && !RuleStation.IsTarget(ent.Owner, body))
+            return false;
+        // DS14-end
+
         if (ent.Comp.AssignedSessions.Contains(session))
             return false;
 
@@ -1088,6 +1095,11 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
 
         if (_arrivals.IsOnArrivals((entity.Value, null)))
             return false;
+
+        // DS14-start
+        if (def.RequireNotDead && _mobState.IsDead(entity.Value))
+            return false;
+        // DS14-end
 
         if (!def.AllowNonHumans && !HasComp<HumanoidAppearanceComponent>(entity))
             return false;

@@ -1,4 +1,6 @@
 using Content.Shared.Audio.Jukebox; // DS14
+using Content.Shared.DeadSpace.Audio;
+using Robust.Shared.Audio.Systems;
 using Content.Shared.DeadSpace.CCCCVars;
 using Robust.Client.Animations;
 using Robust.Client.GameObjects;
@@ -18,7 +20,7 @@ public sealed class JukeboxSystem : SharedJukeboxSystem
     [Dependency] private readonly SpriteSystem _sprite = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!; // DS14
 
-    private const float MinimalVolume = -14f; // DS14
+    [Dependency] private readonly SharedTransformSystem _transform = default!; // DS14
     private float _jukeboxAutoVolume; // DS14
 
     public override void Initialize()
@@ -54,14 +56,19 @@ public sealed class JukeboxSystem : SharedJukeboxSystem
     {
         base.FrameUpdate(frameTime);
 
-        var volume = _jukeboxAutoVolume <= 0f ? float.NegativeInfinity : MinimalVolume + _jukeboxAutoVolume;
+        var audio = EntityManager.System<Robust.Client.Audio.AudioSystem>();
+        var listener = audio.GetListenerCoordinates();
+        var volume = SharedAudioSystem.GainToVolume(_jukeboxAutoVolume / ContentAudioSystem.JukeboxAutoMultiplier);
         var query = AllEntityQuery<JukeboxComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
             if (comp.AudioStream == null || !TryComp<AudioComponent>(comp.AudioStream.Value, out var audioComp))
                 continue;
 
-            audioComp.Volume = volume;
+            var distance = (_transform.GetWorldPosition(uid) - listener.Position).Length();
+            var gain = SpatialAudio.GetDistanceGain(distance, audioComp.Params.MaxDistance);
+            // Preserve the engine's map/range mute, including stereo buffers that bypass native distance falloff.
+            audioComp.Volume += volume + SharedAudioSystem.GainToVolume(gain);
         }
     }
     // DS14-End

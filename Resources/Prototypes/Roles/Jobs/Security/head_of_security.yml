@@ -14,7 +14,6 @@
       time: 100h
     - !type:AgeRequirement
       requiredAge: 24
-  weight: 10
   startingGear: HoSGear
   icon: "JobIconHeadOfSecurity"
   supervisors: job-supervisors-captain

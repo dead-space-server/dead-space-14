@@ -172,6 +172,10 @@
     duration: 1
     minimumPlayers: 15
   - type: BreakerFlipRule
+    blacklist:
+      components:
+        - ProtectedGrid
+
 
 - type: entity
   id: BureaucraticError
@@ -472,8 +476,8 @@
       path: /Audio/_DeadSpace/Announcements/poweroff2.ogg # DS14-Announcements
       params:
        volume: -2
-    duration: 60
-    maxDuration: 120
+    duration: 50
+    maxDuration: 100
   - type: PowerGridCheckRule
 
 - type: entity

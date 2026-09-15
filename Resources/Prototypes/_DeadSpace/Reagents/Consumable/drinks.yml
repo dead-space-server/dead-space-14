@@ -70,7 +70,8 @@
   metabolisms:
     Drink:
       effects:
-      - !type:SatiateThirst
+      - !type:Satiate
+        satiationType: Thirst
         factor: 2
       - !type:AdjustReagent
         reagent: Ethanol
@@ -104,7 +105,8 @@
         time: 10
     Drink:
       effects:
-      - !type:SatiateThirst
+      - !type:Satiate
+        satiationType: Thirst
         factor: 3
       - !type:PopupMessage
         visualType: Small
@@ -143,7 +145,8 @@
         time: 20
     Drink:
       effects:
-      - !type:SatiateThirst
+      - !type:Satiate
+        satiationType: Thirst
         factor: 4
       - !type:AdjustReagent
         reagent: Ethanol
@@ -171,7 +174,8 @@
     Alcohol:
       metabolismRate: 0.05
       effects:
-      - !type:SatiateThirst
+      - !type:Satiate
+        satiationType: Thirst
         factor: 2
       - !type:AdjustReagent
         reagent: Ethanol

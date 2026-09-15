@@ -386,6 +386,10 @@
     sprite: Objects/Fun/Plushies/lizard.rsi
     slots:
     - HEAD
+    clothingVisuals:
+      head:
+      - state: equipped-HELMET
+        offset: "0, 0.03"
   - type: Speech
     speechVerb: Reptilian # for pais (In the secret stash)
   - type: FoodSequenceElement
@@ -467,6 +471,7 @@
       head:
       - state: rainbowlizardplush-equipped-HELMET
         shader: unshaded
+        offset: "0, 0.03"
   - type: Item
     inhandVisuals:
       left:
@@ -522,7 +527,7 @@
     clothingVisuals:
       head:
       - state: spacelizard-equipped-HELMET
-        offset: "0, 0.03"
+        offset: "0, 0.09"
   - type: FoodSequenceElement
     entries:
       CottonBurger: SpaceLizardPlushie
@@ -574,6 +579,10 @@
     equippedPrefix: plushielizardinversed
     slots:
     - HEAD
+    clothingVisuals:
+      head:
+      - state: plushielizardinversed-equipped-HELMET
+        offset: "0, 0.03"
   - type: FoodSequenceElement
     entries:
       CottonBurger: InversedLizardPlushie
@@ -1197,6 +1206,82 @@
   - type: FoodSequenceElement
     entries:
       CottonBurger: MothPlushie
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieSheep
+  name: sheep plushie
+  description: A soft, wooly, stuffed sheep. 100% cotton.
+  components:
+  - type: Sprite
+    sprite: Objects/Fun/Plushies/sheep.rsi
+    state: sheeptoy
+  - type: Item
+    sprite: Objects/Fun/Plushies/sheep.rsi
+    heldPrefix: sheeptoy
+    storedRotation: -90
+  - type: EmitSoundOnUse
+    sound: &PlushieSheepSound
+      collection: Sheep
+      params:
+        variation: 0.05
+  - type: EmitSoundOnLand
+    sound: *PlushieSheepSound
+  - type: EmitSoundOnActivate
+    sound: *PlushieSheepSound
+  - type: EmitSoundOnTrigger
+    sound: *PlushieSheepSound
+  - type: EmitSoundOnCollide
+    sound: *PlushieSheepSound
+  - type: Edible
+    requiresSpecialDigestion: true
+    useSound: *PlushieSheepSound
+  - type: MeleeWeapon
+    wideAnimationRotation: 90
+    soundHit: *PlushieSheepSound
+    angle: 0
+    animation: WeaponArcFist
+  - type: FoodSequenceElement
+    entries:
+      CottonBurger: SheepPlushie
+  - type: Tag
+    tags:
+    - ClothMade
+
+- type: entity
+  parent: PlushieSheep
+  id: PlushieSpaceSheep
+  name: space sheep plushie
+  description: A soft, wooly, cosmically stuffed sheep. 100% cotton.
+  components:
+  - type: Sprite
+    sprite: Objects/Fun/Plushies/sheep.rsi
+    state: spacesheeptoy
+  - type: Item
+    sprite: Objects/Fun/Plushies/sheep.rsi
+    heldPrefix: spacesheeptoy
+  - type: FoodSequenceElement
+    entries:
+      CottonBurger: SheepSpacePlushie
+  - type: EmitSoundOnUse
+    sound: &PlushieSpaceSheepSound
+      collection: SheepSpace
+      params:
+        variation: 0.05
+  - type: EmitSoundOnLand
+    sound: *PlushieSpaceSheepSound
+  - type: EmitSoundOnActivate
+    sound: *PlushieSpaceSheepSound
+  - type: EmitSoundOnTrigger
+    sound: *PlushieSpaceSheepSound
+  - type: EmitSoundOnCollide
+    sound: *PlushieSpaceSheepSound
+  - type: Edible
+    requiresSpecialDigestion: true
+    useSound: *PlushieSpaceSheepSound
+  - type: MeleeWeapon
+    wideAnimationRotation: 90
+    soundHit: *PlushieSpaceSheepSound
 
 - type: entity
   parent: BasePlushie

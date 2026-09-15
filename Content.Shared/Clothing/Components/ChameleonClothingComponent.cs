@@ -39,6 +39,18 @@ public sealed partial class ChameleonClothingComponent : Component
     public string? RequireTag;
 
     /// <summary>
+    ///     Can this item have its prototype changed by a chameleon controller?
+    /// </summary>
+    [DataField]
+    public bool CanBeSetByController = true;
+
+    /// <summary>
+    ///     Whether the interaction verb for opening the selection UI is shown.
+    /// </summary>
+    [DataField]
+    public bool ShowVerb = true;
+
+    /// <summary>
     ///     Will component owner be affected by EMP pulses?
     /// </summary>
     [DataField]

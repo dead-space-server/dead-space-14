@@ -60,6 +60,7 @@
         Orientation="Vertical">
     </BoxContainer>
 
+    <Control VerticalExpand="True" />
     <Button Name="PrintButton" Text="Печать отчета" Margin="0 5 0 0" />
     <!-- DS14-end -->
 

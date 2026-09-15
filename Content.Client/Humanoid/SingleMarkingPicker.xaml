@@ -3,13 +3,15 @@
               HorizontalExpand="True"
               VerticalExpand="True">
     <!-- "Slot" selection -->
-    <Label Name="CategoryName" />
+    <!-- DS14-start -->
+    <Label Name="CategoryName" StyleClasses="DeadSpaceSectionTitle" />
     <BoxContainer Name="SlotSelectorContainer" HorizontalExpand="True">
         <OptionButton Name="SlotSelector" HorizontalExpand="True" StyleClasses="OpenBoth" />
         <Button Name="AddButton" Text="{Loc 'marking-slot-add'}" StyleClasses="OpenBoth" />
         <Button Name="RemoveButton" Text="{Loc 'marking-slot-remove'}" StyleClasses="OpenLeft" />
     </BoxContainer>
     <LineEdit Name="Search" PlaceHolder="{Loc 'markings-search'}" HorizontalExpand="True" />
+    <!-- DS14-end -->
 
     <!-- Item list -->
     <BoxContainer Name="MarkingSelectorContainer" Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">

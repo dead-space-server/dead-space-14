@@ -1,4 +1,5 @@
 strippable-component-not-holding-anything = Вы ничего не держите!
+strip-cannot-strip = Вы не можете обыскивать этого человека!
 strippable-component-cannot-drop = Вы не можете отпустить это!
 strippable-component-item-slot-occupied-message = { $owner } уже что-то имеет здесь!
 strippable-component-cannot-equip-message = { $owner } не может экипировать это сюда!
@@ -18,3 +19,7 @@ strip-all-verb-get-data-text = Снять всё
 
 strippable-bound-user-interface-stripping-menu-title = Инвентарь { $ownerName }
 strippable-bound-user-interface-stripping-menu-ensnare-button = Ограничители ног
+strippable-bound-user-interface-stripping-menu-admin-button = Переключить режим администратора
+strippable-bound-user-interface-stripping-menu-admin-button-tooltip = Переключает административные отметки.
+    Замок — контрабанда
+    «C» — хамелеон

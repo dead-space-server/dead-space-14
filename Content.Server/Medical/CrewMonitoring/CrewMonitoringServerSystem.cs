@@ -4,6 +4,7 @@ using Content.Shared.DeviceNetwork;
 using Content.Shared.DeviceNetwork.Components;
 using Content.Shared.DeviceNetwork.Events;
 using Content.Shared.Medical.SuitSensor;
+using Content.Shared.Medical.CrewMonitoring;
 using Robust.Shared.Timing;
 
 namespace Content.Server.Medical.CrewMonitoring;

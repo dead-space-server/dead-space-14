@@ -1,4 +1,16 @@
 - type: entity
+  parent: StatusEffectClumsyMonkey
+  id: StatusEffectClumsyMonkeyServant
+  components:
+  - type: ClumsyGunStatusEffect
+    failDamage:
+      types:
+        Blunt: 5
+        Piercing: 4
+      groups:
+        Burn: 3
+
+- type: entity
   name: слуга короля обезьян
   id: MobMonkeyServant
   parent: MobMonkey
@@ -20,15 +32,9 @@
     description: ghost-role-information-monkey-servant-description
     rules: ghost-role-information-antagonist-rules
   - type: GhostTakeoverAvailable
-  - type: Clumsy
-    gunShootFailDamage:
-      types:
-        Blunt: 5
-        Piercing: 4
-      groups:
-        Burn: 3
-    clumsySound:
-      path: /Audio/Animals/monkey_scream.ogg
+  - type: PermanentStatusEffects
+    statusEffects:
+    - StatusEffectClumsyMonkeyServant
   - type: NpcFactionMember
     factions:
     - SimpleHostile

@@ -1,6 +1,5 @@
 using System.Linq;
 using Content.DeadSpace.Interfaces.Client;
-using Content.Client.Stylesheets;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
@@ -19,6 +18,8 @@ namespace Content.Client.Humanoid;
 [GenerateTypedNameReferences]
 public sealed partial class MarkingPicker : Control
 {
+    private const float MarkingIconScale = 1.25f; // DS14
+
     [Dependency] private readonly MarkingManager _markingManager = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IEntityManager _entityManager = default!;
@@ -47,8 +48,6 @@ public sealed partial class MarkingPicker : Control
     public Color CurrentEyeColor = Color.Black;
     public Marking? HairMarking;
     public Marking? FacialHairMarking;
-    private bool _useDs14MenuStyle; // DS14
-
     private readonly HashSet<MarkingCategories> _ignoreCategories = new();
 
     public string IgnoreCategories
@@ -153,43 +152,6 @@ public sealed partial class MarkingPicker : Control
         CMarkingSearch.OnTextChanged += args => Populate(args.Text);
     }
 
-    // DS14-start
-    public void UseDs14MenuStyle()
-    {
-        _useDs14MenuStyle = true;
-        ApplyDs14MenuStyle(this);
-    }
-
-    private static void ApplyDs14MenuStyle(Control control)
-    {
-        switch (control)
-        {
-            case Button button:
-                button.RemoveStyleClass(StyleClass.ButtonOpenLeft);
-                button.RemoveStyleClass(StyleClass.ButtonOpenRight);
-                button.RemoveStyleClass(StyleClass.ButtonOpenBoth);
-                button.AddStyleClass("DS14MenuProfileControl");
-                break;
-            case OptionButton option:
-                option.RemoveStyleClass(StyleClass.ButtonOpenLeft);
-                option.RemoveStyleClass(StyleClass.ButtonOpenRight);
-                option.RemoveStyleClass(StyleClass.ButtonOpenBoth);
-                option.AddStyleClass("DS14MenuProfileControl");
-                if (!option.OptionStyleClasses.Contains("DS14MenuProfileControl"))
-                    option.OptionStyleClasses.Add("DS14MenuProfileControl");
-                break;
-            case Label label:
-                label.AddStyleClass("DS14MenuProfileLabel");
-                break;
-        }
-
-        foreach (var child in control.Children)
-        {
-            ApplyDs14MenuStyle(child);
-        }
-    }
-    // DS14-end
-
     private void SetupCategoryButtons()
     {
         CMarkingCategoryButton.Clear();
@@ -270,7 +232,7 @@ public sealed partial class MarkingPicker : Control
                 continue;
             }
 
-            var item = CMarkingsUnused.AddItem($"{GetMarkingName(marking)}", _sprite.Frame0(marking.Sprites[0]));
+            var item = CMarkingsUnused.AddItem($"{GetMarkingName(marking)}", _sprite.Frame0(marking.Sprites[0]), iconScale: MarkingIconScale); // DS14
             item.Metadata = marking;
             // DS14-sponsors-start
             if (_sponsorsManager != null && marking.SponsorOnly)
@@ -317,6 +279,7 @@ public sealed partial class MarkingPicker : Control
                 Icon = _sprite.Frame0(newMarking.Sprites[0]),
                 Selectable = true,
                 Metadata = newMarking,
+                IconScale = MarkingIconScale, // DS14
                 IconModulate = marking.MarkingColors[0]
             };
 
@@ -473,11 +436,6 @@ public sealed partial class MarkingPicker : Control
 
             colorContainer.AddChild(new Label { Text = $"{stateNames[i]} color:" });
             colorContainer.AddChild(colorSelector);
-            // DS14-start
-            if (_useDs14MenuStyle)
-                ApplyDs14MenuStyle(colorContainer);
-            // DS14-end
-
             var listing = _currentMarkings.Markings[_selectedMarkingCategory];
 
             var color = listing[listing.Count - 1 - item.ItemIndex].MarkingColors[i];
@@ -576,6 +534,7 @@ public sealed partial class MarkingPicker : Control
         {
             Text = Loc.GetString("marking-used", ("marking-name", $"{GetMarkingName(marking)}"), ("marking-category", Loc.GetString($"markings-category-{marking.MarkingCategory}"))),
             Icon = _sprite.Frame0(marking.Sprites[0]),
+            IconScale = MarkingIconScale, // DS14
             Selectable = true,
             Metadata = marking,
         };
@@ -599,7 +558,7 @@ public sealed partial class MarkingPicker : Control
 
         if (marking.MarkingCategory == _selectedMarkingCategory)
         {
-            var item = CMarkingsUnused.AddItem($"{GetMarkingName(marking)}", _sprite.Frame0(marking.Sprites[0]));
+            var item = CMarkingsUnused.AddItem($"{GetMarkingName(marking)}", _sprite.Frame0(marking.Sprites[0]), iconScale: MarkingIconScale); // DS14
             item.Metadata = marking;
         }
         _selectedMarking = null;

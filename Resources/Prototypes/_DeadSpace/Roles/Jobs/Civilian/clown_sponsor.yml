@@ -15,13 +15,9 @@
     components:
     # - type: CustomNameOnSpawn
     # - type: ClownBibleUser #Lets them honk with bibles
-    - type: Clumsy
-      clumsyDamage:
-        types: #literally just picked semi random valus. i tested this once and tweaked it.
-          Blunt: 5
-          Piercing: 4
-        groups:
-          Burn: 3
+    - type: PermanentStatusEffects
+      statusEffects:
+      - StatusEffectClumsyClown
     - type: SleepEmitSound
       snore: /Audio/Voice/Misc/silly_snore.ogg
       interval: 10

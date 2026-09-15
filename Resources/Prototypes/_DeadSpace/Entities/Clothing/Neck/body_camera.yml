@@ -5,7 +5,7 @@
   description: Лучше не кидать жёлуди рядом с владельцем этой камеры.
   components:
   - type: Item
-    size: Small
+    size: Tiny
   - type: Sprite
     sprite: _DeadSpace/Clothing/Neck/body_camera.rsi
     state: icon

@@ -4,7 +4,6 @@ using System.Numerics;
 using Content.Client.Administration.Managers;
 using Content.Client.Administration.Systems;
 using Content.Client.Administration.UI.Bwoink;
-using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.Gameplay;
 using Content.Client.Lobby;
 using Content.Client.Lobby.UI;
@@ -522,14 +521,14 @@ public sealed class UserAHelpUIHandler : IAHelpUIHandler
 
     public void ToggleWindow()
     {
-        EnsureInit(_discordRelayActive);
-        if (_window!.IsOpen)
+        var createdWindow = EnsureInit(_discordRelayActive);
+        if (!createdWindow && _window!.IsOpen)
         {
             _window.Close();
         }
         else
         {
-            _window.OpenCentered();
+            _window!.OpenCentered();
         }
     }
 
@@ -563,37 +562,32 @@ public sealed class UserAHelpUIHandler : IAHelpUIHandler
         _window!.OpenCentered();
     }
 
-    private void EnsureInit(bool relayActive)
+    /// <summary>
+    /// Create new ahelp window or return existing window
+    /// </summary>
+    /// <returns>True if new window was created</returns>
+    private bool EnsureInit(bool relayActive)
     {
         if (_window is { Disposed: false })
-            return;
+            return false;
         _chatPanel = new BwoinkPanel(text => SendMessageAction?.Invoke(_ownerId, text, true, false));
         _chatPanel.InputTextChanged += text => InputTextChanged?.Invoke(_ownerId, text);
         _chatPanel.RelayedToDiscordLabel.Visible = relayActive;
         _chatPanel.TypingIndicator.Visible = false; // DS14
+        _chatPanel.Margin = new Thickness(10); // DS14
         _window = new DefaultWindow()
         {
             Title=Loc.GetString("bwoink-user-title"),
-            // DS14-start
-            TitleClass = DeadSpaceMenuSheetlet.Title,
-            HeaderClass = DeadSpaceMenuSheetlet.Header,
-            MinSize = new Vector2(600, 400),
-            // DS14-end
+            MinSize = new Vector2(600, 400), // DS14
         };
         _window.OnClose += () => { OnClose?.Invoke(); };
         _window.OnOpen += () => { OnOpen?.Invoke(); };
-        // DS14-start
-        var shell = new PanelContainer
-        {
-            StyleClasses = { DeadSpaceMenuSheetlet.Shell }
-        };
-        shell.AddChild(_chatPanel);
-        _window.Contents.AddChild(shell);
-        // DS14-end
+        _window.Contents.AddChild(_chatPanel);
 
         var introText = Loc.GetString("bwoink-system-introductory-message");
         var introMessage = new SharedBwoinkSystem.BwoinkTextMessage( _ownerId, SharedBwoinkSystem.SystemUserId, introText);
         Receive(introMessage);
+        return true;
     }
 
     public void Dispose()

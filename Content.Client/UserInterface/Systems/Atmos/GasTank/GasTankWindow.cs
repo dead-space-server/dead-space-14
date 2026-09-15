@@ -1,11 +1,11 @@
 using System.Numerics;
+using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.Message;
 using Content.Client.Resources;
 using Content.Client.Stylesheets;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Atmos.EntitySystems;
 using Content.Shared.Timing;
-using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
@@ -43,18 +43,9 @@ public sealed class GasTankWindow
 
         MouseFilter = MouseFilterMode.Stop;
 
-        var panelTex = _cache.GetTexture("/Textures/Interface/Nano/button.svg.96dpi.png");
-        var back = new StyleBoxTexture
-        {
-            Texture = panelTex,
-            Modulate = Color.FromHex("#25252A"),
-        };
-
-        back.SetPatchMargin(StyleBox.Margin.All, 10);
-
         var topPanel = new PanelContainer
         {
-            PanelOverride = back,
+            StyleClasses = { DeadSpaceStyleClass.Window }, // DS14
             MouseFilter = MouseFilterMode.Pass
         };
 
@@ -95,7 +86,7 @@ public sealed class GasTankWindow
         _topLabel = new Label
         {
             FontOverride = font,
-           StyleClasses = { StyleClass.LabelKeyText },
+            StyleClasses = { DeadSpaceStyleClass.SectionTitle }, // DS14
             VerticalAlignment = VAlignment.Center,
             HorizontalExpand = true,
             HorizontalAlignment = HAlignment.Left,
@@ -119,7 +110,7 @@ public sealed class GasTankWindow
 
         var middle = new PanelContainer
         {
-            PanelOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#202025") },
+            StyleClasses = { StyleClass.PanelDeep }, // DS14: palette-backed and keeps zero-margin geometry
             Children =
             {
                 (contentContainer = new BoxContainer
@@ -134,13 +125,13 @@ public sealed class GasTankWindow
         topContainer.AddChild(new PanelContainer
         {
             MinSize = new Vector2(0, 2),
-            PanelOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#525252ff") }
+            StyleClasses = { DeadSpaceStyleClass.AccentDim }, // DS14
         });
         topContainer.AddChild(middle);
         topContainer.AddChild(new PanelContainer
         {
             MinSize = new Vector2(0, 2),
-            PanelOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#525252ff") }
+            StyleClasses = { DeadSpaceStyleClass.AccentDim }, // DS14
         });
 
 

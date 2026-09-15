@@ -1,14 +1,11 @@
 <ContainerButton xmlns="https://spacestation14.io"
-         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-         xmlns:style="clr-namespace:Content.Client.Stylesheets"
-         StyleClasses="DS14MenuProfileControl"
-         HorizontalExpand="True">
+                 HorizontalExpand="True">
     <!-- DS14-start -->
     <BoxContainer Orientation="Horizontal"
                   HorizontalExpand="True"
                   SeparationOverride="0"
                   Name="InternalHBox">
-        <PanelContainer StyleClasses="DS14MenuCharacterIcon"
+        <PanelContainer StyleClasses="DeadSpaceCharacterIcon"
                         Margin="0 4 6 4">
             <SpriteView Scale="2 2"
                         OverrideDirection="South"
@@ -17,17 +14,14 @@
         </PanelContainer>
         <Label Name="DescriptionLabel"
                ClipText="True"
-               StyleClasses="DS14MenuProfileLabel"
                VerticalAlignment="Center"
                HorizontalExpand="True"/>
         <Button Name="DeleteButton"
-                Text="{Loc 'character-setup-gui-character-picker-button-delete-button'}"
-                StyleClasses="DS14MenuProfileControl"/>
+                Text="{Loc 'character-setup-gui-character-picker-button-delete-button'}"/>
         <Button Name="ConfirmDeleteButton"
                 Text="{Loc 'character-setup-gui-character-picker-button-confirm-delete-button'}"
                 Visible="False"
-                StyleClasses="DS14MenuProfileControl negative"/>
-
+                StyleClasses="negative"/>
     </BoxContainer>
     <!-- DS14-end -->
 </ContainerButton>

@@ -37,7 +37,7 @@ public sealed class VascularRuptureSymptom : VirusSymptomBase
     {
         if (_entityManager.TryGetComponent<BloodstreamComponent>(host, out var bloodstream))
         {
-            var system = _entityManager.System<SharedBloodstreamSystem>();
+            var system = _entityManager.System<BloodstreamSystem>();
             system.TryModifyBleedAmount(host, BleedIncrease);
         }
     }

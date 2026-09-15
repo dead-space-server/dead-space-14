@@ -61,3 +61,4 @@
     sound:
       path: /Audio/_DeadSpace/Items/Handing/headset/headset_drop.ogg
   #DS14-End
+  - type: NoiseProtection

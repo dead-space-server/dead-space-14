@@ -1,15 +1,16 @@
 <BoxContainer xmlns="https://spacestation14.io"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          Orientation="Vertical">
-    <PanelContainer StyleClasses="DS14MenuPanelDark" HorizontalExpand="True" Margin="5">
+    <!-- DS14-start -->
+    <PanelContainer StyleClasses="DeadSpaceSurfaceDark" HorizontalExpand="True" Margin="5">
         <BoxContainer Name="LoadoutsContainer" Orientation="Vertical" VerticalExpand="True" HorizontalExpand="True"/>
     </PanelContainer>
     <!-- Buffer space so we have 10 margin between controls but also 10 to the borders -->
-    <PanelContainer StyleClasses="DS14MenuInset" HorizontalExpand="True" Margin="5">
+    <PanelContainer StyleClasses="DeadSpaceInset" HorizontalExpand="True" Margin="5">
         <BoxContainer Orientation="Vertical">
-            <Label Text="{Loc 'loadout-restrictions'}"
-                   StyleClasses="DS14MenuProfileLabel"/>
+            <Label Text="{Loc 'loadout-restrictions'}"/>
             <BoxContainer Name="RestrictionsContainer" Orientation="Vertical" HorizontalExpand="True" />
         </BoxContainer>
     </PanelContainer>
+    <!-- DS14-end -->
 </BoxContainer>

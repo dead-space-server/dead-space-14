@@ -173,7 +173,7 @@ public sealed class SandevistanSystem : EntitySystem
     private void OnImplanted(Entity<SandevistanImplantComponent> ent, ref ImplantImplantedEvent args)
     {
         var target = args.Implanted;
-        if (Deleted(target))
+        if (Deleted(target) || !ent.Comp.ApplyImplantTrauma)
             return;
 
         if (TryComp<DamageableComponent>(target, out var damageable))

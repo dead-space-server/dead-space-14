@@ -16,11 +16,9 @@
   - NpcFactionMember
   # traits
   - BlackAndWhiteOverlay
-  - Clumsy
   - ImpairedMobility
   # - LegsParalyzed (you get healed)
   - LightweightDrunk
-  - Muted
   - Narcolepsy
   - NicotineAddiction
   - Pacified
@@ -113,6 +111,9 @@
 - type: cloningSettings
   id: ChangelingCloningSettings
   parent: Body
+  statusEffectWhitelist:
+    components:
+    - ChangelingCloneableStatusEffect
   components:
   # These are already part of the base species prototype that is spawned for the clone,
   # that means we only need to copy them over when switching between species.
@@ -133,7 +134,15 @@
   - Sericulture # arachnids
   - MovementSpeedModifier # moths when weightless
   - JumpAbility # vulp leaping
-  copyEquipment: null
+  # DS14-start
+  blacklist:
+    components:
+    - AttachedClothing
+    - HumanoidAppearance
+    - Implanter
+    - VirtualItem
+  copyEquipment: All
+  # DS14-end
   copyInternalStorage: false
   copyImplants: false
 
@@ -148,3 +157,32 @@
     state: preview
   - type: RandomCloneSpawner
     settings: BaseClone
+
+# for plant clones
+- type: cloningSettings
+  id: PlantClone
+  components:
+  - Plant
+  - PlantHarvest # DS14
+  - PlantChemicals
+  - PlantGrowth
+  - PlantAtmospheric
+  - PlantConsumeExudeGas
+  - PlantWeedPest
+  - PlantToxins
+  # traits
+  - PlantTraitKudzu
+  - PlantTraitLigneous
+  - PlantTraitScream
+  - PlantTraitSeedless # DS14
+  - PlantTraitUnviable
+
+# for plant lifecycle clones
+- type: cloningSettings
+  id: PlantLifecycleClone
+  parent: PlantClone
+  components:
+  # traits
+  - PlantTraitSampled
+  eventComponents:
+  - PlantHolder

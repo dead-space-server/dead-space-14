@@ -13,7 +13,8 @@
   metabolisms:
     Drink:
       effects:
-      - !type:SatiateThirst
+      - !type:Satiate
+        satiationType: Thirst
         factor: 1.5
         conditions:
           - !type:MetabolizerTypeCondition

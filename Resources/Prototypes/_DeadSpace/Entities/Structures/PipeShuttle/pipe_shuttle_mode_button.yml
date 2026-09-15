@@ -1,0 +1,29 @@
+- type: entity
+  parent: BaseWallmountMachine
+  id: PipeShuttleModeButton
+  name: кнопка переключения режимов
+  description: Переключает режим управления.
+  components:
+  - type: WallMount
+    arc: 360
+  - type: Sprite
+    drawdepth: SmallObjects
+    sprite: Structures/Wallmounts/switch.rsi
+    state: dead
+  - type: Appearance
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
+  - type: Rotatable
+  - type: PipeShuttleModeSwitch
+  - type: Electrified
+    enabled: false
+    usesApcPower: true

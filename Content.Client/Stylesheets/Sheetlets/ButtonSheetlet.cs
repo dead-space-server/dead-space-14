@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client.DeadSpace.Stylesheets; // DS14
 using Content.Client.Stylesheets.Palette;
 using Content.Client.Stylesheets.SheetletConfigs;
 using Content.Client.Stylesheets.Stylesheets;
@@ -16,6 +17,12 @@ public sealed class ButtonSheetlet<T> : Sheetlet<T> where T : PalettedStylesheet
     {
         IButtonConfig buttonCfg = sheet;
         IIconConfig iconCfg = sheet;
+        // DS14: Classic retains the exact pre-redesign disabled label color.
+        var disabledText = sheet is NanotrasenStylesheet
+            ? DeadSpaceStylePalette.ClassicChrome
+                ? Color.FromHex("#E5E5E581")
+                : DeadSpaceStylePalette.TextDisabled // DS14
+            : sheet.PrimaryPalette.TextDark.WithAlpha(0.6f);
 
         var crossTex = sheet.GetTextureOr(iconCfg.CrossIconPath, NanotrasenStylesheet.TextureRoot);
         var refreshTex = sheet.GetTextureOr(iconCfg.RefreshIconPath, NanotrasenStylesheet.TextureRoot);
@@ -68,9 +75,10 @@ public sealed class ButtonSheetlet<T> : Sheetlet<T> where T : PalettedStylesheet
                 .Class(Button.StyleClassButton)
                 .AlignMode(Label.AlignMode.Center),
 
-            // Have disabled button's text be faded
-            CButton().PseudoDisabled().ParentOf(E<Label>()).FontColor(Color.FromHex("#E5E5E581")),
-            CButton().PseudoDisabled().ParentOf(E()).ParentOf(E<Label>()).FontColor(Color.FromHex("#E5E5E581")),
+            // DS14-start: disabled labels must remain legible in both dark and light palettes
+            CButton().PseudoDisabled().ParentOf(E<Label>()).FontColor(disabledText),
+            CButton().PseudoDisabled().ParentOf(E()).ParentOf(E<Label>()).FontColor(disabledText),
+            // DS14-end
         };
         // Texture button modulation
         MakeButtonRules<TextureButton>(rules, Palettes.AlphaModulate, null);

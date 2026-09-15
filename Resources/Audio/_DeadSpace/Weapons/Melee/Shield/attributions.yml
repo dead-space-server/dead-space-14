@@ -1,0 +1,4 @@
+- files: ["shieldbash.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Added to tgstation by petethegoat@gmail.com for EngTaylor's riot shield bash suggestion. Taken from Paradise and downmixed from stereo to mono for positional audio playback."
+  source: "https://github.com/ss220-space/Paradise/commit/93a5db2cf9b0c8d3772fc3d633718831976438c3"

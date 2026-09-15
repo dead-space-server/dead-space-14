@@ -11,11 +11,16 @@
         <controls:StripeBack HasBottomEdge="False" HasMargins="False">
             <BoxContainer Orientation="Horizontal" Margin="8 8">
                 <Control MinSize="8 0" />
-                <Label Text="{Loc 'ui-options-binds-explanation'}" StyleClasses="LabelSubText" />
+                <!-- DS14-start -->
+                <Label Text="{Loc 'ui-options-binds-explanation'}" StyleClasses="DeadSpaceSubtitle" />
+                <!-- DS14-end -->
+                <!-- DS14-start -->
                 <Button Name="ResetAllButton"
                         Text="{Loc 'ui-options-binds-reset-all'}"
                         HorizontalExpand="True"
-                        HorizontalAlignment="Right" />
+                        HorizontalAlignment="Right"
+                        StyleClasses="negative" />
+                <!-- DS14-end -->
             </BoxContainer>
         </controls:StripeBack>
     </BoxContainer>

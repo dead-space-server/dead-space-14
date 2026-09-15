@@ -2,24 +2,20 @@
                Title="{Loc 'character-setup-gui-save-panel-title'}"
                Resizable="False">
 
-    <!-- DS14-start: KSO-styled save confirmation -->
-    <PanelContainer StyleClasses="DS14MenuShell">
-        <BoxContainer Orientation="Horizontal"
-                      SeparationOverride="6"
-                      MinSize="260 46">
-            <Button Name="SaveButton"
-                    Access="Public"
-                    Text="{Loc 'character-setup-gui-save-panel-save'}"
-                    StyleClasses="DS14MenuAction"/>
-            <Button Name="NoSaveButton"
-                    Access="Public"
-                    Text="{Loc 'character-setup-gui-save-panel-nosave'}"
-                    StyleClasses="DS14MenuAction"/>
-            <Button Name="CancelButton"
-                    Access="Public"
-                    Text="{Loc 'character-setup-gui-save-panel-cancel'}"
-                    StyleClasses="DS14MenuAction"/>
-        </BoxContainer>
-    </PanelContainer>
+    <!-- DS14-start -->
+    <BoxContainer Orientation="Horizontal"
+                  SeparationOverride="6"
+                  MinSize="260 46"
+                  Margin="10">
+        <Button Name="SaveButton"
+                Access="Public"
+                Text="{Loc 'character-setup-gui-save-panel-save'}"/>
+        <Button Name="NoSaveButton"
+                Access="Public"
+                Text="{Loc 'character-setup-gui-save-panel-nosave'}"/>
+        <Button Name="CancelButton"
+                Access="Public"
+                Text="{Loc 'character-setup-gui-save-panel-cancel'}"/>
+    </BoxContainer>
     <!-- DS14-end -->
 </DefaultWindow>

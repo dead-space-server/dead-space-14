@@ -4,7 +4,9 @@
                            MinSize="200 200">
     <BoxContainer Orientation="Vertical" HorizontalExpand="True">
         <GridContainer Margin="4 0 0 0" Columns="2">
-            <Label Name="ShowIFFLabel" Text="{Loc 'iff-console-show-iff-label'}" HorizontalExpand="True" StyleClasses="highlight" />
+            <!-- DS14-start -->
+            <Label Name="ShowIFFLabel" Text="{Loc 'iff-console-show-iff-label'}" HorizontalExpand="True" StyleClasses="DeadSpaceSectionTitle" />
+            <!-- DS14-end -->
             <BoxContainer Orientation="Horizontal" MinWidth="120">
                 <Button Name="ShowIFFOnButton" Text="{Loc 'iff-console-on'}" StyleClasses="OpenRight" />
                 <Button Name="ShowIFFOffButton" Text="{Loc 'iff-console-off'}" StyleClasses="OpenLeft" />

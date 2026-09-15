@@ -1,4 +1,5 @@
 using Content.Shared.Containers.ItemSlots;
+using Content.Shared.FixedPoint;
 using Content.Shared.Hands.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Nutrition.Components;
@@ -12,6 +13,11 @@ namespace Content.Shared.Nutrition.EntitySystems;
 
 public sealed partial class IngestionSystem
 {
+    // DS14-start
+    private const float ForkDrinkDelayMultiplier = 2f;
+    private static readonly FixedPoint2 ForkDrinkTransferAmount = FixedPoint2.New(0.5f);
+    // DS14-end
+
     [Dependency] private readonly SharedInteractionSystem _interactionSystem = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
@@ -52,8 +58,17 @@ public sealed partial class IngestionSystem
         if (!_interactionSystem.InRangeUnobstructed(user, target, popup: true))
             return true;
 
-        return TryIngest(user, user, target);
+        return AttemptIngest(user, user, target, true, utensil.Owner); // DS14
     }
+
+    // DS14-start
+    private bool IsDrinkingWithFork(EntityUid target, EntityUid utensil)
+    {
+        return TryComp<UtensilComponent>(utensil, out var utensilComp)
+            && (utensilComp.Types & UtensilType.Fork) != 0
+            && GetEdibleType((target, CompOrNull<EdibleComponent>(target))) == Drink;
+    }
+    // DS14-end
 
     /// <summary>
     /// Attempt to break the utensil after interaction.

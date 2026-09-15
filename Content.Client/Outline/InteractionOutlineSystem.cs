@@ -4,6 +4,7 @@ using Content.Client.Interactable.Components;
 using Content.Client.Viewport;
 using Content.Shared.CCVar;
 using Content.Shared.Interaction;
+using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
 using Robust.Client.Player;
@@ -11,6 +12,7 @@ using Robust.Client.State;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Configuration;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client.Outline;
 
@@ -20,9 +22,13 @@ public sealed class InteractionOutlineSystem : EntitySystem
     [Dependency] private readonly IEyeManager _eyeManager = default!;
     [Dependency] private readonly IInputManager _inputManager = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private readonly IPrototypeManager _prototypeManager = default!; // DS14 - Current engine has no ProtoMan shortcut.
     [Dependency] private readonly IStateManager _stateManager = default!;
     [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
     [Dependency] private readonly SharedInteractionSystem _interactionSystem = default!;
+
+    private EntityQuery<InteractionOutlineComponent> _outlineQuery;
+    private EntityQuery<SpriteComponent> _spriteQuery;
 
     /// <summary>
     ///     Whether to currently draw the outline. The outline may be temporarily disabled by other systems
@@ -34,14 +40,46 @@ public sealed class InteractionOutlineSystem : EntitySystem
     /// </summary>
     private bool _cvarEnabled = true;
 
+    private const float OutlineWidth = 1;
+
+    private static readonly ProtoId<ShaderPrototype> ShaderInRange = "SelectionOutlineInrange";
+    private static readonly ProtoId<ShaderPrototype> ShaderOutOfRange = "SelectionOutline";
+
+    private ShaderInstance? _shaderInRange;
+    private ShaderInstance? _shaderOutOfRange;
+
     private EntityUid? _lastHoveredEntity;
 
     public override void Initialize()
     {
         base.Initialize();
 
+        // DS14 - Current engine initializes entity queries explicitly.
+        _outlineQuery = GetEntityQuery<InteractionOutlineComponent>();
+        _spriteQuery = GetEntityQuery<SpriteComponent>();
+
+        _shaderInRange = _prototypeManager.Index(ShaderInRange).InstanceUnique();
+        _shaderOutOfRange = _prototypeManager.Index(ShaderOutOfRange).InstanceUnique();
+
         Subs.CVar(_configManager, CCVars.OutlineEnabled, SetCvarEnabled);
         UpdatesAfter.Add(typeof(SharedEyeSystem));
+    }
+
+    private void CleanupLastHoveredShader()
+    {
+        var hovered = _lastHoveredEntity;
+        _lastHoveredEntity = null;
+
+        if (hovered is not { } uid || !_outlineQuery.HasComp(uid))
+            return;
+
+        if (!_spriteQuery.TryComp(uid, out var sprite))
+            return;
+
+        if (sprite.PostShader != _shaderInRange && sprite.PostShader != _shaderOutOfRange)
+            return;
+
+        sprite.PostShader = null;
     }
 
     public void SetCvarEnabled(bool cvarEnabled)
@@ -53,11 +91,7 @@ public sealed class InteractionOutlineSystem : EntitySystem
         if (_cvarEnabled)
             return;
 
-        if (_lastHoveredEntity == null || Deleted(_lastHoveredEntity))
-            return;
-
-        if (TryComp(_lastHoveredEntity, out InteractionOutlineComponent? outline))
-            outline.OnMouseLeave(_lastHoveredEntity.Value);
+        CleanupLastHoveredShader();
     }
 
     public void SetEnabled(bool enabled)
@@ -72,11 +106,7 @@ public sealed class InteractionOutlineSystem : EntitySystem
         if (enabled)
             return;
 
-        if (_lastHoveredEntity == null || Deleted(_lastHoveredEntity))
-            return;
-
-        if (TryComp(_lastHoveredEntity, out InteractionOutlineComponent? outline))
-            outline.OnMouseLeave(_lastHoveredEntity.Value);
+        CleanupLastHoveredShader();
     }
 
     public override void FrameUpdate(float frameTime)
@@ -131,35 +161,24 @@ public sealed class InteractionOutlineSystem : EntitySystem
             renderScale = _eyeManager.MainViewport.GetRenderScale();
         }
 
-        var inRange = false;
-        if (localSession.AttachedEntity != null && !Deleted(entityToClick))
+        if (_lastHoveredEntity != entityToClick)
         {
-            inRange = _interactionSystem.InRangeUnobstructed(localSession.AttachedEntity.Value, entityToClick.Value);
+            CleanupLastHoveredShader();
+
+            _lastHoveredEntity = entityToClick;
         }
 
-        InteractionOutlineComponent? outline;
-
-        if (entityToClick == _lastHoveredEntity)
-        {
-            if (entityToClick != null && TryComp(entityToClick, out outline))
-            {
-                outline.UpdateInRange(entityToClick.Value, inRange, renderScale);
-            }
-
+        if (entityToClick is not { } hovered || !_outlineQuery.HasComp(hovered))
             return;
-        }
 
-        if (_lastHoveredEntity != null && !Deleted(_lastHoveredEntity) &&
-            TryComp(_lastHoveredEntity, out outline))
-        {
-            outline.OnMouseLeave(_lastHoveredEntity.Value);
-        }
+        if (!_spriteQuery.TryComp(hovered, out var sprite))
+            return;
 
-        _lastHoveredEntity = entityToClick;
+        var inRange = false;
+        if (localSession.AttachedEntity is { } attached)
+            inRange = _interactionSystem.InRangeUnobstructed(attached, hovered);
 
-        if (_lastHoveredEntity != null && TryComp(_lastHoveredEntity, out outline))
-        {
-            outline.OnMouseEnter(_lastHoveredEntity.Value, inRange, renderScale);
-        }
+        var shader = sprite.PostShader = inRange ? _shaderInRange : _shaderOutOfRange;
+        shader?.SetParameter("outline_width", OutlineWidth * renderScale);
     }
 }

@@ -69,7 +69,6 @@ namespace Content.Server.Power.NodeGroups
                 // Linked network can be default if it was re-connected twice in one tick.
                 DebugTools.Assert(battery.NetworkBattery.LinkedNetworkDischarging == default || battery.NetworkBattery.LinkedNetworkDischarging == NetworkNode.Id);
                 battery.NetworkBattery.LinkedNetworkDischarging = default;
-                battery.NetworkBattery.SetCurrentSupply(0f); // DS14
             }
 
             Dischargers.Remove(discharger);
@@ -99,7 +98,6 @@ namespace Content.Server.Power.NodeGroups
                 // Linked network can be default if it was re-connected twice in one tick.
                 DebugTools.Assert(battery.NetworkBattery.LinkedNetworkCharging == default || battery.NetworkBattery.LinkedNetworkCharging == NetworkNode.Id);
                 battery.NetworkBattery.LinkedNetworkCharging = default;
-                battery.NetworkBattery.CurrentReceiving = 0f; // DS14
             }
 
             Chargers.Remove(charger);

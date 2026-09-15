@@ -11,6 +11,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 using Content.Shared.DeadSpace.Skills.Prototypes;
+using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;
 
 namespace Content.Shared.Species;
 
@@ -36,12 +37,14 @@ public sealed partial class ReformSystem : EntitySystem
         SubscribeLocalEvent<ReformComponent, ReformDoAfterEvent>(OnDoAfter);
 
         SubscribeLocalEvent<ReformComponent, EntityZombifiedEvent>(OnZombified);
+
+        SubscribeLocalEvent<ReformComponent, InfectionNecroficationEvent>(OnNecrofication); // DS-14
     }
 
     private void OnMapInit(EntityUid uid, ReformComponent comp, MapInitEvent args)
     {
         // When the map is initialized, give them the action
-        if (comp.ActionPrototype != default && !_protoManager.TryIndex<EntityPrototype>(comp.ActionPrototype, out var actionProto))
+        if (comp.ActionPrototype != default && !_protoManager.TryIndex<EntityPrototype>(comp.ActionPrototype, out var actionProto) || TryComp<NecromorfComponent>(uid, out _)) // DS-14
             return;
 
         _actionsSystem.AddAction(uid, ref comp.ActionEntity, out var reformAction, comp.ActionPrototype);
@@ -114,7 +117,12 @@ public sealed partial class ReformSystem : EntitySystem
     {
         _actionsSystem.RemoveAction(uid, comp.ActionEntity); // Zombies can't reform
     }
-
+    // DS-14-start
+    private void OnNecrofication(EntityUid uid, ReformComponent comp, ref InfectionNecroficationEvent args)
+    {
+        _actionsSystem.RemoveAction(uid, comp.ActionEntity);
+    }
+    // DS-14-End
     public sealed partial class ReformEvent : InstantActionEvent { }
 
     [Serializable, NetSerializable]

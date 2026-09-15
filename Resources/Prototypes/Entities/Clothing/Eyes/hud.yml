@@ -127,7 +127,9 @@
     sprite: Clothing/Eyes/Hud/beergoggles.rsi
   - type: Clothing
     sprite: Clothing/Eyes/Hud/beergoggles.rsi
-  - type: ShowThirstIcons
+  - type: ShowSatiationIcons
+    shownTypes:
+    - Thirst
   - type: SolutionScanner
   - type: Tag
     tags:
@@ -144,7 +146,9 @@
     sprite: Clothing/Eyes/Hud/friedonion.rsi
   - type: Clothing
     sprite: Clothing/Eyes/Hud/friedonion.rsi
-  - type: ShowHungerIcons
+  - type: ShowSatiationIcons
+    shownTypes:
+    - Hunger
   - type: Edible
   - type: SolutionContainerManager
     solutions:
@@ -170,8 +174,10 @@
     sprite: Clothing/Eyes/Hud/onionbeer.rsi
   - type: Clothing
     sprite: Clothing/Eyes/Hud/onionbeer.rsi
-  - type: ShowHungerIcons
-  - type: ShowThirstIcons
+  - type: ShowSatiationIcons
+    shownTypes:
+    - Hunger
+    - Thirst
 
 - type: entity
   parent: [ClothingEyesHudBase, ShowMedicalIcons]
@@ -183,7 +189,9 @@
     sprite: Clothing/Eyes/Hud/medonion.rsi
   - type: Clothing
     sprite: Clothing/Eyes/Hud/medonion.rsi
-  - type: ShowHungerIcons
+  - type: ShowSatiationIcons
+    shownTypes:
+    - Hunger
 
 - type: entity
   parent: [ClothingEyesHudBase, ShowMedicalIcons]
@@ -195,8 +203,10 @@
     sprite: Clothing/Eyes/Hud/medonionbeer.rsi
   - type: Clothing
     sprite: Clothing/Eyes/Hud/medonionbeer.rsi
-  - type: ShowHungerIcons
-  - type: ShowThirstIcons
+  - type: ShowSatiationIcons
+    shownTypes:
+    - Hunger
+    - Thirst
 
 - type: entity
   parent: [ClothingEyesHudBase, ShowSecurityIcons, ShowMedicalIcons, BaseSecurityCommandContraband]
@@ -244,8 +254,10 @@
     - Biological
     - Inorganic
     - Silicon
-  - type: ShowHungerIcons
-  - type: ShowThirstIcons
+  - type: ShowSatiationIcons
+    shownTypes:
+    - Hunger
+    - Thirst
   - type: ShowSyndicateIcons
 
 - type: entity

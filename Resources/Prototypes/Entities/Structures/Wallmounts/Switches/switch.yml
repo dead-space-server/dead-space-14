@@ -449,7 +449,7 @@
   components:
   - type: Clickable
   - type: WallMount
-    arc: 360
+    arc: 175 # DS14 - button frames follow the same directional visibility as the buttons they surround.
   - type: Physics
     canCollide: false
   - type: Sprite

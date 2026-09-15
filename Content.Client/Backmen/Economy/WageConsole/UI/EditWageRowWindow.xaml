@@ -7,10 +7,8 @@
         <BoxContainer Orientation="Horizontal" VerticalExpand="True" HorizontalExpand="True">
             <!-- Station name -->
             <controls:StripeBack>
-                <PanelContainer>
-                    <RichTextLabel Name="StationName" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                   Margin="0 5 0 3" />
-                </PanelContainer>
+                <RichTextLabel Name="StationName" HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Margin="0 5 0 3" /> <!-- DS14 -->
             </controls:StripeBack>
         </BoxContainer>
         <!-- Data -->
@@ -28,8 +26,7 @@
             <Button Name="SaveBtn"
                     Access="Public"
                     ToolTip=""
-                    Text="{Loc wageconsole-save}"
-                    StyleClasses="LabelSubText"/>
+                    Text="{Loc wageconsole-save}"/>
         </BoxContainer>
     </BoxContainer>
 </controls:FancyWindow>

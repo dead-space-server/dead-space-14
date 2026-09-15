@@ -97,6 +97,12 @@
       sprite: _DeadSpace/Clothing/Shoes/Boots/blueshield_boots.rsi
 
 - type: entity
+  parent: ClothingShoesBootsBlueShield
+  id: ClothingShoesBootsGreenBeret
+  name: подкованные сапоги офицера "Зелёный Берет"
+  description: Обувь Офицера "Зелёный Берет", для боевых операций или боевых действий. Борьба — всё, борьба — всегда.
+
+- type: entity
   parent: ClothingShoesBootsJack
   id: ClothingShoesBootsKirzachi
   name: кирзовые сапоги
@@ -106,3 +112,28 @@
       sprite: _DeadSpace/Clothing/Shoes/Boots/centcom_officer_black.rsi
     - type: Clothing
       sprite: _DeadSpace/Clothing/Shoes/Boots/centcom_officer_black.rsi
+
+- type: entity
+  parent: ClothingShoesBaseButcherable
+  id: ClothingBootsRunImp
+  name: сапоги бегуна "Импульс"
+  description: Сапоги из плотной огненно-оранжевей кожа и голубым пульсирующим кристаллом. Полированный обсидиан на подошве гарантирует скольжение и частые падения.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Shoes/Boots/impulse_boots.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Shoes/Boots/impulse_boots.rsi
+  - type: ClothingSpeedModifier
+    walkModifier: 1.15
+    sprintModifier: 1.15
+
+- type: entity
+  parent: ClothingShoesBaseButcherable
+  id: ClothingBootsSamurai
+  name: сапоги самурая
+  description: Пара потрёпаных временем, тем не менее, стильных.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Shoes/Boots/samurai_boots.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Shoes/Boots/samurai_boots.rsi

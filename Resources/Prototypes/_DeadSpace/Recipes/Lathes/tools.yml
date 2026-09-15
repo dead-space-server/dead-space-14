@@ -9,7 +9,7 @@
 - type: latheRecipe
   parent: BaseToolRecipe
   id: HoloprojectorRND
-  result: HoloprojectorRNDEmpty
+  result: HoloprojectorRND
   completetime: 3
   materials:
     Steel: 500

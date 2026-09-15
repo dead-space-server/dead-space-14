@@ -19,13 +19,23 @@
     baseState: bloodredripley
     openState: bloodredripley-open
     brokenState: bloodredripley-broken
-    mechToPilotDamageMultiplier: 0.75
-    pilotWhitelist:
-      components:
-      - HumanoidAppearance
     equipmentWhitelist:
       tags:
       - TaipanRipleyEquipment
+  # DS14-start - Port local mech settings to the Vehicle component.
+  - type: Vehicle
+    transferDamageModifier:
+      coefficients:
+        Blunt: 0.75
+        Slash: 0.75
+        Piercing: 0.75
+        Cold: 0.75
+        Heat: 0.75
+        Shock: 0.75
+    operatorWhitelist:
+      components:
+      - HumanoidAppearance
+  # DS14-end
   - type: MeleeWeapon
     hidden: true
     attackRate: 1

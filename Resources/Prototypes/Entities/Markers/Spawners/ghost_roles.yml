@@ -25,9 +25,11 @@
     rules: ghost-role-information-antagonist-rules
     mindRoles:
     - MindRoleGhostRoleSoloAntagonist
+    #DS14-start
     requirements:
     - !type:OverallPlaytimeRequirement
-      time: 36000 # 10 hours
+      time: 180000 # 50 hours
+    #DS14-end
     raffle:
       settings: default
   - type: GhostRoleMobSpawner
@@ -39,7 +41,7 @@
       - sprite: Mobs/Animals/regalrat.rsi
         state: icon
   #DS14-start
-  - type: GhostRoleNotifys 
+  - type: GhostRoleNotifys
     groupPrototype: Ratking
   #DS14-end
 
@@ -93,7 +95,7 @@
       - sprite: Mobs/Pets/corgi.rsi
         state: narsian
   #DS14-start
-  - type: GhostRoleNotifys 
+  - type: GhostRoleNotifys
     groupPrototype: PetsGroup
   #DS14-end
 
@@ -141,21 +143,25 @@
     rules: ghost-role-information-loneop-rules
     mindRoles:
     - MindRoleLoneops
+    #DS14-start
     requirements:
+    - !type:OverallPlaytimeRequirement
+      time: 1800000 # 500 hours
     - !type:DepartmentTimeRequirement
       department: Medical
-      time: 36000 # 10 hours
+      time: 108000 # 30 hours
     - !type:DepartmentTimeRequirement
       department: Security
-      time: 72000 # 20 hours
+      time: 144000 # 40 hours
+    #DS14-end
   - type: Sprite
     sprite: Markers/jobs.rsi
     layers:
       - state: green
       - sprite: Structures/Wallmounts/signs.rsi
         state: radiation
-  #DS14-start      
-  - type: GhostRoleNotifys 
+  #DS14-start
+  - type: GhostRoleNotifys
     groupPrototype: LoneOper
   #DS14-end
 
@@ -181,7 +187,7 @@
       department: Command
       time: 72000 # 20 hours
   #DS14-start
-  - type: GhostRoleNotifys 
+  - type: GhostRoleNotifys
     groupPrototype: CommanderOperatives
   #DS14-end
 
@@ -207,7 +213,7 @@
       department: Security
       time: 72000 # 20 hours
   #DS14-start
-  - type: GhostRoleNotifys 
+  - type: GhostRoleNotifys
     groupPrototype: OperativeMedic
   #DS14-end
 
@@ -223,7 +229,7 @@
     mindRoles:
     - MindRoleNukeops
   #DS14-start
-  - type: GhostRoleNotifys 
+  - type: GhostRoleNotifys
     groupPrototype: Operativeping
   #DS14-end
 
@@ -238,16 +244,18 @@
     rules: ghost-role-information-space-dragon-rules
     mindRoles:
     - MindRoleDragon
+    #DS14-start
     requirements:
     - !type:OverallPlaytimeRequirement
-      time: 36000 # 10h overall
+      time: 720000 # 200 hours
+    #DS14-end
   - type: Sprite
     layers:
     - state: green
     - sprite: Mobs/Aliens/Carps/dragon.rsi
       state: alive
   #DS14-start
-  - type: GhostRoleNotifys 
+  - type: GhostRoleNotifys
     groupPrototype: Dragonping
   #DS14-end
 
@@ -262,9 +270,14 @@
     rules: ghost-role-information-space-ninja-rules
     mindRoles:
     - MindRoleNinja
+    #DS14-start
     requirements:
     - !type:OverallPlaytimeRequirement
-      time: 144000 # 40h overall
+      time: 720000 # 200 hours
+    - !type:DepartmentTimeRequirement
+      department: Security
+      time: 72000 # 20 hours
+    #DS14-end
     raffle:
       settings: default
   - type: Sprite
@@ -274,7 +287,7 @@
     - sprite: Objects/Weapons/Melee/energykatana.rsi
       state: icon
   #DS14-start
-  - type: GhostRoleNotifys 
+  - type: GhostRoleNotifys
     groupPrototype: Nijaping
   #DS14-end
 
@@ -289,10 +302,14 @@
     rules: ghost-role-information-antagonist-rules
     mindRoles:
     - MindRoleParadoxClone
+    #DS14-start
     requirements:
+    - !type:OverallPlaytimeRequirement
+      time: 540000 # 150 hours
     - !type:DepartmentTimeRequirement
       department: Security
-      time: 36000 # 10 hours
+      time: 72000 # 20 hours
+    #DS14-end
     raffle:
       settings: default
   - type: Sprite
@@ -302,7 +319,7 @@
     - sprite: Mobs/Aliens/paradox_clone.rsi
       state: preview
   #DS14-start
-  - type: GhostRoleNotifys 
+  - type: GhostRoleNotifys
     groupPrototype: Paradoxping
   #DS14-end
 
@@ -338,7 +355,7 @@
     - sprite: Mobs/Silicon/chassis.rsi
       state: derelict_icon
   #DS14-start
-  - type: GhostRoleNotifys 
+  - type: GhostRoleNotifys
     groupPrototype: DerelictCyborg
   #DS14-end
 
@@ -447,9 +464,14 @@
     rules: ghost-role-information-freeagent-rules # DS14
     mindRoles:
     - MindRoleWizard
+    #DS14-start
     requirements:
     - !type:OverallPlaytimeRequirement
-      time: 216000 # 60h overall
+      time: 1800000 # 500 hours
+    - !type:DepartmentTimeRequirement
+      department: Security
+      time: 144000 # 40 hours
+    #DS14-end
     raffle:
       settings: default
   - type: Sprite
@@ -459,6 +481,6 @@
     - sprite: Clothing/Head/Hats/wizardhat.rsi
       state: icon
   #DS14-start
-  - type: GhostRoleNotifys 
+  - type: GhostRoleNotifys
     groupPrototype: Wizardping
   #DS14-end

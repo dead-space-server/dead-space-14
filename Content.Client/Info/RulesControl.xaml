@@ -1,7 +1,7 @@
 <BoxContainer xmlns="https://spacestation14.io" Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" MinSize="100 100">
     <!-- DS14-start -->
     <Control HorizontalExpand="True" VerticalExpand="True" HorizontalAlignment="Stretch">
-        <PanelContainer StyleClasses="DS14MenuInset"
+        <PanelContainer StyleClasses="DeadSpaceInset"
                         HorizontalExpand="True"
                         VerticalExpand="True">
             <ScrollContainer Name="Scroll" HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
@@ -15,19 +15,16 @@
             <Button Name="BackButton"
                     Text="{Loc 'ui-rules-button-back'}"
                     HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    StyleClasses="DS14MenuProfileControl"/>
+                    VerticalAlignment="Top"/>
             <Button Name="HomeButton"
                     Text="{Loc 'ui-rules-button-home'}"
                     HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    StyleClasses="DS14MenuProfileControl"/>
+                    VerticalAlignment="Top"/>
             <Button Name="WikiButton"
                     Access="Public"
                     Text="{Loc 'ui-escape-wiki'}"
                     HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    StyleClasses="DS14MenuProfileControl"/>
+                    VerticalAlignment="Top"/>
         </BoxContainer>
     </Control>
     <!-- DS14-end -->

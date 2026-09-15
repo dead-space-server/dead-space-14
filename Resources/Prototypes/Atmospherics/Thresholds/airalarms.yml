@@ -125,3 +125,94 @@
     threshold: 0.8
   lowerWarnAround: !type:AlarmThresholdSetting
     threshold: 1.1
+# DS14-start
+# Explosive with oxygen big boom time.
+- type: alarmThreshold
+  id: stationHydrogen
+  upperBound: !type:AlarmThresholdSetting
+    threshold: 0.005
+  upperWarnAround: !type:AlarmThresholdSetting
+    threshold: 0.5
+
+# War gas dangerous!
+- type: alarmThreshold
+  id: stationIprit
+  upperBound: !type:AlarmThresholdSetting
+    threshold: 0.001
+  upperWarnAround: !type:AlarmThresholdSetting
+    threshold: 0.5
+
+# Narcotic gas.
+- type: alarmThreshold
+  id: stationBrizidium
+  upperBound: !type:AlarmThresholdSetting
+    threshold: 0.02
+  upperWarnAround: !type:AlarmThresholdSetting
+    threshold: 0.5
+
+# Sedative medical gas.
+- type: alarmThreshold
+  id: stationHilium
+  upperBound: !type:AlarmThresholdSetting
+    threshold: 0.02
+  upperWarnAround: !type:AlarmThresholdSetting
+    threshold: 0.5
+
+# Stimulant gas.
+- type: alarmThreshold
+  id: stationNitriatium
+  upperBound: !type:AlarmThresholdSetting
+    threshold: 0.02
+  upperWarnAround: !type:AlarmThresholdSetting
+    threshold: 0.5
+
+# only warn at high concentration, never danger, oxygen replace.
+- type: alarmThreshold
+  id: stationFixirium
+  upperBound: !type:AlarmThresholdSetting
+    threshold: 1.5
+  upperWarnAround: !type:AlarmThresholdSetting
+    threshold: 0.5
+
+- type: alarmThreshold
+  id: stationHyperNoblium
+  upperBound: !type:AlarmThresholdSetting
+    threshold: 0.5
+  upperWarnAround: !type:AlarmThresholdSetting
+    threshold: 0.1
+
+- type: alarmThreshold
+  id: stationProtoNitrate
+  upperBound: !type:AlarmThresholdSetting
+    threshold: 1.5
+  upperWarnAround: !type:AlarmThresholdSetting
+    threshold: 0.5
+
+- type: alarmThreshold
+  id: stationHelium
+  upperBound: !type:AlarmThresholdSetting
+    threshold: 1.5
+  upperWarnAround: !type:AlarmThresholdSetting
+    threshold: 0.5
+
+- type: alarmThreshold
+  id: stationHalon
+  upperBound: !type:AlarmThresholdSetting
+    threshold: 1.5
+  upperWarnAround: !type:AlarmThresholdSetting
+    threshold: 0.5
+
+- type: alarmThreshold
+  id: stationZauker
+  upperBound: !type:AlarmThresholdSetting
+    threshold: 0.001
+  upperWarnAround: !type:AlarmThresholdSetting
+    threshold: 0.5
+
+- type: alarmThreshold
+  id: stationAntinoblium
+  upperBound: !type:AlarmThresholdSetting
+    threshold: 1.5
+  upperWarnAround: !type:AlarmThresholdSetting
+    threshold: 0.5
+# DS14-end

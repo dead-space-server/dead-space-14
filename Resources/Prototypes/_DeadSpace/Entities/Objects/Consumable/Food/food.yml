@@ -530,7 +530,7 @@
   - type: Item
     heldPrefix: produce
   - type: Produce
-    seedId: CactusPlant
+    plantId: CactusPlant
   - type: Extractable
     juiceSolution:
       reagents:
@@ -574,7 +574,7 @@
   - type: Item
     heldPrefix: produce
   - type: Produce
-    seedId: CactusCoralPlant
+    plantId: CactusCoralPlant
   - type: Sprite
     sprite: _DeadSpace/Objects/Specific/Hydroponics/cactus_coral.rsi
     state: produce
@@ -631,7 +631,7 @@
   - type: Item
     heldPrefix: produce
   - type: Produce
-    seedId: CactusBombPlant
+    plantId: CactusBombPlant
   - type: Sprite
     sprite: _DeadSpace/Objects/Specific/Hydroponics/cactus_bomb.rsi
     state: produce
@@ -670,7 +670,7 @@
   - type: Item
     heldPrefix: produce
   - type: Produce
-    seedId: CactusBubblePlant
+    plantId: CactusBubblePlant
   - type: Extractable
     juiceSolution:
       reagents:
@@ -721,7 +721,7 @@
   - type: Item
     heldPrefix: produce
   - type: Produce
-    seedId: MangoPlant
+    plantId: MangoPlant
   - type: Extractable
     juiceSolution:
       reagents:

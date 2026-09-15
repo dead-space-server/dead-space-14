@@ -1,69 +1,60 @@
 <DefaultWindow xmlns="https://spacestation14.io"
                Title="{Loc nano-task-ui-item-title}"
                MinSize="300 300">
-    <PanelContainer StyleClasses="DS14MenuShell">
-        <BoxContainer Orientation="Vertical" Margin="4">
-            <!-- Task Description Input -->
-            <BoxContainer Orientation="Vertical" Margin="0 4">
-                <Label Text="{Loc nano-task-ui-description-label}"
-                       StyleClasses="DS14MenuProfileSection" />
-                <PanelContainer StyleClasses="DS14MenuInset">
-                    <LineEdit Name="DescriptionInput"
-                              PlaceHolder="{Loc nano-task-ui-description-placeholder}"
-                              StyleClasses="DS14MenuInput" />
-                </PanelContainer>
-            </BoxContainer>
-
-            <!-- Task Requester Input -->
-            <BoxContainer Orientation="Vertical" Margin="0 4">
-                <Label Text="{Loc nano-task-ui-requester-label}"
-                       StyleClasses="DS14MenuProfileSection" />
-                <PanelContainer StyleClasses="DS14MenuInset">
-                    <LineEdit Name="RequesterInput"
-                              PlaceHolder="{Loc nano-task-ui-requester-placeholder}"
-                              StyleClasses="DS14MenuInput" />
-                </PanelContainer>
-            </BoxContainer>
-
-            <!-- Severity Buttons -->
-            <BoxContainer Orientation="Horizontal"
-                          HorizontalAlignment="Center"
-                          Margin="0 8 0 0">
-                <Button Name="LowButton"
-                        Text="{Loc nano-task-ui-priority-low}"
-                        StyleClasses="DS14MenuProfileControl"
-                        MinSize="60 0" />
-                <Button Name="MediumButton"
-                        Text="{Loc nano-task-ui-priority-medium}"
-                        StyleClasses="DS14MenuProfileControl"
-                        MinSize="60 0" />
-                <Button Name="HighButton"
-                        Text="{Loc nano-task-ui-priority-high}"
-                        StyleClasses="DS14MenuProfileControl"
-                        MinSize="60 0" />
-            </BoxContainer>
-
-            <!-- Verb Buttons -->
-            <BoxContainer Orientation="Horizontal"
-                          HorizontalAlignment="Right"
-                          Margin="0 8 0 0">
-                <Button Name="CancelButton"
-                        Text="{Loc nano-task-ui-cancel}"
-                        StyleClasses="DS14MenuProfileControl"
-                        MinSize="60 0" />
-                <Button Name="DeleteButton"
-                        Text="{Loc nano-task-ui-delete}"
-                        StyleClasses="DS14MenuProfileControl negative"
-                        MinSize="60 0" />
-                <Button Name="PrintButton"
-                        Text="{Loc nano-task-ui-print}"
-                        StyleClasses="DS14MenuProfileControl"
-                        MinSize="60 0" />
-                <Button Name="SaveButton"
-                        Text="{Loc nano-task-ui-save}"
-                        StyleClasses="DS14MenuAction"
-                        MinSize="60 0" />
-            </BoxContainer>
+    <!-- DS14-start -->
+    <BoxContainer Orientation="Vertical" Margin="14">
+        <!-- Task Description Input -->
+        <BoxContainer Orientation="Vertical" Margin="0 4">
+            <Label Text="{Loc nano-task-ui-description-label}"
+                   StyleClasses="DeadSpaceSectionTitle" />
+            <LineEdit Name="DescriptionInput"
+                      PlaceHolder="{Loc nano-task-ui-description-placeholder}"
+                      Margin="6" />
         </BoxContainer>
-    </PanelContainer>
+
+        <!-- Task Requester Input -->
+        <BoxContainer Orientation="Vertical" Margin="0 4">
+            <Label Text="{Loc nano-task-ui-requester-label}"
+                   StyleClasses="DeadSpaceSectionTitle" />
+            <LineEdit Name="RequesterInput"
+                      PlaceHolder="{Loc nano-task-ui-requester-placeholder}"
+                      Margin="6" />
+        </BoxContainer>
+
+        <!-- Severity Buttons -->
+        <BoxContainer Orientation="Horizontal"
+                      HorizontalAlignment="Center"
+                      Margin="0 8 0 0">
+            <Button Name="LowButton"
+                    Text="{Loc nano-task-ui-priority-low}"
+                    MinSize="60 0" />
+            <Button Name="MediumButton"
+                    Text="{Loc nano-task-ui-priority-medium}"
+                    MinSize="60 0" />
+            <Button Name="HighButton"
+                    Text="{Loc nano-task-ui-priority-high}"
+                    MinSize="60 0" />
+        </BoxContainer>
+
+        <!-- Verb Buttons -->
+        <BoxContainer Orientation="Horizontal"
+                      HorizontalAlignment="Right"
+                      Margin="0 8 0 0">
+            <Button Name="CancelButton"
+                    Text="{Loc nano-task-ui-cancel}"
+                    MinSize="60 0" />
+            <Button Name="DeleteButton"
+                    Text="{Loc nano-task-ui-delete}"
+                    StyleClasses="negative"
+                    MinSize="60 0" />
+            <Button Name="PrintButton"
+                    Text="{Loc nano-task-ui-print}"
+                    MinSize="60 0" />
+            <Button Name="SaveButton"
+                    Text="{Loc nano-task-ui-save}"
+                    StyleClasses="DeadSpaceAction"
+                    MinSize="60 0" />
+        </BoxContainer>
+    </BoxContainer>
+    <!-- DS14-end -->
 </DefaultWindow>

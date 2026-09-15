@@ -24,6 +24,12 @@ public sealed partial class LanguagePrototype : IPrototype
     [DataField]
     public bool GenerateTTSForLexicon = true;
 
+    /// <summary>
+    ///     Whether entities without an explicit list of known languages understand this language.
+    /// </summary>
+    [DataField]
+    public bool CanBeUnderstoodWithoutKnowledge = true;
+
     [DataField]
     public SoundSpecifier? LexiconSound;
 

@@ -26,6 +26,7 @@ public static class UserFormattableTags
         typeof(ConfusionTag),
         typeof(CyrillicConfusionTag),
         typeof(CutTag),
+        typeof(PaperFontTag),
         typeof(ShiftTag),
         typeof(SmallTag),
         typeof(UnderlineTag),

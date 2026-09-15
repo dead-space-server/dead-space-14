@@ -22,6 +22,13 @@ public sealed partial class ErtSpawnRuleComponent : Component
     /// </summary>
     public EntityUid? PinpointerTarget;
 
+    public EntityUid? ShuttleEntity;
+
+    /// <summary>
+    /// Suppresses station-facing announcements for an administrator's silent dispatch.
+    /// </summary>
+    public bool SuppressAnnouncements;
+
     [DataField(required: true)]
     public ProtoId<ERTShuttlePrototype> Shuttle;
 }

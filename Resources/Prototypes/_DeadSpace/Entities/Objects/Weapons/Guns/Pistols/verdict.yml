@@ -5,6 +5,7 @@
   description: Надёжный револьвер любого сотрудника СБ. Имеет барабан на 6 патрон и нескользящую ручку. Использует патроны .45 магнум, так как это то, что предполагали основатели.
   suffix: Револьвер
   components:
+  - type: Akimbo
   - type: Sprite
     sprite: _DeadSpace/Objects/Weapons/Guns/Pistols/verdict.rsi
   - type: Clothing

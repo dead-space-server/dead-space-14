@@ -1,9 +1,8 @@
 - type: marking
-  id: ADTHorseEars
+  id: HorseEars
   bodyPart: HeadTop
   markingCategory: HeadTop
-  speciesRestriction: [Human, Dwarf, Felinid]
-  sponsorOnly: True
+  speciesRestriction: [Human, Dwarf, Felinid, SlimePerson]
   coloring:
     default:
       type:
@@ -29,11 +28,10 @@
     state: ears_horse_inner
 
 - type: marking
-  id: ADTHorseTail
+  id: HorseTail
   bodyPart: Tail
   markingCategory: Tail
-  speciesRestriction: [Human, Dwarf, Felinid]
-  sponsorOnly: True
+  speciesRestriction: [Human, Dwarf, Felinid, SlimePerson]
   coloring:
     default:
       type:

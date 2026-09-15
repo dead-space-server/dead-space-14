@@ -48,13 +48,13 @@
         group: BaseSkills
       # DS14-End
 
+# Униформа, мантия и парик выдаются через меню снаряжения роли (JobMagistrat).
 - type: startingGear
   id: MagistratGear
   equipment:
     shoes: ClothingShoesBootsLaceup
-    outerClothing: ClothingOuterRobesJudge
     eyes: ClothingEyesGlassesSunglasses
-    head: ClothingHeadHatPwig
+    gloves: ClothingHandsGlovesColorWhite
     id: MagistratPDA
     ears: ClothingHeadsetMagistrat
     socks: ClothingUnderwearSockMagistrat
@@ -67,7 +67,10 @@
     - HyperLinkBookCorporateLaw
     - HyperLinkBookSOPSecurity
     - HyperLinkBookSOPLaw
-    - ADTtelescopicBaton
+    - PhoneInstrumentCentComm
+    - BoxFolderCentComEmpty
+    - GavelHammer
+    - GavelBlock
 
 - type: entity
   parent: BasePDA
@@ -119,7 +122,8 @@
   job: Magistrat
   equipment:
     shoes: ClothingShoesBootsLaceup
-    outerClothing: ClothingOuterRobesJudge
+    jumpsuit: ClothingUniformJumpsuitMagistrat
+    outerClothing: ClothingOuterRobesMagistrat
     eyes: ClothingEyesGlassesSunglasses
-    head: ClothingHeadHatPwig
+    head: ClothingHeadHatJwig
     socks: ClothingUnderwearSockMagistrat

@@ -19,7 +19,7 @@
       department: Command
       time: 144000 # 40 hours
     - !type:OverallPlaytimeRequirement
-      time: 3096000 # 860 hours
+      time: 1944000 # 540 hours
   startingGear: ERTLeaderGearAmber
   icon: "JobIconERTLeader"
   supervisors: job-supervisors-centcom
@@ -87,7 +87,7 @@
       department: Command
       time: 144000 # 40 hours
     - !type:OverallPlaytimeRequirement
-      time: 3096000 # 860 hours
+      time: 1944000 # 540 hours
   startingGear: ERTLeaderGearRed
   icon: "JobIconERTLeader"
   supervisors: job-supervisors-centcom
@@ -117,7 +117,7 @@
     head: ClothingHeadHatERTLeaderBeret
     neck: ClothingNeckMantleERTLeader
     gloves: ClothingHandsGlovesCombat
-    outerClothing: ClothingOuterHardsuitERTRedLeader
+    outerClothing: ClothingOuterHardsuitERTLeader
     suitstorage: JetpackSecurityFilled
     shoes: ADTClothingShoesBootsMagERT
     id: ERTLeaderRedPDA
@@ -128,7 +128,6 @@
     back:
     - ERTloadoutRedPrimary
     - ERTloadoutRedSecondary
-    - ERTloadoutMelee
     - BoxCardboardERT
     - PinpointerNuclear
     - CrowbarRed
@@ -154,7 +153,7 @@
       department: Command
       time: 144000 # 40 hours
     - !type:OverallPlaytimeRequirement
-      time: 3096000 # 860 hours
+      time: 1944000 # 540 hours
   startingGear: ERTLeaderGearGamma
   icon: "JobIconERTLeader"
   supervisors: job-supervisors-centcom
@@ -195,8 +194,7 @@
     back:
     - ERTloadoutGammaPrimary
     - ERTloadoutGammaSecondary
-    - ERTloadoutMelee
-    - BoxCardboardERT
+    - BoxCardboardERTGamma
     - PinpointerNuclear
     - CrowbarRed
     - BSAACombatKitFilled
@@ -219,7 +217,7 @@
       department: Security
       time: 288000 # 80 hours
     - !type:OverallPlaytimeRequirement
-      time: 3096000 # 860 hours
+      time: 1944000 # 540 hours
   startingGear: ERTSecurityGearAmber
   icon: "JobIconERT"
   supervisors: job-supervisors-centcom
@@ -285,7 +283,7 @@
       department: Security
       time: 288000 # 80 hours
     - !type:OverallPlaytimeRequirement
-      time: 3096000 # 860 hours
+      time: 1944000 # 540 hours
   startingGear: ERTSecurityGearRed
   icon: "JobIconERT"
   supervisors: job-supervisors-centcom
@@ -312,7 +310,7 @@
     eyes: ClothingEyesHudERT
     ears: ClothingHeadsetAltAERT
     gloves: ClothingHandsGlovesCombat
-    outerClothing: ClothingOuterHardsuitERTRedSecurity
+    outerClothing: ClothingOuterHardsuitERTSecurity
     suitstorage: JetpackSecurityFilled
     shoes: ADTClothingShoesBootsMagERT
     id: ERTSecurityRedPDA
@@ -323,7 +321,6 @@
     back:
     - ERTloadoutRedPrimary
     - ERTloadoutRedSecondary
-    - ERTloadoutMelee
     - BoxCardboardERT
     - CrowbarRed
     - PinpointerNuclear
@@ -346,7 +343,7 @@
       department: Security
       time: 288000 # 80 hours
     - !type:OverallPlaytimeRequirement
-      time: 3096000 # 860 hours
+      time: 1944000 # 540 hours
   startingGear: ERTSecurityGearGamma
   icon: "JobIconERT"
   supervisors: job-supervisors-centcom
@@ -384,8 +381,7 @@
     back:
     - ERTloadoutGammaPrimary
     - ERTloadoutGammaSecondary
-    - ERTloadoutMelee
-    - BoxCardboardERT
+    - BoxCardboardERTGamma
     - CrowbarRed
     - PinpointerNuclear
     - BSAACombatKitFilled
@@ -408,7 +404,7 @@
       department: Security
       time: 144000 # 40 hours
     - !type:OverallPlaytimeRequirement
-      time: 3096000 # 860 hours
+      time: 1944000 # 540 hours
   startingGear: ERTMedicalGearAmber
   icon: "JobIconERTMedical"
   supervisors: job-supervisors-centcom
@@ -476,7 +472,7 @@
       department: Security
       time: 144000 # 40 hours
     - !type:OverallPlaytimeRequirement
-      time: 3096000 # 860 hours
+      time: 1944000 # 540 hours
   startingGear: ERTMedicalGearRed
   icon: "JobIconERTMedical"
   supervisors: job-supervisors-centcom
@@ -503,7 +499,7 @@
     eyes: ClothingEyesHudERTGamma
     ears: ClothingHeadsetAltAERT
     gloves: ClothingHandsGlovesCombat
-    outerClothing: ClothingOuterHardsuitERTRedMedic
+    outerClothing: ClothingOuterHardsuitERTMedical
     suitstorage: JetpackSecurityFilled
     shoes: ADTClothingShoesBootsMagERT
     id: ERTMedicRedPDA
@@ -542,7 +538,7 @@
       department: Security
       time: 144000 # 40 hours
     - !type:OverallPlaytimeRequirement
-      time: 3096000 # 860 hours
+      time: 1944000 # 540 hours
   startingGear: ERTMedicalGearGamma
   icon: "JobIconERTMedical"
   supervisors: job-supervisors-centcom
@@ -581,7 +577,7 @@
     - ERTloadoutGammaPrimary
     - ERTloadoutGammaSecondary
     - ERTloadoutMelee
-    - BoxCardboardERT
+    - BoxCardboardERTGamma
     - DefibrillatorCompact
     - PinpointerNuclear
     - JugTheCircleOmnizine
@@ -606,7 +602,7 @@
       department: Security
       time: 144000 # 40 hours
     - !type:OverallPlaytimeRequirement
-      time: 3096000 # 860 hours
+      time: 1944000 # 540 hours
   startingGear: ERTEngineerGearAmber
   icon: "JobIconERTEngineer"
   supervisors: job-supervisors-centcom
@@ -674,7 +670,7 @@
       department: Security
       time: 144000 # 40 hours
     - !type:OverallPlaytimeRequirement
-      time: 3096000 # 860 hours
+      time: 1944000 # 540 hours
   startingGear: ERTEngineerGearRed
   icon: "JobIconERTEngineer"
   supervisors: job-supervisors-centcom
@@ -701,7 +697,7 @@
     eyes: ClothingEyesHudERT
     ears: ClothingHeadsetAltAERT
     gloves: ClothingHandsGlovesCombat
-    outerClothing: ClothingOuterHardsuitERTRedEngineer
+    outerClothing: ClothingOuterHardsuitERTEngineer
     suitstorage: JetpackSecurityFilled
     shoes: ADTClothingShoesBootsMagERT
     id: ERTEngineerRedPDA
@@ -736,7 +732,7 @@
       department: Security
       time: 144000 # 40 hours
     - !type:OverallPlaytimeRequirement
-      time: 3096000 # 860 hours
+      time: 1944000 # 540 hours
   startingGear: ERTEngineerGearGamma
   icon: "JobIconERTEngineer"
   supervisors: job-supervisors-centcom
@@ -775,7 +771,7 @@
     - ERTloadoutGammaPrimary
     - ERTloadoutGammaSecondary
     - ERTloadoutMelee
-    - BoxCardboardERT
+    - BoxCardboardERTGamma
     - BoxC4ERT
     - RCDRecharging
     - RCDAmmo
@@ -798,7 +794,7 @@
       department: Security
       time: 144000 # 40 hours
     - !type:OverallPlaytimeRequirement
-      time: 3096000 # 860 hours
+      time: 1944000 # 540 hours
   startingGear: ERTJanitorGearAmber
   icon: "JobIconERTJanitor"
   supervisors: job-supervisors-centcom
@@ -859,7 +855,7 @@
       department: Security
       time: 144000 # 40 hours
     - !type:OverallPlaytimeRequirement
-      time: 3096000 # 860 hours
+      time: 1944000 # 540 hours
   startingGear: ERTJanitorGearRed
   icon: "JobIconERTJanitor"
   supervisors: job-supervisors-centcom
@@ -886,7 +882,7 @@
     eyes: ClothingEyesHudERTGamma
     ears: ClothingHeadsetAltAERT
     gloves: ClothingHandsGlovesCombat
-    outerClothing: ClothingOuterHardsuitERTRedJanitor
+    outerClothing: ClothingOuterHardsuitERTJanitor
     suitstorage: JetpackSecurityFilled
     shoes: ADTClothingShoesBootsMagERT
     id: ERTJanitorRedPDA
@@ -919,7 +915,7 @@
       department: Security
       time: 144000 # 40 hours
     - !type:OverallPlaytimeRequirement
-      time: 3096000 # 860 hours
+      time: 1944000 # 540 hours
   startingGear: ERTJanitorGearGamma
   icon: "JobIconERTJanitor"
   supervisors: job-supervisors-centcom
@@ -958,7 +954,7 @@
     - ERTloadoutGammaPrimary
     - ERTloadoutGammaSecondary
     - ERTloadoutMelee
-    - BoxCardboardERT
+    - BoxCardboardERTGamma
     - BoxLightMixed
     - BoxGrenadeCleanade
     - AdvMopItem

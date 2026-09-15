@@ -7,14 +7,14 @@
          HorizontalExpand="True">
     <!-- DS14-start -->
     <PanelContainer Name="BackgroundPanel"
-                    StyleClasses="DS14MenuShell"
+                    StyleClasses="DeadSpaceWindow"
                     VerticalExpand="True"
                     HorizontalExpand="True">
         <BoxContainer Orientation="Vertical"
                       SeparationOverride="8"
                       VerticalExpand="True"
                       HorizontalExpand="True">
-            <PanelContainer StyleClasses="DS14MenuHeader">
+            <PanelContainer StyleClasses="DeadSpaceSectionHeader">
                 <BoxContainer Orientation="Horizontal"
                               HorizontalExpand="True"
                               SeparationOverride="6">
@@ -22,28 +22,28 @@
                                   HorizontalExpand="True"
                                   VerticalAlignment="Center">
                         <Label Text="{Loc 'character-setup-gui-character-setup-label'}"
-                               StyleClasses="DS14MenuTitle" />
+                               StyleClasses="DeadSpaceTitle" />
                         <Label Text="{Loc 'lobby-character-preview-panel-character-setup-button'}"
-                               StyleClasses="DS14MenuSubtitle" />
+                               StyleClasses="DeadSpaceSubtitle" />
                     </BoxContainer>
 
                     <Button Name="StatsButton"
                             Text="{Loc 'character-setup-gui-character-setup-stats-button'}"
-                            StyleClasses="DS14MenuTopButton"
+                            StyleClasses="DeadSpaceTopAction"
                             MinWidth="110" />
                     <cc:CommandButton Name="AdminRemarksButton"
                                       Command="adminremarks"
                                       Text="{Loc 'character-setup-gui-character-setup-adminremarks-button'}"
-                                      StyleClasses="DS14MenuTopButton"
+                                      StyleClasses="DeadSpaceTopAction"
                                       MinWidth="130" />
                     <Button Name="RulesButton"
                             Text="{Loc 'character-setup-gui-character-setup-rules-button'}"
-                            StyleClasses="DS14MenuTopButton"
+                            StyleClasses="DeadSpaceTopAction"
                             MinWidth="110"/>
                     <Button Name="CloseButton"
                             Access="Public"
                             Text="{Loc 'character-setup-gui-character-setup-close-button'}"
-                            StyleClasses="DS14MenuTopButton"
+                            StyleClasses="DeadSpaceTopAction"
                             MinWidth="110"/>
                 </BoxContainer>
             </PanelContainer>
@@ -52,7 +52,7 @@
                           VerticalExpand="True"
                           HorizontalExpand="True"
                           SeparationOverride="8">
-                <PanelContainer StyleClasses="DS14MenuPanelDark"
+                <PanelContainer StyleClasses="DeadSpaceSurfaceDark"
                                 MinWidth="325"
                                 VerticalExpand="True">
                     <ScrollContainer VerticalExpand="True"
@@ -60,7 +60,7 @@
                         <BoxContainer Orientation="Vertical"
                                       HorizontalExpand="True"
                                       SeparationOverride="4">
-                            <PanelContainer StyleClasses="DS14MenuAccent" />
+                            <PanelContainer StyleClasses="DeadSpaceAccent" />
                             <BoxContainer Name="Characters"
                                           Orientation="Vertical"
                                           HorizontalExpand="True" />
@@ -68,7 +68,7 @@
                                    Text="{Loc 'character-setup-gui-inaccessible-characters-label'}"
                                    Margin="4 8 0 4"
                                    Visible="False"
-                                   StyleClasses="DS14MenuSubtitle" />
+                                   StyleClasses="DeadSpaceSubtitle" />
                             <BoxContainer Name="InaccessibleCharacters"
                                           Orientation="Vertical"
                                           Visible="False"
@@ -77,10 +77,10 @@
                     </ScrollContainer>
                 </PanelContainer>
 
-                <PanelContainer StyleClasses="DS14MenuAccentDim"
+                <PanelContainer StyleClasses="DeadSpaceAccentDim"
                                 MinWidth="2" />
 
-                <PanelContainer StyleClasses="DS14MenuPanel"
+                <PanelContainer StyleClasses="DeadSpaceSurface"
                                 HorizontalExpand="True"
                                 VerticalExpand="True">
                     <BoxContainer Name="CharEditor"

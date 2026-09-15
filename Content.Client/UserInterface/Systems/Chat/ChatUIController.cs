@@ -6,6 +6,7 @@ using Content.Client.Chat;
 using Content.Client.Chat.Managers;
 using Content.Client.Chat.TypingIndicator;
 using Content.Client.Chat.UI;
+using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.Examine;
 using Content.Client.Gameplay;
 using Content.Client.Ghost;
@@ -281,7 +282,7 @@ public sealed partial class ChatUIController : UIController
                  && style is StyleBoxFlat propStyleBoxFlat)
             color = propStyleBoxFlat.BackgroundColor;
         else
-            color = Color.FromHex("#25252ADD");
+            color = DeadSpaceStylePalette.SurfaceTranscript.WithAlpha(221f / 255f); // DS14
 
         panel.PanelOverride = new StyleBoxFlat
         {
@@ -928,7 +929,7 @@ public sealed partial class ChatUIController : UIController
                 break;
 
             case ChatChannel.Dead:
-                if (_ghost is not {IsGhost: true})
+                if (_ghost is not { IsGhost: true})
                     break;
 
                 AddSpeechBubble(msg, SpeechBubble.SpeechType.Say);

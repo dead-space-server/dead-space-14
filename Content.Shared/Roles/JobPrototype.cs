@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Content.Shared.Access;
 using Content.Shared.Guidebook;
 using Content.Shared.FixedPoint;
@@ -90,23 +91,6 @@ namespace Content.Shared.Roles
         public bool CanBeAntag { get; private set; } = true;
 
         /// <summary>
-        ///     The "weight" or importance of this job. If this number is large, the job system will assign this job
-        ///     before assigning other jobs.
-        /// </summary>
-        [DataField]
-        public int Weight { get; private set; }
-
-        /// <summary>
-        /// How to sort this job relative to other jobs in the UI.
-        /// Jobs with a higher value with sort before jobs with a lower value.
-        /// If not set, <see cref="Weight"/> is used as a fallback.
-        /// </summary>
-        [DataField]
-        public int? DisplayWeight { get; private set; }
-
-        public int RealDisplayWeight => DisplayWeight ?? Weight;
-
-        /// <summary>
         ///     A numerical score for how much easier this job is for antagonists.
         ///     For traitors, reduces starting TC by this amount. Other gamemodes can use it for whatever they find fitting.
         /// </summary>
@@ -185,12 +169,52 @@ namespace Content.Shared.Roles
     }
 
     /// <summary>
-    /// Sorts <see cref="JobPrototype"/>s appropriately for display in the UI,
-    /// respecting their <see cref="JobPrototype.Weight"/>.
+    /// Sorts <see cref="JobPrototype"/>s appropriately for display using a map's job weighting profile.
     /// </summary>
     public sealed class JobUIComparer : IComparer<JobPrototype>
     {
-        public static readonly JobUIComparer Instance = new();
+        private readonly IReadOnlyDictionary<ProtoId<JobPrototype>, int> _weights;
+
+        private JobUIComparer(IReadOnlyDictionary<ProtoId<JobPrototype>, int> weights)
+        {
+            _weights = weights;
+        }
+
+        /// <summary>
+        /// Creates a comparer when the global fallback profile exists.
+        /// Without one, callers should retain the source order rather than sorting jobs.
+        /// </summary>
+        public static bool TryCreate(
+            IPrototypeManager prototypes,
+            ProtoId<JobWeightPrototype>? jobWeights,
+            [NotNullWhen(true)] out JobUIComparer? comparer)
+        {
+            if (!prototypes.TryIndex(JobWeightPrototype.Default, out var defaultProfile))
+            {
+                comparer = null;
+                return false;
+            }
+
+            var weights = new Dictionary<ProtoId<JobPrototype>, int>(defaultProfile.Weights);
+            if (jobWeights != null && prototypes.TryIndex(jobWeights.Value, out var mapProfile))
+            {
+                foreach (var (job, weight) in mapProfile.Weights)
+                {
+                    weights[job] = weight;
+                }
+            }
+
+            comparer = new JobUIComparer(weights);
+            return true;
+        }
+
+        /// <summary>
+        /// Gets the configured display weight for a job, if one exists.
+        /// </summary>
+        public int? GetWeight(JobPrototype job)
+        {
+            return _weights.TryGetValue(job.ID, out var weight) ? weight : null;
+        }
 
         public int Compare(JobPrototype? x, JobPrototype? y)
         {
@@ -201,7 +225,12 @@ namespace Content.Shared.Roles
             if (ReferenceEquals(null, x))
                 return -1;
 
-            var cmp = -x.RealDisplayWeight.CompareTo(y.RealDisplayWeight);
+            var xWeight = GetWeight(x);
+            var yWeight = GetWeight(y);
+            if (xWeight == null || yWeight == null)
+                return 0;
+
+            var cmp = -xWeight.Value.CompareTo(yWeight.Value);
             if (cmp != 0)
                 return cmp;
             return string.Compare(x.ID, y.ID, StringComparison.Ordinal);

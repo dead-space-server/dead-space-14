@@ -1,0 +1,114 @@
+- type: gasReaction
+  id: NitrousOxideProduction
+  priority: 3
+  minimumTemperature: 200
+  maximumTemperature: 250
+  minimumRequirements:
+    Nitrogen: 20
+    Oxygen: 10
+    Brizidium: 5 # катализатор
+  effects:
+  - !type:NitrousOxideProductionReaction {}
+
+- type: gasReaction
+  id: HyperNobliumProduction
+  priority: 3
+  maximumTemperature: 25
+  minimumRequirements:
+    Nitrogen: 10
+    Tritium: 5
+    # Без бризидума будет огромное количество энергии и бум
+  effects:
+  - !type:HyperNobliumProductionReaction {}
+
+# Глушилка. Пока Гипер нобилиума больше 5 моль и темпа больше 30K, то останавливает все реакции.
+- type: gasReaction
+  id: HyperNobliumSuppression
+  priority: 100
+  minimumTemperature: 30
+  minimumRequirements:
+    HyperNoblium: 5
+  effects:
+  - !type:HyperNobliumSuppressionReaction {}
+
+- type: gasReaction
+  id: ProtoNitrateProduction
+  priority: 3
+  minimumTemperature: 5000
+  maximumTemperature: 10000
+  minimumRequirements:
+    Fixirium: 0.01
+    Hydrogen: 0.01
+  effects:
+  - !type:ProtoNitrateProductionReaction {}
+
+- type: gasReaction
+  id: ProtoNitrateBrizidiumResponse # Выделяет раду
+  priority: 4
+  minimumTemperature: 260
+  maximumTemperature: 280
+  minimumRequirements:
+    ProtoNitrate: 0.01
+    Brizidium: 0.01
+  effects:
+  - !type:ProtoNitrateBrizidiumResponseReaction {}
+
+- type: gasReaction
+  id: ProtoNitrateTritiumResponse # Выделяет раду
+  priority: 3
+  minimumTemperature: 150
+  maximumTemperature: 340
+  minimumRequirements:
+    ProtoNitrate: 0.01
+    Tritium: 0.01
+  effects:
+  - !type:ProtoNitrateTritiumResponseReaction {}
+
+- type: gasReaction
+  id: ProtoNitrateHydrogenResponse
+  priority: 2
+  minimumRequirements:
+    ProtoNitrate: 0.01
+    Hydrogen: 150
+  effects:
+  - !type:ProtoNitrateHydrogenResponseReaction {}
+
+- type: gasReaction
+  id: HalonExtinguish
+  priority: 4
+  minimumTemperature: 343.15
+  minimumRequirements:
+    Halon: 0.01
+    Oxygen: 0.01
+  effects:
+  - !type:HalonExtinguishReaction {}
+
+- type: gasReaction
+  id: ZaukerProduction
+  priority: 3
+  minimumTemperature: 50000
+  maximumTemperature: 75000
+  minimumRequirements:
+    HyperNoblium: 0.01
+    Nitriatium: 0.01
+  effects:
+  - !type:ZaukerProductionReaction {}
+
+- type: gasReaction
+  id: ZaukerDecomposition
+  priority: 4
+  minimumRequirements:
+    Zauker: 0.01
+    Nitrogen: 0.01
+  effects:
+  - !type:ZaukerDecompositionReaction {}
+
+- type: gasReaction
+  id: HydrogenFire
+  priority: -1
+  minimumTemperature: 573.149
+  minimumRequirements:
+    Oxygen: 0.01
+    Hydrogen: 0.01
+  effects:
+  - !type:HydrogenFireReaction {}

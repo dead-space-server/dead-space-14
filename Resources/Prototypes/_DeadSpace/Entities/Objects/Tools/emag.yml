@@ -1,0 +1,14 @@
+- type: entity
+  parent: Emag
+  id: EmagNukeOps
+  suffix: Limited, Nuclear Operatives
+  components:
+  - type: ContainmentFieldHack
+
+- type: entity
+  parent: EmagNukeOps
+  id: EmagLoneOps
+  suffix: Limited, Lone Operative
+  components:
+  - type: ContainmentFieldHack
+    destabilizationDuration: 150

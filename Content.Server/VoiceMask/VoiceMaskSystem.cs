@@ -39,6 +39,7 @@ public sealed partial class VoiceMaskSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<VoiceMaskComponent, InventoryRelayedEvent<TransformSpeakerNameEvent>>(OnTransformSpeakerNameInventory);
         SubscribeLocalEvent<VoiceMaskComponent, ImplantRelayEvent<TransformSpeakerNameEvent>>(OnTransformSpeakerNameImplant);
+        SubscribeLocalEvent<VoiceMaskComponent, TransformSpeakerNameEvent>(OnTransformSpeakerNameInnate);
         SubscribeLocalEvent<VoiceMaskComponent, ImplantRelayEvent<SeeIdentityAttemptEvent>>(OnSeeIdentityAttemptEvent);
         SubscribeLocalEvent<VoiceMaskComponent, ImplantImplantedEvent>(OnImplantImplantedEvent);
         SubscribeLocalEvent<VoiceMaskComponent, ImplantRemovedEvent>(OnImplantRemovedEventEvent);
@@ -90,6 +91,11 @@ public sealed partial class VoiceMaskSystem : EntitySystem
     private void OnTransformSpeakerNameImplant(Entity<VoiceMaskComponent> entity, ref ImplantRelayEvent<TransformSpeakerNameEvent> args)
     {
         TransformVoice(entity, args.Event);
+    }
+
+    private void OnTransformSpeakerNameInnate(Entity<VoiceMaskComponent> entity, ref TransformSpeakerNameEvent args)
+    {
+        TransformVoice(entity, args);
     }
 
     private void OnSeeIdentityAttemptEvent(Entity<VoiceMaskComponent> entity, ref ImplantRelayEvent<SeeIdentityAttemptEvent> args)

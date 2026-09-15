@@ -1,5 +1,7 @@
 ﻿<Control xmlns="https://spacestation14.io">
-    <BoxContainer Orientation="Horizontal">
+    <!-- DS14-start -->
+    <BoxContainer Orientation="Horizontal" Margin="0 0 0 4">
+    <!-- DS14-end -->
         <Label Name="NameLabel" MinWidth="400" />
         <OptionButton Name="Button" Access="Public" />
     </BoxContainer>

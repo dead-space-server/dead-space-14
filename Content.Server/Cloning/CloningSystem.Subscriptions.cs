@@ -1,7 +1,8 @@
-using Content.Server.Forensics;
 using Content.Server.Speech.EntitySystems;
 using Content.Shared.Cloning.Events;
 using Content.Shared.FixedPoint;
+using Content.Shared.Forensics.Components;
+using Content.Shared.Forensics.Systems;
 using Content.Shared.Inventory;
 using Content.Shared.Labels.Components;
 using Content.Shared.Labels.EntitySystems;
@@ -30,7 +31,7 @@ public sealed partial class CloningSystem
 {
     [Dependency] private readonly SharedStackSystem _stack = default!;
     [Dependency] private readonly LabelSystem _label = default!;
-    [Dependency] private readonly ForensicsSystem _forensics = default!;
+    [Dependency] private readonly SharedForensicsSystem _forensics = default!;
     [Dependency] private readonly PaperSystem _paper = default!;
     [Dependency] private readonly VocalSystem _vocal = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movementSpeedModifier = default!;
@@ -86,7 +87,7 @@ public sealed partial class CloningSystem
     private void OnCloneItemForensics(Entity<ForensicsComponent> ent, ref CloningItemEvent args)
     {
         // copy any forensics to the cloned item
-        _forensics.CopyForensicsFrom(ent.Comp, args.CloneUid);
+        _forensics.CopyForensicsFrom(ent.AsNullable(), args.CloneUid);
     }
 
     private void OnCloneItemStore(Entity<StoreComponent> ent, ref CloningItemEvent args)

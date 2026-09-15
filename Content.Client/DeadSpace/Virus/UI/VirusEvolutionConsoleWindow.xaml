@@ -1,18 +1,13 @@
 <!--Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT-->
 
 <DefaultWindow xmlns="https://spacestation14.io"
-               xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
                Title="{Loc 'virus-evolution-window-title'}"
                MinSize="960 640"
                SetSize="1040 720">
-    <PanelContainer StyleClasses="BackgroundPanelDark" HorizontalExpand="True" VerticalExpand="True">
+    <PanelContainer StyleClasses="DeadSpaceSurfaceFlat" HorizontalExpand="True" VerticalExpand="True">
         <BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="10" HorizontalExpand="True" VerticalExpand="True">
             <BoxContainer Orientation="Horizontal">
-                <PanelContainer SetWidth="8">
-                    <PanelContainer.PanelOverride>
-                        <gfx:StyleBoxFlat BackgroundColor="#1f6feb" />
-                    </PanelContainer.PanelOverride>
-                </PanelContainer>
+                <PanelContainer SetWidth="8" StyleClasses="DeadSpaceAccent" />
                 <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="8 0 0 0">
                     <Label Text="{Loc 'virus-evolution-window-title'}" StyleClasses="LabelHeading" />
                     <Label Text="{Loc 'virus-evolution-window-subtitle'}" StyleClasses="LabelSubText" />
@@ -25,7 +20,7 @@
                               HorizontalExpand="True"
                               VerticalExpand="True">
                     <PanelContainer Name="EvolutionContents"
-                                    StyleClasses="PanelDark"
+                                    StyleClasses="DeadSpaceSurfaceDark"
                                     VerticalExpand="True"
                                     HorizontalExpand="True"
                                     Margin="0 8 0 0">
@@ -56,7 +51,7 @@
                                               SelectMode="Single" />
                                 </BoxContainer>
 
-                                <PanelContainer HorizontalExpand="True" VerticalExpand="True" RectClipContent="True">
+                                <PanelContainer HorizontalExpand="True" VerticalExpand="True" RectClipContent="True" StyleClasses="DeadSpaceInset">
                                     <BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="8" HorizontalExpand="True" VerticalExpand="True">
                                         <Label Name="SymptomSelectionLabel" StyleClasses="LabelHeading" ClipText="True" HorizontalExpand="True" />
                                         <Label Name="SymptomCostLabel" StyleClasses="LabelSubText" ClipText="True" HorizontalExpand="True" />
@@ -101,7 +96,7 @@
                     </PanelContainer>
 
                     <PanelContainer Name="EvolutionServerMissing"
-                                    StyleClasses="PanelDark"
+                                    StyleClasses="DeadSpaceInset"
                                     VerticalExpand="True"
                                     HorizontalExpand="True"
                                     Margin="0 8 0 0">
@@ -112,7 +107,7 @@
                     </PanelContainer>
 
                     <PanelContainer Name="VirusDataMissing"
-                                    StyleClasses="PanelDark"
+                                    StyleClasses="DeadSpaceInset"
                                     VerticalExpand="True"
                                     HorizontalExpand="True"
                                     Margin="0 8 0 0">
@@ -123,7 +118,7 @@
                     </PanelContainer>
 
                     <PanelContainer Name="EvolutionServerFar"
-                                    StyleClasses="PanelDark"
+                                    StyleClasses="DeadSpaceInset"
                                     VerticalExpand="True"
                                     HorizontalExpand="True"
                                     Margin="0 8 0 0">
@@ -139,7 +134,7 @@
                               VerticalExpand="True"
                               HorizontalExpand="True">
                     <PanelContainer Name="WhitelistContents"
-                                    StyleClasses="PanelDark"
+                                    StyleClasses="DeadSpaceSurfaceDark"
                                     VerticalExpand="True"
                                     HorizontalExpand="True"
                                     Margin="0 8 0 0">
@@ -164,7 +159,7 @@
                                               SelectMode="Single" />
                                 </BoxContainer>
 
-                                <PanelContainer HorizontalExpand="True" VerticalExpand="True" RectClipContent="True">
+                                <PanelContainer HorizontalExpand="True" VerticalExpand="True" RectClipContent="True" StyleClasses="DeadSpaceInset">
                                     <BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="8" HorizontalExpand="True" VerticalExpand="True">
                                         <Label Name="BodySelectionLabel" StyleClasses="LabelHeading" ClipText="True" HorizontalExpand="True" />
                                         <Label Name="BodyCostLabel" StyleClasses="LabelSubText" ClipText="True" HorizontalExpand="True" />
@@ -202,7 +197,7 @@
                     </PanelContainer>
 
                     <PanelContainer Name="WhitelistStatusPanel"
-                                    StyleClasses="PanelDark"
+                                    StyleClasses="DeadSpaceInset"
                                     VerticalExpand="True"
                                     HorizontalExpand="True"
                                     Margin="0 8 0 0">

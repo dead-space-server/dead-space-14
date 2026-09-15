@@ -304,9 +304,14 @@ binds:
   type: State
   key: R
   mod1: Shift
+# DS14-start
 - function: FlipObject
   type: State
   key: F
+- function: Parry
+  type: State
+  key: F
+# DS14-end
 - function: TextCursorLeft
   type: State
   key: Left

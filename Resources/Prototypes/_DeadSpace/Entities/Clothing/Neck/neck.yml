@@ -33,7 +33,7 @@
 
 - type: entity
   parent: [ClothingNeckBase, BaseCommandContraband]
-  id: ClothingNeckMantleRedSwordhoulder
+  id: ClothingNeckMantleRedSwordShoulder
   name: наплечная мантия офицера "Красный Меч"
   description: Эта мантия является символом спасения высокопоставленных лиц.
   components:
@@ -44,7 +44,7 @@
 
 - type: entity
   parent: [ClothingNeckBase, BaseCommandContraband]
-  id: ClothingNeckMantleGreenBerethoulder
+  id: ClothingNeckMantleGreenBeretShoulder
   name: наплечная мантия офицера "Зелёный Берет"
   description: Яркая зелёная мантия элитных Офицеров, что пугает вас своим видом...
   components:

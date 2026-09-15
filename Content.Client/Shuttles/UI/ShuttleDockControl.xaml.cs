@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.Shuttles.Systems;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
@@ -384,12 +385,12 @@ public sealed partial class ShuttleDockControl : BaseShuttleControl
                 {
                     HorizontalAlignment = HAlignment.Center,
                     VerticalAlignment = VAlignment.Center,
-                    PanelOverride = new StyleBoxFlat(new Color(30, 30, 34, 200)),
                     Children =
                     {
                         container,
                     }
                 };
+                panel.AddStyleClass(DeadSpaceStyleClass.SurfaceDark); // DS14
 
                 Button button;
 

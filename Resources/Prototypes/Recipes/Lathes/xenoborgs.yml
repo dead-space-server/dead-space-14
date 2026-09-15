@@ -2,6 +2,13 @@
 
 - type: latheRecipe
   abstract: true
+  id: BaseXenoborgMachineRecipe
+  categories:
+  - Machines
+  completetime: 2
+
+- type: latheRecipe
+  abstract: true
   id: BaseXenoborgRecipe
   categories:
   - Robotics
@@ -14,65 +21,195 @@
   - Modules
   completetime: 2
 
-# xenoborgs
+# machines
+
+- type: latheRecipe
+  parent: BaseXenoborgMachineRecipe
+  id: XenoborgExtractorRecipe
+  result: XenoborgExtractorFlatpack
+  materials:
+    Steel: 1000
+
+# xenoborgs from common materials
 
 - type: latheRecipe
   parent: BaseXenoborgRecipe
   id: XenoborgEngiRecipe
+  name: lathe-recipe-XenoborgEngiRecipe-materials-name # DS14
   result: XenoborgEngiPrinted
   materials:
-    Steel: 3000
+    Steel: 3900 # DS14
 
 - type: latheRecipe
   parent: BaseXenoborgRecipe
   id: XenoborgHeavyRecipe
+  name: lathe-recipe-XenoborgHeavyRecipe-materials-name # DS14
   result: XenoborgHeavyPrinted
   materials:
-    Steel: 2000
-    Plasteel: 1000
+    # DS14-start
+    Steel: 2600
+    Plasteel: 1300
+    # DS14-end
 
 - type: latheRecipe
   parent: BaseXenoborgRecipe
   id: XenoborgScoutRecipe
+  name: lathe-recipe-XenoborgScoutRecipe-materials-name # DS14
   result: XenoborgScoutPrinted
   materials:
-    Steel: 2000
-    Plastic: 1000
+    # DS14-start
+    Steel: 2600
+    Plastic: 1300
+    # DS14-end
 
 - type: latheRecipe
   parent: BaseXenoborgRecipe
   id: XenoborgStealthRecipe
+  name: lathe-recipe-XenoborgStealthRecipe-materials-name # DS14
   result: XenoborgStealthPrinted
   materials:
-    Steel: 2000
-    Glass: 1000
+    # DS14-start
+    Steel: 2600
+    Glass: 1300
+    # DS14-end
 
-# modules
+# modules from common materials
 
 ## engi xenoborg modules
 
 - type: latheRecipe
   parent: BaseXenoborgModulesRecipe
   id: XenoborgModuleDoorControlRecipe
+  name: lathe-recipe-XenoborgModuleDoorControlRecipe-materials-name # DS14
   result: XenoborgModuleDoorControl
   materials:
-    Steel: 2000 # DS14
-    Glass: 1500
-    Plastic: 1000 # DS14
+    # DS14-start
+    Steel: 2600
+    Glass: 1950
+    Plastic: 1300
+    # DS14-end
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleDeflectorFieldRecipe
+  name: lathe-recipe-XenoborgModuleDeflectorFieldRecipe-materials-name # DS14
+  result: XenoborgModuleDeflectorField
+  materials:
+    # DS14-start
+    Steel: 2600
+    Glass: 1950
+    Plastic: 1300
+    # DS14-end
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleZapRecipe
+  name: lathe-recipe-XenoborgModuleZapRecipe-materials-name # DS14
+  result: XenoborgModuleZap
+  materials:
+    # DS14-start
+    Steel: 2600
+    Glass: 1950
+    Plastic: 1300
+    # DS14-end
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleOilGunRecipe
+  name: lathe-recipe-XenoborgModuleOilGunRecipe-materials-name # DS14
+  result: XenoborgModuleOilGun
+  materials:
+    # DS14-start
+    Steel: 1950
+    Glass: 1300
+    Plasma: 1950
+    Plastic: 1300
+    Diamond: 33
+    # DS14-end
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleNaniteGunRecipe
+  name: lathe-recipe-XenoborgModuleNaniteGunRecipe-materials-name # DS14
+  result: XenoborgModuleNaniteGun
+  materials:
+    # DS14-start
+    Steel: 2600
+    Glass: 1950
+    Plasma: 1300
+    Plastic: 650
+    Diamond: 33
+    # DS14-end
 
 ## heavy xenoborg modules
 
 - type: latheRecipe
   parent: BaseXenoborgModulesRecipe
   id: XenoborgModuleHeavyLaserRecipe
+  name: lathe-recipe-XenoborgModuleHeavyLaserRecipe-materials-name # DS14
   result: XenoborgModuleHeavyLaser
   materials:
-    Steel: 2000 # DS14
-    Glass: 1500
     # DS14-start
-    Plasma: 1000
-    Plastic: 500
-    Diamond: 25
+    Steel: 2600
+    Glass: 1950
+    Plasma: 1300
+    Plastic: 650
+    Diamond: 33
+    # DS14-end
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleGuidedMissileLauncherRecipe
+  name: lathe-recipe-XenoborgModuleGuidedMissileLauncherRecipe-materials-name # DS14
+  result: XenoborgModuleGuidedMissileLauncher
+  materials:
+    # DS14-start
+    Steel: 1950
+    Glass: 1300
+    Plasma: 1950
+    Plastic: 1300
+    Diamond: 33
+    # DS14-end
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleRocketRecipe
+  name: lathe-recipe-XenoborgModuleRocketRecipe-materials-name # DS14
+  result: XenoborgModuleRocket
+  materials:
+    # DS14-start
+    Steel: 1950
+    Glass: 1300
+    Plasma: 1950
+    Plastic: 1300
+    Diamond: 33
+    # DS14-end
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleBurstFireLaserRecipe
+  name: lathe-recipe-XenoborgModuleBurstFireLaserRecipe-materials-name # DS14
+  result: XenoborgModuleBurstFireLaser
+  materials:
+    # DS14-start
+    Steel: 2600
+    Glass: 1950
+    Plasma: 1300
+    Plastic: 650
+    Diamond: 33
+    # DS14-end
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleHeavyRadioactiveRecipe
+  name: lathe-recipe-XenoborgModuleHeavyRadioactiveRecipe-materials-name # DS14
+  result: XenoborgModuleHeavyRadioactive
+  materials:
+    # DS14-start
+    Steel: 2600
+    Glass: 1950
+    Plastic: 1300
+    Uranium: 1300
     # DS14-end
 
 ## scout xenoborg modules
@@ -80,14 +217,41 @@
 - type: latheRecipe
   parent: BaseXenoborgModulesRecipe
   id: XenoborgModuleEnergySwordRecipe
+  name: lathe-recipe-XenoborgModuleEnergySwordRecipe-materials-name # DS14
   result: XenoborgModuleEnergySword
   materials:
-    Steel: 1500
     # DS14-start
-    Glass: 1000
-    Plasma: 1500
-    Plastic: 1000
-    Diamond: 25
+    Steel: 1950
+    Glass: 1300
+    Plasma: 1950
+    Plastic: 1300
+    Diamond: 33
+    # DS14-end
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleJumpRecipe
+  name: lathe-recipe-XenoborgModuleJumpRecipe-materials-name # DS14
+  result: XenoborgModuleJump
+  materials:
+    # DS14-start
+    Steel: 2600
+    Glass: 1950
+    Plastic: 1300
+    # DS14-end
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleBioKnifeRecipe # DS14 - fix upstream typo
+  name: lathe-recipe-XenoborgModuleBioKnifeRecipe-materials-name # DS14
+  result: XenoborgModuleBioKnife # DS14 - fix upstream typo
+  materials:
+    # DS14-start
+    Steel: 2600
+    Glass: 1950
+    Plasma: 1300
+    Plastic: 650
+    Diamond: 33
     # DS14-end
 
 ## stealth xenoborg modules
@@ -95,12 +259,162 @@
 - type: latheRecipe
   parent: BaseXenoborgModulesRecipe
   id: XenoborgModuleSuperCloakDeviceRecipe
+  name: lathe-recipe-XenoborgModuleSuperCloakDeviceRecipe-materials-name # DS14
   result: XenoborgModuleSuperCloakDevice
   materials:
     # DS14-start
-    Steel: 1000
-    Glass: 2000
-    Plasma: 1000
-    Plastic: 1500
-    Diamond: 25
+    Steel: 1300
+    Glass: 2600
+    Plasma: 1300
+    Plastic: 1950
+    Diamond: 33
     # DS14-end
+
+# DS14-start
+# Alternate xenoborg recipes using crystals.
+
+- type: latheRecipe
+  parent: BaseXenoborgRecipe
+  id: XenoborgEngiCrystalRecipe
+  name: lathe-recipe-XenoborgEngiRecipe-crystal-name
+  result: XenoborgEngiPrinted
+  materials:
+    XenoborgCrystal: 100
+
+- type: latheRecipe
+  parent: BaseXenoborgRecipe
+  id: XenoborgHeavyCrystalRecipe
+  name: lathe-recipe-XenoborgHeavyRecipe-crystal-name
+  result: XenoborgHeavyPrinted
+  materials:
+    XenoborgCrystal: 100
+
+- type: latheRecipe
+  parent: BaseXenoborgRecipe
+  id: XenoborgScoutCrystalRecipe
+  name: lathe-recipe-XenoborgScoutRecipe-crystal-name
+  result: XenoborgScoutPrinted
+  materials:
+    XenoborgCrystal: 100
+
+- type: latheRecipe
+  parent: BaseXenoborgRecipe
+  id: XenoborgStealthCrystalRecipe
+  name: lathe-recipe-XenoborgStealthRecipe-crystal-name
+  result: XenoborgStealthPrinted
+  materials:
+    XenoborgCrystal: 100
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleDoorControlCrystalRecipe
+  name: lathe-recipe-XenoborgModuleDoorControlRecipe-crystal-name
+  result: XenoborgModuleDoorControl
+  materials:
+    XenoborgCrystal: 200
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleDeflectorFieldCrystalRecipe
+  name: lathe-recipe-XenoborgModuleDeflectorFieldRecipe-crystal-name
+  result: XenoborgModuleDeflectorField
+  materials:
+    XenoborgCrystal: 100
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleZapCrystalRecipe
+  name: lathe-recipe-XenoborgModuleZapRecipe-crystal-name
+  result: XenoborgModuleZap
+  materials:
+    XenoborgCrystal: 100
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleOilGunCrystalRecipe
+  name: lathe-recipe-XenoborgModuleOilGunRecipe-crystal-name
+  result: XenoborgModuleOilGun
+  materials:
+    XenoborgCrystal: 300
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleNaniteGunCrystalRecipe
+  name: lathe-recipe-XenoborgModuleNaniteGunRecipe-crystal-name
+  result: XenoborgModuleNaniteGun
+  materials:
+    XenoborgCrystal: 200
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleHeavyLaserCrystalRecipe
+  name: lathe-recipe-XenoborgModuleHeavyLaserRecipe-crystal-name
+  result: XenoborgModuleHeavyLaser
+  materials:
+    XenoborgCrystal: 200
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleGuidedMissileLauncherCrystalRecipe
+  name: lathe-recipe-XenoborgModuleGuidedMissileLauncherRecipe-crystal-name
+  result: XenoborgModuleGuidedMissileLauncher
+  materials:
+    XenoborgCrystal: 300
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleRocketCrystalRecipe
+  name: lathe-recipe-XenoborgModuleRocketRecipe-crystal-name
+  result: XenoborgModuleRocket
+  materials:
+    XenoborgCrystal: 400
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleBurstFireLaserCrystalRecipe
+  name: lathe-recipe-XenoborgModuleBurstFireLaserRecipe-crystal-name
+  result: XenoborgModuleBurstFireLaser
+  materials:
+    XenoborgCrystal: 200
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleHeavyRadioactiveCrystalRecipe
+  name: lathe-recipe-XenoborgModuleHeavyRadioactiveRecipe-crystal-name
+  result: XenoborgModuleHeavyRadioactive
+  materials:
+    XenoborgCrystal: 100
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleEnergySwordCrystalRecipe
+  name: lathe-recipe-XenoborgModuleEnergySwordRecipe-crystal-name
+  result: XenoborgModuleEnergySword
+  materials:
+    XenoborgCrystal: 300
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleJumpCrystalRecipe
+  name: lathe-recipe-XenoborgModuleJumpRecipe-crystal-name
+  result: XenoborgModuleJump
+  materials:
+    XenoborgCrystal: 100
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleBioKnifeCrystalRecipe
+  name: lathe-recipe-XenoborgModuleBioKnifeRecipe-crystal-name
+  result: XenoborgModuleBioKnife
+  materials:
+    XenoborgCrystal: 200
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleSuperCloakDeviceCrystalRecipe
+  name: lathe-recipe-XenoborgModuleSuperCloakDeviceRecipe-crystal-name
+  result: XenoborgModuleSuperCloakDevice
+  materials:
+    XenoborgCrystal: 300
+
+# DS14-end

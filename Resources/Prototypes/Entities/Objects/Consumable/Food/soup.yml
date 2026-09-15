@@ -429,6 +429,10 @@
   id: FoodRicePork
   description: Well, it looks like pork...
   components:
+  # DS14-start
+  - type: Edible
+    utensil: Fork, Spoon
+  # DS14-end
   - type: FlavorProfile
     flavors:
       - rice

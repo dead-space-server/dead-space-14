@@ -1,19 +1,16 @@
 <cartridges:NanoTaskUiFragment xmlns:cartridges="clr-namespace:Content.Client.CartridgeLoader.Cartridges"
-                               xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
                                xmlns="https://spacestation14.io" Margin="1 0 2 0">
 
-    <PanelContainer StyleClasses="DS14MenuPanelDark"></PanelContainer>
+    <PanelContainer StyleClasses="DeadSpaceSurfaceDark"></PanelContainer> <!-- DS14 -->
     <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
         <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
             <BoxContainer HorizontalExpand="True" VerticalExpand="True" Orientation="Vertical" Margin="8" SeparationOverride="8">
                 <!-- Heading for High Priority Items -->
                 <BoxContainer Orientation="Horizontal">
-                    <PanelContainer SetWidth="7" Margin="0 0 8 0">
-                        <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat BackgroundColor="#e93d58"/>
-                        </PanelContainer.PanelOverride>
-                    </PanelContainer>
-                    <Label Name="HighPriority" StyleClasses="DS14MenuListHeader"/>
+                    <!-- DS14-start -->
+                    <PanelContainer SetWidth="7" Margin="0 0 8 0" StyleClasses="negative" />
+                    <!-- DS14-end -->
+                    <Label Name="HighPriority" StyleClasses="DeadSpaceListHeader"/> <!-- DS14 -->
                 </BoxContainer>
                 <!-- Location for High Priority Items -->
                 <GridContainer Name="HighContainer"
@@ -23,12 +20,10 @@
 
                 <!-- Heading for Medium Priority Items -->
                 <BoxContainer Orientation="Horizontal">
-                    <PanelContainer SetWidth="7" Margin="0 0 8 0">
-                        <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat BackgroundColor="#ef973c"/>
-                        </PanelContainer.PanelOverride>
-                    </PanelContainer>
-                    <Label Name="MediumPriority" StyleClasses="DS14MenuListHeader"/>
+                    <!-- DS14-start -->
+                    <PanelContainer SetWidth="7" Margin="0 0 8 0" StyleClasses="highlight" />
+                    <!-- DS14-end -->
+                    <Label Name="MediumPriority" StyleClasses="DeadSpaceListHeader"/> <!-- DS14 -->
                 </BoxContainer>
                 <!-- Location for Medium Priority Items -->
                 <GridContainer Name="MediumContainer"
@@ -38,12 +33,10 @@
 
                 <!-- Location for Low Priority Items -->
                 <BoxContainer Orientation="Horizontal">
-                    <PanelContainer SetWidth="7" Margin="0 0 8 0">
-                        <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat BackgroundColor="#3dd425"/>
-                        </PanelContainer.PanelOverride>
-                    </PanelContainer>
-                    <Label Name="LowPriority" StyleClasses="DS14MenuListHeader"/>
+                    <!-- DS14-start -->
+                    <PanelContainer SetWidth="7" Margin="0 0 8 0" StyleClasses="positive" />
+                    <!-- DS14-end -->
+                    <Label Name="LowPriority" StyleClasses="DeadSpaceListHeader"/> <!-- DS14 -->
                 </BoxContainer>
                 <!-- Location for Low Priority Items -->
                 <GridContainer Name="LowContainer"
@@ -51,7 +44,7 @@
                                Access="Public"
                                Columns="2" />
 
-                <Button Name="NewTaskButton" Text="{Loc 'nano-task-ui-new-task'}" HorizontalAlignment="Right" StyleClasses="DS14MenuAction"/>
+                <Button Name="NewTaskButton" Text="{Loc 'nano-task-ui-new-task'}" HorizontalAlignment="Right" StyleClasses="DeadSpaceAction"/> <!-- DS14 -->
             </BoxContainer>
         </ScrollContainer>
     </BoxContainer>

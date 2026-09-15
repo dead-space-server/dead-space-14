@@ -12,6 +12,7 @@ public sealed partial class ToggleableSolutionTransferComponent : Component
 
     [DataField, AutoNetworkedField]
     public SolutionTransferDirection Direction = SolutionTransferDirection.Output;
+    public bool PendingUpdate;
 }
 
 public enum SolutionTransferDirection

@@ -41,3 +41,223 @@
   canBuildInImpassable: false
   conditions:
   - !type:TileNotBlocked
+
+# DS14 - длинные комфортные скамейки
+- type: construction
+  id: LongComfBenchMiddle
+  name: construction-recipe-long-comf-bench-middle
+  graph: LongBench
+  startNode: start
+  targetNode: longComfBenchMiddle
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: LongComfBenchLeft
+  name: construction-recipe-long-comf-bench-left
+  graph: LongBench
+  startNode: start
+  targetNode: longComfBenchLeft
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: LongComfBenchRight
+  name: construction-recipe-long-comf-bench-right
+  graph: LongBench
+  startNode: start
+  targetNode: longComfBenchRight
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: LongComfBenchRedMiddle
+  name: construction-recipe-long-comf-bench-red-middle
+  graph: LongBench
+  startNode: start
+  targetNode: longComfBenchRedMiddle
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: LongComfBenchRedLeft
+  name: construction-recipe-long-comf-bench-red-left
+  graph: LongBench
+  startNode: start
+  targetNode: longComfBenchRedLeft
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: LongComfBenchRedRight
+  name: construction-recipe-long-comf-bench-red-right
+  graph: LongBench
+  startNode: start
+  targetNode: longComfBenchRedRight
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: LongComfBenchBlueMiddle
+  name: construction-recipe-long-comf-bench-blue-middle
+  graph: LongBench
+  startNode: start
+  targetNode: longComfBenchBlueMiddle
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: LongComfBenchBlueLeft
+  name: construction-recipe-long-comf-bench-blue-left
+  graph: LongBench
+  startNode: start
+  targetNode: longComfBenchBlueLeft
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: LongComfBenchBlueRight
+  name: construction-recipe-long-comf-bench-blue-right
+  graph: LongBench
+  startNode: start
+  targetNode: longComfBenchBlueRight
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: LongComfBenchLightBlueMiddle
+  name: construction-recipe-long-comf-bench-light-blue-middle
+  graph: LongBench
+  startNode: start
+  targetNode: longComfBenchLightBlueMiddle
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: LongComfBenchLightBlueLeft
+  name: construction-recipe-long-comf-bench-light-blue-left
+  graph: LongBench
+  startNode: start
+  targetNode: longComfBenchLightBlueLeft
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: LongComfBenchLightBlueRight
+  name: construction-recipe-long-comf-bench-light-blue-right
+  graph: LongBench
+  startNode: start
+  targetNode: longComfBenchLightBlueRight
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: LongComfBenchYellowMiddle
+  name: construction-recipe-long-comf-bench-yellow-middle
+  graph: LongBench
+  startNode: start
+  targetNode: longComfBenchYellowMiddle
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: LongComfBenchYellowLeft
+  name: construction-recipe-long-comf-bench-yellow-left
+  graph: LongBench
+  startNode: start
+  targetNode: longComfBenchYellowLeft
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: LongComfBenchYellowRight
+  name: construction-recipe-long-comf-bench-yellow-right
+  graph: LongBench
+  startNode: start
+  targetNode: longComfBenchYellowRight
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: BedWood
+  graph: BedWood
+  startNode: start
+  targetNode: bedWood
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: NTTribune
+  graph: NTTribune
+  startNode: start
+  targetNode: tribune
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked

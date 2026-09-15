@@ -111,3 +111,4 @@ ert-admin-move-to-manual-button = Move to manual approval
 
 ert-admin-promote-manual-button = Start auto spawn without notifications
 ert-admin-queue-auto-button = Add to auto spawn
+ert-admin-queue-auto-silent-button = Add without announcement

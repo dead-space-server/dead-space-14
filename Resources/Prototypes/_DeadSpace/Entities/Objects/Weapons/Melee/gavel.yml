@@ -1,0 +1,63 @@
+# Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+
+- type: entity
+  parent: BaseItem
+  id: GavelHammer
+  name: судейский молоток
+  description: Порядок, порядок! Никаких бомб в моём суде!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Melee/gavelhammer.rsi
+    state: icon
+    drawdepth: BelowMobs # Always render on top of other items on the floor/table
+  - type: Item
+    size: Small
+    sprite: _DeadSpace/Objects/Weapons/Melee/gavelhammer.rsi
+  - type: MeleeWeapon
+    wideAnimationRotation: 45
+    attackRate: 1.2
+    damage:
+      types:
+        Blunt: 4
+    soundHit:
+      path: /Audio/_DeadSpace/Items/Gavel/gavel.ogg
+      params:
+        variation: 0.125
+  - type: StaminaDamageOnHit
+    damage: 8
+  - type: DisarmMalus
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/materials/wood_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/materials/wood_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/materials/wood_drop.ogg
+  - type: GavelHammer
+
+- type: entity
+  parent: BaseItem
+  id: GavelBlock
+  name: подставка для молотка
+  description: Стукни молотком, когда ассистенты расшумятся.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Melee/gavelblock.rsi
+    state: icon
+  - type: Item
+    size: Small
+    sprite: _DeadSpace/Objects/Weapons/Melee/gavelblock.rsi
+  - type: UseDelay
+    delay: 1.5
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/materials/wood_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/materials/wood_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/materials/wood_drop.ogg
+  - type: GavelBlock

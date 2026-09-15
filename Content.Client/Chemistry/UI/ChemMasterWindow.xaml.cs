@@ -1,3 +1,4 @@
+using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.Chemistry;
@@ -52,7 +53,7 @@ namespace Content.Client.Chemistry.UI
             SearchBar.OnTextChanged += OnPanelInfoSearchChanged;
             ClearSearchButton.OnPressed += OnClearSearchPressed;
 
-            BufferDiscardButton.OnToggled += args => BufferDiscardButton.ModulateSelfOverride = args.Pressed ? Color.FromHex("#C62828") : null;
+            BufferDiscardButton.OnToggled += args => SetDiscardModeStyle(args.Pressed);
             // DS14-end
 
             _sprite = _entityManager.System<SpriteSystem>();
@@ -293,7 +294,7 @@ namespace Content.Client.Chemistry.UI
         {
             BufferTransferButton.Pressed = state.Mode == ChemMasterMode.Transfer;
             BufferDiscardButton.Pressed = state.Mode == ChemMasterMode.Discard;
-            BufferDiscardButton.ModulateSelfOverride = BufferDiscardButton.Pressed ? Color.FromHex("#C62828") : null;
+            SetDiscardModeStyle(BufferDiscardButton.Pressed); // DS14
 
             BuildContainerUI(InputContainerInfo, state.InputContainerInfo, true);
             BuildContainerUI(OutputContainerInfo, state.OutputContainerInfo, false);
@@ -379,6 +380,15 @@ namespace Content.Client.Chemistry.UI
             ApplySearchFilter(SearchBar.Text); // DS14
         }
 
+        // DS14-start: the shared negative button variant owns every discard-button pseudo-state.
+        private void SetDiscardModeStyle(bool active)
+        {
+            BufferDiscardButton.RemoveStyleClass(StyleClass.Negative);
+            if (active)
+                BufferDiscardButton.AddStyleClass(StyleClass.Negative);
+        }
+        // DS14-end
+
         private void BuildContainerUI(Control control, ContainerInfo? info, bool addReagentButtons)
         {
             control.Children.Clear();
@@ -436,14 +446,15 @@ namespace Content.Client.Chemistry.UI
         /// </summary>
         private Control BuildReagentRow(Color reagentColor, int rowCount, string name, ReagentId reagent, FixedPoint2 quantity, bool isBuffer, bool addReagentButtons)
         {
-            //Colors rows and sets fallback for reagentcolor to the same as background, this will hide colorPanel for entities hopefully
-            var rowColor1 = Color.FromHex("#1B1B1E");
-            var rowColor2 = Color.FromHex("#202025");
-            var currentRowColor = (rowCount % 2 == 1) ? rowColor1 : rowColor2;
+            // DS14-start: keep zebra surfaces in the common sheetlet and reserve the strip for reagent semantics.
+            var rowStyle = rowCount % 2 == 1
+                ? DeadSpaceStyleClass.ListItemAlternate
+                : DeadSpaceStyleClass.ListItem;
             if ((reagentColor == default(Color))|(!addReagentButtons))
             {
-                reagentColor = currentRowColor;
+                reagentColor = Color.Transparent;
             }
+            // DS14-end
             //this calls the separated button builder, and stores the return to render after labels
             var reagentButtonConstructors = CreateReagentTransferButtons(reagent, isBuffer, addReagentButtons);
 
@@ -485,7 +496,7 @@ namespace Content.Client.Chemistry.UI
             //Apply panencontainer to allow for striped rows
             return new PanelContainer
             {
-                PanelOverride = new StyleBoxFlat(currentRowColor),
+                StyleClasses = { rowStyle }, // DS14
                 Children = { rowContainer }
             };
         }

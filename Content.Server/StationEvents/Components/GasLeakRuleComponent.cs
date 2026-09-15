@@ -4,6 +4,7 @@ using Robust.Shared.Map;
 
 namespace Content.Server.StationEvents.Components;
 
+[Content.Server.DeadSpace.CentComm.AllowedGameRuleOnCentComm] // DS14
 [RegisterComponent, Access(typeof(GasLeakRule))]
 public sealed partial class GasLeakRuleComponent : Component
 {
@@ -18,6 +19,10 @@ public sealed partial class GasLeakRuleComponent : Component
         Gas.Tritium,
         Gas.Frezon,
         Gas.WaterVapor,
+        // DS14-start
+        Gas.CarbonDioxide,
+        Gas.Hydrogen
+        // DS14-end
     };
 
     /// <summary>

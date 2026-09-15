@@ -1,10 +1,19 @@
 - type: latheRecipe
   parent: BaseXenoborgModulesRecipe
   id: XenoborgModuleAdvancedMinerRecipe
+  name: lathe-recipe-XenoborgModuleAdvancedMinerRecipe-materials-name
   result: XenoborgModuleAdvancedMiner
   materials:
-    Steel: 2500
-    Glass: 1500
-    Plasma: 500
-    Plastic: 1000
-    Diamond: 1000
+    Steel: 3250
+    Glass: 1950
+    Plasma: 650
+    Plastic: 1300
+    Diamond: 1300
+
+- type: latheRecipe
+  parent: BaseXenoborgModulesRecipe
+  id: XenoborgModuleAdvancedMinerCrystalRecipe
+  name: lathe-recipe-XenoborgModuleAdvancedMinerRecipe-crystal-name
+  result: XenoborgModuleAdvancedMiner
+  materials:
+    XenoborgCrystal: 400

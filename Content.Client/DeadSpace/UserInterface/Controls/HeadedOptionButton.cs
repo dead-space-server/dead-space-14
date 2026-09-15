@@ -39,11 +39,6 @@ public class HeadedOptionButton : ContainerButton
     }
     private bool _hideTriangle;
 
-    /// <summary>
-    /// StyleClasses to apply to the options that popup when clicking this button.
-    /// </summary>
-    public ICollection<string> OptionStyleClasses { get; }
-
     public event Action<ItemSelectedEventArgs>? OnItemSelected;
 
     public string Prefix { get; set; } = string.Empty;
@@ -51,7 +46,6 @@ public class HeadedOptionButton : ContainerButton
 
     public HeadedOptionButton()
     {
-        OptionStyleClasses = new List<string>();
         AddStyleClass(StyleClassButton);
         OnPressed += OnPressedInternal;
 
@@ -143,10 +137,7 @@ public class HeadedOptionButton : ContainerButton
             Text = label,
             ToggleMode = true
         };
-        foreach (var styleClass in OptionStyleClasses)
-        {
-            button.AddStyleClass(styleClass);
-        }
+        // DS14: popup rows intentionally inherit the global Nanotrasen button style.
         button.OnPressed += ButtonOnPressed;
         var data = new ButtonData(label, button)
         {

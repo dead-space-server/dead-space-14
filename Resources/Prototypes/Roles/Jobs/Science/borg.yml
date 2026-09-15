@@ -14,7 +14,6 @@
       time: 20h
     - !type:OverallPlaytimeRequirement
       time: 180h
-  weight: 10
   canBeAntag: false
   icon: JobIconStationAi
   supervisors: job-supervisors-crew

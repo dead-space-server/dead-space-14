@@ -68,7 +68,9 @@ public abstract partial class SharedToolSystem
         var comp = ent.Comp1!;
         var tool = ent.Comp2!;
 
-        if (!_mapManager.TryFindGridAt(_transformSystem.ToMapCoordinates(clickLocation), out var gridUid, out var mapGrid))
+        var gridUid = _transformSystem.GetGrid(clickLocation) ?? EntityUid.Invalid;
+        if (!TryComp<MapGridComponent>(gridUid, out var mapGrid) &&
+            !_mapManager.TryFindGridAt(_transformSystem.ToMapCoordinates(clickLocation), out gridUid, out mapGrid))
             return false;
 
         var tileRef = _maps.GetTileRef(gridUid, mapGrid, clickLocation);

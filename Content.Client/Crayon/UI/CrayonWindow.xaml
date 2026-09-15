@@ -9,11 +9,11 @@
             <BoxContainer Name="Grids" Orientation="Vertical">
             </BoxContainer>
         </ScrollContainer>
-        <!-- DS-14 Start -->
-        <BoxContainer Orientation="Horizontal" Margin="0 0 0 8">
-            <Label Text="Поворот:" Margin="0 0 8 0" VerticalAlignment="Center"/>
-            <SpinBox Name="RotationInput" Value="0" HorizontalExpand="True"/>
-        </BoxContainer>
-        <!-- DS-14 End-->
+		<!-- DS-14 Start -->
+		<BoxContainer Orientation="Horizontal" Margin="0 0 0 8">
+			<Label Text="Поворот:" Margin="0 0 8 0" VerticalAlignment="Center"/>
+			<LineEdit Name="RotationInput" Text="0" HorizontalExpand="True"/>
+		</BoxContainer>
+		<!-- DS-14 End-->
     </BoxContainer>
 </DefaultWindow>

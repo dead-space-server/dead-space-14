@@ -357,7 +357,11 @@ public sealed class PersonnelRecordDiagnosticTest
         server.CfgMan.SetCVar(CCVars.GameMap, _map);
         var ticker = server.System<GameTicker>();
 
-        await pair.SetJobPriorities((SecurityOfficer, JobPriority.High));
+        // Passenger is selected by default and shares HoP's primary department. Leaving it enabled
+        // lets minimum-role fallback assign HoP before the preferred Security Officer is considered.
+        await pair.SetJobPriorities(
+            (SharedGameTicker.FallbackOverflowJob, JobPriority.Never),
+            (SecurityOfficer, JobPriority.High));
         ticker.ToggleReadyAll(true);
         await server.WaitPost(() => ticker.StartRound());
         await pair.RunTicksSync(10);

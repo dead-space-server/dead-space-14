@@ -1,18 +1,26 @@
 {
     "version": 1,
     "license": "CC-BY-SA-3.0",
-    "copyright": "made by AsikKEsel, resprite by gribgear (discord) for Space Station 14 server Мёртвый Космос, resprite by pyfya (discord) for Space Station 14 server Мёртвый Космос",
+    "copyright": "made by AsikKEsel, resprite by gribgear (discord) for Space Station 14 server Мёртвый Космос, resprite by pyfya (discord) for Space Station 14 server Мёртвый Космос, inhands by TiniestShark (github)",
     "size": {
-      "x": 32,
-      "y": 32
+        "x": 32,
+        "y": 32
     },
     "states": [
-      {
-        "name": "icon"
-      },
-      {
-        "name": "equipped-NECK",
-        "directions": 4
-      }
+        {
+            "name": "icon"
+        },
+        {
+            "name": "equipped-NECK",
+            "directions": 4
+        },
+        {
+            "name": "inhand-left",
+            "directions": 4
+        },
+        {
+            "name": "inhand-right",
+            "directions": 4
+        }
     ]
-  }
+}

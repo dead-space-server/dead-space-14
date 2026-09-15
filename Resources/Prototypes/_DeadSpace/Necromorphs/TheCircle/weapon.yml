@@ -141,6 +141,7 @@
   description: Мощный штурмовой револьвер под патрон 12.7x55 мм. Убойный калибр позволяет сильно пробивать структуры и небронированные цели. Встроенный фабрикатор восполняет боезапас каждые 3 секунды.
   suffix: Револьвер
   components:
+  - type: Akimbo
   - type: Item
     size: Small
     shape:
@@ -465,6 +466,7 @@
   id: WeaponVSK
   parent: BaseWeaponRifle
   description: Точный винторез, что заточен под дальний бой и сбивание позиции врагов, нежели тупого штурма.
+  suffix: Винтовка
   components:
   - type: Sprite
     sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/weapons/vsk/big.rsi
@@ -873,8 +875,9 @@
 - type: entity
   id: WeaponMachineGunWhirl
   parent: [ BaseWeaponRifle, BaseGunWieldable, BaseMajorContraband ]
-  name: пулемёт «Вихрь»
+  name: Вихрь
   description: Точно не украденный пулемёт на основе чертежей от Redline Cybernetik.
+  suffix: Пулемёт
   components:
   - type: Sprite
     sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/weapons/whirl/Smerch.rsi
@@ -944,7 +947,8 @@
   id: WeaponShotgunKS23
   parent: [ BaseWeaponShotgun, BaseGunWieldable, BaseMajorContraband ]
   name: КС-23
-  description: Удобно фотографировать врагов в техах.
+  description: Ваш фотограф на свадьбу прибыл.
+  suffix: Дробовик
   components:
   - type: Sprite
     sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/weapons/ks23/pump.rsi

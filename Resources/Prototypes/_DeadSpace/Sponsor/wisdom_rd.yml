@@ -13,7 +13,7 @@
     clothingPrototype: ClothingHeadHelmetHardsuitRdWoman
 
 - type: entity
-  parent: ClothingHeadHelmetHardsuitRd
+  parent: [ClothingHeadHelmetHardsuitRd]
   id: ClothingHeadHelmetHardsuitRdWoman
   name: шлем экспериментального скафандра научного руководителя
   description: Лёгкий шлем скафандра, не стесняющий движений головы.

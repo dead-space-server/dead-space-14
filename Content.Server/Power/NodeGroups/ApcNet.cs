@@ -61,10 +61,7 @@ namespace Content.Server.Power.NodeGroups
         public void RemoveApc(EntityUid uid, ApcComponent apc)
         {
             if (EntMan.TryGetComponent(uid, out PowerNetworkBatteryComponent? netBattery))
-            {
                 netBattery.NetworkBattery.LinkedNetworkDischarging = default;
-                netBattery.NetworkBattery.SetCurrentSupply(0f); // DS14
-            }
 
             QueueNetworkReconnect();
             Apcs.Remove(apc);

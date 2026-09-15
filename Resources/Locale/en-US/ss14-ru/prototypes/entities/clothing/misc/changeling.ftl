@@ -1,0 +1,12 @@
+ent-ChangelingFleshClothingBack = changeling flesh backpack
+ent-ChangelingFleshClothingBelt = changeling flesh belt
+ent-ChangelingFleshClothingEars = changeling flesh headset
+ent-ChangelingFleshClothingEyes = changeling flesh glasses
+ent-ChangelingFleshClothingGloves = changeling flesh gloves
+ent-ChangelingFleshClothingHead = changeling flesh hat
+ent-ChangelingFleshClothingMask = changeling flesh mask
+ent-ChangelingFleshClothingNeck = changeling flesh tie
+ent-ChangelingFleshClothingInner = changeling flesh jumpsuit
+ent-ChangelingFleshClothingOuter = changeling flesh vest
+ent-ChangelingFleshClothingFeet = changeling flesh shoes
+ent-ChangelingFleshClothingSuitStorage = changeling flesh gas tank

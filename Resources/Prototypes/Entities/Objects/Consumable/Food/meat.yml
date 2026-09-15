@@ -352,8 +352,12 @@
     solutions:
       food:
         reagents:
-        - ReagentId: Bicaridine
-          Quantity: 20
+#ds14-start
+        - ReagentId: Ichor
+          Quantity: 15
+        - ReagentId: PolypyryliumOligomers
+          Quantity: 15
+#ds14-end
   - type: StaticPrice
     price: 750
   - type: StealTarget
@@ -832,6 +836,9 @@
     - Meat
   - type: Sprite
     state: meatball
+  - type: SliceableFood
+    count: 3
+    slice: FoodMeatSmallBall
   - type: Construction
     graph: MeatMeatballCooked
     node: start

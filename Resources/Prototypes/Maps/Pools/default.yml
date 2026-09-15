@@ -12,7 +12,7 @@
   - Convex
   - Core
   - CorvaxAstra
-  # - CorvaxAvrite # temporarily disabled
+  - CorvaxAvrite
   - CorvaxChloris
   - CorvaxDelta
   - CorvaxGlacier
@@ -32,7 +32,7 @@
   - Omega
   - Origin
   - Packed
-  # - Plasma # broken map, needs resave
+  - Plasma 
   # - Reach # removed by RIP6100 remap in progress
   # - Exo # map prototype is commented out
   - Saltern

@@ -1,0 +1,221 @@
+# DS14-start
+# ВорПРО uplink catalog. Bought with dirty credits earned through requests.
+# Entities are spawned into the thief's hands on purchase.
+
+- type: thiefListing
+  id: ThiefListingThiefBeacon
+  name: ent-ThiefBeacon
+  entities: [ ThiefBeacon ]
+  cost: 5000
+  category: thief-program-category-tools
+
+- type: thiefListing
+  id: ThiefListingC4
+  name: ent-C4
+  entities: [ C4 ]
+  cost: 8000
+  category: thief-program-category-tools
+
+- type: thiefListing
+  id: ThiefListingEmag
+  name: ent-Emag
+  entities: [ Emag ]
+  cost: 20000
+  category: thief-program-category-tools
+
+- type: thiefListing
+  id: ThiefListingAccessBreaker
+  name: ent-AccessBreaker
+  entities: [ AccessBreaker ]
+  cost: 12000
+  category: thief-program-category-tools
+
+- type: thiefListing
+  id: ThiefListingRadioJammer
+  name: ent-RadioJammer
+  entities: [ RadioJammer ]
+  cost: 6000
+  category: thief-program-category-tools
+
+- type: thiefListing
+  id: ThiefListingChameleonProjector
+  name: ent-ChameleonProjector
+  entities: [ ChameleonProjector ]
+  cost: 10000
+  category: thief-program-category-gear
+
+- type: thiefListing
+  id: ThiefListingFakeMindShield
+  name: thief-implant-mindshield
+  description: thief-implant-mindshield-desc
+  entities: [ FakeMindShieldImplanter ]
+  cost: 4000
+  category: thief-program-category-implants
+
+- type: thiefListing
+  id: ThiefListingVoiceMask
+  name: thief-implant-voice-mask
+  description: thief-implant-voice-mask-desc
+  entities: [ VoiceMaskImplanter ]
+  cost: 5000
+  category: thief-program-category-implants
+
+- type: thiefListing
+  id: ThiefListingStorageImplant
+  name: thief-implant-storage
+  description: thief-implant-storage-desc
+  entities: [ StorageImplanter ]
+  cost: 15000
+  category: thief-program-category-implants
+
+- type: thiefListing
+  id: ThiefListingDnaScrambler
+  name: thief-implant-dna-scrambler
+  description: thief-implant-dna-scrambler-desc
+  entities: [ DnaScramblerImplanter ]
+  cost: 8000
+  category: thief-program-category-implants
+
+- type: thiefListing
+  id: ThiefListingNocturine
+  name: ent-ChemistryBottleNocturine
+  entities: [ ChemistryBottleNocturine, ChemistryBottleNocturine ]
+  cost: 3000
+  category: thief-program-category-misc
+
+- type: thiefListing
+  id: ThiefListingHypopenBox
+  name: ent-HypopenBox
+  entities: [ HypopenBox ]
+  cost: 8000
+  category: thief-program-category-misc
+
+- type: thiefListing
+  id: ThiefListingCyberPen
+  name: ent-CyberPen
+  entities: [ CyberPen ]
+  cost: 2000
+  category: thief-program-category-misc
+
+- type: thiefListing
+  id: ThiefListingStationMasterKey
+  name: ent-EncryptionKeyStationMaster
+  entities: [ EncryptionKeyStationMaster ]
+  cost: 4000
+  category: thief-program-category-misc
+
+- type: thiefListing
+  id: ThiefListingSmokeGrenades
+  name: ent-SmokeGrenade
+  entities: [ SmokeGrenade, SmokeGrenade, SmokeGrenade ]
+  cost: 1500
+  category: thief-program-category-misc
+
+- type: thiefListing
+  id: ThiefListingFultonPack
+  name: ent-Fulton
+  entities: [ FultonBeacon, Fulton, Fulton ]
+  cost: 4000
+  category: thief-program-category-misc
+
+- type: thiefListing
+  id: ThiefListingInvisibleCrate
+  name: ent-InvisibleCrate
+  entities: [ InvisibleCrate ]
+  cost: 8000
+  category: thief-program-category-misc
+
+# Full starter sets from the thief satchel
+- type: thiefListing
+  id: ThiefListingChameleonSet
+  name: thief-backpack-category-chameleon-name
+  description: thief-backpack-category-chameleon-description
+  entities:
+  - ClothingBackpackChameleonFillAgent
+  - ChameleonProjector
+  - FakeMindShieldImplanter
+  cost: 25000
+  category: thief-program-category-sets
+
+- type: thiefListing
+  id: ThiefListingToolsSet
+  name: thief-backpack-category-tools-name
+  description: thief-backpack-category-tools-description
+  entities:
+  - WelderIndustrialAdvanced
+  - ClothingEyesGlassesMeson
+  - ClothingHandsGlovesColorYellow
+  - JawsOfLife
+  - RemoteSignaller
+  - Multitool
+  - C4
+  - C4
+  cost: 20000
+  category: thief-program-category-sets
+
+- type: thiefListing
+  id: ThiefListingChemistrySet
+  name: thief-backpack-category-chemistry-name
+  description: thief-backpack-category-chemistry-description
+  entities:
+  - StorageImplanter
+  - DnaScramblerImplanter
+  - CelestinMedipen
+  - SoapOmega
+  - Syringe
+  - DrinkShaker
+  cost: 18000
+  category: thief-program-category-sets
+
+- type: thiefListing
+  id: ThiefListingSyndieSet
+  name: thief-backpack-category-syndie-name
+  description: thief-backpack-category-syndie-description
+  entities:
+  - RadioJammer
+  - TraitorCodePaper
+  - Emag
+  - AccessBreaker
+  - Lighter
+  - CigPackSyndicate
+  cost: 40000
+  category: thief-program-category-sets
+
+- type: thiefListing
+  id: ThiefListingSleeperSet
+  name: thief-backpack-category-sleeper-name
+  description: thief-backpack-category-sleeper-description
+  entities:
+  - ChemistryBottleNocturine
+  - ChemistryBottleNocturine
+  - HypopenBox
+  - NitrousOxideTankFilled
+  cost: 20000
+  category: thief-program-category-sets
+
+- type: thiefListing
+  id: ThiefListingCommunicatorSet
+  name: thief-backpack-category-communicator-name
+  description: thief-backpack-category-communicator-description
+  entities:
+  - EncryptionKeyStationMaster
+  - CyberPen
+  - BriefcaseThiefBribingBundleFilled
+  - VoiceMaskImplanter
+  cost: 15000
+  category: thief-program-category-sets
+
+- type: thiefListing
+  id: ThiefListingSmugglerSet
+  name: thief-backpack-category-smuggler-name
+  description: thief-backpack-category-smuggler-description
+  entities:
+  - InvisibleCrate
+  - FultonBeacon
+  - Fulton
+  - SmokeGrenade
+  - SmokeGrenade
+  - SmokeGrenade
+  cost: 18000
+  category: thief-program-category-sets
+# DS14-end

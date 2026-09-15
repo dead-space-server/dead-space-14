@@ -1,4 +1,5 @@
 device-pda-slot-component-slot-name-cartridge = Cartridge
+device-pda-slot-component-slot-name-tool = Tool
 
 default-program-name = Program
 notekeeper-program-name = Notekeeper
@@ -117,3 +118,4 @@ messenger-notification-message = {$sender} sent a message
 messenger-typing-popup = Typing in a PDA...
 messenger-disable-chat = Disable chat
 messenger-enable-chat = Enable chat
+messenger-unread-header = New messages

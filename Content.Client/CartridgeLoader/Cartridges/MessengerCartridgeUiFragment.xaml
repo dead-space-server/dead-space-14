@@ -8,23 +8,23 @@
                 <LineEdit Name="SearchBar"
                           PlaceHolder="{Loc 'messenger-search-placeholder'}"
                           HorizontalExpand="True"
-                          SetHeight="32"
-                          StyleClasses="DS14MenuInput"/>
+                          SetHeight="32"/>
                 <Button Name="ChatToggleButton"
                         Text="{Loc messenger-disable-chat}"
                         SetWidth="145"
                         SetHeight="32"
-                        Margin="4 0 0 0"
-                        StyleClasses="DS14MenuProfileControl"/>
+                        Margin="4 0 0 0"/>
             </BoxContainer>
+            <!-- DS14-start -->
             <Label Name="NoUsers"
                    Text="{Loc 'messenger-no-users'}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    HorizontalExpand="True"
                    VerticalExpand="True"
-                   FontColorOverride="DarkGray"
+                   StyleClasses="DeadSpaceSubtitle"
                    Visible="False"/>
+            <!-- DS14-end -->
             <ScrollContainer Name="UserListScrollContainer" HorizontalExpand="True" VerticalExpand="True" VScrollEnabled="True" HScrollEnabled="False">
                 <BoxContainer Name="UserListContainer" Orientation="Vertical" HorizontalExpand="True" VerticalExpand="False">
                 </BoxContainer>
@@ -36,7 +36,7 @@
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                HorizontalExpand="True"
-                               StyleClasses="DS14MenuTitle"/>
+                               StyleClasses="DeadSpaceTitle"/> <!-- DS14 -->
                         <!-- DS14 -->
                         <Button Name="BlockButton"
                                        Text="{Loc messenger-block}"
@@ -45,7 +45,6 @@
                                        HorizontalAlignment="Right"
                                        VerticalAlignment="Center"
                                        Margin="6 0 2 0"
-                                       StyleClasses="DS14MenuProfileControl"
                                        Visible="False"/>
                         <TextureButton Name="BackButton"
                                        StyleClasses="windowCloseButton"
@@ -68,15 +67,15 @@
                            Visible="False"/>
                     <!-- DS14-End -->
                     <BoxContainer Name="InputContainer" Orientation="Horizontal" HorizontalExpand="True">  <!-- DS14 -->
-                        <LineEdit Name="MessageInput" HorizontalExpand="True" SetHeight="32" StyleClasses="DS14MenuInput"/>
-                        <Button Name="SendButton" Text="{Loc messenger-send}" SetWidth="70" StyleClasses="DS14MenuProfileControl"/>
+                        <LineEdit Name="MessageInput" HorizontalExpand="True" SetHeight="32"/>
+                        <Button Name="SendButton" Text="{Loc messenger-send}" SetWidth="70"/>
                     </BoxContainer>
                 </BoxContainer>
             </BoxContainer>
         </BoxContainer>
         <!-- Connection lost status -->
         <BoxContainer Name="ConnectionLostContainer" Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" Visible="False">
-            <Label Text="{Loc messenger-status-connection-lost}" HorizontalAlignment="Center" VerticalAlignment="Center" StyleClasses="DS14MenuSubtitle"/>
+            <Label Text="{Loc messenger-status-connection-lost}" HorizontalAlignment="Center" VerticalAlignment="Center" StyleClasses="DeadSpaceSubtitle"/> <!-- DS14 -->
         </BoxContainer>
     </BoxContainer>
 </cartridges:MessengerCartridgeUiFragment>

@@ -5,37 +5,31 @@
                 Title="{Loc 'ui-escape-title'}"
                 Resizable="False">
 
-    <!-- DS14-start: KSO-styled escape menu shell -->
-    <PanelContainer StyleClasses="DS14MenuShell">
-        <BoxContainer Orientation="Vertical"
-                      SeparationOverride="6"
-                      MinWidth="220">
-            <PanelContainer StyleClasses="DS14MenuHeader">
-                <Label Text="{Loc 'ui-escape-title'}"
-                       StyleClasses="DS14MenuTitle"
-                       HorizontalAlignment="Center" />
-            </PanelContainer>
+    <!-- DS14-start -->
+    <BoxContainer Orientation="Vertical"
+                  SeparationOverride="6"
+                  MinWidth="220"
+                  Margin="10">
+        <ui:VoteCallMenuButton />
+        <PanelContainer StyleClasses="DeadSpaceAccentDim" />
 
-            <ui:VoteCallMenuButton StyleClasses="DS14MenuAction" />
-            <PanelContainer StyleClasses="DS14MenuAccentDim" />
+        <Button Access="Public" Name="RulesButton" Text="{Loc 'ui-escape-rules'}" />
+        <Button Access="Public" Name="GuidebookButton" Text="{Loc 'ui-escape-guidebook'}" />
+        <PanelContainer StyleClasses="DeadSpaceAccentDim" />
 
-            <Button Access="Public" Name="RulesButton" Text="{Loc 'ui-escape-rules'}" StyleClasses="DS14MenuAction" />
-            <Button Access="Public" Name="GuidebookButton" Text="{Loc 'ui-escape-guidebook'}" StyleClasses="DS14MenuAction" />
-            <PanelContainer StyleClasses="DS14MenuAccentDim" />
+        <Button Access="Public" Name="WikiButton" Text="{Loc 'ui-escape-wiki'}" />
+        <Button Access="Public" Name="DiscordButton" Text="{Loc 'ui-escape-discord'}" />
+        <Button Access="Public" Name="PatrionButton" Text="{Loc 'ui-escape-patrion'}" />
+        <changelog:ChangelogButton Access="Public" Name="ChangelogButton" />
+        <Button Access="Public" Name="FeedbackButton" Text="{Loc 'ui-escape-feedback'}"/>
+        <Button Access="Public" Name="AdminRemarksButton" Text="{Loc 'ui-escape-remarks'}" />
+        <PanelContainer StyleClasses="DeadSpaceAccentDim" />
 
-            <Button Access="Public" Name="WikiButton" Text="{Loc 'ui-escape-wiki'}" StyleClasses="DS14MenuAction" />
-            <Button Access="Public" Name="DiscordButton" Text="{Loc 'ui-escape-discord'}" StyleClasses="DS14MenuAction" />
-            <Button Access="Public" Name="PatrionButton" Text="{Loc 'ui-escape-patrion'}" StyleClasses="DS14MenuAction" />
-            <changelog:ChangelogButton Access="Public" Name="ChangelogButton" StyleClasses="DS14MenuAction" />
-            <Button Access="Public" Name="FeedbackButton" Text="{Loc 'ui-escape-feedback'}" StyleClasses="DS14MenuAction"/>
-            <PanelContainer StyleClasses="DS14MenuAccentDim" />
+        <Button Access="Public" Name="OptionsButton" Text="{Loc 'ui-escape-options'}" />
+        <PanelContainer StyleClasses="DeadSpaceAccentDim" />
 
-            <Button Access="Public" Name="OptionsButton" Text="{Loc 'ui-escape-options'}" StyleClasses="DS14MenuAction" />
-            <PanelContainer StyleClasses="DS14MenuAccentDim" />
-
-            <Button Access="Public" Name="DisconnectButton" Text="{Loc 'ui-escape-disconnect'}" StyleClasses="DS14MenuAction" />
-            <Button Access="Public" Name="QuitButton" Text="{Loc 'ui-escape-quit'}" StyleClasses="ButtonColorRed" MinHeight="42" />
-        </BoxContainer>
-    </PanelContainer>
+        <Button Access="Public" Name="DisconnectButton" Text="{Loc 'ui-escape-disconnect'}" />
+        <Button Access="Public" Name="QuitButton" Text="{Loc 'ui-escape-quit'}" StyleClasses="negative" />
+    </BoxContainer>
     <!-- DS14-end -->
 </ui1:EscapeMenu>

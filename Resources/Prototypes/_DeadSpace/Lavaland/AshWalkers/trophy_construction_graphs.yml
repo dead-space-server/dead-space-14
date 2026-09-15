@@ -1,0 +1,119 @@
+- type: constructionGraph
+  id: LavaBoat
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: boat
+      steps:
+      - material: GoliathHide
+        amount: 3
+        doAfter: 3
+  - node: boat
+    entity: LavaBoat
+
+- type: constructionGraph
+  id: BoneOar
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: oar
+      steps:
+      - material: Bones
+        amount: 2
+        doAfter: 3
+  - node: oar
+    entity: BoneOar
+
+- type: constructionGraph
+  id: ClothingOuterArmorDrakeAshWalker
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: armor
+      steps:
+      - material: GoliathHide
+        amount: 4
+        doAfter: 3
+      - material: LavalandWatcherSinew
+        amount: 2
+        doAfter: 2
+      - tag: AshDrakeTrophy
+        name: ent-AshDrakeTrophy
+        icon:
+          sprite: _DeadSpace/Lavaland/AshWalkers/trophies.rsi
+          state: tail_spike
+        doAfter: 5
+  - node: armor
+    entity: ClothingOuterArmorDrakeAshWalker
+
+- type: constructionGraph
+  id: ShieldColossusAshWalker
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: shield
+      steps:
+      - material: Bones
+        amount: 6
+        doAfter: 3
+      - material: LavalandWatcherSinew
+        amount: 2
+        doAfter: 2
+      - tag: ColossusTrophy
+        name: ent-ColossusTrophy
+        icon:
+          sprite: _DeadSpace/Lavaland/AshWalkers/trophies.rsi
+          state: blaster_tubes
+        doAfter: 5
+  - node: shield
+    entity: ShieldColossusAshWalker
+
+- type: constructionGraph
+  id: HammerHierophantAshWalker
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: hammer
+      steps:
+      - material: Bones
+        amount: 6
+        doAfter: 3
+      - material: LavalandWatcherSinew
+        amount: 2
+        doAfter: 2
+      - tag: HierophantTrophy
+        name: ent-HierophantTrophy
+        icon:
+          sprite: _DeadSpace/Lavaland/AshWalkers/trophies.rsi
+          state: anomaly_crystal
+        doAfter: 5
+  - node: hammer
+    entity: HammerHierophantAshWalker
+
+- type: constructionGraph
+  id: DaggerBloodAshWalker
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: dagger
+      steps:
+      - material: Bones
+        amount: 4
+        doAfter: 3
+      - material: LavalandWatcherSinew
+        amount: 2
+        doAfter: 2
+      - tag: BubblegumTrophy
+        name: ent-BubblegumTrophy
+        icon:
+          sprite: _DeadSpace/Lavaland/AshWalkers/trophies.rsi
+          state: demon_claws
+        doAfter: 5
+  - node: dagger
+    entity: DaggerBloodAshWalker

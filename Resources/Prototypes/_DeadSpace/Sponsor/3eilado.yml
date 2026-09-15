@@ -174,7 +174,7 @@
     nonlethal: true
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuit3eilado
   name: шлем скафардра Виндемиатрикс
   description: Скафандр модификации Виндемиатрикс собранный на станции 1’А.
@@ -983,14 +983,8 @@
   - type: Sprite
     sprite: _DeadSpace/Sponsor/3eilado/holofanprojector.rsi
     state: icon
-  - type: HolosignProjector
+  - type: LimitedHolosignProjector
     signProto: HoloFan3eilado
-    chargeUse: 120
-  - type: ItemSlots
-    slots:
-      cell_slot:
-        name: power-cell-slot-component-slot-name-default
-        startingItem: PowerCellMedium 
 
 - type: entity
   id: HoloFan3eilado

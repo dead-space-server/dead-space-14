@@ -10,7 +10,7 @@
         <!-- Guide select -->
         <BoxContainer Orientation="Horizontal" Name="TreeBox">
             <fancyTree:FancyTree Name="Tree" VerticalExpand="True" HorizontalExpand="True" Access="Public"/>
-            <cc:VSeparator StyleClasses="LowDivider" Margin="0 -2"/>
+            <cc:VSeparator Margin="0 -2"/> <!-- DS14 -->
         </BoxContainer>
         <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
             <BoxContainer Name="SearchContainer" Visible="False" HorizontalExpand="True">

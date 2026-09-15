@@ -1,3 +1,32 @@
+# Jumpsuit
+- type: loadout
+  id: MagistratJumpsuit
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitMagistrat
+
+# Head
+- type: loadout
+  id: MagistratWig
+  equipment:
+    head: ClothingHeadHatJwig
+
+# Back
+- type: loadout
+  id: MagistratBackpack
+  equipment:
+    back: ClothingBackpackSatchelBig
+
+# Outerclothing
+- type: loadout
+  id: MagistratRobe
+  equipment:
+    outerClothing: ClothingOuterRobesMagistrat
+
+- type: loadout
+  id: MagistratRobesJudge
+  equipment:
+    outerClothing: ClothingOuterRobesJudge
+
 # Underwear
 - type: loadout
   id: UnderwearBottomBoxersMagistrat

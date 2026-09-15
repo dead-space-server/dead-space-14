@@ -16,6 +16,7 @@ nuke-codes-reason-manual = Manual administrator decision
 nuke-codes-reason-blob-critical-mass = Blob critical mass
 nuke-codes-reason-spider-terror-critical = Spider Terror critical takeover
 nuke-codes-requester-auto-timeout = automatic timeout
+nuke-codes-requester-auto-no-admin = automatic dispatch: no available KSO administrator
 nuke-codes-requester-system = game system
 nuke-codes-requester-server-console = server console
 
@@ -29,8 +30,11 @@ nuke-codes-admin-request-missing = Nuke code dispatch request was not found.
 nuke-codes-admin-cancelled = Nuke code dispatch request cancelled.
 nuke-codes-admin-sent = Nuke codes were sent.
 nuke-codes-admin-send-failed = Nuke codes were not sent: no authorized fax machine received them.
+nuke-codes-admin-awaiting-decision-short = KSO decision
+nuke-codes-admin-seconds-short = { $seconds } sec
 
 nuke-codes-admin-alert-game-queued = The game added nuke code dispatch request #{ $requestId } for { $station } to the queue. Reason: { $reason }.
+nuke-codes-admin-decision-reminder = KSO decision required for nuke code dispatch request #{ $requestId } for { $station }. Reason: { $reason }. Open the KSO panel and approve or cancel the dispatch.
 nuke-codes-admin-alert-admin-queued = { $admin } added nuke code dispatch request #{ $requestId } for { $station } to the queue. Reason: { $reason }.
 nuke-codes-admin-alert-cancelled = { $admin } cancelled nuke code dispatch request #{ $requestId } for { $station }.
 nuke-codes-admin-alert-sent = Nuke code dispatch request #{ $requestId } for { $station } was approved by { $admin }. Reason: { $reason }.

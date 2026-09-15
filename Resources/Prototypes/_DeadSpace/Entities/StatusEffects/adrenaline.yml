@@ -1,0 +1,7 @@
+- type: entity
+  parent: StatusEffectAdrenaline
+  id: StatusEffectZombieAdrenaline
+
+- type: entity
+  parent: StatusEffectAdrenaline
+  id: StatusEffectDreadnoughtAdrenaline

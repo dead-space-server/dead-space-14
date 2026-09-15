@@ -4,7 +4,7 @@
   id: SakuraSeeds
   components:
     - type: Seed
-      seedId: sakura
+      plantId: sakura
     - type: Sprite
       sprite: _DeadSpace/Objects/Specific/Hydroponics/sakura.rsi
 
@@ -15,7 +15,7 @@
   id: TritiumCannabisSeeds
   components:
     - type: Seed
-      seedId: tritiumCannabis
+      plantId: tritiumCannabis
     - type: Sprite
       sprite: Objects/Specific/Hydroponics/cannabis.rsi
 
@@ -26,7 +26,7 @@
   id: CactusSeeds
   components:
     - type: Seed
-      seedId: CactusPlant
+      plantId: CactusPlant
     - type: Sprite
       sprite: _DeadSpace/Objects/Specific/Hydroponics/cactus.rsi
 
@@ -37,7 +37,7 @@
   id: CactusCoralSeeds
   components:
     - type: Seed
-      seedId: CactusCoralPlant
+      plantId: CactusCoralPlant
     - type: Sprite
       sprite: _DeadSpace/Objects/Specific/Hydroponics/cactus_coral.rsi
 
@@ -48,7 +48,7 @@
   id: CactusBombSeeds
   components:
     - type: Seed
-      seedId: CactusBombPlant
+      plantId: CactusBombPlant
     - type: Sprite
       sprite: _DeadSpace/Objects/Specific/Hydroponics/cactus_bomb.rsi
 
@@ -59,7 +59,7 @@
   id: CactusBubbleSeeds
   components:
     - type: Seed
-      seedId: CactusBubblePlant
+      plantId: CactusBubblePlant
     - type: Sprite
       sprite: _DeadSpace/Objects/Specific/Hydroponics/cactus_bubble.rsi
 
@@ -70,6 +70,6 @@
   id: MangoSeeds
   components:
     - type: Seed
-      seedId: MangoPlant
+      plantId: MangoPlant
     - type: Sprite
       sprite: _DeadSpace/Objects/Specific/Hydroponics/mango.rsi

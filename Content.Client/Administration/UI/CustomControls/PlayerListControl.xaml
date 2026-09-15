@@ -6,10 +6,9 @@
     <LineEdit Name="FilterLineEdit"
               MinSize="100 0"
               HorizontalExpand="True"
-              PlaceHolder="{Loc player-list-filter}"
-              StyleClasses="DS14MenuInput" />
+              PlaceHolder="{Loc player-list-filter}" />
     <PanelContainer Name="BackgroundPanel"
-                    StyleClasses="DS14MenuInset"
+                    StyleClasses="DeadSpaceInset"
                     VerticalExpand="True"
                     HorizontalExpand="True">
         <controls:ListContainer Name="PlayerListContainer"

@@ -1,7 +1,8 @@
 using Robust.Shared.Random;
 using Content.Shared.Stacks;
-using Content.Shared.Prototypes;
+using Content.Shared.Prototypes; // DS14 - EntityPrototypeHelpers lives in Content.Shared on this baseline.
 using Content.Shared.VendingMachines;
+using Content.Shared.VendingMachines.Components;
 
 namespace Content.Server.Destructible.Thresholds.Behaviors
 {

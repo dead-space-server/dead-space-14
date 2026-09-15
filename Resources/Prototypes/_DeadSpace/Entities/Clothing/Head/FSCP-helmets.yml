@@ -1,5 +1,5 @@
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuitFSCP
   categories: [ HideSpawnMenu ]
   name: шлем штурмового cкафандра армии КПСК

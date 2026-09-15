@@ -1,9 +1,12 @@
 <Control xmlns="https://spacestation14.io"
          xmlns:pllax="clr-namespace:Content.Client.Parallax">
     <pllax:ParallaxControl SpeedX="20"/>
+    <!-- DS14-start -->
     <PanelContainer Name="Background"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
+                    VerticalAlignment="Center"
+                    StyleClasses="PanelInsetDeep">
+        <!-- DS14-end -->
         <BoxContainer Orientation="Vertical"
                       Align="Center">
             <BoxContainer

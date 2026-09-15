@@ -39,8 +39,6 @@
       - Astral
   - type: ContentEye
     maxZoom: 1.2, 1.2
-  - type: NameIdentifier
-    group: GenericNumber
   - type: GhostRole
     makeSentient: true
     name: ghost-role-information-revenant-name
@@ -51,6 +49,11 @@
     - MindRoleGhostRoleSoloAntagonist
     raffle:
       settings: default
+    #ds-14 starts
+    requirements:
+    - !type:OverallPlaytimeRequirement
+      time: 540000 # 150 hours
+    #ds-14 ends
   - type: GhostTakeoverAvailable
   - type: Revenant
     malfunctionWhitelist:
@@ -89,6 +92,9 @@
     - NamesRevenantAdjective
     - NamesRevenantTheme
     nameFormat: name-format-revenant
+  - type: Grammar
+    attributes:
+      proper: true
   - type: Speech
     speechVerb: Ghost
   - type: Reactive

@@ -5,10 +5,10 @@
         <Label Text="{Loc 'observe-warning-1'}"/>
         <Label Text="{Loc 'observe-warning-2'}"/>
         <BoxContainer Orientation="Horizontal">
-            <Button Name="NevermindButton" Text="{Loc 'observe-nevermind'}" SizeFlagsStretchRatio="1" StyleClasses="DS14MenuTopButton"/>
+            <Button Name="NevermindButton" Text="{Loc 'observe-nevermind'}" SizeFlagsStretchRatio="1"/>
             <Control HorizontalExpand="True" SizeFlagsStretchRatio="2" />
-            <cc:CommandButton Command="observe" Name="ObserveButton" StyleClasses="DS14MenuTopButton negative" Text="{Loc 'observe-confirm'}" SizeFlagsStretchRatio="1"/>
-            <cc:CommandButton Command="observe admin" Name="ObserveAsAdminButton" Text="{Loc 'observe-as-admin'}" SizeFlagsStretchRatio="1" Visible="False" StyleClasses="DS14MenuTopButton"/>
+            <cc:CommandButton Command="observe" Name="ObserveButton" StyleClasses="negative" Text="{Loc 'observe-confirm'}" SizeFlagsStretchRatio="1"/>
+            <cc:CommandButton Command="observe admin" Name="ObserveAsAdminButton" Text="{Loc 'observe-as-admin'}" SizeFlagsStretchRatio="1" Visible="False"/>
         </BoxContainer>
     </BoxContainer>
 </DefaultWindow>

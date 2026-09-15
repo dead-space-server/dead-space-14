@@ -1,5 +1,7 @@
-﻿using Robust.Shared.Audio;
+﻿using Content.Shared.Chat.Prototypes;
+using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Chasm;
 
@@ -14,4 +16,10 @@ public sealed partial class ChasmComponent : Component
     /// </summary>
     [DataField("fallingSound")]
     public SoundSpecifier FallingSound = new SoundPathSpecifier("/Audio/Effects/falling.ogg");
+
+    /// <summary>
+    /// Optional emote that should play when an entity falls into the chasm.
+    /// </summary>
+    [DataField]
+    public ProtoId<EmotePrototype>? Emote = "Scream";
 }

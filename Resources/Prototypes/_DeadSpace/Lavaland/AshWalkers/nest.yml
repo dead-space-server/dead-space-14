@@ -1,0 +1,96 @@
+- type: entity
+  parent: BaseStructure
+  id: AshWalkerNest
+  name: necropolis nest
+  description: A living tendril that nurtures the tribe's eggs. It feeds on intact corpses offered by ash walkers.
+  components:
+  - type: AshWalkerNest
+    healing:
+      groups:
+        Brute: -5
+        Burn: -5
+    sacrificeValues:
+      MobWatcherLavaland: 1
+      MobWatcherIcewing: 1
+      MobWatcherMagmawing: 1
+      MobLavalandBasilisk: 1
+      MobLavalandHivelord: 1
+      MobLavalandGoliath: 2
+      MobLavalandLegion: 2
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/nest.rsi
+    state: ash_walker_nest
+    noRot: true
+    drawdepth: Mobs
+    offset: 0,0.5
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeCircle
+          radius: 0.4
+        density: 200
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+  - type: Damageable
+    damageContainer: Biological
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [Destruction]
+  - type: PointLight
+    radius: 3
+    energy: 1.5
+    color: "#d0472f"
+
+- type: entity
+  parent: AshWalkerEgg
+  id: AshWalkerEggIncubating
+  categories: [HideSpawnMenu]
+  components:
+  - type: AshWalkerIncubatingEgg
+
+- type: entity
+  parent: LavalandNecropolisTendrilCollapse
+  id: AshWalkerNestCollapse
+  name: collapsing nest
+  description: The dying tendril is pulling the ground down. Move away!
+  components:
+  - type: LavalandTendrilCollapse
+    delay: 8
+    radius: 1
+
+- type: entity
+  parent: Fountain
+  id: AshWalkerWaterSource
+  name: ash walker spring
+  description: A stone spring fed by an underground aquifer. Its clean water replenishes naturally.
+  components:
+  - type: SolutionRegeneration
+    solution: pool
+    duration: 1
+    generated:
+      reagents:
+      - ReagentId: Water
+        Quantity: 100
+  - type: ReagentTank
+  - type: Edible
+    edible: Drink
+    solution: pool
+    destroyOnEmpty: false
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: Rock
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [Destruction]

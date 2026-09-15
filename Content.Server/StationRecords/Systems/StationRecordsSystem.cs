@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using Content.Server.Access.Systems;
-using Content.Server.Forensics;
 using Content.Shared.Access.Components;
 using Content.Shared.Forensics.Components;
 using Content.Shared.GameTicking;
@@ -8,6 +7,7 @@ using Content.Shared.Inventory;
 using Content.Shared.PDA;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
+using Content.Shared.Station.Components;
 using Content.Shared.StationRecords;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
@@ -151,6 +151,16 @@ public sealed class StationRecordsSystem : SharedStationRecordsSystem
             SetIdKey(idUid, new StationRecordKey(id, station));
             return;
         }
+
+        // DS14-start - upstream station-record code is server-side in this engine version.
+        var jobWeights = TryComp<StationDataComponent>(station, out var stationData)
+            ? stationData.JobWeights
+            : null;
+        var displayPriority = JobUIComparer.TryCreate(_prototypeManager, jobWeights, out var comparer)
+            ? comparer.GetWeight(jobPrototype) ?? 0
+            : 0;
+        // DS14-end
+
         // DS14-start
         var jobTitle = jobPrototype.LocalizedName;
         var jobIcon = jobPrototype.Icon;
@@ -171,7 +181,7 @@ public sealed class StationRecordsSystem : SharedStationRecordsSystem
             JobPrototype = jobId,
             Species = species,
             Gender = gender,
-            DisplayPriority = jobPrototype.RealDisplayWeight,
+            DisplayPriority = displayPriority, // DS14 - engine relocation adaptation
             Fingerprint = mobFingerprint,
             DNA = dna
         };

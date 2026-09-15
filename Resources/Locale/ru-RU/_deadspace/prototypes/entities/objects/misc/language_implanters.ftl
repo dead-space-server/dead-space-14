@@ -1,7 +1,7 @@
 ent-LearnSlimeLanguageImplanter = имплант изучения пузырчатого языка
     .suffix = Пузырчатый язык
     .desc = { ent-BaseImplantOnlyImplanter.desc }
-ent-LearnArachnidLanguageImplanter = имплант изучения пучьего языка
+ent-LearnArachnidLanguageImplanter = имплант изучения паучьего языка
     .suffix = Паучий язык
     .desc = { ent-BaseImplantOnlyImplanter.desc }
 ent-LearnMothLanguageImplanter = имплант изучения ткачьего языка

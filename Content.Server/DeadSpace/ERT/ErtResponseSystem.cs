@@ -32,6 +32,8 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Maths;
+using Content.Shared.Administration;
+using Content.Server.Administration.Managers;
 
 namespace Content.Server.DeadSpace.ERT;
 
@@ -60,6 +62,7 @@ public sealed class ManualApprovedErtRequestData
     public EntityUid? ConsoleUid { get; set; }
     public int ReservedPrice { get; set; }
     public EntityUid? PinpointerTarget { get; set; }
+    public bool SuppressAnnouncements { get; set; }
 }
 
 public sealed class ApprovedErtRequestData
@@ -73,6 +76,7 @@ public sealed class ApprovedErtRequestData
     public EntityUid? ConsoleUid { get; set; }
     public int ReservedPrice { get; set; }
     public EntityUid? PinpointerTarget { get; set; }
+    public bool SuppressAnnouncements { get; set; }
 }
 
 // Работает для одной станции, потому что пока нет смысла делать для множества
@@ -92,6 +96,7 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
     [Dependency] private readonly SharedPinpointerSystem _pinpointerSystem = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly IAdminManager _adminManager = default!;
 
     private readonly Dictionary<int, PendingErtRequestData> _pendingRequests = new();
     private readonly Dictionary<int, ManualApprovedErtRequestData> _manualApprovedRequests = new();
@@ -138,11 +143,18 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
 
         SubscribeLocalEvent<ErtSpawnRuleComponent, RuleLoadedGridsEvent>(OnRuleLoadedGrids);
         SubscribeLocalEvent<ErtSpeciesRoleComponent, MindAddedMessage>(OnMindAdded);
-        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(_ => ResetRoundState());
     }
 
     private void OnRequestErtAdminState(RequestErtAdminStateMessage msg, EntitySessionEventArgs args)
     {
+        if (!_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Admin) ||
+            !_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Fun))
+        {
+            Log.Warning($"Послан в пешее эротическое взаимодействие неадмина с админ обром " +
+                        $"{args.SenderSession.Name} ({args.SenderSession.UserId}).");
+            return;
+        }
         var pendingEntries = new List<ErtPendingRequestEntry>();
         var approvedEntries = new List<ErtApprovedRequestEntry>();
         var manualApprovedEntries = new List<ErtManualApprovedRequestEntry>();
@@ -207,6 +219,13 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
 
     private void OnAdminModifyErtEntry(AdminModifyErtEntryMessage msg, EntitySessionEventArgs args)
     {
+        if (!_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Admin) ||
+            !_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Fun))
+        {
+            Log.Warning($"Послан в пешее эротическое взаимодействие неадмина с админ обром " +
+                        $"{args.SenderSession.Name} ({args.SenderSession.UserId}).");
+            return;
+        }
         if (!_approvedRequests.TryGetValue(msg.RequestId, out var data))
         {
             RaiseNetworkEvent(new ErtAdminActionResult(false, "No approved ERT request with that id"), args.SenderSession.Channel);
@@ -223,6 +242,13 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
 
     private void OnAdminSetPoints(AdminSetPointsMessage msg, EntitySessionEventArgs args)
     {
+        if (!_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Admin) ||
+            !_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Fun))
+        {
+            Log.Warning($"Послан в пешее эротическое взаимодействие неадмина с админ обром " +
+                        $"{args.SenderSession.Name} ({args.SenderSession.UserId}).");
+            return;
+        }
         _points = msg.Points;
 
         _adminLogger.Add(LogType.Action, LogImpact.Medium, $"Admin {args.SenderSession.Name} set ERT points to {_points}");
@@ -233,6 +259,13 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
 
     private void OnDeleteErt(AdminDeleteErtMessage msg, EntitySessionEventArgs args)
     {
+        if (!_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Admin) ||
+            !_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Fun))
+        {
+            Log.Warning($"Послан в пешее эротическое взаимодействие неадмина с админ обром " +
+                        $"{args.SenderSession.Name} ({args.SenderSession.UserId}).");
+            return;
+        }
         if (!_approvedRequests.Remove(msg.RequestId))
         {
             RaiseNetworkEvent(new ErtAdminActionResult(false, "No approved ERT request with that id"), args.SenderSession.Channel);
@@ -247,6 +280,13 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
 
     private void OnAdminSetCooldown(AdminSetCooldownMessage msg, EntitySessionEventArgs args)
     {
+        if (!_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Admin) ||
+            !_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Fun))
+        {
+            Log.Warning($"Послан в пешее эротическое взаимодействие неадмина с админ обром " +
+                        $"{args.SenderSession.Name} ({args.SenderSession.UserId}).");
+            return;
+        }
         var window = new TimedWindow(TimeSpan.FromSeconds(msg.Seconds), TimeSpan.FromSeconds(msg.Seconds));
         _timedWindowSystem.Reset(window);
         _coolDown = window;
@@ -259,6 +299,13 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
 
     private void OnAdminSetReason(AdminSetErtReasonMessage msg, EntitySessionEventArgs args)
     {
+        if (!_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Admin) ||
+            !_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Fun))
+        {
+            Log.Warning($"Послан в пешее эротическое взаимодействие неадмина с админ обром " +
+                        $"{args.SenderSession.Name} ({args.SenderSession.UserId}).");
+            return;
+        }
         if (!_approvedRequests.TryGetValue(msg.RequestId, out var data))
         {
             RaiseNetworkEvent(new ErtAdminActionResult(false, "No approved ERT request with that id"), args.SenderSession.Channel);
@@ -275,24 +322,44 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
 
     private void OnAdminCallErt(AdminCallErtMessage msg, EntitySessionEventArgs args)
     {
+        if (!_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Admin) ||
+            !_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Fun))
+        {
+            Log.Warning($"Послан в пешее эротическое взаимодействие неадмина с админ обром " +
+                        $"{args.SenderSession.Name} ({args.SenderSession.UserId}).");
+            return;
+        }
         var teamId = new ProtoId<ErtTeamPrototype>(msg.ProtoId);
         var success = TryCallErt(
             teamId,
             _stationSystem.GetOwningStation(args.SenderSession.AttachedEntity),
             out var result,
-            true,
-            true,
-            true,
-            msg.Reason,
-            requestedByName: args.SenderSession.Name);
+            toPay: true,
+            needCooldown: true,
+            needWarn: msg.SendNotification,
+            callReason: msg.Reason,
+            requestedByName: args.SenderSession.Name,
+            suppressAnnouncements: !msg.SendNotification);
 
-        _adminLogger.Add(LogType.Action, LogImpact.Medium, $"Admin {args.SenderSession.Name} queued ERT '{msg.ProtoId}' for auto spawn with reason '{msg.Reason}'");
-        _chatManager.SendAdminAlert($"Админ {args.SenderSession.Name} добавил новый вызов ОБР '{msg.ProtoId}' в очередь автоспавна.");
+        _adminLogger.Add(
+            LogType.Action,
+            LogImpact.Medium,
+            $"Admin {args.SenderSession.Name} queued ERT '{msg.ProtoId}' for auto spawn with reason '{msg.Reason}', announcements: {msg.SendNotification}");
+        _chatManager.SendAdminAlert(
+            $"Админ {args.SenderSession.Name} добавил новый вызов ОБР '{msg.ProtoId}' в очередь автоспавна" +
+            (msg.SendNotification ? "." : " без оповещений."));
         RaiseNetworkEvent(new ErtAdminActionResult(success, result ?? "ERT queued successfully."), args.SenderSession.Channel);
     }
 
     private void OnRejectRequest(AdminRejectErtRequestMessage msg, EntitySessionEventArgs args)
     {
+        if (!_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Admin) ||
+            !_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Fun))
+        {
+            Log.Warning($"Послан в пешее эротическое взаимодействие неадмина с админ обром " +
+                        $"{args.SenderSession.Name} ({args.SenderSession.UserId}).");
+            return;
+        }
         if (!_pendingRequests.Remove(msg.RequestId))
         {
             RaiseNetworkEvent(new ErtAdminActionResult(false, "No pending ERT request with that id"), args.SenderSession.Channel);
@@ -319,6 +386,13 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
 
     private void OnApproveRequestManual(AdminApproveErtRequestManualMessage msg, EntitySessionEventArgs args)
     {
+        if (!_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Admin) ||
+            !_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Fun))
+        {
+            Log.Warning($"Послан в пешее эротическое взаимодействие неадмина с админ обром " +
+                        $"{args.SenderSession.Name} ({args.SenderSession.UserId}).");
+            return;
+        }
         if (!_pendingRequests.TryGetValue(msg.RequestId, out var request))
         {
             RaiseNetworkEvent(new ErtAdminActionResult(false, "No pending ERT request with that id"), args.SenderSession.Channel);
@@ -341,6 +415,7 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
             StationUid = request.StationUid,
             ConsoleUid = request.ConsoleUid,
             ReservedPrice = request.ReservedPrice,
+            SuppressAnnouncements = !msg.SendNotification,
         };
 
         if (msg.SendNotification)
@@ -354,6 +429,13 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
 
     private void OnApproveRequestAuto(AdminApproveErtRequestAutoMessage msg, EntitySessionEventArgs args)
     {
+        if (!_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Admin) ||
+            !_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Fun))
+        {
+            Log.Warning($"Послан в пешее эротическое взаимодействие неадмина с админ обром " +
+                        $"{args.SenderSession.Name} ({args.SenderSession.UserId}).");
+            return;
+        }
         if (!_pendingRequests.TryGetValue(msg.RequestId, out var request))
         {
             RaiseNetworkEvent(new ErtAdminActionResult(false, "No pending ERT request with that id"), args.SenderSession.Channel);
@@ -367,7 +449,7 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
         }
 
         _pendingRequests.Remove(msg.RequestId);
-        QueueApprovedRequest(request, prototype);
+        QueueApprovedRequest(request, prototype, suppressAnnouncements: !msg.SendNotification);
         if (msg.SendNotification)
             AnnounceApprovedRequest(prototype);
 
@@ -379,6 +461,13 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
 
     private void OnSetApprovedTeam(AdminSetApprovedErtTeamMessage msg, EntitySessionEventArgs args)
     {
+        if (!_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Admin) ||
+            !_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Fun))
+        {
+            Log.Warning($"Послан в пешее эротическое взаимодействие неадмина с админ обром " +
+                        $"{args.SenderSession.Name} ({args.SenderSession.UserId}).");
+            return;
+        }
         if (!_approvedRequests.TryGetValue(msg.RequestId, out var request))
         {
             RaiseNetworkEvent(new ErtAdminActionResult(false, "No approved ERT request with that id"), args.SenderSession.Channel);
@@ -392,7 +481,7 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
             return;
         }
 
-        if (HasActiveRequestForTeam(newTeam, msg.RequestId))
+        if (HasActiveRequest(prototype, request.PinpointerTarget, msg.RequestId))
         {
             RaiseNetworkEvent(new ErtAdminActionResult(false, Loc.GetString("ert-call-fail-already-waiting")), args.SenderSession.Channel);
             return;
@@ -401,7 +490,7 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
         var teamChanged = request.TeamId != newTeam;
         request.TeamId = newTeam;
 
-        if (teamChanged)
+        if (teamChanged && !request.SuppressAnnouncements)
             AnnounceChangedApprovedTeam(prototype);
 
         _adminLogger.Add(LogType.Action, LogImpact.Medium, $"Admin {args.SenderSession.Name} changed approved ERT request #{msg.RequestId} team to '{msg.ProtoId}'");
@@ -412,13 +501,24 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
 
     private void OnSendErtNow(AdminSendErtNowMessage msg, EntitySessionEventArgs args)
     {
+        if (!_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Admin) ||
+            !_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Fun))
+        {
+            Log.Warning($"Послан в пешее эротическое взаимодействие неадмина с админ обром " +
+                        $"{args.SenderSession.Name} ({args.SenderSession.UserId}).");
+            return;
+        }
         if (!_approvedRequests.TryGetValue(msg.RequestId, out var request))
         {
             RaiseNetworkEvent(new ErtAdminActionResult(false, "No approved ERT request with that id"), args.SenderSession.Channel);
             return;
         }
 
-        EnsureErtTeam(request.TeamId, request.CallReason, request.PinpointerTarget);
+        EnsureErtTeam(
+            request.TeamId,
+            request.CallReason,
+            request.PinpointerTarget,
+            announce: !request.SuppressAnnouncements);
         _approvedRequests.Remove(msg.RequestId);
 
         _adminLogger.Add(LogType.Action, LogImpact.Medium, $"Admin {args.SenderSession.Name} sent approved ERT request #{msg.RequestId} immediately");
@@ -428,6 +528,13 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
 
     private void OnPromoteManualApprovedRequest(AdminPromoteManualApprovedErtMessage msg, EntitySessionEventArgs args)
     {
+        if (!_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Admin) ||
+            !_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Fun))
+        {
+            Log.Warning($"Послан в пешее эротическое взаимодействие неадмина с админ обром " +
+                        $"{args.SenderSession.Name} ({args.SenderSession.UserId}).");
+            return;
+        }
         if (!_manualApprovedRequests.TryGetValue(msg.RequestId, out var request))
         {
             RaiseNetworkEvent(new ErtAdminActionResult(false, "No manual-approved ERT request with that id"), args.SenderSession.Channel);
@@ -441,6 +548,7 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
         }
 
         _manualApprovedRequests.Remove(msg.RequestId);
+        request.SuppressAnnouncements = true;
         QueueApprovedRequest(request, prototype);
 
         _adminLogger.Add(LogType.Action, LogImpact.Medium, $"Admin {args.SenderSession.Name} promoted manual-approved ERT request #{msg.RequestId} to auto spawn");
@@ -450,6 +558,13 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
 
     private void OnMoveApprovedRequestToManual(AdminMoveApprovedErtToManualMessage msg, EntitySessionEventArgs args)
     {
+        if (!_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Admin) ||
+            !_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Fun))
+        {
+            Log.Warning($"Послан в пешее эротическое взаимодействие неадмина с админ обром " +
+                        $"{args.SenderSession.Name} ({args.SenderSession.UserId}).");
+            return;
+        }
         if (!_approvedRequests.TryGetValue(msg.RequestId, out var request))
         {
             RaiseNetworkEvent(new ErtAdminActionResult(false, "No approved ERT request with that id"), args.SenderSession.Channel);
@@ -467,6 +582,7 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
             ConsoleUid = request.ConsoleUid,
             ReservedPrice = request.ReservedPrice,
             PinpointerTarget = request.PinpointerTarget,
+            SuppressAnnouncements = request.SuppressAnnouncements,
         };
 
         _adminLogger.Add(LogType.Action, LogImpact.Medium, $"Admin {args.SenderSession.Name} moved approved ERT request #{msg.RequestId} to manual approval");
@@ -474,7 +590,7 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
         RaiseNetworkEvent(new ErtAdminActionResult(true, "OK"), args.SenderSession.Channel);
     }
 
-    private void OnRoundRestart(RoundRestartCleanupEvent ev)
+    internal void ResetRoundState()
     {
         _windowWaitingSpecies.Clear();
         _pendingRequests.Clear();
@@ -542,7 +658,12 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
                 }
 
                 var window = _defaultWindowWaitingSpecies.Clone();
-                var settings = new WaitingSpeciesSettings(args.Map, window, ent.Comp.Team, uid);
+                var settings = new WaitingSpeciesSettings(
+                    args.Map,
+                    window,
+                    ent.Comp.Team,
+                    uid,
+                    ent.Comp.SuppressAnnouncements);
 
                 EnsureComp<ErtSpeciesRoleComponent>(spec).Settings = settings;
                 _timedWindowSystem.Reset(window);
@@ -599,7 +720,7 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
             if (!_prototypeManager.TryIndex(settings.TeamId, out var prototype))
                 continue;
 
-            if (prototype.CancelMessage != null)
+            if (prototype.CancelMessage != null && !settings.SuppressAnnouncements)
             {
                 _chatSystem.DispatchGlobalAnnouncement(
                     message: prototype.CancelMessage,
@@ -637,7 +758,11 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
             if (!_timedWindowSystem.IsExpired(data.Window))
                 continue;
 
-            EnsureErtTeam(data.TeamId, data.CallReason, data.PinpointerTarget);
+            EnsureErtTeam(
+                data.TeamId,
+                data.CallReason,
+                data.PinpointerTarget,
+                announce: !data.SuppressAnnouncements);
             _approvedRequests.Remove(requestId);
         }
     }
@@ -651,11 +776,12 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
         bool needWarn = true,
         string? callReason = null,
         EntityUid? pinpointerTarget = null,
-        string? requestedByName = null)
+        string? requestedByName = null,
+        bool suppressAnnouncements = false)
     {
         reason = "Вызван успешно.";
 
-        if (!TryReserveCall(team, station, out var prototype, out reason, toPay, needCooldown))
+        if (!TryReserveCall(team, station, out var prototype, out reason, toPay, needCooldown, pinpointerTarget))
             return false;
 
         if (needWarn)
@@ -675,7 +801,8 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
             station,
             null,
             toPay ? prototype.Price : 0,
-            pinpointerTarget);
+            pinpointerTarget,
+            suppressAnnouncements);
 
         return true;
     }
@@ -716,7 +843,11 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
         return true;
     }
 
-    public EntityUid? EnsureErtTeam(ProtoId<ErtTeamPrototype> team, string? callReason = null, EntityUid? pinpointerTarget = null)
+    public EntityUid? EnsureErtTeam(
+        ProtoId<ErtTeamPrototype> team,
+        string? callReason = null,
+        EntityUid? pinpointerTarget = null,
+        bool announce = true)
     {
         if (!_prototypeManager.TryIndex(team, out var prototype))
             return null;
@@ -725,21 +856,28 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
         var ruleComp = EnsureComp<ErtSpawnRuleComponent>(ruleEntity);
 
         if (!_prototypeManager.TryIndex(ruleComp.Shuttle, out var shuttle))
+        {
+            QueueDel(ruleEntity);
             return null;
+        }
 
         var opts = DeserializationOptions.Default with { InitializeMaps = true };
-        _mapSystem.CreateMap(out var mapId);
+        var mapEntity = _mapSystem.CreateMap(out var mapId);
         if (!_mapLoaderSystem.TryLoadGrid(mapId, shuttle.Path, out var grid, opts))
         {
             Log.Error($"Failed to load grid from {shuttle.Path}!");
+            QueueDel(mapEntity);
+            QueueDel(ruleEntity);
             return null;
         }
 
         var grids = new List<EntityUid> { grid.Value };
 
         ruleComp.Team = team;
+        ruleComp.ShuttleEntity = grid.Value;
         ruleComp.CallReason = callReason;
         ruleComp.PinpointerTarget = pinpointerTarget;
+        ruleComp.SuppressAnnouncements = !announce;
 
         var addedEvent = new GameRuleAddedEvent(ruleEntity, prototype.ErtRule);
         RaiseLocalEvent(ruleEntity, ref addedEvent, true);
@@ -749,7 +887,7 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
         var loadedEvent = new RuleLoadedGridsEvent(mapId, grids);
         RaiseLocalEvent(ruleEntity, ref loadedEvent);
 
-        if (!string.IsNullOrEmpty(prototype.StartAnnouncement))
+        if (announce && !string.IsNullOrEmpty(prototype.StartAnnouncement))
         {
             _chatSystem.DispatchGlobalAnnouncement(
                 message: Loc.GetString(prototype.StartAnnouncement),
@@ -777,16 +915,10 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
         out ErtTeamPrototype prototype,
         out string? reason,
         bool toPay,
-        bool needCooldown)
+        bool needCooldown,
+        EntityUid? pinpointerTarget = null)
     {
         reason = "Вызван успешно.";
-
-        if (HasActiveRequestForTeam(team))
-        {
-            prototype = default!;
-            reason = Loc.GetString("ert-call-fail-already-waiting");
-            return false;
-        }
 
         if (!_prototypeManager.TryIndex(team, out var indexedPrototype))
         {
@@ -796,6 +928,14 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
         }
 
         prototype = indexedPrototype;
+
+        if (HasActiveRequest(prototype, pinpointerTarget))
+        {
+            reason = Loc.GetString(prototype.DispatchPerTarget && pinpointerTarget != null
+                ? "ert-call-fail-patient-assigned"
+                : "ert-call-fail-already-waiting");
+            return false;
+        }
 
         if (station != null && prototype.CodeBlackList != null)
         {
@@ -840,17 +980,17 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
         return true;
     }
 
-    private bool HasActiveRequestForTeam(ProtoId<ErtTeamPrototype> team, int? ignoredApprovedRequestId = null)
+    private bool HasActiveRequest(ErtTeamPrototype team, EntityUid? target = null, int? ignoredApprovedRequestId = null)
     {
         foreach (var pending in _pendingRequests.Values)
         {
-            if (pending.RequestedTeamId == team)
+            if (pending.RequestedTeamId == team.ID && (!team.DispatchPerTarget || target == null))
                 return true;
         }
 
         foreach (var manualApproved in _manualApprovedRequests.Values)
         {
-            if (manualApproved.TeamId == team)
+            if (manualApproved.TeamId == team.ID && (!team.DispatchPerTarget || manualApproved.PinpointerTarget == target))
                 return true;
         }
 
@@ -859,14 +999,28 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
             if (ignoredApprovedRequestId != null && approved.RequestId == ignoredApprovedRequestId.Value)
                 continue;
 
-            if (approved.TeamId == team)
+            if (approved.TeamId == team.ID && (!team.DispatchPerTarget || approved.PinpointerTarget == target))
+                return true;
+        }
+
+        if (!team.DispatchPerTarget)
+            return false;
+
+        var query = EntityQueryEnumerator<ErtSpawnRuleComponent>();
+        while (query.MoveNext(out _, out var rule))
+        {
+            if (rule.Team == team.ID && rule.PinpointerTarget == target &&
+                rule.ShuttleEntity is { } shuttle && !TerminatingOrDeleted(shuttle))
                 return true;
         }
 
         return false;
     }
 
-    private void QueueApprovedRequest(PendingErtRequestData request, ErtTeamPrototype prototype)
+    private void QueueApprovedRequest(
+        PendingErtRequestData request,
+        ErtTeamPrototype prototype,
+        bool suppressAnnouncements = false)
     {
         _approvedRequests[request.RequestId] = CreateApprovedRequest(
             request.RequestId,
@@ -877,7 +1031,8 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
             request.StationUid,
             request.ConsoleUid,
             request.ReservedPrice,
-            null);
+            null,
+            suppressAnnouncements);
     }
 
     private void QueueApprovedRequest(ManualApprovedErtRequestData request, ErtTeamPrototype prototype)
@@ -891,7 +1046,8 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
             request.StationUid,
             request.ConsoleUid,
             request.ReservedPrice,
-            request.PinpointerTarget);
+            request.PinpointerTarget,
+            request.SuppressAnnouncements);
     }
 
     private ApprovedErtRequestData CreateApprovedRequest(
@@ -903,7 +1059,8 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
         EntityUid? stationUid,
         EntityUid? consoleUid,
         int reservedPrice,
-        EntityUid? pinpointerTarget)
+        EntityUid? pinpointerTarget,
+        bool suppressAnnouncements)
     {
         var window = prototype.TimeWindowToSpawn.Clone();
         _timedWindowSystem.Reset(window);
@@ -919,6 +1076,7 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
             ConsoleUid = consoleUid,
             ReservedPrice = reservedPrice,
             PinpointerTarget = pinpointerTarget,
+            SuppressAnnouncements = suppressAnnouncements,
         };
     }
 
@@ -987,12 +1145,19 @@ public sealed class WaitingSpeciesSettings
     public TimedWindow Window;
     public ProtoId<ErtTeamPrototype> TeamId;
     public EntityUid SpawnPoint;
+    public bool SuppressAnnouncements;
 
-    public WaitingSpeciesSettings(MapId mapId, TimedWindow window, ProtoId<ErtTeamPrototype> teamId, EntityUid spawnPoint)
+    public WaitingSpeciesSettings(
+        MapId mapId,
+        TimedWindow window,
+        ProtoId<ErtTeamPrototype> teamId,
+        EntityUid spawnPoint,
+        bool suppressAnnouncements)
     {
         MapId = mapId;
         Window = window;
         TeamId = teamId;
         SpawnPoint = spawnPoint;
+        SuppressAnnouncements = suppressAnnouncements;
     }
 }

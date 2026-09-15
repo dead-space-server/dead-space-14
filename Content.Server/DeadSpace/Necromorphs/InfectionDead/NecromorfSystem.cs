@@ -1,6 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
-using Content.Server.Body.Systems;
+using Content.Shared.Body.Systems; // DS14 - forensics refactor moved BloodstreamSystem to Shared.
 using Content.Server.Cloning;
 using Content.Shared.Cloning.Events;
 using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;

@@ -1,26 +1,26 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Made by x_muted_x (discord) for Space Station 14 server Мёртвый Космос.",
+  "copyright": "Made by x_muted_x (discord) for Space Station 14 server Мёртвый Космос. Resprite by skazhennyi_ravlik (discord) for Space Station 14 server Мёртвый Космос",
   "size": {
     "x": 32,
     "y": 32
   },
   "states": [
     {
-      "name": "inhand-right",
-      "directions": 4
-    },
-    {
       "name": "equipped-OUTERCLOTHING",
       "directions": 4
     },
     {
-      "name": "icon"
+      "name": "equipped-OUTERCLOTHING-plaf",
+      "directions": 4
     },
     {
-      "name": "inhand-left",
+      "name": "equipped-OUTERCLOTHING-reptilian",
       "directions": 4
+    },
+    {
+      "name": "icon"
     }
   ]
 }

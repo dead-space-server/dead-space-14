@@ -16,16 +16,18 @@
                                     Margin="2 16" />
 
                     <!-- Box with breaker, label, values -->
-                    <PanelContainer HorizontalExpand="True" StyleClasses="BackgroundPanelDark">
+                    <!-- DS14-start -->
+                    <PanelContainer HorizontalExpand="True" StyleClasses="DeadSpaceSurfaceDark">
                         <BoxContainer Orientation="Vertical">
                             <BoxContainer Orientation="Horizontal">
                                 <Label Text="{Loc 'battery-menu-in'}" HorizontalExpand="True" VerticalAlignment="Top"
-                                       StyleClasses="LabelKeyText" />
+                                       StyleClasses="DeadSpaceSectionTitle" />
                                 <controls:OnOffButton Name="InBreaker" />
                             </BoxContainer>
                             <Label Name="InValue" />
                         </BoxContainer>
                     </PanelContainer>
+                    <!-- DS14-end -->
                 </BoxContainer>
 
                 <!-- Middle row: Entity view & passthrough -->
@@ -34,7 +36,9 @@
 
                     <BoxContainer Orientation="Vertical" VerticalAlignment="Center" HorizontalExpand="True"
                                   HorizontalAlignment="Right">
-                        <Label HorizontalAlignment="Right" Text="{Loc 'battery-menu-passthrough'}" StyleClasses="StatusFieldTitle" />
+                        <!-- DS14-start -->
+                        <Label HorizontalAlignment="Right" Text="{Loc 'battery-menu-passthrough'}" StyleClasses="DeadSpaceSectionTitle" />
+                        <!-- DS14-end -->
                         <Label HorizontalAlignment="Right" Name="PassthroughValue" />
                     </BoxContainer>
                 </BoxContainer>
@@ -46,16 +50,18 @@
                                     Margin="2 16" />
 
                     <!-- Box with breaker, label, values -->
-                    <PanelContainer HorizontalExpand="True" StyleClasses="BackgroundPanelDark">
+                    <!-- DS14-start -->
+                    <PanelContainer HorizontalExpand="True" StyleClasses="DeadSpaceSurfaceDark">
                         <BoxContainer Orientation="Vertical">
                             <BoxContainer Orientation="Horizontal">
                                 <Label Text="{Loc 'battery-menu-out'}" HorizontalExpand="True" VerticalAlignment="Top"
-                                       StyleClasses="LabelKeyText" />
+                                       StyleClasses="DeadSpaceSectionTitle" />
                                 <controls:OnOffButton Name="OutBreaker" />
                             </BoxContainer>
                             <Label Name="OutValue" />
                         </BoxContainer>
                     </PanelContainer>
+                    <!-- DS14-end -->
                 </BoxContainer>
             </BoxContainer>
 
@@ -69,39 +75,43 @@
             <!-- Middle pane: charge/discharge -->
             <BoxContainer Name="ChargeDischarge" Orientation="Vertical" HorizontalExpand="True">
                 <!-- Charge -->
-                <PanelContainer VerticalExpand="True" StyleClasses="BackgroundPanelDark" Margin="0 0 0 8">
+                <!-- DS14-start -->
+                <PanelContainer VerticalExpand="True" StyleClasses="DeadSpaceSurfaceDark" Margin="0 0 0 8">
                     <BoxContainer Orientation="Vertical">
-                        <Label Text="{Loc 'battery-menu-charge-header'}" StyleClasses="LabelKeyText" />
+                        <Label Text="{Loc 'battery-menu-charge-header'}" StyleClasses="DeadSpaceSectionTitle" />
                         <BoxContainer Orientation="Vertical" VerticalExpand="True" VerticalAlignment="Center">
                             <Slider Name="ChargeRateSlider" />
                             <BoxContainer Orientation="Horizontal">
-                                <Label Text="{Loc 'battery-menu-max'}" StyleClasses="StatusFieldTitle" HorizontalExpand="True" />
+                                <Label Text="{Loc 'battery-menu-max'}" HorizontalExpand="True" />
                                 <Label Name="ChargeMaxValue" />
                             </BoxContainer>
                         </BoxContainer>
                         <BoxContainer Orientation="Horizontal">
-                            <Label Text="{Loc 'battery-menu-current'}" StyleClasses="StatusFieldTitle" HorizontalExpand="True" />
+                            <Label Text="{Loc 'battery-menu-current'}" HorizontalExpand="True" />
                             <Label Name="ChargeCurrentValue" />
                         </BoxContainer>
                     </BoxContainer>
                 </PanelContainer>
+                <!-- DS14-end -->
                 <!-- Discharge -->
-                <PanelContainer VerticalExpand="True" StyleClasses="BackgroundPanelDark">
+                <!-- DS14-start -->
+                <PanelContainer VerticalExpand="True" StyleClasses="DeadSpaceSurfaceDark">
                     <BoxContainer Orientation="Vertical">
-                        <Label Text="{Loc 'battery-menu-discharge-header'}" StyleClasses="LabelKeyText" />
+                        <Label Text="{Loc 'battery-menu-discharge-header'}" StyleClasses="DeadSpaceSectionTitle" />
                         <BoxContainer Orientation="Vertical" VerticalExpand="True" VerticalAlignment="Center">
                             <Slider Name="DischargeRateSlider" />
                             <BoxContainer Orientation="Horizontal">
-                                <Label Text="{Loc 'battery-menu-max'}" StyleClasses="StatusFieldTitle" HorizontalExpand="True" />
+                                <Label Text="{Loc 'battery-menu-max'}" HorizontalExpand="True" />
                                 <Label Name="DischargeMaxValue" />
                             </BoxContainer>
                         </BoxContainer>
                         <BoxContainer Orientation="Horizontal">
-                            <Label Text="{Loc 'battery-menu-current'}" StyleClasses="StatusFieldTitle" HorizontalExpand="True" />
+                            <Label Text="{Loc 'battery-menu-current'}" HorizontalExpand="True" />
                             <Label Name="DischargeCurrentValue" />
                         </BoxContainer>
                     </BoxContainer>
                 </PanelContainer>
+                <!-- DS14-end -->
             </BoxContainer>
 
             <!-- Separator connecting panes with some wires -->
@@ -111,15 +121,16 @@
             </BoxContainer>
 
             <!-- Right pane: storage -->
-            <PanelContainer Name="Storage" StyleClasses="BackgroundPanelDark" HorizontalExpand="True">
+            <!-- DS14-start -->
+            <PanelContainer Name="Storage" StyleClasses="DeadSpaceSurfaceDark" HorizontalExpand="True">
                 <BoxContainer Orientation="Vertical">
-                    <Label Text="{Loc 'battery-menu-storage-header'}" StyleClasses="LabelKeyText" />
+                    <Label Text="{Loc 'battery-menu-storage-header'}" StyleClasses="DeadSpaceSectionTitle" />
                     <GridContainer Columns="2">
-                        <Label Text="{Loc 'battery-menu-stored'}" StyleClasses="StatusFieldTitle" />
+                        <Label Text="{Loc 'battery-menu-stored'}" />
                         <Label Name="StoredPercentageValue" HorizontalAlignment="Right" HorizontalExpand="True" />
-                        <Label Text="{Loc 'battery-menu-energy'}" StyleClasses="StatusFieldTitle" />
+                        <Label Text="{Loc 'battery-menu-energy'}" />
                         <Label Name="StoredEnergyValue" HorizontalAlignment="Right" />
-                        <Label Name="EtaLabel" StyleClasses="StatusFieldTitle" />
+                        <Label Name="EtaLabel" />
                         <Label Name="EtaValue" HorizontalAlignment="Right" />
                     </GridContainer>
 
@@ -129,15 +140,18 @@
                     </GridContainer>
                 </BoxContainer>
             </PanelContainer>
+            <!-- DS14-end -->
         </BoxContainer>
 
         <!-- Footer -->
         <BoxContainer Name="Footer" Orientation="Vertical">
             <PanelContainer StyleClasses="LowDivider" />
             <BoxContainer Orientation="Horizontal" Margin="10 2 5 0" VerticalAlignment="Bottom">
-                <Label Text="{Loc 'battery-menu-footer-left'}" StyleClasses="WindowFooterText" />
-                <Label Text="{Loc 'battery-menu-footer-right'}" StyleClasses="WindowFooterText"
+                <!-- DS14-start -->
+                <Label Text="{Loc 'battery-menu-footer-left'}" StyleClasses="DeadSpaceSubtitle" />
+                <Label Text="{Loc 'battery-menu-footer-right'}" StyleClasses="DeadSpaceSubtitle"
                        HorizontalAlignment="Right" HorizontalExpand="True" Margin="0 0 5 0" />
+                <!-- DS14-end -->
                 <TextureRect StyleClasses="NTLogoDark" Stretch="KeepAspectCentered"
                              VerticalAlignment="Center" HorizontalAlignment="Right" SetSize="19 19" />
             </BoxContainer>

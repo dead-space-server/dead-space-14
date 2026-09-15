@@ -1,2 +1,2 @@
-marking-ADTHorseEars = Лошадиные уши (Спонсоркий, Метеор+)
-marking-ADTHorseTail = Лошадиный хвост (Спонсоркий, Метеор+)
+marking-HorseEars = Лошадиные уши (Спонсоркий, Метеор+)
+marking-HorseTail = Лошадиный хвост (Спонсоркий, Метеор+)

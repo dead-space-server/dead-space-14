@@ -1,0 +1,13 @@
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatJwig
+  name: судейский парик
+  description: Белоснежный парик, который носят вершители правосудия. Выглядит нелепо, но спорить с ним никто не решается.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Misc/jwig.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Misc/jwig.rsi
+  - type: HideLayerClothing
+    slots:
+    - HeadTop

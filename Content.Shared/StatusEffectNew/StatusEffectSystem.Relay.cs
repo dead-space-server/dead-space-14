@@ -1,12 +1,23 @@
 using Content.Shared.Body.Events;
+using Content.Shared.Atmos;
+using Content.Shared.Chat;
+using Content.Shared.Chemistry.Events;
+using Content.Shared.Climbing.Events;
 using Content.Shared.Damage.Events;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Examine;
+using Content.Shared.Medical;
 using Content.Shared.Mobs.Events;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Rejuvenate;
 using Content.Shared.Speech;
+using Content.Shared.Speech.EntitySystems;
 using Content.Shared.StatusEffectNew.Components;
 using Content.Shared.Stunnable;
+using Content.Shared.Throwing;
+using Content.Shared.Weapons.Ranged.Events;
+using Robust.Shared.Collections;
 using Robust.Shared.Player;
 
 namespace Content.Shared.StatusEffectNew;
@@ -20,6 +31,7 @@ public sealed partial class StatusEffectsSystem
         SubscribeLocalEvent<StatusEffectContainerComponent, RejuvenateEvent>(RelayStatusEffectEvent);
 
         SubscribeLocalEvent<StatusEffectContainerComponent, RefreshMovementSpeedModifiersEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, ModifySlowOnDamageSpeedEvent>(RefRelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, UpdateCanMoveEvent>(RelayStatusEffectEvent);
 
         SubscribeLocalEvent<StatusEffectContainerComponent, RefreshFrictionModifiersEvent>(RefRelayStatusEffectEvent);
@@ -28,13 +40,26 @@ public sealed partial class StatusEffectsSystem
         SubscribeLocalEvent<StatusEffectContainerComponent, StandUpAttemptEvent>(RefRelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, StunEndAttemptEvent>(RefRelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, RefreshStaminaCritThresholdEvent>(RefRelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, SelfBeforeClimbEvent>(RelayStatusEffectEvent);
 
         SubscribeLocalEvent<StatusEffectContainerComponent, BeforeForceSayEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, BeforeAlertSeverityCheckEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, SpeakAttemptEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, ExaminedEvent>(RelayStatusEffectEvent);
 
+        // DS14-start: EmoteActionEvent and shared vocal systems are not available on the current baseline.
+        SubscribeLocalEvent<StatusEffectContainerComponent, ScreamActionEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, AccentGetEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, EmoteEvent>(RefRelayStatusEffectEvent);
+        // DS14-end
 
         SubscribeLocalEvent<StatusEffectContainerComponent, BleedModifierEvent>(RefRelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, RefreshPressureImmunityEvent>(RefRelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, SelfBeforeDefibrillatorZapsEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, SelfBeforeInjectEvent>(RelayStatusEffectEvent);
+
+        SubscribeLocalEvent<StatusEffectContainerComponent, CatchAttemptEvent>(RefRelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, SelfBeforeGunShotEvent>(RelayStatusEffectEvent);
     }
 
     private void RefRelayStatusEffectEvent<T>(EntityUid uid, StatusEffectContainerComponent component, ref T args) where T : struct
@@ -49,9 +74,15 @@ public sealed partial class StatusEffectsSystem
 
     public void RelayEvent<T>(Entity<StatusEffectContainerComponent> statusEffect, ref T args) where T : struct
     {
+        if (statusEffect.Comp.ActiveStatusEffects?.ContainedEntities is not { } originalCollection || originalCollection.Count == 0)
+            return;
+
         // this copies the by-ref event if it is a struct
-        var ev = new StatusEffectRelayedEvent<T>(args);
-        foreach (var activeEffect in statusEffect.Comp.ActiveStatusEffects?.ContainedEntities ?? [])
+        var ev = new StatusEffectRelayedEvent<T>(args, statusEffect);
+
+        // Prevent a collection modified enumeration error by copying the list in case a status adds another status
+        var list = new ValueList<EntityUid>(originalCollection);
+        foreach (var activeEffect in list)
         {
             RaiseLocalEvent(activeEffect, ref ev);
         }
@@ -61,9 +92,15 @@ public sealed partial class StatusEffectsSystem
 
     public void RelayEvent<T>(Entity<StatusEffectContainerComponent> statusEffect, T args) where T : class
     {
+        if (statusEffect.Comp.ActiveStatusEffects?.ContainedEntities is not { } originalCollection || originalCollection.Count == 0)
+            return;
+
         // this copies the by-ref event if it is a struct
-        var ev = new StatusEffectRelayedEvent<T>(args);
-        foreach (var activeEffect in statusEffect.Comp.ActiveStatusEffects?.ContainedEntities ?? [])
+        var ev = new StatusEffectRelayedEvent<T>(args, statusEffect);
+
+        // Prevent a collection modified enumeration error by copying the list in case a status adds another status
+        var list = new ValueList<EntityUid>(originalCollection);
+        foreach (var activeEffect in list)
         {
             RaiseLocalEvent(activeEffect, ref ev);
         }
@@ -74,4 +111,4 @@ public sealed partial class StatusEffectsSystem
 /// Event wrapper for relayed events.
 /// </summary>
 [ByRefEvent]
-public record struct StatusEffectRelayedEvent<TEvent>(TEvent Args);
+public record struct StatusEffectRelayedEvent<TEvent>(TEvent Args, EntityUid AppliedTo);

@@ -61,6 +61,7 @@
   - InitialInfected
   - SentientVirus
   - Blob
+  - Changeling
   subcategories:
   - displayName: Пауки ужаса
     outlineColor: "#8928ff"

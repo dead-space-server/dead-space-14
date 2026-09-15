@@ -5,16 +5,20 @@
          xmlns:ui="clr-namespace:Content.Client.Options.UI">
     <BoxContainer Orientation="Vertical">
         <BoxContainer Orientation="Vertical" Margin="8 8 8 8" VerticalExpand="True">
+            <!-- DS14-start -->
             <Label Text="{Loc 'ui-options-tab-ping'}"
-                   StyleClasses="LabelKeyText"/>
-            <ui:OptionSlider Name="SliderCooldownForPing" Title="{Loc 'ui-options-cooldown-ping'}" 
+                   StyleClasses="DeadSpaceSectionTitle"/>
+            <!-- DS14-end -->
+            <ui:OptionSlider Name="SliderCooldownForPing" Title="{Loc 'ui-options-cooldown-ping'}"
                 Margin="0 0 0 8" />
-            <CheckBox Name="GetPingPermission" Text="{Loc 'ui-options-ping-permission'}" /> 
-            <ui:OptionDropDown Name="DropDownSoundPing" Title="{Loc 'ui-options-sound-ping'}" />  
-            <Button Name="SaveButton" Text="{Loc 'ui-options-save-button'}" />
+            <CheckBox Name="GetPingPermission" Text="{Loc 'ui-options-ping-permission'}" />
+            <ui:OptionDropDown Name="DropDownSoundPing" Title="{Loc 'ui-options-sound-ping'}" />
+            <!-- DS14-start -->
+            <Button Name="SaveButton" Text="{Loc 'ui-options-save-button'}" Margin="0 0 0 4" />
+            <!-- DS14-end -->
             <LineEdit Name="SearchBar" PlaceHolder="Поиск" HorizontalExpand="True" Margin="0 4" />
             <ScrollContainer Name="ScrollContainer" VerticalExpand="True">
-                <BoxContainer Name="PingsCont" Orientation="Vertical" Margin="0 3 0 0">  
+                <BoxContainer Name="PingsCont" Orientation="Vertical" Margin="0 3 0 0">
                     <!-- Keybind buttons are added here in the C# code -->
                 </BoxContainer>
             </ScrollContainer>

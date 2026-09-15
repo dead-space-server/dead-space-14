@@ -3,6 +3,7 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using Content.Shared.Examine;
 using Content.Shared.Tag;
+using Content.Shared.Wall;
 using Robust.Shared.GameStates;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
@@ -26,8 +27,9 @@ public abstract class SharedNavMapSystem : EntitySystem
     [Robust.Shared.IoC.Dependency] private readonly TagSystem _tagSystem = default!;
     [Robust.Shared.IoC.Dependency] private readonly INetManager _net = default!;
 
-    private static readonly ProtoId<TagPrototype>[] WallTags = {"Wall", "Window"};
+    private static readonly ProtoId<TagPrototype>[] WallTags = {"Window"};
     private EntityQuery<NavMapDoorComponent> _doorQuery;
+    private EntityQuery<WallComponent> _wallQuery; // DS14: injected EntityQuery fields are unavailable on the current engine baseline.
 
     public override void Initialize()
     {
@@ -38,6 +40,7 @@ public abstract class SharedNavMapSystem : EntitySystem
         SubscribeLocalEvent<ConfigurableNavMapBeaconComponent, ExaminedEvent>(OnConfigurableExamined);
 
         _doorQuery = GetEntityQuery<NavMapDoorComponent>();
+        _wallQuery = GetEntityQuery<WallComponent>(); // DS14: initialize the query explicitly on the current engine baseline.
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -62,7 +65,7 @@ public abstract class SharedNavMapSystem : EntitySystem
         if (_doorQuery.HasComp(uid))
             return NavMapChunkType.Airlock;
 
-        if (_tagSystem.HasAnyTag(uid, WallTags))
+        if (_wallQuery.HasComp(uid) || _tagSystem.HasAnyTag(uid, WallTags))
             return NavMapChunkType.Wall;
 
         return NavMapChunkType.Invalid;

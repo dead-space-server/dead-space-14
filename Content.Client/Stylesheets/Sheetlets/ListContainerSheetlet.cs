@@ -12,20 +12,48 @@ public sealed class ListContainerSheetlet<T> : Sheetlet<T> where T : PalettedSty
 {
     public override StyleRule[] GetRules(T sheet, object config)
     {
-        IButtonConfig buttonCfg = sheet;
+        // DS14-start: never use a white backing box; define every interactive state explicitly
+        IButtonConfig buttonConfig = sheet;
+        var normal = new StyleBoxFlat
+        {
+            BackgroundColor = buttonConfig.ButtonPalette.Element,
+        };
+        var hovered = new StyleBoxFlat(normal)
+        {
+            BackgroundColor = buttonConfig.ButtonPalette.HoveredElement,
+        };
+        var pressed = new StyleBoxFlat(normal)
+        {
+            BackgroundColor = buttonConfig.ButtonPalette.PressedElement,
+        };
+        var disabled = new StyleBoxFlat(normal)
+        {
+            BackgroundColor = buttonConfig.ButtonPalette.DisabledElement,
+        };
 
-        var box = new StyleBoxFlat() { BackgroundColor = Color.White };
-
-        var rules = new List<StyleRule>(
+        return
         [
             E<ContainerButton>()
                 .Class(ListContainer.StyleClassListContainerButton)
-                .Box(box),
-        ]);
-        ButtonSheetlet<T>.MakeButtonRules<ContainerButton>(rules,
-            buttonCfg.ButtonPalette,
-            ListContainer.StyleClassListContainerButton);
-
-        return rules.ToArray();
+                .PseudoNormal()
+                .Box(normal)
+                .Modulate(Color.White),
+            E<ContainerButton>()
+                .Class(ListContainer.StyleClassListContainerButton)
+                .PseudoHovered()
+                .Box(hovered)
+                .Modulate(Color.White),
+            E<ContainerButton>()
+                .Class(ListContainer.StyleClassListContainerButton)
+                .PseudoPressed()
+                .Box(pressed)
+                .Modulate(Color.White),
+            E<ContainerButton>()
+                .Class(ListContainer.StyleClassListContainerButton)
+                .PseudoDisabled()
+                .Box(disabled)
+                .Modulate(Color.White),
+        ];
+        // DS14-end
     }
 }

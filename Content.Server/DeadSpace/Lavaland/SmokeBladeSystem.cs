@@ -5,6 +5,7 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.Lavaland.SmokeBlade;
 using Content.Shared.Maps;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Physics;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
@@ -26,6 +27,7 @@ public sealed class SmokeBladeSystem : EntitySystem
     };
 
     private readonly HashSet<EntityUid> _tileBlockers = new();
+    private readonly HashSet<Entity<MobStateComponent>> _cloudTargets = new();
 
     [Dependency] private readonly DamageableSystem _damage = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
@@ -159,33 +161,34 @@ public sealed class SmokeBladeSystem : EntitySystem
     }
     private void TickCloud(SmokeBladeCloudComponent cloud, MapGridComponent grid)
     {
-        var hit = new HashSet<EntityUid>();
+        _cloudTargets.Clear();
 
         foreach (var tile in cloud.Tiles)
         {
             var coords = _map.GridTileToLocal(cloud.Grid, grid, tile);
-            foreach (var target in _lookup.GetEntitiesInRange(coords, 0.45f))
-            {
-                if (target == cloud.Creator || !hit.Add(target))
-                    continue;
-
-                _damage.TryChangeDamage(target, cloud.Damage, origin: cloud.Creator, interruptsDoAfters: false);
-
-                if (!HasComp<ActorComponent>(target) ||
-                    cloud.NextAttackAnimation.TryGetValue(target, out var nextAnimation) && nextAnimation > _timing.CurTime)
-                    continue;
-
-                _melee.DoLunge(
-                    target,
-                    target,
-                    Angle.Zero,
-                    new Vector2(0.75f, 0f),
-                    "WeaponArcFist",
-                    predicted: false);
-                cloud.NextAttackAnimation[target] = _timing.CurTime + cloud.AttackAnimationInterval;
-            }
+            _lookup.GetEntitiesInRange(coords, 0.45f, _cloudTargets, LookupFlags.Uncontained);
         }
 
+        foreach (var target in _cloudTargets)
+        {
+            if (target.Owner == cloud.Creator)
+                continue;
+
+            _damage.TryChangeDamage(target.Owner, cloud.Damage, origin: cloud.Creator, interruptsDoAfters: false);
+
+            if (!HasComp<ActorComponent>(target.Owner) ||
+                cloud.NextAttackAnimation.TryGetValue(target.Owner, out var nextAnimation) && nextAnimation > _timing.CurTime)
+                continue;
+
+            _melee.DoLunge(
+                target.Owner,
+                target.Owner,
+                Angle.Zero,
+                new Vector2(0.75f, 0f),
+                "WeaponArcFist",
+                predicted: false);
+            cloud.NextAttackAnimation[target.Owner] = _timing.CurTime + cloud.AttackAnimationInterval;
+        }
 
     }
 

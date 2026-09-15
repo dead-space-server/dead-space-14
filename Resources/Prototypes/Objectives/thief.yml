@@ -553,6 +553,23 @@
 
 # Escape
 
+# DS14-start: the main goal of the reworked thief
+- type: entity
+  parent: BaseThiefObjective
+  id: EarnCreditsThiefObjective
+  name: Заработать 1 миллион грязных кредитов.
+  description: Художественный фильм - спиздили! Ваша цель — не мелкие карманные кражи, а огромный куш. Беритесь за самые опасные заказы, пока общая сумма выплат не достигнет 1 миллиона кредитов.
+  components:
+  - type: Objective
+    difficulty: 10
+    unique: true
+    icon:
+      sprite: Objects/Economy/cash.rsi
+      state: cash
+  - type: ThiefEarnCondition
+    target: 1000000
+# DS14-end
+
 - type: entity
   parent: [BaseThiefObjective, BaseLivingObjective]
   id: EscapeThiefShuttleObjective

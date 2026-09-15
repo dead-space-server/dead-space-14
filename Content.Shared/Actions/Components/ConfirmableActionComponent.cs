@@ -49,4 +49,18 @@ public sealed partial class ConfirmableActionComponent : Component
     /// </summary>
     [DataField]
     public TimeSpan PrimeTime = TimeSpan.FromSeconds(5);
+
+    // DS14-start
+    /// <summary>
+    /// If true, this action must be confirmed while untoggled.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool ConfirmWhenUntoggled = true;
+
+    /// <summary>
+    /// If true, this action must be confirmed while toggled.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool ConfirmWhenToggled = true;
+    // DS14-end
 }

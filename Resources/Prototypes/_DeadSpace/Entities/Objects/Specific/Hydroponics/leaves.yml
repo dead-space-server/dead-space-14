@@ -10,7 +10,7 @@
       state: produce
       color: "#88FF88"
   - type: Produce
-    seedId: tritiumCannabis
+    plantId: tritiumCannabis
   - type: SolutionContainerManager
     solutions:
       food:

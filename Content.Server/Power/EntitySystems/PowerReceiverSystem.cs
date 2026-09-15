@@ -68,8 +68,8 @@ namespace Content.Server.Power.EntitySystems
             foreach (var receiver in component.LinkedReceivers)
             {
                 receiver.NetworkLoad.LinkedNetwork = default;
-                // DS14-start
-                receiver.NetworkLoad.SetReceivingPower(0f);
+                // DS14-start - defer the zero until topology rebuilds have finished for this tick.
+                _powerNet.QueuePossiblyDisconnectedLoad(receiver.NetworkLoad);
                 _powerNet.QueueApcReceiverUpdate(receiver.Owner);
                 // DS14-end
                 component.Net?.QueueNetworkReconnect();
@@ -153,8 +153,8 @@ namespace Content.Server.Power.EntitySystems
         {
             var comp = receiver.Comp;
             comp.NetworkLoad.LinkedNetwork = default;
-            // DS14-start
-            comp.NetworkLoad.SetReceivingPower(0f);
+            // DS14-start - defer the zero until topology rebuilds have finished for this tick.
+            _powerNet.QueuePossiblyDisconnectedLoad(comp.NetworkLoad);
             _powerNet.QueueApcReceiverUpdate(receiver.Owner);
             // DS14-end
         }

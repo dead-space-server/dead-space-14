@@ -66,6 +66,9 @@
           SheetSteel1:
             min: 1
             max: 1
+      - !type:EmptyContainersBehaviour
+        containers:
+        - disposals # DS14 - Current disposal container ID.
   - type: Appearance
   - type: UserInterface
     interfaces:

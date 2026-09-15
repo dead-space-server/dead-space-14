@@ -107,9 +107,27 @@ public sealed class GamePresetClientSystem : EntitySystem
         RaiseNetworkEvent(new MovePresetInQueueMessage(fromIndex, toIndex));
     }
 
-    public void UpdatePresetSettings(int maxRdmRow, int voteDurationSeconds, bool disableOoc, bool preventRepeat, bool checkPlayerLimit, List<string> whitelistModeIds)
+    public void UpdatePresetSettings(
+        int maxRdmRow,
+        int voteDurationSeconds,
+        bool disableOoc,
+        bool preventRepeat,
+        bool checkPlayerLimit,
+        List<string> whitelistModeIds,
+        bool enableLowPlayerPreset,
+        int lowPlayerThreshold,
+        string? lowPlayerPresetId)
     {
-        RaiseNetworkEvent(new UpdatePresetSettingsMessage(maxRdmRow, voteDurationSeconds, disableOoc, preventRepeat, checkPlayerLimit, whitelistModeIds));
+        RaiseNetworkEvent(new UpdatePresetSettingsMessage(
+            maxRdmRow,
+            voteDurationSeconds,
+            disableOoc,
+            preventRepeat,
+            checkPlayerLimit,
+            whitelistModeIds,
+            enableLowPlayerPreset,
+            lowPlayerThreshold,
+            lowPlayerPresetId));
     }
 
     public void InitiateVoteNow()

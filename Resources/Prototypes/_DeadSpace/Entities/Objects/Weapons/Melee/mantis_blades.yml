@@ -5,6 +5,10 @@
   description: От лезвий струится дымчатый аромат киберпсихоза. Готовы пустить под клинок стаю корпоративных крыс?
   categories: [ HideSpawnMenu ]
   components:
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
   - type: Sprite
     sprite: _DeadSpace/Objects/Weapons/Melee/mantis_blades.rsi
     scale: 0.9, 0.9
@@ -82,6 +86,7 @@
   - type: Tag
     tags:
       - MantisBlades
+      - ParryStandardWeapon
   - type: Prying
     force: true
     speedModifier: 4.0

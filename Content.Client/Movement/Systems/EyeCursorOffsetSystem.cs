@@ -1,7 +1,10 @@
 using System.Numerics;
+using Content.Client.Hands.Systems;
 using Content.Client.Movement.Components;
 using Content.Client.Viewport;
 using Content.Shared.Camera;
+using Content.Shared.Hands;
+using Content.Shared.Movement.Components;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
 using Robust.Shared.Map;
@@ -12,6 +15,7 @@ public sealed partial class EyeCursorOffsetSystem : EntitySystem
 {
     [Dependency] private readonly IEyeManager _eyeManager = default!;
     [Dependency] private readonly IInputManager _inputManager = default!;
+    [Dependency] private readonly HandsSystem _handsSystem = default!; // DS14 - pre-v288 IoC
 
     // This value is here to make sure the user doesn't have to move their mouse
     // all the way out to the edge of the screen to get the full offset.
@@ -22,6 +26,22 @@ public sealed partial class EyeCursorOffsetSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<EyeCursorOffsetComponent, GetEyeOffsetEvent>(OnGetEyeOffsetEvent);
+        SubscribeLocalEvent<CursorOffsetInHandComponent, HeldRelayedEvent<GetEyeOffsetRelayedEvent>>(OnHeldRelayedOffset); // DS14 - pre-v288 explicit event subscription
+    }
+
+    private void OnHeldRelayedOffset(Entity<CursorOffsetInHandComponent> entity, ref HeldRelayedEvent<GetEyeOffsetRelayedEvent> args)
+    {
+        // DS14-Start - pre-v288 HandsSystem has no IsHeld API; held items are parented to their holder.
+        var holder = Transform(entity).ParentUid;
+        if (entity.Comp.UseActiveHand && _handsSystem.GetActiveItem((holder, null)) != entity.Owner)
+            return;
+        // DS14-End
+
+        var offset = OffsetAfterMouse(entity.Owner, null);
+        if (offset == null)
+            return;
+
+        args.Args.Offset += offset.Value;
     }
 
     private void OnGetEyeOffsetEvent(EntityUid uid, EyeCursorOffsetComponent component, ref GetEyeOffsetEvent args)

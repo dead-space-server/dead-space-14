@@ -1,0 +1,34 @@
+- type: paintableGroup
+  id: SerpentAirlockStandard
+  time: 3
+  cost: 3
+  defaultStyle: AirlockSerpent
+  styles:
+    basic: AirlockSerpent
+    service: AirlockSerpentService
+    freezer: AirlockSerpentFreezer
+    engineering: AirlockSerpentEngineering
+    atmospherics: AirlockSerpentAtmospherics
+    cargo: AirlockSerpentCargo
+    maint: AirlockSerpentMaint
+    medical: AirlockSerpentMedical
+    virology: AirlockSerpentVirology
+    science: AirlockSerpentScience
+    command: AirlockSerpentCommand
+
+- type: paintableGroup
+  id: SerpentAirlockGlass
+  time: 3
+  cost: 3
+  defaultStyle: AirlockSerpentGlass
+  styles:
+    basic: AirlockSerpentGlass
+    service: AirlockSerpentGlassService
+    engineering: AirlockSerpentGlassEngineering
+    atmospherics: AirlockSerpentGlassAtmospherics
+    cargo: AirlockSerpentGlassCargo
+    maint: AirlockSerpentGlassMaint
+    medical: AirlockSerpentGlassMedical
+    virology: AirlockSerpentGlassVirology
+    science: AirlockSerpentGlassScience
+    command: AirlockSerpentGlassCommand

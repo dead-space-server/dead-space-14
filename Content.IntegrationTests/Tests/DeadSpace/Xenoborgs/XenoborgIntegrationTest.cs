@@ -271,14 +271,15 @@ public sealed class XenoborgIntegrationTest
         var installedMinerModule = entMan.SpawnEntity("XenoborgModuleMiner", coordinates);
         var advancedMinerModule = entMan.SpawnEntity("XenoborgModuleAdvancedMiner", coordinates);
         var ordinaryModule = entMan.SpawnEntity("XenoborgModuleHeavyLaser", coordinates);
+        var chassis = entMan.SpawnEntity("XenoborgHeavy", coordinates); // DS14 - current insert event requires the destination chassis.
 
         var minerAttempt = new BorgModuleRelayedEvent<BorgModuleInsertAttemptEvent>(
-            new BorgModuleInsertAttemptEvent(advancedMinerModule));
+            new BorgModuleInsertAttemptEvent(advancedMinerModule, chassis));
         entMan.EventBus.RaiseLocalEvent(installedMinerModule, ref minerAttempt);
         Assert.That(minerAttempt.Args.Cancelled, Is.True);
 
         var ordinaryAttempt = new BorgModuleRelayedEvent<BorgModuleInsertAttemptEvent>(
-            new BorgModuleInsertAttemptEvent(ordinaryModule));
+            new BorgModuleInsertAttemptEvent(ordinaryModule, chassis));
         entMan.EventBus.RaiseLocalEvent(installedMinerModule, ref ordinaryAttempt);
         Assert.That(ordinaryAttempt.Args.Cancelled, Is.False);
     }

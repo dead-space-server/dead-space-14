@@ -20,19 +20,34 @@ public sealed class ToggleableSolutionTransferSystem : EntitySystem
         SubscribeLocalEvent<ToggleableSolutionTransferComponent, AfterAutoHandleStateEvent>(OnAfterHandleState);
     }
 
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var query = EntityQueryEnumerator<ToggleableSolutionTransferComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (comp.PendingUpdate)
+            {
+                comp.PendingUpdate = false;
+                ApplyMode((uid, comp));
+            }
+        }
+    }
+
     private void OnStartup(Entity<ToggleableSolutionTransferComponent> ent, ref ComponentStartup args)
     {
-        UpdateMode(ent);
+        ApplyMode(ent);
     }
 
     private void OnMapInit(Entity<ToggleableSolutionTransferComponent> ent, ref MapInitEvent args)
     {
-        UpdateMode(ent);
+        ApplyMode(ent);
     }
 
     private void OnAfterHandleState(Entity<ToggleableSolutionTransferComponent> ent, ref AfterAutoHandleStateEvent args)
     {
-        UpdateMode(ent);
+        ent.Comp.PendingUpdate = true;
     }
 
     private void OnGetVerbs(Entity<ToggleableSolutionTransferComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
@@ -52,7 +67,8 @@ public sealed class ToggleableSolutionTransferSystem : EntitySystem
                 ent.Comp.Direction = ent.Comp.Direction == SolutionTransferDirection.Output
                     ? SolutionTransferDirection.Input
                     : SolutionTransferDirection.Output;
-                UpdateMode(ent);
+
+                ent.Comp.PendingUpdate = true;
                 Dirty(ent);
             },
             Priority = 1,
@@ -71,19 +87,19 @@ public sealed class ToggleableSolutionTransferSystem : EntitySystem
         if (!string.IsNullOrEmpty(directionText))
             args.PushText(directionText);
     }
-
-    private void UpdateMode(Entity<ToggleableSolutionTransferComponent> ent)
+    private void ApplyMode(Entity<ToggleableSolutionTransferComponent> ent)
     {
+        RemCompDeferred<DrainableSolutionComponent>(ent);
+        RemCompDeferred<RefillableSolutionComponent>(ent);
+
         if (ent.Comp.Direction == SolutionTransferDirection.Input)
         {
-            RemCompDeferred<DrainableSolutionComponent>(ent);
             var refillable = EnsureComp<RefillableSolutionComponent>(ent);
             refillable.Solution = ent.Comp.Solution;
             Dirty(ent, refillable);
         }
         else
         {
-            RemCompDeferred<RefillableSolutionComponent>(ent);
             var drainable = EnsureComp<DrainableSolutionComponent>(ent);
             drainable.Solution = ent.Comp.Solution;
             Dirty(ent, drainable);

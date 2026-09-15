@@ -23,6 +23,7 @@ public sealed class PaperBoundUserInterface : BoundUserInterface
 
         _window = this.CreateWindow<PaperWindow>();
         _window.OnSaved += InputOnTextEntered;
+        _window.OnInsertDataRequested += () => SendMessage(new PaperInsertDataRequestMessage()); // DS14
 
         if (EntMan.TryGetComponent<PaperComponent>(Owner, out var paper))
         {
@@ -39,6 +40,16 @@ public sealed class PaperBoundUserInterface : BoundUserInterface
         base.UpdateState(state);
         _window?.Populate((PaperBoundUserInterfaceState) state);
     }
+
+    // DS14-start
+    protected override void ReceiveMessage(BoundUserInterfaceMessage message)
+    {
+        base.ReceiveMessage(message);
+
+        if (message is PaperInsertDataResponseMessage data)
+            _window?.PopulateInsertData(data);
+    }
+    // DS14-end
 
     private void InputOnTextEntered(string text)
     {

@@ -70,6 +70,18 @@
   recipeUnlocks:
     - ClothingShoesBootsMagSuper
 
+- type: technology
+  id: DualWieldingTechnology
+  name: research-technology-dual-wielding-technology
+  icon:
+    sprite: Clothing/Back/Specific/harmpack.rsi
+    state: icon
+  discipline: Experimental
+  tier: 2
+  cost: 10000
+  recipeUnlocks:
+    - ClothingBackpackHarmpack
+
 
 # Tier 3
 

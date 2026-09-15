@@ -1,6 +1,5 @@
 using System.Linq;
 using Content.Client.Administration.Managers;
-using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.EscapeMenu;
 using Content.Shared.Administration;
@@ -21,7 +20,6 @@ namespace Content.Client.Changelog
         public ChangelogWindow()
         {
             RobustXamlLoader.Load(this);
-            WindowTitle.AddStyleClass(DeadSpaceMenuSheetlet.Title); // DS14
         }
 
         protected override void Opened()

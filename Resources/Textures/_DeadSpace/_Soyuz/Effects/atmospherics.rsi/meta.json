@@ -1,0 +1,31 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Created by zeroqwq (discord) for Space Station 14 Server Мёртвый Космос Союз-1",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "fixirium",
+            "delays": [[0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]]
+        },
+        {
+            "name": "hilium",
+            "delays": [[0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]]
+        },
+        {
+            "name": "iprit",
+            "delays": [[0.1, 0.1, 0.1]]
+        },
+        {
+            "name": "nitritium",
+            "delays": [[0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]]
+        },
+        {
+            "name": "nitryl",
+            "delays": [[0.1, 0.1, 0.1, 0.1, 0.1, 0.1]]
+        }
+    ]
+}

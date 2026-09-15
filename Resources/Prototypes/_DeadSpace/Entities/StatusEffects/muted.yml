@@ -1,0 +1,31 @@
+- type: entity
+  parent: MutedStatusEffectBase
+  id: StatusEffectCQCMuted
+
+- type: entity
+  parent: MutedStatusEffectBase
+  id: StatusEffectArkalyseMuted
+
+- type: entity
+  parent: MutedStatusEffectBase
+  id: StatusEffectCocoonMuted
+
+- type: entity
+  parent: MutedStatusEffectBase
+  id: StatusEffectNecromorphPlasmaCutterMuted
+
+- type: entity
+  parent: MutedStatusEffectBase
+  id: StatusEffectUnitologySlaveMuted
+
+- type: entity
+  parent: MutedStatusEffectBase
+  id: StatusEffectVirusPetriMuted
+
+- type: entity
+  parent: MutedStatusEffectBase
+  id: StatusEffectNecromorphMuted
+
+- type: entity
+  parent: MutedStatusEffectBase
+  id: StatusEffectSpiderCocoonMuted

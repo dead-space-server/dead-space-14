@@ -97,6 +97,7 @@ namespace Content.Client.Input
             human.AddFunction(ContentKeyFunctions.OpenLanguageMenu); // DS14
             human.AddFunction(ContentKeyFunctions.UseWorldTargetAction); // DS14
             human.AddFunction(DeadSpaceKeys.SwitchComponentMode); // DS14
+            human.AddFunction(ContentKeyFunctions.Parry); // DS14
 
             // actions should be common (for ghosts, mobs, etc)
             common.AddFunction(ContentKeyFunctions.OpenActionsMenu);

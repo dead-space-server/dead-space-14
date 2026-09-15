@@ -3,7 +3,7 @@
 using System.Linq;
 using Content.Shared.DeadSpace.Necromorphs.NecroWall.Components;
 using Robust.Shared.Timing;
-using Content.Shared.Tag;
+using Content.Shared.Wall;
 using Content.Shared.DeadSpace.Necromorphs.NecroWall;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -15,14 +15,12 @@ public sealed class NecroWallSystem : EntitySystem
 {
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly TagSystem _tags = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     private const float DurationActive = 5f;
     private const float Duration = 60f;
     private const float Range = 1f;
     private const float MaxLvlStage = 100f;
-    private const string WallTag = "Wall";
     public override void Initialize()
     {
         base.Initialize();
@@ -90,7 +88,7 @@ public sealed class NecroWallSystem : EntitySystem
     {
         var ents = _lookup.GetEntitiesInRange(_transform.GetMapCoordinates(uid, Transform(uid)), range).ToList();
         var validEntities = ents
-            .Where(ent => _tags.HasTag(ent, WallTag) && !HasComp<InfestedDeadWallComponent>(ent))
+            .Where(ent => HasComp<WallComponent>(ent) && !HasComp<InfestedDeadWallComponent>(ent))
             .ToList();
 
         return new HashSet<EntityUid>(validEntities);

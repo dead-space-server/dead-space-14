@@ -15,12 +15,12 @@ public sealed class CustomGhostVisualizer : VisualizerSystem<GhostComponent>
         if (AppearanceSystem.TryGetData<string>(uid, CustomGhostAppearance.Sprite, out var rsiPath, args.Component))
             SpriteSystem.LayerSetRsi((uid, args.Sprite), 0, new ResPath(rsiPath));
 
-        var color = args.Sprite.Color;
-
-        color = color.WithAlpha(
-            AppearanceSystem.TryGetData<float>(uid, CustomGhostAppearance.AlphaOverride, out var alpha, args.Component)
-                ? alpha
-                : 1f);
+        var color = AppearanceSystem.TryGetData<Color>(uid,
+            CustomGhostAppearance.ColorOverride,
+            out var colorOverride,
+            args.Component)
+            ? colorOverride
+            : Color.White;
 
         SpriteSystem.SetColor((uid, args.Sprite), color);
     }

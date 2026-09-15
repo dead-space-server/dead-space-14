@@ -51,8 +51,8 @@ public sealed class GameRulesClientSystem : EntitySystem
         RaiseNetworkEvent(new RequestGameRulesListMessage());
     }
 
-    public void AddRule(string ruleId, string adminName)
+    public void AddRule(string ruleId)
     {
-        RaiseNetworkEvent(new AddGameRuleRequestMessage(ruleId, adminName));
+        RaiseNetworkEvent(new AddGameRuleRequestMessage(ruleId));
     }
 }

@@ -1,6 +1,7 @@
 ## Default
 
 teleportation-menu-default-window-title = Меню Телепорта
+teleportation-menu-destination-obstructed = Кажется, вы никуда не переместились...
 
 ## Wizard
 

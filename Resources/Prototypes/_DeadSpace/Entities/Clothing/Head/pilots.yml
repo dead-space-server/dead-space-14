@@ -1,5 +1,5 @@
 - type: entity
-  parent: ClothingHeadHelmetHardsuitSecurity
+  parent: [ClothingHeadHelmetHardsuitSecurity]
   id: ClothingHeadHelmetHardsuitPilot
   categories: [ HideSpawnMenu ]
   name: pilot hardsuit helmet
@@ -13,7 +13,7 @@
     color: white
 
 - type: entity
-  parent: ClothingHeadHelmetHardsuitSecurity
+  parent: [ClothingHeadHelmetHardsuitSecurity]
   id: ClothingHeadHelmetHardsuitSecurityPilot
   categories: [ HideSpawnMenu ]
   name: security pilot hardsuit helmet

@@ -4,6 +4,7 @@ using Content.Shared.DeadSpace.Notify.Components;
 using Content.Shared.Ghost;
 using Content.Shared.DeadSpace.Notify.Prototypes;
 using Content.Server.Ghost.Roles;
+using Content.Shared.DeadSpace.Arena;
 using Robust.Server.Player;
 using Content.Shared.DeadSpace.Notify;
 
@@ -27,7 +28,12 @@ public sealed partial class GhostRoleNotifySystem : EntitySystem
         {
             foreach (var player in _playerManager.Sessions)
             {
-                if (player.AttachedEntity != null && player.AttachedEntity.Value.IsValid() && _entityManager.HasComponent<GhostComponent>(player.AttachedEntity))
+                if (player.AttachedEntity is not { } attached || !attached.IsValid())
+                    continue;
+
+                // Пинг играет и для призраков, и для игроков, находящихся на арене.
+                if (_entityManager.HasComponent<GhostComponent>(attached) ||
+                    _entityManager.HasComponent<ArenaPlayerComponent>(attached))
                 {
                     RaiseNetworkEvent(new PingMessage(component.GroupPrototype), player);
                 }

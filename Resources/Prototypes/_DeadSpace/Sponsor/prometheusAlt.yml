@@ -372,7 +372,7 @@
     - Hardsuit
 
 - type: entity
-  parent: ClothingHeadHelmetHardsuitSyndieMedic
+  parent: [ClothingHeadHelmetHardsuitSyndieMedic]
   id: ClothingHeadHelmetHardsuitPrometheusAlt
   categories: [ HideSpawnMenu ]
   name: шлем красного скафандра

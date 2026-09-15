@@ -29,6 +29,7 @@ public partial class ListingData : IEquatable<ListingData>
         other.Icon,
         other.Priority,
         other.ProductEntity,
+        other.ProductComponents,
         other.ProductAction,
         other.ProductUpgradeId,
         other.ProductActionEntity,
@@ -56,6 +57,7 @@ public partial class ListingData : IEquatable<ListingData>
         SpriteSpecifier? icon,
         int priority,
         EntProtoId? productEntity,
+        EntProtoId? productComponents,
         EntProtoId? productAction,
         ProtoId<ListingPrototype>? productUpgradeId,
         EntityUid? productActionEntity,
@@ -79,6 +81,7 @@ public partial class ListingData : IEquatable<ListingData>
         Icon = icon;
         Priority = priority;
         ProductEntity = productEntity;
+        ProductComponents = productComponents;
         ProductAction = productAction;
         ProductUpgradeId = productUpgradeId;
         ProductActionEntity = productActionEntity;
@@ -157,6 +160,12 @@ public partial class ListingData : IEquatable<ListingData>
     public EntProtoId? ProductEntity;
 
     /// <summary>
+    /// A dummy entity prototype containing components to add to the buyer.
+    /// </summary>
+    [DataField]
+    public EntProtoId? ProductComponents;
+
+    /// <summary>
     /// The action that is given when the listing is purchased.
     /// </summary>
     [DataField]
@@ -233,6 +242,7 @@ public partial class ListingData : IEquatable<ListingData>
             Name != listing.Name ||
             Description != listing.Description ||
             ProductEntity != listing.ProductEntity ||
+            ProductComponents != listing.ProductComponents ||
             ProductAction != listing.ProductAction ||
             ProductEvent?.GetType() != listing.ProductEvent?.GetType() ||
             RestockTime != listing.RestockTime ||
@@ -307,6 +317,7 @@ public sealed partial class ListingDataWithCostModifiers : ListingData
             listingData.Icon,
             listingData.Priority,
             listingData.ProductEntity,
+            listingData.ProductComponents,
             listingData.ProductAction,
             listingData.ProductUpgradeId,
             listingData.ProductActionEntity,

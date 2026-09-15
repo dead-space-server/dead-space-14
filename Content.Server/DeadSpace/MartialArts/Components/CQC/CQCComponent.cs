@@ -51,16 +51,6 @@ public sealed partial class CQCComponent : Component
     public CQCParams Params; // Передача всех переменных и хранение всех переменных, хранится в MartialArtsTrainingComponent
 }
 
-[RegisterComponent]
-public sealed partial class CQCMutedComponent : Component
-{
-    [ViewVariables]
-    public TimeSpan MuteEndTime; // Переменная, которая отвечает за длительность наложения MutedComponent на цель
-
-    [ViewVariables]
-    public bool AddedMutedComponent;
-}
-
 public enum CQCList
 {
     PowerPunch,

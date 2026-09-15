@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.Items.Systems;
 using Content.Shared.Item;
 using Content.Shared.Storage;
@@ -50,7 +51,7 @@ public sealed class ItemGridPiece : Control, IEntityControl
     // DS14-start
     private readonly string _markedPriorityTexturePath = "Storage/marked_priority";
     private Texture? _markedPriorityTexture;
-    // DS14-start
+    // DS14-end
     #endregion
 
     public ItemGridPiece(Entity<ItemComponent> entity, ItemStorageLocation location,  IEntityManager entityManager)
@@ -122,8 +123,7 @@ public sealed class ItemGridPiece : Control, IEntityControl
         var size = _centerTexture!.Size * 2 * UIScale;
 
         var hovering = !_storageController.IsDragging && UserInterfaceManager.CurrentlyHovered == this;
-        //yeah, this coloring is kinda hardcoded. deal with it. B)
-        Color? colorModulate = hovering  ? null : Color.FromHex("#a8a8a8");
+        Color? colorModulate = hovering ? null : DeadSpaceStylePalette.TextInactive; // DS14
 
         var marked = Marked != null;
         Vector2i? maybeMarkedPos = null;

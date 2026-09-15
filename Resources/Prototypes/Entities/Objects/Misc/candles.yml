@@ -41,6 +41,8 @@
     - type: FireVisuals
       sprite: Objects/Misc/candles.rsi
       normalState: fire-big
+    # DS14: semantic #44810 port for the branch's legacy GhostBooEvent API.
+    - type: SpookyExtinguishable
     - type: ToggleableVisuals
       spriteLayer: null
       inhandVisuals:

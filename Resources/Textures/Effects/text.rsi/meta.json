@@ -136,7 +136,64 @@
     {
       "name": "blank"
     },
-	{
+    {
+      "name": "angle-l"
+    },
+    {
+      "name": "angle-r"
+    },
+    {
+      "name": "apostrophe"
+    },
+    {
+      "name": "backslash"
+    },
+    {
+      "name": "bracket-l"
+    },
+    {
+      "name": "bracket-r"
+    },
+    {
+      "name": "caret"
+    },
+    {
+      "name": "comma"
+    },
+    {
+      "name": "equals"
+    },
+    {
+      "name": "hash"
+    },
+    {
+      "name": "paren-l"
+    },
+    {
+      "name": "paren-r"
+    },
+    {
+      "name": "percent"
+    },
+    {
+      "name": "period"
+    },
+    {
+      "name": "quotation"
+    },
+    {
+      "name": "semicolon"
+    },
+    {
+      "name": "slash"
+    },
+    {
+      "name": "speso"
+    },
+    {
+      "name": "underscore"
+    },
+    {
       "name": "а"
     },
     {

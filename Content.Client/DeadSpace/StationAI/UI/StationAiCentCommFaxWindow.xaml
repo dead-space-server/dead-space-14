@@ -8,10 +8,7 @@
     SetSize="840 560"
     Title="{Loc 'station-ai-centcomm-fax-window-title'}">
     <BoxContainer Orientation="Vertical" Margin="8" HorizontalExpand="True" VerticalExpand="True">
-        <PanelContainer HorizontalExpand="True" Margin="0 0 0 8">
-            <PanelContainer.PanelOverride>
-                <gfx:StyleBoxFlat BackgroundColor="#141619" BorderColor="#3b4d58" BorderThickness="1" />
-            </PanelContainer.PanelOverride>
+        <PanelContainer HorizontalExpand="True" Margin="0 0 0 8" StyleClasses="DeadSpaceSurfaceDark">
             <BoxContainer Orientation="Vertical" Margin="10 7 10 7" HorizontalExpand="True">
                 <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
                     <Label Text="{Loc 'station-ai-centcomm-fax-channel'}"
@@ -28,10 +25,7 @@
             </BoxContainer>
         </PanelContainer>
 
-        <PanelContainer HorizontalExpand="True" VerticalExpand="True">
-            <PanelContainer.PanelOverride>
-                <gfx:StyleBoxFlat BackgroundColor="#06090d" BorderColor="#263842" BorderThickness="1" />
-            </PanelContainer.PanelOverride>
+        <PanelContainer HorizontalExpand="True" VerticalExpand="True" StyleClasses="DeadSpaceInset">
             <BoxContainer Orientation="Vertical" Margin="8" HorizontalExpand="True" VerticalExpand="True">
                 <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="0 0 0 4">
                     <Label Text="{Loc 'station-ai-centcomm-fax-buffer-label'}"
@@ -56,7 +50,7 @@
             </BoxContainer>
         </PanelContainer>
 
-        <PanelContainer HorizontalExpand="True" Margin="0 6 0 0">
+        <PanelContainer Name="DeactivationNoticePanel" HorizontalExpand="True" Margin="0 6 0 0">
             <PanelContainer.PanelOverride>
                 <gfx:StyleBoxFlat BackgroundColor="#17150f" BorderColor="#4b3d20" BorderThickness="1" />
             </PanelContainer.PanelOverride>

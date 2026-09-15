@@ -1,20 +1,19 @@
+using System.Numerics;
 using Content.Server.Storage.EntitySystems;
-using Content.Shared.Access.Components;
 using Content.Shared.CardboardBox;
 using Content.Shared.CardboardBox.Components;
-using Content.Shared.Damage.Systems;
 using Content.Shared.Humanoid;
 using Content.Shared.Interaction;
-using Content.Shared.Movement.Components;
-using Content.Shared.Movement.Systems;
 using Content.Shared.Slippery;
 using Content.Shared.Stealth;
 using Content.Shared.Stealth.Components;
 using Content.Shared.Storage.Components;
 using Content.Shared.Stunnable;
+using Content.Shared.Vehicle;
+using Content.Shared.Vehicle.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio.Systems;
-using Robust.Shared.Containers;
+using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
 
 namespace Content.Server.CardboardBox;
@@ -22,13 +21,15 @@ namespace Content.Server.CardboardBox;
 public sealed class CardboardBoxSystem : SharedCardboardBoxSystem
 {
     [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedMoverController _mover = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedStealthSystem _stealth = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly EntityStorageSystem _storage = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly EntityManager _entity = default!;
+    // DS14-start - #43532 is adapted to the current server-side cardboard-box system.
+    [Dependency] private readonly VehicleSystem _vehicle = default!;
+    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    // DS14-end
 
     public override void Initialize()
     {
@@ -36,12 +37,8 @@ public sealed class CardboardBoxSystem : SharedCardboardBoxSystem
         SubscribeLocalEvent<CardboardBoxComponent, StorageAfterOpenEvent>(AfterStorageOpen);
         SubscribeLocalEvent<CardboardBoxComponent, StorageBeforeOpenEvent>(BeforeStorageOpen);
         SubscribeLocalEvent<CardboardBoxComponent, StorageAfterCloseEvent>(AfterStorageClosed);
-        SubscribeLocalEvent<CardboardBoxComponent, GetAdditionalAccessEvent>(OnGetAdditionalAccess);
         SubscribeLocalEvent<CardboardBoxComponent, ActivateInWorldEvent>(OnInteracted);
-        SubscribeLocalEvent<CardboardBoxComponent, EntInsertedIntoContainerMessage>(OnEntInserted);
-        SubscribeLocalEvent<CardboardBoxComponent, EntRemovedFromContainerMessage>(OnEntRemoved);
-
-        SubscribeLocalEvent<CardboardBoxComponent, DamageChangedEvent>(OnDamage);
+        SubscribeLocalEvent<CardboardBoxComponent, VehicleOperatorSetEvent>(OnOperatorSet);
 
         SubscribeLocalEvent<CardboardBoxComponent, SlipEvent>(OnSlip);
     }
@@ -62,19 +59,6 @@ public sealed class CardboardBoxSystem : SharedCardboardBoxSystem
 
         args.Handled = true;
         _storage.ToggleOpen(args.User, uid, box);
-
-        if (box.Contents.Contains(args.User) && !box.Open)
-        {
-            _mover.SetRelay(args.User, uid);
-            component.Mover = args.User;
-        }
-    }
-
-    private void OnGetAdditionalAccess(EntityUid uid, CardboardBoxComponent component, ref GetAdditionalAccessEvent args)
-    {
-        if (component.Mover == null)
-            return;
-        args.Entities.Add(component.Mover.Value);
     }
 
     private void BeforeStorageOpen(EntityUid uid, CardboardBoxComponent component, ref StorageBeforeOpenEvent args)
@@ -82,16 +66,15 @@ public sealed class CardboardBoxSystem : SharedCardboardBoxSystem
         if (component.Quiet)
             return;
 
-        //Play effect & sound
-        if (component.Mover != null)
-        {
-            if (_timing.CurTime > component.EffectCooldown)
-            {
-                RaiseNetworkEvent(new PlayBoxEffectMessage(GetNetEntity(uid), GetNetEntity(component.Mover.Value)));
-                _audio.PlayPvs(component.EffectSound, uid);
-                component.EffectCooldown = _timing.CurTime + component.CooldownDuration;
-            }
-        }
+        if (!_vehicle.TryGetOperator(uid, out var operatorEnt))
+            return;
+
+        if (_timing.CurTime <= component.EffectCooldown)
+            return;
+
+        RaiseNetworkEvent(new PlayBoxEffectMessage(GetNetEntity(uid), GetNetEntity(operatorEnt.Value.Owner)));
+        _audio.PlayPvs(component.EffectSound, uid);
+        component.EffectCooldown = _timing.CurTime + component.CooldownDuration;
     }
 
     private void AfterStorageOpen(EntityUid uid, CardboardBoxComponent component, ref StorageAfterOpenEvent args)
@@ -115,44 +98,18 @@ public sealed class CardboardBoxSystem : SharedCardboardBoxSystem
         }
     }
 
-    //Relay damage to the mover
-    private void OnDamage(EntityUid uid, CardboardBoxComponent component, DamageChangedEvent args)
+    private void OnOperatorSet(Entity<CardboardBoxComponent> ent, ref VehicleOperatorSetEvent args)
     {
-        if (args.DamageDelta == null || !args.DamageIncreased || component.Mover is not { } mover)
+        if (args.NewOperator != null || args.OldOperator == null)
             return;
 
-        _damageable.ChangeDamage(mover, args.DamageDelta, origin: args.Origin);
-    }
-
-    private void OnEntInserted(EntityUid uid, CardboardBoxComponent component, EntInsertedIntoContainerMessage args)
-    {
-        if (!TryComp(args.Entity, out MobMoverComponent? mover))
-            return;
-
-        if (component.Mover == null)
-        {
-            _mover.SetRelay(args.Entity, uid);
-            component.Mover = args.Entity;
-        }
-    }
-
-    /// <summary>
-    /// Through e.g. teleporting, it's possible for the mover to exit the box without opening it.
-    /// Handle those situations but don't play the sound.
-    /// </summary>
-    private void OnEntRemoved(EntityUid uid, CardboardBoxComponent component, EntRemovedFromContainerMessage args)
-    {
-        if (args.Entity != component.Mover)
-            return;
-
-        RemComp<RelayInputMoverComponent>(component.Mover.Value);
-        component.Mover = null;
+        _physics.SetLinearVelocity(ent, Vector2.Zero);
     }
 
     private void OnSlip(EntityUid uid, CardboardBoxComponent component, ref SlipEvent args)
     {
-        if (component.Mover != null)
-            _stun.TryUpdateParalyzeDuration(component.Mover.Value, TimeSpan.FromSeconds(2));
+        if (_vehicle.TryGetOperator(uid, out var operatorEnt))
+            _stun.TryUpdateParalyzeDuration(operatorEnt.Value.Owner, TimeSpan.FromSeconds(2));
 
         if (TryComp<EntityStorageComponent>(uid, out var box))
         {

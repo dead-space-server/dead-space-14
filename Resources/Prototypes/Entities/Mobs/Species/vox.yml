@@ -3,8 +3,6 @@
   id: BaseMobVox
   abstract: true
   components:
-  - type: Hunger
-  - type: Thirst
   - type: Icon
     sprite: Mobs/Species/Vox/parts.rsi
     state: vox_m
@@ -73,6 +71,7 @@
   - type: PassiveDamage
     # Augment normal health regen to be able to tank some Poison damage
     # This allows Vox to take their mask off temporarily to eat something without needing a trip to medbay afterwards.
+    intervalHaltOnDamageTaken: 5s
     allowedStates:
     - Alive
     damageCap: 20

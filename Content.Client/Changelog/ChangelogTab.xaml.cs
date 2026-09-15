@@ -58,7 +58,7 @@ public sealed partial class ChangelogTab : Control
             ChangelogBody.AddChild(new Label
             {
                 Text = dayNice,
-                StyleClasses = { DeadSpaceMenuSheetlet.ProfileSection }, // DS14
+                StyleClasses = { DeadSpaceStyleClass.SectionTitle }, // DS14
                 Margin = new Thickness(4, 6, 0, 0)
             });
 
@@ -94,7 +94,7 @@ public sealed partial class ChangelogTab : Control
                             new TextureRect
                             {
                                 Texture = upArrow,
-                                ModulateSelfOverride = Color.FromHex("#888"),
+                                ModulateSelfOverride = DeadSpaceStylePalette.TextPlaceholder, // DS14
                                 TextureScale = new Vector2(0.5f, 0.5f),
                                 Margin = new Thickness(4, 3),
                                 VerticalAlignment = VAlignment.Bottom
@@ -103,12 +103,12 @@ public sealed partial class ChangelogTab : Control
                             {
                                 Align = Label.AlignMode.Center,
                                 Text = Loc.GetString("changelog-new-changes"),
-                                FontColorOverride = Color.FromHex("#888"),
+                                FontColorOverride = DeadSpaceStylePalette.TextPlaceholder, // DS14
                             },
                             new TextureRect
                             {
                                 Texture = upArrow,
-                                ModulateSelfOverride = Color.FromHex("#888"),
+                                ModulateSelfOverride = DeadSpaceStylePalette.TextPlaceholder, // DS14
                                 TextureScale = new Vector2(0.5f, 0.5f),
                                 Margin = new Thickness(4, 3),
                                 VerticalAlignment = VAlignment.Bottom
@@ -117,7 +117,7 @@ public sealed partial class ChangelogTab : Control
                     };
 
                     readDivider.AddChild(hBox);
-                    readDivider.AddChild(new PanelContainer { StyleClasses = { DeadSpaceMenuSheetlet.AccentDim } }); // DS14
+                    readDivider.AddChild(new PanelContainer { StyleClasses = { DeadSpaceStyleClass.AccentDim } }); // DS14
                     ChangelogBody.AddChild(readDivider);
 
                     if (first)

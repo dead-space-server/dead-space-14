@@ -30,6 +30,7 @@
     #     color: "#00FF00"
     blacklistComponents:
       - CartridgeAmmo
+      - Dragon
     blacklistTags:
       - Ore
       - Trash

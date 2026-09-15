@@ -79,12 +79,17 @@ public abstract class SharedGasTileOverlaySystem : EntitySystem
         [ViewVariables]
         public readonly ThermalByte ByteGasTemperature;
 
+        // DS14-start
+        /// <summary>Ambient pressure for audio: 0 unknown, 1 vacuum, 255 at least one atmosphere.</summary>
+        [ViewVariables] public readonly byte ByteGasPressure;
+        // DS14-end
 
-        public GasOverlayData(byte fireState, byte[] opacity, ThermalByte byteTemp)
+        public GasOverlayData(byte fireState, byte[] opacity, ThermalByte byteTemp, byte bytePressure = 0) // DS14
         {
             FireState = fireState;
             Opacity = opacity;
             ByteGasTemperature = byteTemp;
+            ByteGasPressure = bytePressure; // DS14
         }
 
         public bool Equals(GasOverlayData other)
@@ -106,6 +111,11 @@ public abstract class SharedGasTileOverlaySystem : EntitySystem
 
             if (ByteGasTemperature != other.ByteGasTemperature)
                 return false;
+
+            // DS14-start
+            if (ByteGasPressure != other.ByteGasPressure)
+                return false;
+            // DS14-end
 
             return true;
         }

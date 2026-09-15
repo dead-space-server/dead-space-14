@@ -63,7 +63,7 @@
     clothingPrototype: ClothingHeadHelmetRIGResearch
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetRIGResearch
   name: шлем экспериментального скафандра научного специалиста
   description: Ваш ум ещё нужен для корпорации.

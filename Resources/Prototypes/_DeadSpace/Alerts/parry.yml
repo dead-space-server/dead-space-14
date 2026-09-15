@@ -1,0 +1,7 @@
+- type: alert
+  id: ParryCooldown
+  icons:
+  - sprite: /Textures/Effects/ssd.rsi
+    state: default0
+  name: parry-alert-name
+  description: parry-alert-description

@@ -1,3 +1,4 @@
+using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.Stylesheets;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
@@ -93,15 +94,15 @@ public sealed partial class AtmosMonitoringEntryContainer : BoxContainer
             Loc.GetString("atmos-alerts-window-temperature-value", ("valueInC", tempC), ("valueInK", tempK)) :
             Loc.GetString("atmos-alerts-window-invalid-value");
 
-        TemperatureLabel.FontColorOverride = isNotVacuum ? Color.DarkGray : StyleNano.DisabledFore;
+        TemperatureLabel.FontColorOverride = isNotVacuum ? DeadSpaceStylePalette.Text : DeadSpaceStylePalette.TextMuted; // DS14
 
         // Update pressure
         PressureLabel.Text = Loc.GetString("atmos-alerts-window-pressure-value", ("value", (FixedPoint2)updatedData.PressureData));
-        PressureLabel.FontColorOverride = isNotVacuum ? Color.DarkGray : StyleNano.DisabledFore;
+        PressureLabel.FontColorOverride = isNotVacuum ? DeadSpaceStylePalette.Text : DeadSpaceStylePalette.TextMuted; // DS14
 
         // Update total mol
         TotalMolLabel.Text = Loc.GetString("atmos-alerts-window-total-mol-value", ("value", (FixedPoint2)updatedData.TotalMolData));
-        TotalMolLabel.FontColorOverride = isNotVacuum ? Color.DarkGray : StyleNano.DisabledFore;
+        TotalMolLabel.FontColorOverride = isNotVacuum ? DeadSpaceStylePalette.Text : DeadSpaceStylePalette.TextMuted; // DS14
 
         // Update other present gases
         GasGridContainer.RemoveAllChildren();
@@ -113,7 +114,7 @@ public sealed partial class AtmosMonitoringEntryContainer : BoxContainer
             {
                 Text = Loc.GetString("atmos-alerts-window-other-gases-value-nil"),
                 FontOverride = normalFont,
-                FontColorOverride = StyleNano.DisabledFore,
+                FontColorOverride = DeadSpaceStylePalette.TextMuted, // DS14
                 HorizontalAlignment = HAlignment.Center,
                 VerticalAlignment = VAlignment.Center,
                 HorizontalExpand = true,

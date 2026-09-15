@@ -1,0 +1,9 @@
+- type: cargoProduct
+  id: AtmosphericsFuel
+  icon:
+    sprite: _DeadSpace/Structures/Storage/canister.rsi
+    state: fuel
+  product: FuelCanister
+  cost: 900
+  category: cargoproduct-category-name-atmospherics
+  group: engineering

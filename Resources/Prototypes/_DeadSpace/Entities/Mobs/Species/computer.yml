@@ -72,7 +72,7 @@
       - Heat
       - Shock
     locPrefix: silicon
-  - type: StatusEffects
+  - type: StatusEffects # DS14 - PressureImmunity is provided by the new status effect system.
     allowed:
     - Stun
     - KnockedDown
@@ -81,7 +81,6 @@
     - SeeingRainbows
     - Electrocution
     - SlurredSpeech
-    - PressureImmunity
     - Muted
     - TemporaryBlindness
     - Pacified

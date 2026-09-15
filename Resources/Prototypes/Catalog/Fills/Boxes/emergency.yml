@@ -23,6 +23,39 @@
 # DS14-Start
 - type: entity
   parent: BoxBase
+  id: BoxCardboardERTGamma
+  name: cardboard box
+  description: A cardboard box for storing things.
+  suffix: ERT
+  components:
+  - type: Item
+    size: Large
+    shape:
+    - 0,0,2,1
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,3,3
+  - type: Sprite
+    layers:
+    - state: internals
+    - state: emergencytank
+  - type: StorageFill
+    contents:
+      - id: ClothingMaskGasERT
+      - id: DrinkMREFlask
+      - id: BluespaceHandHeldMassScanner
+      - id: Flare
+      - id: EmergencyMedipen
+      - id: AirlossAutoInjector
+      - id: Flare
+      - id: Flash
+      - id: DoubleEmergencyOxygenTankFilled
+      - id: NutritiousMedipen
+      - id: NutritiousMedipen
+
+- type: entity
+  parent: BoxBase
   id: BoxCardboardERT
   name: cardboard box
   description: A cardboard box for storing things.
@@ -73,6 +106,26 @@
     layers:
       - state: box
       - state: flashbang
+
+- type: entity
+  name: box "Blissful Sleep"
+  parent: BoxCardboard
+  id: BoxBlissfulSleep
+  description: A box full lethal injection
+  suffix: lethal injection
+  components:
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,2,2
+  - type: StorageFill
+    contents:
+      - id: SyringeLexorin
+        amount: 9
+  - type: Sprite
+    layers:
+      - state: box
+      - state: syringe
 # DS14-End
 
 - type: entity
@@ -154,10 +207,10 @@
       storagebase: !type:AllSelector
         children:
         - id: ClothingHeadHatWelding
-        - id: CableApcStack5
+        - id: CableApcStack15
         - id: CrowbarRed
         - id: Flare
-        - id: DrinkWaterBottleFull
+        - id: Welder # DS14
 
 - type: entity
   parent: BoxCardboard

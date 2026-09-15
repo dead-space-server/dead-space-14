@@ -65,6 +65,7 @@
     damageContainer: Inorganic
     damageModifierSet: LivingLight
   - type: PassiveDamage
+    intervalHaltOnDamageTaken: 5s
     allowedStates:
     - Alive
     damageCap: 20

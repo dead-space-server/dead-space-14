@@ -1,20 +1,19 @@
 ﻿<controls:FancyWindow
     xmlns="https://spacestation14.io"
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
-    xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     Title="{Loc 'microwave-menu-title'}"
     MinWidth="512"
     MinSize="512 256">
     <BoxContainer Orientation="Vertical">
         <BoxContainer Orientation="Horizontal"  >
+            <!-- DS14-start -->
             <PanelContainer
                 Name="IngredientsPanel"
                 Access="Public"
                 MinSize="300 128"
-                Margin="5 5">
-                <PanelContainer.PanelOverride>
-                    <gfx:StyleBoxFlat BackgroundColor="#1B1B1E" />
-                </PanelContainer.PanelOverride>
+                Margin="5 5"
+                StyleClasses="BackgroundDark">
+                <!-- DS14-end -->
                 <ItemList
                     Name="IngredientsList"
                     Access="Public"
@@ -35,20 +34,20 @@
                 Margin="10 10"
                 VerticalExpand="True"
                 HorizontalExpand="True">
-                <PanelContainer
-                    VerticalExpand="True"
-                    HorizontalExpand="True">
+                    <!-- DS14-start -->
                     <PanelContainer
                         VerticalExpand="True"
-                        ModulateSelfOverride="#FF0000"
+                        HorizontalExpand="True"
                         MinSize="100 128">
+                        <!-- DS14-end -->
                         <BoxContainer Orientation="Vertical">
+                            <!-- DS14-start: ordinary text inherits the common DS foreground. -->
                             <Label
                                 Name="CookTimeInfoLabel"
                                 Access="Public"
                                 Align="Center"
-                                Modulate="#FFFFFF"
                                 VAlign="Center" />
+                            <!-- DS14-end -->
                             <BoxContainer  Orientation="Vertical">
                                 <Button
                                     Name="InstantCookButton"
@@ -90,7 +89,6 @@
                             </BoxContainer>
                         </BoxContainer>
                     </PanelContainer>
-                </PanelContainer>
             </BoxContainer>
         </BoxContainer>
          <!-- Footer -->
@@ -104,9 +102,10 @@
             </BoxContainer>
         </BoxContainer>
     </BoxContainer>
-    <PanelContainer Name="DisableCookingPanelOverlay" MouseFilter="Stop">
-        <PanelContainer.PanelOverride>
-            <gfx:StyleBoxFlat BackgroundColor="#1B1B1E66" />
-        </PanelContainer.PanelOverride>
-    </PanelContainer>
+    <!-- DS14-start: centralized modal scrim keeps disabled content dark without an inline style box. -->
+    <PanelContainer
+        Name="DisableCookingPanelOverlay"
+        MouseFilter="Stop"
+        StyleClasses="DeadSpaceModalScrim" />
+    <!-- DS14-end -->
 </controls:FancyWindow>

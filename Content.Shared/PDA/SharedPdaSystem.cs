@@ -1,6 +1,7 @@
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Containers.ItemSlots;
+using Content.Shared.DeadSpace.Thief;
 using Robust.Shared.Containers;
 
 namespace Content.Shared.PDA
@@ -22,6 +23,23 @@ namespace Content.Shared.PDA
             SubscribeLocalEvent<PdaComponent, EntRemovedFromContainerMessage>(OnItemRemoved);
 
             SubscribeLocalEvent<PdaComponent, GetAdditionalAccessEvent>(OnGetAdditionalAccess);
+
+            // DS14: refuse to insert a tool into the tool slot of any PDA that isn't
+            // the thief's own marked PDA. Done on both server and client so the
+            // insertion is rejected predictively without a popup.
+            SubscribeLocalEvent<PdaComponent, ItemSlotInsertAttemptEvent>(OnToolSlotInsertAttempt);
+        }
+
+        private void OnToolSlotInsertAttempt(Entity<PdaComponent> ent, ref ItemSlotInsertAttemptEvent args)
+        {
+            if (args.Slot.ID != PdaComponent.PdaToolSlotId)
+                return;
+
+            // The thief's own marked PDA accepts tools.
+            if (HasComp<ThiefPdaComponent>(ent.Owner))
+                return;
+
+            args.Cancelled = true;
         }
         protected virtual void OnComponentInit(EntityUid uid, PdaComponent pda, ComponentInit args)
         {
@@ -31,6 +49,8 @@ namespace Content.Shared.PDA
             ItemSlotsSystem.AddItemSlot(uid, PdaComponent.PdaIdSlotId, pda.IdSlot);
             ItemSlotsSystem.AddItemSlot(uid, PdaComponent.PdaPenSlotId, pda.PenSlot);
             ItemSlotsSystem.AddItemSlot(uid, PdaComponent.PdaPaiSlotId, pda.PaiSlot);
+            // DS14: tool slot used to register the ВорПРО program.
+            ItemSlotsSystem.AddItemSlot(uid, PdaComponent.PdaToolSlotId, pda.ToolSlot);
 
             UpdatePdaAppearance(uid, pda);
         }
@@ -40,6 +60,7 @@ namespace Content.Shared.PDA
             ItemSlotsSystem.RemoveItemSlot(uid, pda.IdSlot);
             ItemSlotsSystem.RemoveItemSlot(uid, pda.PenSlot);
             ItemSlotsSystem.RemoveItemSlot(uid, pda.PaiSlot);
+            ItemSlotsSystem.RemoveItemSlot(uid, pda.ToolSlot); // DS14
         }
 
         protected virtual void OnItemInserted(EntityUid uid, PdaComponent pda, EntInsertedIntoContainerMessage args)

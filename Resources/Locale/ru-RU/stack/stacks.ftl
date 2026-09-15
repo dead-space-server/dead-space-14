@@ -194,6 +194,12 @@ stack-artifact-fragment =
         [few] фрагмента
        *[other] фрагментов
     } артефакта
+stack-xenoborg-crystal =
+    { $amount ->
+        [1] кристалл ксеноборгов
+        [few] кристалла ксеноборгов
+       *[other] кристаллов ксеноборгов
+    }
 # best materials
 stack-ground-tobacco =
     { $amount ->
@@ -253,6 +259,7 @@ stack-rolling-paper =
     }
 stack-fulton = фултон
 stack-credit = кредиты
+stack-dirty-credit = грязные кредиты # DS14
 stack-plasma =
     { $amount ->
         [1] лист

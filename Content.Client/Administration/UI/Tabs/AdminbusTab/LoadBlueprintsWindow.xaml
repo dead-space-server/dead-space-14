@@ -1,5 +1,6 @@
 ﻿<DefaultWindow
-    xmlns="https://spacestation14.io" Title="{Loc admin-ui-blueprint-load}">
+    xmlns="https://spacestation14.io"
+    Title="{Loc admin-ui-blueprint-load}">
     <BoxContainer Orientation="Vertical">
         <BoxContainer Orientation="Horizontal">
             <Label Text="{Loc admin-ui-blueprint-map}" MinSize="100 0" />

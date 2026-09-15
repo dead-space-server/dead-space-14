@@ -9,6 +9,15 @@
     state: hair
 
 - type: marking
+  id: Hairsastr2
+  bodyPart: Hair
+  markingCategory: Hair
+  sponsorOnly: true
+  sprites:
+  - sprite: _DeadSpace/Sponsor/sastr/Customization/hair.rsi
+    state: hair2
+
+- type: marking
   id: Scarsastr
   bodyPart: Head
   markingCategory: Head
@@ -43,22 +52,18 @@
   - type: Storage
     maxItemSize: Huge
     grid:
-    - 0,0,13,10
+    - 0,0,13,8
   - type: StorageFill
     contents:
     - id: ClothingOuterHardsuitsastr
     - id: ClothingBeltMilitaryWebbingsastr
     - id: JetpackVoidFilledsastr
     - id: ClothingOuterVestsastr
-    - id: GasAnalyzersastr
     - id: ResidentAxesastr
     - id: Hypospraysastr
-    - id: HolofanProjectorsastr
     - id: DefibrillatorCompactsastr
-    - id: RCDsastr
     - id: ClothingShoesBootsMagsastr
     - id: ClothingEyesHudMedicalsastr
-    - id: PaperLawsastr
     - id: ClothingHandsGlovessastr
     - id: ClothingNeckMantlesastr
     - id: ClothingHeadsetsastr
@@ -68,14 +73,6 @@
     - id: MedkitAdvancedFilled
     - id: ClothingHeadHelmetsastr
     - id: ClothingMasksastr
-    - id: PapersastrUSSP
-    - id: ClothingNeckMantlePvrsifvlAlt2
-    - id: ClothingNeckGhillieAltsastr
-    - id: WeaponCrusherPvrsifvlAlt2
-    - id: WeaponPistolCHIMPPvrsifvlAlt2
-    - id: ClothingNeckMantle2sastr
-    - id: ClothingShoessastr
-    - id: ClothingHeadHatsastr
   - type: TypingIndicatorClothing
     proto: TypingIndicatorsastr
   - type: Tag
@@ -126,9 +123,8 @@
       - id: PowerDrillsastr
       - id: WelderExperimentalsastr
       - id: Multitoolsastr
-      - id: AdvancedMineralScannersastr
       - id: HandHeldMassScannersastr
-      - id: AnomalyScannersastr
+      - id: RCDsastr
   - type: Tag
     tags: [ ]
 
@@ -181,7 +177,7 @@
 
 # helmet.rsi
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   categories: [ HideSpawnMenu ]
   id: ClothingHeadHelmetHardsuitsastr
   name: шлем диверсионно-разведывательного скафандра Klecsh //
@@ -774,7 +770,7 @@
 - type: entity
   parent: Multitool
   id: Multitoolsastr
-  name: мультитул mil.PULSE // gen.1
+  name: мультитул Klecsh //
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -807,9 +803,8 @@
   - type: Sprite
     sprite: _DeadSpace/Sponsor/sastr/tools_holofanprojector.rsi
     state: icon
-  - type: HolosignProjector
+  - type: LimitedHolosignProjector
     signProto: HoloFansastr
-    chargeUse: 120
 
 # tools_holo.rsi
 - type: entity

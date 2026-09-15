@@ -102,7 +102,7 @@
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuitMysticalRayAlt
   categories: [ HideSpawnMenu ]
   name: шлем скафандра MAXARM
@@ -623,9 +623,8 @@
   - type: Sprite
     sprite: _DeadSpace/Sponsor/MysticalRayAlt/tools_holofanprojector.rsi
     state: icon
-  - type: HolosignProjector
+  - type: LimitedHolosignProjector
     signProto: HoloFan
-    chargeUse: 120
 
 # tools_rcd.rci
 - type: entity

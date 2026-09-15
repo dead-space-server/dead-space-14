@@ -63,7 +63,6 @@
       effects:
       - !type:Emote
         emote: Yawn
-        showInChat: true
         probability: 0.1
       - !type:MovementSpeedModifier
         walkSpeedModifier: 0.65
@@ -216,7 +215,8 @@
   metabolisms:
     Drink:
       effects:
-      - !type:SatiateThirst
+      - !type:Satiate
+        satiationType: Thirst
         factor: -1.5
       - !type:HealthChange
         ignoreResistances: true
@@ -511,15 +511,15 @@
       - !type:HealthChange
         conditions:
         - !type:MetabolizerTypeCondition
-          type: [Animal] # Applying damage to the mobs with lower metabolism capabilities
+          type: [ Animal, Arachnid ] # Applying damage to the mobs with lower metabolism capabilities
         damage:
           types:
             Poison: 0.4
       - !type:Vomit
         probability: 0.04 #Scaled for time, not metabolismrate.
         conditions:
-          - !type:MetabolizerTypeCondition
-            type: [Animal]
+        - !type:MetabolizerTypeCondition
+          type: [ Animal, Arachnid ]
 
 - type: reagent
   id: Amatoxin
@@ -587,7 +587,7 @@
       - !type:PopupMessage
         conditions:
         - !type:MetabolizerTypeCondition
-          type: [ Animal, Vox, Xenomorph ] # DS14: added Xenomorph
+          type: [ Animal, Vox, Arachnid, Xenomorph ] # DS14: added Xenomorph
           inverted: true
         type: Local
         visualType: MediumCaution
@@ -597,12 +597,12 @@
         probability: 0.1
         conditions:
         - !type:MetabolizerTypeCondition
-          type: [ Animal, Vox, Plant, Xenomorph ] # DS14: added Xenomorph
+          type: [ Animal, Vox, Plant, Arachnid, Xenomorph ] # DS14: added Xenomorph
           inverted: true
       - !type:HealthChange
         conditions:
         - !type:MetabolizerTypeCondition
-          type: [ Animal, Vox, Plant, Xenomorph ] # DS14: added Xenomorph
+          type: [ Animal, Vox, Plant, Arachnid, Xenomorph ] # DS14: added Xenomorph
           inverted: true
         damage:
           types:
@@ -617,7 +617,7 @@
       - !type:AdjustReagent
         conditions:
         - !type:MetabolizerTypeCondition
-          type: [ Animal ]
+          type: [ Animal, Arachnid ]
         reagent: Protein
         amount: 0.5
       - !type:AdjustReagent
@@ -653,41 +653,10 @@
           reagent: Allicin
           min: 1
         - !type:MetabolizerTypeCondition
-          type: [Animal]
+          type: [ Animal ]
         damage:
           types:
             Poison: 0.06
-
-- type: reagent
-  id: Pax
-  name: reagent-name-pax
-  group: Narcotics
-  desc: reagent-desc-pax
-  physicalDesc: reagent-physical-desc-soothing
-  allowedDepartments:
-  - Security
-  - Medical
-  color: "#AAAAAA"
-  metabolisms:
-    Poison:
-      effects:
-      - !type:GenericStatusEffect
-        key: Pacified
-        component: Pacified
-        time: 4
-# DS-14-start
-        conditions:
-        - !type:MetabolizerTypeCondition
-          type: [ SuperSoldier ]
-          inverted: true
-# DS-14-end
-      # DS14-start
-      - !type:PopupMessage
-        type: Local
-        visualType: Small
-        messages: ["pax-effect-hands-bound"]
-        probability: 0.05
-      # DS14-end
 
 - type: reagent
   id: Honk
@@ -703,7 +672,6 @@
       effects:
       - !type:Emote
         emote: Honk
-        showInChat: true
         showInGuidebook: true
         force: true
         probability: 0.2
@@ -713,7 +681,7 @@
           reagent: Honk
           min: 1
         - !type:MetabolizerTypeCondition
-          type: [ Animal ]
+          type: [ Animal, Arachnid ]
         damage:
           types:
             Poison: 0.06
@@ -816,12 +784,14 @@
       effects:
       - !type:HealthChange
         conditions:
-        - !type:HungerCondition
+        - !type:SatiationCondition
+          satiationType: Hunger
           max: 50
         damage:
           types:
             Poison: 2
-      - !type:SatiateHunger
+      - !type:Satiate
+        satiationType: Hunger
         factor: -6
 
 # inspired by the spider neurotoxin GsMtx-4
@@ -877,7 +847,8 @@
   metabolisms:
     Food:
       effects:
-      - !type:SatiateHunger
+      - !type:Satiate
+        satiationType: Hunger
         factor: 1
         conditions:
         - !type:MetabolizerTypeCondition
@@ -901,3 +872,52 @@
         type: Update
       - !type:ModifyBleed
         amount: 0.5
+
+- type: reagent
+  id: Hivarol
+  name: reagent-name-hivarol
+  group: Toxins
+  desc: reagent-desc-hivarol
+  physicalDesc: reagent-physical-desc-sickly
+  flavor: sharp
+  color: "#96424f"
+  metabolisms:
+    Poison: # DS14 - current metabolism group name.
+      effects:
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentCondition
+          reagent: Hivarol
+          min: 4
+        - !type:MetabolizerTypeCondition
+          type: [ Changeling ]
+        damage:
+          types:
+            Shock: 3
+      - !type:PopupMessage
+        conditions:
+        - !type:ReagentCondition
+          reagent: Hivarol
+          min: 4
+        - !type:MetabolizerTypeCondition
+          type: [ Changeling ]
+        type: Local
+        visualType: Large
+        messages: [ "generic-reagent-effect-burning-insides" ]
+        probability: 0.33
+      - !type:Emote
+        conditions:
+        - !type:ReagentCondition
+          reagent: Hivarol
+          min: 4
+        - !type:MetabolizerTypeCondition
+          type: [ Changeling ]
+        emote: Scream
+        probability: 0.5
+      - !type:Jitter
+        conditions:
+        - !type:ReagentCondition
+          reagent: Hivarol
+          min: 4
+        - !type:MetabolizerTypeCondition
+          type: [ Changeling ]

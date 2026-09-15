@@ -30,6 +30,7 @@ using Robust.Shared.Physics.Events;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Robust.Shared.Timing;
 using PullableComponent = Content.Shared.Movement.Pulling.Components.PullableComponent;
 using PullerComponent = Content.Shared.Movement.Pulling.Components.PullerComponent;
 using Content.Server.Lightning.Components; //DS14
@@ -58,6 +59,7 @@ public sealed class ElectrocutionSystem : SharedElectrocutionSystem
     [Dependency] private readonly TagSystem _tag = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private readonly IGameTiming _timing = default!; // DS14 - pre-v288 IoC
 
     private static readonly ProtoId<StatusEffectPrototype> StatusKeyIn = "Electrocution";
     private static readonly ProtoId<DamageTypePrototype> DamageType = "Shock";
@@ -226,6 +228,9 @@ public sealed class ElectrocutionSystem : SharedElectrocutionSystem
         if (!_random.Prob(electrified.Probability))
             return false;
 
+        if (electrified.ShockDelay != null && electrified.NextShock > _timing.CurTime)
+            return false;
+
         EnsureComp<ActivatedElectrifiedComponent>(uid);
         _appearance.SetData(uid, ElectrifiedVisuals.ShowSparks, true);
 
@@ -251,6 +256,8 @@ public sealed class ElectrocutionSystem : SharedElectrocutionSystem
                     ignoreInsulation: electrified.IgnoreInsulation //DS14
                 );
             }
+            if (lastRet)
+                electrified.NextShock = _timing.CurTime + electrified.ShockDelay;
             return lastRet;
         }
 

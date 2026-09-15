@@ -3,19 +3,23 @@
                                 xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
                                 Orientation="Vertical"
                                 VerticalExpand="True">
-    <PanelContainer StyleClasses="DS14MenuHeader">
+    <!-- DS14-start -->
+    <PanelContainer StyleClasses="DeadSpaceSectionHeader">
         <BoxContainer Orientation="Horizontal" Margin="4 8">
-            <Label Align="Right" SetWidth="26" ClipText="True" Text="{Loc 'log-probe-label-number'}" StyleClasses="DS14MenuListHeader"/>
-            <Label Align="Center" SetWidth="100" ClipText="True" Text="{Loc 'log-probe-label-time'}" StyleClasses="DS14MenuListHeader"/>
-            <Label Align="Left" SetWidth="390" ClipText="True" Text="{Loc 'log-probe-label-accessor'}" StyleClasses="DS14MenuListHeader"/>
+            <Label Align="Right" SetWidth="26" ClipText="True" Text="{Loc 'log-probe-label-number'}" StyleClasses="DeadSpaceListHeader"/>
+            <Label Align="Center" SetWidth="100" ClipText="True" Text="{Loc 'log-probe-label-time'}" StyleClasses="DeadSpaceListHeader"/>
+            <Label Align="Left" SetWidth="390" ClipText="True" Text="{Loc 'log-probe-label-accessor'}" StyleClasses="DeadSpaceListHeader"/>
         </BoxContainer>
     </PanelContainer>
+    <!-- DS14-end -->
     <ScrollContainer VerticalExpand="True" HScrollEnabled="True">
         <BoxContainer Orientation="Vertical" Name="ProbedDeviceContainer"/>
     </ScrollContainer>
+    <!-- DS14-start -->
     <BoxContainer Orientation="Horizontal" Margin="4 8">
-        <Button Name="PrintButton" HorizontalAlignment="Left" Text="{Loc 'log-probe-print-button'}" Disabled="True" StyleClasses="DS14MenuProfileControl"/>
+        <Button Name="PrintButton" HorizontalAlignment="Left" Text="{Loc 'log-probe-print-button'}" Disabled="True"/>
         <BoxContainer HorizontalExpand="True"/>
-        <Label Name="EntityName" Align="Right" StyleClasses="DS14MenuSubtitle"/>
+        <Label Name="EntityName" Align="Right" StyleClasses="DeadSpaceSubtitle"/>
     </BoxContainer>
+    <!-- DS14-end -->
 </cartridges:LogProbeUiFragment>

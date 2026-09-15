@@ -1,3 +1,4 @@
+using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Robust.Shared.Physics.Dynamics.Joints;
 
@@ -32,5 +33,11 @@ namespace Content.Server.Shuttles.Components
 
         [ViewVariables]
         public int PathfindHandle = -1;
+
+        /// <summary>
+        /// The category of the dock, used to determine what kind of dock it is for the purposes of the radar screen legend
+        /// </summary>
+        [DataField, ViewVariables(VVAccess.ReadWrite)]
+        public LegendCategory DockLegendCategory = LegendCategory.General;
     }
 }

@@ -6,6 +6,12 @@
   components:
   - type: Item
     size: Small
+    sprite: _DeadSpace/Objects/Consumable/Food/snacks.rsi
+    inhandVisuals:
+      left:
+        - state: fabricbrick-inhand-left
+      right:
+        - state: fabricbrick-inhand-right
   - type: Tag
     tags:
     - FoodSnack
@@ -30,6 +36,12 @@
     - cotton
   - type: Item
     size: Small
+    sprite: _DeadSpace/Objects/Consumable/Food/snacks.rsi
+    inhandVisuals:
+      left:
+        - state: fabricbrick-inhand-left
+      right:
+        - state: fabricbrick-inhand-right
   - type: Tag
     tags:
     - ClothMade

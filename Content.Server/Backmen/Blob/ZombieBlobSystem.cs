@@ -1,5 +1,4 @@
-﻿using Content.Server.Atmos.Components;
-using Content.Server.Backmen.Blob.Components;
+﻿using Content.Server.Backmen.Blob.Components;
 using Content.Server.Backmen.Body.Components;
 using Content.Server.Body.Components;
 using Content.Server.Body.Systems;
@@ -20,6 +19,7 @@ using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Prototypes;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Physics;
+using Content.Shared.StatusEffectNew;
 using Content.Shared.Tag;
 using Content.Shared.Temperature.Components;
 using Content.Shared.Trigger.Systems;
@@ -43,6 +43,7 @@ public sealed class ZombieBlobSystem : EntitySystem
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly TriggerSystem _trigger = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private readonly StatusEffectsSystem _statusEffects = default!; // DS14 - PressureImmunity status effect migration
     [Dependency] private readonly LanguageSystem _language = default!; // DS14
 
     private const int ClimbingCollisionGroup = (int)(CollisionGroup.BlobImpassable);
@@ -51,6 +52,7 @@ public sealed class ZombieBlobSystem : EntitySystem
     private static readonly ProtoId<TagPrototype> CannotSuicideTag = "CannotSuicide";
     private static readonly ProtoId<TagPrototype> BlobTag = "BlobMob";
     private static readonly ProtoId<NpcFactionPrototype> BlobFaction = "Blob";
+    private static readonly EntProtoId PressureImmunityEffect = "StatusEffectPressureImmunity"; // DS14 - PressureImmunity status effect migration
     private static readonly ProtoId<LanguagePrototype> BlobLanguage = "BlobLanguage"; // DS14
 
     private readonly GasMixture _normalAtmos;
@@ -136,7 +138,7 @@ public sealed class ZombieBlobSystem : EntitySystem
 
         _tag.AddTag(uid, BlobTag);
 
-        EnsureComp<PressureImmunityComponent>(uid);
+        _statusEffects.TrySetStatusEffectDuration(uid, PressureImmunityEffect); // DS14 - PressureImmunity status effect migration
         EnsureComp<RespiratorImmunityComponent>(uid);
 
         if (TryComp<TemperatureDamageComponent>(uid, out var temperatureDamageComponent))
@@ -194,7 +196,7 @@ public sealed class ZombieBlobSystem : EntitySystem
         RemComp<BlobMobComponent>(uid);
         RemComp<HTNComponent>(uid);
         RemComp<ReplacementAccentComponent>(uid);
-        RemComp<PressureImmunityComponent>(uid);
+        _statusEffects.TryRemoveStatusEffect(uid, PressureImmunityEffect); // DS14 - PressureImmunity status effect migration
         RemComp<RespiratorImmunityComponent>(uid);
 
         if (TryComp<TemperatureDamageComponent>(uid, out var temperatureDamageComponent) && component.OldColdDamageThreshold != null)

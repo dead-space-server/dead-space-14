@@ -6,20 +6,17 @@
     <BoxContainer Orientation="Vertical"
                   HorizontalExpand="True"
                   VerticalExpand="True">
-        <!-- First status label -->
-        <PanelContainer Margin="0 0 0 5">
+        <!-- DS14-start -->
+        <PanelContainer Name="NukeStatusDisplay" Margin="0 0 0 5">
             <PanelContainer.PanelOverride>
                 <gfx:StyleBoxFlat BackgroundColor="#001c00" />
             </PanelContainer.PanelOverride>
-            <Label Name="FirstStatusLabel"/>
+            <BoxContainer Orientation="Vertical" SeparationOverride="5">
+                <Label Name="FirstStatusLabel"/>
+                <Label Name="SecondStatusLabel"/>
+            </BoxContainer>
         </PanelContainer>
-        <!-- Second status label -->
-        <PanelContainer Margin="0 0 0 5">
-            <PanelContainer.PanelOverride>
-                <gfx:StyleBoxFlat BackgroundColor="#001c00" />
-            </PanelContainer.PanelOverride>
-            <Label Name="SecondStatusLabel"/>
-        </PanelContainer>
+        <!-- DS14-end -->
         <BoxContainer Orientation="Horizontal" >
             <GridContainer Columns="3"
                            Name="KeypadGrid">

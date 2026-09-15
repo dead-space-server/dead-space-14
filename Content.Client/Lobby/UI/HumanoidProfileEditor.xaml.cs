@@ -1,14 +1,13 @@
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.Humanoid;
 using Content.Client.Lobby.UI.Loadouts;
 using Content.Client.Lobby.UI.Roles;
 using Content.Client.Message;
 using Content.Client.Players.PlayTimeTracking;
-using Content.Client.Stylesheets;
 using Content.Client.Sprite;
-using Content.Client.DeadSpace.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.Guidebook;
 using Content.DeadSpace.Interfaces.Client;
 using Content.Shared.CCVar;
@@ -92,9 +91,10 @@ namespace Content.Client.Lobby.UI
         private AntagPrototype? _antagPreviewOverride;
         private RoleLoadout? _antagPreviewLoadout;
         private readonly HashSet<ProtoId<AntagPrototype>> _favoriteAntags = new();
-        private readonly HashSet<ProtoId<AntagPrototype>> _displayedFavoriteAntags = new();
         private readonly Dictionary<ProtoId<AntagPrototype>, List<Button>> _favoriteAntagButtons = new();
+        private readonly Dictionary<ProtoId<AntagPrototype>, (Control Row, Button Button)> _favoriteAntagRows = new();
         private BoxContainer? _favoriteAntagContents;
+        private Control? _favoriteAntagCategory;
         private bool _antagFavoritesInitialized;
         private static readonly ProtoId<AntagMenuPrototype> DefaultAntagMenu = "Default";
         // DS14-end
@@ -157,15 +157,7 @@ namespace Content.Client.Lobby.UI
             _maxNameLength = _cfgManager.GetCVar(CCVars.MaxNameLength);
             _allowFlavorText = _cfgManager.GetCVar(CCVars.FlavorText);
 
-            // DS14-start
-            ApplyDs14MenuStyle(SpeciesButton);
-            ApplyDs14MenuStyle(SexButton);
-            ApplyDs14MenuStyle(PronounsButton);
-            ApplyDs14MenuStyle(SpawnPriorityButton);
-            ApplyDs14MenuStyle(VoiceButton);
-            ApplyDs14MenuStyle(PreferenceUnavailableButton);
-            AntagSearch.OnTextChanged += _ => RefreshAntags();
-            // DS14-end
+            AntagSearch.OnTextChanged += _ => RefreshAntags(); // DS14
 
             ImportButton.OnPressed += args =>
             {
@@ -281,7 +273,6 @@ namespace Content.Client.Lobby.UI
 
             RgbSkinColorContainer.AddChild(_rgbSkinColorSelector = new ColorSelectorSliders());
             _rgbSkinColorSelector.SelectorType = ColorSelectorSliders.ColorSelectorType.Hsv; // defaults color selector to HSV
-            ApplyDs14MenuStyle(_rgbSkinColorSelector); // DS14
             _rgbSkinColorSelector.OnColorChanged += _ =>
             {
                 OnSkinColorOnValueChanged();
@@ -290,11 +281,6 @@ namespace Content.Client.Lobby.UI
             #endregion
 
             #region Hair
-
-            // DS14-start
-            HairStylePicker.UseDs14MenuStyle();
-            FacialHairPicker.UseDs14MenuStyle();
-            // DS14-end
 
             HairStylePicker.OnMarkingSelect += newStyle =>
             {
@@ -486,8 +472,6 @@ namespace Content.Client.Lobby.UI
 
             #region Eyes
 
-            ApplyDs14MenuStyle(EyeColorPicker); // DS14
-
             EyeColorPicker.OnEyeColorPicked += newColor =>
             {
                 if (Profile is null || _readOnly) // DS14
@@ -539,7 +523,6 @@ namespace Content.Client.Lobby.UI
 
             TabContainer.SetTabTitle(4, Loc.GetString("humanoid-profile-editor-markings-tab"));
 
-            Markings.UseDs14MenuStyle(); // DS14
             Markings.OnMarkingAdded += OnMarkingChange;
             Markings.OnMarkingRemoved += OnMarkingChange;
             Markings.OnMarkingColorChange += OnMarkingChange;
@@ -576,42 +559,6 @@ namespace Content.Client.Lobby.UI
             UpdateSpeciesGuidebookIcon();
             IsDirty = false;
         }
-
-        // DS14-start
-        private static void ApplyDs14MenuStyle(Control control)
-        {
-            switch (control)
-            {
-                case Button button:
-                    button.RemoveStyleClass(StyleClass.ButtonOpenLeft);
-                    button.RemoveStyleClass(StyleClass.ButtonOpenRight);
-                    button.RemoveStyleClass(StyleClass.ButtonOpenBoth);
-                    button.AddStyleClass("DS14MenuProfileControl");
-                    break;
-                case OptionButton option:
-                    option.RemoveStyleClass(StyleClass.ButtonOpenLeft);
-                    option.RemoveStyleClass(StyleClass.ButtonOpenRight);
-                    option.RemoveStyleClass(StyleClass.ButtonOpenBoth);
-                    option.AddStyleClass("DS14MenuProfileControl");
-                    if (!option.OptionStyleClasses.Contains("DS14MenuProfileControl"))
-                        option.OptionStyleClasses.Add("DS14MenuProfileControl");
-                    break;
-                case HeadedOptionButton option:
-                    option.AddStyleClass("DS14MenuProfileControl");
-                    if (!option.OptionStyleClasses.Contains("DS14MenuProfileControl"))
-                        option.OptionStyleClasses.Add("DS14MenuProfileControl");
-                    break;
-                case Label label:
-                    label.AddStyleClass("DS14MenuProfileLabel");
-                    break;
-            }
-
-            foreach (var child in control.Children)
-            {
-                ApplyDs14MenuStyle(child);
-            }
-        }
-        // DS14-end
 
         /// <summary>
         /// Refreshes the flavor text editor status.
@@ -659,7 +606,6 @@ namespace Content.Client.Lobby.UI
                 TraitsList.AddChild(new Label
                 {
                     Text = Loc.GetString("humanoid-profile-editor-no-traits"),
-                    StyleClasses = { "DS14MenuProfileLabel" }, // DS14
                 });
                 if (_readOnly) // DS14
                     SetInteractiveControlsDisabled(TraitsList, true);
@@ -697,9 +643,9 @@ namespace Content.Client.Lobby.UI
                     // Label
                     TraitsList.AddChild(new Label
                     {
-                        Text = category.Name,
+                        Text = Loc.GetString(category.Name), //DS-14
                         Margin = new Thickness(0, 10, 0, 0),
-                        StyleClasses = { "DS14MenuProfileSection" }, // DS14
+                        StyleClasses = { DeadSpaceStyleClass.SectionTitle }, // DS14
                     });
                 }
 
@@ -741,7 +687,6 @@ namespace Content.Client.Lobby.UI
                     TraitsList.AddChild(new Label
                     {
                         Text = Loc.GetString("humanoid-profile-editor-trait-count-hint", ("current", selectionCount) ,("max", category.MaxTraitPoints)),
-                        StyleClasses = { "DS14MenuProfileLabel" }, // DS14
                     });
                 }
 
@@ -821,13 +766,14 @@ namespace Content.Client.Lobby.UI
         {
             AntagList.RemoveAllChildren();
             _favoriteAntagContents = null;
+            _favoriteAntagCategory = null;
             _favoriteAntagButtons.Clear();
+            _favoriteAntagRows.Clear();
 
             // DS14-start
             if (!_antagFavoritesInitialized && _preferencesManager.Preferences is not null)
             {
                 _favoriteAntags.UnionWith(_preferencesManager.Preferences.FavoriteAntags);
-                _displayedFavoriteAntags.UnionWith(_favoriteAntags);
                 _antagFavoritesInitialized = true;
             }
 
@@ -853,13 +799,13 @@ namespace Content.Client.Lobby.UI
                 return;
             }
 
-            if (_displayedFavoriteAntags.Count > 0)
+            if (_favoriteAntags.Count > 0)
             {
                 AntagList.AddChild(CreateAntagCategory(
                     Loc.GetString("antag-menu-category-favorites"),
                     new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/examine-star.png")),
-                    Color.FromHex("#d9a928"),
-                    _displayedFavoriteAntags.OrderBy(id => id.Id).ToList(),
+                    DeadSpaceStylePalette.Amber,
+                    _favoriteAntags.OrderBy(id => id.Id).ToList(),
                     Array.Empty<AntagSubcategory>(),
                     0,
                     true));
@@ -900,7 +846,7 @@ namespace Content.Client.Lobby.UI
         }
 
         // DS14-start
-        private Control CreateAntagSelector(AntagPrototype antag, Color outlineColor)
+        private Control CreateAntagSelector(AntagPrototype antag, Color outlineColor, bool favorite = false)
         {
             var row = new BoxContainer
             {
@@ -914,7 +860,6 @@ namespace Content.Client.Lobby.UI
             {
                 Text = Loc.GetString(antag.Name),
                 ToolTip = Loc.GetString(antag.Objective),
-                StyleClasses = { "DS14MenuProfileLabel" },
                 HorizontalExpand = true,
                 VerticalAlignment = VAlignment.Center,
             };
@@ -926,7 +871,6 @@ namespace Content.Client.Lobby.UI
                 ToolTip = Loc.GetString(_favoriteAntags.Contains(antag.ID)
                     ? "antag-menu-remove-favorite"
                     : "antag-menu-add-favorite"),
-                StyleClasses = { "DS14MenuProfileControl" },
                 SetSize = new Vector2(28, 28),
                 VerticalAlignment = VAlignment.Center,
             };
@@ -944,27 +888,35 @@ namespace Content.Client.Lobby.UI
                 if (!added)
                     _favoriteAntags.Remove(antag.ID);
 
-                // Keep removed entries visible in the favorites category until reconnecting.
-                var newlyDisplayed = added && _displayedFavoriteAntags.Add(antag.ID);
-
-                if (newlyDisplayed && string.IsNullOrWhiteSpace(AntagSearch.Text))
+                if (added && string.IsNullOrWhiteSpace(AntagSearch.Text))
                 {
                     if (_favoriteAntagContents != null)
                     {
-                        _favoriteAntagContents.AddChild(CreateAntagSelector(antag, Color.FromHex("#d9a928")));
+                        _favoriteAntagContents.AddChild(CreateAntagSelector(antag, DeadSpaceStylePalette.Amber, true));
                     }
                     else
                     {
                         var favoritesCategory = CreateAntagCategory(
                             Loc.GetString("antag-menu-category-favorites"),
                             new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/examine-star.png")),
-                            Color.FromHex("#d9a928"),
-                            _displayedFavoriteAntags.OrderBy(id => id.Id).ToList(),
+                            DeadSpaceStylePalette.Amber,
+                            _favoriteAntags.OrderBy(id => id.Id).ToList(),
                             Array.Empty<AntagSubcategory>(),
                             0,
                             true);
                         AntagList.AddChild(favoritesCategory);
                         favoritesCategory.SetPositionInParent(0);
+                    }
+                }
+                else if (!added && _favoriteAntagRows.Remove(antag.ID, out var entry))
+                {
+                    _favoriteAntagContents?.RemoveChild(entry.Row);
+                    _favoriteAntagButtons[antag.ID].Remove(entry.Button);
+                    if (_favoriteAntagRows.Count == 0 && _favoriteAntagCategory != null)
+                    {
+                        AntagList.RemoveChild(_favoriteAntagCategory);
+                        _favoriteAntagCategory = null;
+                        _favoriteAntagContents = null;
                     }
                 }
 
@@ -1004,7 +956,6 @@ namespace Content.Client.Lobby.UI
             var loadoutButton = new Button
             {
                 Text = Loc.GetString("loadout-window"),
-                StyleClasses = { "DS14MenuProfileControl" },
                 VerticalAlignment = VAlignment.Center,
             };
 
@@ -1088,6 +1039,8 @@ namespace Content.Client.Lobby.UI
                 },
             };
             outline.AddChild(row);
+            if (favorite)
+                _favoriteAntagRows.Add(antag.ID, (outline, favoriteButton));
             return outline;
         }
 
@@ -1118,7 +1071,7 @@ namespace Content.Client.Lobby.UI
                 }
 
                 if (antag.SetPreference)
-                    contents.AddChild(CreateAntagSelector(antag, outlineColor));
+                    contents.AddChild(CreateAntagSelector(antag, outlineColor, favoritesCategory));
             }
 
             foreach (var subcategory in subcategories)
@@ -1137,7 +1090,6 @@ namespace Content.Client.Lobby.UI
                 ToggleMode = true,
                 HorizontalExpand = true,
                 Margin = new Thickness(depth * 8f, 2f, 0f, 2f),
-                StyleClasses = { "DS14MenuProfileControl" },
             };
             var headingContents = new BoxContainer
             {
@@ -1186,6 +1138,8 @@ namespace Content.Client.Lobby.UI
                 },
             };
             outline.AddChild(collapsible);
+            if (favoritesCategory)
+                _favoriteAntagCategory = outline;
             return outline;
         }
 
@@ -1535,26 +1489,12 @@ namespace Content.Client.Lobby.UI
                         });
                     }
 
-                    category.AddChild(new PanelContainer
+                    category.AddChild(new Label
                     {
-                        // DS14-start
-                        PanelOverride = new StyleBoxFlat
-                        {
-                            BackgroundColor = Color.FromHex("#1D2330"),
-                            BorderColor = Color.FromHex("#374252"),
-                            BorderThickness = new Thickness(1),
-                        },
-                        // DS14-end
-                        Children =
-                        {
-                            new Label
-                            {
-                                Text = Loc.GetString("humanoid-profile-editor-department-jobs-label",
-                                    ("departmentName", departmentName)),
-                                Margin = new Thickness(5f, 0, 0, 0),
-                                StyleClasses = { "DS14MenuProfileSection" }, // DS14
-                            }
-                        }
+                        Text = Loc.GetString("humanoid-profile-editor-department-jobs-label",
+                            ("departmentName", departmentName)),
+                        Margin = new Thickness(5f, 0, 0, 0),
+                        StyleClasses = { DeadSpaceStyleClass.SectionTitle }, // DS14
                     });
 
                     _jobCategories[department.ID] = category;
@@ -1565,7 +1505,10 @@ namespace Content.Client.Lobby.UI
                     .Where(job => job.SetPreference)
                     .ToArray();
 
-                Array.Sort(jobs, JobUIComparer.Instance);
+                // DS14-start - upstream roles UI lives in this combined editor file.
+                if (JobUIComparer.TryCreate(_prototypeManager, null, out var comparer))
+                    Array.Sort(jobs, comparer);
+                // DS14-end
 
                 foreach (var job in jobs)
                 {
@@ -1637,7 +1580,6 @@ namespace Content.Client.Lobby.UI
                         HorizontalAlignment = HAlignment.Right,
                         VerticalAlignment = VAlignment.Center,
                         Margin = new Thickness(3f, 3f, 0f, 0f),
-                        StyleClasses = { "DS14MenuProfileControl" }, // DS14
                     };
 
                     var collection = IoCManager.Instance!;

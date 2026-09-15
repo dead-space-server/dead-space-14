@@ -49,8 +49,8 @@
     LavalandMiningPoint: 650
 
 - type: listing
-  id: LavalandMiningClothingShoesBootsMagBlinding
-  productEntity: ClothingShoesBootsMagBlinding
+  id: LavalandMiningClothingBootsRunImp
+  productEntity: ClothingBootsRunImp
   categories:
   - LavalandMiningEquipment
   cost:

@@ -3,7 +3,7 @@
   parent: [BaseWeaponRevolver, BaseMajorContraband]
   id: WeaponRevolverRSH12M
   description: Продвинутый револьверный комплекс РШ-12М представляет собой револьвер с цельной металлической рамкой и с откидывающимся влево барабаном на 6 патронов, тем самым превосходя обычный РШ-12.
-  suffix: Офицер СО
+  suffix: Револьвер, Офицер СО
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Weapons/Guns/Pistols/rsh12.rsi

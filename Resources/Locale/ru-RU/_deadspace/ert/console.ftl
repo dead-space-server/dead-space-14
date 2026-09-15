@@ -153,3 +153,4 @@ ert-admin-move-to-manual-button = Перенести в ручное одобр�
 
 ert-admin-promote-manual-button = Запустить автоспавн без уведомлений
 ert-admin-queue-auto-button = Добавить в автоспавн
+ert-admin-queue-auto-silent-button = Добавить без оповещения

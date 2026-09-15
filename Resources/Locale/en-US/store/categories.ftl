@@ -16,6 +16,9 @@ store-discounted-items = Discounts
 
 # Revenant
 store-category-abilities = Abilities
+store-category-combat = Combat
+store-category-utility = Utility
+store-category-stealth = Stealth
 
 # Wizard
 store-caregory-spellbook-offensive = Offensive Spells

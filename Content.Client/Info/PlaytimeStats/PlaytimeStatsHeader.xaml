@@ -2,7 +2,7 @@
     <!-- DS14-start -->
     <PanelContainer Name="BackgroundColorPlaytimePanel"
                     Access="Public"
-                    StyleClasses="DS14MenuListHeader"/>
+                    StyleClasses="DeadSpaceListHeader"/>
     <BoxContainer Orientation="Vertical"
                   HorizontalExpand="True">
         <BoxContainer Orientation="Horizontal"
@@ -15,7 +15,7 @@
                    Text="{Loc ui-playtime-header-role-type}"
                    MouseFilter="Pass"
                    Margin="5"
-                   StyleClasses="DS14MenuListHeader"/>
+                   StyleClasses="DeadSpaceListHeader"/>
             <Label Name="PlaytimeLabel"
                    SizeFlagsStretchRatio="3"
                    HorizontalExpand="True"
@@ -23,7 +23,7 @@
                    Text="{Loc ui-playtime-header-role-time}"
                    MouseFilter="Pass"
                    Margin="5"
-                   StyleClasses="DS14MenuListHeader"/>
+                   StyleClasses="DeadSpaceListHeader"/>
         </BoxContainer>
     </BoxContainer>
     <!-- DS14-end -->

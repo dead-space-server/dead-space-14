@@ -97,7 +97,7 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
                     _atmosphereSystem.AddHeat(containingMixture, dQLeak);
             }
 
-            receiver.Load = thermoMachine.HeatCapacity;// * scale; // we're not ready for dynamic load yet, see note above
+            receiver.Load = thermoMachine.HeatCapacity * thermoMachine.PowerUsageMultiplier;// * scale; // we're not ready for dynamic load yet, see note above; // DS14
         }
 
         /// <summary>

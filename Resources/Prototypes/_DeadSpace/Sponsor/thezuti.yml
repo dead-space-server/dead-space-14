@@ -134,7 +134,7 @@
 
 # Helmet
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuitTheZuTi
   name: шлем скафандра королевской стражи
   description: Смотря в глаза данного латного и тёмного шлема, на удивление, вы наполняетесь решимостью.
@@ -592,9 +592,8 @@
   - type: Sprite
     sprite: _DeadSpace/Sponsor/TheZuTi/tools_holofanprojector.rsi
     state: icon
-  - type: HolosignProjector
+  - type: LimitedHolosignProjector
     signProto: HoloFanTheZuTi
-    chargeUse: 120
 
 - type: entity
   id: HoloFanTheZuTi

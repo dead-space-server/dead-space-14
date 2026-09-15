@@ -347,6 +347,12 @@
     count: 6
 
 - type: localizedDataset
+  id: PlushieMysticalRaypeech
+  values:
+    prefix: plushies-mystical-
+    count: 3
+
+- type: localizedDataset
   id: PlushieWalkflisSpeech
   values:
     prefix: plushies-walkflis-
@@ -478,3 +484,51 @@
   values:
     prefix: plushies-nikita-
     count: 9
+
+- type: localizedDataset
+  id: PlushieGuitarwhispersSpeech
+  values:
+    prefix: plushies-guitarwhispers-
+    count: 10
+
+- type: localizedDataset
+  id: PlushieMuenraiSpeech
+  values:
+    prefix: plushies-muenrai-
+    count: 10
+
+- type: localizedDataset
+  id: PlushieKieruSpeech
+  values:
+    prefix: plushies-kieru-
+    count: 5
+
+- type: localizedDataset
+  id: PlushieImarabSpeech
+  values:
+    prefix: plushies-imarab-
+    count: 10
+
+- type: localizedDataset
+  id: PlushieZutiKuzSpeech
+  values:
+    prefix: plushies-zuti-kuz-
+    count: 7
+
+- type: localizedDataset
+  id: PlushieZutiIgnaSpeech
+  values:
+    prefix: plushies-zuti-igna-
+    count: 5
+
+- type: localizedDataset
+  id: PlushieSastrBonSpeech
+  values:
+    prefix: plushies-sastr-bon-
+    count: 10
+
+- type: localizedDataset
+  id: PlushieDragonFoxMadParadoxSpeech
+  values:
+    prefix: plushies-drmp-
+    count: 8

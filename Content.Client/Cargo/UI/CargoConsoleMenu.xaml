@@ -1,5 +1,4 @@
 ﻿<controls:FancyWindow xmlns="https://spacestation14.io"
-                           xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
                            xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
                            MinSize="800 600"
                            SetSize="800 600"> <!-- DeadSpace-Localization -->
@@ -70,9 +69,10 @@
                           PlaceHolder="{Loc 'cargo-console-menu-search-bar-placeholder'}"
                           HorizontalExpand="True" />
 
+                      <!-- DS14-start: ordinary dropdown chrome and popup rows are global. -->
                       <OptionButton Name="Categories"
-                          Prefix="{Loc 'cargo-console-menu-categories-label'}"
-                          StyleClasses="OpenLeft"/>
+                          Prefix="{Loc 'cargo-console-menu-categories-label'}" />
+                      <!-- DS14-end -->
                   </BoxContainer>
 
                   <!-- Product list -->
@@ -106,18 +106,19 @@
 
                       <!-- Title -->
                       <controls:StripeBack>
+                          <!-- DS14-start -->
                           <Label Text="{Loc 'cargo-console-menu-requests-label'}"
                               HorizontalAlignment="Center"
+                              StyleClasses="DeadSpaceSectionTitle"
                               Margin="4"/>
+                          <!-- DS14-end -->
                       </controls:StripeBack>
 
+                      <!-- DS14-start -->
                       <PanelContainer VerticalExpand="True"
-                          Margin="0 -4 0 0">
-
-                          <!-- Background -->
-                          <PanelContainer.PanelOverride>
-                              <gfx:StyleBoxFlat BackgroundColor="#040404" />
-                          </PanelContainer.PanelOverride>
+                          Margin="0 -4 0 0"
+                          StyleClasses="BackgroundDark">
+                          <!-- DS14-end -->
 
                           <BoxContainer Orientation="Vertical">
                               <ScrollContainer VerticalExpand="True">
@@ -141,18 +142,19 @@
 
                       <!-- Title -->
                       <controls:StripeBack>
+                          <!-- DS14-start -->
                           <Label Text="{Loc 'cargo-console-menu-orders-label'}"
                               HorizontalAlignment="Center"
+                              StyleClasses="DeadSpaceSectionTitle"
                               Margin="4"/>
+                          <!-- DS14-end -->
                       </controls:StripeBack>
 
+                      <!-- DS14-start -->
                       <PanelContainer VerticalExpand="True"
-                          Margin="0 -4 0 0">
-
-                          <!-- Background -->
-                          <PanelContainer.PanelOverride>
-                              <gfx:StyleBoxFlat BackgroundColor="#040404" />
-                          </PanelContainer.PanelOverride>
+                          Margin="0 -4 0 0"
+                          StyleClasses="BackgroundDark">
+                          <!-- DS14-end -->
 
                           <BoxContainer Orientation="Vertical"
                               Margin="6">

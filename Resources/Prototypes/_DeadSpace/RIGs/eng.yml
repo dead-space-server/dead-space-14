@@ -62,7 +62,7 @@
     clothingPrototype: ClothingHeadHelmetRIGEngineer
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetRIGEngineer
   name: шлем модифицированного рюкзака инженера
   description: Надеюсь оно спасёт от кирпича.

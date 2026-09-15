@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared.ActionBlocker;
 using Content.Shared.Charges.Components;
 using Content.Shared.Charges.Systems;
 using Content.Shared.Coordinates.Helpers;
@@ -48,6 +49,7 @@ public abstract class SharedMagicSystem : EntitySystem
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private readonly SharedGunSystem _gunSystem = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -108,7 +110,7 @@ public abstract class SharedMagicSystem : EntitySystem
             }
         }
 
-        if (comp.RequiresSpeech && HasComp<MutedComponent>(args.Performer))
+        if (comp.RequiresSpeech && !_actionBlocker.CanSpeak(args.Performer))
             hasReqs = false;
 
         if (hasReqs)

@@ -5,7 +5,11 @@
   - type: LavalandFauna
   - type: LavalandWeatherImmune
   - type: LavalandChasmImmune
-  - type: PressureImmunity
+  # DS14-start: PressureImmunity status effect migration
+  - type: PermanentStatusEffects
+    statusEffects:
+    - StatusEffectPressureImmunity
+  # DS14-end
   - type: Flammable
     maximumFireStacks: 0
     firestacksOnIgnite: 0
@@ -28,6 +32,17 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Mobs/lavaland_monsters.rsi
+  - type: Butcherable
+    spawned:
+    - id: FoodMeatGoliath
+      amount: 2
+    - id: MaterialGoliathHide1
+      amount: 2
+      maxAmount: 4
+    - id: MaterialBones1
+      amount: 2
+    - id: PKAUpgradeDamageUp
+      prob: 0.01
 
 - type: entity
   id: MobLavalandBasilisk

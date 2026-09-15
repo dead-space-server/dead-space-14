@@ -1,0 +1,131 @@
+- type: construction
+  id: AshWalkerHearth
+  graph: AshWalkerHearth
+  startNode: start
+  targetNode: hearth
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  conditions:
+  - !type:TileNotBlocked {}
+
+- type: construction
+  id: AshWalkerSoil
+  graph: AshWalkerSoil
+  startNode: start
+  targetNode: soil
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  conditions:
+  - !type:TileNotBlocked {}
+
+- type: construction
+  id: AshWalkerMortar
+  graph: AshWalkerMortar
+  startNode: start
+  targetNode: mortar
+  category: construction-category-tools
+  objectType: Item
+
+- type: construction
+  id: AshWalkerSeedSieve
+  graph: AshWalkerSeedSieve
+  startNode: start
+  targetNode: sieve
+  category: construction-category-tools
+  objectType: Item
+
+- type: construction
+  id: AshWalkerMushroomBowl
+  graph: AshWalkerMushroomBowl
+  startNode: start
+  targetNode: bowl
+  category: construction-category-tools
+  objectType: Item
+
+- type: construction
+  id: AshWalkerMushroomLantern
+  graph: AshWalkerMushroomLantern
+  startNode: start
+  targetNode: lamp
+  category: construction-category-tools
+  objectType: Item
+
+- type: construction
+  id: MaterialFungalWood3
+  graph: MaterialFungalWood3
+  startNode: start
+  targetNode: wood
+  category: construction-category-materials
+  objectType: Item
+
+- type: construction
+  id: MaterialFungalCloth2
+  graph: MaterialFungalCloth2
+  startNode: start
+  targetNode: cloth
+  category: construction-category-materials
+  objectType: Item
+
+- type: construction
+  id: ClothingBackpackAshWalkerCrafted
+  graph: ClothingBackpackAshWalkerCrafted
+  startNode: start
+  targetNode: satchel
+  category: construction-category-clothing
+  objectType: Item
+
+- type: construction
+  id: AshWalkerWoundDressing
+  graph: AshWalkerWoundDressing
+  startNode: start
+  targetNode: dressing
+  category: construction-category-tools
+  objectType: Item
+
+- type: construction
+  id: AshWalkerBurnDressing
+  graph: AshWalkerBurnDressing
+  startNode: start
+  targetNode: dressing
+  category: construction-category-tools
+  objectType: Item
+
+- type: construction
+  id: WallAshWalkerBasalt
+  graph: WallAshWalkerBasalt
+  startNode: start
+  targetNode: wall
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  conditions:
+  - !type:TileNotBlocked {}
+
+- type: construction
+  id: DoorAshWalkerBasalt
+  graph: DoorAshWalkerBasalt
+  startNode: start
+  targetNode: gate
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  conditions:
+  - !type:TileNotBlocked {}
+
+- type: construction
+  id: FloorTileAshWalkerStone4
+  graph: FloorTileAshWalkerStone4
+  startNode: start
+  targetNode: tiles
+  category: construction-category-tiles
+  objectType: Item
+
+- type: construction
+  id: AshWalkerScrapedHide
+  graph: DryAshWalkerHide
+  startNode: start
+  targetNode: wet
+  category: construction-category-materials
+  objectType: Item

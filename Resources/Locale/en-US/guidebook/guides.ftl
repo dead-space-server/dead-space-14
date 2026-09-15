@@ -147,6 +147,7 @@ guide-entry-space-ninja = Space Ninja
 guide-entry-thieves = Thieves
 guide-entry-wizard = Wizard
 guide-entry-xenoborgs = Xenoborgs
+guide-entry-changelings = Changelings
 
 guide-entry-rules = Server Rules
 guide-entry-rules-space-law = Space Law

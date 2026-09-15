@@ -1,0 +1,26 @@
+# DS14: satiation profiles preserving custom species and mob balance.
+
+- type: satiation
+  id: XenomorphHunger
+  parent: NormalSatiationHunger
+  baseChangeRate: -0.05
+
+- type: satiation
+  id: XenomorphThirst
+  parent: NormalSatiationThirst
+  baseChangeRate: -0.05
+
+- type: satiation
+  id: SupersoldierThirst
+  parent: NormalSatiationThirst
+  baseChangeRate: -0.01
+
+- type: satiation
+  id: SpiderTerrorHunger
+  parent: SimpleMobBaseHunger
+  baseChangeRate: 0
+
+- type: satiation
+  id: DeadSpaceHamsterHunger
+  parent: HamsterHunger
+  baseChangeRate: -0.1

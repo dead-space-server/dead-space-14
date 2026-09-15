@@ -172,7 +172,7 @@ public sealed class LavalandMiningSystem : EntitySystem
         }
 
         var delta = result.Points - result.Debt;
-        points.Balance += delta;
+        points.Balance += (result.Debt > 0) ? 0 : delta;
         Dirty(cardUid, points);
 
         if (result.Debt > 0)
@@ -222,7 +222,9 @@ public sealed class LavalandMiningSystem : EntitySystem
 
     private void OnRedeemerMaterialsEjected(Entity<LavalandOreRedeemerComponent> ent, ref MaterialEntitiesEjectedEvent args)
     {
-        ent.Comp.ProcessedMaterials.TryGetValue(args.Material, out var processed);
+        ent.Comp.ProcessedMaterials.TryGetValue(args.Material, out var trackedProcessed);
+        // Every ejected unit entered this redeemer, so it must never become fresh ore again.
+        var processed = Math.Max(trackedProcessed, args.Amount);
         ent.Comp.CreditedMaterials.TryGetValue(args.Material, out var credited);
         if (processed <= 0 && credited <= 0)
             return;

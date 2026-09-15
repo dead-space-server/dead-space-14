@@ -13,9 +13,13 @@ public sealed class ConfirmableActionSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
 
+    private EntityQuery<ActionComponent> _actionQuery; // DS14
+
     public override void Initialize()
     {
         base.Initialize();
+
+        _actionQuery = GetEntityQuery<ActionComponent>(); // DS14
 
         SubscribeLocalEvent<ConfirmableActionComponent, ActionAttemptEvent>(OnAttempt);
     }
@@ -41,6 +45,17 @@ public sealed class ConfirmableActionSystem : EntitySystem
     {
         if (args.Cancelled)
             return;
+
+        // DS14-start
+        if (_actionQuery.TryComp(ent, out var action))
+        {
+            if (action.Toggled && !ent.Comp.ConfirmWhenToggled)
+                return;
+
+            if (!action.Toggled && !ent.Comp.ConfirmWhenUntoggled)
+                return;
+        }
+        // DS14-end
 
         // if not primed, prime it and cancel the action
         if (ent.Comp.NextConfirm is not {} confirm)

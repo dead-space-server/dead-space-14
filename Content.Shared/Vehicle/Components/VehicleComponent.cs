@@ -54,6 +54,12 @@ public sealed partial class VehicleComponent : Component
     [DataField, AutoNetworkedField]
     public bool RequiresHands = true;
 
+    /// <summary>
+    /// Whether the operator can attack while operating this vehicle.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool CanAttack;
+
     // DS14-start
     /// <summary>
     /// If true, the vehicle requires an operator to run.

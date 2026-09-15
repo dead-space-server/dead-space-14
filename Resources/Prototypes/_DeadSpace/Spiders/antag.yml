@@ -16,9 +16,7 @@
   description: Центр улья, связующее звено между пауками.
   id: TelecomServerSpiderTerror
   components:
-  - type: Tag
-    tags:
-    - Wall
+  - type: Wall
   - type: Physics
     bodyType: Static
   - type: Sprite

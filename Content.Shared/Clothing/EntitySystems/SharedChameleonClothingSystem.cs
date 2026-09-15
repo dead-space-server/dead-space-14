@@ -202,6 +202,9 @@ public abstract class SharedChameleonClothingSystem : EntitySystem
         if (!args.CanAccess || !args.CanInteract || _lock.IsLocked(ent.Owner))
             return;
 
+        if (!ent.Comp.ShowVerb)
+            return;
+
         // Can't pass args from a ref event inside of lambdas
         var user = args.User;
 
@@ -318,7 +321,7 @@ public abstract class SharedChameleonClothingSystem : EntitySystem
     }
 
     // TODO: Predict and use component states for the UI
-    public virtual void SetSelectedPrototype(EntityUid uid, string? protoId, bool forceUpdate = false,
+    public virtual void SetSelectedPrototype(EntityUid uid, string? protoId, bool forceUpdate = false, bool validate = true,
         ChameleonClothingComponent? component = null)
     { }
 }

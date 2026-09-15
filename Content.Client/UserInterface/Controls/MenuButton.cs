@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Content.Client.DeadSpace.Stylesheets;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
 using Robust.Client.UserInterface.Controls;
@@ -15,10 +16,17 @@ public sealed class MenuButton : ContainerButton
     public const string StyleClassLabelTopButton = "topButtonLabel";
     // public const string StyleClassRedTopButton = "topButtonLabel";
 
-    // TODO: KIIIIIILLLLLLLLLLLLLLLLLLLLLLLLLLL --kaylie.
-    private static readonly Color ColorNormal = Color.FromHex("#99a7b3"); // primary color[0] + 0.24 L
-    private static readonly Color ColorHovered = Color.FromHex("#acbac6"); // primary color[0] + 0.30 L
-    private static readonly Color ColorPressed = Color.FromHex("#75838e"); // primary color[0] + 0.12 L
+    // DS14-start
+    private static Color ColorNormal => DeadSpaceStylePalette.ClassicChrome
+        ? Color.FromHex("#99A7B3")
+        : DeadSpaceStylePalette.TextInactive;
+    private static Color ColorHovered => DeadSpaceStylePalette.ClassicChrome
+        ? Color.FromHex("#ACBAC6")
+        : DeadSpaceStylePalette.Text;
+    private static Color ColorPressed => DeadSpaceStylePalette.ClassicChrome
+        ? Color.FromHex("#75838E")
+        : DeadSpaceStylePalette.Cyan;
+    // DS14-end
 
     private const float VertPad = 4f;
 

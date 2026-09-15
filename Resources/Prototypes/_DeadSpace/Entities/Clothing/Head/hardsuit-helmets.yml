@@ -1,5 +1,5 @@
 - type: entity
-  parent: ClothingHeadHelmetHardsuitSyndieCommander
+  parent: [ClothingHeadHelmetHardsuitSyndieCommander]
   id: ClothingHeadHelmetHardsuitAgentForestGhost
   name: шлем скафандра «Лесной призрак»
   description: Бронированный шлем скафандра «Лесной призрак». Визор гасит лишний свет, а встроенная лампа помогает найти цель в темноте.
@@ -12,7 +12,7 @@
     color: red
 
 - type: entity
-  parent: ClothingHeadHelmetHardsuitMime
+  parent: [ClothingHeadHelmetHardsuitMime]
   id: ClothingHeadHelmetHardsuitMedEVA
   name: шлем скафандра медицинского отдела
   description: Герметичный скафандр, защищающий как от перепада давления, так и от температур.
@@ -34,7 +34,7 @@
     reduction: 0.2
 
 - type: entity
-  parent: ClothingHeadHelmetHardsuitMime
+  parent: [ClothingHeadHelmetHardsuitMime]
   id: ClothingHeadHelmetHardsuitMedChemEVA
   name: шлем скафандра химика
   description: Герметичный скафандр, защищающий как от перепада давления, так и от температур.

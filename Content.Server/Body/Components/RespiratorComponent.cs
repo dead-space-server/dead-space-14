@@ -105,7 +105,7 @@ namespace Content.Server.Body.Components
 
         // start-backmen: blob
         /// <summary>
-        /// Whether the entity is immuned to pressure (i.e possess the PressureImmunity component)
+        /// Whether the entity is immune to suffocation (for example, blob zombies).
         /// </summary>
         [ViewVariables, Access(typeof(Backmen.Blob.ZombieBlobSystem))]
         public bool HasImmunity = false;

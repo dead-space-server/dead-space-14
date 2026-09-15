@@ -1,0 +1,255 @@
+- type: entity
+  parent: BasePlushie
+  id: BaseAkiPlushie
+  name: seal
+  abstract: true
+  components:
+  - type: EmitSoundOnUse
+    sound: &SealPlushieSound
+      path: /Audio/_LW/Plushie/frfrfr.ogg
+  - type: EmitSoundOnLand
+    sound: *SealPlushieSound
+  - type: EmitSoundOnActivate
+    sound: *SealPlushieSound
+  - type: MeleeWeapon
+    soundHit: *SealPlushieSound
+
+- type: entity
+  parent: BaseAkiPlushie
+  id: Akiplushie1
+  name: plush White Seal
+  description: A plush toy that smells like vanilla, you don't want to eat it...
+  components:
+  - type: Sprite
+    sprite: _LuaM/Objects/Fun/seal.rsi
+    state: seal_white
+
+
+- type: entity
+  parent: BaseAkiPlushie
+  id: Akiplushie2
+  name: plush Dalmatian Seal
+  description: Somewhere far away in space, his 100 brothers are located.
+  components:
+  - type: Sprite
+    sprite: _LuaM/Objects/Fun/seal.rsi
+    state: seal_leopard
+
+- type: entity
+  parent: BaseAkiPlushie
+  id: Akiplushie3
+  name: plush Brown Seal
+  description: A plush toy that smells like chocolate and cinnamon, why do you want to make cookies?....
+  components:
+  - type: Sprite
+    sprite: _LuaM/Objects/Fun/seal.rsi
+    state: seal_brown
+
+- type: entity
+  parent: BaseAkiPlushie
+  id: Akiplushie4
+  name: plush Cream Seal
+  description: This is not coffee, this is crème brûlée.
+  components:
+  - type: Sprite
+    sprite: _LuaM/Objects/Fun/seal.rsi
+    state: seal_cream
+
+- type: entity
+  parent: BaseAkiPlushie
+  id: Akiplushie5
+  name: plush Orange Seal
+  description: The label reads in very aggressive handwriting "HE WAS SUPPOSED TO BE A MANDARIN BUT BECAME A CARROT".
+  components:
+  - type: Sprite
+    sprite: _LuaM/Objects/Fun/seal.rsi
+    state: seal_orange
+
+- type: entity
+  parent: BaseAkiPlushie
+  id: Akiplushie6
+  name: plush Crystal
+  description: He clearly shouldn't be here.
+  components:
+  - type: Sprite
+    sprite: _LuaM/Objects/Fun/seal.rsi
+    state: Plushie_Crystal
+
+- type: entity
+  parent: BaseAkiPlushie
+  id: Akiplushie7
+  name: plush Black Seal
+  description: The label on this toy reads "I am a cloud cloud cloud and not a seal at all".
+  components:
+  - type: Sprite
+    sprite: _LuaM/Objects/Fun/seal.rsi
+    state: seal_black
+
+- type: entity
+  parent: BaseAkiPlushie
+  id: Akiplushie8
+  name: plush Hellish Seal
+  description: A demonic seal that was summoned from the depths of the underworld!
+  components:
+  - type: Sprite
+    sprite: _LuaM/Objects/Fun/seal.rsi
+    state: seal_deval
+
+- type: entity
+  parent: BaseAkiPlushie
+  id: Akiplushie9
+  name: plush Turquoise Seal
+  description: He is like a diamond, but only a seal.. why do you think he has "Silken Touch?"...
+  components:
+  - type: Sprite
+    sprite: _LuaM/Objects/Fun/seal.rsi
+    state: Blue_Seal
+
+- type: entity
+  parent: BaseAkiPlushie
+  id: Akiplushie10
+  name: plush Sealness moth
+  description: A virus appeared that turns humanoids into seals.. but inside the toy you can hear the gurgling of spiced rum.
+  components:
+  - type: Sprite
+    sprite: _LuaM/Objects/Fun/seal.rsi
+    state: seal_agony
+
+- type: entity
+  parent: BaseAkiPlushie
+  id: Akiplushie11
+  name: plush Green Seal
+  description: The label on this toy read "I am a crocodile croco-nom and I will croco-do".
+  components:
+  - type: Sprite
+    sprite: _LuaM/Objects/Fun/seal.rsi
+    state: seal_green
+
+- type: entity
+  parent: BaseAkiPlushie
+  id: Akiplushie12
+  name: plush Pirate Seal
+  description: Well, do you get it? Do you get it? Let's stomp on it.
+  components:
+  - type: Sprite
+    sprite: _LuaM/Objects/Fun/seal.rsi
+    state: seal_pirate
+
+- type: entity
+  parent: BaseAkiPlushie
+  id: Akiplushie13
+  name: plush Ice Cream Seal
+  description: Looking at this seal, you remember your entire childhood.. and the first ice cream that fell.
+  components:
+  - type: Sprite
+    sprite: _LuaM/Objects/Fun/seal.rsi
+    state: seal_ice
+
+- type: entity
+  parent: BaseAkiPlushie
+  id: Akiplushie14
+  name: plush Eggplant Seal
+  description: Well, at least it's not a zucchini.
+  components:
+  - type: Sprite
+    sprite: _LuaM/Objects/Fun/seal.rsi
+    state: seal_eggplant
+
+- type: entity
+  parent: BaseAkiPlushie
+  id: Akiplushie15
+  name: plush Banana Seal
+  description: I'm a banana, I-I'm a banana banana... peel the banana, peel the banana, banana.
+  components:
+  - type: Sprite
+    sprite: _LuaM/Objects/Fun/seal.rsi
+    state: seal_banana
+
+- type: entity
+  parent: BaseAkiPlushie
+  id: Akiplushie16
+  name: plush Zakusik
+  description: Ask the most charismatic vulp to bark, and she will bark.
+  components:
+  - type: Sprite
+    sprite: _LuaM/Objects/Fun/seal.rsi
+    state: Zakysik
+
+- type: entity
+  parent: BaseAkiPlushie
+  id: Akiplushie17
+  name: plush Avvas-Dar
+  description: Pray. And your prayers will be heard. But no guarantees.
+  components:
+  - type: Sprite
+    sprite: _LuaM/Objects/Fun/seal.rsi
+    state: Awas_dar
+  - type: EmitSoundOnUse
+    sound:
+      path: /Audio/Items/Toys/weh.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/Items/Toys/weh.ogg
+  - type: EmitSoundOnActivate
+    sound:
+      path: /Audio/Items/Toys/weh.ogg
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/Items/Toys/weh.ogg
+
+- type: entity
+  parent: BaseAkiPlushie
+  id: Akiplushie18
+  name: plush Avvas-Dar
+  description: Pray. And your prayers will be heard. But no guarantees.
+  components:
+  - type: Sprite
+    sprite: _LuaM/Objects/Fun/seal.rsi
+    state: AwasDar
+  - type: EmitSoundOnUse
+    sound:
+      path: /Audio/Items/Toys/weh.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/Items/Toys/weh.ogg
+  - type: EmitSoundOnActivate
+    sound:
+      path: /Audio/Items/Toys/weh.ogg
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/Items/Toys/weh.ogg
+  - type: Clothing
+    quickEquip: false
+    sprite: _LuaM/Objects/Fun/seal.rsi
+    slots:
+    - HEAD
+
+- type: entity
+  parent: BaseAkiPlushie
+  id: Akiplushie19
+  name: plush Scientific Seal
+  description: "Greetings to the space workers, today on our program. artifacts, research, and test subjects on a voluntary basis (almost)."
+  components:
+  - type: Sprite
+    sprite: _LuaM/Objects/Fun/seal.rsi
+    state: Nauch_seal
+
+- type: entity
+  parent: BaseAkiPlushie
+  id: Akiplushie20
+  name: plush Bee Seal
+  description: Bzz bzz?
+  components:
+  - type: Sprite
+    sprite: _LuaM/Objects/Fun/seal.rsi
+    state: seal_Bee
+
+- type: entity
+  parent: BaseAkiPlushie
+  id: Akiplushie21
+  name: plush bread seal
+  description: This is not food.
+  components:
+  - type: Sprite
+    sprite: _LuaM/Objects/Fun/seal.rsi
+    state: seal_bread

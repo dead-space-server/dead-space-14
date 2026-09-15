@@ -57,7 +57,7 @@
     voice: Glados
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: BSAALeaderHelmet
   categories: [ HideSpawnMenu ]
   name: шлем лидера АПБТ
@@ -140,7 +140,7 @@
     voice: Glados
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: BSAAFighterHelmet
   categories: [ HideSpawnMenu ]
   name: шлем скафандра бойца АПБТ
@@ -223,7 +223,7 @@
     voice: Glados
     
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: BSAAMedicHelmet
   categories: [ HideSpawnMenu ]
   name: шлем скафандра медика АПБТ
@@ -293,7 +293,7 @@
   - type: HardsuitIdentification
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: BSAASpecialistHelmet
   categories: [ HideSpawnMenu ]
   name: шлем скафандра специалиста АПБТ
@@ -362,7 +362,7 @@
   - type: HardsuitIdentification
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: BSAAFlamerHelmet
   categories: [ HideSpawnMenu ]
   name: шлем скафандра флеймера АПБТ

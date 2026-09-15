@@ -2,24 +2,21 @@
               xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
               Margin="4"
               Orientation="Vertical">
-    <PanelContainer StyleClasses="DS14MenuListRow">
-        <BoxContainer Orientation="Horizontal">
-            <Label Name="NumberLabel"
-                   Align="Right"
-                   SetWidth="26"
-                   ClipText="True"
-                   StyleClasses="DS14MenuProfileLabel"/>
-            <Label Name="TimeLabel"
-                   Align="Center"
-                   SetWidth="100"
-                   ClipText="True"
-                   StyleClasses="DS14MenuProfileLabel"/>
-            <Label Name="AccessorLabel"
-                   Align="Left"
-                   SetWidth="390"
-                   ClipText="True"
-                   StyleClasses="DS14MenuProfileLabel"/>
-        </BoxContainer>
-    </PanelContainer>
+    <!-- DS14-start -->
+    <BoxContainer Orientation="Horizontal" Margin="6 4">
+        <Label Name="NumberLabel"
+               Align="Right"
+               SetWidth="26"
+               ClipText="True"/>
+        <Label Name="TimeLabel"
+               Align="Center"
+               SetWidth="100"
+               ClipText="True"/>
+        <Label Name="AccessorLabel"
+               Align="Left"
+               SetWidth="390"
+               ClipText="True"/>
+    </BoxContainer>
+    <!-- DS14-end -->
     <customControls:HSeparator Margin="0 5 0 5"/>
 </BoxContainer>

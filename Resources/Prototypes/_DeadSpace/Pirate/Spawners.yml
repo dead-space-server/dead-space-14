@@ -10,12 +10,14 @@
     mindRoles:
     - MindRoleGhostRoleTeamAntagonist
     requirements:
+    - !type:OverallPlaytimeRequirement
+      time: 540000 # 150 hours
     - !type:DepartmentTimeRequirement
       department: Security
-      time: 36000
+      time: 72000  # 20 hours
     - !type:DepartmentTimeRequirement
       department: Command
-      time: 36000
+      time: 72000 # 20 hours
     raffle:
       settings: short
   - type: Sprite
@@ -39,9 +41,11 @@
     mindRoles:
     - MindRoleGhostRoleTeamAntagonist
     requirements:
+    - !type:OverallPlaytimeRequirement
+      time: 540000 # 150 hours
     - !type:DepartmentTimeRequirement
       department: Security
-      time: 36000
+      time: 72000 # 20 hours
     raffle:
       settings: short
   - type: Sprite

@@ -13,8 +13,11 @@ using static Content.Shared.Paper.PaperComponent;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 // DS14-start
+using System.Text.RegularExpressions;
 using Content.Shared.DeadSpace.SignatureOnPaper.Components;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Mind;
+using Content.Shared.Roles.Jobs;
 using Robust.Shared.Timing;
 using Robust.Shared.Network;
 // DS14-end
@@ -50,6 +53,13 @@ public sealed class PaperSystem : EntitySystem
     private static readonly ProtoId<TagPrototype> WriteIgnoreStampsTag = "WriteIgnoreStamps";
     private static readonly ProtoId<TagPrototype> WriteReWriteTag = "WriteReWrite";
     private static readonly ProtoId<TagPrototype> WriteTag = "Write";
+
+    // DS14-start
+    private const string ClownJobId = "Clown";
+    private const string ForcedPaperFont = "ComicSans";
+
+    private static readonly Regex PaperFontTagRegex = new(@"\[/pfont\]|\[pfont=(?:""[^""]*""|[^\]]*)\]");
+    // DS14-end
 
     private EntityQuery<PaperComponent> _paperQuery;
     private readonly Dictionary<EntityUid, HashSet<EntityUid>> _writers = new(); // DS14
@@ -315,11 +325,18 @@ public sealed class PaperSystem : EntitySystem
         if (ev.Cancelled)
             return;
 
-        if (args.Text.Length <= entity.Comp.ContentSize)
-        {
-            SetContent(entity, args.Text);
+        // DS14-start
+        // Clowns always write in Comic Sans and cannot change it.
+        var text = args.Text;
+        if (IsForcedFontWriter(args.Actor))
+            text = ApplyForcedPaperFont(text);
+        // DS14-end
 
-            var paperStatus = string.IsNullOrWhiteSpace(args.Text) ? PaperStatus.Blank : PaperStatus.Written;
+        if (text.Length <= entity.Comp.ContentSize)
+        {
+            SetContent(entity, text);
+
+            var paperStatus = string.IsNullOrWhiteSpace(text) ? PaperStatus.Blank : PaperStatus.Written; // DS14
 
             if (entity.Comp.Signatures.Count > 0) // DS14-signatures
                 paperStatus = PaperStatus.Written;
@@ -342,7 +359,7 @@ public sealed class PaperSystem : EntitySystem
 
             _adminLogger.Add(LogType.Chat,
                 LogImpact.Low,
-                $"{ToPrettyString(args.Actor):player} has written on {ToPrettyString(entity):entity} the following text: {args.Text}");
+                $"{ToPrettyString(args.Actor):player} has written on {ToPrettyString(entity):entity} the following text: {text}");
 
             _audio.PlayPvs(entity.Comp.Sound, entity);
         }
@@ -509,6 +526,20 @@ public sealed class PaperSystem : EntitySystem
     private bool HasWriters(EntityUid paper)
     {
         return _writers.TryGetValue(paper, out var writers) && writers.Count > 0;
+    }
+
+    private bool IsForcedFontWriter(EntityUid actor)
+    {
+        // The shared systems are registered client/server-side as derived
+        // classes, so resolve them through the entity manager instead of IoC.
+        return EntityManager.System<SharedMindSystem>().TryGetMind(actor, out var mindId, out _) &&
+               EntityManager.System<SharedJobSystem>().MindHasJobWithId(mindId, ClownJobId);
+    }
+
+    private string ApplyForcedPaperFont(string text)
+    {
+        text = PaperFontTagRegex.Replace(text, string.Empty);
+        return $"[pfont=\"{ForcedPaperFont}\"]{text}[/pfont]";
     }
     // DS14-end
 }

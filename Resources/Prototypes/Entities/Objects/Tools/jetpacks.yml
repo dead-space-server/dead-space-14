@@ -62,6 +62,8 @@
           False: {state: icon}
   - type: StaticPrice
     price: 100
+  - type: Tag # DS14
+    tags: []
 
 - type: entity
   parent: BaseAction

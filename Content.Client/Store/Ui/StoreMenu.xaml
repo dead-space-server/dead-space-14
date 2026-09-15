@@ -1,6 +1,5 @@
 <DefaultWindow
     xmlns="https://spacestation14.io"
-    xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     Title="{Loc 'store-ui-default-title'}"
     MinSize="512 512"
     SetSize="512 512">
@@ -24,15 +23,13 @@
                     Text="{Loc 'store-ui-refund-text'}" />
             </BoxContainer>
             <LineEdit Name="SearchBar" Margin="4" PlaceHolder="Search" HorizontalExpand="True"/>
-                <PanelContainer VerticalExpand="True">
-                <PanelContainer.PanelOverride>
-                    <gfx:StyleBoxFlat BackgroundColor="#000000FF" />
-                </PanelContainer.PanelOverride>
+            <!-- DS14-start -->
+            <PanelContainer VerticalExpand="True" StyleClasses="BackgroundDark">
+                <!-- DS14-end -->
                 <BoxContainer Orientation="Horizontal" VerticalExpand="True">
-                    <PanelContainer VerticalExpand="True">
-                        <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat BackgroundColor="#80808005" />
-                        </PanelContainer.PanelOverride>
+                    <!-- DS14-start -->
+                    <PanelContainer VerticalExpand="True" StyleClasses="PanelInsetDeep">
+                        <!-- DS14-end -->
                         <BoxContainer Name="CategoryListContainer" Orientation="Vertical">
                             <!--  Category buttons are added here by code  -->
                         </BoxContainer>

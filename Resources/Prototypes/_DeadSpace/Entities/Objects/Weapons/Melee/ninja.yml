@@ -1,0 +1,32 @@
+- type: entity
+  name: меч самурая
+  parent: BaseSword
+  id: SwordSamurai
+  description: Изящное и смертоносное оружие, выкованное по древним традициям самураев.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Melee/samurai_sword.rsi
+  - type: MeleeWeapon
+    attackRate: 1
+    damage:
+      types:
+        Piercing: 10
+    soundHit:
+        path: /Audio/Weapons/bladeslice.ogg
+    wideAnimationRotation: -135
+    angle: 0
+  - type: Reflect
+    reflectProb: .15
+    spread: 10
+  - type: Item
+    sprite: _DeadSpace/Objects/Weapons/Melee/samurai_sword.rsi
+  - type: DisarmMalus
+  - type: Tag
+    tags:
+    - ParryStandardWeapon
+
+- type: entity
+  name: игрушечная энергокатана
+  parent: [EnergyKatana, BaseToySword]
+  id: ToyEnergyKatana
+  description: Катана, наделённая сильной энергией.

@@ -43,7 +43,7 @@ namespace Content.Server.Atmos.Components
         public float LowPressureModifier = 0f;
 
         /// <summary>
-        /// Whether the entity is immuned to pressure (i.e possess the PressureImmunity component)
+        /// Whether the entity is immune to pressure damage.
         /// </summary>
         [ViewVariables(VVAccess.ReadWrite)]
         public bool HasImmunity = false;

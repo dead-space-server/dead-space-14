@@ -4,29 +4,25 @@ using Content.Server.Gatherable;
 using Content.Server.Gatherable.Components;
 using Content.Shared.Maps;
 using Content.Shared.Mining.Components;
-using Content.Shared.Tag;
 using Content.Shared.Timing;
+using Content.Shared.Wall;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
 public sealed class LavalandSonicJackhammerSystem : EntitySystem
 {
-    private static readonly ProtoId<TagPrototype> WallTag = "Wall";
-
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
     [Dependency] private readonly GatherableSystem _gatherable = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly UseDelaySystem _useDelay = default!;
@@ -128,7 +124,7 @@ public sealed class LavalandSonicJackhammerSystem : EntitySystem
     private bool IsMineableWall(Entity<GatherableComponent> ent, EntityUid toolUid)
     {
         return !TerminatingOrDeleted(ent.Owner) &&
-               _tag.HasTag(ent.Owner, WallTag) &&
+               HasComp<WallComponent>(ent.Owner) &&
                !_whitelist.IsWhitelistFailOrNull(ent.Comp.ToolWhitelist, toolUid);
     }
 
@@ -144,7 +140,7 @@ public sealed class LavalandSonicJackhammerSystem : EntitySystem
         foreach (var uid in _entities)
         {
             if (TerminatingOrDeleted(uid) ||
-                !_tag.HasTag(uid, WallTag) ||
+                !HasComp<WallComponent>(uid) ||
                 !TryComp<GatherableComponent>(uid, out var gatherableComp) ||
                 _whitelist.IsWhitelistFailOrNull(gatherableComp.ToolWhitelist, toolUid))
             {

@@ -1,0 +1,34 @@
+- type: entity
+  parent: [ClothingOuterBaseMedium, AllowSuitStorageClothing, BaseSecurityContraband]
+  id: ClothingOuterArmorMukhtar
+  name: K9 vest
+  description: Light tactical armored vest for security service dogs. Features are blue patches with a white letter "N" on the sides. Provides minimal protection against most types of damage. Suitable for long-term wear and does not restrict movement.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/OuterClothing/Armor/k9_armor.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/OuterClothing/Armor/k9_armor_equipped.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.9
+        Heat: 0.9
+  - type: StaminaResistance
+    damageCoefficient: 0.65
+  - type: ExplosionResistance
+    damageCoefficient: 0.90
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/armor_rustle/plate_armor_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/armor_rustle/plate_armor_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/armor_rustle/plate_armor_drop.ogg
+  - type: Tag
+    tags:
+    - MukhtarWearable
+    - PetOnly

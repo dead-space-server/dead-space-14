@@ -1,0 +1,104 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Created by zeroqwq (Discord) for Space Station 14 Server Мёртвый Космос Союз-1",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "can-connector"
+        },
+        {
+            "name": "locked"
+        },
+        {
+            "name": "unlocked"
+        },
+        {
+            "name": "can-o0",
+            "delays": [
+                [
+                    0.5,
+                    0.5
+                ]
+            ]
+        },
+        {
+            "name": "can-o1"
+        },
+        {
+            "name": "can-o2"
+        },
+        {
+            "name": "can-o3"
+        },
+        {
+            "name": "can-oa1"
+        },
+        {
+            "name": "can-open"
+        },
+        {
+            "name": "scrubber-connector"
+        },
+        {
+            "name": "scrubber-open"
+        },
+        {
+            "name": "bounty"
+        },
+        {
+            "name": "captains_paper"
+        },
+        {
+            "name": "invoice"
+        },
+        {
+            "name": "paper"
+        },
+        {
+            "name": "brizidium"
+        },
+        {
+            "name": "brizidium-1"
+        },
+        {
+            "name": "fixirium"
+        },
+        {
+            "name": "fixirium-1"
+        },
+        {
+            "name": "hilium"
+        },
+        {
+            "name": "hilium-1"
+        },
+        {
+            "name": "hydrogen"
+        },
+        {
+            "name": "hydrogen-1"
+        },
+        {
+            "name": "iprit"
+        },
+        {
+            "name": "iprit-1"
+        },
+        {
+            "name": "nitriatium"
+        },
+        {
+            "name": "nitriatium-1"
+        },
+        {
+            "name": "nitryl"
+        },
+        {
+            "name": "nitryl-1"
+        }
+    ]
+}

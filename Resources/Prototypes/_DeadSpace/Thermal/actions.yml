@@ -18,6 +18,6 @@
   components:
   - type: Action
     icon: _DeadSpace/Actions/thermal/thermal_toogle_experimental.png
-    useDelay: 8
+    useDelay: 10
   - type: InstantAction
     event: !type:ToggleThermalVisionExperimentalActionEvent

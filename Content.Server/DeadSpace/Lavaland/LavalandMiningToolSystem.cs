@@ -3,17 +3,15 @@ using Content.Server.Gatherable;
 using Content.Server.Gatherable.Components;
 using Content.Shared.Maps;
 using Content.Shared.Mining.Components;
-using Content.Shared.Tag;
+using Content.Shared.Wall;
 using Content.Shared.Whitelist;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
 public sealed class LavalandMiningToolSystem : EntitySystem
 {
-    private static readonly ProtoId<TagPrototype> WallTag = "Wall";
     private static readonly Vector2i[] CardinalOffsets =
     [
         new(1, 0),
@@ -27,7 +25,6 @@ public sealed class LavalandMiningToolSystem : EntitySystem
     [Dependency] private readonly GatherableSystem _gatherable = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly LavalandSonicJackhammerSystem _sonicJackhammer = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
 
     private readonly HashSet<EntityUid> _entities = new();
@@ -108,7 +105,7 @@ public sealed class LavalandMiningToolSystem : EntitySystem
     private bool IsMineableWall(Entity<GatherableComponent> ent, EntityUid toolUid)
     {
         return !TerminatingOrDeleted(ent.Owner) &&
-               _tag.HasTag(ent.Owner, WallTag) &&
+               HasComp<WallComponent>(ent.Owner) &&
                !_whitelist.IsWhitelistFailOrNull(ent.Comp.ToolWhitelist, toolUid);
     }
 
@@ -124,7 +121,7 @@ public sealed class LavalandMiningToolSystem : EntitySystem
         foreach (var uid in _entities)
         {
             if (TerminatingOrDeleted(uid) ||
-                !_tag.HasTag(uid, WallTag) ||
+                !HasComp<WallComponent>(uid) ||
                 !TryComp<GatherableComponent>(uid, out var gatherableComp) ||
                 _whitelist.IsWhitelistFailOrNull(gatherableComp.ToolWhitelist, toolUid))
             {

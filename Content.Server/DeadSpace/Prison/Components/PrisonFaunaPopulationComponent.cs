@@ -13,4 +13,5 @@ public sealed partial class PrisonFaunaPopulationComponent : Component
     public int InitialSpawnRemaining;
 
     public readonly Dictionary<Vector2i, TimeSpan> SectorCooldowns = new();
+    public readonly List<Box2> ResidenceExclusions = new();
 }

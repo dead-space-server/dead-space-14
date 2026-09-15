@@ -43852,7 +43852,7 @@ entities:
         id: WetFloorSign
       - amount: 2
         id: TrashBag
-      - id: LightReplacer
+      - id: LightReplacerFilled # DS14: StorageFill prototype IDs are not handled by map migrations.
       - id: BoxLightMixed
       - id: Holoprojector
       - amount: 2

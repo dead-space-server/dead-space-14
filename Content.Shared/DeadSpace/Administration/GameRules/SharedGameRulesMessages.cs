@@ -43,11 +43,9 @@ public sealed class RuleEntry
 public sealed class AddGameRuleRequestMessage : EntityEventArgs
 {
     public string RuleId { get; }
-    public string AdminName { get; }
 
-    public AddGameRuleRequestMessage(string ruleId, string adminName)
+    public AddGameRuleRequestMessage(string ruleId)
     {
         RuleId = ruleId;
-        AdminName = adminName;
     }
 }

@@ -17,8 +17,8 @@
   metabolisms:
     Food:
       effects:
-      - !type:SatiateHunger
-
+      - !type:Satiate
+        satiationType: Hunger
 - type: entity
   parent: DrinkBase
   id: DrinkCondensedMilk
@@ -81,8 +81,8 @@
   metabolisms:
     Food:
       effects:
-      - !type:SatiateHunger
-
+      - !type:Satiate
+        satiationType: Hunger
 - type: reaction
   id: BoiledCondensedMilk
   minTemp: 370

@@ -20,8 +20,6 @@ alerts-weightless-desc =
     Магнитные ботинки и джетпак помогут вам передвигаться с большей эффективностью.
 alerts-walking-name = Шаг
 alerts-walking-desc = Вы идёте шагом, двигаясь в медленном темпе.
-alerts-stunned-name = [color=yellow]Оглушены[/color]
-alerts-stunned-desc = Вы [color=yellow]оглушены[/color]! Что-то мешает вам двигаться или взаимодействовать с объектами.
 alerts-knockdown-name = [color=yellow]На полу[/color]
 alerts-knockdown-desc = Вы оказались [color=yellow]на полу[/color]! Вы на чём-то поскользнулись или вас толкнули, помешав вашему движению.
 alerts-handcuffed-name = [color=yellow]В наручниках[/color]
@@ -54,10 +52,6 @@ alerts-thirsty-name = [color=yellow]Жажда[/color]
 alerts-thirsty-desc = Было бы неплохо чего-нибудь попить.
 alerts-parched-name = [color=red]Сильная жажда[/color]
 alerts-parched-desc = Вы ужасно хотите пить. Жажда вас замедляет.
-alerts-muted-name = Заглушены
-alerts-muted-desc = Вы потеряли способность говорить.
-alerts-vow-silence-name = Обет молчания
-alerts-vow-silence-desc = Вы дали обет, запрещающий устное или письменное общение, в рамках инициации в Мистико Тагма Мимон. Щёлкните по иконке, чтобы нарушить свой обет.
 alerts-vow-broken-name = Нарушенный обет
 alerts-vow-broken-desc = Вы нарушили свою клятву, данную Мимам. Теперь вы можете говорить и писать, но вы потеряли свои мимские способности как минимум на 5 минут!!! Щёлкните по иконке, чтобы попытаться дать обет молчания снова.
 alerts-pulled-name = Вас тянут
@@ -68,8 +62,6 @@ alerts-bleed-name = [color=red]Кровотечение[/color]
 alerts-bleed-desc = У вас [color=red]кровотечение[/color].
 alerts-pacified-name = [color=green]Пацифизм[/color]
 alerts-pacified-desc = Вы чувствуете себя умиротворённо и не можете вредить живым существам.
-alerts-adrenaline-name = [color=red]Адреналин[/color]
-alerts-adrenaline-desc = Вас переполняет адреналин: боль не будет замедлять вас.
 alerts-suit-power-name = Заряд костюма
 alerts-suit-power-desc = Запас энергии вашего костюма космического ниндзя.
 alerts-magboots-name = Магнитные ботинки
@@ -80,6 +72,8 @@ alerts-revenant-corporeal-name = Материальность
 alerts-revenant-corporeal-desc = Вы физически воплотились. Окружающие могут видеть и наносить вам вред.
 alerts-rooted-name = Укоренены
 alerts-rooted-desc = Вы прикреплены к земле. Вы не можете подскользнуться, но вы будете впитывать все жидкости под вами.
+alerts-changeling-chemicals-name = Химикаты
+alerts-changeling-chemicals-desc = Запас химикатов для способностей генокрада. Постепенно восстанавливается.
 alerts-stealthy-name = Карманничество
 alerts-stealthy-desc = Определяет режим скрытой кражи. Нажмите для переключения.
 alerts-prying-name = Открывашка

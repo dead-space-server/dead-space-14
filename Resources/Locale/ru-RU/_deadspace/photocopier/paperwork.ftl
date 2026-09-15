@@ -58,6 +58,7 @@ paperwork-form-title-command-15 = Свидетельство о повышени
 paperwork-form-title-command-17 = Разрешение на использование снаряжения
 paperwork-form-title-command-18 = Приказ о понижении в должности
 paperwork-form-title-command-19 = Приказ о дисциплинарном взыскание
+paperwork-form-title-command-20 = Приказ о повышении
 paperwork-form-title-engineering-0 = Стандартный шаблон документа
 paperwork-form-title-engineering-1 = Заказ на производство продукта
 paperwork-form-title-engineering-2 = Отчёт об изучении объекта

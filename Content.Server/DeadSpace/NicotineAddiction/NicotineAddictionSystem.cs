@@ -9,23 +9,16 @@ namespace Content.Server.DeadSpace.NicotineAddiction;
 public sealed class NicotineAddictionSystem : EntitySystem
 {
     private const string NicotineReagentId = "Nicotine";
-    private const float UpdateInterval = 1f;
 
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
 
-    private float _updateAccumulator;
-
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
 
-        _updateAccumulator += frameTime;
-        if (_updateAccumulator < UpdateInterval)
-            return;
-
-        _updateAccumulator %= UpdateInterval;
+        // Cigarettes add less nicotine than one metabolism tick removes, so it must be detected every frame.
         var now = _timing.CurTime;
         var query = EntityQueryEnumerator<NicotineAddictionComponent>();
         while (query.MoveNext(out var uid, out var comp))

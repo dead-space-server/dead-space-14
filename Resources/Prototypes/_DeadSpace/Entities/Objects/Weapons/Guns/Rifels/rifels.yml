@@ -80,6 +80,7 @@
   id: WeaponRifleXC67
   name: штурмовая винтовка xC-67
   description: Прототип новой штурмовой винтовки от создателей знаменитой С-20r. Использует патрон 5.56х45 мм. Усовершенствованная эргономика позволяет достичь превосходных показателей точности стрельбы.
+  suffix: Автомат
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Weapons/Guns/Rifels/xc67.rsi

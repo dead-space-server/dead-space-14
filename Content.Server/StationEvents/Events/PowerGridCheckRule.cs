@@ -3,6 +3,7 @@ using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Server.StationEvents.Components;
 using Content.Shared.GameTicking.Components;
+using Content.Shared.Station;
 using Content.Shared.Station.Components;
 using JetBrains.Annotations;
 using Robust.Shared.Audio;
@@ -16,21 +17,35 @@ namespace Content.Server.StationEvents.Events
     public sealed class PowerGridCheckRule : StationEventSystem<PowerGridCheckRuleComponent>
     {
         [Dependency] private readonly ApcSystem _apcSystem = default!;
+        [Dependency] private readonly SharedStationSystem _stationSystem = default!;
 
         protected override void Started(EntityUid uid, PowerGridCheckRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
         {
             base.Started(uid, component, gameRule, args);
 
-            if (!TryGetRandomStation(out var chosenStation))
+            if (!TryGetRandomStation(out var chosenStation, rule: uid)) // DS14
                 return;
 
             component.AffectedStation = chosenStation.Value;
 
+            var largestGrid = _stationSystem.GetLargestGrid(chosenStation.Value);
+
+            if (largestGrid == null)
+                return;
+
             var query = AllEntityQuery<ApcComponent, TransformComponent>();
-            while (query.MoveNext(out var apcUid ,out var apc, out var transform))
+            while (query.MoveNext(out var apcUid, out var apc, out var transform))
             {
-                if (apc.MainBreakerEnabled && CompOrNull<StationMemberComponent>(transform.GridUid)?.Station == chosenStation)
-                    component.Powered.Add(apcUid);
+                if (!apc.MainBreakerEnabled)
+                    continue;
+
+                if (CompOrNull<StationMemberComponent>(transform.GridUid)?.Station != chosenStation)
+                    continue;
+
+                if (transform.GridUid != largestGrid.Value)
+                    continue;
+
+                component.Powered.Add(apcUid);
             }
 
             RobustRandom.Shuffle(component.Powered);
@@ -49,7 +64,7 @@ namespace Content.Server.StationEvents.Events
 
                 if (TryComp(entity, out ApcComponent? apcComponent))
                 {
-                    if(!apcComponent.MainBreakerEnabled)
+                    if (!apcComponent.MainBreakerEnabled)
                         _apcSystem.ApcToggleBreaker(entity, apcComponent);
                 }
             }
@@ -59,7 +74,7 @@ namespace Content.Server.StationEvents.Events
             component.AnnounceCancelToken = new CancellationTokenSource();
             Timer.Spawn(3000, () =>
             {
-                Audio.PlayGlobal(component.PowerOnSound, Filter.Broadcast(), true, AudioParams.Default.WithVolume(-2f)); // DS14-Announcements
+                Audio.PlayGlobal(component.PowerOnSound, RuleStation.GetEventPlayers(uid), true, AudioParams.Default.WithVolume(-2f)); // DS14
             }, component.AnnounceCancelToken.Token);
             component.Unpowered.Clear();
         }
@@ -72,7 +87,7 @@ namespace Content.Server.StationEvents.Events
             component.FrameTimeAccumulator += frameTime;
             if (component.FrameTimeAccumulator > component.UpdateRate)
             {
-                updates = (int) (component.FrameTimeAccumulator / component.UpdateRate);
+                updates = (int)(component.FrameTimeAccumulator / component.UpdateRate);
                 component.FrameTimeAccumulator -= component.UpdateRate * updates;
             }
 

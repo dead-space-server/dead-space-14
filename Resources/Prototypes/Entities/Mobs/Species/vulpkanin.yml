@@ -27,8 +27,6 @@
     - DoorBumpOpener
     - AnomalyHost
   # DS14-end
-  - type: Hunger
-  - type: Thirst
   - type: MessyDrinker
     spillChance: 0.33
   - type: Icon

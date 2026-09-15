@@ -3,7 +3,7 @@
                MinSize="1000 600"
                SetSize="1200 720">
     <BoxContainer Orientation="Horizontal" SeparationOverride="12" Margin="10" VerticalExpand="True">
-        <PanelContainer StyleClasses="PanelDark" HorizontalExpand="True" VerticalExpand="True">
+        <PanelContainer StyleClasses="DeadSpaceSurfaceDark" HorizontalExpand="True" VerticalExpand="True"> <!-- DS14 -->
             <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="6">
                 <Label Text="{Loc admin-game-rules-current-list-title}" StyleClasses="LabelSubText" />
                 <BoxContainer Orientation="Horizontal" SeparationOverride="8">
@@ -14,7 +14,7 @@
                 </ScrollContainer>
             </BoxContainer>
         </PanelContainer>
-        <PanelContainer StyleClasses="PanelDark" VerticalExpand="True" MinSize="480 0">
+        <PanelContainer StyleClasses="DeadSpaceSurfaceDark" VerticalExpand="True" MinSize="480 0"> <!-- DS14 -->
             <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="8">
                 <Label Text="{Loc admin-game-rules-add-title}" StyleClasses="LabelSubText" />
                 <CheckBox Name="ShowIdCheckBox" Text="{Loc admin-game-rules-show-id}" />

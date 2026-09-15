@@ -79,9 +79,9 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
         RaiseNetworkEvent(new AdminSetApprovedErtTeamMessage(requestId, protoId));
     }
 
-    public void QueueAutoApprovedRequest(string protoId, string reason)
+    public void QueueAutoApprovedRequest(string protoId, string reason, bool sendNotification = true)
     {
-        RaiseNetworkEvent(new AdminCallErtMessage(protoId, reason));
+        RaiseNetworkEvent(new AdminCallErtMessage(protoId, reason, sendNotification));
     }
 
     public void AdminSendErtNow(int requestId)

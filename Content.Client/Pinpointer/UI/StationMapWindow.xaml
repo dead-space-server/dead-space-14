@@ -8,9 +8,9 @@
     <BoxContainer Orientation="Vertical">
         <!-- Station name -->
         <controls:StripeBack>
-            <PanelContainer>
-                <Label Name="StationName" Text="{Loc 'station-map-unknown-station'}" StyleClasses="LabelBig" Align="Center"/>
-            </PanelContainer>
+            <!-- DS14-start -->
+            <Label Name="StationName" Text="{Loc 'station-map-unknown-station'}" StyleClasses="DeadSpaceSectionTitle" Align="Center"/>
+            <!-- DS14-end -->
         </controls:StripeBack>
 
         <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalAlignment="Top">
@@ -31,9 +31,11 @@
         <BoxContainer Orientation="Vertical">
             <PanelContainer StyleClasses="LowDivider" />
             <BoxContainer Orientation="Horizontal" Margin="10 0 5 0" VerticalAlignment="Bottom">
-                <Label Text="{Loc 'station-map-user-interface-flavor-left'}" StyleClasses="WindowFooterText" />
-                <Label Text="{Loc 'station-map-user-interface-flavor-right'}" StyleClasses="WindowFooterText"
+                <!-- DS14-start -->
+                <Label Text="{Loc 'station-map-user-interface-flavor-left'}" StyleClasses="DeadSpaceSubtitle" />
+                <Label Text="{Loc 'station-map-user-interface-flavor-right'}" StyleClasses="DeadSpaceSubtitle"
                         HorizontalAlignment="Right" HorizontalExpand="True"  Margin="0 0 2 0" />
+                <!-- DS14-end -->
                 <TextureRect StyleClasses="NTLogoDark" Stretch="KeepAspectCentered"
                         VerticalAlignment="Center" HorizontalAlignment="Right" SetSize="19 19"/>
             </BoxContainer>

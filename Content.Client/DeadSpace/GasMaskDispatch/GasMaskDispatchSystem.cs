@@ -32,36 +32,35 @@ public sealed class GasMaskDispatchSystem : EntitySystem
         if (args.Handled)
             return;
 
-        args.Handled = true;
-
         _menu?.Close();
         _menu = new SimpleRadialMenu();
 
         var mask = ent.Owner;
+        var action = args.Action.Owner;
         var buttons = new List<RadialMenuOptionBase>
         {
-            CreateOption(mask, GasMaskDispatchCode.Code0, "gas-mask-dispatch-menu-code-0"),
-            CreateOption(mask, GasMaskDispatchCode.Code1, "gas-mask-dispatch-menu-code-1"),
-            CreateOption(mask, GasMaskDispatchCode.Code2, "gas-mask-dispatch-menu-code-2"),
-            CreateOption(mask, GasMaskDispatchCode.Code3, "gas-mask-dispatch-menu-code-3"),
+            CreateOption(mask, action, GasMaskDispatchCode.Code0, "gas-mask-dispatch-menu-code-0"),
+            CreateOption(mask, action, GasMaskDispatchCode.Code1, "gas-mask-dispatch-menu-code-1"),
+            CreateOption(mask, action, GasMaskDispatchCode.Code2, "gas-mask-dispatch-menu-code-2"),
+            CreateOption(mask, action, GasMaskDispatchCode.Code3, "gas-mask-dispatch-menu-code-3"),
         };
 
         _menu.SetButtons(buttons);
         _menu.OpenCentered();
     }
 
-    private RadialMenuOptionBase CreateOption(EntityUid mask, GasMaskDispatchCode code, string tooltipLocId)
+    private RadialMenuOptionBase CreateOption(EntityUid mask, EntityUid action, GasMaskDispatchCode code, string tooltipLocId)
     {
-        return new RadialMenuActionOption<GasMaskDispatchCode>(selected => SelectCode(mask, selected), code)
+        return new RadialMenuActionOption<GasMaskDispatchCode>(selected => SelectCode(mask, action, selected), code)
         {
             IconSpecifier = RadialMenuIconSpecifier.With(MenuIcons[code]),
             ToolTip = Loc.GetString(tooltipLocId),
         };
     }
 
-    private void SelectCode(EntityUid mask, GasMaskDispatchCode code)
+    private void SelectCode(EntityUid mask, EntityUid action, GasMaskDispatchCode code)
     {
-        RaiseNetworkEvent(new GasMaskDispatchSelectMessage(GetNetEntity(mask), code));
+        RaiseNetworkEvent(new GasMaskDispatchSelectMessage(GetNetEntity(mask), GetNetEntity(action), code));
         _menu?.Close();
     }
 }

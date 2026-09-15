@@ -1,6 +1,6 @@
 ﻿- type: body
   id: Slime
-  name: "слайм" # DS14
+  name: "Слайм (разумный)" # DS14
   root: torso
   slots:
     head:

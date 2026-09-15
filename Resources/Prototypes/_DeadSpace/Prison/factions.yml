@@ -1,0 +1,15 @@
+- type: prisonFaction
+  id: PrisonSlag
+  name: prison-faction-slag-name
+  feature: prison-faction-slag-feature
+  gear: PrisonerSlagGear
+  color: "#D9822B"
+  order: 0
+
+- type: prisonFaction
+  id: PrisonFrontier
+  name: prison-faction-frontier-name
+  feature: prison-faction-frontier-feature
+  gear: PrisonerFrontierGear
+  color: "#B33A3A"
+  order: 1

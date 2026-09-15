@@ -1,5 +1,5 @@
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase] # DS14 - use the restored pre-upstream helmet light behavior.
   id: ADTClothingHeadHelmetHardsuitCybersunBodyGuard
   categories: [ HideSpawnMenu ]
   name: шлем телохранителя Cybersun
@@ -26,7 +26,7 @@
         Radiation: 0.9
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase] # DS14 - use the restored pre-upstream helmet light behavior.
   id: ADTClothingHeadHelmetHardsuitCybersunCrysis
   categories: [ HideSpawnMenu ]
   name: шлем суперсолдата Cybersun
@@ -55,7 +55,7 @@
         Radiation: 0
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase] # DS14 - use the restored pre-upstream helmet light behavior.
   id: ADTClothingHeadHelmetHardsuitCerber
   categories: [ HideSpawnMenu ]
   name: шлем скафандра "Цербера"
@@ -79,7 +79,7 @@
         Radiation: 0.9
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase] # DS14 - use the restored pre-upstream helmet light behavior.
   id: ADTClothingHeadHelmetHardsuitSaibaSain
   categories: [ HideSpawnMenu ]
   name: шлем элитного скафандра самурая
@@ -108,7 +108,7 @@
         Radiation: 0
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase] # DS14 - use the restored pre-upstream helmet light behavior.
   id: ADTClothingHeadHelmetIlisium
   categories: [ HideSpawnMenu ]
   name: шлем Ilisium

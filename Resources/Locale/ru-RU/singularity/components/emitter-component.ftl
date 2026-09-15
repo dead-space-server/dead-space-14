@@ -11,3 +11,8 @@ comp-emitter-not-anchored = { $target } не закреплён!
 emitter-component-upgrade-fire-rate = скорострельность
 emitter-component-current-type = Установленный тип: { $type }.
 emitter-component-type-set = Установить тип: { $type }
+
+emitter-destroyed-broadcast = Запитанный эмиттер { $location } был уничтожен.
+emitter-unlocked-broadcast = Запитанный эмиттер { $location } был разблокирован.
+emitter-unpowered-broadcast = Запитанный эмиттер { $location } потерял питание.
+emitter-turn-off-broadcast = Запитанный эмиттер { $location } был выключен.

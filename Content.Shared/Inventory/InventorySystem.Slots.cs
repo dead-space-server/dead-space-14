@@ -281,6 +281,28 @@ public partial class InventorySystem : EntitySystem
             return false;
         }
 
+        /// <summary>
+        /// Advances to the next slot and returns both its container and definition.
+        /// </summary>
+        public bool MoveNext([NotNullWhen(true)] out ContainerSlot? container, [NotNullWhen(true)] out SlotDefinition? slot)
+        {
+            while (_nextIdx < _slots.Length)
+            {
+                var i = _nextIdx++;
+                slot = _slots[i];
+
+                if ((slot.SlotFlags & _flags) == 0)
+                    continue;
+
+                container = _containers[i];
+                return true;
+            }
+
+            container = null;
+            slot = null;
+            return false;
+        }
+
         public bool NextItem(out EntityUid item)
         {
             while (_nextIdx < _slots.Length)

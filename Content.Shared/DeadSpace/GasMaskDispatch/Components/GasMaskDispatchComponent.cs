@@ -27,7 +27,9 @@ public sealed partial class GasMaskDispatchComponent : Component
     /// Звук, воспроизводимый после отправки сообщения всем слушателям канала и отправителю.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public SoundSpecifier Sound = new SoundPathSpecifier("/Audio/_DeadSpace/Announcements/dispatch_please_respond.ogg");
+    public SoundSpecifier Sound = new SoundPathSpecifier(
+        "/Audio/_DeadSpace/Announcements/dispatch_please_respond.ogg",
+        AudioParams.Default.WithVolume(-8f));
 }
 
 /// <summary>
@@ -58,8 +60,9 @@ public enum GasMaskDispatchCode : byte
 /// Сообщение от клиента о выборе кода в радиальном меню запроса подкрепления.
 /// </summary>
 [Serializable, NetSerializable]
-public sealed class GasMaskDispatchSelectMessage(NetEntity mask, GasMaskDispatchCode code) : EntityEventArgs
+public sealed class GasMaskDispatchSelectMessage(NetEntity mask, NetEntity action, GasMaskDispatchCode code) : EntityEventArgs
 {
     public readonly NetEntity Mask = mask;
+    public readonly NetEntity Action = action;
     public readonly GasMaskDispatchCode Code = code;
 }

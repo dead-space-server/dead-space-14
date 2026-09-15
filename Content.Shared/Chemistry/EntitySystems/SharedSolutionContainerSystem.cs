@@ -1078,12 +1078,24 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
         var (uid, meta) = entity;
         if (!Resolve(uid, ref meta))
             throw new InvalidOperationException("Attempted to ensure solution on invalid entity.");
+
+        // DS14-start: clients may only reuse solution entities received from the server.
+        if (meta.EntityLifeStage >= EntityLifeStage.MapInitialized && NetManager.IsClient)
+        {
+            existed = TryGetSolution(uid, name, out _, out solution);
+            return existed;
+        }
+        // DS14-end
+
         var manager = EnsureComp<SolutionContainerManagerComponent>(uid);
         if (meta.EntityLifeStage >= EntityLifeStage.MapInitialized)
         {
-            EnsureSolutionEntity((uid, manager), name, out existed,
-                out var solEnt, maxVol, prototype);
-            solution = solEnt!.Value.Comp.Solution;
+            // DS14-start: preserve the nullable return contract if entity creation fails.
+            if (!EnsureSolutionEntity((uid, manager), name, out existed,
+                    out var solEnt, maxVol, prototype))
+                return false;
+            solution = solEnt.Value.Comp.Solution;
+            // DS14-end
             return true;
         }
         solution = EnsureSolutionPrototype((uid, manager), name, maxVol, prototype, out existed);

@@ -1,218 +1,255 @@
-- type: seed
+# DS14: custom plants migrated to entity prototypes for the botany refactor.
+
+- type: entity
+  parent: BasePlant
   id: sakura
-  name: seeds-sakura-name
-  noun: seeds-noun-seeds
-  displayName: seeds-sakura-display-name
-  plantRsi: _DeadSpace/Objects/Specific/Hydroponics/sakura_plant.rsi
-  packetPrototype: SakuraSeeds
-  productPrototypes:
-    - FoodSakuraFlower
-  harvestRepeat: Repeat
-  lifespan: 55
-  maturation: 6
-  production: 3
-  yield: 3
-  potency: 10
-  idealLight: 8
-  growthStages: 4
-  waterConsumption: 0.60
-  chemicals:
-    Nutriment:
-      Min: 1
-      Max: 4
-      PotencyDivisor: 20
-    Vitamin:
-      Min: 1
-      Max: 4
-      PotencyDivisor: 25
-    SakuraJuice:
-      Min: 1
-      Max: 5
-      PotencyDivisor: 5
+  name: sakura
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Hydroponics/sakura_plant.rsi
+  - type: PlantData
+    name: seeds-sakura-display-name
+    packetPrototype: SakuraSeeds
+    productPrototypes: [ FoodSakuraFlower ]
+  - type: Plant
+    lifespan: 55
+    maturation: 6
+    production: 3
+    yield: 3
+    potency: 10
+    growthStages: 4
+  - type: PlantHarvest
+    harvestRepeat: Repeat
+  - type: PlantGrowth
+    waterConsumption: 0.6
+  - type: PlantChemicals
+    chemicals:
+      Nutriment:
+        min: 1
+        max: 4
+        potencyDivisor: 20
+      Vitamin:
+        min: 1
+        max: 4
+        potencyDivisor: 25
+      SakuraJuice:
+        min: 1
+        max: 5
+        potencyDivisor: 5
 
-- type: seed
+- type: entity
+  parent: BasePlant
   id: tritiumCannabis
-  name: тритиевая конопля
-  noun: seeds-noun-seeds
-  displayName: тритиевая конопля
-  plantRsi: Objects/Specific/Hydroponics/cannabis.rsi
-  packetPrototype: TritiumCannabisSeeds
-  productPrototypes:
-    - LeavesCannabisTritium
-  harvestRepeat: Repeat
-  lifespan: 75
-  maturation: 8
-  production: 12
-  yield: 2
-  potency: 20
-  growthStages: 3
-  waterConsumption: 0.40
-  idealLight: 9
-  idealHeat: 298
-  exudeGasses:
-    Tritium: 0.1
-  chemicals:
-    THC:
-      Min: 1
-      Max: 10
-      PotencyDivisor: 10
-    SpaceDrugs:
-      Min: 1
-      Max: 5
-      PotencyDivisor: 20
+  name: tritium cannabis
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Hydroponics/cannabis.rsi
+  - type: PlantData
+    name: seeds-tritium-cannabis-name
+    packetPrototype: TritiumCannabisSeeds
+    productPrototypes: [ LeavesCannabisTritium ]
+  - type: Plant
+    lifespan: 75
+    maturation: 8
+    production: 12
+    yield: 2
+    potency: 20
+    growthStages: 3
+  - type: PlantHarvest
+    harvestRepeat: Repeat
+  - type: PlantGrowth
+    waterConsumption: 0.4
+  - type: PlantAtmospheric
+    lowHeatTolerance: 288
+    highHeatTolerance: 308
+  - type: PlantConsumeExudeGas
+    exudeGasses:
+      Tritium: 0.1
+  - type: PlantChemicals
+    chemicals:
+      THC:
+        min: 1
+        max: 10
+        potencyDivisor: 10
+      SpaceDrugs:
+        min: 1
+        max: 5
+        potencyDivisor: 20
 
-- type: seed
+- type: entity
+  parent: BasePlant
   id: CactusPlant
-  name: Кактус
-  noun: seeds-noun-seeds
-  displayName: Кактус
-  plantRsi: _DeadSpace/Objects/Specific/Hydroponics/cactus.rsi
-  packetPrototype: CactusSeeds
-  productPrototypes:
-    - FoodCactus
-  mutationPrototypes:
-    - CactusCoralPlant
-    - CactusBombPlant
-    - CactusBubblePlant
-  harvestRepeat: Repeat
-  lifespan: 125
-  maturation: 12
-  production: 3
-  yield: 3
-  potency: 10
-  idealLight: 8
-  growthStages: 6
-  waterConsumption: 0.10
-  chemicals:
-    Nutriment:
-      Min: 1
-      Max: 5
-      PotencyDivisor: 20
-    CactusJuice:
-      Min: 3
-      Max: 5
-      PotencyDivisor: 5
-    SpikeAcid:
-      Min: 1
-      Max: 1
-      PotencyDivisor: 1
+  name: cactus
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Hydroponics/cactus.rsi
+  - type: PlantData
+    name: seeds-cactus-name
+    packetPrototype: CactusSeeds
+    productPrototypes: [ FoodCactus ]
+    mutationPrototypes: [ CactusCoralPlant, CactusBombPlant, CactusBubblePlant ]
+  - type: Plant
+    lifespan: 125
+    maturation: 12
+    production: 3
+    yield: 3
+    potency: 10
+    growthStages: 6
+  - type: PlantHarvest
+    harvestRepeat: Repeat
+  - type: PlantGrowth
+    waterConsumption: 0.1
+  - type: PlantChemicals
+    chemicals:
+      Nutriment:
+        min: 1
+        max: 5
+        potencyDivisor: 20
+      CactusJuice:
+        min: 3
+        max: 5
+        potencyDivisor: 5
+      SpikeAcid:
+        min: 1
+        max: 1
+        potencyDivisor: 1
 
-- type: seed
+- type: entity
+  parent: BasePlant
   id: CactusCoralPlant
-  name: Коралловый кактус
-  noun: seeds-noun-seeds
-  displayName: коралловый кактус
-  plantRsi: _DeadSpace/Objects/Specific/Hydroponics/cactus_coral.rsi
-  packetPrototype: CactusCoralSeeds
-  productPrototypes:
-    - FoodCactusCoral
-  harvestRepeat: Repeat
-  lifespan: 34
-  maturation: 10
-  production: 6
-  yield: 1
-  potency: 10
-  idealLight: 8
-  growthStages: 6
-  waterConsumption: 1.25
-  chemicals:
-    Nutriment:
-      Min: 1
-      Max: 3
-      PotencyDivisor: 20
-    CactusJuice:
-      Min: 1
-      Max: 3
-      PotencyDivisor: 5
-    SpikeAcid:
-      Min: 1
-      Max: 2
-      PotencyDivisor: 1
+  name: coral cactus
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Hydroponics/cactus_coral.rsi
+  - type: PlantData
+    name: seeds-cactus-coral-name
+    packetPrototype: CactusCoralSeeds
+    productPrototypes: [ FoodCactusCoral ]
+  - type: Plant
+    lifespan: 34
+    maturation: 10
+    production: 6
+    yield: 1
+    potency: 10
+    growthStages: 6
+  - type: PlantHarvest
+    harvestRepeat: Repeat
+  - type: PlantGrowth
+    waterConsumption: 1.25
+  - type: PlantChemicals
+    chemicals:
+      Nutriment:
+        min: 1
+        max: 3
+        potencyDivisor: 20
+      CactusJuice:
+        min: 1
+        max: 3
+        potencyDivisor: 5
+      SpikeAcid:
+        min: 1
+        max: 2
+        potencyDivisor: 1
 
-- type: seed
+- type: entity
+  parent: BasePlant
   id: CactusBombPlant
-  name: взрывной кактус
-  noun: seeds-noun-seeds
-  displayName: взрывной кактус
-  plantRsi: _DeadSpace/Objects/Specific/Hydroponics/cactus_bomb.rsi
-  packetPrototype: CactusBombSeeds
-  productPrototypes:
-    - FoodCactusBomb
-  harvestRepeat: Repeat
-  lifespan: 34
-  maturation: 10
-  production: 6
-  yield: 1
-  potency: 10
-  idealLight: 8
-  growthStages: 6
-  waterConsumption: 1.25
-  chemicals:
-    Nutriment:
-      Min: 1
-      Max: 3
-      PotencyDivisor: 20
-    CactusJuice:
-      Min: 1
-      Max: 3
-      PotencyDivisor: 5
-    SpikeAcid:
-      Min: 1
-      Max: 2
-      PotencyDivisor: 1
+  name: explosive cactus
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Hydroponics/cactus_bomb.rsi
+  - type: PlantData
+    name: seeds-cactus-bomb-name
+    packetPrototype: CactusBombSeeds
+    productPrototypes: [ FoodCactusBomb ]
+  - type: Plant
+    lifespan: 34
+    maturation: 10
+    production: 6
+    yield: 1
+    potency: 10
+    growthStages: 6
+  - type: PlantHarvest
+    harvestRepeat: Repeat
+  - type: PlantGrowth
+    waterConsumption: 1.25
+  - type: PlantChemicals
+    chemicals:
+      Nutriment:
+        min: 1
+        max: 3
+        potencyDivisor: 20
+      CactusJuice:
+        min: 1
+        max: 3
+        potencyDivisor: 5
+      SpikeAcid:
+        min: 1
+        max: 2
+        potencyDivisor: 1
 
-- type: seed
+- type: entity
+  parent: BasePlant
   id: CactusBubblePlant
-  name: пузырчатый Кактоплюх
-  noun: seeds-noun-seeds
-  displayName: пузырчатый кактоплюх
-  plantRsi: _DeadSpace/Objects/Specific/Hydroponics/cactus_bubble.rsi
-  packetPrototype: CactusBubbleSeeds
-  productPrototypes:
-    - FoodCactusBubble
-  harvestRepeat: Repeat
-  lifespan: 34
-  maturation: 10
-  production: 6
-  yield: 3
-  potency: 10
-  idealLight: 8
-  growthStages: 6
-  waterConsumption: 1.25
-  chemicals:
-    Nutriment:
-      Min: 1
-      Max: 3
-      PotencyDivisor: 20
-    Panacemycin:
-      Min: 1
-      Max: 3
-      PotencyDivisor: 5
-    Septomycin:
-      Min: 1
-      Max: 2
-      PotencyDivisor: 1
-      
-- type: seed
+  name: bubble cactus
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Hydroponics/cactus_bubble.rsi
+  - type: PlantData
+    name: seeds-cactus-bubble-name
+    packetPrototype: CactusBubbleSeeds
+    productPrototypes: [ FoodCactusBubble ]
+  - type: Plant
+    lifespan: 34
+    maturation: 10
+    production: 6
+    yield: 3
+    potency: 10
+    growthStages: 6
+  - type: PlantHarvest
+    harvestRepeat: Repeat
+  - type: PlantGrowth
+    waterConsumption: 1.25
+  - type: PlantChemicals
+    chemicals:
+      Nutriment:
+        min: 1
+        max: 3
+        potencyDivisor: 20
+      Panacemycin:
+        min: 1
+        max: 3
+        potencyDivisor: 5
+      Septomycin:
+        min: 1
+        max: 2
+        potencyDivisor: 1
+
+- type: entity
+  parent: BasePlant
   id: MangoPlant
-  name: Манго
-  noun: seeds-noun-seeds
-  displayName: Манго
-  plantRsi: _DeadSpace/Objects/Specific/Hydroponics/mango.rsi
-  packetPrototype: MangoSeeds
-  productPrototypes:
-    - FoodMango
-  harvestRepeat: Repeat
-  lifespan: 55
-  maturation: 12
-  production: 3
-  yield: 3
-  potency: 10
-  idealLight: 8
-  growthStages: 5
-  waterConsumption: 1.5
-  chemicals:
-    Nutriment:
-      Min: 1
-      Max: 5
-      PotencyDivisor: 20
+  name: mango
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Hydroponics/mango.rsi
+  - type: PlantData
+    name: seeds-mango-name
+    packetPrototype: MangoSeeds
+    productPrototypes: [ FoodMango ]
+  - type: Plant
+    lifespan: 55
+    maturation: 12
+    production: 3
+    yield: 3
+    potency: 10
+    growthStages: 5
+  - type: PlantHarvest
+    harvestRepeat: Repeat
+  - type: PlantGrowth
+    waterConsumption: 1.5
+  - type: PlantChemicals
+    chemicals:
+      Nutriment:
+        min: 1
+        max: 5
+        potencyDivisor: 20

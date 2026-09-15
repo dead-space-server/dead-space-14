@@ -4,18 +4,14 @@ using Content.Server.Administration.Logs;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Server.Projectiles;
-using Content.Server.Pinpointer;
-using Content.Server.Radio.EntitySystems;
 using Content.Server.Weapons.Ranged.Systems;
-using Content.Shared.Construction;
 using Content.Shared.Database;
-using Content.Shared.Destructible;
 using Content.Shared.DeviceLinking.Events;
-using Content.Shared.Emag.Systems;
 using Content.Shared.Interaction;
 using Content.Shared.Lock;
 using Content.Shared.Popups;
 using Content.Shared.Power;
+using Content.Shared.Power.Components;
 using Content.Shared.Projectiles;
 using Content.Shared.Singularity.Components;
 using Content.Shared.Singularity.EntitySystems;
@@ -23,7 +19,6 @@ using Content.Shared.Weapons.Ranged.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
 using Timer = Robust.Shared.Timing.Timer;
@@ -38,8 +33,9 @@ namespace Content.Server.Singularity.EntitySystems
         [Dependency] private readonly SharedPopupSystem _popup = default!;
         [Dependency] private readonly ProjectileSystem _projectile = default!;
         [Dependency] private readonly GunSystem _gun = default!;
-        [Dependency] private readonly RadioSystem _radio = default!;
-        [Dependency] private readonly NavMapSystem _navMap = default!;
+        // DS14-start: readonly dependency for the pre-v288 engine.
+        [Dependency] private readonly PowerStateSystem _powerState = default!;
+        // DS14-end
 
         public override void Initialize()
         {
@@ -50,9 +46,6 @@ namespace Content.Server.Singularity.EntitySystems
             SubscribeLocalEvent<EmitterComponent, ActivateInWorldEvent>(OnActivate);
             SubscribeLocalEvent<EmitterComponent, AnchorStateChangedEvent>(OnAnchorStateChanged);
             SubscribeLocalEvent<EmitterComponent, SignalReceivedEvent>(OnSignalReceived);
-            SubscribeLocalEvent<EmitterComponent, DestructionAttemptEvent>(OnDestructionAttempted);
-            SubscribeLocalEvent<EmitterComponent, MachineDeconstructedEvent>(OnDeconstructed); // you shouldn't be able to deconstruct locked emitters but out of scope to fix
-            SubscribeLocalEvent<EmitterComponent, LockToggledEvent>(OnLockToggled);
         }
 
         private void OnAnchorStateChanged(EntityUid uid, EmitterComponent component, ref AnchorStateChangedEvent args)
@@ -75,9 +68,10 @@ namespace Content.Server.Singularity.EntitySystems
                 return;
             }
 
+            var isOn = _powerState.GetWorkingState(uid);
             if (TryComp(uid, out PhysicsComponent? phys) && phys.BodyType == BodyType.Static)
             {
-                if (!component.IsOn)
+                if (!isOn)
                 {
                     SwitchOn(uid, component);
                     _popup.PopupEntity(Loc.GetString("comp-emitter-turned-on",
@@ -90,9 +84,9 @@ namespace Content.Server.Singularity.EntitySystems
                         ("target", uid)), uid, args.User);
                 }
 
-                var stateText = component.IsOn ? "on" : "off";
+                var stateText = isOn ? "on" : "off";
                 _adminLogger.Add(LogType.FieldGeneration,
-                    component.IsOn ? LogImpact.Medium : LogImpact.High,
+                    isOn ? LogImpact.Medium : LogImpact.High,
                     $"{ToPrettyString(args.User):player} toggled {ToPrettyString(uid):emitter} to {stateText}");
                 args.Handled = true;
             }
@@ -108,10 +102,8 @@ namespace Content.Server.Singularity.EntitySystems
             EmitterComponent component,
             ref PowerConsumerReceivedChanged args)
         {
-            if (!component.IsOn)
-            {
+            if (!_powerState.GetWorkingState(uid))
                 return;
-            }
 
             if (args.ReceivedPower < args.DrawRate)
             {
@@ -125,10 +117,8 @@ namespace Content.Server.Singularity.EntitySystems
 
         private void OnApcChanged(EntityUid uid, EmitterComponent component, ref PowerChangedEvent args)
         {
-            if (!component.IsOn)
-            {
+            if (!_powerState.GetWorkingState(uid))
                 return;
-            }
 
             if (!args.Powered)
             {
@@ -142,23 +132,16 @@ namespace Content.Server.Singularity.EntitySystems
 
         public void SwitchOff(EntityUid uid, EmitterComponent component)
         {
-            component.IsOn = false;
-            if (TryComp<PowerConsumerComponent>(uid, out var powerConsumer))
-                powerConsumer.DrawRate = 1; // this needs to be not 0 so that the visuals still work.
-            if (TryComp<ApcPowerReceiverComponent>(uid, out var apcReceiver))
-                apcReceiver.Load = 1;
+            _powerState.SetWorkingState(uid, false);
             PowerOff(uid, component);
             UpdateAppearance(uid, component);
         }
 
         public void SwitchOn(EntityUid uid, EmitterComponent component)
         {
-            component.IsOn = true;
-            if (TryComp<PowerConsumerComponent>(uid, out var powerConsumer))
-                powerConsumer.DrawRate = component.PowerUseActive;
+            _powerState.SetWorkingState(uid, true);
             if (TryComp<ApcPowerReceiverComponent>(uid, out var apcReceiver))
             {
-                apcReceiver.Load = component.PowerUseActive;
                 if (apcReceiver.Powered)
                     PowerOn(uid, component);
             }
@@ -173,8 +156,6 @@ namespace Content.Server.Singularity.EntitySystems
             {
                 return;
             }
-
-            AlertRadio((uid, component), "unpowered");
 
             component.IsPowered = false;
 
@@ -210,7 +191,6 @@ namespace Content.Server.Singularity.EntitySystems
             // Any power-off condition should result in the timer for this method being cancelled
             // and thus not firing
             DebugTools.Assert(component.IsPowered);
-            DebugTools.Assert(component.IsOn);
 
             Fire(uid, component);
 
@@ -257,7 +237,7 @@ namespace Content.Server.Singularity.EntitySystems
             {
                 state = EmitterVisualState.On;
             }
-            else if (component.IsOn)
+            else if (_powerState.GetWorkingState(uid))
             {
                 state = EmitterVisualState.Underpowered;
             }
@@ -284,7 +264,7 @@ namespace Content.Server.Singularity.EntitySystems
             }
             else if (args.Port == component.TogglePort)
             {
-                if (component.IsOn)
+                if (_powerState.GetWorkingState(uid))
                 {
                     SwitchOff(uid, component);
                 }
@@ -297,39 +277,6 @@ namespace Content.Server.Singularity.EntitySystems
             {
                 component.BoltType = boltType;
             }
-        }
-
-        private void OnDestructionAttempted(Entity<EmitterComponent> ent, ref DestructionAttemptEvent args)
-        {
-            // warn engineering their containment engine needs IMMEDIATE repairs
-            // this doesn't change much for natural loosing through emitter destruction given any meteor warning serves the same purpose
-            // can also be used to scare engineering though given it broadcasts its location you need a renamed station beacon to really scare them
-            AlertRadio(ent, "destroyed");
-        }
-
-        private void OnDeconstructed(Entity<EmitterComponent> ent, ref MachineDeconstructedEvent args)
-        {
-            // right now you don't even need to unlock the emitter to deconstruct it. that's almost certainly a bug but even without it it probably still needs an alert
-            AlertRadio(ent, "deconstructed");
-        }
-
-        private void AlertRadio(Entity<EmitterComponent> ent, string type)
-        {
-            if (!ent.Comp.AlertRadio || !ent.Comp.IsOn || !ent.Comp.IsPowered)
-                return; // APEs do not need to scream over engineering radio, and an emitter that is off is probably not going to be alerting radios
-
-            var message = Loc.GetString("emitter-" + type + "-broadcast",
-            ("location", FormattedMessage.RemoveMarkupOrThrow(_navMap.GetNearestBeaconString(ent.Owner)))
-            );
-            _radio.SendRadioMessage(ent.Owner, message, ent.Comp.RadioChannel, ent.Owner);
-        }
-
-        private void OnLockToggled(Entity<EmitterComponent> ent, ref LockToggledEvent args)
-        {
-            if (args.Locked)
-                return;
-
-            AlertRadio(ent, "unlocked");
         }
     }
 }

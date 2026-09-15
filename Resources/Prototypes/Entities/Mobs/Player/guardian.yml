@@ -122,6 +122,7 @@
     #DS14-start
     - type: GhostRoleNotifys
       groupPrototype: EventGroup
+    - type: LavalandChasmImmune
     #DS14-end
 
 # From the uplink injector

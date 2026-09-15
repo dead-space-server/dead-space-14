@@ -243,7 +243,8 @@ public sealed class SurveillanceCameraRouterSystem : EntitySystem
         var payload = new NetworkPayload()
         {
             { DeviceNetworkConstants.Command, SurveillanceCameraSystem.CameraPingMessage },
-            { SurveillanceCameraSystem.CameraSubnetData, router.SubnetName }
+            // DS14: this pre-#45202 baseline stores the frequency prototype ID as a serialized string.
+            { SurveillanceCameraSystem.CameraSubnetData, router.SubnetFrequencyId }
         };
 
         _deviceNetworkSystem.QueuePacket(uid, null, payload, router.SubnetFrequency);

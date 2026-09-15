@@ -22,6 +22,9 @@
       uiWindowPos: 1,1
       strippingWindowPos: 1,2
       displayName: Suit
+      blacklist:
+        tags:
+        - PetOnly
     - name: gloves
       slotTexture: gloves
       slotFlags: GLOVES

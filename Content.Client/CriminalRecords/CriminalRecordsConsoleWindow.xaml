@@ -35,7 +35,7 @@
                            Text="{Loc 'criminal-records-console-no-records'}"
                            HorizontalExpand="True"
                            Align="Center"
-                           FontColorOverride="DarkGray" />
+                           StyleClasses="DeadSpaceSubtitle" /> <!-- DS14 -->
                     <ScrollContainer VerticalExpand="True">
                         <ItemList Name="RecordListing" />
                         <!-- Populated when loading state -->
@@ -45,7 +45,7 @@
                        Text="{Loc 'criminal-records-console-select-record-info'}"
                        HorizontalExpand="True"
                        Align="Center"
-                       FontColorOverride="DarkGray" />
+                       StyleClasses="DeadSpaceSubtitle" /> <!-- DS14 -->
                 <!-- Selected record info -->
                 <BoxContainer Name="PersonContainer"
                         Orientation="Vertical"
@@ -59,7 +59,7 @@
                     <BoxContainer Orientation="Horizontal"
                                   Margin="0 0 0 5">
                         <Label Text="{Loc 'crew-monitoring-ui-job-label'}"
-                               FontColorOverride="DarkGray" />
+                               StyleClasses="DeadSpaceSubtitle" /> <!-- DS14 -->
                         <TextureRect Name="PersonJobIcon"
                                      TextureScale="2 2"
                                      Margin="6 0"
@@ -69,19 +69,19 @@
                     <BoxContainer Orientation="Horizontal"
                                   Margin="0 0 0 5">
                         <Label Text="{Loc 'general-station-record-prints-filter'}"
-                               FontColorOverride="DarkGray" />
+                               StyleClasses="DeadSpaceSubtitle" /> <!-- DS14 -->
                         <Label Text=":"
                                Margin="0 0 6 0"
-                               FontColorOverride="DarkGray" />
+                               StyleClasses="DeadSpaceSubtitle" /> <!-- DS14 -->
                         <Label Name="PersonPrints" />
                     </BoxContainer>
                     <BoxContainer Orientation="Horizontal"
                                   Margin="0 0 0 5">
                         <Label Text="{Loc 'general-station-record-dna-filter'}"
-                               FontColorOverride="DarkGray" />
+                               StyleClasses="DeadSpaceSubtitle" /> <!-- DS14 -->
                         <Label Text=":"
                                Margin="0 0 6 0"
-                               FontColorOverride="DarkGray" />
+                               StyleClasses="DeadSpaceSubtitle" /> <!-- DS14 -->
                         <Label Name="PersonDna" />
                     </BoxContainer>
                     <PanelContainer StyleClasses="LowDivider"
@@ -90,11 +90,11 @@
                                   Margin="0 5 0 5">
                         <Label Name="StatusLabel"
                                Text="{Loc 'criminal-records-console-status'}"
-                               FontColorOverride="DarkGray" />
+                               StyleClasses="DeadSpaceSubtitle" /> <!-- DS14 -->
                         <Label Text=":"
-                               FontColorOverride="DarkGray" />
+                               StyleClasses="DeadSpaceSubtitle" /> <!-- DS14 -->
                         <Label Name="PersonStatus"
-                               FontColorOverride="DarkGray" />
+                               StyleClasses="DeadSpaceSubtitle" /> <!-- DS14 -->
                         <AnimatedTextureRect Name="PersonStatusTX"
                                              Margin="8 0" />
                         <OptionButton Name="StatusOptionButton"
@@ -104,9 +104,14 @@
                     <RichTextLabel Name="WantedReason"
                                    Visible="False"
                                    MaxWidth="425" />
-                    <Button Name="HistoryButton"
-                            Text="{Loc 'criminal-records-console-crime-history'}"
-                            Margin="0 5" />
+                    <BoxContainer Orientation="Horizontal"
+                                  Margin="0 5">
+                        <Button Name="PrintButton"
+                                Text="{Loc 'criminal-records-console-print-button'}" /> <!-- DS14 -->
+                        <Button Name="HistoryButton"
+                                Text="{Loc 'criminal-records-console-crime-history'}"
+                                Margin="6 0 0 0" />
+                    </BoxContainer>
                 </BoxContainer>
             </BoxContainer>
             <BoxContainer Orientation="Horizontal"

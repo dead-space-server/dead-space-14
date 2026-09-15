@@ -21,8 +21,6 @@ namespace Content.Client.ParticleAccelerator.UI;
 [GenerateTypedNameReferences]
 public sealed partial class ParticleAcceleratorControlMenu : FancyWindow
 {
-    [Dependency] private readonly IResourceCache _cache = default!;
-
     [Dependency] private readonly IEntityManager _entityManager = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
 
@@ -56,8 +54,6 @@ public sealed partial class ParticleAcceleratorControlMenu : FancyWindow
         _drawNoiseGenerator.SetFractalType(FastNoiseLite.FractalType.FBm);
         _drawNoiseGenerator.SetFrequency(0.5f);
 
-        var panelTex = _cache.GetTexture("/Textures/Interface/Nano/button.svg.96dpi.png");
-
         MouseFilter = MouseFilterMode.Stop;
 
         _alarmControlAnimation = new Animation
@@ -76,9 +72,6 @@ public sealed partial class ParticleAcceleratorControlMenu : FancyWindow
                 }
             }
         };
-
-        if (BackPanel.PanelOverride is StyleBoxTexture tex)
-            tex.Texture = panelTex;
 
         StatusLabel.SetMarkup(Loc.GetString("particle-accelerator-control-menu-status-label"));
         StatusStateLabel.SetMarkup(Loc.GetString("particle-accelerator-control-menu-status-unknown"));

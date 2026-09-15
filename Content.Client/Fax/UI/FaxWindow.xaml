@@ -3,119 +3,117 @@
     Title="{Loc 'fax-machine-ui-window'}"
     MinSize="380 320"> <!-- DS14 FaxHistory -->
     <BoxContainer Orientation="Vertical"
-        SeparationOverride="2"
-        VerticalExpand="True">
+        SeparationOverride="8"
+        VerticalExpand="True"
+        Margin="10 8 10 10"> <!-- DS14 -->
 
-        <PanelContainer StyleClasses="PanelBackgroundBaseDark" HorizontalExpand="True">
-            <BoxContainer Orientation="Vertical"
-                Margin="0 0 0 2">
+        <BoxContainer Orientation="Vertical"
+            HorizontalExpand="True"> <!-- DS14 -->
 
-                <!-- From Line -->
+            <!-- From Line -->
+            <BoxContainer Orientation="Horizontal">
+
+                <!-- From Value Name -->
+                <Label Text="{Loc 'fax-machine-ui-from'}"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Bottom"/>
+
+                <Control HorizontalExpand="True"
+                    MinWidth="8"
+                    HorizontalAlignment="Center"/>
+
+                <!-- From Value -->
+                <Label Name="FromLabel"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Align="Right"/>
+            </BoxContainer>
+
+            <!-- To Line -->
+            <BoxContainer
+                Orientation="Horizontal">
+
+                <!-- To Label -->
+                <Label Text="{Loc 'fax-machine-ui-to'}"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Bottom"/>
+
+                <Control HorizontalExpand="True"
+                    MinWidth="8"
+                    HorizontalAlignment="Center"/>
+
                 <BoxContainer Orientation="Horizontal">
+                    <!-- To Value -->
+                    <OptionButton Name="PeerSelector"
+                        StyleClasses="OpenRight" />
 
-                    <!-- From Value Name -->
-                    <Label Text="{Loc 'fax-machine-ui-from'}"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Bottom"/>
-
-                    <Control HorizontalExpand="True"
-                        MinWidth="8"
-                        HorizontalAlignment="Center"/>
-
-                    <!-- From Value -->
-                    <Label Name="FromLabel"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Align="Right"/>
-                </BoxContainer>
-
-                <!-- To Line -->
-                <BoxContainer
-                    Orientation="Horizontal">
-
-                    <!-- To Label -->
-                    <Label Text="{Loc 'fax-machine-ui-to'}"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Bottom"/>
-
-                    <Control HorizontalExpand="True"
-                        MinWidth="8"
-                        HorizontalAlignment="Center"/>
-
-                    <BoxContainer Orientation="Horizontal">
-                        <!-- To Value -->
-                        <OptionButton Name="PeerSelector"
-                            StyleClasses="OpenRight" />
-
-                        <!-- Refresh Fax Recipients -->
-                        <Button StyleClasses="OpenLeft"
-                            Name="RefreshButton"
-                            ToolTip="{Loc 'fax-machine-ui-refresh-button'}">
-                            <TextureButton
-                                MouseFilter="Ignore"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Scale="0.9 0.9"
-                                StyleClasses="RefreshButton" />
-                         </Button>
-                   </BoxContainer>
-                </BoxContainer>
-
-                <PanelContainer StyleClasses="LowDivider" Margin="0 4 0 4"/>
-
-                <!-- Send & Copy -->
-                <BoxContainer Orientation="Vertical">
-
-                    <!-- Paper Status -->
-                    <Label Name="PaperStatusLabel"
-                        HorizontalAlignment="Center" />
-
-                    <BoxContainer>
-                        <Button Name="CopyButton"
-                            Text="{Loc 'fax-machine-ui-copy-button'}"
-                            StyleClasses="OpenRight"
-                            HorizontalExpand="True"
-                            Disabled="True" />
-                        <Button Name="SendButton"
-                            Text="{Loc 'fax-machine-ui-send-button'}"
-                            StyleClasses="OpenLeft"
-                            HorizontalExpand="True"
-                            Disabled="True" />
-                    </BoxContainer>
+                    <!-- Refresh Fax Recipients -->
+                    <Button StyleClasses="OpenLeft"
+                        Name="RefreshButton"
+                        ToolTip="{Loc 'fax-machine-ui-refresh-button'}">
+                        <TextureButton
+                            MouseFilter="Ignore"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Scale="0.9 0.9"
+                            StyleClasses="RefreshButton" />
+                     </Button>
                 </BoxContainer>
             </BoxContainer>
 
-        </PanelContainer>
+            <PanelContainer StyleClasses="LowDivider" Margin="0 5 0 5"/> <!-- DS14 -->
 
-        <PanelContainer StyleClasses="PanelBackgroundBaseDark"
-            HorizontalExpand="True" Margin="0 10 0 0"
-            VerticalExpand="True" VerticalAlignment="Bottom">
-            <BoxContainer Orientation="Vertical"
-                VerticalExpand="True">
+            <!-- Send & Copy -->
+            <BoxContainer Orientation="Vertical">
 
-                <!-- Other actions -->
-                <BoxContainer Margin="0 4 0 4">
+                <!-- Paper Status -->
+                <Label Name="PaperStatusLabel"
+                    HorizontalAlignment="Center" />
 
-                    <Button Name="PaperButton"
-                        Text="{Loc 'fax-machine-ui-paper-button-normal'}"
+                <BoxContainer>
+                    <Button Name="CopyButton"
+                        Text="{Loc 'fax-machine-ui-copy-button'}"
                         StyleClasses="OpenRight"
-                        HorizontalExpand="True"/>
-
-                    <Button Name="FileButton"
-                        Text="{Loc 'fax-machine-ui-file-button'}"
+                        HorizontalExpand="True"
+                        Disabled="True" />
+                    <Button Name="SendButton"
+                        Text="{Loc 'fax-machine-ui-send-button'}"
                         StyleClasses="OpenLeft"
-                        HorizontalExpand="True"/>
-
+                        HorizontalExpand="True"
+                        Disabled="True" />
                 </BoxContainer>
-
-                <!-- It would be cool to add a display of the inserted file here. -->
-                <!-- DS14-start FaxHistory -->
-                <PanelContainer StyleClasses="LowDivider" Margin="0 4 0 4"/>
-                <Label Text="История факсов"></Label>
-                <OutputPanel Name="HistoryList" HorizontalExpand="True" VerticalExpand="True" Margin="8 8 8 4" ShowScrollDownButton="True" MinWidth="360" MinHeight="100"></OutputPanel>
-                <!-- DS14-end FaxHistory -->
             </BoxContainer>
-        </PanelContainer>
+
+        </BoxContainer> <!-- DS14 -->
+
+        <!-- DS14-start -->
+        <BoxContainer Orientation="Vertical"
+            HorizontalExpand="True"
+            VerticalExpand="True" VerticalAlignment="Bottom">
+        <!-- DS14-end -->
+
+            <!-- Other actions -->
+            <BoxContainer>
+
+                <Button Name="PaperButton"
+                    Text="{Loc 'fax-machine-ui-paper-button-normal'}"
+                    StyleClasses="OpenRight"
+                    HorizontalExpand="True"/>
+
+                <Button Name="FileButton"
+                    Text="{Loc 'fax-machine-ui-file-button'}"
+                    StyleClasses="OpenLeft"
+                    HorizontalExpand="True"/>
+
+            </BoxContainer>
+
+            <!-- It would be cool to add a display of the inserted file here. -->
+            <!-- DS14-start FaxHistory -->
+            <PanelContainer StyleClasses="LowDivider" Margin="0 7 0 5"/>
+            <Label Text="История факсов" />
+            <OutputPanel Name="HistoryList" HorizontalExpand="True" VerticalExpand="True" Margin="0 4 0 0" ShowScrollDownButton="True" MinWidth="360" MinHeight="100" />
+            <!-- DS14-end FaxHistory -->
+        </BoxContainer> <!-- DS14 -->
 
     </BoxContainer>
 </DefaultWindow>

@@ -55,8 +55,6 @@ public sealed partial class DreadnoughtLastStandActiveComponent : Component
     [AutoNetworkedField, ViewVariables]
     public bool Expired;
 
-    [ViewVariables]
-    public bool AppliedIgnoreSlowOnDamage;
 }
 
 public sealed partial class DreadnoughtLastStandActionEvent : InstantActionEvent;

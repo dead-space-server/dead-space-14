@@ -83,6 +83,7 @@ public sealed class HitscanBasicRaycastSystem : EntitySystem
         {
             ShotDirection = args.ShotDirection,
             Gun = args.Gun,
+            Hitscan = ent.Owner,
             Shooter = args.Shooter,
             Target = target,
             HitEntity = result?.HitEntity,
@@ -104,6 +105,12 @@ public sealed class HitscanBasicRaycastSystem : EntitySystem
 
         var hitEvent = new HitscanRaycastFiredEvent { Data = data };
         RaiseLocalEvent(ent, ref hitEvent);
+
+        if (data.HitEntity != null)
+        {
+            var strikeEvent = new HitscanRaycastStrikeEvent { Data = data };
+            RaiseLocalEvent(data.HitEntity.Value, ref strikeEvent);
+        }
 
         if (isRoot)
             FireEffects(ent.Owner, args.OutputTrace);

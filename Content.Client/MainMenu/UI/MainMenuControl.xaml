@@ -16,38 +16,38 @@
                   StyleIdentifier="mainMenuVBox"
                   SeparationOverride="3">
         <!-- DS14-start: KSO-styled primary menu shell -->
-        <PanelContainer StyleClasses="DS14MenuShell">
+        <PanelContainer StyleClasses="DeadSpaceWindow">
             <BoxContainer Orientation="Vertical"
                           MinWidth="360"
                           SeparationOverride="8">
-                <PanelContainer StyleClasses="DS14MenuHeader">
+                <PanelContainer StyleClasses="DeadSpaceSectionHeader">
                     <BoxContainer Orientation="Vertical"
                                   SeparationOverride="2">
                         <TextureRect Name="Logo"
                                      Stretch="KeepCentered"
                                      Margin="0 0 0 6"/>
                         <Label Text="NANOTRASEN COMMAND UPLINK"
-                               StyleClasses="DS14MenuTitle"
+                               StyleClasses="DeadSpaceTitle"
                                HorizontalAlignment="Center" />
                         <Label Text="{Loc 'main-menu-direct-connect-button'}"
-                               StyleClasses="DS14MenuSubtitle"
+                               StyleClasses="DeadSpaceSubtitle"
                                HorizontalAlignment="Center" />
                     </BoxContainer>
                 </PanelContainer>
 
-                <PanelContainer StyleClasses="DS14MenuPanelDark">
+                <PanelContainer StyleClasses="DeadSpaceSurfaceDark">
                     <GridContainer Columns="2"
                                    HSeparationOverride="6"
                                    VSeparationOverride="6">
                         <Label Text="{Loc 'main-menu-username-label'}"
-                               StyleClasses="DS14MenuSubtitle"
+                               StyleClasses="DeadSpaceSubtitle"
                                VerticalAlignment="Center" />
                         <LineEdit Name="UsernameBox"
                                   Access="Public"
                                   PlaceHolder="{Loc 'main-menu-username-text'}"
                                   HorizontalExpand="True" />
                         <Label Text="{Loc 'main-menu-address-label'}"
-                               StyleClasses="DS14MenuSubtitle"
+                               StyleClasses="DeadSpaceSubtitle"
                                VerticalAlignment="Center" />
                         <LineEdit Name="AddressBox"
                                   Access="Public"
@@ -61,22 +61,22 @@
                         Access="Public"
                         Text="{Loc 'main-menu-direct-connect-button'}"
                         TextAlign="Center"
-                        StyleClasses="DS14MenuAction"
+                        StyleClasses="DeadSpaceAction"
                         StyleIdentifier="mainMenu"/>
                 <Button Name="OptionsButton"
                         Access="Public"
                         Text="{Loc 'main-menu-options-button'}"
                         TextAlign="Center"
-                        StyleClasses="DS14MenuAction"
+                        StyleClasses="DeadSpaceAction"
                         StyleIdentifier="mainMenu"/>
                 <Button Name="QuitButton"
                         Access="Public"
                         Text="{Loc 'main-menu-quit-button'}"
                         TextAlign="Center"
-                        StyleClasses="DS14MenuAction"
+                        StyleClasses="DeadSpaceAction"
                         StyleIdentifier="mainMenu"/>
 
-                <PanelContainer StyleClasses="DS14MenuAccentDim" />
+                <PanelContainer StyleClasses="DeadSpaceAccentDim" />
 
                 <clog:ChangelogButton
                     Name="ChangelogButton"

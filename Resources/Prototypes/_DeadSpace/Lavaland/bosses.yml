@@ -272,6 +272,7 @@
     - LavalandNecropolisChest
     - LavalandNecropolisChest
     - LavalandHierophantStaff
+    - HierophantTrophy
   - type: LavalandHierophant
   - type: NpcFactionMember
     factions:
@@ -601,6 +602,7 @@
     - ClothingOuterSuitAshDrake
     - LavalandSpectralBlade
     - LavalandAshDrakeFireballSpellbookDrop
+    - AshDrakeTrophy
   - type: LavalandAshDrake
   - type: NpcFactionMember
     factions:
@@ -980,6 +982,7 @@
     - LavalandNecropolisChest
     - LavalandSpellBlade
     - LavalandNecropolisChest
+    - BubblegumTrophy
   - type: LavalandBubblegum
   - type: NpcFactionMember
     factions:
@@ -1151,6 +1154,7 @@
     - LavalandDarkInfusedBlade
     - LavalandNecropolisChest
     - LavalandFireStaff
+    - ColossusTrophy
   - type: LavalandColossus
   - type: NpcFactionMember
     factions:

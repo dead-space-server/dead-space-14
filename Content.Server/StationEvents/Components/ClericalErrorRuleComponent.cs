@@ -5,6 +5,7 @@ namespace Content.Server.StationEvents.Components;
 /// <summary>
 /// This is a station event that randomly removes some records from the station record database.
 /// </summary>
+[Content.Server.DeadSpace.CentComm.AllowedGameRuleOnCentComm] // DS14
 [RegisterComponent]
 [Access(typeof(ClericalErrorRule))]
 public sealed partial class ClericalErrorRuleComponent : Component

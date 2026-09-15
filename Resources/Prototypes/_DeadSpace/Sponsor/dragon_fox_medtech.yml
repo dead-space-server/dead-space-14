@@ -5,6 +5,7 @@
   parent: WeaponShotgunBulldog
   id: WeaponShotgun9000Alpha
   description: Автоматический дробовик калибра 12х70. Настолько же стильный, насколько и убойный.
+  suffix: Дробовик
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/weapons/Auto9000Alfa.rsi
@@ -123,6 +124,7 @@
   id: WeaponLaserRifleM1000
   name: лазерный автомат М1000
   description: Жаропрочный лазерный автомат со средним темпом стрельбы. Идеально подходит для близкой и средней дистанции боя.
+  suffix: Автомат
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/weapons/LaserM1000.rsi
@@ -203,10 +205,11 @@
 # Machinegun
 
 - type: entity
-  name: пулемёт 3000PRO
+  name: 3000PRO
   parent: BaseWeaponLightMachineGun
   id: WeaponLightMachineGun3000PRO
   description: Тяжёлый пулемёт из титанового сплава. Совмещает в себе как убойность, так и изящество.
+  suffix: Пулемёт
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/weapons/3000PRO.rsi
@@ -289,6 +292,7 @@
   parent: ClothingHeadsetAltFreelancer
   id: ClothingHeadsetMedTech
   name: полноразмерная гарнитура MedTech
+  categories: [ HideSpawnMenu ]
   description: Стильная гарнитура, необходимая для связи с сотрудниками MedTech.
   components:
   - type: ContainerFill

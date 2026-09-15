@@ -417,7 +417,7 @@
     soundGunshot: /Audio/Weapons/Guns/Gunshots/syringe_gun.ogg
   - type: RechargeBasicEntityAmmo
     showExamineText: false
-    rechargeCooldown: 0
+    rechargeCooldown: 30 #DS14 value
     rechargeSound: null
   - type: BasicEntityAmmoProvider
     proto: BasiliskRay

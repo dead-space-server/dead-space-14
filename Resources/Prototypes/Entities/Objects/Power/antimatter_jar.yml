@@ -25,4 +25,7 @@
   - type: EmitSoundOnLand
     sound:
       path: /Audio/_DeadSpace/Items/Handing/tray/tray_drop.ogg
+  - type: Tag
+    tags:
+      - AmeJar
   #DS14-End

@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Text;
 using Content.Client.Arcade.UI;
 using Content.Client.Resources;
+using Content.Client.Stylesheets;
 using Content.Shared.Arcade;
 using Content.Shared.Input;
 using Robust.Client.Graphics;
@@ -23,9 +24,6 @@ namespace Content.Client.Arcade
 {
     public sealed class BlockGameMenu : DefaultWindow
     {
-        private static readonly Color OverlayBackgroundColor = new(74, 74, 81, 180);
-        private static readonly Color OverlayShadowColor = new(0, 0, 0, 83);
-
         private static readonly Vector2 BlockSize = new(15, 15);
 
         private readonly PanelContainer _mainPanel;
@@ -133,33 +131,14 @@ namespace Content.Client.Arcade
             _mainPanel.AddChild(_gameRootContainer);
 
             #region Pause Menu
-            var pauseRootBack = new StyleBoxTexture
-            {
-                Texture = backgroundTexture,
-                Modulate = OverlayShadowColor
-            };
-            pauseRootBack.SetPatchMargin(StyleBox.Margin.All, 10);
+            // DS14-start: a single shared inset replaces nested shadow/body chrome.
             _menuRootContainer = new PanelContainer
             {
-                PanelOverride = pauseRootBack,
+                StyleClasses = { StyleClass.PanelInsetDeep },
                 VerticalAlignment = VAlignment.Center,
                 HorizontalAlignment = HAlignment.Center
             };
-
-            var pauseInnerBack = new StyleBoxTexture
-            {
-                Texture = backgroundTexture,
-                Modulate = OverlayBackgroundColor
-            };
-            pauseInnerBack.SetPatchMargin(StyleBox.Margin.All, 10);
-            var pauseMenuInnerPanel = new PanelContainer
-            {
-                PanelOverride = pauseInnerBack,
-                VerticalAlignment = VAlignment.Center,
-                HorizontalAlignment = HAlignment.Center
-            };
-
-            _menuRootContainer.AddChild(pauseMenuInnerPanel);
+            // DS14-end
 
             var pauseMenuContainer = new BoxContainer
             {
@@ -205,37 +184,18 @@ namespace Content.Client.Arcade
             };
             pauseMenuContainer.AddChild(_unpauseButton);
 
-            pauseMenuInnerPanel.AddChild(pauseMenuContainer);
+            _menuRootContainer.AddChild(pauseMenuContainer); // DS14
             #endregion
 
             #region Gameover Screen
-            var gameOverRootBack = new StyleBoxTexture
-            {
-                Texture = backgroundTexture,
-                Modulate = OverlayShadowColor
-            };
-            gameOverRootBack.SetPatchMargin(StyleBox.Margin.All, 10);
+            // DS14-start: a single shared inset replaces nested shadow/body chrome.
             _gameOverRootContainer = new PanelContainer
             {
-                PanelOverride = gameOverRootBack,
+                StyleClasses = { StyleClass.PanelInsetDeep },
                 VerticalAlignment = VAlignment.Center,
                 HorizontalAlignment = HAlignment.Center
             };
-
-            var gameOverInnerBack = new StyleBoxTexture
-            {
-                Texture = backgroundTexture,
-                Modulate = OverlayBackgroundColor
-            };
-            gameOverInnerBack.SetPatchMargin(StyleBox.Margin.All, 10);
-            var gameOverMenuInnerPanel = new PanelContainer
-            {
-                PanelOverride = gameOverInnerBack,
-                VerticalAlignment = VAlignment.Center,
-                HorizontalAlignment = HAlignment.Center
-            };
-
-            _gameOverRootContainer.AddChild(gameOverMenuInnerPanel);
+            // DS14-end
 
             var gameOverMenuContainer = new BoxContainer
             {
@@ -263,38 +223,18 @@ namespace Content.Client.Arcade
             };
             gameOverMenuContainer.AddChild(_finalNewGameButton);
 
-            gameOverMenuInnerPanel.AddChild(gameOverMenuContainer);
+            _gameOverRootContainer.AddChild(gameOverMenuContainer); // DS14
             #endregion
 
             #region High Score Screen
-            var rootBack = new StyleBoxTexture
-            {
-                Texture = backgroundTexture,
-                Modulate = OverlayShadowColor
-            };
-            rootBack.SetPatchMargin(StyleBox.Margin.All, 10);
+            // DS14-start: a single shared inset replaces nested shadow/body chrome.
             _highscoresRootContainer = new PanelContainer
             {
-                PanelOverride = rootBack,
+                StyleClasses = { StyleClass.PanelInsetDeep },
                 VerticalAlignment = VAlignment.Center,
                 HorizontalAlignment = HAlignment.Center
             };
-
-            var c = new Color(OverlayBackgroundColor.R, OverlayBackgroundColor.G, OverlayBackgroundColor.B, 220);
-            var innerBack = new StyleBoxTexture
-            {
-                Texture = backgroundTexture,
-                Modulate = c
-            };
-            innerBack.SetPatchMargin(StyleBox.Margin.All, 10);
-            var menuInnerPanel = new PanelContainer
-            {
-                PanelOverride = innerBack,
-                VerticalAlignment = VAlignment.Center,
-                HorizontalAlignment = HAlignment.Center
-            };
-
-            _highscoresRootContainer.AddChild(menuInnerPanel);
+            // DS14-end
 
             var menuContainer = new BoxContainer
             {
@@ -335,7 +275,7 @@ namespace Content.Client.Arcade
             };
             menuContainer.AddChild(_highscoreBackButton);
 
-            menuInnerPanel.AddChild(menuContainer);
+            _highscoresRootContainer.AddChild(menuContainer); // DS14
             #endregion
 
             ContentsContainer.AddChild(_mainPanel);

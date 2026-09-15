@@ -137,8 +137,7 @@ public sealed partial class NecromorfSystem
 
         RemComp<RespiratorComponent>(target);
         RemComp<BarotraumaComponent>(target);
-        RemComp<HungerComponent>(target);
-        RemComp<ThirstComponent>(target);
+        RemComp<SatiationComponent>(target); // DS14: necromorphs do not use hunger or thirst.
         RemComp<SanityComponent>(target);
         RemComp<ReproductiveComponent>(target);
         RemComp<ReproductivePartnerComponent>(target);

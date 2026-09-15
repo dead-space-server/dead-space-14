@@ -6,25 +6,27 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
 using Robust.Shared.Audio;
-using Content.Shared.Speech.Muting;
-using Robust.Shared.Timing;
+using Content.Shared.StatusEffectNew;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Damage;
 using Content.Shared.Popups;
 using Content.Shared.Stunnable;
 using Robust.Shared.Audio.Systems;
 using Content.Server.Damage.Systems;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.MartialArts.Arkalyse;
 
 public sealed class ArkalyseSystem : EntitySystem
 {
+    private static readonly EntProtoId MutedEffect = "StatusEffectArkalyseMuted";
+
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly StaminaSystem _stamina = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -33,21 +35,6 @@ public sealed class ArkalyseSystem : EntitySystem
         SubscribeLocalEvent<ArkalyseComponent, ArkalyseMuteEvent>(OnMuteAction);
         SubscribeLocalEvent<ArkalyseComponent, ArkalyseRelaxEvent>(OnRelaxAction);
         SubscribeLocalEvent<ArkalyseComponent, MeleeHitEvent>(OnMeleeHitEvent);
-    }
-
-    public override void Update(float frameTime)
-    {
-        base.Update(frameTime);
-
-        var query = EntityQueryEnumerator<ArkalyseMutedComponent, MutedComponent>();
-        while (query.MoveNext(out var uid, out var arkMuted, out _))
-        {
-            if (_timing.CurTime < arkMuted.MuteEndTime)
-                continue;
-
-            RemComp<MutedComponent>(uid);
-            RemComp<ArkalyseMutedComponent>(uid);
-        }
     }
 
     private void SelectCombo(Entity<ArkalyseComponent> ent, ArkalyseList combo)
@@ -130,9 +117,7 @@ public sealed class ArkalyseSystem : EntitySystem
                 break;
 
             case ArkalyseList.MuteAttack:
-                var muted = EnsureComp<ArkalyseMutedComponent>(hitEntity);
-                EnsureComp<MutedComponent>(hitEntity);
-                muted.MuteEndTime = _timing.CurTime + ent.Comp.Params.ParalyzeTimeMuteAtack;
+                _statusEffects.TrySetStatusEffectDuration(hitEntity, MutedEffect, ent.Comp.Params.ParalyzeTimeMuteAtack);
                 DamageHit(hitEntity, ent.Comp.Params.DamageTypeForMuteAtack, ent.Comp.Params.HitDamageForMuteAtack, ent.Comp.Params.IgnoreResist, out _);
                 _stamina.TakeStaminaDamage(hitEntity, ent.Comp.Params.StaminaDamageMuteAtack);
                 break;

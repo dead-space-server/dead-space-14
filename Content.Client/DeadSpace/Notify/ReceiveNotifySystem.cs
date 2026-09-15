@@ -10,6 +10,7 @@ using Robust.Shared.Timing;
 using Content.Shared.DeadSpace.Notify.Prototypes;
 using Robust.Shared.Prototypes;
 using System.Collections.Concurrent;
+using Robust.Client.Graphics;
 
 namespace Content.Client.DeadSpace.Notify;
 
@@ -20,6 +21,7 @@ public sealed partial class ReceiveNotifySystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private readonly IClyde _clyde = default!;
     private ISawmill _sawmill = default!;
 
     private TimeSpan _lastNotifyTime;
@@ -40,10 +42,14 @@ public sealed partial class ReceiveNotifySystem : EntitySystem
             if (_timing.RealTime - _lastNotifyTime >= TimeSpan.FromSeconds(_cfg.GetCVar(CCCCVars.SysNotifyCoolDown)))
             {
                 _audio.PlayGlobal(new SoundPathSpecifier(_cfg.GetCVar(CCCCVars.SysNotifySoundPath)), Filter.Local(), false);
+
+                if (!_clyde.MainWindow.IsFocused)
+                    _clyde.RequestWindowAttention();
+
                 _lastNotifyTime = _timing.RealTime;
             }
         }
-    } 
+    }
 
     #region Work With Dictionary
     private ConcurrentDictionary<string, bool> _dictCvar = new ConcurrentDictionary<string, bool>();

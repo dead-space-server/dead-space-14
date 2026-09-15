@@ -57,6 +57,7 @@
     sprite: _DeadSpace/Clothing/OuterClothing/Hardsuits/redsword.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/OuterClothing/Hardsuits/redsword.rsi
+    equipSound: /Audio/_DeadSpace/Misc/rig_equip.ogg
   - type: PressureProtection
     highPressureMultiplier: 0.45
     lowPressureMultiplier: 1000
@@ -121,3 +122,14 @@
     clothingPrototype: ClothingHeadHelmetHardsuitGreenBeret
   - type: Item
     size: Huge
+
+- type: entity
+  parent: ClothingOuterCoatHoSGreatcoat
+  id: ClothingOuterArmorGreenBeret
+  name: бронежилет офицера "Зелёный Берет"
+  description: Лёгкий бронежилет офицера "Зелёный Берет", который носится поверх комбинезона, пока РИГ убран в рюкзак.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/OuterClothing/Armor/greenberet_armor.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/OuterClothing/Armor/greenberet_armor.rsi

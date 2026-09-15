@@ -1,0 +1,22 @@
+- type: entity
+  parent: TableReinforcedGlass
+  id: TablePlasmaGlassArmored
+  name: бронированный плазменный стол
+  description: Усиленный плазменный стол повышенной прочности. Выдерживает серьёзные удары.
+  components:
+  - type: Construction
+    graph: TablePlasmaGlassArmored
+    node: armored
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/Tables/r_plasma.rsi
+  - type: Icon
+    sprite: _DeadSpace/Structures/Furniture/Tables/r_plasma.rsi
+    state: full
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 600
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]

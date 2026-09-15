@@ -10,6 +10,8 @@
     mindRoles:
     - MindRoleGhostRoleTeamAntagonist
     requirements:
+    - !type:OverallPlaytimeRequirement
+      time: 1260000 # 350 hours
     - !type:DepartmentTimeRequirement
       department: Medical
       time: 108000 # 30 hours
@@ -42,6 +44,8 @@
     mindRoles:
     - MindRoleGhostRoleTeamAntagonist
     requirements:
+    - !type:OverallPlaytimeRequirement
+      time: 1260000 # 350 hours
     - !type:DepartmentTimeRequirement
       department: Medical
       time: 36000 # 10 hours

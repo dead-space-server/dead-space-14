@@ -6,12 +6,14 @@ using Content.Server.Chat.Managers;
 using Content.Server.Nuke;
 using Content.Shared.Administration;
 using Content.Shared.Administration.Logs;
+using Content.Shared.Chat;
 using Content.Shared.Database;
 using Content.Shared.DeadSpace.ERT;
 using Content.Shared.DeadSpace.Nuke;
 using Content.Shared.DeadSpace.TimeWindow;
 using Content.Shared.GameTicking;
 using Content.Shared.Station.Components;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Nuke;
@@ -22,7 +24,9 @@ public sealed class PendingNukeCodeRequestData
     public EntityUid StationUid { get; set; }
     public ProtoId<NukeCodeSendReasonPrototype> ReasonId { get; set; }
     public TimedWindow DecisionWindow { get; set; } = default!;
+    public TimedWindow ReminderWindow { get; set; } = default!;
     public string RequestedByName { get; set; } = string.Empty;
+    public bool Automatic { get; set; }
 }
 
 public sealed class NukeCodeSendQueueSystem : EntitySystem
@@ -35,6 +39,7 @@ public sealed class NukeCodeSendQueueSystem : EntitySystem
     [Dependency] private readonly IAdminManager _adminManager = default!;
 
     private static readonly TimeSpan DecisionLifetime = TimeSpan.FromMinutes(1);
+    private static readonly TimeSpan ReminderInterval = TimeSpan.FromSeconds(30);
 
     private readonly Dictionary<int, PendingNukeCodeRequestData> _pendingRequests = new();
     private int _nextRequestId = 1;
@@ -54,8 +59,30 @@ public sealed class NukeCodeSendQueueSystem : EntitySystem
     {
         base.Update(frameTime);
 
+        ICommonSession[]? decisionAdmins = null;
         foreach (var (requestId, request) in _pendingRequests.ToArray())
         {
+            if (request.Automatic)
+            {
+                decisionAdmins ??= GetDecisionAdmins();
+                if (decisionAdmins.Length == 0)
+                {
+                    CompleteRequest(
+                        requestId,
+                        Loc.GetString("nuke-codes-requester-auto-no-admin"),
+                        out _);
+                    continue;
+                }
+
+                if (_timedWindowSystem.IsExpired(request.ReminderWindow))
+                {
+                    SendDecisionReminder(request, decisionAdmins);
+                    _timedWindowSystem.Reset(request.ReminderWindow);
+                }
+
+                continue;
+            }
+
             if (!_timedWindowSystem.IsExpired(request.DecisionWindow))
                 continue;
 
@@ -144,17 +171,22 @@ public sealed class NukeCodeSendQueueSystem : EntitySystem
         }
 
         var requestId = _nextRequestId++;
-        var window = new TimedWindow(DecisionLifetime, DecisionLifetime);
-        _timedWindowSystem.Reset(window);
+        var decisionWindow = new TimedWindow(DecisionLifetime, DecisionLifetime);
+        var reminderWindow = new TimedWindow(ReminderInterval, ReminderInterval);
+        _timedWindowSystem.Reset(decisionWindow);
+        _timedWindowSystem.Reset(reminderWindow);
 
-        _pendingRequests[requestId] = new PendingNukeCodeRequestData
+        var request = new PendingNukeCodeRequestData
         {
             RequestId = requestId,
             StationUid = station,
             ReasonId = reasonId,
-            DecisionWindow = window,
+            DecisionWindow = decisionWindow,
+            ReminderWindow = reminderWindow,
             RequestedByName = requestedByName,
+            Automatic = automatic,
         };
+        _pendingRequests[requestId] = request;
 
         var reasonName = Loc.GetString(reason.Name);
         var stationName = Name(station);
@@ -166,11 +198,16 @@ public sealed class NukeCodeSendQueueSystem : EntitySystem
 
         if (automatic)
         {
-            _chatManager.SendAdminAlert(Loc.GetString(
-                "nuke-codes-admin-alert-game-queued",
-                ("requestId", requestId),
-                ("station", stationName),
-                ("reason", reasonName)));
+            var decisionAdmins = GetDecisionAdmins();
+            if (decisionAdmins.Length == 0)
+            {
+                return CompleteRequest(
+                    requestId,
+                    Loc.GetString("nuke-codes-requester-auto-no-admin"),
+                    out result);
+            }
+
+            SendDecisionReminder(request, decisionAdmins);
         }
         else
         {
@@ -268,19 +305,24 @@ public sealed class NukeCodeSendQueueSystem : EntitySystem
                 Name(data.StationUid),
                 data.ReasonId.ToString(),
                 Loc.GetString(reason.Name),
-                _timedWindowSystem.GetSecondsRemaining(data.DecisionWindow),
-                data.RequestedByName));
+                _timedWindowSystem.GetSecondsRemaining(
+                    data.Automatic ? data.ReminderWindow : data.DecisionWindow),
+                data.RequestedByName,
+                data.Automatic));
         }
 
         return new NukeCodesAdminStateResponse(
             stations.OrderBy(entry => entry.Name).ToArray(),
             reasons,
-            pendingEntries.OrderBy(entry => entry.SecondsRemaining).ToArray());
+            pendingEntries
+                .OrderByDescending(entry => entry.AwaitingAdminDecision)
+                .ThenBy(entry => entry.SecondsRemaining)
+                .ToArray());
     }
 
     private bool TryAuthorizeAdmin(EntitySessionEventArgs args)
     {
-        if (_adminManager.HasAdminFlag(args.SenderSession, AdminFlags.Fun))
+        if (CanManageNukeCodes(args.SenderSession))
             return true;
 
         RaiseNetworkEvent(
@@ -288,6 +330,50 @@ public sealed class NukeCodeSendQueueSystem : EntitySystem
             args.SenderSession.Channel);
 
         return false;
+    }
+
+    /// <summary>
+    /// Mapping grants access to the ertui panel; Fun grants access to its nuke-code actions.
+    /// Automatic dispatches wait only for an active administrator who can do both.
+    /// </summary>
+    private bool CanManageNukeCodes(ICommonSession admin)
+    {
+        return _adminManager.HasAdminFlag(admin, AdminFlags.Mapping) &&
+               _adminManager.HasAdminFlag(admin, AdminFlags.Fun);
+    }
+
+    private ICommonSession[] GetDecisionAdmins()
+    {
+        return _adminManager.ActiveAdmins
+            .Where(CanManageNukeCodes)
+            .ToArray();
+    }
+
+    private void SendDecisionReminder(
+        PendingNukeCodeRequestData request,
+        IReadOnlyCollection<ICommonSession> decisionAdmins)
+    {
+        if (!_prototypeManager.TryIndex(request.ReasonId, out var reason) ||
+            !Exists(request.StationUid))
+        {
+            return;
+        }
+
+        var message = Loc.GetString(
+            "nuke-codes-admin-decision-reminder",
+            ("requestId", request.RequestId),
+            ("station", Name(request.StationUid)),
+            ("reason", Loc.GetString(reason.Name)));
+
+        _chatManager.ChatMessageToMany(
+            ChatChannel.AdminAlert,
+            message,
+            message,
+            default,
+            hideChat: false,
+            recordReplay: true,
+            clients: decisionAdmins.Select(admin => admin.Channel),
+            colorOverride: Color.Gold);
     }
 
     private bool CompleteRequest(int requestId, string approvedByName, out string? result)

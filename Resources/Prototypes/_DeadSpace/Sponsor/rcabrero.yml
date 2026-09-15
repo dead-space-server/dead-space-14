@@ -131,7 +131,7 @@
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuitrcabrero
   name: экспериментальный шлем скафандра
   description: Лёгкий шлем скафандра, не стесняющий движений головы.

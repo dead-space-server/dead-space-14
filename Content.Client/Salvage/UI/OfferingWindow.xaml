@@ -7,11 +7,14 @@
                    Text="{Loc 'salvage-expedition-window-progression'}"
                    SetWidth="200"
                    Margin="5"/>
+            <!-- DS14-start: semantic cyan progress chrome is defined in the shared stylesheet. -->
             <ProgressBar Name="ProgressionBar"
                          HorizontalExpand="True"
                          MinValue="0"
                          MaxValue="1"
+                         StyleClasses="DeadSpaceProgressAccent"
                          SetHeight="25"/>
+            <!-- DS14-end -->
             <Label Name="ProgressionText" Text="00:00"
                    Margin="5"/>
         </BoxContainer>
@@ -28,7 +31,9 @@
             <Label Name="NextOfferText" Text="0.00"
                    Margin="5"/>
         </BoxContainer>
-        <controls:HLine Color="#404040" Thickness="2" Margin="0 5 0 5"/>
+        <!-- DS14-start -->
+        <PanelContainer StyleClasses="LowDivider" Margin="0 5 0 5" />
+        <!-- DS14-end -->
         <BoxContainer Name="Container"
                       Orientation="Horizontal"
                       Margin="5 0 5 0"/>

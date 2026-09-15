@@ -24,9 +24,9 @@ public sealed partial class PlaytimeStatsEntry : ContainerButton
 
     public void UpdateShading(bool useAltStyle)
     {
-        RemoveStyleClass(DeadSpaceMenuSheetlet.ListRow);
-        RemoveStyleClass(DeadSpaceMenuSheetlet.ListRowAlt);
-        AddStyleClass(useAltStyle ? DeadSpaceMenuSheetlet.ListRowAlt : DeadSpaceMenuSheetlet.ListRow);
+        RemoveStyleClass(DeadSpaceStyleClass.ListItemAlternate);
+        if (useAltStyle)
+            AddStyleClass(DeadSpaceStyleClass.ListItemAlternate);
     }
     // DS14-end
 

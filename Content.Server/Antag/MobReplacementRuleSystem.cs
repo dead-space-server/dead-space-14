@@ -1,8 +1,7 @@
 using Content.Server.Antag.Mimic;
 using Content.Server.GameTicking.Rules;
-using Content.Server.GameTicking.Rules.Components;
 using Content.Shared.GameTicking.Components;
-using Content.Shared.VendingMachines;
+using Content.Shared.VendingMachines.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Random;
 
@@ -21,6 +20,11 @@ public sealed class MobReplacementRuleSystem : GameRuleSystem<MobReplacementRule
 
         while (query.MoveNext(out var vendingUid, out _, out var xform))
         {
+            // DS14-start
+            if (!RuleStation.IsTarget(uid, vendingUid))
+                continue;
+            // DS14-end
+
             if (!_random.Prob(component.Chance))
                 continue;
 

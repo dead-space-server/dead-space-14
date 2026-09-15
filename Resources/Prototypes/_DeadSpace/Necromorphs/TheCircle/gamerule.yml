@@ -5,14 +5,14 @@
   name: thecircle-title
   description: thecircle-description
   showInVote: true
-  showInAdminVote: true 
-  voteType: rdm 
+  showInAdminVote: true
+  voteType: rdm
   rules:
-  - WageScheduler 
+  - WageScheduler
   - SiegeOfTheCircle
-  - BasicStationEventScheduler
-  - MeteorSwarmScheduler
-  - SpaceTrafficControlEventScheduler
+  # - BasicStationEventScheduler
+  # - MeteorSwarmScheduler
+  # - SpaceTrafficControlEventScheduler
   - BasicRoundstartVariation
 
 - type: gamePreset
@@ -23,13 +23,13 @@
   description: secret-description
   showInVote: false
   showInAdminVote: false
-  voteType: rdm 
+  voteType: rdm
   rules:
-  - WageScheduler 
+  - WageScheduler
   - SiegeOfTheCircle
-  - BasicStationEventScheduler
-  - MeteorSwarmScheduler
-  - SpaceTrafficControlEventScheduler
+  # - BasicStationEventScheduler
+  # - MeteorSwarmScheduler
+  # - SpaceTrafficControlEventScheduler
   - BasicRoundstartVariation
 
 - type: entity

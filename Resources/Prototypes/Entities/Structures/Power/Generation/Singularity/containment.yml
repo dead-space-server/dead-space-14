@@ -39,6 +39,13 @@
     sprite: Structures/Power/Generation/Singularity/containment.rsi
     state: icon
   - type: ContainmentFieldGenerator
+  # DS14-start
+  - type: Explosive
+    explosionType: Default
+    maxIntensity: 100
+    intensitySlope: 2
+    totalIntensity: 200
+  # DS14-end
   - type: PointLight
     enabled: false
     color: "#4080FF"

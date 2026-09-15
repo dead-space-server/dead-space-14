@@ -7,12 +7,10 @@
     SeparationOverride="6">
     <!-- DS14-start -->
     <OutputPanel Name="TextOutput"
-                 VerticalExpand="True"
-                 StyleClasses="DS14MenuTextArea" />
+                 VerticalExpand="True" />
     <RichTextLabel Name="TypingIndicator"
                    Access="Public" />
-    <HistoryLineEdit Name="SenderLineEdit"
-                     StyleClasses="DS14MenuInput" />
+    <HistoryLineEdit Name="SenderLineEdit" />
     <RichTextLabel Name="RelayedToDiscordLabel"
                    Access="Public"
                    Visible="False" />

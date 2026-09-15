@@ -48,3 +48,5 @@ ent-CrateNPCKangaroo = kangaroo crate
     .desc = A crate containing a kangaroo.
 ent-CrateNPCMothroach = crate of mothroaches
     .desc = A crate containing four mothroaches.
+ent-CrateNPCSheep = sheep crate
+    .desc = A crate containing a single sheep.

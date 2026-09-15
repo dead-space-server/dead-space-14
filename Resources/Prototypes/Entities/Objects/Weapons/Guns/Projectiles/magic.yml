@@ -239,7 +239,6 @@
       components:
       - Airlock
       - Firelock
-      tags:
       - Wall
 
 - type: entity

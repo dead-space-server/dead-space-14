@@ -49,18 +49,22 @@ traitor-ultra-extra-objective-offer-declined-popup = Additional assignment refus
 traitor-ultra-extra-objective-offer-failed-popup = Assignment temporarily unavailable: the handler could not select an executable objective.
 traitor-ultra-upgrade-briefing = Contract transfer confirmed. {$oldCorp} no longer recognizes you as protected property. {$newCorp} has opened the escalation budget and attached a new directive package. Your old objectives remain recorded; your new orders are available in your character menu.
 traitor-ultra-role-briefing-memory = Escalation contract: former handler {$oldCorp}; active handler {$newCorp}. The original uplink channel remains valid.
+
+traitor-ultra-bounty-announcer =
+    Syndicate
+
 traitor-ultra-bounty-announcement =
-    Attention on all channels. {$agent}, formerly bound by contract to {$oldCorp}, has been declared a corporate traitor after entering the protection of {$newCorp}. This asset is stripped of protection and marked as a valid target. Confirmed liquidation will be rewarded: shadow-market agents will receive individually calculated payouts, and {$oldCorp} will contact independent contractors directly.
-traitor-ultra-bounty-announcement-cybersun =
-    Cybersun Industries black protocol is active. {$agent} has defected from {$oldCorp} to {$newCorp} and is no longer considered recoverable property. The asset is marked for disposal. Confirmed liquidation will be rewarded: shadow-market agents will receive individually calculated payouts, and {$oldCorp} will contact independent contractors directly.
-traitor-ultra-bounty-announcement-gorlex =
-    Gorlex contract broadcast. {$agent} broke oath with {$oldCorp} and sold their violence to {$newCorp}. The name is open season. Confirmed liquidation will be rewarded: shadow-market agents will receive individually calculated payouts, and {$oldCorp} will contact independent contractors directly.
-traitor-ultra-bounty-announcement-interdyne =
-    Interdyne Pharmaceutics containment notice. {$agent} has left {$oldCorp} custody for {$newCorp} and is reclassified as an uncontrolled hostile sample. Confirmed liquidation will be rewarded: shadow-market agents will receive individually calculated payouts, and {$oldCorp} will contact independent contractors directly.
-traitor-ultra-bounty-announcement-donk =
-    Donk.Co loss-prevention bulletin. {$agent} violated an active {$oldCorp} contract and accepted cover from {$newCorp}. The asset is cleared for termination. Confirmed liquidation will be rewarded: shadow-market agents will receive individually calculated payouts, and {$oldCorp} will contact independent contractors directly.
-traitor-ultra-bounty-announcement-waffle =
-    WaffleCorp enforcement dispatch. {$agent} abandoned {$oldCorp} for {$newCorp}; the account is hostile, overdue, and collectible by force. Confirmed liquidation will be rewarded: shadow-market agents will receive individually calculated payouts, and {$oldCorp} will contact independent contractors directly.
+    Attention on all channels. {$agent} has changed the terms of the contract. Starting from the date of this notification, the Syndicate is offering a large reward on an individual basis for the assassination of this person. Reminder: any cooperation with this agent will result in immediate elimination. Death to NanoTrasen!
+# traitor-ultra-bounty-announcement-cybersun =
+#     Cybersun Industries black protocol is active. {$agent} has defected from {$oldCorp} to {$newCorp} and is no longer considered recoverable property. The asset is marked for disposal. Confirmed liquidation will be rewarded: shadow-market agents will receive individually calculated payouts, and {$oldCorp} will contact independent contractors directly.
+# traitor-ultra-bounty-announcement-gorlex =
+#     Gorlex contract broadcast. {$agent} broke oath with {$oldCorp} and sold their violence to {$newCorp}. The name is open season. Confirmed liquidation will be rewarded: shadow-market agents will receive individually calculated payouts, and {$oldCorp} will contact independent contractors directly.
+# traitor-ultra-bounty-announcement-interdyne =
+#     Interdyne Pharmaceutics containment notice. {$agent} has left {$oldCorp} custody for {$newCorp} and is reclassified as an uncontrolled hostile sample. Confirmed liquidation will be rewarded: shadow-market agents will receive individually calculated payouts, and {$oldCorp} will contact independent contractors directly.
+# traitor-ultra-bounty-announcement-donk =
+#     Donk.Co loss-prevention bulletin. {$agent} violated an active {$oldCorp} contract and accepted cover from {$newCorp}. The asset is cleared for termination. Confirmed liquidation will be rewarded: shadow-market agents will receive individually calculated payouts, and {$oldCorp} will contact independent contractors directly.
+# traitor-ultra-bounty-announcement-waffle =
+#     WaffleCorp enforcement dispatch. {$agent} abandoned {$oldCorp} for {$newCorp}; the account is hostile, overdue, and collectible by force. Confirmed liquidation will be rewarded: shadow-market agents will receive individually calculated payouts, and {$oldCorp} will contact independent contractors directly.
 traitor-ultra-bounty-traitor-kill-message = Contract closure confirmed. Your individual payout is being calculated and queued.
 traitor-ultra-bounty-crew-kill-message = Your initiative has been noticed. The previous handler is preparing a private offer.
 traitor-ultra-bounty-security-kill-message = Contract violator neutralized. Executor loyalty to their Corporation confirmed; 10,000 credits have been transferred to the NanoTrasen Security account.

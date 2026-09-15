@@ -1,50 +1,39 @@
 <Popup xmlns="https://spacestation14.io"
        xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls">
     <!-- DS14-start -->
-    <PanelContainer StyleClasses="DS14MenuPopupPanel"
+    <PanelContainer StyleClasses="DeadSpacePopup"
                     MinWidth="380">
         <BoxContainer Orientation="Vertical"
                       SeparationOverride="5">
             <Label Name="PlayerNameLabel"
-                   StyleClasses="DS14MenuProfileSection" />
-            <Label Name="IdLabel"
-                   StyleClasses="DS14MenuProfileLabel" />
-            <Label Name="TypeLabel"
-                   StyleClasses="DS14MenuProfileLabel" />
-            <Label Name="SeverityLabel"
-                   StyleClasses="DS14MenuProfileLabel" />
-            <Label Name="RoundIdLabel"
-                   StyleClasses="DS14MenuProfileLabel" />
-            <Label Name="CreatedByLabel"
-                   StyleClasses="DS14MenuProfileLabel" />
-            <Label Name="CreatedAtLabel"
-                   StyleClasses="DS14MenuProfileLabel" />
-            <Label Name="EditedByLabel"
-                   StyleClasses="DS14MenuProfileLabel" />
-            <Label Name="EditedAtLabel"
-                   StyleClasses="DS14MenuProfileLabel" />
-            <Label Name="ExpiryTimeLabel"
-                   StyleClasses="DS14MenuProfileLabel" />
-            <PanelContainer StyleClasses="DS14MenuInset"
+                   StyleClasses="DeadSpaceSectionTitle" />
+            <Label Name="IdLabel" />
+            <Label Name="TypeLabel" />
+            <Label Name="SeverityLabel" />
+            <Label Name="RoundIdLabel" />
+            <Label Name="CreatedByLabel" />
+            <Label Name="CreatedAtLabel" />
+            <Label Name="EditedByLabel" />
+            <Label Name="EditedAtLabel" />
+            <Label Name="ExpiryTimeLabel" />
+            <PanelContainer StyleClasses="DeadSpaceInset"
                             MinHeight="70"
                             HorizontalExpand="True">
                 <TextEdit Name="NoteTextEdit"
                           Editable="False"
-                          StyleClasses="DS14MenuTextArea"
                           HorizontalExpand="True"
                           VerticalExpand="True" />
             </PanelContainer>
             <BoxContainer Orientation="Horizontal"
                           SeparationOverride="6">
                 <Button Name="EditButton"
-                        Text="{Loc admin-notes-edit}"
-                        StyleClasses="DS14MenuProfileControl" />
+                        Text="{Loc admin-notes-edit}" />
                 <Control HorizontalExpand="True" />
                 <controls:ConfirmButton Name="DeleteButton"
                                         Text="{Loc admin-notes-delete}"
                                         ConfirmationText="{Loc 'admin-player-actions-confirm'}"
                                         HorizontalAlignment="Right"
-                                        StyleClasses="DS14MenuProfileControl negative" />
+                                        StyleClasses="negative" />
             </BoxContainer>
         </BoxContainer>
     </PanelContainer>

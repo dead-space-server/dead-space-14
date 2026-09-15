@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
+using Content.Server.DeadSpace.CentComm;
 using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Server.DeadSpace.Prison.Components;
 using Content.Server.DeadSpace.NoShuttleFTL;
@@ -124,6 +125,12 @@ public sealed partial class ShuttleSystem
             return;
         }
         // DS14-prevent-ftl-to-taipan-station-end
+
+        // DS14-start
+        // EmergencyShuttleSystem registers CentComm separately with a coordinate disk requirement.
+        if (HasComp<CentCommStationComponent>(ev.Station))
+            return;
+        // DS14-end
 
         // Add all grid maps as ftl destinations that anyone can FTL to.
         foreach (var gridUid in ev.Station.Comp.Grids)
@@ -1221,11 +1228,13 @@ public sealed partial class ShuttleSystem
                     continue;
                 }
 
-                // If it's on our grid ignore it.
-                if (!_xformQuery.TryComp(ent, out var childXform) || childXform.GridUid == uid)
+                // DS14-start
+                // Grid-owned entities belong to the arriving shuttle or the target station and must never be flattened.
+                if (!_xformQuery.TryComp(ent, out var childXform) || childXform.GridUid is { Valid: true })
                 {
                     continue;
                 }
+                // DS14-end
 
                 // If it has the FTLSmashImmuneComponent ignore it.
                 if (_immuneQuery.HasComponent(ent))

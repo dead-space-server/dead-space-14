@@ -1,0 +1,7 @@
+# Attempted to keep the files in alphabetical order so its easier to audit.
+# Finding individual authors is an unfeasible task. If you can reference the author please do so.
+
+- files: ["dark.png", "dark_mini.png", "dark_mono.png", "dark_mono2.png", "dark_mono3.png", "dark.png_offset", "dark_pavement.png", "dark_pavement_vertical.png", "dark_plastic.png"]
+  license: "CC-BY-SA-4.0"
+  copyright: "Made by sentryprimies (Discord), resprite by sastr. (Discord)"
+  source: "https://github.com/dead-space-server/space-station-14-fobos"

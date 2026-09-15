@@ -19,6 +19,7 @@ namespace Content.Server.Atmos.EntitySystems
         private readonly float[] _reactionFastPathMinimumMoles = new float[Atmospherics.TotalNumberOfGases];
         private bool _useReactionFastPath;
         // DS14-end
+        private readonly GasMixture _scrubBuffer = new(); // DS14
 
         /// <summary>
         ///     List of gas reactions ordered by priority.
@@ -163,6 +164,9 @@ namespace Content.Server.Atmos.EntitySystems
             }
 
             NumericsHelpers.Add(receiver.Moles, giver.Moles);
+            // Kofeecheks Iprit decay: LicenseRef-Kofeecheks
+            var giverIprit = giver.GetMoles(Gas.Iprit);
+            receiver.BlendIpritDecayDeadline(receiver.GetMoles(Gas.Iprit) - giverIprit, giver.IpritDecayDeadline, giverIprit);
         }
 
         /// <summary>
@@ -208,6 +212,9 @@ namespace Content.Server.Atmos.EntitySystems
                 // transfer moles
                 NumericsHelpers.Multiply(source.Moles, fraction, buffer);
                 NumericsHelpers.Add(receiver.Moles, buffer);
+                // Kofeecheks Iprit decay: LicenseRef-Kofeecheks
+                var addedIprit = buffer[(int) Gas.Iprit];
+                receiver.BlendIpritDecayDeadline(receiver.GetMoles(Gas.Iprit) - addedIprit, source.IpritDecayDeadline, addedIprit);
             }
         }
 
@@ -272,9 +279,16 @@ namespace Content.Server.Atmos.EntitySystems
         /// <summary>
         ///     Scrubs specified gases from a gas mixture into a <see cref="destination"/> gas mixture.
         /// </summary>
-        public void ScrubInto(GasMixture mixture, GasMixture destination, IReadOnlyCollection<Gas> filterGases)
+        public void ScrubInto(GasMixture mixture, GasMixture destination, HashSet<Gas> filterGases) // DS14
         {
-            var buffer = new GasMixture(mixture.Volume){Temperature = mixture.Temperature};
+            // DS14-start
+            // Reuse one mixture and mole array; atmos devices run serially.
+            var buffer = _scrubBuffer;
+            buffer.Clear();
+            buffer.Volume = mixture.Volume;
+            buffer.Temperature = mixture.Temperature;
+            // DS14-end
+            var ipritDecayDeadline = mixture.IpritDecayDeadline; // Kofeecheks Iprit decay: LicenseRef-Kofeecheks
 
             foreach (var gas in filterGases)
             {
@@ -282,6 +296,7 @@ namespace Content.Server.Atmos.EntitySystems
                 mixture.SetMoles(gas, 0f);
             }
 
+            buffer.EnsureIpritDecayDeadline(ipritDecayDeadline); // Kofeecheks Iprit decay: LicenseRef-Kofeecheks
             Merge(destination, buffer);
         }
 
@@ -617,6 +632,7 @@ namespace Content.Server.Atmos.EntitySystems
 
             NumericsHelpers.Add(mixture.Moles, molsToAdd);
             NumericsHelpers.Max(mixture.Moles, 0f);
+            mixture.ResetIpritDecayDeadlineIfEmpty(); // Kofeecheks Iprit decay: LicenseRef-Kofeecheks
         }
 
         public enum GasCompareResult

@@ -86,6 +86,7 @@
   id: WeaponPistolViper
   description: A common handgun illegally modified by the Syndicate. The Viper sports a selector switch between semi-auto and ‘rock and roll’. The standard sidearm for any soldier who fights under the three serpents. Feeds from .35 pistol magazines.
   components:
+  - type: Akimbo # DS14
   - type: Sprite
     sprite: Objects/Weapons/Guns/Pistols/viper.rsi
   - type: ItemSlots
@@ -231,6 +232,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
   - type: Item
     storedOffset: 0,-2
+  - type: Akimbo # DS14
   - type: Gun
     fireRate: 5 # DS14
     availableModes:

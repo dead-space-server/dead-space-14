@@ -10,6 +10,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Store.Components;
 using Content.Shared.VendingMachines;
+using Content.Shared.VendingMachines.Components; // DS14 - vending machine refactor adaptation
 using Content.Shared.Wires;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;

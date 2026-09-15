@@ -3,6 +3,7 @@
   parent: [BaseWeaponBatterySmall, BaseGrandTheftContraband]
   id: WeaponEnergyM1911
   description: Мощный самозаряжающийся энергетический кольт, разработанный для Офицерского состава КСО. Имеет три режима стрельбы, позволяющие нелетально обезвреживать, стрелять малыми импульсными зарядами или же использовать всю мощность для максимальной эффективности.
+  suffix: Пистолет
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Weapons/Guns/Battery/m1911.rsi

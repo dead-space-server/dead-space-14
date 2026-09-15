@@ -27,6 +27,7 @@ verb-categories-ping-select = Пикать при
 verb-categories-select-type = Выбрать тип
 verb-categories-fax = Задать место назначения
 verb-categories-adjust = Отрегулировать
+verb-categories-select-target = Выбрать цель
 verb-categories-power-level = Уровень мощности
 verb-common-toggle-light = Переключить свет
 verb-common-close = Закрыть

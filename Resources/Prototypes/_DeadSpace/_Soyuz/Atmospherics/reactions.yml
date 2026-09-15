@@ -1,0 +1,74 @@
+# SPDX-FileCopyrightText: 2026 Kofeecheks
+# SPDX-License-Identifier: LicenseRef-Kofeecheks
+
+- type: gasReaction
+  id: FixiriumProduction
+  priority: 4
+  minimumTemperature: 50
+  maximumTemperature: 273
+  minimumRequirements:
+    Tritium: 0.01
+    CarbonDioxide: 0.01
+    Oxygen: 0.01
+  effects:
+  - !type:FixiriumProductionReaction {}
+
+- type: gasReaction
+  id: BrizidiumProduction
+  priority: 4
+  minimumRequirements:
+    Plasma: 10
+    NitrousOxide: 10
+  effects:
+  - !type:BrizidiumProductionReaction {}
+
+- type: gasReaction
+  id: NitriatiumProduction
+  priority: 4
+  minimumTemperature: 1500
+  minimumRequirements:
+    Tritium: 20
+    Nitrogen: 10
+    Brizidium: 5
+  effects:
+  - !type:NitriatiumProductionReaction {}
+
+- type: gasReaction
+  id: NitriatiumDecomposition
+  priority: 5
+  maximumTemperature: 343.15
+  minimumRequirements:
+    Nitriatium: 0.01
+    Oxygen: 0.01
+  effects:
+  - !type:NitriatiumDecompositionReaction {}
+
+- type: gasReaction
+  id: HiliumProduction
+  priority: 4
+  minimumTemperature: 25
+  maximumTemperature: 300
+  minimumRequirements:
+    Frezon: 0.01
+    Brizidium: 0.01
+  effects:
+  - !type:HiliumProductionReaction {}
+
+- type: gasReaction
+  id: IpritDecay
+  priority: 6
+  minimumRequirements:
+    Iprit: 0.00000005
+  effects:
+  - !type:IpritDecayReaction {}
+
+- type: gasReaction
+  id: IpritProduction
+  priority: 5
+  minimumTemperature: 65
+  maximumTemperature: 75
+  minimumRequirements:
+    Tritium: 0.01
+    Fixirium: 0.01
+  effects:
+  - !type:IpritProductionReaction {}

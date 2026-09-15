@@ -358,10 +358,14 @@ public sealed partial class ServerApi
     private PlaytimeJobInfo[] BuildPlaytimeJobInfos()
     {
         var departments = _prototypeManager.EnumeratePrototypes<DepartmentPrototype>().ToArray();
+        var jobs = _prototypeManager.EnumeratePrototypes<JobPrototype>().ToList();
 
-        return _prototypeManager.EnumeratePrototypes<JobPrototype>()
-            .OrderByDescending(job => job.RealDisplayWeight)
-            .ThenBy(job => job.ID)
+        // DS14-start - keep the local playtime API ordered by the new default job-weight profile.
+        if (JobUIComparer.TryCreate(_prototypeManager, null, out var comparer))
+            jobs.Sort(comparer);
+        // DS14-end
+
+        return jobs
             .Select(job => new PlaytimeJobInfo
             {
                 Id = job.ID,

@@ -4,8 +4,7 @@
     <Label Name="PlayerEntryLabel"
            Text=""
            ClipText="True"
-           HorizontalExpand="True"
-           StyleClasses="DS14MenuProfileLabel" />
+           HorizontalExpand="True" />
     <TextureButton Name="PlayerEntryPinButton"
                    HorizontalAlignment="Right" />
     <!-- DS14-end -->

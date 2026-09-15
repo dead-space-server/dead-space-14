@@ -25,6 +25,7 @@
         - LowImpassable
   - type: Anchorable
     delay: 4
+  - type: GravityAffected #DS14
 
 - type: entity
   parent: [BaseGlassBox, BaseItemCabinetGlass]

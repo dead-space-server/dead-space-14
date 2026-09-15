@@ -13,6 +13,7 @@
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: mukhtar
+      animation: true
     scale: 0.9, 0.9
   - type: Physics
   - type: Fixtures
@@ -130,6 +131,7 @@
   id: MobMukhtarGear
   equipment:
     id: MukhtarIDCard
+    outerClothing: ClothingOuterArmorMukhtar
 
 - type: entity
   name: спавнер Мухтар

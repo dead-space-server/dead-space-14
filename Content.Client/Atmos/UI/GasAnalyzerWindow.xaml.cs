@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.Atmos;
 using Content.Shared.Temperature;
@@ -166,8 +167,8 @@ namespace Content.Client.Atmos.UI
                 VerticalExpand = true,
                 HorizontalExpand = true,
                 Margin = new Thickness(4),
-                PanelOverride = new StyleBoxFlat{BorderColor = Color.FromHex("#4f4f4f"), BorderThickness = new Thickness(1)}
             };
+            panel.AddStyleClass(DeadSpaceStyleClass.Inset); // DS14
             var dataContainer = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, VerticalExpand = true, Margin = new Thickness(4)};
 
 
@@ -252,7 +253,7 @@ namespace Content.Client.Atmos.UI
                 dataContainer.AddChild(new Label
                 {
                     Text = Loc.GetString("gas-analyzer-window-no-gas-text"),
-                    FontColorOverride = Color.Gray
+                    FontColorOverride = DeadSpaceStylePalette.TextMuted // DS14
                 });
                 // return, everything below is for the fancy gas display stuff
                 return;

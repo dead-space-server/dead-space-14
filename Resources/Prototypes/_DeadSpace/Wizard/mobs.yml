@@ -58,6 +58,7 @@
       Alive:
       - ActionHellspawnFireSpawn
   - type: PassiveDamage
+    intervalHaltOnDamageTaken: 5s
     allowedStates:
     - Alive
     damageCap: 0
@@ -110,8 +111,8 @@
     description: ghost-role-information-maglet-description
     rules: ghost-role-information-familiar-rules
     requirements:
-      - !type:OverallPlaytimeRequirement
-        time: 72000 # 20 hours
+    - !type:OverallPlaytimeRequirement
+      time: 720000 # 200 hours
   - type: GhostTakeoverAvailable
   - type: InteractionPopup
     successChance: 1
@@ -160,8 +161,8 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      125: Critical 
-      200: Dead 
+      125: Critical
+      200: Dead
   - type: ReplacementAccent
     accent: mouse
   - type: Speech

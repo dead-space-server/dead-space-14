@@ -1,9 +1,13 @@
 using Content.Client.Administration.Managers;
+using Content.Shared.CCVar;
+using Content.Shared.Ghost;
 using Content.Shared.Roles;
 using Robust.Client.Graphics;
+using Robust.Client.Player;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Shared.Configuration;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client.Administration.Systems
@@ -19,6 +23,7 @@ namespace Content.Client.Administration.Systems
         [Dependency] private readonly IConfigurationManager _configurationManager = default!;
         [Dependency] private readonly SharedRoleSystem _roles = default!;
         [Dependency] private readonly IPrototypeManager _proto = default!;
+        [Dependency] private readonly IPlayerManager _playerManager = default!; // DS14
 
         private AdminNameOverlay _adminNameOverlay = default!;
 
@@ -38,6 +43,7 @@ namespace Content.Client.Administration.Systems
                 _roles,
                 _proto);
             _adminManager.AdminStatusUpdated += OnAdminStatusUpdated;
+            SubscribeLocalEvent<LocalPlayerAttachedEvent>(OnObserverAttached); // DS14
         }
 
         private void ShutdownOverlay()
@@ -48,7 +54,28 @@ namespace Content.Client.Administration.Systems
         private void OnAdminStatusUpdated()
         {
             AdminOverlayOff();
+            TryEnableObserverOverlay(); // DS14
         }
+
+        // DS14-start
+        private void OnObserverAttached(LocalPlayerAttachedEvent args)
+        {
+            TryEnableObserverOverlay();
+        }
+
+        private void TryEnableObserverOverlay()
+        {
+            if (!_configurationManager.GetCVar(CCVars.AdminOverlayAutoEnableOnObserver) ||
+                !_adminManager.IsActive() ||
+                _playerManager.LocalEntity is not { } player ||
+                !HasComp<GhostComponent>(player))
+            {
+                return;
+            }
+
+            AdminOverlayOn();
+        }
+        // DS14-end
 
         public void AdminOverlayOn()
         {

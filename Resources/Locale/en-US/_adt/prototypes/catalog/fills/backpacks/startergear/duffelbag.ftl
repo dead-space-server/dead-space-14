@@ -9,6 +9,5 @@ ent-ClothingBackpackDuffelSyndicateFilledBuldogAmmoXL = { ent-ClothingBackpackDu
 ent-ClothingBackpackDuffelSyndicateFilledXC67 = { ent-ClothingBackpackDuffelSyndicateBundle }
     .desc = { ent-ClothingBackpackDuffelSyndicateBundle.desc }
 ent-ClothingBackpackDuffelSyndicateFilledXC67Ammo = { ent-ClothingBackpackDuffelSyndicateAmmoBundle }
-    .desc = { ent-ClothingBackpackDuffelSyndicateAmmoBundle.desc }
 ent-ClothingBackpackDuffelSyndicateFilledAKAmmo = { ent-ClothingBackpackDuffelSyndicateAmmoBundle }
     .desc = { ent-ClothingBackpackDuffelSyndicateAmmoBundle.desc }

@@ -22,10 +22,10 @@ namespace Content.Client.Ghost
 
         private bool _ghostVisibility = true;
 
-        private bool GhostVisibility
+        public bool GhostVisibility
         {
             get => _ghostVisibility;
-            set
+            private set
             {
                 if (_ghostVisibility == value)
                 {
@@ -201,7 +201,7 @@ namespace Content.Client.Ghost
                 _sprite.SetVisible((uid, sprite), IsGhostSpriteVisible(uid));
         }
 
-        private bool IsGhostSpriteVisible(EntityUid uid)
+        public bool IsGhostSpriteVisible(EntityUid uid)
         {
             if (TryComp<AdminGhostVisibilityComponent>(uid, out var adminGhostVisibility) && adminGhostVisibility.Hidden)
                 return false;

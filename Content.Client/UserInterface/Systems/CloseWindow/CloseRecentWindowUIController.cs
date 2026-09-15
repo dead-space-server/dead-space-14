@@ -19,6 +19,7 @@ public sealed class CloseRecentWindowUIController : UIController
     {
         _uiManager.OnKeyBindDown += OnKeyBindDown;
         _uiManager.WindowRoot.OnChildAdded += OnRootChildAdded;
+        _uiManager.WindowRoot.OnChildRemoved += OnRootChildRemoved;
 
         _inputManager.SetInputCommand(EngineKeyFunctions.WindowCloseRecent,
             InputCmdHandler.FromDelegate(session => CloseMostRecentWindow()));
@@ -91,6 +92,14 @@ public sealed class CloseRecentWindowUIController : UIController
         {
             SetMostRecentlyInteractedWindow(control);
         }
+    }
+
+    private void OnRootChildRemoved(Control control)
+    {
+        // DS14-start - custom Emerald windows participate in the same recent-window lifecycle.
+        if (control is BaseWindow || control is EmeraldBaseWindow)
+            recentlyInteractedWindows.Remove(control);
+        // DS14-end
     }
 
     public bool HasClosableWindow()

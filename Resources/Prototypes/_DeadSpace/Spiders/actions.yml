@@ -185,6 +185,5 @@
     whitelist:
       components:
       - Door
-      tags:
       - Wall
     event: !type:DevourActionEvent

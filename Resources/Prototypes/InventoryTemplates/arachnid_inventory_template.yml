@@ -124,6 +124,11 @@
       uiWindowPos: 1,1
       strippingWindowPos: 1,2
       displayName: Suit
+# DS14-start
+      blacklist:
+        tags:
+        - PetOnly
+# DS14-end
     - name: pocket1
       slotTexture: pocket
       fullTextureName: template_small

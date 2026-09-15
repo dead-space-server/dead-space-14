@@ -9,21 +9,25 @@
         <BoxContainer Margin="0 5 10 10" Orientation="Vertical">
             <BoxContainer Margin="0" Orientation="Horizontal">
                 <!-- Sprite View -->
-                <PanelContainer Margin="0" StyleClasses="BackgroundPanelDark" VerticalAlignment="Center">
+                <!-- DS14-start -->
+                <PanelContainer Margin="10 0 0 0" StyleClasses="DeadSpaceInset" VerticalAlignment="Center">
                     <SpriteView Name="EntityView" Scale="2 2" SetSize="64 64" OverrideDirection="South" />
                 </PanelContainer>
+                <!-- DS14-end -->
                 <!-- Data -->
                 <BoxContainer Orientation="Vertical" HorizontalExpand="True">
                     <GridContainer Margin="10 0 0 0" Columns="2">
                         <!-- Power On/Off -->
+                        <!-- DS14-start -->
                         <Label Text="{Loc 'apc-menu-breaker-label'}" HorizontalExpand="True"
-                                StyleClasses="highlight" MinWidth="120"/>
+                                StyleClasses="DeadSpaceSectionTitle" MinWidth="120"/>
                         <controls:SwitchButton Name="BreakerButton" MinWidth="150"/>
                         <!--Charging Status-->
-                        <Label Text="{Loc 'apc-menu-external-label'}" StyleClasses="highlight" MinWidth="120" />
+                        <Label Text="{Loc 'apc-menu-external-label'}" StyleClasses="DeadSpaceSectionTitle" MinWidth="120" />
                         <Label Name="ExternalPowerStateLabel" Text="{Loc 'apc-menu-power-state-good'}" />
                         <!--Battery Power-->
-                        <Label Text="{Loc 'apc-menu-power-label'}" StyleClasses="highlight" MinWidth="120" />
+                        <Label Text="{Loc 'apc-menu-power-label'}" StyleClasses="DeadSpaceSectionTitle" MinWidth="120" />
+                        <!-- DS14-end -->
                         <Label Name="PowerLabel"/>
                     </GridContainer>
                 </BoxContainer>
@@ -45,9 +49,11 @@
         <BoxContainer Orientation="Vertical">
             <PanelContainer StyleClasses="LowDivider" />
             <BoxContainer Orientation="Horizontal" Margin="10 2 5 0" VerticalAlignment="Bottom">
-                <Label Text="{Loc 'apc-menu-flavor-left'}" StyleClasses="WindowFooterText" />
-                <Label Text="{Loc 'apc-menu-flavor-right'}" StyleClasses="WindowFooterText"
+                <!-- DS14-start -->
+                <Label Text="{Loc 'apc-menu-flavor-left'}" StyleClasses="DeadSpaceSubtitle" />
+                <Label Text="{Loc 'apc-menu-flavor-right'}" StyleClasses="DeadSpaceSubtitle"
                         HorizontalAlignment="Right" HorizontalExpand="True"  Margin="0 0 5 0" />
+                <!-- DS14-end -->
                 <TextureRect StyleClasses="NTLogoDark" Stretch="KeepAspectCentered"
                         VerticalAlignment="Center" HorizontalAlignment="Right" SetSize="19 19"/>
             </BoxContainer>

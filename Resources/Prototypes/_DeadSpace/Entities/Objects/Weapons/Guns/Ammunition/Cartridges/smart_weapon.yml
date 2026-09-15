@@ -1,0 +1,10 @@
+- type: entity
+  parent: BaseCartridgePistol
+  id: CartridgeShingen
+  name: патрон (9x19 мм Smart™)
+  description: 
+  components:
+  - type: CartridgeAmmo
+    proto: BulletShingen
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Guns/Ammunition/Casings/smart.rsi

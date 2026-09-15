@@ -3,3 +3,5 @@ ent-JawsOfLife = челюсти жизни
 ent-SyndicateJawsOfLife = кроваво-красные челюсти жизни
     .suffix = челюсти жизни синдиката
     .desc = { ent-JawsOfLife.desc }.
+ent-XenoborgJawsOfLife = челюсти смерти ксеноборгов
+    .desc = Пригодятся, чтобы вскрывать заблокированные двери, за которыми прячутся органики.

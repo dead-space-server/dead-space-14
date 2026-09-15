@@ -163,7 +163,7 @@
           - PowerCell
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuitKelic
   categories: [ HideSpawnMenu ]
   name: шлем MS-06

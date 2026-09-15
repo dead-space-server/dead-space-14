@@ -5,6 +5,13 @@
   description: Монстр!
   abstract: true
   components:
+  - type: TemperatureDamage
+    heatDamageThreshold: 100000
+    coldDamageThreshold: -100000
+    heatDamage:
+      types: {}
+    coldDamage:
+      types: {}
   - type: HTN
     rootTask:
       task: SimpleHostileCompound
@@ -76,6 +83,7 @@
   - type: ZombieImmune
   - type: ImmunitetInfectionDead
   - type: PassiveDamage
+    intervalHaltOnDamageTaken: 5s
     allowedStates:
     - Alive
     - Critical
@@ -136,6 +144,9 @@
     name: ghost-role-information-herald-name
     description: ghost-role-information-herald-description
     rules: ghost-role-information-herald-rules
+    requirements:
+    - !type:OverallPlaytimeRequirement
+      time: 720000 # 200 hours
   - type: Language
     selectedLanguage: DemonLanguage
     knownLanguages:
@@ -154,7 +165,7 @@
   - type: TTS
     voice: Volibear
   #DS14-start
-  - type: GhostRoleNotifys 
+  - type: GhostRoleNotifys
     groupPrototype: DemonBoss
   #DS14-end
 

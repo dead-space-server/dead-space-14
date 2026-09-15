@@ -1,0 +1,17 @@
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      Title="{Loc new-life-title}"
+                      MinSize="460 340"
+                      SetSize="560 470">
+    <BoxContainer Orientation="Vertical" SeparationOverride="12" Margin="12">
+        <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
+            <RichTextLabel Name="Rules" HorizontalExpand="True" />
+        </ScrollContainer>
+        <RichTextLabel Name="Status" HorizontalExpand="True" />
+        <CheckBox Name="AcceptRules" Text="{Loc new-life-accept-rules}" />
+        <BoxContainer Orientation="Horizontal" SeparationOverride="12">
+            <Button Name="CancelButton" Access="Public" Text="{Loc new-life-cancel}" HorizontalExpand="True" />
+            <Button Name="ConfirmButton" Access="Public" Text="{Loc new-life-confirm}" HorizontalExpand="True" Disabled="True" />
+        </BoxContainer>
+    </BoxContainer>
+</controls:FancyWindow>

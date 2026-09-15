@@ -2,6 +2,7 @@ using Content.Shared.Access;
 using Content.Shared.Access.Systems;
 using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Prototypes;
+using Content.Shared.Weapons.Ranged.Components;
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
 
@@ -127,7 +128,9 @@ public sealed partial class TurretTargetSettingsSystem : EntitySystem
     public bool EntityIsTargetForTurret(Entity<TurretTargetSettingsComponent> ent, EntityUid target)
     {
         // DS14-start
-        if (TargetIsFriendly(ent, target))
+        if (HasComp<GunComponent>(target) &&
+            TryComp<TurretTargetSettingsComponent>(target, out var targetSettings) &&
+            TurretsAreFriendly(ent, (target, targetSettings)))
             return false;
         // DS14-end
 
@@ -143,19 +146,18 @@ public sealed partial class TurretTargetSettingsSystem : EntitySystem
     }
 
     // DS14-start
-    private bool TargetIsFriendly(
+    private bool TurretsAreFriendly(
         Entity<TurretTargetSettingsComponent> source,
-        EntityUid target)
+        Entity<TurretTargetSettingsComponent> target)
     {
         TryComp<NpcFactionMemberComponent>(source, out var sourceFactionMember);
         TryComp<NpcFactionMemberComponent>(target, out var targetFactionMember);
-        TryComp<TurretTargetSettingsComponent>(target, out var targetSettings);
 
         var sourceFactions = source.Comp.TurretFactions.Count > 0
             ? source.Comp.TurretFactions
             : sourceFactionMember?.Factions;
-        var targetFactions = targetSettings?.TurretFactions.Count > 0
-            ? targetSettings.TurretFactions
+        var targetFactions = target.Comp.TurretFactions.Count > 0
+            ? target.Comp.TurretFactions
             : targetFactionMember?.Factions;
 
         if (sourceFactions == null || targetFactions == null)

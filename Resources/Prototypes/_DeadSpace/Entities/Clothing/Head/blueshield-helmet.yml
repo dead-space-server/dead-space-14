@@ -1,5 +1,5 @@
 - type: entity
-  parent: ClothingHeadHelmetHardsuitSecurityRed
+  parent: [ClothingHeadHelmetHardsuitSecurityRed]
   id: ClothingHeadHelmetHardsuitBlueShield
   categories: [ HideSpawnMenu, DoNotMap ]
   name: шлем скафандра офицера "Синий Щит"
@@ -30,7 +30,7 @@
     sprite: _DeadSpace/Clothing/Head/Helmets/blueshieldhelmet.rsi
 
 - type: entity
-  parent: ClothingHeadHelmetHardsuitSecurityRed
+  parent: [ClothingHeadHelmetHardsuitSecurityRed]
   id: ClothingHeadHelmetHardsuitRedSword
   categories: [ HideSpawnMenu, DoNotMap ]
   name: шлем скафандра офицера "Красный Меч"
@@ -50,7 +50,7 @@
     - HeadSide
     
 - type: entity
-  parent: ClothingHeadHelmetHardsuitSecurityRed
+  parent: [ClothingHeadHelmetHardsuitSecurityRed]
   id: ClothingHeadHelmetHardsuitGreenBeret
   categories: [ HideSpawnMenu, DoNotMap ]
   name: шлем скафандра офицера "Зелёный Берет"

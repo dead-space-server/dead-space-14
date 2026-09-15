@@ -151,7 +151,7 @@
   - type: HeldSpeedModifier
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuitswitzerlaand
   categories: [ HideSpawnMenu ]
   name: шлем скафандра NanoTrasen

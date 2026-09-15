@@ -126,7 +126,7 @@
     useDelay: 15
     icon:
       sprite: Objects/Tools/access_breaker.rsi
-      state: icon
+      state: syndi-icon # DS14: The access-breaker icon state was renamed by the xenoborg module rework.
   - type: TargetAction
   - type: EntityTargetAction
     whitelist:

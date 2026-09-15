@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Client.DeadSpace.Stylesheets;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface.Controls;
 
@@ -13,7 +14,7 @@ public sealed class CircleShuttleTimerControl : PanelContainer
     {
         PanelOverride = new StyleBoxFlat
         {
-            BackgroundColor = Color.FromHex("#16191FCC"),
+            BackgroundColor = DeadSpaceStylePalette.SurfaceStatus.WithAlpha(0.8f),
             BorderColor = Color.FromHex("#5F9C89"),
             BorderThickness = new Thickness(2),
             ContentMarginLeftOverride = 10,

@@ -1,0 +1,20 @@
+# Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+#
+# category: NTCriminalRecords - намеренно не входит ни в один AllowedFormCategories обычного
+# ксерокса, см. комментарий у enum PhotocopierFormCategory.NTCriminalRecords. Печатаются только
+# кнопкой "Распечатать" консоли криминальных записей (CriminalRecordsConsoleSystem), которая одна
+# умеет подставлять {{AUTHOR.*}} / {{TARGET.*}} / {{ARTICLES}} / {{SENTENCE}}.
+
+- type: paperworkForm
+  id: CriminalArrestWarrant
+  category: NTCriminalRecords
+  name: paperwork-form-title-criminal-arrest-warrant
+  text: "/Paperwork/Security/arrest-warrant-auto.xml"
+  paperPrototype: PaperPrintedSecurity
+
+- type: paperworkForm
+  id: CriminalVerdict
+  category: NTCriminalRecords
+  name: paperwork-form-title-criminal-verdict
+  text: "/Paperwork/Security/verdict-auto.xml"
+  paperPrototype: PaperPrintedSecurity

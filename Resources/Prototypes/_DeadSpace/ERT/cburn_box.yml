@@ -413,6 +413,7 @@
   components:
   - type: StorageFill
     contents:
+      - id: ERTloadoutMelee
       - id: ADTtelescopicBaton
       - id: Handcuffs
       - id: Handcuffs
@@ -430,6 +431,7 @@
   components:
   - type: StorageFill
     contents:
+      - id: ERTloadoutMelee
       - id: ADTtelescopicBaton
       - id: Handcuffs
       - id: Handcuffs
@@ -447,16 +449,8 @@
   components:
   - type: StorageFill
     contents:
-      - id: BSAACombatKitFilled
-      - id: BSAACombatKitFilled
-      - id: ChemistryBottlePuncturase
-      - id: ChemistryBottlePuncturase
-      - id: ChemistryBottleArithrazine
-      - id: ChemistryBottleDylovene
-      - id: ChemistryBottleBicaridine
-      - id: ChemistryBottleBicaridine
-      - id: ChemistryBottleDermaline
-      - id: ChemistryBottleDermaline
+      - id: ERTGammaMedicCombatKitFilled
+        amount: 2
   - type: ExplosionResistance
     damageCoefficient: 0
 
@@ -472,7 +466,7 @@
      - id: SoapOmega
      - id: MegaSprayBottleSpaceCleaner
        amount: 2
-     - id: LightReplacer
+     - id: LightReplacerFilled
      - id: WireBrush
      - id: BagOfSummoningGarbage
      - id: Holoprojector

@@ -11,6 +11,7 @@
   - Wizard
   - Zombies
   - Xenoborgs
+  - Changelings
   - MinorAntagonists
   - TheCircle #DS14
   - Hooligan #DS14
@@ -34,6 +35,11 @@
   id: Revolutionaries
   name: guide-entry-revolutionaries
   text: "/ServerInfo/Guidebook/Antagonist/Revolutionaries.xml"
+
+- type: guideEntry
+  id: Changelings
+  name: guide-entry-changelings
+  text: "/ServerInfo/Guidebook/Antagonist/Changelings.xml"
 
 - type: guideEntry
   id: MinorAntagonists

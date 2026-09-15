@@ -1,0 +1,32 @@
+- type: entity
+  parent: MobCleanBot
+  id: MobCleanBotChistoTyan
+  name: чисто-тян
+  description: Улучшенный чистобот-горничная. Убирает быстрее и старательнее обычного собрата. Руки прочь.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Mobs/Silicon/Bots/chistotyan.rsi
+    layers:
+    - map: [ "movement" ]
+      state: stand-still
+  - type: SpriteMovement
+    movementLayers:
+      movement:
+        state: move
+    noMovementLayers:
+      movement:
+        state: stand-still
+  - type: Construction
+    graph: CleanBotChistoTyan
+    node: bot
+  - type: Absorbent
+    pickupAmount: 15
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3
+    baseSprintSpeed: 4
+  - type: SolutionRegeneration
+    solution: absorbed
+    generated:
+      reagents:
+        - ReagentId: Water
+          Quantity: 15

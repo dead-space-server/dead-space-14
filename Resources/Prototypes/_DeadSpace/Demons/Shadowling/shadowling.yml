@@ -363,6 +363,15 @@
     decay: 100
     cooldown: 3
 
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Blunt
+        damage: 1000
+      behaviors:
+      - !type:GibBehavior { }
+
   - type: ShadowlingAscendedPhase
   - type: ShadowlingAnnihilation
   - type: ShadowlingAbsoluteFreezingVeins

@@ -4,7 +4,6 @@ using Content.Shared.Actions;
 using Content.Server.Destructible;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Clothing.Components;
-using Content.Shared.Damage.Components;
 using Content.Shared.DeadSpace.TheCircle.Dreadnought;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
@@ -15,9 +14,11 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Mobs.Events;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Stunnable;
+using Content.Shared.StatusEffectNew;
 using Content.Shared.Traits.Assorted;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.TheCircle.Dreadnought;
@@ -25,6 +26,7 @@ namespace Content.Server.DeadSpace.TheCircle.Dreadnought;
 public sealed class DreadnoughtLastStandSystem : EntitySystem
 {
     private const string OuterClothingSlot = "outerClothing";
+    private static readonly EntProtoId AdrenalineEffect = "StatusEffectDreadnoughtAdrenaline";
     private readonly Dictionary<EntityUid, (EntityUid Wearer, TimeSpan StunDuration)> _pendingStrapDestruction = [];
 
     [Dependency] private readonly SharedActionsSystem _actions = default!;
@@ -35,6 +37,7 @@ public sealed class DreadnoughtLastStandSystem : EntitySystem
     [Dependency] private readonly MobThresholdSystem _thresholds = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
+    [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
@@ -88,11 +91,7 @@ public sealed class DreadnoughtLastStandSystem : EntitySystem
         active.EndsAt = _timing.CurTime + ent.Comp.Duration;
         active.SpeedModifier = ent.Comp.SpeedModifier;
         active.Expired = false;
-        if (!HasComp<IgnoreSlowOnDamageComponent>(args.Performer))
-        {
-            AddComp<IgnoreSlowOnDamageComponent>(args.Performer);
-            active.AppliedIgnoreSlowOnDamage = true;
-        }
+        _statusEffects.TrySetStatusEffectDuration(args.Performer, AdrenalineEffect);
         _thresholds.SetMobStateThresholds(args.Performer, new SortedDictionary<FixedPoint2, MobState>
         {
             [0] = MobState.Alive,
@@ -154,8 +153,7 @@ public sealed class DreadnoughtLastStandSystem : EntitySystem
 
     private void OnActiveShutdown(Entity<DreadnoughtLastStandActiveComponent> ent, ref ComponentShutdown args)
     {
-        if (ent.Comp.AppliedIgnoreSlowOnDamage)
-            RemComp<IgnoreSlowOnDamageComponent>(ent);
+        _statusEffects.TryRemoveStatusEffect(ent, AdrenalineEffect);
 
         _movement.RefreshMovementSpeedModifiers(ent);
     }

@@ -363,7 +363,6 @@ namespace Content.Client.Administration.UI
                 SetWidth = TableActionColumnWidth,
                 TextAlign = Label.AlignMode.Center,
                 VerticalAlignment = Control.VAlignment.Center,
-                StyleClasses = { DeadSpaceMenuSheetlet.ProfileControl },
             };
             editButton.OnPressed += _ => OnEditPressed(admin);
 
@@ -376,10 +375,10 @@ namespace Content.Client.Administration.UI
             return MakeListPanel(row, MakeTableRow(
                 GetAdminTableWidth(flagsWidth),
                 editButton,
-                MakeTableLabel(name, DeadSpaceMenuSheetlet.ProfileSection, AdminNameColumnWidth),
-                MakeTableLabel(rank, DeadSpaceMenuSheetlet.ProfileLabel, AdminRankColumnWidth, rankInherited),
-                MakeTableLabel(title, DeadSpaceMenuSheetlet.ProfileLabel, AdminTitleColumnWidth, titleInherited),
-                MakeTableLabel(flagsText, DeadSpaceMenuSheetlet.Subtitle, flagsWidth)));
+                MakeTableLabel(name, DeadSpaceStyleClass.SectionTitle, AdminNameColumnWidth),
+                MakeTableLabel(rank, null, AdminRankColumnWidth, rankInherited),
+                MakeTableLabel(title, null, AdminTitleColumnWidth, titleInherited),
+                MakeTableLabel(flagsText, DeadSpaceStyleClass.Subtitle, flagsWidth)));
         }
 
         private Control MakeRankRow(KeyValuePair<int, PermissionsEuiState.AdminRankData> rank, string name, string flagsText, float flagsWidth, int row)
@@ -390,7 +389,6 @@ namespace Content.Client.Administration.UI
                 SetWidth = TableActionColumnWidth,
                 TextAlign = Label.AlignMode.Center,
                 VerticalAlignment = Control.VAlignment.Center,
-                StyleClasses = { DeadSpaceMenuSheetlet.ProfileControl },
             };
             editButton.OnPressed += _ => OnEditRankPressed(rank);
 
@@ -403,8 +401,8 @@ namespace Content.Client.Administration.UI
             return MakeListPanel(row, MakeTableRow(
                 GetRankTableWidth(flagsWidth),
                 editButton,
-                MakeTableLabel(name, DeadSpaceMenuSheetlet.ProfileSection, RankNameColumnWidth),
-                MakeTableLabel(flagsText, DeadSpaceMenuSheetlet.Subtitle, flagsWidth)));
+                MakeTableLabel(name, DeadSpaceStyleClass.SectionTitle, RankNameColumnWidth),
+                MakeTableLabel(flagsText, DeadSpaceStyleClass.Subtitle, flagsWidth)));
         }
 
         private static PanelContainer MakeListPanel(int row, Control child)
@@ -413,7 +411,7 @@ namespace Content.Client.Administration.UI
             {
                 HorizontalExpand = true,
                 MinSize = child.MinSize,
-                StyleClasses = { row % 2 == 0 ? DeadSpaceMenuSheetlet.ListRow : DeadSpaceMenuSheetlet.ListRowAlt },
+                StyleClasses = { row % 2 == 0 ? DeadSpaceStyleClass.ListItem : DeadSpaceStyleClass.ListItemAlternate },
                 Children = { child },
             };
         }
@@ -424,13 +422,13 @@ namespace Content.Client.Administration.UI
             {
                 HorizontalExpand = true,
                 MinSize = new Vector2(minWidth, 0),
-                StyleClasses = { DeadSpaceMenuSheetlet.ListRow },
+                StyleClasses = { DeadSpaceStyleClass.ListItem },
                 Children =
                 {
                     new Label
                     {
                         Text = Loc.GetString("permissions-eui-no-search-results"),
-                        StyleClasses = { DeadSpaceMenuSheetlet.Subtitle },
+                        StyleClasses = { DeadSpaceStyleClass.Subtitle },
                         HorizontalExpand = true,
                         Align = Label.AlignMode.Center,
                     }
@@ -464,7 +462,7 @@ namespace Content.Client.Administration.UI
             {
                 HorizontalExpand = true,
                 MinSize = child.MinSize,
-                StyleClasses = { DeadSpaceMenuSheetlet.ListHeader },
+                StyleClasses = { DeadSpaceStyleClass.ListHeader },
                 Children = { child },
             };
         }
@@ -516,7 +514,7 @@ namespace Content.Client.Administration.UI
                 SetWidth = width,
                 ToolTip = Loc.GetString(locKey),
                 VerticalAlignment = Control.VAlignment.Center,
-                StyleClasses = { DeadSpaceMenuSheetlet.ListHeader },
+                StyleClasses = { DeadSpaceStyleClass.ListHeader },
             };
         }
 
@@ -530,11 +528,11 @@ namespace Content.Client.Administration.UI
                 ToolTip = Loc.GetString(locKey),
                 Align = Label.AlignMode.Center,
                 VerticalAlignment = Control.VAlignment.Center,
-                StyleClasses = { DeadSpaceMenuSheetlet.ListHeader },
+                StyleClasses = { DeadSpaceStyleClass.ListHeader },
             };
         }
 
-        private static Label MakeTableLabel(string text, string styleClass, float width, bool italic = false)
+        private static Label MakeTableLabel(string text, string? styleClass, float width, bool italic = false)
         {
             var label = new Label
             {
@@ -543,8 +541,10 @@ namespace Content.Client.Administration.UI
                 SetWidth = width,
                 ToolTip = text,
                 VerticalAlignment = Control.VAlignment.Center,
-                StyleClasses = { styleClass },
             };
+
+            if (styleClass != null)
+                label.AddStyleClass(styleClass);
 
             if (italic)
             {
@@ -593,8 +593,6 @@ namespace Content.Client.Administration.UI
             {
                 _ui = ui;
                 // DS14-start
-                HeaderClass = DeadSpaceMenuSheetlet.Header;
-                TitleClass = DeadSpaceMenuSheetlet.Title;
                 MinSize = new Vector2(760, 460);
                 SetSize = new Vector2(920, 560);
                 // DS14-end
@@ -605,7 +603,6 @@ namespace Content.Client.Administration.UI
                 {
                     HorizontalExpand = true,
                     VerticalExpand = true,
-                    StyleClasses = { DeadSpaceMenuSheetlet.Tabs },
                 };
                 // DS14-end
 
@@ -613,14 +610,14 @@ namespace Content.Client.Administration.UI
                 {
                     Text = Loc.GetString("permissions-eui-menu-add-admin-button"),
                     HorizontalAlignment = HAlignment.Right,
-                    StyleClasses = { DeadSpaceMenuSheetlet.ProfileControl, DeadSpaceMenuSheetlet.ProfileControlPositive }, // DS14
+                    StyleClasses = { DeadSpaceStyleClass.ControlPositive }, // DS14
                 };
 
                 AddAdminRankButton = new Button
                 {
                     Text = Loc.GetString("permissions-eui-menu-add-admin-rank-button"),
                     HorizontalAlignment = HAlignment.Right,
-                    StyleClasses = { DeadSpaceMenuSheetlet.ProfileControl, DeadSpaceMenuSheetlet.ProfileControlPositive }, // DS14
+                    StyleClasses = { DeadSpaceStyleClass.ControlPositive }, // DS14
                 };
 
                 // DS14-start
@@ -687,7 +684,6 @@ namespace Content.Client.Administration.UI
                     PlaceHolder = placeholder,
                     SelectAllOnFocus = true,
                     HorizontalExpand = true,
-                    StyleClasses = { DeadSpaceMenuSheetlet.Input },
                 };
             }
 
@@ -721,8 +717,6 @@ namespace Content.Client.Administration.UI
             public EditAdminWindow(PermissionsEui ui, PermissionsEuiState.AdminData? data)
             {
                 // DS14-start
-                HeaderClass = DeadSpaceMenuSheetlet.Header;
-                TitleClass = DeadSpaceMenuSheetlet.Title;
                 MinSize = new Vector2(700, 460);
                 SetSize = new Vector2(760, 520);
                 // DS14-end
@@ -742,7 +736,7 @@ namespace Content.Client.Administration.UI
                         Text = name,
                         ClipText = true,
                         ToolTip = name,
-                        StyleClasses = { DeadSpaceMenuSheetlet.ProfileSection },
+                        StyleClasses = { DeadSpaceStyleClass.SectionTitle },
                     };
                     // DS14-end
                 }
@@ -754,7 +748,6 @@ namespace Content.Client.Administration.UI
                     {
                         PlaceHolder = Loc.GetString("permissions-eui-edit-admin-window-name-edit-placeholder"),
                         SelectAllOnFocus = true,
-                        StyleClasses = { DeadSpaceMenuSheetlet.Input }, // DS14
                     };
                 }
 
@@ -762,7 +755,6 @@ namespace Content.Client.Administration.UI
                 {
                     PlaceHolder = Loc.GetString("permissions-eui-edit-admin-window-title-edit-placeholder"),
                     SelectAllOnFocus = true,
-                    StyleClasses = { DeadSpaceMenuSheetlet.Input }, // DS14
                 };
                 // DS14-start
                 if (data?.Title is { } adminTitle)
@@ -774,14 +766,12 @@ namespace Content.Client.Administration.UI
                 RankButton = new OptionButton
                 {
                     HorizontalExpand = true,
-                    StyleClasses = { DeadSpaceMenuSheetlet.ProfileControl }, // DS14
                 };
-                RankButton.OptionStyleClasses.Add(DeadSpaceMenuSheetlet.ProfileControl); // DS14
                 SaveButton = new Button
                 {
                     Text = Loc.GetString("permissions-eui-edit-admin-window-save-button"),
                     HorizontalAlignment = HAlignment.Right,
-                    StyleClasses = { DeadSpaceMenuSheetlet.ProfileControl, DeadSpaceMenuSheetlet.ProfileControlPositive }, // DS14
+                    StyleClasses = { DeadSpaceStyleClass.ControlPositive }, // DS14
                 };
 
                 SuspendedCheckbox = new CheckBox
@@ -789,7 +779,6 @@ namespace Content.Client.Administration.UI
                     Text = Loc.GetString("permissions-eui-edit-admin-window-suspended"),
                     Pressed = data?.Suspended ?? false,
                 };
-                SuspendedCheckbox.Label.AddStyleClass(DeadSpaceMenuSheetlet.ProfileLabel); // DS14
 
                 RankButton.AddItem(Loc.GetString("permissions-eui-edit-admin-window-no-rank-button"), NoRank);
                 foreach (var (rId, rank) in ui._ranks)
@@ -831,7 +820,7 @@ namespace Content.Client.Administration.UI
                         Text = "I",
                         SetWidth = FlagChoiceColumnWidth,
                         TextAlign = Label.AlignMode.Center,
-                        StyleClasses = { DeadSpaceMenuSheetlet.ProfileControl, StyleClass.ButtonOpenRight },
+                        StyleClasses = { StyleClass.ButtonOpenRight },
                         Disabled = disable,
                         Group = group,
                     };
@@ -840,7 +829,7 @@ namespace Content.Client.Administration.UI
                         Text = "-",
                         SetWidth = FlagChoiceColumnWidth,
                         TextAlign = Label.AlignMode.Center,
-                        StyleClasses = { DeadSpaceMenuSheetlet.ProfileControl, StyleClass.ButtonOpenBoth },
+                        StyleClasses = { StyleClass.ButtonOpenBoth },
                         Disabled = disable,
                         Group = group
                     };
@@ -849,7 +838,7 @@ namespace Content.Client.Administration.UI
                         Text = "+",
                         SetWidth = FlagChoiceColumnWidth,
                         TextAlign = Label.AlignMode.Center,
-                        StyleClasses = { DeadSpaceMenuSheetlet.ProfileControl, StyleClass.ButtonOpenLeft },
+                        StyleClasses = { StyleClass.ButtonOpenLeft },
                         Disabled = disable,
                         Group = group
                     };
@@ -891,7 +880,6 @@ namespace Content.Client.Administration.UI
                         SetWidth = AdminFlagNameColumnWidth,
                         ToolTip = flagName,
                         VerticalAlignment = Control.VAlignment.Center,
-                        StyleClasses = { DeadSpaceMenuSheetlet.ProfileLabel },
                     });
                     // DS14-end
 
@@ -911,7 +899,7 @@ namespace Content.Client.Administration.UI
                     RemoveButton = new Button
                     {
                         Text = Loc.GetString("permissions-eui-edit-admin-window-remove-flag-button"),
-                        StyleClasses = { DeadSpaceMenuSheetlet.ProfileControl, StyleClass.Negative }, // DS14
+                        StyleClasses = { StyleClass.Negative }, // DS14
                     };
                     bottomButtons.AddChild(RemoveButton);
                 }
@@ -939,7 +927,7 @@ namespace Content.Client.Administration.UI
                                 new PanelContainer
                                 {
                                     SetWidth = 260,
-                                    StyleClasses = { DeadSpaceMenuSheetlet.Inset },
+                                    StyleClasses = { DeadSpaceStyleClass.Inset },
                                     Children =
                                     {
                                         new BoxContainer
@@ -960,7 +948,7 @@ namespace Content.Client.Administration.UI
                                 {
                                     HorizontalExpand = true,
                                     VerticalExpand = true,
-                                    StyleClasses = { DeadSpaceMenuSheetlet.Inset },
+                                    StyleClasses = { DeadSpaceStyleClass.Inset },
                                     Children =
                                     {
                                         new ScrollContainer
@@ -1005,14 +993,14 @@ namespace Content.Client.Administration.UI
             private static void SetSelectedFlagButton(Button inherit, Button sub, Button plus, Button selected)
             {
                 ClearSelectedFlagButton(inherit, sub, plus);
-                selected.AddStyleClass(DeadSpaceMenuSheetlet.ProfileControlPositive);
+                selected.AddStyleClass(DeadSpaceStyleClass.ControlPositive);
             }
 
             private static void ClearSelectedFlagButton(Button inherit, Button sub, Button plus)
             {
-                inherit.RemoveStyleClass(DeadSpaceMenuSheetlet.ProfileControlPositive);
-                sub.RemoveStyleClass(DeadSpaceMenuSheetlet.ProfileControlPositive);
-                plus.RemoveStyleClass(DeadSpaceMenuSheetlet.ProfileControlPositive);
+                inherit.RemoveStyleClass(DeadSpaceStyleClass.ControlPositive);
+                sub.RemoveStyleClass(DeadSpaceStyleClass.ControlPositive);
+                plus.RemoveStyleClass(DeadSpaceStyleClass.ControlPositive);
             }
             // DS14-end
 
@@ -1055,8 +1043,6 @@ namespace Content.Client.Administration.UI
             public EditAdminRankWindow(PermissionsEui ui, KeyValuePair<int, PermissionsEuiState.AdminRankData>? data)
             {
                 // DS14-start
-                HeaderClass = DeadSpaceMenuSheetlet.Header;
-                TitleClass = DeadSpaceMenuSheetlet.Title;
                 MinSize = new Vector2(500, 460);
                 SetSize = new Vector2(560, 520);
                 // DS14-end
@@ -1067,7 +1053,6 @@ namespace Content.Client.Administration.UI
                 {
                     PlaceHolder = Loc.GetString("permissions-eui-edit-admin-rank-window-name-edit-placeholder"),
                     SelectAllOnFocus = true,
-                    StyleClasses = { DeadSpaceMenuSheetlet.Input }, // DS14
                 };
 
                 if (data != null)
@@ -1079,20 +1064,19 @@ namespace Content.Client.Administration.UI
                 {
                     Text = Loc.GetString("permissions-eui-menu-save-admin-rank-button"),
                     HorizontalAlignment = HAlignment.Right,
-                    StyleClasses = { DeadSpaceMenuSheetlet.ProfileControl, DeadSpaceMenuSheetlet.ProfileControlPositive }, // DS14
+                    StyleClasses = { DeadSpaceStyleClass.ControlPositive }, // DS14
                 };
                 // DS14-start
                 ClearAllButton = new Button
                 {
                     Text = Loc.GetString("permissions-eui-edit-admin-rank-clear-all-button"),
-                    StyleClasses = { DeadSpaceMenuSheetlet.ProfileControl },
                 };
                 ClearAllButton.OnPressed += _ => SetAvailableFlags(false);
 
                 GrantAllButton = new Button
                 {
                     Text = Loc.GetString("permissions-eui-edit-admin-rank-grant-all-button"),
-                    StyleClasses = { DeadSpaceMenuSheetlet.ProfileControl, DeadSpaceMenuSheetlet.ProfileControlPositive },
+                    StyleClasses = { DeadSpaceStyleClass.ControlPositive },
                 };
                 GrantAllButton.OnPressed += _ => SetAvailableFlags(true);
                 // DS14-end
@@ -1118,7 +1102,6 @@ namespace Content.Client.Administration.UI
                         Disabled = disable,
                         Text = flagName
                     };
-                    checkBox.Label.AddStyleClass(DeadSpaceMenuSheetlet.ProfileLabel); // DS14
 
                     if (data != null && (data.Value.Value.Flags & flag) != 0)
                     {
@@ -1142,7 +1125,7 @@ namespace Content.Client.Administration.UI
                     RemoveButton = new Button
                     {
                         Text = Loc.GetString("permissions-eui-menu-remove-admin-rank-button"),
-                        StyleClasses = { DeadSpaceMenuSheetlet.ProfileControl, StyleClass.Negative }, // DS14
+                        StyleClasses = { StyleClass.Negative }, // DS14
                     };
                     bottomButtons.AddChild(RemoveButton);
                 }
@@ -1168,7 +1151,7 @@ namespace Content.Client.Administration.UI
                         {
                             HorizontalExpand = true,
                             VerticalExpand = true,
-                            StyleClasses = { DeadSpaceMenuSheetlet.Inset },
+                            StyleClasses = { DeadSpaceStyleClass.Inset },
                             Children =
                             {
                                 new ScrollContainer

@@ -29,7 +29,7 @@
 - type: skill
   id: Pharmacology
   name: Фармакология
-  description: Изучение и изготовление лекарств.
+  description: Знания о лекарственных препаратах.
   icon: { sprite: /Textures/Interface/Misc/job_icons.rsi, state: Chemist }
   iconSize: 32
   requiredSkills:

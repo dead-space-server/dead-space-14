@@ -18,8 +18,6 @@
     prototype: Tajaran
     requiredLegs: 2
   - type: RoarAccent
-  - type: Hunger
-  - type: Thirst
   - type: Damageable
     damageContainer: Biological
     damageModifierSet: Fur

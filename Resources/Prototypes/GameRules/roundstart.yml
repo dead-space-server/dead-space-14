@@ -28,6 +28,8 @@
       prob: 0.05
     - id: SubXenoborgs
       prob: 0.05
+    - id: Changeling
+      prob: 0.25
 
 - type: entity
   parent: BaseGameRule
@@ -41,6 +43,8 @@
       prob: 1
     - id: SubXenoborgs
       prob: 0.05
+    - id: Changeling
+      prob: 0.25
 
 - type: entity
   parent: BaseGameRule
@@ -54,6 +58,8 @@
       prob: 1
     - id: SubWizard
       prob: 0.05
+    - id: Changeling
+      prob: 0.25
 
 - type: entity
   parent: BaseGameRule
@@ -65,6 +71,8 @@
       prob: 0.5
     - id: Hooligan # DS14
       prob: 1
+    - id: Changeling
+      prob: 0.25
 
 - type: entity
   parent: BaseGameRule
@@ -376,8 +384,13 @@
   id: Changeling
   parent: BaseGameRule
   components:
+  - type: ChangelingRule
   - type: GameRule
-    minPlayers: 25
+    minPlayers: 20
+    delay:
+      min: 240
+      max: 420
+    cancelPresetOnTooFewPlayers: false
   - type: AntagSelection
     agentName: changeling-round-end-agent-name
     selectionTime: IntraPlayerSpawn
@@ -385,6 +398,10 @@
     - prefRoles: [ Changeling ]
       max: 3
       playerRatio: 15
+      # DS14-start: adapt the upstream changeling definition to the current antag-selection schema.
+      blacklist:
+        components:
+        - InjectionBlocker
       briefing:
         text: changeling-role-greeting
         color: Red
@@ -395,29 +412,61 @@
       - type: ChangelingDevour
       - type: ChangelingIdentity
       - type: ChangelingTransform
+      - type: AddMetabolism
+        addedMetabolizer: Changeling
+      - type: DestructionResistance
+      - type: RevolutionaryImmune
+      - type: ZombieImmune
       - type: ActionGrant
+        removeOnShutdown: false
         actions:
         - ActionChangelingStore
-      # TODO: Make it so the changeling gamerule changeling can inherit from the changeling store preset somehow
+        - ActionChangelingStasis
+      - type: SatiationGrant
+        removeOnShutdown: false
+        satiation:
+          Chemicals:
+            prototype: ChemicalsChangeling
       - type: Store
         name: store-preset-name-changeling
         categories:
-        - ChangelingAbilities
+        - ChangelingStoreCombat
+        - ChangelingStoreStealth
+        - ChangelingStoreUtility
         currencyWhitelist:
         - ChangelingDNA
         balance:
-          ChangelingDNA: 50
+          ChangelingDNA: 60
       - type: UserInterface
         interfaces:
+          # DS14-start: dynamic antag components replace the inherited UI component.
+          enum.StrippingUiKey.Key:
+            type: StrippableBoundUserInterface
+          # DS14-end
           enum.StoreUiKey.Key:
             type: StoreBoundUserInterface
             requireInputValidation: false
+          # DS14-start: register the transform menu for changelings created through role assignment.
+          enum.ChangelingTransformUiKey.Key:
+            type: ChangelingTransformBoundUserInterface
+          # DS14-end
+          enum.VoiceMaskUIKey.Key:
+            type: VoiceMaskBoundUserInterface
       mindRoles:
       - MindRoleChangeling
       sponsorsPriority: true
-  - type: AntagObjectives
-    objectives:
-    - ChangelingSurviveObjective
+  - type: AntagRandomObjectives
+    sets:
+    - groups: ChangelingObjectiveGroupDevourDummy
+      maxPicks: 1
+    - groups: ChangelingObjectiveGroupEscapeDummy
+      maxPicks: 1
+    - groups: ChangelingObjectiveGroupKillDummy
+      maxPicks: 1
+    maxDifficulty: 8
+  # DS14-end
+  - type: DynamicRuleCost
+    cost: 75
 
 - type: entity
   id: Revolutionary
@@ -610,6 +659,7 @@
     removeUponFailedSpawn: false
     definitions:
     - prefRoles: [ InitialInfected, Traitor, Thief, HeadRev ]
+      affectsJobSelection: false # DS14 - this reservation blocks other antags, not antag-incompatible jobs.
       max: 2
       playerRatio: 30
 

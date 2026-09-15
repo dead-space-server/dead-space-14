@@ -2,7 +2,7 @@
               xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
               Orientation="Vertical">
     <!-- DS14-start -->
-    <PanelContainer StyleClasses="DS14MenuListRow"
+    <PanelContainer StyleClasses="DeadSpaceListItem"
                     HorizontalExpand="True">
         <BoxContainer Orientation="Vertical"
                       Margin="2"
@@ -13,40 +13,32 @@
                              Margin="2"
                              VerticalAlignment="Center" />
                 <Label Name="TimeLabel"
-                       Margin="4 0"
-                       StyleClasses="DS14MenuProfileLabel" />
+                       Margin="4 0" />
                 <cc:HSeparator Margin="4 0" />
-                <Label Name="ServerLabel"
-                       StyleClasses="DS14MenuProfileLabel" />
+                <Label Name="ServerLabel" />
                 <cc:HSeparator Margin="4 0" />
-                <Label Name="RoundLabel"
-                       StyleClasses="DS14MenuProfileLabel" />
+                <Label Name="RoundLabel" />
                 <cc:HSeparator Margin="4 0" />
-                <Label Name="AdminLabel"
-                       StyleClasses="DS14MenuProfileLabel" />
+                <Label Name="AdminLabel" />
                 <cc:HSeparator Margin="4 0" />
-                <Label Name="PlaytimeLabel"
-                       StyleClasses="DS14MenuProfileLabel" />
+                <Label Name="PlaytimeLabel" />
                 <cc:HSeparator Name="SecretSeparator"
                                Visible="False"
                                Margin="4 0" />
                 <Label Name="SecretLabel"
                        Text="{Loc admin-notes-secret} "
                        Visible="False"
-                       StyleClasses="DS14MenuProfileSection" />
+                       StyleClasses="DeadSpaceSectionTitle" />
             </BoxContainer>
             <RichTextLabel Name="NoteLabel" />
             <Label Name="ExpiresLabel"
                    Text="{Loc admin-note-editor-expiry-label}"
-                   Visible="False"
-                   StyleClasses="DS14MenuProfileLabel" />
+                   Visible="False" />
             <Label Name="ExtraLabel"
                    Visible="False"
-                   Modulate="#1AA7EC"
-                   StyleClasses="DS14MenuProfileLabel" />
+                   Modulate="#1AA7EC" />
             <Label Name="EditedLabel"
-                   Visible="False"
-                   StyleClasses="DS14MenuProfileLabel" />
+                   Visible="False" />
             <cc:HSeparator Name="Separator" />
         </BoxContainer>
     </PanelContainer>

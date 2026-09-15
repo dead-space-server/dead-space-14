@@ -1,14 +1,11 @@
 ﻿<BoxContainer xmlns="https://spacestation14.io"
-              xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
               Orientation="Vertical"
               Margin="5 5 5 5">
-    <PanelContainer HorizontalExpand="True">
-        <PanelContainer.PanelOverride>
-            <gfx:StyleBoxFlat BorderThickness="1" BorderColor="#777777"/>
-        </PanelContainer.PanelOverride>
+    <PanelContainer HorizontalExpand="True" StyleClasses="DeadSpaceSurface"> <!-- DS14 -->
         <BoxContainer Orientation="Vertical">
             <PanelContainer Name="NameBackground" HorizontalExpand="True" VerticalExpand="False">
-                <RichTextLabel Name="ReagentName" HorizontalAlignment="Center"/>
+                <RichTextLabel Name="ReagentName" HorizontalAlignment="Center"
+                               StyleClasses="DeadSpaceSectionTitle"/> <!-- DS14 -->
             </PanelContainer>
             <BoxContainer Name="RecipesContainer" HorizontalExpand="True">
                 <Collapsible HorizontalExpand="True">

@@ -1,20 +1,12 @@
 <BoxContainer
     xmlns="https://spacestation14.io"
-    xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
     HorizontalExpand="True"
     Orientation="Vertical">
     <customControls:HSeparator />
     <BoxContainer HorizontalExpand="True">
         <Label StyleClasses="SiliconLawPositionLabel" Name="PositionText" Margin="5 0 0 0" />
-        <PanelContainer Margin="20 10 1 0" MinHeight="128" HorizontalExpand="True">
-            <PanelContainer.PanelOverride>
-                <graphics:StyleBoxFlat BackgroundColor="#21182E" />
-            </PanelContainer.PanelOverride>
-            <BoxContainer Orientation="Horizontal" SeparationOverride="5" HorizontalExpand="True">
-                <TextEdit Name="LawContent" HorizontalExpand="True" Editable="True" MinHeight="80" MinWidth="380" />
-            </BoxContainer>
-        </PanelContainer>
+        <TextEdit Name="LawContent" HorizontalExpand="True" Editable="True" MinHeight="128" MinWidth="380" Margin="20 10 1 0" />
     </BoxContainer>
     <BoxContainer Orientation="Horizontal" Margin="0 5 0 0" MaxHeight="64" Align="Begin">
         <Button Name="MoveUp" Text="{Loc silicon-law-ui-minus-one}" StyleClasses="OpenRight" />

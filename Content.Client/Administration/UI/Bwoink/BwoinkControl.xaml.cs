@@ -47,14 +47,12 @@ namespace Content.Client.Administration.UI.Bwoink
             RobustXamlLoader.Load(this);
             IoCManager.InjectDependencies(this);
             // DS14-start
-            AdminOnly.Label.AddStyleClass(DeadSpaceMenuSheetlet.ProfileLabel);
-            PlaySound.Label.AddStyleClass(DeadSpaceMenuSheetlet.ProfileLabel);
             Kick.StyleClasses.Clear();
             Kick.AddStyleClass(ContainerButton.StyleClassButton);
-            Kick.AddStyleClass(DeadSpaceMenuSheetlet.ProfileControlDanger);
+            Kick.AddStyleClass(DeadSpaceStyleClass.ControlDanger);
             Ban.StyleClasses.Clear();
             Ban.AddStyleClass(ContainerButton.StyleClassButton);
-            Ban.AddStyleClass(DeadSpaceMenuSheetlet.ProfileControlDanger);
+            Ban.AddStyleClass(DeadSpaceStyleClass.ControlDanger);
             // DS14-end
 
             var newPlayerThreshold = 0;

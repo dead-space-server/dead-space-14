@@ -5,6 +5,10 @@
   description: Она тонкая. А еще способна разрезать пополам нерадивого корпоративного гада.
   categories: [ HideSpawnMenu ]
   components:
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
   - type: Sprite
     sprite: _DeadSpace/Objects/Weapons/Melee/monowire.rsi
     scale: 0.9, 0.9
@@ -61,3 +65,4 @@
   - type: Tag
     tags:
       - MantisBlades
+      - ParryStandardWeapon

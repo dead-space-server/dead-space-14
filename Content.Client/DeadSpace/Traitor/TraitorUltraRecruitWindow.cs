@@ -22,8 +22,6 @@ public sealed class TraitorUltraRecruitWindow : DefaultWindow
     {
         MinSize = new Vector2(580, 205);
         SetSize = new Vector2(660, 235);
-        HeaderClass = DeadSpaceMenuSheetlet.Header;
-        TitleClass = DeadSpaceMenuSheetlet.Title;
 
         BodyLabel = new RichTextLabel
         {
@@ -38,7 +36,7 @@ public sealed class TraitorUltraRecruitWindow : DefaultWindow
             MinWidth = 150,
             MinHeight = 30,
             TextAlign = Label.AlignMode.Center,
-            StyleClasses = { DeadSpaceMenuSheetlet.ProfileControl, DeadSpaceMenuSheetlet.ProfileControlPositive },
+            StyleClasses = { DeadSpaceStyleClass.ControlPositive },
         };
         DeclineButton = new Button
         {
@@ -46,19 +44,15 @@ public sealed class TraitorUltraRecruitWindow : DefaultWindow
             MinWidth = 150,
             MinHeight = 30,
             TextAlign = Label.AlignMode.Center,
-            StyleClasses = { DeadSpaceMenuSheetlet.ProfileControl, StyleClass.Negative },
+            StyleClasses = { StyleClass.Negative },
         };
 
-        var shell = new PanelContainer
-        {
-            HorizontalExpand = true,
-            StyleClasses = { DeadSpaceMenuSheetlet.Shell },
-        };
-
-        shell.AddChild(new BoxContainer
+        var content = new BoxContainer
         {
             Orientation = LayoutOrientation.Vertical,
             SeparationOverride = 8,
+            HorizontalExpand = true,
+            Margin = new Thickness(10),
             Children =
             {
                 BodyLabel,
@@ -75,9 +69,9 @@ public sealed class TraitorUltraRecruitWindow : DefaultWindow
                     }
                 }
             }
-        });
+        };
 
-        Contents.AddChild(shell);
+        Contents.AddChild(content);
     }
 
     public void SetState(string title, string body, string accept, string decline)

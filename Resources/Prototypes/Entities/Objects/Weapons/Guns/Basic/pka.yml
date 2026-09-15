@@ -4,6 +4,7 @@
   parent: [WeaponProtoKineticAcceleratorBase, BaseCargoContraband]
   description: Fires low-damage kinetic bolts at a short range.
   components:
+  - type: Akimbo # DS14
   - type: Sprite
     sprite: Objects/Weapons/Guns/Basic/kinetic_accelerator.rsi
     layers:

@@ -64,7 +64,7 @@ public sealed partial class ScannerProgramUiFragment : BoxContainer
             {
                 HorizontalExpand = true,
                 Margin = new Thickness(2),
-                StyleClasses = { "DS14MenuListRow" },
+                StyleClasses = { "DeadSpaceListItem" },
             };
 
             var row = new BoxContainer

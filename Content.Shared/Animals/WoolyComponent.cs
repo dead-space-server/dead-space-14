@@ -1,6 +1,7 @@
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.FixedPoint;
+using Content.Shared.Nutrition.Prototypes;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
@@ -8,7 +9,7 @@ namespace Content.Shared.Animals;
 
 /// <summary>
 ///     Gives the ability to produce wool fibers;
-///     produces endlessly if the owner does not have a HungerComponent.
+///     produces endlessly if the owner does not have a SatiationComponent.
 /// </summary>
 [RegisterComponent, AutoGenerateComponentState, AutoGenerateComponentPause, NetworkedComponent]
 public sealed partial class WoolyComponent : Component
@@ -42,6 +43,12 @@ public sealed partial class WoolyComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public float HungerUsage = 10f;
+
+    /// <summary>
+    /// If the entity's hunger satiation is below this value, it cannot be milked.
+    /// </summary>
+    [DataField(required: true), AutoNetworkedField]
+    public SatiationValue MinHungerThreshold;
 
     /// <summary>
     ///     How long to wait before growing wool.

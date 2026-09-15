@@ -2,8 +2,6 @@
                xmlns:cc="clr-namespace:Content.Client.Administration.UI.Bwoink"
                SetSize="920 520"
                MinSize="860 460"
-               HeaderClass="DS14MenuHeader"
-               TitleClass="DS14MenuTitle"
                Title="{Loc 'bwoink-user-title'}">
     <!-- DS14-start -->
     <cc:BwoinkControl Name="Bwoink"

@@ -238,13 +238,12 @@
       - Wall
   components:
   - type: ZombieImmune
-  - type: StatusEffects
+  - type: StatusEffects # DS14 - PressureImmunity is provided by the new status effect system.
     allowed:
     - Stun
     - KnockedDown
     - SlowedDown
     - Electrocution
-    - PressureImmunity
     - StaminaModifier
     - SeeAll
     - Flashed

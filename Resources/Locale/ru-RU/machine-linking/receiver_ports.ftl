@@ -61,3 +61,7 @@ signal-port-description-logic-input = Входной порт, который п
 signal-port-description-logic-memory-input = Сигнал загрузки в ячейку памяти при активации.
 signal-port-name-logic-enable = активация
 signal-port-description-logic-enable = Загружает входной сигнал в ячейку памяти только при ВЫСОКОМ уровне.
+signal-port-name-target-receiver = Приёмник цели
+signal-port-description-target-receiver = Получает сведения о цели от целеуказателя.
+signal-port-name-target-source = Целеуказатель
+signal-port-description-target-source = Передаёт сведения о цели приёмнику.

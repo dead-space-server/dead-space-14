@@ -1,5 +1,4 @@
 <controls:FancyWindow xmlns="https://spacestation14.io"
-    xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
     xmlns:ui="clr-namespace:Content.Client.ParticleAccelerator.UI"
     Title="{Loc 'particle-accelerator-control-menu-device-version-label'}"
@@ -87,9 +86,11 @@
                         </BoxContainer>
                     </controls:StripeBack>
 
+                    <!-- DS14-start -->
                     <Label Text="{Loc 'particle-accelerator-control-menu-service-manual-reference'}"
                         HorizontalAlignment="Center"
-                        StyleClasses="LabelSubText"/>
+                        StyleClasses="DeadSpaceSubtitle"/>
+                    <!-- DS14-end -->
                 </BoxContainer>
             </BoxContainer>
 
@@ -100,16 +101,11 @@
                 VerticalAlignment="Center"
                 Margin="8">
 
+                <!-- DS14-start -->
                 <PanelContainer Name="BackPanel"
-                    HorizontalAlignment="Center">
-
-                    <PanelContainer.PanelOverride>
-                        <gfx:StyleBoxTexture Modulate="#202023"
-                            PatchMarginBottom="8"
-                            PatchMarginLeft="8"
-                            PatchMarginRight="8"
-                            PatchMarginTop="8"/>
-                    </PanelContainer.PanelOverride>
+                    HorizontalAlignment="Center"
+                    StyleClasses="DeadSpaceInset">
+                <!-- DS14-end -->
 
                     <BoxContainer Orientation="Vertical"
                         SeparationOverride="6"
@@ -151,10 +147,12 @@
             VerticalAlignment="Bottom">
 
             <controls:StripeBack>
+                <!-- DS14-start -->
                 <Label Text="{Loc 'particle-accelerator-control-menu-check-containment-field-warning'}"
                     HorizontalAlignment="Center"
-                    StyleClasses="LabelSubText"
+                    StyleClasses="DeadSpaceSubtitle"
                     Margin="0 4"/>
+                <!-- DS14-end -->
             </controls:StripeBack>
 
             <BoxContainer Orientation="Horizontal"
@@ -162,15 +160,17 @@
                 VerticalAlignment="Bottom">
 
                 <!-- Footer title -->
+                <!-- DS14-start -->
                 <Label Text="{Loc 'particle-accelerator-control-menu-flavor-left'}"
-                    StyleClasses="WindowFooterText" />
+                    StyleClasses="DeadSpaceSubtitle" />
 
                 <!-- Version -->
                 <Label Text="{Loc 'particle-accelerator-control-menu-flavor-right'}"
-                    StyleClasses="WindowFooterText"
+                    StyleClasses="DeadSpaceSubtitle"
                     HorizontalAlignment="Right"
                     HorizontalExpand="True"
                     Margin="0 0 4 0" />
+                <!-- DS14-end -->
 
                 <TextureRect StyleClasses="NTLogoDark"
                     Stretch="KeepAspectCentered"

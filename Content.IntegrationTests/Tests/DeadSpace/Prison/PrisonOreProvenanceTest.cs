@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Numerics;
 using Content.Server.Database;
@@ -10,8 +11,12 @@ using Content.Shared.Cargo.Components;
 using Content.Shared.Destructible;
 using Content.Shared.Database;
 using Content.Server.Stack;
+using Content.Shared.ActionBlocker;
 using Content.Shared.DeadSpace.CCCCVars;
 using Content.Shared.DeadSpace.Prison;
+using Content.Shared.GameTicking;
+using Content.Shared.Ghost;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Stacks;
 using Content.Shared.Storage.Components;
 using Robust.Shared.GameObjects;
@@ -19,12 +24,82 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
 using Robust.Shared.Network;
+using Robust.Shared.Timing;
 
 namespace Content.IntegrationTests.Tests.DeadSpace.Prison;
 
 [TestFixture]
 public sealed class PrisonOreProvenanceTest
 {
+    [Test]
+    public async Task FactionBasesAreSeparateAndOnlySlagHasOreProcessors()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = false,
+            Dirty = true,
+        });
+
+        var server = pair.Server;
+
+        await server.WaitPost(() => server.CfgMan.SetCVar(CCCCVars.PrisonEnabled, true));
+        await server.WaitRunTicks(2);
+
+        await server.WaitAssertion(() =>
+        {
+            EntityUid? slagGrid = null;
+            EntityUid? frontierGrid = null;
+            var slagSpawns = 0;
+            var frontierSpawns = 0;
+            var spawnQuery = server.EntMan.EntityQueryEnumerator<PrisonSpawnPointComponent, TransformComponent>();
+            while (spawnQuery.MoveNext(out _, out var spawn, out var xform))
+            {
+                if (spawn.Faction?.Id == "PrisonSlag")
+                {
+                    slagGrid ??= xform.GridUid;
+                    Assert.That(xform.GridUid, Is.EqualTo(slagGrid));
+                    slagSpawns++;
+                }
+                else if (spawn.Faction?.Id == "PrisonFrontier")
+                {
+                    frontierGrid ??= xform.GridUid;
+                    Assert.That(xform.GridUid, Is.EqualTo(frontierGrid));
+                    frontierSpawns++;
+                }
+            }
+
+            Assert.That(slagGrid, Is.Not.Null);
+            Assert.That(frontierGrid, Is.Not.Null);
+
+            var slagProcessors = 0;
+            var frontierProcessors = 0;
+            var processorQuery = server.EntMan.EntityQueryEnumerator<PrisonOreProcessorComponent, TransformComponent>();
+            while (processorQuery.MoveNext(out _, out _, out var xform))
+            {
+                if (xform.GridUid == slagGrid)
+                    slagProcessors++;
+                else if (xform.GridUid == frontierGrid)
+                    frontierProcessors++;
+            }
+
+            var transform = server.System<SharedTransformSystem>();
+            var slagPosition = transform.GetWorldPosition(slagGrid.Value);
+            var frontierPosition = transform.GetWorldPosition(frontierGrid.Value);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(slagGrid, Is.Not.EqualTo(frontierGrid));
+                Assert.That(Vector2.Distance(slagPosition, frontierPosition), Is.GreaterThanOrEqualTo(160f));
+                Assert.That(slagSpawns, Is.EqualTo(11));
+                Assert.That(frontierSpawns, Is.EqualTo(11));
+                Assert.That(slagProcessors, Is.EqualTo(2));
+                Assert.That(frontierProcessors, Is.Zero);
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task LobbyBanRegistersPrisonerWithoutMovingLobbySession()
     {
@@ -46,7 +121,8 @@ public sealed class PrisonOreProvenanceTest
             server.CfgMan.SetCVar(CCCCVars.PrisonEnabled, true);
             var mapSystem = server.System<SharedMapSystem>();
             mapSystem.CreateMap(out var mapId);
-            server.EntMan.SpawnEntity("SpawnPointPrisoner", new MapCoordinates(Vector2.Zero, mapId));
+            server.EntMan.SpawnEntity("SpawnPointPrisonerSlag", new MapCoordinates(Vector2.Zero, mapId));
+            server.EntMan.SpawnEntity("SpawnPointPrisonerFrontier", new MapCoordinates(Vector2.One, mapId));
         });
 
         Assert.That(ticker.UserHasJoinedGame(player), Is.False, "The test session must still be in the lobby.");
@@ -55,6 +131,12 @@ public sealed class PrisonOreProvenanceTest
         var handled = false;
 
         await server.WaitPost(() => handled = prison.TrySendToPrison(player, ban));
+        await server.WaitPost(() =>
+        {
+            Assert.That(prison.GetFactionEuiState().Factions, Has.Count.EqualTo(2));
+            Assert.That(prison.TrySelectFaction(player, "PrisonSlag"), Is.False);
+            Assert.That(prison.TrySelectFaction(player, "PrisonFrontier"), Is.False);
+        });
 
         Assert.Multiple(() =>
         {
@@ -62,6 +144,288 @@ public sealed class PrisonOreProvenanceTest
             Assert.That(player.AttachedEntity, Is.EqualTo(originalEntity));
             Assert.That(prison.IsUserPrisoner(player.UserId), Is.True);
             Assert.That(server.System<ArenaSystem>().CanJoinArena(player), Is.False);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task GhostFactionSelectionCreatesPrisonerBodyOnFactionBase()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            Dirty = true,
+        });
+
+        var server = pair.Server;
+        var player = pair.Player!;
+        var prison = server.System<PrisonSystem>();
+        var ticker = server.System<Content.Server.GameTicking.GameTicker>();
+        var mind = server.System<Content.Server.Mind.MindSystem>();
+        var hands = server.System<SharedHandsSystem>();
+        var database = server.ResolveDependency<IServerDbManager>();
+        EntityUid ghost = default;
+
+        await server.WaitPost(() =>
+        {
+            server.CfgMan.SetCVar(CCCCVars.PrisonEnabled, true);
+            var mapSystem = server.System<SharedMapSystem>();
+            mapSystem.CreateMap(out var mapId);
+            server.EntMan.SpawnEntity("SpawnPointPrisonerSlag", new MapCoordinates(Vector2.Zero, mapId));
+            server.EntMan.SpawnEntity("SpawnPointPrisonerFrontier", new MapCoordinates(Vector2.One, mapId));
+
+            ghost = server.EntMan.SpawnEntity(
+                Content.Server.GameTicking.GameTicker.ObserverPrototypeName,
+                MapCoordinates.Nullspace);
+            var playerMind = mind.CreateMind(player.UserId, player.Name);
+            mind.TransferTo(playerMind, ghost);
+            ((IDictionary<NetUserId, PlayerGameStatus>) ticker.PlayerGameStatuses)[player.UserId] =
+                PlayerGameStatus.JoinedGame;
+        });
+        await pair.RunTicksSync(2);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(ticker.UserHasJoinedGame(player), Is.True);
+            Assert.That(player.AttachedEntity, Is.EqualTo(ghost));
+            Assert.That(server.EntMan.HasComponent<GhostComponent>(ghost), Is.True);
+        });
+
+        var now = DateTimeOffset.UtcNow;
+        var ban = await AddPrisonBan(database, player.UserId, now, now + TimeSpan.FromHours(1));
+        var handled = false;
+        var selected = false;
+
+        await server.WaitPost(() =>
+        {
+            handled = prison.TrySendToPrison(player, ban);
+            selected = prison.TrySelectFaction(player, "PrisonSlag");
+        });
+        await pair.RunTicksSync(3);
+
+        var prisoner = player.AttachedEntity;
+        Assert.That(prisoner, Is.Not.Null);
+        var heldPrototypes = hands.EnumerateHeld(prisoner!.Value)
+            .Select(entity => server.EntMan.GetComponent<MetaDataComponent>(entity).EntityPrototype?.ID)
+            .ToArray();
+        Assert.Multiple(() =>
+        {
+            Assert.That(handled, Is.True);
+            Assert.That(selected, Is.True);
+            Assert.That(prisoner, Is.Not.EqualTo(ghost));
+            Assert.That(server.EntMan.HasComponent<GhostComponent>(prisoner!.Value), Is.False);
+            Assert.That(server.EntMan.HasComponent<PrisonBoundComponent>(prisoner.Value), Is.True);
+            Assert.That(
+                server.EntMan.GetComponent<PrisonFactionMemberComponent>(prisoner.Value).Faction.Id,
+                Is.EqualTo("PrisonSlag"));
+            Assert.That(prison.IsEntityPrisoner(prisoner.Value), Is.True);
+            Assert.That(heldPrototypes, Does.Contain("Pickaxe"));
+            Assert.That(heldPrototypes, Does.Contain("OreBag"));
+        });
+
+        await server.WaitPost(() =>
+        {
+            Assert.That(prison.TrySelectFaction(player, "PrisonSlag"), Is.True);
+            Assert.That(player.AttachedEntity, Is.EqualTo(prisoner));
+            Assert.That(prison.TrySelectFaction(player, "PrisonFrontier"), Is.False);
+        });
+
+        EntityUid secondGhost = default;
+        await server.WaitPost(() =>
+        {
+            secondGhost = server.EntMan.SpawnEntity(
+                Content.Server.GameTicking.GameTicker.ObserverPrototypeName,
+                MapCoordinates.Nullspace);
+            mind.TransferTo(mind.GetMind(player.UserId)!.Value, secondGhost);
+        });
+        await pair.RunTicksSync(3);
+
+        var observingEntity = player.AttachedEntity;
+        Assert.Multiple(() =>
+        {
+            Assert.That(observingEntity, Is.EqualTo(secondGhost));
+            Assert.That(server.EntMan.HasComponent<GhostComponent>(secondGhost), Is.True);
+            Assert.That(server.EntMan.HasComponent<PrisonBoundComponent>(secondGhost), Is.False);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task LivingBodyIsLockedUntilFrontierSelection()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            Dirty = true,
+        });
+
+        var server = pair.Server;
+        var player = pair.Player!;
+        var prison = server.System<PrisonSystem>();
+        var ticker = server.System<Content.Server.GameTicking.GameTicker>();
+        var mind = server.System<Content.Server.Mind.MindSystem>();
+        var blocker = server.System<ActionBlockerSystem>();
+        var hands = server.System<SharedHandsSystem>();
+        var database = server.ResolveDependency<IServerDbManager>();
+        EntityUid body = default;
+
+        await server.WaitPost(() =>
+        {
+            server.CfgMan.SetCVar(CCCCVars.PrisonEnabled, true);
+            var mapSystem = server.System<SharedMapSystem>();
+            mapSystem.CreateMap(out var mapId);
+            server.EntMan.SpawnEntity("SpawnPointPrisonerSlag", new MapCoordinates(Vector2.Zero, mapId));
+            server.EntMan.SpawnEntity("SpawnPointPrisonerFrontier", new MapCoordinates(Vector2.One, mapId));
+
+            body = server.EntMan.SpawnEntity("MobHuman", new MapCoordinates(new Vector2(4, 4), mapId));
+            var playerMind = mind.CreateMind(player.UserId, player.Name);
+            mind.TransferTo(playerMind, body);
+            ((IDictionary<NetUserId, PlayerGameStatus>) ticker.PlayerGameStatuses)[player.UserId] =
+                PlayerGameStatus.JoinedGame;
+        });
+        await pair.RunTicksSync(2);
+
+        var now = DateTimeOffset.UtcNow;
+        var ban = await AddPrisonBan(database, player.UserId, now, now + TimeSpan.FromHours(1));
+        await server.WaitPost(() =>
+        {
+            Assert.That(prison.TrySendToPrison(player, ban), Is.True);
+            Assert.That(server.EntMan.HasComponent<PrisonFactionSelectionLockedComponent>(body), Is.True);
+            Assert.That(blocker.CanMove(body), Is.False);
+
+            server.CfgMan.SetCVar(CCCCVars.PrisonEnabled, false);
+            Assert.That(prison.TrySelectFaction(player, "PrisonFrontier"), Is.False);
+            Assert.That(server.EntMan.HasComponent<PrisonFactionSelectionLockedComponent>(body), Is.True);
+
+            server.CfgMan.SetCVar(CCCCVars.PrisonEnabled, true);
+            Assert.That(prison.TrySelectFaction(player, "InvalidFaction"), Is.False);
+            Assert.That(server.EntMan.HasComponent<PrisonFactionSelectionLockedComponent>(body), Is.True);
+
+            Assert.That(prison.TrySelectFaction(player, "PrisonFrontier"), Is.True);
+            Assert.That(server.EntMan.HasComponent<PrisonFactionSelectionLockedComponent>(body), Is.False);
+            Assert.That(blocker.CanMove(body), Is.True);
+            Assert.That(hands.EnumerateHeld(body), Is.Empty);
+            Assert.That(
+                server.EntMan.GetComponent<PrisonFactionMemberComponent>(body).Faction.Id,
+                Is.EqualTo("PrisonFrontier"));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task LobbyObserverDoesNotStartFactionSelection()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            Dirty = true,
+        });
+
+        var server = pair.Server;
+        var player = pair.Player!;
+        var prison = server.System<PrisonSystem>();
+        var ticker = server.System<Content.Server.GameTicking.GameTicker>();
+        var mind = server.System<Content.Server.Mind.MindSystem>();
+        var database = server.ResolveDependency<IServerDbManager>();
+
+        await server.WaitPost(() =>
+        {
+            server.CfgMan.SetCVar(CCCCVars.PrisonEnabled, true);
+            var mapSystem = server.System<SharedMapSystem>();
+            mapSystem.CreateMap(out var mapId);
+            server.EntMan.SpawnEntity("SpawnPointPrisonerSlag", new MapCoordinates(Vector2.Zero, mapId));
+            server.EntMan.SpawnEntity("SpawnPointPrisonerFrontier", new MapCoordinates(Vector2.One, mapId));
+        });
+
+        Assert.That(ticker.UserHasJoinedGame(player), Is.False);
+        var now = DateTimeOffset.UtcNow;
+        var ban = await AddPrisonBan(database, player.UserId, now, now + TimeSpan.FromHours(1));
+
+        await server.WaitPost(() =>
+        {
+            Assert.That(prison.TrySendToPrison(player, ban), Is.True);
+            Assert.That(prison.GetFactionEuiState(player).SecondsRemaining, Is.Zero);
+
+            var observer = server.EntMan.SpawnEntity(
+                Content.Server.GameTicking.GameTicker.ObserverPrototypeName,
+                MapCoordinates.Nullspace);
+            var playerMind = mind.CreateMind(player.UserId, player.Name);
+            mind.TransferTo(playerMind, observer);
+            ((IDictionary<NetUserId, PlayerGameStatus>) ticker.PlayerGameStatuses)[player.UserId] =
+                PlayerGameStatus.JoinedGame;
+        });
+        await pair.RunTicksSync(server.ResolveDependency<IGameTiming>().TickRate * 2);
+
+        var observer = player.AttachedEntity;
+        Assert.That(observer, Is.Not.Null);
+        Assert.Multiple(() =>
+        {
+            Assert.That(ticker.UserHasJoinedGame(player), Is.True);
+            Assert.That(server.EntMan.HasComponent<GhostComponent>(observer!.Value), Is.True);
+            Assert.That(server.EntMan.HasComponent<PrisonBoundComponent>(observer.Value), Is.False);
+            Assert.That(prison.GetFactionEuiState(player).SecondsRemaining, Is.Zero);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task FactionSelectionTimeoutAutomaticallySpawnsPrisoner()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            Dirty = true,
+        });
+
+        var server = pair.Server;
+        var player = pair.Player!;
+        var prison = server.System<PrisonSystem>();
+        var ticker = server.System<Content.Server.GameTicking.GameTicker>();
+        var mind = server.System<Content.Server.Mind.MindSystem>();
+        var database = server.ResolveDependency<IServerDbManager>();
+
+        await server.WaitPost(() =>
+        {
+            server.CfgMan.SetCVar(CCCCVars.PrisonEnabled, true);
+            server.CfgMan.SetCVar(CCCCVars.PrisonFactionSelectionSeconds, 5);
+            var mapSystem = server.System<SharedMapSystem>();
+            mapSystem.CreateMap(out var mapId);
+            server.EntMan.SpawnEntity("SpawnPointPrisonerSlag", new MapCoordinates(Vector2.Zero, mapId));
+            server.EntMan.SpawnEntity("SpawnPointPrisonerFrontier", new MapCoordinates(Vector2.One, mapId));
+
+            var ghost = server.EntMan.SpawnEntity(
+                Content.Server.GameTicking.GameTicker.ObserverPrototypeName,
+                MapCoordinates.Nullspace);
+            var playerMind = mind.CreateMind(player.UserId, player.Name);
+            mind.TransferTo(playerMind, ghost);
+            ((IDictionary<NetUserId, PlayerGameStatus>) ticker.PlayerGameStatuses)[player.UserId] =
+                PlayerGameStatus.JoinedGame;
+        });
+        await pair.RunTicksSync(2);
+
+        var now = DateTimeOffset.UtcNow;
+        var ban = await AddPrisonBan(database, player.UserId, now, now + TimeSpan.FromHours(1));
+        await server.WaitPost(() =>
+        {
+            Assert.That(prison.TrySendToPrison(player, ban), Is.True);
+            Assert.That(prison.GetFactionEuiState(player).SecondsRemaining, Is.GreaterThan(0));
+        });
+
+        var timing = server.ResolveDependency<IGameTiming>();
+        await pair.RunTicksSync(timing.TickRate * 7);
+
+        var prisoner = player.AttachedEntity;
+        Assert.That(prisoner, Is.Not.Null);
+        Assert.Multiple(() =>
+        {
+            Assert.That(server.EntMan.HasComponent<GhostComponent>(prisoner!.Value), Is.False);
+            Assert.That(server.EntMan.HasComponent<PrisonBoundComponent>(prisoner.Value), Is.True);
+            Assert.That(server.EntMan.HasComponent<PrisonFactionMemberComponent>(prisoner.Value), Is.True);
+            Assert.That(prison.GetFactionEuiState(player).SecondsRemaining, Is.Zero);
         });
 
         await pair.CleanReturnAsync();

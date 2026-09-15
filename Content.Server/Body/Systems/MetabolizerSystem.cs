@@ -34,6 +34,7 @@ public sealed class MetabolizerSystem : SharedMetabolizerSystem
     [Dependency] private readonly SharedEntityConditionsSystem _entityConditions = default!;
     [Dependency] private readonly SharedEntityEffectsSystem _entityEffects = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private readonly BodySystem _bodySystem = default!; // DS14 - #45152 metabolism lookup adaptation
 
     private EntityQuery<OrganComponent> _organQuery;
     private EntityQuery<BloodstreamComponent> _bloodstreamQuery; // DS14
@@ -372,5 +373,43 @@ public sealed class MetabolizerSystem : SharedMetabolizerSystem
 
         return true;
     }
-}
 
+    // DS14-Start - #45152 adaptation for the server-side metabolism architecture
+    public bool HasMetabolizer(
+        Entity<MetabolizerComponent?> targetOrgan,
+        ProtoId<MetabolizerTypePrototype> targetMetabolizer)
+    {
+        if (!Resolve(targetOrgan.Owner, ref targetOrgan.Comp, false))
+            return false;
+
+        return targetOrgan.Comp.MetabolizerTypes?.Contains(targetMetabolizer) == true;
+    }
+
+    public bool BodyHasMetabolizer(EntityUid targetBody, ProtoId<MetabolizerTypePrototype> targetMetabolizer)
+    {
+        foreach (var organ in _bodySystem.GetBodyOrgans(targetBody))
+        {
+            if (TryComp<MetabolizerComponent>(organ.Id, out var metabolizer) &&
+                HasMetabolizer((organ.Id, metabolizer), targetMetabolizer))
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Adds a metabolizer type to every metabolizing organ in a body.
+    /// </summary>
+    public void AddMetabolizerToBody(EntityUid targetBody, ProtoId<MetabolizerTypePrototype> metabolizerType)
+    {
+        foreach (var organ in _bodySystem.GetBodyOrgans(targetBody))
+        {
+            if (!TryComp<MetabolizerComponent>(organ.Id, out var metabolizer))
+                continue;
+
+            metabolizer.MetabolizerTypes ??= [];
+            metabolizer.MetabolizerTypes.Add(metabolizerType);
+        }
+    }
+    // DS14-End
+}

@@ -1,0 +1,55 @@
+<TabContainer xmlns="https://spacestation14.io" >
+    <!-- Controls for sending radio announcements -->
+    <BoxContainer Orientation="Vertical" VerticalExpand="True"
+        TabContainer.TabTitle="{Loc 'comms-console-announce-tab-title'}">
+        <!-- DS14-start -->
+        <Label StyleClasses="DeadSpaceSectionTitle" Align="Center" VAlign="Top"
+            VerticalAlignment="Top"
+            Text="{Loc 'comms-console-station-announcements-header'}" />
+        <PanelContainer StyleClasses="DeadSpaceTextField" Margin="10 6 6 6"
+            HorizontalExpand="True" VerticalExpand="True">
+            <TextEdit Name="RadioMessageInput" MinHeight="100"
+                HorizontalExpand="True" VerticalExpand="True" />
+        </PanelContainer>
+        <!-- DS14-end -->
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+            <Label Name="AnnounceCharLimitLabel" Margin="10 0 0 0"
+                StyleClasses="CommsConsoleCharLimit" HorizontalAlignment="Left" VerticalAlignment="Center" />
+            <Button Name="AnnounceButton" HorizontalExpand="True" Margin="6 6 6 6"
+                Text="{Loc 'comms-console-menu-announcement-button'}"
+                ToolTip="{Loc 'comms-console-menu-announcement-button-tooltip'}" />
+        </BoxContainer>
+    </BoxContainer>
+
+    <!-- Controls for putting messages on station screens (aka broadcasting) -->
+    <BoxContainer Orientation="Vertical" VerticalExpand="True"
+        TabContainer.TabTitle="{Loc 'comms-console-broadcast-tab-title'}">
+        <!-- DS14-start -->
+        <Label StyleClasses="DeadSpaceSectionTitle" Align="Center" VAlign="Top"
+            VerticalAlignment="Top"
+            Text="{Loc 'comms-console-station-broadcast-header'}" />
+        <!-- DS14-end -->
+        <!-- DS14-start -->
+        <!-- Keep the preview centered without inheriting the wall-mounted entity offset. -->
+        <Label Name="BroadcastTopCharLimitLabel"
+            StyleClasses="CommsConsoleCharLimit" HorizontalAlignment="Center" Margin="0 6 0 0" />
+        <SpriteView Name="BroadcastEntityDisplay" Scale="5 5" SpriteOffset="False"
+            HorizontalExpand="True" VerticalExpand="True"
+            HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <!-- DS14-end -->
+        <Label Name="BroadcastBottomCharLimitLabel"
+            StyleClasses="CommsConsoleCharLimit" HorizontalAlignment="Center" />
+        <!-- DS14-start -->
+        <PanelContainer StyleClasses="DeadSpaceTextField" Margin="10 6 6 6"
+            HorizontalExpand="True">
+            <TextEdit Name="ScreenMessageInput" MinHeight="40"
+                HorizontalExpand="True" VerticalExpand="True" />
+        </PanelContainer>
+        <!-- DS14-end -->
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True"> <!-- Ensures consistent button placement vs. announcements -->
+            <Button Name="BroadcastButton" HorizontalExpand="True" Margin="10 6 6 6"
+                Text="{Loc 'comms-console-menu-broadcast-button'}"
+                ToolTip="{Loc 'comms-console-menu-broadcast-button-tooltip'}" />
+        </BoxContainer>
+    </BoxContainer>
+</TabContainer>

@@ -8,23 +8,20 @@
              MaxWidth="800"
              MaxHeight="900">
         <!-- DS14-start -->
-        <PanelContainer StyleClasses="DS14MenuShell" />
+        <PanelContainer StyleClasses="DeadSpaceWindow" />
         <BoxContainer Orientation="Vertical" SeparationOverride="10" Margin="10">
             <info:RulesControl/>
-            <Label Name="WaitLabel"
-                   StyleClasses="DS14MenuProfileLabel" />
+            <Label Name="WaitLabel"/>
             <BoxContainer Orientation="Horizontal" SeparationOverride="4">
                 <Button Name="AcceptButton"
                         Text="{Loc 'ui-rules-accept'}"
-                        Disabled="True"
-                        StyleClasses="DS14MenuProfileControl" />
+                        Disabled="True"/>
                 <Button Name="QuitButton"
-                        StyleClasses="DS14MenuProfileControl negative"
+                        StyleClasses="negative"
                         Text="{Loc 'ui-escape-quit'}" />
                 <Button Name="WikiButton"
                         Access="Public"
-                        Text="{Loc 'ui-escape-wiki'}"
-                        StyleClasses="DS14MenuProfileControl"/>
+                        Text="{Loc 'ui-escape-wiki'}"/>
             </BoxContainer>
         </BoxContainer>
         <!-- DS14-end -->

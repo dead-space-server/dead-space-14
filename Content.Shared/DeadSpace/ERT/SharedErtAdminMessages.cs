@@ -184,11 +184,13 @@ namespace Content.Shared.DeadSpace.ERT
     {
         public string ProtoId { get; }
         public string Reason { get; }
+        public bool SendNotification { get; }
 
-        public AdminCallErtMessage(string protoId, string reason)
+        public AdminCallErtMessage(string protoId, string reason, bool sendNotification = true)
         {
             ProtoId = protoId;
             Reason = reason;
+            SendNotification = sendNotification;
         }
     }
 
@@ -331,6 +333,7 @@ namespace Content.Shared.DeadSpace.ERT
         public string ReasonName { get; }
         public int SecondsRemaining { get; }
         public string RequestedByName { get; }
+        public bool AwaitingAdminDecision { get; }
 
         public NukeCodesPendingRequestEntry(
             int requestId,
@@ -339,7 +342,8 @@ namespace Content.Shared.DeadSpace.ERT
             string reasonProtoId,
             string reasonName,
             int secondsRemaining,
-            string requestedByName)
+            string requestedByName,
+            bool awaitingAdminDecision)
         {
             RequestId = requestId;
             Station = station;
@@ -348,6 +352,7 @@ namespace Content.Shared.DeadSpace.ERT
             ReasonName = reasonName;
             SecondsRemaining = secondsRemaining;
             RequestedByName = requestedByName;
+            AwaitingAdminDecision = awaitingAdminDecision;
         }
     }
 

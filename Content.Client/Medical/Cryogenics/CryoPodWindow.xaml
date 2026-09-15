@@ -168,11 +168,13 @@
             <!-- Reagents -->
             <Control HorizontalExpand="True"
                      MinHeight="30">
+                <!-- DS14-start -->
                 <Label Name="NoBeakerText"
                        Text="{Loc 'cryo-pod-window-chems-no-beaker'}"
-                       FontColorOverride="Gray"
+                       StyleClasses="DeadSpaceSubtitle"
                        VerticalExpand="True"
                        VAlign="Center"/>
+                <!-- DS14-end -->
                 <cryogenics:BeakerBarChart Name="ChemicalsChart"
                                   HorizontalExpand="True"
                                   VerticalExpand="True"/>

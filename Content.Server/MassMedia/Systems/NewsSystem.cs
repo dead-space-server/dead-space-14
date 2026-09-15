@@ -502,6 +502,11 @@ public sealed class NewsSystem : SharedNewsSystem
             LogImpact.Low,
             $"{ToPrettyString(actor):actor} added a comment to news article \"{article.Title}\": {content}");
 
+        // DS14: broadcast so other systems can inspect player comments
+        // (the ВорПРО unlock checks them for the round's code word).
+        var commentArgs = new NewsCommentPostedEvent(actor, content);
+        RaiseLocalEvent(ref commentArgs);
+
         return true;
     }
 

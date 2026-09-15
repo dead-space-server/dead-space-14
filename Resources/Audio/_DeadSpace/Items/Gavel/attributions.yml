@@ -1,0 +1,4 @@
+- files: ["gavel.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Created by dannno for tgstation. Downmixed from stereo to mono for positional audio playback."
+  source: "https://github.com/tgstation/tgstation/commit/3254142b21d49d6712b6f4b95cc9890a8a10fdcc"

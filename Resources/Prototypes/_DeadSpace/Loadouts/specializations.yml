@@ -503,6 +503,13 @@
   name: Сварщик
   description: Специализация инженера на сварочных работах.
 
+- type: entity
+  parent: BaseLoadoutEngineerSpecialization
+  id: LoadoutEngineerArchitect
+  categories: [ HideSpawnMenu ]
+  name: Архитектор
+  description: Специализация инженера на проектировании и строительстве новых объектов.
+
 - type: loadout
   id: EngineerTitleElectrician
   dummyEntity: LoadoutEngineerElectrician
@@ -563,6 +570,18 @@
       role: JobStationEngineer
       time: 18000
 
+- type: loadout
+  id: EngineerTitleArchitect
+  dummyEntity: LoadoutEngineerArchitect
+  effects:
+  - !type:JobTitleLoadoutEffect
+    title: job-title-engineer-architect
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: JobStationEngineer
+      time: 72000
+
 - type: loadoutGroup
   id: EngineerSpecialization
   name: loadout-group-engineer-specialization
@@ -574,6 +593,7 @@
   - EngineerTitleMechanic
   - EngineerTitleNuclear
   - EngineerTitleWelder
+  - EngineerTitleArchitect
 
 # Грузчик
 - type: entity
@@ -820,6 +840,13 @@
   name: Специалист СЖО
   description: Специализация атмосферного техника на системах жизнеобеспечения.
 
+- type: entity
+  parent: BaseLoadoutAtmosphericSpecialization
+  id: LoadoutAtmosphericSynthesis
+  categories: [ HideSpawnMenu ]
+  name: Специалист по синтезу
+  description: Специализация атмосферного техника на синтезе газов.
+
 - type: loadout
   id: AtmosphericTitleLifeSupport
   dummyEntity: LoadoutAtmosphericLifeSupport
@@ -832,6 +859,18 @@
       role: JobAtmosphericTechnician
       time: 36000
 
+- type: loadout
+  id: AtmosphericTitleSynthesis
+  dummyEntity: LoadoutAtmosphericSynthesis
+  effects:
+  - !type:JobTitleLoadoutEffect
+    title: job-title-atmospheric-synthesis
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: JobAtmosphericTechnician
+      time: 180000 # 50 часов
+
 - type: loadoutGroup
   id: AtmosphericSpecialization
   name: loadout-group-atmospheric-specialization
@@ -839,6 +878,7 @@
   maxLimit: 1
   loadouts:
   - AtmosphericTitleLifeSupport
+  - AtmosphericTitleSynthesis
 
 # Библиотекарь
 - type: entity

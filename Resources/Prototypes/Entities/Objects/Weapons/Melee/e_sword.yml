@@ -3,6 +3,15 @@
   parent: BaseItem
   abstract: true
   components:
+  - type: Tag # DS14
+    tags:
+    - ParryEnergySword
+  - type: Parry # DS14
+    requiresActiveToggle: true # DS14
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      - ParryEnergySword
   - type: EnergySword
   - type: ItemToggle
     onActivate: false # DS14
@@ -107,6 +116,7 @@
   - type: Tag # DS14
     tags:
     - EnergySword
+    - ParryEnergySword
 
 - type: entity
   name: energy dagger
@@ -250,6 +260,7 @@
   - type: Tag
     tags:
     - Write
+    - ParryEnergySword # DS14
 
 - type: entity
   parent: [BaseItem, BaseSyndicateContraband]
@@ -364,6 +375,7 @@
   - type: Tag # DS14
     tags:
     - EnergySwordDouble
+    - ParryEnergySword
 
 # Item will look weird in handslot. Will need to adjust handstorage visuals in a future PR
 - type: entity

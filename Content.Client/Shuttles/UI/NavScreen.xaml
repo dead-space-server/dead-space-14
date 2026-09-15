@@ -62,10 +62,64 @@
                             Text="{controls:Loc 'shuttle-console-iff-toggle'}"
                             TextAlign="Center"
                             ToggleMode="True"/>
+
+                    <controls1:StripeBack MinSize="48 48">
+                        <controls:Label Text="{controls:Loc 'shuttle-console-nav-legend'}"
+                                VerticalExpand="True"
+                                HorizontalAlignment="Center"/>
+                    </controls1:StripeBack>
+
+                    <!-- Cargo Dock Toggle -->
+                    <controls:Button Name="CargoDockToggle"
+                            HorizontalAlignment="Stretch"
+                            ToggleMode="True">
+                        <controls:BoxContainer Orientation="Horizontal" Margin="0 2">
+                            <controls:TextureRect
+                                    Stretch="KeepAspectCentered"
+                                    TexturePath="/Textures/Interface/NavMap/beveled_square.png"
+                                    Modulate="LightYellow"
+                                    SetSize="20 20"
+                                    Margin="10 0 5 0"/>
+                            <controls:Label
+                                    Text="{controls:Loc 'shuttle-console-nav-cargo-dock'}"
+                                    VerticalExpand="True"
+                                    HorizontalAlignment="Center"/>
+                        </controls:BoxContainer>
+                    </controls:Button>
+
+                    <!-- Arrivals Dock Toggle -->
+                    <controls:Button Name="ArrivalDockToggle"
+                            HorizontalAlignment="Stretch"
+                            ToggleMode="True">
+                        <controls:BoxContainer Orientation="Horizontal" Margin="0 2">
+                            <controls:TextureRect
+                                    Stretch="KeepAspectCentered"
+                                    TexturePath="/Textures/Interface/NavMap/beveled_square.png"
+                                    Modulate="Red"
+                                    SetSize="20 20"
+                                    Margin="10 0 5 0"/>
+                            <controls:Label
+                                    Text="{controls:Loc 'shuttle-console-nav-arrivals-dock'}"
+                                    VerticalExpand="True"
+                                    HorizontalAlignment="Center"/>
+                        </controls:BoxContainer>
+                    </controls:Button>
+
+                    <!-- Other Dock Toggle -->
                     <controls:Button Name="DockToggle"
-                            Text="{controls:Loc 'shuttle-console-dock-toggle'}"
-                            TextAlign="Center"
-                            ToggleMode="True"/>
+                            HorizontalAlignment="Stretch"
+                            ToggleMode="True">
+                        <controls:BoxContainer Orientation="Horizontal" Margin="0 2">
+                            <controls:TextureRect
+                                    Stretch="KeepAspectCentered"
+                                    TexturePath="/Textures/Interface/NavMap/beveled_square.png"
+                                    Modulate="Magenta"
+                                    SetSize="20 20"
+                                    Margin="10 0 5 0"/>
+                            <controls:Label VerticalAlignment="Center"
+                                    Text="{controls:Loc 'shuttle-console-nav-other-dock'}"/>
+                        </controls:BoxContainer>
+                    </controls:Button>
                     <!-- Signal -->
                     <controls1:StripeBack
                         MinSize="48 48"

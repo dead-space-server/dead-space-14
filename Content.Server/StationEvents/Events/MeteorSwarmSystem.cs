@@ -28,10 +28,10 @@ public sealed class MeteorSwarmSystem : GameRuleSystem<MeteorSwarmComponent>
         component.WaveCounter = component.Waves.Next(RobustRandom);
 
         // we don't want to send to players who aren't in game (i.e. in the lobby)
-        Filter allPlayersInGame = Filter.Empty().AddWhere(GameTicker.UserHasJoinedGame);
+        Filter allPlayersInGame = RuleStation.GetEventPlayers(uid); // DS14
 
         if (component.Announcement is { } locId)
-            _chat.DispatchFilteredAnnouncement(allPlayersInGame, Loc.GetString(locId), playSound: false, colorOverride: Color.Gold);
+            _chat.DispatchFilteredAnnouncement(allPlayersInGame, Loc.GetString(locId), sender: Loc.GetString("station-event-announcer"), playSound: false, colorOverride: Color.Gold); // DS14
 
         _audio.PlayGlobal(component.AnnouncementSound, allPlayersInGame, true);
     }
@@ -44,11 +44,11 @@ public sealed class MeteorSwarmSystem : GameRuleSystem<MeteorSwarmComponent>
         component.NextWaveTime += TimeSpan.FromSeconds(component.WaveCooldown.Next(RobustRandom));
 
 
-        if (_station.GetStations().Count == 0)
+        // DS14-start
+        if (!TryGetRandomStation(out var station, rule: uid))
             return;
-
-        var station = RobustRandom.Pick(_station.GetStations());
-        if (_station.GetLargestGrid(station) is not { } grid)
+        // DS14-end
+        if (_station.GetLargestGrid(station.Value) is not { } grid) // DS14
             return;
 
         var mapId = Transform(grid).MapID;

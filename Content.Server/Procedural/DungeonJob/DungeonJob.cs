@@ -13,7 +13,6 @@ using Content.Shared.Procedural;
 using Content.Shared.Procedural.DungeonGenerators;
 using Content.Shared.Procedural.DungeonLayers;
 using Content.Shared.Procedural.PostGeneration;
-using Content.Shared.Tag;
 using JetBrains.Annotations;
 using Robust.Server.Physics;
 using Robust.Shared.CPUJob.JobQueues;
@@ -40,7 +39,6 @@ public sealed partial class DungeonJob : Job<List<Dungeon>>
     private readonly DungeonSystem _dungeon;
     private readonly EntityLookupSystem _lookup;
     private readonly EntityTableSystem _entTable;
-    private readonly TagSystem _tags;
     private readonly TileSystem _tile;
     private readonly TurfSystem _turf;
     private readonly SharedMapSystem _maps;
@@ -92,7 +90,6 @@ public sealed partial class DungeonJob : Job<List<Dungeon>>
         _lookup = lookup;
         _tile = tile;
         _turf = turf;
-        _tags = _entManager.System<TagSystem>();
         _maps = _entManager.System<SharedMapSystem>();
         _entTable = _entManager.System<EntityTableSystem>();
         _transform = transform;

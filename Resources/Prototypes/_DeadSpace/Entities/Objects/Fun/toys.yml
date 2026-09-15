@@ -1390,6 +1390,24 @@
       types:
         Blunt: 0
 
+- type: entity
+  parent: PlushieBourbon
+  id: PlushieCobla
+  name: русская лошадка
+  description: Кобыла.
+  components:
+  - type: Sprite
+    state: cob
+    scale: 0.9,0.9
+  - type: UseDelay
+    delay: 2.0
+  - type: MeleeWeapon
+    wideAnimationRotation: 180
+    attackRate: 1.5
+    soundHit:
+      path: /Audio/_DeadSpace/Misc/mambo.ogg
+      params:
+        volume: -5
 
 # Плюшевые игрушки очень крутых админов или же плюшки IV класса.
 - type: entity
@@ -1646,3 +1664,97 @@
     voice: Stories
   - type: SpeakOnTrigger
     pack: PlushieNikitaSpeech
+
+- type: entity
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieGuitarwhispersNick
+  name: плюшевый Ник Фон Эмир Шепард
+  description: Плюшевая игрушка злоурядного инструктора, который явно любит полениться вместо работы... Однако, если он намерен обучать, значит, будет обучать по максимуму.
+  components:
+  - type: Sprite
+    state: guitarwhispers
+  - type: TTS
+    voice: LeeSin
+  - type: SpeakOnTrigger
+    pack: PlushieGuitarwhispersSpeech
+
+- type: entity
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieMuenraiSiiri
+  name: плюшевая Сиири Хюттинен Хяайли
+  description: Плюшевая аркана с безэмоциональным выражением лица, пустым взглядом и моноструной.
+  components:
+  - type: Sprite
+    state: muenrai
+  - type: TTS
+    voice: Lanathel
+  - type: SpeakOnTrigger
+    pack: PlushieMuenraiSpeech
+
+- type: entity
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieKieruAngel
+  name: плюшевый Командир Ангелочек
+  description: Малоизвестный брат всеми известного...
+  components:
+  - type: Sprite
+    state: kieru
+  - type: TTS
+    voice: MalygosWOTLK
+  - type: SpeakOnTrigger
+    pack: PlushieKieruSpeech
+
+- type: entity
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieImarabErmina
+  name: плюшевая Эрмина Белова
+  description: Плюшевая игрушка какой-то лисички. Её срочно нужно окунуть в напалм...
+  components:
+  - type: Sprite
+    state: imarab
+  - type: TTS
+    voice: Cop
+  - type: SpeakOnTrigger
+    pack: PlushieImarabSpeech
+
+- type: entity
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieZutiKuz
+  name: плюшевый Куз-Кузич
+  description: Очень маленькая плюшевая игрушка одного противного кобольда с сектора Титан. Сзади, на затылке игрушки, видна потёртая гравировка печати «ОДОБРЕНО». От него пахнет порохом и кровью, а на хвосте написана фраза «Give into the night...»
+  components:
+  - type: Sprite
+    state: plushie_zuti_kuz
+    scale: 0.92,0.92
+  - type: TTS
+    voice: GingerbreadMan
+  - type: SpeakOnTrigger
+    pack: PlushieZutiKuzSpeech
+
+- type: entity
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieZutiIgna
+  name: плюшевая Игна Айрон
+  description: Плюшевая игрушка утилизатора и исследователя Игны Айрон в деловом костюме. Возьми её с собой, чтобы было не так страшно в приключениях по неизведанным мирам. Игрушка пахнет ароматизатором стейка из голиафа и виноградного мармелада.
+  components:
+  - type: Sprite
+    state: plushie_zuti_igna
+  - type: TTS
+    voice: Astrid
+  - type: SpeakOnTrigger
+    pack: PlushieZutiIgnaSpeech
+
+- type: entity
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieSastrBon
+  name: плюшевый Бон
+  description: Просто поц Х.З ннчик первый раз вижу реальна и так далее КЛАЦ-КЛАЦ!
+  components:
+  - type: Sprite
+    state: plushie_sastr_bon
+  - type: TTS
+    voice: Torbjorn
+  - type: SpeakOnTrigger
+    pack: PlushieSastrBonSpeech
+  - type: UseDelay
+    delay: 180

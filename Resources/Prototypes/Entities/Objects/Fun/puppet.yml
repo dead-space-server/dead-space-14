@@ -15,7 +15,11 @@
   - type: VentriloquistPuppet
   - type: Item
     size: Normal
-  - type: Muted
+  # DS14-start: puppet prototypes live in this split file on the current branch.
+  - type: PermanentStatusEffects
+    statusEffects:
+    - StatusEffectVentriloquistPuppetMuted
+  # DS14-end
   - type: TypingIndicator
     proto: robot
   - type: TTS # Corvax-TTS

@@ -50,7 +50,9 @@ public static class StyleClass
     public const string BackgroundPanelOpenRight = "BackgroundPanelOpenRight"; // replaces `BackgroundOpenRight`
 
     public const string PanelDark = "PanelDark";
+    public const string PanelDeep = "PanelDeep";
     public const string PanelLight = "PanelLight";
+    public const string PanelInsetDeep = "PanelInsetDeep";
 
     public const string ButtonOpenRight = "OpenRight";
     public const string ButtonOpenLeft = "OpenLeft";

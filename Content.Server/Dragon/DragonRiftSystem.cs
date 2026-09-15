@@ -26,7 +26,7 @@ namespace Content.Server.Dragon;
 /// </summary>
 public sealed class DragonRiftSystem : EntitySystem
 {
-    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly Content.Server.DeadSpace.CentComm.GameRuleStationSystem _ruleStation = default!; // DS14
     [Dependency] private readonly DragonSystem _dragon = default!;
     [Dependency] private readonly ISerializationManager _serManager = default!;
     [Dependency] private readonly NavMapSystem _navMap = default!;
@@ -86,8 +86,8 @@ public sealed class DragonRiftSystem : EntitySystem
 
                 var msg = Loc.GetString("carp-rift-warning",
                     ("location", FormattedMessage.RemoveMarkupOrThrow(_navMap.GetNearestBeaconString((uid, xform)))));
-                _chat.DispatchGlobalAnnouncement(msg, playSound: false, colorOverride: Color.Red);
-                _audio.PlayGlobal("/Audio/Misc/notice1.ogg", Filter.Broadcast(), true);
+                _ruleStation.Announce(uid, msg, playSound: false, colorOverride: Color.Red); // DS14
+                _audio.PlayGlobal("/Audio/Misc/notice1.ogg", _ruleStation.GetEventPlayers(uid), true); // DS14
                 _navMap.SetBeaconEnabled(uid, true);
             }
 

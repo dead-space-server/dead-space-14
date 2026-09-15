@@ -778,7 +778,7 @@ namespace Content.Server.Atmos.EntitySystems
         }
 
         // DS14-start: Monstermos finalization transfers gas very often; avoid per-transfer GasMixture allocation.
-        private void TransferGas(GasMixture receiver, GasMixture giver, float amount)
+        internal void TransferGas(GasMixture receiver, GasMixture giver, float amount)
         {
             var ratio = amount / giver.TotalMoles;
             switch (ratio)
@@ -793,6 +793,10 @@ namespace Content.Server.Atmos.EntitySystems
             Span<float> removedMoles = stackalloc float[Atmospherics.AdjustedNumberOfGases];
             var giverMoles = giver.Moles;
             var receiverMoles = receiver.Moles;
+            // Preserve Iprit age across direct mole-array updates. Kofeecheks: LicenseRef-Kofeecheks
+            var ipritIndex = (int) Gas.Iprit;
+            var giverIpritDeadline = giver.IpritDecayDeadline;
+            var receiverIpritMoles = receiverMoles[ipritIndex];
             var mixTemperatures = MathF.Abs(receiver.Temperature - giver.Temperature) >
                                   Atmospherics.MinimumTemperatureDeltaToConsider;
             var removedHeatCapacity = 0f;
@@ -820,6 +824,8 @@ namespace Content.Server.Atmos.EntitySystems
                     receiverHeatCapacity += receiverMoles[i] * gasHeatCapacity;
             }
 
+            giver.ResetIpritDecayDeadlineIfEmpty();
+
             if (receiver.Immutable)
                 return;
 
@@ -840,6 +846,11 @@ namespace Content.Server.Atmos.EntitySystems
             {
                 receiverMoles[i] += removedMoles[i];
             }
+
+            receiver.BlendIpritDecayDeadline(
+                receiverIpritMoles,
+                giverIpritDeadline,
+                removedMoles[ipritIndex]);
         }
         // DS14-end
 

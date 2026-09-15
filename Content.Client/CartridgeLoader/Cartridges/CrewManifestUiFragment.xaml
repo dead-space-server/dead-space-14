@@ -2,12 +2,12 @@
                                    xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
                                    xmlns:ui="clr-namespace:Content.Client.CrewManifest.UI"
                                    xmlns="https://spacestation14.io" Margin="1 0 2 0">
-    <PanelContainer StyleClasses="DS14MenuPanelDark"></PanelContainer>
+    <PanelContainer StyleClasses="DeadSpaceSurfaceDark"></PanelContainer> <!-- DS14 -->
     <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
         <controls:StripeBack Name="StationNameContainer">
-            <PanelContainer StyleClasses="DS14MenuListHeader">
-                <Label Name="StationName" Align="Center" Text="{Loc 'crew-manifest-cartridge-loading'}" StyleClasses="DS14MenuProfileSection"/>
-            </PanelContainer>
+            <!-- DS14-start -->
+            <Label Name="StationName" Align="Center" Text="{Loc 'crew-manifest-cartridge-loading'}" StyleClasses="DeadSpaceSectionTitle" Margin="7 5"/>
+            <!-- DS14-end -->
         </controls:StripeBack>
         <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
             <ui:CrewManifestListing

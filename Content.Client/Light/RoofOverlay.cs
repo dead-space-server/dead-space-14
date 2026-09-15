@@ -21,6 +21,7 @@ public sealed class RoofOverlay : Overlay
     private readonly SharedMapSystem _mapSystem;
     private readonly SharedRoofSystem _roof = default!;
     private readonly SharedTransformSystem _xformSystem;
+    private readonly TurfSystem _turf;
 
     private List<Entity<MapGridComponent>> _grids = new();
 
@@ -37,6 +38,7 @@ public sealed class RoofOverlay : Overlay
         _mapSystem = _entManager.System<SharedMapSystem>();
         _roof = _entManager.System<SharedRoofSystem>();
         _xformSystem = _entManager.System<SharedTransformSystem>();
+        _turf = _entManager.System<TurfSystem>();
 
         ZIndex = ContentZIndex;
     }
@@ -82,6 +84,9 @@ public sealed class RoofOverlay : Overlay
 
                     while (tileEnumerator.MoveNext(out var tileRef))
                     {
+                        if (_turf.IsSpace(tileRef))
+                            continue;
+
                         var local = _lookup.GetLocalBounds(tileRef, grid.Comp.TileSize);
                         worldHandle.DrawRect(local, color);
                     }
@@ -113,6 +118,9 @@ public sealed class RoofOverlay : Overlay
                     // Due to stencilling we essentially draw on unrooved tiles
                     while (tileEnumerator.MoveNext(out var tileRef))
                     {
+                        if (_turf.IsSpace(tileRef))
+                            continue;
+
                         var color = _roof.GetColor(roofEnt, tileRef.GridIndices);
 
                         if (color == null)

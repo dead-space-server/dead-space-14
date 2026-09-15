@@ -98,6 +98,7 @@
   id: WeaponRevolverInspector
   description: A double-action revolver manufactured by various companies. It is readily available on the civilian market, making it a popular choice among private investigators. You feel lucky just holding it. Loads 6 rounds of .45 magnum.
   components:
+  - type: Akimbo # DS14
   - type: Sprite
     sprite: Objects/Weapons/Guns/Revolvers/inspector.rsi
   - type: Clothing
@@ -142,6 +143,7 @@
   id: WeaponRevolverPython
   description: A powerful double-action revolver manufactured by the Syndicate. Loud and flashy, perfect for any agent looking to make a statement. Loads 6 rounds of .45 magnum.
   components:
+  - type: Akimbo # DS14
   - type: Sprite
     sprite: Objects/Weapons/Guns/Revolvers/python.rsi
   - type: Clothing

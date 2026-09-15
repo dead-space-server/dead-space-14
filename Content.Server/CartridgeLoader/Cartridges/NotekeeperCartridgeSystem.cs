@@ -2,8 +2,16 @@ using Content.Server.Administration.Logs;
 using Content.Shared.CartridgeLoader;
 using Content.Shared.CartridgeLoader.Cartridges;
 using Content.Shared.Database;
+using Robust.Shared.GameObjects;
 
 namespace Content.Server.CartridgeLoader.Cartridges;
+
+/// <summary>
+/// DS14: Raised broadcast after a note was added to a notekeeper cartridge.
+/// Used by the ВорПРО program to detect the thief's activation code word.
+/// </summary>
+[ByRefEvent]
+public readonly record struct NoteAddedEvent(EntityUid Cartridge, EntityUid Actor, string Note);
 
 public sealed class NotekeeperCartridgeSystem : EntitySystem
 {
@@ -39,6 +47,8 @@ public sealed class NotekeeperCartridgeSystem : EntitySystem
         if (message.Action == NotekeeperUiAction.Add)
         {
             component.Notes.Add(message.Note);
+            var noteAdded = new NoteAddedEvent(uid, args.Actor, message.Note);
+            RaiseLocalEvent(ref noteAdded);
             _adminLogger.Add(LogType.PdaInteract, LogImpact.Low,
                 $"{ToPrettyString(args.Actor)} added a note to PDA: '{message.Note}' contained on: {ToPrettyString(uid)}");
         }

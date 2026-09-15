@@ -56,6 +56,9 @@
   - type: EmitSoundOnLand
     sound:
       path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_drop.ogg
+  - type: Tag
+    tags:
+    - GasTankBorg
   #DS14-End
 
 - type: entity

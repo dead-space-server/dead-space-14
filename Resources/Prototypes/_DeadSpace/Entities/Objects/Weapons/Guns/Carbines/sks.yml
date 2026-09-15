@@ -2,7 +2,6 @@
   parent: [ BaseWeaponRifle, BaseGunWieldable ]
   id: WeaponCarbineSKS
   name: самозарядный карабин Симонова
-  suffix: СКС
   description: Модифицированный самозарядный карабин с пластиковым ложе. Использует патроны калибра 7.62х39 мм. Обычно идёт в комплекте с магазином на 20 патрон
   components:
   - type: Sprite

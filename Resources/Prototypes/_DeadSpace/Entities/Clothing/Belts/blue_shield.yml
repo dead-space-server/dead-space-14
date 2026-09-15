@@ -59,6 +59,26 @@
       - id: JawsOfLife
       - id: PowerDrill
       - id: WelderExperimental
+      - id: CombatHypoRedSword
+      - id: ChemistryBottleCelestin
+      - id: ChemistryBottleCelestin
+      - id: ChemistryBottleOmnizine
+      - id: ChemistryBottleBicaridine
+      - id: ChemistryBottleDexalinPlus
+      - id: ChemistryBottleDermaline
+
+- type: entity
+  id: ClothingBeltMilitaryWebbingGreenBeretCentComFilled
+  parent: ClothingBeltMilitaryWebbingBlueShieldFilled
+  name: РПС офицера "Зелёный Берет"
+  description: РПС, которую носят офицеры "Зелёный Берет"
+  suffix: Заполненный, ЦентКом
+  components:
+  - type: StorageFill
+    contents:
+      - id: JawsOfLife
+      - id: PowerDrill
+      - id: WelderExperimental
       - id: ADTCombatHypo
       - id: ChemistryBottleCelestin
       - id: ChemistryBottleCelestin

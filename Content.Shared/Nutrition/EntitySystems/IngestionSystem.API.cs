@@ -225,9 +225,9 @@ public sealed partial class IngestionSystem
                 foreach (var effect in entry.Effects)
                 {
                     // ignores any effect conditions, just cares about how much it can hydrate
-                    if (effect is SatiateHunger hunger)
+                    if (effect is Satiate satiate && satiate.SatiationType == SatiationSystem.Hunger)
                     {
-                        total += hunger.Factor * quantity.Quantity.Float();
+                        total += satiate.Factor * quantity.Quantity.Float();
                     }
                 }
             }
@@ -276,9 +276,9 @@ public sealed partial class IngestionSystem
                 foreach (var effect in entry.Effects)
                 {
                     // ignores any effect conditions, just cares about how much it can hydrate
-                    if (effect is SatiateThirst thirst)
+                    if (effect is Satiate satiate && satiate.SatiationType == SatiationSystem.Thirst)
                     {
-                        total += thirst.Factor * quantity.Quantity.Float();
+                        total += satiate.Factor * quantity.Quantity.Float();
                     }
                 }
             }
@@ -298,10 +298,12 @@ public sealed partial class IngestionSystem
     /// <param name="user">The entity trying to make the ingestion happening, not necessarily the one eating</param>
     /// <param name="solution">Solution we're returning</param>
     /// <param name="time">The time it takes us to eat this entity</param>
+    /// <param name="requireUtensils">Whether accessing the food requires eating utensils.</param>
     public bool CanAccessSolution(Entity<SolutionContainerManagerComponent?> ingested,
         EntityUid user,
         [NotNullWhen(true)] out Entity<SolutionComponent>? solution,
-        out TimeSpan? time)
+        out TimeSpan? time,
+        bool requireUtensils = true)
     {
         solution = null;
         time = null;
@@ -312,7 +314,7 @@ public sealed partial class IngestionSystem
             return false;
         }
 
-        var ev = new EdibleEvent(user);
+        var ev = new EdibleEvent(user) { RequireUtensils = requireUtensils };
         RaiseLocalEvent(ingested, ref ev);
 
         solution = ev.Solution;

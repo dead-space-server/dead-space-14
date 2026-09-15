@@ -31,6 +31,15 @@
     sound:
       path: /Audio/_DeadSpace/Items/Handing/book_drop.ogg
   #DS14-End
+  - type: Item
+    sprite: Objects/Misc/folders.rsi # DS14 - explicit RSI for imported in-hand layers.
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: "#cc2323"
+      right:
+      - state: inhand-right
+        color: "#cc2323"
 
 - type: entity
   parent: BoxBase
@@ -59,6 +68,11 @@
     sprite: Objects/Misc/folders.rsi
     size: Small
     shape: null
+    inhandVisuals:
+      left:
+      - state: inhand-left
+      right:
+      - state: inhand-right
   - type: Storage
     maxItemSize: Small
     grid:
@@ -142,6 +156,14 @@
     - state: folder-colormap
       color: "#cc2323"
     - state: folder-base
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: "#cc2323"
+      right:
+      - state: inhand-right
+        color: "#cc2323"
 
 - type: entity
   parent: [BoxFolderRedEmpty, BoxFolderFill]
@@ -163,6 +185,14 @@
     - state: folder-colormap
       color: "#355d99"
     - state: folder-base
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: "#355d99"
+      right:
+      - state: inhand-right
+        color: "#355d99"
 
 - type: entity
   parent: [BoxFolderBlueEmpty, BoxFolderFill]
@@ -184,6 +214,14 @@
     - state: folder-colormap
       color: "#b38e3c"
     - state: folder-base
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: "#b38e3c"
+      right:
+      - state: inhand-right
+        color: "#b38e3c"
 
 - type: entity
   parent: [BoxFolderYellowEmpty, BoxFolderFill]
@@ -205,6 +243,14 @@
     - state: folder-colormap
       color: "#999999"
     - state: folder-base
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: "#999999"
+      right:
+      - state: inhand-right
+        color: "#999999"
 
 - type: entity
   parent: [BoxFolderGreyEmpty, BoxFolderFill]
@@ -226,6 +272,14 @@
     - state: folder-colormap
       color: "#3f3f3f"
     - state: folder-base
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: "#3f3f3f"
+      right:
+      - state: inhand-right
+        color: "#3f3f3f"
 
 - type: entity
   parent: [BoxFolderBlackEmpty, BoxFolderFill]
@@ -247,6 +301,14 @@
     - state: folder-colormap
       color: "#43bc38"
     - state: folder-base
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: "#43bc38"
+      right:
+      - state: inhand-right
+        color: "#43bc38"
 
 - type: entity
   parent: [BoxFolderGreenEmpty, BoxFolderFill]
@@ -296,6 +358,14 @@
     whitelist:
       tags:
       - Document
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: "#48b448"
+      right:
+      - state: inhand-right
+        color: "#48b448"
 
 - type: entity
   parent: [BoxFolderCentComEmpty, BoxFolderFill]

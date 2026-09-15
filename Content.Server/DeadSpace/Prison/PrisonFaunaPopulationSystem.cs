@@ -121,13 +121,20 @@ public sealed class PrisonFaunaPopulationSystem : EntitySystem
         }
     }
 
-    public void SetupMap(EntityUid mapUid, PrisonPlanetPrototype planet)
+    public void SetupMap(
+        EntityUid mapUid,
+        PrisonPlanetPrototype planet,
+        IReadOnlyList<Box2> residenceBounds)
     {
         if (!planet.FaunaEnabled || planet.FaunaSpawns.Count == 0)
             return;
 
         var population = EnsureComp<PrisonFaunaPopulationComponent>(mapUid);
         population.SectorCooldowns.Clear();
+        population.ResidenceExclusions.Clear();
+        var residencePadding = Math.Max(0f, planet.FaunaResidenceExclusionPadding);
+        foreach (var bounds in residenceBounds)
+            population.ResidenceExclusions.Add(bounds.Enlarged(residencePadding));
         population.InitialSpawnRemaining = Math.Min(
             Math.Max(0, planet.FaunaInitialSpawnCount),
             Math.Max(0, planet.FaunaHardCap));
@@ -277,7 +284,7 @@ public sealed class PrisonFaunaPopulationSystem : EntitySystem
 
                 if (avoidUsedSectors && usedSectors.Contains(sector) ||
                     population.SectorCooldowns.ContainsKey(sector) ||
-                    IsInsideExclusion(center, planet) ||
+                    IsInsideExclusion(center, planet, population) ||
                     HasNearbyPlayer(mapId, center, planet.FaunaMinPlayerDistance) ||
                     HasNearbyNonTerrainGrid(mapUid, center, Math.Max(2f, planet.FaunaSpawnClearance + 1f)) ||
                     !IsTileSafeForSpawn(mapUid, grid, biome, indices, planet.FaunaSpawnClearance, true) ||
@@ -412,13 +419,14 @@ public sealed class PrisonFaunaPopulationSystem : EntitySystem
         return false;
     }
 
-    private static bool IsInsideExclusion(Vector2 center, PrisonPlanetPrototype planet)
+    private static bool IsInsideExclusion(
+        Vector2 center,
+        PrisonPlanetPrototype planet,
+        PrisonFaunaPopulationComponent population)
     {
-        if (planet.ResidenceReservationEnabled)
+        foreach (var bounds in population.ResidenceExclusions)
         {
-            var halfSize = Math.Max(1, planet.ResidenceReservationSize) / 2f +
-                           Math.Max(0f, planet.FaunaResidenceExclusionPadding);
-            if (MathF.Abs(center.X) <= halfSize && MathF.Abs(center.Y) <= halfSize)
+            if (bounds.Contains(center))
                 return true;
         }
 

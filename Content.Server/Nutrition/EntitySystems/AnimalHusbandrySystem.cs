@@ -9,10 +9,12 @@ using Content.Shared.NameModifier.EntitySystems;
 using Content.Shared.Nutrition.AnimalHusbandry;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
+using Content.Shared.Nutrition.Prototypes;
 using Content.Shared.Storage;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -24,7 +26,7 @@ namespace Content.Server.Nutrition.EntitySystems;
 public sealed class AnimalHusbandrySystem : EntitySystem
 {
     [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
-    [Dependency] private readonly HungerSystem _hunger = default!;
+    [Dependency] private readonly SatiationSystem _satiation = default!;
     [Dependency] private readonly IAdminLogManager _adminLog = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
@@ -107,6 +109,11 @@ public sealed class AnimalHusbandrySystem : EntitySystem
         if (!IsValidPartner(uid, partner, component))
             return false;
 
+        var attempt = new ReproductionAttemptEvent(partner);
+        RaiseLocalEvent(uid, ref attempt);
+        if (attempt.Cancelled)
+            return false;
+
         // if the partner is valid, yet it fails the random check
         // invalidate the entity from further attempts this tick
         // in order to reduce total possible pairs.
@@ -121,12 +128,22 @@ public sealed class AnimalHusbandrySystem : EntitySystem
         if (TryComp<InteractionPopupComponent>(uid, out var interactionPopup))
             _audio.PlayPvs(interactionPopup.InteractSuccessSound, uid);
 
-        _hunger.ModifyHunger(uid, -component.HungerPerBirth);
-        _hunger.ModifyHunger(partner, -component.HungerPerBirth);
+        if (TryComp<SatiationComponent>(uid, out var satiation))
+        {
+            _satiation.ModifyValue((uid, satiation), SatiationSystem.Hunger, -component.HungerPerBirth);
+        }
+
+        if (TryComp<SatiationComponent>(partner, out var partnerSatiation))
+        {
+            _satiation.ModifyValue((partner, partnerSatiation), SatiationSystem.Hunger, -component.HungerPerBirth);
+        }
 
         component.GestationEndTime = _timing.CurTime + component.GestationDuration;
         component.Gestating = true;
-        _adminLog.Add(LogType.Action, $"{ToPrettyString(uid)} (carrier) and {ToPrettyString(partner)} (partner) successfully bred.");
+        var started = new ReproductionStartedEvent(partner);
+        RaiseLocalEvent(uid, ref started);
+        _adminLog.Add(LogType.Action,
+            $"{ToPrettyString(uid)} (carrier) and {ToPrettyString(partner)} (partner) successfully bred.");
         return true;
     }
 
@@ -148,11 +165,27 @@ public sealed class AnimalHusbandrySystem : EntitySystem
         if (_mobState.IsIncapacitated(uid))
             return false;
 
-        if (TryComp<HungerComponent>(uid, out var hunger) && _hunger.GetHungerThreshold(hunger) < HungerThreshold.Okay)
-            return false;
+        // If no satiations, no limit to reproduction
+        if (!TryComp<SatiationComponent>(uid, out var satiation))
+        {
+            return true;
+        }
 
-        if (TryComp<ThirstComponent>(uid, out var thirst) && thirst.CurrentThirstThreshold < ThirstThreshold.Okay)
-            return false;
+        // Check minimum hunger requirement
+        if (component?.MinHungerThreshold is { } minHunger)
+        {
+            if (!satiation.Has(SatiationSystem.Hunger) ||
+                _satiation.IsValueInRange((uid, satiation), SatiationSystem.Hunger, below: minHunger))
+                return false;
+        }
+
+        // Check minimum thirst requirement
+        if (component?.MinThirstThreshold is { } minThirst)
+        {
+            if (!satiation.Has(SatiationSystem.Thirst) ||
+                _satiation.IsValueInRange((uid, satiation), SatiationSystem.Thirst, below: minThirst))
+                return false;
+        }
 
         return true;
     }
@@ -178,8 +211,23 @@ public sealed class AnimalHusbandrySystem : EntitySystem
     /// </summary>
     public void Birth(EntityUid uid, ReproductiveComponent? component = null)
     {
-        if (!Resolve(uid, ref component))
+        if (!Resolve(uid, ref component) || !component.Gestating)
             return;
+
+        if (!_mobState.IsAlive(uid))
+        {
+            component.Gestating = false;
+            component.GestationEndTime = null;
+            return;
+        }
+
+        var attempt = new BeforeAnimalBirthEvent();
+        RaiseLocalEvent(uid, ref attempt);
+        if (attempt.Cancelled)
+        {
+            component.GestationEndTime = _timing.CurTime + component.MinBreedAttemptInterval;
+            return;
+        }
 
         // this is kinda wack but it's the only sound associated with most animals
         if (TryComp<InteractionPopupComponent>(uid, out var interactionPopup))
@@ -198,6 +246,7 @@ public sealed class AnimalHusbandrySystem : EntitySystem
                 // Make sure the name prefix is applied
                 _nameMod.RefreshNameModifiers(offspring);
             }
+
             _adminLog.Add(LogType.Action, $"{ToPrettyString(uid)} gave birth to {ToPrettyString(offspring)}.");
         }
 
@@ -224,7 +273,8 @@ public sealed class AnimalHusbandrySystem : EntitySystem
 
             if (_timing.CurTime < reproductive.NextBreedAttempt)
                 continue;
-            reproductive.NextBreedAttempt += _random.Next(reproductive.MinBreedAttemptInterval, reproductive.MaxBreedAttemptInterval);
+            reproductive.NextBreedAttempt +=
+                _random.Next(reproductive.MinBreedAttemptInterval, reproductive.MaxBreedAttemptInterval);
 
             // no.
             if (HasComp<ActorComponent>(uid) || TryComp<MindContainerComponent>(uid, out var mind) && mind.HasMind)

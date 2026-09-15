@@ -1,0 +1,21 @@
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitMagistrat
+  name: униформа магистрата
+  description: Строгий костюм, в котором выносят приговоры. Сшит так, чтобы протесты отклонялись ещё до того, как их произнесут.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/magistrate.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/magistrate.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitIAA
+  name: униформа агента внутренних дел
+  description: Опрятная униформа агента внутренних дел. Каждая складка на нём соответствует стандартным рабочим процедурам.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/iaa.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/iaa.rsi

@@ -102,6 +102,42 @@ public abstract class SharedJobSystem : EntitySystem
     }
 
     /// <summary>
+    /// Tries non-primary departments first (for example Command for heads), then falls back to the primary department.
+    /// </summary>
+    public bool TryGetSecondaryDepartmentsOrFallback(
+        ProtoId<JobPrototype> jobProto,
+        [NotNullWhen(true)] out List<DepartmentPrototype>? departmentPrototypes)
+    {
+        departmentPrototypes = new List<DepartmentPrototype>();
+
+        foreach (var department in _prototypes.EnumeratePrototypes<DepartmentPrototype>())
+        {
+            if (!department.Primary && department.Roles.Contains(jobProto))
+                departmentPrototypes.Add(department);
+        }
+
+        if (departmentPrototypes.Count > 0)
+            return true;
+
+        if (TryGetPrimaryDepartment(jobProto, out var primaryDepartment))
+        {
+            departmentPrototypes.Add(primaryDepartment);
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Returns whether a job belongs to the given department.
+    /// </summary>
+    public bool JobIsInDepartment(ProtoId<JobPrototype> jobProto, ProtoId<DepartmentPrototype> departmentProto)
+    {
+        return TryGetAllDepartments(jobProto, out var departments) &&
+            departments.Any(department => department.ID == departmentProto);
+    }
+
+    /// <summary>
     /// Tries to get all the departments for a given job. Will return an empty list if none are found.
     /// </summary>
     public bool TryGetAllDepartments(string jobProto, out List<DepartmentPrototype> departmentPrototypes)

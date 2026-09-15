@@ -89,7 +89,7 @@
 
 # Helmet
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuitqu0565
   name: шлем скафандра освободителя
   description: Защитный чёрный шлем скафандра с голубым визором, обеспечивающий полный обзор и защиту в самых опасных условиях космоса.

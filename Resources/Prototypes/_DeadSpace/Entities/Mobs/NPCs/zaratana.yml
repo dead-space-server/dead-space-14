@@ -53,7 +53,7 @@
     state: red
   - type: Marker
 
-- type: entity 
+- type: entity
   id: SpawnZaratanaShadow
   categories: [ HideSpawnMenu ]
   components:
@@ -181,9 +181,12 @@
     name: ghost-role-information-zaratana-name
     description: ghost-role-information-zaratana-description
     rules: ghost-role-information-freeagent-rules
+    requirements:
+    - !type:OverallPlaytimeRequirement
+      time: 720000 # 200 hours
     raffle:
       settings: default
-  - type: GhostRoleNotifys 
+  - type: GhostRoleNotifys
     groupPrototype: DemonBoss
   - type: Vocal
     sounds:
@@ -253,7 +256,7 @@
       - ActionCritLastWords
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.5
-    baseSprintSpeed: 2.5 
+    baseSprintSpeed: 2.5
     baseWeightlessModifier: 1.5
   - type: MeleeWeapon
     soundHit:
@@ -325,6 +328,7 @@
     unlockLanguagesAfterMakeSentient:
     - GeneralLanguage
   - type: PassiveDamage
+    intervalHaltOnDamageTaken: 5s
     allowedStates:
     - Alive
     - Critical

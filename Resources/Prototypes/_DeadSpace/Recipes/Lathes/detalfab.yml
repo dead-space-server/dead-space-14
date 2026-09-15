@@ -4,36 +4,36 @@
   id: DetailTechFabMachineCircuitboard
   result: DetailTechFabMachineCircuitboard
   materials:
-    Steel: 500
-    Plastic: 500
+    Steel: 250
+    Plastic: 250
 
 - type: latheRecipe
   id: DetailTechFabMachineCircuitboardTaipan
   result: DetailTechFabMachineCircuitboardTaipan
   materials:
-    Steel: 500
-    Plastic: 500
+    Steel: 250
+    Plastic: 250
 
 - type: latheRecipe
   id: SecDetailTechFabMachineCircuitboard
   result: SecDetailTechFabMachineCircuitboard
   materials:
-    Steel: 500
-    Plastic: 500
+    Steel: 250
+    Plastic: 250
 
 - type: latheRecipe
   id: CraftConsoleCircuitboard
   result: CraftConsoleCircuitboard
   materials:
-    Steel: 500
-    Plastic: 500
+    Steel: 250
+    Plastic: 250
 
 - type: latheRecipe
   id: CraftMachineCircuitboard
   result: CraftMachineCircuitboard
   materials:
-    Steel: 500
-    Plastic: 500
+    Steel: 250
+    Plastic: 250
 
 # Ядра и каркасы
 
@@ -41,42 +41,42 @@
   id: DefaultCoreForModifiedBackpack
   result: DefaultCoreForModifiedBackpack
   materials:
-    Steel: 1500
-    Plastic: 1000
-    Gold: 500
+    Steel: 750
+    Plastic: 500
+    Gold: 250
 
 - type: latheRecipe
   id: MediumCoreForModifiedBackpack
   result: MediumCoreForModifiedBackpack
   materials:
-    Steel: 1500
-    Plastic: 1250
-    Gold: 1000
-    Plasma: 1000
+    Steel: 750
+    Plastic: 625
+    Gold: 500
+    Plasma: 500
 
 - type: latheRecipe
   id: AdvancedCoreForModifiedBackpack
   result: AdvancedCoreForModifiedBackpack
   materials:
-    Steel: 2000
-    Plastic: 1250
-    Gold: 1250
-    Plasma: 500
-    Magmite: 250
+    Steel: 1000
+    Plastic: 625
+    Gold: 625
+    Plasma: 250
+    Magmite: 125
 
 - type: latheRecipe
   id: HardsuitFrameTorso
   result: HardsuitFrameTorso
   materials:
-    Steel: 1500
-    Plasteel: 250
+    Steel: 750
+    Plasteel: 125
 
 - type: latheRecipe
   id: HardsuitFrameLeg
   result: HardsuitFrameLeg
   materials:
-    Steel: 1500
-    Plasteel: 250
+    Steel: 750
+    Plasteel: 125
 
 # Бесконечные чертежи
 
@@ -84,43 +84,43 @@
   id: BlueprintRIGSecurityInfinite
   result: BlueprintRIGSecurityInfinite
   materials:
-    Plastic: 1750
-    BluespaceCrystal: 525
+    Plastic: 875
+    BluespaceCrystal: 263
 
 - type: latheRecipe
   id: BlueprintRIGSecurityAdvancedInfinite
   result: BlueprintRIGSecurityAdvancedInfinite
   materials:
-    Plastic: 1750
-    BluespaceCrystal: 525
+    Plastic: 875
+    BluespaceCrystal: 263
 
 - type: latheRecipe
   id: BlueprintRIGSalvageInfinite
   result: BlueprintRIGSalvageInfinite
   materials:
-    Plastic: 1750
-    BluespaceCrystal: 525
+    Plastic: 875
+    BluespaceCrystal: 263
 
 - type: latheRecipe
   id: BlueprintRIGEVAInfinite
   result: BlueprintRIGEVAInfinite
   materials:
-    Plastic: 1150
-    BluespaceCrystal: 125
+    Plastic: 575
+    BluespaceCrystal: 63
 
 - type: latheRecipe
   id: BlueprintRIGResearchInfinite
   result: BlueprintRIGResearchInfinite
   materials:
-    Plastic: 1750
-    BluespaceCrystal: 525
+    Plastic: 875
+    BluespaceCrystal: 263
 
 - type: latheRecipe
   id: BlueprintRIGEngineerInfinite
   result: BlueprintRIGEngineerInfinite
   materials:
-    Plastic: 1150
-    BluespaceCrystal: 125
+    Plastic: 575
+    BluespaceCrystal: 63
 
 # 3 использование
 
@@ -128,43 +128,43 @@
   id: BlueprintRIGSecurityThreeUse
   result: BlueprintRIGSecurityThreeUse
   materials:
-    Plastic: 1250
-    Plasma: 800
+    Plastic: 625
+    Plasma: 400
 
 - type: latheRecipe
   id: BlueprintRIGSecurityAdvancedThreeUse
   result: BlueprintRIGSecurityAdvancedThreeUse
   materials:
-    Plastic: 1250
-    Plasma: 800
+    Plastic: 625
+    Plasma: 400
 
 - type: latheRecipe
   id: BlueprintRIGSalvageThreeUse
   result: BlueprintRIGSalvageThreeUse
   materials:
-    Plastic: 1250
-    Plasma: 800
+    Plastic: 625
+    Plasma: 400
 
 - type: latheRecipe
   id: BlueprintRIGEVAThreeUse
   result: BlueprintRIGEVAThreeUse
   materials:
-    Plastic: 950
-    Plasma: 350
+    Plastic: 475
+    Plasma: 175
 
 - type: latheRecipe
   id: BlueprintRIGResearchThreeUse
   result: BlueprintRIGResearchThreeUse
   materials:
-    Plastic: 1250
-    Plasma: 800
+    Plastic: 625
+    Plasma: 400
 
 - type: latheRecipe
   id: BlueprintRIGEngineerThreeUse
   result: BlueprintRIGEngineerThreeUse
   materials:
-    Plastic: 950
-    Plasma: 350
+    Plastic: 475
+    Plasma: 175
 
 # 1 использование
 
@@ -172,37 +172,37 @@
   id: BlueprintRIGSecurityOneUse
   result: BlueprintRIGSecurityOneUse
   materials:
-    Plastic: 950
+    Plastic: 475
 
 - type: latheRecipe
   id: BlueprintRIGSecurityAdvancedOneUse
   result: BlueprintRIGSecurityAdvancedOneUse
   materials:
-    Plastic: 950
+    Plastic: 475
 
 - type: latheRecipe
   id: BlueprintRIGSalvageOneUse
   result: BlueprintRIGSalvageOneUse
   materials:
-    Plastic: 950
+    Plastic: 475
 
 - type: latheRecipe
   id: BlueprintRIGEVAOneUse
   result: BlueprintRIGEVAOneUse
   materials:
-    Plastic: 450
+    Plastic: 225
 
 - type: latheRecipe
   id: BlueprintRIGResearchOneUse
   result: BlueprintRIGResearchOneUse
   materials:
-    Plastic: 950
+    Plastic: 475
 
 - type: latheRecipe
   id: BlueprintRIGEngineerOneUse
   result: BlueprintRIGEngineerOneUse
   materials:
-    Plastic: 450
+    Plastic: 225
 
 # Шлема
 
@@ -210,59 +210,59 @@
   id: ClothingHeadHelmetRIGEVA
   result: ClothingHeadHelmetRIGEVA
   materials:
-    Steel: 1500
-    Glass: 500
-    Durathread: 500
+    Steel: 750
+    Glass: 250
+    Durathread: 250
 
 - type: latheRecipe
   id: ClothingHeadHelmetRIGEngineer
   result: ClothingHeadHelmetRIGEngineer
   materials:
-    Steel: 1500
-    Durathread: 500
-    Glass: 500
-    Silver: 500
+    Steel: 750
+    Durathread: 250
+    Glass: 250
+    Silver: 250
 
 - type: latheRecipe
   id: ClothingHeadHelmetRIGResearch
   result: ClothingHeadHelmetRIGResearch
   materials:
-    Steel: 1500
-    Durathread: 500
-    Silver: 250
-    Glass: 500
-    Gold: 250
+    Steel: 750
+    Durathread: 250
+    Silver: 125
+    Glass: 250
+    Gold: 125
 
 - type: latheRecipe
   id: ClothingHeadHelmetRIGSecurity
   result: ClothingHeadHelmetRIGSecurity
   materials:
-    Steel: 1500
-    Durathread: 500
-    Glass: 500
-    Plasteel: 1000
+    Steel: 750
+    Durathread: 250
+    Glass: 250
+    Plasteel: 500
 
 - type: latheRecipe
   id: ClothingHeadHelmetRIGSecurityAdvanced
   result: ClothingHeadHelmetRIGSecurityAdvanced
   materials:
-    Steel: 2000
-    Durathread: 500
-    Plasteel: 1500
-    Silver: 500
-    Glass: 500
-    Magmite: 500
+    Steel: 1000
+    Durathread: 250
+    Plasteel: 750
+    Silver: 250
+    Glass: 250
+    Magmite: 250
 
 - type: latheRecipe
   id: ClothingHeadHelmetRIGSalvage
   result: ClothingHeadHelmetRIGSalvage
   materials:
-    Steel: 1500
-    Durathread: 500
-    Plasteel: 1000
-    Gold: 250
-    Glass: 500
-    Magmite: 500
+    Steel: 750
+    Durathread: 250
+    Plasteel: 500
+    Gold: 125
+    Glass: 250
+    Magmite: 250
 
 # Пластины
 
@@ -270,52 +270,52 @@
   id: PlastineOfSecurAdvancedityRIG
   result: PlastineOfSecurAdvancedityRIG
   materials:
-    Steel: 3250
-    Plasteel: 2250
-    Magmite: 2500
-    Silver: 1000
+    Steel: 1625
+    Plasteel: 1125
+    Magmite: 1250
+    Silver: 500
 
 - type: latheRecipe
   id: PlastineOfSecurityRIG
   result: PlastineOfSecurityRIG
   materials:
-    Steel: 2150
-    Plasteel: 1250
-    Magmite: 1525
-    Silver: 500
+    Steel: 1075
+    Plasteel: 625
+    Magmite: 763
+    Silver: 250
 
 - type: latheRecipe
   id: PlastineOfSalvageRIG
   result: PlastineOfSalvageRIG
   materials:
-    Steel: 2150
-    Plasteel: 1000
-    Magmite: 1850
-    Gold: 500
+    Steel: 1075
+    Plasteel: 500
+    Magmite: 925
+    Gold: 250
 
 - type: latheRecipe
   id: PlastineOfResearchRIG
   result: PlastineOfResearchRIG
   materials:
-    Steel: 2000
-    Plasteel: 1250
-    Gold: 500
-    Silver: 250
+    Steel: 1000
+    Plasteel: 625
+    Gold: 250
+    Silver: 125
 
 - type: latheRecipe
   id: PlastineOfEngineerRIG
   result: PlastineOfEngineerRIG
   materials:
-    Steel: 1750
-    Plasteel: 550
-    Gold: 250
+    Steel: 875
+    Plasteel: 275
+    Gold: 125
 
 - type: latheRecipe
   id: PlastineOfEVARIG
   result: PlastineOfEVARIG
   materials:
-    Steel: 1500
-    Plasteel: 250
+    Steel: 750
+    Plasteel: 125
 
 # Модули
 
@@ -323,92 +323,92 @@
   id: StorageModuleItem
   result: StorageModuleItem
   materials:
-    Steel: 1500
-    BluespaceCrystal: 525
-    Plastic: 250
+    Steel: 750
+    BluespaceCrystal: 263
+    Plastic: 125
 
 - type: latheRecipe
   id: DelayModifierModuleItem
   result: DelayModifierModuleItem
   materials:
-    Steel: 1250
-    Plastic: 500
+    Steel: 625
+    Plastic: 250
 
 - type: latheRecipe
   id: HeatResistanceModuleEngineer
   result: HeatResistanceModuleEngineer
   materials:
-    Steel: 1750
-    Glass: 500
-    Durathread: 500
+    Steel: 875
+    Glass: 250
+    Durathread: 250
 
 - type: latheRecipe
   id: FireResistanceModuleEngineer
   result: FireResistanceModuleEngineer
   materials:
-    Steel: 2000
-    Glass: 725
+    Steel: 1000
+    Glass: 363
 
 - type: latheRecipe
   id: SpeedModifierModuleSalvage
   result: SpeedModifierModuleSalvage
   materials:
-    Steel: 1750
-    BluespaceCrystal: 200
-    Durathread: 200
+    Steel: 875
+    BluespaceCrystal: 100
+    Durathread: 100
 
 - type: latheRecipe
   id: ExplosionResistanceModuleResearch
   result: ExplosionResistanceModuleResearch
   materials:
-    Steel: 1750
-    Silver: 750
+    Steel: 875
+    Silver: 375
 
 - type: latheRecipe
   id: RadiationResistanceModuleResearch
   result: RadiationResistanceModuleResearch
   materials:
-    Steel: 1000
-    Gold: 1000
+    Steel: 500
+    Gold: 500
 
 - type: latheRecipe
   id: SpeedModifierModuleItemResearch
   result: SpeedModifierModuleItemResearch
   materials:
-    Steel: 1250
-    BluespaceCrystal: 125
-    Durathread: 200
+    Steel: 625
+    BluespaceCrystal: 63
+    Durathread: 100
 
 - type: latheRecipe
   id: StorageModuleSecurity
   result: StorageModuleSecurity
   materials:
-    Steel: 1000
-    Plastic: 500
-    Durathread: 1000
+    Steel: 500
+    Plastic: 250
+    Durathread: 500
 
 - type: latheRecipe
   id: PiercingResistanceModuleSecurityAdvanced
   result: PiercingResistanceModuleSecurityAdvanced
   materials:
-    Steel: 1500
-    Plasteel: 1500
+    Steel: 750
+    Plasteel: 750
 
 - type: latheRecipe
   id: SpeedModifierModuleSecurityAdvanced
   result: SpeedModifierModuleSecurityAdvanced
   materials:
-    Steel: 1550
-    BluespaceCrystal: 200
-    Durathread: 250
+    Steel: 775
+    BluespaceCrystal: 100
+    Durathread: 125
 
 - type: latheRecipe
   id: SpeedModifierModuleSecurity
   result: SpeedModifierModuleSecurity
   materials:
-    Steel: 1250
-    BluespaceCrystal: 125
-    Durathread: 200
+    Steel: 625
+    BluespaceCrystal: 63
+    Durathread: 100
 
 # Оружие
 
@@ -418,129 +418,129 @@
   id: FirstPartLecter
   result: FirstPartLecter
   materials:
-    Steel: 1050
-    Plasteel: 250
+    Steel: 525
+    Plasteel: 125
 
 - type: latheRecipe
   id: SecondPartLecter
   result: SecondPartLecter
   materials:
-    Steel: 1250
-    Plasteel: 650
+    Steel: 625
+    Plasteel: 325
 
 - type: latheRecipe
   id: ThirdPartLecter
   result: ThirdPartLecter
   materials:
-    Steel: 750
-    Plasteel: 350
+    Steel: 375
+    Plasteel: 175
 
 - type: latheRecipe
   id: FirstPartDrozd
   result: FirstPartDrozd
   materials:
-    Steel: 1250
-    Plasteel: 350
+    Steel: 625
+    Plasteel: 175
 
 - type: latheRecipe
   id: SecondPartDrozd
   result: SecondPartDrozd
   materials:
-    Steel: 1150
-    Plasteel: 150
+    Steel: 575
+    Plasteel: 75
 
 - type: latheRecipe
   id: ThirdPartDrozd
   result: ThirdPartDrozd
   materials:
-    Steel: 550
-    Plasteel: 350
+    Steel: 275
+    Plasteel: 175
 
 - type: latheRecipe
   id: FirstPartMK
   result: FirstPartMK
   materials:
-    Steel: 1000
-    Plasteel: 250
+    Steel: 500
+    Plasteel: 125
 
 - type: latheRecipe
   id: SecondPartMK
   result: SecondPartMK
   materials:
-    Steel: 750
-    Plasteel: 150
+    Steel: 375
+    Plasteel: 75
 
 - type: latheRecipe
   id: ThirdPartMK
   result: ThirdPartMK
   materials:
-    Steel: 450
-    Plasteel: 350
+    Steel: 225
+    Plasteel: 175
 
 - type: latheRecipe
   id: FirstPartEnforcer
   result: FirstPartEnforcer
   materials:
-    Steel: 1250
-    Plasteel: 350
+    Steel: 625
+    Plasteel: 175
 
 - type: latheRecipe
   id: SecondPartEnforcer
   result: SecondPartEnforcer
   materials:
-    Steel: 1450
-    Plasteel: 350
+    Steel: 725
+    Plasteel: 175
 
 - type: latheRecipe
   id: ThirdPartEnforcer
   result: ThirdPartEnforcer
   materials:
-    Steel: 550
-    Plasteel: 350
+    Steel: 275
+    Plasteel: 175
 
 - type: latheRecipe
   id: FirstPartAres
   result: FirstPartAres
   materials:
-    Steel: 1250
-    Plasteel: 350
+    Steel: 625
+    Plasteel: 175
 
 - type: latheRecipe
   id: SecondPartAres
   result: SecondPartAres
   materials:
-    Steel: 2000
-    Plasteel: 250
+    Steel: 1000
+    Plasteel: 125
 
 - type: latheRecipe
   id: ThirdPartAres
   result: ThirdPartAres
   materials:
-    Steel: 1050
-    Plasteel: 350
+    Steel: 525
+    Plasteel: 175
 
 - type: latheRecipe
   id: FirstPartKammerer
   result: FirstPartKammerer
   materials:
-    Steel: 1250
-    Plasteel: 350
+    Steel: 625
+    Plasteel: 175
 
 - type: latheRecipe
   id: SecondPartKammerer
   result: SecondPartKammerer
   materials:
-    Steel: 2000
-    Plasteel: 250
-    Wood: 500
+    Steel: 1000
+    Plasteel: 125
+    Wood: 250
 
 - type: latheRecipe
   id: ThirdPartKammerer
   result: ThirdPartKammerer
   materials:
-    Steel: 1250
-    Plasteel: 350
-    Wood: 500
+    Steel: 625
+    Plasteel: 175
+    Wood: 250
 
 # Модули
 
@@ -548,93 +548,93 @@
   id: RateOfFireLecterModuleItemStandart
   result: RateOfFireLecterModuleItemStandart
   materials:
-    Steel: 1250
+    Steel: 625
 
 - type: latheRecipe
   id: RateOfFireLecterModuleItemAdv
   result: RateOfFireLecterModuleItemAdv
   materials:
-    Steel: 3250
-    Silver: 350
+    Steel: 1625
+    Silver: 175
 
 - type: latheRecipe
   id: LecterExtendedAmmoMagModuleItem
   result: LecterExtendedAmmoMagModuleItem
   materials:
-    Steel: 1250
+    Steel: 625
 
 - type: latheRecipe
   id: RateOfFireDrozdModuleItemAdv
   result: RateOfFireDrozdModuleItemAdv
   materials:
-    Steel: 1250
+    Steel: 625
 
 - type: latheRecipe
   id: AllowDrumsDrozdModuleItemAdv
   result: DrozdExtendedAmmoMagModuleItem
   materials:
-    Steel: 1250
+    Steel: 625
 
 - type: latheRecipe
   id: RateOfFireMKModuleItemAdv
   result: RateOfFireMKModuleItemAdv
   materials:
-    Steel: 850
+    Steel: 425
 
 - type: latheRecipe
   id: AvailableModesMKModuleItem
   result: AvailableModesMKModuleItem
   materials:
-    Steel: 1050
+    Steel: 525
 
 - type: latheRecipe
   id: BallisticAmmoShotgunsModuleItem
   result: BallisticAmmoShotgunsModuleItem
   materials:
-    Steel: 1450
+    Steel: 725
 
 - type: latheRecipe
   id: GunSpreadModifierShotgunLowModuleItem
   result: GunSpreadModifierShotgunLowModuleItem
   materials:
-    Steel: 1250
+    Steel: 625
 
 - type: latheRecipe
   id: GunSpreadModifierShotgunHighModuleItem
   result: GunSpreadModifierShotgunHighModuleItem
   materials:
-    Steel: 750
+    Steel: 375
 
 - type: latheRecipe
   id: RateOfFireEnforcerModuleItem
   result: RateOfFireEnforcerModuleItem
   materials:
-    Steel: 950
+    Steel: 475
 
 - type: latheRecipe
   id: RateOfFireKammererModuleItem
   result: RateOfFireKammererModuleItem
   materials:
-    Steel: 1250
+    Steel: 625
 
 - type: latheRecipe
   id: RateOfFireAresSWCModuleItem
   result: RateOfFireAresSWCModuleItem
   materials:
-    Steel: 1250
+    Steel: 625
 
 - type: latheRecipe
   id: MassSkopeModuleItem
   result: MassSkopeModuleItem
   materials:
-    Steel: 500
+    Steel: 250
 
 - type: latheRecipe
   id: SpeedBulletModuleItem
   result: SpeedBulletModuleItem
   materials:
-    Steel: 750
-    Plasteel: 350
+    Steel: 375
+    Plasteel: 175
 
 # Чертежи
 
@@ -644,43 +644,43 @@
   id: BlueprintEnforcerInfinite
   result: BlueprintEnforcerInfinite
   materials:
-    Plastic: 1750
-    BluespaceCrystal: 525
+    Plastic: 875
+    BluespaceCrystal: 263
 
 - type: latheRecipe
   id: BlueprintKammererInfinite
   result: BlueprintKammererInfinite
   materials:
-    Plastic: 1750
-    BluespaceCrystal: 525
+    Plastic: 875
+    BluespaceCrystal: 263
 
 - type: latheRecipe
   id: BlueprintAresSWCInfinite
   result: BlueprintAresSWCInfinite
   materials:
-    Plastic: 1750
-    BluespaceCrystal: 525
+    Plastic: 875
+    BluespaceCrystal: 263
 
 - type: latheRecipe
   id: BlueprintDrozdInfinite
   result: BlueprintDrozdInfinite
   materials:
-    Plastic: 1750
-    BluespaceCrystal: 525
+    Plastic: 875
+    BluespaceCrystal: 263
 
 - type: latheRecipe
   id: BlueprintLecterInfinite
   result: BlueprintLecterInfinite
   materials:
-    Plastic: 1750
-    BluespaceCrystal: 525
+    Plastic: 875
+    BluespaceCrystal: 263
 
 - type: latheRecipe
   id: BlueprintМК58Infinite
   result: BlueprintМК58Infinite
   materials:
-    Plastic: 1150
-    BluespaceCrystal: 125
+    Plastic: 575
+    BluespaceCrystal: 63
 
 # 3 использование
 
@@ -688,40 +688,40 @@
   id: BlueprintEnforcerThreeUse
   result: BlueprintEnforcerThreeUse
   materials:
-    Plastic: 1250
-    Plasma: 800
+    Plastic: 625
+    Plasma: 400
 
 - type: latheRecipe
   id: BlueprintKammererThreeUse
   result: BlueprintKammererThreeUse
   materials:
-    Plastic: 1250
-    Plasma: 800
+    Plastic: 625
+    Plasma: 400
 
 - type: latheRecipe
   id: BlueprintAresSWCThreeUse
   result: BlueprintAresSWCThreeUse
   materials:
-    Plastic: 1250
-    Plasma: 800
+    Plastic: 625
+    Plasma: 400
 
 - type: latheRecipe
   id: BlueprintDrozdThreeUse
   result: BlueprintDrozdThreeUse
   materials:
-    Plastic: 1250
-    Plasma: 800
+    Plastic: 625
+    Plasma: 400
 
 - type: latheRecipe
   id: BlueprintLecterThreeUse
   result: BlueprintLecterThreeUse
   materials:
-    Plastic: 1250
-    Plasma: 800
+    Plastic: 625
+    Plasma: 400
 
 - type: latheRecipe
   id: BlueprintМК58ThreeUse
   result: BlueprintМК58ThreeUse
   materials:
-    Plastic: 950
-    Plasma: 350
+    Plastic: 475
+    Plasma: 175

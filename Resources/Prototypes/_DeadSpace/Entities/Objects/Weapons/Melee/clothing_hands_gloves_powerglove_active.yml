@@ -17,7 +17,8 @@
     mustBeEquippedToUse: true
   - type: MeleeThrowOnHit
     speed: 30
-  - type: HardsuitIdentification # Если что руки оно не отрывает, и не убивает
+  - type: HardsuitIdentification
+    nonlethal: true
   - type: Speech
   - type: TTS
     voice: Adjutant

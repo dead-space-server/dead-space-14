@@ -1,10 +1,10 @@
 <cartridges:NotekeeperUiFragment xmlns:cartridges="clr-namespace:Content.Client.CartridgeLoader.Cartridges"
                                  xmlns="https://spacestation14.io" Margin="1 0 2 0">
-    <PanelContainer StyleClasses="DS14MenuPanelDark"></PanelContainer>
+    <PanelContainer StyleClasses="DeadSpaceSurfaceDark"></PanelContainer> <!-- DS14 -->
     <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
         <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="True">
             <BoxContainer Orientation="Vertical" Name="MessageContainer" HorizontalExpand="True" VerticalExpand="True"/>
         </ScrollContainer>
-        <LineEdit Name="Input" HorizontalExpand="True" SetHeight="32" StyleClasses="DS14MenuInput"/>
+        <LineEdit Name="Input" HorizontalExpand="True" SetHeight="32"/>
     </BoxContainer>
 </cartridges:NotekeeperUiFragment>

@@ -6,4 +6,5 @@
 [RegisterComponent]
 public sealed partial class StationVariationPassRuleComponent : Component
 {
+    [DataField] public bool ApplyToCentComm = true; // DS14
 }

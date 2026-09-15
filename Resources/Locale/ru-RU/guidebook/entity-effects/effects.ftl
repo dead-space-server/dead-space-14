@@ -67,22 +67,13 @@ entity-effect-guidebook-smoke-area =
         *[other] создают
     } густой дым
 
-entity-effect-guidebook-satiate-thirst =
+entity-effect-guidebook-satiate =
     { $chance ->
         [1] Насыщает
-        *[other] Насыщают
+        *[other] насыщают
     } { $relative ->
-        [1] жажду средне
-        *[other] жажду на {NATURALFIXED($relative, 3)}x от средней скорости
-    }
-
-entity-effect-guidebook-satiate-hunger =
-    { $chance ->
-        [1] Насыщает
-        *[other] Насыщают
-    } { $relative ->
-        [1] Сытость средне
-        *[other] сытость на {NATURALFIXED($relative, 3)}x от средней скорости
+        [1] потребность «{ $type }» со средней скоростью
+        *[other] потребность «{ $type }» со скоростью { NATURALFIXED($relative, 3) } от средней
     }
 
 entity-effect-guidebook-health-change =
@@ -588,8 +579,32 @@ entity-effect-guidebook-plant-seeds-remove =
        *[other] убирают
     } семена из растения
 
+entity-effect-guidebook-plant-mutate-exude-gasses =
+    { $chance ->
+        [1] Заставляет мутировать
+       *[other] заставляют мутировать
+    } растение так, чтобы оно выделяло от { $minValue } до { $maxValue } молей газов
+
+entity-effect-guidebook-plant-mutate-consume-gasses =
+    { $chance ->
+        [1] Заставляет мутировать
+       *[other] заставляют мутировать
+    } растение так, чтобы оно поглощало от { $minValue } до { $maxValue } молей газов
+
 entity-effect-guidebook-plant-mutate-chemicals =
     { $chance ->
         [1] Мутирует
        *[other] мутируют
     } растение, чтобы то производило { $name }
+
+entity-effect-guidebook-add-reagent-to-bloodstream =
+    { $chance ->
+        [1] Вводит
+        *[other] вводят
+    } {$quantity} ед. реагента «{$reagent}» прямо в кровь
+
+entity-effect-disarm =
+    { $chance ->
+        [1] Обезоруживает
+        *[other] обезоруживают
+    } цель

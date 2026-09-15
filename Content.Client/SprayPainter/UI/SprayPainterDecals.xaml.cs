@@ -89,10 +89,9 @@ public sealed partial class SprayPainterDecals : Control
             {
                 var panelContainer = new PanelContainer()
                 {
-                    PanelOverride = new StyleBoxFlat()
-                    {
-                        BackgroundColor = StyleNano.ButtonColorDefault,
-                    },
+                    // DS14-start: the wrapper is a functional selection frame, not a local color surface.
+                    StyleClasses = { StyleClass.BackgroundPanel },
+                    // DS14-end
                     Children =
                     {
                         button,

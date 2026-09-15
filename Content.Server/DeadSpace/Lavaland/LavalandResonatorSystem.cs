@@ -14,14 +14,13 @@ using Content.Shared.Mining.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
-using Content.Shared.Tag;
 using Content.Shared.Timing;
 using Content.Shared.Verbs;
+using Content.Shared.Wall;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -29,7 +28,6 @@ namespace Content.Server.DeadSpace.Lavaland;
 
 public sealed class LavalandResonatorSystem : EntitySystem
 {
-    private static readonly ProtoId<TagPrototype> WallTag = "Wall";
     private static readonly TimeSpan TileRearmDelay = TimeSpan.FromSeconds(0.35);
     private static readonly Vector2[] CardinalDirections =
     [
@@ -49,7 +47,6 @@ public sealed class LavalandResonatorSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly UseDelaySystem _useDelay = default!;
 
@@ -125,7 +122,7 @@ public sealed class LavalandResonatorSystem : EntitySystem
             !args.CanComplexInteract ||
             args.Using is not { } resonator ||
             !TryComp<LavalandResonatorComponent>(resonator, out var resonatorComp) ||
-            !_tag.HasTag(ent.Owner, WallTag))
+            !HasComp<WallComponent>(ent.Owner))
         {
             return;
         }
@@ -238,7 +235,7 @@ public sealed class LavalandResonatorSystem : EntitySystem
         foreach (var uid in _entities)
         {
             if (TerminatingOrDeleted(uid) ||
-                !_tag.HasTag(uid, WallTag))
+                !HasComp<WallComponent>(uid))
             {
                 continue;
             }
@@ -321,7 +318,7 @@ public sealed class LavalandResonatorSystem : EntitySystem
         {
             if (TerminatingOrDeleted(uid) ||
                 !HasComp<GatherableComponent>(uid) ||
-                !_tag.HasTag(uid, WallTag))
+                !HasComp<WallComponent>(uid))
             {
                 continue;
             }

@@ -109,7 +109,7 @@
 
 # Helmet
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuitWhoTo
   name: шлем устаревшего скафандра ОБР
   description: Герметичный шлем от устаревшей модели скафандра ОБР. Оснащён стандартным светом.

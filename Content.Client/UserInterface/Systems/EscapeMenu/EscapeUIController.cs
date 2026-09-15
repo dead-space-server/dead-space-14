@@ -1,4 +1,4 @@
-﻿using Content.Client.FeedbackPopup;
+using Content.Client.FeedbackPopup;
 using Content.Client.Gameplay;
 using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.Guidebook;
@@ -27,6 +27,9 @@ public sealed class EscapeUIController : UIController, IOnStateEntered<GameplayS
     [Dependency] private readonly OptionsUIController _options = default!;
     [Dependency] private readonly GuidebookUIController _guidebook = default!;
     [Dependency] private readonly FeedbackPopupUIController _feedback = null!;
+    // DS14-start: readonly dependency for the pre-v288 engine.
+    [Dependency] private readonly ILocalizationManager _loc = default!;
+    // DS14-end
 
     private Options.UI.EscapeMenu? _escapeWindow;
 
@@ -101,6 +104,12 @@ public sealed class EscapeUIController : UIController, IOnStateEntered<GameplayS
             _console.ExecuteCommand("quit");
         };
 
+        _escapeWindow.AdminRemarksButton.OnPressed += _ =>
+        {
+            CloseEscapeWindow();
+            _console.ExecuteCommand("adminremarks");
+        };
+
         _escapeWindow.WikiButton.OnPressed += _ =>
         {
             _uri.OpenUri(_cfg.GetCVar(CCVars.InfoLinksWiki));
@@ -124,6 +133,8 @@ public sealed class EscapeUIController : UIController, IOnStateEntered<GameplayS
             _uri.OpenUri(_cfg.GetCVar(CCVars.InfoLinksDiscord));
         };
 
+        _cfg.OnValueChanged(CCVars.SeeOwnNotes, OnSeeOwnNotesChanged, true);
+
         CommandBinds.Builder
             .Bind(EngineKeyFunctions.EscapeMenu,
                 InputCmdHandler.FromDelegate(_ => ToggleWindow()))
@@ -132,6 +143,8 @@ public sealed class EscapeUIController : UIController, IOnStateEntered<GameplayS
 
     public void OnStateExited(GameplayState state)
     {
+        _cfg.UnsubValueChanged(CCVars.SeeOwnNotes, OnSeeOwnNotesChanged);
+
         if (_escapeWindow != null)
         {
             _escapeWindow.Dispose();
@@ -139,6 +152,17 @@ public sealed class EscapeUIController : UIController, IOnStateEntered<GameplayS
         }
 
         CommandBinds.Unregister<EscapeUIController>();
+    }
+
+    private void OnSeeOwnNotesChanged(bool seeOwnNotes)
+    {
+        if (_escapeWindow == null)
+            return;
+
+        _escapeWindow.AdminRemarksButton.Disabled = !seeOwnNotes;
+        _escapeWindow.AdminRemarksButton.ToolTip = !seeOwnNotes
+            ? _loc.GetString("ui-escape-remarks-button-disabled")
+            : null;
     }
 
     private void EscapeButtonOnOnPressed(ButtonEventArgs obj)

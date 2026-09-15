@@ -66,6 +66,7 @@
   - Stunbaton
   - CombatKnife
   - RiotShield
+  - WeaponLaserCarbine # DS14: round-start Security TechFab recipe
 
 # DS14-start
 - type: latheRecipePack
@@ -182,7 +183,6 @@
   - Truncheon
   - WeaponAdvancedLaser
   - WeaponLaserCannon
-  - WeaponLaserCarbine
   - WeaponXrayCannon
   - WeaponTemperatureGun
   - WeaponLaserRifle # DS14

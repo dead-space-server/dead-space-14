@@ -3,6 +3,7 @@
   parent: [BaseWeaponLauncher, BaseGunWieldable]
   id: WeaponLauncherRPG70
   description: Древний одноразовый гранатомёт с какого-то пыльного склада. Очень эффективно сносит всё что можно, кроме живой силы.
+  suffix: Гранатомёт
   components:
   - type: Sprite
     scale: 1.2, 1.2

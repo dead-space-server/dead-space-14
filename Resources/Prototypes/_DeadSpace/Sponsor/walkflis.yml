@@ -67,7 +67,7 @@
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase, ShowMedicalIcons ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase, ShowMedicalIcons]
   id: ClothingHeadHelmetHardsuitwalkflis
   categories: [ HideSpawnMenu ]
   name: шлем боевого скафандра
@@ -148,6 +148,7 @@
   id: ClothingMaskWeldingGaswalkflis
   name: сварочный противогаз
   description: Противогаз со встроенными сварочными очками и защитной маской для лица. Выглядит как череп, явно созданный ботаником.
+  categories: [ HideSpawnMenu ]
 
 # Headset
 - type: entity

@@ -7,7 +7,7 @@
     MinHeight="450"
     SetSize="520 550">
     <BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="5">
-        <PanelContainer StyleClasses="BackgroundDark" HorizontalExpand="True" Margin="0 0 0 10">
+        <PanelContainer StyleClasses="DeadSpaceSurfaceDark" HorizontalExpand="True" Margin="0 0 0 10">
             <BoxContainer Orientation="Vertical" Margin="8">
                 <Label Name="TargetNameLabel" Access="Public" HorizontalAlignment="Center" StyleClasses="LabelHeading"/>
             </BoxContainer>

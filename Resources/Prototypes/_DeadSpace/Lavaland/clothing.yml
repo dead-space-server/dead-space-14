@@ -214,7 +214,7 @@
     clothingPrototype: ClothingHeadHelmetOldExplorerLavaland
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetOldExplorerLavaland
   name: шлем старомодного скафандра исследователя Лаваленда
   description: Его лицевая пластина полностью скрывает эмоции, не позволяя им пробиться даже через тонированный визор.
@@ -282,7 +282,7 @@
     reduction: 0.5
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetSpaceMarinne
   categories: [ HideSpawnMenu ]
   name: шлем скафандра чемпиона
@@ -328,7 +328,7 @@
     forced: true
     inventory: Transfer
     transferName: true
-    transferDamage: true
+    transferDamage: false
     revertOnCrit: false
     revertOnDeath: false
     revertOnDelete: false

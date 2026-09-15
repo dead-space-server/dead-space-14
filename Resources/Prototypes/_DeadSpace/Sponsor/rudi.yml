@@ -1,0 +1,667 @@
+# backpack.rsi
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackrudi
+  categories: [ HideSpawnMenu ]
+  name: сумка «Коммандос»
+  description: Усиленная полевая сумка для боеприпасов, медикаментов и снаряжения.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/backpack.rsi
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,15,10
+  - type: StorageFill
+    contents:
+    - id: ClothingOuterHardsuitrudi
+    - id: ClothingBeltMilitaryWebbingrudi
+    - id: JetpackVoidFilledrudi
+    - id: Hyposprayrudi
+    - id: DefibrillatorCompactrudi
+    - id: ClothingShoesBootsMagrudi
+    - id: ClothingEyesHudMedicalrudi
+    - id: PaperLawrudi
+    - id: ClothingHandsGlovesrudi
+    - id: ClothingNeckMantlerudi
+    - id: ClothingHeadsetrudi
+    - id: ClothingUniformJumpsuitrudi
+    - id: PDArudi
+    - id: MedkitAdvancedFilled
+    - id: ClothingMaskrudi
+    - id: HolofanProjectorrudi
+    - id: AnomalyScannerrudi
+    - id: WeaponPistolCHIMPrudi
+    - id: WeaponProtoKineticAcceleratorrudi
+    - id: telescopicBatonrudi
+  - type: Tag
+    tags: [ ]
+
+# belt.rsi
+- type: entity
+  parent: ClothingBeltStorageBase
+  id: ClothingBeltMilitaryWebbingrudi
+  name: пояс «Коммандос»
+  description: Тактический пояс для удобного размещения боеприпасов и снаряжения.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Storage
+    grid:
+    - 0,0,7,1
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/belt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/rudi/belt.rsi
+  - type: Item
+    size: Huge
+  - type: StorageFill
+    contents:
+      - id: JawsOfLiferudi
+      - id: PowerDrillrudi
+      - id: WelderExperimentalrudi
+      - id: Multitoolrudi
+      - id: RCDrudi 
+      - id: trayScannerrudi
+  - type: Tag
+    tags: [ ]
+
+# hardsuit.rsi
+- type: entity
+  parent: ClothingOuterHardsuitSecurity
+  id: ClothingOuterHardsuitrudi
+  name: скафандр «Коммандос»
+  description: Тяжёлый боевой скафандр с усиленной защитой и автономным жизнеобеспечением.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/hardsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/rudi/hardsuit.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitrudi
+  - type: Item
+    size: Huge
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.5
+        Slash: 0.5
+        Piercing: 0.6
+        Heat: 0.5
+        Radiation: 0.5
+        Caustic: 0.5
+        Stun: 0.65
+  - type: ExplosionResistance
+    damageCoefficient: 0.5
+  - type: ClothingSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9
+  - type: HardsuitIdentification
+    nonlethal: true
+  - type: Tag
+    tags: [ ]
+
+# helmet.rsi
+- type: entity
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  categories: [ HideSpawnMenu ]
+  id: ClothingHeadHelmetHardsuitrudi
+  name: шлем скафандра «Коммандос»
+  description: Герметичный боевой шлем с защищённой оптикой и системой связи.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/helmet.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/rudi/helmet.rsi
+  - type: PointLight
+    color: "#c9ffff"
+    radius: 5
+    energy: 3
+  - type: PressureProtection
+    highPressureMultiplier: 0.08
+    lowPressureMultiplier: 1000
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.9
+        Heat: 0.9
+  - type: HideLayerClothing
+    slots:
+    - Hair
+    - Snout
+    - HeadTop
+    - HeadSide
+    - FacialHair
+    clothingSlots:
+    - ears
+    bodyLayers:
+    - Head
+  - type: Tag
+    tags: [ ]
+
+# jumpsuit.rsi
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitrudi
+  name: комбинезон «Коммандос»
+  description: Прочный поддоспешник, предназначенный для ношения под тяжёлой бронёй.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/jumpsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/rudi/jumpsuit.rsi
+  - type: Tag
+    tags: [ ]
+
+# headset.rsi
+- type: entity
+  parent: ClothingHeadset
+  id: ClothingHeadsetrudi
+  name: гарнитура «Коммандос»
+  description: Защищённое средство связи, выполненное в расцветке комплекта.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/headset.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/rudi/headset.rsi
+  - type: Headset
+    color: "#591a2a"
+  - type: EncryptionKeyHolder
+    keySlots: 5
+  - type: Tag
+    tags: []
+
+# gloves.rsi
+- type: entity
+  parent: ClothingHandsGlovesCombat
+  id: ClothingHandsGlovesrudi
+  name: перчатки «Коммандос»
+  description: Усиленные тактические перчатки с защитой кистей.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/gloves.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/rudi/gloves.rsi
+  - type: Tag
+    tags: [ ]
+
+# cloak.rsi
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckMantlerudi
+  name: плащ "Коммандос"
+  description: Тяжелый походный плащ в цветах Республики, ставший знаком бойцов, которые идут туда, где обычным доходягам не справиться. 
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/cloak.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/rudi/cloak.rsi
+  - type: Tag
+    tags: [ ]
+
+# hud.rsi
+- type: entity
+  parent: ClothingEyesHudAdvanced
+  id: ClothingEyesHudMedicalrudi
+  name: очки «Коммандос»
+  description: Защищённая тактическая оптика для работы в сложных условиях.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/hud.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/rudi/hud.rsi
+  - type: IdentityBlocker
+    coverage: EYES
+  - type: EyeProtection
+  - type: Tag
+    tags: [ ]
+
+# gasmask.rsi
+- type: entity
+  parent: ClothingMaskGasSecurity
+  id: ClothingMaskrudi
+  name: противогаз «Коммандос»
+  description: Средство защиты дыхания от дыма, токсинов и заражённой атмосферы.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/gasmask.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/rudi/gasmask.rsi
+  - type: Tag
+    tags: [ ]
+
+# magboots.rsi
+- type: entity
+  parent: ClothingShoesBootsMag
+  id: ClothingShoesBootsMagrudi
+  name: магнитные ботинки «Коммандос»
+  description: Магнитная обувь для уверенного передвижения в условиях невесомости.
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Sponsor/rudi/magboots.rsi
+      layers:
+      - state: icon
+        map: [ "enum.ToggleableVisuals.Layer" ]
+    - type: Clothing
+      sprite: _DeadSpace/Sponsor/rudi/magboots.rsi
+    - type: ClothingSpeedModifier
+      walkModifier: 1
+      sprintModifier: 1
+    - type: Tag
+      tags: [ ]
+
+# jetpack.rsi
+- type: entity
+  parent: JetpackVoidFilled
+  id: JetpackVoidFilledrudi
+  name: ранец «Коммандос»
+  description: Вместительный боевой ранец для дополнительного снаряжения и припасов.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Item
+    sprite: _DeadSpace/Sponsor/rudi/jetpack.rsi
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/jetpack.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/rudi/jetpack.rsi
+    slots:
+      - Back
+      - suitStorage
+      - Belt
+  - type: Tag
+    tags: [ ]
+
+# pda.rsi
+- type: entity
+  parent: BaseMedicalPDA
+  id: PDArudi
+  name: КПК «Коммандос»
+  description: Защищённый персональный терминал для связи и оперативной информации.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Icon
+    sprite: _DeadSpace/Sponsor/rudi/pda.rsi
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/pda.rsi
+  - type: CartridgeLoader
+    uiKey: enum.PdaUiKey.Key
+    preinstalled:
+      - CrewManifestCartridge
+      - NotekeeperCartridge
+      - NanoTaskCartridge
+      - NewsReaderCartridge
+      - MedTekCartridge
+      - AstroNavCartridge
+      - MessengerCartridge
+  - type: PdaBorderColor
+    borderColor: "#2a3424"
+    accentHColor: "#242424"
+    accentVColor: "#3a4533"
+  - type: Tag
+    tags: [ ]
+
+# defibsmall.rsi
+- type: entity
+  parent: DefibrillatorCompact
+  id: DefibrillatorCompactrudi
+  name: дефибриллятор «Импульс»
+  description: Облегчённый компактный дефибриллятор для экстренной реанимации в полевых условиях.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/defibsmall.rsi
+  - type: Item
+    sprite: _DeadSpace/Sponsor/rudi/defibsmall.rsi
+
+# hypo.rsi
+- type: entity
+  parent: BaseItem
+  id: Hyposprayrudi
+  name: гипоспрей «Панацея»
+  description: Компактный инъектор коммандос с резервуаром объёмом до 5 унций для быстрого введения препаратов.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/hypo.rsi
+    layers:
+      - state: hypo
+        map: ["enum.SolutionContainerLayers.Base"]
+      - state: hypo_fill1
+        map: ["enum.SolutionContainerLayers.Fill"]
+        visible: false
+  - type: Item
+    sprite: _DeadSpace/Sponsor/rudi/hypo.rsi
+  - type: SolutionContainerManager
+    solutions:
+      hypospray:
+        maxVol: 5
+  - type: RefillableSolution
+    solution: hypospray
+  - type: ExaminableSolution
+    solution: hypospray
+    exactVolume: true
+  - type: Injector
+    solutionName: hypospray
+    ignoreClosed: false
+    activeModeProtoId: HyposprayDynamicMode
+    allowedModes:
+    - HyposprayDynamicMode
+    - HyposprayInjectMode
+  - type: UseDelay
+    delay: 0.5
+  - type: Appearance
+  - type: SolutionContainerVisuals
+    maxFillLevels: 6
+    fillBaseName: hypo_fill
+    solutionName: hypospray
+
+#melee
+- type: entity
+  parent: ToySword
+  id: telescopicBatonrudi
+  categories: [ HideSpawnMenu ]
+  name: синий меч
+  description: Новый пластиковый меч от Sandy-Cat! Имеет реалистичный звук и насыщенный цвет! Почти как настоящий!
+  components:
+  - type: EnergySword
+    activatedColor: blue
+    colorOptions:
+    - blue
+  - type: StaminaDamageOnHit
+    damage: 30
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 3
+  - type: ItemToggleMeleeWeapon
+    activatedSoundOnHit:
+      path: /Audio/Weapons/eblade1.ogg
+      params:
+        variation: 0.250
+    activatedSoundOnHitNoDamage:
+      path: /Audio/Weapons/eblade1.ogg
+      params:
+        variation: 0.250
+    activatedSoundOnSwing:
+      path: /Audio/Weapons/eblademiss.ogg
+      params:
+        variation: 0.125
+    activatedDamage:
+      types:
+        Blunt: 3
+
+# kinetic_accelerator.rsi
+- type: entity
+  parent: WeaponProtoKineticAccelerator
+  id: WeaponProtoKineticAcceleratorrudi
+  categories: [ HideSpawnMenu ]
+  name: кинетическое оружие «Каратель»
+  description: Тестовое оружие Республиканских Коммандос, рассчитанное на точное и надежное поражение целей, ЗА РЕСПУБЛИКУ! 
+  components:
+  - type: Gun
+    fireRate: 0.5
+    selectedMode: SemiAuto
+    angleDecay: 45
+    minAngle: 44
+    maxAngle: 45
+    availableModes:
+    - SemiAuto
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 0.75
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/kinetic_accelerator.rsi
+    layers:
+    - state: icon
+    - state: animation-icon
+      visible: false
+      map: [ "empty-icon" ]
+  - type: Item
+    sprite: _DeadSpace/Sponsor/rudi/kinetic_accelerator.rsi
+    size: Normal
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/rudi/kinetic_accelerator.rsi
+    quickEquip: false
+    slots:
+    - suitStorage
+
+# chimp.rsi
+- type: entity
+  parent: WeaponPistolCHIMP
+  categories: [ HideSpawnMenu ]
+  id: WeaponPistolCHIMPrudi
+  name: М.А.Р.Т.Ы.Х. «Дельта»
+  description: Компактный аномальный излучатель, адаптированный для мобильных исследовательских групп коммандос. Позволяет воздействовать на нестабильные аномалии прямо в полевых условиях. 
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/chimp.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/rudi/chimp.rsi
+
+# tools_jawsoflife.rsi
+- type: entity
+  parent: JawsOfLife
+  id: JawsOfLiferudi
+  name: челюсти жизни «Пролом»
+  description: Усиленный аварийный инструмент в бело-красной расцветке комплекта SEV. Предназначен для вскрытия дверей и расчистки завалов.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/tools_jawsoflife.rsi
+    state: syn_jaws_pry
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: syn_inhand-left
+      right:
+      - state: syn_inhand-right
+    size: Normal
+  - type: MultipleTool
+    entries:
+      - behavior: Prying
+        sprite:
+          sprite: _DeadSpace/Sponsor/rudi/tools_jawsoflife.rsi
+          state: syn_jaws_pry
+        useSound: /Audio/Items/jaws_pry.ogg
+        changeSound: /Audio/Items/change_jaws.ogg
+      - behavior: Cutting
+        sprite:
+          sprite: _DeadSpace/Sponsor/rudi/tools_jawsoflife.rsi
+          state: syn_jaws_cutter
+        useSound: /Audio/Items/jaws_cut.ogg
+        changeSound: /Audio/Items/change_jaws.ogg
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 10
+
+# tools_powerdrill.rsi
+- type: entity
+  parent: PowerDrill
+  id: PowerDrillrudi
+  name: электродрель «Штурм»
+  description: Компактная высокомощная дрель для быстрого демонтажа и полевого ремонта.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/tools_powerdrill.rsi
+    state: drill_screw
+  - type: Item
+    sprite: _DeadSpace/Sponsor/rudi/tools_powerdrill.rsi
+    size: Small
+  - type: MultipleTool
+    statusShowBehavior: true
+    entries:
+      - behavior: Screwing
+        sprite:
+          sprite: _DeadSpace/Sponsor/rudi/tools_powerdrill.rsi
+          state: drill_screw
+        useSound:
+          path: /Audio/Items/drill_use.ogg
+        changeSound:
+          path: /Audio/Items/change_drill.ogg
+      - behavior: Anchoring
+        sprite:
+          sprite: _DeadSpace/Sponsor/rudi/tools_powerdrill.rsi
+          state: drill_bolt
+        useSound:
+          path: /Audio/Items/drill_use.ogg
+        changeSound:
+          path: /Audio/Items/change_drill.ogg
+
+# tools_welder.rsi
+- type: entity
+  parent: WelderExperimental
+  id: WelderExperimentalrudi
+  name: сварочный аппарат «Факел»
+  description: Усовершенствованный сварочный инструмент, идентичный экспериментальной модели.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/tools_welder.rsi
+  - type: Item
+    sprite: _DeadSpace/Sponsor/rudi/tools_welder.rsi
+
+# tools_multitool.rsi
+- type: entity
+  parent: Multitool
+  id: Multitoolrudi
+  name: мультитул «Техник»
+  description: Универсальный электронный инструмент для настройки и обслуживания оборудования.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/tools_multitool.rsi
+  - type: Item
+    sprite: _DeadSpace/Sponsor/rudi/tools_multitool.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/rudi/tools_multitool.rsi
+
+# tools_rcd.rci
+- type: entity
+  parent: RCD
+  id: RCDrudi
+  name: рсу «Конструктор»
+  description: Стандартный РСУ в фирменной расцветке комплекта для оперативного строительства и ремонта.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/tools_rcd.rsi
+    layers:
+    - state: icon
+
+# tools_anomalyscanner.rsi
+- type: entity
+  parent: AnomalyScanner
+  id: AnomalyScannerrudi
+  name: сканер аномалий «Оракул»
+  description: Портативный исследовательский прибор для обнаружения и анализа аномальных объектов. Быстро считывает их состояние и помогает определить дальнейший порядок работы.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/tools_anomalyscanner.rsi
+    layers:
+      - state: icon
+        map: ["enum.AnomalyScannerVisualLayers.Base"]
+      - map: ["enum.AnomalyScannerVisualLayers.Screen"]
+        visible: false
+        shader: unshaded
+      - state: severity_mask
+        map: ["enum.AnomalyScannerVisualLayers.SeverityMask"]
+        visible: false
+        shader: unshaded
+      - map: ["enum.AnomalyScannerVisualLayers.Stability"]
+        visible: false
+        shader: unshaded
+      - visible: false
+        map: ["enum.AnomalyScannerVisualLayers.Pulse"]
+        shader: unshaded
+      - state: supercritical
+        map: ["enum.AnomalyScannerVisualLayers.Supercritical"]
+        shader: unshaded
+        visible: false
+
+# tools_gasanalyzer.rsi
+- type: entity
+  parent: GasAnalyzer
+  id: GasAnalyzerrudi
+  name: газоанализатор «Атмос»
+  description: Компактный прибор для определения состава, давления и состояния атмосферы.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/tools_gasanalyzer.rsi
+    layers:
+    - state: icon
+      map: ["analyzer"]
+
+#t-ray scanner
+- type: entity
+  name: т-лучевой сканер «Призрак»
+  parent: BaseItem
+  id: trayScannerrudi
+  description: Позволяет обнаруживать скрытые коммуникации и объекты за конструкциями.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/tools_trayscanner.rsi
+    layers:
+    - state: tray-off
+      map: ["base"]
+  - type: TrayScanner
+  - type: Item
+    sprite: _DeadSpace/Sponsor/rudi/tools_trayscanner.rsi
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.TrayScannerVisual.Visual:
+        base:
+          On: { state: tray-on }
+          Off: { state: tray-off }
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 400
+      Glass: 150
+  - type: StaticPrice
+    price: 85
+
+# tools_holofanprojector.rsi
+- type: entity
+  parent: HolofanProjector
+  id: HolofanProjectorrudi
+  name: атмосферный голопроектор «Контур» 
+  description: Проецирует схемы атмосферных систем для быстрого планирования работ. 
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/rudi/tools_holofanprojector.rsi
+    state: icon
+  - type: LimitedHolosignProjector
+    signProto: HoloFan
+
+# документ
+- type: entity
+  parent: PaperPrintedCentcomm
+  id: PaperLawrudi
+  name: распечатанная лицензия
+  description: Роскошный лист бумаги с заголовком ЦентКома. Выглядит лучше, чем другие.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Paper
+    stampState: paper_stamp-centcom
+    stampedBy:
+    - stampedColor: '#006600FF'
+      stampedName: Центральное Командование
+    - stampedColor: '#00BE00FF'
+      stampedName: Одобрено
+    content: paper-law-rudi
+  - type: Tag
+    tags: [ ]

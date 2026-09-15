@@ -1,0 +1,25 @@
+- type: entity
+  parent: TableBase
+  id: TableAsia
+  name: азиатский стол
+  description: Низкий деревянный стол в восточном стиле.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/Tables/asia.rsi
+    state: full
+  - type: Icon
+    sprite: _DeadSpace/Structures/Furniture/Tables/asia.rsi
+    state: full
+  - type: IconSmooth
+    mode: NoSprite
+  - type: Construction
+    graph: TableAsia
+    node: asia
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]

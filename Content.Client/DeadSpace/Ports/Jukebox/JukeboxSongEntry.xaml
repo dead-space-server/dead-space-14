@@ -1,10 +1,5 @@
-<Control xmlns="https://spacestation14.io"
-         xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client">
-    <PanelContainer MaxHeight="32" HorizontalExpand="True" Margin="2 2 2 2">
-        <PanelContainer.PanelOverride>
-            <gfx:StyleBoxFlat BackgroundColor="#7B7E7E"></gfx:StyleBoxFlat>
-        </PanelContainer.PanelOverride>
-
+<Control xmlns="https://spacestation14.io">
+    <PanelContainer MaxHeight="32" HorizontalExpand="True" Margin="2 2 2 2" StyleClasses="DeadSpaceListItem">
         <BoxContainer Orientation="Horizontal" HorizontalExpand="True" >
             <Label Name="SongNameLabel" HorizontalAlignment="Left" HorizontalExpand="True"></Label>
             <Button Name="PlaySongButton" HorizontalAlignment="Right" Text="Запустить"></Button>

@@ -8,6 +8,7 @@ using Content.Shared.Radio.Components;
 using Content.Server.Popups;
 using Content.Server.Power.Components;
 using Content.Server.GameTicking;
+using Robust.Server.GameObjects; // DS14
 using Robust.Shared.Localization;
 
 namespace Content.Server.CartridgeLoader.Cartridges;
@@ -17,13 +18,43 @@ public sealed partial class MessengerCartridgeSystem : EntitySystem
     [Dependency] private CartridgeLoaderSystem _cartridgeLoaderSystem = default!;
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private UserInterfaceSystem _userInterfaceSystem = default!; // DS14
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<MessengerCartridgeComponent, CartridgeUiReadyEvent>(OnUiReady);
         SubscribeLocalEvent<MessengerCartridgeComponent, CartridgeMessageEvent>(OnUiMessage);
+        SubscribeLocalEvent<MessengerCartridgeComponent, CartridgeDeactivatedEvent>(OnDeactivated); // DS14
     }
+
+    // DS14-start
+    /// <summary>
+    ///     When the NanoChat app is closed (PDA closed, another app opened, cartridge ejected),
+    ///     the active chat is forgotten so new messages start raising unread badges again.
+    /// </summary>
+    private void OnDeactivated(Entity<MessengerCartridgeComponent> ent, ref CartridgeDeactivatedEvent args)
+    {
+        ent.Comp.ActiveChatPartnerId = null;
+    }
+
+    /// <summary>
+    ///     Checks whether the recipient is actually looking at an open chat with the sender right now
+    ///     (messenger app is active on screen with that chat open).
+    /// </summary>
+    private bool IsViewingChat(EntityUid cartridgeUid, MessengerCartridgeComponent component, int partnerId)
+    {
+        if (component.ActiveChatPartnerId != partnerId)
+            return false;
+
+        var loaderUid = GetLoaderUid(cartridgeUid);
+        if (loaderUid == null || !TryComp<CartridgeLoaderComponent>(loaderUid.Value, out var loader))
+            return false;
+
+        return _userInterfaceSystem.IsUiOpen(loaderUid.Value, loader.UiKey)
+            && loader.ActiveProgram == cartridgeUid;
+    }
+    // DS14-end
 
     /// <summary>
     /// Syncing client and server
@@ -266,7 +297,8 @@ public sealed partial class MessengerCartridgeSystem : EntitySystem
                 return;
 
             var receiverComp = Comp<MessengerCartridgeComponent>(receiverCartridgeUid.Value);
-            if (receiverComp.ActiveChatPartnerId != userData.Value.Id)
+            // DS14-start: only skip the unread badge if the recipient is actually viewing this chat right now
+            if (!IsViewingChat(receiverCartridgeUid.Value, receiverComp, userData.Value.Id))
             {
                 if (server.Value.Component.Users.TryGetValue(sendMessage.ReceiverId, out var receiverUser))
                 {
@@ -329,6 +361,26 @@ public sealed partial class MessengerCartridgeSystem : EntitySystem
         {
             component.IncomingMessagesDisabled = incomingEvent.Disabled;
             UpdateUiState(uid, loaderUid.Value);
+        }
+
+        if (args is MessengerDeleteMessageEvent deleteEvent)
+        {
+            var message = server.Value.Component.Messages.FirstOrDefault(message => message.Id == deleteEvent.MessageId);
+            if (message == null)
+                return;
+            if (message.SenderId != userData.Value.Id)
+                return;
+            server.Value.Component.Messages.Remove(message);
+            Dirty(server.Value.Uid, server.Value.Component);
+            UpdateUiState(uid, loaderUid.Value);
+            var receiverCartridge = GetCartridgeByUserId(message.ReceiverId);
+
+            if (receiverCartridge == null)
+                return;
+            var receiverLoader = GetLoaderUid(receiverCartridge.Value);
+
+            if (receiverLoader != null)
+                UpdateUiState(receiverCartridge.Value, receiverLoader.Value);
         }
         // DS14-End
     }

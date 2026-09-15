@@ -251,6 +251,7 @@
   description: Точный пистолет пулемёт, используется бравыми сотрудниками спецназа, хороший аргумент при стычке с бунтовщиками и террористами. Использует патроны калибра 9х19 мм.
   suffix: Пистолет-пулемёт
   components:
+  - type: Akimbo
   - type: Sprite
     sprite: _DeadSpace/Objects/Weapons/Guns/smgs/mp7.rsi  
     layers:

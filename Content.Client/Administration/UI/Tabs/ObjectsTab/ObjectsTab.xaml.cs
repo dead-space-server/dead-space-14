@@ -41,7 +41,7 @@ public sealed partial class ObjectsTab : Control
         }
 
         ListHeader.OnHeaderClicked += HeaderClicked;
-        ListHeader.BackgroundColorPanel.AddStyleClass(DeadSpaceMenuSheetlet.ListHeader); // DS14
+        ListHeader.BackgroundColorPanel.AddStyleClass(DeadSpaceStyleClass.ListHeader); // DS14
         SearchList.SearchBar = SearchLineEdit;
         SearchList.GenerateItem += GenerateButton;
         SearchList.DataFilterCondition += DataFilterCondition;
@@ -163,8 +163,8 @@ public sealed partial class ObjectsTab : Control
         // DS14-start
         button.StyleClasses.Clear();
         button.AddStyleClass(alternate
-            ? DeadSpaceMenuSheetlet.ListRowAlt
-            : DeadSpaceMenuSheetlet.ListRow);
+            ? DeadSpaceStyleClass.ListItemAlternate
+            : DeadSpaceStyleClass.ListItem);
         // DS14-end
     }
 

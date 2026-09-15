@@ -49,3 +49,11 @@
   name: barkaccent
   components:
   - type: BarkAccent
+
+# DS14-start: trait status effects are split into the current prototype layout.
+- type: entity
+  parent: MutedStatusEffectBase
+  id: TraitStatusEffectMuted
+  components:
+  - type: CloneableStatusEffect
+# DS14-end

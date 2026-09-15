@@ -42,6 +42,8 @@
         density: 80
         mask:
         - ItemMask
+        layer:
+        - BulletImpassable
   - type: EntityStorage
     capacity: 1
     isCollidableWhenOpen: true

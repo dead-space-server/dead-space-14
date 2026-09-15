@@ -192,6 +192,13 @@ public sealed partial class StoreSystem
         }
          // end-backmen: currency
 
+        // Apply components from a dummy prototype directly to the buyer.
+        if (listing.ProductComponents != null &&
+            _proto.TryIndex<EntityPrototype>(listing.ProductComponents, out var productComponents))
+        {
+            EntityManager.AddComponents(buyer, productComponents.Components);
+        }
+
         //spawn entity
         if (listing.ProductEntity != null)
         {

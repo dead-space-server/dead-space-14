@@ -28,7 +28,7 @@
   suffix: вип
   id: PinpointerVipClient
   categories: [ HideSpawnMenu ]
-  description: указатель на vip клиента.
+  description: Указатель местоположения пациента медицинской эвакуационной службы.
   parent: [ PinpointerBase, BaseCommandContraband ]
   components:
   - type: Sprite
@@ -40,36 +40,48 @@
       shader: unshaded
       visible: false
   - type: Pinpointer
-    targetName: vip
+    updateTargetName: true
 
 - type: entity
-  parent: [ClothingShoesBootsMagBase, BaseJetpack]
+  parent: BaseSubdermalImplant
+  id: TrackingImplantCriticalForce
+  name: имплант медицинского вызова CriticalForce
+  description: Передаёт запрос на медицинскую эвакуацию при критическом состоянии носителя. Рассчитан на один принятый вызов.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SubdermalImplant
+    implantAction: ActionCallErtHelp
+    whitelist:
+      components:
+      - MobState
+  - type: ResponseErtImplant
+    team: CriticalForce
+    allowedStates:
+    - Critical
+
+- type: entity
+  parent: BaseImplantOnlyImplanter
+  id: DeathRattleImplanterCriticalForce
+  name: имплантер медицинского вызова CriticalForce
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Implanter
+    implant: TrackingImplantCriticalForce
+
+- type: entity
+  parent: ClothingShoesBootsMagBase
   id: ClothingShoesMagBootsCriticalForce
   name: магнитные ботинки CriticalForce GravLock
   categories: [ HideSpawnMenu ]
-  description: Трекинговые ботинки с интегрированной магнитной подошвой для работы в условиях нулевой гравитации или на скользких поверхностях. Изначально наполнены сжиженным кислородом.
+  description: Магнитные ботинки спасателя для работы в невесомости. Включённые магниты замедляют движение.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/CriticalForce/magboots.rsi
     layers:
     - state: icon
-    - state: icon-on
+      map: ["enum.ToggleableVisuals.Layer"]
   - type: Clothing
     sprite: _DeadSpace/Sponsor/CriticalForce/magboots.rsi
-    clothingVisuals:
-      feet:
-      - state: equipped-FEET
-      - state: on-equipped-FEET
-  - type: ClothingSpeedModifier
-    walkModifier: 1.0
-    sprintModifier: 1.0
-  - type: GasTank
-    outputPressure: 5
-    air:
-      volume: 70
-      temperature: 72
-      moles:
-        - 118.48044
   - type: Item
     sprite: null
     size: Normal
@@ -86,7 +98,8 @@
     containers:
       key_slots:
       - EncryptionKeyCriticalForce
-      - EncryptionKeyStationMaster
+      - EncryptionKeyMedical
+      - EncryptionKeyCommon
   - type: Sprite
     sprite: Clothing/Ears/Headsets/centcom.rsi
   - type: Clothing
@@ -99,7 +112,7 @@
   id: ClothingJumpsuitCriticalForce
   categories: [ HideSpawnMenu ]
   name: комбинезон CriticalForce TraumaFlex
-  description: Эргономичный комбинезон с кевларовыми вставками. Лёгкость, защита и полный контроль состояния бойца в режиме реального времени.
+  description: Комбинезон медицинской эвакуационной службы с карманами для мелких принадлежностей.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/CriticalForce/jumpsuit.rsi
@@ -113,18 +126,12 @@
   id: ClothingBackpackCriticalForce
   categories: [ HideSpawnMenu ]
   name: сумка CriticalForce Rapid-Response
-  description: Тактический рюкзак с модульной системой хранения и взрывозащитой. Оптимален для экстренной доставки медикаментов в зонах боевых действий.
+  description: Рюкзак спасателя с отделениями для медикаментов и эвакуационного снаряжения.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/CriticalForce/backpack.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/CriticalForce/backpack.rsi
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,11,5
-  - type: ExplosionResistance
-    damageCoefficient: 0.1
   - type: Tag
     tags: []
 
@@ -147,21 +154,12 @@
   id: ClothingMaskGasOfficerCriticalForce
   categories: [ HideSpawnMenu ]
   name: респиратор CriticalForce Sentinel
-  description: Тактический противогаз офицерского состава с дополнительной противопулевой защитой и системой фильтрации NBC-угроз. Встроенная защита от ослепления.
+  description: Фильтрующий респиратор медицинской эвакуационной службы.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/CriticalForce/secofficer/gasmask1.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/CriticalForce/secofficer/gasmask1.rsi
-  - type: FlashImmunity
-  - type: EyeProtection
-  - type: Armor
-    modifiers:
-      coefficients:
-        Blunt: 0.95
-        Slash: 0.95
-        Piercing: 0.9
-        Heat: 0.95
   - type: Tag
     tags: []
 
@@ -170,20 +168,11 @@
   id: ClothingMaskGasLeadEMTCriticalForce
   categories: [ HideSpawnMenu ]
   name: респиратор ведущего фельдшера CriticalForce Triage
-  description: Медицинский противогаз с расширенной системой диагностики и повышенным бронированием. Встроенная защита от ослепления.
+  description: Фильтрующий респиратор ведущего фельдшера медицинской эвакуационной службы.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/CriticalForce/lead-emt/gasmask2.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/CriticalForce/lead-emt/gasmask2.rsi
-  - type: FlashImmunity
-  - type: EyeProtection
-  - type: Armor
-    modifiers:
-      coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
   - type: Tag
     tags: []

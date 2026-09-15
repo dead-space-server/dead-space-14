@@ -9,12 +9,14 @@ public sealed class NameModifierSystem : EntitySystem
 {
     [Dependency] private readonly MetaDataSystem _metaData = default!;
 
+    // DS14-start: retain explicit subscriptions used by the current system layout.
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<NameModifierComponent, EntityRenamedEvent>(OnEntityRenamed);
     }
+    // DS14-end
 
     private void OnEntityRenamed(Entity<NameModifierComponent> ent, ref EntityRenamedEvent args)
     {
@@ -135,7 +137,7 @@ public sealed class RefreshNameModifiersEvent : IInventoryRelayEvent
     /// </summary>
     public string GetModifiedName()
     {
-        // Start out with the entity's name name
+        // Start out with the entity's base name
         var name = BaseName;
 
         // Iterate through all the modifiers in priority order

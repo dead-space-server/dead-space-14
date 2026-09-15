@@ -1,6 +1,5 @@
 <ContainerButton xmlns="https://spacestation14.io">
     <!-- DS14-start -->
-    <PanelContainer Name="BackgroundColorPanel"/>
     <BoxContainer Orientation="Horizontal"
                   HorizontalExpand="True"
                   SeparationOverride="4">
@@ -8,14 +7,12 @@
                SizeFlagsStretchRatio="3"
                HorizontalExpand="True"
                ClipText="True"
-               Margin="5"
-               StyleClasses="DS14MenuProfileLabel"/>
+               Margin="5"/>
         <Label Name="PlaytimeLabel"
                SizeFlagsStretchRatio="3"
                HorizontalExpand="True"
                ClipText="True"
-               Margin="5"
-               StyleClasses="DS14MenuProfileLabel"/>
+               Margin="5"/>
     </BoxContainer>
     <!-- DS14-end -->
 </ContainerButton>

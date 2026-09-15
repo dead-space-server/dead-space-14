@@ -11,6 +11,7 @@ public partial class VoiceMaskSystem
     {
         SubscribeLocalEvent<VoiceMaskComponent, InventoryRelayedEvent<TransformSpeakerVoiceEvent>>(OnSpeakerVoiceTransform);
         SubscribeLocalEvent<VoiceMaskComponent, ImplantRelayEvent<TransformSpeakerVoiceEvent>>(OnSpeakerVoiceTransformImplant); // DS14
+        SubscribeLocalEvent<VoiceMaskComponent, TransformSpeakerVoiceEvent>(OnSpeakerVoiceTransformInnate); // DS14
         SubscribeLocalEvent<VoiceMaskComponent, VoiceMaskChangeVoiceMessage>(OnChangeVoice);
     }
 
@@ -31,6 +32,14 @@ public partial class VoiceMaskSystem
             return;
 
         args.Event.VoiceId = entity.Comp.VoiceId;
+    }
+
+    private void OnSpeakerVoiceTransformInnate(Entity<VoiceMaskComponent> entity, ref TransformSpeakerVoiceEvent args)
+    {
+        if (!entity.Comp.Active)
+            return;
+
+        args.VoiceId = entity.Comp.VoiceId;
     }
     // DS14-end
 

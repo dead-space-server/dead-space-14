@@ -11,3 +11,19 @@
     - sprite: Objects/Misc/handcuffs.rsi
       state: handcuff
   - type: PrisonSpawnPoint
+
+- type: entity
+  id: SpawnPointPrisonerSlag
+  parent: SpawnPointPrisoner
+  suffix: Prison, Slag
+  components:
+  - type: PrisonSpawnPoint
+    faction: PrisonSlag
+
+- type: entity
+  id: SpawnPointPrisonerFrontier
+  parent: SpawnPointPrisoner
+  suffix: Prison, Frontier
+  components:
+  - type: PrisonSpawnPoint
+    faction: PrisonFrontier

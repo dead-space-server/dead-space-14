@@ -1,12 +1,14 @@
 - type: entity
-  parent: Holoprojector
+  parent: BaseItem
   id: HoloprojectorRND
   name: проектор РНД голобарьера
   description: Создаёт барьер, который не пропускает через себя аномальных сущностей.
   components:
-    - type: HolosignProjector
+    - type: Item
+      storedRotation: -90
+    - type: LimitedHolosignProjector
       signProto: HolosignRND
-      chargeUse: 90
+      maxBarriers: 6
     - type: Sprite
       sprite: _DeadSpace/Objects/Devices/Holoprojectors/rnd.rsi
       state: icon
@@ -15,13 +17,12 @@
         - HolofanProjector
     - type: StaticPrice
       price: 50
-
-- type: entity
-  parent: HoloprojectorRND
-  id: HoloprojectorRNDEmpty
-  suffix: Пустой
-  components:
-  - type: ItemSlots
-    slots:
-      cell_slot:
-        name: power-cell-slot-component-slot-name-default
+    - type: EmitSoundOnPickup
+      sound:
+        path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_pickup.ogg
+    - type: EmitSoundOnDrop
+      sound:
+        path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_drop.ogg
+    - type: EmitSoundOnLand
+      sound:
+        path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_drop.ogg

@@ -2,6 +2,8 @@
 
 using Content.Shared.DeadSpace.Languages.Prototypes;
 using Content.Shared.DeadSpace.Languages.Components;
+using Content.Shared.DeadSpace.Administration;
+using Content.Server.DeadSpace.Prison.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Player;
 using Content.Shared.DeadSpace.Languages;
@@ -22,6 +24,7 @@ public sealed class LanguageSystem : EntitySystem
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     public static readonly ProtoId<LanguagePrototype> DefaultLanguageId = "GeneralLanguage";
+    public static readonly ProtoId<LanguagePrototype> PrisonLanguageId = "PrisonLanguage";
     private readonly Dictionary<ProtoId<LanguagePrototype>, List<Regex>> _regexCache = new();
     public override void Initialize()
     {
@@ -41,8 +44,19 @@ public sealed class LanguageSystem : EntitySystem
         if (!player.HasValue)
             return;
 
-        if (TryComp<LanguageComponent>(player, out var language))
-            language.SelectedLanguage = msg.PrototypeId;
+        if (HasComp<PrisonBoundComponent>(player.Value) && msg.PrototypeId != PrisonLanguageId)
+            return;
+
+        if (!TryComp<LanguageComponent>(player, out var language) ||
+            !language.KnownLanguages.Contains(msg.PrototypeId) ||
+            language.CantSpeakLanguages.Contains(msg.PrototypeId) ||
+            !_prototypeManager.HasIndex(msg.PrototypeId))
+        {
+            return;
+        }
+
+        language.SelectedLanguage = msg.PrototypeId;
+        Dirty(player.Value, language);
     }
 
     private void OnGetState(EntityUid uid, LanguageComponent component, ref ComponentGetState args)
@@ -201,12 +215,36 @@ public sealed class LanguageSystem : EntitySystem
 
     public bool KnowsLanguage(EntityUid receiver, ProtoId<LanguagePrototype> senderLanguageId)
     {
-        var languages = GetKnownLanguages(receiver);
-
-        if (languages == null) // если нет языков, значит знает всё
+        if (HasComp<AdminGhostVisibilityComponent>(receiver))
             return true;
 
+        var languages = GetKnownLanguages(receiver);
+
+        if (languages == null)
+            return CanUnderstandWithoutKnowledge(senderLanguageId);
+
         return languages.Contains(senderLanguageId);
+    }
+
+    private bool CanUnderstandWithoutKnowledge(ProtoId<LanguagePrototype> languageId)
+    {
+        return !_prototypeManager.TryIndex(languageId, out var prototype) ||
+               prototype.CanBeUnderstoodWithoutKnowledge;
+    }
+
+    public LanguageComponent SetExclusiveLanguage(
+        EntityUid uid,
+        ProtoId<LanguagePrototype> languageId,
+        LanguageComponent? component = null)
+    {
+        component ??= EnsureComp<LanguageComponent>(uid);
+        component.KnownLanguages.Clear();
+        component.KnownLanguages.Add(languageId);
+        component.CantSpeakLanguages.Clear();
+        component.UnlockLanguagesAfterMakeSentient.Clear();
+        component.SelectedLanguage = languageId;
+        Dirty(uid, component);
+        return component;
     }
 
     public void AddKnowLanguage(EntityUid uid, ProtoId<LanguagePrototype> languageId, LanguageComponent? component = null)
@@ -314,7 +352,8 @@ public sealed class LanguageSystem : EntitySystem
         {
             if (session.AttachedEntity == null)
             {
-                understanding.Add(session);
+                if (CanUnderstandWithoutKnowledge(languageId))
+                    understanding.Add(session);
                 continue;
             }
 

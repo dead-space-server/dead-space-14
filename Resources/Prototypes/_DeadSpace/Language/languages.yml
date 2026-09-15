@@ -842,3 +842,12 @@
     - Ччвии!
     - Киииу!
     - Трррра!
+
+- type: language
+  id: PrisonLanguage
+  name: "[ДАННЫЕ УДАЛЕНЫ]"
+  speechMode: Lexicon
+  canBeUnderstoodWithoutKnowledge: false
+  generateTTSForLexicon: false
+  lexicon:
+  - "[ДАННЫЕ УДАЛЕНЫ]"

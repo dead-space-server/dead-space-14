@@ -1,0 +1,78 @@
+# DS14-start
+# Physical "dirty" credits — the currency paid out by ВорПРО requests.
+# Unlike SpaceCash they cannot be deposited at an ATM; they can only be spent
+# through the ВорПРО uplink or laundered into regular credits 1:1.
+- type: entity
+  parent: BaseItem
+  id: DirtyCash
+  name: грязные кредиты (dCR)
+  description: Пачка потрёпанных купюр без опознавательных знаков. Валюта ВорПРО — dCR. Банкоматы такое не принимают, а вот скупщики — с удовольствием.
+  suffix: воровская валюта
+  components:
+  - type: Item
+    shape:
+    - 0,0,1,0
+    storedOffset: 0,-2
+  - type: Material
+  - type: StaticPrice
+    price: 0
+  - type: Stack
+    stackType: DirtyCredit
+    count: 1
+    baseLayer: base
+    layerStates:
+    - cash
+    - cash_10
+    - cash_100
+    - cash_500
+    - cash_1000
+    - cash_5000
+    - cash_10000
+    - cash_25000
+    - cash_50000
+    - cash_100000
+    - cash_1000000
+    layerFunction: Threshold
+  - type: StackLayerThreshold
+    thresholds: [10, 100, 500, 1000, 5000, 10000, 25000, 50000, 100000, 1000000]
+  - type: Sprite
+    sprite: Objects/Economy/cash.rsi
+    state: cash
+    layers:
+    - state: cash
+      color: "#8fa063"
+      map: ["base"]
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        density: 30
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.35,-0.2,0.25,0.1"
+        mask:
+        - ItemMask
+  - type: Appearance
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/paper_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/paper_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/paper_drop.ogg
+
+# Starter pile of 50 000 dCR, given to thieves in their starter gear.
+- type: entity
+  parent: DirtyCash
+  id: DirtyCash50000
+  suffix: 50000
+  components:
+  - type: Icon
+    sprite: Objects/Economy/cash.rsi
+    state: cash_50000
+  - type: Stack
+    count: 50000
+# DS14-end

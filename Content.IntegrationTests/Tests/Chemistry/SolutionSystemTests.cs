@@ -1,4 +1,5 @@
 using Content.Shared.Chemistry.Components;
+using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameObjects;
@@ -49,6 +50,38 @@ public sealed class SolutionSystemTests
     private const string TestReagentC = "TestReagentC";
     private const string Water = "Water";
     private const string Oil = "Oil";
+
+    // DS14-start
+    [Test]
+    public async Task ClientEnsureSolutionWithoutNetworkedSolutionReturnsFalse()
+    {
+        var settings = new PoolSettings { Connected = true };
+        await using var pair = await PoolManager.GetServerClient(settings);
+        var client = pair.Client;
+        bool? result = null;
+        Solution solution = null!;
+        bool? hasManager = null;
+
+        await client.WaitPost(() =>
+        {
+            var entity = client.EntMan.Spawn();
+            var containerSystem = client.System<SharedSolutionContainerSystem>();
+
+            result = containerSystem.EnsureSolution(entity, "beaker", out solution);
+            hasManager = client.EntMan.HasComponent<SolutionContainerManagerComponent>(entity);
+            client.EntMan.DeleteEntity(entity);
+        });
+
+        await pair.CleanReturnAsync();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.False);
+            Assert.That(solution, Is.Null);
+            Assert.That(hasManager, Is.False);
+        });
+    }
+    // DS14-end
 
     [Test]
     public async Task TryAddTwoNonReactiveReagent()

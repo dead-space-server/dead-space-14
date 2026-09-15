@@ -1,0 +1,161 @@
+- type: entity
+  parent: GasCanister
+  id: OxyhydrogenCanister
+  name: канистра гремучего газа
+  description: Канистра со взрывоопасной смесью водорода и кислорода в соотношении два к одному. Достаточно искры. Можно прикрепить к порту коннектора с помощью гаечного ключа.
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Structures/Storage/canister.rsi
+      layers:
+        - state: boom
+        - state: paper
+          visible: false
+          map: [ "enum.PaperLabelVisuals.Layer" ]
+    - type: GasCanister
+      gasMixture:
+        volume: 1500
+        moles:
+          Hydrogen: 1846.24
+          Oxygen: 923.12
+        temperature: 293.15
+
+- type: entity
+  parent: GasCanister
+  id: FuelCanister
+  name: канистра горючего топлива
+  description: Канистра с кислородом и примесью плазмы. Легко воспламеняется при нагреве. Можно прикрепить к порту коннектора с помощью гаечного ключа.
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Structures/Storage/canister.rsi
+      layers:
+        - state: fuel
+        - state: paper
+          visible: false
+          map: [ "enum.PaperLabelVisuals.Layer" ]
+    - type: GasCanister
+      gasMixture:
+        volume: 1500
+        moles:
+          Oxygen: 2741.67
+          Plasma: 27.69
+        temperature: 293.15
+
+- type: entity
+  parent: GasCanister
+  id: HyperNobliumCanister
+  name: канистра гипер-нобилия
+  description: Канистра, в которой может содержаться газ любого вида. В этой, предположительно, содержится гипер-нобилий. Можно прикрепить к порту коннектора с помощью гаечного ключа.
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Structures/Storage/canister.rsi
+      layers:
+        - state: hypernoblium
+        - state: paper
+          visible: false
+          map: [ "enum.PaperLabelVisuals.Layer" ]
+    - type: GasCanister
+      gasMixture:
+        volume: 1500
+        moles:
+          HyperNoblium: 2769.36
+        temperature: 293.15
+
+- type: entity
+  parent: GasCanister
+  id: ProtoNitrateCanister
+  name: канистра прото-нитрата
+  description: Канистра, в которой может содержаться газ любого вида. В этой, предположительно, содержится прото-нитрат. Можно прикрепить к порту коннектора с помощью гаечного ключа.
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Structures/Storage/canister.rsi
+      layers:
+        - state: proto-nitrit
+        - state: paper
+          visible: false
+          map: [ "enum.PaperLabelVisuals.Layer" ]
+    - type: GasCanister
+      gasMixture:
+        volume: 1500
+        moles:
+          ProtoNitrate: 2769.36
+        temperature: 293.15
+
+- type: entity
+  parent: GasCanister
+  id: HeliumCanister
+  name: канистра гелия
+  description: Канистра, в которой может содержаться газ любого вида. В этой, предположительно, содержится гелий. Можно прикрепить к порту коннектора с помощью гаечного ключа.
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Structures/Storage/canister.rsi
+      layers:
+        - state: helium
+        - state: paper
+          visible: false
+          map: [ "enum.PaperLabelVisuals.Layer" ]
+    - type: GasCanister
+      gasMixture:
+        volume: 1500
+        moles:
+          Helium: 2769.36
+        temperature: 293.15
+
+- type: entity
+  parent: GasCanister
+  id: HalonCanister
+  name: канистра галона
+  description: Канистра, в которой может содержаться газ любого вида. В этой, предположительно, содержится галон. Можно прикрепить к порту коннектора с помощью гаечного ключа.
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Structures/Storage/canister.rsi
+      layers:
+        - state: halon
+        - state: paper
+          visible: false
+          map: [ "enum.PaperLabelVisuals.Layer" ]
+    - type: GasCanister
+      gasMixture:
+        volume: 1500
+        moles:
+          Halon: 2769.36
+        temperature: 293.15
+
+- type: entity
+  parent: GasCanister
+  id: ZaukerCanister
+  name: канистра заукера
+  description: Канистра, в которой может содержаться газ любого вида. В этой, предположительно, содержится заукер. Можно прикрепить к порту коннектора с помощью гаечного ключа.
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Structures/Storage/canister.rsi
+      layers:
+        - state: zauker
+        - state: paper
+          visible: false
+          map: [ "enum.PaperLabelVisuals.Layer" ]
+    - type: GasCanister
+      gasMixture:
+        volume: 1500
+        moles:
+          Zauker: 2769.36
+        temperature: 293.15
+
+- type: entity
+  parent: GasCanister
+  id: AntinobliumCanister
+  name: канистра анти-нобилия
+  description: Канистра, в которой может содержаться газ любого вида. В этой, предположительно, содержится анти-нобилий. Можно прикрепить к порту коннектора с помощью гаечного ключа.
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Structures/Storage/canister.rsi
+      layers:
+        - state: antinoblium
+        - state: paper
+          visible: false
+          map: [ "enum.PaperLabelVisuals.Layer" ]
+    - type: GasCanister
+      gasMixture:
+        volume: 1500
+        moles:
+          Antinoblium: 2769.36
+        temperature: 293.15

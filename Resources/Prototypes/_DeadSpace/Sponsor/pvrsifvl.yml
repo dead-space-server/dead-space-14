@@ -224,7 +224,7 @@
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuitpvrsifvl
   name: шлем скафандра железного лорда
   description: Дивной формы шлем Вас подозрительно отпугивает. Прикрытый защитными элементами визор шлема полностью затемнён со стороны, совершенно пуст на вид, словно в доспех никто не облачён. Разработан по чертежам спонсорской организации Warmind.

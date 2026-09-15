@@ -14,6 +14,13 @@
   - FirstPartMK
   - SecondPartMK
   - ThirdPartMK
+  - RateOfFireMKModuleItemAdv
+  - AvailableModesMKModuleItem
+  - MagazinePistolHighCapacity
+  - MagazinePistolHighCapacityEmpty
+  - MagazinePistolHighCapacityPractice
+  - MagazinePistolHighCapacityincendiary
+  - MagazinePistolHighCapacityUranium
 
 # Tier 2
 
@@ -42,6 +49,13 @@
   - BlueprintEnforcerThreeUse
   - BlueprintKammererThreeUse
   - BlueprintAresSWCThreeUse
+  - BallisticAmmoShotgunsModuleItem
+  - GunSpreadModifierShotgunLowModuleItem
+  - GunSpreadModifierShotgunHighModuleItem
+  - RateOfFireEnforcerModuleItem
+  - RateOfFireKammererModuleItem
+  - RateOfFireAresSWCModuleItem
+  - ADTMagazineShotgunXL
 
 - type: technology
   id: RiflesWeapons
@@ -56,58 +70,49 @@
   - FirstPartLecter
   - SecondPartLecter
   - ThirdPartLecter
-  - FirstPartDrozd
-  - SecondPartDrozd
-  - ThirdPartDrozd
   - BlueprintLecterThreeUse
-  - BlueprintDrozdThreeUse
   - BlueprintLecterInfinite
-  - BlueprintDrozdInfinite
-
-- type: technology
-  id: GunsDetails
-  name: research-technology-guns-details
-  icon:
-    sprite: Objects/Misc/stock_parts.rsi
-    state: micro_laser
-  discipline: Arsenal
-  tier: 2
-  cost: 10000
-  recipeUnlocks:
   - RateOfFireLecterModuleItemStandart
   - RateOfFireLecterModuleItemAdv
   - LecterExtendedAmmoMagModuleItem
-  - RateOfFireDrozdModuleItemAdv
-  - AllowDrumsDrozdModuleItemAdv
-  - RateOfFireMKModuleItemAdv
-  - AvailableModesMKModuleItem
-  - BallisticAmmoShotgunsModuleItem
-  - GunSpreadModifierShotgunLowModuleItem
-  - GunSpreadModifierShotgunHighModuleItem
-  - RateOfFireEnforcerModuleItem
-  - RateOfFireKammererModuleItem
-  - RateOfFireAresSWCModuleItem
   - MassSkopeModuleItem
   - SpeedBulletModuleItem
+  - ADTExtMagazineRifle
+  - DrumRifle
+  - DrumRifleEmpty
+  - DrumRiflePractice
+  - DrumRifleIncendiary
+  - DrumRifleUranium
 
 - type: technology
-  id: ExtraMagazine
-  name: research-technology-ext-ammo
+  id: DrozdWeapons
+  name: research-technology-smgs
   icon:
-    sprite: Objects/Weapons/Guns/Ammunition/Magazine/Pistol/pistol_high_capacity_mag.rsi
-    state: base-icon
+    sprite: Objects/Weapons/Guns/SMGs/drozd.rsi
+    state: icon
   discipline: Arsenal
   tier: 2
   cost: 10000
   recipeUnlocks:
-  - ADTExtMagazineRifle
-  - MagazinePistolHighCapacity
-  - MagazinePistolHighCapacityEmpty
-  - MagazinePistolHighCapacityPractice
+  - FirstPartDrozd
+  - SecondPartDrozd
+  - ThirdPartDrozd
+  - BlueprintDrozdThreeUse
+  - BlueprintDrozdInfinite
+  - RateOfFireDrozdModuleItemAdv
+  - AllowDrumsDrozdModuleItemAdv
+  - MassSkopeModuleItem
+  - SpeedBulletModuleItem
   - MagazinePistolSubMachineGunExtended
   - MagazinePistolSubMachineGunExtendedPractice
   - MagazinePistolSubMachineGunExtendedEmpty
-  - ADTMagazineShotgunXL
+  - MagazinePistolSubMachineGunExtendedIncendiary
+  - MagazinePistolSubMachineGunExtendedUranium
+  - DrumPistolSubMachineGun
+  - DrumPistolSubMachineGunEmpty
+  - DrumPistolSubMachineGunPractice
+  - DrumPistolSubMachineGunIncendiary
+  - DrumPistolSubMachineGunUranium
 
 - type: technology
   id: ConcentratedPhotonWeaponry
@@ -122,19 +127,6 @@
   - PhotonShotgun
   - CartridgeLaserRifle
   - EnergyCartridge
-
-- type: technology
-  id: StunBola
-  name: research-technology-bola
-  icon:
-    sprite: Objects/Weapons/Throwable/bola.rsi
-    state: icon
-  discipline: Arsenal
-  tier: 2
-  cost: 15000
-  recipeUnlocks:
-  - Bola
-  - EnergyBola
 
 - type: technology
   id: RIGSecurity
@@ -155,6 +147,80 @@
   - SpeedModifierModuleSecurity
 
 # Tier 3
+
+# Удалённые ветки оставлены здесь для истории. Их рецепты перенесены в профильные исследования.
+#- type: technology
+#  id: GunsDetails
+#  name: research-technology-guns-details
+#  icon:
+#    sprite: Objects/Misc/stock_parts.rsi
+#    state: micro_laser
+#  discipline: Arsenal
+#  tier: 2
+#  cost: 10000
+#  recipeUnlocks:
+#  - RateOfFireLecterModuleItemStandart
+#  - RateOfFireLecterModuleItemAdv
+#  - LecterExtendedAmmoMagModuleItem
+#  - RateOfFireDrozdModuleItemAdv
+#  - AllowDrumsDrozdModuleItemAdv
+#  - RateOfFireMKModuleItemAdv
+#  - AvailableModesMKModuleItem
+#  - BallisticAmmoShotgunsModuleItem
+#  - GunSpreadModifierShotgunLowModuleItem
+#  - GunSpreadModifierShotgunHighModuleItem
+#  - RateOfFireEnforcerModuleItem
+#  - RateOfFireKammererModuleItem
+#  - RateOfFireAresSWCModuleItem
+#  - MassSkopeModuleItem
+#  - SpeedBulletModuleItem
+
+#- type: technology
+#  id: ExtraMagazine
+#  name: research-technology-ext-ammo
+#  icon:
+#    sprite: Objects/Weapons/Guns/Ammunition/Magazine/Pistol/pistol_high_capacity_mag.rsi
+#    state: base-icon
+#  discipline: Arsenal
+#  tier: 2
+#  cost: 10000
+#  recipeUnlocks:
+#  - ADTExtMagazineRifle
+#  - MagazinePistolHighCapacity
+#  - MagazinePistolHighCapacityEmpty
+#  - MagazinePistolHighCapacityPractice
+#  - MagazinePistolSubMachineGunExtended
+#  - MagazinePistolSubMachineGunExtendedPractice
+#  - MagazinePistolSubMachineGunExtendedEmpty
+#  - ADTMagazineShotgunXL
+
+#- type: technology
+#  id: ExtraMagazineTypes
+#  name: research-technology-ext-ammo-types
+#  icon:
+#    sprite: Objects/Weapons/Guns/Ammunition/SpeedLoaders/Magnum/magnum_speed_loader.rsi
+#    state: icon
+#  discipline: Arsenal
+#  tier: 2
+#  cost: 3500
+#  recipeUnlocks:
+#  - MagazinePistolHighCapacityincendiary
+#  - MagazinePistolSubMachineGunExtendedIncendiary
+#  - MagazinePistolHighCapacityUranium
+#  - MagazinePistolSubMachineGunExtendedUranium
+
+#- type: technology
+#  id: StunBola
+#  name: research-technology-bola
+#  icon:
+#    sprite: Objects/Weapons/Throwable/bola.rsi
+#    state: icon
+#  discipline: Arsenal
+#  tier: 2
+#  cost: 15000
+#  recipeUnlocks:
+#  - Bola
+#  - EnergyBola
 
 - type: technology
   id: RIGSecurityAdvanced
@@ -223,35 +289,4 @@
   cost: 10000
   recipeUnlocks:
   - ClothingEyesGlassesThermalVisorExperimental
-
-- type: technology
-  id: SMGDrumMagazines
-  name: research-technology-smg-drum-ammo
-  icon:
-    sprite: _DeadSpace/Objects/Weapons/Guns/Ammunition/Magazine/Pistol/smg_drum.rsi
-    state: base-icon
-  discipline: Arsenal
-  tier: 3
-  cost: 10000
-  recipeUnlocks:
-  - DrumPistolSubMachineGun
-  - DrumPistolSubMachineGunEmpty
-  - DrumPistolSubMachineGunPractice
-  - DrumPistolSubMachineGunIncendiary
-  - DrumPistolSubMachineGunUranium
-
-- type: technology
-  id: RifleDrumMagazines
-  name: research-technology-rifle-drum-ammo
-  icon:
-    sprite: _DeadSpace/Objects/Weapons/Guns/Ammunition/Magazine/LightRifle_drum.rsi
-    state: base-icon
-  discipline: Arsenal
-  tier: 3
-  cost: 10000
-  recipeUnlocks:
-  - DrumRifle
-  - DrumRifleEmpty
-  - DrumRiflePractice
-  - DrumRifleIncendiary
-  - DrumRifleUranium
+  - ClothingEyesPNV

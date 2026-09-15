@@ -163,8 +163,8 @@ public sealed partial class PlayerListControl : BoxContainer
         // DS14-start
         button.StyleBoxOverride = null;
         button.AddStyleClass(button.Index % 2 == 0
-            ? DeadSpaceMenuSheetlet.ListRow
-            : DeadSpaceMenuSheetlet.ListRowAlt);
+            ? DeadSpaceStyleClass.ListItem
+            : DeadSpaceStyleClass.ListItemAlternate);
         // DS14-end
         button.AddChild(entry);
     }

@@ -1,35 +1,29 @@
 <ui:FancyWindow xmlns="https://spacestation14.io"
                 xmlns:ui="clr-namespace:Content.Client.UserInterface.Controls"
-                xmlns:pt="clr-namespace:Content.Client.Info.PlaytimeStats"
-                xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
                 VerticalExpand="True" HorizontalExpand="True"
                 Title="{Loc ui-playtime-stats-title}"
                 SetSize="600 400">
-    <Control>
-        <!-- DS14-start -->
-        <PanelContainer StyleClasses="DS14MenuShell" />
-        <BoxContainer Name="statsBox"
-                      Orientation="Vertical"
-                      Margin="10"
-                      SeparationOverride="8">
+    <!-- DS14-start -->
+    <BoxContainer Name="statsBox"
+                  Orientation="Vertical"
+                  Margin="10"
+                  SeparationOverride="8">
 
-            <PanelContainer StyleClasses="DS14MenuPanelDark">
-                <Label Name="OverallPlaytimeLabel"
-                       HorizontalExpand="True"
-                       Text="{Loc ui-playtime-overall-base}"
-                       StyleClasses="DS14MenuProfileSection" />
-            </PanelContainer>
+        <Label Name="OverallPlaytimeLabel"
+               HorizontalExpand="True"
+               Text="{Loc ui-playtime-overall-base}"
+               StyleClasses="DeadSpaceSectionTitle"
+               Margin="8" />
 
-            <PanelContainer StyleClasses="DS14MenuInset"
-                            HorizontalExpand="True"
-                            VerticalExpand="True">
-                <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
-                    <BoxContainer Orientation="Vertical"
-                                  Name="RolesPlaytimeList"
-                                  SeparationOverride="3" />
-                </ScrollContainer>
-            </PanelContainer>
-        </BoxContainer>
-        <!-- DS14-end -->
-    </Control>
+        <PanelContainer StyleClasses="DeadSpaceInset"
+                        HorizontalExpand="True"
+                        VerticalExpand="True">
+            <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
+                <BoxContainer Orientation="Vertical"
+                              Name="RolesPlaytimeList"
+                              SeparationOverride="3" />
+            </ScrollContainer>
+        </PanelContainer>
+    </BoxContainer>
+    <!-- DS14-end -->
 </ui:FancyWindow>

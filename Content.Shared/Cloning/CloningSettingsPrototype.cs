@@ -57,6 +57,18 @@ public sealed partial class CloningSettingsPrototype : IPrototype, IInheritingPr
     public bool CopyStatusEffects = true;
 
     /// <summary>
+    /// Whitelist for status effect entities copied to the clone.
+    /// </summary>
+    [DataField]
+    public EntityWhitelist? StatusEffectWhitelist;
+
+    /// <summary>
+    /// Blacklist for status effect entities copied to the clone.
+    /// </summary>
+    [DataField]
+    public EntityWhitelist? StatusEffectBlacklist;
+
+    /// <summary>
     ///     Whitelist for the equipment allowed to be copied.
     /// </summary>
     [DataField]

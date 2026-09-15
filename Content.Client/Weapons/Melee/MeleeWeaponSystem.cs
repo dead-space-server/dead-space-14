@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Client.Gameplay;
 using Content.Shared.CCVar;
 using Content.Shared.Effects;
+using Content.Shared.IdentityManagement;
 using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Melee.Components;
 using Content.Shared.Weapons.Melee.Events;
@@ -249,5 +250,37 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
         // Entity might not have been sent by PVS.
         if (Exists(ent) && Exists(entWeapon))
             DoLunge(ent, entWeapon, ev.Angle, ev.LocalPos, ev.Animation);
+    }
+
+    protected override void UndamagedAttack(Entity<MeleeWeaponComponent> ent, EntityUid target, EntityUid user)
+    {
+        if (ent.Comp.UndamagedAlertThreshold == 0)
+            return;
+
+        if (ent.Comp.LastUndamagedHitEntity != target)
+        {
+            ent.Comp.UndamagedSwings = 0;
+            ent.Comp.LastUndamagedHitEntity = target;
+        }
+
+        ent.Comp.UndamagedSwings++;
+        if (ent.Comp.UndamagedSwings >= ent.Comp.UndamagedAlertThreshold)
+        {
+            if (ent.Owner == user)
+            {
+                PopupSystem.PopupEntity(Loc.GetString("melee-self-weapon-dealt-no-damage", ("target", Identity.Entity(target, EntityManager, user))), target, user);
+            }
+            else
+            {
+                PopupSystem.PopupEntity(Loc.GetString("melee-weapon-dealt-no-damage", ("weapon", ent), ("target", Identity.Entity(target, EntityManager, user))), target, user);
+            }
+
+            ent.Comp.UndamagedSwings = 0;
+        }
+    }
+
+    protected override void ResetUndamagedSwingsCount(Entity<MeleeWeaponComponent> ent)
+    {
+        ent.Comp.UndamagedSwings = 0;
     }
 }

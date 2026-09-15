@@ -24,9 +24,14 @@ loadout-group-senior-courier-belt = Ведущий логист, пояс
 
 # Law
 loadout-group-magistrat-jumpsuit = Магистрат, комбинезон
+loadout-group-magistrat-head = Магистрат, голова
+loadout-group-magistrat-outerclothing = Магистрат, верхняя одежда
+loadout-group-magistrat-backpack = Магистрат, рюкзак
 loadout-group-magistrat-underwear = Магистрат, нижнее бельё
 
 loadout-group-iaa-jumpsuit = АВД, комбинезон
+loadout-group-iaa-outerclothing = АВД, верхняя одежда
+loadout-group-iaa-gloves = АВД, перчатки
 loadout-group-iaa-underwear = АВД, нижнее бельё
 
 # Engineering

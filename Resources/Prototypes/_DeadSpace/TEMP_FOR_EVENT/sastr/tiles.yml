@@ -1,0 +1,71 @@
+- type: tile
+  id: FloorDarkGurza
+  parent: BaseStationTile
+  name: углепластиковые плиты Gurza /// (НЕ ИСПОЛЬЗОВАТЬ)
+  sprite: /Textures/_DeadSpace/TEMP_FOR_EVENT/sastr/Tiles/dark.png
+  footstepSounds:
+    collection: FootstepTile
+
+- type: tile
+  id: FloorDarkMiniGurza
+  parent: BaseStationTile
+  name: углепластиковые мини-плиты Gurza /// (НЕ ИСПОЛЬЗОВАТЬ)
+  sprite: /Textures/_DeadSpace/TEMP_FOR_EVENT/sastr/Tiles/dark_mini.png
+  footstepSounds:
+    collection: FootstepTile
+
+- type: tile
+  id: FloorDarkPavementGurza
+  parent: BaseStationTile
+  name: углепластиковое покрытие Gurza /// (НЕ ИСПОЛЬЗОВАТЬ)
+  sprite: /Textures/_DeadSpace/TEMP_FOR_EVENT/sastr/Tiles/dark_pavement.png
+  footstepSounds:
+    collection: FootstepTile
+
+- type: tile
+  id: FloorDarkOffsetGurza
+  parent: BaseStationTile
+  name: углепластиковые технические плиты Gurza /// (НЕ ИСПОЛЬЗОВАТЬ)
+  sprite: /Textures/_DeadSpace/TEMP_FOR_EVENT/sastr/Tiles/dark_offset.png
+  footstepSounds:
+    collection: FootstepTile
+
+- type: tile
+  id: FloorDarkMonoGurza
+  parent: BaseStationTile
+  name: углепластиковые моно плиты Gurza /// (НЕ ИСПОЛЬЗОВАТЬ)
+  sprite: /Textures/_DeadSpace/TEMP_FOR_EVENT/sastr/Tiles/dark_mono.png
+  footstepSounds:
+    collection: FootstepTile
+
+- type: tile
+  id: FloorDarkMono2Gurza
+  parent: BaseStationTile
+  name: углепластиковые дуо плиты Gurza /// (НЕ ИСПОЛЬЗОВАТЬ)
+  sprite: /Textures/_DeadSpace/TEMP_FOR_EVENT/sastr/Tiles/dark_mono2.png
+  footstepSounds:
+    collection: FootstepTile
+
+- type: tile
+  id: FloorDarkMono3Gurza
+  parent: BaseStationTile
+  name: углепластиковые трио плиты Gurza /// (НЕ ИСПОЛЬЗОВАТЬ)
+  sprite: /Textures/_DeadSpace/TEMP_FOR_EVENT/sastr/Tiles/dark_mono3.png
+  footstepSounds:
+    collection: FootstepTile
+
+- type: tile
+  id: FloorDarkPavementVerticalGurza
+  parent: BaseStationTile
+  name: углепластиковое вертикальное покрытие Gurza /// (НЕ ИСПОЛЬЗОВАТЬ)
+  sprite: /Textures/_DeadSpace/TEMP_FOR_EVENT/sastr/Tiles/dark_pavement_vertical.png
+  footstepSounds:
+    collection: FootstepTile
+
+- type: tile
+  id: FloorDarkPlasticGurza
+  parent: BaseStationTile
+  name: углепластиковые армированные плиты Gurza /// (НЕ ИСПОЛЬЗОВАТЬ)
+  sprite: /Textures/_DeadSpace/TEMP_FOR_EVENT/sastr/Tiles/dark_plastic.png
+  footstepSounds:
+    collection: FootstepTile

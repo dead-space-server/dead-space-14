@@ -149,7 +149,7 @@ public abstract partial class InventorySystem
             return false;
         }
 
-        if (!force && !CanEquip(actor, target, itemUid, slot, out var reason, slotDefinition, inventory, clothing))
+        if (!force && !CanEquip(actor, target, itemUid, slot, out var reason, slotDefinition, inventory, clothing, containerSlot: slotContainer))
         {
             if(!silent)
                 _popup.PopupCursor(Loc.GetString(reason));
@@ -159,8 +159,7 @@ public abstract partial class InventorySystem
         if (checkDoafter &&
             clothing != null &&
             clothing.EquipDelay > TimeSpan.Zero &&
-            (clothing.Slots & slotDefinition.SlotFlags) != 0 &&
-            _containerSystem.CanInsert(itemUid, slotContainer))
+            (clothing.Slots & slotDefinition.SlotFlags) != 0)
         {
             var args = new DoAfterArgs(
                 EntityManager,
@@ -224,13 +223,42 @@ public abstract partial class InventorySystem
             HasComp<HandsComponent>(actor);
     }
 
+    /// <summary>
+    /// Checks whether the entity can equip the item.
+    /// </summary>
+    /// <param name="uid">The entity equipping the item.</param>
+    /// <param name="itemUid">The item being equipped.</param>
+    /// <param name="slot">The slot into which the item is being equipped.</param>
+    /// <param name="reason">The reason the equipping check failed.</param>
+    /// <param name="slotDefinition">The definition of the slot.</param>
+    /// <param name="inventory">The target's inventory component.</param>
+    /// <param name="clothing">The item's clothing component.</param>
+    /// <param name="item">The item's component.</param>
+    /// <param name="containerSlot">The container for the slot into which the item is being equipped.</param>
+    /// <param name="assumeEmpty">If true, checks whether the entity could be inserted if the container were empty.</param>
+    /// <returns>Whether the item can be equipped.</returns>
     public bool CanEquip(EntityUid uid, EntityUid itemUid, string slot, [NotNullWhen(false)] out string? reason,
         SlotDefinition? slotDefinition = null, InventoryComponent? inventory = null,
-        ClothingComponent? clothing = null, ItemComponent? item = null) =>
-        CanEquip(uid, uid, itemUid, slot, out reason, slotDefinition, inventory, clothing, item);
+        ClothingComponent? clothing = null, ItemComponent? item = null, ContainerSlot? containerSlot = null, bool assumeEmpty = false) =>
+        CanEquip(uid, uid, itemUid, slot, out reason, slotDefinition, inventory, clothing, item, containerSlot, assumeEmpty);
 
+    /// <summary>
+    /// Checks whether the actor can equip an item on the target.
+    /// </summary>
+    /// <param name="actor">The entity equipping the item.</param>
+    /// <param name="target">The entity on which the item is being equipped.</param>
+    /// <param name="itemUid">The item being equipped.</param>
+    /// <param name="slot">The slot into which the item is being equipped.</param>
+    /// <param name="reason">The reason the equipping check failed.</param>
+    /// <param name="slotDefinition">The definition of the slot.</param>
+    /// <param name="inventory">The target's inventory component.</param>
+    /// <param name="clothing">The item's clothing component.</param>
+    /// <param name="item">The item's component.</param>
+    /// <param name="containerSlot">The container for the slot into which the item is being equipped.</param>
+    /// <param name="assumeEmpty">If true, checks whether the entity could be inserted if the container were empty.</param>
+    /// <returns>Whether the item can be equipped.</returns>
     public bool CanEquip(EntityUid actor, EntityUid target, EntityUid itemUid, string slot, [NotNullWhen(false)] out string? reason, SlotDefinition? slotDefinition = null,
-        InventoryComponent? inventory = null, ClothingComponent? clothing = null, ItemComponent? item = null)
+        InventoryComponent? inventory = null, ClothingComponent? clothing = null, ItemComponent? item = null, ContainerSlot? containerSlot = null, bool assumeEmpty = false)
     {
         reason = "inventory-component-can-equip-cannot";
         if (!Resolve(target, ref inventory, false))
@@ -238,7 +266,13 @@ public abstract partial class InventorySystem
 
         Resolve(itemUid, ref clothing, ref item, false);
 
-        if (slotDefinition == null && !TryGetSlot(target, slot, out slotDefinition, inventory: inventory))
+        if ((containerSlot == null || slotDefinition == null) && !TryGetSlotContainer(target, slot, out containerSlot, out slotDefinition, inventory: inventory))
+            return false;
+
+        if (_containerSystem.TryGetContainingContainer(itemUid, out var container) && !_containerSystem.CanRemove(itemUid, container))
+            return false;
+
+        if (!_containerSystem.CanInsert(itemUid, containerSlot, assumeEmpty))
             return false;
 
         DebugTools.Assert(slotDefinition.Name == slot);
@@ -449,6 +483,12 @@ public abstract partial class InventorySystem
             _doAfter.TryStartDoAfter(args);
             return false;
         }
+
+        // Give systems which need the acting user a chance to react before the container changes.
+        var beforeGettingUnequipped = new BeforeGettingUnequippedEvent(actor, target, removedItem.Value, slotDefinition);
+        var beforeUnequip = new BeforeUnequipEvent(actor, target, removedItem.Value, slotDefinition);
+        RaiseLocalEvent(removedItem.Value, beforeGettingUnequipped);
+        RaiseLocalEvent(target, beforeUnequip);
 
         if (!_containerSystem.Remove(removedItem.Value, slotContainer, force: force, reparent: reparent))
             return false;

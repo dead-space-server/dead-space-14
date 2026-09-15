@@ -6,10 +6,10 @@
   objective: roles-antag-shadowling-objective
   requirements:
     - !type:OverallPlaytimeRequirement
-      time: 100h
+      time: 1440000 # 400 hours
     - !type:DepartmentTimeRequirement
       department: Security
-      time: 20h
+      time: 180000 # 50 hours
 
 - type: antag
   id: ShadowlingSlave

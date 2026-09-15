@@ -1,4 +1,4 @@
-﻿using Robust.Shared.Configuration;
+using Robust.Shared.Configuration;
 
 namespace Content.Shared.CCVar;
 
@@ -36,4 +36,11 @@ public sealed partial class CCVars
     /// <seealso cref="AhelpAdminPrefix"/>
     public static readonly CVarDef<bool> AhelpAdminPrefixWebhook =
         CVarDef.Create("ahelp.admin_prefix_webhook", false, CVar.SERVERONLY);
+
+    /// <summary>
+    /// The path to the sound played on some admin interactions to the client.
+    /// </summary>
+    /// <seealso cref="CCVars.BwoinkSoundEnabled"/>
+    public static readonly CVarDef<string> AHelpSound =
+        CVarDef.Create("audio.ahelp_sound", "/Audio/Effects/adminhelp.ogg", CVar.SERVER | CVar.REPLICATED | CVar.ARCHIVE);
 }

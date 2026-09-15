@@ -12,13 +12,19 @@ namespace Content.Shared.Mobs.Components
     /// </summary>
     [RegisterComponent]
     [NetworkedComponent]
-    [AutoGenerateComponentState]
+    [AutoGenerateComponentState(true)]
     [Access(typeof(MobStateSystem), typeof(MobThresholdSystem))]
     public sealed partial class MobStateComponent : Component
     {
         //default mobstate is always the lowest state level
         [AutoNetworkedField, ViewVariables]
         public MobState CurrentState { get; set; } = MobState.Alive;
+
+        /// <summary>
+        /// The last state that was received by the client.
+        /// </summary>
+        [ViewVariables]
+        public MobState LastReceivedState = MobState.Alive;
 
         [DataField]
         [AutoNetworkedField]

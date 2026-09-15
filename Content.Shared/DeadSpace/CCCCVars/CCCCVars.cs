@@ -124,6 +124,9 @@ public sealed class CCCCVars
     public static readonly CVarDef<bool> LavalandAutoGenerate =
         CVarDef.Create("lavaland.auto_generate", true, CVar.SERVERONLY);
 
+    public static readonly CVarDef<bool> AshWalkersEnabled =
+        CVarDef.Create("lavaland.ash_walkers_enabled", true, CVar.SERVER | CVar.REPLICATED);
+
     /*
     * Prison
     */
@@ -133,6 +136,15 @@ public sealed class CCCCVars
 
     public static readonly CVarDef<int> PrisonMurderPenaltyMinutes =
         CVarDef.Create("prison.murder_penalty_minutes", 60, CVar.SERVERONLY);
+
+    public static readonly CVarDef<float> PrisonSentenceTimeMultiplier =
+        CVarDef.Create("prison.sentence_time_multiplier", 1.1f, CVar.SERVERONLY);
+
+    public static readonly CVarDef<int> PrisonCrossFactionKillRewardMinutes =
+        CVarDef.Create("prison.cross_faction_kill_reward_minutes", 2, CVar.SERVERONLY);
+
+    public static readonly CVarDef<int> PrisonFactionSelectionSeconds =
+        CVarDef.Create("prison.faction_selection_seconds", 20, CVar.SERVERONLY);
 
     /// <summary>
     /// Moves long-stuck dynamic physics bodies out of static hard overlaps.
@@ -149,6 +161,16 @@ public sealed class CCCCVars
     /// </summary>
     public static readonly CVarDef<string> Background =
         CVarDef.Create("ui.background", "Image", CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    public const string InterfaceStyleDark = "Dark";
+    public const string InterfaceStyleLight = "Light";
+    public const string InterfaceStyleClassic = "Classic";
+
+    /// <summary>
+    /// Visual style used by ordinary game windows and menus. This is separate from the HUD resource theme.
+    /// </summary>
+    public static readonly CVarDef<string> InterfaceStyle =
+        CVarDef.Create("ui.style_theme", InterfaceStyleDark, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /*
     * Player Count Mode
@@ -192,8 +214,10 @@ public sealed class CCCCVars
     /// </summary>
     public static readonly CVarDef<bool> MultipleInventoryWindows =
         CVarDef.Create("storage.multiple_inventory_windows", false, CVar.CLIENTONLY | CVar.ARCHIVE);
+    // DS14-start - scrolling screens accept two 32-character lines plus their separator.
     public static readonly CVarDef<int> MaxBroadcastLength =
-        CVarDef.Create("chat.max_broadcast_length", 10, CVar.SERVER | CVar.REPLICATED);
+        CVarDef.Create("chat.max_broadcast_length", 65, CVar.SERVER | CVar.REPLICATED);
+    // DS14-end
 
     /*
     * Попауты

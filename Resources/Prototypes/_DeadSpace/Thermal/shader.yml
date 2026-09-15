@@ -4,3 +4,10 @@
   path: "/Textures/_DeadSpace/Shaders/thermal_mask.swsl"
   params:
     Color: "#f2444499"
+
+- type: shader
+  id: ThermalMaskExperimental
+  kind: source
+  path: "/Textures/_DeadSpace/Shaders/thermal_mask.swsl"
+  params:
+    Color: "#b6225a99"

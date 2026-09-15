@@ -1,18 +1,13 @@
 <!--Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT-->
 
 <DefaultWindow xmlns="https://spacestation14.io"
-               xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
                Title="{Loc 'virus-diagnoser-window-title'}"
                MinSize="760 540"
                SetSize="820 560">
-    <PanelContainer StyleClasses="BackgroundPanelDark" HorizontalExpand="True" VerticalExpand="True">
+    <PanelContainer StyleClasses="DeadSpaceSurfaceFlat" HorizontalExpand="True" VerticalExpand="True">
         <BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="10" HorizontalExpand="True" VerticalExpand="True">
             <BoxContainer Orientation="Horizontal">
-                <PanelContainer SetWidth="8">
-                    <PanelContainer.PanelOverride>
-                        <gfx:StyleBoxFlat BackgroundColor="#2ea043" />
-                    </PanelContainer.PanelOverride>
-                </PanelContainer>
+                <PanelContainer Name="DiagnosticsAccent" SetWidth="8" StyleClasses="positive" />
                 <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="8 0 0 0">
                     <Label Text="{Loc 'virus-diagnoser-window-title'}" StyleClasses="LabelHeading" />
                     <Label Text="{Loc 'virus-diagnoser-window-subtitle'}" StyleClasses="LabelSubText" />
@@ -27,7 +22,7 @@
                               VerticalExpand="True"
                               HorizontalExpand="True">
                     <PanelContainer Name="ServerContents"
-                                    StyleClasses="PanelDark"
+                                    StyleClasses="DeadSpaceSurfaceDark"
                                     VerticalExpand="True"
                                     HorizontalExpand="True"
                                     Margin="0 8 0 0">
@@ -84,7 +79,7 @@
                     </PanelContainer>
 
                     <PanelContainer Name="ServerMissing"
-                                    StyleClasses="PanelDark"
+                                    StyleClasses="DeadSpaceInset"
                                     VerticalExpand="True"
                                     HorizontalExpand="True"
                                     Margin="0 8 0 0">
@@ -95,7 +90,7 @@
                     </PanelContainer>
 
                     <PanelContainer Name="ServerFar"
-                                    StyleClasses="PanelDark"
+                                    StyleClasses="DeadSpaceInset"
                                     VerticalExpand="True"
                                     HorizontalExpand="True"
                                     Margin="0 8 0 0">
@@ -111,7 +106,7 @@
                               VerticalExpand="True"
                               HorizontalExpand="True">
                     <PanelContainer Name="DiagnoserContents"
-                                    StyleClasses="PanelDark"
+                                    StyleClasses="DeadSpaceSurfaceDark"
                                     VerticalExpand="True"
                                     HorizontalExpand="True"
                                     Margin="0 8 0 0">
@@ -133,7 +128,7 @@
                     </PanelContainer>
 
                     <PanelContainer Name="DiagnoserMissing"
-                                    StyleClasses="PanelDark"
+                                    StyleClasses="DeadSpaceInset"
                                     VerticalExpand="True"
                                     HorizontalExpand="True"
                                     Margin="0 8 0 0">
@@ -144,7 +139,7 @@
                     </PanelContainer>
 
                     <PanelContainer Name="DiagnoserFar"
-                                    StyleClasses="PanelDark"
+                                    StyleClasses="DeadSpaceInset"
                                     VerticalExpand="True"
                                     HorizontalExpand="True"
                                     Margin="0 8 0 0">
@@ -160,7 +155,7 @@
                               VerticalExpand="True"
                               HorizontalExpand="True">
                     <PanelContainer Name="SolutionAnalyzerContents"
-                                    StyleClasses="PanelDark"
+                                    StyleClasses="DeadSpaceSurfaceDark"
                                     VerticalExpand="True"
                                     HorizontalExpand="True"
                                     Margin="0 8 0 0">
@@ -178,7 +173,7 @@
                     </PanelContainer>
 
                     <PanelContainer Name="SolutionAnalyzerMissing"
-                                    StyleClasses="PanelDark"
+                                    StyleClasses="DeadSpaceInset"
                                     VerticalExpand="True"
                                     HorizontalExpand="True"
                                     Margin="0 8 0 0">
@@ -189,7 +184,7 @@
                     </PanelContainer>
 
                     <PanelContainer Name="SolutionAnalyzerFar"
-                                    StyleClasses="PanelDark"
+                                    StyleClasses="DeadSpaceInset"
                                     VerticalExpand="True"
                                     HorizontalExpand="True"
                                     Margin="0 8 0 0">

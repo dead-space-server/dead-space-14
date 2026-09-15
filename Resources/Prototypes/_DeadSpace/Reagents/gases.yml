@@ -1,0 +1,131 @@
+- type: reagent
+  id: NitrosylPlasmide
+  name: reagent-name-nitrosyl-plasmide
+  desc: reagent-desc-nitrosyl-plasmide
+  physicalDesc: reagent-physical-desc-gaseous
+  flavor: bitter
+  color: "#d0c090"
+  metabolisms:
+    Narcotic:
+      effects:
+      - !type:ModifyStatusEffect
+        effectProto: StatusEffectNitrosylPlasmide
+        type: Update
+        time: 4
+      - !type:MovementSpeedModifier
+        walkSpeedModifier: 1.25
+        sprintSpeedModifier: 1.25
+        time: 5
+
+- type: reagent
+  id: HyperNoblium
+  name: reagent-name-hyper-noblium
+  desc: reagent-desc-hyper-noblium
+  physicalDesc: reagent-physical-desc-gaseous
+  flavor: bitter
+  color: "#c8f0f0"
+  boilingPoint: -246.0
+  meltingPoint: -249.0
+
+- type: reagent
+  id: ProtoNitrate
+  name: reagent-name-proto-nitrate
+  desc: reagent-desc-proto-nitrate
+  physicalDesc: reagent-physical-desc-gaseous
+  flavor: bitter
+  color: "#3fbfbf"
+  boilingPoint: -30.0
+  meltingPoint: -80.0
+
+- type: reagent
+  id: Helium
+  name: reagent-name-helium
+  desc: reagent-desc-helium
+  physicalDesc: reagent-physical-desc-gaseous
+  flavor: bitter
+  color: "#eeeeff"
+  boilingPoint: -268.0
+  meltingPoint: -272.0
+
+- type: reagent
+  id: Halon
+  name: reagent-name-halon
+  desc: reagent-desc-halon
+  physicalDesc: reagent-physical-desc-gaseous
+  flavor: bitter
+  color: "#eaa0a0"
+  boilingPoint: -30.0
+  meltingPoint: -90.0
+  metabolisms:
+    Narcotic:
+      effects:
+      - !type:MovementSpeedModifier
+        walkSpeedModifier: 0.4
+        sprintSpeedModifier: 0.4
+        time: 2
+      - !type:ModifyStatusEffect
+        effectProto: StatusEffectHalonProtection
+        type: Update
+        time: 4
+    Gas:
+      effects:
+      - !type:MovementSpeedModifier
+        walkSpeedModifier: 0.4
+        sprintSpeedModifier: 0.4
+        time: 2
+      - !type:ModifyStatusEffect
+        effectProto: StatusEffectHalonProtection
+        type: Update
+        time: 4
+
+- type: reagent
+  id: Antinoblium
+  name: reagent-name-antinoblium
+  desc: reagent-desc-antinoblium
+  physicalDesc: reagent-physical-desc-gaseous
+  flavor: bitter
+  color: "#ff66cc"
+  boilingPoint: -240.0
+  meltingPoint: -245.0
+  metabolisms:
+    Poison:
+      effects:
+      - !type:HealthChange
+        damage:
+          types:
+            Cellular: 10
+
+- type: reagent
+  id: Zauker
+  name: reagent-name-zauker
+  desc: reagent-desc-zauker
+  physicalDesc: reagent-physical-desc-gaseous
+  flavor: bitter
+  color: "#bfbf3f"
+  boilingPoint: -50.0
+  meltingPoint: -110.0
+  metabolisms:
+    Poison:
+      effects:
+      - !type:HealthChange
+        ignoreResistances: true
+        damage:
+          types:
+            Poison: 6
+            Asphyxiation: 4
+      - !type:AdjustAlert
+        alertType: Toxins
+        clear: true
+        time: 5
+    Gas:
+      effects:
+      - !type:HealthChange
+        ignoreResistances: true
+        damage:
+          types:
+            Poison: 6
+            Asphyxiation: 4
+      - !type:AdjustAlert
+        alertType: Toxins
+        clear: true
+        time: 5

@@ -3,6 +3,7 @@
   parent: [BaseWeaponBatterySmall, BaseCentcommContraband]
   id: WeaponAdvancedLaserERT
   description: Экспериментальная разработка КСО на основе микроядерного синтеза, благодаря которому данное оружие может автономно восполнять свой боезапас и хранить намного больше заряда.
+  suffix: Пистолет
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Weapons/Guns/Battery/advancedlasergunert.rsi
@@ -105,7 +106,8 @@
   parent: [BaseWeaponBattery, BaseGunWieldable, BaseCentcommContraband]
   id: WeaponPulseCarbineMK2
   description: Новейший импульсный карабин новой модели, скорострельнее и имеет больший запас батареи, но точность понижена.
-  name: Импульсный карабин MK2
+  name: импульсный карабин MK2
+  suffix: Винтовка
   components:
   - type: Item
     size: Large
@@ -170,10 +172,11 @@
     fireStacks: 2
 
 - type: entity
-  name: Мульти-Лазерный-Эмулятор
+  name: мультилазерный эмулятор
   parent: [BaseWeaponBattery, BaseGunWieldable, BaseCentcommContraband]
   id: WeaponXrayEmulator
   description: Пушка что заставляет мутировать прямо на твоих глазах недругов. Стреляет залпом радиации и термического повреждение.
+  suffix: Винтовка
   components:
   - type: Item
     size: Huge

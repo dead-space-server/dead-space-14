@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Linq;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.DeadSpace.Prison.Components;
 using Content.Server.Parallax;
@@ -130,14 +131,18 @@ public sealed class PrisonMapSystem : EntitySystem
             _map.SetPaused(mapUid, true);
 
             PrepareMapBoundary(mapUid, grid, planet, random);
-            PrepareResidenceReservation(mapUid, grid, biome, planet, random);
-            var residenceGrid = LoadResidenceGrid(mapId, planet);
+            var residences = CreateResidencePlacements(planet, random);
+            PrepareResidenceReservations(mapUid, grid, biome, planet, residences, random);
+            var residenceGrid = LoadResidenceGrids(mapId, planet, residences);
             PrepareLandingPad(mapUid, grid, biome, planet, random);
             CreateFtlBeacon(mapUid, planet, residenceGrid);
             CreateGhostWarp(mapUid);
-            PreloadResidenceArea(mapUid, biome, planet);
+            PreloadResidenceAreas(mapUid, biome, residences);
             PreloadLandingArea(mapUid, biome, planet);
-            _faunaPopulation.SetupMap(mapUid, planet);
+            _faunaPopulation.SetupMap(
+                mapUid,
+                planet,
+                residences.Select(residence => ToBox2(residence.ReservationBounds)).ToArray());
 
             _map.SetPaused(mapUid, false);
             Log.Info($"Generated prison map {planet.ID} with seed {seed}.");
@@ -290,48 +295,136 @@ public sealed class PrisonMapSystem : EntitySystem
         }
     }
 
-    private void PrepareResidenceReservation(
+    private static List<ResidencePlacement> CreateResidencePlacements(
+        PrisonPlanetPrototype planet,
+        Random random)
+    {
+        var placements = new List<ResidencePlacement>(planet.Residences.Count);
+        if (!planet.RandomizeResidencePositions)
+        {
+            foreach (var residence in planet.Residences)
+            {
+                var offset = new Vector2i(
+                    (int) MathF.Round(residence.GridOffset.X),
+                    (int) MathF.Round(residence.GridOffset.Y));
+                placements.Add(new ResidencePlacement(
+                    residence,
+                    offset,
+                    TranslateBounds(GetResidenceRelativeBounds(planet, residence), offset)));
+            }
+
+            return placements;
+        }
+
+        var boundaryPadding = planet.BoundaryEnabled ? Math.Max(1, planet.BoundaryWallWidth) : 0;
+        var mapLimit = planet.MapHalfSize - boundaryPadding -
+                       (int) MathF.Ceiling(Math.Max(0f, planet.ResidenceMapEdgePadding));
+        if (mapLimit <= 0)
+            throw new InvalidOperationException("Prison residence placement area is empty.");
+
+        var landingRadius = Math.Max(1, planet.LandingPadRadius) +
+                            Math.Max(4f, planet.FaunaResidenceExclusionPadding);
+        var landingBounds = Box2.CenteredAround(
+            planet.FtlBeaconOffset,
+            new Vector2(landingRadius * 2f + 1f));
+        var minSeparationSquared = MathF.Pow(Math.Max(0f, planet.ResidenceMinSeparation), 2f);
+        var attempts = Math.Max(1, planet.ResidencePlacementAttempts);
+
+        foreach (var residence in planet.Residences)
+        {
+            var relativeBounds = GetResidenceRelativeBounds(planet, residence);
+            var minX = -mapLimit - relativeBounds.Left;
+            var maxX = mapLimit - relativeBounds.Right;
+            var minY = -mapLimit - relativeBounds.Bottom;
+            var maxY = mapLimit - relativeBounds.Top;
+            if (minX > maxX || minY > maxY)
+                throw new InvalidOperationException(
+                    $"Prison residence {residence.GridPath} does not fit inside the map boundary.");
+
+            var placed = false;
+            for (var attempt = 0; attempt < attempts; attempt++)
+            {
+                var offset = new Vector2i(
+                    random.Next(minX, maxX + 1),
+                    random.Next(minY, maxY + 1));
+                var bounds = TranslateBounds(relativeBounds, offset);
+                if (ToBox2(bounds).Intersects(landingBounds))
+                    continue;
+
+                var position = new Vector2(offset.X, offset.Y);
+                if (placements.Any(existing =>
+                        Vector2.DistanceSquared(position, existing.Offset) < minSeparationSquared))
+                {
+                    continue;
+                }
+
+                placements.Add(new ResidencePlacement(residence, position, bounds));
+                placed = true;
+                break;
+            }
+
+            if (!placed)
+                throw new InvalidOperationException(
+                    $"Unable to find a safe random position for prison residence {residence.GridPath}.");
+        }
+
+        return placements;
+    }
+
+    private void PrepareResidenceReservations(
         EntityUid mapUid,
         MapGridComponent grid,
         BiomeComponent biome,
         PrisonPlanetPrototype planet,
+        IReadOnlyList<ResidencePlacement> residences,
         Random random)
     {
-        if (!TryGetResidenceReservationBounds(planet, out var bounds))
+        if (!planet.ResidenceReservationEnabled)
             return;
 
-        var reserved = new List<(Vector2i Index, Tile Tile)>();
-        _biome.ReserveTiles(mapUid, ToBox2(bounds), reserved, biome, grid);
-
         var tileDef = _tileDefinition[planet.ResidenceTile];
-        var tiles = new List<(Vector2i Index, Tile Tile)>(bounds.Area);
-
-        for (var x = bounds.Left; x < bounds.Right; x++)
+        foreach (var residence in residences)
         {
-            for (var y = bounds.Bottom; y < bounds.Top; y++)
-            {
-                tiles.Add((new Vector2i(x, y), CreateTile(tileDef, random)));
-            }
-        }
+            var bounds = residence.ReservationBounds;
+            var reserved = new List<(Vector2i Index, Tile Tile)>();
+            _biome.ReserveTiles(mapUid, ToBox2(bounds), reserved, biome, grid);
 
-        _map.SetTiles(mapUid, grid, tiles);
+            var tiles = new List<(Vector2i Index, Tile Tile)>(bounds.Area);
+            for (var x = bounds.Left; x < bounds.Right; x++)
+            {
+                for (var y = bounds.Bottom; y < bounds.Top; y++)
+                {
+                    tiles.Add((new Vector2i(x, y), CreateTile(tileDef, random)));
+                }
+            }
+
+            _map.SetTiles(mapUid, grid, tiles);
+        }
     }
 
-    private EntityUid? LoadResidenceGrid(MapId mapId, PrisonPlanetPrototype planet)
+    private EntityUid? LoadResidenceGrids(
+        MapId mapId,
+        PrisonPlanetPrototype planet,
+        IReadOnlyList<ResidencePlacement> residences)
     {
-        if (planet.ResidenceGridPath == null)
-            return null;
-
-        if (!_mapLoader.TryLoadGrid(mapId, planet.ResidenceGridPath.Value, out var grid, offset: planet.ResidenceGridOffset))
+        EntityUid? firstGrid = null;
+        foreach (var placement in residences)
         {
-            Log.Error($"Failed to load prison residence grid {planet.ResidenceGridPath.Value} for planet {planet.ID}.");
-            return null;
+            var residence = placement.Definition;
+            if (!_mapLoader.TryLoadGrid(mapId, residence.GridPath, out var grid, offset: placement.Offset))
+                throw new InvalidOperationException(
+                    $"Failed to load prison residence grid {residence.GridPath} for planet {planet.ID}.");
+
+            if (grid == null)
+                throw new InvalidOperationException(
+                    $"Prison residence file {residence.GridPath} did not contain a grid.");
+
+            firstGrid ??= grid;
+            if (!string.IsNullOrWhiteSpace(residence.GridName))
+                _metadata.SetEntityName(grid.Value, residence.GridName);
         }
 
-        if (grid != null && !string.IsNullOrWhiteSpace(planet.ResidenceGridName))
-            _metadata.SetEntityName(grid.Value, planet.ResidenceGridName);
-
-        return grid;
+        return firstGrid;
     }
 
     private void PrepareLandingPad(
@@ -393,12 +486,13 @@ public sealed class PrisonMapSystem : EntitySystem
         _transform.AttachToGridOrMap(warpUid);
     }
 
-    private void PreloadResidenceArea(EntityUid mapUid, BiomeComponent biome, PrisonPlanetPrototype planet)
+    private void PreloadResidenceAreas(
+        EntityUid mapUid,
+        BiomeComponent biome,
+        IReadOnlyList<ResidencePlacement> residences)
     {
-        if (!TryGetResidenceReservationBounds(planet, out var bounds))
-            return;
-
-        _biome.Preload(mapUid, biome, ToBox2(bounds).Enlarged(16f));
+        foreach (var residence in residences)
+            _biome.Preload(mapUid, biome, ToBox2(residence.ReservationBounds).Enlarged(16f));
     }
 
     private void PreloadLandingArea(EntityUid mapUid, BiomeComponent biome, PrisonPlanetPrototype planet)
@@ -430,19 +524,25 @@ public sealed class PrisonMapSystem : EntitySystem
                 : (byte) 0);
     }
 
-    private static bool TryGetResidenceReservationBounds(
+    private static Box2i GetResidenceRelativeBounds(
         PrisonPlanetPrototype planet,
-        out Box2i bounds)
+        PrisonResidenceDefinition residence)
     {
-        bounds = default;
+        var fallbackSize = Math.Max(1, planet.ResidenceReservationSize);
+        var width = residence.ReservationSize.X > 0 ? residence.ReservationSize.X : fallbackSize;
+        var height = residence.ReservationSize.Y > 0 ? residence.ReservationSize.Y : fallbackSize;
+        var minX = residence.ReservationOffset.X - width / 2;
+        var minY = residence.ReservationOffset.Y - height / 2;
+        return new Box2i(minX, minY, minX + width, minY + height);
+    }
 
-        if (!planet.ResidenceReservationEnabled)
-            return false;
-
-        var size = Math.Max(1, planet.ResidenceReservationSize);
-        var min = -size / 2;
-        bounds = new Box2i(min, min, min + size, min + size);
-        return true;
+    private static Box2i TranslateBounds(Box2i bounds, Vector2i offset)
+    {
+        return new Box2i(
+            bounds.Left + offset.X,
+            bounds.Bottom + offset.Y,
+            bounds.Right + offset.X,
+            bounds.Top + offset.Y);
     }
 
     private static Box2 ToBox2(Box2i bounds)
@@ -469,4 +569,9 @@ public sealed class PrisonMapSystem : EntitySystem
         var innerSize = Math.Max(0, size - ringWidth * 2);
         return size * size - innerSize * innerSize;
     }
+
+    private readonly record struct ResidencePlacement(
+        PrisonResidenceDefinition Definition,
+        Vector2 Offset,
+        Box2i ReservationBounds);
 }

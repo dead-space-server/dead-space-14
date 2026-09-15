@@ -1,51 +1,45 @@
 <controls:FancyWindow xmlns="https://spacestation14.io"
                       xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
                       Title="{Loc 'emergency-shuttle-console-window-title'}"
-                      HeaderClass="DS14MenuHeader"
-                      TitleClass="DS14MenuTitle"
                       MinSize="460 360"
                       SetSize="520 420">
     <!-- DS14-start -->
-    <PanelContainer StyleClasses="DS14MenuShell">
-        <PanelContainer StyleClasses="DS14MenuPanelDark">
+    <PanelContainer StyleClasses="DeadSpaceSurfaceDark">
             <BoxContainer Orientation="Vertical"
                           SeparationOverride="8">
-                <PanelContainer StyleClasses="DS14MenuInset"
+                <PanelContainer StyleClasses="DeadSpaceInset"
                                 HorizontalExpand="True">
                     <BoxContainer Orientation="Vertical"
                                   SeparationOverride="4"
                                   HorizontalExpand="True">
                         <Label Text="{Loc 'emergency-shuttle-ui-status-title'}"
-                               StyleClasses="DS14MenuListHeader" />
+                               StyleClasses="DeadSpaceListHeader" />
                         <Label Name="Countdown"
                                HorizontalAlignment="Center"
                                Align="Center"
                                Text="{Loc 'emergency-shuttle-ui-status-waiting'}"
-                               StyleClasses="DS14MenuRoundStatusTime" />
+                               StyleClasses="DeadSpaceRoundStatusTime" />
                         <BoxContainer Name="EngineStatusContainer"
                                       HorizontalAlignment="Center"
                                       SeparationOverride="4">
-                            <Label Text="{Loc 'emergency-shuttle-ui-route'}"
-                                   StyleClasses="DS14MenuProfileLabel" />
+                            <Label Text="{Loc 'emergency-shuttle-ui-route'}" />
                             <Label Name="EngineStatus"
                                    Text="{Loc 'map-name-centcomm'}"
-                                   FontColorOverride="#FFA500"
-                                   StyleClasses="DS14MenuProfileLabel" />
+                                   StyleClasses="DeadSpaceSectionTitle" />
                         </BoxContainer>
                     </BoxContainer>
                 </PanelContainer>
 
                 <PanelContainer Name="HijackContainer"
-                                StyleClasses="DS14MenuListRowAlt"
+                                StyleClasses="DeadSpaceListItemAlternate"
                                 HorizontalExpand="True">
                     <BoxContainer Orientation="Vertical"
                                   SeparationOverride="6"
                                   HorizontalExpand="True">
                         <Label Text="{Loc 'emergency-shuttle-ui-hijack'}"
-                               StyleClasses="DS14MenuListHeader" />
+                               StyleClasses="DeadSpaceListHeader" />
                         <Label Name="HijackStatus"
-                               Text="{Loc 'emergency-shuttle-ui-hijack-inactive'}"
-                               StyleClasses="DS14MenuProfileLabel" />
+                               Text="{Loc 'emergency-shuttle-ui-hijack-inactive'}" />
                         <BoxContainer Orientation="Horizontal"
                                       SeparationOverride="6"
                                       HorizontalExpand="True">
@@ -54,30 +48,30 @@
                                     TextAlign="Center"
                                     MinHeight="30"
                                     HorizontalExpand="True"
-                                    StyleClasses="DS14MenuProfileControl DS14MenuProfileControlPositive" />
+                                    StyleClasses="DeadSpaceControlPositive" />
                             <Button Name="HijackCancelButton"
                                     Text="{Loc 'emergency-shuttle-ui-hijack-cancel'}"
                                     TextAlign="Center"
                                     MinHeight="30"
                                     HorizontalExpand="True"
-                                    StyleClasses="DS14MenuProfileControl negative" />
+                                    StyleClasses="negative" />
                         </BoxContainer>
                     </BoxContainer>
                 </PanelContainer>
 
                 <PanelContainer Name="LaunchContainer"
-                                StyleClasses="DS14MenuInset"
+                                StyleClasses="DeadSpaceInset"
                                 HorizontalExpand="True">
                     <BoxContainer Orientation="Vertical"
                                   SeparationOverride="6"
                                   HorizontalExpand="True">
                         <Label Text="{Loc 'emergency-shuttle-ui-early-authorize'}"
-                               StyleClasses="DS14MenuListHeader" />
+                               StyleClasses="DeadSpaceListHeader" />
                         <Button Name="RepealAllButton"
                                 Text="{Loc 'emergency-shuttle-ui-repeal-all'}"
                                 TextAlign="Center"
                                 HorizontalExpand="True"
-                                StyleClasses="DS14MenuProfileControl negative" />
+                                StyleClasses="negative" />
                     </BoxContainer>
                 </PanelContainer>
 
@@ -89,32 +83,30 @@
                             Text="{Loc 'emergency-shuttle-ui-authorize'}"
                             TextAlign="Center"
                             HorizontalExpand="True"
-                            StyleClasses="DS14MenuProfileControl DS14MenuProfileControlPositive" />
+                            StyleClasses="DeadSpaceControlPositive" />
                     <Button Name="RepealButton"
                             Text="{Loc 'emergency-shuttle-ui-repeal'}"
                             TextAlign="Center"
                             HorizontalExpand="True"
-                            StyleClasses="DS14MenuProfileControl negative" />
+                            StyleClasses="negative" />
                 </BoxContainer>
 
                 <PanelContainer Name="AuthorizationsTextContainer"
-                                StyleClasses="DS14MenuListRow"
+                                StyleClasses="DeadSpaceListItem"
                                 HorizontalExpand="True">
                     <BoxContainer Orientation="Horizontal"
                                   HorizontalExpand="True">
-                        <Label Text="{Loc 'emergency-shuttle-ui-authorizations'}"
-                               StyleClasses="DS14MenuProfileLabel" />
+                        <Label Text="{Loc 'emergency-shuttle-ui-authorizations'}" />
                         <Label Name="AuthorizationCount"
                                Text=""
                                HorizontalAlignment="Right"
                                Align="Right"
-                               HorizontalExpand="True"
-                               StyleClasses="DS14MenuProfileLabel" />
+                               HorizontalExpand="True" />
                     </BoxContainer>
                 </PanelContainer>
 
                 <PanelContainer Name="AuthorizationsPanel"
-                                StyleClasses="DS14MenuInset"
+                                StyleClasses="DeadSpaceInset"
                                 VerticalExpand="True"
                                 HorizontalExpand="True">
                     <ScrollContainer HScrollEnabled="False"
@@ -127,7 +119,6 @@
                     </ScrollContainer>
                 </PanelContainer>
             </BoxContainer>
-        </PanelContainer>
     </PanelContainer>
     <!-- DS14-end -->
 </controls:FancyWindow>

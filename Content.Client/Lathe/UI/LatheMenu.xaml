@@ -1,6 +1,6 @@
+<!-- DS14: Keep the System namespace while this branch uses explicit system:String style entries. -->
 <DefaultWindow
     xmlns="https://spacestation14.io"
-    xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:ui="clr-namespace:Content.Client.Materials.UI"
     Title="{Loc 'lathe-menu-title'}"
@@ -21,26 +21,24 @@
                 HorizontalExpand="True"
                 SeparationOverride="5">
                 <BoxContainer Orientation="Horizontal"
-                    HorizontalExpand="True">
+                    HorizontalExpand="True" SeparationOverride="8"> <!-- DS14 -->
                     <LineEdit
                         Name="SearchBar"
                         PlaceHolder="{Loc 'lathe-menu-search-designs'}"
-                        HorizontalExpand="True">
+                        HorizontalExpand="True" MinHeight="34" StyleClasses="DeadSpaceFormField"> <!-- DS14 -->
                     </LineEdit>
+                    <!-- DS14-start: match the adjacent search field; separate controls with a gap. -->
                     <OptionButton
                         Name="FilterOption"
-                        MinWidth="100"
-                        StyleClasses="ButtonSquare"/>
+                        MinWidth="120" MinHeight="34" StyleClasses="DeadSpaceFormField" />
+                    <!-- DS14-end -->
                 </BoxContainer>
                 <BoxContainer Orientation="Vertical"
                     MinHeight="225"
                     VerticalExpand="True"
                     HorizontalExpand="True"
                     SizeFlagsStretchRatio="4">
-                    <PanelContainer VerticalExpand="True">
-                        <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat BackgroundColor="#1B1B1E" />
-                        </PanelContainer.PanelOverride>
+                    <PanelContainer VerticalExpand="True" StyleClasses="PanelDeep">
                         <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
                             <BoxContainer
                                 Name="RecipeList"
@@ -83,19 +81,21 @@
                         Mode="Press">
                     </Button>
                 </BoxContainer>
-                <Label Text="{Loc 'lathe-menu-queue-title'}" Margin="5 5 5 5" HorizontalAlignment="Center"/>
+                <!-- DS14-start -->
+                <Label Text="{Loc 'lathe-menu-queue-title'}" Margin="5 5 5 5" HorizontalAlignment="Center" StyleClasses="DeadSpaceSectionTitle" />
+                <!-- DS14-end -->
                 <BoxContainer
                     Name="FabricatingContainer"
                     Orientation="Horizontal"
                     HorizontalExpand="True"
                     SizeFlagsStretchRatio="2">
+                    <!-- DS14-start: use the shared semantic success surface for active fabrication. -->
                     <PanelContainer
                         VerticalExpand="True"
                         HorizontalExpand="True"
-                        SizeFlagsStretchRatio="3">
-                        <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat BackgroundColor="#408040" />
-                        </PanelContainer.PanelOverride>
+                        SizeFlagsStretchRatio="3"
+                        StyleClasses="positive">
+                        <!-- DS14-end -->
                         <Label
                             RectClipContent="False"
                             HorizontalAlignment="Left"
@@ -139,11 +139,10 @@
             VerticalExpand="True"
             HorizontalExpand="True"
             Orientation="Vertical">
-            <Label Text="{Loc 'lathe-menu-materials-title'}" Margin="5 5 5 5" HorizontalAlignment="Center"/>
-            <PanelContainer VerticalExpand="True">
-                <PanelContainer.PanelOverride>
-                    <gfx:StyleBoxFlat BackgroundColor="#1B1B1E" />
-                </PanelContainer.PanelOverride>
+            <!-- DS14-start -->
+            <Label Text="{Loc 'lathe-menu-materials-title'}" Margin="5 5 5 5" HorizontalAlignment="Center" StyleClasses="DeadSpaceSectionTitle" />
+            <!-- DS14-end -->
+            <PanelContainer VerticalExpand="True" StyleClasses="PanelDeep">
                 <BoxContainer
                     Orientation="Vertical"
                     VerticalExpand="True"

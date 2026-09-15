@@ -1,0 +1,603 @@
+# Backpack
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackMrGman
+  name: сумка Interdyne Pharmaceutics
+  description: Собственность интердайн.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MrGman/backpack.rsi
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,15,10
+  - type: StorageFill
+    contents:
+    - id: ClothingWebbingMrGman
+    - id: DoubleEmergencyOxygenTankFilledMrGman
+    - id: ClothingHandsGlovesMrGman
+    - id: ClothingOuterHardsuitMrGman
+    - id: ClothingMaskMrGman
+    - id: ClothingHeadsetMrGman
+    - id: PDAMrGman
+    - id: ClothingShoesBootsMagMrGman
+    - id: ClothingEyesHudMrGman
+    - id: JetpackVoidFilleddMrGman
+    - id: DefibrillatorMrGman
+    - id: HyposprayMrGman
+    - id: ClothingNeckCloakMrGman
+    - id: WeaponCrusherMrGman
+    - id: MedkitAdvancedFilled
+    - id: HolofanProjectorMrGman
+    - id: PaperMrGmanUSSP
+    - id: PaperMrGman
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Hardsuit
+- type: entity
+  parent: ClothingOuterHardsuitSecurity
+  id: ClothingOuterHardsuitMrGman
+  name: скафандр Interdyne Pharmaceutics
+  description: Собственность интердайн.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MrGman/hardsuit/hard.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/MrGman/hardsuit/hard.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitMrGman
+  - type: Item
+    size: Huge
+  - type: HardsuitIdentification
+    nonlethal: true
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.50
+        Slash: 0.50
+        Piercing: 0.60
+        Heat: 0.50
+        Radiation: 0.50
+        Caustic: 0.50
+  - type: ClothingSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+- type: entity
+  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase, ShowMedicalIcons ]
+  id: ClothingHeadHelmetHardsuitMrGman
+  categories: [ HideSpawnMenu ]
+  name: шлем Interdyne Pharmaceutics
+  description: Собственность интердайн.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MrGman/hardsuit/helmet.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/MrGman/hardsuit/helmet.rsi
+  - type: PointLight
+    color: pink
+  - type: PressureProtection
+    highPressureMultiplier: 0.08
+    lowPressureMultiplier: 1000
+  - type: ShowHealthBars
+    damageContainers:
+    - Biological
+    - Inorganic
+    - Silicon
+  - type: EyeProtection
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.9
+        Heat: 0.9
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Gloves
+- type: entity
+  parent: ClothingHandsGlovesCombat
+  id: ClothingHandsGlovesMrGman
+  name: защитные перчатки Interdyne Pharmaceutics
+  description: Собственность интердайн.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MrGman/gloves.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/MrGman/gloves.rsi
+  - type: Fiber
+    fiberMaterial: fibers-insulative
+    fiberColor: fibers-white
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Magboots
+- type: entity
+  parent: ClothingShoesBootsMag
+  id: ClothingShoesBootsMagMrGman
+  name: магнитные ботинки Interdyne Pharmaceutics
+  description: Собственность интердайн.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MrGman/magboots.rsi
+    layers:
+    - state: icon
+      map: [ "enum.ToggleableVisuals.Layer" ]
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/MrGman/magboots.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+  - type: ClothingSpeedModifier
+    walkModifier: 1
+    sprintModifier: 1
+
+# Mask
+- type: entity
+  parent: ClothingMaskGas
+  id: ClothingMaskMrGman
+  name: белый противогаз Interdyne Pharmaceutics
+  description: Собственность интердайн.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MrGman/gasmask.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/MrGman/gasmask.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Headset
+- type: entity
+  parent: ClothingHeadset
+  id: ClothingHeadsetMrGman
+  name: гарнитура Interdyne Pharmaceutics
+  description: Собственность интердайн.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MrGman/headset.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/MrGman/headset.rsi
+  - type: Headset
+    color: "#336899"
+  - type: EncryptionKeyHolder
+    keySlots: 5
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# PDA
+- type: entity
+  parent: BaseMedicalPDA
+  id: PDAMrGman
+  name: КПК Interdyne Pharmaceutics
+  description: Собственность интердайн.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Icon
+    sprite: _DeadSpace/Sponsor/MrGman/pda.rsi
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MrGman/pda.rsi
+  - type: CartridgeLoader
+    uiKey: enum.PdaUiKey.Key
+    preinstalled:
+    - CrewManifestCartridge
+    - NotekeeperCartridge
+    - NewsReaderCartridge
+    - AstroNavCartridge
+    - MedTekCartridge
+    - MessengerCartridge
+  - type: PdaBorderColor
+    borderColor: "#336899"
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Jetpack
+- type: entity
+  parent: JetpackVoidFilled
+  id: JetpackVoidFilleddMrGman
+  name: джетпак Interdyne Pharmaceutics
+  description: Собственность интердайн.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Item
+    sprite: _DeadSpace/Sponsor/MrGman/tank.rsi
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MrGman/tank.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/MrGman/tank.rsi
+    slots:
+      - Back
+      - suitStorage
+      - Belt
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Defibrillator
+- type: entity
+  parent: DefibrillatorCompact
+  name: портативный дефибриллятор Interdyne Pharmaceutics
+  description: Собственность интердайн.
+  id: DefibrillatorMrGman
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MrGman/defib.rsi
+  - type: Item
+    sprite: _DeadSpace/Sponsor/MrGman/defib.rsi
+
+# Hypo
+- type: entity
+  name: тактический гипоспрей Interdyne Pharmaceutics
+  parent: BaseItem
+  description: Собственность интердайн.
+  categories: [ HideSpawnMenu ]
+  id: HyposprayMrGman
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MrGman/hypo.rsi
+    layers:
+      - state: hypo
+        map: ["enum.SolutionContainerLayers.Base"]
+      - state: hypo_fill1
+        map: ["enum.SolutionContainerLayers.Fill"]
+        visible: false
+  - type: Item
+    sprite: _DeadSpace/Sponsor/MrGman/hypo.rsi
+  - type: SolutionContainerManager
+    solutions:
+      hypospray:
+        maxVol: 5
+  - type: RefillableSolution
+    solution: hypospray
+  - type: ExaminableSolution
+    solution: hypospray
+    exactVolume: true
+  - type: Injector
+    solutionName: hypospray
+    ignoreClosed: false
+    activeModeProtoId: HyposprayDynamicMode
+    allowedModes:
+    - HyposprayDynamicMode
+    - HyposprayInjectMode
+  - type: UseDelay
+    delay: 0.5
+  - type: StaticPrice
+    price: 750
+  - type: StealTarget
+    stealGroup: Hypospray
+  - type: Appearance
+  - type: SolutionContainerVisuals
+    maxFillLevels: 4
+    fillBaseName: hypo_fill
+    solutionName: hypospray
+
+# Mantle
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckCloakMrGman
+  name: плащ Interdyne Pharmaceutics
+  description: Собственность интердайн.
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Sponsor/MrGman/cloack.rsi
+    - type: Clothing
+      sprite: _DeadSpace/Sponsor/MrGman/cloack.rsi
+    - type: Tag
+      tags: [] # ignore "WhitelistChameleon" tag
+
+#Документ
+- type: entity
+  parent: PaperPrintedCentcomm
+  id: PaperMrGman
+  name: распечатанный документ
+  description: Собственность интердайн.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Paper
+    stampState: paper_stamp-centcom
+    stampedBy:
+    - stampedColor: '#006600FF'
+      stampedName: Центральное Командование
+    - stampedColor: '#00BE00FF'
+      stampedName: Одобрено
+    content: paper-law-MrGman
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+- type: entity
+  parent: PaperPrintedUSSPCentcomm
+  id: PaperMrGmanUSSP
+  name: распечатанный документ
+  description: Собственность интердайн.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Paper
+    stampState: paper_stamp-centcom
+    stampedBy:
+    - stampedColor: '#006600FF'
+      stampedName: Генеральный Штаб
+    - stampedColor: '#00BE00FF'
+      stampedName: Одобрено
+    content: paper-law-MrGman-ussp
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# РПС
+- type: entity
+  parent: ClothingBeltStorageBase
+  id: ClothingWebbingMrGman
+  name: РПС Interdyne Pharmaceutics
+  description: Собственность интердайн.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MrGman/belt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/MrGman/belt.rsi
+  - type: ExplosionResistance
+    damageCoefficient: 0.8
+  - type: Item
+    size: Huge
+  - type: Storage
+    grid:
+    - 0,0,7,1
+  - type: StorageFill
+    contents:
+      - id: MultitoolMrGman
+      - id: WelderExperimentalMrGman
+      - id: JawsOfLifeMrGman
+      - id: PowerDrillMrGman
+      - id: RCDMrGman
+      - id: GasAnalyzerMrGman
+
+# EYES
+- type: entity
+  parent: ClothingEyesHudAdvanced
+  id: ClothingEyesHudMrGman
+  name: очки Interdyne Pharmaceutics
+  description: Собственность интердайн.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MrGman/visor.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/MrGman/visor.rsi
+  - type: EyeProtection
+  - type: IdentityBlocker
+    coverage: EYES
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Crusher
+- type: entity
+  id: WeaponCrusherMrGman
+  parent: WeaponCrusherGlaive
+  name: глефа Interdyne Pharmaceutics
+  description: Собственность интердайн.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MrGman/crusher/crusher.rsi
+    layers:
+    - state: icon
+  - type: Item
+    sprite: _DeadSpace/Sponsor/MrGman/crusher/crusher-in-hands.rsi
+    size: Huge
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/MrGman/crusher/crusher.rsi
+    quickEquip: false
+    slots:
+    - suitStorage
+    - Back
+
+#multitool
+- type: entity
+  parent: Multitool
+  id: MultitoolMrGman
+  name: мультитул Interdyne Pharmaceutics
+  description: Собственность интердайн.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MrGman/tools/multitool.rsi
+
+#WelderExperimental
+- type: entity
+  parent: WelderExperimental
+  id: WelderExperimentalMrGman
+  name: экспериментальный сварочный аппарат Interdyne Pharmaceutics
+  description: Собственность интердайн.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MrGman/tools/welder.rsi
+  - type: Item
+    sprite: _DeadSpace/Sponsor/MrGman/tools/welder.rsi
+
+#JawsOfLife
+- type: entity
+  parent: JawsOfLife
+  id: JawsOfLifeMrGman
+  name: челюсти жизни Interdyne Pharmaceutics
+  description: Собственность интердайн.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MrGman/tools/jaws.rsi
+    state: jaws_pry
+  - type: Item
+    size: Normal
+  - type: MultipleTool
+    entries:
+      - behavior: Prying
+        sprite:
+          sprite: _DeadSpace/Sponsor/MrGman/tools/jaws.rsi
+          state: jaws_pry
+        useSound: /Audio/Items/jaws_pry.ogg
+        changeSound: /Audio/Items/change_jaws.ogg
+      - behavior: Cutting
+        sprite:
+          sprite: _DeadSpace/Sponsor/MrGman/tools/jaws.rsi
+          state: jaws_cutter
+        useSound: /Audio/Items/jaws_cut.ogg
+        changeSound: /Audio/Items/change_jaws.ogg
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 14
+
+#drill
+- type: entity
+  parent: PowerDrill
+  id: PowerDrillMrGman
+  name: электродрель Interdyne Pharmaceutics
+  description: Собственность интердайн.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MrGman/tools/drill.rsi
+    state: drill_screw
+  - type: Item
+    sprite: _DeadSpace/Sponsor/MrGman/tools/drill.rsi
+    size: Small
+  - type: Tool
+    qualities:
+      - Screwing
+    speedModifier: 1.5
+    useSound: /Audio/Items/drill_use.ogg
+  - type: MultipleTool
+    statusShowBehavior: true
+    entries:
+      - behavior: Screwing
+        sprite:
+          sprite: _DeadSpace/Sponsor/MrGman/tools/drill.rsi
+          state: drill_screw
+        useSound:
+          path: /Audio/Items/drill_use.ogg
+        changeSound:
+          path: /Audio/Items/change_drill.ogg
+      - behavior: Anchoring
+        sprite:
+          sprite: _DeadSpace/Sponsor/MrGman/tools/drill.rsi
+          state: drill_bolt
+        useSound:
+          path: /Audio/Items/drill_use.ogg
+        changeSound:
+          path: /Audio/Items/change_drill.ogg
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 300
+      Plastic: 100
+  - type: StaticPrice
+    price: 100
+  - type: MeleeWeapon
+    wideAnimationRotation: -90
+    attackRate: 1.5
+    damage:
+      types:
+        Piercing: 10
+    soundHit:
+      path: "/Audio/Items/drill_hit.ogg"
+
+# RCD
+- type: entity
+  id: RCDMrGman
+  parent: RCD
+  name: РСУ  Interdyne Pharmaceutics
+  description: Собственность интердайн.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MrGman/tools/rcd.rsi
+    state: icon
+
+# HolofanProjector
+- type: entity
+  parent: HolofanProjector
+  id: HolofanProjectorMrGman
+  name: голографический проектор Interdyne Pharmaceutics
+  description: Собственность интердайн.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MrGman/tools/holofanprojectors.rsi
+    state: icon
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: PowerCellMedium 
+
+#gasanalyzer
+- type: entity
+  name: газоанализатор Interdyne Pharmaceutics
+  parent: BaseItem
+  id: GasAnalyzerMrGman
+  description: Собственность интердайн.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MrGman/tools/gasanalyzer.rsi
+    layers:
+      - state: icon
+        map: ["analyzer"]
+  - type: GasAnalyzer
+  - type: ActivatableUI
+    inHandsOnly: true
+    singleUser: true
+    requireActiveHand: false
+    key: enum.GasAnalyzerUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.GasAnalyzerUiKey.Key:
+        type: GasAnalyzerBoundUserInterface
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+        enum.GasAnalyzerVisuals.Enabled:
+          enabled:
+            True: { state: working }
+            False: { state: icon }
+  - type: StaticPrice
+    price: 80
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 400
+      Glass: 100
+  - type: GuideHelp
+    guides:
+    - AtmosTools
+    - PipeNetworks
+    - Pipes
+
+#emergency double
+- type: entity
+  id: DoubleEmergencyOxygenTankFilledMrGman
+  parent: DoubleEmergencyOxygenTank
+  suffix: Filled
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MrGman/emergency_double.rsi
+    state: icon
+  - type: Item
+    sprite: _DeadSpace/Sponsor/MrGman/emergency_double.rsi
+    storedSprite:
+      state: icon
+      sprite: _DeadSpace/Sponsor/MrGman/emergency_double.rsi
+  - type: GasTank
+    outputPressure: 21.3
+    air:
+      # 15 minutes
+      volume: 2.5
+      moles:
+        Oxygen: 1.025689525 # oxygen
+      temperature: 293.15

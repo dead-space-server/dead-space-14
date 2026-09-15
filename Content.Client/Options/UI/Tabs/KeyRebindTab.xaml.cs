@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.Stylesheets;
 using Content.Shared.DeadSpace;
 using Content.Shared.CCVar;
@@ -125,7 +126,7 @@ namespace Content.Client.Options.UI.Tabs
                 KeybindsContainer.AddChild(new Label
                 {
                     Text = Loc.GetString(headerContents),
-                    StyleClasses = { StyleClass.LabelKeyText }
+                    StyleClasses = { DeadSpaceStyleClass.SectionTitle } // DS14
                 });
             }
 
@@ -198,6 +199,7 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(ContentKeyFunctions.ToggleItemPriority); // DS14
             AddButton(ContentKeyFunctions.UseWorldTargetAction); // DS14
             AddButton(DeadSpaceKeys.SwitchComponentMode); // DS14
+            AddButton(ContentKeyFunctions.Parry); // DS14
 
             AddHeader("ui-options-header-interaction-adv");
             AddButton(ContentKeyFunctions.SmartEquipBackpack);

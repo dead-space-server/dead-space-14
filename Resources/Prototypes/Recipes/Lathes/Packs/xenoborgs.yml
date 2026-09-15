@@ -1,22 +1,56 @@
 ## Static
 
 - type: latheRecipePack
+  id: XenoborgMachines
+  recipes:
+  - XenoborgExtractorRecipe
+
+- type: latheRecipePack
   id: EmptyXenoborgs
   recipes:
   - XenoborgEngiRecipe
+  - XenoborgEngiCrystalRecipe # DS14
   - XenoborgHeavyRecipe
+  - XenoborgHeavyCrystalRecipe # DS14
   - XenoborgScoutRecipe
+  - XenoborgScoutCrystalRecipe # DS14
   - XenoborgStealthRecipe
+  - XenoborgStealthCrystalRecipe # DS14
 
 - type: latheRecipePack
   id: XenoborgUpgradeModules
   recipes:
   # engi xenoborg
   - XenoborgModuleDoorControlRecipe
+  - XenoborgModuleDoorControlCrystalRecipe # DS14
+  - XenoborgModuleDeflectorFieldRecipe
+  - XenoborgModuleDeflectorFieldCrystalRecipe # DS14
+  - XenoborgModuleZapRecipe
+  - XenoborgModuleZapCrystalRecipe # DS14
+  - XenoborgModuleOilGunRecipe
+  - XenoborgModuleOilGunCrystalRecipe # DS14
+  - XenoborgModuleNaniteGunRecipe
+  - XenoborgModuleNaniteGunCrystalRecipe # DS14
   # heavy xenoborg
   - XenoborgModuleHeavyLaserRecipe
+  - XenoborgModuleHeavyLaserCrystalRecipe # DS14
+  - XenoborgModuleGuidedMissileLauncherRecipe
+  - XenoborgModuleGuidedMissileLauncherCrystalRecipe # DS14
+  - XenoborgModuleRocketRecipe
+  - XenoborgModuleRocketCrystalRecipe # DS14
+  - XenoborgModuleBurstFireLaserRecipe
+  - XenoborgModuleBurstFireLaserCrystalRecipe # DS14
+  - XenoborgModuleHeavyRadioactiveRecipe
+  - XenoborgModuleHeavyRadioactiveCrystalRecipe # DS14
   # scout xenoborg
   - XenoborgModuleEnergySwordRecipe
+  - XenoborgModuleEnergySwordCrystalRecipe # DS14
+  - XenoborgModuleJumpRecipe
+  - XenoborgModuleJumpCrystalRecipe # DS14
+  - XenoborgModuleBioKnifeRecipe # DS14 - fix upstream typo
+  - XenoborgModuleBioKnifeCrystalRecipe # DS14
   # stealth xenoborg
   - XenoborgModuleSuperCloakDeviceRecipe
+  - XenoborgModuleSuperCloakDeviceCrystalRecipe # DS14
   - XenoborgModuleAdvancedMinerRecipe # DS14
+  - XenoborgModuleAdvancedMinerCrystalRecipe # DS14

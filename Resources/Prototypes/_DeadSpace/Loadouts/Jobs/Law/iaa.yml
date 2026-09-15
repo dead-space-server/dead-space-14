@@ -1,0 +1,22 @@
+# Jumpsuit
+- type: loadout
+  id: IAAJumpsuit
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitIAA
+
+# Outerclothing
+- type: loadout
+  id: IAASuitJacket
+  equipment:
+    outerClothing: ClothingOuterCoatSuitJacketBlackOpened
+
+# Gloves
+- type: loadout
+  id: IAAGlovesWhite
+  equipment:
+    gloves: ClothingHandsGlovesColorWhite
+
+- type: loadout
+  id: IAAWatchGold
+  equipment:
+    gloves: WristwatchGold

@@ -14,3 +14,20 @@
     storage: StorageCanister
     tritium: TritiumCanister
     water-vapor: WaterVaporCanister
+    # DS14-start
+    fixirium: FixiriumCanister
+    hydrogen: HydrogenCanister
+    nitriatium: NitriatiumCanister
+    hilium: HiliumCanister
+    brizidium: BrizidiumCanister
+    iprit: IpritCanister
+    oxyhydrogen: OxyhydrogenCanister
+    fuel: FuelCanister
+    necrogas: InfectionDeadCanister
+    hyper-noblium: HyperNobliumCanister
+    proto-nitrate: ProtoNitrateCanister
+    helium: HeliumCanister
+    halon: HalonCanister
+    zauker: ZaukerCanister
+    antinoblium: AntinobliumCanister
+    # DS14-end

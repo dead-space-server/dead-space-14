@@ -429,7 +429,7 @@
     - type: Loadout
       prototypes: [ VisitorPsychologist, VisitorPsychologistAlt ]
       roleLoadout: [ RoleSurvivalMedical ]
-    - type: GhostRoleNotifys #DS14 
+    - type: GhostRoleNotifys #DS14
       groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
@@ -571,7 +571,7 @@
     - type: Loadout
       prototypes: [ VisitorBoxer, VisitorBoxerAlt ]
       roleLoadout: [ RoleSurvivalStandard ]
-    - type: GhostRoleNotifys #DS14 
+    - type: GhostRoleNotifys #DS14
       groupPrototype: VisitorGroup
 
 - type: randomHumanoidSettings
@@ -1090,6 +1090,25 @@
       roleLoadout: [ RoleSurvivalSyndicate ]
     - type: GhostRoleNotifys #DS14
       groupPrototype: OperativeGroup
+# DS14-start
+  speciesBlacklist:
+    # - Arachnid
+    - Diona
+    # - Dwarf
+    # - Human
+    # - Moth
+    # - Reptilian
+    # - SlimePerson
+    - Vox
+    # - Demon
+    # - Shark
+    # - Tajaran
+    # - Vulpkanin
+    # - Felinid
+    # - Kobolt
+    # - Xenomorph
+    - IPC
+# DS14-end
 
 - type: randomHumanoidSettings
   id: SyndieSoldier
@@ -1121,6 +1140,25 @@
       roleLoadout: [ RoleSurvivalSyndicate ]
     - type: GhostRoleNotifys #DS14
       groupPrototype: OperativeGroup
+# DS14-start
+  speciesBlacklist:
+    # - Arachnid
+    - Diona
+    # - Dwarf
+    # - Human
+    # - Moth
+    # - Reptilian
+    # - SlimePerson
+    - Vox
+    # - Demon
+    # - Shark
+    # - Tajaran
+    # - Vulpkanin
+    # - Felinid
+    # - Kobolt
+    # - Xenomorph
+    - IPC
+# DS14-end
 
 - type: randomHumanoidSettings
   id: SyndieVisitor

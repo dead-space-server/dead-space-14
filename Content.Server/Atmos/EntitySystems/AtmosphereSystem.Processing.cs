@@ -15,6 +15,9 @@ namespace Content.Server.Atmos.EntitySystems
     {
         [Dependency] private readonly IGameTiming _gameTiming = default!;
 
+        // Kofeecheks Iprit decay timing: LicenseRef-Kofeecheks
+        public TimeSpan CurrentSimulationTime => _gameTiming.CurTime;
+
         private readonly Stopwatch _simulationStopwatch = new();
 
         /// <summary>

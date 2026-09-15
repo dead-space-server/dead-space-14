@@ -120,7 +120,7 @@
 
 # helmet.rsi
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   categories: [ HideSpawnMenu ]
   id: ClothingHeadHelmetHardsuitnon_stop_smetana
   name: шлем диверсионно-разведывательного скафандра

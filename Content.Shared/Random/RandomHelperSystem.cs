@@ -1,7 +1,6 @@
 using System.Numerics;
 using Content.Shared.Random.Helpers;
-using Robust.Shared.Random;
-using Robust.Shared.Utility;
+using Robust.Shared.Timing;
 
 namespace Content.Shared.Random;
 
@@ -10,26 +9,32 @@ namespace Content.Shared.Random;
 /// </summary>
 public sealed class RandomHelperSystem : EntitySystem
 {
+    // DS14-start: current engine uses readonly IoC fields.
+    [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    // DS14-end
 
-    public void RandomOffset(EntityUid entity, float minX, float maxX, float minY, float maxY)
+    // DS14-start - predicted random uses System.Random on the current engine.
+    public void RandomOffset(EntityUid entity, float minX, float maxX, float minY, float maxY, System.Random? random = null)
     {
-        var randomX = _random.NextFloat() * (maxX - minX) + minX;
-        var randomY = _random.NextFloat() * (maxY - minY) + minY;
+        random ??= SharedRandomExtensions.PredictedRandom(_timing, GetNetEntity(entity));
+
+        var randomX = random.NextSingle() * (maxX - minX) + minX;
+        var randomY = random.NextSingle() * (maxY - minY) + minY;
         var offset = new Vector2(randomX, randomY);
 
         var xform = Transform(entity);
         _transform.SetLocalPosition(entity, xform.LocalPosition + offset, xform);
     }
 
-    public void RandomOffset(EntityUid entity, float min, float max)
+    public void RandomOffset(EntityUid entity, float min, float max, System.Random? random = null)
     {
-        RandomOffset(entity, min, max, min, max);
+        RandomOffset(entity, min, max, min, max, random);
     }
 
-    public void RandomOffset(EntityUid entity, float value)
+    public void RandomOffset(EntityUid entity, float value, System.Random? random = null)
     {
-        RandomOffset(entity, -value, value);
+        RandomOffset(entity, -value, value, random);
     }
+    // DS14-end
 }

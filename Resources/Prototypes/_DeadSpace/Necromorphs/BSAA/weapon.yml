@@ -54,6 +54,7 @@
   parent: [BaseItem, BaseGunWieldable]
   id: WeaponSinabir
   description: Военизированная версия некогда гражданского оружия для охоты и самообороны. Использование тактических приспособлений, а также перевод в автоматический режим стрельбы, позволили сделать из простого ружья - машину смерти на близкой дистанции.
+  suffix: Дробовик
   components:
   - type: Sprite
     sprite: _DeadSpace/Necromorfs/BSAA/weapons/Sinabir/Sinabir.rsi
@@ -243,6 +244,7 @@
   description: Убойный пистолет-пулемёт специальной разработки, стоящий на вооружении у АПБТ. Заточен под CQB.
   suffix: Пистолет-пулемёт
   components:
+  - type: Akimbo
   - type: Item
     size: Small
     shape:

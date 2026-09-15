@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls">
     <!-- DS14-start: KSO-styled lobby character preview -->
-    <PanelContainer StyleClasses="DS14MenuInset"
+    <PanelContainer StyleClasses="DeadSpaceInset"
                     HorizontalExpand="True">
         <BoxContainer Name="VBox"
                       Orientation="Vertical"
@@ -23,12 +23,12 @@
                 <controls:VSpacer/>
                 <Button Name="CharacterSetup" Text="{Loc 'lobby-character-preview-panel-character-setup-button'}"
                         HorizontalAlignment="Center"
-                        StyleClasses="DS14MenuTopButton"
+                        StyleClasses="DeadSpaceTopAction"
                         Margin="0 5 0 0" Visible="False"/>
             </BoxContainer>
             <Label Name="Unloaded"
                    Text="{Loc 'lobby-character-preview-panel-unloaded-preferences-label'}"
-                   StyleClasses="DS14MenuSubtitle"
+                   StyleClasses="DeadSpaceSubtitle"
                    HorizontalAlignment="Center"/>
         </BoxContainer>
     </PanelContainer>

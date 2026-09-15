@@ -6,5 +6,4 @@
         SetSize="64 64"
         HorizontalAlignment="Right"
         VerticalAlignment="Center"
-        Margin="0 0 5 0"
-        StyleClasses="DS14MenuProfileControl"/>
+        Margin="0 0 5 0"/>

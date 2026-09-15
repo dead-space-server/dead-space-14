@@ -36,7 +36,9 @@
   - type: IgnoreKudzu
   - type: Body
     prototype: Mouse
-  - type: Muted
+  - type: PermanentStatusEffects
+    statusEffects:
+    - StatusEffectNecromorphMuted
   - type: Sprite
     drawdepth: SmallMobs
     sprite: _DeadSpace/Necromorfs/small_necro.rsi

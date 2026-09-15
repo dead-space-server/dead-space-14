@@ -1,19 +1,17 @@
 <controls:FancyWindow xmlns="https://spacestation14.io"
                       xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
                       Title="{Loc 'energy-seller-ui-window-title'}"
-                      HeaderClass="DS14MenuHeader"
-                      TitleClass="DS14MenuTitle"
                       MinWidth="580"
                       Resizable="False">
-    <PanelContainer StyleClasses="DS14MenuFlatBody">
-        <BoxContainer Orientation="Vertical"
-                      HorizontalExpand="True"
-                      SeparationOverride="14">
+    <BoxContainer Orientation="Vertical"
+                  HorizontalExpand="True"
+                  SeparationOverride="14"
+                  Margin="8 8 8 6">
             <BoxContainer Orientation="Vertical"
                           HorizontalExpand="True"
                           SeparationOverride="6">
                 <Label Text="{Loc 'energy-seller-ui-charge-rate'}"
-                       StyleClasses="DS14MenuListHeader" />
+                       StyleClasses="DeadSpaceListHeader" />
                 <BoxContainer Orientation="Horizontal"
                               HorizontalExpand="True"
                               SeparationOverride="8">
@@ -24,19 +22,16 @@
                     <Label Name="ChargeSpeedMaxLabel"
                            Text="100"
                            MinWidth="118"
-                           Align="Right"
-                           StyleClasses="DS14MenuProfileLabel" />
+                           Align="Right" />
                 </BoxContainer>
                 <BoxContainer Orientation="Horizontal"
                               HorizontalExpand="True">
-                    <Label Text="{Loc 'energy-seller-ui-current-rate'}"
-                           StyleClasses="DS14MenuProfileLabel" />
+                    <Label Text="{Loc 'energy-seller-ui-current-rate'}" />
                     <Label Name="ChargeSpeedValue"
                            Text="50"
                            HorizontalExpand="True"
                            HorizontalAlignment="Right"
-                           Align="Right"
-                           StyleClasses="DS14MenuProfileLabel" />
+                           Align="Right" />
                 </BoxContainer>
                 <BoxContainer Orientation="Horizontal"
                               HorizontalExpand="True"
@@ -44,13 +39,12 @@
                     <LineEdit Name="ChargeSpeedLineEdit"
                               PlaceHolder="{Loc 'energy-seller-ui-value-placeholder'}"
                               HorizontalExpand="True"
-                              SetHeight="32"
-                              StyleClasses="DS14MenuInput" />
+                              SetHeight="32" />
                     <Button Name="SpeedChargeConfirm"
                             Text="{Loc 'energy-seller-ui-apply'}"
                             MinWidth="120"
                             TextAlign="Center"
-                            StyleClasses="DS14MenuAction" />
+                            StyleClasses="DeadSpaceAction" />
                 </BoxContainer>
             </BoxContainer>
 
@@ -58,7 +52,7 @@
                           HorizontalExpand="True"
                           SeparationOverride="6">
                 <Label Text="{Loc 'energy-seller-ui-sell-volume'}"
-                       StyleClasses="DS14MenuListHeader" />
+                       StyleClasses="DeadSpaceListHeader" />
                 <BoxContainer Orientation="Horizontal"
                               HorizontalExpand="True"
                               SeparationOverride="8">
@@ -69,19 +63,16 @@
                     <Label Name="MaxChargeMaxLabel"
                            Text="200"
                            MinWidth="118"
-                           Align="Right"
-                           StyleClasses="DS14MenuProfileLabel" />
+                           Align="Right" />
                 </BoxContainer>
                 <BoxContainer Orientation="Horizontal"
                               HorizontalExpand="True">
-                    <Label Text="{Loc 'energy-seller-ui-current-volume'}"
-                           StyleClasses="DS14MenuProfileLabel" />
+                    <Label Text="{Loc 'energy-seller-ui-current-volume'}" />
                     <Label Name="LimitSellValue"
                            Text="50"
                            HorizontalExpand="True"
                            HorizontalAlignment="Right"
-                           Align="Right"
-                           StyleClasses="DS14MenuProfileLabel" />
+                           Align="Right" />
                 </BoxContainer>
                 <BoxContainer Orientation="Horizontal"
                               HorizontalExpand="True"
@@ -89,15 +80,13 @@
                     <LineEdit Name="MaxChargeLineEdit"
                               PlaceHolder="{Loc 'energy-seller-ui-value-placeholder'}"
                               HorizontalExpand="True"
-                              SetHeight="32"
-                              StyleClasses="DS14MenuInput" />
+                              SetHeight="32" />
                     <Button Name="SellLimitConfirm"
                             Text="{Loc 'energy-seller-ui-apply'}"
                             MinWidth="120"
                             TextAlign="Center"
-                            StyleClasses="DS14MenuAction" />
+                            StyleClasses="DeadSpaceAction" />
                 </BoxContainer>
             </BoxContainer>
-        </BoxContainer>
-    </PanelContainer>
+    </BoxContainer>
 </controls:FancyWindow>

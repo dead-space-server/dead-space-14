@@ -4,6 +4,7 @@
   name: протокинетический повторитель
   description: Поздний, модифицированный прототип протокинетического ускорителя с возможностью накапливать заряды для важной ситуации.
   components:
+  - type: Akimbo
   - type: AmmoCounter
   - type: Appearance
   - type: GenericVisualizer
@@ -112,6 +113,7 @@
   name: протокинетический обрез
   description: Зачем было резать и так исправное оружие?
   components:
+  - type: Akimbo
   - type: AmmoCounter
   - type: Appearance
   - type: GenericVisualizer
@@ -262,6 +264,7 @@
   name: магмитовый протокинетический ускоритель
   parent: BaseItem
   components:
+  - type: Akimbo
   - type: Sprite
     sprite: _DeadSpace/Objects/Weapons/Guns/Basic/magmite.rsi
     layers:

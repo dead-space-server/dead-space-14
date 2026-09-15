@@ -2,6 +2,7 @@
 
 using Content.Shared.Store;
 using Content.Shared.VendingMachines;
+using Content.Shared.VendingMachines.Components; // DS14 - vending machine refactor adaptation
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Set;

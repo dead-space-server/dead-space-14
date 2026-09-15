@@ -1,0 +1,330 @@
+- type: constructionGraph
+  id: AshWalkerHearth
+  start: start
+  graph:
+  - node: start
+    actions:
+    - !type:DeleteEntity {}
+    edges:
+    - to: hearth
+      completed:
+      - !type:SnapToGrid {}
+      steps:
+      - material: Basalt
+        amount: 6
+        doAfter: 5
+      - material: Bones
+        amount: 2
+        doAfter: 2
+  - node: hearth
+    entity: AshWalkerHearth
+
+- type: constructionGraph
+  id: AshWalkerSoil
+  start: start
+  graph:
+  - node: start
+    actions:
+    - !type:DeleteEntity {}
+    edges:
+    - to: soil
+      completed:
+      - !type:SnapToGrid {}
+      steps:
+      - material: Basalt
+        amount: 2
+        doAfter: 2
+      - tag: LavalandPolypore
+        name: ash-walker-ingredient-polypore
+        icon:
+          sprite: _DeadSpace/Lavaland/AshWalkers/polypore.rsi
+          state: produce
+        doAfter: 2
+  - node: soil
+    entity: AshWalkerSoil
+
+- type: constructionGraph
+  id: AshWalkerMortar
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: mortar
+      steps:
+      - material: Basalt
+        amount: 2
+        doAfter: 4
+  - node: mortar
+    entity: AshWalkerMortar
+
+- type: constructionGraph
+  id: AshWalkerSeedSieve
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: sieve
+      steps:
+      - material: Bones
+        amount: 1
+        doAfter: 2
+      - tag: LavalandPolypore
+        name: ash-walker-ingredient-polypore
+        icon:
+          sprite: _DeadSpace/Lavaland/AshWalkers/polypore.rsi
+          state: produce
+        doAfter: 2
+  - node: sieve
+    entity: AshWalkerSeedSieve
+
+- type: constructionGraph
+  id: AshWalkerMushroomBowl
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: bowl
+      steps:
+      - tag: LavalandPolypore
+        name: ash-walker-ingredient-polypore
+        icon:
+          sprite: _DeadSpace/Lavaland/AshWalkers/polypore.rsi
+          state: produce
+        doAfter: 2
+      - tag: LavalandPolypore
+        name: ash-walker-ingredient-polypore
+        icon:
+          sprite: _DeadSpace/Lavaland/AshWalkers/polypore.rsi
+          state: produce
+        doAfter: 2
+  - node: bowl
+    entity: AshWalkerMushroomBowl
+
+- type: constructionGraph
+  id: AshWalkerMushroomLantern
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: lamp
+      steps:
+      - tag: LavalandEmber
+        name: ash-walker-ingredient-ember
+        icon:
+          sprite: _DeadSpace/Lavaland/AshWalkers/ember.rsi
+          state: produce
+        doAfter: 2
+      - tag: LavalandPolypore
+        name: ash-walker-ingredient-polypore
+        icon:
+          sprite: _DeadSpace/Lavaland/AshWalkers/polypore.rsi
+          state: produce
+        doAfter: 2
+  - node: lamp
+    entity: AshWalkerMushroomLantern
+
+- type: constructionGraph
+  id: MaterialFungalWood3
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: wood
+      steps:
+      - tag: LavalandPolypore
+        name: ash-walker-ingredient-polypore
+        icon:
+          sprite: _DeadSpace/Lavaland/AshWalkers/polypore.rsi
+          state: produce
+        doAfter: 2
+      - tag: LavalandPolypore
+        name: ash-walker-ingredient-polypore
+        icon:
+          sprite: _DeadSpace/Lavaland/AshWalkers/polypore.rsi
+          state: produce
+        doAfter: 2
+  - node: wood
+    entity: MaterialFungalWood3
+
+- type: constructionGraph
+  id: MaterialFungalCloth2
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: cloth
+      steps:
+      - tag: LavalandPolypore
+        name: ash-walker-ingredient-polypore
+        icon:
+          sprite: _DeadSpace/Lavaland/AshWalkers/polypore.rsi
+          state: produce
+        doAfter: 2
+      - tag: LavalandPolypore
+        name: ash-walker-ingredient-polypore
+        icon:
+          sprite: _DeadSpace/Lavaland/AshWalkers/polypore.rsi
+          state: produce
+        doAfter: 2
+  - node: cloth
+    entity: MaterialFungalCloth2
+
+- type: constructionGraph
+  id: ClothingBackpackAshWalkerCrafted
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: satchel
+      steps:
+      - material: AshWalkerLeather
+        amount: 2
+        doAfter: 2
+      - material: LavalandWatcherSinew
+        amount: 2
+        doAfter: 2
+  - node: satchel
+    entity: ClothingBackpackAshWalkerCrafted
+
+- type: constructionGraph
+  id: AshWalkerWoundDressing
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: dressing
+      steps:
+      - tag: LavalandPorcini
+        name: ash-walker-ingredient-porcini
+        icon:
+          sprite: _DeadSpace/Lavaland/AshWalkers/porcini.rsi
+          state: produce
+        doAfter: 2
+      - tag: LavalandPolypore
+        name: ash-walker-ingredient-polypore
+        icon:
+          sprite: _DeadSpace/Lavaland/AshWalkers/polypore.rsi
+          state: produce
+        doAfter: 2
+  - node: dressing
+    entity: AshWalkerWoundDressing
+
+- type: constructionGraph
+  id: AshWalkerBurnDressing
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: dressing
+      steps:
+      - tag: LavalandCactus
+        name: ash-walker-ingredient-cactus
+        icon:
+          sprite: _DeadSpace/Lavaland/AshWalkers/cactus.rsi
+          state: produce
+        doAfter: 2
+      - tag: LavalandPorcini
+        name: ash-walker-ingredient-porcini
+        icon:
+          sprite: _DeadSpace/Lavaland/AshWalkers/porcini.rsi
+          state: produce
+        doAfter: 2
+  - node: dressing
+    entity: AshWalkerBurnDressing
+
+- type: constructionGraph
+  id: WallAshWalkerBasalt
+  start: start
+  graph:
+  - node: start
+    actions:
+    - !type:DeleteEntity {}
+    edges:
+    - to: wall
+      completed:
+      - !type:SnapToGrid {}
+      steps:
+      - material: Basalt
+        amount: 4
+        doAfter: 5
+  - node: wall
+    entity: WallAshWalkerBasalt
+
+- type: constructionGraph
+  id: DoorAshWalkerBasalt
+  start: start
+  graph:
+  - node: start
+    actions:
+    - !type:DeleteEntity {}
+    edges:
+    - to: gate
+      completed:
+      - !type:SnapToGrid {}
+      steps:
+      - material: Basalt
+        amount: 6
+        doAfter: 5
+      - material: LavalandWatcherSinew
+        amount: 2
+        doAfter: 2
+  - node: gate
+    entity: DoorAshWalkerBasalt
+
+- type: constructionGraph
+  id: FloorTileAshWalkerStone4
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: tiles
+      steps:
+      - material: Basalt
+        amount: 1
+        doAfter: 3
+  - node: tiles
+    entity: FloorTileAshWalkerStone4
+
+- type: constructionGraph
+  id: DryAshWalkerHide
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: wet
+      steps:
+      - material: GoliathHide
+        amount: 1
+        doAfter: 5
+  - node: wet
+    entity: AshWalkerScrapedHide
+    edges:
+    - to: leather
+      steps:
+      - minTemperature: 360
+  - node: leather
+    entity: MaterialAshWalkerLeather1
+
+- type: constructionGraph
+  id: CookLavalandPorcini
+  start: raw
+  graph:
+  - node: raw
+    edges:
+    - to: cooked
+      steps:
+      - minTemperature: 375
+  - node: cooked
+    entity: FoodLavalandPorciniCooked
+
+- type: constructionGraph
+  id: CookLavalandInocybe
+  start: raw
+  graph:
+  - node: raw
+    edges:
+    - to: cooked
+      steps:
+      - minTemperature: 375
+  - node: cooked
+    entity: FoodLavalandInocybeCooked

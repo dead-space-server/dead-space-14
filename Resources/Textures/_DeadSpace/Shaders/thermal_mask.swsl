@@ -21,5 +21,7 @@ void fragment() {
     highp float dither = (pseudo_rand(FRAGCOORD.xy) - 0.5) / 255.0;
     target_alpha = clamp(target_alpha + dither, 0.0, 1.0);
     
-    COLOR = vec4(Color.rgb, target_alpha);
+    highp vec3 dimmed_color = Color.rgb / 1.5;
+    
+    COLOR = vec4(dimmed_color, target_alpha);
 }

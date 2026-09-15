@@ -12,9 +12,7 @@
     anchored: true
     noRot: true
   - type: Clickable
-  - type: Tag
-    tags:
-    - Wall
+  - type: Wall
   - type: IsRoof
   - type: IconSmooth
     key: walls

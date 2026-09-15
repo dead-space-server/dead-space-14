@@ -4,7 +4,6 @@ using System.Numerics;
 using Content.Server.Administration.Managers;
 using Content.Server.Administration.Systems;
 using Content.Server.GameTicking.Events;
-using Content.Server.Ghost;
 using Content.Server.Spawners.Components;
 using Content.Server.Speech.Components;
 using Content.Server.Station.Components;
@@ -48,12 +47,15 @@ namespace Content.Server.GameTicking
         // Mainly to avoid allocations.
         private readonly List<EntityCoordinates> _possiblePositions = new();
 
-        private List<EntityUid> GetSpawnableStations()
+        private List<EntityUid> GetSpawnableStations(bool forRandomSpawn = false)
         {
             var spawnableStations = new List<EntityUid>();
             var query = EntityQueryEnumerator<StationJobsComponent, StationSpawningComponent>();
-            while (query.MoveNext(out var uid, out _, out _))
+            while (query.MoveNext(out var uid, out _, out var spawning))
             {
+                if (forRandomSpawn && !spawning.AllowRandomSpawn)
+                    continue;
+
                 spawnableStations.Add(uid);
             }
 
@@ -115,19 +117,23 @@ namespace Content.Server.GameTicking
             _stationJobs.CalcExtendedAccess(stationJobCounts);
 
             // Spawn everybody in!
+            var spawnedPlayers = new List<ICommonSession>();
             foreach (var (player, (job, station)) in assignedJobs)
             {
                 if (job == null)
                     continue;
 
-                SpawnPlayer(_playerManager.GetSessionById(player), profiles[player], station, job, false);
+                var session = _playerManager.GetSessionById(player);
+                SpawnPlayer(session, profiles[player], station, job, false);
+                if (_playerGameStatuses.GetValueOrDefault(player) == PlayerGameStatus.JoinedGame)
+                    spawnedPlayers.Add(session);
             }
 
             RefreshLateJoinAllowed();
 
             // Allow rules to add roles to players who have been spawned in. (For example, on-station traitors)
             RaiseLocalEvent(new RulePlayerJobsAssignedEvent(
-                assignedJobs.Keys.Select(x => _playerManager.GetSessionById(x)).ToArray(),
+                spawnedPlayers.ToArray(),
                 profiles,
                 force));
         }
@@ -169,7 +175,7 @@ namespace Content.Server.GameTicking
 
             if (station == EntityUid.Invalid)
             {
-                var stations = GetSpawnableStations();
+                var stations = GetSpawnableStations(forRandomSpawn: true);
                 _robustRandom.Shuffle(stations);
                 if (stations.Count == 0)
                     station = EntityUid.Invalid;
@@ -213,9 +219,28 @@ namespace Content.Server.GameTicking
                 character = HumanoidCharacterProfile.RandomWithSpecies(speciesId);
             }
 
+            var attempt = new PlayerSpawnAttemptEvent(player, character, station, jobId);
+            RaiseLocalEvent(ref attempt);
+            if (attempt.Cancelled)
+            {
+                if (attempt.Reason != null)
+                    _chatManager.DispatchServerMessage(player, attempt.Reason);
+                return;
+            }
+
             // We raise this event to allow other systems to handle spawning this player themselves. (e.g. late-join wizard, etc)
             var bev = new PlayerBeforeSpawnEvent(player, character, jobId, lateJoin, station);
             RaiseLocalEvent(bev);
+
+            if (bev.Cancelled)
+            {
+                if (bev.Reason != null)
+                    _chatManager.DispatchServerMessage(player, bev.Reason);
+                return;
+            }
+
+            if (bev.Deferred)
+                return;
 
             // Do nothing, something else has handled spawning this player for us!
             if (bev.Handled)

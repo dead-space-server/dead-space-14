@@ -1,7 +1,7 @@
 {
-"license": "CC-BY-SA-4.0",
-    "copyright": "made by Sakento, https://github.com/Sakento (github) for Space Station 14",
-    "version": 1,
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Created by shaxid22 (discord) for Space Station 14 server Мёртвый Космос",
   "size": {
     "x": 32,
     "y": 32
@@ -11,61 +11,21 @@
       "name": "running",
       "directions": 4,
       "delays": [
-        [
-          0.4,
-          0.4,
-          0.4,
-          0.4
-        ],
-        [
-          0.4,
-          0.4,
-          0.4,
-          0.4
-        ],
-        [
-          0.4,
-          0.4,
-          0.4,
-          0.4
-        ],
-        [
-          0.4,
-          0.4,
-          0.4,
-          0.4
-        ]
+        [0.2, 0.2, 0.2],
+        [0.2, 0.2, 0.2],
+        [0.2, 0.2, 0.2],
+        [0.2, 0.2, 0.2]
       ]
     },
     {
       "name": "crit",
       "directions": 4,
       "delays": [
-        [
-          0.4,
-          0.4,
-          0.4,
-          0.4
-        ],
-        [
-          0.4,
-          0.4,
-          0.4,
-          0.4
-        ],
-        [
-          0.4,
-          0.4,
-          0.4,
-          0.4
-        ],
-        [
-          0.4,
-          0.4,
-          0.4,
-          0.4
-        ]
-	  ]
+        [0.2, 0.2, 0.2],
+        [0.2, 0.2, 0.2],
+        [0.2, 0.2, 0.2],
+        [0.2, 0.2, 0.2]
+      ]
     },
     {
       "name": "dead"

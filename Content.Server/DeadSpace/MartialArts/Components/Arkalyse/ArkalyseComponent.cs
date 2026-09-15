@@ -24,13 +24,6 @@ public sealed partial class ArkalyseComponent : Component
     public bool LearnedFromManual;
 }
 
-[RegisterComponent]
-public sealed partial class ArkalyseMutedComponent : Component
-{
-    [ViewVariables]
-    public TimeSpan MuteEndTime; // Переменная, которая отвечает за длительность наложения MutedComponent на цель
-}
-
 public enum ArkalyseList
 {
     DamageAttack,

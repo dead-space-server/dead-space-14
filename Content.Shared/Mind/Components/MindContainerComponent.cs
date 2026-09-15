@@ -129,7 +129,7 @@ public sealed class MindAddedMessage : MindEvent
 }
 
 /// <summary>
-/// Event raised directed at a mind when it gets added to a mind-container.
+/// Event raised directed at a mind and broadcast when it gets added to a mind-container.
 /// </summary>
 /// <remarks>
 /// Called after the owned entity is already set to the new entity. TransferEntity is the previous entity that this mind owned, if any.

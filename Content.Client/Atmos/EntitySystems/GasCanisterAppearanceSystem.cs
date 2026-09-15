@@ -22,7 +22,7 @@ public sealed class GasCanisterAppearanceSystem : VisualizerSystem<GasCanisterCo
 
         // Create the given prototype and get its first layer.
         var tempUid = Spawn(protoName);
-        SpriteSystem.LayerSetRsiState(uid, 0, SpriteSystem.LayerGetRsiState(tempUid, 0));
+        SpriteSystem.LayerSetRsi(uid, 0, SpriteSystem.LayerGetEffectiveRsi(tempUid, 0), SpriteSystem.LayerGetRsiState(tempUid, 0)); // DS14
         QueueDel(tempUid);
     }
 }

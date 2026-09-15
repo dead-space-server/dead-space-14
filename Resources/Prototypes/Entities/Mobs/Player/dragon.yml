@@ -66,6 +66,7 @@
         BaseUnshaded: alive-unshaded
       Critical:
         Base: crit
+        BaseUnshaded: crit-unshaded
       Dead:
         Base: dead
         BaseUnshaded: dead-unshaded
@@ -109,8 +110,15 @@
     - RadiationProtection
     - Adrenaline
   - type: Temperature
+  # DS14-start
   - type: TemperatureDamage
-    heatDamageThreshold: 2400
+    heatDamageThreshold: 100000
+    coldDamageThreshold: -100000
+    heatDamage:
+      types: {}
+    coldDamage:
+      types: {}
+  # DS14-end
   - type: Metabolizer
     solutionOnBody: false
     updateInterval: 0.25
@@ -150,7 +158,6 @@
       components:
       - MobState
       - Door
-      tags:
       - Wall
   - type: Tag
     tags:
@@ -164,6 +171,11 @@
     - NamesDragon
     - NamesDragonTitle
     nameFormat: name-format-dragon
+  - type: Grammar
+    attributes:
+      proper: true
+  - type: NameIdentifier
+    group: null
   - type: Prying
     pryPowered: true
     force: true
@@ -191,15 +203,57 @@
       collection: MantisRush
   - type: AntiRottingContainer
   - type: NecromorfAfterInfection
-    necroPrototype: NecroBrute
+    necroPrototype: NecroDragon # DS14
   - type: GhostRoleNotifys 
     groupPrototype: Dragonping
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Blunt
+        damage: 700
+      behaviors:
+      - !type:GibBehavior { }
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Heat
+        damage: 1500
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawnInContainer: true
+        spawn:
+          Ash:
+            min: 1
+            max: 1
+      - !type:BurnBodyBehavior
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MeatLaserImpact
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Radiation
+        damage: 15
+      behaviors:
+      - !type:PopupBehavior
+        popup: mouth-taste-metal
+        popupType: LargeCaution
+        targetOnly: true
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Radiation
+        damage: 40
+      behaviors:
+      - !type:VomitBehavior
   # DS14-end
 
 - type: entity
   parent: BaseMobDragon
   id: MobDragon
   components:
+  # DS14-start
+  - type: Stamina
+    baseCritThreshold: 200
+  # DS14-end
   - type: Dragon
     spawnRiftAction: ActionSpawnRift
   - type: GhostRole
@@ -295,7 +349,6 @@
       components:
       - MobState
       - Door
-      tags:
       - Wall
     event: !type:DevourActionEvent
 

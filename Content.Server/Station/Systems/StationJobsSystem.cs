@@ -1,12 +1,15 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Server.DeadSpace.CentComm;
 using Content.Server.GameTicking;
 using Content.Server.Station.Components;
+using Content.Server.Station.Events;
 using Content.Shared.CCVar;
 using Content.Shared.FixedPoint;
 using Content.Shared.GameTicking;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
+using Content.Shared.Station.Components;
 using JetBrains.Annotations;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
@@ -25,6 +28,7 @@ public sealed partial class StationJobsSystem : EntitySystem
 {
     [Dependency] private readonly IConfigurationManager _configurationManager = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private readonly IPrototypeManager _prototypeManager = default!; // DS14 - current engine baseline has no EntitySystem.ProtoMan shortcut.
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
 
@@ -36,6 +40,7 @@ public sealed partial class StationJobsSystem : EntitySystem
         SubscribeLocalEvent<StationJobsComponent, StationRenamedEvent>(OnStationRenamed);
         SubscribeLocalEvent<StationJobsComponent, ComponentShutdown>(OnStationDeletion);
         SubscribeLocalEvent<PlayerJoinedLobbyEvent>(OnPlayerJoinedLobby);
+        SubscribeLocalEvent<StationPostInitEvent>(OnStationPostInit); // DS14 - current engine baseline requires explicit event subscriptions.
         Subs.CVar(_configurationManager, CCVars.GameDisallowLateJoins, _ => UpdateJobsAvailable(), true);
     }
 
@@ -77,6 +82,12 @@ public sealed partial class StationJobsSystem : EntitySystem
 
         stationJobs.TotalJobs = stationJobs.JobList.Values.Select(x => x ?? 0).Sum();
 
+        UpdateJobsAvailable();
+    }
+
+    private void OnStationPostInit(ref StationPostInitEvent ev)
+    {
+        // Station data receives the game map's job-weight profile during station initialization.
         UpdateJobsAvailable();
     }
 
@@ -395,11 +406,11 @@ public sealed partial class StationJobsSystem : EntitySystem
     }
 
     /// <summary>
-    /// Returns a readonly dictionary of all round-start jobs and their slot info.
+    /// Returns a readonly dictionary of all round-start minimum jobs and their slot info.
     /// </summary>
     /// <param name="station">Station to get jobs for</param>
     /// <param name="stationJobs">Resolve pattern, station jobs component of the station.</param>
-    /// <returns>List of all round-start jobs.</returns>
+    /// <returns>List of all round-start minimum jobs.</returns>
     /// <exception cref="ArgumentException">Thrown when the given station is not a station.</exception>
     public Dictionary<ProtoId<JobPrototype>, int?> GetRoundStartJobs(EntityUid station, StationJobsComponent? stationJobs = null)
     {
@@ -430,8 +441,7 @@ public sealed partial class StationJobsSystem : EntitySystem
             var filtered = jobPriorities
                 .Where(p =>
                             p.Value == priority
-                            && disallowedJobs != null
-                            && !disallowedJobs.Contains(p.Key)
+                            && (disallowedJobs == null || !disallowedJobs.Contains(p.Key)) // DS14 - null means no exclusions.
                             && available.Contains(p.Key))
                 .Select(p => p.Key)
                 .ToList();
@@ -464,11 +474,15 @@ public sealed partial class StationJobsSystem : EntitySystem
         if (!pickOverflows)
             return null;
 
-        var overflows = GetOverflowJobs(station);
+        // DS14-start - overflow fallback must not bypass bans, timers, whitelists, or species requirements.
+        var overflows = GetOverflowJobs(station)
+            .Where(job => disallowedJobs == null || !disallowedJobs.Contains(job))
+            .ToList();
         if (overflows.Count == 0)
             return null;
 
         return _random.Pick(overflows);
+        // DS14-end
     }
 
     #endregion Public API
@@ -477,7 +491,7 @@ public sealed partial class StationJobsSystem : EntitySystem
 
     private bool _availableJobsDirty;
 
-    private TickerJobsAvailableEvent _cachedAvailableJobs = new(new(), new());
+    private TickerJobsAvailableEvent _cachedAvailableJobs = new(new(), new(), new());
 
     /// <summary>
     /// Assembles an event from the current available-to-play jobs.
@@ -488,21 +502,31 @@ public sealed partial class StationJobsSystem : EntitySystem
     {
         // If late join is disallowed, return no available jobs.
         if (_gameTicker.DisallowLateJoin)
-            return new TickerJobsAvailableEvent(new(), new());
+            return new TickerJobsAvailableEvent(new(), new(), new());
 
         var jobs = new Dictionary<NetEntity, Dictionary<ProtoId<JobPrototype>, int?>>();
         var stationNames = new Dictionary<NetEntity, string>();
+        var jobWeights = new Dictionary<NetEntity, ProtoId<JobWeightPrototype>?>();
 
         var query = EntityQueryEnumerator<StationJobsComponent>();
 
         while (query.MoveNext(out var station, out var comp))
         {
+            // DS14-start
+            // CentComm uses StationJobs for special-role setup, but is not a late-join destination.
+            if (HasComp<CentCommStationComponent>(station))
+                continue;
+            // DS14-end
+
             var netStation = GetNetEntity(station);
             var list = comp.JobList.ToDictionary(x => x.Key, x => x.Value);
             jobs.Add(netStation, list);
             stationNames.Add(netStation, Name(station));
+            jobWeights.Add(netStation, TryComp<StationDataComponent>(station, out var stationData)
+                ? stationData.JobWeights
+                : null);
         }
-        return new TickerJobsAvailableEvent(stationNames, jobs);
+        return new TickerJobsAvailableEvent(stationNames, jobs, jobWeights);
     }
 
     /// <summary>

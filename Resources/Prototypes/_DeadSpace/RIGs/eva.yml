@@ -50,7 +50,7 @@
     clothingPrototype: ClothingHeadHelmetRIGEVA
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetRIGEVA
   name: шлем гражданского скафандра ВКД
   description: Не позвольте вакууму нарушить ваш покой.

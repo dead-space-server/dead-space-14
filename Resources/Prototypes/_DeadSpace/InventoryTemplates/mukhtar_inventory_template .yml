@@ -11,6 +11,8 @@
     whitelist:
       tags:
         - PetWearable
+        - CorgiWearable
+        - MukhtarWearable
   - name: suitstorage
     slotTexture: suit_storage
     slotFlags: SUITSTORAGE
@@ -21,6 +23,17 @@
     whitelist:
       components:
         - GasTank
+  - name: outerClothing
+    slotTexture: suit
+    slotFlags: OUTERCLOTHING
+    stripTime: 6
+    uiWindowPos: 1,1
+    strippingWindowPos: 1,3
+    displayName: Suit
+    whitelist:
+      tags:
+      - MukhtarWearable
+      - PetWearable
   - name: id
     slotTexture: id
     slotFlags: IDCARD

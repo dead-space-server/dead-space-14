@@ -44,6 +44,7 @@
   - type: Healing
     damageContainers:
       - Biological
+      - Skeletal # DS14
     damage:
       types:
         Heat: -5
@@ -103,6 +104,7 @@
   - type: Healing
     damageContainers:
       - Biological
+      - Skeletal # DS14
     damage:
       types:
         Heat: -10
@@ -151,6 +153,7 @@
   - type: Healing
     damageContainers:
       - Biological
+      - Skeletal # DS14
     damage:
       types:
         Blunt: -5
@@ -210,6 +213,7 @@
   - type: Healing
     damageContainers:
       - Biological
+      - Skeletal # DS14
     damage:
       types:
         Blunt: -10
@@ -357,6 +361,7 @@
   - type: Healing
     damageContainers:
       - Biological
+      - Skeletal # DS14
     damage:
       types:
         Slash: -5
@@ -1137,6 +1142,21 @@
         maxVol: 15
         reagents:
         - ReagentId: Stimulants
+          Quantity: 15
+
+- type: entity
+  suffix: hivarol
+  parent: PrefilledSyringe
+  id: SyringeHivarol
+  components:
+  - type: Label
+    currentLabel: reagent-name-hivarol
+  - type: SolutionContainerManager
+    solutions:
+      injector:
+        maxVol: 15
+        reagents:
+        - ReagentId: Hivarol
           Quantity: 15
 
 # Entity Tables

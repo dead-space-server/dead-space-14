@@ -124,7 +124,7 @@
       methods: [Touch]
       effects:
       - !type:WashCreamPie
-  - type: StatusEffects
+  - type: StatusEffects # DS14 - PressureImmunity is provided by the new status effect system.
     allowed:
     - Stun
     - KnockedDown
@@ -135,7 +135,6 @@
     - Drunk
     - SlurredSpeech
     - RatvarianLanguage
-    - PressureImmunity
     - Muted
     - ForcedSleep
     - TemporaryBlindness
@@ -238,6 +237,7 @@
         Blunt: 0.33 #per second, scales with pressure and other constants.
         Heat: 0.1
   - type: PassiveDamage # Slight passive regen. Assuming one damage type, comes out to about 12 damage a minute.
+    intervalHaltOnDamageTaken: 5s
     allowedStates:
     - Alive
     damageCap: 20
@@ -281,12 +281,15 @@
       types:
         Bloodloss: -1.5
   - type: HumanoidDamageSequence # DS14: for coroner job
-  - type: Hunger
+  - type: Satiation
+    satiations:
+      Hunger:
+        prototype: NormalSatiationHunger
+      Thirst:
+        prototype: SupersoldierThirst
   - type: Icon # It will not have an icon in the adminspawn menu without this. Body parts seem fine for whatever reason.
     sprite: Mobs/Species/Human/parts.rsi
     state: full
-  - type: Thirst
-    baseDecayRate: 0.01 
   - type: Butcherable
     butcheringType: Spike
     spawned:

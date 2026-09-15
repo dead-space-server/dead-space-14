@@ -1,0 +1,298 @@
+#DS14 - длинные комфортные скамейки (левая/средняя/правая секции)
+
+- type: entity
+  name: длинная скамейка
+  id: BenchComfyMiddle
+  parent: BenchComfy
+  suffix: Середина
+  description: Длинная скамейка с невероятно удобной спинкой.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/Bench/comf_bench.rsi
+    layers:
+    - state: bench_middle_base
+      color: "#767e82"
+    - state: bench_middle_cover
+  - type: Construction
+    graph: LongBench
+    node: longComfBenchMiddle
+
+- type: entity
+  name: длинная скамейка
+  id: BenchComfyLeft
+  parent: BenchComfy
+  suffix: Левая часть
+  description: Длинная скамейка с невероятно удобной спинкой.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/Bench/comf_bench.rsi
+    layers:
+    - state: bench_left_base
+      color: "#767e82"
+    - state: bench_left_cover
+  - type: Construction
+    graph: LongBench
+    node: longComfBenchLeft
+
+- type: entity
+  name: длинная скамейка
+  id: BenchComfyRight
+  parent: BenchComfy
+  suffix: Правая часть
+  description: Длинная скамейка с невероятно удобной спинкой.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/Bench/comf_bench.rsi
+    layers:
+    - state: bench_right_base
+      color: "#767e82"
+    - state: bench_right_cover
+  - type: Construction
+    graph: LongBench
+    node: longComfBenchRight
+
+- type: entity
+  name: длинная скамейка
+  id: BenchRedComfyMiddle
+  parent: BenchComfy
+  suffix: Середина. Красная
+  description: Длинная скамейка с невероятно удобной спинкой.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/Bench/comf_bench.rsi
+    layers:
+    - state: bench_middle_base
+      color: "#767e82"
+    - state: bench_middle_cover
+      color: "#8c4141"
+  - type: Construction
+    graph: LongBench
+    node: longComfBenchRedMiddle
+
+- type: entity
+  name: длинная скамейка
+  id: BenchRedComfyLeft
+  parent: BenchComfy
+  suffix: Левая часть. Красная
+  description: Длинная скамейка с невероятно удобной спинкой.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/Bench/comf_bench.rsi
+    layers:
+    - state: bench_left_base
+      color: "#767e82"
+    - state: bench_left_cover
+      color: "#8c4141"
+  - type: Construction
+    graph: LongBench
+    node: longComfBenchRedLeft
+
+- type: entity
+  name: длинная скамейка
+  id: BenchRedComfyRight
+  parent: BenchComfy
+  suffix: Правая часть. Красная
+  description: Длинная скамейка с невероятно удобной спинкой.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/Bench/comf_bench.rsi
+    layers:
+    - state: bench_right_base
+      color: "#767e82"
+    - state: bench_right_cover
+      color: "#8c4141"
+  - type: Construction
+    graph: LongBench
+    node: longComfBenchRedRight
+
+- type: entity
+  name: длинная скамейка
+  id: BenchBlueComfyMiddle
+  parent: BenchComfy
+  suffix: Середина. Синяя
+  description: Длинная скамейка с невероятно удобной спинкой.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/Bench/comf_bench.rsi
+    layers:
+    - state: bench_middle_base
+      color: "#767e82"
+    - state: bench_middle_cover
+      color: "#334e6d"
+  - type: Construction
+    graph: LongBench
+    node: longComfBenchBlueMiddle
+
+- type: entity
+  name: длинная скамейка
+  id: BenchBlueComfyLeft
+  parent: BenchComfy
+  suffix: Левая часть. Синяя
+  description: Длинная скамейка с невероятно удобной спинкой.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/Bench/comf_bench.rsi
+    layers:
+    - state: bench_left_base
+      color: "#767e82"
+    - state: bench_left_cover
+      color: "#334e6d"
+  - type: Construction
+    graph: LongBench
+    node: longComfBenchBlueLeft
+
+- type: entity
+  name: длинная скамейка
+  id: BenchBlueComfyRight
+  parent: BenchComfy
+  suffix: Правая часть. Синяя
+  description: Длинная скамейка с невероятно удобной спинкой.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/Bench/comf_bench.rsi
+    layers:
+    - state: bench_right_base
+      color: "#767e82"
+    - state: bench_right_cover
+      color: "#334e6d"
+  - type: Construction
+    graph: LongBench
+    node: longComfBenchBlueRight
+
+- type: entity
+  name: длинная скамейка
+  id: BenchLightBlueComfyMiddle
+  parent: BenchComfy
+  suffix: Середина. Голубая
+  description: Длинная скамейка с невероятно удобной спинкой.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/Bench/comf_bench.rsi
+    layers:
+    - state: bench_middle_base
+      color: "#767e82"
+    - state: bench_middle_cover
+      color: "#689bb6"
+  - type: Construction
+    graph: LongBench
+    node: longComfBenchLightBlueMiddle
+
+- type: entity
+  name: длинная скамейка
+  id: BenchLightBlueComfyLeft
+  parent: BenchComfy
+  suffix: Левая часть. Голубая
+  description: Длинная скамейка с невероятно удобной спинкой.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/Bench/comf_bench.rsi
+    layers:
+    - state: bench_left_base
+      color: "#767e82"
+    - state: bench_left_cover
+      color: "#689bb6"
+  - type: Construction
+    graph: LongBench
+    node: longComfBenchLightBlueLeft
+
+- type: entity
+  name: длинная скамейка
+  id: BenchLightBlueComfyRight
+  parent: BenchComfy
+  suffix: Правая часть. Голубая
+  description: Длинная скамейка с невероятно удобной спинкой.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/Bench/comf_bench.rsi
+    layers:
+    - state: bench_right_base
+      color: "#767e82"
+    - state: bench_right_cover
+      color: "#689bb6"
+  - type: Construction
+    graph: LongBench
+    node: longComfBenchLightBlueRight
+
+- type: entity
+  name: длинная скамейка
+  id: BenchYellowComfyMiddle
+  parent: BenchComfy
+  suffix: Середина. Жёлтая
+  description: Длинная скамейка с невероятно удобной спинкой.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/Bench/comf_bench.rsi
+    layers:
+    - state: bench_middle_base
+      color: "#767e82"
+    - state: bench_middle_cover
+      color: "#e3ab4b"
+  - type: Construction
+    graph: LongBench
+    node: longComfBenchYellowMiddle
+
+- type: entity
+  name: длинная скамейка
+  id: BenchYellowComfyLeft
+  parent: BenchComfy
+  suffix: Левая часть. Жёлтая
+  description: Длинная скамейка с невероятно удобной спинкой.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/Bench/comf_bench.rsi
+    layers:
+    - state: bench_left_base
+      color: "#767e82"
+    - state: bench_left_cover
+      color: "#e3ab4b"
+  - type: Construction
+    graph: LongBench
+    node: longComfBenchYellowLeft
+
+- type: entity
+  name: длинная скамейка
+  id: BenchYellowComfyRight
+  parent: BenchComfy
+  suffix: Правая часть. Жёлтая
+  description: Длинная скамейка с невероятно удобной спинкой.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/Bench/comf_bench.rsi
+    layers:
+    - state: bench_right_base
+      color: "#767e82"
+    - state: bench_right_cover
+      color: "#e3ab4b"
+  - type: Construction
+    graph: LongBench
+    node: longComfBenchYellowRight

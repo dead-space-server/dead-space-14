@@ -1,70 +1,23 @@
-<controls:FancyWindow xmlns="https://spacestation14.io"
-    xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
-    Title="{Loc 'comms-console-menu-title'}"
-    MinSize="400 300">
+<!-- DS14-start -->
+<comms:CommunicationsConsoleMenu xmlns="https://spacestation14.io"
+    xmlns:comms="clr-namespace:Content.Client.Communications.UI"
+    xmlns:widgets="clr-namespace:Content.Client.Communications.UI.Widgets"
+    MinSize="380 360" SetSize="450 460" Resizable="True"
+    Title="{Loc 'comms-console-menu-title'}">
+    <!-- DS14-end -->
+    <!-- DS14-start -->
+    <ScrollContainer HScrollEnabled="False" VerticalExpand="True" ReserveScrollbarSpace="True">
+        <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="8" SeparationOverride="10">
+            <widgets:MessagingControls Name="MessagingControls" MinHeight="300" VerticalExpand="True" />
 
-    <!-- Main Container -->
-    <BoxContainer Orientation="Vertical"
-        HorizontalExpand="False"
-        VerticalExpand="True"
-        Margin="6 6 6 5">
+            <Button Name="EmagChannelButton"
+                Access="Public"
+                Text="{Loc 'emag-comms-switch-emag'}"
+                Visible="False" />
 
-        <TextEdit Name="MessageInput"
-            VerticalExpand="True"
-            HorizontalExpand="True"
-            VerticalAlignment="Stretch"
-            HorizontalAlignment="Stretch"
-            MinHeight="100"/>
-
-        <!-- ButtonsPart -->
-        <BoxContainer Orientation="Vertical"
-            VerticalAlignment="Bottom"
-            SeparationOverride="4">
-
-            <!-- AnnouncePart -->
-            <BoxContainer Orientation="Vertical"
-                Margin="0 2">
-
-                <Button Name="AnnounceButton"
-                    Access="Public"
-                    Text="{Loc 'comms-console-menu-announcement-button'}"
-                    ToolTip="{Loc 'comms-console-menu-announcement-button-tooltip'}"
-                    StyleClasses="OpenLeft"
-                    Margin="0 0 1 0"
-                    Disabled="True"/>
-
-                <Button Name="BroadcastButton"
-                    Access="Public"
-                    Text="{Loc 'comms-console-menu-broadcast-button'}"
-                    ToolTip="{Loc 'comms-console-menu-broadcast-button-tooltip'}"
-                    StyleClasses="OpenBoth"/>
-
-                <!-- DS14-start -->
-                <Button Name="EmagChannelButton"
-                    Access="Public"
-                    Text="{Loc 'emag-comms-switch-emag'}"
-                    StyleClasses="OpenBoth"
-                    Visible="False"/>
-                <!-- DS14-end -->
-
-                <OptionButton Name="AlertLevelButton"
-                    Access="Public"
-                    ToolTip="{Loc 'comms-console-menu-alert-level-button-tooltip'}"
-                    StyleClasses="OpenRight"/>
-
-            </BoxContainer>
-
-            <!-- EmergencyPart -->
-            <BoxContainer Orientation="Vertical"
-                SeparationOverride="6">
-
-                <RichTextLabel Name="CountdownLabel"/>
-
-                <Button Name="EmergencyShuttleButton"
-                    Access="Public" 
-                    Text="Placeholder Text"
-                    ToolTip="{Loc 'comms-console-menu-emergency-shuttle-button-tooltip'}"/>
-            </BoxContainer>
+            <widgets:AlertLevelControls Name="AlertLevelControls" Margin="0 4" />
+            <widgets:ShuttleControls Name="ShuttleControls" Margin="0 4" />
         </BoxContainer>
-    </BoxContainer>
-</controls:FancyWindow>
+    </ScrollContainer>
+    <!-- DS14-end -->
+</comms:CommunicationsConsoleMenu>

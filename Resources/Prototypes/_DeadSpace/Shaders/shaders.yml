@@ -12,3 +12,10 @@
   id: DeadSpaceDamageBurn
   kind: source
   path: "/Textures/_DeadSpace/Shaders/damage_burn.swsl"
+
+- type: shader
+  id: ContainmentFieldHack
+  kind: source
+  path: "/Textures/_DeadSpace/Shaders/containment_field_hack.swsl"
+  params:
+    progress: 0.0

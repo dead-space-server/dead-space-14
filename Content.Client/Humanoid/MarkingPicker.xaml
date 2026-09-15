@@ -5,8 +5,9 @@
         <BoxContainer Orientation="Horizontal" SeparationOverride="5" HorizontalExpand="True">
             <!-- Unused markings -->
             <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+                <!-- DS14-start -->
                 <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
-                    <Label Text="{Loc 'markings-unused'}" HorizontalAlignment="Stretch" HorizontalExpand="True" />
+                    <Label Text="{Loc 'markings-unused'}" HorizontalAlignment="Stretch" HorizontalExpand="True" StyleClasses="DeadSpaceSectionTitle" />
                     <Label Name="CMarkingPoints" Text="uwu" HorizontalAlignment="Right" />
                 </BoxContainer>
 
@@ -15,11 +16,13 @@
 
                 <ItemList Name="CMarkingsUnused" VerticalExpand="True" MinSize="300 250" />
                 <Button Name="CMarkingAdd" Text="{Loc 'markings-add'}" StyleClasses="OpenRight" />
+                <!-- DS14-end -->
             </BoxContainer>
 
             <!-- Used markings -->
             <BoxContainer Orientation="Vertical" HorizontalExpand="True">
-                <Label Text="{Loc 'markings-used'}" />
+                <!-- DS14-start -->
+                <Label Text="{Loc 'markings-used'}" StyleClasses="DeadSpaceSectionTitle" />
 
                 <ItemList Name="CMarkingsUsed" VerticalExpand="True" MinSize="300 250" />
 
@@ -28,6 +31,7 @@
                     <Button Name="CMarkingRankDown" Text="{Loc 'markings-rank-down'}" StyleClasses="OpenBoth" HorizontalExpand="True" />
                 </BoxContainer>
                 <Button Name="CMarkingRemove" Text="{Loc 'markings-remove'}" StyleClasses="OpenRight" />
+                <!-- DS14-end -->
             </BoxContainer>
         </BoxContainer>
 

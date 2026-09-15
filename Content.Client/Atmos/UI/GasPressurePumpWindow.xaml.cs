@@ -51,6 +51,10 @@ namespace Content.Client.Atmos.UI
 
         public void SetOutputPressure(float pressure)
         {
+            // ds-14-start
+            if (!SetOutputPressureButton.Disabled)
+                return;
+            // ds-14-end
             PumpPressureOutputInput.Value = pressure;
         }
 

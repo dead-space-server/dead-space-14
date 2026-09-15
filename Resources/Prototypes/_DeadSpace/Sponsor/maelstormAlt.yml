@@ -119,6 +119,7 @@
   parent: [ClothingOuterStorageFoldableBaseOpened, ClothingOuterCoatMaelstormAlt]
   id: ClothingOuterCoatMaelstormAltOpened
   name: зимняя парадная шинель НКВБ
+  categories: [ HideSpawnMenu ]
 
 # Перчи
 - type: entity
@@ -179,7 +180,7 @@
     clothingPrototype: ClothingHeadHelmetHardsuitMaelstormAlt
 
 - type: entity
-  parent: ClothingHeadHelmetHardsuitBlueShield
+  parent: [ClothingHeadHelmetHardsuitBlueShield]
   id: ClothingHeadHelmetHardsuitMaelstormAlt
   categories: [ HideSpawnMenu ]
   name: шлем экспериментального скафандра ВОХР КГБ
@@ -392,8 +393,9 @@
 - type: entity
   parent: WeaponPistolDesertEagle
   id: WeaponPistolDesertEagleMaelstormAlt
-  name: "зимняя пантера"
+  name: Зимняя Пантера
   description: Крупнокалиберный пистолет родом из далёкого СССП. На нем выгравировано "Спасибо , товарищ Данко"
+  suffix: Пистолет
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/maelstormAlt/deserteagle.rsi

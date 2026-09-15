@@ -11,6 +11,10 @@
     # ClothingUniformJumpskirtLawyerBlack: 1
     ClothingUniformJumpsuitLawyerGood: 1
     ClothingUniformJumpskirtLawyerGood: 1
+    # DS14-start
+    ClothingUniformJumpsuitIAA: 1
+    ClothingOuterCoatSuitJacketBlack: 2
+    # DS14-end
     ClothingShoesBootsLaceup: 4
     # Corvax-LawyerDrip-Start
     ClothingHandsGlovesColorWhite: 2

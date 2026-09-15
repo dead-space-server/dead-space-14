@@ -34,7 +34,7 @@
     size: Huge
 
 - type: entity
-  parent: ClothingHeadHelmetHardsuitSecurityRed
+  parent: [ClothingHeadHelmetHardsuitSecurityRed]
   id: ClothingHeadHelmetHardsuitCentcomBlack
   categories: [ HideSpawnMenu, DoNotMap ]
   name: шлем скафандра Полевого Офицера

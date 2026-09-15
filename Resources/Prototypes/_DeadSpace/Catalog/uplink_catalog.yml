@@ -1,4 +1,43 @@
 - type: listing
+  id: UplinkEmagNukeOps
+  name: uplink-emag-name
+  description: uplink-emag-desc
+  productEntity: EmagNukeOps
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+    Telecrystal: 3
+  cost:
+    Telecrystal: 5
+  categories:
+  - UplinkDisruption
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+    blacklist:
+      tags:
+      - LoneOpsUplink
+
+- type: listing
+  id: UplinkEmagLoneOps
+  name: uplink-emag-name
+  description: uplink-emag-desc
+  productEntity: EmagLoneOps
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+    Telecrystal: 3
+  cost:
+    Telecrystal: 5
+  categories:
+  - UplinkDisruption
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+
+- type: listing
   id: UplinkEswordDoubleLone
   name: uplink-esword-double-name
   description: Воскрес и разнёс паблик. Только один к покупке.
@@ -430,7 +469,7 @@
   icon: { sprite: _DeadSpace/Objects/Specific/Arkalyse/arkalyse_book.rsi, state: icon }
   productEntity: BoxArkalyse
   cost:
-    Telecrystal: 15
+    Telecrystal: 20
   categories:
   - UplinkWeaponry
   conditions:
@@ -508,7 +547,7 @@
   icon: { sprite: /Textures/_DeadSpace/Items/Toys/TommyGun/tommy_gun.rsi, state: icon }
   productEntity: ClothingBackpackDuffelSyndicateFilledSMGTommyGun
   cost:
-    Telecrystal: 15
+    Telecrystal: 12
   categories:
   - UplinkWeaponry
   conditions:
@@ -959,13 +998,13 @@
 
 - type: listing
   id: UplinkThermalVisor
-  name: uplink-thermal-visor-name
-  description: uplink-thermal-visor-desc
+  name: uplink-thermal-visor-chameleon-name
+  description: uplink-thermal-visor-chameleon-desc
   icon: { sprite: /Textures/_DeadSpace/Clothing/Eyes/Hud/thermal.rsi, state: icon }
-  productEntity: ClothingEyesGlassesThermalVisor
+  productEntity: ClothingEyesGlassesThermalVisorChameleon
   discountCategory: rareDiscounts
   discountDownTo:
-    Telecrystal: 3
+    Telecrystal: 2
   cost:
     Telecrystal: 4
   categories:
@@ -1256,3 +1295,19 @@
     Telecrystal: 8
   categories:
   - UplinkWeaponry
+
+- type: listing
+  id: UplinkIchorMedipenLone
+  name: Медипен ихора
+  description: Способен поднять даже быка, а тебя и подавно.
+  icon: { sprite: _DeadSpace/Objects/Specific/Medical/medipen.rsi, state: ichor }
+  productEntity: IchorMedipen
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkChemicals
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink

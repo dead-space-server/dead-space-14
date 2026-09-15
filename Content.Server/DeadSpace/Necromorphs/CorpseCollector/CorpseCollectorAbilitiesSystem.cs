@@ -95,6 +95,9 @@ public sealed class CorpseCollectorAbilitiesSystem : SharedCorpseCollectorSystem
         if (!_mindSystem.TryGetMind(uid, out var mindId, out var mind))
             return;
 
+        // The discarded body must not reopen its takeover role during the mind transfer.
+        RemComp<GhostTakeoverAvailableComponent>(uid);
+
         var ent = Spawn(component.LeviathanId,
             _transform.GetMapCoordinates(uid, xform),
             rotation: _transform.GetWorldRotation(xform));

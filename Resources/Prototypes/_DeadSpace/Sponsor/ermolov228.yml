@@ -105,7 +105,7 @@
     hideOnToggle: true
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuitErmolov228
   categories: [ HideSpawnMenu ]
   name: купол Рассвета

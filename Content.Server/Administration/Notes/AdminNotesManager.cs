@@ -1,6 +1,7 @@
 using System.Text;
 using System.Threading.Tasks;
 using Content.Server.Administration.Managers;
+using Content.Server.Chat.Managers;
 using Content.Server.Database;
 using Content.Server.EUI;
 using Content.Server.GameTicking;
@@ -9,6 +10,9 @@ using Content.Shared.Administration.Notes;
 using Content.Shared.CCVar;
 using Content.Shared.Database;
 using Content.Shared.Players.PlayTimeTracking;
+using Robust.Server.Player;
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -23,6 +27,11 @@ public sealed class AdminNotesManager : IAdminNotesManager, IPostInjectInit
     [Dependency] private readonly EuiManager _euis = default!;
     [Dependency] private readonly IEntitySystemManager _systems = default!;
     [Dependency] private readonly IConfigurationManager _config = default!;
+    // DS14-start: readonly dependencies for the pre-v288 engine.
+    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private readonly ILocalizationManager _loc = default!;
+    [Dependency] private readonly IChatManager _chat = default!;
+    // DS14-end
 
     public const string SawmillId = "admin.notes";
 
@@ -70,12 +79,13 @@ public sealed class AdminNotesManager : IAdminNotesManager, IPostInjectInit
 
     public async Task AddAdminRemark(ICommonSession createdBy, Guid player, NoteType type, string message, NoteSeverity? severity, bool secret, DateTime? expiryTime)
     {
+        var netUserId = (NetUserId)player;
         message = message.Trim();
 
         // There's a foreign key constraint in place here. If there's no player record, it will fail.
         // Not like there's much use in adding notes on accounts that have never connected.
         // You can still ban them just fine, which is why we should allow admins to view their bans with the notes panel
-        if (await _db.GetPlayerRecordByUserId((NetUserId) player) is null)
+        if (await _db.GetPlayerRecordByUserId(netUserId) is null)
             return;
 
         var sb = new StringBuilder($"{createdBy.Name} added a");
@@ -163,6 +173,18 @@ public sealed class AdminNotesManager : IAdminNotesManager, IPostInjectInit
             seen
         );
         NoteAdded?.Invoke(note);
+
+        // Send a notification to the player that they received a non-secret note.
+        if (!secret && type == NoteType.Note
+            && _player.TryGetSessionById(netUserId, out var session) && _config.GetCVar(CCVars.SeeOwnNotes))
+        {
+            _systems.TryGetEntitySystem(out SharedAudioSystem? audio);
+            var notifMessage = _loc.GetString("admin-notes-manager-note-notification");
+            var notifSound = new SoundPathSpecifier(_config.GetCVar(CCVars.AHelpSound));
+
+            _chat.DispatchServerMessage(session, notifMessage);
+            audio?.PlayGlobal(notifSound, session, AudioParams.Default.AddVolume(-7f));
+        }
     }
 
     private async Task<SharedAdminNote?> GetAdminRemark(int id, NoteType type)

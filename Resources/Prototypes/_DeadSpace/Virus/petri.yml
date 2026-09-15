@@ -23,7 +23,9 @@
       types:
         Bloodloss: -1
   - type: Pullable
-  - type: Muted
+  - type: PermanentStatusEffects
+    statusEffects:
+    - StatusEffectVirusPetriMuted
   - type: Physics
     bodyType: KinematicController
   - type: Sprite

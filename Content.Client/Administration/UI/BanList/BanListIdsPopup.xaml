@@ -1,5 +1,5 @@
 ﻿<Popup xmlns="https://spacestation14.io">
-    <PanelContainer StyleClasses="BackgroundDark">
+    <PanelContainer StyleClasses="DeadSpaceSurfaceDark"> <!-- DS14 -->
         <BoxContainer Orientation="Vertical">
             <Label Name="ID" HorizontalExpand="True"/>
             <Label Name="IP" HorizontalExpand="True"/>

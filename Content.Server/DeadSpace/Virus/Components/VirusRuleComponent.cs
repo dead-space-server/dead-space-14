@@ -6,6 +6,7 @@ using Content.Shared.DeadSpace.Virus.Prototypes;
 
 namespace Content.Server.DeadSpace.Virus.Components;
 
+[Content.Server.DeadSpace.CentComm.AllowedGameRuleOnCentComm]
 [RegisterComponent, Access(typeof(VirusRule))]
 public sealed partial class VirusRuleComponent : Component
 {

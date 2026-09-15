@@ -16,3 +16,7 @@ ent-BlastDoorXenoborg = гермозатвор ксеноборгов
     .desc = Не потеряйте голову!
 ent-BlastDoorXenoborgOpen = { ent-BlastDoorXenoborg }
     .desc = { ent-BlastDoorXenoborg.desc }
+ent-BlastDoorSOD = { ent-BlastDoor }
+    .desc = { ent-BlastDoor.desc }
+ent-BlastDoorCentralCommandOpen = { ent-BlastDoor }
+    .desc = { ent-BlastDoor.desc }

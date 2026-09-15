@@ -1,0 +1,14 @@
+- type: entity
+  parent: BoxCardboard
+  id: BoxGasGrenadeKit
+  name: набор газовой гранаты
+  description: Коробка с газовой гранатой и двумя снарядами к ней. Это детям не игрушка.
+  components:
+  - type: StorageFill
+    contents:
+    - id: GasGrenade
+      amount: 1
+    - id: GasGrenadeShellRed
+      amount: 1
+    - id: GasGrenadeShellBlue
+      amount: 1

@@ -14,4 +14,10 @@ public sealed partial class ActionGrantComponent : Component
 
     [DataField, AutoNetworkedField]
     public List<EntityUid> ActionEntities = new();
+
+    /// <summary>
+    /// Whether granted actions are removed when this component shuts down.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool RemoveOnShutdown = true;
 }

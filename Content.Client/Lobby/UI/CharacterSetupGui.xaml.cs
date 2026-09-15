@@ -42,7 +42,6 @@ namespace Content.Client.Lobby.UI
                 ClipText = true,
                 HorizontalExpand = true,
                 HorizontalAlignment = HAlignment.Stretch,
-                StyleClasses = { "DS14MenuProfileControl" },
                 // DS14-end
             };
 

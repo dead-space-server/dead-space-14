@@ -121,6 +121,9 @@
     rules: ghost-role-information-shadow-rules
     raffle:
       settings: default
+    requirements:
+    - !type:OverallPlaytimeRequirement
+      time: 720000 # 200 hours
   - type: Tag
     tags:
       - CannotSuicide
@@ -209,6 +212,7 @@
   - type: ZombieImmune
   - type: ImmunitetInfectionDead
   - type: PassiveDamage
+    intervalHaltOnDamageTaken: 5s
     allowedStates:
     - Alive
     damageCap: 0

@@ -9,3 +9,12 @@
   name: stack-credit
   icon: { sprite: /Textures/Objects/Economy/cash.rsi, state: cash }
   spawn: SpaceCash
+
+# DS14-start
+# Physical "dirty" credits paid out by the ВорПРО thief program
+- type: stack
+  id: DirtyCredit
+  name: stack-dirty-credit
+  icon: { sprite: /Textures/Objects/Economy/cash.rsi, state: cash }
+  spawn: DirtyCash
+# DS14-end

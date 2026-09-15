@@ -1,0 +1,27 @@
+- type: constructionGraph
+  id: NTTribune
+  start: start
+  graph:
+    - node: start
+      actions:
+        - !type:DestroyEntity {}
+      edges:
+        - to: tribune
+          completed:
+            - !type:SnapToGrid {}
+          steps:
+            - material: WoodPlank
+              amount: 10
+              doAfter: 3
+
+    - node: tribune
+      entity: NTTribune
+      edges:
+        - to: start
+          completed:
+            - !type:SpawnPrototype
+              prototype: MaterialWoodPlank1
+              amount: 10
+          steps:
+            - tool: Prying
+              doAfter: 3

@@ -3,13 +3,11 @@
     xmlns="https://spacestation14.io"
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
     Title="{Loc 'emag-comms-title'}"
-    HeaderClass="DS14MenuHeader"
-    TitleClass="DS14MenuTitle"
     MinSize="600 260"
     SetSize="600 260"
     Resizable="False">
 
-    <PanelContainer StyleClasses="DS14MenuFlatBody"
+    <PanelContainer StyleClasses="DeadSpaceSurfaceFlat"
                     HorizontalExpand="True"
                     VerticalExpand="True">
         <BoxContainer Name="PasswordView"
@@ -21,7 +19,7 @@
             <Label Name="PasswordTitle"
                    Access="Public"
                    Text="{Loc 'emag-comms-password-setup-title'}"
-                   StyleClasses="DS14MenuProfileSection" />
+                   StyleClasses="DeadSpaceSectionTitle" />
             <RichTextLabel Name="PasswordHint"
                            Access="Public"
                            Text="{Loc 'emag-comms-password-setup-hint'}"
@@ -29,8 +27,7 @@
             <LineEdit Name="PasswordInput"
                       Access="Public"
                       PlaceHolder="{Loc 'emag-comms-password-placeholder'}"
-                      HorizontalExpand="True"
-                      StyleClasses="DS14MenuInput" />
+                      HorizontalExpand="True" />
             <RichTextLabel Name="PasswordError"
                            Access="Public"
                            Visible="False"
@@ -43,15 +40,14 @@
                 <Button Name="PasswordReturnToNormalButton"
                        Access="Public"
                        Text="{Loc 'emag-comms-switch-normal'}"
-                       MinWidth="180"
-                       StyleClasses="DS14MenuProfileControl" />
+                       MinWidth="180" />
                 <Control HorizontalExpand="True" />
                 <Button Name="PasswordConfirmButton"
                         Access="Public"
                         Text="{Loc 'emag-comms-password-confirm'}"
                         Disabled="True"
                         MinWidth="180"
-                        StyleClasses="DS14MenuAction" />
+                        StyleClasses="DeadSpaceAction" />
             </BoxContainer>
         </BoxContainer>
 
@@ -69,32 +65,27 @@
                               HorizontalExpand="True"
                               SizeFlagsStretchRatio="1"
                               SeparationOverride="2">
-                    <Label Text="{Loc 'emag-comms-announcer'}"
-                           StyleClasses="DS14MenuProfileLabel" />
+                    <Label Text="{Loc 'emag-comms-announcer'}" />
                     <LineEdit Name="AnnouncerInput"
                               Access="Public"
                               PlaceHolder="{Loc 'emag-comms-announcer-placeholder'}"
-                              HorizontalExpand="True"
-                              StyleClasses="DS14MenuInput" />
+                              HorizontalExpand="True" />
                 </BoxContainer>
                 <BoxContainer Orientation="Vertical"
                               HorizontalExpand="True"
                               SizeFlagsStretchRatio="1"
                               SeparationOverride="2">
-                    <Label Text="{Loc 'emag-comms-signature'}"
-                           StyleClasses="DS14MenuProfileLabel" />
+                    <Label Text="{Loc 'emag-comms-signature'}" />
                     <LineEdit Name="SignatureInput"
                               Access="Public"
                               PlaceHolder="{Loc 'emag-comms-signature-placeholder'}"
-                              HorizontalExpand="True"
-                              StyleClasses="DS14MenuInput" />
+                              HorizontalExpand="True" />
                 </BoxContainer>
                 <BoxContainer Orientation="Vertical"
                               HorizontalExpand="True"
                               SizeFlagsStretchRatio="0.7"
                               SeparationOverride="2">
-                    <Label Text="{Loc 'emag-comms-color'}"
-                           StyleClasses="DS14MenuProfileLabel" />
+                    <Label Text="{Loc 'emag-comms-color'}" />
                     <BoxContainer Orientation="Horizontal"
                                   HorizontalExpand="True"
                                   SeparationOverride="4">
@@ -102,62 +93,51 @@
                                 Access="Public"
                                 Text=" "
                                 MinSize="32 28"
-                                SetSize="32 28"
-                                StyleClasses="DS14MenuProfileControl" />
+                                SetSize="32 28" />
                         <LineEdit Name="ColorHexInput"
                                   Access="Public"
                                   Text="1d8bad"
                                   PlaceHolder="{Loc 'emag-comms-color-placeholder'}"
-                                  HorizontalExpand="True"
-                                  StyleClasses="DS14MenuInput" />
+                                  HorizontalExpand="True" />
                     </BoxContainer>
                 </BoxContainer>
             </BoxContainer>
 
             <BoxContainer Orientation="Horizontal"
                           HorizontalExpand="True">
-                <Label Text="{Loc 'emag-comms-announcement'}"
-                       StyleClasses="DS14MenuProfileLabel" />
+                <Label Text="{Loc 'emag-comms-announcement'}" />
                 <Control HorizontalExpand="True" />
                 <Label Name="CharacterCounter"
                        Access="Public"
-                       StyleClasses="DS14MenuSubtitle" />
+                       StyleClasses="DeadSpaceSubtitle" />
             </BoxContainer>
-            <PanelContainer StyleClasses="DS14MenuTextField"
-                            HorizontalExpand="True"
-                            VerticalExpand="True">
-                <TextEdit Name="AnnouncementInput"
-                          Access="Public"
-                          HorizontalExpand="True"
-                          VerticalExpand="True"
-                          MinHeight="100"
-                          StyleClasses="DS14MenuTextArea" />
-            </PanelContainer>
+            <TextEdit Name="AnnouncementInput"
+                      Access="Public"
+                      HorizontalExpand="True"
+                      VerticalExpand="True"
+                      MinHeight="100" />
 
             <BoxContainer Orientation="Horizontal"
                           HorizontalExpand="True"
                           SeparationOverride="6">
                 <Label Text="{Loc 'emag-comms-sound'}"
                        MinWidth="72"
-                       VerticalAlignment="Center"
-                       StyleClasses="DS14MenuProfileLabel" />
+                       VerticalAlignment="Center" />
                 <OptionButton Name="SoundSelector"
                               Access="Public"
                               Filterable="True"
-                              HorizontalExpand="True"
-                              StyleClasses="DS14MenuProfileControl" />
+                              HorizontalExpand="True" />
                 <Label Name="SoundDuration"
                        Access="Public"
                        Text="00:00"
                        MinWidth="42"
                        Align="Center"
                        VerticalAlignment="Center"
-                       StyleClasses="DS14MenuSubtitle" />
+                       StyleClasses="DeadSpaceSubtitle" />
                 <Button Name="PreviewButton"
                         Access="Public"
                         Text="{Loc 'emag-comms-preview'}"
-                        MinWidth="96"
-                        StyleClasses="DS14MenuProfileControl" />
+                        MinWidth="96" />
             </BoxContainer>
 
             <BoxContainer Orientation="Horizontal"
@@ -166,12 +146,10 @@
                 <CheckBox Name="EnableTtsCheckBox"
                           Access="Public"
                           Text="{Loc 'emag-comms-enable-tts'}"
-                          Pressed="True"
-                          StyleClasses="DS14MenuProfileControl" />
+                          Pressed="True" />
                 <CheckBox Name="UseCustomTtsCheckBox"
                           Access="Public"
-                          Text="{Loc 'emag-comms-custom-tts'}"
-                          StyleClasses="DS14MenuProfileControl" />
+                          Text="{Loc 'emag-comms-custom-tts'}" />
                 <Control HorizontalExpand="True" />
             </BoxContainer>
             <BoxContainer Orientation="Horizontal"
@@ -183,14 +161,12 @@
                               SeparationOverride="4">
                     <Label Text="{Loc 'emag-comms-voice'}"
                            MinWidth="52"
-                           VerticalAlignment="Center"
-                           StyleClasses="DS14MenuProfileLabel" />
+                           VerticalAlignment="Center" />
                     <OptionButton Name="VoiceSelector"
                                   Access="Public"
                                   Filterable="True"
                                   HorizontalExpand="True"
-                                  Disabled="True"
-                                  StyleClasses="DS14MenuProfileControl" />
+                                  Disabled="True" />
                 </BoxContainer>
                 <BoxContainer Orientation="Horizontal"
                               HorizontalExpand="True"
@@ -198,13 +174,11 @@
                               SeparationOverride="4">
                     <Label Text="{Loc 'emag-comms-language'}"
                            MinWidth="52"
-                           VerticalAlignment="Center"
-                           StyleClasses="DS14MenuProfileLabel" />
+                           VerticalAlignment="Center" />
                     <OptionButton Name="LanguageSelector"
                                   Access="Public"
                                   Filterable="True"
-                                  HorizontalExpand="True"
-                                  StyleClasses="DS14MenuProfileControl" />
+                                  HorizontalExpand="True" />
                 </BoxContainer>
             </BoxContainer>
 
@@ -219,19 +193,18 @@
                 <Button Name="ReturnToNormalButton"
                         Access="Public"
                         Text="{Loc 'emag-comms-switch-normal'}"
-                        MinWidth="180"
-                        StyleClasses="DS14MenuProfileControl" />
+                        MinWidth="180" />
                 <Control HorizontalExpand="True" />
                 <Button Name="AnnounceButton"
                         Access="Public"
                         Text="{Loc 'emag-comms-announce'}"
                         Disabled="True"
                         MinWidth="180"
-                        StyleClasses="DS14MenuAction" />
+                        StyleClasses="DeadSpaceAction" />
             </BoxContainer>
             <RichTextLabel Text="{Loc 'emag-comms-footer'}"
                            HorizontalExpand="True"
-                           StyleClasses="DS14MenuSubtitle" />
+                           StyleClasses="DeadSpaceSubtitle" />
         </BoxContainer>
     </PanelContainer>
 </controls:FancyWindow>

@@ -36,10 +36,12 @@
       reagents:
       - ReagentId: AcidicBlood
         Quantity: 300
-  - type: Hunger
-    baseDecayRate: 0.05
-  - type: Thirst
-    baseDecayRate: 0.05
+  - type: Satiation
+    satiations:
+      Hunger:
+        prototype: XenomorphHunger
+      Thirst:
+        prototype: XenomorphThirst
   - type: Perishable
     molsPerSecondPerUnitMass: 0.0005
   - type: Vocal
@@ -54,7 +56,7 @@
     damage:
       types:
         Slash: 6
-  - type: StatusEffects
+  - type: StatusEffects # DS14 - PressureImmunity is provided by the new status effect system.
     allowed:
     - Stun
     - KnockedDown
@@ -63,7 +65,6 @@
     - Electrocution
     - SlurredSpeech
     - RatvarianLanguage
-    - PressureImmunity
     - Muted
     - ForcedSleep
     - TemporaryBlindness
@@ -97,6 +98,7 @@
       - id: FoodMeatXeno
         amount: 5
   - type: PassiveDamage # Slight passive regen. Assuming one damage type, comes out to about 4 damage a minute.
+    intervalHaltOnDamageTaken: 5s
     allowedStates:
     - Alive
     - Critical

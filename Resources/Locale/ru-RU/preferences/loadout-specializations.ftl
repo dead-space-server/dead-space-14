@@ -48,6 +48,7 @@ job-title-engineer-repairman = Ремонтник
 job-title-engineer-mechanic = Механик
 job-title-engineer-nuclear = Инженер-ядерщик
 job-title-engineer-welder = Сварщик
+job-title-engineer-architect = Архитектор
 
 # Грузчик
 job-title-cargo-logistician = Логист
@@ -67,6 +68,7 @@ job-title-passenger-handyman = Разнорабочий
 
 # Атмосферный техник
 job-title-atmospheric-lifesupport = Специалист СЖО
+job-title-atmospheric-synthesis = Специалист по синтезу
 
 # Библиотекарь
 job-title-librarian-gamemaster = Гейм-мастер

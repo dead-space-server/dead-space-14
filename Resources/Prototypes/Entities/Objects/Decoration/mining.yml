@@ -146,8 +146,8 @@
     key: walls
   - type: Tag
     tags:
-    - Wall
     - Wooden
+  - type: Wall
   - type: Sprite
     noRot: true
     sprite: Objects/Decoration/mines.rsi

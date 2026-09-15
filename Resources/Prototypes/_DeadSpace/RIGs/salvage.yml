@@ -63,7 +63,7 @@
     clothingPrototype: ClothingHeadHelmetRIGSalvage
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetRIGSalvage
   name: шлем скафандра утилизационного специалиста
   description: Его лицевая пластина полностью скрывает эмоции, не позволяя им пробиться даже через тонированный визор.
@@ -157,7 +157,7 @@
     clothingPrototype: ClothingHeadHelmetRIGSalvageAdvanced
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetRIGSalvageAdvanced
   name: шлем продвинутого скафандра утилизационного специалиста
   description: Его лицевая пластина полностью скрывает эмоции, не позволяя им пробиться даже через тонированный визор.

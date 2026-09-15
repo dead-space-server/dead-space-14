@@ -8,6 +8,8 @@ using Content.Shared.DeadSpace.Skills.Components;
 using Content.Shared.Objectives;
 using Content.Shared.Objectives.Components;
 using Content.Shared.Objectives.Systems;
+using Content.Shared.Roles;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.CharacterInfo;
 
@@ -35,8 +37,8 @@ public sealed class CharacterInfoSystem : EntitySystem
         var entity = args.SenderSession.AttachedEntity.Value;
 
         var objectives = new Dictionary<string, List<ObjectiveInfo>>();
-        var jobTitle = Loc.GetString("character-info-no-profession");
         string? briefing = null;
+        ProtoId<JobPrototype>? job = null;
         if (_minds.TryGetMind(entity, out var mindId, out var mind))
         {
             // Get objectives
@@ -53,8 +55,7 @@ public sealed class CharacterInfoSystem : EntitySystem
                 objectives[issuer].Add(info.Value);
             }
 
-            if (_jobs.MindTryGetJobName(mindId, out var jobName))
-                jobTitle = jobName;
+            _jobs.MindTryGetJobId(mindId, out job);
 
             // Get briefing
             briefing = _roles.MindGetBriefing(mindId);
@@ -74,7 +75,7 @@ public sealed class CharacterInfoSystem : EntitySystem
             }
         }
 
-        RaiseNetworkEvent(new CharacterInfoEvent(GetNetEntity(entity), jobTitle, objectives, skills, briefing), args.SenderSession);
+        RaiseNetworkEvent(new CharacterInfoEvent(GetNetEntity(entity), objectives, skills, briefing, job), args.SenderSession);
         // DS14-Skills-End
     }
 }

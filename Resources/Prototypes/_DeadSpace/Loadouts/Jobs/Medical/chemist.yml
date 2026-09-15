@@ -1,3 +1,10 @@
+# Head
+
+- type: loadout
+  id: ChemistHead
+  equipment:
+    head: ClothingHeadHatMedBeretChemist
+
 # Jumpsuit
 
 - type: loadout

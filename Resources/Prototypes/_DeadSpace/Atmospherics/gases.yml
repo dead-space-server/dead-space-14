@@ -1,0 +1,71 @@
+- type: gas
+  id: HyperNoblium
+  name: gases-hyper-noblium
+  specificHeat: 2000
+  heatCapacityRatio: 1.66
+  molarMass: 293
+  gasOverlaySprite: /Textures/_DeadSpace/Effects/atmospherics.rsi
+  gasOverlayState: hypernoblium
+  gasMolesVisible: 0.5
+  color: C8F0F0
+  reagent: HyperNoblium
+  pricePerMole: 12
+
+- type: gas
+  id: ProtoNitrate
+  name: gases-proto-nitrate
+  specificHeat: 30
+  heatCapacityRatio: 1.3
+  molarMass: 60
+  gasOverlaySprite: /Textures/_DeadSpace/Effects/atmospherics.rsi
+  gasOverlayState: protonitrat
+  gasMolesVisible: 0.5
+  color: 3FBFBF
+  reagent: ProtoNitrate
+  pricePerMole: 7
+
+- type: gas
+  id: Helium
+  name: gases-helium
+  specificHeat: 80
+  heatCapacityRatio: 1.66
+  molarMass: 4
+  color: EEEEFF
+  reagent: Helium
+  pricePerMole: 2
+
+- type: gas
+  id: Halon
+  name: gases-halon
+  specificHeat: 35
+  heatCapacityRatio: 1.3
+  molarMass: 200
+  color: EAA0A0
+  reagent: Halon
+  pricePerMole: 4
+
+- type: gas
+  id: Zauker
+  name: gases-zauker
+  specificHeat: 30
+  heatCapacityRatio: 1.3
+  molarMass: 90
+  gasOverlaySprite: /Textures/_DeadSpace/Effects/atmospherics.rsi
+  gasOverlayState: zauker
+  gasMolesVisible: 0.5
+  color: BFBF3F
+  reagent: Zauker
+  pricePerMole: 16
+
+- type: gas
+  id: Antinoblium # Потом сделать рецепт через электролизёр газов или термояд
+  name: gases-antinoblium
+  specificHeat: 1
+  heatCapacityRatio: 1.66
+  molarMass: 293
+  gasOverlaySprite: /Textures/_DeadSpace/Effects/atmospherics.rsi
+  gasOverlayState: antinoblium
+  gasMolesVisible: 0.5
+  color: FF66CC
+  reagent: Antinoblium
+  pricePerMole: 20

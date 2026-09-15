@@ -22,6 +22,11 @@ public sealed class BluespaceLockerRule : StationEventSystem<BluespaceLockerRule
         var query = EntityQueryEnumerator<EntityStorageComponent, ResistLockerComponent>();
         while (query.MoveNext(out var storageUid, out _, out _))
         {
+            // DS14-start
+            if (!RuleStation.IsTarget(uid, storageUid))
+                continue;
+            // DS14-end
+
             targets.Add(storageUid);
         }
 

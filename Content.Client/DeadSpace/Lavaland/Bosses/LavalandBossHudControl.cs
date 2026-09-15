@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client.DeadSpace.Stylesheets;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface.Controls;
 
@@ -16,22 +17,15 @@ public sealed class LavalandBossHudControl : PanelContainer
         MouseFilter = MouseFilterMode.Ignore;
         HorizontalAlignment = HAlignment.Center;
         MinSize = new Vector2(280, 48);
-        PanelOverride = new StyleBoxFlat
-        {
-            BackgroundColor = Color.FromHex("#25252aee"),
-            BorderColor = Color.FromHex("#4a4a55"),
-            BorderThickness = new Thickness(1),
-            ContentMarginLeftOverride = 10,
-            ContentMarginRightOverride = 10,
-            ContentMarginTopOverride = 6,
-            ContentMarginBottomOverride = 6,
-        };
+        AddStyleClass(DeadSpaceStyleClass.SurfaceDark);
 
         var root = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
             SeparationOverride = 4,
             HorizontalExpand = true,
+            // SurfaceDark contributes three pixels; retain the original 10x6 effective padding.
+            Margin = new Thickness(7, 3),
         };
         AddChild(root);
 
@@ -66,8 +60,7 @@ public sealed class LavalandBossHudControl : PanelContainer
             MaxValue = 1,
             Value = 1,
             SetHeight = 10,
-            BackgroundStyleBoxOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#121218") },
-            ForegroundStyleBoxOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#9f3a3a") },
+            ForegroundStyleBoxOverride = new StyleBoxFlat { BackgroundColor = DeadSpaceStylePalette.NegativeBorder },
         };
         root.AddChild(_healthBar);
 

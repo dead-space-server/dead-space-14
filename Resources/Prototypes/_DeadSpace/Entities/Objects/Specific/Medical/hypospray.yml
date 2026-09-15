@@ -73,6 +73,35 @@
             Quantity: 30
 
 - type: entity
+  name: инъектор ихора
+  parent: ChemicalMedipen
+  id: IchorMedipen
+  description: Медипен, который способен помочь вам не потерять силы в самый важный момент.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Medical/medipen.rsi
+    layers:
+    - state: ichor
+      map: ["enum.SolutionContainerLayers.Fill"]
+  - type: SolutionContainerVisuals
+    maxFillLevels: 1
+    changeColor: false
+    emptySpriteName: ichor_empty
+  - type: Injector
+    solutionName: pen
+    currentTransferAmount: null
+    activeModeProtoId: HyposprayInjectMode
+    allowedModes:
+    - HyposprayInjectMode
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 20
+        reagents:
+        - ReagentId: Ichor
+          Quantity: 20
+
+- type: entity
   parent: ADTCombatHypo
   id: CombatHypoBlueShield
   name: боевой гипоспрей офицера "Синий Щит"
@@ -83,3 +112,15 @@
     state: icon
   - type: Item
     sprite: _DeadSpace/Objects/Specific/Medical/combathypo.rsi
+
+- type: entity
+  parent: ADTCombatHypo
+  id: CombatHypoRedSword
+  name: боевой гипоспрей офицера "Красный Меч"
+  description: Модель гипоспрея, разработанная NT для использования в боевых ситуациях - с повышенным объемом в ущерб скорости применения.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Medical/combathyporedsword.rsi
+    state: icon
+  - type: Item
+    sprite: _DeadSpace/Objects/Specific/Medical/combathyporedsword.rsi

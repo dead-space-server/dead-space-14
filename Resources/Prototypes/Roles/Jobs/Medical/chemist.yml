@@ -33,7 +33,7 @@
   equipment:
     id: ChemistryPDA
     ears: ClothingHeadsetMedical
-    head: ClothingHeadHatMedBeretChemist # DS14
+    # head: ClothingHeadHatMedBeretChemist # DS14
     belt: ChemBag
     pocket1: HandLabeler
     eyes: ClothingEyesGlassesChemical

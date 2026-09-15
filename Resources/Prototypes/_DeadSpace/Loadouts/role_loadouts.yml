@@ -61,9 +61,11 @@
   id: JobMagistrat
   groups:
   - GroupTankHarness
+  - MagistratHead
   - LawyerNeck
   - MagistratJumpsuit
-  - CommonBackpack
+  - MagistratOuterClothing
+  - MagistratBackpack
   - Survival
   - Trinkets
   - GroupSpeciesBreathTool

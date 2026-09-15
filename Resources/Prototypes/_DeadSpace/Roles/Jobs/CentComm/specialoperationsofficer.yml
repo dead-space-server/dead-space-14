@@ -13,6 +13,7 @@
   access:
   - CentralCommand
   - SOD
+  - BlueShield
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant, TrackingImplant, DeathRattleImplantCentcomm ]

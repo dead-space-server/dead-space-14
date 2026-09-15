@@ -1,5 +1,4 @@
 <cartridges:NewsReaderUiFragment xmlns:cartridges="clr-namespace:Content.Client.CartridgeLoader.Cartridges"
-                               xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
                                xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
                                xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
                                xmlns="https://spacestation14.io"
@@ -7,7 +6,7 @@
                                Orientation="Vertical"
                                HorizontalExpand="True"
                                VerticalExpand="True">
-    <PanelContainer StyleClasses="DS14MenuPanelDark"></PanelContainer>
+    <PanelContainer StyleClasses="DeadSpaceSurfaceDark"></PanelContainer> <!-- DS14 -->
     <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="5,4,5,2">
         <Button
             Name="Prev"
@@ -18,8 +17,7 @@
             Text="{Loc 'news-read-ui-prev-text'}"
             ToolTip="{Loc 'news-read-ui-prev-tooltip'}"
             Access="Public"
-            HorizontalExpand="True"
-            StyleClasses="DS14MenuProfileControl"/>
+            HorizontalExpand="True"/>
         <Button
             Name="Next"
             MinWidth="64"
@@ -27,16 +25,16 @@
             Disabled="True"
             HorizontalAlignment="Right"
             Text="{Loc 'news-read-ui-next-text'}"
-            ToolTip="{Loc 'news-read-ui-next-tooltip'}"
-            StyleClasses="DS14MenuProfileControl"/>
+            ToolTip="{Loc 'news-read-ui-next-tooltip'}"/>
     </BoxContainer>
+    <!-- DS14-start -->
     <controls:StripeBack Name="ArticleNameContainer">
-        <PanelContainer StyleClasses="DS14MenuHeader">
-            <Label Name="PageNum" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="4,0,0,0" StyleClasses="DS14MenuSubtitle"/>
-            <Label Name="PageName" Align="Center" StyleClasses="DS14MenuTitle"/>
+        <PanelContainer StyleClasses="DeadSpaceSectionHeader">
+            <Label Name="PageNum" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="4,0,0,0" StyleClasses="DeadSpaceSubtitle"/>
+            <Label Name="PageName" Align="Center" StyleClasses="DeadSpaceTitle"/>
         </PanelContainer>
     </controls:StripeBack>
-    <PanelContainer VerticalExpand="True" SizeFlagsStretchRatio="5" StyleClasses="DS14MenuInset">
+    <PanelContainer VerticalExpand="True" SizeFlagsStretchRatio="5" StyleClasses="DeadSpaceInset">
         <ScrollContainer
                 Name="PageTextScroll"
                 HScrollEnabled="False"
@@ -54,6 +52,7 @@
             </BoxContainer>
         </ScrollContainer>
     </PanelContainer>
+    <!-- DS14-end -->
 
     <BoxContainer Name="InteractionPanel" Orientation="Vertical" HorizontalExpand="True" VerticalExpand="False">
         <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="5,2,5,2">
@@ -61,8 +60,7 @@
                 Name="LikeButton"
                 MinWidth="60"
                 HorizontalAlignment="Left"
-                ToolTip="{Loc 'news-read-ui-like-tooltip'}"
-                StyleClasses="DS14MenuProfileControl">
+                ToolTip="{Loc 'news-read-ui-like-tooltip'}">
                 <BoxContainer Orientation="Horizontal">
                     <Label Text="+" VerticalAlignment="Center"/>
                     <Label Name="LikeCount" Text="0" Margin="6,0,0,0" VerticalAlignment="Center"/>
@@ -73,8 +71,7 @@
                 MinWidth="60"
                 Margin="4,0,0,0"
                 HorizontalAlignment="Left"
-                ToolTip="{Loc 'news-read-ui-dislike-tooltip'}"
-                StyleClasses="DS14MenuProfileControl">
+                ToolTip="{Loc 'news-read-ui-dislike-tooltip'}">
                 <BoxContainer Orientation="Horizontal">
                     <Label Text="-" VerticalAlignment="Center"/>
                     <Label Name="DislikeCount" Text="0" Margin="6,0,0,0" VerticalAlignment="Center"/>
@@ -86,25 +83,25 @@
 
             <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SetHeight="88">
 
-                <PanelContainer StyleClasses="DS14MenuInset" HorizontalExpand="True" SizeFlagsStretchRatio="1" Margin="0,2,2,2">
+                <!-- DS14-start -->
+                <PanelContainer StyleClasses="DeadSpaceInset" HorizontalExpand="True" SizeFlagsStretchRatio="1" Margin="0,2,2,2">
                     <BoxContainer Orientation="Vertical" Margin="4">
                         <LineEdit
                             Name="CommentInput"
                             PlaceHolder="{Loc 'news-read-ui-comment-placeholder'}"
-                            HorizontalExpand="True"
-                            StyleClasses="DS14MenuInput"/>
+                            HorizontalExpand="True"/>
                         <Button
                             Name="SendCommentButton"
                             MinWidth="60"
                             Margin="0,4,0,0"
                             HorizontalAlignment="Center"
                             Text="{Loc 'news-read-ui-comment-send'}"
-                            ToolTip="{Loc 'news-read-ui-comment-send-tooltip'}"
-                            StyleClasses="DS14MenuProfileControl"/>
+                            ToolTip="{Loc 'news-read-ui-comment-send-tooltip'}"/>
                     </BoxContainer>
                 </PanelContainer>
+                <!-- DS14-end -->
 
-                <PanelContainer StyleClasses="DS14MenuInset" HorizontalExpand="True" SizeFlagsStretchRatio="1" Margin="2,2,0,2">
+                <PanelContainer StyleClasses="DeadSpaceInset" HorizontalExpand="True" SizeFlagsStretchRatio="1" Margin="2,2,0,2"> <!-- DS14 -->
                     <ScrollContainer
                         Name="CommentsScroll"
                         HScrollEnabled="False"
@@ -126,8 +123,7 @@
         <Button
             Name="NotificationSwitch"
             ToolTip="{Loc news-reader-ui-mute-tooltip}"
-            MinWidth="20"
-            StyleClasses="DS14MenuProfileControl"/>
+            MinWidth="20"/>
         <RichTextLabel Margin="5,2,2,2" Name="ShareTime" VerticalAlignment="Top"/>
         <customControls:VSeparator Margin="2 0"/>
         <RichTextLabel Margin="5,2,2,2" Name="Author" VerticalAlignment="Top" HorizontalAlignment="Right"/>

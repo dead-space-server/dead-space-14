@@ -70,6 +70,8 @@
     - name: component-mode-switcher-architect-construction
       components:
       - type: RCD
+        instantConstructionEffect: EffectArchitectConstruct1
+        constructionEffect: EffectArchitectConstruct3
         availablePrototypes:
         - WallSolid
         - FloorSteel
@@ -109,7 +111,7 @@
 
 - type: rcd
   id: CircleTriggerKudzu
-  name: Триггер кудзу
+  name: rcd-component-circle-trigger-kudzu # DS14
   category: NecromorphTriggers
   sprite: { sprite: /Textures/Tiles/Misc/floortrap.rsi, state: floortrapspawn }
   mode: ConstructObject
@@ -120,7 +122,7 @@
 
 - type: rcd
   id: CircleTriggerMeleeTentacle
-  name: Триггер атакующей тентакли
+  name: rcd-component-circle-trigger-melee-tentacle # DS14
   category: NecromorphTriggers
   sprite: { sprite: /Textures/_DeadSpace/Necromorfs/tentacle.rsi, state: tentacle }
   mode: ConstructObject
@@ -131,7 +133,7 @@
 
 - type: rcd
   id: CircleTriggerRangedTentacle
-  name: Триггер стрелковой тентакли
+  name: rcd-component-circle-trigger-ranged-tentacle # DS14
   category: NecromorphTriggers
   sprite: { sprite: /Textures/_DeadSpace/Necromorfs/bone_tentacle.rsi, state: bonetentacle }
   mode: ConstructObject
@@ -147,3 +149,25 @@
     state: icon
   name: alerts-architect-dash-name
   description: alerts-architect-dash-description
+
+- type: entity
+  parent: EffectRCDBase
+  id: EffectArchitectConstruct1
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Necromorfs/TheCircle/Effects/architect-construction.rsi
+    state: construct1
+  - type: TimedDespawn
+    lifetime: 1.2
+
+- type: entity
+  parent: EffectRCDBase
+  id: EffectArchitectConstruct3
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Necromorfs/TheCircle/Effects/architect-construction.rsi
+    state: construct3
+  - type: TimedDespawn
+    lifetime: 4.2

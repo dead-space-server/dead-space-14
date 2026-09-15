@@ -6,14 +6,10 @@
   components:
   - type: VendingMachine
     pack: ClownVendDispenserInventory
-    dispenseOnHitChance: 0.25
-    dispenseOnHitThreshold: 2
-    offState: off
-    brokenState: broken
-    normalState: normal-unshaded
+    initialStockQuality: 1.0 # Nobody knows how Honk does it, but their vending machines always seem well-stocked...
+  - type: VendingMachineEject # DS14 - vending machine refactor adaptation
     ejectDelay: 1.0
     soundVend: /Audio/Items/bikehorn.ogg
-    initialStockQuality: 1.0 # Nobody knows how Honk does it, but their vending machines always seem well-stocked...
   - type: Sprite
     sprite: _DeadSpace/Structures/Machines/VendingMachines/clown.rsi
     layers:
@@ -44,15 +40,15 @@
   components:
   - type: VendingMachine
     pack: ToysInventory
-    dispenseOnHitChance: 0.25
-    dispenseOnHitThreshold: 2
+    initialStockQuality: 0.33
+  - type: VendingMachineEject # DS14 - vending machine refactor adaptation
+    ejectDelay: 1.9
+  - type: VendingMachineVisuals # DS14 - vending machine refactor adaptation
     offState: off
     brokenState: broken
     normalState: normal-unshaded
     ejectState: eject-unshaded
     denyState: deny-unshaded
-    ejectDelay: 1.9
-    initialStockQuality: 0.33
   - type: Sprite
     sprite: _DeadSpace/Structures/Machines/VendingMachines/toysmat.rsi
     layers:
@@ -77,6 +73,7 @@
   components:
   - type: VendingMachine
     pack: ClothesMateCapeInventory
+  - type: VendingMachineVisuals # DS14 - vending machine refactor adaptation
     offState: off
     brokenState: broken
     normalState: normal-unshaded
@@ -135,6 +132,7 @@
   components:
   - type: VendingMachine
     pack: SyndieToolInventory
+  - type: VendingMachineVisuals # DS14 - vending machine refactor adaptation
     offState: off
     brokenState: broken
     normalState: normal-unshaded
@@ -204,8 +202,7 @@
     color: "#8B0000"
   - type: VendingMachine
     pack: SalvageEquipmentInventoryTaipan
-    dispenseOnHitChance: 0.25
-    dispenseOnHitThreshold: 2
+  - type: VendingMachineVisuals # DS14 - vending machine refactor adaptation
     offState: off
     brokenState: broken
     normalState: normal-unshaded
@@ -222,8 +219,7 @@
   components:
   - type: VendingMachine
     pack: CigaretteMachineInventoryTaipan
-    dispenseOnHitChance: 0.25
-    dispenseOnHitThreshold: 2
+  - type: VendingMachineVisuals # DS14 - vending machine refactor adaptation
     offState: off
     brokenState: broken
     normalState: normal-unshaded
@@ -253,13 +249,12 @@
   components:
   - type: VendingMachine
     pack: DonkInventory
-    dispenseOnHitChance: 0.25
-    dispenseOnHitThreshold: 2
+    initialStockQuality: 0.33
+  - type: VendingMachineVisuals # DS14 - vending machine refactor adaptation
     offState: off
     brokenState: broken
     normalState: normal-unshaded
     denyState: deny-unshaded
-    initialStockQuality: 0.33
   - type: Sprite
     sprite: _DeadSpace/Structures/Machines/VendingMachines/donk.rsi
     layers:
@@ -284,12 +279,11 @@
   components:
   - type: VendingMachine
     pack: BrassNBoltInventory
-    dispenseOnHitChance: 0.25
-    dispenseOnHitThreshold: 2
+    initialStockQuality: 0.33
+  - type: VendingMachineVisuals # DS14 - vending machine refactor adaptation
     offState: off
     brokenState: broken
     normalState: normal-unshaded
-    initialStockQuality: 0.33
   - type: Sprite
     sprite: _DeadSpace/Structures/Machines/VendingMachines/brassnbolt.rsi
     layers:
@@ -314,6 +308,7 @@
   components:
   - type: VendingMachine
     pack: CaptainDrobeInventory # This is empty and not useable pack. Yes, it's shitcode
+  - type: VendingMachineVisuals # DS14 - vending machine refactor adaptation
     offState: off
     normalState: normal-unshaded
   - type: Sprite

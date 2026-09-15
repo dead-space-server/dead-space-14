@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
+using Content.Shared.Examine;
 using Content.Shared.Hands.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Tag;
@@ -36,6 +37,7 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
         SubscribeLocalEvent<DoAfterComponent, EntityUnpausedEvent>(OnUnpaused);
         SubscribeLocalEvent<DoAfterComponent, ComponentGetState>(OnDoAfterGetState);
         SubscribeLocalEvent<DoAfterComponent, ComponentHandleState>(OnDoAfterHandleState);
+        SubscribeLocalEvent<DoAfterComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<GetInteractingEntitiesEvent>(OnGetInteractingEntities);
     }
 
@@ -150,6 +152,29 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
                     args.InteractingEntities.Add(doAfter.Args.User);
             }
         }
+    }
+
+    private void OnExamined(Entity<DoAfterComponent> ent, ref ExaminedEvent args)
+    {
+        if (!args.IsInDetailsRange)
+            return;
+
+        var msg = new FormattedMessage();
+        var examined = new HashSet<string>(ent.Comp.DoAfters.Count);
+
+        foreach (var doAfter in ent.Comp.DoAfters.Values)
+        {
+            if (doAfter.Args.ExamineText is not null)
+                examined.Add(doAfter.Args.ExamineText);
+        }
+
+        foreach (var entry in examined)
+        {
+            msg.AddMarkupOrThrow(entry);
+            msg.PushNewline();
+        }
+
+        args.PushMessage(msg, -5);
     }
 
     #region Creation

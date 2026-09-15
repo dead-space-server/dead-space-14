@@ -66,22 +66,12 @@
   - type: Body
     prototype: Rat
     requiredLegs: 0 # TODO: Make more than 1 leg, set to 0 to avoid sprint speed being reset by the body system
-  - type: Hunger # probably should be prototyped
-    thresholds:
-      Overfed: 200
-      Okay: 150
-      Peckish: 100
-      Starving: 50
-      Dead: 0
-    baseDecayRate: 0.01666666666
-  - type: Thirst
-    thresholds:
-      OverHydrated: 600
-      Okay: 450
-      Thirsty: 300
-      Parched: 150
-      Dead: 0
-    baseDecayRate: 0.1
+  - type: Satiation
+    satiations:
+      Hunger:
+        prototype: RegalRatHunger
+      Thirst:
+        prototype: NormalSatiationThirst
   - type: DamageStateVisuals
     states:
       Alive:
@@ -126,11 +116,14 @@
     - NamesRegalratKingdom
     - NamesRegalratTitle
     nameFormat: name-format-regal-rat
+  - type: NameIdentifier
+    group: null
   - type: GuideHelp
     guides:
     - MinorAntagonists
   - type: Grammar
     attributes:
+      proper: true
       gender: male
   - type: Sharp
   - type: TTS
@@ -280,22 +273,12 @@
   - type: Body
     prototype: Rat
     requiredLegs: 0 # TODO: Make more than 1 leg, set to 0 to avoid sprint speed being reset by the body system
-  - type: Hunger # probably should be prototyped
-    thresholds:
-      Overfed: 200
-      Okay: 150
-      Peckish: 100
-      Starving: 50
-      Dead: 0
-    baseDecayRate: 0.01666666666
-  - type: Thirst
-    thresholds:
-      OverHydrated: 600
-      Okay: 450
-      Thirsty: 300
-      Parched: 150
-      Dead: 0
-    baseDecayRate: 0.1
+  - type: Satiation
+    satiations:
+      Hunger:
+        prototype: RegalRatHunger
+      Thirst:
+        prototype: NormalSatiationThirst
   - type: DamageStateVisuals
     states:
       Alive:

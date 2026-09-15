@@ -556,8 +556,8 @@
   - type: HitscanStaminaDamage
     staminaDamage: 60
   - type: HitscanPenetration
-    penetrationThreshold: 360
-    maxPenetratedTargets: 3
+    penetrationThreshold: 601
+    maxPenetratedTargets: 5
     maxDestroyedObstacles: 1
     obstacleSearchRadius: 0.35
     penetrationDamageTypeRequirement:

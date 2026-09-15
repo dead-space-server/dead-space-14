@@ -1,16 +1,18 @@
 ﻿<cartridges:NetProbeUiFragment xmlns:cartridges="clr-namespace:Content.Client.CartridgeLoader.Cartridges"
                                  xmlns="https://spacestation14.io" Margin="1 0 2 0">
-    <PanelContainer StyleClasses="DS14MenuPanelDark"></PanelContainer>
+    <PanelContainer StyleClasses="DeadSpaceSurfaceDark"></PanelContainer> <!-- DS14 -->
     <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
         <BoxContainer Orientation="Vertical" MinHeight="32" MaxHeight="32" VerticalAlignment="Top" Margin="3 0">
-            <PanelContainer Name="HeaderPanel">
+            <!-- DS14-start -->
+            <PanelContainer Name="HeaderPanel" StyleClasses="DeadSpaceSectionHeader">
                 <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="4">
-                    <Label HorizontalExpand="True" Text="{Loc 'net-probe-label-name'}" StyleClasses="DS14MenuListHeader"/>
-                    <Label HorizontalExpand="True" Text="{Loc 'net-probe-label-address'}" StyleClasses="DS14MenuListHeader"/>
-                    <Label HorizontalExpand="True" Text="{Loc 'net-probe-label-frequency'}" StyleClasses="DS14MenuListHeader"/>
-                    <Label HorizontalExpand="True" Text="{Loc 'net-probe-label-network'}" StyleClasses="DS14MenuListHeader"/>
+                    <Label HorizontalExpand="True" Text="{Loc 'net-probe-label-name'}" StyleClasses="DeadSpaceListHeader"/>
+                    <Label HorizontalExpand="True" Text="{Loc 'net-probe-label-address'}" StyleClasses="DeadSpaceListHeader"/>
+                    <Label HorizontalExpand="True" Text="{Loc 'net-probe-label-frequency'}" StyleClasses="DeadSpaceListHeader"/>
+                    <Label HorizontalExpand="True" Text="{Loc 'net-probe-label-network'}" StyleClasses="DeadSpaceListHeader"/>
                 </BoxContainer>
             </PanelContainer>
+            <!-- DS14-end -->
         </BoxContainer>
         <ScrollContainer Name="ScrollContainer" HorizontalExpand="True" VerticalExpand="True">
             <BoxContainer Orientation="Vertical" Name="ProbedDeviceContainer" HorizontalExpand="True" VerticalExpand="True" VerticalAlignment="Top" Margin="3 0"/>

@@ -3,62 +3,51 @@
                       Title="Loading..."
                       MinSize="400 200">
     <!-- DS14-start -->
-    <PanelContainer StyleClasses="DS14MenuShell">
-        <PanelContainer StyleClasses="DS14MenuPanelDark">
-            <BoxContainer Orientation="Vertical"
-                          SeparationOverride="8">
-                <PanelContainer StyleClasses="DS14MenuInset"
+    <PanelContainer StyleClasses="DeadSpaceSurfaceDark">
+        <BoxContainer Orientation="Vertical"
+                      SeparationOverride="8">
+                <PanelContainer StyleClasses="DeadSpaceInset"
                                 HorizontalExpand="True"
                                 VerticalExpand="True">
                     <TextEdit Name="NoteTextEdit"
                               Access="Public"
                               HorizontalExpand="True"
-                              VerticalExpand="True"
-                              StyleClasses="DS14MenuTextArea" />
+                              VerticalExpand="True" />
                 </PanelContainer>
                 <BoxContainer Orientation="Horizontal"
                               HorizontalExpand="True"
                               SeparationOverride="6">
                     <Label Name="ExpiryLabel"
                            Text="{Loc admin-note-editor-expiry-label}"
-                           Visible="False"
-                           StyleClasses="DS14MenuProfileLabel" />
+                           Visible="False" />
                     <HistoryLineEdit Name="ExpiryLineEdit"
                                      PlaceHolder="{Loc admin-note-editor-expiry-placeholder}"
                                      Visible="False"
-                                     HorizontalExpand="True"
-                                     StyleClasses="DS14MenuInput" />
+                                     HorizontalExpand="True" />
                     <OptionButton Name="ExpiryLengthDropdown"
-                                  Visible="False"
-                                  StyleClasses="DS14MenuProfileControl" />
+                                  Visible="False" />
                 </BoxContainer>
                 <BoxContainer Orientation="Horizontal"
                               HorizontalExpand="True"
                               SeparationOverride="6">
                     <OptionButton Name="TypeOption"
-                                  HorizontalAlignment="Center"
-                                  StyleClasses="DS14MenuProfileControl" />
+                                  HorizontalAlignment="Center" />
                     <OptionButton Name="SeverityOption"
-                                  HorizontalAlignment="Center"
-                                  StyleClasses="DS14MenuProfileControl" />
+                                  HorizontalAlignment="Center" />
                     <CheckBox Name="SecretCheckBox"
                               Text="{Loc admin-note-editor-secret}"
-                              ToolTip="{Loc admin-note-editor-secret-tooltip}"
-                              StyleClasses="DS14MenuProfileControl" />
+                              ToolTip="{Loc admin-note-editor-secret-tooltip}" />
                     <CheckBox Name="PermanentCheckBox"
                               Pressed="True"
                               Text="{Loc admin-note-editor-expiry-checkbox}"
-                              ToolTip="{Loc admin-note-editor-expiry-checkbox-tooltip}"
-                              StyleClasses="DS14MenuProfileControl" />
+                              ToolTip="{Loc admin-note-editor-expiry-checkbox-tooltip}" />
                     <Control HorizontalExpand="True" />
                     <Button Name="SubmitButton"
                             Access="Public"
                             Text="{Loc admin-note-editor-submit}"
-                            HorizontalAlignment="Right"
-                            StyleClasses="DS14MenuProfileControl" />
+                            HorizontalAlignment="Right" />
                 </BoxContainer>
-            </BoxContainer>
+        </BoxContainer>
         </PanelContainer>
-    </PanelContainer>
     <!-- DS14-end -->
 </controls:FancyWindow>

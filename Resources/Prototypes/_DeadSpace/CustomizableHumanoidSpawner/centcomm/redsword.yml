@@ -8,18 +8,11 @@
     layers:
     - state: timed
     - sprite: Markers/jobs.rsi
-      state: blueshield-low
+      state: redsword
   - type: CustomizableHumanoidSpawner
     jobPrototype: CentralCommandRedSwordOfficer
     allowedSpecies:
     - Human
-    - Shark
-    - Demon
-    - Reptilian
-    - Arachnid
-    - SlimePerson
-    - Tajaran
-    - Vulpkanin
     randomNameFirstDataset: CustomizableSpawnerCentralCommandBlueShieldOfficerFirstName
     randomNameSecondLocalized: NamesLastERT
   - type: GhostRole
@@ -49,7 +42,6 @@
 - type: loadout
   id: CentralCommandRedSwordOfficerLoadout
   equipment:
-    back: ClothingBackpackSatchelBig
     socks: ClothingUnderwearSocksBlueShieldOfficer
 
 - type: entity

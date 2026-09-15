@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.Examine;
 using Content.Client.Resources;
 using Content.Client.Stylesheets;
@@ -39,17 +40,9 @@ namespace Content.Client.Wires.UI
 
             MouseFilter = MouseFilterMode.Stop;
 
-            var panelTex = _resourceCache.GetTexture("/Textures/Interface/Nano/button.svg.96dpi.png");
-            var back = new StyleBoxTexture
-            {
-                Texture = panelTex,
-                Modulate = Color.FromHex("#25252A"),
-            };
-            back.SetPatchMargin(StyleBox.Margin.All, 10);
-
             var topPanel = new PanelContainer
             {
-                PanelOverride = back,
+                StyleClasses = { DeadSpaceStyleClass.Window }, // DS14
                 MouseFilter = MouseFilterMode.Pass
             };
             var bottomWrap = new LayoutContainer
@@ -58,7 +51,7 @@ namespace Content.Client.Wires.UI
             };
             var bottomPanel = new PanelContainer
             {
-                PanelOverride = back,
+                StyleClasses = { DeadSpaceStyleClass.SurfaceDark }, // DS14
                 MouseFilter = MouseFilterMode.Pass
             };
 
@@ -70,19 +63,19 @@ namespace Content.Client.Wires.UI
                     new PanelContainer
                     {
                         MinSize = new Vector2(2, 0),
-                        PanelOverride = new StyleBoxFlat {BackgroundColor = Color.FromHex("#525252ff")}
+                        StyleClasses = { DeadSpaceStyleClass.AccentDim }, // DS14
                     },
                     new PanelContainer
                     {
                         HorizontalExpand = true,
                         MouseFilter = MouseFilterMode.Stop,
                         Name = "Shadow",
-                        PanelOverride = new StyleBoxFlat {BackgroundColor = Color.Black.WithAlpha(0.5f)}
+                        StyleClasses = { DeadSpaceStyleClass.ModalScrim }, // DS14
                     },
                     new PanelContainer
                     {
                         MinSize = new Vector2(2, 0),
-                        PanelOverride = new StyleBoxFlat {BackgroundColor = Color.FromHex("#525252ff")}
+                        StyleClasses = { DeadSpaceStyleClass.AccentDim }, // DS14
                     },
                 }
             };
@@ -160,13 +153,13 @@ namespace Content.Client.Wires.UI
                         Text = Loc.GetString("wires-menu-name-label"),
                         FontOverride = font,
                         VerticalAlignment = VAlignment.Center,
-                        StyleClasses = { StyleClass.LabelKeyText },
+                        StyleClasses = { DeadSpaceStyleClass.SectionTitle }, // DS14
                     }),
                     (_serialLabel = new Label
                     {
                         Text = Loc.GetString("wires-menu-dead-beef-text"),
                         FontOverride = fontSmall,
-                        FontColorOverride = Color.Gray,
+                        FontColorOverride = DeadSpaceStylePalette.TextMuted, // DS14
                         VerticalAlignment = VAlignment.Center,
                         Margin = new Thickness(8, 0, 20, 0),
                         HorizontalAlignment = HAlignment.Left,
@@ -195,7 +188,7 @@ namespace Content.Client.Wires.UI
 
             var middle = new PanelContainer
             {
-                PanelOverride = new StyleBoxFlat {BackgroundColor = Color.FromHex("#202025")},
+                StyleClasses = { StyleClass.PanelDeep }, // DS14: palette-backed and keeps zero-margin geometry
                 Children =
                 {
                     new BoxContainer
@@ -217,13 +210,13 @@ namespace Content.Client.Wires.UI
             _topContainer.AddChild(new PanelContainer
             {
                 MinSize = new Vector2(0, 2),
-                PanelOverride = new StyleBoxFlat {BackgroundColor = Color.FromHex("#525252ff")}
+                StyleClasses = { DeadSpaceStyleClass.AccentDim }, // DS14
             });
             _topContainer.AddChild(middle);
             _topContainer.AddChild(new PanelContainer
             {
                 MinSize = new Vector2(0, 2),
-                PanelOverride = new StyleBoxFlat {BackgroundColor = Color.FromHex("#525252ff")}
+                StyleClasses = { DeadSpaceStyleClass.AccentDim }, // DS14
             });
             CloseButton.OnPressed += _ => Close();
             SetHeight = 200;
@@ -318,7 +311,7 @@ namespace Content.Client.Wires.UI
                     HorizontalAlignment = HAlignment.Center,
                     Align = Label.AlignMode.Center,
                     FontOverride = _resourceCache.GetFont("/Fonts/NotoSansDisplay/NotoSansDisplay-Bold.ttf", 12),
-                    FontColorOverride = Color.Gray,
+                    FontColorOverride = DeadSpaceStylePalette.TextMuted, // DS14
                     ToolTip = letter.Name(),
                     MouseFilter = MouseFilterMode.Stop
                 };
@@ -575,7 +568,7 @@ namespace Content.Client.Wires.UI
                 {
                     Text = data.Text,
                     FontOverride = font,
-                    FontColorOverride = Color.FromHex("#A1A6AE"),
+                    FontColorOverride = DeadSpaceStylePalette.TextMuted, // DS14
                     VerticalAlignment = VAlignment.Center,
                 });
                 hBox.AddChild(lightContainer);

@@ -1,6 +1,6 @@
 <Control xmlns="https://spacestation14.io">
     <!-- DS14-start -->
-    <PanelContainer StyleClasses="DS14MenuListRow"
+    <PanelContainer StyleClasses="DeadSpaceListItem"
                     HorizontalExpand="True">
         <BoxContainer Orientation="Vertical"
                       Margin="2"

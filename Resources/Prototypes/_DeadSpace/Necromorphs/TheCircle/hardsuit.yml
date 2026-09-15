@@ -51,7 +51,7 @@
     voice: Overwatch
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuitUnitologyCommander
   name: шлем ведущего бронескафандра «Прометей»
   description: На нём читается только-... АРАМ РООООООООСС-!!!
@@ -135,7 +135,7 @@
     voice: Overwatch
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuitUnitologyHeavy
   name: шлем тяжелого бронескафандра «Артемида»
   description: В какой визор смотреть?
@@ -220,7 +220,7 @@
     voice: Overwatch
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuitUnitologyLight
   name: шлем экзоскафандра «Гермес»
   description: Тяжёлый дым, что исходит с противогаза, заставляет вас дрожать.
@@ -306,7 +306,7 @@
     voice: Overwatch
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuitUnitologyEngineer
   name: шлем экзогенного бронескафандра «Гефест»
   description: И тут не как у людей с глазами-...
@@ -392,7 +392,7 @@
     voice: Overwatch
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuitUnitologyMedic
   name: шлем мобильного бронескафандра «Асклепий»
   description: Где-то вы уже такой шлем видели-... Наверное.
@@ -539,7 +539,7 @@
 
 - type: entity
   id: ClothingHeadHelmetHardsuitUnitologyDreadnought
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   name: шлем бронескафандра «Бастион»
   description: Бронированный шлем Дредноута Круга.
   categories: [ HideSpawnMenu ]

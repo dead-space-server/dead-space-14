@@ -1,15 +1,61 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Sprite made by stranik2435 (discord), resprite by ravanesus (discord) for Space Station 14 server Мёртвый Космос",
+  "copyright": "Sprite made by stranik2435 (discord), resprite by ravanesus (discord), resprite by Golubok_epta (discord) for Space Station 14 server Мёртвый Космос",
   "size": {
-    "x": 32,
-    "y": 32
+    "x": 64, 
+    "y": 64
   },
   "states": [
     {
       "name": "mukhtar",
-      "directions": 4
+      "directions": 4,
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
     },
     {
       "name": "mukhtar_dead",

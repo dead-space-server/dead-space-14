@@ -171,7 +171,7 @@
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuitAkitovsky
   name: шлем скафандра Ми-ми-милитари
   description: Купол спокойствия. Гарантирует стерильную среду для ваших прекрасных мыслей.

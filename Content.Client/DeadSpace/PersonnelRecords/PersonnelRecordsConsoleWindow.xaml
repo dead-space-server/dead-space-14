@@ -35,12 +35,12 @@
                            Text="{Loc 'personnel-records-console-no-records'}"
                            HorizontalExpand="True"
                            Align="Center"
-                           FontColorOverride="DarkGray" />
+                           StyleClasses="DeadSpaceSubtitle" />
                     <Label Name="NoDepartmentLabel"
                            Text="{Loc 'personnel-records-console-no-department'}"
                            HorizontalExpand="True"
                            Align="Center"
-                           FontColorOverride="DarkGray"
+                           StyleClasses="DeadSpaceSubtitle"
                            Visible="False" />
                     <ScrollContainer VerticalExpand="True">
                         <ItemList Name="RecordListing" />
@@ -51,7 +51,7 @@
                        Text="{Loc 'personnel-records-console-select-record-info'}"
                        HorizontalExpand="True"
                        Align="Center"
-                       FontColorOverride="DarkGray" />
+                       StyleClasses="DeadSpaceSubtitle" />
                 <!-- Selected record info -->
                 <BoxContainer Name="PersonContainer"
                         Orientation="Vertical"
@@ -65,7 +65,7 @@
                     <BoxContainer Orientation="Horizontal"
                                   Margin="0 0 0 5">
                         <Label Text="{Loc 'crew-monitoring-ui-job-label'}"
-                               FontColorOverride="DarkGray" />
+                               StyleClasses="DeadSpaceSubtitle" />
                         <TextureRect Name="PersonJobIcon"
                                      TextureScale="2 2"
                                      Margin="6 0"
@@ -74,23 +74,23 @@
                     </BoxContainer>
                     <Label Name="PersonDepartment"
                            Margin="0 0 0 5"
-                           FontColorOverride="DarkGray" />
+                           StyleClasses="DeadSpaceSubtitle" />
                     <Label Name="PersonAge"
                            Margin="0 0 0 5"
-                           FontColorOverride="DarkGray" />
+                           StyleClasses="DeadSpaceSubtitle" />
                     <Label Name="PersonSpecies"
                            Margin="0 0 0 5"
-                           FontColorOverride="DarkGray" />
+                           StyleClasses="DeadSpaceSubtitle" />
                     <PanelContainer StyleClasses="LowDivider"
                                     Margin="0 5 0 5" />
                     <!-- Employment status -->
                     <BoxContainer Orientation="Horizontal"
                                   Margin="0 5 0 5">
                         <Label Text="{Loc 'personnel-records-console-status'}"
-                               FontColorOverride="DarkGray" />
+                               StyleClasses="DeadSpaceSubtitle" />
                         <Label Text=":"
                                Margin="0 0 6 0"
-                               FontColorOverride="DarkGray" />
+                               StyleClasses="DeadSpaceSubtitle" />
                         <Label Name="PersonStatus" />
                     </BoxContainer>
                     <RichTextLabel Name="PersonReason"
@@ -129,10 +129,10 @@
                     <BoxContainer Orientation="Horizontal"
                                   Margin="0 0 0 5">
                         <Label Text="{Loc 'personnel-records-console-criminal-status'}"
-                               FontColorOverride="DarkGray" />
+                               StyleClasses="DeadSpaceSubtitle" />
                         <Label Text=":"
                                Margin="0 0 6 0"
-                               FontColorOverride="DarkGray" />
+                               StyleClasses="DeadSpaceSubtitle" />
                         <Label Name="PersonCriminalStatus" />
                     </BoxContainer>
                     <Button Name="DeclareWantedButton"

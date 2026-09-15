@@ -18,9 +18,9 @@ public abstract class SharedAtmosMonitoringConsoleSystem : EntitySystem
         Dictionary<Vector2i, Dictionary<AtmosMonitoringConsoleSubnet, ulong>> chunks;
 
         // Should this be a full component state or a delta-state?
-        if (args.FromTick <= component.CreationTick || component.ForceFullUpdate)
+        if (args.FromTick <= component.CreationTick || args.FromTick <= component.ForceFullUpdateTick) // DS14
         {
-            component.ForceFullUpdate = false;
+            // component.ForceFullUpdate = false; // DS14: generating state must not consume other recipients' full update.
 
             // Full state
             chunks = new(component.AtmosPipeChunks.Count);

@@ -79,6 +79,10 @@ ui-options-scale-150 = 150%
 ui-options-scale-175 = 175%
 ui-options-scale-200 = 200%
 ui-options-hud-theme = HUD theme:
+ui-options-interface-style = Window and menu theme:
+ui-options-interface-style-dark = Dark
+ui-options-interface-style-light = Light
+ui-options-interface-style-classic = Classic
 ui-options-hud-theme-default = Default
 ui-options-hud-theme-plasmafire = Plasmafire
 ui-options-hud-theme-slimecore = Slimecore
@@ -407,6 +411,7 @@ ui-options-admin-player-tab-color-setting-roletype = Colorize all role types
 ui-options-admin-player-tab-color-setting-both = Colorize both
 
 ui-options-admin-overlay-title = Admin Overlay
+ui-options-admin-overlay-auto-enable-on-observer = Enable overlay when entering observer mode
 
 ui-options-admin-overlay-antag-format = Antag label style
 ui-options-admin-overlay-antag-format-binary = Show antag status
@@ -424,5 +429,9 @@ ui-options-admin-overlay-merge-distance = Stack merge distance
 ui-options-admin-overlay-ghost-fade-distance = Ghost overlay fade range from mouse
 ui-options-admin-overlay-ghost-hide-distance = Ghost overlay hide range from mouse
 
+ui-options-admin-strip-overlay-title = Strip Overlay
+ui-options-admin-strip-overlay-setting = Show strip overlay by default
+
 ui-options-function-use-world-target-action = Use targeted ability
 ui-options-function-switch-component-mode = Switch held item component mode
+ui-options-function-parry = Parry

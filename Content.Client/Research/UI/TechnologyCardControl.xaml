@@ -24,18 +24,24 @@
                                  HorizontalAlignment="Center"/>
                     <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalAlignment="Center" Margin="10 0 0 0">
                         <BoxContainer Orientation="Horizontal">
-                            <Label Name="TechnologyNameLabel" StyleClasses="LabelKeyText" HorizontalExpand="True"/>
+                            <!-- DS14-start -->
+                            <Label Name="TechnologyNameLabel" StyleClasses="DeadSpaceSectionTitle" HorizontalExpand="True"/>
+                            <!-- DS14-end -->
                             <TextureRect Name="DisciplineTexture" TextureScale="2 2" VerticalAlignment="Top" HorizontalAlignment="Right"/>
                         </BoxContainer>
                         <customControls:HSeparator StyleClasses="LowDivider" Margin="0 5 0 5"/>
                         <BoxContainer Orientation="Horizontal">
-                            <RichTextLabel Name="TierLabel" HorizontalAlignment="Left" StyleClasses="LabelSubText" HorizontalExpand="True"/>
+                            <!-- DS14-start -->
+                            <RichTextLabel Name="TierLabel" HorizontalAlignment="Left" StyleClasses="DeadSpaceSubtitle" HorizontalExpand="True"/>
+                            <!-- DS14-end -->
                             <Button Name="ResearchButton" Text="{Loc 'research-console-menu-server-research-button'}"/>
                         </BoxContainer>
                     </BoxContainer>
                 </BoxContainer>
                 <Control MinHeight="5"></Control>
-                <RichTextLabel Name="UnlocksLabel" HorizontalExpand="True" StyleClasses="LabelSubText"></RichTextLabel>
+                <!-- DS14-start -->
+                <RichTextLabel Name="UnlocksLabel" HorizontalExpand="True" StyleClasses="DeadSpaceSubtitle"></RichTextLabel>
+                <!-- DS14-end -->
             </BoxContainer>
         </Button>
     </BoxContainer>

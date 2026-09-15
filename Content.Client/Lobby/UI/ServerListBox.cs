@@ -1,4 +1,5 @@
-﻿using Robust.Client;
+﻿using Content.Client.DeadSpace.Stylesheets;
+using Robust.Client;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Utility;
@@ -53,12 +54,18 @@ public sealed class ServerListBox : BoxContainer
         {
             Orientation = LayoutOrientation.Horizontal,
             MinHeight = 50,
-            Margin = new Thickness(0, 0, 0, 5)
+            Margin = new Thickness(0, 0, 0, 5),
+            HorizontalExpand = true, // DS14
+            SeparationOverride = 12, // DS14
         };
 
         var nameAndDescriptionBox = new BoxContainer
         {
             Orientation = LayoutOrientation.Vertical,
+            // DS14-start
+            HorizontalExpand = true,
+            RectClipContent = true,
+            // DS14-end
         };
 
         var serverNameLabel = new Label
@@ -69,21 +76,23 @@ public sealed class ServerListBox : BoxContainer
 
         var descriptionLabel = new RichTextLabel
         {
-            MaxWidth = 500
+            MaxWidth = 500,
+            HorizontalExpand = true, // DS14
         };
         descriptionLabel.SetMessage(FormattedMessage.FromMarkup(description));
 
         var buttonBox = new BoxContainer
         {
             Orientation = LayoutOrientation.Horizontal,
-            HorizontalExpand = true,
+            HorizontalExpand = false, // DS14
             HorizontalAlignment = HAlignment.Right
         };
 
         var connectButton = new Button
         {
             Text = "Подключиться",
-            StyleClasses = { "DS14MenuTopButton" } // DS14
+            StyleClasses = { DeadSpaceStyleClass.TopAction }, // DS14
+            MinWidth = 150, // DS14
         };
 
         if (discord != null)
@@ -91,7 +100,7 @@ public sealed class ServerListBox : BoxContainer
             var discordButton = new Button
             {
                 Text = "Discord",
-                StyleClasses = { "DS14MenuTopButton" } // DS14
+                StyleClasses = { DeadSpaceStyleClass.TopAction } // DS14
             };
 
             discordButton.OnPressed += _ =>

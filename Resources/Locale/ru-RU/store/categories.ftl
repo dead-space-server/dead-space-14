@@ -17,6 +17,9 @@ store-discounted-items = Скидки
 
 # Revenant
 store-category-abilities = Способности
+store-category-combat = Боевые
+store-category-utility = Вспомогательные
+store-category-stealth = Скрытность
 
 # Wizard
 store-caregory-spellbook-offensive = Атакующие заклинания

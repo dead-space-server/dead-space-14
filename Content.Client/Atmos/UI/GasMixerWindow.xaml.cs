@@ -66,11 +66,19 @@ namespace Content.Client.Atmos.UI
 
         public void SetOutputPressure(float pressure)
         {
+            // ds-14-start
+            if (!SetOutputPressureButton.Disabled)
+                return;
+            // ds-14-end
             MixerPressureOutputInput.Text = pressure.ToString(CultureInfo.CurrentCulture);
         }
 
         public void SetNodePercentages(float nodeOne)
         {
+            // ds-14-start
+            if (!SetMixerPercentageButton.Disabled)
+                return;
+            // ds-14-end
             nodeOne *= 100.0f;
             MixerNodeOneInput.Text = nodeOne.ToString("0.##", CultureInfo.CurrentCulture);
 

@@ -80,6 +80,10 @@ stack-artifact-fragment = artifact {$amount ->
     [1] fragment
     *[other] fragments
 }
+stack-xenoborg-crystal = xenoborg {$amount ->
+    [1] crystal
+    *[other] crystals
+}
 
 # best materials
 stack-ground-tobacco = ground tobacco

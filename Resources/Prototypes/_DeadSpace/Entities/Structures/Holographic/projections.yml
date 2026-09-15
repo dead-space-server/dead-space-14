@@ -1,6 +1,6 @@
 - type: entity
   id: HolosignRND
-  parent: HolosignWetFloor
+  parent: BaseHoloSign
   name: РНД голобарьер
   description: Барьер из твёрдого света, не пропускает через себя аномальных сущностей, но довольно хрупкий.
   components:

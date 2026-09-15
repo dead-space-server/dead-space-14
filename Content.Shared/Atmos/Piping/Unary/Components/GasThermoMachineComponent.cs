@@ -17,6 +17,10 @@ namespace Content.Shared.Atmos.Piping.Unary.Components
         [DataField]
         [GuidebookData]
         public float HeatCapacity = 5000;
+        // DS14-start
+        [DataField]
+        public float PowerUsageMultiplier = 1f;
+        // DS14-end
 
         [DataField, AutoNetworkedField]
         public float TargetTemperature = Atmospherics.T20C;

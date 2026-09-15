@@ -15,17 +15,21 @@
         <PanelContainer StyleClasses="LowDivider" Margin="0 5 0 5"/>
 
         <!-- Selected borg info -->
-        <Label Name="SelectCyborg" Text="{Loc 'robotics-console-select-cyborg'}" HorizontalAlignment="Center"/>
+        <!-- DS14-start -->
+        <Label Name="SelectCyborg" Text="{Loc 'robotics-console-select-cyborg'}" HorizontalAlignment="Center" StyleClasses="DeadSpaceSubtitle"/>
+        <!-- DS14-end -->
         <BoxContainer Name="BorgContainer" Orientation="Vertical" MaxHeight="200" Visible="False">
             <BoxContainer Margin="5 5 5 5" Orientation="Horizontal">
-                <PanelContainer VerticalExpand="True">
+                <!-- DS14-start -->
+                <PanelContainer VerticalExpand="True" StyleClasses="DeadSpaceInset">
+                <!-- DS14-end -->
                     <BoxContainer HorizontalAlignment="Center" VerticalAlignment="Center">
                         <TextureRect Name="BorgSprite" TextureScale="4 4"/>
                     </BoxContainer>
                 </PanelContainer>
-                <PanelContainer VerticalExpand="True" HorizontalExpand="True">
-                    <RichTextLabel Name="BorgInfo"/>
-                </PanelContainer>
+                <!-- DS14-start -->
+                <RichTextLabel Name="BorgInfo" VerticalExpand="True" HorizontalExpand="True"/>
+                <!-- DS14-end -->
                 <!-- TODO: button to open camera window for this borg -->
             </BoxContainer>
             <controls:StripeBack>

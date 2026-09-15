@@ -15,10 +15,12 @@
                 VerticalAlignment="Center">
 
                 <!-- Power -->
+                <!-- DS14-start -->
                 <Label
                     Text="{Loc 'power-charge-window-power'}"
                     HorizontalExpand="True"
-                    StyleClasses="highlight" />
+                    StyleClasses="DeadSpaceSectionTitle" />
+                <!-- DS14-end -->
 
                 <BoxContainer
                     Orientation="Horizontal"
@@ -47,23 +49,29 @@
                     Text="0 / 0 W" />
 
                 <!-- Status -->
+                <!-- DS14-start -->
                 <Label
                     Text="{Loc 'power-charge-window-status'}"
-                    StyleClasses="highlight" />
+                    StyleClasses="DeadSpaceSectionTitle" />
+                <!-- DS14-end -->
                 <Label Name="StatusLabel"
                     Text="{Loc 'power-charge-window-status-fully-charged'}" />
 
                 <!-- ETA -->
+                <!-- DS14-start -->
                 <Label
                     Text="{Loc 'power-charge-window-eta'}"
-                    StyleClasses="highlight" />
+                    StyleClasses="DeadSpaceSectionTitle" />
+                <!-- DS14-end -->
                 <Label Name="EtaLabel"
                     Text="N/A" />
 
                 <!-- Charge -->
+                <!-- DS14-start -->
                 <Label
                     Text="{Loc 'power-charge-window-charge'}"
-                    StyleClasses="highlight" />
+                    StyleClasses="DeadSpaceSectionTitle" />
+                <!-- DS14-end -->
 
                 <ProgressBar Name="ChargeBar"
                     MaxValue="255">
@@ -75,8 +83,9 @@
                 </ProgressBar>
             </GridContainer>
         </BoxContainer>
+        <!-- DS14-start -->
         <PanelContainer
-            StyleClasses="BackgroundPanelDark"
+            StyleClasses="DeadSpaceInset"
             VerticalAlignment="Top">
 
             <SpriteView Name="EntityView"
@@ -84,5 +93,6 @@
                 Margin="0 0 0 26"
                 OverrideDirection="South" />
         </PanelContainer>
+        <!-- DS14-end -->
     </BoxContainer>
 </controls:FancyWindow>

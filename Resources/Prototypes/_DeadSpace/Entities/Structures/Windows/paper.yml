@@ -1,0 +1,25 @@
+- type: entity
+  parent: Window
+  id: PaperWindow
+  name: бумажное окно
+  description: Перегородка сёдзи из бумаги и дерева.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Windows/paper_window.rsi
+    state: normal
+  - type: Icon
+    sprite: _DeadSpace/Structures/Windows/paper_window.rsi
+    state: normal
+  - type: IconSmooth
+    mode: NoSprite
+  - type: Construction
+    graph: PaperWindow
+    node: window
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]

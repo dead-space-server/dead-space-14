@@ -22,6 +22,7 @@
   - AllAccess
   access:
   - CentralCommand
+  - BlueShield
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant, TrackingImplant, DeathRattleImplantCentcomm ]
@@ -71,26 +72,87 @@
     - type: PresetIdCard
       job: CentralCommandGreenBeretOfficer
 
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackGreenBeret
+  name: модифицированный рюкзак офицера "Зелёный Берет"
+  description: Рюкзак офицера "Зелёный Берет" с функцией РИГ.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Back/greenberet.rsi
+  - type: Storage
+    grid:
+    - 0,0,7,5
+  - type: ClothingSpeedModifier
+    walkModifier: 1
+    sprintModifier: 1
+  - type: ToggleableClothing
+    toggleDelay: 1
+    clothingPrototype: ClothingOuterHardsuitGreenBeret
+    requiredSlot: BACK
+    slot: outerClothing
+  - type: Clothing
+    equipDelay: 1
+    unequipDelay: 1
+  - type: ContainerContainer
+    containers:
+      toggleable-clothing: !type:ContainerSlot {}
+      storagebase: !type:Container
+        ents: []
+  - type: ExplosionResistance
+    damageCoefficient: 0.6
+
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackRedSword
+  name: модифицированный рюкзак офицера "Красный Меч"
+  description: Рюкзак офицера "Красный Меч" с функцией РИГ.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Back/redsword.rsi
+  - type: Storage
+    grid:
+    - 0,0,9,5
+  - type: ClothingSpeedModifier
+    walkModifier: 1
+    sprintModifier: 1
+  - type: ToggleableClothing
+    toggleDelay: 1
+    clothingPrototype: ClothingOuterHardsuitRedSword
+    requiredSlot: BACK
+    slot: outerClothing
+  - type: Clothing
+    equipDelay: 1
+    unequipDelay: 1
+  - type: ContainerContainer
+    containers:
+      toggleable-clothing: !type:ContainerSlot {}
+      storagebase: !type:Container
+        ents: []
+  - type: ExplosionResistance
+    damageCoefficient: 0.6
+
 - type: startingGear
   id: CentcomGreenBeretGear
   equipment:
-    jumpsuit: ClothingUniformTurtleneckTactic
-    # back: ClothingBackpackSatchelBig
-    neck: ClothingNeckMantleGreenBerethoulder
-    eyes: ClothingEyesHudERT
+    jumpsuit: ClothingUniformJumpsuitGreenBeret
+    back: ClothingBackpackGreenBeret
+    neck: ClothingNeckMantleGreenBeretShoulder
+    eyes: ClothingEyesHudGreenBeret
+    head: ClothingHeadHatBeretGreenBeret
+    mask: ClothingMaskGasGreenBeret
     ears: ClothingHeadsetAltCentCom
-    gloves: ClothingHandsGlovesCombat
-    outerClothing: ClothingOuterHardsuitGreenBeret
-    shoes: ADTClothingShoesBootsMagERT
-    suitstorage: JetpackBlackFilled
+    gloves: ClothingHandsGlovesGreenBeret
+    outerClothing: ClothingOuterArmorGreenBeret
+    shoes: ClothingShoesBootsGreenBeret
     id: GreenBeretOfficerPDA
     pocket1: FlashlightSeclite
     pocket2: WeaponDisabler
-    belt: ClothingBeltMilitaryWebbingRedSwordCentComFilled
+    belt: ClothingBeltMilitaryWebbingGreenBeretCentComFilled
   storage:
     back:
     - BoxCardboardERT
-    - ERTloadoutBlueShieldPrimary
+    - ERTloadoutGreenBeretPrimary
     - ADTtelescopicBaton
     - TelescopicShield
     - MedkitCombatFilled
@@ -140,9 +202,10 @@
   - AllAccess
   access:
   - CentralCommand
+  - BlueShield
   special:
   - !type:AddImplantSpecial
-    implants: [ MindShieldImplant, TrackingImplant, DeathRattleImplantCentcomm ]
+    implants: [ MindShieldImplant, TrackingImplant, DeathRattleImplantCentcomm, RadioImplantSOC, RezervImplant ]
   - !type:AddComponentSpecial
     components:
     - type: AntagImmune
@@ -194,12 +257,12 @@
   id: CentcomRedSwordGear
   equipment:
     jumpsuit: ClothingUniformTurtleneckTactic
-    # back: ClothingBackpackSatchelBig
-    neck: ClothingNeckMantleRedSwordhoulder
+    back: ClothingBackpackRedSword
+    neck: ClothingNeckMantleRedSwordShoulder
     eyes: ClothingEyesHudERTGamma
     ears: ClothingHeadsetAltCentCom
     gloves: ClothingHandsGlovesCombat
-    outerClothing: ClothingOuterHardsuitRedSword
+    suitstorage: JetpackVoidFilled
     shoes: ADTClothingShoesBootsMagERT
     id: RedSwordOfficerPDA
     pocket1: FlashlightSeclite
@@ -207,13 +270,16 @@
     belt: ClothingBeltMilitaryWebbingRedSwordCentComFilled
   storage:
     back:
-    - BoxCardboardERT
+    - BoxCardboardERTGamma
     - ERTloadoutGammaPrimary
+    - ERTloadoutGammaSecondary
+    - ERTloadoutMelee
     - BSAACombatKitFilled
-    - PinpointerNuclear
     - InjectorCaseERTFilled
+    - PinpointerNuclear
     - TelescopicShield
-    - TelescopicShield
+    - BodyBagFolded
+    - DefibrillatorCompact
 
 - type: chameleonOutfit
   id: CentcomRedSwordGearChameleonOutfit

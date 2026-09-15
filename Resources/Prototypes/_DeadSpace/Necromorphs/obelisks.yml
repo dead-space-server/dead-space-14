@@ -11,9 +11,7 @@
       Heat:
         collection:
           MetalLaserImpact
-  - type: Tag
-    tags:
-    - Wall
+  - type: Wall
   - type: Physics
     bodyType: Static
   - type: Sprite
@@ -328,9 +326,7 @@
       Heat:
         collection:
           MetalLaserImpact
-  - type: Tag
-    tags:
-    - Wall
+  - type: Wall
   - type: XenoArtifact
     effectsTable: !type:NestedSelector
       tableId: ObeliskArtifactEffectsDefaultTable
@@ -383,9 +379,7 @@
       Heat:
         collection:
           MetalLaserImpact
-  - type: Tag
-    tags:
-    - Wall
+  - type: Wall
   - type: Physics
     bodyType: Static
   - type: Damageable
@@ -428,9 +422,7 @@
       Heat:
         collection:
           MetalLaserImpact
-  - type: Tag
-    tags:
-    - Wall
+  - type: Wall
   - type: Physics
     bodyType: Static
   - type: Sprite
@@ -472,7 +464,7 @@
       sprite: _DeadSpace/Structures/obelisk_cracks.rsi
   - type: SuperMatterialNecroObelisk
     endAfterDestroy: true
-    warn: false
+    warn: true
     cudzu: false
     active: false
   - type: WarpPoint
@@ -491,6 +483,11 @@
     supplyRate: 10000
     supplyRampRate: 500
     supplyRampTolerance: 500
+  - type: PowerMonitoringDevice
+    group: Generator
+    loadNode: output
+    sprite: _DeadSpace/Interface/Power/obelisk.rsi
+    state: obelisk
   - type: Anchorable
   - type: Electrified
     onHandInteract: false

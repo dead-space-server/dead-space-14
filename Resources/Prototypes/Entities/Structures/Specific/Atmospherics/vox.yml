@@ -15,6 +15,21 @@
       Ammonia: stationAmmonia
       NitrousOxide: stationNO
       Frezon: danger
+      # DS14-start
+      InfectionDeadSpace: stationInfectionDeadSpace
+      Iprit: stationIprit
+      Brizidium: stationBrizidium
+      Hydrogen: stationHydrogen
+      Fixirium: stationFixirium
+      Nitriatium: stationNitriatium
+      Hilium: stationHilium
+      HyperNoblium: stationHyperNoblium
+      ProtoNitrate: stationProtoNitrate
+      Helium: stationHelium
+      Halon: stationHalon
+      Zauker: stationZauker
+      Antinoblium: stationAntinoblium
+      # DS14-end
 
 - type: entity
   parent: [AirSensorVoxBase, AirSensor]
@@ -23,11 +38,22 @@
 - type: entity
   parent: [AirSensorVoxBase, GasVentPump]
   id: GasVentPumpVox
+  components:
+  - type: AtmosPipeLayers
+    alternativePrototypes:
+      Primary: GasVentPumpVox
+      Secondary: GasVentPumpVoxAlt1
+      Tertiary: GasVentPumpVoxAlt2
 
 - type: entity
   parent: [AirSensorVoxBase, GasVentScrubber]
   id: GasVentScrubberVox
   components:
+  - type: AtmosPipeLayers
+    alternativePrototypes:
+      Primary: GasVentScrubberVox
+      Secondary: GasVentScrubberVoxAlt1
+      Tertiary: GasVentScrubberVoxAlt2
   - type: GasVentScrubber
     wideNet: true # Air alarm with auto mode overrides filters with hardcoded defaults so default to widenet
     filterGases:
@@ -39,6 +65,20 @@
     - Ammonia
     - NitrousOxide
     - Frezon
+    # DS14-start
+    - InfectionDeadSpace
+    - Nitriatium
+    - Hilium
+    - Brizidium
+    - Iprit
+    - Hydrogen
+    - HyperNoblium
+    - ProtoNitrate
+    - Helium
+    - Halon
+    - Zauker
+    - Antinoblium
+    # DS14-end
 
 # use this to prevent overriding filters with hardcoded defaults
 - type: entity

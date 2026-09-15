@@ -1,7 +1,11 @@
 <Control xmlns="https://spacestation14.io">
-    <BoxContainer Orientation="Vertical">
+    <!-- DS14-start -->
+    <BoxContainer Orientation="Vertical" Margin="0 0 0 4">
+    <!-- DS14-end -->
         <Label Name="TitleLabel" Access="Public" />
-        <Label Name="ExampleLabel" Access="Public" />
+        <!-- DS14-start -->
+        <Label Name="ExampleLabel" Access="Public" StyleClasses="DeadSpaceSubtitle" />
+        <!-- DS14-end -->
         <ColorSelectorSliders Name="Slider" Access="Public" HorizontalExpand="True" />
     </BoxContainer>
 </Control>

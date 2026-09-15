@@ -241,6 +241,16 @@
 # DS14-start
 - type: entity
   parent: CableApcStack
+  id: CableApcStack15
+  suffix: 15
+  components:
+  - type: Sprite
+    state: coillv-20
+  - type: Stack
+    count: 15
+
+- type: entity
+  parent: CableApcStack
   id: CableApcStack5
   suffix: 5
   components:

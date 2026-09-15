@@ -57,6 +57,7 @@
   id: JobChemist
   groups:
   - GroupTankHarness
+  - ChemistHead # DS14
   - MedicalMask
   - ChemistJumpsuit
   - MedicalGloves

@@ -154,3 +154,8 @@
       shader: unshaded
   - type: Electrified
     requirePower: false
+  # DS14-start
+  - type: Tag
+    tags:
+    - CannotTether
+  # DS14-end

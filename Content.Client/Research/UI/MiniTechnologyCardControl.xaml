@@ -21,7 +21,9 @@
                              Margin="1"
                              TextureScale="0.5 0.5"/>
                 <Control MinWidth="5"/>
-                <RichTextLabel Name="NameLabel" StyleClasses="LabelSubText" VerticalAlignment="Center"/>
+                <!-- DS14-start -->
+                <RichTextLabel Name="NameLabel" StyleClasses="DeadSpaceSubtitle" VerticalAlignment="Center"/>
+                <!-- DS14-end -->
             </BoxContainer>
         </Button>
     </BoxContainer>

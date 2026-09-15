@@ -29,6 +29,9 @@
           layer:
           - SlipLayer
     - type: Pullable
+    - type: Vehicle
+    - type: ContainerVehicle
+      containerId: entity_storage
     - type: CardboardBox
       effectSound: /Audio/Effects/chime.ogg
     - type: InputMover
@@ -63,6 +66,11 @@
       containers:
         - entity_storage
     - type: GravityAffected
+    - type: MovementSpeedModifier
+      weightlessModifier: 0
+      acceleration: 2
+      friction: 2
+      frictionNoInput: 6
 
 - type: entity
   id: StealthBox

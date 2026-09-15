@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.Guidebook;
@@ -55,7 +56,6 @@ public sealed partial class RequirementsSelector : BoxContainer
             Text = Loc.GetString("role-timer-locked"),
             Visible = true,
             HorizontalAlignment = HAlignment.Center,
-            StyleClasses = {"DS14MenuProfileLabel"}, // DS14
         };
 
         _lockStripe = new StripeBack()
@@ -132,21 +132,20 @@ public sealed partial class RequirementsSelector : BoxContainer
             Text = text,
             MinWidth = 90,
             HorizontalExpand = true,
-            StyleClasses = { "DS14MenuProfileControl" }, // DS14
         };
 
         // DS14-start
         if (UseJobPriorityColors)
         {
             button.AddStyleClass(value == (int) JobPriority.Never
-                ? "DS14MenuJobPriorityNever"
-                : "DS14MenuJobPriorityPreferred");
+                ? DeadSpaceStyleClass.JobPriorityNever
+                : DeadSpaceStyleClass.JobPriorityPreferred);
         }
         else if (UseAntagPreferenceColors)
         {
             button.AddStyleClass(value == 0
-                ? "DS14MenuAntagPreferenceOn"
-                : "DS14MenuAntagPreferenceOff");
+                ? DeadSpaceStyleClass.AntagPreferenceOn
+                : DeadSpaceStyleClass.AntagPreferenceOff);
         }
         // DS14-end
 

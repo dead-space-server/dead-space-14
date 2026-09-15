@@ -65,6 +65,7 @@
       sprite: Structures/Machines/parts.rsi
       state: box_0
       snapCardinals: true
+    - type: GravityAffected #DS14
 
 - type: entity
   id: MachineFrame
@@ -142,6 +143,7 @@
           whitelist:
             components:
             - MachineBoard
+    - type: GravityAffected #DS14
 
 - type: entity
   id: MachineFrameDestroyed
@@ -184,3 +186,4 @@
     - type: Sprite
       sprite: Structures/Machines/parts.rsi
       state: destroyed
+    - type: GravityAffected #DS14

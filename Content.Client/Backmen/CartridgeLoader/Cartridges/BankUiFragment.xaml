@@ -6,40 +6,39 @@
                            HorizontalExpand="True"
                            VerticalExpand="True"
                            Margin="1 0 2 0">
-    <PanelContainer StyleClasses="DS14MenuPanelDark" HorizontalExpand="True" VerticalExpand="True">
+    <PanelContainer StyleClasses="DeadSpaceSurfaceDark" HorizontalExpand="True" VerticalExpand="True"> <!-- DS14 -->
         <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="8">
             <BoxContainer Name="LinkedAccount" Orientation="Vertical" Visible="False" SeparationOverride="8">
-                <PanelContainer StyleClasses="DS14MenuInset" HorizontalExpand="True">
+                <!-- DS14-start -->
+                <PanelContainer StyleClasses="DeadSpaceInset" HorizontalExpand="True">
                     <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="4">
                         <RichTextLabel Name="LinkedAccountNumberLabel"/>
                         <RichTextLabel Name="LinkedAccountNameLabel"/>
                         <RichTextLabel Name="LinkedAccountBalanceLabel"/>
                     </BoxContainer>
                 </PanelContainer>
-                <PanelContainer Name="TransferContainer" StyleClasses="DS14MenuInset" HorizontalExpand="True">
+                <PanelContainer Name="TransferContainer" StyleClasses="DeadSpaceInset" HorizontalExpand="True">
                     <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="6">
-                        <Label Text="{Loc 'bank-program-transfer-title'}" StyleClasses="DS14MenuProfileSection"/>
+                        <Label Text="{Loc 'bank-program-transfer-title'}" StyleClasses="DeadSpaceSectionTitle"/>
                         <LineEdit Name="TransferAccountInput"
                                   PlaceHolder="{Loc 'bank-program-transfer-account-placeholder'}"
                                   HorizontalExpand="True"
-                                  SetHeight="30"
-                                  StyleClasses="DS14MenuInput"/>
+                                  SetHeight="30"/>
                         <LineEdit Name="TransferAmountInput"
                                   PlaceHolder="{Loc 'bank-program-transfer-amount-placeholder'}"
                                   HorizontalExpand="True"
-                                  SetHeight="30"
-                                  StyleClasses="DS14MenuInput"/>
+                                  SetHeight="30"/>
                         <LineEdit Name="TransferPinInput"
                                   PlaceHolder="{Loc 'bank-program-transfer-pin-placeholder'}"
                                   HorizontalExpand="True"
-                                  SetHeight="30"
-                                  StyleClasses="DS14MenuInput"/>
+                                  SetHeight="30"/>
                         <Button Name="TransferButton"
                                 Text="{Loc 'bank-program-transfer-button'}"
                                 HorizontalAlignment="Right"
-                                StyleClasses="DS14MenuAction"/>
+                                StyleClasses="DeadSpaceAction"/>
                     </BoxContainer>
                 </PanelContainer>
+                <!-- DS14-end -->
             </BoxContainer>
             <RichTextLabel Name="NoLinkedAccount" Visible="False"/>
         </BoxContainer>

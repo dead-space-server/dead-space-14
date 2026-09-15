@@ -1,3 +1,4 @@
+using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.GameTicking.Managers;
 using Content.Shared.PDA;
 using Robust.Shared.Utility;
@@ -206,12 +207,9 @@ namespace Content.Client.PDA
             ToggleSilentModeButton.Description = Loc.GetString(silentMode
                 ? "comp-pda-ui-silent-mode-button-description-on"
                 : "comp-pda-ui-silent-mode-button-description-off");
-            ToggleSilentModeButton.BackgroundColor = silentMode
-                ? Color.FromHex("#2A4A1A")
-                : Color.FromHex(PdaSettingsButton.NormalBgColor);
-            ToggleSilentModeButton.ForegroundColor = silentMode
-                ? Color.FromHex("#A0FF80")
-                : Color.FromHex(PdaSettingsButton.EnabledFgColor);
+            ToggleSilentModeButton.RemoveStyleClass(DeadSpaceStyleClass.ControlPositive);
+            if (silentMode)
+                ToggleSilentModeButton.AddStyleClass(DeadSpaceStyleClass.ControlPositive);
             // DS14-End
         }
 

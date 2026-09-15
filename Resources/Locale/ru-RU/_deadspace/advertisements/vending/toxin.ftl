@@ -1,0 +1,11 @@
+advertisement-toxinvend-1 = Потешь своего лаборанта в душе!
+advertisement-toxinvend-2 = Стань смертью! Разрушитилем миров!
+advertisement-toxinvend-3 = Запрещено использовать лимитки в исследованиях с 2696.
+advertisement-toxinvend-4 = Наука требует жертв. Массовых!
+advertisement-toxinvend-5 = Напои слизня плазмой!
+advertisement-toxinvend-6 = Только с использованием перчаток.
+advertisement-toxinvend-7 = Запрет для клоунов.
+advertisement-toxinvend-8 = Синтезируй жидкое пространство!
+thankyou-toxinvend-1 = Не взорвись!
+thankyou-toxinvend-2 = Осторожнее с трифторидом хлора.
+thankyou-toxinvend-3 = Научный Руководитель будет в восторге!

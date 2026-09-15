@@ -13,6 +13,7 @@ using Content.Shared.NPC.Systems;
 using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components; //DS14
 using Content.Shared.Zombies;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 
 namespace Content.Server.Dragon;
@@ -169,8 +170,10 @@ public sealed partial class DragonSystem : EntitySystem
             }
         }
 
+        var position = _transform.GetWorldPosition(xform);
+
         // cant put a rift on solars
-        foreach (var tile in _map.GetTilesIntersecting(xform.GridUid.Value, grid, new Circle(_transform.GetWorldPosition(xform), RiftTileRadius), false))
+        foreach (var tile in _map.GetTilesIntersecting(xform.GridUid.Value, grid, new Circle(position, RiftTileRadius), false))
         {
             if (!_turf.IsSpace(tile))
                 continue;
@@ -179,8 +182,7 @@ public sealed partial class DragonSystem : EntitySystem
             return;
         }
 
-        var carpUid = Spawn(component.RiftPrototype, _transform.GetMapCoordinates(uid, xform: xform));
-        Transform(carpUid).LocalRotation = Angle.Zero;
+        var carpUid = Spawn(component.RiftPrototype, new MapCoordinates(position, xform.MapID), rotation: Transform(xform.GridUid.Value).LocalRotation);
 
         component.Rifts.Add(carpUid);
         Comp<DragonRiftComponent>(carpUid).Dragon = uid;

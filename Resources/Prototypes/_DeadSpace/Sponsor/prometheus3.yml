@@ -22,9 +22,11 @@
         base:
           True: { state: icon-open }
           False: { state: icon }
+    netsync: false
+  - type: Appearance
+    netsync: false
   - type: ExplosionResistance
     damageCoefficient: 0.1
-  - type: Appearance
   - type: Storage
     maxItemSize: Huge
     grid:
@@ -198,79 +200,12 @@
 
 # BATON
 - type: entity
-  parent: BaseItem
+  parent: EnergySword
   id: ESwordPrometheus3
   name: меч «Sandy-Cat»
-  description: Новинка против невиновных — механизм меча заряжен оглушающим зарядом, валит даже капитана.
+  description: Новинка против невиновных — заряд в мече слабый, но как аргумент — безотказный.
   categories: [ HideSpawnMenu ]
   components:
-  - type: Sprite
-    sprite: Objects/Weapons/Melee/e_sword.rsi
-    layers:
-    - state: e_sword
-    - state: e_sword_blade
-      color: "#FFFFFF"
-      visible: false
-      shader: unshaded
-      map: [ "blade" ]
-  - type: EnergySword
-  - type: ItemToggle
-    onActivate: false # DS14
-    soundActivate:
-      path: /Audio/Weapons/ebladeon.ogg
-    soundDeactivate:
-      path: /Audio/Weapons/ebladeoff.ogg
-  - type: ItemToggleActiveSound
-    activeSound:
-      path: /Audio/Weapons/ebladehum.ogg
-  - type: Item
-    size: Small
-    sprite: Objects/Weapons/Melee/e_sword-inhands.rsi
-    heldPrefix: "off"
-    inhandVisuals:
-      left:
-      - state: inhand-left
-      right:
-      - state: inhand-right
-  - type: UseDelay
-    delay: 1.0
-  - type: PointLight
-    enabled: false
-    radius: 2
-    energy: 2
-    color: white
-    netsync: false
-  - type: Appearance
-  - type: ToggleableVisuals
-    spriteLayer: blade
-    inhandVisuals:
-      left:
-      - state: inhand-left-blade
-        shader: unshaded
-      right:
-      - state: inhand-right-blade
-        shader: unshaded
-  - type: ItemTogglePointLight
-  - type: DisarmMalus
-    malus: 0
-  - type: StaminaDamageOnHit
-    damage: 0
-  - type: SwitchableWeapon
-    openSound: null
-    closeSound: null
-    damageOpen:
-      types:
-        Blunt: 3
-    damageFolded:
-      types:
-        Blunt: 0
-    staminaDamageFolded: 0
-    staminaDamageOpen: 30
-  - type: MeleeWeapon
-    wideAnimationRotation: -135
-    damage:
-      types:
-        Blunt: 0
   - type: ItemToggleMeleeWeapon
     activatedSoundOnHit:
       path: /Audio/Weapons/eblade1.ogg
@@ -280,10 +215,16 @@
       path: /Audio/Weapons/eblade1.ogg
       params:
         variation: 0.250
+        volume: -10
     activatedSoundOnSwing:
       path: /Audio/Weapons/eblademiss.ogg
       params:
         variation: 0.125
+    activatedDamage:
+      types:
+        Slash: 7
+        Heat: 7
+        Structural: 10
 
 # MASK
 - type: entity
@@ -328,6 +269,11 @@
     sprite: _DeadSpace/Sponsor/Prometheus3/gloves.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Prometheus3/gloves.rsi
+  - type: DamageOnInteractProtection
+    damageProtection:
+      flatReductions:
+        Heat: 10
+        Caustic: 5
   - type: Tag
     tags: [ ] # ignore "WhitelistChameleon" tag
 
@@ -383,38 +329,15 @@
 
 # JawsOfLife
 - type: entity
-  parent: JawsOfLife
+  parent: SyndicateJawsOfLife
   id: JawsOfLifePrometheus3
   name: кроваво-красные челюсти жизни
   description: Набор челюстей жизни, скомпонованных при помощи магии науки..
   categories: [ HideSpawnMenu ]
   components:
-  - type: Sprite
-    sprite: Objects/Tools/jaws_of_life.rsi
-    state: syn_jaws_pry
-  - type: Item
-    inhandVisuals:
-      left:
-      - state: syn_inhand-left
-      right:
-      - state: syn_inhand-right
-    size: Normal
-  - type: MultipleTool
-    entries:
-      - behavior: Prying
-        sprite:
-          sprite: Objects/Tools/jaws_of_life.rsi
-          state: syn_jaws_pry
-        useSound: /Audio/Items/jaws_pry.ogg
-        changeSound: /Audio/Items/change_jaws.ogg
-      - behavior: Cutting
-        sprite:
-          sprite: Objects/Tools/jaws_of_life.rsi
-          state: syn_jaws_cutter
-        useSound: /Audio/Items/jaws_cut.ogg
-        changeSound: /Audio/Items/change_jaws.ogg
   - type: Prying
     speedModifier: 3.0
+    force: false
 
 # MEDIPEN
 - type: entity
@@ -476,13 +399,47 @@
     sprite: _DeadSpace/Sponsor/Prometheus3/pouch.rsi
     layers:
     - state: icon
-      map: [ base ]
+      map: [ "empty-icon" ]
+    - state: icon-open
+      map: ["openLayer"]
+      visible: false
+    - state: fill-1
+      map: ["fill-1"]
+      visible: false
+    - state: fill-2
+      map: ["fill-2"]
+      visible: false
+    - state: fill-3
+      map: ["fill-3"]
+      visible: false
+    - state: fill-4
+      map: ["fill-4"]
+      visible: false
+  - type: UserInterface
+    interfaces:
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
   - type: GenericVisualizer
     visuals:
-      enum.StorageVisuals.Open:
-        base:
-          True: { state: icon-open }
-          False: { state: icon }
+      enum.SharedBagOpenVisuals.BagState: # You don't have to use both of these if its not necessary.
+        closeLayer:
+          Open: { visible: false }
+          Closed: { visible: true }
+        openLayer:
+          Open: { visible: true }
+          Closed: { visible: false }
+    netsync: false
+  - type: ItemCounter
+    count:
+      components: [Item]
+    composite: true
+    layerStates:
+    - fill-1
+    - fill-2
+    - fill-3
+    - fill-4
+  - type: Appearance
+    netsync: false
   - type: Item
     inhandVisuals:
       left:
@@ -491,7 +448,6 @@
       right:
       - state: inhand-right
         color: "#ca4545"
-  - type: Appearance
   - type: StorageFill
     contents:
     - id: ClothingMaskGasPrometheus3

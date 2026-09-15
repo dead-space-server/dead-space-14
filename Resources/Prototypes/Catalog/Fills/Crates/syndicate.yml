@@ -31,8 +31,7 @@
     - type: SurplusBundle
       totalPrice: 125
 
-#DS start
-
+# DS14-start
 - type: entity
   parent: CrateSyndicate
   id: CrateBundleNukeхС67
@@ -44,7 +43,7 @@
     containers:
       entity_storage: !type:AllSelector
         children:
-        - id: ClothingBackpackSatchelTaipanBundleХС67
+        - id: ClothingBackpackSatchelTaipanBundleXC67
         - id: WeaponRifleXC67
 
 - type: entity
@@ -80,7 +79,7 @@
   id: CrateBundleNukeBulldog
   name: Набор Бульдога
   suffix: Готовый закуп, Бульдог
-  description: К сожалению чего-то стоит.
+  description: К сожалению, чего-то стоит.
   components:
   - type: EntityTableContainerFill
     containers:
@@ -90,3 +89,4 @@
         - id: ClothingBackpackDuffelSyndicateFilledShotgun
         - id: BoxLethalshotMagnum
           amount: 5
+# DS14-end

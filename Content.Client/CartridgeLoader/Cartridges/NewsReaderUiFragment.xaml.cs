@@ -1,3 +1,4 @@
+using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.Message;
 using Content.Client.RichText;
 using Content.Client.UserInterface.RichText;
@@ -95,7 +96,7 @@ public sealed partial class NewsReaderUiFragment : BoxContainer
             {
                 Margin = new Thickness(4, 4, 4, 4),
                 HorizontalAlignment = HAlignment.Center,
-                StyleClasses = { "DS14MenuSubtitle" },
+                StyleClasses = { DeadSpaceStyleClass.Subtitle },
             };
             noCommentsLabel.SetMarkup(Loc.GetString("news-read-ui-no-comments"));
             CommentsContainer.AddChild(noCommentsLabel);
@@ -104,16 +105,11 @@ public sealed partial class NewsReaderUiFragment : BoxContainer
 
         foreach (var comment in comments)
         {
-            var commentPanel = new PanelContainer
-            {
-                HorizontalExpand = true,
-                Margin = new Thickness(0, 0, 0, 4),
-                StyleClasses = { "DS14MenuListRow" },
-            };
-
             var commentBox = new BoxContainer
             {
                 Orientation = BoxContainer.LayoutOrientation.Vertical,
+                HorizontalExpand = true,
+                Margin = new Thickness(6, 4, 6, 8),
             };
 
             var metaLabel = new RichTextLabel
@@ -135,8 +131,7 @@ public sealed partial class NewsReaderUiFragment : BoxContainer
 
             commentBox.AddChild(metaLabel);
             commentBox.AddChild(contentLabel);
-            commentPanel.AddChild(commentBox);
-            CommentsContainer.AddChild(commentPanel);
+            CommentsContainer.AddChild(commentBox);
         }
     }
     // DS14-end

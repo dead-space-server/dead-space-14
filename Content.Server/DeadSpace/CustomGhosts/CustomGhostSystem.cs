@@ -28,14 +28,13 @@ public sealed class CustomGhostSystem : EntitySystem
         _appearance.RemoveData(uid, GhostVisuals.Damage);
         RemCompDeferred<GhostSpriteStateComponent>(uid);
 
-        _ghostSystem.SetGhostColor(uid, Color.White);
+        var color = ghost.Alpha > 0
+            ? ghost.Color.WithAlpha(ghost.Alpha)
+            : ghost.Color;
 
+        _ghostSystem.SetGhostColor(uid, color);
         _appearance.SetData(uid, CustomGhostAppearance.Sprite, ghost.SpritePath.ToString());
-
-        if (ghost.Alpha > 0)
-        {
-            _appearance.SetData(uid, CustomGhostAppearance.AlphaOverride, ghost.Alpha);
-        }
+        _appearance.SetData(uid, CustomGhostAppearance.ColorOverride, color);
 
         if (!string.IsNullOrWhiteSpace(ghost.Name))
         {

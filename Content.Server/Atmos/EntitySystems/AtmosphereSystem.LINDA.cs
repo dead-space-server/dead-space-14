@@ -105,7 +105,9 @@ namespace Content.Server.Atmos.EntitySystems
             if (visualsChanged) // DS14
                 InvalidateVisuals(ent, tile);
 
-            var remove = true;
+            // Keep the tile active while its Iprit decay timer is pending.
+            // Kofeecheks Iprit decay: LicenseRef-Kofeecheks
+            var remove = tile.Air!.IpritDecayDeadline == TimeSpan.Zero;
 
             if(tile.Air!.Temperature > Atmospherics.MinimumTemperatureStartSuperConduction)
                 if (ConsiderSuperconductivity(gridAtmosphere, tile, true))
@@ -228,6 +230,9 @@ namespace Content.Server.Atmos.EntitySystems
             var heatCapacitySharerToThis = 0f;
             var movedMoles = 0f;
             var absMovedMoles = 0f;
+            // Preserve gas age when Iprit diffuses between tiles. Kofeecheks: LicenseRef-Kofeecheks
+            var receiverIpritDeadline = receiver.IpritDecayDeadline;
+            var sharerIpritDeadline = sharer.IpritDecayDeadline;
 
             for(var i = 0; i < Atmospherics.TotalNumberOfGases; i++)
             {
@@ -250,9 +255,23 @@ namespace Content.Server.Atmos.EntitySystems
 
                 if (!receiver.Immutable) receiver.Moles[i] -= delta;
                 if (!sharer.Immutable) sharer.Moles[i] += delta;
+
+                // Kofeecheks Iprit decay: LicenseRef-Kofeecheks
+                if (i == (int) Gas.Iprit)
+                {
+                    if (delta > 0f)
+                        sharer.BlendIpritDecayDeadline(sharer.GetMoles(Gas.Iprit) - delta, receiverIpritDeadline, delta);
+                    else
+                        receiver.BlendIpritDecayDeadline(receiver.GetMoles(Gas.Iprit) + delta, sharerIpritDeadline, -delta);
+                }
+
                 movedMoles += delta;
                 absMovedMoles += MathF.Abs(delta);
             }
+
+            // Direct mole-array updates above bypass GasMixture setters.
+            receiver.ResetIpritDecayDeadlineIfEmpty(); // Kofeecheks Iprit decay: LicenseRef-Kofeecheks
+            sharer.ResetIpritDecayDeadlineIfEmpty(); // Kofeecheks Iprit decay: LicenseRef-Kofeecheks
 
             tileReceiver.LastShare = absMovedMoles;
 

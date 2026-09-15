@@ -1,7 +1,6 @@
 <!--Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT-->
 <DefaultWindow xmlns="https://spacestation14.io"
                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-               xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
                x:Class="Content.Client.DeadSpace.ConsoleCraft.ConsoleCraftConsoleWindow"
                Title="{Loc consolecraft-console-title}"
                MinWidth="700"
@@ -16,12 +15,7 @@
                    HorizontalAlignment="Left"
                    Margin="2 0 0 2" />
 
-            <PanelContainer VerticalExpand="True">
-                <PanelContainer.PanelOverride>
-                    <gfx:StyleBoxFlat BackgroundColor="#0d0d0dFF"
-                                      BorderColor="#555555FF"
-                                      BorderThickness="1" />
-                </PanelContainer.PanelOverride>
+            <PanelContainer VerticalExpand="True" StyleClasses="DeadSpaceInset">
                 <ScrollContainer VerticalExpand="True" Margin="4">
                     <BoxContainer Name="BlueprintListContainer"
                                   Orientation="Vertical"
@@ -37,12 +31,7 @@
 
             <BoxContainer Orientation="Vertical" MinWidth="230" SeparationOverride="6">
 
-                <PanelContainer>
-                    <PanelContainer.PanelOverride>
-                        <gfx:StyleBoxFlat BackgroundColor="#0d0d0dFF"
-                                          BorderColor="#555555FF"
-                                          BorderThickness="1" />
-                    </PanelContainer.PanelOverride>
+                <PanelContainer StyleClasses="DeadSpaceSurfaceDark">
                     <BoxContainer Orientation="Vertical"
                                   HorizontalAlignment="Center"
                                   Margin="8"
@@ -59,16 +48,27 @@
                     </BoxContainer>
                 </PanelContainer>
 
+                <BoxContainer Orientation="Vertical" SeparationOverride="2">
+                    <Label Text="{Loc consolecraft-stats-label}"
+                           StyleClasses="LabelSubText"
+                           Margin="2 0 0 2" />
+                    <PanelContainer StyleClasses="DeadSpaceInset">
+                        <ScrollContainer Name="StatsScroll"
+                                         MaxHeight="150"
+                                         Margin="4">
+                            <BoxContainer Name="StatsContainer"
+                                          Orientation="Vertical"
+                                          SeparationOverride="2"
+                                          Margin="2" />
+                        </ScrollContainer>
+                    </PanelContainer>
+                </BoxContainer>
+
                 <BoxContainer Orientation="Vertical" VerticalExpand="True" SeparationOverride="2">
                     <Label Text="{Loc consolecraft-modules-label}"
                            StyleClasses="LabelSubText"
                            Margin="2 0 0 2" />
-                    <PanelContainer VerticalExpand="True">
-                        <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat BackgroundColor="#0d0d0dFF"
-                                              BorderColor="#555555FF"
-                                              BorderThickness="1" />
-                        </PanelContainer.PanelOverride>
+                    <PanelContainer VerticalExpand="True" StyleClasses="DeadSpaceInset">
                         <ScrollContainer Name="ModulesScroll"
                                          VerticalExpand="True"
                                          HScrollEnabled="True"
@@ -81,17 +81,10 @@
                     </PanelContainer>
                 </BoxContainer>
 
-                <PanelContainer>
-                    <PanelContainer.PanelOverride>
-                        <gfx:StyleBoxFlat BackgroundColor="#0d0d0dFF"
-                                          BorderColor="#555555FF"
-                                          BorderThickness="1" />
-                    </PanelContainer.PanelOverride>
-                    <Label Name="StatusLabel"
-                           Text=""
-                           HorizontalAlignment="Center"
-                           Margin="8 6 8 6" />
-                </PanelContainer>
+                <Label Name="StatusLabel"
+                       Text=""
+                       HorizontalAlignment="Center"
+                       Margin="8 6 8 6" />
 
             </BoxContainer>
 
@@ -101,12 +94,7 @@
                     <Label Text="{Loc consolecraft-required-label}"
                            StyleClasses="LabelBig"
                            Margin="2 0 0 2" />
-                    <PanelContainer VerticalExpand="True">
-                        <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat BackgroundColor="#0d0d0dFF"
-                                              BorderColor="#555555FF"
-                                              BorderThickness="1" />
-                        </PanelContainer.PanelOverride>
+                    <PanelContainer VerticalExpand="True" StyleClasses="DeadSpaceInset">
                         <ScrollContainer VerticalExpand="True" Margin="4">
                             <BoxContainer Name="RequiredContainer"
                                           Orientation="Vertical"

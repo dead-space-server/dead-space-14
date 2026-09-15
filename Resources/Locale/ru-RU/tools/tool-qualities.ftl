@@ -6,6 +6,9 @@ tool-quality-screwing-name = Свинчивание
 tool-quality-screwing-tool-name = Отвёртка
 tool-quality-cutting-name = Резка
 tool-quality-cutting-tool-name = Кусачки
+
+tool-quality-shearing-name = Стрижка
+tool-quality-shearing-tool-name = Кусачки
 tool-quality-welding-name = Варка
 tool-quality-welding-tool-name = Сварка
 tool-quality-pulsing-name = Пульсирование

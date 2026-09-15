@@ -1,6 +1,9 @@
+<!-- DS14-start -->
 <controls:PanelContainer HorizontalExpand="True"
                          xmlns:controls="https://spacestation14.io"
-                         Margin="0 3">
+                         Margin="0 3"
+                         StyleClasses="DeadSpaceSurfaceDark">
+    <!-- DS14-end -->
     <controls:BoxContainer Name="Contents" Orientation="Vertical"
                            Margin="3">
         <controls:Label Name="DockedLabel"

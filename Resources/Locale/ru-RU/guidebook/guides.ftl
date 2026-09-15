@@ -142,6 +142,7 @@ guide-entry-space-ninja = Космический ниндзя
 guide-entry-thieves = Воры
 guide-entry-hooligan = Хулиган
 guide-entry-wizard = Волшебник
+guide-entry-changelings = Генокрад
 guide-entry-rules = Правила сервера
 guide-entry-rules-space-law = Космический закон
 guide-entry-rules-sl-crime-list = Список преступлений

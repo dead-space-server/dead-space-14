@@ -1,21 +1,14 @@
 <Control xmlns="https://spacestation14.io"
-         xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
          MouseFilter="Stop">
-    <PanelContainer StyleClasses="BackgroundPanelOpenLeft"/>
-    <PanelContainer>
-        <PanelContainer.PanelOverride>
-            <graphics:StyleBoxFlat BorderColor="#25252A" BorderThickness="0 0 0 3"/>
-        </PanelContainer.PanelOverride>
-    </PanelContainer>
+    <PanelContainer StyleClasses="DeadSpaceSurfaceFlat"/> <!-- DS14 -->
     <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
-        <Control Margin="0 0 1 0">
-            <PanelContainer StyleClasses="WindowHeadingBackground" />
+        <PanelContainer Margin="0 0 1 0" StyleClasses="DeadSpaceSectionHeader"> <!-- DS14 -->
             <BoxContainer Margin="4 2 8 0" Orientation="Horizontal">
                 <Label Name="Title" Text="{Loc news-write-ui-new-article}"
-                       HorizontalExpand="True" VAlign="Center" StyleClasses="FancyWindowTitle" />
+                       HorizontalExpand="True" VAlign="Center" StyleClasses="DeadSpaceSectionTitle" /> <!-- DS14 -->
             </BoxContainer>
-        </Control>
-        <PanelContainer StyleClasses="LowDivider" Margin="0 0 1 0"/>
+        </PanelContainer>
+        <PanelContainer StyleClasses="DeadSpaceAccentDim" Margin="0 0 1 0"/> <!-- DS14 -->
         <BoxContainer Orientation="Horizontal">
             <Label Text="{Loc news-write-ui-article-name-label}" Margin="17 10 0 9" VerticalAlignment="Center"/>
             <LineEdit Name="TitleField" Margin="6 10 0 9" MinWidth="260" MinHeight="23" Access="Public"/>
@@ -23,23 +16,14 @@
             <Label Name="RichTextInfoLabel" Text="?" MouseFilter="Pass" Margin="14 0" StyleClasses="LabelWeak"/>
         </BoxContainer>
         <Control Name="TextEditPanel" VerticalExpand="True" Margin="11 0 11 0">
-            <PanelContainer>
-                <PanelContainer.PanelOverride>
-                    <graphics:StyleBoxFlat BackgroundColor="#202023" BorderThickness="1" BorderColor="#3B3E56"/>
-                </PanelContainer.PanelOverride>
-            </PanelContainer>
             <TextEdit Name="ContentField" Margin="0 1" Access="Public"/>
         </Control>
-        <Control Name="PreviewPanel" Visible="False" VerticalExpand="True" Margin="11 0 11 0">
-            <PanelContainer>
-                <PanelContainer.PanelOverride>
-                    <graphics:StyleBoxFlat BorderThickness="1" BorderColor="#3B3E56"/>
-                </PanelContainer.PanelOverride>
-            </PanelContainer>
+        <PanelContainer Name="PreviewPanel" Visible="False" VerticalExpand="True" Margin="11 0 11 0"
+                        StyleClasses="DeadSpaceInset"> <!-- DS14 -->
             <ScrollContainer HScrollEnabled="True">
                 <RichTextLabel Name="PreviewLabel" VerticalAlignment="Top" Margin="9 3" MaxWidth="360"/>
             </ScrollContainer>
-        </Control>
+        </PanelContainer>
         <BoxContainer Orientation="Horizontal" Margin="12 5 12 8">
             <Control>
                 <Button Name="ButtonCancel" SetHeight="32" SetWidth="85"
@@ -55,19 +39,4 @@
             </BoxContainer>
         </BoxContainer>
     </BoxContainer>
-    <PanelContainer>
-        <PanelContainer.PanelOverride>
-            <graphics:StyleBoxFlat BorderThickness="2 0 0 0" BorderColor="#1d1d22"/>
-        </PanelContainer.PanelOverride>
-    </PanelContainer>
-    <PanelContainer HorizontalAlignment="Left" VerticalAlignment="Top" SetHeight="27" SetWidth="2">
-        <PanelContainer.PanelOverride>
-            <graphics:StyleBoxFlat BorderColor="#2a2a2d" BorderThickness="0 0 0 2"/>
-        </PanelContainer.PanelOverride>
-    </PanelContainer>
-    <PanelContainer HorizontalAlignment="Left" VerticalAlignment="Top" SetHeight="25" SetWidth="2">
-        <PanelContainer.PanelOverride>
-            <graphics:StyleBoxFlat BackgroundColor="#1b1b1f"/>
-        </PanelContainer.PanelOverride>
-    </PanelContainer>
 </Control>

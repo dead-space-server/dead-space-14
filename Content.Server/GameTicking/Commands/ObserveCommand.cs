@@ -1,6 +1,7 @@
 using Content.Server.Administration.Managers;
 using Content.Shared.Administration;
 using Content.Shared.GameTicking;
+using Robust.Server.Console;
 using Robust.Shared.Console;
 
 namespace Content.Server.GameTicking.Commands
@@ -10,6 +11,10 @@ namespace Content.Server.GameTicking.Commands
     {
         [Dependency] private readonly IEntityManager _e = default!;
         [Dependency] private readonly IAdminManager _adminManager = default!;
+        // DS14-start
+        [Dependency] private readonly IConGroupController _conGroupController = default!;
+        [Dependency] private readonly IServerConsoleHost _consoleHost = default!;
+        // DS14-end
 
         public string Command => "observe";
         public string Description => "";
@@ -42,6 +47,11 @@ namespace Content.Server.GameTicking.Commands
                 status != PlayerGameStatus.JoinedGame)
             {
                 ticker.JoinAsObserver(player);
+
+                // DS14-start
+                if (isAdminCommand && _conGroupController.CanCommand(player, "aghost"))
+                    _consoleHost.ExecuteCommand(player, "aghost");
+                // DS14-end
             }
             else
             {

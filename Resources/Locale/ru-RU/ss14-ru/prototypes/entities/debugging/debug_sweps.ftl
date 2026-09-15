@@ -17,3 +17,6 @@ ent-MeleeDebug100 = бах палка 100 урона
     .desc = { ent-MeleeDebugGib.desc }
 ent-MeleeDebug200 = бах палка 200 урона
     .desc = { ent-MeleeDebugGib.desc }
+ent-MeleeDebugUnbang = анти-гиб палка
+    .desc = Ударьте цель, чтобы полностью исцелить её.
+    .suffix = ДЕБАГ

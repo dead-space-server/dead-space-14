@@ -3,7 +3,6 @@
          Orientation="Horizontal">
     <Label Name="TitleLabel"
            Margin="5 0"
-           StyleClasses="DS14MenuProfileLabel"
            MouseFilter="Stop"/>
 
     <!--21 was the height of OptionsContainer at the time that this button was added. So I am limiting the texture to 21x21-->

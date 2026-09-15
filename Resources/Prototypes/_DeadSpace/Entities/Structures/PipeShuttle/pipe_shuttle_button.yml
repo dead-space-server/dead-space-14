@@ -1,0 +1,36 @@
+- type: entity
+  parent: BaseWallmountMachine
+  id: PipeShuttleCallButton
+  name: pipe shuttle call button
+  description: A wall-mounted button with a display for calling the shuttle.
+  components:
+  - type: WallMount
+    arc: 360
+  - type: Sprite
+    drawdepth: SmallObjects
+    sprite: _DeadSpace/Structures/Wallmounts/pipe_shuttle_call_button.rsi
+    state: on
+  - type: Appearance
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
+  - type: Rotatable
+  - type: PipeShuttleCall
+  - type: ActivatableUI
+    key: enum.PipeShuttleUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.PipeShuttleUiKey.Key:
+        type: PipeShuttleBoundUserInterface
+  - type: Electrified
+    enabled: false
+    usesApcPower: true
+  - type: ActivatableUIRequiresPower

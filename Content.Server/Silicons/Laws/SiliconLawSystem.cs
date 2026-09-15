@@ -4,6 +4,7 @@ using Content.Server.Chat.Managers;
 using Content.Server.Station.Systems;
 using Content.Shared.Administration;
 using Content.Shared.Chat;
+using Content.Shared.Emag.Components;
 using Content.Shared.Emag.Systems;
 using Content.Shared.GameTicking;
 using Content.Shared.Mind;
@@ -288,6 +289,16 @@ public sealed class SiliconLawSystem : SharedSiliconLawSystem
             component.Lawset = new SiliconLawset();
 
         component.Lawset.Laws = newLaws;
+        // DS14-start
+        if (TryComp<EmaggedComponent>(target, out var emagged))
+        {
+            emagged.EmagType &= ~EmagType.Interaction;
+            if (emagged.EmagType == EmagType.None)
+                RemComp<EmaggedComponent>(target);
+            else
+                Dirty(target, emagged);
+        }
+        // DS14-end
         NotifyLawsChanged(target, cue);
     }
 

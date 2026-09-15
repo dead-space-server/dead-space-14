@@ -1,7 +1,9 @@
 <Control xmlns="https://spacestation14.io">
     <BoxContainer Margin="8,0,8,8" Orientation="Vertical">
         <BoxContainer Orientation="Horizontal">
-            <Label Name="StoreItemName" HorizontalExpand="True" />
+            <!-- DS14-start -->
+            <Label Name="StoreItemName" HorizontalExpand="True" StyleClasses="DeadSpaceSectionTitle" />
+            <!-- DS14-end -->
         </BoxContainer>
         <PanelContainer StyleClasses="HighDivider" Margin="0,1,0,2"/>
         <BoxContainer HorizontalExpand="True" Orientation="Horizontal">
@@ -18,6 +20,7 @@
                     Stretch="Fill"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center" />
+                <!-- DS14-start -->
                 <Button
                     Name="StoreItemBuyButton"
                     MinWidth="48"
@@ -25,7 +28,9 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Margin="0,4,0,0"
-                    Access="Public" />
+                    Access="Public"
+                    StyleClasses="DeadSpaceAction" />
+                <!-- DS14-end -->
                 <Label Name="DiscountSubText"
                        HorizontalAlignment="Center"/>
             </BoxContainer>

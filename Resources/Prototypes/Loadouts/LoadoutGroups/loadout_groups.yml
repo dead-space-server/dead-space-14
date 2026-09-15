@@ -12,6 +12,27 @@
   - PlushieLizard
   - PlushieSpaceLizard
   # DS14-plushie-start
+  - Akiplushie1
+  - Akiplushie2
+  - Akiplushie3
+  - Akiplushie4
+  - Akiplushie5
+  - Akiplushie6
+  - Akiplushie7
+  - Akiplushie8
+  - Akiplushie9
+  - Akiplushie10
+  - Akiplushie11
+  - Akiplushie12
+  - Akiplushie13
+  - Akiplushie14
+  - Akiplushie15
+  - Akiplushie16
+  - Akiplushie17
+  - Akiplushie18
+  - Akiplushie19
+  - Akiplushie20
+  - Akiplushie21
   - DiscordToy
   - PlushieJokerge
   - PlushieFloran
@@ -62,6 +83,13 @@
   - PlushieRavanesusDeath
   - PlushieRavanesusOperativ
   - PlushieDajidanNikita
+  - PlushieGuitarwhispersNick
+  - PlushieMuenraiSiiri
+  - PlushieKieruAngel
+  - PlushieImarabErmina
+  - PlushieZutiKuz
+  - PlushieZutiIgna
+  - PlushieSastrBon
   # IV rang end
   - PlushieSilAily
   - PlushieSilAizek
@@ -336,6 +364,7 @@
   loadouts:
   - HoPJumpsuit
   - HoPJumpskirt
+  - HoPJumpsuitWhite # DS14
 
 - type: loadoutGroup
   id: HoPNeck
@@ -1546,6 +1575,7 @@
   - CombatBoots
   - JackBoots
   - ShoesBootsLaceup
+  - SecurityWinterBoots # DS14
 
 - type: loadoutGroup
   id: HeadofSecuritySocks
@@ -1676,7 +1706,7 @@
   - JackSecBoots
   - CombatBoots
   - JackBoots
-  - SecurityWinterBoots
+  - SecurityWinterBoots # DS14
 
 # DS14-disabled
 #- type: loadoutGroup
@@ -1712,13 +1742,13 @@
   - DetectiveGreyFlatCap # DS14
   - DetectiveBrownFlatCap # DS14
 
-- type: loadoutGroup
-  id: DetectiveNeck
-  name: loadout-group-detective-neck
-  minLimit: 0
-  loadouts:
-  - DetectiveTie
-  - DetectiveTieRed # DS14
+#- type: loadoutGroup
+#  id: DetectiveNeck
+#  name: loadout-group-detective-neck
+#  minLimit: 0
+#  loadouts:
+#  - DetectiveTie
+#  - DetectiveTieRed # DS14
 
 - type: loadoutGroup
   id: DetectiveJumpsuit
@@ -2263,4 +2293,3 @@
   minLimit: 0
   loadouts:
   - LizardPlushiePsychologist
-

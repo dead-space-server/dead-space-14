@@ -5,18 +5,15 @@
                     SetSize="500 400"
                     Stylesheet="Interface">
     <!-- DS14-start -->
-    <PanelContainer StyleClasses="DS14MenuShell" />
     <BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="6">
         <TabContainer Name="Tabs"
                       Access="Public"
                       HorizontalExpand="True"
-                      VerticalExpand="True"
-                      StyleClasses="DS14MenuTabs" />
-        <PanelContainer StyleClasses="DS14MenuAccentDim" />
+                      VerticalExpand="True" />
+        <PanelContainer StyleClasses="DeadSpaceAccentDim" />
         <Label Name="VersionLabel"
                Access="Public"
                HorizontalAlignment="Right"
-               StyleClasses="DS14MenuProfileLabel"
                Margin="4 0" />
     </BoxContainer>
     <!-- DS14-end -->

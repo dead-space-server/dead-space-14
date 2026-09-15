@@ -104,7 +104,7 @@
       - id: Multitool
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuitrtwo45
   categories: [ HideSpawnMenu ]
   name: шлем скафандра улья Белодис

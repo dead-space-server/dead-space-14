@@ -1,3 +1,4 @@
+using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.Stylesheets;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
@@ -58,8 +59,9 @@ public sealed partial class AtmosAlarmEntryContainer : BoxContainer
 
         NoDataLabel.FontOverride = headerFont;
 
+        StatusBackground.ModulateSelfOverride = DeadSpaceStylePalette.SurfaceDark; // DS14
         SilenceCheckBox.Label.FontOverride = smallFont;
-        SilenceCheckBox.Label.FontColorOverride = Color.DarkGray;
+        SilenceCheckBox.Label.FontColorOverride = DeadSpaceStylePalette.TextMuted; // DS14
     }
 
     public void UpdateEntry(AtmosAlertsComputerEntry entry, bool isFocus, AtmosAlertsFocusDeviceData? focusData = null)
@@ -141,7 +143,7 @@ public sealed partial class AtmosAlarmEntryContainer : BoxContainer
                     {
                         Text = Loc.GetString("atmos-alerts-window-other-gases-value-nil"),
                         FontOverride = normalFont,
-                        FontColorOverride = StyleNano.DisabledFore,
+                        FontColorOverride = DeadSpaceStylePalette.TextMuted, // DS14
                         HorizontalAlignment = HAlignment.Center,
                         VerticalAlignment = VAlignment.Center,
                         HorizontalExpand = true,
@@ -204,6 +206,6 @@ public sealed partial class AtmosAlarmEntryContainer : BoxContainer
                 return StyleNano.DangerousRedFore;
         }
 
-        return StyleNano.DisabledFore;
+        return DeadSpaceStylePalette.TextMuted; // DS14
     }
 }

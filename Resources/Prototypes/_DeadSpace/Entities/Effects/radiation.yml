@@ -1,0 +1,10 @@
+- type: entity
+  id: RadiationPulseSilent
+  name: radiation pulse
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+  - type: RadiationSource
+    intensity: 5
+  - type: TimedDespawn
+    lifetime: 1

@@ -1,8 +1,10 @@
 using System.Linq;
 using System.Numerics;
 using Content.Client.DeadSpace.RoundEnd;
+using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.Message;
 using Content.Client.UserInterface.Controls;
+using Content.Shared.DeadSpace.Arena;
 using Content.Shared.DeadSpace.RoundEnd;
 using Content.Shared.GameTicking;
 using Robust.Client.GameObjects;
@@ -23,7 +25,9 @@ namespace Content.Client.RoundEnd
         private readonly RoundEndDollPreviewSystem _dollPreviews;
         private readonly List<RoundEndManifestDollView> _manifestDollViews = new();
         private int _dollPreviewOwner;
-        // DS14-end
+        private readonly TabContainer _roundEndTabs;
+        private Control? _arenaManifestTab;
+        // DS14-End
         public int RoundId;
 
         public RoundEndSummaryWindow(string gm, string roundEnd, TimeSpan roundTimeSpan, int roundId,
@@ -50,11 +54,11 @@ namespace Content.Client.RoundEnd
             // Also good for serious info.
 
             RoundId = roundId;
-            var roundEndTabs = new TabContainer();
-            roundEndTabs.AddChild(MakeRoundEndSummaryTab(gm, roundEnd, roundTimeSpan, roundId, info));
-            roundEndTabs.AddChild(MakePlayerManifestTab(info));
+            _roundEndTabs = new TabContainer();
+            _roundEndTabs.AddChild(MakeRoundEndSummaryTab(gm, roundEnd, roundTimeSpan, roundId, info));
+            _roundEndTabs.AddChild(MakePlayerManifestTab(info));
 
-            ContentsContainer.AddChild(roundEndTabs);
+            ContentsContainer.AddChild(_roundEndTabs);
 
             OpenCenteredRight();
             ResumeManifestDollSnapshots(); // DS14
@@ -73,7 +77,7 @@ namespace Content.Client.RoundEnd
             // DS14-start
             var background = new PanelContainer
             {
-                StyleClasses = { "BackgroundPanelDark" },
+                StyleClasses = { DeadSpaceStyleClass.SurfaceFlat },
                 HorizontalExpand = true,
                 VerticalExpand = true,
             };
@@ -127,7 +131,7 @@ namespace Content.Client.RoundEnd
             // DS14-start
             var background = new PanelContainer
             {
-                StyleClasses = { "BackgroundPanelDark" },
+                StyleClasses = { DeadSpaceStyleClass.SurfaceFlat },
                 HorizontalExpand = true,
                 VerticalExpand = true,
             };
@@ -172,13 +176,10 @@ namespace Content.Client.RoundEnd
         }
 
         // DS14-start
-        private static readonly Color ManifestBodyBackground = Color.FromHex("#0d1117");
-        private static readonly Color ManifestPanelBorder = Color.FromHex("#30363d");
-        private static readonly Color ObjectiveSuccessColor = Color.FromHex("#3fb950");
+        private static readonly Color ObjectiveSuccessColor = DeadSpaceStylePalette.PositiveBorderHover;
         private static readonly Color ObjectivePartialSuccessColor = Color.FromHex("#d29922");
         private static readonly Color ObjectivePartialFailureColor = Color.FromHex("#f0883e");
-        private static readonly Color ObjectiveFailureColor = Color.FromHex("#f85149");
-        private static readonly Color ManifestCardSeparatorColor = Color.FromHex("#30363d");
+        private static readonly Color ObjectiveFailureColor = DeadSpaceStylePalette.NegativeBorderHover;
         private static readonly Vector2 DefaultWindowSize = new(920, 720);
         private const float RoundEndSummaryWindowHorizontalPadding = 160f;
         private const float AntagManifestCardHorizontalPadding = 20f;
@@ -275,7 +276,7 @@ namespace Content.Client.RoundEnd
         {
             var panel = new PanelContainer
             {
-                StyleClasses = { "PanelDark" },
+                StyleClasses = { DeadSpaceStyleClass.SurfaceDark },
                 HorizontalExpand = true,
             };
 
@@ -317,7 +318,7 @@ namespace Content.Client.RoundEnd
         {
             var panel = new PanelContainer
             {
-                StyleClasses = { "PanelDark" },
+                StyleClasses = { DeadSpaceStyleClass.SurfaceDark },
                 HorizontalExpand = true,
             };
 
@@ -352,7 +353,7 @@ namespace Content.Client.RoundEnd
         {
             var panel = new PanelContainer
             {
-                StyleClasses = { "PanelDark" },
+                StyleClasses = { DeadSpaceStyleClass.SurfaceDark },
                 HorizontalExpand = true,
             };
 
@@ -385,7 +386,7 @@ namespace Content.Client.RoundEnd
         {
             var panel = new PanelContainer
             {
-                StyleClasses = { "PanelDark" },
+                StyleClasses = { DeadSpaceStyleClass.SurfaceDark },
                 HorizontalExpand = true,
             };
 
@@ -409,13 +410,7 @@ namespace Content.Client.RoundEnd
                 VerticalExpand = true,
             };
 
-            content.AddChild(new Label
-            {
-                Text = playerInfo.PlayerICName ?? Loc.GetString("generic-unknown-title"),
-                StyleClasses = { playerInfo.Antag ? "LabelBig" : "LabelHeading" },
-                ClipText = true,
-                HorizontalExpand = true,
-            });
+            content.AddChild(MakeManifestName(playerInfo, playerInfo.Antag)); // DS-14
 
             var roleText = GetPlayerManifestRoleText(playerInfo);
 
@@ -481,10 +476,7 @@ namespace Content.Client.RoundEnd
                 MinHeight = 1,
                 HorizontalExpand = true,
                 Margin = new Thickness(8, 0),
-                PanelOverride = new StyleBoxFlat
-                {
-                    BackgroundColor = ManifestCardSeparatorColor,
-                },
+                StyleClasses = { DeadSpaceStyleClass.AccentDim },
             };
         }
 
@@ -492,7 +484,7 @@ namespace Content.Client.RoundEnd
         {
             var panel = new PanelContainer
             {
-                StyleClasses = { "PanelDark" },
+                StyleClasses = { DeadSpaceStyleClass.SurfaceDark },
                 HorizontalExpand = true,
             };
 
@@ -527,11 +519,53 @@ namespace Content.Client.RoundEnd
             return panel;
         }
 
+        // DS-14-Start
+        private static Control MakeManifestName(RoundEndMessageEvent.RoundEndPlayerInfo playerInfo, bool antag)
+        {
+            var name = playerInfo.PlayerICName ?? Loc.GetString("generic-unknown-title");
+            var container = new BoxContainer
+            {
+                Orientation = LayoutOrientation.Vertical,
+                HorizontalExpand = true,
+            };
+
+            if (!string.IsNullOrWhiteSpace(playerInfo.PlayerPseudonym))
+            {
+                container.AddChild(new Label
+                {
+                    Text = playerInfo.PlayerPseudonym,
+                    StyleClasses = { antag ? "LabelBig" : "LabelHeading" },
+                    ClipText = true,
+                    HorizontalExpand = true,
+                });
+                container.AddChild(new Label
+                {
+                    Text = name,
+                    StyleClasses = { "LabelSubText" },
+                    ClipText = true,
+                    HorizontalExpand = true,
+                });
+            }
+            else
+            {
+                container.AddChild(new Label
+                {
+                    Text = name,
+                    StyleClasses = { antag ? "LabelBig" : "LabelHeading" },
+                    ClipText = true,
+                    HorizontalExpand = true,
+                });
+            }
+
+            return container;
+        }
+        // DS-14-End
+
         private Control MakeAntagManifestCard(RoundEndMessageEvent.RoundEndPlayerInfo playerInfo)
         {
             var panel = new PanelContainer
             {
-                StyleClasses = { "PanelDark" },
+                StyleClasses = { DeadSpaceStyleClass.SurfaceDark },
                 HorizontalExpand = true,
             };
 
@@ -560,13 +594,7 @@ namespace Content.Client.RoundEnd
                 Orientation = LayoutOrientation.Horizontal,
                 HorizontalExpand = true,
             };
-            nameRow.AddChild(new Label
-            {
-                Text = playerInfo.PlayerICName ?? Loc.GetString("generic-unknown-title"),
-                StyleClasses = { "LabelBig" },
-                ClipText = true,
-                HorizontalExpand = true,
-            });
+            nameRow.AddChild(MakeManifestName(playerInfo, true)); // DS-14
             if (playerInfo.IsDead)
             {
                 var badgeLabel = new RichTextLabel
@@ -779,6 +807,229 @@ namespace Content.Client.RoundEnd
                 view.RequestSnapshot(_dollPreviewOwner);
         }
 
+        // DS14-start
+        public void SetArenaManifest(ArenaManifestEvent ev)
+        {
+            if (_arenaManifestTab != null)
+            {
+                _roundEndTabs.RemoveChild(_arenaManifestTab);
+                _arenaManifestTab.Dispose();
+                _arenaManifestTab = null;
+            }
+
+            _arenaManifestTab = MakeArenaManifestTab(ev);
+            if (_arenaManifestTab != null)
+                _roundEndTabs.AddChild(_arenaManifestTab);
+        }
+
+        private static readonly Color ArenaFirstPlaceColor = Color.FromHex("#ffd700");
+        private static readonly Color ArenaSecondPlaceColor = Color.FromHex("#c0c0c0");
+        private static readonly Color ArenaThirdPlaceColor = Color.FromHex("#cd7f32");
+
+        private Control? MakeArenaManifestTab(ArenaManifestEvent ev)
+        {
+            if (ev.Players.Count == 0)
+                return null;
+
+            var tab = new BoxContainer
+            {
+                Orientation = LayoutOrientation.Vertical,
+                Name = Loc.GetString("arena-manifest-tab-title"),
+            };
+
+            var background = new PanelContainer
+            {
+                StyleClasses = { DeadSpaceStyleClass.SurfaceFlat },
+                HorizontalExpand = true,
+                VerticalExpand = true,
+            };
+
+            var scrollbox = new ScrollContainer
+            {
+                VerticalExpand = true,
+                HorizontalExpand = true,
+                HScrollEnabled = false,
+                Margin = new Thickness(10),
+            };
+
+            var container = new BoxContainer
+            {
+                Orientation = LayoutOrientation.Vertical,
+                SeparationOverride = 8,
+                HorizontalExpand = true,
+            };
+
+            var topThree = ev.Players.Take(3).ToArray();
+            if (topThree.Length > 0)
+            {
+                var podium = new BoxContainer
+                {
+                    Orientation = LayoutOrientation.Horizontal,
+                    SeparationOverride = 16,
+                    HorizontalAlignment = HAlignment.Center,
+                    Margin = new Thickness(0, 0, 0, 12),
+                };
+
+                for (var i = 0; i < topThree.Length; i++)
+                    podium.AddChild(MakeArenaPodiumCard(i + 1, topThree[i]));
+
+                container.AddChild(podium);
+            }
+
+            container.AddChild(MakeArenaManifestHeader(ev.Players.Count));
+
+            for (var i = 0; i < ev.Players.Count; i++)
+                container.AddChild(MakeArenaManifestRow(i + 1, ev.Players[i]));
+
+            scrollbox.AddChild(container);
+            background.AddChild(scrollbox);
+            tab.AddChild(background);
+            return tab;
+        }
+
+        private static Control MakeArenaPodiumCard(int place, ArenaPlayerRecord player)
+        {
+            var panel = new PanelContainer
+            {
+                StyleClasses = { DeadSpaceStyleClass.SurfaceDark },
+                MinWidth = 200,
+                HorizontalExpand = true,
+            };
+
+            var box = new BoxContainer
+            {
+                Orientation = LayoutOrientation.Vertical,
+                SeparationOverride = 4,
+                Margin = new Thickness(12),
+                HorizontalAlignment = HAlignment.Center,
+                HorizontalExpand = true,
+            };
+
+            var placeColor = place switch
+            {
+                1 => ArenaFirstPlaceColor,
+                2 => ArenaSecondPlaceColor,
+                _ => ArenaThirdPlaceColor,
+            };
+
+            box.AddChild(new Label
+            {
+                Text = Loc.GetString("arena-manifest-place", ("place", place)),
+                StyleClasses = { "LabelBig" },
+                FontColorOverride = placeColor,
+                HorizontalAlignment = HAlignment.Center,
+            });
+            box.AddChild(new Label
+            {
+                Text = string.IsNullOrEmpty(player.PlayerName)
+                    ? Loc.GetString("arena-manifest-unknown-player")
+                    : player.PlayerName,
+                StyleClasses = { "LabelHeading" },
+                HorizontalAlignment = HAlignment.Center,
+                HorizontalExpand = true,
+            });
+            box.AddChild(new Label
+            {
+                Text = Loc.GetString("arena-manifest-kd",
+                    ("kills", player.Kills),
+                    ("deaths", player.Deaths),
+                    ("kd", player.KD.ToString("0.##"))),
+                StyleClasses = { "LabelSubText" },
+                HorizontalAlignment = HAlignment.Center,
+            });
+
+            panel.AddChild(box);
+            return panel;
+        }
+
+        private static Control MakeArenaManifestHeader(int playerCount)
+        {
+            var panel = new PanelContainer
+            {
+                StyleClasses = { DeadSpaceStyleClass.SurfaceDark },
+                HorizontalExpand = true,
+            };
+
+            var box = new BoxContainer
+            {
+                Orientation = LayoutOrientation.Vertical,
+                Margin = new Thickness(10),
+                SeparationOverride = 4,
+                HorizontalExpand = true,
+            };
+
+            box.AddChild(new Label
+            {
+                Text = Loc.GetString("arena-manifest-tab-title"),
+                StyleClasses = { "LabelBig" },
+                HorizontalExpand = true,
+            });
+            box.AddChild(new Label
+            {
+                Text = Loc.GetString("arena-manifest-subtitle", ("count", playerCount)),
+                StyleClasses = { "LabelSubText" },
+                HorizontalExpand = true,
+            });
+
+            panel.AddChild(box);
+            return panel;
+        }
+
+        private static Control MakeArenaManifestRow(int place, ArenaPlayerRecord player)
+        {
+            var panel = new PanelContainer
+            {
+                StyleClasses = { DeadSpaceStyleClass.SurfaceDark },
+                HorizontalExpand = true,
+            };
+
+            var box = new BoxContainer
+            {
+                Orientation = LayoutOrientation.Horizontal,
+                Margin = new Thickness(10),
+                SeparationOverride = 10,
+                HorizontalExpand = true,
+            };
+
+            box.AddChild(new Label
+            {
+                Text = Loc.GetString("arena-manifest-row-place", ("place", place)),
+                MinWidth = 60,
+                StyleClasses = { "LabelSubText" },
+            });
+            box.AddChild(new Label
+            {
+                Text = string.IsNullOrEmpty(player.PlayerName)
+                    ? Loc.GetString("arena-manifest-unknown-player")
+                    : player.PlayerName,
+                StyleClasses = { "LabelHeading" },
+                HorizontalExpand = true,
+                ClipText = true,
+            });
+            box.AddChild(new Label
+            {
+                Text = Loc.GetString("arena-manifest-row-kills", ("kills", player.Kills)),
+                MinWidth = 70,
+                HorizontalAlignment = HAlignment.Right,
+            });
+            box.AddChild(new Label
+            {
+                Text = Loc.GetString("arena-manifest-row-deaths", ("deaths", player.Deaths)),
+                MinWidth = 70,
+                HorizontalAlignment = HAlignment.Right,
+            });
+            box.AddChild(new Label
+            {
+                Text = player.KD.ToString("0.##"),
+                MinWidth = 70,
+                HorizontalAlignment = HAlignment.Right,
+            });
+
+            panel.AddChild(box);
+            return panel;
+        }
+        // DS14-end
+
         private Control? MakeManifestDoll(
             RoundEndDollData? dollData,
             Vector2 panelSize,
@@ -793,8 +1044,8 @@ namespace Content.Client.RoundEnd
                 SetSize = panelSize,
                 PanelOverride = new StyleBoxFlat
                 {
-                    BackgroundColor = ManifestBodyBackground,
-                    BorderColor = ManifestPanelBorder,
+                    BackgroundColor = DeadSpaceStylePalette.SurfaceInset,
+                    BorderColor = DeadSpaceStylePalette.BorderInset,
                     BorderThickness = new Thickness(1),
                 },
             };
@@ -818,7 +1069,7 @@ namespace Content.Client.RoundEnd
         {
             var panel = new PanelContainer
             {
-                StyleClasses = { "PanelDark" },
+                StyleClasses = { DeadSpaceStyleClass.SurfaceDark },
                 HorizontalExpand = true,
             };
 

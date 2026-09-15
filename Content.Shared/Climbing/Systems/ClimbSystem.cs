@@ -45,6 +45,7 @@ public sealed partial class ClimbSystem : VirtualController
     private const string ClimbingFixtureName = "climb";
     private const int ClimbingCollisionGroup = (int) (CollisionGroup.TableLayer | CollisionGroup.LowImpassable);
 
+    private EntityQuery<BonkableComponent> _bonkQuery; // DS14: current engine baseline initializes queries manually.
     private EntityQuery<ClimbableComponent> _climbableQuery;
     private EntityQuery<FixturesComponent> _fixturesQuery;
     private EntityQuery<TransformComponent> _xformQuery;
@@ -53,6 +54,7 @@ public sealed partial class ClimbSystem : VirtualController
     {
         base.Initialize();
 
+        _bonkQuery = GetEntityQuery<BonkableComponent>(); // DS14: current engine baseline has no query injection.
         _climbableQuery = GetEntityQuery<ClimbableComponent>();
         _fixturesQuery = GetEntityQuery<FixturesComponent>();
         _xformQuery = GetEntityQuery<TransformComponent>();

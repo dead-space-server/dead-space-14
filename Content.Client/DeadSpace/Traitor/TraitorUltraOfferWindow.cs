@@ -24,8 +24,6 @@ public sealed class TraitorUltraOfferWindow : DefaultWindow
     {
         MinSize = new Vector2(620, 400);
         SetSize = new Vector2(700, 470);
-        HeaderClass = DeadSpaceMenuSheetlet.Header;
-        TitleClass = DeadSpaceMenuSheetlet.Title;
 
         BodyLabel = MakeTextLabel();
         GainsLabel = MakeTextLabel();
@@ -36,28 +34,21 @@ public sealed class TraitorUltraOfferWindow : DefaultWindow
             HorizontalExpand = true,
             MinHeight = 34,
             TextAlign = Label.AlignMode.Center,
-            StyleClasses = { DeadSpaceMenuSheetlet.ProfileControl, DeadSpaceMenuSheetlet.ProfileControlPositive },
+            StyleClasses = { DeadSpaceStyleClass.ControlPositive },
         };
         DeclineButton = new Button
         {
             HorizontalExpand = true,
             MinHeight = 34,
             TextAlign = Label.AlignMode.Center,
-            StyleClasses = { DeadSpaceMenuSheetlet.ProfileControl, StyleClass.Negative },
-        };
-
-        var shell = new PanelContainer
-        {
-            HorizontalExpand = true,
-            VerticalExpand = true,
-            StyleClasses = { DeadSpaceMenuSheetlet.Shell },
+            StyleClasses = { StyleClass.Negative },
         };
 
         var panel = new PanelContainer
         {
             HorizontalExpand = true,
             VerticalExpand = true,
-            StyleClasses = { DeadSpaceMenuSheetlet.PanelDark },
+            StyleClasses = { DeadSpaceStyleClass.SurfaceDark },
         };
 
         var textContent = new BoxContainer
@@ -71,19 +62,19 @@ public sealed class TraitorUltraOfferWindow : DefaultWindow
                 new PanelContainer
                 {
                     HorizontalExpand = true,
-                    StyleClasses = { DeadSpaceMenuSheetlet.Inset },
+                    StyleClasses = { DeadSpaceStyleClass.Inset },
                     Children = { BodyLabel },
                 },
                 new PanelContainer
                 {
                     HorizontalExpand = true,
-                    StyleClasses = { DeadSpaceMenuSheetlet.ListRow },
+                    StyleClasses = { DeadSpaceStyleClass.ListItem },
                     Children = { GainsLabel },
                 },
                 new PanelContainer
                 {
                     HorizontalExpand = true,
-                    StyleClasses = { DeadSpaceMenuSheetlet.ListRowAlt },
+                    StyleClasses = { DeadSpaceStyleClass.ListItemAlternate },
                     Children = { LossesLabel },
                 },
             }
@@ -118,8 +109,7 @@ public sealed class TraitorUltraOfferWindow : DefaultWindow
             }
         });
 
-        shell.AddChild(panel);
-        Contents.AddChild(shell);
+        Contents.AddChild(panel);
     }
 
     private static RichTextLabel MakeTextLabel()

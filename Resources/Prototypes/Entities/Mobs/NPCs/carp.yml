@@ -260,8 +260,15 @@
       damage:
        types: {}
     - type: Temperature
+    # DS14-start
     - type: TemperatureDamage
-      heatDamageThreshold: 1200
+      heatDamageThreshold: 100000
+      coldDamageThreshold: -100000
+      heatDamage:
+        types: {}
+      coldDamage:
+        types: {}
+    # DS14-end
 
 - type: entity
   id: MobCarpDungeon

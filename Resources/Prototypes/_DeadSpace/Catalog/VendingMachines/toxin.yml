@@ -1,0 +1,39 @@
+- type: entity
+  parent: VendingMachine
+  id: VendingMachineToxin
+  name: ТоксВенд
+  description: Автомат с лабораторной химией и посудой. Не взорвись.
+  components:
+  - type: VendingMachine
+    pack: ToxinVendInventory
+  - type: VendingMachineVisuals
+    normalState: normal
+    denyState: deny
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Machines/VendingMachines/toxin.rsi
+    drawdepth: SmallObjects
+    offset: "0.0,0.2"
+    layers:
+    - state: "off"
+      map: ["enum.VendingMachineVisualLayers.Base"]
+    - state: "off"
+      shader: unshaded
+      map: ["enum.VendingMachineVisualLayers.BaseUnshaded"]
+    - state: panel
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+      visible: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.45,0.25,0.45"
+        mask:
+        - TabletopMachineMask
+        layer:
+        - TabletopMachineLayer
+        density: 200
+  - type: DatasetVocalizer
+    dataset: ToxinVendAds
+  - type: SpeakOnUIClosed
+    pack: ToxinVendGoodbyes

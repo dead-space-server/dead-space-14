@@ -73,6 +73,10 @@
       Critical: XenomorphCrit
       Dead: XenomorphDead
   - type: Bloodstream
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: AcidicBlood
+        Quantity: 300
   - type: Perishable
     molsPerSecondPerUnitMass: 0.0005
   - type: CombatMode

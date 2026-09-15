@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-4.0",
+  "copyright": "Sprites by bluestarwings (discord), imported from https://github.com/Lua-Frontier/Monolith-DS/pull/46.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "seal_white"
+    },
+    {
+      "name": "seal_leopard"
+    },
+    {
+      "name": "seal_brown"
+    },
+    {
+      "name": "seal_cream"
+    },
+    {
+      "name": "seal_orange"
+    },
+    {
+      "name": "seal_black"
+    },
+    {
+      "name": "seal_deval"
+    },
+    {
+      "name": "Plushie_Crystal"
+    },
+    {
+      "name": "Blue_Seal"
+    },
+    {
+      "name": "seal_agony"
+    },
+    {
+      "name": "seal_green"
+    },
+    {
+      "name": "seal_pirate"
+    },
+    {
+      "name": "seal_ice"
+    },
+    {
+      "name": "seal_eggplant"
+    },
+    {
+      "name": "seal_banana"
+    },
+    {
+      "name": "Zakysik"
+    },
+    {
+      "name": "Awas_dar"
+    },
+    {
+      "name": "AwasDar"
+    },
+    {
+      "name": "equipped-HELMET",
+      "directions": 4
+    },
+    {
+      "name": "inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "Nauch_seal"
+    },
+    {
+      "name": "seal_Bee"
+    },
+    {
+      "name": "seal_bread"
+    }
+  ]
+}

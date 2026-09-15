@@ -130,6 +130,13 @@
   - type: SolutionContainerVisuals
     maxFillLevels: 4
     fillBaseName: watercooler-2-
+  ## DS-14-Start
+  - type: Edible
+    edible: Drink
+    solution: tank
+    destroyOnEmpty: false
+    utensil: Spoon
+  ## DS-14-End
   - type: SolutionContainerManager
     solutions:
       tank:

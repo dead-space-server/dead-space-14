@@ -60,9 +60,7 @@
 
                 <!-- Station name -->
                 <controls:StripeBack>
-                    <PanelContainer>
-                        <RichTextLabel Name="StationName" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 5 0 3"/>
-                    </PanelContainer>
+                    <RichTextLabel Name="StationName" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 5 0 3"/>
                 </controls:StripeBack>
 
                 <!-- Alarm status (entries added by C# code) -->
@@ -96,9 +94,11 @@
         <BoxContainer Orientation="Vertical">
             <PanelContainer StyleClasses="LowDivider" />
             <BoxContainer Orientation="Horizontal" Margin="10 2 5 0" VerticalAlignment="Bottom">
-                <Label Text="{Loc 'atmos-alerts-window-flavor-left'}" StyleClasses="WindowFooterText" />
-                <Label Text="{Loc 'atmos-alerts-window-flavor-right'}" StyleClasses="WindowFooterText"
+                <!-- DS14-start -->
+                <Label Text="{Loc 'atmos-alerts-window-flavor-left'}" StyleClasses="DeadSpaceSubtitle" />
+                <Label Text="{Loc 'atmos-alerts-window-flavor-right'}" StyleClasses="DeadSpaceSubtitle"
                         HorizontalAlignment="Right" HorizontalExpand="True"  Margin="0 0 5 0" />
+                <!-- DS14-end -->
                 <TextureRect StyleClasses="NTLogoDark" Stretch="KeepAspectCentered"
                         VerticalAlignment="Center" HorizontalAlignment="Right" SetSize="19 19"/>
             </BoxContainer>

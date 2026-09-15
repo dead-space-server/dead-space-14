@@ -285,7 +285,7 @@
   discountDownTo:
     Telecrystal: 10
   cost:
-    Telecrystal: 15 # DS14-value
+    Telecrystal: 12 # DS14-value
   categories:
   - TraitorUltraUplinkWeaponry
   # DS14-start
@@ -310,9 +310,33 @@
   discountDownTo:
     Telecrystal: 11
   cost:
-    Telecrystal: 16 # DS14-value
+    Telecrystal: 8 # DS14-value
   categories:
   - TraitorUltraUplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkTraitorUltraEstocBundleAgent
+  name: uplink-estoc-bundle-name
+  description: uplink-estoc-bundle-desc
+  icon: { sprite: /Textures/Objects/Weapons/Guns/Rifles/estoc.rsi, state: icon }
+  productEntity: ClothingBackpackDuffelSyndicateFilledRifle
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+    Telecrystal: 11
+  cost:
+    Telecrystal: 16
+  categories:
+  - TraitorUltraUplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
 
 - type: listing
   id: UplinkTraitorUltraBulldog
@@ -343,7 +367,7 @@
   discountDownTo:
     Telecrystal: 10 # DS14-value
   cost:
-    Telecrystal: 15 # DS14-value
+    Telecrystal: 12 # DS14-value
   categories:
   - TraitorUltraUplinkWeaponry
   # DS14-start
@@ -764,9 +788,30 @@
   icon: { sprite: /Textures/Objects/Weapons/Guns/Ammunition/SpeedLoaders/Magnum/magnum_speed_loader.rsi, state: icon }
   productEntity: SpeedLoaderMagnumAP
   cost:
+    Telecrystal: 4 # DS14-value
+  categories:
+  - TraitorUltraUplinkAmmo
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkTraitorUltraSpeedLoaderMagnumAPAgent
+  name: uplink-speedloader-magnum-name
+  description: uplink-speedloader-magnu-desc
+  icon: { sprite: /Textures/Objects/Weapons/Guns/Ammunition/SpeedLoaders/Magnum/magnum_speed_loader.rsi, state: icon }
+  productEntity: SpeedLoaderMagnumAP
+  cost:
     Telecrystal: 3
   categories:
   - TraitorUltraUplinkAmmo
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
 
 # For the mosin
 
@@ -800,9 +845,29 @@
   description: uplink-sniper-ammo-desc
   productEntity: MagazineBoxAntiMateriel
   cost:
+    Telecrystal: 5 # DS14-value
+  categories:
+  - TraitorUltraUplinkAmmo
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkTraitorUltraHristovAmmoAgent
+  name: uplink-sniper-ammo-name
+  description: uplink-sniper-ammo-desc
+  productEntity: MagazineBoxAntiMateriel
+  cost:
     Telecrystal: 2
   categories:
   - TraitorUltraUplinkAmmo
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
 
 - type: listing
   id: UplinkTraitorUltraAmmoBundle
@@ -1707,9 +1772,33 @@
   discountDownTo:
     Telecrystal: 4
   cost:
-    Telecrystal: 6 # it's a gamble that may kill you easily so 6 TC per 2 uses, second one more of a backup
+    Telecrystal: 8 # DS14-value
   categories:
     - TraitorUltraUplinkImplants
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkTraitorUltraScramImplanterAgent
+  name: uplink-scram-implanter-name
+  description: uplink-scram-implanter-desc
+  icon: { sprite: /Textures/Structures/Specific/anomaly.rsi, state: anom4 }
+  productEntity: ScramImplanter
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+    Telecrystal: 4
+  cost:
+    Telecrystal: 6
+  categories:
+    - TraitorUltraUplinkImplants
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
 
 - type: listing
   id: UplinkTraitorUltraDnaScramblerImplant
@@ -3244,7 +3333,7 @@
   icon: { sprite: _DeadSpace/Objects/Specific/Arkalyse/arkalyse_book.rsi, state: icon }
   productEntity: BoxArkalyse
   cost:
-    Telecrystal: 15
+    Telecrystal: 20 # DS14-value
   categories:
   - TraitorUltraUplinkWeaponry
   conditions:
@@ -3322,7 +3411,7 @@
   icon: { sprite: /Textures/_DeadSpace/Items/Toys/TommyGun/tommy_gun.rsi, state: icon }
   productEntity: ClothingBackpackDuffelSyndicateFilledSMGTommyGun
   cost:
-    Telecrystal: 15
+    Telecrystal: 12 # DS14-value
   categories:
   - TraitorUltraUplinkWeaponry
   conditions:
@@ -3552,7 +3641,7 @@
   discountDownTo:
     Telecrystal: 2
   cost:
-    Telecrystal: 3
+    Telecrystal: 4 # DS14-value
   categories:
   - TraitorUltraUplinkAmmo
   conditions:
@@ -3761,7 +3850,7 @@
   productEntity: ClothingEyesGlassesThermalVisor
   discountCategory: rareDiscounts
   discountDownTo:
-    Telecrystal: 3
+    Telecrystal: 2
   cost:
     Telecrystal: 4
   categories:
@@ -3998,9 +4087,9 @@
       - NukeOpsUplink
 
 - type: listing
-  id: UplinkTraitorUltraNukeХС
-  name: Пресет "хС-67"
-  description: Используемый опытным оперативником набор вещей, основа которого - хС-67. Придумал ебанутый слайм.
+  id: UplinkTraitorUltraNukeHK
+  name: Пресет "Хёкля"
+  description: Используемый опытным оперативником набор вещей, основа которого - XC67. Придумал ебанутый слайм.
   productEntity: CrateBundleNukeхС67
   icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Rifels/xc67.rsi, state: icon }
   cost:

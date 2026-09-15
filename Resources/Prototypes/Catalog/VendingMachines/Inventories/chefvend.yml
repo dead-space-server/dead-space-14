@@ -20,6 +20,7 @@
     FoodButter: 3
     FoodCheese: 1
     FoodMeat: 6
+    FoodMeatPatty: 6 # DS14
     ADTReagentContainerCocoaSolid: 4 # ADT
     ADTFoodSausageRaw: 12 # ADT
   contrabandInventory:

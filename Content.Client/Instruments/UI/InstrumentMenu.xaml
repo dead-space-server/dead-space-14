@@ -1,6 +1,5 @@
 <!-- DeadSpace-Changes -->
-<DefaultWindow xmlns="https://spacestation14.io"
-            xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client">
+<DefaultWindow xmlns="https://spacestation14.io">
     <BoxContainer Orientation="Vertical" SeparationOverride="5">
         <BoxContainer Orientation="Horizontal" VerticalExpand="True">
             <Button Name="BandButton" Text="{Loc 'instruments-component-menu-band-button'}"
@@ -24,10 +23,9 @@
             <Control HorizontalExpand="True" SizeFlagsStretchRatio="0.1"/>
         </BoxContainer>
     </BoxContainer>
-    <PanelContainer Name="UnavailableOverlay" Visible="False" MouseFilter="Stop">
-        <PanelContainer.PanelOverride>
-            <gfx:StyleBoxFlat BackgroundColor="#000000E5" />
-        </PanelContainer.PanelOverride>
+    <!-- DS14-start: use the shared blocking overlay instead of an inline black surface. -->
+    <PanelContainer Name="UnavailableOverlay" Visible="False" MouseFilter="Stop" StyleClasses="DeadSpaceModalScrim">
+        <!-- DS14-end -->
         <Label VerticalAlignment="Center" HorizontalAlignment="Center" Align="Center"
                StyleClasses="LabelBig"
                Text="{Loc instruments-component-menu-no-midi-support}" />

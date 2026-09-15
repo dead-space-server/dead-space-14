@@ -1,0 +1,49 @@
+- type: entity
+  parent: BaseComputer
+  id: BSAConsole
+  name: консоль БСА
+  description: Консоль управления блюспейс-артиллерией. Подключается к орудию через сетевой конфигуратор. Принимает координатный диск для наведения на целевую карту.
+  components:
+  - type: Sprite
+    layers:
+    - map: ["computerLayerBody"]
+      state: computer
+    - map: ["computerLayerKeyboard"]
+      state: generic_keyboard
+    - map: ["computerLayerScreen"]
+      state: rdcomp
+    - map: ["computerLayerKeys"]
+      state: rd_key
+    - map: ["enum.WiresVisualLayers.MaintenancePanel"]
+      visible: false
+      state: generic_panel_open
+  - type: BSAConsole
+    diskSlot:
+      whitelist:
+        components:
+        - ShuttleDestinationCoordinates
+  - type: ActivatableUI
+    key: enum.BSAConsoleUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.BSAConsoleUiKey.Key:
+        type: BSAConsoleBoundUserInterface
+  - type: ApcPowerReceiver
+    powerLoad: 50
+  - type: PointLight
+    radius: 1.5
+    energy: 3.0
+    color: "#00d4ff"
+  - type: ItemSlots
+  - type: ContainerContainer
+    containers:
+      board: !type:Container {}
+      BSAConsole-DiskSlot: !type:ContainerSlot {}
+  - type: DeviceNetwork
+    deviceNetId: 1
+    receiveFrequencyId: BasicDevice
+    transmitFrequencyId: BasicDevice
+    prefix: bsac
+    examinableAddress: true
+  - type: DeviceList
+    isAllowList: true

@@ -4,8 +4,6 @@
   id: BaseMobSlimePerson
   abstract: true
   components:
-  - type: Hunger
-  - type: Thirst
   - type: Icon
     sprite: Mobs/Species/Slime/parts.rsi
     state: full
@@ -58,6 +56,7 @@
     damageContainer: Biological
     damageModifierSet: Slime
   - type: PassiveDamage # Around 8 damage a minute healed
+    intervalHaltOnDamageTaken: 5s
     allowedStates:
     - Alive
     damageCap: 65

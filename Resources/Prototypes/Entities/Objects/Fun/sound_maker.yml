@@ -282,6 +282,9 @@
     sound:
       path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_drop.ogg
   #DS14-End
+  - type: Tag
+    tags:
+    - MonkeyWearable
 
 - type: entity
   parent: BaseWhistle

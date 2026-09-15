@@ -1,9 +1,20 @@
 # Bounds Guide
 #1D2L3U4R
 
+# This prototype is used as a parent by unique named pets (e.g Pun Pun, Ian, Hamlet)
+- type: entity
+  abstract: true
+  id: BaseUniquePet
+  components:
+  - type: Grammar
+    attributes:
+      proper: true # Makes the pet's ingame name count as a proper noun (e.g, they have colored names when that accessibility setting is enabled)
+  - type: NameIdentifier
+    group: null # Strips the numeric identifier from the pet's ingame name
+
 - type: entity
   name: Ian
-  parent: MobCorgi
+  parent: [BaseUniquePet, MobCorgi]
   id: MobCorgiIan
   description: Favorite pet corgi.
   components:
@@ -146,10 +157,11 @@
     attributes:
       proper: true
       gender: female
+  - type: SpeakOnException
 
 - type: entity
   name: Puppy Ian
-  parent: MobCorgiPuppy
+  parent: [BaseUniquePet, MobCorgiPuppy]
   id: MobCorgiIanPup
   description: Favourite puppy corgi. Awww.
   components:
@@ -178,7 +190,7 @@
 
 - type: entity
   name: Runtime
-  parent: MobCat
+  parent: [BaseUniquePet, MobCat]
   id: MobCatRuntime
   description: Professional mouse hunter. Escape artist.
   components:
@@ -198,6 +210,9 @@
     - VimPilot
   - type: StealTarget
     stealGroup: AnimalNamedCat
+  - type: SpeakOnException
+    speechCooldown: 3m
+    chanceSpeakNoAccent: 0.01
   # DS14-start
   - type: Language
     selectedLanguage: DogLanguage
@@ -213,12 +228,15 @@
 - type: entity
   name: Exception
   id: MobCatException
-  parent: MobCatCalico
+  parent: [BaseUniquePet, MobCatCalico]
   description: Ask nicely, and maybe they'll give you one of their spare lives.
   components:
   - type: NpcFactionMember
     factions:
       - PetsNT
+  - type: SpeakOnException
+    speechCooldown: 2m
+    chanceSpeakNoAccent: 0.007
   - type: Grammar
     attributes:
       proper: true
@@ -244,7 +262,7 @@
 - type: entity
   name: Floppa
   id: MobCatFloppa
-  parent: MobCatCaracal
+  parent: [BaseUniquePet, MobCatCaracal]
   description: He out here.
   components:
   - type: Fixtures
@@ -289,7 +307,7 @@
 
 - type: entity
   name: Bandito
-  parent: MobFerret
+  parent: [BaseUniquePet, MobFerret]
   id: MobBandito
   description: Just a silly little guy!
   components:
@@ -314,7 +332,7 @@
 
 - type: entity
   name: Bingus
-  parent: [SimpleMobBase, StripableInventoryBase]
+  parent: [BaseUniquePet, SimpleMobBase, StripableInventoryBase]
   id: MobBingus
   description: Bingus my beloved...
   components:
@@ -388,7 +406,7 @@
 
 - type: entity
   name: McGriff
-  parent: [SimpleMobBase, StripableInventoryBase]
+  parent: [BaseUniquePet, SimpleMobBase, StripableInventoryBase]
   id: MobMcGriff
   description: This dog can tell something smells around here, and that something is CRIME!
   components:
@@ -479,7 +497,7 @@
 
 - type: entity
   name: Paperwork
-  parent: MobSloth
+  parent: [BaseUniquePet, MobSloth]
   id: MobPaperwork
   description: Took up a new job sorting books in the library after he got transferred from Space Station 13. He seems to be just as slow at this.
   components:
@@ -522,7 +540,7 @@
 
 - type: entity
   name: Walter
-  parent: [SimpleMobBase, StripableInventoryBase]
+  parent: [BaseUniquePet, SimpleMobBase, StripableInventoryBase]
   id: MobWalter
   description: He likes chems and treats. Walter.
   components:
@@ -597,7 +615,7 @@
 
 - type: entity
   name: Morty
-  parent: MobPossum
+  parent: [BaseUniquePet, MobPossum]
   id: MobPossumMorty
   description: The station's resident Didelphis virginiana. A sensitive but resilient kind of guy.
   components:
@@ -672,7 +690,7 @@
 
 - type: entity
   name: Morticia
-  parent: MobRaccoon
+  parent: [BaseUniquePet, MobRaccoon]
   id: MobRaccoonMorticia
   description: A powerful creature of the night. Her eyeshadow is always on point.
   components:
@@ -703,7 +721,7 @@
 
 - type: entity
   name: Alexander
-  parent: MobPig
+  parent: [BaseUniquePet, MobPig]
   id: MobAlexander
   description: Chef's finest colleague.
   components:
@@ -743,7 +761,7 @@
 
 - type: entity
   name: Renault
-  parent: MobFox
+  parent: [BaseUniquePet, MobFox]
   id: MobFoxRenault
   description: The captain's trustworthy fox.
   components:
@@ -782,7 +800,7 @@
 
 - type: entity
   name: Hamlet
-  parent: MobHamster
+  parent: [BaseUniquePet, MobHamster]
   id: MobHamsterHamlet
   description: A grumpy, cute and fluffy hamster.
   components:
@@ -835,8 +853,12 @@
     flavors:
     - meaty
     - sadness
-  - type: Hunger
-    baseDecayRate: 0.1 # DS14: not soo hungry
+  - type: Satiation
+    satiations:
+      Hunger:
+        prototype: DeadSpaceHamsterHunger # DS14: not so hungry.
+      Thirst:
+        prototype: SimpleMobBaseThirst
 # DS14-start
   - type: Language
     knownLanguages:
@@ -867,7 +889,7 @@
 
 - type: entity
   name: Shiva
-  parent: MobGiantSpider
+  parent: [BaseUniquePet, MobGiantSpider]
   id: MobSpiderShiva
   description: The first defender of the station.
   components:
@@ -944,7 +966,7 @@
 
 - type: entity
   name: Willow
-  parent: MobKangaroo
+  parent: [BaseUniquePet, MobKangaroo]
   id: MobKangarooWillow
   description: Willow the boxing kangaroo.
   components:
@@ -987,7 +1009,7 @@
 - type: entity
   name: Smile
   id: MobSlimesPet
-  parent: [MobAdultSlimes, StripableInventoryBase]
+  parent: [BaseUniquePet, MobAdultSlimes, StripableInventoryBase]
   description: This masterpiece has gone through thousands of experiments. But it is the sweetest creature in the world. Smile Slime!
   components:
   - type: Sprite
@@ -1081,7 +1103,7 @@
 
 - type: entity
   name: Pun Pun
-  parent: MobMonkey
+  parent: [BaseUniquePet, MobMonkey]
   id: MobMonkeyPunpun
   description: A prominent representative of monkeys with unlimited access to alcohol.
   components:
@@ -1133,7 +1155,7 @@
 
 - type: entity
   name: Tropico
-  parent: MobCrab
+  parent: [BaseUniquePet, MobCrab]
   id: MobCrabAtmos
   description: The noble and stalwart defender of Atmosia. Viva!
   components:
@@ -1169,7 +1191,7 @@
 
 - type: entity
   name: Polly the parrot
-  parent: MobParrotBase
+  parent: [BaseUniquePet, MobParrotBase]
   id: MobPollyParrot
   description: An expert in quantum cracker theory
   components:

@@ -5,10 +5,8 @@
     <BoxContainer Orientation="Vertical" HorizontalAlignment="Stretch">
         <!-- Station name -->
         <controls:StripeBack HorizontalAlignment="Stretch">
-            <PanelContainer>
-                <RichTextLabel Name="StationName" HorizontalAlignment="Center" VerticalAlignment="Center"
-                               Margin="0 5 0 3" />
-            </PanelContainer>
+            <RichTextLabel Name="StationName" HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Margin="0 5 0 3" /> <!-- DS14 -->
         </controls:StripeBack>
         <!-- Main display -->
         <BoxContainer Orientation="Horizontal" VerticalExpand="True" HorizontalExpand="True">

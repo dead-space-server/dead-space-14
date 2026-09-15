@@ -1,0 +1,10 @@
+- type: entity
+  parent: MarkerBase
+  id: NinjaMindScannerMarker
+  name: маркер точки телепортации сканера разума
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - sprite: Objects/Weapons/Melee/energykatana.rsi
+      state: icon

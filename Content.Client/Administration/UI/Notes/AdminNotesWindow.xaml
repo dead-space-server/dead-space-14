@@ -4,9 +4,7 @@
             SetSize="600 400"
             Title="Loading...">
     <!-- DS14-start -->
-    <PanelContainer StyleClasses="DS14MenuShell">
-        <notes:AdminNotesControl Name="Notes"
-                                 Access="Public" />
-    </PanelContainer>
+    <notes:AdminNotesControl Name="Notes"
+                             Access="Public" />
     <!-- DS14-end -->
 </ui:FancyWindow>

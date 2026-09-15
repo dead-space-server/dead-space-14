@@ -44,6 +44,8 @@ namespace Content.Client.Atmos.UI
 
         public void SetTransferRate(float rate)
         {
+            if (!SetTransferRateButton.Disabled)
+                return;
             PumpTransferRateInput.Text = rate.ToString(CultureInfo.CurrentCulture);
         }
 

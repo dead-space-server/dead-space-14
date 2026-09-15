@@ -1,0 +1,114 @@
+# Reverse RIG (система обратного рига, СОР).
+
+- type: entity
+  parent: ClothingOuterHardsuitBase
+  id: ClothingOuterRIGReverse
+  name: скафандр системы обратного рига
+  description: Скафандр, который носит собственный ранец. При надевании ранец автоматически крепится на спину, вытесняя прежний рюкзак.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ReverseRig
+    backpackPrototype: ClothingBackpackRIGReverse
+  - type: Sprite
+    sprite: _DeadSpace/RIGs/Engineer/outer.rsi
+  - type: Clothing
+    sprite: _DeadSpace/RIGs/Engineer/outer.rsi
+    equipSound: /Audio/_DeadSpace/Misc/rig_equip.ogg
+  - type: PressureProtection
+    highPressureMultiplier: 0.04
+    lowPressureMultiplier: 1000
+  - type: ExplosionResistance
+    damageCoefficient: 0.5
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.9
+        Heat: 0.65
+        Shock: 0.8
+        Caustic: 0.5
+        Radiation: 0.2
+  - type: ClothingSpeedModifier
+    walkModifier: 0.8
+    sprintModifier: 0.8
+  - type: TemperatureProtection
+    heatingCoefficient: 0.001
+    coolingCoefficient: 0.001
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetRIGReverse
+    storeExistingItem: true
+  - type: ContainerContainer
+    containers:
+      toggleable-clothing: !type:ContainerSlot {}
+      reverse-rig-backpack: !type:ContainerSlot {}
+
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackRIGReverse
+  name: ранец системы обратного рига
+  description: Несъёмный ранец системы обратного рига, снимается только вместе со скафандром. Вместимость обычного рюкзака, 100% защита от взрывов. Внутренний слот - под кислородный баллон, питающий дыхание и джет.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ReverseRigBackpack
+  - type: Sprite
+    sprite: _DeadSpace/RIGs/Engineer/backpack.rsi
+  - type: Clothing
+    quickEquip: false
+    equipDelay: 1.5
+    unequipDelay: 1.5
+    slots:
+    - back
+  - type: ExplosionResistance
+    damageCoefficient: 0
+  - type: GasTank
+    outputPressure: 21.3
+    air:
+      volume: 5
+      temperature: 293.15
+    tankLowPressure: 30.0
+  - type: Jetpack
+    moleUsage: 0.00085
+  - type: ItemSlots
+    slots:
+      sor-tank:
+        startingItem: OxygenTankFilled
+        whitelist:
+          tags:
+          - GasTank
+  - type: UseDelay
+    delay: 0.5
+    delays:
+      gasTank:
+        length: 1.0
+  - type: ContainerContainer
+    containers:
+      sor-tank: !type:ContainerSlot {}
+      storagebase: !type:Container
+        ents: []
+
+- type: entity
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  id: ClothingHeadHelmetRIGReverse
+  name: шлем системы обратного рига
+  description: Шлем системы обратного рига. Надевается автоматически вместе со скафандром.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/RIGs/Engineer/helmet.rsi
+    scale: 0.7, 0.7
+  - type: Clothing
+    sprite: _DeadSpace/RIGs/Engineer/helmet.rsi
+  - type: PressureProtection
+    highPressureMultiplier: 0.08
+    lowPressureMultiplier: 1000
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.95
+        Slash: 0.95
+        Piercing: 0.95
+        Heat: 0.95
+  - type: Item
+    heldPrefix: off
+    size: Normal

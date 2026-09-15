@@ -1,5 +1,5 @@
 <PanelContainer
     xmlns="https://spacestation14.io"
-    StyleClasses="DS14MenuPanelDark">
+    StyleClasses="DeadSpaceSurfaceDark">
     <!-- DS14: KSO-styled highlighted container -->
 </PanelContainer>

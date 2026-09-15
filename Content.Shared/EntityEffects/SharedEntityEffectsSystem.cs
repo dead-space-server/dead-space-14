@@ -22,6 +22,7 @@ public sealed partial class SharedEntityEffectsSystem : EntitySystem, IEntityEff
     public override void Initialize()
     {
         SubscribeLocalEvent<ReactiveComponent, ReactionEntityEvent>(OnReactive);
+        SubscribeLocalEvent<EntityEffectOnMapInitComponent, MapInitEvent>(OnMapInit);
     }
 
     private void OnReactive(Entity<ReactiveComponent> entity, ref ReactionEntityEvent args)
@@ -58,6 +59,11 @@ public sealed partial class SharedEntityEffectsSystem : EntitySystem, IEntityEff
         }
     }
 
+    private void OnMapInit(Entity<EntityEffectOnMapInitComponent> entity, ref MapInitEvent args)
+    {
+        ApplyEffects(entity, entity.Comp.Effects);
+    }
+
     /// <inheritdoc cref="ApplyEffects(EntityUid,EntityEffect[],float,EntityUid?)"/>
     public void ApplyEffects(EntityUid target, EntityEffect[] effects, FixedPoint2 scale, EntityUid? user = null)
     {
@@ -78,6 +84,20 @@ public sealed partial class SharedEntityEffectsSystem : EntitySystem, IEntityEff
         {
             TryApplyEffect(target, effect, scale, user);
         }
+    }
+
+    /// <summary>
+    /// Applies all effects whose conditions pass and reports whether at least one was applied.
+    /// </summary>
+    public bool TryApplyEffects(EntityUid target, EntityEffect[] effects, float scale = 1f, EntityUid? user = null)
+    {
+        var applied = false;
+        foreach (var effect in effects)
+        {
+            applied |= TryApplyEffect(target, effect, scale, user);
+        }
+
+        return applied;
     }
 
     /// <summary>

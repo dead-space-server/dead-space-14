@@ -1,20 +1,16 @@
-<Control xmlns="https://spacestation14.io"
-         xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client">
-    <PanelContainer MouseFilter="Stop">
-        <PanelContainer.PanelOverride>
-            <!-- semi-transparent background -->
-            <gfx:StyleBoxFlat BackgroundColor="#000000AA" />
-        </PanelContainer.PanelOverride>
+<Control xmlns="https://spacestation14.io">
+    <PanelContainer MouseFilter="Stop"
+                    StyleClasses="DeadSpaceModalScrim"> <!-- DS14 -->
 
         <Control HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="600">
             <!-- DS14-start -->
-            <PanelContainer StyleClasses="DS14MenuPopupPanel">
+            <PanelContainer StyleClasses="DeadSpacePopup">
                 <BoxContainer Orientation="Vertical"
                               SeparationOverride="8">
                     <RichTextLabel Name="Description" />
 
                     <!-- Contains actual messages -->
-                    <PanelContainer StyleClasses="DS14MenuInset"
+                    <PanelContainer StyleClasses="DeadSpaceInset"
                                     VerticalExpand="True"
                                     HorizontalExpand="True">
                         <ScrollContainer HScrollEnabled="False"
@@ -28,7 +24,6 @@
                     </PanelContainer>
 
                     <Label Name="WaitLabel"
-                           StyleClasses="DS14MenuProfileLabel"
                            HorizontalAlignment="Center" />
                     <BoxContainer Orientation="Horizontal"
                                   SeparationOverride="6">
@@ -36,12 +31,11 @@
                                 Text="{Loc 'admin-notes-message-dismiss'}"
                                 Disabled="True"
                                 HorizontalExpand="True"
-                                StyleClasses="DS14MenuProfileControl negative" />
+                                StyleClasses="negative" />
                         <Button Name="AcceptButton"
                                 Text="{Loc 'admin-notes-message-accept'}"
                                 Disabled="True"
-                                HorizontalExpand="True"
-                                StyleClasses="DS14MenuProfileControl" />
+                                HorizontalExpand="True" />
                     </BoxContainer>
                 </BoxContainer>
             </PanelContainer>

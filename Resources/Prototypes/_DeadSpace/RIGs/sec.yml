@@ -63,7 +63,7 @@
     clothingPrototype: ClothingHeadHelmetRIGSecurity
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetRIGSecurity
   name: шлем боевого офицерского скафандра
   description: The Love I Lost - Fried by Fluoride.
@@ -156,7 +156,7 @@
     clothingPrototype: ClothingHeadHelmetRIGSecurityAdvanced
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetRIGSecurityAdvanced
   name: шлем продвинутого боевого офицерского скафандра
   description: Честно, тут должно быть что-то написано.

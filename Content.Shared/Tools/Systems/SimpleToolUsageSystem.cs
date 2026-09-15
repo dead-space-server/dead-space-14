@@ -66,6 +66,8 @@ public sealed partial class SimpleToolUsageSystem : EntitySystem
         if (attemptEv.Cancelled)
             return;
 
+        // DS14: reuse the shared helper because this branch has no implicit ProtoMan property.
+        var qualityName = _tools.GetQualitiesText([ent.Comp.Quality], true);
         var doAfterArgs = new DoAfterArgs(EntityManager, user, ent.Comp.DoAfter, new SimpleToolDoAfterEvent(), ent, ent, tool)
         {
             BreakOnDamage = true,
@@ -73,6 +75,7 @@ public sealed partial class SimpleToolUsageSystem : EntitySystem
             BreakOnMove = true,
             BreakOnHandChange = true,
             NeedHand = true,
+            ExamineText = Loc.GetString("tool-component-doafter-examine", ("user", user), ("quality", qualityName), ("target", ent)),
         };
 
         _doAfterSystem.TryStartDoAfter(doAfterArgs);

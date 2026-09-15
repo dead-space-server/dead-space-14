@@ -8,8 +8,8 @@
                     HorizontalExpand="True"
                     HorizontalAlignment="Center"
                     MinSize="50 50">
-            <PanelContainer>
-                <BoxContainer Orientation="Horizontal"
+            <!-- DS14-start -->
+            <BoxContainer Orientation="Horizontal"
                         VerticalExpand="True"
                         HorizontalExpand="True"
                         HorizontalAlignment="Center"
@@ -68,10 +68,8 @@
                             MinSize="40 0"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center" />
-                </BoxContainer>
-            </PanelContainer>
-            <PanelContainer>
-                <BoxContainer Orientation="Horizontal"
+            </BoxContainer>
+            <BoxContainer Orientation="Horizontal"
                             VerticalExpand="True"
                             HorizontalExpand="True"
                             HorizontalAlignment="Center"
@@ -88,7 +86,7 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             StyleClasses="OpenLeft" />
-                </BoxContainer>
-            </PanelContainer>
+            </BoxContainer>
+            <!-- DS14-end -->
         </BoxContainer>
 </controls:FancyWindow>

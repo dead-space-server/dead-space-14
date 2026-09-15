@@ -9,14 +9,11 @@
     xmlns:panic="clr-namespace:Content.Client.Administration.UI.Tabs.PanicBunkerTab"
     MinWidth="720"
     MinHeight="360"
-    SetSize="780 430"
-    HeaderClass="DS14MenuHeader"
-    TitleClass="DS14MenuTitle">
+    SetSize="780 430">
     <!-- DS14-start -->
     <TabContainer Name="MasterTabContainer"
                   HorizontalExpand="True"
-                  VerticalExpand="True"
-                  StyleClasses="DS14MenuTabs">
+                  VerticalExpand="True">
         <adminTab:AdminTab />
         <adminbusTab:AdminbusTab />
         <atmosTab:AtmosTab />

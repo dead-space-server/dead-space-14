@@ -1,4 +1,5 @@
 ﻿using Content.Shared.Administration.Logs;
+using Content.Shared.Actions.Events;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Organ;
 using Content.Shared.Body.Systems;
@@ -9,7 +10,7 @@ using Content.Shared.Database;
 using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
-using Content.Shared.Forensics;
+using Content.Shared.Forensics.Systems;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
@@ -55,6 +56,7 @@ public sealed partial class IngestionSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly SharedForensicsSystem _forensics = default!;
 
     // Body Component Dependencies
     [Dependency] private readonly SharedBodySystem _body = default!;
@@ -88,9 +90,16 @@ public sealed partial class IngestionSystem : EntitySystem
         // Misc
         SubscribeLocalEvent<EdibleComponent, AttemptShakeEvent>(OnAttemptShake);
         SubscribeLocalEvent<EdibleComponent, BeforeFullySlicedEvent>(OnBeforeFullySliced);
+        SubscribeLocalEvent<ActionRequireMouthUncoveredComponent, ActionAttemptEvent>(OnMouthUncoveredActionAttempt);
 
         InitializeBlockers();
         InitializeUtensils();
+    }
+
+    private void OnMouthUncoveredActionAttempt(Entity<ActionRequireMouthUncoveredComponent> ent, ref ActionAttemptEvent args)
+    {
+        if (!HasMouthAvailable(args.User, args.User, ent.Comp.Slots))
+            args.Cancelled = true;
     }
 
     /// <summary>
@@ -121,7 +130,7 @@ public sealed partial class IngestionSystem : EntitySystem
     /// <param name="ingested">The entity that is trying to be ingested.</param>
     /// <param name="ingest"> When set to true, it tries to ingest. When false, it only checks if we can.</param>
     /// <returns>Returns true if we can ingest the item.</returns>
-    private bool AttemptIngest(EntityUid user, EntityUid target, EntityUid ingested, bool ingest)
+    private bool AttemptIngest(EntityUid user, EntityUid target, EntityUid ingested, bool ingest, EntityUid? utensil = null) // DS14
     {
         var eatEv = new IngestibleEvent();
         RaiseLocalEvent(ingested, ref eatEv);
@@ -129,7 +138,7 @@ public sealed partial class IngestionSystem : EntitySystem
         if (eatEv.Cancelled)
             return false;
 
-        var ingestionEv = new AttemptIngestEvent(user, ingested, ingest);
+        var ingestionEv = new AttemptIngestEvent(user, ingested, ingest, utensil); // DS14
         RaiseLocalEvent(target, ref ingestionEv);
 
         return ingestionEv.Handled;
@@ -274,8 +283,14 @@ public sealed partial class IngestionSystem : EntitySystem
         if (!CanConsume(args.User, entity, args.Ingested, out var solution, out var time))
             return;
 
-        if (!_doAfter.TryStartDoAfter(GetEdibleDoAfterArgs(args.User, entity, food, time ?? TimeSpan.Zero)))
+        // DS14-start
+        var ingestionTime = time ?? TimeSpan.Zero;
+        if (args.Utensil is { } utensil && IsDrinkingWithFork(food, utensil))
+            ingestionTime *= ForkDrinkDelayMultiplier;
+
+        if (!_doAfter.TryStartDoAfter(GetEdibleDoAfterArgs(args.User, entity, food, ingestionTime, args.Utensil)))
             return;
+        // DS14-end
 
         args.Handled = true;
         var foodSolution = solution.Value.Comp.Solution;
@@ -363,6 +378,11 @@ public sealed partial class IngestionSystem : EntitySystem
 
         var transfer = FixedPoint2.Clamp(beforeEv.Transfer, beforeEv.Min, beforeEv.Max);
 
+        // DS14-start
+        if (args.Used is { } utensil && IsDrinkingWithFork(food, utensil))
+            transfer = FixedPoint2.Min(transfer, ForkDrinkTransferAmount);
+        // DS14-end
+
         var split = _solutionContainer.SplitSolution(solution.Value, transfer);
 
         if (beforeEv.Refresh)
@@ -411,20 +431,20 @@ public sealed partial class IngestionSystem : EntitySystem
     /// <param name="food">Food entity we're trying to eat.</param>
     /// <param name="delay">The time delay for our DoAfter</param>
     /// <returns>Returns true if it was able to successfully start the DoAfter</returns>
-    private DoAfterArgs GetEdibleDoAfterArgs(EntityUid user, EntityUid target, EntityUid food, TimeSpan delay = default)
+    private DoAfterArgs GetEdibleDoAfterArgs(EntityUid user, EntityUid target, EntityUid food, TimeSpan delay = default, EntityUid? utensil = null) // DS14
     {
         var forceFeed = user != target;
 
-        var doAfterArgs = new DoAfterArgs(EntityManager, user, delay, new EatingDoAfterEvent(), target, food)
+        var doAfterArgs = new DoAfterArgs(EntityManager, user, delay, new EatingDoAfterEvent(), target, food, utensil) // DS14
         {
-            BreakOnHandChange = false,
+            BreakOnHandChange = utensil != null, // DS14
             BreakOnMove = forceFeed,
             BreakOnDamage = true,
             MovementThreshold = 0.01f,
             DistanceThreshold = MaxFeedDistance,
             // do-after will stop if item is dropped when trying to feed someone else
             // or if the item started out in the user's own hands
-            NeedHand = forceFeed || _hands.IsHolding(user, food),
+            NeedHand = utensil != null || forceFeed || _hands.IsHolding(user, food), // DS14
         };
 
         return doAfterArgs;
@@ -495,13 +515,7 @@ public sealed partial class IngestionSystem : EntitySystem
         if (!IsEmpty(entity))
         {
             // Leave some of the consumer's DNA on the consumed item...
-            var ev = new TransferDnaEvent
-            {
-                Donor = args.Target,
-                Recipient = entity,
-                CanDnaBeCleaned = false,
-            };
-            RaiseLocalEvent(args.Target, ref ev);
+            _forensics.TransferDna(entity, args.Target, false);
 
             args.Repeat = !args.ForceFed;
             return;

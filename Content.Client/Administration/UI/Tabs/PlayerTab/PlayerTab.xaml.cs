@@ -54,7 +54,7 @@ public sealed partial class PlayerTab : Control
         OverlayButton.OnPressed += OverlayButtonPressed;
         ShowDisconnectedButton.OnPressed += ShowDisconnectedPressed;
 
-        ListHeader.BackgroundColorPanel.AddStyleClass(DeadSpaceMenuSheetlet.ListHeader); // DS14
+        ListHeader.BackgroundColorPanel.AddStyleClass(DeadSpaceStyleClass.ListHeader); // DS14
         ListHeader.OnHeaderClicked += HeaderClicked;
 
         SearchList.SearchBar = SearchLineEdit;
@@ -173,8 +173,8 @@ public sealed partial class PlayerTab : Control
         // DS14-start
         button.StyleClasses.Clear();
         button.AddStyleClass(button.Index % 2 == 0
-            ? DeadSpaceMenuSheetlet.ListRow
-            : DeadSpaceMenuSheetlet.ListRowAlt);
+            ? DeadSpaceStyleClass.ListItem
+            : DeadSpaceStyleClass.ListItemAlternate);
         // DS14-end
     }
 

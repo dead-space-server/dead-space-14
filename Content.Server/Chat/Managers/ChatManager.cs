@@ -285,17 +285,13 @@ internal sealed partial class ChatManager : IChatManager
 
     private void SendOOC(ICommonSession player, string message)
     {
-        if (_adminManager.IsAdmin(player))
-        {
-            if (!_adminOocEnabled)
-            {
-                return;
-            }
-        }
-        else if (!_oocEnabled)
-        {
+        // DS14-start
+        if (!_oocEnabled && !_adminManager.HasAdminFlag(player, AdminFlags.ChatToggle))
             return;
-        }
+
+        if (_adminManager.IsAdmin(player) && !_adminOocEnabled)
+            return;
+        // DS14-end
 
         Color? colorOverride = null;
         // DS14-start

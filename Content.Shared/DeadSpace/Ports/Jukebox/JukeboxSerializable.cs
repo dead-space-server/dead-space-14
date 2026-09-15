@@ -66,6 +66,10 @@ public sealed partial class WhiteJukeboxComponent : Component
 public sealed class PlayingSongData
 {
     public ResPath? SongPath;
+    // DS14-start
+    public TimeSpan StartedAt;
+    public TimeSpan? EndsAt;
+    // DS14-end
     public string? SongName;
     public float PlaybackPosition;
     public float ActualSongLengthSeconds;

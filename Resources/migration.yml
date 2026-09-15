@@ -174,12 +174,12 @@ SpyCrewMonitorEmpty: null
 SyndiCrewMonitor: null
 SyndiCrewMonitorEmpty: null
 
-SpawnVehicleWheelchair: null
+#SpawnVehicleWheelchair: null
 SpawnVehicleWheelchairFolded: null
-VehicleWheelchair: null
+#VehicleWheelchair: null
 VehicleWheelchairFolded: null
 VehicleSecwayStealObjective: null
-VehicleKeyJanicart: null
+#VehicleKeyJanicart: null
 VehicleKeySecway: null
 VehicleKeyATV: null
 VehicleKeySkeleton: null
@@ -199,8 +199,8 @@ MobTaxiBot: null
 SpawnVehicleMotobike: null
 SpawnVehicleATV: null
 SpawnVehicleSecway: null
-SpawnVehicleJanicart: null
-VehicleJanicart: null
+SpawnVehicleJanicart: VehicleJanicart # DS14
+#VehicleJanicart: null
 VehicleJanicartDestroyed: null
 
 # 2024-02-01
@@ -1305,3 +1305,10 @@ ComputerCargoOrdersService: null
 WeaponTurretLaserNanoTrasen: WeaponEnergyTurretAI
 WeaponTurretLaserHostile: WeaponEnergyTurretTaipanAI
 WeaponTurretLaserTaipan: WeaponEnergyTurretTaipanAI
+
+# 2026-08-10 - DS14
+WaterCooler: WaterCoolerTransfer
+
+# 2026-08-18
+LightReplacer: LightReplacerFilled
+LightReplacerEmpty: LightReplacer # DS14: preserve empty replacers placed on fork maps

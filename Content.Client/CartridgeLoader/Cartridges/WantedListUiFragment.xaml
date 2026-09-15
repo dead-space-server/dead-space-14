@@ -5,13 +5,12 @@
         VerticalExpand="True"
         HorizontalExpand="True">
 
-    <PanelContainer StyleClasses="DS14MenuPanelDark"></PanelContainer>
+    <PanelContainer StyleClasses="DeadSpaceSurfaceDark"></PanelContainer> <!-- DS14 -->
     <LineEdit Name="SearchBar"
               PlaceHolder="{Loc 'wanted-list-search-placeholder'}"
               HorizontalExpand="True"
               SetHeight="32"
-              Margin="4 4 4 2"
-              StyleClasses="DS14MenuInput"/>
+              Margin="4 4 4 2"/>
 
     <BoxContainer Name="MainContainer"
                   Orientation="Horizontal"
@@ -19,23 +18,29 @@
                   VerticalExpand="True"
                   Margin="4"
                   SeparationOverride="6">
-        <PanelContainer StyleClasses="DS14MenuInset"
+        <!-- DS14-start -->
+        <PanelContainer StyleClasses="DeadSpaceInset"
                         HorizontalExpand="True"
                         VerticalExpand="True"
                         SizeFlagsStretchRatio="1">
+        <!-- DS14-end -->
             <BoxContainer Orientation="Vertical"
                           HorizontalExpand="True"
                           VerticalExpand="True">
+                <!-- DS14-start -->
                 <Label Text="{Loc 'wanted-list-records-title'}"
-                       StyleClasses="DS14MenuListHeader"
+                       StyleClasses="DeadSpaceListHeader"
                        Margin="2 0 2 4"/>
+                <!-- DS14-end -->
+                <!-- DS14-start -->
                 <Label Name="NoRecords"
                        Text="{Loc 'wanted-list-label-no-records'}"
                        Align="Center"
                        VAlign="Center"
                        HorizontalExpand="True"
                        VerticalExpand="True"
-                       FontColorOverride="DarkGray"/>
+                       StyleClasses="DeadSpaceSubtitle"/>
+                <!-- DS14-end -->
 
                 <controls:ListContainer
                     Name="RecordsList"
@@ -47,42 +52,46 @@
             </BoxContainer>
         </PanelContainer>
 
-        <PanelContainer StyleClasses="DS14MenuPanel"
+        <!-- DS14-start -->
+        <PanelContainer StyleClasses="DeadSpaceSurface"
                         HorizontalExpand="True"
                         VerticalExpand="True"
                         SizeFlagsStretchRatio="2">
+        <!-- DS14-end -->
             <BoxContainer Orientation="Vertical"
                           HorizontalExpand="True"
                           VerticalExpand="True">
+                <!-- DS14-start -->
                 <Label Name="RecordUnselected"
                        Text="{Loc 'criminal-records-console-select-record-info'}"
                        Align="Center"
                        VAlign="Center"
-                       FontColorOverride="DarkGray"
+                       StyleClasses="DeadSpaceSubtitle"
                        Visible="False"
                        HorizontalExpand="True"
                        VerticalExpand="True" />
+                <!-- DS14-end -->
                 <BoxContainer Name="PersonContainer"
                               Orientation="Vertical"
                               HorizontalExpand="True"
                               VerticalExpand="True"
                               Visible="False">
                     <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
-                        <Label Name="PersonName" StyleClasses="DS14MenuTitle" HorizontalExpand="True" ClipText="True"/>
+                        <Label Name="PersonName" StyleClasses="DeadSpaceTitle" HorizontalExpand="True" ClipText="True"/> <!-- DS14 -->
                         <RichTextLabel Name="PersonState" HorizontalAlignment="Right" />
                     </BoxContainer>
-                    <PanelContainer StyleClasses="DS14MenuAccentDim" SetHeight="1" Margin="0 5 0 5"/>
+                    <PanelContainer StyleClasses="DeadSpaceAccentDim" SetHeight="1" Margin="0 5 0 5"/> <!-- DS14 -->
                     <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
                         <BoxContainer Name="DataContainer" Orientation="Vertical" SeparationOverride="4">
                             <RichTextLabel Name="TargetAge" />
                             <RichTextLabel Name="TargetJob" />
                             <RichTextLabel Name="TargetSpecies" />
                             <RichTextLabel Name="TargetGender" />
-                            <PanelContainer StyleClasses="DS14MenuAccentDim" SetHeight="1" Margin="0 5 0 5"/>
+                            <PanelContainer StyleClasses="DeadSpaceAccentDim" SetHeight="1" Margin="0 5 0 5"/> <!-- DS14 -->
                             <RichTextLabel Name="InitiatorName" VerticalAlignment="Stretch"/>
                             <RichTextLabel Name="WantedReason" VerticalAlignment="Stretch"/>
-                            <PanelContainer StyleClasses="DS14MenuAccentDim" SetHeight="1" Margin="0 5 0 5" />
-                            <PanelContainer Name="HistoryPanel" StyleClasses="DS14MenuInset">
+                            <PanelContainer StyleClasses="DeadSpaceAccentDim" SetHeight="1" Margin="0 5 0 5" /> <!-- DS14 -->
+                            <PanelContainer Name="HistoryPanel" StyleClasses="DeadSpaceInset"> <!-- DS14 -->
                                 <controls:TableContainer Name="HistoryTable" Columns="3" Visible="False" HorizontalAlignment="Stretch" />
                             </PanelContainer>
                         </BoxContainer>

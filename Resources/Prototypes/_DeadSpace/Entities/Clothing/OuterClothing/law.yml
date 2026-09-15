@@ -1,0 +1,10 @@
+- type: entity
+  parent: ClothingOuterBase
+  id: ClothingOuterRobesMagistrat
+  name: мантия магистрата
+  description: Тяжёлая мантия магистрата с соответствующими погонами. Носящий её говорит от имени закона, и закон не любит, когда его перебивают.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/OuterClothing/Misc/magirobe.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/OuterClothing/Misc/magirobe.rsi

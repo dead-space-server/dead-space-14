@@ -36,7 +36,7 @@
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuitEllisTinker
   categories: [ HideSpawnMenu ]
   name: шлем бронескафандра UF-16
@@ -326,9 +326,8 @@
   - type: Sprite
     sprite: _DeadSpace/Sponsor/EllisTinker/tools_holofanprojector.rsi
     state: icon
-  - type: HolosignProjector
+  - type: LimitedHolosignProjector
     signProto: HoloFanEllisTinker
-    chargeUse: 120
 
 - type: entity
   id: HoloFanEllisTinker

@@ -1,0 +1,57 @@
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      Title="{Loc paper-ui-insert-title}"
+                      MinSize="380 500" SetSize="460 610">
+    <ScrollContainer HScrollEnabled="False">
+        <BoxContainer Orientation="Vertical" SeparationOverride="8" Margin="8" VerticalExpand="True">
+            <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                <Label Text="{Loc paper-ui-insert-document}" StyleClasses="DeadSpaceSectionTitle" HorizontalExpand="True" />
+                <Button Name="RefreshButton" Text="{Loc paper-ui-insert-refresh}" />
+            </BoxContainer>
+            <RichTextLabel Text="{Loc paper-ui-insert-hint}" />
+            <Label Name="LoadingLabel" Text="{Loc paper-ui-insert-loading}" StyleClasses="LabelSecondaryColor" />
+            <BoxContainer Name="DataButtons" Orientation="Vertical" SeparationOverride="4" Visible="False">
+                <Button Name="StationButton" HorizontalExpand="True">
+                    <BoxContainer Orientation="Horizontal" SeparationOverride="10" Margin="4 2">
+                        <Label Text="{Loc paper-ui-insert-station}" MinWidth="104" StyleClasses="LabelSecondaryColor" VerticalAlignment="Top" />
+                        <RichTextLabel Name="StationValue" HorizontalExpand="True" MouseFilter="Ignore" />
+                    </BoxContainer>
+                </Button>
+                <Button Name="TimeButton" HorizontalExpand="True">
+                    <BoxContainer Orientation="Horizontal" SeparationOverride="10" Margin="4 2">
+                        <Label Text="{Loc paper-ui-insert-datetime}" MinWidth="104" StyleClasses="LabelSecondaryColor" />
+                        <Label Name="TimeValue" HorizontalExpand="True" MouseFilter="Ignore" />
+                    </BoxContainer>
+                </Button>
+                <Button Name="NameButton" HorizontalExpand="True">
+                    <BoxContainer Orientation="Horizontal" SeparationOverride="10" Margin="4 2">
+                        <Label Text="{Loc paper-ui-insert-name}" MinWidth="104" StyleClasses="LabelSecondaryColor" VerticalAlignment="Top" />
+                        <RichTextLabel Name="NameValue" HorizontalExpand="True" MouseFilter="Ignore" />
+                    </BoxContainer>
+                </Button>
+                <Button Name="JobButton" HorizontalExpand="True">
+                    <BoxContainer Orientation="Horizontal" SeparationOverride="10" Margin="4 2">
+                        <Label Text="{Loc paper-ui-insert-job}" MinWidth="104" StyleClasses="LabelSecondaryColor" VerticalAlignment="Top" />
+                        <RichTextLabel Name="JobValue" HorizontalExpand="True" MouseFilter="Ignore" />
+                    </BoxContainer>
+                </Button>
+            </BoxContainer>
+            <BoxContainer Orientation="Horizontal" SeparationOverride="8" Margin="0 6 0 0">
+                <Label Text="{Loc paper-ui-insert-manifest}" StyleClasses="DeadSpaceSectionTitle" HorizontalExpand="True" />
+                <Label Name="ManifestCount" StyleClasses="LabelSecondaryColor" />
+            </BoxContainer>
+            <LineEdit Name="ManifestSearch" PlaceHolder="{Loc paper-ui-insert-manifest-search}" Editable="False" />
+            <PanelContainer StyleClasses="DeadSpaceInset" VerticalExpand="True" MinHeight="100">
+                <ScrollContainer Name="ManifestScroll" HScrollEnabled="False" VerticalExpand="True">
+                    <BoxContainer Name="ManifestRows" Orientation="Vertical" SeparationOverride="2" Margin="4" />
+                </ScrollContainer>
+                <RichTextLabel Name="ManifestStatus" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="14" MaxWidth="330" />
+            </PanelContainer>
+            <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+                <Button Name="InsertNameButton" Text="{Loc paper-ui-insert-person-name}" HorizontalExpand="True" Disabled="True" />
+                <Button Name="InsertJobButton" Text="{Loc paper-ui-insert-person-job}" HorizontalExpand="True" Disabled="True" />
+                <Button Name="InsertPersonButton" Text="{Loc paper-ui-insert-person-both}" HorizontalExpand="True" Disabled="True" />
+            </BoxContainer>
+        </BoxContainer>
+    </ScrollContainer>
+</controls:FancyWindow>

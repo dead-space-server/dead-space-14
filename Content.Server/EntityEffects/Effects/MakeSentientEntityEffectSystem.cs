@@ -1,6 +1,7 @@
 ﻿using Content.Server.Ghost.Roles.Components;
-using Content.Server.Speech.Components;
 using Content.Server.DeadSpace.Languages;
+using Content.Server.RuntimeFun;
+using Content.Server.Speech.Components;
 using Content.Shared.DeadSpace.Languages.Components; // DS14
 using Content.Shared.EntityEffects;
 using Content.Shared.EntityEffects.Effects;
@@ -26,6 +27,7 @@ public sealed partial class MakeSentientEntityEffectSystem : EntityEffectSystem<
             RemComp<ReplacementAccentComponent>(entity);
             // TODO: Make MonkeyAccent a replacement accent and remove MonkeyAccent code-smell.
             RemComp<MonkeyAccentComponent>(entity);
+            RemComp<SpeakOnExceptionComponent>(entity);
 
             // DS14-Languages-start
             var language = EnsureComp<LanguageComponent>(entity);

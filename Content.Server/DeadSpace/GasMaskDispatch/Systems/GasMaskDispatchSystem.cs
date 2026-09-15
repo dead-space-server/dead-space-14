@@ -2,10 +2,13 @@
 
 using Content.Server.Pinpointer;
 using Content.Server.Radio.EntitySystems;
+using Content.Shared.Actions;
+using Content.Shared.Actions.Components;
 using Content.Shared.DeadSpace.GasMaskDispatch.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Radio;
 using Content.Shared.Radio.Components;
+using Content.Shared.Speech;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
@@ -15,7 +18,10 @@ namespace Content.Server.DeadSpace.GasMaskDispatch.Systems;
 
 public sealed class GasMaskDispatchSystem : EntitySystem
 {
+    private const string DispatchActionPrototype = "ActionGasMaskDispatch";
+
     [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly NavMapSystem _navMap = default!;
     [Dependency] private readonly RadioSystem _radio = default!;
@@ -33,15 +39,7 @@ public sealed class GasMaskDispatchSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<GasMaskDispatchComponent, OpenGasMaskDispatchMenuEvent>(OnOpenMenu);
         SubscribeNetworkEvent<GasMaskDispatchSelectMessage>(OnSelect);
-    }
-
-    private void OnOpenMenu(Entity<GasMaskDispatchComponent> ent, ref OpenGasMaskDispatchMenuEvent args)
-    {
-        // Открытие меню целиком обрабатывается на клиенте, здесь достаточно подтвердить действие,
-        // чтобы у него корректно сработала перезарядка (useDelay) и звук нажатия.
-        args.Handled = true;
     }
 
     private void OnSelect(GasMaskDispatchSelectMessage msg, EntitySessionEventArgs args)
@@ -58,6 +56,16 @@ public sealed class GasMaskDispatchSystem : EntitySystem
         if (!_inventory.TryGetSlotEntity(wearer.Value, "mask", out var equippedMask) || equippedMask != mask)
             return;
 
+        var action = GetEntity(msg.Action);
+        if (!TryComp<ActionComponent>(action, out var actionComp) ||
+            actionComp.AttachedEntity != wearer.Value ||
+            actionComp.Container != mask ||
+            MetaData(action).EntityPrototype?.ID != DispatchActionPrototype ||
+            _actions.IsCooldownActive(actionComp))
+        {
+            return;
+        }
+
         if (!_proto.TryIndex(comp.Channel, out var channel))
             return;
 
@@ -67,7 +75,12 @@ public sealed class GasMaskDispatchSystem : EntitySystem
         var location = _navMap.GetNearestBeaconString(wearer.Value, onlyName: true);
         var message = Loc.GetString(locKey, ("location", location));
 
+        var accentEvent = new AccentGetEvent(wearer.Value, message);
+        RaiseLocalEvent(wearer.Value, accentEvent);
+        message = accentEvent.Message;
+
         _radio.SendRadioMessage(wearer.Value, message, channel, wearer.Value);
+        _actions.StartUseDelay((action, actionComp));
         PlayDispatchAlert(wearer.Value, channel, comp.Sound);
     }
 

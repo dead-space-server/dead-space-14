@@ -66,18 +66,18 @@
 
                 <!-- Station name -->
                 <controls:StripeBack>
-                    <PanelContainer>
-                        <RichTextLabel Name="StationName" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 5 0 3"/>
-                    </PanelContainer>
+                    <RichTextLabel Name="StationName" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 5 0 3"/>
                 </controls:StripeBack>
 
                 <!-- Power overview -->
                 <GridContainer Columns="2">
-                    <Label StyleClasses="highlight" Text="{Loc 'power-monitoring-window-total-sources'}"/>
+                    <!-- DS14-start -->
+                    <Label StyleClasses="DeadSpaceSectionTitle" Text="{Loc 'power-monitoring-window-total-sources'}"/>
                     <Label Name="TotalSources" Text="?" Margin="10 0 0 0"/>
-                    <Label StyleClasses="highlight" Text="{Loc 'power-monitoring-window-total-battery-usage'}"/>
+                    <Label StyleClasses="DeadSpaceSectionTitle" Text="{Loc 'power-monitoring-window-total-battery-usage'}"/>
                     <Label Name="TotalBatteryUsage" Text="?" Margin="10 0 0 0"/>
-                    <Label StyleClasses="highlight" Text="{Loc 'power-monitoring-window-total-loads'}"/>
+                    <Label StyleClasses="DeadSpaceSectionTitle" Text="{Loc 'power-monitoring-window-total-loads'}"/>
+                    <!-- DS14-end -->
                     <Label Name="TotalLoads" Text="?" Margin="10 0 0 0"/>
                 </GridContainer>
 
@@ -116,9 +116,11 @@
         <BoxContainer Orientation="Vertical">
             <PanelContainer StyleClasses="LowDivider" />
             <BoxContainer Orientation="Horizontal" Margin="10 2 5 0" VerticalAlignment="Bottom">
-                <Label Text="{Loc 'power-monitoring-window-flavor-left'}" StyleClasses="WindowFooterText" />
-                <Label Text="{Loc 'power-monitoring-window-flavor-right'}" StyleClasses="WindowFooterText"
+                <!-- DS14-start -->
+                <Label Text="{Loc 'power-monitoring-window-flavor-left'}" StyleClasses="DeadSpaceSubtitle" />
+                <Label Text="{Loc 'power-monitoring-window-flavor-right'}" StyleClasses="DeadSpaceSubtitle"
                         HorizontalAlignment="Right" HorizontalExpand="True"  Margin="0 0 5 0" />
+                <!-- DS14-end -->
                 <TextureRect StyleClasses="NTLogoDark" Stretch="KeepAspectCentered"
                         VerticalAlignment="Center" HorizontalAlignment="Right" SetSize="19 19"/>
             </BoxContainer>
