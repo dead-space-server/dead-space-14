@@ -4,6 +4,7 @@ names-circle-engineer-first-dataset-1 = Зодчий
 names-circle-light-first-dataset-1 = Вестник
 names-circle-heavy-first-dataset-1 = Диакон
 names-circle-geist-first-dataset-1 = Гейст
+names-circle-legion-first-dataset-1 = Легионер
 names-circle-fighters-second-dataset-1 = Феу
 names-circle-fighters-second-dataset-2 = Уруз
 names-circle-fighters-second-dataset-3 = Турисаз

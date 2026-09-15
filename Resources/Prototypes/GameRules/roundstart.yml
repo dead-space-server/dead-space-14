@@ -169,6 +169,19 @@
       - RoleSurvivalNukie
       components:
         # DS14-start
+      - type: GhostRoleIntroduction
+        useNukeopsOperationName: true
+        textLoc: nukeops-briefing
+        textColor: '#ff4747'
+        font: /Fonts/Bedstead/Bedstead.otf
+        fontSize: 18
+        operationFontSize: 26
+        sound:
+          path: /Audio/Ambience/Antag/nukeops_start.ogg
+        duration: 12
+        fadeFromBlackDuration: 3
+        textDelay: 0.8
+        charactersPerSecond: 50
       - type: CustomNameOnSpawn
         namePrefix: "Командир"
       # DS14-end
@@ -193,6 +206,19 @@
       - RoleSurvivalNukie
       components:
         # DS14-start
+      - type: GhostRoleIntroduction
+        useNukeopsOperationName: true
+        textLoc: nukeops-briefing
+        textColor: '#ff4747'
+        font: /Fonts/Bedstead/Bedstead.otf
+        fontSize: 18
+        operationFontSize: 26
+        sound:
+          path: /Audio/Ambience/Antag/nukeops_start.ogg
+        duration: 12
+        fadeFromBlackDuration: 3
+        textDelay: 0.8
+        charactersPerSecond: 50
       - type: CustomNameOnSpawn
         namePrefix: "Агент"
       # DS14-end
@@ -219,6 +245,19 @@
       - RoleSurvivalNukie
       components:
         # DS14-start
+      - type: GhostRoleIntroduction
+        useNukeopsOperationName: true
+        textLoc: nukeops-briefing
+        textColor: '#ff4747'
+        font: /Fonts/Bedstead/Bedstead.otf
+        fontSize: 18
+        operationFontSize: 26
+        sound:
+          path: /Audio/Ambience/Antag/nukeops_start.ogg
+        duration: 12
+        fadeFromBlackDuration: 3
+        textDelay: 0.8
+        charactersPerSecond: 50
       - type: CustomNameOnSpawn
         namePrefix: "Оператор"
       # DS14-end

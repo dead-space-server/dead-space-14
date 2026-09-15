@@ -16,6 +16,60 @@
   - GroupTankHarness
   - TheCircleEmergencyTankGeist
 
+- type: roleLoadout
+  id: RoleTheCircleShockTrooper
+  groups:
+  - SurvivalExtended
+  - GroupSpeciesBreathTool
+  - GroupTankHarness
+  - TheCircleEmergencyTankGeist
+  - TheCircleGeistStyle
+
+- type: loadoutGroup
+  id: TheCircleGeistStyle
+  name: loadout-group-the-circle-geist-style
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - TheCircleGeistOldStyle
+  - TheCircleGeistNewStyle
+
+- type: entity
+  id: TheCircleGeistOldStylePreview
+  categories: [ HideSpawnMenu ]
+  name: классический стиль Гейста
+  description: Классический скафандр «Морс», лицевые обмотки и порванный плащ.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Necromorfs/TheCircle/Helmet/geist.rsi
+    state: icon
+
+- type: entity
+  id: TheCircleGeistNewStylePreview
+  categories: [ HideSpawnMenu ]
+  name: золотой стиль Гейста
+  description: Новый скафандр «Морс», лицевая маска и порванный плащ.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Necromorfs/TheCircle/Helmet/geist-new.rsi
+    state: icon
+
+- type: loadout
+  id: TheCircleGeistOldStyle
+  dummyEntity: TheCircleGeistOldStylePreview
+  equipment:
+    outerClothing: ClothingOuterHardsuitUnitologyGeist
+    head: ClothingHeadHelmetUnitologyGeist
+    neck: ClothingNeckUnitologyGeistMantle
+
+- type: loadout
+  id: TheCircleGeistNewStyle
+  dummyEntity: TheCircleGeistNewStylePreview
+  equipment:
+    outerClothing: ClothingOuterHardsuitUnitologyGeistNew
+    head: ClothingHeadHelmetUnitologyGeistNew
+    neck: ClothingNeckUnitologyGeistMantleNew
+
 - type: loadoutGroup
   id: TheCircleEmergencyTank
   name: loadout-group-survival-military

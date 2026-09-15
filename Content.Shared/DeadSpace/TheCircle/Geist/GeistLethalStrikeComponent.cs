@@ -10,6 +10,12 @@ public sealed partial class GeistLethalStrikeComponent : Component
     [DataField(required: true)]
     public DamageSpecifier Damage = new();
 
+    /// <summary>
+    /// Whether an armed strike bypasses all damage resistances.
+    /// </summary>
+    [DataField]
+    public bool IgnoreResistances = true;
+
     [DataField]
     public TimeSpan Cooldown = TimeSpan.FromSeconds(120);
 

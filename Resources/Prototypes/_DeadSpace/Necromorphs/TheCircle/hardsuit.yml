@@ -20,7 +20,7 @@
       coefficients:
         Blunt: 0.35
         Slash: 0.35
-        Piercing: 0.35
+        Piercing: 0.38
         Heat: 0.40
         Cold: 0.3
         Radiation: 0.5
@@ -39,7 +39,6 @@
     allowedStates:
     - Dead
     reagents:
-      ExtractInfectorDead: 15
       NecromorphMutagenCorpseCollector: 5
   - type: Tag
     tags:
@@ -108,7 +107,7 @@
         Piercing: 0.3  
         Heat: 0.3
         Cold: 0.3
-        Radiation: 0.2
+        Radiation: 0.5
         Poison: 0.2
         Caustic: 0.2
   - type: StaminaResistance
@@ -124,13 +123,13 @@
     allowedStates:
     - Dead
     reagents:
-      ExtractInfectorDead: 15
       NecromorphMutagenDeva: 5
   - type: Tag
     tags:
     - Hardsuit
     - WhitelistChameleon
   - type: HardsuitIdentification
+    dissolveOnDnaChange: false
   - type: Speech
   - type: TTS
     voice: Overwatch
@@ -189,7 +188,7 @@
       coefficients:
         Blunt: 0.55
         Slash: 0.55
-        Piercing: 0.58
+        Piercing: 0.6
         Heat: 0.45
         Cold: 0.6
         Radiation: 0.5
@@ -209,13 +208,13 @@
     allowedStates:
     - Dead
     reagents:
-      ExtractInfectorDead: 15
       NecromorphMutagenStalker: 5
   - type: Tag
     tags:
     - Hardsuit
     - WhitelistChameleon
   - type: HardsuitIdentification
+    dissolveOnDnaChange: false
   - type: Speech
   - type: TTS
     voice: Overwatch
@@ -295,13 +294,13 @@
     allowedStates:
     - Dead
     reagents:
-      ExtractInfectorDead: 15
       NecromorphMutagenBoomer: 5
   - type: Tag
     tags:
     - Hardsuit
     - WhitelistChameleon
   - type: HardsuitIdentification
+    dissolveOnDnaChange: false
   - type: Speech
   - type: TTS
     voice: Overwatch
@@ -381,13 +380,13 @@
     allowedStates:
     - Dead
     reagents:
-      ExtractInfectorDead: 15
       NecromorphMutagenPregnant: 5
   - type: Tag
     tags:
     - Hardsuit
     - WhitelistChameleon
   - type: HardsuitIdentification
+    dissolveOnDnaChange: false
   - type: Speech
   - type: TTS
     voice: Overwatch
@@ -568,3 +567,44 @@
   - type: Tag
     tags:
     - WhitelistChameleon
+
+- type: entity
+  parent: ClothingOuterHardsuitUnitologyGeist
+  id: ClothingOuterHardsuitUnitologyGeistNew
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Necromorfs/TheCircle/HardSuit/geist-new.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Necromorfs/TheCircle/HardSuit/geist-new.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetUnitologyGeist
+  id: ClothingHeadHelmetUnitologyGeistNew
+  name: лицевая маска
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Necromorfs/TheCircle/Helmet/geist-new.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Necromorfs/TheCircle/Helmet/geist-new.rsi
+
+- type: entity
+  parent: ClothingOuterHardsuitUnitologyGeist
+  id: ClothingOuterHardsuitUnitologyLegion
+  name: скафандр «Макелио»
+  description: Лёгкий трофейный скафандр бойца, завербованного Кругом в секторе СССП.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Necromorfs/TheCircle/HardSuit/legion.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Necromorfs/TheCircle/HardSuit/legion.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetUnitologyGeist
+  id: ClothingHeadHelmetUnitologyLegion
+  name: обмотки
+  description: Хе хе весело бегать и резать людей.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Necromorfs/TheCircle/Helmet/legion.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Necromorfs/TheCircle/Helmet/legion.rsi
