@@ -238,7 +238,14 @@ public sealed class ArchitectArmSystem : EntitySystem
             var otherPrototype = MetaData(other).EntityPrototype?.ID;
             if (otherPrototype != null && ent.Comp.UnbreakablePrototypes.Contains(otherPrototype))
             {
-                RestartDashAfterObstacle(ent);
+                if (TryComp<PhysicsComponent>(ent.Owner, out var obstaclePhysics))
+                    EndDash(ent.Owner, ent.Comp, obstaclePhysics);
+                else
+                {
+                    SetMovementLocked(ent.Owner, ent.Comp, false);
+                    RemCompDeferred<ActiveArchitectDashComponent>(ent.Owner);
+                }
+
                 return;
             }
 

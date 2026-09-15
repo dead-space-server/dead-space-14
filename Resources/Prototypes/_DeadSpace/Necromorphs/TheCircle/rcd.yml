@@ -159,7 +159,7 @@
     sprite: _DeadSpace/Necromorfs/TheCircle/Effects/architect-construction.rsi
     state: construct1
   - type: TimedDespawn
-    lifetime: 1.2
+    lifetime: 0.6
 
 - type: entity
   parent: EffectRCDBase
@@ -170,4 +170,4 @@
     sprite: _DeadSpace/Necromorfs/TheCircle/Effects/architect-construction.rsi
     state: construct3
   - type: TimedDespawn
-    lifetime: 4.2
+    lifetime: 2.1
