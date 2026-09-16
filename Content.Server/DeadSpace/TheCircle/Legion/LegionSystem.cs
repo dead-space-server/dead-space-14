@@ -23,6 +23,7 @@ using Content.Shared.Mind.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
 using Content.Shared.NPC.Systems;
+using Content.Shared.Placeable;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Prototypes;
@@ -59,6 +60,7 @@ public sealed class LegionSystem : EntitySystem
         SubscribeLocalEvent<LegionComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshSpeed);
         SubscribeLocalEvent<LegionComponent, StartCollideEvent>(OnCollide);
         SubscribeLocalEvent<LegionComponent, PreventCollideEvent>(OnPreventCollide);
+        SubscribeLocalEvent<LegionComponent, EndCollideEvent>(OnEndCollide);
         SubscribeLocalEvent<LegionKnifeComponent, MeleeHitEvent>(OnKnifeHit);
         SubscribeLocalEvent<LegionKnifeComponent, LegionKnifeRageAttemptEvent>(OnKnifeRageAttempt);
         SubscribeLocalEvent<LegionSurvivalPerkComponent, UpdateMobStateEvent>(OnSurvivalMobState,
@@ -127,12 +129,21 @@ public sealed class LegionSystem : EntitySystem
 
     private void OnPreventCollide(Entity<LegionComponent> ent, ref PreventCollideEvent args)
     {
-        if (!ent.Comp.Active)
+        var isTable = HasComp<PlaceableSurfaceComponent>(args.OtherEntity);
+        if (isTable && ent.Comp.Active)
+            ent.Comp.IgnoredTables.Add(args.OtherEntity);
+
+        if (!ent.Comp.Active && (!isTable || !ent.Comp.IgnoredTables.Contains(args.OtherEntity)))
             return;
 
         if (HasComp<Content.Shared.Buckle.Components.StrapComponent>(args.OtherEntity) ||
-            HasComp<ClimbableComponent>(args.OtherEntity))
+            HasComp<ClimbableComponent>(args.OtherEntity) || isTable)
             args.Cancelled = true;
+    }
+
+    private void OnEndCollide(Entity<LegionComponent> ent, ref EndCollideEvent args)
+    {
+        ent.Comp.IgnoredTables.Remove(args.OtherEntity);
     }
 
     private void OnKnifeHit(Entity<LegionKnifeComponent> knife, ref MeleeHitEvent args)

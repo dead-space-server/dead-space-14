@@ -1122,10 +1122,10 @@
   description: Игнорирует защиту и возвращает владельцу часть отнятой жизни.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Melee/combat_knife.rsi
+    sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/melee/legion-knife.rsi
     state: icon
   - type: Item
-    sprite: Objects/Weapons/Melee/combat_knife.rsi
+    sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/melee/legion-knife-inhands.rsi
   - type: MeleeWeapon
     angle: 0
     wideAnimationRotation: 55

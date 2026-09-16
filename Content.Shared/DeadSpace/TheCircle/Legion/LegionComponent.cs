@@ -28,6 +28,7 @@ public sealed partial class LegionComponent : Component
     [AutoNetworkedField] public bool RevealPulseActive;
     [ViewVariables] public EntityUid? HeartbeatStream;
     [ViewVariables] public TimeSpan CooldownEndsAt;
+    [ViewVariables] public readonly HashSet<EntityUid> IgnoredTables = new();
 }
 
 [RegisterComponent]

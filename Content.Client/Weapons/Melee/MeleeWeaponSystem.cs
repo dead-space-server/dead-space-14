@@ -102,10 +102,14 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
             }
         }
 
-        if (weapon.Attacking || weapon.NextAttack > Timing.CurTime)
+        // DS14-start: Legionnaire rage must activate immediately instead of waiting for the melee attack cooldown.
+        var legionRageAttempt = altDown == BoundKeyState.Down &&
+                                HasComp<Content.Shared.DeadSpace.TheCircle.Legion.LegionKnifeComponent>(weaponUid);
+        if (!legionRageAttempt && (weapon.Attacking || weapon.NextAttack > Timing.CurTime))
         {
             return;
         }
+        // DS14-end
 
         // TODO using targeted actions while combat mode is enabled should NOT trigger attacks.
 

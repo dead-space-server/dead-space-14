@@ -62,7 +62,7 @@
   components:
   - type: Action
     icon:
-      sprite: Objects/Weapons/Melee/combat_knife.rsi
+      sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/melee/legion-knife.rsi
       state: icon
     itemIconStyle: BigAction
   - type: InstantAction
@@ -71,7 +71,7 @@
 - type: alert
   id: LegionRage
   icons:
-  - sprite: /Textures/Objects/Weapons/Melee/combat_knife.rsi
+  - sprite: /Textures/_DeadSpace/Necromorfs/TheCircle/Weapon/melee/legion-knife.rsi
     state: icon
   name: Бешенство Легионера
   description: Показывает оставшееся время бешенства или его отката.

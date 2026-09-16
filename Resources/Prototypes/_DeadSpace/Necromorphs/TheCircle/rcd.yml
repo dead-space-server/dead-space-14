@@ -33,6 +33,7 @@
       collection: splinter-blade-extend
     retractSounds:
       collection: splinter-blade-retract
+
 - type: entity
   parent: RCDRecharging
   id: ArchitectIntegratedArm
@@ -64,6 +65,12 @@
     - PlastitaniumPlasmaWindow
     - PlastitaniumPlasmaWindowDiagonalIndestructible
     - PlastitaniumPlasmaWindowDiagonal
+    - StructureObelisk
+    - StructureBlackObelisk
+    - StructureBlackObelisk2
+    - StructureObelisk2
+    - ComplexNecroObeliskArtifact
+    - SMObelisk
   - type: ComponentModeSwitcher
     currentMode: 0
     modes:

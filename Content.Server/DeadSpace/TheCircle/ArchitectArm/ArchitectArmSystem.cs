@@ -19,6 +19,7 @@ using Content.Shared.Throwing;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
@@ -36,6 +37,7 @@ public sealed class ArchitectArmSystem : EntitySystem
     [Dependency] private readonly DestructibleSystem _destructible = default!;
     [Dependency] private readonly NpcFactionSystem _factions = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
@@ -54,6 +56,7 @@ public sealed class ArchitectArmSystem : EntitySystem
         SubscribeLocalEvent<ArchitectArmComponent, GotEquippedHandEvent>(OnEquippedHand);
         SubscribeLocalEvent<ArchitectArmComponent, GotUnequippedHandEvent>(OnUnequippedHand);
         SubscribeLocalEvent<ActiveArchitectDashComponent, StartCollideEvent>(OnCollide);
+        SubscribeLocalEvent<ActiveArchitectDashComponent, DownedEvent>(OnDowned);
     }
 
     private void OnEquippedHand(Entity<ArchitectArmComponent> ent, ref GotEquippedHandEvent args)
@@ -187,6 +190,17 @@ public sealed class ArchitectArmSystem : EntitySystem
 
             SetMovementLocked(uid, active, true);
 
+            // Downed bodies do not produce the same collisions as standing mobs.
+            foreach (var target in _lookup.GetEntitiesInRange(uid, 0.4f))
+            {
+                if (TryComp<StandingStateComponent>(target, out var standing) &&
+                    !standing.Standing && TryCapture((uid, active), target))
+                    break;
+            }
+
+            if (!active.Dashing)
+                continue;
+
             var position = _transform.GetMapCoordinates(uid);
             if (now >= active.EndTime ||
                 position.MapId != active.Origin.MapId ||
@@ -236,7 +250,8 @@ public sealed class ArchitectArmSystem : EntitySystem
             _audio.PlayPvs(ImpactSound, ent.Owner);
 
             var otherPrototype = MetaData(other).EntityPrototype?.ID;
-            if (otherPrototype != null && ent.Comp.UnbreakablePrototypes.Contains(otherPrototype))
+            if (HasComp<MapGridComponent>(other) ||
+                otherPrototype != null && ent.Comp.UnbreakablePrototypes.Contains(otherPrototype))
             {
                 if (TryComp<PhysicsComponent>(ent.Owner, out var obstaclePhysics))
                     EndDash(ent.Owner, ent.Comp, obstaclePhysics);
@@ -266,11 +281,16 @@ public sealed class ArchitectArmSystem : EntitySystem
             return;
         }
 
-        if (ent.Comp.Captured != null ||
+        TryCapture(ent, other);
+    }
+
+    private bool TryCapture(Entity<ActiveArchitectDashComponent> ent, EntityUid other)
+    {
+        if (!HasComp<BodyComponent>(other) || ent.Comp.Captured != null ||
             other == ent.Owner ||
             TryComp<NpcFactionMemberComponent>(other, out var faction) &&
             _factions.IsMember((other, faction), NecromorfsFaction))
-            return;
+            return false;
 
         ent.Comp.Captured = other;
         ent.Comp.ReleaseTime = _timing.CurTime + TimeSpan.FromSeconds(5);
@@ -283,6 +303,13 @@ public sealed class ArchitectArmSystem : EntitySystem
 
         _stun.TryKnockdown(other, TimeSpan.FromSeconds(0.5), drop: false, force: true);
         _transform.SetCoordinates(other, Transform(other), new EntityCoordinates(ent.Owner, -Vector2.UnitY * 0.45f), rotation: Angle.Zero);
+        return true;
+    }
+
+    private void OnDowned(Entity<ActiveArchitectDashComponent> ent, ref DownedEvent args)
+    {
+        if (TryComp<PhysicsComponent>(ent.Owner, out var physics))
+            EndDash(ent.Owner, ent.Comp, physics);
     }
 
     private void RestartDashAfterObstacle(Entity<ActiveArchitectDashComponent> ent)
@@ -366,7 +393,12 @@ public sealed class ArchitectArmSystem : EntitySystem
 
     private void EndDash(EntityUid uid, ActiveArchitectDashComponent active, PhysicsComponent physics)
     {
+        active.Dashing = false;
+        active.RestartPending = false;
         _physics.SetLinearVelocity(uid, Vector2.Zero, body: physics);
+
+        if (_players.TryGetSessionByEntity(uid, out var session))
+            RaiseNetworkEvent(new ArchitectArmWindupEvent(GetNetCoordinates(Transform(uid).Coordinates), TimeSpan.Zero), session);
 
         if (active.Captured is { } captured)
             ReleaseCaptured(uid, active, captured);

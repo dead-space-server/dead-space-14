@@ -73,7 +73,6 @@ public sealed partial class SurvivalNecromorphBreachRuleComponent : Component
         new() { Prototype = "PregnantNecromorfSpawner", Weight = 33f, EarliestRoundTime = 30f },
         new() { Prototype = "TwitcherNecromorfSpawner", Weight = 27f, EarliestRoundTime = 30f },
         new() { Prototype = "DevaNecromorfSpawner", Weight = 22f, EarliestRoundTime = 45f, MinimumPlayers = 25 },
-        new() { Prototype = "BoomerNecromorfSpawner", Weight = 15f, EarliestRoundTime = 60f, MinimumPlayers = 30 },
         new() { Prototype = "BruteNecromorfSpawner", Weight = 24f, EarliestRoundTime = 60f, MinimumPlayers = 35 },
     };
 
