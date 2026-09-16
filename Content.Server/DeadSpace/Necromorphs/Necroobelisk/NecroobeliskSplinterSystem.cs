@@ -5,11 +5,15 @@ using Content.Server.DeadSpace.Necromorphs.Necroobelisk.Components;
 using Content.Server.Emp;
 using Content.Shared.Charges.Components;
 using Content.Shared.Charges.Systems;
+using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.Chemistry.Reagent;
+using Content.Shared.DeadSpace.Camera;
+using Content.Shared.DeadSpace.Necromorphs.Necroobelisk;
 using Content.Shared.DeadSpace.Necromorphs.Sanity;
 using Content.Shared.Interaction;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
-using Content.Shared.Stunnable;
+using Content.Shared.Movement.Systems;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
@@ -20,13 +24,24 @@ namespace Content.Server.DeadSpace.Necromorphs.Necroobelisk;
 
 public sealed class NecroobeliskSplinterSystem : EntitySystem
 {
+    private static readonly ReagentId[] StimulantReagents =
+    [
+        new("Stimulants", null),
+        new("Ephedrine", null),
+        new("Desoxyephedrine", null),
+        new("Depotojil", null),
+        new("Celestin", null),
+    ];
+
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedChargesSystem _charges = default!;
     [Dependency] private readonly EmpSystem _epm = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly ISharedPlayerManager _player = default!;
     [Dependency] private readonly SharedSanitySystem _sharedSanity = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
+    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
+    [Dependency] private readonly MovementModStatusSystem _movement = default!;
+    [Dependency] private readonly ScreenshakeSystem _screenshake = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
@@ -86,7 +101,10 @@ public sealed class NecroobeliskSplinterSystem : EntitySystem
             }
         }
 
-        _stun.TryUpdateParalyzeDuration(args.Target.Value, TimeSpan.FromSeconds(component.Duration));
+        var duration = IsStimulated(args.Target.Value)
+            ? component.StimulatedInteractionDuration
+            : component.InteractionDuration;
+        ApplySplinterEffect(args.Target.Value, component, duration);
         _sharedSanity.TryAddSanityLvl(args.Target.Value, -component.SanityDamage);
     }
 
@@ -113,11 +131,47 @@ public sealed class NecroobeliskSplinterSystem : EntitySystem
 
         foreach (var entity in entities)
         {
-            _stun.TryUpdateParalyzeDuration(entity.Owner, TimeSpan.FromSeconds(component.Duration));
+            ApplySplinterEffect(entity.Owner, component, component.Duration);
         }
 
         if (entities.Count > 0)
             CauseDamageSanity(uid, targets, component);
+    }
+
+    private void ApplySplinterEffect(EntityUid target, NecroobeliskSplinterComponent component, float durationSeconds)
+    {
+        var duration = TimeSpan.FromSeconds(durationSeconds);
+        _movement.TryUpdateMovementSpeedModDuration(
+            target,
+            "StatusEffectSplinterBladeSlowdown",
+            duration,
+            component.SpeedModifier);
+
+        var decayRate = component.ScreenshakeTrauma / MathF.Pow(durationSeconds, 2);
+        var shake = new ScreenshakeParameters
+        {
+            Trauma = component.ScreenshakeTrauma,
+            DecayRate = decayRate,
+            Frequency = component.ScreenshakeFrequency,
+        };
+        _screenshake.Screenshake(target, shake, shake);
+
+        if (TryComp<ActorComponent>(target, out var actor))
+            RaiseNetworkEvent(new SplinterBladeVisualEvent(durationSeconds), actor.PlayerSession);
+    }
+
+    private bool IsStimulated(EntityUid target)
+    {
+        if (!_solutionContainer.TryGetSolution(target, "bloodstream", out var bloodstream))
+            return false;
+
+        foreach (var reagent in StimulantReagents)
+        {
+            if (bloodstream.Value.Comp.Solution.ContainsReagent(reagent))
+                return true;
+        }
+
+        return false;
     }
 
     private void CauseDamageSanity(EntityUid uid,

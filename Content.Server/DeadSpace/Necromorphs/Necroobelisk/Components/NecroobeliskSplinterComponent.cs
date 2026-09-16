@@ -34,7 +34,22 @@ public sealed partial class NecroobeliskSplinterComponent : Component
 
     [DataField]
     [ViewVariables(VVAccess.ReadOnly)]
-    public float Duration = 5f;
+    public float Duration = 8f;
+
+    [DataField]
+    public float InteractionDuration = 5f;
+
+    [DataField]
+    public float StimulatedInteractionDuration = 2.8f;
+
+    [DataField]
+    public float SpeedModifier = 0.3f;
+
+    [DataField]
+    public float ScreenshakeTrauma = 1f;
+
+    [DataField]
+    public float ScreenshakeFrequency = 0.04f;
 
     [DataField("energyConsumption"), ViewVariables(VVAccess.ReadWrite)]
     public float EnergyConsumption = 50000f;
