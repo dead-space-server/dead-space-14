@@ -51,6 +51,8 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
 using Content.DeadSpace.Interfaces.Server;
+using Content.Shared.Nutrition.EntitySystems;
+using Content.Shared.Roles.Components;
 
 namespace Content.Server.Antag;
 
@@ -78,12 +80,14 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
     [Dependency] private readonly SharedSubdermalImplantSystem _subdermalImplant = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly SatiationSystem _satiation = default!;
     // DS14-end
     private IServerSponsorsManager? _sponsorsManager; // DS14-sponsors
 
     // arbitrary random number to give late joining some mild interest.
     public const float LateJoinRandomChance = 0.5f;
     private const string SleeperAgentsRule = "SleeperAgents"; // DS14
+    private const string ChemicalsChangelingType = "Chemicals";
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -839,6 +843,11 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
             Del(transformAction);
             blobCarrier.TransformToBlob = null;
             Dirty(player, blobCarrier);
+        }
+
+        if (_role.MindHasRole<ChangelingRoleComponent>(mindId))
+        {
+            _satiation.RemoveSatiationType(player, ChemicalsChangelingType);
         }
 
         HashSet<EntityUid>? objectivesBeforeAssignment = null;
