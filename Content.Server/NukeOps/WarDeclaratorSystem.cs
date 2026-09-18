@@ -7,7 +7,9 @@ using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Database;
 // DS14-start
+using Content.Shared.DeadSpace.Administration;
 using Content.Shared.DeadSpace.GhostRoleIntroduction;
+using Content.Shared.Ghost;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -64,7 +66,10 @@ public sealed class WarDeclaratorSystem : EntitySystem
 
     private void OnAttemptOpenUI(Entity<WarDeclaratorComponent> ent, ref ActivatableUIOpenAttemptEvent args)
     {
-        if (!_accessReaderSystem.IsAllowed(args.User, ent))
+        // DS14-start
+        // Admin ghosts are allowed to use the declaration UI without an ID/access check.
+        if (!IsAdminGhost(args.User) && !_accessReaderSystem.IsAllowed(args.User, ent))
+        // DS14-end
         {
             if (!args.Silent)
             {
@@ -114,12 +119,13 @@ public sealed class WarDeclaratorSystem : EntitySystem
         Entity<WarDeclaratorComponent> ent,
         ref WarDeclaratorSecondaryAnnouncementMessage args)
     {
-        // Server-side protection: hidden/disabled UI cannot be bypassed with a forged BUI message.
         if (!ent.Comp.SecondaryAnnouncementEnabled)
             return;
 
-        if (!TryComp<MobStateComponent>(args.Actor, out var actorMobState) ||
-            actorMobState.CurrentState != MobState.Alive)
+        // Admin ghosts do not have MobStateComponent and must bypass the living-mob check.
+        if (!IsAdminGhost(args.Actor) &&
+            (!TryComp<MobStateComponent>(args.Actor, out var actorMobState) ||
+             actorMobState.CurrentState != MobState.Alive))
         {
             return;
         }
@@ -144,23 +150,23 @@ public sealed class WarDeclaratorSystem : EntitySystem
 
     private void SendSecondaryAnnouncement(WarDeclaratorComponent comp, string title, string message)
     {
-        if (comp.SecondaryAnnouncementRequiredEquipment.Count == 0)
-            return;
-
         foreach (var session in _player.Sessions)
         {
             if (session.AttachedEntity is not { Valid: true } playerEntity)
                 continue;
 
-            // Dead, critical and non-mob entities must never receive this announcement.
-            if (!TryComp<MobStateComponent>(playerEntity, out var mobState) ||
-                mobState.CurrentState != MobState.Alive)
+            // Admin ghosts always receive targeted announcements for moderation.
+            if (!IsAdminGhost(playerEntity))
             {
-                continue;
-            }
+                if (!TryComp<MobStateComponent>(playerEntity, out var mobState) ||
+                    mobState.CurrentState != MobState.Alive)
+                {
+                    continue;
+                }
 
-            if (!WearsSecondaryAnnouncementEquipment(playerEntity, comp))
-                continue;
+                if (!WearsSecondaryAnnouncementEquipment(playerEntity, comp))
+                    continue;
+            }
 
             RaiseNetworkEvent(new GhostRoleIntroductionEvent(
                 title,
@@ -176,21 +182,21 @@ public sealed class WarDeclaratorSystem : EntitySystem
                 comp.SecondaryAnnouncementCharactersPerSecond,
                 comp.SecondaryAnnouncementShowBlackBackground,
                 comp.SecondaryAnnouncementTypeTitle,
-                // DS14-start
                 targetedAnnouncement: true,
                 announcementSound: comp.SecondaryAnnouncementSound,
                 interferenceSound: comp.SecondaryAnnouncementInterferenceSound,
-                interferenceDuration: comp.SecondaryAnnouncementInterferenceDuration
-                // DS14-end
-                ),
+                interferenceDuration: comp.SecondaryAnnouncementInterferenceDuration),
                 session);
         }
     }
 
     private bool WearsSecondaryAnnouncementEquipment(EntityUid wearer, WarDeclaratorComponent comp)
     {
-        if (!TryComp<InventoryComponent>(wearer, out var inventory))
+        if (comp.SecondaryAnnouncementRequiredEquipment.Count == 0 ||
+            !TryComp<InventoryComponent>(wearer, out var inventory))
+        {
             return false;
+        }
 
         var enumerator = _inventory.GetSlotEnumerator((wearer, inventory));
         while (enumerator.NextItem(out var item))
@@ -201,6 +207,15 @@ public sealed class WarDeclaratorSystem : EntitySystem
         }
 
         return false;
+    }
+
+    private bool IsAdminGhost(EntityUid entity)
+    {
+        if (HasComp<AdminGhostVisibilityComponent>(entity))
+            return true;
+
+        // Fallback for older or custom admin-observer prototypes.
+        return TryComp<GhostComponent>(entity, out var ghost) && ghost.CanGhostInteract;
     }
 
     private static string NormalizeAnnouncementPart(string value, int maxLength)

@@ -1,6 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Text;
+using Content.Shared.DeadSpace.CCCCVars;
 using Content.Shared.DeadSpace.GhostRoleIntroduction;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
@@ -9,6 +10,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -16,10 +18,10 @@ namespace Content.Client.DeadSpace.GhostRoleIntroduction;
 
 public sealed class GhostRoleIntroductionSystem : EntitySystem
 {
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IResourceCache _resourceCache = default!;
     [Dependency] private readonly IUserInterfaceManager _ui = default!;
-
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
 
@@ -43,6 +45,7 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
     private bool _typeOperationName;
     private int _visibleOperationCharacters = -1;
     private int _visibleCharacters = -1;
+    private float _announcementVolume = 1f;
 
     // Targeted tablet / war-declarator announcements share one local display.
     // If another targeted announcement reaches this same player while one is active,
@@ -55,6 +58,7 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
     {
         base.Initialize();
         SubscribeNetworkEvent<GhostRoleIntroductionEvent>(ShowIntroduction);
+        Subs.CVar(_cfg, CCCCVars.AnnonceVolume, SetAnnouncementVolume, true);
     }
 
     private void ShowIntroduction(GhostRoleIntroductionEvent ev)
@@ -156,8 +160,6 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
         _ui.WindowRoot.AddChild(_root);
         LayoutContainer.SetAnchorPreset(_root, LayoutContainer.LayoutPreset.Wide);
 
-        // Targeted announcement sounds are played client-side so collision handling can
-        // suppress the second announcement sound and replace it with the multitool pulse.
         PlayLocalSound(ev.AnnouncementSound);
     }
 
@@ -171,7 +173,7 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
         if (_interferenceActive)
         {
             if (_timing.CurTime >= _interferenceEnd)
-                Clear(); // Deliberately abrupt: no fade-out after jamming.
+                Clear();
 
             return;
         }
@@ -237,8 +239,6 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
         _textLabel.Text = MakeInterference(_text);
         _senderLabel.Text = MakeInterference(_senderText);
 
-        // Do not fade the jammed text. It remains visible for the configured short
-        // interference lifetime, then disappears instantly in FrameUpdate().
         _operationLabel.FontColorOverride = _textColor;
         _textLabel.FontColorOverride = _textColor;
         _senderLabel.FontColorOverride = _textColor;
@@ -251,7 +251,13 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
         if (sound == null || _player.LocalSession?.AttachedEntity is not { Valid: true } playerEntity)
             return;
 
-        _audio.PlayGlobal(sound, playerEntity);
+        var audioParams = sound.Params.AddVolume(SharedAudioSystem.GainToVolume(_announcementVolume));
+        _audio.PlayGlobal(sound, playerEntity, audioParams);
+    }
+
+    private void SetAnnouncementVolume(float volume)
+    {
+        _announcementVolume = volume;
     }
 
     private static string MakeInterference(string source)
@@ -339,7 +345,6 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
         _visibleCharacters = -1;
         _showBlackBackground = false;
         _typeOperationName = false;
-
         _targetedAnnouncementActive = false;
         _interferenceActive = false;
         _interferenceEnd = default;

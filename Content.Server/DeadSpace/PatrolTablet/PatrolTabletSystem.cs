@@ -2,8 +2,10 @@ using Content.Server.Popups;
 using Content.Server.UserInterface;
 using Content.Shared.Access.Systems;
 using Content.Shared.Access.Components;
+using Content.Shared.DeadSpace.Administration;
 using Content.Shared.DeadSpace.GhostRoleIntroduction;
 using Content.Shared.DeadSpace.PatrolTablet;
+using Content.Shared.Ghost;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
@@ -270,23 +272,18 @@ public sealed class PatrolTabletSystem : EntitySystem
 
     private void OnSendAnnouncement(EntityUid uid, PatrolTabletComponent comp, PatrolTabletSendAnnouncementMessage msg)
     {
-        // Sending is controlled ONLY by the sender's ID-card access.
-        // AnnouncementRequiredEquipment is used ONLY for recipients below.
         if (!CanSendAnnouncement(msg.Actor))
         {
             _popup.PopupEntity(Loc.GetString("patrol-tablet-announcement-access-denied"), uid, msg.Actor);
             return;
         }
 
-        // Shared lock only for overlapping recipient equipment.
-        // Tablets whose AnnouncementRequiredEquipment lists do not intersect may announce in parallel.
         if (GetAnnouncementBusyRemaining(comp) > 0f)
         {
             UpdateAllTabletUiStates();
             return;
         }
 
-        // Personal cooldown: only this exact tablet instance is blocked.
         if (_timing.CurTime < comp.NextAnnouncementTime)
         {
             UpdateUiState(uid, comp);
@@ -307,7 +304,11 @@ public sealed class PatrolTabletSystem : EntitySystem
         var senderName = MetaData(msg.Actor).EntityName;
         var senderJobTitle = Loc.GetString("patrol-tablet-announcement-unknown-job");
 
-        if (_idCard.TryFindIdCard(msg.Actor, out var senderIdCard))
+        if (IsAdminGhost(msg.Actor))
+        {
+            senderJobTitle = "Administrator";
+        }
+        else if (_idCard.TryFindIdCard(msg.Actor, out var senderIdCard))
         {
             senderName = senderIdCard.Comp.FullName ?? senderName;
             senderJobTitle = senderIdCard.Comp.LocalizedJobTitle ?? senderJobTitle;
@@ -319,14 +320,19 @@ public sealed class PatrolTabletSystem : EntitySystem
             if (session.AttachedEntity is not { Valid: true } playerEntity)
                 continue;
 
+            // Admin ghosts always receive targeted announcements so they can moderate them.
+            if (IsAdminGhost(playerEntity))
+            {
+                recipients.Add(session);
+                continue;
+            }
+
             if (!TryComp<MobStateComponent>(playerEntity, out var mobState) ||
                 mobState.CurrentState != MobState.Alive)
             {
                 continue;
             }
 
-            // This is intentionally the ONLY equipment check in the send path.
-            // It decides who RECEIVES the announcement, not who may send it.
             if (!WearsAnnouncementEquipment(playerEntity, comp))
                 continue;
 
@@ -369,18 +375,15 @@ public sealed class PatrolTabletSystem : EntitySystem
                 senderName,
                 senderJobTitle,
                 comp.AnnouncementSenderFontSize,
-                // DS14-start
                 targetedAnnouncement: true,
                 announcementSound: comp.AnnouncementSound,
                 interferenceSound: comp.AnnouncementInterferenceSound,
-                interferenceDuration: comp.AnnouncementInterferenceDuration
-                // DS14-end
-                ), session);
+                interferenceDuration: comp.AnnouncementInterferenceDuration),
+                session);
         }
 
         UpdateAllTabletUiStates();
     }
-
 
     private float GetAnnouncementBusyRemaining(PatrolTabletComponent comp)
     {
@@ -404,6 +407,10 @@ public sealed class PatrolTabletSystem : EntitySystem
 
     private bool CanSendAnnouncement(EntityUid actor)
     {
+        // Admin ghosts can send announcements without an ID card or living-mob state.
+        if (IsAdminGhost(actor))
+            return true;
+
         if (!TryComp<MobStateComponent>(actor, out var mobState) ||
             mobState.CurrentState != MobState.Alive)
         {
@@ -423,6 +430,15 @@ public sealed class PatrolTabletSystem : EntitySystem
         }
 
         return false;
+    }
+
+    private bool IsAdminGhost(EntityUid entity)
+    {
+        if (HasComp<AdminGhostVisibilityComponent>(entity))
+            return true;
+
+        // Fallback for older or custom admin-observer prototypes.
+        return TryComp<GhostComponent>(entity, out var ghost) && ghost.CanGhostInteract;
     }
 
     private void UpdateAllTabletUiStates()
@@ -505,9 +521,7 @@ public sealed class PatrolTabletSystem : EntitySystem
             var jobTitle = "Security";
 
             if (TryComp(target, out MetaDataComponent? meta))
-            {
                 name = meta.EntityName;
-            }
 
             var squadId = string.Empty;
             var squadIcon = string.Empty;
@@ -516,6 +530,7 @@ public sealed class PatrolTabletSystem : EntitySystem
             {
                 if (idCard.Comp.FullName != null)
                     name = idCard.Comp.FullName;
+
                 jobTitle = idCard.Comp.LocalizedJobTitle ?? "Security";
 
                 if (TryComp<PatrolSquadCardComponent>(idCard.Owner, out var squadCard))
@@ -540,7 +555,7 @@ public sealed class PatrolTabletSystem : EntitySystem
         var squadMemberNames = new Dictionary<string, HashSet<string>>();
 
         var cardQuery = EntityQueryEnumerator<PatrolSquadCardComponent>();
-        while (cardQuery.MoveNext(out var cardUid, out var squadCard))
+        while (cardQuery.MoveNext(out _, out var squadCard))
         {
             if (string.IsNullOrEmpty(squadCard.SquadId) || string.IsNullOrEmpty(squadCard.MemberName))
                 continue;
@@ -564,22 +579,26 @@ public sealed class PatrolTabletSystem : EntitySystem
         }
 
         var busyRemaining = GetAnnouncementBusyRemaining(comp);
-
         var cooldownRemaining = Math.Max(
             0f,
             (float) (comp.NextAnnouncementTime - _timing.CurTime).TotalSeconds);
 
         _ui.SetUiState(uid, PatrolTabletUiKey.Key,
-            new PatrolTabletUpdateState(officers, squads, comp.SquadManagementEnabled, busyRemaining, cooldownRemaining));
+            new PatrolTabletUpdateState(
+                officers,
+                squads,
+                comp.SquadManagementEnabled,
+                busyRemaining,
+                cooldownRemaining));
     }
 
     private List<PatrolSquadDef> GetSquads(PatrolTabletComponent comp)
     {
         var result = new List<PatrolSquadDef>();
+
         foreach (var squad in comp.Squads)
-        {
             result.Add(new PatrolSquadDef(squad.Id, squad.Name, squad.IconId));
-        }
+
         return result;
     }
 }
