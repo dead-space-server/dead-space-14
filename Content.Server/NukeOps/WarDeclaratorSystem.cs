@@ -6,10 +6,12 @@ using Content.Shared.Access.Systems;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Database;
+// DS14-start
 using Content.Shared.DeadSpace.GhostRoleIntroduction;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+// DS14-end
 using Content.Shared.NukeOps;
 using Content.Shared.UserInterface;
 using Robust.Server.GameObjects;
@@ -24,20 +26,24 @@ namespace Content.Server.NukeOps;
 /// </summary>
 public sealed class WarDeclaratorSystem : EntitySystem
 {
+    // DS14-start
     private const int MaxSecondaryTitleLength = 120;
     private const int MaxSecondaryTextLength = 2000;
     private const int SecondaryTitleWords = 6;
+    // DS14-end
 
     [Dependency] private readonly IAdminLogManager _adminLogger = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly UserInterfaceSystem _userInterfaceSystem = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly ServerGlobalSoundSystem _sound = default!;
+    [Dependency] private readonly ServerGlobalSoundSystem _sound = default!; // DS14
     [Dependency] private readonly PopupSystem _popupSystem = default!;
     [Dependency] private readonly AccessReaderSystem _accessReaderSystem = default!;
+    // DS14-start
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly ISharedPlayerManager _player = default!;
+    // DS14-end
 
     public override void Initialize()
     {
@@ -52,7 +58,7 @@ public sealed class WarDeclaratorSystem : EntitySystem
 
     private void OnMapInit(Entity<WarDeclaratorComponent> ent, ref MapInitEvent args)
     {
-        ent.Comp.Message = Loc.GetString(ent.Comp.Message);
+        ent.Comp.Message = Loc.GetString(ent.Comp.Message); // DS14
         ent.Comp.DisableAt = _gameTiming.CurTime + TimeSpan.FromMinutes(ent.Comp.WarDeclarationDelay);
     }
 
@@ -89,8 +95,10 @@ public sealed class WarDeclaratorSystem : EntitySystem
         {
             var title = Loc.GetString(ent.Comp.SenderTitle);
 
+            // DS14-start
             _chat.DispatchGlobalAnnouncement(ent.Comp.Message, title, false, colorOverride: ent.Comp.Color);
             _sound.PlayAlertLevelGlobal(Filter.Broadcast(), ent.Comp.Sound, ent.Comp.Sound.Params);
+            // DS14-end
 
             _adminLogger.Add(
                 LogType.Chat,
@@ -216,7 +224,6 @@ public sealed class WarDeclaratorSystem : EntitySystem
             ? string.Join(" ", words, titleWordCount, words.Length - titleWordCount)
             : string.Empty;
     }
-
     // DS14-end
 
     private void UpdateUI(Entity<WarDeclaratorComponent> ent, WarConditionStatus? status = null)
@@ -224,10 +231,12 @@ public sealed class WarDeclaratorSystem : EntitySystem
         _userInterfaceSystem.SetUiState(
             ent.Owner,
             WarDeclaratorUiKey.Key,
+            // DS14-start
             new WarDeclaratorBoundUserInterfaceState(
                 status,
                 ent.Comp.DisableAt,
                 ent.Comp.ShuttleDisabledTime,
                 ent.Comp.SecondaryAnnouncementEnabled));
+            // DS14-end
     }
 }
