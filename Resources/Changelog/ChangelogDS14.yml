@@ -7914,7 +7914,7 @@ Entries:
   pr: 2355
   changes:
   - type: Add
-    message: КЗ и ОПРС из нашего вики (на момент 16:38 15.09.2026)
+    message: КЗ и ОПРС из нашего вики
   - type: Remove
     message: Старое КЗ из внутриигрового руководства
   - type: Tweak
@@ -7935,8 +7935,7 @@ Entries:
     message: Рация ЦК и противогаз офицера ЦК для офицеров Центрального Командования.
   - type: Tweak
     message: Поясы Офицеров ЦК теперь вмещают рацию ЦК (Раньше была рация СБ), а противогаз
-      заменен на противогаз ЦК. <img width="798" height="534" alt="image" src="https://github.com/user-attachments/assets/a4a3ba63-b030-4162-a8ec-2fa11325ec08"
-      />
+      заменен на противогаз ЦК.
 - id: 756
   author: pe4enkakris
   time: '2026-09-18T19:29:24.273892+00:00'
