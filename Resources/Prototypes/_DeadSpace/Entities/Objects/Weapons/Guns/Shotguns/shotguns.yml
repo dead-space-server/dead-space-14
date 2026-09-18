@@ -247,7 +247,8 @@
     soundGunshot:
       path: /Audio/_DeadSpace/Weapons/Guns/Gunshots/shorty.ogg
   - type: GunSpreadModifier
-    spread: 1.4
+    spread: 1
+    wieldedSpread: 0.6
   - type: BallisticAmmoProvider
     capacity: 4
   - type: Akimbo
