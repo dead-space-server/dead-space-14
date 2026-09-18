@@ -251,7 +251,7 @@
   - type: BallisticAmmoProvider
     capacity: 4
   - type: Akimbo
-    fireDelayMultiplier: 0.82
+    fireDelayMultiplier: 0.40
   - type: Wieldable
 
 - type: entity
