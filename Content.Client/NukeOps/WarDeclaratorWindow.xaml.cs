@@ -65,14 +65,14 @@ public sealed partial class WarDeclaratorWindow : FancyWindow
 
         if (state.Status == null)
         {
-            // До первого запроса статуса кнопка должна оставаться доступной,
-            // как в оригинальном WarDeclaratorWindow.
+            // Keep the button available until the first status update,
+            // matching the original WarDeclaratorWindow behavior.
             WarButton.Disabled = false;
             return;
         }
 
-        // Оригинальная логика SS14/DS14:
-        // блокируем кнопку только после успешного объявления войны.
+        // Original SS14/DS14 behavior:
+        // disable the button only after war has been successfully declared.
         WarButton.Disabled = state.Status == WarConditionStatus.WarReady;
 
         _endTime = state.EndTime;
@@ -104,7 +104,7 @@ public sealed partial class WarDeclaratorWindow : FancyWindow
                 break;
 
             case WarConditionStatus.NoWarSmallCrew:
-                // В оригинале кнопка здесь НЕ блокировалась.
+                // The original window did not disable the button in this state.
                 WarButton.Disabled = false;
                 StatusLabel.Text = Loc.GetString("war-declarator-boost-impossible");
                 InfoLabel.Text = Loc.GetString("war-declarator-conditions-small-crew");
@@ -113,7 +113,7 @@ public sealed partial class WarDeclaratorWindow : FancyWindow
 
             // DS14 no stealth nuke - NoWarShuttleDeparted and NoWarTimeout removed
             case WarConditionStatus.NoWarUnknown:
-                // В оригинале кнопка здесь НЕ блокировалась.
+                // The original window did not disable the button in this state.
                 WarButton.Disabled = false;
                 StatusLabel.Text = Loc.GetString("war-declarator-boost-impossible");
                 InfoLabel.Text = Loc.GetString("war-declarator-conditions-unknown");
@@ -121,7 +121,7 @@ public sealed partial class WarDeclaratorWindow : FancyWindow
                 break;
 
             default:
-                // Не блокируем кнопку неизвестным клиентским состоянием.
+                // Do not disable the button for an unknown client-side state.
                 WarButton.Disabled = false;
                 StatusLabel.Text = Loc.GetString("war-declarator-boost-impossible");
                 InfoLabel.Text = Loc.GetString("war-declarator-conditions-unknown");

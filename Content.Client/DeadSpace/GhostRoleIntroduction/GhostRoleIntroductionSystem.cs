@@ -1,16 +1,14 @@
-// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+// Dead Space, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Text;
 using Content.Shared.DeadSpace.GhostRoleIntroduction;
 using Robust.Client.Graphics;
-// DS14-start
 using Robust.Client.Player;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
-// DS14-end
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -22,10 +20,8 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
     [Dependency] private readonly IResourceCache _resourceCache = default!;
     [Dependency] private readonly IUserInterfaceManager _ui = default!;
 
-    // DS14-start
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
-    // DS14-end
 
     private LayoutContainer? _root;
     private PanelContainer? _black;
@@ -48,14 +44,12 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
     private int _visibleOperationCharacters = -1;
     private int _visibleCharacters = -1;
 
-    // DS14-start
     // Targeted tablet / war-declarator announcements share one local display.
     // If another targeted announcement reaches this same player while one is active,
     // the active text is jammed instead of stacking a second announcement over it.
     private bool _targetedAnnouncementActive;
     private bool _interferenceActive;
     private TimeSpan _interferenceEnd;
-    // DS14-end
 
     public override void Initialize()
     {
@@ -65,7 +59,6 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
 
     private void ShowIntroduction(GhostRoleIntroductionEvent ev)
     {
-        // DS14-start
         // A second targeted announcement must NOT play its own announcement sound.
         // Instead, jam the announcement that is already visible for this player.
         if (_root != null && _targetedAnnouncementActive && ev.TargetedAnnouncement)
@@ -73,7 +66,6 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
             StartInterference(ev.InterferenceSound, ev.InterferenceDuration);
             return;
         }
-        // DS14-end
 
         Clear();
 
@@ -85,9 +77,7 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
 
         _showBlackBackground = ev.ShowBlackBackground;
         _typeOperationName = ev.TypeOperationName;
-        // DS14-start
         _targetedAnnouncementActive = ev.TargetedAnnouncement;
-        // DS14-end
 
         _black = new PanelContainer
         {
@@ -166,11 +156,9 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
         _ui.WindowRoot.AddChild(_root);
         LayoutContainer.SetAnchorPreset(_root, LayoutContainer.LayoutPreset.Wide);
 
-        // DS14-start
         // Targeted announcement sounds are played client-side so collision handling can
         // suppress the second announcement sound and replace it with the multitool pulse.
         PlayLocalSound(ev.AnnouncementSound);
-        // DS14-end
     }
 
     public override void FrameUpdate(float frameTime)
@@ -180,7 +168,6 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
         if (_root == null || _black == null || _operationLabel == null || _textLabel == null || _senderLabel == null)
             return;
 
-        // DS14-start
         if (_interferenceActive)
         {
             if (_timing.CurTime >= _interferenceEnd)
@@ -188,7 +175,6 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
 
             return;
         }
-        // DS14-end
 
         var elapsed = (float) (_timing.CurTime - _started).TotalSeconds;
         if (elapsed >= _duration)
@@ -239,7 +225,6 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
         _senderLabel.FontColorOverride = fadedColor;
     }
 
-    // DS14-start
     private void StartInterference(SoundSpecifier? sound, float duration)
     {
         if (_root == null || _operationLabel == null || _textLabel == null || _senderLabel == null)
@@ -292,7 +277,6 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
 
         return result.ToString();
     }
-    // DS14-end
 
     private static string WrapText(string text, Font font, float maxWidth)
     {
@@ -356,11 +340,9 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
         _showBlackBackground = false;
         _typeOperationName = false;
 
-        // DS14-start
         _targetedAnnouncementActive = false;
         _interferenceActive = false;
         _interferenceEnd = default;
-        // DS14-end
     }
 
     public override void Shutdown()

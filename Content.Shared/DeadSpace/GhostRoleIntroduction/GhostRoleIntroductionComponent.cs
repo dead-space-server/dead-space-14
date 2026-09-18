@@ -1,4 +1,4 @@
-// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+// Dead Space, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Shared.Dataset;
 using Robust.Shared.Audio;
@@ -99,7 +99,6 @@ public sealed class GhostRoleIntroductionEvent(
     float fadeOutDuration,
     float textDelay,
     float charactersPerSecond,
-    // DS14-start
     bool showBlackBackground = true,
     bool typeOperationName = false,
     string senderName = "",
@@ -109,7 +108,6 @@ public sealed class GhostRoleIntroductionEvent(
     SoundSpecifier? announcementSound = null,
     SoundSpecifier? interferenceSound = null,
     float interferenceDuration = 1f
-    // DS14-end
     ) : EntityEventArgs
 {
     public string OperationName = operationName;
@@ -124,7 +122,6 @@ public sealed class GhostRoleIntroductionEvent(
     public float TextDelay = textDelay;
     public float CharactersPerSecond = charactersPerSecond;
 
-    // DS14-start
     public bool ShowBlackBackground = showBlackBackground;
     public bool TypeOperationName = typeOperationName;
     public string SenderName = senderName;
@@ -134,5 +131,4 @@ public sealed class GhostRoleIntroductionEvent(
     public SoundSpecifier? AnnouncementSound = announcementSound;
     public SoundSpecifier? InterferenceSound = interferenceSound;
     public float InterferenceDuration = interferenceDuration;
-    // DS14-end
 }

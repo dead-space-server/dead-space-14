@@ -89,7 +89,7 @@ public sealed partial class WarDeclaratorCommsMenu : FancyWindow
         }
         else
         {
-            // До первого ответа сервера оставляем стандартную кнопку доступной.
+            // Keep the standard button available until the first server state arrives.
             _canDeclareWar = true;
         }
 
@@ -116,7 +116,7 @@ public sealed partial class WarDeclaratorCommsMenu : FancyWindow
                 break;
 
             case WarConditionStatus.NoWarSmallCrew:
-                // Сохраняем оригинальное поведение: кнопка не блокируется клиентом.
+                // Preserve the original behavior: the client does not disable the button here.
                 _canDeclareWar = true;
                 StatusLabel.Text = Loc.GetString("war-declarator-boost-impossible");
                 InfoLabel.Text = Loc.GetString("war-declarator-conditions-small-crew");
@@ -125,7 +125,7 @@ public sealed partial class WarDeclaratorCommsMenu : FancyWindow
 
             case WarConditionStatus.NoWarUnknown:
             default:
-                // Сервер сам решает, возможно ли объявить войну.
+                // The server decides whether war can actually be declared.
                 _canDeclareWar = true;
                 StatusLabel.Text = Loc.GetString("war-declarator-boost-impossible");
                 InfoLabel.Text = Loc.GetString("war-declarator-conditions-unknown");
