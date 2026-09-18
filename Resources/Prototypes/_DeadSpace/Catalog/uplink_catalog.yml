@@ -130,6 +130,57 @@
       - SurplusBundle
 
 - type: listing
+  id: UplinkShortyNukeopsCommander
+  name: uplink-shorty-name
+  description: uplink-shorty-desc
+  icon: { sprite: _DeadSpace/Objects/Weapons/Guns/Shotguns/supershorty.rsi, state: icon }
+  productEntity: ClothingBackpackDuffelSyndicateFilledShotgunShorty
+  cost:
+    Telecrystal: 25
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsCommanderUplink
+  - !type:BuyerAntagCondition
+    whitelist:
+    - NukeopsCommander
+  - !type:PopulationLimitedStockCondition
+    stock: 1
+    highPopulationStock: 1
+    highPopulationThreshold: 110
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkShortyNukeopsLone
+  name: uplink-shorty-name
+  description: uplink-shorty-lone-desc
+  icon: { sprite: _DeadSpace/Objects/Weapons/Guns/Shotguns/supershorty.rsi, state: icon }
+  productEntity: ClothingBackpackDuffelSyndicateFilledShotgunShortyLone
+  cost:
+    Telecrystal: 18
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+  - !type:PopulationLimitedStockCondition
+    stock: 1
+    highPopulationStock: 1
+    highPopulationThreshold: 110
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
   id: UplinkEswordDoubleAgents
   name: uplink-esword-double-name
   description: uplink-esword-double-desc

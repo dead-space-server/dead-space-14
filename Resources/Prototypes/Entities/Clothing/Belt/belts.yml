@@ -80,6 +80,11 @@
     whitelist:
       tags:
         - ShellShotgun
+    grid:
+    - 0,0,7,3
+    areaInsert: true
+  - type: UseDelay
+    delay: 0.5
 
 - type: entity
   parent: [ ClothingBeltStorageBase, BaseMagicalContraband ]
