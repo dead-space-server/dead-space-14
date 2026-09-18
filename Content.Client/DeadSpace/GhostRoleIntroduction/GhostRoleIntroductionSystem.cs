@@ -3,9 +3,14 @@
 using System.Text;
 using Content.Shared.DeadSpace.GhostRoleIntroduction;
 using Robust.Client.Graphics;
+// DS14-start
+using Robust.Client.Player;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
+// DS14-end
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -17,11 +22,20 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
     [Dependency] private readonly IResourceCache _resourceCache = default!;
     [Dependency] private readonly IUserInterfaceManager _ui = default!;
 
+    // DS14-start
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly IPlayerManager _player = default!;
+    // DS14-end
+
     private LayoutContainer? _root;
     private PanelContainer? _black;
     private Label? _operationLabel;
     private Label? _textLabel;
+    private Label? _senderLabel;
+
+    private string _operationText = string.Empty;
     private string _text = string.Empty;
+    private string _senderText = string.Empty;
     private TimeSpan _started;
     private float _duration;
     private float _fadeDuration;
@@ -29,7 +43,19 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
     private float _textDelay;
     private float _charactersPerSecond;
     private Color _textColor;
+    private bool _showBlackBackground;
+    private bool _typeOperationName;
+    private int _visibleOperationCharacters = -1;
     private int _visibleCharacters = -1;
+
+    // DS14-start
+    // Targeted tablet / war-declarator announcements share one local display.
+    // If another targeted announcement reaches this same player while one is active,
+    // the active text is jammed instead of stacking a second announcement over it.
+    private bool _targetedAnnouncementActive;
+    private bool _interferenceActive;
+    private TimeSpan _interferenceEnd;
+    // DS14-end
 
     public override void Initialize()
     {
@@ -39,28 +65,62 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
 
     private void ShowIntroduction(GhostRoleIntroductionEvent ev)
     {
+        // DS14-start
+        // A second targeted announcement must NOT play its own announcement sound.
+        // Instead, jam the announcement that is already visible for this player.
+        if (_root != null && _targetedAnnouncementActive && ev.TargetedAnnouncement)
+        {
+            StartInterference(ev.InterferenceSound, ev.InterferenceDuration);
+            return;
+        }
+        // DS14-end
+
         Clear();
 
         var fontResource = _resourceCache.GetResource<FontResource>(new ResPath(ev.Font));
         var operationFont = new VectorFont(fontResource, Math.Max(ev.OperationFontSize, 1));
         var textFont = new VectorFont(fontResource, Math.Max(ev.FontSize, 1));
+        var senderFont = new VectorFont(fontResource, Math.Max(ev.SenderFontSize, 1));
         var textWidth = Math.Clamp(_ui.WindowRoot.Size.X * 0.5f, 320f, 760f);
+
+        _showBlackBackground = ev.ShowBlackBackground;
+        _typeOperationName = ev.TypeOperationName;
+        // DS14-start
+        _targetedAnnouncementActive = ev.TargetedAnnouncement;
+        // DS14-end
 
         _black = new PanelContainer
         {
-            PanelOverride = new StyleBoxFlat(Color.Black),
+            PanelOverride = new StyleBoxFlat(_showBlackBackground ? Color.Black : Color.Transparent),
             MouseFilter = Control.MouseFilterMode.Ignore,
         };
+
+        _operationText = WrapText(ev.OperationName, operationFont, textWidth);
+        _text = WrapText(ev.Text, textFont, textWidth);
+
         _operationLabel = new Label
         {
-            Text = WrapText(ev.OperationName, operationFont, textWidth),
+            Text = _typeOperationName ? string.Empty : _operationText,
             FontOverride = operationFont,
             FontColorOverride = ev.TextColor,
             MouseFilter = Control.MouseFilterMode.Ignore,
         };
+
         _textLabel = new Label
         {
             FontOverride = textFont,
+            FontColorOverride = ev.TextColor,
+            MouseFilter = Control.MouseFilterMode.Ignore,
+        };
+
+        _senderText = string.IsNullOrWhiteSpace(ev.SenderJobTitle)
+            ? ev.SenderName
+            : $"{ev.SenderName} — {ev.SenderJobTitle}";
+
+        _senderLabel = new Label
+        {
+            Text = _senderText,
+            FontOverride = senderFont,
             FontColorOverride = ev.TextColor,
             MouseFilter = Control.MouseFilterMode.Ignore,
         };
@@ -74,21 +134,27 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
             SetWidth = textWidth,
             MouseFilter = Control.MouseFilterMode.Ignore,
         };
+
         if (!string.IsNullOrWhiteSpace(ev.OperationName))
             textContainer.AddChild(_operationLabel);
-        textContainer.AddChild(_textLabel);
+
+        if (!string.IsNullOrWhiteSpace(ev.Text))
+            textContainer.AddChild(_textLabel);
+
+        if (!string.IsNullOrWhiteSpace(_senderText))
+            textContainer.AddChild(_senderLabel);
 
         _root = new LayoutContainer
         {
             MouseFilter = Control.MouseFilterMode.Ignore,
         };
+
         _root.AddChild(_black);
         _root.AddChild(textContainer);
         LayoutContainer.SetAnchorPreset(_black, LayoutContainer.LayoutPreset.Wide);
         LayoutContainer.SetAnchorPreset(textContainer, LayoutContainer.LayoutPreset.CenterLeft);
         LayoutContainer.SetMarginLeft(textContainer, 72f);
 
-        _text = WrapText(ev.Text, textFont, textWidth);
         _textColor = ev.TextColor;
         _duration = ev.Duration;
         _fadeDuration = Math.Max(ev.FadeFromBlackDuration, 0.01f);
@@ -99,13 +165,30 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
 
         _ui.WindowRoot.AddChild(_root);
         LayoutContainer.SetAnchorPreset(_root, LayoutContainer.LayoutPreset.Wide);
+
+        // DS14-start
+        // Targeted announcement sounds are played client-side so collision handling can
+        // suppress the second announcement sound and replace it with the multitool pulse.
+        PlayLocalSound(ev.AnnouncementSound);
+        // DS14-end
     }
 
     public override void FrameUpdate(float frameTime)
     {
         base.FrameUpdate(frameTime);
-        if (_root == null || _black == null || _operationLabel == null || _textLabel == null)
+
+        if (_root == null || _black == null || _operationLabel == null || _textLabel == null || _senderLabel == null)
             return;
+
+        // DS14-start
+        if (_interferenceActive)
+        {
+            if (_timing.CurTime >= _interferenceEnd)
+                Clear(); // Deliberately abrupt: no fade-out after jamming.
+
+            return;
+        }
+        // DS14-end
 
         var elapsed = (float) (_timing.CurTime - _started).TotalSeconds;
         if (elapsed >= _duration)
@@ -114,13 +197,35 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
             return;
         }
 
-        var darkness = 1f - Math.Clamp(elapsed / _fadeDuration, 0f, 1f);
-        _black.ModulateSelfOverride = Color.White.WithAlpha(darkness);
+        if (_showBlackBackground)
+        {
+            var darkness = 1f - Math.Clamp(elapsed / _fadeDuration, 0f, 1f);
+            _black.ModulateSelfOverride = Color.White.WithAlpha(darkness);
+        }
+        else
+        {
+            _black.ModulateSelfOverride = Color.Transparent;
+        }
+
+        if (_typeOperationName)
+        {
+            var visibleOperationCharacters = Math.Clamp(
+                (int) (elapsed * _charactersPerSecond),
+                0,
+                _operationText.Length);
+
+            if (_visibleOperationCharacters != visibleOperationCharacters)
+            {
+                _visibleOperationCharacters = visibleOperationCharacters;
+                _operationLabel.Text = _operationText[..visibleOperationCharacters];
+            }
+        }
 
         var visibleCharacters = Math.Clamp(
             (int) ((elapsed - _textDelay) * _charactersPerSecond),
             0,
             _text.Length);
+
         if (_visibleCharacters != visibleCharacters)
         {
             _visibleCharacters = visibleCharacters;
@@ -131,7 +236,63 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
         var fadedColor = _textColor.WithAlpha(_textColor.A * textFade);
         _operationLabel.FontColorOverride = fadedColor;
         _textLabel.FontColorOverride = fadedColor;
+        _senderLabel.FontColorOverride = fadedColor;
     }
+
+    // DS14-start
+    private void StartInterference(SoundSpecifier? sound, float duration)
+    {
+        if (_root == null || _operationLabel == null || _textLabel == null || _senderLabel == null)
+            return;
+
+        _interferenceActive = true;
+        _interferenceEnd = _timing.CurTime + TimeSpan.FromSeconds(Math.Max(duration, 0.01f));
+
+        _operationLabel.Text = MakeInterference(_operationText);
+        _textLabel.Text = MakeInterference(_text);
+        _senderLabel.Text = MakeInterference(_senderText);
+
+        // Do not fade the jammed text. It remains visible for the configured short
+        // interference lifetime, then disappears instantly in FrameUpdate().
+        _operationLabel.FontColorOverride = _textColor;
+        _textLabel.FontColorOverride = _textColor;
+        _senderLabel.FontColorOverride = _textColor;
+
+        PlayLocalSound(sound);
+    }
+
+    private void PlayLocalSound(SoundSpecifier? sound)
+    {
+        if (sound == null || _player.LocalSession?.AttachedEntity is not { Valid: true } playerEntity)
+            return;
+
+        _audio.PlayGlobal(sound, playerEntity);
+    }
+
+    private static string MakeInterference(string source)
+    {
+        if (string.IsNullOrEmpty(source))
+            return string.Empty;
+
+        const string noise = "#@!?%/\\*+=";
+        var result = new StringBuilder(source.Length);
+        var noiseIndex = 0;
+
+        foreach (var character in source)
+        {
+            if (character == '\r' || character == '\n' || char.IsWhiteSpace(character))
+            {
+                result.Append(character);
+                continue;
+            }
+
+            result.Append(noise[noiseIndex % noise.Length]);
+            noiseIndex++;
+        }
+
+        return result.ToString();
+    }
+    // DS14-end
 
     private static string WrapText(string text, Font font, float maxWidth)
     {
@@ -178,6 +339,7 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
 
         return width;
     }
+
     private void Clear()
     {
         _root?.Orphan();
@@ -185,7 +347,20 @@ public sealed class GhostRoleIntroductionSystem : EntitySystem
         _black = null;
         _operationLabel = null;
         _textLabel = null;
+        _senderLabel = null;
+        _operationText = string.Empty;
+        _text = string.Empty;
+        _senderText = string.Empty;
+        _visibleOperationCharacters = -1;
         _visibleCharacters = -1;
+        _showBlackBackground = false;
+        _typeOperationName = false;
+
+        // DS14-start
+        _targetedAnnouncementActive = false;
+        _interferenceActive = false;
+        _interferenceEnd = default;
+        // DS14-end
     }
 
     public override void Shutdown()

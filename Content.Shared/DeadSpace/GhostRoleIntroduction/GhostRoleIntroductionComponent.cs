@@ -98,7 +98,19 @@ public sealed class GhostRoleIntroductionEvent(
     float fadeFromBlackDuration,
     float fadeOutDuration,
     float textDelay,
-    float charactersPerSecond) : EntityEventArgs
+    float charactersPerSecond,
+    // DS14-start
+    bool showBlackBackground = true,
+    bool typeOperationName = false,
+    string senderName = "",
+    string senderJobTitle = "",
+    int senderFontSize = 14,
+    bool targetedAnnouncement = false,
+    SoundSpecifier? announcementSound = null,
+    SoundSpecifier? interferenceSound = null,
+    float interferenceDuration = 1f
+    // DS14-end
+    ) : EntityEventArgs
 {
     public string OperationName = operationName;
     public string Text = text;
@@ -111,4 +123,16 @@ public sealed class GhostRoleIntroductionEvent(
     public float FadeOutDuration = fadeOutDuration;
     public float TextDelay = textDelay;
     public float CharactersPerSecond = charactersPerSecond;
+
+    // DS14-start
+    public bool ShowBlackBackground = showBlackBackground;
+    public bool TypeOperationName = typeOperationName;
+    public string SenderName = senderName;
+    public string SenderJobTitle = senderJobTitle;
+    public int SenderFontSize = senderFontSize;
+    public bool TargetedAnnouncement = targetedAnnouncement;
+    public SoundSpecifier? AnnouncementSound = announcementSound;
+    public SoundSpecifier? InterferenceSound = interferenceSound;
+    public float InterferenceDuration = interferenceDuration;
+    // DS14-end
 }

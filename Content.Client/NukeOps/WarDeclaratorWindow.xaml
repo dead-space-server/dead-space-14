@@ -1,23 +1,115 @@
-﻿<controls:FancyWindow xmlns="https://spacestation14.io"
-               xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
-               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-               Title="{Loc 'war-declarator-ui-header'}">
-    <BoxContainer Orientation="Vertical" SeparationOverride="4" MinWidth="440">
-        <TextEdit Name="MessageEdit"
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      MinSize="420 360"
+                      SetSize="500 500"
+                      Resizable="True"
+                      Title="{Loc 'war-declarator-ui-header'}">
+
+    <!-- DS14-start -->
+    <TabContainer Name="MainTabs"
                   HorizontalExpand="True"
-                  MinHeight="200"
-                  Access="Public" />
-        <Button Name="WarButton"
-                Text="{Loc 'war-declarator-ui-try-war-button'}"
-                StyleClasses="negative"
-                Access="Public"/>
-        <BoxContainer Orientation="Vertical" HorizontalExpand="True">
-            <Label Name="StatusLabel"
+                  VerticalExpand="True"
+                  Access="Public">
+
+        <BoxContainer Name="WarTabView"
+                      Orientation="Vertical"
+                      VerticalExpand="True"
+                      HorizontalExpand="True"
+                      TabContainer.TabTitle="ОБЪЯВЛЕНИЕ ВОЙНЫ"
+                      Access="Public">
+
+            <Label StyleClasses="DeadSpaceSectionTitle"
                    Align="Center"
-                   Access="Public"/>
-            <Label Name="InfoLabel"
-                   Align="Center"
-                   Access="Public"/>
+                   VerticalAlignment="Top"
+                   Text="ОБЪЯВЛЕНИЕ ВОЙНЫ" />
+
+            <PanelContainer StyleClasses="DeadSpaceTextField"
+                            Margin="10 6 6 6"
+                            HorizontalExpand="True"
+                            VerticalExpand="True">
+                <TextEdit Name="MessageEdit"
+                          MinHeight="180"
+                          HorizontalExpand="True"
+                          VerticalExpand="True"
+                          Access="Public" />
+            </PanelContainer>
+
+            <BoxContainer Orientation="Horizontal"
+                          HorizontalExpand="True">
+                <Button Name="WarButton"
+                        HorizontalExpand="True"
+                        Margin="10 6 6 6"
+                        MinHeight="34"
+                        Text="{Loc 'war-declarator-ui-try-war-button'}"
+                        StyleClasses="negative"
+                        Access="Public" />
+            </BoxContainer>
+
+            <PanelContainer Margin="10 2 6 6"
+                            HorizontalExpand="True">
+                <BoxContainer Orientation="Vertical"
+                              HorizontalExpand="True"
+                              SeparationOverride="2">
+                    <Label Name="StatusLabel"
+                           Align="Center"
+                           Access="Public" />
+                    <Label Name="InfoLabel"
+                           Align="Center"
+                           Access="Public" />
+                </BoxContainer>
+            </PanelContainer>
         </BoxContainer>
-    </BoxContainer>
+
+        <BoxContainer Name="SecondaryTabView"
+                      Orientation="Vertical"
+                      VerticalExpand="True"
+                      HorizontalExpand="True"
+                      TabContainer.TabTitle="ВТОРОСТЕПЕННОЕ ОБЪЯВЛЕНИЕ"
+                      Visible="False"
+                      Access="Public">
+
+            <Label StyleClasses="DeadSpaceSectionTitle"
+                   Align="Center"
+                   VerticalAlignment="Top"
+                   Text="ВТОРОСТЕПЕННОЕ ОБЪЯВЛЕНИЕ" />
+
+            <Label Text="Краткий приказ"
+                   Margin="10 6 6 0" />
+
+            <PanelContainer StyleClasses="DeadSpaceTextField"
+                            Margin="10 2 6 6"
+                            HorizontalExpand="True">
+                <LineEdit Name="SecondaryTitleEdit"
+                          HorizontalExpand="True"
+                          MinHeight="32"
+                          Access="Public" />
+            </PanelContainer>
+
+            <Label Text="Подробности"
+                   Margin="10 6 6 0" />
+
+            <PanelContainer StyleClasses="DeadSpaceTextField"
+                            Margin="10 2 6 6"
+                            HorizontalExpand="True"
+                            VerticalExpand="True">
+                <TextEdit Name="SecondaryMessageEdit"
+                          MinHeight="140"
+                          HorizontalExpand="True"
+                          VerticalExpand="True"
+                          Access="Public" />
+            </PanelContainer>
+
+            <BoxContainer Orientation="Horizontal"
+                          HorizontalExpand="True">
+                <Button Name="SecondaryAnnouncementButton"
+                        HorizontalExpand="True"
+                        Margin="10 6 6 6"
+                        MinHeight="34"
+                        Text="ОТПРАВИТЬ ВТОРОСТЕПЕННОЕ ОБЪЯВЛЕНИЕ"
+                        Access="Public" />
+            </BoxContainer>
+        </BoxContainer>
+    </TabContainer>
+    <!-- DS14-end -->
 </controls:FancyWindow>

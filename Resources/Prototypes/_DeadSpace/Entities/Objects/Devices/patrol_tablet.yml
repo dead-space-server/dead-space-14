@@ -1,8 +1,8 @@
 - type: entity
   parent: BaseItem
   id: PatrolTablet
-  name: Patrol Tablet
-  description: "A tablet."
+  name: планшет связи
+  description: Специальный планшет для ГСБ и Капитана станции, да бы держать связь с силами СБ.
   components:
   - type: Sprite
     sprite: _DeadSpace/Objects/Devices/patroltablet.rsi
@@ -17,6 +17,30 @@
       enum.PatrolTabletUiKey.Key:
         type: PatrolTabletBoundUserInterface
   - type: PatrolTablet
+    announcementCooldown: 60
+    announcementDuration: 10
+    announcementTextColor: "#9db7ff"
+    announcementFont: /Fonts/Bedstead/Bedstead.otf
+    announcementFontSize: 20
+    announcementTitleFontSize: 54
+    announcementFadeFromBlackDuration: 2.5
+    announcementFadeOutDuration: 1.5
+    announcementTextDelay: 0.75
+    announcementShowBlackBackground: false
+    announcementTypeTitle: true
+    announcementCharactersPerSecond: 28
+    announcementSound:
+      path: /Audio/_DeadSpace/Announcements/briefing_warning.ogg
+    announcementInterferenceSound:
+      path: /Audio/Effects/multitool_pulse.ogg
+    announcementInterferenceDuration: 1
+    announcementRequiredEquipment:
+    - ClothingMaskGasSecurity
+    - ClothingHeadsetAltCommand
+    - ClothingEyesHudSecurity
+    - ClothingEyesGlassesSecurity
+  - type: AccessReader
+    access: [["HeadOfSecurity"], ["Captain"]]
   - type: DeviceNetwork
     deviceNetId: Wireless
     receiveFrequencyId: CrewMonitor
