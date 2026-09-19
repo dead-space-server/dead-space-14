@@ -17,5 +17,5 @@
   price: 0
   dispatchPerTarget: true
   spawns:
-    - id: RandomHumanoidSpawnerCriticalForceOfficerEMT
-      amount: 2
+    - id: RandomHumanoidSpawnerCriticalForceMedic
+    - id: RandomHumanoidSpawnerCriticalForceSecurity
