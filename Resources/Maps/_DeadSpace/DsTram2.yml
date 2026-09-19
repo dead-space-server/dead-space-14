@@ -149999,7 +149999,7 @@ entities:
           hard: False
           restitution: 0
           friction: 0.4
-    - proto: ParticleAcceleratorComputerCircuitboard
+- proto: ParticleAcceleratorComputerCircuitboard
   entities:
   - uid: 20677
     components:
@@ -173493,7 +173493,7 @@ entities:
           hard: False
           restitution: 0
           friction: 0.4
-    - proto: SpaceCash10
+- proto: SpaceCash10
   entities:
   - uid: 24397
     components:
@@ -183419,7 +183419,7 @@ entities:
           hard: False
           restitution: 0
           friction: 0.4
-    - proto: ValentineCard
+- proto: ValentineCard
   entities:
   - uid: 25870
     components:
