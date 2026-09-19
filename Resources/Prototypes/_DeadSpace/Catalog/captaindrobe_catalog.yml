@@ -771,3 +771,49 @@
   conditions:
   - !type:ListingLimitedStockCondition
     stock: 1
+
+# Ножны
+## Синий
+
+- type: listing
+  id: CaptainSheath
+  name: captaindrobe-sheath
+  description: captaindrobe-sheath-desc
+  icon: { sprite: /Textures/Clothing/Belt/sheath.rsi, state: sheath }
+  productEntity: ClothingBeltSheath
+  priority: 0
+  categories:
+  - CaptainDrobeSheath
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+## Белый
+
+- type: listing
+  id: CaptainSheathWhite
+  name: captaindrobe-sheath-white
+  description: captaindrobe-sheath-white-desc
+  icon: { sprite: /Textures/_DeadSpace/Clothing/Belt/white_sheath.rsi, state: sheath }
+  productEntity: ClothingBeltSheathWhite
+  priority: 1
+  categories:
+  - CaptainDrobeSheath
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+## Чёрный
+
+- type: listing
+  id: CaptainSheathBlack
+  name: captaindrobe-sheath-black
+  description: captaindrobe-sheath-black-desc
+  icon: { sprite: /Textures/_DeadSpace/Clothing/Belt/black_sheath.rsi, state: sheath }
+  productEntity: ClothingBeltSheathBlack
+  priority: 2
+  categories:
+  - CaptainDrobeSheath
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
