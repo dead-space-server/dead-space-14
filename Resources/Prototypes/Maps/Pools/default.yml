@@ -7,7 +7,7 @@
   - Bagel
   - Barratry
   - Box
-  # - Cluster # broken map, needs resave
+  - Cluster
   - Cog
   - Convex
   - Core
@@ -24,8 +24,7 @@
   - Gate
   - Ishimura
   - Gemini #DS14
-  # - Loop # broken map, needs resave
-  # - Loop
+  - Loop
   - Marathon
   - Meta
   - Oasis
@@ -33,7 +32,7 @@
   - Origin
   - Packed
   - Plasma 
-  # - Reach # removed by RIP6100 remap in progress
+  - Reach
   # - Exo # map prototype is commented out
   - Saltern
   # - Snowball #DS14
