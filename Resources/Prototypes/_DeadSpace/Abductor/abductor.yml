@@ -92,16 +92,19 @@
   indestructible: true
 
 # ============================================================================
-# DUBIOUS GLANDS ("weird glands" - experiment results)
+# DUBIOUS GLANDS ("weird glands" - experiment results, delivered as implants)
+# REHWORK (DS14): glands are no longer surgery organs grafted via the
+# experimentator, they are subdermal implants administered with disposable
+# implanters. Only effects available natively in dead-space are used.
 # ============================================================================
 
 - type: entity
-  id: OrganDubiousBase
-  parent: [ OrganHumanHeart, BaseMajorContraband ]
-  name: mysterious gland
+  id: ImplantDubiousBase
+  parent: BaseSubdermalImplant
+  name: doubtful gland
   categories: [ HideSpawnMenu ]
   abstract: true
-  description: Suspicious alien gland, replaces the heart.
+  description: A microscopic alien gland that can be injected under the skin of a test subject.
   components:
   - type: Sprite
     sprite: _DeadSpace/Abductor/dubious_organs.rsi
@@ -109,13 +112,13 @@
   - type: AbductorOrgan
 
 - type: entity
-  id: OrganDubiousHealth
-  parent: OrganDubiousBase
+  id: ImplantDubiousHealth
+  parent: ImplantDubiousBase
   components:
   - type: Sprite
     state: health
-  - type: Organ
-    onAdd:
+  - type: SubdermalImplant
+    implantComponents:
     - type: PassiveDamage
       allowedStates:
       - Alive
@@ -130,13 +133,13 @@
           Genetic: -0.14
 
 - type: entity
-  id: OrganDubiousAA
-  parent: OrganDubiousBase
+  id: ImplantDubiousAA
+  parent: ImplantDubiousBase
   components:
   - type: Sprite
     state: emp
-  - type: Organ
-    onAdd:
+  - type: SubdermalImplant
+    implantComponents:
     - type: Access
       enabled: true
       groups:
@@ -145,13 +148,13 @@
       access: [["Command"], ["Research"]]
 
 - type: entity
-  id: OrganDubiousShock
-  parent: OrganDubiousBase
+  id: ImplantDubiousShock
+  parent: ImplantDubiousBase
   components:
   - type: Sprite
     state: emp
-  - type: Organ
-    onAdd:
+  - type: SubdermalImplant
+    implantComponents:
     - type: Insulated
     - type: LightningArcShooter
       arcDepth: 1
@@ -162,13 +165,13 @@
       lightningPrototype: Lightning
 
 - type: entity
-  id: OrganDubiousInvisible
-  parent: OrganDubiousBase
+  id: ImplantDubiousInvisible
+  parent: ImplantDubiousBase
   components:
   - type: Sprite
     state: species
-  - type: Organ
-    onAdd:
+  - type: SubdermalImplant
+    implantComponents:
     - type: Stealth
       enabledOnDeath: false
       maxVisibility: 1.2
@@ -177,190 +180,33 @@
       movementVisibilityRate: 0.25
 
 - type: entity
-  id: OrganDubiousGoliath
-  parent: OrganDubiousBase
+  id: ImplantDubiousGoliath
+  parent: ImplantDubiousBase
   components:
   - type: Sprite
     state: species
-  - type: Organ
-    onAdd:
+  - type: SubdermalImplant
+    implantComponents:
     - type: GoliathTentacle
 
 - type: entity
-  id: OrganDubiousSpaceAdaptation
-  parent: OrganDubiousBase
-  components:
-  - type: Sprite
-    state: species
-  - type: Organ
-    onAdd:
-    - type: PressureImmunity
-    - type: BreathingImmunity
-
-- type: entity
-  id: OrganDubiousArtifact
-  parent: OrganDubiousBase
+  id: ImplantDubiousArtifact
+  parent: ImplantDubiousBase
   components:
   - type: Sprite
     state: mindshock
-  - type: Organ
-    onAdd:
+  - type: SubdermalImplant
+    implantComponents:
     - type: XenoArtifact
-    - type: RandomStatusActivation
-      statusEffects:
-        ActivateArtifactEffect: ActivateArtifactEffect
 
 - type: entity
-  id: OrganDubiousScrambleDna
-  parent: OrganDubiousBase
+  id: ImplantDubiousRepairable
+  parent: ImplantDubiousBase
   components:
   - type: Sprite
     state: species
-  - type: Organ
-    onAdd:
-    - type: RandomStatusActivation
-      statusEffects:
-        ScrambleDnaEffect: ScrambleDnaEffect
-
-- type: entity
-  id: OrganDubiousScrambleLocation
-  parent: OrganDubiousBase
-  components:
-  - type: Sprite
-    state: vent
-  - type: Organ
-    onAdd:
-    - type: RandomStatusActivation
-      statusEffects:
-        ScrambleLocationEffect: ScrambleLocationEffect
-
-- type: entity
-  id: OrganDubiousSpiderEggs
-  parent: OrganDubiousBase
-  components:
-  - type: Sprite
-    state: spider
-  - type: Organ
-    onAdd:
-    - type: RandomStatusActivation
-      minActivationTime: 120
-      maxActivationTime: 360
-      statusEffects:
-        SpawnSpiderEggs: SpawnSpiderEggs
-
-- type: entity
-  id: OrganDubiousSlimeEggs
-  parent: OrganDubiousBase
-  components:
-  - type: Sprite
-    state: slime
-  - type: Organ
-    onAdd:
-    - type: RandomStatusActivation
-      minActivationTime: 120
-      maxActivationTime: 360
-      statusEffects:
-        SpawnSlimes: SpawnSlimes
-
-- type: entity
-  id: OrganDubiousEMP
-  parent: OrganDubiousBase
-  components:
-  - type: Sprite
-    state: emp
-  - type: Organ
-    onAdd:
-    - type: RandomStatusActivation
-      statusEffects:
-        SpawnEmp: SpawnEmp
-
-- type: entity
-  id: OrganDubiousGravityWell
-  parent: OrganDubiousBase
-  components:
-  - type: Sprite
-    state: emp
-  - type: Organ
-    onAdd:
-    - type: RandomStatusActivation
-      statusEffects:
-        SpawnGravityWell: SpawnGravityWell
-
-- type: entity
-  id: OrganDubiousFlash
-  parent: OrganDubiousBase
-  components:
-  - type: Sprite
-    state: emp
-  - type: Organ
-    onAdd:
-    - type: RandomStatusActivation
-      statusEffects:
-        SpawnFlash: SpawnFlash
-
-- type: entity
-  id: OrganDubiousSmoke
-  parent: OrganDubiousBase
-  components:
-  - type: Sprite
-    state: emp
-  - type: Organ
-    onAdd:
-    - type: RandomStatusActivation
-      statusEffects:
-        SpawnSmoke: SpawnSmoke
-
-- type: entity
-  id: OrganDubiousGas
-  parent: OrganDubiousBase
-  components:
-  - type: Sprite
-    state: viral
-  - type: Organ
-    onAdd:
-    - type: RandomStatusActivation
-      statusEffects:
-        ExpelGas: ExpelGas
-
-- type: entity
-  id: OrganDubiousSteptriggerImmune
-  parent: OrganDubiousBase
-  components:
-  - type: Sprite
-    state: viral
-  - type: Organ
-    onAdd:
-    - type: StepTriggerImmune
-      whitelist:
-        types:
-        - Shard
-        - Landmine
-        - Mousetrap
-        - Lava
-        - Chasm
-        - SlipTile
-        - SlipEntity
-        - ContrabandDetector
-
-- type: entity
-  id: OrganDubiousVentcrawler
-  parent: OrganDubiousBase
-  components:
-  - type: Sprite
-    state: viral
-  - type: Organ
-    onAdd:
-    - type: VentCrawler
-      allowInventory: false
-
-- type: entity
-  id: OrganDubiousRepairable
-  parent: OrganDubiousBase
-  components:
-  - type: Sprite
-    state: species
-  - type: Organ
-    onAdd:
+  - type: SubdermalImplant
+    implantComponents:
     - type: Repairable
       fuelCost: 5
       doAfterDelay: 3
@@ -371,49 +217,105 @@
           Slash: -10
 
 # ============================================================================
-# DUBIOUS GLAND SPAWNER
+# DUBIOUS IMPLANTERS (one-shot syringes preloaded with a gland)
+# ============================================================================
+
+- type: entity
+  id: ImplanterDubiousHealth
+  name: doubtful health implanter
+  description: A disposable syringe loaded with a health gland. Pick your test subject wisely.
+  parent: BaseImplantOnlyImplanter
+  components:
+  - type: Implanter
+    implant: ImplantDubiousHealth
+
+- type: entity
+  id: ImplanterDubiousAA
+  name: doubtful access implanter
+  description: A disposable syringe loaded with an access gland. Pick your test subject wisely.
+  parent: BaseImplantOnlyImplanter
+  components:
+  - type: Implanter
+    implant: ImplantDubiousAA
+
+- type: entity
+  id: ImplanterDubiousShock
+  name: doubtful shock implanter
+  description: A disposable syringe loaded with a shock gland. Pick your test subject wisely.
+  parent: BaseImplantOnlyImplanter
+  components:
+  - type: Implanter
+    implant: ImplantDubiousShock
+
+- type: entity
+  id: ImplanterDubiousInvisible
+  name: doubtful invisibility implanter
+  description: A disposable syringe loaded with an invisibility gland. Pick your test subject wisely.
+  parent: BaseImplantOnlyImplanter
+  components:
+  - type: Implanter
+    implant: ImplantDubiousInvisible
+
+- type: entity
+  id: ImplanterDubiousGoliath
+  name: doubtful goliath implanter
+  description: A disposable syringe loaded with a goliath gland. Pick your test subject wisely.
+  parent: BaseImplantOnlyImplanter
+  components:
+  - type: Implanter
+    implant: ImplantDubiousGoliath
+
+- type: entity
+  id: ImplanterDubiousArtifact
+  name: doubtful artifact implanter
+  description: A disposable syringe loaded with an artifact gland. Pick your test subject wisely.
+  parent: BaseImplantOnlyImplanter
+  components:
+  - type: Implanter
+    implant: ImplantDubiousArtifact
+
+- type: entity
+  id: ImplanterDubiousRepairable
+  name: doubtful repair implanter
+  description: A disposable syringe loaded with a repair gland. Pick your test subject wisely.
+  parent: BaseImplantOnlyImplanter
+  components:
+  - type: Implanter
+    implant: ImplantDubiousRepairable
+
+# ============================================================================
+# DUBIOUS IMPLANTER SPAWNER
 # ============================================================================
 
 - type: entityTable
-  id: DubiousOrgansTable
+  id: DubiousImplanterTable
   table: !type:GroupSelector
     children:
-    # Not-so Annoying Organs Group - 50% chance
+    # Not-so Annoying - 50% chance
     - !type:GroupSelector
       weight: 50
       children:
-      - id: OrganDubiousHealth
-      - id: OrganDubiousInvisible
-      - id: OrganDubiousSpaceAdaptation
-      - id: OrganDubiousScrambleDna
-      - id: OrganDubiousScrambleLocation
-      - id: OrganDubiousArtifact
-      - id: OrganDubiousVentcrawler
-      - id: OrganDubiousSteptriggerImmune
-      - id: OrganDubiousRepairable
+      - id: ImplanterDubiousHealth
+      - id: ImplanterDubiousInvisible
+      - id: ImplanterDubiousArtifact
+      - id: ImplanterDubiousRepairable
 
-    # Annoying/Disruptive Organs Group - 35% chance
+    # Annoying/Disruptive - 35% chance
     - !type:GroupSelector
       weight: 35
       children:
-      - id: OrganDubiousShock
-      - id: OrganDubiousGoliath
-      - id: OrganDubiousEMP
-      - id: OrganDubiousGravityWell
-      - id: OrganDubiousFlash
-      - id: OrganDubiousSmoke
-      - id: OrganDubiousGas
-    # Very Disruptive Organs Group - 15% chance
+      - id: ImplanterDubiousShock
+      - id: ImplanterDubiousGoliath
+
+    # Very Disruptive - 15% chance
     - !type:GroupSelector
       weight: 15
       children:
-      - id: OrganDubiousAA
-      - id: OrganDubiousSpiderEggs
-      - id: OrganDubiousSlimeEggs
+      - id: ImplanterDubiousAA
 
 - type: entity
-  name: Dubious Organ Spawner
-  id: DubiousOrganSpawner
+  name: Doubtful Implanter Spawner
+  id: DubiousImplanterSpawner
   parent: MarkerBase
   components:
   - type: Sprite
@@ -423,7 +325,7 @@
         state: gland
   - type: EntityTableSpawner
     table: !type:NestedSelector
-      tableId: DubiousOrgansTable
+      tableId: DubiousImplanterTable
 # ============================================================================
 # SPECIES
 # ============================================================================
@@ -575,7 +477,6 @@
   parent: BaseMobSpeciesOrganic
   id: MobAbductor
   components:
-  - type: Absorbable # BLOOD FOR THE BLOOD GOD
   - type: HumanoidAppearance
     species: Abductor
   - type: Icon
@@ -592,24 +493,11 @@
     - CanPilot
     - FootstepSound
     - DoorBumpOpener
-  - type: CollectiveMind
-    defaultChannel: Abductormind
-    channels:
-    - Abductormind
-  - type: LanguageKnowledge # adapted to languages available in DS14
-    speaks:
-    - GeneralLanguage
-    understands:
-    - GeneralLanguage
-  - type: Targeting
-  - type: SurgeryTarget
   - type: Bloodstream
     bloodReferenceSolution:
       reagents:
       - ReagentId: AlienBlood
         Quantity: 200
-  - type: GrabIntent #goob
-  - type: Grabbable #goob
 
 - type: entity
   parent: BaseSpeciesDummy
@@ -743,7 +631,7 @@
     gloves: ClothingHandsGlovesCombat
     head: ClothingHeadMirror
     outerClothing: ClothingOuterCoatAbductor
-    back: ClothingBackpackDuffelAbductor
+    back: ClothingBackpackDuffelAbductorFilled
     pocket1: AbductorGizmo
     suitstorage: WeaponDecloner
     id: AgentIDCard
@@ -1046,9 +934,7 @@
   - type: Sprite
     sprite: _DeadSpace/Abductor/abductor_wonderprod.rsi
     state: icon
-  - type: GuideHelp
-    guides:
-    - Abductors
+  
   - type: MeleeWeapon
     wideAnimationRotation: -135
     attackRate: 0.75
@@ -1154,18 +1040,6 @@
     state: icon
   - type: Item
     sprite: _DeadSpace/Abductor/gizmo.rsi
-  - type: RestrictInteractionByUserTag
-    contains:
-    - AbductorScientist
-    messages:
-    - abductors-gizmo-restricted-1
-    - abductors-gizmo-restricted-2
-  - type: RestrictMeleeByUserTag
-    contains:
-    - AbductorScientist
-    messages:
-    - abductors-gizmo-restricted-1
-    - abductors-gizmo-restricted-2
   - type: MeleeWeapon
     wideAnimationRotation: -135
     attackRate: 0.5
@@ -1175,9 +1049,7 @@
     angle: 60
     animation: WeaponArcThrust
   - type: AbductorGizmo
-  - type: GuideHelp
-    guides:
-    - Abductors
+  
 # ============================================================================
 # CLOTHING
 # ============================================================================
@@ -1267,13 +1139,11 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Abductor/clothing_abductor_vest.rsi
-  - type: AbductorVest # Goob-only C#
-  - type: ModifyDelayedKnockdown # Goob-only C#
-    cancel: true
+  - type: AbductorVest
   - type: StaminaResistance
     damageCoefficient: 0.25
   - type: ItemSwitch # Goob-only C#
-    state: stealth
+    state: Stealth
     states:
       Stealth: !type:ItemSwitchState
         verb: Stealth
@@ -1383,9 +1253,6 @@
     damageCoefficient: 0.75
   - type: StaminaResistance
     damageCoefficient: 0.4
-  - type: ModifyDelayedKnockdown # Goob-only C#
-    delayDelta: 3
-    knockdownTimeDelta: -3
 
 - type: entity
   parent: [ ClothingBeltUtility, BaseMajorContraband ]
@@ -1421,7 +1288,10 @@
   description: An ordinary surgical duffel bag woven from a durable fiber.
   components:
   - type: StorageFill
-    contents: []
+    contents:
+    - id: ImplanterDubiousInvisible
+    - id: ImplanterDubiousShock
+    - id: ImplanterDubiousAA
 
 # ============================================================================
 # STRUCTURES
@@ -1457,9 +1327,7 @@
         base:
           True: { state: experimentator_1 }
           False: { state: experimentator_0 }
-  - type: GuideHelp
-    guides:
-    - Abductors
+  
 
 - type: entity
   id: AbductorAlienPad
@@ -1489,16 +1357,12 @@
     drawdepth: FloorObjects
     layers:
     - state: offline
-      map: [ "enum.CargoTelepadLayers.Base" ]
+      map: [ "pad" ]
     - state: idle
-      map: [ "enum.CargoTelepadLayers.Beam" ]
-  - type: WirelessNetworkConnection # Goob-only C#
-    range: 200
+      map: [ "beam" ]
   - type: Appearance
   - type: CollideOnAnchor
-  - type: GuideHelp
-    guides:
-    - Abductors
+  
 
 - type: entity
   parent: BaseComputer
@@ -1523,9 +1387,7 @@
     radius: 1.5
     energy: 1.6
     color: "#FC0097"
-  - type: GuideHelp
-    guides:
-    - Abductors
+  
 
 - type: entity
   parent: BaseComputer
@@ -1550,9 +1412,7 @@
     radius: 1.5
     energy: 1.6
     color: "#FC0097"
-  - type: GuideHelp
-    guides:
-    - Abductors
+  
 
 - type: entity
   parent:
@@ -1570,7 +1430,7 @@
   - type: Eye
     pvsScale: 1.5
   - type: Visibility
-    layer: 8 # Abductor visflag
+    layer: 32 # VisibilityFlags.Abductor
   - type: Sprite
     sprite: _DeadSpace/Abductor/abductor_camera_console.rsi
     layers:
@@ -1791,7 +1651,6 @@
   - type: Objective
     difficulty: 1
     issuer: objective-issuer-voices
-  - type: RoleplayObjective # Goob-only C#
   - type: RoleRequirement
     roles:
     - AbductorVictim
@@ -2224,18 +2083,6 @@
       sprite: Objects/Specific/Medical/defib.rsi
       state: icon
 
-- type: entity
-  parent: BaseAbductorVictimObjective
-  id: AbductorVictimHeretic
-  name: THE GATES HAVE OPENED MY MIND IS OPEN MY MIND IS OPEN MY MIND IS OPEN
-  description: You see you see what they cannot you see the open door you seeE you SEeEe you SEe yOU seEee SHOW THEM ALL.
-  components:
-  - type: ForceHereticObjective # Goob-only C#
-  - type: Objective
-    icon:
-      sprite: _DeadSpace/Abductor/heretic_mansus_grasp.rsi
-      state: icon
-
 # Objective rolls (weightedRandom is supported by dead-space)
 
 - type: weightedRandom
@@ -2294,7 +2141,6 @@
     AbductorVictimStealWeapons: 1
     AbductorVictimDismantleComputers: 1
     AbductorVictimFinality: 1
-    AbductorVictimHeretic: 0.01
 
 # ============================================================================
 # ANTAG / ROLE REQUIREMENTS / MIND ROLES
@@ -2344,6 +2190,18 @@
   name: abductor-victim-role-name
   antagonist: true
   objective: roles-antag-abductor-victim
+
+- type: roleType
+  id: Abductor
+  name: abductor-role-name
+  color: "#0083ba"
+  symbol: "☌"
+
+- type: roleType
+  id: AbductorVictim
+  name: abductor-victim-role-name-freeagent
+  color: "#ffff00"
+  symbol: "☯"
 
 - type: roleType
   id: AbductorVictimRole
@@ -2622,3 +2480,48 @@
   values:
     prefix: abductor-agent-prefix-dataset-
     count: 2
+
+# ============================================================================
+# EFFECTS
+# ============================================================================
+
+- type: entity
+  id: EffectTeleportation
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 0.6
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    layers:
+    - shader: unshaded
+      sprite: Effects/sparks.rsi
+      state: sparks
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: AnimationPlayer
+
+- type: entity
+  id: EffectTeleportationEntity
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 0.6
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    layers:
+    - shader: unshaded
+      sprite: Effects/portal.rsi
+      state: portal-artifact
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: AnimationPlayer
+  - type: EmitSoundOnSpawn
+    sound:
+      path: /Audio/Effects/teleport_arrival.ogg

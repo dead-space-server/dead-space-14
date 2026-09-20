@@ -1,44 +1,52 @@
-# Abductor localization. Values ported verbatim from Goob-Station,
-# except: roles-antag-abductor-victim and tiles-abductor-floor were dangling
-# locale keys in Goob (not defined in any FTL) and are filled here.
+# ============================================================================
+# Abductor (DeadSpace port) - en-US
+# ============================================================================
 
-# Species
-species-name-abductor = alien
-
-# Reagent / flavor
-reagent-name-alien-blood = alien blood
-reagent-desc-alien-blood = The creature this bled from is not of this galaxy. Maybe it's grape flavoured.
-reagent-physical-desc-alien = alien
-flavor-base-alienblood = alien
-
-# Tile
-tiles-abductor-floor = Abductor Floor
-
-# Roles / ghost roles
-abductor-lone-ghost-role-name = Lone Abductor
-abductor-lone-ghost-role-desc = Kidnap people, and stuff them with experimental organs of dubious origin, all by yourself.
-abductor-scientist-ghost-role-name = Abductor Scientist
-abductor-scientist-ghost-role-desc = Teleport people your partner kidnapped onto your ship and stuff them with experimental organs of dubious origin.
-abductor-agent-ghost-role-name = Abductor Agent
-abductor-agent-ghost-role-desc = Kidnap people for your partner to stuff them with experimental organs of dubious origin.
+# Roles / role types
+abductor-role-name = Abductor
 abductor-victim-role-name = Abductee
-abductor-victim-role-name-freeagent = Abductee (Free Agent)
-abductors-ghost-role-rules = You are an [color=red][bold]Abductor[/bold][/color].
+abductor-victim-role-name-freeagent = Abductee
+
+# Ghost roles
+abductor-lone-ghost-role-name = Lone Abductor
+abductor-lone-ghost-role-desc = Your ship has stranded near the station. Choose a target, abduct it and return it to the ship for experiments.
+abductor-scientist-ghost-role-name = Abductor Scientist
+abductor-scientist-ghost-role-desc = You are an abductor scientist. Your mission - find a suitable victim, grab them with the pad and experiment.
+abductor-agent-ghost-role-name = Abductor Agent
+abductor-agent-ghost-role-desc = You are an abductor agent. Your mission - protect the scientist and help capture targets.
+abductors-ghost-role-rules = You are a ghost role antagonist. Do not grief, and follow the server rules.
+
+# Briefings
+abductor-role-greeting = You are an abductor! Work together with your team to abduct, experiment and return crew members. Don't forget to return your subjects safe and sound (mostly).
+abductor-victim-role-greeting = You have been abducted! Aliens have done something to you and dumped you back on the station. Your objective is on your character. Good luck.
 
 # Antag objectives
-roles-antag-abductor-objective = Kidnap station crew and perform your experiments on them!
-roles-antag-abductor-victim = You have been changed by the Mothership. Survive your ordeal, return to the station, and tell the crew the truth.
+roles-antag-abductor-objective = Abduct crew members and experiment on them.
+roles-antag-abductor-victim = Complete your abductor-given objective.
 
-# Antag briefings (game rules)
-abductor-role-greeting = You are a professional combat scientist of a high-tech race. Your task is to abduct humans, conduct experiments on them, and return them alive for the purity of the experiment. It is not in your interest to destroy the station, kill, or assist the crew.
-abductor-victim-role-greeting = You have seen things you shouldn't have. The world must know the truth.
+# Subtypes
+role-subtype-abductor = Abductor Team
+role-subtype-abductor-victim = Abductee
 
-# Mind role subtypes
-role-subtype-abductor = Abductor
-role-subtype-abductor-victim = Abducted
+# Objective condition
+objective-condition-abduct-title = Abduct targets
+objective-condition-abduct-description = Abduct {$count} crew members. They must stand on the alien pad when you press "Attract".
 
-# Objectives
-objective-issuer-abductors = [color=#FD0098]Mothership[/color]
-objective-issuer-voices = [color=#FD0098]The Voices[/color]
-objective-condition-abduct-title = Abduct {$count} person.
-objective-condition-abduct-description = (use the Gizmo on a subdued victim, then use the Gizmo on the abductor console and select the attract action), then replace their heart with one of the glands, put them in the experimenter, and press complete experiment.
+objective-issuer-abductors = Abductors
+
+# Console UI
+abductor-ui-pad-found = Alien pad found.
+abductor-ui-pad-not-found = Alien pad not found.
+abductor-ui-target-none = No target.
+abductor-ui-target-found = Target: {$target}
+abductor-ui-experimentator-connected = Experimentator connected.
+abductor-ui-experimentator-not-found = Experimentator not found. Keep subject away from experimentator to avoid resetting.
+abductor-ui-victim-none = Experimentator is empty.
+abductor-ui-victim-found = Subject on experimentator: {$victim}
+abductor-ui-armor-plug-in = Plug the vest into the console to control it.
+abductors-ui-lock-armor = Lock Armor
+abductors-ui-unlock-armor = Unlock Armor
+
+# Gizmo / vest popups
+abductors-ui-gizmo-transferred = Target marked. Coordinates sent to the observation console.
+abductors-ui-vest-linked = Vest linked to this console.

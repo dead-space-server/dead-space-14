@@ -8,34 +8,19 @@
   },
   "states": [
     {
-      "name": "egg"
-    },
-    {
-      "name": "emp"
-    },
-    {
       "name": "gland"
     },
     {
       "name": "health"
     },
     {
-      "name": "mindshock"
-    },
-    {
-      "name": "slime"
-    },
-    {
-      "name": "spider"
-    },
-    {
-      "name": "vent"
-    },
-    {
-      "name": "viral"
+      "name": "emp"
     },
     {
       "name": "species"
+    },
+    {
+      "name": "mindshock"
     }
   ]
 }
