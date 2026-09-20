@@ -86,8 +86,10 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
 
     // arbitrary random number to give late joining some mild interest.
     public const float LateJoinRandomChance = 0.5f;
-    private const string SleeperAgentsRule = "SleeperAgents"; // DS14
+    // DS14-start
+    private const string SleeperAgentsRule = "SleeperAgents";
     private const string ChemicalsChangelingType = "Chemicals";
+    // DS14-end
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -845,10 +847,12 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
             Dirty(player, blobCarrier);
         }
 
+        // DS14-start
         if (_role.MindHasRole<ChangelingRoleComponent>(mindId))
         {
             _satiation.RemoveSatiationType(player, ChemicalsChangelingType);
         }
+        // DS14-end
 
         HashSet<EntityUid>? objectivesBeforeAssignment = null;
         if (TryComp<AntagRollbackTrackerComponent>(player, out var rollback))
