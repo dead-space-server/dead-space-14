@@ -183,9 +183,9 @@
 - type: listing
   id: UplinkEswordDoubleAgents
   name: uplink-esword-double-name
-  description: uplink-esword-double-desc
+  description: Воскрес и разнёс паблик. Только один к покупке.
   icon: { sprite: /Textures/Objects/Weapons/Melee/e_sword_double.rsi, state: icon }
-  productEntity: BriefcaseWeaponESwordDoubleFilled
+  productEntity: EnergySwordDouble
   cost:
     Telecrystal: 20
   categories:
