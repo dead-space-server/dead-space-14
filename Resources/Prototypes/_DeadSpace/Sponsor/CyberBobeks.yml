@@ -2,8 +2,8 @@
 - type: entity
   parent: ClothingBackpack
   id: ClothingBackpackCyberBobeks
-  name: сумка ордена
-  description: Специализорованная сумка истинных последователей Ордена.
+  name: тактическая сумка Syn.V // Mod.7
+  description: На вид крайне вместительная и довольно модная сумка... Там точно нет гранат?...
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -26,10 +26,8 @@
     - id: telescopicBatonCyberBobeks
     - id: HyposprayCyberBobeks
     - id: ClothingNeckCloakCyberBobeks
-    - id: ClothingNeckCloakCyberBobeks
     - id: MedkitAdvancedFilled
     - id: DoubleEmergencyOxygenTankCyberBobeks
-    - id: PlushieCyberBobeks
     - id: PaperCyberBobeks
     - id: ClothingUniformJumpsuitCyberBobeks
     - id: ClothingHeadHatBeretCyberBobeks
@@ -44,6 +42,7 @@
     - id: ClothingOuterVestCyberBobeks
     - id: HolofanProjectorCyberBobeks
     - id: GasAnalyzerCyberBobeks
+    - id: AnomalyScannerCyberBobeks
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -51,8 +50,8 @@
 - type: entity
   parent: ClothingOuterHardsuitSecurity
   id: ClothingOuterHardsuitCyberBobeks
-  name: скафандр отступника
-  description: Мощный скафандр, созданный по единому стандарту всех орденов, способный выдерживать экстремальные условия. Скафандр символизирует силу и стойкость членов Ордена Эраван. Придание Темной стороны.
+  name: скафандр Syn.V // Gen.14-1
+  description: Скафандр, больше похожий на какой-то высокотехнологичный костюм от биоугроз, в прочем, мир этого заслуживает...
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -65,9 +64,6 @@
     size: Huge
   - type: HardsuitIdentification
     nonlethal: true
-  - type: HideLayerClothing
-    clothingSlots: 
-    - belt
   - type: Armor
     modifiers:
       coefficients:
@@ -91,8 +87,8 @@
   parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuitCyberBobeks
   categories: [ HideSpawnMenu ]
-  name: шлем отступника
-  description: Общепризнанный шлем членов Ордена Эраван. При детальном осмотре становится понятно, что визор шлема сделан из необычного материала и возможно, пропитан запретными знаниями, способствующим вызывать страх и авторитет к владельцу. 
+  name: шлем Syn.V // Gen.14-2
+  description: Шлем от одноименного скафандра, с ярко-красным светящимся визором. Кажется, что носитель шлема смотрит на вас с призрением.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/CyberBobeks/helmet.rsi
@@ -120,6 +116,7 @@
     - FacialHair
     clothingSlots:
     - ears
+    - mask
     bodyLayers:
     - Head
   - type: Tag
@@ -129,8 +126,8 @@
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitCyberBobeks
-  name: униформа mil.FEAR // gen.1
-  description: Я бы с тобой погулял, но у меня слишком много дел. Если бы я пошёл, что бы я надел тогда?
+  name: униформа Syn.V
+  description: На первый взгляд стандартная военная униформа, однако, что-то в ней всё таки смущает.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -144,8 +141,8 @@
 - type: entity
   parent: ClothingHeadHatBeretPvrsifvlAlt2
   id: ClothingHeadHatBeretCyberBobeks
-  name: фирменный берет
-  description: Берет колониальной морской пехоты. Выглядит достойно, отражает гордый статус специалиста по матерям.
+  name: берет Syn.V
+  description: Обычный берет, разве что на нём присутствуют странные пятна, похожие на кровь, а также бирка "000".
   categories: [ HideSpawnMenu ]
   components:
   - type: Tag
@@ -155,8 +152,8 @@
 - type: entity
   parent: ClothingHandsGlovessastr
   id: ClothingHandsGlovesCyberBobeks
-  name: перчатки отступника
-  description: Перчатки из особой ткани, усиленные для боевых ситуаций. Особые полоски символизируют принадлежность к Ордену Эраван.
+  name: перчатки Syn.V // Gen.7
+  description: Перчатки, созданные по особой ранее не известной технологии, явно усиленные для боевых и иных нестандартных ситуаций.
   categories: [ HideSpawnMenu ]
   components:
   - type: Tag
@@ -164,10 +161,10 @@
 
 # Magboots
 - type: entity
-  parent: ClothingHandsGlovessastr
+  parent: ClothingShoesBootsMagsastr
   id: ClothingShoesBootsMagCyberBobeks
-  name: магнитные сапоги отступника
-  description: Усовершенствованные ботинки членов Ордена, способные выдерживать любые условия.
+  name: магнитные сапоги Syn.V
+  description: Высококачественные магнитные сапоги, которыми можно кого-нибудь прибить...
   categories: [ HideSpawnMenu ]
   components:
   - type: Tag
@@ -180,8 +177,8 @@
 - type: entity
   parent: ClothingMaskGasSecurity
   id: ClothingMaskCyberBobeks
-  name: маска отступника
-  description: Подозрительная маска, сделанная на особом станке из весьма загадочных материалов.
+  name: противогаз Syn.V // Mod.1
+  description: Модернизированный противогаз, явно сделанный с акцентом не дышать с челядью одним воздухом.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -195,8 +192,8 @@
 - type: entity
   parent: ClothingHeadset
   id: ClothingHeadsetCyberBobeks
-  name: полноразмерная гарнитура отступника
-  description: Наличие гарнитуры с символикой редкость для Ордена, но вы все равно не понимаете как её сделали.
+  name: полноразмерная гарнитура Syn.V // Gen.2
+  description: Гарнитура, крайне похожая на одну из ревизий "Синдиката", однако, вместо стандартного знака Корпорации на гарнитуре красуется темнокрасная буква "V". 
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -214,8 +211,8 @@
 - type: entity
   parent: JetpackVoidFilledPvrsifvlAlt2
   id: JetpackVoidFilleddCyberBobeks
-  name: подушка отступника
-  description: Между перерывами всегда хочется отдохнуть... Хр-ми-ми.
+  name: джетпак Syn.V-H // Gen.1
+  description: Первоклассный джетпак, сделанный с акцентом на мобильность и повышенное время эксплуатации в условиях мёртвого и холодного космоса.
   categories: [ HideSpawnMenu ]
   components:
   - type: Tag
@@ -224,21 +221,16 @@
 # Defibrillator
 - type: entity
   parent: DefibrillatorCompactPvrsifvlAlt2
-  name: портативный дефибриллятор ордена
-  description: Высокотехнологичный портативный дефибриллятор, выделяется особыми цветами, очень редко встречается у некоторых членов Ордена, но все же имеет смысл.
+  name: портативный дефибриллятор Syn.V
+  description: Высокотехнологичный портативный дефибриллятор, крайне похожий на тот, что используют товарищи из "Синдиката". На правом боку дефибрилятора красуется серийный номер "Vel-000-01".
   id: DefibrillatorCyberBobeks
   categories: [ HideSpawnMenu ]
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Sponsor/CyberBobeks/defibsmall.rsi
-  - type: Item
-    sprite: _DeadSpace/Sponsor/CyberBobeks/defibsmall.rsi
 
 # Hypo
 - type: entity
-  name: тактический гипоспрей ордена
+  name: тактический гипоспрей Syn.V // Light
   parent: CombatHypoRedSword
-  description: Особая разработка членов Ордена Эраван, весьма неплохого качества, но в малых количествах.
+  description: Облегчённая версия боевого гипоспрея с некоторыми модификациями для интеграции со скафандром с целью упрощения ввода препаратов.
   categories: [ HideSpawnMenu ]
   id: HyposprayCyberBobeks
   components:
@@ -253,8 +245,8 @@
 - type: entity
   parent: ClothingNeckBase
   id: ClothingNeckCloakCyberBobeks
-  name: плащ отступника
-  description: Мрачный плащ, сотканный из непонятной ткани, наделяет владельца таинственностью. В нем скрываются тени тьмы и мощь Темной стороны.
+  name: мантия Syn.V
+  description: Тёмная мантия, покрытая следами крови и пепла. Снизу мантия была явно опалена огнём.
   categories: [ HideSpawnMenu ]
   components:
     - type: Sprite
@@ -287,8 +279,8 @@
 - type: entity
   parent: ClothingBeltMilitaryWebbingPvrsifvlAlt2
   id: ClothingWebbingCyberBobeks
-  name: рпс отступника
-  description: Ременно-плечевая система, созданная по новым стандартам и совсем не выделяющаяся.
+  name: рпс Syn.V // Mod.1
+  description: Ременно-плечевая система, кажется, модернизированная неизвестным металлом.
   categories: [ HideSpawnMenu ]
   components:
   - type: Storage
@@ -301,14 +293,14 @@
       - id: WelderExperimentalCyberBobeks
       - id: MultitoolCyberBobeks
       - id: RCDCyberBobeks
-      - id: AnomalyScannerCyberBobeks
+      - id: HandHeldMassScannerCyberBobeks
   
 # EYES
 - type: entity
   parent: ClothingEyesHudMedicalPvrsifvlAlt2
   id: ClothingEyesHudCyberBobeks
-  name: визор отступника
-  description: Уникальный визор, придуманный и созданный разными членами Орденов. В моментах кажется что визор как-то действует на вас.
+  name: визор Syn.V // Gen.F.1
+  description: Странный визор, на котором присутствуют странные порты для внешнего подключения устройств.
   categories: [ HideSpawnMenu ]
   components:
   - type: Tag
@@ -318,8 +310,8 @@
 - type: entity
   parent: BaseMedicalPDA
   id: PDACyberBobeks
-  name: тактический планшет mil.FORWARD // gen.1
-  description: Gucci, Louis, Александра Прада. Всё, что на тебе, скажи — «Спасибо, папа». Нет, man, это не твоя награда. Ты ничего не сделал — тебе идёт расплата.
+  name: тактический планшет Syn.V // Mod.1
+  description: Странный планшет, похожий на модернизированный КПК. На обратной стороне планшета имеется маленькая выгравированная цифра "747".
   categories: [ HideSpawnMenu ]
   components:
   - type: Icon
@@ -348,8 +340,8 @@
   parent: ToySword
   id: telescopicBatonCyberBobeks
   categories: [ HideSpawnMenu ]
-  name: белый меч отступника
-  description: Именной меч члена Ордена Эраван. В связи с непредвиденными последствиями меч работает слегка по другому. Белый цвет самого меча вызывает у вас неловкость.
+  name: тактический меч Syn.V
+  description: Лазерный меч с гравировкой "Vel-747" на рукоятке. Кажется, меч был слегка модернизирован, или торчащие провода из рукоятки это новая мода.
   components:
   - type: EnergySword
     activatedColor: white
@@ -382,8 +374,8 @@
 - type: entity
   parent: DoubleEmergencyOxygenTank
   id: DoubleEmergencyOxygenTankCyberBobeks
-  name: двойной кислородный баллон отступника
-  description: В связи с тем, что большие баллоны неудобны, члены Ордена носят карманный вариант балона, созданные по заказу.
+  name: двойной кислородный баллон Syn.V // Gen.1
+  description: Стандартный двойной баллон, интегрируемый со скафандром Syn.V.
   categories: [ HideSpawnMenu ] 
   components:
   - type: Sprite
@@ -409,8 +401,8 @@
   parent: WeaponCrushernon_stop_smetana
   categories: [ HideSpawnMenu ]
   id: WeaponCrusherCyberBobeks
-  name: протокинетическое копьё mil.FRIDAY // gen.1 
-  description: При лунном свете я ощущал капли дождя и теплый ветер обнял меня, и я так рад что тебя встретил — вокруг лишь злые голоса. Но ты мне веришь — отважно веришь до конца, веришь в меня, эй.
+  name: протокеническая катана Syn.V
+  description: Катана, с модификацией для облегчённого уничтожения больших объектов. Лезвие катаны переливается красивой радужной плёнкой...
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/CyberBobeks/crusher.rsi
@@ -428,8 +420,8 @@
   parent: WeaponProtoKineticAcceleratorPvrsifvlAlt2
   id: WeaponProtoKineticAcceleratorCyberBobeks
   categories: [ HideSpawnMenu ]
-  name: протокинетическое ружьё mil.PEACEKEEPER // gen.1
-  description: Модифицированное протокинетическое ружьё с рычажным механизмом. Распространяет демократию среди дикой фауны космоса.
+  name: протокинетическое ружьё Syn.V // Gen.1
+  description: Модифицированное протокинетическое ружьё с рычажным механизмом. Помогает избавляться от биомусора.
   components:
   - type: Gun
     fireRate: 0.5
@@ -466,8 +458,8 @@
   parent: WeaponPistolCHIMPPvrsifvlAlt2
   categories: [ HideSpawnMenu ]
   id: WeaponPistolCHIMPCyberBobeks
-  name: эргономичный излучатель mil.RSh // gen.1
-  description: В крайней степени модифицированный экземпляр продвинутого прибора R&D М.А.Р.Т.Ы.Х., лишённый любой летальности несмотря на свой вызывающий облик, далеко опередивший оригинальный вид.
+  name: излучатель Syn.V // Gen.2
+  description: В крайней степени модифицированный экземпляр продвинутого прибора R&D М.А.Р.Т.Ы.Х, лишённый любой летальности несмотря на свой вызывающий облик, далеко опередивший оригинальный вид.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/chimp.rsi
@@ -478,8 +470,8 @@
 - type: entity
   parent: ClothingOuterVestPvrsifvlAlt2
   id: ClothingOuterVestCyberBobeks
-  name: тактический бронежилет mil.SLICK // gen.1
-  description: Бездна прям перед тобой. Шаг вперёд — попал в софтлок. Ты герой, но всё равно сфидишь.
+  name: тактический бронежилет Syn.V
+  description: Модифицированный бронежилет, который пережил уже многое...
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -493,8 +485,8 @@
 - type: entity
   parent: JawsOfLifeSpecialOperationsOfficer
   id: JawsOfLifeCyberBobeks
-  name: челюсти жизни mil.BREAK-IN // gen.1
-  description: So, what do you wanna do? What's your point of view?
+  name: челюсти жизни Syn.V // Gen.2
+  description: На первый взгляд обычные челюсти жизни, пока не замечаешь пару кровавых пятен на рабочей части устройства. Кажется, владельца лучше не задерживать на стойке...
   categories: [ HideSpawnMenu ]
   components:
   - type: MeleeWeapon
@@ -508,8 +500,8 @@
 - type: entity
   parent: PowerDrillPvrsifvlAlt2
   id: PowerDrillCyberBobeks
-  name: электродрель mil.PRIMARY // gen.1
-  description: There's a party, screw it, do you wanna go?
+  name: электродрель Syn.V
+  description: Владельцу точно можно доверить работу с ядерной боеголовкой.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -542,8 +534,8 @@
 - type: entity
   parent: WelderExperimentalPvrsifvlAlt2
   id: WelderExperimentalCyberBobeks
-  name: экспериментальный сварочный пистолет mil.HEAT // gen.1
-  description: A handshake with you, what's your point of view?
+  name: экспериментальный сварочный пистолет Syn.V-TEST // Gen.1
+  description: Модифицированный сварочный пистолет с гравировкой "ТЕСТ". А не еб*нёт?...
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -555,17 +547,16 @@
 - type: entity
   parent: Multitoolnon_stop_smetana
   id: MultitoolCyberBobeks
-  name: мультитул mil.PULSE // gen.1
-  description: I'm on top of you, I don't wanna go.
+  name: мультитул Syn.V // Gen.2
+  description: Устройство точно не занесёт вредоносный код в коносль управления блюспейс-артелерии.
   categories: [ HideSpawnMenu ]
-  components:
 
 # tools_gasanalyzer.rsi
 - type: entity
   parent: GasAnalyzerPvrsifvlAlt2
   id: GasAnalyzerCyberBobeks
-  name: газоанализатор mil.CAUTION // gen.1
-  description: But now you're gone and leaving nothing but a sign.
+  name: газоанализатор Syn.V
+  description: Устройство для просмотра забавных значений трития в атмосфере.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -578,8 +569,8 @@
 - type: entity
   parent: HolofanProjectorPvrsifvlAlt2
   id: HolofanProjectorCyberBobeks
-  name: атмос-проектор mil.BREACH // gen.1
-  description: Cause I really wanna stay at your housе.
+  name: атмос-проектор Syn.V // Gen.2
+  description: Проектор для защиты владельца от всякой нечести. Жаль что работает плохо...
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -588,12 +579,32 @@
   - type: LimitedHolosignProjector
     signProto: HoloFanPvrsifvlAlt2
 
+# tools_massscanner.rsi
+- type: entity
+  parent: HandHeldMassScannerPvrsifvlAlt2
+  id: HandHeldMassScannerCyberBobeks
+  name: сканер масс Syn.V
+  description: Когда-нибудь на нём появится место, куда можно свалить и где о тебе не вспомнят.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Item
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/tools_massscanner.rsi
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/tools_massscanner.rsi
+    state: icon
+    layers:
+    - state: icon
+    - state: scanner
+      shader: unshaded
+      visible: false
+      map: [ "enum.PowerDeviceVisualLayers.Powered" ]
+
 # tools_rcd.rci
 - type: entity
   parent: RCD
   id: RCDCyberBobeks
-  name: РСУ mil.PROTECTOR // gen.1
-  description: But you know how much you broke me apart. I'm done with you, I'm ignoring you. I don't wanna know.
+  name: РСУ Syn.V // Gen.1
+  description: Устройство на случай если закончились патроны. Жаль что заряды ограничены...
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -605,8 +616,8 @@
 - type: entity
   parent: AnomalyScannerPvrsifvlAlt2
   id: AnomalyScannerCyberBobeks
-  name: сканер аномалий mil.FORECAST // gen.1
-  description: Another evening, I'll be sitting reading in-between your lines.
+  name: сканер аномалий Syn.V
+  description: Сканер аномалий, но лучше сразу стрелять с М.А.Р.Т.Ы.Х'а, авось прокатит...
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
