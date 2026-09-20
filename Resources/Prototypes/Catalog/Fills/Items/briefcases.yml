@@ -109,3 +109,16 @@
         - id: WeaponLauncherChinaLake
         - id: GrenadeFrag
           amount: 2
+# ds14-start
+- type: entity
+  id: BriefcaseWeaponESwordDoubleFilled
+  parent: BriefcaseWeaponSmall
+  name: secure energy double sword case
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: EnergySwordDouble
+        - id: UnitologyWeaponRetentionImplanter
+# ds14-end
