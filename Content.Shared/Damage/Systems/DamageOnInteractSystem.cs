@@ -10,6 +10,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Timing;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Stunnable;
+using Content.Shared.Humanoid;
 
 namespace Content.Shared.Damage.Systems;
 
@@ -42,6 +43,12 @@ public sealed class DamageOnInteractSystem : EntitySystem
     /// <param name="args">Contains the user that interacted with the entity</param>
     private void OnHandInteract(Entity<DamageOnInteractComponent> entity, ref InteractHandEvent args)
     {
+        // DS14-start
+        if (TryComp<HumanoidAppearanceComponent>(args.User, out var humanoid) &&
+            entity.Comp.SpeciesBlacklist.Contains(humanoid.Species))
+            return;
+        // DS14-end
+
         // Stop the interaction if the user attempts to interact with the object before the timer is finished
         if (_gameTiming.CurTime < entity.Comp.NextInteraction)
         {

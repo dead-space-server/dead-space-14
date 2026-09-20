@@ -18,6 +18,9 @@
   - type: NameIdentifier
     group: null
   - type: IdBind
+  - type: AutoImplant
+    implants:
+    - MindShieldImplant
   - type: Loadout
     prototypes:
       - CentComAvavaGear

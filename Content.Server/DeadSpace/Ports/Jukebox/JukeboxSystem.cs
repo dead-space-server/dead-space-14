@@ -18,12 +18,9 @@ public sealed class JukeboxSystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
     [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
     [Dependency] private readonly PvsOverrideSystem _pvsOverrideSystem = default!;
-
-    // DS14-start
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
-    // DS14-end
 
     private readonly List<Entity<WhiteJukeboxComponent>> _playingJukeboxes = new() { };
 
@@ -96,14 +93,12 @@ public sealed class JukeboxSystem : EntitySystem
     private void OnRepeatToggled(EntityUid uid, WhiteJukeboxComponent component, JukeboxRepeatToggled args)
     {
         component.Playing = args.NewState;
-        // DS14-start
         if (component.PlayingSongData is { } song)
         {
             var elapsed = Math.Max(0, (_timing.CurTime - song.StartedAt).TotalSeconds);
             song.EndsAt = args.NewState ? null : song.StartedAt + TimeSpan.FromSeconds(
                 (Math.Floor(elapsed / song.ActualSongLengthSeconds) + 1) * song.ActualSongLengthSeconds);
         }
-        // DS14-end
         Dirty(uid, component);
     }
 
@@ -137,8 +132,6 @@ public sealed class JukeboxSystem : EntitySystem
             _containerSystem.Insert(args.Used, component.TapeContainer);
         }
     }
-
-    // DS14-start
     internal void OnSongRequestPlay(JukeboxRequestSongPlay msg, EntitySessionEventArgs args)
     {
         if (msg.Jukebox is not { } netEntity || !TryGetEntity(netEntity, out var entity) ||
@@ -159,7 +152,16 @@ public sealed class JukeboxSystem : EntitySystem
         if (selected == null)
             return;
 
-        var duration = (float) _audio.GetAudioLength(new ResolvedPathSpecifier(path)).TotalSeconds;
+        float duration;
+        try
+        {
+            duration = (float) _audio.GetAudioLength(new ResolvedPathSpecifier(path)).TotalSeconds;
+        }
+        catch (Exception e)
+        {
+            Log.Warning($"Could not read jukebox song {path}: {e.Message}");
+            return;
+        }
         if (!float.IsFinite(duration) || duration <= 0f)
             return;
         jukebox.Playing = true;
@@ -174,9 +176,6 @@ public sealed class JukeboxSystem : EntitySystem
             _playingJukeboxes.Add((entity.Value, jukebox));
         Dirty(entity.Value, jukebox);
     }
-    // DS14-end
-
-    // DS14-start
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -200,5 +199,4 @@ public sealed class JukeboxSystem : EntitySystem
             }
         }
     }
-    // DS14-end
 }

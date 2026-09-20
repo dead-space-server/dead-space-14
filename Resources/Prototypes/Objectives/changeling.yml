@@ -104,6 +104,9 @@
         components:
         - JobRole # Our target has to be employed, obviously.
     - !type:DifferentDepartmentMindFilter # I love spawning as a scientist and having to escape as a scientist
+    - !type:BlacklistedJobsMindFilter
+      blacklist:
+      - AshWalker
   # DS14-end
 
 - type: entity

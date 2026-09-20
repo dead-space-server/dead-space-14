@@ -112,7 +112,7 @@
   parent: BaseSign
   id: SignNlogo6
   name: логотип nanotrasen 6
-  description: Часть 5.
+  description: Часть 6.
   components:
   - type: Sprite
     sprite: _DeadSpace/Structures/Wallmounts/signs.rsi

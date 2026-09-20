@@ -99,6 +99,10 @@
   copyEquipment: null
   copyInternalStorage: false
   copyImplants: false
+  # DS14-start
+  eventComponents:
+  - ChangelingIdentity
+  # DS14-end
 
 # for paradox clones
 - type: cloningSettings
