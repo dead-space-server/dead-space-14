@@ -5,7 +5,7 @@ meta:
   forkId: GoobLRP
   forkVersion: 6df1fc8f5e51e2512a5da522d8cc6fac09fe09ea
   time: 01/18/2026 05:20:14
-  entityCount: 253
+  entityCount: 242
 maps:
 - 1
 grids:
@@ -224,30 +224,6 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 4.5,0.5
-      parent: 2
-- proto: BasicCyberneticEyes
-  entities:
-  - uid: 16
-    components:
-    - type: Transform
-      pos: 2.4815433,0.0026143193
-      parent: 2
-  - uid: 17
-    components:
-    - type: Transform
-      pos: 2.4815433,0.0026143193
-      parent: 2
-  - uid: 18
-    components:
-    - type: Transform
-      pos: 2.4815433,0.0026143193
-      parent: 2
-- proto: Biofabricator
-  entities:
-  - uid: 19
-    components:
-    - type: Transform
-      pos: 2.5,2.5
       parent: 2
 - proto: CableApcExtension
   entities:
@@ -910,30 +886,6 @@ entities:
     - type: Transform
       pos: 2.336482,-0.39490277
       parent: 2
-- proto: MedicalBiofabricator
-  entities:
-  - uid: 136
-    components:
-    - type: Transform
-      pos: -1.5,-0.5
-      parent: 2
-- proto: MedicalCyberneticEyes
-  entities:
-  - uid: 137
-    components:
-    - type: Transform
-      pos: 2.4815433,0.5442808
-      parent: 2
-  - uid: 138
-    components:
-    - type: Transform
-      pos: 2.4815433,0.5442808
-      parent: 2
-  - uid: 139
-    components:
-    - type: Transform
-      pos: 2.4815433,0.5442808
-      parent: 2
 - proto: MedkitBruteFilled
   entities:
   - uid: 140
@@ -999,13 +951,6 @@ entities:
         actions: !type:Container
           ents:
           - 12
-- proto: PlushieAbductor
-  entities:
-  - uid: 145
-    components:
-    - type: Transform
-      pos: 1.15,5.25
-      parent: 2
 - proto: Poweredlight
   entities:
   - uid: 146
@@ -1032,18 +977,6 @@ entities:
     components:
     - type: Transform
       pos: 0.5,6.5
-      parent: 2
-- proto: SecurityCyberneticEyes
-  entities:
-  - uid: 150
-    components:
-    - type: Transform
-      pos: 2.7046454,0.30507672
-      parent: 2
-  - uid: 151
-    components:
-    - type: Transform
-      pos: 2.7046454,0.27382672
       parent: 2
 - proto: SMESBasic
   entities:

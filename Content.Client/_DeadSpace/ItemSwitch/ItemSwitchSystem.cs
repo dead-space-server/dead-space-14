@@ -1,3 +1,4 @@
+// TEMP FOR EVENT DONT FCKNG TOUCH
 using Content.Shared.DeadSpace.ItemSwitch;
 using Content.Shared.DeadSpace.ItemSwitch.Components;
 using Robust.Client.GameObjects;

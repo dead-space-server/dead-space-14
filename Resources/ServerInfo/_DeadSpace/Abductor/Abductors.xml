@@ -64,8 +64,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
   <Box>
     <GuideEntityEmbed Entity="Silencer"/>
-    <GuideEntityEmbed Entity="EnergyScalpelAbductor"/>
-    <GuideEntityEmbed Entity="CrowbarAbductor"/>
+    <GuideEntityEmbed Entity="WeaponDecloner"/>
   </Box>
 
   Abductors have access to more advanced tools than normal surgeons or engineers. Their surgical tools are faster than advanced surgical tools, and from their normal tools, the multitool's alternative mode is able to be used to hijack doors.

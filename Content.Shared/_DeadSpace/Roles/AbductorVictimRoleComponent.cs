@@ -1,3 +1,4 @@
+// TEMP FOR EVENT DONT FCKNG TOUCH
 using Content.Shared.Roles.Components;
 
 namespace Content.Shared.DeadSpace.Roles;

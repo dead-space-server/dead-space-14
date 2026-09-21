@@ -100,6 +100,7 @@
 
 - type: entity
   id: ImplantDubiousBase
+  suffix: ИВЕНТ Ivan_Kuvalda
   parent: BaseSubdermalImplant
   name: doubtful gland
   categories: [ HideSpawnMenu ]
@@ -136,6 +137,7 @@
 
 - type: entity
   id: ImplantDubiousHealth
+  suffix: ИВЕНТ Ivan_Kuvalda
   parent: ImplantDubiousBase
   components:
   - type: Sprite
@@ -157,6 +159,7 @@
 
 - type: entity
   id: ImplantDubiousAA
+  suffix: ИВЕНТ Ivan_Kuvalda
   parent: ImplantDubiousBase
   components:
   - type: Sprite
@@ -172,6 +175,7 @@
 
 - type: entity
   id: ImplantDubiousShock
+  suffix: ИВЕНТ Ivan_Kuvalda
   parent: ImplantDubiousBase
   components:
   - type: Sprite
@@ -189,6 +193,7 @@
 
 - type: entity
   id: ImplantDubiousInvisible
+  suffix: ИВЕНТ Ivan_Kuvalda
   parent: ImplantDubiousBase
   components:
   - type: Sprite
@@ -204,6 +209,7 @@
 
 - type: entity
   id: ImplantDubiousArtifact
+  suffix: ИВЕНТ Ivan_Kuvalda
   parent: ImplantDubiousBase
   components:
   - type: Sprite
@@ -214,6 +220,7 @@
 
 - type: entity
   id: ImplantDubiousRepairable
+  suffix: ИВЕНТ Ivan_Kuvalda
   parent: ImplantDubiousBase
   components:
   - type: Sprite
@@ -235,6 +242,7 @@
 
 - type: entity
   id: ImplanterDubiousHealth
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: doubtful health implanter
   description: A disposable syringe loaded with a health gland. Pick your test subject wisely.
   parent: BaseImplantOnlyImplanter
@@ -244,6 +252,7 @@
 
 - type: entity
   id: ImplanterDubiousAA
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: doubtful access implanter
   description: A disposable syringe loaded with an access gland. Pick your test subject wisely.
   parent: BaseImplantOnlyImplanter
@@ -253,6 +262,7 @@
 
 - type: entity
   id: ImplanterDubiousShock
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: doubtful shock implanter
   description: A disposable syringe loaded with a shock gland. Pick your test subject wisely.
   parent: BaseImplantOnlyImplanter
@@ -262,6 +272,7 @@
 
 - type: entity
   id: ImplanterDubiousInvisible
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: doubtful invisibility implanter
   description: A disposable syringe loaded with an invisibility gland. Pick your test subject wisely.
   parent: BaseImplantOnlyImplanter
@@ -271,6 +282,7 @@
 
 - type: entity
   id: ImplanterDubiousArtifact
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: doubtful artifact implanter
   description: A disposable syringe loaded with an artifact gland. Pick your test subject wisely.
   parent: BaseImplantOnlyImplanter
@@ -280,6 +292,7 @@
 
 - type: entity
   id: ImplanterDubiousRepairable
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: doubtful repair implanter
   description: A disposable syringe loaded with a repair gland. Pick your test subject wisely.
   parent: BaseImplantOnlyImplanter
@@ -288,37 +301,38 @@
     implant: ImplantDubiousRepairable
 
 # ============================================================================
-# DUBIOUS IMPLANTER SPAWNER
+# DUBIOUS GLAND TABLE (real gland drops)
 # ============================================================================
 
 - type: entityTable
-  id: DubiousImplanterTable
+  id: DubiousGlandTable
   table: !type:GroupSelector
     children:
     # Not-so Annoying - 50% chance
     - !type:GroupSelector
       weight: 50
       children:
-      - id: ImplanterDubiousHealth
-      - id: ImplanterDubiousInvisible
-      - id: ImplanterDubiousArtifact
-      - id: ImplanterDubiousRepairable
+      - id: ImplantDubiousHealth
+      - id: ImplantDubiousInvisible
+      - id: ImplantDubiousArtifact
+      - id: ImplantDubiousRepairable
 
     # Annoying/Disruptive - 35% chance
     - !type:GroupSelector
       weight: 35
       children:
-      - id: ImplanterDubiousShock
+      - id: ImplantDubiousShock
 
     # Very Disruptive - 15% chance
     - !type:GroupSelector
       weight: 15
       children:
-      - id: ImplanterDubiousAA
+      - id: ImplantDubiousAA
 
 - type: entity
-  name: Doubtful Implanter Spawner
-  id: DubiousImplanterSpawner
+  name: Doubtful Organ Spawner
+  id: DubiousOrganSpawner
+  suffix: ИВЕНТ Ivan_Kuvalda
   parent: MarkerBase
   components:
   - type: Sprite
@@ -328,7 +342,7 @@
         state: gland
   - type: EntityTableSpawner
     table: !type:NestedSelector
-      tableId: DubiousImplanterTable
+      tableId: DubiousGlandTable
 # ============================================================================
 # SPECIES
 # ============================================================================
@@ -478,6 +492,7 @@
   name: Urist McAlien
   parent: BaseMobSpeciesOrganic
   id: MobAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
   components:
   - type: HumanoidAppearance
     species: Abductor
@@ -504,6 +519,7 @@
 - type: entity
   parent: BaseSpeciesDummy
   id: MobAbductorDummy
+  suffix: ИВЕНТ Ivan_Kuvalda
   categories: [ HideSpawnMenu ]
   components:
   - type: HumanoidAppearance
@@ -516,6 +532,7 @@
 - type: entity
   parent: MobAbductor
   id: MobAbductorAntag
+  suffix: ИВЕНТ Ivan_Kuvalda
   abstract: true
   components:
   - type: Abductor
@@ -546,6 +563,7 @@
   name: lone abductor
   parent: MobAbductorAntag
   id: MobLoneAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
   components:
   - type: GhostRole
     name: abductor-lone-ghost-role-name
@@ -561,6 +579,7 @@
   name: abductor scientist
   parent: MobAbductorAntag
   id: MobAbductorScientist
+  suffix: ИВЕНТ Ivan_Kuvalda
   components:
   - type: GhostRole
     name: abductor-scientist-ghost-role-name
@@ -576,6 +595,7 @@
   name: abductor agent
   parent: MobAbductorAntag
   id: MobAbductorAgent
+  suffix: ИВЕНТ Ivan_Kuvalda
   components:
   - type: GhostRole
     name: abductor-agent-ghost-role-name
@@ -652,6 +672,7 @@
 - type: entity
   name: lone abductor spawner
   id: SpawnPointLoneAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
   parent: MarkerBase
   components:
   - type: SpawnPoint
@@ -666,6 +687,7 @@
   categories: [ HideSpawnMenu ]
   parent: BaseAntagSpawner
   id: LoneAbductorSpawner
+  suffix: ИВЕНТ Ivan_Kuvalda
   components:
   - type: GhostRole
     name: abductor-lone-ghost-role-name
@@ -685,6 +707,7 @@
 - type: entity
   name: abductor agent spawner
   id: SpawnPointAbductorAgent
+  suffix: ИВЕНТ Ivan_Kuvalda
   parent: MarkerBase
   components:
   - type: SpawnPoint
@@ -699,6 +722,7 @@
   categories: [ HideSpawnMenu ]
   parent: BaseAntagSpawner
   id: AbductorAgentSpawner
+  suffix: ИВЕНТ Ivan_Kuvalda
   components:
   - type: GhostRole
     name: abductor-agent-ghost-role-name
@@ -718,6 +742,7 @@
 - type: entity
   name: abductor scientist spawner
   id: SpawnPointAbductorScientist
+  suffix: ИВЕНТ Ivan_Kuvalda
   parent: MarkerBase
   components:
   - type: SpawnPoint
@@ -732,6 +757,7 @@
   categories: [ HideSpawnMenu ]
   parent: BaseAntagSpawner
   id: AbductorScientistSpawner
+  suffix: ИВЕНТ Ivan_Kuvalda
   components:
   - type: GhostRole
     name: abductor-scientist-ghost-role-name
@@ -755,6 +781,7 @@
 # Base bullet for the decloner bolt (ported from Goob BaseBulletStarlight).
 - type: entity
   id: BaseBulletStarlight
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: BaseBullet
   description: If you can see this you're probably dead!
   abstract: true
@@ -803,6 +830,7 @@
 
 - type: entity
   id: BulletDeclone
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: decloner bolt
   parent: BaseBulletStarlight
   categories: [ HideSpawnMenu ]
@@ -822,6 +850,7 @@
 - type: entity
   parent: [BaseWeaponBatterySmall, BaseMajorContraband]
   id: WeaponAlien
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: alien pistol
   description: Is this a war crime? Probably.
   components:
@@ -851,6 +880,7 @@
 - type: entity
   parent: [BaseWeaponBattery, BaseGunWieldable, BaseMajorContraband]
   id: WeaponDecloner
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: decloner
   description: Is this a war crime? Absolutely.
   components:
@@ -883,6 +913,7 @@
   name: silencer
   parent: [ BaseItem, BaseMajorContraband ]
   id: Silencer
+  suffix: ИВЕНТ Ivan_Kuvalda
   description: Tool for silencing humans.
   components:
   - type: Item
@@ -914,6 +945,7 @@
   name: wonderprod
   parent: [BaseItem, BaseMajorContraband]
   id: Wonderprod
+  suffix: ИВЕНТ Ivan_Kuvalda
   description: Universal tool of the abductor agent.
   components:
   - type: Item
@@ -1009,6 +1041,7 @@
 
 - type: entity
   id: AbductorGizmo
+  suffix: ИВЕНТ Ivan_Kuvalda
   parent: [BaseItem, BaseMajorContraband]
   name: gizmo
   description: A device that inserts a nano tracker, which can be used to target a teleportation beam.
@@ -1035,6 +1068,7 @@
 - type: entity
   parent: [ UnsensoredClothingUniformBase, BaseMajorContraband ]
   id: ClothingUniformJumpsuitAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: abductor uniform
   components:
   - type: Sprite
@@ -1045,6 +1079,7 @@
 - type: entity
   parent: [ ClothingBackpack, BaseMajorContraband ]
   id: ClothingBackpackAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: alien backpack
   description: An ordinary backpack woven from a durable fiber.
   components:
@@ -1056,6 +1091,7 @@
 - type: entity
   parent: [ ClothingBackpackDuffel, BaseMajorContraband ]
   id: ClothingBackpackDuffelAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: alien duffel bag
   description: An ordinary duffel bag woven from a durable fiber.
   components:
@@ -1070,6 +1106,7 @@
 - type: entity
   parent: [ ClothingHeadsetAlt, BaseMajorContraband ]
   id: ClothingHeadsetAltAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: abductor over-ear headset
   components:
   - type: ContainerFill
@@ -1084,6 +1121,7 @@
 - type: entity
   parent: [ ClothingHeadHelmetBase, BaseMajorContraband ]
   id: ClothingHeadHelmetAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: alien helmet
   description: Zeep Glorp!
   components:
@@ -1113,6 +1151,7 @@
 - type: entity
   parent: [ ClothingOuterBase, AllowSuitStorageClothing, BaseMajorContraband ]
   id: ClothingOuterArmorAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: agent vest
   components:
   - type: Sprite
@@ -1199,6 +1238,7 @@
 - type: entity
   parent: [ ClothingOuterStorageBase, AllowSuitStorageClothing, BaseMajorContraband]
   id: ClothingOuterCoatAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: alien lab coat
   description: A suit of alien origin that protects from various injuries, as well as from chemical spills.
   components:
@@ -1235,6 +1275,7 @@
 - type: entity
   parent: [ ClothingBeltUtility, BaseMajorContraband ]
   id: ClothingAbductorBelt
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: alien belt
   description: Can hold various OUR things. # I was going to change this, but it's funny so it stays.
   components:
@@ -1247,8 +1288,8 @@
 
 - type: entity
   id: ClothingAbductorBeltFilled
+  suffix: ИВЕНТ Ivan_Kuvalda, Filled
   parent: ClothingAbductorBelt
-  suffix: Filled
   components:
   - type: StorageFill
     contents:
@@ -1262,6 +1303,7 @@
 - type: entity
   parent: ClothingBackpackDuffelAbductor
   id: ClothingBackpackDuffelAbductorFilled
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: alien surgery duffel bag
   description: An ordinary surgical duffel bag woven from a durable fiber.
   components:
@@ -1278,6 +1320,7 @@
 - type: entity
   parent: BaseStructure
   id: AbductorExperimentator
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: experimentator
   description: A device that analyzes the result of the experiment and resets the subject to the place from where they were taken.
   components:
@@ -1309,6 +1352,7 @@
 
 - type: entity
   id: AbductorAlienPad
+  suffix: ИВЕНТ Ivan_Kuvalda
   parent: [ BaseMachinePowered, BaseStructure ] # BaseMachinePowered only: ConstructibleMachine is Goob-only
   name: alien pad
   description: Beam in the inferior lifeforms and dig in.
@@ -1345,6 +1389,7 @@
 - type: entity
   parent: BaseComputer
   id: AbductorConsole
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: abductor console
   description: A computer that is used for spying on the station.
   components:
@@ -1370,6 +1415,7 @@
 - type: entity
   parent: BaseComputer
   id: AbductorHumanObservationConsole
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: human observation console
   description: Use this to set teleporter destination or retrieve people marked by scientist tools. Also used for buying replacement gear and linking the agent's vest.
   components:
@@ -1397,10 +1443,10 @@
   - Incorporeal
   - BaseMob
   id: AbductorHumanObservationConsoleEye
+  suffix: ИВЕНТ Ivan_Kuvalda, DO NOT MAP
   name: abductor eye
   description: The abductor's viewer.
   categories: [ HideSpawnMenu, DoNotMap ]
-  suffix: DO NOT MAP
   components:
   - type: NoFTL
   - type: WarpPoint
@@ -1420,6 +1466,7 @@
 
 - type: entity
   id: AbductorOperatingTable
+  suffix: ИВЕНТ Ivan_Kuvalda
   parent: OperatingTable
   name: abductor operating table
   components:
@@ -1433,6 +1480,7 @@
 
 - type: entity
   id: TableAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
   parent: TableBase
   name: alien table
   description: Literally the sturdiest thing you have ever seen. # Peak. No changes needed.
@@ -1447,8 +1495,8 @@
 
 - type: entity
   id: WallAbductorDiagonal
+  suffix: ИВЕНТ Ivan_Kuvalda, Diagonal
   name: shuttle wall
-  suffix: Diagonal
   description: Keeps the air in and the bloodthirsty salvagers out.
   placement:
     mode: SnapgridCenter
@@ -1507,8 +1555,8 @@
 - type: entity
   parent: BaseWall
   id: WallAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda, Reinforced, Exterior
   name: shuttle wall
-  suffix: Reinforced, Exterior
   description: Keeps the air in and the bloodthirsty salvagers out.
   components:
   - type: Damageable
@@ -1543,6 +1591,7 @@
 - type: entity
   parent: BaseAction
   id: ActionExitConsole
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Exit console
   description: Exit console.
   components:
@@ -1559,6 +1608,7 @@
 - type: entity
   parent: BaseAction
   id: ActionSendYourself
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Send yourself
   description: You need to FTL to the same map as the station to use this ability!
   components:
@@ -1579,6 +1629,7 @@
 - type: entity
   parent: BaseAction
   id: ActionReturnToShip
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: return
   description: return to the ship.
   components:
@@ -1598,6 +1649,7 @@
   abstract: true
   parent: BaseObjective
   id: BaseAbductorObjective
+  suffix: ИВЕНТ Ivan_Kuvalda
   components:
   - type: Objective
     difficulty: 1.5
@@ -1609,6 +1661,7 @@
 - type: entity
   parent: BaseAbductorObjective
   id: AbductObjective
+  suffix: ИВЕНТ Ivan_Kuvalda
   components:
   - type: Objective
     icon:
@@ -1624,6 +1677,7 @@
 - type: entity
   parent: BaseObjective
   id: BaseAbductorVictimObjective
+  suffix: ИВЕНТ Ivan_Kuvalda
   abstract: true
   components:
   - type: Objective
@@ -1638,6 +1692,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimPaintObjective
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Paint the station.
   description: The station is hideous. You must color it all!
   components:
@@ -1649,6 +1704,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimPristine
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Ensure the station is pristine.
   description: The CEO of Nanotrasen is coming! Ensure the station is in absolutely pristine condition.
   components:
@@ -1660,6 +1716,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimBlingFloor
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Replace the floor.
   description: Replace all the floor tiles with wood, carpeting, grass or bling.
   components:
@@ -1671,6 +1728,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimCorpseCollector
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Collect dead corpses.
   description: Start a collection of corpses. Don't kill people to get these corpses.
   components:
@@ -1682,6 +1740,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimParaplegic
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Paraplegic.
   description: Convince the crew that you are paraplegic.
   components:
@@ -1693,6 +1752,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimHungry
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Sate your hunger.
   description: You are hungry. Eat as much food as you can find.
   components:
@@ -1704,6 +1764,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimBlazeIt
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Chemically improve your body.
   description: Your body must be improved. Ingest as many drugs as you can.
   components:
@@ -1715,6 +1776,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimSocialExperiment
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: It's all a lie.
   description: This is a secret social experiment conducted by Nanotrasen. Convince the crew that this is the truth.
   components:
@@ -1726,6 +1788,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimVirtualInsanity
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: NOTHING IS REAL.
   description: It's all an entirely virtual simulation within an underground vault. Convince the crew to escape the shackles of VR.
   components:
@@ -1737,6 +1800,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimGame
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Chat is this real?
   description: Convince the crew that we are in a game, without explicitly telling them we are in a game.
   components:
@@ -1748,6 +1812,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimSaveAnimals
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Save the animals.
   description: Nanotrasen is abusing the animals! Save as many as you can!
   components:
@@ -1759,6 +1824,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimMusic
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Share your music.
   description: You burn with passion for music. Share your vision. If anyone hates it, beat them on the head with your instrument!
   components:
@@ -1770,6 +1836,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimStalker
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Stalk the crew.
   description: Someone hired you to compile dossiers on all important members of the crew. Be sure they don't know you're doing it.
   components:
@@ -1781,6 +1848,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimConspiracy
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: The conspiracy.
   description: The leaders of this station are hiding a grand, evil conspiracy. Only you can learn what it is, and expose it to the people!
   components:
@@ -1792,6 +1860,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimNarrator
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Narrate the story.
   description: You're the narrator of this tale. Follow around the protagonists to tell their story.
   components:
@@ -1803,6 +1872,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimSixthsense
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Are you really alive?
   description: You died back there and went to heaven... or is it hell? No one here seems to know they're dead. Convince them, and maybe you can escape this limbo.
   components:
@@ -1814,6 +1884,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimParty
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: PARTY!
   description: You NEED to throw a huge rager. Make it as awesome as possible so the whole crew comes... OR ELSE!
   components:
@@ -1825,6 +1896,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimDeadStationTheory
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Only one other person exists.
   description: There is only one other person in existence, they are just really good at pretending to be multiple people.
   components:
@@ -1836,6 +1908,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimWeaknessOfMyFlesh
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: The flesh is rotting.
   description: Your flesh is rotting from your body. Fight the inevitable, and replace your tainted limbs with entirely new ones.
   components:
@@ -1847,6 +1920,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimInstructor
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Military instructor.
   description: You are a military instructor. You must make sure the crew is in top shape for the war against the syndicate!
   components:
@@ -1858,6 +1932,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimActor
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Action movie.
   description: You are in an action movie. You must say as many cheesy one-liners as possible.
   components:
@@ -1871,6 +1946,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimNations
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Make your department prosper.
   description: Ensure your department prospers over all else.
   components:
@@ -1882,6 +1958,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimPowerUnlimited
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Unlimited power.
   description: Flood the station's powernet with as much electricity as you can.
   components:
@@ -1893,6 +1970,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimBuild
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Expand the station.
   description: The station is too tiny, and you're going to fix that.
   components:
@@ -1904,6 +1982,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimDefect
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Defect from the station.
   description: Fuck the system! Defect from the station and start an independent colony in space, Mining Outpost or the derelict. Recruit crewmates if you can.
   components:
@@ -1915,6 +1994,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimMonkeyTakeover
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Raise an army of monkeys.
   description: OOK OOK AAH!!!
   components:
@@ -1926,6 +2006,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimAverageFrontierPirate
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Steal shoes.
   description: Steal as many shoes as you can.
   components:
@@ -1937,6 +2018,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimNoClown
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: The clown is not funny.
   description: The clown is not funny. You can do better! Take over their role and make the crew laugh!
   components:
@@ -1948,6 +2030,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimReplacePets
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Replace the pets.
   description: All the pets around here suck. You need to make them cooler. Replace them with exotic beasts!
   components:
@@ -1959,6 +2042,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimBald
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Save people from the hair invasion.
   description: There are alien parasites masquerading as people's hair. Save people from this invasion.
   components:
@@ -1972,6 +2056,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimNoWalls
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Break down the walls.
   description: The crew must get to know one another better. Break down the walls inside the station!
   components:
@@ -1983,6 +2068,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimAbductception
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Take revenge.
   description: You have been changed forever. Find the aliens that did this to you and give them a taste of their own medicine.
   components:
@@ -1994,6 +2080,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimNoOxygen
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: OXYGEN IS KILLING EVERYONE.
   description: The oxygen is killing them all and they don't even know it. Make sure no oxygen is on the station.
   components:
@@ -2008,6 +2095,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimEscapeStation
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Escape the station.
   description: You must escape the station! Get the shuttle called!
   components:
@@ -2020,6 +2108,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimNoCloning
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: No cloning.
   description: Don't allow anyone to be cloned.
   components:
@@ -2031,6 +2120,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimStealWeapons
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Steal weapons.
   description: Steal as many weapons as you can fit on your person.
   components:
@@ -2042,6 +2132,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimDismantleComputers
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Steal computers.
   description: The 7G waves coming off from the computers are killing the crew and they dont know it! Dismantle them!
   components:
@@ -2053,6 +2144,7 @@
 - type: entity
   parent: BaseAbductorVictimObjective
   id: AbductorVictimFinality
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: No revival.
   description: Death should be final and modern medicine disrupts the natural order. Don't allow anyone to be revived.
   components:
@@ -2190,6 +2282,7 @@
 - type: entity
   parent: BaseMindRoleAntag
   id: MindRoleLoneAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Lone Abductor Role
   components:
   - type: MindRole
@@ -2202,6 +2295,7 @@
 - type: entity
   parent: BaseMindRoleAntag
   id: MindRoleAbductorAgent
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Lone Abductor Role
   components:
   - type: MindRole
@@ -2214,6 +2308,7 @@
 - type: entity
   parent: BaseMindRoleAntag
   id: MindRoleAbductorScientist
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Lone Abductor Role
   components:
   - type: MindRole
@@ -2226,6 +2321,7 @@
 - type: entity
   parent: BaseMindRoleAntag
   id: MindRoleAbductorVictim
+  suffix: ИВЕНТ Ivan_Kuvalda
   name: Abductee Role
   components:
   - type: MindRole
@@ -2240,6 +2336,7 @@
 - type: entity
   parent: BaseGameRule
   id: LoneAbductorSpawn
+  suffix: ИВЕНТ Ivan_Kuvalda
   components:
   - type: StationEvent
     earliestStart: 15
@@ -2307,6 +2404,7 @@
 - type: entity
   parent: BaseGameRule
   id: AbductorVictim
+  suffix: ИВЕНТ Ivan_Kuvalda
   components:
   - type: AbductorVictimRule
   - type: AntagSelection
@@ -2326,6 +2424,7 @@
 - type: entity
   parent: BaseGameRule
   id: DuoAbductorSpawn
+  suffix: ИВЕНТ Ivan_Kuvalda
   components:
   - type: StationEvent
     earliestStart: 15
@@ -2457,6 +2556,7 @@
 
 - type: entity
   id: EffectTeleportation
+  suffix: ИВЕНТ Ivan_Kuvalda
   categories: [ HideSpawnMenu ]
   components:
   - type: TimedDespawn
@@ -2476,6 +2576,7 @@
 
 - type: entity
   id: EffectTeleportationEntity
+  suffix: ИВЕНТ Ivan_Kuvalda
   categories: [ HideSpawnMenu ]
   components:
   - type: TimedDespawn
@@ -2495,3 +2596,4 @@
   - type: EmitSoundOnSpawn
     sound:
       path: /Audio/Effects/teleport_arrival.ogg
+
