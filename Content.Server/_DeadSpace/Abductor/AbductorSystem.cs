@@ -675,7 +675,7 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
     private void OnImplanted(Entity<AbductorOrganComponent> ent, ref ImplantImplantedEvent args)
     {
         if (HasComp<AbductorComponent>(args.Implanted)
-            || !TryComp<AbductorVictimComponent>(args.Implanted, out var victimComp)
+            || !EnsureComp<AbductorVictimComponent>(args.Implanted, out var victimComp)
             || victimComp.Implanted
             || !HasComp<HumanoidAppearanceComponent>(args.Implanted)
             || !_mind.TryGetMind(args.Implanted, out var mindId, out var mind)

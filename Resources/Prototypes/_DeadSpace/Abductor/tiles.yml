@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# Abductor floor tile.
+#
+# Kept OUT of abductor.yml on purpose: the runtime prototype uploader
+# ("loadprototype") cannot register brand-new tiles, so this tile must be part
+# of the normal build and registered on server/client startup.
+
+- type: tile
+  id: FloorAbductor
+  name: tiles-abductor-floor
+  sprite: /Textures/_DeadSpace/Abductor/abductor_tile.rsi/abductor_tile.png
+  isSubfloor: true
+  footstepSounds:
+    collection: FootstepAsteroid
+  heatCapacity: 10000
+  weather: true
+  indestructible: true
