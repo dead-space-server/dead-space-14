@@ -48,6 +48,7 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
         InitializeConsole();
         InitializeVest();
         InitializeVictim();
+        InitializeGland();
         base.Initialize();
     }
 
@@ -94,8 +95,7 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
                 _eye.SetTarget(args.Actor, eye, eyeComp);
                 _eye.SetDrawFov(args.Actor, false);
                 _eye.SetRotation(args.Actor, Angle.Zero, eyeComp);
-                if (!HasComp<StationAiOverlayComponent>(args.Actor))
-                    AddComp<StationAiOverlayComponent>(args.Actor);
+
                 if (!TryComp(eye, out RemoteEyeSourceContainerComponent? remoteEyeSourceContainerComponent))
                 {
                     remoteEyeSourceContainerComponent = new RemoteEyeSourceContainerComponent { Actor = args.Actor };

@@ -50,3 +50,6 @@ abductors-ui-unlock-armor = Unlock Armor
 # Gizmo / vest popups
 abductors-ui-gizmo-transferred = Target marked. Coordinates sent to the observation console.
 abductors-ui-vest-linked = Vest linked to this console.
+
+# Gland implanting
+gland-implanted-popup = The gland burrows under the skin!

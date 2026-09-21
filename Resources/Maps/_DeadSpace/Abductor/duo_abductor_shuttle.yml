@@ -159,7 +159,7 @@ entities:
     - type: Transform
       pos: -0.5,2.5
       parent: 2
-- proto: AbductorHandcuffs
+- proto: Handcuffs
   entities:
   - uid: 6
     components:
@@ -608,7 +608,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -1.5,-3.5
       parent: 2
-- proto: CandyBowlFilledLollypopsMystery
+- proto: CandyBowl
   entities:
   - uid: 90
     components:

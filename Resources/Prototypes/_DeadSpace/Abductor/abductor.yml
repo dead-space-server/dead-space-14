@@ -110,6 +110,29 @@
     sprite: _DeadSpace/Abductor/dubious_organs.rsi
     state: gland
   - type: AbductorOrgan
+  - type: Item
+    size: Tiny
+  - type: Clickable
+  - type: InteractionOutline
+  - type: GravityAffected
+  - type: Physics
+    bodyType: Dynamic
+    fixedRotation: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.15,-0.15,0.15,0.15"
+        density: 20
+        mask:
+        - ItemMask
+        restitution: 0.3
+        friction: 0.2
+  - type: CollisionWake
+  - type: Tag
+    tags:
+    - SubdermalImplant
 
 - type: entity
   id: ImplantDubiousHealth
@@ -180,16 +203,6 @@
       movementVisibilityRate: 0.25
 
 - type: entity
-  id: ImplantDubiousGoliath
-  parent: ImplantDubiousBase
-  components:
-  - type: Sprite
-    state: species
-  - type: SubdermalImplant
-    implantComponents:
-    - type: GoliathTentacle
-
-- type: entity
   id: ImplantDubiousArtifact
   parent: ImplantDubiousBase
   components:
@@ -257,15 +270,6 @@
     implant: ImplantDubiousInvisible
 
 - type: entity
-  id: ImplanterDubiousGoliath
-  name: doubtful goliath implanter
-  description: A disposable syringe loaded with a goliath gland. Pick your test subject wisely.
-  parent: BaseImplantOnlyImplanter
-  components:
-  - type: Implanter
-    implant: ImplantDubiousGoliath
-
-- type: entity
   id: ImplanterDubiousArtifact
   name: doubtful artifact implanter
   description: A disposable syringe loaded with an artifact gland. Pick your test subject wisely.
@@ -305,7 +309,6 @@
       weight: 35
       children:
       - id: ImplanterDubiousShock
-      - id: ImplanterDubiousGoliath
 
     # Very Disruptive - 15% chance
     - !type:GroupSelector
@@ -348,7 +351,6 @@
     HeadTop: MobHumanoidAnyMarking
     HeadSide: MobHumanoidAnyMarking
     Chest: MobAbductorChest
-    Groin: MobAbductorGroin
     Eyes: MobAbductorEyes
     LArm: MobAbductorLArm
     RArm: MobAbductorRArm
@@ -551,10 +553,6 @@
     mindRoles:
     - MindRoleLoneAbductor
   - type: AbductorScientist
-  - type: SurgeryIgnoreClothing
-  - type: Sanitized
-  - type: SurgerySpeedModifier
-    speedModifier: 1.5
   - type: Loadout
     prototypes:
       - LoneAbductorGear
@@ -570,10 +568,6 @@
     mindRoles:
     - MindRoleAbductorScientist
   - type: AbductorScientist
-  - type: SurgeryIgnoreClothing
-  - type: Sanitized
-  - type: SurgerySpeedModifier
-    speedModifier: 1.5
   - type: Loadout
     prototypes:
       - AbductorScientistGear
@@ -905,11 +899,16 @@
         Shock: 0
     angle: 60
     animation: WeaponArcThrust
-  - type: InjectOnHit
-    reagents:
-    - ReagentId: MuteToxin
-      Quantity: 5
-    limit: 10
+  - type: SolutionContainerManager
+    solutions:
+      default:
+        maxVol: 10
+        reagents:
+        - ReagentId: MuteToxin
+          Quantity: 10
+  - type: MeleeChemicalInjector
+    transferAmount: 5
+    pierceArmor: true
 
 - type: entity
   name: wonderprod
@@ -950,15 +949,13 @@
   - type: Tag
     tags:
     - Wonderprod
-  - type: Multihit
-    multihitWhitelist:
-      tags:
-      - Wonderprod
-    conditions:
-    - !type:MultihitUserWhitelistEvent
-      whitelist:
-        tags:
-        - Abductor
+  - type: SolutionContainerManager
+    solutions:
+      sleep:
+        maxVol: 20
+        reagents:
+        - ReagentId: Nocturine
+          Quantity: 20
   - type: DisarmMalus
   - type: ItemSwitch
     state: stun
@@ -987,23 +984,6 @@
           params:
             variation: 0.250
 
-      cuffs: !type:ItemSwitchState
-        verb: cuffs
-        sprite:
-          sprite: _DeadSpace/Abductor/abductor_wonderprod.rsi
-          state: cuffs-icon
-        components:
-        - type: MeleeWeapon
-          wideAnimationRotation: -135
-          attackRate: 0.75
-          damage:
-            types:
-              Shock: 0
-          angle: 60
-          animation: WeaponArcThrust
-        - type: CuffsOnHit
-          proto: Cablecuffs
-
       sleep: !type:ItemSwitchState
         verb: sleep
         sprite:
@@ -1015,15 +995,13 @@
           attackRate: 1
           damage:
             types:
-              Ion: 30
+              Shock: 30
           angle: 60
           animation: WeaponArcThrust
-        - type: InjectOnHit
-          reagents:
-          - ReagentId: Nocturine
-            Quantity: 5
-          limit: 20
-          needsRestrain: true
+        - type: MeleeChemicalInjector
+          solution: sleep
+          transferAmount: 5
+          pierceArmor: true
 
 # ============================================================================
 # GIZMO
@@ -2323,10 +2301,6 @@
           - FootstepSound
           - DoorBumpOpener
       - type: AbductorScientist
-      - type: SurgeryIgnoreClothing
-      - type: Sanitized
-      - type: SurgerySpeedModifier
-        speedModifier: 1.5
       mindRoles:
       - MindRoleLoneAbductor
 
@@ -2413,10 +2387,6 @@
           - FootstepSound
           - DoorBumpOpener
       - type: AbductorScientist
-      - type: SurgeryIgnoreClothing
-      - type: Sanitized
-      - type: SurgerySpeedModifier
-        speedModifier: 1.5
       mindRoles:
       - MindRoleAbductorScientist
     - spawnerPrototype: AbductorAgentSpawner
