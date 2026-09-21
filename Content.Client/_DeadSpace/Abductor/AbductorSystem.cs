@@ -63,7 +63,7 @@ public sealed class AbductorConsoleBui : BoundUserInterface
         if (_window != null) return;
         _window = new AbductorConsoleWindow();
         _window.OnClose += Close;
-        _window.Title = "console";
+        _window.Title = Loc.GetString("abductor-ui-console-title");
 
         _window.TeleportTabButton.OnPressed += _ => View(ViewType.Teleport);
 
@@ -272,7 +272,7 @@ public sealed class AbductorCameraConsoleBui : BoundUserInterface
         if (_window != null) return;
         _window = new AbductorCameraConsoleWindow();
         _window.OnClose += Close;
-        _window.Title = "Intercepted cameras.";
+        _window.Title = Loc.GetString("abductor-camera-console-title");
 
         _window.StationsButton.OnPressed += _ =>
         {
@@ -352,8 +352,8 @@ public sealed class AbductorCameraConsoleBui : BoundUserInterface
         _window.Title = State is not AbductorCameraConsoleBuiState state
             || _station == null
             || !state.Stations.TryGetValue(_station.Value, out var station)
-            ? "Stations"
-            : $"Station - {station.Name}";
+            ? Loc.GetString("abductor-ui-stations-title")
+            : Loc.GetString("abductor-ui-station-title", ("station", station.Name));
     }
 
     private enum ViewType
