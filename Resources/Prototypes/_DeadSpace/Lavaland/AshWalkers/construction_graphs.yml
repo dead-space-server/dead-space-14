@@ -58,7 +58,7 @@
     entity: AxeBone
 
 - type: constructionGraph
-  id: ClothingHandsGlovesBoneBracers
+  id: ClothingHandsGlovesBoneBracersAshWalker
   start: start
   graph:
   - node: start
@@ -72,10 +72,10 @@
         amount: 1
         doAfter: 1
   - node: bracers
-    entity: ClothingHandsGlovesBoneBracers
+    entity: ClothingHandsGlovesBoneBracersAshWalker
 
 - type: constructionGraph
-  id: ClothingNeckBoneTalisman
+  id: ClothingNeckBoneTalismanAshWalker
   start: start
   graph:
   - node: start
@@ -89,10 +89,10 @@
         amount: 1
         doAfter: 1
   - node: talisman
-    entity: ClothingNeckBoneTalisman
+    entity: ClothingNeckBoneTalismanAshWalker
 
 - type: constructionGraph
-  id: ClothingUniformSkullArmor
+  id: ClothingUniformSkullArmorAshWalker
   start: start
   graph:
   - node: start
@@ -106,7 +106,7 @@
         amount: 1
         doAfter: 2
   - node: loincloth
-    entity: ClothingUniformSkullArmor
+    entity: ClothingUniformSkullArmorAshWalker
 
 - type: constructionGraph
   id: SinewCuffs
@@ -189,3 +189,54 @@
         doAfter: 1
   - node: arrow
     entity: ArrowBone
+
+- type: constructionGraph
+  id: ClothingHandsGlovesBoneBracers
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: bracers
+      steps:
+      - material: Bones
+        amount: 2
+        doAfter: 2
+      - material: LavalandWatcherSinew
+        amount: 4
+        doAfter: 2
+  - node: bracers
+    entity: ClothingHandsGlovesBoneBracers
+
+- type: constructionGraph
+  id: ClothingNeckBoneTalisman
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: talisman
+      steps:
+      - material: Bones
+        amount: 2
+        doAfter: 2
+      - material: LavalandWatcherSinew
+        amount: 2
+        doAfter: 2
+  - node: talisman
+    entity: ClothingNeckBoneTalisman
+
+- type: constructionGraph
+  id: ClothingUniformSkullArmor
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: loincloth
+      steps:
+      - material: Bones
+        amount: 2
+        doAfter: 2
+      - material: LavalandWatcherSinew
+        amount: 4
+        doAfter: 2
+  - node: loincloth
+    entity: ClothingUniformSkullArmor

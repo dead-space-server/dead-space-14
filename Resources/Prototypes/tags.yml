@@ -691,6 +691,17 @@
 - type: Tag
   id: GunUpgradeReloadSpeed # Used by PKAUpgradeFireRate:GunUpgrade to ensure mutually exclusive upgrades.
 
+# DS14-start
+- type: Tag
+  id: gasmask
+
+- type: Tag
+  id: gasmaskexplorer
+
+- type: Tag
+  id: gasmaskwelding
+# DS14-end
+
 ## H ##
 
 - type: Tag
@@ -1507,6 +1518,9 @@
 
 - type: Tag
   id: VoiceTrigger # ConstructionGraph: Vim
+
+- type: Tag
+  id: voicesensor # DS-14
 
 ## W ##
 

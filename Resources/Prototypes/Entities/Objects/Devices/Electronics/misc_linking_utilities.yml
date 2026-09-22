@@ -27,6 +27,9 @@
   - type: WirelessNetworkConnection
     range: 15
   #DS14-Start
+  - type: Tag
+    tags:
+    - voicesensor
   - type: EmitSoundOnPickup
     sound:
       path: /Audio/_DeadSpace/Items/Handing/component_pickup.ogg

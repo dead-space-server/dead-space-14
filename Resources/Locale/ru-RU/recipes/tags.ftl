@@ -46,6 +46,7 @@ construction-graph-tag-power-cell-small = маленькая батарея
 construction-graph-tag-power-cell = батарея
 construction-graph-tag-potato-battery = картофельная батарея
 construction-graph-tag-super-compact-ai-chip = сверхкомпактный чип ИИ
+construction-graph-tag-voice-sensor = Голосовой сенсор
 # other
 construction-graph-tag-light-bulb = лампочка
 construction-graph-tag-radio = радио

@@ -336,6 +336,15 @@
   id: Medipen
 
 - type: Tag
+  id: MaskGasVoice
+
+- type: Tag
+  id: MaskGasExplorerVoice
+
+- type: Tag
+  id: MaskWeldingGasVoice
+
+- type: Tag
   id: MukhtarWearable
 
 - type: Tag

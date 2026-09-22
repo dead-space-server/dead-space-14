@@ -15,6 +15,7 @@
     tags:
     - HamsterWearable
     - WhitelistChameleon
+    - gasmask
   - type: HideLayerClothing
     layers:
       Snout: Mask
@@ -135,6 +136,9 @@
         Slash: 0.90
         Piercing: 0.95
         Heat: 0.95
+  - type: Tag
+    tags:
+    - gasmaskexplorer # DS14
 
 - type: entity
   parent: ClothingMaskPullableBase
@@ -831,6 +835,7 @@
     - WhitelistChameleon
     - WeldingMask # DS14
     - WeldingMaskWhite # DS14
+    - gasmaskwelding # DS14
 
 # Entity tables
 - type: entityTable
