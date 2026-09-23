@@ -345,6 +345,15 @@
   id: MaskWeldingGasVoice
 
 - type: Tag
+  id: gasmask
+
+- type: Tag
+  id: gasmaskexplorer
+
+- type: Tag
+  id: gasmaskwelding
+
+- type: Tag
   id: MukhtarWearable
 
 - type: Tag
@@ -499,6 +508,9 @@
 
 - type: Tag
   id: VulpkaninEmotes
+
+- type: Tag
+  id: voicesensor 
 
 - type: Tag
   id: WeldingMaskFlame

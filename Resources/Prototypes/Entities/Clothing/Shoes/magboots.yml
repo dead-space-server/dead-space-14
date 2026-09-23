@@ -107,8 +107,6 @@
   - type: ClothingSpeedModifier
     walkModifier: 0.9
     sprintModifier: 0.9
-  - type: ClothingSlowOnDamageModifier
-    modifier: 0.5 # DS14
   - type: GasTank
     outputPressure: 42.6
     air:

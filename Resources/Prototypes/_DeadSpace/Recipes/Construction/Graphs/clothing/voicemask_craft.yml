@@ -2,7 +2,7 @@
   id: MaskGasVoice
   graph: MaskGasVoice
   startNode: start
-  targetNode: GasMaskVoice
+  targetNode: gasMaskVoice
   category: construction-category-clothing
   objectType: Item
 
@@ -12,7 +12,7 @@
   graph:
     - node: start
       edges:
-        - to: GasMaskVoice
+        - to: gasMaskVoice
           steps:
             - tag: gasmask
               name: ent-ClothingMaskGas
@@ -36,14 +36,14 @@
             - material: Manipulator
               amount: 3
               doAfter: 5
-    - node: GasMaskVoice
+    - node: gasMaskVoice
       entity: ClothingMaskGasVoice
 
 - type: construction
   id: MaskGasVoiceExplorer
   graph: MaskGasVoiceExplorer
   startNode: start
-  targetNode: GasMaskVoiceExplorer
+  targetNode: gasMaskVoiceExplorer
   category: construction-category-clothing
   objectType: Item
 
@@ -53,7 +53,7 @@
   graph:
     - node: start
       edges:
-        - to: GasMaskVoiceExplorer
+        - to: gasMaskVoiceExplorer
           steps:
             - tag: gasmaskexplorer
               name: ent-ClothingMaskGasExplorer
@@ -77,14 +77,14 @@
             - material: Manipulator
               amount: 3
               doAfter: 5
-    - node: GasMaskVoiceExplorer
+    - node: gasMaskVoiceExplorer
       entity: ClothingMaskGasExplorerVoice
 
 - type: construction
   id: MaskGasVoiceWelding
   graph: MaskGasVoiceWelding
   startNode: start
-  targetNode: GasMaskVoiceWelding
+  targetNode: gasMaskVoiceWelding
   category: construction-category-clothing
   objectType: Item
 
@@ -94,7 +94,7 @@
   graph:
     - node: start
       edges:
-        - to: GasMaskVoiceWelding
+        - to: gasMaskVoiceWelding
           steps:
             - tag: gasmaskwelding
               name: ent-ClothingMaskWeldingGas
@@ -118,6 +118,6 @@
             - material: Manipulator
               amount: 3
               doAfter: 5
-    - node: GasMaskVoiceWelding
+    - node: gasMaskVoiceWelding
       entity: ClothingMaskWeldingGasVoice
 

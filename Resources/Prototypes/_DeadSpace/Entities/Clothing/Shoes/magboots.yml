@@ -16,8 +16,6 @@
   - type: ClothingSpeedModifier
     walkModifier: 1
     sprintModifier: 1
-  - type: ClothingSlowOnDamageModifier
-    modifier: 0.1
   - type: Appearance
   - type: StaticPrice
     price: 400
@@ -39,8 +37,6 @@
   - type: ClothingSpeedModifier
     walkModifier: 0.85
     sprintModifier: 0.85
-  - type: ClothingSlowOnDamageModifier
-    modifier: 0.75
   - type: StaticPrice
     price: 250
 

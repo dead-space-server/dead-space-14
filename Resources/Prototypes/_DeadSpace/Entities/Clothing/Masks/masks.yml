@@ -145,7 +145,7 @@
   parent: ClothingMaskGas
   id: ClothingMaskGasVoice
   suffix: Голосовая маска
-  name: Голосовой противогаз
+  name: голосовой противогаз
   description: Обычный противогаз. Погодите... почему из него торчат провода?
   components:
     - type: VoiceMask
@@ -166,13 +166,13 @@
       - MaskGasVoice
     - type: Construction
       graph: MaskGasVoice
-      node: GasMaskVoice
+      node: gasMaskVoice
 
 - type: entity
   parent: [ClothingMaskGasVoice, ClothingMaskGasExplorer]
   id: ClothingMaskGasExplorerVoice
   suffix: Голосовая маска
-  name: Голосовой противогаз исследователя
+  name: голосовой противогаз исследователя
   description: Эх старый добрый запах пепла и крови по утрам. Погодите... почему из него торчат провода?
   components:
   - type: Sprite
@@ -184,13 +184,13 @@
     - MaskGasExplorerVoice
   - type: Construction
     graph: MaskGasVoiceExplorer
-    node: GasMaskVoiceExplorer
+    node: gasMaskVoiceExplorer
 
 - type: entity
   parent: [ClothingMaskGasVoice, ClothingMaskWeldingGas]
   id: ClothingMaskWeldingGasVoice
   suffix: Голосовая маска
-  name: Голосовой сварочный противогаз
+  name: голосовой сварочный противогаз
   description: Срочно сварите мне этот прекрасный шов! Погодите... почему из него торчат провода?
   components:
   - type: Sprite
@@ -203,5 +203,5 @@
     - MaskWeldingGasVoice
   - type: Construction
     graph: MaskGasVoiceWelding
-    node: GasMaskVoiceWelding
+    node: gasMaskVoiceWelding
   # DS14-end
