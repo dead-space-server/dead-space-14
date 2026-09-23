@@ -212,6 +212,9 @@
   id: FoodMeatSmallBall
 
 - type: Tag
+  id: FreezerCloset
+
+- type: Tag
   id: GasTank
 
 - type: Tag

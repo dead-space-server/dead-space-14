@@ -7,6 +7,7 @@ using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.Components;
 using Content.Shared.IdentityManagement;
+using Content.Shared.Mobs.Components; // DS14
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Pulling.Events;
 using Content.Shared.Popups;
@@ -585,6 +586,15 @@ public abstract partial class SharedBuckleSystem
 
         if (TryComp<CuffableComponent>(args.Target, out var targetCuffableComp) && targetCuffableComp.CuffedHandCount > 0
             || _mobState.IsIncapacitated(args.Target.Value))
+        // DS14-Start
+        {
+            ev.Cancel();
+            TryBuckle(args.Target.Value, args.User, args.Used.Value, popup: false);
+            return;
+        }
+
+        if (!HasComp<MobStateComponent>(args.Target.Value))
+        // DS14-End
         {
             ev.Cancel();
             TryBuckle(args.Target.Value, args.User, args.Used.Value, popup: false);
