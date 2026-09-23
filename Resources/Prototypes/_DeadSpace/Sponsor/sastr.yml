@@ -499,7 +499,7 @@
 
 # gasmask.rsi
 - type: entity
-  parent: ClothingMaskGasSecurity
+  parent: ClothingMaskGasSponsor
   id: ClothingMasksastr
   name: балаклава Klecsh //
   categories: [ HideSpawnMenu ]

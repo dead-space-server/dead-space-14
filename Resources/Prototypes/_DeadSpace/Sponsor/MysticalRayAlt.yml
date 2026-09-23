@@ -191,7 +191,7 @@
 
 # Mask
 - type: entity
-  parent: ClothingMaskGasSecurity
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskMysticalRayAlt
   name: боевая маска MAXARM
   description: Укрепленная маска что бы  по морде не прилетело.

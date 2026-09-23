@@ -183,7 +183,7 @@
 
 # Mask
 - type: entity
-  parent: ClothingMaskGasSyndicate
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskdrippenwagenAlt
   name: дыхательная маска
   description: Изготовлено на заказ организацией LaFleur Wear.

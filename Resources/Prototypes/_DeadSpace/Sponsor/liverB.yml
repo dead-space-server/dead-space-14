@@ -150,7 +150,7 @@
 
 # Mask
 - type: entity
-  parent: ClothingMaskGasSyndicate
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskGasLiverB
   name: противогаз "Aurelion MK-II"
   description: Противогаз с фильтрующей системой нового поколения, окрашен в гармонирующие скафандру цвета. Предназначен для защиты от химических и биологических угроз.

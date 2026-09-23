@@ -154,7 +154,7 @@
 
 # Mask
 - type: entity
-  parent: ClothingMaskGasSyndicate
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskGasPrometheus
   name: боевой противогаз агента
   description: Высокотехнологичный противогаз с подключением к баллону и защитой от сварочного излучения.

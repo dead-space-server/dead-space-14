@@ -279,7 +279,7 @@
 
 # Mask
 - type: entity
-  parent: ClothingMaskGasSecurity
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskdeFOA
   name: маска "deFo"
   description: Изготовлено на заказ компанией "deFo".
