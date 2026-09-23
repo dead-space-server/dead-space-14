@@ -3,7 +3,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitParamedicSyndie
     back: ClothingBackpackBrigmedic
-    mask: ClothingMaskGasSponsor
+    mask: ClothingMaskGasSyndicate
     eyes: ClothingEyesHudMedical
     ears: ClothingHeadsetAltSyndicate
     gloves: ClothingHandsGlovesCombat
