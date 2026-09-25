@@ -312,11 +312,6 @@ deadspace-chatsan-replacement-128 = что за херня
 deadspace-chatsan-word-129 = гг
 deadspace-chatsan-replacement-129 = хорошо сработано
 
-deadspace-chatsan-word-130 = увы
-deadspace-chatsan-replacement-130 = к сожалению
-deadspace-chatsan-word-131 = уви
-deadspace-chatsan-replacement-131 = к сожалению
-
 deadspace-chatsan-word-132 = сво
 deadspace-chatsan-replacement-132 = свой
 
