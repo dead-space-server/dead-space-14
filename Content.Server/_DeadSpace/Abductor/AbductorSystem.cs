@@ -260,7 +260,7 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
 
         if (abductorScientistComponent.SpawnPosition.HasValue)
         {
-            var effect = EntityManager.SpawnEntity(TeleportationEffect, abductorScientistComponent.SpawnPosition.Value);
+            var effect = Spawn(TeleportationEffect, abductorScientistComponent.SpawnPosition.Value);
             EnsureComp<TimedDespawnComponent>(effect, out var despawnComp);
             despawnComp.Lifetime = 3.0f;
             _audioSystem.PlayPvs("/Audio/Effects/teleport_departure.ogg", effect);
@@ -286,7 +286,7 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
     private void OnSendYourself(SendYourselfEvent ev)
     {
         AddTeleportationEffect(ev.Performer, 5.0f, TeleportationEffectEntity, out var effectEnt, true, false);
-        var effect = EntityManager.SpawnEntity(TeleportationEffect, ev.Target);
+        var effect = Spawn(TeleportationEffect, ev.Target);
         EnsureComp<TimedDespawnComponent>(effect, out var _);
 
         var @event = new AbductorSendYourselfDoAfterEvent(GetNetCoordinates(ev.Target));
@@ -432,7 +432,7 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
 
         var telepad = GetEntity(ent.Comp.AlienPod.Value);
         var telepadXform = EnsureComp<TransformComponent>(telepad);
-        var effect = EntityManager.SpawnEntity(TeleportationEffect, telepadXform.Coordinates);
+        var effect = Spawn(TeleportationEffect, telepadXform.Coordinates);
         EnsureComp<TimedDespawnComponent>(effect, out var despawnComp);
         despawnComp.Lifetime = 3.0f;
         _audioSystem.PlayPvs("/Audio/Effects/teleport_arrival.ogg", effect);
@@ -607,7 +607,7 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
 
     private void OnEquipped(Entity<AbductorVestComponent> ent, ref GotEquippedEvent args)
     {
-        if (args.Equipee != null && !HasComp<StealthComponent>(args.Equipee) && ent.Comp.CurrentState != AbductorArmorModeType.Combat)
+        if (args.Equipee.IsValid() && !HasComp<StealthComponent>(args.Equipee) && ent.Comp.CurrentState != AbductorArmorModeType.Combat)
         {
             AddComp<StealthComponent>(args.Equipee);
             AddComp<StealthOnMoveComponent>(args.Equipee);
@@ -616,7 +616,7 @@ public sealed partial class AbductorSystem : SharedAbductorSystem
 
     private void OnUnequipped(Entity<AbductorVestComponent> ent, ref GotUnequippedEvent args)
     {
-        if (args.Equipee != null && HasComp<StealthComponent>(args.Equipee))
+        if (args.Equipee.IsValid() && HasComp<StealthComponent>(args.Equipee))
         {
             RemComp<StealthComponent>(args.Equipee);
             RemComp<StealthOnMoveComponent>(args.Equipee);
