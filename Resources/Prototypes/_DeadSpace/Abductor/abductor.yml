@@ -74,7 +74,7 @@
   flavor: alienblood
   color: "#4B076D"
   recognizable: true
-  physicalDesc: reagent-physical-desc-alien
+  physicalDesc: reagent-physical-desc-glowing
 
 # ============================================================================
 # DUBIOUS GLANDS ("weird glands" - experiment results, delivered as implants)
@@ -961,7 +961,6 @@
     animation: WeaponArcThrust
   - type: StaminaDamageOnHit
     damage: 60
-    lightAttackDamageMultiplier: 2
     sound: /Audio/Weapons/Guns/Hits/taser_hit.ogg
   - type: Tag
     tags:
@@ -994,7 +993,6 @@
           animation: WeaponArcThrust
         - type: StaminaDamageOnHit
           damage: 60
-          lightAttackDamageMultiplier: 2
           sound: /Audio/Weapons/Guns/Hits/taser_hit.ogg
         soundStateActivate:
           collection: sparks
@@ -1111,8 +1109,6 @@
   description: Zeep Glorp!
   components:
   - type: Armor
-    coverage:
-    - Head
     modifiers:
       coefficients:
         Blunt: 0.35
@@ -1153,20 +1149,6 @@
     slots:
     - outerClothing
   - type: Armor
-    traumaDeductions:
-      Dismemberment: 0.4
-      OrganDamage: 0.4
-      BoneDamage: 0.4
-      VeinsDamage: 0
-      NerveDamage: 0
-    coverage:
-    - Chest
-    - Groin
-    - Arm
-    - Leg
-    - Tail
-    - Hand
-    - Foot
     modifiers:
       coefficients:
         Blunt: 0.6
@@ -1188,20 +1170,6 @@
           state: icon
         components:
         - type: Armor
-          traumaDeductions:
-            Dismemberment: 0.4
-            OrganDamage: 0.4
-            BoneDamage: 0.4
-            VeinsDamage: 0
-            NerveDamage: 0
-          coverage:
-          - Chest
-          - Groin
-          - Arm
-          - Leg
-          - Tail
-          - Hand
-          - Foot
           modifiers:
             coefficients:
               Blunt: 0.6
@@ -1225,18 +1193,6 @@
           state: combat-icon
         components:
         - type: Armor
-          traumaDeductions:
-            Dismemberment: 0.4
-            OrganDamage: 0.4
-            BoneDamage: 0.4
-            VeinsDamage: 0
-            NerveDamage: 0
-          coverage:
-          - Chest
-          - Groin
-          - Arm
-          - Leg
-          - Tail
           modifiers:
             coefficients:
               Blunt: 0.25
@@ -1265,18 +1221,6 @@
   - type: Clothing
     sprite: _DeadSpace/Abductor/clothing_abductor_coat.rsi
   - type: Armor
-    coverage:
-    - Chest
-    - Groin
-    - Arm
-    - Leg
-    - Tail
-    traumaDeductions:
-      Dismemberment: 0.3
-      OrganDamage: 0.3
-      BoneDamage: 0.3
-      VeinsDamage: 0
-      NerveDamage: 0
     modifiers:
       coefficients:
         Blunt: 0.6
@@ -1837,7 +1781,7 @@
   - type: Objective
     icon:
       sprite: Mobs/Animals/monkey.rsi
-      state: full
+      state: monkey
 
 - type: entity
   parent: BaseAbductorVictimObjective
@@ -2019,7 +1963,7 @@
   - type: Objective
     icon:
       sprite: Mobs/Animals/monkey.rsi
-      state: full
+      state: monkey
 
 - type: entity
   parent: BaseAbductorVictimObjective
@@ -2362,12 +2306,6 @@
     weight: 3
     minimumPlayers: 10
     duration: null
-    chaos:
-      Hostile: 75
-      Medical: 75
-    eventType: HostilesSpawn
-  - type: GameRule
-    chaosScore: 100
   - type: RuleGrids
   - type: LoadMapRule
     mapPath: /Maps/_DeadSpace/Abductor/abductor_shuttle.yml
@@ -2375,7 +2313,7 @@
     objectives:
     - AbductObjective
   - type: AntagLoadProfileRule
-    speciesHardOverride: Abductor
+    speciesOverride: Abductor
   - type: AntagSelection
     definitions:
     - spawnerPrototype: LoneAbductorSpawner
@@ -2450,12 +2388,6 @@
     weight: 3
     minimumPlayers: 20
     duration: null
-    chaos:
-      Hostile: 150
-      Medical: 150
-    eventType: HostilesSpawn
-  - type: GameRule
-    chaosScore: 150
   - type: RuleGrids
   - type: LoadMapRule
     mapPath: /Maps/_DeadSpace/Abductor/duo_abductor_shuttle.yml
@@ -2463,7 +2395,7 @@
     objectives:
     - AbductObjective
   - type: AntagLoadProfileRule
-    speciesHardOverride: Abductor
+    speciesOverride: Abductor
   - type: AntagSelection
     definitions:
     - spawnerPrototype: AbductorScientistSpawner
