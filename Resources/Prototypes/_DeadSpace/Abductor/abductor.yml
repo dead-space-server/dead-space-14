@@ -1144,6 +1144,39 @@
   - type: AbductorVest
   - type: StaminaResistance
     damageCoefficient: 0.25
+  - type: Item
+    size: Normal
+    heldPrefix: Stealth
+  - type: Clothing
+    sprite: _DeadSpace/Abductor/clothing_abductor_vest.rsi
+    equippedPrefix: Stealth
+    slots:
+    - outerClothing
+  - type: Armor
+    traumaDeductions:
+      Dismemberment: 0.4
+      OrganDamage: 0.4
+      BoneDamage: 0.4
+      VeinsDamage: 0
+      NerveDamage: 0
+    coverage:
+    - Chest
+    - Groin
+    - Arm
+    - Leg
+    - Tail
+    - Hand
+    - Foot
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.6
+        Heat: 0.6
+        Piercing: 0.6
+        Radiation: 0.6
+        Caustic: 0.4
+  - type: ExplosionResistance
+    damageCoefficient: 0.85
   - type: ItemSwitch # Goob-only C#
     state: Stealth
     states:
