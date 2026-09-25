@@ -1145,7 +1145,6 @@
     heldPrefix: Stealth
   - type: Clothing
     sprite: _DeadSpace/Abductor/clothing_abductor_vest.rsi
-    equippedPrefix: Stealth
     slots:
     - outerClothing
   - type: Armor
