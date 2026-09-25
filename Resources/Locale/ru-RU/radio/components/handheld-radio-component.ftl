@@ -1,6 +1,9 @@
 handheld-radio-component-on-use = Радио { $radioState }.
+handheld-radio-component-mic-change = Микрофон {$microphonState}.
 handheld-radio-component-on-examine = Настроено на работу на частоте { $frequency }.
 handheld-radio-component-on-state = включено
 handheld-radio-component-off-state = выключено
+handheld-radio-component-mic-on-state = включен
+handheld-radio-component-mic-off-state = выключен
 handheld-radio-component-channel-set = Включён { $channel } канал
 handheld-radio-component-chennel-examine = Выбранный канал: { $channel }.

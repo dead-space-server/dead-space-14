@@ -24,6 +24,7 @@ verb-categories-set-sensor = Датчики
 verb-categories-timer = Установить задержку
 verb-categories-lever = Рычаг
 verb-categories-ping-select = Пикать при
+verb-categories-microphon-state = Микрофон
 verb-categories-select-type = Выбрать тип
 verb-categories-fax = Задать место назначения
 verb-categories-adjust = Отрегулировать

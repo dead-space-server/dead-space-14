@@ -14,7 +14,9 @@ using Content.Shared.Speech;
 using Content.Shared.Speech.Components;
 using Robust.Shared.Prototypes;
 using Content.Shared.DeadSpace.Languages.Components;
-
+using Content.Shared.Verbs;// DS14
+using Content.Shared.Database;// DS14
+using Robust.Shared.Player;// DS14
 namespace Content.Server.Radio.EntitySystems;
 
 /// <summary>
@@ -50,6 +52,8 @@ public sealed class RadioDeviceSystem : SharedRadioDeviceSystem
         SubscribeLocalEvent<IntercomComponent, ToggleIntercomMicMessage>(OnToggleIntercomMic);
         SubscribeLocalEvent<IntercomComponent, ToggleIntercomSpeakerMessage>(OnToggleIntercomSpeaker);
         SubscribeLocalEvent<IntercomComponent, SelectIntercomChannelMessage>(OnSelectIntercomChannel);
+
+        SubscribeLocalEvent<RadioMicrophoneComponent, GetVerbsEvent<Verb>>(OnGetVerb); // DS14
     }
 
     public override void Update(float frameTime)
@@ -253,4 +257,59 @@ public sealed class RadioDeviceSystem : SharedRadioDeviceSystem
             speaker.Channels = new() { channel.Value };
         Dirty(ent);
     }
+
+    // DS14-start
+    //Не совсем правильная реализация, но быстро и не нужно много переделывать.
+    private void OnGetVerb(EntityUid uid, RadioMicrophoneComponent component, GetVerbsEvent<Verb> args)
+    {
+        if (HasComp<ActorComponent>(uid) ||
+                !args.CanAccess ||
+                !args.CanInteract ||
+                !args.CanComplexInteract)
+            return;
+
+        if (!component.ToggleOnInteract)
+            return;
+
+        if (!component.Enabled)
+            return;
+
+        var a = HasComp<ActiveListenerComponent>(uid);
+        args.Verbs.Add(new Verb
+        {
+            Priority = 1,
+            Disabled = a,
+            Category = VerbCategory.Microphone,
+            Text = "Включить",
+            Impact = LogImpact.Low,
+            DoContactInteraction = false,
+            CloseMenu = true,
+            Act = () =>
+            {
+                var state = Loc.GetString(!a ? "handheld-radio-component-mic-on-state" : "handheld-radio-component-mic-off-state");
+                var message = Loc.GetString("handheld-radio-component-mic-change", ("microphonState", state));
+                _popup.PopupEntity(message, args.User, args.User);
+                EnsureComp<ActiveListenerComponent>(uid).Range = component.ListenRange;
+            },
+        });
+
+        args.Verbs.Add(new Verb
+        {
+            Priority = 0,
+            Disabled = !a,
+            Category = VerbCategory.Microphone,
+            Text = "Выключить",
+            Impact = LogImpact.Low,
+            DoContactInteraction = false,
+            CloseMenu = true,
+            Act = () =>
+            {
+                var state = Loc.GetString(!a ? "handheld-radio-component-mic-on-state" : "handheld-radio-component-mic-off-state");
+                var message = Loc.GetString("handheld-radio-component-mic-change", ("microphonState", state));
+                _popup.PopupEntity(message, args.User, args.User);
+                RemCompDeferred<ActiveListenerComponent>(uid);
+            }
+        });
+    }
+    // DS14-end
 }
