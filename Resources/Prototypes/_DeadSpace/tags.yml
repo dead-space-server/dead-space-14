@@ -339,19 +339,7 @@
   id: MaskGasVoice
 
 - type: Tag
-  id: MaskGasExplorerVoice
-
-- type: Tag
-  id: MaskWeldingGasVoice
-
-- type: Tag
   id: gasmask
-
-- type: Tag
-  id: gasmaskexplorer
-
-- type: Tag
-  id: gasmaskwelding
 
 - type: Tag
   id: MukhtarWearable
