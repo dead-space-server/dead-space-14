@@ -1,6 +1,6 @@
 - type: entity
   parent: ClothingOuterHardsuitBrigmedic
-  id: ClothingOuterHardsuitOfficerCriticalForce
+  id: ClothingOuterHardsuitCriticalForceMedic
   categories: [ HideSpawnMenu ]
   name: скафандр офицера CriticalForce Aesculap
   description: Бронированный скафандр медицинской эвакуационной службы. Защищает спасателя при работе в разгерметизированных отсеках.
@@ -12,13 +12,31 @@
   - type: StaminaResistance
     damageCoefficient: 0.7
   - type: ToggleableClothing
-    clothingPrototype: ClothingHeadHelmetHardsuitOfficerCriticalForce
+    clothingPrototype: ClothingHeadHelmetHardsuitCriticalForceMedic
+  - type: Tag
+    tags: []
+
+- type: entity
+  parent: ClothingOuterHardsuitBrigmedic
+  id: ClothingOuterHardsuitCriticalForceSecurity
+  categories: [ HideSpawnMenu ]
+  name: скафандр офицера CriticalForce Security
+  description: Бронированный скафандр медицинской эвакуационной службы. Защищает спасателя при работе в разгерметизированных отсеках.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/CriticalForce/hardsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/CriticalForce/hardsuit.rsi
+  - type: StaminaResistance
+    damageCoefficient: 0.7
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitCriticalForceSecurity
   - type: Tag
     tags: []
 
 - type: entity
   parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
-  id: ClothingHeadHelmetHardsuitOfficerCriticalForce
+  id: ClothingHeadHelmetHardsuitCriticalForceMedic
   categories: [ HideSpawnMenu ]
   name: шлем скафандра офицера CriticalForce Apollo
   description: Герметичный шлем спасателя со встроенным фонарём.
@@ -29,6 +47,35 @@
     sprite: _DeadSpace/Sponsor/CriticalForce/secofficer/helmet1.rsi
   - type: PointLight
     color: white
+  - type: HideLayerClothing
+    bodyLayers:
+    - Hair
+    - FacialHair
+  - type: PressureProtection
+    highPressureMultiplier: 0.08
+    lowPressureMultiplier: 1000
+  - type: FireProtection
+    reduction: 0.2
+  - type: Tag
+    tags: []
+
+- type: entity
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  id: ClothingHeadHelmetHardsuitCriticalForceSecurity
+  categories: [ HideSpawnMenu ]
+  name: шлем скафандра офицера CriticalForce Security
+  description: Герметичный шлем спасателя со встроенным фонарём.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/CriticalForce/secofficer/helmet2.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/CriticalForce/secofficer/helmet2.rsi
+  - type: PointLight
+    color: white
+  - type: HideLayerClothing
+    bodyLayers:
+    - Hair
+    - FacialHair
   - type: PressureProtection
     highPressureMultiplier: 0.08
     lowPressureMultiplier: 1000

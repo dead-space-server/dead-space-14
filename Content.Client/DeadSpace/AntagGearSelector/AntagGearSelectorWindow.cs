@@ -28,6 +28,7 @@ public sealed partial class AntagGearSelectorWindow : DefaultWindow
         RobustXamlLoader.Load(this);
         _timing = IoCManager.Resolve<IGameTiming>();
         Title = "Выбор специализации";
+        CloseButton.Visible = false;
         ConfirmButton.OnPressed += _ => OnConfirmed?.Invoke(_gearIndex, _perkIndex);
     }
 

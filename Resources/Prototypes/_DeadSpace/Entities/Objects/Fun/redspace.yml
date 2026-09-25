@@ -1,0 +1,67 @@
+- type: entity
+  parent: BaseItem
+  id: RedSpaceTaipanClownBag
+  name: редспейс мешок
+  description: Мешок, основанный на технологии РедСпейса, сзади написано "Будьте осторожны в использовании, мы не несём ответственность за вашу жизнь!"
+  suffix: Тайпан
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Fun/red-space-bag.rsi
+    state: icon
+  - type: Item
+    size: Normal
+  - type: UseDelay
+    delay: 120
+  - type: TriggerOnActivate
+  - type: EmitSoundOnTrigger
+    sound:
+      collection: trashBagRustle
+      params:
+        variation: 0.125
+  - type: SpawnEntityTableOnTrigger
+    useMapCoords: true
+    table: !type:GroupSelector
+      rolls: !type:RangeNumberSelector
+        range: 2, 5
+      children:
+      - id: FoodPieBananaCream
+        amount: !type:RangeNumberSelector
+          range: 1, 3
+      - id: FoodPieBananaCream
+        amount: !type:RangeNumberSelector
+          range: 1, 3
+      - id: WeaponLauncherChinaLakeToy
+      - id: CapGunSpawner90
+      - id: RandomSnacks
+      - id: ToySoundMakerSpawner90
+      - id: MiscToySpawner90
+      - id: ToySpawner90
+      - id: ToyWeaponSpawner90
+      - id: RandomSoap
+      - id: RandomSlip100
+      - id: MaintenanceWeaponSpawner
+      - id: SpawnMobHonkBot
+      - id: WeaponSMGTommyGunCap
+      - id: CrayonBox
+      - id: CrazyLube
+      - id: CrazyGlue
+      - id: ToyHammer
+      - id: PlushieSilSharp
+      - id: PlushieSilRenaTakala
+      - id: SalvageLivingLightSpawner
+        weight: 0.5
+      - id: PresentRandomInsane
+        weight: 0.2
+      - id: NukeOpsLootSpawner
+        weight: 0.1
+      - id: PushHorn
+        weight: 0.1
+      - id: HoloprojectorClownBorg
+        weight: 0.1
+      - id: BorgLauncherCreamPie
+        weight: 0.1
+      - id: TeslaMiniEnergyBall
+        weight: 0.1
+      - id: ClownBible
+        weight: 0.1
+

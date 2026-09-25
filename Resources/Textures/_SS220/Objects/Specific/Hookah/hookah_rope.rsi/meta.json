@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Made by Xenoksys (Github) for SS220. Imported unchanged from https://github.com/SerbiaStrong-220/space-station-14/tree/ee709bb0efd1f60bd0f02349ff540ebaadcb9086/Resources/Textures/Objects/Specific/Hookah/hookah_rope.rsi.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "rope"
+    }
+  ]
+}

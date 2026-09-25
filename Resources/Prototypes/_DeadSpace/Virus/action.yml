@@ -20,6 +20,7 @@
   components:
   - type: Action
     useDelay: 5
+    checkCanInteract: false
     icon:
       sprite: _DeadSpace/Virus/virus.rsi
       state: primary

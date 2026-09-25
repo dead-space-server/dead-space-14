@@ -1,0 +1,65 @@
+- type: job
+  id: TaipanClown
+  name: job-name-taipan-clown
+  description: job-description-taipan-clown
+  playTimeTracker: JobTaipanClown
+  setPreference: false
+  overrideConsoleVisibility: true
+  isTaipan: true
+  startingGear: TaipanClownGear
+  icon: "JobIconClown"
+  supervisors: job-supervisors-syndicate
+  canBeAntag: false
+  requirements:
+  - !type:RoleTimeRequirement
+    role: JobClown
+    time: 18000 # 5 hours
+  - !type:DepartmentTimeRequirement
+    department: Taipan
+    time: 36000 # 10 hours
+  access:
+  - TaipanService
+  accessGroups:
+  - TaipanAccess
+  special:
+  - !type:AddImplantSpecial
+    implants: [ ChameleonControllerImplant ]
+  - !type:AddComponentSpecial
+    components:
+    # - type: CustomNameOnSpawn
+    # - type: ClownBibleUser #Lets them honk with bibles
+    - type: PermanentStatusEffects
+      statusEffects:
+      - StatusEffectClumsyClown
+    - type: SleepEmitSound
+      snore: /Audio/Voice/Misc/silly_snore.ogg
+      interval: 10
+  - !type:AddImplantSpecial
+    implants: [ DeathRattleImplantTaipan ]
+  - !type:AddComponentSpecial
+    components:
+    - type: AntagImmune
+    - type: NpcFactionMember
+      factions:
+      - Taipan
+    - type: Skill
+      group: BasicAndShuttleControl
+
+- type: startingGear
+  id: TaipanClownGear
+  equipment:
+    head: ClothingHeadHatChameleon
+    mask: ClothingMaskGasChameleon
+    outerClothing: ClothingOuterChameleon
+    socks: ClothingUnderwearSocksChef
+    underwearb: ClothingUnderwearBottomBoxersClown
+    gloves: ClothingHandsChameleon
+    jumpsuit: ClothingUniformJumpsuitChameleon
+    shoes: ClothingShoesChameleon
+    ears: ClothingHeadsetTaipan
+    back: ClothingBackpackChameleon
+    id: ChameleonAgentPDA
+  storage:
+    back:
+    - BoxSurvivalTaipan
+    - RedSpaceTaipanClownBag

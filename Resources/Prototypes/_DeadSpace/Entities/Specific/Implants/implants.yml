@@ -130,6 +130,7 @@
     - Dead
   - type: RattleOnTrigger
     radioChannel: Taipan
+    targetUser: true
   - type: SuitSensor
     randomMode: false
     controlsLocked: true

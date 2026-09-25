@@ -13,8 +13,6 @@ using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 namespace Content.Client.DeadSpace.Ports.Jukebox;
-
-// DS14-start
 public sealed class JukeboxSystem : EntitySystem
 {
     [Dependency] private readonly IResourceCache _resource = default!;
@@ -26,6 +24,7 @@ public sealed class JukeboxSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
 
     private readonly Dictionary<EntityUid, JukeboxAudio> _playing = new();
+    private readonly HashSet<ResPath> _failedSongs = new();
     private float _volume;
 
     public override void Initialize()
@@ -55,14 +54,13 @@ public sealed class JukeboxSystem : EntitySystem
 
     public void RequestSongToPlay(EntityUid jukebox, WhiteJukeboxComponent component, JukeboxSong song)
     {
-        if (song.SongPath is not { } path || !_resource.TryGetResource<AudioResource>(path, out var resource))
+        if (song.SongPath is not { } path)
             return;
         RaiseNetworkEvent(new JukeboxRequestSongPlay
         {
             Jukebox = GetNetEntity(jukebox),
             SongName = song.SongName,
             SongPath = path,
-            SongDuration = (float) resource.AudioStream.Length.TotalSeconds,
         });
     }
 
@@ -96,8 +94,20 @@ public sealed class JukeboxSystem : EntitySystem
 
             if (current == null)
             {
-                if (!_resource.TryGetResource<AudioResource>(path, out var resource))
+                // Playback state can arrive before the asynchronous file transfer has finished.
+                if (_failedSongs.Contains(path) || !_resource.ContentFileExists(path))
                     continue;
+                AudioResource resource;
+                try
+                {
+                    resource = _resource.GetResource<AudioResource>(path, useFallback: false);
+                }
+                catch (Exception e)
+                {
+                    _failedSongs.Add(path);
+                    Log.Warning($"Could not load jukebox song {path}: {e.Message}");
+                    continue;
+                }
                 var length = (float) resource.AudioStream.Length.TotalSeconds;
                 if (length <= 0f)
                     continue;
@@ -107,16 +117,19 @@ public sealed class JukeboxSystem : EntitySystem
                 var source = _audioManager.CreateAudioSource(resource.AudioStream);
                 if (source == null)
                     continue;
+                var positional = resource.AudioStream.ChannelCount == 1;
+                source.Global = !positional;
                 source.Gain = 0f;
                 source.RolloffFactor = 0f;
                 source.MaxDistance = jukebox.MaxAudioRange;
                 source.PlaybackPosition = offset % length;
-                current = new JukeboxAudio(source, path, song.StartedAt);
+                current = new JukeboxAudio(source, path, song.StartedAt, positional);
                 _playing.Add(uid, current);
             }
 
             current.Source.Looping = jukebox.Playing;
-            current.Source.Position = position;
+            if (current.Positional)
+                current.Source.Position = position;
             current.Source.Occlusion = _audio.GetOcclusion(listener, delta, distance, uid);
             // Explicit gain also attenuates stereo tracks; OpenAL does not spatially attenuate stereo buffers.
             var gain = SpatialAudio.GetDistanceGain(distance, jukebox.MaxAudioRange);
@@ -130,11 +143,12 @@ public sealed class JukeboxSystem : EntitySystem
         }
     }
 
-    private sealed class JukeboxAudio(IAudioSource source, ResPath path, TimeSpan startedAt)
+    private sealed class JukeboxAudio(IAudioSource source, ResPath path, TimeSpan startedAt, bool positional)
     {
         public readonly IAudioSource Source = source;
         public readonly ResPath Path = path;
         public readonly TimeSpan StartedAt = startedAt;
+        public readonly bool Positional = positional;
         public bool Started;
     }
 
@@ -146,6 +160,6 @@ public sealed class JukeboxSystem : EntitySystem
             audio.Source.Dispose();
         }
         _playing.Clear();
+        _failedSongs.Clear();
     }
 }
-// DS14-end

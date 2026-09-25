@@ -22,6 +22,30 @@
           type: WarDeclaratorBoundUserInterface
     - type: WarDeclarator
       message: war-declarator-default-message
+      #DS14-Start
+      secondaryAnnouncementEnabled: true
+      secondaryAnnouncementDuration: 10
+      secondaryAnnouncementTextColor: "#ff4747"
+      secondaryAnnouncementFont: /Fonts/Bedstead/Bedstead.otf
+      secondaryAnnouncementFontSize: 20
+      secondaryAnnouncementTitleFontSize: 54
+      secondaryAnnouncementFadeFromBlackDuration: 2.5
+      secondaryAnnouncementFadeOutDuration: 1.5
+      secondaryAnnouncementTextDelay: 0.75
+      secondaryAnnouncementCharactersPerSecond: 28
+      secondaryAnnouncementShowBlackBackground: false
+      secondaryAnnouncementTypeTitle: true
+      secondaryAnnouncementRequiredEquipment:
+      - ClothingEyesPNVAdvSyndicate
+      - ClothingEyesGlassesThermalVisor
+      - ClothingEyesHudSyndicateAgent
+      - ClothingEyesHudSyndicate
+      secondaryAnnouncementSound:
+        path: /Audio/_DeadSpace/Announcements/briefing_warning.ogg
+      secondaryAnnouncementInterferenceSound:
+        path: /Audio/Effects/multitool_pulse.ogg
+      secondaryAnnouncementInterferenceDuration: 1
+      #DS14-End
     - type: AccessReader
       access: [["NuclearOperative"]]
     #DS14-Start

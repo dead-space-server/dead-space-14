@@ -1,7 +1,5 @@
-using Lidgren.Network;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
-using Robust.Shared.Network;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
 
@@ -66,10 +64,8 @@ public sealed partial class WhiteJukeboxComponent : Component
 public sealed class PlayingSongData
 {
     public ResPath? SongPath;
-    // DS14-start
     public TimeSpan StartedAt;
     public TimeSpan? EndsAt;
-    // DS14-end
     public string? SongName;
     public float PlaybackPosition;
     public float ActualSongLengthSeconds;
@@ -109,36 +105,9 @@ public sealed class JukeboxStopPlaying : EntityEventArgs
     public NetEntity? JukeboxUid { get; set; }
 }
 
-[Serializable, NetSerializable]
-public sealed class JukeboxSongUploadRequest : EntityEventArgs
+public sealed class JukeboxSongUploadRequest
 {
     public string SongName = string.Empty;
-    public List<byte> SongBytes = new();
+    public byte[] SongBytes = Array.Empty<byte>();
     public NetEntity TapeCreatorUid = default!;
-}
-
-public sealed class JukeboxSongUploadNetMessage : NetMessage
-{
-    public override NetDeliveryMethod DeliveryMethod => NetDeliveryMethod.ReliableUnordered;
-
-    public override MsgGroups MsgGroup => MsgGroups.Command;
-
-    public ResPath RelativePath { get; set; } = ResPath.Self;
-
-    public byte[] Data { get; set; } = Array.Empty<byte>();
-
-    public override void ReadFromBuffer(NetIncomingMessage buffer, IRobustSerializer serializer)
-    {
-        var dataLength = buffer.ReadVariableInt32();
-        Data = buffer.ReadBytes(dataLength);
-        RelativePath = new ResPath(buffer.ReadString());
-    }
-
-    public override void WriteToBuffer(NetOutgoingMessage buffer, IRobustSerializer serializer)
-    {
-        buffer.WriteVariableInt32(Data.Length);
-        buffer.Write(Data);
-        buffer.Write(RelativePath.ToString());
-        buffer.Write(ResPath.Separator);
-    }
 }

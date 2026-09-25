@@ -31,24 +31,24 @@
   objectType: Item
 
 - type: construction
-  id: ClothingHandsGlovesBoneBracers
-  graph: ClothingHandsGlovesBoneBracers
+  id: ClothingHandsGlovesBoneBracersAshWalker
+  graph: ClothingHandsGlovesBoneBracersAshWalker
   startNode: start
   targetNode: bracers
   category: construction-category-clothing
   objectType: Item
 
 - type: construction
-  id: ClothingNeckBoneTalisman
-  graph: ClothingNeckBoneTalisman
+  id: ClothingNeckBoneTalismanAshWalker
+  graph: ClothingNeckBoneTalismanAshWalker
   startNode: start
   targetNode: talisman
   category: construction-category-clothing
   objectType: Item
 
 - type: construction
-  id: ClothingUniformSkullArmor
-  graph: ClothingUniformSkullArmor
+  id: ClothingUniformSkullArmorAshWalker
+  graph: ClothingUniformSkullArmorAshWalker
   startNode: start
   targetNode: loincloth
   category: construction-category-clothing
@@ -102,4 +102,28 @@
   startNode: start
   targetNode: arrow
   category: construction-category-weapons
+  objectType: Item
+
+- type: construction
+  id: ClothingHandsGlovesBoneBracers
+  graph: ClothingHandsGlovesBoneBracers
+  startNode: start
+  targetNode: bracers
+  category: construction-category-clothing
+  objectType: Item
+
+- type: construction
+  id: ClothingNeckBoneTalisman
+  graph: ClothingNeckBoneTalisman
+  startNode: start
+  targetNode: talisman
+  category: construction-category-clothing
+  objectType: Item
+
+- type: construction
+  id: ClothingUniformSkullArmor
+  graph: ClothingUniformSkullArmor
+  startNode: start
+  targetNode: loincloth
+  category: construction-category-clothing
   objectType: Item

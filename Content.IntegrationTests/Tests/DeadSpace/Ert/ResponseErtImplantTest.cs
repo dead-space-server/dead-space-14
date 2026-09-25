@@ -12,6 +12,7 @@ using Content.Server.Shuttles.Systems;
 using Content.Shared.Access.Systems;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
+using Content.Shared.Clothing.Components;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.ERT;
@@ -22,6 +23,7 @@ using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Pinpointer;
+using Content.Shared.Roles;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Station.Components;
 using Content.Shared.Storage;
@@ -216,10 +218,17 @@ public sealed class ResponseErtImplantTest : InteractionTest
             foreach (var responder in responders)
             {
                 Assert.That(responder.Comp.CallReason, Is.Not.Null.And.Not.Empty);
-                Assert.That(inventory.TryGetSlotEntity(responder, "back", out var back), Is.True);
-                Assert.That(SEntMan.GetComponent<StorageComponent>(back!.Value).Container.ContainedEntities, Has.Count.EqualTo(6), "All evacuation supplies must fit in the backpack");
-                Assert.That(inventory.TryGetSlotEntity(responder, "belt", out var belt), Is.True);
-                Assert.That(SEntMan.GetComponent<StorageComponent>(belt!.Value).Container.ContainedEntities, Has.Count.EqualTo(5), "All belt equipment must fit");
+                // DS14-start
+                var loadout = SEntMan.GetComponent<LoadoutComponent>(responder);
+                var gear = Server.ProtoMan.Index<StartingGearPrototype>(loadout.StartingGear!.Single());
+                foreach (var (slot, expected) in gear.Storage)
+                {
+                    Assert.That(inventory.TryGetSlotEntity(responder, slot, out var container), Is.True);
+                    var contents = SEntMan.GetComponent<StorageComponent>(container!.Value).Container.ContainedEntities;
+                    Assert.That(contents.Select(item => SEntMan.GetComponent<MetaDataComponent>(item).EntityPrototype?.ID),
+                        Is.EquivalentTo(expected.Select(proto => proto.Id)), $"All {gear.ID} supplies must fit in {slot}");
+                }
+                // DS14-end
                 Assert.That(inventory.TryGetSlotEntity(responder, "pocket1", out var pointer), Is.True);
                 Assert.That(SEntMan.GetComponent<PinpointerComponent>(pointer!.Value).Target, Is.EqualTo(SPlayer));
             }

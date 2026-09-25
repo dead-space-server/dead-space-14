@@ -1,4 +1,4 @@
-﻿using Robust.Shared.Serialization;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared.NukeOps;
 
@@ -24,12 +24,25 @@ public sealed class WarDeclaratorBoundUserInterfaceState : BoundUserInterfaceSta
     public WarConditionStatus? Status;
     public TimeSpan ShuttleDisabledTime;
     public TimeSpan EndTime;
+    // DS14-start
+    public bool SecondaryAnnouncementEnabled;
+    // DS14-end
 
-    public WarDeclaratorBoundUserInterfaceState(WarConditionStatus? status, TimeSpan endTime, TimeSpan shuttleDisabledTime)
+    public WarDeclaratorBoundUserInterfaceState(
+        WarConditionStatus? status,
+        TimeSpan endTime,
+        TimeSpan shuttleDisabledTime,
+        // DS14-start
+        bool secondaryAnnouncementEnabled
+        // DS14-end
+        )
     {
         Status = status;
         EndTime = endTime;
         ShuttleDisabledTime = shuttleDisabledTime;
+        // DS14-start
+        SecondaryAnnouncementEnabled = secondaryAnnouncementEnabled;
+        // DS14-end
     }
 
 }
@@ -44,3 +57,13 @@ public sealed class WarDeclaratorActivateMessage : BoundUserInterfaceMessage
         Message = msg;
     }
 }
+
+// DS14-start
+[Serializable, NetSerializable]
+public sealed class WarDeclaratorSecondaryAnnouncementMessage(string title, string text)
+    : BoundUserInterfaceMessage
+{
+    public string Title { get; } = title;
+    public string Text { get; } = text;
+}
+// DS14-end

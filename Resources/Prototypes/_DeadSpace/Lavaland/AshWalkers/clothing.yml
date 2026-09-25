@@ -40,8 +40,8 @@
 
 - type: entity
   parent: ClothingHandsBase
-  id: ClothingHandsGlovesBoneBracers
-  name: bone bracers
+  id: ClothingHandsGlovesBoneBracersAshWalker
+  name: bone bracers Ash Walker
   description: Overlapping bone plates tied around the forearms. They soften blows without covering the fingers.
   components:
   - type: AshWalkerClothing
@@ -70,8 +70,8 @@
 
 - type: entity
   parent: ClothingNeckBase
-  id: ClothingNeckBoneTalisman
-  name: bone talisman
+  id: ClothingNeckBoneTalismanAshWalker
+  name: bone talisman Ash Walker
   description: A hunter's charm carved from bone and bound with sinew. The old gods favor those who return from the hunt.
   components:
   - type: AshWalkerClothing
@@ -94,8 +94,8 @@
 
 - type: entity
   parent: ClothingUniformAshWalker
-  id: ClothingUniformSkullArmor
-  name: skull-plated loincloth
+  id: ClothingUniformSkullArmorAshWalker
+  name: skull-plated loincloth Ash Walker
   description: A hide loincloth reinforced with a carved skull plate to protect the groin.
   components:
   - type: AshWalkerClothing
@@ -204,3 +204,78 @@
         Piercing: 0.9
         Heat: 0.8
         Caustic: 0.8
+
+- type: entity
+  parent: ClothingHandsBase
+  id: ClothingHandsGlovesBoneBracers
+  name: bone bracers
+  description: Overlapping bone plates tied around the forearms. They soften blows without covering the fingers.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_bracers.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_bracers.rsi
+  - type: Item
+    sprite: Clothing/Hands/Gloves/fingerless.rsi
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: "#CBBF82"
+      right:
+      - state: inhand-right
+        color: "#CBBF82"
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.9
+  - type: Construction
+    graph: ClothingHandsGlovesBoneBracers
+    node: bracers
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckBoneTalisman
+  name: bone talisman
+  description: A hunter's charm carved from bone and bound with sinew. The old gods favor those who return from the hunt.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_talisman.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_talisman.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Heat: 0.9
+        Cold: 0.9
+        Caustic: 0.9
+  - type: Construction
+    graph: ClothingNeckBoneTalisman
+    node: talisman
+
+- type: entity
+  parent: ClothingUniformAshWalker
+  id: ClothingUniformSkullArmor
+  name: skull-plated loincloth
+  description: A hide loincloth reinforced with a carved skull plate to protect the groin.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/skull_codpiece.rsi
+  - type: Clothing
+    clothingVisuals:
+      jumpsuit:
+      - state: equipped-INNERCLOTHING
+        sprite: Clothing/Uniforms/Jumpsuit/gladiator.rsi
+      - state: equipped-INNERCLOTHING
+        sprite: _DeadSpace/Lavaland/AshWalkers/skull_codpiece.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.95
+        Slash: 0.95
+        Piercing: 0.95
+        Heat: 0.95
+  - type: Construction
+    graph: ClothingUniformSkullArmor
+    node: loincloth

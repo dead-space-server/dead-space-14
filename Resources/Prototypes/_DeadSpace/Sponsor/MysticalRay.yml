@@ -106,7 +106,7 @@
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
-  parent: ClothingHeadHelmetHardsuitOfficerCriticalForce
+  parent: ClothingHeadHelmetHardsuitCriticalForceMedic
   id: ClothingHeadHelmetHardsuitMysticalRay
   categories: [ HideSpawnMenu ]
   name: шлем скафандра CriticalForce

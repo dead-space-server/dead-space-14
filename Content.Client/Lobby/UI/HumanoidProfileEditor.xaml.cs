@@ -2027,7 +2027,8 @@ namespace Content.Client.Lobby.UI
                         RgbSkinColorContainer.Visible = false;
                     }
 
-                    Skin.Value = strategy.ToUnary(Profile.Appearance.SkinColor);
+                    // Skin.Value = strategy.ToUnary(Profile.Appearance.SkinColor); // DS14: refreshing controls must not rewrite the profile.
+                    Skin.SetValueWithoutEvent(strategy.ToUnary(Profile.Appearance.SkinColor)); // DS14
 
                     break;
                 }

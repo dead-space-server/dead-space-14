@@ -16,6 +16,7 @@
     prototype: Skeleton
     requiredLegs: 2
     gibSound: /Audio/Effects/bone_rattle.ogg
+    gibBodyParts: true # DS14
   - type: Damageable
     damageContainer: Skeletal # DS14
     damageModifierSet: Skeleton # If we get non-Holy metaphysical damage types in the future, the Skeleton set might need to be adjusted to provide immunity to them (depends on what exactly the new types are)

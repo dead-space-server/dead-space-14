@@ -15,6 +15,7 @@
     tags:
     - HamsterWearable
     - WhitelistChameleon
+    - gasmask
   - type: HideLayerClothing
     layers:
       Snout: Mask

@@ -45,3 +45,6 @@
 
 - type: playTimeTracker
   id: JobDismissed
+
+- type: playTimeTracker
+  id: JobTaipanClown

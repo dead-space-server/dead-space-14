@@ -12,6 +12,8 @@ using Robust.Server.Containers;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
 using Robust.Shared.Utility;
+using Robust.Server.Player;
+using Robust.Shared.Network;
 
 namespace Content.Server.DeadSpace.Ports.Jukebox;
 
@@ -22,6 +24,8 @@ public sealed class TapeCreatorSystem : EntitySystem
     [Dependency] private readonly ContainerSystem _container = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private readonly IPlayerManager _players = default!;
+    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
 
     private static readonly ProtoId<TagPrototype> TapeRecorderCoinTag = "TapeRecorderCoin";
     private const string TapeCreatorContainerName = "tape_creator_container";
@@ -29,7 +33,6 @@ public sealed class TapeCreatorSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeNetworkEvent<JukeboxSongUploadRequest>(OnSongUploaded);
         SubscribeLocalEvent<TapeCreatorComponent, ComponentInit>(OnComponentInit);
         SubscribeLocalEvent<TapeCreatorComponent, InteractUsingEvent>(OnInteract);
         SubscribeLocalEvent<TapeCreatorComponent, GetVerbsEvent<Verb>>(OnTapeCreatorGetVerb);
@@ -128,13 +131,17 @@ public sealed class TapeCreatorSystem : EntitySystem
         }
     }
 
-    private void OnSongUploaded(JukeboxSongUploadRequest ev)
+    internal void OnSongUploaded(JukeboxSongUploadRequest ev, INetChannel channel)
     {
-        var tapeCreator = GetEntity(ev.TapeCreatorUid);
-        if (!TryComp<TapeCreatorComponent>(tapeCreator, out var tapeCreatorComponent))
+        if (!_players.TryGetSessionByChannel(channel, out var session) || session.AttachedEntity is not { } actor ||
+            !TryGetEntity(ev.TapeCreatorUid, out var creator) ||
+            !TryComp<TapeCreatorComponent>(creator, out var tapeCreatorComponent) || tapeCreatorComponent.Recording ||
+            !_ui.IsUiOpen(creator.Value, TapeCreatorUIKey.Key, actor) ||
+            string.IsNullOrWhiteSpace(ev.SongName))
         {
             return;
         }
+        var tapeCreator = creator.Value;
 
         if (!tapeCreatorComponent.InsertedTape.HasValue || tapeCreatorComponent.CoinBalance <= 0)
         {
@@ -142,12 +149,17 @@ public sealed class TapeCreatorSystem : EntitySystem
             return;
         }
 
+        var insertedTape = GetEntity(tapeCreatorComponent.InsertedTape.Value);
+        if (!tapeCreatorComponent.TapeContainer.Contains(insertedTape) || !TryComp<TapeComponent>(insertedTape, out var tapeComponent))
+            return;
+        if (_songsSyncManager.SyncSongData(ev.SongName, ev.SongBytes) is not { } songData)
+        {
+            _popup.PopupEntity("Не удалось прочитать музыкальную запись.", tapeCreator, actor);
+            return;
+        }
+
         tapeCreatorComponent.CoinBalance -= 1;
         tapeCreatorComponent.Recording = true;
-
-        var insertedTape = GetEntity(tapeCreatorComponent.InsertedTape.Value);
-        var tapeComponent = Comp<TapeComponent>(insertedTape);
-        var songData = _songsSyncManager.SyncSongData(ev.SongName, ev.SongBytes);
 
         var song = new JukeboxSong
         {
