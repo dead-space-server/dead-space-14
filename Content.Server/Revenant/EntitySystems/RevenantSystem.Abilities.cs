@@ -42,6 +42,7 @@ using Robust.Shared.Containers;
 using Content.Shared.DeadSpace.Languages.Components;
 using Content.Shared.Beam.Components;
 using Content.Shared.Damage.Components;
+using Content.Shared.Roles.Components; //DS14
 using Robust.Shared.Audio.Systems; //DS14
 using Robust.Shared.Player; //DS14
 using Content.Shared.Actions; //DS14
@@ -419,6 +420,20 @@ public sealed partial class RevenantSystem
             _popup.PopupEntity(Loc.GetString("revenant-mind-capture-corporeal"), uid);
             return;
         }
+        // DS-14-start
+        if (_mind.TryGetMind(args.Target, out var targetMindId, out var targetMind))
+        {
+            foreach (var role in targetMind.MindRoleContainer.ContainedEntities)
+            {
+                if (!HasComp<ChangelingRoleComponent>(role))
+                    continue;
+
+                _popup.PopupEntity(Loc.GetString("revenant-soul-too-powerful"), uid, uid);
+
+                return;
+            }
+        }
+        // DS-14-end
 
         if (!HasComp<MobStateComponent>(args.Target) || !_mobState.IsDead(args.Target))
         {

@@ -38,6 +38,7 @@ public sealed class SentientVirusSystem : EntitySystem
         SubscribeLocalEvent<SentientVirusComponent, SelectPrimaryPatientEvent>(OnSelectPrimaryPatient);
         SubscribeLocalEvent<SentientVirusComponent, TeleportToPrimaryPatientEvent>(OnTeleportToPrimaryPatient);
         SubscribeLocalEvent<SentientVirusComponent, EvolutionConsoleUiButtonPressedMessage>(OnButtonPressed);
+        SubscribeLocalEvent<SentientVirusComponent, MapInitEvent>(OnMapInit);
     }
 
     public override void Update(float frameTime)
@@ -343,8 +344,10 @@ public sealed class SentientVirusSystem : EntitySystem
             entity.Comp.Data.StrainId = strain;
 
         _timedWindowSystem.Reset(entity.Comp.UpdateWindow);
-
-        EnsureVirusActions(entity);
+    }
+    private void OnMapInit(EntityUid uid, SentientVirusComponent comp, MapInitEvent args)
+    {
+        EnsureVirusActions((uid, comp));
     }
 
     private void OnMindAdded(EntityUid uid, SentientVirusComponent component, MindAddedMessage args)
