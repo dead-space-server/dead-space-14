@@ -247,7 +247,6 @@
     zombificationResistanceCoefficient: 0.9
   - type: VirusResistance
     virusResistanceCoefficient: 0.1
-  - type: EyeProtection
   - type: Tag
     tags: [ ] # ignore "WhitelistChameleon" tag
 
@@ -324,6 +323,7 @@
     - AstroNavCartridge
     - WantedListCartridge
     - BankCartridge
+    - ScannerProgramCartridge
   - type: Tag
     tags: [ ] # ignore "WhitelistChameleon" tag
 
@@ -428,7 +428,6 @@
         openLayer:
           Open: { visible: true }
           Closed: { visible: false }
-    netsync: false
   - type: ItemCounter
     count:
       components: [Item]
@@ -439,7 +438,6 @@
     - fill-3
     - fill-4
   - type: Appearance
-    netsync: false
   - type: Item
     inhandVisuals:
       left:
@@ -451,7 +449,7 @@
   - type: StorageFill
     contents:
     - id: ClothingMaskGasPrometheus3
-    - id: DoubleEmergencyOxygenTankFilled
+    - id: DoubleEmergencyOxygenTankPrometheus3
     - id: EmergencyMedipenPrometheus3
     - id: FoodSnackNutribrick
     - id: DrinkMREFlask
@@ -570,24 +568,24 @@
   parent: [ ClothingEyesGlassesMeson, ClothingEyesPNVAdv ]
   id: ClothingVisorPrometheus3
   name: визор «BlackOps»
-  description: Улучшенный визор с несколькими встроенными сканерами. X-ray отсутствует.
+  description: Пара складных очков с несколькими встроенными сканерами. Вы никогда не просили о них.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Prometheus3/glasses.rsi
     layers:
     - state: icon
-      scale: 0.8, 0.8
   - type: Clothing
     sprite: _DeadSpace/Sponsor/Prometheus3/glasses.rsi
   - type: EyeProtection
+  - type: FlashImmunity
   - type: SolutionScanner
   - type: IdentityBlocker
     coverage: EYES
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
-# JETPACK
+# JETPACK & GASTANK
 - type: entity
   parent: JetpackVoidFilled
   id: JetpackVoidPrometheus3
@@ -607,7 +605,23 @@
     slots:
     - Back
     - suitStorage
-    - Belt
+
+- type: entity
+  parent: DoubleEmergencyOxygenTankFilled
+  id: DoubleEmergencyOxygenTankPrometheus3
+  name: двойной аварийный кислородный баллон
+  description: Высококлассный двухбаллонный резервуар аварийного жизнеобеспечения. Вмещает приличное для своих небольших размеров количество кислорода. Вмещает 2,5 Л газа.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Prometheus3/emergency_double.rsi
+  - type: Item
+    sprite: _DeadSpace/Sponsor/Prometheus3/emergency_double.rsi
+    storedSprite:
+      state: storage
+      sprite: _DeadSpace/Sponsor/Prometheus3/emergency_double.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Prometheus3/emergency_double.rsi
 
 # JUMPSUIT
 - type: entity
