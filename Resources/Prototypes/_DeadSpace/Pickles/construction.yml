@@ -1,0 +1,42 @@
+- type: constructionGraph
+  id: PickleBarrelWood
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: barrel
+      completed:
+      - !type:SnapToGrid {}
+      steps:
+      - material: WoodPlank
+        amount: 3
+        doAfter: 2
+  - node: barrel
+    entity: PickleBarrelWood
+    edges:
+    - to: start
+      completed:
+      - !type:EmptyAllContainers
+      - !type:SpawnPrototype
+        prototype: MaterialWoodPlank1
+        amount: 3
+      - !type:DeleteEntity {}
+      steps:
+      - tool: Prying
+        doAfter: 2
+
+- type: construction
+  id: PickleBarrelWood
+  name: construction-recipe-pickle-barrel-wood
+  graph: PickleBarrelWood
+  startNode: start
+  targetNode: barrel
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  icon:
+    sprite: _DeadSpace/Pickles/barrel_wood.rsi
+    state: idle
+  conditions:
+  - !type:TileNotBlocked

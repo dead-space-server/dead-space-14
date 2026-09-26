@@ -1,0 +1,11 @@
+- type: reaction
+  id: PickleBacteriaCulture
+  reactants:
+    Sugar:
+      amount: 5
+    Nutriment:
+      amount: 5
+    Water:
+      amount: 5
+  products:
+    PickleBacteria: 12

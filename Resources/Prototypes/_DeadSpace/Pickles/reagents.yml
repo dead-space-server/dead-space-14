@@ -1,0 +1,120 @@
+# Station wine — stronger ethanol, less thirst spam than stock Wine/BaseAlcohol.
+- type: reagent
+  id: PickleVinegarBrine
+  name: reagent-name-pickle-vinegar-brine
+  group: Foods
+  desc: reagent-desc-pickle-vinegar-brine
+  physicalDesc: reagent-physical-desc-cloudy
+  flavor: sour
+  color: "#b8a06a"
+  recognizable: true
+  metabolisms:
+    Food:
+      effects:
+      - !type:Satiate
+        satiationType: Hunger
+        factor: 0.4
+      - !type:Satiate
+        satiationType: Thirst
+        factor: 0.6
+      # Sober-up a bit if already drunk; mild toxin cleanse.
+      - !type:AdjustReagent
+        conditions:
+        - !type:ReagentCondition
+          reagent: Ethanol
+          min: 0.1
+        reagent: Ethanol
+        amount: -0.5
+      - !type:HealthChange
+        damage:
+          types:
+            Poison: -0.2
+
+- type: reagent
+  id: PickleSaltBrine
+  name: reagent-name-pickle-salt-brine
+  group: Foods
+  desc: reagent-desc-pickle-salt-brine
+  physicalDesc: reagent-physical-desc-salty
+  flavor: salty
+  color: "#e8e6dc"
+  recognizable: true
+  metabolisms:
+    Food:
+      effects:
+      - !type:Satiate
+        satiationType: Hunger
+        factor: 0.3
+      - !type:Satiate
+        satiationType: Thirst
+        factor: -0.2
+      - !type:AdjustReagent
+        conditions:
+        - !type:ReagentCondition
+          reagent: Ethanol
+          min: 0.1
+        reagent: Ethanol
+        amount: -0.45
+      - !type:HealthChange
+        damage:
+          types:
+            Poison: -0.15
+
+- type: reagent
+  id: PickleWine
+  name: reagent-name-pickle-wine
+  parent: BaseAlcohol
+  desc: reagent-desc-pickle-wine
+  physicalDesc: reagent-physical-desc-strong-smelling
+  flavor: shittywine
+  color: "#E00820"
+  recognizable: true
+  metabolisms:
+    Drink:
+      effects:
+      - !type:Satiate
+        satiationType: Thirst
+        factor: 0.35
+      - !type:AdjustReagent
+        reagent: Ethanol
+        amount: 0.3
+
+- type: reagent
+  id: PickleCider
+  name: reagent-name-pickle-cider
+  parent: BaseAlcohol
+  desc: reagent-desc-pickle-cider
+  physicalDesc: reagent-physical-desc-strong-smelling
+  flavor: juice
+  color: "#c9a227"
+  recognizable: true
+  metabolisms:
+    Drink:
+      effects:
+      - !type:Satiate
+        satiationType: Thirst
+        factor: 0.35
+      - !type:AdjustReagent
+        reagent: Ethanol
+        amount: 0.25
+
+- type: reagent
+  id: PickleBacteria
+  name: reagent-name-pickle-bacteria
+  group: Toxins
+  desc: reagent-desc-pickle-bacteria
+  physicalDesc: reagent-physical-desc-bubbling
+  flavor: bitter
+  color: "#6b8f3a"
+  metabolisms:
+    Poison:
+      effects:
+      - !type:HealthChange
+        damage:
+          types:
+            Poison: 0.1
+      - !type:PopupMessage
+        visualType: Small
+        messages: [ "pickle-bacteria-fart" ]
+        type: Local
+        probability: 0.08
