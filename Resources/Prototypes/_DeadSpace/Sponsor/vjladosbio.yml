@@ -259,7 +259,7 @@
 
 # Gasmask
 - type: entity
-  parent: ClothingMaskGasSyndicate
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskVjlados
   name: противогаз ксеноида
   description: Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.

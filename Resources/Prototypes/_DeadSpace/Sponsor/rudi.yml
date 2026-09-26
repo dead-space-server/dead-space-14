@@ -225,7 +225,7 @@
 
 # gasmask.rsi
 - type: entity
-  parent: ClothingMaskGasSecurity
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskrudi
   name: противогаз «Коммандос»
   description: Средство защиты дыхания от дыма, токсинов и заражённой атмосферы.

@@ -49,7 +49,7 @@ tilemap:
   37: FloorDarkMono
   2: FloorDarkOffset
   39: FloorDarkPavement
-  110: FloorDarkPavementGurza
+  110: FloorDarkPavement
   40: FloorDarkPavementVertical
   41: FloorDarkPlastic
   35: FloorDesert

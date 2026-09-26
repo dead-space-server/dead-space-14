@@ -254,7 +254,7 @@
 
 # Gas mask
 - type: entity
-  parent: ClothingMaskGasSecurity
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskGasswitzerlaand
   name: синий противогаз
   description: Закрывающая лицо маска, которую можно подключить к дыхательному баллону.

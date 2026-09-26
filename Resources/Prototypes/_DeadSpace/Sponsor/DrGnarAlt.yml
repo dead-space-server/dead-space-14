@@ -266,7 +266,7 @@
 
 # Mask
 - type: entity
-  parent: ClothingMaskGasSecurity
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskDrGnarAlt
   name: маска Канако
   description: Созданная из папье-маше маска Китсунэ.

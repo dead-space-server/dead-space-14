@@ -354,7 +354,7 @@
 
 # gasmask.rsi
 - type: entity
-  parent: ClothingMaskGasSecurity
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskPvrsifvlAlt2
   name: тактическая маска mil.HAZE // gen.1
   description: Давай оставлю свой автограф, только на тебе. Скрепляю степлером оставленный тобой порез. Не замечаю, что вокруг один тупой протест.
