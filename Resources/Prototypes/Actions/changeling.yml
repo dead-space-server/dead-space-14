@@ -94,6 +94,31 @@
     minStasisCooldown: 60
     maxStasisCooldown: 120
 
+# DS14-start
+- type: entity
+  parent: BaseAction
+  id: ActionChangelingAdrenaline
+  name: Adrenaline
+  description: "Your body adapts, synthesizing a toxin that speeds you up. Use it to corner your prey. \n\nRequires 25 Chemicals."
+  components:
+  - type: Action
+    icon: { sprite: _DeadSpace/Actions/changeling_adrenaline.rsi, state: adrenaline }
+    useDelay: 90
+    raiseOnAction: true
+    checkCanInteract: false
+  - type: ActionRequireSatiation
+    satiation: Chemicals
+    amount: 25
+    failReason: changeling-not-enough-chemicals
+  - type: InstantAction
+    event: !type:EntityEffectInstantActionEvent
+  - type: EntityEffectAction
+    effects:
+    - !type:AddReagentToBloodstream
+      reagent: Stimulants
+      quantity: 15
+# DS14-end
+
 - type: entity
   parent: ActionIntrinsicStore
   id: ActionChangelingStore

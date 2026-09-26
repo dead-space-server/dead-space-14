@@ -19,6 +19,29 @@
         enum.ChameleonUiKey.Key:
           type: ChameleonBoundUserInterface
 
+# DS-14-start
+- type: entity
+  parent: [ClothingBackpack, BaseChameleon]
+  id: ClothingBackpackTaipanClownChameleon
+  name: рюкзак
+  description: Вы надеваете эту штуку себе на спину и кладёте туда вещи! Просто как никогда!
+  suffix: Тайпан
+  components:
+    - type: Tag
+      tags: [] # ignore "WhitelistChameleon" tag
+    - type: Sprite
+      sprite: Clothing/Back/Backpacks/backpack.rsi
+    - type: ChameleonClothing
+      slot: [back]
+      default: ClothingBackpackClown
+    - type: UserInterface
+      interfaces:
+        enum.StorageUiKey.Key:
+          type: StorageBoundUserInterface
+        enum.ChameleonUiKey.Key:
+          type: ChameleonBoundUserInterface
+# DS-14-end
+
 - type: entity
   parent: [Clothing, ClothingSlotBase]
   id: ClothingBackpackWaterTank

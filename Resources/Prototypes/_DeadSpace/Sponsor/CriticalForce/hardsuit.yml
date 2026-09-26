@@ -1,65 +1,45 @@
 - type: entity
-  parent: [ClothingOuterHardsuitBase, BaseSyndicateContraband]
-  id: ClothingOuterHardsuitOfficerCriticalForce
+  parent: ClothingOuterHardsuitBrigmedic
+  id: ClothingOuterHardsuitCriticalForceMedic
   categories: [ HideSpawnMenu ]
   name: скафандр офицера CriticalForce Aesculap
-  description: Тяжелый боевой скафандр с интегрированной системой жизнеобеспечения. Оснащен автоматическими инъекторами, подавляющими боль и стабилизирующими критические состояния.
+  description: Бронированный скафандр медицинской эвакуационной службы. Защищает спасателя при работе в разгерметизированных отсеках.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/CriticalForce/hardsuit.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/CriticalForce/hardsuit.rsi
-  - type: Item
-    size: Huge
-  - type: PressureProtection
-    highPressureMultiplier: 0.02
-    lowPressureMultiplier: 1000
-  - type: FireProtection
-    reduction: 0.8
-  - type: ExplosionResistance
-    damageCoefficient: 0.5
-  - type: Armor
-    modifiers:
-      coefficients:
-        Blunt: 0.6
-        Slash: 0.6
-        Piercing: 0.6
-        Heat: 0.5
-        Shock: 0.5
-        Radiation: 0.4
-        Caustic: 0.5
-        Poison: 0.5
   - type: StaminaResistance
-    damageCoefficient: 0.5
-  - type: ClothingSpeedModifier
-    walkModifier: 0.85
-    sprintModifier: 0.85
-  - type: HeldSpeedModifier
+    damageCoefficient: 0.7
   - type: ToggleableClothing
-    clothingPrototype: ClothingHeadHelmetHardsuitOfficerCriticalForce
-  - type: HardsuitIdentification
-  - type: Speech
-  - type: TTS
-    voice: Adjutant
-  - type: AutoInjectReagentClothingOnAllowedState
-    durationRegenReagents: 90
-    allowedStates:
-    - Critical
-    reagents:
-      Omnizine: 10
-      Stimulants: 10
-      Saline: 5
+    clothingPrototype: ClothingHeadHelmetHardsuitCriticalForceMedic
   - type: Tag
     tags: []
-  - type: VirusResistance
-    virusResistanceCoefficient: 0.9
+
+- type: entity
+  parent: ClothingOuterHardsuitBrigmedic
+  id: ClothingOuterHardsuitCriticalForceSecurity
+  categories: [ HideSpawnMenu ]
+  name: скафандр офицера CriticalForce Security
+  description: Бронированный скафандр медицинской эвакуационной службы. Защищает спасателя при работе в разгерметизированных отсеках.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/CriticalForce/hardsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/CriticalForce/hardsuit.rsi
+  - type: StaminaResistance
+    damageCoefficient: 0.7
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitCriticalForceSecurity
+  - type: Tag
+    tags: []
 
 - type: entity
   parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
-  id: ClothingHeadHelmetHardsuitOfficerCriticalForce
+  id: ClothingHeadHelmetHardsuitCriticalForceMedic
   categories: [ HideSpawnMenu ]
   name: шлем скафандра офицера CriticalForce Apollo
-  description: Тактический шлем с панорамным HUD и ассистирующей системой авто-доводки. Защищает от большинства типов урона.
+  description: Герметичный шлем спасателя со встроенным фонарём.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/CriticalForce/secofficer/helmet1.rsi
@@ -67,17 +47,39 @@
     sprite: _DeadSpace/Sponsor/CriticalForce/secofficer/helmet1.rsi
   - type: PointLight
     color: white
+  - type: HideLayerClothing
+    bodyLayers:
+    - Hair
+    - FacialHair
   - type: PressureProtection
     highPressureMultiplier: 0.08
     lowPressureMultiplier: 1000
   - type: FireProtection
     reduction: 0.2
-  - type: Armor
-    modifiers:
-      coefficients:
-        Blunt: 0.9
-        Slash: 0.9
-        Piercing: 0.9
-        Heat: 0.9
+  - type: Tag
+    tags: []
+
+- type: entity
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  id: ClothingHeadHelmetHardsuitCriticalForceSecurity
+  categories: [ HideSpawnMenu ]
+  name: шлем скафандра офицера CriticalForce Security
+  description: Герметичный шлем спасателя со встроенным фонарём.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/CriticalForce/secofficer/helmet2.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/CriticalForce/secofficer/helmet2.rsi
+  - type: PointLight
+    color: white
+  - type: HideLayerClothing
+    bodyLayers:
+    - Hair
+    - FacialHair
+  - type: PressureProtection
+    highPressureMultiplier: 0.08
+    lowPressureMultiplier: 1000
+  - type: FireProtection
+    reduction: 0.2
   - type: Tag
     tags: []

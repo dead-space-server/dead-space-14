@@ -130,6 +130,57 @@
       - SurplusBundle
 
 - type: listing
+  id: UplinkShortyNukeopsCommander
+  name: uplink-shorty-name
+  description: uplink-shorty-desc
+  icon: { sprite: _DeadSpace/Objects/Weapons/Guns/Shotguns/supershorty.rsi, state: icon }
+  productEntity: ClothingBackpackDuffelSyndicateFilledShotgunShorty
+  cost:
+    Telecrystal: 25
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsCommanderUplink
+  - !type:BuyerAntagCondition
+    whitelist:
+    - NukeopsCommander
+  - !type:PopulationLimitedStockCondition
+    stock: 1
+    highPopulationStock: 1
+    highPopulationThreshold: 110
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkShortyNukeopsLone
+  name: uplink-shorty-name
+  description: uplink-shorty-lone-desc
+  icon: { sprite: _DeadSpace/Objects/Weapons/Guns/Shotguns/supershorty.rsi, state: icon }
+  productEntity: ClothingBackpackDuffelSyndicateFilledShotgunShortyLone
+  cost:
+    Telecrystal: 18
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+  - !type:PopulationLimitedStockCondition
+    stock: 1
+    highPopulationStock: 1
+    highPopulationThreshold: 110
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
   id: UplinkEswordDoubleAgents
   name: uplink-esword-double-name
   description: uplink-esword-double-desc
@@ -469,7 +520,7 @@
   icon: { sprite: _DeadSpace/Objects/Specific/Arkalyse/arkalyse_book.rsi, state: icon }
   productEntity: BoxArkalyse
   cost:
-    Telecrystal: 15
+    Telecrystal: 20
   categories:
   - UplinkWeaponry
   conditions:
@@ -547,7 +598,7 @@
   icon: { sprite: /Textures/_DeadSpace/Items/Toys/TommyGun/tommy_gun.rsi, state: icon }
   productEntity: ClothingBackpackDuffelSyndicateFilledSMGTommyGun
   cost:
-    Telecrystal: 15
+    Telecrystal: 12
   categories:
   - UplinkWeaponry
   conditions:
@@ -998,13 +1049,13 @@
 
 - type: listing
   id: UplinkThermalVisor
-  name: uplink-thermal-visor-name
-  description: uplink-thermal-visor-desc
+  name: uplink-thermal-visor-chameleon-name
+  description: uplink-thermal-visor-chameleon-desc
   icon: { sprite: /Textures/_DeadSpace/Clothing/Eyes/Hud/thermal.rsi, state: icon }
-  productEntity: ClothingEyesGlassesThermalVisor
+  productEntity: ClothingEyesGlassesThermalVisorChameleon
   discountCategory: rareDiscounts
   discountDownTo:
-    Telecrystal: 3
+    Telecrystal: 2
   cost:
     Telecrystal: 4
   categories:

@@ -452,6 +452,34 @@ public sealed partial class AntagSelectionSystem
         return result;
     }
 
+    // DS14-start
+    /// <summary>
+    /// Gets preselected sessions whose antagonist definition restricts their round-start job selection.
+    /// </summary>
+    public HashSet<ICommonSession> GetPreSelectedSessionsAffectingJobSelection(
+        AntagSelectionDefinition? except = null)
+    {
+        var result = new HashSet<ICommonSession>();
+        var query = QueryAllRules();
+        while (query.MoveNext(out var uid, out var comp, out _))
+        {
+            if (HasComp<EndedGameRuleComponent>(uid))
+                continue;
+
+            foreach (var def in comp.Definitions)
+            {
+                if (!def.AffectsJobSelection || def.Equals(except))
+                    continue;
+
+                if (comp.PreSelectedSessions.TryGetValue(def, out var set))
+                    result.UnionWith(set);
+            }
+        }
+
+        return result;
+    }
+    // DS14-end
+
     /// <summary>
     /// Get all sessions that have been preselected for antag and are exclusive, i.e. should not be paired with other antags.
     /// </summary>

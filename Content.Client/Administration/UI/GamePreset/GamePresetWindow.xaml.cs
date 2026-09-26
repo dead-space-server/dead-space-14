@@ -37,6 +37,9 @@ public sealed partial class GamePresetWindow : DefaultWindow
     private bool _preventRepeatMode;
     private bool _checkPlayerLimit;
     private List<string> _whitelistModeIds = new();
+    private bool _enableLowPlayerPreset;
+    private int _lowPlayerThreshold;
+    private string? _lowPlayerPresetId;
     private int _rdmStreak;
     private bool _isLobby;
 
@@ -194,6 +197,9 @@ public sealed partial class GamePresetWindow : DefaultWindow
         _preventRepeatMode = msg.PreventRepeatMode;
         _checkPlayerLimit = msg.CheckPlayerLimit;
         _whitelistModeIds = msg.WhitelistModeIds ?? new List<string>();
+        _enableLowPlayerPreset = msg.EnableLowPlayerPreset;
+        _lowPlayerThreshold = msg.LowPlayerThreshold;
+        _lowPlayerPresetId = msg.LowPlayerPresetId;
         _rdmStreak = msg.RdmStreak;
         _isLobby = msg.IsLobby;
 
@@ -635,7 +641,16 @@ public sealed partial class GamePresetWindow : DefaultWindow
             _settingsWindow.Close();
 
         _settingsWindow = new PresetSettingsWindow();
-        _settingsWindow.LoadSettings(_maxRdmRow, _voteDurationSeconds, _disableOocDuringVote, _preventRepeatMode, _checkPlayerLimit, _whitelistModeIds);
+        _settingsWindow.LoadSettings(
+            _maxRdmRow,
+            _voteDurationSeconds,
+            _disableOocDuringVote,
+            _preventRepeatMode,
+            _checkPlayerLimit,
+            _whitelistModeIds,
+            _enableLowPlayerPreset,
+            _lowPlayerThreshold,
+            _lowPlayerPresetId);
         _settingsWindow.OpenCentered();
     }
 

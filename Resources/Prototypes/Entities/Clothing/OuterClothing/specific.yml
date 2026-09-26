@@ -23,3 +23,31 @@
           Slash: 0.95
           Heat: 0.90
       showArmorOnExamine: false
+
+# DS-14-Start
+- type: entity
+  parent: [ClothingOuterBase, AllowSuitStorageClothingGasTanks, BaseChameleon]
+  id: ClothingTaipanClownOuterChameleon
+  name: бомбер
+  description: Странный на вид бомбер, не надумывайте!
+  suffix: Тайпан
+  components:
+    - type: Tag
+      tags: [] # ignore "WhitelistChameleon" tag
+    - type: Sprite
+      sprite: Clothing/OuterClothing/Vests/vest.rsi
+    - type: Clothing
+      sprite: Clothing/OuterClothing/Vests/vest.rsi
+    - type: ChameleonClothing
+      slot: [outerClothing]
+      default: ClothingOuterClownPriest
+    - type: TemperatureProtection # Same as a basic winter coat.
+      heatingCoefficient: 1.1
+      coolingCoefficient: 0.1
+    - type: Armor
+      modifiers:
+        coefficients:
+          Slash: 0.95
+          Heat: 0.90
+      showArmorOnExamine: false
+# DS-14-End

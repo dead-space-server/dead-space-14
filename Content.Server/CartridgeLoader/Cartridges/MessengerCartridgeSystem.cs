@@ -362,6 +362,26 @@ public sealed partial class MessengerCartridgeSystem : EntitySystem
             component.IncomingMessagesDisabled = incomingEvent.Disabled;
             UpdateUiState(uid, loaderUid.Value);
         }
+
+        if (args is MessengerDeleteMessageEvent deleteEvent)
+        {
+            var message = server.Value.Component.Messages.FirstOrDefault(message => message.Id == deleteEvent.MessageId);
+            if (message == null)
+                return;
+            if (message.SenderId != userData.Value.Id)
+                return;
+            server.Value.Component.Messages.Remove(message);
+            Dirty(server.Value.Uid, server.Value.Component);
+            UpdateUiState(uid, loaderUid.Value);
+            var receiverCartridge = GetCartridgeByUserId(message.ReceiverId);
+
+            if (receiverCartridge == null)
+                return;
+            var receiverLoader = GetLoaderUid(receiverCartridge.Value);
+
+            if (receiverLoader != null)
+                UpdateUiState(receiverCartridge.Value, receiverLoader.Value);
+        }
         // DS14-End
     }
 

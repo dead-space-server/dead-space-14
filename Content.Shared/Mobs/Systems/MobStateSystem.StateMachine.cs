@@ -1,4 +1,5 @@
 ﻿using Content.Shared.Database;
+using Content.Shared.DeadSpace.Arena;
 using Content.Shared.Humanoid;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Movement.Components; //DS14
@@ -119,6 +120,10 @@ public partial class MobStateSystem
         var ev = new MobStateChangedEvent(target, component, oldState, newState, origin);
         OnStateChanged(target, component, oldState, newState);
         RaiseLocalEvent(target, ev, true);
+        // DS14-start: don't log arena player state changes to the admin log
+        if (HasComp<ArenaPlayerComponent>(target))
+            return;
+        // DS14-end
         if (origin != null && HasComp<ActorComponent>(origin) && HasComp<ActorComponent>(target) && oldState < newState)
             _adminLogger.Add(LogType.Damaged, LogImpact.High, $"{ToPrettyString(origin):player} caused {ToPrettyString(target):player} state to change from {oldState} to {newState}");
         else

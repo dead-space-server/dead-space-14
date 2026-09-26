@@ -1,4 +1,4 @@
-﻿using Content.Server.GameTicking.Rules;
+using Content.Server.GameTicking.Rules;
 using Content.Shared.NukeOps;
 using Robust.Shared.Audio;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
@@ -37,7 +37,7 @@ public sealed partial class WarDeclaratorComponent : Component
     /// War declaration sound file path
     /// </summary>
     [DataField]
-    public SoundSpecifier Sound = new SoundPathSpecifier("/Audio/_DeadSpace/Announcements/war.ogg"); // DS14-Announcements
+    public SoundSpecifier Sound = new SoundPathSpecifier("/Audio/_DeadSpace/Announcements/war.ogg");
 
     /// <summary>
     /// Fluent ID for the declaration sender title
@@ -63,6 +63,75 @@ public sealed partial class WarDeclaratorComponent : Component
 
     [DataField]
     public WarConditionStatus? CurrentStatus;
+
+    // DS14-start
+    /// <summary>
+    /// Enables the optional targeted full-screen announcement tab.
+    /// This does not affect the normal declaration-of-war announcement.
+    /// </summary>
+    [DataField]
+    public bool SecondaryAnnouncementEnabled = false;
+
+    /// <summary>
+    /// Entity prototype IDs. A player must be wearing at least one of these in an inventory slot.
+    /// Items in hands, pockets, backpacks, or nested containers do not count.
+    /// Empty list means there are no recipients.
+    /// </summary>
+    [DataField]
+    public List<string> SecondaryAnnouncementRequiredEquipment = [];
+
+    [DataField]
+    public float SecondaryAnnouncementDuration = 10f;
+
+    [DataField]
+    public Color SecondaryAnnouncementTextColor = Color.Red;
+
+    [DataField]
+    public string SecondaryAnnouncementFont = "/Fonts/Bedstead/Bedstead.otf";
+
+    [DataField]
+    public int SecondaryAnnouncementFontSize = 20;
+
+    [DataField]
+    public int SecondaryAnnouncementTitleFontSize = 54;
+
+    [DataField]
+    public float SecondaryAnnouncementFadeFromBlackDuration = 2.5f;
+
+    [DataField]
+    public float SecondaryAnnouncementFadeOutDuration = 1.5f;
+
+    [DataField]
+    public float SecondaryAnnouncementTextDelay = 0.75f;
+
+    [DataField]
+    public float SecondaryAnnouncementCharactersPerSecond = 28f;
+
+    [DataField]
+    public bool SecondaryAnnouncementShowBlackBackground = false;
+
+    [DataField]
+    public bool SecondaryAnnouncementTypeTitle = true;
+
+    /// <summary>
+    /// Normal sound for the targeted secondary announcement.
+    /// Played locally only if there is no already active targeted announcement.
+    /// </summary>
+    [DataField]
+    public SoundSpecifier? SecondaryAnnouncementSound =
+        new SoundPathSpecifier("/Audio/_DeadSpace/Announcements/briefing_warning.ogg");
+
+    /// <summary>
+    /// Sound used when this announcement collides with another targeted announcement.
+    /// </summary>
+    [DataField]
+    public SoundSpecifier? SecondaryAnnouncementInterferenceSound =
+        new SoundPathSpecifier("/Audio/Effects/multitool_pulse.ogg");
+
+    [DataField]
+    public float SecondaryAnnouncementInterferenceDuration = 1f;
+    // DS14-end
+
 }
 
 [ByRefEvent]

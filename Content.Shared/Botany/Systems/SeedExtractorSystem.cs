@@ -11,20 +11,23 @@ namespace Content.Shared.Botany.Systems;
 
 public sealed partial class SeedExtractorSystem : EntitySystem
 {
-    // DS14-start: current engine uses explicit event subscriptions.
+    // DS14-start: current engine uses explicit event subscriptions and query initialization.
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<SeedExtractorComponent, InteractUsingEvent>(OnInteractUsing);
+        _produceQuery = GetEntityQuery<ProduceComponent>();
     }
     // DS14-end
 
-    // DS14-start: current engine uses readonly IoC fields.
+    // DS14-start
     [Dependency] private readonly BotanySystem _botany = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedPowerReceiverSystem _powerReceiver = default!;
+
+    private EntityQuery<ProduceComponent> _produceQuery;
     // DS14-end
 
     private void OnInteractUsing(Entity<SeedExtractorComponent> ent, ref InteractUsingEvent args)
@@ -32,7 +35,7 @@ public sealed partial class SeedExtractorSystem : EntitySystem
         if (!_powerReceiver.IsPowered(ent.Owner))
             return;
 
-        if (!TryComp<ProduceComponent>(args.Used, out var produce))
+        if (!_produceQuery.TryComp(args.Used, out var produce)) // DS14
             return;
 
         if (produce.PlantProtoId == null)

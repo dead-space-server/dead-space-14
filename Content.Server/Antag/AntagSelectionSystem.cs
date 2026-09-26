@@ -33,6 +33,7 @@ using Content.Shared.Humanoid;
 using Content.Shared.Implants;
 using Content.Shared.Implants.Components;
 using Content.Shared.Mind;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Players;
 using Content.Shared.Preferences;
 using Content.Shared.Preferences.Loadouts;
@@ -49,7 +50,9 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
-using Content.DeadSpace.Interfaces.Server; // DS14-sponsors
+using Content.DeadSpace.Interfaces.Server;
+using Content.Shared.Nutrition.EntitySystems;
+using Content.Shared.Roles.Components;
 
 namespace Content.Server.Antag;
 
@@ -76,12 +79,17 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
     [Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly SharedSubdermalImplantSystem _subdermalImplant = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly SatiationSystem _satiation = default!;
     // DS14-end
     private IServerSponsorsManager? _sponsorsManager; // DS14-sponsors
 
     // arbitrary random number to give late joining some mild interest.
     public const float LateJoinRandomChance = 0.5f;
-    private const string SleeperAgentsRule = "SleeperAgents"; // DS14
+    // DS14-start
+    private const string SleeperAgentsRule = "SleeperAgents";
+    private const string ChemicalsChangelingType = "Chemicals";
+    // DS14-end
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -555,11 +563,16 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
         var componentsBeforeAssignment = SnapshotComponents(entitiesBeforeAssignment);
         // DS14-end
 
-        EntityManager.AddComponents(player, def.Components);
+        // DS14-start: selector-backed antagonists receive their components after the player chooses a body.
+        var deferredGearSelection = TryComp<Content.Server.DeadSpace.AntagGearSelector.AntagGearSelectorComponent>(ent, out var gearSelector) &&
+                                    def.PrefRoles.Any(gearSelector.Roles.Contains);
+        if (!deferredGearSelection)
+            EntityManager.AddComponents(player, def.Components);
+        // DS14-end
 
         // Equip the entity's RoleLoadout and LoadoutGroup
         List<ProtoId<StartingGearPrototype>> gear = new();
-        if (def.StartingGear is not null)
+        if (!deferredGearSelection && def.StartingGear is not null) // DS14
             gear.Add(def.StartingGear.Value);
 
         // DS14-start
@@ -584,10 +597,13 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
             }
         }
 
-        if (selectedAntagLoadout != null && selectedAntagLoadoutPrototype != null)
-            _loadout.Equip(player, gear, selectedAntagLoadout, selectedAntagLoadoutPrototype);
-        else
-            _loadout.Equip(player, gear, def.RoleLoadout);
+        if (!deferredGearSelection) // DS14
+        {
+            if (selectedAntagLoadout != null && selectedAntagLoadoutPrototype != null)
+                _loadout.Equip(player, gear, selectedAntagLoadout, selectedAntagLoadoutPrototype);
+            else
+                _loadout.Equip(player, gear, def.RoleLoadout);
+        } // DS14
         // DS14-end
 
         if (session != null)
@@ -610,7 +626,11 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
             // DS14-end
             _role.MindAddRoles(curMind.Value, def.MindRoles, null, true);
             ent.Comp.AssignedMinds.Add((curMind.Value, Name(player)));
-            SendBriefing(session, def.Briefing);
+            // DS14-start: selector-backed antagonists get the proper role briefing
+            // only after their fighter and perk have been selected.
+            if (!deferredGearSelection)
+                SendBriefing(session, def.Briefing);
+            // DS14-end
 
             Log.Debug($"Assigned {ToPrettyString(curMind)} as antagonist: {ToPrettyString(ent)}");
             _adminLogger.Add(LogType.AntagSelection, $"Assigned {ToPrettyString(curMind)} as antagonist: {ToPrettyString(ent)}");
@@ -839,6 +859,13 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
             Dirty(player, blobCarrier);
         }
 
+        // DS14-start
+        if (_role.MindHasRole<ChangelingRoleComponent>(mindId))
+        {
+            _satiation.RemoveSatiationType(player, ChemicalsChangelingType);
+        }
+        // DS14-end
+
         HashSet<EntityUid>? objectivesBeforeAssignment = null;
         if (TryComp<AntagRollbackTrackerComponent>(player, out var rollback))
         {
@@ -1026,6 +1053,11 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
         if (_prison.IsUserPrisoner(session.UserId))
             return false;
 
+        // DS14-start
+        if (session.AttachedEntity is { } body && !HasComp<GhostComponent>(body) && !RuleStation.IsTarget(ent.Owner, body))
+            return false;
+        // DS14-end
+
         if (ent.Comp.AssignedSessions.Contains(session))
             return false;
 
@@ -1076,6 +1108,11 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
 
         if (_arrivals.IsOnArrivals((entity.Value, null)))
             return false;
+
+        // DS14-start
+        if (def.RequireNotDead && _mobState.IsDead(entity.Value))
+            return false;
+        // DS14-end
 
         if (!def.AllowNonHumans && !HasComp<HumanoidAppearanceComponent>(entity))
             return false;

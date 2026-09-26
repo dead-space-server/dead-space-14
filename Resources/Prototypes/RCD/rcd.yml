@@ -11,6 +11,7 @@
   mode: Deconstruct
   prototype: EffectRCDDeconstructPreview
   rotation: Camera
+  menuOrder: -1 # DS14
 
 - type: rcd
   id: DeconstructLattice   # Hidden prototype - do not add to RCDs
@@ -44,6 +45,7 @@
   rules:
     - CanBuildOnEmptyTile
   fx: EffectRCDConstruct1
+  menuOrder: 0 # DS14
 
 - type: rcd
   id: FloorSteel
@@ -58,6 +60,7 @@
   rules:
     - CanBuildOnEmptyTile
   fx: EffectRCDConstruct1
+  menuOrder: 1 # DS14
 
 - type: rcd
   id: Catwalk
@@ -73,6 +76,7 @@
     - IsCatwalk
   rotation: Fixed
   fx: EffectRCDConstruct1
+  menuOrder: 2 # DS14
 
 # Walls
 - type: rcd
@@ -86,6 +90,7 @@
   collisionMask: FullTileMask
   rotation: Fixed
   fx: EffectRCDConstruct2
+  menuOrder: 3 # DS14
 
 - type: rcd
   id: Grille
@@ -98,6 +103,7 @@
   collisionMask: Impassable
   rotation: Fixed
   fx: EffectRCDConstruct2
+  menuOrder: 0 # DS14
 
 # Windows
 - type: rcd
@@ -113,6 +119,7 @@
     - IsWindow
   rotation: Fixed
   fx: EffectRCDConstruct2
+  menuOrder: 1 # DS14
 
 - type: rcd
   id: WindowDirectional
@@ -129,6 +136,7 @@
   rotation: User
   fx: EffectRCDConstruct1
   allowMultiDirection: true
+  menuOrder: 2 # DS14
 
 - type: rcd
   id: ReinforcedWindow
@@ -143,6 +151,7 @@
     - IsWindow
   rotation: User
   fx: EffectRCDConstruct3
+  menuOrder: 3 # DS14
 
 - type: rcd
   id: WindowReinforcedDirectional
@@ -159,6 +168,7 @@
   rotation: User
   fx: EffectRCDConstruct2
   allowMultiDirection: true
+  menuOrder: 4 # DS14
 
 # Airlocks
 - type: rcd
@@ -172,6 +182,7 @@
   collisionMask: FullTileMask
   rotation: Camera
   fx: EffectRCDConstruct4
+  menuOrder: 0 # DS14
 
 - type: rcd
   id: AirlockGlass
@@ -184,6 +195,7 @@
   collisionMask: FullTileMask
   rotation: Camera
   fx: EffectRCDConstruct4
+  menuOrder: 1 # DS14
 
 - type: rcd
   id: Firelock
@@ -196,6 +208,7 @@
   collisionMask: FullTileMask
   rotation: Camera
   fx: EffectRCDConstruct3
+  menuOrder: 2 # DS14
 
 # Lighting
 - type: rcd
@@ -211,6 +224,7 @@
   rotation: User
   fx: EffectRCDConstruct1
   allowMultiDirection: true
+  menuOrder: 0 # DS14
 
 - type: rcd
   id: BulbLight
@@ -225,6 +239,7 @@
   rotation: User
   fx: EffectRCDConstruct1
   allowMultiDirection: true
+  menuOrder: 1 # DS14
 
 # Electrical
 - type: rcd
@@ -239,6 +254,7 @@
   - MustBuildOnSubfloor
   rotation: Fixed
   fx: EffectRCDConstruct0
+  menuOrder: 0 # DS14
 
 - type: rcd
   id: MVCable
@@ -252,6 +268,7 @@
   - MustBuildOnSubfloor
   rotation: Fixed
   fx: EffectRCDConstruct0
+  menuOrder: 1 # DS14
 
 - type: rcd
   id: HVCable
@@ -265,6 +282,7 @@
   - MustBuildOnSubfloor
   rotation: Fixed
   fx: EffectRCDConstruct0
+  menuOrder: 2 # DS14
 
 - type: rcd
   id: CableTerminal
@@ -277,3 +295,4 @@
   collisionMask: Impassable
   rotation: User
   fx: EffectRCDConstruct0
+  menuOrder: 3 # DS14

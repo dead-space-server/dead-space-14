@@ -550,10 +550,13 @@ public sealed partial class VehicleSystem : EntitySystem
         if (entity.Comp.RequiresHands && (!_handsQuery.HasComp(uid) || !_actionBlocker.CanInteract(uid, entity)))
             return false;
 
-        if (_handBlockerQuery.TryComp(entity, out var handBlocker) &&
+        // DS14-start
+        if (entity.Comp.RequiresHands &&
+            _handBlockerQuery.TryComp(entity, out var handBlocker) &&
             (!_handsQuery.TryComp(uid, out var hands) ||
              _hands.GetHandCount((uid, hands)) < handBlocker.BlockedHands))
             return false;
+        // DS14-end
 
         return _actionBlocker.CanConsciouslyPerformAction(uid);
     }
@@ -563,7 +566,7 @@ public sealed partial class VehicleSystem : EntitySystem
     /// </summary>
     private bool TryBlockHands(Entity<VehicleComponent> vehicle, EntityUid operatorUid)
     {
-        if (!_handBlockerQuery.TryComp(vehicle, out var handBlocker))
+        if (!vehicle.Comp.RequiresHands || !_handBlockerQuery.TryComp(vehicle, out var handBlocker)) // DS14
             return true;
 
         if (_virtualItem.TrySpawnUnremoveableVirtualItemInHand(

@@ -17,11 +17,15 @@ public sealed partial class StoreListingControl : Control
     [Dependency] private readonly IGameTiming _timing = default!;
     private readonly ClientGameTicker _ticker;
 
-    private readonly ListingDataWithCostModifiers _data;
+    // DS14-start
+    private ListingDataWithCostModifiers _data = default!;
+    private bool _hasBalance;
+    private string _price = string.Empty;
+    private string _discount = string.Empty;
 
-    private readonly bool _hasBalance;
-    private readonly string _price;
-    private readonly string _discount;
+    public ListingDataWithCostModifiers Listing => _data;
+    // DS14-end
+
     public StoreListingControl(
         ListingDataWithCostModifiers data,
         string price,
@@ -35,19 +39,28 @@ public sealed partial class StoreListingControl : Control
 
         _ticker = _entity.System<ClientGameTicker>();
 
+        SetPreview(texture, productEntity);
+        Update(data, price, discount, hasBalance); // DS14
+    }
+
+    // DS14-start
+    public void Update(
+        ListingDataWithCostModifiers data,
+        string price,
+        string discount,
+        bool hasBalance)
+    {
         _data = data;
         _hasBalance = hasBalance;
         _price = price;
         _discount = discount;
 
-        StoreItemName.Text = GetName(); // DS14
+        StoreItemName.Text = GetName();
         StoreItemDescription.SetMessage(ListingLocalisationHelpers.GetLocalisedDescriptionOrEntityDescription(_data, _prototype));
-
         UpdateBuyButtonText();
         StoreItemBuyButton.Disabled = !CanBuy();
-
-        SetPreview(texture, productEntity);
     }
+    // DS14-end
 
     private void SetPreview(Texture? texture, EntProtoId? productEntity)
     {

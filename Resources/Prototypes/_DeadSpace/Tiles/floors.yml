@@ -52,6 +52,12 @@
   name: tiles-stone-floor
   sprite: /Textures/_DeadSpace/Tiles/stone_floor.png
   baseTurf: Plating
+  baseWhitelist:
+  - FloorBasalt
+  - FloorCave
+  - FloorCaveDrought
+  - FloorWasteland
+  - FloorWastelandDug
   isSubfloor: false
   deconstructTools: [ Prying ]
   footstepSounds:

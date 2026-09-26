@@ -130,6 +130,7 @@
     - Dead
   - type: RattleOnTrigger
     radioChannel: Taipan
+    targetUser: true
   - type: SuitSensor
     randomMode: false
     controlsLocked: true
@@ -224,6 +225,18 @@
     popup: sandevistan-implant-activated
 
 - type: entity
+  parent: SandevistanImplant
+  id: SandevistanImplantDeathsquadSeal
+  components:
+  - type: SandevistanImplant
+    applyImplantTrauma: false
+    softcapPopups: []
+    softcapShouts: []
+    endWarningPopups: []
+    recoveryPopups: []
+    popup: null
+
+- type: entity
   id: SandevistanImplanter
   suffix: Сандевистан
   parent: BaseImplantOnlyImplanter
@@ -287,3 +300,36 @@
           components:
           - Implanter
   - type: Appearance
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/evidence_bag_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/evidence_bag_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/evidence_bag_drop.ogg
+
+- type: entity
+  parent: BaseSubdermalImplant
+  id: SmartLinkImplant
+  name: имплант «Смартлинк»
+  description: Кибернетический имплант синхронизирующий баллистические данные умного оружия с нейроинтерфейсом владельца и проецирующий их прямо на сетчатку глаза. Позволяет использовать системы самонаведения и тактический интерфейс совместимого вооружения.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SubdermalImplant
+    whitelist:
+      components:
+      - Hands
+    implantComponents:
+    - type: SmartLinkImplant
+
+- type: entity
+  parent: BaseImplantOnlyImplanterSyndi
+  id: SmartLinkImplanter
+  suffix: смартлинк
+  name: имплантер
+  description: Одноразовый шприц, специально предназначенный для введения подкожных имплантов.
+  components:
+  - type: Implanter
+    implant: SmartLinkImplant

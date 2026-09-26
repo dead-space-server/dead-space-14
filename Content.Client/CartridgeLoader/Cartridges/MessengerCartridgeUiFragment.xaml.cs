@@ -28,6 +28,7 @@ public sealed partial class MessengerCartridgeUiFragment : BoxContainer
     private IPrototypeManager _prototypeManager = default!;
     private TimeSpan _lastTypingTime;
     private string _searchText = string.Empty; // DS14
+    private readonly HashSet<int> _delSelfMessages = new(); // DS14
     private bool _isBlocking; // DS14
     private bool _incomingMessagesDisabled; // DS14
 
@@ -334,33 +335,115 @@ public sealed partial class MessengerCartridgeUiFragment : BoxContainer
         OnSendMessage?.Invoke(_currentChatPartnerId, text);
         MessageInput.Clear();
     }
+    // DS-14-start
+    private void OpenDeleteMenu(Button menuButton, MessengerMessageEntry message)
+    {
+        var popup = new Popup
+        {
+            CloseOnClick = true,
+            CloseOnEscape = true,
+        };
+
+        popup.OnPopupHide += popup.Dispose;
+        var menu = new BoxContainer
+        {
+            Orientation = LayoutOrientation.Vertical,
+            MinWidth = 150,
+        };
+        var delSelfButton = new Button
+        {
+            Text = "Удалить у себя",
+            TextAlign = Label.AlignMode.Center,
+            HorizontalExpand = true,
+        };
+        delSelfButton.OnPressed += _ =>
+        {
+            _delSelfMessages.Add(message.Id);
+            OnDeleteSelfMessage?.Invoke(message.Id);
+
+            popup.Close();
+
+            if (_currentChatPartnerId != 0)
+                OnRequestMessages?.Invoke(_currentChatPartnerId);
+        };
+        menu.AddChild(delSelfButton);
+
+        if (!message.IsIncoming)
+        {
+            var delForAllButton = new Button
+            {
+                Text = "Удалить у всех",
+                TextAlign = Label.AlignMode.Center,
+                HorizontalExpand = true,
+            };
+            delForAllButton.OnPressed += _ =>
+            {
+                OnDeleteMessage?.Invoke(message.Id);
+                popup.Close();
+            };
+            menu.AddChild(delForAllButton);
+        }
+
+        popup.AddChild(menu);
+        UserInterfaceManager.ModalRoot.AddChild(popup);
+
+        var pos = menuButton.GlobalPosition + new Vector2(0, menuButton.Height + 2);
+
+        popup.Open(UIBox2.FromDimensions(pos, Vector2.One));
+    }
 
     private void UpdateMessages(List<MessengerMessageEntry> messages)
     {
         MessageContainer.RemoveAllChildren();
-
-        var filteredMessages = messages.Where(m =>
-            m.SenderId == _currentChatPartnerId || m.ReceiverId == _currentChatPartnerId);
-
-        foreach (var msg in filteredMessages.OrderBy(m => m.Timestamp))
+        var filteredMessages = messages.Where(message => !_delSelfMessages.Contains(message.Id) && (message.SenderId == _currentChatPartnerId || message.ReceiverId == _currentChatPartnerId)).OrderBy(message => message.Timestamp);
+        foreach (var message in filteredMessages)
         {
-            var timeStr = msg.Timestamp.ToString(@"hh\:mm\:ss");
-            var color = msg.IsIncoming ? "aqua" : "white";
-            // DS14-start
-            var safeName = FormattedMessage.EscapeText(msg.SenderName);
-            var safeContent = FormattedMessage.EscapeText(msg.Content);
-            var safeTime = FormattedMessage.EscapeText(timeStr);
-            var richLabel = new RichTextLabel { HorizontalExpand = true };
-            richLabel.SetMessage(FormattedMessage.FromMarkup(
-                $"[color={color}]{safeTime} {safeName}: {safeContent}[/color]"));
-            // DS14-end
-            MessageContainer.AddChild(richLabel);
+            var time = message.Timestamp.ToString(@"hh\:mm\:ss");
+            var color = message.IsIncoming ? "aqua" : "white";
+
+            var safeName = FormattedMessage.EscapeText(message.SenderName);
+            var safeContent = FormattedMessage.EscapeText(message.Content);
+            var safeTime = FormattedMessage.EscapeText(time);
+
+            var messageRow = new BoxContainer
+            {
+                Orientation = LayoutOrientation.Horizontal,
+                HorizontalExpand = true,
+                Margin = new Thickness(0, 0, 0, 4),
+            };
+
+            var messageLabel = new RichTextLabel
+            {
+                HorizontalExpand = true,
+                VerticalAlignment = VAlignment.Center,
+            };
+            messageLabel.SetMessage(FormattedMessage.FromMarkupOrThrow($"[color={color}]{safeTime} {safeName}: {safeContent}[/color]"));
+
+            var delMenuButton = new Button
+            {
+                Text = "...",
+                SetWidth = 24,
+                SetHeight = 24,
+                TextAlign = Label.AlignMode.Center,
+                VerticalAlignment = VAlignment.Center,
+                HorizontalAlignment = HAlignment.Center,
+            };
+
+            delMenuButton.OnPressed += _ => OpenDeleteMenu(delMenuButton, message);
+
+            messageRow.AddChild(messageLabel);
+            messageRow.AddChild(delMenuButton);
+
+            MessageContainer.AddChild(messageRow);
         }
     }
+    // DS-14-end
 
     public event Action<int, string>? OnSendMessage;
     public event Action<int>? OnRequestMessages;
     public event Action? OnTyping;
     public event Action<int, bool>? OnBlockUser; // DS14
     public event Action<bool>? OnSetIncomingDisabled; // DS14
+    public event Action<int>? OnDeleteMessage; // DS14
+    public event Action<int>? OnDeleteSelfMessage; // DS14
 }

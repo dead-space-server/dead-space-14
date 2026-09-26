@@ -9,3 +9,9 @@
   values:
     prefix: thankyou-captaindrobe-
     count: 6
+
+- type: localizedDataset
+  id: ToxinVendGoodbyes
+  values:
+    prefix: thankyou-toxinvend-
+    count: 3

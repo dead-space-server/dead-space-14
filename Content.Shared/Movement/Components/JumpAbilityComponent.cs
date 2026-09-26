@@ -38,6 +38,14 @@ public sealed partial class JumpAbilityComponent : Component
     [DataField, AutoNetworkedField]
     public float JumpThrowSpeed = 10f;
 
+    // DS14-start
+    /// <summary>
+    /// Whether the entire jump path must be clear of hard collisions before starting the throw.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool RequireUnobstructedPath;
+    // DS14-end
+
     /// <summary>
     /// Whether this entity can collide with another entity, leading to it getting knocked down.
     /// </summary>

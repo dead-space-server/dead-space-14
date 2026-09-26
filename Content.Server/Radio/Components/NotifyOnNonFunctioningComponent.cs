@@ -45,6 +45,17 @@ public sealed partial class NotifyOnNonFunctioningComponent : Component
     [DataField]
     public LocId? LocUnpowered;
 
+    // DS14-start
+    /// <summary>
+    /// Minimum interval between repeated unpowered radio alerts from this device.
+    /// </summary>
+    [DataField]
+    public TimeSpan UnpoweredAlertCooldown = TimeSpan.FromMinutes(1);
+
+    [ViewVariables]
+    public TimeSpan NextUnpoweredAlert;
+    // DS14-end
+
     /// <summary>
     /// Localized string to use when this device is turned off.
     /// </summary>

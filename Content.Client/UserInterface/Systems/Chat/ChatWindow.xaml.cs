@@ -100,7 +100,7 @@ public sealed partial class ChatWindow : FancyWindow
         _poppedOutWindow.RequestClosed += OnPoppedOutWindowRequestClosed;
 
         var poppedOutRoot = UserInterfaceManager.CreateWindowRoot(_poppedOutWindow);
-        poppedOutRoot.BackgroundColor = DeadSpaceStylePalette.SurfaceDark;
+        poppedOutRoot.BackgroundColor = DeadSpaceStylePalette.SurfaceTranscript;
 
         var poppedOutBackground = new PanelContainer
         {
@@ -190,7 +190,7 @@ public sealed partial class ChatWindow : FancyWindow
         _poppedOutWindow.RequestClosed += OnPoppedOutWindowRequestClosed;
 
         var poppedOutRoot = UserInterfaceManager.CreateWindowRoot(_poppedOutWindow);
-        poppedOutRoot.BackgroundColor = DeadSpaceStylePalette.SurfaceDark;
+        poppedOutRoot.BackgroundColor = DeadSpaceStylePalette.SurfaceTranscript;
 
         var poppedOutBackground = new PanelContainer
         {

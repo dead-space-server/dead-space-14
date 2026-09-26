@@ -1,0 +1,28 @@
+- type: vendingMachineInventory
+  id: ToxinVendInventory
+  startingInventory:
+    Jug: 2
+    JugAluminium: 1
+    JugCarbon: 2
+    JugChlorine: 1
+    JugCopper: 1
+    JugEthanol: 1
+    JugFluorine: 1
+    JugHydrogen: 1
+    JugIodine: 1
+    JugIron: 1
+    JugLithium: 1
+    JugMercury: 1
+    JugNitrogen: 2
+    JugOxygen: 2
+    JugPhosphorus: 1
+    JugPotassium: 1
+    JugRadium: 1
+    JugSilicon: 1
+    JugSodium: 1
+    JugSugar: 1
+    JugSulfur: 1
+    ArtifexiumChemistryVial: 2
+  contrabandInventory:
+    StrangePill: 3
+    ChemistryBottleToxin: 1

@@ -518,6 +518,7 @@
     sprite: _DeadSpace/Lavaland/Objects/Specific/Mining/adv_jump_boots.rsi
   - type: JumpAbility
     jumpDistance: 3
+    requireUnobstructedPath: true
     jumpSound: /Audio/Effects/stealthoff.ogg
   - type: ActionGrant
     actions:

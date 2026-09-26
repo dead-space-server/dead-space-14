@@ -1,4 +1,5 @@
 using Content.Shared.Humanoid;
+using Content.Shared.DeadSpace.Languages.Prototypes;
 using Content.Shared.Speech;
 using Robust.Shared.Prototypes;
 
@@ -34,19 +35,32 @@ public sealed partial class TapeCassetteRecordedMessage : IComparable<TapeCasset
     [DataField]
     public string Message = string.Empty;
 
+    /// <summary>
+    /// Language used by the original speaker. Old serialized recordings default to Galactic Common.
+    /// </summary>
+    [DataField]
+    public ProtoId<LanguagePrototype> LanguageId = "GeneralLanguage"; // DS14
+
     // Corvax-TTS-Start
     [DataField]
     [ViewVariables(VVAccess.ReadWrite)]
     public string VoiceId = SharedHumanoidAppearanceSystem.DefaultTapeRecorderVoice;
     // Corvax-TTS-End
 
-    public TapeCassetteRecordedMessage(float timestamp, string name, ProtoId<SpeechVerbPrototype> verb, string message, string voiceId)
+    public TapeCassetteRecordedMessage(
+        float timestamp,
+        string name,
+        ProtoId<SpeechVerbPrototype> verb,
+        string message,
+        string voiceId,
+        ProtoId<LanguagePrototype> languageId) // DS14
     {
         Timestamp = timestamp;
         Name = name;
         Verb = verb;
         Message = message;
         VoiceId = voiceId;
+        LanguageId = languageId; // DS14
     }
 
     public int CompareTo(TapeCassetteRecordedMessage? other)

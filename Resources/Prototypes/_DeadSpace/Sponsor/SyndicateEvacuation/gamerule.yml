@@ -1,0 +1,61 @@
+- type: entity
+  parent: BaseGameRule
+  id: SpawnSyndicateEvacuationShuttle
+  components:
+  - type: ErtSpawnRule
+    shuttle: SyndicateEvacuationShuttle
+
+- type: ertShuttle
+  id: SyndicateEvacuationShuttle
+  path: /Maps/Shuttles/ERT/ds_syndicate_evacuation.yml
+
+- type: ertTeam
+  id: SyndicateEvacuation
+  name: Эвакуационная группа Синдиката
+  description: Стабилизация и окончательная эвакуация одного агента со станции.
+  announceOnApproval: false
+  rule: SpawnSyndicateEvacuationShuttle
+  spawnWindow:
+    min: 2m
+    max: 4m
+  price: 0
+  dispatchPerTarget: true
+  spawns:
+  - id: RandomHumanoidSpawnerSyndicateEvacuationMedic
+  - id: RandomHumanoidSpawnerSyndicateEvacuationEscort
+
+- type: entity
+  parent: ActionCallErtHelp
+  id: ActionCallSyndicateEvacuation
+  name: Request extraction
+  description: Request a medical extraction team. Departure aboard their shuttle ends your mission on the station.
+
+- type: entity
+  parent: BaseSubdermalImplant
+  id: TrackingImplantSyndicateEvacuation
+  name: extraction contract implant
+  description: A single-use emergency transmitter for a station agent. Requests extraction while the bearer is in critical condition.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SubdermalImplant
+    implantAction: ActionCallSyndicateEvacuation
+    whitelist:
+      components:
+      - MobState
+  - type: ResponseErtImplant
+    team: SyndicateEvacuation
+    allowedStates: [ Critical ]
+    requiredAntagonistRole: MindRoleTraitor
+    confirmationTitle: syndicate-evacuation-call-title
+    confirmationPrompt: syndicate-evacuation-call-prompt
+    callReason: syndicate-evacuation-call-reason
+    roleDeniedMessage: syndicate-evacuation-role-denied
+
+- type: entity
+  parent: BaseImplantOnlyImplanter
+  id: ImplanterSyndicateEvacuation
+  name: extraction contract implanter
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Implanter
+    implant: TrackingImplantSyndicateEvacuation

@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Created by Taiga (Discord: zdhh). Edited by amaliz (Discord) for Space Station 14 Мёртвый Космос",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon",
+      "directions": 1
+    },
+    {
+      "name": "stand-still",
+      "directions": 4,
+      "delays": [
+        [2, 0.2, 0.2, 2],
+        [2, 0.2, 0.2, 2],
+        [2, 0.2, 0.2, 2],
+        [2, 0.2, 0.2, 2]
+      ]
+    },
+    {
+      "name": "move",
+      "directions": 4,
+      "delays": [
+        [0.13, 0.13, 0.13, 0.13],
+        [0.13, 0.13, 0.13, 0.13],
+        [0.13, 0.13, 0.13, 0.13],
+        [0.13, 0.13, 0.13, 0.13]
+      ]
+    }
+  ]
+}

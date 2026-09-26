@@ -8,6 +8,7 @@ using Content.Shared.DeadSpace.GasMaskDispatch.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Radio;
 using Content.Shared.Radio.Components;
+using Content.Shared.Speech;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
@@ -73,6 +74,10 @@ public sealed class GasMaskDispatchSystem : EntitySystem
 
         var location = _navMap.GetNearestBeaconString(wearer.Value, onlyName: true);
         var message = Loc.GetString(locKey, ("location", location));
+
+        var accentEvent = new AccentGetEvent(wearer.Value, message);
+        RaiseLocalEvent(wearer.Value, accentEvent);
+        message = accentEvent.Message;
 
         _radio.SendRadioMessage(wearer.Value, message, channel, wearer.Value);
         _actions.StartUseDelay((action, actionComp));

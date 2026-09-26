@@ -163,3 +163,9 @@
     removeOnShutdown: false
     actions:
     - ActionChangelingFakeMindshieldToggle
+
+- type: entity # dummy prototype for the store listing
+  id: ChangelingCocoonDummy
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ChangelingCocoonAbility

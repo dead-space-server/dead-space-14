@@ -39,6 +39,13 @@ public sealed partial class PipeShuttleComponent : Component
 
     [ViewVariables]
     public bool DoorsSecured;
+
+    /// <summary>
+    /// Whether the shuttle body has been switched to dynamic for manual flight.
+    /// Prevents re-applying every frame.
+    /// </summary>
+    [ViewVariables]
+    public bool ManualBodyActive;
 }
 
 public enum PipeShuttleFlightMode : byte

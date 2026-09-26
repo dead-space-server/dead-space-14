@@ -16,6 +16,7 @@
       min: 1
       max: 1
       playerRatio: 20
+      requireNotDead: true
       briefing:
         text: shadowling-role-greeting
         color: Red

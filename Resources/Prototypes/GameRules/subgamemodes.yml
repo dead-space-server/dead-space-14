@@ -3,9 +3,6 @@
   id: Thief
   components:
   - type: ThiefRule
-  - type: AntagObjectives
-    objectives:
-    - EscapeThiefShuttleObjective
   - type: AntagRandomObjectives
     sets:
     - groups: ThiefBigObjectiveGroups

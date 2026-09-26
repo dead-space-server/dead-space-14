@@ -1,0 +1,18 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="{Loc centcomm-transfer-title}" MinSize="420 300">
+    <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="8">
+        <Label Text="{Loc centcomm-transfer-parallax}" />
+        <OptionButton Name="ParallaxSelector" HorizontalExpand="True" />
+        <Label Text="{Loc centcomm-transfer-temperature}" />
+        <OptionButton Name="TemperatureSelector" HorizontalExpand="True" />
+        <BoxContainer Name="CustomTemperatureRow" Visible="False">
+            <FloatSpinBox Name="CelsiusInput" Value="20" HorizontalExpand="True" />
+            <Label Text="°C" Margin="8 0 0 0" />
+        </BoxContainer>
+        <Label Text="{Loc centcomm-transfer-weather}" />
+        <OptionButton Name="WeatherSelector" HorizontalExpand="True" />
+        <RichTextLabel Name="StatusLabel" Margin="0 6 0 6" />
+        <Button Name="TransferButton" Text="{Loc centcomm-transfer-start}" Disabled="True" />
+    </BoxContainer>
+</DefaultWindow>

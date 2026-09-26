@@ -1,0 +1,30 @@
+- type: entity
+  parent: BaseStructure
+  id: NinjaGroundLight
+  name: напольный светильник
+  suffix: Ниндзя
+  description: Небольшой декоративный напольный светильник.
+  components:
+  - type: Sprite
+    drawdepth: FloorObjects
+    sprite: _DeadSpace/Structures/Lighting/ninja_ground_light.rsi
+    layers:
+    - state: normal
+    - state: "on"
+      map: ["light"]
+      shader: unshaded
+  - type: PointLight
+    enabled: true
+    netsync: false
+    radius: 10
+    energy: 0.8
+    softness: 1
+    color: "#FFE4CE"
+  - type: ItemToggle
+    activated: true
+  - type: ItemTogglePointLight 
+  - type: ToggleableVisuals
+    spriteLayer: light
+  - type: Appearance
+  - type: Clickable
+  - type: InteractionOutline

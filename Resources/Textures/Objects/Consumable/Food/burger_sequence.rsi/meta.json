@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Created by TheShuEd. Bun taken from tgstation and modified by Swept and potato1234x at https://github.com/tgstation/tgstation/commit/40d75cc340c63582fb66ce15bf75a36115f6bdaa, and edited by TheShuEd",
+  "copyright": "Made by Ma3xak2 для сервера Мёртвый Космос",
   "size": {
     "x": 32,
     "y": 32
@@ -15,6 +15,21 @@
     },
     {
       "name": "cheese"
+    },
+    {
+      "name": "patty"
+    },
+    {
+      "name": "cabbage"
+    },
+    {
+      "name": "tomato"
+    },
+    {
+      "name": "onion"
+    },
+    {
+      "name": "bird-cooked"
     }
   ]
 }

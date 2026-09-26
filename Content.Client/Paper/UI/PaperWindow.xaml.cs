@@ -86,6 +86,9 @@ namespace Content.Client.Paper.UI
         private DefaultWindow? _colorPickerWindow;
         private ColorSelectorSliders? _colorPickerSliders;
 
+        private PaperInsertDataWindow? _insertDataWindow;
+        public event Action? OnInsertDataRequested;
+
         // Color picker debounce: while dragging the sliders we only update the
         // swatch button. The text is rewritten once the user pauses for a moment,
         // so a single drag doesn't produce dozens of text edits.
@@ -158,6 +161,7 @@ namespace Content.Client.Paper.UI
             CyrillicConfusionButton.OnPressed += _ => ToggleInlineFormat("[сonf=2]", "[/сonf]");
             BulletButton.OnPressed += _ => ToggleBlockFormat("[bullet]", "[/bullet]");
             ColorButton.OnPressed += _ => ToggleColorPicker();
+            InsertButton.OnPressed += _ => ToggleInsertDataPanel(); // DS14
 
             FormatDropdown.AddItem(Loc.GetString("paper-ui-toolbar-text"));
             FormatDropdown.AddItem(Loc.GetString("paper-ui-toolbar-heading-1"));
@@ -379,6 +383,9 @@ namespace Content.Client.Paper.UI
             EditButtons.Visible = isEditing;
             FormatToolbar.Visible = isEditing; // DS14
             UpdateWindowSizeForEditMode(isEditing); // DS14
+
+            if (!isEditing)
+                CleanupInsertDataPanel();
 
             var msg = new FormattedMessage();
             msg.AddMarkupPermissive(state.Text);
@@ -932,9 +939,56 @@ namespace Content.Client.Paper.UI
             _colorPickerWindow = null;
         }
 
+        private void ToggleInsertDataPanel()
+        {
+            if (!InputContainer.Visible)
+                return;
+
+            if (_insertDataWindow is { IsOpen: true })
+            {
+                _insertDataWindow.Close();
+                return;
+            }
+
+            if (_insertDataWindow == null)
+            {
+                _insertDataWindow = new PaperInsertDataWindow();
+                _insertDataWindow.OnInsert += InsertValue;
+                _insertDataWindow.OnRefresh += () => OnInsertDataRequested?.Invoke();
+            }
+
+            _insertDataWindow.SetLoading();
+            _insertDataWindow.Open();
+            OnInsertDataRequested?.Invoke();
+        }
+
+        public void PopulateInsertData(PaperInsertDataResponseMessage data)
+        {
+            if (InputContainer.Visible && _insertDataWindow is { IsOpen: true })
+                _insertDataWindow.Populate(data);
+        }
+
+        private void InsertValue(string value)
+        {
+            if (!InputContainer.Visible)
+                return;
+
+            FlushPendingColor();
+            Input.InsertAtCursor(FormattedMessage.EscapeText(value));
+            if (!_previewMode)
+                Input.GrabKeyboardFocus();
+        }
+
+        private void CleanupInsertDataPanel()
+        {
+            _insertDataWindow?.Close();
+            _insertDataWindow = null;
+        }
+
         public override void Close()
         {
             CleanupColorPicker();
+            CleanupInsertDataPanel(); // DS14
             base.Close();
         }
 
@@ -942,7 +996,10 @@ namespace Content.Client.Paper.UI
         protected override void Dispose(bool disposing)
         {
             if (disposing)
+            {
                 CleanupColorPicker();
+                CleanupInsertDataPanel(); // DS14
+            }
 
             base.Dispose(disposing);
         }

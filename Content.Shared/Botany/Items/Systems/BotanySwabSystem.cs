@@ -12,7 +12,7 @@ namespace Content.Shared.Botany.Items.Systems;
 
 public sealed partial class BotanySwabSystem : EntitySystem
 {
-    // DS14-start: current engine uses explicit event subscriptions.
+    // DS14-start: current engine uses explicit event subscriptions and query initialization.
     public override void Initialize()
     {
         base.Initialize();
@@ -20,10 +20,13 @@ public sealed partial class BotanySwabSystem : EntitySystem
         SubscribeLocalEvent<BotanySwabComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<BotanySwabComponent, AfterInteractEvent>(OnAfterInteract);
         SubscribeLocalEvent<BotanySwabComponent, BotanySwabDoAfterEvent>(OnDoAfter);
+        _plantQuery = GetEntityQuery<PlantComponent>();
     }
     // DS14-end
 
-    // DS14-start: current engine uses readonly IoC fields.
+    // DS14-start
+    private EntityQuery<PlantComponent> _plantQuery;
+
     [Dependency] private readonly BotanySystem _botany = default!;
     [Dependency] private readonly PlantMutationSystem _mutation = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
@@ -50,7 +53,7 @@ public sealed partial class BotanySwabSystem : EntitySystem
     /// </summary>
     private void OnAfterInteract(Entity<BotanySwabComponent> ent, ref AfterInteractEvent args)
     {
-        if (args.Target == null || !args.CanReach || !HasComp<PlantComponent>(args.Target))
+        if (args.Target == null || !args.CanReach || !_plantQuery.HasComp(args.Target)) // DS14
             return;
 
         _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, ent.Comp.SwabDelay, new BotanySwabDoAfterEvent(), ent.Owner, target: args.Target, used: ent.Owner)
@@ -66,7 +69,7 @@ public sealed partial class BotanySwabSystem : EntitySystem
     /// </summary>
     private void OnDoAfter(Entity<BotanySwabComponent> ent, ref BotanySwabDoAfterEvent args)
     {
-        if (args.Cancelled || args.Handled || !HasComp<PlantComponent>(args.Args.Target))
+        if (args.Cancelled || args.Handled || !_plantQuery.HasComp(args.Args.Target)) // DS14
             return;
 
         var targetPlant = args.Args.Target.Value;

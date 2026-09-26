@@ -38,7 +38,7 @@ public abstract class BasePowerNet<TNetType> : BaseNetConnectorNodeGroup<TNetTyp
         // Linked network can be default if it was re-connected twice in one tick.
         DebugTools.Assert(consumer.NetworkLoad.LinkedNetwork == default || consumer.NetworkLoad.LinkedNetwork == NetworkNode.Id);
         consumer.NetworkLoad.LinkedNetwork = default;
-        consumer.NetworkLoad.SetReceivingPower(0f); // DS14
+        PowerNetSystem.QueuePossiblyDisconnectedLoad(consumer.NetworkLoad); // DS14
         Consumers.Remove(consumer);
         QueueNetworkReconnect();
     }
@@ -56,10 +56,6 @@ public abstract class BasePowerNet<TNetType> : BaseNetConnectorNodeGroup<TNetTyp
         // Linked network can be default if it was re-connected twice in one tick.
         DebugTools.Assert(supplier.NetworkSupply.LinkedNetwork == default || supplier.NetworkSupply.LinkedNetwork == NetworkNode.Id);
         supplier.NetworkSupply.LinkedNetwork = default;
-        // DS14-start
-        supplier.NetworkSupply.CurrentSupply = 0f;
-        supplier.NetworkSupply.SupplyRampTarget = 0f;
-        // DS14-end
         Suppliers.Remove(supplier);
         QueueNetworkReconnect();
     }

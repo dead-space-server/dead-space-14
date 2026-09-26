@@ -27,6 +27,7 @@
       - ChiefMedicalOfficer
       - Quartermaster
       - Command
+      - BlueShield # DS14
       - Cryogenics
       - Lawyer
       - Armory
@@ -112,6 +113,7 @@
     - ChiefMedicalOfficer
     - Quartermaster
     - Command
+    - BlueShield # DS14
     - Cryogenics
     - Lawyer
     - Armory

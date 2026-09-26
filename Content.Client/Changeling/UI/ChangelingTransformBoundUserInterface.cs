@@ -91,9 +91,9 @@ public sealed partial class ChangelingTransformBoundUserInterface(EntityUid owne
             {
                 IconSpecifier = RadialMenuIconSpecifier.With(new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/delete.svg.192dpi.png"))),
                 ToolTip = Loc.GetString("changeling-transform-bui-drop-identity-menu"),
+                Order = 0, // DS14 - keep the identity-drop category first.
             };
-            // DS14: this radial-menu baseline has no Order property.
-            buttons.Insert(0, dropMenuButton);
+            buttons.Add(dropMenuButton); // DS14
         }
 
         return buttons;

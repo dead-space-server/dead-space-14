@@ -1,8 +1,10 @@
 using Content.Server.Chat.Systems;
 using Content.Shared.Chat;
+using Content.Shared.DeadSpace.Languages.Prototypes;
 using Content.Shared.Ghost;
 using Content.Shared.Speech;
 using Content.Shared.Speech.Components;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.Speech.EntitySystems;
 
@@ -21,10 +23,16 @@ public sealed class ListeningSystem : EntitySystem
 
     private void OnSpeak(EntitySpokeEvent ev)
     {
-        PingListeners(ev.Source, ev.Message, ev.ObfuscatedMessage);
+        PingListeners(ev.Source, ev.Message, ev.ObfuscatedMessage, ev.LanguageId); // DS14
     }
 
-    public void PingListeners(EntityUid source, string message, string? obfuscatedMessage)
+    // DS14-start
+    public void PingListeners(
+        EntityUid source,
+        string message,
+        string? obfuscatedMessage,
+        ProtoId<LanguagePrototype> languageId)
+    // DS14-end
     {
         // DS14-start
         if (HasComp<SpectralComponent>(source))
@@ -39,8 +47,8 @@ public sealed class ListeningSystem : EntitySystem
         var sourcePos = _xforms.GetWorldPosition(sourceXform, xformQuery);
 
         var attemptEv = new ListenAttemptEvent(source);
-        var ev = new ListenEvent(message, source);
-        var obfuscatedEv = obfuscatedMessage == null ? null : new ListenEvent(obfuscatedMessage, source);
+        var ev = new ListenEvent(message, source, languageId); // DS14
+        var obfuscatedEv = obfuscatedMessage == null ? null : new ListenEvent(obfuscatedMessage, source, languageId); // DS14
         var query = EntityQueryEnumerator<ActiveListenerComponent, TransformComponent>();
 
         while(query.MoveNext(out var listenerUid, out var listener, out var xform))

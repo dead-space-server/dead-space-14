@@ -34,12 +34,14 @@ public static class DeadSpaceStylePalette
     public static Color SurfaceTabs => _current.SurfaceTabs;
     public static Color SurfaceTabActive => _current.SurfaceTabActive;
     public static Color SurfaceTabInactive => _current.SurfaceTabInactive;
+    public static Color SurfaceTranscript => _current.SurfaceTranscript;
     public static Color ModalScrim => _current.ModalScrim;
 
     public static Color Control => _current.Control;
     public static Color ControlHover => _current.ControlHover;
     public static Color ControlPressed => _current.ControlPressed;
     public static Color ControlDisabled => _current.ControlDisabled;
+    public static Color ControlDisabledPressed => _current.ControlDisabledPressed;
     public static Color Action => _current.Action;
     public static Color ActionHover => _current.ActionHover;
     public static Color ActionPressed => _current.ActionPressed;
@@ -72,7 +74,11 @@ public static class DeadSpaceStylePalette
     public static Color Text => _current.Text;
     public static Color TextInactive => _current.TextInactive;
     public static Color TextMuted => _current.TextMuted;
+    public static Color TextDisabled => _current.TextDisabled;
     public static Color TextPlaceholder => _current.TextPlaceholder;
+    public static Color TextOnTranscript => _current.TextOnTranscript;
+    public static Color TextOnTranscriptMuted => _current.TextOnTranscriptMuted;
+    public static Color TextOnTranscriptPlaceholder => _current.TextOnTranscriptPlaceholder;
 
     public static Color Positive => _current.Positive;
     public static Color PositiveHover => _current.PositiveHover;
@@ -125,52 +131,60 @@ public static class DeadSpaceStylePalette
     {
         var palette = new ThemePalette
         {
-            Surface = Neutral("#1B1F25"),
-            SurfaceDark = Neutral("#0F1318"),
-            SurfaceFlat = Neutral("#20252C"),
-            SurfaceHeader = Neutral("#252B33"),
-            SurfaceInset = Neutral("#0C1015"),
-            SurfaceStatus = Neutral("#181E25"),
-            SurfacePopup = Neutral("#11161C"),
-            SurfaceIcon = Neutral("#06080B"),
-            SurfaceTabs = Neutral("#12171D"),
-            SurfaceTabActive = Neutral("#272E38"),
-            SurfaceTabInactive = Neutral("#12171D"),
+            Surface = Neutral("#181D23"),
+            SurfaceDark = Neutral("#10151B"),
+            SurfaceFlat = Neutral("#20262D"),
+            SurfaceHeader = Neutral("#262E37"),
+            SurfaceInset = Neutral("#0C1117"),
+            SurfaceStatus = Neutral("#1D252E"),
+            SurfacePopup = Neutral("#121920"),
+            SurfaceIcon = Neutral("#070A0E"),
+            SurfaceTabs = Neutral("#131A21"),
+            SurfaceTabActive = Neutral("#2B3540"),
+            SurfaceTabInactive = Neutral("#171E26"),
+            SurfaceTranscript = Neutral("#090E14"),
             ModalScrim = Color.FromHex("#000000AA"),
-            Control = Neutral("#1A232DF2"),
-            ControlHover = Neutral("#263440F6"),
-            ControlPressed = Neutral("#314350F8"),
-            ControlDisabled = Neutral("#11161CCF"),
-            Action = Neutral("#1B252FF4"),
-            ActionHover = Neutral("#283744F7"),
-            ActionPressed = Neutral("#354856F8"),
-            ActionDisabled = Neutral("#111820CF"),
-            ListItem = Neutral("#202B35F2"),
-            ListItemAlternate = Neutral("#273440F2"),
-            ListItemHover = Neutral("#30414FF6"),
-            ListItemPressed = Neutral("#3A4E5EF8"),
-            Input = Neutral("#151C24F8"),
-            Border = Color.FromHex("#3A414A"),
-            BorderDark = Color.FromHex("#252B32"),
-            BorderHeader = Color.FromHex("#574936"),
-            BorderInset = Color.FromHex("#222931"),
-            BorderControl = Color.FromHex("#343C45"),
-            BorderDisabled = Color.FromHex("#242A31"),
-            BorderIcon = Color.FromHex("#303840"),
-            BorderTabActive = Color.FromHex("#B98B52"),
-            BorderTabInactive = Color.Transparent,
-            HoverOutline = Color.FromHex("#B98B52"),
-            PressedOutline = Color.FromHex("#D6A35F"),
+            // Controls must remain distinct from SurfaceHeader even without a permanent border.
+            Control = Neutral("#35434F"),
+            ControlHover = Neutral("#405160"),
+            ControlPressed = Neutral("#73592F"),
+            // Unselected controls are cool, selected controls are warm, and unavailable controls are neutral.
+            ControlDisabled = Neutral("#292B2E"),
+            ControlDisabledPressed = Neutral("#453B2D"),
+            Action = Neutral("#303E4A"),
+            ActionHover = Neutral("#3E5261"),
+            ActionPressed = Neutral("#73592F"),
+            ActionDisabled = Neutral("#292B2E"),
+            ListItem = Neutral("#212B35"),
+            ListItemAlternate = Neutral("#283440"),
+            ListItemHover = Neutral("#33424F"),
+            ListItemPressed = Neutral("#5B492F"),
+            Input = Neutral("#263440"),
+            Border = Color.FromHex("#49545F"),
+            BorderDark = Color.FromHex("#2B343D"),
+            BorderHeader = Color.FromHex("#6B573D"),
+            BorderInset = Color.FromHex("#303A44"),
+            BorderControl = Color.FromHex("#52606D"),
+            BorderDisabled = Color.FromHex("#59636D"),
+            BorderIcon = Color.FromHex("#394550"),
+            BorderTabActive = Color.FromHex("#C09258"),
+            BorderTabInactive = Color.FromHex("#343E48"),
+            HoverOutline = Color.FromHex("#C09258"),
+            PressedOutline = Color.FromHex("#DDAA65"),
             CyanDim = Color.FromHex("#1D5B73"),
             Cyan = Color.FromHex("#1D8BAD"),
             CyanBright = Color.FromHex("#2EA7D0"),
             CyanSelection = Color.FromHex("#1D7E9D88"),
             Amber = Palettes.Gold.Text,
             AccentDim = Color.FromHex("#514431"),
-            Text = Color.FromHex("#ECEEF1"),
-            TextInactive = Color.FromHex("#B5BAC1"),
-            TextMuted = Color.FromHex("#9CA3AB"),
-            TextPlaceholder = Color.FromHex("#7F8791"),
+            Text = Color.FromHex("#F0F2F4"),
+            TextInactive = Color.FromHex("#C4C9CF"),
+            TextMuted = Color.FromHex("#A9B0B8"),
+            TextDisabled = Color.FromHex("#92969D"),
+            TextPlaceholder = Color.FromHex("#89939E"),
+            TextOnTranscript = Color.FromHex("#F0F2F4"),
+            TextOnTranscriptMuted = Color.FromHex("#B6C0CA"),
+            TextOnTranscriptPlaceholder = Color.FromHex("#8D99A5"),
             Positive = Color.FromHex("#1D4B2EF4"),
             PositiveHover = Color.FromHex("#245F39F8"),
             PositivePressed = Color.FromHex("#2B7A40F8"),
@@ -214,69 +228,79 @@ public static class DeadSpaceStylePalette
     {
         var palette = new ThemePalette
         {
-            Surface = Color.FromHex("#DAD9D6"),
-            SurfaceDark = Color.FromHex("#C7C8C9"),
-            SurfaceFlat = Color.FromHex("#E7E5E1"),
-            SurfaceHeader = Color.FromHex("#D0CCC5"),
-            SurfaceInset = Color.FromHex("#C0C3C6"),
-            SurfaceStatus = Color.FromHex("#D1D3D4"),
-            SurfacePopup = Color.FromHex("#F0EFEC"),
-            SurfaceIcon = Color.FromHex("#4C535BFA"),
-            SurfaceTabs = Color.FromHex("#CFD0D0"),
-            SurfaceTabActive = Color.FromHex("#F2EEE7"),
-            SurfaceTabInactive = Color.FromHex("#CFD0D0"),
+            Surface = Color.FromHex("#D0D5D9"),
+            SurfaceDark = Color.FromHex("#B8C0C7"),
+            SurfaceFlat = Color.FromHex("#DEE2E5"),
+            SurfaceHeader = Color.FromHex("#C2C9CF"),
+            SurfaceInset = Color.FromHex("#AEB7C0"),
+            SurfaceStatus = Color.FromHex("#C4CBD1"),
+            SurfacePopup = Color.FromHex("#E7EAEC"),
+            SurfaceIcon = Color.FromHex("#28313A"),
+            SurfaceTabs = Color.FromHex("#BAC2C9"),
+            SurfaceTabActive = Color.FromHex("#E4E7E9"),
+            SurfaceTabInactive = Color.FromHex("#BCC4CB"),
+            // Chat, logs and ahelp retain a dark transcript in Light because their markup colors are
+            // intentionally authored for a dark background and cannot be recolored safely by a stylesheet.
+            SurfaceTranscript = Color.FromHex("#111A23"),
             ModalScrim = Color.FromHex("#10131888"),
-            Control = Color.FromHex("#E2E5E8FA"),
-            ControlHover = Color.FromHex("#EEE4D6FC"),
-            ControlPressed = Color.FromHex("#DEC7A5FC"),
-            ControlDisabled = Color.FromHex("#CDD0D2"),
-            Action = Color.FromHex("#DDE2E6FC"),
-            ActionHover = Color.FromHex("#EEE2D2FD"),
-            ActionPressed = Color.FromHex("#D9BF9AFD"),
-            ActionDisabled = Color.FromHex("#C9CDD0D9"),
-            ListItem = Color.FromHex("#E3E6E8FC"),
-            ListItemAlternate = Color.FromHex("#D8DDE0FC"),
-            ListItemHover = Color.FromHex("#EEE3D5FD"),
-            ListItemPressed = Color.FromHex("#DCC39FFD"),
-            Input = Color.FromHex("#F5F6F7FE"),
-            Border = Color.FromHex("#7A8087"),
-            BorderDark = Color.FromHex("#9AA0A6"),
-            BorderHeader = Color.FromHex("#9A7A51"),
-            BorderInset = Color.FromHex("#A5A9AD"),
-            BorderControl = Color.FromHex("#8D949B"),
-            BorderDisabled = Color.FromHex("#B6BABE"),
-            BorderIcon = Color.FromHex("#6C737A"),
-            BorderTabActive = Color.FromHex("#96672E"),
-            BorderTabInactive = Color.Transparent,
-            HoverOutline = Color.FromHex("#96672E"),
-            PressedOutline = Color.FromHex("#714514"),
-            CyanDim = Color.FromHex("#39758A"),
-            Cyan = Color.FromHex("#176D89"),
-            CyanBright = Color.FromHex("#0E789A"),
+            // Cool enabled controls contrast with warm selections and neutral disabled controls.
+            Control = Color.FromHex("#A9B8C4"),
+            ControlHover = Color.FromHex("#C9BEAD"),
+            ControlPressed = Color.FromHex("#CDAE77"),
+            // The light neutral fill is intentionally separated from the darker enabled control fill.
+            ControlDisabled = Color.FromHex("#E1E1E1"),
+            ControlDisabledPressed = Color.FromHex("#D8CBB6"),
+            Action = Color.FromHex("#9FA6AB"),
+            ActionHover = Color.FromHex("#C4B69F"),
+            ActionPressed = Color.FromHex("#CDAE77"),
+            ActionDisabled = Color.FromHex("#E1E1E1"),
+            ListItem = Color.FromHex("#DCE0E3"),
+            ListItemAlternate = Color.FromHex("#CCD3D8"),
+            ListItemHover = Color.FromHex("#E3D8C8"),
+            ListItemPressed = Color.FromHex("#D5C09E"),
+            Input = Color.FromHex("#ECEFF1"),
+            Border = Color.FromHex("#67727D"),
+            BorderDark = Color.FromHex("#89949E"),
+            BorderHeader = Color.FromHex("#87663C"),
+            BorderInset = Color.FromHex("#7D8994"),
+            BorderControl = Color.FromHex("#697680"),
+            BorderDisabled = Color.FromHex("#A5AEB5"),
+            BorderIcon = Color.FromHex("#52606B"),
+            BorderTabActive = Color.FromHex("#8A5D27"),
+            BorderTabInactive = Color.FromHex("#8C969F"),
+            HoverOutline = Color.FromHex("#8A5D27"),
+            PressedOutline = Color.FromHex("#653D10"),
+            CyanDim = Color.FromHex("#356D80"),
+            Cyan = Color.FromHex("#126A86"),
+            CyanBright = Color.FromHex("#006F92"),
             CyanSelection = Color.FromHex("#1D7E9D55"),
-            Amber = Color.FromHex("#76501E"),
-            AccentDim = Color.FromHex("#9B7D55"),
-            Text = Color.FromHex("#20242A"),
-            TextInactive = Color.FromHex("#3E454D"),
-            TextMuted = Color.FromHex("#5B636C"),
-            TextPlaceholder = Color.FromHex("#747C84"),
-            Positive = Color.FromHex("#CDE4D3F8"),
-            PositiveHover = Color.FromHex("#B8D9C0FC"),
-            PositivePressed = Color.FromHex("#A2CEADFC"),
+            Amber = Color.FromHex("#694314"),
+            AccentDim = Color.FromHex("#92734C"),
+            Text = Color.FromHex("#171C21"),
+            TextInactive = Color.FromHex("#303840"),
+            TextMuted = Color.FromHex("#46515B"),
+            TextDisabled = Color.FromHex("#6F7378"),
+            TextPlaceholder = Color.FromHex("#626D77"),
+            TextOnTranscript = Color.FromHex("#F0F2F4"),
+            TextOnTranscriptMuted = Color.FromHex("#B6C0CA"),
+            TextOnTranscriptPlaceholder = Color.FromHex("#8D99A5"),
+            Positive = Color.FromHex("#BBD8C2"),
+            PositiveHover = Color.FromHex("#A7CDAF"),
+            PositivePressed = Color.FromHex("#91C09C"),
             PositiveBorder = Color.FromHex("#347E48"),
             PositiveBorderHover = Color.FromHex("#286D3C"),
             PositiveBorderPressed = Color.FromHex("#1E5C31"),
-            Negative = Color.FromHex("#EED4D8F8"),
-            NegativeHover = Color.FromHex("#E4BBC2FC"),
-            NegativeStrong = Color.FromHex("#E5BAC1F8"),
-            NegativeStrongHover = Color.FromHex("#DDA4AEFC"),
+            Negative = Color.FromHex("#DDBFC4"),
+            NegativeHover = Color.FromHex("#D1A7AE"),
+            NegativeStrong = Color.FromHex("#D2AAB1"),
+            NegativeStrongHover = Color.FromHex("#C79099"),
             NegativeBorder = Color.FromHex("#9D3F49"),
             NegativeBorderStrong = Color.FromHex("#A73541"),
             NegativeBorderHover = Color.FromHex("#842C36"),
-            Warning = Color.FromHex("#D6B65A"),
-            WarningControl = Color.FromHex("#EFDDC8F8"),
-            WarningControlHover = Color.FromHex("#E6C9A8FC"),
-            WarningControlPressed = Color.FromHex("#DAB78EFC"),
+            Warning = Color.FromHex("#C8A34B"),
+            WarningControl = Color.FromHex("#E2CCAE"),
+            WarningControlHover = Color.FromHex("#D5B98F"),
+            WarningControlPressed = Color.FromHex("#C5A371"),
             WarningBorder = Color.FromHex("#9A552C"),
             WarningBorderHover = Color.FromHex("#7F421F"),
         };
@@ -330,11 +354,13 @@ public static class DeadSpaceStylePalette
             SurfaceTabs = Palettes.Slate.Background,
             SurfaceTabActive = Palettes.Slate.Element,
             SurfaceTabInactive = Palettes.Slate.Background,
+            SurfaceTranscript = Palettes.Slate.BackgroundDark,
             ModalScrim = Color.FromHex("#000000AA"),
             Control = Palettes.Navy.Element,
             ControlHover = Palettes.Navy.HoveredElement,
             ControlPressed = Palettes.Navy.PressedElement,
             ControlDisabled = Palettes.Navy.DisabledElement,
+            ControlDisabledPressed = Palettes.Navy.DisabledElement,
             Action = Palettes.Navy.Element,
             ActionHover = Palettes.Navy.HoveredElement,
             ActionPressed = Palettes.Navy.PressedElement,
@@ -364,7 +390,11 @@ public static class DeadSpaceStylePalette
             Text = Color.White,
             TextInactive = Color.FromHex("#99A7B3"),
             TextMuted = Color.FromHex("#757575"),
+            TextDisabled = Color.FromHex("#E5E5E581"),
             TextPlaceholder = Color.FromHex("#5A5A5A"),
+            TextOnTranscript = Color.White,
+            TextOnTranscriptMuted = Color.FromHex("#99A7B3"),
+            TextOnTranscriptPlaceholder = Color.FromHex("#757575"),
             Positive = Palettes.Green.Element,
             PositiveHover = Palettes.Green.HoveredElement,
             PositivePressed = Palettes.Green.PressedElement,
@@ -408,11 +438,13 @@ public static class DeadSpaceStylePalette
         public Color SurfaceTabs { get; init; }
         public Color SurfaceTabActive { get; init; }
         public Color SurfaceTabInactive { get; init; }
+        public Color SurfaceTranscript { get; init; }
         public Color ModalScrim { get; init; }
         public Color Control { get; init; }
         public Color ControlHover { get; init; }
         public Color ControlPressed { get; init; }
         public Color ControlDisabled { get; init; }
+        public Color ControlDisabledPressed { get; init; }
         public Color Action { get; init; }
         public Color ActionHover { get; init; }
         public Color ActionPressed { get; init; }
@@ -442,7 +474,11 @@ public static class DeadSpaceStylePalette
         public Color Text { get; init; }
         public Color TextInactive { get; init; }
         public Color TextMuted { get; init; }
+        public Color TextDisabled { get; init; }
         public Color TextPlaceholder { get; init; }
+        public Color TextOnTranscript { get; init; }
+        public Color TextOnTranscriptMuted { get; init; }
+        public Color TextOnTranscriptPlaceholder { get; init; }
         public Color Positive { get; init; }
         public Color PositiveHover { get; init; }
         public Color PositivePressed { get; init; }

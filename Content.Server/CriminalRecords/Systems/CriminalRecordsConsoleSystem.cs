@@ -7,8 +7,10 @@ using Content.Shared.Access.Systems;
 using Content.Shared.CriminalRecords;
 using Content.Shared.CriminalRecords.Components;
 using Content.Shared.CriminalRecords.Systems;
+using Content.Shared.DeadSpace.Photocopier; // DS14
 using Content.Shared.Security;
 using Content.Shared.StationRecords;
+using Robust.Shared.Audio.Systems; // DS14
 using Robust.Server.GameObjects;
 using System.Diagnostics.CodeAnalysis;
 using Content.Shared.IdentityManagement;
@@ -17,6 +19,11 @@ using System.Linq;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Roles.Jobs;
+using Content.Server.GameTicking; // DS14
+using Content.Shared.Paper; // DS14
+using Robust.Shared.ContentPack; // DS14
+using Robust.Shared.Prototypes; // DS14
+using Robust.Shared.Timing; // DS14
 
 namespace Content.Server.CriminalRecords.Systems;
 
@@ -27,11 +34,18 @@ public sealed class CriminalRecordsConsoleSystem : SharedCriminalRecordsConsoleS
 {
     [Dependency] private readonly AccessReaderSystem _access = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!; // DS14
     [Dependency] private readonly CriminalRecordsSystem _criminalRecords = default!;
+    [Dependency] private readonly GameTicker _gameTicker = default!; // DS14
+    [Dependency] private readonly SharedIdCardSystem _idCard = default!; // DS14
+    [Dependency] private readonly PaperSystem _paperSystem = default!; // DS14
     [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private readonly IPrototypeManager _prototype = default!; // DS14
     [Dependency] private readonly RadioSystem _radio = default!;
     [Dependency] private readonly StationRecordsSystem _records = default!;
+    [Dependency] private readonly IResourceManager _resourceManager = default!; // DS14
     [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private readonly IGameTiming _timing = default!; // DS14
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
 
     public override void Initialize()
@@ -48,6 +62,7 @@ public sealed class CriminalRecordsConsoleSystem : SharedCriminalRecordsConsoleS
             subs.Event<CriminalRecordAddHistory>(OnAddHistory);
             subs.Event<CriminalRecordDeleteHistory>(OnDeleteHistory);
             subs.Event<CriminalRecordSetStatusFilter>(OnStatusFilterPressed);
+            subs.Event<CriminalRecordPrintDocument>(OnPrintDocument); // DS14
         });
     }
 
@@ -94,6 +109,12 @@ public sealed class CriminalRecordsConsoleSystem : SharedCriminalRecordsConsoleS
             msg.Status == SecurityStatus.Hostile != (msg.Reason != null))
             return;
 
+        // DS14-start
+        if (msg.Status == SecurityStatus.Detained != (msg.Articles != null) ||
+            msg.Status == SecurityStatus.Detained != (msg.Sentence != null))
+            return;
+        // DS14-end
+
         if (!CheckSelected(ent, msg.Actor, out var mob, out var key))
             return;
 
@@ -109,6 +130,19 @@ public sealed class CriminalRecordsConsoleSystem : SharedCriminalRecordsConsoleS
                 return;
         }
 
+        // DS14-start
+        string? articles = null;
+        string? sentence = null;
+        if (msg.Articles != null && msg.Sentence != null)
+        {
+            articles = msg.Articles.Trim();
+            sentence = msg.Sentence.Trim();
+            if (articles.Length < 1 || articles.Length > ent.Comp.MaxStringLength ||
+                sentence.Length < 1 || sentence.Length > ent.Comp.MaxStringLength)
+                return;
+        }
+        // DS14-end
+
         var oldStatus = record.Status;
 
         var name = _records.RecordName(key.Value);
@@ -118,9 +152,10 @@ public sealed class CriminalRecordsConsoleSystem : SharedCriminalRecordsConsoleS
         // fallback exists if the player was not set to wanted beforehand
         if (msg.Status == SecurityStatus.Detained)
         {
-            var oldReason = record.Reason ?? Loc.GetString("criminal-records-console-unspecified-reason");
+            // DS14: prefer the freshly entered articles over the stale wanted reason, if given
+            var oldReason = articles ?? record.Reason ?? Loc.GetString("criminal-records-console-unspecified-reason");
             var history = Loc.GetString("criminal-records-console-auto-history", ("reason", oldReason));
-            _criminalRecords.TryAddHistory(key.Value, history, officer);
+            _criminalRecords.TryAddHistory(key.Value, history, officer, sentence); // DS14: record the sentence alongside the article
         }
 
         // will probably never fail given the checks above
@@ -137,7 +172,7 @@ public sealed class CriminalRecordsConsoleSystem : SharedCriminalRecordsConsoleS
         if (tryGetIdentityShortInfoEvent.Title != null)
             officer = tryGetIdentityShortInfoEvent.Title;
 
-        _criminalRecords.TryChangeStatus(key.Value, msg.Status, msg.Reason, officer);
+        _criminalRecords.TryChangeStatus(key.Value, msg.Status, msg.Reason, officer, articles, sentence); // DS14: pass articles/sentence
 
         (string, object)[] args;
         if (reason != null)
@@ -215,6 +250,78 @@ public sealed class CriminalRecordsConsoleSystem : SharedCriminalRecordsConsoleS
         UpdateUserInterface(ent);
     }
 
+    // DS14-start
+    private void OnPrintDocument(Entity<CriminalRecordsConsoleComponent> ent, ref CriminalRecordPrintDocument msg)
+    {
+        if (!ent.Comp.HasPrinter)
+            return;
+
+        if (!CheckSelected(ent, msg.Actor, out var mob, out var key))
+            return;
+
+        if (_timing.CurTime < ent.Comp.NextPrintTime)
+            return;
+
+        if (!_records.TryGetRecord<GeneralStationRecord>(key.Value, out var general))
+            return;
+
+        if (!_records.TryGetRecord<CriminalRecord>(key.Value, out var record))
+            return;
+
+        var form = record.Status switch
+        {
+            SecurityStatus.Wanted => ent.Comp.ArrestWarrantForm,
+            SecurityStatus.Eliminated => ent.Comp.ArrestWarrantForm,
+            SecurityStatus.Detained => ent.Comp.VerdictForm,
+            _ => (ProtoId<PaperworkFormPrototype>?) null,
+        };
+
+        if (form is not { } formId || !_prototype.TryIndex(formId, out var formPrototype))
+            return;
+
+        PrintDocument(ent, mob.Value, general, record, formPrototype);
+    }
+
+    private void PrintDocument(Entity<CriminalRecordsConsoleComponent> ent, EntityUid actor, GeneralStationRecord general, CriminalRecord record, PaperworkFormPrototype formPrototype)
+    {
+        var text = _resourceManager.ContentFileReadText(formPrototype.Text).ReadToEnd();
+
+        var stationName = _station.GetOwningStation(ent) is { } station ? Name(station) : null;
+        text = PaperworkTextSubstitutions.ApplyBase(text, Loc.GetString(formPrototype.Name), _gameTicker.RoundDuration(), stationName);
+
+        var authorName = Loc.GetString("criminal-records-console-unknown-officer");
+        var authorJob = string.Empty;
+        if (_idCard.TryFindIdCard(actor, out var authorCard))
+        {
+            if (!string.IsNullOrWhiteSpace(authorCard.Comp.FullName))
+                authorName = authorCard.Comp.FullName;
+            authorJob = authorCard.Comp.LocalizedJobTitle ?? string.Empty;
+        }
+
+        text = text.Replace("{{AUTHOR.NAME}}", authorName);
+        text = text.Replace("{{AUTHOR.JOB}}", authorJob);
+        text = text.Replace("{{TARGET.NAME}}", general.Name);
+        text = text.Replace("{{TARGET.JOB}}", general.JobTitle ?? string.Empty);
+
+        text = record.Status switch
+        {
+            SecurityStatus.Wanted or SecurityStatus.Eliminated => text
+                .Replace("{{ARTICLES}}", record.Reason ?? string.Empty),
+            SecurityStatus.Detained => text
+                .Replace("{{ARTICLES}}", record.Articles ?? string.Empty)
+                .Replace("{{SENTENCE}}", record.Sentence ?? string.Empty),
+            _ => text,
+        };
+
+        var printed = Spawn(formPrototype.PaperPrototype, Transform(ent).Coordinates);
+        if (TryComp<PaperComponent>(printed, out var paper))
+            _paperSystem.SetContent((printed, paper), text);
+
+        _audio.PlayPvs(ent.Comp.PrintSound, ent);
+        ent.Comp.NextPrintTime = _timing.CurTime + ent.Comp.PrintDelay;
+    }
+    // DS14-end
+
     private void UpdateUserInterface(Entity<CriminalRecordsConsoleComponent> ent)
     {
         var (uid, console) = ent;
@@ -250,6 +357,10 @@ public sealed class CriminalRecordsConsoleSystem : SharedCriminalRecordsConsoleS
 
         // Set the Current Tab aka the filter status type for the records list
         state.FilterStatus = console.FilterStatus;
+
+        // DS14: printable while a Wanted/Eliminated (-> warrant) or Detained (-> verdict) record is selected
+        state.CanPrint = console.HasPrinter &&
+            state.CriminalRecord is { Status: SecurityStatus.Wanted or SecurityStatus.Eliminated or SecurityStatus.Detained };
 
         _ui.SetUiState(uid, CriminalRecordsConsoleKey.Key, state);
     }

@@ -33,6 +33,12 @@ public sealed partial class StoreMenu : DefaultWindow
 
     private List<ListingDataWithCostModifiers> _cachedListings = new();
 
+    // DS14-start
+    private readonly Dictionary<string, StoreListingControl> _listingControls = new();
+    private readonly Dictionary<string, StoreCategoryButton> _categoryButtons = new();
+    private readonly ButtonGroup _categoryGroup = new();
+    // DS14-end
+
     public StoreMenu()
     {
         RobustXamlLoader.Load(this);
@@ -81,26 +87,65 @@ public sealed partial class StoreMenu : DefaultWindow
         WithdrawButton.Disabled = disabled;
     }
 
-    public void UpdateListing(List<ListingDataWithCostModifiers> listings)
+    // DS14-start
+    public void UpdateListing(
+        List<ListingDataWithCostModifiers> listings,
+        HashSet<string> availableListingIds,
+        bool resetScroll = false)
     {
         _cachedListings = listings;
 
-        UpdateListing();
+        foreach (var id in _listingControls.Keys.Where(id => !availableListingIds.Contains(id)).ToList())
+        {
+            _listingControls[id].Orphan();
+            _listingControls.Remove(id);
+        }
+
+        UpdateListing(resetScroll);
     }
 
-    public void UpdateListing()
+    public void UpdateListing(bool resetScroll = false)
     {
         var sorted = _cachedListings.OrderBy(l => l.Priority)
-                                    .ThenBy(l => l.Cost.Values.Sum());
+                                    .ThenBy(l => l.Cost.Values.Sum())
+                                    .Where(l => l.Categories.Contains(CurrentCategory))
+                                    .ToList();
 
-        // should probably chunk these out instead. to-do if this clogs the internet tubes.
-        // maybe read clients prototypes instead?
-        ClearListings();
-        foreach (var item in sorted)
+        var visibleIds = sorted.Select(listing => listing.ID).ToHashSet();
+        foreach (var control in _listingControls.Values)
         {
-            AddListingGui(item);
+            if (control.Parent == StoreListingsContainer && !visibleIds.Contains(control.Listing.ID))
+                control.Orphan();
+        }
+
+        for (var index = 0; index < sorted.Count; index++)
+        {
+            var listing = sorted[index];
+            if (!_listingControls.TryGetValue(listing.ID, out var control))
+            {
+                control = CreateListingControl(listing);
+                _listingControls.Add(listing.ID, control);
+            }
+            else
+            {
+                UpdateListingControl(control, listing);
+            }
+
+            if (control.Parent == null)
+                StoreListingsContainer.AddChild(control);
+
+            control.SetPositionInParent(index);
+        }
+
+        StoreListingsContainer.InvalidateMeasure();
+
+        if (resetScroll)
+        {
+            StoreListingsScroll.VScroll = 0;
+            StoreListingsScroll.VScrollTarget = 0;
         }
     }
+    // DS14-end
 
     public void SetFooterVisibility(bool visible)
     {
@@ -129,13 +174,9 @@ public sealed partial class StoreMenu : DefaultWindow
         OnRefundAttempt?.Invoke(args);
     }
 
-    private void AddListingGui(ListingDataWithCostModifiers listing)
+    // DS14-start
+    private StoreListingControl CreateListingControl(ListingDataWithCostModifiers listing)
     {
-        if (!listing.Categories.Contains(CurrentCategory))
-            return;
-
-        var hasBalance = listing.CanBuyWith(Balance) || CanBuyFromBank;
-
         var spriteSys = _entityManager.EntitySysManager.GetEntitySystem<SpriteSystem>();
 
         Texture? texture = null;
@@ -155,15 +196,28 @@ public sealed partial class StoreMenu : DefaultWindow
                 texture = spriteSys.Frame0(icon);
         }
 
-        var listingInStock = GetListingPriceString(listing);
-        var discount = GetDiscountString(listing);
-
-        var newListing = new StoreListingControl(listing, listingInStock, discount, hasBalance, texture, productEntity);
+        var newListing = new StoreListingControl(
+            listing,
+            GetListingPriceString(listing),
+            GetDiscountString(listing),
+            listing.CanBuyWith(Balance) || CanBuyFromBank,
+            texture,
+            productEntity);
         newListing.StoreItemBuyButton.OnButtonDown += args
-            => OnListingButtonPressed?.Invoke(args, listing);
+            => OnListingButtonPressed?.Invoke(args, newListing.Listing);
 
-        StoreListingsContainer.AddChild(newListing);
+        return newListing;
     }
+
+    private void UpdateListingControl(StoreListingControl control, ListingDataWithCostModifiers listing)
+    {
+        control.Update(
+            listing,
+            GetListingPriceString(listing),
+            GetDiscountString(listing),
+            listing.CanBuyWith(Balance) || CanBuyFromBank);
+    }
+    // DS14-end
 
     private string GetListingPriceString(ListingDataWithCostModifiers listing)
     {
@@ -236,57 +290,79 @@ public sealed partial class StoreMenu : DefaultWindow
         return discountMessage;
     }
 
-    private void ClearListings()
+    // DS14-start
+    public void PopulateStoreCategoryButtons(
+        HashSet<ListingDataWithCostModifiers> listings,
+        HashSet<ProtoId<StoreCategoryPrototype>> allowedCategories)
     {
-        StoreListingsContainer.Children.Clear();
-    }
-
-    public void PopulateStoreCategoryButtons(HashSet<ListingDataWithCostModifiers> listings, HashSet<ProtoId<StoreCategoryPrototype>> allowedCategories) // DS14
-    {
-        var allCategories = new List<StoreCategoryPrototype>();
+        var categoryIds = new HashSet<ProtoId<StoreCategoryPrototype>>();
         foreach (var listing in listings)
         {
             foreach (var cat in listing.Categories)
             {
-                if (!allowedCategories.Contains(cat)) // DS14
+                if (!allowedCategories.Contains(cat))
                     continue;
 
-                var proto = _prototypeManager.Index(cat);
-                if (!allCategories.Contains(proto))
-                    allCategories.Add(proto);
+                categoryIds.Add(cat);
             }
         }
 
-        allCategories = allCategories.OrderBy(c => c.Priority).ToList();
+        var allCategories = categoryIds.Select(id => _prototypeManager.Index(id))
+                                       .OrderBy(category => category.Priority)
+                                       .ToList();
 
-        // This will reset the Current Category selection if nothing matches the search.
+        // Preserve the selected category while it remains visible.
         if (allCategories.All(category => category.ID != CurrentCategory))
             CurrentCategory = string.Empty;
 
         if (CurrentCategory == string.Empty && allCategories.Count > 0)
             CurrentCategory = allCategories.First().ID;
 
-        CategoryListContainer.Children.Clear();
-        if (allCategories.Count < 1)
-            return;
-
-        var group = new ButtonGroup();
-        foreach (var proto in allCategories)
+        var allowedIds = allowedCategories.Select(category => category.Id).ToHashSet();
+        foreach (var id in _categoryButtons.Keys.Where(id => !allowedIds.Contains(id)).ToList())
         {
-            var catButton = new StoreCategoryButton
-            {
-                Text = Loc.GetString(proto.Name),
-                Id = proto.ID,
-                Pressed = proto.ID == CurrentCategory,
-                Group = group,
-                ToggleMode = true,
-                StyleClasses = { "OpenBoth" }
-            };
-
-            catButton.OnPressed += args => OnCategoryButtonPressed?.Invoke(args, catButton.Id);
-            CategoryListContainer.AddChild(catButton);
+            var button = _categoryButtons[id];
+            button.Orphan();
+            button.Group = null;
+            _categoryButtons.Remove(id);
         }
+
+        var visibleIds = allCategories.Select(category => category.ID).ToHashSet();
+        foreach (var button in _categoryButtons.Values)
+        {
+            if (button.Parent == CategoryListContainer && !visibleIds.Contains(button.Id))
+                button.Orphan();
+        }
+
+        for (var index = 0; index < allCategories.Count; index++)
+        {
+            var proto = allCategories[index];
+            if (!_categoryButtons.TryGetValue(proto.ID, out var catButton))
+            {
+                catButton = new StoreCategoryButton
+                {
+                    Id = proto.ID,
+                    Group = _categoryGroup,
+                    StyleClasses = { "OpenBoth" }
+                };
+
+                catButton.OnPressed += args => OnCategoryButtonPressed?.Invoke(args, catButton.Id);
+                _categoryButtons.Add(proto.ID, catButton);
+            }
+
+            catButton.Text = Loc.GetString(proto.Name);
+            if (catButton.Parent == null)
+                CategoryListContainer.AddChild(catButton);
+
+            catButton.SetPositionInParent(index);
+        }
+
+        foreach (var button in _categoryButtons.Values)
+            button.Pressed = button.Id == CurrentCategory;
+
+        CategoryListContainer.InvalidateMeasure();
     }
+    // DS14-end
 
     public override void Close()
     {
@@ -301,6 +377,6 @@ public sealed partial class StoreMenu : DefaultWindow
 
     private sealed class StoreCategoryButton : Button
     {
-        public string? Id;
+        public string Id = string.Empty; // DS14
     }
 }

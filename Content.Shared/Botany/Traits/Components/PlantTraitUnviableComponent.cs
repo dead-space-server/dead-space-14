@@ -13,7 +13,7 @@ public sealed partial class PlantTraitUnviableComponent : PlantTraitsComponent
     /// Amount of damage dealt to the plant per growth tick with unviable.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public float UnviableDamage = 6f;
+    public float UnviableDamage = 9f; // DS14 - restore 9 damage per growth tick.
 
     /// <inheritdoc/>
     public override LocId? TraitState { get; set; } = "mutation-plant-unviable";

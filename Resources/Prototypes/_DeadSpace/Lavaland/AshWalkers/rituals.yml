@@ -1,0 +1,141 @@
+- type: entity
+  parent: BaseRune
+  id: BaseAshWalkerRune
+  abstract: true
+  components:
+  - type: AshWalkerRune
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/ritual_runes.rsi
+    drawdepth: FloorObjects
+    noRot: true
+    layers:
+    - state: "5"
+      color: "#BD563D"
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 20
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [Destruction]
+
+- type: entity
+  parent: BaseAshWalkerRune
+  id: AshWalkerHuntRune
+  name: rune of the hunt
+  description: A ring of angular signs etched into the ground. An intact goliath offered here lends strength to the tribe's hunters.
+  components:
+  - type: AshWalkerRune
+    rite: Hunt
+    sacrifices: [MobLavalandGoliath]
+    effect: AshWalkerHuntEffect
+  - type: Sprite
+    layers:
+    - state: "5"
+      color: "#BD563D"
+
+- type: entity
+  parent: BaseAshWalkerRune
+  id: AshWalkerMendingRune
+  name: rune of mending
+  description: Interwoven signs circle a small hollow for an offering. The life of a watcher slowly mends the tribe's wounds.
+  components:
+  - type: AshWalkerRune
+    rite: Mending
+    sacrifices: [MobWatcherLavaland, MobWatcherIcewing, MobWatcherMagmawing]
+    effect: AshWalkerMendingEffect
+    effectDuration: 180
+  - type: Sprite
+    layers:
+    - state: "6"
+      color: "#A78452"
+
+- type: entity
+  parent: BaseAshWalkerRune
+  id: AshWalkerReturnRune
+  name: rune of return
+  description: A closed circle surrounding the place of the fallen. Two worthy offerings and a blood tonic can call a tribesmate back to their body.
+  components:
+  - type: AshWalkerRune
+    rite: Return
+    sacrifices: [MobLavalandGoliath, MobLavalandBasilisk, MobWatcherLavaland, MobWatcherIcewing, MobWatcherMagmawing, AshWalkerSoulFish]
+    sacrificeCount: 2
+    ritualTime: 20
+  - type: Sprite
+    layers:
+    - state: "1"
+      color: "#933B50"
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: AshWalkerHuntEffect
+  name: blessing of the hunt
+  components:
+  - type: AshWalkerRitualEffect
+    huntMultiplier: 1.15
+  - type: ExaminableStatusEffect
+    messageId: ash-walker-hunt-effect-examine
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: AshWalkerMendingEffect
+  name: mending blessing
+  components:
+  - type: AshWalkerRitualEffect
+    healingBudget: 80
+    healingPerTick: 2
+    healingInterval: 3
+  - type: ExaminableStatusEffect
+    messageId: ash-walker-mending-effect-examine
+
+- type: entity
+  parent: StatusEffectSlowdown
+  id: AshWalkerReturnWeaknessEffect
+  name: weakness after return
+  components:
+  - type: MovementModStatusEffect
+    walkSpeedModifier: 0.7
+    sprintSpeedModifier: 0.7
+  - type: ExaminableStatusEffect
+    messageId: ash-walker-return-effect-examine
+
+- type: entity
+  parent: BaseAction
+  id: ActionAshWalkerDrawHuntRune
+  name: draw rune of the hunt
+  description: Etch a rune into solid ground with your bone dagger.
+  components:
+  - type: Action
+    icon: { sprite: _DeadSpace/Lavaland/AshWalkers/ritual_runes.rsi, state: "5" }
+    useDelay: 1
+  - type: TargetAction
+    range: 1.5
+  - type: WorldTargetAction
+    event: !type:AshWalkerDrawRuneActionEvent
+      rite: Hunt
+
+- type: entity
+  parent: ActionAshWalkerDrawHuntRune
+  id: ActionAshWalkerDrawMendingRune
+  name: draw rune of mending
+  components:
+  - type: Action
+    icon: { sprite: _DeadSpace/Lavaland/AshWalkers/ritual_runes.rsi, state: "6" }
+  - type: WorldTargetAction
+    event: !type:AshWalkerDrawRuneActionEvent
+      rite: Mending
+
+- type: entity
+  parent: ActionAshWalkerDrawHuntRune
+  id: ActionAshWalkerDrawReturnRune
+  name: draw rune of return
+  components:
+  - type: Action
+    icon: { sprite: _DeadSpace/Lavaland/AshWalkers/ritual_runes.rsi, state: "1" }
+  - type: WorldTargetAction
+    event: !type:AshWalkerDrawRuneActionEvent
+      rite: Return

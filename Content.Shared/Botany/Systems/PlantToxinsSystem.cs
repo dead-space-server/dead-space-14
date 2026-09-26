@@ -10,21 +10,26 @@ namespace Content.Shared.Botany.Systems;
 /// </summary>
 public sealed partial class PlantToxinsSystem : EntitySystem
 {
-    // DS14-start: current engine uses explicit event subscriptions.
+    // DS14-start: current engine uses explicit event subscriptions and query initialization.
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<PlantToxinsComponent, PlantCrossPollinateEvent>(OnCrossPollinate);
         SubscribeLocalEvent<PlantToxinsComponent, PlantGrowEvent>(OnPlantGrow);
+        _trayQuery = GetEntityQuery<PlantTrayComponent>();
+        _holderQuery = GetEntityQuery<PlantHolderComponent>();
     }
     // DS14-end
 
-    // DS14-start: current engine uses readonly IoC fields.
+    // DS14-start
     [Dependency] private readonly BotanySystem _botany = default!;
     [Dependency] private readonly PlantMutationSystem _mutation = default!;
     [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
     [Dependency] private readonly PlantTraySystem _plantTray = default!;
+
+    private EntityQuery<PlantTrayComponent> _trayQuery;
+    private EntityQuery<PlantHolderComponent> _holderQuery;
     // DS14-end
 
     private void OnCrossPollinate(Entity<PlantToxinsComponent> ent, ref PlantCrossPollinateEvent args)
@@ -32,16 +37,18 @@ public sealed partial class PlantToxinsSystem : EntitySystem
         if (!_botany.TryGetPlantComponent<PlantToxinsComponent>(args.PollenData, args.PollenProtoId, out var pollenData))
             return;
 
-        _mutation.CrossFloat(ent, ref ent.Comp.ToxinsTolerance, pollenData.ToxinsTolerance);
-        _mutation.CrossFloat(ent, ref ent.Comp.ToxinUptakeDivisor, pollenData.ToxinUptakeDivisor);
+        // DS14-start
+        _mutation.CrossFloat(ref ent.Comp.ToxinsTolerance, pollenData.ToxinsTolerance);
+        _mutation.CrossFloat(ref ent.Comp.ToxinUptakeDivisor, pollenData.ToxinUptakeDivisor);
+        // DS14-end
         Dirty(ent);
     }
 
     private void OnPlantGrow(Entity<PlantToxinsComponent> ent, ref PlantGrowEvent args)
     {
         var trayUid = GetEntity(args.Tray);
-        if (!TryComp<PlantTrayComponent>(trayUid, out var tray)
-            || !TryComp<PlantHolderComponent>(ent.Owner, out var holder))
+        if (!_trayQuery.TryComp(trayUid, out var tray)
+            || !_holderQuery.TryComp(ent.Owner, out var holder)) // DS14
             return;
 
         if (ent.Comp.ToxinUptakeDivisor <= 0)

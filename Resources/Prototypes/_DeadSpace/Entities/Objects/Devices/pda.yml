@@ -551,3 +551,19 @@
       - NanoTaskCartridge
       - AstroNavCartridge
       - TaipanMessengerCartridge
+
+- type: entity
+  parent: ChameleonAgentPDA
+  id: TaipanClownPDA
+  name: КПК клоуна
+  suffix: Тайпан
+  description: Незаменим. Да. Просто незаменим.
+  components:
+  - type: ChameleonClothing
+    default: ClownPDA
+  - type: CartridgeLoader
+    uiKey: enum.PdaUiKey.Key
+    preinstalled:
+      - NotekeeperCartridge
+      - NanoTaskCartridge
+      - TaipanMessengerCartridge

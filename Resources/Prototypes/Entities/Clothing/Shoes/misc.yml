@@ -203,6 +203,7 @@
     sprite: Clothing/Shoes/Boots/jumpboots.rsi
   - type: JumpAbility
     jumpDistance: 4
+    requireUnobstructedPath: true # DS14
     jumpSound: /Audio/Effects/stealthoff.ogg
   - type: ActionGrant
     actions:

@@ -47,6 +47,9 @@ public sealed partial class ErtTeamPrototype : IPrototype
     [DataField]
     public int Price = 1;
 
+    [DataField]
+    public bool DispatchPerTarget;
+
     /// <summary>
     ///     Особый Entity без которого не обойтись для спавна отряда.
     /// </summary>

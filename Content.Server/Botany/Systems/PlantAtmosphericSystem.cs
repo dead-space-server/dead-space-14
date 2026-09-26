@@ -8,22 +8,21 @@ namespace Content.Server.Botany.Systems;
 
 public sealed partial class PlantAtmosphericSystem : SharedPlantAtmosphericSystem
 {
-    // DS14-start: current engine uses explicit event subscriptions.
+    // DS14-start: current engine uses explicit event subscriptions and query initialization.
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<PlantAtmosphericComponent, PlantGrowEvent>(OnPlantGrow);
+        _holderQuery = GetEntityQuery<PlantHolderComponent>();
     }
     // DS14-end
 
-    // DS14-start: current engine uses readonly IoC fields.
+    // DS14-start
     [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
     [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
-    // DS14-end
 
-    // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly EntityQuery<PlantHolderComponent> _holderQuery = default!;
+    private EntityQuery<PlantHolderComponent> _holderQuery;
     // DS14-end
 
     private void OnPlantGrow(Entity<PlantAtmosphericComponent> ent, ref PlantGrowEvent args)

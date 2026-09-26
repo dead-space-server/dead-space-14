@@ -1,0 +1,198 @@
+- type: entity
+  parent: BaseItem
+  id: BaseAshWalkerTrophy
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/trophies.rsi
+  - type: Item
+    size: Small
+
+- type: entity
+  parent: BaseAshWalkerTrophy
+  id: AshDrakeTrophy
+  name: drake spine
+  description: A fire-hardened spine from an ash drake, surrounded by a mantle of thick scales. A master hunter can work it into a suit of armor.
+  components:
+  - type: Sprite
+    state: tail_spike
+  - type: Tag
+    tags: [AshDrakeTrophy]
+
+- type: entity
+  parent: BaseAshWalkerTrophy
+  id: ColossusTrophy
+  name: colossus carapace
+  description: A dense fragment of a colossus, its hollow channels still resonating. It can reinforce a hunter's shield.
+  components:
+  - type: Sprite
+    state: blaster_tubes
+  - type: Tag
+    tags: [ColossusTrophy]
+
+- type: entity
+  parent: BaseAshWalkerTrophy
+  id: HierophantTrophy
+  name: hierophant crystal
+  description: A vibrating crystal pried from a fallen hierophant. Bound to a bone haft, it lends its blows a tremendous impact.
+  components:
+  - type: Sprite
+    state: anomaly_crystal
+    color: "#CF7DE8"
+  - type: Tag
+    tags: [HierophantTrophy]
+
+- type: entity
+  parent: BaseAshWalkerTrophy
+  id: BubblegumTrophy
+  name: bubblegum claws
+  description: A cluster of serrated demonic claws. Even after their owner's death, their edges remain sharp enough to carve through thick hides.
+  components:
+  - type: Sprite
+    state: demon_claws
+  - type: Tag
+    tags: [BubblegumTrophy]
+
+- type: entity
+  parent: [ClothingOuterBaseToggleable, AllowSuitStorageClothing, BaseMinorContraband]
+  id: ClothingOuterArmorDrakeAshWalker
+  name: drake scale armor
+  description: Interlocking drake scales sewn over a goliath hide lining. The heavy mantle guards an ash walker's body against claws and flame.
+  components:
+  - type: AshWalkerClothing
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Clothing/OuterClothing/Suits/ash.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Lavaland/Clothing/OuterClothing/Suits/ash.rsi
+  - type: Item
+    size: Huge
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHoodDrakeAshWalker
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.35
+        Slash: 0.3
+        Piercing: 0.45
+        Heat: 0.2
+        Caustic: 0.4
+  - type: TemperatureProtection
+    heatingCoefficient: 0.01
+    coolingCoefficient: 0.1
+  - type: FireProtection
+    reduction: 0.7
+  - type: ExplosionResistance
+    damageCoefficient: 0.5
+  - type: ClothingSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9
+  - type: HeldSpeedModifier
+  - type: GroupExamine
+  - type: Construction
+    graph: ClothingOuterArmorDrakeAshWalker
+    node: armor
+
+- type: entity
+  parent: ClothingHeadHatHoodAshDrake
+  id: ClothingHeadHoodDrakeAshWalker
+  name: drake scale hood
+  description: A hood of overlapping scales shaped for an ash walker's head.
+  components:
+  - type: AshWalkerClothing
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.85
+        Slash: 0.85
+        Piercing: 0.85
+        Heat: 0.7
+        Caustic: 0.8
+
+- type: entity
+  parent: BaseShield
+  id: ShieldColossusAshWalker
+  name: colossus shield
+  description: A dense carapace bound to a round hide shield. It absorbs heavy blows, but each impact wears away its ancient shell.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Melee/buckler-shield.rsi
+    state: icon
+    color: "#B08C62"
+  - type: Item
+    sprite: Objects/Weapons/Melee/buckler-shield.rsi
+    heldPrefix: icon
+  - type: Blocking
+    passiveBlockModifier:
+      flatReductions:
+        Blunt: 18
+        Slash: 18
+        Piercing: 12
+        Heat: 10
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 450
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WoodDestroy
+      - !type:DoActsBehavior
+        acts: [Destruction]
+  - type: Construction
+    graph: ShieldColossusAshWalker
+    node: shield
+
+- type: entity
+  parent: BaseItem
+  id: HammerHierophantAshWalker
+  name: resonant bone maul
+  description: A hierophant crystal suspended in a cage of bone. A two-handed blow knocks prey away from its wielder.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Specific/Mining/HierophantClub.rsi
+    state: hierophant_club
+  - type: Item
+    size: Ginormous
+    sprite: Objects/Weapons/Melee/sledgehammer.rsi
+  - type: MeleeWeapon
+    attackRate: 0.6
+    wideAnimationRotation: -135
+    damage:
+      types:
+        Blunt: 30
+        Structural: 35
+    soundHit:
+      path: /Audio/_DeadSpace/Lavaland/Hierophant/sonic_jackhammer.ogg
+  - type: Wieldable
+  - type: MeleeRequiresWield
+  - type: MeleeThrowOnHit
+    speed: 5
+    distance: 2
+    activateOnThrown: false
+  - type: Construction
+    graph: HammerHierophantAshWalker
+    node: hammer
+
+- type: entity
+  parent: DaggerBone
+  id: DaggerBloodAshWalker
+  name: blood claw
+  description: Bubblegum's serrated claw bound into a bone grip. Its curved edge tears deep wounds and makes short work of a hunter's kill.
+  components:
+  - type: Sprite
+    color: "#D87474"
+  - type: Sharp
+    butcherDelayModifier: 0.4
+  - type: MeleeWeapon
+    attackRate: 1.2
+    damage:
+      types:
+        Slash: 18
+        Piercing: 5
+  - type: DamageOtherOnHit
+    damage:
+      types:
+        Piercing: 15
+  - type: Construction
+    graph: DaggerBloodAshWalker
+    node: dagger

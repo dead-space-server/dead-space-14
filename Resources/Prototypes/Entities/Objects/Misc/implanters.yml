@@ -51,6 +51,7 @@
     - ChameleonControllerImplant
     - VoiceMaskImplant
     - AdrenalImplant # DS14
+    - SmartLinkImplant #DS14
     deimplantFailureDamage:
       types:
         Cellular: 30 # DS14-Value
@@ -69,6 +70,7 @@
     sprite: Objects/Specific/Medical/implanter.rsi
     heldPrefix: implanter
     size: Small
+    storedRotation: -90 #DS14
   - type: Appearance
   - type: GenericVisualizer
     visuals:

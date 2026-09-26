@@ -229,4 +229,28 @@
     transmitFrequencyId: Messenger
     receiveFrequencyId: Messenger
     autoConnect: true
-#DS-14-end
+
+# DS14-start
+# The ВорПРО program of the thief. Never found on items — it is installed onto
+# the thief's PDA when they insert a tool into the PDA's tool slot, and deleted
+# again when the tool is taken out.
+- type: entity
+  parent: BasePDACartridge
+  id: ThiefPdaProgram
+  name: ВорПРО cartridge
+  description: Программа для профессионалов своего дела. Запросы, оплата, снаряжение.
+  components:
+  - type: Sprite
+    state: cart-s
+  - type: Icon
+    sprite: Objects/Devices/cartridge.rsi
+    state: cart-s
+  - type: UIFragment
+    ui: !type:ThiefProgramUi
+  - type: Cartridge
+    programName: thief-program-name
+    icon:
+      sprite: Interface/Misc/program_icons.rsi
+      state: syndi_chat
+  - type: ThiefPdaProgram
+# DS14-end

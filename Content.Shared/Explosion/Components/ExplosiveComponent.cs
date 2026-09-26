@@ -80,6 +80,12 @@ public sealed partial class ExplosiveComponent : Component
     public bool Repeatable;
 
     /// <summary>
+    ///     Whether triggering this explosive should add an admin log / admin alert message.
+    /// </summary>
+    [DataField]
+    public bool AddLog = true;
+
+    /// <summary>
     ///     Avoid somehow double-triggering this explosion (e.g. by damaging this entity from its own explosion.
     /// </summary>
     public bool Exploded;

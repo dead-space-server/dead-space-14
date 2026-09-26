@@ -251,9 +251,9 @@
   - WageScheduler # backmen: currency
   - Nukeops
   # - SubGamemodesRule # DS14
-  - BasicStationEventScheduler
-  - MeteorSwarmScheduler
-  - SpaceTrafficControlEventScheduler
+  # - BasicStationEventScheduler # DS14
+  # - MeteorSwarmScheduler # DS14
+  # - SpaceTrafficControlEventScheduler # DS14
   - BasicRoundstartVariation
 
 - type: gamePreset

@@ -569,7 +569,7 @@ public sealed class NukeopsRuleSystem : GameRuleSystem<NukeopsRuleComponent>
         nukeops.EvacShuttleTime,
         nukeops.RoundEndTextSender,
         nukeops.RoundEndTextShuttleCall,
-        nukeops.RoundEndTextAnnouncement);
+        nukeops.RoundEndTextAnnouncement, announcementSource: nukeops.TargetStation); // DS14
 
 
         // prevent it called multiple times

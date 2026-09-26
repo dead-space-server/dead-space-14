@@ -1,0 +1,191 @@
+- type: entity
+  abstract: true
+  parent: [BaseSimpleMob, BaseMobLavalandFauna]
+  id: BaseMobGutlunch
+  name: gutlunch
+  description: A placid scavenger with a nutrient sac. It digests raw meat into rich milk.
+  components:
+  - type: Gutlunch
+    foodWhitelist:
+      tags: [Meat]
+    milkPerNutrient:
+      reagents:
+      - ReagentId: Cream
+        Quantity: 1.2
+      - ReagentId: Saline
+        Quantity: 0.8
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/gutlunch.rsi
+    layers:
+    - state: gutlunch
+      map: ["enum.DamageStateVisualLayers.Base"]
+    - state: gl_full
+      map: [sac]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.GutlunchVisuals.Full:
+        sac:
+          True: {visible: true}
+          False: {visible: false}
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: gutlunch
+      Dead:
+        Base: gutlunch
+  - type: RotationVisuals
+    horizontalRotation: 90
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      100: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 1.5
+    baseSprintSpeed: 1.5
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeCircle
+          radius: 0.3
+        density: 100
+        mask: [MobMask]
+        layer: [MobLayer]
+  - type: Tag
+    tags: []
+  - type: NpcFactionMember
+    factions: [SimpleNeutral]
+  - type: HTN
+    rootTask:
+      task: GutlunchCompound
+    blackboard:
+      VisionRadius: !type:Single 6
+      InteractRange: !type:Single 1
+  - type: SolutionContainerManager
+    solutions:
+      udder:
+        maxVol: 50
+  - type: Udder
+    autoGenerate: false
+    milkOnInteract: true
+    reagentId: Cream
+    minHungerThreshold: Peckish
+  - type: ReproductivePartner
+  - type: Butcherable
+    spawned:
+    - id: FoodMeat
+      amount: 1
+  - type: InteractionPopup
+    successChance: 1
+    interactSuccessString: petting-success-slimes
+    interactSuccessSound:
+      path: /Audio/Animals/lizard_happy.ogg
+  - type: ZombieImmune
+
+- type: entity
+  parent: BaseMobGutlunch
+  id: MobGubbuck
+  name: gubbuck
+  description: A small, colourful male gutlunch. It eats raw meat and produces nutritious milk. A well-fed gubbuck can mate with a guthen.
+  components:
+  - type: Gutlunch
+    isMale: true
+  - type: Sprite
+    scale: 0.85, 0.85
+    color: "#D97D64"
+  - type: Grammar
+    attributes:
+      gender: male
+
+- type: entity
+  parent: BaseMobGutlunch
+  id: MobGuthen
+  name: guthen
+  description: A female gutlunch. It eats raw meat and produces nutritious milk. With a full sac and a well-fed male nearby, it can bear a single young.
+  components:
+  - type: Grammar
+    attributes:
+      gender: female
+  - type: Reproductive
+    breedRange: 1.5
+    breedChance: 1
+    hungerPerBirth: 0
+    gestationDuration: 120
+    partnerWhitelist:
+      components: [Gutlunch]
+    offspring:
+    - id: MobGubbuck
+      prob: 0.45
+      orGroup: GutlunchOffspring
+    - id: MobGuthen
+      prob: 0.55
+      orGroup: GutlunchOffspring
+
+- type: entity
+  parent: MarkerBase
+  id: SpawnMobGubbuck
+  name: gubbuck spawner
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: gutlunch
+      sprite: _DeadSpace/Lavaland/AshWalkers/gutlunch.rsi
+      color: "#D97D64"
+      scale: 0.85, 0.85
+  - type: ConditionalSpawner
+    prototypes: [MobGubbuck]
+
+- type: entity
+  parent: MarkerBase
+  id: SpawnMobGuthen
+  name: guthen spawner
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: gutlunch
+      sprite: _DeadSpace/Lavaland/AshWalkers/gutlunch.rsi
+  - type: ConditionalSpawner
+    prototypes: [MobGuthen]
+
+- type: htnCompound
+  id: GutlunchCompound
+  branches:
+  - tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:UtilityOperator
+        proto: NearbyGutlunchFood
+    - !type:HTNPrimitiveTask
+      operator: !type:MoveToOperator
+        pathfindInPlanning: true
+        removeKeyOnFinish: false
+        targetKey: TargetCoordinates
+        pathfindKey: TargetPathfind
+        rangeKey: InteractRange
+    - !type:HTNPrimitiveTask
+      preconditions:
+      - !type:KeyExistsPrecondition
+        key: Target
+      operator: !type:AltInteractOperator
+    - !type:HTNPrimitiveTask
+      operator: !type:WaitOperator
+        key: IdleTime
+  - tasks:
+    - !type:HTNCompoundTask
+      task: IdleSpinCompound
+
+- type: utilityQuery
+  id: NearbyGutlunchFood
+  query:
+  - !type:ComponentQuery
+    components:
+    - type: Edible
+  considerations:
+  - !type:CanIngestCon
+    curve: !type:BoolCurve
+  - !type:TargetDistanceCon
+    curve: !type:PresetCurve
+      preset: TargetDistance
+  - !type:TargetAccessibleCon
+    curve: !type:BoolCurve

@@ -1,0 +1,19 @@
+- type: construction
+  id: TableAsia
+  graph: TableAsia
+  startNode: start
+  targetNode: asia
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+
+- type: construction
+  id: TablePlasmaGlassArmored
+  graph: TablePlasmaGlassArmored
+  startNode: start
+  targetNode: armored
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false

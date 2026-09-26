@@ -20,6 +20,9 @@
   - type: UseDelay
     delay: 1
   - type: GunRequiresWield
+  - type: Tag
+    tags:
+    - AshWalkerUsableGun
   - type: Gun
     minAngle: 0
     maxAngle: 5

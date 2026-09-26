@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "license": "Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT",
+  "copyright": "Dead Space. Contributed by ESphagnum for the K1llaro event (https://github.com/ESphagnum/space-station-14-fobos/commit/08b8fc323b333322d8290d2b6d29b3a089232257).",
+  "size": {
+    "x": 128,
+    "y": 128
+  },
+  "states": [
+    {
+      "name": "alive",
+      "directions": 1,
+      "delays": [
+        [0.06, 0.10, 0.10, 0.10, 0.10]
+      ]
+    },
+    {
+      "name": "dead",
+      "directions": 1,
+      "delays": [
+        [0.1]
+      ]
+    }
+  ]
+}
+

@@ -3,9 +3,9 @@ meta:
   category: Grid
   engineVersion: 276.0.0
   forkId: dsfobos
-  forkVersion: bafa6bba7bf0c58137c0f23db8b00f5b9a113d05
-  time: 06/27/2026 00:29:56
-  entityCount: 1269
+  forkVersion: 09d881ad2ddcaf41085f266d6f216dac0cfd9539
+  time: 09/04/2026 20:49:51
+  entityCount: 1273
 maps: []
 grids:
 - 1
@@ -39,7 +39,6 @@ entities:
       name: NT-Omen
     - type: Transform
       pos: -0.50781727,-0.484375
-      parent: invalid
     - type: MapGrid
       chunks:
         0,1:
@@ -556,30 +555,31 @@ entities:
             0: 65329
           0,3:
             0: 4375
-            1: 8704
+            1: 512
+            2: 8192
           -1,4:
             0: 61312
-            2: 1
+            3: 1
           0,5:
             0: 15
-            2: 45824
+            3: 45824
           -1,5:
             0: 14
-            2: 43008
+            3: 43008
           0,6:
             0: 48
           -1,6:
             0: 128
           1,4:
             0: 256
-            2: 8197
+            3: 8197
           1,3:
-            2: 8704
+            3: 8704
             0: 3
           -2,4:
-            2: 32772
+            3: 32772
           -2,3:
-            2: 34816
+            3: 34816
             0: 8
           -1,3:
             0: 34831
@@ -587,52 +587,52 @@ entities:
             0: 4096
           0,-3:
             0: 28976
-            2: 2052
+            3: 2052
           -1,-3:
             0: 49280
-            2: 516
+            3: 516
           0,-2:
             0: 45687
           -1,-2:
             0: 47308
-            2: 17
+            3: 17
           0,-1:
             0: 49087
           -1,-1:
             0: 40895
           0,0:
             0: 29186
-            3: 136
+            4: 136
           1,-2:
-            2: 34867
+            3: 34867
             0: 12288
           1,-1:
             0: 13107
-            2: 128
+            3: 128
           1,0:
             0: 28689
-            4: 34
-            2: 8
+            5: 34
+            3: 8
           -2,-2:
-            2: 8840
+            3: 8840
             0: 32768
           -2,-1:
-            2: 32
+            3: 32
             0: 2184
           -2,0:
             0: 49288
-            2: 2
+            3: 2
           -1,0:
             0: 63531
-            5: 16
+            6: 16
           -3,0:
-            2: 26114
+            3: 26114
           -3,1:
-            2: 3110
+            3: 3110
           -3,2:
-            2: 2052
+            3: 2052
           -2,2:
-            2: 8209
+            3: 8209
             0: 36044
           -2,1:
             0: 52974
@@ -647,16 +647,16 @@ entities:
           1,1:
             0: 32767
           1,2:
-            1: 16
+            7: 16
             0: 14176
-            2: 32768
+            3: 32768
           2,1:
             0: 1
-            2: 1676
+            3: 1676
           2,2:
-            2: 533
+            3: 533
           2,0:
-            2: 52232
+            3: 52232
         uniqueMixes:
         - volume: 2500
           temperature: 293.15
@@ -664,10 +664,15 @@ entities:
             Oxygen: 21.824879
             Nitrogen: 82.10312
         - volume: 2500
-          temperature: 293.15
+          temperature: 293.14975
           moles:
             Oxygen: 21.6852
             Nitrogen: 81.57766
+        - volume: 2500
+          temperature: 293.15
+          moles:
+            Oxygen: 23.57087
+            Nitrogen: 88.67137
         - volume: 2500
           immutable: True
           moles: {}
@@ -684,6 +689,11 @@ entities:
           moles:
             Oxygen: 20.078888
             Nitrogen: 75.53487
+        - volume: 2500
+          temperature: 293.15
+          moles:
+            Oxygen: 21.6852
+            Nitrogen: 81.57766
         chunkSize: 4
     - type: GasTileOverlay
     - type: RadiationGridResistance
@@ -702,6 +712,80 @@ entities:
     - type: Action
       originalIconColor: '#FFFFFFFF'
       container: 526
+- proto: ActionToggleInternals
+  entities:
+  - uid: 442
+    mapInit: true
+    paused: true
+    components:
+    - type: Transform
+      parent: 433
+    - type: Action
+      originalIconColor: '#FFFFFFFF'
+      container: 433
+  - uid: 447
+    mapInit: true
+    paused: true
+    components:
+    - type: Transform
+      parent: 428
+    - type: Action
+      originalIconColor: '#FFFFFFFF'
+      container: 428
+  - uid: 448
+    mapInit: true
+    paused: true
+    components:
+    - type: Transform
+      parent: 430
+    - type: Action
+      originalIconColor: '#FFFFFFFF'
+      container: 430
+  - uid: 451
+    mapInit: true
+    paused: true
+    components:
+    - type: Transform
+      parent: 431
+    - type: Action
+      originalIconColor: '#FFFFFFFF'
+      container: 431
+  - uid: 456
+    mapInit: true
+    paused: true
+    components:
+    - type: Transform
+      parent: 426
+    - type: Action
+      originalIconColor: '#FFFFFFFF'
+      container: 426
+  - uid: 1270
+    mapInit: true
+    paused: true
+    components:
+    - type: Transform
+      parent: 427
+    - type: Action
+      originalIconColor: '#FFFFFFFF'
+      container: 427
+  - uid: 1271
+    mapInit: true
+    paused: true
+    components:
+    - type: Transform
+      parent: 432
+    - type: Action
+      originalIconColor: '#FFFFFFFF'
+      container: 432
+  - uid: 1272
+    mapInit: true
+    paused: true
+    components:
+    - type: Transform
+      parent: 429
+    - type: Action
+      originalIconColor: '#FFFFFFFF'
+      container: 429
 - proto: AirAlarm
   entities:
   - uid: 1220
@@ -1158,35 +1242,43 @@ entities:
   - uid: 446
     components:
     - type: Transform
-      parent: 442
+      parent: 425
+    - type: RadarConsole
+      followEntity: False
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-      storage: 442
+      storage: 425
   - uid: 452
     components:
     - type: Transform
-      parent: 442
+      parent: 425
+    - type: RadarConsole
+      followEntity: False
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-      storage: 442
+      storage: 425
   - uid: 453
     components:
     - type: Transform
-      parent: 442
+      parent: 425
+    - type: RadarConsole
+      followEntity: False
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-      storage: 442
+      storage: 425
   - uid: 457
     components:
     - type: Transform
-      parent: 442
+      parent: 425
+    - type: RadarConsole
+      followEntity: False
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-      storage: 442
+      storage: 425
 - proto: BookshelfFilled
   entities:
   - uid: 410
@@ -3462,40 +3554,6 @@ entities:
       parent: 1
     - type: Physics
       canCollide: False
-- proto: ClothingHeadHelmetBlueShield
-  entities:
-  - uid: 447
-    components:
-    - type: Transform
-      parent: 442
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-      storage: 442
-  - uid: 448
-    components:
-    - type: Transform
-      parent: 442
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-      storage: 442
-  - uid: 451
-    components:
-    - type: Transform
-      parent: 442
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-      storage: 442
-  - uid: 456
-    components:
-    - type: Transform
-      parent: 442
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-      storage: 442
 - proto: ClothingMaskBreath
   entities:
   - uid: 1257
@@ -3899,32 +3957,64 @@ entities:
     components:
     - type: Transform
       parent: 425
+    - type: GasTank
+      toggleActionEntity: 456
     - type: Physics
       canCollide: False
+    - type: ActionsContainer
+    - type: ContainerContainer
+      containers:
+        actions: !type:Container
+          ents:
+          - 456
     - type: InsideEntityStorage
       storage: 425
   - uid: 427
     components:
     - type: Transform
       parent: 425
+    - type: GasTank
+      toggleActionEntity: 1270
     - type: Physics
       canCollide: False
+    - type: ActionsContainer
+    - type: ContainerContainer
+      containers:
+        actions: !type:Container
+          ents:
+          - 1270
     - type: InsideEntityStorage
       storage: 425
   - uid: 432
     components:
     - type: Transform
       parent: 425
+    - type: GasTank
+      toggleActionEntity: 1271
     - type: Physics
       canCollide: False
+    - type: ActionsContainer
+    - type: ContainerContainer
+      containers:
+        actions: !type:Container
+          ents:
+          - 1271
     - type: InsideEntityStorage
       storage: 425
   - uid: 433
     components:
     - type: Transform
       parent: 425
+    - type: GasTank
+      toggleActionEntity: 442
     - type: Physics
       canCollide: False
+    - type: ActionsContainer
+    - type: ContainerContainer
+      containers:
+        actions: !type:Container
+          ents:
+          - 442
     - type: InsideEntityStorage
       storage: 425
 - proto: DoubleEmergencyOxygenTankFilled
@@ -3941,32 +4031,64 @@ entities:
     components:
     - type: Transform
       parent: 425
+    - type: GasTank
+      toggleActionEntity: 447
     - type: Physics
       canCollide: False
+    - type: ActionsContainer
+    - type: ContainerContainer
+      containers:
+        actions: !type:Container
+          ents:
+          - 447
     - type: InsideEntityStorage
       storage: 425
   - uid: 429
     components:
     - type: Transform
       parent: 425
+    - type: GasTank
+      toggleActionEntity: 1272
     - type: Physics
       canCollide: False
+    - type: ActionsContainer
+    - type: ContainerContainer
+      containers:
+        actions: !type:Container
+          ents:
+          - 1272
     - type: InsideEntityStorage
       storage: 425
   - uid: 430
     components:
     - type: Transform
       parent: 425
+    - type: GasTank
+      toggleActionEntity: 448
     - type: Physics
       canCollide: False
+    - type: ActionsContainer
+    - type: ContainerContainer
+      containers:
+        actions: !type:Container
+          ents:
+          - 448
     - type: InsideEntityStorage
       storage: 425
   - uid: 431
     components:
     - type: Transform
       parent: 425
+    - type: GasTank
+      toggleActionEntity: 451
     - type: Physics
       canCollide: False
+    - type: ActionsContainer
+    - type: ContainerContainer
+      containers:
+        actions: !type:Container
+          ents:
+          - 451
     - type: InsideEntityStorage
       storage: 425
 - proto: DrinkHotCoffee
@@ -5994,58 +6116,13 @@ entities:
   - uid: 425
     components:
     - type: Transform
-      pos: 1.5,15.5
-      parent: 1
-    - type: AccessReader
-      accessListsOriginal:
-      - - Captain
-    - type: EntityStorage
-      air:
-        volume: 200
-        immutable: False
-        temperature: 293.14673
-        moles:
-          Oxygen: 1.8856695
-          Nitrogen: 7.0937095
-    - type: ContainerContainer
-      containers:
-        entity_storage: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 441
-          - 433
-          - 432
-          - 431
-          - 430
-          - 429
-          - 428
-          - 427
-          - 426
-          - 434
-          - 435
-          - 436
-          - 437
-          - 438
-          - 439
-          - 440
-        paper_label: !type:ContainerSlot
-          showEnts: False
-          occludes: True
-          ent: null
-  - uid: 442
-    components:
-    - type: Transform
       pos: 1.5,14.5
       parent: 1
-    - type: AccessReader
-      accessListsOriginal:
-      - - Captain
     - type: EntityStorage
       air:
         volume: 200
         immutable: False
-        temperature: 293.14673
+        temperature: 293.14697
         moles:
           Oxygen: 1.8856695
           Nitrogen: 7.0937095
@@ -6055,22 +6132,34 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 456
-          - 454
-          - 455
-          - 449
-          - 445
-          - 450
-          - 458
-          - 457
-          - 446
-          - 444
-          - 443
+          - 439
           - 452
+          - 429
+          - 444
+          - 454
+          - 436
+          - 435
+          - 458
+          - 455
+          - 457
+          - 440
+          - 449
+          - 434
+          - 432
+          - 427
           - 453
-          - 447
-          - 448
-          - 451
+          - 446
+          - 426
+          - 431
+          - 430
+          - 428
+          - 450
+          - 438
+          - 441
+          - 433
+          - 445
+          - 437
+          - 443
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
@@ -7391,35 +7480,35 @@ entities:
   - uid: 445
     components:
     - type: Transform
-      parent: 442
+      parent: 425
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-      storage: 442
+      storage: 425
   - uid: 449
     components:
     - type: Transform
-      parent: 442
+      parent: 425
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-      storage: 442
+      storage: 425
   - uid: 450
     components:
     - type: Transform
-      parent: 442
+      parent: 425
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-      storage: 442
+      storage: 425
   - uid: 455
     components:
     - type: Transform
-      parent: 442
+      parent: 425
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-      storage: 442
+      storage: 425
   - uid: 630
     components:
     - type: Transform
@@ -7470,6 +7559,13 @@ entities:
     components:
     - type: Transform
       pos: 5.5,0.5
+      parent: 1
+- proto: VendingMachineAmmo
+  entities:
+  - uid: 1273
+    components:
+    - type: Transform
+      pos: 1.5,15.5
       parent: 1
 - proto: VendingMachineBooze
   entities:
@@ -8879,35 +8975,35 @@ entities:
   - uid: 443
     components:
     - type: Transform
-      parent: 442
+      parent: 425
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-      storage: 442
+      storage: 425
   - uid: 444
     components:
     - type: Transform
-      parent: 442
+      parent: 425
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-      storage: 442
+      storage: 425
   - uid: 454
     components:
     - type: Transform
-      parent: 442
+      parent: 425
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-      storage: 442
+      storage: 425
   - uid: 458
     components:
     - type: Transform
-      parent: 442
+      parent: 425
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-      storage: 442
+      storage: 425
 - proto: WeaponEnergyTurretCentralCommand
   entities:
   - uid: 1232

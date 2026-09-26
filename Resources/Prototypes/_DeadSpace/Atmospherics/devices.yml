@@ -1,0 +1,291 @@
+- type: entity
+  parent: GasBinaryBase
+  id: GasTemperatureValve
+  name: тепловой клапан
+  description: Клапан, пропускающий газ только при подходящей температуре. По умолчанию открыт, пока температура ниже или выше установленной.
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+    - type: SubFloorHide
+      visibleLayers:
+      - enum.SubfloorLayers.FirstLayer
+    - type: Sprite
+      sprite: _DeadSpace/Structures/Piping/Atmospherics/pump.rsi
+      layers:
+        - sprite: Structures/Piping/Atmospherics/pipe.rsi
+          state: pipeStraight
+          map: [ "enum.PipeVisualLayers.Pipe" ]
+        - state: tempGate
+          map: [ "enum.SubfloorLayers.FirstLayer", "enabled" ]
+    - type: Appearance
+    - type: GenericVisualizer
+      visuals:
+        enum.FilterVisuals.Enabled:
+          enabled:
+            True: { state: tempGateOn }
+            False: { state: tempGate }
+    - type: PipeColorVisuals
+    - type: AtmosPipeLayers
+      spriteRsiPaths:
+        Primary: _DeadSpace/Structures/Piping/Atmospherics/pump.rsi
+        Secondary: _DeadSpace/Structures/Piping/Atmospherics/pump_alt1.rsi
+        Tertiary: _DeadSpace/Structures/Piping/Atmospherics/pump_alt2.rsi
+      alternativePrototypes:
+        Primary: GasTemperatureValve
+        Secondary: GasTemperatureValveAlt1
+        Tertiary: GasTemperatureValveAlt2
+    - type: GasTemperatureValve
+    - type: AtmosDevice
+    - type: Construction
+      graph: GasBinary
+      node: temperaturevalve
+    - type: ActivatableUI
+      key: enum.GasTemperatureValveUiKey.Key
+    - type: ActivatableUIRequiresAnchor
+    - type: UserInterface
+      interfaces:
+        enum.GasTemperatureValveUiKey.Key:
+          type: GasTemperatureValveBoundUserInterface
+    - type: NodeContainer
+      nodes:
+        inlet:
+          !type:PipeNode
+          nodeGroupID: Pipe
+          pipeDirection: North
+          volume: 100
+        outlet:
+          !type:PipeNode
+          nodeGroupID: Pipe
+          pipeDirection: South
+          volume: 100
+
+- type: entity
+  parent: [ BaseMachinePowered, SmallConstructibleMachine ]
+  id: GasElectrolyzer
+  name: газовый электролизер
+  description: Пропускает газ и расщепляет расщепляемые компоненты на составляющие.
+  placement:
+    mode: SnapgridCenter
+  components:
+    - type: ApcPowerReceiver
+      powerLoad: 500
+    - type: Rotatable
+    - type: Transform
+      noRot: false
+    - type: Sprite
+      sprite: _DeadSpace/Structures/Machines/elctrolizer.rsi
+      snapCardinals: true
+      granularLayersRendering: true
+      layers:
+        - sprite: Structures/Piping/Atmospherics/pipe.rsi
+          state: pipeBinaryConnectors
+          map: [ "enum.PipeVisualLayers.Pipe" ]
+          renderingStrategy: Default
+        - state: electro-off
+          map: [ "enum.PowerDeviceVisualLayers.Powered" ]
+    - type: Appearance
+    - type: GenericVisualizer
+      visuals:
+        enum.PowerDeviceVisuals.Powered:
+          enum.PowerDeviceVisualLayers.Powered:
+            True: { state: electro-on }
+            False: { state: electro-off }
+    - type: PipeColorVisuals
+    - type: GasElectrolyzer
+      reactions:
+        WaterVapor:
+          products:
+            Hydrogen: 0.5
+            Oxygen: 0.25
+          energy: -800 
+        Brizidium:
+          products:
+            Halon: 2.0
+            Oxygen: 0.2
+          energy: 2000
+    - type: AtmosDevice
+    - type: ActivatableUI
+      key: enum.GasElectrolyzerUiKey.Key
+    - type: UserInterface
+      interfaces:
+        enum.GasElectrolyzerUiKey.Key:
+          type: GasElectrolyzerBoundUserInterface
+    - type: Machine
+      board: GasElectrolyzerMachineCircuitBoard
+    - type: NodeContainer
+      nodes:
+        inlet:
+          !type:PipeNode
+          nodeGroupID: Pipe
+          pipeDirection: North
+          volume: 200
+        outlet:
+          !type:PipeNode
+          nodeGroupID: Pipe
+          pipeDirection: South
+          volume: 200
+
+- type: entity
+  parent: GasBinaryBase
+  id: GasHeatExchanger
+  name: теплообменник
+  description: Уравнивает температуру газов в подключённых к ним трубах, не смешивая сам газ, если два теплообменника касаются друг друга.
+  placement:
+    mode: SnapgridCenter
+  components:
+    - type: Rotatable
+    - type: Transform
+      noRot: false
+    - type: SubFloorHide
+      visibleLayers:
+      - enum.SubfloorLayers.FirstLayer
+    - type: Sprite
+      sprite: _DeadSpace/Structures/Piping/Atmospherics/heunary.rsi
+      layers:
+        - sprite: Structures/Piping/Atmospherics/pipe.rsi
+          state: pipeHalf
+          map: [ "enum.PipeVisualLayers.Pipe" ]
+        - state: heunary
+          map: [ "enum.SubfloorLayers.FirstLayer" ]
+    - type: Appearance
+    - type: PipeColorVisuals
+    - type: AtmosPipeLayers
+      numberOfPipeLayers: 1
+      spriteRsiPaths:
+        Primary: _DeadSpace/Structures/Piping/Atmospherics/heunary.rsi
+    - type: GasHeatExchanger
+    - type: AtmosDevice
+    - type: Construction
+      graph: GasBinary
+      node: heatexchanger
+    - type: NodeContainer
+      nodes:
+        pipe:
+          !type:PipeNode
+          nodeGroupID: Pipe
+          pipeDirection: South
+          volume: 200
+
+- type: entity
+  parent: GasBinaryBase
+  id: GasTemperaturePump
+  name: тепловой насос
+  description: Перекачивает тепло с одной стороны на другую в одну сторону. Требует питания.
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+    - type: ExtensionCableReceiver
+    - type: ApcPowerReceiver
+      powerLoad: 500
+    - type: Rotatable
+    - type: Transform
+      noRot: false
+    - type: SubFloorHide
+      visibleLayers:
+      - enum.SubfloorLayers.FirstLayer
+    - type: Sprite
+      sprite: _DeadSpace/Structures/Piping/Atmospherics/pump.rsi
+      layers:
+        - sprite: Structures/Piping/Atmospherics/pipe.rsi
+          state: pipeStraight
+          map: [ "enum.PipeVisualLayers.Pipe" ]
+        - state: tempPump
+          map: [ "enum.SubfloorLayers.FirstLayer", "enabled" ]
+    - type: Appearance
+    - type: GenericVisualizer
+      visuals:
+        enum.FilterVisuals.Enabled:
+          enabled:
+            True: { state: tempPumpOn }
+            False: { state: tempPump }
+    - type: PipeColorVisuals
+    - type: AtmosPipeLayers
+      spriteRsiPaths:
+        Primary: _DeadSpace/Structures/Piping/Atmospherics/pump.rsi
+        Secondary: _DeadSpace/Structures/Piping/Atmospherics/pump_alt1.rsi
+        Tertiary: _DeadSpace/Structures/Piping/Atmospherics/pump_alt2.rsi
+      alternativePrototypes:
+        Primary: GasTemperaturePump
+        Secondary: GasTemperaturePumpAlt1
+        Tertiary: GasTemperaturePumpAlt2
+    - type: GasTemperaturePump
+    - type: AtmosDevice
+    - type: Construction
+      graph: GasBinary
+      node: temperaturepump
+    - type: NodeContainer
+      nodes:
+        inlet:
+          !type:PipeNode
+          nodeGroupID: Pipe
+          pipeDirection: North
+          volume: 200
+        outlet:
+          !type:PipeNode
+          nodeGroupID: Pipe
+          pipeDirection: South
+          volume: 200
+
+- type: entity
+  parent: [ GasPipeLayerAlt1, GasTemperatureValve ]
+  id: GasTemperatureValveAlt1
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Construction
+      node: temperaturevalveAlt1
+    - type: Sprite
+      sprite: _DeadSpace/Structures/Piping/Atmospherics/pump_alt1.rsi
+      layers:
+        - sprite: Structures/Piping/Atmospherics/pipe_alt1.rsi
+          state: pipeStraight
+          map: [ "enum.PipeVisualLayers.Pipe" ]
+        - state: tempGate
+          map: [ "enum.SubfloorLayers.FirstLayer", "enabled" ]
+
+- type: entity
+  parent: [ GasPipeLayerAlt2, GasTemperatureValve ]
+  id: GasTemperatureValveAlt2
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Construction
+      node: temperaturevalveAlt2
+    - type: Sprite
+      sprite: _DeadSpace/Structures/Piping/Atmospherics/pump_alt2.rsi
+      layers:
+        - sprite: Structures/Piping/Atmospherics/pipe_alt2.rsi
+          state: pipeStraight
+          map: [ "enum.PipeVisualLayers.Pipe" ]
+        - state: tempGate
+          map: [ "enum.SubfloorLayers.FirstLayer", "enabled" ]
+
+- type: entity
+  parent: [ GasPipeLayerAlt1, GasTemperaturePump ]
+  id: GasTemperaturePumpAlt1
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Construction
+      node: temperaturepumpAlt1
+    - type: Sprite
+      sprite: _DeadSpace/Structures/Piping/Atmospherics/pump_alt1.rsi
+      layers:
+        - sprite: Structures/Piping/Atmospherics/pipe_alt1.rsi
+          state: pipeStraight
+          map: [ "enum.PipeVisualLayers.Pipe" ]
+        - state: tempPump
+          map: [ "enum.SubfloorLayers.FirstLayer", "enabled" ]
+
+- type: entity
+  parent: [ GasPipeLayerAlt2, GasTemperaturePump ]
+  id: GasTemperaturePumpAlt2
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Construction
+      node: temperaturepumpAlt2
+    - type: Sprite
+      sprite: _DeadSpace/Structures/Piping/Atmospherics/pump_alt2.rsi
+      layers:
+        - sprite: Structures/Piping/Atmospherics/pipe_alt2.rsi
+          state: pipeStraight
+          map: [ "enum.PipeVisualLayers.Pipe" ]
+        - state: tempPump
+          map: [ "enum.SubfloorLayers.FirstLayer", "enabled" ]

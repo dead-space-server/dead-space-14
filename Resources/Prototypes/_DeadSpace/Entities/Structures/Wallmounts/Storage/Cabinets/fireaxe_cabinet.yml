@@ -12,3 +12,53 @@
   - type: Lock
   - type: AccessReader
     access: [["TaipanAtmospherics"], ["TaipanCommand"]]
+
+- type: entity
+  parent: BaseWallmountCabinetGlass
+  id: SamuraiSwordCabinet
+  name: шкаф для меча самурая
+  description: Шкаф для хранения мечей, видимо их используют для тренировок.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:EmptyAllContainersBehaviour
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Wallmounts/samurai.rsi
+    layers:
+    - state: cabinet
+    - state: katana
+      map: ["enum.ItemCabinetVisuals.Layer"]
+      visible: true
+    - state: glass
+      map: ["enum.OpenableVisuals.Layer"]
+  - type: ItemSlots
+    slots:
+      ItemCabinet:
+        ejectOnInteract: true
+        whitelist:
+          tags:
+          - EnergyKatana
+  - type: Lock
+  - type: AccessReader
+    access: [["Ninja"]]
+  - type: ContainerFill
+    containers:
+      ItemCabinet:
+      - ToyEnergyKatana

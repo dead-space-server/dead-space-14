@@ -1,0 +1,45 @@
+- type: entity
+  parent: Bed
+  id: Futon
+  name: Футон
+  description: Традиционный японский матрас.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/bed.rsi
+    state: bed-1
+  - type: Damageable
+    damageModifierSet: Inflatable
+
+- type: entity
+  parent: Bed
+  id: BedWood
+  name: деревянная кровать
+  description: Неудобная кровать из дерева, не показывайте её ортопеду.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Furniture/bed.rsi
+    state: bed_wood
+  - type: Damageable
+    damageModifierSet: Wood
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+    - trigger:
+        !type:DamageTrigger
+        damage: 75
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          MaterialWoodPlank1:
+            min: 3
+            max: 5
+  - type: Construction
+    graph: BedWood
+    node: bedWood

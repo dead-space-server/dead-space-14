@@ -7,6 +7,7 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
+using Content.Shared.Corvax.TTS;
 using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.DeadSpace.Lavaland.DrakeArmor;
 using Content.Shared.Humanoid;
@@ -187,9 +188,20 @@ public sealed class DrakeArmorSystem : EntitySystem
             return;
         }
 
+        var ttsVoice = TryComp<TTSComponent>(args.Performer, out var sourceTts)
+            ? sourceTts.VoicePrototypeId
+            : null;
         var skeleton = _polymorph.PolymorphEntity(args.Performer, args.SkeletonPolymorph);
         if (skeleton is not { } skeletonUid)
             return;
+
+        if (ttsVoice != null &&
+            TryComp<TTSComponent>(skeletonUid, out var skeletonTts) &&
+            TryComp<HumanoidAppearanceComponent>(skeletonUid, out var skeletonAppearance))
+        {
+            skeletonTts.VoicePrototypeId = ttsVoice;
+            skeletonAppearance.Voice = ttsVoice;
+        }
 
         TransferCompatibleDamage(args.Performer, skeletonUid);
         _stun.TryKnockdown(skeletonUid, args.SkeletonStunDuration, autoStand: true, drop: false, force: true);

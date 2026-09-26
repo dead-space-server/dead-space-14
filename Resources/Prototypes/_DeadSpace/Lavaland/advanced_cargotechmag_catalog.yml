@@ -1,7 +1,71 @@
 - type: listing
+  id: TaipanTechIchorMedipen
+  productEntity: IchorMedipen
+  categories:
+  - CargoTechMagTaipan
+  cost:
+    LavalandMiningPoint: 850
+
+- type: listing
+  id: TaipanTechClothingMaskGasVoiceChameleon
+  productEntity: ClothingMaskGasVoiceChameleon
+  categories:
+  - CargoTechMagTaipan
+  cost:
+    LavalandMiningPoint: 900
+
+- type: listing
+  id: TaipanTechAgentIDCard
+  productEntity: AgentIDCard
+  categories:
+  - CargoTechMagTaipan
+  cost:
+    LavalandMiningPoint: 1000
+
+- type: listing
+  id: TaipanTechChameleonProjector
+  productEntity: ChameleonProjector
+  categories:
+  - CargoTechMagTaipan
+  cost:
+    LavalandMiningPoint: 2500
+
+- type: listing
+  id: TaipanTechClothingOuterHardsuitAshGhost
+  productEntity: ClothingOuterHardsuitAshGhost
+  categories:
+  - CargoTechMagTaipan
+  cost:
+    LavalandMiningPoint: 5000
+
+- type: listing
   id: TaipanTechMagSmokingCarp
   productEntity: SmokingCarpInjector
   categories:
   - CargoTechMagTaipan
   cost:
-    LavalandMiningPoint: 100000
+    LavalandMiningPoint: 7500
+
+- type: listing
+  id: TaipanTechBoxArkalyse
+  productEntity: BoxArkalyse
+  categories:
+  - CargoTechMagTaipan
+  cost:
+    LavalandMiningPoint: 10000
+
+- type: listing
+  id: TaipanTechSandevistanImplantCase
+  productEntity: SandevistanImplantCase
+  categories:
+  - CargoTechMagTaipan
+  cost:
+    LavalandMiningPoint: 15000
+
+- type: listing
+  id: TaipanTechWeaponPistolMalorian
+  productEntity: WeaponPistolMalorian
+  categories:
+  - CargoTechMagTaipan
+  cost:
+    LavalandMiningPoint: 20000

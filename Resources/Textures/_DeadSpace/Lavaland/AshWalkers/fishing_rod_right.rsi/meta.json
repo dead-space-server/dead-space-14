@@ -1,0 +1,27 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from tgstation. Licensed under CC-BY-SA-3.0.",
+    "size": {
+        "x": 64,
+        "y": 64
+    },
+    "states": [
+        {
+            "name": "rod",
+            "directions": 4
+        },
+        {
+            "name": "reel_overlay",
+            "directions": 4
+        },
+        {
+            "name": "hook_overlay",
+            "directions": 4
+        },
+        {
+            "name": "line_overlay",
+            "directions": 4
+        }
+    ]
+}

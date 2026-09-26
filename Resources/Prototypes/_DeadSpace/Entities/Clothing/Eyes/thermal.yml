@@ -87,3 +87,40 @@
   - type: EmitSoundOnLand
     sound:
       path: /Audio/_DeadSpace/Items/Handing/glasses/goggles_drop.ogg
+
+- type: entity
+  parent: [ClothingEyesBase, BaseChameleon]
+  id: ClothingEyesGlassesThermalVisorChameleon
+  name: оптический тепловизор
+  description: Тепловизор, который оснащён инфракрасными сенсорами для обнаружения живых существ по тепловым сигнатурам сквозь твёрдые преграды.
+  suffix: Хамелион
+  components:
+  - type: GroupExamine
+  - type: IdentityBlocker
+    coverage: EYES
+  - type: ThermalVisor
+    activateSound:
+      path: /Audio/_DeadSpace/NightVision/pnv.ogg
+    activateSoundOff:
+      path: /Audio/_DeadSpace/NightVision/pnv_off.ogg
+  - type: Tag
+    tags: []
+  - type: FlashImmunity
+  - type: EyeProtection
+  - type: ShowSyndicateIcons
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/glasses/goggles_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/glasses/goggles_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/glasses/goggles_drop.ogg
+  - type: Sprite
+    sprite: Clothing/Eyes/Glasses/sunglasses.rsi
+  - type: Clothing
+    sprite: Clothing/Eyes/Glasses/sunglasses.rsi
+  - type: ChameleonClothing
+    slot: [eyes]
+    default: ClothingEyesGlassesSunglasses

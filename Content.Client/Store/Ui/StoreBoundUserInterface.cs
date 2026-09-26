@@ -1,7 +1,7 @@
 using Content.Shared.Store;
 using JetBrains.Annotations;
 using System.Linq;
-using Content.Shared.Backmen.Store; // Backmen
+using Content.Shared.Backmen.Store;
 using Content.Shared.Store.Components;
 using Robust.Client.UserInterface;
 using Robust.Shared.Prototypes;
@@ -45,8 +45,13 @@ public sealed class StoreBoundUserInterface : BoundUserInterface
 
         _menu.OnCategoryButtonPressed += (_, category) =>
         {
+            // DS14-start
+            if (_menu.CurrentCategory == category)
+                return;
+
             _menu.CurrentCategory = category;
-            _menu?.UpdateListing();
+            _menu.UpdateListing(resetScroll: true);
+            // DS14-end
         };
 
         _menu.OnWithdrawAttempt += (_, type, amount) =>
@@ -56,8 +61,14 @@ public sealed class StoreBoundUserInterface : BoundUserInterface
 
         _menu.SearchTextUpdated += (_, search) =>
         {
-            _search = search.Trim().ToLowerInvariant();
-            UpdateListingsWithSearchFilter();
+            // DS14-start
+            var normalizedSearch = search.Trim().ToLowerInvariant();
+            if (_search == normalizedSearch)
+                return;
+
+            _search = normalizedSearch;
+            UpdateListingsWithSearchFilter(resetScroll: true);
+            // DS14-end
         };
 
         _menu.OnRefundAttempt += (_) =>
@@ -81,14 +92,14 @@ public sealed class StoreBoundUserInterface : BoundUserInterface
 
                 _menu?.UpdateBalance(msg.Balance);
 
-                UpdateListingsWithSearchFilter();
+                UpdateListingsWithSearchFilter(resetScroll: false); // DS14
                 _menu?.SetFooterVisibility(msg.ShowFooter);
                 _menu?.UpdateRefund(msg.AllowRefund);
                 break;
         }
     }
 
-    private void UpdateListingsWithSearchFilter()
+    private void UpdateListingsWithSearchFilter(bool resetScroll) // DS14
     {
         if (_menu == null)
             return;
@@ -99,7 +110,12 @@ public sealed class StoreBoundUserInterface : BoundUserInterface
             filteredListings.RemoveWhere(listingData => !ListingLocalisationHelpers.GetLocalisedNameOrEntityName(listingData, _prototypeManager).Trim().ToLowerInvariant().Contains(_search) &&
                                                         !ListingLocalisationHelpers.GetLocalisedDescriptionOrEntityDescription(listingData, _prototypeManager).Trim().ToLowerInvariant().Contains(_search));
         }
-        _menu.PopulateStoreCategoryButtons(filteredListings, _categories); // DS14
-        _menu.UpdateListing(filteredListings.ToList());
+        // DS14-start
+        _menu.PopulateStoreCategoryButtons(filteredListings, _categories);
+        _menu.UpdateListing(
+            filteredListings.ToList(),
+            _listings.Select(listing => listing.ID).ToHashSet(),
+            resetScroll);
+        // DS14-end
     }
 }

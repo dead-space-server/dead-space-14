@@ -7,7 +7,6 @@ using System.Linq;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.DeadSpace.Kitchen.Components;
 using Content.Shared.DoAfter;
-using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
@@ -51,8 +50,8 @@ public sealed class SharedPlateSystem : EntitySystem
         SubscribeLocalEvent<PlateComponent, InteractUsingEvent>(OnInteractUsing, before: [typeof(ItemSlotsSystem)]);
         SubscribeLocalEvent<PlateComponent, UseInHandEvent>(OnUseInHand, before: [typeof(ItemSlotsSystem)]);
         SubscribeLocalEvent<PlateComponent, GetVerbsEvent<AlternativeVerb>>(OnGetAlternativeVerbs);
-        SubscribeLocalEvent<HandsComponent, AccessibleOverrideEvent>(OnAccessibleOverride);
-        SubscribeLocalEvent<HandsComponent, InRangeOverrideEvent>(OnInRangeOverride);
+        SubscribeLocalEvent<TransformComponent, AccessibleOverrideEvent>(OnAccessibleOverride);
+        SubscribeLocalEvent<TransformComponent, InRangeOverrideEvent>(OnInRangeOverride);
     }
 
     private void OnPlateMapInit(Entity<PlateComponent> ent, ref MapInitEvent args)
@@ -83,11 +82,23 @@ public sealed class SharedPlateSystem : EntitySystem
     {
         if (args.Handled ||
             !TryComp(args.Used, out UtensilComponent? utensil) ||
-            (utensil.Types & PlateUtensils) == 0 ||
             !TryGetPlateContent(ent.Owner, ent.Comp, out var content))
         {
             return;
         }
+
+        if ((utensil.Types & UtensilType.Knife) != 0 &&
+            _ingestion.GetEdibleType((content.Value, CompOrNull<EdibleComponent>(content.Value))) != null)
+        {
+            // Route the knife to the food before ItemSlots can swap it with the plate's contents.
+            var slice = new InteractUsingEvent(args.User, args.Used, content.Value, args.ClickLocation);
+            RaiseLocalEvent(content.Value, slice);
+            args.Handled = true;
+            return;
+        }
+
+        if ((utensil.Types & PlateUtensils) == 0)
+            return;
 
         if (_ingestion.GetEdibleType((content.Value, CompOrNull<EdibleComponent>(content.Value))) != null)
             TryUsePlateContentWithUtensil(ent.Owner, ent.Comp, args.User, args.Used, utensil, content.Value);
@@ -97,10 +108,9 @@ public sealed class SharedPlateSystem : EntitySystem
 
     private void OnGetAlternativeVerbs(Entity<PlateComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
     {
-        if (args.Hands == null ||
-            !args.CanAccess ||
+        if (!args.CanAccess ||
             !args.CanInteract ||
-            _hands.IsHolding((args.User, args.Hands), ent.Owner))
+            args.Hands != null && _hands.IsHolding((args.User, args.Hands), ent.Owner))
         {
             return;
         }
@@ -190,8 +200,11 @@ public sealed class SharedPlateSystem : EntitySystem
                _ingestion.GetEdibleType((content.Value, CompOrNull<EdibleComponent>(content.Value))) != null;
     }
 
-    private void OnAccessibleOverride(Entity<HandsComponent> ent, ref AccessibleOverrideEvent args)
+    private void OnAccessibleOverride(Entity<TransformComponent> ent, ref AccessibleOverrideEvent args)
     {
+        if (ent.Owner != args.User)
+            return;
+
         if (!TryGetPlate(args.Target, out var plate) || !_interaction.CanAccess(ent.Owner, plate.Value))
             return;
 
@@ -199,8 +212,11 @@ public sealed class SharedPlateSystem : EntitySystem
         args.Accessible = true;
     }
 
-    private void OnInRangeOverride(Entity<HandsComponent> ent, ref InRangeOverrideEvent args)
+    private void OnInRangeOverride(Entity<TransformComponent> ent, ref InRangeOverrideEvent args)
     {
+        if (ent.Owner != args.User)
+            return;
+
         if (!TryGetPlate(args.Target, out var plate) || !_interaction.InRangeUnobstructed(ent.Owner, plate.Value))
             return;
 

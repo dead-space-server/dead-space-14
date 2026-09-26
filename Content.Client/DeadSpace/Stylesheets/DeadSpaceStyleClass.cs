@@ -26,6 +26,7 @@ public static class DeadSpaceStyleClass
     public const string ControlPositive = "DeadSpaceControlPositive";
     public const string ControlWarning = "DeadSpaceControlWarning";
     public const string ControlDanger = "DeadSpaceControlDanger";
+    public const string LockedSelected = "DeadSpaceLockedSelected";
     public const string SectionTitle = "DeadSpaceSectionTitle";
     public const string ListHeader = "DeadSpaceListHeader";
     public const string ListItem = "DeadSpaceListItem";
@@ -34,6 +35,8 @@ public static class DeadSpaceStyleClass
     public const string ProgressHighlight = "DeadSpaceProgressHighlight";
     public const string ProgressAccent = "DeadSpaceProgressAccent";
     public const string TextField = "DeadSpaceTextField";
+    public const string FormField = "DeadSpaceFormField";
+    public const string InputFocused = "DeadSpaceInputFocused";
     public const string Popup = "DeadSpacePopup";
     public const string Ready = "DeadSpaceReady";
     public const string JobPriorityPreferred = "DeadSpaceJobPriorityPreferred";

@@ -6,22 +6,31 @@ paper-law-mysticalray = [head=3]Приказ на разрешение на ис
     Должность составителя: Оператор Станции Центрального Командования
     ═════════════════════════════════════
     Уважаемое командование cтанции. Данный член экипажа имеет полное право на ношение следующего снаряжения
-    - рюкзак TraumaTec
-    - РПС TraumaTec и его содержимое
-    - скафандр TraumaTec
-    - защитные перчатки TraumaTec
-    - комбинезон TraumaTec
-    - магнитные ботинки TraumaTec
-    - противогаз TraumaTec
-    - гарнитура TraumaTec
-    - КПК TraumaTec
-    - защитная куртка TraumaTec
-    - набедренная сумка TraumaTec
-    - свисток TraumaTec
-    - зелёные очки TraumaTec
-    - пустотный джетпак TraumaTec
-    - портативный дефибриллятор TraumaTec
-    - Тактический гипоспрей TraumaTec  "Жало"
+    - рюкзак CriticalForce
+    - РПС CriticalForce 
+    - шлем скафандра CriticalForce
+    - защитные перчатки CriticalForce
+    - комбинезон CriticalForce
+    - магнитные ботинки CriticalForce
+    - Заслон CriticalForce
+    - Кепка CriticalForce
+    - гарнитура CriticalForce
+    - КПК CriticalForce
+    - защитная куртка CriticalForce
+    - набедренная сумка CriticalForce
+    - свисток CriticalForce
+    - красные очки CriticalForce
+    - пустотный джетпак CriticalForce
+    - портативный дефибриллятор CriticalForce
+    - гипоспрей CriticalForce "SecondWind"
+    - имплант CriticalForce
+    - телескопическая дубинка
+    - бра CriticalForce
+    - носки CriticalForce
+    - стринги CriticalForce
+    - боксеры CriticalForce
+    - плюшевый MysticalRay
+    - двойной аварийный кислородный баллон CriticalForce
     Данное снаряжение соответствует всем техникам безопасности отделов и может заменять форму отдела.
     Игнорирование данного приказа будет расчитываться как нарушение статьи [bold][color=red]207[/color] корпоративного закона[/bold]. Относитесь к данному приказу ответственно и не игнорируйте его.
     ═════════════════════════════════════
@@ -35,23 +44,36 @@ paper-law-mysticalray-ussp = [head=3]Приказ на разрешение на
     Должность составителя: Администратор Генерального Штаба
     ═════════════════════════════════════
     Уважаемое командование cтанции. Данный член экипажа имеет полное право на ношение следующего снаряжения
-    - рюкзак TraumaTec
-    - РПС TraumaTec и его содержимое
-    - скафандр TraumaTec
-    - защитные перчатки TraumaTec
-    - комбинезон TraumaTec
-    - магнитные ботинки TraumaTec
-    - противогаз TraumaTec
-    - гарнитура TraumaTec
-    - КПК TraumaTec
-    - защитная куртка TraumaTec
-    - набедренная сумка TraumaTec
-    - свисток TraumaTec
-    - зелёные очки TraumaTec
-    - пустотный джетпак TraumaTec
-    - портативный дефибриллятор TraumaTec
-    - Тактический гипоспрей TraumaTec  "Жало"
+    - рюкзак CriticalForce
+    - РПС CriticalForce
+    - скафандр CriticalForce
+    - защитные перчатки CriticalForce
+    - комбинезон CriticalForce
+    - магнитные ботинки CriticalForce
+    - Заслон CriticalForce
+    - Кепка CriticalForce
+    - гарнитура CriticalForce
+    - КПК CriticalForce
+    - защитная куртка CriticalForce
+    - набедренная сумка CriticalForce
+    - свисток CriticalForce
+    - красные очки CriticalForce
+    - пустотный джетпак CriticalForce
+    - портативный дефибриллятор CriticalForce
+    - гипоспрей CriticalForce "SecondWind"
+    - имплант CriticalForce
+    - телескопическая дубинка
+    - бра CriticalForce
+    - носки CriticalForce
+    - стринги CriticalForce
+    - боксеры CriticalForce
+    - плюшевый MysticalRay
+    - двойной аварийный кислородный баллон CriticalForce
     Данное снаряжение соответствует всем техникам безопасности отделов и может заменять форму отдела.
     Игнорирование данного приказа будет расчитываться как нарушение статьи [bold][color=red]207[/color] ПВР[/bold]. Относитесь к данному приказу ответственно и не игнорируйте его.
     ═════════════════════════════════════
     Место для печатей
+
+plushies-mystical-1 = Деньги — гарант вашего спасения!
+plushies-mystical-2 = Critical Force — это мы, а мы выше спасение!
+plushies-mystical-3 = Ди — самая хорошая кошка во всей галактике!

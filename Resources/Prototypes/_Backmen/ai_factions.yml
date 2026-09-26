@@ -1,6 +1,7 @@
 ﻿- type: npcFaction
   id: Blob
   hostile:
+  - AshWalker
   - Revolutionary
   - NanoTrasen
   - SimpleNeutral

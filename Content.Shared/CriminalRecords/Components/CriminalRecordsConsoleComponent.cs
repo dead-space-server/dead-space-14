@@ -1,17 +1,21 @@
 using Content.Shared.CriminalRecords.Systems;
 using Content.Shared.CriminalRecords.Components;
 using Content.Shared.CriminalRecords;
+using Content.Shared.DeadSpace.Photocopier; // DS14
 using Content.Shared.Radio;
 using Content.Shared.StationRecords;
+using Robust.Shared.Audio; // DS14
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom; // DS14
 using Content.Shared.Security;
+using Robust.Shared.GameStates;
 
 namespace Content.Shared.CriminalRecords.Components;
 
 /// <summary>
 /// A component for Criminal Record Console storing an active station record key and a currently applied filter
 /// </summary>
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 [Access(typeof(SharedCriminalRecordsConsoleSystem))]
 public sealed partial class CriminalRecordsConsoleComponent : Component
 {
@@ -49,6 +53,26 @@ public sealed partial class CriminalRecordsConsoleComponent : Component
     /// <summary>
     /// Max length of arrest and crime history strings.
     /// </summary>
-    [DataField]
+    [DataField, AutoNetworkedField]
     public uint MaxStringLength = 256;
+
+    // DS14-start
+    [DataField, AutoNetworkedField]
+    public bool HasPrinter = true;
+
+    [DataField]
+    public ProtoId<PaperworkFormPrototype> ArrestWarrantForm = "CriminalArrestWarrant";
+
+    [DataField]
+    public ProtoId<PaperworkFormPrototype> VerdictForm = "CriminalVerdict";
+
+    [DataField]
+    public SoundSpecifier PrintSound = new SoundCollectionSpecifier("PrinterPrint");
+
+    [DataField]
+    public TimeSpan PrintDelay = TimeSpan.FromSeconds(5);
+
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
+    public TimeSpan NextPrintTime = TimeSpan.Zero;
+    // DS14-end
 }

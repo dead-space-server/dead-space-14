@@ -19,10 +19,20 @@ using Content.Shared.Tools.Systems;
 using Content.Shared.Tools;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
+using Content.Shared.Armor;
+using Content.Shared.Clothing.Components;
+using Content.Shared.Damage;
+using Content.Shared.Damage.Prototypes;
+using Content.Shared.FixedPoint;
+using Content.Shared.Projectiles;
+using Content.Shared.Weapons.Hitscan.Components;
+using Content.Shared.Weapons.Melee;
+using Content.Shared.Weapons.Ranged.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
+using Robust.Shared.Localization;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.Manager;
 using Robust.Shared.Timing;
@@ -47,6 +57,7 @@ public sealed partial class ConsoleCraftSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
     [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private readonly ILocalizationManager _loc = default!;
 
     private ConsoleCraftBlueprintSystem? _blueprints;
     private ConsoleCraftBlueprintSystem Blueprints =>
@@ -974,6 +985,7 @@ public sealed partial class ConsoleCraftSystem : EntitySystem
 
         var requiredStatus  = new List<ConsoleCraftRequirementStatus>();
         var moduleStatus    = new List<ConsoleCraftModuleStatus>();
+        var itemStats       = new List<ConsoleCraftItemStat>();
         var canCraft        = false;
         var canDismantle    = false;
         var craftInProgress = false;
@@ -985,6 +997,7 @@ public sealed partial class ConsoleCraftSystem : EntitySystem
             stationComp != null)
         {
             craftItemProtoId = recipe.Item.Id;
+            itemStats.AddRange(BuildItemStats(recipe.Item.Id));
             craftInProgress  = stationComp.CraftInProgress;
             remainingCrafts  = entries.FirstOrDefault(e => e.RecipeId == selectedId)?.RemainingCrafts;
 
@@ -1058,6 +1071,7 @@ public sealed partial class ConsoleCraftSystem : EntitySystem
             CraftItemProtoId   = craftItemProtoId,
             RequiredStatus     = requiredStatus,
             ModuleStatus       = moduleStatus,
+            ItemStats          = itemStats,
             CanCraft           = canCraft,
             CanDismantle       = canDismantle,
             CraftInProgress    = craftInProgress,
@@ -1065,6 +1079,169 @@ public sealed partial class ConsoleCraftSystem : EntitySystem
             SelectedBlueprintRemainingCrafts = remainingCrafts,
         });
     }
+
+    private List<ConsoleCraftItemStat> BuildItemStats(string protoId)
+    {
+        var stats = new List<ConsoleCraftItemStat>();
+
+        if (!_proto.TryIndex<EntityPrototype>(protoId, out var itemProto))
+            return stats;
+
+        if (itemProto.Components.TryGetValue("MeleeWeapon", out var meleeEntry) &&
+            meleeEntry.Component is MeleeWeaponComponent melee &&
+            melee.Damage != null)
+        {
+            AddMeleeStats(stats, melee);
+        }
+
+        var armorProto = itemProto;
+        if (!armorProto.Components.ContainsKey("Armor") &&
+            armorProto.Components.TryGetValue("ToggleableClothing", out var toggleEntry) &&
+            toggleEntry.Component is ToggleableClothingComponent toggle &&
+            !string.IsNullOrEmpty(toggle.ClothingPrototype.Id) &&
+            _proto.TryIndex<EntityPrototype>(toggle.ClothingPrototype.Id, out var innerProto))
+        {
+            armorProto = innerProto;
+        }
+
+        if (armorProto.Components.TryGetValue("Armor", out var armorEntry) &&
+            armorEntry.Component is ArmorComponent armor &&
+            armor.Modifiers != null)
+        {
+            AddArmorStats(stats, armor.Modifiers);
+        }
+
+        if (itemProto.Components.TryGetValue("Gun", out var gunEntry) &&
+            gunEntry.Component is GunComponent gun)
+        {
+            AddGunStats(stats, itemProto, gun);
+        }
+
+        return stats;
+    }
+
+    private void AddMeleeStats(List<ConsoleCraftItemStat> stats, MeleeWeaponComponent melee)
+    {
+        stats.Add(HeaderStat("consolecraft-stats-header-attack"));
+        stats.Add(ValueStat(Loc.GetString("consolecraft-stats-damage"), FormatDamage(melee.Damage)));
+        stats.Add(ValueStat(Loc.GetString("consolecraft-stats-attack-rate"), $"{melee.AttackRate:0.##}"));
+        stats.Add(ValueStat(Loc.GetString("consolecraft-stats-range"), $"{melee.Range:0.##}"));
+
+        var piercing = new List<(string Type, string Level)>();
+        foreach (var type in melee.Damage.DamageDict.Keys)
+        {
+            var level = melee.Damage.GetArmorPiercingLevelForType(type);
+            if (level <= 1)
+                continue;
+            piercing.Add((DamageTypeLabel(type), $"{level:0.##}"));
+        }
+
+        if (piercing.Count > 0)
+        {
+            stats.Add(HeaderStat("consolecraft-stats-header-armor-pierce"));
+            foreach (var (type, level) in piercing)
+                stats.Add(ValueStat(type, Loc.GetString("consolecraft-stats-pierce-level", ("amount", level))));
+        }
+    }
+
+    private void AddArmorStats(List<ConsoleCraftItemStat> stats, DamageModifierSet modifiers)
+    {
+        stats.Add(HeaderStat("consolecraft-stats-header-armor"));
+
+        foreach (var (type, coefficient) in modifiers.Coefficients)
+        {
+            var reduction = MathF.Round((1f - coefficient) * 100, 1);
+            stats.Add(ValueStat(ArmorTypeLabel(type), $"-{reduction:0.###}%"));
+        }
+
+        foreach (var (type, reduction) in modifiers.FlatReduction)
+        {
+            stats.Add(ValueStat(ArmorTypeLabel(type), $"-{reduction:0.###}"));
+        }
+
+        if (modifiers.ArmorLvls.Count > 0)
+        {
+            stats.Add(HeaderStat("consolecraft-stats-header-armor-levels"));
+            foreach (var (type, level) in modifiers.ArmorLvls)
+                stats.Add(ValueStat(ArmorTypeLabel(type), Loc.GetString("consolecraft-stats-armor-level-value", ("value", level))));
+        }
+    }
+
+    private void AddGunStats(List<ConsoleCraftItemStat> stats, EntityPrototype gunProto, GunComponent gun)
+    {
+        stats.Add(HeaderStat("consolecraft-stats-header-firearm"));
+        stats.Add(ValueStat(Loc.GetString("consolecraft-stats-fire-rate"), $"{gun.FireRate:0.##}"));
+
+        if ((gun.AvailableModes & SelectiveFire.Burst) != 0)
+            stats.Add(ValueStat(Loc.GetString("consolecraft-stats-burst"), $"{gun.ShotsPerBurst}"));
+
+        stats.Add(ValueStat(Loc.GetString("consolecraft-stats-spread"), $"{gun.MinAngle.Degrees:0.##}°"));
+        stats.Add(ValueStat(Loc.GetString("consolecraft-stats-projectile-speed"), $"{gun.ProjectileSpeed:0.##}"));
+
+        var projectile = CraftingPrototypeHelpers.GetDefaultProjectile(gunProto, _proto, EntityManager.ComponentFactory);
+        var damageText = projectile != null ? AmmoDamageText(projectile) : null;
+        if (damageText != null)
+            stats.Add(ValueStat(Loc.GetString("consolecraft-stats-shot-damage"), damageText));
+    }
+
+    private string? AmmoDamageText(EntityPrototype ammoProto)
+    {
+        var parts = new List<string>();
+
+        if (ammoProto.Components.TryGetValue("Projectile", out var projEntry) &&
+            projEntry.Component is ProjectileComponent proj &&
+            proj.Damage != null)
+        {
+            parts.Add(FormatDamage(proj.Damage));
+        }
+
+        if (ammoProto.Components.TryGetValue("HitscanBasicDamage", out var hitscanEntry) &&
+            hitscanEntry.Component is HitscanBasicDamageComponent hitscan &&
+            hitscan.Damage != null)
+        {
+            parts.Add(FormatDamage(hitscan.Damage));
+        }
+
+        if (ammoProto.Components.TryGetValue("HitscanStaminaDamage", out var stamEntry) &&
+            stamEntry.Component is HitscanStaminaDamageComponent stamina)
+        {
+            parts.Add(Loc.GetString("consolecraft-stats-stamina-damage-value",
+                ("amount", $"{stamina.StaminaDamage:0.##}")));
+        }
+
+        return parts.Count > 0 ? string.Join(", ", parts) : null;
+    }
+
+    private string FormatDamage(DamageSpecifier damage)
+    {
+        var parts = new List<string>();
+        foreach (var (type, amount) in damage.DamageDict)
+        {
+            if (amount == FixedPoint2.Zero)
+                continue;
+            parts.Add($"{amount:0.##} {DamageTypeLabel(type)}");
+        }
+        return parts.Count > 0 ? string.Join(", ", parts) : Loc.GetString("consolecraft-stats-none");
+    }
+
+    private string DamageTypeLabel(string damageType)
+    {
+        if (_proto.TryIndex<DamageTypePrototype>(damageType, out var proto))
+            return proto.LocalizedName;
+        return damageType;
+    }
+
+    private string ArmorTypeLabel(string type)
+    {
+        var key = $"armor-damage-type-{type.ToLowerInvariant()}";
+        if (_loc.TryGetString(key, out var label))
+            return label;
+        return type;
+    }
+
+    private ConsoleCraftItemStat HeaderStat(string locKey) => new() { Label = Loc.GetString(locKey) };
+
+    private ConsoleCraftItemStat ValueStat(string label, string value) => new() { Label = label, Value = value };
 
     private void StartCraftingSound(EntityUid stationUid, ConsoleCraftStationComponent comp)
     {

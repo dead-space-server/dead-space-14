@@ -6,12 +6,15 @@ using Content.Shared.Hands;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Input;
+using Content.Shared.Item.ItemToggle;
+using Content.Shared.Item.ItemToggle.Components;
 using Content.Shared.Popups;
 using Content.Shared.Tag;
 using Content.Shared.Throwing;
 using Content.Shared.Weapons.Melee;
 using Content.Shared.Whitelist;
 using Robust.Shared.Input.Binding;
+using Robust.Shared.Map;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Random;
 using Robust.Shared.Network;
@@ -31,6 +34,7 @@ public sealed class ParrySystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly ItemToggleSystem _itemToggle = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly AlertsSystem _alerts = default!;
@@ -45,10 +49,11 @@ public sealed class ParrySystem : EntitySystem
         SubscribeLocalEvent<ParryComponent, HandSelectedEvent>(OnHandSelected);
         SubscribeLocalEvent<ParryComponent, HandDeselectedEvent>(OnHandDeselected);
         SubscribeLocalEvent<ParryComponent, GotUnequippedHandEvent>(OnUnequippedHand);
+        SubscribeLocalEvent<ParryComponent, ItemToggledEvent>(OnItemToggled);
         SubscribeAllEvent<ParryPressedEvent>(OnParryPressed);
 
         CommandBinds.Builder
-            .Bind(ContentKeyFunctions.Parry, InputCmdHandler.FromDelegate(OnParryPressedLocal))
+            .Bind(ContentKeyFunctions.Parry, new PointerInputCmdHandler(OnParryPressedLocal, outsidePrediction: true))
             .Register<ParrySystem>();
     }
 
@@ -58,15 +63,17 @@ public sealed class ParrySystem : EntitySystem
         CommandBinds.Unregister<ParrySystem>();
     }
 
-    private void OnParryPressedLocal(ICommonSession? session)
+    private bool OnParryPressedLocal(ICommonSession? session, EntityCoordinates coordinates, EntityUid target)
     {
         if (!_net.IsClient || session?.AttachedEntity is not { } user ||
             !TryGetParryWeapon(user, out var weapon))
         {
-            return;
+            // Let other actions on the same key (such as the Architect's mode switch) handle the press.
+            return false;
         }
 
         RaisePredictiveEvent(new ParryPressedEvent(GetNetEntity(weapon.Owner)));
+        return true;
     }
 
     private void OnParryPressed(ParryPressedEvent args, EntitySessionEventArgs session)
@@ -88,7 +95,8 @@ public sealed class ParrySystem : EntitySystem
 
     private void OnBeforeMeleeDamage(Entity<HandsComponent> defender, ref BeforeMeleeDamageEvent args)
     {
-        if (!TryGetParryWeapon(defender.Owner, out var parryWeapon) ||
+        if (args.Attacker == defender.Owner ||
+            !TryGetParryWeapon(defender.Owner, out var parryWeapon) ||
             parryWeapon.Comp.ActiveUntil <= _timing.CurTime ||
             !CanParry(parryWeapon, args.Weapon))
         {
@@ -124,7 +132,10 @@ public sealed class ParrySystem : EntitySystem
 
     private void OnHandSelected(Entity<ParryComponent> weapon, ref HandSelectedEvent args)
     {
-        UpdateAlert(args.User, weapon.Comp);
+        if (TryGetParryWeapon(args.User, out var selected) && selected.Owner == weapon.Owner)
+            UpdateAlert(args.User, weapon.Comp);
+        else
+            _alerts.ClearAlert(args.User, weapon.Comp.CooldownAlert);
     }
 
     private void OnHandDeselected(Entity<ParryComponent> weapon, ref HandDeselectedEvent args)
@@ -136,6 +147,23 @@ public sealed class ParrySystem : EntitySystem
     {
         if (!TryGetParryWeapon(args.User, out _))
             _alerts.ClearAlert(args.User, weapon.Comp.CooldownAlert);
+    }
+
+    private void OnItemToggled(Entity<ParryComponent> weapon, ref ItemToggledEvent args)
+    {
+        if (!args.Activated && weapon.Comp.RequiresActiveToggle)
+        {
+            weapon.Comp.ActiveUntil = TimeSpan.Zero;
+            Dirty(weapon);
+        }
+
+        if (args.User is not { } user)
+            return;
+
+        if (TryGetParryWeapon(user, out var active) && active.Owner == weapon.Owner)
+            UpdateAlert(user, weapon.Comp);
+        else
+            _alerts.ClearAlert(user, weapon.Comp.CooldownAlert);
     }
 
     private void UpdateAlert(EntityUid user, ParryComponent component)
@@ -153,7 +181,8 @@ public sealed class ParrySystem : EntitySystem
         if (!TryComp<HandsComponent>(defender, out var hands) ||
             !_hands.TryGetActiveItem((defender, hands), out var held) ||
             !TryComp<ParryComponent>(held, out var parry) ||
-            !HasComp<MeleeWeaponComponent>(held))
+            !HasComp<MeleeWeaponComponent>(held) ||
+            parry.RequiresActiveToggle && !_itemToggle.IsActivated(held.Value))
         {
             return false;
         }

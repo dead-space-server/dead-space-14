@@ -37,7 +37,7 @@
   equipment:
     # jumpsuit: ADTClothingUniformTurleneckGreenBlack
     # back: ClothingBackpackMilitarySatchel
-    mask: ClothingMaskGasSecurity
+    mask: ClothingMaskGasCentcomSecurity
     # shoes: ClothingShoesBootsJack
     outerClothing: ClothingOuterCoatCentcomOfficer
     # eyes: ClothingEyesGlassesSecurity
@@ -45,16 +45,16 @@
     id: CentcomPDA
     gloves: ClothingHandsGlovesCombat
     ears: ClothingHeadsetAltCentCom
-    belt: ClothingBeltSecurityFilled
+    belt: ClothingBeltCentcomSecurityFilled
 
 - type: chameleonOutfit
   id: CentralCommandOfficerChameleonOutfit
   job: CentralCommandOfficer
   equipment:
-    mask: ClothingMaskGasSecurity
+    mask: ClothingMaskGasCentcomSecurity
     shoes: ClothingShoesBootsJack
     outerClothing: ClothingOuterVestWeb
     eyes: ClothingEyesGlassesSecurity
     head: ClothingHeadHatBeretCentcomNaval
     gloves: ClothingHandsGlovesCombat
-    belt: ClothingBeltSecurityWebbingFilled
+    belt: ClothingBeltCentcomSecurityFilled

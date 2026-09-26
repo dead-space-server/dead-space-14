@@ -1,6 +1,7 @@
 ﻿using System.Numerics; //DS14
 using Content.Shared.ActionBlocker;
 using Content.Shared.Chat;
+using Content.Shared.Ghost;
 using Content.Shared.Movement.Events;
 using Content.Shared.StepTrigger.Systems;
 using Content.Shared.Weapons.Misc;
@@ -105,6 +106,15 @@ public sealed class ChasmSystem : EntitySystem
     {
         if (HasComp<ChasmFallingComponent>(tripper))
             return;
+
+        // DS14-start: startup checks also reach this path without a step trigger.
+        if (HasComp<GhostComponent>(tripper))
+            return;
+
+        // A chasm beneath another grid must not swallow entities standing on that grid.
+        if (Transform(tripper).GridUid is { } grid && grid != Transform(chasm).GridUid)
+            return;
+        // DS14-end
 
         var attempt = new ChasmFallingAttemptEvent(tripper, chasm);
         RaiseLocalEvent(tripper, attempt, true);

@@ -28,3 +28,27 @@
   - type: Thieving
     stripTimeReduction: 2
     stealthy: true
+
+#DS-14-Start
+- type: entity
+  parent: [ClothingHandsButcherable, BaseChameleon]
+  id: ClothingHandsTaipanClownChameleon # doesn't protect from electricity or heat
+  name: жёлтые перчатки
+  description: Точно-точно защитят вас от прожарки.
+  suffix: Тайпан
+  components:
+    - type: Tag
+      tags: # ignore "WhitelistChameleon" tag
+      - ClothMade
+      - Recyclable
+    - type: Sprite
+      sprite: Clothing/Hands/Gloves/Color/black.rsi
+    - type: Clothing
+      sprite: Clothing/Hands/Gloves/Color/black.rsi
+    - type: ChameleonClothing
+      slot: [gloves]
+      default: ClothingHandsGlovesColorYellowBudget
+    - type: Fiber
+      fiberMaterial: fibers-chameleon
+    - type: FingerprintMask
+#DS-14-End

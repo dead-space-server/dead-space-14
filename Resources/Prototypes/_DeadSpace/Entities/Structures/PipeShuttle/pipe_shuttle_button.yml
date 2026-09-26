@@ -8,8 +8,8 @@
     arc: 360
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: Structures/Wallmounts/switch.rsi
-    state: dead
+    sprite: _DeadSpace/Structures/Wallmounts/pipe_shuttle_call_button.rsi
+    state: on
   - type: Appearance
   - type: Destructible
     thresholds:

@@ -1,0 +1,17 @@
+- type: entity
+  parent: BaseBullet
+  id: BulletShingen
+  categories: [ HideSpawnMenu ]
+  name: патрон (9x19 мм Smart™)
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 16
+  - type: ChasingWalk
+    speed: 40
+    maxAngleVectorChangePerImpulse: 10
+    impulseInterval: 0.05
+    stopAtTarget: false
+  - type: TimedDespawn
+    lifetime: 5

@@ -4,8 +4,8 @@ meta:
   engineVersion: 276.0.0
   forkId: ""
   forkVersion: ""
-  time: 07/22/2026 20:56:41
-  entityCount: 10330
+  time: 09/24/2026 10:21:13
+  entityCount: 10331
 maps:
 - 1
 grids:
@@ -28022,6 +28022,13 @@ entities:
     components:
     - type: Transform
       pos: -7.5,12.5
+      parent: 2
+- proto: CustomizableSpawnerTaipanClown
+  entities:
+  - uid: 10331
+    components:
+    - type: Transform
+      pos: -8.5,4.5
       parent: 2
 - proto: CustomizableSpawnerTaipanCommunicationsOfficer
   entities:

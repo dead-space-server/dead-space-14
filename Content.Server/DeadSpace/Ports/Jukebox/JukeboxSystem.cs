@@ -7,6 +7,9 @@ using Content.Shared.Verbs;
 using Robust.Server.GameStates;
 using Robust.Shared.Containers;
 using Robust.Shared.Utility;
+using Robust.Shared.Timing;
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.DeadSpace.Ports.Jukebox;
 
@@ -15,6 +18,9 @@ public sealed class JukeboxSystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
     [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
     [Dependency] private readonly PvsOverrideSystem _pvsOverrideSystem = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
 
     private readonly List<Entity<WhiteJukeboxComponent>> _playingJukeboxes = new() { };
 
@@ -87,6 +93,12 @@ public sealed class JukeboxSystem : EntitySystem
     private void OnRepeatToggled(EntityUid uid, WhiteJukeboxComponent component, JukeboxRepeatToggled args)
     {
         component.Playing = args.NewState;
+        if (component.PlayingSongData is { } song)
+        {
+            var elapsed = Math.Max(0, (_timing.CurTime - song.StartedAt).TotalSeconds);
+            song.EndsAt = args.NewState ? null : song.StartedAt + TimeSpan.FromSeconds(
+                (Math.Floor(elapsed / song.ActualSongLengthSeconds) + 1) * song.ActualSongLengthSeconds);
+        }
         Dirty(uid, component);
     }
 
@@ -120,72 +132,71 @@ public sealed class JukeboxSystem : EntitySystem
             _containerSystem.Insert(args.Used, component.TapeContainer);
         }
     }
-
-    private void OnSongRequestPlay(JukeboxRequestSongPlay msg, EntitySessionEventArgs args)
+    internal void OnSongRequestPlay(JukeboxRequestSongPlay msg, EntitySessionEventArgs args)
     {
-        var entity = GetEntity(msg.Jukebox!.Value);
-        var jukebox = Comp<WhiteJukeboxComponent>(entity);
-        jukebox.Playing = true;
+        if (msg.Jukebox is not { } netEntity || !TryGetEntity(netEntity, out var entity) ||
+            !TryComp<WhiteJukeboxComponent>(entity, out var jukebox) ||
+            args.SenderSession.AttachedEntity is not { } actor ||
+            !_ui.IsUiOpen(entity.Value, JukeboxUIKey.Key, actor) || msg.SongPath is not { } path)
+            return;
 
-        var songData = new PlayingSongData
+        JukeboxSong? selected = null;
+        foreach (var tape in jukebox.TapeContainer.ContainedEntities.Concat(jukebox.DefaultSongsContainer.ContainedEntities))
         {
-            SongName = msg.SongName,
-            SongPath = msg.SongPath,
-            ActualSongLengthSeconds = msg.SongDuration,
-            PlaybackPosition = 0f
+            if (!TryComp<TapeComponent>(tape, out var component))
+                continue;
+            selected = component.Songs.FirstOrDefault(song => song.SongPath == path);
+            if (selected != null)
+                break;
+        }
+        if (selected == null)
+            return;
+
+        float duration;
+        try
+        {
+            duration = (float) _audio.GetAudioLength(new ResolvedPathSpecifier(path)).TotalSeconds;
+        }
+        catch (Exception e)
+        {
+            Log.Warning($"Could not read jukebox song {path}: {e.Message}");
+            return;
+        }
+        if (!float.IsFinite(duration) || duration <= 0f)
+            return;
+        jukebox.Playing = true;
+        jukebox.PlayingSongData = new PlayingSongData
+        {
+            SongName = selected.SongName,
+            SongPath = path,
+            ActualSongLengthSeconds = duration,
+            StartedAt = _timing.CurTime,
         };
-
-        jukebox.PlayingSongData = songData;
-
-        _playingJukeboxes.Add(new Entity<WhiteJukeboxComponent>(entity, jukebox));
-
-        Dirty(entity, jukebox);
+        if (!_playingJukeboxes.Any(playing => playing.Owner == entity))
+            _playingJukeboxes.Add((entity.Value, jukebox));
+        Dirty(entity.Value, jukebox);
     }
-
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-
-        if (_updateTimer <= UpdateTimerDefaultTime)
-        {
-            _updateTimer += frameTime;
+        _updateTimer += frameTime;
+        if (_updateTimer < UpdateTimerDefaultTime)
             return;
-        }
-
-        ProcessPlayingJukeboxes();
-    }
-
-    private void ProcessPlayingJukeboxes()
-    {
+        _updateTimer = 0f;
         for (var i = _playingJukeboxes.Count - 1; i >= 0; i--)
         {
-            var playingJukeboxData = _playingJukeboxes[i];
-
-            if (playingJukeboxData.Comp.PlayingSongData == null)
+            var entity = _playingJukeboxes[i];
+            if (TerminatingOrDeleted(entity) || entity.Comp.PlayingSongData is not { } song)
             {
                 _playingJukeboxes.RemoveAt(i);
                 continue;
             }
-
-            playingJukeboxData.Comp.PlayingSongData.PlaybackPosition += _updateTimer;
-
-            if (playingJukeboxData.Comp.PlayingSongData.PlaybackPosition >=
-                playingJukeboxData.Comp.PlayingSongData.ActualSongLengthSeconds)
+            if (song.EndsAt is { } end && _timing.CurTime >= end)
             {
-                if (playingJukeboxData.Comp.Playing)
-                {
-                    playingJukeboxData.Comp.PlayingSongData.PlaybackPosition = 0;
-                }
-                else
-                {
-                    RaiseNetworkEvent(new JukeboxStopPlaying());
-                    _playingJukeboxes.RemoveAt(i);
-                }
+                entity.Comp.PlayingSongData = null;
+                _playingJukeboxes.RemoveAt(i);
+                Dirty(entity);
             }
-
-            Dirty(playingJukeboxData);
         }
-
-        _updateTimer = 0;
     }
 }

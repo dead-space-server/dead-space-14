@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Server.DeadSpace.CentComm;
 using Content.Server.GameTicking;
 using Content.Server.Station.Components;
 using Content.Server.Station.Events;
@@ -440,8 +441,7 @@ public sealed partial class StationJobsSystem : EntitySystem
             var filtered = jobPriorities
                 .Where(p =>
                             p.Value == priority
-                            && disallowedJobs != null
-                            && !disallowedJobs.Contains(p.Key)
+                            && (disallowedJobs == null || !disallowedJobs.Contains(p.Key)) // DS14 - null means no exclusions.
                             && available.Contains(p.Key))
                 .Select(p => p.Key)
                 .ToList();
@@ -474,11 +474,15 @@ public sealed partial class StationJobsSystem : EntitySystem
         if (!pickOverflows)
             return null;
 
-        var overflows = GetOverflowJobs(station);
+        // DS14-start - overflow fallback must not bypass bans, timers, whitelists, or species requirements.
+        var overflows = GetOverflowJobs(station)
+            .Where(job => disallowedJobs == null || !disallowedJobs.Contains(job))
+            .ToList();
         if (overflows.Count == 0)
             return null;
 
         return _random.Pick(overflows);
+        // DS14-end
     }
 
     #endregion Public API
@@ -508,6 +512,12 @@ public sealed partial class StationJobsSystem : EntitySystem
 
         while (query.MoveNext(out var station, out var comp))
         {
+            // DS14-start
+            // CentComm uses StationJobs for special-role setup, but is not a late-join destination.
+            if (HasComp<CentCommStationComponent>(station))
+                continue;
+            // DS14-end
+
             var netStation = GetNetEntity(station);
             var list = comp.JobList.ToDictionary(x => x.Key, x => x.Value);
             jobs.Add(netStation, list);

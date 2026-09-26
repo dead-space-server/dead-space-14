@@ -7,4 +7,6 @@ namespace Content.Server.Spreader;
 [RegisterComponent]
 public sealed partial class ActiveEdgeSpreaderComponent : Component
 {
+    [ViewVariables]
+    public EntityUid? Grid;
 }

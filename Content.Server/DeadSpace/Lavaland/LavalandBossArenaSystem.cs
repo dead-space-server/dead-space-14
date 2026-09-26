@@ -2,6 +2,7 @@ using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.DeadSpace.Lavaland.Components;
+using Content.Server.Guardian;
 using Content.Server.NPC.HTN;
 using Content.Server.Parallax;
 using Content.Server.Tiles;
@@ -21,6 +22,7 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Parallax.Biomes;
+using Content.Shared.PAI;
 using Robust.Server.Player;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
@@ -607,7 +609,7 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         foreach (var session in _players.Sessions)
         {
             if (session.AttachedEntity is not { Valid: true } attached ||
-                !IsCombatParticipant(attached, arena.Comp)) // DS14
+                !IsCountedParticipant(attached, arena.Comp))
             {
                 continue;
             }
@@ -1009,7 +1011,14 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         return false;
     }
 
-    private bool IsCombatParticipant(EntityUid uid, LavalandBossArenaComponent arena)
+    internal bool IsCountedParticipant(EntityUid uid, LavalandBossArenaComponent arena)
+    {
+        return !HasComp<GuardianComponent>(uid) &&
+               !HasComp<PAIComponent>(uid) &&
+               IsCombatParticipant(uid, arena);
+    }
+
+    internal bool IsCombatParticipant(EntityUid uid, LavalandBossArenaComponent arena)
     {
         return Exists(uid) &&
                !HasComp<GhostComponent>(uid) &&

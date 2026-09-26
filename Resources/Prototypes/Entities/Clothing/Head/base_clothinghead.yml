@@ -164,6 +164,7 @@
 #    slots: [ears, eyes, mask]
   - type: BreathMask
   - type: Sprite
+    drawdepth: Items # DS14
     state: icon # default state used by most inheritors
   - type: Clickable
   - type: InteractionOutline

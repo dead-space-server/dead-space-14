@@ -1,9 +1,11 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
+using Content.Server.DeadSpace.CentComm;
 using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Server.DeadSpace.Prison.Components;
 using Content.Server.DeadSpace.NoShuttleFTL;
+using Content.Server.Salvage.Expeditions;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Server.Station.Events;
@@ -124,6 +126,12 @@ public sealed partial class ShuttleSystem
             return;
         }
         // DS14-prevent-ftl-to-taipan-station-end
+
+        // DS14-start
+        // EmergencyShuttleSystem registers CentComm separately with a coordinate disk requirement.
+        if (HasComp<CentCommStationComponent>(ev.Station))
+            return;
+        // DS14-end
 
         // Add all grid maps as ftl destinations that anyone can FTL to.
         foreach (var gridUid in ev.Station.Comp.Grids)
@@ -1193,6 +1201,10 @@ public sealed partial class ShuttleSystem
         var transform = _physics.GetRelativePhysicsTransform((uid, xform), xform.MapUid.Value);
         var aabbs = new List<Box2>(manager.Fixtures.Count);
         var tileSet = new List<(Vector2i, Tile)>();
+        // DS14-start
+        var clearLandingArea = HasComp<SalvageExpeditionComponent>(xform.MapUid.Value);
+        HashSet<EntityUid>? landingFootprint = clearLandingArea ? new() : null;
+        // DS14-end
 
         foreach (var fixture in manager.Fixtures.Values)
         {
@@ -1203,7 +1215,8 @@ public sealed partial class ShuttleSystem
 
             // Shift it slightly
             // Create a small border around it.
-            aabb = aabb.Enlarged(0.2f);
+            // aabb = aabb.Enlarged(0.2f); // DS14: leave room to exit the expedition shuttle.
+            aabb = aabb.Enlarged(clearLandingArea ? 1f : 0.2f); // DS14
             aabbs.Add(aabb);
 
             // Handle clearing biome stuff as relevant.
@@ -1212,7 +1225,16 @@ public sealed partial class ShuttleSystem
             _lookupEnts.Clear();
             _immuneEnts.Clear();
             // TODO: Ideally we'd query first BEFORE moving grid but needs adjustments above.
-            _lookup.GetLocalEntitiesIntersecting(xform.MapUid.Value, fixture.Shape, transform, _lookupEnts, flags: LookupFlags.Uncontained, lookup: lookup);
+            // DS14-start
+            if (landingFootprint != null)
+            {
+                landingFootprint.Clear();
+                _lookup.GetLocalEntitiesIntersecting(xform.MapUid.Value, fixture.Shape, transform, landingFootprint, flags: LookupFlags.Uncontained, lookup: lookup);
+                _lookup.GetLocalEntitiesIntersecting(xform.MapUid.Value, aabb, _lookupEnts, flags: LookupFlags.Uncontained);
+            }
+            else
+            // DS14-end
+                _lookup.GetLocalEntitiesIntersecting(xform.MapUid.Value, fixture.Shape, transform, _lookupEnts, flags: LookupFlags.Uncontained, lookup: lookup);
 
             foreach (var ent in _lookupEnts)
             {
@@ -1221,11 +1243,14 @@ public sealed partial class ShuttleSystem
                     continue;
                 }
 
-                // If it's on our grid ignore it.
-                if (!_xformQuery.TryComp(ent, out var childXform) || childXform.GridUid == uid)
+                // DS14-start
+                // The map itself may be a planetary grid; only entities on separate grids are protected.
+                if (!_xformQuery.TryComp(ent, out var childXform) ||
+                    childXform.GridUid is { Valid: true } childGrid && childGrid != xform.MapUid.Value)
                 {
                     continue;
                 }
+                // DS14-end
 
                 // If it has the FTLSmashImmuneComponent ignore it.
                 if (_immuneQuery.HasComponent(ent))
@@ -1235,6 +1260,11 @@ public sealed partial class ShuttleSystem
 
                 if (_bodyQuery.TryGetComponent(ent, out var mob))
                 {
+                    // DS14-start: the exit clearance must not crush bystanders outside the shuttle.
+                    if (landingFootprint != null && !landingFootprint.Contains(ent))
+                        continue;
+                    // DS14-end
+
                     _logger.Add(LogType.Gib, LogImpact.Extreme, $"{ToPrettyString(ent):player} got gibbed by the shuttle" +
                                                                 $" {ToPrettyString(uid)} arriving from FTL at {xform.Coordinates:coordinates}");
                     var gibs = _gibbing.Gib(ent);

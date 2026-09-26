@@ -94,6 +94,7 @@
     intensitySlope: 2.5
     maxIntensity: 10
     canCreateVacuum: false
+    addLog: false
   - type: Destructible
     thresholds:
     - trigger:

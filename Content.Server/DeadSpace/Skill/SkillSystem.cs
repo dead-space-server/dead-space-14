@@ -130,9 +130,14 @@ public sealed class SkillSystem : EntitySystem
         }
 
         if (component.Skills.TryGetValue(prototypeId, out var currentProgress))
-            component.Skills[prototypeId] = Math.Min(1f, currentProgress + progress);
+            component.Skills[prototypeId] = currentProgress + progress;
         else
-            component.Skills[prototypeId] = Math.Min(1f, progress);
+            component.Skills[prototypeId] = progress;
+
+        component.Skills[prototypeId] = Math.Min(1f, component.Skills[prototypeId]);
+
+        if (component.Skills[prototypeId] > 1f - 0.0001f)
+            component.Skills[prototypeId] = 1f;
     }
 
     public bool CheckRequiredSkills(EntityUid user, List<ProtoId<SkillPrototype>> neededSkills)

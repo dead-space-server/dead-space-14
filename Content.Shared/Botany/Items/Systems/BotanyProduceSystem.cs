@@ -16,17 +16,20 @@ namespace Content.Shared.Botany.Items.Systems;
 /// </summary>
 public sealed partial class BotanyProduceSystem : EntitySystem
 {
-    // DS14-start: current engine uses explicit event subscriptions.
+    // DS14-start: current engine uses explicit event subscriptions and query initialization.
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<ProduceComponent, AfterInteractEvent>(OnAfterInteract);
         SubscribeLocalEvent<PlantTrayComponent, CompostingProduceAttemptEvent>(OnCompostingProduceAttempt);
+        _trayQuery = GetEntityQuery<PlantTrayComponent>();
     }
     // DS14-end
 
-    // DS14-start: current engine uses readonly IoC fields.
+    // DS14-start
+    private EntityQuery<PlantTrayComponent> _trayQuery;
+
     [Dependency] private readonly BotanySystem _botany = default!;
     [Dependency] private readonly PlantSystem _plant = default!;
     [Dependency] private readonly PlantTraySystem _plantTray = default!;
@@ -36,7 +39,7 @@ public sealed partial class BotanyProduceSystem : EntitySystem
 
     private void OnAfterInteract(Entity<ProduceComponent> ent, ref AfterInteractEvent args)
     {
-        if (args.Target == null || args.Handled || !args.CanReach || !HasComp<PlantTrayComponent>(args.Target))
+        if (args.Target == null || args.Handled || !args.CanReach || !_trayQuery.HasComp(args.Target)) // DS14
             return;
 
         var ev = new CompostingProduceAttemptEvent(ent, args.User);

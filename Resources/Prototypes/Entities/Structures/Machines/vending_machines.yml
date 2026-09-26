@@ -2187,6 +2187,25 @@
     guides:
     - Chemicals
     - Chemist
+  # DS14: ChemVend should require two direct C4 blasts to destroy.
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 400
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Breakage"]
+      - !type:EjectVendorItems
 
 - type: entity
   parent: VendingMachineChemicals

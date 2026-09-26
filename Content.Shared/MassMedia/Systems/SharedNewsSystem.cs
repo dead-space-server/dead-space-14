@@ -1,5 +1,6 @@
 using Robust.Shared.Serialization;
 using Robust.Shared.Network;
+using Robust.Shared.GameObjects;
 
 namespace Content.Shared.MassMedia.Systems;
 
@@ -97,3 +98,7 @@ public record struct NewsArticlePublishedEvent(NewsArticle Article);
 
 [ByRefEvent]
 public record struct NewsArticleDeletedEvent;
+
+// DS14: broadcast when a player successfully posts a comment under a news article.
+[ByRefEvent]
+public record struct NewsCommentPostedEvent(EntityUid Author, string Content);

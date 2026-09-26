@@ -21,7 +21,7 @@ namespace Content.Server.StationEvents.Events
                 return;
 
             // Essentially we'll pick out a target amount of gas to leak, then a rate to leak it at, then work out the duration from there.
-            if (TryFindRandomTile(out component.TargetTile, out var target, out component.TargetGrid, out component.TargetCoords))
+            if (TryFindRandomTile(out component.TargetTile, out var target, out component.TargetGrid, out component.TargetCoords, rule: uid)) // DS14
             {
                 component.TargetStation = target.Value;
                 component.FoundTile = true;

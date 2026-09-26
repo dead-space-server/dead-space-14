@@ -99,6 +99,10 @@
   copyEquipment: null
   copyInternalStorage: false
   copyImplants: false
+  # DS14-start
+  eventComponents:
+  - ChangelingIdentity
+  # DS14-end
 
 # for paradox clones
 - type: cloningSettings
@@ -163,6 +167,7 @@
   id: PlantClone
   components:
   - Plant
+  - PlantHarvest # DS14
   - PlantChemicals
   - PlantGrowth
   - PlantAtmospheric
@@ -173,6 +178,7 @@
   - PlantTraitKudzu
   - PlantTraitLigneous
   - PlantTraitScream
+  - PlantTraitSeedless # DS14
   - PlantTraitUnviable
 
 # for plant lifecycle clones
@@ -180,9 +186,7 @@
   id: PlantLifecycleClone
   parent: PlantClone
   components:
-  - PlantHarvest
   # traits
   - PlantTraitSampled
-  - PlantTraitSeedless
   eventComponents:
   - PlantHolder

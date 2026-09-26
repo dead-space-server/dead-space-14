@@ -6,6 +6,7 @@ using Content.Shared.Construction;
 using Content.Shared.Destructible;
 using Content.Shared.Lock;
 using Content.Shared.Power.EntitySystems;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 namespace Content.Server.Radio.EntitySystems;
@@ -21,6 +22,7 @@ public sealed class NotifyOnNonFunctioningSystem : EntitySystem
     [Dependency] private readonly RadioSystem _radio = default!;
     [Dependency] private readonly NavMapSystem _navMap = default!;
     [Dependency] private readonly PowerStateSystem _powerState = default!;
+    [Dependency] private readonly IGameTiming _gameTiming = default!;
 
     public override void Initialize()
     {
@@ -82,8 +84,13 @@ public sealed class NotifyOnNonFunctioningSystem : EntitySystem
         if (!ent.Comp.LocUnpowered.HasValue || !_powerState.GetWorkingState(ent.Owner))
             return;
 
-        if (args.ReceivedPower < args.DrawRate)
-            AlertRadioIfWasWorking(ent, ent.Comp.LocUnpowered, true);
+        if (args.ReceivedPower >= args.DrawRate || _gameTiming.CurTime < ent.Comp.NextUnpoweredAlert)
+            return;
+
+        // DS14-start - unstable power must not spam the engineering radio.
+        ent.Comp.NextUnpoweredAlert = _gameTiming.CurTime + ent.Comp.UnpoweredAlertCooldown;
+        AlertRadioIfWasWorking(ent, ent.Comp.LocUnpowered, true);
+        // DS14-end
     }
 
     private void AlertRadioIfWasWorking(Entity<NotifyOnNonFunctioningComponent> ent, string locString, bool ignorePower = false)

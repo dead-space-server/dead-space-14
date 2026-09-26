@@ -240,6 +240,15 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
             return;
         }
 
+        // DS14-start: Legionnaire knife RMB activates rage instead of making a wide attack.
+        if (HasComp<Content.Shared.DeadSpace.TheCircle.Legion.LegionKnifeComponent>(weaponUid))
+        {
+            var ev = new Content.Shared.DeadSpace.TheCircle.Legion.LegionKnifeRageAttemptEvent(user);
+            RaiseLocalEvent(weaponUid, ev);
+            return;
+        }
+        // DS14-end
+
         AttemptAttack(user, weaponUid, weapon, msg, args.SenderSession);
     }
 
@@ -561,19 +570,19 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
         // Sawmill.Debug($"Melee damage is {damage.Total} out of {component.Damage.Total}");
 
-        // Raise event before doing damage so we can cancel damage if the event is handled
-        var hitEvent = new MeleeHitEvent(new List<EntityUid> { target.Value }, user, meleeUid, damage, null);
-        RaiseLocalEvent(meleeUid, hitEvent);
-
-        if (hitEvent.Handled)
-            return;
-
         // DS14-start
         var parryEvent = new BeforeMeleeDamageEvent(user, meleeUid);
         RaiseLocalEvent(target.Value, ref parryEvent);
         if (parryEvent.Cancelled)
             return;
         // DS14-end
+
+        // Raise event before doing damage so we can cancel damage if the event is handled
+        var hitEvent = new MeleeHitEvent(new List<EntityUid> { target.Value }, user, meleeUid, damage, null);
+        RaiseLocalEvent(meleeUid, hitEvent);
+
+        if (hitEvent.Handled)
+            return;
 
         var targets = new List<EntityUid>(1)
         {
@@ -717,6 +726,29 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
             targets.Add(entity);
         }
 
+        var weapon = GetEntity(ev.Weapon);
+
+        // DS14-start
+        for (var i = targets.Count - 1; i >= 0; i--)
+        {
+            var target = targets[i];
+            // We raise an attack attempt here as well,
+            // primarily because this was an untargeted wideswing: if a subscriber to that event cared about
+            // the potential target (such as for pacifism), they need to be made aware of the target here.
+            // In that case, just continue.
+            if (!Blocker.CanAttack(user, target, (weapon, component)))
+            {
+                targets.RemoveAt(i);
+                continue;
+            }
+
+            var parryEvent = new BeforeMeleeDamageEvent(user, meleeUid);
+            RaiseLocalEvent(target, ref parryEvent);
+            if (parryEvent.Cancelled)
+                targets.RemoveAt(i);
+        }
+        // DS14-end
+
         // Sawmill.Debug($"Melee damage is {damage.Total} out of {component.Damage.Total}");
 
         // Raise event before doing damage so we can cancel damage if the event is handled
@@ -725,8 +757,6 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
         if (hitEvent.Handled)
             return true;
-
-        var weapon = GetEntity(ev.Weapon);
 
         Interaction.DoContactInteraction(user, weapon);
 
@@ -745,26 +775,6 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         for (var i = targets.Count - 1; i >= 0; i--)
         {
             var entity = targets[i];
-            // We raise an attack attempt here as well,
-            // primarily because this was an untargeted wideswing: if a subscriber to that event cared about
-            // the potential target (such as for pacifism), they need to be made aware of the target here.
-            // In that case, just continue.
-            if (!Blocker.CanAttack(user, entity, (weapon, component)))
-            {
-                targets.RemoveAt(i);
-                continue;
-            }
-
-            // DS14-start
-            var parryEvent = new BeforeMeleeDamageEvent(user, meleeUid);
-            RaiseLocalEvent(entity, ref parryEvent);
-            if (parryEvent.Cancelled)
-            {
-                targets.RemoveAt(i);
-                continue;
-            }
-            // DS14-end
-
             var attackedEvent = new AttackedEvent(meleeUid, user, GetCoordinates(ev.Coordinates));
             RaiseLocalEvent(entity, attackedEvent);
             var modifiedDamage = DamageSpecifier.ApplyModifierSets(damage + hitEvent.BonusDamage + attackedEvent.BonusDamage, hitEvent.ModifiersList);

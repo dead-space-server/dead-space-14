@@ -19,6 +19,7 @@ namespace Content.Server.Atmos.EntitySystems
         private readonly float[] _reactionFastPathMinimumMoles = new float[Atmospherics.TotalNumberOfGases];
         private bool _useReactionFastPath;
         // DS14-end
+        private readonly GasMixture _scrubBuffer = new(); // DS14
 
         /// <summary>
         ///     List of gas reactions ordered by priority.
@@ -278,9 +279,15 @@ namespace Content.Server.Atmos.EntitySystems
         /// <summary>
         ///     Scrubs specified gases from a gas mixture into a <see cref="destination"/> gas mixture.
         /// </summary>
-        public void ScrubInto(GasMixture mixture, GasMixture destination, IReadOnlyCollection<Gas> filterGases)
+        public void ScrubInto(GasMixture mixture, GasMixture destination, HashSet<Gas> filterGases) // DS14
         {
-            var buffer = new GasMixture(mixture.Volume){Temperature = mixture.Temperature};
+            // DS14-start
+            // Reuse one mixture and mole array; atmos devices run serially.
+            var buffer = _scrubBuffer;
+            buffer.Clear();
+            buffer.Volume = mixture.Volume;
+            buffer.Temperature = mixture.Temperature;
+            // DS14-end
             var ipritDecayDeadline = mixture.IpritDecayDeadline; // Kofeecheks Iprit decay: LicenseRef-Kofeecheks
 
             foreach (var gas in filterGases)

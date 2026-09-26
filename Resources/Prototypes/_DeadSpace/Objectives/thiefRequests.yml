@@ -1,0 +1,203 @@
+# DS14-start
+# Pool of goods the ВорПРО program requests from thieves.
+# Groups are taken from the old thief steal objectives (items and collections only —
+# structures and animals cannot be delivered to a beacon).
+# PricePerItem is in dirty credits and is roughly tied to the objective difficulty.
+# TimeLimitMinutes is the delivery window: delivering in time grants a bonus,
+# being late reduces the payout (see ThiefPdaProgramComponent multipliers).
+
+# Collections (easy money, several copies needed)
+- type: thiefRequestGroup
+  id: ThiefRequestHeadCloak
+  group: HeadCloak
+  weight: 1
+  minCount: 2
+  maxCount: 4
+  pricePerItem: 8000
+  timeLimitMinutes: 15
+
+- type: thiefRequestGroup
+  id: ThiefRequestHeadBedsheet
+  group: HeadBedsheet
+  weight: 1.5
+  minCount: 3
+  maxCount: 6
+  pricePerItem: 4000
+  timeLimitMinutes: 12
+
+- type: thiefRequestGroup
+  id: ThiefRequestStamp
+  group: Stamp
+  weight: 1.5
+  minCount: 3
+  maxCount: 6
+  pricePerItem: 3500
+  timeLimitMinutes: 12
+
+- type: thiefRequestGroup
+  id: ThiefRequestDoorRemote
+  group: DoorRemote
+  weight: 1
+  minCount: 2
+  maxCount: 4
+  pricePerItem: 7000
+  timeLimitMinutes: 15
+
+- type: thiefRequestGroup
+  id: ThiefRequestOfficerHandgun
+  group: OfficerHandgun
+  weight: 0.8
+  minCount: 2
+  maxCount: 3
+  pricePerItem: 12000
+  timeLimitMinutes: 18
+
+- type: thiefRequestGroup
+  id: ThiefRequestTechnologyDisk
+  group: TechnologyDisk
+  weight: 1.5
+  minCount: 4
+  maxCount: 8
+  pricePerItem: 2500
+  timeLimitMinutes: 12
+
+- type: thiefRequestGroup
+  id: ThiefRequestIDCard
+  group: IDCard
+  weight: 1.5
+  minCount: 3
+  maxCount: 6
+  pricePerItem: 2000
+  timeLimitMinutes: 10
+
+- type: thiefRequestGroup
+  id: ThiefRequestLAMP
+  group: LAMP
+  weight: 0.3
+  minCount: 2
+  maxCount: 5
+  pricePerItem: 500
+  timeLimitMinutes: 8
+
+- type: thiefRequestGroup
+  id: ThiefRequestClothingEyesHuds
+  group: ClothingEyesHuds
+  weight: 1
+  minCount: 3
+  maxCount: 6
+  pricePerItem: 1500
+  timeLimitMinutes: 10
+
+# Single valuable items
+- type: thiefRequestGroup
+  id: ThiefRequestForensicScanner
+  group: ForensicScanner
+  weight: 1
+  pricePerItem: 8000
+  timeLimitMinutes: 12
+
+- type: thiefRequestGroup
+  id: ThiefRequestFlippoEngravedLighter
+  group: FlippoEngravedLighter
+  weight: 0.8
+  pricePerItem: 5000
+  timeLimitMinutes: 10
+
+- type: thiefRequestGroup
+  id: ThiefRequestClothingHeadHatWarden
+  group: ClothingHeadHatWarden
+  weight: 0.7
+  pricePerItem: 10000
+  timeLimitMinutes: 12
+
+- type: thiefRequestGroup
+  id: ThiefRequestWantedListCartridge
+  group: WantedListCartridge
+  weight: 1
+  pricePerItem: 6000
+  timeLimitMinutes: 12
+
+- type: thiefRequestGroup
+  id: ThiefRequestVoidParamedHardsuit
+  group: ClothingOuterHardsuitVoidParamed
+  weight: 0.8
+  pricePerItem: 15000
+  timeLimitMinutes: 18
+
+- type: thiefRequestGroup
+  id: ThiefRequestMedicalTechFabBoard
+  group: MedicalTechFabCircuitboard
+  weight: 1
+  pricePerItem: 9000
+  timeLimitMinutes: 15
+
+- type: thiefRequestGroup
+  id: ThiefRequestMedicalAltHeadset
+  group: ClothingHeadsetAltMedical
+  weight: 1
+  pricePerItem: 10000
+  timeLimitMinutes: 15
+
+- type: thiefRequestGroup
+  id: ThiefRequestFireAxe
+  group: FireAxe
+  weight: 1
+  pricePerItem: 5000
+  timeLimitMinutes: 10
+
+- type: thiefRequestGroup
+  id: ThiefRequestAmePartFlatpack
+  group: AmePartFlatpack
+  weight: 0.8
+  pricePerItem: 15000
+  timeLimitMinutes: 18
+
+- type: thiefRequestGroup
+  id: ThiefRequestChiefEngineerToolbelt
+  group: ChiefEngineerToolBelt
+  weight: 0.7
+  pricePerItem: 15000
+  timeLimitMinutes: 18
+
+- type: thiefRequestGroup
+  id: ThiefRequestExpeditionsBoard
+  group: SalvageExpeditionsComputerCircuitboard
+  weight: 1
+  pricePerItem: 8000
+  timeLimitMinutes: 15
+
+- type: thiefRequestGroup
+  id: ThiefRequestCargoShuttleBoard
+  group: CargoShuttleConsoleCircuitboard
+  weight: 1
+  pricePerItem: 8000
+  timeLimitMinutes: 15
+
+- type: thiefRequestGroup
+  id: ThiefRequestBible
+  group: Bible
+  weight: 0.8
+  pricePerItem: 3000
+  timeLimitMinutes: 8
+
+- type: thiefRequestGroup
+  id: ThiefRequestGoldMedal
+  group: ClothingNeckGoldmedal
+  weight: 0.5
+  pricePerItem: 25000
+  timeLimitMinutes: 20
+
+- type: thiefRequestGroup
+  id: ThiefRequestClownMedal
+  group: ClothingNeckClownmedal
+  weight: 0.5
+  pricePerItem: 20000
+  timeLimitMinutes: 20
+
+- type: thiefRequestGroup
+  id: ThiefRequestRevolverDeckard
+  group: WeaponRevolverDeckard
+  weight: 0.8
+  pricePerItem: 20000
+  timeLimitMinutes: 20
+# DS14-end

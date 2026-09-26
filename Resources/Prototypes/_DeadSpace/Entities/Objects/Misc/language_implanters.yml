@@ -11,7 +11,7 @@
 - type: entity
   parent: BaseImplantOnlyImplanter
   id: LearnArachnidLanguageImplanter
-  name: имплант изучения пучьего языка
+  name: имплант изучения паучьего языка
   components:
   - type: Implanter
     implant: LearnArachnidLanguageImplant
@@ -104,4 +104,3 @@
   components:
   - type: Implanter
     implant: LearnDogLanguageImplant
-  

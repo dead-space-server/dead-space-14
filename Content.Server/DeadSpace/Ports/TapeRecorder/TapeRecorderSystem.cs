@@ -11,6 +11,8 @@ using Content.Shared.DeadSpace.Ports.TapeRecorder.Events;
 using Robust.Shared.Prototypes;
 using System.Text;
 using Content.Shared.Corvax.TTS;
+using Content.Server.DeadSpace.Languages;
+using Content.Shared.DeadSpace.Languages.Components;
 using Content.Shared.Humanoid;
 
 namespace Content.Server.DeadSpace.Ports.TapeRecorder;
@@ -21,6 +23,7 @@ public sealed class TapeRecorderSystem : SharedTapeRecorderSystem
     [Dependency] private readonly HandsSystem _hands = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly PaperSystem _paper = default!;
+    [Dependency] private readonly LanguageSystem _language = default!; // DS14 - render recordings through their original language.
 
     public override void Initialize()
     {
@@ -39,6 +42,7 @@ public sealed class TapeRecorderSystem : SharedTapeRecorderSystem
         var voice = EnsureComp<VoiceOverrideComponent>(ent);
         var speech = EnsureComp<SpeechComponent>(ent);
         var tts = EnsureComp<TTSComponent>(ent);
+        var language = EnsureComp<LanguageComponent>(ent); // DS14
 
         foreach (var message in tape.RecordedData)
         {
@@ -51,6 +55,12 @@ public sealed class TapeRecorderSystem : SharedTapeRecorderSystem
             // TODO: mimic the exact string chosen when the message was recorded
             var verb = message.Verb ?? SharedChatSystem.DefaultSpeechVerb;
             speech.SpeechVerb = _proto.Index<SpeechVerbPrototype>(verb);
+            // DS14-start
+            language.KnownLanguages.Add(message.LanguageId);
+            language.CantSpeakLanguages.Remove(message.LanguageId);
+            language.SelectedLanguage = message.LanguageId;
+            Dirty(ent, language);
+            // DS14-end
             //Play the message
             _chat.TrySendInGameICMessage(ent, message.Message, InGameICChatType.Speak, false);
         }
@@ -90,7 +100,15 @@ public sealed class TapeRecorderSystem : SharedTapeRecorderSystem
         //Add a new entry to the tape
         var verb = _chat.GetSpeechVerb(args.Source, args.Message);
         var name = nameEv.VoiceName;
-        cassette.Comp.Buffer.Add(new TapeCassetteRecordedMessage(cassette.Comp.CurrentPosition, name, verb, args.Message, voiceId));
+        // DS14-start
+        cassette.Comp.Buffer.Add(new TapeCassetteRecordedMessage(
+            cassette.Comp.CurrentPosition,
+            name,
+            verb,
+            args.Message,
+            voiceId,
+            args.LanguageId));
+        // DS14-end
     }
 
     private void OnPrintMessage(Entity<TapeRecorderComponent> ent, ref PrintTapeRecorderMessage args)
@@ -127,11 +145,16 @@ public sealed class TapeRecorderSystem : SharedTapeRecorderSystem
         {
             var name = message.Name ?? ent.Comp.DefaultName;
             var time = TimeSpan.FromSeconds((double) message.Timestamp);
+            // DS14-start
+            var printedMessage = Exists(player) && _language.KnowsLanguage(player, message.LanguageId)
+                ? message.Message
+                : _language.TransformWord(message.Message, message.LanguageId);
+            // DS14-end
 
             text.AppendLine(Loc.GetString("tape-recorder-print-message-text",
                 ("time", time.ToString(@"hh\:mm\:ss")),
                 ("source", name),
-                ("message", message.Message)));
+                ("message", printedMessage))); // DS14
         }
         text.AppendLine();
         text.Append(Loc.GetString("tape-recorder-print-end-text"));

@@ -85,6 +85,14 @@ public sealed partial class AntagSelectionComponent : Component
 [DataDefinition]
 public partial struct AntagSelectionDefinition()
 {
+    // DS14-start
+    /// <summary>
+    /// Whether preselecting this definition should prevent jobs that cannot be antagonists.
+    /// </summary>
+    [DataField]
+    public bool AffectsJobSelection = true;
+    // DS14-end
+
     /// <summary>
     /// A list of antagonist roles that are used for selecting which players will be antagonists.
     /// </summary>
@@ -257,6 +265,12 @@ public partial struct AntagSelectionDefinition()
     /// </summary>
     [DataField]
     public List<ProtoId<JobPrototype>>? JobWhitelist;
+
+    /// <summary>
+    /// Whether dead bodies should be excluded from selection and assignment.
+    /// </summary>
+    [DataField]
+    public bool RequireNotDead;
     // DS14-end
 }
 

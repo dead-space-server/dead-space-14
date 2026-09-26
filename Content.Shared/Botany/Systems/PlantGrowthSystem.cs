@@ -13,28 +13,28 @@ namespace Content.Shared.Botany.Systems;
 /// </summary>
 public sealed partial class PlantGrowthSystem : EntitySystem
 {
-    // DS14-start: current engine uses explicit event subscriptions.
+    // DS14-start: current engine uses explicit event subscriptions and query initialization.
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<PlantGrowthComponent, PlantCrossPollinateEvent>(OnCrossPollinate);
         SubscribeLocalEvent<PlantGrowthComponent, PlantGrowEvent>(OnPlantGrow);
+        _holderQuery = GetEntityQuery<PlantHolderComponent>();
+        _trayQuery = GetEntityQuery<PlantTrayComponent>();
     }
     // DS14-end
 
-    // DS14-start: current engine uses readonly IoC fields.
+    // DS14-start
     [Dependency] private readonly BotanySystem _botany = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly PlantMutationSystem _mutation = default!;
     [Dependency] private readonly PlantHarvestSystem _plantHarvest = default!;
     [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
     [Dependency] private readonly PlantTraySystem _plantTray = default!;
-    // DS14-end
 
-    // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly EntityQuery<PlantHolderComponent> _holderQuery = default!;
-    [Dependency] private readonly EntityQuery<PlantTrayComponent> _trayQuery = default!;
+    private EntityQuery<PlantHolderComponent> _holderQuery;
+    private EntityQuery<PlantTrayComponent> _trayQuery;
     // DS14-end
 
     private void OnCrossPollinate(Entity<PlantGrowthComponent> ent, ref PlantCrossPollinateEvent args)
@@ -42,8 +42,10 @@ public sealed partial class PlantGrowthSystem : EntitySystem
         if (!_botany.TryGetPlantComponent<PlantGrowthComponent>(args.PollenData, args.PollenProtoId, out var pollenData))
             return;
 
-        _mutation.CrossFloat(ent, ref ent.Comp.WaterConsumption, pollenData.WaterConsumption);
-        _mutation.CrossFloat(ent, ref ent.Comp.NutrientConsumption, pollenData.NutrientConsumption);
+        // DS14-start
+        _mutation.CrossFloat(ref ent.Comp.WaterConsumption, pollenData.WaterConsumption);
+        _mutation.CrossFloat(ref ent.Comp.NutrientConsumption, pollenData.NutrientConsumption);
+        // DS14-end
         Dirty(ent);
     }
 

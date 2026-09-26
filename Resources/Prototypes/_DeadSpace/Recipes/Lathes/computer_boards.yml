@@ -12,3 +12,8 @@
   parent: [ BaseCircuitboardRecipe, BaseGeneralComputerRecipeCategory ]
   id: PersonnelRecordsComputerCircuitboard
   result: PersonnelRecordsComputerCircuitboard
+
+- type: latheRecipe
+  parent: [ BaseCircuitboardRecipe, BaseEngineeringMachineRecipeCategory ]
+  id: GasElectrolyzerMachineCircuitBoard
+  result: GasElectrolyzerMachineCircuitBoard

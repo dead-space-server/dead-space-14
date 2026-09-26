@@ -11,6 +11,8 @@ using Content.Shared.GameTicking;
 using Content.Shared.Roles;
 using Content.Shared.Station.Components;
 using Content.Shared.StationRecords;
+using Content.Shared.IdentityManagement.Components; // DS-14
+using Robust.Shared.Containers; // DS-14
 using Robust.Shared.Configuration;
 using Robust.Shared.Console;
 using Robust.Shared.Player;
@@ -25,6 +27,7 @@ public sealed class CrewManifestSystem : EntitySystem
     [Dependency] private readonly EuiManager _euiManager = default!;
     [Dependency] private readonly IConfigurationManager _configManager = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private readonly SharedContainerSystem _container = default!; // DS-14
 
     /// <summary>
     ///     Cached crew manifest entries. The alternative is to outright
@@ -215,6 +218,41 @@ public sealed class CrewManifestSystem : EntitySystem
         }
     }
 
+    // DS-14-start
+    private bool TryGetRecordCharacter(StationRecordKey key, out EntityUid character)
+    {
+        character = default;
+        EntityUid? holder = null;
+        var query = EntityQueryEnumerator<StationRecordKeyStorageComponent>();
+
+        while (query.MoveNext(out var uid, out var storage))
+        {
+            if (storage.Key is { } neededKey && neededKey.Equals(key))
+            {
+                holder = uid;
+                break;
+            }
+        }
+        if (holder is not { } current)
+            return false;
+
+        var visited = new HashSet<EntityUid>();
+        while (visited.Add(current))
+        {
+            if (HasComp<IdentityComponent>(current))
+            {
+                character = current;
+                return true;
+            }
+            if (!_container.TryGetContainingContainer(current, out var container))
+                return false;
+            current = container.Owner;
+        }
+
+        return false;
+    }
+    // DS-14-end
+
     /// <summary>
     ///     Builds the crew manifest for a station. Stores it in the cache afterwards.
     /// </summary>
@@ -229,7 +267,20 @@ public sealed class CrewManifestSystem : EntitySystem
         foreach (var recordObject in iter)
         {
             var record = recordObject.Item2;
-            var entry = new CrewManifestEntry(record.Name, record.JobTitle, record.JobIcon, record.JobPrototype);
+            // DS-14-start
+            var displayedName = record.Name;
+            var key = new StationRecordKey(recordObject.Item1, station);
+
+            if (TryGetRecordCharacter(key, out var character))
+            {
+                var characterName = MetaData(character).EntityName;
+
+                if (!string.IsNullOrWhiteSpace(characterName))
+                    displayedName = characterName;
+            }
+
+            var entry = new CrewManifestEntry(displayedName, record.JobTitle, record.JobIcon, record.JobPrototype);
+            // DS-14-end
 
             _prototypeManager.TryIndex(record.JobPrototype, out JobPrototype? job);
             entriesSort.Add((job, entry));

@@ -154,6 +154,11 @@ namespace Content.Client.Inventory
             _handCount = 0;
             _inventoryDimensions = Vector2i.Zero;
 
+            // DS14-start: a stasis cocoon hides the entire inventory, not only hands.
+            if (EntMan.TryGetComponent<HandsComponent>(Owner, out var targetHands) && !targetHands.CanBeStripped)
+                return;
+            // DS14-end
+
             if (EntMan.TryGetComponent<InventoryComponent>(Owner, out var inv))
             {
                 foreach (var slot in inv.Slots)

@@ -246,6 +246,7 @@
   desc: reagent-desc-vomit
   flavor: terrible
   color: "#87ab08"
+  evaporationSpeed: 0.3
   physicalDesc: reagent-physical-desc-pungent
   slipData:
     requiredSlipSpeed: 4.0 #It's not as slippery as water

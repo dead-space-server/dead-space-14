@@ -124,6 +124,14 @@ public sealed partial class RCDPrototype : IPrototype
     /// </summary>
     [DataField, ViewVariables(VVAccess.ReadOnly)]
     public RcdRotation Rotation { get; private set; } = RcdRotation.User;
+
+    // DS14-start
+    /// <summary>
+    /// Relative order in the radial menu. Lower values appear first, followed by null values.
+    /// </summary>
+    [DataField]
+    public int? MenuOrder { get; private set; }
+    // DS14-end
 }
 
 public enum RcdMode : byte

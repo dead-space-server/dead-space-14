@@ -1,0 +1,668 @@
+# Backpack
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackCyberBobeks
+  name: тактическая сумка Syn.V // Mod.7
+  description: На вид крайне вместительная и довольно модная сумка... Там точно нет гранат?...
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/CyberBobeks/backpack.rsi
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,15,10
+  - type: StorageFill
+    contents:
+    - id: ClothingWebbingCyberBobeks
+    - id: ClothingHandsGlovesCyberBobeks
+    - id: ClothingOuterHardsuitCyberBobeks
+    - id: ClothingMaskCyberBobeks
+    - id: ClothingHeadsetCyberBobeks
+    - id: ClothingShoesBootsMagCyberBobeks
+    - id: ClothingEyesHudCyberBobeks
+    - id: JetpackVoidFilleddCyberBobeks
+    - id: DefibrillatorCyberBobeks
+    - id: telescopicBatonCyberBobeks
+    - id: HyposprayCyberBobeks
+    - id: ClothingNeckCloakCyberBobeks
+    - id: MedkitAdvancedFilled
+    - id: DoubleEmergencyOxygenTankCyberBobeks
+    - id: PaperCyberBobeks
+    - id: ClothingUniformJumpsuitCyberBobeks
+    - id: ClothingHeadHatBeretCyberBobeks
+    - id: PDACyberBobeks
+    - id: JukeboxMK
+    - id: TapeRecorderr
+    - id: TapeEmpty
+    - id: PlushieCyberBobeksRiikka
+    - id: WeaponPistolCHIMPCyberBobeks
+    - id: WeaponProtoKineticAcceleratorCyberBobeks
+    - id: WeaponCrusherCyberBobeks
+    - id: ClothingOuterVestCyberBobeks
+    - id: HolofanProjectorCyberBobeks
+    - id: GasAnalyzerCyberBobeks
+    - id: AnomalyScannerCyberBobeks
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Hardsuit
+- type: entity
+  parent: ClothingOuterHardsuitSecurity
+  id: ClothingOuterHardsuitCyberBobeks
+  name: скафандр Syn.V // Gen.14-1
+  description: Скафандр, больше похожий на какой-то высокотехнологичный костюм от биоугроз, в прочем, мир этого заслуживает...
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/CyberBobeks/hardsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/CyberBobeks/hardsuit.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitCyberBobeks
+  - type: Item
+    size: Huge
+  - type: HardsuitIdentification
+    nonlethal: true
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.50
+        Slash: 0.50
+        Piercing: 0.60
+        Heat: 0.50
+        Radiation: 0.50
+        Caustic: 0.50
+  - type: ClothingSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9
+  - type: HideLayerClothing
+    clothingSlots: 
+    - belt
+    - jumpsuit
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+- type: entity
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  id: ClothingHeadHelmetHardsuitCyberBobeks
+  categories: [ HideSpawnMenu ]
+  name: шлем Syn.V // Gen.14-2
+  description: Шлем от одноименного скафандра, с ярко-красным светящимся визором. Кажется, что носитель шлема смотрит на вас с призрением.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/CyberBobeks/helmet.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/CyberBobeks/helmet.rsi
+  - type: PointLight
+    color: "#ea2738"
+  - type: PressureProtection
+    highPressureMultiplier: 0.08
+    lowPressureMultiplier: 1000
+  - type: EyeProtection
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.9
+        Heat: 0.9
+  - type: HideLayerClothing
+    slots:
+    - Hair
+    - Snout
+    - HeadTop
+    - HeadSide
+    - FacialHair
+    clothingSlots:
+    - ears
+    - mask
+    bodyLayers:
+    - Head
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# jumpsuit.rsi
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitCyberBobeks
+  name: униформа Syn.V
+  description: На первый взгляд стандартная военная униформа, однако, что-то в ней всё таки смущает.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/CyberBobeks/jumpsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/CyberBobeks/jumpsuit.rsi
+  - type: Tag
+    tags: [ ]
+
+# beret.rsi
+- type: entity
+  parent: ClothingHeadHatBeretPvrsifvlAlt2
+  id: ClothingHeadHatBeretCyberBobeks
+  name: берет Syn.V
+  description: Обычный берет, разве что на нём присутствуют странные пятна, похожие на кровь, а также бирка "000".
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Tag
+    tags: [ ]
+
+# Gloves
+- type: entity
+  parent: ClothingHandsGlovessastr
+  id: ClothingHandsGlovesCyberBobeks
+  name: перчатки Syn.V // Gen.7
+  description: Перчатки, созданные по особой ранее не известной технологии, явно усиленные для боевых и иных нестандартных ситуаций.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Magboots
+- type: entity
+  parent: ClothingShoesBootsMagsastr
+  id: ClothingShoesBootsMagCyberBobeks
+  name: магнитные сапоги Syn.V
+  description: Высококачественные магнитные сапоги, которыми можно кого-нибудь прибить...
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+  - type: ClothingSpeedModifier
+    walkModifier: 1
+    sprintModifier: 1
+
+# Mask
+- type: entity
+  parent: ClothingMaskGasSecurity
+  id: ClothingMaskCyberBobeks
+  name: противогаз Syn.V // Mod.1
+  description: Модернизированный противогаз, явно сделанный с акцентом не дышать с челядью одним воздухом.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/CyberBobeks/gasmask.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/CyberBobeks/gasmask.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Headset
+- type: entity
+  parent: ClothingHeadset
+  id: ClothingHeadsetCyberBobeks
+  name: полноразмерная гарнитура Syn.V // Gen.2
+  description: Гарнитура, крайне похожая на одну из ревизий "Синдиката", однако, вместо стандартного знака Корпорации на гарнитуре красуется темнокрасная буква "V". 
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/CyberBobeks/headset.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/CyberBobeks/headset.rsi
+  - type: Headset
+    color: "#840f1a"
+  - type: EncryptionKeyHolder
+    keySlots: 5
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Jetpack
+- type: entity
+  parent: JetpackVoidFilledPvrsifvlAlt2
+  id: JetpackVoidFilleddCyberBobeks
+  name: джетпак Syn.V-H // Gen.1
+  description: Первоклассный джетпак, сделанный с акцентом на мобильность и повышенное время эксплуатации в условиях мёртвого и холодного космоса.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Defibrillator
+- type: entity
+  parent: DefibrillatorCompactPvrsifvlAlt2
+  name: портативный дефибриллятор Syn.V
+  description: Высокотехнологичный портативный дефибриллятор, крайне похожий на тот, что используют товарищи из "Синдиката". На правом боку дефибрилятора красуется серийный номер "Vel-000-01".
+  id: DefibrillatorCyberBobeks
+  categories: [ HideSpawnMenu ]
+
+# Hypo
+- type: entity
+  name: тактический гипоспрей Syn.V // Light
+  parent: CombatHypoRedSword
+  description: Облегчённая версия боевого гипоспрея с некоторыми модификациями для интеграции со скафандром с целью упрощения ввода препаратов.
+  categories: [ HideSpawnMenu ]
+  id: HyposprayCyberBobeks
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      hypospray:
+        maxVol: 5
+  - type: UseDelay
+    delay: 0.5
+
+# Mantle
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckCloakCyberBobeks
+  name: мантия Syn.V
+  description: Тёмная мантия, покрытая следами крови и пепла. Снизу мантия была явно опалена огнём.
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Sponsor/CyberBobeks/cloak.rsi
+    - type: Clothing
+      sprite: _DeadSpace/Sponsor/CyberBobeks/cloak.rsi
+    - type: Tag
+      tags: [] # ignore "WhitelistChameleon" tag
+
+#Документ
+- type: entity
+  parent: PaperPrintedCentcomm
+  id: PaperCyberBobeks
+  name: распечатанный документ
+  description: Лист бумаги с заголовком центкома. Страшно даже смотреть на него.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Paper
+    stampState: paper_stamp-centcom
+    stampedBy:
+    - stampedColor: '#006600FF'
+      stampedName: Центральное Командование
+    - stampedColor: '#00BE00FF'
+      stampedName: Одобрено
+    content: paper-law-bobeks
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# РПС
+- type: entity
+  parent: ClothingBeltMilitaryWebbingPvrsifvlAlt2
+  id: ClothingWebbingCyberBobeks
+  name: рпс Syn.V // Mod.1
+  description: Ременно-плечевая система, кажется, модернизированная неизвестным металлом.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Storage
+    grid:
+    - 0,0,7,1
+  - type: StorageFill
+    contents:
+      - id: JawsOfLifeCyberBobeks
+      - id: PowerDrillCyberBobeks
+      - id: WelderExperimentalCyberBobeks
+      - id: MultitoolCyberBobeks
+      - id: RCDCyberBobeks
+      - id: HandHeldMassScannerCyberBobeks
+  
+# EYES
+- type: entity
+  parent: ClothingEyesHudMedicalPvrsifvlAlt2
+  id: ClothingEyesHudCyberBobeks
+  name: визор Syn.V // Gen.F.1
+  description: Странный визор, на котором присутствуют странные порты для внешнего подключения устройств.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# pda.rsi
+- type: entity
+  parent: BaseMedicalPDA
+  id: PDACyberBobeks
+  name: тактический планшет Syn.V // Mod.1
+  description: Странный планшет, похожий на модернизированный КПК. На обратной стороне планшета имеется маленькая выгравированная цифра "747".
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Icon
+    sprite: _DeadSpace/Sponsor/CyberBobeks/pda.rsi
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/CyberBobeks/pda.rsi
+  - type: CartridgeLoader
+    uiKey: enum.PdaUiKey.Key
+    preinstalled:
+      - CrewManifestCartridge
+      - NotekeeperCartridge
+      - NanoTaskCartridge
+      - NewsReaderCartridge
+      - MedTekCartridge
+      - AstroNavCartridge
+      - MessengerCartridge
+  - type: PdaBorderColor
+    borderColor: "#0b0817"
+    accentHColor: "#242424"
+    accentVColor: "#1d1d22"
+  - type: Tag
+    tags: [ ]
+
+#melee
+- type: entity
+  parent: ToySword
+  id: telescopicBatonCyberBobeks
+  categories: [ HideSpawnMenu ]
+  name: тактический меч Syn.V
+  description: Лазерный меч с гравировкой "Vel-747" на рукоятке. Кажется, меч был слегка модернизирован, или торчащие провода из рукоятки это новая мода.
+  components:
+  - type: EnergySword
+    activatedColor: white
+    colorOptions:
+    - white
+  - type: StaminaDamageOnHit
+    damage: 30
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 3
+  - type: ItemToggleMeleeWeapon
+    activatedSoundOnHit:
+      path: /Audio/Weapons/eblade1.ogg
+      params:
+        variation: 0.250
+    activatedSoundOnHitNoDamage:
+      path: /Audio/Weapons/eblade1.ogg
+      params:
+        variation: 0.250
+    activatedSoundOnSwing:
+      path: /Audio/Weapons/eblademiss.ogg
+      params:
+        variation: 0.125
+    activatedDamage:
+      types:
+        Blunt: 3
+
+# tank.rsi
+- type: entity
+  parent: DoubleEmergencyOxygenTank
+  id: DoubleEmergencyOxygenTankCyberBobeks
+  name: двойной кислородный баллон Syn.V // Gen.1
+  description: Стандартный двойной баллон, интегрируемый со скафандром Syn.V.
+  categories: [ HideSpawnMenu ] 
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/CyberBobeks/tank.rsi
+  - type: Item
+    sprite: _DeadSpace/Sponsor/CyberBobeks/tank.rsi
+    storedSprite:
+      state: storage
+      sprite: _DeadSpace/Sponsor/CyberBobeks/tank.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/CyberBobeks/tank.rsi
+  - type: GasTank
+    outputPressure: 21.3
+    air:
+      # 15 minutes
+      volume: 2.5
+      moles:
+        Oxygen: 1.025689525 # oxygen
+      temperature: 293.15
+
+# crusher.rsi
+- type: entity
+  parent: WeaponCrushernon_stop_smetana
+  categories: [ HideSpawnMenu ]
+  id: WeaponCrusherCyberBobeks
+  name: протокеническая катана Syn.V
+  description: Катана, с модификацией для облегчённого уничтожения больших объектов. Лезвие катаны переливается красивой радужной плёнкой...
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/CyberBobeks/crusher.rsi
+    state: icon
+  - type: Item
+    sprite: _DeadSpace/Sponsor/CyberBobeks/crusher.rsi
+    size: Huge
+  - type: PointLight
+    color: "#ea2738"
+    enabled: false
+    radius: 4
+  
+# kinetic_accelerator.rsi
+- type: entity
+  parent: WeaponProtoKineticAcceleratorPvrsifvlAlt2
+  id: WeaponProtoKineticAcceleratorCyberBobeks
+  categories: [ HideSpawnMenu ]
+  name: протокинетическое ружьё Syn.V // Gen.1
+  description: Модифицированное протокинетическое ружьё с рычажным механизмом. Помогает избавляться от биомусора.
+  components:
+  - type: Gun
+    fireRate: 0.5
+    selectedMode: SemiAuto
+    angleDecay: 45
+    minAngle: 44
+    maxAngle: 45
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/_DeadSpace/Sponsor/pvrsifvlAlt2/peacekeeper_shot.ogg
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 0.75
+    rechargeSound:
+      path: /Audio/_DeadSpace/Sponsor/pvrsifvlAlt2/peacekeeper_reload.ogg
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/kinetic_accelerator.rsi
+    layers:
+    - state: icon
+    - state: animation-icon
+      visible: false
+      map: [ "empty-icon" ]
+  - type: Item
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/kinetic_accelerator.rsi
+    size: Normal
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/kinetic_accelerator.rsi
+    quickEquip: false
+    slots:
+    - suitStorage
+
+# chimp.rsi
+- type: entity
+  parent: WeaponPistolCHIMPPvrsifvlAlt2
+  categories: [ HideSpawnMenu ]
+  id: WeaponPistolCHIMPCyberBobeks
+  name: излучатель Syn.V // Gen.2
+  description: В крайней степени модифицированный экземпляр продвинутого прибора R&D М.А.Р.Т.Ы.Х, лишённый любой летальности несмотря на свой вызывающий облик, далеко опередивший оригинальный вид.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/chimp.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/chimp.rsi
+
+# outer.rsi
+- type: entity
+  parent: ClothingOuterVestPvrsifvlAlt2
+  id: ClothingOuterVestCyberBobeks
+  name: тактический бронежилет Syn.V
+  description: Модифицированный бронежилет, который пережил уже многое...
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/outer.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/outer.rsi
+  - type: Tag
+    tags: [ ]
+
+# tools_jawsoflife.rsi
+- type: entity
+  parent: JawsOfLife
+  id: JawsOfLifeCyberBobeks
+  name: челюсти жизни Syn.V // Gen.2
+  description: На первый взгляд обычные челюсти жизни, пока не замечаешь пару кровавых пятен на рабочей части устройства. Кажется, владельца лучше не задерживать на стойке...
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/CyberBobeks/tools_jawsoflife.rsi
+    state: syn_jaws_pry
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: syn_inhand-left
+      right:
+      - state: syn_inhand-right
+    size: Normal
+  - type: MultipleTool
+    entries:
+      - behavior: Prying
+        sprite:
+          sprite: _DeadSpace/Sponsor/CyberBobeks/tools_jawsoflife.rsi
+          state: syn_jaws_pry
+        useSound: /Audio/Items/jaws_pry.ogg
+        changeSound: /Audio/Items/change_jaws.ogg
+      - behavior: Cutting
+        sprite:
+          sprite: _DeadSpace/Sponsor/CyberBobeks/tools_jawsoflife.rsi
+          state: syn_jaws_cutter
+        useSound: /Audio/Items/jaws_cut.ogg
+        changeSound: /Audio/Items/change_jaws.ogg
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 10
+  - type: Tool
+    speedModifier: 1.0
+
+# tools_powerdrill.rsi
+- type: entity
+  parent: PowerDrillPvrsifvlAlt2
+  id: PowerDrillCyberBobeks
+  name: электродрель Syn.V
+  description: Владельцу точно можно доверить работу с ядерной боеголовкой.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/tools_powerdrill.rsi
+    state: drill_screw
+  - type: Item
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/tools_powerdrill.rsi
+    size: Small
+  - type: MultipleTool
+    statusShowBehavior: true
+    entries:
+      - behavior: Screwing
+        sprite:
+          sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/tools_powerdrill.rsi
+          state: drill_screw
+        useSound:
+          path: /Audio/Items/drill_use.ogg
+        changeSound:
+          path: /Audio/Items/change_drill.ogg
+      - behavior: Anchoring
+        sprite:
+          sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/tools_powerdrill.rsi
+          state: drill_bolt
+        useSound:
+          path: /Audio/Items/drill_use.ogg
+        changeSound:
+          path: /Audio/Items/change_drill.ogg
+
+# tools_welder.rsi
+- type: entity
+  parent: WelderExperimentalPvrsifvlAlt2
+  id: WelderExperimentalCyberBobeks
+  name: экспериментальный сварочный пистолет Syn.V-TEST // Gen.1
+  description: Модифицированный сварочный пистолет с гравировкой "ТЕСТ". А не еб*нёт?...
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/tools_welder.rsi
+  - type: Item
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/tools_welder.rsi
+
+# tools_multitool.rsi
+- type: entity
+  parent: Multitoolnon_stop_smetana
+  id: MultitoolCyberBobeks
+  name: мультитул Syn.V // Gen.2
+  description: Устройство точно не занесёт вредоносный код в коносль управления блюспейс-артелерии.
+  categories: [ HideSpawnMenu ]
+
+# tools_gasanalyzer.rsi
+- type: entity
+  parent: GasAnalyzerPvrsifvlAlt2
+  id: GasAnalyzerCyberBobeks
+  name: газоанализатор Syn.V
+  description: Устройство для просмотра забавных значений трития в атмосфере.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/tools_gasanalyzer.rsi
+    layers:
+    - state: icon
+      map: ["analyzer"]
+
+# tools_holofanprojector.rsi
+- type: entity
+  parent: HolofanProjectorPvrsifvlAlt2
+  id: HolofanProjectorCyberBobeks
+  name: атмос-проектор Syn.V // Gen.2
+  description: Проектор для защиты владельца от всякой нечести. Жаль что работает плохо...
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/tools_holofanprojector.rsi
+    state: icon
+  - type: LimitedHolosignProjector
+    signProto: HoloFanPvrsifvlAlt2
+
+# tools_massscanner.rsi
+- type: entity
+  parent: HandHeldMassScannerPvrsifvlAlt2
+  id: HandHeldMassScannerCyberBobeks
+  name: сканер масс Syn.V
+  description: Когда-нибудь на нём появится место, куда можно свалить и где о тебе не вспомнят.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Item
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/tools_massscanner.rsi
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/tools_massscanner.rsi
+    state: icon
+    layers:
+    - state: icon
+    - state: scanner
+      shader: unshaded
+      visible: false
+      map: [ "enum.PowerDeviceVisualLayers.Powered" ]
+
+# tools_rcd.rci
+- type: entity
+  parent: RCD
+  id: RCDCyberBobeks
+  name: РСУ Syn.V // Gen.1
+  description: Устройство на случай если закончились патроны. Жаль что заряды ограничены...
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/tools_rcd.rsi
+    layers:
+    - state: icon
+
+# tools_anomalyscanner.rsi
+- type: entity
+  parent: AnomalyScannerPvrsifvlAlt2
+  id: AnomalyScannerCyberBobeks
+  name: сканер аномалий Syn.V
+  description: Сканер аномалий, но лучше сразу стрелять с М.А.Р.Т.Ы.Х'а, авось прокатит...
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/tools_anomalyscanner.rsi
+    layers:
+      - state: icon
+        map: ["enum.AnomalyScannerVisualLayers.Base"]
+      - map: ["enum.AnomalyScannerVisualLayers.Screen"]
+        visible: false
+        shader: unshaded
+      - state: severity_mask
+        map: ["enum.AnomalyScannerVisualLayers.SeverityMask"]
+        visible: false
+        shader: unshaded
+      - map: ["enum.AnomalyScannerVisualLayers.Stability"]
+        visible: false
+        shader: unshaded
+      - visible: false
+        map: ["enum.AnomalyScannerVisualLayers.Pulse"]
+        shader: unshaded
+      - state: supercritical
+        map: ["enum.AnomalyScannerVisualLayers.Supercritical"]
+        shader: unshaded
+        visible: false

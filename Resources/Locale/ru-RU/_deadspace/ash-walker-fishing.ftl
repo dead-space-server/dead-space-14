@@ -1,0 +1,34 @@
+ent-AshWalkerFishingRod = костяная удочка
+    .desc = Удилище из кости с обмотанной шкурой рукоятью, костяным крючком и жаростойкой леской из жил.
+ent-LavaFishingFloat = поплавок
+ent-AshWalkerLavaFish = лавовый угорь
+    .desc = Небольшой угорь с жаростойкой кожей. Его мясо можно есть после приготовления.
+ent-AshWalkerArmoredFish = панцирная лавовая рыба
+    .desc = Коренастая рыба с толстой перекрывающейся чешуёй. Поймать трудно, зато она сытная.
+ent-AshWalkerSoulFish = бледная лавовая рыба
+    .desc = Редкая бледная рыба, которую ценит племя. Целая рыба заменяет одну тушу в обряде возвращения.
+ent-AshWalkerFishCooked = жареная лавовая рыба
+    .desc = Плотное рыбное мясо с хрустящей подкопчённой кожей.
+lava-fishing-collect = Забрать улов
+lava-fishing-cancel = Смотать леску
+lava-fishing-window-title = Рыбалка
+lava-fishing-window-waiting = Ожидание поклёвки…
+lava-fishing-window-bite = Поклёвка! Нажми { $key }
+lava-fishing-window-reeling = Вываживание
+lava-fishing-window-controls =
+    Удерживай { $key } — зона движется вправо.
+    Отпусти { $key } — зона движется влево.
+lava-fishing-window-waiting-hint = При поклёвке нажми { $key }, чтобы подсечь.
+lava-fishing-window-goal = Держи белую отметку внутри цветной рамки.
+lava-fishing-window-finish = Заполни шкалу улова. За пределами рамки прогресс убывает.
+lava-fishing-window-catch = Улов
+lava-fishing-window-progress = { $percent }%
+lava-fishing-no-bait = Сначала насади на крючок кусочек еды.
+lava-fishing-cannot-bait = Сейчас нельзя добавить наживку.
+lava-fishing-bait-added = Наживка добавлена. Запас: { $count } из { $max }.
+lava-fishing-bait-count = Наживка: { $count } из { $max }.
+lava-fishing-catch-held = На крючке удерживается пойманный улов.
+lava-fishing-free-hand = Освободи руку и забери улов с удочки.
+lava-fishing-depleted = Здесь стало тихо. Попробуй другой участок лавы или вернись позже.
+lava-fishing-escaped = Улов сорвался. Нужна новая наживка.
+lava-fishing-caught = Вы поймали { $catch }!

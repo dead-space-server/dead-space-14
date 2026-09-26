@@ -16,7 +16,6 @@ public sealed partial class PlantVisualizerSystem : VisualizerSystem<PlantVisual
         SubscribeLocalEvent<PlantVisualsComponent, ComponentInit>(OnComponentInit);
         SubscribeLocalEvent<PlantVisualsComponent, ComponentStartup>(OnComponentStartup);
         SubscribeLocalEvent<PlantComponent, AfterAutoHandleStateEvent>(OnPlantState);
-        SubscribeLocalEvent<PlantHarvestComponent, AfterAutoHandleStateEvent>(OnHarvestState);
         SubscribeLocalEvent<PlantHolderComponent, AfterAutoHandleStateEvent>(OnHolderState);
         SubscribeLocalEvent<EntityUid>(UpdateSprite);
     }
@@ -49,13 +48,6 @@ public sealed partial class PlantVisualizerSystem : VisualizerSystem<PlantVisual
         UpdateSprite(ent.Owner);
     }
 
-    private void OnHarvestState(Entity<PlantHarvestComponent> ent, ref AfterAutoHandleStateEvent args)
-    {
-        UpdateSprite(ent.Owner);
-        if (_plant.TryGetTray(ent.Owner, out var trayEnt))
-            _plantTrayVisualizer.UpdateTrayWarnings(trayEnt.AsNullable());
-    }
-
     private void OnHolderState(Entity<PlantHolderComponent> ent, ref AfterAutoHandleStateEvent args)
     {
         UpdateSprite(ent.Owner);
@@ -66,7 +58,7 @@ public sealed partial class PlantVisualizerSystem : VisualizerSystem<PlantVisual
     private void UpdateSprite(EntityUid plantUid)
     {
         if (!HasComp<PlantVisualsComponent>(plantUid)
-            || !TryComp<PlantHarvestComponent>(plantUid, out var harvest)
+            || !TryComp<PlantHolderComponent>(plantUid, out var holder) // DS14
             || !TryComp<SpriteComponent>(plantUid, out var sprite))
         {
             return;
@@ -75,7 +67,7 @@ public sealed partial class PlantVisualizerSystem : VisualizerSystem<PlantVisual
         string state;
 
         var dead = _plantHolder.IsDead(plantUid);
-        var harvestReady = harvest.ReadyForHarvest;
+        var harvestReady = holder.ReadyForHarvest; // DS14
         var growthStage = _plant.GetGrowthStageValue(plantUid);
 
         if (dead)

@@ -238,3 +238,26 @@
   conditions:
   - !type:TileNotBlocked
 
+- type: construction
+  id: BedWood
+  graph: BedWood
+  startNode: start
+  targetNode: bedWood
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: NTTribune
+  graph: NTTribune
+  startNode: start
+  targetNode: tribune
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked

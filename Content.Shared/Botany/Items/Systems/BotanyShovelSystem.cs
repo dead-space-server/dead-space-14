@@ -14,17 +14,22 @@ namespace Content.Shared.Botany.Items.Systems;
 /// </summary>
 public sealed partial class BotanyShovelSystem : EntitySystem
 {
-    // DS14-start: current engine uses explicit event subscriptions.
+    // DS14-start: current engine uses explicit event subscriptions and query initialization.
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<ShovelComponent, AfterInteractEvent>(OnAfterInteract);
         SubscribeLocalEvent<PlantTrayComponent, TrayShovelAttemptEvent>(OnTrayShovelAttempt);
+        _plantQuery = GetEntityQuery<PlantComponent>();
+        _trayQuery = GetEntityQuery<PlantTrayComponent>();
     }
     // DS14-end
 
-    // DS14-start: current engine uses readonly IoC fields.
+    // DS14-start
+    private EntityQuery<PlantComponent> _plantQuery;
+    private EntityQuery<PlantTrayComponent> _trayQuery;
+
     [Dependency] private readonly PlantSystem _plant = default!;
     [Dependency] private readonly PlantTraySystem _plantTray = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
@@ -37,14 +42,14 @@ public sealed partial class BotanyShovelSystem : EntitySystem
 
         // Allow interacting with either the plant or the tray.
         var target = args.Target.Value;
-        if (HasComp<PlantComponent>(target))
+        if (_plantQuery.HasComp(target)) // DS14
         {
             if (!_plant.TryGetTray(target, out var tray))
                 return;
 
             target = tray.Owner;
         }
-        else if (!HasComp<PlantTrayComponent>(target))
+        else if (!_trayQuery.HasComp(target)) // DS14
             return;
 
         var ev = new TrayShovelAttemptEvent(ent, args.User);

@@ -4,3 +4,6 @@ ent-VendingMachineToys = ИгрушкоМат
     .desc = Игровой автомат с игрушками, точно не лохотрон!
 ent-VendingMachineClothingCapes = Плащвенд
     .desc = Автомат с различными плащами.
+ent-VendingMachineMedicalRescue = НаноМед Плюс
+    .suffix = Медицинская эвакуация
+    .desc = Медицинский автомат с запасом препаратов для оказания неотложной помощи.

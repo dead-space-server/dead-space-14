@@ -7,6 +7,7 @@
     tags:
     - ParryEnergySword
   - type: Parry # DS14
+    requiresActiveToggle: true # DS14
     parryableWeapons:
       tags:
       - ParryStandardWeapon

@@ -1,0 +1,19 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from tgstation. Licensed under CC-BY-SA-3.0.",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "gutlunch",
+            "directions": 4
+        },
+        {
+            "name": "gl_full",
+            "directions": 4
+        }
+    ]
+}

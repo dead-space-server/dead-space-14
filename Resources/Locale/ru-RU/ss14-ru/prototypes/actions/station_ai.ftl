@@ -18,3 +18,5 @@ ent-AIActionAGhostShowCrewMonitoring = { ent-ActionAGhostShowCrewMonitoring }
     .desc = { ent-ActionAGhostShowCrewMonitoring.desc }
 ent-AIActionAGhostShowStationRecords = { ent-ActionAGhostShowStationRecords }
     .desc = { ent-ActionAGhostShowStationRecords.desc }
+ent-AIActionAGhostShowCriminalRecords = { ent-ActionAGhostShowCriminalRecords }
+    .desc = { ent-ActionAGhostShowCriminalRecords.desc }

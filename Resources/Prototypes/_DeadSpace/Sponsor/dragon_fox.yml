@@ -82,6 +82,7 @@
 - type: entity
   parent: ClothingOuterHardsuitSecurity
   id: ClothingOuterHardsuitDragonFoxEvent
+  categories: [ HideSpawnMenu ]
   name: силовой доспех эгида
   description: Доспех изготавливают из самых продвинутых сплавов керамита, адамантия и некоторых других металлов. Точный состав сплава хранится в строжайшей тайне. Все элементы доспеха покрываются гексаграммными оберегами, омываются священными маслами и заклинаются древними защитными заклинаниями.
   components:
@@ -112,6 +113,7 @@
 - type: entity
   parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuitDragonFoxEvent
+  categories: [ HideSpawnMenu ]
   name: шлем эгида
   description: Это имперский шлем типа «Аэгис», предназначенный для защиты владельца от психических атак.
   components:
@@ -272,9 +274,9 @@
 - type: entity
   parent: ClothingBackpack
   id: ClothingBackpackSingleStrapКhaki
+  categories: [ HideSpawnMenu ]
   name: однолямочный  рюкзак
   description: Однолямочный рюкзак для хранения вещей. Окрашен в зелёный хаки.
-  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/backpack.rsi
@@ -363,6 +365,7 @@
   parent: ClothingOuterHardsuitBase
   id: ClothingOuterHardsuitDragonFoxMedTech
   name: скафандр Боевой Прототип Медика
+  categories: [ HideSpawnMenu ]
   description: Скафандр оснащен передовыми медицинскими датчиками и устройствами, такими как мониторы сердечного ритма, датчики кислорода в крови и температуры тела, а также портативные медицинские лаборатории. Скафандр имеет модульную конструкцию, что позволяет адаптировать его под различные миссии и условия эксплуатации.
   components:
   - type: Armor
@@ -413,6 +416,7 @@
   parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
   id: ClothingHeadHelmetHardsuitDragonFoxMedTech
   name: шлем скафандра Боевого Прототипа Медика
+  categories: [ HideSpawnMenu ]
   description:
   components:
   - type: Sprite
@@ -432,6 +436,7 @@
   id: ClothingBeltWebbingDragonFoxMedTech
   name: РПС МедТех-Элит
   description: Обеспечивает надёжную фиксацию и удобство при переноске необходимых предметов, что делает её незаменимой в полевых условиях.
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/other/belt.rsi
@@ -457,6 +462,7 @@
   id: ClothingShoesBootsMagDragonFoxMedTech
   name: магнитные сапоги МедТех-Элит
   description: Представляют собой инновационное решение для медицинского персонала, обеспечивающее комфорт и безопасность при работе в условиях, требующих повышенной защиты и удобства.
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/other/magboots.rsi
@@ -474,6 +480,7 @@
   id: ClothingHandsGlovesDragonFoxMedTech
   name: боевые перчатки МедТех-Элит
   description: предназначены для защиты рук медицинского персонала в условиях, требующих повышенной прочности и защиты.
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/other/gloves.rsi
@@ -485,6 +492,7 @@
   id: PDADragonFoxMedTech
   name: КПК МедТех-Элит
   description: Защищённый карманный компьютер с высокой производительностью и надёжной конструкцией. Также оснащён встроенным анализатором здоровья.
+  categories: [ HideSpawnMenu ]
   components:
   - type: Icon
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/other/pda.rsi
@@ -508,6 +516,7 @@
   id: ClothingUniformJumpsuitDragonFoxMedTech
   name: униформа МедТех-Элит
   description: Разработана с учетом специфики работы медицинского персонала и обеспечивает комфорт и функциональность.
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/other/jumpsuit.rsi
@@ -519,6 +528,7 @@
   id: ClothingEyesHudMultiversalDragonFoxMedTech
   name: визор МедТех-Элит
   description: Предназначен для анализа здоровья пациента и его должности, также обеспечивает надёжную защиту глаз от вспышек и защиту от сварочных работ.
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/MedTech/other/hud.rsi
@@ -547,6 +557,7 @@
   parent: RCDCE
   name: РСУ МедТех-Элит
   description: Улучшенная версия базового РСУ которая самовосстанавливет заряды, может быстро размещать и демонтировать стены, полы и шлюзы.
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/rcd.rsi
@@ -562,6 +573,7 @@
   parent: BaseItem
   description: Гипоспрей МедТех-Элит является современным и эффективным инструментом для медицинской практики, обеспечивающим комфорт как для медицинского персонала, так и для пациентов. Устройство позволяет быстро и безболезненно вводить необходимые препараты.
   id: HypoDragonfox
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/hypo.rsi

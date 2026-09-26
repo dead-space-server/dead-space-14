@@ -1,5 +1,6 @@
 
 using Content.Server.Administration.Systems;
+using Content.Server.DeadSpace.Weapons.Smart; // DS14
 using Content.Server.Physics.Controllers;
 using Content.Server.Weapons.Ranged.Systems;
 using Robust.Shared.Prototypes;
@@ -10,7 +11,7 @@ namespace Content.Server.Physics.Components;
 /// <summary>
 /// A component which makes its entity chasing entity with selected component.
 /// </summary>
-[RegisterComponent, Access(typeof(ChasingWalkSystem), typeof(AdminVerbSystem), typeof(GunSystem)), AutoGenerateComponentPause]
+[RegisterComponent, Access(typeof(ChasingWalkSystem), typeof(AdminVerbSystem), typeof(GunSystem), typeof(SmartWeaponServerSystem)), AutoGenerateComponentPause] // DS14: added SmartWeaponServerSystem access
 public sealed partial class ChasingWalkComponent : Component
 {
     /// <summary>
@@ -104,4 +105,12 @@ public sealed partial class ChasingWalkComponent : Component
     /// </summary>
     [DataField]
     public Angle RotationAngleOffset = Angle.Zero;
+    // DS14-start
+
+    /// <summary>
+    /// Задержка перед началом магнетизма.
+    /// </summary>
+    [DataField]
+    public float MagnetismDelay = 0f;
+    // DS14-end
 }

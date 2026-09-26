@@ -16,6 +16,23 @@
           Quantity: 10
 
 - type: entity
+  parent: ChemistryEmptyVial
+  id: ArtifexiumChemistryVial
+  name: пробирка
+  description: Маленькая пробирка.
+  suffix: Артифексиум
+  components:
+  - type: Label
+    currentLabel: артифексиум
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: Artifexium
+          Quantity: 30
+
+- type: entity
   parent: BaseChemistryEmptyVial
   id: BluespaceVial
   name: блюспейс пробирка

@@ -259,6 +259,7 @@ stack-rolling-paper =
     }
 stack-fulton = фултон
 stack-credit = кредиты
+stack-dirty-credit = грязные кредиты # DS14
 stack-plasma =
     { $amount ->
         [1] лист

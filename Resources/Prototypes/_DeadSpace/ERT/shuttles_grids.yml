@@ -56,12 +56,12 @@
 - type: ertShuttle
   id: FOStormShuttle
   path: /Maps/Shuttles/ERT/ultimateFO.yml
-  dockTag: DockCentcommERTOfficialShuttle
+  dockTag: DockCentcommERTFieldOfficerShuttle
 
 - type: ertShuttle
   id: FODeathMessengerShuttle
   path: /Maps/Shuttles/ERT/baseFO.yml
-  dockTag: DockCentcommERTOfficialShuttle
+  dockTag: DockCentcommERTFieldOfficerShuttle
 
 - type: ertShuttle
   id: EngineersShuttle

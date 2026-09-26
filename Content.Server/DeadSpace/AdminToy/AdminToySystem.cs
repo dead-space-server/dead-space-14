@@ -21,6 +21,8 @@ using Content.Shared.DeadSpace.AdminToy;
 using Content.Shared.DeadSpace.Languages.Components;
 using Content.Shared.DeadSpace.Languages.Prototypes;
 using Content.Shared.GameTicking;
+using Content.Shared.Follower;
+using Content.Shared.Follower.Components;
 using Content.Shared.Light;
 using Content.Shared.Light.Components;
 using Content.Shared.Mind;
@@ -72,6 +74,7 @@ public sealed class AdminToySystem : EntitySystem
     [Dependency] private readonly MetaDataSystem _metadata = default!;
     [Dependency] private readonly SharedPointLightSystem _pointLight = default!;
     [Dependency] private readonly SharedRgbLightControllerSystem _rgb = default!;
+    [Dependency] private readonly FollowerSystem _follower = default!;
     [Dependency] private readonly LanguageSystem _language = default!;
     [Dependency] private readonly IAdminLogManager _adminLogger = default!;
     [Dependency] private readonly IReplayRecordingManager _replay = default!;
@@ -674,6 +677,9 @@ public sealed class AdminToySystem : EntitySystem
 
         if (component.AdminUserId is { } adminUserId)
             _adminToys.Remove(adminUserId);
+
+        if (TryComp<FollowerComponent>(uid, out var follower))
+            _follower.StopFollowingEntity(uid, follower.Following);
 
         if (unvisit && component.AdminMindId is {Valid: true} mindId && TryComp<MindComponent>(mindId, out var mind))
         {

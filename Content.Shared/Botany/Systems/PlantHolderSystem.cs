@@ -11,18 +11,21 @@ namespace Content.Shared.Botany.Systems;
 /// </summary>
 public sealed partial class PlantHolderSystem : EntitySystem
 {
-    // DS14-start: current engine uses explicit event subscriptions.
+    // DS14-start: current engine uses explicit event subscriptions and query initialization.
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<PlantHolderComponent, CloningEvent>(OnCloning);
         SubscribeLocalEvent<PlantHolderComponent, DamageChangedEvent>(OnDamageChanged);
+        _plantQuery = GetEntityQuery<PlantComponent>();
     }
     // DS14-end
 
-    // DS14-start: current engine uses readonly IoC fields.
+    // DS14-start
     [Dependency] private readonly ISerializationManager _serialization = default!;
+
+    private EntityQuery<PlantComponent> _plantQuery;
     // DS14-end
 
     private void OnCloning(Entity<PlantHolderComponent> ent, ref CloningEvent args)
@@ -54,7 +57,7 @@ public sealed partial class PlantHolderSystem : EntitySystem
         if (!Resolve(ent.Owner, ref ent.Comp))
             return;
 
-        if (!TryComp<PlantComponent>(ent.Owner, out var plant))
+        if (!_plantQuery.TryComp(ent.Owner, out var plant)) // DS14
             return;
 
         ent.Comp.Health += amount;
@@ -178,7 +181,7 @@ public sealed partial class PlantHolderSystem : EntitySystem
     public bool GetHealthThreshold(Entity<PlantHolderComponent?> ent)
     {
         if (!Resolve(ent.Owner, ref ent.Comp, false)
-            || !TryComp<PlantComponent>(ent.Owner, out var plant))
+            || !_plantQuery.TryComp(ent.Owner, out var plant)) // DS14
             return false;
 
         return ent.Comp.Health <= plant.Endurance * 0.5f;

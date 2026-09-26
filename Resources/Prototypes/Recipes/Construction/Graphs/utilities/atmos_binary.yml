@@ -76,6 +76,44 @@
         amount: 2
         doAfter: 1
 
+    # DS14-start
+    - to: temperaturevalve
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 1
+    - to: temperaturevalveAlt1
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 1
+    - to: temperaturevalveAlt2
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 1
+    - to: heatexchanger
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 1
+    - to: temperaturepump
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 1
+    - to: temperaturepumpAlt1
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 1
+    - to: temperaturepumpAlt2
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 1
+    # DS14-end
+
     - to: signalvalve
       steps:
       - material: Steel
@@ -493,3 +531,117 @@
         doAfter: 1
       - tool: Welding
         doAfter: 1
+
+  # DS14-start
+  - node: temperaturevalve
+    entity: GasTemperatureValve
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetSteel1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1
+
+  - node: temperaturevalveAlt1
+    entity: GasTemperatureValveAlt1
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetSteel1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1
+
+  - node: temperaturevalveAlt2
+    entity: GasTemperatureValveAlt2
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetSteel1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1
+
+  - node: heatexchanger
+    entity: GasHeatExchanger
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetSteel1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1
+
+  - node: temperaturepump
+    entity: GasTemperaturePump
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetSteel1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1
+
+  - node: temperaturepumpAlt1
+    entity: GasTemperaturePumpAlt1
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetSteel1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1
+
+  - node: temperaturepumpAlt2
+    entity: GasTemperaturePumpAlt2
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetSteel1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1
+  # DS14-end

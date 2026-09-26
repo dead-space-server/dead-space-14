@@ -20,7 +20,7 @@ namespace Content.Shared.Botany.Systems;
 /// </summary>
 public sealed partial class PlantTraySystem : EntitySystem
 {
-    // DS14-start: current engine uses explicit event subscriptions.
+    // DS14-start: current engine uses explicit event subscriptions and query initialization.
     public override void Initialize()
     {
         base.Initialize();
@@ -28,10 +28,12 @@ public sealed partial class PlantTraySystem : EntitySystem
         SubscribeLocalEvent<PlantTrayComponent, ExaminedEvent>(OnExamine);
         SubscribeLocalEvent<PlantTrayComponent, SolutionTransferredEvent>(OnSolutionTransferred);
         SubscribeLocalEvent<PlantTrayComponent, EntRemovedFromContainerMessage>(OnEntRemoved);
+        _dataQuery = GetEntityQuery<PlantDataComponent>();
+        _weedPestQuery = GetEntityQuery<PlantWeedPestComponent>();
     }
     // DS14-end
 
-    // DS14-start: current engine uses readonly IoC fields.
+    // DS14-start
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
@@ -40,6 +42,9 @@ public sealed partial class PlantTraySystem : EntitySystem
     [Dependency] private readonly SharedEntityEffectsSystem _entityEffects = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+
+    private EntityQuery<PlantDataComponent> _dataQuery;
+    private EntityQuery<PlantWeedPestComponent> _weedPestQuery;
     // DS14-end
 
     private void OnExamine(Entity<PlantTrayComponent> ent, ref ExaminedEvent args)
@@ -52,7 +57,7 @@ public sealed partial class PlantTraySystem : EntitySystem
             if (!TryGetPlant(ent.AsNullable(), out var plantUid))
             {
                 args.PushMarkup(Loc.GetString("tray-component-nothing-planted-message"));
-                if (TryComp<PlantDataComponent>(plantUid, out var plantData))
+                if (_dataQuery.TryComp(plantUid, out var plantData)) // DS14
                 {
                     var name = Loc.GetString(plantData.Name);
                     args.PushMarkup(Loc.GetString("plant-component-something-already-growing-message", ("seedName", name)));
@@ -148,7 +153,7 @@ public sealed partial class PlantTraySystem : EntitySystem
 
         if (TryGetPlant(ent, out var plantUid))
         {
-            if (!TryComp<PlantWeedPestComponent>(plantUid.Value, out var weedPestGrowth))
+            if (!_weedPestQuery.TryComp(plantUid.Value, out var weedPestGrowth)) // DS14
                 return;
 
             if (ent.Comp.WeedLevel > weedPestGrowth.WeedTolerance)

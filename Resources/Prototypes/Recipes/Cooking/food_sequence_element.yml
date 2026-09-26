@@ -72,7 +72,7 @@
 - type: foodSequenceElement
   id: MeatPatty
   sprites:
-  - sprite: Objects/Consumable/Food/meat.rsi
+  - sprite: Objects/Consumable/Food/burger_sequence.rsi # DS14
     state: patty
   tags:
   - Cooked
@@ -153,8 +153,10 @@
   id: MeatChicken
   name: food-sequence-content-chicken
   sprites:
-  - sprite: Objects/Consumable/Food/meat.rsi
-    state: chicken-fried
+  # DS14-start
+  - sprite: Objects/Consumable/Food/burger_sequence.rsi
+    state: bird-cooked
+  # DS14-end
   tags:
   - Cooked
   - Meat
@@ -181,7 +183,7 @@
   id: MeatDuck
   name: food-sequence-content-duck
   sprites:
-  - sprite: Objects/Consumable/Food/meat.rsi
+  - sprite: Objects/Consumable/Food/burger_sequence.rsi # DS14
     state: bird-cooked
   tags:
   - Cooked
@@ -533,8 +535,10 @@
   id: Cabbage
   name: food-sequence-content-cabbage
   sprites:
-  - sprite: Objects/Specific/Hydroponics/cabbage.rsi
-    state: produce
+  # DS14-start
+  - sprite: Objects/Consumable/Food/burger_sequence.rsi
+    state: cabbage
+  # DS14-end
   tags:
   - Vegetable
 
@@ -542,8 +546,10 @@
   id: CabbageBurger
   name: food-sequence-burger-content-cabbage
   sprites:
-  - sprite: Objects/Specific/Hydroponics/cabbage.rsi
-    state: produce
+  # DS14-start
+  - sprite: Objects/Consumable/Food/burger_sequence.rsi
+    state: cabbage
+  # DS14-end
   tags:
   - Vegetable
 
@@ -650,8 +656,10 @@
   id: Tomato
   name: food-sequence-content-tomato
   sprites:
-  - sprite: Objects/Specific/Hydroponics/tomato.rsi
-    state: produce
+  # DS14-start
+  - sprite: Objects/Consumable/Food/burger_sequence.rsi
+    state: tomato
+  # DS14-end
   tags:
   - Fruit
   - Vegetable
@@ -740,8 +748,10 @@
   id: OnionSliceBurger
   name: food-sequence-burger-content-onion
   sprites:
-  - sprite: Objects/Specific/Hydroponics/onion.rsi
-    state: slice
+  # DS14-start
+  - sprite: Objects/Consumable/Food/burger_sequence.rsi
+    state: onion
+  # DS14-end
   tags:
   - Vegetable
   - Slice

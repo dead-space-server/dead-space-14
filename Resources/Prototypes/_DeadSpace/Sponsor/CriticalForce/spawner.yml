@@ -6,41 +6,82 @@
     state: tti
 
 - type: startingGear
-  id: CriticalForceOfficerEMT
+  id: CriticalForceOfficerMedic
   equipment:
     jumpsuit: ClothingJumpsuitCriticalForce
     back: ClothingBackpackCriticalForce
     mask: ClothingMaskGasOfficerCriticalForce
-    eyes: ClothingEyesHudAdvanced
+    eyes: ClothingEyesHudMedSec
     ears: ClothingHeadsetAltCriticalForce
     gloves: ClothingHandsGlovesCombatCriticalForce
-    outerClothing: ClothingOuterHardsuitOfficerCriticalForce
+    outerClothing: ClothingOuterHardsuitCriticalForceMedic
+    suitstorage: WeaponPistolMk58
     shoes: ClothingShoesMagBootsCriticalForce
     id: CriticalForceOfficerEMTIDCard
-    belt: ClothingBeltWisdomCriticalForceSec
+    belt: ClothingBeltWisdomCriticalForceEMT
+    pocket1: PinpointerVipClient
     pocket2: DoubleEmergencyOxygenTankFilled
   storage:
     back:
+    - MedkitAdvancedFilled
     - JawsOfLife
-    - EmergencyMedipen
     - KukriKnife
-    - BoxMRE
-    - WeaponSubMachineGunDrozd
-    - DefibrillatorCompact
-    - MedkitCombatFilled
-    - EmergencyRollerBedSpawnFolded
-    - BodyBagFolded
     - HandheldGPSBasic
-    - PinpointerVipClient
-    - Syringe
-    - InjectorCaseStimFilled
-    - InjectorCaseFilled
+    - EmergencyRollerBedSpawnFolded
+    - DefibrillatorCompact
     - HandheldHealthAnalyzer
+    - BodyBagFolded
+    belt:
+    - MagazinePistol
+    - MagazinePistol
+    - JetInjector
+    - ChemistryBottleOmnizine
+    - ChemistryBottleBicaridine
+    - ChemistryBottleDexalinPlus
+    - ChemistryBottleEpinephrine
+    - ChemistryBottleDermaline
+    - PillCanisterIron
+    - PillCanisterDylovene
+    - PillCanisterHyronalin
+    - EmergencyMedipen
+    - EmergencyMedipen
+
+- type: startingGear
+  id: CriticalForceOfficerSecurity
+  equipment:
+    jumpsuit: ClothingJumpsuitCriticalForce
+    back: ClothingBackpackCriticalForce
+    mask: ClothingMaskGasOfficerCriticalForce
+    eyes: ClothingEyesHudMedSec
+    ears: ClothingHeadsetAltCriticalForce
+    gloves: ClothingHandsGlovesCombatCriticalForce
+    outerClothing: ClothingOuterHardsuitCriticalForceSecurity
+    suitstorage: WeaponSubMachineGunDrozd
+    shoes: ClothingShoesMagBootsCriticalForce
+    id: CriticalForceOfficerEMTIDCard
+    belt: ClothingBeltWisdomCriticalForceEMT
+    pocket1: PinpointerVipClient
+    pocket2: DoubleEmergencyOxygenTankFilled
+  storage:
+    back:
+    - MedkitCombatFilled
+    - JawsOfLife
+    - KukriKnife
+    - HandheldGPSBasic
+    belt:
+    - MagazinePistolSubMachineGun
+    - MagazinePistolSubMachineGun
+    - MagazinePistolSubMachineGun
+    - MagazinePistolSubMachineGun
+    - ADTtelescopicBaton
+    - Zipties
+    - Zipties
 
 - type: entity
-  parent: ClothingBeltMilitaryWebbing
-  id: ClothingBeltWisdomCriticalForceSec 
-  name: РПС CriticalForce безопасника
+  parent: ClothingBeltStorageBase
+  id: ClothingBeltWisdomCriticalForceEMT
+  categories: [ HideSpawnMenu ]
+  name: разгрузка спасателя CriticalForce
   description: Разгрузочный жилет, необходимый для спасения жизней в экстремальных условиях.
   components:
   - type: Storage
@@ -50,11 +91,6 @@
     sprite: _DeadSpace/Sponsor/Wisdom/belt.rsi
   - type: Item
     size: Huge
-  - type: StorageFill
-    contents:
-      - id: MagazinePistolSubMachineGun
-        amount: 4
-      - id: ChemistryBottleNecrosol
 
 - type: entity
   parent: IDCardStandard
@@ -67,21 +103,28 @@
     jobTitle: job-title-tti-officer
     jobIcon: JobIconCriticalForce
   - type: Access
-    groups:
-    - GroupCounterpartyNT
-    - General
+    tags:
+    - CounterpartyNT
+    - Medical
+    - Paramedic
+    - Coroner
+    - Maintenance
+    - External
   - type: Sprite
     layers:
     - state: silver
     - state: idbrigmedic
 
 - type: randomHumanoidSettings
-  id: EventHumanoidCriticalForceOfficer
+  id: EventHumanoidCriticalForceMedic
   parent: EventHumanoidERT
   components:
+    - type: AutoImplant
+      implants:
+      - MindShieldImplant
     - type: GhostRole
       name: Офицер CriticalForce
-      description: Вы зафискировали смерть спонсора на активе НТ! Немедленно бросить все свои силы на его спасение!
+      description: Стабилизируйте указанного пациента и организуйте медицинскую эвакуацию. Согласуйте действия с медотделом и службой безопасности станции.
       rules: ghost-role-information-tti-rules
       requirements:
         - !type:DepartmentTimeRequirement
@@ -93,7 +136,38 @@
       raffle:
         settings: short
     - type: Loadout
-      prototypes: [ CriticalForceOfficerEMT ]
+      prototypes: [ CriticalForceOfficerMedic ]
+    - type: RandomMetadata
+      nameSegments:
+      - NamesCriticalForceOfficerEMT
+      - NamesLastERT
+      nameFormat: name-format-ert
+    - type: NpcFactionMember
+      factions:
+      - NanoTrasen
+
+- type: randomHumanoidSettings
+  id: EventHumanoidCriticalForceSecurity
+  parent: EventHumanoidERT
+  components:
+    - type: AutoImplant
+      implants:
+      - MindShieldImplant
+    - type: GhostRole
+      name: Офицер CriticalForce
+      description: Стабилизируйте указанного пациента и организуйте медицинскую эвакуацию. Согласуйте действия с медотделом и службой безопасности станции.
+      rules: ghost-role-information-tti-rules
+      requirements:
+        - !type:DepartmentTimeRequirement
+          department: Medical
+          time: 36000 # 10 hours
+        - !type:DepartmentTimeRequirement
+          department: Security
+          time: 36000 # 10 hours
+      raffle:
+        settings: short
+    - type: Loadout
+      prototypes: [ CriticalForceOfficerSecurity ]
     - type: RandomMetadata
       nameSegments:
       - NamesCriticalForceOfficerEMT
@@ -104,10 +178,19 @@
       - NanoTrasen
 
 - type: entity
-  id: RandomHumanoidSpawnerCriticalForceOfficerEMT
+  id: RandomHumanoidSpawnerCriticalForceMedic
   # categories: [ HideSpawnMenu ]
   parent: RandomHumanoidSpawnerERTMedicalAmber
   name: Офицер Критикал-Форс
   components:
     - type: RandomHumanoidSpawner
-      settings: EventHumanoidCriticalForceOfficer
+      settings: EventHumanoidCriticalForceMedic
+
+- type: entity
+  id: RandomHumanoidSpawnerCriticalForceSecurity
+  # categories: [ HideSpawnMenu ]
+  parent: RandomHumanoidSpawnerERTMedicalAmber
+  name: Офицер Критикал-Форс
+  components:
+    - type: RandomHumanoidSpawner
+      settings: EventHumanoidCriticalForceSecurity

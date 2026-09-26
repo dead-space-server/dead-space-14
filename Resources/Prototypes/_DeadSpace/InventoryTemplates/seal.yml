@@ -1,0 +1,54 @@
+- type: inventoryTemplate
+  id: seal
+  slots:
+  - name: head
+    slotTexture: head
+    slotFlags: HEAD
+    uiWindowPos: 0,0
+    strippingWindowPos: 1,0
+    displayName: Head
+    whitelist:
+      tags:
+      - SealWearable
+  - name: mask
+    slotTexture: mask
+    slotFlags: MASK
+    uiWindowPos: 0,1
+    strippingWindowPos: 1,1
+    displayName: Mask
+    whitelist:
+      tags:
+      - SealWearable
+  - name: suitstorage
+    slotTexture: suit_storage
+    slotFlags: SUITSTORAGE
+    stripTime: 3
+    uiWindowPos: 0,2
+    strippingWindowPos: 2,5
+    displayName: Suit Storage
+    whitelist:
+      tags:
+      - SealWearable
+
+- type: inventoryTemplate
+  id: sealPup
+  slots:
+  - name: mask
+    slotTexture: mask
+    slotFlags: MASK
+    uiWindowPos: 0,1
+    strippingWindowPos: 1,1
+    displayName: Mask
+    whitelist:
+      tags:
+      - SealWearable
+  - name: suitstorage
+    slotTexture: suit_storage
+    slotFlags: SUITSTORAGE
+    stripTime: 3
+    uiWindowPos: 0,2
+    strippingWindowPos: 2,5
+    displayName: Suit Storage
+    whitelist:
+      tags:
+      - SealWearable

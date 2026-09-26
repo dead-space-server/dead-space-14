@@ -239,6 +239,7 @@
       tags:
       - SmallMech
   - type: Vehicle
+    requiresHands: false # DS14
     transferDamageModifier:
       coefficients:
         Blunt: 0.2
@@ -309,6 +310,7 @@
     maxEquipmentAmount: 0
     airtight: true
   - type: Vehicle
+    requiresHands: false # DS14
     transferDamageModifier:
       coefficients:
         Blunt: 0.1

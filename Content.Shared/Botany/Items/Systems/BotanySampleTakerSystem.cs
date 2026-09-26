@@ -16,33 +16,35 @@ namespace Content.Shared.Botany.Items.Systems;
 /// </summary>
 public sealed partial class BotanySampleTakerSystem : EntitySystem
 {
-    // DS14-start: current engine uses explicit event subscriptions.
+    // DS14-start: current engine uses explicit event subscriptions and query initialization.
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<BotanySampleTakerComponent, AfterInteractEvent>(OnAfterInteract);
         SubscribeLocalEvent<PlantComponent, PlantSampleAttemptEvent>(OnPlantSampleAttempt);
+
+        _holderQuery = GetEntityQuery<PlantHolderComponent>();
+        _dataQuery = GetEntityQuery<PlantDataComponent>();
+        _plantQuery = GetEntityQuery<PlantComponent>();
     }
     // DS14-end
 
-    // DS14-start: current engine uses readonly IoC fields.
+    // DS14-start
     [Dependency] private readonly BotanySystem _botany = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
     [Dependency] private readonly PlantSystem _plant = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
-    // DS14-end
 
-    // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly EntityQuery<PlantHolderComponent> _holderQuery = default!;
-    [Dependency] private readonly EntityQuery<PlantDataComponent> _dataQuery = default!;
-    [Dependency] private readonly EntityQuery<PlantHarvestComponent> _harvestQuery = default!;
+    private EntityQuery<PlantHolderComponent> _holderQuery;
+    private EntityQuery<PlantDataComponent> _dataQuery;
+    private EntityQuery<PlantComponent> _plantQuery;
     // DS14-end
 
     private void OnAfterInteract(Entity<BotanySampleTakerComponent> ent, ref AfterInteractEvent args)
     {
-        if (args.Target == null || args.Handled || !args.CanReach || !HasComp<PlantComponent>(args.Target))
+        if (args.Target == null || args.Handled || !args.CanReach || !_plantQuery.HasComp(args.Target)) // DS14
             return;
 
         var ev = new PlantSampleAttemptEvent(ent, args.User);
@@ -57,8 +59,7 @@ public sealed partial class BotanySampleTakerSystem : EntitySystem
             return;
 
         if (!_holderQuery.TryComp(ent.Owner, out var holder)
-            || !_dataQuery.TryComp(ent.Owner, out var plantData)
-            || !_harvestQuery.TryComp(ent.Owner, out var harvest))
+            || !_dataQuery.TryComp(ent.Owner, out var plantData))
             return;
 
         if (_plantHolder.IsDead((ent.Owner, holder)))
@@ -81,7 +82,7 @@ public sealed partial class BotanySampleTakerSystem : EntitySystem
         _plantHolder.AdjustsHealth((ent.Owner, holder), -random.NextFloat(args.Sample.Comp.SampleDamage.Min, args.Sample.Comp.SampleDamage.Max));
 
         // Produce a seed packet snapshot.
-        float? healthOverride = harvest.ReadyForHarvest ? null : holder.Health;
+        float? healthOverride = holder.ReadyForHarvest ? null : holder.Health; // DS14
         var protoId = MetaData(ent.Owner).EntityPrototype!.ID;
         _botany.SpawnSeedPacket(plantData, protoId, ent.Owner, Transform(args.User).Coordinates, args.User, healthOverride);
 

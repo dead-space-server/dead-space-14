@@ -41,6 +41,12 @@ public sealed partial class ParryComponent : Component
     [DataField]
     public ProtoId<AlertPrototype> CooldownAlert = "ParryCooldown";
 
+    /// <summary>
+    /// Whether the item must be toggled on before it can parry.
+    /// </summary>
+    [DataField]
+    public bool RequiresActiveToggle;
+
     [AutoNetworkedField]
     public TimeSpan CooldownStart;
 

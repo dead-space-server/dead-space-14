@@ -84,15 +84,6 @@
   - !type:HalonExtinguishReaction {}
 
 - type: gasReaction
-  id: HalonProduction
-  priority: 3
-  minimumTemperature: 1500
-  minimumRequirements:
-    Frezon: 0.01
-  effects:
-  - !type:HalonProductionReaction {}
-
-- type: gasReaction
   id: ZaukerProduction
   priority: 3
   minimumTemperature: 50000

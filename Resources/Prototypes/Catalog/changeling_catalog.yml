@@ -181,6 +181,39 @@
     stock: 1
   productComponents: ChangelingNightVisionDummy
 
+# DS14-start
+- type: listing
+  id: ChangelingAdrenaline
+  name: changeling-catalog-adrenaline-name
+  description: changeling-catalog-adrenaline-desc
+  icon: { sprite: /Textures/_DeadSpace/Actions/changeling_adrenaline.rsi, state: adrenaline }
+  applyToMob: true
+  cost:
+    ChangelingDNA: 15
+  categories:
+  - ChangelingStoreUtility
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+  productAction: ActionChangelingAdrenaline
+# DS14-end
+# DS14-start
+- type: listing
+  id: ChangelingCocoon
+  name: changeling-catalog-cocoon-name
+  description: changeling-catalog-cocoon-desc
+  icon: { sprite: /Textures/_DeadSpace/Actions/changeling_cocoon.rsi, state: cocoon }
+  applyToMob: true
+  cost:
+    ChangelingDNA: 15
+  categories:
+  - ChangelingStoreUtility
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+  productComponents: ChangelingCocoonDummy
+# DS14-end
+
 - type: listing
   id: ChangelingScreech
   name: changeling-catalog-screech-name

@@ -1,6 +1,8 @@
 using Content.Shared.DeviceLinking;
 using Content.Shared.DeviceLinking.Events;
+using Content.Shared.Weapons.Hitscan.Components;
 using Content.Shared.Weapons.Hitscan.Events;
+using Content.Shared.Weapons.Hitscan.Systems;
 using Content.Shared.Weapons.Ranged.Components;
 
 namespace Content.Shared.Weapons.Ranged.Systems;
@@ -12,20 +14,24 @@ public partial class SharedGunSystem
     // DS14-Start - pre-v288 explicit event subscriptions
     private void InitializeTargetFinder()
     {
-        SubscribeLocalEvent<TargetFinderHitscanComponent, HitscanRaycastFiredEvent>(OnHitscanHit);
+        SubscribeLocalEvent<TargetFinderHitscanComponent, AttemptHitscanRaycastFiredEvent>(OnHitscanAttempt,
+            before: [typeof(HitscanReflectSystem)]); // DS14 - lock the original hit before reflection recursion.
         SubscribeLocalEvent<TargetFinderComponent, MapInitEvent>(OnTargetFinderMapInit);
         SubscribeLocalEvent<TargetFinderComponent, NewLinkEvent>(OnNewLink);
         SubscribeLocalEvent<TargetFinderComponent, PortDisconnectedEvent>(OnPortDisconnected);
     }
     // DS14-End
 
-    public void OnHitscanHit(Entity<TargetFinderHitscanComponent> entity, ref HitscanRaycastFiredEvent args)
+    // DS14-start
+    public void OnHitscanAttempt(Entity<TargetFinderHitscanComponent> entity, ref AttemptHitscanRaycastFiredEvent args)
     {
-        if (!HasComp<TargetFinderComponent>(args.Data.Gun))
+        if (!HasComp<TargetFinderComponent>(args.Data.Gun) ||
+            TryComp<HitscanReflectComponent>(entity, out var reflect) && reflect.CurrentReflections > 0)
             return;
 
         UpdateTarget(args.Data.Gun, args.Data.HitEntity);
     }
+    // DS14-end
 
     private void OnTargetFinderMapInit(Entity<TargetFinderComponent> ent, ref MapInitEvent args)
     {

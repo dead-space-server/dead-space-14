@@ -11,22 +11,25 @@ namespace Content.Shared.Botany.Systems;
 /// </summary>
 public sealed partial class PlantWeedPestSystem : EntitySystem
 {
-    // DS14-start: current engine uses explicit event subscriptions.
+    // DS14-start: current engine uses explicit event subscriptions and query initialization.
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<PlantWeedPestComponent, PlantCrossPollinateEvent>(OnCrossPollinate);
         SubscribeLocalEvent<PlantWeedPestComponent, PlantGrowEvent>(OnPlantGrow);
+        _trayQuery = GetEntityQuery<PlantTrayComponent>();
     }
     // DS14-end
 
-    // DS14-start: current engine uses readonly IoC fields.
+    // DS14-start
     [Dependency] private readonly BotanySystem _botany = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly PlantMutationSystem _mutation = default!;
     [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
     [Dependency] private readonly PlantTraySystem _plantTray = default!;
+
+    private EntityQuery<PlantTrayComponent> _trayQuery;
     // DS14-end
 
     private void OnCrossPollinate(Entity<PlantWeedPestComponent> ent, ref PlantCrossPollinateEvent args)
@@ -34,15 +37,17 @@ public sealed partial class PlantWeedPestSystem : EntitySystem
         if (!_botany.TryGetPlantComponent<PlantWeedPestComponent>(args.PollenData, args.PollenProtoId, out var pollenData))
             return;
 
-        _mutation.CrossFloat(ent, ref ent.Comp.WeedTolerance, pollenData.WeedTolerance);
-        _mutation.CrossFloat(ent, ref ent.Comp.PestTolerance, pollenData.PestTolerance);
+        // DS14-start
+        _mutation.CrossFloat(ref ent.Comp.WeedTolerance, pollenData.WeedTolerance);
+        _mutation.CrossFloat(ref ent.Comp.PestTolerance, pollenData.PestTolerance);
+        // DS14-end
         Dirty(ent);
     }
 
     private void OnPlantGrow(Entity<PlantWeedPestComponent> ent, ref PlantGrowEvent args)
     {
         var trayUid = GetEntity(args.Tray);
-        if (!TryComp<PlantTrayComponent>(trayUid, out var tray))
+        if (!_trayQuery.TryComp(trayUid, out var tray)) // DS14
             return;
 
         if (_random.Prob(ent.Comp.PestGrowthChance))

@@ -121,3 +121,8 @@
   parent: BaseSpecifiedDoubleBedsheetRecipe
   id: DoubleBedsheetBrigmedic
   result: DoubleBedsheetBrigmedic
+
+- type: latheRecipe
+  parent: BaseBedsheetRecipe
+  id: BedsheetComfort
+  result: BedsheetComfort

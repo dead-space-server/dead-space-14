@@ -125,7 +125,7 @@
     sprintModifier: 0.8
   - type: FootstepModifier # DS14
     footstepSoundCollection:
-      collection: SquidFootsteps 
+      collection: SquidFootsteps
 
 - type: entity
   parent: [ClothingShoesBaseButcherable, BaseHighlyIllegalContraband]
@@ -146,7 +146,7 @@
   - type: FootstepModifier
     footstepSoundCollection: null
   - type: ClothingGrantComponent
-    component: 
+    component:
       - type: RenegadeCANTRenegadeForce
 
 - type: entity
@@ -208,6 +208,46 @@
     - type: ChameleonClothing
       slot: [FEET]
       default: ClothingShoesColorBlack
+
+#DS-14-start
+- type: entity
+  parent: [ClothingShoesBase, BaseChameleon]
+  id: ClothingShoesTaipanClownChameleon
+  name: ботинки
+  suffix: Тайпан
+  description: Стильные чёрные ботинки.
+  components:
+    - type: Tag
+      tags: # ignore "WhitelistChameleon" tag
+      - ClothMade
+      - Recyclable
+    - type: Sprite
+      sprite: Clothing/Shoes/color.rsi
+      layers:
+      - state: icon
+        color: "#3f3f3f"
+      - state: soles-icon
+    - type: Clothing
+      sprite: Clothing/Shoes/color.rsi
+      clothingVisuals:
+        shoes:
+        - state: equipped-FEET
+          color: "#1d1d1d"
+        - state: soles-equipped-FEET
+    - type: Item
+      inhandVisuals:
+        left:
+        - state: inhand-left
+          color: "#3f3f3f"
+        - state: soles-inhand-left
+        right:
+        - state: inhand-right
+          color: "#3f3f3f"
+        - state: soles-inhand-right
+    - type: ChameleonClothing
+      slot: [FEET]
+      default: ClothingShoesClownLarge
+#DS-14-end
 
 - type: entity
   parent: ClothingShoesChameleon

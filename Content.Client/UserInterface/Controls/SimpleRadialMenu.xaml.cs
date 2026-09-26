@@ -9,12 +9,15 @@ using Robust.Client.UserInterface.XAML;
 using Robust.Client.Input;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Prototypes;
+using System.Linq;
 
 namespace Content.Client.UserInterface.Controls;
 
 [GenerateTypedNameReferences]
 public sealed partial class SimpleRadialMenu : RadialMenu
 {
+    private static readonly RadialMenuOptionComparer Comparer = new(); // DS14
+
     private EntityUid? _attachMenuToEntity;
 
     [Dependency] private readonly IClyde _clyde = default!;
@@ -63,7 +66,7 @@ public sealed partial class SimpleRadialMenu : RadialMenu
         };
         rootControlChildren.Add(rootContainer);
 
-        foreach (var model in models)
+        foreach (var model in SortOptions(models)) // DS14
         {
             if (model is RadialMenuNestedLayerOption nestedMenuModel)
             {
@@ -78,6 +81,23 @@ public sealed partial class SimpleRadialMenu : RadialMenu
             }
         }
     }
+
+    // DS14-start
+    private IEnumerable<RadialMenuOptionBase> SortOptions(IEnumerable<RadialMenuOptionBase> models)
+    {
+        switch (models)
+        {
+            case RadialMenuOptionBase[] asArray:
+                Array.Sort(asArray, Comparer);
+                return asArray;
+            case List<RadialMenuOptionBase> asList:
+                asList.Sort(Comparer);
+                return asList;
+            default:
+                return models.Order(Comparer);
+        }
+    }
+    // DS14-end
 
     private RadialMenuButton RecursiveContainerExtraction(
         SpriteSystem sprites,
@@ -94,7 +114,7 @@ public sealed partial class SimpleRadialMenu : RadialMenu
             ReserveSpaceForHiddenChildren = false,
             Visible = false
         };
-        foreach (var nested in model.Nested)
+        foreach (var nested in SortOptions(model.Nested)) // DS14
         {
             if (nested is RadialMenuNestedLayerOption nestedMenuModel)
             {
@@ -316,8 +336,17 @@ public sealed record RadialMenuEntityPrototypeIconSpecifier(EntProtoId ProtoId) 
 /// <summary> Container for common options for radial menu button. </summary>
 public abstract class RadialMenuOptionBase
 {
-    /// <summary> Tooltip to be displayed when button is hovered. </summary>
+    // DS14-start
+    /// <summary>
+    /// Tooltip to display when the button is hovered and to sort by when no order is given.
+    /// </summary>
     public string? ToolTip { get; init; }
+
+    /// <summary>
+    /// Relative menu order. Lower values appear first, followed by options without an explicit order.
+    /// </summary>
+    public int? Order { get; init; }
+    // DS14-end
 
     /// <summary>
     /// Color for button background.

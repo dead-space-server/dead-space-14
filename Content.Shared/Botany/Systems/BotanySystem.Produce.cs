@@ -70,21 +70,26 @@ public sealed partial class BotanySystem
     /// Spawns a produce item from a plant and produces the produce.
     /// </summary>
     [PublicAPI]
-    public void SpawnProduce(Entity<PlantComponent?, PlantDataComponent?> ent, EntityCoordinates position)
+    public void SpawnProduce(Entity<PlantComponent?, PlantDataComponent?> ent, EntityCoordinates position, int amount) // DS14
     {
         if (!Resolve(ent, ref ent.Comp1, ref ent.Comp2, false))
             return;
 
         var random = SharedRandomExtensions.PredictedRandom(_timing, GetNetEntity(ent));
-        var product = random.Pick(ent.Comp2.ProductPrototypes);
-        var entity = PredictedSpawnAtPosition(product, position);
-        _randomHelper.RandomOffset(entity, 0.25f, random);
+        // DS14-start - keep one random sequence so a multi-yield harvest does not clone one identical roll.
+        for (var i = 0; i < amount; i++)
+        {
+            var product = random.Pick(ent.Comp2.ProductPrototypes);
+            var entity = PredictedSpawnAtPosition(product, position);
+            _randomHelper.RandomOffset(entity, 0.25f, random);
 
-        var produce = EnsureComp<ProduceComponent>(entity);
-        produce.PlantProtoId = MetaData(ent.Owner).EntityPrototype!.ID;
-        produce.PlantData = ClonePlantSnapshotData(ent.Owner, parent: entity);
-        Dirty(entity, produce);
-        ProduceGrown((entity, produce));
-        _appearance.SetData(entity, ProduceVisuals.Potency, ent.Comp1.Potency);
+            var produce = EnsureComp<ProduceComponent>(entity);
+            produce.PlantProtoId = MetaData(ent.Owner).EntityPrototype!.ID;
+            produce.PlantData = ClonePlantSnapshotData(ent.Owner, parent: entity);
+            Dirty(entity, produce);
+            ProduceGrown((entity, produce));
+            _appearance.SetData(entity, ProduceVisuals.Potency, ent.Comp1.Potency);
+        }
+        // DS14-end
     }
 }

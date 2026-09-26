@@ -585,6 +585,15 @@
   - type: Sprite
     sprite: _DeadSpace/Clothing/Underwear/xmas.rsi
 
+- type: entity
+  parent: ClothingUnderwearSocksBase
+  id: ClothingUnderwearSocksThighBaltica9
+  name: чулки балтики9
+  description: Для настоящих любителей пива
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Underwear/baltica9.rsi
+
 # Taipan
 
 - type: entity

@@ -4,9 +4,11 @@ using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
+using Content.Shared.Storage;
 using Content.Shared.Throwing;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Physics;
@@ -43,8 +45,9 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         SubscribeLocalEvent<EmbeddableProjectileComponent, ComponentShutdown>(OnEmbeddableCompShutdown);
 
         SubscribeLocalEvent<EmbeddedContainerComponent, EntityTerminatingEvent>(OnEmbeddableTermination);
+        SubscribeLocalEvent<EmbeddedContainerComponent, ContainerGettingInsertedAttemptEvent>(OnEmbeddedContainerInsertAttempt); // DS14
         SubscribeLocalEvent<ComplexProjectileDamageComponent, BeforeProjectileHitEvent>(OnBeforeComplexProjectileHit);
-        SubscribeLocalEvent<ProjectileComponent, MapInitEvent>(OnBeingShot); // DS14 - pre-v288 explicit event subscription
+        SubscribeLocalEvent<ProjectileComponent, ProjectileShotEvent>(OnBeingShot); // DS14 - pre-v288 explicit event subscription
     }
 
     private void OnEmbedActivate(Entity<EmbeddableProjectileComponent> embeddable, ref ActivateInWorldEvent args)
@@ -194,6 +197,16 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         DetachAllEmbedded(container);
     }
 
+    // DS14-start
+    private void OnEmbeddedContainerInsertAttempt(EntityUid uid,
+        EmbeddedContainerComponent component,
+        ContainerGettingInsertedAttemptEvent args)
+    {
+        if (component.EmbeddedObjects.Count != 0 && HasComp<StorageComponent>(args.Container.Owner))
+            args.Cancel();
+    }
+    // DS14-end
+
     private void OnBeforeComplexProjectileHit(Entity<ComplexProjectileDamageComponent> ent, ref BeforeProjectileHitEvent args)
     {
         foreach (var option in ent.Comp.DamageOptions)
@@ -205,7 +218,7 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         }
     }
 
-    private void OnBeingShot(Entity<ProjectileComponent> entity, ref MapInitEvent args)
+    private void OnBeingShot(Entity<ProjectileComponent> entity, ref ProjectileShotEvent args) // DS14
     {
         entity.Comp.WhenToStopIgnoringShooter = _timing.CurTime + entity.Comp.DelayToAcknowledgeShooter;
         Dirty(entity);
@@ -268,6 +281,14 @@ public record struct ProjectileReflectAttemptEvent(EntityUid ProjUid, Projectile
 {
     SlotFlags IInventoryRelayEvent.TargetSlots => SlotFlags.WITHOUT_POCKET;
 }
+
+// DS14-start
+/// <summary>
+/// Raised whenever an existing projectile entity is fired from a gun.
+/// </summary>
+[ByRefEvent]
+public record struct ProjectileShotEvent;
+// DS14-end
 
 /// <summary>
 /// Raised when a projectile hits an entity

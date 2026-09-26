@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Created by ripentropy (Discord) for Space Station 14 Server Мёртвый Космос",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    { "name": "empty", "directions": 1 },
+    { "name": "alt_empty", "directions": 1 },
+    { "name": "red_tank", "directions": 1 },
+    { "name": "blue_tank", "directions": 1 },
+    { "name": "red_tank_icon", "directions": 1, "delays": [[0.1, 0.1, 0.1, 0.1, 0.1]] },
+    { "name": "blue_tank_icon", "directions": 1, "delays": [[0.1, 0.1, 0.1, 0.1, 0.1]] },
+    { "name": "spend", "directions": 1 },
+    { "name": "spend_empty", "directions": 1 },
+    {
+      "name": "active",
+      "directions": 1,
+      "delays": [
+        [ 0.15, 0.15, 0.15, 0.15, 0.15 ]
+      ]
+    },
+    { "name": "inhand-left", "directions": 4 },
+    { "name": "inhand-right", "directions": 4 },
+    { "name": "equipped-BELT", "directions": 4 }
+  ]
+}

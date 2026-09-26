@@ -8,6 +8,7 @@ using Content.Server.Preferences.Managers;
 using Content.Server.Roles.Jobs;
 using Content.Server.Station.Systems;
 using Content.Shared.DeadSpace.CustomizableHumanoidSpawner;
+using Content.Shared.DeadSpace.GhostRoleIntroduction;
 using Content.Shared.Mind.Components;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Preferences;
@@ -158,6 +159,13 @@ public sealed class CustomizableHumanoidSpawnerSystem : EntitySystem
             RemComp(newEntity, component.GetType());
             AddComp(newEntity, component);
             EnsureComp<GhostTakeoverAvailableComponent>(newEntity);
+        }
+
+        if (TryComp<GhostRoleIntroductionComponent>(uid, out var introduction))
+        {
+            var component = (Component) _serialization.CreateCopy(introduction, notNullableOverride: true);
+            RemComp(newEntity, component.GetType());
+            AddComp(newEntity, component);
         }
 
         if (comp.Factions != null)

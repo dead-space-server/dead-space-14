@@ -234,6 +234,11 @@
             - !type:ReagentCondition
               reagent: NecromorphMutagenStalker
               min: 5
+        - !type:CauseInfectionDead
+          conditions:
+            - !type:ReagentCondition
+              reagent: NecromorphMutagenStalker
+              min: 5
 
 - type: reagent
   id: NecromorphMutagenCorpseCollector
@@ -250,6 +255,11 @@
         - !type:NecromorphMutagen
           isAnimal: false
           necroPrototype: NecroCorpseCollector
+          conditions:
+            - !type:ReagentCondition
+              reagent: NecromorphMutagenCorpseCollector
+              min: 5
+        - !type:CauseInfectionDead
           conditions:
             - !type:ReagentCondition
               reagent: NecromorphMutagenCorpseCollector
@@ -274,6 +284,11 @@
             - !type:ReagentCondition
               reagent: NecromorphMutagenDeva
               min: 5
+        - !type:CauseInfectionDead
+          conditions:
+            - !type:ReagentCondition
+              reagent: NecromorphMutagenDeva
+              min: 5
 
 - type: reagent
   id: NecromorphMutagenBoomer
@@ -294,6 +309,11 @@
             - !type:ReagentCondition
               reagent: NecromorphMutagenBoomer
               min: 5
+        - !type:CauseInfectionDead
+          conditions:
+            - !type:ReagentCondition
+              reagent: NecromorphMutagenBoomer
+              min: 5
 
 - type: reagent
   id: NecromorphMutagenPregnant
@@ -310,6 +330,11 @@
         - !type:NecromorphMutagen
           isAnimal: false
           necroPrototype: NecroPregnant
+          conditions:
+            - !type:ReagentCondition
+              reagent: NecromorphMutagenPregnant
+              min: 5
+        - !type:CauseInfectionDead
           conditions:
             - !type:ReagentCondition
               reagent: NecromorphMutagenPregnant

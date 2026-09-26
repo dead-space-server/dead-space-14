@@ -1,3 +1,4 @@
+using System.IO;
 using System.Text.RegularExpressions;
 using Content.Shared.DeadSpace.Ports.Jukebox;
 using Content.Shared.Popups;
@@ -20,12 +21,12 @@ public sealed partial class TapeCreatorMenu : DefaultWindow
     [Dependency] private readonly EntityManager _entityManager = default!;
     [Dependency] private readonly IFileDialogManager _fileDialogManager = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
-    private readonly CheZaHuetaSystem _huetaSystem = default!;
+    [Dependency] private readonly ClientJukeboxSongsSyncManager _songs = default!;
     private readonly SharedPopupSystem _popupSystem = default!;
 
-    private double _maxFileSize;
-    private double _currentFileSize;
-    private readonly List<byte> _songBytes = new();
+    private byte[] _songBytes = Array.Empty<byte>();
+    private bool _uploading;
+    private bool _loading;
     private Entity<TapeCreatorComponent> _entity;
 
     private const double BytesToMegabytes = 0.000001d;
@@ -35,10 +36,7 @@ public sealed partial class TapeCreatorMenu : DefaultWindow
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
 
-        _huetaSystem = _entityManager.System<CheZaHuetaSystem>();
         _popupSystem = _entityManager.System<SharedPopupSystem>();
-
-        _cfg.OnValueChanged(JKCVars.MaxJukeboxSongSizeInMB, x => _maxFileSize = x, true);
 
         _entity = entity;
 
@@ -46,7 +44,7 @@ public sealed partial class TapeCreatorMenu : DefaultWindow
         UploadSong.OnPressed += OnUploadButtonPressed;
     }
 
-    private void OnUploadButtonPressed(BaseButton.ButtonEventArgs obj)
+    private async void OnUploadButtonPressed(BaseButton.ButtonEventArgs obj)
     {
         if(!CanUploadSong()) return;
 
@@ -67,10 +65,17 @@ public sealed partial class TapeCreatorMenu : DefaultWindow
             TapeCreatorUid = _entityManager.GetNetEntity(_entity.Owner)
         };
 
-        _huetaSystem.SendNetMessage(msg);
-
-        _currentFileSize = 0;
-        _songBytes.Clear();
+        _uploading = true;
+        var uploaded = await _songs.UploadSong(msg);
+        _uploading = false;
+        if (Disposed)
+            return;
+        if (!uploaded)
+        {
+            _popupSystem.PopupEntity("Не удалось передать запись. Попробуйте ещё раз.", _entity.Owner);
+            return;
+        }
+        _songBytes = Array.Empty<byte>();
         SongNameField.Clear();
 
         _popupSystem.PopupEntity("Внимание. Начинается запись мозговой активности.", _entity.Owner);
@@ -78,25 +83,39 @@ public sealed partial class TapeCreatorMenu : DefaultWindow
 
     private async void TryLoadSong(BaseButton.ButtonEventArgs obj)
     {
-        var fileFilter = new FileDialogFilters(new FileDialogFilters.Group("ogg"));
-
-        var file = await _fileDialogManager.OpenFile(fileFilter);
-
-        if (Disposed) return;
-
-        if(file == null) return;
-
-        _currentFileSize = file.Length * BytesToMegabytes;
-
-        if (_currentFileSize > _maxFileSize)
+        _loading = true;
+        LoadSongButton.Disabled = true;
+        try
         {
-            _popupSystem.PopupEntity($"Лимит активности мозговых волн превышен на {_currentFileSize - _maxFileSize} мегахрюков", _entity.Owner);
-            return;
+            var fileFilter = new FileDialogFilters(new FileDialogFilters.Group("ogg"));
+            using var file = await _fileDialogManager.OpenFile(fileFilter);
+            if (Disposed || file == null)
+                return;
+
+            var size = file.Length * BytesToMegabytes;
+            var limit = _cfg.GetCVar(JKCVars.MaxJukeboxSongSizeInMB);
+            if (size > limit)
+            {
+                _popupSystem.PopupEntity($"Лимит активности мозговых волн превышен на {size - limit} мегахрюков", _entity.Owner);
+                return;
+            }
+
+            using var buffer = new MemoryStream();
+            await file.CopyToAsync(buffer);
+            if (!Disposed)
+                _songBytes = buffer.ToArray();
         }
-
-        //TODO: Песня слишком длинная пиздец
-
-        _songBytes.AddRange(file.CopyToArray());
+        catch (Exception)
+        {
+            if (!Disposed)
+                _popupSystem.PopupEntity("Не удалось прочитать музыкальный файл.", _entity.Owner);
+        }
+        finally
+        {
+            _loading = false;
+            if (!Disposed)
+                LoadSongButton.Disabled = _uploading;
+        }
     }
 
     protected override void FrameUpdate(FrameEventArgs args)
@@ -104,6 +123,7 @@ public sealed partial class TapeCreatorMenu : DefaultWindow
         base.FrameUpdate(args);
 
         CoinsLabel.Text = _entity.Comp.CoinBalance.ToString();
+        LoadSongButton.Disabled = _loading || _uploading;
 
         if (CanUploadSong())
         {
@@ -117,15 +137,6 @@ public sealed partial class TapeCreatorMenu : DefaultWindow
 
     private bool CanUploadSong()
     {
-        return SongNameField.Text.Length > 0 && _songBytes.Count > 0 && _entity.Comp.CoinBalance > 0 && _entity.Comp.InsertedTape.HasValue && !_entity.Comp.Recording;
-    }
-}
-
-
-public sealed class CheZaHuetaSystem : EntitySystem
-{
-    public void SendNetMessage(EntityEventArgs message)
-    {
-        RaiseNetworkEvent(message);
+        return !_loading && !_uploading && SongNameField.Text.Length > 0 && _songBytes.Length > 0 && _entity.Comp.CoinBalance > 0 && _entity.Comp.InsertedTape.HasValue && !_entity.Comp.Recording;
     }
 }

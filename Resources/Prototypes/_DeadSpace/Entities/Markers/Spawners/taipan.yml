@@ -38,6 +38,41 @@
 
 - type: entity
   parent: CustomizableSpawnerBase
+  id: CustomizableSpawnerTaipanClown
+  name: Клоун Синдиката
+  suffix: Тайпан, Призрачная роль, Кастомизируемый персонаж
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: timed
+    - sprite: Markers/jobs.rsi
+      state: clown
+  - type: CustomizableHumanoidSpawner
+    jobPrototype: TaipanClown
+    tags:
+    - TaipanRole
+    factions:
+    - Taipan
+  - type: GhostRole
+    name: job-name-taipan-clown
+    description: job-description-taipan-clown
+    rules: ghost-role-information-taipan-personal-rules
+    job: TaipanClown
+    category: ghost-role-information-taipan-category
+    reregister: false
+    requirements:
+    - !type:RoleTimeRequirement
+      role: JobClown
+      time: 5h
+    - !type:DepartmentTimeRequirement
+      department: Taipan
+      time: 10h
+    raffle:
+      settings: default
+
+- type: entity
+  parent: CustomizableSpawnerBase
   id: CustomizableSpawnerTaipanBotanist
   name: Ботаник
   suffix: Тайпан, Призрачная роль, Кастомизируемый персонаж

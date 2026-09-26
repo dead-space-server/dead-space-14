@@ -13,6 +13,7 @@
   access:
   - CentralCommand
   - SOD
+  - BlueShield
   - ErtTeamLeader
   special:
   - !type:AddImplantSpecial

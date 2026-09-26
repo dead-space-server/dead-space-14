@@ -20,6 +20,31 @@
       slots:
       - Snout
 
+#DS-14-start
+- type: entity
+  parent: [ClothingMaskBase, BaseChameleon]
+  id: ClothingTaipanMaskClownChameleon
+  name: маска
+  description: Покрывающая лицо маска, может быть подключена к воздушному клапану.. ой.. а что это за кнопочка?
+  suffix: Тайпан
+  components:
+    - type: Tag
+      tags: [] # ignore "WhitelistChameleon" tag
+    - type: Sprite
+      sprite: Clothing/Mask/gas.rsi
+    - type: Clothing
+      sprite: Clothing/Mask/gas.rsi
+    - type: ChameleonClothing
+      slot: [mask]
+      default: ClothingMaskClown
+    - type: BreathMask
+    - type: IdentityBlocker # need that for default ClothingMaskGas
+    - type: HideLayerClothing
+      slots:
+      - Snout
+#DS-14-end
+
+
 - type: entity
   parent: ClothingMaskGasChameleon
   id: ClothingMaskGasVoiceChameleon

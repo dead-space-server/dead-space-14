@@ -14,24 +14,25 @@ namespace Content.Shared.Botany.Items.Systems;
 /// </summary>
 public sealed partial class BotanyHoeSystem : EntitySystem
 {
-    // DS14-start: current engine uses explicit event subscriptions.
+    // DS14-start: current engine uses explicit event subscriptions and query initialization.
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<BotanyHoeComponent, AfterInteractEvent>(OnAfterInteract);
         SubscribeLocalEvent<PlantTrayComponent, TrayHoeAttemptEvent>(OnTrayHoeAttempt);
+        _plantQuery = GetEntityQuery<PlantComponent>();
+        _trayQuery = GetEntityQuery<PlantTrayComponent>();
     }
     // DS14-end
 
-    // DS14-start: current engine uses readonly IoC fields.
+    // DS14-start
     [Dependency] private readonly PlantTraySystem _plantTray = default!;
     [Dependency] private readonly PlantSystem _plant = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
-    // DS14-end
 
-    // DS14-start: current engine uses readonly IoC fields.
-    [Dependency] private readonly EntityQuery<PlantComponent> _plantQuery = default!;
+    private EntityQuery<PlantComponent> _plantQuery;
+    private EntityQuery<PlantTrayComponent> _trayQuery;
     // DS14-end
 
     private void OnAfterInteract(Entity<BotanyHoeComponent> ent, ref AfterInteractEvent args)
@@ -48,7 +49,7 @@ public sealed partial class BotanyHoeSystem : EntitySystem
 
             target = tray.Owner;
         }
-        else if (!HasComp<PlantTrayComponent>(target))
+        else if (!_trayQuery.HasComp(target)) // DS14
             return;
 
         var ev = new TrayHoeAttemptEvent(ent, args.User);

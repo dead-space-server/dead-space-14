@@ -76,7 +76,8 @@ public sealed partial class StationJobsSystem
     /// <remarks>
     /// You probably shouldn't use useRoundStartJobs mid-round if the station has been available to join,
     /// as there may end up being more round-start slots than available slots, which can cause weird behavior.
-    /// Round-start allocation attempts each station's minimum roles first, ordered by the station's job weights.
+    /// Priority players choose first, in descending preference order, and count toward the station's minimum roles.
+    /// Round-start allocation then attempts the remaining minimum roles, ordered by the station's job weights.
     /// Unpreferred minimum roles can use an eligible random player when configured to do so.
     /// It then considers remaining players in random order and gives each their highest available preference.
     /// </remarks>
@@ -102,6 +103,8 @@ public sealed partial class StationJobsSystem
         foreach (var station in stations)
         {
             stationJobs.Add(station, GetJobs(station).ToDictionary(x => x.Key, x => x.Value));
+            var available = new StationJobsGetAvailableJobsEvent(station, profiles, stationJobs[station]);
+            RaiseLocalEvent(ref available);
             stationMinimumJobs.Add(
                 station,
                 useRoundStartJobs
@@ -114,7 +117,28 @@ public sealed partial class StationJobsSystem
         var jobCandidates = GetJobCandidates(profiles);
         var playerCandidates = GetPlayerCandidates(jobCandidates);
 
-        // Phase one: complete every required role on a station before considering the next station.
+        var priorityEvent = new StationJobsGetPriorityPlayersEvent(playerCandidates.Keys, new HashSet<NetUserId>());
+        RaiseLocalEvent(ref priorityEvent);
+        var priorityPlayers = priorityEvent.PriorityPlayers.Where(playerCandidates.ContainsKey).ToList();
+
+        for (var priority = JobPriority.High; priority > JobPriority.Never; priority--)
+        {
+            _random.Shuffle(priorityPlayers);
+            foreach (var station in stations)
+            {
+                foreach (var player in priorityPlayers)
+                {
+                    if (!TryPickJob(player, station, priority, stationJobs, playerCandidates, out var job))
+                        continue;
+
+                    AssignPlayer(player, job, station, stationJobs, jobCandidates, playerCandidates, profiles, assigned);
+                    if (stationMinimumJobs[station].TryGetValue(job, out var minimum) && minimum is > 0)
+                        stationMinimumJobs[station][job] = minimum - 1;
+                }
+            }
+        }
+
+        // Complete the remaining required roles on a station before considering the next station.
         // Within a station, job priority win over player preference; player preference breaks ties between candidates.
         var jobFallback = _configurationManager.GetCVar(CCVars.GameMinimumJobFallback);
 
@@ -145,18 +169,14 @@ public sealed partial class StationJobsSystem
             }
         }
 
-        // Phase two: each remaining player gets their highest available preference. Shuffle the player order and
-        // equal-priority jobs so contention is still fair, while preserving station-by-station allocation.
-        foreach (var station in stations)
-        {
-            var players = profiles.Keys.ToList();
-            _random.Shuffle(players);
+        // Compare preferences across stations so an optional station job cannot displace a preferred off-station role.
+        var players = profiles.Keys.ToList();
+        _random.Shuffle(players);
 
-            foreach (var player in players)
-            {
-                if (TryPickJob(player, station, stationJobs, playerCandidates, out var job))
-                    AssignPlayer(player, job, station, stationJobs, jobCandidates, playerCandidates, profiles, assigned);
-            }
+        foreach (var player in players)
+        {
+            if (TryPickJob(player, stations, stationJobs, playerCandidates, out var job, out var station))
+                AssignPlayer(player, job, station, stationJobs, jobCandidates, playerCandidates, profiles, assigned);
         }
 
         return assigned;
@@ -195,13 +215,6 @@ public sealed partial class StationJobsSystem
                 continue;
 
             player = _random.Pick(players);
-            // DS14-start - preserve the local preferred round-start assignee.
-            foreach (var specialPlayer in players)
-            {
-                if (specialPlayer.ToString() == "e4932384-1e5b-4299-bc17-47b3b503040c")
-                    player = specialPlayer;
-            }
-            // DS14-end
             return true;
         }
 
@@ -211,34 +224,49 @@ public sealed partial class StationJobsSystem
 
     private bool TryPickJob(
         NetUserId player,
+        IReadOnlyList<EntityUid> stations,
+        Dictionary<EntityUid, Dictionary<ProtoId<JobPrototype>, int?>> stationJobs,
+        Dictionary<NetUserId, Dictionary<JobPriority, List<ProtoId<JobPrototype>>>> playerCandidates,
+        out ProtoId<JobPrototype> job,
+        out EntityUid station)
+    {
+        for (var priority = JobPriority.High; priority > JobPriority.Never; priority--)
+        {
+            foreach (var candidate in stations)
+            {
+                if (!TryPickJob(player, candidate, priority, stationJobs, playerCandidates, out job))
+                    continue;
+
+                station = candidate;
+                return true;
+            }
+        }
+
+        job = default;
+        station = default;
+        return false;
+    }
+
+    private bool TryPickJob(
+        NetUserId player,
         EntityUid station,
+        JobPriority priority,
         Dictionary<EntityUid, Dictionary<ProtoId<JobPrototype>, int?>> stationJobs,
         Dictionary<NetUserId, Dictionary<JobPriority, List<ProtoId<JobPrototype>>>> playerCandidates,
         out ProtoId<JobPrototype> job)
     {
-        if (!playerCandidates.TryGetValue(player, out var candidates))
-        {
-            job = default;
-            return false;
-        }
-
-        for (var priority = JobPriority.High; priority > JobPriority.Never; priority--)
-        {
-            if (!candidates.TryGetValue(priority, out var jobs))
-                continue;
-
-            var availableJobs = jobs
-                .Where(jobId => stationJobs[station].TryGetValue(jobId, out var slots) && slots is null or > 0)
-                .ToList();
-            if (availableJobs.Count == 0)
-                continue;
-
-            job = _random.Pick(availableJobs);
-            return true;
-        }
-
         job = default;
-        return false;
+        if (!playerCandidates.TryGetValue(player, out var candidates) || !candidates.TryGetValue(priority, out var jobs))
+            return false;
+
+        var availableJobs = jobs
+            .Where(jobId => stationJobs[station].TryGetValue(jobId, out var slots) && slots is null or > 0)
+            .ToList();
+        if (availableJobs.Count == 0)
+            return false;
+
+        job = _random.Pick(availableJobs);
+        return true;
     }
 
     private void AssignPlayer(
@@ -334,7 +362,7 @@ public sealed partial class StationJobsSystem
     {
         var outputDict = new Dictionary<ProtoId<JobPrototype>, Dictionary<JobPriority, HashSet<NetUserId>>>();
 
-        var antagBlocked = _antag.GetPreSelectedAntagSessions(); // DS14
+        var antagBlocked = _antag.GetPreSelectedSessionsAffectingJobSelection(); // DS14
 
         foreach (var (player, profile) in profiles)
         {
@@ -445,7 +473,7 @@ public sealed partial class StationJobsSystem
         }
 
         var candidates = new HashSet<NetUserId>();
-        var antagBlocked = _antag.GetPreSelectedAntagSessions(); // DS14
+        var antagBlocked = _antag.GetPreSelectedSessionsAffectingJobSelection(); // DS14
 
         foreach (var (userId, _) in profiles)
         {

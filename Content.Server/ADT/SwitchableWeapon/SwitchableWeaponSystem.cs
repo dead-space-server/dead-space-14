@@ -3,6 +3,7 @@ using Content.Shared.Damage.Events;
 using Content.Shared.Examine;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
+using Content.Shared.Item.ItemToggle.Components;
 using Content.Shared.ADT.SwitchableWeapon;
 using Content.Shared.Toggleable;
 using Content.Shared.Weapons.Melee.Events;
@@ -25,12 +26,26 @@ public sealed class SwitchableWeaponSystem : EntitySystem
         SubscribeLocalEvent<SwitchableWeaponComponent, StaminaDamageOnHitAttemptEvent>(OnStaminaHitAttempt);
         SubscribeLocalEvent<SwitchableWeaponComponent, GetMeleeDamageEvent>(OnGetMeleeDamage);
         SubscribeLocalEvent<SwitchableWeaponComponent, ComponentAdd>(OnComponentAdded);
+        SubscribeLocalEvent<SwitchableWeaponComponent, ItemToggledEvent>(OnItemToggled); // DS14
     }
 
     private void OnComponentAdded(EntityUid uid, SwitchableWeaponComponent component, ComponentAdd args)
     {
+        // DS14-start
+        if (TryComp<ItemToggleComponent>(uid, out var toggle))
+            component.IsOpen = toggle.Activated;
+        // DS14-end
+
         UpdateState(uid, component);
     }
+
+    // DS14-start
+    private void OnItemToggled(Entity<SwitchableWeaponComponent> entity, ref ItemToggledEvent args)
+    {
+        entity.Comp.IsOpen = args.Activated;
+        UpdateState(entity.Owner, entity.Comp);
+    }
+    // DS14-end
 
     //Non-stamina damage
     private void OnGetMeleeDamage(EntityUid uid, SwitchableWeaponComponent component, ref GetMeleeDamageEvent args)
@@ -74,6 +89,9 @@ public sealed class SwitchableWeaponSystem : EntitySystem
 
     private void Toggle(EntityUid uid, SwitchableWeaponComponent comp, UseInHandEvent args)
     {
+        if (HasComp<ItemToggleComponent>(uid)) // DS14
+            return;
+
         comp.IsOpen = !comp.IsOpen;
         var soundToPlay = comp.IsOpen ? comp.OpenSound : comp.CloseSound;
         _audio.PlayPvs(soundToPlay, args.User);

@@ -523,6 +523,11 @@ public abstract partial class SharedGunSystem : EntitySystem
             Projectiles.SetShooter(uid, projectile, shooter.Value);
 
         TransformSystem.SetWorldRotation(uid, direction.ToWorldAngle() + projectile.Angle);
+
+        // DS14-start: reusable projectiles must restart their shooter-ignore window for every shot.
+        var shotEvent = new ProjectileShotEvent();
+        RaiseLocalEvent(uid, ref shotEvent);
+        // DS14-end
     }
 
     protected abstract void Popup(string message, EntityUid? uid, EntityUid? user);

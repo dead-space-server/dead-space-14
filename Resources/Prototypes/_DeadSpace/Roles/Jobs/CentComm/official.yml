@@ -12,6 +12,7 @@
   - AllAccess
   access:
   - CentralCommand
+  - BlueShield
   - ErtTeamLeader
   special:
   - !type:AddImplantSpecial

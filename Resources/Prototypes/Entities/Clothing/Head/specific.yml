@@ -16,6 +16,26 @@
       slot: [HEAD]
       default: ClothingHeadHatBeret
 
+#DS-14-Start
+- type: entity
+  parent: [ClothingHeadBase, BaseChameleon]
+  id: ClothingHeadHatTaipanClownChameleon
+  name: корона
+  description: Корона, выполненная в цветах радуги.
+  suffix: Тайпан
+  components:
+    - type: Tag
+      tags: # ignore "WhitelistChameleon" tag
+      - ClothMade
+    - type: Sprite
+      sprite: Clothing/Head/Hats/beret.rsi
+    - type: Clothing
+      sprite: Clothing/Head/Hats/beret.rsi
+    - type: ChameleonClothing
+      slot: [HEAD]
+      default: ClothingHeadHatXmasCrown
+#DS-14-End
+
 - type: entity
   parent: ClothingHeadHatFedoraBrown
   id: ClothingHeadHatDetGadget

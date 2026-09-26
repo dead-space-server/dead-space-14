@@ -422,4 +422,14 @@
     soundHit:
       collection: WeakHit
   - type: AltFireMelee
-    attackType: Heavy #DS-14 end
+    attackType: Heavy
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/evidence_bag_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/evidence_bag_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/evidence_bag_drop.ogg
+  #DS-14 end

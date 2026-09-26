@@ -63,6 +63,14 @@
   id: TruncheonBlueShield
   description: Электрошоковое мачете для обездвиживания или убийства людей. Имеет нелетальный и летальный режимы. Является улучшением шоковой дубинки для действительно трудных ситуаций.
   components:
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      - ParryEnergySword
+  - type: Tag
+    tags:
+    - ParryStandardWeapon
   - type: Sprite
     sprite: _DeadSpace/Objects/Weapons/Melee/truncheon_sec.rsi
     layers:
@@ -84,10 +92,21 @@
           Heat: 15
     staminaDamageFolded: 0
     staminaDamageOpen: 40
+  - type: ItemToggleMeleeWeapon
+    activatedDamage:
+      types:
+        Blunt: 0
+    deactivatedDamage:
+      types:
+        Slash: 10
+        Heat: 15
+    activatedSoundOnHit:
+      path: /Audio/Weapons/bladeslice.ogg
+    deactivatedSoundOnHit:
+      path: /Audio/Weapons/bladeslice.ogg
   - type: StaminaDamageOnHit
     damage: 0
   - type: ItemToggle
-    predictable: false
     soundActivate:
       collection: sparks
       params:
@@ -99,7 +118,8 @@
   - type: MeleeWeapon
     damage:
       types:
-        Blunt: 3
+        Slash: 10
+        Heat: 15
     wideAnimationRotation: -135
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
@@ -112,6 +132,7 @@
   - type: Sharp
   - type: Reflect
     reflectProb: .15
+    reflectProbNotToggled: .10
     spread: 90
   - type: GenericVisualizer
     visuals:

@@ -16,5 +16,20 @@ public sealed partial class ResponseErtImplantComponent : Component
     public List<MobState> AllowedStates = new();
 
     [DataField]
-    public EntProtoId ActionPrototype = "ActionCallErtHelp";
+    public EntProtoId? RequiredAntagonistRole;
+
+    [DataField]
+    public LocId ConfirmationTitle = "ert-critical-force-call-title";
+
+    [DataField]
+    public LocId ConfirmationPrompt = "ert-critical-force-call-prompt";
+
+    [DataField]
+    public LocId CallReason = "ert-critical-force-reason";
+
+    [DataField]
+    public LocId RoleDeniedMessage = "ert-critical-force-antagonist-denied";
+
+    [DataField]
+    public bool Used;
 }

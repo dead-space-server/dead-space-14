@@ -1911,6 +1911,7 @@
     - map: [ "outline" ]
       sprite: Mobs/Animals/kobold.rsi
       state: outline
+    - map: [ "jumpsuit" ] # DS14
     - map: [ "horns" ]
       sprite: Mobs/Customization/reptilian_parts.rsi
       state: horns_short
@@ -1921,6 +1922,7 @@
       visible: false
     - map: [ "ears" ]
     - map: [ "id" ]
+    - map: [ "outerClothing" ] # DS14
     - map: [ "mask" ]
     - map: [ "head" ]
     - map: [ "clownedon" ]
@@ -1978,6 +1980,13 @@
   parent: MobBaseKobold
   suffix: syndicate base
   components:
+  # DS14-start: trained reinforcements can coordinate in Galactic Common.
+  - type: Language
+    selectedLanguage: GeneralLanguage
+    knownLanguages:
+    - GeneralLanguage
+    - ReptilianLanguage
+  # DS14-end
   - type: MobThresholds
     thresholds:
       0: Alive

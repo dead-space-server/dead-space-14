@@ -5,38 +5,55 @@ using Content.Shared.Botany.Traits.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Tools.Systems;
+using Content.Shared.Kitchen.Components;
 
 namespace Content.Shared.Botany.Traits.Systems;
 
 /// <inheritdoc cref="PlantTraitLigneousComponent"/>
 public sealed partial class PlantTraitLigneousSystem : EntitySystem
 {
-    // DS14-start: current engine uses readonly IoC fields.
+    // DS14-start
     [Dependency] private readonly PlantHarvestSystem _plantHarvest = default!;
     [Dependency] private readonly PlantHolderSystem _plantHolder = default!;
+    [Dependency] private readonly PlantTraySystem _plantTray = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedToolSystem _tool = default!;
+
+    private EntityQuery<PlantHolderComponent> _holderQuery;
     // DS14-end
 
     public override void Initialize()
     {
-        // DS14-start: current engine uses explicit event subscriptions.
+        // DS14-start: current engine uses explicit event subscriptions and query initialization.
         base.Initialize();
         SubscribeLocalEvent<PlantTraitLigneousComponent, InteractUsingEvent>(OnInteractUsing);
+        SubscribeLocalEvent<PlantTrayComponent, InteractUsingEvent>(OnTrayInteractUsing);
+        _holderQuery = GetEntityQuery<PlantHolderComponent>();
         // DS14-end
 
         SubscribeLocalEvent<PlantTraitLigneousComponent, DoHarvestEvent>(OnDoHarvest, before: [typeof(PlantHarvestSystem)]);
     }
+
+    // DS14-start
+    private void OnTrayInteractUsing(Entity<PlantTrayComponent> ent, ref InteractUsingEvent args)
+    {
+        if (args.Handled || !_plantTray.TryGetPlant(ent.AsNullable(), out var plant) ||
+            !TryComp<PlantTraitLigneousComponent>(plant, out var ligneous))
+            return;
+
+        OnInteractUsing((plant.Value, ligneous), ref args);
+    }
+    // DS14-end
 
     private void OnInteractUsing(Entity<PlantTraitLigneousComponent> ent, ref InteractUsingEvent args)
     {
         if (args.Handled)
             return;
 
-        if (!TryComp<PlantHarvestComponent>(ent.Owner, out var harvest))
+        if (!_holderQuery.TryComp(ent.Owner, out var holder)) // DS14
             return;
 
-        if (!harvest.ReadyForHarvest)
+        if (!holder.ReadyForHarvest) // DS14
             return;
 
         if (_plantHolder.IsDead(ent.Owner))
@@ -47,7 +64,12 @@ public sealed partial class PlantTraitLigneousSystem : EntitySystem
 
         // Ligneous requires sharp tool.
         var harvestToolQuality = ent.Comp.HarvestToolQuality;
-        if (harvestToolQuality.HasValue && !_tool.HasQuality(args.Used, harvestToolQuality.Value))
+        // DS14-start
+        // Scythes and axes use Sharp rather than the Sawing tool quality.
+        // if (harvestToolQuality.HasValue && !_tool.HasQuality(args.Used, harvestToolQuality.Value))
+        if (harvestToolQuality.HasValue && !_tool.HasQuality(args.Used, harvestToolQuality.Value) &&
+            !HasComp<SharpComponent>(args.Used))
+        // DS14-end
         {
             _popup.PopupCursor(Loc.GetString("plant-component-ligneous-cant-harvest-message"), args.User);
             return;

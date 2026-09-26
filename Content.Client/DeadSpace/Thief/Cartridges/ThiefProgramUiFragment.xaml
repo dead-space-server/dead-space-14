@@ -1,0 +1,62 @@
+<cartridges:ThiefProgramUiFragment xmlns:cartridges="clr-namespace:Content.Client.DeadSpace.Thief.Cartridges"
+                                   xmlns="https://spacestation14.io"
+                                   xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+                                   Orientation="Vertical"
+                                   HorizontalExpand="True"
+                                   VerticalExpand="True"
+                                   Margin="1 0 2 0">
+    <PanelContainer StyleClasses="DS14MenuPanelDark" HorizontalExpand="True" VerticalExpand="True">
+        <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="6">
+            <!-- Header with balance and goal -->
+            <PanelContainer StyleClasses="DS14MenuInset" HorizontalExpand="True">
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="2">
+                    <RichTextLabel Name="BalanceLabel"/>
+                    <RichTextLabel Name="GoalLabel"/>
+                    <Label Name="HintLabel"/>
+                </BoxContainer>
+            </PanelContainer>
+
+            <!-- Tabs -->
+            <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+                <Button Name="RequestsTabButton"
+                        Text="{Loc 'thief-program-tab-requests'}"
+                        StyleClasses="DS14MenuAction"
+                        ToggleMode="True"
+                        Pressed="True"
+                        HorizontalExpand="True"/>
+                <Button Name="UplinkTabButton"
+                        Text="{Loc 'thief-program-tab-uplink'}"
+                        StyleClasses="DS14MenuAction"
+                        ToggleMode="True"
+                        HorizontalExpand="True"/>
+            </BoxContainer>
+
+            <!-- Requests tab -->
+            <ScrollContainer Name="RequestsView" HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False">
+                <BoxContainer Orientation="Vertical" Name="RequestsContainer" HorizontalExpand="True" VerticalExpand="True"/>
+            </ScrollContainer>
+
+            <!-- Uplink tab -->
+            <BoxContainer Name="UplinkView" Orientation="Vertical" Visible="False" HorizontalExpand="True" VerticalExpand="True">
+                <LineEdit Name="UplinkSearchInput"
+                          PlaceHolder="{Loc 'thief-program-search-placeholder'}"
+                          HorizontalExpand="True"
+                          SetHeight="30"
+                          StyleClasses="DS14MenuInput"/>
+                <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False">
+                    <BoxContainer Orientation="Vertical" Name="UplinkContainer" HorizontalExpand="True" VerticalExpand="True"/>
+                </ScrollContainer>
+                <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+                    <LineEdit Name="ExchangeInput"
+                              PlaceHolder="{Loc 'thief-program-exchange-placeholder'}"
+                              HorizontalExpand="True"
+                              SetHeight="30"
+                              StyleClasses="DS14MenuInput"/>
+                    <Button Name="ExchangeButton"
+                            Text="{Loc 'thief-program-exchange-button'}"
+                            StyleClasses="DS14MenuAction"/>
+                </BoxContainer>
+            </BoxContainer>
+        </BoxContainer>
+    </PanelContainer>
+</cartridges:ThiefProgramUiFragment>

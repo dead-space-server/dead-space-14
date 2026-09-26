@@ -317,6 +317,7 @@
   - type: Extractable
     grindableSolutionName: food
   - type: DamageOnInteract
+    speciesBlacklist: [ Skeleton ] # DS14
     damage:
       types:
         Heat: 4
@@ -1321,6 +1322,7 @@
   - type: Produce
     plantId: OnionPlants
   - type: ToolRefinable
+    qualityNeeded: Slicing # DS14
     refineResult:
     - id: FoodOnionSlice
       amount: 5
@@ -1355,6 +1357,7 @@
   - type: Produce
     plantId: OnionRedPlants
   - type: ToolRefinable
+    qualityNeeded: Slicing # DS14
     refineResult:
     - id: FoodOnionRedSlice
       amount: 5

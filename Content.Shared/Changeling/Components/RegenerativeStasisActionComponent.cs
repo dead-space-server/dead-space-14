@@ -28,6 +28,13 @@ public sealed partial class RegenerativeStasisActionComponent : Component
     public bool AllowGhosting;
 
     /// <summary>
+    /// Whether the changeling is currently wrapped in their stasis cocoon
+    /// (requires the Cocoon ability), which prevents them from being stripped.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool CocoonActive; // DS14: stasis cocoon ability.
+
+    /// <summary>
     /// Minimum time the entity has to be in stasis before they are allowed to get up.
     /// </summary>
     [DataField, AutoNetworkedField]

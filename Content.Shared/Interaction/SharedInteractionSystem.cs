@@ -281,7 +281,7 @@ namespace Content.Shared.Interaction
             if (Deleted(uid))
                 return false;
 
-            if (!InRangeUnobstructed(userEntity.Value, uid, popup: true))
+            if (!InRangeUnobstructed(userEntity.Value, uid, _pullSystem.GetPullRange(uid), popup: true))
                 return false;
 
             _pullSystem.TogglePull(uid, userEntity.Value);

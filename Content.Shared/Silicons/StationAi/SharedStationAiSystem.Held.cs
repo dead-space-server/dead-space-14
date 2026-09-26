@@ -4,7 +4,7 @@ using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
-using Content.Shared.Xenoborgs.Components; // DS14
+using Content.Shared.Xenoborgs.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
@@ -274,6 +274,8 @@ public sealed class StationAiRadial : BaseStationAiAction
     public string? Tooltip;
 
     public BaseStationAiAction Event = default!;
+
+    public int? Order; // DS14
 }
 
 /// <summary>

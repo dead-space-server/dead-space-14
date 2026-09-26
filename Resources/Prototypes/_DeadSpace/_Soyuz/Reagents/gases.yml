@@ -77,8 +77,8 @@
     Narcotic:
       effects:
       - !type:MovementSpeedModifier
-        walkSpeedModifier: 1.2
-        sprintSpeedModifier: 1.2
+        walkSpeedModifier: 1.5
+        sprintSpeedModifier: 1.5
         time: 5
       - !type:Jitter
       - !type:AdjustStaminaDamage
@@ -109,8 +109,8 @@
     Gas:
       effects:
       - !type:MovementSpeedModifier
-        walkSpeedModifier: 1.2
-        sprintSpeedModifier: 1.2
+        walkSpeedModifier: 1.5
+        sprintSpeedModifier: 1.5
         time: 5
       - !type:Jitter
       - !type:AdjustStaminaDamage
@@ -154,13 +154,13 @@
       - !type:EvenHealthChange
         minScale: 0.2
         damage:
-          Brute: -0.5
-          Burn: -0.4
+          Brute: -1.0
+          Burn: -0.8
       - !type:HealthChange
         minScale: 0.2
         damage:
           types:
-            Poison: -0.24
+            Poison: -0.48
       - !type:ModifyStatusEffect
         minScale: 0.6
         effectProto: StatusEffectDrowsiness
@@ -176,13 +176,13 @@
       - !type:EvenHealthChange
         minScale: 0.2
         damage:
-          Brute: -0.5
-          Burn: -0.4
+          Brute: -1.0
+          Burn: -0.8
       - !type:HealthChange
         minScale: 0.2
         damage:
           types:
-            Poison: -0.24
+            Poison: -0.48
       - !type:ModifyStatusEffect
         minScale: 0.6
         effectProto: StatusEffectDrowsiness

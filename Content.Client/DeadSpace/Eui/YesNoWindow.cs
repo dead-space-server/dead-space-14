@@ -2,51 +2,41 @@
 
 using System.Numerics;
 using Robust.Client.UserInterface.Controls;
-using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.CustomControls;
-using static Robust.Client.UserInterface.Controls.BoxContainer;
+using Robust.Shared.Localization;
 
-namespace Content.Client.Eui
+namespace Content.Client.Eui;
+
+public sealed class YesNoWindow : DefaultWindow
 {
-    public sealed class YesNoWindow : DefaultWindow
+    public readonly Button NoButton;
+    public readonly Button YesButton;
+
+    public RichTextLabel MessageLabel { get; }
+
+    public YesNoWindow(string title, string text)
     {
-        public readonly Button NoButton;
-        public readonly Button YesButton;
+        Title = title;
+        MinSize = new Vector2(420, 160);
+        MessageLabel = new RichTextLabel { MaxWidth = 440, HorizontalExpand = true };
+        MessageLabel.SetMessage(text);
+        YesButton = new Button { Text = Loc.GetString("yes-no-window-yes"), HorizontalExpand = true };
+        NoButton = new Button { Text = Loc.GetString("yes-no-window-no"), HorizontalExpand = true };
 
-        public Label MessageLabel { get; }
-
-        public YesNoWindow(string title, string text)
+        Contents.AddChild(new BoxContainer
         {
-            Title = title;
-
-            MessageLabel = new Label { Text = text };
-
-            Contents.AddChild(new BoxContainer
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            SeparationOverride = 12,
+            Children =
             {
-                Orientation = LayoutOrientation.Vertical,
-                Children =
+                MessageLabel,
+                new BoxContainer
                 {
-                    new BoxContainer
-                    {
-                        Orientation = LayoutOrientation.Vertical,
-                        Children =
-                        {
-                            MessageLabel,
-                            new BoxContainer
-                            {
-                                Orientation = LayoutOrientation.Horizontal,
-                                Align = AlignMode.Center,
-                                Children =
-                                {
-                                    (YesButton = new Button { Text = "Yes" }),
-                                    new Control { MinSize = new Vector2(20, 0) },
-                                    (NoButton = new Button { Text = "No" })
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
+                    Orientation = BoxContainer.LayoutOrientation.Horizontal,
+                    SeparationOverride = 8,
+                    Children = { NoButton, YesButton },
+                },
+            },
+        });
     }
 }
