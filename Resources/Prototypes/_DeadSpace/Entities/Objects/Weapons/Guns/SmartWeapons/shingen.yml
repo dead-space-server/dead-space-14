@@ -29,8 +29,8 @@
     availableModes:
     - Burst
     - SemiAuto
-    shotsPerBurst: 3
-    burstCooldown: 0.375
+    shotsPerBurst: 4
+    burstCooldown: 0.5
   - type: ItemSlots
     slots:
       gun_magazine:
