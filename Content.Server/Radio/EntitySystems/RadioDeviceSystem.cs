@@ -274,19 +274,19 @@ public sealed class RadioDeviceSystem : SharedRadioDeviceSystem
         if (!component.Enabled)
             return;
 
-        var a = HasComp<ActiveListenerComponent>(uid);
+        var on = HasComp<ActiveListenerComponent>(uid);
         args.Verbs.Add(new Verb
         {
             Priority = 1,
-            Disabled = a,
+            Disabled = on,
             Category = VerbCategory.Microphone,
-            Text = "Включить",
+            Text = Loc.GetString("handheld-radio-component-mic-on-set"),
             Impact = LogImpact.Low,
             DoContactInteraction = false,
             CloseMenu = true,
             Act = () =>
             {
-                var state = Loc.GetString(!a ? "handheld-radio-component-mic-on-state" : "handheld-radio-component-mic-off-state");
+                var state = Loc.GetString(!on ? "handheld-radio-component-mic-on-state" : "handheld-radio-component-mic-off-state");
                 var message = Loc.GetString("handheld-radio-component-mic-change", ("microphonState", state));
                 _popup.PopupEntity(message, args.User, args.User);
                 EnsureComp<ActiveListenerComponent>(uid).Range = component.ListenRange;
@@ -296,15 +296,15 @@ public sealed class RadioDeviceSystem : SharedRadioDeviceSystem
         args.Verbs.Add(new Verb
         {
             Priority = 0,
-            Disabled = !a,
+            Disabled = !on,
             Category = VerbCategory.Microphone,
-            Text = "Выключить",
+            Text = Loc.GetString("handheld-radio-component-mic-off-set"),
             Impact = LogImpact.Low,
             DoContactInteraction = false,
             CloseMenu = true,
             Act = () =>
             {
-                var state = Loc.GetString(!a ? "handheld-radio-component-mic-on-state" : "handheld-radio-component-mic-off-state");
+                var state = Loc.GetString(!on ? "handheld-radio-component-mic-on-state" : "handheld-radio-component-mic-off-state");
                 var message = Loc.GetString("handheld-radio-component-mic-change", ("microphonState", state));
                 _popup.PopupEntity(message, args.User, args.User);
                 RemCompDeferred<ActiveListenerComponent>(uid);
