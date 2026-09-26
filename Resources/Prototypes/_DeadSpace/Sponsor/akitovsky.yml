@@ -108,7 +108,7 @@
 
 #Gasmask
 - type: entity
-  parent: ClothingMaskGasSecurity
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskAkitovsky
   name: противогаз Ми-ми-милитари
   description: Фильтрует токсичную зависть и нейтрализует любые попытки усомниться в вашей неотразимости.

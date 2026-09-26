@@ -137,7 +137,7 @@
 
 # Mask
 - type: entity
-  parent: ClothingMaskGasSyndicate
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskDragonFox
   name: золотой противогаз
   description: Изготовлен на заказ, хорошо защищает владельца от вредных паров.

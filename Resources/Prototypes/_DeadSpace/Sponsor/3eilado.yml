@@ -998,7 +998,7 @@
     state: icon
 
 - type: entity
-  parent: ClothingMaskGasSecurity
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskGas3eilado
   name: чёрная маска
   description: Чёрная стерильная маска подходящая для разного вида работ.

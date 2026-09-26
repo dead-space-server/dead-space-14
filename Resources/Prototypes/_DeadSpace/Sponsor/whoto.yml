@@ -177,7 +177,7 @@
 
 # Mask
 - type: entity
-  parent: ClothingMaskGasSyndicate
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskGasWhoTo
   name: инженерный противогаз
   description: Противогаз модели М50 с жёлтым визором. Обеспечивает защиту от вредных газов и частиц.

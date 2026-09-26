@@ -230,7 +230,7 @@
 
 # gasmask.rsi
 - type: entity
-  parent: ClothingMaskGasSecurity
+  parent: ClothingMaskGasSponsor
   id: ClothingMaski750
   name: защитный противогаз «Респиратор»
   description: Герметичный противогаз с фильтрующим блоком для защиты дыхательных путей. Предназначен для работы в атмосфере, где обычный вдох может стать последним.

@@ -228,7 +228,7 @@
 
 # MASK
 - type: entity
-  parent: ClothingMaskGas
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskGasPrometheus3
   name: тактический противогаз «BlackOps»
   description: Оснащен улучшенным фильтром и дополнительной броней. Фильтрует не только воздух, но и речь.

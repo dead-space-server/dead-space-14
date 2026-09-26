@@ -499,7 +499,7 @@
 
 # gasmask.rsi
 - type: entity
-  parent: ClothingMaskGasSecurity
+  parent: ClothingMaskGasSponsor
   id: ClothingMasksastr
   name: балаклава Klecsh //
   categories: [ HideSpawnMenu ]
@@ -1091,3 +1091,11 @@
   content:
   - Vehiclesastr
   - VehicleKeyUniversal
+
+- type: customGhost
+  id: sastr-ghost
+  login: YameteKudasai
+  spritePath: _DeadSpace/Sponsor/sastr/s.rsi
+  alpha: 0.6
+  name: / / / 
+  description:   / / /   
