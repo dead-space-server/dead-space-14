@@ -1,0 +1,2548 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# All Abductor content, consolidated from Goob-Station:
+#   - Resources/Prototypes/_Shitmed/** (abductor species, body, organs, glands,
+#     tools, surgery, gizmo, weapons, clothing, structures, roles, objectives,
+#     gamerules, datasets, tiles)
+#   - Resources/Prototypes/_Goobstation/Reagents/biological.yml (AlienBlood)
+#   - Resources/Prototypes/_Goobstation/tags.yml (Wonderprod tag)
+#   - Resources/Prototypes/_Goobstation/Flavors/flavors.yml (alienblood flavor)
+#
+# Textures live under Resources/Textures/_DeadSpace/Abductor/*.rsi (renamed to
+# avoid collisions), audio under Resources/Audio/_DeadSpace/Abductor/, maps under
+# Resources/Maps/_DeadSpace/Abductor/, guidebook under
+# Resources/ServerInfo/_DeadSpace/Abductor/.
+#
+# ADAPTATIONS vs Goob-Station (dead-space-14 uses the OLD SS14 body system):
+#   - BodyPrototype "Abductor" rewritten for the old body system:
+#     root "torso", BaseTorso part (no BaseChest/BaseGroin exist here), underscore
+#     slot names, groin organs folded into the torso slot.
+#   - MobAbductor parent BaseMobDisgust -> BaseMobSpeciesOrganic.
+#   - BulletDisabler -> BulletDisablerTrace.
+#   - BaseMentalAction -> BaseAction.
+#   - LanguageKnowledge languages Xeeplian/TauCetiBasic -> GeneralLanguage.
+#   - RustRequiresPathStage dropped from walls (Goob-only).
+#   - "Spawner" entity category dropped (not used in dead-space).
+#
+# NOTE: many referenced components/systems are Goob-Station-only C# code
+# (Abductor*, Shitmed surgery, ItemSwitch, CollectiveMind, LanguageKnowledge,
+# RandomMetadata, WoundableVisuals, Restrict*ByUserTag, Absorbable,
+# GrabIntent/Grabbable, gizmo/vest/experimentator interfaces, organ onAdd
+# effects, antag selection config, StationEvent chaos, etc.). Port that code
+# before this file can boot.
+
+# ============================================================================
+# TAGS
+# ============================================================================
+
+- type: Tag
+  id: Wall
+
+- type: Tag
+  id: PlantSampleTaker
+
+- type: Tag
+  id: ShowWires
+
+- type: Tag
+  id: CantInteract
+
+- type: Tag
+  id: Abductor
+
+- type: Tag
+  id: AbductorScientist
+
+- type: Tag
+  id: Wonderprod
+
+# ============================================================================
+# ALIEN BLOOD (reagent + flavor)
+# ============================================================================
+
+- type: flavor
+  id: alienblood
+  flavorType: Base
+  description: flavor-base-alienblood
+
+- type: reagent
+  parent: Blood
+  id: AlienBlood
+  name: reagent-name-alien-blood
+  group: Biological
+  desc: reagent-desc-alien-blood
+  flavor: alienblood
+  color: "#4B076D"
+  recognizable: true
+  physicalDesc: reagent-physical-desc-glowing
+
+# ============================================================================
+# DUBIOUS GLANDS ("weird glands" - experiment results, delivered as implants)
+# REHWORK (DS14): glands are no longer surgery organs grafted via the
+# experimentator, they are subdermal implants administered with disposable
+# implanters. Only effects available natively in dead-space are used.
+# ============================================================================
+
+- type: entity
+  id: ImplantDubiousBase
+  suffix: ИВЕНТ Ivan_Kuvalda
+  parent: BaseSubdermalImplant
+  name: doubtful gland
+  categories: [ HideSpawnMenu ]
+  abstract: true
+  description: A microscopic alien gland that can be injected under the skin of a test subject.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Abductor/dubious_organs.rsi
+    state: gland
+  - type: AbductorOrgan
+  - type: Item
+    size: Tiny
+  - type: Clickable
+  - type: InteractionOutline
+  - type: GravityAffected
+  - type: Physics
+    bodyType: Dynamic
+    fixedRotation: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.15,-0.15,0.15,0.15"
+        density: 20
+        mask:
+        - ItemMask
+        restitution: 0.3
+        friction: 0.2
+  - type: CollisionWake
+  - type: Tag
+    tags:
+    - SubdermalImplant
+
+- type: entity
+  id: ImplantDubiousHealth
+  suffix: ИВЕНТ Ivan_Kuvalda
+  parent: ImplantDubiousBase
+  components:
+  - type: Sprite
+    state: health
+  - type: SubdermalImplant
+    implantComponents:
+    - type: PassiveDamage
+      allowedStates:
+      - Alive
+      - Critical
+      damageCap: 150
+      damage:
+        groups:
+          Brute: -0.14
+          Burn: -0.14
+          Airloss: -0.14
+          Toxin: -0.14
+          Genetic: -0.14
+
+- type: entity
+  id: ImplantDubiousAA
+  suffix: ИВЕНТ Ivan_Kuvalda
+  parent: ImplantDubiousBase
+  components:
+  - type: Sprite
+    state: emp
+  - type: SubdermalImplant
+    implantComponents:
+    - type: Access
+      enabled: true
+      groups:
+      - AllAccess
+    - type: AccessReader
+      access: [["Command"], ["Research"]]
+
+- type: entity
+  id: ImplantDubiousShock
+  suffix: ИВЕНТ Ivan_Kuvalda
+  parent: ImplantDubiousBase
+  components:
+  - type: Sprite
+    state: emp
+  - type: SubdermalImplant
+    implantComponents:
+    - type: Insulated
+    - type: LightningArcShooter
+      arcDepth: 1
+      maxLightningArc: 3
+      shootMinInterval: 90
+      shootMaxInterval: 300
+      shootRange: 5
+      lightningPrototype: Lightning
+
+- type: entity
+  id: ImplantDubiousInvisible
+  suffix: ИВЕНТ Ivan_Kuvalda
+  parent: ImplantDubiousBase
+  components:
+  - type: Sprite
+    state: species
+  - type: SubdermalImplant
+    implantComponents:
+    - type: Stealth
+      enabledOnDeath: false
+      maxVisibility: 1.2
+    - type: StealthOnMove
+      passiveVisibilityRate: -0.25
+      movementVisibilityRate: 0.25
+
+- type: entity
+  id: ImplantDubiousArtifact
+  suffix: ИВЕНТ Ivan_Kuvalda
+  parent: ImplantDubiousBase
+  components:
+  - type: Sprite
+    state: mindshock
+  - type: SubdermalImplant
+    implantComponents:
+    - type: XenoArtifact
+
+- type: entity
+  id: ImplantDubiousRepairable
+  suffix: ИВЕНТ Ivan_Kuvalda
+  parent: ImplantDubiousBase
+  components:
+  - type: Sprite
+    state: species
+  - type: SubdermalImplant
+    implantComponents:
+    - type: Repairable
+      fuelCost: 5
+      doAfterDelay: 3
+      damage:
+        types:
+          Blunt: -10
+          Piercing: -10
+          Slash: -10
+
+# ============================================================================
+# DUBIOUS IMPLANTERS (one-shot syringes preloaded with a gland)
+# ============================================================================
+
+- type: entity
+  id: ImplanterDubiousHealth
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: doubtful health implanter
+  description: A disposable syringe loaded with a health gland. Pick your test subject wisely.
+  parent: BaseImplantOnlyImplanter
+  components:
+  - type: Implanter
+    implant: ImplantDubiousHealth
+
+- type: entity
+  id: ImplanterDubiousAA
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: doubtful access implanter
+  description: A disposable syringe loaded with an access gland. Pick your test subject wisely.
+  parent: BaseImplantOnlyImplanter
+  components:
+  - type: Implanter
+    implant: ImplantDubiousAA
+
+- type: entity
+  id: ImplanterDubiousShock
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: doubtful shock implanter
+  description: A disposable syringe loaded with a shock gland. Pick your test subject wisely.
+  parent: BaseImplantOnlyImplanter
+  components:
+  - type: Implanter
+    implant: ImplantDubiousShock
+
+- type: entity
+  id: ImplanterDubiousInvisible
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: doubtful invisibility implanter
+  description: A disposable syringe loaded with an invisibility gland. Pick your test subject wisely.
+  parent: BaseImplantOnlyImplanter
+  components:
+  - type: Implanter
+    implant: ImplantDubiousInvisible
+
+- type: entity
+  id: ImplanterDubiousArtifact
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: doubtful artifact implanter
+  description: A disposable syringe loaded with an artifact gland. Pick your test subject wisely.
+  parent: BaseImplantOnlyImplanter
+  components:
+  - type: Implanter
+    implant: ImplantDubiousArtifact
+
+- type: entity
+  id: ImplanterDubiousRepairable
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: doubtful repair implanter
+  description: A disposable syringe loaded with a repair gland. Pick your test subject wisely.
+  parent: BaseImplantOnlyImplanter
+  components:
+  - type: Implanter
+    implant: ImplantDubiousRepairable
+
+# ============================================================================
+# DUBIOUS GLAND TABLE (real gland drops)
+# ============================================================================
+
+- type: entityTable
+  id: DubiousGlandTable
+  table: !type:GroupSelector
+    children:
+    # Not-so Annoying - 50% chance
+    - !type:GroupSelector
+      weight: 50
+      children:
+      - id: ImplantDubiousHealth
+      - id: ImplantDubiousInvisible
+      - id: ImplantDubiousArtifact
+      - id: ImplantDubiousRepairable
+
+    # Annoying/Disruptive - 35% chance
+    - !type:GroupSelector
+      weight: 35
+      children:
+      - id: ImplantDubiousShock
+
+    # Very Disruptive - 15% chance
+    - !type:GroupSelector
+      weight: 15
+      children:
+      - id: ImplantDubiousAA
+
+- type: entity
+  name: Doubtful Organ Spawner
+  id: DubiousOrganSpawner
+  suffix: ИВЕНТ Ivan_Kuvalda
+  parent: MarkerBase
+  components:
+  - type: Sprite
+    layers:
+      - state: red
+      - sprite: _DeadSpace/Abductor/dubious_organs.rsi
+        state: gland
+  - type: EntityTableSpawner
+    table: !type:NestedSelector
+      tableId: DubiousGlandTable
+# ============================================================================
+# SPECIES
+# ============================================================================
+
+- type: species
+  id: Abductor
+  name: species-name-abductor
+  roundStart: false
+  prototype: MobAbductor
+  sprites: MobAbductorSprites
+  markingLimits: MobHumanMarkingLimits
+  dollPrototype: MobAbductorDummy
+  skinColoration: HumanToned
+  defaultSkinTone: "#BFC2C7"
+
+- type: speciesBaseSprites
+  id: MobAbductorSprites
+  sprites:
+    Head: MobAbductorHead
+    HeadTop: MobHumanoidAnyMarking
+    HeadSide: MobHumanoidAnyMarking
+    Chest: MobAbductorChest
+    Eyes: MobAbductorEyes
+    LArm: MobAbductorLArm
+    RArm: MobAbductorRArm
+    LHand: MobAbductorLHand
+    RHand: MobAbductorRHand
+    LLeg: MobAbductorLLeg
+    RLeg: MobAbductorRLeg
+    LFoot: MobAbductorLFoot
+    RFoot: MobAbductorRFoot
+
+- type: humanoidBaseSprite
+  id: MobAbductorEyes
+  baseSprite:
+    sprite: Mobs/Customization/eyes.rsi
+    state: no_eyes
+
+- type: humanoidBaseSprite
+  id: MobAbductorHeadFemale
+  baseSprite:
+    sprite: _DeadSpace/Abductor/abductor_parts.rsi
+    state: head
+
+- type: humanoidBaseSprite
+  id: MobAbductorHeadMale
+  baseSprite:
+    sprite: _DeadSpace/Abductor/abductor_parts.rsi
+    state: head
+
+- type: humanoidBaseSprite
+  id: MobAbductorHead
+  baseSprite:
+    sprite: _DeadSpace/Abductor/abductor_parts.rsi
+    state: head
+
+- type: humanoidBaseSprite
+  id: MobAbductorChestMale
+  baseSprite:
+    sprite: _DeadSpace/Abductor/abductor_parts.rsi
+    state: chest
+
+- type: humanoidBaseSprite
+  id: MobAbductorChestFemale
+  baseSprite:
+    sprite: _DeadSpace/Abductor/abductor_parts.rsi
+    state: chest
+
+- type: humanoidBaseSprite
+  id: MobAbductorChest
+  baseSprite:
+    sprite: _DeadSpace/Abductor/abductor_parts.rsi
+    state: chest
+
+- type: humanoidBaseSprite
+  id: MobAbductorGroinMale
+  baseSprite:
+    sprite: _DeadSpace/Abductor/abductor_parts.rsi
+    state: groin
+
+- type: humanoidBaseSprite
+  id: MobAbductorGroinFemale
+  baseSprite:
+    sprite: _DeadSpace/Abductor/abductor_parts.rsi
+    state: groin
+
+- type: humanoidBaseSprite
+  id: MobAbductorGroin
+  baseSprite:
+    sprite: _DeadSpace/Abductor/abductor_parts.rsi
+    state: groin
+
+- type: humanoidBaseSprite
+  id: MobAbductorLLeg
+  baseSprite:
+    sprite: _DeadSpace/Abductor/abductor_parts.rsi
+    state: l_leg
+
+- type: humanoidBaseSprite
+  id: MobAbductorLHand
+  baseSprite:
+    sprite: _DeadSpace/Abductor/abductor_parts.rsi
+    state: l_hand
+
+- type: humanoidBaseSprite
+  id: MobAbductorLArm
+  baseSprite:
+    sprite: _DeadSpace/Abductor/abductor_parts.rsi
+    state: l_arm
+
+- type: humanoidBaseSprite
+  id: MobAbductorLFoot
+  baseSprite:
+    sprite: _DeadSpace/Abductor/abductor_parts.rsi
+    state: l_foot
+
+- type: humanoidBaseSprite
+  id: MobAbductorRLeg
+  baseSprite:
+    sprite: _DeadSpace/Abductor/abductor_parts.rsi
+    state: r_leg
+
+- type: humanoidBaseSprite
+  id: MobAbductorRHand
+  baseSprite:
+    sprite: _DeadSpace/Abductor/abductor_parts.rsi
+    state: r_hand
+
+- type: humanoidBaseSprite
+  id: MobAbductorRArm
+  baseSprite:
+    sprite: _DeadSpace/Abductor/abductor_parts.rsi
+    state: r_arm
+
+- type: humanoidBaseSprite
+  id: MobAbductorRFoot
+  baseSprite:
+    sprite: _DeadSpace/Abductor/abductor_parts.rsi
+    state: r_foot
+
+# ============================================================================
+# MOB
+# ============================================================================
+
+- type: entity
+  save: false
+  name: Urist McAlien
+  parent: BaseMobSpeciesOrganic
+  id: MobAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
+  components:
+  - type: HumanoidAppearance
+    species: Abductor
+  - type: Icon
+    sprite: _DeadSpace/Abductor/abductor_parts.rsi
+    state: full
+  - type: Fingerprint
+  - type: Blindable
+  - type: FireVisuals
+    alternateState: Standing
+  - type: Damageable
+    damageContainer: Biological
+  - type: Tag
+    tags:
+    - CanPilot
+    - FootstepSound
+    - DoorBumpOpener
+  - type: Bloodstream
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: AlienBlood
+        Quantity: 200
+
+- type: entity
+  parent: BaseSpeciesDummy
+  id: MobAbductorDummy
+  suffix: ИВЕНТ Ivan_Kuvalda
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HumanoidAppearance
+    species: Abductor
+
+# ----------------------------------------------------------------------------
+# Antag mobs
+# ----------------------------------------------------------------------------
+
+- type: entity
+  parent: MobAbductor
+  id: MobAbductorAntag
+  suffix: ИВЕНТ Ivan_Kuvalda
+  abstract: true
+  components:
+  - type: Abductor
+  - type: ActionGrant
+    actions:
+      - ActionReturnToShip
+  - type: GhostRole
+    rules: abductors-ghost-role-rules
+    raffle:
+      settings: default
+  - type: GhostTakeoverAvailable
+  - type: NpcFactionMember
+    factions:
+      - SimpleHostile
+  - type: RandomMetadata
+    nameSegments:
+      - AbductorScientistPrefix
+      - AbductorNames
+  - type: Tag
+    tags:
+      - Abductor
+      - AbductorScientist
+      - CanPilot
+      - FootstepSound
+      - DoorBumpOpener
+
+- type: entity
+  name: lone abductor
+  parent: MobAbductorAntag
+  id: MobLoneAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
+  components:
+  - type: GhostRole
+    name: abductor-lone-ghost-role-name
+    description: abductor-lone-ghost-role-desc
+    mindRoles:
+    - MindRoleLoneAbductor
+  - type: AbductorScientist
+  - type: Loadout
+    prototypes:
+      - LoneAbductorGear
+
+- type: entity
+  name: abductor scientist
+  parent: MobAbductorAntag
+  id: MobAbductorScientist
+  suffix: ИВЕНТ Ivan_Kuvalda
+  components:
+  - type: GhostRole
+    name: abductor-scientist-ghost-role-name
+    description: abductor-scientist-ghost-role-desc
+    mindRoles:
+    - MindRoleAbductorScientist
+  - type: AbductorScientist
+  - type: Loadout
+    prototypes:
+      - AbductorScientistGear
+
+- type: entity
+  name: abductor agent
+  parent: MobAbductorAntag
+  id: MobAbductorAgent
+  suffix: ИВЕНТ Ivan_Kuvalda
+  components:
+  - type: GhostRole
+    name: abductor-agent-ghost-role-name
+    description: abductor-agent-ghost-role-desc
+    mindRoles:
+    - MindRoleAbductorAgent
+  - type: RandomMetadata
+    nameSegments:
+      - AbductorAgentPrefix
+      - AbductorNames
+  - type: Tag # Ignore AbductorScientist tag
+    tags:
+      - Abductor
+      - CanPilot
+      - FootstepSound
+      - DoorBumpOpener
+  - type: AbductorScientist # Should be removed when we have proper teleportation system
+  - type: Loadout
+    prototypes:
+      - AbductorAgentGear
+
+# ----------------------------------------------------------------------------
+# Gearsets
+# ----------------------------------------------------------------------------
+
+- type: startingGear
+  id: LoneAbductorGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitAbductor
+    ears: ClothingHeadsetAltAbductor
+    shoes: ClothingShoesBootsCombat
+    gloves: ClothingHandsGlovesCombat
+    head: ClothingHeadHelmetAbductor
+    outerClothing: ClothingOuterCoatAbductor
+    back: ClothingBackpackAbductor
+    pocket1: AbductorGizmo
+    pocket2: WeaponAlien
+    suitstorage: Wonderprod
+    id: AgentIDCard
+
+- type: startingGear
+  id: AbductorScientistGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitAbductor
+    ears: ClothingHeadsetAltAbductor
+    shoes: ClothingShoesBootsCombat
+    gloves: ClothingHandsGlovesCombat
+    head: ClothingHeadMirror
+    outerClothing: ClothingOuterCoatAbductor
+    back: ClothingBackpackDuffelAbductorFilled
+    pocket1: AbductorGizmo
+    suitstorage: WeaponDecloner
+    id: AgentIDCard
+
+- type: startingGear
+  id: AbductorAgentGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitAbductor
+    ears: ClothingHeadsetAltAbductor
+    shoes: ClothingShoesBootsCombat
+    gloves: ClothingHandsGlovesCombat
+    head: ClothingHeadHelmetAbductor
+    outerClothing: ClothingOuterArmorAbductor
+    back: ClothingBackpackAbductor
+    pocket1: Silencer
+    pocket2: WeaponAlien
+    suitstorage: Wonderprod
+    id: AgentIDCard
+
+# ----------------------------------------------------------------------------
+# Spawners
+# ----------------------------------------------------------------------------
+
+- type: entity
+  name: lone abductor spawner
+  id: SpawnPointLoneAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
+  parent: MarkerBase
+  components:
+  - type: SpawnPoint
+  - type: Sprite
+    sprite: Markers/jobs.rsi
+    layers:
+      - state: green
+      - sprite: Structures/Wallmounts/signs.rsi
+        state: radiation
+
+- type: entity
+  categories: [ HideSpawnMenu ]
+  parent: BaseAntagSpawner
+  id: LoneAbductorSpawner
+  suffix: ИВЕНТ Ivan_Kuvalda
+  components:
+  - type: GhostRole
+    name: abductor-lone-ghost-role-name
+    description: abductor-lone-ghost-role-desc
+    rules: abductors-ghost-role-rules
+    mindRoles:
+    - MindRoleLoneAbductor
+    raffle:
+      settings: default
+  - type: Sprite
+    sprite: Markers/jobs.rsi
+    layers:
+      - state: green
+      - sprite: Structures/Wallmounts/signs.rsi
+        state: radiation
+
+- type: entity
+  name: abductor agent spawner
+  id: SpawnPointAbductorAgent
+  suffix: ИВЕНТ Ivan_Kuvalda
+  parent: MarkerBase
+  components:
+  - type: SpawnPoint
+  - type: Sprite
+    sprite: Markers/jobs.rsi
+    layers:
+      - state: green
+      - sprite: Structures/Wallmounts/signs.rsi
+        state: radiation
+
+- type: entity
+  categories: [ HideSpawnMenu ]
+  parent: BaseAntagSpawner
+  id: AbductorAgentSpawner
+  suffix: ИВЕНТ Ivan_Kuvalda
+  components:
+  - type: GhostRole
+    name: abductor-agent-ghost-role-name
+    description: abductor-agent-ghost-role-desc
+    rules: abductors-ghost-role-rules
+    mindRoles:
+    - MindRoleAbductorAgent
+    raffle:
+      settings: default
+  - type: Sprite
+    sprite: Markers/jobs.rsi
+    layers:
+      - state: green
+      - sprite: Structures/Wallmounts/signs.rsi
+        state: radiation
+
+- type: entity
+  name: abductor scientist spawner
+  id: SpawnPointAbductorScientist
+  suffix: ИВЕНТ Ivan_Kuvalda
+  parent: MarkerBase
+  components:
+  - type: SpawnPoint
+  - type: Sprite
+    sprite: Markers/jobs.rsi
+    layers:
+      - state: green
+      - sprite: Structures/Wallmounts/signs.rsi
+        state: radiation
+
+- type: entity
+  categories: [ HideSpawnMenu ]
+  parent: BaseAntagSpawner
+  id: AbductorScientistSpawner
+  suffix: ИВЕНТ Ivan_Kuvalda
+  components:
+  - type: GhostRole
+    name: abductor-scientist-ghost-role-name
+    description: abductor-scientist-ghost-role-desc
+    rules: abductors-ghost-role-rules
+    mindRoles:
+    - MindRoleAbductorScientist
+    raffle:
+      settings: default
+  - type: Sprite
+    sprite: Markers/jobs.rsi
+    layers:
+      - state: green
+      - sprite: Structures/Wallmounts/signs.rsi
+        state: radiation
+
+# ============================================================================
+# WEAPONS
+# ============================================================================
+
+# Base bullet for the decloner bolt (ported from Goob BaseBulletStarlight).
+- type: entity
+  id: BaseBulletStarlight
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: BaseBullet
+  description: If you can see this you're probably dead!
+  abstract: true
+  components:
+  - type: Reflective
+  - type: FlyBySound
+  - type: Clickable
+  - type: Sprite
+    noRot: false
+    sprite: Objects/Weapons/Guns/Projectiles/projectiles2.rsi
+    layers:
+    - state: bullet
+      shader: unshaded
+  - type: Physics
+    bodyType: Dynamic
+    linearDamping: 0
+    angularDamping: 0
+  - type: Fixtures
+    fixtures:
+      projectile:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.1,-0.1,0.1,0.1"
+        hard: false
+        mask:
+        - Impassable
+        - BulletImpassable
+      fly-by:
+        shape: !type:PhysShapeCircle
+          radius: 1.5
+        layer:
+        - Impassable
+        - MidImpassable
+        - HighImpassable
+        - LowImpassable
+        hard: False
+  - type: Projectile
+    impactEffect: BulletImpactEffect
+    damage:
+      types:
+        Piercing: 14
+    soundHit:
+      path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
+  - type: TimedDespawn
+    lifetime: 10
+
+- type: entity
+  id: BulletDeclone
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: decloner bolt
+  parent: BaseBulletStarlight
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Abductor/abductor_projectiles.rsi
+    layers:
+    - state: declone
+  - type: Projectile
+    damage:
+      types:
+        Radiation: 20
+    ignoreResistances: true
+    soundHit:
+      collection: MeatLaserImpact
+
+- type: entity
+  parent: [BaseWeaponBatterySmall, BaseMajorContraband]
+  id: WeaponAlien
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: alien pistol
+  description: Is this a war crime? Probably.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Abductor/abductor_pistol.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-unshaded-4
+      map: ["enum.GunVisualLayers.MagUnshaded"]
+      shader: unshaded
+  - type: BatteryAmmoProvider
+    proto: BulletDisablerTrace # adapted (BulletDisabler in Goob)
+    fireCost: 50
+  - type: BatteryWeaponFireModes
+    fireModes:
+    - proto: BulletDisablerTrace # adapted (BulletDisabler in Goob)
+      fireCost: 50
+    - proto: BulletDeclone
+      fireCost: 125
+  - type: Appearance
+  - type: MagazineVisuals
+    magState: mag
+    steps: 5
+    zeroVisible: true
+
+- type: entity
+  parent: [BaseWeaponBattery, BaseGunWieldable, BaseMajorContraband]
+  id: WeaponDecloner
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: decloner
+  description: Is this a war crime? Absolutely.
+  components:
+  - type: Clothing
+    sprite: _DeadSpace/Abductor/abductor_decloner.rsi
+  - type: Sprite
+    sprite: _DeadSpace/Abductor/abductor_decloner.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-unshaded-4
+      map: ["enum.GunVisualLayers.MagUnshaded"]
+      shader: unshaded
+  - type: Item
+    shape:
+    - 0,0,5,1
+  - type: BatteryAmmoProvider
+    proto: BulletDeclone
+    fireCost: 125
+  - type: Battery
+    maxCharge: 2000
+    startingCharge: 2000
+  - type: Appearance
+  - type: MagazineVisuals
+    magState: mag
+    steps: 5
+    zeroVisible: true
+
+- type: entity
+  name: silencer
+  parent: [ BaseItem, BaseMajorContraband ]
+  id: Silencer
+  suffix: ИВЕНТ Ivan_Kuvalda
+  description: Tool for silencing humans.
+  components:
+  - type: Item
+    size: Small
+    storedRotation: -90
+  - type: Sprite
+    sprite: _DeadSpace/Abductor/abductor_silencer.rsi
+    state: icon
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    attackRate: 1
+    damage:
+      types:
+        Shock: 0
+    angle: 60
+    animation: WeaponArcThrust
+  - type: SolutionContainerManager
+    solutions:
+      default:
+        maxVol: 10
+        reagents:
+        - ReagentId: MuteToxin
+          Quantity: 10
+  - type: MeleeChemicalInjector
+    transferAmount: 5
+    pierceArmor: true
+
+- type: entity
+  name: wonderprod
+  parent: [BaseItem, BaseMajorContraband]
+  id: Wonderprod
+  suffix: ИВЕНТ Ivan_Kuvalda
+  description: Universal tool of the abductor agent.
+  components:
+  - type: Item
+    sprite: _DeadSpace/Abductor/abductor_wonderprod.rsi
+    heldPrefix: stun
+    size: Large
+    storedRotation: -90
+    shape:
+    - 0,0,2,2
+  - type: Clothing
+    sprite: _DeadSpace/Abductor/abductor_wonderprod.rsi
+    quickEquip: false
+    equippedPrefix: stun
+    slots:
+    - Back
+    - suitStorage
+  - type: Sprite
+    sprite: _DeadSpace/Abductor/abductor_wonderprod.rsi
+    state: icon
+  
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    attackRate: 0.75
+    damage:
+      types:
+        Shock: 0
+    angle: 60
+    animation: WeaponArcThrust
+  - type: StaminaDamageOnHit
+    damage: 60
+    sound: /Audio/Weapons/Guns/Hits/taser_hit.ogg
+  - type: Tag
+    tags:
+    - Wonderprod
+  - type: SolutionContainerManager
+    solutions:
+      sleep:
+        maxVol: 20
+        reagents:
+        - ReagentId: Nocturine
+          Quantity: 20
+  - type: DisarmMalus
+  - type: ItemSwitch
+    state: stun
+    showLabel: true
+    states:
+      stun: !type:ItemSwitchState
+        verb: stun
+        sprite:
+          sprite: _DeadSpace/Abductor/abductor_wonderprod.rsi
+          state: stun-icon
+        components:
+        - type: MeleeWeapon
+          wideAnimationRotation: -135
+          attackRate: 0.75
+          damage:
+            types:
+              Shock: 0
+          angle: 60
+          animation: WeaponArcThrust
+        - type: StaminaDamageOnHit
+          damage: 60
+          sound: /Audio/Weapons/Guns/Hits/taser_hit.ogg
+        soundStateActivate:
+          collection: sparks
+          params:
+            variation: 0.250
+
+      sleep: !type:ItemSwitchState
+        verb: sleep
+        sprite:
+          sprite: _DeadSpace/Abductor/abductor_wonderprod.rsi
+          state: sleep-icon
+        components:
+        - type: MeleeWeapon
+          wideAnimationRotation: -135
+          attackRate: 1
+          damage:
+            types:
+              Shock: 30
+          angle: 60
+          animation: WeaponArcThrust
+        - type: MeleeChemicalInjector
+          solution: sleep
+          transferAmount: 5
+          pierceArmor: true
+
+# ============================================================================
+# GIZMO
+# ============================================================================
+
+- type: entity
+  id: AbductorGizmo
+  suffix: ИВЕНТ Ivan_Kuvalda
+  parent: [BaseItem, BaseMajorContraband]
+  name: gizmo
+  description: A device that inserts a nano tracker, which can be used to target a teleportation beam.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Abductor/gizmo.rsi
+    state: icon
+  - type: Item
+    sprite: _DeadSpace/Abductor/gizmo.rsi
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    attackRate: 0.5
+    damage:
+      types:
+        Shock: 0
+    angle: 60
+    animation: WeaponArcThrust
+  - type: AbductorGizmo
+  
+# ============================================================================
+# CLOTHING
+# ============================================================================
+
+- type: entity
+  parent: [ UnsensoredClothingUniformBase, BaseMajorContraband ]
+  id: ClothingUniformJumpsuitAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: abductor uniform
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Abductor/clothing_abductor_uniform.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Abductor/clothing_abductor_uniform.rsi
+
+- type: entity
+  parent: [ ClothingBackpack, BaseMajorContraband ]
+  id: ClothingBackpackAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: alien backpack
+  description: An ordinary backpack woven from a durable fiber.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Abductor/clothing_abductor_backpack.rsi
+  - type: ExplosionResistance
+    damageCoefficient: 0.1
+
+- type: entity
+  parent: [ ClothingBackpackDuffel, BaseMajorContraband ]
+  id: ClothingBackpackDuffelAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: alien duffel bag
+  description: An ordinary duffel bag woven from a durable fiber.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Abductor/clothing_abductor_duffel.rsi
+  - type: ExplosionResistance
+    damageCoefficient: 0.1
+  - type: Storage
+    grid:
+    - 0,0,8,4
+
+- type: entity
+  parent: [ ClothingHeadsetAlt, BaseMajorContraband ]
+  id: ClothingHeadsetAltAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: abductor over-ear headset
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - EncryptionKeyStationMaster
+  - type: Sprite
+    sprite: _DeadSpace/Abductor/clothing_abductor_headset.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Abductor/clothing_abductor_headset.rsi
+
+- type: entity
+  parent: [ ClothingHeadHelmetBase, BaseMajorContraband ]
+  id: ClothingHeadHelmetAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: alien helmet
+  description: Zeep Glorp!
+  components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.35
+        Slash: 0.35
+        Piercing: 0.35
+        Heat: 0.35
+        Radiation: 0.5
+        Caustic: 0.5
+  - type: ExplosionResistance
+    damageCoefficient: 0.75
+  - type: Sprite
+    sprite: _DeadSpace/Abductor/clothing_abductor_helmet.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Abductor/clothing_abductor_helmet.rsi
+  - type: EyeProtection
+  - type: HideLayerClothing
+    layers:
+      HeadTop : HEAD
+      HeadSide : HEAD
+
+- type: entity
+  parent: [ ClothingOuterBase, AllowSuitStorageClothing, BaseMajorContraband ]
+  id: ClothingOuterArmorAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: agent vest
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Abductor/clothing_abductor_vest.rsi
+  - type: AbductorVest
+  - type: StaminaResistance
+    damageCoefficient: 0.25
+  - type: Item
+    size: Normal
+    heldPrefix: Stealth
+  - type: Clothing
+    sprite: _DeadSpace/Abductor/clothing_abductor_vest.rsi
+    slots:
+    - outerClothing
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.6
+        Heat: 0.6
+        Piercing: 0.6
+        Radiation: 0.6
+        Caustic: 0.4
+  - type: ExplosionResistance
+    damageCoefficient: 0.85
+  - type: ItemSwitch # Goob-only C#
+    state: Stealth
+    states:
+      Stealth: !type:ItemSwitchState
+        verb: Stealth
+        hidden: true
+        sprite:
+          sprite: _DeadSpace/Abductor/clothing_abductor_vest.rsi
+          state: icon
+        components:
+        - type: Armor
+          modifiers:
+            coefficients:
+              Blunt: 0.6
+              Slash: 0.6
+              Heat: 0.6
+              Piercing: 0.6
+              Radiation: 0.6
+              Caustic: 0.4
+        - type: ExplosionResistance
+          damageCoefficient: 0.85
+        - type: Clothing
+          sprite: _DeadSpace/Abductor/clothing_abductor_vest.rsi
+          slots:
+          - outerClothing
+
+      Combat: !type:ItemSwitchState
+        verb: Combat
+        hidden: true
+        sprite:
+          sprite: _DeadSpace/Abductor/clothing_abductor_vest.rsi
+          state: combat-icon
+        components:
+        - type: Armor
+          modifiers:
+            coefficients:
+              Blunt: 0.25
+              Slash: 0.25
+              Heat: 0.25
+              Piercing: 0.25
+              Radiation: 0.25
+              Caustic: 0.1
+        - type: ExplosionResistance
+          damageCoefficient: 0.5
+        - type: Clothing
+          sprite: _DeadSpace/Abductor/clothing_abductor_vest.rsi
+          slots:
+          - outerClothing
+          equippedPrefix: combat
+
+- type: entity
+  parent: [ ClothingOuterStorageBase, AllowSuitStorageClothing, BaseMajorContraband]
+  id: ClothingOuterCoatAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: alien lab coat
+  description: A suit of alien origin that protects from various injuries, as well as from chemical spills.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Abductor/clothing_abductor_coat.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Abductor/clothing_abductor_coat.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.6
+        Heat: 0.6
+        Piercing: 0.6
+        Radiation: 0.6
+        Caustic: 0.4
+  - type: ExplosionResistance
+    damageCoefficient: 0.75
+  - type: StaminaResistance
+    damageCoefficient: 0.4
+
+- type: entity
+  parent: [ ClothingBeltUtility, BaseMajorContraband ]
+  id: ClothingAbductorBelt
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: alien belt
+  description: Can hold various OUR things. # I was going to change this, but it's funny so it stays.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Abductor/clothing_abductor_belt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Abductor/clothing_abductor_belt.rsi
+
+# Filled variants
+
+- type: entity
+  id: ClothingAbductorBeltFilled
+  suffix: ИВЕНТ Ivan_Kuvalda, Filled
+  parent: ClothingAbductorBelt
+  components:
+  - type: StorageFill
+    contents:
+      - id: Crowbar
+      - id: Wrench
+      - id: Screwdriver
+      - id: Wirecutter
+      - id: Welder
+      - id: Multitool
+
+- type: entity
+  parent: ClothingBackpackDuffelAbductor
+  id: ClothingBackpackDuffelAbductorFilled
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: alien surgery duffel bag
+  description: An ordinary surgical duffel bag woven from a durable fiber.
+  components:
+  - type: StorageFill
+    contents:
+    - id: ImplanterDubiousInvisible
+    - id: ImplanterDubiousShock
+    - id: ImplanterDubiousAA
+
+# ============================================================================
+# STRUCTURES
+# ============================================================================
+
+- type: entity
+  parent: BaseStructure
+  id: AbductorExperimentator
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: experimentator
+  description: A device that analyzes the result of the experiment and resets the subject to the place from where they were taken.
+  components:
+  - type: AbductorExperimentator
+  - type: Sprite
+    noRot: true
+    sprite: _DeadSpace/Abductor/abductor_experimentator.rsi
+    layers:
+    - state: experimentator_0
+      map: ["base"]
+  - type: InteractionOutline
+  - type: Physics
+    canCollide: false
+  - type: DragInsertContainer
+    containerId: storage
+  - type: ExitContainerOnMove
+    containerId: storage
+  - type: ContainerContainer
+    containers:
+      storage: !type:ContainerSlot
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.AbductorExperimentatorVisuals.Full:
+        base:
+          True: { state: experimentator_1 }
+          False: { state: experimentator_0 }
+  
+
+- type: entity
+  id: AbductorAlienPad
+  suffix: ИВЕНТ Ivan_Kuvalda
+  parent: [ BaseMachinePowered, BaseStructure ] # BaseMachinePowered only: ConstructibleMachine is Goob-only
+  name: alien pad
+  description: Beam in the inferior lifeforms and dig in.
+  components:
+  - type: AbductorAlienPad
+  - type: InteractionOutline
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.00"
+        density: 190
+        mask:
+          - MachineMask
+  - type: Sprite
+    sprite: _DeadSpace/Abductor/abductor_alien_pad.rsi
+    drawdepth: FloorObjects
+    layers:
+    - state: offline
+      map: [ "pad" ]
+    - state: idle
+      map: [ "beam" ]
+  - type: Appearance
+  - type: CollideOnAnchor
+  
+
+- type: entity
+  parent: BaseComputer
+  id: AbductorConsole
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: abductor console
+  description: A computer that is used for spying on the station.
+  components:
+  - type: AbductorConsole
+  - type: Sprite
+    sprite: _DeadSpace/Abductor/abductor_console.rsi
+    layers:
+    - map: ["console"]
+      state: console
+  - type: ActivatableUI
+    key: enum.AbductorConsoleUIKey.Key
+  - type: UserInterface
+    interfaces:
+     enum.AbductorConsoleUIKey.Key:
+        type: AbductorConsoleBui
+  - type: PointLight
+    enabled: true
+    radius: 1.5
+    energy: 1.6
+    color: "#FC0097"
+  
+
+- type: entity
+  parent: BaseComputer
+  id: AbductorHumanObservationConsole
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: human observation console
+  description: Use this to set teleporter destination or retrieve people marked by scientist tools. Also used for buying replacement gear and linking the agent's vest.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Abductor/abductor_camera_console.rsi
+    layers:
+    - map: ["console"]
+      state: console
+  - type: AbductorHumanObservationConsole
+  - type: ActivatableUI
+    key: enum.AbductorCameraConsoleUIKey.Key
+  - type: UserInterface
+    interfaces:
+     enum.AbductorCameraConsoleUIKey.Key:
+        type: AbductorCameraConsoleBui
+  - type: PointLight
+    enabled: true
+    radius: 1.5
+    energy: 1.6
+    color: "#FC0097"
+  
+
+- type: entity
+  parent:
+  - Incorporeal
+  - BaseMob
+  id: AbductorHumanObservationConsoleEye
+  suffix: ИВЕНТ Ivan_Kuvalda, DO NOT MAP
+  name: abductor eye
+  description: The abductor's viewer.
+  categories: [ HideSpawnMenu, DoNotMap ]
+  components:
+  - type: NoFTL
+  - type: WarpPoint
+    follow: true
+  - type: Eye
+    pvsScale: 1.5
+  - type: Visibility
+    layer: 32 # VisibilityFlags.Abductor
+  - type: Sprite
+    sprite: _DeadSpace/Abductor/abductor_camera_console.rsi
+    layers:
+    - state: eye
+      shader: unshaded
+  - type: Tag
+    tags:
+    - CantInteract
+
+- type: entity
+  id: AbductorOperatingTable
+  suffix: ИВЕНТ Ivan_Kuvalda
+  parent: OperatingTable
+  name: abductor operating table
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Abductor/abductor_optable.rsi
+    state: operating_table
+    noRot: true
+  - type: Icon
+    sprite: _DeadSpace/Abductor/abductor_optable.rsi
+    state: operating_table
+
+- type: entity
+  id: TableAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
+  parent: TableBase
+  name: alien table
+  description: Literally the sturdiest thing you have ever seen. # Peak. No changes needed.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Abductor/abductor_table.rsi
+  - type: Icon
+    sprite: _DeadSpace/Abductor/abductor_table.rsi
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepFloor
+
+- type: entity
+  id: WallAbductorDiagonal
+  suffix: ИВЕНТ Ivan_Kuvalda, Diagonal
+  name: shuttle wall
+  description: Keeps the air in and the bloodthirsty salvagers out.
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: Tag
+    tags:
+    - Wall
+    - Diagonal
+  - type: Sprite
+    drawdepth: Walls
+    sprite: _DeadSpace/Abductor/abductor_diagonal_walls.rsi
+    state: state0
+  - type: IconSmooth
+    mode: Diagonal
+    key: walls
+    base: state
+  - type: Icon
+    sprite: _DeadSpace/Abductor/abductor_diagonal_walls.rsi
+    state: state0
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StructuralMetallic
+  - type: Physics
+    bodyType: Static
+  - type: Reflect
+    reflectProb: 1
+  - type: Pullable
+  - type: Airtight
+    noAirWhenFullyAirBlocked: false
+    airBlockedDirection:
+    - South
+    - East
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PolygonShape
+            vertices:
+            - "-0.5,-0.5"
+            - "0.5,0.5"
+            - "0.5,-0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+  - type: Construction
+    graph: Girder
+    node: diagonalshuttleWall
+  # RustRequiresPathStage dropped (Goob-only)
+
+- type: entity
+  parent: BaseWall
+  id: WallAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda, Reinforced, Exterior
+  name: shuttle wall
+  description: Keeps the air in and the bloodthirsty salvagers out.
+  components:
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StructuralMetallicStrong
+  - type: StaticPrice
+    price: 250
+  - type: RadiationBlocker
+    resistance: 5
+  - type: Sprite
+    sprite: _DeadSpace/Abductor/abductor_walls.rsi
+  - type: Icon
+    sprite: _DeadSpace/Abductor/abductor_walls.rsi
+    state: full
+  - type: Construction
+    graph: Girder
+    node: shuttleWall
+  - type: IconSmooth
+    key: walls
+    base: state
+  - type: Appearance
+  - type: Reflect
+    reflectProb: 1
+  # RustRequiresPathStage dropped (Goob-only)
+
+# ============================================================================
+# ACTIONS
+# ============================================================================
+
+# Actions (BaseMentalAction does not exist in dead-space -> BaseAction)
+
+- type: entity
+  parent: BaseAction
+  id: ActionExitConsole
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Exit console
+  description: Exit console.
+  components:
+  - type: Action
+    checkCanInteract: false
+    priority: -20
+    itemIconStyle: BigAction
+    icon:
+      sprite: _DeadSpace/Abductor/actions_abductor.rsi
+      state: exit
+  - type: InstantAction
+    event: !type:ExitConsoleEvent
+
+- type: entity
+  parent: BaseAction
+  id: ActionSendYourself
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Send yourself
+  description: You need to FTL to the same map as the station to use this ability!
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    checkCanInteract: false
+    icon:
+      sprite: _DeadSpace/Abductor/actions_abductor.rsi
+      state: send-yourself
+    useDelay: 10
+    priority: -19
+  - type: TargetAction
+    checkCanAccess: false
+    range: -1
+  - type: WorldTargetAction
+    event: !type:SendYourselfEvent
+
+- type: entity
+  parent: BaseAction
+  id: ActionReturnToShip
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: return
+  description: return to the ship.
+  components:
+  - type: Action
+    useDelay: 30
+    icon:
+      sprite: _DeadSpace/Abductor/actions_abductor.rsi
+      state: take
+    priority: -12
+  - type: InstantAction
+    event: !type:AbductorReturnToShipEvent
+# ============================================================================
+# OBJECTIVES
+# ============================================================================
+
+- type: entity
+  abstract: true
+  parent: BaseObjective
+  id: BaseAbductorObjective
+  suffix: ИВЕНТ Ivan_Kuvalda
+  components:
+  - type: Objective
+    difficulty: 1.5
+    issuer: objective-issuer-abductors
+  - type: RoleRequirement
+    roles:
+    - Abductor
+
+- type: entity
+  parent: BaseAbductorObjective
+  id: AbductObjective
+  suffix: ИВЕНТ Ivan_Kuvalda
+  components:
+  - type: Objective
+    icon:
+      sprite: _DeadSpace/Abductor/dubious_organs.rsi
+      state: gland
+  - type: NumberObjective
+    min: 6
+    max: 9
+    title: objective-condition-abduct-title
+    description: objective-condition-abduct-description
+  - type: AbductCondition # Goob-only C#
+
+- type: entity
+  parent: BaseObjective
+  id: BaseAbductorVictimObjective
+  suffix: ИВЕНТ Ivan_Kuvalda
+  abstract: true
+  components:
+  - type: Objective
+    difficulty: 1
+    issuer: objective-issuer-voices
+  - type: RoleRequirement
+    roles:
+    - AbductorVictim
+
+# Harmless Objectives
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimPaintObjective
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Paint the station.
+  description: The station is hideous. You must color it all!
+  components:
+  - type: Objective
+    icon:
+      sprite: Objects/Fun/crayons.rsi
+      state: rainbow
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimPristine
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Ensure the station is pristine.
+  description: The CEO of Nanotrasen is coming! Ensure the station is in absolutely pristine condition.
+  components:
+  - type: Objective
+    icon:
+      sprite: Clothing/Head/Hats/comcap.rsi
+      state: icon
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimBlingFloor
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Replace the floor.
+  description: Replace all the floor tiles with wood, carpeting, grass or bling.
+  components:
+  - type: Objective
+    icon:
+      sprite: Objects/Tiles/tile.rsi
+      state: carpet-blue
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimCorpseCollector
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Collect dead corpses.
+  description: Start a collection of corpses. Don't kill people to get these corpses.
+  components:
+  - type: Objective
+    icon:
+      sprite: Objects/Specific/Medical/Morgue/bodybags.rsi
+      state: bag
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimParaplegic
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Paraplegic.
+  description: Convince the crew that you are paraplegic.
+  components:
+  - type: Objective
+    icon:
+      sprite: Objects/Specific/Medical/Morgue/bodybags.rsi
+      state: bag
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimHungry
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Sate your hunger.
+  description: You are hungry. Eat as much food as you can find.
+  components:
+  - type: Objective
+    icon:
+      sprite: Objects/Consumable/Food/meat.rsi
+      state: plain-cooked
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimBlazeIt
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Chemically improve your body.
+  description: Your body must be improved. Ingest as many drugs as you can.
+  components:
+  - type: Objective
+    icon:
+      sprite: Objects/Specific/Hydroponics/cannabis.rsi
+      state: produce
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimSocialExperiment
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: It's all a lie.
+  description: This is a secret social experiment conducted by Nanotrasen. Convince the crew that this is the truth.
+  components:
+  - type: Objective
+    icon:
+      sprite: Structures/Wallmounts/camera.rsi
+      state: cameracase
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimVirtualInsanity
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: NOTHING IS REAL.
+  description: It's all an entirely virtual simulation within an underground vault. Convince the crew to escape the shackles of VR.
+  components:
+  - type: Objective
+    icon:
+      sprite: Structures/Machines/computers.rsi
+      state: avionics-systems
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimGame
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Chat is this real?
+  description: Convince the crew that we are in a game, without explicitly telling them we are in a game.
+  components:
+  - type: Objective
+    icon:
+      sprite: Structures/Machines/arcade.rsi
+      state: icon
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimSaveAnimals
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Save the animals.
+  description: Nanotrasen is abusing the animals! Save as many as you can!
+  components:
+  - type: Objective
+    icon:
+      sprite: Mobs/Animals/monkey.rsi
+      state: monkey
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimMusic
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Share your music.
+  description: You burn with passion for music. Share your vision. If anyone hates it, beat them on the head with your instrument!
+  components:
+  - type: Objective
+    icon:
+      sprite: Objects/Fun/Instruments/guitar.rsi
+      state: icon
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimStalker
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Stalk the crew.
+  description: Someone hired you to compile dossiers on all important members of the crew. Be sure they don't know you're doing it.
+  components:
+  - type: Objective
+    icon:
+      sprite: Objects/Misc/folders.rsi
+      state: folder-colormap
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimConspiracy
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: The conspiracy.
+  description: The leaders of this station are hiding a grand, evil conspiracy. Only you can learn what it is, and expose it to the people!
+  components:
+  - type: Objective
+    icon:
+      sprite: Structures/Wallmounts/camera.rsi
+      state: cameracase
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimNarrator
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Narrate the story.
+  description: You're the narrator of this tale. Follow around the protagonists to tell their story.
+  components:
+  - type: Objective
+    icon:
+      sprite: Objects/Misc/books.rsi
+      state: book_icon
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimSixthsense
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Are you really alive?
+  description: You died back there and went to heaven... or is it hell? No one here seems to know they're dead. Convince them, and maybe you can escape this limbo.
+  components:
+  - type: Objective
+    icon:
+      sprite: Structures/Storage/Crates/coffin.rsi
+      state: base
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimParty
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: PARTY!
+  description: You NEED to throw a huge rager. Make it as awesome as possible so the whole crew comes... OR ELSE!
+  components:
+  - type: Objective
+    icon:
+      sprite: Objects/Consumable/Drinks/beer.rsi
+      state: icon
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimDeadStationTheory
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Only one other person exists.
+  description: There is only one other person in existence, they are just really good at pretending to be multiple people.
+  components:
+  - type: Objective
+    icon:
+      sprite: Mobs/Species/Human/parts.rsi
+      state: full
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimWeaknessOfMyFlesh
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: The flesh is rotting.
+  description: Your flesh is rotting from your body. Fight the inevitable, and replace your tainted limbs with entirely new ones.
+  components:
+  - type: Objective
+    icon:
+      sprite: Mobs/Species/Human/parts.rsi
+      state: full
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimInstructor
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Military instructor.
+  description: You are a military instructor. You must make sure the crew is in top shape for the war against the syndicate!
+  components:
+  - type: Objective
+    icon:
+      sprite: Mobs/Species/Human/parts.rsi
+      state: full
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimActor
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Action movie.
+  description: You are in an action movie. You must say as many cheesy one-liners as possible.
+  components:
+  - type: Objective
+    icon:
+      sprite: Clothing/Eyes/Glasses/sunglasses.rsi
+      state: icon
+
+# Annoying Objectives
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimNations
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Make your department prosper.
+  description: Ensure your department prospers over all else.
+  components:
+  - type: Objective
+    icon:
+      sprite: Clothing/Neck/Medals/gold.rsi
+      state: icon
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimPowerUnlimited
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Unlimited power.
+  description: Flood the station's powernet with as much electricity as you can.
+  components:
+  - type: Objective
+    icon:
+      sprite: Objects/Power/power_cells.rsi
+      state: antique
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimBuild
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Expand the station.
+  description: The station is too tiny, and you're going to fix that.
+  components:
+  - type: Objective
+    icon:
+      sprite: Objects/Tools/rcd.rsi
+      state: icon
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimDefect
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Defect from the station.
+  description: Fuck the system! Defect from the station and start an independent colony in space, Mining Outpost or the derelict. Recruit crewmates if you can.
+  components:
+  - type: Objective
+    icon:
+      sprite: Structures/Shuttles/gyroscope.rsi
+      state: base
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimMonkeyTakeover
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Raise an army of monkeys.
+  description: OOK OOK AAH!!!
+  components:
+  - type: Objective
+    icon:
+      sprite: Mobs/Animals/monkey.rsi
+      state: monkey
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimAverageFrontierPirate
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Steal shoes.
+  description: Steal as many shoes as you can.
+  components:
+  - type: Objective
+    icon:
+      sprite: Clothing/Shoes/color.rsi
+      state: icon
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimNoClown
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: The clown is not funny.
+  description: The clown is not funny. You can do better! Take over their role and make the crew laugh!
+  components:
+  - type: Objective
+    icon:
+      sprite: Clothing/Mask/clown.rsi
+      state: icon
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimReplacePets
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Replace the pets.
+  description: All the pets around here suck. You need to make them cooler. Replace them with exotic beasts!
+  components:
+  - type: Objective
+    icon:
+      sprite: Mobs/Animals/snake.rsi
+      state: icon
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimBald
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Save people from the hair invasion.
+  description: There are alien parasites masquerading as people's hair. Save people from this invasion.
+  components:
+  - type: Objective
+    icon:
+      sprite: Objects/Tools/scissors.rsi
+      state: icon
+
+# Harmful Objectives
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimNoWalls
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Break down the walls.
+  description: The crew must get to know one another better. Break down the walls inside the station!
+  components:
+  - type: Objective
+    icon:
+      sprite: Structures/Walls/solid.rsi
+      state: rgeneric
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimAbductception
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Take revenge.
+  description: You have been changed forever. Find the aliens that did this to you and give them a taste of their own medicine.
+  components:
+  - type: Objective
+    icon:
+      sprite: Objects/Weapons/Melee/baseball_bat.rsi
+      state: icon
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimNoOxygen
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: OXYGEN IS KILLING EVERYONE.
+  description: The oxygen is killing them all and they don't even know it. Make sure no oxygen is on the station.
+  components:
+  - type: NotJobRequirement
+    jobs:
+    - AtmosphericTechnician # It would be too free for atmos techs :) CE is fair game though.
+  - type: Objective
+    icon:
+      sprite: Objects/Tanks/oxygen.rsi
+      state: icon
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimEscapeStation
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Escape the station.
+  description: You must escape the station! Get the shuttle called!
+  components:
+  - type: Objective
+    icon:
+      sprite: Structures/Furniture/chairs.rsi
+      state: shuttle
+  - type: EscapeShuttleCondition
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimNoCloning
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: No cloning.
+  description: Don't allow anyone to be cloned.
+  components:
+  - type: Objective
+    icon:
+      sprite: Structures/Machines/cloning.rsi
+      state: pod_g
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimStealWeapons
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Steal weapons.
+  description: Steal as many weapons as you can fit on your person.
+  components:
+  - type: Objective
+    icon:
+      sprite: Objects/Weapons/Melee/baseball_bat.rsi
+      state: icon
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimDismantleComputers
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Steal computers.
+  description: The 7G waves coming off from the computers are killing the crew and they dont know it! Dismantle them!
+  components:
+  - type: Objective
+    icon:
+      sprite: Structures/Machines/computers.rsi
+      state: avionics-systems
+
+- type: entity
+  parent: BaseAbductorVictimObjective
+  id: AbductorVictimFinality
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: No revival.
+  description: Death should be final and modern medicine disrupts the natural order. Don't allow anyone to be revived.
+  components:
+  - type: Objective
+    icon:
+      sprite: Objects/Specific/Medical/defib.rsi
+      state: icon
+
+# Objective rolls (weightedRandom is supported by dead-space)
+
+- type: weightedRandom
+  id: AbductorVictimObjectiveGroups
+  weights:
+    AbductorVictimObjectiveGroupHarmless: 0.75
+    AbductorVictimObjectiveGroupAnnoy: 0.20
+    AbductorVictimObjectiveGroupHarmful: 0.05
+
+- type: weightedRandom
+  id: AbductorVictimObjectiveGroupHarmless
+  weights:
+    AbductorVictimPaintObjective: 1
+    AbductorVictimPristine: 1
+    AbductorVictimCorpseCollector: 1
+    AbductorVictimBlingFloor: 1
+    AbductorVictimParaplegic: 1
+    AbductorVictimHungry: 1
+    AbductorVictimBlazeIt: 1
+    AbductorVictimVirtualInsanity: 1
+    AbductorVictimSocialExperiment: 1
+    AbductorVictimGame: 1
+    AbductorVictimSaveAnimals: 1
+    AbductorVictimMusic: 1
+    AbductorVictimNarrator: 1
+    AbductorVictimStalker: 1
+    AbductorVictimConspiracy: 1
+    AbductorVictimSixthsense: 1
+    AbductorVictimParty: 1
+    AbductorVictimDeadStationTheory: 1
+    AbductorVictimWeaknessOfMyFlesh: 1
+    AbductorVictimInstructor: 1
+    AbductorVictimActor: 1
+
+- type: weightedRandom
+  id: AbductorVictimObjectiveGroupAnnoy
+  weights:
+    AbductorVictimNations: 1
+    AbductorVictimPowerUnlimited: 1
+    AbductorVictimBuild: 1
+    AbductorVictimDefect: 1
+    AbductorVictimMonkeyTakeover: 1
+    AbductorVictimAverageFrontierPirate: 1
+    AbductorVictimNoClown: 1
+    AbductorVictimReplacePets: 1
+    AbductorVictimBald: 1
+
+- type: weightedRandom
+  id: AbductorVictimObjectiveGroupHarmful
+  weights:
+    AbductorVictimNoWalls: 1
+    AbductorVictimAbductception: 1
+    AbductorVictimNoOxygen: 1
+    AbductorVictimEscapeStation: 1
+    AbductorVictimNoCloning: 1
+    AbductorVictimStealWeapons: 1
+    AbductorVictimDismantleComputers: 1
+    AbductorVictimFinality: 1
+
+# ============================================================================
+# ANTAG / ROLE REQUIREMENTS / MIND ROLES
+# ============================================================================
+
+- type: antag
+  id: LoneAbductorAntag
+  name: abductor-lone-ghost-role-name
+  antagonist: true
+  objective: roles-antag-abductor-objective
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 5h #5 hours
+  - !type:DepartmentTimeRequirement
+    department: Medical
+    time: 2h #2 hours
+  - !type:DepartmentTimeRequirement
+    department: Security
+    time: 2h #2 hours
+
+- type: antag
+  id: AbductorScientistAntag
+  name: abductor-scientist-ghost-role-name
+  antagonist: true
+  objective: roles-antag-abductor-objective
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 5h #5 hours
+  - !type:DepartmentTimeRequirement
+    department: Medical
+    time: 3h #3 hours
+
+- type: antag
+  id: AbductorAgentAntag
+  name: abductor-agent-ghost-role-name
+  antagonist: true
+  objective: roles-antag-abductor-objective
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 5h #5 hours
+  - !type:DepartmentTimeRequirement
+    department: Security
+    time: 3h #3 hours
+
+- type: antag
+  id: AbductorVictimAntag
+  name: abductor-victim-role-name
+  antagonist: true
+  objective: roles-antag-abductor-victim
+
+- type: roleType
+  id: Abductor
+  name: abductor-role-name
+  color: "#0083ba"
+  symbol: "☌"
+
+- type: roleType
+  id: AbductorVictim
+  name: abductor-victim-role-name-freeagent
+  color: "#ffff00"
+  symbol: "☯"
+
+- type: roleType
+  id: AbductorVictimRole
+  name: abductor-victim-role-name-freeagent
+  color: "#ffff00"
+  symbol: "☯"
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleLoneAbductor
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Lone Abductor Role
+  components:
+  - type: MindRole
+    exclusiveAntag: true
+    antagPrototype: LoneAbductorAntag
+    roleType: SoloAntagonist
+    subtype: role-subtype-abductor
+  - type: Abductor
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleAbductorAgent
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Lone Abductor Role
+  components:
+  - type: MindRole
+    exclusiveAntag: true
+    antagPrototype: AbductorAgentAntag
+    roleType: TeamAntagonist
+    subtype: role-subtype-abductor
+  - type: Abductor
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleAbductorScientist
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Lone Abductor Role
+  components:
+  - type: MindRole
+    exclusiveAntag: true
+    antagPrototype: AbductorScientistAntag
+    roleType: TeamAntagonist
+    subtype: role-subtype-abductor
+  - type: Abductor
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleAbductorVictim
+  suffix: ИВЕНТ Ivan_Kuvalda
+  name: Abductee Role
+  components:
+  - type: MindRole
+    roleType: AbductorVictimRole
+    antagPrototype: AbductorVictimAntag
+    subtype: role-subtype-abductor-victim
+  - type: AbductorVictim
+# ============================================================================
+# GAMERULES
+# ============================================================================
+
+- type: entity
+  parent: BaseGameRule
+  id: LoneAbductorSpawn
+  suffix: ИВЕНТ Ivan_Kuvalda
+  components:
+  - type: StationEvent
+    earliestStart: 15
+    reoccurrenceDelay: 45
+    weight: 3
+    minimumPlayers: 10
+    duration: null
+  - type: RuleGrids
+  - type: LoadMapRule
+    mapPath: /Maps/_DeadSpace/Abductor/abductor_shuttle.yml
+  - type: AntagObjectives
+    objectives:
+    - AbductObjective
+  - type: AntagLoadProfileRule
+    speciesOverride: Abductor
+  - type: AntagSelection
+    definitions:
+    - spawnerPrototype: LoneAbductorSpawner
+      min: 1
+      max: 1
+      pickPlayer: false
+      startingGear: LoneAbductorGear
+      briefing:
+        text: abductor-role-greeting
+        color: Green
+        sound: /Audio/_DeadSpace/Abductor/abductor.ogg
+      components:
+      - type: Abductor
+      - type: ActionGrant
+        actions:
+          - ActionReturnToShip
+      - type: GhostRole
+        name: abductor-lone-ghost-role-name
+        description: abductor-lone-ghost-role-desc
+        rules: abductors-ghost-role-rules
+        mindRoles:
+        - MindRoleLoneAbductor
+        raffle:
+          settings: default
+      - type: GhostTakeoverAvailable
+      - type: NpcFactionMember
+        factions:
+          - SimpleHostile
+      - type: RandomMetadata
+        nameSegments:
+          - AbductorScientistPrefix
+          - AbductorNames
+      - type: Tag
+        tags:
+          - Abductor
+          - AbductorScientist
+          - CanPilot
+          - FootstepSound
+          - DoorBumpOpener
+      - type: AbductorScientist
+      mindRoles:
+      - MindRoleLoneAbductor
+
+- type: entity
+  parent: BaseGameRule
+  id: AbductorVictim
+  suffix: ИВЕНТ Ivan_Kuvalda
+  components:
+  - type: AbductorVictimRule
+  - type: AntagSelection
+    definitions:
+    - mindRoles:
+      - MindRoleAbductorVictim
+      briefing:
+        text: abductor-victim-role-greeting
+        color: Red
+        sound: /Audio/_DeadSpace/Abductor/abducted.ogg
+  - type: AntagRandomObjectives
+    maxDifficulty: 1
+    sets:
+    - maxPicks: 1
+      groups: AbductorVictimObjectiveGroups
+
+- type: entity
+  parent: BaseGameRule
+  id: DuoAbductorSpawn
+  suffix: ИВЕНТ Ivan_Kuvalda
+  components:
+  - type: StationEvent
+    earliestStart: 15
+    reoccurrenceDelay: 45
+    weight: 3
+    minimumPlayers: 20
+    duration: null
+  - type: RuleGrids
+  - type: LoadMapRule
+    mapPath: /Maps/_DeadSpace/Abductor/duo_abductor_shuttle.yml
+  - type: AntagObjectives
+    objectives:
+    - AbductObjective
+  - type: AntagLoadProfileRule
+    speciesOverride: Abductor
+  - type: AntagSelection
+    definitions:
+    - spawnerPrototype: AbductorScientistSpawner
+      min: 1
+      max: 1
+      pickPlayer: false
+      startingGear: AbductorScientistGear
+      briefing:
+        text: abductor-role-greeting
+        color: Green
+        sound: /Audio/_DeadSpace/Abductor/abductor.ogg
+      components:
+      - type: Abductor
+      - type: ActionGrant
+        actions:
+          - ActionReturnToShip
+      - type: GhostRole
+        name: abductor-scientist-ghost-role-name
+        description: abductor-scientist-ghost-role-desc
+        rules: abductors-ghost-role-rules
+        mindRoles:
+        - MindRoleAbductorScientist
+        raffle:
+          settings: default
+      - type: GhostTakeoverAvailable
+      - type: NpcFactionMember
+        factions:
+          - SimpleHostile
+      - type: RandomMetadata
+        nameSegments:
+          - AbductorScientistPrefix
+          - AbductorNames
+      - type: Tag
+        tags:
+          - Abductor
+          - AbductorScientist
+          - CanPilot
+          - FootstepSound
+          - DoorBumpOpener
+      - type: AbductorScientist
+      mindRoles:
+      - MindRoleAbductorScientist
+    - spawnerPrototype: AbductorAgentSpawner
+      min: 1
+      max: 1
+      pickPlayer: false
+      startingGear: AbductorAgentGear
+      briefing:
+        text: abductor-role-greeting
+        color: Green
+        sound: /Audio/_DeadSpace/Abductor/abductor.ogg
+      components:
+      - type: Abductor
+      - type: ActionGrant
+        actions:
+          - ActionReturnToShip
+      - type: GhostRole
+        name: abductor-agent-ghost-role-name
+        description: abductor-agent-ghost-role-desc
+        rules: abductors-ghost-role-rules
+        mindRoles:
+        - MindRoleAbductorAgent
+        raffle:
+          settings: default
+      - type: GhostTakeoverAvailable
+      - type: NpcFactionMember
+        factions:
+          - SimpleHostile
+      - type: RandomMetadata
+        nameSegments:
+          - AbductorAgentPrefix
+          - AbductorNames
+      - type: Tag
+        tags:
+          - Abductor
+          - CanPilot
+          - FootstepSound
+          - DoorBumpOpener
+      - type: AbductorScientist # Should be removed when we have proper teleportation system
+      mindRoles:
+      - MindRoleAbductorAgent
+
+# ============================================================================
+# DATASETS (localizedDataset prefix+count is supported by dead-space)
+# ============================================================================
+
+- type: localizedDataset
+  id: AbductorNames
+  values:
+    prefix: abductor-names-dataset-
+    count: 45
+
+- type: localizedDataset
+  id: AbductorScientistPrefix
+  values:
+    prefix: abductor-scientist-prefix-dataset-
+    count: 2
+
+- type: localizedDataset
+  id: AbductorAgentPrefix
+  values:
+    prefix: abductor-agent-prefix-dataset-
+    count: 2
+
+# ============================================================================
+# EFFECTS
+# ============================================================================
+
+- type: entity
+  id: EffectTeleportation
+  suffix: ИВЕНТ Ivan_Kuvalda
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 0.6
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    layers:
+    - shader: unshaded
+      sprite: Effects/sparks.rsi
+      state: sparks
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: AnimationPlayer
+
+- type: entity
+  id: EffectTeleportationEntity
+  suffix: ИВЕНТ Ivan_Kuvalda
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 0.6
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    layers:
+    - shader: unshaded
+      sprite: Effects/portal.rsi
+      state: portal-artifact
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: AnimationPlayer
+  - type: EmitSoundOnSpawn
+    sound:
+      path: /Audio/Effects/teleport_arrival.ogg
+
