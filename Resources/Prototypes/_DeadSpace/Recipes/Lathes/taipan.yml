@@ -448,6 +448,18 @@
     Plastic: 500
     Silver: 100
 
+
+- type: latheRecipe
+  id: ClothingBackpackRedspace
+  result: ClothingBackpackRedspace
+  completetime: 60
+  materials:
+    Titanium: 3000
+    Plastic: 1000
+    Gold: 1000
+    Steel: 2000
+    RedspaceCrystal: 100
+
 - type: latheRecipe
   id: ADTClothingShoesBootsMagAdvSynd
   result: ADTClothingShoesBootsMagAdvSynd
@@ -637,6 +649,16 @@
     Silver: 150
 
 - type: latheRecipe
+  parent: BaseToolRecipe
+  id: TaipanMultitool
+  result: TaipanMultitool
+  completetime: 10
+  materials:
+    Steel: 250
+    Plastic: 200
+    Glass: 100
+
+- type: latheRecipe
   id: SyndiHypo
   result: SyndiHypo
   completetime: 10
@@ -671,6 +693,17 @@
     Steel: 300
     Plastic: 300
     Silver: 150
+
+- type: latheRecipe
+  id: RedspaceBeaker
+  result: RedspaceBeaker
+  completetime: 10
+  materials:
+    Steel: 500
+    Plastic: 300
+    Silver: 150
+    Plastitanium: 500
+    RedspaceCrystal: 100
 
 # HUDs
 - type: latheRecipe

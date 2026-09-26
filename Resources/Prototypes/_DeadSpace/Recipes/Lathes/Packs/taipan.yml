@@ -132,6 +132,7 @@
   - SheetifierMachineCircuitboard
   - PowerCageRechargerCircuitboard
   - AnalysisComputerCircuitboardTaipan
+  - RedSpaceMachineCircuitboardTaipan
   - AnomalyVesselCircuitboardTaipan
   - AnomalyVesselExperimentalCircuitboardTaipan
   - AnomalySynchronizerCircuitboard
@@ -225,6 +226,12 @@
   - MaterialDiamond
 
 - type: latheRecipePack
+  id: TaipanRedspaceSmelting
+  recipes:
+  - SheetRedspaceCrystal1
+  - RedspaceCrystalRaw1
+
+- type: latheRecipePack
   id: TaipanAdvancedSmelting
   recipes:
   - SheetPlasteel1
@@ -248,6 +255,7 @@
   - PhotocopierMachineCircuitboard
   - SurveillanceCameraMonitorCircuitboardTaipan
   - TaipanHolopadMachineCircuitboard
+  - RedSpaceMachineCircuitboardTaipan
 
 - type: latheRecipePack
   id: TaipanServiceBoards
@@ -361,6 +369,7 @@
   - HypoDart
   - DefibrillatorSyndicate
   - DrinkShakerSyndie
+  - RedspaceBeaker
 
 ## Cloning
 - type: latheRecipePack
@@ -382,6 +391,7 @@
   - Wrench
   - CrowbarGreen
   - Multitool
+  - TaipanMultitool
   - NetworkConfigurator
   - Signaller
   - SprayPainterTaipan
@@ -423,12 +433,14 @@
   - HandHeldMassScanner
   - ClothingMaskWeldingGas
   - SignallerAdvanced
+  - SignallerRedspace
   - ClothingEyesHudTaipanDiagnostic
   - ClothingEyesHudTaipanMedical
   - ClothingEyesHudTaipanRecruit
   - ClothingEyesHudTaipanResearch
   - ClothingEyesHudTaipanAdvanced
   - ClothingEyesPNVAdvSyndicate
+  - ClothingBackpackRedspace
   - EmagTaipanLimited
   - ChameleonPDA
   - ChameleonProjector

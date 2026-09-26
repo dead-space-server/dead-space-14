@@ -1,0 +1,18 @@
+- type: entity
+  name: редспейс мензурка
+  parent: BaseBeakerMetallic
+  description: Мензурка повышенного объёма, достижимого благодаря РедСпейс технологии. Главное не заглядывайте внутрь.
+  id: RedspaceBeaker
+  components:
+  - type: Spillable
+    solution: beaker
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Chemistry/beaker_redspace.rsi
+    layers:
+      - state: beakerredspace
+  - type: SolutionContainerVisuals
+    maxFillLevels: 0
+  - type: SolutionContainerManager
+    solutions:
+      beaker:
+        maxVol: 800

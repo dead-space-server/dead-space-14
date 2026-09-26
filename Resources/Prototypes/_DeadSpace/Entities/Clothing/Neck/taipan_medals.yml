@@ -1,0 +1,57 @@
+
+- type: entity
+  parent: ClothingNeckMedalBase
+  id: ClothingNeckTaipanCargomedal
+  name: медаль карготехника
+  description: Лучшему работнику отдела Карго.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/Medals/cargomedal.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Neck/Medals/cargomedal.rsi
+
+- type: entity
+  parent: ClothingNeckMedalBase
+  id: ClothingNeckTaipanEngineermedal
+  name: медаль инженера
+  description: Лучшему работнику Инженерного отдела.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/Medals/engineermedal.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Neck/Medals/engineermedal.rsi
+
+- type: entity
+  parent: ClothingNeckMedalBase
+  id: ClothingNeckTaipanSciencemedal
+  name: медаль учёного
+  description: Лучше работнику научно-исследовательского отдела.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/Medals/researchmedal.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Neck/Medals/researchmedal.rsi
+
+- type: entity
+  parent: ClothingNeckMedalBase
+  id: ClothingNeckTaipanSecuritymedal
+  name: медаль рекрута
+  description: Лучшему рекруту.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/Medals/recruitmedal.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Neck/Medals/recruitmedal.rsi
+
+- type: entity
+  parent: ClothingNeckMedalBase
+  id: ClothingNeckTaipanClownmedal
+  name: медаль клоуна
+  description: За лучшую шутку века награждается. . . Клоун!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/Medals/clownmedal.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Neck/Medals/clownmedal.rsi
+  - type: StealTarget
+    stealGroup: ClothingNeckClownmedal

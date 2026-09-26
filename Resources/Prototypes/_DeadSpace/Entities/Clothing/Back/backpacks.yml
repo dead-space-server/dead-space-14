@@ -15,3 +15,26 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Clothing/Back/Backpacks/captain_black.rsi
+
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackRedspace
+  name: бездонный рюкзак
+  description: Рюкзак, что имеет огроооомную пропасть внутрь, как бы то ни было удивительно, имеет дно, от него пахнет корицей.
+  suffix: Тайпан
+  components:
+  - type: Sprite
+    sprite: Clothing/Back/Backpacks/holding.rsi
+    state: holding
+    layers:
+    - state: holding
+    - state: holding-unlit
+      shader: unshaded
+  - type: Clothing
+    equippedPrefix: holding
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,18,7

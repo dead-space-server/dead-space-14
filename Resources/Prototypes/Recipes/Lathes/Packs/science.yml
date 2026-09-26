@@ -22,6 +22,7 @@
   - HoloprojectorRND # DS14
   - HoloprojectorField
   - SignallerAdvanced
+  - SignallerRedspace ## DS-14
   - DeviceQuantumSpinInverter
   - DeviceDesynchronizer
   - ClothingBackpackHarmpack

@@ -226,3 +226,63 @@
     damage:
       types:
         Blunt: 14
+
+- type: entity
+  parent: BaseItem
+  id: TaipanMultitool
+  name: кроваво-красный мультитул
+  description: Красный мультитул с хлястиком из кожи, Вам лучше не вдаваться в подробности, насчёт её происхождения.
+  suffix: Тайпан
+  components:
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/Items/multitool_drop.ogg
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Tools/red_multitool.rsi
+    layers:
+    - state: icon
+  - type: Item
+    size: Small
+    sprite: _DeadSpace/Objects/Tools/red_multitool.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Objects/Tools/red_multitool.rsi
+    quickEquip: false
+    slots:
+    - Belt
+  - type: Tool
+    qualities:
+      - Pulsing
+  - type: NetworkConfigurator
+  - type: ActivatableUI
+    key: enum.NetworkConfiguratorUiKey.List
+    inHandsOnly: true
+  - type: UserInterface
+    interfaces:
+      enum.NetworkConfiguratorUiKey.List:
+        type: NetworkConfiguratorBoundUserInterface
+      enum.NetworkConfiguratorUiKey.Configure:
+        type: NetworkConfiguratorBoundUserInterface
+      enum.NetworkConfiguratorUiKey.Link:
+        type: NetworkConfiguratorBoundUserInterface
+  - type: Tag
+    tags:
+      - Multitool
+      - DoorElectronicsConfigurator
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 100
+      Plastic: 100
+  - type: StaticPrice
+    price: 56
+  - type: GuideHelp
+    guides:
+    - Networking
+    - WirePanels
+    - Airlocks
+    - InspectingPower
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/tools/multitool_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/Items/multitool_drop.ogg

@@ -51,3 +51,39 @@
   components:
   - type: Stack
     count: 1
+
+- type: entity
+  parent: OreBase
+  id: RedspaceCrystalRaw
+  name: редспейс кристалл
+  description: Кусок неочищенного кристалла.
+  suffix: Полная
+  components:
+  - type: Stack
+    stackType: RedspaceCrystalRaw
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Materials/redspace-crystal-raw.rsi
+    state: redspace_crystal_raw
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RawRedspaceCrystal: 300
+  - type: PointLight
+    radius: 1.0
+    energy: 2.0
+    color: "#821111"
+    castShadows: false
+    netsync: false
+  - type: Item
+    heldPrefix: redspace_crystal_raw
+  - type: Tag
+    tags:
+    - RawMaterial
+
+- type: entity
+  parent: RedspaceCrystalRaw
+  id: RedspaceCrystalRaw1
+  suffix: Одна
+  components:
+  - type: Stack
+    count: 1

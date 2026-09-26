@@ -70,7 +70,7 @@
     state: icon
   discipline: TaipanResearch
   tier: 2
-  cost: 15000
+  cost: 17500 #ds-14
   diskAvailable: false
   recipeUnlocks:
   - EnergyDagger
@@ -98,7 +98,7 @@
     state: base
   discipline: TaipanResearch
   tier: 2
-  cost: 15000
+  cost: 13500 #ds-14
   diskAvailable: false
   recipeUnlocks:
   - WeaponPistolCHIMP
@@ -156,6 +156,19 @@
   - TaipanEnergyDaggers
 
 - type: technology
+  id: TaipanRedspace
+  name: research-technology-redspace
+  icon:
+    sprite: _DeadSpace/Objects/Materials/redspace-crystal-raw.rsi
+    state: redspace_crystal_raw
+  discipline: TaipanResearch
+  tier: 3
+  cost: 25000 #ds-14
+  diskAvailable: false
+  recipeUnlocks:
+  - RedSpaceMachineCircuitboardTaipan
+
+- type: technology
   id: TaipanEmag
   name: research-technology-emag
   icon:
@@ -194,7 +207,7 @@
     state: icon
   discipline: TaipanResearch
   tier: 4
-  cost: 50000
+  cost: 75000 #ds-14
   diskAvailable: false
   recipeUnlocks:
   - EnergySwordDouble

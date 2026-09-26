@@ -4,7 +4,7 @@ meta:
   engineVersion: 276.0.0
   forkId: ""
   forkVersion: ""
-  time: 09/24/2026 10:21:13
+  time: 09/25/2026 16:27:24
   entityCount: 10331
 maps:
 - 1
@@ -5983,9 +5983,14 @@ entities:
   - uid: 28
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -5.5,-21.5
+      rot: -3.141592653589793 rad
+      pos: -3.5,-21.5
       parent: 2
+    - type: Physics
+      angularDamping: 8
+      linearDamping: 8
+    - type: Pullable
+      prevFixedRotation: True
   - uid: 29
     components:
     - type: Transform
@@ -6054,9 +6059,14 @@ entities:
   - uid: 40
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -3.5,-21.5
+      rot: -3.141592653589793 rad
+      pos: -5.5,-21.5
       parent: 2
+    - type: Physics
+      angularDamping: 8
+      linearDamping: 8
+    - type: Pullable
+      prevFixedRotation: True
   - uid: 41
     components:
     - type: Transform
@@ -9887,7 +9897,7 @@ entities:
   - uid: 569
     components:
     - type: Transform
-      pos: -27.574162,-8.279547
+      pos: -27.711617,-8.103935
       parent: 2
     - type: Physics
       canCollide: False
@@ -26486,13 +26496,19 @@ entities:
   - uid: 3637
     components:
     - type: Transform
+      anchored: True
       pos: -29.5,3.5
       parent: 2
+    - type: Physics
+      bodyType: Static
   - uid: 3638
     components:
     - type: Transform
+      anchored: True
       pos: -31.5,3.5
       parent: 2
+    - type: Physics
+      bodyType: Static
   - uid: 3639
     components:
     - type: Transform
@@ -28028,7 +28044,7 @@ entities:
   - uid: 10331
     components:
     - type: Transform
-      pos: -8.5,4.5
+      pos: -5.5,-1.5
       parent: 2
 - proto: CustomizableSpawnerTaipanCommunicationsOfficer
   entities:
@@ -33014,15 +33030,6 @@ entities:
     components:
     - type: Transform
       pos: 30.7209,-5.4384875
-      parent: 2
-    - type: Physics
-      canCollide: False
-- proto: FoodBowlBig
-  entities:
-  - uid: 4632
-    components:
-    - type: Transform
-      pos: -3.3957272,3.7395186
       parent: 2
     - type: Physics
       canCollide: False
@@ -48102,7 +48109,7 @@ entities:
       parent: 6662
     - type: Physics
       canCollide: False
-- proto: LightReplacerEmpty
+- proto: LightReplacerFilled
   entities:
   - uid: 6664
     components:
@@ -48110,7 +48117,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 35.036583,1.2480555
       parent: 2
-- proto: LockableButtonAtmospherics
+- proto: LockableButtonExternal
   entities:
   - uid: 6665
     components:
@@ -48119,32 +48126,19 @@ entities:
       parent: 2
     - type: DeviceLinkSource
       linkedPorts:
+        534:
+        - - Pressed
+          - Toggle
         538:
         - - Pressed
           - Toggle
         539:
         - - Pressed
           - Toggle
-        534:
-        - - Pressed
-          - Toggle
     - type: Fixtures
       fixtures: {}
 - proto: LockerSyndicatePersonal
   entities:
-  - uid: 6666
-    components:
-    - type: Transform
-      pos: -23.5,-16.5
-      parent: 2
-    - type: EntityStorage
-      air:
-        volume: 200
-        immutable: False
-        temperature: 293.14673
-        moles:
-          Oxygen: 1.7459903
-          Nitrogen: 6.568249
   - uid: 10045
     components:
     - type: Transform
@@ -48310,11 +48304,19 @@ entities:
       parent: 2
 - proto: LockerTaipanSteel
   entities:
+  - uid: 6666
+    components:
+    - type: Transform
+      pos: -23.5,-16.5
+      parent: 2
   - uid: 6693
     components:
     - type: Transform
+      anchored: True
       pos: -31.5,4.5
       parent: 2
+    - type: Physics
+      bodyType: Static
   - uid: 6694
     components:
     - type: Transform
@@ -48328,8 +48330,13 @@ entities:
   - uid: 6696
     components:
     - type: Transform
+      anchored: True
       pos: -29.5,4.5
       parent: 2
+    - type: AccessReader
+      accessListsOriginal: []
+    - type: Physics
+      bodyType: Static
 - proto: LockerTaipanTechnicalOperationsSupervisorFilled
   entities:
   - uid: 6697
@@ -49821,12 +49828,12 @@ entities:
   - uid: 6895
     components:
     - type: Transform
-      pos: -31.5,3.5
+      pos: -29.5,3.5
       parent: 2
   - uid: 6896
     components:
     - type: Transform
-      pos: -29.5,3.5
+      pos: -31.5,3.5
       parent: 2
   - uid: 6897
     components:
@@ -54551,7 +54558,7 @@ entities:
   - uid: 7624
     components:
     - type: Transform
-      pos: -27.220448,-8.2709465
+      pos: -27.190344,-8.064604
       parent: 2
     - type: Physics
       canCollide: False
@@ -54565,7 +54572,7 @@ entities:
   - uid: 7626
     components:
     - type: Transform
-      pos: -27.300316,-8.028406
+      pos: -27.416555,-8.064604
       parent: 2
     - type: Physics
       canCollide: False
@@ -58890,15 +58897,15 @@ entities:
     - type: Transform
       pos: -5.5,3.5
       parent: 2
-  - uid: 8189
-    components:
-    - type: Transform
-      pos: -2.5,3.5
-      parent: 2
   - uid: 8190
     components:
     - type: Transform
       pos: 9.5,-37.5
+      parent: 2
+  - uid: 8333
+    components:
+    - type: Transform
+      pos: -3.5,3.5
       parent: 2
 - proto: SyndicatePersonalAI
   entities:
@@ -59731,17 +59738,10 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -4.5,3.5
       parent: 2
-  - uid: 8333
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -3.5,3.5
-      parent: 2
   - uid: 8334
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -2.5,3.5
+      pos: -3.5,3.5
       parent: 2
   - uid: 8335
     components:
@@ -60348,6 +60348,15 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 43.5,-4.5
       parent: 2
+- proto: TaipanCommunicationsOfficerIDcard
+  entities:
+  - uid: 4632
+    components:
+    - type: Transform
+      pos: -27.51491,-8.5759115
+      parent: 2
+    - type: Physics
+      canCollide: False
 - proto: TaipanLeftLegBorg
   entities:
   - uid: 8441
@@ -61035,6 +61044,13 @@ entities:
     components:
     - type: Transform
       pos: -25.5,-16.5
+      parent: 2
+- proto: VendingMachineChefvend
+  entities:
+  - uid: 8189
+    components:
+    - type: Transform
+      pos: -2.5,3.5
       parent: 2
 - proto: VendingMachineChemicalsSyndicate
   entities:
@@ -69172,7 +69188,7 @@ entities:
       parent: 2
     - type: Fixtures
       fixtures: {}
-- proto: WaterCooler
+- proto: WaterCoolerTransfer
   entities:
   - uid: 9857
     components:

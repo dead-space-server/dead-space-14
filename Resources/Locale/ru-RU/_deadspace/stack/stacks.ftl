@@ -89,6 +89,19 @@ stack-bluespace-sheet =
        *[other] кусочков
     } чистого блюспейс кристала
 
+stack-redspace =
+    { $amount ->
+        [1] кусок
+        [few] кусочка
+       *[other] кусочков
+    } редспейс кристала
+stack-redspace-sheet =
+    { $amount ->
+        [1] кусок
+        [few] кусочка
+       *[other] кусочков
+    } чистого редспейс кристала
+
 stack-glass-scrap =
     { $amount ->
         [1] кусок

@@ -8,7 +8,7 @@
     state: seedextractor
   discipline: TaipanLifeSupport
   tier: 1
-  cost: 7500
+  cost: 5000
   diskAvailable: false
   recipeUnlocks:
   - SeedExtractorMachineCircuitboard
@@ -23,7 +23,7 @@
     state: icon
   discipline: TaipanLifeSupport
   tier: 1
-  cost: 7500
+  cost: 5000
   diskAvailable: false
   recipeUnlocks:
   - SynthesizerInstrument
@@ -70,10 +70,11 @@
     state: base
   discipline: TaipanLifeSupport
   tier: 1
-  cost: 7500
+  cost: 9000
   diskAvailable: false
   recipeUnlocks:
   - DrinkShakerSyndie
+  - RedspaceBeaker
 
 # Tier 2
 
@@ -85,7 +86,7 @@
     state: hypo
   discipline: TaipanLifeSupport
   tier: 2
-  cost: 15000
+  cost: 12500
   diskAvailable: false
   recipeUnlocks:
   - ADTCyberHypospray
@@ -155,7 +156,7 @@
     state: display
   discipline: TaipanLifeSupport
   tier: 2
-  cost: 15000
+  cost: 9000
   diskAvailable: false
   recipeUnlocks:
   - CargoTelepadMachineCircuitboardTaipan
@@ -220,6 +221,19 @@
   - LearnXenomorphLanguageImplanter
   - LearnDogLanguageImplanter
 
+- type: technology
+  id: TaipanDefibrillatorSyndicate
+  name: research-technology-defibrillator-syndicate
+  icon:
+    sprite: Objects/Specific/Medical/defibsyndi.rsi
+    state: icon
+  discipline: TaipanLifeSupport
+  tier: 2
+  cost: 20000
+  diskAvailable: false
+  recipeUnlocks:
+  - DefibrillatorSyndicate
+
 # Tier 3
 
 - type: technology
@@ -246,7 +260,7 @@
     state: pod_0
   discipline: TaipanLifeSupport
   tier: 3
-  cost: 30000
+  cost: 20000
   diskAvailable: false
   recipeUnlocks:
   - CloningPodMachineCircuitboard
@@ -269,16 +283,3 @@
   - SyndiHypo
   technologyPrerequisites:
   - TaipanHypopen
-
-- type: technology
-  id: TaipanDefibrillatorSyndicate
-  name: research-technology-defibrillator-syndicate
-  icon:
-    sprite: Objects/Specific/Medical/defibsyndi.rsi
-    state: icon
-  discipline: TaipanLifeSupport
-  tier: 4
-  cost: 50000
-  diskAvailable: false
-  recipeUnlocks:
-  - DefibrillatorSyndicate
