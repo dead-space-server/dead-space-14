@@ -9,7 +9,7 @@
 - type: tile
   id: FloorAbductor
   name: tiles-abductor-floor
-  sprite: /Textures/_DeadSpace/Abductor/abductor_tile.rsi/abductor_tile.png
+  sprite: /Textures/_DeadSpace/Tiles/abductor_tile.png
   isSubfloor: true
   footstepSounds:
     collection: FootstepAsteroid
