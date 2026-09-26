@@ -227,3 +227,11 @@
 - type: lobbyBackground
   id: MarmSec
   background: /Textures/LobbyScreens/Fobos/marm.webp
+
+# snovazs
+
+- type: lobbyBackground
+  id: SecretSupper
+  background: /Textures/LobbyScreens/Fobos/secret_supper.webp
+  title: lobby-state-background-secretsupper-title
+  artist: lobby-state-background-secretsupper-artist
