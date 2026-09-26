@@ -2,7 +2,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpack 
   id: ClothingBackpackDragonFoxMadParadox
   name: рюкзак KUMA
   description: Вместительный и стильный рюкзак для удобного хранения всех необходимых вещей.
