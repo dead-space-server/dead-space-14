@@ -1,0 +1,23 @@
+- type: entity
+  parent: ClothingBeltSheath
+  id: ClothingBeltSheathBlack
+  name: чёрные сабельные ножны
+  description: Украшенные ножны, предназначенные для хранения офицерского клинка.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Belt/black_sheath.rsi
+    state: sheath
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Belt/black_sheath.rsi
+
+- type: entity
+  parent: ClothingBeltSheath
+  id: ClothingBeltSheathWhite
+  name: белые сабельные ножны
+  description: Украшенные ножны, предназначенные для хранения офицерского клинка.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Belt/white_sheath.rsi
+    state: sheath
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Belt/white_sheath.rsi
