@@ -175,7 +175,7 @@
 
 # Mask
 - type: entity
-  parent: ClothingMaskGasSecurity
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskCyberBobeks
   name: противогаз Syn.V // Mod.1
   description: Модернизированный противогаз, явно сделанный с акцентом не дышать с челядью одним воздухом.

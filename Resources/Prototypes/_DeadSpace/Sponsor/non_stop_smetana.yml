@@ -394,7 +394,7 @@
 
 # gasmask.rsi
 - type: entity
-  parent: ClothingMaskGasSecurity
+  parent: ClothingMaskGasSponsor
   id: ClothingMasknon_stop_smetana
   name: тактическая маска
   description: Надёжная фильтрация любых загрязнителей, ударопрочный корпус и широкий угол обзора. Она не мешает речи и круто выглядит. Возможно, даже спасёт от некрогаза.

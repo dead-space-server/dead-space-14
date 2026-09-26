@@ -195,7 +195,7 @@
 
 # Gasmask
 - type: entity
-  parent: ClothingMaskGasSyndicate
+  parent: ClothingMaskGasSponsor
   id: ClothingMask0black_cat0
   name: противогаз тёмного воителя
   description: Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.

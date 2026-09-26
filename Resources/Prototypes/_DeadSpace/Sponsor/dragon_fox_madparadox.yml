@@ -2,7 +2,7 @@
 
 # Backpack
 - type: entity
-  parent: ClothingBackpack
+  parent: ClothingBackpack 
   id: ClothingBackpackDragonFoxMadParadox
   name: рюкзак KUMA
   description: Вместительный и стильный рюкзак для удобного хранения всех необходимых вещей.
@@ -530,7 +530,7 @@
 
 #Gasmask
 - type: entity
-  parent: ClothingMaskGasSecurity
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskDragonFoxMadParadox
   name: шлем с противогазом «Бездна Смотрит»
   description: Шлем «Бездна Смотрит» — высокотехнологичное защитное снаряжение, вдохновлённое физикой чёрных дыр. Его визор имитирует горизонт событий, а встроенные системы используют принципы гравитационного искажения для защиты носителя. Предназначен для работы в экстремальных условиях - от заражённых зон до областей с гравитационными аномалиями.
