@@ -278,7 +278,7 @@ public sealed class SmartWeaponSystem : EntitySystem
             }
         }
 
-        float crosshairTarget = LockedTarget != null ? 1f : 0f;
+        float crosshairTarget = (LockedTarget != null && targetValidNow) ? 1f : 0f;
         float crosshairDelta = AnimationSpeed * frameTime;
         CrosshairProgress = crosshairTarget > 0
             ? MathF.Min(1f, CrosshairProgress + crosshairDelta)

@@ -24,21 +24,20 @@
     fireRate: 7.5
     burstFireRate: 20
     soundGunshot:
-      path: /Audio/Weapons/Guns/Gunshots/atreides.ogg
-    selectedMode: FullAuto
+      path: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/shingen_shot.ogg
+    selectedMode: Burst
     availableModes:
     - Burst
-    - FullAuto
     - SemiAuto
-    shotsPerBurst: 3
-    burstCooldown: 0.375
+    shotsPerBurst: 4
+    burstCooldown: 0.5
   - type: ItemSlots
     slots:
       gun_magazine:
         name: Magazine
         startingItem: MagazineSmartWeaponShingen
-        insertSound: /Audio/Weapons/Guns/MagIn/smg_magin.ogg
-        ejectSound: /Audio/Weapons/Guns/MagOut/smg_magout.ogg
+        insertSound: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/shingen_magin.ogg
+        ejectSound: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/shingen_magout.ogg
         priority: 2
         whitelist:
           tags:
@@ -60,6 +59,9 @@
     size: Normal
     shape:
       - 0,0,3,1
+  - type: ChamberMagazineAmmoProvider
+    soundRack:
+      path: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/shingen_bolt.ogg
   - type: SmartWeapon
     crosshairColor: "#f84a3e"
     targetHighlightColor: "#FF0000"
@@ -67,7 +69,7 @@
     debugZoneColor: "#20ff027f"
     ammoDigitsColor: "#ffba78"
     magnetismDelay: 0.01
-    magnetismUpdateInterval: 0.002
+    magnetismUpdateInterval: 0.02
     magnetismMaxAngle: 5
     crosshairAlpha: 0.7
     cornerStickTexture: /Textures/_DeadSpace/Interface/SmartWeapon/corner_stick.png
