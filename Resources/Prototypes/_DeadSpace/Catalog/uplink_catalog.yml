@@ -1362,3 +1362,62 @@
     whitelist:
       tags:
       - LoneOpsUplink
+
+- type: listing 
+  id: UplinkShingen
+  name: uplink-shingen-name
+  description: uplink-shingen-desc
+  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Smart/shingen2.rsi, state: icon }
+  productEntity: ShingenCase
+  cost:
+    Telecrystal: 18
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkShingenAmmo
+  name: uplink-shingen-ammo-name
+  description: uplink-shingen-ammo-desc
+  productEntity: MagazineSmartWeaponShingen
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkAmmo
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkSmartlinkImplanter
+  name: uplink-smartlink-implanter-name
+  description: uplink-smartlink-implanter-desc
+  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Smart/case.rsi, state: smartlink }
+  productEntity: SmartLinkImplanter
+  cost:
+    Telecrystal: 2
+  categories:
+    - UplinkImplants
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
