@@ -3,6 +3,7 @@ using Content.Shared.Buckle.Components;
 using Content.Shared.Construction.EntitySystems;
 using Content.Shared.Popups;
 using Content.Shared.Storage.Components;
+using Content.Shared.Tag; // DS14
 using Content.Shared.Verbs;
 using Robust.Shared.Containers;
 using Robust.Shared.Physics.Components;
@@ -19,6 +20,7 @@ public sealed class FoldableSystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly AnchorableSystem _anchorable = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly TagSystem _tag = default!; // DS14
 
     public override void Initialize()
     {
@@ -91,9 +93,23 @@ public sealed class FoldableSystem : EntitySystem
 
     private void OnInsertEvent(EntityUid uid, FoldableComponent component, ContainerGettingInsertedAttemptEvent args)
     {
-        if (!component.IsFolded && !component.CanFoldInsideContainer)
+        if (!component.IsFolded && !component.CanFoldInsideContainer && !CanStoreBodyBagUnfolded(uid, args.Container)) // DS14
             args.Cancel();
     }
+
+    // DS14-Start
+    private bool CanStoreBodyBagUnfolded(EntityUid uid, BaseContainer container)
+    {
+        if (!_tag.HasTag(uid, "BodyBag"))
+            return false;
+
+        var target = container.Owner;
+        if (_tag.HasTag(target, "FreezerCloset"))
+            return false;
+
+        return HasComp<EntityStorageComponent>(target);
+    }
+    // DS14-End
 
     public bool TryToggleFold(EntityUid uid, FoldableComponent comp, EntityUid? folder = null)
     {

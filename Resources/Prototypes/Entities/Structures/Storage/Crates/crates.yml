@@ -50,6 +50,9 @@
   - type: Sprite
     sprite: Structures/Storage/Crates/freezer.rsi
   - type: AntiRottingContainer
+  - type: Tag # DS14
+    tags:
+    - FreezerCloset
   - type: ExplosionResistance
     damageCoefficient: 0.50
   - type: Construction
