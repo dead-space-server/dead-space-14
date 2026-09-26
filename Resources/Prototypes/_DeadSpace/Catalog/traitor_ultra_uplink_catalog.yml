@@ -2955,9 +2955,9 @@
 - type: listing
   id: UplinkTraitorUltraEswordDoubleLone
   name: uplink-esword-double-name
-  description: Воскрес и разнёс паблик. Только один к покупке.
+  description: uplink-esword-double-desc
   icon: { sprite: /Textures/Objects/Weapons/Melee/e_sword_double.rsi, state: icon }
-  productEntity: EnergySwordDouble
+  productEntity: BriefcaseWeaponESwordDoubleFilled
   cost:
     Telecrystal: 36
   categories:
@@ -2977,7 +2977,7 @@
 - type: listing
   id: UplinkTraitorUltraEswordDoubleAgents
   name: uplink-esword-double-name
-  description: uplink-esword-double-desc
+  description: Воскрес и разнёс паблик. Только один к покупке.
   icon: { sprite: /Textures/Objects/Weapons/Melee/e_sword_double.rsi, state: icon }
   productEntity: EnergySwordDouble
   cost:
