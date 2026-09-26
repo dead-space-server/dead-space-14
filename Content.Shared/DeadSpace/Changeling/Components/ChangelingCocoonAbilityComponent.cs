@@ -17,16 +17,9 @@ namespace Content.Shared.DeadSpace.Changeling.Components;
 [Access(typeof(ChangelingCocoonAbilitySystem))]
 public sealed partial class ChangelingCocoonAbilityComponent : Component
 {
-    /// <summary>
-    ///     Whether the changeling wants to be wrapped in a cocoon when entering stasis.
-    ///     The changeling can switch this on and off with the alert on the right side of their screen.
-    /// </summary>
     [DataField, AutoNetworkedField]
     public bool Enabled = true;
 
-    /// <summary>
-    ///     The alert showing the current state of the ability and used to toggle it.
-    /// </summary>
     [DataField]
     public ProtoId<AlertPrototype> AlertId = "ChangelingCocoon";
 }

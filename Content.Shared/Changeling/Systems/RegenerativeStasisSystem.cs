@@ -210,17 +210,11 @@ public sealed partial class RegenerativeStasisSystem : EntitySystem
             _hands.SetCanBeStripped((target, hands), true);
     }
 
-    /// <summary>
-    ///     Takes every pair of handcuffs off the changeling and drops them on the floor, so that
-    ///     they are free to move again after regenerating. The cuffs cannot be escaped while
-    ///     stasis is active, so they are removed instead of going through the usual doafter.
-    /// </summary>
     private void RemoveCuffs(EntityUid target)
     {
         if (!TryComp<CuffableComponent>(target, out var cuffable) || cuffable.Container.ContainedEntities.Count == 0)
             return;
 
-        // Uncuffing modifies the container, so we have to walk over a copy of it.
         foreach (var cuffs in cuffable.Container.ContainedEntities.ToArray())
         {
             _cuffs.Uncuff(target, null, cuffs, cuffable);
