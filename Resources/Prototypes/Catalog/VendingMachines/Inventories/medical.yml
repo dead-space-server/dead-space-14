@@ -10,6 +10,7 @@
     Syringe: 3
     PillCanisterTricordrazine: 2
     ChemistryBottleInfectizine: 1 # DS14
+    IvDripFolded: 1
   contrabandInventory:
     PillCanisterRandom: 1
 
@@ -52,11 +53,13 @@
     # Optional / Situational Gear
     BoxBottle: 3
     Defibrillator: 2 # Easily shared between several people
+    IvDripFolded: 2
     Syringe: 4
     PillCanisterTricordrazine: 4
     ClothingOuterHospitalGown: 2 # Not a popular item, so less stock
     ChemistryBottleInfectizine: 1 # DS14
     ToolAlcoTester: 3 # DS14
+    ChemistryBottleSaline: 4
   contrabandInventory:
     PillCanisterRandom: 3
     PillSpaceDrugs: 3

@@ -1,0 +1,126 @@
+# IV drips — wheeled stand with onboard injectable tank. Sold folded from NanoMed Plus.
+- type: entity
+  parent: [BaseItem, BaseDeployFoldable]
+  id: IvDrip
+  name: IV drip
+  description: Quickly injects blood or chemicals into a patient. Click to draw the IV line, fill the bag with a beaker, syringe, or blood pack.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Medical/iv_drip.rsi
+    noRot: true
+    layers:
+    - state: unfolded
+      map: [ "unfoldedLayer" ]
+    - state: folded
+      map: [ "foldedLayer" ]
+      visible: false
+    - state: bag
+      map: [ "enum.IvDripVisuals.HasBag" ]
+      visible: false
+    - state: slider_off
+      map: [ "enum.IvDripVisuals.Speed" ]
+  - type: Transform
+    noRot: true
+  - type: Item
+    size: Large
+    heldPrefix: inhand
+  - type: MultiHandedItem
+  - type: IvDrip
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        maxVol: 120
+  - type: RefillableSolution
+    solution: tank
+  - type: InjectableSolution
+    solution: tank
+  - type: DrainableSolution
+    solution: tank
+  - type: DrawableSolution
+    solution: tank
+  - type: ExaminableSolution
+    solution: tank
+  - type: SolutionTransfer
+    canChangeTransferAmount: true
+  - type: UserInterface
+    interfaces:
+      enum.TransferAmountUiKey.Key:
+        type: TransferAmountBoundUserInterface
+  - type: Foldable
+    folded: false
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.FoldedVisuals.State:
+        foldedLayer:
+          True: { visible: true }
+          False: { visible: false }
+        unfoldedLayer:
+          True: { visible: false }
+          False: { visible: true }
+  - type: Pullable
+    fixedRotation: true
+  - type: InteractionOutline
+  - type: Physics
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 20
+        mask:
+        - MobMask
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 80
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:SpillBehavior
+        solution: tank
+  - type: StaticPrice
+    price: 200
+
+- type: entity
+  parent: IvDrip
+  id: IvDripFolded
+  suffix: Folded
+  components:
+  - type: Foldable
+    folded: true
+  - type: Sprite
+    layers:
+    - state: unfolded
+      map: [ "unfoldedLayer" ]
+      visible: false
+    - state: folded
+      map: [ "foldedLayer" ]
+    - state: bag
+      map: [ "enum.IvDripVisuals.HasBag" ]
+      visible: false
+    - state: slider_off
+      map: [ "enum.IvDripVisuals.Speed" ]
+      visible: false
+
+# Temporary IV line drawn from an unfolded stand. Vanishes if you walk away.
+- type: entity
+  parent: BaseItem
+  id: IvDripNeedle
+  name: IV line
+  description: The tubing and needle from an IV drip. Stay close to the stand or it retracts.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Medical/iv_drip.rsi
+    state: needle
+    scale: 0.7, 0.7
+  - type: Item
+    size: Tiny
+    sprite: _DeadSpace/Medical/iv_drip.rsi
+    heldPrefix: needle-inhand
+  - type: IvDripNeedle
+  - type: Unremoveable
