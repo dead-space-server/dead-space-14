@@ -1,7 +1,9 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
-using Content.Shared.Changeling.Systems;
+using Content.Shared.Alert;
+using Content.Shared.DeadSpace.Changeling.Systems;
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.Changeling.Components;
 
@@ -11,8 +13,20 @@ namespace Content.Shared.DeadSpace.Changeling.Components;
 ///     of leftover flesh that prevents other people from stripping or searching them.
 ///     The cocoon provides no damage protection, but the body can still be dragged around.
 /// </summary>
-[RegisterComponent, NetworkedComponent]
-[Access(typeof(RegenerativeStasisSystem))]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[Access(typeof(ChangelingCocoonAbilitySystem))]
 public sealed partial class ChangelingCocoonAbilityComponent : Component
 {
+    /// <summary>
+    ///     Whether the changeling wants to be wrapped in a cocoon when entering stasis.
+    ///     The changeling can switch this on and off with the alert on the right side of their screen.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool Enabled = true;
+
+    /// <summary>
+    ///     The alert showing the current state of the ability and used to toggle it.
+    /// </summary>
+    [DataField]
+    public ProtoId<AlertPrototype> AlertId = "ChangelingCocoon";
 }
