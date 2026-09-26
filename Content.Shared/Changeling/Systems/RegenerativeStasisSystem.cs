@@ -1,9 +1,12 @@
-﻿using Content.Shared.Actions;
+﻿using System.Linq;
+using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
 using Content.Shared.Changeling.Components;
-using Content.Shared.DeadSpace.Changeling.Components; // DS14
+using Content.Shared.Cuffs; // DS14
+using Content.Shared.Cuffs.Components; // DS14
+using Content.Shared.DeadSpace.Changeling.Systems; // DS14
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Hands.Components;
@@ -22,6 +25,8 @@ public sealed partial class RegenerativeStasisSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!; // DS14
+    [Dependency] private readonly ChangelingCocoonAbilitySystem _cocoon = default!; // DS14
+    [Dependency] private readonly SharedCuffableSystem _cuffs = default!; // DS14
     [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly MobStateSystem _mobs = default!;
     [Dependency] private readonly DamageableSystem _damage = default!;
@@ -57,6 +62,7 @@ public sealed partial class RegenerativeStasisSystem : EntitySystem
             {
                 CancelStasis((action, stasis));
                 RestoreStrip(ent.Owner);
+                RemoveCuffs(ent.Owner); // DS14
             }
         }
     }
@@ -102,7 +108,7 @@ public sealed partial class RegenerativeStasisSystem : EntitySystem
         _popup.PopupPredicted(Loc.GetString("changeling-stasis-enter"), null, target, target, PopupType.MediumCaution); // DS14
 
         // DS14-start
-        if (HasComp<ChangelingCocoonAbilityComponent>(target) &&
+        if (_cocoon.IsEnabled(target) &&
             TryComp<HandsComponent>(target, out var cocoonHands) &&
             cocoonHands.CanBeStripped)
         {
@@ -162,6 +168,7 @@ public sealed partial class RegenerativeStasisSystem : EntitySystem
         ent.Comp.IsInStasis = false;
         ent.Comp.CocoonActive = false;
         RestoreStrip(target);
+        RemoveCuffs(target);
         // DS14-end
         Dirty(ent);
 
@@ -201,6 +208,17 @@ public sealed partial class RegenerativeStasisSystem : EntitySystem
     {
         if (TryComp<HandsComponent>(target, out var hands) && !hands.CanBeStripped)
             _hands.SetCanBeStripped((target, hands), true);
+    }
+
+    private void RemoveCuffs(EntityUid target)
+    {
+        if (!TryComp<CuffableComponent>(target, out var cuffable) || cuffable.Container.ContainedEntities.Count == 0)
+            return;
+
+        foreach (var cuffs in cuffable.Container.ContainedEntities.ToArray())
+        {
+            _cuffs.Uncuff(target, null, cuffs, cuffable);
+        }
     }
     // DS14-end
 }
