@@ -87,6 +87,51 @@
   #DS14-End
 
 - type: entity
+  name: flashlight1
+  parent: BaseItem
+  id: Ebal
+  description: It lights the way to freedom.
+  components:
+  - type: Ebal
+  - type: Sprite
+    sprite: Objects/Tools/flashlight.rsi
+    layers:
+      - state: flashlight
+      - state: flashlight-overlay
+        shader: unshaded
+        visible: false
+        map: [ "light" ]
+  - type: Item
+    sprite: Objects/Tools/flashlight.rsi
+    storedRotation: -90
+  - type: Clothing
+    sprite: Objects/Tools/flashlight.rsi
+    quickEquip: false
+    slots:
+      - head
+  - type: Edible
+    edible: Drink # Namesake. This entity is a sort of cup you can drink directly from.
+    destroyOnEmpty: false
+    utensil: None # Spoons don't fit in cups, also conflicts with bar spoon stirring
+    Repeat: false
+    solution: &sol drink # solution name alias
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+  - type: SolutionTransfer
+    canChangeTransferAmount: true
+  - type: ContainerContainer
+    containers:
+      item: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      item:
+        whitelist:
+          tags:
+          - DrinkCan
+
+- type: entity
   name: seclite
   parent: [FlashlightLantern, BaseSecurityContraband]
   id: FlashlightSeclite
