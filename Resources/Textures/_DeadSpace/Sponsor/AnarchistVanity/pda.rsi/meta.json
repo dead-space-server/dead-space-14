@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "license": "CC-BY-SA 3.0",
+  "license": "CC-BY-SA-3.0",
   "copyright": "By TheGypsyBaron (discord: semkagamez) for Space Station 14 server Мёртвый Космос",
   "size": {
     "x": 32,
@@ -15,7 +15,7 @@
 			0.2,
 			0.2,
 			0.2
-		  ]	
+		  ]
 		]
       },
       {
