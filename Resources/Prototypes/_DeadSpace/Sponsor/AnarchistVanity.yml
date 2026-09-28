@@ -261,7 +261,7 @@
   - type: MeleeWeapon
     damage:
       types:
-        Blunt: 14
+        Blunt: 10
 
 - type: entity
   parent: PowerDrill
