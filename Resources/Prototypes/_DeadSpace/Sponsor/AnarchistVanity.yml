@@ -400,7 +400,7 @@
     - HyposprayDynamicMode
     - HyposprayInjectMode
   - type: UseDelay
-    delay: 1.0
+    delay: 0.5
 
 # Shoes
 - type: entity
