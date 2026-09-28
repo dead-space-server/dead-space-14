@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "license": "CC-BY-SA 2.0",
+  "license": "CC-BY-SA-4.0",
   "copyright": "By TheGypsyBaron (discord: semkagamez) for Space Station 12 server Мёртвый Космос",
   "size": {
     "x": 32,
@@ -16,25 +16,25 @@
       "delays": [
         [
           0.2,
-          0.2,        
+          0.2,
           0.2,
           0.2
         ],
         [
           0.2,
-          0.2,    
+          0.2,
           0.2,
           0.2
         ],
         [
           0.2,
-          0.2,        
+          0.2,
           0.2,
           0.2
         ],
         [
           0.2,
-          0.2,        
+          0.2,
           0.2,
           0.2
         ]
