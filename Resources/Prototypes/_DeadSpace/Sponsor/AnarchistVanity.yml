@@ -41,7 +41,7 @@
 
 # Belt
 - type: entity
-  parent: ClothingBeltChiefEngineer
+  parent: ClothingWebbingAnarchistVanity
   id: ClothingBeltAnarchistVanityFilled
   name: пояс «Патриот»
   description: Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
@@ -59,6 +59,8 @@
       - id: PowerDrillAnarchistVanity
       - id: MultitoolAnarchistVanity
       - id: JawsOfLifeAnarchistVanity
+  - type: Tag
+    tags: []
 
 # Gloves
 - type: entity
@@ -72,12 +74,15 @@
     sprite: _DeadSpace/Sponsor/AnarchistVanity/gloves.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/AnarchistVanity/gloves.rsi
+  - type: Tag
+    tags: []
 
 # Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitBase
+  parent: ClothingOuterHardsuitSecurity
   id: ClothingOuterHardsuitAnarchistVanity
   name: тяжелый скафандр «Патриот»
+  categories: [ HideSpawnMenu ]
   description: Тяжёлый, израненный временем скафандр, ставший последней опорой умирающего воина. Его системы поддерживают жизнь Патриота, пока массивные пластины защищают истощённое тело. Каждая трещина, вмятина и заменённая деталь хранит историю десятилетий войны и память о павших братьях, которых он пережил. Она стала последним панцирем старого солдата — тем, что осталось между его разрушенным телом и миром, против которого он продолжал идти вперёд.
   components:
   - type: Sprite
@@ -102,6 +107,8 @@
     clothingPrototype: ClothingHeadHelmetHardsuitAnarchistVanity
   - type: Item
     size: Huge
+  - type: Tag
+    tags: []
 
 
 - type: entity
@@ -120,6 +127,8 @@
   - type: PressureProtection
     highPressureMultiplier: 0.08
     lowPressureMultiplier: 1000
+  - type: Tag
+    tags: []
 
 # Jumpsuit
 - type: entity
@@ -133,6 +142,8 @@
     sprite: _DeadSpace/Sponsor/AnarchistVanity/jumpsuit.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/AnarchistVanity/jumpsuit.rsi
+  - type: Tag
+    tags: []
 
 # Magboots
 - type: entity
@@ -152,10 +163,12 @@
     - type: ClothingSpeedModifier
       walkModifier: 1
       sprintModifier: 1
+    - type: Tag
+      tags: []
 
 # jacket
 - type: entity
-  parent: ClothingOuterCoatSyndieCapArmored
+  parent: ClothingOuterStorageBase
   id: ClothingOuterCoatAnarchistVanity
   name: пальто Млечной пути
   description: Длинное аристократическое пальто глубокого тёмно-бордового оттенка, отделанное алыми вставками и потускневшим золотом. Тяжёлая ткань почти достигает земли, а чрезмерно длинные рукава свободно свисают по бокам — владелец практически никогда не надевает их, предпочитая носить пальто наброшенным на плечи, словно королевскую мантию. Золотые эполеты и декоративные элементы придают ему вид старинного военного облачения. За благородной внешностью скрывается древнее существо чудовищной силы, некогда мечтавшее о мире, где люди и вампиры смогут существовать вместе.
@@ -165,6 +178,8 @@
     sprite: _DeadSpace/Sponsor/AnarchistVanity/jacket.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/AnarchistVanity/jacket.rsi
+  - type: Tag
+    tags: []
 
 # Cloak
 - type: entity
@@ -176,6 +191,8 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/AnarchistVanity/cloak.rsi
+  - type: Tag
+    tags: []
 
 # PDA
 - type: entity
@@ -190,6 +207,8 @@
   - type: Sprite
     sprite: _DeadSpace/Sponsor/AnarchistVanity/pda.rsi
   - type: Pda
+  - type: Tag
+    tags: []
 
 # Tools
 - type: entity
@@ -314,6 +333,8 @@
     enabled: true
     radius: 10
     color: "#66CCFF"
+  - type: Tag
+    tags: []
 
 # HeadSet
 - type: entity
@@ -332,6 +353,8 @@
     enabled: true
     radius: 1.5
     color: "#6600FF"
+  - type: Tag
+    tags: []
 
 # Hat
 - type: entity
@@ -345,6 +368,8 @@
     sprite: _DeadSpace/Sponsor/AnarchistVanity/hat.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/AnarchistVanity/hat.rsi
+  - type: Tag
+    tags: []
 
 # Hypospray
 - type: entity
@@ -389,6 +414,8 @@
     sprite: _DeadSpace/Sponsor/AnarchistVanity/shoes.rsi
   - type: Clothing
     sprite: _DeadSpace/Sponsor/AnarchistVanity/shoes.rsi
+  - type: Tag
+    tags: []
 
 # Defibrillator
 - type: entity
@@ -423,6 +450,8 @@
     grid:
     - 0,0,7,1
   - type: StorageFill
+  - type: Tag
+    tags: []
 
 # toy
 - type: entity
@@ -449,6 +478,8 @@
   - type: Item
     sprite: _DeadSpace/Sponsor/AnarchistVanity/medkit.rsi
     size: Normal
+  - type: Tag
+    tags: []
 
 #Customization
 - type: marking
