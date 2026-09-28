@@ -108,7 +108,7 @@
   id: ClothingHeadHelmetHardsuitAnarchistVanity
   categories: [ HideSpawnMenu ]
   name: шлем скафандра «Потерянный Лик Добродетеля»
-  description: Массивный закрытый шлем, полностью скрывающий лицо Патриота. Потёртый металл покрыт шрамами старых сражений, а встроенная система дыхания помогает поддерживать жизнь умирающего воина. За его безликой маской скрывается не только измученное тело, но и память о павших братьях. 
+  description: Массивный закрытый шлем, полностью скрывающий лицо Патриота. Потёртый металл покрыт шрамами старых сражений, а встроенная система дыхания помогает поддерживать жизнь умирающего воина. За его безликой маской скрывается не только измученное тело, но и память о павших братьях.
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/AnarchistVanity/hardsuit_helmet.rsi
@@ -280,7 +280,7 @@
   parent: Multitool
   id: MultitoolAnarchistVanity
   name: мультитул «Патриот»
-  description: Модифицированное устройство 
+  description: Модифицированное устройство
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -350,7 +350,7 @@
   parent: BaseItem
   id: HypoAnarchistVanity
   name: универсальный гипоспрей
-  description: Гипоспрей модификации «Патриот». 
+  description: Гипоспрей модификации «Патриот».
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -458,7 +458,7 @@
   sprites:
   - sprite: _DeadSpace/Sponsor/AnarchistVanity/Customization/hair.rsi
     state: hair
-  
+
 #melee
 - type: entity
   parent: BaseItem
@@ -501,3 +501,20 @@
         enum.ToggleableVisuals.Layer:
           True: {state: telescope_on}
           False: {state: telescope_off}
+
+#Paper
+- type: entity
+  parent: PaperPrintedCentcomm
+  id: PaperAnarchistVanity
+  name: распечатанный документ
+  description: Лист бумаги с заголовком центкома. Страшно даже смотреть на него.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Paper
+    stampState: paper_stamp-centcom
+    stampedBy:
+    - stampedColor: '#006600FF'
+      stampedName: Центральное Командование
+    - stampedColor: '#00BE00FF'
+      stampedName: Одобрено
+    content: paper-law-anarchistvanity
