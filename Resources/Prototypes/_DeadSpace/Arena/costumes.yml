@@ -1,6 +1,6 @@
 # == Костюмы для арены. == цены не нужны. надо сохранения сделат
 # Купленная одежда надевается поверх выбранного пресета.
-# Жилетам сервер автоматически выдаёт резисты ClothingOuterArmorBasic. 
+# Жилетам сервер автоматически выдаёт резисты ClothingOuterArmorBasic.
 
 # --- Плащи (надеваются на шею) ---
 
@@ -40,6 +40,420 @@
   slot: neck
   price: 0
 
+- type: arenaCostume
+  id: ArenaCostumeUnitologyGeistMantleNew
+  nameLoc: arene-costume-ClothingNeckUnitologyGeistMantleNew-name
+  descLoc: arene-costume-ClothingNeckUnitologyGeistMantleNew-desc
+  category: cloak
+  item: ClothingNeckUnitologyGeistMantleNew
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeUnitologyGeistMantle
+  nameLoc: arene-costume-ClothingNeckUnitologyGeistMantle-name
+  descLoc: arene-costume-ClothingNeckUnitologyGeistMantle-desc
+  category: cloak
+  item: ClothingNeckUnitologyGeistMantle
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeNukeOpsCloak
+  nameLoc: arene-costume-ClothingNeckNukeOpsCloak-name
+  descLoc: arene-costume-ClothingNeckNukeOpsCloak-desc
+  category: cloak
+  item: ClothingNeckNukeOpsCloak
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeNanotrasenCloak
+  nameLoc: ent-ClothingNeckCloakNanotrasen
+  descLoc: ent-ClothingNeckCloakNanotrasen.desc
+  category: cloak
+  item: ClothingNeckCloakNanotrasen
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeCommunicationsOfficerCloak
+  nameLoc: ent-ClothingNeckCloakCommunicationsOfficer
+  descLoc: ent-ClothingNeckCloakCommunicationsOfficer.desc
+  category: cloak
+  item: ClothingNeckCloakCommunicationsOfficer
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeSunsetCloak
+  nameLoc: ent-ClothingNeckCloakSunset
+  descLoc: ent-ClothingNeckCloakSunset.desc
+  category: cloak
+  item: ClothingNeckCloakSunset
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeCentcomAdmiralCloak
+  nameLoc: ent-ClothingNeckCloakCentcomAdmiral
+  descLoc: ent-ClothingNeckCloakCentcomAdmiral.desc
+  category: cloak
+  item: ClothingNeckCloakCentcomAdmiral
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeAdminCloak
+  nameLoc: ent-ClothingNeckCloakAdmin
+  descLoc: ent-ClothingNeckCloakAdmin.desc
+  category: cloak
+  item: ClothingNeckCloakAdmin
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeVoidCloak
+  nameLoc: ent-ClothingNeckCloakVoid
+  descLoc: ent-ClothingNeckCloakVoid.desc
+  category: cloak
+  item: ClothingNeckCloakVoid
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeGoliathCloak
+  nameLoc: ent-ClothingNeckCloakGoliathCloak
+  descLoc: ent-ClothingNeckCloakGoliathCloak.desc
+  category: cloak
+  item: ClothingNeckCloakGoliathCloak
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeSrCloak
+  nameLoc: ent-ClothingNeckCloakSr
+  descLoc: ent-ClothingNeckCloakSr.desc
+  category: cloak
+  item: ClothingNeckCloakSr
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeSalvagerSupremeCloak
+  nameLoc: ent-ClothingNeckCloakSalvagerSupreme
+  descLoc: ent-ClothingNeckCloakSalvagerSupreme.desc
+  category: cloak
+  item: ClothingNeckCloakSalvagerSupreme
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeCentcomBlackCloak
+  nameLoc: ent-ClothingNeckCloakCentcomBlack
+  descLoc: ent-ClothingNeckCloakCentcomBlack.desc
+  category: cloak
+  item: ClothingNeckCloakCentcomBlack
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeCentcomCloak
+  nameLoc: ent-ClothingNeckCloakCentcom
+  descLoc: ent-ClothingNeckCloakCentcom.desc
+  category: cloak
+  item: ClothingNeckCloakCentcom
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeHOSMantle
+  nameLoc: ent-ClothingNeckMantleHOS
+  descLoc: ent-ClothingNeckMantleHOS.desc
+  category: cloak
+  item: ClothingNeckMantleHOS
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeHosCloak
+  nameLoc: ent-ClothingNeckCloakHos
+  descLoc: ent-ClothingNeckCloakHos.desc
+  category: cloak
+  item: ClothingNeckCloakHos
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeERTLeaderMantle
+  nameLoc: ent-ClothingNeckMantleERTLeader
+  descLoc: ent-ClothingNeckMantleERTLeader.desc
+  category: cloak
+  item: ClothingNeckMantleERTLeader
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeHeraldCloak
+  nameLoc: ent-ClothingNeckCloakHerald
+  descLoc: ent-ClothingNeckCloakHerald.desc
+  category: cloak
+  item: ClothingNeckCloakHerald
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJanitorCloak
+  nameLoc: ent-ClothingNeckCloakJanitor
+  descLoc: ent-ClothingNeckCloakJanitor.desc
+  category: cloak
+  item: ClothingNeckCloakJanitor
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeCmoCloak
+  nameLoc: ent-ClothingCloakCmo
+  descLoc: ent-ClothingCloakCmo.desc
+  category: cloak
+  item: ClothingCloakCmo
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeQmCloak
+  nameLoc: ent-ClothingNeckCloakQm
+  descLoc: ent-ClothingNeckCloakQm.desc
+  category: cloak
+  item: ClothingNeckCloakQm
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeCapCloak
+  nameLoc: ent-ClothingNeckCloakCap
+  descLoc: ent-ClothingNeckCloakCap.desc
+  category: cloak
+  item: ClothingNeckCloakCap
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeRdCloak
+  nameLoc: ent-ClothingNeckCloakRd
+  descLoc: ent-ClothingNeckCloakRd.desc
+  category: cloak
+  item: ClothingNeckCloakRd
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeCeCloak
+  nameLoc: ent-ClothingNeckCloakCe
+  descLoc: ent-ClothingNeckCloakCe.desc
+  category: cloak
+  item: ClothingNeckCloakCe
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeMothCloak
+  nameLoc: ent-ClothingNeckCloakMoth
+  descLoc: ent-ClothingNeckCloakMoth.desc
+  category: cloak
+  item: ClothingNeckCloakMoth
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumePanCloak
+  nameLoc: ent-ClothingNeckCloakPan
+  descLoc: ent-ClothingNeckCloakPan.desc
+  category: cloak
+  item: ClothingNeckCloakPan
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeLesbianCloak
+  nameLoc: ent-ClothingNeckCloakLesbian
+  descLoc: ent-ClothingNeckCloakLesbian.desc
+  category: cloak
+  item: ClothingNeckCloakLesbian
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeBiCloak
+  nameLoc: ent-ClothingNeckCloakBi
+  descLoc: ent-ClothingNeckCloakBi.desc
+  category: cloak
+  item: ClothingNeckCloakBi
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeGayCloak
+  nameLoc: ent-ClothingNeckCloakGay
+  descLoc: ent-ClothingNeckCloakGay.desc
+  category: cloak
+  item: ClothingNeckCloakGay
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeIntersexCloak
+  nameLoc: ent-ClothingNeckCloakIntersex
+  descLoc: ent-ClothingNeckCloakIntersex.desc
+  category: cloak
+  item: ClothingNeckCloakIntersex
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeAceCloak
+  nameLoc: ent-ClothingNeckCloakAce
+  descLoc: ent-ClothingNeckCloakAce.desc
+  category: cloak
+  item: ClothingNeckCloakAce
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeEnbyCloak
+  nameLoc: ent-ClothingNeckCloakEnby
+  descLoc: ent-ClothingNeckCloakEnby.desc
+  category: cloak
+  item: ClothingNeckCloakEnby
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeAroaceCloak
+  nameLoc: ent-ClothingNeckCloakAroace
+  descLoc: ent-ClothingNeckCloakAroace.desc
+  category: cloak
+  item: ClothingNeckCloakAroace
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeAroCloak
+  nameLoc: ent-ClothingNeckCloakAro
+  descLoc: ent-ClothingNeckCloakAro.desc
+  category: cloak
+  item: ClothingNeckCloakAro
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeTransCloak
+  nameLoc: ent-ClothingNeckCloakTrans
+  descLoc: ent-ClothingNeckCloakTrans.desc
+  category: cloak
+  item: ClothingNeckCloakTrans
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumePronMaidCloak
+  nameLoc: ent-ClothingNeckPronMaid
+  descLoc: ent-ClothingNeckPronMaid.desc
+  category: cloak
+  item: ClothingNeckPronMaid
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeApronCoronerCloak
+  nameLoc: ent-ClothingNeckApronCoroner
+  descLoc: ent-ClothingNeckApronCoroner.desc
+  category: cloak
+  item: ClothingNeckApronCoroner
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeCapeNeonCloak
+  nameLoc: ent-ClothingNeckCapeNeon
+  descLoc: ent-ClothingNeckCapeNeon.desc
+  category: cloak
+  item: ClothingNeckCapeNeon
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeCapeLuaCloak
+  nameLoc: ent-ClothingNeckCapeLua
+  descLoc: ent-ClothingNeckCapeLua.desc
+  category: cloak
+  item: ClothingNeckCapeLua
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeCapeCrystalCloak
+  nameLoc: ent-ClothingNeckCapeCrystal
+  descLoc: ent-ClothingNeckCapeCrystal.desc
+  category: cloak
+  item: ClothingNeckCapeCrystal
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeCapeVioletCloak
+  nameLoc: ent-ClothingNeckCapeViolet
+  descLoc: ent-ClothingNeckCapeViolet.desc
+  category: cloak
+  item: ClothingNeckCapeViolet
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeMantleCaptainShoulderWhiteCloak
+  nameLoc: arene-costume-ClothingNeckMantleCaptainShoulderWhite-name
+  descLoc: arene-costume-ClothingNeckMantleCaptainShoulderWhite-desc
+  category: cloak
+  item: ClothingNeckMantleCaptainShoulderWhite
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeMantleRedSwordShoulderCloak
+  nameLoc: arena-costume-ClothingNeckMantleRedSwordShoulder-name
+  descLoc: arena-costume-ClothingNeckMantleRedSwordShoulder-desc
+  category: cloak
+  item: ClothingNeckMantleRedSwordShoulder
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeCapeSiriusCloak
+  nameLoc: ent-ClothingNeckCapeSirius
+  descLoc: ent-ClothingNeckCapeSirius.desc
+  category: cloak
+  item: ClothingNeckCapeSirius
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeCapeGalaxyCloak
+  nameLoc: ent-ClothingNeckCapeGalaxy
+  descLoc: ent-ClothingNeckCapeGalaxy.desc
+  category: cloak
+  item: ClothingNeckCapeGalaxy
+  slot: neck
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeCapeFlameCloak
+  nameLoc: ent-ClothingNeckCapeFlame
+  descLoc: ent-ClothingNeckCapeFlame.desc
+  category: cloak
+  item: ClothingNeckCapeFlame
+  slot: neck
+  price: 0
+
 # --- Комбинезоны ---
 
 - type: arenaCostume
@@ -75,6 +489,447 @@
   descLoc: arena-costume-jumpsuit-blue-desc
   category: jumpsuit
   item: ClothingUniformJumpsuitColorBlue
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitColorOrange
+  nameLoc: ent-ClothingUniformJumpsuitColorOrange
+  descLoc: ent-ClothingUniformJumpsuitColorOrange.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitColorOrange
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitColorPink
+  nameLoc: ent-ClothingUniformJumpsuitColorPink
+  descLoc: ent-ClothingUniformJumpsuitColorPink.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitColorPink
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitColorPurple
+  nameLoc: ent-ClothingUniformJumpsuitColorPurple
+  descLoc: ent-ClothingUniformJumpsuitColorPurple.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitColorPurple
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitColorYellow
+  nameLoc: ent-ClothingUniformJumpsuitColorYellow
+  descLoc: ent-ClothingUniformJumpsuitColorYellow.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitColorYellow
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitColorLightBrown
+  nameLoc: ent-ClothingUniformJumpsuitColorLightBrown
+  descLoc: ent-ClothingUniformJumpsuitColorLightBrown.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitColorLightBrown
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitColorDarkBlue
+  nameLoc: ent-ClothingUniformJumpsuitColorDarkBlue
+  descLoc: ent-ClothingUniformJumpsuitColorDarkBlue.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitColorDarkBlue
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitColorGreen
+  nameLoc: ent-ClothingUniformJumpsuitColorGreen
+  descLoc: ent-ClothingUniformJumpsuitColorGreen.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitColorGreen
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitColorMaroon
+  nameLoc: ent-ClothingUniformJumpsuitColorMaroon
+  descLoc: ent-ClothingUniformJumpsuitColorMaroon.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitColorMaroon
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitColorDarkGreen
+  nameLoc: ent-ClothingUniformJumpsuitColorDarkGreen
+  descLoc: ent-ClothingUniformJumpsuitColorDarkGreen.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitColorDarkGreen
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitColorTeal
+  nameLoc: ent-ClothingUniformJumpsuitColorTeal
+  descLoc: ent-ClothingUniformJumpsuitColorTeal.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitColorTeal
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitColorRed
+  nameLoc: ent-ClothingUniformJumpsuitColorRed
+  descLoc: ent-ClothingUniformJumpsuitColorRed.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitColorRed
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitColorBrown
+  nameLoc: ent-ClothingUniformJumpsuitColorBrown
+  descLoc: ent-ClothingUniformJumpsuitColorBrown.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitColorBrown
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitClown
+  nameLoc: ent-ClothingUniformJumpsuitClown
+  descLoc: ent-ClothingUniformJumpsuitClown.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitClown
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitCapFormalWhite
+  nameLoc: arene-costume-ClothingUniformJumpsuitCapFormalWhite-name
+  descLoc: arene-costume-ClothingUniformJumpsuitCapFormalWhite-desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitCapFormalWhite
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitMimeSexyBlack
+  nameLoc: ent-ClothingUniformJumpsuitMimeSexyBlack
+  descLoc: ent-ClothingUniformJumpsuitMimeSexyBlack.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitMimeSexyBlack
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitClownBanana
+  nameLoc: ent-ClothingUniformJumpsuitClownBanana
+  descLoc: ent-ClothingUniformJumpsuitClownBanana.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitClownBanana
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitGreenBeret
+  nameLoc: arene-costume-ClothingUniformJumpsuitGreenBeret-name
+  descLoc: arene-costume-ClothingUniformJumpsuitGreenBeret-desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitGreenBeret
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitCMOTurtle
+  nameLoc: ent-ClothingUniformJumpsuitCMOTurtle
+  descLoc: ent-ClothingUniformJumpsuitCMOTurtle.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitCMOTurtle
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpskirtPencilCaptainWhite
+  nameLoc: arene-costume-ClothingUniformJumpskirtPencilCaptainWhite-name
+  descLoc: arene-costume-ClothingUniformJumpskirtPencilCaptainWhite-desc
+  category: jumpsuit
+  item: ClothingUniformJumpskirtPencilCaptainWhite
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpskirtDressRed
+  nameLoc: ent-ClothingUniformJumpskirtDressRed
+  descLoc: ent-ClothingUniformJumpskirtDressRed.desc
+  category: jumpsuit
+  item: ClothingUniformJumpskirtDressRed
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpskirtGothic
+  nameLoc: ent-ClothingUniformJumpskirtGothic
+  descLoc: ent-ClothingUniformJumpskirtGothic.desc
+  category: jumpsuit
+  item: ClothingUniformJumpskirtGothic
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeADTClothingUniformWhiteGhoticWeddingDress
+  nameLoc: ent-ADTClothingUniformWhiteGhoticWeddingDress
+  descLoc: ent-ADTClothingUniformWhiteGhoticWeddingDress.desc
+  category: jumpsuit
+  item: ADTClothingUniformWhiteGhoticWeddingDress
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitPrisoner
+  nameLoc: ent-ClothingUniformJumpsuitPrisoner
+  descLoc: ent-ClothingUniformJumpsuitPrisoner.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitPrisoner
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitDetectiveAlt
+  nameLoc: ent-ClothingUniformJumpsuitDetectiveAlt
+  descLoc: ent-ClothingUniformJumpsuitDetectiveAlt.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitDetectiveAlt
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitTaipanRecruit
+  nameLoc: ent-ClothingUniformJumpsuitTaipanRecruit
+  descLoc: ent-ClothingUniformJumpsuitTaipanRecruit.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitTaipanRecruit
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitOperative
+  nameLoc: ent-ClothingUniformJumpsuitOperative
+  descLoc: ent-ClothingUniformJumpsuitOperative.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitOperative
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitChaplain
+  nameLoc: ent-ClothingUniformJumpsuitChaplain
+  descLoc: ent-ClothingUniformJumpsuitChaplain.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitChaplain
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitCentcomAgent
+  nameLoc: ent-ClothingUniformJumpsuitCentcomAgent
+  descLoc: ent-ClothingUniformJumpsuitCentcomAgent.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitCentcomAgent
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitEngineeringHazard
+  nameLoc: ent-ClothingUniformJumpsuitEngineeringHazard
+  descLoc: ent-ClothingUniformJumpsuitEngineeringHazard.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitEngineeringHazard
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitQMTurtleneck
+  nameLoc: ent-ClothingUniformJumpsuitQMTurtleneck
+  descLoc: ent-ClothingUniformJumpsuitQMTurtleneck.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitQMTurtleneck
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeTurtleneckCaptain
+  nameLoc: arene-costume-ClothingUniformTurtleneckCaptain-name
+  descLoc: arene-costume-ClothingUniformTurtleneckCaptain-desc
+  category: jumpsuit
+  item: ClothingUniformTurtleneckCaptain
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeTurtleneckMerc
+  nameLoc: ent-ClothingUniformTurtleneckMerc
+  descLoc: ent-ClothingUniformTurtleneckMerc.desc
+  category: jumpsuit
+  item: ClothingUniformTurtleneckMerc
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitResearchDirector
+  nameLoc: ent-ClothingUniformJumpsuitResearchDirector
+  descLoc: ent-ClothingUniformJumpsuitResearchDirector.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitResearchDirector
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitSuitCheckered
+  nameLoc: ent-ClothingUniformJumpsuitSuitCheckered
+  descLoc: ent-ClothingUniformJumpsuitSuitCheckered.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitSuitCheckered
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitCoroner
+  nameLoc: ent-ClothingUniformJumpsuitCoroner
+  descLoc: ent-ClothingUniformJumpsuitCoroner.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitCoroner
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitBSAA
+  nameLoc: arene-costume-ClothingUniformJumpsuitBSAA-name
+  descLoc: arene-costume-ClothingUniformJumpsuitBSAA-desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitBSAA
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitHoSAlt
+  nameLoc: ent-ClothingUniformJumpsuitHoSAlt
+  descLoc: ent-ClothingUniformJumpsuitHoSAlt.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitHoSAlt
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitChiefEngineerTurtle
+  nameLoc: ent-ClothingUniformJumpsuitChiefEngineerTurtle
+  descLoc: ent-ClothingUniformJumpsuitChiefEngineerTurtle.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitChiefEngineerTurtle
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitSuitTan
+  nameLoc: ent-ClothingUniformJumpsuitSuitTan
+  descLoc: ent-ClothingUniformJumpsuitSuitTan.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitSuitTan
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpskirtWarden
+  nameLoc: ent-ClothingUniformJumpskirtWarden
+  descLoc: ent-ClothingUniformJumpskirtWarden.desc
+  category: jumpsuit
+  item: ClothingUniformJumpskirtWarden
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitHawaiBlack
+  nameLoc: ent-ClothingUniformJumpsuitHawaiBlack
+  descLoc: ent-ClothingUniformJumpsuitHawaiBlack.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitHawaiBlack
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitTaipanAtmosphericsEngineer
+  nameLoc: ent-ClothingUniformJumpsuitTaipanAtmosphericsEngineer
+  descLoc: ent-ClothingUniformJumpsuitTaipanAtmosphericsEngineer.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitTaipanAtmosphericsEngineer
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitHawaiBlue
+  nameLoc: ent-ClothingUniformJumpsuitHawaiBlue
+  descLoc: ent-ClothingUniformJumpsuitHawaiBlue.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitHawaiBlue
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeADTClothingUniformIlisium
+  nameLoc: ent-ADTClothingUniformIlisium
+  descLoc: ent-ADTClothingUniformIlisium.desc
+  category: jumpsuit
+  item: ADTClothingUniformIlisium
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitHawaiYellow
+  nameLoc: ent-ClothingUniformJumpsuitHawaiYellow
+  descLoc: ent-ClothingUniformJumpsuitHawaiYellow.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitHawaiYellow
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitHawaiRed
+  nameLoc: ent-ClothingUniformJumpsuitHawaiRed
+  descLoc: ent-ClothingUniformJumpsuitHawaiRed.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitHawaiRed
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJumpsuitCentcomOfficial
+  nameLoc: ent-ClothingUniformJumpsuitCentcomOfficial
+  descLoc: ent-ClothingUniformJumpsuitCentcomOfficial.desc
+  category: jumpsuit
+  item: ClothingUniformJumpsuitCentcomOfficial
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeADTClothingUniformRabbitDress
+  nameLoc: ent-ADTClothingUniformRabbitDress
+  descLoc: ent-ADTClothingUniformRabbitDress.desc
+  category: jumpsuit
+  item: ADTClothingUniformRabbitDress
+  slot: jumpsuit
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeTurtleneckRedBlack
+  nameLoc: ent-ClothingUniformTurtleneckRedBlack
+  descLoc: ent-ClothingUniformTurtleneckRedBlack.desc
+  category: jumpsuit
+  item: ClothingUniformTurtleneckRedBlack
   slot: jumpsuit
   price: 0
 
@@ -123,5 +978,266 @@
   descLoc: arena-costume-vest-craft-desc
   category: vest
   item: ClothingOuterArmorBasicCraft
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeSuitIan
+  nameLoc: ent-ClothingOuterSuitIan
+  descLoc: ent-ClothingOuterSuitIan.desc
+  category: vest
+  item: ClothingOuterSuitIan
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeRobesMagistrat
+  nameLoc: arene-costume-ClothingOuterRobesMagistrat-name
+  descLoc: arene-costume-ClothingOuterRobesMagistrat-desc
+  category: vest
+  item: ClothingOuterRobesMagistrat
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumePlagueSuit
+  nameLoc: ent-ClothingOuterPlagueSuit
+  descLoc: ent-ClothingOuterPlagueSuit.desc
+  category: vest
+  item: ClothingOuterPlagueSuit
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeSuitWitchRobes
+  nameLoc: ent-ClothingOuterSuitWitchRobes
+  descLoc: ent-ClothingOuterSuitWitchRobes.desc
+  category: vest
+  item: ClothingOuterSuitWitchRobes
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeArmorBasic
+  nameLoc: ent-ClothingOuterArmorBasic
+  descLoc: ent-ClothingOuterArmorBasic.desc
+  category: vest
+  item: ClothingOuterArmorBasic
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeWizard
+  nameLoc: ent-ClothingOuterWizard
+  descLoc: ent-ClothingOuterWizard.desc
+  category: vest
+  item: ClothingOuterWizard
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeSuitChicken
+  nameLoc: ent-ClothingOuterSuitChicken
+  descLoc: ent-ClothingOuterSuitChicken.desc
+  category: vest
+  item: ClothingOuterSuitChicken
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeCoatTaipanCommunicationsOfficer
+  nameLoc: ent-ClothingOuterCoatTaipanCommunicationsOfficer
+  descLoc: ent-ClothingOuterCoatTaipanCommunicationsOfficer.desc
+  category: vest
+  item: ClothingOuterCoatTaipanCommunicationsOfficer
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeCoatSpaceAsshole
+  nameLoc: ent-ClothingOuterCoatSpaceAsshole
+  descLoc: ent-ClothingOuterCoatSpaceAsshole.desc
+  category: vest
+  item: ClothingOuterCoatSpaceAsshole
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeWinterSyndieCapArmored
+  nameLoc: ent-ClothingOuterWinterSyndieCapArmored
+  descLoc: ent-ClothingOuterWinterSyndieCapArmored.desc
+  category: vest
+  item: ClothingOuterWinterSyndieCapArmored
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeCoatLettermanS
+  nameLoc: ent-ClothingOuterCoatLettermanS
+  descLoc: ent-ClothingOuterCoatLettermanS.desc
+  category: vest
+  item: ClothingOuterCoatLettermanS
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeVestDetective
+  nameLoc: ent-ClothingOuterVestDetective
+  descLoc: ent-ClothingOuterVestDetective.desc
+  category: vest
+  item: ClothingOuterVestDetective
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeADTClothingOuterCoatOctyabrinaCoat
+  nameLoc: ent-ADTClothingOuterCoatOctyabrinaCoat
+  descLoc: ent-ADTClothingOuterCoatOctyabrinaCoat.desc
+  category: vest
+  item: ADTClothingOuterCoatOctyabrinaCoat
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeWinterWardenUnarmored
+  nameLoc: ent-ClothingOuterWinterWardenUnarmored
+  descLoc: ent-ClothingOuterWinterWardenUnarmored.desc
+  category: vest
+  item: ClothingOuterWinterWardenUnarmored
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeNunRobe
+  nameLoc: ent-ClothingOuterNunRobe
+  descLoc: ent-ClothingOuterNunRobe.desc
+  category: vest
+  item: ClothingOuterNunRobe
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeWinterClown
+  nameLoc: ent-ClothingOuterWinterClown
+  descLoc: ent-ClothingOuterWinterClown.desc
+  category: vest
+  item: ClothingOuterWinterClown
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeVestHazard
+  nameLoc: ent-ClothingOuterVestHazard
+  descLoc: ent-ClothingOuterVestHazard.desc
+  category: vest
+  item: ClothingOuterVestHazard
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeADTClothingOuterBrownFurCoat
+  nameLoc: ent-ADTClothingOuterBrownFurCoat
+  descLoc: ent-ADTClothingOuterBrownFurCoat.desc
+  category: vest
+  item: ADTClothingOuterBrownFurCoat
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeWinterClownDownjacket
+  nameLoc: ent-ClothingOuterWinterClownDownjacket
+  descLoc: ent-ClothingOuterWinterClownDownjacket.desc
+  category: vest
+  item: ClothingOuterWinterClownDownjacket
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeCoatHoSGreatcoat
+  nameLoc: ent-ClothingOuterCoatHoSGreatcoat
+  descLoc: ent-ClothingOuterCoatHoSGreatcoat.desc
+  category: vest
+  item: ClothingOuterCoatHoSGreatcoat
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeCoatExpensiveOpened
+  nameLoc: ent-ClothingOuterCoatExpensiveOpened
+  descLoc: ent-ClothingOuterCoatExpensiveOpened.desc
+  category: vest
+  item: ClothingOuterCoatExpensiveOpened
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeCoatLettermanRed
+  nameLoc: ent-ClothingOuterCoatLettermanRed
+  descLoc: ent-ClothingOuterCoatLettermanRed.desc
+  category: vest
+  item: ClothingOuterCoatLettermanRed
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeCoatCentcomOfficer
+  nameLoc: arene-costume-ClothingOuterCoatCentcomOfficer-name
+  descLoc: arene-costume-ClothingOuterCoatCentcomOfficer-desc
+  category: vest
+  item: ClothingOuterCoatCentcomOfficer
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeVestPress
+  nameLoc: ent-ClothingOuterVestPress
+  descLoc: ent-ClothingOuterVestPress.desc
+  category: vest
+  item: ClothingOuterVestPress
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeJacketChef
+  nameLoc: ent-ClothingOuterJacketChef
+  descLoc: ent-ClothingOuterJacketChef.desc
+  category: vest
+  item: ClothingOuterJacketChef
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeArmorCaptainCarapaceWhite
+  nameLoc: arene-costume-ClothingOuterArmorCaptainCarapaceWhite-name
+  descLoc: arene-costume-ClothingOuterArmorCaptainCarapaceWhite-desc
+  category: vest
+  item: ClothingOuterArmorCaptainCarapaceWhite
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeArmorCentcommCarapace
+  nameLoc: ent-ClothingOuterArmorCentcommCarapace
+  descLoc: ent-ClothingOuterArmorCentcommCarapace.desc
+  category: vest
+  item: ClothingOuterArmorCentcommCarapace
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeApron
+  nameLoc: ent-ClothingOuterApron
+  descLoc: ent-ClothingOuterApron.desc
+  category: vest
+  item: ClothingOuterApron
+  slot: outerClothing
+  price: 0
+
+- type: arenaCostume
+  id: ArenaCostumeWinterCoatCaptainWhite
+  nameLoc: arene-costume-ClothingOuterWinterCoatCaptainWhite-name
+  descLoc: arene-costume-ClothingOuterWinterCoatCaptainWhite-desc
+  category: vest
+  item: ClothingOuterWinterCoatCaptainWhite
   slot: outerClothing
   price: 0
