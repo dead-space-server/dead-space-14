@@ -8,7 +8,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Storage;
 using Content.Shared.Weapons.Ranged.Systems;
-
+using Content.Shared.Light.Components;
 namespace Content.Shared.Nutrition.EntitySystems;
 
 public sealed partial class IngestionSystem
@@ -109,6 +109,9 @@ public sealed partial class IngestionSystem
             return;
 
         if (!ent.Comp.Slots.Any(slot => slot.Value.HasItem))
+            return;
+        
+        if (HasComp<EbalComponent>(ent))
             return;
 
         args.Cancelled = true;
