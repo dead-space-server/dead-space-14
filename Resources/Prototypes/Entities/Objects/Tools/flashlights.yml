@@ -87,28 +87,27 @@
   #DS14-End
 
 - type: entity
-  name: flashlight1
+  name: shapka_name
   parent: BaseItem
   id: Ebal
-  description: It lights the way to freedom.
+  description: shapka_descripton.
   components:
   - type: Ebal
   - type: Sprite
-    sprite: Objects/Tools/flashlight.rsi
-    layers:
-      - state: flashlight
-      - state: flashlight-overlay
-        shader: unshaded
-        visible: false
-        map: [ "light" ]
-  - type: Item
-    sprite: Objects/Tools/flashlight.rsi
-    storedRotation: -90
+    sprite: Clothing/Belt/sheath.rsi
+    state: sheath
   - type: Clothing
-    sprite: Objects/Tools/flashlight.rsi
+    sprite: Clothing/Belt/sheath.rsi
     quickEquip: false
     slots:
       - head
+  - type: ItemMapper
+    mapLayers:
+      sheath-sabre:
+        whitelist:
+          tags:
+          - DrinkCan
+  - type: Appearance
   - type: SolutionContainerManager
     solutions:
       drink:

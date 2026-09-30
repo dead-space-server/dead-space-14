@@ -110,7 +110,7 @@ public sealed partial class IngestionSystem
 
         if (!ent.Comp.Slots.Any(slot => slot.Value.HasItem))
             return;
-        
+
         if (HasComp<EbalComponent>(ent))
             return;
 

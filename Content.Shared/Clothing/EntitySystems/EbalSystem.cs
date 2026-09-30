@@ -1,12 +1,7 @@
 using Content.Shared.Actions;
 using Content.Shared.Light.Components;
-using Content.Shared.Power.EntitySystems;
-using Content.Shared.PowerCell;
-using Content.Shared.Toggleable;
 using Robust.Shared.Audio.Systems;
-using Robust.Shared.Containers;
 using Content.Shared.Nutrition.EntitySystems;
-using Content.Shared.DoAfter;
 using Content.Shared.Popups;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Inventory;
@@ -26,8 +21,7 @@ namespace Content.Server.Light.EntitySystems
         [Dependency] private readonly SharedPopupSystem _popup = default!;
         [Dependency] private readonly SharedActionsSystem _actions = default!;
 
-        [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-        [Dependency] private readonly IngestionSystem ss = default!;
+        [Dependency] private readonly IngestionSystem _ingestionSystem = default!;
         [Dependency] private readonly ActionContainerSystem _actionContainer = default!;
         [Dependency] private readonly SharedAudioSystem _audio = default!;
         [Dependency] private readonly InventorySystem _inventorySystem = default!;
@@ -35,10 +29,6 @@ namespace Content.Server.Light.EntitySystems
         [Dependency] private readonly IPrototypeManager _proto = default!;
         [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
         [Dependency] private readonly FlavorProfileSystem _flavorProfile = default!;
-        // TODO: Ideally you'd be able to subscribe to power stuff to get events at certain percentages.. or something?
-        // But for now this will be better anyway
-
-        public DoAfterId? g = null;
 
         public override void Initialize()
         {
@@ -46,13 +36,13 @@ namespace Content.Server.Light.EntitySystems
 
 
             SubscribeLocalEvent<EbalComponent, MapInitEvent>(OnMapInit);
+
             SubscribeLocalEvent<EbalComponent, ComponentShutdown>(OnShutdown);
-
             SubscribeLocalEvent<EbalComponent, GetItemActionsEvent>(OnGetActions);
-            SubscribeLocalEvent<EbalComponent, ToggleActionEvent>(OnToggleAction);
+            SubscribeLocalEvent<EbalComponent, ActionEat>(OnToggleAction);
 
-            SubscribeLocalEvent<EbalComponent, EdibleEvent>(S);
-            SubscribeLocalEvent<EbalComponent, BeforeIngestedEvent>(Y);
+            SubscribeLocalEvent<EbalComponent, EdibleEvent>(OnEdible);
+            SubscribeLocalEvent<EbalComponent, BeforeIngestedEvent>(OnBeforeIngested);
             SubscribeLocalEvent<EbalComponent, IngestedEvent>(OnEdibleIngested);
             SubscribeLocalEvent<EbalComponent, IsDigestibleEvent>(OnDrainableIsDigestible);
         }
@@ -61,108 +51,22 @@ namespace Content.Server.Light.EntitySystems
         private void OnGetActions(EntityUid uid, EbalComponent component, GetItemActionsEvent args)
         {
             if ((args.SlotFlags & component.RequiredFlags) == component.RequiredFlags)
-                args.AddAction(ref component.ToggleActionEntity, component.ToggleAction);
+                args.AddAction(ref component.ActionEntity, component.Action);
         }
 
-        private void OnToggleAction(Entity<EbalComponent> ent, ref ToggleActionEvent args)
+        private void OnToggleAction(Entity<EbalComponent> ent, ref ActionEat args)
         {
             if (args.Handled)
                 return;
 
-            args.Handled = ss.TryIngest(args.Performer, ent);
+            args.Handled = _ingestionSystem.TryIngest(args.Performer, ent);
         }
 
         private void OnDrainableIsDigestible(Entity<EbalComponent> ent, ref IsDigestibleEvent args)
         {
             args.UniversalDigestion();
         }
-        private void OnEdibleIngested(Entity<EbalComponent> entity, ref IngestedEvent args)
-        {
-            // This is a lot but there wasn't really a way to separate this from the EdibleComponent otherwise I would've moved it.
-
-            if (args.Handled)
-                return;
-
-            args.Handled = true;
-
-            var edible = _proto.Index(entity.Comp.Edible);
-            _audio.PlayPredicted(entity.Comp.UseSound, args.Target, args.User);
-
-            var flavors = _flavorProfile.GetLocalizedFlavorsMessage(entity.Owner, args.Target, args.Split);
-
-            _popup.PopupPredicted(Loc.GetString(edible.Message, ("food", entity.Owner), ("flavors", flavors)),
-                Loc.GetString(edible.OtherMessage),
-                args.User,
-                args.User);
-
-            // log successful voluntary eating
-            // TODO: Use correct verb
-            // the past tense is tricky here
-            // localized admin logs when?
-            _adminLogger.Add(LogType.Ingestion, LogImpact.Low, $"{ToPrettyString(args.User):target} ate {ToPrettyString(entity):food}");
-
-
-            // This also prevents us from repeating if it's empty
-            if (!IsEmpty(entity))
-            {
-                args.Repeat = true;
-            }
-            else
-            {
-                args.Repeat = false;
-            }
-
-            args.Destroy = false;
-        }
-
-        private bool IsEmpty(Entity<EbalComponent> entity)
-        {
-            var slots = Comp<ItemSlotsComponent>(entity).Slots.Values;
-
-            if (slots.Any(slot => slot.Item != null && !_openable.IsClosed(slot.Item.Value) &&
-            _solutionContainer.TryGetSolution(slot.Item.Value, "drink", out var solution)
-            && solution.Value.Comp.Solution.Volume != FixedPoint2.Zero))
-            {
-                return false;
-            }
-
-
-            return true;
-        }
-        private void Y(Entity<EbalComponent> entity, ref BeforeIngestedEvent args)
-        {
-            if (args.Cancelled || args.Solution == null)
-                return;
-
-            if (IsEmpty(entity))
-            {
-                args.Cancelled = true;
-                return;
-            }
-            // Set it to transfer amount if it exists, otherwise eat the whole volume if possible.
-            args.Transfer = entity.Comp.TransferAmount ?? args.Solution.Volume;
-
-            if (!_solutionContainer.TryGetSolution(entity.Owner, "drink", out var ToSolution))
-                return;
-
-            var slots = Comp<ItemSlotsComponent>(entity).Slots.Values.Where(slot =>
-                slot.Item != null && !_openable.IsClosed(slot.Item.Value)
-                && _solutionContainer.TryGetSolution(slot.Item.Value, "drink", out var fromSolution)
-                && fromSolution.Value.Comp.Solution.Volume != FixedPoint2.Zero);
-
-            foreach (var slot in slots)
-            {
-                var item = slot.Item;
-                if (item != null && _solutionContainer.TryGetSolution(item.Value, "drink", out var fromSolution))
-                {
-                    var split = _solutionContainer.SplitSolution(fromSolution.Value, args.Transfer / slots.Count());
-
-                    _solutionContainer.TryAddSolution(ToSolution.Value, split);
-                }
-            }
-        }
-
-        private void S(Entity<EbalComponent> entity, ref EdibleEvent args)
+        private void OnEdible(Entity<EbalComponent> entity, ref EdibleEvent args)
         {
             if (args.Cancelled || args.Solution != null)
                 return;
@@ -184,22 +88,91 @@ namespace Content.Server.Light.EntitySystems
             }
 
             // Time is additive because I said so.
-            args.Time += TimeSpan.FromSeconds(1);
+            args.Time += entity.Comp.Delay;
+        }
+
+        private void OnBeforeIngested(Entity<EbalComponent> entity, ref BeforeIngestedEvent args)
+        {
+            if (args.Cancelled || args.Solution == null)
+                return;
+
+            args.Transfer = entity.Comp.TransferAmount ?? args.Solution.Volume;
+
+            if (!_solutionContainer.TryGetSolution(entity.Owner, entity.Comp.Solution, out var toSolution))
+                return;
+
+            //Боже храни хардкод
+            var sortedSlots = Comp<ItemSlotsComponent>(entity).Slots.Values.Where(slot =>
+                slot.Item != null && !_openable.IsClosed(slot.Item.Value)
+                && _solutionContainer.TryGetSolution(slot.Item.Value, entity.Comp.Solution, out var fromSolution)
+                && fromSolution.Value.Comp.Solution.Volume != FixedPoint2.Zero);
+
+            foreach (var slot in sortedSlots)
+            {
+                var item = slot.Item;
+                if (item != null && _solutionContainer.TryGetSolution(item.Value, entity.Comp.Solution, out var fromSolution))
+                {
+                    var split = _solutionContainer.SplitSolution(fromSolution.Value, args.Transfer / sortedSlots.Count());
+
+                    _solutionContainer.TryAddSolution(toSolution.Value, split);
+                }
+            }
+        }
+        private void OnEdibleIngested(Entity<EbalComponent> entity, ref IngestedEvent args)
+        {
+            if (args.Handled)
+                return;
+
+            args.Handled = true;
+
+            var edible = _proto.Index(entity.Comp.Edible);
+            _audio.PlayPredicted(entity.Comp.UseSound ?? edible.UseSound, args.Target, args.User);
+
+            var flavors = _flavorProfile.GetLocalizedFlavorsMessage(entity.Owner, args.Target, args.Split);
+
+            _popup.PopupPredicted(Loc.GetString(edible.Message, ("food", entity.Owner), ("flavors", flavors)),
+                Loc.GetString(edible.OtherMessage),
+                args.User,
+                args.User);
+
+
+            _adminLogger.Add(LogType.Ingestion, LogImpact.Low, $"{ToPrettyString(args.User):target} ate {ToPrettyString(entity):food}");
+
+
+            // This also prevents us from repeating if it's empty
+            if (!IsEmpty(entity))
+            {
+                args.Repeat = true;
+            }
+
+            args.Destroy = false;
         }
         private void OnMapInit(Entity<EbalComponent> ent, ref MapInitEvent args)
         {
             var component = ent.Comp;
-            _actionContainer.EnsureAction(ent, ref component.ToggleActionEntity, component.ToggleAction);
+            _actionContainer.EnsureAction(ent, ref component.ActionEntity, component.Action);
         }
 
         private void OnShutdown(EntityUid uid, EbalComponent component, ComponentShutdown args)
         {
-            if (component.s != null)
+            _actions.RemoveAction(uid, component.ActionEntity);
+        }
+        private bool IsEmpty(Entity<EbalComponent> entity)
+        {
+            var slots = Comp<ItemSlotsComponent>(entity).Slots.Values;
+
+            if (slots.Any(slot =>
+            slot.Item != null && !_openable.IsClosed(slot.Item.Value) &&
+            _solutionContainer.TryGetSolution(slot.Item.Value, entity.Comp.Solution, out var solution)
+            && solution.Value.Comp.Solution.Volume != FixedPoint2.Zero))
             {
-                _doAfter.Cancel(component.s);
-                component.s = null;
+                return false;
             }
-            _actions.RemoveAction(uid, component.ToggleActionEntity);
+
+
+            return true;
         }
     }
+
+    public sealed partial class ActionEat : InstantActionEvent;
 }

@@ -19,10 +19,6 @@ namespace Content.Shared.Light.Components;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class EbalComponent : Component
 {
-
-    [DataField("toggleAction", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string ToggleAction = "ActionToggleLight";
-
     [DataField]
     public FixedPoint2? TransferAmount = FixedPoint2.New(5);
     [DataField]
@@ -31,7 +27,7 @@ public sealed partial class EbalComponent : Component
     [DataField]
     public TimeSpan Delay = TimeSpan.FromSeconds(1f);
 
-[DataField]
+    [DataField]
     public SoundSpecifier? UseSound;
 
     /// <summary>
@@ -40,11 +36,13 @@ public sealed partial class EbalComponent : Component
     [DataField]
     public ProtoId<EdiblePrototype> Edible = IngestionSystem.Drink;
 
-    [DataField("toggleActionEntity")]
-    public EntityUid? ToggleActionEntity;
+    [DataField("Action", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+
+    public string Action = "ActionEat";
+    [DataField("ActionEntity")]
+    public EntityUid? ActionEntity;
 
     [DataField("requiredSlot"), AutoNetworkedField]
     public SlotFlags RequiredFlags = SlotFlags.HEAD;
-    public DoAfterId? s;
 
 }
