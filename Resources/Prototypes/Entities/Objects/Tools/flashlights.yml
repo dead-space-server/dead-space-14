@@ -109,22 +109,6 @@
     quickEquip: false
     slots:
       - head
-  - type: Spillable
-    solution: drink
-  - type: MixableSolution
-    solution: drink
-  - type: DrawableSolution
-    solution: drink
-  - type: RefillableSolution
-    solution: drink
-  - type: DrainableSolution
-    solution: drink
-  - type: InjectableSolution # Injectors (syringe) will fall back to RefillableSolution. This adds support for hyposprays and liquid anomalies.
-    solution: drink
-  - type: ExaminableSolution
-    solution: drink
-  - type: SolutionItemStatus
-    solution: drink
   - type: SolutionContainerManager
     solutions:
       drink:
@@ -132,9 +116,14 @@
   - type: ContainerContainer
     containers:
       item: !type:ContainerSlot
+      item1: !type:ContainerSlot
   - type: ItemSlots
     slots:
       item:
+        whitelist:
+          tags:
+          - DrinkCan
+      item1:
         whitelist:
           tags:
           - DrinkCan
