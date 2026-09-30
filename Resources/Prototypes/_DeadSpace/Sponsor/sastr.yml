@@ -73,9 +73,6 @@
     - id: MedkitAdvancedFilled
     - id: ClothingHeadHelmetsastr
     - id: ClothingMasksastr
-    - id: JukeboxMK
-    - id: TapeRecorderr
-    - id: TapeEmpty
   - type: TypingIndicatorClothing
     proto: TypingIndicatorsastr
   - type: Tag
