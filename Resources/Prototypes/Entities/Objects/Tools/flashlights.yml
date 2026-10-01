@@ -87,47 +87,6 @@
   #DS14-End
 
 - type: entity
-  name: shapka_name
-  parent: BaseItem
-  id: Ebal
-  description: shapka_descripton.
-  components:
-  - type: Ebal
-  - type: Sprite
-    sprite: Clothing/Belt/sheath.rsi
-    state: sheath
-  - type: Clothing
-    sprite: Clothing/Belt/sheath.rsi
-    quickEquip: false
-    slots:
-      - head
-  - type: ItemMapper
-    mapLayers:
-      sheath-sabre:
-        whitelist:
-          tags:
-          - DrinkCan
-  - type: Appearance
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 30
-  - type: ContainerContainer
-    containers:
-      item: !type:ContainerSlot
-      item1: !type:ContainerSlot
-  - type: ItemSlots
-    slots:
-      item:
-        whitelist:
-          tags:
-          - DrinkCan
-      item1:
-        whitelist:
-          tags:
-          - DrinkCan
-
-- type: entity
   name: seclite
   parent: [FlashlightLantern, BaseSecurityContraband]
   id: FlashlightSeclite

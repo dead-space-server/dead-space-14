@@ -13,9 +13,9 @@ using Robust.Shared.Prototypes;
 using Content.Shared.Nutrition;
 using System.Linq;
 
-namespace Content.Server.Light.EntitySystems
+namespace Content.Shared.Clothing.EntitySystems
 {
-    public sealed class EbalSystem : EntitySystem
+    public sealed class BeerHatSystem : EntitySystem
     {
         [Dependency] private readonly OpenableSystem _openable = default!;
         [Dependency] private readonly SharedPopupSystem _popup = default!;
@@ -35,26 +35,26 @@ namespace Content.Server.Light.EntitySystems
             base.Initialize();
 
 
-            SubscribeLocalEvent<EbalComponent, MapInitEvent>(OnMapInit);
+            SubscribeLocalEvent<BeerHatComponent, MapInitEvent>(OnMapInit);
 
-            SubscribeLocalEvent<EbalComponent, ComponentShutdown>(OnShutdown);
-            SubscribeLocalEvent<EbalComponent, GetItemActionsEvent>(OnGetActions);
-            SubscribeLocalEvent<EbalComponent, ActionEat>(OnToggleAction);
+            SubscribeLocalEvent<BeerHatComponent, ComponentShutdown>(OnShutdown);
+            SubscribeLocalEvent<BeerHatComponent, GetItemActionsEvent>(OnGetActions);
+            SubscribeLocalEvent<BeerHatComponent, ActionEat>(OnToggleAction);
 
-            SubscribeLocalEvent<EbalComponent, EdibleEvent>(OnEdible);
-            SubscribeLocalEvent<EbalComponent, BeforeIngestedEvent>(OnBeforeIngested);
-            SubscribeLocalEvent<EbalComponent, IngestedEvent>(OnEdibleIngested);
-            SubscribeLocalEvent<EbalComponent, IsDigestibleEvent>(OnDrainableIsDigestible);
+            SubscribeLocalEvent<BeerHatComponent, EdibleEvent>(OnEdible);
+            SubscribeLocalEvent<BeerHatComponent, BeforeIngestedEvent>(OnBeforeIngested);
+            SubscribeLocalEvent<BeerHatComponent, IngestedEvent>(OnEdibleIngested);
+            SubscribeLocalEvent<BeerHatComponent, IsDigestibleEvent>(OnDrainableIsDigestible);
         }
 
 
-        private void OnGetActions(EntityUid uid, EbalComponent component, GetItemActionsEvent args)
+        private void OnGetActions(EntityUid uid, BeerHatComponent component, GetItemActionsEvent args)
         {
             if ((args.SlotFlags & component.RequiredFlags) == component.RequiredFlags)
                 args.AddAction(ref component.ActionEntity, component.Action);
         }
 
-        private void OnToggleAction(Entity<EbalComponent> ent, ref ActionEat args)
+        private void OnToggleAction(Entity<BeerHatComponent> ent, ref ActionEat args)
         {
             if (args.Handled)
                 return;
@@ -62,11 +62,11 @@ namespace Content.Server.Light.EntitySystems
             args.Handled = _ingestionSystem.TryIngest(args.Performer, ent);
         }
 
-        private void OnDrainableIsDigestible(Entity<EbalComponent> ent, ref IsDigestibleEvent args)
+        private void OnDrainableIsDigestible(Entity<BeerHatComponent> ent, ref IsDigestibleEvent args)
         {
             args.UniversalDigestion();
         }
-        private void OnEdible(Entity<EbalComponent> entity, ref EdibleEvent args)
+        private void OnEdible(Entity<BeerHatComponent> entity, ref EdibleEvent args)
         {
             if (args.Cancelled || args.Solution != null)
                 return;
@@ -91,17 +91,17 @@ namespace Content.Server.Light.EntitySystems
             args.Time += entity.Comp.Delay;
         }
 
-        private void OnBeforeIngested(Entity<EbalComponent> entity, ref BeforeIngestedEvent args)
+        private void OnBeforeIngested(Entity<BeerHatComponent> entity, ref BeforeIngestedEvent args)
         {
             if (args.Cancelled || args.Solution == null)
                 return;
-
+            //Боже храни хардкод
             args.Transfer = entity.Comp.TransferAmount ?? args.Solution.Volume;
 
             if (!_solutionContainer.TryGetSolution(entity.Owner, entity.Comp.Solution, out var toSolution))
                 return;
 
-            //Боже храни хардкод
+
             var sortedSlots = Comp<ItemSlotsComponent>(entity).Slots.Values.Where(slot =>
                 slot.Item != null && !_openable.IsClosed(slot.Item.Value)
                 && _solutionContainer.TryGetSolution(slot.Item.Value, entity.Comp.Solution, out var fromSolution)
@@ -118,7 +118,7 @@ namespace Content.Server.Light.EntitySystems
                 }
             }
         }
-        private void OnEdibleIngested(Entity<EbalComponent> entity, ref IngestedEvent args)
+        private void OnEdibleIngested(Entity<BeerHatComponent> entity, ref IngestedEvent args)
         {
             if (args.Handled)
                 return;
@@ -147,17 +147,17 @@ namespace Content.Server.Light.EntitySystems
 
             args.Destroy = false;
         }
-        private void OnMapInit(Entity<EbalComponent> ent, ref MapInitEvent args)
+        private void OnMapInit(Entity<BeerHatComponent> ent, ref MapInitEvent args)
         {
             var component = ent.Comp;
             _actionContainer.EnsureAction(ent, ref component.ActionEntity, component.Action);
         }
 
-        private void OnShutdown(EntityUid uid, EbalComponent component, ComponentShutdown args)
+        private void OnShutdown(EntityUid uid, BeerHatComponent component, ComponentShutdown args)
         {
             _actions.RemoveAction(uid, component.ActionEntity);
         }
-        private bool IsEmpty(Entity<EbalComponent> entity)
+        private bool IsEmpty(Entity<BeerHatComponent> entity)
         {
             var slots = Comp<ItemSlotsComponent>(entity).Slots.Values;
 

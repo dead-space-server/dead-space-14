@@ -7,8 +7,7 @@ using Content.Shared.Interaction.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Storage;
-using Content.Shared.Weapons.Ranged.Systems;
-using Content.Shared.Light.Components;
+using Content.Shared.Clothing.EntitySystems;
 namespace Content.Shared.Nutrition.EntitySystems;
 
 public sealed partial class IngestionSystem
@@ -111,8 +110,10 @@ public sealed partial class IngestionSystem
         if (!ent.Comp.Slots.Any(slot => slot.Value.HasItem))
             return;
 
-        if (HasComp<EbalComponent>(ent))
+        // DS14-start :не знаю как сделать по другому.
+        if (HasComp<BeerHatComponent>(ent))
             return;
+        // DS14-end
 
         args.Cancelled = true;
 

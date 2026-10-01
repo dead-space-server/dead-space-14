@@ -1,23 +1,17 @@
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
-using Content.Shared.Clothing.EntitySystems;
-using Content.Shared.DoAfter;
 using Content.Shared.Inventory;
-using Content.Shared.Body.Components;
 using Content.Shared.FixedPoint;
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Nutrition.Prototypes;
-using Robust.Shared.Audio;
-using Robust.Shared.GameStates;
-using Robust.Shared.Prototypes;
 
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
-namespace Content.Shared.Light.Components;
+namespace Content.Shared.Clothing.EntitySystems;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-public sealed partial class EbalComponent : Component
+public sealed partial class BeerHatComponent : Component
 {
     [DataField]
     public FixedPoint2? TransferAmount = FixedPoint2.New(5);
@@ -38,7 +32,7 @@ public sealed partial class EbalComponent : Component
 
     [DataField("Action", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
 
-    public string Action = "ActionEat";
+    public string Action = "ActionDrinkFromBeerHat";
     [DataField("ActionEntity")]
     public EntityUid? ActionEntity;
 

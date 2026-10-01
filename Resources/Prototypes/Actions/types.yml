@@ -88,18 +88,6 @@
 
 - type: entity
   parent: BaseAction
-  id: ActionEat
-  name: shapka_Action_name
-  description: shapka_Action_descripton.
-  components:
-  - type: Action
-    useDelay: 1
-    icon: { sprite: Objects/Tools/flashlight.rsi, state: flashlight }
-  - type: InstantAction
-    event: !type:ActionEat
-
-- type: entity
-  parent: BaseAction
   id: ActionOpenStorageImplant
   name: Toggle Storage Implant
   description: Opens or closes the storage implant embedded under your skin
