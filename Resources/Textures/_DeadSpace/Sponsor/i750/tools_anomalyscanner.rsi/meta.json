@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Made by sastr. (discord) for Space Station 14 server Мёртвый Космос",
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "growing"
+    },
+    {
+      "name": "decaying"
+    },
+    {
+      "name": "severity_mask"
+    },
+    {
+      "name": "timer_1"
+    },
+    {
+      "name": "timer_2"
+    },
+    {
+      "name": "timer_3"
+    },
+    {
+      "name": "timer_4"
+    },
+    {
+      "name": "timer_5"
+    },
+    {
+      "name": "supercritical"
+    }
+  ]
+}
