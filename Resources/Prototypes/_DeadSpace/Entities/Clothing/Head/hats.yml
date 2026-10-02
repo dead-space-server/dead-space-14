@@ -217,7 +217,11 @@
   id: BeerHat
   description: Можно пить сразу из двух банок!
   components:
-  - type: Ebal
+  - type: Item
+    size: Normal
+    shape:
+    - 0,0,2,1
+  - type: BeerHat
   - type: Sprite
     sprite: _DeadSpace/Clothing/Head/Hats/beerhat.rsi
     state: icon
@@ -232,15 +236,18 @@
         maxVol: 5
   - type: ContainerContainer
     containers:
-      item: !type:ContainerSlot
-      item1: !type:ContainerSlot
+      can_slot: !type:ContainerSlot
+      can_slot2: !type:ContainerSlot
   - type: ItemSlots
     slots:
-      item:
+      can_slot:
         whitelist:
           tags:
           - DrinkCan
-      item1:
+      can_slot2:
         whitelist:
           tags:
           - DrinkCan
+  - type: Tag
+    tags:
+    - ClothMade

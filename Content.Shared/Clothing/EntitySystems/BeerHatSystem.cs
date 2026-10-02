@@ -39,7 +39,7 @@ namespace Content.Shared.Clothing.EntitySystems
 
             SubscribeLocalEvent<BeerHatComponent, ComponentShutdown>(OnShutdown);
             SubscribeLocalEvent<BeerHatComponent, GetItemActionsEvent>(OnGetActions);
-            SubscribeLocalEvent<BeerHatComponent, ActionEat>(OnToggleAction);
+            SubscribeLocalEvent<BeerHatComponent, DrinkFromBeerHatEvent>(OnToggleAction);
 
             SubscribeLocalEvent<BeerHatComponent, EdibleEvent>(OnEdible);
             SubscribeLocalEvent<BeerHatComponent, BeforeIngestedEvent>(OnBeforeIngested);
@@ -54,7 +54,7 @@ namespace Content.Shared.Clothing.EntitySystems
                 args.AddAction(ref component.ActionEntity, component.Action);
         }
 
-        private void OnToggleAction(Entity<BeerHatComponent> ent, ref ActionEat args)
+        private void OnToggleAction(Entity<BeerHatComponent> ent, ref DrinkFromBeerHatEvent args)
         {
             if (args.Handled)
                 return;
@@ -95,13 +95,13 @@ namespace Content.Shared.Clothing.EntitySystems
         {
             if (args.Cancelled || args.Solution == null)
                 return;
-            //Боже храни хардкод
+
             args.Transfer = entity.Comp.TransferAmount ?? args.Solution.Volume;
 
             if (!_solutionContainer.TryGetSolution(entity.Owner, entity.Comp.Solution, out var toSolution))
                 return;
 
-
+            //Боже храни хардкод
             var sortedSlots = Comp<ItemSlotsComponent>(entity).Slots.Values.Where(slot =>
                 slot.Item != null && !_openable.IsClosed(slot.Item.Value)
                 && _solutionContainer.TryGetSolution(slot.Item.Value, entity.Comp.Solution, out var fromSolution)
@@ -174,5 +174,5 @@ namespace Content.Shared.Clothing.EntitySystems
         }
     }
 
-    public sealed partial class ActionEat : InstantActionEvent;
+    public sealed partial class DrinkFromBeerHatEvent : InstantActionEvent;
 }

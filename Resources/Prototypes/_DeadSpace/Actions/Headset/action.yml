@@ -19,7 +19,5 @@
   name: Попить
   description: Попить из пивной шляпы?
   components:
-  - type: Action
-    useDelay: 1
   - type: InstantAction
-    event: !type:ActionEat
+    event: !type:DrinkFromBeerHatEvent
