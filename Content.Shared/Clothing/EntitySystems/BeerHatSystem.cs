@@ -159,9 +159,10 @@ namespace Content.Shared.Clothing.EntitySystems
 
         private bool IsEmpty(Entity<BeerHatComponent> entity)
         {
+            if (!TryComp<ItemSlotsComponent>(entity, out var slots))
+                return true;
 
-            if (TryComp<ItemSlotsComponent>(entity, out var slots) &&
-            slots.Slots.Values.Any(slot => slot.Item != null &&
+            if (slots.Slots.Values.Any(slot => slot.Item != null &&
             !_openable.IsClosed(slot.Item.Value) &&
             _solutionContainer.TryGetSolution(slot.Item.Value, entity.Comp.Solution, out var solution) &&
             solution.Value.Comp.Solution.Volume != FixedPoint2.Zero))
