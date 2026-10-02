@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Dead Space 14 IV drip",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "folded"
+    },
+    {
+      "name": "unfolded"
+    },
+    {
+      "name": "bag"
+    },
+    {
+      "name": "slider_off"
+    },
+    {
+      "name": "slider_slow"
+    },
+    {
+      "name": "slider_medium"
+    },
+    {
+      "name": "slider_fast"
+    },
+    {
+      "name": "inhand-left"
+    },
+    {
+      "name": "inhand-right"
+    },
+    {
+      "name": "needle"
+    },
+    {
+      "name": "needle-inhand-left"
+    },
+    {
+      "name": "needle-inhand-right"
+    }
+  ]
+}
