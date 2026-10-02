@@ -779,6 +779,17 @@
   categories:
   - TraitorUltraUplinkAmmo
 
+- type: listing
+  id: UplinkTraitorUltraMagazinePistolCaselessRiflePoisoned
+  name: uplink-pistol-magazine-caseless-poisoned-name
+  description: uplink-pistol-magazine-caseless-poisoned-desc
+  icon: { sprite: /Textures/Objects/Weapons/Guns/Ammunition/Magazine/CaselessRifle/caseless_pistol_mag.rsi, state: red-icon }
+  productEntity: MagazinePistolCaselessRiflePoisoned
+  cost:
+    Telecrystal: 2
+  categories:
+  - TraitorUltraUplinkAmmo
+
 # For the Python
 
 - type: listing

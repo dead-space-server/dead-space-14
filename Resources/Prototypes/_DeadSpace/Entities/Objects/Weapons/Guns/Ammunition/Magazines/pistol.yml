@@ -172,7 +172,7 @@
   - type: Tag
     tags:
       - SMGDrumMagazine
-  
+
 - type: entity
   parent: DrumPistolSubMachineGun
   id: DrumPistolSubMachineGunEmpty
@@ -243,3 +243,36 @@
     - state: mag-1
       map: ["enum.GunVisualLayers.Mag"]
     - state: uranium
+
+- type: entity
+  parent: BaseMagazinePistolCaselessRifle
+  id: MagazinePistolCaselessRiflePoisoned
+  name: "pistol magazine (.25 caseless poisoned)"
+  components:
+  - type: BallisticAmmoProvider
+    proto: CartridgeCaselessRiflePoisoned
+    capacity: 10
+  - type: Sprite
+    scale: 1.2, 1.2
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: stripe
+      color: "#57007F"
+  - type: MagazineVisuals
+    magState: mag
+    steps: 6
+    zeroVisible: false
+  - type: Appearance
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left-mag
+      - state: inhand-left-stripe
+        color: "#57007F"
+      right:
+      - state: inhand-right-mag
+      - state: inhand-right-stripe
+        color: "#57007F"

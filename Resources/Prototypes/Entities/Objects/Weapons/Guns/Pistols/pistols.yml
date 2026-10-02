@@ -191,7 +191,7 @@
     slots:
       gun_magazine:
         name: Magazine
-        startingItem: MagazinePistolCaselessRifle
+        startingItem: MagazinePistolCaselessRiflePoisoned #DS14
         insertSound: /Audio/Weapons/Guns/MagIn/pistol_magin.ogg
         ejectSound: /Audio/Weapons/Guns/MagOut/pistol_magout.ogg
         priority: 2
