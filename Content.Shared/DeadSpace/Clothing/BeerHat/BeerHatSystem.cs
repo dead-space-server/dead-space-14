@@ -7,13 +7,12 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Database;
 using Content.Shared.FixedPoint;
-using Content.Shared.Clothing.Components;
 using Content.Shared.Nutrition;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Audio.Systems;
 using System.Linq;
 
-namespace Content.Shared.Clothing.EntitySystems
+namespace Content.Shared.DeadSpace.Clothing
 {
     public sealed class BeerHatSystem : EntitySystem
     {

@@ -7,7 +7,7 @@ using Content.Shared.Interaction.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Storage;
-using Content.Shared.Clothing.Components;
+using Content.Shared.DeadSpace.Clothing;
 namespace Content.Shared.Nutrition.EntitySystems;
 
 public sealed partial class IngestionSystem
