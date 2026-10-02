@@ -5,6 +5,10 @@ using Content.Shared.Database;
 using Content.Shared.Emag.Systems;
 using Content.Shared.IdentityManagement;
 using Content.Shared.UserInterface;
+// DS14-start
+using Content.Shared.Cargo.Prototypes;
+using Robust.Shared.Prototypes;
+// DS14-end
 
 namespace Content.Server.Cargo.Systems;
 
@@ -164,4 +168,95 @@ public sealed partial class CargoSystem
         if (_station.GetOwningStation(ent) is { } station)
             _uiSystem.SetUiState(ent.Owner, FundingAllocationConsoleUiKey.Key, new FundingAllocationConsoleBuiState(GetNetEntity(station)));
     }
+
+    // DS14-start
+    #region Revenue distribution
+
+    /// <summary>
+    /// All the accounts that have a cargo order console somewhere on the given station.
+    /// </summary>
+    private HashSet<ProtoId<CargoAccountPrototype>> GetStationOrderAccounts(EntityUid station)
+    {
+        var accounts = new HashSet<ProtoId<CargoAccountPrototype>>();
+
+        var query = EntityQueryEnumerator<CargoOrderConsoleComponent>();
+        while (query.MoveNext(out var uid, out var orderConsole))
+        {
+            if (_station.GetOwningStation(uid) == station)
+                accounts.Add(orderConsole.Account);
+        }
+
+        return accounts;
+    }
+
+    /// <summary>
+    /// The same as the shared account distribution, except that accounts without a cargo order console on the station
+    /// are given nothing. Their share is handed to the primary account instead, so that no money gets silently
+    /// deleted from the station's income.
+    /// </summary>
+    public Dictionary<ProtoId<CargoAccountPrototype>, double> CreateStationAccountDistribution(
+        Entity<StationBankAccountComponent> stationBank)
+    {
+        var bank = stationBank.Comp;
+        var revenue = GetStationRevenueDistribution(stationBank);
+
+        var distribution = new Dictionary<ProtoId<CargoAccountPrototype>, double>
+        {
+            { bank.PrimaryAccount, bank.PrimaryCut }
+        };
+
+        var remaining = 1.0 - bank.PrimaryCut;
+        foreach (var (account, percentage) in revenue)
+            distribution[account] = distribution.GetValueOrDefault(account) + remaining * percentage;
+
+        return distribution;
+    }
+
+    /// <summary>
+    /// The station's <see cref="StationBankAccountComponent.RevenueDistribution"/>, normalized so that it always sums
+    /// up to 1.0, with the share of every account that has no cargo order console on this station folded into the
+    /// primary account.
+    /// </summary>
+    public Dictionary<ProtoId<CargoAccountPrototype>, double> GetStationRevenueDistribution(
+        Entity<StationBankAccountComponent> stationBank)
+    {
+        var bank = stationBank.Comp;
+        var accounts = GetStationOrderAccounts(stationBank.Owner);
+
+        var revenue = new Dictionary<ProtoId<CargoAccountPrototype>, double>();
+        var total = 0.0;
+        var kept = 0.0;
+
+        foreach (var (account, percentage) in bank.RevenueDistribution)
+        {
+            total += percentage;
+
+            if (account != bank.PrimaryAccount && !accounts.Contains(account))
+                continue;
+
+            revenue[account] = revenue.GetValueOrDefault(account) + percentage;
+            kept += percentage;
+        }
+
+        if (total <= 0.0)
+            return new Dictionary<ProtoId<CargoAccountPrototype>, double> { { bank.PrimaryAccount, 1.0 } };
+
+        if (!MathHelper.CloseTo(total, 1.0))
+        {
+            var keys = revenue.Keys.ToArray();
+            foreach (var account in keys)
+                revenue[account] /= total;
+
+            kept /= total;
+            total = 1.0;
+        }
+
+        if (kept < total)
+            revenue[bank.PrimaryAccount] = revenue.GetValueOrDefault(bank.PrimaryAccount) + total - kept;
+
+        return revenue;
+    }
+
+    #endregion
+// DS14-end
 }
