@@ -15,3 +15,18 @@
   components:
   - type: CartridgeAmmo
     proto: BulletCaselessRifleUranium
+
+- type: entity
+  parent: BaseCartridgeCaselessRifle
+  id: CartridgeCaselessRiflePoisoned
+  name: cartridge (.25 caseless poisoned)
+  components:
+  - type: CartridgeAmmo
+    proto: BulletCaselessRiflePoisonedTrace
+  - type: Sprite
+    layers:
+    - state: base
+      map: [ "enum.AmmoVisualLayers.Base" ]
+    - state: tip
+      map: [ "enum.AmmoVisualLayers.Tip" ]
+      color: "#B200FF"
