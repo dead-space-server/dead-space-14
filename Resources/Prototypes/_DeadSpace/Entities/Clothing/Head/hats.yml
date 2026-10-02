@@ -214,7 +214,7 @@
 - type: entity
   name: Пивная шляпа
   parent: BaseItem
-  id: BeerHat
+  id: ClothingBeerHat
   description: Можно пить сразу из двух банок!
   components:
   - type: Item
