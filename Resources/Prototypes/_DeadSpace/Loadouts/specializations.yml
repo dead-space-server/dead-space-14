@@ -1,4 +1,4 @@
-# Шеф-Повар 
+# Шеф-Повар
 - type: entity
   abstract: true
   id: BaseLoadoutChefSpecialization
@@ -212,6 +212,13 @@
   name: Медсестра
   description: Специализация врача на сестринском уходе.
 
+- type: entity
+  parent: BaseLoadoutDoctorSpecialization
+  id: LoadoutDoctorMaleNurse
+  categories: [ HideSpawnMenu ]
+  name: Медбрат
+  description: Специализация врача на братком уходе.
+
 - type: loadout
   id: DoctorTitleTherapist
   dummyEntity: LoadoutDoctorTherapist
@@ -230,6 +237,18 @@
   effects:
   - !type:JobTitleLoadoutEffect
     title: job-title-doctor-resuscitator
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: JobMedicalDoctor
+      time: 18000
+
+- type: loadout
+  id: DoctorTitleMaleNurse
+  dummyEntity: LoadoutDoctorMaleNurse
+  effects:
+  - !type:JobTitleLoadoutEffect
+    title: job-title-doctor-male-nurse
   - !type:JobRequirementLoadoutEffect
     requirement:
       !type:RoleTimeRequirement
@@ -296,8 +315,86 @@
   - DoctorTitleResuscitator
   - DoctorTitleGeneticist
   - DoctorTitleCryotherapist
+  - DoctorTitleMaleNurse
   - DoctorTitleSurgeon
   - DoctorTitleNurse
+
+# Уборщик
+- type: entity
+  abstract: true
+  id: BaseLoadoutJanitorSpecialization
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Interface/Misc/job_icons.rsi
+    state: Janitor
+
+- type: entity
+  parent: BaseLoadoutJanitorSpecialization
+  id: LoadoutJanitorCleaner
+  categories: [ HideSpawnMenu ]
+  name: Клинер
+  description: Специализация уборщика на  поддержании чистоты и порядка в помещениях.
+
+- type: entity
+  parent: BaseLoadoutJanitorSpecialization
+  id: LoadoutJanitorPlumber
+  categories: [ HideSpawnMenu ]
+  name: Сантехник
+  description: Специализация уборщика на обслуживании сантехнических систем.
+
+- type: entity
+  parent: BaseLoadoutJanitorSpecialization
+  id: LoadoutJanitorDisinfector
+  categories: [ HideSpawnMenu ]
+  name: Дезинсектор
+  description: Специализация уборщика на борьбе с вредителями и санитарной обработке.
+
+- type: loadout
+  id: JanitorTitlePlumber
+  dummyEntity: LoadoutJanitorPlumber
+  effects:
+  - !type:JobTitleLoadoutEffect
+    title: job-title-janitor-plumber
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: JobJanitor
+      time: 18000
+
+- type: loadout
+  id: JanitorTitleDisinfector
+  dummyEntity: LoadoutJanitorDisinfector
+  effects:
+  - !type:JobTitleLoadoutEffect
+    title: job-title-janitor-disinfector
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: JobJanitor
+      time: 18000
+
+- type: loadout
+  id: JanitorTitleCleaner
+  dummyEntity: LoadoutJanitorCleaner
+  effects:
+  - !type:JobTitleLoadoutEffect
+    title: job-title-janitor-cleaner
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: JobJanitor
+      time: 18000
+
+- type: loadoutGroup
+  id: JanitorSpecialization
+  name: loadout-group-janitor-specialization
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - JanitorTitleCleaner
+  - JanitorTitleDisinfector
+  - JanitorTitlePlumber
 
 # Сервисный работник
 - type: entity
@@ -445,7 +542,7 @@
     requirement:
       !type:RoleTimeRequirement
       role: JobScientist
-      time: 36000 
+      time: 36000
 
 - type: loadoutGroup
   id: ScientistSpecialization
@@ -473,7 +570,7 @@
   id: LoadoutEngineerElectrician
   categories: [ HideSpawnMenu ]
   name: Электрик
-  description: Специализация инженера на лектросетях и проводке.
+  description: Специализация инженера на электросетях и проводке.
 
 - type: entity
   parent: BaseLoadoutEngineerSpecialization
@@ -487,14 +584,21 @@
   id: LoadoutEngineerMechanic
   categories: [ HideSpawnMenu ]
   name: Механик
-  description: Специализация инженера на механизмах, оборудоавнии и шаттлах.
+  description: Специализация инженера на механизмах, оборудовании и шаттлах.
+
+- type: entity
+  parent: BaseLoadoutEngineerSpecialization
+  id: LoadoutEngineerShuttleBuilder
+  categories: [ HideSpawnMenu ]
+  name: Шаттлостроитель
+  description: Специализация инженера на строительстве шаттлов.
 
 - type: entity
   parent: BaseLoadoutEngineerSpecialization
   id: LoadoutEngineerNuclear
   categories: [ HideSpawnMenu ]
   name: Ядерщик
-  description: Специализация инженера на атомной энергетике, РИТЭГах, Двигатели Сингулярности и Тесле.
+  description: Специализация инженера на атомной энергетике, РИТЭГах, двигателях Сингулярности и Тесле.
 
 - type: entity
   parent: BaseLoadoutEngineerSpecialization
@@ -516,6 +620,18 @@
   effects:
   - !type:JobTitleLoadoutEffect
     title: job-title-engineer-electrician
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: JobStationEngineer
+      time: 18000
+
+- type: loadout
+  id: EngineerTitleShuttleBuilder
+  dummyEntity: LoadoutEngineerShuttleBuilder
+  effects:
+  - !type:JobTitleLoadoutEffect
+    title: job-title-engineer-shuttle-builder
   - !type:JobRequirementLoadoutEffect
     requirement:
       !type:RoleTimeRequirement
@@ -593,6 +709,7 @@
   - EngineerTitleMechanic
   - EngineerTitleNuclear
   - EngineerTitleWelder
+  - EngineerTitleShuttleBuilder
   - EngineerTitleArchitect
 
 # Грузчик
@@ -652,7 +769,7 @@
   - CargoTitleLogistician
   - CargoTitlePostman
 
-# УТилизатор
+# Утилизатор
 - type: entity
   abstract: true
   id: BaseLoadoutSalvageSpecialization
@@ -731,7 +848,7 @@
   id: LoadoutBotanistSelectioner
   categories: [ HideSpawnMenu ]
   name: Селекционер
-  description: Специализация ботаника на селекции и мутациях
+  description: Специализация ботаника на селекции и мутациях.
 
 - type: loadout
   id: BotanistTitleAgronomist
@@ -750,7 +867,7 @@
   dummyEntity: LoadoutBotanistSelectioner
   effects:
   - !type:JobTitleLoadoutEffect
-    title: job-title-botanist-Selectioner
+    title: job-title-botanist-selectioner
   - !type:JobRequirementLoadoutEffect
     requirement:
       !type:RoleTimeRequirement
@@ -847,12 +964,31 @@
   name: Специалист по синтезу
   description: Специализация атмосферного техника на синтезе газов.
 
+- type: entity
+  parent: BaseLoadoutAtmosphericSpecialization
+  id: LoadoutAtmosphericThermodynamic
+  categories: [ HideSpawnMenu ]
+  name: Термодинамик
+  description: Специализация атмосферного техника на выработке электроэнергии с ТЭГа.
+
 - type: loadout
   id: AtmosphericTitleLifeSupport
   dummyEntity: LoadoutAtmosphericLifeSupport
   effects:
   - !type:JobTitleLoadoutEffect
     title: job-title-atmospheric-lifesupport
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: JobAtmosphericTechnician
+      time: 36000
+
+- type: loadout
+  id: AtmosphericTitleThermodynamic
+  dummyEntity: LoadoutAtmosphericThermodynamic
+  effects:
+  - !type:JobTitleLoadoutEffect
+    title: job-title-atmospheric-thermodynamic
   - !type:JobRequirementLoadoutEffect
     requirement:
       !type:RoleTimeRequirement
@@ -877,6 +1013,7 @@
   minLimit: 0
   maxLimit: 1
   loadouts:
+  - AtmosphericTitleThermodynamic
   - AtmosphericTitleLifeSupport
   - AtmosphericTitleSynthesis
 
@@ -1030,3 +1167,100 @@
   loadouts:
   - ClownTitleComedian
   - ClownTitlePrankster
+
+# Репортёр
+- type: entity
+  abstract: true
+  id: BaseLoadoutReporterSpecialization
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Interface/Misc/job_icons.rsi
+    state: Reporter
+
+- type: entity
+  parent: BaseLoadoutReporterSpecialization
+  id: LoadoutReporterJournalist
+  categories: [ HideSpawnMenu ]
+  name: Журналист
+  description: Специализация репортёра на .
+
+- type: entity
+  parent: BaseLoadoutReporterSpecialization
+  id: LoadoutReporterСorrespondent
+  categories: [ HideSpawnMenu ]
+  name: Корреспондент
+  description: Специализация репортёра на .
+
+- type: entity
+  parent: BaseLoadoutReporterSpecialization
+  id: LoadoutReporterTVShow
+  categories: [ HideSpawnMenu ]
+  name: Телеведущий
+  description: Специализация репортёра на .
+
+- type: entity
+  parent: BaseLoadoutReporterSpecialization
+  id: LoadoutReporterRadioShow
+  categories: [ HideSpawnMenu ]
+  name: Радиоведущий
+  description: Специализация репортёра на .
+
+- type: loadout
+  id: ReporterTitleJournalist
+  dummyEntity: LoadoutReporterJournalist
+  effects:
+  - !type:JobTitleLoadoutEffect
+    title: job-title-reporter-journalist
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: JobReporter
+      time: 18000
+
+- type: loadout
+  id: ReporterTitleСorrespondent
+  dummyEntity: LoadoutReporterСorrespondent
+  effects:
+  - !type:JobTitleLoadoutEffect
+    title: job-title-reporter-correspondent
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: JobReporter
+      time: 18000
+
+- type: loadout
+  id: ReporterTitleTVShow
+  dummyEntity: LoadoutReporterTVShow
+  effects:
+  - !type:JobTitleLoadoutEffect
+    title: job-title-reporter-tvshow
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: JobReporter
+      time: 18000
+
+- type: loadout
+  id: ReporterTitleRadioShow
+  dummyEntity: LoadoutReporterRadioShow
+  effects:
+  - !type:JobTitleLoadoutEffect
+    title: job-title-reporter-radioshow
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: JobReporter
+      time: 18000
+
+- type: loadoutGroup
+  id: ReporterSpecialization
+  name: loadout-group-reporter-specialization
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - ReporterTitleJournalist
+  - ReporterTitleСorrespondent
+  - ReporterTitleTVShow
+  - ReporterTitleRadioShow
