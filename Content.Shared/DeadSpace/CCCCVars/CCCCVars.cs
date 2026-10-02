@@ -327,6 +327,10 @@ public sealed class CCCCVars
     public static readonly CVarDef<float> PsychiatryAsphyxiationChance =
         CVarDef.Create("deadspace.psychiatry_asphyxiation_chance", 0.01f, CVar.SERVER | CVar.REPLICATED);
 
+    // Пауза между бросками удушья, радиации и шока. Урон капает чаще, болезнь проверяется раз за паузу.
+    public static readonly CVarDef<float> PsychiatryDamageRollGapSec =
+        CVarDef.Create("deadspace.psychiatry_damage_roll_gap_sec", 2f, CVar.SERVER | CVar.REPLICATED);
+
     // 0 полный иммунитет, 1 только случайные ситуации, 2 иммунитета нет.
     public static readonly CVarDef<int> PsychiatryAntagImmunityMode =
         CVarDef.Create("deadspace.psychiatry_antag_immunity", (int) global::Content.Shared.DeadSpace.Psychiatry.PsychiatryAntagImmunity.Partial, CVar.SERVER | CVar.REPLICATED);
