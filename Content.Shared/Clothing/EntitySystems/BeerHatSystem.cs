@@ -1,5 +1,4 @@
 using Content.Shared.Actions;
-using Robust.Shared.Audio.Systems;
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Popups;
 using Content.Shared.Containers.ItemSlots;
@@ -8,8 +7,10 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Database;
 using Content.Shared.FixedPoint;
-using Robust.Shared.Prototypes;
+using Content.Shared.Clothing.Components;
 using Content.Shared.Nutrition;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Audio.Systems;
 using System.Linq;
 
 namespace Content.Shared.Clothing.EntitySystems
@@ -32,7 +33,6 @@ namespace Content.Shared.Clothing.EntitySystems
         public override void Initialize()
         {
             base.Initialize();
-
 
             SubscribeLocalEvent<BeerHatComponent, MapInitEvent>(OnMapInit);
 
@@ -65,6 +65,7 @@ namespace Content.Shared.Clothing.EntitySystems
         {
             args.UniversalDigestion();
         }
+
         private void OnEdible(Entity<BeerHatComponent> entity, ref EdibleEvent args)
         {
             if (args.Cancelled || args.Solution != null)
@@ -117,6 +118,7 @@ namespace Content.Shared.Clothing.EntitySystems
                 }
             }
         }
+
         private void OnEdibleIngested(Entity<BeerHatComponent> entity, ref IngestedEvent args)
         {
             if (args.Handled)
@@ -134,9 +136,7 @@ namespace Content.Shared.Clothing.EntitySystems
                 args.User,
                 args.User);
 
-
             _adminLogger.Add(LogType.Ingestion, LogImpact.Low, $"{ToPrettyString(args.User):target} ate {ToPrettyString(entity):food}");
-
 
             if (!IsEmpty(entity))
             {
@@ -145,6 +145,7 @@ namespace Content.Shared.Clothing.EntitySystems
 
             args.Destroy = false;
         }
+
         private void OnMapInit(Entity<BeerHatComponent> ent, ref MapInitEvent args)
         {
             var component = ent.Comp;
@@ -155,18 +156,18 @@ namespace Content.Shared.Clothing.EntitySystems
         {
             _actions.RemoveAction(uid, component.ActionEntity);
         }
+
         private bool IsEmpty(Entity<BeerHatComponent> entity)
         {
-            var slots = Comp<ItemSlotsComponent>(entity).Slots.Values;
 
-            if (slots.Any(slot =>
-            slot.Item != null && !_openable.IsClosed(slot.Item.Value) &&
-            _solutionContainer.TryGetSolution(slot.Item.Value, entity.Comp.Solution, out var solution)
-            && solution.Value.Comp.Solution.Volume != FixedPoint2.Zero))
+            if (TryComp<ItemSlotsComponent>(entity, out var slots) &&
+            slots.Slots.Values.Any(slot => slot.Item != null &&
+            !_openable.IsClosed(slot.Item.Value) &&
+            _solutionContainer.TryGetSolution(slot.Item.Value, entity.Comp.Solution, out var solution) &&
+            solution.Value.Comp.Solution.Volume != FixedPoint2.Zero))
             {
                 return false;
             }
-
 
             return true;
         }

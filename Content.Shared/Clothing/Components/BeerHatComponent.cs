@@ -11,7 +11,6 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototy
 namespace Content.Shared.Clothing.Components;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
-[Access(typeof(BeerHatSystem))]
 public sealed partial class BeerHatComponent : Component
 {
     [DataField]
