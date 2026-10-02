@@ -236,15 +236,15 @@
         maxVol: 5
   - type: ContainerContainer
     containers:
-      can_slot: !type:ContainerSlot
-      can_slot2: !type:ContainerSlot
+      drinkcan_slot: !type:ContainerSlot
+      drinkcan_slot2: !type:ContainerSlot
   - type: ItemSlots
     slots:
-      can_slot:
+      drinkcan_slot:
         whitelist:
           tags:
           - DrinkCan
-      can_slot2:
+      drinkcan_slot2:
         whitelist:
           tags:
           - DrinkCan
