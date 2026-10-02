@@ -98,11 +98,11 @@ namespace Content.Shared.Clothing.EntitySystems
 
             args.Transfer = entity.Comp.TransferAmount ?? args.Solution.Volume;
 
-            if (!_solutionContainer.TryGetSolution(entity.Owner, entity.Comp.Solution, out var toSolution))
+            if (!_solutionContainer.TryGetSolution(entity.Owner, entity.Comp.Solution, out var toSolution) || !TryComp<ItemSlotsComponent>(entity, out var slots))
                 return;
 
             //Боже храни хардкод
-            var sortedSlots = Comp<ItemSlotsComponent>(entity).Slots.Values.Where(slot =>
+            var sortedSlots = slots.Slots.Values.Where(slot =>
                 slot.Item != null && !_openable.IsClosed(slot.Item.Value)
                 && _solutionContainer.TryGetSolution(slot.Item.Value, entity.Comp.Solution, out var fromSolution)
                 && fromSolution.Value.Comp.Solution.Volume != FixedPoint2.Zero);
@@ -139,7 +139,6 @@ namespace Content.Shared.Clothing.EntitySystems
             _adminLogger.Add(LogType.Ingestion, LogImpact.Low, $"{ToPrettyString(args.User):target} ate {ToPrettyString(entity):food}");
 
 
-            // This also prevents us from repeating if it's empty
             if (!IsEmpty(entity))
             {
                 args.Repeat = true;
