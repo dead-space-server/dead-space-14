@@ -1,0 +1,23 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Original 8x8 placeholder art drawn for this fork.",
+    "size": {
+        "x": 8,
+        "y": 8
+    },
+    "states": [
+        {
+            "name": "hud_on_treatment"
+        },
+        {
+            "name": "hud_completed"
+        },
+        {
+            "name": "hud_psych_unstable"
+        },
+        {
+            "name": "hud_forced_treatment"
+        }
+    ]
+}

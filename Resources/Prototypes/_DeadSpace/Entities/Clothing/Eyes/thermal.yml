@@ -30,6 +30,9 @@
   - type: ShowMindShieldIcons
   - type: ShowCriminalRecordIcons
   - type: ShowPersonnelRecordIcons
+  # DS14-start: a surveillance visor shows the same medical subset security acts on
+  - type: ShowSecurityMedicalStatusIcons
+  # DS14-end
   - type: ShowSyndicateIcons
   - type: EmitSoundOnPickup
     sound:
@@ -78,6 +81,9 @@
   - type: ShowMindShieldIcons
   - type: ShowCriminalRecordIcons
   - type: ShowPersonnelRecordIcons
+  # DS14-start
+  - type: ShowSecurityMedicalStatusIcons
+  # DS14-end
   - type: EmitSoundOnPickup
     sound:
       path: /Audio/_DeadSpace/Items/Handing/glasses/goggles_pickup.ogg

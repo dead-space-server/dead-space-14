@@ -370,6 +370,17 @@
   name: medical records computer
   description: This can be used to check medical records.
   components:
+  # DS14-start: medical records console UI
+  - type: MedicalRecordsConsole
+  - type: UserInterface
+    interfaces:
+      enum.MedicalRecordsConsoleKey.Key:
+        type: MedicalRecordsConsoleBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+  - type: ActivatableUI
+    key: enum.MedicalRecordsConsoleKey.Key
+  # DS14-end
   - type: Sprite
     layers:
     - map: ["computerLayerBody"]
@@ -389,6 +400,10 @@
     color: "#1f8c28"
   - type: Computer
     board: MedicalRecordsComputerCircuitboard
+  # DS14-start: medical access gates the console
+  - type: AccessReader
+    access: [["Medical"]]
+  # DS14-end
 
 - type: entity
   parent: BaseComputerAiAccess
