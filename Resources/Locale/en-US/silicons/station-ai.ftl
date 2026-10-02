@@ -69,6 +69,7 @@ station-ai-camera-search-invalid = Target is unavailable.
 station-ai-camera-search-no-eye = AI eye is unavailable.
 station-ai-camera-search-not-visible = Target was not found on accessible cameras.
 station-ai-camera-jump-cooldown = Camera targeting array is recalibrating. Try again in {$seconds}s.
+station-ai-camera-link-expired = The camera data is outdated.
 station-ai-camera-search-type-all = All
 station-ai-camera-search-type-characters = Crew
 station-ai-camera-search-type-items = Items

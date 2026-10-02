@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using System.Globalization;
 using System.Text;
 using Content.Client.Administration.Managers;
 using Content.Shared.Chat;
@@ -8,6 +9,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Silicons.StationAi;
 using Robust.Client.Player;
 using Robust.Client.UserInterface.RichText;
+using Robust.Shared.Timing;
 
 namespace Content.Client.DeadSpace.Chat;
 
@@ -27,6 +29,7 @@ public sealed class ChatEntityCommandLinkSystem : EntitySystem
 
     [Dependency] private readonly IClientAdminManager _admin = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     public bool TryGetPrefix(ChatMessage message, out string prefix)
     {
@@ -48,7 +51,10 @@ public sealed class ChatEntityCommandLinkSystem : EntitySystem
         var builder = new StringBuilder();
 
         if (HasComp<StationAiHeldComponent>(localEntity))
-            AppendLink(builder, "[CAM]", $"ai_track_entity {message.SenderEntity}");
+        {
+            var timestamp = _timing.CurTime.TotalSeconds.ToString(CultureInfo.InvariantCulture);
+            AppendLink(builder, "[CAM]", $"ai_track_entity {message.SenderEntity} {timestamp}");
+        }
 
         if (CanUseAdminChatLinks(localEntity))
         {
