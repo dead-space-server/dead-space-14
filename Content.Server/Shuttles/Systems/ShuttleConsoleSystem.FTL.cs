@@ -193,6 +193,14 @@ public sealed partial class ShuttleConsoleSystem
             return;
         }
 
+        // DS14-start: expedition beacons sit in the middle of a procedural asteroid, so arriving exactly on
+        // one buries the shuttle inside the generated dungeon. Drop into a clear spot around it instead.
+        if (_shuttle.TryGetExpeditionLandingSpot(shuttleUid.Value, targetCoordinates, targetAngle, out var landingCoordinates))
+        {
+            targetCoordinates = landingCoordinates;
+        }
+        // DS14-end
+
         // Client sends the "adjusted" coordinates and we adjust it back to get the actual transform coordinates.
         var adjustedCoordinates = targetCoordinates.Offset(targetAngle.RotateVec(-shuttlePhysics.LocalCenter));
 
