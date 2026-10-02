@@ -8,7 +8,7 @@ using Content.Shared.Nutrition.Prototypes;
 
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
-namespace Content.Shared.Clothing.EntitySystems;
+namespace Content.Shared.Clothing.Components;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class BeerHatComponent : Component
