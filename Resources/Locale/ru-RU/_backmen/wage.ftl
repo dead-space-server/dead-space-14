@@ -1,4 +1,5 @@
 wageconsole-row = { $name } ({ $account })
+wageconsole-balance = баланс: { $balance }
 wageconsole-title = Консоль ЗУП
 wageconsole-edit = редактировать
 wageconsole-edit-title = Окно редактирования ЗП
@@ -7,3 +8,4 @@ wageconsole-bonus = Выплата премии
 wageconsole-bonus-title = Выплата премии
 wageconsole-done = Подтвердить
 wageconsole-insufficient-access = Недостаточный доступ!
+wageconsole-invalid-amount = Некорректная сумма!

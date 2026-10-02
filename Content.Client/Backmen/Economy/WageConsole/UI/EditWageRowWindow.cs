@@ -34,9 +34,10 @@ public sealed partial class EditWageRowWindow : FancyWindow
 
     private void SaveBtnOnOnPressed(BaseButton.ButtonEventArgs obj)
     {
-        if (Double.TryParse(Wage.Text, out var wage))
+        if (double.TryParse(Wage.Text, System.Globalization.NumberStyles.Float,
+                System.Globalization.CultureInfo.InvariantCulture, out var wage))
         {
-            OnSaveEditedWageRow.Invoke(State.Id, wage);
+            OnSaveEditedWageRow.Invoke(State.Id, FixedPoint2.New(wage));
         }
     }
 }

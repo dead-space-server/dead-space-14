@@ -1,16 +1,15 @@
 ﻿// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Diagnostics.CodeAnalysis;
-using Content.Server.Administration.Logs;
-using Content.Server.Backmen.CartridgeLoader.Cartridges;
+using Content.Server.Administration.Logs;using Content.Server.Backmen.CartridgeLoader.Cartridges;
 using Content.Server.Backmen.Economy.ATM;
 using Content.Shared.Backmen.Economy;
 using Content.Shared.Backmen.Economy.ATM;
 using Content.Shared.Database;
 using Content.Shared.FixedPoint;
 using Content.Shared.GameTicking;
-using Content.Shared.Roles;
-using Content.Shared.Store;
+using Content.Shared.Roles;using Content.Shared.Store;
+using JetBrains.Annotations;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -32,6 +31,22 @@ public sealed class BankManagerSystem : EntitySystem
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnCleanup);
         SubscribeLocalEvent<BankAccountComponent, BankChangeBalanceEvent>(OnBalanceChange);
         SubscribeLocalEvent<BankAccountComponent, ComponentGetStateAttemptEvent>(IsCardInHand);
+        SubscribeLocalEvent<BankAccountComponent, ComponentShutdown>(OnAccountShutdown);
+    }
+
+    private void OnAccountShutdown(Entity<BankAccountComponent> ent, ref ComponentShutdown args)
+    {
+        RemoveAccount(ent);
+    }
+
+    [PublicAPI]
+    public void RemoveAccount(Entity<BankAccountComponent> account)
+    {
+        if (ActiveBankAccounts.TryGetValue(account.Comp.AccountNumber, out var existing) &&
+            existing.Comp == account.Comp)
+        {
+            ActiveBankAccounts.Remove(account.Comp.AccountNumber);
+        }
     }
 
     private void IsCardInHand(Entity<BankAccountComponent> component, ref ComponentGetStateAttemptEvent args)
@@ -49,13 +64,16 @@ public sealed class BankManagerSystem : EntitySystem
 
         if (component.Comp.IsInfinite)
         {
-            return;
+            component.Comp.SetBalance(FixedPoint2.Max(args.Balance, 0));
+        }
+        else
+        {
+            component.Comp.SetBalance(args.Balance);
         }
 
-        component.Comp.SetBalance(args.Balance);
         Dirty(component);
 
-        var ev = new ChangeBankAccountBalanceEvent(args.Balance - args.OldBalance, args.Balance);
+        var ev = new ChangeBankAccountBalanceEvent(component.Comp.Balance - args.OldBalance, component.Comp.Balance);
         RaiseLocalEvent(component, ev);
 
         var parent = Transform(component).ParentUid;
@@ -67,7 +85,7 @@ public sealed class BankManagerSystem : EntitySystem
 
     public bool TryChangeBalanceBy(Entity<BankAccountComponent> uid, FixedPoint2 amount)
     {
-        if (uid.Comp.Balance + amount < 0)
+        if (!uid.Comp.IsInfinite && uid.Comp.Balance + amount < 0)
             return false;
         var oldBalance = uid.Comp.Balance;
 
@@ -82,10 +100,10 @@ public sealed class BankManagerSystem : EntitySystem
 
         return ev.Handled;
     }
+
     public bool TrySetBalance(Entity<BankAccountComponent> uid, FixedPoint2 amount)
     {
-
-        if (uid.Comp.Balance + amount < 0)
+        if (amount < 0)
             return false;
         var oldBalance = uid.Comp.Balance;
 
