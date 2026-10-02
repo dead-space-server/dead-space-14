@@ -147,8 +147,13 @@
     size: Small
     sprite: Objects/Weapons/Melee/e_sword_double-inhands.rsi
   - type: Wieldable
-  - type: StaminaDamageOnHit
-    damage: 10
+  - type: ItemToggle
+    onUse: false
+  - type: ComponentToggler
+    components:
+    - type: AnimationOnMelee
+  - type: MeleeWeapon
+    attackRate: 1.5
 
 - type: entity
   parent: WeaponSMGTommyGun
