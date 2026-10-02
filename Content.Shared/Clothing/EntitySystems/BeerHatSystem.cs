@@ -1,5 +1,4 @@
 using Content.Shared.Actions;
-using Content.Shared.Light.Components;
 using Robust.Shared.Audio.Systems;
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Popups;

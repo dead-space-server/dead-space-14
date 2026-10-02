@@ -5,12 +5,13 @@ using Content.Shared.Inventory;
 using Content.Shared.FixedPoint;
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Nutrition.Prototypes;
-
+using Content.Shared.Clothing.EntitySystems;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Shared.Clothing.Components;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
+[Access(typeof(BeerHatSystem))]
 public sealed partial class BeerHatComponent : Component
 {
     [DataField]
