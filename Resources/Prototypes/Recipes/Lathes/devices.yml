@@ -80,6 +80,18 @@
     Plastic: 200
     Plasma: 100
 
+#DS-14-Start
+- type: latheRecipe
+  parent: BasePartRecipe
+  id: SignallerRedspace
+  result: RemoteSignallerRedspace
+  materials:
+    Steel: 100
+    Plastic: 200
+    Plasma: 100
+    RedspaceCrystal: 100
+#DS-14-end
+
 - type: latheRecipe
   id: AnomalyLocator
   result: AnomalyLocatorEmpty

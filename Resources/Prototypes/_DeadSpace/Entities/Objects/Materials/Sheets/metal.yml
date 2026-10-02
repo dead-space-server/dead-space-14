@@ -272,3 +272,68 @@
     state: synthetic_bluespace_crystal
   - type: Stack
     count: 1
+
+- type: entity
+  parent: SheetOtherBase
+  id: SheetRedspaceCrystal
+  name: очищенный редспейс кристалл
+  description: Завораживающий кроваво-красный кристалл, хоть в нём и видно проблески чего-то, но, кажется, он идёт вглубь бесконечно.
+  suffix: Полный
+  components:
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RedspaceCrystal: 100
+  - type: PointLight
+    radius: 5.0
+    energy: 10.0
+    color: "#b80606"
+    castShadows: false
+    netsync: false
+  - type: Stack
+    stackType: ClearRedspaceCrystal
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Materials/Sheets/redspace-crystal-sheet.rsi
+    state: synthetic_redspace_crystal
+    layers:
+    - state: synthetic_redspace_crystal
+      map: ["base"]
+  - type: Item
+    sprite: _DeadSpace/Objects/Materials/Sheets/redspace-crystal-sheet.rsi
+  - type: Appearance
+  - type: Tag
+    tags:
+    - Sheet
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/materials/glass_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/materials/glass_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/materials/glass_drop.ogg
+
+- type: entity
+  parent: SheetRedspaceCrystal
+  id: SheetRedspaceCrystal10
+  name: очищенный редспейс кристалл
+  suffix: 10
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Materials/Sheets/redspace-crystal-sheet.rsi
+    state: synthetic_redspace_crystal
+  - type: Stack
+    count: 10
+
+- type: entity
+  parent: SheetRedspaceCrystal
+  id: SheetRedspaceCrystal1
+  name: очищенный редспейс кристалл
+  suffix: Один
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Materials/Sheets/redspace-crystal-sheet.rsi
+    state: synthetic_redspace_crystal
+  - type: Stack
+    count: 1

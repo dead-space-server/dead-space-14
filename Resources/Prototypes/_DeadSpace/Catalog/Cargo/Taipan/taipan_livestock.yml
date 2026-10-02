@@ -239,6 +239,16 @@
   group: taipan_market
 
 - type: cargoProduct
+  id: TaipanLivestockSeal
+  icon:
+    sprite: _DeadSpace/Mobs/Animals/Seal/seal.rsi
+    state: seal_idle
+  product: CrateNPCSeal
+  cost: 10000
+  category: cargoproduct-category-name-livestock
+  group: taipan_market
+
+- type: cargoProduct
   id: TaipanLivestockGiantSpiderSpace
   icon:
     sprite: Mobs/Animals/spacespider.rsi

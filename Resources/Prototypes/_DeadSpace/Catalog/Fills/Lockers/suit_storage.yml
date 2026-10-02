@@ -62,7 +62,7 @@
   - type: StorageFill
     contents:
     - id: OxygenTankFilled
-    - id: ClothingOuterHardsuitTaipanRecruit
+    - id: ClothingOuterHardsuitTaipanCommunicationsOfficer
   - type: AccessReader
     access: [["TaipanProtection"]]
 
@@ -75,6 +75,6 @@
   - type: StorageFill
     contents:
     - id: OxygenTankFilled
-    - id: ClothingOuterHardsuitTaipanCommunicationsOfficer
+    - id: TaipanClothingOuterHardsuitOfficerTelecommunication
   - type: AccessReader
     access: [["TaipanCommunicationsOfficer"]]

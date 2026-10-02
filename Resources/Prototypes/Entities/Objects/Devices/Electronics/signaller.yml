@@ -59,3 +59,24 @@
     range: 50
   - type: StaticPrice
     price: 30
+
+#DS-14-start
+- type: entity
+  parent: RemoteSignaller
+  id: RemoteSignallerRedspace
+  name: редспейс передатчик сигналов
+  description: Ручное устройство передачи сигналов на дальние растояния, около 100 метров.
+  components:
+  - type: Sprite
+    state: redspace
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: advanced-inhand-left
+      right:
+      - state: advanced-inhand-right
+  - type: WirelessNetworkConnection
+    range: 100
+  - type: StaticPrice
+    price: 100
+#Ds-14-Start

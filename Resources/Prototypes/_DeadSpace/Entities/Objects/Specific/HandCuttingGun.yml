@@ -64,7 +64,7 @@
       storageLimit: 9000
       whitelist: *StandardMaterialWhitelist
     - type: Gun
-      fireRate: 3
+      fireRate: 5
       soundGunshot:
         path: /Audio/_DeadSpace/Weapons/Guns/Gunshots/laser_rifle.ogg
         params:

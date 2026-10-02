@@ -242,6 +242,7 @@
     - id: DoorRemoteTaipan
     - id: TaipanMessengerCartridge
       amount: 2
+    - id: TaipanMedalCase
     - id: EmagTaipan
     - id: ClothingHeadHelmetSwatSyndicate
     - id: ClothingMaskGasSyndicate
