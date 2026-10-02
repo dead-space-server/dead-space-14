@@ -52,6 +52,14 @@
   - CaptainGlovesBlack
 
 - type: loadoutGroup
+  id: CaptainBelt
+  name: loadout-group-captain-belt
+  loadouts:
+  - CaptainBelt
+  - CaptainBeltWhite
+  - CaptainBeltBlack
+
+- type: loadoutGroup
   id: CaptainTailbag
   name: loadout-group-captain-tailbag
   minLimit: 0

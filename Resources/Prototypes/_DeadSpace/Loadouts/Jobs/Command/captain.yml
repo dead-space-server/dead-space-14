@@ -315,3 +315,23 @@
   id: CaptainSocksBlack
   equipment:
     socks: ClothingUnderwearSocksCaptainBlack
+
+# Belt
+## Blue
+- type: loadout
+  id: CaptainBelt
+  equipment:
+    belt: ClothingBeltSheath
+
+## White
+- type: loadout
+  id: CaptainBeltWhite
+  equipment:
+    belt: ClothingBeltSheathWhite
+
+## Black
+- type: loadout
+  id: CaptainBeltBlack
+  equipment:
+    belt: ClothingBeltSheathBlack
+

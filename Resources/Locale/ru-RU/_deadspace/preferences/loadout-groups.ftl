@@ -11,6 +11,7 @@ loadout-group-captain-gloves = Капитан, перчатки
 loadout-group-captain-tailbag = Капитан, хвост
 loadout-group-captain-shoes = Капитан, обувь
 loadout-group-captain-socks = Капитан, носки
+loadout-group-captain-belt = Капитан, ножны
 
 # Civilian
 loadout-group-senior-administrator-jumpsuit = Менеджер, комбинезон
