@@ -431,7 +431,7 @@ public sealed partial class IngestionSystem : EntitySystem
     /// <param name="food">Food entity we're trying to eat.</param>
     /// <param name="delay">The time delay for our DoAfter</param>
     /// <returns>Returns true if it was able to successfully start the DoAfter</returns>
-    public DoAfterArgs GetEdibleDoAfterArgs(EntityUid user, EntityUid target, EntityUid food, TimeSpan delay = default, EntityUid? utensil = null) // DS14
+    private DoAfterArgs GetEdibleDoAfterArgs(EntityUid user, EntityUid target, EntityUid food, TimeSpan delay = default, EntityUid? utensil = null) // DS14
     {
         var forceFeed = user != target;
 

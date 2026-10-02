@@ -24,9 +24,6 @@ public sealed partial class BeerHatComponent : Component
     [DataField]
     public SoundSpecifier? UseSound;
 
-    /// <summary>
-    /// Verb, icon, and sound data for our edible.
-    /// </summary>
     [DataField]
     public ProtoId<EdiblePrototype> Edible = IngestionSystem.Drink;
 
