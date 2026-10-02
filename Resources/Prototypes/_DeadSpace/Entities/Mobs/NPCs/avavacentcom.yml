@@ -24,6 +24,14 @@
   - type: Loadout
     prototypes:
       - CentComAvavaGear
+    components:
+  - type: Language
+    knownLanguages:
+    - GeneralLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage
 
 - type: entity
   name: спавнер Авава ЦентКомович
