@@ -210,3 +210,44 @@
       sprite: _DeadSpace/Clothing/Head/Hats/sechat.rsi
     - type: Clothing
       sprite: _DeadSpace/Clothing/Head/Hats/sechat.rsi
+
+- type: entity
+  name: Пивная шляпа
+  parent: BaseItem
+  id: ClothingBeerHat
+  description: Можно пить сразу из двух банок!
+  components:
+  - type: Item
+    size: Normal
+    shape:
+    - 0,0,2,1
+  - type: BeerHat
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hats/beerhat.rsi
+    state: icon
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hats/beerhat.rsi
+    quickEquip: true
+    slots:
+      - head
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 5
+  - type: ContainerContainer
+    containers:
+      drinkcan_slot: !type:ContainerSlot
+      drinkcan_slot2: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      drinkcan_slot:
+        whitelist:
+          tags:
+          - DrinkCan
+      drinkcan_slot2:
+        whitelist:
+          tags:
+          - DrinkCan
+  - type: Tag
+    tags:
+    - ClothMade
