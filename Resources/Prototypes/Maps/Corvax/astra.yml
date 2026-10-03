@@ -77,3 +77,4 @@
             BorgSecurity: [ 1, 1 ]
             # etc
             ClownSponsor: [ 0, 2 ]
+            Zookeeper: [ 1, 1 ]

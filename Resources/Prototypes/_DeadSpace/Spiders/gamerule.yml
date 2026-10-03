@@ -1,7 +1,6 @@
 - type: npcFaction
   id: SpiderTerror
   hostile:
-  - AshWalker
   - Revolutionary
   - NanoTrasen
   - SimpleNeutral

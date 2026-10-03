@@ -30,3 +30,4 @@
     containers:
       item:
       - EnergyKatana
+  - type: NinjaAppearanceItem

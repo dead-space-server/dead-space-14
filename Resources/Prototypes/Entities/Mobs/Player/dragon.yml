@@ -78,7 +78,6 @@
         BaseUnshaded: alive-unshaded
       Critical:
         Base: crit
-        BaseUnshaded: crit-unshaded
       Dead:
         Base: dead
         BaseUnshaded: dead-unshaded
@@ -222,7 +221,7 @@
       collection: MantisRush
   - type: AntiRottingContainer
   - type: NecromorfAfterInfection
-    necroPrototype: NecroDragon # DS14
+    necroPrototype: NecroBrute
   - type: GhostRoleNotifys 
     groupPrototype: Dragonping
   - type: Destructible

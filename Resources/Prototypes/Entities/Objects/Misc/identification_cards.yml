@@ -846,7 +846,7 @@
     - TaipanAccess # DS14-taipan
     - Silicon
     tags:
-    - SOD #DS-14
+    - SOD
     - CentralCommand
     - NuclearOperative
     - SyndicateAgent

@@ -41,10 +41,6 @@
   id: BasicTrashVariationPass
   parent: BaseVariationPass
   components:
-  # DS14-start
-  - type: StationVariationPassRule
-    applyToCentComm: false
-  # DS14-end
   - type: EntitySpawnVariationPass
     tilesPerEntityAverage: 35
     tilesPerEntityStdDev: 4
@@ -65,10 +61,6 @@
   id: BasicDecalGraffitiVariationPass
   parent: BaseVariationPass
   components:
-  # DS14-start
-  - type: StationVariationPassRule
-    applyToCentComm: false
-  # DS14-end
   - type: EntitySpawnVariationPass
     tilesPerEntityAverage: 120
     tilesPerEntityStdDev: 5
@@ -148,10 +140,6 @@
   id: BasicPuddleMessVariationPass
   parent: BaseVariationPass
   components:
-  # DS14-start
-  - type: StationVariationPassRule
-    applyToCentComm: false
-  # DS14-end
   - type: PuddleMessVariationPass
     randomPuddleSolutionFill: RandomFillTrashPuddle
 
@@ -159,10 +147,6 @@
   id: BloodbathPuddleMessVariationPass
   parent: BaseVariationPass
   components:
-  # DS14-start
-  - type: StationVariationPassRule
-    applyToCentComm: false
-  # DS14-end
   - type: PuddleMessVariationPass
     tilesPerSpillAverage: 150
     tilesPerSpillStdDev: 10

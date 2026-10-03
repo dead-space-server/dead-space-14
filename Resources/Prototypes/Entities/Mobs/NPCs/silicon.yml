@@ -278,16 +278,7 @@
   components:
   - type: Sprite
     sprite: Mobs/Silicon/Bots/cleanbot.rsi
-    layers:
-    - map: [ "movement" ]
-      state: cleanbot
-  - type: SpriteMovement
-    movementLayers:
-      movement:
-        state: move
-    noMovementLayers:
-      movement:
-        state: cleanbot
+    state: cleanbot
   - type: Construction
     graph: CleanBot
     node: bot

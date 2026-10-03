@@ -1,0 +1,1 @@
+objective-condition-ninja-protect-title = Protect {$targetName}, {CAPITALIZE($job)}, keeping them alive.

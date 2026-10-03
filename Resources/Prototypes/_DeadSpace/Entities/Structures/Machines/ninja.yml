@@ -1,0 +1,93 @@
+- type: sourcePort
+  id: NinjaScannerPort
+  name: Инфо-сканер
+  description: Порт для передачи данных и команд между консолью и сканером.
+
+- type: sinkPort
+  id: NinjaScannerPort
+  name: Инфо-сканер
+  description: Порт для передачи данных и команд между консолью и сканером.
+
+- type: entity
+  parent: BaseStructure
+  id: NinjaInfoScanner
+  name: сканнер разума
+  description: Высокотехнологичная капсула для извлечения данных из живых субъектов.
+  components:
+  - type: NinjaInfoScanner
+  - type: Speech
+    speechVerb: Robotic
+    speechSounds: Pai
+  - type: DeviceLinkSource
+    ports:
+    - NinjaScannerPort
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Machines/ninja_scan.rsi
+    layers:
+    - map: ["base"]
+      state: icon_open
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.NinjaInfoScannerVisuals.VisualState:
+        base:
+          Open: { state: icon_open }
+          Closed: { state: icon_closed }
+          Scan: { state: icon_scan }
+  - type: InteractionOutline
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 150
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Climbable
+
+- type: entity
+  parent: BaseStructure
+  id: NinjaInfoConsole
+  name: консоль сканера разума
+  description: Терминал управления капсулой сканирования разума.
+  components:
+  - type: NinjaInfoConsole
+  - type: DeviceLinkSink
+    ports:
+    - NinjaScannerPort
+  - type: ActivatableUI
+    key: enum.NinjaInfoScannerUiKey.Key
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [["Ninja"]]
+  - type: UserInterface
+    interfaces:
+      enum.NinjaInfoScannerUiKey.Key:
+        type: NinjaInfoScannerBoundUserInterface
+  - type: Speech
+    speechVerb: Robotic
+    speechSounds: Pai
+  - type: Sprite
+    sprite: Structures/Machines/computers.rsi
+    layers:
+    - state: computer
+    - state: request-sec
+  - type: InteractionOutline
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 150
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer

@@ -78,3 +78,4 @@
             BorgSecurity: [ 1, 1 ]
             # etc
             ClownSponsor: [ 0, 2 ]
+            Boxer: [ 1, 1 ]

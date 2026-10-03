@@ -1,7 +1,6 @@
 - type: npcFaction
   id: Dragon
   hostile:
-  - AshWalker
   - NanoTrasen
   - Syndicate
   - Xeno
@@ -20,7 +19,6 @@
 - type: npcFaction
   id: NanoTrasen
   hostile:
-  - AshWalker
   - SimpleHostile
   - Syndicate
   - Xeno
@@ -59,7 +57,6 @@
 - type: npcFaction
   id: SimpleHostile
   hostile:
-  - AshWalker
   - NanoTrasen
   - Syndicate
   - Passive
@@ -83,7 +80,6 @@
 - type: npcFaction
   id: Syndicate
   hostile:
-  - AshWalker
   - NanoTrasen
   - SimpleHostile
   - Xeno
@@ -104,7 +100,6 @@
 - type: npcFaction
   id: SyndicateAgent
   hostile:
-  - AshWalker
   - SimpleHostile
   - Xeno
   - Zombie
@@ -121,7 +116,6 @@
 - type: npcFaction
   id: Revenant
   hostile:
-  - AshWalker
   - Revolutionary
   - NanoTrasen
   - SimpleNeutral
@@ -144,7 +138,6 @@
 - type: npcFaction
   id: Ninja
   hostile:
-  - AshWalker
   - Revolutionary
   - NanoTrasen
   - SimpleNeutral
@@ -167,7 +160,6 @@
 - type: npcFaction
   id: Xeno
   hostile:
-  - AshWalker
   - NanoTrasen
   - Syndicate
   - Passive
@@ -188,7 +180,6 @@
 - type: npcFaction
   id: Zombie
   hostile:
-  - AshWalker
   - NanoTrasen
   - SimpleNeutral
   - SimpleHostile
@@ -210,7 +201,6 @@
 - type: npcFaction
   id: Revolutionary
   hostile:
-  - AshWalker
   - NanoTrasen
   - Zombie
   - SimpleHostile
@@ -226,7 +216,6 @@
 - type: npcFaction
   id: AllHostile
   hostile:
-  - AshWalker
   - NanoTrasen
   - Dragon
   - Mouse
@@ -250,7 +239,6 @@
 - type: npcFaction
   id: Wizard
   hostile:
-  - AshWalker
   - NanoTrasen
   - Dragon
   - Mouse
@@ -274,7 +262,6 @@
 - type: npcFaction
   id: Xenoborg
   hostile:
-  - AshWalker
   # they have brains
   - NanoTrasen
   - Syndicate

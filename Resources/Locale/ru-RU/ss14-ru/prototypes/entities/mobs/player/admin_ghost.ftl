@@ -16,5 +16,3 @@ ent-ActionAGhostShowCrewMonitoring = Интерфейс мониторинга �
     .desc = Просмотр интерфейса мониторинга экипажа.
 ent-ActionAGhostShowStationRecords = Интерфейс станционного учёта
     .desc = Просмотр интерфейса станционного учёта.
-ent-ActionAGhostShowCriminalRecords = Интерфейс криминальных записей
-    .desc = Просмотр интерфейса криминальных записей.

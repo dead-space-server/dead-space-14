@@ -122,7 +122,7 @@ public sealed class RetractableItemActionSystem : EntitySystem
         Dirty(ent);
     }
 
-    private void RetractRetractableItem(EntityUid holder, EntityUid item, Entity<RetractableItemActionComponent?> action)
+    public void RetractRetractableItem(EntityUid holder, EntityUid item, Entity<RetractableItemActionComponent?> action)
     {
         if (!Resolve(action, ref action.Comp, false))
             return;

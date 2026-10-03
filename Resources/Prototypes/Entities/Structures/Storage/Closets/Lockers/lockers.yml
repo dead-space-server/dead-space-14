@@ -627,7 +627,7 @@
     stateDoorOpen: blueshield_open
     stateDoorClosed: blueshield_door
   - type: AccessReader
-    access: [["BlueShield"]]
+    access: [["Captain"]]
 
 # Coroner
 - type: entity

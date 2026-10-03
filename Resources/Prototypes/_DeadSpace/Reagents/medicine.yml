@@ -32,3 +32,31 @@
         - !type:ReagentCondition
           reagent: Derytracine
           min: 22
+
+- type: reagent
+  id: Chiyurizine
+  name: reagent-name-chiyurizine
+  group: Medicine
+  desc: reagent-desc-chiyurizine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#E9FFCC"
+  metabolisms:
+    Medicine:
+      effects:
+      - !type:HealthChange
+        damage:
+          groups:
+            Burn: -4
+            Brute: -3
+          types:
+            Poison: -2
+            Radiation: -1
+      - !type:DamageDisease
+        baseDamage: 40
+        resistanceIncrease: 0.001
+        medicine: Chiyurizine
+        conditions:
+        - !type:ReagentCondition
+          reagent: Chiyurizine
+          min: 1

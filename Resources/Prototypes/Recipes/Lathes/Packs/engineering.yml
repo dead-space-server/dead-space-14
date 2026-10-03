@@ -55,7 +55,6 @@
   id: EngineeringBoardsStatic
   recipes:
   - SpaceHeaterMachineCircuitBoard
-  - GasElectrolyzerMachineCircuitBoard # DS14
 
 ## Dynamic
 

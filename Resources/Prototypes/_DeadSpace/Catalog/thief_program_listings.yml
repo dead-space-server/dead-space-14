@@ -46,32 +46,28 @@
 
 - type: thiefListing
   id: ThiefListingFakeMindShield
-  name: thief-implant-mindshield
-  description: thief-implant-mindshield-desc
+  name: ent-FakeMindShieldImplanter
   entities: [ FakeMindShieldImplanter ]
   cost: 4000
   category: thief-program-category-implants
 
 - type: thiefListing
   id: ThiefListingVoiceMask
-  name: thief-implant-voice-mask
-  description: thief-implant-voice-mask-desc
+  name: ent-VoiceMaskImplanter
   entities: [ VoiceMaskImplanter ]
   cost: 5000
   category: thief-program-category-implants
 
 - type: thiefListing
   id: ThiefListingStorageImplant
-  name: thief-implant-storage
-  description: thief-implant-storage-desc
+  name: ent-StorageImplanter
   entities: [ StorageImplanter ]
   cost: 15000
   category: thief-program-category-implants
 
 - type: thiefListing
   id: ThiefListingDnaScrambler
-  name: thief-implant-dna-scrambler
-  description: thief-implant-dna-scrambler-desc
+  name: ent-DnaScramblerImplanter
   entities: [ DnaScramblerImplanter ]
   cost: 8000
   category: thief-program-category-implants

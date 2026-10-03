@@ -1,0 +1,41 @@
+- type: entity
+  parent: BaseComputerCircuitboard
+  id: NinjaComputerShuttleCircuitboard
+  name: плата консоли управления шаттла
+  description: Компьютерная печатная плата для консоли шаттла.
+  components:
+    - type: Sprite
+      state: cpu_command
+    - type: ComputerBoard
+      prototype: NinjaComputerShuttle
+
+- type: entity
+  parent: BaseComputerShuttle
+  id: NinjaComputerShuttle
+  name: консоль управления шаттла
+  description: Консоль для управления шаттлом.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Machines/Computers.rsi
+    layers:
+    - map: ["computerLayerBody"]
+      state: console_shuttle
+    - map: ["computerLayerKeyboard"]
+      state: keys_shuttle
+    - map: ["computerLayerScreen"]
+      state: screen_shuttle
+    - map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
+      visible: false
+      state: generic_panel_open
+  - type: Computer
+    board: NinjaComputerShuttleCircuitboard
+  - type: PointLight
+    radius: 1.5
+    energy: 1.6
+    color: "#026b02"
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StructuralMetallicStrong
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [["Ninja"]]

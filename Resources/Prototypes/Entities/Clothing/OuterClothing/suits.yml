@@ -117,7 +117,7 @@
   - type: IgnoreContactDamage #DS14
 
 - type: entity
-  parent: [ClothingOuterBaseLarge, GeigerCounterClothing, AllowSuitStorageClothing]
+  parent: [ClothingOuterBaseLarge, GeigerCounterClothing, AllowSuitStorageClothing] #DS14
   id: ClothingOuterSuitRad
   name: radiation suit
   description: "A suit that protects against radiation. The label reads, 'Made with lead. Please do not consume insulation.'"
@@ -145,7 +145,7 @@
     - Tail
 
 - type: entity
-  parent: [ClothingOuterBaseLarge, AllowSuitStorageClothing, BaseToggleClothing, BaseHighlyIllegalContraband]
+  parent: [ClothingOuterBaseLarge, AllowSuitStorageClothing, BaseHighlyIllegalContraband]
   id: ClothingOuterSuitSpaceNinja
   name: space ninja suit
   description: This black technologically advanced, cybernetically-enhanced suit provides many abilities like invisibility or teleportation.
@@ -154,6 +154,15 @@
     sprite: Clothing/OuterClothing/Suits/spaceninja.rsi
   - type: Clothing
     sprite: Clothing/OuterClothing/Suits/spaceninja.rsi
+    clothingVisuals:
+      outerClothing:
+      - state: equipped-OUTERCLOTHING
+      - state: equipped-OUTERCLOTHING-unshaded
+        shader: unshaded
+      outerClothing-reptilian:
+      - state: equipped-OUTERCLOTHING-reptilian
+      - state: equipped-OUTERCLOTHING-unshaded
+        shader: unshaded
   # hardsuit stuff
   - type: PressureProtection
     highPressureMultiplier: 0.6
@@ -161,40 +170,59 @@
   - type: TemperatureProtection
     heatingCoefficient: 0.01
     coolingCoefficient: 0.01
-  - type: Armor
+  - type: Armor #DS14
     modifiers:
       coefficients:
-        Blunt: 0.75
-        Slash: 0.75
-        Piercing: 0.75
-        Heat: 0.75
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
   - type: StaminaResistance #DS14
     damageCoefficient: 0.5
-  # phase cloak
-  - type: ToggleClothing
-    action: ActionTogglePhaseCloak
-    disableOnUnequip: true
-  - type: ComponentToggler
-    parent: true
-    components:
-    - type: Stealth
-      minVisibility: 0.1
-      lastVisibility: 0.1
-  - type: PowerCellDraw
-    drawRate: 3.6 # 100 seconds on the default cell
-  - type: ToggleCellDraw
-  # throwing star ability
-  - type: ItemCreator
-    action: ActionCreateThrowingStar
-    charge: 14.4
-    spawnedPrototype: ThrowingStarNinja
-    noPowerPopup: ninja-no-power
+  - type: Appearance #DS14
   # core ninja suit stuff
   - type: NinjaSuit
+  #DS14 start
+  - type: SpiderOS
+    skills: SpiderOS
+  - type: ShuttleConsole
+    zoom: 1, 1
+  - type: DroneConsole
+    ignoreStation: true
+    components:
+    - type: NinjaShuttle
+  - type: RadarConsole
+    maxRange: 256
+  - type: UserInterface
+    interfaces: 
+      enum.SpiderOSUiKey.Key:
+        type: SpiderOSWindowBoundUserInterface
+      enum.HealthAnalyzerUiKey.Key:
+        type: HealthAnalyzerBoundUserInterface
+      enum.ShuttleConsoleUiKey.Key:
+        type: ShuttleConsoleBoundUserInterface
+      enum.NinjaDisguiseUiKey.Key:
+        type: NinjaDisguiseBoundUserInterface
+  - type: SelfHealthAnalyzer
+  - type: HealthAnalyzer
+  - type: AutoDust
+  - type: NinjaSuitRefill
+    actionMaterials:
+      ActionNinjaHealingCocktail:
+        stack: ClearBluspaceCrystal
+        amount: 10
+      ActionNinjaAdrenal:
+        stack: Uranium
+        amount: 10
+  - type: Jetpack
+    requiresGas: false
+    toggleAction: NinjaActionToggleJetpack
+  - type: NinjaSuitHeat
+  - type: NinjaAppearance
+  - type: NinjaAppearanceItem
+  #DS14 end
   - type: EmpResistance
     strengthMultiplier: 0
-  - type: UseDelay
-    delay: 5 # disable time
   - type: PowerCellSlot
     cellSlotId: cell_slot
     # throwing in a recharger would bypass glove charging mechanic
@@ -214,6 +242,9 @@
   - type: HideLayerClothing
     slots:
     - Tail
+  - type: MultiClothing
+    equipment: 
+      neck: ClothingNeckScarfNinja
 
 - type: entity
   parent: ClothingOuterBase

@@ -232,8 +232,7 @@
 
 # DS14-start
 # The ВорПРО program of the thief. Never found on items — it is installed onto
-# the thief's PDA when they insert a tool into the PDA's tool slot, and deleted
-# again when the tool is taken out.
+# the thief's PDA when they write the round's code word into their notekeeper.
 - type: entity
   parent: BasePDACartridge
   id: ThiefPdaProgram

@@ -124,3 +124,16 @@
     sprite: _DeadSpace/Clothing/Neck/captain_mantle_black.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/Neck/captain_mantle_black.rsi
+
+- type: entity
+  parent: [ClothingScarfBase, BaseHighlyIllegalContraband]
+  id: ClothingNeckScarfNinja
+  name: шарф ниндзя
+  description: Шарф клана Паука, сотканный из нановолокон. Его цвет гармонирует с остальным вашим снаряжением.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Neck/spaceninja.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Neck/spaceninja.rsi
+  - type: NinjaAppearanceItem
+    itemType: Scarf

@@ -1,0 +1,94 @@
+{
+	"version": 1,
+	"license": "CC-BY-SA-3.0",
+	"copyright": "jasjasaoi",
+	"size": {
+	  "x": 32,
+	  "y": 32
+	},
+	"states": [
+	  {
+		"name": "chain",
+		"delays": [
+			[
+			  1,
+			  1,
+			  1
+			]
+		  ]
+	  },
+	  {
+		"name": "kunai",
+		"delays": [
+			[
+			  0.2,
+			  0.2,
+			  0.2,
+			  0.2,
+			  0.2,
+			  0.2,
+			  0.2,
+			  0.2,
+			  0.2,
+			  0.2,
+			  0.2,
+			  0.2,
+			  0.2,
+			  0.2,
+			  0.2,
+			  0.2,
+			  0.2,
+			  0.2
+			]
+		  ]
+	  },
+	  {
+		"name": "net_emitter"
+	  },
+	  {
+		"name": "kunai_projectile"
+	  },
+	  {
+		"name": "shuriken_emitter",
+		"delays": [
+			[
+			  0.25,
+			  0.25
+			]
+		  ]
+	  },
+	  {
+		"name": "shuriken_projectile",
+		"delays": [
+			[
+			  0.25,
+			  0.25
+			]
+		  ]
+	  },
+	  {
+		"name": "net",
+		"delays": [
+			[
+			  1,
+			  0.25
+			]
+		  ]
+	  },
+	  {
+		"name": "n_beam",
+		"delays": [
+			[
+			  0.25,
+			  0.25,
+			  0.25,
+			  0.25,
+			  0.25,
+			  0.25,
+			  0.25,
+			  0.25
+			]
+		  ]
+	  }
+	]
+  }

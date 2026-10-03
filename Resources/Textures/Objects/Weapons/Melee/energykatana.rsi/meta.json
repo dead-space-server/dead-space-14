@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from tgstation ss13, resprite by yri_nouri (discord) for Space Station 14 server Мёртвый Космос",
+  "copyright": "Taken from tgstation ss13, resprite by yri_nouri (discord), blue and red version sprited by sakent0 (discord) for Space Station 14 server Мёртвый Космос",
   "size": {
     "x": 32,
     "y": 32
@@ -103,7 +103,93 @@
           0.2,
           0.2,
           0.2
+]
+       ]
+     },
+    {
+      "name": "red-icon"
+    },
+    {
+      "name": "red-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "red-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "red-icon-unshaded",
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
         ]
+      ]
+    },
+    {
+      "name": "red-inhand-left-unshaded",
+      "directions": 4,
+      "delays": [
+        [0.2, 0.2, 0.2, 0.2, 0.2],
+        [0.2, 0.2, 0.2, 0.2, 0.2],
+        [0.2, 0.2, 0.2, 0.2, 0.2],
+        [0.2, 0.2, 0.2, 0.2, 0.2]
+      ]
+    },
+    {
+      "name": "red-inhand-right-unshaded",
+      "directions": 4,
+      "delays": [
+        [0.2, 0.2, 0.2, 0.2, 0.2],
+        [0.2, 0.2, 0.2, 0.2, 0.2],
+        [0.2, 0.2, 0.2, 0.2, 0.2],
+        [0.2, 0.2, 0.2, 0.2, 0.2]
+      ]
+    },
+    {
+      "name": "blue-icon"
+    },
+    {
+      "name": "blue-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "blue-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "blue-icon-unshaded",
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "blue-inhand-left-unshaded",
+      "directions": 4,
+      "delays": [
+        [0.2, 0.2, 0.2, 0.2, 0.2],
+        [0.2, 0.2, 0.2, 0.2, 0.2],
+        [0.2, 0.2, 0.2, 0.2, 0.2],
+        [0.2, 0.2, 0.2, 0.2, 0.2]
+      ]
+    },
+    {
+      "name": "blue-inhand-right-unshaded",
+      "directions": 4,
+      "delays": [
+        [0.2, 0.2, 0.2, 0.2, 0.2],
+        [0.2, 0.2, 0.2, 0.2, 0.2],
+        [0.2, 0.2, 0.2, 0.2, 0.2],
+        [0.2, 0.2, 0.2, 0.2, 0.2]
       ]
     }
   ]

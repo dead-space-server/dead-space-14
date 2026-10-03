@@ -21,6 +21,12 @@
     },
     {
       "name": "icon"
+    },
+    {
+      "name": "inhand-left"
+    },
+    {
+      "name": "inhand-right"
     }
   ]
 }

@@ -302,6 +302,30 @@ public sealed class SiliconLawSystem : SharedSiliconLawSystem
         NotifyLawsChanged(target, cue);
     }
 
+    /// <summary>
+    /// Replaces the laws of a single silicon with its own lawset instance and marks it subverted.
+    /// Unlike <see cref="SetLaws"/> this never aliases the supplied list, so callers can safely
+    /// hand the same list to several targets.
+    /// </summary>
+    public void SetSubvertedLaws(EntityUid target, List<SiliconLaw> newLaws, SoundSpecifier? cue = null)
+    {
+        if (!TryComp<SiliconLawProviderComponent>(target, out var component))
+            return;
+
+        var obeysTo = component.Lawset?.ObeysTo;
+        if (string.IsNullOrEmpty(obeysTo))
+            obeysTo = _prototype.TryIndex(component.Laws, out var proto) ? proto.ObeysTo : string.Empty;
+
+        component.Lawset = new SiliconLawset
+        {
+            Laws = newLaws,
+            ObeysTo = obeysTo
+        };
+        component.Subverted = true;
+
+        NotifyLawsChanged(target, cue ?? component.LawUploadSound);
+    }
+
     protected override void OnUpdaterInsert(Entity<SiliconLawUpdaterComponent> ent, ref EntInsertedIntoContainerMessage args)
     {
         // TODO: Prediction dump this

@@ -1,5 +1,4 @@
 strippable-component-not-holding-anything = Вы ничего не держите!
-strip-cannot-strip = Вы не можете обыскивать этого человека!
 strippable-component-cannot-drop = Вы не можете отпустить это!
 strippable-component-item-slot-occupied-message = { $owner } уже что-то имеет здесь!
 strippable-component-cannot-equip-message = { $owner } не может экипировать это сюда!

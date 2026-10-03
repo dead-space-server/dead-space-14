@@ -195,14 +195,18 @@
     shape:
     - 0,0,0,3
   - type: EnergyKatana
+  - type: NinjaAppearanceItem
   # DS14-start
   - type: Parry
     parryableWeapons:
       tags:
       - ParryStandardWeapon
       - ParryEnergySword
-  # DS14-end
   - type: DashAbility
+    corruptByBluespaceItems: true
+    teleportPulledEntity: true
+    beamProto: NinjaBeam
+  # DS14-end
   - type: LimitedCharges
     maxCharges: 3
   - type: AutoRecharge

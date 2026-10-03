@@ -36,5 +36,3 @@ ent-ActionChangelingScreech = Визг
     .desc = Издайте оглушительный визг, ослабляющий всех вокруг.
 ent-ActionChangelingFakeMindshieldToggle = [color=green]Переключить поддельный имплант защиты разума[/color]
     .desc = Включает или выключает видимость поддельного импланта защиты разума.
-ent-ActionChangelingAdrenaline = Адреналин
-    .desc = Тело синтезирует гиперзин, ускоряя вас. Требует 25 химикатов. Откат: 90 секунд.

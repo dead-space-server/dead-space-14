@@ -10,3 +10,5 @@
       state: critical
   - type: InstantAction
     event: !type:CallErtHelpActionEvent {}
+  - type: ConfirmableAction
+    popup: action-call-ert-help-confirm

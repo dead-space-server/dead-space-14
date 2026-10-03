@@ -1,0 +1,51 @@
+- type: entity
+  id: NinjaRespawnCapsule
+  parent: BaseStructure
+  name: капсула клонирования клана Паука
+  description: Капсула, содержащее в себе запасное тело на случай, если всё пойдёт не так... Сработает только если выбран модуль "Второй шанс".
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: NinjaRespawnCapsule
+  - type: Sprite
+    sprite: /Textures/_DeadSpace/Structures/Machines/ninjacloningpod.rsi
+    noRot: True
+    layers:
+    - map: ["base"]
+      state: cloning-off
+  - type: Appearance
+  - type: Climbable
+  - type: InteractionOutline
+  - type: GenericVisualizer
+    visuals:
+      enum.NinjaRespawnCapsuleVisuals.Full:
+        base:
+          True: { state: cloning-on }
+          False: { state: cloning-off }
+  - type: ContainerContainer
+    containers:
+      ninja_capsule_body: !type:ContainerSlot
+  - type: EmptyOnMachineDeconstruct
+    containers:
+      - ninja_capsule_body
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StrongMetallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+
+- type: cloningSettings
+  id: NinjaSecondChanceClone
+  parent: BaseClone
+  copyEquipment: null
+  copyInternalStorage: false
+  copyImplants: false

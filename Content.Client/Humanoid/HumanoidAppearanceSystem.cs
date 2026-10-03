@@ -28,6 +28,9 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
     private void OnHandleState(EntityUid uid, HumanoidAppearanceComponent component, ref AfterAutoHandleStateEvent args)
     {
         UpdateSprite((uid, component, Comp<SpriteComponent>(uid)));
+
+        var ev = new AfterHumanoidAppearanceAppliedEvent(uid);
+        RaiseLocalEvent(ref ev);
     }
 
     private void UpdateSprite(Entity<HumanoidAppearanceComponent, SpriteComponent> entity)
@@ -419,6 +422,18 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
         }
     }
 
+    /// <summary>
+    ///     Rebuilds the humanoid sprite layers from the current appearance data. Used when external code
+    ///     has tampered with the sprite (e.g. the ninja disguise) and needs to restore the humanoid parts.
+    /// </summary>
+    public void RefreshAppearance(EntityUid uid, HumanoidAppearanceComponent? humanoid = null)
+    {
+        if (!Resolve(uid, ref humanoid, false) || !TryComp<SpriteComponent>(uid, out var sprite))
+            return;
+
+        UpdateSprite((uid, humanoid, sprite));
+    }
+
     public override void SetSkinColor(EntityUid uid, Color skinColor, bool sync = true, bool verify = true, HumanoidAppearanceComponent? humanoid = null)
     {
         if (!Resolve(uid, ref humanoid) || humanoid.SkinColor == skinColor)
@@ -475,3 +490,11 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
         }
     }
 }
+
+/// <summary>
+///     Broadcast right after a humanoid's sprite layers have been rebuilt from a networked appearance
+///     state. Unlike <see cref="AfterAutoHandleStateEvent"/> this is a plain broadcast event, so any
+///     number of systems may subscribe.
+/// </summary>
+[ByRefEvent]
+public record struct AfterHumanoidAppearanceAppliedEvent(EntityUid Uid);

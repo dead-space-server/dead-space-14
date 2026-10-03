@@ -3,6 +3,7 @@ using Content.Shared.Ninja.Systems;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared.Ninja.Components;
 
@@ -35,6 +36,14 @@ public sealed partial class NinjaSuitComponent : Component
     [DataField, AutoNetworkedField]
     public EntityUid? RecallKatanaActionEntity;
 
+    //DS14-start
+    [DataField]
+    public EntProtoId OpenSpiderOSAction = "SpiderOSAction";
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? OpenSpiderOSActionEntity;
+    //DS14-end
+
     /// <summary>
     /// Battery charge used per tile the katana teleported.
     /// Uses 1% of a default battery per tile.
@@ -50,42 +59,7 @@ public sealed partial class NinjaSuitComponent : Component
     [DataField]
     public float RecallOverMaxChargeRatio = 0.9f;
     // DS14-end
-
-    /// <summary>
-    /// The action id for creating an EMP burst
-    /// </summary>
-    [DataField]
-    public EntProtoId EmpAction = "ActionNinjaEmp";
-
-    [DataField, AutoNetworkedField]
-    public EntityUid? EmpActionEntity;
-
-    /// <summary>
-    /// Battery charge used to create an EMP burst. Can do it 2 times on a small-capacity power cell.
-    /// </summary>
-    [DataField]
-    public float EmpCharge = 180f;
-
-    // TODO: EmpOnTrigger bruh
-
-    /// <summary>
-    /// Range of the EMP in tiles.
-    /// </summary>
-    [DataField]
-    public float EmpRange = 6f;
-
-    /// <summary>
-    /// Power consumed from batteries by the EMP
-    /// </summary>
-    [DataField]
-    public float EmpConsumption = 100000f;
-
-    /// <summary>
-    /// How long the EMP effects last for
-    /// </summary>
-    [DataField]
-    public TimeSpan EmpDuration = TimeSpan.FromSeconds(60);
 }
 
 public sealed partial class RecallKatanaEvent : InstantActionEvent;
-public sealed partial class NinjaEmpEvent : InstantActionEvent;
+public sealed partial class OpenSpiderOSEvent : InstantActionEvent;

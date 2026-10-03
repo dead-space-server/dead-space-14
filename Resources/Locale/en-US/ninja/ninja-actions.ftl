@@ -1,4 +1,5 @@
 ninja-no-power = Not enough charge in suit battery!
+ninja-no-power-1 = The net emitter is still recharging!
 ninja-revealed = You have been revealed!
 ninja-suit-cooldown = The suit needs time to recuperate from the last attack.
 ninja-cell-downgrade = The suit will only accept a new power cell that is better than the current one!

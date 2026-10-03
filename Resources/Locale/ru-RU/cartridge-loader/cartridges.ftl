@@ -1,5 +1,4 @@
 device-pda-slot-component-slot-name-cartridge = Картридж
-device-pda-slot-component-slot-name-tool = Инструмент
 default-program-name = Программа
 notekeeper-program-name = Заметки
 nano-task-program-name = НаноДела

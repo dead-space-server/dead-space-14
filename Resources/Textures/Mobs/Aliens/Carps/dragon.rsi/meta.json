@@ -5,7 +5,7 @@
     "y": 64
   },
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from /tg/station at https://github.com/Toastgoats/tgstation/commit/024a840eed2a1be3f72435c2bb39faac8025f822. Resprite by amaliz (Discord) for Space Station 14 Мёртвый Космос",
+  "copyright": "Taken from /tg/station at https://github.com/Toastgoats/tgstation/commit/024a840eed2a1be3f72435c2bb39faac8025f822",
   "states": [
     {
       "name": "alive",
@@ -15,7 +15,9 @@
           0.2,
           0.2,
           0.2,
-          0.2,
+          0.2
+        ],
+        [
           0.2,
           0.2,
           0.2,
@@ -25,27 +27,9 @@
           0.2,
           0.2,
           0.2,
-          0.2,
-          0.2,
-          0.2,
-          0.2,
           0.2
         ],
         [
-          0.2,
-          0.2,
-          0.2,
-          0.2,
-          0.2,
-          0.2,
-          0.2,
-          0.2
-        ],
-        [
-          0.2,
-          0.2,
-          0.2,
-          0.2,
           0.2,
           0.2,
           0.2,
@@ -61,7 +45,9 @@
           0.2,
           0.2,
           0.2,
-          0.2,
+          0.2
+        ],
+        [
           0.2,
           0.2,
           0.2,
@@ -71,27 +57,9 @@
           0.2,
           0.2,
           0.2,
-          0.2,
-          0.2,
-          0.2,
-          0.2,
           0.2
         ],
         [
-          0.2,
-          0.2,
-          0.2,
-          0.2,
-          0.2,
-          0.2,
-          0.2,
-          0.2
-        ],
-        [
-          0.2,
-          0.2,
-          0.2,
-          0.2,
           0.2,
           0.2,
           0.2,

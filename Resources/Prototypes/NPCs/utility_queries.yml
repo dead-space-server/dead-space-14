@@ -89,7 +89,6 @@
     - !type:NearbyHostilesQuery
   considerations:
     - !type:TargetIsAliveCon
-      includePreCritical: true
       curve: !type:BoolCurve
     - !type:TargetIsVisibleCon
       curve: !type:BoolCurve
@@ -113,7 +112,6 @@
     curve: !type:BoolCurve
     minTemp: 250
   - !type:TargetIsAliveCon
-    includePreCritical: true
     curve: !type:BoolCurve
   - !type:TargetDistanceCon
     curve: !type:PresetCurve
@@ -132,7 +130,6 @@
     - !type:NearbyHostilesQuery
   considerations:
     - !type:TargetIsAliveCon
-      includePreCritical: true
       curve: !type:BoolCurve
     - !type:TargetDistanceCon
       curve: !type:PresetCurve
@@ -238,7 +235,6 @@
     - !type:NearbyHostilesQuery
   considerations:
     - !type:TargetIsAliveCon
-      includePreCritical: true
       curve: !type:BoolCurve
     - !type:TargetIsCritCon
       curve: !type:InverseBoolCurve

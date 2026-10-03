@@ -3,8 +3,6 @@
 
 thief-program-name = ВорПРО
 thief-program-unlocked = Программа «ВорПРО» установлена на ваш КПК. Проверьте список программ!
-thief-program-removed = Программа «ВорПРО» удалена с вашего КПК.
-thief-program-wrong-tool = Это не тот инструмент. Нужен инструмент из вашего брифинга.
 
 ## Header
 thief-program-balance = Баланс: [color=#8fa063]{$balance}[/color] dCR
@@ -60,15 +58,5 @@ thief-program-exchanged = Обмен выполнен: {$amount} обычных 
 thief-program-carry-hint = Важно: в цель раунда идут только dCR, которые вы несёте с собой!
 
 ## Uplink listings
-# Listing names reference the implant locales below and item locales from thief_program_listings.yml.
-
-## Implant names used by the thief uplink preview (DS14)
-thief-implant-storage = Имплант "Хранилище"
-thief-implant-storage-desc = Внепространственный имплант с ячейкой для скрытого хранения контрабанды.
-thief-implant-voice-mask = Имплант "Маска голоса"
-thief-implant-voice-mask-desc = Позволяет менять свой голос, маскируя его под чужой.
-thief-implant-dna-scrambler = Имплант "Скремблер ДНК"
-thief-implant-dna-scrambler-desc = Перемешивает вашу ДНК, затрудняя опознание личности.
-thief-implant-mindshield = Имплант "Фальшивый щит разума"
-thief-implant-mindshield-desc = Имитирует защиту разума, сбивая с толку тех, кто проверяет импланты.
+# Listing names reuse the already-existing item locales (ent-*) referenced from thief_program_listings.yml.
 # DS14-end

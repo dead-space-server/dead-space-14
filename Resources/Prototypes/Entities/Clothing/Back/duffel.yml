@@ -259,6 +259,13 @@
   - type: ClothingSpeedModifier
     sprintModifier: 1 # makes its stats identical to other variants of bag of holding
   - type: HeldSpeedModifier
+  #DS14-start
+  - type: Tag
+    tags:
+    - WhitelistChameleon
+    - Backpack
+    - CorruptTeleportItem
+  #DS14-end
 
 # - type: entity
 #   parent: [ ClothingBackpackDuffel, BaseCentcommContraband ]

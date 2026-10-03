@@ -12,7 +12,6 @@
   - AllAccess
   access:
   - CentralCommand
-  - BlueShield
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant, TrackingImplant, DeathRattleImplantCentcomm ]

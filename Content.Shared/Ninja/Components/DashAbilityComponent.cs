@@ -10,9 +10,32 @@ namespace Content.Shared.Ninja.Components;
 /// Adds an action to dash, teleport to clicked position, when this item is held.
 /// Cancel <see cref="CheckDashEvent"/> to prevent using it.
 /// </summary>
-[RegisterComponent, NetworkedComponent, Access(typeof(DashAbilitySystem)), AutoGenerateComponentState]
+//DS14-start
+[RegisterComponent, NetworkedComponent, Access(typeof(SharedDashAbilitySystem)), AutoGenerateComponentState]
+//DS14-end
 public sealed partial class DashAbilityComponent : Component
 {
+    //DS14-start
+    [DataField]
+    public bool CorruptByBluespaceItems = false;
+
+    /// <summary>
+    /// If true, the entity the user is pulling is teleported along with them,
+    /// preserving the distance joint instead of breaking the pull.
+    /// </summary>
+    [DataField]
+    public bool TeleportPulledEntity = false;
+
+    [DataField]
+    public float CorruptMaxDistance = 3f;
+
+    [DataField]
+    public float CorruptMinDistance = 1f;
+
+    [DataField]
+    public string? BeamProto;
+    //DS14-end
+
     /// <summary>
     /// The action id for dashing.
     /// </summary>

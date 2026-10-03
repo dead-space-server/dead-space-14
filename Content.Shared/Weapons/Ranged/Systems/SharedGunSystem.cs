@@ -115,6 +115,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         InitializeContainer();
         InitializeSolution();
         InitializeTargetFinder(); // DS14 - pre-v288 explicit event subscriptions (#45247)
+        InitializeNinja(); // DS14
 
         // Interactions
         SubscribeLocalEvent<GunComponent, GetVerbsEvent<AlternativeVerb>>(OnAltVerb);

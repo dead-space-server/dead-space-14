@@ -34,6 +34,15 @@ public sealed partial class ShuttleConsoleSystem
         }
     }
 
+    public bool TryRefreshDroneTarget(EntityUid uid, DroneConsoleComponent? component = null)
+    {
+        if (!Resolve(uid, ref component))
+            return false;
+
+        component.Entity = GetShuttleConsole(uid, component);
+        return component.Entity != null;
+    }
+
     private void OnDronePilotConsoleOpen(EntityUid uid, DroneConsoleComponent component, AfterActivatableUIOpenEvent args)
     {
         component.Entity = GetShuttleConsole(uid);
@@ -54,26 +63,36 @@ public sealed partial class ShuttleConsoleSystem
     /// <summary>
     /// Gets the relevant shuttle console to proxy from the drone console.
     /// </summary>
-    private EntityUid? GetShuttleConsole(EntityUid uid, DroneConsoleComponent? component = null)
+    public EntityUid? GetShuttleConsole(EntityUid uid, DroneConsoleComponent? component = null)
     {
         if (!Resolve(uid, ref component))
             return null;
 
-        var stationUid = _station.GetOwningStation(uid);
+        EntityUid? stationUid = null;
 
-        if (stationUid == null)
-            return null;
+        if (!component.IgnoreStation)
+        {
+            stationUid = _station.GetOwningStation(uid);
+
+            if (stationUid == null)
+                return null;
+        }
 
         // I know this sucks but needs device linking or something idunno
         var query = AllEntityQuery<ShuttleConsoleComponent, TransformComponent>();
 
         while (query.MoveNext(out var cUid, out _, out var xform))
         {
-            if (xform.GridUid == null ||
-                !TryComp<StationMemberComponent>(xform.GridUid, out var member) ||
-                member.Station != stationUid)
-            {
+            if (xform.GridUid == null)
                 continue;
+
+            if (!component.IgnoreStation)
+            {
+                if (!TryComp<StationMemberComponent>(xform.GridUid, out var member) ||
+                    member.Station != stationUid)
+                {
+                    continue;
+                }
             }
 
             foreach (var compType in component.Components.Values)

@@ -738,6 +738,28 @@
                 ]
             ]
         },
+        {
+            "name": "red-pda-ninja",
+            "delays": [
+                [
+                    2.0,
+                    0.3,
+                    2.0,
+                    0.3
+                ]
+            ]
+        },
+        {
+            "name": "blue-pda-ninja",
+            "delays": [
+                [
+                    2.0,
+                    0.3,
+                    2.0,
+                    0.3
+                ]
+            ]
+        },
     {
       "name": "pda-black-centcom",
       "delays": [

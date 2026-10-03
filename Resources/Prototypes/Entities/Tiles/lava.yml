@@ -7,7 +7,6 @@
     snap:
     - Wall
   components:
-  - type: Lava
   - type: TileEmission
     color: "#FF4500"
   - type: StepTrigger

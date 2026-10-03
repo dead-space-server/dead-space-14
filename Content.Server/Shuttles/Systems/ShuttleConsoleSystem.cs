@@ -144,6 +144,12 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         }
     }
 
+    public void RefreshShuttleConsole(EntityUid consoleUid)
+    {
+        DockingInterfaceState? dockState = null;
+        UpdateState(consoleUid, ref dockState);
+    }
+
     /// <summary>
     /// Stop piloting if the window is closed.
     /// </summary>

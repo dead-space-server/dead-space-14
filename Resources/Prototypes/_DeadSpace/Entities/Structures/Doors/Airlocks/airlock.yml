@@ -76,6 +76,8 @@
     containers:
       board: [ DoorElectronicsBlueShield ]
 
+#Ninja
+
 - type: entity
   parent: AirlockMiningGlass
   id: AirlockNinjagGlass
@@ -92,6 +94,28 @@
   id: AirlockNinja
   name: шлюз
   description: Он открывается, он закрывается, и он может вас раздавить.
+  suffix: Ниндзя, Закрыт
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsNinja ]
+
+- type: entity
+  parent: AirlockGlassShuttleSyndicate
+  id: AirlockExternalGlassShuttleNinjaLocked
+  name: стыковочный шлюз
+  description: Необходим для соединения двух космических кораблей вместе.
+  suffix: Ниндзя, Закрыт, Стеклянный
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsNinja ]
+
+- type: entity
+  parent: AirlockHatch
+  id: AirlockHatchNinjaLocked
+  name: герметичный люк
+  description: Он открывается, он закрывается и он может вас раздавить.
   suffix: Ниндзя, Закрыт
   components:
   - type: ContainerFill

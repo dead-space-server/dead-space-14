@@ -1,0 +1,192 @@
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
+                      xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+                      x:Class="Content.Client.DeadSpace.Ninja.UI.SpiderOSWindow"
+                      MinSize="670 440"
+                      MaxSize="670 440"
+                      SetSize="670 440"
+                      Resizable="False"
+                      Title="{Loc 'spider-os-window-title'}">
+    <BoxContainer Name="MainSpiderOS" 
+            Visible="False"
+            Orientation="Horizontal"
+            HorizontalExpand="True"
+            VerticalExpand="True">
+        <BoxContainer Margin="10 10 10 10"
+                Orientation="Vertical"
+                VerticalExpand="True">
+            <BoxContainer Orientation="Horizontal">
+                <PanelContainer StyleClasses="BackgroundPanelDark"
+                        HorizontalExpand="True">
+                    <BoxContainer Orientation="Vertical"
+                            Margin="4 4 4 4">
+                        <Label Text="{Loc 'spider-os-modules'}"
+                               HorizontalAlignment="Center"
+                               StyleClasses="ConsoleHeading"
+                               Modulate="#1bcc15"
+                               Margin="0 0 0 4"
+                               Align="Center"/>
+                    </BoxContainer>
+                </PanelContainer>
+            </BoxContainer>
+            <PanelContainer SetHeight="2"
+                    Margin="0 0 0 4">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#1bcc15"/>
+                </PanelContainer.PanelOverride>
+            </PanelContainer>
+            <ScrollContainer Name="ModuleScroll"
+                    SetWidth="360"
+                    HorizontalExpand="True"
+                    VerticalExpand="True"
+                    HScrollEnabled="False">
+                <GridContainer Name="ModuleGrid"
+                        Columns="3"
+                        HorizontalExpand="True"/>
+            </ScrollContainer>
+        </BoxContainer>
+        <BoxContainer Margin="0 10 10 10"
+                Orientation="Vertical"
+                VerticalExpand="True">
+            <BoxContainer Orientation="Horizontal">
+                <PanelContainer StyleClasses="BackgroundPanelDark"
+                        HorizontalExpand="True">
+                    <BoxContainer Orientation="Vertical"
+                            Margin="4 4 4 4">
+                        <Label Text="{Loc 'spider-os-personalization'}"
+                               HorizontalAlignment="Center"
+                               StyleClasses="ConsoleHeading"
+                               Modulate="#1bcc15"
+                               Margin="0 0 0 4"
+                               Align="Center"/>
+                    </BoxContainer>
+                </PanelContainer>
+            </BoxContainer>
+            <PanelContainer SetHeight="2"
+                    Margin="0 0 0 4">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#1bcc15"/>
+                </PanelContainer.PanelOverride>
+            </PanelContainer>
+            <PanelContainer StyleClasses="BackgroundPanelDark"
+                    HorizontalExpand="True"
+                    Margin="0 0 0 10">
+                <BoxContainer Margin="5 5 5 5"
+                        HorizontalAlignment="Center">
+                    <PanelContainer Name="BackPanel">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxTexture Modulate="#202023"
+                                                 PatchMarginBottom="5"
+                                                 PatchMarginLeft="5"
+                                                 PatchMarginRight="5"
+                                                 PatchMarginTop="5"/>
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer HorizontalExpand="True"
+                                VerticalExpand="True"
+                                MinSize="128 128">
+                            <TextureRect Name="StylePreview"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    HorizontalExpand="True"
+                                    VerticalExpand="True"/>
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
+            </PanelContainer>
+            <PanelContainer StyleClasses="BackgroundPanelDark"
+                    HorizontalExpand="True">
+                <BoxContainer Orientation="Vertical">
+                    <BoxContainer Margin="0 0 0 5"
+                            Orientation="Horizontal"
+                            HorizontalExpand="True">
+                        <Label Text="{Loc 'spider-os-personalization-style'}"
+                               HorizontalAlignment="Left"
+                               StyleClasses="ConsoleText"
+                               Modulate="#1bcc15"
+                               Align="Left"/>
+                        <Control HorizontalExpand="True"/>
+                        <OptionButton Name="StyleOption"
+                                MinSize="40 25"/>
+                    </BoxContainer>
+                    <BoxContainer Margin="0 0 0 5"
+                            Orientation="Horizontal"
+                            HorizontalExpand="True">
+                        <Label Text="{Loc 'spider-os-personalization-color'}"
+                               HorizontalAlignment="Left"
+                               StyleClasses="ConsoleText"
+                               Modulate="#1bcc15"
+                               Align="Left"/>
+                        <Control HorizontalExpand="True"/>
+                        <OptionButton Name="ColorOption"
+                                MinSize="40 25"/>
+                    </BoxContainer>
+                    <BoxContainer Margin="0 0 0 5"
+                            Orientation="Horizontal"
+                            HorizontalExpand="True">
+                        <Label Text="{Loc 'spider-os-personalization-hood-or-scarf'}"
+                               HorizontalAlignment="Left"
+                               StyleClasses="ConsoleText"
+                               Modulate="#1bcc15"
+                               Align="Left"/>
+                        <Control HorizontalExpand="True"/>
+                        <OptionButton Name="HoodOrScarfOption"
+                                MinSize="40 25"/>
+                    </BoxContainer>
+                    <Button Name="ActivateButton"
+                            Text="{Loc 'spider-os-personalization-activate'}"
+                            Margin="0 0 0 5"/>
+                    <Button Name="ShuttleButton"
+                            Text="{Loc 'spider-os-shuttle-control'}"
+                            Margin="0 0 0 5"/>
+                </BoxContainer>
+            </PanelContainer>
+        </BoxContainer>
+    </BoxContainer>
+    <LayoutContainer Name="LoadSpiderOS"
+        Visible="True"
+        HorizontalExpand="True"
+        VerticalExpand="True"
+        Margin="10 10 10 10">
+        <ProgressBar Name="LoadProgressBar"
+                MinValue="0"
+                MaxValue="1"
+                LayoutContainer.AnchorLeft="0"
+                LayoutContainer.AnchorTop="0"
+                LayoutContainer.AnchorRight="1"
+                LayoutContainer.AnchorBottom="0.2">
+            <ProgressBar.BackgroundStyleBoxOverride>
+                <gfx:StyleBoxFlat BackgroundColor="#2f5a36"/>
+            </ProgressBar.BackgroundStyleBoxOverride>
+            <ProgressBar.ForegroundStyleBoxOverride>
+                <gfx:StyleBoxFlat BackgroundColor="#1bcc15"/>
+            </ProgressBar.ForegroundStyleBoxOverride>
+        </ProgressBar>
+        <PanelContainer StyleClasses="BackgroundPanelDark"
+                LayoutContainer.AnchorLeft="0"
+                LayoutContainer.AnchorTop="0"
+                LayoutContainer.AnchorRight="1"
+                LayoutContainer.AnchorBottom="0.2"
+                LayoutContainer.MarginLeft="8"
+                LayoutContainer.MarginTop="8"
+                LayoutContainer.MarginRight="-8"
+                LayoutContainer.MarginBottom="-8">
+            <Label Text="{Loc 'spider-os-loading'}"
+                   StyleClasses="ConsoleHeading"
+                   Modulate="#1bcc15"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+        </PanelContainer>
+        <OutputPanel Name="LoadOutput"
+                LayoutContainer.AnchorLeft="0"
+                LayoutContainer.AnchorTop="0.2"
+                LayoutContainer.AnchorRight="1"
+                LayoutContainer.AnchorBottom="1"
+                LayoutContainer.MarginTop="4">
+            <OutputPanel.StyleBoxOverride>
+                <gfx:StyleBoxFlat BackgroundColor="#000000"/>
+            </OutputPanel.StyleBoxOverride>
+        </OutputPanel>
+    </LayoutContainer>
+</controls:FancyWindow>

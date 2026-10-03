@@ -55,6 +55,18 @@
         },
         {
             "name": "law_board_configurator_console"
+        },
+        {
+            "name": "console_shuttle",
+            "directions": 4
+        },
+        {
+            "name": "screen_shuttle",
+            "directions": 4
+        },
+        {
+            "name": "keys_shuttle",
+            "directions": 4
         }
     ]
 }
