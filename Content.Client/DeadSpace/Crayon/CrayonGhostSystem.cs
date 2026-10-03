@@ -62,7 +62,8 @@ public sealed class CrayonGhostSystem : EntitySystem
             return false;
 
         decalId = crayon.SelectedState;
-        color = crayon.Color;
+        var tint = crayon.Color;
+        color = tint.WithAlpha(Math.Clamp(crayon.Opacity, crayon.MinOpacity, crayon.MaxOpacity));
         rotation = crayon.Rotation;
         return true;
     }

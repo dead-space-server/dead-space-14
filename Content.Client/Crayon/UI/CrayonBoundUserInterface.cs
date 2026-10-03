@@ -32,6 +32,9 @@ namespace Content.Client.Crayon.UI
                 _crayonGhostSystem.SetRotation(rotation);
                 SendMessage(new CrayonRotationMessage(rotation));
             };
+            _menu.OnOpacityChanged += opacity => SendMessage(new CrayonOpacityMessage(opacity));
+            if (EntMan.TryGetComponent<CrayonComponent>(Owner, out var crayon))
+                _menu.SetOpacity(crayon);
             //DS-14 End
             PopulateCrayons();
         }
@@ -67,6 +70,8 @@ namespace Content.Client.Crayon.UI
             base.UpdateState(state);
 
             _menu?.UpdateState((CrayonBoundUserInterfaceState) state);
+            if (_menu != null && EntMan.TryGetComponent<CrayonComponent>(Owner, out var crayon))
+                _menu.SetOpacity(crayon); //DS-14
         }
 
         public void Select(string state)
