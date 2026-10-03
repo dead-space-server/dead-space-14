@@ -51,8 +51,7 @@
     },
     {
       "name": "lieutenant"
-    }
-    ,
+    },
     {
       "name": "ostwind"
     },
@@ -170,7 +169,7 @@
     {
       "name": "plushie_weaver"
     },
-	{
+    {
       "name": "plushie_aleksey"
     },
     {
@@ -337,6 +336,9 @@
     },
     {
       "name": "plushie_sastr_bon"
+    },
+    {
+      "name": "plushie_ivan_kuvalda"
     }
   ]
 }

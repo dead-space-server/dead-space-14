@@ -1758,3 +1758,18 @@
     pack: PlushieSastrBonSpeech
   - type: UseDelay
     delay: 180
+
+- type: entity
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieIvanKuvalda
+  name: плюшевый Иван Кувалда
+  description: Воняющая арбузами, плюшевая форма всеми любимого разработчика... по крайней мере... он так думает.
+  components:
+  - type: Sprite
+    state: plushie_ivan_kuvalda
+  - type: TTS
+    voice: Torbjorn
+  - type: SpeakOnTrigger
+    pack: PlushieIvanKuvaldaSpeech
+  - type: UseDelay
+    delay: 180

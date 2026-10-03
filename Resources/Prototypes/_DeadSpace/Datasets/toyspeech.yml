@@ -528,6 +528,12 @@
     count: 10
 
 - type: localizedDataset
+  id: PlushieIvanKuvaldaSpeech
+  values:
+    prefix: plushies-ivan-kuvalda-
+    count: 10
+
+- type: localizedDataset
   id: PlushieDragonFoxMadParadoxSpeech
   values:
     prefix: plushies-drmp-
