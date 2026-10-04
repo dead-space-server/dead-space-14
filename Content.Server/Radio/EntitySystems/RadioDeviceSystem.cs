@@ -274,6 +274,9 @@ public sealed class RadioDeviceSystem : SharedRadioDeviceSystem
         if (!component.Enabled)
             return;
 
+        if (component.PowerRequired && !this.IsPowered(uid, EntityManager))
+            return;
+
         var on = HasComp<ActiveListenerComponent>(uid);
         args.Verbs.Add(new Verb
         {
