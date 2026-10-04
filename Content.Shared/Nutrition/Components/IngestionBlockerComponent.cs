@@ -1,5 +1,5 @@
 using Content.Shared.Nutrition.EntitySystems;
-
+using Robust.Shared.GameStates;
 namespace Content.Shared.Nutrition.Components;
 
 /// <summary>
@@ -10,11 +10,14 @@ namespace Content.Shared.Nutrition.Components;
 ///     masks), then this component might become redundant.
 /// </remarks>
 [RegisterComponent, Access(typeof(IngestionSystem))]
+[NetworkedComponent]
+[AutoGenerateComponentState(true)]
 public sealed partial class IngestionBlockerComponent : Component
 {
     /// <summary>
     ///     Is this component currently blocking consumption.
     /// </summary>
     [DataField]
+    [AutoNetworkedField]
     public bool Enabled { get; set; } = true;
 }
