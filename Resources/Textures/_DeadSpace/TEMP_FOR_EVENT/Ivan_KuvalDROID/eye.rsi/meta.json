@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Celestial eye (Ivan_KuvalDROID)",
+  "size": {
+    "x": 140,
+    "y": 140
+  },
+  "states": [
+    {
+      "name": "icon"
+    }
+  ]
+}

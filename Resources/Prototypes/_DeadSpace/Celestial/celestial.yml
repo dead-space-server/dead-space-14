@@ -1,0 +1,274 @@
+﻿# DS14-start: Celestial - manually spawnable, station-wide boss.
+- type: entity
+  id: CelestialBeamTelegraph
+  name: celestial beam warning
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/projectiles_tg.rsi
+    layers:
+    - state: heavylaser
+      shader: unshaded
+      color: "#ff2a2a"
+      scale: 6, 3
+  - type: CelestialBeamTelegraph
+  - type: PointLight
+    enabled: true
+    color: "#ff2a2a"
+    radius: 3.0
+    energy: 2.0
+    softness: 2
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: CelestialAttackSphere
+  name: celestial orb
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CelestialSphere
+    startScale: 0.3
+    endScale: 1.6
+    lifetime: 2.6
+    damagePerTick: 30
+  - type: PointLight
+    enabled: true
+    color: "#FF5298"
+    radius: 4
+    energy: 2.5
+    softness: 2
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: CelestialTeleportEffect
+  name: celestial warp
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/projectiles_tg.rsi
+    layers:
+    - state: omnilaser
+      shader: unshaded
+      color: "#F35587"
+      scale: 2, 2
+  - type: PointLight
+    enabled: true
+    color: "#F35587"
+    radius: 6.0
+    energy: 3.0
+    softness: 3
+  - type: TimedDespawn
+    lifetime: 0.5
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: BaseMob
+  id: MobCelestial
+  name: "Селестиал"
+  description: "Нам конец..."
+  suffix: Boss
+  components:
+  - type: IgnoreKudzu
+  - type: Insulated
+  - type: StunImmune
+  - type: NoSlip
+  - type: Sprite
+    sprite: _DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/celestial.rsi
+    layers:
+    - state: Idle
+  - type: PointLight
+    enabled: true
+    color: "#8A2BE2"
+    radius: 9
+    energy: 9
+    softness: 3
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      500000: Critical
+  - type: Damageable
+    damageContainer: Biological
+    healthBarThreshold: 500000
+  - type: GravityAffected
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: CombatMode
+  - type: MeleeWeapon
+    hidden: true
+    damage:
+      groups:
+        Brute: 15
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 0.45
+    baseSprintSpeed: 0.6
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 1.6
+        density: 200
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: Celestial
+    talkSounds:
+    - path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Celestial_Talk_1.ogg
+    - path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Celestial_Talk_2.ogg
+    - path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Celestial_Talk_3.ogg
+    variationSound:
+      path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Fall_Variation_1.ogg
+    beamSound:
+      path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Fall_Variation_2.ogg
+    volleySound:
+      path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Fall_Final.ogg
+    futilityCrackSound:
+      path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Futile_Crack.ogg
+    futilityOrbSounds:
+    - path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Futile_Variation_1.ogg
+    - path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Futile_Variation_2.ogg
+    - path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Futile_Variation_3.ogg
+    cutterChargeSound:
+      path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Cutter_Charge.ogg
+    cutterImpactSound:
+      path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Cutter_Impact.ogg
+    cutterFinalSound:
+      path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Cutter_Final.ogg
+    bloomChargeSound:
+      path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Death_in_Bloom_Charge.ogg
+    bloomFireSound:
+      path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Death_in_Bloom_Firing.ogg
+    teleportSound:
+      path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Celestial_Talk_1.ogg
+# DS14-end
+
+- type: entity
+  id: CelestialRift
+  name: celestial rift
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: /Textures/Effects/portal.rsi
+    drawdepth: Effects
+    layers:
+    - state: portal-blue
+      shader: unshaded
+      color: "#FF5298"
+  - type: PointLight
+    enabled: true
+    color: "#FF5298"
+    radius: 4
+    energy: 3
+    softness: 2
+  - type: TimedDespawn
+    lifetime: 1.2
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: CelestialCircle
+  name: celestial mark
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CelestialCircle
+  - type: PointLight
+    enabled: true
+    color: "#FF5298"
+    radius: 5
+    energy: 2.5
+    softness: 3
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: CelestialCutsceneProp
+  name: ""
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    layers:
+    - state: black
+      sprite: /Textures/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/black.rsi
+      scale: 14, 14
+    - state: cocoon_idle
+      sprite: _DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/celestial.rsi
+      scale: 0.6, 0.6
+      offset: -0.6, 0
+      map: ["idle"]
+    - state: CelestialEyesOpen
+      sprite: _DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/celestial.rsi
+      scale: 0.6, 0.6
+      offset: -0.6, 0
+      map: ["eyes"]
+      visible: false
+    - state: cocoon_breach
+      sprite: _DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/celestial.rsi
+      scale: 0.6, 0.6
+      offset: -0.6, 0
+      map: ["breach"]
+      visible: false
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CelestialSpiritVisuals.Stage:
+        idle:
+          0: { visible: true }
+          1: { visible: false }
+          2: { visible: false }
+        eyes:
+          0: { visible: false }
+          1: { visible: true }
+          2: { visible: false }
+        breach:
+          0: { visible: false }
+          1: { visible: false }
+          2: { visible: true }
+  - type: PointLight
+    enabled: true
+    color: "#FF5298"
+    radius: 8
+    energy: 5
+    softness: 3
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: CelestialOrb
+  name: celestial seeker
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CelestialOrb
+  - type: PointLight
+    enabled: true
+    color: "#FF5298"
+    radius: 3
+    energy: 3
+    softness: 2
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+# Локальный вариант: катсцены и фразы видят только игроки на карте босса
+- type: entity
+  parent: MobCelestial
+  id: MobCelestialLocal
+  name: "Селестиал (локальный)"
+  description: "Нам конец... Но только на этой карте."
+  suffix: Boss, локальные события
+  components:
+  - type: Celestial
+    localizedEvents: true
