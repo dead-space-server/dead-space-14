@@ -72,7 +72,7 @@
     - id: PDATheZuTiAltCombine
     - id: ClothingHeadsetTheZuTiAltCombine
     - id: JetpackVoidFilledTheZuTiAltCombine
-    - id: PaperLawTheZuTi
+    - id: PaperLawTheZuTiAltCombine
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
 
@@ -458,3 +458,19 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/pvrsifvl/tools_multitool.rsi
+
+- type: entity
+  parent: PaperPrintedCentcomm
+  id: PaperLawTheZuTiAltCombine
+  name: распечатанный документ
+  description: Лист бумаги с заголовком ЦентКома. Страшно даже смотреть на него.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Paper
+    stampState: paper_stamp-centcom
+    stampedBy:
+    - stampedColor: '#006600FF'
+      stampedName: Центральное Командование
+    - stampedColor: '#00BE00FF'
+      stampedName: Одобрено
+    content: paper-law-thezuti-alt-combine
