@@ -1,0 +1,460 @@
+- type: emoteSounds
+  id: TheZuTiCombine
+  parents:
+  - MaleHuman
+  sounds:
+    Scream:
+      collection: CombineScreams
+    ScreamOnDamage:
+      collection: CombineScreams
+
+- type: soundCollection
+  id: CombineScreams
+  files:
+    - /Audio/_DeadSpace/Sponsor/TheZuTiAltCombine/combine-hit-2.ogg
+    - /Audio/_DeadSpace/Sponsor/TheZuTiAltCombine/combine-hit-10.ogg
+    - /Audio/_DeadSpace/Sponsor/TheZuTiAltCombine/combine-hit-9.ogg
+
+- type: entity
+  parent: BaseSubdermalImplant
+  id: EmoteSoundsImplantTheZuTiAltCombine
+  name: голосовой имплант «Комбайн»
+  description: Имплант с голосовым пресетом «Комбайн».
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SubdermalImplant
+    implantComponents:
+    - type: Vocal
+      sounds:
+        Male: TheZuTiCombine
+        Female: TheZuTiCombine
+        Unsexed: TheZuTiCombine
+    - type: Speech
+      speechSounds: SuperSoldier
+    whitelist:
+      components:
+      - Vocal
+
+- type: entity
+  parent: BaseImplantOnlyImplanter
+  id: EmoteSoundsImplanterTheZuTiAltCombine
+  name: имплантер голосового импланта «Комбайн»
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Implanter
+    implant: EmoteSoundsImplantTheZuTiAltCombine
+
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackTheZuTiAltCombine
+  name: боевая сумка элитного бойца
+  description: Крепкая сумка, которая поможет перенести вооружение, ну и конечно же головы тех, кто решил пойти против системы.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/TheZuTiAltCombine/backpack.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/TheZuTiAltCombine/backpack.rsi
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,15,10
+  - type: StorageFill
+    contents:
+    - id: ClothingOuterHardsuitTheZuTiAltCombine
+    - id: ClothingBeltTheZuTiAltCombine
+    - id: ClothingShoesBootsMagTheZuTiAltCombine
+    - id: EmoteSoundsImplanterTheZuTiAltCombine
+    - id: ClothingUniformTurtleneckTactic
+    - id: ClothingHandsGlovesCombatTheZuTiAltCombine
+    - id: ClothingMaskGasTheZuTiAltCombine
+    - id: HypoTheZuTiAltCombine
+    - id: PDATheZuTiAltCombine
+    - id: ClothingHeadsetTheZuTiAltCombine
+    - id: JetpackVoidFilledTheZuTiAltCombine
+    - id: PaperLawTheZuTi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+- type: entity
+  parent: ClothingBeltStorageBase
+  id: ClothingBeltTheZuTiAltCombine
+  name: пояс клона
+  description: Пояс, на котором видна дубинка, которая уже летит на ваш горб.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Clothing/Belt/security.rsi
+  - type: Clothing
+    sprite: Clothing/Belt/security.rsi
+  - type: Item
+    size: Huge
+  - type: Storage
+    grid:
+    - 0,0,7,1
+  - type: StorageFill
+    contents:
+      - id: PowerDrillTheZuTiAltCombine
+      - id: WelderExperimentalTheZuTiAltCombine
+      - id: MultitoolTheZuTiAltCombine
+      - id: JawsOfLifeTheZuTiAltCombine
+  - type: ItemMapper
+    sprite: Clothing/Belt/belt_overlay.rsi
+    mapLayers:
+      flashbang:
+        whitelist:
+          components:
+          - FlashOnTrigger
+      stunbaton:
+        whitelist:
+          components:
+          - Stunbaton
+      tear_gas_grenade:
+        whitelist:
+          components:
+          - SmokeOnTrigger
+
+- type: entity
+  parent: ClothingHandsGlovesCombat
+  id: ClothingHandsGlovesCombatTheZuTiAltCombine
+  name: боевые перчатки
+  description: Сделанные на заказ боевые перчатки с удлинёнными рукавицами. Ткань укреплена углеродными нитями что обеспечивает надежную защиту рук.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/TheZuTiAltCombine/gloves.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/TheZuTiAltCombine/gloves.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+- type: entity
+  parent: ClothingOuterHardsuitTheZuTi
+  id: ClothingOuterHardsuitTheZuTiAltCombine
+  name: потрёпанный скафандр «3650»
+  description: Удобный скафандр, что помогает легко маневрировать в техах, а также заставляет людей подумать трижды, когда тем дают какой либо приказ.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/TheZuTiAltCombine/hardsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/TheZuTiAltCombine/hardsuit.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitTheZuTiAltCombine
+
+- type: entity
+  parent: ClothingHeadHelmetHardsuitTheZuTi
+  id: ClothingHeadHelmetHardsuitTheZuTiAltCombine
+  name: шлем скафандра клона
+  description: Вы смотрите прямо в душу, прямо, в вашу же душу...
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/TheZuTiAltCombine/helmet.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/TheZuTiAltCombine/helmet.rsi
+    clothingVisuals:
+      head:
+      - state: equipped-head
+      - state: equipped-head-unshaded
+        shader: unshaded
+  - type: PointLight
+    color: "#FF0000"
+    radius: 7
+    energy: 3
+  - type: ToggleableVisuals
+    spriteLayer: light
+    clothingVisuals:
+      head:
+      - state: equipped-head-light
+        shader: unshaded
+  - type: HideLayerClothing
+    slots:
+    - Hair
+    - Snout
+    - HeadTop
+    - HeadSide
+    - FacialHair
+    clothingSlots:
+    - ears
+    - mask
+    bodyLayers:
+    - Head
+
+- type: entity
+  parent: ClothingMaskGasSponsor
+  id: ClothingMaskGasTheZuTiAltCombine
+  name: "!^~&$*@"
+  description: Вы недостойны смотреть ему в глаза.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Mask/unknown.rsi
+    scale: "0.5, 0.5"
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Mask/unknown.rsi
+    clothingVisuals:
+      mask:
+      - state: equipped-MASK
+      - state: equipped-MASK-unshaded
+        shader: unshaded
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+  - type: SpecialDeathSound
+    sound:
+      path: /Audio/_DeadSpace/Sponsor/TheZuTiAltCombine/gas-dead.ogg
+  - type: ActionGrant
+    actions:
+    - ActionGasMaskDispatch
+  - type: ItemActionGrant
+    actions:
+    - ActionGasMaskDispatch
+    activeIfWorn: true
+  - type: GasMaskDispatch
+    channel: Security
+    sound:
+      path: /Audio/_DeadSpace/Sponsor/TheZuTiAltCombine/deploy-audio.ogg
+
+- type: entity
+  parent: ClothingShoesBootsMagTheZuTi
+  id: ClothingShoesBootsMagTheZuTiAltCombine
+  name: крепкие берцы
+  description: Берцы, которыми весело пинать экипаж.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/TheZuTiAltCombine/magboots.rsi
+    layers:
+    - state: icon
+      map: [ "enum.ToggleableVisuals.Layer" ]
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/TheZuTiAltCombine/magboots.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepJackbootsTheZuTiAltCombine
+      params:
+        volume: -1
+
+- type: soundCollection
+  id: FootstepJackbootsTheZuTiAltCombine
+  files:
+  - /Audio/_DeadSpace/Sponsor/TheZuTiAltCombine/gear1.ogg
+  - /Audio/_DeadSpace/Sponsor/TheZuTiAltCombine/gear2.ogg
+
+# Headset
+- type: entity
+  parent: ClothingHeadset
+  id: ClothingHeadsetTheZuTiAltCombine
+  name: гарнитура клона
+  description: Его мнение нужно учитывать.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/pvrsifvl/headset.rsi
+  - type: Headset
+    color: "#FF0000"
+  - type: EncryptionKeyHolder
+    keySlots: 5
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Jetpack
+- type: entity
+  id: JetpackVoidFilledTheZuTiAltCombine
+  parent: JetpackVoidFilled
+  name: поясной джетпак
+  description: Технологичный и компактный джетпак на пояс с увеличенным запасом баллона за счёт экстремального сжатия газа.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/TheZuTiAltCombine/jetpack.rsi
+  - type: Item
+    sprite: _DeadSpace/Sponsor/TheZuTiAltCombine/jetpack.rsi
+    size: Huge
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/TheZuTiAltCombine/jetpack.rsi
+    slots:
+      - back
+      - suitStorage
+      - belt
+
+# Hypospray
+- type: entity
+  id: HypoTheZuTiAltCombine
+  name: гипоспрей «Комбайн»
+  parent: BaseItem
+  description: Военный гипоспрей для быстрого ввода реагентов, благодаря конструкции крайне прост в применении даже в пылу сражения.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/pvrsifvl/hypo.rsi
+    state: icon
+  - type: Item
+    sprite: _DeadSpace/Sponsor/pvrsifvl/hypo.rsi
+  - type: SolutionContainerManager
+    solutions:
+      hypospray:
+        maxVol: 5
+  - type: RefillableSolution
+    solution: hypospray
+  - type: ExaminableSolution
+    solution: hypospray
+  - type: Injector
+    solutionName: hypospray
+    ignoreClosed: false
+    activeModeProtoId: HyposprayDynamicMode
+    allowedModes:
+    - HyposprayDynamicMode
+    - HyposprayInjectMode
+  - type: UseDelay
+    delay: 0.5
+
+- type: entity
+  parent: BaseMedicalPDA
+  id: PDATheZuTiAltCombine
+  name: КПК рыцаря
+  description: Темно-фиолетовый кпк с увеличенным экраном и поддержкой систем глобального позиционирования.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Icon
+    sprite: _DeadSpace/Sponsor/TheZuTiAltCombine/pda.rsi
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/TheZuTiAltCombine/pda.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+  - type: CartridgeLoader
+    uiKey: enum.PdaUiKey.Key
+    preinstalled:
+    - CrewManifestCartridge
+    - NotekeeperCartridge
+    - NanoTaskCartridge
+    - NewsReaderCartridge
+    - MedTekCartridge
+    - AstroNavCartridge
+    - MessengerCartridge
+  - type: PdaBorderColor
+    borderColor: "#2e2e2e"
+    accentHColor: "#FF0000"
+  - type: PointLight
+    color: "#FF0000"
+    enabled: false
+    radius: 1.5
+    softness: 5
+    autoRot: true
+
+#instruments
+#drill
+- type: entity
+  parent: BaseItem
+  id: PowerDrillTheZuTiAltCombine
+  name: электродрель
+  description: Выглядит устаревшей и местами сильно потёртой, но не собирается прекращать работу. Идеальна для разборов технических помещений.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/pvrsifvl/tools_powerdrill.rsi
+    state: drill_screw
+  - type: Item
+    sprite: _DeadSpace/Sponsor/pvrsifvl/tools_powerdrill.rsi
+    size: Small
+  - type: Tool
+    qualities:
+      - Screwing
+    speedModifier: 1.5
+    useSound: /Audio/Items/drill_use.ogg
+  - type: MultipleTool
+    statusShowBehavior: true
+    entries:
+      - behavior: Screwing
+        sprite:
+          sprite: _DeadSpace/Sponsor/pvrsifvl/tools_powerdrill.rsi
+          state: drill_screw
+        useSound:
+          path: /Audio/Items/drill_use.ogg
+        changeSound:
+          path: /Audio/Items/change_drill.ogg
+      - behavior: Anchoring
+        sprite:
+          sprite: _DeadSpace/Sponsor/pvrsifvl/tools_powerdrill.rsi
+          state: drill_bolt
+        useSound:
+          path: /Audio/Items/drill_use.ogg
+        changeSound:
+          path: /Audio/Items/change_drill.ogg
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 300
+      Plastic: 100
+  - type: StaticPrice
+    price: 100
+  - type: MeleeWeapon
+    wideAnimationRotation: -90
+    attackRate: 1.5
+    damage:
+      types:
+        Piercing: 10
+    soundHit:
+      path: "/Audio/Items/drill_hit.ogg"
+
+#JawsOfLife
+- type: entity
+  parent: JawsOfLife
+  id: JawsOfLifeTheZuTiAltCombine
+  name: челюсти жизни
+  description: Выглядят устаревшими и местами сильно потёртыми, но не уступают в эффективности стандартным. Всегда окажутся под рукой.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/pvrsifvl/tools_jawsoflife.rsi
+    state: syn_jaws_pry
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: syn_inhand-left
+      right:
+      - state: syn_inhand-right
+    size: Normal
+  - type: MultipleTool
+    entries:
+      - behavior: Prying
+        sprite:
+          sprite: _DeadSpace/Sponsor/pvrsifvl/tools_jawsoflife.rsi
+          state: syn_jaws_pry
+        useSound: /Audio/Items/jaws_pry.ogg
+        changeSound: /Audio/Items/change_jaws.ogg
+      - behavior: Cutting
+        sprite:
+          sprite: _DeadSpace/Sponsor/pvrsifvl/tools_jawsoflife.rsi
+          state: syn_jaws_cutter
+        useSound: /Audio/Items/jaws_cut.ogg
+        changeSound: /Audio/Items/change_jaws.ogg
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 14
+
+#WelderExperimental
+- type: entity
+  parent: WelderExperimental
+  id: WelderExperimentalTheZuTiAltCombine
+  name: экспериментальный сварочный
+  description: Выглядит устаревшим и местами сильно потёртым, но всё ещё выполняет свою основную функцию. Пригодится в переработке и ремонте.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/pvrsifvl/tools_welder.rsi
+  - type: Item
+    sprite: _DeadSpace/Sponsor/pvrsifvl/tools_welder.rsi
+
+#multitool
+- type: entity
+  parent: Multitool
+  id: MultitoolTheZuTiAltCombine
+  name: мультитул
+  description: Выглядит устаревшим и местами сильно потёртым, но древняя модификация ещё не списана в утиль. Верный инструмент взломщика.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/pvrsifvl/tools_multitool.rsi

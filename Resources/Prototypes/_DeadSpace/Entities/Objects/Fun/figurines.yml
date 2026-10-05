@@ -10,8 +10,8 @@
 - type: entity
   parent: BaseFigurine
   id: ToyFigurineHqdishka
-  name: игрушечная Айрис Луа
-  description: Фигурка, изображающая Айрис Луа
+  name: игрушечная Айрис Лихт
+  description: Фигурка, изображающая Айрис Лихт
   components:
   - type: Sprite
     sprite: _DeadSpace/Items/Toys/misc.rsi
