@@ -314,8 +314,8 @@
 - type: entity
   parent: BaseMedicalPDA
   id: PDATheZuTiAltCombine
-  name: КПК рыцаря
-  description: Темно-фиолетовый кпк с увеличенным экраном и поддержкой систем глобального позиционирования.
+  name: КПК клона
+  description: КПК? Планшет? Почему он выглядит не как ни то, и не другое?
   categories: [ HideSpawnMenu ]
   components:
   - type: Icon
