@@ -85,6 +85,7 @@
 - type: entity
   parent: BaseWeaponBattery
   id: WeaponCelestialLMG
+  suffix: Ивент Ivan_Kuvalda
   name: лазерный пулемёт
   description: "Двести зарядов чистого света в секунду времени."
   components:
@@ -112,6 +113,7 @@
 - type: entity
   parent: BaseWeaponLauncher
   id: WeaponCelestialGL
+  suffix: Ивент Ivan_Kuvalda
   name: лазерный гранатомёт
   description: "Десять зелёных причин покинуть помещение. Перезаряжается неспешно."
   components:
@@ -141,6 +143,7 @@
 - type: entity
   parent: BaseWeaponBattery
   id: WeaponCelestialShotgun
+  suffix: Ивент Ivan_Kuvalda
   name: лазерный дробовик
   description: "Два режима — красный лишает здоровья, зелёный возвращает. Урон волны — как десять дробинок."
   components:
@@ -177,6 +180,7 @@
 - type: entity
   parent: ClothingShoesBootsMag
   id: CelestialMagboots
+  suffix: Ивент Ivan_Kuvalda
   name: магнитные ботинки ускорителя
   description: "Магниты, притягивающие тебя к полу... и вперёд."
   components:
@@ -191,6 +195,7 @@
 - type: entity
   parent: JetpackCaptain
   id: CelestialJetpackBluespace
+  suffix: Ивент Ivan_Kuvalda
   name: блюспейс джетпак
   components:
   - type: Sprite
@@ -207,6 +212,7 @@
 - type: entity
   parent: PortableRecharger
   id: CelestialSuperRecharger
+  suffix: Ивент Ivan_Kuvalda
   name: переносной супер-зарядник
   description: "Заряжает втрое быстрее обычного переносного. Тяжёлое, но стоит того."
   components:
@@ -220,9 +226,9 @@
 - type: entity
   parent: BaseERTloadoutPrimary
   id: CelestialArsenalCase
+  suffix: Боссфайт, Ивент Ivan_Kuvalda
   name: гуманитарный ящик неопределённости
   description: "Внутри — что-то определённо ценное. Выбери, что тебе ближе: скорость, гром или исцеление."
-  suffix: Боссфайт
   components:
   - type: Sprite
     sprite: _DeadSpace/Necromorfs/BSAA/misc/misc.rsi

@@ -71,7 +71,7 @@
   id: MobCelestial
   name: "Селестиал"
   description: "Нам конец..."
-  suffix: Boss
+  suffix: Boss, Ивент Ivan_Kuvalda
   components:
   - type: IgnoreKudzu
   - type: Insulated
@@ -268,7 +268,7 @@
   id: MobCelestialLocal
   name: "Селестиал (локальный)"
   description: "Нам конец... Но только на этой карте."
-  suffix: Boss, локальные события
+  suffix: Boss, Ивент Ivan_Kuvalda, локальные события
   components:
   - type: Celestial
     localizedEvents: true
