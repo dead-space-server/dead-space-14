@@ -3,9 +3,9 @@ meta:
   category: Map
   engineVersion: 276.0.0
   forkId: dsfobos
-  forkVersion: 09d881ad2ddcaf41085f266d6f216dac0cfd9539
-  time: 09/05/2026 09:43:57
-  entityCount: 3600
+  forkVersion: 6a2424e319302b8f938b113535bb97544740a0da
+  time: 09/22/2026 04:36:48
+  entityCount: 3603
 maps:
 - 1
 grids:
@@ -4695,7 +4695,7 @@ entities:
       pos: -21.5,-4.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -230575.83
+      secondsUntilStateChange: -230645.89
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -4723,7 +4723,7 @@ entities:
       pos: 12.5,-1.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -144831.4
+      secondsUntilStateChange: -144901.47
       state: Opening
     - type: AccessReader
       accessListsOriginal: []
@@ -4746,7 +4746,7 @@ entities:
       pos: -26.5,5.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -88025.41
+      secondsUntilStateChange: -88095.48
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -4784,7 +4784,7 @@ entities:
       pos: 15.5,0.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -144612.52
+      secondsUntilStateChange: -144682.58
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -4980,7 +4980,7 @@ entities:
       pos: -15.5,2.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -110900.555
+      secondsUntilStateChange: -110970.625
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -5055,7 +5055,7 @@ entities:
       pos: -14.5,-1.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -230578.12
+      secondsUntilStateChange: -230648.19
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -12297,7 +12297,7 @@ entities:
       pos: 13.5,-4.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -145327.27
+      secondsUntilStateChange: -145397.33
       state: Closing
 - proto: CurtainsOrangeOpen
   entities:
@@ -12307,7 +12307,7 @@ entities:
       pos: 9.5,10.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -140910.5
+      secondsUntilStateChange: -140980.56
       state: Closing
 - proto: CurtainsRed
   entities:
@@ -12317,7 +12317,7 @@ entities:
       pos: -26.5,3.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -172689.95
+      secondsUntilStateChange: -172760.02
       state: Opening
 - proto: DecalSpawnerDirtNear
   entities:
@@ -20464,6 +20464,23 @@ entities:
       parent: 2
     - type: Physics
       canCollide: False
+- proto: NinjaMindScannerMarker
+  entities:
+  - uid: 3601
+    components:
+    - type: Transform
+      pos: 5.5,18.5
+      parent: 2
+  - uid: 3602
+    components:
+    - type: Transform
+      pos: 16.5,6.5
+      parent: 2
+  - uid: 3603
+    components:
+    - type: Transform
+      pos: -11.5,-14.5
+      parent: 2
 - proto: NitrogenTankFilled
   entities:
   - uid: 1331
@@ -27807,7 +27824,7 @@ entities:
     - type: AccessReader
       accessListsOriginal: []
     - type: Door
-      secondsUntilStateChange: -262151.12
+      secondsUntilStateChange: -262221.2
       state: Opening
     - type: Airlock
       autoClose: False
@@ -27826,7 +27843,7 @@ entities:
     - type: AccessReader
       accessListsOriginal: []
     - type: Door
-      secondsUntilStateChange: -262107.58
+      secondsUntilStateChange: -262177.66
       state: Opening
     - type: Airlock
       autoClose: False
