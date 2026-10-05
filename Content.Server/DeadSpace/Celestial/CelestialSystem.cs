@@ -35,15 +35,12 @@ namespace Content.Server.DeadSpace.Celestial;
 public sealed class CelestialSystem : EntitySystem
 {
     [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly TileSystem _tiles = default!;
     [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly ExplosionSystem _explosions = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly ServerGlobalSoundSystem _globalSound = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
@@ -91,7 +88,6 @@ public sealed class CelestialSystem : EntitySystem
         d.DamageDict.TryAdd("Structural", 50f);
         return d;
     }
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
     private const float DestroyInterval = 0.25f;
     private const float DestroyRadius = 1.4f;
@@ -575,7 +571,7 @@ public sealed class CelestialSystem : EntitySystem
                         return;
 
                     // чистим исчезнувшие шары
-                    aliveRef.RemoveAll(o => o == EntityUid.Invalid || TerminatingOrDeleted(o) || !EntityManager.EntityExists(o));
+                    aliveRef.RemoveAll(o => o == EntityUid.Invalid || TerminatingOrDeleted(o) || !Exists(o));
 
                     if (spawned >= quota || aliveRef.Count >= comp.OrbsPerCrack)
                         return;

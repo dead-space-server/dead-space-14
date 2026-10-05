@@ -3,13 +3,9 @@ using Robust.Client.Graphics;
 using Robust.Shared.Maths;
 using Robust.Shared.Utility;
 using Robust.Shared.Serialization;
-using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Shared.Enums;
 using Robust.Shared.Graphics;
-using Robust.Shared.Maths;
-using Robust.Shared.Utility;
-using Robust.Shared.Serialization;
 using System.Numerics;
 
 namespace Content.Client.DeadSpace.Celestial;

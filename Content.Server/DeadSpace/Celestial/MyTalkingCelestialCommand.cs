@@ -4,6 +4,7 @@ using Content.Server.Administration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Timing;
 using System.Text.RegularExpressions;
+using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.Celestial;
 
@@ -14,6 +15,8 @@ namespace Content.Server.DeadSpace.Celestial;
 [AdminCommand(AdminFlags.Admin)]
 public sealed class MyTalkingCelestialCommand : IConsoleCommand
 {
+    private static readonly Regex PhraseRegex = new("\"(.+?)\"\\s+(\\d+(?:\\.\\d+)?)", RegexOptions.Compiled);
+
     [Dependency] private readonly IEntityManager _entities = default!;
 
     public string Command => "mytalkingcelestial";

@@ -1,11 +1,9 @@
 using Content.Client.Resources;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
-using Robust.Client.Graphics;
 using Robust.Shared.Maths;
 using Robust.Shared.Enums;
 using Robust.Shared.Graphics;
-using Robust.Shared.Maths;
 using System.Numerics;
 
 namespace Content.Client.DeadSpace.Celestial;

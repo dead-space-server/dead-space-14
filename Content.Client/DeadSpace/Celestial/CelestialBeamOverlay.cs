@@ -66,11 +66,6 @@ public sealed class CelestialBeamOverlay : Overlay
     }
 
     private readonly List<IntroSphere> _introSpheres = new();
-    private Vector2 _introCenter;
-    private MapId _introMap;
-    private float _introElapsed;
-    private bool _introActive;
-    private readonly Random _introRand = new();
     private readonly Dictionary<EntityUid, (Vector2 pos, float radius)> _sphereLast = new();
     private readonly List<(Vector2 pos, float radius, float age)> _sphereAura = new();
     private const float TrailLife = 0.9f;
