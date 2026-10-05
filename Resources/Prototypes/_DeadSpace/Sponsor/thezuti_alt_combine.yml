@@ -1,12 +1,20 @@
 - type: emoteSounds
   id: TheZuTiCombine
-  parents:
-  - MaleHuman
   sounds:
     Scream:
       collection: CombineScreams
     ScreamOnDamage:
       collection: CombineScreams
+    Whistle:
+      collection: Whistles
+    Laugh:
+      collection: CombineXD
+    Gasp:
+      collection: CombineGasp
+    Sigh:
+      collection: MaleSigh
+    Cough:
+      collection: CombineGasp
 
 - type: soundCollection
   id: CombineScreams
@@ -14,6 +22,20 @@
     - /Audio/_DeadSpace/Sponsor/TheZuTiAltCombine/combine-hit-2.ogg
     - /Audio/_DeadSpace/Sponsor/TheZuTiAltCombine/combine-hit-10.ogg
     - /Audio/_DeadSpace/Sponsor/TheZuTiAltCombine/combine-hit-9.ogg
+
+- type: soundCollection
+  id: CombineXD
+  files:
+    - /Audio/_DeadSpace/Sponsor/TheZuTiAltCombine/combine-laugh-4.ogg
+    - /Audio/_DeadSpace/Sponsor/TheZuTiAltCombine/combine-laugh-2.ogg
+
+- type: soundCollection
+  id: CombineGasp
+  files:
+    - /Audio/_DeadSpace/Sponsor/TheZuTiAltCombine/combine-hit.ogg
+    - /Audio/_DeadSpace/Sponsor/TheZuTiAltCombine/combine-hit-7.ogg
+    
+
 
 - type: entity
   parent: BaseSubdermalImplant
