@@ -302,7 +302,6 @@ public sealed class SpiderOSSystem : SharedSpiderOSSystem
             if (TryGetSkill(comp, category, tier, out var skill) && !skill.TransferOnSecondChance)
             {
                 comp.SelectedModules.Remove(tier);
-                comp.LockedTiers.Remove(tier);
             }
         }
 

@@ -9,7 +9,7 @@ public sealed partial class NinjaCloneComponent : Component
     public EntProtoId CloneProto = "HolographicNinjaClone";
 
     [DataField]
-    public float CloningChance = 0.5f;
+    public float CloningChance = 0.25f;
 
     [DataField]
     public float MinSpawnRadius = 1f;

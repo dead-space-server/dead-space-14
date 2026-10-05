@@ -103,8 +103,8 @@
       path: /Audio/_DeadSpace/Necromorfs/TheCircle/Weapon/sfx/hook-sfx/hit_hook.ogg
   - type: NinjaJohyoProjectile
   - type: StunOnCollide
-    stunAmount: 3
-    knockdownAmount: 2.5 
+    stunAmount: 1
+    knockdownAmount: 1.5 
     drop: true
   - type: TriggerOnCollide
     fixtureID: projectile
