@@ -26,7 +26,7 @@ public sealed class MyTalkingCelestialCommand : IConsoleCommand
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         // парсим цепочку "фраза" время из сырой строки
-        var matches = Regex.Matches(argStr, "\"(.+?)\"\\s+(\\d+(?:\\.\\d+)?)");
+        var matches = PhraseRegex.Matches(argStr);
         if (matches.Count == 0)
         {
             shell.WriteError(Help);

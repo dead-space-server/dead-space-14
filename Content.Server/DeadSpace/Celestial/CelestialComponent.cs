@@ -37,11 +37,11 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Минимальная пауза между атаками, сек.</summary>
     [DataField]
-    public float AttackMinDelay = 10f;
+    public float AttackMinDelay = 4f;
 
     /// <summary>Максимальная пауза между атаками, сек.</summary>
     [DataField]
-    public float AttackMaxDelay = 20f;
+    public float AttackMaxDelay = 8f;
 
     /// <summary>Громкость звуков атаки (меньше — тише).</summary>
     [DataField]
@@ -167,7 +167,7 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Длина лучей Cutter, метры.</summary>
     [DataField]
-    public float CutterLength = 45f;
+    public float CutterLength = 120f;
 
     /// <summary>Время вращения лучей Cutter, сек.</summary>
     [DataField]
@@ -199,7 +199,7 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Урон луча Cutter.</summary>
     [DataField]
-    public float CutterDamage = 20f;
+    public float CutterDamage = 60f;
 
     // ----- третья атака: РАЗНЕСУ -----
 
@@ -277,7 +277,7 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Урон замершего луча при почернении.</summary>
     [DataField]
-    public float FreezeBeamDamage = 25f;
+    public float FreezeBeamDamage = 40f;
 
     // ----- вторая фаза -----
 
@@ -287,11 +287,11 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Минимальная пауза между атаками во второй фазе, сек.</summary>
     [DataField]
-    public float Phase2AttackMinDelay = 6f;
+    public float Phase2AttackMinDelay = 3f;
 
     /// <summary>Максимальная пауза между атаками во второй фазе, сек.</summary>
     [DataField]
-    public float Phase2AttackMaxDelay = 12f;
+    public float Phase2AttackMaxDelay = 6f;
 
     /// <summary>Сколько дополнительных игроков атакуется во второй фазе.</summary>
     [DataField]

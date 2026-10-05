@@ -721,9 +721,11 @@ public sealed class CelestialSystem : EntitySystem
         var bossPos = _transform.GetMapCoordinates(ent);
         var targetPos = _transform.GetMapCoordinates(target);
 
-        // рандомное смещение по X и Z относительно игрока
-        var offset = new Vector2(_random.NextFloat(-6f, 6f), _random.NextFloat(-6f, 6f));
-        var center = targetPos.Position + offset;
+        // Cutter разворачивается ПРЯМО У КУЧИ игроков
+        var offsetAngle = _random.NextFloat(0f, MathF.Tau);
+        var offsetDist = _random.NextFloat(3f, 6f);
+        var center = targetPos.Position +
+            new Vector2(MathF.Cos(offsetAngle) * offsetDist, MathF.Sin(offsetAngle) * offsetDist);
         var baseAngle = _random.NextFloat(0f, MathF.Tau);
 
         RaiseNetworkEvent(new CelestialCutterEvent(
@@ -747,24 +749,30 @@ public sealed class CelestialSystem : EntitySystem
             damage.DamageDict.TryAdd("Heat", comp.CutterDamage * 0.6f);
             damage.DamageDict.TryAdd("Blunt", comp.CutterDamage * 0.4f);
 
-            var halfLen = comp.CutterLength / 2f + 1f;
+            var halfLen = comp.CutterLength / 2f + 2f;
             _nearbySpheres.Clear();
             foreach (var victim in _lookup.GetEntitiesInRange(new MapCoordinates(center, bossPos.MapId), halfLen, LookupFlags.Uncontained))
             {
                 if (HasComp<CelestialComponent>(victim) || TerminatingOrDeleted(victim))
                     continue;
 
-                var victimRel = _transform.GetMapCoordinates(victim).Position - center;
+                var victimPos = _transform.GetMapCoordinates(victim).Position;
+                var victimRel = victimPos - center;
 
-                // 4 линии через центр (8 лучей, противоположные пары)
+                // у самого центра бьёт гарантированно
+                if (victimRel.Length() <= 2.5f)
+                {
+                    _damage.TryChangeDamage(victim, damage, true);
+                    continue;
+                }
+
+                // 8 лучей-отрезков из центра (4 линии, противоположные пары)
                 var hit = false;
-                for (var k = 0; k < 4; k++)
+                for (var k = 0; k < 8; k++)
                 {
                     var ang = baseAngle + k * MathF.PI / 4f;
-                    var lineDir = new Vector2(MathF.Cos(ang), MathF.Sin(ang));
-                    var projK = Vector2.Dot(victimRel, lineDir);
-                    var perpK = (victimRel - lineDir * projK).Length();
-                    if (MathF.Abs(projK) <= comp.CutterLength / 2f && perpK <= 1f)
+                    var rayEnd = center + new Vector2(MathF.Cos(ang), MathF.Sin(ang)) * (comp.CutterLength / 2f);
+                    if (DistanceToSegment(victimPos, center, rayEnd) <= 1.5f)
                     {
                         hit = true;
                         break;
@@ -931,6 +939,7 @@ public sealed class CelestialSystem : EntitySystem
             // дрейф: медленно движется, изредка меняя направление
             if (circle.Elapsed < circle.WanderTime)
             {
+                var xform = Transform(uid);
                 circle.WanderTimer += frameTime;
                 if (circle.WanderTimer >= circle.WanderChangeInterval)
                 {
@@ -941,7 +950,33 @@ public sealed class CelestialSystem : EntitySystem
                 }
 
                 var pos = _transform.GetMapCoordinates(uid).Position;
-                _transform.SetWorldPosition(uid, pos + circle.WanderDir * circle.WanderSpeed * frameTime);
+                var move = circle.WanderDir * circle.WanderSpeed * frameTime;
+
+                // небольшой магнит: кружок подтягивается к ближайшему игроку
+                EntityUid? nearest = null;
+                var nearestDist = float.MaxValue;
+                foreach (var session in _players.Sessions)
+                {
+                    if (session.AttachedEntity is not { } player || TerminatingOrDeleted(player))
+                        continue;
+                    if (Transform(player).MapID != xform.MapID)
+                        continue;
+                    var d = (_transform.GetMapCoordinates(player).Position - pos).LengthSquared();
+                    if (d < nearestDist)
+                    {
+                        nearestDist = d;
+                        nearest = player;
+                    }
+                }
+
+                if (nearest != null)
+                {
+                    var toPlayer = _transform.GetMapCoordinates(nearest.Value).Position - pos;
+                    if (toPlayer.Length() > 1.5f)
+                        move += Vector2.Normalize(toPlayer) * 0.8f * frameTime;
+                }
+
+                _transform.SetWorldPosition(uid, pos + move);
             }
             else
             {
@@ -1185,7 +1220,7 @@ public sealed class CelestialSystem : EntitySystem
             var center = bossPos.Position + new Vector2(MathF.Cos(angle) * dist, MathF.Sin(angle) * dist);
 
             var beamAngle = _random.NextFloat(0f, MathF.Tau);
-            var length = _random.NextFloat(8f, 24f);
+            var length = _random.NextFloat(16f, 40f);
             var dir = new Vector2(MathF.Cos(beamAngle), MathF.Sin(beamAngle));
             var start = center - dir * (length / 2f);
             var end = center + dir * (length / 2f);

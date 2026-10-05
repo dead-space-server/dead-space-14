@@ -1,0 +1,297 @@
+# Celestial arsenal: награды боссфайта Селестиала
+# DS14-start: Celestial arsenal
+
+# ==================== хитсканы и снаряды ====================
+
+- type: entity
+  parent: LaserHitscanBase
+  id: CelestialLaserLMGShot
+  name: bright laser beam
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HitscanBasicDamage
+    damage:
+      types:
+        Heat: 20
+
+- type: entity
+  parent: BaseBullet
+  id: CelestialPelletLethal
+  name: lethal light pellet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/projectiles2.rsi
+    layers:
+    - state: buckshot
+      shader: unshaded
+      color: "#FF3B3B"
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 1
+        Heat: 1
+  - type: ProjectileSpread
+    proto: CelestialPelletLethal
+    count: 9
+    spread: 12
+
+- type: entity
+  parent: BaseBullet
+  id: CelestialPelletHealing
+  name: healing light pellet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/projectiles2.rsi
+    layers:
+    - state: buckshot
+      shader: unshaded
+      color: "#7CFC00"
+  - type: Projectile
+    damage:
+      types:
+        Blunt: -10
+        Piercing: -10
+        Slash: -10
+        Heat: -10
+        Bloodloss: -20
+    ignoreResistances: true
+  - type: ProjectileSpread
+    proto: CelestialPelletHealing
+    count: 9
+    spread: 10
+
+- type: entity
+  id: CelestialLaserGrenade
+  name: light grenade
+  description: Ага, оно зелёное и гудит. Бегом.
+  parent: BaseBulletTrigger
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: spell
+      color: "#7CFC00"
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Heat: 10
+  - type: ExplodeOnTrigger
+  - type: Explosive
+    explosionType: Default
+    totalIntensity: 80
+    intensitySlope: 2
+    maxIntensity: 7
+    canCreateVacuum: false
+
+# ==================== оружие ====================
+
+- type: entity
+  parent: BaseWeaponBattery
+  id: WeaponCelestialLMG
+  name: лазерный пулемёт
+  description: "Двести зарядов чистого света в секунду времени."
+  components:
+  - type: GunRequiresWield
+  - type: Sprite
+    sprite: _DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/celestial_lmg.rsi
+    layers:
+    - state: icon
+      map: ["enum.GunVisualLayers.Base"]
+  - type: Gun
+    fireRate: 5
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/laser.ogg
+  - type: BatteryAmmoProvider
+    proto: CelestialLaserLMGShot
+    fireCost: 9
+  - type: Battery
+    maxCharge: 1800
+  - type: StaticPrice
+    price: 500
+
+- type: entity
+  parent: BaseWeaponLauncher
+  id: WeaponCelestialGL
+  name: лазерный гранатомёт
+  description: "Десять зелёных причин покинуть помещение. Перезаряжается неспешно."
+  components:
+  - type: GunRequiresWield
+  - type: Sprite
+    sprite: _DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/celestial_gl.rsi
+    layers:
+    - state: icon
+      map: ["enum.GunVisualLayers.Base"]
+  - type: Clothing
+    slots:
+    - Back
+    - suitStorage
+  - type: Gun
+    fireRate: 0.4
+    projectileSpeed: 12
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/laser_cannon.ogg
+  - type: BatteryAmmoProvider
+    proto: CelestialLaserGrenade
+    fireCost: 180
+  - type: Battery
+    maxCharge: 1800
+  - type: StaticPrice
+    price: 500
+
+- type: entity
+  parent: BaseWeaponBattery
+  id: WeaponCelestialShotgun
+  name: лазерный дробовик
+  description: "Два режима — красный лишает здоровья, зелёный возвращает. Урон волны — как десять дробинок."
+  components:
+  - type: GunRequiresWield
+  - type: Sprite
+    sprite: _DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/celestial_shotgun.rsi
+    layers:
+    - state: icon
+      map: ["enum.GunVisualLayers.Base"]
+  - type: Gun
+    fireRate: 1.5
+    minAngle: 7
+    maxAngle: 20
+    angleIncrease: 6
+    angleDecay: 12
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/shotgun.ogg
+  - type: BatteryAmmoProvider
+    proto: CelestialPelletLethal
+    fireCost: 60
+  - type: BatteryWeaponFireModes
+    fireModes:
+    - proto: CelestialPelletLethal
+      fireCost: 60
+    - proto: CelestialPelletHealing
+      fireCost: 60
+  - type: Battery
+    maxCharge: 1800
+  - type: StaticPrice
+    price: 500
+
+# ==================== снаряжение ====================
+
+- type: entity
+  parent: ClothingShoesBootsMag
+  id: CelestialMagboots
+  name: магнитные ботинки ускорителя
+  description: "Магниты, притягивающие тебя к полу... и вперёд."
+  components:
+  - type: ClothingSpeedModifier
+    walkModifier: 1.2
+    sprintModifier: 1.2
+  - type: Sprite
+    sprite: Clothing/Shoes/Boots/magboots.rsi
+  - type: Clothing
+    sprite: Clothing/Shoes/Boots/magboots.rsi
+
+- type: entity
+  parent: JetpackCaptain
+  id: CelestialJetpackBluespace
+  name: блюспейс джетпак
+  components:
+  - type: Sprite
+    sprite: Objects/Tanks/Jetpacks/blue.rsi
+  - type: Clothing
+    sprite: Objects/Tanks/Jetpacks/blue.rsi
+    slots:
+    - Back
+    - SuitStorage
+    - Belt
+  - type: Item
+    sprite: Objects/Tanks/Jetpacks/blue.rsi
+
+- type: entity
+  parent: PortableRecharger
+  id: CelestialSuperRecharger
+  name: переносной супер-зарядник
+  description: "Заряжает втрое быстрее обычного переносного. Тяжёлое, но стоит того."
+  components:
+  - type: Charger
+    chargeRate: 60
+
+# ==================== ящик ====================
+
+# ==================== кейс неопределённости ====================
+
+- type: entity
+  parent: BaseERTloadoutPrimary
+  id: CelestialArsenalCase
+  name: гуманитарный ящик неопределённости
+  description: "Внутри — что-то определённо ценное. Выбери, что тебе ближе: скорость, гром или исцеление."
+  suffix: Боссфайт
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Necromorfs/BSAA/misc/misc.rsi
+    state: case
+  - type: ThiefUndeterminedBackpack
+    possibleSets:
+    - CelestialLMGSet
+    - CelestialGLSet
+    - CelestialShotgunSet
+  - type: ActivatableUI
+    key: enum.ThiefBackpackUIKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.ThiefBackpackUIKey.Key:
+        type: ThiefBackpackBoundUserInterface
+
+## Наборы кейса
+
+- type: thiefBackpackSet
+  id: CelestialLMGSet
+  name: Набор «Двести причин»
+  description: Лазерный пулемёт с гипер-батареей на двести выстрелов и запасной батареей. Скорость решает.
+  sprite:
+    sprite: Objects/Weapons/Guns/Battery/laser_cannon.rsi
+    state: base
+  content:
+  - WeaponCelestialLMG
+  - PowerCellHyper
+  - PowerCellHyper
+
+- type: thiefBackpackSet
+  id: CelestialGLSet
+  name: Набор «Десять зелёных»
+  description: Лазерный гранатомёт с батареей на десять выстрелов. Медленно, уверенно, снести стену.
+  sprite:
+    sprite: Objects/Weapons/Guns/Launchers/china_lake.rsi
+    state: icon
+  content:
+  - WeaponCelestialGL
+  - PowerCellHyper
+  - PowerCellHyper
+
+- type: thiefBackpackSet
+  id: CelestialShotgunSet
+  name: Набор «Милосердие и кара»
+  description: Лазерный дробовик с двумя режимами — красный карает, зелёный лечит. Гипер-батарея в комплекте.
+  sprite:
+    sprite: Objects/Weapons/Guns/Battery/energy_shotgun.rsi
+    state: base
+  content:
+  - WeaponCelestialShotgun
+  - PowerCellHyper
+  - PowerCellHyper
+
+- type: cargoProduct
+  id: CargoCelestialArsenal
+  icon:
+    sprite: _DeadSpace/Necromorfs/BSAA/misc/misc.rsi
+    state: case
+  product: CelestialArsenalCase
+  cost: 30000
+  category: cargoproduct-category-name-materials
+  group: general
+
+# DS14-end

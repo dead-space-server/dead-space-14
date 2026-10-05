@@ -55,17 +55,6 @@ public sealed class CelestialBeamOverlay : Overlay
     private readonly Dictionary<EntityUid, float> _sphereElapsed = new();
     private readonly Dictionary<EntityUid, List<(Vector2 pos, float age)>> _orbTrails = new();
 
-    // интро-катсцена: дрожащие сферы вокруг персонажа
-    private sealed class IntroSphere
-    {
-        public Vector2 Offset;
-        public float Delay;
-        public float Duration;
-        public float MaxRadius;
-        public float Phase;
-    }
-
-    private readonly List<IntroSphere> _introSpheres = new();
     private readonly Dictionary<EntityUid, (Vector2 pos, float radius)> _sphereLast = new();
     private readonly List<(Vector2 pos, float radius, float age)> _sphereAura = new();
     private const float TrailLife = 0.9f;
