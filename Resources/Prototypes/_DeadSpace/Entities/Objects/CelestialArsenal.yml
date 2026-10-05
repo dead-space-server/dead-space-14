@@ -15,22 +15,15 @@
         Heat: 20
 
 - type: entity
-  parent: BaseBullet
+  parent: BulletLaserTrace
   id: CelestialPelletLethal
   name: lethal light pellet
   categories: [ HideSpawnMenu ]
   components:
-  - type: Sprite
-    sprite: Objects/Weapons/Guns/Projectiles/projectiles2.rsi
-    layers:
-    - state: buckshot
-      shader: unshaded
-      color: "#FF3B3B"
-  - type: Projectile
+  - type: HitscanBasicDamage
     damage:
       types:
-        Piercing: 1
-        Heat: 1
+        Heat: 5
   - type: ProjectileSpread
     proto: CelestialPelletLethal
     count: 9
