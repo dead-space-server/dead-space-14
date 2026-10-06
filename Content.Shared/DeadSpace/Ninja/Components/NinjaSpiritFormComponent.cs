@@ -15,7 +15,7 @@ public sealed partial class NinjaSpiritFormComponent : Component
     public EntityUid? SpiritFormActionEntity;
 
     [DataField]
-    public float EnergyDrainPercent = 0.25f;
+    public float EnergyDrainPercent = 0.24f;
 
     [DataField, AutoNetworkedField]
     public bool SpiritFormActive;

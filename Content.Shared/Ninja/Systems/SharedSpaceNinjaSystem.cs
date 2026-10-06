@@ -7,6 +7,7 @@ using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Shared.Random;
 using System.Diagnostics.CodeAnalysis;
+using Content.Shared.Damage.Systems; // DS14
 
 namespace Content.Shared.Ninja.Systems;
 
@@ -34,6 +35,7 @@ public abstract class SharedSpaceNinjaSystem : EntitySystem
         SubscribeLocalEvent<SpaceNinjaComponent, AttackedEvent>(OnNinjaAttacked);
         SubscribeLocalEvent<SpaceNinjaComponent, MeleeAttackEvent>(OnNinjaAttack);
         SubscribeLocalEvent<SpaceNinjaComponent, ShotAttemptedEvent>(OnShotAttempted);
+        SubscribeLocalEvent<SpaceNinjaComponent, DamageChangedEvent>(OnDamageNinjaChanged); // DS14
     }
 
     //DS14-start
@@ -62,7 +64,7 @@ public abstract class SharedSpaceNinjaSystem : EntitySystem
 
                 if (heat.Heat >= heat.EffectsThreshold && previousHeat < heat.EffectsThreshold)
                 {
-                    Popup.PopupPredicted(Loc.GetString("ninja-suit-heat-warning"), uid, uid, PopupType.MediumCaution);
+                    Popup.PopupEntity(Loc.GetString("ninja-suit-heat-warning"), uid, uid, PopupType.MediumCaution);
                 }
 
                 var dangerThreshold = heat.DangerThreshold;
@@ -70,7 +72,7 @@ public abstract class SharedSpaceNinjaSystem : EntitySystem
                 if (heat.Heat >= dangerThreshold &&
                     previousHeat < dangerThreshold)
                 {
-                    Popup.PopupPredicted(Loc.GetString("ninja-suit-heat-danger"), uid, uid, PopupType.MediumCaution);
+                    Popup.PopupEntity(Loc.GetString("ninja-suit-heat-danger"), uid, uid, PopupType.MediumCaution);
                 }
 
                 if (heat.Heat >= heat.EffectsThreshold &&
@@ -88,7 +90,7 @@ public abstract class SharedSpaceNinjaSystem : EntitySystem
                     cloak.Enabled = false;
                     Dirty(suitUid, cloak);
 
-                    Popup.PopupPredicted(Loc.GetString("ninja-suit-overheated"), uid, uid, PopupType.MediumCaution);
+                    Popup.PopupEntity(Loc.GetString("ninja-suit-overheated"), uid, uid, PopupType.MediumCaution);
                 }
             }
             else
@@ -188,6 +190,16 @@ public abstract class SharedSpaceNinjaSystem : EntitySystem
     {
         RevealNinja(ent);
     }
+
+    // DS14-start
+    private void OnDamageNinjaChanged(Entity<SpaceNinjaComponent> ent, ref DamageChangedEvent args)
+    {
+        if (args.DamageDelta != null && args.DamageIncreased && args.DamageDelta.GetTotal() > ent.Comp.RevealThreshold)
+        {
+            RevealNinja(ent);
+        }
+    }
+    // DS14-end
 
     public bool RevealNinja(EntityUid user)
     {
