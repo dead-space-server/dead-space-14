@@ -24,6 +24,8 @@
       state: keys_shuttle
     - map: ["computerLayerScreen"]
       state: screen_shuttle
+    - map: ["computerLayerKeys"]
+      state: keys_shuttle
     - map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
       visible: false
       state: generic_panel_open

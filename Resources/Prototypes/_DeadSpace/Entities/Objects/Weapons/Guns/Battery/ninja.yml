@@ -163,6 +163,6 @@
       - !type:DoActsBehavior
         acts: ["Destruction"]
   - type: TimedDespawn
-    lifetime: 5
+    lifetime: 10
   - type: NinjaEnergyNet
       

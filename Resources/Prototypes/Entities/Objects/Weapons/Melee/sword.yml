@@ -177,6 +177,19 @@
     damage:
       types:
         Slash: 30
+    soundHit:
+      collection: KatanaHitSound #DS14
+#DS14-start
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/katana/katana-equip.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/katana/katana-unequip.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/knife/knife_drop.ogg
+#DS14-end
   - type: Item
 #DS14-start
     inhandVisuals:
