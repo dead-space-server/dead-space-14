@@ -743,7 +743,7 @@
   icon: { sprite: /Textures/Objects/Weapons/Guns/Ammunition/SpeedLoaders/Magnum/magnum_speed_loader.rsi, state: icon }
   productEntity: SpeedLoaderMagnumAP
   cost:
-    Telecrystal: 4 # DS14-value
+    Telecrystal: 3 # DS14-value
   categories:
   - UplinkAmmo
   conditions:
@@ -1522,7 +1522,7 @@
   description: uplink-starter-kit-desc
   productEntity: ClothingBackpackDuffelSyndicateFilledStarterKit
   cost:
-    Telecrystal: 52 #DS-14 value
+    Telecrystal: 56 #DS-14 value
   categories:
   - UplinkPresets #DS14
   conditions:

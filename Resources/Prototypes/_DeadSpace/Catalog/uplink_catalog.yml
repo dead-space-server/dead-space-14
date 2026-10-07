@@ -60,6 +60,26 @@
       - SurplusBundle
 
 - type: listing
+  id: UplinkArkalysLone
+  name: uplink-arkalyse-bundle-name
+  description: uplink-arkalyse-bundle-desc
+  icon: { sprite: _DeadSpace/Objects/Specific/Arkalyse/arkalyse_book.rsi, state: icon }
+  productEntity: BoxArkalyse
+  cost:
+    Telecrystal: 15
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
   id: UplinkMalorianLone
   name: uplink-malorian-name
   description: uplink-malorian-desc
@@ -528,6 +548,9 @@
     whitelist:
       tags:
       - NukeOpsUplink
+    blacklist:
+      tags:
+      - LoneOpsUplink
 
 - type: listing
   id: UplinkAdrenalineImplanter
