@@ -149,7 +149,7 @@ public sealed class CelestialSystem : EntitySystem
                 // на последней фразе: особый звук и открытые глаза
                 if (phrase == CutscenePhrases[^1])
                 {
-                    _globalSound.PlayGlobalOnStation(ent,
+                    _globalSound.PlayAnnonceGlobal(Filter.Broadcast(),
                         _audio.ResolveSound(new SoundPathSpecifier(
                             "/Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Celestial_Talk_4.ogg")),
                         new AudioParams { Volume = -2f });
@@ -162,6 +162,8 @@ public sealed class CelestialSystem : EntitySystem
         var breachTime = CutsceneIntroTime + CutscenePhrases.Length * CutscenePhraseDuration;
         Timer.Spawn(TimeSpan.FromSeconds(breachTime), () =>
         {
+            // катсцена клиентская: продолжается даже без босса,
+            // RaiseCelestial сам фоллбэкнется в глобальную рассылку
             RaiseCelestial(ent, new CelestialSpiritStageEvent(2));
         });
 
@@ -169,13 +171,14 @@ public sealed class CelestialSystem : EntitySystem
         var endTime = breachTime + 3f;
         Timer.Spawn(TimeSpan.FromSeconds(endTime), () =>
         {
-            _globalSound.PlayGlobalOnStation(ent,
+            // финальный крик - без привязки к ентити (босс мог быть удалён)
+            _globalSound.PlayAnnonceGlobal(Filter.Broadcast(),
                 _audio.ResolveSound(new SoundPathSpecifier(
                     "/Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Celestial_screams_really_loudly.ogg")),
                 new AudioParams { Volume = 2f });
             RaiseCelestial(ent, new CelestialCutsceneEndEvent());
 
-            if (!TerminatingOrDeleted(ent))
+            if (Exists(ent) && !TerminatingOrDeleted(ent))
                 comp.AttackTimer = 8f;
         });
     }
@@ -333,16 +336,9 @@ public sealed class CelestialSystem : EntitySystem
     private MapId? _deathCutsceneMap;
 
     /// <summary>Катсцена смерти: глобально или на карте убитого босса.</summary>
-    public void BroadcastDeath(EntityUid? boss)
+    public void BroadcastDeath(bool localized, MapId? bossMap)
     {
-        _deathCutsceneMap = null;
-        if (boss != null
-            && TryComp<CelestialComponent>(boss.Value, out var bossComp)
-            && bossComp.LocalizedEvents
-            && !TerminatingOrDeleted(boss.Value))
-        {
-            _deathCutsceneMap = Transform(boss.Value).MapID;
-        }
+        _deathCutsceneMap = localized ? bossMap : null;
 
         RaiseToMapOrAll(new CelestialDeathEvent());
     }
@@ -384,7 +380,7 @@ public sealed class CelestialSystem : EntitySystem
     /// <summary>События босса: глобально или только на его карте.</summary>
     private void RaiseCelestial(Entity<CelestialComponent> ent, EntityEventArgs ev)
     {
-        if (!ent.Comp.LocalizedEvents)
+        if (!ent.Comp.LocalizedEvents || !Exists(ent) || TerminatingOrDeleted(ent))
         {
             RaiseNetworkEvent(ev);
             return;

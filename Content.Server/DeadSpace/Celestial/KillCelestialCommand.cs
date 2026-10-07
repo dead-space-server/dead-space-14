@@ -3,6 +3,7 @@ using Content.Shared.Administration;
 using Content.Shared.DeadSpace.Celestial;
 using Robust.Shared.Console;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Map;
 using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Celestial;
@@ -51,6 +52,16 @@ public sealed class KillCelestialCommand : IConsoleCommand
         }
 
         shell.WriteLine($"Селестиал {target.Value} повержен.");
+
+        // читаем данные босса ДО удаления
+        var wasLocalized = false;
+        MapId? bossMap = null;
+        if (_entities.TryGetComponent<CelestialComponent>(target.Value, out var bossComp))
+        {
+            wasLocalized = bossComp.LocalizedEvents;
+            bossMap = _entities.GetComponent<TransformComponent>(target.Value).MapID;
+        }
+
         _entities.DeleteEntity(target.Value);
 
         // катсцена смерти: белый экран, глаз, цепочка фраз
@@ -59,7 +70,7 @@ public sealed class KillCelestialCommand : IConsoleCommand
             shell.WriteError("Система Селестиала недоступна.");
             return;
         }
-        celestial.BroadcastDeath(target.Value);
+        celestial.BroadcastDeath(wasLocalized, bossMap);
 
         string[] phrases =
         {
