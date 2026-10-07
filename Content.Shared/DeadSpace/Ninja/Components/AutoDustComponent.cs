@@ -1,6 +1,7 @@
 using Content.Shared.Actions;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
+using Content.Shared.Tag;
 
 namespace Content.Shared.DeadSpace.Ninja.Components;
 
@@ -21,6 +22,12 @@ public sealed partial class AutoDustComponent : Component
 
     [DataField, AutoNetworkedField]
     public EntProtoId SpawnOnDustProto = "Acidifier";
+
+    [DataField]
+    public List<ProtoId<TagPrototype>> HightRiskTags = new()
+    {
+        "HighRiskItem",
+    };
 }
 
 public enum DustMode : byte

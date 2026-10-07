@@ -62,7 +62,10 @@ public sealed class NinjaSecondChanceSystem : EntitySystem
             return;
 
         var target = args.Target;
-        if (!target.IsValid() || !_mind.TryGetMind(target, out var mindId, out var mind))
+        if (!target.IsValid())
+            return;
+
+        if (!TryGetDustMind(args, target, out var mindId, out var mind))
             return;
 
         if (!TryComp<NinjaRespawnCapsuleComponent>(ent.Comp.Capsule, out var capsule) || !IsCapsuleFree(capsule))
@@ -96,6 +99,22 @@ public sealed class NinjaSecondChanceSystem : EntitySystem
         _audio.PlayPvs(capsule.EnterSound, capsuleUid);
 
         _mind.TransferTo(mindId, clone, ghostCheckOverride: true, mind: mind);
+    }
+
+    private bool TryGetDustMind(
+        AutoDustEvent args,
+        EntityUid target,
+        out EntityUid mindId,
+        [NotNullWhen(true)] out MindComponent? mind)
+    {
+        if (args.Mind is { } eventMind && eventMind.Owner.IsValid() && eventMind.Comp != null && Exists(eventMind.Owner))
+        {
+            mindId = eventMind.Owner;
+            mind = eventMind.Comp;
+            return true;
+        }
+
+        return _mind.TryGetMind(target, out mindId, out mind);
     }
 
     public override void Update(float frameTime)
