@@ -210,7 +210,10 @@ public sealed class CelestialSystem : EntitySystem
                 comp.ExtraTargets = comp.Phase2ExtraTargets;
             }
 
-            if (comp.Phase2 && TryComp<DamageableComponent>(uid, out var dmgImmortal))
+            // бессмертие: сбрасываем урон только если его реально нанесли
+            if (comp.Phase2
+                && TryComp<DamageableComponent>(uid, out var dmgImmortal)
+                && dmgImmortal.TotalDamage > 0f)
             {
                 _damage.SetDamage((uid, dmgImmortal), new DamageSpecifier());
             }
@@ -327,19 +330,50 @@ public sealed class CelestialSystem : EntitySystem
     // Речь: только крик атаки
     // ------------------------------------------------------------------
 
-    public void BroadcastDeath()
+    private MapId? _deathCutsceneMap;
+
+    /// <summary>Катсцена смерти: глобально или на карте убитого босса.</summary>
+    public void BroadcastDeath(EntityUid? boss)
     {
-        RaiseNetworkEvent(new CelestialDeathEvent());
+        _deathCutsceneMap = null;
+        if (boss != null
+            && TryComp<CelestialComponent>(boss.Value, out var bossComp)
+            && bossComp.LocalizedEvents
+            && !TerminatingOrDeleted(boss.Value))
+        {
+            _deathCutsceneMap = Transform(boss.Value).MapID;
+        }
+
+        RaiseToMapOrAll(new CelestialDeathEvent());
     }
 
     public void BroadcastDeathSpeak(string text, float duration)
     {
-        RaiseNetworkEvent(new CelestialDeathSpeakEvent(text, duration));
+        RaiseToMapOrAll(new CelestialDeathSpeakEvent(text, duration));
     }
 
     public void BroadcastDeathEnd()
     {
-        RaiseNetworkEvent(new CelestialDeathEndEvent());
+        RaiseToMapOrAll(new CelestialDeathEndEvent());
+    }
+
+    private void RaiseToMapOrAll(EntityEventArgs ev)
+    {
+        if (_deathCutsceneMap == null)
+        {
+            RaiseNetworkEvent(ev);
+            return;
+        }
+
+        var mapId = _deathCutsceneMap.Value;
+        foreach (var session in _players.Sessions)
+        {
+            if (session.AttachedEntity is not { } player || TerminatingOrDeleted(player))
+                continue;
+            if (Transform(player).MapID != mapId)
+                continue;
+            RaiseNetworkEvent(ev, session.Channel);
+        }
     }
 
     private void Speak(string text, float duration)

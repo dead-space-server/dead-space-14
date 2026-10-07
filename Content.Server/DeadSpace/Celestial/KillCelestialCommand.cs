@@ -59,7 +59,7 @@ public sealed class KillCelestialCommand : IConsoleCommand
             shell.WriteError("Система Селестиала недоступна.");
             return;
         }
-        celestial.BroadcastDeath();
+        celestial.BroadcastDeath(target.Value);
 
         string[] phrases =
         {
