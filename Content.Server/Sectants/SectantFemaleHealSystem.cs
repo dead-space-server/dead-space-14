@@ -13,6 +13,10 @@ public sealed class SectantFemaleHealSystem : EntitySystem
     [Dependency] private readonly DamageableSystem _damage = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
 
+    private static readonly ProtoId<DamageTypePrototype> Poison = "Poison";
+    private static readonly ProtoId<DamageTypePrototype> Bloodloss = "Bloodloss";
+    private static readonly ProtoId<DamageTypePrototype> Radiation = "Radiation";
+
     private readonly HashSet<EntityUid> _entitySet = new();
 
     public override void Initialize()
@@ -34,9 +38,9 @@ public sealed class SectantFemaleHealSystem : EntitySystem
             if (!AreInSameFaction(uid, ally)) continue;
 
             var heal = new DamageSpecifier();
-            heal.DamageDict[_proto.Index<DamageTypePrototype>("Poison").ID]    = -50;
-            heal.DamageDict[_proto.Index<DamageTypePrototype>("Bloodloss").ID] = -50;
-            heal.DamageDict[_proto.Index<DamageTypePrototype>("Radiation").ID] = -50;
+            heal.DamageDict[_proto.Index(Poison).ID]    = -50;
+            heal.DamageDict[_proto.Index(Bloodloss).ID] = -50;
+            heal.DamageDict[_proto.Index(Radiation).ID] = -50;
             _damage.TryChangeDamage(ally, heal, ignoreResistances: true);
             Spawn("SectantHealEffect", Transform(ally).Coordinates);
         }
@@ -44,7 +48,6 @@ public sealed class SectantFemaleHealSystem : EntitySystem
         args.Handled = true;
     }
 
-    /// <summary>Ручная проверка общих фракций — обходит RA0002.</summary>
     private bool AreInSameFaction(EntityUid a, EntityUid b)
     {
         if (!TryComp<NpcFactionMemberComponent>(a, out var ca)) return false;

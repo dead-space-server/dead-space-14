@@ -7,7 +7,6 @@ namespace Content.Client.Sectants;
 public sealed class ClientSectantHallucinationOverlaySystem : EntitySystem
 {
     [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
 
     public override void Initialize()
     {

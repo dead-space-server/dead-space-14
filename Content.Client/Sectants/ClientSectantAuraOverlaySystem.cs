@@ -11,7 +11,6 @@ namespace Content.Client.Sectants;
 public sealed class ClientSectantAuraOverlaySystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _protoMan = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {
