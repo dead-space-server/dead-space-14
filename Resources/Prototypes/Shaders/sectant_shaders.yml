@@ -1,0 +1,28 @@
+- type: shader
+  id: SectantFadeShader
+  kind: source
+  path: "/Textures/Shaders/sectant_fade.swsl"
+  params:
+    visibility: 0.5
+
+- type: shader
+  id: SectantHallucinationShader
+  kind: source
+  path: "/Textures/Shaders/sectant_hallucination.swsl"
+  params:
+    distortion: 0.01
+
+- type: shader
+  id: SectantAuraShader
+  kind: source
+  path: "/Textures/Shaders/sectant_aura.swsl"
+  params:
+    auraColor: 0.53, 0.27, 1.0, 1.0
+    pulseSpeed: 2.0
+
+- type: shader
+  id: SectantDissolveShader
+  kind: source
+  path: "/Textures/Shaders/sectant_dissolve.swsl"
+  params:
+    progress: 0.5
