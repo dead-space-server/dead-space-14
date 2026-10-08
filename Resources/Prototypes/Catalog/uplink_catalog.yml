@@ -1547,7 +1547,7 @@
   description: uplink-starter-kit-desc
   productEntity: ClothingBackpackDuffelSyndicateFilledStarterKit
   cost:
-    Telecrystal: 54 #DS-14 value
+    Telecrystal: 52 #DS-14 value
   categories:
   - UplinkPresets #DS14
   conditions:

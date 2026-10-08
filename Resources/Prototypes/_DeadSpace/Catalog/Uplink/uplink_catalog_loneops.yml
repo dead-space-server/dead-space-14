@@ -261,7 +261,7 @@
   productEntity: ClothingBackpackSatchelTaipanBundleMantis
   icon: { sprite: /Textures/_DeadSpace/Actions/mantisblades_actions.rsi, state: mantis-toggle }
   cost:
-    Telecrystal: 67
+    Telecrystal: 65
   categories:
   - UplinkPresets
   conditions:
@@ -277,7 +277,7 @@
   productEntity: CrateBundleNukeBulldog
   icon: { sprite: /Textures/Clothing/Mask/clown_security.rsi, state: icon }
   cost:
-    Telecrystal: 74
+    Telecrystal: 72
   categories:
   - UplinkPresets
   conditions:
@@ -293,7 +293,7 @@
   productEntity: ClothingBackpackSatchelTaipanBundleAP
   icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Pistols/deserteagle.rsi, state: icon }
   cost:
-    Telecrystal: 87
+    Telecrystal: 79
   categories:
   - UplinkPresets
   conditions:
@@ -309,7 +309,7 @@
   productEntity: CrateBundleNukeHristov
   icon: { sprite: /Textures/Objects/Weapons/Guns/Snipers/heavy_sniper.rsi, state: icon }
   cost:
-    Telecrystal: 95
+    Telecrystal: 89
   categories:
   - UplinkPresets
   conditions:
@@ -325,7 +325,7 @@
   productEntity: CrateBundleNukeJuggernaut
   icon: { sprite: /Textures/Clothing/Head/Hardsuits/cybersun.rsi, state: icon }
   cost:
-    Telecrystal: 101
+    Telecrystal: 99
   categories:
   - UplinkPresets
   conditions:
