@@ -868,6 +868,9 @@ public sealed class CelestialSystem : EntitySystem
             var moveDir = Vector2.Normalize(orb.VelocityDir + perpendicular * weave);
 
             var step = orb.Speed * frameTime;
+            if (!CanMove(uid))
+                continue;
+
             _transform.SetWorldPosition(uid, orbPos + moveDir * step);
 
             // стрельба мелкими лучами вдоль пути
@@ -1005,6 +1008,9 @@ public sealed class CelestialSystem : EntitySystem
                     if (toPlayer.Length() > 1.5f)
                         move += Vector2.Normalize(toPlayer) * 0.8f * frameTime;
                 }
+
+                if (!CanMove(uid))
+                    continue;
 
                 _transform.SetWorldPosition(uid, pos + move);
             }
@@ -1330,6 +1336,9 @@ public sealed class CelestialSystem : EntitySystem
     /// </summary>
     private void TeleportBoss(Entity<CelestialComponent> ent)
     {
+        if (!CanMove(ent))
+            return;
+
         var targets = GetTargets(ent, 5);
         if (targets.Count == 0)
             return;
@@ -1362,6 +1371,20 @@ public sealed class CelestialSystem : EntitySystem
     // ------------------------------------------------------------------
     // Утилиты
     // ------------------------------------------------------------------
+
+    /// <summary>
+    /// SetWorldPosition бросает DebugTools.Assert, если у сущности нет валидного
+    /// parent либо она не привязана к мапе (nullspace / root node). Такое бывает
+    /// у сущностей, уже уходящих на удаление, и у сущностей, заспавненных вне мапы.
+    /// </summary>
+    private bool CanMove(EntityUid uid)
+    {
+        if (TerminatingOrDeleted(uid))
+            return false;
+
+        var xform = Transform(uid);
+        return xform.ParentUid.IsValid() && xform.MapUid != null;
+    }
 
     private List<EntityUid> GetTargets(Entity<CelestialComponent> ent, int max)
     {
