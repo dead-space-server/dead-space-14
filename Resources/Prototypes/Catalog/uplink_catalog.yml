@@ -751,6 +751,11 @@
     whitelist:
       tags:
       - NukeOpsUplink
+#ds14-start
+    blacklist:
+      tags:
+      - LoneOpsUplink
+#ds14-end
 
 - type: listing
   id: UplinkSpeedLoaderMagnumAPAgent
@@ -1522,7 +1527,7 @@
   description: uplink-starter-kit-desc
   productEntity: ClothingBackpackDuffelSyndicateFilledStarterKit
   cost:
-    Telecrystal: 52 #DS-14 value
+    Telecrystal: 56 #DS-14 value
   categories:
   - UplinkPresets #DS14
   conditions:
@@ -1534,6 +1539,27 @@
       blacklist:
         components:
         - SurplusBundle
+
+#DS14-start
+- type: listing
+  id: UplinkStarterKitNukeOpsLone
+  name: uplink-starter-kit-name
+  description: uplink-starter-kit-desc
+  productEntity: ClothingBackpackDuffelSyndicateFilledStarterKit
+  cost:
+    Telecrystal: 54 #DS-14 value
+  categories:
+  - UplinkPresets #DS14
+  conditions:
+    - !type:StoreWhitelistCondition
+      whitelist:
+        tags:
+        - LoneOpsUplink
+    - !type:BuyerWhitelistCondition
+      blacklist:
+        components:
+        - SurplusBundle
+#DS14-end
 
 
 - type: listing
@@ -1796,6 +1822,11 @@
     whitelist:
       tags:
       - NukeOpsUplink
+#ds14-start
+    blacklist:
+      tags:
+      - LoneOpsUplink
+#ds14-end
 
 - type: listing
   id: UplinkScramImplanterAgent

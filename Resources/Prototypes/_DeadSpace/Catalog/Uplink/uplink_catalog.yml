@@ -20,89 +20,6 @@
       - LoneOpsUplink
 
 - type: listing
-  id: UplinkEmagLoneOps
-  name: uplink-emag-name
-  description: uplink-emag-desc
-  productEntity: EmagLoneOps
-  discountCategory: veryRareDiscounts
-  discountDownTo:
-    Telecrystal: 3
-  cost:
-    Telecrystal: 5
-  categories:
-  - UplinkDisruption
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
-      tags:
-      - LoneOpsUplink
-
-- type: listing
-  id: UplinkEswordDoubleLone
-  name: uplink-esword-double-name
-  description: uplink-esword-double-desc
-  icon: { sprite: /Textures/Objects/Weapons/Melee/e_sword_double.rsi, state: icon }
-  productEntity: BriefcaseWeaponESwordDoubleFilled
-  cost:
-    Telecrystal: 36
-  categories:
-  - UplinkWeaponry
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
-      tags:
-      - LoneOpsUplink
-  - !type:ListingLimitedStockCondition
-    stock: 1
-  - !type:BuyerWhitelistCondition
-    blacklist:
-      components:
-      - SurplusBundle
-
-- type: listing
-  id: UplinkMalorianLone
-  name: uplink-malorian-name
-  description: uplink-malorian-desc
-  productEntity: WeaponPistolMalorian
-  cost:
-    Telecrystal: 12
-  categories:
-  - UplinkWeaponry
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
-      tags:
-      - LoneOpsUplink
-  - !type:BuyerWhitelistCondition
-    blacklist:
-      components:
-      - SurplusBundle
-
-- type: listing
-  id: UplinkSandevistanLone
-  name: uplink-sandevistan-misanthropy-name
-  description: uplink-sandevistan-misanthropy-desc
-  icon: { sprite: _DeadSpace/Actions/implants_actions.rsi, state: sandevistan }
-  productEntity: SandevistanImplantCase
-  cost:
-    Telecrystal: 15
-  categories:
-  - UplinkImplants
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
-      tags:
-      - LoneOpsUplink
-  - !type:PopulationLimitedStockCondition
-    stock: 1
-    highPopulationStock: 1
-    highPopulationThreshold: 110
-  - !type:BuyerWhitelistCondition
-    blacklist:
-      components:
-      - SurplusBundle
-
-- type: listing
   id: UplinkSandevistanNukeopsCommander
   name: uplink-sandevistan-misanthropy-name
   description: uplink-sandevistan-misanthropy-desc
@@ -155,55 +72,6 @@
     blacklist:
       components:
       - SurplusBundle
-
-- type: listing
-  id: UplinkShortyNukeopsLone
-  name: uplink-shorty-name
-  description: uplink-shorty-lone-desc
-  icon: { sprite: _DeadSpace/Objects/Weapons/Guns/Shotguns/supershorty.rsi, state: icon }
-  productEntity: ClothingBackpackDuffelSyndicateFilledShotgunShortyLone
-  cost:
-    Telecrystal: 18
-  categories:
-  - UplinkWeaponry
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
-      tags:
-      - LoneOpsUplink
-  - !type:PopulationLimitedStockCondition
-    stock: 1
-    highPopulationStock: 1
-    highPopulationThreshold: 110
-  - !type:BuyerWhitelistCondition
-    blacklist:
-      components:
-      - SurplusBundle
-
-- type: listing
-  id: UplinkEswordDoubleAgents
-  name: uplink-esword-double-name
-  description: Воскрес и разнёс паблик. Только один к покупке.
-  icon: { sprite: /Textures/Objects/Weapons/Melee/e_sword_double.rsi, state: icon }
-  productEntity: EnergySwordDouble
-  cost:
-    Telecrystal: 20
-  categories:
-  - UplinkUltra
-  conditions:
-  - !type:StoreWhitelistCondition
-    blacklist:
-      tags:
-      - NukeOpsUplink
-      - LoneOpsUplink
-  - !type:BuyerAntagCondition
-    whitelist:
-    - TraitorUltra
-  - !type:BuyerWhitelistCondition
-    blacklist:
-      components:
-      - SurplusBundle
-
 
 - type: listing
   id: UplinkEnergyCrossbow
@@ -282,7 +150,6 @@
       blacklist:
         components:
           - SurplusBundle
-
 
 - type: listing
   id: UplinkSyndieSabre
@@ -470,7 +337,6 @@
     blacklist:
       tags:
       - NukeOpsUplink
-
 
 - type: listing
   id: UplinkArkalyseBundle
@@ -770,7 +636,7 @@
       - NukeOpsUplink
 
 - type: listing
-  id: UplinkCyberHypospray
+  id: UplinkCyberHyposprayNukeOps
   name: uplink-cyber-hypospray-name
   description: uplink-cyber-hypospray-desc
   productEntity: ADTCyberHypospray
@@ -778,7 +644,7 @@
   discountDownTo:
     Telecrystal: 6
   cost:
-    Telecrystal: 8
+    Telecrystal: 10
   categories:
   - UplinkChemicals
   conditions:
@@ -786,6 +652,9 @@
     whitelist:
       tags:
       - NukeOpsUplink
+    blacklist:
+      tags:
+      - LoneOpsUplink
 
 - type: listing
   id: UplinkFlippoSyndicateLighter
@@ -828,7 +697,7 @@
   discountDownTo:
     Telecrystal: 2
   cost:
-    Telecrystal: 3
+    Telecrystal: 4
   categories:
   - UplinkAmmo
   conditions:
@@ -836,6 +705,9 @@
     whitelist:
       tags:
       - NukeOpsUplink
+    blacklist:
+      tags:
+      - LoneOpsUplink
 
 - type: listing
   id: UplinkCombatMedipenNuke
@@ -1012,26 +884,6 @@
       - NukeOpsUplink
 
 - type: listing
-  id: UplinkSyndicateChemBundle
-  name: продвинутый набор химического синтеза
-  description: Источник огромного количества реагентов для варки вашего ширева. Рецепт крокодила в комплекте не идёт.
-  icon: { sprite: _DeadSpace/Structures/Machines/VendingMachines/chemvend.rsi, state: deny }
-  productEntity: ClothingBackpackSatchelChemistrySyndicateChemBundle
-  cost:
-    Telecrystal: 25
-  categories:
-  - UplinkChemicals
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
-      tags:
-      - LoneOpsUplink
-  - !type:BuyerWhitelistCondition
-    blacklist:
-      components:
-      - SurplusBundle
-
-- type: listing
   id: UplinkThermalVisorNuke
   name: uplink-thermal-visor-name
   description: uplink-thermal-visor-desc
@@ -1086,8 +938,320 @@
     Telecrystal: 4
   categories:
   - UplinkAmmo
+  conditions:
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+      - LoneOpsUplink
+
+- type: listing
+  id: UplinkHristovMagAPNukeOps
+  name: Магазин бронебойных патронов для Христова
+  description: Заряд сваги каждому на прицельной линии.//ББ
+  productEntity: MagazineHristovAP
+  icon: { sprite: /Textures/Objects/Weapons/Guns/Ammunition/Magazine/magazine_heavy_sniper.rsi, state: iconap }
+  cost:
+    Telecrystal: 5
+  categories:
+  - UplinkAmmo
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+    blacklist:
+      tags:
+      - LoneOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkNukeMain
+  name: Основа оперативника
+  description: Самые базовые вещи, на которых строится почти любой закуп оперативника. !КРОМЕ КЛИНКОВ!
+  productEntity: ClothingBackpackSatchelTaipanBundleMain
+  icon: { sprite: /Textures/Objects/Weapons/Melee/e_sword.rsi, state: icon }
+  cost:
+    Telecrystal: 29
+  categories:
+  - UplinkPresets
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkNukeMantis1
+  name: Пресет "Богомолы"
+  description: Используемый опытным оперативником набор вещей, основа которого - клинки богомола.
+  productEntity: ClothingBackpackSatchelTaipanBundleMantis
+  icon: { sprite: /Textures/_DeadSpace/Actions/mantisblades_actions.rsi, state: mantis-toggle }
+  cost:
+    Telecrystal: 69
+  categories:
+  - UplinkPresets
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+    blacklist:
+      tags:
+      - LoneOpsUplink
+
+- type: listing
+  id: UplinkNukeJuggernautNukeOps
+  name: Пресет "Джаггернаут"
+  description: Используемый опытным оперативником набор вещей, основа которого - джаггернаут.
+  productEntity: CrateBundleNukeJuggernaut
+  icon: { sprite: /Textures/Clothing/Head/Hardsuits/cybersun.rsi, state: icon }
+  cost:
+    Telecrystal: 103
+  categories:
+  - UplinkPresets
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+    blacklist:
+      tags:
+      - LoneOpsUplink
+
+- type: listing
+  id: UplinkNukeHristovNukeOps
+  name: Пресет "Христов"
+  description: Используемый опытным оперативником набор вещей, основа которого - Христов.
+  productEntity: CrateBundleNukeHristov
+  icon: { sprite: /Textures/Objects/Weapons/Guns/Snipers/heavy_sniper.rsi, state: icon }
+  cost:
+    Telecrystal: 97
+  categories:
+  - UplinkPresets
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+    blacklist:
+      tags:
+      - LoneOpsUplink
+
+- type: listing
+  id: UplinkNukeХС
+  name: Пресет "хС-67"
+  description: Используемый опытным оперативником набор вещей, основа которого - хС-67.
+  productEntity: CrateBundleNukeхС67
+  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Rifels/xc67.rsi, state: icon }
+  cost:
+    Telecrystal: 79
+  categories:
+  - UplinkPresets
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkNukeAPNukeOps
+  name: Пресет "Дигл"
+  description: Используемый опытным оперативником набор вещей, основа которого - Пустынный Орёл на бронебойных боеприпасах.
+  productEntity: ClothingBackpackSatchelTaipanBundleAP
+  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Pistols/deserteagle.rsi, state: icon }
+  cost:
+    Telecrystal: 89
+  categories:
+  - UplinkPresets
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+    blacklist:
+      tags:
+      - LoneOpsUplink
+
+- type: listing
+  id: UplinkNukeBulldog
+  name: Пресет "Бульдог"
+  description: Используемый опытным оперативником набор вещей, основа которого Дробовик и Рапира.
+  productEntity: CrateBundleNukeBulldog
+  icon: { sprite: /Textures/Clothing/Mask/clown_security.rsi, state: icon }
+  cost:
+    Telecrystal: 76
+  categories:
+  - UplinkPresets
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+    blacklist:
+      tags:
+      - LoneOpsUplink
+
+- type: listing
+  id: UplinkRPG70
+  name: РПГ70
+  description: Невероятно мощный одноразовый гранатомёт для уничтожения структур. Почти не наносит вреда людям.
+  productEntity: WeaponLauncherRPG70
+  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Launchers/rpg70.rsi, state: icon }
+  cost:
+    Telecrystal: 6
+  categories:
+  - UplinkExplosives
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: UplinkSynKatana
+  name: Катана Синдиката
+  description: Альтернатива энергетическому мечу в виде стальной катаны. Не обладает структурным уроном.
+  productEntity: SynKatana
+  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Melee/synkatana.rsi, state: icon }
+  cost:
+    Telecrystal: 8
+  categories:
+  - UplinkWeaponry
+
+- type: listing
+  id: UplinkShingen
+  name: uplink-shingen-name
+  description: uplink-shingen-desc
+  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Smart/shingen2.rsi, state: icon }
+  productEntity: ShingenCase
+  cost:
+    Telecrystal: 18
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkShingenAmmo
+  name: uplink-shingen-ammo-name
+  description: uplink-shingen-ammo-desc
+  productEntity: MagazineSmartWeaponShingen
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkAmmo
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkSmartlinkImplanter
+  name: uplink-smartlink-implanter-name
+  description: uplink-smartlink-implanter-desc
+  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Smart/case.rsi, state: smartlink }
+  productEntity: SmartLinkImplanter
+  cost:
+    Telecrystal: 2
+  categories:
+    - UplinkImplants
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkMagazinePistolCaselessRiflePoisoned
+  name: uplink-pistol-magazine-caseless-poisoned-name
+  description: uplink-pistol-magazine-caseless-poisoned-desc
+  icon: { sprite: /Textures/Objects/Weapons/Guns/Ammunition/Magazine/CaselessRifle/caseless_pistol_mag.rsi, state: red-icon }
+  productEntity: MagazinePistolCaselessRiflePoisoned
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkAmmo
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - LoneOpsUplink
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkMagazinePistolCaselessRiflePoisonedNukeOps
+  name: uplink-pistol-magazine-caseless-poisoned-name
+  description: uplink-pistol-magazine-caseless-poisoned-desc
+  icon: { sprite: /Textures/Objects/Weapons/Guns/Ammunition/Magazine/CaselessRifle/caseless_pistol_mag.rsi, state: red-icon }
+  productEntity: MagazinePistolCaselessRiflePoisoned
+  cost:
+    Telecrystal: 3
+  categories:
+  - UplinkAmmo
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+    blacklist:
+      tags:
+      - LoneOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
 
 # Traitor Ultra
+- type: listing
+  id: UplinkEswordDoubleAgents
+  name: uplink-esword-double-name
+  description: Воскрес и разнёс паблик. Только один к покупке.
+  icon: { sprite: /Textures/Objects/Weapons/Melee/e_sword_double.rsi, state: icon }
+  productEntity: EnergySwordDouble
+  cost:
+    Telecrystal: 20
+  categories:
+  - UplinkUltra
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+      - LoneOpsUplink
+  - !type:BuyerAntagCondition
+    whitelist:
+    - TraitorUltra
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
 - type: listing
   id: UplinkUltraNukeHardsuit
   name: uplink-hardsuit-syndie-name
@@ -1204,231 +1368,3 @@
   - !type:BuyerAntagCondition
     whitelist:
     - TraitorUltra
-
-
-- type: listing
-  id: UplinkNukeMain
-  name: Основа оперативника
-  description: Самые базовые вещи, на которых строится почти любой закуп оперативника. !КРОМЕ КЛИНКОВ!
-  productEntity: ClothingBackpackSatchelTaipanBundleMain
-  icon: { sprite: /Textures/Objects/Weapons/Melee/e_sword.rsi, state: icon }
-  cost:
-    Telecrystal: 29
-  categories:
-  - UplinkPresets
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
-      tags:
-      - NukeOpsUplink
-
-- type: listing
-  id: UplinkNukeMantis1
-  name: Пресет "Богомолы"
-  description: Используемый опытным оперативником набор вещей, основа которого - клинки богомола.
-  productEntity: ClothingBackpackSatchelTaipanBundleMantis
-  icon: { sprite: /Textures/_DeadSpace/Actions/mantisblades_actions.rsi, state: mantis-toggle }
-  cost:
-    Telecrystal: 65
-  categories:
-  - UplinkPresets
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
-      tags:
-      - NukeOpsUplink
-
-- type: listing
-  id: UplinkNukeJuggernaut
-  name: Пресет "Джаггернаут"
-  description: Используемый опытным оперативником набор вещей, основа которого - джаггернаут.
-  productEntity: CrateBundleNukeJuggernaut
-  icon: { sprite: /Textures/Clothing/Head/Hardsuits/cybersun.rsi, state: icon }
-  cost:
-    Telecrystal: 99
-  categories:
-  - UplinkPresets
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
-      tags:
-      - NukeOpsUplink
-
-- type: listing
-  id: UplinkNukeHristov
-  name: Пресет "Христов"
-  description: Используемый опытным оперативником набор вещей, основа которого - Христов.
-  productEntity: CrateBundleNukeHristov
-  icon: { sprite: /Textures/Objects/Weapons/Guns/Snipers/heavy_sniper.rsi, state: icon }
-  cost:
-    Telecrystal: 89
-  categories:
-  - UplinkPresets
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
-      tags:
-      - NukeOpsUplink
-
-- type: listing
-  id: UplinkNukeХС
-  name: Пресет "хС-67"
-  description: Используемый опытным оперативником набор вещей, основа которого - хС-67.
-  productEntity: CrateBundleNukeхС67
-  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Rifels/xc67.rsi, state: icon }
-  cost:
-    Telecrystal: 79
-  categories:
-  - UplinkPresets
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
-      tags:
-      - NukeOpsUplink
-
-- type: listing
-  id: UplinkNukeAP
-  name: Пресет "Дигл"
-  description: Используемый опытным оперативником набор вещей, основа которого - Пустынный Орёл на бронебойных боеприпасах.
-  productEntity: ClothingBackpackSatchelTaipanBundleAP
-  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Pistols/deserteagle.rsi, state: icon }
-  cost:
-    Telecrystal: 79
-  categories:
-  - UplinkPresets
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
-      tags:
-      - NukeOpsUplink
-
-- type: listing
-  id: UplinkNukeBulldogFreak
-  name: Пресет "Бульдог"
-  description: Используемый опытным оперативником набор вещей, основа которого Дробовик и Рапира.
-  productEntity: CrateBundleNukeBulldog
-  icon: { sprite: /Textures/Clothing/Mask/clown_security.rsi, state: icon }
-  cost:
-    Telecrystal: 72
-  categories:
-  - UplinkPresets
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
-      tags:
-      - NukeOpsUplink
-
-- type: listing
-  id: UplinkRPG70
-  name: РПГ70
-  description: Невероятно мощный одноразовый гранатомёт для уничтожения структур. Почти не наносит вреда людям.
-  productEntity: WeaponLauncherRPG70
-  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Launchers/rpg70.rsi, state: icon }
-  cost:
-    Telecrystal: 6
-  categories:
-  - UplinkExplosives
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
-      tags:
-      - NukeOpsUplink
-  - !type:ListingLimitedStockCondition
-    stock: 1
-
-- type: listing
-  id: UplinkSynKatana
-  name: Катана Синдиката
-  description: Альтернатива энергетическому мечу в виде стальной катаны. Не обладает структурным уроном.
-  productEntity: SynKatana
-  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Melee/synkatana.rsi, state: icon }
-  cost:
-    Telecrystal: 8
-  categories:
-  - UplinkWeaponry
-
-- type: listing
-  id: UplinkIchorMedipenLone
-  name: Медипен ихора
-  description: Способен поднять даже быка, а тебя и подавно.
-  icon: { sprite: _DeadSpace/Objects/Specific/Medical/medipen.rsi, state: ichor }
-  productEntity: IchorMedipen
-  cost:
-    Telecrystal: 4
-  categories:
-  - UplinkChemicals
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
-      tags:
-      - LoneOpsUplink
-
-- type: listing
-  id: UplinkShingen
-  name: uplink-shingen-name
-  description: uplink-shingen-desc
-  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Smart/shingen2.rsi, state: icon }
-  productEntity: ShingenCase
-  cost:
-    Telecrystal: 18
-  categories:
-  - UplinkWeaponry
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
-      tags:
-      - NukeOpsUplink
-  - !type:BuyerWhitelistCondition
-    blacklist:
-      components:
-      - SurplusBundle
-
-- type: listing
-  id: UplinkShingenAmmo
-  name: uplink-shingen-ammo-name
-  description: uplink-shingen-ammo-desc
-  productEntity: MagazineSmartWeaponShingen
-  cost:
-    Telecrystal: 2
-  categories:
-  - UplinkAmmo
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
-      tags:
-      - NukeOpsUplink
-  - !type:BuyerWhitelistCondition
-    blacklist:
-      components:
-      - SurplusBundle
-
-- type: listing
-  id: UplinkSmartlinkImplanter
-  name: uplink-smartlink-implanter-name
-  description: uplink-smartlink-implanter-desc
-  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Smart/case.rsi, state: smartlink }
-  productEntity: SmartLinkImplanter
-  cost:
-    Telecrystal: 2
-  categories:
-    - UplinkImplants
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
-      tags:
-      - NukeOpsUplink
-  - !type:BuyerWhitelistCondition
-    blacklist:
-      components:
-      - SurplusBundle
-
-- type: listing
-  id: UplinkMagazinePistolCaselessRiflePoisoned
-  name: uplink-pistol-magazine-caseless-poisoned-name
-  description: uplink-pistol-magazine-caseless-poisoned-desc
-  icon: { sprite: /Textures/Objects/Weapons/Guns/Ammunition/Magazine/CaselessRifle/caseless_pistol_mag.rsi, state: red-icon }
-  productEntity: MagazinePistolCaselessRiflePoisoned
-  cost:
-    Telecrystal: 2
-  categories:
-  - UplinkAmmo
