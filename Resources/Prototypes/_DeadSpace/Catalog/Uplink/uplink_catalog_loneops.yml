@@ -1,5 +1,5 @@
 - type: listing
-  id: UplinkEmagLoneOps
+  id: UplinkEmagNukeOpsLone
   name: uplink-emag-name
   description: uplink-emag-desc
   productEntity: EmagLoneOps
@@ -17,7 +17,7 @@
       - LoneOpsUplink
 
 - type: listing
-  id: UplinkEswordDoubleLone
+  id: UplinkEswordDoubleNukeOpsLone
   name: uplink-esword-double-name
   description: uplink-esword-double-desc
   icon: { sprite: /Textures/Objects/Weapons/Melee/e_sword_double.rsi, state: icon }
@@ -352,3 +352,23 @@
     whitelist:
       tags:
       - LoneOpsUplink
+
+- type: listing
+  id: UplinkArkalysNukeOpsLone
+  name: uplink-arkalyse-bundle-name
+  description: uplink-arkalyse-bundle-desc
+  icon: { sprite: _DeadSpace/Objects/Specific/Arkalyse/arkalyse_book.rsi, state: icon }
+  productEntity: BoxArkalyse
+  cost:
+    Telecrystal: 15
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle

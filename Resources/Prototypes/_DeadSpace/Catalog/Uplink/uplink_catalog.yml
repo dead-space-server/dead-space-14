@@ -20,6 +20,89 @@
       - LoneOpsUplink
 
 - type: listing
+  id: UplinkEmagLoneOps
+  name: uplink-emag-name
+  description: uplink-emag-desc
+  productEntity: EmagLoneOps
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+    Telecrystal: 3
+  cost:
+    Telecrystal: 5
+  categories:
+  - UplinkDisruption
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+
+- type: listing
+  id: UplinkEswordDoubleLone
+  name: uplink-esword-double-name
+  description: uplink-esword-double-desc
+  icon: { sprite: /Textures/Objects/Weapons/Melee/e_sword_double.rsi, state: icon }
+  productEntity: BriefcaseWeaponESwordDoubleFilled
+  cost:
+    Telecrystal: 36
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+  - !type:ListingLimitedStockCondition
+    stock: 1
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkMalorianLone
+  name: uplink-malorian-name
+  description: uplink-malorian-desc
+  productEntity: WeaponPistolMalorian
+  cost:
+    Telecrystal: 12
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkSandevistanLone
+  name: uplink-sandevistan-misanthropy-name
+  description: uplink-sandevistan-misanthropy-desc
+  icon: { sprite: _DeadSpace/Actions/implants_actions.rsi, state: sandevistan }
+  productEntity: SandevistanImplantCase
+  cost:
+    Telecrystal: 15
+  categories:
+  - UplinkImplants
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+  - !type:PopulationLimitedStockCondition
+    stock: 1
+    highPopulationStock: 1
+    highPopulationThreshold: 110
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
   id: UplinkSandevistanNukeopsCommander
   name: uplink-sandevistan-misanthropy-name
   description: uplink-sandevistan-misanthropy-desc
@@ -394,6 +477,9 @@
     whitelist:
       tags:
       - NukeOpsUplink
+    blacklist:
+      tags:
+      - LoneOpsUplink
 
 - type: listing
   id: UplinkAdrenalineImplanter

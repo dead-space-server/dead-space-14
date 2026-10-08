@@ -37,6 +37,7 @@ public abstract class SharedChainGunSystem : EntitySystem
             proj.PullAcceleration = ent.Comp.PullAcceleration;
             proj.MaxPullSpeed = ent.Comp.MaxPullSpeed;
             proj.ArrivalDistance = ent.Comp.ArrivalDistance;
+            proj.MaxDistance = ent.Comp.MaxDistance;
         }
 
         SayPhrase(args.User, ent.Comp);
@@ -75,7 +76,21 @@ public abstract class SharedChainGunSystem : EntitySystem
         var query = EntityQueryEnumerator<NinjaJohyoProjectileComponent>();
         while (query.MoveNext(out var uid, out var proj))
         {
-            if (!proj.Pulling || proj.Target == null || proj.Shooter == null)
+            if (proj.Shooter == null)
+                continue;
+
+            var targetPos = _transform.GetWorldPosition(uid);
+            var shooterPos = _transform.GetWorldPosition(proj.Shooter.Value);
+            var diff = shooterPos - targetPos;
+            var distance = diff.Length();
+
+            if (distance >= proj.MaxDistance)
+            {
+                QueueDel(uid);
+                continue;
+            }
+
+            if (!proj.Pulling || proj.Target == null)
                 continue;
 
             if (!Exists(proj.Target.Value) || !Exists(proj.Shooter.Value))
@@ -95,11 +110,6 @@ public abstract class SharedChainGunSystem : EntitySystem
                 QueueDel(uid);
                 continue;
             }
-
-            var targetPos = _transform.GetWorldPosition(proj.Target.Value);
-            var shooterPos = _transform.GetWorldPosition(proj.Shooter.Value);
-            var diff = shooterPos - targetPos;
-            var distance = diff.Length();
 
             if (distance <= proj.ArrivalDistance)
             {

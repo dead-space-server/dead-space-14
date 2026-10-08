@@ -10,9 +10,11 @@ using Content.Shared.Item;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
+using Content.Shared.Inventory.VirtualItem;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
+
 
 namespace Content.Server.DeadSpace.ItemTransfer;
 
@@ -226,7 +228,7 @@ public sealed class ItemTransferSystem : EntitySystem
             !_hands.TryGetEmptyHand((target, targetHandsComp), out var emptyHand))
             return false;
 
-        if (!HasComp<ItemComponent>(item) ||
+        if (!HasComp<ItemComponent>(item) || HasComp<VirtualItemComponent>(item) ||
             !_hands.CanPickupToHand(target, item, emptyHand, handsComp: targetHandsComp))
             return false;
 

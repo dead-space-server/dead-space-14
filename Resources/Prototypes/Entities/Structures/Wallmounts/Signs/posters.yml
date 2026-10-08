@@ -45,6 +45,9 @@
     drawdepth: WallTops
     sprite: Structures/Wallmounts/posters.rsi
     state: poster_broken
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Card
   - type: Destructible
     thresholds:
     - trigger:

@@ -16,7 +16,10 @@ public sealed partial class NinjaJohyoComponent : Component
     public float MaxPullSpeed = 15f;
 
     [DataField]
-    public float ArrivalDistance = 1.5f;
+    public float ArrivalDistance = 2f;
+
+    [DataField]
+    public float MaxDistance = 15f;
 
     [DataField]
     public SpriteSpecifier ChainSprite =
@@ -35,5 +38,6 @@ public sealed partial class NinjaJohyoProjectileComponent : Component
     public float PullAcceleration;
     public float MaxPullSpeed;
     public float ArrivalDistance;
+    public float MaxDistance;
     public bool Pulling;
 }

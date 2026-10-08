@@ -1,0 +1,86 @@
+- type: entity
+  parent: StorageTank
+  id: PickleBarrelBase
+  abstract: true
+  name: fermentation barrel
+  description: A sealed barrel for curing, pickling, and short-round fruit ferments. Needs a warm room.
+  components:
+  - type: InteractionOutline
+  - type: FermentationBarrel
+  # Like MachineFrame: blocks walking, no InteractImpassable so items beside/on it stay clickable.
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.35,0.25,0.35"
+        density: 55
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: RefillableSolution
+    solution: tank
+  - type: DrainableSolution
+    solution: tank
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        maxVol: 200
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.FermentationVisuals.State:
+        enum.FermentationVisuals.Layer:
+          Idle: { state: idle }
+          Fermenting: { state: fermenting }
+          Ready: { state: idle }
+  - type: ContainerContainer
+    containers:
+      pickle_produce: !type:Container
+        showEnts: False
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: Wood
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 80
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 30
+      behaviors:
+      - !type:SpillBehavior
+        solution: tank
+      - !type:EmptyAllContainersBehaviour
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WoodDestroy
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Construction
+    graph: PickleBarrelWood
+    node: barrel
+
+- type: entity
+  parent: PickleBarrelBase
+  id: PickleBarrelWood
+  name: wooden curing barrel
+  description: Hammered together from a few planks. Good enough for station curing.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Pickles/barrel_wood.rsi
+    noRot: true
+    layers:
+    - state: idle
+      map: [ "enum.FermentationVisuals.Layer" ]
+  - type: PhysicalComposition
+    materialComposition:
+      Wood: 300
+  - type: Construction
+    graph: PickleBarrelWood
+    node: barrel
