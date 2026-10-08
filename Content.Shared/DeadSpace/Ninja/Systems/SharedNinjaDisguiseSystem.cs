@@ -103,6 +103,7 @@ public abstract class SharedNinjaDisguiseSystem : EntitySystem
             Age = humanoid.Age,
             Voice = humanoid.Voice,
             PermanentlyHidden = new HashSet<HumanoidVisualLayers>(humanoid.PermanentlyHidden),
+            HiddenLayers = new Dictionary<HumanoidVisualLayers, SlotFlags>(humanoid.HiddenLayers),
             CustomBaseLayers = new Dictionary<HumanoidVisualLayers, CustomBaseLayerInfo>(humanoid.CustomBaseLayers),
             HairGradientEnabled = humanoid.HairGradientEnabled,
             HairGradientColor = humanoid.HairGradientColor,
@@ -126,7 +127,7 @@ public abstract class SharedNinjaDisguiseSystem : EntitySystem
         humanoid.Comp.PermanentlyHidden = new HashSet<HumanoidVisualLayers>(saved.PermanentlyHidden);
         humanoid.Comp.CustomBaseLayers = new Dictionary<HumanoidVisualLayers, CustomBaseLayerInfo>(saved.CustomBaseLayers);
 
-        humanoid.Comp.HiddenLayers = new Dictionary<HumanoidVisualLayers, SlotFlags>();
+        humanoid.Comp.HiddenLayers = new Dictionary<HumanoidVisualLayers, SlotFlags>(saved.HiddenLayers);
 
         humanoid.Comp.HairGradientEnabled = saved.HairGradientEnabled;
         humanoid.Comp.HairGradientColor = saved.HairGradientColor;

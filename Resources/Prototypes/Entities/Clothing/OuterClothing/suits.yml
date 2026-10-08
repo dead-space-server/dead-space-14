@@ -177,8 +177,11 @@
         Slash: 0.6
         Piercing: 0.6
         Heat: 0.6
+        Radiation: 0.6
   - type: StaminaResistance #DS14
     damageCoefficient: 0.5
+  - type: ExplosionResistance
+    damageCoefficient: 0.75
   - type: Appearance #DS14
   # core ninja suit stuff
   - type: NinjaSuit

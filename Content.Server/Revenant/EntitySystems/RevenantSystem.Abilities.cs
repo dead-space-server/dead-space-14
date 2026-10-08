@@ -46,6 +46,7 @@ using Content.Shared.Roles.Components; //DS14
 using Robust.Shared.Audio.Systems; //DS14
 using Robust.Shared.Player; //DS14
 using Content.Shared.Actions; //DS14
+using Content.Shared.Ninja.Components; //DS14
 
 namespace Content.Server.Revenant.EntitySystems;
 
@@ -393,7 +394,7 @@ public sealed partial class RevenantSystem
         if (args.Handled)
             return;
 
-        if (HasComp<MindShieldComponent>(args.Target))
+        if (HasComp<MindShieldComponent>(args.Target) || HasComp<SpaceNinjaComponent>(args.Target))
         {
             _popup.PopupEntity(Loc.GetString("revenant-sleep-too-powerful"), uid, uid);
             return;

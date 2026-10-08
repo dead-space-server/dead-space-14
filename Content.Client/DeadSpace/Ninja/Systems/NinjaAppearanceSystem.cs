@@ -14,7 +14,9 @@ using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Shared.Containers;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations;
+using Robust.Shared.Utility;
 
 namespace Content.Client.DeadSpace.Ninja.Systems;
 
@@ -172,6 +174,26 @@ public sealed partial class NinjaAppearanceSystem : SharedNinjaAppearanceSystem
             _applied[item] = (prefix, style, visible);
             _item.VisualsChanged(item);
         }
+    }
+
+    public SpriteSpecifier? RecolorStoredSprite(EntityUid item, SpriteSpecifier storedSprite)
+    {
+        if (!TryComp<NinjaAppearanceItemComponent>(item, out var itemComp) ||
+            storedSprite is not SpriteSpecifier.Rsi rsi)
+        {
+            return null;
+        }
+
+        var (prefix, style, _) = ResolveAppearance(item, itemComp);
+
+        var rsiResource = _cache.GetResource<RSIResource>(SpriteSpecifierSerializer.TextureRoot / rsi.RsiPath);
+        if (TryGetFirstState(rsiResource.RSI, GetColorCandidates(StripPrefixes(rsi.RsiState), prefix, style), out var candidate) &&
+            candidate != rsi.RsiState)
+        {
+            return new SpriteSpecifier.Rsi(rsi.RsiPath, candidate);
+        }
+
+        return null;
     }
 
     private (string Prefix, NinjaStyle Style, bool Visible) ResolveAppearance(EntityUid item, NinjaAppearanceItemComponent itemComp)

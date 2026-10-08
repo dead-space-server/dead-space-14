@@ -15,7 +15,23 @@
       "directions": 4
     },
     {
+      "name": "red-equipped-BACKPACK",
+      "directions": 4
+    },
+    {
+      "name": "blue-equipped-BACKPACK",
+      "directions": 4
+    },
+    {
       "name": "equipped-BELT",
+      "directions": 4
+    },
+    {
+      "name": "red-equipped-BELT",
+      "directions": 4
+    },
+    {
+      "name": "blue-equipped-BELT",
       "directions": 4
     },
     {

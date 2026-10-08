@@ -3,6 +3,7 @@
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
+using Content.Shared.Inventory;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -41,6 +42,9 @@ public sealed class NinjaDisguiseAppearance
 
     [DataField]
     public HashSet<HumanoidVisualLayers> PermanentlyHidden = new();
+
+    [DataField]
+    public Dictionary<HumanoidVisualLayers, SlotFlags> HiddenLayers = new();
 
     [DataField]
     public Dictionary<HumanoidVisualLayers, CustomBaseLayerInfo> CustomBaseLayers = new();

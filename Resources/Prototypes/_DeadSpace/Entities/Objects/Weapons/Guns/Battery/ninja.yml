@@ -69,7 +69,8 @@
   - type: NinjaJohyo
     pullAcceleration: 400
     maxPullSpeed: 15
-    arrivalDistance: 0.5
+    arrivalDistance: 1
+    maxDistance: 10
     chainSprite:
       sprite: _DeadSpace/Objects/Weapons/Guns/ninja.rsi
       state: chain
@@ -88,6 +89,7 @@
   - type: Sprite
     noRot: false
     sprite: _DeadSpace/Objects/Weapons/Guns/ninja.rsi
+    rotation: 180
     layers:
       - state: kunai_projectile
   - type: Physics
@@ -106,14 +108,6 @@
     stunAmount: 1
     knockdownAmount: 1.5 
     drop: true
-  - type: TriggerOnCollide
-    fixtureID: projectile
-  - type: TimedDespawn
-    lifetime: 0.2
-  - type: TriggerOnEmbed
-  - type: RemoveComponentsOnTrigger
-    components: 
-    - type: TimedDespawn
 
 - type: entity
   id: WeaponNinjaNet
