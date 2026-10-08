@@ -142,26 +142,6 @@
       - SurplusBundle
 
 - type: listing
-  id: UplinkSyndicateChemBundle
-  name: продвинутый набор химического синтеза
-  description: Источник огромного количества реагентов для варки вашего ширева. Рецепт крокодила в комплекте не идёт.
-  icon: { sprite: _DeadSpace/Structures/Machines/VendingMachines/chemvend.rsi, state: deny }
-  productEntity: ClothingBackpackSatchelChemistrySyndicateChemBundle
-  cost:
-    Telecrystal: 25
-  categories:
-  - UplinkChemicals
-  conditions:
-  - !type:StoreWhitelistCondition
-    whitelist:
-      tags:
-      - LoneOpsUplink
-  - !type:BuyerWhitelistCondition
-    blacklist:
-      components:
-      - SurplusBundle
-
-- type: listing
   id: UplinkMagazineEagleAPLone
   name: uplink-magazine-eagle-ap-name
   description: uplink-magazine-eagle-ap-desc
