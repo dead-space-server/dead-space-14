@@ -21,5 +21,12 @@ public sealed partial class HeadsetComponent : Component
     // DS14-start
     [DataField]
     public Color Color = Color.Lime;
+
+    /// <summary>
+    ///     Конечный цвет градиента, которым имя говорящего отображается в радиочате.
+    ///     Если не задан — имя рисуется одним цветом <see cref="Color"/>.
+    /// </summary>
+    [DataField]
+    public Color? ColorEnd;
     // DS14-end
 }

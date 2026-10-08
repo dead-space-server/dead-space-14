@@ -188,7 +188,14 @@ public sealed class RadioSystem : EntitySystem
 
         // DS14-start
 
-        var headsetColor = TryComp(radioSource, out HeadsetComponent? headset) ? headset.Color : channel.Color;
+        var headsetColor = channel.Color;
+        Color? headsetColorEnd = null;
+
+        if (TryComp(radioSource, out HeadsetComponent? headset))
+        {
+            headsetColor = headset.Color;
+            headsetColorEnd = headset.ColorEnd;
+        }
 
         var job = String.Empty;
         if (_inventory.HasSlot(messageSource, "id"))
@@ -208,6 +215,11 @@ public sealed class RadioSystem : EntitySystem
             job = $"\\[{job}\\] ";
         }
 
+        // если у гарнитуры задан конечный цвет, имя говорящего рисуется градиентом.
+        var headsetName = headsetColorEnd is { } colorEnd && colorEnd != headsetColor
+            ? ChatMarkup.Gradient($"{job}{name}", headsetColor, colorEnd)
+            : $"{job}{name}";
+
         content = Highlight(content);
         ProtoId<LanguagePrototype>? languageId = null;
 
@@ -226,6 +238,7 @@ public sealed class RadioSystem : EntitySystem
             ("name", name),
             ("message", content),
             ("headset-color", headsetColor),
+            ("headset-name", headsetName),
             ("job", job));
 
         // DS14-end
@@ -262,6 +275,7 @@ public sealed class RadioSystem : EntitySystem
             ("name", name),
             ("message", lexiconContent),
             ("headset-color", headsetColor),
+            ("headset-name", headsetName),
             ("job", job));
 
             var chatLexicon = new ChatMessage(
