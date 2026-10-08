@@ -1,0 +1,12 @@
+uniform lowp float distortion;
+
+void fragment() {
+    vec2 uv = UV;
+    uv.x += sin(uv.y * 20.0 + TIME * 3.0) * distortion;
+    uv.y += cos(uv.x * 18.0 + TIME * 2.4) * distortion;
+
+    vec4 base = texture(TEXTURE, uv);
+    vec3 tint = mix(base.rgb, vec3(0.4, 0.5, 1.0), 0.4);
+    float fade = smoothstep(0.0, 0.35, base.a);
+    COLOR = vec4(tint, base.a * 0.75 * fade);
+}
