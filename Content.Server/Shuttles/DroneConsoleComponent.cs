@@ -13,6 +13,9 @@ public sealed partial class DroneConsoleComponent : Component
     [DataField("components", required: true)]
     public ComponentRegistry Components = default!;
 
+    [DataField("ignoreStation")]
+    public bool IgnoreStation;
+
     /// <summary>
     /// <see cref="ShuttleConsoleComponent"/> that we're proxied into.
     /// </summary>

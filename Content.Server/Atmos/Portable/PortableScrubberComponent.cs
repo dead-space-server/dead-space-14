@@ -43,6 +43,7 @@ namespace Content.Server.Atmos.Portable
             Gas.Halon,
             Gas.Zauker,
             Gas.Antinoblium,
+            Gas.Psychogen,
             // DS14-end
         };
 

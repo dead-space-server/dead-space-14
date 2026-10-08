@@ -24,6 +24,32 @@ public sealed class AreaEchoTest
 {
     private const string Boundary = "AreaEchoTestBoundary";
 
+    [Test]
+    public void OccludedEchoLosesHighFrequenciesWithoutShorteningItsTail()
+    {
+        var room = new AreaEchoSystem.RoomAcoustics(EntityUid.Invalid, 40f, 1f, 1f,
+            Vector2.Zero, 20f, 40f, 1f, Vector2.Zero, 40f);
+        var clear = AreaEchoSystem.CreatePreset(room, Vector2.Zero, Matrix3x2.Identity, Angle.Zero, 1f);
+        Assert.That(AreaEchoSystem.MuffleReverb(clear, 1f, 0f), Is.EqualTo(clear));
+
+        var previous = clear;
+        foreach (var occlusion in new[] { 1f, 3f, AtmosphericAudio.VacuumOcclusion })
+        {
+            var muffled = AreaEchoSystem.MuffleReverb(clear, 1f, occlusion);
+            Assert.Multiple(() =>
+            {
+                Assert.That(muffled.Gain, Is.LessThan(previous.Gain));
+                Assert.That(muffled.GainHF, Is.LessThan(previous.GainHF),
+                    "A quiet but bright wet path must not bypass the dry path's low-pass filter.");
+                Assert.That(muffled.DecayHFRatio, Is.LessThanOrEqualTo(previous.DecayHFRatio));
+                Assert.That(muffled.DecayTime, Is.EqualTo(clear.DecayTime));
+                Assert.That(muffled.EchoTime, Is.EqualTo(clear.EchoTime));
+                Assert.That(muffled.EchoDepth, Is.EqualTo(clear.EchoDepth));
+            });
+            previous = muffled;
+        }
+    }
+
     [TestPrototypes]
     private const string Prototypes = @"
 - type: entity

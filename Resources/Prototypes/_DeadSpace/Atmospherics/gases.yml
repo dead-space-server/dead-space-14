@@ -69,3 +69,17 @@
   color: FF66CC
   reagent: Antinoblium
   pricePerMole: 20
+
+- type: gas
+  id: Psychogen
+  name: gases-psychogen
+  specificHeat: 40
+  heatCapacityRatio: 1.33
+  molarMass: 30
+  gasOverlaySprite: /Textures/Effects/atmospherics.rsi
+  gasOverlayState: water_vapor
+  gasMolesVisible: 0.4
+  gasVisbilityFactor: 2
+  color: c8b4f0
+  reagent: PsychogenGas
+  pricePerMole: 0

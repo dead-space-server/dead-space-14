@@ -26,6 +26,18 @@
             </PanelContainer>
         </GridContainer>
 
+        <PanelContainer StyleClasses="DeadSpaceSurfaceFlat">
+            <BoxContainer Margin="8" SeparationOverride="12">
+                <Label Text="{Loc 'id-card-console-window-quick-access'}" StyleClasses="DeadSpaceSectionTitle" />
+                <BoxContainer HorizontalExpand="True" SeparationOverride="8">
+                    <Button Name="BasicAccessButton" Access="Public" HorizontalExpand="True" Text="{Loc 'id-card-console-window-basic-access'}" />
+                    <Button Name="ExtendedAccessButton" Access="Public" HorizontalExpand="True" Text="{Loc 'id-card-console-window-extended-access'}" />
+                    <Button Name="GrantAllAccessButton" HorizontalExpand="True" Text="{Loc 'id-card-console-window-all-access'}"
+                            ToolTip="{Loc 'id-card-console-window-grant-all-tooltip'}" />
+                </BoxContainer>
+            </BoxContainer>
+        </PanelContainer>
+
         <GridContainer Columns="3" HSeparationOverride="8" VSeparationOverride="4">
             <Label Name="FullNameLabel" Text="{Loc 'id-card-console-window-full-name-label'}" />
             <LineEdit Name="FullNameLineEdit" HorizontalExpand="True" />
@@ -38,8 +50,6 @@
         <BoxContainer SeparationOverride="8">
             <Label Text="{Loc 'id-card-console-window-preset-label'}" />
             <OptionButton Name="JobPresetOptionButton" HorizontalExpand="True" MaxWidth="300" RectClipContent="True" Filterable="True" StyleClasses="DeadSpaceFormField" />
-            <Button Name="BasicAccessButton" Access="Public" Text="{Loc 'id-card-console-window-basic-access'}" />
-            <Button Name="ExtendedAccessButton" Access="Public" Text="{Loc 'id-card-console-window-extended-access'}" />
         </BoxContainer>
 
         <Control Name="AccessLevelControlContainer" HorizontalExpand="True" VerticalExpand="True" />

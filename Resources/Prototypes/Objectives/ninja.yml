@@ -89,7 +89,7 @@
       sprite: Objects/Weapons/Melee/stunbaton.rsi
       state: stunbaton_on
 
-# DS14
+# DS14-start
 
 - type: entity
   parent: [BaseNinjaObjective, BaseKillObjective]
@@ -129,3 +129,60 @@
     # don't count missing evac as killing as heads are higher profile, so you really need to do the dirty work
     # if ce flies a shittle to centcom you better find a way onto it
     requireDead: true
+
+- type: entity
+  parent: [BaseNinjaObjective, BaseTargetObjective]
+  id: NinjaProtectPersonObjective
+  components:
+  - type: Objective
+    icon:
+      sprite: Objects/Weapons/Melee/buckler-shield.rsi
+      state: icon
+  - type: KeepAliveCondition
+  - type: TargetObjective
+    title: objective-condition-ninja-protect-title
+  - type: PickRandomPerson
+    filters:
+    - !type:TargetObjectiveMindFilter
+      blacklist:
+        components:
+        - KillPersonCondition
+        - KeepAliveCondition
+    - !type:BlacklistedJobsMindFilter
+      blacklist:
+      - Passenger
+      - TaipanAtmosphericsEngineer
+      - TaipanBotanist
+      - TaipanCargotech
+      - TaipanChef
+      - TaipanCommunicationsOfficer
+      - TaipanMedic
+      - TaipanParamedic
+      - TaipanRecruit
+      - TaipanResearchDirector
+      - TaipanResearcher
+      - TaipanTechnician
+      - TaipanTechnicalOperationsSupervisor
+
+- type: entity
+  parent: [BaseNinjaObjective, BaseCodeObjective]
+  id: NinjaAiHackObjective
+  components:
+  - type: Objective
+    icon:
+      sprite: _DeadSpace/Mobs/Silicon/station_ai.rsi
+      state: ai
+  - type: NinjaAiHackCondition
+
+- type: entity
+  parent: [BaseNinjaObjective, BaseCodeObjective]
+  id: NinjaInfoScanObjective
+  name: Сканирование целей
+  description: Просканируйте необходимые объекты или персонал станции с помощью своего инфо-сканера для сбора разведданных.
+  components:
+  - type: Objective
+    icon:
+      sprite: _DeadSpace/Objects/Devices/pinpointer.rsi
+      state: pinpointer-black
+  - type: NinjaInfoCondition
+# DS14-end

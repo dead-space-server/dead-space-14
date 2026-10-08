@@ -1,0 +1,162 @@
+- type: entity
+  id: WeaponNinjaShuriken
+  name: эммитер энергетических сюрикенов
+  description: Отличная штука, чтобы оглушить оппонента... Ну или оборвать его жизнь — тут уж как вам угодно.
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Guns/ninja.rsi
+    layers:
+    - state: shuriken_emitter
+  - type: Gun
+    shotsPerBurst: 3
+    burstFireRate: 6
+    burstCooldown: 2
+    fireRate: 1
+    selectedMode: Burst
+    availableModes:
+    - Burst
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/silenced.ogg
+      params:
+        volume: -14
+  - type: NinjaAmmoProvider
+    proto: ShurikenProjectile
+    energyPerShoot: 10
+  - type: Appearance
+
+- type: entity
+  name: сюрикен
+  id: ShurikenProjectile
+  categories: [ HideSpawnMenu ]
+  parent: DominatorBulletTrace
+  components:
+  - type: HitscanBasicVisuals
+    speed: 260
+    bullet:
+      sprite:
+        sprite: _DeadSpace/Objects/Weapons/Guns/ninja.rsi
+        state: shuriken_projectile
+        shader: unshaded
+  - type: HitscanBasicDamage
+    damage:
+      types:
+        Heat: 15
+  - type: HitscanStaminaDamage
+    staminaDamage: 30
+
+- type: entity
+  id: NinjaJohyo
+  parent: BaseItem
+  name: энергетическое джохьё
+  description: Позволит вам познакомиться с целью поближе с дальней дистанции.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Guns/ninja.rsi
+    layers:
+    - state: kunai
+  - type: Gun
+    fireRate: 0.25
+    resetOnHandSelected: false
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/silenced.ogg
+  - type: NinjaAmmoProvider
+    proto: NinjaJohyoProjectile
+    energyPerShoot: 100
+  - type: NinjaJohyo
+    pullAcceleration: 400
+    maxPullSpeed: 15
+    arrivalDistance: 1
+    maxDistance: 10
+    chainSprite:
+      sprite: _DeadSpace/Objects/Weapons/Guns/ninja.rsi
+      state: chain
+    shotPhrases:
+    - johyo-phrase-1
+    - johyo-phrase-2
+
+- type: entity
+  id: NinjaJohyoProjectile
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EmbeddableProjectile
+    deleteOnRemove: true
+  - type: InteractionOutline
+  - type: Sprite
+    noRot: false
+    sprite: _DeadSpace/Objects/Weapons/Guns/ninja.rsi
+    rotation: 180
+    layers:
+      - state: kunai_projectile
+  - type: Physics
+    bodyType: Dynamic
+    linearDamping: 0
+    angularDamping: 0
+  - type: Projectile
+    deleteOnCollide: false
+    damage:
+      types:
+        Slash: 5
+    soundHit:
+      path: /Audio/_DeadSpace/Necromorfs/TheCircle/Weapon/sfx/hook-sfx/hit_hook.ogg
+  - type: NinjaJohyoProjectile
+  - type: StunOnCollide
+    stunAmount: 1
+    knockdownAmount: 1.5 
+    drop: true
+
+- type: entity
+  id: WeaponNinjaNet
+  name: эммитер энергетической сети
+  description: Выпускает энергетическую сеть, которая не позволит врагу далеко от вас убежать.
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Guns/ninja.rsi
+    layers:
+    - state: net_emitter
+  - type: Appearance
+  - type: NinjaEnergyNetGun
+
+- type: entity
+  id: NinjaNet
+  name: энергетическая сеть
+  components:
+  - type: Animateable
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 100
+        mask:
+        - TableMask
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Guns/ninja.rsi
+    state: net
+    noRot: true
+  - type: Strap
+    position: Stand
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: TimedDespawn
+    lifetime: 10
+  - type: NinjaEnergyNet
+      

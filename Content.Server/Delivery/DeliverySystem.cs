@@ -87,7 +87,7 @@ public sealed partial class DeliverySystem : SharedDeliverySystem
         _cargo.UpdateBankAccount(
             stationAccountEnt,
             (int)(ent.Comp.BaseSpesoReward * multiplier),
-           _cargo.CreateAccountDistribution((ent.Comp.RecipientStation.Value, account)));
+           _cargo.CreateStationAccountDistribution((ent.Comp.RecipientStation.Value, account))); // DS14
     }
 
     /// <summary>

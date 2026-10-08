@@ -32,11 +32,12 @@ public struct HealthAnalyzerUiState
 
     // DS14-start
     public bool? Unclonable;
+    public bool Overheating;
     public List<HealthAnalyzerReagentEntry> Reagents = new(); // DS14
 
     public HealthAnalyzerUiState() {}
 
-    public HealthAnalyzerUiState(NetEntity? targetEntity, float temperature, float bloodLevel, bool? scanMode, bool? bleeding, bool? unrevivable, bool? unclonable = null, List<HealthAnalyzerReagentEntry>? reagents = null)
+    public HealthAnalyzerUiState(NetEntity? targetEntity, float temperature, float bloodLevel, bool? scanMode, bool? bleeding, bool? unrevivable, bool? unclonable = null, List<HealthAnalyzerReagentEntry>? reagents = null, bool overheating = false)
     {
         TargetEntity = targetEntity;
         Temperature = temperature;
@@ -45,6 +46,7 @@ public struct HealthAnalyzerUiState
         Bleeding = bleeding;
         Unrevivable = unrevivable;
         Unclonable = unclonable; // DS14
+        Overheating = overheating;
         Reagents = reagents ?? new List<HealthAnalyzerReagentEntry>(); // DS14
     }
     // DS14-end

@@ -1046,6 +1046,50 @@
   - !type:ListingLimitedStockCondition
     stock: 2
 
+- type: listing
+  id: ClothingJumpsuitMachineInventory61
+  productEntity: ClothingUniformJumpsuitCasualBlue
+  cost:
+    SpaceCash: 20
+  categories:
+  - ClothingJumpsuitMachineInventory
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 2
+
+- type: listing
+  id: ClothingJumpsuitMachineInventory62
+  productEntity: ClothingUniformJumpsuitCasualPurple
+  cost:
+    SpaceCash: 20
+  categories:
+  - ClothingJumpsuitMachineInventory
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 2
+
+- type: listing
+  id: ClothingJumpsuitMachineInventory63
+  productEntity: ClothingUniformJumpsuitCasualRed
+  cost:
+    SpaceCash: 20
+  categories:
+  - ClothingJumpsuitMachineInventory
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 2
+
+- type: listing
+  id: ClothingJumpsuitMachineInventory64
+  productEntity: ClothingUniformJumpsuitCasualGreen
+  cost:
+    SpaceCash: 20
+  categories:
+  - ClothingJumpsuitMachineInventory
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 2
+
 # Jumpskirt
 
 - type: listing
@@ -2429,3 +2473,16 @@
   conditions:
   - !type:ListingLimitedStockCondition
     stock: 2
+
+# DS14-start
+- type: listing
+  id: ClothingBackpackMachineInventoryContraband1
+  productEntity: ClothingBackpackSyndicate
+  cost:
+    SpaceCash: 125
+  categories:
+  - ClothingBackpackMachineInventoryContraband
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+# DS14-end

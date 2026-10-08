@@ -9,6 +9,10 @@
     species: Moth
     hideLayersOnEquip:
     - HeadTop
+  # DS14-start
+  - type: CorpseBurning
+    messageType: chitin
+  # DS14-end
   - type: Icon
     sprite: Mobs/Species/Moth/parts.rsi
     state: full

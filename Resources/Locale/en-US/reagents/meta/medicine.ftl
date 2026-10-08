@@ -72,7 +72,7 @@ reagent-name-stellibinin = stellibinin
 reagent-desc-stellibinin = A natual anti-toxin with particular effectiveness against amatoxin.
 
 reagent-name-synaptizine = synaptizine
-reagent-desc-synaptizine = A toxic chemical that halves the duration of stuns and knockdowns.
+reagent-desc-synaptizine = A toxic chemical that halves the duration of stuns and knockdowns. Restores speech and hearing.
 
 reagent-name-tranexamic-acid = tranexamic acid
 reagent-desc-tranexamic-acid = A blood-clotting medicine used to prevent profuse bleeding. Causes heavier bleeding on overdose. Commonly found in small doses within emergency medipens.

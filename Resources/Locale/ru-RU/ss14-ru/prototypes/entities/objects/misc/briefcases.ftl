@@ -26,3 +26,6 @@ ent-BriefcaseWeaponChinaLakeFilled = { ent-BriefcaseWeapon }
 ent-BriefcaseWeaponHushpupFilled = { ent-BriefcaseWeapon }
     .desc = { ent-BriefcaseWeapon.desc }
     .suffix = Глухарь
+ent-BriefcaseWeaponESwordDoubleFilled = { ent-BriefcaseWeapon }
+    .desc = { ent-BriefcaseWeapon.desc }
+    .suffix = двухклинковый энергомеч

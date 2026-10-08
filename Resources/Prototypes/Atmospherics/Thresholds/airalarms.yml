@@ -78,6 +78,14 @@
   upperWarnAround: !type:AlarmThresholdSetting
     threshold: 0.5
 
+# Psychogen uses the water-vapor overlay. A small share is already danger.
+- type: alarmThreshold
+  id: stationPsychogen
+  upperBound: !type:AlarmThresholdSetting
+    threshold: 0.002
+  upperWarnAround: !type:AlarmThresholdSetting
+    threshold: 0.5
+
 - type: alarmThreshold
   id: stationNO
   upperBound: !type:AlarmThresholdSetting

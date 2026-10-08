@@ -4,3 +4,4 @@ gases-helium = Helium
 gases-halon = Halon
 gases-zauker = Zauker
 gases-antinoblium = Anti-Noblium
+gases-psychogen = Psychogen

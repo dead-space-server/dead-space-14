@@ -28023,13 +28023,6 @@ entities:
     - type: Transform
       pos: -7.5,12.5
       parent: 2
-- proto: CustomizableSpawnerTaipanClown
-  entities:
-  - uid: 10331
-    components:
-    - type: Transform
-      pos: -8.5,4.5
-      parent: 2
 - proto: CustomizableSpawnerTaipanCommunicationsOfficer
   entities:
   - uid: 3820

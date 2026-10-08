@@ -7,8 +7,7 @@ using Content.Shared.Interaction.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Storage;
-using Content.Shared.Weapons.Ranged.Systems;
-
+using Content.Shared.DeadSpace.Clothing;
 namespace Content.Shared.Nutrition.EntitySystems;
 
 public sealed partial class IngestionSystem
@@ -46,6 +45,7 @@ public sealed partial class IngestionSystem
     private void OnBlockerMaskToggled(Entity<IngestionBlockerComponent> ent, ref ItemMaskToggledEvent args)
     {
         ent.Comp.Enabled = !args.Mask.Comp.IsToggled;
+        Dirty(ent); //DS14
     }
 
     private void OnIngestionBlockerAttempt(Entity<IngestionBlockerComponent> entity, ref IngestionAttemptEvent args)
@@ -110,6 +110,11 @@ public sealed partial class IngestionSystem
 
         if (!ent.Comp.Slots.Any(slot => slot.Value.HasItem))
             return;
+
+        // DS14-start :не знаю как сделать по другому.
+        if (HasComp<BeerHatComponent>(ent))
+            return;
+        // DS14-end
 
         args.Cancelled = true;
 

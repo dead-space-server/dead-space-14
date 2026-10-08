@@ -75,6 +75,10 @@
   - type: Speech
     speechVerb: Robotic
     speechSounds: Vending
+  - type: Language # DS14
+    selectedLanguage: GeneralLanguage
+    knownLanguages:
+    - GeneralLanguage
   - type: Vocalizer
     minVocalizeInterval: 8m
     maxVocalizeInterval: 10m

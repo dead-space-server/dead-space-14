@@ -77,6 +77,7 @@ namespace Content.Client.Actions
                 return;
 
             ActionsUpdated?.Invoke();
+            OnActionAdded?.Invoke(ent.Owner);
         }
 
         private void OnHandleState(Entity<ActionsComponent> ent, ref ComponentHandleState args)

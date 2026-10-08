@@ -1,0 +1,14 @@
+- type: construction
+  id: CascadeSpike
+  graph: CascadeSpike
+  startNode: start
+  targetNode: spike
+  category: construction-category-utilities
+  objectType: Item
+  conditions:
+  - !type:SkillCondition
+    skill: Robotics
+    popup: psychiatry-spike-roboticist
+    guideIcon:
+      sprite: Interface/Misc/job_icons.rsi
+      state: Roboticist

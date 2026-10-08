@@ -779,6 +779,17 @@
   categories:
   - TraitorUltraUplinkAmmo
 
+- type: listing
+  id: UplinkTraitorUltraMagazinePistolCaselessRiflePoisoned
+  name: uplink-pistol-magazine-caseless-poisoned-name
+  description: uplink-pistol-magazine-caseless-poisoned-desc
+  icon: { sprite: /Textures/Objects/Weapons/Guns/Ammunition/Magazine/CaselessRifle/caseless_pistol_mag.rsi, state: red-icon }
+  productEntity: MagazinePistolCaselessRiflePoisoned
+  cost:
+    Telecrystal: 2
+  categories:
+  - TraitorUltraUplinkAmmo
+
 # For the Python
 
 - type: listing
@@ -2955,9 +2966,9 @@
 - type: listing
   id: UplinkTraitorUltraEswordDoubleLone
   name: uplink-esword-double-name
-  description: Воскрес и разнёс паблик. Только один к покупке.
+  description: uplink-esword-double-desc
   icon: { sprite: /Textures/Objects/Weapons/Melee/e_sword_double.rsi, state: icon }
-  productEntity: EnergySwordDouble
+  productEntity: BriefcaseWeaponESwordDoubleFilled
   cost:
     Telecrystal: 36
   categories:
@@ -2977,7 +2988,7 @@
 - type: listing
   id: UplinkTraitorUltraEswordDoubleAgents
   name: uplink-esword-double-name
-  description: uplink-esword-double-desc
+  description: Воскрес и разнёс паблик. Только один к покупке.
   icon: { sprite: /Textures/Objects/Weapons/Melee/e_sword_double.rsi, state: icon }
   productEntity: EnergySwordDouble
   cost:

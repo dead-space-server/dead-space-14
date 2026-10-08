@@ -29,6 +29,7 @@
       Halon: stationHalon
       Zauker: stationZauker
       Antinoblium: stationAntinoblium
+      Psychogen: stationPsychogen
       # DS14-end
 
 - type: entity
@@ -78,6 +79,7 @@
     - Halon
     - Zauker
     - Antinoblium
+    - Psychogen
     # DS14-end
 
 # use this to prevent overriding filters with hardcoded defaults

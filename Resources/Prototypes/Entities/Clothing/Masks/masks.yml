@@ -9,6 +9,7 @@
   - type: Clothing
     sprite: Clothing/Mask/gas.rsi
   - type: BreathMask
+  - type: PsychogenFilter
   - type: IngestionBlocker
   - type: IdentityBlocker
   - type: Tag
@@ -799,14 +800,19 @@
   description: A close-fitting nano-enhanced mask that acts both as an air filter and a post-modern fashion statement.
   components:
   - type: Sprite
-    sprite: Clothing/Mask/ninja.rsi
+    sprite: _DeadSpace/Clothing/Mask/spaceninja.rsi
   - type: Clothing
-    sprite: Clothing/Mask/ninja.rsi
+    sprite: _DeadSpace/Clothing/Mask/spaceninja.rsi
   - type: Item
     storedRotation: -90
+  - type: NinjaAppearanceItem
+  - type: NinjaSuitItem
   - type: EyeProtection
   - type: BreathMask
   - type: IdentityBlocker
+  - type: HideLayerClothing
+    clothingSlots:
+    - eyes
 
 - type: entity
   parent: ClothingMaskGas

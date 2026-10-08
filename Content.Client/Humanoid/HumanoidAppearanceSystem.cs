@@ -419,6 +419,18 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
         }
     }
 
+    /// <summary>
+    ///     Rebuilds the humanoid sprite layers from the current appearance data. Used when external code
+    ///     has tampered with the sprite (e.g. the ninja disguise) and needs to restore the humanoid parts.
+    /// </summary>
+    public void RefreshAppearance(EntityUid uid, HumanoidAppearanceComponent? humanoid = null)
+    {
+        if (!Resolve(uid, ref humanoid, false) || !TryComp<SpriteComponent>(uid, out var sprite))
+            return;
+
+        UpdateSprite((uid, humanoid, sprite));
+    }
+
     public override void SetSkinColor(EntityUid uid, Color skinColor, bool sync = true, bool verify = true, HumanoidAppearanceComponent? humanoid = null)
     {
         if (!Resolve(uid, ref humanoid) || humanoid.SkinColor == skinColor)

@@ -1,0 +1,129 @@
+pickle-cvar-enabled = Оверлей солений / ферментации
+
+pickle-barrel-verb-start = Начать ферментацию
+pickle-barrel-verb-empty = Опустошить бочку
+pickle-barrel-verb-tip = Перевернуть
+
+pickle-barrel-started = Вы герметизируете бочку и оставляете партию бродить.
+pickle-barrel-busy = Бочка закрыта, пока идёт брожение.
+pickle-barrel-full = Бочка битком набита.
+pickle-barrel-empty = Сначала положите продукты в бочку.
+pickle-barrel-no-liquid = В бочке нет рассола. Налейте уксус, соль или сахар.
+pickle-barrel-no-brine = Рассол не подходит к этим ингредиентам.
+pickle-barrel-need-vinegar = Мало уксуса: нужно около {$needed} ед. (сейчас {$have}).
+pickle-barrel-need-salt = Мало соли: нужно около {$needed} ед. (сейчас {$have}).
+pickle-barrel-need-sugar-ferment = Мало сахара для брожения: нужно около {$needed} ед. (сейчас {$have}).
+pickle-barrel-no-sugar = Для маринада с уксусом нужен сахар: около {$needed} ед. (сейчас {$have}).
+pickle-barrel-bad-recipe = «{$name}» не подходит ни под один рецепт засолки.
+pickle-barrel-not-enough = Мало продуктов: для «{$name}» нужно {$needed} шт., сейчас {$have}.
+pickle-barrel-not-enough-generic = Недостаточно продуктов для полной партии.
+pickle-barrel-water-only = Одна вода ничего не замаринует. Добавьте уксус, соль или сахар.
+pickle-barrel-too-cold = Здесь слишком холодно для ферментации.
+pickle-barrel-too-hot = Слишком жарко — культура погибнет.
+pickle-barrel-complete = Партия готова. Пустая рука — один кусок, открытая банка — наполнить.
+pickle-barrel-ready-alcohol = Вино готово. Налейте в открытую банку — руками жидкость не собрать.
+pickle-barrel-hand-alcohol = Это вино. Нужна банка — руками не разлить.
+pickle-barrel-jar-filled = Вы набиваете банку из бочки.
+pickle-barrel-empty-first = Сначала достаньте готовую партию из бочки.
+pickle-barrel-pack-empty = Нечего набивать в банку.
+pickle-barrel-already-pickled = Это уже засолено — повторно ферментировать нельзя.
+pickle-barrel-tipped = Вы опрокидываете бочку — жидкость разливается, овощи вываливаются.
+pickle-barrel-burst = Бочка лопается с мерзким хлопком!
+pickle-barrel-spoiled = Что-то пошло не так. Партия дурно пахнет.
+pickle-barrel-disabled = Соленья на этом сервере отключены.
+
+pickle-barrel-state-idle = Бочка простаивает.
+pickle-barrel-state-fermenting = Бочка бродит.
+pickle-barrel-state-ready = Партия готова.
+pickle-barrel-state-failed = Партия испорчена.
+pickle-barrel-produce-count = Продукты: {$count}/{$max}
+pickle-barrel-progress = Ферментация: {$percent}%
+
+pickle-jar-pieces = Хватит примерно на {$count} укусов.
+pickle-jar-full = Банка уже полная.
+pickle-jar-closed = Сначала откройте крышку.
+pickle-jar-verb-take = Достать кусок
+pickle-jar-slip = Соленье выскальзывает из рук!
+pickle-wine-eye-damage = Самодельное вино жжёт глаза — зрение мутнеет!
+pickle-jar-name = банка ({$name})
+pickle-alcohol-jar-name = банка ({$name})
+pickle-jar-examine-wine = Внутри станционное вино.
+
+pickle-produce-desc = {$name}
+pickle-produce-examine-vinegar = Выглядит маринованным — желтее и кислее.
+pickle-produce-examine-salt = Выглядит солёным — темнее и плотнее.
+pickle-piece-pickled = маринованный {$name}
+pickle-piece-wine = станционное вино
+
+pickle-bacteria-fart = Желудок зловеще урчит...
+
+flavor-complex-cucumber = как свежий огурец
+
+seeds-cucumber-name = огурец
+
+reagent-name-pickle-vinegar-brine = уксусный рассол
+reagent-desc-pickle-vinegar-brine = Кисловатый сок после солений.
+reagent-name-pickle-salt-brine = соляной рассол
+reagent-desc-pickle-salt-brine = Солёный сок после солений.
+reagent-name-pickle-wine = станционное вино
+reagent-desc-pickle-wine = Грубое фруктовое вино из бочки. Бьёт сильнее, чем кажется.
+reagent-name-pickle-cider = станционный сидр
+reagent-desc-pickle-cider = Яблочный сидр из бочки для засолки.
+reagent-name-pickle-bacteria = бактерии солений
+reagent-desc-pickle-bacteria = То, что выросло, когда партия испортилась.
+
+food-name-pickled-cucumber = маринованный огурец
+food-desc-pickled-cucumber = Хрустящий, кислый, желтовато-зелёный от уксуса.
+food-name-pickled-cabbage = маринованная капуста
+food-desc-pickled-cabbage = Кисловатая шинкованная капуста.
+food-name-pickled-onion = маринованный лук
+food-desc-pickled-onion = Острый и уксусный.
+food-name-pickled-carrot = маринованная морковь
+food-desc-pickled-carrot = Кисло-сладкие оранжевые палочки.
+food-name-pickled-garlic = маринованный чеснок
+food-desc-pickled-garlic = Мягкие зубчики в уксусе.
+food-name-salted-cucumber = солёный огурец
+food-desc-salted-cucumber = Темнее, плотнее и по-настоящему солёный.
+food-name-salted-cabbage = солёная капуста
+food-desc-salted-cabbage = Квашеная капуста, темнее свежей.
+food-name-salted-onion = солёный лук
+food-desc-salted-onion = Мягкий лук после засолки.
+food-name-salted-mushroom = солёные лисички
+food-desc-salted-mushroom = Плотные солёные грибы, темнее свежих.
+food-name-salted-cactus = солёный кактус
+food-desc-salted-cactus = Колючий, но уже посоленный.
+food-name-pickled-cactus = маринованный кактус
+food-desc-pickled-cactus = Кисло-сладкий плод кактуса в уксусе.
+food-name-pickled-watermelon = маринованный арбуз
+food-desc-pickled-watermelon = Сладковатые куски арбуза в уксусе.
+food-name-pickled-tomato = маринованный помидор
+food-desc-pickled-tomato = Кисло-сладкий помидор из бочки.
+food-name-salted-tomato = солёный помидор
+food-desc-salted-tomato = Плотный солёный помидор.
+food-name-pickled-pumpkin = маринованная тыква
+food-desc-pickled-pumpkin = Мягкие куски тыквы в уксусе.
+food-name-pickled-chili = маринованный чили
+food-desc-pickled-chili = Острый перец в уксусе.
+food-name-salted-soy = солёная соя
+food-desc-salted-soy = Плотные солёные бобы.
+food-name-station-wine = станционное вино
+food-desc-station-wine = Фруктовое вино из бочки.
+food-name-station-cider = станционный сидр
+food-desc-station-cider = Яблочный сидр из бочки.
+
+construction-recipe-pickle-barrel-wood = деревянная бочка для засолки
+
+ent-PickleBarrelBase = бочка для засолки
+    .desc = Герметичная бочка для засолки, маринования и короткого фруктового брожения. Нужна тёплая комната.
+ent-PickleBarrelWood = деревянная бочка для засолки
+    .desc = Сколочена из нескольких досок. Сгодится для станционной засолки.
+ent-FoodPickleJar = банка
+    .desc = Небольшая стеклянная банка с винтовой крышкой. Набивайте открытой, потом закрутите.
+ent-FoodCucumber = огурец
+    .desc = Хрустящий, водянистый и явно для бочки.
+ent-CucumberSeeds = пакетик семян огурца
+    .desc = Семена огурца.
+ent-CucumberPlants = огурец
+    .desc = Огуречный куст.
+ent-CratePickleSeeds = ящик огородника-соления
+    .desc = Семена огурца и стартовый набор для первой бочки.

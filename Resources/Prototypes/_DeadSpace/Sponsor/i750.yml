@@ -36,6 +36,10 @@
     - id: Plushiei750
     - id: ADTtelescopicBaton
     - id: ClothingHeadHatBereti750
+    - id: AnomalyScanneri750
+    - id: HolofanProjectori750
+    - id: GasAnalyzeri750
+    - id: WeaponPistolCHIMPi750
   - type: Tag
     tags: [ ]
 
@@ -63,6 +67,7 @@
       - id: WelderExperimentali750
       - id: Multitooli750
       - id: RCDi750 
+      - id: trayScanneri750
   - type: Tag
     tags: [ ]
 
@@ -531,6 +536,119 @@
     sprite: _DeadSpace/Sponsor/i750/tools_rcd.rsi
     layers:
     - state: icon
+
+#t-ray scanner
+- type: entity
+  name: т-лучевой сканер «Рентген»
+  parent: BaseItem
+  id: trayScanneri750
+  description: Сканер, позволяющий видеть трубы и кабели, скрытые под обшивкой пола. Своего рода снимок станции, на котором сразу видно, где повреждены её сосуды и нервы.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/i750/tools_trayscanner.rsi
+    layers:
+    - state: tray-off
+      map: ["base"]
+  - type: TrayScanner
+  - type: Item
+    sprite: _DeadSpace/Sponsor/i750/tools_trayscanner.rsi
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.TrayScannerVisual.Visual:
+        base:
+          On: { state: tray-on }
+          Off: { state: tray-off }
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 400
+      Glass: 150
+  - type: StaticPrice
+    price: 85
+
+# tools_gasanalyzer.rsi
+- type: entity
+  parent: GasAnalyzer
+  id: GasAnalyzeri750
+  name: газоанализатор «Пульсоксиметр»
+  description: Портативный прибор для замера давления, температуры и состава газов в помещении. Как и его медицинский тёзка, быстро показывает, хватает ли кому-то воздуха.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/i750/tools_gasanalyzer.rsi
+    layers:
+    - state: icon
+      map: ["analyzer"]
+
+# tools_holofanprojector.rsi
+- type: entity
+  parent: HolofanProjector
+  id: HolofanProjectori750
+  name: атмос голопроектор «Карантин»
+  description: Проектор голографических барьеров, удерживающих атмосферу в разгерметизированных зонах. Изолирует опасный участок так же, как карантин отделяет очаг заражения от остальных.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/i750/tools_holofanprojector.rsi
+    state: icon
+  - type: LimitedHolosignProjector
+    signProto: HoloFani750
+
+# tools_holo.rsi
+- type: entity
+  parent: HoloFan
+  id: HoloFani750
+  name: атмос-поле
+  categories: [ HideSpawnMenu ]
+  components: 
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/i750/tools_holo.rsi
+    state: icon
+
+# tools_anomalyscanner.rsi
+- type: entity
+  parent: AnomalyScanner
+  id: AnomalyScanneri750
+  name: анализатор аномалий «Дифдиагноз»
+  description: Прибор для изучения аномалий - определяет их тип, стабильность и возможные последствия. Помогает отличить безобидное явление от того, что вот-вот обернётся катастрофой.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/i750/tools_anomalyscanner.rsi
+    layers:
+      - state: icon
+        map: ["enum.AnomalyScannerVisualLayers.Base"]
+      - map: ["enum.AnomalyScannerVisualLayers.Screen"]
+        visible: false
+        shader: unshaded
+      - state: severity_mask
+        map: ["enum.AnomalyScannerVisualLayers.SeverityMask"]
+        visible: false
+        shader: unshaded
+      - map: ["enum.AnomalyScannerVisualLayers.Stability"]
+        visible: false
+        shader: unshaded
+      - visible: false
+        map: ["enum.AnomalyScannerVisualLayers.Pulse"]
+        shader: unshaded
+      - state: supercritical
+        map: ["enum.AnomalyScannerVisualLayers.Supercritical"]
+        shader: unshaded
+        visible: false
+
+# chimp.rsi
+- type: entity
+  parent: WeaponPistolCHIMP
+  categories: [ HideSpawnMenu ]
+  id: WeaponPistolCHIMPi750
+  name: пистолет «Купирование»
+  description: Устройство для направленного воздействия на аномалии - позволяет подавить их активность или изменить поведение.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/i750/chimp.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/i750/chimp.rsi
 
 # документ
 - type: entity

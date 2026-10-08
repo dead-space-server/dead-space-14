@@ -1,1 +1,16 @@
-marking-LizardHornsShort1 = короткие рожки, ящер
+marking-LizardHornsShort1 = Короткие рожки, ящер
+marking-SharkTailDefault = Плафеим, хвост
+marking-SharkTail1 = Плафеим, крупный хвост
+marking-SharkTail1-tail_shark_wagging = Основной
+marking-SharkTail1-tail_stripes = Полоски
+marking-SharkTail1-tail_bottom = Акцент
+marking-SharkHornsNarwhal = Рог нарвала
+marking-SharkHornsNarwhal-narwhal_horn = Рог нарвала
+marking-SharkHeadPattern1 = Брови
+marking-SharkHeadPattern1-head_pattern_1 = Брови
+marking-SharkHeadPattern2 = Нижняя челюсть
+marking-SharkHeadPattern2-head_pattern_2 = Нижняя челюсть
+marking-SharkChestBellyPattern1 = Тигровый окрас
+marking-SharkChestBellyPattern1-belly_pattern_1 = Тигровый окрас
+marking-SharkChestBellyPattern2 = Живот 5
+marking-SharkChestBellyPattern2-belly_pattern_2 = Живот 5

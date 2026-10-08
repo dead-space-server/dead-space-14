@@ -34,6 +34,7 @@ public sealed class AiEyeSystem : EntitySystem
     private static readonly TimeSpan SearchCooldown = TimeSpan.FromSeconds(3);
     private static readonly TimeSpan TargetJumpCooldown = TimeSpan.FromSeconds(0.75);
     private static readonly TimeSpan SensorCacheRefreshRate = TimeSpan.FromSeconds(1);
+    private static readonly TimeSpan CamLinkValidity = TimeSpan.FromSeconds(40);
 
     [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] private readonly IChatManager _chat = default!;
@@ -226,7 +227,7 @@ public sealed class AiEyeSystem : EntitySystem
             return;
         }
 
-        TryJumpToTarget(ent.Owner, target.Value);
+        TryJumpToTarget(ent.Owner, target.Value, args.SourceTime);
     }
 
     private void OnTrackEntityRequest(StationAiTrackEntityNetworkEvent msg, EntitySessionEventArgs args)
@@ -244,16 +245,39 @@ public sealed class AiEyeSystem : EntitySystem
             return;
         }
 
-        TryJumpToTarget(ai, target.Value);
+        TryJumpToTarget(ai, target.Value, msg.SourceTime);
     }
 
-    private bool TryJumpToTarget(EntityUid ai, EntityUid target, bool showPopup = true)
+    private bool IsIdentityResolvable(EntityUid target)
     {
+        var displayedIdentity = Identity.Name(target, EntityManager);
+        var realName = Comp<MetaDataComponent>(target).EntityName;
+        return displayedIdentity == realName;
+    }
+
+    private bool TryJumpToTarget(EntityUid ai, EntityUid target, TimeSpan sourceTime, bool showPopup = true)
+    {
+        var elapsed = _timing.CurTime - sourceTime;
+        if (elapsed > CamLinkValidity)
+        {
+            if (showPopup)
+                PopupToAi(ai, Loc.GetString("station-ai-camera-link-expired"));
+            return false;
+        }
+
         if (!TryUseTargetJumpCooldown(ai, showPopup))
             return false;
 
         if (HasTrackingSuitSensors(target) && TryGetSensorTrackedCoordinates(ai, target, out var sensorCoordinates))
             return TryMoveEye(ai, sensorCoordinates);
+
+        if (!IsIdentityResolvable(target))
+        {
+            if (showPopup)
+                PopupToAi(ai, Loc.GetString("station-ai-camera-search-not-visible"));
+
+            return false;
+        }
 
         return TryJumpToVisibleTarget(ai, target, showPopup);
     }

@@ -1,5 +1,6 @@
 ﻿using Content.Shared.Examine;
 using Content.Shared.IdentityManagement;
+using Content.Shared.DeadSpace.Temperature;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -58,6 +59,11 @@ public abstract class SharedRottingSystem : EntitySystem
         }
 
         var isMob = HasComp<MobStateComponent>(perishable);
+        // DS14-start
+        if (stage == 1 && isMob && TryComp<CorpseBurningComponent>(perishable, out var burns) &&
+            burns.SuppressFreshDescription)
+            return;
+        // DS14-end
         var description = "perishable-" + stage + (!isMob ? "-nonmob" : string.Empty);
         args.PushMarkup(Loc.GetString(description, ("target", Identity.Entity(perishable, EntityManager))));
     }

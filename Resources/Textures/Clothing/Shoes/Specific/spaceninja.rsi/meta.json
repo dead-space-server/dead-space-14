@@ -11,6 +11,12 @@
       "name": "icon"
     },
     {
+      "name": "red-icon"
+    },
+    {
+      "name": "blue-icon"
+    },
+    {
       "name": "equipped-FEET",
       "directions": 4
     },
@@ -24,6 +30,22 @@
     },
     {
       "name": "inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "red-equipped-FEET",
+      "directions": 4
+    },
+    {
+      "name": "red-equipped-FEET-unshaded",
+      "directions": 4
+    },
+    {
+      "name": "blue-equipped-FEET",
+      "directions": 4
+    },
+    {
+      "name": "blue-equipped-FEET-unshaded",
       "directions": 4
     }
   ]

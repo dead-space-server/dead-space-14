@@ -1,0 +1,72 @@
+# Single jar for produce packs and wine/cider — starts open.
+- type: entity
+  parent: [ DrinkBaseMaterialGlass, DrinkBase, DrinkBaseOpenable ]
+  id: FoodPickleJar
+  name: jar
+  description: A small glass jar with a screw lid. Pack it open, then seal it shut.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Pickles/jar.rsi
+    scale: 0.8, 0.8
+    layers:
+    - state: icon_open
+      map: [ "enum.OpenableVisuals.Layer" ]
+    - state: fill-1
+      map: [ "enum.SolutionContainerLayers.Fill" ]
+      visible: false
+    - state: cucumber-1
+      map: [ "enum.PickleJarVisuals.HasProduce" ]
+      visible: false
+    - state: icon-front
+      map: [ "enum.SolutionContainerLayers.Overlay" ]
+  - type: Item
+    size: Tiny
+    sprite: _DeadSpace/Pickles/jar.rsi
+    heldPrefix: open
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.OpenableVisuals.Opened:
+        enum.OpenableVisuals.Layer:
+          True: { state: icon_open }
+          False: { state: icon_empty }
+  # Produce overlay (cucumber-N / tomato-N / …) is applied by client PickleJarSystem.
+  - type: SolutionContainerVisuals
+    solutionName: drink
+    maxFillLevels: 9
+    fillBaseName: fill-
+    inHandsMaxFillLevels: 3
+    inHandsFillBaseName: -fill-
+    changeColor: true
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 80
+  - type: Openable
+    opened: true
+    closeable: true
+    openOnActivate: false
+    # Sounds played by SharedPickleJarSystem only when jar has contents.
+    sound: null
+    closeSound: null
+  - type: Edible
+    edible: Drink
+    solution: drink
+    destroyOnEmpty: false
+    transferAmount: 10
+    utensil: None
+    delay: 1
+  - type: Spillable
+    solution: drink
+  - type: PickleJar
+    maxPieces: 4
+  - type: FlavorProfile
+    flavors:
+    - sour
+  - type: StaticPrice
+    price: 40
+  - type: ExaminableSolution
+    solution: drink
+    examinableWhileClosed: false
+  - type: SolutionItemStatus
+    solution: drink

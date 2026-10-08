@@ -30,3 +30,9 @@
   parent: [EnergyKatana, BaseToySword]
   id: ToyEnergyKatana
   description: Катана, наделённая сильной энергией.
+  components:
+  - type: MeleeWeapon
+    attackRate: 1
+    damage:
+      types:
+        Piercing: 1

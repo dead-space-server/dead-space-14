@@ -183,7 +183,7 @@ public sealed class ThiefProgramSystem : EntitySystem
     {
         foreach (var rule in _gameTicker.GetActiveGameRules())
         {
-            if (TryComp<Content.Server.GameTicking.Rules.Components.ThiefRuleComponent>(rule, out var ruleComp) &&
+            if (TryComp<GameTicking.Rules.Components.ThiefRuleComponent>(rule, out var ruleComp) &&
                 ruleComp.UnlockTool is { } unlockTool)
             {
                 return unlockTool;

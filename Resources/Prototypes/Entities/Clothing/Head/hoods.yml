@@ -10,6 +10,7 @@
   - type: Clothing
     sprite: Clothing/Head/Hoods/Bio/general.rsi
   - type: BreathMask
+  - type: PsychogenFilter
   - type: IngestionBlocker
   - type: GroupExamine
   - type: Armor

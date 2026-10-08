@@ -177,6 +177,19 @@
     damage:
       types:
         Slash: 30
+    soundHit:
+      collection: KatanaHitSound #DS14
+#DS14-start
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/katana/katana-equip.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/katana/katana-unequip.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/knife/knife_drop.ogg
+#DS14-end
   - type: Item
 #DS14-start
     inhandVisuals:
@@ -195,14 +208,18 @@
     shape:
     - 0,0,0,3
   - type: EnergyKatana
+  - type: NinjaAppearanceItem
   # DS14-start
   - type: Parry
     parryableWeapons:
       tags:
       - ParryStandardWeapon
       - ParryEnergySword
-  # DS14-end
   - type: DashAbility
+    corruptByBluespaceItems: true
+    teleportPulledEntity: true
+    beamProto: NinjaBeam
+  # DS14-end
   - type: LimitedCharges
     maxCharges: 3
   - type: AutoRecharge

@@ -99,6 +99,11 @@ public abstract class SharedSmartFridgeSystem : EntitySystem
 
     private void OnItemRemoved(Entity<SmartFridgeComponent> ent, ref EntRemovedFromContainerMessage args)
     {
+        //DS-14 start
+        if (args.Container.ID != ent.Comp.Container || _timing.ApplyingState)
+            return;
+        //DS-14 end
+
         var key = new SmartFridgeEntry(Identity.Name(args.Entity, EntityManager));
 
         if (ent.Comp.ContainedEntries.TryGetValue(key, out var contained))

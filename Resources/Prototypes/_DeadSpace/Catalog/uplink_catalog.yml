@@ -40,9 +40,9 @@
 - type: listing
   id: UplinkEswordDoubleLone
   name: uplink-esword-double-name
-  description: Воскрес и разнёс паблик. Только один к покупке.
+  description: uplink-esword-double-desc
   icon: { sprite: /Textures/Objects/Weapons/Melee/e_sword_double.rsi, state: icon }
-  productEntity: EnergySwordDouble
+  productEntity: BriefcaseWeaponESwordDoubleFilled
   cost:
     Telecrystal: 36
   categories:
@@ -54,6 +54,26 @@
       - LoneOpsUplink
   - !type:ListingLimitedStockCondition
     stock: 1
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkArkalysLone
+  name: uplink-arkalyse-bundle-name
+  description: uplink-arkalyse-bundle-desc
+  icon: { sprite: _DeadSpace/Objects/Specific/Arkalyse/arkalyse_book.rsi, state: icon }
+  productEntity: BoxArkalyse
+  cost:
+    Telecrystal: 15
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
   - !type:BuyerWhitelistCondition
     blacklist:
       components:
@@ -183,7 +203,7 @@
 - type: listing
   id: UplinkEswordDoubleAgents
   name: uplink-esword-double-name
-  description: uplink-esword-double-desc
+  description: Воскрес и разнёс паблик. Только один к покупке.
   icon: { sprite: /Textures/Objects/Weapons/Melee/e_sword_double.rsi, state: icon }
   productEntity: EnergySwordDouble
   cost:
@@ -528,6 +548,9 @@
     whitelist:
       tags:
       - NukeOpsUplink
+    blacklist:
+      tags:
+      - LoneOpsUplink
 
 - type: listing
   id: UplinkAdrenalineImplanter
@@ -1362,3 +1385,73 @@
     whitelist:
       tags:
       - LoneOpsUplink
+
+- type: listing
+  id: UplinkShingen
+  name: uplink-shingen-name
+  description: uplink-shingen-desc
+  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Smart/shingen2.rsi, state: icon }
+  productEntity: ShingenCase
+  cost:
+    Telecrystal: 18
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkShingenAmmo
+  name: uplink-shingen-ammo-name
+  description: uplink-shingen-ammo-desc
+  productEntity: MagazineSmartWeaponShingen
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkAmmo
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkSmartlinkImplanter
+  name: uplink-smartlink-implanter-name
+  description: uplink-smartlink-implanter-desc
+  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Smart/case.rsi, state: smartlink }
+  productEntity: SmartLinkImplanter
+  cost:
+    Telecrystal: 2
+  categories:
+    - UplinkImplants
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkMagazinePistolCaselessRiflePoisoned
+  name: uplink-pistol-magazine-caseless-poisoned-name
+  description: uplink-pistol-magazine-caseless-poisoned-desc
+  icon: { sprite: /Textures/Objects/Weapons/Guns/Ammunition/Magazine/CaselessRifle/caseless_pistol_mag.rsi, state: red-icon }
+  productEntity: MagazinePistolCaselessRiflePoisoned
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkAmmo

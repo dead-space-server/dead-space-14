@@ -123,6 +123,7 @@
 #  - type: SlotBlock
 #    slots: [ears, eyes, mask]
   - type: BreathMask
+  - type: PsychogenFilter
   - type: Item
     size: Normal
   - type: PressureProtection
@@ -163,6 +164,7 @@
 #  - type: SlotBlock
 #    slots: [ears, eyes, mask]
   - type: BreathMask
+  - type: PsychogenFilter
   - type: Sprite
     drawdepth: Items # DS14
     state: icon # default state used by most inheritors

@@ -1,0 +1,496 @@
+# Backpack
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackAmaliz
+  name: сумка Fashion Dynamics
+  description: Тёмная сумка с бирюзовой застёжкой, на лямке имеется красный значок изображающий пульсар. На боковых карманах имеется аккуратная гравировка "by Fashion Dynamics".
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Amaliz/backpack.rsi
+    layers:
+    - state: icon
+      map: [ base ]
+  - type: GenericVisualizer
+    visuals:
+      enum.StorageVisuals.Open:
+        base:
+          True: { state: icon-open }
+          False: { state: icon }
+    netsync: false
+  - type: Appearance
+    netsync: false
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,15,10
+  - type: StorageFill
+    contents:
+    - id: ClothingHandsGlovesAmaliz
+    - id: ClothingOuterHardsuitAmaliz
+    - id: ClothingMaskGasPrometheus3 # Разрешил использовать маску
+    - id: ClothingHeadsetAmaliz
+    - id: ClothingShoesBootsMagAmaliz
+    - id: ClothingEyesHudAmaliz
+    - id: JetpackVoidFilledAmaliz
+    - id: DefibrillatorAmaliz
+    - id: HyposprayAmaliz
+    - id: ClothingNeckCloakAmaliz
+    - id: MedkitAdvancedFilled
+    - id: DoubleEmergencyOxygenTank
+    - id: PaperAmaliz
+    - id: ClothingUniformTurtleneckTactic
+    - id: PDAAmaliz
+    - id: PlushieRuniAmaliz
+    - id: JawsOfLifeAmaliz
+    - id: PowerDrillAmaliz
+    - id: WelderExperimentalAmaliz
+    - id: MultitoolAmaliz
+    - id: RCDAmaliz
+    - id: HolofanProjectorTheZuTi # Разрешил использовать голопроектор
+    - id: ADTtelescopicBaton
+    - id: JukeboxMK
+    - id: TapeRecorderr
+    - id: TapeEmpty
+    - id: ClothingUnderwearBottomBoxersAmaliz
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Hardsuit
+- type: entity
+  parent: ClothingOuterHardsuitSecurity
+  id: ClothingOuterHardsuitAmaliz
+  name: скафандр "Вихрь туманности"
+  description: Скафандр с малиново-красновыми вставками. Пластины скафандра сделаны из Титана и прошиты углеродным волокном. Судя по внешнему виду, скафандр был создан индивидуально для владельца. Ручная работа.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Amaliz/hardsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Amaliz/hardsuit.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitAmaliz
+  - type: Item
+    size: Huge
+  - type: HardsuitIdentification
+    nonlethal: true
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.50
+        Slash: 0.50
+        Piercing: 0.60
+        Heat: 0.50
+        Radiation: 0.50
+        Caustic: 0.50
+  - type: ClothingSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9
+  - type: HideLayerClothing
+    clothingSlots: 
+    - belt
+    - jumpsuit
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+- type: entity
+  parent: [ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase]
+  id: ClothingHeadHelmetHardsuitAmaliz
+  categories: [ HideSpawnMenu ]
+  name: шлем "Вихрь туманности"
+  description: Шлем от одноименного скафандра, с двумя антеннами и встроенными в них фонариками. Имеет большой обзорный визор. На затылке шлема красуется инициалы мастера, который его создавал.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Amaliz/helmet.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Amaliz/helmet.rsi
+  - type: PointLight
+    color: "#379CCFFF"
+  - type: ToggleableVisuals
+    spriteLayer: light
+    clothingVisuals:
+      head:
+      - state: on-equipped-HELMET
+      - state: on-unshaded
+        shader: unshaded
+  - type: PressureProtection
+    highPressureMultiplier: 0.08
+    lowPressureMultiplier: 1000
+  - type: EyeProtection
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.9
+        Heat: 0.9
+  - type: HideLayerClothing
+    slots:
+    - Hair
+    - Snout
+    - HeadTop
+    - HeadSide
+    - FacialHair
+    clothingSlots:
+    - ears
+    - mask
+    bodyLayers:
+    - Head
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Gloves
+- type: entity
+  parent: ClothingHandsGlovessastr
+  id: ClothingHandsGlovesAmaliz
+  name: рабочие перчатки
+  description: Рабочие перчатки, сшитые из тёмной кожи с вырезом на запястье и пальцах. Гравировка на запястье "by Fashion Dynamics".
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Amaliz/gloves.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Amaliz/gloves.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Magboots
+- type: entity
+  parent: ClothingShoesBootsMagsastr
+  id: ClothingShoesBootsMagAmaliz
+  name: рабочие магнитные сапоги
+  description: Высококачественные магнитные сапоги, имеют дополнительные косметические детали в свой конструкции. Крайне похоже на магнитные сапоги Старшего Инженера, за исключением явных следов ручной работы и модификаций.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Amaliz/magboots.rsi
+    layers:
+    - state: icon
+      map: [ "enum.ToggleableVisuals.Layer" ]
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Amaliz/magboots.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+  - type: ClothingSpeedModifier
+    walkModifier: 1
+    sprintModifier: 1
+
+# Headset
+- type: entity
+  parent: ClothingHeadset
+  id: ClothingHeadsetAmaliz
+  name: полноразмерная гарнитура "Вихрь туманности"
+  description: Гарнитура, крайне похожая на стандартную гарнитуру НаноТрейзен, но с дополнительными портами для ключей шифрования и изображением пульсаров на боковой части гарнитуры.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Amaliz/headset.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Amaliz/headset.rsi
+  - type: Headset
+    color: "#379CCFFF"
+  - type: EncryptionKeyHolder
+    keySlots: 5
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Jetpack
+- type: entity
+  parent: JetpackVoidFilledPvrsifvlAlt2
+  id: JetpackVoidFilledAmaliz
+  name: джетпак "Вихрь туманности"
+  description: Ручной работы джетпак с малиново-красными вставками. Судя по внешнему виду, джетпак был создан индивидуально для владельца и длительных работ в космосе. 
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Amaliz/jetpack.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Amaliz/jetpack.rsi
+  - type: GenericVisualizer
+    visuals:
+      enum.JetpackVisuals.Enabled:
+        enum.JetpackVisuals.Layer:
+          True: {state: icon}
+          False: {state: icon}
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# Defibrillator
+- type: entity
+  parent: DefibrillatorCompactPvrsifvlAlt2
+  name: самодельный портативный дефибриллятор
+  description: Самодельный портативный дефибриллятор. Не смотря на ручную сборку, устройство выполнено крайне аккуратно. Имеются бирюзовые и красно-малиновые вставки.
+  id: DefibrillatorAmaliz
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Amaliz/defibsmall.rsi
+    layers:
+    - state: off
+    - state: on
+      map: [ "enum.ToggleableVisuals.Layer" ]
+      visible: false
+      shader: unshaded
+  - type: Item
+    sprite: _DeadSpace/Sponsor/Amaliz/defibsmall.rsi
+
+# Hypo
+- type: entity
+  name: кастомизированный гипоспрей
+  parent: CombatHypoRedSword
+  description: Облегчённая версия гипоспрея, которую разукрасили в малиново-красные и бюризовые цвета.
+  categories: [ HideSpawnMenu ]
+  id: HyposprayAmaliz
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Amaliz/hypospray.rsi
+    state: hypo
+  - type: Item
+    sprite: _DeadSpace/Sponsor/Amaliz/hypospray.rsi
+  - type: SolutionContainerManager
+    solutions:
+      hypospray:
+        maxVol: 5
+  - type: UseDelay
+    delay: 0.5
+
+# Mantle
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckCloakAmaliz
+  name: красный шарф
+  description: Красный шарф, сшитый из разорванного куска ткани. На шарфе имеются покрашенные в бирюзовый цвет части.
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Sponsor/Amaliz/cloak.rsi
+    - type: Clothing
+      sprite: _DeadSpace/Sponsor/Amaliz/cloak.rsi
+    - type: Tag
+      tags: [] # ignore "WhitelistChameleon" tag
+
+#Документ
+- type: entity
+  parent: PaperPrintedCentcomm
+  id: PaperAmaliz
+  name: распечатанный документ
+  description: Лист бумаги с заголовком центкома. Страшно даже смотреть на него.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Paper
+    stampState: paper_stamp-centcom
+    stampedBy:
+    - stampedColor: '#006600FF'
+      stampedName: Центральное Командование
+    - stampedColor: '#00BE00FF'
+      stampedName: Одобрено
+    content: paper-law-amaliz
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+  
+# HUD
+- type: entity
+  parent: ClothingEyesHudMedicalPvrsifvlAlt2
+  id: ClothingEyesHudAmaliz
+  name: модифицированные очки инженера
+  description: Модифицированные очки инженера с дополнительным линзовым интерфейсом. Ручная работа.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Amaliz/hud.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/Amaliz/hud.rsi
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+# pda.rsi
+- type: entity
+  parent: BaseMedicalPDA
+  id: PDAAmaliz
+  name: гейм-бой планшет
+  description: Странный планшет, похожий на модернизированный КПК для игр. Имеет Джойстик и кнопки управления. Либо так запланировано, либо это чья-то шутка при модификации КПК.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Icon
+    sprite: _DeadSpace/Sponsor/Amaliz/pda.rsi
+    state: pda
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Amaliz/pda.rsi
+    layers:
+    - map: [ "enum.PdaVisualLayers.Base" ]
+      state: pda
+    - state: light_overlay
+      map: [ "enum.PdaVisualLayers.Flashlight" ]
+      shader: unshaded
+      visible: false
+    - state: light_overlay
+      map: [ "enum.PdaVisualLayers.IdLight" ]
+      shader: unshaded
+      visible: false
+  - type: CartridgeLoader
+    uiKey: enum.PdaUiKey.Key
+    preinstalled:
+      - CrewManifestCartridge
+      - NotekeeperCartridge
+      - NanoTaskCartridge
+      - NewsReaderCartridge
+      - MedTekCartridge
+      - AstroNavCartridge
+      - MessengerCartridge
+  - type: PdaBorderColor
+    borderColor: "#0b0817"
+    accentHColor: "#242424"
+    accentVColor: "#1d1d22"
+  - type: Tag
+    tags: [ ]
+
+# tools_jawsoflife.rsi
+- type: entity
+  parent: JawsOfLife
+  id: JawsOfLifeAmaliz
+  name: металлополимерные челюсти жизни
+  description: Металлополимер позволяет использовать инструмент в качестве монтировки и резака, крайне прочный и лёгкий. Интересное инженерное решение.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Amaliz/tools_jawsoflife.rsi
+    state: jaws_pry
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left
+      right:
+      - state: inhand-right
+    size: Normal
+  - type: MultipleTool
+    entries:
+      - behavior: Prying
+        sprite:
+          sprite: _DeadSpace/Sponsor/Amaliz/tools_jawsoflife.rsi
+          state: jaws_pry
+        useSound: /Audio/Items/jaws_pry.ogg
+        changeSound: /Audio/Items/change_jaws.ogg
+      - behavior: Cutting
+        sprite:
+          sprite: _DeadSpace/Sponsor/Amaliz/tools_jawsoflife.rsi
+          state: jaws_cutter
+        useSound: /Audio/Items/jaws_cut.ogg
+        changeSound: /Audio/Items/change_jaws.ogg
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 10
+  - type: Tool
+    speedModifier: 1.0
+
+# tools_powerdrill.rsi
+- type: entity
+  parent: PowerDrillPvrsifvlAlt2
+  id: PowerDrillAmaliz
+  name: кастомизированная дрель
+  description: Кастомизированная дрель, подходящая для работы с различными материалами. Имеет бирюзовые и малиново-красные вставки. 
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Amaliz/tools_powerdrill.rsi
+    state: drill_screw
+  - type: Item
+    sprite: _DeadSpace/Sponsor/Amaliz/tools_powerdrill.rsi
+    size: Small
+    inhandVisuals:
+      left:
+      - state: screw-inhand-left
+      right:
+      - state: screw-inhand-right
+  - type: MultipleTool
+    statusShowBehavior: true
+    entries:
+      - behavior: Screwing
+        sprite:
+          sprite: _DeadSpace/Sponsor/Amaliz/tools_powerdrill.rsi
+          state: drill_screw
+        useSound:
+          path: /Audio/Items/drill_use.ogg
+        changeSound:
+          path: /Audio/Items/change_drill.ogg
+      - behavior: Anchoring
+        sprite:
+          sprite: _DeadSpace/Sponsor/Amaliz/tools_powerdrill.rsi
+          state: drill_bolt
+        useSound:
+          path: /Audio/Items/drill_use.ogg
+        changeSound:
+          path: /Audio/Items/change_drill.ogg
+
+# tools_welder.rsi
+- type: entity
+  parent: WelderExperimentalPvrsifvlAlt2
+  id: WelderExperimentalAmaliz
+  name: самодельный сварочный пистолет
+  description: Похоже, раньше это был обычный водяной пистолет, который был каким то образом переделан в сварочный. Имеет бирюзовые и малиново-красные вставки.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Amaliz/tools_welder.rsi
+    state: icon
+  - type: Item
+    sprite: _DeadSpace/Sponsor/Amaliz/tools_welder.rsi
+
+# tools_multitool.rsi
+- type: entity
+  parent: Multitoolnon_stop_smetana
+  id: MultitoolAmaliz
+  name: бирюзовый мультитул
+  description: Похоже, что это обычный бирюзовый мультитул. Хотя, корпус мультитула похож на устройство для взлома.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Amaliz/tools_multitool.rsi
+    layers:
+    - state: icon
+  - type: Item
+    sprite: _DeadSpace/Sponsor/Amaliz/tools_multitool.rsi
+
+# tools_rcd.rci
+- type: entity
+  parent: RCD
+  id: RCDAmaliz
+  name: ручной конструктор материи
+  description: Ручной конструктор материи, с бирюзовыми и малиново-красными вставками. Использует заряды РСУ как источники сжатой материи для перевода в энергию и обратно.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Amaliz/tools_rcd.rsi
+    state: icon
+
+
+# boxers.rsi
+- type: entity
+  parent: ClothingUnderwearBottomBase
+  id: ClothingUnderwearBottomBoxersAmaliz
+  name: семейники с сердечками
+  categories: [ HideSpawnMenu ]
+  description: Серьёзно?..
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Amaliz/boxers.rsi
+
+# plushieruni.rsi
+- type: entity
+  parent: BasePlushie
+  id: PlushieRuniAmaliz
+  name: большая плюшевая игрушка руни
+  description: Более точная игрушечная копия Руни. Куда пропал Руни?
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Amaliz/plushieruni.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: _DeadSpace/Sponsor/Amaliz/plushieruni.rsi
+    inhandVisuals:
+      left:
+      - state: inhand-left
+      right:
+      - state: inhand-right
+  - type: MultiHandedItem

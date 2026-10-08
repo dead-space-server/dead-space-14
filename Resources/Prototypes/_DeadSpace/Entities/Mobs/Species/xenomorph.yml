@@ -126,6 +126,8 @@
     requiredLegs: 2
   - type: HumanoidAppearance
     species: Xenomorph
+  - type: CorpseBurning
+    messageType: chitin
   - type: DamageVisuals
     damageOverlayGroups:
       Brute:

@@ -215,7 +215,7 @@
 
 # Mantle
 - type: entity
-  parent: ClothingOuterCoatSyndieCapArmored
+  parent: ClothingOuterStorageBase
   id: ClothingOuterCoatdrippenwagenAlt
   name: одеяния Магоса
   description: Оно обвешено механическими манипуляторами. Изготовлено на заказ организацией LaFleur Wear.

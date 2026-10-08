@@ -1,0 +1,134 @@
+- type: SpiderOS
+  id: SpiderOS
+  allSkills:
+  - category: Ghost
+    tier: 1
+    name: spider-os-module-ghost-1
+    description: spider-os-module-ghost-1-desc
+    icon:
+      sprite: /Textures/_DeadSpace/Actions/ninja_actions.rsi
+      state: smoke
+    components:
+    - type: NinjaSmokeAbility
+      spreadAmount: 10
+      spreadAmountAutoMode: 5
+  - category: Ghost
+    tier: 2
+    name: spider-os-module-ghost-2
+    description: spider-os-module-ghost-2-desc
+    icon:
+      sprite: /Textures/_DeadSpace/Actions/ninja_actions.rsi
+      state: cloak
+    components:
+    - type: NinjaCloak
+  - category: Ghost
+    tier: 3
+    name: spider-os-module-ghost-3
+    description: spider-os-module-ghost-3-desc
+    icon:
+      sprite: /Textures/_DeadSpace/Actions/ninja_actions.rsi
+      state: clones
+    components:
+    - type: NinjaHolographicClones
+  - category: Ghost
+    tier: 4
+    name: spider-os-module-ghost-4
+    description: spider-os-module-ghost-4-desc
+    icon:
+      sprite: /Textures/_DeadSpace/Actions/ninja_actions.rsi
+      state: scanner
+    components:
+    - type: NinjaDisguise
+      effect: NinjaDisguiseEffect
+  - category: Ghost
+    tier: 5
+    name: spider-os-module-ghost-5
+    description: spider-os-module-ghost-5-desc
+    icon:
+      sprite: /Textures/_DeadSpace/Actions/ninja_actions.rsi
+      state: spiritform
+    components:
+    - type: NinjaSpiritForm
+  - category: Snake
+    tier: 1
+    name: spider-os-module-snake-1
+    description: spider-os-module-snake-1-desc
+    icon:
+      sprite: /Textures/_DeadSpace/Actions/ninja_actions.rsi
+      state: kunai
+    actions:
+    - ToggleNinjaJohyoAbility
+  - category: Snake
+    tier: 2
+    name: spider-os-module-snake-2
+    description: spider-os-module-snake-2-desc
+    icon:
+      sprite: /Textures/_DeadSpace/Actions/ninja_actions.rsi
+      state: cheminjector
+    actions:
+    - ActionNinjaHealingCocktail
+  - category: Snake
+    tier: 3
+    name: spider-os-module-snake-3
+    description: spider-os-module-snake-3-desc
+    icon:
+      sprite: /Textures/_DeadSpace/Actions/ninja_actions.rsi
+      state: emergencyblink
+    components:
+    - type: NinjaEmergencyTeleport
+  - category: Snake
+    tier: 4
+    name: spider-os-module-snake-4
+    description: spider-os-module-snake-4-desc
+    icon:
+      sprite: /Textures/_DeadSpace/Actions/ninja_actions.rsi
+      state: caltrop
+    components:
+    - type: NinjaCaltrop
+  - category: Snake
+    tier: 5
+    name: spider-os-module-snake-5
+    description: spider-os-module-snake-5-desc
+    transferOnSecondChance: false
+    icon:
+      sprite: /Textures/_DeadSpace/Actions/ninja_actions.rsi
+      state: ninjasecondchance
+    components:
+    - type: NinjaSecondChance
+  - category: Steel
+    tier: 1
+    name: spider-os-module-steel-1
+    description: spider-os-module-steel-1-desc
+    icon:
+      sprite: /Textures/_DeadSpace/Actions/ninja_actions.rsi
+      state: shuriken
+    actions:
+    - ToggleNinjaShurikenAbility
+  - category: Steel
+    tier: 2
+    name: spider-os-module-steel-2
+    description: spider-os-module-steel-2-desc
+    icon:
+      sprite: /Textures/_DeadSpace/Actions/ninja_actions.rsi
+      state: adrenal
+    actions:
+    - ActionNinjaAdrenal
+  - category: Steel
+    tier: 3
+    name: spider-os-module-steel-3
+    description: spider-os-module-steel-3-desc
+    icon:
+      sprite: /Textures/_DeadSpace/Actions/ninja_actions.rsi
+      state: emp
+    components:
+    - type: NinjaEmpAbility
+  - category: Steel
+    tier: 4
+    name: spider-os-module-steel-4
+    description: spider-os-module-steel-4-desc
+    icon:
+      sprite: /Textures/_DeadSpace/Actions/ninja_actions.rsi
+      state: energynet
+    actions:
+    - ToggleNinjaNetAbility
+    

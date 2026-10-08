@@ -140,3 +140,16 @@
   conditions:
     - !type:ListingLimitedStockCondition
       stock: 2
+
+# DS14-start
+- type: listing
+  id: YooToolContrabandToolbox
+  productEntity: ToolboxSyndicate
+  cost:
+    SpaceCash: 125
+  categories:
+    - VendingYouToolInventoryContraband
+  conditions:
+    - !type:ListingLimitedStockCondition
+      stock: 1
+# DS14-end

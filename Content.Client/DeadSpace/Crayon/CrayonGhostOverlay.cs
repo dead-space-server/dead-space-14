@@ -57,7 +57,7 @@ public sealed class CrayonGhostOverlay : Overlay
 
         if (!string.IsNullOrEmpty(decalId) && _protoMan.TryIndex<DecalPrototype>(decalId, out var decalProto))
         {
-            handle.DrawTextureRect(_sprite.Frame0(decalProto.Sprite), box, color.WithAlpha(0.5f));
+            handle.DrawTextureRect(_sprite.Frame0(decalProto.Sprite), box, color);
         }
 
         handle.SetTransform(Matrix3x2.Identity);

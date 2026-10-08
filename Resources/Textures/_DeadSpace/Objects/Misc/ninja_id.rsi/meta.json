@@ -17,6 +17,28 @@
     {
       "name": "green-inhand-right",
       "directions": 4
+    },
+    {
+      "name": "red-Ninja_ID"
+    },
+    {
+      "name": "red-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "red-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "blue-Ninja_ID"
+    },
+    {
+      "name": "blue-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "blue-inhand-right",
+      "directions": 4
     }
   ]
 }

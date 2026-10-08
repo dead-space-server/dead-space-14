@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Client.Stylesheets;
 using Content.Shared.Atmos;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage.Components;
@@ -53,6 +54,11 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
             || !_entityManager.TryGetComponent<DamageableComponent>(target, out var damageable))
         {
             NoPatientDataText.Visible = true;
+            // DS14-start
+            AlertsContainer.RemoveAllChildren();
+            AlertsContainer.Visible = false;
+            AlertsDivider.Visible = false;
+            // DS14-end
             DrawInjectedReagents(null); // DS14
             return;
         }
@@ -110,7 +116,7 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
         // Alerts
 
         // DS14-start
-        var showAlerts = state.Unrevivable == true || state.Bleeding == true || state.Unclonable == true;
+        var showAlerts = state.Overheating || state.Unrevivable == true || state.Bleeding == true || state.Unclonable == true;
         // DS14-end
 
         AlertsDivider.Visible = showAlerts;
@@ -118,6 +124,17 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
 
         if (showAlerts)
             AlertsContainer.RemoveAllChildren();
+
+        // DS14-start
+        if (state.Overheating)
+            AlertsContainer.AddChild(new Label
+            {
+                Text = Loc.GetString("health-analyzer-window-entity-overheating-text"),
+                Margin = new Thickness(0, 4),
+                Align = Label.AlignMode.Center,
+                StyleClasses = { StyleClass.LabelKeyText, StyleClass.Negative }
+            });
+        // DS14-end
 
         if (state.Unrevivable == true)
             AlertsContainer.AddChild(new RichTextLabel

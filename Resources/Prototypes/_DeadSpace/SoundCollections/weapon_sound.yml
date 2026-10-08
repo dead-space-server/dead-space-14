@@ -23,3 +23,10 @@
   id: RadianceOn
   files:
    - /Audio/_DeadSpace/Weapons/Melee/Radiance/on_sound.ogg
+
+- type: soundCollection
+  id: KatanaHitSound
+  files:
+   - /Audio/_DeadSpace/Items/Handing/katana/katana-hit1.ogg
+   - /Audio/_DeadSpace/Items/Handing/katana/katana-hit2.ogg
+   - /Audio/_DeadSpace/Items/Handing/katana/katana-hit3.ogg

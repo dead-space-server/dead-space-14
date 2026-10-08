@@ -13,6 +13,8 @@ chat-emote-name-workout = Качаться
 chat-emote-name-flip = Сделать сальто
 chat-emote-name-jump = Прыгнуть
 chat-emote-name-turn = Кружится
+chat-emote-name-bow = Поклониться
+chat-emote-name-breakdance = Брейкданс
 chat-emote-name-start-tail = Начать вилять хвостом
 chat-emote-name-stop-tail = Перестать вилять хвостом
 # Сообщение
@@ -26,6 +28,8 @@ chat-emote-msg-workout = качается
 chat-emote-msg-flip = делает сальто
 chat-emote-msg-jump = прыгает
 chat-emote-msg-turn = кружится
+chat-emote-msg-bow = кланяется
+chat-emote-msg-breakdance = танцует брейкданс
 chat-emote-msg-start-tail = виляет хвостом
 chat-emote-msg-stop-tail = хвост замирает
 chat-emote-msg-teeth-clack = клацает зубами

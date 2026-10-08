@@ -1,0 +1,335 @@
+- type: entity
+  abstract: true
+  parent: Pill
+  id: BasePsychiatryPill
+  components:
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/disk_pickup.ogg
+      params:
+        volume: -6
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/disk_drop.ogg
+      params:
+        volume: -6
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/disk_drop.ogg
+      params:
+        volume: -6
+
+- type: entity
+  parent: BasePsychiatryPill
+  id: PillNeuroClarity
+  name: neuroclarity pill
+  description: One 15-unit tablet takes about five minutes. The course is one tablet per stage already present. A second tablet before that is an overdose.
+  components:
+  - type: Pill
+    pillType: 1
+  - type: Sprite
+    state: pill2
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: NeuroClarity
+          Quantity: 15
+
+- type: entity
+  parent: BasePsychiatryPill
+  id: PillSchizotoxin
+  name: schizotoxin pill
+  description: Forces acute schizophrenia. Bypasses antagonist immunity.
+  components:
+  - type: Pill
+    pillType: 5
+  - type: Sprite
+    state: pill6
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 20
+        reagents:
+        - ReagentId: Schizotoxin
+          Quantity: 10
+
+- type: entity
+  parent: BasePsychiatryPill
+  id: PillPsychogenLatent
+  name: psychogen-L pill
+  description: Five units raise one stage. Fifteen units from a healthy patient reach acute.
+  components:
+  - type: Pill
+    pillType: 6
+  - type: Sprite
+    state: pill7
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 20
+        reagents:
+        - ReagentId: PsychogenLatent
+          Quantity: 10
+
+- type: entity
+  parent: BasePsychiatryPill
+  id: PillPsychiatryRemedy
+  name: psychiatry remedy
+  suffix: Admin
+  description: Clears every schizophrenia stage. Does nothing to a positronic.
+  components:
+  - type: Pill
+    pillType: 3
+  - type: Sprite
+    state: pill4
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 5
+        reagents:
+        - ReagentId: PsychiatryRemedy
+          Quantity: 5
+
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadNeuroMesh
+  name: neuro-mesh
+  description: A cranial mesh. An encephalograph reads live brain activity through it.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Psychiatry/neuro_mesh.rsi
+    state: icon
+  - type: Clothing
+    sprite: _DeadSpace/Psychiatry/neuro_mesh.rsi
+    equipSound: /Audio/Effects/rustle1.ogg
+    unequipSound: /Audio/Effects/rustle2.ogg
+  - type: NeuroMesh
+  - type: Item
+    size: Small
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/cloth/cloth_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/cloth/cloth_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/cloth/cloth_drop.ogg
+
+- type: entity
+  parent: BaseItem
+  id: HandheldEncephalograph
+  name: handheld encephalograph
+  description: A brain monitor. Through a neuro-mesh it lights the region that just fired, like speech, hearing, sight, movement, fear, arousal. Needs the Advanced Treatment skill. Works without schizophrenia.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Psychiatry/encephalograph.rsi
+    layers:
+    - state: icon
+    - state: screen
+      shader: unshaded
+  - type: Item
+    size: Small
+  - type: Encephalograph
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_drop.ogg
+  - type: UserInterface
+    interfaces:
+      enum.EncephalographUiKey.Key:
+        type: EncephalographBoundUserInterface
+
+- type: entity
+  parent: BaseItem
+  id: LobotomyTool
+  name: lobotomy kit
+  description: Cast hammer and chisel. On any organic stage it drops three at once. Complications are possible.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Psychiatry/lobotomy_kit.rsi
+    state: icon
+  - type: Item
+    size: Normal
+  - type: LobotomyTool
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/tools/screwdriver_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/Items/screwdriver_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/Items/screwdriver_drop.ogg
+
+- type: entity
+  parent: [BaseItem, PowerCellSlotMediumItem]
+  id: ShockTherapyPaddles
+  name: shock therapy unit
+  description: A two-handed shock unit with round electrodes. Shocks any creature; without a medical gag the jaw breaks. Metal conducts to whoever is touching it. Wood does not conduct. Moisture evaporates. On any schizophrenia stage it drops two and can blind, deafen, or mute. On a positronic it scrambles the processor instead.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Psychiatry/shock_paddles.rsi
+    layers:
+    - state: icon
+    - state: powered
+      map: [ "enum.ToggleableVisuals.Layer" ]
+      visible: false
+      shader: unshaded
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Item
+    size: Large
+  - type: MultiHandedItem
+  - type: ItemToggle
+    soundActivate:
+      path: /Audio/Items/Defib/defib_safety_on.ogg
+    soundDeactivate:
+      path: /Audio/Items/Defib/defib_safety_off.ogg
+  - type: ToggleCellDraw
+  - type: PowerCellDraw
+    enabled: false
+    drawRate: 3
+    useCharge: 180
+  - type: ShockTherapy
+    shockDamage: 40
+    sideEffectChance: 0.18
+    doAfterMinSeconds: 40
+    doAfterMaxSeconds: 61
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/medkit/medkit_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/medkit/medkit_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/medkit/medkit_drop.ogg
+
+- type: entity
+  parent: ClothingMaskMuzzle
+  id: ClothingMaskMedicalGag
+  name: medical gag
+  description: A jaw guard. Without it, shock therapy breaks the patient's jaw.
+  components:
+  - type: MedicalGag
+  - type: Sprite
+    sprite: _DeadSpace/Psychiatry/medical_gag.rsi
+    state: icon
+  - type: Clothing
+    sprite: _DeadSpace/Psychiatry/medical_gag.rsi
+    equipSound: /Audio/Effects/rustle1.ogg
+    unequipSound: /Audio/Effects/rustle2.ogg
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/cloth/cloth_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/cloth/cloth_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/cloth/cloth_drop.ogg
+
+- type: entity
+  parent: BaseItem
+  id: FirmwarePatch
+  name: firmware patch
+  description: A one-use cartridge. Clears latent cyberpsychosis only.
+  components:
+  - type: FirmwarePatch
+  - type: Construction
+    graph: FirmwarePatch
+    node: patch
+  - type: Sprite
+    sprite: _DeadSpace/Psychiatry/firmware_patch.rsi
+    state: active
+  - type: Item
+    sprite: _DeadSpace/Psychiatry/firmware_patch.rsi
+    size: Small
+
+- type: entity
+  parent: BaseItem
+  id: AdminFirmwarePatch
+  name: admin firmware patch
+  suffix: Admin
+  description: Clears every cyberpsychosis stage. Spawn only.
+  components:
+  - type: AdminCurePatch
+  - type: Sprite
+    sprite: _DeadSpace/Psychiatry/firmware_patch.rsi
+    state: icon
+  - type: Item
+    sprite: _DeadSpace/Psychiatry/firmware_patch.rsi
+    size: Small
+
+- type: entity
+  parent: BaseItem
+  id: HardResetProbe
+  name: hard-reset probe
+  description: Drops any cyberpsychosis stage by three. The reset can burn out a sensor bus.
+  components:
+  - type: HardResetProbe
+  - type: Sprite
+    sprite: _DeadSpace/Psychiatry/hard_reset_probe.rsi
+    state: active
+  - type: Item
+    sprite: _DeadSpace/Psychiatry/hard_reset_probe.rsi
+    size: Normal
+
+- type: entity
+  parent: BaseItem
+  id: IonScrubber
+  name: ion scrubber
+  description: A fast discharge. On any cyberpsychosis stage it drops two, shocks the chassis, and can fault a bus.
+  components:
+  - type: IonScrubber
+  - type: Sprite
+    sprite: _DeadSpace/Psychiatry/ion_scrubber.rsi
+    state: active
+  - type: Item
+    sprite: _DeadSpace/Psychiatry/ion_scrubber.rsi
+    size: Normal
+
+- type: entity
+  parent: BaseItem
+  id: CascadeSpike
+  name: cascade spike
+  description: A one-use probe that forces cyberpsychosis in a positronic.
+  components:
+  - type: CascadeSpike
+  - type: Construction
+    graph: CascadeSpike
+    node: spike
+  - type: Sprite
+    sprite: Objects/Tools/multitool.rsi
+    state: red-unlit
+  - type: Item
+    size: Small
+
+- type: entity
+  parent: GasCanister
+  id: GasCanisterPsychogen
+  name: psychogen canister
+  description: Open the release valve and it floods the room. Breathing it gives a biological schizophrenia.
+  components:
+  - type: Sprite
+    layers:
+    - state: greenys
+  - type: GasCanister
+    gasMixture:
+      volume: 1500
+      moles:
+        Psychogen: 2769.36
+      temperature: 293.15

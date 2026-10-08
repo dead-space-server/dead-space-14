@@ -346,6 +346,13 @@
     maxItemSize: Huge
     grid:
     - 0,0,19,9
+  #DS14-start
+  - type: Tag
+    tags:
+    - WhitelistChameleon
+    - Backpack
+    - CorruptTeleportItem
+  #DS14-end
 
 - type: entity
   parent: ClothingBackpackClown

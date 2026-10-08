@@ -11,10 +11,13 @@
       "name": "icon"
     },
     {
-      "name": "icon-red"
+      "name": "red-activated"
     },
     {
-      "name": "icon-green"
+      "name": "green-activated"
+    },
+    {
+      "name": "blue-activated"
     },
     {
       "name": "equipped-HAND",
@@ -30,6 +33,18 @@
     },
     {
       "name": "green-equipped-HAND-unshaded",
+      "directions": 4
+    },
+    {
+      "name": "red-equipped-HAND-unshaded",
+      "directions": 4
+    },
+    {
+      "name": "blue-equipped-HAND",
+      "directions": 4
+    },
+    {
+      "name": "blue-equipped-HAND-unshaded",
       "directions": 4
     },
     {
@@ -54,6 +69,14 @@
     },
     {
       "name": "green-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "blue-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "blue-inhand-right",
       "directions": 4
     }
   ]

@@ -29,6 +29,7 @@ public sealed partial class CrewMonitoringWindow : FancyWindow
 {
     [Dependency] private readonly IEntityManager _entManager = default!;
     [Dependency] private readonly IPlayerManager _player = default!; // DS14
+    [Dependency] private readonly IGameTiming _timing = default!; // DS14
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     private readonly SharedTransformSystem _transformSystem;
     private readonly SpriteSystem _spriteSystem;
@@ -379,7 +380,7 @@ public sealed partial class CrewMonitoringWindow : FancyWindow
                 cameraButton.OnPressed += args =>
                 {
                     args.Event.Handle();
-                    _stationAiTrack.Track(sensor.OwnerUid);
+                    _stationAiTrack.Track(sensor.OwnerUid, _timing.CurTime);
                 };
 
                 mainContainer.AddChild(cameraButton);

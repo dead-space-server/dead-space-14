@@ -48,4 +48,6 @@ public static class DeadSpaceStyleClass
     public const string Subtitle = "DeadSpaceSubtitle";
     public const string RoundStatusTitle = "DeadSpaceRoundStatusTitle";
     public const string RoundStatusTime = "DeadSpaceRoundStatusTime";
+    public const string SpiderOSWindow = "SpiderOSWindow";
+    public const string SpiderOSWindowHeader = "SpiderOSWindowHeader";
 }

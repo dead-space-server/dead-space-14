@@ -58,7 +58,3 @@
   - type: Lock
   - type: AccessReader
     access: [["Ninja"]]
-  - type: ContainerFill
-    containers:
-      ItemCabinet:
-      - ToyEnergyKatana

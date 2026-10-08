@@ -18,4 +18,15 @@ public partial class InventorySystem
         base.Shutdown();
         ShutdownSlots();
     }
+
+    // DS14 Start
+    public void SetInventorySpecies(EntityUid uid, string speciesId, InventoryComponent? inventory = null)
+    {
+        if (!Resolve(uid, ref inventory))
+            return;
+
+        inventory.SpeciesId = speciesId.ToLower();
+        Dirty(uid, inventory);
+    }
+    //DS14 End
 }

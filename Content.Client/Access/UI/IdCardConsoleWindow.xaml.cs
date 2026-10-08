@@ -125,6 +125,11 @@ namespace Content.Client.Access.UI
             ExtendedAccessButton.Visible = _extendedAccessLevels.Count > 0;
             BasicAccessButton.OnPressed += _ => SetAccessPreset(_basicAccessLevels);
             ExtendedAccessButton.OnPressed += _ => SetAccessPreset(_extendedAccessLevels);
+            GrantAllAccessButton.OnPressed += _ =>
+            {
+                SetAllAccess(true);
+                SubmitData();
+            };
             DismissButton.Visible = hasDismissal;
             // DS14-End
         }
@@ -238,6 +243,7 @@ namespace Content.Client.Access.UI
             // DS14-start
             BasicAccessButton.Disabled = !interfaceEnabled;
             ExtendedAccessButton.Disabled = !interfaceEnabled;
+            GrantAllAccessButton.Disabled = !interfaceEnabled;
             // Don't clobber ConfirmButton's own transient disabled state while it's mid-"are you
             // sure" cooldown - only force it here outside of that window.
             if (!DismissButton.IsConfirming)

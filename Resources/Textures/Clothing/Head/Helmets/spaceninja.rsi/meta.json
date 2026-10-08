@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from tgstation ss13, resprite by yri_nouri (discord) for Space Station 14 server Мёртвый Космос",
+  "copyright": "Taken from tgstation ss13, resprite by yri_nouri (discord), new version sprited by pivo_3amopckoe (discord), pyfya (discord) for Space Station 14 server Мёртвый Космос",
   "size": {
     "x": 32,
     "y": 32
@@ -9,6 +9,9 @@
   "states": [
     {
       "name": "icon"
+    },
+    {
+      "name": "deactivated-icon"
     },
     {
       "name": "equipped-HELMET",
@@ -48,6 +51,125 @@
     },
     {
       "name": "inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "red-equipped-HELMET",
+      "directions": 4
+    },
+    {
+      "name": "red-equipped-head-unshaded",
+      "directions": 4
+    },
+    {
+      "name": "red-equipped-HELMET-vox",
+      "directions": 4
+    },
+    {
+      "name": "red-equipped-head-unshaded-vox",
+      "directions": 4
+    },
+    {
+      "name": "red-equipped-HELMET-reptilian",
+      "directions": 4
+    },
+    {
+      "name": "red-equipped-head-unshaded-reptilian",
+      "directions": 4
+    },
+    {
+      "name": "red-equipped-HELMET-vulpkanin",
+      "directions": 4
+    },
+    {
+      "name": "red-equipped-head-unshaded-vulpkanin",
+      "directions": 4
+    },
+    {
+      "name": "blue-equipped-HELMET",
+      "directions": 4
+    },
+    {
+      "name": "blue-equipped-head-unshaded",
+      "directions": 4
+    },
+    {
+      "name": "blue-equipped-HELMET-vox",
+      "directions": 4
+    },
+    {
+      "name": "blue-equipped-head-unshaded-vox",
+      "directions": 4
+    },
+    {
+      "name": "blue-equipped-HELMET-reptilian",
+      "directions": 4
+    },
+    {
+      "name": "blue-equipped-head-unshaded-reptilian",
+      "directions": 4
+    },
+    {
+      "name": "blue-equipped-HELMET-vulpkanin",
+      "directions": 4
+    },
+    {
+      "name": "blue-equipped-head-unshaded-vulpkanin",
+      "directions": 4
+    },
+    {
+      "name": "blue-icon"
+    },
+    {
+      "name": "blue-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "blue-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "red-icon"
+    },
+    {
+      "name": "red-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "red-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "new-icon"
+    },
+    {
+      "name": "red-new-icon"
+    },
+    {
+      "name": "blue-new-icon"
+    },
+    {
+      "name": "new-equipped-HELMET",
+      "directions": 4
+    },
+    {
+      "name": "red-new-equipped-HELMET",
+      "directions": 4
+    },
+    {
+      "name": "blue-new-equipped-HELMET",
+      "directions": 4
+    },
+    {
+      "name": "new-equipped-head-unshaded",
+      "directions": 4
+    },
+    {
+      "name": "red-new-equipped-head-unshaded",
+      "directions": 4
+    },
+    {
+      "name": "blue-new-equipped-head-unshaded",
       "directions": 4
     }
   ]

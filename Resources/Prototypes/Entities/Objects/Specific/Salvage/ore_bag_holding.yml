@@ -14,3 +14,8 @@
   - type: Storage
     grid:
     - 0,0,19,9
+  #DS14-start
+  - type: Tag
+    tags:
+    - CorruptTeleportItem
+  #DS14-end

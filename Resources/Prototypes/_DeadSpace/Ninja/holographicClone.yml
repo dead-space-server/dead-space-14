@@ -1,0 +1,54 @@
+- type: entity
+  id: HolographicNinjaClone
+  name: голографическая копия ниндзя
+  parent: SimpleSpaceMobBase
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Demons/shadowling.rsi
+    layers:
+    - state: shadowling
+  - type: NoSlip
+  - type: Magboots
+  - type: NpcFactionMember
+    factions:
+    - Ninja
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 6
+    baseSprintSpeed: 6
+    baseWeightlessModifier: 1
+  - type: MovementAlwaysTouching
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/Weapons/Xeno/alien_claw_flesh3.ogg
+    angle: 0
+    attackRate: 1
+    animation: WeaponArcStatic
+    damage:
+      types:
+        Heat: 2.5
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      25: Dead
+  - type: AutoDeleteOnDeath
+  - type: NinjaClone
+    cloningChance: 0.5
+    minSpawnRadius: 1
+    maxSpawnRadius: 2
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+    - FootstepSound
+  - type: TimedDespawn
+    lifetime: 5
+  - type: NameIdentifier
+    group: null
+    

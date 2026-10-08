@@ -90,10 +90,12 @@ public sealed class UpdateWageRow
     public NetEntity FromId { get; set; }
     public string FromName { get; set; } = default!;
     public string FromAccount { get; set; } = default!;
+    public FixedPoint2 FromBalance { get; set; }
 
     public NetEntity ToId { get; set; }
     public string ToName { get; set; } = default!;
     public string ToAccount { get; set; } = default!;
+    public FixedPoint2 ToBalance { get; set; }
 
     public FixedPoint2 Wage { get; set; }
 }

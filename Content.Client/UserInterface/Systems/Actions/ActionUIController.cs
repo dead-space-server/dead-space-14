@@ -251,13 +251,13 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
         if (_actionsSystem?.GetAction(actionId) is not {} action)
             return;
 
+        if (_actions.Contains(action))
+            return;
         // TODO: event
         // if the action is toggled when we add it, start targeting
         if (action.Comp.Toggled && EntityManager.TryGetComponent<TargetActionComponent>(actionId, out var target))
             StartTargeting((action, action, target));
 
-        if (_actions.Contains(action))
-            return;
 
         _actions.Add(action);
     }

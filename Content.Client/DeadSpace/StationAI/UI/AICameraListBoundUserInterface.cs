@@ -1,6 +1,7 @@
 using Content.Shared.DeadSpace.StationAI.UI;
 using Content.Shared.Silicons.StationAi;
 using JetBrains.Annotations;
+using Robust.Shared.Timing;
 
 namespace Content.Client.DeadSpace.StationAI.UI;
 
@@ -11,6 +12,7 @@ namespace Content.Client.DeadSpace.StationAI.UI;
 public sealed class AICameraListBoundUserInterface : BoundUserInterface
 {
     public AICameraList? Window;
+    [Dependency] private readonly IGameTiming _timing = default!; // DS14
 
     public AICameraListBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
@@ -53,7 +55,12 @@ public sealed class AICameraListBoundUserInterface : BoundUserInterface
 
     private void WindowOnWarpToTarget(NetEntity obj)
     {
-        SendMessage(new AiCameraJumpToTargetMessage { Entity = EntMan.GetNetEntity(Owner), Target = obj });
+        SendMessage(new AiCameraJumpToTargetMessage
+        {
+            Entity = EntMan.GetNetEntity(Owner),
+            Target = obj,
+            SourceTime = _timing.CurTime
+        });
     }
 
     public void UpdateCameras()

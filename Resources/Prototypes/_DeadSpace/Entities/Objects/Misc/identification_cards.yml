@@ -607,20 +607,27 @@
 - type: entity
   parent: IDCardStandard
   id: NinjaIDCard
-  name: зеленая ID-карта
-  description: Зеленая ID-карта.... 
+  name: ID-карта с пауком
+  description: ID-карта с пауком.... 
   suffix: Ninja
   components:
   - type: AgentIDCard
-  - type: PresetIdCard
-    job: Passenger
+  - type: IdCard
+    jobTitle: job-name-passenger
+    jobIcon: JobIconPassenger
   - type: Sprite
     sprite: _DeadSpace/Objects/Misc/ninja_id.rsi
     layers:
     - state: Ninja_ID
   - type: Access
+    tags:
+    - Ninja
   - type: Item
-    heldPrefix: green
+    inhandVisuals:
+      left:
+      - state: green-inhand-left
+      right:
+      - state: green-inhand-right
   - type: Clothing
     sprite: _DeadSpace/Objects/Misc/ninja_id.rsi
   - type: UIRequiresLock
@@ -629,6 +636,7 @@
     verbText: agent-id-open-ui-verb
   - type: Tag
     tags: [] # ignore "WhitelistChameleon" tag
+  - type: NinjaAppearanceItem
   - type: UserInterface
     interfaces:
       enum.AgentIDCardUiKey.Key:

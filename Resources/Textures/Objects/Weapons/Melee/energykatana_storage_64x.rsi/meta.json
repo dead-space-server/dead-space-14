@@ -9,6 +9,12 @@
     "states": [
         {
             "name": "storage"
+        },
+        {
+            "name": "red-storage"
+        },
+        {
+            "name": "blue-storage"
         }
     ]
 }

@@ -1,0 +1,25 @@
+- type: constructionGraph
+  id: CascadeSpike
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: spike
+      steps:
+      - material: Steel
+        amount: 4
+        doAfter: 1
+      - material: Glass
+        amount: 2
+        doAfter: 1
+      - material: Gold
+        amount: 2
+        doAfter: 2
+      - material: Plasma
+        amount: 1
+        doAfter: 2
+      - material: Cable
+        amount: 10
+        doAfter: 2
+  - node: spike
+    entity: CascadeSpike

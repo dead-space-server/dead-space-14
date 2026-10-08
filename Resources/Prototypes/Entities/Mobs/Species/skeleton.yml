@@ -9,6 +9,10 @@
   components:
   - type: HumanoidAppearance
     species: Skeleton
+  # DS14-start
+  - type: CorpseBurning
+    messageType: bone
+  # DS14-end
   - type: Icon
     sprite: Mobs/Species/Skeleton/parts.rsi
     state: full

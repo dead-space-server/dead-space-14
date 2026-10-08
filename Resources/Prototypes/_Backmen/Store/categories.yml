@@ -214,3 +214,17 @@
 - type: storeCategory
   id: StarkistInventoryContraband
   name: store-category-contraband
+
+# DS14-start
+- type: storeCategory
+  id: ClothingBackpackMachineInventoryContraband
+  name: store-category-contraband
+
+- type: storeCategory
+  id: VendingYouToolInventoryContraband
+  name: store-category-contraband
+
+- type: storeCategory
+  id: VendingWallMedicalInventoryContraband
+  name: store-category-contraband
+# DS14-end

@@ -43,6 +43,7 @@ public sealed partial class MapScreen : BoxContainer
 
     private List<ShuttleBeaconObject> _beacons = new();
     private List<ShuttleExclusionObject> _exclusions = new();
+    private HashSet<MapId>? _ftlAllowedMaps; // DS14
 
     private TimeSpan _nextPing;
     private TimeSpan _pingCooldown = TimeSpan.FromSeconds(3);
@@ -109,6 +110,7 @@ public sealed partial class MapScreen : BoxContainer
         // This should work better with predicting network states as they come in.
         _beacons = state.Destinations;
         _exclusions = state.Exclusions;
+        _ftlAllowedMaps = state.FTLAllowedMaps != null ? new HashSet<MapId>(state.FTLAllowedMaps) : null; // DS14
         _state = state.FTLState;
         _ftlTime = state.FTLTime;
         MapRadar.InFtl = true;
@@ -263,10 +265,17 @@ public sealed partial class MapScreen : BoxContainer
 
         while (mapComps.MoveNext(out var mapUid, out var mapComp, out var mapXform, out var mapMetadata))
         {
-            if (_console != null && !_shuttles.CanFTLTo(_shuttleEntity.Value, mapComp.MapId, _console.Value))
+            // DS14-start
+            if (_ftlAllowedMaps != null)
+            {
+                if (!_ftlAllowedMaps.Contains(mapComp.MapId))
+                    continue;
+            }
+            else if (_console != null && !_shuttles.CanFTLTo(_shuttleEntity.Value, mapComp.MapId, _console.Value))
             {
                 continue;
             }
+            // DS14-end
             var mapName = mapMetadata.EntityName;
 
             if (string.IsNullOrEmpty(mapName))

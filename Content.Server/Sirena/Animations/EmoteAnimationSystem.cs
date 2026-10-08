@@ -14,6 +14,16 @@ public sealed class EmoteAnimationSystem : SharedEmoteAnimationSystem
     public override void Initialize()
     {
         base.Initialize();
+        //DS-14 start
+        foreach (var emote in _proto.EnumeratePrototypes<EmotePrototype>())
+        {
+            if (emote.Steps == null || emote.Steps.Count == 0)
+                continue;
+
+            if (!EmoteAnimation.TryResolve(emote.Steps, out _, out var error))
+                Log.Warning($"emote {emote.ID}: {error}");
+        }
+        //DS-14 end
         SubscribeLocalEvent<EmoteAnimationComponent, ComponentGetState>(OnGetState);
 
         SubscribeLocalEvent<EmoteAnimationComponent, MapInitEvent>(OnMapInint);

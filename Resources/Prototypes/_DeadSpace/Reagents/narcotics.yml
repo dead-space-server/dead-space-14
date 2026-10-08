@@ -95,3 +95,53 @@
         - !type:ReagentCondition
           reagent: Celestin
           min: 5
+
+- type: reagent
+  id: Velaxin
+  name: reagent-name-velaxin
+  group: Narcotics
+  desc: reagent-desc-velaxin
+  physicalDesc: reagent-physical-desc-energizing
+  contrabandSeverity: Major
+  flavor: bitter
+  color: "#FFB52E"
+  boilingPoint: 212.0
+  meltingPoint: 170.0
+  metabolisms:
+    Narcotic:
+      metabolismRate: 0.5
+      effects:
+      - !type:MovementSpeedModifier
+        walkSpeedModifier: 1.4
+        sprintSpeedModifier: 1.4
+      - !type:AdjustReagent
+        conditions:
+        - !type:ReagentCondition
+          reagent: ChloralHydrate
+          min: 1
+        reagent: ChloralHydrate
+        amount: -10
+      - !type:ModifyStatusEffect
+        effectProto: StatusEffectStunned
+        time: 3
+        type: Remove
+      - !type:ModifyKnockdown
+        time: 3
+        type: Remove
+      - !type:GenericStatusEffect
+        key: StaminaModifier
+        component: StaminaModifier
+        time: 3
+      - !type:ModifyStatusEffect
+        effectProto: StatusEffectForcedSleeping
+        time: 3
+        type: Remove
+      - !type:ModifyStatusEffect
+        effectProto: StatusEffectDrowsiness
+        time: 3
+        type: Remove
+      - !type:Jitter
+        conditions:
+        - !type:ReagentCondition
+          reagent: Velaxin
+          min: 5

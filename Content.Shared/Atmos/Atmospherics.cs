@@ -194,6 +194,7 @@ namespace Content.Shared.Atmos
             [Gas.Halon] = Loc.GetString("gas-halon-abbreviation"),
             [Gas.Zauker] = Loc.GetString("gas-zauker-abbreviation"),
             [Gas.Antinoblium] = Loc.GetString("gas-antinoblium-abbreviation"),
+            [Gas.Psychogen] = Loc.GetString("gas-psychogen-abbreviation"),
             // DS14-end
         };
 
@@ -224,7 +225,7 @@ namespace Content.Shared.Atmos
         /// <summary>
         ///     Total number of gases. Increase this if you want to add more!
         /// </summary>
-        public const int TotalNumberOfGases = 22; // Kofeecheks gases: LicenseRef-Kofeecheks //DS14: HyperNoblium, ProtoNitrate, Helium, Halon, Zauker, Antinoblium
+        public const int TotalNumberOfGases = 23; // Kofeecheks gases: LicenseRef-Kofeecheks //DS14: HyperNoblium, ProtoNitrate, Helium, Halon, Zauker, Antinoblium, Psychogen
 
         /// <summary>
         ///     This is the actual length of the gases arrays in mixtures.
@@ -403,7 +404,8 @@ namespace Content.Shared.Atmos
         Helium = 18,
         Halon = 19,
         Zauker = 20,
-        Antinoblium = 21
+        Antinoblium = 21,
+        Psychogen = 22
         // DS14-end
     }
 }

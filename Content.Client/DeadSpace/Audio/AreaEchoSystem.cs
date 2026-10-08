@@ -63,7 +63,8 @@ public sealed class AreaEchoSystem : EntitySystem
     private readonly Dictionary<(EntityUid Grid, Vector2i Tile, EntityUid Source), RoomAcoustics> _rooms = new();
     private readonly List<(EntityUid Auxiliary, EntityUid Effect)> _effects = new();
     private readonly HashSet<EntityUid> _leased = new();
-    private readonly Dictionary<EntityUid, (AudioComponent Audio, EntityUid Auxiliary, RoomAcoustics Room)> _applied = new();
+    private readonly Dictionary<EntityUid, TimeSpan> _tailUntil = new();
+    private readonly Dictionary<EntityUid, (AudioComponent Audio, EntityUid Auxiliary, RoomAcoustics Room, TimeSpan TailDuration)> _applied = new();
     private readonly List<EntityUid> _stale = new();
     private readonly float[] _rayLengths = new float[32];
     private readonly bool[] _rayReflected = new bool[32];
@@ -136,8 +137,7 @@ public sealed class AreaEchoSystem : EntitySystem
         }
         foreach (var uid in _stale)
         {
-            _leased.Remove(_applied[uid].Auxiliary);
-            _applied.Remove(uid);
+            ReleaseAuxiliary(uid);
         }
 
         if (_timing.RealTime < _effectsUpdateAt)
@@ -164,8 +164,8 @@ public sealed class AreaEchoSystem : EntitySystem
     {
         var ownsEffect = _applied.TryGetValue(sound, out var applied) &&
                          sound.Comp1 == applied.Audio && sound.Comp1.Auxiliary == applied.Auxiliary;
-        if (!ownsEffect && _applied.Remove(sound, out var previous))
-            _leased.Remove(previous.Auxiliary);
+        if (!ownsEffect)
+            ReleaseAuxiliary(sound);
 
         // Authored effects and effects assigned by another system take priority.
         if (sound.Comp1.Auxiliary != null && !ownsEffect)
@@ -237,9 +237,12 @@ public sealed class AreaEchoSystem : EntitySystem
         if (effect == null)
             return;
 
+        float tailDuration;
         if (drugEcho)
         {
-            _audio.SetEffectPreset(effect.Value, Comp<AudioEffectComponent>(effect.Value), _prototypes.Index(DrugPreset));
+            var preset = _prototypes.Index(DrugPreset);
+            _audio.SetEffectPreset(effect.Value, Comp<AudioEffectComponent>(effect.Value), preset);
+            tailDuration = preset.DecayTime + preset.ReflectionsDelay + preset.LateReverbDelay;
         }
         else
         {
@@ -249,11 +252,11 @@ public sealed class AreaEchoSystem : EntitySystem
             var parameters = sound.Comp1.Params;
             var distanceGain = SpatialAudio.GetDistanceGain(distance, parameters.MaxDistance, parameters.ReferenceDistance);
             var occlusion = _muffling.GetOcclusion(listener, delta, distance, sound.Comp2.ParentUid);
-            // Native direct-path occlusion does not filter the auxiliary send. Attenuate the wet path explicitly.
-            var gain = distanceGain * MathF.Exp(-occlusion) * echoGain;
             var preset = CreatePreset(room, listener.Position, _transform.GetWorldMatrix(room.Grid),
-                _eye.CurrentEye.Rotation, gain);
+                _eye.CurrentEye.Rotation, echoGain);
+            preset = MuffleReverb(preset, distanceGain, occlusion);
             _audio.SetEffectPreset(effect.Value, Comp<AudioEffectComponent>(effect.Value), preset);
+            tailDuration = preset.DecayTime + preset.ReflectionsDelay + preset.LateReverbDelay;
         }
         _audio.SetEffect(auxiliary, Comp<AudioAuxiliaryComponent>(auxiliary), effect);
 
@@ -262,7 +265,8 @@ public sealed class AreaEchoSystem : EntitySystem
             SetAuxiliaryLocally((sound.Owner, sound.Comp1), auxiliary);
             _leased.Add(auxiliary);
         }
-        _applied[sound] = (sound.Comp1, auxiliary, room);
+        _applied[sound] = (sound.Comp1, auxiliary, room,
+            TimeSpan.FromSeconds(tailDuration));
     }
 
     internal void ConfigureSpeech(Entity<AudioComponent> sound, bool whisper, bool radio, bool suppressEcho = false)
@@ -345,8 +349,10 @@ public sealed class AreaEchoSystem : EntitySystem
     {
         foreach (var slot in _effects)
         {
-            if (_leased.Contains(slot.Auxiliary))
+            if (_leased.Contains(slot.Auxiliary) ||
+                _tailUntil.TryGetValue(slot.Auxiliary, out var tailUntil) && _timing.RealTime < tailUntil)
                 continue;
+            _tailUntil.Remove(slot.Auxiliary);
             var component = Comp<AudioAuxiliaryComponent>(slot.Auxiliary);
             if (component.Effect == null)
                 _audio.SetEffect(slot.Auxiliary, component, slot.Effect);
@@ -616,6 +622,16 @@ public sealed class AreaEchoSystem : EntitySystem
         return preset;
     }
 
+    internal static ReverbProperties MuffleReverb(ReverbProperties preset, float distanceGain, float occlusion)
+    {
+        // The native low-pass affects only the dry path. Quiet but unfiltered reflections sound shrill beside it.
+        var cutoff = MathF.Exp(-occlusion);
+        preset.Gain *= distanceGain * cutoff;
+        preset.GainHF *= cutoff;
+        preset.DecayHFRatio = Math.Clamp(preset.DecayHFRatio * MathF.Sqrt(cutoff), 0.1f, 2f);
+        return preset;
+    }
+
     private bool IsCovered(Entity<MapGridComponent> grid, RoofComponent? roof, Vector2i tile)
     {
         if (!_maps.TryGetTileRef(grid, grid.Comp, tile, out var tileRef) ||
@@ -629,12 +645,22 @@ public sealed class AreaEchoSystem : EntitySystem
 
     private void RemoveEcho(EntityUid uid, AudioComponent sound)
     {
-        if (_applied.Remove(uid, out var applied) &&
+        if (_applied.TryGetValue(uid, out var applied) &&
             sound == applied.Audio && sound.Auxiliary == applied.Auxiliary)
         {
             SetAuxiliaryLocally((uid, sound), null);
-            _leased.Remove(applied.Auxiliary);
         }
+        ReleaseAuxiliary(uid);
+    }
+
+    private void ReleaseAuxiliary(EntityUid sound)
+    {
+        if (!_applied.Remove(sound, out var applied))
+            return;
+
+        _leased.Remove(applied.Auxiliary);
+        // EFX keeps reflecting after the source ends. Reconfiguring this slot early truncates that tail.
+        _tailUntil[applied.Auxiliary] = _timing.RealTime + applied.TailDuration;
     }
 
     private void ClearEcho()
@@ -647,6 +673,7 @@ public sealed class AreaEchoSystem : EntitySystem
         }
         _applied.Clear();
         _leased.Clear();
+        _tailUntil.Clear();
         _rooms.Clear();
         // Detaching sources alone leaves the native reverb tail playing. Stop our owned slots as well.
         if (!_backendUnavailable)

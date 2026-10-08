@@ -1,0 +1,27 @@
+<Controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:Controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      x:Class="Content.Client.DeadSpace.Ninja.UI.NinjaDisguiseWindow"
+                      Title="{Loc 'ninja-disguise-ui-title'}"
+                      MinSize="500 300"
+                      SetSize="500 300">
+    <BoxContainer Orientation="Vertical"
+                  Margin="4"
+                  VerticalExpand="True"
+                  SeparationOverride="4">
+        <ScrollContainer VerticalExpand="True">
+            <BoxContainer Name="EntriesContainer"
+                          Orientation="Vertical"
+                          VerticalExpand="True"
+                          SeparationOverride="2" />
+        </ScrollContainer>
+        <Label Name="EmptyLabel"
+               Text="{Loc 'ninja-disguise-ui-empty'}"
+               HorizontalAlignment="Center"
+               Margin="4"
+               FontColorOverride="#888888"
+               Visible="False" />
+        <Button Name="ResetButton"
+                Text="{Loc 'ninja-disguise-ui-reset'}" />
+    </BoxContainer>
+</Controls:FancyWindow>

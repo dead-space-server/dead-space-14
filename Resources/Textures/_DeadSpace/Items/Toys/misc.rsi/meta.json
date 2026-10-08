@@ -170,7 +170,7 @@
     {
       "name": "plushie_weaver"
     },
-	{
+    {
       "name": "plushie_aleksey"
     },
     {
@@ -337,6 +337,29 @@
     },
     {
       "name": "plushie_sastr_bon"
+    },
+    {
+      "name": "plushie_ivan_kuvalda"
+    },
+    {
+      "name": "plushie_bog",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "plushie_margo"
+    },
+    {
+      "name": "plushie_genesis"
+    },
+    {
+      "name": "plushie_gnar"
     }
   ]
 }

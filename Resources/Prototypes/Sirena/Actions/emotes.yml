@@ -54,6 +54,7 @@
     event: !type:EmoteStartTailActionEvent
 
 # Using EmoteAnimation from IC action chat
+# steps — движение: at секунды, shift сдвиг, tilt наклон, face поворот.
 - type: emote
   id: EmoteFlip
   name: chat-emote-name-flip
@@ -66,6 +67,13 @@
     - делает сальто
     - устроила сальто
     - устроил сальто
+  steps:
+  - at: 0
+    tilt: 0
+  - at: 0.25
+    tilt: 180
+  - at: 0.5
+    tilt: 360
 
 - type: emote
   id: EmoteJump
@@ -80,6 +88,13 @@
     - подпрыгнул
     - подпрыгнула
     - подскакивает
+  steps:
+  - at: 0
+    shift: 0, 0
+  - at: 0.125
+    shift: 0, 1
+  - at: 0.25
+    shift: 0, 0
 
 - type: emote
   id: EmoteTurn
@@ -93,6 +108,104 @@
     - танцует
     - покружилась
     - покружился
+  steps:
+  - at: 0
+    face: 0
+  - at: 0.075
+    face: 90
+  - at: 0.15
+    face: 180
+  - at: 0.225
+    face: 270
+  - at: 0.3
+    face: 360
+  - at: 0.375
+    face: 450
+  - at: 0.45
+    face: 540
+  - at: 0.525
+    face: 630
+  - at: 0.6
+    face: 720
+
+- type: emote
+  id: EmoteBow
+  name: chat-emote-name-bow
+  icon: Interface/Emotes/jump.png
+  category: Animations
+  chatMessages: ["chat-emote-msg-bow"]
+  chatTriggers:
+    - кланяется
+    - поклонился
+    - поклонилась
+    - отвесил поклон
+    - отвесила поклон
+  steps:
+  - at: 0
+    shift: 0, 0
+    tilt: 0
+    size: 1, 1
+  - at: 0.25
+    shift: 0, -0.15
+    tilt: 40
+    size: 1.15, 0.75
+  - at: 0.7
+    shift: 0, -0.15
+    tilt: 40
+    size: 1.15, 0.75
+  - at: 1.05
+    shift: 0, 0
+    tilt: 0
+    size: 1, 1
+
+- type: emote
+  id: EmoteBreakdance
+  name: chat-emote-name-breakdance
+  icon: Interface/Emotes/spin.png
+  category: Animations
+  chatMessages: ["chat-emote-msg-breakdance"]
+  chatTriggers:
+    - брейкданс
+    - брейкдансит
+  steps:
+  - at: 0
+    shift: 0, 0
+    tilt: 0
+    face: 0
+    size: 1, 1
+  - at: 0.2
+    shift: 0, 0.9
+  - at: 0.42
+    tilt: 180
+    shift: 0, 0.65
+  - at: 0.58
+    size: 1.5, 0.4
+  - at: 0.78
+    shift: 0, -0.15
+  - at: 0.92
+    face: 90
+  - at: 1.06
+    face: 180
+  - at: 1.2
+    face: 270
+  - at: 1.34
+    face: 360
+  - at: 1.48
+    face: 270
+  - at: 1.62
+    face: 180
+  - at: 1.76
+    face: 90
+  - at: 1.9
+    face: 0
+  - at: 2.08
+    size: 1, 1
+    shift: 0, 0.2
+  - at: 2.28
+    tilt: 0
+    shift: 0, 0.85
+  - at: 2.48
+    shift: 0, 0
 
 # Using EmoteAnimation from IC action chat
 - type: emote

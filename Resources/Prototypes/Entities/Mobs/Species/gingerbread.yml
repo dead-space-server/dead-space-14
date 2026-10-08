@@ -7,6 +7,10 @@
   components:
   - type: HumanoidAppearance
     species: Gingerbread
+  # DS14-start
+  - type: CorpseBurning
+    messageType: dough
+  # DS14-end
   - type: Icon
     sprite: Mobs/Species/Gingerbread/parts.rsi
     state: full
