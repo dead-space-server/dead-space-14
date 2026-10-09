@@ -7,19 +7,19 @@ namespace Content.Shared.DeadSpace.Celestial;
 /// Кружок атаки РАЗНЕСУ: полупрозрачный розовый, медленно дрейфует,
 /// затем чернеет с тонкой розовой обводкой и наносит урон.
 /// </summary>
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CelestialCircleComponent : Component
 {
     /// <summary>Радиус кружка, метры.</summary>
-    [DataField]
+    [DataField, AutoNetworkedField]
     public float Radius = 2.5f;
 
     /// <summary>Время дрейфа, сек.</summary>
-    [DataField]
+    [DataField, AutoNetworkedField]
     public float WanderTime = 5f;
 
     /// <summary>Время чёрной фазы, сек.</summary>
-    [DataField]
+    [DataField, AutoNetworkedField]
     public float DarkTime = 1.4f;
 
     /// <summary>Скорость дрейфа, м/с.</summary>

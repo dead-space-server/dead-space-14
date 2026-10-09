@@ -26,6 +26,18 @@ public sealed partial class CelestialOrbComponent : Component
     [DataField]
     public float FireInterval = 0.18f;
 
+    /// <summary>Минимальный урон мелкого луча.</summary>
+    [DataField]
+    public float BeamDamageMin = 7f;
+
+    /// <summary>Максимальный урон мелкого луча.</summary>
+    [DataField]
+    public float BeamDamageMax = 14f;
+
+    /// <summary>Визуальные события шара видят только игроки на карте босса.</summary>
+    [ViewVariables]
+    public bool LocalizedEvents;
+
     /// <summary>Кому летит шар.</summary>
     [ViewVariables]
     public EntityUid? Target;

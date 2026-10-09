@@ -141,8 +141,8 @@ public sealed class CelestialSubtitleOverlay : Overlay
         if (bestIndex < 0)
             return new List<Line> { new(text, width, 0) };
 
-        var line1 = text[..bestIndex];
-        var line2 = text[(bestIndex + 1)..];
+        var line1 = string.Concat(runes.Take(bestIndex).Select(r => r.ToString()));
+        var line2 = string.Concat(runes.Skip(bestIndex + 1).Select(r => r.ToString()));
         var w1 = MeasureWidth(line1, scale);
         var w2 = MeasureWidth(line2, scale);
         return new List<Line> { new(line1, w1, 0), new(line2, w2, 1) };

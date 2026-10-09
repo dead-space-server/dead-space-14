@@ -1,28 +1,5 @@
 ﻿# DS14-start: Celestial - manually spawnable, station-wide boss.
 - type: entity
-  id: CelestialBeamTelegraph
-  name: celestial beam warning
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Sprite
-    sprite: Objects/Weapons/Guns/Projectiles/projectiles_tg.rsi
-    layers:
-    - state: heavylaser
-      shader: unshaded
-      color: "#ff2a2a"
-      scale: 6, 3
-  - type: CelestialBeamTelegraph
-  - type: PointLight
-    enabled: true
-    color: "#ff2a2a"
-    radius: 3.0
-    energy: 2.0
-    softness: 2
-  - type: Tag
-    tags:
-    - HideContextMenu
-
-- type: entity
   id: CelestialAttackSphere
   name: celestial orb
   categories: [ HideSpawnMenu ]
@@ -187,60 +164,6 @@
     color: "#FF5298"
     radius: 5
     energy: 2.5
-    softness: 3
-  - type: Tag
-    tags:
-    - HideContextMenu
-
-- type: entity
-  id: CelestialCutsceneProp
-  name: ""
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Sprite
-    drawdepth: BelowMobs
-    layers:
-    - state: black
-      sprite: /Textures/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/black.rsi
-      scale: 14, 14
-    - state: cocoon_idle
-      sprite: _DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/celestial.rsi
-      scale: 0.6, 0.6
-      offset: -0.6, 0
-      map: ["idle"]
-    - state: CelestialEyesOpen
-      sprite: _DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/celestial.rsi
-      scale: 0.6, 0.6
-      offset: -0.6, 0
-      map: ["eyes"]
-      visible: false
-    - state: cocoon_breach
-      sprite: _DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/celestial.rsi
-      scale: 0.6, 0.6
-      offset: -0.6, 0
-      map: ["breach"]
-      visible: false
-  - type: Appearance
-  - type: GenericVisualizer
-    visuals:
-      enum.CelestialSpiritVisuals.Stage:
-        idle:
-          0: { visible: true }
-          1: { visible: false }
-          2: { visible: false }
-        eyes:
-          0: { visible: false }
-          1: { visible: true }
-          2: { visible: false }
-        breach:
-          0: { visible: false }
-          1: { visible: false }
-          2: { visible: true }
-  - type: PointLight
-    enabled: true
-    color: "#FF5298"
-    radius: 8
-    energy: 5
     softness: 3
   - type: Tag
     tags:

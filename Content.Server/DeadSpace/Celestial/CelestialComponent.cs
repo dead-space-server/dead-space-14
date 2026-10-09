@@ -47,14 +47,6 @@ public sealed partial class CelestialComponent : Component
     [DataField]
     public float AttackVolume = -8f;
 
-    /// <summary>Звук телеграфа луча.</summary>
-    [DataField]
-    public string PinkBeamPrototype = "CelestialBeamPink";
-
-    /// <summary>Звук удара луча.</summary>
-    [DataField]
-    public string DarkBeamPrototype = "CelestialBeamDark";
-
     /// <summary>Насколько дальше игрока тянется розовый шнур, метры.</summary>
     [DataField]
     public float BeamOvershoot = 24f;
@@ -87,21 +79,9 @@ public sealed partial class CelestialComponent : Component
     [DataField]
     public float BeamChargeTime = 1f;
 
-    /// <summary>Максимальная дистанция до цели атаки, метры (0 = без ограничения).</summary>
-    [DataField]
-    public float AttackRange = 0f;
-
     /// <summary>Сколько лучей в финальном залпе.</summary>
     [DataField]
     public int FinalBeamCount = 3;
-
-    /// <summary>Прототип взрыва удара луча.</summary>
-    [DataField]
-    public string BeamExplosion = "CelestialBeamBlast";
-
-    /// <summary>Интенсивность взрыва луча.</summary>
-    [DataField]
-    public float BeamIntensity = 80f;
 
     /// <summary>Сколько игроков становится целью сфер.</summary>
     [DataField]

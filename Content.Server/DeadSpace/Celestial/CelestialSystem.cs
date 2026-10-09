@@ -1,6 +1,4 @@
 using Content.Server.Audio;
-using Content.Server.Explosion.EntitySystems;
-using Content.Shared.Audio;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.DeadSpace.Celestial;
@@ -8,19 +6,14 @@ using Content.Shared.Maps;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Projectiles;
-using Robust.Server.GameObjects;
 using Content.Shared.Damage.Systems;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
-using Robust.Shared.Map.Components;
-using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
-using Robust.Shared.Prototypes;
 using Robust.Server.Player;
-using Robust.Shared.Maths;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using System.Linq;
@@ -49,8 +42,7 @@ public sealed class CelestialSystem : EntitySystem
 
     private readonly HashSet<EntityUid> _nearbySpheres = new();
 
-    private static readonly DamageSpecifier _sphereDamage = MakeSphereDamage();
-    private static readonly DamageSpecifier _beamDamage = MakeBeamDamage();
+    private static readonly DamageSpecifier BeamDamage = MakeBeamDamage();
 
     private static float AngleDiff(float from, float to)
     {
@@ -72,14 +64,6 @@ public sealed class CelestialSystem : EntitySystem
         return (p - (a + ab * t)).Length();
     }
 
-    private static DamageSpecifier MakeSphereDamage()
-    {
-        var d = new DamageSpecifier();
-        d.DamageDict.TryAdd("Heat", 10f);
-        d.DamageDict.TryAdd("Blunt", 10f);
-        return d;
-    }
-
     private static DamageSpecifier MakeBeamDamage()
     {
         var d = new DamageSpecifier();
@@ -91,8 +75,6 @@ public sealed class CelestialSystem : EntitySystem
 
     private const float DestroyInterval = 0.25f;
     private const float DestroyRadius = 1.4f;
-
-    private readonly HashSet<EntityUid> _nearby = new();
 
     public override void Initialize()
     {
@@ -288,11 +270,14 @@ public sealed class CelestialSystem : EntitySystem
             var sphereXform = Transform(uid);
             _nearbySpheres.Clear();
             _lookup.GetEntitiesInRange(sphereXform.Coordinates, radius, _nearbySpheres, LookupFlags.Uncontained);
+            var sphereDmg = new DamageSpecifier();
+            sphereDmg.DamageDict.TryAdd("Heat", comp.DamagePerTick * 0.5f);
+            sphereDmg.DamageDict.TryAdd("Blunt", comp.DamagePerTick * 0.5f);
             foreach (var victim in _nearbySpheres)
             {
                 if (victim == uid || TerminatingOrDeleted(victim))
                     continue;
-                _damage.TryChangeDamage(victim, _sphereDamage, true);
+                _damage.TryChangeDamage(victim, sphereDmg, true);
             }
         }
     }
@@ -361,15 +346,7 @@ public sealed class CelestialSystem : EntitySystem
             return;
         }
 
-        var mapId = _deathCutsceneMap.Value;
-        foreach (var session in _players.Sessions)
-        {
-            if (session.AttachedEntity is not { } player || TerminatingOrDeleted(player))
-                continue;
-            if (Transform(player).MapID != mapId)
-                continue;
-            RaiseNetworkEvent(ev, session.Channel);
-        }
+        RaiseNetworkEvent(ev, Filter.BroadcastMap(_deathCutsceneMap.Value));
     }
 
     private void Speak(string text, float duration)
@@ -380,13 +357,28 @@ public sealed class CelestialSystem : EntitySystem
     /// <summary>События босса: глобально или только на его карте.</summary>
     private void RaiseCelestial(Entity<CelestialComponent> ent, EntityEventArgs ev)
     {
-        if (!ent.Comp.LocalizedEvents || !Exists(ent) || TerminatingOrDeleted(ent))
+        if (!Exists(ent) || TerminatingOrDeleted(ent) || !ent.Comp.LocalizedEvents)
         {
             RaiseNetworkEvent(ev);
             return;
         }
 
-        var mapId = Transform(ent).MapID;
+        RaiseNetworkEvent(ev, Filter.BroadcastMap(Transform(ent).MapID));
+    }
+
+    private void SpeakFor(Entity<CelestialComponent> ent, string text, float duration)
+    {
+        RaiseCelestial(ent, new CelestialSpeakEvent(text, duration));
+    }
+
+    private void RaiseVisual(MapId mapId, EntityEventArgs ev, bool localized)
+    {
+        if (!localized)
+        {
+            RaiseNetworkEvent(ev);
+            return;
+        }
+
         foreach (var session in _players.Sessions)
         {
             if (session.AttachedEntity is not { } player || TerminatingOrDeleted(player))
@@ -395,11 +387,6 @@ public sealed class CelestialSystem : EntitySystem
                 continue;
             RaiseNetworkEvent(ev, session.Channel);
         }
-    }
-
-    private void SpeakFor(Entity<CelestialComponent> ent, string text, float duration)
-    {
-        RaiseCelestial(ent, new CelestialSpeakEvent(text, duration));
     }
 
     /// <summary>Публичный показ субтитров со звуком (для консольной команды).</summary>
@@ -418,15 +405,27 @@ public sealed class CelestialSystem : EntitySystem
         new SoundPathSpecifier("/Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Celestial_Talk_3.ogg"),
     };
 
-    private void SpeakAttack(Entity<CelestialComponent> ent, CelestialComponent comp)
+    private void SpeakVoice(Entity<CelestialComponent> ent, float volume)
     {
-        if (comp.TalkSounds.Count > 0)
+        var comp = ent.Comp;
+        if (comp.TalkSounds.Count == 0)
+            return;
+
+        var sound = _audio.ResolveSound(_random.Pick(comp.TalkSounds));
+        var audioParams = new AudioParams { Volume = volume };
+
+        if (comp.LocalizedEvents && Exists(ent) && !TerminatingOrDeleted(ent))
         {
-            var sound = _random.Pick(comp.TalkSounds);
-            _globalSound.PlayGlobalOnStation(ent, _audio.ResolveSound(sound),
-                new AudioParams { Volume = comp.AttackVolume });
+            _audio.PlayGlobal(sound, Filter.BroadcastMap(Transform(ent).MapID), false, audioParams);
+            return;
         }
 
+        _globalSound.PlayGlobalOnStation(ent, sound, audioParams);
+    }
+
+    private void SpeakAttack(Entity<CelestialComponent> ent, CelestialComponent comp)
+    {
+        SpeakVoice(ent, comp.AttackVolume);
         SpeakFor(ent, comp.AttackLine, 4.5f);
     }
 
@@ -520,8 +519,8 @@ public sealed class CelestialSystem : EntitySystem
             var beamStart = startPos;
             var beamEnd = end;
 
-            RaiseNetworkEvent(new CelestialBeamVisualEvent(
-                startPos, end, (int) targetPos.MapId, comp.BeamChargeTime, comp.DarkBeamDuration));
+            RaiseCelestial(ent, new CelestialBeamVisualEvent(
+                startPos, end, (int)targetPos.MapId, comp.BeamChargeTime, comp.DarkBeamDuration));
 
             var strikeMap = new MapCoordinates(aimPos, targetPos.MapId);
 
@@ -543,10 +542,10 @@ public sealed class CelestialSystem : EntitySystem
                         continue;
 
                     var victimPos = _transform.GetMapCoordinates(victim).Position;
-                    if (DistanceToSegment(victimPos, beamStart, beamEnd) > 1f)
+                    if (DistanceToSegment(victimPos, beamStart, beamEnd) > comp.BeamDamageRadius)
                         continue;
 
-                    _damage.TryChangeDamage(victim, _beamDamage, true);
+                    _damage.TryChangeDamage(victim, BeamDamage, true);
                 }
 
                 // ломаем пол под ударом
@@ -575,9 +574,7 @@ public sealed class CelestialSystem : EntitySystem
         comp.Attacking = true;
 
         // говор Селестиала перед атакой
-        if (comp.TalkSounds.Count > 0)
-            _globalSound.PlayGlobalOnStation(ent, _audio.ResolveSound(_random.Pick(comp.TalkSounds)),
-                new AudioParams { Volume = -8f });
+        SpeakVoice(ent, -8f);
 
         SpeakFor(ent, "ТЩЕТНО.", 4f);
 
@@ -699,6 +696,10 @@ public sealed class CelestialSystem : EntitySystem
                 orbComp.Phase = _random.NextFloat(0f, MathF.Tau);
                 orbComp.Lifetime = comp.OrbLifetime;
                 orbComp.Speed = comp.OrbSpeed;
+                orbComp.FireInterval = comp.OrbFireInterval;
+                orbComp.BeamDamageMin = comp.SmallBeamMinDamage;
+                orbComp.BeamDamageMax = comp.SmallBeamMaxDamage;
+                orbComp.LocalizedEvents = comp.LocalizedEvents;
                 orbComp.VelocityDir = Vector2.Normalize(
                     _transform.GetMapCoordinates(target).Position - riftCenter);
                 alive.Add(orb);
@@ -709,7 +710,7 @@ public sealed class CelestialSystem : EntitySystem
         return spawnedAny;
     }
 
-    private void FireSmallBeam(Vector2 from, MapId mapId)
+    private void FireSmallBeam(Vector2 from, MapId mapId, CelestialOrbComponent orb)
     {
         var angle = _random.NextFloat(0f, MathF.Tau);
         var length = _random.NextFloat(4f, 7f);
@@ -718,11 +719,11 @@ public sealed class CelestialSystem : EntitySystem
         var end = from + dir * length;
 
         // тонкий луч стоит: короткая розовая фаза, затем чёрный
-        RaiseNetworkEvent(new CelestialBeamVisualEvent(start, end, (int) mapId, 0.35f, 0.45f, 0.4f));
+        RaiseVisual(mapId, new CelestialBeamVisualEvent(start, end, (int)mapId, 0.35f, 0.45f, 0.4f), orb.LocalizedEvents);
 
-        // мелкий урон (10-20) всем на линии
+        // мелкий урон всем на линии
         var damage = new DamageSpecifier();
-        var amount = _random.NextFloat(7f, 14f);
+        var amount = _random.NextFloat(orb.BeamDamageMin, orb.BeamDamageMax);
         damage.DamageDict.TryAdd("Heat", amount * 0.5f);
         damage.DamageDict.TryAdd("Blunt", amount * 0.5f);
 
@@ -758,8 +759,8 @@ public sealed class CelestialSystem : EntitySystem
             new Vector2(MathF.Cos(offsetAngle) * offsetDist, MathF.Sin(offsetAngle) * offsetDist);
         var baseAngle = _random.NextFloat(0f, MathF.Tau);
 
-        RaiseNetworkEvent(new CelestialCutterEvent(
-            center, (int) bossPos.MapId, baseAngle, comp.CutterLength,
+        RaiseCelestial(ent, new CelestialCutterEvent(
+            center, (int)bossPos.MapId, baseAngle, comp.CutterLength,
             comp.CutterRotateTime, comp.CutterFireTime));
 
         // урон в момент вспышки: все на линиях лучей
@@ -878,7 +879,7 @@ public sealed class CelestialSystem : EntitySystem
             if (orb.FireAccumulator >= orb.FireInterval)
             {
                 orb.FireAccumulator -= orb.FireInterval;
-                FireSmallBeam(orbPos, _transform.GetMapCoordinates(uid).MapId);
+                FireSmallBeam(orbPos, _transform.GetMapCoordinates(uid).MapId, orb);
             }
         }
     }
@@ -893,9 +894,7 @@ public sealed class CelestialSystem : EntitySystem
         comp.Attacking = true;
 
         // говор Селестиала перед атакой
-        if (comp.TalkSounds.Count > 0)
-            _globalSound.PlayGlobalOnStation(ent, _audio.ResolveSound(_random.Pick(comp.TalkSounds)),
-                new AudioParams { Volume = -8f });
+        SpeakVoice(ent, -8f);
 
         SpeakFor(ent, "РАЗНЕСУ.", 4f);
 
@@ -913,6 +912,7 @@ public sealed class CelestialSystem : EntitySystem
                 circleComp.Radius = _random.NextFloat(1.8f, 3.4f);
                 var dirAngle = _random.NextFloat(0f, MathF.Tau);
                 circleComp.WanderDir = new Vector2(MathF.Cos(dirAngle), MathF.Sin(dirAngle));
+                Dirty(circle, circleComp);
             }
         }
 
@@ -1057,7 +1057,7 @@ public sealed class CelestialSystem : EntitySystem
         var targets = GetTargets(ent, comp.SphereTargets + comp.ExtraTargets);
         foreach (var target in targets)
         {
-            var count = (int) MathF.Round(_random.Next(comp.SpheresPerTargetMin, comp.SpheresPerTargetMax + 1) * multiplier);
+            var count = (int)MathF.Round(_random.Next(comp.SpheresPerTargetMin, comp.SpheresPerTargetMax + 1) * multiplier);
             for (var i = 0; i < count; i++)
             {
                 // сферы стоят на месте: спавним сразу на орбитальной позиции
@@ -1073,7 +1073,7 @@ public sealed class CelestialSystem : EntitySystem
                     sphereComp.StartScale = _random.NextFloat(0.3f, 0.6f);
                     sphereComp.EndScale = _random.NextFloat(1.4f, 2.4f);
                     sphereComp.Lifetime = _random.NextFloat(comp.SphereLifetimeMin, comp.SphereLifetimeMax);
-                    sphereComp.Arrived = true; // не двигаются
+                    Dirty(sphere, sphereComp);
                 }
             }
         }
@@ -1088,9 +1088,7 @@ public sealed class CelestialSystem : EntitySystem
         var comp = ent.Comp;
         comp.Attacking = true;
 
-        if (comp.TalkSounds.Count > 0)
-            _globalSound.PlayGlobalOnStation(ent, _audio.ResolveSound(_random.Pick(comp.TalkSounds)),
-                new AudioParams { Volume = -8f });
+        SpeakVoice(ent, -8f);
 
         SpeakFor(ent, comp.FlashLine, 3f);
         SummonSpheres(ent, comp, comp.FlashSphereMultiplier);
@@ -1113,9 +1111,7 @@ public sealed class CelestialSystem : EntitySystem
         var comp = compOverride ?? ent.Comp;
         comp.Attacking = true;
 
-        if (comp.TalkSounds.Count > 0)
-            _globalSound.PlayGlobalOnStation(ent, _audio.ResolveSound(_random.Pick(comp.TalkSounds)),
-                new AudioParams { Volume = -8f });
+        SpeakVoice(ent, -8f);
 
         SpeakFor(ent, comp.BloomLine, 4f);
 
@@ -1144,7 +1140,7 @@ public sealed class CelestialSystem : EntitySystem
                     new AudioParams { Volume = 0f });
 
             // обход карты: медленный тик 0.25с, луч неторопливо преследует игрока
-            var ticks = (int) (comp.BloomFireTime / 0.25f);
+            var ticks = (int)(comp.BloomFireTime / 0.25f);
             for (var tick = 1; tick <= ticks; tick++)
             {
                 var delay = (tick - 1) * 0.25f;
@@ -1182,8 +1178,8 @@ public sealed class CelestialSystem : EntitySystem
                         var end = start + dir * (dist + 45f);
 
                         // массивный чёрный луч с розовой обводкой, постоянно обновляется
-                        RaiseNetworkEvent(new CelestialBeamVisualEvent(
-                            start, end, (int) bossNow.MapId, 0.06f, 0.3f, 2.2f));
+                        RaiseCelestial(ent, new CelestialBeamVisualEvent(
+                            start, end, (int)bossNow.MapId, 0.06f, 0.3f, 2.2f));
 
                         // урон вдоль линии
                         damageAcc += 0.25f;
@@ -1239,9 +1235,7 @@ public sealed class CelestialSystem : EntitySystem
         var comp = ent.Comp;
         comp.Attacking = true;
 
-        if (comp.TalkSounds.Count > 0)
-            _globalSound.PlayGlobalOnStation(ent, _audio.ResolveSound(_random.Pick(comp.TalkSounds)),
-                new AudioParams { Volume = -8f });
+        SpeakVoice(ent, -8f);
 
         SpeakFor(ent, comp.FreezeLine, 3f);
 
@@ -1262,7 +1256,7 @@ public sealed class CelestialSystem : EntitySystem
             var end = center + dir * (length / 2f);
 
             // 2 секунды розовые (замерли), затем чернеют
-            RaiseNetworkEvent(new CelestialBeamVisualEvent(start, end, (int) bossPos.MapId, 2f, 1.5f));
+            RaiseCelestial(ent, new CelestialBeamVisualEvent(start, end, (int)bossPos.MapId, 2f, 1.5f));
             freezeBeams.Add((start, end));
         }
 
@@ -1317,6 +1311,7 @@ public sealed class CelestialSystem : EntitySystem
                     var dirAngle = _random.NextFloat(0f, MathF.Tau);
                     circleComp.WanderDir = new Vector2(MathF.Cos(dirAngle), MathF.Sin(dirAngle));
                     circleComp.WanderTime = comp.CutterRotateTime; // чернеют одновременно со вспышкой Cutter
+                    Dirty(circle, circleComp);
                 }
             }
         });
