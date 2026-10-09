@@ -151632,7 +151632,7 @@ entities:
       parent: 2
     - type: Physics
       canCollide: False
-- proto: PlushieScarlettPvrsifvlAlt2
+- proto: PlushieScarlett
   entities:
   - uid: 20945
     components:
