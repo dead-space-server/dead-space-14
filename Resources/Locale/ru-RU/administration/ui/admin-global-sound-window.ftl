@@ -1,0 +1,14 @@
+admin-global-sound-title = Управление глобальной музыкой
+admin-global-sound-nothing-playing = Сейчас глобальная музыка не играет
+admin-global-sound-playing = Сейчас играет: { $track }
+admin-global-sound-volume = Громкость:
+admin-global-sound-ckey = CKey (пусто — всем):
+admin-global-sound-play = Играть
+admin-global-sound-pause = Пауза
+admin-global-sound-resume = Продолжить
+admin-global-sound-fade-out = Плавно выключить
+admin-global-sound-no-selection = Выберите файл OGG
+admin-global-sound-invalid-volume = Укажите громкость числом от -24 до 12.
+admin-global-sound-invalid-directory = Не удалось открыть эту папку.
+admin-global-sound-invalid-file = Выберите OGG-файл из списка.
+admin-global-sound-player-not-found = Игрок с CKey «{ $ckey }» не найден или не подключён.

@@ -3,6 +3,7 @@ using Content.Server.Audio;
 using Content.Shared.Administration;
 using Robust.Server.Player;
 using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Console;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Player;
@@ -26,6 +27,7 @@ public sealed class PlayGlobalSoundCommand : IConsoleCommand
     {
         Filter filter;
         var audio = AudioParams.Default;
+        List<ICommonSession>? targetSessions = null; // DS14
 
         bool replay = true;
 
@@ -68,6 +70,7 @@ public sealed class PlayGlobalSoundCommand : IConsoleCommand
                     replay = false;
 
                     filter = Filter.Empty();
+                    targetSessions = new List<ICommonSession>(); // DS14
 
                     // Skip the first argument, which is the sound path.
                     for (var i = 1 + volumeOffset; i < args.Length; i++)
@@ -81,6 +84,7 @@ public sealed class PlayGlobalSoundCommand : IConsoleCommand
                         }
 
                         filter.AddPlayer(session);
+                        targetSessions.Add(session); // DS14
                     }
                 }
 
@@ -88,7 +92,14 @@ public sealed class PlayGlobalSoundCommand : IConsoleCommand
         }
 
         audio = audio.AddVolume(-8);
-        _entManager.System<ServerGlobalSoundSystem>().PlayAdminGlobal(filter, args[0], audio, replay);
+        var specifier = _entManager.System<SharedAudioSystem>().ResolveSound(new SoundPathSpecifier(args[0]));
+        _entManager.System<ServerGlobalSoundSystem>().PlayAdminGlobal(
+            filter,
+            specifier,
+            audio,
+            replay,
+            targetSessions,
+            args[0]); // DS14
     }
 
     public CompletionResult GetCompletion(IConsoleShell shell, string[] args)

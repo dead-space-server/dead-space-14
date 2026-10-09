@@ -29,7 +29,20 @@ public class GlobalSoundEvent : EntityEventArgs
 [Serializable, NetSerializable]
 public sealed class AdminSoundEvent : GlobalSoundEvent
 {
-    public AdminSoundEvent(ResolvedSoundSpecifier specifier, AudioParams? audioParams = null) : base(specifier, audioParams){}
+    // DS14-start
+    public int StreamId;
+    public bool Paused;
+
+    public AdminSoundEvent(
+        ResolvedSoundSpecifier specifier,
+        AudioParams? audioParams = null,
+        int streamId = 0,
+        bool paused = false) : base(specifier, audioParams)
+    {
+        StreamId = streamId;
+        Paused = paused;
+    }
+    // DS14-end
 }
 
 /// <summary>

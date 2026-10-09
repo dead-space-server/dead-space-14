@@ -1829,6 +1829,22 @@
 
 - type: entity
   parent: BasePlushieDeadSpaceMisc
+  id: PlushieScarlett
+  name: плюшевая Скарлетт Хелль'Веттиа
+  description: Плюшевая игрушка арканы в офицерской форме с отсутствующей нательной камерой. Электродубинка в руке кажется настоящей, а на её боевой части вышито число 336. Острые скулы, sleepy eyes. От игрушки исходит аромат крепкого кофе и сигаретного дыма. На бирке написано — «Милая Скарлетт».
+  components:
+  - type: Sprite
+    state: scarlett
+  - type: TTS
+    voice: Pharah
+  - type: SpeakOnTrigger
+    pack: PlushieScarlettSpeech
+  - type: EmitSoundOnTrigger
+    sound:
+      collection: PlushieScarlettSounds
+
+- type: entity
+  parent: BasePlushieDeadSpaceMisc
   id: PlushieGnar
   name: плюшевый монстр
   description: Плюшевый зверёк, который, скорее всего, не опасен. Ищет свой костяной бумеранг

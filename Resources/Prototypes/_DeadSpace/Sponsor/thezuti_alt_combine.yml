@@ -257,7 +257,7 @@
     footstepSoundCollection:
       collection: FootstepJackbootsTheZuTiAltCombine
       params:
-        volume: -1
+        volume: -6
 
 - type: soundCollection
   id: FootstepJackbootsTheZuTiAltCombine

@@ -902,21 +902,6 @@
   - /Audio/_DeadSpace/Sponsor/pvrsifvlAlt2/combatboots4.ogg
   - /Audio/_DeadSpace/Sponsor/pvrsifvlAlt2/combatboots5.ogg
 
-# toy.rsi
-- type: entity
-  parent: BasePlushieDeadSpaceMisc
-  id: PlushieScarlettPvrsifvlAlt2
-  name: плюшевая Скарлетт Хелль'Веттиа
-  description: Плюшевая игрушка одной важной и постоянно занятой личности, во взгляде которой отражена сильная усталость. От неё исходит аромат крепкого кофе и сигаретного дыма.
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/toy.rsi
-    state: scarlett
-  - type: TTS
-    voice: Pharah
-  - type: SpeakOnTrigger
-    pack: PlushieScarlettSpeech
-
 # документ
 - type: entity
   parent: PaperPrintedCentcomm

@@ -4,3 +4,8 @@
   - /Audio/_DeadSpace/Items/Toys/gnar_laugh.ogg
   - /Audio/_DeadSpace/Items/Toys/gnar_transfur.ogg
   - /Audio/_DeadSpace/Items/Toys/gnar_newforgis.ogg
+
+- type: soundCollection
+  id: PlushieScarlettSounds
+  files:
+  - /Audio/_DeadSpace/Items/Toys/scar_buyback.ogg

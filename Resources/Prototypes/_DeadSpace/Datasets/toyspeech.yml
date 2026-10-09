@@ -44,7 +44,7 @@
   id: PlushieWillieSpeech
   values:
     prefix: plushies-willie-
-    count: 5
+    count: 6
 
 - type: localizedDataset
   id: PlushieAinnetelSpeech
@@ -344,7 +344,7 @@
   id: PlushieScarlettSpeech
   values:
     prefix: plushies-scarlett-
-    count: 6
+    count: 10
 
 - type: localizedDataset
   id: PlushieMysticalRaypeech
@@ -513,7 +513,7 @@
   id: PlushieZutiKuzSpeech
   values:
     prefix: plushies-zuti-kuz-
-    count: 7
+    count: 8
 
 - type: localizedDataset
   id: PlushieZutiIgnaSpeech
