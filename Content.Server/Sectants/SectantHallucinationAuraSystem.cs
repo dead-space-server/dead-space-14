@@ -30,7 +30,6 @@ public sealed class SectantHallucinationAuraSystem : EntitySystem
                 if (target == uid) continue;
                 if (!HasComp<StatusEffectsComponent>(target)) continue;
 
-                // Пропускаем союзников — не накладываем дебаффы на своих.
                 if (AreInSameFaction(uid, target)) continue;
 
                 _status.TryAddStatusEffect(target, aura.SleepEffect,  TimeSpan.FromSeconds(3), refresh: true);

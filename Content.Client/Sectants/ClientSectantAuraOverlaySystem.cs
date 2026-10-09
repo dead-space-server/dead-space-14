@@ -42,9 +42,6 @@ public sealed class ClientSectantAuraOverlaySystem : EntitySystem
         if (!TryComp<SpriteComponent>(ent, out var sprite))
             return;
 
-        // Сбрасываем шейдер на дефолтный.
-        // Если вы точно знаете, что на слоях был "unshaded" или другой шейдер,
-        // можно вернуть его строкой: sprite.LayerSetShader(i, "unshaded");
         for (var i = 0; i < sprite.AllLayers.Count(); i++)
         {
             sprite.LayerSetShader(i, null, null);

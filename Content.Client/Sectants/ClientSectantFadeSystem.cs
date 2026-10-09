@@ -19,7 +19,6 @@ public sealed class ClientSectantFadeSystem : EntitySystem
         var query = EntityQueryEnumerator<StealthComponent, SpriteComponent>();
         while (query.MoveNext(out var uid, out var stealth, out var sprite))
         {
-            // В твоём форке поля Visibility нет — берём значение через систему.
             var target = _stealth.GetVisibility(uid, stealth);
 
             _lastAlpha.TryGetValue(uid, out var cur);
