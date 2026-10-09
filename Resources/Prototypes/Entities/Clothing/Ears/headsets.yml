@@ -13,9 +13,6 @@
       key_slots:
       - EncryptionKeyCommon
   - type: Headset
-    # DS14: color — цвет имени в радиочате, colorEnd — конечный цвет градиента (необязателен).
-    # color: "#0055ff"
-    # colorEnd: "#ff0000"
   - type: EncryptionKeyHolder
     keySlots: 4
   - type: Sprite

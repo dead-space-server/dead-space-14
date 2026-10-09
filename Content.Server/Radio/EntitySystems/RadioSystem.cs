@@ -215,7 +215,6 @@ public sealed class RadioSystem : EntitySystem
             job = $"\\[{job}\\] ";
         }
 
-        // если у гарнитуры задан конечный цвет, имя говорящего рисуется градиентом.
         var headsetName = headsetColorEnd is { } colorEnd && colorEnd != headsetColor
             ? ChatMarkup.Gradient($"{job}{name}", headsetColor, colorEnd)
             : $"{job}{name}";
