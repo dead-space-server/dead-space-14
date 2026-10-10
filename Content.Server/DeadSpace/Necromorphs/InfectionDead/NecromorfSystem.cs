@@ -35,6 +35,7 @@ using Content.Shared.Humanoid;
 using Content.Shared.NPC.Components;
 using Content.Shared.Speech.Components;
 using Robust.Shared.Random;
+using Robust.Shared.Player;
 
 namespace Content.Server.DeadSpace.Necromorphs.InfectionDead;
 
@@ -65,6 +66,8 @@ public sealed partial class NecromorfSystem : SharedInfectionDeadSystem
         SubscribeLocalEvent<NecromorfComponent, CloningEvent>(
             OnNecromorfCloning,
             after: [typeof(CloningSystem)]);
+        SubscribeLocalEvent<NecromorfComponent, PlayerDetachedEvent>(ActivateNPC);
+        SubscribeLocalEvent<NecromorfComponent, PlayerAttachedEvent>(DeactivateNPC);
     }
 
     private void OnRefreshSpeed(EntityUid uid, NecromorfComponent component, RefreshMovementSpeedModifiersEvent args)
