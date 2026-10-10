@@ -1,0 +1,23 @@
+- type: entity
+  id: EffectBluespaceMinerTeleport
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 0.8
+  - type: PointLight
+    radius: 3
+    energy: 4
+    color: "#18abf5"
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    layers:
+    - shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+      sprite: Effects/portal.rsi
+      state: portal-blue
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: AnimationPlayer
