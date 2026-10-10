@@ -65,7 +65,7 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Радиус урона удара луча, метры.</summary>
     [DataField]
-    public float BeamDamageRadius = 1.2f;
+    public float BeamDamageRadius = 0.6f;
 
     /// <summary>Количество одиночных лучей перед финальным залпом.</summary>
     [DataField]
@@ -117,6 +117,10 @@ public sealed partial class CelestialComponent : Component
     [DataField]
     public int OrbsPerCrack = 3;
 
+    /// <summary>Неповоротливость шаров: скорость поворота, рад/сек. Чем меньше - тем тяжелее им доворачивать за игроком.</summary>
+    [DataField]
+    public float OrbTurnRate = 1.4f;
+
     /// <summary>Звук открытия рифта.</summary>
     [DataField]
     public SoundSpecifier? FutilityCrackSound;
@@ -131,11 +135,11 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Минимальный урон мелкого луча.</summary>
     [DataField]
-    public float SmallBeamMinDamage = 10f;
+    public float SmallBeamMinDamage = 15f;
 
     /// <summary>Максимальный урон мелкого луча.</summary>
     [DataField]
-    public float SmallBeamMaxDamage = 20f;
+    public float SmallBeamMaxDamage = 30f;
 
     /// <summary>Сколько раз повторяется Cutter.</summary>
     [DataField]
@@ -179,7 +183,33 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Урон луча Cutter.</summary>
     [DataField]
-    public float CutterDamage = 60f;
+    public float CutterDamage = 30f;
+
+    // ----- радиусы попадания (понижены: лучи били слишком широко) -----
+
+    /// <summary>Радиус попадания лучей Cutter, метры.</summary>
+    [DataField]
+    public float CutterDamageRadius = 0.8f;
+
+    /// <summary>Радиус попадания замерших лучей атаки "ЗАМРИ", метры.</summary>
+    [DataField]
+    public float FreezeBeamRadius = 0.6f;
+
+    /// <summary>Радиус попадания мелких лучей шара-снаряда, метры.</summary>
+    [DataField]
+    public float SmallBeamRadius = 0.5f;
+
+    /// <summary>Множитель радиуса урона сферы от её визуального радиуса.</summary>
+    [DataField]
+    public float SphereDamageRadiusScale = 0.8f;
+
+    /// <summary>Множитель радиуса урона кружка от его радиуса.</summary>
+    [DataField]
+    public float CircleDamageRadiusScale = 0.7f;
+
+    /// <summary>Сколько игроков одновременно ловит Cutter.</summary>
+    [DataField]
+    public int CutterTargets = 2;
 
     // ----- третья атака: РАЗНЕСУ -----
 
@@ -229,7 +259,7 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Урон за тик гигантского луча.</summary>
     [DataField]
-    public float BloomBeamDamage = 20f;
+    public float BloomBeamDamage = 10f;
 
     /// <summary>Интервал урона гигантского луча, сек.</summary>
     [DataField]
@@ -257,7 +287,7 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Урон замершего луча при почернении.</summary>
     [DataField]
-    public float FreezeBeamDamage = 40f;
+    public float FreezeBeamDamage = 20f;
 
     // ----- вторая фаза -----
 

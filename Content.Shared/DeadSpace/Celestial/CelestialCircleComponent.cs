@@ -32,7 +32,11 @@ public sealed partial class CelestialCircleComponent : Component
 
     /// <summary>Урон за тик в чёрной фазе.</summary>
     [DataField]
-    public float DamagePerTick = 25f;
+    public float DamagePerTick = 12f;
+
+    /// <summary>Множитель радиуса урона от радиуса кружка.</summary>
+    [DataField]
+    public float DamageRadiusScale = 0.7f;
 
     /// <summary>Период урона, сек.</summary>
     [DataField]

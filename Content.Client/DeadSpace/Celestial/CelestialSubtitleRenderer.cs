@@ -1,7 +1,6 @@
 using Content.Client.Resources;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
-using Robust.Shared.Enums;
 using Robust.Shared.Graphics;
 using Robust.Shared.Maths;
 using System.Linq;
@@ -13,8 +12,12 @@ namespace Content.Client.DeadSpace.Celestial;
 /// Субтитры Селестиала: розовый текст шрифтом OMORI под центром экрана,
 /// позади — мерцающие чёрные прямоугольники с рандомной альфой (глитч).
 /// В конце блоки белеют, текст мигает белым и исчезает.
+///
+/// Рисуется вручную поверх UI-корня (<see cref="Robust.Client.UserInterface.IUserInterfaceManager.OnPostDrawUIRoot"/>),
+/// а не оверлеем: оверлеи рисуются только внутри вьюпорта игрового экрана, поэтому в лобби
+/// (до раунда, у убитых и наблюдателей) их не видно, а UI-корень рисуется всегда.
 /// </summary>
-public sealed class CelestialSubtitleOverlay : Overlay
+public sealed class CelestialSubtitleRenderer
 {
     private const string FontPath = "/Fonts/OMORI/OMORI_GAME_RUS.ttf";
     private const int FontSize = 104;
@@ -27,7 +30,6 @@ public sealed class CelestialSubtitleOverlay : Overlay
     private static readonly Color White = new(1f, 1f, 1f, 1f);
     private static readonly Color Black = new(0f, 0f, 0f, 1f);
 
-    private readonly IEntityManager _entityManager;
     private readonly Font _font;
 
     private string _text = string.Empty;
@@ -47,15 +49,11 @@ public sealed class CelestialSubtitleOverlay : Overlay
 
     private readonly Random _rand = new();
 
-    public override OverlaySpace Space => OverlaySpace.ScreenSpace;
-
     public bool Active => _timeLeft > 0f;
 
-    public CelestialSubtitleOverlay(IEntityManager entityManager, IResourceCache resourceCache)
+    public CelestialSubtitleRenderer(IResourceCache resourceCache)
     {
-        _entityManager = entityManager;
         _font = resourceCache.GetFont(FontPath, FontSize);
-        ZIndex = 10; // субтитры поверх оверлея катсцены
     }
 
     public void ShowDeath(string text, float duration)
@@ -194,13 +192,15 @@ public sealed class CelestialSubtitleOverlay : Overlay
         }
     }
 
-    protected override void Draw(in OverlayDrawArgs args)
+    /// <summary>
+    /// Рисует субтитр в экранных координатах. <paramref name="bounds"/> - полный экран
+    /// (оверлей вьюпорта либо UI-корень).
+    /// </summary>
+    public void Draw(DrawingHandleScreen handle, UIBox2i bounds)
     {
         if (_timeLeft <= 0f || string.IsNullOrEmpty(_text))
             return;
 
-        var handle = args.ScreenHandle;
-        var bounds = args.ViewportBounds;
         var width = bounds.Width;
         var height = bounds.Height;
 
@@ -309,6 +309,5 @@ public sealed class CelestialSubtitleOverlay : Overlay
                 charIndex++;
             }
         }
-
     }
 }

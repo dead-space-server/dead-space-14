@@ -5,10 +5,11 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: CelestialSphere
-    startScale: 0.3
-    endScale: 1.6
+    startScale: 0.25
+    endScale: 1.3
     lifetime: 2.6
-    damagePerTick: 30
+    damagePerTick: 15
+    damageRadiusScale: 0.8
   - type: PointLight
     enabled: true
     color: "#FF5298"
