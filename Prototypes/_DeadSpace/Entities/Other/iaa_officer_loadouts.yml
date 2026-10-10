@@ -1,0 +1,16 @@
+# Коробка неопределённости офицера ВД: содержимое как у СБ (ERTloadoutSecuritySecondary), свой спрайт.
+- type: entity
+  id: IAAOfficerLoadoutSecondary
+  parent: BaseERTloadoutSecondary
+  name: коробка неопределённости
+  description: Коробка с табельным оружием. Принадлежит офицеру ВД.
+  suffix: ВД, Вторичное
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Other/ertloadouts/iaa_officer_box.rsi
+    state: iaa_officer
+  - type: ThiefUndeterminedBackpack
+    possibleSets:
+    - Mk58DisablerSet
+    - DominatorSet
+    - VerdictDisablerSet

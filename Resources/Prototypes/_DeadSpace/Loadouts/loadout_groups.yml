@@ -163,6 +163,20 @@
   - UnderwearTopBraIAA
   - UnderwearBottomPantiesIAA
 
+- type: loadout
+  id: GlassesCommand
+  equipment:
+    eyes: ClothingEyesGlassesCommand
+
+- type: loadoutGroup
+  id: GlassesCommand
+  name: loadout-group-glasses
+  minLimit: 0
+  loadouts:
+  - Glasses
+  - GlassesSunglasses
+  - GlassesCommand
+
 # Engineering
 - type: loadoutGroup
   id: SeniorEngineerHead

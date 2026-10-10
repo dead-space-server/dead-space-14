@@ -1,0 +1,13 @@
+- type: entity
+  id: SpawnPointIAAOfficer
+  parent: SpawnPointJobBase
+  name: iaaofficer
+  components:
+  - type: SpawnPoint
+    job_id: IAAOfficer
+  - type: Sprite
+    layers:
+    - sprite: Markers/jobs.rsi
+      state: green
+    - sprite: Markers/jobs.rsi
+      state: iaaofficer

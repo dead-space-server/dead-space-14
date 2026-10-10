@@ -1,0 +1,92 @@
+- type: loadout
+  id: IAAOfficerUniform1
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitIAAOfficer1
+
+- type: loadout
+  id: IAAOfficerUniform2
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitIAAOfficer2
+
+- type: loadout
+  id: IAAOfficerUniform3
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitIAAOfficer3
+
+- type: loadout
+  id: IAAOfficerHelmet
+  equipment:
+    head: ClothingHeadHelmetIAAOfficer
+
+- type: loadout
+  id: IAAOfficerBeret
+  equipment:
+    head: ClothingHeadHatBeretIAAOfficer
+
+- type: loadout
+  id: IAAOfficerBoots
+  equipment:
+    shoes: ClothingShoesBootsIAAOfficer
+
+- type: loadout
+  id: IAAOfficerBackpack
+  equipment:
+    back: ClothingBackpackIAAOfficer
+
+- type: loadout
+  id: IAAOfficerSatchel
+  equipment:
+    back: ClothingBackpackSatchelIAAOfficer
+
+- type: loadout
+  id: IAAOfficerDuffel
+  equipment:
+    back: ClothingBackpackDuffelIAAOfficer
+
+- type: loadoutGroup
+  id: IAAOfficerBackpack
+  name: loadout-group-iaa-officer-backpack
+  minLimit: 1
+  loadouts:
+  - IAAOfficerBackpack
+  - IAAOfficerSatchel
+  - IAAOfficerDuffel
+
+- type: loadoutGroup
+  id: IAAOfficerUniform
+  name: loadout-group-iaa-officer-uniform
+  minLimit: 1
+  loadouts:
+  - IAAOfficerUniform1
+  - IAAOfficerUniform2
+  - IAAOfficerUniform3
+
+- type: loadoutGroup
+  id: IAAOfficerHead
+  name: loadout-group-iaa-officer-head
+  minLimit: 1
+  loadouts:
+  - IAAOfficerHelmet
+  - IAAOfficerBeret
+
+- type: loadoutGroup
+  id: IAAOfficerShoes
+  name: loadout-group-iaa-officer-shoes
+  minLimit: 1
+  loadouts:
+  - IAAOfficerBoots
+  - JackBoots
+  - CombatBoots
+
+- type: roleLoadout
+  id: JobIAAOfficer
+  groups:
+  - GroupTankHarness
+  - IAAOfficerUniform
+  - IAAOfficerHead
+  - IAAOfficerShoes
+  - IAAOfficerBackpack
+  - Survival
+  - Trinkets
+  - GroupSpeciesBreathTool
+  - IAAUnderwear

@@ -80,7 +80,7 @@
   - BartenderJumpsuit
   - CommonBackpack
   - BartenderOuterClothing
-  - Glasses
+  - GlassesCommand # DS14
   - Survival
   - Trinkets
   - BartenderJobTrinkets
@@ -142,7 +142,7 @@
   - LawyerNeck
   - LawyerJumpsuit
   - CommonBackpack
-  - Glasses
+  - GlassesCommand # DS14
   - Survival
   - Trinkets
   - LawyerJobTrinkets

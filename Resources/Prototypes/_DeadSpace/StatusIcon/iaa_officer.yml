@@ -1,0 +1,7 @@
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconIAAOfficer
+  icon:
+    sprite: /Textures/Interface/Misc/job_icons.rsi
+    state: IAAOfficer
+  allowSelection: false

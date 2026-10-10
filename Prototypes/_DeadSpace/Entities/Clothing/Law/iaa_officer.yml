@@ -1,0 +1,100 @@
+- type: entity
+  parent: [ClothingUniformBase, BaseSecurityContraband]
+  id: ClothingUniformJumpsuitIAAOfficer1
+  name: форма офицера ВД
+  description: Форма офицера отдела внутренних дел юридического департамента.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/iaa_officer_1.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/iaa_officer_1.rsi
+
+- type: entity
+  parent: [ClothingUniformBase, BaseSecurityContraband]
+  id: ClothingUniformJumpsuitIAAOfficer2
+  name: форма офицера ВД
+  description: Форма офицера отдела внутренних дел юридического департамента.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/iaa_officer_2.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/iaa_officer_2.rsi
+
+- type: entity
+  parent: [ClothingUniformBase, BaseSecurityContraband]
+  id: ClothingUniformJumpsuitIAAOfficer3
+  name: форма офицера ВД
+  description: Форма офицера отдела внутренних дел юридического департамента.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/iaa_officer_3.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/iaa_officer_3.rsi
+
+- type: entity
+  parent: [ClothingHeadHelmetArmoredBase, BaseSecurityContraband]
+  id: ClothingHeadHelmetIAAOfficer
+  name: шлем офицера ВД
+  description: Защитный шлем офицера отдела внутренних дел.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Helmets/iaa_officer.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Helmets/iaa_officer.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatBeretIAAOfficer
+  name: берет офицера ВД
+  description: Берет офицера отдела внутренних дел.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Hats/beret_iaa_officer.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Hats/beret_iaa_officer.rsi
+
+- type: entity
+  parent: [ClothingShoesMilitaryBase, BaseSecurityContraband]
+  id: ClothingShoesBootsIAAOfficer
+  name: подкованные сапоги офицера ВД
+  description: Прочные подкованные сапоги офицера отдела внутренних дел.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Shoes/Boots/iaa_officer_boots.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Shoes/Boots/iaa_officer_boots.rsi
+
+- type: entity
+  parent: IAAIDCard
+  id: IAAOfficerIDCard
+  name: ID карта офицера ВД
+  components:
+  - type: Sprite
+    layers:
+    - sprite: Objects/Misc/id_cards.rsi
+      state: default
+    - sprite: Objects/Misc/id_cards.rsi
+      state: idiaaofficer
+  - type: PresetIdCard
+    job: IAAOfficer
+
+- type: entity
+  parent: IAAPDA
+  id: IAAOfficerPDA
+  name: КПК офицера ВД
+  description: КПК офицера отдела внутренних дел.
+  components:
+  - type: Sprite
+    sprite: Objects/Devices/pda.rsi
+  - type: Icon
+    sprite: Objects/Devices/pda.rsi
+    state: pda-iaaofficer
+  - type: Clothing
+    sprite: Objects/Devices/pda.rsi
+  - type: Appearance
+    appearanceDataInit:
+      enum.PdaVisuals.PdaType:
+        !type:String
+        pda-iaaofficer
+  - type: Pda
+    id: IAAOfficerIDCard

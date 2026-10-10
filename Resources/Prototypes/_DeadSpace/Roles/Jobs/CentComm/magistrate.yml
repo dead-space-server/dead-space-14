@@ -96,8 +96,8 @@
   components:
     - type: Sprite
       layers:
-        - state: default
-        - state: idlawyer
+        - state: gold
+        - state: idiaa
     - type: PresetIdCard
       job: Magistrat
 
