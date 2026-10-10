@@ -16750,8 +16750,6 @@ entities:
       pos: -93.5,-26.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 170
   - uid: 627
@@ -16792,8 +16790,6 @@ entities:
       pos: -98.5,-27.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 73
   - uid: 632
@@ -16802,8 +16798,6 @@ entities:
       pos: -98.5,-31.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 73
   - uid: 633
@@ -16812,8 +16806,6 @@ entities:
       pos: -98.5,-23.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 73
   - uid: 634
@@ -82635,8 +82627,6 @@ entities:
       pos: -91.5,-36.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 170
       - 97
@@ -83216,8 +83206,6 @@ entities:
       pos: -96.5,-21.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 170
   - uid: 12515
@@ -83226,8 +83214,6 @@ entities:
       pos: -94.5,-21.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 170
   - uid: 12516
@@ -83254,8 +83240,6 @@ entities:
       pos: -95.5,-21.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 170
   - uid: 12519
@@ -83269,8 +83253,6 @@ entities:
       pos: -90.5,-36.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 170
       - 97
@@ -83351,8 +83333,6 @@ entities:
       pos: -92.5,-36.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 170
       - 97
@@ -83504,8 +83484,6 @@ entities:
       pos: -89.5,-33.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 75
       - 170
@@ -83515,8 +83493,6 @@ entities:
       pos: -95.5,-36.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 170
       - 72
@@ -84520,8 +84496,6 @@ entities:
       pos: -91.5,-24.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 70
       - 170
@@ -84851,8 +84825,6 @@ entities:
       pos: -97.5,-35.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 170
   - uid: 27537
@@ -85652,8 +85624,6 @@ entities:
       pos: -89.5,-27.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 71
       - 170
@@ -86345,8 +86315,6 @@ entities:
       pos: -97.5,-23.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 73
   - uid: 12864
@@ -86356,8 +86324,6 @@ entities:
       pos: -97.5,-27.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 73
   - uid: 12865
@@ -86367,8 +86333,6 @@ entities:
       pos: -97.5,-31.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 73
   - uid: 12866
@@ -122888,8 +122852,6 @@ entities:
       pos: -98.5,-24.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 73
     - type: AtmosPipeColor
@@ -122901,8 +122863,6 @@ entities:
       pos: -98.5,-28.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 73
     - type: AtmosPipeColor
@@ -122914,8 +122874,6 @@ entities:
       pos: -98.5,-32.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 73
     - type: AtmosPipeColor
@@ -122926,8 +122884,6 @@ entities:
       pos: -93.5,-32.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 170
     - type: AtmosPipeColor
@@ -125058,8 +125014,6 @@ entities:
       pos: -99.5,-24.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 73
     - type: AtmosPipeLayers
@@ -125073,8 +125027,6 @@ entities:
       pos: -99.5,-28.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 73
     - type: AtmosPipeLayers
@@ -125088,8 +125040,6 @@ entities:
       pos: -99.5,-32.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 73
     - type: AtmosPipeLayers
@@ -125103,8 +125053,6 @@ entities:
       pos: -93.5,-28.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 170
     - type: AtmosPipeLayers
@@ -138643,10 +138591,10 @@ entities:
         stampedColor: '#006600FF'
         stampedName: stamp-component-stamped-name-centcom
       content: >-
-        Поздравляем, командование NanoTrasen решило обновить минимальный охранный шаттл службы безопасности станции NT-Raven-GE до версии 09. 
+        Поздравляем, командование NanoTrasen решило обновить минимальный охранный шаттл службы безопасности станции NT-Raven-GE до версии 09.
 
 
-        Добавлены экстерьерные осветительные приборы на внешней стороне шаттла, чтобы космический мрак космоса не мешал служебным обязанностям пилота службы безопасности станции. 
+        Добавлены экстерьерные осветительные приборы на внешней стороне шаттла, чтобы космический мрак космоса не мешал служебным обязанностям пилота службы безопасности станции.
 
 
         Так же мы учли недовольства по поводу кнопок, добавлена кнопка переключения гермозатвора оружия отдельно от остальных гермозатворов фонаря шаттла.

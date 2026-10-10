@@ -17587,8 +17587,6 @@ entities:
       pos: -20.5,9.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 259
   - uid: 17070
@@ -79362,8 +79360,6 @@ entities:
       pos: -20.5,10.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 259
     - type: AtmosPipeColor
@@ -80815,8 +80811,6 @@ entities:
       pos: -20.5,8.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 259
     - type: AtmosPipeColor
