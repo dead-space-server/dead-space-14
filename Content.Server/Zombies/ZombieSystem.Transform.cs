@@ -52,6 +52,7 @@ using System.Linq; // DS14
 using Content.Shared.Cuffs.Components; // DS14
 using Content.Shared.Temperature.Components;
 using Content.Shared.StatusEffectNew; // DS14
+using Content.Shared.NPC; //DS14
 
 namespace Content.Server.Zombies;
 
@@ -308,6 +309,7 @@ public sealed partial class ZombieSystem
         var htn = EnsureComp<HTNComponent>(target);
         htn.RootTask = new HTNCompoundTask() { Task = "SimpleHostileCompound" };
         htn.Blackboard.SetValue(NPCBlackboard.Owner, target);
+        EnsureComp<ActiveNPCComponent>(target);//DS14
         _npc.SleepNPC(target, htn);
 
         //He's gotta have a mind
@@ -371,4 +373,17 @@ public sealed partial class ZombieSystem
         _tag.AddTag(target, InvalidForGlobalSpawnSpellTag);
         _tag.AddTag(target, CannotSuicideTag);
     }
+    private void ActivateNPC(EntityUid uid, ZombieComponent component, ref PlayerDetachedEvent args)//DS14-start
+    {
+        var htn = EnsureComp<HTNComponent>(args.Entity);
+        htn.RootTask = new HTNCompoundTask() { Task = "SimpleHostileCompound" };
+        htn.Blackboard.SetValue(NPCBlackboard.Owner, args.Entity);
+        _npc.WakeNPC(args.Entity, htn);
+        EnsureComp<ActiveNPCComponent>(args.Entity);
+    }
+    private void DeactivateNPC(EntityUid uid, ZombieComponent component, ref PlayerAttachedEvent args)
+    {
+        RemCompDeferred<HTNComponent>(args.Entity);
+        RemCompDeferred<ActiveNPCComponent>(args.Entity);
+    }//DS14-end
 }

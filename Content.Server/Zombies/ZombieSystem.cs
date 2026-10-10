@@ -32,6 +32,7 @@ using Robust.Shared.Timing;
 using Content.Shared.Movement.Systems;
 using Content.Shared.DeadSpace.Movement.Events;
 using Content.Shared.NPC.Components; // DS14
+using Robust.Shared.Player;//DS14
 
 namespace Content.Server.Zombies
 {
@@ -90,6 +91,8 @@ namespace Content.Server.Zombies
             SubscribeLocalEvent<ZombifyOnDeathComponent, MobStateChangedEvent>(OnDamageChanged);
 
             SubscribeLocalEvent<ZombieComponent, AttemptActivateJetpackHandledEvent>(OnJetpackAttempt); // DS14
+            SubscribeLocalEvent<ZombieComponent, PlayerDetachedEvent>(ActivateNPC); //DS14
+            SubscribeLocalEvent<ZombieComponent, PlayerAttachedEvent>(DeactivateNPC); //DS14
         }
 
         private void OnBeforeRemoveAnomalyOnDeath(Entity<PendingZombieComponent> ent, ref BeforeRemoveAnomalyOnDeathEvent args)
