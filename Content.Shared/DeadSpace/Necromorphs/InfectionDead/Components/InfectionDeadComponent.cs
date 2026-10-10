@@ -94,7 +94,7 @@ public enum VirusEffects : ushort
     NightVision = 1 << 0,
     EmitGas = 2 << 1,
     NoSlip = 3 << 3,
-    Explosion = 4 << 4,
+    // Bit 6 is reserved for the removed explosion mutation; do not reuse it for another effect.
     Invisability = 5 << 5,
     Pulling = 6 << 6,
     StunAttack = 7 << 7,
@@ -130,7 +130,6 @@ public static class VirusEffectsConditions
         { VirusEffects.NightVision, 1f},
         { VirusEffects.EmitGas, 0.8f},
         { VirusEffects.NoSlip, 0.5f},
-        { VirusEffects.Explosion, 0.1f},
         { VirusEffects.Pulling, 1f},
         { VirusEffects.StunAttack, 0.5f},
         // { VirusEffects.Dash, 0.1f}, // Это слишком сильно
