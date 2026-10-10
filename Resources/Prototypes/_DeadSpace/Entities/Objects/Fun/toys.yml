@@ -1782,7 +1782,7 @@
   - type: Sprite
     state: plushie_ivan_kuvalda
   - type: TTS
-    voice: Torbjorn
+    voice: MForsworn
   - type: SpeakOnTrigger
     pack: PlushieIvanKuvaldaSpeech
   - type: UseDelay

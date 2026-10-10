@@ -146,6 +146,7 @@
     - id: WeaponDisabler
     - id: BoxPhotocopierToners # DS14
     - id: WeaponMiniatureEnergyGun # DS14
+    - id: MachinePdaPainterFlatpack # DS14
     - id: ADTtelescopicBaton # ADT
     - id: PlushieLizardJobHeadofpersonnel
       prob: 0.02

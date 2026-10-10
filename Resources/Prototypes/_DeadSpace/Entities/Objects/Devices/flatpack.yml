@@ -189,3 +189,18 @@
     - state: overlay
       color: "#cec8ac"
     - state: icon-default
+
+- type: entity
+  parent: BaseFlatpack
+  id: MachinePdaPainterFlatpack
+  name: упаковка покрасчика КПК
+  description: Универсально-сборная упаковка, используемая для сборки покрасчика КПК.
+  components:
+  - type: Flatpack
+    entity: MachinePdaPainter
+  - type: Sprite
+    layers:
+    - state: base
+    - state: overlay
+      color: "#9FED58"
+    - state: icon-default
