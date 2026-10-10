@@ -10,6 +10,7 @@ using Robust.Shared.Utility;
 using Robust.Shared.Timing;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.ContentPack;
 
 namespace Content.Server.DeadSpace.Ports.Jukebox;
 
@@ -21,6 +22,7 @@ public sealed class JukeboxSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly IResourceManager _resources = default!;
 
     private readonly List<Entity<WhiteJukeboxComponent>> _playingJukeboxes = new() { };
 
@@ -150,6 +152,9 @@ public sealed class JukeboxSystem : EntitySystem
                 break;
         }
         if (selected == null)
+            return;
+        if (path.CanonPath.StartsWith(JukeboxSongsSyncManager.Prefix.CanonPath + "/", StringComparison.Ordinal) &&
+            !_resources.ContentFileExists(path))
             return;
 
         float duration;

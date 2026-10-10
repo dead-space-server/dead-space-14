@@ -50,11 +50,16 @@ public sealed partial class TapeCreatorMenu : DefaultWindow
 
         var input = SongNameField.Text;
 
-        string pattern = @"[^a-zA-Zа-яА-Я ]+";
+        string pattern = @"[^a-zA-Zа-яА-ЯёЁ ]+";
         string replacement = "";
 
         var songName = Regex.Replace(input, pattern, replacement);
-        songName = Regex.Replace(songName, @"\s+", " ");
+        songName = Regex.Replace(songName, @"\s+", " ").Trim();
+        if (string.IsNullOrWhiteSpace(songName))
+        {
+            _popupSystem.PopupEntity("Введите название записи.", _entity.Owner);
+            return;
+        }
 
         var songBytes = _songBytes;
 
@@ -66,8 +71,10 @@ public sealed partial class TapeCreatorMenu : DefaultWindow
         };
 
         _uploading = true;
+        _popupSystem.PopupEntity("Внимание. Начинается запись мозговой активности.", _entity.Owner);
         var uploaded = await _songs.UploadSong(msg);
         _uploading = false;
+
         if (Disposed)
             return;
         if (!uploaded)
@@ -77,8 +84,6 @@ public sealed partial class TapeCreatorMenu : DefaultWindow
         }
         _songBytes = Array.Empty<byte>();
         SongNameField.Clear();
-
-        _popupSystem.PopupEntity("Внимание. Начинается запись мозговой активности.", _entity.Owner);
     }
 
     private async void TryLoadSong(BaseButton.ButtonEventArgs obj)

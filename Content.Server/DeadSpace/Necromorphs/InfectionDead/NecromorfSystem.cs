@@ -22,7 +22,6 @@ using Content.Shared.Movement.Systems;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.DeadSpace.Abilities.ReleaseGasPerSecond.Components;
 using Content.Shared.Slippery;
-using Content.Shared.DeadSpace.Abilities.ExplosionAbility.Components;
 using Content.Shared.DeadSpace.Abilities.Invisibility.Components;
 using Content.Shared.DeadSpace.Demons.Abilities.Components;
 using Content.Shared.Charges.Components;
@@ -257,9 +256,6 @@ public sealed partial class NecromorfSystem : SharedInfectionDeadSystem
         if (!HasComp<NoSlipComponent>(uid) && VirusEffectsConditions.HasEffect(component.StrainData.Effects, VirusEffects.NoSlip))
             AddComp<NoSlipComponent>(uid);
 
-        if (!HasComp<ExplosionAbilityComponent>(uid) && VirusEffectsConditions.HasEffect(component.StrainData.Effects, VirusEffects.Explosion))
-            AddComp<ExplosionAbilityComponent>(uid);
-
         if (!HasComp<InvisibilityComponent>(uid) && VirusEffectsConditions.HasEffect(component.StrainData.Effects, VirusEffects.Invisability))
             AddComp<InvisibilityComponent>(uid);
 
@@ -342,6 +338,9 @@ public sealed partial class NecromorfSystem : SharedInfectionDeadSystem
         {
             var effect = GetRandomEffectExcludingCurrent(component.StrainData.Effects);
 
+            if (effect == VirusEffects.None)
+                break;
+
             var weight = VirusEffectsConditions.Weights[effect];
 
             float chance = weight * mutationStrength;
@@ -365,11 +364,9 @@ public sealed partial class NecromorfSystem : SharedInfectionDeadSystem
 
     public VirusEffects GetRandomEffectExcludingCurrent(VirusEffects currentEffects)
     {
-        var allEffects = Enum.GetValues<VirusEffects>();
-
         var availableEffects = new List<VirusEffects>();
 
-        foreach (var effect in allEffects)
+        foreach (var effect in VirusEffectsConditions.Weights.Keys)
         {
             if (effect == VirusEffects.None)
                 continue;
