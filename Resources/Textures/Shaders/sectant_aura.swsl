@@ -1,0 +1,49 @@
+uniform highp vec4 auraColor;
+uniform highp float pulseSpeed;
+uniform highp float outlineWidth; // Базовая длина колючек в UV
+uniform highp float spikeCount;   // Количество колючек по кругу
+
+void fragment() {
+    highp vec4 originalColor = zTexture(UV);
+    highp float pulse = 0.6 + 0.4 * sin(TIME * pulseSpeed);
+
+    // 1. Сам спрайт — подкрашиваем аурой
+    if (originalColor.a > 0.1) {
+        highp vec3 tinted = mix(originalColor.rgb, auraColor.rgb, pulse * 0.7);
+        COLOR = vec4(tinted, originalColor.a);
+        return;
+    }
+
+    // 2. Прозрачный пиксель — проверяем, не рядом ли край спрайта
+    highp vec2 center = vec2(0.5, 0.5);
+    highp vec2 dir = UV - center;
+    highp float dist = length(dir);
+
+    // Защита от деления на ноль в самом центре
+    if (dist < 0.001) {
+        COLOR = vec4(0.0);
+        return;
+    }
+
+    highp float angle = atan(dir.y, dir.x);
+
+    // Колючесть: длина луча модулируется по углу + медленно вращается
+    highp float spike = abs(sin(angle * spikeCount + TIME * pulseSpeed * 0.5));
+    highp float radius = outlineWidth * pulse * (0.5 + spike);
+
+    // Сэмплируем несколько точек по направлению к центру
+    highp vec2 dirN = normalize(dir);
+    highp float maxAlpha = 0.0;
+    for (highp int i = 0; i < 4; i++) {
+        highp float t = float(i) / 3.0;
+        highp vec2 sampleUV = UV - dirN * radius * t;
+        maxAlpha = max(maxAlpha, zTexture(sampleUV).a);
+    }
+
+    if (maxAlpha > 0.1) {
+        highp float glow = 0.5 + 0.5 * pulse;
+        COLOR = vec4(auraColor.rgb * glow, auraColor.a * maxAlpha * pulse);
+    } else {
+        COLOR = vec4(0.0);
+    }
+}

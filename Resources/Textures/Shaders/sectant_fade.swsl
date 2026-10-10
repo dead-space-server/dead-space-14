@@ -1,0 +1,8 @@
+uniform lowp float visibility;
+
+void fragment() {
+    vec4 base = texture(TEXTURE, UV);
+    float edge = smoothstep(0.0, 1.0, base.a);
+    float vis = mix(1.0, visibility, edge);
+    COLOR = vec4(base.rgb, base.a * vis);
+}
