@@ -38,6 +38,7 @@ public sealed class TapeCreatorSystem : EntitySystem
         SubscribeLocalEvent<TapeCreatorComponent, GetVerbsEvent<Verb>>(OnTapeCreatorGetVerb);
         SubscribeLocalEvent<TapeCreatorComponent, ComponentGetState>(OnTapeCreatorStateChanged);
         SubscribeLocalEvent<TapeComponent, ComponentGetState>(OnTapeStateChanged);
+        SubscribeLocalEvent<TapeCreatorComponent, EntRemovedFromContainerMessage>(OnTapeRemoved);
     }
 
     private void OnTapeCreatorGetVerb(EntityUid uid, TapeCreatorComponent component, GetVerbsEvent<Verb> ev)
@@ -92,6 +93,13 @@ public sealed class TapeCreatorSystem : EntitySystem
         component.TapeContainer = _container.EnsureContainer<Container>(uid, TapeCreatorContainerName);
     }
 
+    private void OnTapeRemoved(EntityUid uid, TapeCreatorComponent component, EntRemovedFromContainerMessage args)
+    {
+        if (args.Container != component.TapeContainer || component.InsertedTape != GetNetEntity(args.Entity)) return;
+        component.InsertedTape = null;
+        Dirty(uid, component);
+    }
+
     private void OnInteract(EntityUid uid, TapeCreatorComponent component, InteractUsingEvent args)
     {
         if (component.Recording)
@@ -103,20 +111,16 @@ public sealed class TapeCreatorSystem : EntitySystem
         {
             var containedEntities = component.TapeContainer.ContainedEntities;
 
-            if (containedEntities.Count > 1)
+            if (containedEntities.Count >= 1)
             {
                 var removedTapes = _container.EmptyContainer(component.TapeContainer, true).ToList();
-                _container.Insert(args.Used, component.TapeContainer);
 
                 foreach (var tapes in removedTapes)
                 {
                     _hands.PickupOrDrop(args.User, tapes);
                 }
             }
-            else
-            {
-                _container.Insert(args.Used, component.TapeContainer);
-            }
+            if (!_container.Insert(args.Used, component.TapeContainer)) return;
 
             component.InsertedTape = GetNetEntity(args.Used);
             Dirty(uid, component);
@@ -149,7 +153,8 @@ public sealed class TapeCreatorSystem : EntitySystem
             return;
         }
 
-        var insertedTape = GetEntity(tapeCreatorComponent.InsertedTape.Value);
+        if (!TryGetEntity(tapeCreatorComponent.InsertedTape.Value, out var inserted) || inserted is not { } insertedTape)
+            return;
         if (!tapeCreatorComponent.TapeContainer.Contains(insertedTape) || !TryComp<TapeComponent>(insertedTape, out var tapeComponent))
             return;
         if (_songsSyncManager.SyncSongData(ev.SongName, ev.SongBytes) is not { } songData)
@@ -173,6 +178,15 @@ public sealed class TapeCreatorSystem : EntitySystem
         Dirty(insertedTape, tapeComponent);
 
         Record(tapeCreator, tapeCreatorComponent, _popup, _container);
+    }
+
+    internal bool CanUploadSong(NetEntity recorder, INetChannel channel)
+    {
+        return _players.TryGetSessionByChannel(channel, out var session) && session.AttachedEntity is { } actor &&
+            TryGetEntity(recorder, out var creator) && TryComp<TapeCreatorComponent>(creator, out var component) &&
+            !component.Recording && component.CoinBalance > 0 && component.InsertedTape is { } tape &&
+            _ui.IsUiOpen(creator.Value, TapeCreatorUIKey.Key, actor) && TryGetEntity(tape, out var inserted) &&
+            inserted is { } entity && component.TapeContainer.Contains(entity) && HasComp<TapeComponent>(entity);
     }
 
     private void Record(

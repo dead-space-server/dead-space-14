@@ -1,5 +1,11 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 using System.IO;
+using System.Collections;
+using System.Reflection;
+using System.Linq;
+using Robust.Client.ResourceManagement;
+using ClientJukeboxSystem = Content.Client.DeadSpace.Ports.Jukebox.JukeboxSystem;
+using ServerJukeboxSystem = Content.Server.DeadSpace.Ports.Jukebox.JukeboxSystem;
 using Content.Client.DeadSpace.Ports.Jukebox;
 using Content.IntegrationTests.Tests.Interaction;
 using Content.Server.DeadSpace.Ports.Jukebox;
@@ -128,6 +134,68 @@ public sealed class JukeboxUploadTest : InteractionTest
             Assert.That(Client.ProtoMan.Index(prototypeId).TryGetComponent<TapeComponent>(out var component,
                 Client.ResolveDependency<IComponentFactory>()), Is.True);
             Assert.That(component.Songs[0].SongPath, Is.EqualTo(downloaded));
+        });
+
+        var jukebox = await Spawn("JukeboxMK");
+        await Server.WaitAssertion(() =>
+        {
+            var box = SEntMan.GetComponent<WhiteJukeboxComponent>(ToServer(jukebox));
+            Assert.That(Server.System<SharedContainerSystem>().Insert(ToServer(tape), box.TapeContainer), Is.True);
+            Assert.That(SUiSys.TryOpenUi(ToServer(jukebox), JukeboxUIKey.Key, SPlayer), Is.True);
+            Server.System<ServerJukeboxSystem>().OnSongRequestPlay(new JukeboxRequestSongPlay
+            {
+                Jukebox = jukebox,
+                SongPath = downloaded,
+            }, new EntitySessionEventArgs(ServerSession));
+            Assert.That(box.PlayingSongData, Is.Not.Null);
+        });
+        await RunTicks(10);
+        await Client.WaitAssertion(() =>
+        {
+            var playback = Client.System<ClientJukeboxSystem>();
+            playback.FrameUpdate(0.016f);
+            var decoded = (IDictionary) typeof(ClientJukeboxSystem).GetField("_songStreams", BindingFlags.Instance | BindingFlags.NonPublic)!
+                .GetValue(playback);
+            Assert.That(decoded.Contains(downloaded.Value), Is.True);
+            Assert.That(Client.ResolveDependency<IResourceCache>().GetAllResources<AudioResource>()
+                .Any(resource => resource.Key == downloaded), Is.False,
+                "Dynamic songs must not leak into the permanent engine resource cache.");
+        });
+        await Server.WaitPost(() => Server.System<ServerJukeboxSongsSyncSystem>().ClearSongs());
+        await RunTicks(5);
+        await Client.WaitAssertion(() =>
+        {
+            Assert.That(Client.ResolveDependency<IResourceManager>().ContentFileExists(downloaded.Value), Is.False);
+            var decoded = (IDictionary) typeof(ClientJukeboxSystem).GetField("_songStreams", BindingFlags.Instance | BindingFlags.NonPublic)!
+                .GetValue(Client.System<ClientJukeboxSystem>());
+            Assert.That(decoded.Count, Is.Zero);
+        });
+        await Server.WaitAssertion(() =>
+        {
+            var box = SEntMan.GetComponent<WhiteJukeboxComponent>(ToServer(jukebox));
+            box.PlayingSongData = null;
+            Server.System<ServerJukeboxSystem>().OnSongRequestPlay(new JukeboxRequestSongPlay
+            {
+                Jukebox = jukebox,
+                SongPath = downloaded,
+            }, new EntitySessionEventArgs(ServerSession));
+            Assert.That(box.PlayingSongData, Is.Null, "Cached duration must not resurrect a deleted song.");
+        });
+    }
+
+    [Test]
+    public async Task ReplacingAndRemovingTapeKeepsRecorderStateConsistent()
+    {
+        var recorder = await SpawnTarget("TapeRecorderr");
+        await InteractUsing("TapeEmpty");
+        await InteractUsing("TapeEmpty");
+        await Server.WaitAssertion(() =>
+        {
+            var creator = SEntMan.GetComponent<TapeCreatorComponent>(ToServer(recorder));
+            Assert.That(creator.TapeContainer.ContainedEntities.Count, Is.EqualTo(1));
+            Assert.That(creator.InsertedTape, Is.Not.Null);
+            Server.System<SharedContainerSystem>().EmptyContainer(creator.TapeContainer, force: true);
+            Assert.That(creator.InsertedTape, Is.Null);
         });
     }
 }

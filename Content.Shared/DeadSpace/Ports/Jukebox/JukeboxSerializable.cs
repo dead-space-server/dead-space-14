@@ -18,6 +18,12 @@ public sealed class JukeboxRepeatToggled(bool newState) : BoundUserInterfaceMess
 public sealed class JukeboxEjectRequest : BoundUserInterfaceMessage;
 
 [Serializable, NetSerializable]
+public sealed class JukeboxRoundClearedEvent(int round) : EntityEventArgs
+{
+    public int Round { get; } = round;
+}
+
+[Serializable, NetSerializable]
 public enum JukeboxUIKey : byte
 {
     Key
