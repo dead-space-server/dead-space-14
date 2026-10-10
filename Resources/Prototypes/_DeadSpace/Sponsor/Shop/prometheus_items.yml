@@ -1,0 +1,66 @@
+# WEH-BACKPACK
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackWEH
+  categories: [ HideSpawnMenu ]
+  name: Weh-рюкзак
+  description: "\"Вех\"чательный рюкзак очаровательной ящерицы. Удобен для переноски вещей, ящериц и прочих вехательных предметов."
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/Shop/Prometheus/backpack_weh.rsi
+    layers:
+    - state: icon
+      map: [ base ]
+  - type: GenericVisualizer
+    visuals:
+      enum.StorageVisuals.Open:
+        base:
+          True: { state: icon-open }
+          False: { state: icon }
+    netsync: false
+  - type: Appearance
+    netsync: false
+  - type: Storage
+    storageOpenSound: /Audio/_DeadSpace/Sponsor/Shop/Prometheus/weh_pop.ogg
+    maxItemSize: Huge
+    grid:
+    - 0,0,8,4
+  - type: EmitSoundOnLand
+    sound: &PlushieLizardSound
+      path: /Audio/Items/Toys/weh.ogg
+      params:
+        volume: -5
+  - type: EmitSoundOnTrigger
+    sound: *PlushieLizardSound
+  - type: EmitSoundOnCollide
+    sound: *PlushieLizardSound
+  - type: MeleeWeapon
+    attackRate: 0.333
+    wideAnimationRotation: 180
+    soundHit: *PlushieLizardSound
+    damage:
+      types:
+        Blunt: 0
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/glove_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/glove_drop.ogg
+  - type: Extractable
+    grindableSolutionName: food
+    juiceSolution:
+      reagents:
+      - ReagentId: JuiceThatMakesYouWeh
+        Quantity: 30
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 20
+        reagents:
+        - ReagentId: Fiber
+          Quantity: 10
+        - ReagentId: JuiceThatMakesYouWeh
+          Quantity: 10
+  - type: Speech
+    speechVerb: Reptilian
