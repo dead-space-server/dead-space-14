@@ -17,7 +17,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: MobXenoRavager 
+    - id: MobXenoRavager
 
 # Engineering
 - type: entity
@@ -107,3 +107,15 @@
       entity_storage:
         id: VendingMachineRestockBrassNBoltTaipan
         amount: 2
+
+# Medical
+- type: entity
+  id: CrateTerratosomochromolinTaipanFilled
+  parent: CrateSyndicate
+  name: терратосоматохромолин
+  description: Содержит 6 пробирок с терратосоматохромолином.
+  components:
+  - type: StorageFill
+    contents:
+    - id: TerratosomochromolinChemistryVial
+      amount: 6

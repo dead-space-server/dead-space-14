@@ -239,7 +239,7 @@
   completetime: 2
   materials:
     Plastic: 200
-    
+
 - type: latheRecipe
   parent: BaseToolRecipe
   id: HoloprojectorField

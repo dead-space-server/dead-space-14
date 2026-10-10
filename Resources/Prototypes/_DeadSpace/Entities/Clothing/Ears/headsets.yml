@@ -76,7 +76,7 @@
   suffix: Тайпан
   components:
   - type: Headset
-    color: "#8B0000"
+    color: "#8D0046"
   - type: ContainerFill
     containers:
       key_slots:

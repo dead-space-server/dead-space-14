@@ -498,6 +498,12 @@
     tags: [] # ignore "WhitelistChameleon" tag
 
 - type: entity
+  parent: ClothingOuterHardsuitSyndieCommander
+  id: TaipanClothingOuterHardsuitOfficerTelecommunication
+  name: кроваво-красный скафандр
+  description: Красный - значит главный. Это ведь ТАК работает?
+
+- type: entity
   parent: ClothingOuterHardsuitEngineering
   id: ClothingOuterHardsuitTaipanTechnician
   name: скафандр ремонтника

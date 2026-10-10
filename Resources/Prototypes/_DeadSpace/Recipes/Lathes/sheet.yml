@@ -49,3 +49,24 @@
   completetime: 0
   materials:
     RawBluespaceCrystal: 170
+
+- type: latheRecipe
+  id: RedspaceCrystalRaw1
+  result: RedspaceCrystalRaw1
+  completetime: 60
+  materials:
+    RawArtifactFragment: 6000
+    Bananium: 1500
+    Steel: 3000
+
+
+- type: latheRecipe
+  id: SheetRedspaceCrystal1
+  result: SheetRedspaceCrystal1
+  completetime: 300
+  materials:
+    RawRedspaceCrystal: 300
+    Plasma: 1000
+    RawUranium: 3000
+
+

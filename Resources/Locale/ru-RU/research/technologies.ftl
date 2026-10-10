@@ -78,3 +78,6 @@ research-technology-bluespace-cargo-transport = Блюспейс-транспо�
 research-technology-night-vision-technology = Технология ночного зрения
 research-technology-security-turrets-technology = Автономные охранные системы
 research-technology-app-hub-software = Программное обеспечение
+research-technology-redspace-backpack = РедСпейс рюкзак
+research-technology-redspace-signaller = РедСпейс передатчик сигналов
+research-technology-redspace = Стабилизация РедСпейс энергии
