@@ -1,0 +1,9 @@
+- type: entity
+  parent: MobFireBot
+  id: MobFlameBot
+  name: пламябот
+  description: Маленький, милый и, словом, классный бот-огнетушитель!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Mobs/Silicon/Bots/flamebot.rsi
+    state: flamebot

@@ -1,0 +1,78 @@
+- type: entity
+  name: Шума
+  parent: MobSnake
+  id: MobShumaSyndicate
+  description: Милый аргоцит, спасённый от NanoTrasen!
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base", "movement" ]
+      state: shuma
+      sprite: _DeadSpace/Mobs/Pets/shuma.rsi
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: shuma
+      Critical:
+        Base: crit
+      Dead:
+        Base: dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      40: Critical
+      60: Dead
+  - type: ReplacementAccent
+    accent: xeno
+  - type: TypingIndicator
+    proto: lizard
+  - type: Speech
+    speechVerb: Arachnid
+    speechSounds: Arachnid
+  - type: InteractionPopup
+    successChance: 0.6
+    interactSuccessString: petting-success-reptile
+    interactFailureString: petting-failure-generic
+    interactSuccessSpawn: EffectHearts
+    interactSuccessSound:
+      path: /Audio/_DeadSpace/Animals/shuma_success.ogg
+    interactFailureSound:
+      path: /Audio/_DeadSpace/Animals/shuma_failure.ogg
+  - type: Grammar
+    attributes:
+      proper: true
+      gender: female
+  - type: Vocal
+    sounds:
+      Male: ShumaRoar
+      Female: ShumaRoar
+      Unsexed: ShumaRoar
+
+- type: soundCollection
+  id: ShumaScream
+  files:
+  - /Audio/_DeadSpace/Animals/shuma_scream.ogg
+
+- type: emoteSounds
+  id: ShumaRoar
+  params:
+    variation: 0.125
+    volume: 2
+  sounds:
+    Scream:
+      collection: ShumaScream
+
+- type: entity
+  name: спавнер шумы
+  description: Спавнер аргоцита-Шумы.
+  id: SpawnMobShuma
+  parent: MarkerBase
+  components:
+  - type: Sprite
+    layers:
+    - state: shuma
+      sprite: _DeadSpace/Mobs/Pets/shuma.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - MobShumaSyndicate

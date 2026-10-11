@@ -5,3 +5,11 @@
   targetNode: bot
   category: construction-category-utilities
   objectType: Item
+
+- type: construction
+  id: flamebot
+  graph: FlameBot
+  startNode: start
+  targetNode: bot
+  category: construction-category-utilities
+  objectType: Item

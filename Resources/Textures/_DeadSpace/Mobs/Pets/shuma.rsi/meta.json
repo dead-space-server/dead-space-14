@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Custom Sprite by Leo_bahmet",
+  "states": [
+    {
+      "name": "dead",
+      "delays": [
+        [
+          1
+        ]
+      ]
+    },
+    {
+      "name": "shuma",
+      "directions": 4,
+      "delays": [
+        [
+          1
+        ],
+        [
+          1
+        ],
+        [
+          1
+        ],
+        [
+          1
+        ]
+      ]
+    },
+    {
+      "name": "crit",
+        "delays": [
+        [
+          1
+        ]
+      ]
+    }
+      ]
+    }
