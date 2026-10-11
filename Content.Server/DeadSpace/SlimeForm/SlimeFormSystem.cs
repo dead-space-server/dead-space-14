@@ -4,6 +4,7 @@ using Content.Server.Polymorph.Systems;
 using Content.Shared.Actions;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
+using Content.Shared.Corvax.TTS;
 using Content.Shared.Cuffs;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.DeadSpace.SlimeForm;
@@ -118,6 +119,14 @@ public sealed class SlimeFormSystem : EntitySystem
         var face = appearance.EyeColor.WithAlpha(1f);
         _appearance.SetData(args.NewEntity, SlimeFormVisuals.BodyColor, body);
         _appearance.SetData(args.NewEntity, SlimeFormVisuals.FaceColor, face);
+
+        if (!TryComp<TTSComponent>(args.NewEntity, out var newTts))
+            return;
+
+        var voice = TryComp<TTSComponent>(args.OldEntity, out var oldTts) && oldTts.VoicePrototypeId != null
+            ? oldTts.VoicePrototypeId
+            : appearance.Voice.Id;
+        newTts.VoicePrototypeId = voice;
     }
 
     private bool StartChange(Entity<SlimeFormComponent> ent, DoAfterEvent doAfterEvent, bool dropLimbs)

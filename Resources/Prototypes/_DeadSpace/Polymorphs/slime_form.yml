@@ -37,6 +37,18 @@
   components:
   - type: SlimeForm
     isSlime: true
+  - type: StatusIcon
+    bounds: -0.5,-0.5,0.5,0.5
+  - type: SSDIndicator
+  - type: MindExaminable
+  - type: CarrySize
+    size: Small
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 0
+        Structural: 0
+        Caustic: 0
   - type: Sprite
     drawdepth: Mobs
     sprite: _DeadSpace/Mobs/SlimeForm/slime_form.rsi
