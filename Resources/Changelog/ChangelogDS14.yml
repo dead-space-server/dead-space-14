@@ -8518,3 +8518,10 @@ Entries:
   changes:
   - type: Add
     message: Добавлен функционал консоли медицинских карт
+- id: 818
+  author: Sonic2020prirod
+  time: '2026-10-11T03:10:47.506489+00:00'
+  pr: 2413
+  changes:
+  - type: Tweak
+    message: Ремилии и Вавы теперь понимают общегалактический
