@@ -1,0 +1,26 @@
+[head=3]STATION XX-00[/head]
+[head=3]МЕД[/head]
+═════════════════════════════════════
+[bold]DOCUMENT NAME[/bold]
+═════════════════════════════════════
+Время от начала смены и дата: {{HOUR.MINUTE.SECOND}} {{DAY.MONTH.YEAR}}
+
+Пациент: {{PATIENT.NAME}}
+Раса: {{PATIENT.SPECIES}}
+Пол: {{PATIENT.SEX}}
+ДНК: {{PATIENT.DNA}}
+
+Вид записи: {{CASE.KIND}}
+Время постановки на учёт: {{CASE.ADDED}}
+Составитель: {{CASE.AUTHOR}}
+
+Состояние при поступлении: {{CASE.ADMISSION}}
+Диагноз: {{CASE.DIAGNOSIS}}
+Проведённое лечение: {{CASE.TREATMENT}}
+Требуется продолжение лечения: {{CASE.CONTINUED}}
+Требуется принудительное лечение: {{CASE.FORCED}}
+Лечившие специалисты: {{CASE.SPECIALISTS}}
+Рекомендации: {{CASE.RECOMMENDATIONS}}
+Состояние при выписке: {{CASE.DISCHARGE}}
+═════════════════════════════════════
+[italic]Подпись лечащего врача[/italic]
