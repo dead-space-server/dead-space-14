@@ -8511,3 +8511,10 @@ Entries:
   changes:
   - type: Fix
     message: Плазма на аврите, мелкие изменения на карте BOX
+- id: 817
+  author: IvanKuvalda
+  time: '2026-10-11T03:04:50.788808+00:00'
+  pr: 2412
+  changes:
+  - type: Add
+    message: Добавлен функционал консоли медицинских карт
