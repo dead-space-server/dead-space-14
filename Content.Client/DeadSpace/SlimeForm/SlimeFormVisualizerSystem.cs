@@ -19,6 +19,18 @@ public sealed class SlimeFormVisualizerSystem : EntitySystem
         SubscribeLocalEvent<BodyPartComponent, AppearanceChangeEvent>(OnLimbAppearance);
     }
 
+    public void SetCarriedPose(EntityUid uid, bool carried)
+    {
+        if (!TryComp<SlimeFormComponent>(uid, out var slime) || !slime.IsSlime)
+            return;
+
+        if (!TryComp<SpriteComponent>(uid, out var sprite))
+            return;
+
+        _sprite.LayerSetRsiState((uid, sprite), "body", carried ? "held" : "slime");
+        _sprite.LayerSetRsiState((uid, sprite), "face", carried ? "face-held" : "face");
+    }
+
     private void OnStartup(Entity<SlimeFormComponent> ent, ref ComponentStartup args)
     {
         if (!ent.Comp.IsSlime || !TryComp<SpriteComponent>(ent, out var sprite))
