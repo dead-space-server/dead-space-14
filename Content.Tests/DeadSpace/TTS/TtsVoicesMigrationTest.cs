@@ -17,7 +17,10 @@ public sealed class TtsVoicesMigrationTest
     [Test]
     public async Task UpgradingLegacyDatabasePreservesCharacter()
     {
-        await using var db = new DesignTimeContextFactorySqlite().CreateDbContext([]);
+        var options = new DbContextOptionsBuilder<SqliteServerDbContext>()
+            .UseSqlite("Data Source=:memory:")
+            .Options;
+        await using var db = new SqliteServerDbContext(options);
         await db.Database.OpenConnectionAsync();
         await db.Database.MigrateAsync();
         db.Profile.Add(new Profile
