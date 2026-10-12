@@ -148,9 +148,7 @@ public sealed class TelephoneSystem : SharedTelephoneSystem
             : LanguageSystem.DefaultLanguageId;
 
         var speakerTts = EnsureComp<TTSComponent>(speaker);
-        speakerTts.VoicePrototypeId = TryComp<TTSComponent>(messageSource, out var sourceTts)
-            ? sourceTts.VoicePrototypeId
-            : null;
+        speakerTts.Voices = TryComp<TTSComponent>(messageSource, out var sourceTts) ? new(sourceTts.Voices) : new();
     }
     // DS14-end
 

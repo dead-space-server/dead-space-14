@@ -75,6 +75,12 @@ namespace Content.Server.Database
                 .Property(log => log.Json)
                 .HasConversion(jsonStringConverter);
 
+            // DS14-start
+            modelBuilder.Entity<Profile>()
+                .Property(profile => profile.TtsVoices)
+                .HasConversion(jsonStringConverter);
+            // DS14-end
+
             modelBuilder.Entity<Profile>()
                 .Property(log => log.Markings)
                 .HasConversion(jsonByteArrayConverter);

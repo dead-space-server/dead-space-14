@@ -123,10 +123,9 @@ public sealed class SlimeFormSystem : EntitySystem
         if (!TryComp<TTSComponent>(args.NewEntity, out var newTts))
             return;
 
-        var voice = TryComp<TTSComponent>(args.OldEntity, out var oldTts) && oldTts.VoicePrototypeId != null
-            ? oldTts.VoicePrototypeId
-            : appearance.Voice.Id;
-        newTts.VoicePrototypeId = voice;
+        newTts.Voices = TryComp<TTSComponent>(args.OldEntity, out var oldTts)
+            ? new(oldTts.Voices)
+            : new(appearance.TtsVoices);
     }
 
     private bool StartChange(Entity<SlimeFormComponent> ent, DoAfterEvent doAfterEvent, bool dropLimbs)

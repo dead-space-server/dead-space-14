@@ -127,7 +127,11 @@
       gender: male
   - type: Sharp
   - type: TTS
-    voice: DrSezavo
+    # DS14-start
+    voices:
+      silero: DrSezavo
+      ntts: NTTSKleiner
+    # DS14-end
   # DS14-start
   - type: NightVision
     animation: true

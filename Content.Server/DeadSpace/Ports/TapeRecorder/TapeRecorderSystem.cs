@@ -11,6 +11,8 @@ using Content.Shared.DeadSpace.Ports.TapeRecorder.Events;
 using Robust.Shared.Prototypes;
 using System.Text;
 using Content.Shared.Corvax.TTS;
+using Content.Shared.DeadSpace.TTS;
+using Robust.Shared.Configuration;
 using Content.Server.DeadSpace.Languages;
 using Content.Shared.DeadSpace.Languages.Components;
 using Content.Shared.Humanoid;
@@ -51,6 +53,7 @@ public sealed class TapeRecorderSystem : SharedTapeRecorderSystem
 
             //Change the voice to match the speaker
             voice.NameOverride = message.Name ?? ent.Comp.DefaultName;
+            tts.Voices.Clear(); // DS14
             tts.VoicePrototypeId = message.VoiceId;
             // TODO: mimic the exact string chosen when the message was recorded
             var verb = message.Verb ?? SharedChatSystem.DefaultSpeechVerb;
@@ -90,9 +93,14 @@ public sealed class TapeRecorderSystem : SharedTapeRecorderSystem
 
         string voiceId = SharedHumanoidAppearanceSystem.DefaultTapeRecorderVoice;
 
-        if (TryComp<TTSComponent>(args.Source, out var ttsComp) && ttsComp.VoicePrototypeId != null)
+        // DS14-start
+        var selectedVoice = TryComp<TTSComponent>(args.Source, out var ttsComp)
+            ? TTSVoices.GetVoice(ttsComp, IoCManager.Resolve<IConfigurationManager>().GetCVar(TTSProviderCVars.Provider))
+            : null;
+        // DS14-end
+        if (selectedVoice != null) // DS14
         {
-            var voiceEv = new TransformSpeakerVoiceEvent(args.Source, ttsComp.VoicePrototypeId);
+            var voiceEv = new TransformSpeakerVoiceEvent(args.Source, selectedVoice); // DS14
             RaiseLocalEvent(args.Source, voiceEv);
             voiceId = voiceEv.VoiceId;
         }

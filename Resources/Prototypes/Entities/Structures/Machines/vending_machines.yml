@@ -414,7 +414,11 @@
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
       visible: false # DS14
   - type: TTS
-    voice: Tereshkova
+    # DS14-start
+    voices:
+      silero: Tereshkova
+      ntts: NTTSAdjutant
+    # DS14-end
 
 - type: entity
   parent: VendingMachine
@@ -1044,7 +1048,11 @@
     - Security
     - Antagonists
   - type: TTS
-    voice: Glowtron
+    # DS14-start
+    voices:
+      silero: Glowtron
+      ntts: NTTSMisterHandyFl3
+    # DS14-end
 
 - type: entity
   parent: VendingMachine
@@ -1601,7 +1609,11 @@
   - type: AccessReader
     access: [["Security"]]
   - type: TTS
-    voice: Glowtron
+    # DS14-start
+    voices:
+      silero: Glowtron
+      ntts: NTTSMisterHandyFl3
+    # DS14-end
 
 - type: entity
   parent: VendingMachine

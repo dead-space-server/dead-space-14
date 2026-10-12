@@ -2,6 +2,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Content.Shared.CCVar;
 using Content.Shared.Corvax.TTS;
+using Content.Shared.DeadSpace.TTS;
 using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
@@ -79,7 +80,21 @@ namespace Content.Shared.Preferences
         /// Associated <see cref="TTSVoicePrototype"/> for this profile.
         /// </summary>
         [DataField]
-        public string Voice { get; set; } = SharedHumanoidAppearanceSystem.DefaultVoice;
+        // DS14-start
+        // Keep the old serialized field as a view of the Silero selection for legacy character exports.
+        public string Voice
+        {
+            get => TtsVoices.GetValueOrDefault(TTSVoices.Silero, SharedHumanoidAppearanceSystem.DefaultVoice);
+            set => TtsVoices[TTSVoices.Silero] = value;
+        }
+
+        [DataField]
+        public Dictionary<string, string> TtsVoices { get; set; } = new();
+
+        public string GetVoice(string provider, IPrototypeManager prototypes) =>
+            TtsVoices.GetValueOrDefault(provider) ?? TTSVoices.Resolve(prototypes, provider, Voice, Sex)?.ID ??
+            TTSVoices.DefaultVoice(provider, Sex);
+        // DS14-end
 
         [DataField]
         public int Age { get; set; } = 20;
@@ -143,12 +158,19 @@ namespace Content.Shared.Preferences
             PreferenceUnavailableMode preferenceUnavailable,
             HashSet<ProtoId<AntagPrototype>> antagPreferences,
             HashSet<ProtoId<TraitPrototype>> traitPreferences,
-            Dictionary<string, RoleLoadout> loadouts)
+            Dictionary<string, RoleLoadout> loadouts, Dictionary<string, string>? ttsVoices = null) // DS14
         {
             Name = name;
             FlavorText = flavortext;
             Species = species;
             Voice = voice; // Corvax-TTS
+            // DS14-start
+            if (ttsVoices != null)
+            {
+                TtsVoices = new(ttsVoices);
+                Voice = voice;
+            }
+            // DS14-end
             Age = age;
             Sex = sex;
             Gender = gender;
@@ -190,7 +212,7 @@ namespace Content.Shared.Preferences
                 other.PreferenceUnavailable,
                 new HashSet<ProtoId<AntagPrototype>>(other.AntagPreferences),
                 new HashSet<ProtoId<TraitPrototype>>(other.TraitPreferences),
-                new Dictionary<string, RoleLoadout>(other.Loadouts))
+                new Dictionary<string, RoleLoadout>(other.Loadouts), other.TtsVoices) // DS14
         {
         }
 
@@ -252,9 +274,20 @@ namespace Content.Shared.Preferences
             // Corvax-TTS-Start
             var voiceId = random.Pick(prototypeManager
                 .EnumeratePrototypes<TTSVoicePrototype>()
-                .Where(o => CanHaveVoice(o, sex) && !o.SponsorOnly).ToArray()
+                .Where(o => o.Provider == TTSVoices.Silero && CanHaveVoice(o, sex) && !o.SponsorOnly).ToArray() // DS14
             ).ID;
             // Corvax-TTS-End
+
+            // DS14-start
+            var ttsVoices = new Dictionary<string, string> { [TTSVoices.Silero] = voiceId };
+            foreach (var provider in TTSVoices.Providers.Where(provider => provider != TTSVoices.Silero))
+            {
+                var voices = prototypeManager.EnumeratePrototypes<TTSVoicePrototype>()
+                    .Where(voice => voice.Provider == provider && CanHaveVoice(voice, sex) && !voice.SponsorOnly).ToArray();
+                if (voices.Length > 0)
+                    ttsVoices[provider] = random.Pick(voices).ID;
+            }
+            // DS14-end
 
             var gender = Gender.Epicene;
 
@@ -277,7 +310,7 @@ namespace Content.Shared.Preferences
                 Age = age,
                 Gender = gender,
                 Species = species,
-                Voice = voiceId, // Corvax-TTS
+                TtsVoices = ttsVoices, // DS14
                 Appearance = HumanoidCharacterAppearance.Random(species, sex),
             };
         }
@@ -318,6 +351,15 @@ namespace Content.Shared.Preferences
             return new(this) { Voice = voice };
         }
         // Corvax-TTS-End
+
+        // DS14-start
+        public HumanoidCharacterProfile WithTtsVoice(string provider, string voice)
+        {
+            var profile = new HumanoidCharacterProfile(this);
+            profile.TtsVoices[provider] = voice;
+            return profile;
+        }
+        // DS14-end
 
         public HumanoidCharacterProfile WithCharacterAppearance(HumanoidCharacterAppearance appearance)
         {
@@ -488,6 +530,11 @@ namespace Content.Shared.Preferences
             if (Sex != other.Sex) return false;
             if (Gender != other.Gender) return false;
             if (Species != other.Species) return false;
+            // DS14-start
+            if (Voice != other.Voice) return false;
+            if (TtsVoices.Count != other.TtsVoices.Count ||
+                TtsVoices.Any(pair => !other.TtsVoices.TryGetValue(pair.Key, out var voice) || voice != pair.Value)) return false;
+            // DS14-end
             if (PreferenceUnavailable != other.PreferenceUnavailable) return false;
             if (SpawnPriority != other.SpawnPriority) return false;
             if (!_jobPriorities.SequenceEqual(other._jobPriorities)) return false;
@@ -677,7 +724,7 @@ namespace Content.Shared.Preferences
 
             // Corvax-TTS-Start
             prototypeManager.TryIndex<TTSVoicePrototype>(Voice, out var voice);
-            if (voice is null || !CanHaveVoice(voice, Sex))
+            if (voice is null || voice.Provider != TTSVoices.Silero || !CanHaveVoice(voice, Sex)) // DS14
                 Voice = SharedHumanoidAppearanceSystem.DefaultSexVoice[sex];
             // Corvax-TTS-End
 
@@ -687,12 +734,28 @@ namespace Content.Shared.Preferences
                 Voice = SharedHumanoidAppearanceSystem.DefaultVoice;
             }
             // DS14-sponsor-tts-end
+
+            // DS14-start
+            foreach (var provider in TTSVoices.Providers)
+            {
+                var id = GetVoice(provider, prototypeManager);
+                if (!prototypeManager.TryIndex<TTSVoicePrototype>(id, out var providerVoice) ||
+                    providerVoice.Provider != provider || !CanHaveVoice(providerVoice, sex) ||
+                    providerVoice.SponsorOnly && !sponsorMarkings.Contains(providerVoice.ID))
+                    id = TTSVoices.DefaultVoice(provider, sex);
+                TtsVoices[provider] = id;
+            }
+            // DS14-end
         }
 
         // Corvax-TTS-Start
         // MUST NOT BE PUBLIC, BUT....
         public static bool CanHaveVoice(TTSVoicePrototype voice, Sex sex)
         {
+            // DS14-start
+            if (voice.Provider == TTSVoices.Ntts && !voice.RoundStart)
+                return false;
+            // DS14-end
             return voice.RoundStart && sex == Sex.Unsexed || (voice.Sex == sex || voice.Sex == Sex.Unsexed);
         }
         // Corvax-TTS-End
@@ -773,6 +836,14 @@ namespace Content.Shared.Preferences
             hashCode.Add(Name);
             hashCode.Add(FlavorText);
             hashCode.Add(Species);
+            // DS14-start
+            hashCode.Add(Voice);
+            foreach (var (provider, voice) in TtsVoices.OrderBy(pair => pair.Key))
+            {
+                hashCode.Add(provider);
+                hashCode.Add(voice);
+            }
+            // DS14-end
             hashCode.Add(Age);
             hashCode.Add((int)Sex);
             hashCode.Add((int)Gender);

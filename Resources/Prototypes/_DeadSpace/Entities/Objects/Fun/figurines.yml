@@ -33,7 +33,9 @@
   - type: SpeakOnTrigger
     pack: FigurinesHacksLuaSpeech
   - type: TTS
-    voice: Annah
+    voices:
+      silero: Annah
+      ntts: NTTSPhilippaEilhart
 
 - type: entity
   parent: BaseFigurineDS14

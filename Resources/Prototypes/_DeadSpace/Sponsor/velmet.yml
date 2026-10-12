@@ -535,7 +535,9 @@
     targetUser: true
     components:
     - type: TTS
-      voice: Overwatch
+      voices:
+        silero: Overwatch
+        ntts: NTTSSentrybot
 
 - type: entity
   parent: BaseItem

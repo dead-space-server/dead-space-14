@@ -497,7 +497,10 @@ public sealed partial class RevenantSystem
             if (!string.IsNullOrEmpty(targetTTS.VoicePrototypeId))
                 oldTTSProto = targetTTS.VoicePrototypeId;
 
-            targetTTS.VoicePrototypeId = revTTS.VoicePrototypeId;
+            // DS14-start
+            comp.ReturnTtsVoices = new(targetTTS.Voices);
+            targetTTS.Voices = new(revTTS.Voices);
+            // DS14-end
 
             comp.ReturnTTSPrototype = oldTTSProto;
         }

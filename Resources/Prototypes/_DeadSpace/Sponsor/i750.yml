@@ -421,7 +421,9 @@
     sprite: _DeadSpace/Sponsor/i750/toy.rsi
     state: toy
   - type: TTS
-    voice: Angel
+    voices:
+      silero: Angel
+      ntts: NTTSOmniknightDota2
   - type: SpeakOnTrigger
     pack: Plushiei750
 

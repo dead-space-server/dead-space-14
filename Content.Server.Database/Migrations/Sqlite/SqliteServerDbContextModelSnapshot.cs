@@ -1258,6 +1258,12 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasColumnName("species");
 
+                    // DS14-start
+                    b.Property<string>("TtsVoices")
+                        .HasColumnType("jsonb")
+                        .HasColumnName("tts_voices");
+                    // DS14-end
+
                     b.Property<string>("Voice")
                         .IsRequired()
                         .HasColumnType("TEXT")

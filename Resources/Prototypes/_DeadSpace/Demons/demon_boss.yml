@@ -163,7 +163,9 @@
     color: "#80008011"
     actionToggleNightVision: ActionToggleNightVision
   - type: TTS
-    voice: Volibear
+    voices:
+      silero: Volibear
+      ntts: NTTSDragonKnightDragonDota2
   #DS14-start
   - type: GhostRoleNotifys
     groupPrototype: DemonBoss

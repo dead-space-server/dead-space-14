@@ -24,7 +24,7 @@ from typing import Any, Iterable
 
 DEFAULT_CATALOG_URL = "https://tts-bot-web.silero.ai/list.json"
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_PROTOTYPES = REPOSITORY_ROOT / "Resources/Prototypes/_Corvax/tts-voices.yml"
+DEFAULT_PROTOTYPES = REPOSITORY_ROOT / "Resources/Prototypes/_Corvax/TTS/silero.yml"  # DS14
 DEFAULT_LOCALE = REPOSITORY_ROOT / "Resources/Locale/ru-RU/corvax/tts/tts-voices.ftl"
 
 

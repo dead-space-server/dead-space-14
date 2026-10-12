@@ -1,3 +1,4 @@
+using Content.Shared.DeadSpace.TTS;
 using System.Threading.Tasks;
 using System.Linq;
 using Content.Server.Chat.Systems;
@@ -83,6 +84,11 @@ public sealed partial class TTSSystem : EntitySystem
             !_prototypeManager.TryIndex<TTSVoicePrototype>(ev.VoiceId, out var protoVoice))
             return;
 
+        // DS14-start
+        if (protoVoice.Provider != _cfg.GetCVar(TTSProviderCVars.Provider))
+            return;
+        // DS14-end
+
         if (HandleRateLimit(args.SenderSession) != RateLimitStatus.Allowed)
             return;
 
@@ -96,7 +102,7 @@ public sealed partial class TTSSystem : EntitySystem
 
     private async void OnEntitySpoke(EntityUid uid, TTSComponent component, EntitySpokeEvent args)
     {
-        var voiceId = component.VoicePrototypeId;
+        var voiceId = TTSVoices.GetVoice(component, _cfg.GetCVar(TTSProviderCVars.Provider)); // DS14
         if (!_isEnabled ||
             args.Message.Length > MaxMessageChars ||
             voiceId == null)
@@ -106,7 +112,7 @@ public sealed partial class TTSSystem : EntitySystem
         RaiseLocalEvent(uid, voiceEv);
         voiceId = voiceEv.VoiceId;
 
-        if (!_prototypeManager.TryIndex<TTSVoicePrototype>(voiceId, out var protoVoice))
+        if (TTSVoices.Resolve(_prototypeManager, _cfg.GetCVar(TTSProviderCVars.Provider), voiceId) is not { } protoVoice) // DS14
             return;
 
         if (args.ObfuscatedMessage != null)
@@ -120,7 +126,7 @@ public sealed partial class TTSSystem : EntitySystem
 
     private async void OnEntitySpokeToEntity(EntityUid uid, TTSComponent component, EntitySpokeToEntityEvent args)
     {
-        var voiceId = component.VoicePrototypeId;
+        var voiceId = TTSVoices.GetVoice(component, _cfg.GetCVar(TTSProviderCVars.Provider)); // DS14
         if (!_isEnabled ||
             args.Message.Length > MaxMessageChars ||
             voiceId == null)
@@ -130,7 +136,7 @@ public sealed partial class TTSSystem : EntitySystem
         RaiseLocalEvent(uid, voiceEv);
         voiceId = voiceEv.VoiceId;
 
-        if (!_prototypeManager.TryIndex<TTSVoicePrototype>(voiceId, out var protoVoice))
+        if (TTSVoices.Resolve(_prototypeManager, _cfg.GetCVar(TTSProviderCVars.Provider), voiceId) is not { } protoVoice) // DS14
             return;
 
         HandleDirectSay(args.Target, args.Message, args.LexiconMessage, args.LanguageId, protoVoice.Speaker);
@@ -141,14 +147,15 @@ public sealed partial class TTSSystem : EntitySystem
     {
         var receivers = new HashSet<EntityUid>(args.Receivers) { args.Source }.ToArray();
         if (!_isEnabled || args.Message.Length > MaxMessageChars ||
-            !TryComp<TTSComponent>(args.Source, out var component) || component.VoicePrototypeId == null)
+            !TryComp<TTSComponent>(args.Source, out var component) ||
+            TTSVoices.GetVoice(component, _cfg.GetCVar(TTSProviderCVars.Provider)) is not { } voiceId)
         {
             SendRadioCues(receivers);
             return;
         }
-        var voiceEv = new TransformSpeakerVoiceEvent(args.Source, component.VoicePrototypeId);
+        var voiceEv = new TransformSpeakerVoiceEvent(args.Source, voiceId);
         RaiseLocalEvent(args.Source, voiceEv);
-        if (!_prototypeManager.TryIndex<TTSVoicePrototype>(voiceEv.VoiceId, out var protoVoice))
+        if (TTSVoices.Resolve(_prototypeManager, _cfg.GetCVar(TTSProviderCVars.Provider), voiceEv.VoiceId) is not { } protoVoice)
         {
             SendRadioCues(receivers);
             return;
@@ -202,7 +209,7 @@ public sealed partial class TTSSystem : EntitySystem
             voiceId = voiceEv.VoiceId;
         }
 
-        if (!_prototypeManager.TryIndex<TTSVoicePrototype>(voiceId, out var protoVoice))
+        if (TTSVoices.Resolve(_prototypeManager, _cfg.GetCVar(TTSProviderCVars.Provider), voiceId) is not { } protoVoice) // DS14
             return;
 
         Timer.Spawn(6000, () => HandleAnnounce(args.Message, args.LexiconMessage, args.LanguageId, protoVoice.Speaker, args.Filter)); // Awful, but better than sending announce sound to client in resource file

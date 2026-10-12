@@ -1,4 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+using Content.Shared.DeadSpace.TTS;
+using Robust.Shared.Configuration;
 
 using System.Linq;
 using Content.Server.Actions;
@@ -2448,7 +2450,8 @@ public sealed class TraitorUltraRuleSystem : GameRuleSystem<TraitorUltraRuleComp
 
     private string? PickRandomAnnouncementVoice()
     {
-        var voices = _proto.EnumeratePrototypes<TTSVoicePrototype>().ToArray();
+        var voices = _proto.EnumeratePrototypes<TTSVoicePrototype>()
+            .Where(voice => voice.Provider == IoCManager.Resolve<IConfigurationManager>().GetCVar(TTSProviderCVars.Provider)).ToArray();
         return voices.Length == 0 ? null : _random.Pick(voices).ID;
     }
 

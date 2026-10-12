@@ -1,0 +1,1927 @@
+- type: ttsVoice
+  id: NTTSPapich
+  provider: ntts
+  name: tts-ntts-voice-name-papich
+  sex: Male
+  speaker: "papich"
+
+- type: ttsVoice
+  id: NTTSBebey
+  provider: ntts
+  name: tts-ntts-voice-name-bebey
+  sex: Male
+  speaker: "bebey"
+
+- type: ttsVoice
+  id: NTTSPuchkow
+  provider: ntts
+  name: tts-ntts-voice-name-puchkow
+  sex: Male
+  speaker: "puchkow"
+
+- type: ttsVoice
+  id: NTTSMoriarti
+  provider: ntts
+  name: tts-ntts-voice-name-moriarti
+  sex: Male
+  speaker: "moriarti"
+
+- type: ttsVoice
+  id: NTTSCharlotte
+  provider: ntts
+  name: tts-ntts-voice-name-charlotte
+  sex: Female
+  speaker: "charlotte"
+
+- type: ttsVoice
+  id: NTTSPlanya
+  provider: ntts
+  name: tts-ntts-voice-name-planya
+  sex: Female
+  speaker: "planya"
+
+- type: ttsVoice
+  id: NTTSMana
+  provider: ntts
+  name: tts-ntts-voice-name-mana
+  sex: Female
+  speaker: "mana"
+
+- type: ttsVoice
+  id: NTTSAmina
+  provider: ntts
+  name: tts-ntts-voice-name-amina
+  sex: Female
+  speaker: "amina"
+
+- type: ttsVoice
+  id: NTTSBiden
+  provider: ntts
+  name: tts-ntts-voice-name-biden
+  sex: Male
+  speaker: "biden"
+
+- type: ttsVoice
+  id: NTTSObama
+  provider: ntts
+  name: tts-ntts-voice-name-obama
+  sex: Male
+  speaker: "obama"
+
+- type: ttsVoice
+  id: NTTSTrump
+  provider: ntts
+  name: tts-ntts-voice-name-trump
+  sex: Male
+  speaker: "trump"
+
+- type: ttsVoice
+  id: NTTSDbkn2
+  provider: ntts
+  name: tts-ntts-voice-name-dbkn2
+  sex: Male
+  speaker: "dbkn2"
+
+- type: ttsVoice
+  id: NTTSXrenoid
+  provider: ntts
+  name: tts-ntts-voice-name-xrenoid
+  sex: Male
+  speaker: "xrenoid"
+
+- type: ttsVoice
+  id: NTTSPlayboyztv
+  provider: ntts
+  name: tts-ntts-voice-name-playboyztv
+  sex: Male
+  speaker: "playboyztv"
+
+- type: ttsVoice
+  id: NTTSBriman
+  provider: ntts
+  name: tts-ntts-voice-name-briman
+  sex: Male
+  speaker: "briman"
+
+- type: ttsVoice
+  id: NTTSFatherGrigori
+  provider: ntts
+  name: tts-ntts-voice-name-father-grigori
+  sex: Male
+  speaker: "father_grigori"
+
+- type: ttsVoice
+  id: NTTSKleiner
+  provider: ntts
+  name: tts-ntts-voice-name-kleiner
+  sex: Male
+  speaker: "kleiner"
+
+- type: ttsVoice
+  id: NTTSMossman
+  provider: ntts
+  name: tts-ntts-voice-name-mossman
+  sex: Female
+  speaker: "mossman"
+
+- type: ttsVoice
+  id: NTTSVance
+  provider: ntts
+  name: tts-ntts-voice-name-vance
+  sex: Male
+  speaker: "vance"
+
+- type: ttsVoice
+  id: NTTSAlyx
+  provider: ntts
+  name: tts-ntts-voice-name-alyx
+  sex: Unsexed
+  speaker: "alyx"
+
+- type: ttsVoice
+  id: NTTSGman
+  provider: ntts
+  name: tts-ntts-voice-name-gman
+  sex: Male
+  speaker: "gman"
+
+- type: ttsVoice
+  id: NTTSBarni
+  provider: ntts
+  name: tts-ntts-voice-name-barni
+  sex: Male
+  speaker: "barni"
+
+- type: ttsVoice
+  id: NTTSNeco
+  provider: ntts
+  name: tts-ntts-voice-name-neco
+  sex: Female
+  speaker: "neco"
+
+- type: ttsVoice
+  id: NTTSNecoArc2
+  provider: ntts
+  name: tts-ntts-voice-name-neco-arc-2
+  sex: Female
+  speaker: "neco_arc_2"
+
+- type: ttsVoice
+  id: NTTSAngryNecoArc
+  provider: ntts
+  name: tts-ntts-voice-name-angry-neco-arc
+  sex: Female
+  speaker: "angry_neco_arc"
+
+- type: ttsVoice
+  id: NTTSVillager
+  provider: ntts
+  name: tts-ntts-voice-name-villager
+  sex: Male
+  speaker: "villager"
+
+- type: ttsVoice
+  id: NTTSSquidward
+  provider: ntts
+  name: tts-ntts-voice-name-squidward
+  sex: Male
+  speaker: "squidward"
+
+- type: ttsVoice
+  id: NTTSSentrybot
+  provider: ntts
+  name: tts-ntts-voice-name-sentrybot
+  sex: Male
+  speaker: "sentrybot"
+
+- type: ttsVoice
+  id: NTTSMoiraBrown
+  provider: ntts
+  name: tts-ntts-voice-name-moira-brown
+  sex: Female
+  speaker: "moira_brown"
+
+- type: ttsVoice
+  id: NTTSRobertMaccready
+  provider: ntts
+  name: tts-ntts-voice-name-robert-maccready
+  sex: Male
+  speaker: "robert_maccready"
+
+- type: ttsVoice
+  id: NTTSThreedog
+  provider: ntts
+  name: tts-ntts-voice-name-threedog
+  sex: Male
+  speaker: "threedog"
+
+- type: ttsVoice
+  id: NTTSThreedogRadio
+  provider: ntts
+  name: tts-ntts-voice-name-threedog-radio
+  sex: Male
+  speaker: "threedog_radio"
+
+- type: ttsVoice
+  id: NTTSMisterHandyFl3
+  provider: ntts
+  name: tts-ntts-voice-name-mister-handy-fl3
+  sex: Male
+  speaker: "mister_handy_fl3"
+
+- type: ttsVoice
+  id: NTTSMisterGutsyFl3
+  provider: ntts
+  name: tts-ntts-voice-name-mister-gutsy-fl3
+  sex: Male
+  speaker: "mister_gutsy_fl3"
+
+- type: ttsVoice
+  id: NTTSJerichoFl3
+  provider: ntts
+  name: tts-ntts-voice-name-jericho-fl3
+  sex: Male
+  speaker: "jericho_fl3"
+
+- type: ttsVoice
+  id: NTTSElderLyonsFl3
+  provider: ntts
+  name: tts-ntts-voice-name-elder-lyons-fl3
+  sex: Male
+  speaker: "elder_lyons_fl3"
+
+- type: ttsVoice
+  id: NTTSSarahLyonsFl3
+  provider: ntts
+  name: tts-ntts-voice-name-sarah-lyons-fl3
+  sex: Female
+  speaker: "sarah_lyons_fl3"
+
+- type: ttsVoice
+  id: NTTSColinMoriartyFl3
+  provider: ntts
+  name: tts-ntts-voice-name-colin-moriarty-fl3
+  sex: Male
+  speaker: "colin_moriarty_fl3"
+
+- type: ttsVoice
+  id: NTTSJohnHenryEdenFl3
+  provider: ntts
+  name: tts-ntts-voice-name-john-henry-eden-fl3
+  sex: Male
+  speaker: "john_henry_eden_fl3"
+
+- type: ttsVoice
+  id: NTTSSuperMutantFl3
+  provider: ntts
+  name: tts-ntts-voice-name-super-mutant-fl3
+  sex: Male
+  speaker: "super_mutant_fl3"
+
+- type: ttsVoice
+  id: NTTSPolina
+  provider: ntts
+  name: tts-ntts-voice-name-polina
+  sex: Female
+  speaker: "polina"
+
+- type: ttsVoice
+  id: NTTSRomka
+  provider: ntts
+  name: tts-ntts-voice-name-romka
+  sex: Male
+  speaker: "romka"
+
+- type: ttsVoice
+  id: NTTSBorisPetrovFatherTb
+  provider: ntts
+  name: tts-ntts-voice-name-boris-petrov-father-tb
+  sex: Male
+  speaker: "boris_petrov_father_tb"
+
+- type: ttsVoice
+  id: NTTSKarinaPetrovaTb
+  provider: ntts
+  name: tts-ntts-voice-name-karina-petrova-tb
+  sex: Female
+  speaker: "karina_petrova_tb"
+
+- type: ttsVoice
+  id: NTTSKateSmirnovaTb
+  provider: ntts
+  name: tts-ntts-voice-name-kate-smirnova-tb
+  sex: Female
+  speaker: "kate_smirnova_tb"
+
+- type: ttsVoice
+  id: NTTSSemenBaburinTb
+  provider: ntts
+  name: tts-ntts-voice-name-semen-baburin-tb
+  sex: Male
+  speaker: "semen_baburin_tb"
+
+- type: ttsVoice
+  id: NTTSTihonovTb
+  provider: ntts
+  name: tts-ntts-voice-name-tihonov-tb
+  sex: Male
+  speaker: "tihonov_tb"
+
+- type: ttsVoice
+  id: NTTSCicero
+  provider: ntts
+  name: tts-ntts-voice-name-cicero
+  sex: Male
+  speaker: "cicero"
+
+- type: ttsVoice
+  id: NTTSSheogorath
+  provider: ntts
+  name: tts-ntts-voice-name-sheogorath
+  sex: Male
+  speaker: "sheogorath"
+
+- type: ttsVoice
+  id: NTTSKodlakwhitemane
+  provider: ntts
+  name: tts-ntts-voice-name-kodlakwhitemane
+  sex: Male
+  speaker: "kodlakwhitemane"
+
+- type: ttsVoice
+  id: NTTSKhajiit
+  provider: ntts
+  name: tts-ntts-voice-name-khajiit
+  sex: Male
+  speaker: "khajiit"
+
+- type: ttsVoice
+  id: NTTSElenwen
+  provider: ntts
+  name: tts-ntts-voice-name-elenwen
+  sex: Female
+  speaker: "elenwen"
+
+- type: ttsVoice
+  id: NTTSEmperor
+  provider: ntts
+  name: tts-ntts-voice-name-emperor
+  sex: Male
+  speaker: "emperor"
+
+- type: ttsVoice
+  id: NTTSGuard
+  provider: ntts
+  name: tts-ntts-voice-name-guard
+  sex: Male
+  speaker: "guard"
+
+- type: ttsVoice
+  id: NTTSHagraven
+  provider: ntts
+  name: tts-ntts-voice-name-hagraven
+  sex: Male
+  speaker: "hagraven"
+
+- type: ttsVoice
+  id: NTTSHermaeusMora
+  provider: ntts
+  name: tts-ntts-voice-name-hermaeus-mora
+  sex: Male
+  speaker: "hermaeus_mora"
+  roundStart: false
+
+- type: ttsVoice
+  id: NTTSNord
+  provider: ntts
+  name: tts-ntts-voice-name-nord
+  sex: Male
+  speaker: "nord"
+
+- type: ttsVoice
+  id: NTTSUlfric
+  provider: ntts
+  name: tts-ntts-voice-name-ulfric
+  sex: Male
+  speaker: "ulfric"
+
+- type: ttsVoice
+  id: NTTSAstrid
+  provider: ntts
+  name: tts-ntts-voice-name-astrid
+  sex: Female
+  speaker: "astrid"
+
+- type: ttsVoice
+  id: NTTSMaven
+  provider: ntts
+  name: tts-ntts-voice-name-maven
+  sex: Female
+  speaker: "maven"
+
+- type: ttsVoice
+  id: NTTSNazir
+  provider: ntts
+  name: tts-ntts-voice-name-nazir
+  sex: Male
+  speaker: "nazir"
+
+- type: ttsVoice
+  id: NTTSFemaleCommander
+  provider: ntts
+  name: tts-ntts-voice-name-female-commander
+  sex: Female
+  speaker: "female_commander"
+
+- type: ttsVoice
+  id: NTTSLordHarkon
+  provider: ntts
+  name: tts-ntts-voice-name-lord-harkon
+  sex: Male
+  speaker: "lord_harkon"
+
+- type: ttsVoice
+  id: NTTSSerana
+  provider: ntts
+  name: tts-ntts-voice-name-serana
+  sex: Female
+  speaker: "serana"
+
+- type: ttsVoice
+  id: NTTSGlados
+  provider: ntts
+  name: tts-ntts-voice-name-glados
+  sex: Female
+  speaker: "glados"
+  roundStart: false
+
+- type: ttsVoice
+  id: NTTSAdventureCore
+  provider: ntts
+  name: tts-ntts-voice-name-adventure-core
+  sex: Male
+  speaker: "adventure_core"
+
+- type: ttsVoice
+  id: NTTSFactCore
+  provider: ntts
+  name: tts-ntts-voice-name-fact-core
+  sex: Male
+  speaker: "fact_core"
+
+- type: ttsVoice
+  id: NTTSSpaceCore
+  provider: ntts
+  name: tts-ntts-voice-name-space-core
+  sex: Male
+  speaker: "space_core"
+
+- type: ttsVoice
+  id: NTTSTurretFloor
+  provider: ntts
+  name: tts-ntts-voice-name-turret-floor
+  sex: Female
+  speaker: "turret_floor"
+
+- type: ttsVoice
+  id: NTTSGeralt
+  provider: ntts
+  name: tts-ntts-voice-name-geralt
+  sex: Male
+  speaker: "geralt"
+
+- type: ttsVoice
+  id: NTTSCirilla
+  provider: ntts
+  name: tts-ntts-voice-name-cirilla
+  sex: Female
+  speaker: "cirilla"
+
+- type: ttsVoice
+  id: NTTSCerys
+  provider: ntts
+  name: tts-ntts-voice-name-cerys
+  sex: Female
+  speaker: "cerys"
+
+- type: ttsVoice
+  id: NTTSLambert
+  provider: ntts
+  name: tts-ntts-voice-name-lambert
+  sex: Male
+  speaker: "lambert"
+
+- type: ttsVoice
+  id: NTTSTriss
+  provider: ntts
+  name: tts-ntts-voice-name-triss
+  sex: Female
+  speaker: "triss"
+
+- type: ttsVoice
+  id: NTTSKovirNobleman
+  provider: ntts
+  name: tts-ntts-voice-name-kovir-nobleman
+  sex: Male
+  speaker: "kovir_nobleman"
+
+- type: ttsVoice
+  id: NTTSZoltanChivay
+  provider: ntts
+  name: tts-ntts-voice-name-zoltan-chivay
+  sex: Male
+  speaker: "zoltan_chivay"
+
+- type: ttsVoice
+  id: NTTSVesemir
+  provider: ntts
+  name: tts-ntts-voice-name-vesemir
+  sex: Male
+  speaker: "vesemir"
+
+- type: ttsVoice
+  id: NTTSGuillaumeDeLaunfal
+  provider: ntts
+  name: tts-ntts-voice-name-guillaume-de-launfal
+  sex: Male
+  speaker: "guillaume_de_launfal"
+
+- type: ttsVoice
+  id: NTTSPhilippaEilhart
+  provider: ntts
+  name: tts-ntts-voice-name-philippa-eilhart
+  sex: Female
+  speaker: "philippa_eilhart"
+
+- type: ttsVoice
+  id: NTTSEwaldBorsodi
+  provider: ntts
+  name: tts-ntts-voice-name-ewald-borsodi
+  sex: Male
+  speaker: "ewald_borsodi"
+
+- type: ttsVoice
+  id: NTTSDandelion
+  provider: ntts
+  name: tts-ntts-voice-name-dandelion
+  sex: Male
+  speaker: "dandelion"
+
+- type: ttsVoice
+  id: NTTSShani
+  provider: ntts
+  name: tts-ntts-voice-name-shani
+  sex: Female
+  speaker: "shani"
+
+- type: ttsVoice
+  id: NTTSAzir
+  provider: ntts
+  name: tts-ntts-voice-name-azir
+  sex: Male
+  speaker: "azir"
+
+- type: ttsVoice
+  id: NTTSEkko
+  provider: ntts
+  name: tts-ntts-voice-name-ekko
+  sex: Male
+  speaker: "ekko"
+
+- type: ttsVoice
+  id: NTTSTwitch
+  provider: ntts
+  name: tts-ntts-voice-name-twitch
+  sex: Male
+  speaker: "twitch"
+
+- type: ttsVoice
+  id: NTTSZiggs
+  provider: ntts
+  name: tts-ntts-voice-name-ziggs
+  sex: Male
+  speaker: "ziggs"
+
+- type: ttsVoice
+  id: NTTSCaitlyn
+  provider: ntts
+  name: tts-ntts-voice-name-caitlyn
+  sex: Female
+  speaker: "caitlyn"
+
+- type: ttsVoice
+  id: NTTSArthas
+  provider: ntts
+  name: tts-ntts-voice-name-arthas
+  sex: Male
+  speaker: "arthas"
+
+- type: ttsVoice
+  id: NTTSIllidan
+  provider: ntts
+  name: tts-ntts-voice-name-illidan
+  sex: Male
+  speaker: "illidan"
+
+- type: ttsVoice
+  id: NTTSRexxar
+  provider: ntts
+  name: tts-ntts-voice-name-rexxar
+  sex: Male
+  speaker: "rexxar"
+
+- type: ttsVoice
+  id: NTTSVoljin
+  provider: ntts
+  name: tts-ntts-voice-name-voljin
+  sex: Male
+  speaker: "voljin"
+
+- type: ttsVoice
+  id: NTTSBandit
+  provider: ntts
+  name: tts-ntts-voice-name-bandit
+  sex: Male
+  speaker: "bandit"
+
+- type: ttsVoice
+  id: NTTSForester
+  provider: ntts
+  name: tts-ntts-voice-name-forester
+  sex: Male
+  speaker: "forester"
+
+- type: ttsVoice
+  id: NTTSSidorovich
+  provider: ntts
+  name: tts-ntts-voice-name-sidorovich
+  sex: Male
+  speaker: "sidorovich"
+
+- type: ttsVoice
+  id: NTTSStrelok
+  provider: ntts
+  name: tts-ntts-voice-name-strelok
+  sex: Male
+  speaker: "strelok"
+
+- type: ttsVoice
+  id: NTTSTracer
+  provider: ntts
+  name: tts-ntts-voice-name-tracer
+  sex: Female
+  speaker: "tracer"
+
+- type: ttsVoice
+  id: NTTSSoldier
+  provider: ntts
+  name: tts-ntts-voice-name-soldier
+  sex: Male
+  speaker: "soldier"
+
+- type: ttsVoice
+  id: NTTSEngineer
+  provider: ntts
+  name: tts-ntts-voice-name-engineer
+  sex: Male
+  speaker: "engineer"
+
+- type: ttsVoice
+  id: NTTSHeavy
+  provider: ntts
+  name: tts-ntts-voice-name-heavy
+  sex: Male
+  speaker: "heavy"
+
+- type: ttsVoice
+  id: NTTSMedic
+  provider: ntts
+  name: tts-ntts-voice-name-medic
+  sex: Male
+  speaker: "medic"
+
+- type: ttsVoice
+  id: NTTSDemoman
+  provider: ntts
+  name: tts-ntts-voice-name-demoman
+  sex: Male
+  speaker: "demoman"
+
+- type: ttsVoice
+  id: NTTSSniper
+  provider: ntts
+  name: tts-ntts-voice-name-sniper
+  sex: Male
+  speaker: "sniper"
+
+- type: ttsVoice
+  id: NTTSSpy
+  provider: ntts
+  name: tts-ntts-voice-name-spy
+  sex: Male
+  speaker: "spy"
+
+- type: ttsVoice
+  id: NTTSPunisher
+  provider: ntts
+  name: tts-ntts-voice-name-punisher
+  sex: Male
+  speaker: "punisher"
+
+- type: ttsVoice
+  id: NTTSJohnny
+  provider: ntts
+  name: tts-ntts-voice-name-johnny
+  sex: Male
+  speaker: "johnny"
+
+- type: ttsVoice
+  id: NTTSPanam
+  provider: ntts
+  name: tts-ntts-voice-name-panam
+  sex: Female
+  speaker: "panam"
+
+- type: ttsVoice
+  id: NTTSVFemale
+  provider: ntts
+  name: tts-ntts-voice-name-v-female
+  sex: Female
+  speaker: "v_female"
+
+- type: ttsVoice
+  id: NTTSJudy
+  provider: ntts
+  name: tts-ntts-voice-name-judy
+  sex: Female
+  speaker: "judy"
+
+- type: ttsVoice
+  id: NTTSMitch
+  provider: ntts
+  name: tts-ntts-voice-name-mitch
+  sex: Male
+  speaker: "mitch"
+
+- type: ttsVoice
+  id: NTTSSkippy
+  provider: ntts
+  name: tts-ntts-voice-name-skippy
+  sex: Male
+  speaker: "skippy"
+
+- type: ttsVoice
+  id: NTTSJackie
+  provider: ntts
+  name: tts-ntts-voice-name-jackie
+  sex: Male
+  speaker: "jackie"
+
+- type: ttsVoice
+  id: NTTSMaiko
+  provider: ntts
+  name: tts-ntts-voice-name-maiko
+  sex: Female
+  speaker: "maiko"
+
+- type: ttsVoice
+  id: NTTSBrendan
+  provider: ntts
+  name: tts-ntts-voice-name-brendan
+  sex: Male
+  speaker: "brendan"
+
+- type: ttsVoice
+  id: NTTSNancyHartley
+  provider: ntts
+  name: tts-ntts-voice-name-nancy-hartley
+  sex: Female
+  speaker: "nancy_hartley"
+
+- type: ttsVoice
+  id: NTTSOswaldForrest
+  provider: ntts
+  name: tts-ntts-voice-name-oswald-forrest
+  sex: Male
+  speaker: "oswald_forrest"
+
+- type: ttsVoice
+  id: NTTSSteve
+  provider: ntts
+  name: tts-ntts-voice-name-steve
+  sex: Male
+  speaker: "steve"
+
+- type: ttsVoice
+  id: NTTSDornan
+  provider: ntts
+  name: tts-ntts-voice-name-dornan
+  sex: Male
+  speaker: "dornan"
+
+- type: ttsVoice
+  id: NTTSOfficerEnclave
+  provider: ntts
+  name: tts-ntts-voice-name-officer-enclave
+  sex: Male
+  speaker: "officer_enclave"
+
+- type: ttsVoice
+  id: NTTSRichardson
+  provider: ntts
+  name: tts-ntts-voice-name-richardson
+  sex: Male
+  speaker: "richardson"
+
+- type: ttsVoice
+  id: NTTSButch
+  provider: ntts
+  name: tts-ntts-voice-name-butch
+  sex: Male
+  speaker: "butch"
+
+- type: ttsVoice
+  id: NTTSMarcus
+  provider: ntts
+  name: tts-ntts-voice-name-marcus
+  sex: Male
+  speaker: "marcus"
+
+- type: ttsVoice
+  id: NTTSSulik
+  provider: ntts
+  name: tts-ntts-voice-name-sulik
+  sex: Male
+  speaker: "sulik"
+
+- type: ttsVoice
+  id: NTTSMyron
+  provider: ntts
+  name: tts-ntts-voice-name-myron
+  sex: Male
+  speaker: "myron"
+
+- type: ttsVoice
+  id: NTTSGoodThalya
+  provider: ntts
+  name: tts-ntts-voice-name-good-thalya
+  sex: Female
+  speaker: "good_thalya"
+
+- type: ttsVoice
+  id: NTTSEvilThalya
+  provider: ntts
+  name: tts-ntts-voice-name-evil-thalya
+  sex: Female
+  speaker: "evil_thalya"
+
+- type: ttsVoice
+  id: NTTSNarratorD3
+  provider: ntts
+  name: tts-ntts-voice-name-narrator-d3
+  sex: Male
+  speaker: "narrator_d3"
+
+- type: ttsVoice
+  id: NTTSDude
+  provider: ntts
+  name: tts-ntts-voice-name-dude
+  sex: Male
+  speaker: "dude"
+
+- type: ttsVoice
+  id: NTTSAnduin
+  provider: ntts
+  name: tts-ntts-voice-name-anduin
+  sex: Male
+  speaker: "anduin"
+
+- type: ttsVoice
+  id: NTTSBrukan
+  provider: ntts
+  name: tts-ntts-voice-name-brukan
+  sex: Male
+  speaker: "brukan"
+
+- type: ttsVoice
+  id: NTTSGarrosh
+  provider: ntts
+  name: tts-ntts-voice-name-garrosh
+  sex: Male
+  speaker: "garrosh"
+
+- type: ttsVoice
+  id: NTTSJaina
+  provider: ntts
+  name: tts-ntts-voice-name-jaina
+  sex: Female
+  speaker: "jaina"
+
+- type: ttsVoice
+  id: NTTSUtherHs
+  provider: ntts
+  name: tts-ntts-voice-name-uther-hs
+  sex: Male
+  speaker: "uther_hs"
+
+- type: ttsVoice
+  id: NTTSAdjutant
+  provider: ntts
+  name: tts-ntts-voice-name-adjutant
+  sex: Female
+  speaker: "adjutant"
+  roundStart: false
+
+- type: ttsVoice
+  id: NTTSHanson
+  provider: ntts
+  name: tts-ntts-voice-name-hanson
+  sex: Female
+  speaker: "hanson"
+
+- type: ttsVoice
+  id: NTTSBralik
+  provider: ntts
+  name: tts-ntts-voice-name-bralik
+  sex: Male
+  speaker: "bralik"
+
+- type: ttsVoice
+  id: NTTSHorner
+  provider: ntts
+  name: tts-ntts-voice-name-horner
+  sex: Male
+  speaker: "horner"
+
+- type: ttsVoice
+  id: NTTSTosh
+  provider: ntts
+  name: tts-ntts-voice-name-tosh
+  sex: Male
+  speaker: "tosh"
+
+- type: ttsVoice
+  id: NTTSTychus
+  provider: ntts
+  name: tts-ntts-voice-name-tychus
+  sex: Male
+  speaker: "tychus"
+
+- type: ttsVoice
+  id: NTTSAmitkakkar
+  provider: ntts
+  name: tts-ntts-voice-name-amitkakkar
+  sex: Male
+  speaker: "amitkakkar"
+
+- type: ttsVoice
+  id: NTTSEleazarfig
+  provider: ntts
+  name: tts-ntts-voice-name-eleazarfig
+  sex: Male
+  speaker: "eleazarfig"
+
+- type: ttsVoice
+  id: NTTSErnielark
+  provider: ntts
+  name: tts-ntts-voice-name-ernielark
+  sex: Male
+  speaker: "ernielark"
+
+- type: ttsVoice
+  id: NTTSIgnatiaflootravel
+  provider: ntts
+  name: tts-ntts-voice-name-ignatiaflootravel
+  sex: Female
+  speaker: "ignatiaflootravel"
+
+- type: ttsVoice
+  id: NTTSLodgok
+  provider: ntts
+  name: tts-ntts-voice-name-lodgok
+  sex: Male
+  speaker: "lodgok"
+
+- type: ttsVoice
+  id: NTTSPhineasblack
+  provider: ntts
+  name: tts-ntts-voice-name-phineasblack
+  sex: Male
+  speaker: "phineasblack"
+
+- type: ttsVoice
+  id: NTTSRanrak
+  provider: ntts
+  name: tts-ntts-voice-name-ranrak
+  sex: Male
+  speaker: "ranrak"
+
+- type: ttsVoice
+  id: NTTSVictorrookwood
+  provider: ntts
+  name: tts-ntts-voice-name-victorrookwood
+  sex: Male
+  speaker: "victorrookwood"
+
+- type: ttsVoice
+  id: NTTSZenobianoke
+  provider: ntts
+  name: tts-ntts-voice-name-zenobianoke
+  sex: Female
+  speaker: "zenobianoke"
+
+- type: ttsVoice
+  id: NTTSGladwinmoon
+  provider: ntts
+  name: tts-ntts-voice-name-gladwinmoon
+  sex: Male
+  speaker: "gladwinmoon"
+
+- type: ttsVoice
+  id: NTTSMatildaweasley
+  provider: ntts
+  name: tts-ntts-voice-name-matildaweasley
+  sex: Female
+  speaker: "matildaweasley"
+
+- type: ttsVoice
+  id: NTTSNatsaionai
+  provider: ntts
+  name: tts-ntts-voice-name-natsaionai
+  sex: Female
+  speaker: "natsaionai"
+
+- type: ttsVoice
+  id: NTTSOminisgaunt
+  provider: ntts
+  name: tts-ntts-voice-name-ominisgaunt
+  sex: Male
+  speaker: "ominisgaunt"
+
+- type: ttsVoice
+  id: NTTSPoppysweeting
+  provider: ntts
+  name: tts-ntts-voice-name-poppysweeting
+  sex: Female
+  speaker: "poppysweeting"
+
+- type: ttsVoice
+  id: NTTSGenericGoblinC
+  provider: ntts
+  name: tts-ntts-voice-name-generic-goblin-c
+  sex: Male
+  speaker: "generic_goblin_c"
+
+- type: ttsVoice
+  id: NTTSDinahHecat
+  provider: ntts
+  name: tts-ntts-voice-name-dinah-hecat
+  sex: Female
+  speaker: "dinah_hecat"
+
+- type: ttsVoice
+  id: NTTSAesopSharp
+  provider: ntts
+  name: tts-ntts-voice-name-aesop-sharp
+  sex: Male
+  speaker: "aesop_sharp"
+
+- type: ttsVoice
+  id: NTTSAbrahamRonen
+  provider: ntts
+  name: tts-ntts-voice-name-abraham-ronen
+  sex: Male
+  speaker: "abraham_ronen"
+
+- type: ttsVoice
+  id: NTTSSamanthaDale
+  provider: ntts
+  name: tts-ntts-voice-name-samantha-dale
+  sex: Female
+  speaker: "samantha_dale"
+
+- type: ttsVoice
+  id: NTTSSironaRyan
+  provider: ntts
+  name: tts-ntts-voice-name-sirona-ryan
+  sex: Female
+  speaker: "sirona_ryan"
+
+- type: ttsVoice
+  id: NTTSSophroniaFranklin
+  provider: ntts
+  name: tts-ntts-voice-name-sophronia-franklin
+  sex: Female
+  speaker: "sophronia_franklin"
+
+- type: ttsVoice
+  id: NTTSEverettClopton
+  provider: ntts
+  name: tts-ntts-voice-name-everett-clopton
+  sex: Male
+  speaker: "everett_clopton"
+
+- type: ttsVoice
+  id: NTTSGenericGoblinB
+  provider: ntts
+  name: tts-ntts-voice-name-generic-goblin-b
+  sex: Male
+  speaker: "generic_goblin_b"
+
+- type: ttsVoice
+  id: NTTSSanctuaryHouseElf
+  provider: ntts
+  name: tts-ntts-voice-name-sanctuary-house-elf
+  sex: Male
+  speaker: "sanctuary_house_elf"
+
+- type: ttsVoice
+  id: NTTSAbaddonDota2
+  provider: ntts
+  name: tts-ntts-voice-name-abaddon-dota-2
+  sex: Male
+  speaker: "abaddon_dota_2"
+
+- type: ttsVoice
+  id: NTTSAlchemistDota2
+  provider: ntts
+  name: tts-ntts-voice-name-alchemist-dota-2
+  sex: Male
+  speaker: "alchemist_dota_2"
+
+- type: ttsVoice
+  id: NTTSAntiMageDota2
+  provider: ntts
+  name: tts-ntts-voice-name-anti-mage-dota-2
+  sex: Male
+  speaker: "anti-mage_dota_2"
+
+- type: ttsVoice
+  id: NTTSArcWardenDota2
+  provider: ntts
+  name: tts-ntts-voice-name-arc-warden-dota-2
+  sex: Male
+  speaker: "arc_warden_dota_2"
+
+- type: ttsVoice
+  id: NTTSBatriderDota2
+  provider: ntts
+  name: tts-ntts-voice-name-batrider-dota-2
+  sex: Male
+  speaker: "batrider_dota_2"
+
+- type: ttsVoice
+  id: NTTSBloodseekerDota2
+  provider: ntts
+  name: tts-ntts-voice-name-bloodseeker-dota-2
+  sex: Male
+  speaker: "bloodseeker_dota_2"
+
+- type: ttsVoice
+  id: NTTSBountyHunterDota2
+  provider: ntts
+  name: tts-ntts-voice-name-bounty-hunter-dota-2
+  sex: Male
+  speaker: "bounty_hunter_dota_2"
+
+- type: ttsVoice
+  id: NTTSBristlebackDota2
+  provider: ntts
+  name: tts-ntts-voice-name-bristleback-dota-2
+  sex: Male
+  speaker: "bristleback_dota_2"
+
+- type: ttsVoice
+  id: NTTSBroodmotherDota2
+  provider: ntts
+  name: tts-ntts-voice-name-broodmother-dota-2
+  sex: Female
+  speaker: "broodmother_dota_2"
+
+- type: ttsVoice
+  id: NTTSCentaurWarrunnerDota2
+  provider: ntts
+  name: tts-ntts-voice-name-centaur-warrunner-dota-2
+  sex: Male
+  speaker: "centaur_warrunner_dota_2"
+
+- type: ttsVoice
+  id: NTTSClinkzDota2
+  provider: ntts
+  name: tts-ntts-voice-name-clinkz-dota-2
+  sex: Male
+  speaker: "clinkz_dota_2"
+
+- type: ttsVoice
+  id: NTTSClockwerkDota2
+  provider: ntts
+  name: tts-ntts-voice-name-clockwerk-dota-2
+  sex: Male
+  speaker: "clockwerk_dota_2"
+
+- type: ttsVoice
+  id: NTTSCrystalMaidenDota2
+  provider: ntts
+  name: tts-ntts-voice-name-crystal-maiden-dota-2
+  sex: Female
+  speaker: "crystal_maiden_dota_2"
+
+- type: ttsVoice
+  id: NTTSDazzleDota2
+  provider: ntts
+  name: tts-ntts-voice-name-dazzle-dota-2
+  sex: Male
+  speaker: "dazzle_dota_2"
+
+- type: ttsVoice
+  id: NTTSDisruptorDota2
+  provider: ntts
+  name: tts-ntts-voice-name-disruptor-dota-2
+  sex: Male
+  speaker: "disruptor_dota_2"
+
+- type: ttsVoice
+  id: NTTSDoomDota2
+  provider: ntts
+  name: tts-ntts-voice-name-doom-dota-2
+  sex: Male
+  speaker: "doom_dota_2"
+
+- type: ttsVoice
+  id: NTTSDragonKnightDota2
+  provider: ntts
+  name: tts-ntts-voice-name-dragon-knight-dota-2
+  sex: Male
+  speaker: "dragon_knight_dota_2"
+
+- type: ttsVoice
+  id: NTTSDragonKnightDragonDota2
+  provider: ntts
+  name: tts-ntts-voice-name-dragon-knight-dragon-dota-2
+  sex: Male
+  speaker: "dragon_knight_dragon_dota_2"
+
+- type: ttsVoice
+  id: NTTSDrowRangerDota2
+  provider: ntts
+  name: tts-ntts-voice-name-drow-ranger-dota-2
+  sex: Female
+  speaker: "drow_ranger_dota_2"
+
+- type: ttsVoice
+  id: NTTSEarthshakerDota2
+  provider: ntts
+  name: tts-ntts-voice-name-earthshaker-dota-2
+  sex: Male
+  speaker: "earthshaker_dota_2"
+
+- type: ttsVoice
+  id: NTTSEmberSpiritDota2
+  provider: ntts
+  name: tts-ntts-voice-name-ember-spirit-dota-2
+  sex: Male
+  speaker: "ember_spirit_dota_2"
+
+- type: ttsVoice
+  id: NTTSEnigmaDota2
+  provider: ntts
+  name: tts-ntts-voice-name-enigma-dota-2
+  sex: Male
+  speaker: "enigma_dota_2"
+
+- type: ttsVoice
+  id: NTTSGyrocopterDota2
+  provider: ntts
+  name: tts-ntts-voice-name-gyrocopter-dota-2
+  sex: Male
+  speaker: "gyrocopter_dota_2"
+
+- type: ttsVoice
+  id: NTTSHuskarDota2
+  provider: ntts
+  name: tts-ntts-voice-name-huskar-dota-2
+  sex: Male
+  speaker: "huskar_dota_2"
+
+- type: ttsVoice
+  id: NTTSInvokerDota2
+  provider: ntts
+  name: tts-ntts-voice-name-invoker-dota-2
+  sex: Male
+  speaker: "invoker_dota_2"
+
+- type: ttsVoice
+  id: NTTSJuggernautDota2
+  provider: ntts
+  name: tts-ntts-voice-name-juggernaut-dota-2
+  sex: Male
+  speaker: "juggernaut_dota_2"
+
+- type: ttsVoice
+  id: NTTSKeeperOfTheLightDota2
+  provider: ntts
+  name: tts-ntts-voice-name-keeper-of-the-light-dota-2
+  sex: Male
+  speaker: "keeper_of_the_light_dota_2"
+
+- type: ttsVoice
+  id: NTTSKunkkaDota2
+  provider: ntts
+  name: tts-ntts-voice-name-kunkka-dota-2
+  sex: Male
+  speaker: "kunkka_dota_2"
+
+- type: ttsVoice
+  id: NTTSLegionCommanderDemonDota2
+  provider: ntts
+  name: tts-ntts-voice-name-legion-commander-demon-dota-2
+  sex: Female
+  speaker: "legion_commander_demon_dota_2"
+
+- type: ttsVoice
+  id: NTTSLegionCommanderDota2
+  provider: ntts
+  name: tts-ntts-voice-name-legion-commander-dota-2
+  sex: Female
+  speaker: "legion_commander_dota_2"
+
+- type: ttsVoice
+  id: NTTSLichDota2
+  provider: ntts
+  name: tts-ntts-voice-name-lich-dota-2
+  sex: Male
+  speaker: "lich_dota_2"
+
+- type: ttsVoice
+  id: NTTSLinaDota2
+  provider: ntts
+  name: tts-ntts-voice-name-lina-dota-2
+  sex: Female
+  speaker: "lina_dota_2"
+
+- type: ttsVoice
+  id: NTTSLunaDota2
+  provider: ntts
+  name: tts-ntts-voice-name-luna-dota-2
+  sex: Female
+  speaker: "luna_dota_2"
+
+- type: ttsVoice
+  id: NTTSLycanDota2
+  provider: ntts
+  name: tts-ntts-voice-name-lycan-dota-2
+  sex: Male
+  speaker: "lycan_dota_2"
+
+- type: ttsVoice
+  id: NTTSLycanWolfDota2
+  provider: ntts
+  name: tts-ntts-voice-name-lycan-wolf-dota-2
+  sex: Male
+  speaker: "lycan_wolf_dota_2"
+
+- type: ttsVoice
+  id: NTTSMeepoDota2
+  provider: ntts
+  name: tts-ntts-voice-name-meepo-dota-2
+  sex: Male
+  speaker: "meepo_dota_2"
+
+- type: ttsVoice
+  id: NTTSMiranaDota2
+  provider: ntts
+  name: tts-ntts-voice-name-mirana-dota-2
+  sex: Female
+  speaker: "mirana_dota_2"
+
+- type: ttsVoice
+  id: NTTSMonkeyKingCrownDota2
+  provider: ntts
+  name: tts-ntts-voice-name-monkey-king-crown-dota-2
+  sex: Male
+  speaker: "monkey_king_crown_dota_2"
+
+- type: ttsVoice
+  id: NTTSMonkeyKingDota2
+  provider: ntts
+  name: tts-ntts-voice-name-monkey-king-dota-2
+  sex: Male
+  speaker: "monkey_king_dota_2"
+
+- type: ttsVoice
+  id: NTTSNecrophosDota2
+  provider: ntts
+  name: tts-ntts-voice-name-necrophos-dota-2
+  sex: Male
+  speaker: "necrophos_dota_2"
+
+- type: ttsVoice
+  id: NTTSNyxAssassinDota2
+  provider: ntts
+  name: tts-ntts-voice-name-nyx-assassin-dota-2
+  sex: Male
+  speaker: "nyx_assassin_dota_2"
+
+- type: ttsVoice
+  id: NTTSOmniknightDota2
+  provider: ntts
+  name: tts-ntts-voice-name-omniknight-dota-2
+  sex: Male
+  speaker: "omniknight_dota_2"
+
+- type: ttsVoice
+  id: NTTSOutworldDestroyerDota2
+  provider: ntts
+  name: tts-ntts-voice-name-outworld-destroyer-dota-2
+  sex: Male
+  speaker: "outworld_destroyer_dota_2"
+
+- type: ttsVoice
+  id: NTTSPhantomAssassinArcanaDota2
+  provider: ntts
+  name: tts-ntts-voice-name-phantom-assassin-arcana-dota-2
+  sex: Female
+  speaker: "phantom_assassin_arcana_dota_2"
+
+- type: ttsVoice
+  id: NTTSPhantomAssassinDota2
+  provider: ntts
+  name: tts-ntts-voice-name-phantom-assassin-dota-2
+  sex: Female
+  speaker: "phantom_assassin_dota_2"
+
+- type: ttsVoice
+  id: NTTSPhantomLancerDota2
+  provider: ntts
+  name: tts-ntts-voice-name-phantom-lancer-dota-2
+  sex: Male
+  speaker: "phantom_lancer_dota_2"
+
+- type: ttsVoice
+  id: NTTSPudgeDota2
+  provider: ntts
+  name: tts-ntts-voice-name-pudge-dota-2
+  sex: Male
+  speaker: "pudge_dota_2"
+
+- type: ttsVoice
+  id: NTTSQueenOfPainDota2
+  provider: ntts
+  name: tts-ntts-voice-name-queen-of-pain-dota-2
+  sex: Female
+  speaker: "queen_of_pain_dota_2"
+
+- type: ttsVoice
+  id: NTTSRazorDota2
+  provider: ntts
+  name: tts-ntts-voice-name-razor-dota-2
+  sex: Male
+  speaker: "razor_dota_2"
+
+- type: ttsVoice
+  id: NTTSRikiDota2
+  provider: ntts
+  name: tts-ntts-voice-name-riki-dota-2
+  sex: Male
+  speaker: "riki_dota_2"
+
+- type: ttsVoice
+  id: NTTSRubickDota2
+  provider: ntts
+  name: tts-ntts-voice-name-rubick-dota-2
+  sex: Male
+  speaker: "rubick_dota_2"
+
+- type: ttsVoice
+  id: NTTSSandKingDota2
+  provider: ntts
+  name: tts-ntts-voice-name-sand-king-dota-2
+  sex: Male
+  speaker: "sand_king_dota_2"
+
+- type: ttsVoice
+  id: NTTSShadowFiendDota2
+  provider: ntts
+  name: tts-ntts-voice-name-shadow-fiend-dota-2
+  sex: Male
+  speaker: "shadow_fiend_dota_2"
+
+- type: ttsVoice
+  id: NTTSShadowShamanDota2
+  provider: ntts
+  name: tts-ntts-voice-name-shadow-shaman-dota-2
+  sex: Male
+  speaker: "shadow_shaman_dota_2"
+
+- type: ttsVoice
+  id: NTTSSkywrathMageDota2
+  provider: ntts
+  name: tts-ntts-voice-name-skywrath-mage-dota-2
+  sex: Male
+  speaker: "skywrath_mage_dota_2"
+
+- type: ttsVoice
+  id: NTTSSlardarDota2
+  provider: ntts
+  name: tts-ntts-voice-name-slardar-dota-2
+  sex: Male
+  speaker: "slardar_dota_2"
+
+- type: ttsVoice
+  id: NTTSSlarkDota2
+  provider: ntts
+  name: tts-ntts-voice-name-slark-dota-2
+  sex: Male
+  speaker: "slark_dota_2"
+
+- type: ttsVoice
+  id: NTTSSpiritBreakerDota2
+  provider: ntts
+  name: tts-ntts-voice-name-spirit-breaker-dota-2
+  sex: Male
+  speaker: "spirit_breaker_dota_2"
+
+- type: ttsVoice
+  id: NTTSStormSpiritDota2
+  provider: ntts
+  name: tts-ntts-voice-name-storm-spirit-dota-2
+  sex: Male
+  speaker: "storm_spirit_dota_2"
+
+- type: ttsVoice
+  id: NTTSSvenDota2
+  provider: ntts
+  name: tts-ntts-voice-name-sven-dota-2
+  sex: Male
+  speaker: "sven_dota_2"
+
+- type: ttsVoice
+  id: NTTSTemplarAssassinDota2
+  provider: ntts
+  name: tts-ntts-voice-name-templar-assassin-dota-2
+  sex: Female
+  speaker: "templar_assassin_dota_2"
+
+- type: ttsVoice
+  id: NTTSTidehunterDota2
+  provider: ntts
+  name: tts-ntts-voice-name-tidehunter-dota-2
+  sex: Male
+  speaker: "tidehunter_dota_2"
+
+- type: ttsVoice
+  id: NTTSTreantProtectorDota2
+  provider: ntts
+  name: tts-ntts-voice-name-treant-protector-dota-2
+  sex: Male
+  speaker: "treant_protector_dota_2"
+
+- type: ttsVoice
+  id: NTTSUnderlordDota2
+  provider: ntts
+  name: tts-ntts-voice-name-underlord-dota-2
+  sex: Male
+  speaker: "underlord_dota_2"
+
+- type: ttsVoice
+  id: NTTSUrsaDota2
+  provider: ntts
+  name: tts-ntts-voice-name-ursa-dota-2
+  sex: Male
+  speaker: "ursa_dota_2"
+
+- type: ttsVoice
+  id: NTTSWindrangerDota2
+  provider: ntts
+  name: tts-ntts-voice-name-windranger-dota-2
+  sex: Female
+  speaker: "windranger_dota_2"
+
+- type: ttsVoice
+  id: NTTSWinterWyvernDota2
+  provider: ntts
+  name: tts-ntts-voice-name-winter-wyvern-dota-2
+  sex: Female
+  speaker: "winter_wyvern_dota_2"
+
+- type: ttsVoice
+  id: NTTSWitchDoctorDota2
+  provider: ntts
+  name: tts-ntts-voice-name-witch-doctor-dota-2
+  sex: Male
+  speaker: "witch_doctor_dota_2"
+
+- type: ttsVoice
+  id: NTTSWraithKingDota2
+  provider: ntts
+  name: tts-ntts-voice-name-wraith-king-dota-2
+  sex: Male
+  speaker: "wraith_king_dota_2"
+
+- type: ttsVoice
+  id: NTTSZeusDota2
+  provider: ntts
+  name: tts-ntts-voice-name-zeus-dota-2
+  sex: Male
+  speaker: "zeus_dota_2"
+
+- type: ttsVoice
+  id: NTTSMita
+  provider: ntts
+  name: tts-ntts-voice-name-mita
+  sex: Female
+  speaker: "mita"
+
+- type: ttsVoice
+  id: NTTSMitadream
+  provider: ntts
+  name: tts-ntts-voice-name-mitadream
+  sex: Female
+  speaker: "mitadream"
+
+- type: ttsVoice
+  id: NTTSMitaghost
+  provider: ntts
+  name: tts-ntts-voice-name-mitaghost
+  sex: Female
+  speaker: "mitaghost"
+
+- type: ttsVoice
+  id: NTTSMitakind
+  provider: ntts
+  name: tts-ntts-voice-name-mitakind
+  sex: Female
+  speaker: "mitakind"
+
+- type: ttsVoice
+  id: NTTSMitashorthairs
+  provider: ntts
+  name: tts-ntts-voice-name-mitashorthairs
+  sex: Female
+  speaker: "mitashorthairs"
+
+- type: ttsVoice
+  id: NTTSChaosMarinesCultistsDow
+  provider: ntts
+  name: tts-ntts-voice-name-chaos-marines-cultists-dow
+  sex: Male
+  speaker: "chaos_marines_cultists_dow"
+
+- type: ttsVoice
+  id: NTTSChaosMarinesDow
+  provider: ntts
+  name: tts-ntts-voice-name-chaos-marines-dow
+  sex: Male
+  speaker: "chaos_marines_dow"
+
+- type: ttsVoice
+  id: NTTSChaosMarinesLordDow
+  provider: ntts
+  name: tts-ntts-voice-name-chaos-marines-lord-dow
+  sex: Male
+  speaker: "chaos_marines_lord_dow"
+
+- type: ttsVoice
+  id: NTTSChaosMarinesSorcerorDow
+  provider: ntts
+  name: tts-ntts-voice-name-chaos-marines-sorceror-dow
+  sex: Male
+  speaker: "chaos_marines_sorceror_dow"
+
+- type: ttsVoice
+  id: NTTSDarkEldarArchonDow
+  provider: ntts
+  name: tts-ntts-voice-name-dark-eldar-archon-dow
+  sex: Male
+  speaker: "dark_eldar_archon_dow"
+
+- type: ttsVoice
+  id: NTTSDarkEldarMandrakeDow
+  provider: ntts
+  name: tts-ntts-voice-name-dark-eldar-mandrake-dow
+  sex: Male
+  speaker: "dark_eldar_mandrake_dow"
+
+- type: ttsVoice
+  id: NTTSDarkEldarWarriorDow
+  provider: ntts
+  name: tts-ntts-voice-name-dark-eldar-warrior-dow
+  sex: Male
+  speaker: "dark_eldar_warrior_dow"
+
+- type: ttsVoice
+  id: NTTSDarkEldarWychDow
+  provider: ntts
+  name: tts-ntts-voice-name-dark-eldar-wych-dow
+  sex: Female
+  speaker: "dark_eldar_wych_dow"
+
+- type: ttsVoice
+  id: NTTSEldarDow
+  provider: ntts
+  name: tts-ntts-voice-name-eldar-dow
+  sex: Female
+  speaker: "eldar_dow"
+
+- type: ttsVoice
+  id: NTTSEldarFarseerDow
+  provider: ntts
+  name: tts-ntts-voice-name-eldar-farseer-dow
+  sex: Female
+  speaker: "eldar_farseer_dow"
+
+- type: ttsVoice
+  id: NTTSEldarFireDragonDow
+  provider: ntts
+  name: tts-ntts-voice-name-eldar-fire-dragon-dow
+  sex: Female
+  speaker: "eldar_fire_dragon_dow"
+
+- type: ttsVoice
+  id: NTTSEldarWarlockDow
+  provider: ntts
+  name: tts-ntts-voice-name-eldar-warlock-dow
+  sex: Female
+  speaker: "eldar_warlock_dow"
+
+- type: ttsVoice
+  id: NTTSGuardAssassinDow
+  provider: ntts
+  name: tts-ntts-voice-name-guard-assassin-dow
+  sex: Male
+  speaker: "guard_assassin_dow"
+
+- type: ttsVoice
+  id: NTTSGuardCaptainDow
+  provider: ntts
+  name: tts-ntts-voice-name-guard-captain-dow
+  sex: Male
+  speaker: "guard_captain_dow"
+
+- type: ttsVoice
+  id: NTTSGuardCommissarDow
+  provider: ntts
+  name: tts-ntts-voice-name-guard-commissar-dow
+  sex: Male
+  speaker: "guard_commissar_dow"
+
+- type: ttsVoice
+  id: NTTSGuardEnginseerDow
+  provider: ntts
+  name: tts-ntts-voice-name-guard-enginseer-dow
+  sex: Male
+  speaker: "guard_enginseer_dow"
+
+- type: ttsVoice
+  id: NTTSGuardGuardsmanSergeantDow
+  provider: ntts
+  name: tts-ntts-voice-name-guard-guardsman-sergeant-dow
+  sex: Male
+  speaker: "guard_guardsman_sergeant_dow"
+
+- type: ttsVoice
+  id: NTTSGuardHeavyWeaponsPlatoonDow
+  provider: ntts
+  name: tts-ntts-voice-name-guard-heavy-weapons-platoon-dow
+  sex: Male
+  speaker: "guard_heavy_weapons_platoon_dow"
+
+- type: ttsVoice
+  id: NTTSGuardKarskinDow
+  provider: ntts
+  name: tts-ntts-voice-name-guard-karskin-dow
+  sex: Male
+  speaker: "guard_karskin_dow"
+
+- type: ttsVoice
+  id: NTTSGuardOgrynDow
+  provider: ntts
+  name: tts-ntts-voice-name-guard-ogryn-dow
+  sex: Male
+  speaker: "guard_ogryn_dow"
+
+- type: ttsVoice
+  id: NTTSGuardPriestDow
+  provider: ntts
+  name: tts-ntts-voice-name-guard-priest-dow
+  sex: Male
+  speaker: "guard_priest_dow"
+
+- type: ttsVoice
+  id: NTTSGuardPsykerDow
+  provider: ntts
+  name: tts-ntts-voice-name-guard-psyker-dow
+  sex: Male
+  speaker: "guard_psyker_dow"
+
+- type: ttsVoice
+  id: NTTSOrksDow
+  provider: ntts
+  name: tts-ntts-voice-name-orks-dow
+  sex: Male
+  speaker: "orks_dow"
+
+- type: ttsVoice
+  id: NTTSOrksFlashgitznobsDow
+  provider: ntts
+  name: tts-ntts-voice-name-orks-flashgitznobs-dow
+  sex: Male
+  speaker: "orks_flashgitznobs_dow"
+
+- type: ttsVoice
+  id: NTTSOrksGrotsDow
+  provider: ntts
+  name: tts-ntts-voice-name-orks-grots-dow
+  sex: Male
+  speaker: "orks_grots_dow"
+
+- type: ttsVoice
+  id: NTTSOrksWarbossDow
+  provider: ntts
+  name: tts-ntts-voice-name-orks-warboss-dow
+  sex: Male
+  speaker: "orks_warboss_dow"
+
+- type: ttsVoice
+  id: NTTSSistersBattleSisterDow
+  provider: ntts
+  name: tts-ntts-voice-name-sisters-battle-sister-dow
+  sex: Female
+  speaker: "sisters_battle_sister_dow"
+
+- type: ttsVoice
+  id: NTTSSistersMissionaryDow
+  provider: ntts
+  name: tts-ntts-voice-name-sisters-missionary-dow
+  sex: Male
+  speaker: "sisters_missionary_dow"
+
+- type: ttsVoice
+  id: NTTSSpaceMarines2Dow
+  provider: ntts
+  name: tts-ntts-voice-name-space-marines-2-dow
+  sex: Male
+  speaker: "space_marines_2_dow"
+
+- type: ttsVoice
+  id: NTTSSpaceMarinesChaplainDow
+  provider: ntts
+  name: tts-ntts-voice-name-space-marines-chaplain-dow
+  sex: Male
+  speaker: "space_marines_chaplain_dow"
+
+- type: ttsVoice
+  id: NTTSSpaceMarinesDow
+  provider: ntts
+  name: tts-ntts-voice-name-space-marines-dow
+  sex: Male
+  speaker: "space_marines_dow"
+
+- type: ttsVoice
+  id: NTTSSpaceMarinesForceCommanderDow
+  provider: ntts
+  name: tts-ntts-voice-name-space-marines-force-commander-dow
+  sex: Male
+  speaker: "space_marines_force_commander_dow"
+
+- type: ttsVoice
+  id: NTTSSpaceMarinesLibrarianDow
+  provider: ntts
+  name: tts-ntts-voice-name-space-marines-librarian-dow
+  sex: Male
+  speaker: "space_marines_librarian_dow"
+
+- type: ttsVoice
+  id: NTTSTauEtherealDow
+  provider: ntts
+  name: tts-ntts-voice-name-tau-ethereal-dow
+  sex: Male
+  speaker: "tau_ethereal_dow"
+
+- type: ttsVoice
+  id: NTTSTauKrootDow
+  provider: ntts
+  name: tts-ntts-voice-name-tau-kroot-dow
+  sex: Male
+  speaker: "tau_kroot_dow"
+
+- type: ttsVoice
+  id: NTTSTutorialFDow
+  provider: ntts
+  name: tts-ntts-voice-name-tutorial-f-dow
+  sex: Female
+  speaker: "tutorial_f_dow"
+
+- type: ttsVoice
+  id: NTTSTutorialMDow
+  provider: ntts
+  name: tts-ntts-voice-name-tutorial-m-dow
+  sex: Male
+  speaker: "tutorial_m_dow"
+
+- type: ttsVoice
+  id: NTTSKingpin
+  provider: ntts
+  name: tts-ntts-voice-name-kingpin
+  sex: Male
+  speaker: "kingpin"

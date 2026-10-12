@@ -57,6 +57,10 @@
   name: tts-voice-name-maiev
   sex: Female
   speaker: maiev
+  # DS14-start
+  fallbacks:
+    ntts: NTTSFemaleCommander
+  # DS14-end
 
 - type: ttsVoice
   id: Rexxar
@@ -94,6 +98,10 @@
   name: tts-voice-name-jaina
   sex: Female
   speaker: jaina
+  # DS14-start
+  fallbacks:
+    ntts: NTTSJaina
+  # DS14-end
 
 - type: ttsVoice
   id: Ladyvashj
@@ -119,6 +127,10 @@
   sex: Male
   speaker: garithos
   sponsorOnly: true
+  # DS14-start
+  fallbacks:
+    ntts: NTTSGuardCommissarDow
+  # DS14-end
 
 - type: ttsVoice
   id: Anubarak
@@ -157,6 +169,10 @@
   name: tts-voice-name-naisha
   sex: Female
   speaker: naisha
+  # DS14-start
+  fallbacks:
+    ntts: NTTSEldarDow
+  # DS14-end
 
 - type: ttsVoice
   id: IllidanF
@@ -175,6 +191,10 @@
   name: tts-voice-name-chen
   sex: Male
   speaker: chen
+  # DS14-start
+  fallbacks:
+    ntts: NTTSBralik
+  # DS14-end
 
 - type: ttsVoice
   id: DreadBm
@@ -211,6 +231,10 @@
   name: tts-voice-name-dreadt
   sex: Male
   speaker: dread_t
+  # DS14-start
+  fallbacks:
+    ntts: NTTSLordHarkon
+  # DS14-end
 
 - type: ttsVoice
   id: Mannoroth
@@ -244,6 +268,10 @@
   sex: Female
   speaker: glados
   roundStart: false # reserved for Station AI
+  # DS14-start
+  fallbacks:
+    ntts: NTTSGlados
+  # DS14-end
 
 - type: ttsVoice
   id: Announcer
@@ -276,6 +304,10 @@
   name: tts-voice-name-kerrigan
   sex: Female
   speaker: kerrigan
+  # DS14-start
+  fallbacks:
+    ntts: NTTSEvilThalya
+  # DS14-end
 
 - type: ttsVoice
   id: Tusk
@@ -308,6 +340,10 @@
   sex: Female
   speaker: lina
   sponsorOnly: true
+  # DS14-start
+  fallbacks:
+    ntts: NTTSLinaDota2
+  # DS14-end
 
 - type: ttsVoice
   id: Bristle
@@ -320,6 +356,10 @@
   name: tts-voice-name-gyro
   sex: Male
   speaker: gyro
+  # DS14-start
+  fallbacks:
+    ntts: NTTSGyrocopterDota2
+  # DS14-end
 
 - type: ttsVoice
   id: Treant
@@ -332,12 +372,20 @@
   name: tts-voice-name-lancer
   sex: Male
   speaker: lancer
+  # DS14-start
+  fallbacks:
+    ntts: NTTSPhantomLancerDota2
+  # DS14-end
 
 - type: ttsVoice
   id: Clockwerk
   name: tts-voice-name-clockwerk
   sex: Male
   speaker: clockwerk
+  # DS14-start
+  fallbacks:
+    ntts: NTTSClockwerkDota2
+  # DS14-end
 
 - type: ttsVoice
   id: Batrider
@@ -363,6 +411,10 @@
   sex: Male
   speaker: pudge
   sponsorOnly: true
+  # DS14-start
+  fallbacks:
+    ntts: NTTSPudgeDota2
+  # DS14-end
 
 - type: ttsVoice
   id: Juggernaut
@@ -431,6 +483,10 @@
   sex: Female
   speaker: templar
   sponsorOnly: true
+  # DS14-start
+  fallbacks:
+    ntts: NTTSTemplarAssassinDota2
+  # DS14-end
 
 - type: ttsVoice
   id: Ranger
@@ -506,6 +562,10 @@
   sex: Unsexed
   speaker: yuumi
   sponsorOnly: true
+  # DS14-start
+  fallbacks:
+    ntts: NTTSNecoArc2
+  # DS14-end
 
 - type: ttsVoice
   id: Bandit
@@ -590,6 +650,10 @@
   sex: Male
   speaker: valerian
   sponsorOnly: true
+  # DS14-start
+  fallbacks:
+    ntts: NTTSHorner
+  # DS14-end
 
 - type: ttsVoice
   id: Gman
@@ -647,12 +711,20 @@
   name: tts-voice-name-dick
   sex: Male
   speaker: dick
+  # DS14-start
+  fallbacks:
+    ntts: NTTSRichardson
+  # DS14-end
 
 - type: ttsVoice
   id: Officer
   name: tts-voice-name-officer
   sex: Male
   speaker: officer
+  # DS14-start
+  fallbacks:
+    ntts: NTTSOfficerEnclave
+  # DS14-end
 
 - type: ttsVoice
   id: Frank
@@ -750,6 +822,10 @@
   sex: Unsexed
   speaker: myron
   sponsorOnly: true
+  # DS14-start
+  fallbacks:
+    ntts: NTTSMyron
+  # DS14-end
 
 - type: ttsVoice
   id: Nicole
@@ -812,6 +888,10 @@
   sex: Male
   speaker: demoman
   sponsorOnly: true
+  # DS14-start
+  fallbacks:
+    ntts: NTTSDemoman
+  # DS14-end
 
 - type: ttsVoice
   id: Engineer
@@ -859,6 +939,10 @@
   name: tts-voice-name-spy
   sex: Male
   speaker: spy
+  # DS14-start
+  fallbacks:
+    ntts: NTTSSpy
+  # DS14-end
 
 - type: ttsVoice
   id: Admiral
@@ -991,6 +1075,10 @@
   name: tts-voice-name-p3
   sex: Male
   speaker: p3
+  # DS14-start
+  fallbacks:
+    ntts: NTTSPunisher
+  # DS14-end
 
 - type: ttsVoice
   id: Tereshkova
@@ -998,6 +1086,10 @@
   sex: Female
   speaker: tereshkova
   roundStart: false # reserved for Vending Machines
+  # DS14-start
+  fallbacks:
+    ntts: NTTSAdjutant
+  # DS14-end
 
 - type: ttsVoice
   id: Babazina
@@ -1022,12 +1114,20 @@
   name: tts-voice-name-garen
   sex: Male
   speaker: garen
+  # DS14-start
+  fallbacks:
+    ntts: NTTSSvenDota2
+  # DS14-end
 
 - type: ttsVoice
   id: Janna
   name: tts-voice-name-janna
   sex: Female
   speaker: janna
+  # DS14-start
+  fallbacks:
+    ntts: NTTSTriss
+  # DS14-end
 
 - type: ttsVoice
   id: Cassiopeia
@@ -1058,12 +1158,20 @@
   name: tts-voice-name-neeko
   sex: Female
   speaker: neeko
+  # DS14-start
+  fallbacks:
+    ntts: NTTSNeco
+  # DS14-end
 
 - type: ttsVoice
   id: Volibear
   name: tts-voice-name-volibear
   sex: Male
   speaker: volibear
+  # DS14-start
+  fallbacks:
+    ntts: NTTSDragonKnightDragonDota2
+  # DS14-end
 
 - type: ttsVoice
   id: Taric
@@ -1077,6 +1185,10 @@
   name: tts-voice-name-samira
   sex: Female
   speaker: samira
+  # DS14-start
+  fallbacks:
+    ntts: NTTSPanam
+  # DS14-end
 
 - type: ttsVoice
   id: Swain
@@ -1163,6 +1275,10 @@
   name: tts-voice-name-anivia
   sex: Female
   speaker: anivia
+  # DS14-start
+  fallbacks:
+    ntts: NTTSWinterWyvernDota2
+  # DS14-end
 
 - type: ttsVoice
   id: Ahri
@@ -1218,6 +1334,10 @@
   name: tts-voice-name-qiyana
   sex: Female
   speaker: qiyana
+  # DS14-start
+  fallbacks:
+    ntts: NTTSCaitlyn
+  # DS14-end
 
 - type: ttsVoice
   id: Ksante
@@ -1267,6 +1387,10 @@
   name: tts-voice-name-zac
   sex: Male
   speaker: zac
+  # DS14-start
+  fallbacks:
+    ntts: NTTSSlarkDota2
+  # DS14-end
 
 - type: ttsVoice
   id: Talon
@@ -1291,6 +1415,10 @@
   name: tts-voice-name-zenyatta
   sex: Male
   speaker: zenyatta
+  # DS14-start
+  fallbacks:
+    ntts: NTTSBrendan
+  # DS14-end
 
 - type: ttsVoice
   id: Kiriko
@@ -1345,12 +1473,20 @@
   name: tts-voice-name-tracer
   sex: Female
   speaker: tracer
+  # DS14-start
+  fallbacks:
+    ntts: NTTSTracer
+  # DS14-end
 
 - type: ttsVoice
   id: Mercy
   name: tts-voice-name-mercy
   sex: Female
   speaker: mercy
+  # DS14-start
+  fallbacks:
+    ntts: NTTSHanson
+  # DS14-end
 
 - type: ttsVoice
   id: LucioOv
@@ -1418,6 +1554,10 @@
   name: tts-voice-name-pharah
   sex: Female
   speaker: pharah
+  # DS14-start
+  fallbacks:
+    ntts: NTTSSarahLyonsFl3
+  # DS14-end
 
 - type: ttsVoice
   id: Sombra
@@ -1461,6 +1601,10 @@
   sex: Male
   speaker: training_robot
   roundStart: false # reserved for Vending Machines and Borgs
+  # DS14-start
+  fallbacks:
+    ntts: NTTSSentrybot
+  # DS14-end
 
 - type: ttsVoice
   id: Harbor
@@ -1473,6 +1617,10 @@
   name: tts-voice-name-sage
   sex: Female
   speaker: sage
+  # DS14-start
+  fallbacks:
+    ntts: NTTSShani
+  # DS14-end
 
 - type: ttsVoice
   id: Brimstone
@@ -1485,6 +1633,10 @@
   name: tts-voice-name-sova
   sex: Male
   speaker: sova
+  # DS14-start
+  fallbacks:
+    ntts: NTTSSniper
+  # DS14-end
 
 - type: ttsVoice
   id: FShrill
@@ -1623,6 +1775,10 @@
   name: tts-voice-name-fargo
   sex: Female
   speaker: f_argo
+  # DS14-start
+  fallbacks:
+    ntts: NTTSFemaleCommander
+  # DS14-end
 
 - type: ttsVoice
   id: Farkas
@@ -1683,6 +1839,10 @@
   name: tts-voice-name-elisif
   sex: Female
   speaker: elisif
+  # DS14-start
+  fallbacks:
+    ntts: NTTSElenwen
+  # DS14-end
 
 - type: ttsVoice
   id: MCitizen
@@ -1750,6 +1910,10 @@
   name: tts-voice-name-astrid
   sex: Female
   speaker: astrid
+  # DS14-start
+  fallbacks:
+    ntts: NTTSAstrid
+  # DS14-end
 
 - type: ttsVoice
   id: Brynjolf
@@ -1855,6 +2019,10 @@
   name: tts-voice-name-ancano
   sex: Male
   speaker: ancano
+  # DS14-start
+  fallbacks:
+    ntts: NTTSPhineasblack
+  # DS14-end
 
 - type: ttsVoice
   id: Mercer
@@ -1925,6 +2093,10 @@
   sex: Male
   speaker: hermaeus
   roundStart: false
+  # DS14-start
+  fallbacks:
+    ntts: NTTSHermaeusMora
+  # DS14-end
 
 - type: ttsVoice
   id: Gormlaith
@@ -1950,6 +2122,10 @@
   sex: Male
   speaker: overwatch
   roundStart: false
+  # DS14-start
+  fallbacks:
+    ntts: NTTSSentrybot
+  # DS14-end
 
 - type: ttsVoice
   id: Rita
@@ -1963,6 +2139,10 @@
   name: tts-voice-name-barman
   sex: Male
   speaker: barman
+  # DS14-start
+  fallbacks:
+    ntts: NTTSSidorovich
+  # DS14-end
 
 - type: ttsVoice
   id: Zak
@@ -2105,6 +2285,10 @@
   name: tts-voice-name-valeera
   sex: Male
   speaker: valeera
+  # DS14-start
+  fallbacks:
+    ntts: NTTSEvilThalya
+  # DS14-end
 
 - type: ttsVoice
   id: Abathur
@@ -2141,6 +2325,10 @@
   name: tts-voice-name-anduin
   sex: Male
   speaker: anduin
+  # DS14-start
+  fallbacks:
+    ntts: NTTSAnduin
+  # DS14-end
 
 - type: ttsVoice
   id: Deckard
@@ -2153,6 +2341,10 @@
   name: tts-voice-name-volskaya
   sex: Female
   speaker: volskaya
+  # DS14-start
+  fallbacks:
+    ntts: NTTSMatildaweasley
+  # DS14-end
 
 - type: ttsVoice
   id: MalfurionH
@@ -2263,6 +2455,10 @@
   sex: Female
   speaker: adjutant
   roundStart: false # reserved for HardsuitIdentificationSystem
+  # DS14-start
+  fallbacks:
+    ntts: NTTSAdjutant
+  # DS14-end
 
 - type: ttsVoice
   id: Vanndara
@@ -2336,6 +2532,10 @@
   name: tts-voice-name-angel
   sex: Male
   speaker: angel
+  # DS14-start
+  fallbacks:
+    ntts: NTTSOmniknightDota2
+  # DS14-end
 
 - type: ttsVoice
   id: Drekthar
@@ -2475,6 +2675,10 @@
   name: tts-voice-name-valeerahs
   sex: Female
   speaker: valeera_hs
+  # DS14-start
+  fallbacks:
+    ntts: NTTSEvilThalya
+  # DS14-end
 
 - type: ttsVoice
   id: Malacrass
@@ -2511,6 +2715,10 @@
   name: tts-voice-name-flark
   sex: Male
   speaker: flark
+  # DS14-start
+  fallbacks:
+    ntts: NTTSZiggs
+  # DS14-end
 
 - type: ttsVoice
   id: Siamat
@@ -2598,6 +2806,10 @@
   sex: Male
   speaker: dr_sezavo
   roundStart: false
+  # DS14-start
+  fallbacks:
+    ntts: NTTSKleiner
+  # DS14-end
 
 - type: ttsVoice
   id: Tierra
@@ -2695,6 +2907,10 @@
   name: tts-voice-name-norroa
   sex: Female
   speaker: norroa
+  # DS14-start
+  fallbacks:
+    ntts: NTTSElenwen
+  # DS14-end
 
 - type: ttsVoice
   id: Turalyon
@@ -2737,6 +2953,10 @@
   name: tts-voice-name-lunara
   sex: Female
   speaker: lunara
+  # DS14-start
+  fallbacks:
+    ntts: NTTSWindrangerDota2
+  # DS14-end
 
 - type: ttsVoice
   id: Bob
@@ -2811,6 +3031,10 @@
   name: tts-voice-name-lanathel
   sex: Female
   speaker: lanathel
+  # DS14-start
+  fallbacks:
+    ntts: NTTSPhilippaEilhart
+  # DS14-end
 
 - type: ttsVoice
   id: Saurfang
@@ -2829,6 +3053,10 @@
   name: tts-voice-name-kizi
   sex: Male
   speaker: kizi
+  # DS14-start
+  fallbacks:
+    ntts: NTTSGenericGoblinB
+  # DS14-end
 
 - type: ttsVoice
   id: Slate
@@ -2847,6 +3075,10 @@
   name: tts-voice-name-hesutu
   sex: Male
   speaker: hesutu
+  # DS14-start
+  fallbacks:
+    ntts: NTTSCentaurWarrunnerDota2
+  # DS14-end
 
 - type: ttsVoice
   id: Rasil
@@ -2871,6 +3103,10 @@
   name: tts-voice-name-karastamper
   sex: Female
   speaker: karastamper
+  # DS14-start
+  fallbacks:
+    ntts: NTTSLegionCommanderDota2
+  # DS14-end
 
 - type: ttsVoice
   id: George
@@ -2962,6 +3198,10 @@
   sex: Male
   speaker: avozu
   roundStart: false
+  # DS14-start
+  fallbacks:
+    ntts: NTTSDoomDota2
+  # DS14-end
 
 - type: ttsVoice
   id: Wagtoggle
@@ -3024,6 +3264,10 @@
   sex: Male
   speaker: thrud
   sponsorOnly: true
+  # DS14-start
+  fallbacks:
+    ntts: NTTSGuardOgrynDow
+  # DS14-end
 
 - type: ttsVoice
   id: Lazul
@@ -3043,6 +3287,10 @@
   sex: Male
   speaker: glowtron
   roundStart: false
+  # DS14-start
+  fallbacks:
+    ntts: NTTSMisterHandyFl3
+  # DS14-end
 
 - type: ttsVoice
   id: Isiset
@@ -3099,6 +3347,10 @@
   name: tts-voice-name-cerys
   sex: Female
   speaker: cerys
+  # DS14-start
+  fallbacks:
+    ntts: NTTSCerys
+  # DS14-end
 
 - type: ttsVoice
   id: Philippa
@@ -3117,6 +3369,10 @@
   name: tts-voice-name-lambert
   sex: Male
   speaker: lambert
+  # DS14-start
+  fallbacks:
+    ntts: NTTSLambert
+  # DS14-end
 
 - type: ttsVoice
   id: Shani
@@ -3141,6 +3397,10 @@
   name: tts-voice-name-guru
   sex: Male
   speaker: guru
+  # DS14-start
+  fallbacks:
+    ntts: NTTSEleazarfig
+  # DS14-end
 
 - type: ttsVoice
   id: Lugos
@@ -3171,6 +3431,10 @@
   name: tts-voice-name-noble
   sex: Male
   speaker: noble
+  # DS14-start
+  fallbacks:
+    ntts: NTTSKovirNobleman
+  # DS14-end
 
 - type: ttsVoice
   id: Huber
@@ -3268,6 +3532,10 @@
   name: tts-voice-name-annah
   sex: Female
   speaker: annah
+  # DS14-start
+  fallbacks:
+    ntts: NTTSPhilippaEilhart
+  # DS14-end
 
 - type: ttsVoice
   id: Patrick
@@ -3382,6 +3650,10 @@
   name: tts-voice-name-guillaume
   sex: Male
   speaker: guillaume
+  # DS14-start
+  fallbacks:
+    ntts: NTTSGuillaumeDeLaunfal
+  # DS14-end
 
 - type: ttsVoice
   id: Vivienne
@@ -3406,6 +3678,10 @@
   name: tts-voice-name-vor
   sex: Male
   speaker: vor
+  # DS14-start
+  fallbacks:
+    ntts: NTTSCicero
+  # DS14-end
 
 - type: ttsVoice
   id: Grandmother
@@ -3448,18 +3724,30 @@
   name: tts-voice-name-vesemir
   sex: Male
   speaker: vesemir
+  # DS14-start
+  fallbacks:
+    ntts: NTTSVesemir
+  # DS14-end
 
 - type: ttsVoice
   id: Kate
   name: tts-voice-name-kate
   sex: Female
   speaker: kate
+  # DS14-start
+  fallbacks:
+    ntts: NTTSKateSmirnovaTb
+  # DS14-end
 
 - type: ttsVoice
   id: Polina
   name: tts-voice-name-polina
   sex: Female
   speaker: polina
+  # DS14-start
+  fallbacks:
+    ntts: NTTSPolina
+  # DS14-end
 
 - type: ttsVoice
   id: Crach
@@ -3497,6 +3785,10 @@
   name: tts-voice-name-stories
   sex: Male
   speaker: stories
+  # DS14-start
+  fallbacks:
+    ntts: NTTSForester
+  # DS14-end
 
 - type: ttsVoice
   id: Nekro
@@ -3533,6 +3825,10 @@
   name: tts-voice-name-ellis
   sex: Male
   speaker: ellis
+  # DS14-start
+  fallbacks:
+    ntts: NTTSEkko
+  # DS14-end
 
 - type: ttsVoice
   id: Udalryk
@@ -3563,6 +3859,10 @@
   name: tts-voice-name-abaddon
   sex: Male
   speaker: abaddon
+  # DS14-start
+  fallbacks:
+    ntts: NTTSAbaddonDota2
+  # DS14-end
 
 - type: ttsVoice
   id: Eskel
@@ -3581,6 +3881,10 @@
   name: tts-voice-name-magess
   sex: Unsexed
   speaker: magess
+  # DS14-start
+  fallbacks:
+    ntts: NTTSElenwen
+  # DS14-end
 
 - type: ttsVoice
   id: Nalo
@@ -3647,6 +3951,10 @@
   name: tts-voice-name-nick
   sex: Male
   speaker: nick
+  # DS14-start
+  fallbacks:
+    ntts: NTTSJohnny
+  # DS14-end
 
 - type: ttsVoice
   id: Hjalmar
@@ -3659,6 +3967,10 @@
   name: tts-voice-name-portal_cave_johnson
   sex: Male
   speaker: portal_cave_johnson
+  # DS14-start
+  fallbacks:
+    ntts: NTTSBriman
+  # DS14-end
 
 - type: ttsVoice
   id: Shredder
@@ -3725,6 +4037,10 @@
   name: tts-voice-name-The_Lord_of_the_Rings_Aragorn
   sex: Male
   speaker: The_Lord_of_the_Rings_Aragorn
+  # DS14-start
+  fallbacks:
+    ntts: NTTSGeralt
+  # DS14-end
 
 - type: ttsVoice
   id: Elrond
@@ -3761,6 +4077,10 @@
   name: tts-voice-name-Srek_Gingerbread_Man
   sex: Male
   speaker: Srek_Gingerbread_Man
+  # DS14-start
+  fallbacks:
+    ntts: NTTSZiggs
+  # DS14-end
 
 - type: ttsVoice
   id: Fiona
@@ -3899,6 +4219,10 @@
   name: tts-voice-name-Marvel_Tony_Stark
   sex: Male
   speaker: Marvel_Tony_Stark
+  # DS14-start
+  fallbacks:
+    ntts: NTTSJohnny
+  # DS14-end
 
 - type: ttsVoice
   id: Sabellian
@@ -3917,6 +4241,10 @@
   name: tts-voice-name-Dragons_MalygosWrath_of_the_Lich_King
   sex: Male
   speaker: Dragons_MalygosWrath_of_the_Lich_King
+  # DS14-start
+  fallbacks:
+    ntts: NTTSDragonKnightDragonDota2
+  # DS14-end
 
 - type: ttsVoice
   id: Ebyssian
@@ -4037,6 +4365,10 @@
   name: tts-voice-name-Treasure_Island_Livsy
   sex: Male
   speaker: Treasure_Island_Livsy
+  # DS14-start
+  fallbacks:
+    ntts: NTTSAbrahamRonen
+  # DS14-end
 
 - type: ttsVoice
   id: Gale
@@ -4145,6 +4477,10 @@
   name: tts-voice-name-slovo_patsana_cop
   sex: Female
   speaker: slovo_patsana_cop
+  # DS14-start
+  fallbacks:
+    ntts: NTTSNancyHartley
+  # DS14-end
 
 - type: ttsVoice
   id: Main
@@ -4271,6 +4607,10 @@
   name: tts-voice-name-halflife_olga
   sex: Female
   speaker: halflife_olga
+  # DS14-start
+  fallbacks:
+    ntts: NTTSAlyx
+  # DS14-end
 
 - type: ttsVoice
   id: Alyx_Alyx
@@ -4373,6 +4713,10 @@
   name: tts-voice-name-stalker_metro_soldier
   sex: Male
   speaker: stalker_metro_soldier
+  # DS14-start
+  fallbacks:
+    ntts: NTTSGuardGuardsmanSergeantDow
+  # DS14-end
 
 - type: ttsVoice
   id: Stalker01
@@ -4391,6 +4735,10 @@
   name: tts-voice-name-warcraft_garrosh
   sex: Male
   speaker: warcraft_garrosh
+  # DS14-start
+  fallbacks:
+    ntts: NTTSGarrosh
+  # DS14-end
 
 - type: ttsVoice
   id: Male_v
@@ -4487,6 +4835,10 @@
   name: tts-voice-name-ellie
   sex: Female
   speaker: tlou_ellie
+  # DS14-start
+  fallbacks:
+    ntts: NTTSCirilla
+  # DS14-end
 
 - type: ttsVoice
   id: Joel
@@ -4505,6 +4857,10 @@
   name: tts-voice-name-mission_control
   sex: Male
   speaker: Deep_rock_galactic_mission_control
+  # DS14-start
+  fallbacks:
+    ntts: NTTSGuardCaptainDow
+  # DS14-end
 
 - type: ttsVoice
   id: Dwarves
@@ -4530,6 +4886,10 @@
   sex: Male
   speaker: an_alt_girl_dlc_sunboy_n
   roundStart: false # reserved for BaseMobSpiderTerror
+  # DS14-start
+  fallbacks:
+    ntts: NTTSSheogorath
+  # DS14-end
 
 - type: ttsVoice
   id: Sunboy_kalm
@@ -4554,6 +4914,10 @@
   name: tts-voice-name-titus
   sex: Male
   speaker: marine2_titus
+  # DS14-start
+  fallbacks:
+    ntts: NTTSSpaceMarinesForceCommanderDow
+  # DS14-end
 
 - type: ttsVoice
   id: Berserk
@@ -4608,6 +4972,10 @@
   name: tts-voice-name-anastasia
   sex: Female
   speaker: anastasia
+  # DS14-start
+  fallbacks:
+    ntts: NTTSJudy
+  # DS14-end
 
 - type: ttsVoice
   id: Petr
@@ -4644,6 +5012,10 @@
   name: tts-voice-name-diana
   sex: Female
   speaker: diana
+  # DS14-start
+  fallbacks:
+    ntts: NTTSPhilippaEilhart
+  # DS14-end
 
 - type: ttsVoice
   id: Nunu
@@ -4692,6 +5064,10 @@
   name: tts-voice-name-lee_sin
   sex: Male
   speaker: lee_sin
+  # DS14-start
+  fallbacks:
+    ntts: NTTSOmniknightDota2
+  # DS14-end
 
 - type: ttsVoice
   id: Kayle
@@ -4814,12 +5190,20 @@
   name: tts-voice-name-torbjorn
   sex: Male
   speaker: torbjorn
+  # DS14-start
+  fallbacks:
+    ntts: NTTSBralik
+  # DS14-end
 
 - type: ttsVoice
   id: Mei
   name: tts-voice-name-mei
   sex: Female
   speaker: mei
+  # DS14-start
+  fallbacks:
+    ntts: NTTSPoppysweeting
+  # DS14-end
 
 - type: ttsVoice
   id: Galmar
