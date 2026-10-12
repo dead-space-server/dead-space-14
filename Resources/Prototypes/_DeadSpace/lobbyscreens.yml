@@ -228,6 +228,14 @@
   id: MarmSec
   background: /Textures/LobbyScreens/Fobos/marm.webp
 
+- type: lobbyBackground
+  id: FyrmorMeadow
+  background: /Textures/LobbyScreens/Fobos/fyrmor_meadow.webp
+
+- type: lobbyBackground
+  id: FyrmorWest
+  background: /Textures/LobbyScreens/Fobos/fyrmor_west.webp
+
 # snovazs
 
 - type: lobbyBackground

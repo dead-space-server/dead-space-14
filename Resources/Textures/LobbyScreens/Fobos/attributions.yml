@@ -302,7 +302,7 @@
   source: "https://discord.gg/ds14"
 
 # fyrmor
-- files: ["marm.webp"]
+- files: ["marm.webp", "fyrmor_meadow.webp", "fyrmor_west.webp"]
   license: "CC-BY-NC-SA-4.0"
   copyright: "fyrmor on discord"
   source: "https://discord.com/channels/1030160796401016883/1487310560667107358/1511403135560847360"
