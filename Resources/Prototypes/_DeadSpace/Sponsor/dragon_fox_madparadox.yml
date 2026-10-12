@@ -937,8 +937,8 @@
     rechargeCooldown: 2
   - type: BasicEntityAmmoProvider
     proto: BulletKineticDragonFoxMadParadox
-    capacity: 5
-    count: 5
+    capacity: 3
+    count: 3
   - type: Sprite
     sprite: _DeadSpace/Sponsor/DragonFox/MadParadox/kinetic_accelerator.rsi
     layers:
