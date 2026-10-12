@@ -48,20 +48,12 @@
   - type: SolutionContainerManager
     solutions:
       pen:
-        maxVol: 60
+        maxVol: 15
         reagents:
           - ReagentId: Rororium
-            Quantity: 10
-          - ReagentId: Tricordrazine
-            Quantity: 15
-          - ReagentId: DexalinPlus
-            Quantity: 5
-          - ReagentId: TranexamicAcid
-            Quantity: 5
-          - ReagentId: Epinephrine
             Quantity: 5
           - ReagentId: Saline
-            Quantity: 15
+            Quantity: 5
           - ReagentId: Dermaline
             Quantity: 5
   - type: StaticPrice
