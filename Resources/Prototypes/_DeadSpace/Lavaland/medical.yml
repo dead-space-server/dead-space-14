@@ -48,10 +48,10 @@
   - type: SolutionContainerManager
     solutions:
       pen:
-        maxVol: 45
+        maxVol: 60
         reagents:
           - ReagentId: Rororium
-            Quantity: 5
+            Quantity: 10
           - ReagentId: Tricordrazine
             Quantity: 15
           - ReagentId: DexalinPlus
@@ -61,6 +61,8 @@
           - ReagentId: Epinephrine
             Quantity: 5
           - ReagentId: Saline
-            Quantity: 10
+            Quantity: 15
+          - ReagentId: Dermaline
+            Quantity: 5
   - type: StaticPrice
     price: 300
