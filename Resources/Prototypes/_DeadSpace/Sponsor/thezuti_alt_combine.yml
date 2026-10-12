@@ -45,6 +45,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: SubdermalImplant
+    implantAction: ActionTheZuTiAltCombineCode1
     implantComponents:
     - type: Vocal
       sounds:
@@ -53,9 +54,63 @@
         Unsexed: TheZuTiCombine
     - type: Speech
       speechSounds: SuperSoldier
+    - type: ActionGrant
+      actions:
+      - ActionTheZuTiAltCombineCode3
+    - type: SpeakOnTrigger
+      keysIn: [ thezutiCombineCode3 ]
+      pack: TheZuTiAltCombineCode3Phrases
     whitelist:
       components:
       - Vocal
+  - type: SpeakOnTrigger
+    keysIn: [ thezutiCombineCode1 ]
+    targetUser: true
+    pack: TheZuTiAltCombineCode1Phrases
+
+- type: entity
+  parent: BaseAction
+  id: ActionTheZuTiAltCombineCode1
+  name: Иду первым
+  description: Дать понять, что вы идёте первым.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 5
+    icon:
+      sprite: _DeadSpace/Interface/Radial/GasMaskDispatch.rsi
+      state: code-1
+  - type: InstantAction
+    event: !type:TriggerActionEvent
+  - type: TriggerOnAction
+    keyOut: thezutiCombineCode1
+
+- type: entity
+  parent: ActionTheZuTiAltCombineCode1
+  id: ActionTheZuTiAltCombineCode3
+  name: За мной!
+  description: Приказать следовать за вами.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 5
+    icon:
+      sprite: _DeadSpace/Interface/Radial/GasMaskDispatch.rsi
+      state: code-3
+  - type: TriggerOnAction
+    keyOut: thezutiCombineCode3
+
+- type: localizedDataset
+  id: TheZuTiAltCombineCode1Phrases
+  values:
+    prefix: thezuti-alt-combine-code1-phrase-
+    count: 2
+
+- type: localizedDataset
+  id: TheZuTiAltCombineCode3Phrases
+  values:
+    prefix: thezuti-alt-combine-code3-phrase-
+    count: 3
 
 - type: entity
   parent: BaseImplantOnlyImplanter
@@ -496,3 +551,12 @@
     - stampedColor: '#00BE00FF'
       stampedName: Одобрено
     content: paper-law-thezuti-alt-combine
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconTheZuTiAltCombine
+  icon:
+    sprite: /Textures/_DeadSpace/Sponsor/TheZuTiAltCombine/jobicon.rsi
+    state: union
+  jobName: job-name-security
+  allowSelection: false

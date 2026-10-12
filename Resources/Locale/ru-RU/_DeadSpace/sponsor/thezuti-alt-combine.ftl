@@ -22,3 +22,10 @@ paper-law-thezuti-alt-combine = [head=3]Приказ на разрешение �
     Игнорирование данного приказа будет расcчитываться как нарушение статьи [bold][color=red]207[/color] корпоративного закона[/bold]. Относитесь к данному приказу ответственно и не игнорируйте его.
     ═════════════════════════════════════
     Место для печатей
+
+thezuti-alt-combine-code1-phrase-1 = Я иду первым
+thezuti-alt-combine-code1-phrase-2 = Не суйтесь, иду впереди вас
+
+thezuti-alt-combine-code3-phrase-1 = Я элитнее тебя, ты идёшь со мной
+thezuti-alt-combine-code3-phrase-2 = Плевать кто ты, иди за мной
+thezuti-alt-combine-code3-phrase-3 = Живо за мной

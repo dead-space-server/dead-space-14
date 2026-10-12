@@ -62,6 +62,9 @@ public sealed class AdminGlobalSoundEui : BaseEui
     {
         base.HandleMessage(msg);
 
+        if (IsShutDown)
+            return;
+
         if (!HasAccess())
         {
             Close();
