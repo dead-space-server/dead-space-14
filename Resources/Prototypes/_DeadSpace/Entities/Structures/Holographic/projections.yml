@@ -57,3 +57,38 @@
       radius: 3
       color: violet
     - type: Clickable
+
+- type: entity
+  id: HolosignBulletShield
+  parent: BaseHoloSign
+  name: holographic bullet barrier
+  description: A barrier of hard light that absorbs bullets, but lets anything else pass through.
+  components:
+    - type: Physics
+      bodyType: Static
+      canCollide: true
+    - type: Sprite
+      sprite: Structures/Holo/field.rsi
+      state: icon
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PhysShapeAabb
+            bounds: "-0.5,-0.5,0.5,0.5"
+          hard: true
+          # Blocks projectiles (projectile fixtures include BulletImpassable in their mask) but nothing else.
+          layer:
+            - BulletImpassable
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 40
+          behaviors:
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+    - type: PointLight
+      enabled: true
+      radius: 3
+      color: blue

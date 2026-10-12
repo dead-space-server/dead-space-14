@@ -26,3 +26,25 @@
     - type: EmitSoundOnLand
       sound:
         path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_drop.ogg
+
+
+- type: entity
+  parent: BaseItem
+  id: FieldprojectorSecurity
+  name: containment field projector
+  description: Creates a solid but fragile holographic barrier.
+  components:
+  - type: LimitedHolosignProjector
+    signProto: HolosignBulletShield
+    maxBarriers: 3
+    rechargeTime: 40
+    ejectOldest: true
+  - type: Sprite
+    sprite: Objects/Devices/Holoprojectors/security.rsi
+    state: icon
+  - type: Tag
+    tags:
+    - HolofanProjector
+    - SecBeltEquip
+  - type: StaticPrice
+    price: 50
