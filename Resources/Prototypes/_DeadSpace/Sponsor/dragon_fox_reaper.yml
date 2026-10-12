@@ -1,0 +1,261 @@
+# Coat2
+- type: entity
+  parent: ClothingOuterWinterCoatToggleable
+  id: ClothingOuterCoatDragonFoxReaper2
+  name: плащ "Смерти"
+  description: плащ из теней, сотканный из шёпота ушедших эпох — его края растворяются в сумраке, стирая грань между мирами. Капюшон скрывает лик вечности, обрамлённый бахромой из застывшего времени.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/DragonFox/Reaper/outer2.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/DragonFox/Reaper/outer2.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHatHoodDragonFoxReaper2
+
+- type: entity
+  parent: ClothingHeadHatHoodWinterBase
+  id: ClothingHeadHatHoodDragonFoxReaper2
+  categories: [ HideSpawnMenu ]
+  name: капюшон "Смерти"
+  description: Капюшон "Смерти" — не просто деталь одежды, а врата между мирами, сотканные из самой тишины, что наступает после последнего вздоха. Его ткань не имеет привычной текстуры это переплетение сумеречных нитей и остывшего света — они не отражают ни луну, ни звёзды, а будто втягивают свет внутрь, превращая капюшон в сгусток первозданной темноты. 
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/DragonFox/Reaper/helmet2.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/DragonFox/Reaper/helmet2.rsi
+  - type: HideLayerClothing
+    slots:
+    - Hair
+    - Snout
+    - HeadTop
+    - HeadSide
+    - FacialHair
+    clothingSlots:
+    - ears
+    bodyLayers:
+    - Head
+
+- type: entity
+  parent: ClothingHandsGlovesColorWhite
+  id: ClothingHandsGlovesDragonFoxReaper2
+  name: перчатки Смерти
+  description: Перчатки Смерти — будто сотканы из тишины, которая наступает после последнего вздоха. Ткань не похожа ни на кожу, ни на бархат - это переплетение сумеречных нитей, каждая из которых — оборванная нить судьбы; в полумраке они слабо мерцают тусклым серебром, а на свету словно растворяются, оставляя лишь едва заметную дымку вокруг силуэта.
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Sponsor/DragonFox/Reaper/gloves2.rsi
+    - type: Clothing
+      sprite: _DeadSpace/Sponsor/DragonFox/Reaper/gloves2.rsi
+    - type: Item
+      sprite: _DeadSpace/Sponsor/DragonFox/Reaper/gloves2.rsi
+
+- type: entity
+  parent: ADTClothingFootWrapsHighWhite
+  id: ClothingFootDragonFoxReaper2
+  name: ботинки "Жнеца"
+  description: Ботинки "Жнеца" будто выкованы из застывшей тишины между ударами сердца. Их тёмно‑серая кожа не просто тёмная — она словно поглощает свет, делая каждый шаг почти невидимым - кажется, что фигура не идёт, а сама тень подтягивает её вперёд.
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Sponsor/DragonFox/Reaper/boots2.rsi
+    - type: Clothing
+      sprite: _DeadSpace/Sponsor/DragonFox/Reaper/boots2.rsi
+    - type: Item
+      sprite: _DeadSpace/Sponsor/DragonFox/Reaper/boots2.rsi
+
+- type: entity
+  parent: ToySword
+  id: ToyScytheDragonFoxReaper2
+  name: Игрушечная Коса "Смерти и Жнеца"
+  description: Игрушечная Коса "Смерти и Жнеца"- это не просто игрушечное орудие, а ключ к вратам между мирами — изогнутое лезвие будто выковано из застывшего мгновения, когда свет окончательно уступает место тени.
+  components:
+  - type: EnergySword
+    colorOptions:
+      - Black
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/3eilado/e_scythe.rsi
+    layers:
+      - state: e_sword
+        shader: shaded
+      - state: e_sword_blade
+        color: "#FFFFFF"
+        visible: false
+        shader: unshaded
+        map: [ "blade" ]
+      - sprite: _DeadSpace/Sponsor/DragonFox/Reaper/c.rsi
+        state: t
+  - type: ToggleableVisuals
+    spriteLayer: blade
+    inhandVisuals:
+      left:
+        - state: inhand-left-blade
+          shader: unshaded
+      right:
+        - state: inhand-right-blade
+          shader: unshaded
+  - type: Item
+    size: Normal
+    sprite: _DeadSpace/Sponsor/3eilado/e_scythe.rsi
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieDragonFoxReaper2
+  name: плюшевый "Жнец"
+  description: парадокс уюта и тайны - серая ворсистая ткань будто впитывает полумрак, превращая игрушку в сгусток тишины. Лик‑череп с наивно‑огромными глазами хранит секрет — в них мерцает отблеск далёких звёзд, виденных лишь на пороге сна. Пухлые белые «ладошки» будто готовы поймать падающую звезду или удержать ускользающий миг. Пушистый помпон‑«штрих» над головой — намёк на искру жизни, тлеющую даже в самой глубокой тьме.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/DragonFox/Reaper/toy.rsi
+    state: toy
+
+
+# Coat
+- type: entity
+  parent: ClothingOuterWinterCoatToggleable
+  id: ClothingOuterCoatDragonFoxReaper1
+  name: плащ "Жнеца"
+  description: одеяние из поглощающего свет материала - фрак с удлинёнными, будто истаивающими полами скрывает очертания фигуры, а белоснежные манжеты и воротник контрастируют с мраком, подчёркивая неестественную бледность.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/DragonFox/Reaper/outer.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/DragonFox/Reaper/outer.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHatHoodDragonFoxReaper1
+
+- type: entity
+  parent: ClothingHeadHatHoodWinterBase
+  id: ClothingHeadHatHoodDragonFoxReaper1
+  name: капюшон "Жнеца"
+  categories: [ HideSpawnMenu ]
+  description: Скрывает лик за завесой абсолютной тени, в которой мерцают два тусклых огонька — не глаза, а проёмы в иные измерения, где слышны отзвуки всех когда‑либо произнесённых «прощай».
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/DragonFox/Reaper/helmet.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/DragonFox/Reaper/helmet.rsi
+  - type: HideLayerClothing
+    slots:
+    - Hair
+    - Snout
+    - HeadTop
+    - HeadSide
+    - FacialHair
+    clothingSlots:
+    - ears
+    bodyLayers:
+    - Head
+
+- type: entity
+  parent: ClothingHandsGlovesColorWhite
+  id: ClothingHandsGlovesDragonFoxReaper1
+  name: перчатки "Жнеца"
+  description: Перчатки "Жнеца" — словно отлитые из застывшего сумрака - белые кости не отражает свет и тьму, а втягивает его в микроскопические складки, будто хранит в себе отголоски бесчисленных прощаний.
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Sponsor/DragonFox/Reaper/gloves.rsi
+    - type: Clothing
+      sprite: _DeadSpace/Sponsor/DragonFox/Reaper/gloves.rsi
+    - type: Item
+      sprite: _DeadSpace/Sponsor/DragonFox/Reaper/gloves.rsi
+
+# Jumpsuit
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitDragonFoxReaper1
+  name: костюм "Жнеца"
+  description: одеяние из поглощающего свет материала - фрак с удлинёнными, будто истаивающими полами скрывает очертания фигуры, а белоснежные манжеты и воротник контрастируют с мраком, подчёркивая неестественную бледность.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/DragonFox/Reaper/jumpsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/DragonFox/Reaper/jumpsuit.rsi
+
+- type: entity
+  parent: CrateGeneric
+  id: CrateDragonFoxReaper
+  name: каменный ящик
+  components:
+  - type: Icon
+    sprite: _DeadSpace/Sponsor/DragonFox/Reaper/crate.rsi
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/DragonFox/Reaper/crate.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: paper
+      sprite: Structures/Storage/Crates/labels.rsi
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WoodDestroy
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WoodDestroy
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          MaterialBasalt1:
+            min: 3
+            max: 5
+
+- type: entity
+  id: CrateDragonFoxReaper2
+  parent: CrateDragonFoxReaper
+  categories: [ HideSpawnMenu ]
+  name: каменный ящик (набор 1)
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingOuterCoatDragonFoxReaper2
+    - id: ClothingHandsGlovesDragonFoxReaper2
+    - id: ClothingFootDragonFoxReaper2
+    - id: ToyScytheDragonFoxReaper2
+    - id: PlushieDragonFoxReaper2
+
+- type: entity
+  id: CrateDragonFoxReaper1
+  parent: CrateDragonFoxReaper
+  categories: [ HideSpawnMenu ]
+  name: каменный ящик (набор 2)
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingOuterCoatDragonFoxReaper1
+    - id: ClothingHandsGlovesDragonFoxReaper1
+    - id: ClothingShoesBootsLaceup
+    - id: ToyScytheDragonFoxReaper2
+    - id: ClothingUniformJumpsuitDragonFoxReaper1
+    - id: PlushieDragonFoxReaper2
+
+- type: cargoProduct
+  id: ServiceCrateDragonFoxReaper1
+  icon:
+    sprite: _DeadSpace/Sponsor/DragonFox/Reaper/crate.rsi
+    state: icon
+  product: CrateDragonFoxReaper1
+  cost: 500
+  category: cargoproduct-category-name-fun
+  group: market
+
+- type: cargoProduct
+  id: ServiceCrateDragonFoxReaper2
+  icon:
+    sprite: _DeadSpace/Sponsor/DragonFox/Reaper/crate.rsi
+    state: icon
+  product: CrateDragonFoxReaper2
+  cost: 500
+  category: cargoproduct-category-name-fun
+  group: market

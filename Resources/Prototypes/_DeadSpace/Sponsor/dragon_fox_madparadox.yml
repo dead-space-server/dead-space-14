@@ -46,6 +46,7 @@
     - id: WeaponCrusherDragonFoxMadParadox
     - id: PDADragonFoxMadParadox
     - id: PaperDragonFoxMadParadox
+    - id: WeaponProtoKineticAcceleratorDragonFoxMadParadox
 
 # Belt
 - type: entity
@@ -915,6 +916,60 @@
   - type: EmitSoundOnLand
     sound:
       collection: DemonScreams
+
+# kinetic_accelerator.rsi
+- type: entity
+  parent: WeaponProtoKineticAccelerator
+  id: WeaponProtoKineticAcceleratorDragonFoxMadParadox
+  categories: [ HideSpawnMenu ]
+  name: «Искривитель»
+  description: Это не просто винтовка, а портативный генератор гравитационных аномалий, построенный на протокинетной технологии. Название отражает её суть - она не столько стреляет, сколько искривляет ткань пространства‑времени, заставляя снаряд двигаться по неестественно эффективной траектории.
+  components:
+  - type: Gun
+    fireRate: 2
+    selectedMode: SemiAuto
+    angleDecay: 45
+    minAngle: 44
+    maxAngle: 45
+    availableModes:
+    - SemiAuto
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 2
+  - type: BasicEntityAmmoProvider
+    proto: BulletKineticDragonFoxMadParadox
+    capacity: 5
+    count: 5
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/DragonFox/MadParadox/kinetic_accelerator.rsi
+    layers:
+    - state: icon
+    - state: animation-icon
+      visible: false
+      map: [ "empty-icon" ]
+  - type: Item
+    sprite: _DeadSpace/Sponsor/DragonFox/MadParadox/kinetic_accelerator.rsi
+    size: Normal
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/DragonFox/MadParadox/kinetic_accelerator.rsi
+    quickEquip: false
+    slots:
+    - suitStorage
+  - type: UpgradeableGun
+    maxUpgradeCount: 3
+
+- type: entity
+  id: BulletKineticDragonFoxMadParadox
+  name: kinetic bolt
+  parent: BulletKinetic
+  categories: [ HideSpawnMenu ]
+  description: Not too bad, but you still don't want to get hit by it.
+  components:
+  - type: Sprite
+    noRot: false
+    sprite: _DeadSpace/Sponsor/DragonFox/MadParadox/p.rsi
+    layers:
+    - state: chronobolt
+      shader: unshaded
 
 - type: entity
   parent: PaperPrintedCentcomm
