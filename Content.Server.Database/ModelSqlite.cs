@@ -76,9 +76,10 @@ namespace Content.Server.Database
                 .HasConversion(jsonStringConverter);
 
             // DS14-start
+            // EF handles nulls itself; the non-generic overload lets nullable profiles share this converter.
             modelBuilder.Entity<Profile>()
                 .Property(profile => profile.TtsVoices)
-                .HasConversion(jsonStringConverter);
+                .HasConversion((ValueConverter) jsonStringConverter);
             // DS14-end
 
             modelBuilder.Entity<Profile>()
