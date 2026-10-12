@@ -198,7 +198,7 @@
   # DS14-start
   - type: LimitedHolosignProjector
     signProto: HolosignSecurity
-    maxBarriers: 6
+    maxBarriers: 3
   - type: ContainerContainer # тесты падали из за отсуствия слота у наследников
     containers:
       cell_slot: !type:ContainerSlot {}
