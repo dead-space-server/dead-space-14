@@ -12,14 +12,13 @@ public record struct GetMetabolicMultiplierEvent()
     public float Multiplier = 1f;
 }
 
+//DS14-Start
 [ByRefEvent]
 public record struct GetRotMultiplierEvent()
 {
-    /// <summary>
-    /// What the metabolism's update rate will be multiplied by.
-    /// </summary>
     public float Multiplier = 1f;
 }
+//DS14-End
 
 /// <summary>
 /// Raised on an entity to apply their metabolic multiplier to relevant systems.
