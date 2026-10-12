@@ -31,8 +31,8 @@
 - type: entity
   parent: BaseItem
   id: FieldprojectorSecurity
-  name: containment field projector
-  description: Creates a solid but fragile holographic barrier.
+  name: absorbent matrix projector
+  description: Creates a matrix capable of containing flying lead.
   components:
   - type: LimitedHolosignProjector
     signProto: HolosignBulletShield
@@ -40,7 +40,7 @@
     rechargeTime: 40
     ejectOldest: true
   - type: Sprite
-    sprite: Objects/Devices/Holoprojectors/security.rsi
+    sprite: _DeadSpace/Objects/Devices/Holoprojectors/bullet_blocker_projector.rsi
     state: icon
   - type: Tag
     tags:

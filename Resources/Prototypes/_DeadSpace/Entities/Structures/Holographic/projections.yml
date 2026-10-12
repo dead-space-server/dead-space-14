@@ -61,14 +61,14 @@
 - type: entity
   id: HolosignBulletShield
   parent: BaseHoloSign
-  name: holographic bullet barrier
+  name: holographic matrix
   description: A barrier of hard light that absorbs bullets, but lets anything else pass through.
   components:
     - type: Physics
       bodyType: Static
       canCollide: true
     - type: Sprite
-      sprite: Structures/Holo/field.rsi
+      sprite: _DeadSpace/Structures/Holo/bullet_shield.rsi
       state: icon
     - type: Fixtures
       fixtures:
@@ -91,4 +91,5 @@
     - type: PointLight
       enabled: true
       radius: 3
-      color: blue
+      color: orange
+      energy: 4
