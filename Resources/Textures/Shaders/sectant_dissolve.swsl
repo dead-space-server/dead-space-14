@@ -1,8 +1,0 @@
-uniform lowp float progress;
-
-void fragment() {
-    vec4 base = texture(TEXTURE, UV);
-    if (base.a < progress)
-        discard;
-    COLOR = base;
-}
