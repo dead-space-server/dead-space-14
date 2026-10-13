@@ -1,10 +1,12 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Shared.DeadSpace.Holosign;
+using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Storage;
+using Content.Shared.Verbs;
 using Robust.Shared.Spawners;
 using Robust.Shared.Timing;
 
@@ -14,6 +16,7 @@ public sealed class LimitedHolosignSystem : EntitySystem
 {
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
     public override void Initialize()
@@ -21,6 +24,8 @@ public sealed class LimitedHolosignSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<LimitedHolosignProjectorComponent, BeforeRangedInteractEvent>(OnBeforeInteract);
+        SubscribeLocalEvent<LimitedHolosignProjectorComponent, GetVerbsEvent<AlternativeVerb>>(OnGetVerbs);
+        SubscribeLocalEvent<LimitedHolosignProjectorComponent, RemoveAllBarriersDoAfterEvent>(OnRemoveAllDoAfter);
         SubscribeLocalEvent<LimitedHolosignProjectorComponent, ExaminedEvent>(OnExamine);
         SubscribeLocalEvent<EntityTerminatingEvent>(OnEntityTerminating);
     }
@@ -64,18 +69,9 @@ public sealed class LimitedHolosignSystem : EntitySystem
 
         if (ent.Comp.Barriers.Count >= ent.Comp.MaxBarriers)
         {
-            if (ent.Comp.EjectOldest)
-            {
-                var oldest = ent.Comp.Barriers[0];
-                ent.Comp.Barriers.RemoveAt(0);
-                QueueDel(oldest);
-            }
-            else
-            {
-                _popup.PopupEntity(Loc.GetString("limited-holosign-full", ("max", ent.Comp.MaxBarriers)), ent, args.User);
-                args.Handled = true;
-                return;
-            }
+            _popup.PopupEntity(Loc.GetString("limited-holosign-full", ("max", ent.Comp.MaxBarriers)), ent, args.User);
+            args.Handled = true;
+            return;
         }
 
         var barrier = SpawnAtPosition(ent.Comp.SignProto, args.ClickLocation);
@@ -84,6 +80,61 @@ public sealed class LimitedHolosignSystem : EntitySystem
         ent.Comp.Barriers.Add(barrier);
 
         args.Handled = true;
+    }
+
+    private void OnGetVerbs(Entity<LimitedHolosignProjectorComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
+    {
+        if (!args.CanAccess || !args.CanInteract)
+            return;
+
+        PruneBarriers(ent);
+
+        if (ent.Comp.Barriers.Count == 0)
+            return;
+
+        var user = args.User;
+        args.Verbs.Add(new AlternativeVerb
+        {
+            Text = Loc.GetString("limited-holosign-remove-all"),
+            Act = () => StartRemoveAll(ent, user),
+            Priority = 1,
+        });
+    }
+
+    private void StartRemoveAll(Entity<LimitedHolosignProjectorComponent> ent, EntityUid user)
+    {
+        if (ent.Comp.Barriers.Count == 0)
+            return;
+
+        var args = new DoAfterArgs(EntityManager, user, ent.Comp.RemoveAllDelay,
+            new RemoveAllBarriersDoAfterEvent(), eventTarget: ent.Owner, used: ent.Owner)
+        {
+            BreakOnDamage = false,
+            BreakOnMove = false,
+            NeedHand = false,
+        };
+
+        _doAfter.TryStartDoAfter(args);
+    }
+
+    private void OnRemoveAllDoAfter(Entity<LimitedHolosignProjectorComponent> ent, ref RemoveAllBarriersDoAfterEvent args)
+    {
+        if (args.Cancelled || args.Handled)
+            return;
+
+        args.Handled = true;
+        PruneBarriers(ent);
+
+        var barriers = ent.Comp.Barriers.ToArray();
+        ent.Comp.Barriers.Clear();
+
+        foreach (var barrier in barriers)
+        {
+            if (Exists(barrier))
+                QueueDel(barrier);
+        }
+
+        _popup.PopupEntity(Loc.GetString("limited-holosign-remove-all-done"), ent, args.User);
     }
 
     private void OnEntityTerminating(ref EntityTerminatingEvent args)
@@ -99,8 +150,7 @@ public sealed class LimitedHolosignSystem : EntitySystem
             // The barrier was destroyed by something other than the projector itself.
             if (comp.RechargeTime > TimeSpan.Zero)
             {
-                // Each destroyed barrier starts its own recharge timer for its own slot, so the slot
-                // becomes available again exactly RechargeTime after that barrier was destroyed.
+                // Each destroyed barrier starts its own recharge timer for its own slot
                 comp.RechargingSlots.Add(_timing.CurTime + comp.RechargeTime);
             }
             break;

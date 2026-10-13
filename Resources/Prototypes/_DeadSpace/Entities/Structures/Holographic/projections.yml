@@ -77,7 +77,6 @@
             !type:PhysShapeAabb
             bounds: "-0.5,-0.5,0.5,0.5"
           hard: true
-          # Blocks projectiles (projectile fixtures include BulletImpassable in their mask) but nothing else.
           layer:
             - BulletImpassable
     - type: Destructible
@@ -88,6 +87,10 @@
           behaviors:
             - !type:DoActsBehavior
               acts: [ "Destruction" ]
+
+    - type: Damageable
+      damageContainer: Inorganic
+      damageModifierSet: HolosignBulletShieldResist #60% resist Piercing & Burn
     - type: PointLight
       enabled: true
       radius: 3

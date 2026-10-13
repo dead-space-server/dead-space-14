@@ -21,10 +21,10 @@ public sealed partial class LimitedHolosignProjectorComponent : Component
     public TimeSpan RechargeTime;
 
     /// <summary>
-    /// If true, placing a barrier while at the limit removes the oldest barrier instead of rejecting the placement.
+    /// How long the "remove all barriers" action takes when invoked on the projector.
     /// </summary>
     [DataField]
-    public bool EjectOldest;
+    public TimeSpan RemoveAllDelay = TimeSpan.FromSeconds(5);
 
     /// <summary>
     /// Deadlines of the barrier slots that are currently recharging because their barrier was destroyed

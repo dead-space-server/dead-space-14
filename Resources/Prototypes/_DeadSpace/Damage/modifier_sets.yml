@@ -35,3 +35,9 @@
     Piercing: 0.85
     Cold: 0.5
     Poison: 0.8
+
+- type: damageModifierSet
+  id: HolosignBulletShieldResist
+  coefficients:
+    Piercing: 0.4
+    Heat: 0.4

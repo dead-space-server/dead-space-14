@@ -38,7 +38,7 @@
     signProto: HolosignBulletShield
     maxBarriers: 3
     rechargeTime: 40
-    ejectOldest: true
+    removeAllDelay: 3
   - type: Sprite
     sprite: _DeadSpace/Objects/Devices/Holoprojectors/bullet_blocker_projector.rsi
     state: icon
