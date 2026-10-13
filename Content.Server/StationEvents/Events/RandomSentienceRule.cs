@@ -19,7 +19,7 @@ public sealed class RandomSentienceRule : StationEventSystem<RandomSentienceRule
 
     protected override void Started(EntityUid uid, RandomSentienceRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
-        if (!TryGetRandomStation(out var station))
+        if (!TryGetRandomStation(out var station, rule: uid)) // DS14
             return;
 
         var targetList = new List<Entity<SentienceTargetComponent>>();
@@ -72,14 +72,14 @@ public sealed class RandomSentienceRule : StationEventSystem<RandomSentienceRule
         var kind2 = groupList.Count > 1 ? groupList[1] : "???";
         var kind3 = groupList.Count > 2 ? groupList[2] : "???";
 
-        ChatSystem.DispatchStationAnnouncement(
+        RuleStation.Announce( // DS14
             station.Value,
             Loc.GetString("station-event-random-sentience-announcement",
                 ("kind1", kind1), ("kind2", kind2), ("kind3", kind3), ("amount", groupList.Count),
                 ("data", _random.Pick(_prototype.Index(DataSourceNames))),
                 ("strength", _random.Pick(_prototype.Index(IntelligenceLevelNames)))
             ),
-            playDefaultSound: false,
+            playSound: false, // DS14
             colorOverride: Color.Gold
         );
     }

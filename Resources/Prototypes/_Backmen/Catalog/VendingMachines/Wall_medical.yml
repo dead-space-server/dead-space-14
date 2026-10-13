@@ -41,3 +41,16 @@
   conditions:
     - !type:ListingLimitedStockCondition
       stock: 6
+
+# DS14-start
+- type: listing
+  id: WallMedicalContrabandStimpack
+  productEntity: Stimpack
+  cost:
+    SpaceCash: 150
+  categories:
+    - VendingWallMedicalInventoryContraband
+  conditions:
+    - !type:ListingLimitedStockCondition
+      stock: 1
+# DS14-end

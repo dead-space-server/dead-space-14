@@ -21,3 +21,4 @@ comp-climbable-cant-interact = Вы не можете этого сделать!
 comp-climbable-cant-climb = Вы не можете взбираться!
 # Shown to you when your character tries to force someone else who can't climb onto a climbable
 comp-climbable-target-cant-climb = { CAPITALIZE($moved-user) } не может взбираться!
+comp-climbable-cant-stand = Вы не можете встать, пока взбираетесь!

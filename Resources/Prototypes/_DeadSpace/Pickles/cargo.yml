@@ -1,0 +1,24 @@
+- type: entity
+  parent: CrateHydroponics
+  id: CratePickleSeeds
+  name: pickle garden crate
+  description: Cucumber seeds and starters for the station's first fermentation barrel.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CucumberSeeds
+      amount: 3
+    - id: CabbageSeeds
+      amount: 2
+    - id: FoodCucumber
+      amount: 4
+
+- type: cargoProduct
+  id: CargoPickleSeeds
+  icon:
+    sprite: _DeadSpace/Pickles/cucumber.rsi
+    state: seed
+  product: CratePickleSeeds
+  cost: 600
+  category: cargoproduct-category-name-hydroponics
+  group: service

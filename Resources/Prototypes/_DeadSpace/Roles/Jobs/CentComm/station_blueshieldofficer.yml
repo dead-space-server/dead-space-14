@@ -45,6 +45,7 @@
   - Coroner
   - Hydroponics
   - Salvage
+  - BlueShield
   #start-backmen: currency
   minBankBalance: 800
   maxBankBalance: 1200
@@ -60,10 +61,6 @@
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant ]
-  - !type:AddComponentSpecial
-    components:
-    - type: Skill
-      group: BlueShield
 
 - type: startingGear
   id: BlueShieldOfficerGear

@@ -1,10 +1,11 @@
 <DefaultWindow xmlns="https://spacestation14.io"
                xmlns:viewport="clr-namespace:Content.Client.Viewport"
                xmlns:local="clr-namespace:Content.Client.SurveillanceCamera.UI"
+               xmlns:archive="clr-namespace:Content.Client.DeadSpace.CameraArchives"
                Title="{Loc 'surveillance-camera-monitor-ui-window'}">
     <BoxContainer>
         <!-- Panel with tabs -->
-        <BoxContainer Orientation="Vertical" MinWidth="350">
+        <BoxContainer Name="MonitorSide" Orientation="Vertical" MinWidth="350">
             <TabContainer Name="ViewModeTabs" VerticalExpand="True">
                 <!-- Camera list tab -->
                 <BoxContainer Name="{Loc 'surveillance-camera-monitor-ui-tab-list'}" Orientation="Vertical">
@@ -55,12 +56,15 @@
                     </BoxContainer>
                     <Button Name="SubnetRefreshButtonMap" Text="{Loc 'surveillance-camera-monitor-ui-refresh-subnets'}"/>
                 </BoxContainer>
+                <BoxContainer Name="{Loc 'surveillance-camera-monitor-ui-tab-archive'}" Orientation="Vertical" VerticalExpand="True" HorizontalExpand="True">
+                    <archive:CameraArchiveControl Name="Archive" VerticalExpand="True" HorizontalExpand="True"/>
+                </BoxContainer>
             </TabContainer>
             <Button Name="CameraDisconnectButton" Text="{Loc 'surveillance-camera-monitor-ui-disconnect'}"/>
         </BoxContainer>
 
         <!-- Right panel with camera view -->
-        <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+        <BoxContainer Name="LivePane" Orientation="Vertical" HorizontalExpand="True">
             <Label Name="CameraStatus"/>
             <Control VerticalExpand="True" Margin="5" Name="CameraViewBox">
                 <viewport:ScalingViewport Name="CameraView" MinSize="500 500" MouseFilter="Ignore"/>

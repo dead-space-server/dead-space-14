@@ -13,3 +13,15 @@ war-declarator-boost-declared = War declared! Shuttle may be disabled for...
 war-declarator-boost-timer = Time left: {$time} minutes.
 war-declarator-default-message = A syndicate fringe group has declared their intent to utterly destroy station with a nuclear device, and dares the crew to try and stop them.
 war-declarator-message-placeholder = Write a custom declaration of war here...
+
+# DS14-start
+war-declarator-comms-war-tab = Declaration of war
+war-declarator-comms-war-header = DECLARATION OF WAR
+war-declarator-comms-secondary-tab = Secondary announcement
+war-declarator-comms-secondary-header = SECONDARY ANNOUNCEMENT
+war-declarator-comms-secondary-title-label = Short order
+war-declarator-comms-secondary-title-placeholder = Example: TAKE POSITIONS
+war-declarator-comms-secondary-text-label = Details
+war-declarator-comms-secondary-placeholder = Detailed announcement text...
+war-declarator-comms-secondary-send = SEND ANNOUNCEMENT
+# DS14-end

@@ -20,6 +20,14 @@ public sealed partial class SpriteMovementComponent : Component
     [DataField]
     public Dictionary<string, PrototypeLayerData> NoMovementLayers = new();
 
+    // DS14-start
+    /// <summary>
+    /// Opts equipped states ending in idle/walk into movement animation, synchronized with this body layer.
+    /// </summary>
+    [DataField]
+    public string? EquipmentAnimationLayer;
+    // DS14-end
+
     [DataField, AutoNetworkedField]
     public bool IsMoving;
 }

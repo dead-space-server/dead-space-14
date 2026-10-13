@@ -32,6 +32,7 @@
   - type: ShowCriminalRecordIcons
   - type: ShowContrabandDetails
   - type: ShowPatrolIcons
+  - type: ShowSecurityMedicalStatusIcons # DS14: medical status subset for security goggles
   # DS14-start
   - type: ShowPersonnelRecordIcons
   # DS14-end
@@ -43,6 +44,7 @@
   components:
   - type: ShowHealthBars
   - type: ShowHealthIcons
+  - type: ShowMedicalStatusIcons # DS14: full medical status set on the medbay goggles
 
 - type: entity
   parent: ClothingEyesHudBase
@@ -110,6 +112,7 @@
   - type: ShowJobIcons
   # DS14-start
   - type: ShowPersonnelRecordIcons
+  - type: ShowMedicalStatusIcons # DS14: command staff oversee the medbay, so the full status set
   # DS14-end
   - type: Tag
     tags:

@@ -109,8 +109,7 @@ public sealed class RadioSystem : EntitySystem
 
             // DS14-TTS-Start
             if (uid != args.MessageSource &&
-                !args.Receivers.Contains(uid) &&
-                HasComp<TTSComponent>(args.MessageSource))
+                !args.Receivers.Contains(uid)) // DS14: route radio cues even when the sender has no TTS voice.
             {
                 args.Receivers.Add(uid);
             }
@@ -189,7 +188,14 @@ public sealed class RadioSystem : EntitySystem
 
         // DS14-start
 
-        var headsetColor = TryComp(radioSource, out HeadsetComponent? headset) ? headset.Color : channel.Color;
+        var headsetColor = channel.Color;
+        Color? headsetColorEnd = null;
+
+        if (TryComp(radioSource, out HeadsetComponent? headset))
+        {
+            headsetColor = headset.Color;
+            headsetColorEnd = headset.ColorEnd;
+        }
 
         var job = String.Empty;
         if (_inventory.HasSlot(messageSource, "id"))
@@ -209,6 +215,10 @@ public sealed class RadioSystem : EntitySystem
             job = $"\\[{job}\\] ";
         }
 
+        var headsetName = headsetColorEnd is { } colorEnd && colorEnd != headsetColor
+            ? ChatMarkup.Gradient($"{job}{name}", headsetColor, colorEnd)
+            : $"{job}{name}";
+
         content = Highlight(content);
         ProtoId<LanguagePrototype>? languageId = null;
 
@@ -216,8 +226,11 @@ public sealed class RadioSystem : EntitySystem
             languageId = language.SelectedLanguage;
 
         string langName = _language.GetLangName(languageId);
+        var showLanguage = _language.ShowInChat(language?.SelectedLanguage); //DS-14
 
-        var wrappedMessage = Loc.GetString(speech.Bold ? "chat-radio-message-wrap-bold-lang" : "chat-radio-message-wrap-lang",
+        var wrappedMessage = Loc.GetString(speech.Bold
+                ? showLanguage ? "chat-radio-message-wrap-bold-lang" : "chat-radio-message-wrap-bold" //DS-14
+                : showLanguage ? "chat-radio-message-wrap-lang" : "chat-radio-message-wrap", //DS-14
             ("channel-color", channel.Color),
             ("fontType", speech.FontId),
             ("fontSize", speech.FontSize),
@@ -227,6 +240,7 @@ public sealed class RadioSystem : EntitySystem
             ("name", name),
             ("message", content),
             ("headset-color", headsetColor),
+            ("headset-name", headsetName),
             ("job", job));
 
         // DS14-end
@@ -263,6 +277,7 @@ public sealed class RadioSystem : EntitySystem
             ("name", name),
             ("message", lexiconContent),
             ("headset-color", headsetColor),
+            ("headset-name", headsetName),
             ("job", job));
 
             var chatLexicon = new ChatMessage(

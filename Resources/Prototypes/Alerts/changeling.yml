@@ -12,6 +12,20 @@
   minSeverity: 0
   maxSeverity: 1
 
+# for ChangelingCocoonAbilityComponent
+- type: alert
+  id: ChangelingCocoon
+  clickEvent: !type:ToggleChangelingCocoonEvent
+  icons:
+  - sprite: /Textures/Interface/Alerts/changeling_cocoon.rsi
+    state: cocoon-off
+  - sprite: /Textures/Interface/Alerts/changeling_cocoon.rsi
+    state: cocoon-on
+  name: changeling-cocoon-alert-name
+  description: changeling-cocoon-alert-desc
+  minSeverity: 0
+  maxSeverity: 1
+
 - type: alert
   id: ChemicalsChangeling
   category: Chemicals

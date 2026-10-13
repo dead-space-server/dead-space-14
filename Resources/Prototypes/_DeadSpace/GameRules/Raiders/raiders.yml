@@ -15,14 +15,12 @@
         text: nukeops-raiders-welcome
         color: Red
         sound: /Audio/Ambience/Antag/nukeops_start.ogg
-      roleLoadout: 
+      roleLoadout:
       - RoleSurvivalSyndicate
       components:
       - type: RoleBriefing
         briefing: nukeops-briefing
       - type: NukeOperative
-      - type: Skill
-        group: ALL
       - type: Loadout
         prototypes: [ SyndicateFootsoldierTeamLeaderGear ]
       - type: RandomMetadata
@@ -48,8 +46,6 @@
       - type: RoleBriefing
         briefing: nukeops-briefing
       - type: NukeOperative
-      - type: Skill
-        group: ALL
       - type: Loadout
         prototypes: [ SyndicateFootsoldierGear ]
       - type: RandomMetadata

@@ -44,10 +44,6 @@
   - !type:AddComponentSpecial
     components:
       - type: CommandStaff
-      # DS14-Start
-      - type: Skill
-        group: BasicAndShuttleControl
-      # DS14-End
 
 - type: startingGear
   id: QuartermasterGear

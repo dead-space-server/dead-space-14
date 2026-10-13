@@ -31,6 +31,25 @@ astro-nav-program-name = AstroNav
 med-tek-program-name = MedTek
 
 snake-cartridge-program-name = Snake Game
+pda-arcade-program-name = Games
+pda-arcade-menu = Games
+pda-arcade-board = Leaderboard
+pda-arcade-back = Back
+pda-arcade-act = Action
+pda-arcade-score = Score: { $score }
+pda-arcade-over = Saved: { $score }
+pda-arcade-empty = No finished games yet
+pda-arcade-game-snake = Snake
+pda-arcade-game-tiles = Tiles
+pda-arcade-game-blocks = Blocks
+pda-arcade-game-rocks = Rocks
+pda-arcade-game-flap = Hop
+pda-arcade-game-match = Match three
+pda-arcade-finish = Finish
+pda-arcade-pause = Pause
+pda-arcade-again = Again
+pda-arcade-win = Victory
+pda-arcade-lose = Defeat
 
 # NanoTask cartridge
 

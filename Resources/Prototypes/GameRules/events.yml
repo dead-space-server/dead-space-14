@@ -47,7 +47,7 @@
   table: !type:AllSelector # we need to pass a list of rules, since rules have further restrictions to consider via StationEventComp
     children:
     - id: DragonSpawn
-    - id: NinjaSpawn
+    #- id: NinjaSpawn Временно, пока не будут завершены тесты.
     - id: ParadoxCloneSpawn
     - id: SleeperAgents
     - id: ZombieOutbreak
@@ -266,13 +266,18 @@
   parent: BaseGameRule
   id: NinjaSpawn
   components:
+  #DS14-start
+  - type: LoadMapRule
+    mapPath: /Maps/_DeadSpace/Ninja/ninja.yml
+  - type: RuleGrids
+  #DS14-end
   - type: StationEvent
     weight: 3 # DS14
     duration: null
     earliestStart: 30
     reoccurrenceDelay: 30 # DS14
     minimumPlayers: 30
-  - type: SpaceSpawnRule
+  #- type: SpaceSpawnRule ##DS14
   - type: AntagLoadProfileRule
   # DS14-start
     speciesOverride: Human
@@ -303,6 +308,12 @@
     - MassArrestObjective
     - NinjaSurviveObjective
     - NinjaKillRandomPersonObjective # DS14 ninja balance
+    #DS14-start
+    - NinjaKillRandomPersonObjective
+    - NinjaAiHackObjective
+    - NinjaProtectPersonObjective
+    - NinjaInfoScanObjective
+    #DS14-end
   - type: AntagSelection
     agentName: ninja-round-end-agent-name
     definitions:
@@ -322,10 +333,7 @@
       - type: SpaceNinja
       - type: NpcFactionMember
         factions:
-        - Ninja ## ds-14
-      - type: AutoImplant
-        implants:
-        - DeathAcidifierImplant
+        - Ninja ## DS14
       - type: RandomMetadata
         nameSegments:
         - NamesNinjaTitle

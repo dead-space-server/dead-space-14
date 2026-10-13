@@ -12,24 +12,6 @@
     ClothingUniformJumpskirtLibrarian: 3
     ClothingShoesBootsLaceup: 2
     ClothingHeadsetService: 2
-    SkillBookBasicBotany: 3
-    SkillBookHacking: 3
-    SkillBookBasicTreatment: 3
-    SkillBookSimpleConstruction: 3
-    SkillBookPharmacology: 2
-    SkillBookAdvancedTreatment: 2
-    SkillBookSolarAndDAMConstruction: 2
-    SkillBookComplexDeconstruction: 2
-    SkillBookAdvancedBotany: 2
-    SkillBookShuttleControl: 2
-    SkillBookAtmos: 2
-    SkillBookSingularityAssembly: 1
-    SkillBookComplexConstruction: 1
-    SkillBookDeviceConstruction: 1
-    SkillBookRobotics: 1
-    SkillBookResearch: 1
-    SkillBookChemistry: 1
-    SkillBookVirology: 1
   contrabandInventory:
     ToyFigurineLibrarian: 1
 

@@ -259,7 +259,7 @@
 
 # Gas Mask
 - type: entity
-  parent: ClothingMaskGasSyndicate
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskGasReimon
   name: защитная маска Minaris
   description: Защитная маска офицера-исследователя Minaris.

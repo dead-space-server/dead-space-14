@@ -270,7 +270,9 @@
     sprite: _DeadSpace/Clothing/Hands/Gloves/spaceninja.rsi # DS14 Resprite
     layers:
     - state: icon
-      map: [ "enum.ToggleableVisuals.Layer" ]
+    - map: [ "enum.ToggleableVisuals.Layer" ]
+      state: green-activated
+      visible: false
   - type: Clothing
 #DS14-start
     clothingVisuals:
@@ -284,8 +286,8 @@
     visuals:
       enum.ToggleableVisuals.Enabled:
         enum.ToggleableVisuals.Layer:
-          True: {state: icon-green}
-          False: {state: icon}
+          True: {visible: true}
+          False: {visible: false}
   - type: Insulated
   - type: Fiber
     fiberMaterial: fibers-nanomachines
@@ -296,6 +298,8 @@
   - type: ToggleClothing
     action: ActionToggleNinjaGloves
     disableOnUnequip: true
+  - type: NinjaAppearanceItem
+  - type: NinjaSuitItem
   - type: NinjaGloves
     abilities:
     - components:
@@ -320,6 +324,9 @@
     - objective: MassArrestObjective
       components:
       - type: CriminalRecordsHacker
+    - objective: NinjaAiHackObjective
+      components:
+      - type: NinjaAiHack
 
 - type: entity
   parent: [ ClothingHandsGlovesColorBlack, BaseSecurityEngineeringContraband ]

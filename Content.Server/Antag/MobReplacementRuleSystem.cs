@@ -20,6 +20,11 @@ public sealed class MobReplacementRuleSystem : GameRuleSystem<MobReplacementRule
 
         while (query.MoveNext(out var vendingUid, out _, out var xform))
         {
+            // DS14-start
+            if (!RuleStation.IsTarget(uid, vendingUid))
+                continue;
+            // DS14-end
+
             if (!_random.Prob(component.Chance))
                 continue;
 

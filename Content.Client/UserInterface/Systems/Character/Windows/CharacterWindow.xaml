@@ -19,7 +19,6 @@
                     <!-- DS14-end -->
                 </BoxContainer>
             </BoxContainer>
-            <Button Name="SkillsButton" Access="Public" Text="{Loc 'character-info-skills-button'}" HorizontalAlignment="Center" Margin="0 10 0 5" Visible="False"/>
             <BoxContainer Orientation="Vertical" Name="Memory" Access="Public"/> <!-- backmen: currency -->
             <!-- DS14-start -->
             <Label Name="ObjectivesLabel" Access="Public" Text="{Loc 'character-info-objectives-label'}" HorizontalAlignment="Center" StyleClasses="DeadSpaceSectionTitle"/>

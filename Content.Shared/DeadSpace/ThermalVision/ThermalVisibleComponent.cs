@@ -7,4 +7,6 @@ namespace Content.Shared.DeadSpace.ThermalVision;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class ThermalVisibleComponent : Component
 {
+    [DataField]
+    public bool DrawWhenInvisible = false;
 }

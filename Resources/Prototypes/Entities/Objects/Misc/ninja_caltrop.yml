@@ -1,0 +1,50 @@
+- type: entity
+  name: энергочеснок
+  placement:
+    mode: SnapgridCenter
+    snap:
+      - Wall
+  description: Смотрите, куда наступаете!
+  id: NinjaCaltrop
+  components:
+  - type: Physics
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Misc/ninjaCaltrop.rsi
+    state: caltrop
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false
+        density: 7
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - ItemMask
+        layer:
+        - MidImpassable
+  - type: Transform
+    anchored: true
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 15
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: DamageContacts
+    damage:
+      types:
+        Heat: 10
+  - type: StunOnContact
+    fixtureId: fix1
+    duration: 2
+  - type: TriggerOnCollide
+    fixtureID: fix1
+    maxTriggers: 1
+  - type: TimedDespawn
+    lifetime: 5
+    

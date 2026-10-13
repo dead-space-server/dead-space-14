@@ -14,6 +14,16 @@ public sealed class EmoteAnimationSystem : SharedEmoteAnimationSystem
     public override void Initialize()
     {
         base.Initialize();
+        //DS-14 start
+        foreach (var emote in _proto.EnumeratePrototypes<EmotePrototype>())
+        {
+            if (emote.Steps == null || emote.Steps.Count == 0)
+                continue;
+
+            if (!EmoteAnimation.TryResolve(emote.Steps, out _, out var error))
+                Log.Warning($"emote {emote.ID}: {error}");
+        }
+        //DS-14 end
         SubscribeLocalEvent<EmoteAnimationComponent, ComponentGetState>(OnGetState);
 
         SubscribeLocalEvent<EmoteAnimationComponent, MapInitEvent>(OnMapInint);
@@ -38,7 +48,7 @@ public sealed class EmoteAnimationSystem : SharedEmoteAnimationSystem
 
     private void OnGetState(EntityUid uid, EmoteAnimationComponent component, ref ComponentGetState args)
     {
-        args.State = new EmoteAnimationComponentState(component.AnimationId);
+        args.State = new EmoteAnimationComponentState(component.AnimationId, component.PlaySerial); //DS-14
     }
 
     private void OnMapInint(EntityUid uid, EmoteAnimationComponent component, MapInitEvent args)
@@ -99,6 +109,7 @@ public sealed class EmoteAnimationSystem : SharedEmoteAnimationSystem
     public void PlayEmoteAnimation(EntityUid uid, EmoteAnimationComponent component, string emoteId)
     {
         component.AnimationId = emoteId;
+        component.PlaySerial++; //DS-14
         Dirty(uid, component);
     }
 }

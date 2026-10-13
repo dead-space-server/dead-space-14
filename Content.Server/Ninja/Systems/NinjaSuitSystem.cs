@@ -1,11 +1,15 @@
+using Content.Server.DeadSpace.Ninja.Components;
+using Content.Server.DeadSpace.Ninja.Systems;
 using Content.Server.Ninja.Events;
-using Content.Shared.Emp;
+using Content.Shared.DeadSpace.Ninja.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Ninja.Components;
 using Content.Shared.Ninja.Systems;
 using Content.Shared.Power.Components;
-using Content.Shared.PowerCell;
+using Content.Shared.Power.EntitySystems;
 using Content.Shared.PowerCell.Components;
+using Content.Shared.PowerCell;
+using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 
 namespace Content.Server.Ninja.Systems;
@@ -16,14 +20,15 @@ namespace Content.Server.Ninja.Systems;
 /// </summary>
 public sealed class NinjaSuitSystem : SharedNinjaSuitSystem
 {
-    [Dependency] private readonly SharedEmpSystem _emp = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SpaceNinjaSystem _ninja = default!;
     [Dependency] private readonly PowerCellSystem _powerCell = default!;
+    //DS14-start
+    [Dependency] private readonly SharedBatterySystem _battery = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
-
-    // How much the cell score should be increased per 1 AutoRechargeRate.
-    private const int AutoRechargeValue = 100;
+    [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
+    [Dependency] private readonly AutoDustSystem _autoDust = default!;
+    //DS14-end
 
     public override void Initialize()
     {
@@ -31,7 +36,14 @@ public sealed class NinjaSuitSystem : SharedNinjaSuitSystem
 
         SubscribeLocalEvent<NinjaSuitComponent, ContainerIsInsertingAttemptEvent>(OnSuitInsertAttempt);
         SubscribeLocalEvent<NinjaSuitComponent, RecallKatanaEvent>(OnRecallKatana);
-        SubscribeLocalEvent<NinjaSuitComponent, NinjaEmpEvent>(OnEmp);
+        //DS14-start
+        SubscribeLocalEvent<NinjaSuitComponent, OpenSpiderOSEvent>(OnOpenOS);
+
+        // DS14-start
+        SubscribeLocalEvent<NinjaSuitComponent, EntInsertedIntoContainerMessage>(OnSuitCellInserted);
+        SubscribeLocalEvent<NinjaSuitComponent, EntRemovedFromContainerMessage>(OnSuitCellRemoved);
+        // DS14-end
+        //DS14-end
     }
 
     protected override void NinjaEquipped(Entity<NinjaSuitComponent> ent, Entity<SpaceNinjaComponent> user)
@@ -71,7 +83,9 @@ public sealed class NinjaSuitSystem : SharedNinjaSuitSystem
         var user = Transform(uid).ParentUid;
 
         // can only upgrade power cell, not swap to recharge instantly otherwise ninja could just swap batteries with flashlights in maints for easy power
-        if (GetCellScore(args.EntityUid, inserting) <= GetCellScore(battery.Value, battery.Value))
+        //DS14-start
+        if (GetCellScore(inserting) <= GetCellScore(battery.Value))
+        //DS14-end
         {
             args.Cancel();
             Popup.PopupEntity(Loc.GetString("ninja-cell-downgrade"), user, user);
@@ -87,14 +101,48 @@ public sealed class NinjaSuitSystem : SharedNinjaSuitSystem
         RaiseLocalEvent(user, ref ev);
     }
 
-    // this function assigns a score to a power cell depending on the capacity, to be used when comparing which cell is better.
-    private float GetCellScore(EntityUid uid, BatteryComponent battcomp)
+    // DS14-start
+    private void OnSuitCellInserted(EntityUid uid, NinjaSuitComponent comp, EntInsertedIntoContainerMessage args)
     {
-        // if a cell is able to automatically recharge, boost the score drastically depending on the recharge rate,
-        // this is to ensure a ninja can still upgrade to a micro reactor cell even if they already have a medium or high.
-        if (TryComp<BatterySelfRechargerComponent>(uid, out var selfcomp))
-            return battcomp.MaxCharge + selfcomp.AutoRechargeRate * AutoRechargeValue;
+        if (TryComp<PowerCellSlotComponent>(uid, out var slot) && args.Container.ID != slot.CellSlotId)
+            return;
+
+        if (!TryComp<BatterySelfRechargerComponent>(args.Entity, out var recharger))
+            return;
+
+        var disabled = EnsureComp<NinjaSuitBatteryComponent>(args.Entity);
+        disabled.AutoRechargeRate = recharger.AutoRechargeRate;
+        disabled.AutoRechargePauseTime = recharger.AutoRechargePauseTime;
+        disabled.NextAutoRecharge = recharger.NextAutoRecharge;
+
+        RemComp<BatterySelfRechargerComponent>(args.Entity);
+    }
+
+    private void OnSuitCellRemoved(EntityUid uid, NinjaSuitComponent comp, EntRemovedFromContainerMessage args)
+    {
+        if (TryComp<PowerCellSlotComponent>(uid, out var slot) && args.Container.ID != slot.CellSlotId)
+            return;
+
+        if (!TryComp<NinjaSuitBatteryComponent>(args.Entity, out var disabled))
+            return;
+
+        var recharger = EnsureComp<BatterySelfRechargerComponent>(args.Entity);
+        recharger.AutoRechargeRate = disabled.AutoRechargeRate;
+        recharger.AutoRechargePauseTime = disabled.AutoRechargePauseTime;
+        recharger.NextAutoRecharge = disabled.NextAutoRecharge;
+        Dirty(args.Entity, recharger);
+
+        RemComp<NinjaSuitBatteryComponent>(args.Entity);
+
+        _battery.RefreshChargeRate(args.Entity);
+    }
+    // DS14-end
+
+    private float GetCellScore(BatteryComponent battcomp)
+    {
+        // DS14-start
         return battcomp.MaxCharge;
+        // DS14-end
     }
 
     protected override void UserUnequippedSuit(Entity<NinjaSuitComponent> ent, Entity<SpaceNinjaComponent> user)
@@ -113,11 +161,6 @@ public sealed class NinjaSuitSystem : SharedNinjaSuitSystem
             return;
 
         args.Handled = true;
-
-        // DS14-start
-        if (CheckDisabled(ent, user))
-            return;
-        // DS14-end
 
         var katana = ninja.Katana.Value;
         var coords = _transform.GetWorldPosition(katana);
@@ -152,21 +195,25 @@ public sealed class NinjaSuitSystem : SharedNinjaSuitSystem
         Popup.PopupEntity(Loc.GetString(message), user, user);
     }
 
-    private void OnEmp(Entity<NinjaSuitComponent> ent, ref NinjaEmpEvent args)
+    //DS14-start
+    private void OnOpenOS(Entity<NinjaSuitComponent> ent, ref OpenSpiderOSEvent args)
     {
-        var (uid, comp) = ent;
-        args.Handled = true;
+        var (uid, _) = ent;
 
-        var user = args.Performer;
-        if (!_ninja.TryUseCharge(user, comp.EmpCharge))
+        // Без этого UI открывался бы любому, кто поднял костюм с пола.
+        if (!_ninja.IsNinja(args.Performer))
         {
-            Popup.PopupEntity(Loc.GetString("ninja-no-power"), user, user);
+            if (!TryComp<AutoDustMarkerComponent>(args.Performer, out var marker))
+                return;
+
+            _autoDust.ActivateAutoDust(args.Performer, marker);
             return;
         }
 
-        if (CheckDisabled(ent, user))
+        if (!_uiSystem.HasUi(uid, SpiderOSUiKey.Key))
             return;
 
-        _emp.EmpPulse(Transform(user).Coordinates, comp.EmpRange, comp.EmpConsumption, comp.EmpDuration, user);
+        _uiSystem.TryToggleUi(uid, SpiderOSUiKey.Key, args.Performer);
     }
+    //DS14-end
 }

@@ -33,9 +33,10 @@ public sealed partial class BonusWageWindow : FancyWindow
 
     private void BonusBtnOnOnPressed(BaseButton.ButtonEventArgs obj)
     {
-        if (Double.TryParse(Wage.Text, out var wage))
+        if (double.TryParse(Wage.Text, System.Globalization.NumberStyles.Float,
+                System.Globalization.CultureInfo.InvariantCulture, out var wage))
         {
-            OnBonusWageRow.Invoke(State.Id, wage);
+            OnBonusWageRow.Invoke(State.Id, FixedPoint2.New(wage));
         }
     }
 }

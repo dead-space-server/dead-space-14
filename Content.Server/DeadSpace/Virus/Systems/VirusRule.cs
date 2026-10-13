@@ -32,7 +32,7 @@ public sealed class VirusRule : StationEventSystem<VirusRuleComponent>
 
         foreach (var session in _playerManager.Sessions)
         {
-            if (session.AttachedEntity is { } entity)
+            if (session.AttachedEntity is { } entity && RuleStation.IsTarget(uid, entity))
                 ents.Add(entity);
         }
 

@@ -1,33 +1,120 @@
 - type: entity
-  parent: RCDRecharging
-  id: RCDTheCircleEngineer
-  name: экспериментальный РСУ Круга
-  description: Сохраняет стандартные строительные режимы и создаёт замаскированные некроморфные триггеры.
+  parent: BaseSubdermalImplant
+  id: ArchitectIntegratedArmImplant
+  name: имплант встроенной руки Зодчего
+  description: Позволяет владельцу вызвать или убрать встроенную строительную руку.
+  categories: [ HideSpawnMenu ]
   components:
-  - type: RCD
-    availablePrototypes:
-    - WallSolid
-    - FloorSteel
-    - Plating
-    - Catwalk
-    - Grille
-    - Window
-    - WindowDirectional
-    - WindowReinforcedDirectional
-    - ReinforcedWindow
-    - Airlock
-    - AirlockGlass
-    - Firelock
-    - TubeLight
-    - BulbLight
-    - LVCable
-    - MVCable
-    - HVCable
-    - CableTerminal
-    - Deconstruct
-    - CircleTriggerKudzu
-    - CircleTriggerMeleeTentacle
-    - CircleTriggerRangedTentacle
+  - type: SubdermalImplant
+    implantAction: ActionRetractableArchitectIntegratedArm
+    whitelist:
+      components:
+      - Hands
+
+- type: entity
+  parent: BaseAction
+  id: ActionRetractableArchitectIntegratedArm
+  name: "[color=red]Освободить руку Зодчего[/color]"
+  description: Вызвать или убрать встроенную строительную руку.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 1
+    raiseOnAction: true
+    itemIconStyle: BigAction
+    icon:
+      sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/tools/architect-arm.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:OnRetractableItemActionEvent
+  - type: RetractableItemAction
+    spawnedPrototype: ArchitectIntegratedArm
+    summonSounds:
+      collection: splinter-blade-extend
+    retractSounds:
+      collection: splinter-blade-retract
+
+- type: entity
+  parent: RCDRecharging
+  id: ArchitectIntegratedArm
+  name: встроенная рука Зодчего
+  description: Встроенный боевой и строительный инструмент Зодчего.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/tools/architect-arm.rsi
+    state: icon
+  - type: Item
+    sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/tools/architect-arm.rsi
+  - type: ArchitectArm
+    dashObjectsPerSlowdown: 5
+    dashSpeedReduction: 5
+    dashMinimumSpeed: 1
+    dashObstacleRestartDelay: 1.5
+    dashUnbreakablePrototypes:
+    - WallPlastitaniumIndestructible
+    - WallPlastitanium
+    - WallPlastitaniumDiagonalIndestructible
+    - WallPlastitaniumDiagonal
+    - WallTitanaluminum
+    - WallTitanaluminumDiagonal
+    - PlastitaniumWindowIndestructible
+    - PlastitaniumWindow
+    - PlastitaniumWindowDiagonalIndestructible
+    - PlastitaniumWindowDiagonal
+    - PlastitaniumPlasmaWindowIndestructible
+    - PlastitaniumPlasmaWindow
+    - PlastitaniumPlasmaWindowDiagonalIndestructible
+    - PlastitaniumPlasmaWindowDiagonal
+    - StructureObelisk
+    - StructureBlackObelisk
+    - StructureBlackObelisk2
+    - StructureObelisk2
+    - ComplexNecroObeliskArtifact
+    - SMObelisk
+  - type: ComponentModeSwitcher
+    currentMode: 0
+    modes:
+    - name: component-mode-switcher-architect-construction
+      components:
+      - type: RCD
+        instantConstructionEffect: EffectArchitectConstruct1
+        constructionEffect: EffectArchitectConstruct3
+        availablePrototypes:
+        - WallSolid
+        - FloorSteel
+        - Plating
+        - Catwalk
+        - Grille
+        - Window
+        - WindowDirectional
+        - WindowReinforcedDirectional
+        - ReinforcedWindow
+        - Airlock
+        - AirlockGlass
+        - Firelock
+        - TubeLight
+        - BulbLight
+        - LVCable
+        - MVCable
+        - HVCable
+        - CableTerminal
+        - Deconstruct
+        - CircleTriggerKudzu
+        - CircleTriggerMeleeTentacle
+        - CircleTriggerRangedTentacle
+    - name: component-mode-switcher-architect-combat
+      components:
+      - type: MeleeWeapon
+        wideAnimationRotation: 55
+        damage:
+          types:
+            Heat: 10
+            Slash: 7
+            Structural: 50
+        soundHit:
+          collection: splinter-blade-attack
+        soundNoDamage:
+          collection: splinter-blade-miss
 
 - type: rcd
   id: CircleTriggerKudzu
@@ -61,3 +148,33 @@
   cost: 3
   delay: 1
   rotation: Fixed
+
+- type: alert
+  id: ArchitectArmDashCooldown
+  icons:
+  - sprite: /Textures/_DeadSpace/Necromorfs/TheCircle/Weapon/tools/architect-arm.rsi
+    state: icon
+  name: alerts-architect-dash-name
+  description: alerts-architect-dash-description
+
+- type: entity
+  parent: EffectRCDBase
+  id: EffectArchitectConstruct1
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Necromorfs/TheCircle/Effects/architect-construction.rsi
+    state: construct1
+  - type: TimedDespawn
+    lifetime: 0.6
+
+- type: entity
+  parent: EffectRCDBase
+  id: EffectArchitectConstruct3
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Necromorfs/TheCircle/Effects/architect-construction.rsi
+    state: construct3
+  - type: TimedDespawn
+    lifetime: 2.1

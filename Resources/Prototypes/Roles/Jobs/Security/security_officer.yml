@@ -28,12 +28,6 @@
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant ]
-  - !type:AddComponentSpecial
-    components:
-      # DS14-Start
-      - type: Skill
-        group: BaseSkills
-      # DS14-End
 
 - type: startingGear
   id: SecurityOfficerGear

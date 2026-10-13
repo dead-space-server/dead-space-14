@@ -13,6 +13,7 @@
   access:
   - CentralCommand
   - SOD
+  - BlueShield
   - ErtTeamLeader
   special:
   - !type:AddImplantSpecial
@@ -24,8 +25,6 @@
     - type: NpcFactionMember
       factions:
       - CentralCommand
-    - type: Skill
-      group: ALL
 
 - type: chameleonOutfit
   id: CentcomFieldOfficerChameleonOutfit

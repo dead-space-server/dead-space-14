@@ -16,10 +16,32 @@
         "directions": 4
     },
     {
+        "name": "red-sheath-sabre"
+    },
+    {
+        "name": "blue-sheath-sabre"
+    },
+    {
         "name": "sheath-sabre"
     },
     {
         "name": "sheath"
+    },
+    {
+        "name": "red-equipped-BELT",
+        "directions": 4
+    },
+    {
+        "name": "red-sheath-sabre-equipped-BELT",
+        "directions": 4
+    },
+    {
+        "name": "blue-equipped-BELT",
+        "directions": 4
+    },
+    {
+        "name": "blue-sheath-sabre-equipped-BELT",
+        "directions": 4
     }
   ]
 }

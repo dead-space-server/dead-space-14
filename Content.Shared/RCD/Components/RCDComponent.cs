@@ -27,6 +27,18 @@ public sealed partial class RCDComponent : Component
     [DataField]
     public SoundSpecifier SuccessSound { get; set; } = new SoundPathSpecifier("/Audio/Items/deconstruct.ogg");
 
+    // DS14-start
+    /// <summary>
+    /// Optional construction visuals for this device, selected after operation delay modifiers.
+    /// Deconstruction keeps the target's effect.
+    /// </summary>
+    [DataField]
+    public EntProtoId? InstantConstructionEffect { get; set; }
+
+    [DataField]
+    public EntProtoId? ConstructionEffect { get; set; }
+    // DS14-end
+
     /// <summary>
     /// The ProtoId of the currently selected RCD prototype
     /// </summary>

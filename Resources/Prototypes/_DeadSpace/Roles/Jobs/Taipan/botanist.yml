@@ -26,8 +26,6 @@
       - type: NpcFactionMember
         factions:
           - Taipan
-      - type: Skill
-        group: BasicAndBotany
 
 - type: startingGear
   id: TaipanBotanistGear

@@ -31,6 +31,14 @@ public sealed partial class BodyComponent : Component
     [DataField, AutoNetworkedField]
     public SoundSpecifier GibSound = new SoundCollectionSpecifier("gib");
 
+    // DS14-start
+    /// <summary>
+    /// Scatter body parts along with organs instead of deleting them when gibbed.
+    /// </summary>
+    [DataField]
+    public bool GibBodyParts;
+    // DS14-end
+
     /// <summary>
     /// The amount of legs required to move at full speed.
     /// If 0, then legs do not impact speed.

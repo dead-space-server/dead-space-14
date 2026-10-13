@@ -16,6 +16,7 @@ using Content.Shared.DeadSpace.Necromorphs.PlasmaCutter;
 using Content.Shared.NPC.Prototypes;
 using Content.Server.NPC.HTN;
 using Content.Server.NPC.Systems;
+using Content.Shared.NPC;
 using Content.Server.Temperature.Components;
 using Content.Shared.CombatMode;
 using Content.Shared.CombatMode.Pacification;
@@ -66,6 +67,7 @@ using Content.Shared.DeadSpace.Virus.Components;
 using Content.Server.DeadSpace.Virus.Systems;
 using Content.Server.DeadSpace.Languages;
 using Content.Shared.Temperature.Components;
+using Robust.Shared.Player;
 
 namespace Content.Server.DeadSpace.Necromorphs.InfectionDead;
 
@@ -343,6 +345,7 @@ public sealed partial class NecromorfSystem
             htn.RootTask = new HTNCompoundTask() { Task = "SimpleHostileCompound" };
             htn.Blackboard.SetValue(NPCBlackboard.Owner, target);
             _npc.WakeNPC(target, htn);
+            EnsureComp<ActiveNPCComponent>(target);
         }
 
         if (!hasMind)
@@ -445,5 +448,18 @@ public sealed partial class NecromorfSystem
                 }
             }
         }
+    }
+    private void ActivateNPC(EntityUid uid, NecromorfComponent component, ref PlayerDetachedEvent args)
+    {
+        var htn = EnsureComp<HTNComponent>(args.Entity);
+        htn.RootTask = new HTNCompoundTask() { Task = "SimpleHostileCompound" };
+        htn.Blackboard.SetValue(NPCBlackboard.Owner, args.Entity);
+        _npc.WakeNPC(args.Entity, htn);
+        EnsureComp<ActiveNPCComponent>(args.Entity);
+    }
+    private void DeactivateNPC(EntityUid uid, NecromorfComponent component, PlayerAttachedEvent args)
+    {
+        RemCompDeferred<HTNComponent>(args.Entity);
+        RemCompDeferred<ActiveNPCComponent>(args.Entity);
     }
 }

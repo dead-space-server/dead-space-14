@@ -1323,6 +1323,12 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("text")
                         .HasColumnName("species");
 
+                    // DS14-start
+                    b.Property<JsonDocument>("TtsVoices")
+                        .HasColumnType("jsonb")
+                        .HasColumnName("tts_voices");
+                    // DS14-end
+
                     b.Property<string>("Voice")
                         .IsRequired()
                         .HasColumnType("text")

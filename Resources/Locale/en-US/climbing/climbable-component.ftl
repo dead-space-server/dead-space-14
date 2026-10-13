@@ -29,3 +29,6 @@ comp-climbable-cant-climb = You are incapable of climbing!
 
 # Shown to you when your character tries to force someone else who can't climb onto a climbable
 comp-climbable-target-cant-climb = { CAPITALIZE(THE($moved-user)) } can't go there!
+
+# Shown when standing is refused because a climb is in progress or the climber is still on the surface
+comp-climbable-cant-stand = You can't stand up while climbing!

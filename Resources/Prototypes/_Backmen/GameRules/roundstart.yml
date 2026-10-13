@@ -17,8 +17,6 @@
       allowNonHumans: true
       components:
       - type: BlobCarrier
-      - type: Skill
-        group: ALL
       blacklist:
         components:
         - AntagImmune

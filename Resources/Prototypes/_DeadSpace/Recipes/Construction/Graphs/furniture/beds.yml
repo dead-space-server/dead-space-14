@@ -1,0 +1,27 @@
+- type: constructionGraph
+  id: BedWood
+  start: start
+  graph:
+    - node: start
+      actions:
+        - !type:DestroyEntity {}
+      edges:
+        - to: bedWood
+          completed:
+            - !type:SnapToGrid {}
+          steps:
+            - material: WoodPlank
+              amount: 10
+              doAfter: 3
+
+    - node: bedWood
+      entity: BedWood
+      edges:
+        - to: start
+          completed:
+            - !type:SpawnPrototype
+              prototype: MaterialWoodPlank1
+              amount: 10
+          steps:
+            - tool: Prying
+              doAfter: 3

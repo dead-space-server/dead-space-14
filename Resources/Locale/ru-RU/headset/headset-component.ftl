@@ -1,6 +1,6 @@
 # Chat window radio wrap (prefix and postfix)
-chat-radio-message-wrap = [bold][color={ $channel-color }]{ $channel } [/color][color={ $headset-color }]{ $job }{ $name }[/bold][/color][color={ $channel-color }] { $verb }, [font={ $fontType } size={ $fontSize }]"{ $message }"[/font][/color]
-chat-radio-message-wrap-bold = [bold][color={ $channel-color }]{ $channel } [/color][color={ $headset-color }]{ $job }{ $name }[/bold][/color][color={ $channel-color }] { $verb }, [font={ $fontType } size={ $fontSize }][bold]"{ $message }"[/bold][/font][/color]
+chat-radio-message-wrap = [bold][color={ $channel-color }]{ $channel } [/color][color={ $headset-color }]{ $headset-name }[/bold][/color][color={ $channel-color }] { $verb }, [font={ $fontType } size={ $fontSize }]"{ $message }"[/font][/color]
+chat-radio-message-wrap-bold = [bold][color={ $channel-color }]{ $channel } [/color][color={ $headset-color }]{ $headset-name }[/bold][/color][color={ $channel-color }] { $verb }, [font={ $fontType } size={ $fontSize }][bold]"{ $message }"[/bold][/font][/color]
 examine-headset-default-channel = Отображается, что каналом по умолчанию этой гарнитуры является [color={ $color }]{ $channel }[/color].
 chat-radio-common = Общий
 chat-radio-centcom = Центком
@@ -32,5 +32,5 @@ chat-radio-soc = КСО
 chat-radio-carpdragon = Общий разум
 
 # DS14
-chat-radio-message-wrap-lang = [bold][color={ $channel-color }]{ $channel } [/color][color={ $headset-color }]{ $job }{ $name }[/bold][/color][color={ $channel-color }] { $verb } ({ $language }): [font={ $fontType } size={ $fontSize }]"{ $message }"[/font][/color]
-chat-radio-message-wrap-bold-lang = [bold][color={ $channel-color }]{ $channel } [/color][color={ $headset-color }]{ $job }{ $name }[/bold][/color][color={ $channel-color }] { $verb } ({ $language }): [font={ $fontType } size={ $fontSize }][bold]"{ $message }"[/bold][/font][/color]
+chat-radio-message-wrap-lang = [bold][color={ $channel-color }]{ $channel } [/color][color={ $headset-color }]{ $headset-name }[/bold][/color][color={ $channel-color }] { $verb } ({ $language }): [font={ $fontType } size={ $fontSize }]"{ $message }"[/font][/color]
+chat-radio-message-wrap-bold-lang = [bold][color={ $channel-color }]{ $channel } [/color][color={ $headset-color }]{ $headset-name }[/bold][/color][color={ $channel-color }] { $verb } ({ $language }): [font={ $fontType } size={ $fontSize }][bold]"{ $message }"[/bold][/font][/color]

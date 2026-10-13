@@ -384,10 +384,10 @@
   groupBy: "plushie"
 
 - type: loadout
-  id: PlushieScarlettPvrsifvlAlt2 # Милая Скарлетт
+  id: PlushieScarlett # Милая Скарлетт
   storage:
     back:
-    - PlushieScarlettPvrsifvlAlt2
+    - PlushieScarlett
   groupBy: "plushie"
 
 - type: loadout

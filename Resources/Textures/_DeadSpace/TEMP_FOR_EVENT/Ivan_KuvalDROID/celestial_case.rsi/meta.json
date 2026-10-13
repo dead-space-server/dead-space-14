@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Celestial case, base taken from BSAA misc.rsi (Мёртвый Космос), for redraw",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "celestial_case"
+    }
+  ]
+}

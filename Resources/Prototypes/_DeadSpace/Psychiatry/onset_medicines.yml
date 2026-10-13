@@ -1,0 +1,32 @@
+# Шанс один раз за приём, пока лекарство ещё в крови. 0.01%, чтобы обычная аптечка почти не сажала болезнь.
+# Новое лекарство это ещё одна запись. Код для этого не нужен.
+
+- type: psychiatryOnsetMedicine
+  id: PsychiatryOnsetHaloperidol
+  reagent: Haloperidol
+  chance: 0.0001
+
+- type: psychiatryOnsetMedicine
+  id: PsychiatryOnsetDiphenhydramine
+  reagent: Diphenhydramine
+  chance: 0.0001
+
+- type: psychiatryOnsetMedicine
+  id: PsychiatryOnsetArithrazine
+  reagent: Arithrazine
+  chance: 0.0001
+
+- type: psychiatryOnsetMedicine
+  id: PsychiatryOnsetPhalanximine
+  reagent: Phalanximine
+  chance: 0.0001
+
+- type: psychiatryOnsetMedicine
+  id: PsychiatryOnsetFragmentin
+  reagent: Fragmentin
+  chance: 0.0001
+
+- type: psychiatryOnsetMedicine
+  id: PsychiatryOnsetDylovene
+  reagent: Dylovene
+  chance: 0.0001

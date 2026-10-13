@@ -247,7 +247,7 @@
 
 # Gas Mask
 - type: entity
-  parent: ClothingMaskGasSyndicate
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskGasTheZuTi
   name: боевой респиратор валькирии
   description: Улучшенная модель боевого респиратора с повышенной эффективностью фильтрации воздуха.

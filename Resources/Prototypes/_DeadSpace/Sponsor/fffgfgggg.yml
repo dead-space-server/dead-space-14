@@ -134,7 +134,7 @@
 
 # Mask
 - type: entity
-  parent: ClothingMaskGasSyndicate
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskfffgfgggg
   name: чёрно-красный респиратор
   description: Чёрно-красный респиратор, защитит от пыли и... Всё.

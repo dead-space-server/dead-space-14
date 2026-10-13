@@ -59,13 +59,6 @@
   wageDepartment: Civilian
   wage: 300 # DS14-value
   #end-backmen: currency
-  special:
-  - !type:AddComponentSpecial
-    components:
-    # DS14-Start
-    - type: Skill
-      group: BasicAndBotany
-    # DS14-End
 
 - type: startingGear
   id: SeniorAdministratorGear

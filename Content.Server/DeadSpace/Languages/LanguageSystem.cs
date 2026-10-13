@@ -176,6 +176,11 @@ public sealed class LanguageSystem : EntitySystem
         return result;
     }
 
+    public bool ShowInChat(string? languageId)
+    {
+        return !string.IsNullOrEmpty(languageId) && languageId != DefaultLanguageId;
+    }
+
     public string GetLangName(ProtoId<LanguagePrototype>? languageId)
     {
         var name = "Неизвестно";

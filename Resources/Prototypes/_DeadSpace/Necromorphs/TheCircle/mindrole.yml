@@ -51,8 +51,8 @@
 
 - type: entity
   parent: MindRoleBaseCircleFighters
-  id: MindRoleCircleGeist
-  name: роль Гейста Круга
+  id: MindRoleCircleShockTrooper
+  name: роль шок-трупера Круга
   components:
   - type: MindRole
-    antagPrototype: CircleGeist
+    antagPrototype: CircleShockTrooper

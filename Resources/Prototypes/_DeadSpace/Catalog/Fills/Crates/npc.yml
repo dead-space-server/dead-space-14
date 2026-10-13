@@ -98,3 +98,29 @@
       entity_storage:
         id: MobBearPolar
         amount: 1
+
+- type: entity
+  parent: CrateLivestock
+  id: CrateNPCSeal
+  name: seal crate
+  description: SEAL!!! SEAL!!! SEAL!!! SEAL!!! SEAL!!!
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage:
+        id: MobSealCargo
+        amount: !type:RangeNumberSelector
+          range: 1, 3
+
+- type: entity
+  parent: CrateLivestock
+  id: CrateNPCSealPup
+  name: seal pup crate
+  description: SEAL!!! SEAL!!! SEAL!!! SEAL!!! SEAL!!!
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage:
+        id: MobSealPupCargo
+        amount: !type:RangeNumberSelector
+          range: 1, 3

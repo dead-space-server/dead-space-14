@@ -133,6 +133,9 @@
   - type: Icon
     sprite: _DeadSpace/Structures/Walls/solid_dark.rsi
     state: rgeneric
+  - type: Construction
+    graph: Girder
+    node: reinforcedWallDark
 
 - type: entity
   parent: WallReinforced
@@ -148,7 +151,7 @@
     state: rgeneric
   - type: Construction
     graph: Girder
-    node: reinforcedWallVine
+    node: reinforcedWallDarkRust
   - type: IconSmooth
     key: walls
     base: reinf_over

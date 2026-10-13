@@ -18,6 +18,7 @@ using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using Robust.Shared.Utility;
 
 namespace Content.Client.DeadSpace.PatrolTablet;
 
@@ -30,6 +31,9 @@ public sealed partial class PatrolTabletWindow : DefaultWindow
     [Dependency] private readonly IEntitySystemManager _entitySystem = default!;
     private readonly SpriteSystem _sprite;
     private readonly ClientGameTicker _gameTicker;
+    private TimeSpan _announcementBusyEnd;
+    private TimeSpan _announcementCooldownEnd;
+    private bool _squadManagementEnabled = true;
 
     public Action<string, string>? OnRenameSquad;
     public Action<string>? OnBulkAssignSquad;
@@ -37,6 +41,7 @@ public sealed partial class PatrolTabletWindow : DefaultWindow
     public Action<string>? OnClearSquad;
     public Action<string>? OnDeleteSquad;
     public Action<string, string>? OnCreateSquad;
+    public Action<string, string>? OnSendAnnouncement;
 
     public PatrolTabletWindow()
     {
@@ -50,8 +55,34 @@ public sealed partial class PatrolTabletWindow : DefaultWindow
         Title = Loc.GetString("patrol-tablet-title");
         ClearListButton.OnPressed += _ => OnClearList?.Invoke();
         CreateSquadButton.OnPressed += _ => OpenCreateSquadDialog();
+        SquadsTabButton.OnPressed += _ => SetAnnouncementTab(false);
+        AnnouncementTabButton.OnPressed += _ => SetAnnouncementTab(true);
+        SendAnnouncementButton.OnPressed += _ =>
+            OnSendAnnouncement?.Invoke(AnnouncementTitleInput.Text, Rope.Collapse(AnnouncementBodyInput.TextRope));
 
+        SetAnnouncementTab(false);
         UpdateShiftTime();
+        UpdateAnnouncementBusy();
+    }
+
+    private void SetAnnouncementTab(bool announcement)
+    {
+        if (!announcement && !_squadManagementEnabled)
+            announcement = true;
+        SquadsView.Visible = !announcement;
+        AnnouncementView.Visible = announcement;
+        SquadsTabButton.Disabled = !announcement;
+        AnnouncementTabButton.Disabled = announcement;
+        ClearListButton.Visible = !announcement && _squadManagementEnabled;
+    }
+
+    private void SetSquadManagementEnabled(bool enabled)
+    {
+        _squadManagementEnabled = enabled;
+        SquadsTabButton.Visible = enabled;
+
+        if (!enabled)
+            SetAnnouncementTab(true);
     }
 
     private void OpenCreateSquadDialog()
@@ -72,17 +103,49 @@ public sealed partial class PatrolTabletWindow : DefaultWindow
             ("time", stationTime.ToString(@"hh\:mm\:ss"))));
     }
 
+    private void UpdateAnnouncementBusy()
+    {
+        var globalRemaining = _announcementBusyEnd - _gameTiming.CurTime;
+        var cooldownRemaining = _announcementCooldownEnd - _gameTiming.CurTime;
+
+        if (globalRemaining > TimeSpan.Zero)
+        {
+            SendAnnouncementButton.Disabled = true;
+            SendAnnouncementButton.Text = Loc.GetString(
+                "patrol-tablet-announcement-send-active",
+                ("seconds", (int) Math.Ceiling(globalRemaining.TotalSeconds)));
+            return;
+        }
+
+        if (cooldownRemaining > TimeSpan.Zero)
+        {
+            SendAnnouncementButton.Disabled = true;
+            SendAnnouncementButton.Text = Loc.GetString(
+                "patrol-tablet-announcement-send-cooldown",
+                ("seconds", (int) Math.Ceiling(cooldownRemaining.TotalSeconds)));
+            return;
+        }
+
+        SendAnnouncementButton.Disabled = false;
+        SendAnnouncementButton.Text = Loc.GetString("patrol-tablet-announcement-send");
+    }
+
     public void UpdateState(PatrolTabletUpdateState state)
     {
+        SetSquadManagementEnabled(state.SquadManagementEnabled);
         UpdateShiftTime();
         UpdateOfficers(state.Officers);
         UpdateSquads(state.Squads);
+        _announcementBusyEnd = _gameTiming.CurTime + TimeSpan.FromSeconds(state.AnnouncementBusyRemaining);
+        _announcementCooldownEnd = _gameTiming.CurTime + TimeSpan.FromSeconds(state.AnnouncementCooldownRemaining);
+        UpdateAnnouncementBusy();
     }
 
     protected override void Draw(DrawingHandleScreen handle)
     {
         base.Draw(handle);
         UpdateShiftTime();
+        UpdateAnnouncementBusy();
     }
 
     private void UpdateOfficers(List<PatrolOfficerInfo> officers)

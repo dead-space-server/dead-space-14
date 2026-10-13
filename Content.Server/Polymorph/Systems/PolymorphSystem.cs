@@ -124,6 +124,9 @@ public sealed partial class PolymorphSystem : EntitySystem
     private void OnRevertPolymorphActionEvent(Entity<PolymorphedEntityComponent> ent,
         ref RevertPolymorphActionEvent args)
     {
+        if (args.Handled) //DS-14
+            return;
+
         Revert((ent, ent));
     }
 

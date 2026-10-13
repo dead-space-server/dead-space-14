@@ -341,7 +341,7 @@
         conditions:
           # they gotta be in crit first
         - !type:MobStateCondition
-          mobstate: 
+          mobstate:
           #DS14-start
           - Critical
           - PreCritical
@@ -817,6 +817,13 @@
         effectProto: StatusEffectSeeingRainbow
         time: 15.0
         type: Remove
+      - !type:ModifyStatusEffect
+        effectProto: StatusEffectMuted
+        type: Remove
+      - !type:ModifyStatusEffect
+        effectProto: StatusEffectDeaf
+        type: Remove
+      - !type:ClearSensoryFault # DS14
 
 - type: reagent
   id: TranexamicAcid
@@ -852,11 +859,12 @@
   color: "#00e5ff"
   metabolisms:
     Medicine:
+      metabolismRate: 1 # DS14-value
       effects:
       - !type:EvenHealthChange
         damage:
-          Brute: -1
-          Burn: -1
+          Brute: -0.5 # DS14-value
+          Burn: -0.5 # DS14-value
           Toxin: -0.5
 
 - type: reagent

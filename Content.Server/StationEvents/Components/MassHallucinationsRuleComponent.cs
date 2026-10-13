@@ -4,6 +4,7 @@ using Robust.Shared.Collections;
 
 namespace Content.Server.StationEvents.Components;
 
+[Content.Server.DeadSpace.CentComm.AllowedGameRuleOnCentComm] // DS14
 [RegisterComponent, Access(typeof(MassHallucinationsRule))]
 public sealed partial class MassHallucinationsRuleComponent : Component
 {

@@ -41,6 +41,10 @@
     delay: 0.5
   - type: HumanoidAppearance
     species: SlimePerson
+  # DS14-start
+  - type: CorpseBurning
+    messageType: slime
+  # DS14-end
   - type: Speech
     speechVerb: Slime
     speechSounds: Slime
@@ -156,6 +160,7 @@
     uis:
       enum.MagicMirrorUiKey.Key:
         toggleAction: HairstyleAction
+  - type: SlimeForm
   # DS14-end
 
 - type: entity

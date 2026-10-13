@@ -1,0 +1,10 @@
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHelmetSamurai
+  name: шлем самурая
+  description: Традиционный самурайский шлем. Изготовлен для защиты головы.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Head/Helmets/samurai_helmet.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Head/Helmets/samurai_helmet.rsi

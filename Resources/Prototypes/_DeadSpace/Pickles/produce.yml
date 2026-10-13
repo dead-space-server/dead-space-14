@@ -1,0 +1,81 @@
+- type: entity
+  parent: FoodProduceBase
+  id: FoodCucumber
+  name: cucumber
+  description: Crunchy, watery, and destined for a barrel.
+  components:
+  - type: FlavorProfile
+    flavors:
+    - cucumber
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 12
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 8
+        - ReagentId: Vitamin
+          Quantity: 3
+        - ReagentId: Water
+          Quantity: 1
+  - type: Sprite
+    sprite: _DeadSpace/Pickles/cucumber.rsi
+    state: produce
+  - type: Item
+    size: Small
+    sprite: _DeadSpace/Pickles/cucumber.rsi
+    heldPrefix: produce
+  - type: Produce
+    plantId: CucumberPlants
+  - type: Extractable
+    juiceSolution:
+      reagents:
+      - ReagentId: Water
+        Quantity: 8
+  - type: Tag
+    tags:
+    - Vegetable
+
+- type: entity
+  parent: BasePlant
+  id: CucumberPlants
+  name: cucumber
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Pickles/cucumber.rsi
+  - type: PlantData
+    name: seeds-cucumber-name
+    packetPrototype: CucumberSeeds
+    productPrototypes: [ FoodCucumber ]
+  - type: Plant
+    lifespan: 40
+    maturation: 6
+    production: 4
+    yield: 3
+    potency: 8
+    growthStages: 1
+  - type: PlantChemicals
+    chemicals:
+      Nutriment:
+        min: 1
+        max: 10
+        potencyDivisor: 10
+      Vitamin:
+        min: 1
+        max: 4
+        potencyDivisor: 25
+
+- type: entity
+  parent: SeedBase
+  id: CucumberSeeds
+  name: packet of cucumber seeds
+  components:
+  - type: Seed
+    plantId: CucumberPlants
+  - type: Sprite
+    sprite: _DeadSpace/Pickles/cucumber.rsi
+
+- type: flavor
+  id: cucumber
+  flavorType: Complex
+  description: flavor-complex-cucumber

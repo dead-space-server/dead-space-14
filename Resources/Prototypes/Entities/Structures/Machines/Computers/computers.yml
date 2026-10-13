@@ -370,6 +370,17 @@
   name: medical records computer
   description: This can be used to check medical records.
   components:
+  # DS14-start: medical records console UI
+  - type: MedicalRecordsConsole
+  - type: UserInterface
+    interfaces:
+      enum.MedicalRecordsConsoleKey.Key:
+        type: MedicalRecordsConsoleBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+  - type: ActivatableUI
+    key: enum.MedicalRecordsConsoleKey.Key
+  # DS14-end
   - type: Sprite
     layers:
     - map: ["computerLayerBody"]
@@ -389,6 +400,10 @@
     color: "#1f8c28"
   - type: Computer
     board: MedicalRecordsComputerCircuitboard
+  # DS14-start: medical access gates the console
+  - type: AccessReader
+    access: [["Medical"]]
+  # DS14-end
 
 - type: entity
   parent: BaseComputerAiAccess
@@ -608,6 +623,47 @@
   description: Terminal for programming Nanotrasen employee ID cards to access parts of the station.
   components:
   - type: IdCardConsole
+    # DS14-start
+    accessLevels:
+    - Captain
+    - HeadOfPersonnel
+    - HeadOfSecurity
+    - ChiefEngineer
+    - ResearchDirector
+    - ChiefMedicalOfficer
+    - Quartermaster
+    - Command
+    - BlueShield
+    - Cryogenics
+    - Lawyer
+    - Armory
+    - Detective
+    - Brigmedic
+    - Security
+    - Brig
+    - GenpopEnter
+    - GenpopLeave
+    - Chemistry
+    - Paramedic
+    - Coroner
+    - Virology
+    - Medical
+    - Research
+    - Atmospherics
+    - Engineering
+    - SeniorSalvage
+    - Salvage
+    - Cargo
+    - Service
+    - Bar
+    - Chapel
+    - Hydroponics
+    - Janitor
+    - Kitchen
+    - Theatre
+    - Maintenance
+    - External
+    # DS14-end
     basicAccessLevels:
     - Coroner
     - Medical
@@ -1463,6 +1519,7 @@
   - type: WiredNetworkConnection
   - type: DeviceNetworkRequiresPower
   - type: SurveillanceCameraMonitor
+  - type: CameraArchiveConsole
   - type: ActivatableUI
     key: enum.SurveillanceCameraMonitorUiKey.Key
   - type: ActivatableUIRequiresVision

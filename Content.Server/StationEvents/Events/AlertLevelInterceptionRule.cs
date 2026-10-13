@@ -13,7 +13,7 @@ public sealed class AlertLevelInterceptionRule : StationEventSystem<AlertLevelIn
     {
         base.Started(uid, component, gameRule, args);
 
-        if (!TryGetRandomStation(out var chosenStation))
+        if (!TryGetRandomStation(out var chosenStation, rule: uid)) // DS14
             return;
         if (_alertLevelSystem.GetLevel(chosenStation.Value) != "green")
             return;

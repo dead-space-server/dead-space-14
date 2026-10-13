@@ -80,7 +80,11 @@ public sealed class HealingSystem : EntitySystem
         if (healing.ModifyBloodLevel != 0 && bloodstream != null)
             _bloodstreamSystem.TryModifyBloodLevel((target.Owner, bloodstream), healing.ModifyBloodLevel);
 
-        if (!_damageable.TryChangeDamage(target.Owner, healing.Damage * _damageable.UniversalTopicalsHealModifier, out var healed, true, origin: args.Args.User) && healing.BloodlossModifier == 0)
+        // DS14-start: eye damage can be the only injury the item repairs.
+        var canHealEyes = healing.HealEyeDamage && TryComp<BlindableComponent>(target.Owner, out var damagedEyes) && damagedEyes.EyeDamage > 0;
+        // if (!_damageable.TryChangeDamage(target.Owner, healing.Damage * _damageable.UniversalTopicalsHealModifier, out var healed, true, origin: args.Args.User) && healing.BloodlossModifier == 0)
+        if (!_damageable.TryChangeDamage(target.Owner, healing.Damage * _damageable.UniversalTopicalsHealModifier, out var healed, true, origin: args.Args.User) && healing.BloodlossModifier == 0 && !canHealEyes)
+        // DS14-end
             return;
 
         var total = healed?.GetTotal() ?? FixedPoint2.Zero;

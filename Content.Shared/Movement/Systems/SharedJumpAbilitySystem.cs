@@ -165,7 +165,15 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
         if (!args.Settings.EventComponents.Contains(Factory.GetRegistration(ent.Comp.GetType()).Name))
             return;
 
-        var targetComp = Factory.GetComponent<JumpAbilityComponent>();
+        // DS14-start: preserve a live action when changing between identities of the same species.
+        // var targetComp = Factory.GetComponent<JumpAbilityComponent>();
+        var targetComp = EnsureComp<JumpAbilityComponent>(args.CloneUid);
+        if (targetComp.Action != ent.Comp.Action)
+        {
+            _actions.RemoveAction(args.CloneUid, targetComp.ActionEntity);
+            targetComp.ActionEntity = null;
+        }
+        // DS14-end
         targetComp.Action = ent.Comp.Action;
         targetComp.CanCollide = ent.Comp.CanCollide;
         targetComp.JumpSound = ent.Comp.JumpSound;
@@ -173,6 +181,11 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
         targetComp.JumpDistance = ent.Comp.JumpDistance;
         targetComp.JumpThrowSpeed = ent.Comp.JumpThrowSpeed;
         targetComp.RequireUnobstructedPath = ent.Comp.RequireUnobstructedPath; // DS14
-        AddComp(args.CloneUid, targetComp, true);
+        // DS14-start: MapInit may have run before Actions existed or with the default action prototype.
+        targetComp.JumpFailedPopup = ent.Comp.JumpFailedPopup;
+        // AddComp(args.CloneUid, targetComp, true);
+        _actions.AddAction(args.CloneUid, ref targetComp.ActionEntity, targetComp.Action);
+        Dirty(args.CloneUid, targetComp);
+        // DS14-end
     }
 }

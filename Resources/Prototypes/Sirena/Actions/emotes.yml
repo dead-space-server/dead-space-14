@@ -1,3 +1,14 @@
+# steps это кадры. at (сек) обязателен, строго растёт. Остальные не обязательны
+# наследуются от прошлого кадра, можно менять только нужное
+#   at = время кадра в секундах
+#   shift = сдвиг в тайлах (1.0 = 32 px, |x|,|y| <= 2)
+#   tilt = градусы поворота спрайта, |tilt| <= 720
+#   face = градусы поворота тела, кратно 90, в конце кратно 360
+#   size = сжаите и растижение (x, y, каждое от 0.2 до 3)
+#   fade = прозрачность (от 0.15 до 1)
+#   color = цвет (#ff0000 / red)
+#   frame = state из RSI (с layer один раз на анимацию)
+
 # flip animation
 - type: entity
   id: EmoteFlip
@@ -54,6 +65,7 @@
     event: !type:EmoteStartTailActionEvent
 
 # Using EmoteAnimation from IC action chat
+# steps — движение: at секунды, shift сдвиг, tilt наклон, face поворот.
 - type: emote
   id: EmoteFlip
   name: chat-emote-name-flip
@@ -66,6 +78,13 @@
     - делает сальто
     - устроила сальто
     - устроил сальто
+  steps:
+  - at: 0
+    tilt: 0
+  - at: 0.25
+    tilt: 180
+  - at: 0.5
+    tilt: 360
 
 - type: emote
   id: EmoteJump
@@ -80,6 +99,13 @@
     - подпрыгнул
     - подпрыгнула
     - подскакивает
+  steps:
+  - at: 0
+    shift: 0, 0
+  - at: 0.125
+    shift: 0, 1
+  - at: 0.25
+    shift: 0, 0
 
 - type: emote
   id: EmoteTurn
@@ -90,9 +116,160 @@
   chatTriggers:
     - кружится
     - оборачивается
-    - танцует
     - покружилась
     - покружился
+  steps:
+  - at: 0
+    face: 0
+  - at: 0.075
+    face: 90
+  - at: 0.15
+    face: 180
+  - at: 0.225
+    face: 270
+  - at: 0.3
+    face: 360
+  - at: 0.375
+    face: 450
+  - at: 0.45
+    face: 540
+  - at: 0.525
+    face: 630
+  - at: 0.6
+    face: 720
+
+- type: emote
+  id: EmoteBow
+  name: chat-emote-name-bow
+  icon: Interface/Emotes/jump.png
+  category: Animations
+  chatMessages: ["chat-emote-msg-bow"]
+  chatTriggers:
+    - кланяется
+    - поклонился
+    - поклонилась
+    - отвесил поклон
+    - отвесила поклон
+  steps:
+  - at: 0
+    shift: 0, 0
+    tilt: 0
+    size: 1, 1
+  - at: 0.25
+    shift: 0, -0.15
+    tilt: 40
+    size: 1.15, 0.75
+  - at: 0.7
+    shift: 0, -0.15
+    tilt: 40
+    size: 1.15, 0.75
+  - at: 1.05
+    shift: 0, 0
+    tilt: 0
+    size: 1, 1
+
+- type: emote
+  id: EmoteBreakdance
+  name: chat-emote-name-breakdance
+  icon: Interface/Emotes/spin.png
+  category: Animations
+  chatMessages: ["chat-emote-msg-breakdance"]
+  chatTriggers:
+    - брейкданс
+    - брейкдансит
+  steps:
+  - at: 0
+    shift: 0, 0
+    tilt: 0
+    face: 0
+    size: 1, 1
+  - at: 0.2
+    shift: 0, 0.9
+  - at: 0.42
+    tilt: 180
+    shift: 0, 0.65
+  - at: 0.58
+    size: 1.5, 0.4
+  - at: 0.78
+    shift: 0, -0.15
+  - at: 0.92
+    face: 90
+  - at: 1.06
+    face: 180
+  - at: 1.2
+    face: 270
+  - at: 1.34
+    face: 360
+  - at: 1.48
+    face: 270
+  - at: 1.62
+    face: 180
+  - at: 1.76
+    face: 90
+  - at: 1.9
+    face: 0
+  - at: 2.08
+    size: 1, 1
+    shift: 0, 0.2
+  - at: 2.28
+    tilt: 0
+    shift: 0, 0.85
+  - at: 2.48
+    shift: 0, 0
+
+- type: emote
+  id: Polskorovit
+  name: chat-emote-name-polskorovit
+  available: false
+  category: Animations
+  steps:
+  - at: 0
+    shift: 0, 0
+    tilt: 0
+    face: 0
+    size: 1, 1
+  - at: 0.12
+    shift: 0, 0.22
+    size: 0.92, 1.08
+  - at: 0.24
+    shift: 0, 0
+    tilt: 20
+    size: 1, 1
+  - at: 0.36
+    shift: 0, 0.32
+    size: 0.9, 1.1
+  - at: 0.48
+    shift: 0, 0
+    size: 1.08, 0.92
+  - at: 0.6
+    shift: 0, 0.32
+    size: 0.9, 1.1
+  - at: 0.72
+    shift: 0, 0
+    size: 1, 1
+  - at: 0.9
+    shift: 0, 0.85
+    size: 0.88, 1.14
+  - at: 1.1
+    shift: 0, 0
+    tilt: -40
+    size: 1, 1
+  - at: 1.24
+    shift: 0, 0.3
+    size: 0.92, 1.08
+  - at: 1.38
+    shift: 0, 0
+    size: 1.08, 0.92
+  - at: 1.52
+    shift: 0, 0.3
+    size: 0.92, 1.08
+  - at: 1.66
+    shift: 0, 0
+    size: 1, 1
+  - at: 1.86
+    face: 90
+  - at: 2.1
+    face: 0
 
 # Using EmoteAnimation from IC action chat
 - type: emote
@@ -123,3 +300,193 @@
   chatTriggers:
     - виляет хвостом
     - хвост двигается
+
+- type: emote
+  id: EmoteHeadSpin
+  name: chat-emote-name-head-spin
+  icon: Interface/Emotes/spin.png
+  category: Animations
+  chatMessages: ["chat-emote-msg-head-spin"]
+  chatTriggers:
+    - кружится на голове
+    - покружился на голове
+    - покружилась на голове
+    - встал на голову
+    - встала на голову
+  steps:
+  - at: 0
+    shift: 0, 0
+    tilt: 0
+    face: 0
+  - at: 0.25
+    tilt: 180
+    face: 0
+  - at: 0.45
+    tilt: 180
+    face: 180
+  - at: 0.65
+    tilt: 180
+    face: 360
+  - at: 0.85
+    tilt: 180
+    face: 540
+  - at: 1.05
+    tilt: 180
+    face: 720
+
+- type: emote
+  id: EmoteHeadDance
+  name: chat-emote-name-head-dance
+  icon: Interface/Emotes/spin.png
+  category: Animations
+  chatMessages: ["chat-emote-msg-head-dance"]
+  chatTriggers:
+    - танцует на голове
+    - станцевал на голове
+    - станцевала на голове
+    - пляшет на голове
+    - дико флексит
+    - танцует
+  steps:
+  - at: 0
+    shift: 0, 0
+    tilt: 0
+    face: 0
+  - at: 0.3
+    shift: 0.25, 0
+    tilt: 20
+    face: 0
+  - at: 0.8
+    shift: -0.25, 0
+    tilt: -20
+    face: 0
+  - at: 1.0
+    tilt: 180
+    face: 360
+  - at: 1.2
+    face: 540
+  - at: 1.4
+    shift: 0.25, 0
+  - at: 1.6
+    face: 720
+  - at: 1.8
+    shift: -0.25, 0
+  - at: 2.0
+    face: 900
+  - at: 2.2
+    shift: 0.25, 0
+  - at: 2.4
+    face: 1080
+  - at: 2.5
+    shift: 0, 0
+  - at: 2.6
+    face: 1440
+
+- type: emote
+  id: EmoteShiver
+  name: chat-emote-name-shiver
+  icon: Interface/Emotes/jump.png
+  category: Animations
+  chatMessages: ["chat-emote-msg-shiver"]
+  chatTriggers:
+    - дрожит
+    - трясётся
+    - трясется
+    - задрожал
+    - задрожала
+  steps:
+  - at: 0
+    shift: 0, 0
+  - at: 0.1
+    shift: -0.059, -0.032
+  - at: 0.2
+    shift: 0.104, -0.031
+  - at: 0.3
+    shift: -0.069, 0.031
+  - at: 0.4
+    shift: -0.035, 0.036
+  - at: 0.5
+    shift: 0.066, -0.04
+  - at: 0.6
+    shift: -0.043, -0.031
+  - at: 0.7
+    shift: -0.081, 0.032
+  - at: 0.8
+    shift: -0.086, 0.035
+  - at: 0.9
+    shift: -0.113, 0.034
+  - at: 1.0
+    shift: 0.052, -0.036
+  - at: 1.1
+    shift: -0.056, 0.04
+  - at: 1.2
+    shift: -0.045, 0.033
+  - at: 1.3
+    shift: 0.09, -0.038
+  - at: 1.4
+    shift: 0.083, 0.036
+  - at: 1.5
+    shift: -0.115, -0.035
+  - at: 1.6
+    shift: 0.096, 0.033
+  - at: 1.7
+    shift: 0, 0
+
+- type: emote
+  id: EmoteTurnRed
+  name: chat-emote-name-turnred
+  icon: Interface/Emotes/jump.png
+  category: Animations
+  chatMessages: ["chat-emote-msg-turnred"]
+  chatTriggers:
+    - краснеет
+    - злится
+    - смущён
+  steps:
+  - at: 0
+  - at: 0.3
+    color: red
+  - at: 0.6
+    color: red
+  - at: 1.2
+
+- type: emote
+  id: EmoteChill
+  name: chat-emote-name-chill
+  icon: Interface/Emotes/spin.png
+  category: Animations
+  chatMessages: ["chat-emote-msg-chill"]
+  chatTriggers:
+    - пританцовывает
+    - медленно танцует
+    - чилит
+    - качается из стороны в сторону
+  steps:
+  - at: 0
+    shift: 0, 0
+    tilt: 0
+    face: 0
+  - at: 0.3
+    shift: 0.25, 0
+    tilt: 20
+    face: 0
+  - at: 0.8
+    shift: -0.25, 0
+    tilt: -20
+    face: 0
+  - at: 1.3
+    shift: 0.25, 0
+    tilt: 20
+    face: 0
+  - at: 1.8
+    shift: -0.25, 0
+    tilt: -20
+    face: 0
+  - at: 2.3
+    shift: 0.25, 0
+    tilt: 20
+    face: 0
+  - at: 2.8
+    shift: -0.25, 0
+    tilt: -20
+    face: 0

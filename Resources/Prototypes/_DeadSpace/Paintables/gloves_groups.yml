@@ -1,0 +1,18 @@
+- type: paintableGroup
+  id: Gloves
+  cost: 1
+  time: 2
+  defaultStyle: yellow
+  styles:
+    black: GlovesPaintStyleBlack
+    blue: ClothingHandsGlovesColorBlue
+    brown: ClothingHandsGlovesColorBrown
+    gray: ClothingHandsGlovesColorGray
+    green: ClothingHandsGlovesColorGreen
+    lightBrown: ClothingHandsGlovesColorLightBrown
+    orange: ClothingHandsGlovesColorOrange
+    purple: ClothingHandsGlovesColorPurple
+    red: ClothingHandsGlovesColorRed
+    teal: ClothingHandsGlovesColorTeal
+    white: ClothingHandsGlovesColorWhite
+    yellow: GlovesPaintStyleYellow

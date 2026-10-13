@@ -56,6 +56,7 @@ station-ai-camera-search-invalid = Цель недоступна.
 station-ai-camera-search-no-eye = Око ИИ недоступно.
 station-ai-camera-search-not-visible = Цель не найдена на доступных камерах.
 station-ai-camera-jump-cooldown = Система наведения камер перезаряжается. Повторите попытку через { $seconds } с.
+station-ai-camera-link-expired = Данные с камер устарели.
 station-ai-camera-search-type-all = Всё
 station-ai-camera-search-type-characters = Сотрудники
 station-ai-camera-search-type-items = Предметы

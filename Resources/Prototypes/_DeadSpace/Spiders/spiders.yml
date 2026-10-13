@@ -164,7 +164,9 @@
       Extinguish: [ Touch ]
       Acidic: [Touch, Ingestion]
   - type: TTS
-    voice: Sunboy_mannered
+    voices:
+      silero: Sunboy_mannered
+      ntts: NTTSSheogorath
   - type: Language
     selectedLanguage: ArachnidLanguage
     knownLanguages:

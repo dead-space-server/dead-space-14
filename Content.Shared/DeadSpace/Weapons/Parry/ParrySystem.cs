@@ -14,6 +14,7 @@ using Content.Shared.Throwing;
 using Content.Shared.Weapons.Melee;
 using Content.Shared.Whitelist;
 using Robust.Shared.Input.Binding;
+using Robust.Shared.Map;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Random;
 using Robust.Shared.Network;
@@ -52,7 +53,7 @@ public sealed class ParrySystem : EntitySystem
         SubscribeAllEvent<ParryPressedEvent>(OnParryPressed);
 
         CommandBinds.Builder
-            .Bind(ContentKeyFunctions.Parry, InputCmdHandler.FromDelegate(OnParryPressedLocal))
+            .Bind(ContentKeyFunctions.Parry, new PointerInputCmdHandler(OnParryPressedLocal, outsidePrediction: true))
             .Register<ParrySystem>();
     }
 
@@ -62,15 +63,17 @@ public sealed class ParrySystem : EntitySystem
         CommandBinds.Unregister<ParrySystem>();
     }
 
-    private void OnParryPressedLocal(ICommonSession? session)
+    private bool OnParryPressedLocal(ICommonSession? session, EntityCoordinates coordinates, EntityUid target)
     {
         if (!_net.IsClient || session?.AttachedEntity is not { } user ||
             !TryGetParryWeapon(user, out var weapon))
         {
-            return;
+            // Let other actions on the same key (such as the Architect's mode switch) handle the press.
+            return false;
         }
 
         RaisePredictiveEvent(new ParryPressedEvent(GetNetEntity(weapon.Owner)));
+        return true;
     }
 
     private void OnParryPressed(ParryPressedEvent args, EntitySessionEventArgs session)

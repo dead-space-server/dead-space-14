@@ -1,0 +1,552 @@
+- type: sponsorLoadout
+  id: AnarchistVanity
+  entity: ClothingBackpackAnarchistVanity
+  sponsorOnly: true
+
+# Backpack
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackAnarchistVanity
+  name: аппарат искусственного дыхания «Патриот»
+  description: Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/backpack.rsi
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,15,10
+  - type: StorageFill
+    contents:
+    -  id: ClothingBeltAnarchistVanityFilled
+    -  id: ClothingHandsGlovesAnarchistVanity
+    -  id: ClothingOuterHardsuitAnarchistVanity
+    -  id: ClothingUniformJumpsuitAnarchistVanity
+    -  id: ClothingShoesBootsMagAnarchistVanity
+    -  id: ClothingOuterCoatAnarchistVanity
+    -  id: ClothingNeckCloakAnarchistVanity
+    -  id: PDAAnarchistVanity
+    -  id: ClothingEyesHudMultiversalAnarchistVanity
+    -  id: ClothingHeadsetAnarchistVanity
+    -  id: ClothingHeadHatAnarchistVanity
+    -  id: HypoAnarchistVanity
+    -  id: ClothingShoesBootsAnarchistVanity
+    -  id: DefibrillatorAnarchistVanity
+    -  id: ClothingWebbingAnarchistVanity
+    -  id: PlushieAnarchistVanity
+    -  id: AnarchistVanityMedkitAdvanced
+    -  id: PaperAnarchistVanity
+
+
+# Belt
+- type: entity
+  parent: ClothingWebbingAnarchistVanity
+  id: ClothingBeltAnarchistVanityFilled
+  name: пояс «Патриот»
+  description: Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/belt.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/belt.rsi
+  - type: Item
+    size: Huge
+  - type: StorageFill
+    contents:
+      - id: WelderExperimentalAnarchistVanity
+      - id: PowerDrillAnarchistVanity
+      - id: MultitoolAnarchistVanity
+      - id: JawsOfLifeAnarchistVanity
+  - type: Tag
+    tags: []
+
+# Gloves
+- type: entity
+  parent: ClothingHandsGlovesCombat
+  id: ClothingHandsGlovesAnarchistVanity
+  name: перчатки «Патриот»
+  description: Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/gloves.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/gloves.rsi
+  - type: Tag
+    tags: []
+
+# Hardsuit
+- type: entity
+  parent: ClothingOuterHardsuitSecurity
+  id: ClothingOuterHardsuitAnarchistVanity
+  name: тяжелый скафандр «Патриот»
+  categories: [ HideSpawnMenu ]
+  description: Тяжёлый, израненный временем скафандр, ставший последней опорой умирающего воина. Его системы поддерживают жизнь Патриота, пока массивные пластины защищают истощённое тело. Каждая трещина, вмятина и заменённая деталь хранит историю десятилетий войны и память о павших братьях, которых он пережил. Она стала последним панцирем старого солдата — тем, что осталось между его разрушенным телом и миром, против которого он продолжал идти вперёд.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/hardsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/hardsuit.rsi
+  - type: ExplosionResistance
+    damageCoefficient: 0.5
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.5
+        Slash: 0.5
+        Piercing: 0.6
+        Heat: 0.5
+        Radiation: 0.5
+        Caustic: 0.5
+  - type: ClothingSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitAnarchistVanity
+  - type: Item
+    size: Huge
+  - type: Tag
+    tags: []
+
+
+- type: entity
+  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
+  id: ClothingHeadHelmetHardsuitAnarchistVanity
+  categories: [ HideSpawnMenu ]
+  name: шлем скафандра «Потерянный Лик Добродетеля»
+  description: Массивный закрытый шлем, полностью скрывающий лицо Патриота. Потёртый металл покрыт шрамами старых сражений, а встроенная система дыхания помогает поддерживать жизнь умирающего воина. За его безликой маской скрывается не только измученное тело, но и память о павших братьях.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/hardsuit_helmet.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/hardsuit_helmet.rsi
+  - type: PointLight
+    color: red
+  - type: PressureProtection
+    highPressureMultiplier: 0.08
+    lowPressureMultiplier: 1000
+  - type: Tag
+    tags: []
+
+# Jumpsuit
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitAnarchistVanity
+  name: униформа «Патриот»
+  description: Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/jumpsuit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/jumpsuit.rsi
+  - type: Tag
+    tags: []
+
+# Magboots
+- type: entity
+  parent: ClothingShoesBootsMag
+  id: ClothingShoesBootsMagAnarchistVanity
+  name: магнитные сапоги «Патриот»
+  description: Принадлежат члену экипажа, находящемуся под покровительством спонсорской организации.
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Sprite
+      sprite: _DeadSpace/Sponsor/AnarchistVanity/magboots.rsi
+      layers:
+      - state: icon
+        map: [ "enum.ToggleableVisuals.Layer" ]
+    - type: Clothing
+      sprite: _DeadSpace/Sponsor/AnarchistVanity/magboots.rsi
+    - type: ClothingSpeedModifier
+      walkModifier: 1
+      sprintModifier: 1
+    - type: Tag
+      tags: []
+
+# jacket
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterCoatAnarchistVanity
+  name: пальто Млечной пути
+  description: Длинное аристократическое пальто глубокого тёмно-бордового оттенка, отделанное алыми вставками и потускневшим золотом. Тяжёлая ткань почти достигает земли, а чрезмерно длинные рукава свободно свисают по бокам — владелец практически никогда не надевает их, предпочитая носить пальто наброшенным на плечи, словно королевскую мантию. Золотые эполеты и декоративные элементы придают ему вид старинного военного облачения. За благородной внешностью скрывается древнее существо чудовищной силы, некогда мечтавшее о мире, где люди и вампиры смогут существовать вместе.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/jacket.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/jacket.rsi
+  - type: Tag
+    tags: []
+
+# Cloak
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckCloakAnarchistVanity
+  name: плащ Млечной пути
+  description: Накидка в чёрном цвете. Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/cloak.rsi
+  - type: Tag
+    tags: []
+
+# PDA
+- type: entity
+  parent: BaseMedicalPDA
+  id: PDAAnarchistVanity
+  name: КПК «Патриот»
+  description: Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Icon
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/pda.rsi
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/pda.rsi
+  - type: Pda
+  - type: Tag
+    tags: []
+
+# Tools
+- type: entity
+  parent: WelderExperimental
+  id: WelderExperimentalAnarchistVanity
+  name: пламенный резак
+  description: Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    enabled: false
+    radius: 1.5
+    color: "#ffb42b"
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/tools_welder.rsi
+  - type: Item
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/tools_welder.rsi
+
+- type: entity
+  name: челюсти «Патриот»
+  description: Судя по этому "костяному ключу" Патриот сломал кому-то зубы мудрости.
+  parent: JawsOfLife
+  id: JawsOfLifeAnarchistVanity
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/tools_jawsoflife.rsi
+    state: jaws_pry
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left
+      right:
+      - state: inhand-right
+    size: Normal
+  - type: MultipleTool
+    entries:
+      - behavior: Prying
+        sprite:
+          sprite: _DeadSpace/Sponsor/AnarchistVanity/tools_jawsoflife.rsi
+          state: jaws_pry
+        useSound: /Audio/Items/jaws_pry.ogg
+        changeSound: /Audio/Items/change_jaws.ogg
+      - behavior: Cutting
+        sprite:
+          sprite: _DeadSpace/Sponsor/AnarchistVanity/tools_jawsoflife.rsi
+          state: jaws_cutter
+        useSound: /Audio/Items/jaws_cut.ogg
+        changeSound: /Audio/Items/change_jaws.ogg
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 10
+
+- type: entity
+  parent: PowerDrill
+  id: PowerDrillAnarchistVanity
+  name: промышленная дрель
+  description: Бывает падают и небеса.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/tools_powerdrill.rsi
+    state: drill_screw
+  - type: Item
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/tools_powerdrill.rsi
+    size: Small
+  - type: MultipleTool
+    statusShowBehavior: true
+    entries:
+      - behavior: Screwing
+        sprite:
+          sprite: _DeadSpace/Sponsor/AnarchistVanity/tools_powerdrill.rsi
+          state: drill_screw
+        useSound:
+          path: /Audio/Items/drill_use.ogg
+        changeSound:
+          path: /Audio/Items/change_drill.ogg
+      - behavior: Anchoring
+        sprite:
+          sprite: _DeadSpace/Sponsor/AnarchistVanity/tools_powerdrill.rsi
+          state: drill_bolt
+        useSound:
+          path: /Audio/Items/drill_use.ogg
+        changeSound:
+          path: /Audio/Items/change_drill.ogg
+
+- type: entity
+  parent: Multitool
+  id: MultitoolAnarchistVanity
+  name: мультитул «Патриот»
+  description: Модифицированное устройство
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/tools_multitool.rsi
+    layers:
+    - state: icon
+    - state: green-unlit
+  - type: PointLight
+    enabled: true
+    radius: 1.5
+    color: "#99CCFF"
+
+#glasses
+- type: entity
+  parent: ClothingEyesHudMultiversal
+  id: ClothingEyesHudMultiversalAnarchistVanity
+  name: вечные очи
+  description: Вероятность успешного завершения этой миссии была ноль процентов. Но, видимо, в вашем случае любые расчёты теряют смысл.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/hud.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/hud.rsi
+  - type: FlashImmunity
+  - type: EyeProtection
+  - type: IdentityBlocker
+    coverage: EYES
+  - type: PointLight
+    enabled: true
+    radius: 10
+    color: "#66CCFF"
+  - type: Tag
+    tags: []
+
+# HeadSet
+- type: entity
+  parent: ClothingHeadset
+  id: ClothingHeadsetAnarchistVanity
+  name: гарнитура «Патриот»
+  description: Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/headset.rsi
+    scale: "0.6, 0.6"
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/headset.rsi
+  - type: PointLight
+    enabled: true
+    radius: 1.5
+    color: "#6600FF"
+  - type: Tag
+    tags: []
+
+# Hat
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatAnarchistVanity
+  name: Шляпа Млечной пути
+  description: Удобный головной убор.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/hat.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/hat.rsi
+  - type: Tag
+    tags: []
+
+# Hypospray
+- type: entity
+  parent: BaseItem
+  id: HypoAnarchistVanity
+  name: универсальный гипоспрей
+  description: Гипоспрей модификации «Патриот».
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/hypo.rsi
+    state: icon
+  - type: Item
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/hypo.rsi
+  - type: SolutionContainerManager
+    solutions:
+      hypospray:
+        maxVol: 5
+  - type: RefillableSolution
+    solution: hypospray
+  - type: ExaminableSolution
+    solution: hypospray
+  - type: Injector
+    solutionName: hypospray
+    ignoreClosed: false
+    activeModeProtoId: HyposprayDynamicMode
+    allowedModes:
+    - HyposprayDynamicMode
+    - HyposprayInjectMode
+  - type: UseDelay
+    delay: 0.5
+
+# Shoes
+- type: entity
+  parent: ClothingShoesBaseButcherable
+  id: ClothingShoesBootsAnarchistVanity
+  name: берцы «Патриот»
+  description: Удобная боевая обувь.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/shoes.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/shoes.rsi
+  - type: Tag
+    tags: []
+
+# Defibrillator
+- type: entity
+  parent: DefibrillatorCompact
+  name: мини-дефибрилятор «Патриот»
+  description: Высокотехнологичный портативный дефибриллятор.
+  id: DefibrillatorAnarchistVanity
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/defibsmall.rsi
+  - type: Item
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/defibsmall.rsi
+
+# РПС
+- type: entity
+  parent: ClothingBeltStorageBase
+  id: ClothingWebbingAnarchistVanity
+  name: последняя Мечта Героя
+  description: Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/RPC.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/RPC.rsi
+  - type: ExplosionResistance
+    damageCoefficient: 0.8
+  - type: Item
+    size: Huge
+  - type: Storage
+    grid:
+    - 0,0,7,1
+  - type: StorageFill
+  - type: Tag
+    tags: []
+
+# toy
+- type: entity
+  parent: BasePlushieDeadSpaceMisc
+  id: PlushieAnarchistVanity
+  name: плюшевый голубой кот
+  categories: [ HideSpawnMenu ]
+  description: Котенок которого выбросили на улицу изза его ненужности он отчайна боролся за свою жизнь и учился многому новому его много предавали изза этого он недоверяет всем но не показывает это и теперь он ходит в надежде на лучшую жизнь( он забыл своё имя изза долгих странствий и изменении его психики изза этого его обычно называют голубым котенком изза акраски его шерсти)
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/toy.rsi
+    state: toy
+
+# medkit
+- type: entity
+  name: продвинутая аптечка «Патриот»
+  description: Продвинутый набор для оказания помощи при продвинутых ранах. Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
+  categories: [ HideSpawnMenu ]
+  parent: MedkitAdvancedFilled
+  id: AnarchistVanityMedkitAdvanced
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/medkit.rsi
+  - type: Item
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/medkit.rsi
+    size: Normal
+  - type: Tag
+    tags: []
+
+#Customization
+- type: marking
+  id: AnarchistVanity
+  bodyPart: Hair
+  markingCategory: Hair
+  sponsorOnly: true
+  sprites:
+  - sprite: _DeadSpace/Sponsor/AnarchistVanity/Customization/hair.rsi
+    state: hair
+
+#melee
+- type: entity
+  parent: BaseItem
+  id: telescopicBatonAnarchistVanity
+  categories: [ HideSpawnMenu ]
+  name: высокотехнологичная телескопическая дубинка
+  description: Для того что бы дать понять что к тебе не стоит подходить без веской причины.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/melee.rsi
+    layers:
+    - state: telescope_off
+      map: [ "enum.ToggleableVisuals.Layer" ]
+  - type: SwitchableWeapon
+    openSound: "/Audio/_ADT/open_telescopic_baton.ogg"
+    closeSound: "/Audio/_ADT/close_telescopic_baton.ogg"
+    damageOpen:
+      types:
+        Blunt: 3
+    damageFolded:
+      types:
+        Blunt: 0
+    staminaDamageFolded: 0
+    staminaDamageOpen: 30
+  - type: StaminaDamageOnHit
+    damage: 0
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 3
+  - type: Item
+    size: Small
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/melee.rsi
+  - type: UseDelay
+    delay: 1
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+     enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: {state: telescope_on}
+          False: {state: telescope_off}
+
+#Paper
+- type: entity
+  parent: PaperPrintedCentcomm
+  id: PaperAnarchistVanity
+  name: распечатанный документ
+  description: Лист бумаги с заголовком центкома. Страшно даже смотреть на него.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Paper
+    stampState: paper_stamp-centcom
+    stampedBy:
+    - stampedColor: '#006600FF'
+      stampedName: Центральное Командование
+    - stampedColor: '#00BE00FF'
+      stampedName: Одобрено
+    content: paper-law-anarchistvanity

@@ -498,6 +498,7 @@
   - type: SiliconLawProvider
     laws: CrewsimovAi # DS14
   - type: SiliconLawBound
+  - type: CameraArchiveIgnore
   - type: ActionGrant
     actions:
     - ActionViewLaws

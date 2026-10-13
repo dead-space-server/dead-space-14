@@ -7,6 +7,7 @@ namespace Content.Server.StationEvents.Components;
 /// <summary>
 /// Used an event that gifts the station with certian cargo
 /// </summary>
+[Content.Server.DeadSpace.CentComm.AllowedGameRuleOnCentComm] // DS14
 [RegisterComponent, Access(typeof(CargoGiftsRule))]
 public sealed partial class CargoGiftsRuleComponent : Component
 {

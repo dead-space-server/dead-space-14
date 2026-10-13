@@ -1,0 +1,36 @@
+- type: construction
+  id: Shisha
+  graph: Shisha
+  startNode: start
+  targetNode: shisha
+  category: construction-category-tools
+  objectType: Item
+
+- type: constructionGraph
+  id: Shisha
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: shisha
+      steps:
+      - tag: Bucket
+        name: construction-graph-tag-bucket
+        icon:
+          sprite: Objects/Tools/bucket.rsi
+          state: icon
+      - tag: Pipe
+        name: construction-graph-tag-pipe
+        icon:
+          sprite: Structures/Piping/Atmospherics/pipe.rsi
+          state: pipeStraight
+      - tag: Ashtray
+        name: construction-graph-tag-ashtray
+        icon:
+          sprite: Objects/Decoration/ashtray.rsi
+          state: icon
+      - material: Cable
+        amount: 2
+        doAfter: 2
+  - node: shisha
+    entity: Shisha

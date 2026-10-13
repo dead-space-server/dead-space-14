@@ -94,6 +94,7 @@ public sealed class RevenantMindCapturedSystem : EntitySystem
 
         if (TryComp<TTSComponent>(uid, out var tts))
         {
+            tts.Voices = new(comp.ReturnTtsVoices);
             if (!string.IsNullOrEmpty(comp.ReturnTTSPrototype))
                 tts.VoicePrototypeId = comp.ReturnTTSPrototype;
             else

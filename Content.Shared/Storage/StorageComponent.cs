@@ -44,6 +44,24 @@ namespace Content.Shared.Storage
         [DataField]
         public Dictionary<string, List<ItemStorageLocation>> SavedLocations = new();
 
+        // DS14-start
+        [DataField, ViewVariables(VVAccess.ReadWrite)]
+        public Dictionary<string, List<Box2i>> GridGroups = new();
+
+        public IEnumerable<List<Box2i>> GetEffectiveGroups()
+        {
+            if (GridGroups.Count > 0)
+            {
+                foreach (var g in GridGroups.Values)
+                    yield return g;
+            }
+            else
+            {
+                yield return Grid;
+            }
+        }
+        // DS14-end
+
         /// <summary>
         /// A list of boxes that comprise a combined grid that determines the location that items can be stored.
         /// </summary>

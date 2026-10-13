@@ -42,4 +42,8 @@
 - type: font
   id: ComicSans
   path: /Fonts/Comic Sans/Comic Sans MS.ttf
+
+- type: font
+  id: Omori
+  path: /Fonts/OMORI/OMORI_GAME_RUS.ttf
 # DS14-end

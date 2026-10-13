@@ -1,0 +1,84 @@
+- type: pdaArcadeProfile
+  id: PdaArcade
+  font: /Fonts/Bedstead/Bedstead.otf
+  start:
+    path: /Audio/Effects/Arcade/newgame.ogg
+  action:
+    path: /Audio/Effects/Arcade/player_charge.ogg
+  win:
+    path: /Audio/Effects/Arcade/win.ogg
+  lose:
+    path: /Audio/Effects/Arcade/gameover.ogg
+  fruits:
+  - sprite: Objects/Specific/Hydroponics/apple.rsi
+    state: produce
+  - sprite: Objects/Specific/Hydroponics/banana.rsi
+    state: produce
+  - sprite: Objects/Specific/Hydroponics/orange.rsi
+    state: produce
+  - sprite: Objects/Specific/Hydroponics/lemon.rsi
+    state: produce
+  - sprite: Objects/Specific/Hydroponics/watermelon.rsi
+    state: produce
+  - sprite: Objects/Specific/Hydroponics/tomato.rsi
+    state: produce
+  - sprite: Objects/Specific/Hydroponics/berries.rsi
+    state: produce
+
+- type: pdaArcadeGame
+  id: snake
+  name: pda-arcade-game-snake
+  order: 1
+  floor: Tiles/grass.png
+
+- type: pdaArcadeGame
+  id: tiles
+  name: pda-arcade-game-tiles
+  order: 2
+  quiet: true
+  floor: Tiles/steel.png
+
+- type: pdaArcadeGame
+  id: blocks
+  name: pda-arcade-game-blocks
+  order: 3
+  well: "#12141c"
+  settled: "#8e97a8"
+  colors:
+  - "#3dd6d0"
+  - "#f2d36b"
+  - "#b07cff"
+  - "#7dce6a"
+  - "#e25b5b"
+  - "#6aa8ff"
+  - "#f09a3a"
+
+- type: pdaArcadeGame
+  id: rocks
+  name: pda-arcade-game-rocks
+  order: 4
+  floor: Tiles/arcadeblue.png
+
+- type: pdaArcadeGame
+  id: flap
+  name: pda-arcade-game-flap
+  order: 6
+  floors:
+  - Tiles/grass.png
+  - Tiles/wood.png
+  - Tiles/arcadeblue.png
+  - Tiles/cafeteria.png
+  sprites:
+    pipe:
+      sprite: Structures/Piping/Atmospherics/pipe.rsi
+      state: pipeStraight
+    creature:
+      sprite: Mobs/Pets/hamlet.rsi
+      state: hamster-0
+
+- type: pdaArcadeGame
+  id: match
+  name: pda-arcade-game-match
+  order: 7
+  quiet: true
+  field: "#1c2230"

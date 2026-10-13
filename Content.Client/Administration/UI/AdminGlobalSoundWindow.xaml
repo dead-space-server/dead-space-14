@@ -1,0 +1,36 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               Title="{Loc admin-global-sound-title}"
+               MinWidth="620"
+               MinHeight="420"
+               SetSize="760 520">
+    <BoxContainer Orientation="Vertical"
+                  HorizontalExpand="True"
+                  VerticalExpand="True"
+                  SeparationOverride="6">
+        <Label Name="CurrentTrack" Text="{Loc admin-global-sound-nothing-playing}"/>
+        <Label Name="CurrentPath" StyleClasses="LabelSubText"/>
+        <ScrollContainer Name="BrowserScroll"
+                         HorizontalExpand="True"
+                         VerticalExpand="True">
+            <BoxContainer Name="Entries"
+                          Orientation="Vertical"
+                          HorizontalExpand="True"/>
+        </ScrollContainer>
+        <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+            <Label Text="{Loc admin-global-sound-volume}"/>
+            <LineEdit Name="Volume" Text="0" SetWidth="70"/>
+            <Label Text="{Loc admin-global-sound-ckey}"/>
+            <LineEdit Name="CKey" HorizontalExpand="True"/>
+        </BoxContainer>
+        <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+            <Label Name="SelectedFile" HorizontalExpand="True" ClipText="True"/>
+            <Button Name="PlayButton" Text="{Loc admin-global-sound-play}"/>
+        </BoxContainer>
+        <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+            <Button Name="PauseButton" Text="{Loc admin-global-sound-pause}"/>
+            <Button Name="ResumeButton" Text="{Loc admin-global-sound-resume}"/>
+            <Button Name="FadeButton" Text="{Loc admin-global-sound-fade-out}"/>
+        </BoxContainer>
+        <Label Name="Error" StyleClasses="LabelDanger"/>
+    </BoxContainer>
+</DefaultWindow>

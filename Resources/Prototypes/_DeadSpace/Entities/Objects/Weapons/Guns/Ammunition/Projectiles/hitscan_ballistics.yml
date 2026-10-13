@@ -323,6 +323,26 @@
         Blunt: 2
 
 - type: entity
+  parent: BulletTrace
+  id: BulletCaselessRiflePoisonedTrace
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HitscanBasicDamage
+    damage:
+      types:
+        Piercing: 15
+  - type: SolutionContainerManager
+    solutions:
+      bullet:
+        maxVol: 1
+        reagents:
+        - ReagentId: Nociotoxin
+          Quantity: 1
+  - type: SolutionInjectOnProjectileHit
+    transferAmount: 1
+    solution: bullet
+
+- type: entity
   id: PelletShotgunSlugTrace
   parent: BulletTrace
   categories: [ HideSpawnMenu ]

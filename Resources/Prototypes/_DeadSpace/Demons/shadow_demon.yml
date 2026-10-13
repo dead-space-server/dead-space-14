@@ -29,6 +29,7 @@
   - type: MovementIgnoreGravity
   - type: Clickable
   - type: CantGetMagicOnSwap
+  - type: CameraArchiveIgnore
   - type: Sprite
     noRot: true
     overrideContainerOcclusion: true
@@ -83,10 +84,10 @@
     animation: WeaponArcClaw
     damage:
       types:
-        Slash: 2
-        Blunt: 3
-        Piercing: 1
-        Heat: 5
+        Slash: 5
+        Blunt: 7
+        Piercing: 3
+        Heat: 10
         Structural: 40
   - type: NpcFactionMember
     factions:

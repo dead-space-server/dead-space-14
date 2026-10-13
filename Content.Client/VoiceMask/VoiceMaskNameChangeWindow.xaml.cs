@@ -1,3 +1,4 @@
+using Content.Shared.DeadSpace.TTS;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.Speech;
 using System.Linq;
@@ -92,7 +93,7 @@ public sealed partial class VoiceMaskNameChangeWindow : FancyWindow
         };
         _voices = proto
             .EnumeratePrototypes<TTSVoicePrototype>()
-            .Where(o => o.RoundStart)
+            .Where(o => o.RoundStart && o.Provider == IoCManager.Resolve<IConfigurationManager>().GetCVar(TTSProviderCVars.Provider)) // DS14
             .OrderBy(o => Loc.GetString(o.Name))
             .ToList();
         for (var i = 0; i < _voices.Count; i++)

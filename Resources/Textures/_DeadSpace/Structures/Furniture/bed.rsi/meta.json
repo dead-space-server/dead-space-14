@@ -1,6 +1,17 @@
-{ 
-    "version": 1, 
-    "license": "CC-BY-SA-3.0", 
-    "copyright": "Created by amaliz (Discord) for Space Station 14 Мёртвый Космос", 
-    "size": { "x": 32, "y": 32 }, 
-    "states": [ { "name": "bed-1" } ] }
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Bed-1 created by amaliz (Discord), bed_wood taken from https://github.com/ParadiseSS13/Paradise by mtf0036 (discord) for Space Station 14 Мёртвый Космос.",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "bed-1"
+        },
+        {
+            "name": "bed_wood"
+        }
+    ]
+}

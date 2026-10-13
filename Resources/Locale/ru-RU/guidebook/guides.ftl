@@ -68,6 +68,7 @@ guide-entry-bartender = Бармен
 guide-entry-chef = Шеф-повар
 guide-entry-medical = Медицинский отдел
 guide-entry-medicaldoctor = Врач
+guide-entry-psychiatry = Психиатрия
 guide-entry-chemist = Химик
 guide-entry-brute =
     Продвинутое лечение

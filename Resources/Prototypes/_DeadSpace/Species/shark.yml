@@ -18,7 +18,7 @@
     Head: MobSharkHead
     HeadTop: MobHumanoidAnyMarking
     HeadSide: MobHumanoidAnyMarking
-    Tail: MobSharkTail
+    Tail: MobHumanoidAnyMarking
     Hair: MobHumanoidAnyMarking
     FacialHair: MobHumanoidAnyMarking
     Chest: MobSharkTorso
@@ -52,7 +52,8 @@
       required: false
     Tail:
       points: 1
-      required: false
+      required: true
+      defaultMarkings: [SharkTailDefault]
     Head:
       points: 3
       required: false

@@ -75,6 +75,9 @@
   - type: Appearance
   - type: Dumpable
   #DS14-Start
+  - type: Tag
+    tags:
+    - Ashtray
   - type: EmitSoundOnPickup
     sound:
       path: /Audio/_DeadSpace/Items/Handing/disk_pickup.ogg

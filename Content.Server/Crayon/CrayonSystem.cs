@@ -39,6 +39,7 @@ public sealed class CrayonSystem : SharedCrayonSystem
         SubscribeLocalEvent<CrayonComponent, AfterInteractEvent>(OnCrayonAfterInteract, after: [typeof(IngestionSystem)]);
         SubscribeLocalEvent<CrayonComponent, DroppedEvent>(OnCrayonDropped);
         SubscribeLocalEvent<CrayonComponent, CrayonRotationMessage>(OnCrayonRotation); //DS-14
+        SubscribeLocalEvent<CrayonComponent, CrayonOpacityMessage>(OnCrayonOpacity); //DS-14
     }
 
     private void OnMapInit(Entity<CrayonComponent> ent, ref MapInitEvent args)
@@ -81,7 +82,8 @@ public sealed class CrayonSystem : SharedCrayonSystem
             return;
         }
 
-        if (!_decals.TryAddDecal(component.SelectedState, args.ClickLocation.Offset(new Vector2(-0.5f, -0.5f)), out _, component.Color, component.Rotation, cleanable: true)) //DS-14
+        var stroke = component.StrokeColor();
+        if (!_decals.TryAddDecal(component.SelectedState, args.ClickLocation.Offset(new Vector2(-0.5f, -0.5f)), out _, stroke, component.Rotation, cleanable: true)) //DS-14
             return;
 
         if (component.UseSound != null)
@@ -89,7 +91,7 @@ public sealed class CrayonSystem : SharedCrayonSystem
 
         _charges.TryUseCharge(uid);
 
-        _adminLogger.Add(LogType.CrayonDraw, LogImpact.Low, $"{ToPrettyString(args.User):user} drew a {component.Color:color} {component.SelectedState}");
+        _adminLogger.Add(LogType.CrayonDraw, LogImpact.Low, $"{ToPrettyString(args.User):user} drew a {stroke:color} {component.SelectedState}"); //DS-14
         args.Handled = true;
         // DS14-start
         var graffitiEv = new HooliganGraffitiDrawnEvent(args.User);
@@ -141,6 +143,16 @@ public sealed class CrayonSystem : SharedCrayonSystem
     {
         // TODO: Use the existing event.
         _uiSystem.CloseUi(uid, CrayonUiKey.Key, args.User);
+    }
+
+    private void OnCrayonOpacity(Entity<CrayonComponent> ent, ref CrayonOpacityMessage args)
+    {
+        var opacity = Math.Clamp(args.Opacity, ent.Comp.MinOpacity, ent.Comp.MaxOpacity);
+        if (opacity == ent.Comp.Opacity)
+            return;
+
+        ent.Comp.Opacity = opacity;
+        Dirty(ent);
     }
 
     private void UseUpCrayon(EntityUid uid, EntityUid user)

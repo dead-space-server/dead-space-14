@@ -1,4 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+using Content.Shared.DeadSpace.TTS;
+using Robust.Shared.Configuration;
 
 using System.Linq;
 using System.Numerics;
@@ -77,6 +79,7 @@ public sealed partial class AdminToySelectionMenu : DefaultWindow
         TtsSelector.SelectId(0);
 
         var voices = _prototype.EnumeratePrototypes<TTSVoicePrototype>()
+            .Where(voice => voice.Provider == IoCManager.Resolve<IConfigurationManager>().GetCVar(TTSProviderCVars.Provider))
             .OrderBy(proto => Loc.GetString(proto.Name))
             .ThenBy(proto => proto.ID)
             .ToList();

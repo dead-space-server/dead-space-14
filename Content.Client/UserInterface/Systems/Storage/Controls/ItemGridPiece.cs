@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client.DeadSpace.Ninja.Systems; //DS14
 using Content.Client.DeadSpace.Stylesheets;
 using Content.Client.Items.Systems;
 using Content.Shared.Item;
@@ -178,7 +179,8 @@ public sealed class ItemGridPiece : Control, IEntityControl
         if (itemComponent.StoredSprite is { } storageSprite)
         {
             var scale = 2 * UIScale;
-            var sprite = _entityManager.System<SpriteSystem>().Frame0(storageSprite);
+            var recoloredSprite = _entityManager.System<NinjaAppearanceSystem>().RecolorStoredSprite(Entity, storageSprite); //DS14
+            var sprite = _entityManager.System<SpriteSystem>().Frame0(recoloredSprite ?? storageSprite); //DS14
 
             var sizeDifference = ((boundingGrid.Size + Vector2i.One) * _centerTexture.Size * 2 - sprite.Size) * UIScale;
 

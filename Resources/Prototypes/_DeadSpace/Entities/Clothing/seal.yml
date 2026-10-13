@@ -1,0 +1,58 @@
+- type: entity
+  parent: ClothingHeadHatUshanka
+  id: ClothingHeadHatUshankaSeal
+  name: seal ushanka
+  description: A warm ushanka fitted for a very distinguished seal.
+  components:
+  - type: Clothing
+    clothingVisuals:
+      head-seal:
+      - state: equipped-HELMET-sealidle
+        sprite: _DeadSpace/Clothing/Seal/ushanka.rsi
+  - type: Tag
+    tags:
+    - ClothMade
+    - SealWearable
+
+- type: entity
+  parent: ClothingMaskBreath
+  id: ClothingMaskBreathSeal
+  name: seal breath mask
+  description: A breath mask fitted for a seal's whiskered muzzle.
+  components:
+  - type: Clothing
+    clothingVisuals:
+      mask-seal:
+      - state: equipped-MASK-sealidle
+        sprite: _DeadSpace/Clothing/Seal/mask.rsi
+      mask-sealPup:
+      - state: equipped-MASK-lilsealidle
+        sprite: _DeadSpace/Clothing/Seal/mask_pup.rsi
+  - type: Tag
+    tags:
+    - PetWearable
+    - SealWearable
+
+- type: entity
+  parent: OxygenTank
+  id: OxygenTankSeal
+  name: seal oxygen tank
+  description: An oxygen tank with a harness fitted for a seal.
+  components:
+  - type: Clothing
+    clothingVisuals:
+      suitstorage-seal:
+      - state: equipped-SUITSTORAGE-sealidle
+        sprite: _DeadSpace/Clothing/Seal/tank.rsi
+      suitstorage-sealPup:
+      - state: equipped-SUITSTORAGE-lilsealidle
+        sprite: _DeadSpace/Clothing/Seal/tank_pup.rsi
+  - type: Tag
+    tags:
+    - GasTank
+    - SealWearable
+
+- type: entity
+  parent: [OxygenTankSeal, OxygenTankFilled]
+  id: OxygenTankSealFilled
+  suffix: Filled

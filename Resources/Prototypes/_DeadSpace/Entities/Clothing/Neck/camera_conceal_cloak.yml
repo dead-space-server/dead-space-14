@@ -1,0 +1,9 @@
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckCameraConcealCloak
+  name: conceal cloak
+  description: While worn, the live feed and the archive do not show the wearer. People standing nearby still see them.
+  components:
+  - type: Sprite
+    sprite: Clothing/Neck/Cloaks/void.rsi
+  - type: CameraConcealCloak

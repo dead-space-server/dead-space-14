@@ -1,0 +1,40 @@
+# Обувь клоуна (DS14). Спрайты: _DeadSpace/Clothing/Shoes/Specific
+- type: entity
+  parent: ClothingShoesClownBase
+  id: ClothingShoesClownBoots
+  name: клоунские ботинки
+  description: Тяжёлые клоунские ботинки. Хонк!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Shoes/Specific/clown_boots.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Shoes/Specific/clown_boots.rsi
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepClown
+      params:
+        variation: 0.17
+  - type: Tag
+    tags:
+    - ClownShoes
+    - WhitelistChameleon
+
+- type: entity
+  parent: ClothingShoesClownBase
+  id: ClothingShoesClownSlippers
+  name: клоунские тапочки
+  description: Мягкие клоунские тапочки. Хонк!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Shoes/Specific/clown_slippers.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Shoes/Specific/clown_slippers.rsi
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepClown
+      params:
+        variation: 0.17
+  - type: Tag
+    tags:
+    - ClownShoes
+    - WhitelistChameleon

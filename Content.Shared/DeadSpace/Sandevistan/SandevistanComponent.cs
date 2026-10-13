@@ -20,6 +20,10 @@ public sealed partial class SandevistanImplanterComponent : Component
 [RegisterComponent]
 public sealed partial class SandevistanImplantComponent : Component
 {
+    /// <summary>Preinstalled variants can skip the damage, paralysis and emotes of implantation.</summary>
+    [DataField]
+    public bool ApplyImplantTrauma = true;
+
     [DataField]
     public float Duration = 25f;
 

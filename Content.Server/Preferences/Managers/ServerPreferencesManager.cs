@@ -292,6 +292,26 @@ namespace Content.Server.Preferences.Managers
                         profile.EnsureValid(session, collection, allowedMarkings);
                     }
                     prefs = await NormalizeCharacterSlotsAsync(session, prefs);
+
+                    var validAntagFavorites = prefs.FavoriteAntags
+                        .Where(id => _prototypeManager.HasIndex(id))
+                        .Distinct()
+                        .Take(256)
+                        .ToList();
+
+                    if (!validAntagFavorites.SequenceEqual(prefs.FavoriteAntags))
+                    {
+                        prefs = new PlayerPreferences(
+                            prefs.Characters,
+                            prefs.SelectedCharacterIndex,
+                            prefs.AdminOOCColor,
+                            prefs.ConstructionFavorites,
+                            prefs.InaccessibleCharacters,
+                            validAntagFavorites);
+
+                        if (ShouldStorePrefs(session.Channel.AuthType))
+                            await _db.SaveAntagFavoritesAsync(session.UserId, validAntagFavorites);
+                    }
                     // DS14-end
                     prefsData.Prefs = prefs;
                 }

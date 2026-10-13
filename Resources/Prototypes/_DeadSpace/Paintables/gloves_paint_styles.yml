@@ -1,0 +1,59 @@
+# Стили покраски перчаток краскопультом.
+# Все стили используют тонируемую текстуру Clothing/Hands/Gloves/Color/color.rsi,
+# поэтому нужный цвет задаётся полем color у слоёв.
+
+- type: entity
+  id: GlovesPaintStyleYellow
+  name: gloves paint style (yellow)
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    sprite: Clothing/Hands/Gloves/Color/color.rsi
+    layers:
+    - state: icon
+      color: "#EFB514"
+  - type: Item
+    size: Small
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: "#EFB514"
+      right:
+      - state: inhand-right
+        color: "#EFB514"
+  - type: Clothing
+    slots: [ gloves ]
+    sprite: Clothing/Hands/Gloves/Color/color.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND
+        color: "#EFB514"
+
+- type: entity
+  id: GlovesPaintStyleBlack
+  name: gloves paint style (black)
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    sprite: Clothing/Hands/Gloves/Color/color.rsi
+    layers:
+    - state: icon
+      color: "#333333"
+  - type: Item
+    size: Small
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: "#333333"
+      right:
+      - state: inhand-right
+        color: "#333333"
+  - type: Clothing
+    slots: [ gloves ]
+    sprite: Clothing/Hands/Gloves/Color/color.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND
+        color: "#333333"

@@ -172,6 +172,7 @@
   id: JobJanitor
   groups:
   - GroupTankHarness
+  - JanitorSpecialization #DS-14
   - JanitorHead
   - JanitorJumpsuit
   - JanitorGloves
@@ -548,6 +549,7 @@
   - GroupTankHarness
   - ReporterJumpsuit
   - CommonBackpack
+  - ReporterSpecialization #DS-14
   - Glasses
   - Survival
   - Trinkets

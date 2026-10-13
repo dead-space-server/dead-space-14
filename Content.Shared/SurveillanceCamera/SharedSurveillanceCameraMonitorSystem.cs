@@ -1,3 +1,4 @@
+using Content.Shared.DeadSpace.CameraArchives; //DS-14
 using Content.Shared.DeviceNetwork;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -73,6 +74,34 @@ public sealed class SurveillanceCameraRefreshSubnetsMessage : BoundUserInterface
 [Serializable, NetSerializable]
 public sealed class SurveillanceCameraDisconnectMessage : BoundUserInterfaceMessage
 {}
+
+//DS-14 start
+[Serializable, NetSerializable]
+public sealed class SurveillanceCameraArchiveOpenMessage : BoundUserInterfaceMessage
+{
+}
+
+[Serializable, NetSerializable]
+public sealed class SurveillanceCameraArchivePickMessage : BoundUserInterfaceMessage
+{
+    public NetEntity Camera;
+    public int FrameIndex = -1;
+}
+
+[Serializable, NetSerializable]
+public sealed class SurveillanceCameraArchiveBrowseMessage : BoundUserInterfaceMessage
+{
+    public CameraArchiveEntry[] Cameras = [];
+    public NetEntity Selected;
+    public int FrameIndex;
+    public int FrameCount;
+    public TimeSpan FrameTime;
+    public CameraArchive? Frame;
+    public bool Covered;
+
+    public bool BodyLog;
+}
+//DS-14 end
 
 [Serializable, NetSerializable]
 public enum SurveillanceCameraMonitorUiKey : byte

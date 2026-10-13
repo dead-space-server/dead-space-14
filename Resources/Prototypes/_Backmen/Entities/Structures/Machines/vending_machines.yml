@@ -590,6 +590,7 @@
   - type: BuyStoreBank
     emagCategories:
     - ClothingEmagMachineInventory
+    - ClothingBackpackMachineInventoryContraband # DS14
   - type: ActivatableUI
     key: enum.StoreUiKey.Key
     singleUser: true
@@ -673,6 +674,8 @@
     balance:
       SpaceCash: 0
   - type: BuyStoreBank
+    emagCategories:
+    - VendingWallMedicalInventoryContraband # DS14
   - type: ActivatableUI
     key: enum.StoreUiKey.Key
     singleUser: true
@@ -699,6 +702,8 @@
     balance:
       SpaceCash: 0
   - type: BuyStoreBank
+    emagCategories:
+    - VendingYouToolInventoryContraband # DS14
   - type: ActivatableUI
     key: enum.StoreUiKey.Key
     singleUser: true

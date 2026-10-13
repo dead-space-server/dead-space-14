@@ -30,6 +30,7 @@
   - type: NpcFactionMember
     factions:
     - Revenant
+  - type: CameraArchiveIgnore
   ## DS14-end
   - type: Eye
     drawFov: false

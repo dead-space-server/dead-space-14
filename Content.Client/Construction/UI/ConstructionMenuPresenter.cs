@@ -12,10 +12,20 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 // DS14-start
 using Content.Client.DeadSpace.AdminToy;
 using Content.Shared.DeadSpace.AdminToy;
 // DS14-end
+using Content.Shared.Armor;
+using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
+using Content.Shared.DeadSpace.ConsoleCraft;
+using Content.Shared.Projectiles;
+using Content.Shared.Weapons.Hitscan.Components;
+using Content.Shared.Weapons.Melee;
+using Content.Shared.Weapons.Ranged.Components;
+using Content.Shared.Weapons.Ranged.Systems;
 
 namespace Content.Client.Construction.UI
 {
@@ -37,6 +47,8 @@ namespace Content.Client.Construction.UI
 
         private readonly SpriteSystem _spriteSystem;
         private readonly ISawmill _sawmill;
+        private readonly DamageExamineSystem _damageExamine;
+        private readonly DamageableSystem _damageable;
 
         private readonly IConstructionMenuView _constructionView;
         private readonly EntityWhitelistSystem _whitelistSystem;
@@ -96,6 +108,8 @@ namespace Content.Client.Construction.UI
             _constructionView = new ConstructionMenu();
             _whitelistSystem = _entManager.System<EntityWhitelistSystem>();
             _spriteSystem = _entManager.System<SpriteSystem>();
+            _damageExamine = _entManager.System<DamageExamineSystem>();
+            _damageable = _entManager.System<DamageableSystem>();
             _sawmill = _logManager.GetSawmill("construction.ui");
 
             // This is required so that if we load after the system is initialized, we can bind to it immediately
@@ -391,6 +405,8 @@ namespace Content.Client.Construction.UI
 
             var stepList = _constructionView.RecipeStepList;
             GenerateStepList(prototype, stepList);
+
+            _constructionView.SetRecipeStats(GetRecipeStats(proto));
         }
 
         private void GenerateStepList(ConstructionPrototype prototype, ItemList stepList)
@@ -454,6 +470,119 @@ namespace Content.Client.Construction.UI
 
             _constructionView.BuildButtonPressed = pressed;
         }
+
+        private FormattedMessage? GetRecipeStats(EntityPrototype proto)
+        {
+            var msg = new FormattedMessage();
+            var factory = _entManager.ComponentFactory;
+
+            if (proto.TryGetComponent<ArmorComponent>(out var armor, factory) && armor.Modifiers is { } armorModifiers)
+                AddArmorStats(msg, armorModifiers);
+
+            if (proto.TryGetComponent<MeleeWeaponComponent>(out var melee, factory) && !melee.Hidden)
+            {
+                var damage = _damageable.ApplyUniversalAllModifiers(melee.Damage * _damageable.UniversalMeleeDamageModifier);
+                if (!damage.Empty)
+                    _damageExamine.AddDamageExamine(msg, damage, Loc.GetString("damage-melee"));
+            }
+
+            if (proto.TryGetComponent<GunComponent>(out var gun, factory) && gun.ShowExamineText)
+                AddGunStats(msg, proto, gun);
+
+            return msg.IsEmpty ? null : msg;
+        }
+
+        private void AddArmorStats(FormattedMessage msg, DamageModifierSet armorModifiers)
+        {
+            if (armorModifiers.Coefficients.Count == 0
+                && armorModifiers.FlatReduction.Count == 0
+                && armorModifiers.ArmorLvls.Count == 0)
+                return;
+
+            if (!msg.IsEmpty)
+                msg.PushNewline();
+
+            msg.AddMarkupOrThrow(Loc.GetString("armor-examine"));
+
+            foreach (var coefficientArmor in armorModifiers.Coefficients)
+            {
+                msg.PushNewline();
+
+                var armorType = Loc.GetString("armor-damage-type-" + coefficientArmor.Key.ToLower());
+                msg.AddMarkupOrThrow(Loc.GetString("armor-coefficient-value",
+                    ("type", armorType),
+                    ("value", MathF.Round((1f - coefficientArmor.Value) * 100, 1))
+                ));
+            }
+
+            foreach (var flatArmor in armorModifiers.FlatReduction)
+            {
+                msg.PushNewline();
+
+                var armorType = Loc.GetString("armor-damage-type-" + flatArmor.Key.ToLower());
+                msg.AddMarkupOrThrow(Loc.GetString("armor-reduction-value",
+                    ("type", armorType),
+                    ("value", flatArmor.Value)
+                ));
+            }
+
+            if (armorModifiers.ArmorLvls.Count > 0)
+            {
+                msg.PushNewline();
+                msg.AddMarkupOrThrow(Loc.GetString("armor-lvl-examine"));
+
+                foreach (var armorLvl in armorModifiers.ArmorLvls)
+                {
+                    msg.PushNewline();
+
+                    var armorType = Loc.GetString("armor-damage-type-" + armorLvl.Key.ToLower());
+                    msg.AddMarkupOrThrow(Loc.GetString("armor-lvl-value",
+                        ("type", armorType),
+                        ("value", armorLvl.Value)
+                    ));
+                }
+            }
+        }
+
+        private void AddGunStats(FormattedMessage msg, EntityPrototype proto, GunComponent gun)
+        {
+            var damage = GetGunDamage(proto);
+
+            if (damage is null && gun.FireRate <= 0f)
+                return;
+
+            if (!msg.IsEmpty)
+                msg.PushNewline();
+
+            msg.AddMarkupOrThrow(Loc.GetString("gun-selected-mode-examine",
+                ("color", SharedGunSystem.ModeExamineColor),
+                ("mode", Loc.GetString($"gun-{gun.SelectedMode}"))));
+            msg.PushNewline();
+            msg.AddMarkupOrThrow(Loc.GetString("gun-fire-rate-examine",
+                ("color", "yellow"),
+                ("fireRate", $"{gun.FireRate:0.0}")));
+
+            if (damage is not null)
+                _damageExamine.AddDamageExamine(msg, damage, Loc.GetString("damage-projectile"));
+        }
+
+        // DS14-start
+        private DamageSpecifier? GetGunDamage(EntityPrototype proto)
+        {
+            var factory = _entManager.ComponentFactory;
+            var projectileProto = CraftingPrototypeHelpers.GetDefaultProjectile(proto, _prototypeManager, factory);
+            if (projectileProto == null)
+                return null;
+
+            if (projectileProto.TryGetComponent<ProjectileComponent>(out var projectile, factory) && !projectile.Damage.Empty)
+                return _damageable.ApplyUniversalAllModifiers(projectile.Damage * _damageable.UniversalProjectileDamageModifier);
+
+            if (projectileProto.TryGetComponent<HitscanBasicDamageComponent>(out var hitscan, factory) && !hitscan.Damage.Empty)
+                return _damageable.ApplyUniversalAllModifiers(hitscan.Damage * _damageable.UniversalHitscanDamageModifier);
+
+            return null;
+        }
+        // DS14-end
 
         private void UpdateGhostPlacement()
         {

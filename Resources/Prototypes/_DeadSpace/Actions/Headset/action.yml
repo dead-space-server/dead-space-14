@@ -12,3 +12,12 @@
     itemIconStyle: BigAction
   - type: InstantAction
     event: !type:ToggleNoiseCancellingActionEvent {}
+
+- type: entity
+  parent: BaseAction
+  id: ActionDrinkFromBeerHat
+  name: Попить
+  description: Попить из пивной шляпы?
+  components:
+  - type: InstantAction
+    event: !type:DrinkFromBeerHatEvent

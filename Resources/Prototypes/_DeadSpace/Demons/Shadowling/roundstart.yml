@@ -23,8 +23,6 @@
         - AntagImmune
       components:
       - type: ShadowlingReveal
-      - type: Skill
-        group: ALL
       - type: IntrinsicRadioTransmitter
         channels:
         - Shadowling

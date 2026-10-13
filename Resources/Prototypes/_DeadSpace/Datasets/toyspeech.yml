@@ -44,7 +44,7 @@
   id: PlushieWillieSpeech
   values:
     prefix: plushies-willie-
-    count: 5
+    count: 6
 
 - type: localizedDataset
   id: PlushieAinnetelSpeech
@@ -68,7 +68,7 @@
   id: PlushieEllisSpeech
   values:
     prefix: plushies-ellis-
-    count: 5
+    count: 10
 
 - type: localizedDataset
   id: PlushieKermuthSpeech
@@ -344,7 +344,13 @@
   id: PlushieScarlettSpeech
   values:
     prefix: plushies-scarlett-
-    count: 6
+    count: 10
+
+- type: localizedDataset
+  id: PlushieMysticalRaypeech
+  values:
+    prefix: plushies-mystical-
+    count: 3
 
 - type: localizedDataset
   id: PlushieWalkflisSpeech
@@ -507,7 +513,7 @@
   id: PlushieZutiKuzSpeech
   values:
     prefix: plushies-zuti-kuz-
-    count: 7
+    count: 8
 
 - type: localizedDataset
   id: PlushieZutiIgnaSpeech
@@ -520,3 +526,33 @@
   values:
     prefix: plushies-sastr-bon-
     count: 10
+
+- type: localizedDataset
+  id: PlushieIvanKuvaldaSpeech
+  values:
+    prefix: plushies-ivan-kuvalda-
+    count: 10
+
+- type: localizedDataset
+  id: PlushieDragonFoxMadParadoxSpeech
+  values:
+    prefix: plushies-drmp-
+    count: 8
+
+- type: localizedDataset
+  id: PlushieMargoSpeech
+  values:
+    prefix: plushies-margo-
+    count: 10
+
+- type: localizedDataset
+  id: PlushieBogSpeech
+  values:
+    prefix: plushies-bog-
+    count: 8
+
+- type: localizedDataset
+  id: PlushieGenesisSpeech
+  values:
+    prefix: plushies-genesis-
+    count: 8

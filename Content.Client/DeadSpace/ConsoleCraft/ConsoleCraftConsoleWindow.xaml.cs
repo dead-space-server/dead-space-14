@@ -187,6 +187,52 @@ public sealed partial class ConsoleCraftConsoleWindow : DefaultWindow
             }
         }
 
+        StatsContainer.RemoveAllChildren();
+        if (state.ItemStats.Count == 0)
+        {
+            StatsContainer.AddChild(new Label
+            {
+                Text = Loc.GetString("consolecraft-stats-empty"),
+                StyleClasses = { "LabelSubText" },
+            });
+        }
+        else
+        {
+            foreach (var stat in state.ItemStats)
+            {
+                if (string.IsNullOrEmpty(stat.Value))
+                {
+                    StatsContainer.AddChild(new Label
+                    {
+                        Text = stat.Label,
+                        FontColorOverride = Color.FromHex("#FFD700"),
+                        StyleClasses = { "LabelSubText" },
+                    });
+                    continue;
+                }
+
+                var row = new BoxContainer
+                {
+                    Orientation = BoxContainer.LayoutOrientation.Horizontal,
+                    SeparationOverride = 6,
+                    HorizontalExpand = true,
+                };
+                row.AddChild(new Label
+                {
+                    Text = stat.Label,
+                    StyleClasses = { "LabelSubText" },
+                    HorizontalExpand = true,
+                });
+                row.AddChild(new Label
+                {
+                    Text = stat.Value,
+                    Align = Label.AlignMode.Right,
+                    StyleClasses = { "LabelSubText" },
+                });
+                StatsContainer.AddChild(row);
+            }
+        }
+
         if (state.CraftInProgress)
         {
             StatusLabel.Text = Loc.GetString("consolecraft-crafting");

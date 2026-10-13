@@ -136,7 +136,7 @@
                     </LayoutContainer>
                 </PanelContainer>
 
-                <BoxContainer Orientation="Vertical"
+                <BoxContainer Orientation="Horizontal"
                               SeparationOverride="4"
                               Name="VoteContainer"
                               Access="Public"

@@ -26,6 +26,8 @@ public sealed partial class EmoteAnimationComponent : Component
     [ViewVariables(VVAccess.ReadWrite)]
     public string AnimationId = "none";
 
+    public int PlaySerial; //DS-14
+
     public EntityUid? FlipAction;
     public EntityUid? JumpAction;
     public EntityUid? TurnAction;
@@ -37,9 +39,12 @@ public sealed partial class EmoteAnimationComponent : Component
     {
         public string AnimationId { get; init; }
 
-        public EmoteAnimationComponentState(string animationId)
+        public int PlaySerial { get; init; } //DS-14
+
+        public EmoteAnimationComponentState(string animationId, int playSerial) //DS-14
         {
             AnimationId = animationId;
+            PlaySerial = playSerial; //DS-14
         }
     }
 }

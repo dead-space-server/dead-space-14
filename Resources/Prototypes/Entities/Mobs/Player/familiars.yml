@@ -33,8 +33,15 @@
   - type: Alerts
   - type: Familiar
   #DS14-start
-  - type: GhostRoleNotifys #DS14
+  - type: GhostRoleNotifys
     groupPrototype: PetsGroup
+  - type: Language
+    knownLanguages:
+    - GeneralLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage
   #DS14-end
 
 - type: entity

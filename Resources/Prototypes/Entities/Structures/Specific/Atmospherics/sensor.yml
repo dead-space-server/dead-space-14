@@ -39,6 +39,7 @@
       Halon: stationHalon
       Zauker: stationZauker
       Antinoblium: stationAntinoblium
+      Psychogen: stationPsychogen
       # DS14-end
   - type: Tag
     tags:

@@ -16,6 +16,7 @@
   - Dragon
   - Xenoborg
   - CentralCommand # DS14
+  - Taipan # DS14
   - Necromorfs # DS14
   - Blob # DS14
   - SyndicateAgent # DS14-agents-faction
@@ -76,8 +77,6 @@
         color: CornflowerBlue
         sound: "/Audio/_DeadSpace/Spiders/brif.ogg"
       components:
-      - type: Skill
-        group: ALL
       - type: Egg
         canHatch: true
         duration: 360
@@ -97,8 +96,6 @@
         color: CornflowerBlue
         sound: "/Audio/_DeadSpace/Spiders/brif.ogg"
       components:
-      - type: Skill
-        group: ALL
       - type: Egg
         canHatch: true
         duration: 360
@@ -118,8 +115,6 @@
         color: CornflowerBlue
         sound: "/Audio/_DeadSpace/Spiders/brif.ogg"
       components:
-      - type: Skill
-        group: ALL
       - type: Egg
         canHatch: true
         duration: 360

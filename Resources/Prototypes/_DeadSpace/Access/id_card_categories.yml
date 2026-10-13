@@ -1,0 +1,61 @@
+- type: idCardAccessCategory
+  id: Command
+  name: id-card-console-category-command
+  order: 0
+  accessLevels: [Command, Captain, HeadOfPersonnel, HeadOfSecurity, ChiefEngineer, ChiefMedicalOfficer, ResearchDirector, Quartermaster, BlueShield, Cryogenics, TaipanCommand, TaipanCommunicationsOfficer, TaipanResearchDirector, TaipanTechnicalOperationsSupervisor]
+
+- type: idCardAccessCategory
+  id: Security
+  name: id-card-console-category-security
+  order: 10
+  accessLevels: [Security, Armory, Brig, Detective, Brigmedic, GenpopEnter, GenpopLeave, TaipanProtection, TaipanArmory]
+
+- type: idCardAccessCategory
+  id: Medical
+  name: id-card-console-category-medical
+  order: 20
+  accessLevels: [Medical, Chemistry, Paramedic, Coroner, Virology, TaipanMedical]
+
+- type: idCardAccessCategory
+  id: Engineering
+  name: id-card-console-category-engineering
+  order: 30
+  accessLevels: [Engineering, Atmospherics, TaipanEngineering, TaipanAtmospherics]
+
+- type: idCardAccessCategory
+  id: Science
+  name: id-card-console-category-science
+  order: 40
+  accessLevels: [Research, TaipanResearch]
+
+- type: idCardAccessCategory
+  id: Cargo
+  name: id-card-console-category-cargo
+  order: 50
+  accessLevels: [Cargo, Salvage, SeniorSalvage, TaipanCargo]
+
+- type: idCardAccessCategory
+  id: Service
+  name: id-card-console-category-service
+  order: 60
+  accessLevels: [Service, Bar, Kitchen, Hydroponics, Janitor, Theatre, Chapel, Lawyer, TaipanService]
+
+- type: idCardAccessCategory
+  id: General
+  name: id-card-console-category-general
+  order: 70
+  accessLevels: [Maintenance, External, TaipanMaint, TaipanExternal]
+
+- type: idCardAccessCategory
+  id: SpecialOperations
+  name: id-card-console-category-special-operations
+  order: 80
+  centCommOnly: true
+  accessLevels: [SOD, ErtTeamLeader]
+
+- type: idCardAccessCategory
+  id: CentralCommand
+  name: id-card-console-category-central-command
+  order: 90
+  centCommOnly: true
+  accessLevels: [CentralCommand, CounterpartyNT]

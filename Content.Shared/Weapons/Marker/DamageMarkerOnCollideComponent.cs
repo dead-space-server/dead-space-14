@@ -1,6 +1,7 @@
 using Content.Shared.Damage;
 using Content.Shared.Whitelist;
 using Robust.Shared.GameStates;
+using Robust.Shared.Utility; // DS14
 
 namespace Content.Shared.Weapons.Marker;
 
@@ -27,4 +28,11 @@ public sealed partial class DamageMarkerOnCollideComponent : Component
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite), DataField("amount"), AutoNetworkedField]
     public int Amount = 1;
+    // DS14-start
+    /// <summary>
+    /// Sprite to apply to the entity when damagemark is applied and overrides default sprite
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite), DataField("effect")]
+    public SpriteSpecifier.Rsi? Effect;
+    // DS14-end
 }

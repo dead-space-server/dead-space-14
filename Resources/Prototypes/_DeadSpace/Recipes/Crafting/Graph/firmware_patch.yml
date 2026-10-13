@@ -1,0 +1,22 @@
+- type: constructionGraph
+  id: FirmwarePatch
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: patch
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 1
+      - material: Plastic
+        amount: 2
+        doAfter: 1
+      - material: Glass
+        amount: 1
+        doAfter: 1
+      - material: Cable
+        amount: 5
+        doAfter: 2
+  - node: patch
+    entity: FirmwarePatch

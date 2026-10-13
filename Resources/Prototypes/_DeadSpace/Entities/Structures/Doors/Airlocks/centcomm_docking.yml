@@ -1,0 +1,54 @@
+- type: entity
+  parent: AirlockExternalGlassShuttleCentcommERTLocked
+  id: AirlockExternalGlassShuttleCentcommERTBSAALocked
+  suffix: ЦК, Стыковочный, АПБТ
+  components:
+  - type: Tag
+    tags:
+    - ForceNoFixRotations
+    - DockCentcommERTBSAAShuttle
+
+- type: entity
+  parent: AirlockExternalGlassShuttleCentcommERTLocked
+  id: AirlockExternalGlassShuttleCentcommERTCburnLocked
+  suffix: ЦК, Стыковочный, РХБЗЗ, Сьерра, Уборщики
+  components:
+  - type: Tag
+    tags:
+    - ForceNoFixRotations
+    - DockCentcommERTCburnShuttle
+    - DockCentcommERTSierraShuttle
+    - DockCentcommERTJanitorsShuttle
+
+- type: entity
+  parent: AirlockExternalGlassShuttleCentcommERTLocked
+  id: AirlockExternalGlassShuttleCentcommERTFieldOfficerLocked
+  suffix: ЦК, Стыковочный, Буря, Смерть Вестника
+  components:
+  - type: Tag
+    tags:
+    - ForceNoFixRotations
+    - DockCentcommERTFieldOfficerShuttle
+
+- type: entity
+  parent: AirlockExternalGlassShuttleCentcommERTLocked
+  id: AirlockExternalGlassShuttleCentcommERTGammaLocked
+  suffix: ЦК, Стыковочный, Гамма, Красный, Янтарный, Инженеры
+  components:
+  - type: Tag
+    tags:
+    - ForceNoFixRotations
+    - DockCentcommERTGammaShuttle
+    - DockCentcommERTRedShuttle
+    - DockCentcommERTAmberShuttle
+    - DockCentcommERTEngineersShuttle
+
+- type: entity
+  parent: AirlockExternalGlassShuttleCentcommERTLocked
+  id: AirlockExternalGlassShuttleCentcommERTOfficialLocked
+  suffix: ЦК, Стыковочный, ПЦК
+  components:
+  - type: Tag
+    tags:
+    - ForceNoFixRotations
+    - DockCentcommERTOfficialShuttle

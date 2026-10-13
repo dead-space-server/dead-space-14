@@ -9,6 +9,7 @@
   id: BaseMobSpecies
   abstract: true
   components:
+  - type: CorpseBurning # DS14
   - type: Sprite
     layers:
     - map: [ "enum.HumanoidVisualLayers.Chest" ]

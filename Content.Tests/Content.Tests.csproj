@@ -10,6 +10,10 @@
     <PackageReference Include="NUnit3TestAdapter" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="Moq" />
+    <!-- DS14-start -->
+    <PackageReference Include="VorbisPizza" PrivateAssets="All" />
+    <PackageReference Include="OggVorbisEncoder" PrivateAssets="All" />
+    <!-- DS14-end -->
   </ItemGroup>
 
   <Import Project="..\RobustToolbox\Imports\Client.props" />

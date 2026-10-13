@@ -1,0 +1,30 @@
+# Одежда клоуна (DS14). Спрайты: _DeadSpace/Clothing/Uniforms/Jumpsuit
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitClownJester
+  name: костюм клоуна-шута
+  description: Тёмно-красный клоунский костюм с золотой отделкой. Хонк!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/clown_jester.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/clown_jester.rsi
+  - type: Tag
+    tags:
+    - ClownSuit
+    - WhitelistChameleon
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitClownStriped
+  name: полосатый костюм клоуна
+  description: Красно-чёрный клоунский костюм в полоску. Хонк!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/clown_striped.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Uniforms/Jumpsuit/clown_striped.rsi
+  - type: Tag
+    tags:
+    - ClownSuit
+    - WhitelistChameleon

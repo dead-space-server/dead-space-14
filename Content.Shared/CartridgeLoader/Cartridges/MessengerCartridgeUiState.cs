@@ -140,6 +140,17 @@ public sealed class MessengerSetIncomingDisabledEvent : CartridgeMessageEvent
         Disabled = disabled;
     }
 }
+
+[Serializable, NetSerializable]
+public sealed class MessengerDeleteMessageEvent : CartridgeMessageEvent
+{
+    public int MessageId;
+
+    public MessengerDeleteMessageEvent(int messageId)
+    {
+        MessageId = messageId;
+    }
+}
 // DS14-End
 
 /// <summary>

@@ -142,6 +142,28 @@ public sealed partial class HealthIconPrototype : StatusIconPrototype, IInheriti
     public bool Abstract { get; private set; }
 }
 
+// DS14-start: medical status icons. Its own prototype type rather than a SecurityIconPrototype, so
+// medical status can never be filtered out alongside the wanted/detained icons.
+[Prototype]
+public sealed partial class MedicalStatusIconPrototype : StatusIconPrototype, IInheritingPrototype
+{
+    /// <inheritdoc />
+    [ParentDataField(typeof(AbstractPrototypeIdArraySerializer<MedicalStatusIconPrototype>))]
+    public string[]? Parents { get; private set; }
+
+    /// <inheritdoc />
+    [NeverPushInheritance]
+    [AbstractDataField]
+    public bool Abstract { get; private set; }
+
+    /// <summary>
+    /// Whether this icon is also worth showing a security officer holding only a security HUD.
+    /// </summary>
+    [DataField]
+    public bool SecurityVisible;
+}
+// DS14-end
+
 /// <summary>
 /// StatusIcons for the beer goggles and fried onion goggles
 /// </summary>

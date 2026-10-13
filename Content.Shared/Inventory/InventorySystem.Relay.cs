@@ -7,6 +7,7 @@ using Content.Shared.Climbing.Events;
 using Content.Shared.Contraband;
 using Content.Shared.Damage.Events;
 using Content.Shared.Damage.Systems;
+using Content.Shared.DeadSpace.MedicalRecords.Overlays; // DS14
 using Content.Shared.Electrocution;
 using Content.Shared.Explosion;
 using Content.Shared.Eye.Blinding.Systems;
@@ -110,6 +111,10 @@ public partial class InventorySystem
         SubscribeLocalEvent<InventoryComponent, RefreshEquipmentHudEvent<NoirOverlayComponent>>(RefRelayInventoryEvent);
         SubscribeLocalEvent<InventoryComponent, RefreshEquipmentHudEvent<ThermalSightComponent>>(RefRelayInventoryEvent);
         SubscribeLocalEvent<InventoryComponent, RefreshEquipmentHudEvent<ShowPatrolIconsComponent>>(RefRelayInventoryEvent);
+        // DS14-start
+        SubscribeLocalEvent<InventoryComponent, RefreshEquipmentHudEvent<ShowMedicalStatusIconsComponent>>(RefRelayInventoryEvent);
+        SubscribeLocalEvent<InventoryComponent, RefreshEquipmentHudEvent<ShowSecurityMedicalStatusIconsComponent>>(RefRelayInventoryEvent);
+        // DS14-end
 
         SubscribeLocalEvent<InventoryComponent, GetVerbsEvent<EquipmentVerb>>(OnGetEquipmentVerbs);
         SubscribeLocalEvent<InventoryComponent, GetVerbsEvent<InnateVerb>>(OnGetInnateVerbs);

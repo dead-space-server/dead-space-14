@@ -12,6 +12,7 @@
   - AllAccess
   access:
   - CentralCommand
+  - BlueShield
   - ErtTeamLeader
   special:
   - !type:AddImplantSpecial
@@ -23,10 +24,6 @@
     - type: NpcFactionMember
       factions:
       - CentralCommand
-    # DS14-Start
-    - type: Skill
-      group: ALL
-    # DS14-End
 
 - type: startingGear
   id: CentcomGear

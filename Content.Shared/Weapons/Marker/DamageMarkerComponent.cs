@@ -9,14 +9,14 @@ namespace Content.Shared.Weapons.Marker;
 /// <summary>
 /// Marks an entity to take additional damage
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, Access(typeof(SharedDamageMarkerSystem))]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(raiseAfterAutoHandleState: true), Access(typeof(SharedDamageMarkerSystem))] // DS14
 [AutoGenerateComponentPause]
 public sealed partial class DamageMarkerComponent : Component
 {
     /// <summary>
     /// Sprite to apply to the entity while damagemarker is applied.
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("effect")]
+    [ViewVariables(VVAccess.ReadWrite), DataField("effect"), AutoNetworkedField] // DS14
     public SpriteSpecifier.Rsi? Effect = new(new ResPath("/Textures/Objects/Weapons/Effects"), "shield2");
 
     /// <summary>

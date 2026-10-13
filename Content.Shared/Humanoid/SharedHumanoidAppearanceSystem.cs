@@ -167,7 +167,7 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
         targetHumanoid.Age = sourceHumanoid.Age;
         targetHumanoid.CustomBaseLayers = new(sourceHumanoid.CustomBaseLayers);
         targetHumanoid.MarkingSet = new(sourceHumanoid.MarkingSet);
-        SetTTSVoice(target, sourceHumanoid.Voice, targetHumanoid); // Corvax-TTS
+        SetTTSVoice(target, sourceHumanoid.Voice, targetHumanoid, sourceHumanoid.TtsVoices); // DS14
         targetHumanoid.SpeakerColor = sourceHumanoid.SpeakerColor; // Corvax-SpeakerColor
 
         SetSex(target, sourceHumanoid.Sex, false, targetHumanoid);
@@ -494,7 +494,7 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
         }
 
         EnsureDefaultMarkings(uid, humanoid);
-        SetTTSVoice(uid, profile.Voice, humanoid); // Corvax-TTS
+        SetTTSVoice(uid, profile.Voice, humanoid, profile.TtsVoices); // DS14
         // DS14-start
         humanoid.HairGradientEnabled = profile.Appearance.HairGradientEnabled;
         humanoid.HairGradientColor = profile.Appearance.HairGradientColor;
@@ -580,13 +580,14 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
 
     // Corvax-TTS-Start
     // ReSharper disable once InconsistentNaming
-    public void SetTTSVoice(EntityUid uid, string voiceId, HumanoidAppearanceComponent humanoid)
+    public void SetTTSVoice(EntityUid uid, string voiceId, HumanoidAppearanceComponent humanoid, IReadOnlyDictionary<string, string>? voices = null) // DS14
     {
         if (!TryComp<TTSComponent>(uid, out var comp))
             return;
 
+        humanoid.TtsVoices = voices != null ? new(voices) : new(); // DS14
         humanoid.Voice = voiceId;
-        comp.VoicePrototypeId = voiceId;
+        comp.Voices = new(humanoid.TtsVoices); // DS14
     }
     // Corvax-TTS-End
 

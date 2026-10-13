@@ -1,6 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Robust.Shared.GameStates;
+using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Content.Shared.Damage;
 using Content.Shared.NPC.Prototypes;
@@ -27,7 +28,7 @@ public sealed partial class DemonShadowComponent : Component
     public EntityUid? DemonShadowCrawlActionEntity;
 
     [ViewVariables(VVAccess.ReadOnly)]
-    public bool IsShadowCrawl = true;
+    public bool IsShadowCrawl = false;
 
     [ViewVariables(VVAccess.ReadOnly)]
     public bool IsStartShadowCrawl = false;
@@ -58,7 +59,18 @@ public sealed partial class DemonShadowComponent : Component
 
     [DataField]
     [ViewVariables(VVAccess.ReadOnly)]
+    public TimeSpan PhaseDuration = TimeSpan.FromSeconds(6);
+
+    [DataField]
+    [ViewVariables(VVAccess.ReadOnly)]
     public TimeSpan TimeUtilShadowCrawl = TimeSpan.Zero;
+
+    [DataField]
+    [ViewVariables(VVAccess.ReadOnly)]
+    public TimeSpan TimeUtilPhaseEnd = TimeSpan.Zero;
+
+    [ViewVariables(VVAccess.ReadOnly)]
+    public EntityCoordinates? PhaseLastSafeCoordinates;
 
     [DataField]
     [ViewVariables(VVAccess.ReadOnly)]
@@ -67,9 +79,6 @@ public sealed partial class DemonShadowComponent : Component
     [AutoNetworkedField]
     [ViewVariables(VVAccess.ReadOnly)]
     public float MovementSpeedMultiply = 1f;
-
-    [ViewVariables(VVAccess.ReadOnly)]
-    public float PassiveHealingMultiplier = 4f;
 
     [DataField("passiveHealing")]
     public DamageSpecifier PassiveHealing = new()
@@ -82,6 +91,29 @@ public sealed partial class DemonShadowComponent : Component
             { "Heat", -0.4 },
             { "Shock", -0.1 },
             { "Bloodloss", -0.2 }
+        }
+    };
+
+    [DataField("darknessHealing")]
+    public DamageSpecifier DarknessHealing = new()
+    {
+        DamageDict = new()
+        {
+            { "Blunt", -4 },
+            { "Slash", -4 },
+            { "Piercing", -4 },
+            { "Heat", -4 },
+            { "Shock", -4 },
+            { "Bloodloss", -4 }
+        }
+    };
+
+    [DataField("lightDamage")]
+    public DamageSpecifier LightDamage = new()
+    {
+        DamageDict = new()
+        {
+            { "Heat", 4 }
         }
     };
 

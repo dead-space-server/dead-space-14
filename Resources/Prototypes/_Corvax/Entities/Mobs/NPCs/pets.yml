@@ -78,7 +78,11 @@
       speechVerb: Monkey
     - type: MonkeyAccent
     - type: TTS
-      voice: Hesutu
+      # DS14-start
+      voices:
+        silero: Hesutu
+        ntts: NTTSCentaurWarrunnerDota2
+      # DS14-end
     - type: MeleeWeapon
       damage:
         types:

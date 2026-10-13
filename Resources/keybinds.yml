@@ -1,4 +1,4 @@
-﻿version: 1 # Not used right now, whatever.
+version: 1 # Not used right now, whatever.
 binds:
 - function: UIClick
   type: State
@@ -664,3 +664,6 @@ binds:
   type: State
   key: MouseMiddle
   canFocus: true
+- function: SwitchComponentMode
+  type: State
+  key: F

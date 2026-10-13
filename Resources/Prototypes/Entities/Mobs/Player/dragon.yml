@@ -1,3 +1,15 @@
+# DS14-start
+- type: damageModifierSet
+  id: DragonScale
+  coefficients:
+    Blunt: 0.6 # 40% reduction
+    Piercing: 0.6 # 40% reduction
+    Slash: 0.65 # 35% reduction
+    Heat: 0.6 # 40% reduction
+    Radiation: 0.7 # 30% reduction
+    Caustic: 0.8 # 20% reduction
+# DS14-end
+
 - type: entity
   parent: [ SimpleSpaceMobBase, FlyingMobBase ]
   id: BaseMobDragon
@@ -94,6 +106,13 @@
       0: Alive
       500: Critical #DS14
       525: Dead #DS14
+  # DS14-start
+  - type: Damageable
+    damageModifierSet: DragonScale
+  - type: ExplosionResistance
+    worn: false # only the dragon itself gets this resistance
+    damageCoefficient: 0.6 # 40% explosion resistance
+  # DS14-end
   - type: SlowOnDamage
     speedModifierThresholds:
       325: 0.7 #DS14

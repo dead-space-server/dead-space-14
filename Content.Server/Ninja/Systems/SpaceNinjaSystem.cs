@@ -39,16 +39,22 @@ public sealed class SpaceNinjaSystem : SharedSpaceNinjaSystem
         SubscribeLocalEvent<SpaceNinjaComponent, CriminalRecordsHackedEvent>(OnCriminalRecordsHacked);
     }
 
-    // TODO: Make this charge rate based instead of updating it every single tick.
-    // Or make it client side, since power cells are predicted.
     public override void Update(float frameTime)
     {
+        //DS14-start
+        base.Update(frameTime);
+        //DS14-end
+
         var query = EntityQueryEnumerator<SpaceNinjaComponent>();
         while (query.MoveNext(out var uid, out var ninja))
         {
             SetSuitPowerAlert((uid, ninja));
         }
     }
+
+    // DS14-start
+    protected override bool SimulateHeat => true;
+    // DS14-end
 
     /// <summary>
     /// Download the given set of nodes, returning how many new nodes were downloaded.

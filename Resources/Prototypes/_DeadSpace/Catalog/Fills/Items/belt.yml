@@ -75,3 +75,25 @@
     containers:
       item:
       - Radiance
+
+- type: entityTable
+  id: BeltCentcomSecurityEntityTable
+  table: !type:AllSelector
+    children:
+    - id: Stunbaton
+    - id: Handcuffs
+    - id: Handcuffs
+    - id: HoloprojectorSecurity
+    - id: RadioHandheldSecurityCentcom
+
+- type: entity
+  id: ClothingBeltCentcomSecurityFilled
+  parent: ClothingBeltSecurity
+  name: пояс службы безопасности
+  description: Может вмещать снаряжение охраны, например наручники и вспышки.
+  suffix: Заполненный, ОЦК
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:NestedSelector
+        tableId: BeltCentcomSecurityEntityTable

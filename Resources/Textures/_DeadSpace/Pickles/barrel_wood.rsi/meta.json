@@ -1,0 +1,25 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Adapted from vgstation barrel sprites for Dead Space Pickles overlay.",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "idle"
+        },
+        {
+            "name": "fermenting",
+            "delays": [
+                [
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2
+                ]
+            ]
+        }
+    ]
+}

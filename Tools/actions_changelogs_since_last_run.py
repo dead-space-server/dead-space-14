@@ -86,15 +86,13 @@ def get_most_recent_workflow(
     sess: requests.Session, github_repository: str, github_run: str
 ) -> Optional[Any]:
     workflow_run = get_current_run(sess, github_repository, github_run)
-    past_runs = get_past_runs(sess, workflow_run)
-    for run in past_runs["workflow_runs"]:
-        # First past successful run that is not our current run.
-        if run["id"] == workflow_run["id"]:
-            continue
-
-        return run
-
-    return None
+    past_runs = (
+        run for run in get_past_runs(sess, workflow_run)
+        if run["conclusion"] == "success"
+        and run["id"] < workflow_run["id"]
+        and run["created_at"] <= workflow_run["created_at"]
+    )
+    return max(past_runs, key=lambda run: (run["created_at"], run["id"]), default=None)
 
 
 def get_current_run(
@@ -107,14 +105,19 @@ def get_current_run(
     return resp.json()
 
 
-def get_past_runs(sess: requests.Session, current_run: Any) -> Any:
+def get_past_runs(sess: requests.Session, current_run: Any) -> Iterable[Any]:
     """
-    Get all successful workflow runs before our current one.
+    Get successful workflow runs on the current branch across all result pages.
     """
-    params = {"status": "success", "created": f"<={current_run['created_at']}"}
-    resp = sess.get(f"{current_run['workflow_url']}/runs", params=params)
-    resp.raise_for_status()
-    return resp.json()
+    # Avoid the created search filter and do not assume the first result is the newest run.
+    params = {"status": "success", "branch": current_run["head_branch"], "per_page": 100}
+    url = f"{current_run['workflow_url']}/runs"
+    while url:
+        resp = sess.get(url, params=params)
+        resp.raise_for_status()
+        yield from resp.json()["workflow_runs"]
+        url = resp.links.get("next", {}).get("url")
+        params = None
 
 
 def get_last_changelog() -> Optional[tuple[str, str]]:

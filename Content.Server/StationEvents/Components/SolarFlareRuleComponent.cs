@@ -8,9 +8,12 @@ namespace Content.Server.StationEvents.Components;
 /// <summary>
 ///     Solar Flare event specific configuration
 /// </summary>
+[Content.Server.DeadSpace.CentComm.AllowedGameRuleOnCentComm] // DS14
 [RegisterComponent, Access(typeof(SolarFlareRule))]
 public sealed partial class SolarFlareRuleComponent : Component
 {
+    public float EffectTimer; // DS14
+
     /// <summary>
     ///     If true, only headsets affected, but e.g. handheld radio will still work
     /// </summary>

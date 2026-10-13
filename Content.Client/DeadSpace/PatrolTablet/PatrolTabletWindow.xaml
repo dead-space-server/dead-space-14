@@ -9,7 +9,12 @@
             </BoxContainer>
         </PanelContainer>
 
-        <BoxContainer Orientation="Horizontal" VerticalExpand="True" SeparationOverride="10">
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="8">
+            <Button Name="SquadsTabButton" Text="{Loc 'patrol-tablet-tab-squads'}" HorizontalExpand="True" MinHeight="32" Disabled="True" />
+            <Button Name="AnnouncementTabButton" Text="{Loc 'patrol-tablet-tab-announcement'}" HorizontalExpand="True" MinHeight="32" />
+        </BoxContainer>
+
+        <BoxContainer Name="SquadsView" Orientation="Horizontal" VerticalExpand="True" SeparationOverride="10">
             <PanelContainer HorizontalExpand="True" VerticalExpand="True" MinWidth="400" StyleClasses="DeadSpaceInset">
                 <BoxContainer Orientation="Vertical" Margin="6" VerticalExpand="True">
                     <Label Text="{Loc 'patrol-tablet-personnel'}" StyleClasses="DeadSpaceSectionTitle" Margin="0 4" />
@@ -29,6 +34,17 @@
                 </BoxContainer>
             </PanelContainer>
         </BoxContainer>
+
+        <PanelContainer Name="AnnouncementView" Visible="False" HorizontalExpand="True" VerticalExpand="True" StyleClasses="DeadSpaceInset">
+            <BoxContainer Orientation="Vertical" Margin="16" SeparationOverride="10" HorizontalExpand="True" VerticalExpand="True">
+                <Label Text="{Loc 'patrol-tablet-announcement-heading'}" StyleClasses="DeadSpaceSectionTitle" Align="Center" />
+                <Label Text="{Loc 'patrol-tablet-announcement-title-label'}" StyleClasses="DeadSpaceSubtitle" />
+                <LineEdit Name="AnnouncementTitleInput" PlaceHolder="{Loc 'patrol-tablet-announcement-title-placeholder'}" MinHeight="34" />
+                <Label Text="{Loc 'patrol-tablet-announcement-text-label'}" StyleClasses="DeadSpaceSubtitle" />
+                <TextEdit Name="AnnouncementBodyInput" VerticalExpand="True" MinHeight="240" />
+                <Button Name="SendAnnouncementButton" Text="{Loc 'patrol-tablet-announcement-send'}" MinHeight="42" />
+            </BoxContainer>
+        </PanelContainer>
 
         <Label Name="FooterLabel"
                Text="{Loc 'patrol-tablet-footer'}"

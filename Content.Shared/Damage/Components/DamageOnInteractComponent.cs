@@ -1,5 +1,7 @@
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
+using Content.Shared.Humanoid.Prototypes;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Damage.Components;
 
@@ -25,6 +27,14 @@ public sealed partial class DamageOnInteractComponent : Component
     /// </summary>
     [DataField]
     public bool IgnoreResistances;
+
+    // DS14-start
+    /// <summary>
+    /// Species that can safely touch this object without taking contact damage.
+    /// </summary>
+    [DataField]
+    public HashSet<ProtoId<SpeciesPrototype>> SpeciesBlacklist = new();
+    // DS14-end
 
     /// <summary>
     /// What kind of localized text should pop up when they interact with the entity

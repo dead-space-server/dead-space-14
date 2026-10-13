@@ -41,12 +41,6 @@
     - type: NpcFactionMember
       factions:
       - CentralCommand
-  - !type:AddComponentSpecial
-    components:
-      # DS14-Start
-      - type: Skill
-        group: BaseSkills
-      # DS14-End
 
 # Униформа, мантия и парик выдаются через меню снаряжения роли (JobMagistrat).
 - type: startingGear

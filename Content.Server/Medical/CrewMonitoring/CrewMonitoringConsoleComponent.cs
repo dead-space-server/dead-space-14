@@ -20,6 +20,12 @@ public sealed partial class CrewMonitoringConsoleComponent : Component
     public float SensorTimeout = 10f;
 
     // DS14-start
+    /// <summary>
+    /// Read suit sensors directly for an administrator's personal monitor, without a monitoring server.
+    /// </summary>
+    [DataField]
+    public bool AdminMonitor;
+
     [DataField]
     [AutoPausedField]
     public TimeSpan NextSound = TimeSpan.Zero;

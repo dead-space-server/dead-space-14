@@ -8,6 +8,8 @@ crayon-interact-invalid-location = Туда не дотянуться!
 ## UI
 
 crayon-window-title = Мелок
+crayon-opacity-verb = Насыщенность
+crayon-opacity-window = Насыщенность
 crayon-window-placeholder = Поиск, или создание очереди рисования из списка имён, разделенных запятыми
 crayon-category-1-brushes = Кисти
 crayon-category-2-alphanum = Цифры и буквы

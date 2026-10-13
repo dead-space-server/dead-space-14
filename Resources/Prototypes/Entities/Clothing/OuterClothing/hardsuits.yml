@@ -606,9 +606,9 @@
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.6
-        Slash: 0.5
-        Piercing: 0.4
+        Blunt: 0.6 # DS14-value
+        Slash: 0.6 # DS14-value
+        Piercing: 0.5 # DS14-value
         Heat: 0.5 # DS14-value
         Radiation: 0.5
         Caustic: 0.6

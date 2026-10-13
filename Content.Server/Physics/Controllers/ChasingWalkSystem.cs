@@ -108,9 +108,11 @@ public sealed class ChasingWalkSystem : VirtualController
         else if (angleToChange < Angle.FromDegrees(-180))
             angleToChange += Angle.FromDegrees(360);
 
+        // DS14-start
         angleToChange = Math.Clamp(angleToChange,
             -component.MaxAngleVectorChangePerImpulse,
             component.MaxAngleVectorChangePerImpulse);
+        // DS14-end
 
         var newDirection = currentDirection.ToAngle() + angleToChange;
 

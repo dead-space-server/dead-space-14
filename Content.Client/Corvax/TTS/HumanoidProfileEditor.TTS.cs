@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Client.Corvax.TTS;
 using Content.Shared.Corvax.TTS;
+using Content.Shared.DeadSpace.TTS;
 using Content.Shared.Preferences;
 using Robust.Shared.Timing;
 
@@ -12,11 +13,7 @@ public sealed partial class HumanoidProfileEditor
 
     private void InitializeVoice()
     {
-        _voiceList = _prototypeManager
-            .EnumeratePrototypes<TTSVoicePrototype>()
-            .Where(o => o.RoundStart)
-            .OrderBy(o => Loc.GetString(o.Name))
-            .ToList();
+        _cfgManager.OnValueChanged(TTSProviderCVars.Provider, OnTtsProviderChanged, true); // DS14
 
         VoiceButton.OnItemSelected += args =>
         {
@@ -27,6 +24,17 @@ public sealed partial class HumanoidProfileEditor
         VoicePlayButton.OnPressed += _ => PlayPreviewTTS();
     }
 
+    // DS14-start
+    private void OnTtsProviderChanged(string provider)
+    {
+        _voiceList = _prototypeManager.EnumeratePrototypes<TTSVoicePrototype>()
+            .Where(voice => voice.RoundStart && voice.Provider == provider)
+            .OrderBy(voice => Loc.GetString(voice.Name))
+            .ToList();
+        UpdateTTSVoicesControls();
+    }
+    // DS14-end
+
     private void UpdateTTSVoicesControls()
     {
         if (Profile is null)
@@ -34,7 +42,7 @@ public sealed partial class HumanoidProfileEditor
 
         VoiceButton.Clear();
 
-        var firstVoiceChoiceId = 1;
+        var firstVoiceChoiceId = -1; // DS14
         for (var i = 0; i < _voiceList.Count; i++)
         {
             var voice = _voiceList[i];
@@ -44,7 +52,7 @@ public sealed partial class HumanoidProfileEditor
             var name = Loc.GetString(voice.Name);
             VoiceButton.AddItem(name, i);
 
-            if (firstVoiceChoiceId == 1)
+            if (firstVoiceChoiceId == -1) // DS14
                 firstVoiceChoiceId = i;
 
             // Не спонсоры могут прослушивать голоса в лобби
@@ -61,7 +69,12 @@ public sealed partial class HumanoidProfileEditor
             // }
         }
 
-        var voiceChoiceId = _voiceList.FindIndex(x => x.ID == Profile.Voice);
+        // DS14-start
+        var selectedVoice = Profile.GetVoice(_cfgManager.GetCVar(TTSProviderCVars.Provider), _prototypeManager);
+        var voiceChoiceId = _voiceList.FindIndex(x => x.ID == selectedVoice);
+        VoiceButton.Disabled = _readOnly || firstVoiceChoiceId == -1;
+        VoicePlayButton.Disabled = firstVoiceChoiceId == -1;
+        // DS14-end
         if (!VoiceButton.TrySelectId(voiceChoiceId) &&
             VoiceButton.TrySelectId(firstVoiceChoiceId))
         {
@@ -78,6 +91,6 @@ public sealed partial class HumanoidProfileEditor
         if (Profile is null)
             return;
 
-        _entManager.System<TTSSystem>().RequestPreviewTTS(Profile.Voice);
+        _entManager.System<TTSSystem>().RequestPreviewTTS(Profile.GetVoice(_cfgManager.GetCVar(TTSProviderCVars.Provider), _prototypeManager)); // DS14
     }
 }

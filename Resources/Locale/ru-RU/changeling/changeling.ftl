@@ -33,6 +33,9 @@ changeling-flesh-clothing-examine-wearer = [color=crimson]Этот предме�
 changeling-flesh-clothing-alert-name = Одежда из плоти
 changeling-flesh-clothing-alert-desc = Включена ли имитация одежды. Нажмите для переключения.
 
+changeling-cocoon-alert-name = Кокон стазиса
+changeling-cocoon-alert-desc = Обволакивает ли нас кокон из плоти при входе в стазис. Нажмите для переключения.
+
 changeling-biodegrade-used-popup = {CAPITALIZE(THE($user))} изрыгает кислоту на {POSS-ADJ($user)} {$restraint}!
 changeling-biodegrade-used-popup-self = Мы изрыгаем кислоту на наши {$restraint}!
 

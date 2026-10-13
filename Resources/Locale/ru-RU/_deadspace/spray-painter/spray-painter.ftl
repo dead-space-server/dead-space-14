@@ -3,11 +3,13 @@ spray-painter-tab-category-taipanairlocks = Шлюзы
 spray-painter-tab-category-taipancanisters = Канистры
 spray-painter-tab-category-taipancrates = Ящики
 spray-painter-tab-category-taipanlockers = Шкафчики
+spray-painter-tab-category-gloves = Перчатки
 # Groups (subtabs)
 spray-painter-tab-group-taipanairlockstandard = Стандарт
 spray-painter-tab-group-taipanairlockglass = Стекло
 spray-painter-tab-group-taipancratesteel = Сталь
 spray-painter-tab-group-taipanlocker = С замком
+spray-painter-tab-group-gloves = Перчатки
 # Airlocks
 spray-painter-style-taipanairlockstandard-atmospherics = Атмос
 spray-painter-style-taipanairlockstandard-basic = Обычный
@@ -60,3 +62,16 @@ spray-painter-style-taipancratesteel-radiation = Радиационный
 spray-painter-style-taipancratesteel-science = Научный
 spray-painter-style-taipancratesteel-surgery = Хирургический
 spray-painter-style-taipancratesteel-syndicate = Синдикат
+# Gloves
+spray-painter-style-gloves-black = Чёрные
+spray-painter-style-gloves-blue = Синие
+spray-painter-style-gloves-brown = Коричневые
+spray-painter-style-gloves-gray = Серые
+spray-painter-style-gloves-green = Зелёные
+spray-painter-style-gloves-lightbrown = Светло-коричневые
+spray-painter-style-gloves-orange = Оранжевые
+spray-painter-style-gloves-purple = Фиолетовые
+spray-painter-style-gloves-red = Красные
+spray-painter-style-gloves-teal = Бирюзовые
+spray-painter-style-gloves-white = Белые
+spray-painter-style-gloves-yellow = Жёлтые

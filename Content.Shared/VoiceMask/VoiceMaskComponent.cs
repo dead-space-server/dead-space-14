@@ -1,3 +1,4 @@
+using Content.Shared.DeadSpace.TTS;
 using Content.Shared.Speech;
 using Robust.Shared.Prototypes;
 using Content.Shared.Humanoid;
@@ -42,7 +43,16 @@ public sealed partial class VoiceMaskComponent : Component
     // Corvax-TTS-Start
     [DataField]
     [ViewVariables(VVAccess.ReadWrite)]
-    public string VoiceId = SharedHumanoidAppearanceSystem.DefaultVoice;
+    // DS14-start
+    public string VoiceId
+    {
+        get => Voices.GetValueOrDefault(TTSVoices.Silero, SharedHumanoidAppearanceSystem.DefaultVoice);
+        set => Voices[TTSVoices.Silero] = value;
+    }
+
+    [DataField]
+    public Dictionary<string, string> Voices = new();
+    // DS14-end
     // Corvax-TTS-End
 
     /// <summary>

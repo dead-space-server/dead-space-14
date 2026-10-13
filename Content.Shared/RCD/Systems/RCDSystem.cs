@@ -87,18 +87,28 @@ public sealed class RCDSystem : EntitySystem
 
     private void OnMapInit(EntityUid uid, RCDComponent component, MapInitEvent args)
     {
+        InitializeDevice((uid, component));
+    }
+
+    // DS14-start
+    public void InitializeDevice(Entity<RCDComponent> ent)
+    {
+        if (_net.IsClient)
+            return;
+
         // On init, set the RCD to its first available recipe
-        if (component.AvailablePrototypes.Count > 0)
+        if (ent.Comp.AvailablePrototypes.Count > 0)
         {
-            component.ProtoId = component.AvailablePrototypes.ElementAt(0);
-            Dirty(uid, component);
+            ent.Comp.ProtoId = ent.Comp.AvailablePrototypes.ElementAt(0);
+            Dirty(ent);
 
             return;
         }
 
         // The RCD has no valid recipes somehow? Get rid of it
-        QueueDel(uid);
+        QueueDel(ent);
     }
+    // DS14-end
 
     private void OnRCDSystemMessage(EntityUid uid, RCDComponent component, RCDSystemMessage args)
     {
@@ -226,6 +236,16 @@ public sealed class RCDSystem : EntitySystem
         }
 
         #endregion
+
+        // DS14-start
+        if (prototype.Mode != RcdMode.Deconstruct)
+        {
+            var constructionEffect = delay <= 0
+                ? component.InstantConstructionEffect
+                : component.ConstructionEffect;
+            effectPrototype = constructionEffect ?? effectPrototype;
+        }
+        // DS14-end
 
         // Try to start the do after
         var effect = Spawn(effectPrototype, _mapSystem.ToCenterCoordinates(tile, mapGrid));

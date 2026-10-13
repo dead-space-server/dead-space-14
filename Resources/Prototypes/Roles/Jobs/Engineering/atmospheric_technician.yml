@@ -19,19 +19,13 @@
   - !type:GiveItemOnHolidaySpecial
     holiday: FirefighterDay
     prototype: FireAxe
-  - !type:AddComponentSpecial
-    components:
-      # DS14-Start
-      - type: Skill
-        group: EngineerAtmos
-      # DS14-End
   #start-backmen: currency
   minBankBalance: 250 # DS14-value
   maxBankBalance: 350 # DS14-value
   wageDepartment: Engineering
   wage: 200 # DS14-value
   #end-backmen: currency
-  
+
 
 - type: startingGear
   id: AtmosphericTechnicianGear

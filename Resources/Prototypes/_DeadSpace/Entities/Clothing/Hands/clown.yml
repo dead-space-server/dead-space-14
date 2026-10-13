@@ -1,0 +1,22 @@
+# Перчатки клоуна (DS14). Спрайты: _DeadSpace/Clothing/Hands/Gloves
+- type: entity
+  parent: ClothingHandsBase
+  id: ClothingHandsGlovesClownWhite
+  name: белые перчатки клоуна
+  description: Белые клоунские перчатки. Хонк!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Hands/Gloves/clown_white.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Hands/Gloves/clown_white.rsi
+
+- type: entity
+  parent: ClothingHandsBase
+  id: ClothingHandsGlovesClownRed
+  name: красные перчатки клоуна
+  description: Красные клоунские перчатки. Хонк!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Hands/Gloves/clown_red.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Hands/Gloves/clown_red.rsi

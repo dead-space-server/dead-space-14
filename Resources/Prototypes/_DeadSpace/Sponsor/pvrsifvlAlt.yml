@@ -217,7 +217,7 @@
 
 #Gasmask
 - type: entity
-  parent: ClothingMaskGasSyndicate
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskpvrsifvlAlt
   name: разведывательная маска ETL//07
   description: Я один из тех, кому не улыбаются. Разработана и спроектирована компанией Nakamura Engineering по индивидуальному заказу.

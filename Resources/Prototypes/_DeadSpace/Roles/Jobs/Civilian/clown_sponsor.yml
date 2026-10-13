@@ -23,12 +23,6 @@
       interval: 10
   - !type:AddImplantSpecial
     implants: [ SadTromboneImplant ]
-  - !type:AddComponentSpecial
-    components:
-    # DS14-Start
-    - type: Skill
-      group: BaseSkills
-    # DS14-End
   #start-backmen: currency
   minBankBalance: 150
   maxBankBalance: 250

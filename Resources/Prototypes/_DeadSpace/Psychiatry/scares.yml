@@ -1,0 +1,77 @@
+- type: psychiatryScare
+  id: PsychiatryScareGhost
+  sprite: { sprite: Mobs/Ghosts/ghost_human.rsi, state: icon }
+  fallbackState: animated
+  sound:
+    path: /Audio/_DeadSpace/Lavaland/SpectralBlade/ghost2.ogg
+  speed: 1.6
+  duration: 1.4
+  size: 1, 1
+  weight: 56
+  wobble: true
+
+- type: psychiatryScare
+  id: PsychiatryScareCarp
+  sprite: { sprite: Mobs/Aliens/Carps/space.rsi, state: alive }
+  sound:
+    path: /Audio/_DeadSpace/Lavaland/AshDrake/demon_attack1.ogg
+  speed: 3.5
+  duration: 3.5
+  size: 1, 1
+  weight: 40
+
+- type: psychiatryScare
+  id: PsychiatryScareDragon
+  sprite: { sprite: _DeadSpace/Mobs/Aliens/MiniDragon.rsi, state: alive }
+  fallbackSprite: { sprite: Mobs/Aliens/Carps/dragon.rsi, state: alive }
+  sound:
+    path: /Audio/_DeadSpace/Lavaland/AshDrake/demon_attack1.ogg
+  speed: 3.5
+  duration: 3.5
+  size: 1, 1
+  weight: 35
+
+- type: psychiatryScare
+  id: PsychiatryScareGoliath
+  sprite: { sprite: _DeadSpace/Lavaland/Mobs/lavaland_monsters.rsi, state: goliath }
+  fallbackSprite: { sprite: Mobs/Aliens/Asteroid/goliath.rsi, state: goliath }
+  sound:
+    path: /Audio/_DeadSpace/Lavaland/AshDrake/demon_attack1.ogg
+  speed: 3.5
+  duration: 3.5
+  size: 1.35, 1.35
+  weight: 35
+
+- type: psychiatryScare
+  id: PsychiatryScareLaser
+  sprite: { sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi, state: u_laser }
+  fallbackSprite: { sprite: Objects/Weapons/Guns/Projectiles/projectiles_tg.rsi, state: omnilaser }
+  sound:
+    path: /Audio/Weapons/Guns/Gunshots/laser_cannon.ogg
+  speed: 11
+  duration: 1.2
+  size: 0.95, 0.28
+  weight: 50
+  rotate: true
+
+- type: psychiatryScare
+  id: PsychiatryScareFireball
+  sprite: { sprite: _DeadSpace/Lavaland/Effects/AshDrakeFireball.rsi, state: fireball }
+  fallbackSprite: { sprite: Objects/Weapons/Guns/Projectiles/magic.rsi, state: fireball }
+  sound:
+    path: /Audio/_DeadSpace/Lavaland/AshDrake/fireball.ogg
+  speed: 7
+  duration: 1.7
+  size: 1.35, 1.35
+  weight: 40
+
+- type: psychiatryHarmfulReagents
+  id: PsychiatryHarmful
+  reagents:
+  - WeldingFuel
+  - Toxin
+  - Chlorine
+  - FluorosulfuricAcid
+  - SulfuricAcid
+  - Vomit
+  - Plasma

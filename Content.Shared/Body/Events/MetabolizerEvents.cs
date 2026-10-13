@@ -12,6 +12,14 @@ public record struct GetMetabolicMultiplierEvent()
     public float Multiplier = 1f;
 }
 
+//DS14-Start
+[ByRefEvent]
+public record struct GetRotMultiplierEvent()
+{
+    public float Multiplier = 1f;
+}
+//DS14-End
+
 /// <summary>
 /// Raised on an entity to apply their metabolic multiplier to relevant systems.
 /// Note that you should be storing this value as to not accrue precision errors when it's modified.

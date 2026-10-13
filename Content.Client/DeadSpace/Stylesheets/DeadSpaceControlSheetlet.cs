@@ -18,8 +18,8 @@ public sealed class DeadSpaceControlSheetlet : Sheetlet<NanotrasenStylesheet>
 {
     public override StyleRule[] GetRules(NanotrasenStylesheet sheet, object config)
     {
-        // Dark and light separate controls from their parent through fill, not permanent frames. Retaining the
-        // one-pixel transparent edge keeps existing layout geometry stable and leaves the gold edge for hover.
+        // Keep geometry constant and distinguish ordinary button states through fill and text.
+        // Only transient hover/focus feedback uses an outline.
         var normalBorder = DeadSpaceStylePalette.ClassicChrome
             ? DeadSpaceStylePalette.BorderControl
             : Color.Transparent;
@@ -114,6 +114,10 @@ public sealed class DeadSpaceControlSheetlet : Sheetlet<NanotrasenStylesheet>
             BackgroundColor = DeadSpaceStylePalette.ControlDisabled,
             BorderColor = disabledBorder,
         };
+        var lockedSelected = new StyleBoxFlat(baseControlDisabled)
+        {
+            BackgroundColor = DeadSpaceStylePalette.ControlDisabledPressed,
+        };
         // Bare ContainerButton is widely used as a zero-margin interactive row. Give it safe global chrome
         // without changing its measured geometry; the more specific ordinary Button rule below keeps its margins.
         var bareContainer = DeadSpaceStyleBoxes.Flat(DeadSpaceStylePalette.Control);
@@ -161,6 +165,10 @@ public sealed class DeadSpaceControlSheetlet : Sheetlet<NanotrasenStylesheet>
             new Thickness(1),
             7,
             4);
+        var inputFocused = new StyleBoxFlat(input)
+        {
+            BorderColor = DeadSpaceStylePalette.HoverOutline,
+        };
         var inputDisabled = new StyleBoxFlat(input)
         {
             BackgroundColor = DeadSpaceStylePalette.ControlDisabled,
@@ -209,9 +217,12 @@ public sealed class DeadSpaceControlSheetlet : Sheetlet<NanotrasenStylesheet>
                     .Prop(LineEdit.StylePropertyCursorColor, DeadSpaceStylePalette.Amber)
                     .Prop(LineEdit.StylePropertySelectionColor, DeadSpaceStylePalette.CyanSelection),
                 E<LineEdit>()
+                    .Class(DeadSpaceStyleClass.InputFocused)
+                    .Prop(LineEdit.StylePropertyStyleBox, inputFocused),
+                E<LineEdit>()
                     .Class(LineEdit.StyleClassLineEditNotEditable)
                     .Prop(LineEdit.StylePropertyStyleBox, inputDisabled)
-                    .Prop("font-color", DeadSpaceStylePalette.TextMuted),
+                    .Prop("font-color", DeadSpaceStylePalette.TextDisabled),
                 E<LineEdit>()
                     .Pseudo(LineEdit.StylePseudoClassPlaceholder)
                     .Prop("font-color", DeadSpaceStylePalette.TextPlaceholder),
@@ -253,6 +264,26 @@ public sealed class DeadSpaceControlSheetlet : Sheetlet<NanotrasenStylesheet>
                 E<SwitchButton>().PseudoDisabled().Box(switchBackground).Modulate(Color.White),
             ]);
             AddButtonRules(rules, null, baseControl, baseControlHover, baseControlPressed, baseControlDisabled);
+            // Form dropdowns share the input surface and geometry of their neighboring text fields.
+            rules.AddRange(
+            [
+                E<OptionButton>().Class(ContainerButton.StyleClassButton).Class(DeadSpaceStyleClass.FormField)
+                    .PseudoNormal().Box(input).Modulate(Color.White),
+                E<OptionButton>().Class(ContainerButton.StyleClassButton).Class(DeadSpaceStyleClass.FormField)
+                    .PseudoHovered().Box(inputFocused).Modulate(Color.White),
+                E<OptionButton>().Class(ContainerButton.StyleClassButton).Class(DeadSpaceStyleClass.FormField)
+                    .PseudoPressed().Box(inputFocused).Modulate(Color.White),
+                E<OptionButton>().Class(ContainerButton.StyleClassButton).Class(DeadSpaceStyleClass.FormField)
+                    .PseudoDisabled().Box(inputDisabled).Modulate(Color.White),
+            ]);
+            // Disabled draw mode hides the pressed pseudo-state; a content marker preserves a locked selection.
+            rules.AddRange(
+            [
+                Button(DeadSpaceStyleClass.LockedSelected).Class(ContainerButton.StyleClassButton)
+                    .PseudoDisabled().Box(lockedSelected).Modulate(Color.White),
+                Button(DeadSpaceStyleClass.LockedSelected).Class(ContainerButton.StyleClassButton)
+                    .PseudoDisabled().ParentOf(E<Label>()).FontColor(DeadSpaceStylePalette.TextInactive),
+            ]);
         }
 
         if (!DeadSpaceStylePalette.ClassicChrome)

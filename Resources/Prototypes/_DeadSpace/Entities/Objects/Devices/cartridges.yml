@@ -16,6 +16,23 @@
 
 - type: entity
   parent: BasePDACartridge
+  id: PdaGamesCartridge
+  name: картридж Игры
+  description: Набор маленьких игр для КПК и общая таблица результатов.
+  components:
+  - type: Sprite
+    state: cart-y
+  - type: UIFragment
+    ui: !type:PdaArcadeUi
+  - type: Cartridge
+    programName: pda-arcade-program-name
+    icon:
+      sprite: Objects/Specific/Hydroponics/apple.rsi
+      state: produce
+  - type: PdaArcadeCartridge
+
+- type: entity
+  parent: BasePDACartridge
   id: ScannerProgramCartridge
   name: картридж Сканер Документов
   description: Программа для сканирования документов через КПК.

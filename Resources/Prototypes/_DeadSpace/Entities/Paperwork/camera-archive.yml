@@ -1,0 +1,6 @@
+- type: paperworkForm
+  id: CameraArchive
+  category: NTSecurity
+  name: paperwork-form-title-camera-archive
+  text: "/Paperwork/Security/camera-archive.xml"
+  paperPrototype: PaperPrintedSecurity

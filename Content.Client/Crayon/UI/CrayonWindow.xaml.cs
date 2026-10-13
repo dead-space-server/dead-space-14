@@ -33,6 +33,9 @@ namespace Content.Client.Crayon.UI
         public event Action<string>? OnSelected;
 
         public event Action<Angle>? OnRotationChanged; //DS14
+        public event Action<float>? OnOpacityChanged; //DS14
+
+        private bool _settingOpacity; //DS-14
 
         public CrayonWindow()
         {
@@ -50,6 +53,14 @@ namespace Content.Client.Crayon.UI
 				{
 					OnRotationChanged?.Invoke(Angle.FromDegrees(degrees));
 				}
+			};
+			OpacitySlider.OnValueChanged += _ =>
+			{
+				PercentLabel.Text = $"{(int) OpacitySlider.Value}%";
+				if (_settingOpacity)
+					return;
+
+				OnOpacityChanged?.Invoke(OpacitySlider.Value / 100f);
 			};
 			// DS14-end
         }
@@ -170,6 +181,18 @@ namespace Content.Client.Crayon.UI
 
             RefreshList();
         }
+
+        //DS-14 start
+        public void SetOpacity(CrayonComponent crayon)
+        {
+            _settingOpacity = true;
+            OpacitySlider.MinValue = crayon.MinOpacity * 100f;
+            OpacitySlider.MaxValue = crayon.MaxOpacity * 100f;
+            OpacitySlider.Value = crayon.Opacity * 100f;
+            PercentLabel.Text = $"{(int) OpacitySlider.Value}%";
+            _settingOpacity = false;
+        }
+        //DS-14 end
 
         public void AdvanceState(string drawnDecal)
         {

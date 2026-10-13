@@ -8,6 +8,9 @@
             <Label Name="ToName"
                    Access="Public"
                    HorizontalExpand="True" />
+            <Label Name="ToBalance"
+                   Access="Public"
+                   HorizontalAlignment="Right" />
         </BoxContainer>
         <BoxContainer Orientation="Horizontal"
                       HorizontalExpand="True"
@@ -15,6 +18,9 @@
             <Label Name="FromName"
                    Access="Public"
                    MinSize="32 32"/>
+            <Label Name="FromBalance"
+                   Access="Public"
+                   HorizontalAlignment="Right" />
             <Label Name="Wage"
                    Access="Public"
                    HorizontalExpand="True" />

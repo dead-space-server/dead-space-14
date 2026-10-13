@@ -24,12 +24,6 @@
   - !type:GiveItemOnHolidaySpecial
     holiday: BoxingDay
     prototype: BoxCardboard
-  - !type:AddComponentSpecial
-    components:
-      # DS14-Start
-      - type: Skill
-        group: BasicAndShuttleControl
-      # DS14-End
 
 - type: startingGear
   id: CargoTechGear

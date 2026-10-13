@@ -178,6 +178,15 @@
   # Strips the name identifier from them, so they're just "Confident Waters" rather than "Confident Waters (123)"
   - type: NameIdentifier
     group: null
+    #DS14-start
+  - type: Language
+    knownLanguages:
+    - GeneralLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage
+    #DS14-end
 
 # Emotional Support Scurrets have a ghost role and equipment. At the moment, these are intended to be used for admemes, but
 # feel free to hook them into random content.
@@ -209,3 +218,13 @@
   id: MobEmotionalSupportScurret
   parent: [MobScurret, MobBaseEmotionalSupportScurret]
   description: Commonly known as Wawa, from the wetlands of Planet Wawa, these critters make up the bulk of Arnold's Pizza's "loyal workforce". This one is here as a temp.
+  #DS14-start
+  components:
+  - type: Language
+    knownLanguages:
+    - GeneralLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage
+  #DS14-end

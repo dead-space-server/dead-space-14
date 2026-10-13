@@ -107,7 +107,7 @@
   offset: 0.05, 0.125
 
 - type: entity
-  parent: ClothingMaskGasSyndicate
+  parent: ClothingMaskGasSponsor
   name: боевой противогаз ветерана
   description: Высокотехнологичный противогаз с возможностью подключить его к баллону. Теперь – с функцией защиты для глаз!
   id: ClothingMaskGasPrometheusAlt

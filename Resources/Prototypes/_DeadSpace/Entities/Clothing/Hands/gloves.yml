@@ -126,3 +126,14 @@
     sprite: _DeadSpace/Clothing/Hands/Gloves/atmos_gloves.rsi
   - type: Clothing
     sprite: _DeadSpace/Clothing/Hands/Gloves/atmos_gloves.rsi
+
+- type: entity
+  parent: ClothingHandsGlovesColorYellow
+  id: ClothingHandsGlovesSamurai
+  name: перчатки самурая
+  description: Прочные перчатки с сегментированными пластинами для защиты кистей. Идеально подходят для уверенного хвата рукояти меча.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Hands/Gloves/samurai_gloves.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Hands/Gloves/samurai_gloves.rsi

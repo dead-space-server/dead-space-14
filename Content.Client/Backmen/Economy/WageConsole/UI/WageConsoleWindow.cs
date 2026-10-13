@@ -30,7 +30,9 @@ public sealed partial class WageConsoleWindow : FancyWindow
                 Id = row.Id
             };
             wageRow.FromName.Text = Loc.GetString("wageconsole-row", ("name", row.FromName), ("account", row.FromAccount));
+            wageRow.FromBalance.Text = Loc.GetString("wageconsole-balance", ("balance", row.FromBalance));
             wageRow.ToName.Text = Loc.GetString("wageconsole-row", ("name", row.ToName), ("account", row.ToAccount));
+            wageRow.ToBalance.Text = Loc.GetString("wageconsole-balance", ("balance", row.ToBalance));
             wageRow.Wage.Text = row.Wage.ToString();
             wageRow.EditBtn.OnPressed += EditBtnOnOnPressed;
             wageRow.BonusBtn.OnPressed += BonusBtnOnOnPressed;

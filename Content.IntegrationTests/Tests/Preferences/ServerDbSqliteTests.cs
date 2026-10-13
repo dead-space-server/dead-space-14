@@ -10,6 +10,7 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
+using Content.Shared.DeadSpace.TTS;
 using Content.Shared.Preferences;
 using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Preferences.Loadouts.Effects;
@@ -106,6 +107,32 @@ namespace Content.IntegrationTests.Tests.Preferences
             Assert.That(prefs.Characters.Single(p => p.Key == slot).Value.MemberwiseEquals(originalProfile));
             await pair.CleanReturnAsync();
         }
+
+        // DS14-start
+        [Test]
+        public async Task TestIndependentTtsVoices()
+        {
+            await using var pair = await PoolManager.GetServerClient();
+            var db = GetDb(pair.Server);
+            var user = NewUserId();
+            var original = CharlieCharlieson();
+            await db.InitPrefsAsync(user, original);
+            var legacy = (HumanoidCharacterProfile) (await db.GetPlayerPreferencesAsync(user))!.Characters[0];
+            Assert.That(legacy.Voice, Is.EqualTo(original.Voice));
+            Assert.That(legacy.TtsVoices.ContainsKey(TTSVoices.Ntts), Is.False);
+
+            await db.SaveCharacterSlotAsync(user, legacy.WithTtsVoice(TTSVoices.Ntts, "NTTSKleiner"), 0);
+            var ntts = (HumanoidCharacterProfile) (await db.GetPlayerPreferencesAsync(user))!.Characters[0];
+            Assert.That(ntts.Voice, Is.EqualTo(original.Voice));
+            Assert.That(ntts.TtsVoices[TTSVoices.Ntts], Is.EqualTo("NTTSKleiner"));
+
+            await db.SaveCharacterSlotAsync(user, ntts.WithVoice("Noble"), 0);
+            var silero = (HumanoidCharacterProfile) (await db.GetPlayerPreferencesAsync(user))!.Characters[0];
+            Assert.That(silero.Voice, Is.EqualTo("Noble"));
+            Assert.That(silero.TtsVoices[TTSVoices.Ntts], Is.EqualTo("NTTSKleiner"));
+            await pair.CleanReturnAsync();
+        }
+        // DS14-end
 
         [Test]
         public async Task TestDeleteCharacter()

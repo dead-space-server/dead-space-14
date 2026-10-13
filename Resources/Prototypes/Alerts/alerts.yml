@@ -5,6 +5,7 @@
   id: BaseAlertOrder
   order:
     - category: Health
+    - alertType: ChangelingCocoon
     - category: Stamina
     - alertType: SuitPower
     - category: Internals

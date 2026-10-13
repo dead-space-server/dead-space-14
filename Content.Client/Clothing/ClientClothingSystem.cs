@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Numerics; // DS14
 using Content.Client.DisplacementMap;
 using Content.Client.Inventory;
 using Content.Shared.Clothing;
@@ -231,9 +232,10 @@ public sealed class ClientClothingSystem : ClothingSystem
         RenderEquipment(args.Equipee, uid, args.Slot, clothingComponent: component);
     }
 
-    private void RenderEquipment(EntityUid equipee, EntityUid equipment, string slot,
+    // DS14-start
+    public void RenderEquipment(EntityUid equipee, EntityUid equipment, string slot,
         InventoryComponent? inventory = null, SpriteComponent? sprite = null, ClothingComponent? clothingComponent = null,
-        InventorySlotsComponent? inventorySlots = null)
+        InventorySlotsComponent? inventorySlots = null, Vector2? slotOffset = null)
     {
         if (!Resolve(equipee, ref inventory, ref sprite, ref inventorySlots) ||
            !Resolve(equipment, ref clothingComponent, false))
@@ -241,8 +243,15 @@ public sealed class ClientClothingSystem : ClothingSystem
             return;
         }
 
-        if (!_inventorySystem.TryGetSlot(equipee, slot, out var slotDef, inventory))
-            return;
+        if (slotOffset == null)
+        {
+            if (_inventorySystem.TryGetSlot(equipee, slot, out var slotDef, inventory))
+            {
+                slotOffset = slotDef.Offset;
+            }
+            else return;
+        }
+        // DS14-end
 
         // Remove old layers. We could also just set them to invisible, but as items may add arbitrary layers, this
         // may eventually bloat the player with lots of invisible layers.
@@ -336,7 +345,7 @@ public sealed class ClientClothingSystem : ClothingSystem
             }
 
             _sprite.LayerSetData((equipee, sprite), index, layerData);
-            _sprite.LayerSetOffset(layer, layer.Offset + slotDef.Offset);
+            _sprite.LayerSetOffset(layer, layer.Offset + slotOffset.Value); // DS14
 
             if (displacementData is not null)
             {

@@ -6,3 +6,6 @@ ent-BoxCardboardERT = аварийный запас
 ent-BoxCardboardERTGamma = аварийный запас
     .desc = Коробка с базовым набором для выживания.
     .suffix = ОБР Гамма
+ent-BoxBlissfulSleep = коробка инъекций "Блаженный Сон"
+    .desc = Коробка, полная каких-то инъекций.
+    .suffix = Летальная Инъекция

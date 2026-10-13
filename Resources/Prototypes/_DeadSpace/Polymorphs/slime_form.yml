@@ -1,0 +1,73 @@
+- type: polymorph
+  id: SlimePersonForm
+  configuration:
+    entity: MobSlimeForm
+    inventory: Drop
+    transferName: true
+    transferDamage: true
+    revertOnCrit: true
+    revertOnDeath: true
+    forced: true
+    delay: 0
+    polymorphSound: !type:SoundPathSpecifier
+      path: /Audio/Voice/Slime/slime_squish.ogg
+    exitPolymorphSound: !type:SoundPathSpecifier
+      path: /Audio/Voice/Slime/slime_squish.ogg
+
+- type: entity
+  parent: BaseAction
+  id: ActionSlimeForm
+  name: Become slime
+  description: Condense into a slime.
+  components:
+  - type: Action
+    checkCanInteract: false
+    icon:
+      sprite: _DeadSpace/Actions/slime_form.rsi
+      state: transformslime
+  - type: InstantAction
+    event: !type:SlimeFormActionEvent
+
+- type: entity
+  parent: BaseMobAdultSlimes
+  id: MobSlimeForm
+  name: slime
+  suffix: Player form
+  description: A blob of slime. Sentient. Probably...
+  components:
+  - type: SlimeForm
+    isSlime: true
+  - type: StatusIcon
+    bounds: -0.5,-0.5,0.5,0.5
+  - type: SSDIndicator
+  - type: MindExaminable
+  - type: CarrySize
+    size: Small
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 0
+        Structural: 0
+        Caustic: 0
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Mobs/SlimeForm/slime_form.rsi
+    noRot: true
+    layers:
+    - map: ["body"]
+      sprite: _DeadSpace/Mobs/SlimeForm/slime_form.rsi
+      state: slime
+    - map: ["face"]
+      sprite: _DeadSpace/Mobs/SlimeForm/slime_form.rsi
+      state: face
+  - type: HTN
+    enabled: false
+  - type: Language
+    selectedLanguage: GeneralLanguage
+    knownLanguages:
+    - GeneralLanguage
+    - SlimeLanguage
+  - type: Speech
+    speechVerb: Slime
+    speechSounds: Slime
+    allowedEmotes: ['Squish']

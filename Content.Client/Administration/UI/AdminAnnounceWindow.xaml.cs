@@ -1,3 +1,5 @@
+using Content.Shared.DeadSpace.TTS;
+using Robust.Shared.Configuration;
 using System.Linq;
 using Content.Client.Decals.UI;
 using Content.Shared.Administration;
@@ -86,6 +88,7 @@ namespace Content.Client.Administration.UI
             // Corvax-TTS-Start
             _voices = protoManager // DS14-Languages
                 .EnumeratePrototypes<TTSVoicePrototype>()
+                .Where(voice => voice.Provider == IoCManager.Resolve<IConfigurationManager>().GetCVar(TTSProviderCVars.Provider)) // DS14
                 .OrderBy(o => Loc.GetString(o.Name))
                 .ToList();
             for (var i = 0; i < _voices.Count; i++)
@@ -420,7 +423,7 @@ namespace Content.Client.Administration.UI
             // DS14-end
             base.Close();
         }
-        // DS14-announce-end
+        // DS14-Languages-end
 
         // DS14-start
         private void OpenTemplatesWindow(BaseButton.ButtonEventArgs _)

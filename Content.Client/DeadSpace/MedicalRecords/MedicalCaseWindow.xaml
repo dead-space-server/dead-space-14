@@ -1,0 +1,55 @@
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      Title="{Loc 'medical-records-case-window-title'}"
+                      MinSize="560 420">
+    <BoxContainer Orientation="Vertical" Margin="8">
+        <BoxContainer Orientation="Vertical" Margin="0 4">
+            <Label Text="{Loc 'medical-records-case-admission'}" StyleClasses="DeadSpaceSubtitle" />
+            <LineEdit Name="AdmissionState" HorizontalExpand="True" />
+        </BoxContainer>
+        <BoxContainer Orientation="Vertical" Margin="0 4">
+            <Label Text="{Loc 'medical-records-case-diagnosis'}" StyleClasses="DeadSpaceSubtitle" />
+            <LineEdit Name="Diagnosis" HorizontalExpand="True" />
+        </BoxContainer>
+        <BoxContainer Orientation="Vertical" Margin="0 4">
+            <Label Text="{Loc 'medical-records-case-treatment'}" StyleClasses="DeadSpaceSubtitle" />
+            <LineEdit Name="Treatment" HorizontalExpand="True" />
+        </BoxContainer>
+        <BoxContainer Orientation="Vertical" Margin="0 4">
+            <Label Text="{Loc 'medical-records-case-specialists'}" StyleClasses="DeadSpaceSubtitle" />
+            <LineEdit Name="Specialists" HorizontalExpand="True" />
+        </BoxContainer>
+        <BoxContainer Orientation="Vertical" Margin="0 4">
+            <Label Text="{Loc 'medical-records-case-recommendations'}" StyleClasses="DeadSpaceSubtitle" />
+            <LineEdit Name="Recommendations" HorizontalExpand="True" />
+        </BoxContainer>
+        <BoxContainer Orientation="Vertical" Margin="0 4">
+            <Label Text="{Loc 'medical-records-case-discharge'}" StyleClasses="DeadSpaceSubtitle" />
+            <LineEdit Name="DischargeState" HorizontalExpand="True" />
+        </BoxContainer>
+
+        <CheckBox Name="ContinuedTreatment"
+                  Text="{Loc 'medical-records-case-needs-continued-treatment'}"
+                  Margin="0 6 0 0" />
+        <CheckBox Name="ForcedTreatment"
+                  Text="{Loc 'medical-records-case-needs-forced-treatment'}" />
+        <CheckBox Name="CloseCase"
+                  Text="{Loc 'medical-records-case-close'}"
+                  Margin="0 4 0 0"
+                  Visible="False" />
+
+        <Label Name="ErrorLabel"
+               Text="{Loc 'medical-records-case-needs-diagnosis'}"
+               StyleClasses="DeadSpaceSubtitle"
+               Visible="False"
+               Margin="0 4 0 0" />
+
+        <BoxContainer Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 8 0 0">
+            <Button Name="ConfirmButton"
+                    Text="{Loc 'medical-records-case-confirm'}" />
+            <Button Name="CancelButton"
+                    Text="{Loc 'medical-records-case-cancel'}"
+                    Margin="6 0 0 0" />
+        </BoxContainer>
+    </BoxContainer>
+</controls:FancyWindow>

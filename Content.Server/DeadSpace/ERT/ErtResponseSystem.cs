@@ -143,7 +143,7 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
 
         SubscribeLocalEvent<ErtSpawnRuleComponent, RuleLoadedGridsEvent>(OnRuleLoadedGrids);
         SubscribeLocalEvent<ErtSpeciesRoleComponent, MindAddedMessage>(OnMindAdded);
-        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(_ => ResetRoundState());
     }
 
     private void OnRequestErtAdminState(RequestErtAdminStateMessage msg, EntitySessionEventArgs args)
@@ -590,7 +590,7 @@ public sealed class ErtResponseSystem : SharedErtResponseSystem
         RaiseNetworkEvent(new ErtAdminActionResult(true, "OK"), args.SenderSession.Channel);
     }
 
-    private void OnRoundRestart(RoundRestartCleanupEvent ev)
+    internal void ResetRoundState()
     {
         _windowWaitingSpecies.Clear();
         _pendingRequests.Clear();

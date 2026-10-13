@@ -1,0 +1,6 @@
+- type: entity
+  parent: MobStatusEffectDebuff
+  id: StatusEffectDeaf
+  name: deaf
+  components:
+  - type: DeafStatusEffect

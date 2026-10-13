@@ -43,8 +43,6 @@
     - type: NpcFactionMember
       factions:
       - Taipan
-    - type: Skill
-      group: BasicAndShuttleControl
 
 - type: startingGear
   id: TaipanCommunicationsOfficerGear

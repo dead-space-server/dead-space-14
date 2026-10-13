@@ -3,6 +3,7 @@ using Content.Shared.Storage;
 
 namespace Content.Server.StationEvents.Components;
 
+[Content.Server.DeadSpace.CentComm.AllowedGameRuleOnCentComm] // DS14
 [RegisterComponent, Access(typeof(VentCrittersRule))]
 public sealed partial class VentCrittersRuleComponent : Component
 {

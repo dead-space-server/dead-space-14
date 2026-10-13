@@ -1,0 +1,199 @@
+- type: reagent
+  id: PsychogenGas
+  name: reagent-name-psychogen-gas
+  desc: reagent-desc-psychogen-gas
+  physicalDesc: reagent-physical-desc-gaseous
+  color: "#c8b4f0"
+  boilingPoint: -20
+  meltingPoint: -80
+  metabolisms:
+    Gas:
+      effects:
+      - !type:PsychiatryInhale
+        minScale: 0.15
+
+- type: reagent
+  id: Schizotoxin
+  name: reagent-name-schizotoxin
+  group: Toxins
+  desc: reagent-desc-schizotoxin
+  physicalDesc: reagent-physical-desc-opaque
+  flavor: bitter
+  color: "#4B0082"
+  metabolisms:
+    Poison:
+      metabolismRate: 0.5
+      effects:
+      - !type:HealthChange
+        probability: 0.1
+        damage:
+          types:
+            Cellular: 0.2
+
+- type: reagent
+  id: NeuroClarity
+  name: reagent-name-neuroclarity
+  group: Medicine
+  desc: reagent-desc-neuroclarity
+  physicalDesc: reagent-physical-desc-shiny
+  flavor: medicine
+  color: "#E8F7FF"
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.05
+      effects:
+      - !type:PsychiatryClarityDose
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentCondition
+          reagent: NeuroClarity
+          min: 16
+        damage:
+          types:
+            Poison: 1
+      - !type:Jitter
+        conditions:
+        - !type:ReagentCondition
+          reagent: NeuroClarity
+          min: 16
+      - !type:PopupMessage
+        conditions:
+        - !type:ReagentCondition
+          reagent: NeuroClarity
+          min: 16
+        type: Local
+        visualType: Medium
+        messages: [ "generic-reagent-effect-nauseous" ]
+        probability: 0.25
+      - !type:Vomit
+        conditions:
+        - !type:ReagentCondition
+          reagent: NeuroClarity
+          min: 16
+        probability: 0.5
+
+- type: reagent
+  id: PsychiatryRemedy
+  name: reagent-name-psychiatry-remedy
+  group: Medicine
+  desc: reagent-desc-psychiatry-remedy
+  physicalDesc: reagent-physical-desc-shiny
+  flavor: medicine
+  color: "#F4E7B2"
+  metabolisms:
+    Medicine:
+      metabolismRate: 1.0
+      effects: []
+
+- type: reagent
+  id: PsychogenLatent
+  name: reagent-name-psychogen-latent
+  group: Toxins
+  desc: reagent-desc-psychogen-latent
+  physicalDesc: reagent-physical-desc-powdery
+  flavor: bitter
+  color: "#6B5B95"
+  metabolisms:
+    Poison:
+      metabolismRate: 1.0
+      effects:
+      - !type:PsychiatryPsychogenDose
+
+- type: psychiatryPhrases
+  id: PsychiatryDefault
+  crime:
+  - psychiatry-phrase-crime-1
+  - psychiatry-phrase-crime-2
+  - psychiatry-phrase-crime-3
+  - psychiatry-phrase-crime-4
+  - psychiatry-phrase-crime-5
+  - psychiatry-phrase-crime-6
+  - psychiatry-phrase-crime-7
+  - psychiatry-phrase-crime-8
+  - psychiatry-phrase-crime-9
+  - psychiatry-phrase-crime-10
+  mockery:
+  - psychiatry-phrase-mockery-1
+  - psychiatry-phrase-mockery-2
+  - psychiatry-phrase-mockery-3
+  - psychiatry-phrase-mockery-4
+  - psychiatry-phrase-mockery-5
+  - psychiatry-phrase-mockery-6
+  - psychiatry-phrase-mockery-7
+  - psychiatry-phrase-mockery-8
+  - psychiatry-phrase-mockery-9
+  - psychiatry-phrase-mockery-10
+  - psychiatry-phrase-mockery-11
+  - psychiatry-phrase-mockery-12
+  neutral:
+  - psychiatry-phrase-neutral-1
+  - psychiatry-phrase-neutral-2
+  - psychiatry-phrase-neutral-3
+  addressed:
+  - psychiatry-phrase-addressed-1
+  - psychiatry-phrase-addressed-2
+  - psychiatry-phrase-addressed-3
+  - psychiatry-phrase-addressed-4
+  - psychiatry-phrase-addressed-5
+  - psychiatry-phrase-addressed-6
+  - psychiatry-phrase-addressed-7
+  - psychiatry-phrase-addressed-8
+  - psychiatry-phrase-addressed-9
+  - psychiatry-phrase-addressed-10
+  - psychiatry-phrase-addressed-11
+  - psychiatry-phrase-addressed-12
+  - psychiatry-phrase-addressed-13
+  - psychiatry-phrase-addressed-14
+  - psychiatry-phrase-addressed-15
+  - psychiatry-phrase-addressed-16
+  - psychiatry-phrase-addressed-17
+  - psychiatry-phrase-addressed-18
+  - psychiatry-phrase-addressed-19
+  - psychiatry-phrase-addressed-20
+  radio:
+  - psychiatry-phrase-radio-1
+  - psychiatry-phrase-radio-2
+  - psychiatry-phrase-radio-3
+  - psychiatry-phrase-radio-4
+  - psychiatry-phrase-radio-5
+  - psychiatry-phrase-radio-6
+  - psychiatry-phrase-radio-7
+  - psychiatry-phrase-radio-8
+  - psychiatry-phrase-radio-9
+  - psychiatry-phrase-radio-10
+  - psychiatry-phrase-radio-11
+  - psychiatry-phrase-radio-12
+  - psychiatry-phrase-radio-13
+  - psychiatry-phrase-radio-14
+  - psychiatry-phrase-radio-15
+  - psychiatry-phrase-radio-16
+  - psychiatry-phrase-radio-17
+  - psychiatry-phrase-radio-18
+  - psychiatry-phrase-radio-19
+  - psychiatry-phrase-radio-20
+  - psychiatry-phrase-radio-21
+  - psychiatry-phrase-radio-22
+  - psychiatry-phrase-radio-23
+  - psychiatry-phrase-radio-24
+  - psychiatry-phrase-radio-25
+  - psychiatry-phrase-radio-26
+  - psychiatry-phrase-radio-27
+  - psychiatry-phrase-radio-28
+  - psychiatry-phrase-radio-29
+  - psychiatry-phrase-radio-30
+  fakeNames:
+  - psychiatry-fake-name-1
+  - psychiatry-fake-name-2
+  - psychiatry-fake-name-3
+  - psychiatry-fake-name-default
+  radioNames:
+  - psychiatry-radio-name-1
+  - psychiatry-radio-name-2
+  - psychiatry-radio-name-3
+  - psychiatry-radio-name-4
+  radioJobs:
+  - Passenger
+  - StationEngineer
+  - MedicalDoctor
+  - SecurityCadet
+  - Chef

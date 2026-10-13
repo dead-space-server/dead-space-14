@@ -1,0 +1,1 @@
+objective-condition-ninja-protect-title = Защитите { $targetName }, должность: { CAPITALIZE($job) }, сохраните ему жизнь.

@@ -1,0 +1,70 @@
+# Unique parallax choices from Maps/Pools/default.yml. Keep planetary atmosphere paired with its background.
+- type: centCommEnvironment
+  id: CentCommDefault
+  parallax: Default
+
+- type: centCommEnvironment
+  id: CentCommAmber
+  parallax: AmberStation
+
+- type: centCommEnvironment
+  id: CentCommBagel
+  parallax: BagelStation
+
+- type: centCommEnvironment
+  id: CentCommAvrite
+  parallax: AvriteStation
+
+- type: centCommEnvironment
+  id: CentCommAspid
+  parallax: AspidParallax
+
+- type: centCommEnvironment
+  id: CentCommDelta
+  parallax: DeltaStation
+
+# Chloris uses Venus but has the default vacuum MapAtmosphere.
+- type: centCommEnvironment
+  id: CentCommVenus
+  parallax: Venus
+
+- type: centCommEnvironment
+  id: CentCommGlacier
+  parallax: GlacierPlanet
+  atmosphere:
+    volume: 2500
+    temperature: 233
+    moles:
+      Oxygen: 16
+      Nitrogen: 70
+      WaterVapor: 1.7
+
+- type: centCommEnvironment
+  id: CentCommSilly
+  parallax: SillyIsland
+  atmosphere:
+    volume: 2500
+    temperature: 288.15
+    moles:
+      Oxygen: 21.824879
+      Nitrogen: 82.10312
+
+- type: centCommEnvironment
+  id: CentCommCore
+  parallax: CoreStation
+
+- type: centCommEnvironment
+  id: CentCommKettle
+  parallax: KettleStation
+
+- type: centCommEnvironment
+  id: CentCommOrigin
+  parallax: OriginStation
+
+- type: centCommEnvironment
+  id: CentCommPlasma
+  parallax: PlasmaStation
+
+- type: centCommEnvironment
+  id: CentCommTrain
+  parallax: TrainStation

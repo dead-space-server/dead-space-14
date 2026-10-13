@@ -1,3 +1,4 @@
+using Content.Shared.Sirena.Animations; //DS-14
 using Content.Shared.Whitelist;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -68,6 +69,11 @@ public sealed partial class EmotePrototype : IPrototype
     /// </summary>
     [DataField]
     public HashSet<string> ChatTriggers = new();
+
+    //DS-14 start
+    [DataField]
+    public List<EmoteAnimationStep>? Steps;
+    //DS-14 end
 
 }
 

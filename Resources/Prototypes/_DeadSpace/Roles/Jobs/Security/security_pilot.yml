@@ -30,12 +30,6 @@
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant ]
-  - !type:AddComponentSpecial
-    components:
-    # DS14-Start
-    - type: Skill
-      group: BasicAndShuttleControl
-    # DS14-End
 
 - type: startingGear
   id: SecurityPilotGear

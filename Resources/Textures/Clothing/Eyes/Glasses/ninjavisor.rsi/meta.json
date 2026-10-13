@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from paradise station https://github.com/ParadiseSS13/Paradise/commit/ede55cc8f5b50abcd4f51d37779b56853a440a9a, equipped-EYES-arachnid modified from equipped-EYES by HTMLSystem",
+  "copyright": "Taken from paradise station https://github.com/ParadiseSS13/Paradise/commit/ede55cc8f5b50abcd4f51d37779b56853a440a9a, equipped-EYES-arachnid modified from equipped-EYES by HTMLSystem, resprited by nasdfx (discord) for Space Station 14 server Мёртвый Космос",
   "size": {
     "x": 32,
     "y": 32
@@ -11,11 +11,33 @@
       "name": "icon"
     },
     {
+      "name": "icon-night"
+    },
+    {
+      "name": "icon-thermal"
+    },
+    {
       "name": "equipped-EYES",
+      "directions": 4
+    },
+     {
+      "name": "equipped-EYES-night",
+      "directions": 4
+    },
+     {
+      "name": "equipped-EYES-thermal",
       "directions": 4
     },
     {
       "name": "equipped-EYES-arachnid",
+      "directions": 4
+    },
+    {
+      "name": "equipped-EYES-arachnid-night",
+      "directions": 4
+    },
+    {
+      "name": "equipped-EYES-arachnid-thermal",
       "directions": 4
     },
     {

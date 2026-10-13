@@ -1,0 +1,6 @@
+light_mode unshaded;
+
+void fragment()
+{
+    discard;
+}

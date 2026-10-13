@@ -1,972 +1,587 @@
+<Table Columns="6">
+  <ColorBox>
+    <Box>Код</Box>
+  </ColorBox>
+  <ColorBox>
+    <Box>1-XX — Проступки</Box>
+  </ColorBox>
+  <ColorBox>
+    <Box>2-XX — Лёгкие</Box>
+  </ColorBox>
+  <ColorBox>
+    <Box>3-XX — Средние</Box>
+  </ColorBox>
+  <ColorBox>
+    <Box>4-XX — Тяжкие</Box>
+  </ColorBox>
+  <ColorBox>
+    <Box>5-XX — Особо тяжкие</Box>
+  </ColorBox>
+
+  <ColorBox>
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">00</Box>
+  </ColorBox>
+  <ColorBox Color="#5b9810">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Оскорбление должностного лица</Box>
+  </ColorBox>
+  <ColorBox Color="#d67210">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Сопротивление органам власти</Box>
+  </ColorBox>
+  <ColorBox Color="#b51414">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Массовые беспорядки</Box>
+  </ColorBox>
+  <ColorBox Color="#8e2525">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Нарушение режима ЧС</Box>
+  </ColorBox>
+  <ColorBox Color="#000000">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Мятеж</Box>
+  </ColorBox>
+
+  <ColorBox>
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">01</Box>
+  </ColorBox>
+  <ColorBox Color="#5b9810">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Харассмент</Box>
+  </ColorBox>
+  <ColorBox Color="#d67210">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Нападение второй степени</Box>
+  </ColorBox>
+  <ColorBox Color="#b51414">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Нападение первой степени</Box>
+  </ColorBox>
+  <ColorBox Color="#8e2525">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Убийство второй степени</Box>
+  </ColorBox>
+  <ColorBox Color="#000000">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Убийство первой степени</Box>
+  </ColorBox>
+
+  <ColorBox>
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">02</Box>
+  </ColorBox>
+  <ColorBox>
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2"></Box>
+  </ColorBox>
+  <ColorBox Color="#d67210">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Оборот наркотиков</Box>
+  </ColorBox>
+  <ColorBox Color="#b51414">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Оборот контрабанды</Box>
+  </ColorBox>
+  <ColorBox Color="#8e2525">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Эксплуатация опасных веществ</Box>
+  </ColorBox>
+  <ColorBox Color="#000000">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Владение вражеским снаряжением</Box>
+  </ColorBox>
+
+  <ColorBox>
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">03</Box>
+  </ColorBox>
+  <ColorBox Color="#5b9810">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Злоупотребление экипировкой</Box>
+  </ColorBox>
+  <ColorBox Color="#d67210">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Владение боевым приспособлением</Box>
+  </ColorBox>
+  <ColorBox Color="#b51414">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Владение боевым оружием</Box>
+  </ColorBox>
+  <ColorBox Color="#8e2525">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Распространение оружия</Box>
+  </ColorBox>
+  <ColorBox>
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2"></Box>
+  </ColorBox>
+
+  <ColorBox>
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">04</Box>
+  </ColorBox>
+  <ColorBox Color="#5b9810">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Хулиганство</Box>
+  </ColorBox>
+  <ColorBox Color="#d67210">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Порча имущества</Box>
+  </ColorBox>
+  <ColorBox Color="#b51414">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Злоупотребление доверием</Box>
+  </ColorBox>
+  <ColorBox>
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2"></Box>
+  </ColorBox>
+  <ColorBox Color="#000000">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Терроризм</Box>
+  </ColorBox>
+
+  <ColorBox>
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">05</Box>
+  </ColorBox>
+  <ColorBox Color="#5b9810">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Мелкая кража</Box>
+  </ColorBox>
+  <ColorBox Color="#d67210">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Грабёж</Box>
+  </ColorBox>
+  <ColorBox Color="#b51414">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Кража</Box>
+  </ColorBox>
+  <ColorBox Color="#8e2525">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Разбой</Box>
+  </ColorBox>
+  <ColorBox Color="#000000">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Особо крупное хищение</Box>
+  </ColorBox>
+
+  <ColorBox>
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">06</Box>
+  </ColorBox>
+  <ColorBox Color="#5b9810">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Проникновение</Box>
+  </ColorBox>
+  <ColorBox>
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2"></Box>
+  </ColorBox>
+  <ColorBox Color="#b51414">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Проникновение в стратегическую точку</Box>
+  </ColorBox>
+  <ColorBox>
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2"></Box>
+  </ColorBox>
+  <ColorBox Color="#000000">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Проникновение в защищённую стратегическую точку</Box>
+  </ColorBox>
+
+  <ColorBox>
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">07</Box>
+  </ColorBox>
+  <ColorBox>
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2"></Box>
+  </ColorBox>
+  <ColorBox Color="#d67210">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Халатность</Box>
+  </ColorBox>
+  <ColorBox Color="#b51414">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Саботаж</Box>
+  </ColorBox>
+  <ColorBox Color="#8e2525">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Грубая халатность</Box>
+  </ColorBox>
+  <ColorBox Color="#000000">
+    <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">Особо крупный саботаж</Box>
+  </ColorBox>
+</Table>
 <Document>
-  # Space Law: Crime Listing
-  Crime codes are colored by linked crime groups, which are collections of non-stackable crimes. Suffixes are also included in the Quick Crime Guide to identify linked crimes.
+  # 100 - Оскорбление должностного лица
+  Публичное выражение явного неуважения к представителю власти при исполнении им своих должностных обязанностей или в связи с их исполнением.
 
-  ## Quick Crime Guide
-  <Table Columns="6">
-    <ColorBox>
-      <Box>
-        1-XX - Minor
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box>
-        2-XX - Moderate
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box>
-        3-XX - Major
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box>
-        4-XX - Extreme
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box>
-        5-XX - Capital
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box>
-        Code
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Animal Cruelty
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#593a4e">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Failure to Comply (E)
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#593a4e">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Breach of Arrest (E)
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#593a4e">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Breach of Custody (E)
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#593a4e">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Breach of Permanent Confinement (E)
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        00
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#2f3832">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Possession: Minor (P)
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#2f3832">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Possession: Major (P)
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#2f3832">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Possession: Highly Illegal (P)
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        01
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#2e422e">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Petty Theft (H)
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#2e422e">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Grand Theft (H)
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Kidnapping
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        02
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#453a59">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Vandalism (D)
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#453a59">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Damage of Property (D)
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#453a59">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Destruction of Critical Property (D)
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#453a59">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Destruction of Vital Infrastructure (D)
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#453a59">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Station-Wide Destruction (D)
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        03
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#59563a">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Trespass (T)
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#59563a">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Secure Trespass (T)
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        04
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#4d2e2e">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Endangerment (V)
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#4d2e2e">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Assault (V)
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#4d2e2e">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Attempted Murder (V)
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#4d2e2e">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Prevention of Revival (V)
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        05
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#4d2e2e">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Manslaughter (V)
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#4d2e2e">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Murder (V)
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#4d2e2e">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Mass Murder (V)
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        06
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#3b4354">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Disturbance (R)
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#3b4354">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Rioting (R)
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-      </Box>
-    </ColorBox>
-    <ColorBox Color="#3b4354">
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Refusal of Mental Shielding (R)
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        07
-      </Box>
-    </ColorBox>
-  </Table>
+  Под действие данной статьи попадает:
+  -Прямое оскорбление должностных лиц, или же корпорации NanoTrasen и её интересов в целом.
 
-  ## Minor Crimes
-  - Warnings should be issued for a first offense.
-  - If multiple minor crimes have been committed or it is a repeat offense, 5 minutes per minor crime is the maximum.
-  <Table Columns="4">
-    <ColorBox>
-      <Box>
-        Offense
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box>
-        Description
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box>
-        Notes
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box>
-        Code
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Animal Cruelty
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To inflict unnecessary suffering or harm on a non-sapient being with malicious intent.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        This doesn’t include legitimate and authorized animal testing and usually doesn't extend to vermin or creatures
-        that could pose a threat to the station.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        1-00
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Possession/Use of Minor Contraband
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To make, hold, or use minor contraband without authorization.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Any contraband which is restricted to a department other than command or security is minor contraband unless otherwise specified. The Captain or Head of Security may authorize individual use of minor contraband, and other department heads may authorize individual use of minor contraband restricted to their assigned department.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        1-01
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Petty Theft
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To take non-vital or inexpensive property of another individual, organization, or common property, without
-        consent.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        The difference between petty theft and grand theft is based on how crucial the stolen item is, things like
-        instruments, clothing and tools fall under petty theft. In most cases all you need to do is detain the thief,
-        return the stolen item and let them go with a warning.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        1-02
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Vandalism
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To intentionally deface or superficially damage public or private property.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Painting graffiti, smashing bar glasses, and cracking internal windows is vandalism, breaking a window into
-        space or secure areas is not.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        1-03
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Trespass
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To enter a non-secured area without permission.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        It's best to just remove them from the area unless this is a repeated crime.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        1-04
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Disturbance
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To cause a public disturbance.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Sometimes referred to as hooliganism. The catch-all for obnoxious crewmates. Covers things such as public
-        nudity, needless insults, obstructing authorities, and inciting crime or violence.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        1-07
-      </Box>
-    </ColorBox>
-  </Table>
+  Примечания:
 
-  ## Moderate Crimes
-  - The maximum sentence per moderate crime is 5 minutes.
-  - Depending on the situation you may want to issue a warning instead of a detaining.
-  <Table Columns="4">
-    <ColorBox>
-      <Box>
-        Offense
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box>
-        Description
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box>
-        Notes
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box>
-        Code
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Failure to Comply
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To resist reasonable orders given by an authority. This extends to authorized searches.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        The order has to be reasonable and the person has to receive a good amount of warning before the arrest is
-        issued.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        2-00
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Possession/Use of Major Contraband
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To make, hold, or use major contraband without authorization.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        The Captain may authorize individual use of major contraband. Any contraband which is restricted to the command or security department is major contraband unless otherwise specified.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        2-01
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Damage/Destruction of Property
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To maliciously damage or deface public or private property or equipment
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Includes destruction of job equipment such as hydro trays, booze dispensers, chemical dispensers. Step up from
-        vandalism but a step down from critical property destruction.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        2-03
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Endangerment
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To recklessly put yourself or others in danger, either through direct action, or failure to act.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Covers industrial accidents, industrial negligence, self-experimentation, or even medical malpractice.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        2-05
-      </Box>
-    </ColorBox>
-  </Table>
+  - Не складывается со статьёй 101 - Харассмент.
 
-  ## Major Crimes
-  - The maximum sentence per major crime is 10 minutes.
-  - Assault and Manslaughter are linked crimes, and cannot be stacked against a suspect.
-  - It is recommended to not use maximum sentences for those being compliant.
-  <Table Columns="4">
-    <ColorBox>
-      <Box>
-        Offense
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box>
-        Description
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box>
-        Notes
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box>
-        Code
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Breach of Arrest
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To intentionally resist and flee arrest or detainment by an authorized staff.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        This only applies if someone is actively being physically arrested. People uncuffing or assisting others out of
-        an arrest can also be charged with this. Breach of custody is a separate crime.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        3-00
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Possession/Use of Highly Illegal Contraband
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To make, hold, or use highly illegal contraband.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Highly illegal contraband includes Syndicate contraband and magical contraband. Without explicit authorization from Central Command, highly illegal contraband may only be used in emergencies, and only to prevent death or gross bodily harm.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        3-01
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Grand Theft
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To take critical or unreplaceable property of another individual or organization without consent.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        The difference between petty theft and grand theft is based on how crucial the stolen item is, this mostly is
-        used for the theft of command staff items, things like door remotes, hardsuits, jetpacks, and unreplaceable
-        machine parts.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        3-02
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Destruction of Critical Property
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To destroy critical station equipment and systems.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Includes destruction of station machinery such as ID card computers or telecommunications servers,
-        power devices such as substations, and non-hostile silicon units.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        3-03
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Secure Trespass
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To enter a secured area without permission.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        This covers places like telecomms, head offices, security zones, command areas, the vault and armory.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        3-04
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Assault/Battery
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To threaten to or to use physical force against someone without the intent to kill.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Attempted murder and battery are different; a fist fight is most likely assault. A shooting is most likely an
-        attempt at murder.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        3-05
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Manslaughter
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To incidentally kill a sapient being without intent.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Includes manslaughter in self-defense and negligent manslaughter.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        3-06
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Rioting
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To take part in a large group of personnel creating an unlawful public disturbance.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Crimes like damage of property or battery are expected to be thrown on top of this charge. Leaders of a riot can be charged with all crimes that happen under their lead.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        3-07
-      </Box>
-    </ColorBox>
-  </Table>
+  #200 - Сопротивление органам власти
+  Неповиновение законному требованию представителя власти, а также иные действия, направленные на уклонение от исполнения норм экипажа или препятствование осуществлению правомерных мер принуждения.
 
-  ## Extreme Crimes
-  - The maximum sentence per extreme crime is 15 minutes.
-  - Particularly violent offenders may be placed in perma. (Attacking officers in an attempt to escape prison)
-  - Attempted murder and murder are linked crimes and cannot be stacked together.
-  - Attempted murderers should be granted a more lenient sentence than a murderer.
-  <Table Columns="4">
-    <ColorBox>
-      <Box>
-        Offense
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box>
-        Description
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box>
-        Notes
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box>
-        Code
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Breach of Custody
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To break out of a cell or custody with the intention of escaping.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Includes breaking out other people.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        4-00
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Kidnapping
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To unlawfully restrain, transport, control or confine a sapient being against that individual’s will.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        A large range of things, used mostly as a catch all when dealing with unlawful control of another being.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        4-02
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Destruction of Vital Infrastructure
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Destruction of equipment or infrastructure that renders a department inoperable or severely degraded.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        This is mostly used for large-scale bombings or the sabotage of major station systems such as power production,
-        the Cargo shuttle, or station AI.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        4-03
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Attempted Murder
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To make an attempt to use physical force against someone with the clear intent to kill.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Make sure you've got the proof to back up the intention claims, such as proof of a lethal weapon being used.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        4-05
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Murder
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To kill a sapient being with malicious intent.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        This only changes from attempted to full-on murder if the victim enters a state of being deceased, having to be resurrected.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        4-06
-      </Box>
-    </ColorBox>
-  </Table>
+  Под действие данной статьи попадают:
+  -а) Попытки побега или побег при проведении законного ареста;
+  -б) Помеха при аресте или обыске другого члена экипажа;
+  -в) Нарушение распорядка мест заключения;
+  -г) Отказ от законного обыска;
+  -д) Отказ от законного понижения или увольнения;
+  -е) Несоблюдение норм экипажа, установленных кодами угроз.
 
-  ## Capital Crimes
-  - Capital crimes should usually lead to a death sentence or shift lasting detainment.
-  <Table Columns="4">
-    <ColorBox>
-      <Box>
-        Offense
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box>
-        Description
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box>
-        Notes
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box>
-        Code
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Breach of Permanent Confinement
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To break someone sentenced to Permanent Confinement out of a cell or custody with the intention of escaping.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Includes breaking out other people sentenced to Permanent Confinement.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        5-00
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Station-Wide Destruction
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To engage in maliciously destructive actions which threaten to destroy, or successfully destroy a vessel or habitat.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Summed up; extreme sabotage of station systems or setting off self-destruction systems. This includes any means causing the entire station to become uninhabitable, such as through station-wide atmospherics sabotage.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        5-03
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Prevention of Revival
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To render a body unresurrectable.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        This covers gibbing, spacing, intentionally hiding a body, or other ways of preventing a body with a soul from being resurrected.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        5-05
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Mass Murder
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To kill three or more sapient beings with malicious intent.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Only applies when there have been multiple killings with intention.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        5-06
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Refusal of Mental Shielding
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        To refuse to comply with a reasonable Mind Shielding procedure.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        Applies if the suspect is excessively uncooperative or the implant fails to function due to the mental state of the prisoner already being too far gone. If the implant fails execution is heavily recommended.
-      </Box>
-    </ColorBox>
-    <ColorBox>
-      <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2">
-        5-07
-      </Box>
-    </ColorBox>
-  </Table>
+  #300 - Массовые беспорядки
+  Организация или участие в акциях сопротивления, бунтах, забастовках либо иных коллективных действиях, направленных на противодействие политике Корпорации NanoTrasen, её представителям или законному командованию станции.
+
+  Под действие данной статьи попадает:
+  -а) Организация или участие в забастовках, бунтах и иных формах коллективного неповиновения;
+  -б) Призывы к свержению командования станции или принуждение его к сложению полномочий без законных оснований;
+  -в) Принуждение командования и иных должностных лиц Корпорации к нарушению политики NanoTrasen или указов Центрального Командования;
+  -г) Организация или участие в движении, направленном на достижение независимости от влияния NanoTrasen;
+  -д) Агитация в поддержку враждебных Корпорации организаций или распространение соответствующих лозунгов.
+
+  #400 - Нарушение режима ЧС
+  Неисполнение законных требований квалифицированного персонала в условиях чрезвычайной ситуации.
+
+  Под действие данной статьи попадает:
+
+  Неисполнение законных требований членов командования станции, сотрудников Службы Безопасности, представителей Центрального Командования/Корпуса Специальных Операций либо иных лиц, наделённых полномочиями по управлению действиями персонала в условиях чрезвычайной ситуации.
+
+  Примечания:
+  - Режимом чрезвычайной ситуации считается: объявление на станции уровней угроз Гамма, Сьерра, Энигма или Дельта, объявление процедуры мобилизации экипажа, крупномасштабное восстание, а также иные происшествия, ставящие под угрозу существование станции.
+
+  #500 - Мятеж
+  Вооружённое выступление группы лиц против законной власти Корпорации NanoTrasen или её представителей, выражающееся в попытке насильственного свержения либо изменения установленного порядка управления на станции.
+
+  Примечания:
+  - Выступление считается вооружённым, если его участники используют огнестрельное, холодное оружие либо иные предметы, применяемые для причинения существенного вреда здоровью.
+
+  #101 - Харассмент
+  Нарушение личных границ и субординации, приставания, нарушение неприкосновенности частной жизни, унижение достоинства.
+
+  Под действие данной статьи попадает, но не ограничивается:
+  -а) Клевета, то есть распространение заведомо ложной информации, порочащих честь и достоинство другого лица или подрывающих его репутацию;
+  -б) Неоднократные целенаправленные словесные или письменные оскорбления;
+  -в) Ненужные прикосновения;
+  -г) Подавление по расовому или половому признаку.
+
+
+  #201 - Нападение второй степени
+  Насильственные действия, повлёкшие незначительный вред здоровью, а также действия, направленные на временное ограничение свободы лица.
+
+  Под действие данной статьи попадают:
+  -а) Причинение незначительного вреда здоровью, побои;
+  -б) Ограничение свободы: похищение, связывание, запирание;
+  -в) Усыпление или введение члена экипажа в бессознательное состояние.
+
+  Примечания:
+  -Нападение с целью грабежа квалифицируется по статье 405 — Разбой.
+
+  #301 - Нападение первой степени
+  Насильственные действия, повлёкшие существенный вред здоровью либо совершённые в отношении должностных лиц при исполнении ими служебных обязанностей.
+
+  Под действие данной статьи попадает:
+  -а) Причинение существенного вреда здоровью;
+  -б) Вызывание открытого кровотечения;
+  -в) Доведение до критического состояния;
+  -г) Насильственные действия либо угроза их применения в отношении должностного лица.
+
+  Примечания:
+  - Доведение должностного лица до критического состояния квалифицируется как статья 501 — Убийство первой степени.
+  - Угроза применения насилия наказывается данной статьей только в случае, если были реальные основания опасатся её совершения.
+
+  #401 - Убийство второй степени
+  Противоправное лишение жизни разумного существа, без квалифицирующих признаков.
+
+  Под действие данной статьи также попадают:
+  Попытки предотвратить выведение из критического состояния члена экипажа;
+
+  Примечания:
+  - При неумышленном убийстве или причинении смерти по неосторожности данная статья применяется вместе с модификатором “отсутствие умысла”;
+  - Применение огнестрельного, лазерного, импульсного оружия либо взрывных устройств в отношении пострадавшего квалифицируется как покушение на убийство.
+
+  #501 - Убийство первой степени
+  Противоправное лишение жизни с обеспечением невозможности реанимации или клонирования, или лишение жизни, доведение до критического состояния должностного лица в связи с исполнением ним своих рабочих обязанностей, или убийство с множеством жертв.
+
+  Квалифицирующие признаки:
+  -а) Убийство двух и более лиц;
+  -б) Применение насилия к должностному лицу, повлёкшее смерть или критическое состояние потерпевшего;
+  -в) Обеспечение невозможности клонирования или реанимации существа, защищённого ОПРС;
+  -г) Назначение заведомо неправомерных приговоров о казни, приказов об убийстве на месте, уничтожении тела.
+
+  Примечания:
+  - Не складывается с модификатором "отсутствие умысла", за исключением пункта «б» статьи;
+  - Применение огнестрельного, лазерного, импульсного оружия либо взрывных устройств в отношении должностного лица квалифицируется как покушение на убийство.
+
+  #202 - Оборот наркотиков
+  Незаконная деятельность, включающая в себя производство, хранение, распространение, применение и сбыт наркотических веществ.
+
+  Примечания:
+  - Перед применением данной статьи убедитесь, что эксплуатация запрещённых веществ не разрешена обвиняемому согласно СРП;
+  - При распространении наркотиков данная статья применяется вместе с модификатором “пособничество”.
+
+  #302 - Оборот контрабанды
+  Незаконная деятельность, включающая в себя хранение, распространение, применение, и сбыт предметов, обладающего свойствами контрабанды.
+
+  Перечень свойств контрабанды:
+  -а) Незаконное снаряжение - снаряжение неиспользуемое на станциях NanoTrasen, которое не приносит особо большого вреда экипажу или станции.
+  -б) Пропаганда вражеских корпораций - предметы, имеющие однозначную и явно выраженную символику вражеских корпораций, но не обладающие опасностью для экипажа.
+  -в) Модификация - модификацией считается любое видоизменение обычного снаряжения с приобретением им новых общественно-опасных свойств, без использования продвинутых технологий.
+  -г) Запрещённые вещества - ряд веществ, которые запрещены к обороту на объектах NanoTrasen.
+
+  Примечания:
+  - Члены экипажа, обнаружившие контрабанду, обязаны сообщить о ней сотрудникам Службы Безопасности и действовать согласно их указаниям;
+  - Наказания не последует при самоличном обращении для передачи контрабанды Службе Безопасности;
+  - При распространении контрабанды данная статья применяется вместе с модификатором “пособничество”.
+
+  #402 - Эксплуатация опасных веществ
+  Незаконная деятельность, включающая в себя производство, хранение, распространение или применение веществ, обладающих свойствами опасных веществ. Часть из них допустима в пределах производства, либо вне его при указании об этом в СРП.
+
+  Перечень свойств опасных веществ:
+  -а) Токсичные вещества - вещества, способные при воздействии на живой организм вызвать за короткий промежуток времени тяжёлое отравление или смерть.
+  -б) Пиротехнические вещества - вещества, способные поджечь или поддерживать длительное горение.
+  -в) Гранаты и взрывчатые вещества - вещества и предметы, использование которых сопровождается выделением большого количества энергии, влекущее разрушительное воздействие.
+
+  Примечания:
+  - При распространении запрещённых веществ данная статья применяется вместе с модификатором “пособничество”;
+
+  #502 - Владение вражеским снаряжением
+  Незаконная деятельность, включающая в себя производство, хранение, распространение или применение предметов, обладающих свойствами вражеского снаряжения.
+
+  Перечень свойств вражеского снаряжения:
+  -а) Энергетическое оружие - холодное оружие, оснащённое энергетическим клинком.
+  -б) Импланты вражеского происхождения - любая кибернетическая технология, не используемая корпорацией NanoTrasen.
+  -в) Экипировка врагов NanoTrasen - экипировка вражеских корпораций, выступающих против NanoTrasen и её политики в частности.
+  -г) Предметы саботажа - предметы фабричного производства, созданные вражескими корпорациями с целью создания условий неработоспособности отдела или целого объекта NanoTrasen.
+  -д) Биологическое оружие - вещества, которые являются возбудителями различных инфекций, искусственные вирусы.
+  -е) Маскировка - предметы, обладающие свойствами маскировки, изменения внешнего вида, невидимости.
+  -ж) Магия - предметы, имеющие экстраординарные возможности, происхождение которых современная наука не способна объяснить.
+
+  Примечания:
+  - Само владение искусством боя "Аркалис" или "Курящий Карп" не попадают под действие данной статьи;
+
+  #103 - Злоупотребление экипировкой
+  Владение рабочим снаряжением без соответствующей должности или разрешения главы соответствующего отдела.
+
+  Под действие данной статьи попадает:
+  -а) Хранение множественного количества ресурсов, без необходимости в их использовании;
+  -б) Владение профессиональным снаряжением
+
+  без соответствующей должности или письменного разрешения главы соответствующего отдела, исключая инструменты;
+  -в) Ношение и хранение EVA скафандров, без необходимости в их использовании;
+  -г) Бронежилеты, шлемы, РПС, Тактическое снаряжение.
+
+  #203 - Владение боевым приспособлением
+  Владение опасным предметом, средством самообороны, самодельным или холодным оружием без соответствующего разрешения. Предмет считается опасным, если не является полезным для работы инструментом, но при этом является пригодным для нанесения тяжёлого вреда здоровью.
+
+  Список снаряжения, регулируемого данной статьёй:
+  -а) Опасные рабочие инструменты и холодное оружие, в том числе импровизированное;
+  -б) Средства самообороны и нелетальные средства;
+  -в) Средства ограничения свободы;
+  -г) Любые щиты, за исключением паутинных и игрушечных.
+
+  #303 - Владение боевым оружием
+  Владение боевым снаряжением без соответствующего разрешения. Боевым снаряжением считаются средства или предметы, предназначенные для ведения боевых действий, либо способные быстро привести к травмам и повреждениям, несовместимыми с жизнью.
+
+  Список снаряжения, регулируемого данной статьёй:
+  -а) Летальное оружие;
+  -б) Патроны летального характера;
+  -в) Иные средства, подпающие под определение статьи.
+
+  Примечания:
+  - Летальные гранаты и иные взрывчатые вещества, их пусковые установки, регулируются статьёй 402 - Эксплуатация опасных веществ;
+  - Наличие стрелкового оружия не складывается с 405 — Разбой.
+
+  #403 - Распространение оружия
+  Незаконное распространение, сбыт боевого вооружения, его основных частей и боеприпасов к нему.
+
+  Примечания:
+  - При приобретении данная статья применяется вместе с модификатором “пособничество”.
+
+  #104 - Хулиганство
+  Нарушение общественного порядка, выражающее явное неуважение к обществу.
+
+  Под действие данной статьи попадает, но не ограничивается:
+  -а) Курение в неположенных местах;
+  -б) Неподобающее поведение;
+  -в) Битье посуды, принадлежащей сервисному отделу, а так же битье посуды без каких-либо конкретных причин;
+  -г) Броски скользких предметов под ноги с целью опрокидывания;
+  -д) Осквернение стен, пола при помощи мелков/краскопульта;
+  -е) Спам на станционные факсы, рацию, голопады, в личные сообщения;
+  -ж) Создание условий антисанитарии, путем выброса мусора или использованных предметов в общественных местах, а не специальных местах для утилизации данных предметов.
+
+  Примечания:
+  - Неположенным для курения местом является место рядом с знаком "Не курить";
+  - Станционный клоун не подлежит уголовному преследованию за броски скользких предметов под ноги с целью опрокидывания.
+
+  #204 - Порча имущества
+  Повреждение, разрушение, приведение в непригодность к эксплуатации, другой ущерб имуществу экипажа или станции, а также повреждение самой станции в незначительной степени.
+
+  Под действие данной статьи попадает:
+  -а) Выведение из строя шлюзов путём поломки, электрификации или заваривания;
+  -б) Уничтожение, взлом, разборка оборудования, перекрытий и предметов мебели вне своего рабочего места или без согласия отдела;
+  -в) Жестокое обращение с домашними животными;
+  -г) Повреждение или уничтожение киборгов и/или любых других синтетиков.
+
+  Примечания:
+  - Причинение вреда корги Иану является вопиющим случаем особо тяжкого преступления и подлежит уголовному преследованию по статье 504 — Терроризм.
+
+  #304 - Злоупотребление доверием
+  Совершение действий путём обмана, введения в заблуждение, злоупотребления доверием либо незаконного использования служебного положения с целью получения выгоды, уклонения от ответственности или причинения вреда интересам Корпорации, станции либо иным разумным существам.
+
+  Под действие данной статьи попадает:
+  -а) Ложное заявление о преступлении, результатом которого явились конкретные негативные последствия для невиновного лица;
+  -б) Получение подписи, печати другого сотрудника корпорации обманным путем;
+  -в) Попытка завладевания/успешное завладение денежными и/или материальными благами путём обмана с целью получения личной выгоды;
+  -г) Получение неправомерной выгоды должностным лицом за действие или бездействие в интересах лица, предоставившего выгоду;
+  -д) Выдача себя за другое лицо;
+  -е) Присвоение полномочий должностного лица;
+  -ж) Дача заведомо ложных показаний во время осуществления процедур внутреннего расследования/допроса/трибунала.
+
+  Примечания:
+  - Лицо, предоставившее неправомерной выгоды должностному лицу подлежит уголовной ответсвенности по данной статье с приминением модификатора "Пособничество".
+
+
+  #504 - Терроризм
+  Совершение действий либо участие в организациях, направленных на устрашение, шантаж или принуждение Корпорации, её сотрудников или органов управления к принятию решений в интересах террориста.
+
+  Под действие данной статьи попадает:
+  -а) Захват заложников;
+  -б) Подрыв взрывных устройств, повлёкшее смерть члена экипажа или наступление тяжких последствий;
+  -в) Членство в террористических организациях.
+
+  Примечания:
+  - Перечень организаций, признанных террористическими: "Синдикат", "Круг", пиратские группировки, конфедерация космических волшебников, "орден Ностор".
+
+  #105 - Мелкая кража
+  Присвоение имущества общего пользования или имущества из зоны без соответствующего к ней доступа.
+
+  Под действие данной статьи попадает, но не ограничивается:
+  -а) Присвоение экипировки с территории отдела, к которому обвиняемый не относится. Несвоевременная сдача специального снаряжение отделов, полученного в технических помещениях или в общем доступе (например изолированные перчатки), также попадает под статью;
+  -б) Присвоение дефицитных вещей из мест, где они необходимы по назначению;
+  -в) Отказ сдать экипировку после законного увольнения;
+  -г) Присвоение гарнитур и ключей шифрования отделов, к которым обвиняемый не относится (кроме СБ).
+
+  #205 - Грабёж
+  Открытое присвоение чужого имущества или попытка его присвоения.
+
+  Под действие данной статьи попадает присвоение чужих:
+  -а) КПК или ID-карты;
+  -б) Гарнитур и ключей шифрования отделов, к которым обвиняемый не относится (Службы Безопасности, Командования);
+  -в) Рабочая форма глав, капитана, членов центрального командования, их предметы гардероба;
+  -г) Профессионального снаряжения;
+  -д) Личных вещей;
+  -е) Денежных средств членов экипажа/отдела (до 1000 кредитов);
+  -ж) Вымогательство.
+
+
+  #305 - Кража
+  Присвоение редкого или важного для работы отделов имущества Корпорации.
+
+  К редкому или важному для работы отделов имуществу относятся:
+  -а) Вещи, находящиеся в ограниченном, малом количестве на станции, пополнение количества которых не является возможным;
+  -б) Важное для функционирования отдела оборудование;
+  -в) Платы консолей;
+  -г) Платы смены/удаления законов ИИ;
+  -д) Транспортные средства, исключая космические;
+  -е) Печати должностных лиц;
+  -ж) Картриджи программ для КПК;
+  -з) Денежных средств членов экипажа/отдела (до 15000 кредитов);
+  -и) Пульты управления шлюзами отделов;
+  -к) Карты с расширенным уровнем доступа, без соответствующего разрешения уполномоченных лиц.
+  -л) Завладение нелетальным снаряжением либо боевым оружием должностного лица.
+
+  #405 - Разбой
+  Нападение в целях хищения чужого имущества, совершённое с применением насилия, опасного для жизни или здоровья, либо с угрозой применения такого насилия.
+
+  Под действие данной статьи подпадает:
+  -а) Насильственное завладение чужим имуществом;
+  -б) Применение насилия при совершении хищения в целях завладения либо удержания похищенного имущества;
+  -в) Насильственное завладение боевым оружием должностного лица.
+
+  Примечание:
+  - Насильственное завладевание оружием не складывается вместе с 301 — Нападение первой степени;
+  - Насильственное завладевание оружием не складывается вместе с 303 — владение боевым снаряжением;
+  - Насильственный грабёж не складывается с 201 — Нападение второй степени.
+
+  #505 - Особо крупное хищение
+  Присвоение особо ценного или же критически важного оборудования и имущества Корпорации.
+
+  К особо ценному или же критически важному имуществу относятся:
+  -а) Все особо ценные предметы;
+  -б) Скафандры: Капитана, КСО, Офицера синего щита;
+  -в) Уникальное снаряжение КСО/ЦК, такое как: печать ЦК, гарнитура или ключи шифрования Центком, их вооружение;
+  -г) Ядерная боеголовка;
+  -д) Денежные средства членов экипажа/отдела (от 15000 кредитов и выше);
+  -е) Любые виды шаттлов, космических кораблей, являющихся имуществом Корпорации;
+  -ж) ID-карты с доступом Капитана и Главы персонала, либо аналогичными (с полным доступом, либо возможностью изменять доступ через консоль).
+
+  #106 - Проникновение
+  Нахождение на закрытой территории маловажного отсека без соответствующего доступа или разрешения.
+
+  Примечания:
+  - Попытка или взлом шлюзов также квалифицируется по данной статье.
+  - Разрешить нахождение на территории отдела может любой член экипажа, работающий в данном отделе, но запрет Главы отдела приоритетнее.
+  - Разрешить находиться на территории технических тоннелей может Капитан, Старший Инженер или Глава Персонала.
+
+
+  #306 - Проникновение в стратегическую точку
+  Нахождение на закрытой территории отсека стратегической важности без соответствующего доступа или разрешения.
+
+  К стратегическим точкам относятся:
+  -а) Мостик;
+  -б) Отсек с двигателем АМ;
+  -в) Атмосферный отсек;
+  -г) Жилые каюты и рабочие кабинеты должностных лиц;
+  -д) Химическая лаборатория;
+  -е) Хранилище канистр НИО;
+  -ж) Зоны службы безопасности;
+  -з) Хранилище ВКД;
+  -и) Телекоммуникационные сервера;
+  -к) Солнечные панели и ТЭГ;
+  -л) Отсек с Ускорителем частиц.
+
+  Примечания:
+  - Попытка или взлом шлюзов в стратегические точки также квалифицируется по данной статье.
+  - Разрешить нахождение на данных территориях имеет право только Глава отдела, к которому относится помещение.
+
+  #506 - Проникновение в защищённую стратегическую точку
+  Нахождение на закрытой территории защищённого стратегического отсека без соответствующего доступа или разрешения.
+
+  К защищённым стратегическим точкам относятся:
+  -а) Закрытые шаттлы ЦК/КСО, отдельные отсеки в них;
+  -б) Хранилище;
+  -в) Арсенал;
+  -г) Ядро ИИ;
+  -д) Отсек загрузки ИИ;
+  -е) Серверная НИО;
+  -ж) Защищённое хранилище плат;
+  -з) Отсек генератора гравитации;
+  -и) Жилая каюта и рабочий кабинет капитана.
+
+  Примечания:
+  - Попытка или взлом шлюзов в защищённые стратегические также квалифицируется по данной статье.
+  - Разрешить нахождение на данных территориях имеет право только Глава отдела, к которому относится помещение, или старший по иерархии сотрудник (Для шаттлов ЦК/КСО, соответственно, сотрудники ЦК/КСО).
+
+  #207 - Халатность
+  Неисполнение либо ненадлежащее исполнение сотрудником своих обязанностей, бездействие либо злоупотребление должностными полномочиями, повлёкшие причинение незначительного ущерба станции, здоровью разумного существа либо интересам Корпорации, либо создавшие реальную угрозу причинения существенного ущерба.
+
+  Под действие данной статьи попадает:
+  -а) Пренебрежение либо ненадлежащее исполнение служебных обязаностей, повлёкшее совершение преступлений категорий 2ХХ–3ХХ;
+  -б) Пренебрежение или ненадлежащее исполнение служебных обязаностей, повлёкшее причинение незначительного ущерба станции, разумному существу или корпорации, или которое могло причинить существенный ущерб;
+  -в) Неисполнение законного
+
+  приказа вышестоящего руководителя;
+  -г) Умышленное непринятие Главой отдела мер в отношении подчинённого, допустившего нарушение СРП и/или Техники Безопасности;
+  -д) Владение опасным рабочим снаряжением за пределами зоны исполнения своих рабочих обязанностей;
+  -е) Превышение должностных полномочий, повлёкшее незначительный ущерб станции, разумному существу или корпорации.
+
+  Примечания:
+  - Владение опасным рабочим снаряжением не складывается со статьёй 203 - Владение боевым приспособлением, если обвиняемый владеет данным снаряжением согласно своему СРП.
+  - Допускается вынос рабочего снаряжение в специальных поясах. (пояс повара, ботанический пояс, РПС утилизатора, медицинский пояс, …)
+  - Под умышленным непринятием мер понимается отсутствие со стороны Главы отдела каких-либо дисциплинарных мер в отношении сотрудника в течении 20 минут с момента, когда главе стало известно о совершённом нарушении.
+
+  #307 - Саботаж
+  Умышленные действия или бездействие, направленные на воспрепятствование нормальной деятельности отдела, станции в целом либо исполнению законных распоряжений и служебных обязанностей.
+
+  Под действие данной статьи также попадает:
+  -а) Отключение электропитания на небольшой площади станции в пределах одного отдела;
+  -б) Выпуск неопасных газов на небольшой площади в пределах одного отдела;
+  -в) Блокировка проходов несанкционированными конструкциями;
+  -г) Разрушение одного телекоммуникационного сервера;
+  -д) Нарушение герметичности станции путём разбора или поломки пола, внешних стен и шлюзов;
+  -е) Иные действия, направленные на остановку или затруднение работы отдела.
+
+  Примечания:
+  - Не складывается с модификатором "отсутствие умысла".
+  - В случае, если возникают сомнения в умышленности действий обвиняемого, обратитесь к статьям 204 — Порча имущества или 207 — Халатность.
+
+  #407 - Грубая халатность
+  Неисполнение либо ненадлежащее исполнение сотрудником своих служебных обязаностей, бездействие либо злоупотребление должностными полномочиями, повлёкшие причинение существенного ущерба станции, здоровью разумного существа существа либо интересам Корпорации.
+
+  Под действие данной статьи попадает:
+  -а) Пренебрежение либо ненадлежащее исполнение служебных обязаностей, повлёкшее совершение преступлений категории 4ХХ и выше;
+  -б) Пренебрежение или ненадлежащее исполнение служебных обязаностей, повлёкшее причинение существенного ущерба станции, разумному существу или Корпорации или повлёкшее смерть разумного существа;
+  -в) Превышение должностных полномочий, повлёкшее существенный ущерб станции, разумному существу или Корпорации.
+
+  #507 - Особо крупный саботаж
+  Действия или бездействие, направленное на создание значительной угрозы экипажу или нанесение существенного ущерба станции, попытка создать условия невыполнимости цели или полной неработоспособности станции.
+
+  Под действие данной статьи также попадает:
+  -а) Отключение электропитания нескольких отделов или эквивалентно большой части станции;
+  -б) Вызов большого количества разгерметизаций по всей площади станции;
+  -в) Подача особо опасных газов в систему вентиляции станции;
+  -г) Нарушение условий содержания двигателей Теслы или Сингулярности, взрыв двигателя АМ, выведение из строя ТЭГа;
+  -д) Несанкционированная смена законов ИИ;
+  -е) Разрушение множества телекоммуникационных серверов;
+  -ж) Выведение из строя генератора гравитации станции;
+  -з) Создание пожаров на больших площадях;
+  -и) Уничтожение Искусственного Интеллекта;
+  -к) Иные действия, повлёкшие полную остановку работы отдела.
+
+  Примечания:
+  - Не складывается с модификатором "отсутствие умысла".
+  - В случае, если возникают сомнения в умышленности действий обвиняемого, обратитесь к статье 407 — Грубая халатность.
 </Document>

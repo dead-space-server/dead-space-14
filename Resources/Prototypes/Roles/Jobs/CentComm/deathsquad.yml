@@ -23,12 +23,6 @@
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant, RadioImplantDeathSquad, DeathRattleImplantDeathSquad, RezervImplant ]
-  - !type:AddComponentSpecial
-    components:
-      # DS14-Start
-      - type: Skill
-        group: ALL
-      # DS14-End
 
 # - type: startingGear
 #   id: DeathSquadGear

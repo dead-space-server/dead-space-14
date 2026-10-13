@@ -29,10 +29,13 @@ public sealed class UniformAccessorySystem : SharedUniformAccessorySystem
 
         foreach (var accessory in accessories)
         {
-            if (_container.Remove(accessory, container, reparent: false))
-            {
-                Transform(accessory).Coordinates = coordinates;
-            }
+            if (!_container.Remove(accessory, container, reparent: false))
+                continue;
+
+            if (!coordinates.IsValid(EntityManager) || TerminatingOrDeleted(coordinates.EntityId))
+                continue;
+
+            Transform(accessory).Coordinates = coordinates;
         }
     }
 

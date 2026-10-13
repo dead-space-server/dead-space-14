@@ -29,6 +29,13 @@
   programId: SnakeCartridge
 
 - type: appCatalogEntry
+  id: app-pda-games
+  name: app-catalog-entry-pda-games-name
+  description: app-catalog-entry-pda-games-desc
+  category: Games
+  programId: PdaGamesCartridge
+
+- type: appCatalogEntry
   id: app-scanner
   name: app-catalog-entry-scanner-name
   description: app-catalog-entry-scanner-desc

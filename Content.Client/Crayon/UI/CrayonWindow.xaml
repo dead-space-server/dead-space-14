@@ -10,6 +10,11 @@
             </BoxContainer>
         </ScrollContainer>
 		<!-- DS-14 Start -->
+		<BoxContainer Orientation="Horizontal" Margin="0 8 0 4">
+			<Label Text="{Loc 'crayon-opacity-verb'}" Margin="0 0 8 0" VerticalAlignment="Center"/>
+			<Slider Name="OpacitySlider" MinValue="10" MaxValue="100" HorizontalExpand="True" Rounded="True"/>
+			<Label Name="PercentLabel" Text="100%" MinWidth="44" Margin="8 0 0 0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+		</BoxContainer>
 		<BoxContainer Orientation="Horizontal" Margin="0 0 0 8">
 			<Label Text="Поворот:" Margin="0 0 8 0" VerticalAlignment="Center"/>
 			<LineEdit Name="RotationInput" Text="0" HorizontalExpand="True"/>

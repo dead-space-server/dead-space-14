@@ -106,6 +106,26 @@
     layers:
       - state: box
       - state: flashbang
+
+- type: entity
+  name: box "Blissful Sleep"
+  parent: BoxCardboard
+  id: BoxBlissfulSleep
+  description: A box full lethal injection
+  suffix: lethal injection
+  components:
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,2,2
+  - type: StorageFill
+    contents:
+      - id: SyringeLexorin
+        amount: 9
+  - type: Sprite
+    layers:
+      - state: box
+      - state: syringe
 # DS14-End
 
 - type: entity

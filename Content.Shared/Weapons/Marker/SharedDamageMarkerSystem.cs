@@ -72,6 +72,10 @@ public abstract class SharedDamageMarkerSystem : EntitySystem
         marker.Damage = new DamageSpecifier(component.Damage);
         marker.Marker = projectile.Weapon.Value;
         marker.EndTime = _timing.CurTime + component.Duration;
+        // DS14-start
+        if (component.Effect != null)
+            marker.Effect = component.Effect;
+        // DS14-end
         component.Amount--;
         Dirty(args.OtherEntity, marker);
 

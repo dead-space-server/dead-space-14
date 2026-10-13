@@ -14,7 +14,7 @@ public sealed class IonStormRule : StationEventSystem<IonStormRuleComponent>
     {
         base.Started(uid, comp, gameRule, args);
 
-        if (!TryGetRandomStation(out var chosenStation))
+        if (!TryGetRandomStation(out var chosenStation, rule: uid)) // DS14
             return;
 
         var query = EntityQueryEnumerator<SiliconLawBoundComponent, TransformComponent, IonStormTargetComponent>();

@@ -10,6 +10,7 @@ using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Client.Player; //DS-14
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
 using static Robust.Shared.Maths.Color;
@@ -22,6 +23,8 @@ namespace Content.Client.Overlays;
 /// </summary>
 public sealed class EntityHealthBarOverlay : Overlay
 {
+    [Dependency] private readonly IPlayerManager _player = default!; //DS-14
+
     private readonly IEntityManager _entManager;
     private readonly IPrototypeManager _prototype;
 
@@ -39,6 +42,7 @@ public sealed class EntityHealthBarOverlay : Overlay
 
     public EntityHealthBarOverlay(IEntityManager entManager, IPrototypeManager prototype)
     {
+        IoCManager.InjectDependencies(this); //DS-14
         _entManager = entManager;
         _prototype = prototype;
         _transform = _entManager.System<SharedTransformSystem>();
@@ -51,6 +55,11 @@ public sealed class EntityHealthBarOverlay : Overlay
 
     protected override void Draw(in OverlayDrawArgs args)
     {
+        //DS-14 start
+        if (!_entManager.TryGetComponent(_player.LocalEntity, out EyeComponent? playerEye) || args.Viewport.Eye != playerEye.Eye)
+            return;
+        //DS-14 end
+
         var handle = args.WorldHandle;
         var rotation = args.Viewport.Eye?.Rotation ?? Angle.Zero;
         var xformQuery = _entManager.GetEntityQuery<TransformComponent>();

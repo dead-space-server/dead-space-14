@@ -81,11 +81,13 @@
   guides: [ TheCircle ]
 
 - type: antag
-  id: CircleGeist
-  name: roles-antag-thecircle-geist-name
+  id: CircleShockTrooper
+  name: roles-antag-thecircle-shock-trooper-name
   antagonist: true
   setPreference: true
-  objective: roles-antag-thecircle-geist-objective
+  objective: roles-antag-thecircle-shock-trooper-objective
+  roleLoadout: RoleTheCircleShockTrooper
+  previewStartingGear: TheCircleGeistGear
   requirements:
     - !type:OverallPlaytimeRequirement
       time: 1944000 # 540 hours
@@ -183,7 +185,15 @@
     back: ClothingBackpackUnitologyGeistFilled
     belt: ClothingBeltUnitologyGeistWebbing
     id: UnitologyGeistPDA
-    head: ClothingHeadHelmetUnitologyGeist
-    neck: ClothingNeckUnitologyGeistMantle
     pocket1: UniPhoneGeistUplink
     pocket2: UnitologyLethalBladeImplanter
+
+- type: startingGear
+  parent: TheCircleBaseGear
+  id: TheCircleLegionGear
+  equipment:
+    id: UnitologyLegionPDA
+    head: ClothingHeadHelmetUnitologyLegion
+    mask: ClothingUnitologyLegionGasMask
+    pocket1: WeaponUnitologyLegionKnife
+    outerClothing: ClothingOuterHardsuitUnitologyLegion

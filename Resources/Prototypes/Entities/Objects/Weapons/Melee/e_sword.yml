@@ -344,6 +344,7 @@
       malus: 0.7
     - type: Execution
       doAfterDuration: 4.0
+    - type: AnimationOnMelee # DS14
   - type: Wieldable
     wieldSound: null # esword light sound instead
   - type: MeleeWeapon

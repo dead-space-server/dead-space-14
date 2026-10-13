@@ -1,0 +1,24 @@
+<DefaultWindow xmlns="https://spacestation14.io" MinSize="780 520" SetSize="820 560">
+    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="8" Margin="8">
+        <PanelContainer StyleClasses="BackgroundPanel" MinWidth="360" VerticalExpand="True">
+            <BoxContainer Orientation="Vertical" VerticalExpand="True" Margin="8" SeparationOverride="6">
+                <Label Text="Выберите бойца" Align="Center" StyleClasses="LabelHeading"/>
+                <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
+                    <BoxContainer Name="GearContainer" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5"/>
+                </ScrollContainer>
+            </BoxContainer>
+        </PanelContainer>
+        <PanelContainer StyleClasses="BackgroundPanel" HorizontalExpand="True" VerticalExpand="True">
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" Margin="8" SeparationOverride="6">
+                <Label Name="TimerLabel" Text="До случайного выбора: 01:00" Align="Center" StyleClasses="LabelSubText"/>
+                <Label Name="SelectedLabel" Text="Ничего не выбрано" Align="Center" StyleClasses="LabelSubText"/>
+                <Label Text="Выберите перк" Align="Center" StyleClasses="LabelHeading"/>
+                <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
+                    <BoxContainer Name="PerksContainer" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5"/>
+                </ScrollContainer>
+                <PanelContainer StyleClasses="LowDivider" MinHeight="2"/>
+                <Button Name="ConfirmButton" Text="Подтвердить" Disabled="True" MinHeight="42"/>
+            </BoxContainer>
+        </PanelContainer>
+    </BoxContainer>
+</DefaultWindow>

@@ -2,6 +2,7 @@ using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Client.Player; //DS-14
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -16,6 +17,7 @@ public sealed class StatusIconOverlay : Overlay
     [Dependency] private readonly IEntityManager _entity = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IPlayerManager _player = default!; //DS-14
 
     private readonly SpriteSystem _sprite;
     private readonly TransformSystem _transform;
@@ -36,6 +38,11 @@ public sealed class StatusIconOverlay : Overlay
 
     protected override void Draw(in OverlayDrawArgs args)
     {
+        //DS-14 start
+        if (!_entity.TryGetComponent(_player.LocalEntity, out EyeComponent? playerEye) || args.Viewport.Eye != playerEye.Eye)
+            return;
+        //DS-14 end
+
         var handle = args.WorldHandle;
 
         var eyeRot = args.Viewport.Eye?.Rotation ?? default;

@@ -1,0 +1,63 @@
+// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+
+using Content.Shared.DeadSpace.Psychiatry;
+using Content.Shared.Item.ItemToggle;
+using Content.Shared.Item.ItemToggle.Components;
+using Content.Shared.Power.EntitySystems;
+using Content.Shared.PowerCell;
+using Content.Shared.Rounding;
+using Robust.Client.GameObjects;
+using Robust.Shared.GameObjects;
+
+namespace Content.Client.DeadSpace.Psychiatry;
+
+public sealed class HardResetVisualsSystem : EntitySystem
+{
+    [Dependency] private readonly ItemToggleSystem _toggle = default!;
+    [Dependency] private readonly PowerCellSystem _cells = default!;
+    [Dependency] private readonly SharedBatterySystem _battery = default!;
+    [Dependency] private readonly SpriteSystem _sprite = default!;
+
+    private readonly Dictionary<EntityUid, string> _shown = new();
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        SubscribeLocalEvent<HardResetProbeComponent, ComponentShutdown>(OnShutdown);
+    }
+
+    private void OnShutdown(Entity<HardResetProbeComponent> ent, ref ComponentShutdown args)
+    {
+        _shown.Remove(ent.Owner);
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var query = EntityQueryEnumerator<HardResetProbeComponent, SpriteComponent, ItemToggleComponent>();
+        while (query.MoveNext(out var uid, out _, out var sprite, out var toggle))
+        {
+            var step = 0;
+            if (_cells.TryGetBatteryFromSlot(uid, out var battery))
+                step = ContentHelpers.RoundToNearestLevels(_battery.GetChargeLevel(battery.Value.AsNullable()), 1, 3);
+
+            var state = "control_off";
+            if (_toggle.IsActivated((uid, toggle)) && step > 0)
+            {
+                state = step switch
+                {
+                    >= 3 => "control_standby",
+                    2 => "control_stun",
+                    _ => "control_kill",
+                };
+            }
+
+            if (_shown.TryGetValue(uid, out var shown) && shown == state)
+                continue;
+
+            _sprite.LayerSetRsiState((uid, sprite), 0, state);
+            _shown[uid] = state;
+        }
+    }
+}

@@ -103,7 +103,9 @@
   - type: ExplosionResistance
     damageCoefficient: 0.5
   - type: TTS
-    voice: Glowtron
+    voices:
+      silero: Glowtron
+      ntts: NTTSMisterHandyFl3
   - type: FootstepModifier
     footstepSoundCollection:
       collection: FootstepBorgSec

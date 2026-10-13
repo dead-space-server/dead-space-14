@@ -3,6 +3,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Audio;
 using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Popups;
@@ -20,6 +21,8 @@ using Content.Shared.DeadSpace.MartialArts.CQC;
 using Content.Shared.Actions;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.DeadSpace.MartialArts.CQC.Components;
+using Content.Server.Physics.Controllers;
+using Content.Shared.GameTicking;
 
 namespace Content.Server.DeadSpace.MartialArts.CQC;
 
@@ -39,8 +42,11 @@ public sealed class CQCSystem : CQCSharedSystem
     [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] private readonly SharedActionsSystem _action = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private readonly RayCastSystem _rayCast = default!;
 
     private readonly HashSet<EntityUid> _receivers = new();
+    private readonly HashSet<EntityUid> _knockbackTargets = new();
+    private readonly List<EntityUid> _finishedKnockbacks = new();
     public override void Initialize()
     {
         base.Initialize();
@@ -51,6 +57,8 @@ public sealed class CQCSystem : CQCSharedSystem
         SubscribeLocalEvent<CQCComponent, MeleeHitEvent>(OnMeleeHitEvent);
         SubscribeLocalEvent<CQCComponent, CQCConcentrationEvent>(CQCConcentration);
         SubscribeLocalEvent<CQCStepPunchComponent, CQCStepPunchEvent>(CQCStepPunch);
+        SubscribeLocalEvent<PhysicsUpdateBeforeSolveEvent>(OnBeforeSolve, after: [typeof(MoverController)]);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(_ => _knockbackTargets.Clear());
     }
 
     private void SelectCombo(Entity<CQCComponent> ent, CQCList combo)
@@ -249,5 +257,57 @@ public sealed class CQCSystem : CQCSharedSystem
 
         var impulse = dir * pushStrength;
         _physics.ApplyLinearImpulse(hitEnt, impulse, body: physicsComponent);
+
+        _knockbackTargets.Add(hitEnt);
+    }
+
+    private void OnBeforeSolve(ref PhysicsUpdateBeforeSolveEvent args)
+    {
+        _finishedKnockbacks.Clear();
+        foreach (var target in _knockbackTargets)
+        {
+            if (!TryComp<PhysicsComponent>(target, out var body) || !body.CanCollide ||
+                !TryComp<FixturesComponent>(target, out var fixtures))
+            {
+                _finishedKnockbacks.Add(target);
+                continue;
+            }
+
+            var translation = body.LinearVelocity * args.DeltaTime;
+            var distance = translation.Length();
+            if (distance <= 0.5f)
+            {
+                _finishedKnockbacks.Add(target);
+                continue;
+            }
+
+            var xform = Transform(target);
+            var origin = _physics.GetPhysicsTransform(target, xform);
+            var fraction = 1f;
+            foreach (var fixture in fixtures.Fixtures.Values)
+            {
+                if (!fixture.Hard)
+                    continue;
+
+                var filter = new QueryFilter
+                {
+                    LayerBits = fixture.CollisionLayer,
+                    MaskBits = fixture.CollisionMask,
+                    Flags = QueryFlags.Static,
+                    IsIgnored = uid => uid == target,
+                };
+                var cast = _rayCast.CastShape(xform.MapID, fixture.Shape, origin, translation, filter,
+                    RayCastSystem.RayCastClosestCallback);
+                foreach (var hit in cast.Results)
+                    fraction = MathF.Min(fraction, hit.Fraction);
+            }
+
+            // Keep the full impulse in open space, but stop just short of a wall before the discrete physics step.
+            if (fraction < 1f)
+                _physics.SetLinearVelocity(target, body.LinearVelocity * MathF.Max(0f, fraction - 0.01f / distance), body: body);
+        }
+
+        foreach (var target in _finishedKnockbacks)
+            _knockbackTargets.Remove(target);
     }
 }

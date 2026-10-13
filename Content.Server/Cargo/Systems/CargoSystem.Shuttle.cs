@@ -280,7 +280,7 @@ public sealed partial class CargoSystem
         {
             var bankAccountEnt = bankAccount!;
             var stationEnt = station!.Value;
-            var baseDistribution = CreateAccountDistribution((stationEnt, bankAccountEnt));
+            var baseDistribution = CreateStationAccountDistribution((stationEnt, bankAccountEnt)); // DS14
             foreach (var (_, sellComponent, value) in goods)
             {
                 Dictionary<ProtoId<CargoAccountPrototype>, double> distribution;

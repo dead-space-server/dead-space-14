@@ -1,0 +1,28 @@
+- type: entity
+  id: IntercomLaw
+  parent: Intercom
+  suffix: Law
+  components:
+  - type: Sprite
+    layers:
+    - state: freelance
+    - state: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+      shader: unshaded
+    - state: broadcasting
+      map: ["enum.RadioDeviceVisualLayers.Broadcasting"]
+      shader: unshaded
+      visible: false
+    - state: speaker
+      map: ["enum.RadioDeviceVisualLayers.Speaker"]
+      shader: unshaded
+      visible: false
+    - state: panel
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: ContainerFill
+    containers:
+      board:
+      - IntercomElectronics
+      key_slots:
+      - EncryptionKeyCommon
+      - EncryptionKeyLaw

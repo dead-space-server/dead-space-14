@@ -1,8 +1,10 @@
 ﻿using Content.Shared.Audio;
 using Content.Shared.CCVar;
+using Content.Shared.DeadSpace.Administration.Events;
 using Content.Shared.DeadSpace.CCCCVars;
 using Content.Shared.GameTicking;
 using Robust.Shared.Audio;
+using Robust.Shared.Audio.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Player;
@@ -13,10 +15,12 @@ public sealed class ClientGlobalSoundSystem : SharedGlobalSoundSystem
 {
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly ContentAudioSystem _contentAudio = default!; // DS14
 
     // Admin music
     private bool _adminAudioEnabled = true;
-    private Dictionary<EntityUid, float> _adminAudio = new(1); // DS14
+    private readonly Dictionary<int, (EntityUid Stream, float BaseVolume)> _adminAudio = new(1); // DS14
+    private int _nextUntrackedAdminAudioId; // DS14
 
     // Event sounds (e.g. nuke timer)
     private bool _eventAudioEnabled = true;
@@ -32,6 +36,7 @@ public sealed class ClientGlobalSoundSystem : SharedGlobalSoundSystem
         base.Initialize();
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
         SubscribeNetworkEvent<AdminSoundEvent>(PlayAdminSound);
+        SubscribeNetworkEvent<AdminSoundPlaybackControlEvent>(ControlAdminSound); // DS14
         Subs.CVar(_cfg, CCVars.AdminSoundsEnabled, ToggleAdminSound, true);
 
         SubscribeNetworkEvent<StationEventMusicEvent>(PlayStationEventMusic);
@@ -59,7 +64,7 @@ public sealed class ClientGlobalSoundSystem : SharedGlobalSoundSystem
 
     private void ClearAudio()
     {
-        foreach (var stream in _adminAudio.Keys) // DS14
+        foreach (var (stream, _) in _adminAudio.Values) // DS14
         {
             _audio.Stop(stream);
         }
@@ -78,13 +83,50 @@ public sealed class ClientGlobalSoundSystem : SharedGlobalSoundSystem
         if(!_adminAudioEnabled) return;
 
         // DS14-start
+        var streamId = soundEvent.StreamId;
+        if (streamId == 0)
+            streamId = --_nextUntrackedAdminAudioId;
+
+        if (_adminAudio.Remove(streamId, out var existing))
+            _audio.Stop(existing.Stream);
+
         var baseAudioParams = soundEvent.AudioParams ?? AudioParams.Default;
         var audioParams = baseAudioParams.AddVolume(SharedAudioSystem.GainToVolume(_adminVolume));
         var stream = _audio.PlayGlobal(soundEvent.Specifier, Filter.Local(), false, audioParams);
         if (stream != null)
-            _adminAudio[stream.Value.Entity] = baseAudioParams.Volume;
+        {
+            _adminAudio[streamId] = (stream.Value.Entity, baseAudioParams.Volume);
+            if (soundEvent.Paused)
+                _audio.SetState(stream.Value.Entity, AudioState.Paused, component: stream.Value.Component);
+        }
         // DS14-end
     }
+
+    // DS14-start
+    private void ControlAdminSound(AdminSoundPlaybackControlEvent soundEvent)
+    {
+        if (!_adminAudio.TryGetValue(soundEvent.StreamId, out var audio))
+            return;
+
+        switch (soundEvent.Action)
+        {
+            case AdminGlobalSoundControl.Pause:
+                _audio.SetState(audio.Stream, AudioState.Paused);
+                break;
+            case AdminGlobalSoundControl.Resume:
+                _audio.SetState(audio.Stream, AudioState.Playing);
+                break;
+            case AdminGlobalSoundControl.Stop:
+                _audio.Stop(audio.Stream);
+                _adminAudio.Remove(soundEvent.StreamId);
+                break;
+            case AdminGlobalSoundControl.FadeOut:
+                _contentAudio.FadeOut(audio.Stream, duration: soundEvent.FadeDuration);
+                _adminAudio.Remove(soundEvent.StreamId);
+                break;
+        }
+    }
+    // DS14-end
 
     private void PlayStationEventMusic(StationEventMusicEvent soundEvent)
     {
@@ -128,7 +170,7 @@ public sealed class ClientGlobalSoundSystem : SharedGlobalSoundSystem
     {
         _adminAudioEnabled = enabled;
         if (_adminAudioEnabled) return;
-        foreach (var stream in _adminAudio.Keys) // DS14
+        foreach (var (stream, _) in _adminAudio.Values) // DS14
         {
             _audio.Stop(stream);
         }
@@ -159,7 +201,7 @@ public sealed class ClientGlobalSoundSystem : SharedGlobalSoundSystem
     {
         _adminVolume = volume;
         var volumeOffset = SharedAudioSystem.GainToVolume(volume);
-        foreach (var (stream, baseVolume) in _adminAudio)
+        foreach (var (stream, baseVolume) in _adminAudio.Values)
         {
             _audio.SetVolume(stream, baseVolume + volumeOffset);
         }

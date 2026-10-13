@@ -4,6 +4,7 @@ using Content.Client.Wall.Systems;
 using Content.Shared.Wall;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Client.Player;
 using Robust.Shared.Enums;
 using Robust.Shared.Graphics;
 using Robust.Shared.Map.Components;
@@ -19,6 +20,7 @@ public sealed class WallMountVisibilityOverlay : Overlay
 {
     [Dependency] private readonly IEntityManager _entManager = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IPlayerManager _player = default!; //DS-14
 
     private readonly SharedMapSystem _map;
     private readonly SpriteSystem _sprite;
@@ -155,7 +157,7 @@ public sealed class WallMountVisibilityOverlay : Overlay
 
             viewportState.SeenThisFrame.Add(uid);
 
-            var targetAlpha = ComputeTargetAlpha(wallmount, xform, eye, matrix);
+            var targetAlpha = ComputeTargetAlpha(uid, wallmount, xform, eye, matrix);
             UpdateFadeState(uid, originalAlpha, targetAlpha, fadeStep, viewportState);
         }
     }
@@ -163,10 +165,15 @@ public sealed class WallMountVisibilityOverlay : Overlay
     /// <summary>
     /// Returns 1 if the entity is within its facing arc relative to the eye, 0 otherwise.
     /// </summary>
-    private float ComputeTargetAlpha(WallMountComponent wallmount, TransformComponent xform, IEye eye, Matrix3x2 matrix)
+    private float ComputeTargetAlpha(EntityUid uid, WallMountComponent wallmount, TransformComponent xform, IEye eye, Matrix3x2 matrix)
     {
         if (!wallmount.DirectionalVisibility || wallmount.Arc >= Math.Tau)
             return 1f;
+
+        //DS-14 start
+        if (_player.LocalEntity is { } player && _xform.ContainsEntity(uid, player))
+            return 1f;
+        //DS-14 end
 
         if (xform.GridUid is not { } gridUid || !_gridQuery.TryGetComponent(gridUid, out var grid))
             return 1f;

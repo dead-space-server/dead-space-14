@@ -21,16 +21,16 @@
                 HorizontalExpand="True"
                 SeparationOverride="5">
                 <BoxContainer Orientation="Horizontal"
-                    HorizontalExpand="True">
+                    HorizontalExpand="True" SeparationOverride="8"> <!-- DS14 -->
                     <LineEdit
                         Name="SearchBar"
                         PlaceHolder="{Loc 'lathe-menu-search-designs'}"
-                        HorizontalExpand="True">
+                        HorizontalExpand="True" MinHeight="34" StyleClasses="DeadSpaceFormField"> <!-- DS14 -->
                     </LineEdit>
-                    <!-- DS14-start: ordinary dropdown chrome and popup rows are global. -->
+                    <!-- DS14-start: match the adjacent search field; separate controls with a gap. -->
                     <OptionButton
                         Name="FilterOption"
-                        MinWidth="100" />
+                        MinWidth="120" MinHeight="34" StyleClasses="DeadSpaceFormField" />
                     <!-- DS14-end -->
                 </BoxContainer>
                 <BoxContainer Orientation="Vertical"

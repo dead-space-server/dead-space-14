@@ -1,0 +1,48 @@
+- type: entity
+  parent: FoodTinBase
+  id: FoodTinSurstromming
+  name: сюрстремминг
+  description: Древнее земное блюдо, от которого недавно вырвал в прямом эфире президент не древнего Союза Независимых Колоний. Воняет аммиаком, на вкус примерно также. Вкуснятинка.
+  components:
+  - type: Item
+    size: Tiny
+    shape:
+    - 0,0,0,0
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Consumable/Food/surstromming.rsi
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 25
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 6
+        - ReagentId: Ammonia
+          Quantity: 15
+  - type: Openable
+    openableByHand: true
+  - type: FlavorProfile
+    flavors:
+    - meaty
+    - salty
+    - cheap
+  - type: Edible
+    trash:
+    - FoodTinSurstrommingTrash
+  - type: Tag
+    tags:
+    - Meat
+
+- type: entity
+  parent: FoodTinBaseTrash
+  id: FoodTinSurstrommingTrash
+  name: сюрстремминг
+  description: Оставшаяся после смелого человека консерва. Кажется, металл этой банки уже насквозь провонял аммиаком.
+  components:
+  - type: Item
+    size: Tiny
+    shape:
+    - 0,0,0,0
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Consumable/Food/surstromming.rsi
+    state: trash

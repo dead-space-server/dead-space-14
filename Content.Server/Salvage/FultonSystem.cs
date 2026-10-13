@@ -3,6 +3,9 @@ using Content.Shared.Salvage.Fulton;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Random;
+using Content.Shared.Movement.Pulling.Components; //DS14
+using Content.Shared.Movement.Pulling.Systems; //DS14
+
 
 namespace Content.Server.Salvage;
 
@@ -12,6 +15,7 @@ namespace Content.Server.Salvage;
 public sealed class FultonSystem : SharedFultonSystem
 {
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly PullingSystem _pulling = default!; //DS14
 
     public override void Initialize()
     {
@@ -58,6 +62,11 @@ public sealed class FultonSystem : SharedFultonSystem
             !Container.IsEntityOrParentInContainer(component.Beacon.Value, xform: beaconXform) &&
             CanFulton(uid))
         {
+            //DS14-start
+            if (TryComp<PullableComponent>(uid, out var pull) && _pulling.IsPulled(uid, pull))
+                _pulling.TryStopPull(uid, pull);
+            //DS14-end
+
             var xform = Transform(uid);
             var metadata = MetaData(uid);
             var oldCoords = xform.Coordinates;

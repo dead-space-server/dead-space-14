@@ -179,6 +179,12 @@
     sprite: _DeadSpace/Objects/Weapons/Guns/Shotguns/bread.rsi
   - type: Item
     sprite: _DeadSpace/Objects/Weapons/Guns/Shotguns/bread.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Objects/Weapons/Guns/Shotguns/bread.rsi
+    quickEquip: false
+    slots:
+    - Back
+    - suitStorage
   - type: GunRequiresWield
   - type: Gun
     fireRate: 3
@@ -220,3 +226,39 @@
   components:
   - type: BallisticAmmoProvider
     proto: ShellShotgunImprovised
+
+- type: entity
+  name: помповый дробовик Shorty x-32
+  parent: [ BaseWeaponShotgun, BaseSecurityBartenderContraband ]
+  id: WeaponShotgunShorty
+  description: Он такой короткий, что даже отдача удивляется. Использует патроны калибра 12х70.
+  components: # needs to be super inaccurate because you don't need to wield it
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Guns/Shotguns/supershorty.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Objects/Weapons/Guns/Shotguns/supershorty.rsi
+  - type: Item
+    size: Small
+    shape:
+    - 0,0,1,1
+    sprite: _DeadSpace/Objects/Weapons/Guns/Shotguns/supershorty.rsi
+  - type: Gun
+    fireRate: 2.2
+    soundGunshot:
+      path: /Audio/_DeadSpace/Weapons/Guns/Gunshots/shorty.ogg
+  - type: GunSpreadModifier
+    spread: 1
+    wieldedSpread: 0.6
+  - type: BallisticAmmoProvider
+    capacity: 4
+  - type: Akimbo
+    fireDelayMultiplier: 0.40
+  - type: Wieldable
+
+- type: entity
+  parent: WeaponShotgunShorty
+  id: WeaponShotgunShortyEmpty
+  suffix: Пустой
+  components:
+  - type: BallisticAmmoProvider
+    proto: null

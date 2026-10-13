@@ -846,12 +846,21 @@
     - TaipanAccess # DS14-taipan
     - Silicon
     tags:
-    - SOD
+    - SOD #DS-14
     - CentralCommand
     - NuclearOperative
     - SyndicateAgent
     - Wizard
     - Xenoborg
+    - BlueShield #DS-14
+    # DS14-start
+    - ErtTeamLeader
+    - SpiderTerror
+    - SyndicateEvacuation
+    - AccessReserved1
+    - AccessReserved2
+    - AccessReserved3
+    # DS14-end
   - type: Tag #  Ignore Chameleon tags
     tags:
     - DoorBumpOpener

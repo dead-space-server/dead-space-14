@@ -11,6 +11,7 @@ using Content.Shared.Zombies;
 using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Tag;
+using Content.Shared.Interaction.Events;
 
 namespace Content.Shared.DeadSpace.Virus;
 
@@ -102,6 +103,21 @@ public abstract partial class SharedVirusSystem : EntitySystem
         base.Initialize();
 
         _sawmill = _logManager.GetSawmill("SharedVirusSystem");
+
+        SubscribeLocalEvent<SentientVirusComponent, InteractionAttemptEvent>(OnSentientVirusInteract);
+        SubscribeLocalEvent<SentientVirusComponent, UseAttemptEvent>(OnSentientVirusUse);
+    }
+
+    private void OnSentientVirusInteract(Entity<SentientVirusComponent> ent, ref InteractionAttemptEvent args)
+    {
+        // Its own mutation UI and instant actions remain available, but it has no physical body to use objects.
+        if (args.Target != null && args.Target != ent.Owner)
+            args.Cancelled = true;
+    }
+
+    private void OnSentientVirusUse(Entity<SentientVirusComponent> ent, ref UseAttemptEvent args)
+    {
+        args.Cancel();
     }
 
     public int GetSymptomPrice(VirusData data, ProtoId<VirusSymptomPrototype> symptomId)

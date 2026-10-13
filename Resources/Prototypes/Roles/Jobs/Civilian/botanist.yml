@@ -21,12 +21,6 @@
   - !type:GiveItemOnHolidaySpecial
     holiday: FourTwenty
     prototype: CannabisSeeds
-  - !type:AddComponentSpecial
-    components:
-      # DS14-Start
-      - type: Skill
-        group: BasicAndBotany
-      # DS14-End
   #start-backmen: currency
   minBankBalance: 250 # DS14-value
   maxBankBalance: 350 # DS14-value

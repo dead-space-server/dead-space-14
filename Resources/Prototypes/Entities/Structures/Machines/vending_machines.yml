@@ -75,6 +75,10 @@
   - type: Speech
     speechVerb: Robotic
     speechSounds: Vending
+  - type: Language # DS14
+    selectedLanguage: GeneralLanguage
+    knownLanguages:
+    - GeneralLanguage
   - type: Vocalizer
     minVocalizeInterval: 8m
     maxVocalizeInterval: 10m
@@ -410,7 +414,11 @@
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
       visible: false # DS14
   - type: TTS
-    voice: Tereshkova
+    # DS14-start
+    voices:
+      silero: Tereshkova
+      ntts: NTTSAdjutant
+    # DS14-end
 
 - type: entity
   parent: VendingMachine
@@ -1040,7 +1048,11 @@
     - Security
     - Antagonists
   - type: TTS
-    voice: Glowtron
+    # DS14-start
+    voices:
+      silero: Glowtron
+      ntts: NTTSMisterHandyFl3
+    # DS14-end
 
 - type: entity
   parent: VendingMachine
@@ -1597,7 +1609,11 @@
   - type: AccessReader
     access: [["Security"]]
   - type: TTS
-    voice: Glowtron
+    # DS14-start
+    voices:
+      silero: Glowtron
+      ntts: NTTSMisterHandyFl3
+    # DS14-end
 
 - type: entity
   parent: VendingMachine
@@ -2187,6 +2203,25 @@
     guides:
     - Chemicals
     - Chemist
+  # DS14: ChemVend should require two direct C4 blasts to destroy.
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 400
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Breakage"]
+      - !type:EjectVendorItems
 
 - type: entity
   parent: VendingMachineChemicals

@@ -5,6 +5,11 @@
   components:
   - type: Sprite
     state: icon
+  # DS14-start
+  - type: Appearance
+  - type: Paintable
+    group: Gloves
+  # DS14-end
   - type: Clothing
     slots: [gloves]
   - type: Edible

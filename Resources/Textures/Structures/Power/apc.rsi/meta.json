@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from tgstation at commit https://github.com/tgstation/tgstation/commit/9c7d509354ee030300f63c701da63c17928c3b3b and heavily modified by EmoGarbage404 (github)",
+  "copyright": "Made by Nano_Jump (discord) for Space Station 14 server Мёртвый космос",
   "size": {
     "x": 32,
     "y": 32
@@ -141,12 +141,6 @@
           0.1,
           0.1,
           0.1,
-          0.1
-        ],
-        [
-          0.1,
-          0.1,
-          0.1,
           0.1,
           0.1
         ],
@@ -155,9 +149,19 @@
           0.1,
           0.1,
           0.1,
+          0.1,
           0.1
         ],
         [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
           0.1,
           0.1,
           0.1,
@@ -192,6 +196,8 @@
       "name": "sparks-unlit",
       "delays": [
         [
+          0.1,
+          0.1,
           0.1,
           0.1,
           0.1,

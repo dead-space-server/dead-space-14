@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Content.Server.Chat.Systems;
 using Content.Shared.Chat;
+using Content.Shared.DeadSpace.TTS;
 
 #pragma warning disable RA0026
 
@@ -24,7 +25,12 @@ public sealed partial class TTSSystem
     private string Sanitize(string text)
     {
         text = text.Trim();
-        text = Regex.Replace(text, AllowedTtsCharsPattern, "");
+        // DS14-start
+        var allowed = _cfg.GetCVar(TTSProviderCVars.Provider) == TTSVoices.Ntts
+            ? @"[^a-zA-ZäöüÄÖÜßіІїЇа-яА-ЯёЁ0-9,;:\-+?!.… \r\n]"
+            : AllowedTtsCharsPattern;
+        text = Regex.Replace(text, allowed, "");
+        // DS14-end
         text = Regex.Replace(text, MultiWordReplacementPattern, ReplaceMatchedWord, RegexOptions.Multiline | RegexOptions.IgnoreCase);
         text = Regex.Replace(text, AllowedTtsWordPattern, ReplaceMatchedWord, RegexOptions.Multiline | RegexOptions.IgnoreCase);
         text = Regex.Replace(text, LatinTranslitPattern, ReplaceLat2Cyr, RegexOptions.Multiline | RegexOptions.IgnoreCase);
@@ -174,6 +180,10 @@ public sealed partial class TTSSystem
             {"брдм", "Бэр Дэ Эм"},
             {"кпп", "Кэ Пэ Пэ"},
             {"кпск", "Кэ Пэ Эс Ка"},
+            {"мед", "Ммед"}, // Мёд fix
+            {"меде", "Ммеде"}, // Мёде fix
+            {"медом", "Ммедом"}, // Мёдом fix. Если найдёте комбинацию с правильным ударением, то исправьте
+            {"чудно", "Ч удно"}, // Чудно́ fix
             {"hello", "хэллоу"}, // English-start
             {"wassup", "вассап"},
             {"no", "ноу"},

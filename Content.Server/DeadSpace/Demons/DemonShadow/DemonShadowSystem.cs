@@ -16,6 +16,11 @@ using Content.Shared.DeadSpace.Demons.DemonShadow.Components;
 using Content.Shared.Examine;
 using Content.Shared.Eye;
 using Content.Shared.Ghost;
+using Content.Shared.IgnitionSource;
+using Content.Shared.Item;
+using Content.Shared.Item.ItemToggle;
+using Content.Shared.Item.ItemToggle.Components;
+using Content.Shared.Light;
 using Content.Shared.Interaction;
 using Content.Shared.Light.Components;
 using Content.Shared.Maps;
@@ -35,8 +40,10 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -70,8 +77,14 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
     [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
     [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private readonly SharedPointLightSystem _light = default!;
+    [Dependency] private readonly SharedHandheldLightSystem _handheldLight = default!;
+    [Dependency] private readonly ItemToggleSystem _itemToggle = default!;
+    [Dependency] private readonly SharedItemSystem _item = default!;
+    [Dependency] private readonly SharedIgnitionSourceSystem _ignitionSource = default!;
 
     private const float ConeHalfAngle = 60f * MathF.PI / 180f;
+    private const float LightExtinguishRadius = 7f;
     private static readonly ProtoId<TagPrototype> FlareTag = "Flare";
 
     public override void Initialize()
@@ -94,7 +107,7 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
     {
         if (component.IsShadowCrawl)
         {
-            _popup.PopupEntity(Loc.GetString("Вы не можете применить эту способность в астрале."), uid, uid);
+            _popup.PopupEntity(Loc.GetString("Вы не можете применить эту способность в теневой фазе."), uid, uid);
             args.Handled = true;
             return;
         }
@@ -111,7 +124,19 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
                 ShadowCheck(uid, component);
 
             if (component.NextTickForRegen + TimeSpan.FromSeconds(1) < _gameTiming.CurTime)
+            {
                 Regeneration(uid, component);
+                ReceiveLightDamage(uid, component);
+            }
+
+            if (component.IsShadowCrawl)
+            {
+                if (_physics.GetEntitiesIntersectingBody(uid, (int) CollisionGroup.Impassable).Count == 0)
+                    component.PhaseLastSafeCoordinates = Transform(uid).Coordinates;
+
+                if (_gameTiming.CurTime >= component.TimeUtilPhaseEnd)
+                    EndPhase(uid, component);
+            }
 
             if (_gameTiming.CurTime >= component.TimeUtilTeleport && component.TeleportTarget != null)
                 Teleport(uid, component.TeleportTarget.Value, component);
@@ -134,11 +159,25 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
         if (_mobState.IsDead(uid, mobStateComponent))
             return;
 
-        var multiplier = component.IsShadowPosition
-            ? component.PassiveHealingMultiplier
-            : 1f;
+        var healing = component.IsShadowPosition
+            ? component.DarknessHealing
+            : component.PassiveHealing;
 
-        _damageable.TryChangeDamage(uid, component.PassiveHealing * multiplier, true, false);
+        _damageable.TryChangeDamage(uid, healing, true, false);
+    }
+
+    private void ReceiveLightDamage(EntityUid uid, DemonShadowComponent component)
+    {
+        if (component.IsShadowPosition)
+            return;
+
+        if (!TryComp<MobStateComponent>(uid, out var mobStateComponent))
+            return;
+
+        if (_mobState.IsDead(uid, mobStateComponent))
+            return;
+
+        _damageable.TryChangeDamage(uid, component.LightDamage, true, false);
     }
 
     public void ShadowCheck(EntityUid uid, DemonShadowComponent component)
@@ -153,7 +192,7 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
         component.IsShadowPosition = shadowState.IsShadowPosition;
         component.TimeToCheck = _gameTiming.CurTime + component.CheckDuration;
 
-        var movementSpeedMultiply = shadowState.IsShadowPosition ? 3f : 1f;
+        var movementSpeedMultiply = shadowState.IsShadowPosition ? 2f : 1f;
         if (component.MovementSpeedMultiply != movementSpeedMultiply)
         {
             component.MovementSpeedMultiply = movementSpeedMultiply;
@@ -174,7 +213,7 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
         if (TryComp<NpcFactionMemberComponent>(uid, out var factionComp))
             component.OldFaction = factionComp.Factions.FirstOrDefault();
 
-        Astral(uid, true);
+        Astral(uid, false);
     }
 
     private void OnComponentInit(EntityUid uid, DemonShadowComponent component, ComponentInit args)
@@ -186,12 +225,47 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
     private void OnMeleeHit(EntityUid uid, DemonShadowComponent component, MeleeHitEvent args)
     {
         if (component.IsShadowCrawl)
+        {
             args.Handled = true;
+            return;
+        }
+
+        if (!args.IsHit)
+            return;
+
+        var stunnedTargets = new List<EntityUid>();
+
+        foreach (var target in args.HitEntities)
+        {
+            if (target == uid)
+                continue;
+
+            if (!HasComp<StunnedComponent>(target))
+                return;
+
+            stunnedTargets.Add(target);
+        }
+
+        if (stunnedTargets.Count == 0)
+            return;
+
+        var damage = DamageSpecifier.ApplyModifierSets(args.BaseDamage + args.BonusDamage, args.ModifiersList);
+
+        foreach (var target in stunnedTargets)
+        {
+            _damageable.TryChangeDamage(target, damage, ignoreResistances: true, origin: args.User);
+        }
+
+        args.Handled = true;
     }
 
     private void OnComponentShutdown(EntityUid uid, DemonShadowComponent component, ComponentShutdown args)
     {
         _actionsSystem.RemoveAction(uid, component.DemonShadowCrawlActionEntity);
+
+        component.IsShadowCrawl = false;
+        component.IsStartShadowCrawl = false;
+        component.PhaseLastSafeCoordinates = null;
 
         Astral(uid, false);
 
@@ -203,6 +277,9 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
     private void DoShadowCrawl(EntityUid uid, DemonShadowComponent component, ShadowCrawlActionEvent args)
     {
         if (args.Handled)
+            return;
+
+        if (component.IsShadowCrawl || component.IsStartShadowCrawl)
             return;
 
         if (!TryUseShadowCrawl(uid))
@@ -236,27 +313,44 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
     private void Crawl(EntityUid uid, DemonShadowComponent component)
     {
         component.IsStartShadowCrawl = false;
-        _actionsSystem.SetEnabled(component.DemonShadowCrawlActionEntity, true);
 
         if (!TryUseShadowCrawl(uid))
         {
             _appearance.SetData(uid, DemonShadowVisuals.Astral, false);
+            _actionsSystem.SetEnabled(component.DemonShadowCrawlActionEntity, true);
             _actionsSystem.ClearCooldown(component.DemonShadowCrawlActionEntity);
             return;
         }
 
         _appearance.SetData(uid, DemonShadowVisuals.Astral, false);
 
-        component.IsShadowCrawl = !component.IsShadowCrawl;
+        component.IsShadowCrawl = true;
+        component.TimeUtilPhaseEnd = _gameTiming.CurTime + component.PhaseDuration;
+        component.PhaseLastSafeCoordinates = Transform(uid).Coordinates;
 
-        if (component.IsShadowCrawl)
+        Astral(uid, true);
+    }
+
+    private void EndPhase(EntityUid uid, DemonShadowComponent component)
+    {
+        component.IsShadowCrawl = false;
+        component.TimeUtilPhaseEnd = TimeSpan.Zero;
+
+        _actionsSystem.SetEnabled(component.DemonShadowCrawlActionEntity, true);
+
+        var stuck = _physics.GetEntitiesIntersectingBody(uid, (int) CollisionGroup.Impassable).Count > 0;
+
+        Astral(uid, false);
+
+        if (stuck && component.PhaseLastSafeCoordinates is { } safeCoordinates)
         {
-            Astral(uid, true);
+            _transform.SetCoordinates(uid, Transform(uid), safeCoordinates);
+
+            if (TryComp<PhysicsComponent>(uid, out var physics))
+                _physics.SetLinearVelocity(uid, Vector2.Zero, body: physics);
         }
-        else
-        {
-            Astral(uid, false);
-        }
+
+        component.PhaseLastSafeCoordinates = null;
     }
 
     /// <summary>
@@ -379,6 +473,8 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
 
         args.Handled = true;
 
+        ExtinguishLights(user, LightExtinguishRadius);
+
         _beam.TryCreateBeam(uid, target, "ShadowHand");
         _stun.TryUpdateParalyzeDuration(target, TimeSpan.FromSeconds(3));
 
@@ -391,6 +487,67 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
         component.TeleportTarget = null;
         _transform.SetCoordinates(target, Transform(uid).Coordinates);
         _transform.AttachToGridOrMap(target);
+    }
+
+    private void ExtinguishLights(EntityUid uid, float radius)
+    {
+        var position = _transform.GetMapCoordinates(uid);
+        var lights = _lookup.GetEntitiesInRange(position, radius);
+
+        foreach (var lightUid in lights)
+        {
+            if (lightUid == uid)
+                continue;
+
+            if (TryComp<ExpendableLightComponent>(lightUid, out var expendable))
+            {
+                if (expendable.Activated)
+                    KillFlare(lightUid, expendable);
+
+                continue;
+            }
+
+            if (TryComp<HandheldLightComponent>(lightUid, out var handheld))
+            {
+                if (handheld.Activated)
+                    _handheldLight.TurnOff((lightUid, handheld));
+
+                continue;
+            }
+
+            if (TryComp<ItemTogglePointLightComponent>(lightUid, out _) &&
+                TryComp<ItemToggleComponent>(lightUid, out var itemToggle))
+            {
+                if (itemToggle.Activated)
+                    _itemToggle.Toggle((lightUid, itemToggle));
+
+                continue;
+            }
+
+            if (TryComp<PointLightComponent>(lightUid, out var pointLight) && pointLight.Enabled)
+                _light.SetEnabled(lightUid, false, pointLight);
+        }
+    }
+
+    private void KillFlare(EntityUid uid, ExpendableLightComponent expendable)
+    {
+        if (TryComp<PointLightComponent>(uid, out var flareLight))
+            _light.SetEnabled(uid, false, flareLight);
+
+        if (TryComp<IgnitionSourceComponent>(uid, out var ignition))
+            _ignitionSource.SetIgnited((uid, ignition), false);
+
+        expendable.CurrentState = ExpendableLightState.Dead;
+        Dirty(uid, expendable);
+
+        if (TryComp<AppearanceComponent>(uid, out var appearance))
+        {
+            _appearance.SetData(uid, ExpendableLightVisuals.State, ExpendableLightState.Dead, appearance);
+            _appearance.SetData(uid, ExpendableLightVisuals.Behavior, string.Empty, appearance);
+        }
+
+        if (TryComp<ItemComponent>(uid, out var item))
+            _item.SetHeldPrefix(uid, "unlit", false, item);
     }
 
     public bool IsShadowPosition(EntityUid uid, DemonShadowComponent? component = null)

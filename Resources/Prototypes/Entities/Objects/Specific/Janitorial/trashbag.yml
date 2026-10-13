@@ -13,7 +13,6 @@
     grid:
     - 0,0,7,5
     quickInsert: true
-    quickEject: false # DS14
     areaInsert: true
     storageOpenSound:
       collection: trashBagRustle

@@ -223,6 +223,7 @@
   description: Призрак. Черный.
   categories: [ HideSpawnMenu ]
   components:
+  - type: CameraArchiveIgnore
   - type: Sprite
     sprite: _DeadSpace/Demons/shadowling.rsi
     layers:

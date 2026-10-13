@@ -8,6 +8,7 @@ namespace Content.Server.StationEvents.Components;
 /// Component for spawning antags in space around a station.
 /// Requires <c>AntagSelectionComponent</c>.
 /// </summary>
+[Content.Server.DeadSpace.CentComm.AllowedGameRuleOnCentComm] // DS14
 [RegisterComponent, Access(typeof(SpaceSpawnRule))]
 public sealed partial class SpaceSpawnRuleComponent : Component
 {

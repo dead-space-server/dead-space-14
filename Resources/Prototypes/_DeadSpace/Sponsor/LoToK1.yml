@@ -212,7 +212,7 @@
 
 # Gasmask
 - type: entity
-  parent: ClothingMaskGasSyndicate
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskLoToK1
   name: ведьмина маска мима
   description: Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.

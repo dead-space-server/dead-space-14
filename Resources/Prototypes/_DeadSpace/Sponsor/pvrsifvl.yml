@@ -161,7 +161,7 @@
 
 #Gasmask
 - type: entity
-  parent: ClothingMaskGasSyndicate
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskpvrsifvl
   name: боевая маска железного лорда
   description: Душно. Разработана по чертежам спонсорской организации Warmind.

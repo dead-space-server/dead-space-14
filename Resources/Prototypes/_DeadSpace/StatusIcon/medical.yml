@@ -1,0 +1,44 @@
+# Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+
+- type: medicalStatusIcon
+  id: MedicalStatusIcon
+  abstract: true
+  priority: 3
+  offset: 1
+  locationPreference: Left
+  isShaded: true
+
+# "On treatment" is medical bookkeeping - security has no reason to see it.
+- type: medicalStatusIcon
+  parent: MedicalStatusIcon
+  id: MedicalStatusIconOnTreatment
+  securityVisible: false
+  icon:
+    sprite: /Textures/_DeadSpace/Interface/Misc/medical_icons.rsi
+    state: hud_on_treatment
+
+# Psychologically unstable: security has to know before deciding how to handle a transport.
+- type: medicalStatusIcon
+  parent: MedicalStatusIcon
+  id: MedicalStatusIconPsychUnstable
+  securityVisible: true
+  icon:
+    sprite: /Textures/_DeadSpace/Interface/Misc/medical_icons.rsi
+    state: hud_psych_unstable
+
+- type: medicalStatusIcon
+  parent: MedicalStatusIcon
+  id: MedicalStatusIconCompletedTreatment
+  securityVisible: false
+  icon:
+    sprite: /Textures/_DeadSpace/Interface/Misc/medical_icons.rsi
+    state: hud_completed
+
+# Not a status in its own right - it rides alongside whichever status the patient is in.
+- type: medicalStatusIcon
+  parent: MedicalStatusIcon
+  id: MedicalStatusIconForcedTreatment
+  securityVisible: true
+  icon:
+    sprite: /Textures/_DeadSpace/Interface/Misc/medical_icons.rsi
+    state: hud_forced_treatment

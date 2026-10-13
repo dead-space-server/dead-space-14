@@ -1,0 +1,22 @@
+<Controls:DefaultWindow xmlns="https://spacestation14.io"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                        xmlns:Controls="clr-namespace:Robust.Client.UserInterface.CustomControls;assembly=Robust.Client"
+                        xmlns:cc="clr-namespace:Robust.Client.UserInterface.Controls;assembly=Robust.Client"
+                        x:Class="Content.Client.DeadSpace.Ninja.UI.NinjaInfoScannerWindow"
+                        Title="{Loc 'ninja-info-ui-title'}">
+    <BoxContainer Orientation="Vertical">
+        <PanelContainer StyleClasses="DeadSpaceCharacterIcon"
+                        Margin="0 4 6 4">
+            <cc:SpriteView Name="TargetView" 
+                        OverrideDirection="South"
+                        MinSize="98 98"
+                        SetSize="98 98"
+                        Scale="1 1"
+                        RectClipContent="True"/>
+        </PanelContainer>
+        <Label Name="StatusLabel" />
+        <Button Name="ScanButton" Text="{Loc 'ninja-info-ui-scan'}" />
+        <Button Name="EjectButton" Text="{Loc 'ninja-info-ui-eject'}" />
+        <Button Name="TeleportButton" Text="{Loc 'ninja-info-ui-teleport'}" />
+    </BoxContainer>
+</Controls:DefaultWindow>

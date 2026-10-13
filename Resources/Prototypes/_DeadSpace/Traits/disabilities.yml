@@ -18,6 +18,14 @@
   - type: Worm
 
 - type: trait
+  id: TraumaticBrainInjury
+  name: trait-head-trauma-name
+  description: trait-head-trauma-desc
+  category: Disabilities
+  components:
+  - type: PsychiatryHeadTrauma
+
+- type: trait
   id: Uncloning
   name: trait-uncloning-name
   description: trait-uncloning-desc

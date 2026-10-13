@@ -13519,22 +13519,6 @@ entities:
     - type: Transform
       pos: 7.3050327,-13.797678
       parent: 2
-- proto: SkillBookHacking
-  entities:
-  - uid: 1163
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 36.570118,6.6054707
-      parent: 2
-- proto: SkillBookSimpleConstruction
-  entities:
-  - uid: 1164
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 6.50861,-13.4047
-      parent: 2
 - proto: SMESBasic
   entities:
   - uid: 2376

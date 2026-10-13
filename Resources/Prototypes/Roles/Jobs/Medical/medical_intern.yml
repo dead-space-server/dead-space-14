@@ -22,13 +22,6 @@
   wageDepartment: Medical
   wage: 100 # DS14-value
   #end-backmen: currency
-  special:
-  - !type:AddComponentSpecial
-    components:
-      # DS14-Start
-      - type: Skill
-        group: Medical
-      # DS14-End
 
 - type: startingGear
   id: MedicalInternGear

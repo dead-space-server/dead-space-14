@@ -64,12 +64,6 @@ public sealed partial class ToggleableClothingComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool StoreExistingItem;
-
-    /// <summary>
-    ///     Container used to hold the displaced clothing while the attached clothing is equipped.
-    /// </summary>
-    [ViewVariables]
-    public ContainerSlot? StoredClothingContainer;
     // DS14-end
 
     /// <summary>

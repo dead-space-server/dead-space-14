@@ -95,6 +95,7 @@ public sealed class GasPressureRegulatorSystem : SharedGasPressureRegulatorSyste
 
         Gas is simply transferred from the inlet to the outlet, restricted by flow rate and pressure.
         We want to transfer enough gas to bring the inlet pressure below the threshold,
+        without overpressurizing the outlet past the threshold,
         and only as much as our max flow rate allows.
 
         The equations:
@@ -105,8 +106,9 @@ public sealed class GasPressureRegulatorSystem : SharedGasPressureRegulatorSyste
         */
 
         var p1 = inletPipeNode.Air.Pressure;
+        var p2 = outletPipeNode.Air.Pressure; // DS14
 
-        if (p1 <= ent.Comp.Threshold) // DS14 - regulators may exhaust into a higher-pressure outlet.
+        if (p1 <= ent.Comp.Threshold || p2 >= ent.Comp.Threshold) // DS14
         {
             ChangeStatus(false, ent, inletPipeNode, outletPipeNode, 0);
             return;
@@ -114,13 +116,19 @@ public sealed class GasPressureRegulatorSystem : SharedGasPressureRegulatorSyste
 
         var t1 = inletPipeNode.Air.Temperature;
 
-        // DS14-start - the setpoint controls inlet pressure; outlet pressure does not throttle the regulator.
+        // DS14-start - the setpoint controls inlet pressure; the outlet pressure also throttles the
+        // regulator, as far as the setpoint is concerned.
         // Calculate the amount of gas we need to transfer to bring the inlet down to the threshold.
         var deltaMolesToPressureThreshold =
             AtmosphereSystem.MolesToPressureThreshold(inletPipeNode.Air, ent.Comp.Threshold);
 
+        var deltaMolesToOutletThreshold =
+            -AtmosphereSystem.MolesToPressureThreshold(outletPipeNode.Air, ent.Comp.Threshold);
+
+        var deltaMolesToTransfer = MathF.Min(deltaMolesToPressureThreshold, deltaMolesToOutletThreshold);
+
         // Convert to the desired inlet volume to transfer.
-        var desiredVolumeToTransfer = deltaMolesToPressureThreshold * ((Atmospherics.R * t1) / p1);
+        var desiredVolumeToTransfer = deltaMolesToTransfer * ((Atmospherics.R * t1) / p1);
         // DS14-end
 
         // And finally, limit the transfer volume to the max flow rate of the valve.

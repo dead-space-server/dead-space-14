@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Server.DeadSpace.CentComm;
 using Content.Server.GameTicking;
 using Content.Server.Station.Components;
 using Content.Server.Station.Events;
@@ -511,6 +512,12 @@ public sealed partial class StationJobsSystem : EntitySystem
 
         while (query.MoveNext(out var station, out var comp))
         {
+            // DS14-start
+            // CentComm uses StationJobs for special-role setup, but is not a late-join destination.
+            if (HasComp<CentCommStationComponent>(station))
+                continue;
+            // DS14-end
+
             var netStation = GetNetEntity(station);
             var list = comp.JobList.ToDictionary(x => x.Key, x => x.Value);
             jobs.Add(netStation, list);

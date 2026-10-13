@@ -64,7 +64,7 @@
     sprite: Objects/Specific/Service/vending_machine_restock.rsi
     state: base
   product: CrateVendingMachineRestockMedicalFilledTaipan
-  cost: 1750
+  cost: 1800
   category: cargoproduct-category-name-medical
   group: taipan_market
 
@@ -114,7 +114,7 @@
     sprite: Objects/Specific/Service/vending_machine_restock.rsi
     state: base
   product: CrateVendingMachineRestockSeedsFilledTaipan
-  cost: 3600
+  cost: 3800
   category: cargoproduct-category-name-hydroponics
   group: taipan_market
 

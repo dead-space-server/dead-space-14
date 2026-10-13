@@ -1,6 +1,5 @@
 using Content.Shared.Inventory;
 using Robust.Shared.GameStates;
-using Robust.Shared.Audio;
 
 namespace Content.Shared.Radio.Components;
 
@@ -24,6 +23,6 @@ public sealed partial class HeadsetComponent : Component
     public Color Color = Color.Lime;
 
     [DataField]
-    public SoundSpecifier RadioReceiveSoundPath = new SoundPathSpecifier("/Audio/_DeadSpace/Items/Misc/radio_headset_receive.ogg");
+    public Color? ColorEnd;
     // DS14-end
 }

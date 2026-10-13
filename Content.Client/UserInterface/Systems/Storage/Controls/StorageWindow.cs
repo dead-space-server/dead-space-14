@@ -5,6 +5,7 @@ using Content.Client.Hands.Systems;
 using Content.Client.Items.Systems;
 using Content.Client.Storage;
 using Content.Client.Storage.Systems;
+using Content.Client.DeadSpace.UserInterface.Storage; // DS14
 using Content.Shared.IdentityManagement;
 using Content.Shared.Input;
 using Content.Shared.Item;
@@ -32,6 +33,7 @@ public sealed class StorageWindow : BaseWindow
 
     private readonly GridContainer _pieceGrid;
     private readonly GridContainer _backgroundGrid;
+    private readonly StorageGridBorderOverlay _gridBorders; // DS14
     private readonly GridContainer _sidebar;
 
     private Control _titleContainer;
@@ -108,6 +110,14 @@ public sealed class StorageWindow : BaseWindow
             VSeparationOverride = 0
         };
 
+        // DS14-start
+        _gridBorders = new StorageGridBorderOverlay
+        {
+            Name = "GridBorders",
+            MouseFilter = MouseFilterMode.Ignore,
+        };
+        // DS14-end
+
         _titleLabel = new Label()
         {
             HorizontalExpand = true,
@@ -149,6 +159,7 @@ public sealed class StorageWindow : BaseWindow
                             Children =
                             {
                                 _backgroundGrid,
+                                _gridBorders,  // DS14
                                 _pieceGrid
                             }
                         }
@@ -215,13 +226,27 @@ public sealed class StorageWindow : BaseWindow
             parentBui.CloseWindow(Position);
         }
     }
-
+    // DS14-start
+    private static List<Box2i> GetAllBoxes(StorageComponent comp)
+    {
+        var all = new List<Box2i>();
+        foreach (var g in comp.GetEffectiveGroups())
+            all.AddRange(g);
+        return all;
+    }
+    // DS14-end
     private void BuildGridRepresentation()
     {
-        if (!_entity.TryGetComponent<StorageComponent>(StorageEntity, out var comp) || comp.Grid.Count == 0)
+        // DS14-start
+        if (!_entity.TryGetComponent<StorageComponent>(StorageEntity, out var comp))
             return;
 
-        var boundingGrid = comp.Grid.GetBoundingBox();
+        var allBoxes = GetAllBoxes(comp);
+        if (allBoxes.Count == 0)
+            return;
+
+        var boundingGrid = allBoxes.GetBoundingBox();
+        // DS14-end
 
         BuildBackground();
 
@@ -340,10 +365,16 @@ public sealed class StorageWindow : BaseWindow
 
     public void BuildBackground()
     {
-        if (!_entity.TryGetComponent<StorageComponent>(StorageEntity, out var comp) || !comp.Grid.Any())
+        // DS14-start
+        if (!_entity.TryGetComponent<StorageComponent>(StorageEntity, out var comp))
             return;
 
-        var boundingGrid = comp.Grid.GetBoundingBox();
+        var allBoxes = GetAllBoxes(comp);
+        if (allBoxes.Count == 0)
+            return;
+
+        var boundingGrid = allBoxes.GetBoundingBox();
+        // DS14-end
 
         var emptyTexture = _storageController.OpaqueStorageWindow
             ? _emptyOpaqueTexture
@@ -359,7 +390,7 @@ public sealed class StorageWindow : BaseWindow
         {
             for (var x = boundingGrid.Left; x <= boundingGrid.Right; x++)
             {
-                var texture = comp.Grid.Contains(x, y)
+                var texture = allBoxes.Contains(x, y) // DS14
                     ? emptyTexture
                     : blockedTexture;
 
@@ -370,6 +401,11 @@ public sealed class StorageWindow : BaseWindow
                 });
             }
         }
+        // DS14-start
+        _gridBorders.Groups = comp.GetEffectiveGroups().Select(g => new List<Box2i>(g)).ToList();
+        _gridBorders.Origin = boundingGrid.BottomLeft;
+        _gridBorders.CellSize = (Vector2)_emptyTexture!.Size * 2;
+        // DS14-end
     }
 
     public void Reclaim(ItemStorageLocation location, ItemGridPiece draggingGhost)
@@ -405,10 +441,13 @@ public sealed class StorageWindow : BaseWindow
         if (!_entity.TryGetComponent<StorageComponent>(StorageEntity, out var storageComp))
             return;
 
-        if (storageComp.Grid.Count == 0)
+        // DS14-start
+        var allBoxes = GetAllBoxes(storageComp);
+        if (allBoxes.Count == 0)
             return;
 
-        var boundingGrid = storageComp.Grid.GetBoundingBox();
+        var boundingGrid = allBoxes.GetBoundingBox();
+        // DS14-end
         var size = _emptyTexture!.Size * 2;
         _contained.Clear();
         _contained.AddRange(storageComp.Container.ContainedEntities.Reverse());
@@ -675,7 +714,12 @@ public sealed class StorageWindow : BaseWindow
         var origin = Vector2i.Zero;
 
         if (StorageEntity != null)
-            origin = _entity.GetComponent<StorageComponent>(StorageEntity.Value).Grid.GetBoundingBox().BottomLeft;
+        // DS14-start
+        {
+            var comp = _entity.GetComponent<StorageComponent>(StorageEntity.Value);
+            origin = GetAllBoxes(comp).GetBoundingBox().BottomLeft;
+        }
+        // DS14-end
 
         var textureSize = (Vector2) _emptyTexture!.Size * 2;
         var position = ((UserInterfaceManager.MousePositionScaled.Position
@@ -692,7 +736,7 @@ public sealed class StorageWindow : BaseWindow
 
         if (!_entity.TryGetComponent<StorageComponent>(StorageEntity, out var storageComponent))
             return false;
-        var boundingBox = storageComponent.Grid.GetBoundingBox();
+        var boundingBox = GetAllBoxes(storageComponent).GetBoundingBox(); // DS14
         x -= boundingBox.Left;
         y -= boundingBox.Bottom;
 

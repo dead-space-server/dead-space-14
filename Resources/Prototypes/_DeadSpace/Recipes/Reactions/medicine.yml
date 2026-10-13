@@ -27,3 +27,33 @@
       amount: 1
   products:
     Romerol: 1
+
+- type: reaction
+  id: NeuroClarity
+  impact: Low
+  reactants:
+    Benzene:
+      amount: 1
+    Carbon:
+      amount: 1
+    Dylovene:
+      amount: 1
+    Synaptizine:
+      amount: 1
+    Mannitol:
+      amount: 1
+  products:
+    NeuroClarity: 2
+
+- type: reaction
+  id: PsychogenLatent
+  impact: Medium
+  reactants:
+    SpaceDrugs:
+      amount: 1
+    Impedrezene:
+      amount: 1
+    Desoxyephedrine:
+      amount: 1
+  products:
+    PsychogenLatent: 2

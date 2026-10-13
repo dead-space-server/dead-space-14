@@ -2,6 +2,7 @@ using Content.Shared.Shuttles.Systems;
 using Content.Shared.Shuttles.UI.MapObjects;
 using Content.Shared.Timing;
 using Robust.Shared.Serialization;
+using Robust.Shared.Map; // DS14
 
 namespace Content.Shared.Shuttles.BUIStates;
 
@@ -24,6 +25,8 @@ public sealed class ShuttleMapInterfaceState
     public List<ShuttleBeaconObject> Destinations;
 
     public List<ShuttleExclusionObject> Exclusions;
+
+    public List<MapId>? FTLAllowedMaps; // DS14
 
     public ShuttleMapInterfaceState(
         FTLState ftlState,

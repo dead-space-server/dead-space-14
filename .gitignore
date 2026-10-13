@@ -316,3 +316,9 @@ Resources/MapImages
 
 # Direnv stuff
 .direnv/
+
+Tools/gen_hallucination_sprites.py
+Tools/gen_psychiatry_sprites.py
+Tools/gen_brain_map.py
+Tools/gen_cpu_map.py
+

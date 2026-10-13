@@ -149,7 +149,9 @@
     sprite: _DeadSpace/Necromorfs/TheCircle/Gear/accessories/plushies.rsi
     state: plushie_esther
   - type: TTS
-    voice: Lunara
+    voices:
+      silero: Lunara
+      ntts: NTTSWindrangerDota2
   - type: EmitSoundOnUse
     sound:
       path: /Audio/Ambience/Antag/nukeops_start.ogg

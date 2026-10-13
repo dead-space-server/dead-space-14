@@ -1,5 +1,6 @@
 <controls:FancyWindow xmlns="https://spacestation14.io"
                xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+               xmlns:ds="clr-namespace:Content.Client.DeadSpace.UserInterface.Controls"
                Title="{Loc 'voice-mask-name-change-window'}"
                MinSize="5 30">
     <BoxContainer Orientation="Vertical" Margin="5">
@@ -15,7 +16,10 @@
         <!-- Corvax-TTS-Start -->
         <BoxContainer Orientation="Horizontal" Visible="False" Name="TTSContainer">
             <Label Text="{Loc 'voice-mask-voice-change-info'}" />
-            <OptionButton Name="VoiceSelector" />
+            <!-- DS14-start -->
+            <ds:SearchOptionButton Name="VoiceSelector"
+                                   PlaceHolder="{Loc 'humanoid-profile-editor-voice-search-placeholder'}" />
+            <!-- DS14-end -->
         </BoxContainer>
         <!-- Corvax-TTS-End -->
         <Button Name="ToggleAccentButton" Text="{Loc 'voice-mask-name-change-accent-toggle'}" HorizontalExpand="True" ToggleMode="True" Margin="5"/>

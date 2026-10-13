@@ -58,7 +58,7 @@
     - id: PDAPvrsifvlAlt2
     - id: MedkitAdvancedFilled
     - id: ClothingHeadHelmetPvrsifvlAlt2
-    - id: PlushieScarlettPvrsifvlAlt2
+    - id: PlushieScarlett
     - id: ClothingMaskPvrsifvlAlt2
     - id: WeaponPistolCHIMPPvrsifvlAlt2
     - id: PaperPvrsifvlAlt2USSP
@@ -354,7 +354,7 @@
 
 # gasmask.rsi
 - type: entity
-  parent: ClothingMaskGasSecurity
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskPvrsifvlAlt2
   name: тактическая маска mil.HAZE // gen.1
   description: Давай оставлю свой автограф, только на тебе. Скрепляю степлером оставленный тобой порез. Не замечаю, что вокруг один тупой протест.
@@ -901,21 +901,6 @@
   - /Audio/_DeadSpace/Sponsor/pvrsifvlAlt2/combatboots3.ogg
   - /Audio/_DeadSpace/Sponsor/pvrsifvlAlt2/combatboots4.ogg
   - /Audio/_DeadSpace/Sponsor/pvrsifvlAlt2/combatboots5.ogg
-
-# toy.rsi
-- type: entity
-  parent: BasePlushieDeadSpaceMisc
-  id: PlushieScarlettPvrsifvlAlt2
-  name: плюшевая Скарлетт Хелль'Веттиа
-  description: Плюшевая игрушка одной важной и постоянно занятой личности, во взгляде которой отражена сильная усталость. От неё исходит аромат крепкого кофе и сигаретного дыма.
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Sponsor/pvrsifvlAlt2/toy.rsi
-    state: scarlett
-  - type: TTS
-    voice: Pharah
-  - type: SpeakOnTrigger
-    pack: PlushieScarlettSpeech
 
 # документ
 - type: entity

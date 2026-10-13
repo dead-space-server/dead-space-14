@@ -106,3 +106,51 @@
       - !type:Emote
         emote: Scream
         probability: 0.2
+
+- type: reagent
+  id: DonorBlood
+  name: reagent-name-donor-blood
+  group: Biological
+  desc: reagent-desc-donor-blood
+  flavor: metallic
+  color: "#800000"
+  recognizable: true
+  standsout: true
+  decorativePuddle: true
+  physicalDesc: reagent-physical-desc-ferrous
+  metabolisms:
+    Medicine:
+      metabolismRate: 1
+      effects:
+      - !type:ModifyBloodLevel
+        amount: 1
+      - !type:Satiate
+        satiationType: Thirst
+        factor: 1.0
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [ Human ]
+          inverted: true
+      - !type:HealthChange
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [ Bloodsucker ]
+        damage:
+          groups:
+            Brute: -3
+            Burn: -1.25
+      - !type:HealthChange
+        conditions:
+        - !type:MetabolizerTypeCondition
+          type: [ Xenomorph ]
+        damage:
+          groups:
+            Brute: -0.50
+            Burn: -0.25
+  plantMetabolism:
+    - !type:PlantAdjustWater
+      amount: 0.5
+  footstepSound:
+    collection: FootstepBlood
+    params:
+      volume: 6

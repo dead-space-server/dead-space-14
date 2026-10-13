@@ -129,6 +129,7 @@
       - NewsReaderCartridge
       - MessengerCartridge
       - BankCartridge
+      - PdaGamesCartridge
     cartridgeSlot:
       priority: -1
       name: device-pda-slot-component-slot-name-cartridge
@@ -1646,6 +1647,8 @@
         pda-ninja
   - type: Icon
     state: pda-ninja
+  - type: NinjaAppearanceItem
+    itemType: Color
 
 - type: entity
   parent: [ BaseMajorContraband, SyndiPDA ]

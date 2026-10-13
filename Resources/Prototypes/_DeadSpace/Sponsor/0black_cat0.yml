@@ -9,7 +9,7 @@
   id: ClothingBackpack0black_cat0
   name: рюкзак темного воителя
   description: Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
-  # categories: [ HideSpawnMenu ]
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/0black_cat0/backpack.rsi
@@ -195,7 +195,7 @@
 
 # Gasmask
 - type: entity
-  parent: ClothingMaskGasSyndicate
+  parent: ClothingMaskGasSponsor
   id: ClothingMask0black_cat0
   name: противогаз тёмного воителя
   description: Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.
@@ -208,7 +208,7 @@
 
 # Coat
 - type: entity
-  parent: ClothingOuterCoatSyndieCapArmored
+  parent: ClothingOuterStorageBase
   id: ClothingOuterCoat0black_cat0
   name: бронированный тренч тёмного воителя
   description: Принадлежит члену экипажа, находящемуся под покровительством спонсорской организации.

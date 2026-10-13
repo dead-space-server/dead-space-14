@@ -25,12 +25,17 @@ public sealed class XAERandomTeleportInvokerSystem : BaseXAESystem<XAERandomTele
         var component = ent.Comp;
 
         var xform = Transform(args.Artifact);
+        // DS14-start
+        // Nullspace coordinates point at the artifact itself and cannot be used as a teleport destination.
+        if (!_xform.TryGetMapOrGridCoordinates(args.Artifact, out var coordinates, xform) ||
+            coordinates.Value.EntityId == args.Artifact.Owner)
+            return;
+        // DS14-end
         _popup.PopupPredictedCoordinates(Loc.GetString("blink-artifact-popup"), xform.Coordinates, args.User, PopupType.Medium);
 
         var offsetTo = _random.NextVector2(component.MinRange, component.MaxRange);
 
-        _xform.AttachToGridOrMap(args.Artifact);
         _jointSystem.ClearJoints(args.Artifact);
-        _xform.SetCoordinates(args.Artifact, xform, xform.Coordinates.Offset(offsetTo));
+        _xform.SetCoordinates(args.Artifact, xform, coordinates.Value.Offset(offsetTo)); // DS14
     }
 }

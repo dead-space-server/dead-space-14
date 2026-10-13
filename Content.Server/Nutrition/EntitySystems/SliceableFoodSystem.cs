@@ -15,6 +15,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Content.Shared.Destructible;
+using Content.Shared.DeadSpace.Kitchen.Components;
 
 namespace Content.Server.Nutrition.EntitySystems;
 
@@ -81,6 +82,17 @@ public sealed class SliceableFoodSystem : EntitySystem
 
         if (!TryComp<UtensilComponent>(usedItem, out var utensil) || (utensil.Types & UtensilType.Knife) == 0)
             return false;
+
+        // DS14-start
+        // A plate has only one slot. Detach the food before spawning slices beside it.
+        if (_container.TryGetContainingContainer(entity.Owner, out var container) &&
+            TryComp<PlateComponent>(container.Owner, out var plate) &&
+            container.ID == plate.SlotId &&
+            !_container.Remove(entity.Owner, container, destination: _transform.GetMoverCoordinates(container.Owner)))
+        {
+            return false;
+        }
+        // DS14-end
 
         var sliceVolume = solution.Volume / FixedPoint2.New(entity.Comp2.TotalCount);
         for (int i = 0; i < entity.Comp2.TotalCount; i++)

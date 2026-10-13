@@ -5,6 +5,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.StationEvents.Components;
 
+[Content.Server.DeadSpace.CentComm.AllowedGameRuleOnCentComm] // DS14
 [RegisterComponent, Access(typeof(VentClogRule))]
 public sealed partial class VentClogRuleComponent : Component
 {

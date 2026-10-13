@@ -59,7 +59,7 @@
 
 #Gasmask
 - type: entity
-  parent: ClothingMaskGasSyndicate
+  parent: ClothingMaskGasSponsor
   id: ClothingMasklaziclas
   name: балаклава, зелёная
   description: Маскирует лицо и защищает от ветра, пыли и холода.

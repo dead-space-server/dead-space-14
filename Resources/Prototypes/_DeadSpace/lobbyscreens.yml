@@ -227,3 +227,19 @@
 - type: lobbyBackground
   id: MarmSec
   background: /Textures/LobbyScreens/Fobos/marm.webp
+
+- type: lobbyBackground
+  id: FyrmorMeadow
+  background: /Textures/LobbyScreens/Fobos/fyrmor_meadow.webp
+
+- type: lobbyBackground
+  id: FyrmorWest
+  background: /Textures/LobbyScreens/Fobos/fyrmor_west.webp
+
+# snovazs
+
+- type: lobbyBackground
+  id: SecretSupper
+  background: /Textures/LobbyScreens/Fobos/secret_supper.webp
+  title: lobby-state-background-secretsupper-title
+  artist: lobby-state-background-secretsupper-artist

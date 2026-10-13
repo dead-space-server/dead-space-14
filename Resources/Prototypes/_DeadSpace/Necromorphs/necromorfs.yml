@@ -622,19 +622,6 @@
     groupPrototype: CorpseCollectorNecromorfping
 
 - type: randomHumanoidSettings
-  id: BoomerNecromorf
-  parent: Necromorf
-  components:
-  - type: InitialNecrofication
-    necroPrototype: NecroBoomer
-  - type: GhostRole
-    name: Некроморф бумер
-    description: Вы некроморф, убейте всех своих врагов.
-  - type: GhostTakeoverAvailable
-  - type: GhostRoleNotifys 
-    groupPrototype: NecromorfGroup
-
-- type: randomHumanoidSettings
   id: StalkerNecromorf
   parent: Necromorf
   components:
@@ -769,17 +756,6 @@
     state: full
   - type: RandomHumanoidSpawner
     settings: StalkerNecromorf
-
-- type: entity
-  id: BoomerNecromorfSpawner
-  name: Некроморф
-  suffix: бумер
-  components:
-  - type: Icon
-    sprite: Mobs/Species/Human/parts.rsi
-    state: full
-  - type: RandomHumanoidSpawner
-    settings: BoomerNecromorf
 
 - type: entity
   id: CorpseCollectorNecromorfSpawner

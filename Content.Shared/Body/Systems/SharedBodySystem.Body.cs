@@ -289,7 +289,12 @@ public partial class SharedBodySystem
             {
                 args.Giblets.Add(organ.Id);
             }
-            PredictedQueueDel(part.Id);
+            // DS14-start
+            if (ent.Comp.GibBodyParts)
+                args.Giblets.Add(part.Id);
+            else
+                PredictedQueueDel(part.Id);
+            // DS14-end
         }
 
         foreach (var item in _inventory.GetHandOrInventoryEntities(ent.Owner))

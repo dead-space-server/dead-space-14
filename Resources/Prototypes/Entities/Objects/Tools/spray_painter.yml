@@ -36,6 +36,7 @@
     - Canisters
     - Crates
     - Lockers
+    - Gloves # DS14
     # DS14-end
   - type: StaticPrice
     price: 40

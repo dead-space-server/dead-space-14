@@ -72,7 +72,7 @@ namespace Content.Server.Entry
         [Dependency] private readonly IGameMapManager _gameMap = default!;
         [Dependency] private readonly ILogManager _log = default!;
         [Dependency] private readonly INodeGroupFactory _nodeFactory = default!;
-        [Dependency] private readonly IPrototypeManager _proto = default!;
+        // [Dependency] private readonly IPrototypeManager _proto = default!; // DS14: parallax IDs are now registered on the server.
         [Dependency] private readonly IResourceManager _res = default!;
         [Dependency] private readonly IServerDbManager _dbManager = default!;
         [Dependency] private readonly IServerPreferencesManager _preferences = default!;
@@ -120,7 +120,7 @@ namespace Content.Server.Entry
             _factory.RegisterIgnore(IgnoredComponents.List);
             _factory.GenerateNetIds();
 
-            _proto.RegisterIgnore("parallax");
+            // _proto.RegisterIgnore("parallax"); // DS14: server indexes IDs for CentComm transfers.
 
             _loc.Initialize();
 

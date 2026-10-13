@@ -1,7 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Server.DeadSpace.Wear.Components;
-using Content.Shared.DeadSpace.Skills.Events;
 using Content.Shared.Interaction;
 using Content.Shared.RCD.Systems;
 using Content.Shared.Tools.Components;
@@ -21,7 +20,6 @@ public sealed class AddWearAfterUseSystem : EntitySystem
         SubscribeLocalEvent<AddWearAfterUseComponent, MeleeHitEvent>(OnMeleeHit);
         SubscribeLocalEvent<AddWearAfterUseComponent, AfterInteractUsingEvent>(OnAfterInteractUsing);
         SubscribeLocalEvent<AddWearAfterUseComponent, TileToolDoAfterEvent>(OnToolTileComplete);
-        SubscribeLocalEvent<AddWearAfterUseComponent, LearnDoAfterEvent>(OnLearnDoAfter);
         SubscribeLocalEvent<AddWearAfterUseComponent, RCDDoAfterEvent>(OnRCDDoAfter);
     }
 
@@ -58,21 +56,6 @@ public sealed class AddWearAfterUseSystem : EntitySystem
     private void OnToolTileComplete(EntityUid uid, AddWearAfterUseComponent component, TileToolDoAfterEvent args)
     {
         if ((component.Triggers & WearTrigger.TileTool) == 0)
-            return;
-
-        if (component.Whitelist != null && _whitelist.IsWhitelistFail(component.Whitelist, uid))
-            return;
-
-        if (TryComp<WearComponent>(uid, out var wearComp))
-            _wear.AddWear(uid, component.Damage, wearComp);
-    }
-
-    private void OnLearnDoAfter(EntityUid uid, AddWearAfterUseComponent component, LearnDoAfterEvent args)
-    {
-        if (args.Cancelled || args.Handled)
-            return;
-
-        if ((component.Triggers & WearTrigger.Learn) == 0)
             return;
 
         if (component.Whitelist != null && _whitelist.IsWhitelistFail(component.Whitelist, uid))

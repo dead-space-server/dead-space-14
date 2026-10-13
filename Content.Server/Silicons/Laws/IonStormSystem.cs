@@ -212,16 +212,16 @@ public sealed class IonStormSystem : EntitySystem
         // message logic!!!
         return _robustRandom.Next(0, 35) switch
         {
-            0  => Loc.GetString("ion-storm-law-on-station", ("joined", joined), ("subjects", triple)),
-            1  => Loc.GetString("ion-storm-law-call-shuttle", ("joined", joined), ("subjects", triple)),
-            2  => Loc.GetString("ion-storm-law-crew-are", ("who", crewAll), ("joined", joined), ("subjects", objectsThreats)),
-            3  => Loc.GetString("ion-storm-law-subjects-harmful", ("adjective", adjective), ("subjects", triple)),
-            4  => Loc.GetString("ion-storm-law-must-harmful", ("must", must)),
-            5  => Loc.GetString("ion-storm-law-thing-harmful", ("thing", _robustRandom.Prob(0.5f) ? concept : action)),
-            6  => Loc.GetString("ion-storm-law-job-harmful", ("adjective", adjective), ("job", crew1)),
-            7  => Loc.GetString("ion-storm-law-having-harmful", ("adjective", adjective), ("thing", objectsConcept)),
-            8  => Loc.GetString("ion-storm-law-not-having-harmful", ("adjective", adjective), ("thing", objectsConcept)),
-            9  => Loc.GetString("ion-storm-law-requires", ("who", who), ("plural", plural), ("thing", _robustRandom.Prob(0.5f) ? concept : require)),
+            0 => Loc.GetString("ion-storm-law-on-station", ("joined", joined), ("subjects", triple)),
+            1 => Loc.GetString("ion-storm-law-call-shuttle", ("joined", joined), ("subjects", triple)),
+            2 => Loc.GetString("ion-storm-law-crew-are", ("who", crewAll), ("joined", joined), ("subjects", objectsThreats)),
+            3 => Loc.GetString("ion-storm-law-subjects-harmful", ("adjective", adjective), ("subjects", triple)),
+            4 => Loc.GetString("ion-storm-law-must-harmful", ("must", must)),
+            5 => Loc.GetString("ion-storm-law-thing-harmful", ("thing", _robustRandom.Prob(0.5f) ? concept : action)),
+            6 => Loc.GetString("ion-storm-law-job-harmful", ("adjective", adjective), ("job", crew1)),
+            7 => Loc.GetString("ion-storm-law-having-harmful", ("adjective", adjective), ("thing", objectsConcept)),
+            8 => Loc.GetString("ion-storm-law-not-having-harmful", ("adjective", adjective), ("thing", objectsConcept)),
+            9 => Loc.GetString("ion-storm-law-requires", ("who", who), ("plural", plural), ("thing", _robustRandom.Prob(0.5f) ? concept : require)),
             10 => Loc.GetString("ion-storm-law-requires-subjects", ("who", who), ("plural", plural), ("joined", joined), ("subjects", triple)),
             11 => Loc.GetString("ion-storm-law-allergic", ("who", who), ("plural", plural), ("severity", allergySeverity), ("allergy", _robustRandom.Prob(0.5f) ? concept : allergy)),
             12 => Loc.GetString("ion-storm-law-allergic-subjects", ("who", who), ("plural", plural), ("severity", allergySeverity), ("adjective", adjective), ("subjects", _robustRandom.Prob(0.5f) ? objects : crew1)),
@@ -259,4 +259,21 @@ public sealed class IonStormSystem : EntitySystem
         var dataset = _proto.Index<DatasetPrototype>(name);
         return _robustRandom.Pick(dataset.Values);
     }
+
+    //DS14-start
+    public List<SiliconLaw> GenerateIonLaws(int amount = 3)
+    {
+        var laws = new List<SiliconLaw>();
+        for (var i = 0; i < amount; i++)
+        {
+            laws.Add(new SiliconLaw
+            {
+                LawString = GenerateLaw(),
+                Order = i + 1,
+                LawIdentifierOverride = Loc.GetString("ion-storm-law-scrambled-number", ("length", _robustRandom.Next(5, 10)))
+            });
+        }
+        return laws;
+    }
+    //DS14-end
 }

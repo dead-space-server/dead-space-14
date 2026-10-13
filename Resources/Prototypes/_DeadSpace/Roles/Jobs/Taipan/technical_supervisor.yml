@@ -40,8 +40,6 @@
     - type: NpcFactionMember
       factions:
       - Taipan
-    - type: Skill
-      group: Engineer
 
 - type: startingGear
   id: TaipanTechnicalOperationsSupervisorGear

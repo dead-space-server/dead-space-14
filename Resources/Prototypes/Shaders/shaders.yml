@@ -95,6 +95,11 @@
   path: "/Textures/Shaders/stealth.swsl"
 
 - type: shader
+  id: CameraConceal
+  kind: source
+  path: "/Textures/Shaders/camera_conceal.swsl"
+
+- type: shader
   id: PaperStamp
   kind: source
   path: "/Textures/Shaders/paperstamp.swsl"

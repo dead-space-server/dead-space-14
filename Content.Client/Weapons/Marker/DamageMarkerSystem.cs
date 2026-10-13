@@ -13,12 +13,28 @@ public sealed class DamageMarkerSystem : SharedDamageMarkerSystem
     {
         base.Initialize();
         SubscribeLocalEvent<DamageMarkerComponent, ComponentStartup>(OnMarkerStartup);
+        SubscribeLocalEvent<DamageMarkerComponent, AfterAutoHandleStateEvent>(OnMarkerAutoHandleState); // DS14
         SubscribeLocalEvent<DamageMarkerComponent, ComponentShutdown>(OnMarkerShutdown);
     }
 
     private void OnMarkerStartup(EntityUid uid, DamageMarkerComponent component, ComponentStartup args)
     {
-        if (!_timing.ApplyingState || component.Effect == null || !TryComp<SpriteComponent>(uid, out var sprite))
+        // DS14-start
+        if (!_timing.ApplyingState)
+            return;
+
+        ApplyMarkerSprite(uid, component);
+    }
+
+    private void OnMarkerAutoHandleState(EntityUid uid, DamageMarkerComponent component, ref AfterAutoHandleStateEvent args)
+    {
+        ApplyMarkerSprite(uid, component);
+    }
+
+    private void ApplyMarkerSprite(EntityUid uid, DamageMarkerComponent component)
+    {
+        if (component.Effect == null || !TryComp<SpriteComponent>(uid, out var sprite))
+        // DS14-end
             return;
 
         var layer = _sprite.LayerMapReserve((uid, sprite), DamageMarkerKey.Key);

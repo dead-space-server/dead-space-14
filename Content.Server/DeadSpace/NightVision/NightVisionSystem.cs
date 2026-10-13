@@ -3,6 +3,7 @@ using Content.Server.DeadSpace.Components.NightVision;
 using Content.Shared.DeadSpace.NightVision;
 using Robust.Shared.GameStates;
 using Robust.Shared.Timing;
+using Content.Shared.Actions.Components;
 
 namespace Content.Server.DeadSpace.NightVision;
 
@@ -53,6 +54,7 @@ public sealed class NightVisionSystem : EntitySystem
     private void OnMapInit(EntityUid uid, NightVisionComponent component, MapInitEvent args)
     {
         _actions.AddAction(uid, ref component.ActionToggleNightVisionEntity, component.ActionToggleNightVision);
+        Dirty(uid, Comp<ActionsComponent>(uid));
     }
 
     private void OnComponentRemove(EntityUid uid, NightVisionComponent component, ComponentRemove args)

@@ -60,3 +60,10 @@
   name: paperwork-form-title-medical-8
   text: "/Paperwork/Medical/8.xml"
   paperPrototype: PaperPrintedMedical
+
+- type: paperworkForm
+  id: MedicalConclusion
+  category: NTMedical
+  name: paperwork-form-title-medical-conclusion
+  text: "/Paperwork/Medical/conclusion.xml"
+  paperPrototype: PaperPrintedMedical

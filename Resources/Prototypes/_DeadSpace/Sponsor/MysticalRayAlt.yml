@@ -191,7 +191,7 @@
 
 # Mask
 - type: entity
-  parent: ClothingMaskGasSecurity
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskMysticalRayAlt
   name: боевая маска MAXARM
   description: Укрепленная маска что бы  по морде не прилетело.
@@ -437,7 +437,9 @@
     targetUser: true
     components:
     - type: TTS
-      voice: Glowtron
+      voices:
+        silero: Glowtron
+        ntts: NTTSMisterHandyFl3
 
 #melee
 - type: entity

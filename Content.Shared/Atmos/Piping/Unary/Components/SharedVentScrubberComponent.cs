@@ -37,6 +37,7 @@ namespace Content.Shared.Atmos.Piping.Unary.Components
             Gas.Halon,
             Gas.Zauker,
             Gas.Antinoblium,
+            Gas.Psychogen,
             // DS14-end
         };
 

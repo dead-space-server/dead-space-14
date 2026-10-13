@@ -35,6 +35,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Utility;
 using System.Text;
 using System.Text.RegularExpressions;
+using YamlDotNet.Serialization;
 
 #pragma warning disable RA0026
 
@@ -586,6 +587,19 @@ namespace Content.Server.GameTicking
                 Log.Error($"Error while {description}: {e}");
             }
         }
+        private string? GetRoundEndPlayerPseudonym(MindComponent mind, RoundEndManifestIdentity? manifestIdentity, string playerIcName)
+        {
+            EntityUid? source = manifestIdentity?.SourceEntity ?? mind.CurrentEntity;
+
+            if (source == null && TryGetEntity(mind.OriginalOwnedEntity, out var originalEntity))
+                source = originalEntity;
+
+            if (source is not { } sourceEntity || !TryComp(sourceEntity, out MetaDataComponent? metadata))
+                return null;
+
+            var pseudonym = metadata.EntityName;
+            return string.IsNullOrWhiteSpace(pseudonym) || string.Equals(pseudonym, playerIcName, StringComparison.Ordinal) ? null : pseudonym;
+        }
         // DS14-end
 
         private RoundEndMessageEvent BuildRoundEndScoreboard(string text) // DS14
@@ -641,6 +655,7 @@ namespace Content.Server.GameTicking
 
                 var manifestIdentity = _roundEndManifestStats.GetManifestIdentity(mindId);
                 var playerIcName = GetRoundEndPlayerIcName(mind, manifestIdentity);
+                var playerPseudonym = GetRoundEndPlayerPseudonym(mind, manifestIdentity, playerIcName);
                 // DS14-end
 
                 var roles = _roles.MindGetAllRoleInfo(mindId).ToArray();
@@ -677,6 +692,7 @@ namespace Content.Server.GameTicking
                     PlayerOOCName = contentPlayerData?.Name ?? "(IMPOSSIBLE: REGISTERED MIND WITH NO OWNER)",
                     // Character name takes precedence over current entity name
                     PlayerICName = playerIcName,
+                    PlayerPseudonym = playerPseudonym, // DS14
                     PlayerGuid = userId,
                     DollData = dollData, // DS14
                     // DS14-start

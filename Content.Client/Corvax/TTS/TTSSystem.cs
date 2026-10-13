@@ -3,13 +3,17 @@ using Content.Shared.Corvax.CCCVars;
 using Content.Shared.Corvax.TTS;
 using Content.Shared.DeadSpace.CCCCVars;
 using Robust.Client.Audio;
-using Robust.Client.ResourceManagement;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
-using Robust.Shared.Utility;
-using Content.Client.DeadSpace.Languages;
+using Robust.Shared.Timing;
+using Content.Shared.GameTicking;
+using Content.Client.DeadSpace.Audio;
+using Content.Shared.DeadSpace.Audio;
+using Content.Shared.DeadSpace.Languages.Prototypes;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Audio.Components;
 
 namespace Content.Client.Corvax.TTS;
 
@@ -22,21 +26,23 @@ public sealed class TTSSystem : EntitySystem
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IResourceManager _res = default!;
     [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly LanguageSystem _languageSystem = default!;
+    // DS14-start
+    [Dependency] private readonly AreaEchoSystem _echo = default!;
+    [Dependency] private readonly IAudioManager _audioManager = default!;
+    [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    private readonly Dictionary<EntityUid, (AudioStream Stream, bool Radio)> _streams = new();
+    private readonly List<Transmission> _transmissions = new();
+    [Dependency] private readonly IGameTiming _timing = default!;
+    private readonly List<EntityUid> _finished = new();
+    private bool _radioCues = true;
+    // DS14-end
 
     private ISawmill _sawmill = default!;
-    // Static so the root survives system shutdown/reinit (e.g. round restart).
-    // IResourceManager has no RemoveRoot, so disposing on shutdown left a dead
-    // root registered and crashed subsequent reads with ObjectDisposedException.
-    private static readonly MemoryContentRoot _contentRoot = new();
-    private static bool _rootRegistered;
-    private static readonly ResPath Prefix = ResPath.Root / "TTS";
-
     // DS14-start
     /// <summary>
     /// Gain multiplier for whispered TTS relative to normal local TTS.
     /// </summary>
-    internal const float WhisperVolumeMultiplier = 0.5f;
+    internal const float WhisperVolumeMultiplier = 0.25f;
 
     // A remote microphone supplies attenuation itself, so the listener's movable AI eye must not clip the stream.
     private const float RemoteMicrophonePlaybackRange = 64f;
@@ -50,16 +56,16 @@ public sealed class TTSSystem : EntitySystem
     private float _volume = 0.0f;
     private float _volumeRadio = 0.0f;
     private bool _playRadio = true;
-    private int _fileIdx = 0;
 
     public override void Initialize()
     {
+        // DS14-start
+        UpdatesAfter.Add(typeof(AudioSystem));
+        SubscribeNetworkEvent<RoundRestartCleanupEvent>(_ => ClearSpeech());
+        SubscribeNetworkEvent<TickerJoinLobbyEvent>(_ => ClearSpeech());
+        Subs.CVar(_cfg, AreaEchoCVars.RadioCues, value => _radioCues = value, true);
+        // DS14-end
         _sawmill = Logger.GetSawmill("tts");
-        if (!_rootRegistered)
-        {
-            _res.AddRoot(Prefix, _contentRoot);
-            _rootRegistered = true;
-        }
         _cfg.OnValueChanged(CCCVars.TTSVolume, OnTtsVolumeChanged, true);
         _cfg.OnValueChanged(CCCCVars.TTSVolumeRadio, OnTtsRadioVolumeChanged, true);
         _cfg.OnValueChanged(CCCCVars.RadioTTSSoundsEnabled, OnTtsPlayRadioChanged, true);
@@ -72,8 +78,7 @@ public sealed class TTSSystem : EntitySystem
         _cfg.UnsubValueChanged(CCCVars.TTSVolume, OnTtsVolumeChanged);
         _cfg.UnsubValueChanged(CCCCVars.TTSVolumeRadio, OnTtsRadioVolumeChanged);
         _cfg.UnsubValueChanged(CCCCVars.RadioTTSSoundsEnabled, OnTtsPlayRadioChanged);
-        // Don't dispose _contentRoot - IResourceManager has no RemoveRoot, so disposing
-        // it would leave a dead reference in the manager and crash subsequent file reads.
+        ClearSpeech(); // DS14
     }
 
     public void RequestPreviewTTS(string voiceId)
@@ -95,89 +100,193 @@ public sealed class TTSSystem : EntitySystem
         _playRadio = radio;
     }
 
-    private void OnPlayTTS(PlayTTSEvent ev)
+    // DS14-start
+    public override void FrameUpdate(float frameTime)
     {
-        if (ev.IsRadio && !_playRadio)
-            return;
-
-        var hasData = ev.Data is { Length: > 0 };
-        var hasLexiconSound = ev.IsLexiconSound && !string.IsNullOrEmpty(ev.LanguageId);
-
-        // Проверяем, что хотя бы один источник звука доступен
-        if (!hasData && !hasLexiconSound)
+        base.FrameUpdate(frameTime);
+        _finished.Clear();
+        foreach (var (uid, stream) in _streams)
         {
-            _sawmill.Warning("Не содержит звуковых данных и допустимого звучания лексики (TTS event has no audio data and no valid lexicon sound)");
+            if (TryComp<AudioComponent>(uid, out var audio))
+            {
+                // Positional processing resets occlusion every frame. Apply the receiver filter afterwards.
+                if (stream.Radio)
+                    audio.Occlusion = RadioSpeech.FilterStrength;
+                continue;
+            }
+            stream.Stream.Dispose();
+            _finished.Add(uid);
+        }
+        foreach (var uid in _finished)
+            _streams.Remove(uid);
+        UpdateTransmissions(_timing.RealTime);
+    }
+
+    internal void UpdateTransmissions(TimeSpan now)
+    {
+        for (var i = _transmissions.Count - 1; i >= 0; i--)
+        {
+            var transmission = _transmissions[i];
+            if (now < transmission.NextAt)
+                continue;
+            if (!transmission.Started)
+            {
+                transmission.Started = true;
+                var duration = transmission.Stream?.Length ?? TimeSpan.Zero;
+                if (transmission.Stream is { } stream)
+                {
+                    transmission.Stream = null;
+                    if (transmission.Event.RadioCueOnly)
+                        stream.Dispose();
+                    else
+                        PlaySpeech(stream, transmission.Source, transmission.Params, transmission.Event.IsWhisper, true);
+                }
+                transmission.NextAt = now + duration;
+                if (duration > TimeSpan.Zero)
+                    continue;
+            }
+            PlayCue(transmission.Source, transmission.Params, true);
+            _transmissions.RemoveAt(i);
+        }
+    }
+
+    private sealed class Transmission(AudioStream? stream, EntityUid? source, AudioParams parameters,
+        PlayTTSEvent ev, TimeSpan nextAt)
+    {
+        public AudioStream? Stream = stream;
+        public readonly EntityUid? Source = source;
+        public readonly AudioParams Params = parameters;
+        public readonly PlayTTSEvent Event = ev;
+        public TimeSpan NextAt = nextAt;
+        public bool Started;
+    }
+
+    internal void ClearSpeech()
+    {
+        foreach (var (uid, stream) in _streams)
+        {
+            if (!Deleted(uid))
+                Del(uid);
+            stream.Stream.Dispose();
+        }
+        _streams.Clear();
+        foreach (var transmission in _transmissions)
+            transmission.Stream?.Dispose();
+        _transmissions.Clear();
+    }
+
+    private void PlayCue(EntityUid? source, AudioParams parameters, bool closing)
+    {
+        if (!_radioCues)
             return;
+        var stream = _audioManager.LoadAudioRaw(RadioSpeech.CreateCue(closing), 1, RadioSpeech.SampleRate);
+        PlaySpeech(stream, source, parameters, false, true, cue: true);
+    }
+
+    private void PlaySpeech(AudioStream stream, EntityUid? source, AudioParams parameters, bool whisper, bool radio,
+        bool cue = false, bool suppressEcho = false)
+    {
+        EntityUid? soundUid = null;
+        try
+        {
+            if (source is { } uid && TerminatingOrDeleted(uid))
+            {
+                stream.Dispose();
+                return;
+            }
+            var playing = source is { } entity
+                ? _audio.PlayEntity(stream, entity, null, parameters.WithVolume(float.NegativeInfinity))
+                : _audio.PlayGlobal(stream, null, parameters.WithVolume(float.NegativeInfinity));
+            if (playing is not { } sound)
+            {
+                stream.Dispose();
+                return;
+            }
+            soundUid = sound.Entity;
+            _streams.Add(sound.Entity, (stream, radio && !cue));
+            // Configure the receiver before making it audible, including short opening/closing cues.
+            _echo.ConfigureSpeech((sound.Entity, sound.Component), whisper, radio, suppressEcho);
+            if (radio && !cue)
+                sound.Component.Occlusion = RadioSpeech.FilterStrength;
+            _audio.SetVolume(sound.Entity, parameters.Volume, sound.Component);
+        }
+        catch (Exception e)
+        {
+            if (soundUid is { } uid)
+            {
+                _streams.Remove(uid);
+                if (!Deleted(uid))
+                    Del(uid);
+            }
+            stream.Dispose();
+            _sawmill.Warning($"Could not play speech audio: {e.Message}");
+        }
+    }
+
+    internal void OnPlayTTS(PlayTTSEvent ev)
+    {
+        if (ev.IsRadio && (!_playRadio || _volumeRadio <= 0f) || !ev.IsRadio && _volume <= 0f)
+            return;
+        EntityUid? source = null;
+        if (!ev.IsRadio && ev.SourceUid is { } netSource)
+        {
+            if (!TryGetEntity(netSource, out source) || source == null)
+                return;
         }
 
-        string verboseMessage;
-
-        if (hasData)
-            verboseMessage = $"Play TTS audio {ev.Data.Length} bytes from {ev.SourceUid} entity";
-        else if (hasLexiconSound)
-            verboseMessage = $"Play Lexicon sound '{ev.LanguageId}' from {ev.SourceUid} entity";
-        else
-            verboseMessage = "Play TTS event with no audio data";
-
-        _sawmill.Verbose(verboseMessage);
-
-        ResolvedPathSpecifier? soundSpecifier = null;
-        AudioResource? audioResource = null;
-        ResPath? filePath = null;
-
-        var maxDistance = AdjustDistance(ev.IsWhisper);
+        var radio = ev.IsRadio || ev.IsSuitRadio;
+        var maxDistance = ev.IsWhisper ? SpatialAudio.WhisperRange : SharedChatSystem.VoiceRange;
         var audioParams = AudioParams.Default
             .WithVolume(AdjustVolume(ev.IsWhisper, ev.IsRadio))
             .WithMaxDistance(maxDistance);
-
-        // DS14-start: attenuate camera audio by speaker-to-device distance, not speaker-to-AI-eye distance.
         if (ev.DistanceOverride is { } distance)
         {
             var gain = CalculateDistanceGain(distance, maxDistance);
             if (gain <= 0f)
                 return;
-
-            audioParams = audioParams
-                .AddVolume(SharedAudioSystem.GainToVolume(gain))
-                .WithRolloffFactor(0f)
-                .WithMaxDistance(RemoteMicrophonePlaybackRange);
-        }
-        // DS14-end
-
-        // Если есть обычные данные TTS — готовим ресурс
-        if (hasData)
-        {
-            filePath = new ResPath($"{_fileIdx++}.ogg");
-            _contentRoot.AddOrUpdateFile(filePath.Value, ev.Data);
-
-            audioResource = new AudioResource();
-            audioResource.Load(IoCManager.Instance!, Prefix / filePath.Value);
-            soundSpecifier = new ResolvedPathSpecifier(Prefix / filePath.Value);
+            audioParams = audioParams.AddVolume(SharedAudioSystem.GainToVolume(gain))
+                .WithRolloffFactor(0f).WithMaxDistance(RemoteMicrophonePlaybackRange);
         }
 
-        if (ev.SourceUid != null)
+        AudioStream? stream = null;
+        try
         {
-            if (!TryGetEntity(ev.SourceUid.Value, out _))
+            var data = ev.Data;
+            if (ev.IsLexiconSound && !string.IsNullOrEmpty(ev.LanguageId) && _prototypes.TryIndex<LanguagePrototype>(ev.LanguageId, out var language) &&
+                language.LexiconSound is { } lexicon)
+            {
+                var path = _audio.GetAudioPath(_audio.ResolveSound(lexicon))!;
+                using var file = _res.ContentFileRead(path);
+                using var memory = new System.IO.MemoryStream();
+                file.CopyTo(memory);
+                data = memory.ToArray();
+            }
+            if (data.Length == 0 && !radio)
                 return;
 
-            var sourceUid = GetEntity(ev.SourceUid.Value);
-
-            if (ev.IsLexiconSound && !string.IsNullOrEmpty(ev.LanguageId))
-                _languageSystem.PlayEntityLexiconSound(audioParams, sourceUid, ev.LanguageId);
-            else
-                _audio.PlayEntity(audioResource!.AudioStream, sourceUid, soundSpecifier, audioParams);
+            if (data.Length > 0)
+            {
+                // Only the engine may access the Vorbis decoder from a sandboxed client assembly.
+                using var input = new System.IO.MemoryStream(data, false);
+                stream = _audioManager.LoadAudioOggVorbis(input);
+            }
+            if (radio)
+            {
+                PlayCue(source, audioParams, false);
+                _transmissions.Add(new Transmission(stream, source, audioParams, ev,
+                    _timing.RealTime + TimeSpan.FromSeconds(_radioCues ? RadioSpeech.OpeningDuration : 0f)));
+            }
+            else if (stream != null)
+                PlaySpeech(stream, source, audioParams, ev.IsWhisper, false, suppressEcho: ev.SuppressEcho);
+            stream = null;
         }
-        else
+        catch (Exception e)
         {
-            if (ev.IsLexiconSound && !string.IsNullOrEmpty(ev.LanguageId))
-                _languageSystem.PlayGlobalLexiconSound(audioParams, ev.LanguageId);
-            else
-                _audio.PlayGlobal(audioResource!.AudioStream, soundSpecifier, audioParams);
+            stream?.Dispose();
+            _sawmill.Warning($"Could not play speech audio: {e.Message}");
         }
-
-        if (filePath is not null)
-            _contentRoot.RemoveFile(filePath.Value);
     }
+    // DS14-end
 
     private float AdjustVolume(bool isWhisper, bool isRadio)
     {
@@ -185,7 +294,7 @@ public sealed class TTSSystem : EntitySystem
 
         if (isWhisper && !isRadio)
         {
-            volume += SharedAudioSystem.GainToVolume(WhisperVolumeMultiplier); // DS14: exactly half normal gain.
+            volume += SharedAudioSystem.GainToVolume(WhisperVolumeMultiplier); // DS14
         }
         else if (isRadio)
         {
@@ -193,11 +302,6 @@ public sealed class TTSSystem : EntitySystem
         }
 
         return volume;
-    }
-
-    private float AdjustDistance(bool isWhisper)
-    {
-        return isWhisper ? SharedChatSystem.WhisperMuffledRange : SharedChatSystem.VoiceRange;
     }
 
     // DS14-start

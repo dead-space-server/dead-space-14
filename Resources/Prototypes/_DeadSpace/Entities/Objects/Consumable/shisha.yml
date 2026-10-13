@@ -1,0 +1,89 @@
+- type: entity
+  parent: BaseItem
+  id: Shisha
+  name: shisha
+  description: A water pipe for a leisurely smoke.
+  components:
+  - type: Shisha
+    hoseLength: 0.25
+    dose: 6
+    puffDuration: 2
+    hoseSag: 0.15
+    fuelPerItem: 300
+    ropeSprite:
+      sprite: _SS220/Objects/Specific/Hookah/hookah_rope.rsi
+      state: rope
+    puffPrototype: ShishaPuff
+    puffSound:
+      path: /Audio/Effects/cig_snuff.ogg
+    emptyPuffSound:
+      path: /Audio/Effects/Chemistry/bubbles.ogg
+  - type: Sprite
+    sprite: _SS220/Objects/Specific/Hookah/hookah.rsi
+    layers:
+    - state: icon-no-hose
+      map: [ "enum.ShishaVisuals.Base" ]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ShishaVisuals.State:
+        enum.ShishaVisuals.Base:
+          icon: { state: icon }
+          icon-no-hose: { state: icon-no-hose }
+          icon-coal: { state: icon-coal }
+          icon-coal-no-hose: { state: icon-coal-no-hose }
+          icon-lit: { state: icon-lit }
+          icon-lit-no-hose: { state: icon-lit-no-hose }
+  - type: Item
+    size: Normal
+    sprite: _SS220/Objects/Specific/Hookah/hookah.rsi
+    inhandVisuals:
+      left:
+      - state: icon-no-hose
+        scale: 0.5, 0.5
+        offset: -0.15, -0.1
+      right:
+      - state: icon-no-hose
+        scale: 0.5, 0.5
+        offset: 0.15, -0.1
+  - type: ContainerContainer
+    containers:
+      shisha_hose: !type:ContainerSlot
+  - type: SolutionContainerManager
+    solutions:
+      shisha:
+        maxVol: 900
+  - type: ExaminableSolution
+    solution: shisha
+    exactVolume: true
+  - type: Construction
+    graph: Shisha
+    node: shisha
+
+- type: entity
+  parent: BaseItem
+  id: ShishaHose
+  name: shisha hose
+  description: A mouthpiece on a hose. Mind the distance.
+  components:
+  - type: ShishaHose
+  - type: Sprite
+    sprite: _SS220/Objects/Specific/Hookah/hookah_hose.rsi
+    state: icon
+  - type: Item
+    size: Small
+    sprite: _SS220/Objects/Specific/Hookah/hookah_hose.rsi
+
+# Cosmetic only: no chemical smoke, occlusion, or atmosphere changes.
+- type: entity
+  id: ShishaPuff
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Effects/chemsmoke.rsi
+    state: chemsmoke
+    drawdepth: Effects
+    scale: 0.3, 0.3
+    color: "#FFFFFF80"
+  - type: TimedDespawn
+    lifetime: 0.6

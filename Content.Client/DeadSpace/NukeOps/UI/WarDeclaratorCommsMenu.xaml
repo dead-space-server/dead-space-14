@@ -1,0 +1,137 @@
+<ui:WarDeclaratorCommsMenu xmlns="https://spacestation14.io"
+    xmlns:ui="clr-namespace:Content.Client.DeadSpace.NukeOps.UI"
+    MinSize="380 360"
+    SetSize="450 460"
+    Resizable="True"
+    Title="{Loc 'war-declarator-ui-header'}">
+
+    <ScrollContainer HScrollEnabled="False"
+                     VerticalExpand="True"
+                     ReserveScrollbarSpace="True">
+        <BoxContainer Orientation="Vertical"
+                      HorizontalExpand="True"
+                      Margin="8"
+                      SeparationOverride="10">
+
+            <TabContainer Name="MainTabs"
+                          MinHeight="300"
+                          VerticalExpand="True"
+                          HorizontalExpand="True"
+                          Access="Public">
+
+                <BoxContainer Name="WarTab"
+                              Orientation="Vertical"
+                              VerticalExpand="True"
+                              HorizontalExpand="True"
+                              TabContainer.TabTitle="{Loc 'war-declarator-comms-war-tab'}"
+                              Access="Public">
+
+                    <Label StyleClasses="DeadSpaceSectionTitle"
+                           Align="Center"
+                           VAlign="Top"
+                           VerticalAlignment="Top"
+                           Text="{Loc 'war-declarator-comms-war-header'}" />
+
+                    <PanelContainer StyleClasses="DeadSpaceTextField"
+                                    Margin="10 6 6 6"
+                                    HorizontalExpand="True"
+                                    VerticalExpand="True">
+                        <TextEdit Name="WarMessageInput"
+                                  MinHeight="150"
+                                  HorizontalExpand="True"
+                                  VerticalExpand="True"
+                                  Access="Public" />
+                    </PanelContainer>
+
+                    <BoxContainer Orientation="Horizontal"
+                                  HorizontalExpand="True">
+                        <Label Name="WarCharLimitLabel"
+                               Margin="10 0 0 0"
+                               StyleClasses="CommsConsoleCharLimit"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Access="Public" />
+
+                        <Button Name="WarButton"
+                                HorizontalExpand="True"
+                                Margin="6 6 6 6"
+                                MinHeight="32"
+                                Text="{Loc 'war-declarator-ui-try-war-button'}"
+                                StyleClasses="negative"
+                                Access="Public" />
+                    </BoxContainer>
+
+                    <BoxContainer Orientation="Vertical"
+                                  HorizontalExpand="True"
+                                  Margin="10 2 6 6"
+                                  SeparationOverride="2">
+                        <Label Name="StatusLabel"
+                               Align="Center"
+                               Access="Public" />
+                        <Label Name="InfoLabel"
+                               Align="Center"
+                               Access="Public" />
+                    </BoxContainer>
+                </BoxContainer>
+
+                <BoxContainer Name="SecondaryTab"
+                              Orientation="Vertical"
+                              VerticalExpand="True"
+                              HorizontalExpand="True"
+                              TabContainer.TabTitle="{Loc 'war-declarator-comms-secondary-tab'}"
+                              Access="Public">
+
+                    <Label StyleClasses="DeadSpaceSectionTitle"
+                           Align="Center"
+                           VAlign="Top"
+                           VerticalAlignment="Top"
+                           Text="{Loc 'war-declarator-comms-secondary-header'}" />
+
+                    <Label Margin="10 6 6 0"
+                           Text="{Loc 'war-declarator-comms-secondary-title-label'}" />
+
+                    <PanelContainer StyleClasses="DeadSpaceTextField"
+                                    Margin="10 2 6 6"
+                                    HorizontalExpand="True">
+                        <LineEdit Name="SecondaryTitleInput"
+                                  MinHeight="32"
+                                  HorizontalExpand="True"
+                                  PlaceHolder="{Loc 'war-declarator-comms-secondary-title-placeholder'}"
+                                  Access="Public" />
+                    </PanelContainer>
+
+                    <Label Margin="10 4 6 0"
+                           Text="{Loc 'war-declarator-comms-secondary-text-label'}" />
+
+                    <PanelContainer StyleClasses="DeadSpaceTextField"
+                                    Margin="10 2 6 6"
+                                    HorizontalExpand="True"
+                                    VerticalExpand="True">
+                        <TextEdit Name="SecondaryMessageInput"
+                                  MinHeight="110"
+                                  HorizontalExpand="True"
+                                  VerticalExpand="True"
+                                  Access="Public" />
+                    </PanelContainer>
+
+                    <BoxContainer Orientation="Horizontal"
+                                  HorizontalExpand="True">
+                        <Label Name="SecondaryCharLimitLabel"
+                               Margin="10 0 0 0"
+                               StyleClasses="CommsConsoleCharLimit"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Access="Public" />
+
+                        <Button Name="SecondaryAnnouncementButton"
+                                HorizontalExpand="True"
+                                Margin="6 6 6 6"
+                                MinHeight="32"
+                                Text="{Loc 'war-declarator-comms-secondary-send'}"
+                                Access="Public" />
+                    </BoxContainer>
+                </BoxContainer>
+            </TabContainer>
+        </BoxContainer>
+    </ScrollContainer>
+</ui:WarDeclaratorCommsMenu>

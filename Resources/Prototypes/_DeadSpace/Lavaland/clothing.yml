@@ -549,4 +549,4 @@
   - type: InstantAction
     event: !type:DrakeArmorTransformActionEvent
       drakeChance: 0.5
-      skeletonStunDuration: 10
+      skeletonStunDuration: 0

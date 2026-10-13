@@ -31,6 +31,7 @@ public sealed class AiCameraSearchRequestMessage : BoundUserInterfaceMessage
 public sealed class AiCameraJumpToTargetMessage : BoundUserInterfaceMessage
 {
     public NetEntity Target;
+    public TimeSpan SourceTime;
 }
 
 [Serializable, NetSerializable]
@@ -50,13 +51,15 @@ public readonly record struct AiCameraSearchResult(
 public sealed class StationAiTrackEntityNetworkEvent : EntityEventArgs
 {
     public NetEntity Target;
+    public TimeSpan SourceTime;
 
     public StationAiTrackEntityNetworkEvent()
     {
     }
 
-    public StationAiTrackEntityNetworkEvent(NetEntity target)
+    public StationAiTrackEntityNetworkEvent(NetEntity target, TimeSpan sourceTime)
     {
         Target = target;
+        SourceTime = sourceTime;
     }
 }

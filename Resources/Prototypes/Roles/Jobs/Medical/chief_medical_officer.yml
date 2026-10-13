@@ -43,10 +43,6 @@
   - !type:AddComponentSpecial
     components:
       - type: CommandStaff
-      # DS14-Start
-      - type: Skill
-        group: HeadMedical
-      # DS14-End
 
 - type: startingGear
   id: CMOGear

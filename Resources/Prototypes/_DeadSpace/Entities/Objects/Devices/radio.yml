@@ -21,3 +21,28 @@
     limit: 1
     color: "#731B37" 
   - type: Appearance
+
+- type: entity
+  name: рация ЦК
+  description: Не очень удобная рация ЦК.
+  parent: [ RadioHandheld, BaseSecurityContraband ]
+  id: RadioHandheldSecurityCentcom
+  components:
+  - type: RadioMicrophone
+    broadcastChannel: CentCom
+    listenRange: 1
+  - type: RadioSpeaker
+    channels:
+    - CentCom
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Devices/securitycentcomhandy.rsi
+  - type: Item
+    sprite: _DeadSpace/Objects/Devices/securitycentcomhandy.rsi
+    heldPrefix: walkietalkie
+  # DS14-start
+  - type: Language
+  - type: UniformAccessory
+    category: Radio
+    limit: 1
+    color: "#329632" 
+  # DS14-end

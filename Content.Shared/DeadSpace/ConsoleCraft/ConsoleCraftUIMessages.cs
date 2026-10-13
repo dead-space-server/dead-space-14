@@ -35,6 +35,13 @@ public sealed class ConsoleCraftBlueprintEntry
 }
 
 [Serializable, NetSerializable]
+public sealed class ConsoleCraftItemStat
+{
+    public string Label { get; init; } = string.Empty;
+    public string Value { get; init; } = string.Empty;
+}
+
+[Serializable, NetSerializable]
 public sealed class ConsoleCraftConsoleState : BoundUserInterfaceState
 {
     public List<ConsoleCraftBlueprintEntry> AvailableRecipes { get; init; } = new();
@@ -42,6 +49,7 @@ public sealed class ConsoleCraftConsoleState : BoundUserInterfaceState
     public string? CraftItemProtoId { get; init; }
     public List<ConsoleCraftRequirementStatus> RequiredStatus { get; init; } = new();
     public List<ConsoleCraftModuleStatus> ModuleStatus { get; init; } = new();
+    public List<ConsoleCraftItemStat> ItemStats { get; init; } = new();
     public bool CanCraft { get; init; }
     public bool CraftInProgress { get; init; }
     public bool NoStation { get; init; }

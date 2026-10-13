@@ -46,8 +46,6 @@
         color: Green
         sound: /Audio/_DeadSpace/Renegade/renegade-arrived-at-the-space-station.ogg
       components:
-      - type: Skill
-        group: ALL
       - type: RandomHumanoidAppearance
         randomizeName: false
       - type: Renegade

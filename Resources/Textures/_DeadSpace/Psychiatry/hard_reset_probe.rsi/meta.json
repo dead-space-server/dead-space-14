@@ -1,0 +1,12 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "taken from ss220-space/Paradise https://github.com/ss220-space/Paradise/",
+    "size": { "x": 32, "y": 32 },
+    "states": [
+        { "name": "control_off" },
+        { "name": "control_standby", "delays": [[0.1, 0.1, 0.1, 0.1, 0.1, 0.1]] },
+        { "name": "control_stun", "delays": [[0.1, 0.1, 0.1, 0.1, 0.1, 0.1]] },
+        { "name": "control_kill", "delays": [[0.1, 0.1, 0.1, 0.1, 0.1, 0.1]] }
+    ]
+}

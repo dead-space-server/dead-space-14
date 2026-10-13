@@ -32,7 +32,7 @@ public sealed class SurvivalNecromorphBreachRule : StationEventSystem<SurvivalNe
         while (component.BreachSites.Count < breachCount && attempts < breachCount * 10)
         {
             attempts++;
-            if (!TryFindRandomTile(out _, out _, out _, out var coords))
+            if (!TryFindRandomTile(out _, out _, out _, out var coords, rule: uid)) // DS14
                 continue;
 
             var breachIndex = component.BreachSites.Count;

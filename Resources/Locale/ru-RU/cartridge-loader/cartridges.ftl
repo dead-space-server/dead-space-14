@@ -24,6 +24,25 @@ log-probe-printout-entry = #{ $number } / { $time } / { $accessor }
 astro-nav-program-name = АстроНав
 med-tek-program-name = МедТек
 snake-cartridge-program-name = Змейка
+pda-arcade-program-name = Игры
+pda-arcade-menu = Игры
+pda-arcade-board = Таблица лидеров
+pda-arcade-back = Назад
+pda-arcade-act = Действие
+pda-arcade-score = Счёт: { $score }
+pda-arcade-over = Записано: { $score }
+pda-arcade-empty = Завершённых игр пока нет
+pda-arcade-game-snake = Змейка
+pda-arcade-game-tiles = Плитки
+pda-arcade-game-blocks = Блоки
+pda-arcade-game-rocks = Обломки
+pda-arcade-game-flap = Прыжок
+pda-arcade-game-match = Три в ряд
+pda-arcade-finish = Завершить
+pda-arcade-pause = Пауза
+pda-arcade-again = Ещё раз
+pda-arcade-win = Победа
+pda-arcade-lose = Поражение
 
 # NanoTask cartridge
 

@@ -1,4 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+using Content.Shared.DeadSpace.TTS;
+using Robust.Shared.Configuration;
 
 using System.Linq;
 using Content.Server.Actions;
@@ -73,7 +75,6 @@ public sealed class TraitorUltraRuleSystem : GameRuleSystem<TraitorUltraRuleComp
     [Dependency] private readonly AntagSelectionSystem _antag = default!;
     [Dependency] private readonly ActionsSystem _actions = default!;
     [Dependency] private readonly BankManagerSystem _bankManager = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly ISharedChatManager _chatManager = default!;
     [Dependency] private readonly SharedCargoSystem _cargo = default!;
     [Dependency] private readonly EuiManager _eui = default!;
@@ -1820,9 +1821,8 @@ public sealed class TraitorUltraRuleSystem : GameRuleSystem<TraitorUltraRuleComp
             ("agent", name ?? Loc.GetString("generic-unknown-title")),
             ("reward", state.BountyReward));
 
-        _chat.DispatchGlobalAnnouncement(
+        RuleStation.Announce(mind?.OwnedEntity ?? rule,
             announcement,
-            sender: Loc.GetString("traitor-ultra-bounty-announcer"),
             playSound: true,
             announcementSound: component.BountyAnnouncementSound,
             colorOverride: Color.OrangeRed,
@@ -2450,7 +2450,8 @@ public sealed class TraitorUltraRuleSystem : GameRuleSystem<TraitorUltraRuleComp
 
     private string? PickRandomAnnouncementVoice()
     {
-        var voices = _proto.EnumeratePrototypes<TTSVoicePrototype>().ToArray();
+        var voices = _proto.EnumeratePrototypes<TTSVoicePrototype>()
+            .Where(voice => voice.Provider == IoCManager.Resolve<IConfigurationManager>().GetCVar(TTSProviderCVars.Provider)).ToArray();
         return voices.Length == 0 ? null : _random.Pick(voices).ID;
     }
 

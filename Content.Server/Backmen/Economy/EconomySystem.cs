@@ -20,6 +20,7 @@ using Content.Shared.Backmen.Economy;
 using Content.Shared.CartridgeLoader;
 using Content.Shared.Chat;
 using Content.Shared.Database;
+using Content.Shared.FixedPoint;
 using Content.Shared.Inventory;
 using Content.Shared.Objectives.Components;
 using Content.Shared.PDA;
@@ -48,6 +49,8 @@ public sealed class EconomySystem : EntitySystem
     [Dependency] private readonly IChatManager _chatManager = default!;
 
     private static readonly EntProtoId MindRoleBankMemory = "MindRoleBankMemory";
+
+    private static readonly FixedPoint2 DepartmentStartingBalance = 100_000;
 
     public override void Initialize()
     {
@@ -205,13 +208,19 @@ public sealed class EconomySystem : EntitySystem
     {
         foreach (var department in _prototype.EnumeratePrototypes<DepartmentPrototype>())
         {
+            if (department.AccountNumber == null)
+                continue;
+
+            var departmentName = Loc.GetString(department.Name);
             var dummy = Spawn("CaptainIDCard");
-            _metaDataSystem.SetEntityName(dummy, "Bank: " + department.AccountNumber);
+            _metaDataSystem.SetEntityName(dummy, departmentName);
             var bankAccount = _bankManager.CreateNewBankAccount(dummy, department.AccountNumber, true);
             if (bankAccount == null)
                 continue;
-            bankAccount.Value.Comp.AccountName = department.ID;
-            bankAccount.Value.Comp.Balance = 100_000;
+
+            bankAccount.Value.Comp.AccountName = departmentName;
+            bankAccount.Value.Comp.Balance = DepartmentStartingBalance;
+            _wageManagerSystem.RegisterDepartmentAccount(bankAccount.Value.Owner, department.ID, departmentName);
         }
     }
 
@@ -281,10 +290,38 @@ public sealed class EconomySystem : EntitySystem
 
         if (bankAccount == null)
         {
-            if (!TryStoreNewBankAccount(player, idCardComponent, out bankAccount))
+            var createdNewAccount = false;
+
+            if (_roleSystem.MindHasRole<BankMemoryComponent>(mindId, out var bankMemoryRole) &&
+                TryComp<BankMemoryComponent>(bankMemoryRole, out var bankMemory) &&
+                TryComp<BankAccountComponent>(bankMemory.BankAccount, out var rememberedAccount) &&
+                _bankManager.TryGetBankAccount(rememberedAccount.AccountNumber, out var remembered))
             {
-                return null;
+                bankAccount = remembered;
             }
+            else if (TryComp<BankAccountComponent>(idCardComponent, out var existingAccount) &&
+                     !string.IsNullOrEmpty(existingAccount.AccountNumber))
+            {
+                bankAccount = (idCardComponent, existingAccount);
+            }
+            else
+            {
+                if (!TryStoreNewBankAccount(player, idCardComponent, out bankAccount))
+                {
+                    return null;
+                }
+
+                createdNewAccount = true;
+            }
+
+            if (!string.IsNullOrEmpty(bankAccount.Value.Comp.AccountNumber))
+                idCardComponent.Comp.StoredBankAccountNumber = bankAccount.Value.Comp.AccountNumber;
+
+            if (string.IsNullOrEmpty(bankAccount.Value.Comp.AccountName))
+                bankAccount.Value.Comp.AccountName = idCardComponent.Comp.FullName;
+
+            Dirty(bankAccount.Value);
+            Dirty(idCardComponent);
 
             if (AttachWage && !_roleSystem.MindHasRole<JobRoleComponent>(mindId))
             {
@@ -294,11 +331,16 @@ public sealed class EconomySystem : EntitySystem
             if (_roleSystem.MindHasRole<JobRoleComponent>(mindId, out var jobComponent) && jobComponent?.Comp1.JobPrototype != null &&
                 _prototype.TryIndex(jobComponent?.Comp1.JobPrototype, out var jobPrototype))
             {
-                _bankManager.TryGenerateStartingBalance(bankAccount, jobPrototype);
+                if (createdNewAccount)
+                    _bankManager.TryGenerateStartingBalance(bankAccount.Value, jobPrototype);
 
                 if (AttachWage)
                 {
-                    _wageManagerSystem.TryAddAccountToWagePayoutList(bankAccount.Value, jobPrototype);
+                    _wageManagerSystem.TryAddAccountToWagePayoutList(
+                        bankAccount.Value,
+                        jobPrototype,
+                        mindId,
+                        idCardComponent.Comp.FullName);
                 }
             }
         }

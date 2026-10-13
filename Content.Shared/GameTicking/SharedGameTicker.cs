@@ -184,6 +184,10 @@ namespace Content.Shared.GameTicking
 
             [DataField]
             public string? PlayerICName;
+            // DS-14-start
+            [DataField]
+            public string? PlayerPseudonym;
+            // DS-14-end
 
             [DataField, NonSerialized]
             public NetUserId? PlayerGuid;

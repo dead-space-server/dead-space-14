@@ -8,6 +8,8 @@
     sprite: _ADT/KD/RingBlood.rsi
   - type: Clothing
     sprite: _ADT/KD/RingBlood.rsi
+  - type: Paintable
+    group: null
   - type: Item
     size: Tiny
   - type: StaticPrice
@@ -37,6 +39,8 @@
     sprite: _ADT/KD/RingEmerald.rsi
   - type: Clothing
     sprite: _ADT/KD/RingEmerald.rsi
+  - type: Paintable
+    group: null
   - type: Item
     size: Tiny
   - type: StaticPrice
@@ -66,6 +70,8 @@
     sprite: _ADT/KD/RingPlazma.rsi
   - type: Clothing
     sprite: _ADT/KD/RingPlazma.rsi
+  - type: Paintable
+    group: null
   - type: Item
     size: Tiny
   - type: StaticPrice
@@ -95,6 +101,8 @@
     sprite: _ADT/KD/RingTurk.rsi
   - type: Clothing
     sprite: _ADT/KD/RingTurk.rsi
+  - type: Paintable
+    group: null
   - type: Item
     size: Tiny
   - type: StaticPrice

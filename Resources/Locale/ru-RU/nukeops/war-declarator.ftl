@@ -18,3 +18,13 @@ war-declarator-boost-timer =
     }.
 war-declarator-default-message = Пограничный отряд Синдиката объявляет о своём намерении уничтожить станцию при помощи ядерного устройства и призывает экипаж предпринять ничтожную попытку остановить их.
 war-declarator-message-placeholder = Введите текст объявления...
+
+war-declarator-comms-war-tab = Объявление войны
+war-declarator-comms-war-header = ОБЪЯВЛЕНИЕ ВОЙНЫ
+war-declarator-comms-secondary-tab = Второстепенное объявление
+war-declarator-comms-secondary-header = ВТОРОСТЕПЕННОЕ ОБЪЯВЛЕНИЕ
+war-declarator-comms-secondary-title-label = Краткий приказ
+war-declarator-comms-secondary-title-placeholder = Например: ЗАНЯТЬ ПОЗИЦИИ
+war-declarator-comms-secondary-text-label = Подробности
+war-declarator-comms-secondary-placeholder = Подробный текст объявления...
+war-declarator-comms-secondary-send = ОТПРАВИТЬ ОБЪЯВЛЕНИЕ

@@ -6,6 +6,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Client.Construction.UI
 {
@@ -41,6 +42,7 @@ namespace Content.Client.Construction.UI
 
         void ClearRecipeInfo();
         void SetRecipeInfo(string name, string description, EntityPrototype? targetPrototype, bool isItem, bool isFavorite);
+        void SetRecipeStats(FormattedMessage? stats);
         void ResetPlacement();
 
         #region Window Control
@@ -179,9 +181,24 @@ namespace Content.Client.Construction.UI
             BuildButton.Disabled = true;
             TargetName.SetMessage(string.Empty);
             TargetDesc.SetMessage(string.Empty);
+            TargetStats.Visible = false;
+            TargetStats.SetMessage(string.Empty);
             TargetTexture.SetPrototype(null);
             FavoriteButton.Visible = false;
             RecipeStepList.Clear();
+        }
+
+        public void SetRecipeStats(FormattedMessage? stats)
+        {
+            if (stats is null || stats.IsEmpty)
+            {
+                TargetStats.Visible = false;
+                TargetStats.SetMessage(string.Empty);
+                return;
+            }
+
+            TargetStats.Visible = true;
+            TargetStats.SetMessage(stats);
         }
 
         public sealed record ConstructionMenuListData(ConstructionPrototype Prototype, EntityPrototype TargetPrototype) : ListData;

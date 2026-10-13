@@ -180,7 +180,7 @@ public sealed class BearTrapSystem : EntitySystem
     private void OnCollide(Entity<BearTrapComponent> ent, ref StartCollideEvent args)
     {
         var target = args.OtherEntity;
-        if (!args.OtherFixture.Hard || target == ent.Comp.Installer)
+        if (target == ent.Comp.Installer)
             return;
 
         TryCatch(ent, target);

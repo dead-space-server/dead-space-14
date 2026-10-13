@@ -1497,7 +1497,7 @@ namespace Content.Server.Database
                 (PreferenceUnavailableMode) profile.PreferenceUnavailable,
                 antags.ToHashSet(),
                 traits.ToHashSet(),
-                loadouts
+                loadouts, profile.TtsVoices?.Deserialize<Dictionary<string, string>>() // DS14
             );
         }
 
@@ -1516,6 +1516,7 @@ namespace Content.Server.Database
             profile.FlavorText = humanoid.FlavorText;
             profile.Species = humanoid.Species;
             profile.Voice = humanoid.Voice; // Corvax-TTS
+            profile.TtsVoices = JsonSerializer.SerializeToDocument(humanoid.TtsVoices); // DS14
             profile.Age = humanoid.Age;
             profile.Sex = humanoid.Sex.ToString();
             profile.Gender = humanoid.Gender.ToString();

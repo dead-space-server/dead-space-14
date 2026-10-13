@@ -24,9 +24,26 @@ public sealed partial class CrayonComponent : Component
     public Color Color;
 
     //DS-14 Start
+    /// <summary>
+    /// Stroke opacity. 1 is a solid mark.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float Opacity = 1f;
+
+    [DataField]
+    public float MinOpacity = 0.1f;
+
+    [DataField]
+    public float MaxOpacity = 1f;
+
+    public Color StrokeColor()
+    {
+        return Color.WithAlpha(Math.Clamp(Opacity, MinOpacity, MaxOpacity));
+    }
+    // DS-14 End
+
     [DataField, AutoNetworkedField]
     public Angle Rotation = Angle.Zero;
-    // DS-14 End
 
     /// <summary>
     /// Play a sound when drawing if specified.
@@ -92,7 +109,19 @@ public sealed class CrayonRotationMessage : BoundUserInterfaceMessage
         Rotation = rotation;
     }
 }
-//DS-14 End
+
+[Serializable, NetSerializable]
+public sealed class CrayonOpacityMessage : BoundUserInterfaceMessage
+{
+    public readonly float Opacity;
+
+    public CrayonOpacityMessage(float opacity)
+    {
+        Opacity = opacity;
+    }
+}
+
+// DS-14 End
 
 /// <summary>
 /// Server to CLIENT. Notifies the BUI that a decal with given ID has been drawn.

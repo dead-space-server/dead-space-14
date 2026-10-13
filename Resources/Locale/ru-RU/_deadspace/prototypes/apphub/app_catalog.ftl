@@ -6,6 +6,8 @@ app-catalog-entry-wanted-list-name = Список разыскиваемых
 app-catalog-entry-wanted-list-desc = Актуальный список разыскиваемых лиц.
 app-catalog-entry-snake-name = Змейка
 app-catalog-entry-snake-desc = Классическая игра «Змейка» для КПК.
+app-catalog-entry-pda-games-name = Игры
+app-catalog-entry-pda-games-desc = Змейка, плитки, блоки, обломки, прыжок и три в ряд. Общая таблица результатов.
 app-catalog-entry-scanner-name = Сканер документов
 app-catalog-entry-scanner-desc = Программа для сканирования документов.
 

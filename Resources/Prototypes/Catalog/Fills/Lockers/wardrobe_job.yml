@@ -27,8 +27,8 @@
       rolls: 2
       children:
       - id: ClothingUniformJumpsuitPrisoner
-      - id: ClothingUniformJumpskirtPrisoner
-      - id: ClothingShoesColorBlack
+      # - id: ClothingUniformJumpskirtPrisoner # DS-14
+      - id: ClothingShoesColorOrange # DS-14
       - id: ClothingHeadsetGrey # DS-14
     - id: ClothingMaskMuzzle
     - !type:GroupSelector

@@ -1,0 +1,99 @@
+- type: SpiderOSBoot
+  id: SpiderOSActivationBoot
+  steps:
+  - delay: 5
+    log: spider-os-boot-self-test
+    check: SelfTest
+  - delay: 10
+    log: spider-os-boot-verify-identity
+    check: Authorized
+  - delay: 5
+    log: spider-os-boot-neuro-sync
+  - delay: 4
+    log: spider-os-boot-driver-setup-init
+  - delay: 3
+    log: spider-os-boot-driver-setup-10
+  - delay: 3
+    log: spider-os-boot-driver-setup-20
+  - delay: 3
+    log: spider-os-boot-driver-setup-30
+  - delay: 3
+    log: spider-os-boot-driver-setup-40
+  - delay: 3
+    log: spider-os-boot-driver-setup-50
+  - delay: 3
+    log: spider-os-boot-driver-setup-67
+  - delay: 3
+    log: spider-os-boot-driver-setup-70
+  - delay: 3
+    log: spider-os-boot-driver-setup-80
+  - delay: 3
+    log: spider-os-boot-driver-setup-90
+  - delay: 5
+    log: spider-os-boot-driver-setup-95
+  - delay: 7
+    log: spider-os-boot-driver-setup-96
+  - delay: 7
+    log: spider-os-boot-driver-setup-97
+  - delay: 7
+    log: spider-os-boot-driver-setup-98
+  - delay: 7
+    log: spider-os-boot-driver-setup-99
+  - delay: 10
+    log: spider-os-boot-driver-setup-complete
+  - delay: 5
+    log: spider-os-boot-locking-suit
+    check: SuitFasten
+  - delay: 5
+    log: spider-os-boot-locking-visor
+    check: VisorSecure
+  - delay: 5
+    log: spider-os-boot-locking-helmet
+    check: HelmetSecure
+  - delay: 5
+    log: spider-os-boot-locking-mask
+    check: MaskSecure
+  - delay: 5
+    log: spider-os-boot-locking-gloves
+    check: GlovesSecure
+  - delay: 5
+    log: spider-os-boot-locking-boots
+    check: BootsSecure
+  - delay: 5
+    log: spider-os-boot-lock-modules
+    check: ModulesReady
+  - delay: 5
+    log: spider-os-boot-power-up
+    check: NotActivated
+  - delay: 5
+    log: spider-os-boot-battery-capacity
+    check: BatteryReport
+  - delay: 5
+    log: spider-os-boot-final
+
+- type: SpiderOSBoot
+  id: SpiderOSDeactivationBoot
+  steps:
+  - delay: 0.5
+    log: spider-os-boot-unlocking-suit
+    check: SuitFasten
+  - delay: 0.5
+    log: spider-os-boot-releasing-boots
+    check: BootsSecure
+  - delay: 0.5
+    log: spider-os-boot-releasing-gloves
+    check: GlovesSecure
+  - delay: 0.5
+    log: spider-os-boot-releasing-mask
+    check: MaskSecure
+  - delay: 0.5
+    log: spider-os-boot-releasing-helmet
+    check: HelmetSecure
+  - delay: 0.5
+    log: spider-os-boot-releasing-visor
+    check: VisorSecure
+  - delay: 0.5
+    log: spider-os-boot-shutdown
+    check: Authorized
+  - delay: 0.6
+    log: spider-os-boot-offline

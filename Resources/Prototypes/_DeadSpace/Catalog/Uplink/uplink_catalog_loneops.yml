@@ -1,0 +1,354 @@
+- type: listing
+  id: UplinkEmagNukeOpsLone
+  name: uplink-emag-name
+  description: uplink-emag-desc
+  productEntity: EmagLoneOps
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+    Telecrystal: 3
+  cost:
+    Telecrystal: 5
+  categories:
+  - UplinkDisruption
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+
+- type: listing
+  id: UplinkEswordDoubleNukeOpsLone
+  name: uplink-esword-double-name
+  description: uplink-esword-double-desc
+  icon: { sprite: /Textures/Objects/Weapons/Melee/e_sword_double.rsi, state: icon }
+  productEntity: BriefcaseWeaponESwordDoubleFilled
+  cost:
+    Telecrystal: 36
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+  - !type:ListingLimitedStockCondition
+    stock: 1
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkMalorianLone
+  name: uplink-malorian-name
+  description: uplink-malorian-desc
+  productEntity: WeaponPistolMalorian
+  cost:
+    Telecrystal: 12
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkSandevistanLone
+  name: uplink-sandevistan-misanthropy-name
+  description: uplink-sandevistan-misanthropy-desc
+  icon: { sprite: _DeadSpace/Actions/implants_actions.rsi, state: sandevistan }
+  productEntity: SandevistanImplantCase
+  cost:
+    Telecrystal: 15
+  categories:
+  - UplinkImplants
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+  - !type:PopulationLimitedStockCondition
+    stock: 1
+    highPopulationStock: 1
+    highPopulationThreshold: 110
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkShortyNukeopsLone
+  name: uplink-shorty-name
+  description: uplink-shorty-lone-desc
+  icon: { sprite: _DeadSpace/Objects/Weapons/Guns/Shotguns/supershorty.rsi, state: icon }
+  productEntity: ClothingBackpackDuffelSyndicateFilledShotgunShortyLone
+  cost:
+    Telecrystal: 18
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+  - !type:PopulationLimitedStockCondition
+    stock: 1
+    highPopulationStock: 1
+    highPopulationThreshold: 110
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkIchorMedipenLone
+  name: Медипен ихора
+  description: Способен поднять даже быка, а тебя и подавно.
+  icon: { sprite: _DeadSpace/Objects/Specific/Medical/medipen.rsi, state: ichor }
+  productEntity: IchorMedipen
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkChemicals
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+
+- type: listing
+  id: UplinkSyndicateChemBundle
+  name: продвинутый набор химического синтеза
+  description: Источник огромного количества реагентов для варки вашего ширева. Рецепт крокодила в комплекте не идёт.
+  icon: { sprite: _DeadSpace/Structures/Machines/VendingMachines/chemvend.rsi, state: deny }
+  productEntity: ClothingBackpackSatchelChemistrySyndicateChemBundle
+  cost:
+    Telecrystal: 25
+  categories:
+  - UplinkChemicals
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkMagazineEagleAPLone
+  name: uplink-magazine-eagle-ap-name
+  description: uplink-magazine-eagle-ap-desc
+  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Ammunition/Magazine/Pistol/magazinedeserteagle.rsi, state: red }
+  productEntity: MagazineEagleAP
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 3
+  categories:
+  - UplinkAmmo
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+
+- type: listing
+  id: UplinkHristovMagAPNukeOpsLone
+  name: Магазин бронебойных патронов для Христова
+  description: Заряд сваги каждому на прицельной линии.//ББ
+  productEntity: MagazineHristovAP
+  icon: { sprite: /Textures/Objects/Weapons/Guns/Ammunition/Magazine/magazine_heavy_sniper.rsi, state: iconap }
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkAmmo
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkMagazinePistolCaselessRiflePoisonedNukeOpsLone
+  name: uplink-pistol-magazine-caseless-poisoned-name
+  description: uplink-pistol-magazine-caseless-poisoned-desc
+  icon: { sprite: /Textures/Objects/Weapons/Guns/Ammunition/Magazine/CaselessRifle/caseless_pistol_mag.rsi, state: red-icon }
+  productEntity: MagazinePistolCaselessRiflePoisoned
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkAmmo
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkCyberHyposprayNukeOpsLone
+  name: uplink-cyber-hypospray-name
+  description: uplink-cyber-hypospray-desc
+  productEntity: ADTCyberHypospray
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 6
+  cost:
+    Telecrystal: 8
+  categories:
+  - UplinkChemicals
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+
+- type: listing
+  id: UplinkSpeedLoaderMagnumAPNukeOpsLone
+  name: uplink-speedloader-magnum-name
+  description: uplink-speedloader-magnu-desc
+  icon: { sprite: /Textures/Objects/Weapons/Guns/Ammunition/SpeedLoaders/Magnum/magnum_speed_loader.rsi, state: icon }
+  productEntity: SpeedLoaderMagnumAP
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkAmmo
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+
+- type: listing
+  id: UplinkNukeMantis1NukeOpsLone
+  name: Пресет "Богомолы"
+  description: Используемый опытным оперативником набор вещей, основа которого - клинки богомола.
+  productEntity: ClothingBackpackSatchelTaipanBundleMantis
+  icon: { sprite: /Textures/_DeadSpace/Actions/mantisblades_actions.rsi, state: mantis-toggle }
+  cost:
+    Telecrystal: 65
+  categories:
+  - UplinkPresets
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+
+- type: listing
+  id: UplinkNukeBulldogNukeOpsLone
+  name: Пресет "Бульдог"
+  description: Используемый опытным оперативником набор вещей, основа которого Дробовик и Рапира.
+  productEntity: CrateBundleNukeBulldog
+  icon: { sprite: /Textures/Clothing/Mask/clown_security.rsi, state: icon }
+  cost:
+    Telecrystal: 72
+  categories:
+  - UplinkPresets
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+
+- type: listing
+  id: UplinkNukeAPNukeOpsLone
+  name: Пресет "Дигл"
+  description: Используемый опытным оперативником набор вещей, основа которого - Пустынный Орёл на бронебойных боеприпасах.
+  productEntity: ClothingBackpackSatchelTaipanBundleAP
+  icon: { sprite: /Textures/_DeadSpace/Objects/Weapons/Guns/Pistols/deserteagle.rsi, state: icon }
+  cost:
+    Telecrystal: 79
+  categories:
+  - UplinkPresets
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+
+- type: listing
+  id: UplinkNukeHristovNukeOpsLone
+  name: Пресет "Христов"
+  description: Используемый опытным оперативником набор вещей, основа которого - Христов.
+  productEntity: CrateBundleNukeHristov
+  icon: { sprite: /Textures/Objects/Weapons/Guns/Snipers/heavy_sniper.rsi, state: icon }
+  cost:
+    Telecrystal: 89
+  categories:
+  - UplinkPresets
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+
+- type: listing
+  id: UplinkNukeJuggernautNukeOpsLone
+  name: Пресет "Джаггернаут"
+  description: Используемый опытным оперативником набор вещей, основа которого - джаггернаут.
+  productEntity: CrateBundleNukeJuggernaut
+  icon: { sprite: /Textures/Clothing/Head/Hardsuits/cybersun.rsi, state: icon }
+  cost:
+    Telecrystal: 99
+  categories:
+  - UplinkPresets
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+
+- type: listing
+  id: UplinkScramImplanterNukeOpsLone
+  name: uplink-scram-implanter-name
+  description: uplink-scram-implanter-desc
+  icon: { sprite: /Textures/Structures/Specific/anomaly.rsi, state: anom4 }
+  productEntity: ScramImplanter
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+    Telecrystal: 4
+  cost:
+    Telecrystal: 6
+  categories:
+    - UplinkImplants
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+
+- type: listing
+  id: UplinkArkalysNukeOpsLone
+  name: uplink-arkalyse-bundle-name
+  description: uplink-arkalyse-bundle-desc
+  icon: { sprite: _DeadSpace/Objects/Specific/Arkalyse/arkalyse_book.rsi, state: icon }
+  productEntity: BoxArkalyse
+  cost:
+    Telecrystal: 15
+  categories:
+  - UplinkWeaponry
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - LoneOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle

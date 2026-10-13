@@ -7,6 +7,7 @@ namespace Content.Server.StationEvents.Components;
 /// <summary>
 /// Spawns a single entity in a random EntityStorage on the station
 /// </summary>
+[Content.Server.DeadSpace.CentComm.AllowedGameRuleOnCentComm] // DS14
 [RegisterComponent, Access(typeof(RandomEntityStorageSpawnRule))]
 public sealed partial class RandomEntityStorageSpawnRuleComponent : Component
 {

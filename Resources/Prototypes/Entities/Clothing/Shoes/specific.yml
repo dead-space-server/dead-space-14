@@ -115,6 +115,7 @@
   - type: Clothing
     sprite: Clothing/Shoes/Specific/galoshes.rsi
   - type: NoSlip
+  - type: Insulated # DS14
   - type: SlowedOverSlippery
     slowdownModifier: 0.7
   - type: SpeedModifierContactCapClothing # DS14
@@ -125,7 +126,7 @@
     sprintModifier: 0.8
   - type: FootstepModifier # DS14
     footstepSoundCollection:
-      collection: SquidFootsteps 
+      collection: SquidFootsteps
 
 - type: entity
   parent: [ClothingShoesBaseButcherable, BaseHighlyIllegalContraband]
@@ -146,8 +147,10 @@
   - type: FootstepModifier
     footstepSoundCollection: null
   - type: ClothingGrantComponent
-    component: 
+    component:
       - type: RenegadeCANTRenegadeForce
+  - type: NinjaAppearanceItem
+  - type: NinjaSuitItem
 
 - type: entity
   parent: ClothingShoesBaseButcherable

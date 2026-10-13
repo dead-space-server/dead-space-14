@@ -5,6 +5,7 @@ loadout-group-service-specialization = Сервисный работник, сп
 loadout-group-scientist-specialization = Учёный, специализация
 loadout-group-engineer-specialization = Инженер, специализация
 loadout-group-cargo-specialization = Грузчик, специализация
+loadout-group-janitor-specialization = Уборщик, специализация
 loadout-group-salvage-specialization = Утилизатор, специализация
 loadout-group-botanist-specialization = Ботаник, специализация
 loadout-group-passenger-specialization = Ассистент, специализация
@@ -12,7 +13,7 @@ loadout-group-atmospheric-specialization = Атмосферный техник, 
 loadout-group-librarian-specialization = Библиотекарь, специализация
 loadout-group-psychologist-specialization = Психолог, специализация
 loadout-group-clown-specialization = Клоун, специализация
-
+loadout-group-reporter-specialization = Репортёр, специализация
 
 # Повар
 job-title-chef-confectioner = Кондитер
@@ -31,6 +32,14 @@ job-title-doctor-geneticist = Генетик
 job-title-doctor-cryotherapist = Криотерапевт
 job-title-doctor-surgeon = Хирург
 job-title-doctor-nurse = Медсестра
+job-title-doctor-male-nurse = Медбрат
+
+# уборщик
+job-title-janitor-exterminator = Дезинсектор
+job-title-janitor-cleaner = Клинер
+job-title-janitor-plumber = Сантехник
+job-title-janitor-housemaid = Горничная
+job-title-janitor-houseman = Горничный
 
 # Сервисный работник
 job-title-service-waiter = Официант
@@ -49,6 +58,7 @@ job-title-engineer-mechanic = Механик
 job-title-engineer-nuclear = Инженер-ядерщик
 job-title-engineer-welder = Сварщик
 job-title-engineer-architect = Архитектор
+job-title-engineer-shuttle-builder = Шаттлостроитель
 
 # Грузчик
 job-title-cargo-logistician = Логист
@@ -60,7 +70,7 @@ job-title-salvage-explorer = Исследователь
 
 # Ботаник
 job-title-botanist-agronomist = Агроном
-job-title-botanist-Selectioner = Селекционер
+job-title-botanist-selectioner = Селекционер
 
 # Ассистент
 job-title-passenger-trainee = Стажёр
@@ -69,6 +79,7 @@ job-title-passenger-handyman = Разнорабочий
 # Атмосферный техник
 job-title-atmospheric-lifesupport = Специалист СЖО
 job-title-atmospheric-synthesis = Специалист по синтезу
+job-title-atmospheric-thermodynamic = Термодинамик
 
 # Библиотекарь
 job-title-librarian-gamemaster = Гейм-мастер
@@ -80,3 +91,9 @@ job-title-psychologist-psychiatrist = Психиатр
 # Клоун
 job-title-clown-comedian = Комик
 job-title-clown-prankster = Пранкер
+
+# Репортёр
+job-title-reporter-journalist = Журналист
+job-title-reporter-correspondent = Корреспондент
+job-title-reporter-radioshow = Радиоведущий
+job-title-reporter-tvshow = Телеведущий

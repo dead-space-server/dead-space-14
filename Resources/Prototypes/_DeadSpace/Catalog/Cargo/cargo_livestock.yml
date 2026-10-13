@@ -56,4 +56,24 @@
   product: CrateNPCTurtle
   cost: 3000
   category: cargoproduct-category-name-livestock
-  group: service 
+  group: service
+
+- type: cargoProduct
+  id: LivestockSeal
+  icon:
+    sprite: _DeadSpace/Mobs/Animals/Seal/seal.rsi
+    state: seal_idle
+  product: CrateNPCSeal
+  cost: 50000
+  category: cargoproduct-category-name-livestock
+  group: service
+
+- type: cargoProduct
+  id: LivestockSealPup
+  icon:
+    sprite: _DeadSpace/Mobs/Animals/Seal/pup.rsi
+    state: lilseal_idle
+  product: CrateNPCSealPup
+  cost: 75000
+  category: cargoproduct-category-name-livestock
+  group: service

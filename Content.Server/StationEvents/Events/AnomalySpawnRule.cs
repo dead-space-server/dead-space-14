@@ -25,7 +25,7 @@ public sealed class AnomalySpawnRule : StationEventSystem<AnomalySpawnRuleCompon
     {
         base.Started(uid, component, gameRule, args);
 
-        if (!TryGetRandomStation(out var chosenStation))
+        if (!TryGetRandomStation(out var chosenStation, rule: uid)) // DS14
             return;
 
         if (!TryComp<StationDataComponent>(chosenStation, out var stationData))

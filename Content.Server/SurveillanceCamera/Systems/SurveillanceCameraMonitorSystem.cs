@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.DeadSpace.CameraArchives; //DS-14
 using Content.Server.DeviceNetwork;
 using Content.Server.DeviceNetwork.Systems;
 using Content.Server.Power.Components;
@@ -6,6 +7,7 @@ using Content.Shared.DeviceNetwork;
 using Content.Shared.DeviceNetwork.Events;
 using Content.Shared.Power;
 using Content.Shared.UserInterface;
+using Content.Shared.DeadSpace.CameraArchives; //DS-14
 using Content.Shared.SurveillanceCamera;
 using Robust.Server.GameObjects;
 using Robust.Shared.Player;
@@ -14,6 +16,7 @@ namespace Content.Server.SurveillanceCamera;
 
 public sealed class SurveillanceCameraMonitorSystem : EntitySystem
 {
+    [Dependency] private readonly CameraArchiveConsoleSystem _archive = default!; //DS-14
     [Dependency] private readonly SurveillanceCameraSystem _surveillanceCameras = default!;
     [Dependency] private readonly UserInterfaceSystem _userInterface = default!;
     [Dependency] private readonly DeviceNetworkSystem _deviceNetworkSystem = default!;
@@ -33,6 +36,11 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
             subs.Event<SurveillanceCameraDisconnectMessage>(OnDisconnectMessage);
             subs.Event<SurveillanceCameraMonitorSubnetRequestMessage>(OnSubnetRequest);
             subs.Event<SurveillanceCameraMonitorSwitchMessage>(OnSwitchMessage);
+            //DS-14 start
+            subs.Event<SurveillanceCameraArchiveOpenMessage>(OnArchiveOpen);
+            subs.Event<SurveillanceCameraArchivePickMessage>(OnArchivePick);
+            subs.Event<CameraArchivePrintMessage>(OnArchivePrint);
+            //DS-14 end
             subs.Event<BoundUIClosedEvent>(OnBoundUiClose);
         });
     }
@@ -179,6 +187,29 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
     {
         RefreshSubnets(uid, component);
     }
+
+    //DS-14 start
+    private void OnArchiveOpen(EntityUid uid, SurveillanceCameraMonitorComponent component, SurveillanceCameraArchiveOpenMessage message)
+    {
+        if (!HasComp<CameraArchiveConsoleComponent>(uid))
+            return;
+
+        _userInterface.ServerSendUiMessage(uid, SurveillanceCameraMonitorUiKey.Key, _archive.Browse(default, -1));
+    }
+
+    private void OnArchivePick(EntityUid uid, SurveillanceCameraMonitorComponent component, SurveillanceCameraArchivePickMessage message)
+    {
+        if (!HasComp<CameraArchiveConsoleComponent>(uid))
+            return;
+
+        _userInterface.ServerSendUiMessage(uid, SurveillanceCameraMonitorUiKey.Key, _archive.Browse(message.Camera, message.FrameIndex));
+    }
+
+    private void OnArchivePrint(EntityUid uid, SurveillanceCameraMonitorComponent component, CameraArchivePrintMessage message)
+    {
+        _archive.AcceptPrint(uid, message);
+    }
+    //DS-14 end
 
     private void OnSwitchMessage(EntityUid uid, SurveillanceCameraMonitorComponent component, SurveillanceCameraMonitorSwitchMessage message)
     {

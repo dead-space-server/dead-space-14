@@ -60,7 +60,7 @@
   - type: HitscanBasicDamage
     damage:
       types:
-        Piercing: 15
+        Piercing: 13
         Blunt: 4
   - type: StaminaDamageOnCollide
     damage: 15
@@ -181,9 +181,9 @@
   - type: HitscanBasicDamage
     damage:
       types:
-       Piercing: 14
+       Piercing: 10
        Slash: 2
-       Caustic: 4
+       Caustic: 6
 
 ## Катридж VSK
 - type: entity

@@ -18,9 +18,19 @@
   - type: NameIdentifier
     group: null
   - type: IdBind
+  - type: AutoImplant
+    implants:
+    - MindShieldImplant
   - type: Loadout
     prototypes:
       - CentComAvavaGear
+  - type: Language
+    knownLanguages:
+    - GeneralLanguage
+    cantSpeakLanguages:
+    - GeneralLanguage
+    unlockLanguagesAfterMakeSentient:
+    - GeneralLanguage
 
 - type: entity
   name: спавнер Авава ЦентКомович

@@ -22,6 +22,7 @@
   - AllAccess
   access:
   - CentralCommand
+  - BlueShield
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant, TrackingImplant, DeathRattleImplantCentcomm ]
@@ -201,9 +202,10 @@
   - AllAccess
   access:
   - CentralCommand
+  - BlueShield
   special:
   - !type:AddImplantSpecial
-    implants: [ MindShieldImplant, TrackingImplant, DeathRattleImplantCentcomm ]
+    implants: [ MindShieldImplant, TrackingImplant, DeathRattleImplantCentcomm, RadioImplantSOC, RezervImplant ]
   - !type:AddComponentSpecial
     components:
     - type: AntagImmune
@@ -260,6 +262,7 @@
     eyes: ClothingEyesHudERTGamma
     ears: ClothingHeadsetAltCentCom
     gloves: ClothingHandsGlovesCombat
+    suitstorage: JetpackVoidFilled
     shoes: ADTClothingShoesBootsMagERT
     id: RedSwordOfficerPDA
     pocket1: FlashlightSeclite
@@ -269,11 +272,14 @@
     back:
     - BoxCardboardERTGamma
     - ERTloadoutGammaPrimary
+    - ERTloadoutGammaSecondary
+    - ERTloadoutMelee
     - BSAACombatKitFilled
-    - PinpointerNuclear
     - InjectorCaseERTFilled
+    - PinpointerNuclear
     - TelescopicShield
-    - TelescopicShield
+    - BodyBagFolded
+    - DefibrillatorCompact
 
 - type: chameleonOutfit
   id: CentcomRedSwordGearChameleonOutfit

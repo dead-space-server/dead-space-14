@@ -1,0 +1,14 @@
+admin-global-sound-title = Global music controls
+admin-global-sound-nothing-playing = No global music is playing
+admin-global-sound-playing = Now playing: { $track }
+admin-global-sound-volume = Volume:
+admin-global-sound-ckey = CKey (blank for everyone):
+admin-global-sound-play = Play
+admin-global-sound-pause = Pause
+admin-global-sound-resume = Resume
+admin-global-sound-fade-out = Fade out
+admin-global-sound-no-selection = Select an OGG file
+admin-global-sound-invalid-volume = Enter a volume from -24 to 12.
+admin-global-sound-invalid-directory = Could not open this folder.
+admin-global-sound-invalid-file = Select an OGG file from the list.
+admin-global-sound-player-not-found = Connected player with CKey "{ $ckey }" was not found.

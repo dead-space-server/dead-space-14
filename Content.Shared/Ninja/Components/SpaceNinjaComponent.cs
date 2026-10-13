@@ -54,4 +54,8 @@ public sealed partial class SpaceNinjaComponent : Component
     /// </summary>
     [DataField]
     public ProtoId<AlertPrototype> SuitPowerAlert = "SuitPower";
+
+    // DS14
+    [DataField, AutoNetworkedField]
+    public int RevealThreshold = 5;
 }

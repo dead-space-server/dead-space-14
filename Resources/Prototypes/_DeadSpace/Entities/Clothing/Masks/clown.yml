@@ -1,0 +1,32 @@
+# Маски клоуна (DS14). Спрайты: _DeadSpace/Clothing/Mask
+- type: entity
+  parent: ClothingMaskClownBase
+  id: ClothingMaskClownDark
+  name: тёмная маска клоуна
+  description: Тёмная клоунская маска с рыжим париком. Хонк!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Mask/clown_dark.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Mask/clown_dark.rsi
+  - type: Tag
+    tags:
+    - ClownMask
+    - HamsterWearable
+    - WhitelistChameleon
+
+- type: entity
+  parent: ClothingMaskClownBase
+  id: ClothingMaskClownOrange
+  name: оранжевая маска клоуна
+  description: Классическая клоунская маска с оранжевым париком. Хонк!
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Mask/clown_orange.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Mask/clown_orange.rsi
+  - type: Tag
+    tags:
+    - ClownMask
+    - HamsterWearable
+    - WhitelistChameleon

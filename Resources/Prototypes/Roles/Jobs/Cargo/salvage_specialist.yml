@@ -23,13 +23,6 @@
   wageDepartment: Cargo
   wage: 120 # DS14-value
   #end-backmen: currency
-  special:
-  - !type:AddComponentSpecial
-    components:
-      # DS14-Start
-      - type: Skill
-        group: SalvageControl
-      # DS14-End
 
 - type: startingGear
   id: SalvageSpecialistGear

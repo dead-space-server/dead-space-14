@@ -40,8 +40,6 @@
     - type: NpcFactionMember
       factions:
       - Taipan
-    - type: Skill
-      group: ALL
 
 - type: startingGear
   id: TaipanResearchDirectorGear

@@ -5,6 +5,8 @@ using Content.Server.Administration.Logs;
 using Content.Server.Backmen.Economy.Wage;
 using Content.Server.Popups;
 using Content.Shared.Access.Systems;
+using Content.Shared.Administration;
+using Content.Shared.Backmen.Economy;
 using Content.Shared.Backmen.Economy.WageConsole;
 using Content.Shared.Database;
 using Content.Shared.Popups;
@@ -64,11 +66,14 @@ public sealed class WageConsoleSystem : SharedWageConsoleSystem
             return;
         }
 
-        var id = args.Id;
-        var wagePayout = _wageManager.PayoutsList.FirstOrDefault(x => x.Id == id);
-
-        if (wagePayout == null)
+        if (args.Id == null || !_wageManager.TryGetPayout(args.Id.Value, out var wagePayout))
         {
+            return;
+        }
+
+        if (args.Wage <= 0)
+        {
+            _popup.PopupCursor(Loc.GetString("wageconsole-invalid-amount"), args.Actor, PopupType.Medium);
             return;
         }
 
@@ -81,31 +86,20 @@ public sealed class WageConsoleSystem : SharedWageConsoleSystem
             Value = args.Wage,
             WhiteListTo = { wagePayout.ToAccountNumber }
         });
+
+        UpdateUserInterface(ent);
     }
 
     private void OnOpenBonusRow(Entity<WageConsoleComponent> ent, ref OpenBonusWageMsg args)
     {
-        var id = args.Id;
-        var wagePayout = _wageManager.PayoutsList.FirstOrDefault(x => x.Id == id);
-
-        if (wagePayout == null)
+        if (args.Id == null || !_wageManager.TryGetPayout(args.Id.Value, out var wagePayout))
         {
             return;
         }
 
         _ui.SetUiState(ent.Owner, WageUiKey.Key, new OpenBonusWageConsoleUi
         {
-            Row = new UpdateWageRow
-            {
-                Id = wagePayout.Id,
-                FromId = GetNetEntity(wagePayout.FromAccountNumber),
-                FromName = Name(wagePayout.FromAccountNumber),
-                FromAccount = wagePayout.FromAccountNumber.Comp.AccountNumber,
-                ToId = GetNetEntity(wagePayout.ToAccountNumber),
-                ToName = Name(wagePayout.ToAccountNumber),
-                ToAccount = wagePayout.ToAccountNumber.Comp.AccountNumber,
-                Wage = wagePayout.PayoutAmount,
-            }
+            Row = BuildRow(wagePayout)
         });
     }
 
@@ -122,11 +116,14 @@ public sealed class WageConsoleSystem : SharedWageConsoleSystem
             return;
         }
 
-        var id = args.Id;
-        var wagePayout = _wageManager.PayoutsList.FirstOrDefault(x => x.Id == id);
-
-        if (wagePayout == null)
+        if (args.Id == null || !_wageManager.TryGetPayout(args.Id.Value, out var wagePayout))
         {
+            return;
+        }
+
+        if (args.Wage < 0)
+        {
+            _popup.PopupCursor(Loc.GetString("wageconsole-invalid-amount"), args.Actor, PopupType.Medium);
             return;
         }
 
@@ -139,31 +136,18 @@ public sealed class WageConsoleSystem : SharedWageConsoleSystem
 
     private void OnOpenWageRow(Entity<WageConsoleComponent> ent, ref OpenWageRowMsg args)
     {
-        var id = args.Id;
-        var wagePayout = _wageManager.PayoutsList.FirstOrDefault(x => x.Id == id);
-
-        if (wagePayout == null)
+        if (args.Id == null || !_wageManager.TryGetPayout(args.Id.Value, out var wagePayout))
         {
             return;
         }
 
-        if(!TryComp(wagePayout.FromAccountNumber, out MetaDataComponent? mdFrom) ||
-           !TryComp(wagePayout.ToAccountNumber, out MetaDataComponent? mdTp))
+        var row = BuildRow(wagePayout);
+        if (row == null)
             return;
 
         _ui.SetUiState(ent.Owner, WageUiKey.Key, new OpenEditWageConsoleUi
         {
-            Row = new UpdateWageRow
-            {
-                Id = wagePayout.Id,
-                FromId = GetNetEntity(wagePayout.FromAccountNumber, mdFrom),
-                FromName = Name(wagePayout.FromAccountNumber, mdFrom),
-                FromAccount = wagePayout.FromAccountNumber.Comp.AccountNumber,
-                ToId = GetNetEntity(wagePayout.ToAccountNumber, mdTp),
-                ToName = Name(wagePayout.ToAccountNumber, mdTp),
-                ToAccount = wagePayout.ToAccountNumber.Comp.AccountNumber,
-                Wage = wagePayout.PayoutAmount,
-            }
+            Row = row
         });
     }
 
@@ -172,27 +156,55 @@ public sealed class WageConsoleSystem : SharedWageConsoleSystem
         UpdateUserInterface(ent);
     }
 
+    private string GetAccountName(Entity<BankAccountComponent> account)
+    {
+        if (_wageManager.DepartmentNames.TryGetValue(account.Owner, out var department))
+            return department.Name;
+
+        if (!string.IsNullOrEmpty(account.Comp.AccountName))
+            return account.Comp.AccountName;
+
+        if (HasComp<MetaDataComponent>(account.Owner))
+            return MetaData(account.Owner).EntityName;
+
+        return account.Comp.AccountNumber;
+    }
+
+    private UpdateWageRow? BuildRow(WagePaydayPayout wagePayout)
+    {
+        if (!TryComp(wagePayout.FromAccountNumber, out MetaDataComponent? mdFrom) ||
+           !TryComp(wagePayout.ToAccountNumber, out MetaDataComponent? mdTp))
+            return null;
+
+        return new UpdateWageRow
+        {
+            Id = wagePayout.Id,
+
+            FromId = GetNetEntity(wagePayout.FromAccountNumber, mdFrom),
+            FromName = GetAccountName(wagePayout.FromAccountNumber),
+            FromAccount = wagePayout.FromAccountNumber.Comp.AccountNumber,
+            FromBalance = wagePayout.FromAccountNumber.Comp.Balance,
+
+            ToId = GetNetEntity(wagePayout.ToAccountNumber, mdTp),
+            ToName = GetAccountName(wagePayout.ToAccountNumber),
+            ToAccount = wagePayout.ToAccountNumber.Comp.AccountNumber,
+            ToBalance = wagePayout.ToAccountNumber.Comp.Balance,
+
+            Wage = wagePayout.PayoutAmount,
+        };
+    }
+
     private void UpdateUserInterface(Entity<WageConsoleComponent> ent)
     {
         var msg = new UpdateWageConsoleUi();
 
-        foreach (var wagePayout in _wageManager.PayoutsList)
-        {
-            if(!TryComp(wagePayout.FromAccountNumber, out MetaDataComponent? mdFrom) ||
-               !TryComp(wagePayout.ToAccountNumber, out MetaDataComponent? mdTp))
-                continue;
-            msg.Records.Add(new UpdateWageRow
-            {
-                Id = wagePayout.Id,
+        _wageManager.PruneInvalidPayouts();
 
-                FromId = GetNetEntity(wagePayout.FromAccountNumber, mdFrom),
-                FromName = Name(wagePayout.FromAccountNumber,mdFrom),
-                FromAccount = wagePayout.FromAccountNumber.Comp.AccountNumber,
-                ToId = GetNetEntity(wagePayout.ToAccountNumber, mdTp),
-                ToName = Name(wagePayout.ToAccountNumber,mdTp),
-                ToAccount = wagePayout.ToAccountNumber.Comp.AccountNumber,
-                Wage = wagePayout.PayoutAmount,
-            });
+        foreach (var wagePayout in _wageManager.PayoutsList.Values)
+        {
+            var row = BuildRow(wagePayout);
+            if (row != null)
+                msg.Records.Add(row);
         }
 
         _ui.SetUiState(ent.Owner, WageUiKey.Key, msg);

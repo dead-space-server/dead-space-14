@@ -126,3 +126,14 @@
   - type: ClothingSpeedModifier
     walkModifier: 1.15
     sprintModifier: 1.15
+
+- type: entity
+  parent: ClothingShoesBaseButcherable
+  id: ClothingBootsSamurai
+  name: сапоги самурая
+  description: Пара потрёпаных временем, тем не менее, стильных.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Shoes/Boots/samurai_boots.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Shoes/Boots/samurai_boots.rsi

@@ -1,0 +1,12 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "taken from tgstation at commit https://github.com/tgstation/tgstation/commit/db963ad418e63bbbed7a00541acd8160cbff966f",
+    "size": { "x": 32, "y": 32 },
+    "states": [
+        {
+            "name": "icon",
+            "delays": [[1.0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]]
+        }
+    ]
+}

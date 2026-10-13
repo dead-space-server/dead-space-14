@@ -440,6 +440,9 @@
       - DoorRemote
       - Whistle
       - BalloonPopper
+      - Ensnaring # DS14
+      - SwitchableWeapon # DS 14
+      - Blocking # DS 14
   - type: ItemMapper
     sprite: *BeltOverlay
     mapLayers:
