@@ -392,3 +392,23 @@
     - id: ClothingUniformdeFOA
     - id: ClothingNeckCapedeFOA
     - id: HolofanProjectorIrisReda
+    - id: ClothingOuterCoatunemotional
+
+# Coat
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterCoatunemotional
+  name: Халат компании "deFo"
+  description: Изготовлено на заказ компанией "deFo".
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/unemotional/arcadia_trench.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/unemotional/arcadia_trench.rsi
+  - type: Item
+    size: Normal
+    shape:
+    - 0,0,1,1
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
