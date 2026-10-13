@@ -387,6 +387,7 @@
     - SecurityBorgModulesTierTwo # DS14
     - SecurityBorgModulesTierThree # DS14
     - StunBola # DS14
+    - SecurityHolographicMatrix # DS14
   - type: EmagLatheRecipes
     emagStaticPacks:
     - SyndicateAmmoStatic

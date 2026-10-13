@@ -74,3 +74,4 @@ research-technology-defibrillator-syndicate = Дефибриллятор Син�
 research-technology-photon-laser-weaponry = Фотонный арсенал
 research-technology-compact-defibrillator = Компактный дефибриллятор
 research-technology-holding-bags = Объёмное хранилище
+research-technology-fieldprojectorsec = Сотовый блокиратор

@@ -146,6 +146,18 @@
   - StorageModuleSecurity
   - SpeedModifierModuleSecurity
 
+- type: technology
+  id: HolographicMatrixProjector
+  name: research-technology-fieldprojectorsec
+  icon:
+    sprite: _DeadSpace/Objects/Devices/Holoprojectors/bullet_blocker_projector.rsi
+    state: icon
+  discipline: Arsenal
+  tier: 2
+  cost: 10000
+  recipeUnlocks:
+  - FieldprojectorSecurity
+
 # Tier 3
 
 # Удалённые ветки оставлены здесь для истории. Их рецепты перенесены в профильные исследования.
