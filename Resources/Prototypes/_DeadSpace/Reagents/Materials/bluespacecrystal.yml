@@ -5,7 +5,7 @@
   unit: materials-unit-piece
   icon: { sprite: /Textures/_DeadSpace/Objects/Materials/bluespace-crystal-ore.rsi, state: bluespace_crystal_ore }
   color: "#3db1ff"
-  price: 2.5
+  price: 0.8
 
 - type: material
   id: BluespaceCrystal
@@ -13,4 +13,4 @@
   name: очищенный блюспейс кристалл
   icon: { sprite: /Textures/_DeadSpace/Objects/Materials/Sheets/bluespace-crystal-sheet.rsi, state: synthetic_bluespace_crystal }
   color: "#1ea4c5"
-  price: 10
+  price: 3.5
