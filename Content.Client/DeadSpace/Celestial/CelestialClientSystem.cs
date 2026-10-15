@@ -95,7 +95,7 @@ public sealed class CelestialClientSystem : EntitySystem
 
     private void OnSpeak(CelestialSpeakEvent ev, EntitySessionEventArgs args)
     {
-        _subtitles?.Show(ev.Text, ev.Duration);
+        _subtitles?.Show(ev.Text, ev.Duration, ev.Style);
     }
 
     private void OnBeam(CelestialBeamVisualEvent ev)

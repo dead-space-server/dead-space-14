@@ -388,9 +388,15 @@ public sealed class CelestialSystem : EntitySystem
         _globalSound.PlayAnnonceGlobal(filter, _audio.ResolveSound(sound), audioParams);
     }
 
-    private void Speak(string text, float duration)
+    private void Speak(string text, float duration, int style = 0)
     {
-        RaiseNetworkEvent(new CelestialSpeakEvent(text, duration));
+        RaiseNetworkEvent(new CelestialSpeakEvent(text, duration, style));
+    }
+
+    /// <summary>Фраза в палитре смерти: клиент сам рисует белые блоки и играет Celestial_Talk_5.</summary>
+    private void SpeakDeath(string text, float duration)
+    {
+        RaiseNetworkEvent(new CelestialDeathSpeakEvent(text, duration));
     }
 
     /// <summary>События босса: глобально или только на его карте.</summary>
@@ -428,13 +434,36 @@ public sealed class CelestialSystem : EntitySystem
         }
     }
 
-    /// <summary>Публичный показ субтитров со звуком (для консольной команды).</summary>
-    public void SpeakGlobal(string text, float duration)
+    /// <summary>
+    /// Публичный показ субтитров со звуком (для консольной команды).
+    /// </summary>
+    /// <param name="mode">
+    /// 0 - обычный розовый текст и звук Celestial_Talk_1..3;
+    /// 1 - обычный текст и звук Celestial_Talk_6..8;
+    /// 2 - палитра смерти (белые блоки/чёрные буквы) и Celestial_Talk_5, как в катсцене killcelestial;
+    /// 3 - красные буквы и звук Level100Start_Final.
+    /// </param>
+    public void SpeakGlobal(string text, float duration, int mode = 0)
     {
-        if (_talkSounds.Count > 0)
-            _globalSound.PlayAnnonceGlobal(Filter.Broadcast(), _audio.ResolveSound(_talkSounds[_random.Next(_talkSounds.Count)]),
+        var clamped = Math.Clamp(mode, 0, 3);
+
+        // режим 2 - это штатное событие смерти: клиент сам рисует палитру смерти
+        // и сам проигрывает Celestial_Talk_5, поэтому серверный звук тут не нужен
+        if (clamped == 2)
+        {
+            SpeakDeath(text, duration);
+            return;
+        }
+
+        var sounds = clamped == 1 ? _talk6Sounds : clamped == 3 ? _specialSounds : _talkSounds;
+        if (sounds.Count > 0)
+        {
+            _globalSound.PlayAnnonceGlobal(Filter.Broadcast(),
+                _audio.ResolveSound(_random.Pick(sounds)),
                 new AudioParams { Volume = -8f });
-        Speak(text, duration);
+        }
+
+        Speak(text, duration, clamped == 3 ? 3 : 0);
     }
 
     private readonly List<SoundSpecifier> _talkSounds = new()
@@ -442,6 +471,18 @@ public sealed class CelestialSystem : EntitySystem
         new SoundPathSpecifier("/Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Celestial_Talk_1.ogg"),
         new SoundPathSpecifier("/Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Celestial_Talk_2.ogg"),
         new SoundPathSpecifier("/Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Celestial_Talk_3.ogg"),
+    };
+
+    private readonly List<SoundSpecifier> _talk6Sounds = new()
+    {
+        new SoundPathSpecifier("/Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Celestial_Talk_6.ogg"),
+        new SoundPathSpecifier("/Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Celestial_Talk_7.ogg"),
+        new SoundPathSpecifier("/Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Celestial_Talk_8.ogg"),
+    };
+
+    private readonly List<SoundSpecifier> _specialSounds = new()
+    {
+        new SoundPathSpecifier("/Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Level100Start_Final.ogg"),
     };
 
     private void SpeakVoice(Entity<CelestialComponent> ent, float volume)
@@ -1321,36 +1362,49 @@ public sealed class CelestialSystem : EntitySystem
                 }
             }
 
-            // cutter только на нескольких игроков
-            var cutterTargets = GetTargets(ent, comp.CutterTargets);
-            foreach (var target in cutterTargets)
+            // cutter + кружки повторяются CutterRepeats раз, как и в остальных атаках
+            for (var r = 0; r < comp.CutterRepeats; r++)
             {
-                if (TerminatingOrDeleted(target))
-                    continue;
-                RunCutter(ent, comp, target);
-            }
-
-            // кружки, чернеющие синхронно с Cutter
-            for (var i = 0; i < comp.FreezeCircleCount; i++)
-            {
-                var angle = _random.NextFloat(0f, MathF.Tau);
-                var dist = _random.NextFloat(5f, 38f);
-                var pos = bossPos.Position + new Vector2(MathF.Cos(angle) * dist, MathF.Sin(angle) * dist);
-                var circle = Spawn("CelestialCircle", new MapCoordinates(pos, bossPos.MapId));
-                if (TryComp<CelestialCircleComponent>(circle, out var circleComp))
+                var final = r == comp.CutterRepeats - 1;
+                Timer.Spawn(TimeSpan.FromSeconds(r * comp.CutterRepeatDelay), () =>
                 {
-                    circleComp.Radius = _random.NextFloat(1.5f, 2.8f);
-                    circleComp.DamageRadiusScale = comp.CircleDamageRadiusScale;
-                    var dirAngle = _random.NextFloat(0f, MathF.Tau);
-                    circleComp.WanderDir = new Vector2(MathF.Cos(dirAngle), MathF.Sin(dirAngle));
-                    circleComp.WanderTime = comp.CutterRotateTime; // чернеют одновременно со вспышкой Cutter
-                    Dirty(circle, circleComp);
-                }
+                    if (TerminatingOrDeleted(ent))
+                        return;
+
+                    // cutter только на нескольких игроков
+                    var cutterTargets = GetTargets(ent, comp.CutterTargets);
+                    foreach (var target in cutterTargets)
+                    {
+                        if (TerminatingOrDeleted(target))
+                            continue;
+                        RunCutter(ent, comp, target, final);
+                    }
+
+                    // кружки, чернеющие синхронно с этим Cutter
+                    for (var i = 0; i < comp.FreezeCircleCount; i++)
+                    {
+                        var angle = _random.NextFloat(0f, MathF.Tau);
+                        var dist = _random.NextFloat(5f, 38f);
+                        var pos = bossPos.Position + new Vector2(MathF.Cos(angle) * dist, MathF.Sin(angle) * dist);
+                        var circle = Spawn("CelestialCircle", new MapCoordinates(pos, bossPos.MapId));
+                        if (TryComp<CelestialCircleComponent>(circle, out var circleComp))
+                        {
+                            circleComp.Radius = _random.NextFloat(1.5f, 2.8f);
+                            circleComp.DamageRadiusScale = comp.CircleDamageRadiusScale;
+                            var dirAngle = _random.NextFloat(0f, MathF.Tau);
+                            circleComp.WanderDir = new Vector2(MathF.Cos(dirAngle), MathF.Sin(dirAngle));
+                            circleComp.WanderTime = comp.CutterRotateTime; // чернеют одновременно со вспышкой Cutter
+                            Dirty(circle, circleComp);
+                        }
+                    }
+                });
             }
         });
 
-        // атака заканчивается после одновременного взрыва
-        Timer.Spawn(TimeSpan.FromSeconds(2f + comp.CutterRotateTime + 0.4f), () =>
+        // атака заканчивается после последнего повтора
+        var freezeEnd = 2f + MathF.Max(0, comp.CutterRepeats - 1) * comp.CutterRepeatDelay
+            + comp.CutterRotateTime + 0.4f;
+        Timer.Spawn(TimeSpan.FromSeconds(freezeEnd), () =>
         {
             if (TerminatingOrDeleted(ent))
                 return;
