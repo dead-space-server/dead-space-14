@@ -130,6 +130,46 @@
     - HideContextMenu
 
 - type: entity
+  id: NecropolisDrakeStatue
+  name: статуя дракона
+  description: Высокая базальтовая скульптура гордого и величественного дракона. Его глаза — шесть светящихся самоцветов.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Structures/Necropolis/drake_statue.rsi
+    state: drake_statue
+    offset: 0,0.5
+    noRot: true
+  - type: Clickable
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        density: 1000
+        mask:
+        - MachineMask
+        layer:
+        - WallLayer
+
+- type: entity
+  parent: NecropolisDrakeStatue
+  id: NecropolisDrakeStatueFalling
+  name: разрушающаяся статуя дракона
+  description: Высокая базальтовая скульптура дракона. По её поверхности бегут трещины, а часть уже отвалилась.
+  components:
+  - type: Sprite
+    state: drake_statue_falling
+
+- type: entity
   id: WallNecropolisLavaland
   name: стена некрополя
   description: С виду непробиваемая стена.

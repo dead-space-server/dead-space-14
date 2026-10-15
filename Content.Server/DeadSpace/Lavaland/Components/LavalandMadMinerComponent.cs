@@ -17,6 +17,18 @@ public sealed partial class LavalandMadMinerComponent : Component
     [DataField] public float NoticeRange = 7f;
     [DataField] public float ChaseRange = 160f;
     [DataField] public float BlinkDistance = 4.5f;
+
+    /// <summary>
+    /// Farther than this from the target the miner does not walk there (no long paths through rock): he jumps closer.
+    /// Keep it below the AI vision radius so the AI takes over after the jump.
+    /// </summary>
+    [DataField] public float CatchUpDistance = 20f;
+
+    /// <summary>How far from the target the catch-up jump lands.</summary>
+    [DataField] public float CatchUpLanding = 7f;
+
+    [DataField] public TimeSpan CatchUpCooldown = TimeSpan.FromSeconds(4);
+    public TimeSpan NextCatchUp;
     [DataField] public TimeSpan BlinkCooldown = TimeSpan.FromSeconds(1.25);
     [DataField] public TimeSpan BlinkDuration = TimeSpan.FromSeconds(0.45);
     [DataField] public TimeSpan BlinkStallTimeout = TimeSpan.FromSeconds(0.15);

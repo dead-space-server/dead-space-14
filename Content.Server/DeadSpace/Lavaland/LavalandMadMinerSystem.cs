@@ -6,6 +6,7 @@ using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Server.DeadSpace.Blink;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Server.NPC.HTN;
+using Content.Server.Tiles;
 using Content.Shared.Chasm;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -55,6 +56,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
@@ -120,6 +122,14 @@ public sealed class LavalandMadMinerSystem : EntitySystem
             var from = _transform.GetWorldPosition(xform);
             var to = _transform.GetWorldPosition(target);
             var distance = Vector2.Distance(from, to);
+
+            if (distance > miner.CatchUpDistance)
+            {
+                if (now >= miner.NextCatchUp)
+                    CatchUp(uid, miner, target, now);
+                SendHud(uid, miner);
+                continue;
+            }
 
             if (distance > miner.BlinkDistance && now >= miner.NextBlink)
                 BlinkBehind(uid, miner, target, now);
@@ -286,6 +296,56 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         var speed = Math.Max(28f, distance / Math.Max(0.05f, (float) miner.BlinkDuration.TotalSeconds));
         if (_blink.TryStartDash(uid, destination, speed, miner.BlinkDuration, miner.BlinkStallTimeout, miner.BlinkSound))
             miner.NextBlink = now + miner.BlinkCooldown;
+    }
+
+    /// <summary>A far target: jump onto open ground a few tiles from it instead of pathing across the map.</summary>
+    private void CatchUp(EntityUid uid, LavalandMadMinerComponent miner, EntityUid target, TimeSpan now)
+    {
+        miner.NextCatchUp = now + miner.CatchUpCooldown;
+        var targetCoordinates = _transform.GetMapCoordinates(target);
+        var away = _transform.GetWorldPosition(uid) - targetCoordinates.Position;
+        if (away.LengthSquared() < 0.01f)
+            return;
+        away = Vector2.Normalize(away);
+
+        for (var landing = miner.CatchUpLanding; landing >= 2f; landing -= 1f)
+        {
+            var destination = targetCoordinates.Offset(away * landing);
+            if (!IsOpenGround(destination))
+                continue;
+
+            if (miner.BlinkSound != null)
+                _audio.PlayPvs(miner.BlinkSound, uid);
+            _transform.SetMapCoordinates(uid, destination);
+            if (miner.BlinkSound != null)
+                _audio.PlayPvs(miner.BlinkSound, uid);
+            miner.NextBlink = now + miner.BlinkCooldown;
+            return;
+        }
+    }
+
+    private bool IsOpenGround(MapCoordinates coordinates)
+    {
+        if (!_mapManager.TryFindGridAt(coordinates, out var gridUid, out var grid))
+            return false;
+
+        var tile = _map.TileIndicesFor(gridUid, grid, coordinates);
+        if (!_map.TryGetTileRef(gridUid, grid, tile, out var tileRef) || tileRef.Tile.IsEmpty)
+            return false;
+
+        var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
+        while (anchored.MoveNext(out var entity))
+        {
+            if (entity is not { } blocker)
+                continue;
+            if (HasComp<ChasmComponent>(blocker) || HasComp<TileEntityEffectComponent>(blocker) ||
+                TryComp<PhysicsComponent>(blocker, out var body) && body.CanCollide && body.Hard)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private void Feint(EntityUid uid, LavalandMadMinerComponent miner, EntityUid target, TimeSpan now)

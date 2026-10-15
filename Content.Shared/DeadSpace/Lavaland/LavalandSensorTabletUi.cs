@@ -43,9 +43,16 @@ public sealed class LavalandRadarPoint(Vector2 position, Color color, float size
 }
 
 [Serializable, NetSerializable]
-public sealed class LavalandSensorTabletState(List<LavalandRadarPoint> points, float scanRadius)
+public sealed class LavalandSensorTabletState(
+    List<LavalandRadarPoint> points,
+    float scanRadius,
+    List<LavalandRadarPoint>? basePoints = null)
     : BoundUserInterfaceState
 {
+    /// <summary>What moves or changes: miners, fauna, terrain around miners, beacons.</summary>
     public List<LavalandRadarPoint> Points = points;
     public float ScanRadius = scanRadius;
+
+    /// <summary>The outpost plan. Null when it has not changed since the last state: the client keeps its copy.</summary>
+    public List<LavalandRadarPoint>? BasePoints = basePoints;
 }

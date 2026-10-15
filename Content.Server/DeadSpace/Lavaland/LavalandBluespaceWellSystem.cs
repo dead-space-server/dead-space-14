@@ -11,6 +11,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Timing;
 using Robust.Shared.Audio.Systems;
 using Content.Shared.DeadSpace.Lavaland;
+using Content.Shared.DeadSpace.Lavaland.Components;
 using Robust.Shared.Map;
 
 namespace Content.Server.DeadSpace.Lavaland;
@@ -235,7 +236,7 @@ public sealed class LavalandBluespaceWellSystem : EntitySystem
     }
 
     /// <summary>
-    /// One pass over all stacks for every well: loose ore left on a lavaland map long enough is pulled into a well there.
+    /// One pass over the ore for every well: loose ore left on a lavaland map long enough is pulled into a well there.
     /// </summary>
     private void ScanGroundOre(TimeSpan now)
     {
@@ -265,8 +266,9 @@ public sealed class LavalandBluespaceWellSystem : EntitySystem
         }
 
         _seenOre.Clear();
-        var ores = EntityQueryEnumerator<StackComponent, TransformComponent>();
-        while (ores.MoveNext(out var ore, out var stack, out var oreTransform))
+        // Only marked ore, not every stack on the station.
+        var ores = EntityQueryEnumerator<LavalandWellOreComponent, StackComponent, TransformComponent>();
+        while (ores.MoveNext(out var ore, out _, out var stack, out var oreTransform))
         {
             if (oreTransform.MapUid is not { } map ||
                 !_wellsByMap.TryGetValue(map, out var mapWells) || mapWells.Count == 0 ||

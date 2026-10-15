@@ -16,6 +16,9 @@
     collectionDelay: 60
     returnDelay: 60
     oreTypes: [SteelOre, Coal, GoldOre, SilverOre, PlasmaOre, SpaceQuartz, UraniumOre, BananiumOre, DiamondOre, SaltOre, MagmiteOre, BluespaceCrystalOre]
+  - type: ContainerContainer
+    containers:
+      lavaland-well-ore: !type:Container
   - type: Damageable
     damageContainer: StructuralInorganic
     damageModifierSet: Metallic

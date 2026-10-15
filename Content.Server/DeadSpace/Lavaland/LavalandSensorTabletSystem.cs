@@ -41,9 +41,11 @@ public sealed class LavalandSensorTabletSystem : EntitySystem
 
     private static readonly TimeSpan BaseCacheLifetime = TimeSpan.FromSeconds(30);
 
-    // The outpost barely changes, so its tiles are rescanned rarely instead of on every UI update.
+    // The outpost barely changes: its tiles are rescanned rarely and sent only when the plan actually differs.
     private readonly List<LavalandRadarPoint> _baseCache = new();
     private TimeSpan _baseCacheExpires;
+    private int _baseVersion;
+    private int _baseSignature;
 
     public override void Initialize()
     {
@@ -56,6 +58,9 @@ public sealed class LavalandSensorTabletSystem : EntitySystem
 
     private void OnOpened(Entity<LavalandSensorTabletComponent> ent, ref BoundUIOpenedEvent args)
     {
+        // A fresh window has no outpost plan yet; the periodic update must not replace this state in the same tick.
+        ent.Comp.SentBaseVersion = -1;
+        ent.Comp.NextUpdate = _timing.CurTime + ent.Comp.UpdateInterval;
         UpdateUi(ent);
     }
 
@@ -103,7 +108,15 @@ public sealed class LavalandSensorTabletSystem : EntitySystem
 
     private void UpdateUi(Entity<LavalandSensorTabletComponent> ent)
     {
-        var points = new List<LavalandRadarPoint>(GetBasePoints(ent.Comp));
+        var basePoints = GetBasePoints(ent.Comp);
+        List<LavalandRadarPoint>? sentBase = null;
+        if (ent.Comp.SentBaseVersion != _baseVersion)
+        {
+            sentBase = new List<LavalandRadarPoint>(basePoints);
+            ent.Comp.SentBaseVersion = _baseVersion;
+        }
+
+        var points = new List<LavalandRadarPoint>();
         foreach (var (center, radius, color) in _secretBoss.GetNoiseAreas())
         {
             points.Add(new LavalandRadarPoint(center, color, radius, LavalandRadarPointKind.CelestialNoise));
@@ -191,7 +204,7 @@ public sealed class LavalandSensorTabletSystem : EntitySystem
         }
 
         _ui.SetUiState(ent.Owner, LavalandSensorTabletUiKey.Key,
-            new LavalandSensorTabletState(points, ent.Comp.ScanRadius));
+            new LavalandSensorTabletState(points, ent.Comp.ScanRadius, sentBase));
     }
 
     private List<LavalandRadarPoint> GetBasePoints(LavalandSensorTabletComponent tablet)
@@ -225,6 +238,17 @@ public sealed class LavalandSensorTabletSystem : EntitySystem
         // Nothing found yet (outpost still loading): try again on the next update instead of in 30 seconds.
         if (_baseCache.Count == 0)
             _baseCacheExpires = now;
+
+        // Only a changed plan (a wall built or torn down) is sent to the open windows again.
+        var signature = _baseCache.Count;
+        foreach (var point in _baseCache)
+            signature = HashCode.Combine(signature, point.Position, point.Kind);
+        if (signature != _baseSignature)
+        {
+            _baseSignature = signature;
+            _baseVersion++;
+        }
+
         return _baseCache;
     }
 

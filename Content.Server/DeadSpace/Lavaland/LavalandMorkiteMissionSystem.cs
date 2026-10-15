@@ -53,6 +53,11 @@ public sealed class LavalandMorkiteMissionSystem : EntitySystem
     private readonly HashSet<EntityUid> _wellExtractors = new();
     private readonly List<EntityUid> _unpowered = new();
     private readonly Dictionary<EntityUid, LavalandMorkiteExtractorComponent> _pipes = new();
+
+    // Pipes bucketed by map cell, so each fauna checks only the pipes around it, not every pipe.
+    private const float PipeCellSize = 16f;
+    private readonly Dictionary<(MapId Map, Vector2i Cell), List<(EntityUid Pipe, Vector2 Position, LavalandMorkiteExtractorComponent Config)>> _pipeCells = new();
+    private float _maxAttractRange;
     private readonly List<(MapId Map, Vector2 Position)> _playerPositions = new();
 
     public override void Initialize()
@@ -190,6 +195,20 @@ public sealed class LavalandMorkiteMissionSystem : EntitySystem
             }
         }
 
+        foreach (var cell in _pipeCells.Values)
+            cell.Clear();
+        _maxAttractRange = 0f;
+        foreach (var (pipe, config) in _pipes)
+        {
+            var pipeXform = Transform(pipe);
+            var pipePosition = _transform.GetWorldPosition(pipeXform);
+            var key = (pipeXform.MapID, PipeCell(pipePosition));
+            if (!_pipeCells.TryGetValue(key, out var bucket))
+                _pipeCells[key] = bucket = new();
+            bucket.Add((pipe, pipePosition, config));
+            _maxAttractRange = MathF.Max(_maxAttractRange, config.FaunaAttractRange);
+        }
+
         _playerPositions.Clear();
         foreach (var session in _players.Sessions)
         {
@@ -210,19 +229,26 @@ public sealed class LavalandMorkiteMissionSystem : EntitySystem
             EntityUid? target = null;
             LavalandMorkiteExtractorComponent? targetConfig = null;
             var best = float.MaxValue;
-            foreach (var (pipe, config) in _pipes)
+            var cell = PipeCell(position);
+            var reach = (int) MathF.Ceiling(_maxAttractRange / PipeCellSize);
+            for (var dx = -reach; dx <= reach; dx++)
             {
-                var pipeXform = Transform(pipe);
-                if (pipeXform.MapID != xform.MapID)
-                    continue;
+                for (var dy = -reach; dy <= reach; dy++)
+                {
+                    if (!_pipeCells.TryGetValue((xform.MapID, cell + new Vector2i(dx, dy)), out var bucket))
+                        continue;
 
-                var distance = Vector2.DistanceSquared(position, _transform.GetWorldPosition(pipeXform));
-                if (distance > config.FaunaAttractRange * config.FaunaAttractRange || distance >= best)
-                    continue;
+                    foreach (var (pipe, pipePosition, config) in bucket)
+                    {
+                        var distance = Vector2.DistanceSquared(position, pipePosition);
+                        if (distance > config.FaunaAttractRange * config.FaunaAttractRange || distance >= best)
+                            continue;
 
-                best = distance;
-                target = pipe;
-                targetConfig = config;
+                        best = distance;
+                        target = pipe;
+                        targetConfig = config;
+                    }
+                }
             }
 
             if (target is not { } pipeTarget || targetConfig == null || PlayerNear(xform.MapID, position, targetConfig.FaunaPlayerAggroRange))
@@ -246,6 +272,11 @@ public sealed class LavalandMorkiteMissionSystem : EntitySystem
             saboteur.NextBite = now + targetConfig.FaunaBiteInterval;
             _damageable.TryChangeDamage(pipeTarget, targetConfig.FaunaBiteDamage, origin: uid);
         }
+    }
+
+    private static Vector2i PipeCell(Vector2 position)
+    {
+        return new Vector2i((int) MathF.Floor(position.X / PipeCellSize), (int) MathF.Floor(position.Y / PipeCellSize));
     }
 
     private bool PlayerNear(MapId map, Vector2 position, float range)

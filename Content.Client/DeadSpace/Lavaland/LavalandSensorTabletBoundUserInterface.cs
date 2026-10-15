@@ -202,6 +202,8 @@ public sealed class LavalandSensorTabletWindow : DefaultWindow
     public void SetState(LavalandSensorTabletState state)
     {
         _status.Visible = !state.Points.Exists(p => p.Kind is LavalandRadarPointKind.LivingMiner or LavalandRadarPointKind.DeadMiner);
+        if (state.BasePoints != null)
+            _radar.SetBasePoints(state.BasePoints);
         _radar.SetPoints(state.Points);
     }
 }
@@ -209,6 +211,7 @@ public sealed class LavalandSensorTabletWindow : DefaultWindow
 public sealed class LavalandRadarControl : MapGridControl
 {
     private List<LavalandRadarPoint> _points = new();
+    private List<LavalandRadarPoint> _basePoints = new();
     private bool _initialized;
     private bool _dragging;
     private float _interferenceTime;
@@ -232,10 +235,16 @@ public sealed class LavalandRadarControl : MapGridControl
         RectClipContent = true;
     }
 
+    /// <summary>The outpost plan: kept until the server sends a changed one.</summary>
+    public void SetBasePoints(List<LavalandRadarPoint> points)
+    {
+        _basePoints = points;
+    }
+
     public void SetPoints(List<LavalandRadarPoint> points)
     {
         _points = points;
-        if (!_initialized && points.Count > 0)
+        if (!_initialized && _points.Count + _basePoints.Count > 0)
         {
             Recenter();
             _initialized = true;
@@ -244,17 +253,25 @@ public sealed class LavalandRadarControl : MapGridControl
 
     public void Recenter()
     {
-        if (_points.Count == 0)
+        if (_points.Count + _basePoints.Count == 0)
             return;
         var min = new Vector2(float.MaxValue);
         var max = new Vector2(float.MinValue);
-        foreach (var point in _points)
+        foreach (var point in AllPoints())
         {
             min = Vector2.Min(min, point.Position - new Vector2(point.Size));
             max = Vector2.Max(max, point.Position + new Vector2(point.Size));
         }
         Offset = (min + max) / 2;
         WorldRange = ActualRadarRange = Math.Clamp(MathF.Max(max.X - min.X, max.Y - min.Y) * 0.6f, 12f, 600f);
+    }
+
+    private IEnumerable<LavalandRadarPoint> AllPoints()
+    {
+        foreach (var point in _basePoints)
+            yield return point;
+        foreach (var point in _points)
+            yield return point;
     }
 
     protected override void KeyBindDown(GUIBoundKeyEventArgs args)
@@ -317,10 +334,19 @@ public sealed class LavalandRadarControl : MapGridControl
             DrawRangeRings(handle, center);
         }
 
-        foreach (var point in _points)
+        foreach (var point in AllPoints())
         {
             var relative = (point.Position - Offset) * scale;
             var position = PixelSize / 2 + new Vector2(relative.X, -relative.Y);
+
+            // Only what lands on the screen is drawn; wide circles keep a margin of their size.
+            var reach = MathF.Max(24f, scale * point.Size * 1.2f);
+            if (position.X < -reach || position.Y < -reach ||
+                position.X > PixelSize.X + reach || position.Y > PixelSize.Y + reach)
+            {
+                continue;
+            }
+
             if (glitch)
                 position.X += MathF.Round(MathF.Sin(MathF.Floor(position.Y / 16f) * 2.1f + _interferenceTime * 35f) * 5f);
             var radius = MathF.Max(1.5f, scale * point.Size);

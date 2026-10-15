@@ -91,6 +91,18 @@ public sealed partial class LavalandLegionMegafaunaComponent : Component
     [ViewVariables]
     public EntityUid? Arena;
 
+    /// <summary>Fights on its own, without a boss arena (spawned by a mapping marker).</summary>
+    [ViewVariables]
+    public bool Free;
+
+    /// <summary>Stands still and does not attack until woken: a Legion gate nearby opens or it gets hit.</summary>
+    [DataField]
+    public bool Dormant;
+
+    /// <summary>Longest lunge at whoever woke the Legion up.</summary>
+    [DataField]
+    public TimeSpan WakeLungeMax = TimeSpan.FromSeconds(1.5);
+
     [ViewVariables]
     public bool Dying;
 

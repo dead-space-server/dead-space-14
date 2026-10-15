@@ -130,8 +130,8 @@ public sealed partial class LavalandBossArenaPrototype : IPrototype
     public Dictionary<string, string> NaturalFloors = new()
     {
         { "FloorBasalt", "FloorBasaltArena" },
-        { "FloorLavalandAsh", "FloorLavalandAshArena" },
-        { "FloorLavalandPaleGrass", "FloorLavalandPaleGrassArena" },
+        { "FloorLavalandAsh", "FloorBasaltArena" },
+        { "FloorLavalandPaleGrass", "FloorBasaltArena" },
     };
 
     /// <summary>Wall used to close the entrances. Falls back to <see cref="WallPrototype"/>.</summary>
@@ -199,6 +199,13 @@ public sealed partial class LavalandBossArenaCaveConfig
     /// <summary>Ore rock and its weight.</summary>
     [DataField]
     public Dictionary<EntProtoId, float> Ores = new();
+
+    /// <summary>
+    /// Band of solid basalt laid around the cave over whatever open land is there,
+    /// so the cave sits in one mass of rock and only its passages lead in.
+    /// </summary>
+    [DataField]
+    public int Surround = 6;
 
     /// <summary>Floor of the passages dug into the lavaland.</summary>
     [DataField]

@@ -240,6 +240,8 @@
   - type: ContainerContainer
     containers:
       upgrades: !type:Container
+      bayonet_slot: !type:ContainerSlot
+      light_slot: !type:ContainerSlot
   - type: EmitSoundOnPickup
     sound:
       path: /Audio/_DeadSpace/Items/Handing/gun/gun_pickup.ogg
@@ -351,6 +353,8 @@
   - type: ContainerContainer
     containers:
       upgrades: !type:Container
+      bayonet_slot: !type:ContainerSlot
+      light_slot: !type:ContainerSlot
   - type: BatteryWeaponFireModes
     fireModes:
     - proto: BulletKinetic
@@ -477,5 +481,7 @@
   - type: ContainerContainer
     containers:
       upgrades: !type:Container
+      bayonet_slot: !type:ContainerSlot
+      light_slot: !type:ContainerSlot
   - type: UseDelay
     delay: 1

@@ -55,6 +55,10 @@
   - type: ContainerContainer
     containers:
       upgrades: !type:Container
+      # DS14-Start
+      bayonet_slot: !type:ContainerSlot
+      light_slot: !type:ContainerSlot
+      # DS14-End
   - type: UseDelay
     delay: 1
   #DS14-Start

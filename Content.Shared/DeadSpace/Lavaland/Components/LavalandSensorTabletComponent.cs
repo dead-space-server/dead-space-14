@@ -30,4 +30,7 @@ public sealed partial class LavalandSensorTabletComponent : Component
     [DataField] public float JamScatter = 15f;
     public TimeSpan NextUpdate;
     public TimeSpan NextBeep;
+
+    /// <summary>Version of the outpost plan last sent to the UI of this tablet; -1 sends it again.</summary>
+    public int SentBaseVersion = -1;
 }

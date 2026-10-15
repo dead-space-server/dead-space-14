@@ -12,6 +12,9 @@
   - type: Tag
     tags:
     - Ore
+  # DS14-Start
+  - type: LavalandWellOre
+  # DS14-End
   - type: Fixtures
     fixtures:
       fix1:

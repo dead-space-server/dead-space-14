@@ -330,8 +330,10 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         if (ent.Comp.SpawnPair is not { } pair || ent.Comp.Linked != null)
             return;
 
-        var other = Spawn(pair, Transform(ent).Coordinates);
+        // Link before the twin's own map init runs, or it spawns a twin of its own, and so on forever.
+        var other = EntityManager.CreateEntityUninitialized(pair, Transform(ent).Coordinates);
         EnsureComp<LavalandParadoxBagComponent>(other).Linked = ent.Owner;
+        EntityManager.InitializeAndStartEntity(other);
         ent.Comp.Linked = other;
     }
 

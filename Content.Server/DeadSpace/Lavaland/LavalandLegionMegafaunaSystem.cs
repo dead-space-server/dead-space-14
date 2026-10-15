@@ -79,8 +79,18 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
             if (TryComp<LavalandBossComponent>(uid, out var boss))
                 legion.Arena = boss.Arena;
 
-            if (!TryGetArena(legion, out var arena) || !arena.FightStarted || arena.Ended)
+            // In an arena it fights once the fight starts; a mapped Legion fights once woken.
+            LavalandBossArenaComponent? arena = null;
+            if (TryGetArena(legion, out var found))
+            {
+                if (!found.FightStarted || found.Ended)
+                    continue;
+                arena = found;
+            }
+            else if (!legion.Free || legion.Dormant)
+            {
                 continue;
+            }
 
             if (UpdateCharge(uid, legion, xform, arena, now))
                 continue;
@@ -118,7 +128,7 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
     private bool UpdateCharge(EntityUid uid,
         LavalandLegionMegafaunaComponent legion,
         TransformComponent xform,
-        LavalandBossArenaComponent arena,
+        LavalandBossArenaComponent? arena,
         TimeSpan now)
     {
         if (legion.ChargeStartAt is { } start)
@@ -221,7 +231,7 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
 
     private bool TryFindTarget(TransformComponent xform,
         LavalandLegionMegafaunaComponent legion,
-        LavalandBossArenaComponent arena,
+        LavalandBossArenaComponent? arena,
         out EntityUid target)
     {
         target = default;
@@ -231,7 +241,7 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
         {
             if (session.AttachedEntity is not { Valid: true } player ||
                 !IsValidTarget(player, xform.MapID) ||
-                Transform(player).GridUid != arena.Grid)
+                arena != null && Transform(player).GridUid != arena.Grid)
             {
                 continue;
             }
@@ -256,6 +266,53 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
                Transform(player).MapID == map;
     }
 
+    /// <summary>A mapped Legion wakes up and lunges at whoever woke it.</summary>
+    public void Wake(Entity<LavalandLegionMegafaunaComponent> ent, EntityUid? target)
+    {
+        if (!ent.Comp.Dormant)
+            return;
+
+        var now = _timing.CurTime;
+        ent.Comp.Dormant = false;
+        ent.Comp.NextAttack = now + ent.Comp.AttackCooldown;
+        SetAi(ent, true);
+
+        if (target is not { } victim || !IsValidTarget(victim, Transform(ent).MapID))
+            return;
+
+        var offset = _transform.GetWorldPosition(victim) - _transform.GetWorldPosition(ent);
+        if (offset.LengthSquared() < 0.01f)
+            return;
+
+        // Long enough to reach the target, never longer than the limit.
+        var seconds = Math.Clamp(offset.Length() / MathF.Max(1f, ent.Comp.ChargeSpeed),
+            (float) ent.Comp.ChargeDuration.TotalSeconds,
+            MathF.Max((float) ent.Comp.ChargeDuration.TotalSeconds, (float) ent.Comp.WakeLungeMax.TotalSeconds));
+        ent.Comp.ChargeStartAt = null;
+        ent.Comp.ChargeDirection = Vector2.Normalize(offset);
+        ent.Comp.ChargeEndAt = now + TimeSpan.FromSeconds(seconds);
+        ent.Comp.ChargeHit.Clear();
+        SetAi(ent, false);
+        if (ent.Comp.ChargeWindupSound != null)
+            _audio.PlayPvs(ent.Comp.ChargeWindupSound, ent);
+    }
+
+    /// <summary>Wakes every sleeping Legion on the map within <paramref name="range"/> of the spot.</summary>
+    public void WakeNear(MapCoordinates coordinates, float range, EntityUid? target)
+    {
+        var query = EntityQueryEnumerator<LavalandLegionMegafaunaComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var legion, out var xform))
+        {
+            if (!legion.Dormant || xform.MapID != coordinates.MapId ||
+                Vector2.DistanceSquared(_transform.GetWorldPosition(xform), coordinates.Position) > range * range)
+            {
+                continue;
+            }
+
+            Wake((uid, legion), target);
+        }
+    }
+
     #endregion
 
     #region Splitting
@@ -264,6 +321,9 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
     {
         if (ent.Comp.Dying || !args.DamageIncreased)
             return;
+
+        if (ent.Comp.Dormant)
+            Wake(ent, args.Origin);
 
         var scale = GetHealthScale(ent.Comp);
         if (args.Damageable.TotalDamage.Float() < ent.Comp.BodyHealth * scale)
@@ -286,6 +346,7 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
             var childComp = EnsureComp<LavalandLegionMegafaunaComponent>(child);
             childComp.Root = ent.Comp.Root;
             childComp.Arena = ent.Comp.Arena;
+            childComp.Free = ent.Comp.Free;
             childComp.NextAttack = now + TimeSpan.FromSeconds(_random.NextFloat(0.8f, 1.6f));
             firstChild ??= child;
         }
@@ -341,6 +402,9 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
 
         if (old.Arena is { } arenaUid && TryComp<LavalandBossArenaComponent>(arenaUid, out var arena))
             arena.Boss = to;
+
+        if (HasComp<LavalandFreeBossComponent>(from))
+            EnsureComp<LavalandFreeBossComponent>(to);
 
         RemComp<LavalandBossComponent>(from);
     }

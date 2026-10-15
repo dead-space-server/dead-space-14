@@ -8,9 +8,11 @@
   cave:
     thickness: 12
     shell: 3
-    roughness: 0.75
-    passages: 3
+    roughness: 0
+    passages: 2
     passageHalfWidth: 1
+    collapseChance: 0
+    rubbleChance: 0
     exitLength: 30
     exitWander: 0.35
     oreVeins: 18

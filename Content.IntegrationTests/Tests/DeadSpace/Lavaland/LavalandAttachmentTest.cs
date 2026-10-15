@@ -80,7 +80,7 @@ public sealed class LavalandAttachmentTest
             var pka = entities.SpawnEntity("WeaponProtoKineticAccelerator", MapCoordinates.Nullspace);
             entities.RemoveComponent<LavalandPressureDamageComponent>(pka);
             Assert.That(entities.HasComponent<MeleeWeaponComponent>(pka), Is.False);
-            var knife = entities.SpawnEntity("CombatKnife", MapCoordinates.Nullspace);
+            var knife = entities.SpawnEntity("SurvivalKnife", MapCoordinates.Nullspace);
             Assert.That(slots.TryInsert(pka, "bayonet_slot", knife, null), Is.True);
             Assert.That(entities.HasComponent<MeleeWeaponComponent>(pka), Is.True);
             Assert.That(entities.HasComponent<AltFireMeleeComponent>(pka), Is.True);

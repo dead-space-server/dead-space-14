@@ -5,6 +5,7 @@ using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
@@ -15,6 +16,7 @@ namespace Content.Server.DeadSpace.Lavaland;
 public sealed class LavalandNecropolisGateSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly LavalandLegionMegafaunaSystem _legion = default!;
     [Dependency] private readonly OccluderSystem _occluder = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
@@ -61,6 +63,7 @@ public sealed class LavalandNecropolisGateSystem : EntitySystem
                 return;
 
             gate.KnockEnd = _timing.CurTime + gate.KnockTime;
+            gate.Knocker = args.User;
             _audio.PlayPvs(gate.KnockSound, ent);
             _popup.PopupEntity(Loc.GetString("lavaland-necropolis-gate-knock"), ent, args.User, PopupType.MediumCaution);
             return;
@@ -122,6 +125,10 @@ public sealed class LavalandNecropolisGateSystem : EntitySystem
             {
                 gate.State = LavalandNecropolisGateState.Open;
                 SetBlocking(ent, false);
+
+                // The way is open: the Legion waiting behind it lunges at whoever knocked.
+                if (gate.LegionGate)
+                    _legion.WakeNear(_transform.GetMapCoordinates(uid), gate.WakeRange, gate.Knocker);
             }
             else if (gate.State == LavalandNecropolisGateState.Closing)
             {
@@ -151,7 +158,8 @@ public sealed class LavalandNecropolisGateSystem : EntitySystem
     /// <summary>A closed gate blocks the way and the view.</summary>
     private void SetBlocking(Entity<LavalandNecropolisGateComponent> ent, bool blocking)
     {
-        _physics.SetCanCollide(ent, blocking);
+        if (TryComp<PhysicsComponent>(ent, out var body))
+            _physics.SetCanCollide(ent, blocking, body: body);
         if (TryComp<OccluderComponent>(ent, out var occluder))
             _occluder.SetEnabled(ent, blocking, occluder);
     }

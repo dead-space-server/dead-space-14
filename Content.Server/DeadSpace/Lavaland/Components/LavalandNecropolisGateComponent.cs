@@ -24,6 +24,14 @@ public sealed partial class LavalandNecropolisGateComponent : Component
     [DataField]
     public TimeSpan KnockTime = TimeSpan.FromSeconds(5);
 
+    /// <summary>A sleeping Legion this close wakes up when the Legion gate is fully open.</summary>
+    [DataField]
+    public float WakeRange = 40f;
+
+    /// <summary>Who knocked on the Legion gate: the Legion lunges at them.</summary>
+    [ViewVariables]
+    public EntityUid? Knocker;
+
     /// <summary>The door grinds open (the opening animation).</summary>
     [DataField]
     public TimeSpan OpenTime = TimeSpan.FromSeconds(3.7);

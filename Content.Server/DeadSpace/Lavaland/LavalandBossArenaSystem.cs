@@ -13,6 +13,7 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.DeadSpace.Lavaland.Bosses;
+using Content.Shared.Light.Components;
 using Content.Shared.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
 using Content.Shared.FixedPoint;
@@ -291,6 +292,8 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         }
 
         _metadata.SetEntityName(grid.Owner, arenaPrototype.ArenaName);
+        // New grids are drawn as if roofed; the arena is open sky like the land around it.
+        RemComp<ImplicitRoofComponent>(grid.Owner);
 
         CaveLayout? caveLayout = null;
         var layoutSealTiles = new List<(Vector2i Tile, Vector2i Inward)>();
@@ -324,6 +327,7 @@ public sealed class LavalandBossArenaSystem : EntitySystem
                 grid.Comp,
                 mapUid,
                 terrainGrid,
+                biome,
                 center,
                 naturalFloor,
                 floorTile,
@@ -355,7 +359,11 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         if (layout == null && loadedGrid == null && arenaPrototype.LightPrototype is { } lightPrototype)
             SpawnArenaLights(grid.Owner, grid.Comp, lightPrototype, width, height);
 
-        var boss = Spawn(arenaPrototype.BossPrototype.Id, _map.GridTileToLocal(grid.Owner, grid.Comp, origin));
+        var bossTile = origin;
+        if (loadedGrid != null && TryTakeBossSpawnPoint(grid, out var markedTile))
+            bossTile = markedTile;
+
+        var boss = Spawn(arenaPrototype.BossPrototype.Id, _map.GridTileToLocal(grid.Owner, grid.Comp, bossTile));
         var bossComponent = EnsureComp<LavalandBossComponent>(boss);
         bossComponent.Arena = grid.Owner;
         bossComponent.MaxHealth = Math.Max(1f, bossComponent.MaxHealth);
@@ -369,7 +377,7 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         arena.Map = mapUid;
         arena.Grid = grid.Owner;
         arena.Boss = boss;
-        arena.BossSpawnTile = origin;
+        arena.BossSpawnTile = bossTile;
         arena.Origin = origin;
         arena.Width = width;
         arena.Height = height;
@@ -494,7 +502,8 @@ public sealed class LavalandBossArenaSystem : EntitySystem
                     _tileDefinition.TryGetDefinition(arenaTileId, out var arenaTile))
                 {
                     // Same pattern as the land: keep the natural tile's variant and rotation.
-                    tile = new Tile(arenaTile.TileId, existing.Tile.Flags, existing.Tile.Variant, existing.Tile.RotationMirroring);
+                    var variant = (byte) (existing.Tile.Variant % Math.Max((byte) 1, arenaTile.Variants));
+                    tile = new Tile(arenaTile.TileId, existing.Tile.Flags, variant, existing.Tile.RotationMirroring);
                 }
 
                 naturalFloor[index] = tile;
@@ -822,6 +831,7 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         MapGridComponent grid,
         EntityUid terrainUid,
         MapGridComponent terrainGrid,
+        BiomeComponent biome,
         Vector2i center,
         Dictionary<Vector2i, Tile> naturalFloor,
         ITileDefinition floorTile,
@@ -895,6 +905,38 @@ public sealed class LavalandBossArenaSystem : EntitySystem
             SpawnAnchored(prototype.Id, terrainUid, terrainGrid, center + tile);
             if (++spawned % ArenaEntityBatchSize == 0)
                 await Timer.Delay(1, cancellation);
+        }
+
+        // Solid basalt around the cave over the open land, so no strips or holes of floor are left next to it.
+        var band = outer + EntranceDepth + Math.Max(0, cave.Surround);
+        _reservedTiles.Clear();
+        _biome.ReserveTiles(terrainUid,
+            new Box2(center.X - band, center.Y - band, center.X + band + 1, center.Y + band + 1),
+            _reservedTiles,
+            biome,
+            terrainGrid);
+        _reservedTiles.Clear();
+
+        for (var x = -band; x <= band; x++)
+        {
+            for (var y = -band; y <= band; y++)
+            {
+                if (Math.Max(Math.Abs(x), Math.Abs(y)) <= outer)
+                    continue;
+
+                cancellation.ThrowIfCancellationRequested();
+                var index = center + new Vector2i(x, y);
+                if (!_map.TryGetTileRef(terrainUid, terrainGrid, index, out var tileRef) || tileRef.Tile.IsEmpty)
+                    continue;
+
+                var occupied = _map.GetAnchoredEntitiesEnumerator(terrainUid, terrainGrid, index);
+                if (occupied.MoveNext(out _))
+                    continue;
+
+                SpawnAnchored(cave.Rock.Id, terrainUid, terrainGrid, index);
+                if (++spawned % ArenaEntityBatchSize == 0)
+                    await Timer.Delay(1, cancellation);
+            }
         }
 
         if (floorVisualPrototype is not { } visual)
@@ -1583,10 +1625,14 @@ public sealed class LavalandBossArenaSystem : EntitySystem
 
     private void OnBossMobStateChanged(Entity<LavalandBossComponent> ent, ref MobStateChangedEvent args)
     {
-        if (args.NewMobState != MobState.Dead ||
-            ent.Comp.Arena is not { Valid: true } arenaUid ||
+        if (args.NewMobState != MobState.Dead)
+            return;
+
+        if (ent.Comp.Arena is not { Valid: true } arenaUid ||
             !TryComp<LavalandBossArenaComponent>(arenaUid, out var arena))
         {
+            if (HasComp<LavalandFreeBossComponent>(ent))
+                FinishFreeBoss(ent);
             return;
         }
 
@@ -1601,6 +1647,20 @@ public sealed class LavalandBossArenaSystem : EntitySystem
 
         QueueDel(ent.Owner);
         EndArena((arenaUid, arena));
+    }
+
+    private void FinishFreeBoss(Entity<LavalandBossComponent> ent)
+    {
+        if (ent.Comp.DeathSound != null)
+            _audio.PlayPvs(ent.Comp.DeathSound, ent.Owner);
+
+        if (!ent.Comp.DeathRewardsSpawned)
+        {
+            ent.Comp.DeathRewardsSpawned = true;
+            SpawnDeathRewards(ent.Owner, ent.Comp);
+        }
+
+        QueueDel(ent.Owner);
     }
 
     private void SpawnDeathRewards(EntityUid bossUid, LavalandBossComponent boss)
@@ -2101,6 +2161,29 @@ public sealed class LavalandBossArenaSystem : EntitySystem
     /// <summary>
     /// Size and middle of a loaded arena grid's floor, and its entrances: floor on the outer edge without a wall.
     /// </summary>
+    /// <summary>The boss spawn point a mapper put on the arena grid; the marker itself is removed.</summary>
+    private bool TryTakeBossSpawnPoint(Entity<MapGridComponent> grid, out Vector2i tile)
+    {
+        tile = default;
+        var found = false;
+        var markers = EntityQueryEnumerator<LavalandBossSpawnPointComponent, TransformComponent>();
+        while (markers.MoveNext(out var marker, out _, out var xform))
+        {
+            if (xform.GridUid != grid.Owner)
+                continue;
+
+            if (!found)
+            {
+                tile = _map.TileIndicesFor(grid.Owner, grid.Comp, xform.Coordinates);
+                found = true;
+            }
+
+            QueueDel(marker);
+        }
+
+        return found;
+    }
+
     private bool TryMeasureLoadedArena(
         Entity<MapGridComponent> grid,
         out Vector2i origin,

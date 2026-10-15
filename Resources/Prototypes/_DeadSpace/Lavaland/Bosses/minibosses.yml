@@ -53,9 +53,9 @@
       task: SimpleHostileCompound
     blackboard:
       VisionRadius: !type:Single
-        160
+        24
       AggroVisionRadius: !type:Single
-        160
+        24
       NavSmash: !type:Bool
         true
   - type: MeleeWeapon
