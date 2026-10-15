@@ -70,8 +70,8 @@ public sealed partial class LavalandDayPhase
 }
 
 /// <summary>
-/// Deep night: a warning, then the moon hides for <see cref="Duration"/> - the light dies, equipment fails and the
-/// darkness burns; then the usual night goes on for <see cref="AfterDuration"/>.
+/// Deep night: with its announcement the moon hides for <see cref="Duration"/> - the light dies, equipment fails at
+/// once and the darkness burns; then the usual night goes on for <see cref="AfterDuration"/>.
 /// </summary>
 [DataDefinition]
 public sealed partial class LavalandDeepNightConfig
@@ -79,9 +79,6 @@ public sealed partial class LavalandDeepNightConfig
     [DataField]
     public float Chance = 0.3f;
 
-    /// <summary>Between the warning and the moon hiding; the light fades to black meanwhile.</summary>
-    [DataField]
-    public TimeSpan WarningTime = TimeSpan.FromSeconds(60);
 
     [DataField]
     public TimeSpan Duration = TimeSpan.FromMinutes(5);
@@ -93,8 +90,6 @@ public sealed partial class LavalandDeepNightConfig
     [DataField]
     public Color LightColor = Color.Black;
 
-    [DataField]
-    public LocId? Warning;
 
     [DataField]
     public LocId? Message;
@@ -105,8 +100,6 @@ public sealed partial class LavalandDeepNightConfig
     [DataField]
     public Color MessageColor = Color.FromHex("#8a1c1c");
 
-    [DataField]
-    public SoundSpecifier? WarningSound;
 
     [DataField]
     public SoundSpecifier? Sound;

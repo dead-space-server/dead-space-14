@@ -94,16 +94,14 @@
       message: lavaland-day-cycle-day
       messageColor: "#ffb347"
     - duration: 900
-      lightColor: "#2B130D"
+      lightColor: "#16213D"
       message: lavaland-day-cycle-night
       messageColor: "#c46a3a"
       deepNight:
         chance: 0.3
-        warningTime: 60
         duration: 300
         afterDuration: 600
         lightColor: "#000000"
-        warning: lavaland-day-cycle-deep-night-warning
         message: lavaland-day-cycle-deep-night
         endMessage: lavaland-day-cycle-deep-night-end
         messageColor: "#8a1c1c"

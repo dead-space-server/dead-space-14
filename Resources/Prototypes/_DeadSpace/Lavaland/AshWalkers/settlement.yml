@@ -70,6 +70,8 @@
   name: ash garden bed
   description: A shallow bed of fertile ash held by stones. Plant spores or seeds, water it and compost spare produce to replenish its nutrients.
   components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/garden_bed.rsi
   - type: PlantTray
     waterLevel: 40
     nutritionLevel: 40
@@ -189,7 +191,14 @@
   description: Closely fitted basalt blocks, sturdy enough to shelter a settlement.
   components:
   - type: Sprite
-    color: "#77716E"
+    sprite: _DeadSpace/Lavaland/AshWalkers/basalt_wall.rsi
+    color: "#FFFFFF"
+  - type: Icon
+    sprite: _DeadSpace/Lavaland/AshWalkers/basalt_wall.rsi
+    state: full
+  - type: IconSmooth
+    key: walls
+    base: ashwall
   - type: Damageable
     damageModifierSet: Rock
   - type: Destructible
@@ -214,6 +223,8 @@
   name: basalt gate
   description: A heavy stone gate bound with sinew. It opens by hand and needs no electricity.
   components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/basalt_gate.rsi
   - type: Destructible
     thresholds:
     - trigger: !type:DamageTrigger
@@ -236,6 +247,8 @@
   name: hide satchel
   description: A roomy satchel sewn from dried goliath hide and watcher sinew.
   components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/hide_satchel.rsi
   - type: Construction
     graph: ClothingBackpackAshWalkerCrafted
     node: satchel

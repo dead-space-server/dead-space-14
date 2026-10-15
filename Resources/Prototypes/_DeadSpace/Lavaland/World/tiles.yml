@@ -34,3 +34,19 @@
     East: /Textures/_Goob/Lavaland/Tiles/Planet/LightGrass/double_edge_E.png
     North: /Textures/_Goob/Lavaland/Tiles/Planet/LightGrass/double_edge_N.png
     West: /Textures/_Goob/Lavaland/Tiles/Planet/LightGrass/double_edge_W.png
+
+# Arena floors that look like the land around them but shelter from storms.
+- type: tile
+  id: FloorBasaltArena
+  parent: FloorBasalt
+  weather: false
+
+- type: tile
+  id: FloorLavalandAshArena
+  parent: FloorLavalandAsh
+  weather: false
+
+- type: tile
+  id: FloorLavalandPaleGrassArena
+  parent: FloorLavalandPaleGrass
+  weather: false

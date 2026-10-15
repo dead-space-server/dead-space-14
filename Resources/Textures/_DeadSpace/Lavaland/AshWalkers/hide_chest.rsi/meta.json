@@ -1,0 +1,39 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from tgstation, resprited by golubok_epta (Discord); welded and sparking states from Structures/Storage/Crates/piratechest.rsi (made by brainfood118 (github))",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "crate"
+        },
+        {
+            "name": "crate_door"
+        },
+        {
+            "name": "crate_open"
+        },
+        {
+            "name": "crate_icon"
+        },
+        {
+            "name": "welded"
+        },
+        {
+            "name": "sparking",
+            "delays": [
+                [
+                    0.1,
+                    0.1,
+                    0.1,
+                    0.1,
+                    0.1,
+                    0.1
+                ]
+            ]
+        }
+    ]
+}

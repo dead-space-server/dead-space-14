@@ -55,7 +55,6 @@ public sealed class LavalandMiningEquipmentSystem : EntitySystem
     [Dependency] private readonly SharedPointLightSystem _light = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedStackSystem _stack = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly TagSystem _tag = default!;
 
     private readonly HashSet<Entity<StackComponent>> _ores = new();

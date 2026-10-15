@@ -217,7 +217,8 @@ public sealed class LavalandBossArenaSystem : EntitySystem
             return false;
         }
 
-        PrepareArenaTerrain(mapUid, terrainGrid, biome, floorTile, center, footprint, footprint);
+        var naturalFloor = new Dictionary<Vector2i, Tile>();
+        PrepareArenaTerrain(mapUid, terrainGrid, biome, floorTile, arenaPrototype.NaturalFloors, naturalFloor, center, footprint, footprint);
         await Timer.Delay(1, cancellation);
 
         var mapId = Transform(mapUid).MapID;
@@ -229,11 +230,16 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         var layoutSealTiles = new List<(Vector2i Tile, Vector2i Inward)>();
         if (layout != null)
         {
+            var altFloorTile = arenaPrototype.AltFloorTile is { } altId && _tileDefinition.TryGetDefinition(altId, out var altDef)
+                ? altDef
+                : floorTile;
             await FillLayoutArena(
                 grid.Owner,
                 grid.Comp,
                 floorTile,
+                altFloorTile,
                 arenaPrototype.FloorVisualPrototype,
+                arenaPrototype.AltFloorVisualPrototype ?? arenaPrototype.FloorVisualPrototype,
                 arenaPrototype.WallPrototype,
                 arenaPrototype.LightPrototype,
                 layout,
@@ -249,6 +255,7 @@ public sealed class LavalandBossArenaSystem : EntitySystem
                 mapUid,
                 terrainGrid,
                 center,
+                naturalFloor,
                 floorTile,
                 arenaPrototype.FloorVisualPrototype,
                 cave,
@@ -262,6 +269,8 @@ public sealed class LavalandBossArenaSystem : EntitySystem
             await FillArenaFloor(
                 grid.Owner,
                 grid.Comp,
+                naturalFloor,
+                center,
                 floorTile,
                 arenaPrototype.FloorVisualPrototype,
                 width,
@@ -383,6 +392,8 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         MapGridComponent terrainGrid,
         BiomeComponent biome,
         ITileDefinition floorTile,
+        Dictionary<string, string> naturalFloors,
+        Dictionary<Vector2i, Tile> naturalFloor,
         Vector2i center,
         int width,
         int height)
@@ -394,12 +405,25 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         _biome.ReserveTiles(mapUid, reserveBounds, _reservedTiles, biome, terrainGrid);
         _reservedTiles.Clear();
 
+        // Keep the look of the land: each natural floor becomes its storm-safe arena variant.
         _terrainTiles.Clear();
         for (var x = bounds.Left; x < bounds.Right; x++)
         {
             for (var y = bounds.Bottom; y < bounds.Top; y++)
             {
-                _terrainTiles.Add((new Vector2i(x, y), CreateTile(floorTile)));
+                var index = new Vector2i(x, y);
+                var tile = CreateTile(floorTile);
+                if (_map.TryGetTileRef(mapUid, terrainGrid, index, out var existing) &&
+                    !existing.Tile.IsEmpty &&
+                    naturalFloors.TryGetValue(_tileDefinition[existing.Tile.TypeId].ID, out var arenaTileId) &&
+                    _tileDefinition.TryGetDefinition(arenaTileId, out var arenaTile))
+                {
+                    // Same pattern as the land: keep the natural tile's variant and rotation.
+                    tile = new Tile(arenaTile.TileId, existing.Tile.Flags, existing.Tile.Variant, existing.Tile.RotationMirroring);
+                }
+
+                naturalFloor[index] = tile;
+                _terrainTiles.Add((index, tile));
             }
         }
 
@@ -409,9 +433,19 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         ClearClearableTerrainEntities(mapUid, terrainGrid, bounds);
     }
 
+    /// <summary>The arena floor at a tile of the arena grid: the land's look where known, else the arena floor.</summary>
+    private Tile ArenaFloorAt(Dictionary<Vector2i, Tile>? naturalFloor, Vector2i center, Vector2i local, ITileDefinition floorTile)
+    {
+        return naturalFloor != null && naturalFloor.TryGetValue(center + local, out var tile)
+            ? tile
+            : CreateTile(floorTile);
+    }
+
     private async Task FillArenaFloor(
         EntityUid gridUid,
         MapGridComponent grid,
+        Dictionary<Vector2i, Tile> naturalFloor,
+        Vector2i center,
         ITileDefinition floorTile,
         EntProtoId? floorVisualPrototype,
         int width,
@@ -427,6 +461,9 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         AddFloorRect(tiles, floorTile, -EntranceHalfWidth, -halfHeight - EntranceDepth, EntranceHalfWidth, -halfHeight - 1);
         AddFloorRect(tiles, floorTile, halfWidth + 1, -EntranceHalfWidth, halfWidth + EntranceDepth, EntranceHalfWidth);
         AddFloorRect(tiles, floorTile, -halfWidth - EntranceDepth, -EntranceHalfWidth, -halfWidth - 1, EntranceHalfWidth);
+
+        for (var i = 0; i < tiles.Count; i++)
+            tiles[i] = (tiles[i].Index, ArenaFloorAt(naturalFloor, center, tiles[i].Index, floorTile));
 
         _map.SetTiles(gridUid, grid, tiles);
 
@@ -476,7 +513,9 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         EntityUid gridUid,
         MapGridComponent grid,
         ITileDefinition floorTile,
+        ITileDefinition altFloorTile,
         EntProtoId? floorVisualPrototype,
+        EntProtoId? altFloorVisualPrototype,
         EntProtoId? wallPrototype,
         EntProtoId? lightPrototype,
         List<string> layout,
@@ -489,6 +528,7 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         var halfY = rows / 2;
 
         var floor = new List<Vector2i>();
+        var altFloor = new HashSet<Vector2i>();
         var walls = new List<Vector2i>();
         var lights = new List<Vector2i>();
         for (var row = 0; row < rows; row++)
@@ -507,7 +547,9 @@ public sealed class LavalandBossArenaSystem : EntitySystem
                 }
 
                 floor.Add(tile);
-                if (symbol == 'L')
+                if (symbol is ',' or 'l')
+                    altFloor.Add(tile);
+                if (symbol is 'L' or 'l')
                     lights.Add(tile);
 
                 // Floor on the outer edge is a way in: walled off when the arena seals.
@@ -524,7 +566,7 @@ public sealed class LavalandBossArenaSystem : EntitySystem
 
         var tiles = new List<(Vector2i Index, Tile Tile)>(floor.Count + walls.Count);
         foreach (var tile in floor)
-            tiles.Add((tile, CreateTile(floorTile)));
+            tiles.Add((tile, CreateTile(altFloor.Contains(tile) ? altFloorTile : floorTile)));
         foreach (var tile in walls)
             tiles.Add((tile, CreateTile(floorTile)));
         _map.SetTiles(gridUid, grid, tiles);
@@ -547,12 +589,12 @@ public sealed class LavalandBossArenaSystem : EntitySystem
                 SpawnAnchored(light.Id, gridUid, grid, tile);
         }
 
-        if (floorVisualPrototype is not { } visual)
-            return;
-
         foreach (var tile in floor)
         {
             cancellation.ThrowIfCancellationRequested();
+            if ((altFloor.Contains(tile) ? altFloorVisualPrototype : floorVisualPrototype) is not { } visual)
+                continue;
+
             SpawnAnchored(visual.Id, gridUid, grid, tile);
             if (++spawned % ArenaEntityBatchSize == 0)
                 await Timer.Delay(1, cancellation);
@@ -690,6 +732,7 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         EntityUid terrainUid,
         MapGridComponent terrainGrid,
         Vector2i center,
+        Dictionary<Vector2i, Tile> naturalFloor,
         ITileDefinition floorTile,
         EntProtoId? floorVisualPrototype,
         LavalandBossArenaCaveConfig cave,
@@ -699,7 +742,7 @@ public sealed class LavalandBossArenaSystem : EntitySystem
     {
         var tiles = new List<(Vector2i Index, Tile Tile)>(layout.Floor.Count);
         foreach (var tile in layout.Floor)
-            tiles.Add((tile, CreateTile(floorTile)));
+            tiles.Add((tile, ArenaFloorAt(naturalFloor, center, tile, floorTile)));
         _map.SetTiles(gridUid, grid, tiles);
 
         var outer = layout.Outer;
@@ -803,6 +846,7 @@ public sealed class LavalandBossArenaSystem : EntitySystem
                 var tile = new Vector2i((int) MathF.Floor(position.X), (int) MathF.Floor(position.Y));
                 var bounds = new Box2i(tile.X - halfWidth, tile.Y - halfWidth, tile.X + halfWidth + 1, tile.Y + halfWidth + 1);
 
+                // The land keeps its own floor; only the rock in the way is cleared.
                 _reservedTiles.Clear();
                 _biome.ReserveTiles(mapUid, new Box2(bounds.Left, bounds.Bottom, bounds.Right, bounds.Top), _reservedTiles, biome, terrainGrid);
                 _reservedTiles.Clear();
@@ -811,10 +855,15 @@ public sealed class LavalandBossArenaSystem : EntitySystem
                 for (var x = bounds.Left; x < bounds.Right; x++)
                 {
                     for (var y = bounds.Bottom; y < bounds.Top; y++)
-                        _terrainTiles.Add((new Vector2i(x, y), CreateTile(exitFloor)));
+                    {
+                        var index = new Vector2i(x, y);
+                        if (!_map.TryGetTileRef(mapUid, terrainGrid, index, out var existing) || existing.Tile.IsEmpty)
+                            _terrainTiles.Add((index, CreateTile(exitFloor)));
+                    }
                 }
 
-                _map.SetTiles(mapUid, terrainGrid, _terrainTiles);
+                if (_terrainTiles.Count > 0)
+                    _map.SetTiles(mapUid, terrainGrid, _terrainTiles);
                 _terrainTiles.Clear();
                 ClearClearableTerrainEntities(mapUid, terrainGrid, bounds);
             }

@@ -101,11 +101,31 @@ public sealed partial class LavalandBossArenaPrototype : IPrototype
 
     /// <summary>
     /// Exact arena plan, one string per row (top row first): '#' wall, 'L' floor with a light,
-    /// any other non-space character floor. The boss stands in the middle; floor on the outer edge is an entrance
+    /// ',' the alternative floor, 'l' the alternative floor with a light, any other non-space character floor. The boss stands in the middle; floor on the outer edge is an entrance
     /// that gets walled off when the arena seals. Overrides size, cave and the default lights.
     /// </summary>
     [DataField]
     public List<string>? Layout;
+
+    /// <summary>Tile of the alternative floor in <see cref="Layout"/> (',' and 'l').</summary>
+    [DataField]
+    public string? AltFloorTile;
+
+    /// <summary>Floor visual of the alternative floor in <see cref="Layout"/>.</summary>
+    [DataField]
+    public EntProtoId? AltFloorVisualPrototype;
+
+    /// <summary>
+    /// The arena floor copies the natural lavaland floor under it (so it blends with the land around), using these
+    /// storm-safe variants: natural tile id -> arena tile id. Tiles not listed become <see cref="FloorTile"/>.
+    /// </summary>
+    [DataField]
+    public Dictionary<string, string> NaturalFloors = new()
+    {
+        { "FloorBasalt", "FloorBasaltArena" },
+        { "FloorLavalandAsh", "FloorLavalandAshArena" },
+        { "FloorLavalandPaleGrass", "FloorLavalandPaleGrassArena" },
+    };
 
     /// <summary>Wall used to close the entrances. Falls back to <see cref="WallPrototype"/>.</summary>
     [DataField]

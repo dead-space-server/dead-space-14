@@ -72,6 +72,8 @@
   name: ash walker spring
   description: A stone spring fed by an underground aquifer. Its clean water replenishes naturally.
   components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/spring.rsi
   - type: SolutionRegeneration
     solution: pool
     duration: 1

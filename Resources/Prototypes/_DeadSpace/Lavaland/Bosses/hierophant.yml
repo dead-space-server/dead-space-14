@@ -5,44 +5,46 @@
   bossPrototype: MobLavalandHierophant
   floorTile: FloorHierophantArena
   floorVisualPrototype: LavalandHierophantArenaFloor
+  altFloorTile: FloorHierophantAlt
+  altFloorVisualPrototype: LavalandHierophantArenaFloorAlt
   wallPrototype: WallHierophantArena
   lightPrototype: LavalandHierophantArenaLightSmall
   # Расположение стен, колонн и светильников как в руине Иерофанта на tgstation (растянута до 35x35).
   layout:
   - "######....###############....######"
-  - "#................L................#"
-  - "#.................................#"
-  - "#.................................#"
-  - "#.................................#"
-  - "#......LL....#.......#....LL......#"
-  - "..................................."
-  - ".....L.##.L......L......L.##.L....."
-  - ".....L.##.L......L......L.##.L....."
-  - "..................................."
-  - "#......LL....#.......#....LL......#"
-  - "#................L................#"
-  - "#.................................#"
-  - "#....#....#.............#....#....#"
-  - "#.................................#"
-  - "#.................................#"
-  - "#.................................#"
-  - "#L.....LL..L...........L..LL.....L#"
-  - "#.................................#"
-  - "#.................................#"
-  - "#.................................#"
-  - "#....#....#.............#....#....#"
-  - "#.................................#"
-  - "#................L................#"
-  - "#......LL....#.......#....LL......#"
-  - "..................................."
-  - ".....L.##.L......L......L.##.L....."
-  - ".....L.##.L......L......L.##.L....."
-  - "..................................."
-  - "#......LL....#.......#....LL......#"
-  - "#.................................#"
-  - "#.................................#"
-  - "#.................................#"
-  - "#................L................#"
+  - "#......,,........L........,,......#"
+  - "#......,,.................,,......#"
+  - "#......,,.................,,......#"
+  - "#......,,.................,,......#"
+  - "#....,.ll.,..#...,...#..,.ll.,....#"
+  - ".................,................."
+  - ".,,,,l.##.l,,....L....,,l.##.l,,,,."
+  - ".,,,,l.##.l,,....L....,,l.##.l,,,,."
+  - ".................,................."
+  - "#....,.ll.,..#...,...#..,.ll.,....#"
+  - "#......,,....,...L...,....,,......#"
+  - "#......,,....,.......,....,,......#"
+  - "#....#....#,,.........,,#....#....#"
+  - "#.............,,,,,,,.............#"
+  - "#.............,,,,,,,.............#"
+  - "#.............,,,,,,,.............#"
+  - "#L...,,LL,,L..,,,.,,,..L,,LL,,...L#"
+  - "#.............,,,,,,,.............#"
+  - "#.............,,,,,,,.............#"
+  - "#.............,,,,,,,.............#"
+  - "#....#....#,,.........,,#....#....#"
+  - "#......,,....,.......,....,,......#"
+  - "#......,,....,...L...,....,,......#"
+  - "#....,.ll.,..#...,...#..,.ll.,....#"
+  - ".................,................."
+  - ".,,,,l.##.l,,....L....,,l.##.l,,,,."
+  - ".,,,,l.##.l,,....L....,,l.##.l,,,,."
+  - ".................,................."
+  - "#....,.ll.,..#...,...#..,.ll.,....#"
+  - "#......,,.................,,......#"
+  - "#......,,.................,,......#"
+  - "#......,,.................,,......#"
+  - "#......,,........L........,,......#"
   - "######....###############....######"
   size: 35
   spawnAttempts: 160
@@ -62,6 +64,10 @@
   id: FloorHierophantArena
   name: tiles-hierophant-arena-floor
   parent: FloorBasalt
+  sprite: /Textures/_DeadSpace/Lavaland/Tiles/hierophant_floor.png
+  variants: 1
+  placementVariants:
+  - 1.0
   weather: false
 
 - type: entity
@@ -85,6 +91,8 @@
   id: LavalandHierophantArenaFloor
   name: пол Иерофанта
   categories: [ HideSpawnMenu ]
+  placement:
+    mode: SnapgridCenter
   components:
   - type: Transform
     anchored: true
@@ -92,13 +100,25 @@
   - type: Sprite
     noRot: true
     drawdepth: FloorTiles
-    sprite: _DeadSpace/Lavaland/Tiles/HierophantFloor.rsi
-    layers:
-    - state: floor
-      shader: unshaded
+    sprite: _DeadSpace/Lavaland/Tiles/HierophantFloorSmooth.rsi
+    state: full
+  - type: IconSmooth
+    key: hierophant_floor
+    base: hiero
   - type: Tag
     tags:
     - HideContextMenu
+
+- type: entity
+  parent: LavalandHierophantArenaFloor
+  id: LavalandHierophantArenaFloorAlt
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Tiles/HierophantFloorAltSmooth.rsi
+    state: full
+  - type: IconSmooth
+    key: hierophant_floor
+    base: hieroalt
 
 - type: entity
   parent: BaseWall
@@ -370,3 +390,19 @@
     softness: 1
     color: "#dce8ff"
     castShadows: false
+
+- type: tile
+  id: FloorHierophant
+  name: tiles-hierophant-floor
+  parent: FloorBasalt
+  sprite: /Textures/_DeadSpace/Lavaland/Tiles/hierophant_floor.png
+  variants: 1
+  placementVariants:
+  - 1.0
+  weather: false
+
+- type: tile
+  id: FloorHierophantAlt
+  name: tiles-hierophant-floor-alt
+  parent: FloorHierophant
+  sprite: /Textures/_DeadSpace/Lavaland/Tiles/hierophant_floor_alt.png

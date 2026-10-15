@@ -16,8 +16,8 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// <summary>
 /// Runs the lavaland day/night phases from <see cref="LavalandDayCycleConfig"/>: fades the map light,
 /// announces the phase and sets the phase flags other systems read through <see cref="LavalandDayCycleSystem"/>.
-/// A phase with <see cref="LavalandDayPhase.DeepNight"/> may turn into a deep night: warning, the moon hides
-/// for a while (effects in <see cref="LavalandDeepNightSystem"/>), then the usual night goes on.
+/// A phase with <see cref="LavalandDayPhase.DeepNight"/> may turn into a deep night: with its one announcement the
+/// moon hides and equipment fails at once (effects in <see cref="LavalandDeepNightSystem"/>), then the usual night goes on.
 /// </summary>
 public sealed class LavalandDayNightSystem : EntitySystem
 {
@@ -103,10 +103,12 @@ public sealed class LavalandDayNightSystem : EntitySystem
             : null;
         if (deep != null)
         {
-            // Warning, the moon hides, deep night, then the usual night.
-            cycle.DeepStage = LavalandDeepNightStage.Warning;
-            cycle.DeepStartAt = now + deep.WarningTime;
-            cycle.PhaseEnd = cycle.DeepStartAt + deep.Duration + deep.AfterDuration;
+            // The moon hides right away: everything fails with the announcement, then the usual night.
+            cycle.DeepStage = LavalandDeepNightStage.Active;
+            cycle.DeepStartAt = now;
+            cycle.DeepEndAt = now + deep.Duration;
+            cycle.PhaseEnd = cycle.DeepEndAt + deep.AfterDuration;
+            SetFlags(cycle, deep.JamTrackers, deep.BlockJaunter, deep.WispGuide, true, deep.SuppressLavaLight);
         }
 
         Dirty(ent);
@@ -120,7 +122,7 @@ public sealed class LavalandDayNightSystem : EntitySystem
             return;
 
         if (deep != null)
-            Announce(ent, deep.Warning, deep.MessageColor, deep.WarningSound);
+            Announce(ent, deep.Message, deep.MessageColor, deep.Sound);
         else
             Announce(ent, phase.Message, phase.MessageColor, phase.Sound);
     }
@@ -133,16 +135,6 @@ public sealed class LavalandDayNightSystem : EntitySystem
         TimeSpan now)
     {
         var cycle = ent.Comp;
-        if (cycle.DeepStage == LavalandDeepNightStage.Warning && now >= cycle.DeepStartAt)
-        {
-            cycle.DeepStage = LavalandDeepNightStage.Active;
-            cycle.DeepEndAt = now + deep.Duration;
-            SetFlags(cycle, deep.JamTrackers, deep.BlockJaunter, deep.WispGuide, true, deep.SuppressLavaLight);
-            Dirty(ent);
-            Announce(ent, deep.Message, deep.MessageColor, deep.Sound);
-            return;
-        }
-
         if (cycle.DeepStage == LavalandDeepNightStage.Active && now >= cycle.DeepEndAt)
         {
             // The moon is back: equipment works again and the usual night goes on.
