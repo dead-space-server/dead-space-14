@@ -5,4 +5,4 @@
   unit: materials-unit-piece
   icon: { sprite: Objects/Specific/Xenoarchaeology/artifact_fragments.rsi, state: ancientball6 }
   color: "#C9D8F2"
-  price: 3
+  price: 0.75

@@ -149,6 +149,7 @@
     - id: ADTtelescopicBaton # ADT
     - id: PlushieLizardJobHeadofpersonnel
       prob: 0.02
+    - id: ClothingBackpackRIGEVA # DS14
 
 - type: entity
   id: LockerHeadOfPersonnelFilled

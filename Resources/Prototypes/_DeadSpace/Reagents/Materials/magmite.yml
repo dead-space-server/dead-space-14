@@ -5,7 +5,7 @@
   unit: materials-unit-piece
   icon: { sprite: /Textures/_DeadSpace/Objects/Materials/magmite-ore.rsi, state: magmite }
   color: "#c73914"
-  price: 2.5
+  price: 1.25
 
 - type: material
   id: Magmite
@@ -13,4 +13,4 @@
   name: магмитовая сталь
   icon: { sprite: /Textures/_DeadSpace/Objects/Materials/Sheets/magmite-sheet.rsi, state: magmite }
   color: "#c73914"
-  price: 8
+  price: 4
