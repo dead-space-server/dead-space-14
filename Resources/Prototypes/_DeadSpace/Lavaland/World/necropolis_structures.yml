@@ -130,7 +130,7 @@
     - HideContextMenu
 
 - type: entity
-  id: WallNecropolis
+  id: WallNecropolisLavaland
   name: стена некрополя
   description: С виду непробиваемая стена.
   suffix: Некрополь, неразрушимая
