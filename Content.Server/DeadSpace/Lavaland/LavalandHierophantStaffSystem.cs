@@ -173,17 +173,14 @@ public sealed class LavalandHierophantStaffSystem : EntitySystem
     private void OnUnequippedHand(Entity<LavalandHierophantStaffComponent> ent, ref GotUnequippedHandEvent args)
     {
         _alerts.ClearAlert(args.User, ent.Comp.BlinkAlert);
-        _alerts.ClearAlert(args.User, ent.Comp.BlessAlert);
     }
 
-    /// <summary>Blink and blessing alerts at the side of the screen, with their cooldowns.</summary>
+    /// <summary>The blink alert at the side of the screen, with its cooldown.</summary>
     private void UpdateAlerts(Entity<LavalandHierophantStaffComponent> ent, EntityUid user)
     {
         var now = _timing.CurTime;
         _alerts.ShowAlert(user, ent.Comp.BlinkAlert,
             cooldown: ent.Comp.NextBlink > now ? (now, ent.Comp.NextBlink) : null, autoRemove: false);
-        _alerts.ShowAlert(user, ent.Comp.BlessAlert,
-            cooldown: ent.Comp.NextBless > now ? (now, ent.Comp.NextBless) : null, autoRemove: false);
     }
 
     #endregion

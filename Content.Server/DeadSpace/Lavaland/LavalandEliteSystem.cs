@@ -689,7 +689,7 @@ public sealed class LavalandEliteSystem : EntitySystem
         if (ent.Comp.Bonfire is not { } bonfire || TerminatingOrDeleted(bonfire))
         {
             var newBonfire = Spawn(ent.Comp.BonfirePrototype, TileCenter(xform.Coordinates));
-            EnsureComp<LavalandBonfireComponent>(newBonfire).Owner = ent.Owner;
+            EnsureComp<LavalandBonfireComponent>(newBonfire).Legionnaire = ent.Owner;
             ent.Comp.Bonfire = newBonfire;
             _popup.PopupEntity(Loc.GetString("lavaland-legionnaire-bonfire", ("elite", ent.Owner)), ent, PopupType.MediumCaution);
         }
@@ -726,7 +726,7 @@ public sealed class LavalandEliteSystem : EntitySystem
             _lookup.GetEntitiesInRange(xform.Coordinates, 0.5f, _mobs);
             foreach (var mob in _mobs)
             {
-                if (mob.Owner != bonfire.Owner && !_mobState.IsDead(mob, mob.Comp))
+                if (mob.Owner != bonfire.Legionnaire && !_mobState.IsDead(mob, mob.Comp))
                     _flammable.AdjustFireStacks(mob, bonfire.FireStacks, ignite: true);
             }
         }

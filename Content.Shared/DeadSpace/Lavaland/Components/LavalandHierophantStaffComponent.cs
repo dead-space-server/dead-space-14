@@ -36,9 +36,6 @@ public sealed partial class LavalandHierophantStaffComponent : Component
     [DataField]
     public float BlessRange = 1.5f;
 
-    [DataField]
-    public ProtoId<AlertPrototype> BlessAlert = "LavalandHierophantStaffBlessing";
-
     [ViewVariables]
     public TimeSpan NextBlink;
 

@@ -7,9 +7,10 @@
   lightPrototype: LavalandLegionArenaLight
   decorations:
   - prototype: FloorLavaEntity
+    pool: true
     count: 22
     spawnAttempts: 80
-    clusterSize: 3
+    clusterSize: 5
     clusterRadius: 1
     minDistance: 9
     maxDistance: 15

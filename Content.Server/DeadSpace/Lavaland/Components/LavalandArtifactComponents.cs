@@ -86,7 +86,7 @@ public sealed partial class LavalandMinebotComponent : Component
     public ProtoId<TagPrototype> OreTag = "Ore";
 
     [ViewVariables]
-    public EntityUid? Owner;
+    public EntityUid? BoundUser;
 
     public TimeSpan NextCollect;
 }
@@ -281,7 +281,7 @@ public sealed partial class LavalandMementoMoriComponent : Component
     public EntProtoId AshPrototype = "Ash";
 
     [ViewVariables]
-    public EntityUid? Owner;
+    public EntityUid? LinkedUser;
 }
 
 /// <summary>Wearer linked to a memento mori; keeps the thresholds it had before.</summary>

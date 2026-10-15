@@ -23,6 +23,10 @@ public sealed partial class LavalandBossArenaComponent : Component
     [ViewVariables]
     public Vector2i BossSpawnTile = Vector2i.Zero;
 
+    /// <summary>Tile in the middle of the arena (zero for generated arenas, the floor center for loaded grids).</summary>
+    [ViewVariables]
+    public Vector2i Origin = Vector2i.Zero;
+
     [ViewVariables]
     public string BossName = "boss";
 

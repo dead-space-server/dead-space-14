@@ -327,7 +327,7 @@ public sealed class LavalandMiningEquipmentSystem : EntitySystem
 
     private void BindMinebot(Entity<LavalandMinebotComponent> ent, EntityUid user)
     {
-        ent.Comp.Owner = user;
+        ent.Comp.BoundUser = user;
         _npc.SetBlackboard(ent, NPCBlackboard.FollowTarget, new EntityCoordinates(user, Vector2.Zero));
         _popup.PopupEntity(Loc.GetString("lavaland-minebot-bound"), ent, user);
     }

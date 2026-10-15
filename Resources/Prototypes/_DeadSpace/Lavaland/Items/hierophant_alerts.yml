@@ -5,19 +5,3 @@
     state: hierophant_club
   name: Скачок Иерофанта
   description: Alt + ПКМ по полу с посохом в руке — телепорт со взрывами. Пока идёт отсчёт, скачок недоступен.
-
-- type: alert
-  id: LavalandHierophantStaffBlessing
-  icons:
-  - sprite: /Textures/_DeadSpace/Lavaland/Effects/HierophantBlast.rsi
-    state: hierophant_squares
-  name: Благословение Иерофанта
-  description: Alt + ПКМ по существу с посохом в руке (каст 5 с) — даёт потайловую ходьбу; повторно — снимает её. Новый заряд — через 200 с.
-
-- type: alert
-  id: LavalandHierophantBeat
-  icons:
-  - sprite: /Textures/_DeadSpace/Lavaland/Effects/HierophantTelegraph.rsi
-    state: hierophant_telegraph
-  name: Ритм Иерофанта
-  description: Вы ходите потайлово, от центра к центру клетки. Подкаты не работают.

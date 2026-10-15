@@ -107,6 +107,13 @@ public sealed partial class LavalandBossArenaPrototype : IPrototype
     [DataField]
     public List<string>? Layout;
 
+    /// <summary>
+    /// A ready-made arena grid (map file). The boss spawns in the middle of its floor and the fight stays within it;
+    /// floor on the outer edge is an entrance walled off when the arena seals. Overrides size, layout and cave.
+    /// </summary>
+    [DataField]
+    public Robust.Shared.Utility.ResPath? GridPath;
+
     /// <summary>Tile of the alternative floor in <see cref="Layout"/> (',' and 'l').</summary>
     [DataField]
     public string? AltFloorTile;
@@ -196,6 +203,18 @@ public sealed partial class LavalandBossArenaCaveConfig
     /// <summary>Floor of the passages dug into the lavaland.</summary>
     [DataField]
     public string ExitFloor = "FloorBasalt";
+
+    /// <summary>Chance for each corridor to be caved in somewhere along its way: a plug of rock to mine through.</summary>
+    [DataField]
+    public float CollapseChance = 0.6f;
+
+    /// <summary>Radius of the cave-in plug, in tiles.</summary>
+    [DataField]
+    public int CollapseRadius = 2;
+
+    /// <summary>Chance for each passage and corridor tile to hold a loose boulder (minable rock).</summary>
+    [DataField]
+    public float RubbleChance = 0.08f;
 }
 
 [DataDefinition]
@@ -223,6 +242,13 @@ public sealed partial class LavalandBossArenaDecorationEntry
 
     [DataField]
     public int ClusterRadius = 1;
+
+    /// <summary>
+    /// Grow each cluster as one solid pool (through tile sides only) with a gap to other decorations,
+    /// so smoothing entities such as lava get clean edges.
+    /// </summary>
+    [DataField]
+    public bool Pool;
 
     [DataField]
     public float MinDistance;

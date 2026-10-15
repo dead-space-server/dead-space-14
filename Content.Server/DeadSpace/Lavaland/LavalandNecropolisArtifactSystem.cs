@@ -564,7 +564,7 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
 
     private void OnMementoAction(Entity<LavalandMementoMoriComponent> ent, ref LavalandMementoMoriActionEvent args)
     {
-        if (args.Handled || ent.Comp.Owner != null || !HasComp<HumanoidAppearanceComponent>(args.Performer))
+        if (args.Handled || ent.Comp.LinkedUser != null || !HasComp<HumanoidAppearanceComponent>(args.Performer))
             return;
         args.Handled = true;
 
@@ -579,7 +579,7 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
 
     private void OnMementoLinked(Entity<LavalandMementoMoriComponent> ent, ref LavalandMementoMoriDoAfterEvent args)
     {
-        if (args.Handled || args.Cancelled || ent.Comp.Owner != null)
+        if (args.Handled || args.Cancelled || ent.Comp.LinkedUser != null)
             return;
         args.Handled = true;
 
@@ -599,7 +599,7 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         _thresholds.SetMobStateThreshold(user, never, MobState.Critical, thresholds);
         _thresholds.SetMobStateThreshold(user, never + 1, MobState.Dead, thresholds);
 
-        ent.Comp.Owner = user;
+        ent.Comp.LinkedUser = user;
         _appearance.SetData(ent, LavalandArtifactVisuals.Active, true);
         _popup.PopupEntity(Loc.GetString("lavaland-memento-linked"), user, user, PopupType.Large);
     }
@@ -616,10 +616,10 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
 
     private void Mori(Entity<LavalandMementoMoriComponent> ent)
     {
-        if (ent.Comp.Owner is not { } owner)
+        if (ent.Comp.LinkedUser is not { } owner)
             return;
 
-        ent.Comp.Owner = null;
+        ent.Comp.LinkedUser = null;
         if (!TerminatingOrDeleted(ent))
             _appearance.SetData(ent, LavalandArtifactVisuals.Active, false);
         if (TerminatingOrDeleted(owner))

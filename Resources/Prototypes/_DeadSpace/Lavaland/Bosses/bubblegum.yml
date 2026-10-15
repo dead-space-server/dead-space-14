@@ -32,9 +32,10 @@
       WallRockBasaltArtifactFragment: 2
   decorations:
   - prototype: FloorLavaEntity
+    pool: true
     count: 28
     spawnAttempts: 80
-    clusterSize: 3
+    clusterSize: 6
     clusterRadius: 1
     minDistance: 12
     maxDistance: 22

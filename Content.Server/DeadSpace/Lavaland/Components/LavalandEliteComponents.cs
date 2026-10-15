@@ -247,7 +247,7 @@ public sealed partial class LavalandBonfireComponent : Component
     public TimeSpan Interval = TimeSpan.FromSeconds(1);
 
     [ViewVariables]
-    public EntityUid? Owner;
+    public EntityUid? Legionnaire;
 
     public TimeSpan NextBurn;
 }

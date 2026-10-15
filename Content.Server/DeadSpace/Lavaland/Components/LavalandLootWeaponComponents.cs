@@ -186,7 +186,7 @@ public sealed partial class LavalandDaggerCrystalComponent : Component
     public float Radius = 0.5f;
 
     [ViewVariables]
-    public EntityUid? Owner;
+    public EntityUid? Thrower;
 
     public readonly HashSet<EntityUid> Hit = new();
 }

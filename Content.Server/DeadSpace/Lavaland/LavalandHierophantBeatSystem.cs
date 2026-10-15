@@ -1,7 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Server.DeadSpace.Lavaland.Components;
-using Content.Shared.Alert;
 using Content.Shared.Ghost;
 using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.DeadSpace.Movement.Components;
@@ -17,7 +16,6 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// </summary>
 public sealed class LavalandHierophantBeatSystem : EntitySystem
 {
-    [Dependency] private readonly AlertsSystem _alerts = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
     private static readonly TimeSpan ArenaCheckInterval = TimeSpan.FromSeconds(0.5);
@@ -33,7 +31,6 @@ public sealed class LavalandHierophantBeatSystem : EntitySystem
     private void OnStartup(Entity<LavalandHierophantBeatComponent> ent, ref ComponentStartup args)
     {
         EnsureComp<TileStepMovementComponent>(ent);
-        _alerts.ShowAlert(ent.Owner, ent.Comp.Alert);
     }
 
     private void OnShutdown(Entity<LavalandHierophantBeatComponent> ent, ref ComponentShutdown args)
@@ -42,7 +39,6 @@ public sealed class LavalandHierophantBeatSystem : EntitySystem
             return;
 
         RemCompDeferred<TileStepMovementComponent>(ent);
-        _alerts.ClearAlert(ent.Owner, ent.Comp.Alert);
     }
 
     public bool IsBlessed(EntityUid uid)

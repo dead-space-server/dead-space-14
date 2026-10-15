@@ -56,6 +56,14 @@ public sealed class LavalandBossArenaSystem : EntitySystem
     private static readonly TimeSpan BossLeashResetDelay = TimeSpan.FromSeconds(5);
     private static readonly TimeSpan EmptyCleanupDelay = TimeSpan.FromMinutes(2);
     private static readonly TimeSpan BossDeadCleanupDelay = TimeSpan.FromMinutes(3);
+    private static readonly Vector2i[] CardinalSteps =
+    {
+        new(1, 0),
+        new(-1, 0),
+        new(0, 1),
+        new(0, -1),
+    };
+
     private static readonly Vector2i[] RewardOffsets =
     {
         new(-1, 0),
@@ -69,6 +77,7 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         Vector2i.Zero,
     };
 
+    [Dependency] private readonly Robust.Shared.EntitySerialization.Systems.MapLoaderSystem _mapLoader = default!;
     [Dependency] private readonly Content.Server.Decals.DecalSystem _decals = default!;
     [Dependency] private readonly BiomeSystem _biome = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
@@ -200,35 +209,96 @@ public sealed class LavalandBossArenaSystem : EntitySystem
             : arenaPrototype.Size);
         var height = width;
 
-        var layout = arenaPrototype.Layout is { Count: > 0 } rows ? rows : null;
+        // A ready-made grid: loaded on a scratch map first to measure it, moved onto lavaland once placed.
+        Entity<MapGridComponent>? loadedGrid = null;
+        EntityUid? scratchMap = null;
+        var origin = Vector2i.Zero;
+        var loadedSealTiles = new List<(Vector2i Tile, Vector2i Inward)>();
+        if (arenaPrototype.GridPath is { } gridPath)
+        {
+            scratchMap = _map.CreateMap(out var scratchMapId);
+            if (!_mapLoader.TryLoadGrid(scratchMapId, gridPath, out loadedGrid) ||
+                !TryMeasureLoadedArena(loadedGrid.Value, out origin, out width, out height, loadedSealTiles))
+            {
+                Log.Error($"Lavaland boss arena {arenaPrototype.ID} cannot load its grid {gridPath}.");
+                QueueDel(scratchMap.Value);
+                return false;
+            }
+        }
+
+        var layout = loadedGrid == null && arenaPrototype.Layout is { Count: > 0 } rows ? rows : null;
         if (layout != null)
         {
             width = layout.Max(row => row.Length) | 1;
             height = layout.Count | 1;
         }
 
-        // A cave arena takes the fight square plus its rock ring.
-        var cave = layout == null ? arenaPrototype.Cave : null;
-        var footprint = cave != null ? width + Math.Max(3, cave.Thickness) * 2 : width;
+        // A cave arena takes the fight square plus its rock ring. If there is no room for the full cave,
+        // try a thinner rock ring and at last a plain arena, so the boss is never left out.
+        var cave = layout == null && loadedGrid == null ? arenaPrototype.Cave : null;
+        var caveThickness = 0;
+        var footprint = width;
+        Vector2i center = default;
+        var placed = false;
+        var tries = cave != null
+            ? new[] { Math.Max(3, cave.Thickness), Math.Max(5, cave.Thickness * 2 / 3), Math.Max(4, cave.Shell + 2), 0 }
+            : new[] { 0 };
+        foreach (var thickness in tries)
+        {
+            caveThickness = thickness;
+            footprint = width + thickness * 2;
+            // The rock ring already keeps the arena apart from its neighbours.
+            if (TryFindArenaCenter(mapUid, terrainGrid, planet, arenaPrototype, random, footprint, footprint, out center,
+                    Math.Max(8f, arenaPrototype.GridSeparation - thickness)))
+            {
+                placed = true;
+                break;
+            }
 
-        if (!TryFindArenaCenter(mapUid, terrainGrid, planet, arenaPrototype, random, footprint, footprint, out var center))
+            if (thickness > 0)
+                Log.Warning($"Lavaland boss arena {arenaPrototype.ID}: no room for a cave {thickness} thick, trying smaller.");
+        }
+
+        if (!placed)
         {
             Log.Warning($"Lavaland boss arena {arenaPrototype.ID} failed to find a safe placement.");
+            if (scratchMap != null)
+                QueueDel(scratchMap.Value);
             return false;
         }
+
+        if (caveThickness == 0)
+            cave = null;
 
         var naturalFloor = new Dictionary<Vector2i, Tile>();
         PrepareArenaTerrain(mapUid, terrainGrid, biome, floorTile, arenaPrototype.NaturalFloors, naturalFloor, center, footprint, footprint);
         await Timer.Delay(1, cancellation);
 
         var mapId = Transform(mapUid).MapID;
-        var grid = _mapManager.CreateGridEntity(mapId);
+        Entity<MapGridComponent> grid;
+        if (loadedGrid is { } loaded)
+        {
+            // The middle tile of the loaded floor lands where a generated arena would have its center.
+            grid = loaded;
+            _transform.SetMapCoordinates(grid.Owner, new MapCoordinates(new Vector2(center.X - origin.X, center.Y - origin.Y), mapId));
+            _transform.SetLocalRotation(grid.Owner, Angle.Zero);
+            QueueDel(scratchMap!.Value);
+        }
+        else
+        {
+            grid = _mapManager.CreateGridEntity(mapId);
+            _transform.SetMapCoordinates(grid.Owner, new MapCoordinates(new Vector2(center.X, center.Y), mapId));
+        }
+
         _metadata.SetEntityName(grid.Owner, arenaPrototype.ArenaName);
-        _transform.SetMapCoordinates(grid.Owner, new MapCoordinates(new Vector2(center.X, center.Y), mapId));
 
         CaveLayout? caveLayout = null;
         var layoutSealTiles = new List<(Vector2i Tile, Vector2i Inward)>();
-        if (layout != null)
+        if (loadedGrid != null)
+        {
+            // Everything comes with the grid.
+        }
+        else if (layout != null)
         {
             var altFloorTile = arenaPrototype.AltFloorTile is { } altId && _tileDefinition.TryGetDefinition(altId, out var altDef)
                 ? altDef
@@ -248,7 +318,7 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         }
         else if (cave != null)
         {
-            caveLayout = BuildCaveLayout(width, cave, random);
+            caveLayout = BuildCaveLayout(width, cave, caveThickness, random);
             await FillCave(
                 grid.Owner,
                 grid.Comp,
@@ -279,12 +349,13 @@ public sealed class LavalandBossArenaSystem : EntitySystem
             SpawnArenaWalls(grid.Owner, grid.Comp, arenaPrototype.WallPrototype, width, height);
         }
 
-        SpawnArenaDecorations(grid.Owner, grid.Comp, arenaPrototype.Decorations, width, height, random);
+        if (loadedGrid == null)
+            SpawnArenaDecorations(grid.Owner, grid.Comp, arenaPrototype.Decorations, width, height, random);
 
-        if (layout == null && arenaPrototype.LightPrototype is { } lightPrototype)
+        if (layout == null && loadedGrid == null && arenaPrototype.LightPrototype is { } lightPrototype)
             SpawnArenaLights(grid.Owner, grid.Comp, lightPrototype, width, height);
 
-        var boss = Spawn(arenaPrototype.BossPrototype.Id, _map.GridTileToLocal(grid.Owner, grid.Comp, Vector2i.Zero));
+        var boss = Spawn(arenaPrototype.BossPrototype.Id, _map.GridTileToLocal(grid.Owner, grid.Comp, origin));
         var bossComponent = EnsureComp<LavalandBossComponent>(boss);
         bossComponent.Arena = grid.Owner;
         bossComponent.MaxHealth = Math.Max(1f, bossComponent.MaxHealth);
@@ -298,7 +369,8 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         arena.Map = mapUid;
         arena.Grid = grid.Owner;
         arena.Boss = boss;
-        arena.BossSpawnTile = Vector2i.Zero;
+        arena.BossSpawnTile = origin;
+        arena.Origin = origin;
         arena.Width = width;
         arena.Height = height;
         arena.FightStartDistance = arenaPrototype.FightStartDistance > 0f
@@ -317,10 +389,11 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         arena.TileMovement = arenaPrototype.TileMovement;
         arena.SealWallPrototype = arenaPrototype.SealWallPrototype ?? arenaPrototype.WallPrototype;
         arena.SealTiles.AddRange(layoutSealTiles);
+        arena.SealTiles.AddRange(loadedSealTiles);
         if (caveLayout != null)
         {
             arena.SealTiles.AddRange(caveLayout.SealTiles);
-            arena.ParticipantExtent = width / 2 + Math.Max(3, cave!.Thickness) - 3;
+            arena.ParticipantExtent = width / 2 + caveThickness - Math.Max(3, cave!.Shell);
         }
         arena.SealSound = arenaPrototype.SealSound;
         arena.SealMessage = arenaPrototype.SealMessage;
@@ -349,9 +422,11 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         Random random,
         int width,
         int height,
-        out Vector2i center)
+        out Vector2i center,
+        float? gridSeparation = null)
     {
         center = default;
+        var separation = gridSeparation ?? arenaPrototype.GridSeparation;
 
         var limit = GetPlacementLimit(planet, arenaPrototype, width, height);
         if (limit <= 0)
@@ -374,7 +449,7 @@ public sealed class LavalandBossArenaSystem : EntitySystem
                 (int) MathF.Round(MathF.Sin((float) angle) * (float) distance));
 
             if (IsInsideArenaExclusion(candidate, planet, arenaPrototype, arenaRadius) ||
-                HasNearbyNonTerrainGrid(mapUid, candidate, arenaRadius + arenaPrototype.GridSeparation) ||
+                HasNearbyNonTerrainGrid(mapUid, candidate, arenaRadius + separation) ||
                 HasPersistentAnchoredEntityInFootprint(mapUid, terrainGrid, candidate, width, height))
             {
                 continue;
@@ -610,6 +685,9 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         public int Outer;
         public readonly List<(Vector2i Tile, Vector2i Inward)> SealTiles = new();
 
+        /// <summary>Rock that stays minable even inside the shell (boulders in the passages).</summary>
+        public readonly HashSet<Vector2i> Minable = new();
+
         /// <summary>Where each passage leaves the cave (grid coordinates) and its direction.</summary>
         public readonly List<(Vector2 Exit, Vector2 Direction)> Exits = new();
     }
@@ -618,11 +696,11 @@ public sealed class LavalandBossArenaSystem : EntitySystem
     /// The fight square stays fully open (the bosses' attacks rely on it); around it a rock ring with uneven
     /// pockets, and winding passages out. The seal goes across each passage near its outer end.
     /// </summary>
-    private static CaveLayout BuildCaveLayout(int width, LavalandBossArenaCaveConfig cave, Random random)
+    private static CaveLayout BuildCaveLayout(int width, LavalandBossArenaCaveConfig cave, int caveThickness, Random random)
     {
         var layout = new CaveLayout();
         var half = width / 2;
-        var thickness = Math.Max(3, cave.Thickness);
+        var thickness = Math.Max(3, caveThickness);
         var outer = half + thickness;
         layout.Outer = outer;
         var maxPocket = Math.Max(0, thickness - Math.Max(3, cave.Shell));
@@ -676,6 +754,7 @@ public sealed class LavalandBossArenaSystem : EntitySystem
             var scale = half / MathF.Max(MathF.Abs(direction.X), MathF.Abs(direction.Y));
             var position = direction * scale;
             var passageTiles = new HashSet<Vector2i>();
+            var dug = new HashSet<Vector2i>();
 
             for (var step = 0; step < 400; step++)
             {
@@ -693,7 +772,8 @@ public sealed class LavalandBossArenaSystem : EntitySystem
                             continue;
                         }
 
-                        layout.Rock.Remove(tile);
+                        if (layout.Rock.Remove(tile))
+                            dug.Add(tile);
                         layout.Floor.Add(tile);
                         passageTiles.Add(tile);
                     }
@@ -716,6 +796,17 @@ public sealed class LavalandBossArenaSystem : EntitySystem
                     ? new Vector2i(-Math.Sign(tile.X), 0)
                     : new Vector2i(0, -Math.Sign(tile.Y));
                 layout.SealTiles.Add((tile, inward));
+            }
+
+            // Loose boulders left in the passage, clear of the seal.
+            foreach (var tile in dug)
+            {
+                if (Math.Max(Math.Abs(tile.X), Math.Abs(tile.Y)) >= outer - 2 || random.NextDouble() >= cave.RubbleChance)
+                    continue;
+
+                layout.Floor.Remove(tile);
+                layout.Rock.Add(tile);
+                layout.Minable.Add(tile);
             }
         }
 
@@ -750,7 +841,7 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         var minable = new List<Vector2i>();
         foreach (var tile in layout.Rock)
         {
-            if (Math.Max(Math.Abs(tile.X), Math.Abs(tile.Y)) <= outer - shell)
+            if (Math.Max(Math.Abs(tile.X), Math.Abs(tile.Y)) <= outer - shell || layout.Minable.Contains(tile))
                 minable.Add(tile);
         }
 
@@ -798,7 +889,7 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         {
             cancellation.ThrowIfCancellationRequested();
             var chebyshev = Math.Max(Math.Abs(tile.X), Math.Abs(tile.Y));
-            var prototype = chebyshev > outer - shell
+            var prototype = chebyshev > outer - shell && !layout.Minable.Contains(tile)
                 ? cave.ShellRock
                 : ore.TryGetValue(tile, out var oreRock) ? oreRock : cave.Rock;
             SpawnAnchored(prototype.Id, terrainUid, terrainGrid, center + tile);
@@ -838,6 +929,8 @@ public sealed class LavalandBossArenaSystem : EntitySystem
             var outward = MathF.Atan2(direction.Y, direction.X);
             var heading = outward;
             var position = new Vector2(center.X, center.Y) + exit;
+            var corridor = new HashSet<Vector2i>();
+            var path = new List<Vector2>();
             for (var step = 0; step <= Math.Max(0, cave.ExitLength); step++)
             {
                 heading += ((float) random.NextDouble() - 0.5f) * 2f * cave.ExitWander;
@@ -845,6 +938,12 @@ public sealed class LavalandBossArenaSystem : EntitySystem
                 position += new Vector2(MathF.Cos(heading), MathF.Sin(heading));
                 var tile = new Vector2i((int) MathF.Floor(position.X), (int) MathF.Floor(position.Y));
                 var bounds = new Box2i(tile.X - halfWidth, tile.Y - halfWidth, tile.X + halfWidth + 1, tile.Y + halfWidth + 1);
+                path.Add(position);
+                for (var x = bounds.Left; x < bounds.Right; x++)
+                {
+                    for (var y = bounds.Bottom; y < bounds.Top; y++)
+                        corridor.Add(new Vector2i(x, y));
+                }
 
                 // The land keeps its own floor; only the rock in the way is cleared.
                 _reservedTiles.Clear();
@@ -866,6 +965,34 @@ public sealed class LavalandBossArenaSystem : EntitySystem
                     _map.SetTiles(mapUid, terrainGrid, _terrainTiles);
                 _terrainTiles.Clear();
                 ClearClearableTerrainEntities(mapUid, terrainGrid, bounds);
+            }
+
+            // Cave-ins: a plug across the whole corridor somewhere along it, plus loose boulders.
+            var rubble = new HashSet<Vector2i>();
+            if (path.Count > 6 && random.NextDouble() < cave.CollapseChance)
+            {
+                var plug = path[random.Next(3, path.Count - 3)];
+                var radius = Math.Max(halfWidth + 1, cave.CollapseRadius) + 0.5f;
+                foreach (var tile in corridor)
+                {
+                    if (Vector2.DistanceSquared(new Vector2(tile.X + 0.5f, tile.Y + 0.5f), plug) <= radius * radius)
+                        rubble.Add(tile);
+                }
+            }
+
+            foreach (var tile in corridor)
+            {
+                if (random.NextDouble() < cave.RubbleChance)
+                    rubble.Add(tile);
+            }
+
+            foreach (var tile in rubble)
+            {
+                var occupied = _map.GetAnchoredEntitiesEnumerator(mapUid, terrainGrid, tile);
+                if (occupied.MoveNext(out _))
+                    continue;
+
+                SpawnAnchored(cave.Rock.Id, mapUid, terrainGrid, tile);
             }
         }
     }
@@ -938,6 +1065,9 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         Vector2i seed,
         int remaining)
     {
+        if (decoration.Pool && decoration.Decals.Count == 0)
+            return SpawnDecorationPool(gridUid, grid, decoration, width, height, random, seed, remaining);
+
         var spawned = 0;
         var current = seed;
         var clusterSize = Math.Min(Math.Max(1, decoration.ClusterSize), remaining);
@@ -973,6 +1103,63 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         }
 
         return spawned;
+    }
+
+    /// <summary>
+    /// One solid pool: grows through tile sides only and never touches another decoration,
+    /// so smoothing entities such as lava get clean edges instead of lone diagonal tiles.
+    /// </summary>
+    private int SpawnDecorationPool(
+        EntityUid gridUid,
+        MapGridComponent grid,
+        LavalandBossArenaDecorationEntry decoration,
+        int width,
+        int height,
+        Random random,
+        Vector2i seed,
+        int remaining)
+    {
+        var size = Math.Min(Math.Max(1, decoration.ClusterSize), remaining);
+        var pool = new List<Vector2i>();
+        var poolSet = new HashSet<Vector2i>();
+
+        for (var attempt = 0; attempt < size * 8 && pool.Count < size; attempt++)
+        {
+            var tile = pool.Count == 0
+                ? seed
+                : pool[random.Next(pool.Count)] + CardinalSteps[random.Next(CardinalSteps.Length)];
+
+            if (poolSet.Contains(tile) ||
+                TouchesOtherDecoration(tile, poolSet) ||
+                !IsValidDecorationTile(gridUid, grid, decoration, width, height, tile))
+            {
+                if (pool.Count == 0)
+                    break;
+                continue;
+            }
+
+            SpawnAnchored(decoration.Prototype!.Value.Id, gridUid, grid, tile);
+            _decorationTiles.Add(tile);
+            pool.Add(tile);
+            poolSet.Add(tile);
+        }
+
+        return pool.Count;
+    }
+
+    private bool TouchesOtherDecoration(Vector2i tile, HashSet<Vector2i> own)
+    {
+        for (var dx = -1; dx <= 1; dx++)
+        {
+            for (var dy = -1; dy <= 1; dy++)
+            {
+                var neighbour = tile + new Vector2i(dx, dy);
+                if (_decorationTiles.Contains(neighbour) && !own.Contains(neighbour))
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     private bool TryPickDecorationTile(
@@ -1652,7 +1839,7 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         var tile = _map.LocalToTile(arena.Grid, grid, xform.Coordinates);
         // Cave: the pockets around the fight square count too, up to the passage seal.
         if (arena.ParticipantExtent > 0)
-            return Math.Max(Math.Abs(tile.X), Math.Abs(tile.Y)) <= arena.ParticipantExtent;
+            return Math.Max(Math.Abs(tile.X - arena.Origin.X), Math.Abs(tile.Y - arena.Origin.Y)) <= arena.ParticipantExtent;
 
         return IsInsideInnerArena(arena, tile);
     }
@@ -1907,7 +2094,71 @@ public sealed class LavalandBossArenaSystem : EntitySystem
     {
         var halfWidth = arena.Width / 2;
         var halfHeight = arena.Height / 2;
-        return (-halfWidth + 1, halfWidth - 1, -halfHeight + 1, halfHeight - 1);
+        var origin = arena.Origin;
+        return (origin.X - halfWidth + 1, origin.X + halfWidth - 1, origin.Y - halfHeight + 1, origin.Y + halfHeight - 1);
+    }
+
+    /// <summary>
+    /// Size and middle of a loaded arena grid's floor, and its entrances: floor on the outer edge without a wall.
+    /// </summary>
+    private bool TryMeasureLoadedArena(
+        Entity<MapGridComponent> grid,
+        out Vector2i origin,
+        out int width,
+        out int height,
+        List<(Vector2i Tile, Vector2i Inward)> sealTiles)
+    {
+        origin = default;
+        width = height = 0;
+        var minX = int.MaxValue;
+        var minY = int.MaxValue;
+        var maxX = int.MinValue;
+        var maxY = int.MinValue;
+        var floor = new List<Vector2i>();
+        foreach (var tileRef in _map.GetAllTiles(grid, grid.Comp))
+        {
+            var index = tileRef.GridIndices;
+            floor.Add(index);
+            minX = Math.Min(minX, index.X);
+            minY = Math.Min(minY, index.Y);
+            maxX = Math.Max(maxX, index.X);
+            maxY = Math.Max(maxY, index.Y);
+        }
+
+        if (floor.Count == 0)
+            return false;
+
+        width = maxX - minX + 1;
+        height = maxY - minY + 1;
+        origin = new Vector2i((minX + maxX) / 2, (minY + maxY) / 2);
+
+        foreach (var tile in floor)
+        {
+            if (tile.X != minX && tile.X != maxX && tile.Y != minY && tile.Y != maxY)
+                continue;
+
+            var walled = false;
+            var anchored = _map.GetAnchoredEntitiesEnumerator(grid, grid.Comp, tile);
+            while (anchored.MoveNext(out var uid))
+            {
+                if (uid != null && HasComp<OccluderComponent>(uid.Value))
+                {
+                    walled = true;
+                    break;
+                }
+            }
+
+            if (walled)
+                continue;
+
+            var inward = tile.X == minX ? new Vector2i(1, 0)
+                : tile.X == maxX ? new Vector2i(-1, 0)
+                : tile.Y == minY ? new Vector2i(0, 1)
+                : new Vector2i(0, -1);
+            sealTiles.Add((tile, inward));
+        }
+
+        return true;
     }
 
     private static Box2i GetReservationBounds(Vector2i center, int width, int height)

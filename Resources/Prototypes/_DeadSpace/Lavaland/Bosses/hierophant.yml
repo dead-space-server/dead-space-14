@@ -1,52 +1,11 @@
 - type: lavalandBossArena
   id: LavalandHierophantArena
   arenaName: Арена Иерофанта
+  gridPath: /Maps/_DeadSpace/Lavaland/hierophant_arena.yml
   tileMovement: true
   bossPrototype: MobLavalandHierophant
   floorTile: FloorHierophantArena
-  floorVisualPrototype: LavalandHierophantArenaFloor
-  altFloorTile: FloorHierophantAlt
-  altFloorVisualPrototype: LavalandHierophantArenaFloorAlt
   wallPrototype: WallHierophantArena
-  lightPrototype: LavalandHierophantArenaLightSmall
-  # Расположение стен, колонн и светильников как в руине Иерофанта на tgstation (растянута до 35x35).
-  layout:
-  - "######....###############....######"
-  - "#......,,........L........,,......#"
-  - "#......,,.................,,......#"
-  - "#......,,.................,,......#"
-  - "#......,,.................,,......#"
-  - "#....,.ll.,..#...,...#..,.ll.,....#"
-  - ".................,................."
-  - ".,,,,l.##.l,,....L....,,l.##.l,,,,."
-  - ".,,,,l.##.l,,....L....,,l.##.l,,,,."
-  - ".................,................."
-  - "#....,.ll.,..#...,...#..,.ll.,....#"
-  - "#......,,....,...L...,....,,......#"
-  - "#......,,....,.......,....,,......#"
-  - "#....#....#,,.........,,#....#....#"
-  - "#.............,,,,,,,.............#"
-  - "#.............,,,,,,,.............#"
-  - "#.............,,,,,,,.............#"
-  - "#L...,,LL,,L..,,,.,,,..L,,LL,,...L#"
-  - "#.............,,,,,,,.............#"
-  - "#.............,,,,,,,.............#"
-  - "#.............,,,,,,,.............#"
-  - "#....#....#,,.........,,#....#....#"
-  - "#......,,....,.......,....,,......#"
-  - "#......,,....,...L...,....,,......#"
-  - "#....,.ll.,..#...,...#..,.ll.,....#"
-  - ".................,................."
-  - ".,,,,l.##.l,,....L....,,l.##.l,,,,."
-  - ".,,,,l.##.l,,....L....,,l.##.l,,,,."
-  - ".................,................."
-  - "#....,.ll.,..#...,...#..,.ll.,....#"
-  - "#......,,.................,,......#"
-  - "#......,,.................,,......#"
-  - "#......,,.................,,......#"
-  - "#......,,........L........,,......#"
-  - "######....###############....######"
-  size: 35
   spawnAttempts: 160
   minDistance: 170
   maxDistance: 320
@@ -377,19 +336,6 @@
         - MobLayer
   - type: NoSlip
   - type: RequireProjectileTarget
-
-- type: entity
-  parent: LavalandHierophantArenaLight
-  id: LavalandHierophantArenaLightSmall
-  name: светильник арены Иерофанта
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: PointLight
-    radius: 4
-    energy: 1
-    softness: 1
-    color: "#dce8ff"
-    castShadows: false
 
 - type: tile
   id: FloorHierophant

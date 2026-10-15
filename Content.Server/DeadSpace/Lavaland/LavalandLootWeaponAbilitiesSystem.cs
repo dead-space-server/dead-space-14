@@ -90,12 +90,12 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
             _lookup.GetEntitiesInRange(xform.Coordinates, crystal.Radius, _mobs);
             foreach (var mob in _mobs)
             {
-                if (mob.Owner == crystal.Owner || _mobState.IsDead(mob, mob.Comp) || !crystal.Hit.Add(mob))
+                if (mob.Owner == crystal.Thrower || _mobState.IsDead(mob, mob.Comp) || !crystal.Hit.Add(mob))
                     continue;
 
                 var large = _weapons.IsLavalandCreature(mob);
                 _damageable.TryChangeDamage(mob.Owner, large ? crystal.LargeDamage : crystal.SmallDamage,
-                    origin: crystal.Owner);
+                    origin: crystal.Thrower);
                 _stun.TryUpdateParalyzeDuration(mob, crystal.Stun);
             }
         }
@@ -184,7 +184,7 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
     {
         var crystal = Spawn(weapon.CrystalPrototype, coordinates);
         if (TryComp<LavalandDaggerCrystalComponent>(crystal, out var comp))
-            comp.Owner = owner;
+            comp.Thrower = owner;
     }
 
     #endregion

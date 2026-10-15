@@ -147,7 +147,7 @@ public sealed class LavalandSensorTabletSystem : EntitySystem
         {
             if (sensor.Mode != SuitSensorMode.SensorCords || sensor.User is not { } user ||
                 !IsEquippedSensor(sensorUid, sensor, user) ||
-                !TryComp<TransformComponent>(user, out var userXform) ||
+                !TryComp(user, out TransformComponent? userXform) ||
                 userXform.MapUid is not { } mapUid || !HasComp<LavalandMapComponent>(mapUid) ||
                 !users.Add(user))
             {
@@ -284,7 +284,7 @@ public sealed class LavalandSensorTabletSystem : EntitySystem
     {
         foreach (var candidate in _lookup.GetEntitiesInRange(mapId, center, tablet.ScanRadius))
         {
-            if (candidate == user || !scanned.Add(candidate) || !TryComp<TransformComponent>(candidate, out var xform))
+            if (candidate == user || !scanned.Add(candidate) || !TryComp(candidate, out TransformComponent? xform))
                 continue;
 
             Color color;
