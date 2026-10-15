@@ -341,6 +341,11 @@
   description: Временное воплощение могучего хранителя некрополя.
   suffix: Lavaland, Player
   components:
+  # Stun resistance like the space dragon: stun and knockdown status effects skip it.
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+    - StunImmune
   - type: Sprite
     drawdepth: Mobs
     sprite: _DeadSpace/Lavaland/Mobs/AshDrake.rsi

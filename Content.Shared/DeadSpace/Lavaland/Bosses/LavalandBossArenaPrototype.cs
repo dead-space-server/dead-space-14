@@ -92,6 +92,21 @@ public sealed partial class LavalandBossArenaPrototype : IPrototype
     [DataField]
     public bool TileMovement;
 
+    /// <summary>
+    /// Build the arena as a huge cave: the fight square stays open, a thick rock ring with uneven pockets surrounds
+    /// it and winding passages lead out into the lavaland. The passages are walled off when the arena seals.
+    /// </summary>
+    [DataField]
+    public LavalandBossArenaCaveConfig? Cave;
+
+    /// <summary>
+    /// Exact arena plan, one string per row (top row first): '#' wall, 'L' floor with a light,
+    /// any other non-space character floor. The boss stands in the middle; floor on the outer edge is an entrance
+    /// that gets walled off when the arena seals. Overrides size, cave and the default lights.
+    /// </summary>
+    [DataField]
+    public List<string>? Layout;
+
     /// <summary>Wall used to close the entrances. Falls back to <see cref="WallPrototype"/>.</summary>
     [DataField]
     public EntProtoId? SealWallPrototype;
@@ -102,6 +117,65 @@ public sealed partial class LavalandBossArenaPrototype : IPrototype
     /// <summary>Popup shown to everyone inside when the entrances close. Null disables it.</summary>
     [DataField]
     public LocId? SealMessage = "lavaland-boss-arena-sealed";
+}
+
+[DataDefinition]
+public sealed partial class LavalandBossArenaCaveConfig
+{
+    /// <summary>Rock around the fight square, in tiles.</summary>
+    [DataField]
+    public int Thickness = 9;
+
+    /// <summary>How deep the uneven pockets bite into the rock (0..1 of the thickness).</summary>
+    [DataField]
+    public float Roughness = 0.75f;
+
+    [DataField]
+    public int Passages = 3;
+
+    /// <summary>Passage width is 2 * this + 1.</summary>
+    [DataField]
+    public int PassageHalfWidth = 1;
+
+    /// <summary>How far the corridors wind on into the lavaland past the cave.</summary>
+    [DataField]
+    public int ExitLength = 30;
+
+    /// <summary>How much the corridors wind (radians of random turn per step).</summary>
+    [DataField]
+    public float ExitWander = 0.35f;
+
+    /// <summary>
+    /// The rock is built on the lavaland itself, so it joins the surrounding rock without seams.
+    /// Inner rock: ordinary rock you can mine, with ore veins.
+    /// </summary>
+    [DataField]
+    public EntProtoId Rock = "WallRockBasalt";
+
+    /// <summary>Outer layers of the rock that cannot be mined: no digging out of a sealed arena.</summary>
+    [DataField]
+    public int Shell = 3;
+
+    [DataField]
+    public EntProtoId ShellRock = "WallRockBasaltLavalandBoundary";
+
+    /// <summary>Ore veins in the minable rock.</summary>
+    [DataField]
+    public int OreVeins = 16;
+
+    [DataField]
+    public int OreVeinMin = 3;
+
+    [DataField]
+    public int OreVeinMax = 7;
+
+    /// <summary>Ore rock and its weight.</summary>
+    [DataField]
+    public Dictionary<EntProtoId, float> Ores = new();
+
+    /// <summary>Floor of the passages dug into the lavaland.</summary>
+    [DataField]
+    public string ExitFloor = "FloorBasalt";
 }
 
 [DataDefinition]

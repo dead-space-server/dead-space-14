@@ -5,6 +5,31 @@
   floorTile: FloorColossusArena
   wallPrototype: WallColossusArena
   lightPrototype: LavalandColossusArenaLight
+  cave:
+    thickness: 12
+    shell: 3
+    roughness: 0.75
+    passages: 3
+    passageHalfWidth: 1
+    exitLength: 30
+    exitWander: 0.35
+    oreVeins: 18
+    oreVeinMin: 3
+    oreVeinMax: 7
+    ores:
+      WallRockBasaltTin: 30
+      WallRockBasaltCoal: 30
+      WallRockBasaltPlasma: 15
+      WallRockBasaltQuartz: 15
+      WallRockBasaltSalt: 10
+      WallRockBasaltSilver: 10
+      WallRockBasaltGold: 8
+      WallRockBasaltUranium: 6
+      WallRockBasaltDiamond: 3
+      WallRockBasaltGibtonite: 3
+      WallRockBasaltMagmite: 2
+      WallRockBasaltBluespaceCrystal: 2
+      WallRockBasaltArtifactFragment: 2
   decorations:
   - prototype: BasaltRandom
     count: 110

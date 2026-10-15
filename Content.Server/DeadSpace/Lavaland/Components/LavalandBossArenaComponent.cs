@@ -123,4 +123,12 @@ public sealed partial class LavalandBossArenaComponent : Component
 
     [ViewVariables]
     public readonly List<EntityUid> SealWalls = new();
+
+    /// <summary>Cave arenas: tiles walled off on sealing (across the passages), with the way into the cave.</summary>
+    [ViewVariables]
+    public readonly List<(Vector2i Tile, Vector2i Inward)> SealTiles = new();
+
+    /// <summary>Cave arenas: players count as fighting up to this Chebyshev distance (inside the seal line).</summary>
+    [ViewVariables]
+    public int ParticipantExtent;
 }

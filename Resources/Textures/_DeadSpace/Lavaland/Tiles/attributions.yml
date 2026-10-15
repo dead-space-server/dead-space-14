@@ -1,0 +1,4 @@
+- files: ["necropolis.png"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from tgstation at commit https://github.com/tgstation/tgstation/commit/b0d43af7cdc3098143186a03b7f35045ce7944bf (icons/turf/floors.dmi: necro1, necro2, necro3 first frames)"
+  source: "https://github.com/tgstation/tgstation"
