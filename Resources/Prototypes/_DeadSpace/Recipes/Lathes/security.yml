@@ -68,3 +68,19 @@
     Steel: 800
     Plastic: 500
     Plasma: 50
+
+- type: latheRecipePack
+  id: SecurityHolographicMatrix
+  recipes:
+  - FieldprojectorSecurity
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: FieldprojectorSecurity
+  result: FieldprojectorSecurity
+  materials:
+    Steel: 500
+    Glass: 200
+    Plasma: 200
+    Silver: 100
+    Gold: 100

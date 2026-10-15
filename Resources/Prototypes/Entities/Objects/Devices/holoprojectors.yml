@@ -190,14 +190,19 @@
         name: power-cell-slot-component-slot-name-default
 
 - type: entity
-  parent: Holoprojector
+  parent: BaseItem
   id: HoloprojectorSecurity
   name: holobarrier projector
   description: Creates a solid but fragile holographic barrier.
   components:
-  - type: HolosignProjector
+  # DS14-start
+  - type: LimitedHolosignProjector
     signProto: HolosignSecurity
-    chargeUse: 90
+    maxBarriers: 3
+  - type: ContainerContainer # тесты падали из за отсуствия слота у наследников
+    containers:
+      cell_slot: !type:ContainerSlot {}
+  # DS14-end
   - type: Sprite
     sprite: Objects/Devices/Holoprojectors/security.rsi
     state: icon

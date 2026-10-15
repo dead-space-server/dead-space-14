@@ -26,3 +26,25 @@
     - type: EmitSoundOnLand
       sound:
         path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_drop.ogg
+
+
+- type: entity
+  parent: BaseItem
+  id: FieldprojectorSecurity
+  name: absorbent matrix projector
+  description: Creates a matrix capable of containing flying lead.
+  components:
+  - type: LimitedHolosignProjector
+    signProto: HolosignBulletShield
+    maxBarriers: 3
+    rechargeTime: 40
+    removeAllDelay: 3
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Devices/Holoprojectors/bullet_blocker_projector.rsi
+    state: icon
+  - type: Tag
+    tags:
+    - HolofanProjector
+    - SecBeltEquip
+  - type: StaticPrice
+    price: 50

@@ -859,7 +859,6 @@
   color: "#00e5ff"
   metabolisms:
     Medicine:
-      metabolismRate: 1 # DS14-value
       effects:
       - !type:EvenHealthChange
         damage:
