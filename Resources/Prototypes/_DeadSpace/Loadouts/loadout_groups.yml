@@ -164,6 +164,11 @@
   - UnderwearBottomPantiesIAA
 
 - type: loadout
+  id: GlassesSunglasses
+  equipment:
+    eyes: ClothingEyesGlassesSunglasses
+
+- type: loadout
   id: GlassesCommand
   equipment:
     eyes: ClothingEyesGlassesCommand
