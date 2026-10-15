@@ -80,6 +80,7 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         SubscribeLocalEvent<LavalandWarpCubeComponent, ComponentShutdown>(OnCubeShutdown);
         SubscribeLocalEvent<LavalandImmortalityTalismanComponent, UseInHandEvent>(OnTalismanUse);
         SubscribeLocalEvent<LavalandParadoxBagComponent, MapInitEvent>(OnParadoxMapInit);
+        SubscribeLocalEvent<LavalandParadoxBagComponent, ComponentShutdown>(OnParadoxShutdown);
         Subs.BuiEvents<LavalandParadoxBagComponent>(StorageComponent.StorageUiKey.Key, subs =>
         {
             subs.Event<BoundUIOpenedEvent>(OnParadoxOpened);
@@ -335,6 +336,21 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         EnsureComp<LavalandParadoxBagComponent>(other).Linked = ent.Owner;
         EntityManager.InitializeAndStartEntity(other);
         ent.Comp.Linked = other;
+    }
+
+    /// <summary>The paradox collapses with either bag: the twin goes too, spilling what it held.</summary>
+    private void OnParadoxShutdown(Entity<LavalandParadoxBagComponent> ent, ref ComponentShutdown args)
+    {
+        if (ent.Comp.Linked is not { } linked || TerminatingOrDeleted(linked) ||
+            !TryComp<LavalandParadoxBagComponent>(linked, out var twin))
+        {
+            return;
+        }
+
+        twin.Linked = null;
+        if (TryComp<StorageComponent>(linked, out var storage))
+            _containers.EmptyContainer(storage.Container, true);
+        QueueDel(linked);
     }
 
     private void OnParadoxOpened(Entity<LavalandParadoxBagComponent> ent, ref BoundUIOpenedEvent args)

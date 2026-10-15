@@ -1309,15 +1309,10 @@ public sealed class CelestialSystem : EntitySystem
         var bossPos = _transform.GetMapCoordinates(ent);
         var freezeBeams = new List<(Vector2 start, Vector2 end)>();
 
-        // ОЧЕНЬ много замерших лучей по всей округе
-        for (var i = 0; i < comp.FreezeBeamCount; i++)
+        void AddFreezeBeam(Vector2 center)
         {
-            var angle = _random.NextFloat(0f, MathF.Tau);
-            var dist = _random.NextFloat(4f, 40f);
-            var center = bossPos.Position + new Vector2(MathF.Cos(angle) * dist, MathF.Sin(angle) * dist);
-
             var beamAngle = _random.NextFloat(0f, MathF.Tau);
-            var length = _random.NextFloat(16f, 40f);
+            var length = _random.NextFloat(comp.FreezeBeamMinLength, MathF.Max(comp.FreezeBeamMinLength, comp.FreezeBeamMaxLength));
             var dir = new Vector2(MathF.Cos(beamAngle), MathF.Sin(beamAngle));
             var start = center - dir * (length / 2f);
             var end = center + dir * (length / 2f);
@@ -1325,6 +1320,22 @@ public sealed class CelestialSystem : EntitySystem
             // 2 секунды розовые (замерли), затем чернеют
             RaiseCelestial(ent, new CelestialBeamVisualEvent(start, end, (int)bossPos.MapId, 2f, 1.5f));
             freezeBeams.Add((start, end));
+        }
+
+        // длинные лучи прямо через каждого игрока: от них надо уходить
+        foreach (var target in GetTargets(ent, int.MaxValue))
+        {
+            var targetPos = _transform.GetMapCoordinates(target).Position;
+            for (var i = 0; i < comp.FreezeBeamsPerTarget; i++)
+                AddFreezeBeam(targetPos + _random.NextVector2(comp.FreezeBeamAimSpread));
+        }
+
+        // и ОЧЕНЬ много по всей округе
+        for (var i = freezeBeams.Count; i < comp.FreezeBeamCount; i++)
+        {
+            var angle = _random.NextFloat(0f, MathF.Tau);
+            var dist = _random.NextFloat(4f, 40f);
+            AddFreezeBeam(bossPos.Position + new Vector2(MathF.Cos(angle) * dist, MathF.Sin(angle) * dist));
         }
 
         // через 2 секунды: урон на линиях + ОДНОВРЕМЕННО cutter и кружки
@@ -1339,7 +1350,7 @@ public sealed class CelestialSystem : EntitySystem
             freezeDamage.DamageDict.TryAdd("Blunt", comp.FreezeBeamDamage * 0.3f);
 
             // урон всем, кто на линии хотя бы одного замершего луча
-            var candidates = _lookup.GetEntitiesInRange(new MapCoordinates(bossPos.Position, bossPos.MapId), 60f, LookupFlags.Uncontained);
+            var candidates = _lookup.GetEntitiesInRange(new MapCoordinates(bossPos.Position, bossPos.MapId), 60f + comp.FreezeBeamMaxLength, LookupFlags.Uncontained);
             foreach (var victim in candidates)
             {
                 if (HasComp<CelestialComponent>(victim) || TerminatingOrDeleted(victim))
@@ -1462,8 +1473,8 @@ public sealed class CelestialSystem : EntitySystem
                 continue;
             if (!HasComp<MobStateComponent>(mob.Value))
                 continue;
-            // только живые, трупы не атакуем
-            if (!_mobState.IsAlive(mob.Value))
+            // живые и лежащие в крите; трупы не атакуем
+            if (_mobState.IsDead(mob.Value))
                 continue;
             candidates.Add(mob.Value);
         }

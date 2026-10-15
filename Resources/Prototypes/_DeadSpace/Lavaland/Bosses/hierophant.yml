@@ -18,6 +18,12 @@
   emptyResetDelay: 10
   emptyResetHealFraction: 5
   emptyResetMinHeal: 450
+  intro:
+    style: Bowling
+    titleColor: "#c47bff"
+    roarSound: /Audio/_DeadSpace/Lavaland/Hierophant/sonic_jackhammer.ogg
+    impactSound: /Audio/_DeadSpace/Lavaland/Hierophant/repulse.ogg
+    subtitle: lavaland-boss-intro-hierophant
 
 - type: tile
   id: FloorHierophantArena

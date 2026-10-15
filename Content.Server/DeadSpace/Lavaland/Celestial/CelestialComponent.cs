@@ -289,6 +289,21 @@ public sealed partial class CelestialComponent : Component
     [DataField]
     public float FreezeBeamDamage = 20f;
 
+    /// <summary>Сколько замерших лучей проходит прямо через каждого игрока (остальные - по округе).</summary>
+    [DataField]
+    public int FreezeBeamsPerTarget = 4;
+
+    /// <summary>Длина замерших лучей.</summary>
+    [DataField]
+    public float FreezeBeamMinLength = 30f;
+
+    [DataField]
+    public float FreezeBeamMaxLength = 60f;
+
+    /// <summary>Насколько луч, нацеленный в игрока, может пройти мимо него.</summary>
+    [DataField]
+    public float FreezeBeamAimSpread = 1f;
+
     // ----- вторая фаза -----
 
     /// <summary>Фаза 2: босс бессмертен, урон сбрасывается.</summary>

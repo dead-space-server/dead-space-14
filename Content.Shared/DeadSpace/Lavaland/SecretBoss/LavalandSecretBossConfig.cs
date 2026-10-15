@@ -30,6 +30,10 @@ public sealed partial class LavalandSecretBossConfig
     [DataField]
     public float AwakenMessageDuration = 6f;
 
+    /// <summary>Only players this close to the pit hear the awakening (0 - everyone on lavaland).</summary>
+    [DataField]
+    public float AwakenMessageRange = 60f;
+
     [DataField]
     public SoundSpecifier? AwakenSound = new SoundPathSpecifier("/Audio/_DeadSpace/Lavaland/Celestial/sounds/Roar_Phase2.ogg");
 

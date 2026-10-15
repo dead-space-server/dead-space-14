@@ -103,6 +103,110 @@ public sealed partial class LavalandLegionMegafaunaComponent : Component
     [DataField]
     public TimeSpan WakeLungeMax = TimeSpan.FromSeconds(1.5);
 
+    /// <summary>The lunge on waking up tears through gates and walls in its way.</summary>
+    [DataField]
+    public bool LungeBreaksWalls = true;
+
+    /// <summary>How far ahead of the body the waking lunge breaks things.</summary>
+    [DataField]
+    public float LungeBreakRange = 1.4f;
+
+    [DataField]
+    public SoundSpecifier? LungeBreakSound = new SoundPathSpecifier("/Audio/Effects/explosion_small1.ogg");
+
+    /// <summary>The waking lunge is under way.</summary>
+    [ViewVariables]
+    public bool Lunging;
+
+    /// <summary>Time between maneuvers: a roll behind the target's back or a leap to close the distance.</summary>
+    [DataField]
+    public TimeSpan ManeuverCooldownMin = TimeSpan.FromSeconds(2.5);
+
+    [DataField]
+    public TimeSpan ManeuverCooldownMax = TimeSpan.FromSeconds(4.5);
+
+    /// <summary>Within this distance the body rolls around to the target's back.</summary>
+    [DataField]
+    public float FlankRange = 8f;
+
+    /// <summary>How far behind the target's back the roll lands.</summary>
+    [DataField]
+    public float FlankDistance = 1.8f;
+
+    /// <summary>Farther than this the body leaps at the target to close the distance.</summary>
+    [DataField]
+    public float GapCloseDistance = 9f;
+
+    /// <summary>How far in front of the target the closing leap lands.</summary>
+    [DataField]
+    public float GapCloseLanding = 2.5f;
+
+    /// <summary>The roll: it spins towards its spot at this speed (tiles per second), no longer than the limit.</summary>
+    [DataField]
+    public float ManeuverSpeed = 9f;
+
+    [DataField]
+    public TimeSpan ManeuverMaxDuration = TimeSpan.FromSeconds(1.2);
+
+    /// <summary>
+    /// Chasing a target that runs off (farther than <see cref="GapCloseDistance"/>): rolls come more often,
+    /// faster and farther, so a quick player is not lost.
+    /// </summary>
+    [DataField]
+    public TimeSpan ChaseCooldown = TimeSpan.FromSeconds(1);
+
+    [DataField]
+    public float ChaseSpeed = 13f;
+
+    [DataField]
+    public TimeSpan ChaseMaxDuration = TimeSpan.FromSeconds(2);
+
+    [ViewVariables]
+    public TimeSpan? ManeuverEndAt;
+
+    public Vector2 ManeuverVelocity;
+
+    [DataField]
+    public SoundSpecifier? ManeuverSound = new SoundPathSpecifier("/Audio/Effects/demon_attack1.ogg");
+
+    [ViewVariables]
+    public TimeSpan NextManeuver;
+
+    /// <summary>
+    /// How often an awake body checks whether it is stuck: if it barely moved while its target is away,
+    /// it smashes through whatever stands between them.
+    /// </summary>
+    [DataField]
+    public TimeSpan StuckCheckInterval = TimeSpan.FromSeconds(1);
+
+    /// <summary>Moving less than this between two checks counts as stuck.</summary>
+    [DataField]
+    public float StuckDistance = 0.4f;
+
+    /// <summary>A target closer than this is being fought, not chased: standing still is fine.</summary>
+    [DataField]
+    public float StuckIgnoreRange = 2.5f;
+
+    [ViewVariables]
+    public TimeSpan NextStuckCheck;
+
+    [ViewVariables]
+    public Vector2 LastStuckPosition;
+
+    /// <summary>
+    /// Outside an arena: whoever woke the Legion. Every body hunts them across the map until one of them dies.
+    /// </summary>
+    [ViewVariables]
+    public EntityUid? Pursued;
+
+    /// <summary>Outside an arena, once the pursued one is gone: other players this close are attacked.</summary>
+    [DataField]
+    public float PursuitRange = 80f;
+
+    /// <summary>Outside an arena: necropolis gates this close in front of a body are burst open.</summary>
+    [DataField]
+    public float GateSmashRange = 1.6f;
+
     [ViewVariables]
     public bool Dying;
 

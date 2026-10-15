@@ -66,9 +66,13 @@ public sealed partial class LavalandSecretBossComponent : Component
     [ViewVariables]
     public EntityUid? Flower;
 
-    /// <summary>Tiles of the flower room, filled with gas when the flower is touched.</summary>
+    /// <summary>Tiles of the flower room.</summary>
     [ViewVariables]
     public readonly List<MapCoordinates> FlowerRoom = new();
+
+    /// <summary>Every open tile of the maze: the gas fills all of them when the flower is touched.</summary>
+    [ViewVariables]
+    public readonly List<MapCoordinates> MazeOpenTiles = new();
 
     [ViewVariables]
     public MapCoordinates ArenaCenter;

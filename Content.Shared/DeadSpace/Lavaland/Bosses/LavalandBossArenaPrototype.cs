@@ -114,6 +114,24 @@ public sealed partial class LavalandBossArenaPrototype : IPrototype
     [DataField]
     public Robust.Shared.Utility.ResPath? GridPath;
 
+    /// <summary>
+    /// The arena is built without its boss: the boss appears on its spawn point once someone has knocked
+    /// on a Legion gate of the arena.
+    /// </summary>
+    [DataField]
+    public bool SummonOnGate;
+
+    /// <summary>
+    /// The arena only brings the boss out: no leash, no reset, no seal. The boss hunts its targets across
+    /// lavaland and carries its own health bar and music (the Legion).
+    /// </summary>
+    [DataField]
+    public bool BossUnbound;
+
+    /// <summary>A cutscene introducing the boss when the fight would start (see <see cref="LavalandBossIntroConfig"/>).</summary>
+    [DataField]
+    public LavalandBossIntroConfig? Intro;
+
     /// <summary>Tile of the alternative floor in <see cref="Layout"/> (',' and 'l').</summary>
     [DataField]
     public string? AltFloorTile;
@@ -186,9 +204,15 @@ public sealed partial class LavalandBossArenaCaveConfig
     [DataField]
     public EntProtoId ShellRock = "WallRockBasaltLavalandBoundary";
 
-    /// <summary>Ore veins in the minable rock.</summary>
+    /// <summary>Ore veins in the minable rock (at least this many).</summary>
     [DataField]
     public int OreVeins = 16;
+
+    /// <summary>
+    /// Share of the minable rock (the ring and the band around it) that is ore: more veins are added to reach it.
+    /// </summary>
+    [DataField]
+    public float OreFraction = 0.35f;
 
     [DataField]
     public int OreVeinMin = 3;

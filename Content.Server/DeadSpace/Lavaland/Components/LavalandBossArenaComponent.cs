@@ -20,6 +20,40 @@ public sealed partial class LavalandBossArenaComponent : Component
     [ViewVariables]
     public EntityUid Boss = EntityUid.Invalid;
 
+    /// <summary>Boss not summoned yet (see <c>SummonOnGate</c> of the arena prototype).</summary>
+    [ViewVariables]
+    public EntProtoId? PendingBoss;
+
+    /// <summary>The boss is not held by the arena (see <c>BossUnbound</c> of the arena prototype).</summary>
+    [ViewVariables]
+    public bool BossUnbound;
+
+    /// <summary>The boss intro played once, when the fight first starts.</summary>
+    [ViewVariables]
+    public Content.Shared.DeadSpace.Lavaland.Bosses.LavalandBossIntroConfig? Intro;
+
+    [ViewVariables]
+    public bool IntroPlayed;
+
+    /// <summary>The intro is playing: the fight starts when it ends.</summary>
+    [ViewVariables]
+    public TimeSpan? IntroEndsAt;
+
+    /// <summary>Players frozen by the intro (released when it ends).</summary>
+    [ViewVariables]
+    public readonly List<EntityUid> IntroWatchers = new();
+
+    /// <summary>The gate-break intro: the gate and whoever knocked on it.</summary>
+    [ViewVariables]
+    public EntityUid? IntroGate;
+
+    [ViewVariables]
+    public EntityUid? IntroKnocker;
+
+    /// <summary>Where the copy of the boss stands at the end of the intro: the real boss is brought out there.</summary>
+    [ViewVariables]
+    public MapCoordinates? IntroBossSpot;
+
     [ViewVariables]
     public Vector2i BossSpawnTile = Vector2i.Zero;
 

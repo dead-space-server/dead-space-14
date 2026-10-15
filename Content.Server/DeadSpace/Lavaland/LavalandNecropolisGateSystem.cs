@@ -17,6 +17,7 @@ public sealed class LavalandNecropolisGateSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly LavalandLegionMegafaunaSystem _legion = default!;
+    [Dependency] private readonly LavalandBossArenaSystem _arenas = default!;
     [Dependency] private readonly OccluderSystem _occluder = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
@@ -84,6 +85,22 @@ public sealed class LavalandNecropolisGateSystem : EntitySystem
         _appearance.SetData(ent, LavalandNecropolisGateVisuals.State, ent.Comp.State);
     }
 
+    /// <summary>Burst open by force (the Legion): open at once and for good.</summary>
+    public void Smash(Entity<LavalandNecropolisGateComponent> ent)
+    {
+        if (ent.Comp.State == LavalandNecropolisGateState.Open)
+            return;
+
+        ent.Comp.KnockEnd = null;
+        ent.Comp.StageEnd = null;
+        ent.Comp.BlockAt = null;
+        ent.Comp.Locked = true;
+        ent.Comp.State = LavalandNecropolisGateState.Open;
+        SetBlocking(ent, false);
+        _audio.PlayPvs(ent.Comp.OpenSound, ent);
+        _appearance.SetData(ent, LavalandNecropolisGateVisuals.State, ent.Comp.State);
+    }
+
     private void StartClosing(Entity<LavalandNecropolisGateComponent> ent)
     {
         ent.Comp.State = LavalandNecropolisGateState.Closing;
@@ -107,8 +124,18 @@ public sealed class LavalandNecropolisGateSystem : EntitySystem
             {
                 gate.KnockEnd = null;
                 gate.Locked = true;
-                StartOpening(ent);
                 ReleaseLegion(ent);
+
+                // The knock is answered: the arena plays its gate-break intro (it breaks the gate itself),
+                // or the Legion appears behind the gate as it grinds open.
+                var gateGrid = Transform(uid).GridUid;
+                if (gate.LegionGate && gateGrid is { } introGrid && _arenas.TryBeginGateIntro(introGrid, ent, gate.Knocker))
+                    continue;
+
+                if (gate.LegionGate && gateGrid is { } summonGrid)
+                    _arenas.TrySummonBoss(summonGrid);
+
+                StartOpening(ent);
             }
 
             if (gate.BlockAt is { } blockAt && now >= blockAt)

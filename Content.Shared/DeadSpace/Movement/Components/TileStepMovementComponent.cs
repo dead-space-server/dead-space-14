@@ -25,11 +25,11 @@ public sealed partial class TileStepMovementComponent : Component
     public EntityUid? Parent;
 
     /// <summary>When we last got noticeably closer to the target: no progress for a while means a wall.</summary>
-    [AutoNetworkedField]
+    [ViewVariables]
     public TimeSpan LastProgress;
 
     /// <summary>Distance left to the target on the last check.</summary>
-    [AutoNetworkedField]
+    [ViewVariables]
     public float LastDistance;
 
     /// <summary>Give up a step after this long without getting closer.</summary>

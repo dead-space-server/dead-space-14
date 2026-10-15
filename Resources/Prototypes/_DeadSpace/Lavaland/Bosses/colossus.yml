@@ -7,7 +7,8 @@
   lightPrototype: LavalandColossusArenaLight
   cave:
     thickness: 12
-    shell: 3
+    shell: 12
+    shellRock: WallColossusArena
     roughness: 0
     passages: 2
     passageHalfWidth: 1
@@ -53,6 +54,12 @@
   emptyResetDelay: 10
   emptyResetHealFraction: 5
   emptyResetMinHeal: 450
+  intro:
+    style: Blast
+    titleColor: "#e0182d"
+    impactSound: /Audio/Effects/explosion_small1.ogg
+    landSound: /Audio/Effects/explosion1.ogg
+    subtitle: lavaland-boss-intro-colossus
 
 - type: tile
   id: FloorColossusArena
@@ -63,8 +70,8 @@
 - type: entity
   parent: WallRockBasaltLavalandBoundary
   id: WallColossusArena
-  name: colossus arena wall
-  description: An indestructible basalt wall enclosing the colossus's domain.
+  name: базальт
+  description: Неразрушимая базальтовая стена, отделяющая логово от остального Лаваленда.
   suffix: Lavaland, Indestructible
 
 - type: entity

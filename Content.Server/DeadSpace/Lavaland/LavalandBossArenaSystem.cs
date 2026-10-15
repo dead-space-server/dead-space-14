@@ -13,6 +13,7 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.DeadSpace.Lavaland.Bosses;
+using Content.Shared.DeadSpace.Lavaland.SecretBoss;
 using Content.Shared.Light.Components;
 using Content.Shared.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
@@ -27,6 +28,7 @@ using Content.Shared.Parallax.Biomes;
 using Content.Shared.PAI;
 using Content.Shared.Popups;
 using Robust.Server.Player;
+using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
@@ -39,7 +41,7 @@ using Timer = Robust.Shared.Timing.Timer;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
-public sealed class LavalandBossArenaSystem : EntitySystem
+public sealed partial class LavalandBossArenaSystem : EntitySystem
 {
     private const int ArenaEntityBatchSize = 128;
     private const int DefaultArenaSize = 35;
@@ -132,11 +134,18 @@ public sealed class LavalandBossArenaSystem : EntitySystem
                 continue;
             }
 
-            if (!arena.Ended && (!Exists(arena.Boss) || !Exists(arena.Grid)))
+            if (!arena.Ended && (!Exists(arena.Boss) && arena.PendingBoss == null || !Exists(arena.Grid)))
             {
                 EndArena((uid, arena));
                 continue;
             }
+
+            if (arena.IntroEndsAt is { } introEnd && now >= introEnd)
+                FinishIntro((uid, arena));
+
+            // The boss roams free: the arena only waits for it to die.
+            if (arena.BossUnbound)
+                continue;
 
             if (arena.NextParticipantScan <= now)
             {
@@ -360,23 +369,18 @@ public sealed class LavalandBossArenaSystem : EntitySystem
             SpawnArenaLights(grid.Owner, grid.Comp, lightPrototype, width, height);
 
         var bossTile = origin;
-        if (loadedGrid != null && TryTakeBossSpawnPoint(grid, out var markedTile))
-            bossTile = markedTile;
-
-        var boss = Spawn(arenaPrototype.BossPrototype.Id, _map.GridTileToLocal(grid.Owner, grid.Comp, bossTile));
-        var bossComponent = EnsureComp<LavalandBossComponent>(boss);
-        bossComponent.Arena = grid.Owner;
-        bossComponent.MaxHealth = Math.Max(1f, bossComponent.MaxHealth);
-        bossComponent.SelectedMusic = bossComponent.MusicPool.Count > 0
-            ? bossComponent.MusicPool[random.Next(bossComponent.MusicPool.Count)]
-            : bossComponent.Music;
-        SetBossAiEnabled(boss, false);
+        if (loadedGrid != null)
+        {
+            if (TryTakeBossSpawnPoint(grid, out var markedTile))
+                bossTile = markedTile;
+            else
+                Log.Warning($"Lavaland boss arena {arenaPrototype.ID}: no boss spawn point on its grid, the boss appears in the middle.");
+        }
 
         var arena = AddComp<LavalandBossArenaComponent>(grid.Owner);
         arena.ArenaId = _nextArenaId++;
         arena.Map = mapUid;
         arena.Grid = grid.Owner;
-        arena.Boss = boss;
         arena.BossSpawnTile = bossTile;
         arena.Origin = origin;
         arena.Width = width;
@@ -405,11 +409,12 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         }
         arena.SealSound = arenaPrototype.SealSound;
         arena.SealMessage = arenaPrototype.SealMessage;
-        arena.BossName = string.IsNullOrWhiteSpace(bossComponent.BossName)
-            ? Name(boss)
-            : bossComponent.BossName;
-        arena.MaxHealth = bossComponent.MaxHealth;
-        arena.ScaledMaxHealth = bossComponent.MaxHealth;
+        arena.BossUnbound = arenaPrototype.BossUnbound;
+        arena.Intro = arenaPrototype.Intro;
+        if (arenaPrototype.SummonOnGate || arenaPrototype.Intro != null)
+            arena.PendingBoss = arenaPrototype.BossPrototype;
+        else
+            SpawnArenaBoss((grid.Owner, arena), arenaPrototype.BossPrototype, random);
         arena.NextParticipantScan = _timing.CurTime;
         arena.NextHudUpdate = _timing.CurTime;
         arena.NextBossLeashCheck = _timing.CurTime + BossLeashCheckInterval;
@@ -855,6 +860,38 @@ public sealed class LavalandBossArenaSystem : EntitySystem
                 minable.Add(tile);
         }
 
+        // The band of basalt around the cave, over the open land: rock with ore as well.
+        var band = outer + EntranceDepth + Math.Max(0, cave.Surround);
+        _reservedTiles.Clear();
+        _biome.ReserveTiles(terrainUid,
+            new Box2(center.X - band, center.Y - band, center.X + band + 1, center.Y + band + 1),
+            _reservedTiles,
+            biome,
+            terrainGrid);
+        _reservedTiles.Clear();
+
+        var bandTiles = new List<Vector2i>();
+        for (var x = -band; x <= band; x++)
+        {
+            for (var y = -band; y <= band; y++)
+            {
+                if (Math.Max(Math.Abs(x), Math.Abs(y)) <= outer)
+                    continue;
+
+                var index = center + new Vector2i(x, y);
+                if (!_map.TryGetTileRef(terrainUid, terrainGrid, index, out var tileRef) || tileRef.Tile.IsEmpty)
+                    continue;
+
+                var occupied = _map.GetAnchoredEntitiesEnumerator(terrainUid, terrainGrid, index);
+                if (occupied.MoveNext(out _))
+                    continue;
+
+                bandTiles.Add(new Vector2i(x, y));
+            }
+        }
+
+        minable.AddRange(bandTiles);
+
         // Ore veins: random seeds grown into small clumps.
         var ore = new Dictionary<Vector2i, EntProtoId>();
         var totalWeight = 0f;
@@ -863,7 +900,10 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         if (totalWeight > 0f && minable.Count > 0)
         {
             var minableSet = new HashSet<Vector2i>(minable);
-            for (var vein = 0; vein < cave.OreVeins; vein++)
+            var averageVein = Math.Max(1f, (cave.OreVeinMin + Math.Max(cave.OreVeinMin, cave.OreVeinMax)) / 2f);
+            var veins = Math.Max(cave.OreVeins,
+                (int) MathF.Round(minable.Count * Math.Clamp(cave.OreFraction, 0f, 1f) / averageVein));
+            for (var vein = 0; vein < veins; vein++)
             {
                 var roll = (float) random.NextDouble() * totalWeight;
                 var veinOre = default(EntProtoId);
@@ -908,35 +948,13 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         }
 
         // Solid basalt around the cave over the open land, so no strips or holes of floor are left next to it.
-        var band = outer + EntranceDepth + Math.Max(0, cave.Surround);
-        _reservedTiles.Clear();
-        _biome.ReserveTiles(terrainUid,
-            new Box2(center.X - band, center.Y - band, center.X + band + 1, center.Y + band + 1),
-            _reservedTiles,
-            biome,
-            terrainGrid);
-        _reservedTiles.Clear();
-
-        for (var x = -band; x <= band; x++)
+        foreach (var tile in bandTiles)
         {
-            for (var y = -band; y <= band; y++)
-            {
-                if (Math.Max(Math.Abs(x), Math.Abs(y)) <= outer)
-                    continue;
-
-                cancellation.ThrowIfCancellationRequested();
-                var index = center + new Vector2i(x, y);
-                if (!_map.TryGetTileRef(terrainUid, terrainGrid, index, out var tileRef) || tileRef.Tile.IsEmpty)
-                    continue;
-
-                var occupied = _map.GetAnchoredEntitiesEnumerator(terrainUid, terrainGrid, index);
-                if (occupied.MoveNext(out _))
-                    continue;
-
-                SpawnAnchored(cave.Rock.Id, terrainUid, terrainGrid, index);
-                if (++spawned % ArenaEntityBatchSize == 0)
-                    await Timer.Delay(1, cancellation);
-            }
+            cancellation.ThrowIfCancellationRequested();
+            var prototype = ore.TryGetValue(tile, out var bandOre) ? bandOre : cave.Rock;
+            SpawnAnchored(prototype.Id, terrainUid, terrainGrid, center + tile);
+            if (++spawned % ArenaEntityBatchSize == 0)
+                await Timer.Delay(1, cancellation);
         }
 
         if (floorVisualPrototype is not { } visual)
@@ -1597,6 +1615,12 @@ public sealed class LavalandBossArenaSystem : EntitySystem
             return;
         }
 
+        if (arena.IntroEndsAt != null)
+        {
+            args.Cancelled = true;
+            return;
+        }
+
         if (IsDamageOriginFromArenaParticipant(arena, args.Origin))
             return;
 
@@ -1708,6 +1732,8 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         if (arena.Comp.Ended)
             return;
 
+        ReleaseIntroWatchers(arena.Comp);
+
         arena.Comp.Ended = true;
         UnsealArena(arena.Comp);
         arena.Comp.SealedByConstruction = false;
@@ -1755,14 +1781,74 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         arena.Comp.NextHudUpdate = now;
     }
 
+    private void SpawnArenaBoss(Entity<LavalandBossArenaComponent> arena, EntProtoId prototype, Random random)
+    {
+        if (!TryComp<MapGridComponent>(arena.Owner, out var grid))
+            return;
+
+        var boss = Spawn(prototype.Id, _map.GridTileToLocal(arena.Owner, grid, arena.Comp.BossSpawnTile));
+        var bossComponent = EnsureComp<LavalandBossComponent>(boss);
+        bossComponent.Arena = arena.Owner;
+        if (arena.Comp.BossUnbound)
+        {
+            // Not tied to the arena: its fight, rewards and health bar are its own.
+            bossComponent.Arena = null;
+            EnsureComp<LavalandFreeBossComponent>(boss);
+        }
+        bossComponent.MaxHealth = Math.Max(1f, bossComponent.MaxHealth);
+        bossComponent.SelectedMusic = bossComponent.MusicPool.Count > 0
+            ? bossComponent.MusicPool[random.Next(bossComponent.MusicPool.Count)]
+            : bossComponent.Music;
+        SetBossAiEnabled(boss, false);
+
+        arena.Comp.Boss = boss;
+        arena.Comp.BossName = string.IsNullOrWhiteSpace(bossComponent.BossName)
+            ? Name(boss)
+            : bossComponent.BossName;
+        arena.Comp.MaxHealth = bossComponent.MaxHealth;
+        arena.Comp.ScaledMaxHealth = bossComponent.MaxHealth;
+    }
+
+    /// <summary>Brings out the boss an arena was built without (a Legion gate knocked on). False if none waits.</summary>
+    public bool TrySummonBoss(EntityUid arenaUid)
+    {
+        if (!TryComp<LavalandBossArenaComponent>(arenaUid, out var arena) ||
+            arena.Ended ||
+            arena.PendingBoss is not { } prototype)
+        {
+            return false;
+        }
+
+        arena.PendingBoss = null;
+        SpawnArenaBoss((arenaUid, arena), prototype, new Random());
+        return Exists(arena.Boss);
+    }
+
+
+    /// <summary>Starts the fight of an arena from outside (a boss woken by its own trigger).</summary>
+    public void StartFightFor(EntityUid arenaUid)
+    {
+        if (TryComp<LavalandBossArenaComponent>(arenaUid, out var arena))
+            StartFight((arenaUid, arena));
+    }
+
     private void StartFight(Entity<LavalandBossArenaComponent> arena)
     {
-        if (arena.Comp.FightStarted ||
-            arena.Comp.Ended ||
-            !Exists(arena.Comp.Boss))
+        if (arena.Comp.FightStarted || arena.Comp.Ended)
+            return;
+
+        // The boss is introduced first (it is not there yet); the fight starts when the scene ends.
+        if (arena.Comp.IntroEndsAt != null)
+            return;
+
+        if (arena.Comp.Intro is { } intro && !arena.Comp.IntroPlayed)
         {
+            BeginIntro(arena, intro);
             return;
         }
+
+        if (!Exists(arena.Comp.Boss))
+            return;
 
         TryScaleBossHpForParticipants((arena.Owner, arena.Comp));
 
@@ -1790,16 +1876,28 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         Entity<LavalandBossArenaComponent> arena,
         IEnumerable<ICommonSession> sessions)
     {
-        if (!Exists(arena.Comp.Boss) ||
-            !TryComp(arena.Comp.Boss, out TransformComponent? bossXform) ||
-            bossXform.GridUid != arena.Comp.Grid)
+        Vector2 bossPosition;
+        if (Exists(arena.Comp.Boss) &&
+            TryComp(arena.Comp.Boss, out TransformComponent? bossXform) &&
+            bossXform.GridUid == arena.Comp.Grid)
+        {
+            bossPosition = bossXform.Coordinates.Position;
+        }
+        else if (arena.Comp.PendingBoss != null && arena.Comp.Intro != null && !arena.Comp.IntroPlayed)
+        {
+            // The boss comes with its intro: the spot where it will land.
+            bossPosition = new Vector2(arena.Comp.BossSpawnTile.X + 0.5f, arena.Comp.BossSpawnTile.Y + 0.5f);
+        }
+        else
         {
             return false;
         }
 
-        var maxDistance = MathF.Max(0.1f, arena.Comp.FightStartDistance);
+        // An arena whose intro is still to play starts it as soon as someone is this close to the middle.
+        var maxDistance = arena.Comp.Intro != null && !arena.Comp.IntroPlayed
+            ? IntroStartDistance
+            : MathF.Max(0.1f, arena.Comp.FightStartDistance);
         var maxDistanceSquared = maxDistance * maxDistance;
-        var bossPosition = bossXform.Coordinates.Position;
 
         foreach (var session in sessions)
         {
@@ -2166,10 +2264,12 @@ public sealed class LavalandBossArenaSystem : EntitySystem
     {
         tile = default;
         var found = false;
-        var markers = EntityQueryEnumerator<LavalandBossSpawnPointComponent, TransformComponent>();
+
+        // The grid comes from a scratch map, where its entities may still be paused: look at all of them.
+        var markers = AllEntityQuery<LavalandBossSpawnPointComponent, TransformComponent>();
         while (markers.MoveNext(out var marker, out _, out var xform))
         {
-            if (xform.GridUid != grid.Owner)
+            if (xform.GridUid != grid.Owner && xform.ParentUid != grid.Owner)
                 continue;
 
             if (!found)

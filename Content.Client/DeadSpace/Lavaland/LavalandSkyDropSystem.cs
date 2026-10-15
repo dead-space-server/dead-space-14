@@ -2,6 +2,7 @@
 
 using System.Numerics;
 using Content.Shared.DeadSpace.Lavaland;
+using Robust.Client.ComponentTrees;
 using Robust.Client.GameObjects;
 using Robust.Shared.Timing;
 
@@ -12,6 +13,7 @@ public sealed class LavalandSkyDropSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private readonly SpriteTreeSystem _spriteTree = default!;
 
     public override void FrameUpdate(float frameTime)
     {
@@ -31,6 +33,9 @@ public sealed class LavalandSkyDropSystem : EntitySystem
                 : drop.Height * (1f - progress) * (1f - progress);
 
             _sprite.SetOffset((uid, sprite), new Vector2(0f, height));
+
+            // Keep the place of the sprite in the render tree with it, or it is culled high up in the air.
+            _spriteTree.QueueTreeUpdate((uid, sprite));
         }
     }
 }

@@ -3,6 +3,7 @@
 using System.Numerics;
 using Content.Shared.DeadSpace.Movement.Components;
 using Content.Shared.Movement.Components;
+using Robust.Shared.Network;
 using Robust.Shared.Physics.Components;
 
 namespace Content.Shared.Movement.Systems;
@@ -14,6 +15,8 @@ namespace Content.Shared.Movement.Systems;
 /// </summary>
 public abstract partial class SharedMoverController
 {
+    [Dependency] private readonly INetManager _tileStepNet = default!;
+
     protected EntityQuery<TileStepMovementComponent> TileStepQuery;
 
     /// <summary>Close enough to a tile center to count as standing on it.</summary>
@@ -36,10 +39,15 @@ public abstract partial class SharedMoverController
             if (step.Stepping)
             {
                 step.Stepping = false;
-                Dirty(ent);
+                DirtyTileStep(ent);
             }
             return false;
         }
+
+        // Only the step itself is networked; the progress counters are local.
+        var wasStepping = step.Stepping;
+        var oldTarget = step.Target;
+        var oldParent = step.Parent;
 
         var position = xform.LocalPosition;
         var now = Timing.CurTime;
@@ -106,8 +114,21 @@ public abstract partial class SharedMoverController
 
         PhysicsSystem.SetLinearVelocity(ent, velocity, body: physics);
         PhysicsSystem.SetAngularVelocity(ent, 0f, body: physics);
-        Dirty(ent);
+        if (step.Stepping != wasStepping || step.Target != oldTarget || step.Parent != oldParent)
+            DirtyTileStep(ent);
         return true;
+    }
+
+    /// <summary>
+    /// Marks the step as changed. The client only does it while predicting: dirtying outside of prediction
+    /// breaks the rollback of predicted entities.
+    /// </summary>
+    private void DirtyTileStep(Entity<TileStepMovementComponent> ent)
+    {
+        if (_tileStepNet.IsClient && !Timing.InPrediction)
+            return;
+
+        Dirty(ent);
     }
 
     private static void BeginTileStep(TileStepMovementComponent step, TransformComponent xform, Vector2 target, TimeSpan now)

@@ -1,24 +1,31 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using System.Linq;
 using System.Numerics;
 using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Server.NPC.HTN;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
+using Content.Shared.DeadSpace.Lavaland.Bosses;
+using Content.Shared.DeadSpace.Lavaland.Components;
 using Content.Shared.Ghost;
 using Content.Shared.Maps;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.MouseRotator;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Robust.Server.Player;
+using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Enums;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
+using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -32,6 +39,9 @@ namespace Content.Server.DeadSpace.Lavaland;
 public sealed class LavalandLegionMegafaunaSystem : EntitySystem
 {
     [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly LavalandNecropolisGateSystem _gates = default!;
+    [Dependency] private readonly LavalandBossArenaSystem _arenas = default!;
     [Dependency] private readonly HTNSystem _htn = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
@@ -46,6 +56,29 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
 
     private readonly List<Vector2i> _freeTiles = new();
     private readonly List<EntityUid> _bodies = new();
+    private readonly HashSet<Entity<LavalandNecropolisGateComponent>> _nearGates = new();
+
+    private static readonly TimeSpan FreeHudInterval = TimeSpan.FromSeconds(0.5);
+
+    /// <summary>Players this close to any body of a free Legion get its health bar and music.</summary>
+    private const float FreeHudRange = 40f;
+
+    private int _nextHudId = 300000;
+
+    /// <summary>Health bar and music of each free Legion, by its root (outlives the first body).</summary>
+    private readonly Dictionary<EntityUid, FreeLegionHud> _freeHuds = new();
+    private readonly Dictionary<EntityUid, List<EntityUid>> _bodiesByRoot = new();
+
+    private sealed class FreeLegionHud
+    {
+        public int Id;
+        public string Name = string.Empty;
+        public float MaxHealth;
+        public ResolvedSoundSpecifier? Music;
+        public AudioParams MusicParams;
+        public TimeSpan NextUpdate;
+        public readonly HashSet<ICommonSession> Recipients = new();
+    }
 
     public override void Initialize()
     {
@@ -56,6 +89,7 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
             before: [typeof(MobThresholdSystem)]);
         SubscribeLocalEvent<LavalandLegionMegafaunaComponent, LavalandBossHudHealthEvent>(OnHudHealth);
         SubscribeLocalEvent<LavalandLegionMegafaunaComponent, LavalandBossResetEvent>(OnBossReset);
+        SubscribeLocalEvent<LavalandLegionMegafaunaComponent, LavalandBossFightStartedEvent>(OnFightStarted);
     }
 
     private void OnMapInit(Entity<LavalandLegionMegafaunaComponent> ent, ref MapInitEvent args)
@@ -65,11 +99,20 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
         ent.Comp.NextAttack = _timing.CurTime + TimeSpan.FromSeconds(1);
     }
 
+    private void OnFightStarted(Entity<LavalandLegionMegafaunaComponent> ent, ref LavalandBossFightStartedEvent args)
+    {
+        // Players at the tower do not wake the Legion: it waits behind its gate until the gate opens.
+        if (ent.Comp.Dormant)
+            SetAi(ent, false);
+    }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
 
         var now = _timing.CurTime;
+        UpdateFreeHuds(now);
+
         var query = EntityQueryEnumerator<LavalandLegionMegafaunaComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var legion, out var xform))
         {
@@ -78,8 +121,13 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
 
             if (TryComp<LavalandBossComponent>(uid, out var boss))
                 legion.Arena = boss.Arena;
+            if (!legion.Free && HasComp<LavalandFreeBossComponent>(uid))
+                legion.Free = true;
 
-            // In an arena it fights once the fight starts; a mapped Legion fights once woken.
+            // Asleep until its gate opens; then in an arena it fights while the fight is on, outside one always.
+            if (legion.Dormant)
+                continue;
+
             LavalandBossArenaComponent? arena = null;
             if (TryGetArena(legion, out var found))
             {
@@ -87,12 +135,21 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
                     continue;
                 arena = found;
             }
-            else if (!legion.Free || legion.Dormant)
+            else if (!legion.Free)
             {
                 continue;
             }
 
+            SmashGates(xform, legion);
+            UnstuckTowardsTarget(uid, legion, xform, arena, now);
+
             if (UpdateCharge(uid, legion, xform, arena, now))
+                continue;
+
+            if (UpdateManeuver(uid, legion, now))
+                continue;
+
+            if (TryManeuver(uid, legion, xform, arena, now))
                 continue;
 
             if (now < legion.NextAttack || !TryFindTarget(xform, legion, arena, out var target))
@@ -115,6 +172,104 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
     }
 
     #region Attacks
+
+    /// <summary>
+    /// Keeps the target busy: rolls around to its back when close, leaps in when it runs off.
+    /// </summary>
+    private bool TryManeuver(EntityUid uid,
+        LavalandLegionMegafaunaComponent legion,
+        TransformComponent xform,
+        LavalandBossArenaComponent? arena,
+        TimeSpan now)
+    {
+        if (now < legion.NextManeuver || !TryFindTarget(xform, legion, arena, out var target))
+            return false;
+
+        var targetCoordinates = _transform.GetMapCoordinates(target);
+        var from = _transform.GetWorldPosition(xform);
+        var offset = targetCoordinates.Position - from;
+        var distance = offset.Length();
+        if (distance < 0.1f)
+            return false;
+
+        var chasing = distance > legion.GapCloseDistance;
+        if (chasing)
+        {
+            legion.NextManeuver = now + legion.ChaseCooldown;
+        }
+        else
+        {
+            var min = legion.ManeuverCooldownMin.TotalSeconds;
+            var max = Math.Max(min, legion.ManeuverCooldownMax.TotalSeconds);
+            legion.NextManeuver = now + TimeSpan.FromSeconds(_random.NextDouble() * (max - min) + min);
+        }
+
+        MapCoordinates destination;
+        if (chasing)
+        {
+            // Lead the runner a little: roll to where it is heading.
+            var lead = TryComp<PhysicsComponent>(target, out var targetBody) ? targetBody.LinearVelocity * 0.4f : Vector2.Zero;
+            destination = new MapCoordinates(targetCoordinates.Position + lead - offset / distance * legion.GapCloseLanding,
+                targetCoordinates.MapId);
+        }
+        else if (distance <= legion.FlankRange)
+        {
+            var facing = TryComp<MouseRotatorComponent>(target, out var mouse) && mouse.GoalRotation is { } goal
+                ? goal.ToVec()
+                : _transform.GetWorldRotation(target).ToVec();
+            destination = targetCoordinates.Offset(-facing * legion.FlankDistance);
+        }
+        else
+        {
+            return false;
+        }
+
+        var travel = destination.Position - from;
+        var length = travel.Length();
+        if (length < 0.3f)
+            return false;
+
+        // A rolling body: it spins slowly on its way, straight at its spot.
+        var speed = MathF.Max(1f, chasing ? legion.ChaseSpeed : legion.ManeuverSpeed);
+        var limit = chasing ? legion.ChaseMaxDuration : legion.ManeuverMaxDuration;
+        var seconds = Math.Min(length / speed, (float) limit.TotalSeconds);
+        legion.ManeuverVelocity = travel / length * speed;
+        legion.ManeuverEndAt = now + TimeSpan.FromSeconds(seconds);
+        SetAi(uid, false);
+        SetSpinning(uid, true);
+        if (legion.ManeuverSound != null)
+            _audio.PlayPvs(legion.ManeuverSound, uid);
+        return true;
+    }
+
+    /// <summary>Returns true while the body is rolling.</summary>
+    private bool UpdateManeuver(EntityUid uid, LavalandLegionMegafaunaComponent legion, TimeSpan now)
+    {
+        if (legion.ManeuverEndAt is not { } end)
+            return false;
+
+        if (!TryComp<PhysicsComponent>(uid, out var physics) || now >= end)
+        {
+            legion.ManeuverEndAt = null;
+            if (physics != null)
+                _physics.SetLinearVelocity(uid, Vector2.Zero, body: physics);
+            SetSpinning(uid, false);
+            SetAi(uid, true);
+            return false;
+        }
+
+        _physics.SetLinearVelocity(uid, legion.ManeuverVelocity, body: physics);
+        return true;
+    }
+
+    private void SetSpinning(EntityUid uid, bool spinning)
+    {
+        if (!TryComp<LavalandSpinComponent>(uid, out var spin) || spin.Spinning == spinning)
+            return;
+
+        spin.Spinning = spinning;
+        Dirty(uid, spin);
+    }
 
     private void StartCharge(EntityUid uid, LavalandLegionMegafaunaComponent legion, TimeSpan now)
     {
@@ -148,6 +303,7 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
             legion.ChargeEndAt = now + legion.ChargeDuration;
             legion.ChargeHit.Clear();
             SetAi(uid, false);
+            SetSpinning(uid, true);
         }
 
         if (legion.ChargeEndAt is not { } end)
@@ -159,10 +315,15 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
         if (now >= end)
         {
             legion.ChargeEndAt = null;
+            legion.Lunging = false;
             _physics.SetLinearVelocity(uid, Vector2.Zero, body: physics);
+            SetSpinning(uid, false);
             SetAi(uid, true);
             return false;
         }
+
+        if (legion.Lunging && legion.LungeBreaksWalls)
+            BreakAhead(uid, xform, legion, legion.ChargeDirection);
 
         _physics.SetLinearVelocity(uid, legion.ChargeDirection * legion.ChargeSpeed, body: physics);
 
@@ -235,7 +396,16 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
         out EntityUid target)
     {
         target = default;
-        var best = legion.AggroRange * legion.AggroRange;
+
+        // Outside an arena the Legion keeps hunting whoever woke it, however far they run.
+        if (arena == null && legion.Pursued is { } pursued && IsValidTarget(pursued, xform.MapID))
+        {
+            target = pursued;
+            return true;
+        }
+
+        var range = arena == null ? legion.PursuitRange : legion.AggroRange;
+        var best = range * range;
         var position = _transform.GetWorldPosition(xform);
         foreach (var session in _players.Sessions)
         {
@@ -277,8 +447,14 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
         ent.Comp.NextAttack = now + ent.Comp.AttackCooldown;
         SetAi(ent, true);
 
+        // In its arena the fight begins right away, so the lunge and the attacks run.
+        if (ent.Comp.Arena is { } arenaUid)
+            _arenas.StartFightFor(arenaUid);
+
         if (target is not { } victim || !IsValidTarget(victim, Transform(ent).MapID))
             return;
+
+        ent.Comp.Pursued = victim;
 
         var offset = _transform.GetWorldPosition(victim) - _transform.GetWorldPosition(ent);
         if (offset.LengthSquared() < 0.01f)
@@ -292,9 +468,82 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
         ent.Comp.ChargeDirection = Vector2.Normalize(offset);
         ent.Comp.ChargeEndAt = now + TimeSpan.FromSeconds(seconds);
         ent.Comp.ChargeHit.Clear();
+        ent.Comp.Lunging = true;
         SetAi(ent, false);
+        SetSpinning(ent, true);
         if (ent.Comp.ChargeWindupSound != null)
             _audio.PlayPvs(ent.Comp.ChargeWindupSound, ent);
+    }
+
+    /// <summary>The waking lunge: gates burst open, walls and other solid structures in the way are torn down.</summary>
+    private void BreakAhead(EntityUid uid, TransformComponent xform, LavalandLegionMegafaunaComponent legion, Vector2 direction)
+    {
+        var ahead = new MapCoordinates(
+            _transform.GetWorldPosition(xform) + direction * legion.LungeBreakRange,
+            xform.MapID);
+        var broke = false;
+        foreach (var hit in _lookup.GetEntitiesInRange(ahead, legion.LungeBreakRange, LookupFlags.Static))
+        {
+            if (hit == uid || TerminatingOrDeleted(hit) || HasComp<MobStateComponent>(hit))
+                continue;
+
+            if (TryComp<LavalandNecropolisGateComponent>(hit, out var gate))
+            {
+                _gates.Smash((hit, gate));
+                continue;
+            }
+
+            if (!TryComp<TransformComponent>(hit, out var hitXform) || !hitXform.Anchored ||
+                !TryComp<PhysicsComponent>(hit, out var body) || !body.Hard || !body.CanCollide)
+            {
+                continue;
+            }
+
+            QueueDel(hit);
+            broke = true;
+        }
+
+        if (broke && legion.LungeBreakSound != null)
+            _audio.PlayPvs(legion.LungeBreakSound, uid);
+    }
+
+    /// <summary>
+    /// The big body jams in narrow passages: when it has not moved for a while but its target is away,
+    /// it tears down the walls between them.
+    /// </summary>
+    private void UnstuckTowardsTarget(EntityUid uid,
+        LavalandLegionMegafaunaComponent legion,
+        TransformComponent xform,
+        LavalandBossArenaComponent? arena,
+        TimeSpan now)
+    {
+        if (now < legion.NextStuckCheck)
+            return;
+        legion.NextStuckCheck = now + legion.StuckCheckInterval;
+
+        var position = _transform.GetWorldPosition(xform);
+        var moved = Vector2.Distance(position, legion.LastStuckPosition);
+        legion.LastStuckPosition = position;
+        if (moved >= legion.StuckDistance || legion.ChargeEndAt != null ||
+            !TryFindTarget(xform, legion, arena, out var target))
+        {
+            return;
+        }
+
+        var offset = _transform.GetWorldPosition(target) - position;
+        if (offset.Length() <= legion.StuckIgnoreRange)
+            return;
+
+        BreakAhead(uid, xform, legion, Vector2.Normalize(offset));
+    }
+
+    /// <summary>An awake Legion does not stop at a necropolis gate: it bursts it open.</summary>
+    private void SmashGates(TransformComponent xform, LavalandLegionMegafaunaComponent legion)
+    {
+        _nearGates.Clear();
+        _lookup.GetEntitiesInRange(xform.Coordinates, legion.GateSmashRange, _nearGates);
+        foreach (var gate in _nearGates)
+            _gates.Smash(gate);
     }
 
     /// <summary>Wakes every sleeping Legion on the map within <paramref name="range"/> of the spot.</summary>
@@ -347,6 +596,7 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
             childComp.Root = ent.Comp.Root;
             childComp.Arena = ent.Comp.Arena;
             childComp.Free = ent.Comp.Free;
+            childComp.Pursued = ent.Comp.Pursued;
             childComp.NextAttack = now + TimeSpan.FromSeconds(_random.NextFloat(0.8f, 1.6f));
             firstChild ??= child;
         }
@@ -403,6 +653,14 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
         if (old.Arena is { } arenaUid && TryComp<LavalandBossArenaComponent>(arenaUid, out var arena))
             arena.Boss = to;
 
+        // An arena whose boss roams free still follows it, so the arena ends only with the last skull.
+        var arenas = EntityQueryEnumerator<LavalandBossArenaComponent>();
+        while (arenas.MoveNext(out var unboundArena))
+        {
+            if (unboundArena.Boss == from)
+                unboundArena.Boss = to;
+        }
+
         if (HasComp<LavalandFreeBossComponent>(from))
             EnsureComp<LavalandFreeBossComponent>(to);
 
@@ -450,6 +708,7 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
         var root = Spawn(prototype, Transform(ent).Coordinates);
         var rootComp = EnsureComp<LavalandLegionMegafaunaComponent>(root);
         rootComp.Root = root;
+        rootComp.Dormant = false;
         rootComp.Arena = ent.Comp.Arena;
         TransferBossRole(ent.Owner, root);
         SetAi(root, false);
@@ -462,6 +721,129 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
         return TryGetArena(legion, out var arena) && arena.MaxHealth > 0f
             ? Math.Max(1f, arena.ScaledMaxHealth / arena.MaxHealth)
             : 1f;
+    }
+
+    #endregion
+
+    #region Free Legion health bar and music
+
+    /// <summary>
+    /// A Legion outside an arena carries its own health bar and music, like the mad miner:
+    /// players near any of its bodies get them, and they go away with its last skull.
+    /// </summary>
+    private void UpdateFreeHuds(TimeSpan now)
+    {
+        foreach (var list in _bodiesByRoot.Values)
+            list.Clear();
+
+        var query = EntityQueryEnumerator<LavalandLegionMegafaunaComponent>();
+        while (query.MoveNext(out var uid, out var legion))
+        {
+            if (!legion.Free || legion.Dormant || legion.Dying || _mobState.IsDead(uid))
+                continue;
+
+            if (!_bodiesByRoot.TryGetValue(legion.Root, out var bodies))
+                _bodiesByRoot[legion.Root] = bodies = new List<EntityUid>();
+            bodies.Add(uid);
+        }
+
+        foreach (var (root, bodies) in _bodiesByRoot)
+        {
+            if (bodies.Count == 0)
+                continue;
+
+            if (!_freeHuds.TryGetValue(root, out var hud))
+            {
+                hud = CreateFreeHud(bodies);
+                if (hud == null)
+                    continue;
+                _freeHuds[root] = hud;
+            }
+
+            if (now < hud.NextUpdate)
+                continue;
+            hud.NextUpdate = now + FreeHudInterval;
+
+            var health = 0f;
+            foreach (var body in bodies)
+            {
+                var legion = Comp<LavalandLegionMegafaunaComponent>(body);
+                var damage = TryComp<DamageableComponent>(body, out var damageable) ? damageable.TotalDamage.Float() : 0f;
+                health += Math.Max(0f, legion.BodyHealth - damage) + legion.SplitHealthPool;
+            }
+            health = Math.Clamp(health, 0f, hud.MaxHealth);
+
+            foreach (var session in _players.Sessions)
+            {
+                if (session.AttachedEntity is not { Valid: true } player || !NearAnyBody(player, bodies))
+                    continue;
+
+                // Players who walk into the hunt get the music too, not only those there at its start.
+                if (hud.Recipients.Add(session) && hud.Music is { } music)
+                    RaiseNetworkEvent(new LavalandBossMusicStartEvent(hud.Id, music, hud.MusicParams), session.Channel);
+                RaiseNetworkEvent(new LavalandBossHudUpdateEvent(hud.Id, hud.Name, health, hud.MaxHealth, 1), session.Channel);
+            }
+        }
+
+        // Every body of a Legion is gone: its health bar and music go too.
+        foreach (var root in _freeHuds.Keys.ToList())
+        {
+            if (_bodiesByRoot.TryGetValue(root, out var bodies) && bodies.Count > 0)
+                continue;
+
+            var hud = _freeHuds[root];
+            foreach (var session in hud.Recipients)
+            {
+                if (session.Status == SessionStatus.Disconnected)
+                    continue;
+                RaiseNetworkEvent(new LavalandBossHudHideEvent(hud.Id), session.Channel);
+                RaiseNetworkEvent(new LavalandBossMusicStopEvent(hud.Id), session.Channel);
+            }
+
+            _freeHuds.Remove(root);
+        }
+    }
+
+    private FreeLegionHud? CreateFreeHud(List<EntityUid> bodies)
+    {
+        LavalandBossComponent? boss = null;
+        foreach (var body in bodies)
+        {
+            if (TryComp(body, out boss))
+                break;
+        }
+
+        if (boss == null)
+            return null;
+
+        var sound = boss.SelectedMusic
+                    ?? (boss.MusicPool.Count > 0 ? _random.Pick(boss.MusicPool) : boss.Music);
+        boss.SelectedMusic = sound;
+        return new FreeLegionHud
+        {
+            Id = _nextHudId++,
+            Name = string.IsNullOrWhiteSpace(boss.BossName) ? Name(bodies[0]) : boss.BossName,
+            MaxHealth = Math.Max(1f, boss.MaxHealth),
+            Music = sound == null ? null : _audio.ResolveSound(sound),
+            MusicParams = (sound?.Params ?? AudioParams.Default).WithLoop(true),
+        };
+    }
+
+    private bool NearAnyBody(EntityUid player, List<EntityUid> bodies)
+    {
+        var playerXform = Transform(player);
+        var position = _transform.GetWorldPosition(playerXform);
+        foreach (var body in bodies)
+        {
+            var bodyXform = Transform(body);
+            if (bodyXform.MapID == playerXform.MapID &&
+                Vector2.DistanceSquared(position, _transform.GetWorldPosition(bodyXform)) <= FreeHudRange * FreeHudRange)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     #endregion

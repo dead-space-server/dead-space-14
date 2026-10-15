@@ -243,6 +243,13 @@ public sealed class LavalandSecretBossSystem : EntitySystem
 
         var mapId = Transform(mapUid).MapID;
         var filter = Filter.BroadcastMap(mapId);
+        if (config.AwakenMessageRange > 0f && ent.Comp.Pit is { } awakenPit)
+        {
+            // Heard only around the pit, not by every player on lavaland.
+            var pitCoordinates = _transform.GetMapCoordinates(awakenPit);
+            filter = Filter.Empty().AddInRange(pitCoordinates, config.AwakenMessageRange);
+        }
+
         RaiseNetworkEvent(new CelestialSpeakEvent(Loc.GetString(config.AwakenMessage), config.AwakenMessageDuration), filter);
         if (config.AwakenSound != null)
             _audio.PlayGlobal(config.AwakenSound, filter, true);
@@ -342,6 +349,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
         comp.ArenaMap = null;
         comp.Flower = null;
         comp.FlowerRoom.Clear();
+        comp.MazeOpenTiles.Clear();
     }
 
     private EntityUid CreateZoneMap(Color light, out MapId mapId)
@@ -475,7 +483,12 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             for (var y = 0; y < size; y++)
             {
                 if (open[x, y])
+                {
+                    comp.MazeOpenTiles.Add(_transform.ToMapCoordinates(
+                        _map.GridTileToLocal(grid.Owner, grid.Comp, new Vector2i(x, y))));
                     continue;
+                }
+
                 Spawn(config.MazeWall, _map.GridTileToLocal(grid.Owner, grid.Comp, new Vector2i(x, y)));
             }
         }
@@ -766,7 +779,8 @@ public sealed class LavalandSecretBossSystem : EntitySystem
         ent.Comp.Step = 0;
         ent.Comp.StageTime = now + config.SleepDelay;
 
-        foreach (var coords in ent.Comp.FlowerRoom)
+        // The gas fills every passage of the maze, not only the flower room.
+        foreach (var coords in ent.Comp.MazeOpenTiles.Count > 0 ? ent.Comp.MazeOpenTiles : ent.Comp.FlowerRoom)
         {
             Spawn(config.GasPrototype, coords);
         }
@@ -884,6 +898,14 @@ public sealed class LavalandSecretBossSystem : EntitySystem
     {
         var comp = ent.Comp;
         if (comp.Boss is not { } currentBoss || TerminatingOrDeleted(currentBoss) || _mobState.IsDead(currentBoss))
+        {
+            Victory(ent, config);
+            return;
+        }
+
+        // Out of health is dead, whatever its thresholds say.
+        if (comp.BossMaxHealth > 0f && TryComp<DamageableComponent>(currentBoss, out var bossDamage) &&
+            bossDamage.TotalDamage.Float() >= comp.BossMaxHealth)
         {
             Victory(ent, config);
             return;
@@ -1193,7 +1215,9 @@ public sealed class LavalandSecretBossSystem : EntitySystem
                 continue;
 
             regen.NextHeal = now + regen.Interval;
-            if (!_mobState.IsAlive(uid))
+
+            // Heals in crit too; only the dead stay as they are.
+            if (_mobState.IsDead(uid))
                 continue;
 
             var heal = new DamageSpecifier();

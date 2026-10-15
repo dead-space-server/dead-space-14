@@ -1,60 +1,13 @@
 - type: lavalandBossArena
   id: LavalandLegionArena
-  arenaName: Арена Легиона
+  arenaName: Башня Некрополиса
+  gridPath: /Maps/_DeadSpace/Lavaland/legion_necropolis.yml
+  summonOnGate: true
+  bossUnbound: true
   bossPrototype: MobLavalandLegionMegafauna
   floorTile: FloorLegionArena
   wallPrototype: WallLegionArena
   lightPrototype: LavalandLegionArenaLight
-  decorations:
-  - prototype: FloorLavaEntity
-    pool: true
-    count: 22
-    spawnAttempts: 80
-    clusterSize: 5
-    clusterRadius: 1
-    minDistance: 9
-    maxDistance: 15
-    edgePadding: 3
-    minSeparation: 0
-  - prototype: FloraRockSolid
-    count: 4
-    spawnAttempts: 80
-    minDistance: 12
-    maxDistance: 15
-    edgePadding: 3
-    minSeparation: 3
-  - prototype: FloraTreeLavalandAsh
-    count: 5
-    spawnAttempts: 80
-    minDistance: 10
-    maxDistance: 15
-    edgePadding: 3
-    minSeparation: 4
-  - prototype: LavalandEmberWild
-    count: 4
-    spawnAttempts: 60
-    minDistance: 6
-    maxDistance: 15
-    edgePadding: 2
-    minSeparation: 3
-  - prototype: BasaltRandom
-    count: 70
-    spawnAttempts: 100
-    minDistance: 4
-    maxDistance: 16
-    edgePadding: 2
-    minSeparation: 1
-  - decals:
-    - FlowersBROne
-    - FlowersBRTwo
-    - FlowersBRThree
-    decalColor: "#ff6b24"
-    count: 40
-    spawnAttempts: 120
-    minDistance: 3
-    maxDistance: 16
-    edgePadding: 1
-    minSeparation: 0
   size: 35
   spawnAttempts: 160
   minDistance: 170
@@ -68,6 +21,13 @@
   emptyResetDelay: 10
   emptyResetHealFraction: 5
   emptyResetMinHeal: 450
+  intro:
+    style: GateBreak
+    titleColor: "#e0182d"
+    impactSound: /Audio/Effects/metal_thud1.ogg
+    landSound: /Audio/Effects/explosion_small1.ogg
+    roarSound: /Audio/Effects/demon_dies.ogg
+    subtitle: lavaland-boss-intro-legion
 
 - type: tile
   id: FloorLegionArena
@@ -78,8 +38,8 @@
 - type: entity
   parent: WallRockBasaltLavalandBoundary
   id: WallLegionArena
-  name: стена логова Легиона
-  description: Несокрушимая базальтовая стена, окружающая логово Легиона.
+  name: базальт
+  description: Неразрушимая базальтовая стена, отделяющая логово от остального Лаваленда.
   suffix: Lavaland, Indestructible
 
 - type: entity
@@ -111,6 +71,8 @@
   - type: IgnoreKudzu
   - type: StunImmune
   - type: NoSlip
+  - type: LavalandSpin
+    speed: 5
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -133,9 +95,9 @@
       VisionRadius: !type:Single
         13
       AggroVisionRadius: !type:Single
-        13
+        80
       NavSmash: !type:Bool
-        false
+        true
   - type: MeleeWeapon
     resistanceBypass: true
     soundHit:
@@ -187,6 +149,7 @@
     - LavalandNecropolisChest
   - type: LavalandLegionMegafauna
     size: 3
+    dormant: true
     bodyHealth: 700
     splitHealthPool: 2850
     splitInto:
