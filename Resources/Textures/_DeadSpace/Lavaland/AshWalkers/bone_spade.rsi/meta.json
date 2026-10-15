@@ -1,7 +1,7 @@
 {
     "version": 1,
     "license": "CC-BY-SA-3.0",
-    "copyright": "Taken from tgstation, resprited by golubok_epta (Discord); equipped-BELT from Objects/Tools/Hydroponics/spade.rsi",
+    "copyright": "Taken from tgstation, resprited by golubok_epta (Discord)",
     "size": {
         "x": 32,
         "y": 32
@@ -19,10 +19,6 @@
         },
         {
             "name": "inhand-right",
-            "directions": 4
-        },
-        {
-            "name": "equipped-BELT",
             "directions": 4
         }
     ]

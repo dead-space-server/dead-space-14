@@ -56,8 +56,6 @@
     sprite: _DeadSpace/Lavaland/AshWalkers/bone_spade.rsi
   - type: Item
     sprite: _DeadSpace/Lavaland/AshWalkers/bone_spade.rsi
-  - type: Clothing
-    sprite: _DeadSpace/Lavaland/AshWalkers/bone_spade.rsi
 
 - type: entity
   parent: Bucket
