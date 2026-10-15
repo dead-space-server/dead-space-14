@@ -1,0 +1,7 @@
+- type: latheRecipePack
+  id: ClothingIAAOfficer
+  recipes:
+  - ClothingUniformJumpsuitIAAOfficer1
+  - ClothingUniformJumpsuitIAAOfficer2
+  - ClothingUniformJumpsuitIAAOfficer3
+  - ClothingHeadHatBeretIAAOfficer

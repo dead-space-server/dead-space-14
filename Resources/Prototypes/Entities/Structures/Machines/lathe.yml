@@ -505,6 +505,7 @@
     - ClothingMedical
     - ClothingScience
     - ClothingSecurity
+    - ClothingIAAOfficer # DS14
     - ClothingService
     - WinterCoats
     - Ties
