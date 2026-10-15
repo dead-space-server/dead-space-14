@@ -1,0 +1,69 @@
+- type: entity
+  id: MobLavalandWildAshWhelp
+  name: пепельный детёныш
+  description: Дикий детёныш пепельного дракона. Его не поймать и не убить — плюнет огнём и улетит.
+  suffix: Lavaland, неуязвимый
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _DeadSpace/Lavaland/Mobs/AshWhelp.rsi
+    layers:
+    - state: ash_whelp
+  - type: Clickable
+  - type: InteractionOutline
+  - type: PointLight
+    radius: 2
+    energy: 1
+    color: "#ff7a2d"
+  - type: LavalandWildWhelp
+    dropTime: 0.8
+    dropHeight: 8
+    aimTime: 1.1
+    fireRange: 5
+    fleeSpeed: 6
+    fleeTime: 1.6
+    riseTime: 0.7
+  - type: LavalandSkyDrop
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: MarkerBase
+  id: LavalandWildWhelpNest
+  name: гнездо пепельных детёнышей
+  suffix: Lavaland, триггер
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Mobs/AshWhelp.rsi
+    layers:
+    - state: ash_whelp
+  - type: LavalandWildWhelpNest
+    radius: 4
+    cooldown: 300
+
+- type: entity
+  parent: MarkerBase
+  id: LavalandWildWhelpTestSpawner
+  name: тест — дикие пепельные детёныши
+  suffix: Lavaland, тест
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Mobs/AshWhelp.rsi
+    layers:
+    - state: ash_whelp
+  - type: LavalandWildWhelpTest
+
+- type: entity
+  parent: MarkerBase
+  id: LavalandGoldgrubAmbushTestSpawner
+  name: тест — засада золотой личинки
+  suffix: Lavaland, тест
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Mobs/lavaland_monsters.rsi
+    layers:
+    - state: goldgrub
+  - type: LavalandGoldgrubAmbushTest

@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Content.Server.DeadSpace.Lavaland.Components;
+using Content.Server.DeadSpace.Lavaland.SecretBoss;
+using Content.Shared.DeadSpace.Lavaland.SecretBoss;
 using Content.Server.Tiles;
 using Content.Shared.Chasm;
 using Content.Shared.DeadSpace.Lavaland;
@@ -27,6 +29,9 @@ public sealed class LavalandJaunterSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedLavalandJaunterSystem _jaunter = default!;
+    [Dependency] private readonly LavalandMadMinerSystem _madMiner = default!;
+    [Dependency] private readonly LavalandDayCycleSystem _dayCycle = default!;
+    [Dependency] private readonly LavalandBossArenaSystem _arena = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly PullingSystem _pulling = default!;
@@ -49,7 +54,7 @@ public sealed class LavalandJaunterSystem : EntitySystem
         if (args.Handled)
             return;
 
-        if (EntityManager.System<LavalandMadMinerSystem>().TryInterceptJaunter(args.User, ent.Owner))
+        if (_madMiner.TryInterceptJaunter(args.User, ent.Owner))
         {
             args.Handled = true;
             return;
@@ -63,20 +68,43 @@ public sealed class LavalandJaunterSystem : EntitySystem
             return;
         }
 
+        // In the Celestial maze the jaunter works by hand once you have landed (not while jumping, falling
+        // or asleep) and takes you back to lavaland; the fight blocks it completely.
+        var userMap = Transform(args.User).MapUid;
+        var inMaze = HasComp<LavalandCelestialMazeComponent>(userMap);
+        if (HasComp<LavalandNoTeleportZoneComponent>(userMap) && !inMaze ||
+            inMaze && (HasComp<LavalandPitDescentComponent>(args.User) || HasComp<LavalandPitFrozenComponent>(args.User)) ||
+            _arena.IsInSealedArena(args.User))
+        {
+            _popup.PopupEntity(Loc.GetString("lavaland-jaunter-blocked"), args.User, args.User, PopupType.MediumCaution);
+            return;
+        }
+
+        if (_dayCycle.IsJaunterBlocked(Transform(args.User).MapUid))
+        {
+            _popup.PopupEntity(Loc.GetString("lavaland-jaunter-night"), args.User, args.User, PopupType.MediumCaution);
+            return;
+        }
+
         if (!TryActivate(ent, args.User, false))
             _popup.PopupEntity(Loc.GetString("lavaland-jaunter-no-anchor"), args.User, args.User, PopupType.MediumCaution);
     }
 
     private void OnChasmFallingAttempt(ChasmFallingAttemptEvent args)
     {
-        if (args.Cancelled)
+        // The Celestial pit is a way down, not a death: no jaunter rescue, no mad miner.
+        // In the Celestial zone the jaunter never fires on its own.
+        if (args.Cancelled || HasComp<LavalandCelestialPitComponent>(args.Chasm) ||
+            HasComp<LavalandNoTeleportZoneComponent>(Transform(args.Tripper).MapUid))
             return;
 
-        var hasJaunter = _jaunter.TryFindEquippedJaunter(args.Tripper, out var jaunter);
-        if (EntityManager.System<LavalandMadMinerSystem>().TryRescueFromChasm(
+        var hasJaunter = _jaunter.TryFindJaunterOn(args.Tripper, out var jaunter);
+        if (_madMiner.TryRescueFromChasm(
                 args.Tripper, args, hasJaunter ? jaunter.Owner : null) ||
             !hasJaunter ||
-            _timing.CurTime < jaunter.Comp.NextAutomaticUse)
+            _timing.CurTime < jaunter.Comp.NextAutomaticUse ||
+            _arena.IsInSealedArena(args.Tripper) ||
+            _dayCycle.IsJaunterBlocked(Transform(args.Tripper).MapUid))
         {
             return;
         }
@@ -147,6 +175,14 @@ public sealed class LavalandJaunterSystem : EntitySystem
             TryComp(xformMapUid, out lavalandMap))
         {
             mapUid = xformMapUid;
+            return true;
+        }
+
+        // From the Celestial maze the jaunter leads back to the lavaland it belongs to.
+        if (TryComp<LavalandCelestialMazeComponent>(xform.MapUid, out var maze) &&
+            TryComp(maze.LavalandMap, out lavalandMap))
+        {
+            mapUid = maze.LavalandMap;
             return true;
         }
 

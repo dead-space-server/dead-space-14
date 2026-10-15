@@ -6,7 +6,7 @@ using Robust.Shared.Maths;
 using System.Linq;
 using System.Numerics;
 
-namespace Content.Client.DeadSpace.Celestial;
+namespace Content.Client.DeadSpace.Lavaland.Celestial;
 
 /// <summary>
 /// Субтитры Селестиала: розовый текст шрифтом OMORI под центром экрана,
@@ -41,6 +41,9 @@ public sealed class CelestialSubtitleRenderer
     // режим смерти: чёрный текст, чисто белые прямоугольники, зона НАД глазом
     private bool _deathMode;
 
+    // DS14: цвет текста вместо розового (фразы безумного шахтёра)
+    private Color? _colorOverride;
+
     // блок: (нормированное смещение, размер, задержка появления, альфа)
     private readonly List<(Vector2 offset, Vector2 size, float delay, float alpha, bool whitens)> _blocks = new();
 
@@ -59,12 +62,14 @@ public sealed class CelestialSubtitleRenderer
     public void ShowDeath(string text, float duration)
     {
         _deathMode = true; // ВАЖНО: после Show, чтобы не сбросился
+        _colorOverride = null;
         ShowInternal(text, duration);
     }
 
-    public void Show(string text, float duration)
+    public void Show(string text, float duration, Color? color = null)
     {
         _deathMode = false;
+        _colorOverride = color;
         ShowInternal(text, duration);
     }
 
@@ -228,7 +233,7 @@ public sealed class CelestialSubtitleRenderer
             halfW = MathF.Max(halfW, line.width / 2f + 22f);
 
         // цвет текста: обычный розовый; в смерти - чёрный
-        var textColor = _deathMode ? Black : TextColor;
+        var textColor = _deathMode ? Black : _colorOverride ?? TextColor;
         if (ending)
         {
             var blinkBlack = (_timeLeft % BlinkPeriod) < BlinkPeriod / 2f;

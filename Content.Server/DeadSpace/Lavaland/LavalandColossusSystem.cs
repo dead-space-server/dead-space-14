@@ -1,5 +1,7 @@
 using System.Numerics;
 using Content.Server.DeadSpace.Lavaland.Components;
+using Content.Server.Explosion.EntitySystems;
+using Robust.Shared.Map;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared.Camera;
 using Content.Shared.Damage.Components;
@@ -42,6 +44,8 @@ public sealed class LavalandColossusSystem : EntitySystem
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly ExplosionSystem _explosion = default!;
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
     private readonly List<EntityUid> _participants = new();
     private readonly List<EntityUid> _telegraphTargets = new();
@@ -90,6 +94,7 @@ public sealed class LavalandColossusSystem : EntitySystem
             }
 
             ProcessPendingShots(uid, colossus, now);
+            ProcessFury(uid, colossus, arena, xform, frameTime, now);
             if (colossus.BusyUntil > now || colossus.NextAttack > now)
                 continue;
 
@@ -120,6 +125,9 @@ public sealed class LavalandColossusSystem : EntitySystem
 
     private void PrepareFight(EntityUid uid, LavalandColossusComponent colossus)
     {
+        colossus.Furious = false;
+        colossus.PendingFuryBlasts.Clear();
+        _appearance.SetData(uid, LavalandColossusVisuals.Angry, false);
         SetEnraged(uid, colossus, false);
         ClearRuntime(colossus);
         colossus.NextAttack = _timing.CurTime + TimeSpan.FromSeconds(1);
@@ -310,6 +318,90 @@ public sealed class LavalandColossusSystem : EntitySystem
             colossus.ActiveProjectiles.Remove(ent.Owner);
     }
 
+    /// <summary>
+    /// Below a quarter of health the colossus is furious: angry animation, it runs at the nearest player,
+    /// and every few seconds marks appear around the players and blow up a moment later.
+    /// </summary>
+    private void ProcessFury(
+        EntityUid uid,
+        LavalandColossusComponent colossus,
+        LavalandBossArenaComponent arena,
+        TransformComponent xform,
+        float frameTime,
+        TimeSpan now)
+    {
+        for (var i = colossus.PendingFuryBlasts.Count - 1; i >= 0; i--)
+        {
+            var (coords, at) = colossus.PendingFuryBlasts[i];
+            if (at > now)
+                continue;
+
+            colossus.PendingFuryBlasts.RemoveAt(i);
+            _explosion.QueueExplosion(coords, "Default", colossus.FuryExplosionIntensity, colossus.FuryExplosionSlope,
+                colossus.FuryExplosionMaxTile, uid, tileBreakScale: 0f, maxTileBreak: 0, canCreateVacuum: false);
+        }
+
+        if (!colossus.Furious)
+        {
+            if (!TryComp<DamageableComponent>(uid, out var damageable) ||
+                damageable.TotalDamage.Float() < Math.Max(1f, arena.ScaledMaxHealth) * (1f - colossus.FuryHealthFraction))
+            {
+                return;
+            }
+
+            colossus.Furious = true;
+            colossus.NextFuryBlast = now + TimeSpan.FromSeconds(1);
+            _appearance.SetData(uid, LavalandColossusVisuals.Angry, true);
+            Telegraph(uid, colossus);
+            Popup(uid, "lavaland-colossus-fury");
+        }
+
+        // Run at the nearest player.
+        var position = _transform.GetWorldPosition(xform);
+        EntityUid? nearest = null;
+        var best = float.MaxValue;
+        foreach (var participant in _participants)
+        {
+            var distance = Vector2.DistanceSquared(_transform.GetWorldPosition(participant), position);
+            if (distance < best)
+            {
+                best = distance;
+                nearest = participant;
+            }
+        }
+
+        if (nearest is { } target)
+        {
+            var offset = _transform.GetWorldPosition(target) - position;
+            var length = offset.Length();
+            if (length > colossus.FuryChaseReach)
+            {
+                var step = MathF.Min(colossus.FuryChaseSpeed * frameTime, length - colossus.FuryChaseReach);
+                _transform.SetWorldPosition(uid, position + offset / length * step);
+            }
+        }
+
+        if (now < colossus.NextFuryBlast)
+            return;
+
+        colossus.NextFuryBlast = now + colossus.FuryBlastInterval;
+        foreach (var participant in _participants)
+        {
+            var center = _transform.GetMapCoordinates(participant);
+            for (var i = 0; i <= colossus.FuryMarksPerPlayer; i++)
+            {
+                var spot = i == 0
+                    ? center.Position
+                    : center.Position + _random.NextAngle().ToVec() * _random.NextFloat(1.5f, colossus.FuryMarkRadius);
+                var coords = new MapCoordinates(spot, center.MapId);
+                Spawn(colossus.FuryMarkPrototype, coords);
+                colossus.PendingFuryBlasts.Add((coords, now + colossus.FuryBlastDelay));
+            }
+        }
+
+        _audio.PlayPvs(colossus.TelegraphSound, uid, AudioParams.Default.WithVolume(2f));
+    }
+
     private void Telegraph(EntityUid uid, LavalandColossusComponent colossus)
     {
         _telegraphTargets.Clear();
@@ -488,6 +580,7 @@ public sealed class LavalandColossusSystem : EntitySystem
     private void ClearRuntime(LavalandColossusComponent colossus)
     {
         colossus.PendingShots.Clear();
+        colossus.PendingFuryBlasts.Clear();
         colossus.BusyUntil = TimeSpan.Zero;
         colossus.NextShotSound = TimeSpan.Zero;
     }

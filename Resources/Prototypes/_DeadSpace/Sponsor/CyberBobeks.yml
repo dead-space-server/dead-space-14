@@ -423,6 +423,17 @@
   name: протокинетическое ружьё Syn.V // Gen.1
   description: Модифицированное протокинетическое ружьё с рычажным механизмом. Помогает избавляться от биомусора.
   components:
+  - type: AttachmentHolder
+    slotOverlays:
+      bayonet_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: bayonet
+        offset: 0.71875,0.4375
+      light_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: flight
+        stateOn: flight_on
+        offset: 0.46875,0.34375
   - type: Gun
     fireRate: 0.5
     selectedMode: SemiAuto

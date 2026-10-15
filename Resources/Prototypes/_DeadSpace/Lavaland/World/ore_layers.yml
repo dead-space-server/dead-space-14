@@ -1,7 +1,3 @@
-# Lavaland-specific ore layers.
-# These keep the volcanic surface closer to tg Lavaland's ore spread instead of
-# reusing the generic asteroid distribution.
-
 - type: biomeMarkerLayer
   id: LavalandOreIron
   entityMask:
@@ -128,8 +124,6 @@
   maxGroupSize: 3
   radius: 4
 
-# Chasms are split into several sparse layers so Lavaland gets readable hazards
-# instead of only tiny single holes or too many constant obstacles.
 - type: biomeMarkerLayer
   id: LavalandChasms
   prototype: FloorChasmEntity

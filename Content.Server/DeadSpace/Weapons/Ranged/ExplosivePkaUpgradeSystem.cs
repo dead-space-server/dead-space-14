@@ -8,7 +8,9 @@ using Content.Shared.DeadSpace.Weapons.Ranged.Upgrades;
 using Content.Shared.Humanoid;
 using Content.Shared.Projectiles;
 using Content.Shared.Weapons.Ranged.Systems;
+using Content.Shared.Physics;
 using Robust.Shared.Map;
+using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
@@ -29,10 +31,15 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<ExplosivePkaUpgradeComponent, GunShotEvent>(OnGunShot);
         SubscribeLocalEvent<ExplosivePkaProjectileComponent, PreventCollideEvent>(OnPreventCollide);
+        SubscribeLocalEvent<ExplosivePkaProjectileComponent, ProjectileHitEvent>(OnProjectileHit);
     }
 
     private void OnGunShot(Entity<ExplosivePkaUpgradeComponent> ent, ref GunShotEvent args)
     {
+        // Only on lavaland: anywhere else the shot is an ordinary kinetic bolt.
+        if (!HasComp<LavalandMapComponent>(Transform(args.User).MapUid))
+            return;
+
         foreach (var (ammo, _) in args.Ammo)
         {
             if (ammo is not { } projectile ||
@@ -73,9 +80,27 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    /// Flies over creatures to the cursor, but walls and rock stop it: it blows up where it hits them.
+    /// </summary>
     private void OnPreventCollide(Entity<ExplosivePkaProjectileComponent> ent, ref PreventCollideEvent args)
     {
+        if (args.OtherBody.BodyType == BodyType.Static &&
+            args.OtherFixture.Hard &&
+            (args.OtherFixture.CollisionLayer & (int) CollisionGroup.Impassable) != 0)
+        {
+            return;
+        }
+
         args.Cancelled = true;
+    }
+
+    private void OnProjectileHit(Entity<ExplosivePkaProjectileComponent> ent, ref ProjectileHitEvent args)
+    {
+        if (TerminatingOrDeleted(ent) || ent.Comp.DetonationTarget == null)
+            return;
+
+        Detonate(ent, _transform.GetMapCoordinates(ent), args.Shooter);
     }
 
     public override void Update(float frameTime)
@@ -105,6 +130,8 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
         MapCoordinates center,
         EntityUid? shooter)
     {
+        // Once only: hitting a wall and reaching the cursor can happen on the same tick.
+        ent.Comp.DetonationTarget = null;
 
         foreach (var victim in _lookup.GetEntitiesInRange(center, ent.Comp.Radius))
         {

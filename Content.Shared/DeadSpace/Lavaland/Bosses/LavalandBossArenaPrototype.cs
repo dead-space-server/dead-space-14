@@ -1,3 +1,4 @@
+using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.Lavaland.Bosses;
@@ -79,13 +80,43 @@ public sealed partial class LavalandBossArenaPrototype : IPrototype
 
     [DataField]
     public float EmptyResetMinHeal;
+
+    /// <summary>
+    /// The entrances are walled off once the boss drops to this fraction of its health. 0 disables sealing.
+    /// The walls disappear when the boss dies or resets.
+    /// </summary>
+    [DataField]
+    public float SealHealthFraction = 0.5f;
+
+    /// <summary>Players on this arena walk tile by tile (the beat of the Hierophant).</summary>
+    [DataField]
+    public bool TileMovement;
+
+    /// <summary>Wall used to close the entrances. Falls back to <see cref="WallPrototype"/>.</summary>
+    [DataField]
+    public EntProtoId? SealWallPrototype;
+
+    [DataField]
+    public SoundSpecifier? SealSound = new SoundPathSpecifier("/Audio/Effects/explosionfar.ogg");
+
+    /// <summary>Popup shown to everyone inside when the entrances close. Null disables it.</summary>
+    [DataField]
+    public LocId? SealMessage = "lavaland-boss-arena-sealed";
 }
 
 [DataDefinition]
 public sealed partial class LavalandBossArenaDecorationEntry
 {
-    [DataField(required: true)]
-    public EntProtoId Prototype = default;
+    /// <summary>Entity to spawn. Not needed when <see cref="Decals"/> are set.</summary>
+    [DataField]
+    public EntProtoId? Prototype;
+
+    /// <summary>Decals to scatter instead of an entity (one random per tile), e.g. fiery flowers.</summary>
+    [DataField]
+    public List<ProtoId<Content.Shared.Decals.DecalPrototype>> Decals = new();
+
+    [DataField]
+    public Color? DecalColor;
 
     [DataField]
     public int Count = 1;

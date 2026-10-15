@@ -10,6 +10,7 @@ using Content.Shared.Chasm;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
+using Content.Shared.DeadSpace.Lavaland.Celestial;
 using Content.Shared.DeadSpace.Lavaland.Bosses;
 using Content.Shared.DeadSpace.Lavaland.Components;
 using Content.Shared.DeadSpace.Lavaland;
@@ -26,6 +27,7 @@ using Content.Shared.Verbs;
 using Robust.Server.Player;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
+using Robust.Shared.Enums;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
@@ -63,12 +65,12 @@ public sealed class LavalandMadMinerSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<LavalandMadMinerComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<LavalandMadMinerComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<LavalandMadMinerComponent, MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<LavalandMadMinerComponent, DamageChangedEvent>(OnDamageChanged);
         SubscribeLocalEvent<LavalandMadMinerHookedComponent, GetVerbsEvent<AlternativeVerb>>(OnHookedGetVerbs);
         SubscribeLocalEvent<LavalandMadMinerHookedComponent, LavalandRemoveMadMinerHookDoAfterEvent>(OnHookRemoved);
         SubscribeLocalEvent<LavalandMadMinerHookVisualComponent, InteractHandEvent>(OnHookVisualInteract);
-        SubscribeLocalEvent<ChasmFallingAttemptEvent>(OnChasmFalling);
     }
 
     private void OnMapInit(Entity<LavalandMadMinerComponent> ent, ref MapInitEvent args)
@@ -77,6 +79,12 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         ent.Comp.SpawnCoordinates = _transform.GetMapCoordinates(ent.Owner);
         ent.Comp.SelectedMusic = ent.Comp.Music.Count == 0 ? null : _random.Pick(ent.Comp.Music);
         BuildPlatform(ent.Owner);
+    }
+
+    private void OnShutdown(Entity<LavalandMadMinerComponent> ent, ref ComponentShutdown args)
+    {
+        // Deleting the miner mid-fight must not leave HUD, music or hooks on players.
+        EndFight(ent.Owner, ent.Comp);
     }
 
     public override void Update(float frameTime)
@@ -89,10 +97,12 @@ public sealed class LavalandMadMinerSystem : EntitySystem
                 continue;
             miner.NextThink = now + TimeSpan.FromSeconds(0.1);
 
+            TrySpeak(uid, miner, now);
+
             if (!TryPickTarget(uid, miner, xform, out var target))
             {
                 if (miner.Active)
-                    EndFight(miner);
+                    EndFight(uid, miner);
                 continue;
             }
 
@@ -191,7 +201,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         if (!separated)
             return;
 
-        ClearHooks(miner);
+        ClearHooks(uid, miner);
         if (TryComp<HTNComponent>(uid, out var htn))
             _htn.SetHTNEnabled((uid, htn), false);
         miner.Target = farthest;
@@ -224,24 +234,46 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         miner.NextBlink = now + TimeSpan.FromSeconds(0.5);
         miner.NextShot = now + TimeSpan.FromSeconds(1);
         miner.NextHook = now + TimeSpan.FromSeconds(2);
-        foreach (var session in GetNearbySessions(uid, miner.ChaseRange))
-        {
-            if (miner.SelectedMusic != null)
-                RaiseNetworkEvent(new LavalandBossMusicStartEvent(miner.HudId,
-                    _audio.ResolveSound(miner.SelectedMusic), miner.SelectedMusic.Params.WithLoop(true)), session.Channel);
-        }
+        miner.NextHud = TimeSpan.Zero;
+        SendHud(uid, miner);
     }
 
-    private void EndFight(LavalandMadMinerComponent miner)
+    private void EndFight(EntityUid uid, LavalandMadMinerComponent miner)
     {
         miner.Active = false;
         miner.Target = null;
-        ClearHooks(miner);
-        foreach (var session in _players.Sessions)
+        ClearHooks(uid, miner);
+        foreach (var session in miner.HudRecipients)
         {
+            if (session.Status == SessionStatus.Disconnected)
+                continue;
             RaiseNetworkEvent(new LavalandBossHudHideEvent(miner.HudId), session.Channel);
             RaiseNetworkEvent(new LavalandBossMusicStopEvent(miner.HudId), session.Channel);
         }
+        miner.HudRecipients.Clear();
+    }
+
+    private void TrySpeak(EntityUid uid, LavalandMadMinerComponent miner, TimeSpan now)
+    {
+        // Quiet once the fight is on: the whispers are only for those who haven't been noticed yet.
+        if (miner.Active || now < miner.NextSpeech || miner.SpeechLines.Count == 0)
+            return;
+
+        var line = Loc.GetString(_random.Pick(miner.SpeechLines));
+        var spoke = false;
+        foreach (var session in GetNearbySessions(uid, miner.SpeechRadius))
+        {
+            if (session.AttachedEntity is not { } player || IsDead(player) || HasComp<GhostComponent>(player))
+                continue;
+            RaiseNetworkEvent(new CelestialSpeakEvent(line, miner.SpeechDuration, miner.SpeechColor), session.Channel);
+            spoke = true;
+        }
+
+        if (!spoke)
+            return;
+        var min = miner.SpeechCooldownMin.TotalSeconds;
+        var max = Math.Max(min, miner.SpeechCooldownMax.TotalSeconds);
+        miner.NextSpeech = now + TimeSpan.FromSeconds(_random.NextDouble(min, max));
     }
 
     private void BlinkBehind(EntityUid uid, LavalandMadMinerComponent miner, EntityUid target, TimeSpan now)
@@ -304,7 +336,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
 
     private void BeginHook(EntityUid uid, LavalandMadMinerComponent miner, EntityUid target, TimeSpan now)
     {
-        ClearHooks(miner);
+        ClearHooks(uid, miner);
         if (TryComp<HTNComponent>(uid, out var htn))
             _htn.SetHTNEnabled((uid, htn), false);
         miner.HookEnds = now + miner.HookDuration;
@@ -341,7 +373,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
     {
         if (now >= miner.HookEnds || miner.HookTargets.Count == 0)
         {
-            ClearHooks(miner);
+            ClearHooks(uid, miner);
             return;
         }
 
@@ -400,7 +432,10 @@ public sealed class LavalandMadMinerSystem : EntitySystem
             var distance = direction.Length();
             if (distance <= miner.HookImpactRange)
             {
-                _damage.TryChangeDamage(target, miner.HookImpactDamage, ignoreResistances: true, origin: uid);
+                var damage = TryComp<LavalandBossRageComponent>(uid, out var rage) && rage.Enraged
+                    ? miner.HookImpactDamage * miner.RageHookDamageMultiplier
+                    : miner.HookImpactDamage;
+                _damage.TryChangeDamage(target, damage, ignoreResistances: true, origin: uid);
                 if (TryComp<PhysicsComponent>(target, out var body) && distance > 0.01f)
                     _physics.SetLinearVelocity(target, -Vector2.Normalize(direction) * miner.HookKnockback, body: body);
                 RemoveHookTarget(miner, target);
@@ -461,30 +496,29 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         RemCompDeferred<LavalandMadMinerHookedComponent>(target);
     }
 
-    private void ClearHooks(LavalandMadMinerComponent miner)
+    private void ClearHooks(EntityUid uid, LavalandMadMinerComponent miner)
     {
         foreach (var target in miner.HookTargets.Keys.ToArray())
             RemoveHookTarget(miner, target);
         miner.HookAttacker = null;
         miner.SplitDragOffsets.Clear();
         miner.SplitDragUntil = TimeSpan.Zero;
-        var query = EntityQueryEnumerator<LavalandMadMinerComponent, HTNComponent>();
-        while (query.MoveNext(out var uid, out var component, out var htn))
-        {
-            if (component != miner)
-                continue;
+        if (!TerminatingOrDeleted(uid) && TryComp<HTNComponent>(uid, out var htn))
             _htn.SetHTNEnabled((uid, htn), true);
-            break;
-        }
     }
 
     private void OnHookedGetVerbs(Entity<LavalandMadMinerHookedComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
     {
         if (args.User != ent.Owner || ent.Comp.Removing)
             return;
+        if (!HasComp<LavalandMadMinerComponent>(ent.Comp.Miner))
+        {
+            RemCompDeferred<LavalandMadMinerHookedComponent>(ent.Owner);
+            return;
+        }
         args.Verbs.Add(new AlternativeVerb
         {
-            Text = "Снять крюк",
+            Text = Loc.GetString("lavaland-mad-miner-remove-hook"),
             Act = () => StartRemovingHook(ent),
         });
     }
@@ -545,29 +579,45 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         return false;
     }
 
-    private void OnChasmFalling(ChasmFallingAttemptEvent args)
+    /// <summary>
+    /// Pulls a falling player out of a chasm to the nearest fighting miner.
+    /// Called only from <see cref="LavalandJaunterSystem"/> so the attempt is handled once and after immunity checks.
+    /// </summary>
+    public bool TryRescueFromChasm(EntityUid tripper, ChasmFallingAttemptEvent args, EntityUid? jaunter = null)
     {
-        TryRescueFromChasm(args.Tripper, args);
-    }
+        if (args.Cancelled || !HasComp<ActorComponent>(tripper) || IsDead(tripper) || HasComp<GhostComponent>(tripper))
+            return false;
 
-    public bool TryRescueFromChasm(EntityUid tripper, ChasmFallingAttemptEvent? args = null, EntityUid? jaunter = null)
-    {
-        var query = EntityQueryEnumerator<LavalandMadMinerComponent>();
-        while (query.MoveNext(out var uid, out var miner))
+        var tripperCoordinates = _transform.GetMapCoordinates(tripper);
+        EntityUid? rescuer = null;
+        LavalandMadMinerComponent? rescuerComp = null;
+        var best = float.MaxValue;
+        var query = EntityQueryEnumerator<LavalandMadMinerComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var miner, out var xform))
         {
-            if (!miner.Active || Transform(uid).MapID != Transform(tripper).MapID)
+            if (!miner.Active || xform.MapID != tripperCoordinates.MapId || IsDead(uid))
                 continue;
-            args?.Cancel();
-            if (jaunter is { Valid: true } item && Exists(item))
-            {
-                _containers.TryRemoveFromContainer(item, force: true);
-                _transform.SetMapCoordinates(item, _transform.GetMapCoordinates(uid).Offset(new Vector2(0.5f, 0)));
-            }
-            _transform.SetMapCoordinates(tripper, _transform.GetMapCoordinates(uid).Offset(new Vector2(2, 0)));
-            BeginHook(uid, miner, tripper, _timing.CurTime);
-            return true;
+            var distance = Vector2.DistanceSquared(_transform.GetWorldPosition(xform), tripperCoordinates.Position);
+            if (distance > miner.ChaseRange * miner.ChaseRange || distance >= best)
+                continue;
+            best = distance;
+            rescuer = uid;
+            rescuerComp = miner;
         }
-        return false;
+
+        if (rescuer is not { } minerUid || rescuerComp == null)
+            return false;
+
+        args.Cancel();
+        var minerCoordinates = _transform.GetMapCoordinates(minerUid);
+        if (jaunter is { Valid: true } item && Exists(item))
+        {
+            _containers.TryRemoveFromContainer(item, force: true);
+            _transform.SetMapCoordinates(item, minerCoordinates.Offset(new Vector2(0.5f, 0)));
+        }
+        _transform.SetMapCoordinates(tripper, minerCoordinates.Offset(new Vector2(2, 0)));
+        BeginHook(minerUid, rescuerComp, tripper, _timing.CurTime);
+        return true;
     }
 
     private void OnDamageChanged(Entity<LavalandMadMinerComponent> ent, ref DamageChangedEvent args)
@@ -585,7 +635,9 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         ent.Comp.RewardsSpawned = true;
         SpawnReward(ent.Owner, ent.Comp.ChainHandReward, ent.Comp.ChainHandChance);
         SpawnReward(ent.Owner, ent.Comp.ExplosivePkaReward, ent.Comp.ExplosivePkaChance);
-        EndFight(ent.Comp);
+        foreach (var reward in ent.Comp.ExtraRewards)
+            SpawnReward(ent.Owner, reward, 1f);
+        EndFight(ent.Owner, ent.Comp);
     }
 
     private void SpawnReward(EntityUid uid, EntProtoId? reward, float chance)
@@ -597,11 +649,25 @@ public sealed class LavalandMadMinerSystem : EntitySystem
 
     private void SendHud(EntityUid uid, LavalandMadMinerComponent miner)
     {
+        var now = _timing.CurTime;
+        if (now < miner.NextHud)
+            return;
+        miner.NextHud = now + miner.HudInterval;
+
         var health = miner.MaxHealth;
         if (TryComp<DamageableComponent>(uid, out var damageable))
             health = Math.Max(0, miner.MaxHealth - damageable.TotalDamage.Float());
+        var name = Loc.GetString("lavaland-mad-miner-hud-name");
         foreach (var session in GetNearbySessions(uid, miner.ChaseRange))
-            RaiseNetworkEvent(new LavalandBossHudUpdateEvent(miner.HudId, "Безумный шахтёр", health, miner.MaxHealth, 1), session.Channel);
+        {
+            // Players who walk into an ongoing fight also get the music, not only those present at its start.
+            if (miner.HudRecipients.Add(session) && miner.SelectedMusic != null)
+            {
+                RaiseNetworkEvent(new LavalandBossMusicStartEvent(miner.HudId,
+                    _audio.ResolveSound(miner.SelectedMusic), miner.SelectedMusic.Params.WithLoop(true)), session.Channel);
+            }
+            RaiseNetworkEvent(new LavalandBossHudUpdateEvent(miner.HudId, name, health, miner.MaxHealth, 1), session.Channel);
+        }
     }
 
     private IEnumerable<ICommonSession> GetNearbySessions(EntityUid uid, float range)

@@ -6,7 +6,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.DeadSpace.Lavaland;
 
-public sealed class LavalandWellWaveHudSystem : EntitySystem
+public sealed class LavalandFaunaRaidHudSystem : EntitySystem
 {
     [Dependency] private readonly IUserInterfaceManager _ui = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -21,11 +21,11 @@ public sealed class LavalandWellWaveHudSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeNetworkEvent<LavalandWellWaveTimerEvent>(OnTimer);
-        SubscribeNetworkEvent<LavalandWellWaveTimerHideEvent>(_ => Hide());
+        SubscribeNetworkEvent<LavalandFaunaRaidTimerEvent>(OnTimer);
+        SubscribeNetworkEvent<LavalandFaunaRaidTimerHideEvent>(_ => Hide());
     }
 
-    private void OnTimer(LavalandWellWaveTimerEvent ev)
+    private void OnTimer(LavalandFaunaRaidTimerEvent ev)
     {
         if (_timer == null)
         {
@@ -41,7 +41,7 @@ public sealed class LavalandWellWaveHudSystem : EntitySystem
         _timer.Visible = true;
         _hideAt = _timing.CurTime + TimeSpan.FromSeconds(ev.Seconds + 2);
         _timer.FontColorOverride = ev.Warning ? Color.Red : Color.CornflowerBlue;
-        _timer.Text = Loc.GetString(ev.Warning ? "lavaland-well-wave-timer-warning" : "lavaland-well-wave-timer-active",
+        _timer.Text = Loc.GetString(ev.Warning ? "lavaland-raid-timer-warning" : "lavaland-raid-timer-active",
             ("time", TimeSpan.FromSeconds(ev.Seconds).ToString(@"mm\:ss")));
     }
 

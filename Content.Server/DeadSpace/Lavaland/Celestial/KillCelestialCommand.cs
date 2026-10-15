@@ -1,12 +1,12 @@
 using Content.Server.Administration;
 using Content.Shared.Administration;
-using Content.Shared.DeadSpace.Celestial;
+using Content.Shared.DeadSpace.Lavaland.Celestial;
 using Robust.Shared.Console;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
 
-namespace Content.Server.DeadSpace.Celestial;
+namespace Content.Server.DeadSpace.Lavaland.Celestial;
 
 /// <summary>
 /// killcelestial [uid] - убивает Селестиала (единственный способ убить во второй фазе).

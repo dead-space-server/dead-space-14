@@ -1,0 +1,665 @@
+- type: Tag
+  id: CrusherUpgradeMain
+
+- type: Tag
+  id: CrusherUpgradeBlade
+
+- type: Tag
+  id: CrusherUpgradeHandle
+
+- type: Tag
+  id: CrusherTrophy
+
+- type: entity
+  abstract: true
+  id: BaseCrusherAttachmentSlots
+  components:
+  - type: LavalandPressureDamage
+  - type: AttachmentHolder
+    trophyHunter: true
+    slots:
+    - upgrade_slot_main
+    - upgrade_slot_blade
+    - upgrade_slot_handle
+    - trophy_slot_1
+    - trophy_slot_2
+    - trophy_slot_3
+  - type: ItemSlots
+    slots:
+      upgrade_slot_main:
+        name: attachment-slot-crusher-main
+        priority: 5
+        whitelist:
+          tags:
+          - CrusherUpgradeMain
+      upgrade_slot_blade:
+        name: attachment-slot-crusher-blade
+        priority: 4
+        whitelist:
+          tags:
+          - CrusherUpgradeBlade
+      upgrade_slot_handle:
+        name: attachment-slot-crusher-handle
+        priority: 3
+        whitelist:
+          tags:
+          - CrusherUpgradeHandle
+      trophy_slot_1:
+        name: attachment-slot-crusher-trophy
+        priority: 2
+        whitelist:
+          tags:
+          - CrusherTrophy
+      trophy_slot_2:
+        name: attachment-slot-crusher-trophy
+        priority: 1
+        whitelist:
+          tags:
+          - CrusherTrophy
+      trophy_slot_3:
+        name: attachment-slot-crusher-trophy
+        priority: 0
+        whitelist:
+          tags:
+          - CrusherTrophy
+
+- type: entity
+  abstract: true
+  parent: [ BaseItem, BaseSecurityCargoContraband ]
+  id: BaseCrusherUpgrade
+  name: капсула улучшения крашера
+  description: Модкит для крашеров.
+  components:
+  - type: Sprite
+    sprite: _Goob/Lavaland/Objects/Weapons/Upgrades/crusher.rsi
+  - type: Item
+    size: Small
+  - type: StaticPrice
+    price: 500
+
+- type: entity
+  abstract: true
+  parent: BaseCrusherUpgrade
+  id: BaseCrusherUpgradeMain
+  components:
+  - type: StaticPrice
+    price: 750
+  - type: Tag
+    tags:
+    - CrusherUpgradeMain
+
+- type: entity
+  parent: BaseCrusherUpgradeMain
+  id: CrusherUpgradeMainMarker
+  name: капсула крашера (кинетический маркер)
+  description: Компактный генератор блюспейс-поля. Его выстрел помечает цель, делая её уязвимее к ударам крашера, и разрушает некоторые породы.
+  components:
+  - type: Sprite
+    layers:
+    - state: base
+    - state: kinetic-marker
+  - type: Attachment
+    description: attachment-desc-crusher-marker
+    addComponents:
+    - type: AmmoCounter
+    - type: UseDelayOnShoot
+    - type: GunRequiresWield
+    - type: Gun
+      soundGunshot: /Audio/Weapons/plasma_cutter.ogg
+      fireRate: 1
+      useKey: false
+    - type: RechargeBasicEntityAmmo
+      rechargeCooldown: 1
+      rechargeSound:
+        path: /Audio/Weapons/Guns/MagIn/kinetic_reload.ogg
+    - type: BasicEntityAmmoProvider
+      proto: BulletCharge
+      capacity: 1
+      count: 1
+    layers:
+    - state: upgrade-marker
+
+- type: entity
+  parent: BaseCrusherUpgradeMain
+  id: CrusherUpgradeMainRudeBuster
+  name: капсула крашера (rude buster)
+  description: Собирает решимость владельца и выпускает её полумагическим снарядом. Внутри что-то постоянно отскакивает от стенок.
+  components:
+  - type: Sprite
+    layers:
+    - state: base
+    - state: rude-buster
+  - type: Attachment
+    description: attachment-desc-crusher-rude-buster
+    addComponents:
+    - type: AmmoCounter
+    - type: UseDelayOnShoot
+    - type: GunRequiresWield
+    - type: Gun
+      projectileSpeed: 12
+      soundGunshot: /Audio/Weapons/plasma_cutter.ogg
+      fireRate: 10
+      useKey: false
+    - type: RechargeBasicEntityAmmo
+      rechargeCooldown: 8
+      rechargeSound:
+        path: /Audio/Weapons/Guns/MagIn/kinetic_reload.ogg
+    - type: BasicEntityAmmoProvider
+      proto: ProjectileRudeBuster
+      capacity: 1
+      count: 1
+    layers:
+    - state: upgrade-rude-buster
+
+- type: entity
+  abstract: true
+  parent: BaseCrusherUpgrade
+  id: BaseCrusherUpgradeBlade
+  components:
+  - type: Tag
+    tags:
+    - CrusherUpgradeBlade
+
+- type: entity
+  parent: BaseCrusherUpgradeBlade
+  id: CrusherUpgradeBladeLavaAspect
+  name: лезвие крашера (аспект лавы)
+  description: Кристалл из неостывающей лавы. Постоянно горячий и легко воспламеняет.
+  components:
+  - type: Sprite
+    state: lava-shard
+  - type: Attachment
+    description: attachment-desc-crusher-lava
+    bonusDamage:
+      types:
+        Heat: 5
+    targetHitEffects:
+    - !type:Flammable
+      multiplier: 2
+      multiplierOnExisting: 0.5
+    - !type:Ignite
+    - !type:AdjustTemperature
+      amount: 7500
+    layers:
+    - state: upgrade-lava-aspect
+
+- type: entity
+  parent: BaseCrusherUpgradeBlade
+  id: CrusherUpgradeBladeIceFrost
+  name: лезвие крашера (ледяной мороз)
+  description: Кристалл, излучающий холод - видимо, нарушая законы термодинамики.
+  components:
+  - type: Sprite
+    state: ice-shard
+  - type: Attachment
+    description: attachment-desc-crusher-ice
+    bonusDamage:
+      types:
+        Cold: 4
+    targetHitEffects:
+    - !type:AdjustTemperature
+      amount: -7500
+    layers:
+    - state: upgrade-ice-frost
+
+- type: entity
+  parent: BaseCrusherUpgradeBlade
+  id: CrusherUpgradeBladeSharpness
+  name: лезвие крашера (заточка)
+  description: Простой точильный камень, повышающий урон крашера.
+  components:
+  - type: Sprite
+    state: black-shard
+  - type: Attachment
+    description: attachment-desc-crusher-sharpness
+    bonusDamage:
+      types:
+        Slash: 7
+    layers:
+    - state: upgrade-sharpness
+
+- type: entity
+  abstract: true
+  parent: BaseCrusherUpgrade
+  id: BaseCrusherUpgradeHandle
+  components:
+  - type: Tag
+    tags:
+    - CrusherUpgradeHandle
+
+- type: entity
+  parent: BaseCrusherUpgradeHandle
+  id: CrusherUpgradeHandleWeights
+  name: рукоять крашера (грузы)
+  description: Набор утяжелителей для рукояти - удары отбрасывают врагов.
+  components:
+  - type: Sprite
+    state: handle-weights
+  - type: Attachment
+    description: attachment-desc-crusher-weights
+    addComponents:
+    - type: MeleeThrowOnHit
+      distance: 3
+      speed: 3
+    layers:
+    - state: upgrade-handle-weights
+
+- type: entity
+  parent: BaseCrusherUpgradeHandle
+  id: CrusherUpgradeHandleLight
+  name: рукоять крашера (облегчённая)
+  description: Лёгкая рукоять, позволяющая бить чаще.
+  components:
+  - type: Sprite
+    state: handle-lightweight
+  - type: Attachment
+    description: attachment-desc-crusher-lightweight
+    attackRateMultiplier: 1.3
+    layers:
+    - state: upgrade-handle-lightweight
+
+- type: entity
+  parent: BaseCrusherUpgradeHandle
+  id: CrusherUpgradeHandleRange
+  name: рукоять крашера (длинная)
+  description: Удлинённая рукоять с шипами, увеличивающая дальность удара.
+  components:
+  - type: Sprite
+    state: handle-spikes
+  - type: Attachment
+    description: attachment-desc-crusher-range
+    rangeMultiplier: 1.2
+    layers:
+    - state: upgrade-handle-range
+
+- type: entity
+  parent: BaseBullet
+  id: ProjectileRudeBuster
+  name: rude buster
+  description: Мощный полумагический снаряд, вкладывающий всю волю владельца в один удар.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _Goob/Lavaland/Objects/Projectiles/rude_buster.rsi
+    layers:
+    - state: buster
+      shader: unshaded
+      color: "#ae00ffdd"
+      scale: 1.5,1.5
+  - type: Reflective
+    reflective:
+    - Energy
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 40
+        Heat: 40
+        Structural: 80
+    penetrationThreshold: 500
+  - type: StaminaDamageOnCollide
+    damage: 60
+  - type: Fixtures
+    fixtures:
+      projectile:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.2,0.4,0.2"
+        hard: false
+        mask:
+        - Impassable
+        - BulletImpassable
+  - type: Ammo
+    muzzleFlash: null
+  - type: TileFrictionModifier
+    modifier: 0
+  - type: LavalandProjectileTrail
+    color: "#ae00ffdd"
+    size: 0.35
+    lifetime: 0.8
+    interval: 0.02
+  - type: LavalandHomingProjectile
+    range: 8
+    coneAngle: 70
+    turnRate: 540
+  - type: PointLight
+    radius: 1.5
+    energy: 5
+    color: "#ae00ff"
+  - type: TimedDespawn
+    lifetime: 2.0
+
+- type: entity
+  abstract: true
+  parent: [ BaseWeaponCrusher, BaseCrusherAttachmentSlots, BaseSecurityCargoContraband ]
+  id: BaseWeaponGoobCrusher
+  components:
+  - type: Item
+    size: Ginormous
+  - type: MeleeWeapon
+    range: 2
+    attackRate: 1
+    animationRotation: -135
+    wideAnimationRotation: -135
+    soundHit:
+      collection: MetalThud
+  - type: Wieldable
+  - type: UseDelay
+    delay: 1
+  - type: DisarmMalus
+  - type: Prying
+  - type: Tag
+    tags:
+    - Pickaxe
+
+- type: entity
+  parent: BaseWeaponGoobCrusher
+  id: WeaponCrusherHammer
+  name: крашер-молот
+  description: Массивное двуручное оружие, бьющее сильнее обычного крашера.
+  components:
+  - type: Sprite
+    sprite: _Goob/Lavaland/Objects/Weapons/Crushers/crusher_hammer.rsi
+    state: icon
+  - type: Item
+    sprite: _Goob/Lavaland/Objects/Weapons/Crushers/crusher_hammer-inhands.rsi
+  - type: Clothing
+    sprite: _Goob/Lavaland/Objects/Weapons/Crushers/crusher_hammer.rsi
+    quickEquip: false
+    slots:
+    - Back
+    - suitStorage
+  - type: MeleeWeapon
+    range: 2
+    attackRate: 0.6
+    animationRotation: -135
+    wideAnimationRotation: -135
+    damage:
+      types:
+        Blunt: 12
+    soundHit:
+      collection: MetalThud
+  - type: IncreaseDamageOnWield
+    damage:
+      types:
+        Blunt: 13
+        Structural: 15
+  - type: Tool
+    speedModifier: 1.5
+    useSound:
+      path: /Audio/Items/trayhit2.ogg
+    qualities:
+    - Hammering
+
+- type: entity
+  parent: BaseWeaponGoobCrusher
+  id: WeaponCrusherHalberd
+  name: крашер-алебарда
+  description: Универсальное оружие, сочетающее мощь крашера и досягаемость копья.
+  components:
+  - type: Sprite
+    sprite: _Goob/Lavaland/Objects/Weapons/Crushers/crusher_halberd.rsi
+    state: icon
+  - type: Item
+    sprite: _Goob/Lavaland/Objects/Weapons/Crushers/crusher_halberd-inhands.rsi
+  - type: Clothing
+    sprite: _Goob/Lavaland/Objects/Weapons/Crushers/crusher_halberd.rsi
+    quickEquip: false
+    slots:
+    - Back
+    - suitStorage
+  - type: MeleeWeapon
+    range: 2.2
+    attackRate: 1
+    animationRotation: -135
+    wideAnimationRotation: -135
+    damage:
+      types:
+        Slash: 6
+        Blunt: 5
+    soundHit:
+      collection: MetalThud
+  - type: IncreaseDamageOnWield
+    damage:
+      types:
+        Piercing: 3
+        Slash: 3
+        Structural: 15
+
+- type: entity
+  parent: [ BaseItem, ClothingHandsBase, BaseSecurityCargoContraband ]
+  id: LavalandWeaponKineticClaws
+  name: кинетические когти
+  description: Одноручные когти, достаточно маленькие, чтобы поместиться в рюкзак.
+  components:
+  - type: Appearance
+  - type: Sprite
+    sprite: _Goob/Lavaland/Objects/Weapons/Secondary/kinetic_claws.rsi
+    state: icon
+  - type: Clothing
+    sprite: _Goob/Lavaland/Objects/Weapons/Secondary/kinetic_claws-inhands.rsi
+  - type: Item
+    size: Normal
+    sprite: _Goob/Lavaland/Objects/Weapons/Secondary/kinetic_claws-inhands.rsi
+  - type: MeleeWeapon
+    attackRate: 2.5
+    wideAnimationRotation: -135
+    damage:
+      types:
+        Slash: 7
+    soundHit:
+      collection: AlienClaw
+    angle: 30
+    animation: WeaponArcClaw
+    range: 1.1
+    mustBeEquippedToUse: true
+    heavyStaminaCost: 4
+  - type: Sharp
+  - type: Prying
+  - type: UseDelay
+    delay: 1
+  - type: LavalandPressureDamage
+  - type: Fiber
+    fiberMaterial: fibers-synthetic
+    fiberColor: fibers-purple
+  - type: Execution
+    doAfterDuration: 4.0
+  - type: Tool
+    qualities:
+    - Slicing
+    useSound:
+      path: /Audio/Items/Culinary/chop.ogg
+
+- type: entity
+  parent: [ BaseItem, BaseSecurityCargoContraband ]
+  id: LavalandWeaponKineticMachete
+  name: кинетическое мачете
+  description: Уменьшенный одноручный вариант крашера, позволяющий бить издалека.
+  components:
+  - type: Sprite
+    sprite: _Goob/Lavaland/Objects/Weapons/Secondary/kinetic_machete.rsi
+    state: icon
+  - type: UseDelay
+    delay: 1
+  - type: Appearance
+  - type: Sharp
+  - type: Execution
+    doAfterDuration: 4.0
+  - type: DisarmMalus
+  - type: Prying
+  - type: MeleeWeapon
+    attackRate: 1.0
+    damage:
+      types:
+        Slash: 15
+    soundHit:
+      collection: MetalThud
+    angle: 0
+    animation: WeaponArcThrust
+    range: 2
+  - type: LavalandPressureDamage
+  - type: Item
+    size: Normal
+    sprite: _Goob/Lavaland/Objects/Weapons/Secondary/kinetic_machete-inhands.rsi
+  - type: Tool
+    qualities:
+    - Slicing
+    useSound:
+      path: /Audio/Items/Culinary/chop.ogg
+
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: BaseCrusherTrophy
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Specific/crusher_trophies.rsi
+  - type: Item
+    size: Small
+  - type: StaticPrice
+    price: 750
+  - type: Tag
+    tags:
+    - CrusherTrophy
+
+- type: entity
+  parent: BaseCrusherTrophy
+  id: CrusherTrophyGoliathTentacle
+  name: щупальце голиафа
+  description: Отрубленное щупальце голиафа. Годится как трофей для кинетического крашера.
+  components:
+  - type: Sprite
+    state: goliath_tentacle
+  - type: Attachment
+    uniqueGroup: GoliathTentacle
+    description: attachment-desc-trophy-goliath
+    markDetonationEffects:
+    - !type:AttachmentMissingHealthDamage
+      perMissing: 10
+      damage:
+        types:
+          Blunt: 2
+
+- type: entity
+  parent: BaseCrusherTrophy
+  id: CrusherTrophyLegionSkull
+  name: череп легиона
+  description: Мёртвый безжизненный череп легиона. Годится как трофей для кинетического крашера.
+  components:
+  - type: Sprite
+    state: legion_skull
+  - type: Attachment
+    uniqueGroup: LegionSkull
+    description: attachment-desc-trophy-legion
+    rechargeCooldownBonus: -0.3
+
+- type: entity
+  parent: BaseCrusherTrophy
+  id: CrusherTrophyMinerEye
+  name: глаз охотника, опьянённого кровью
+  description: Зрачок схлопнулся и превратился в кашу. Годится как трофей для кинетического крашера.
+  components:
+  - type: Sprite
+    state: hunter_eye
+  - type: Attachment
+    uniqueGroup: MinerEye
+    description: attachment-desc-trophy-miner-eye
+    markDetonationEffects:
+    - !type:AttachmentDamageShield
+      coefficient: 0.1
+      duration: 1
+
+- type: entity
+  parent: BaseCrusherTrophy
+  id: CrusherTrophyTailSpike
+  name: шип хвоста дракона
+  description: Шип с хвоста пепельного дракона. Годится как трофей для кинетического крашера.
+  components:
+  - type: Sprite
+    state: tail_spike
+  - type: Attachment
+    uniqueGroup: TailSpike
+    description: attachment-desc-trophy-tail-spike
+    markDetonationEffects:
+    - !type:AttachmentAreaBlast
+      radius: 2
+      push: 1
+      damage:
+        types:
+          Heat: 5
+      sound: /Audio/Magic/fireball.ogg
+
+- type: entity
+  parent: BaseCrusherTrophy
+  id: CrusherTrophyDemonClaws
+  name: когти демона
+  description: Окровавленные когти с лапы огромного демона. Годятся как трофей для кинетического крашера.
+  components:
+  - type: Sprite
+    state: demon_claws
+  - type: Attachment
+    uniqueGroup: DemonClaws
+    description: attachment-desc-trophy-demon-claws
+    wieldedBonusDamage:
+      types:
+        Blunt: 2
+    hitEffects:
+    - !type:AttachmentHealUser
+      damage:
+        groups:
+          Brute: -1
+    markDetonationEffects:
+    - !type:AttachmentBonusDamage
+      damage:
+        types:
+          Blunt: 8
+    - !type:AttachmentHealUser
+      damage:
+        groups:
+          Brute: -4
+
+- type: entity
+  parent: BaseCrusherTrophy
+  id: CrusherTrophyBlasterTubes
+  name: бластерные трубки
+  description: Бластерные трубки с руки Колосса. Годятся как трофей для кинетического крашера.
+  components:
+  - type: Sprite
+    state: blaster_tubes
+  - type: Attachment
+    uniqueGroup: BlasterTubes
+    description: attachment-desc-trophy-blaster-tubes
+    removeComponents:
+    - type: UseDelayOnShoot
+
+- type: entity
+  parent: BaseCrusherTrophy
+  id: CrusherTrophyVortexTalisman
+  name: талисман вихря
+  description: Светящаяся безделушка, бывшая когда-то маяком Иерофанта. Годится как трофей для кинетического крашера.
+  components:
+  - type: Sprite
+    state: vortex_talisman
+  - type: Attachment
+    uniqueGroup: VortexTalisman
+    description: attachment-desc-trophy-vortex
+    markDetonationEffects:
+    - !type:AttachmentHierophantChaser
+      maxSteps: 7
+      damage:
+        types:
+          Heat: 14
+          Blunt: 6
+
+- type: entity
+  parent: BaseAction
+  id: ActionAttachmentToggleLight
+  name: Фонарик на оружии
+  description: Включить или выключить фонарик, закреплённый на оружии.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 0.5
+    icon: { sprite: Objects/Tools/flashlight.rsi, state: flashlight }
+    iconOn: { sprite: Objects/Tools/flashlight.rsi, state: flashlight-on }
+  - type: InstantAction
+    event: !type:AttachmentToggleLightActionEvent

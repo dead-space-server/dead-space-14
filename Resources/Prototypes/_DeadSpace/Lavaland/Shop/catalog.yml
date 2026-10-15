@@ -172,15 +172,6 @@
   cost:
     LavalandMiningPoint: 500
 
-
-# - type: listing
-#   id: LavalandMiningSeniorKineticAccelerator
-#   productEntity: WeaponSeniorKinetik
-#   categories:
-#   - LavalandMiningTools
-#   cost:
-#     LavalandMiningPoint: 400
-
 - type: listing
   id: LavalandMiningMagmiteAccelerator
   productEntity: WeaponMagmiteAccelerator
@@ -268,6 +259,102 @@
   - LavalandMiningTools
   cost:
     LavalandMiningPoint: 400
+
+- type: listing
+  id: LavalandMiningWeaponCrusherHammer
+  productEntity: WeaponCrusherHammer
+  categories:
+  - LavalandMiningTools
+  cost:
+    LavalandMiningPoint: 800
+
+- type: listing
+  id: LavalandMiningWeaponCrusherHalberd
+  productEntity: WeaponCrusherHalberd
+  categories:
+  - LavalandMiningTools
+  cost:
+    LavalandMiningPoint: 800
+
+- type: listing
+  id: LavalandMiningLavalandWeaponKineticClaws
+  productEntity: LavalandWeaponKineticClaws
+  categories:
+  - LavalandMiningTools
+  cost:
+    LavalandMiningPoint: 500
+
+- type: listing
+  id: LavalandMiningLavalandWeaponKineticMachete
+  productEntity: LavalandWeaponKineticMachete
+  categories:
+  - LavalandMiningTools
+  cost:
+    LavalandMiningPoint: 500
+
+- type: listing
+  id: LavalandMiningCrusherUpgradeMainMarker
+  productEntity: CrusherUpgradeMainMarker
+  categories:
+  - LavalandMiningTools
+  cost:
+    LavalandMiningPoint: 750
+
+- type: listing
+  id: LavalandMiningCrusherUpgradeMainRudeBuster
+  productEntity: CrusherUpgradeMainRudeBuster
+  categories:
+  - LavalandMiningTools
+  cost:
+    LavalandMiningPoint: 1500
+
+- type: listing
+  id: LavalandMiningCrusherUpgradeBladeLavaAspect
+  productEntity: CrusherUpgradeBladeLavaAspect
+  categories:
+  - LavalandMiningTools
+  cost:
+    LavalandMiningPoint: 750
+
+- type: listing
+  id: LavalandMiningCrusherUpgradeBladeIceFrost
+  productEntity: CrusherUpgradeBladeIceFrost
+  categories:
+  - LavalandMiningTools
+  cost:
+    LavalandMiningPoint: 750
+
+- type: listing
+  id: LavalandMiningCrusherUpgradeBladeSharpness
+  productEntity: CrusherUpgradeBladeSharpness
+  categories:
+  - LavalandMiningTools
+  cost:
+    LavalandMiningPoint: 750
+
+- type: listing
+  id: LavalandMiningCrusherUpgradeHandleWeights
+  productEntity: CrusherUpgradeHandleWeights
+  categories:
+  - LavalandMiningTools
+  cost:
+    LavalandMiningPoint: 750
+
+- type: listing
+  id: LavalandMiningCrusherUpgradeHandleLight
+  productEntity: CrusherUpgradeHandleLight
+  categories:
+  - LavalandMiningTools
+  cost:
+    LavalandMiningPoint: 750
+
+- type: listing
+  id: LavalandMiningCrusherUpgradeHandleRange
+  productEntity: CrusherUpgradeHandleRange
+  categories:
+  - LavalandMiningTools
+  cost:
+    LavalandMiningPoint: 750
 
 - type: listing
   id: LavalandMiningResonator
@@ -544,6 +631,13 @@
     LavalandMiningPoint: 340
 
 # Детали
+- type: listing
+  id: LavalandSoulStabilizer
+  productEntity: LavalandSoulStabilizer
+  categories:
+  - LavalandMiningMedical
+  cost:
+    LavalandMiningPoint: 400
 
 - type: listing
   id: LavalandDetailsPlastineOfSalvageAdvancedRIG
@@ -734,3 +828,27 @@
   - LavalandMiningContraband
   cost:
     LavalandMiningPoint: 1650
+
+- type: listing
+  id: LavalandMarkerBeacons
+  productEntity: LavalandMarkerBeaconStack
+  categories:
+  - LavalandMiningUtility
+  cost:
+    LavalandMiningPoint: 100
+
+- type: listing
+  id: LavalandLazarusInjector
+  productEntity: LavalandLazarusInjector
+  categories:
+  - LavalandMiningMedical
+  cost:
+    LavalandMiningPoint: 1000
+
+- type: listing
+  id: LavalandMinebot
+  productEntity: MobLavalandMinebot
+  categories:
+  - LavalandMiningEquipment
+  cost:
+    LavalandMiningPoint: 800

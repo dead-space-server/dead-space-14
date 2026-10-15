@@ -2,6 +2,7 @@
 using System.Linq;
 using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Shared.Examine;
+using Content.Shared.GameTicking;
 using Content.Shared.Interaction;
 using Content.Shared.Stacks;
 using Content.Shared.Storage;
@@ -9,23 +10,28 @@ using Content.Shared.Verbs;
 using Robust.Shared.Containers;
 using Robust.Shared.Timing;
 using Robust.Shared.Audio.Systems;
-using Content.Server.Chat.Systems;
 using Content.Shared.DeadSpace.Lavaland;
-using Robust.Shared.Player;
-using Robust.Shared.Random;
-using Robust.Shared.Spawners;
 using Robust.Shared.Map;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
 public sealed class LavalandBluespaceWellSystem : EntitySystem
 {
+    private static readonly TimeSpan ScanInterval = TimeSpan.FromSeconds(5);
+
     [Dependency] private readonly SharedContainerSystem _containers = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly LavalandMorkiteMissionSystem _morkite = default!;
+    [Dependency] private readonly LavalandFaunaRaidSystem _raids = default!;
+
+    private TimeSpan _nextScan;
+
+    // Ore lying loose on a lavaland map -> when it was first seen there.
+    private readonly Dictionary<EntityUid, TimeSpan> _groundSince = new();
+    private readonly HashSet<EntityUid> _seenOre = new();
+    private readonly Dictionary<EntityUid, List<Entity<LavalandBluespaceWellComponent>>> _wellsByMap = new();
 
     public override void Initialize()
     {
@@ -34,12 +40,17 @@ public sealed class LavalandBluespaceWellSystem : EntitySystem
         SubscribeLocalEvent<LavalandBluespaceWellComponent, ExaminedEvent>(OnExamine);
         SubscribeLocalEvent<LavalandBluespaceWellComponent, GetVerbsEvent<AlternativeVerb>>(OnUnloadVerb);
         SubscribeLocalEvent<LavalandBluespaceWellComponent, GetVerbsEvent<Verb>>(OnSendVerb);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
     }
 
     private void OnInit(Entity<LavalandBluespaceWellComponent> ent, ref ComponentInit args)
     {
         ent.Comp.Ore = _containers.EnsureContainer<Container>(ent, "lavaland-well-ore");
-        ent.Comp.NextWaveCheck = _timing.CurTime + ent.Comp.WaveCheckInterval;
+    }
+
+    private void OnRoundRestart(RoundRestartCleanupEvent args)
+    {
+        _groundSince.Clear();
     }
 
     private int Count(LavalandBluespaceWellComponent comp)
@@ -51,6 +62,11 @@ public sealed class LavalandBluespaceWellSystem : EntitySystem
                 count += stack.Count;
         }
         return count;
+    }
+
+    private bool CanSend(LavalandBluespaceWellComponent comp)
+    {
+        return comp.ReturnAt == null && (Count(comp) >= comp.RequiredOre || comp.Morkite >= 100f);
     }
 
     private bool Insert(Entity<LavalandBluespaceWellComponent> ent, EntityUid ore)
@@ -78,6 +94,8 @@ public sealed class LavalandBluespaceWellSystem : EntitySystem
         var percent = Math.Clamp(count * 100L / Math.Max(1, ent.Comp.RequiredOre), 0, 100);
         args.PushMarkup(Loc.GetString("lavaland-well-progress", ("count", count),
             ("required", ent.Comp.RequiredOre), ("percent", percent)));
+        args.PushMarkup(Loc.GetString("lavaland-well-morkite-progress",
+            ("percent", (int) Math.Floor(ent.Comp.Morkite))));
     }
 
     private void OnUnloadVerb(Entity<LavalandBluespaceWellComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
@@ -97,24 +115,25 @@ public sealed class LavalandBluespaceWellSystem : EntitySystem
             return;
         foreach (var ore in ent.Comp.Ore.ContainedEntities.ToArray())
             _containers.Remove(ore, ent.Comp.Ore);
-        ent.Comp.GroundSince.Clear();
     }
 
     private void OnSendVerb(Entity<LavalandBluespaceWellComponent> ent, ref GetVerbsEvent<Verb> args)
     {
-        if (!args.CanAccess || !args.CanInteract || ent.Comp.ReturnAt != null || Count(ent.Comp) < ent.Comp.RequiredOre)
+        if (!args.CanAccess || !args.CanInteract || !CanSend(ent.Comp))
             return;
         args.Verbs.Add(new Verb
         {
             Text = Loc.GetString("lavaland-well-send"),
             Act = () =>
             {
-                if (Deleted(ent) || ent.Comp.ReturnAt != null || Count(ent.Comp) < ent.Comp.RequiredOre)
+                if (Deleted(ent) || !CanSend(ent.Comp))
                     return;
                 foreach (var ore in ent.Comp.Ore.ContainedEntities.ToArray())
                     QueueDel(ore);
+                ent.Comp.Morkite = 0f;
+                ent.Comp.RaidsTriggered.Clear();
+                ent.Comp.WasConnected = false;
                 ent.Comp.ReturnAt = _timing.CurTime + ent.Comp.ReturnDelay;
-                ent.Comp.GroundSince.Clear();
                 ent.Comp.ReturnCoordinates = Transform(ent).Coordinates;
                 TeleportEffect(ent);
                 _transform.DetachEntity(ent, Transform(ent));
@@ -148,120 +167,137 @@ public sealed class LavalandBluespaceWellSystem : EntitySystem
                 _transform.AnchorEntity((uid, transform));
                 TeleportEffect((uid, well));
             }
-            UpdateWave((uid, well, transform), now);
-            if (well.NextScan > now)
-                continue;
-            well.NextScan = now + well.ScanInterval;
-            if (transform.MapUid is not { } map || !HasComp<LavalandMapComponent>(map) || !transform.Anchored)
+        }
+
+        if (now < _nextScan)
+            return;
+        _nextScan = now + ScanInterval;
+        UpdateMorkite((float) ScanInterval.TotalSeconds);
+        ScanGroundOre(now);
+        CheckGuaranteedRaids();
+    }
+
+    /// <summary>
+    /// Guaranteed fauna raids at fill thresholds: the ore bar on ore delivery,
+    /// the morkite bar on morkite mining (when the map has morkite extractors).
+    /// </summary>
+    private void CheckGuaranteedRaids()
+    {
+        var wells = EntityQueryEnumerator<LavalandBluespaceWellComponent, TransformComponent>();
+        while (wells.MoveNext(out _, out var well, out var xform))
+        {
+            if (well.ReturnAt != null || !xform.Anchored ||
+                xform.MapUid is not { } map || !HasComp<LavalandMapComponent>(map))
             {
-                well.GroundSince.Clear();
                 continue;
             }
 
-            var candidates = new HashSet<EntityUid>();
-            var ores = EntityQueryEnumerator<StackComponent, TransformComponent>();
-            while (ores.MoveNext(out var ore, out var stack, out var oreTransform))
+            var morkite = _morkite.HasExtractorsOnMap(map);
+            var thresholds = morkite ? well.MorkiteRaidPercents : well.OreRaidPercents;
+            if (thresholds.Count == 0)
+                continue;
+
+            var percent = morkite
+                ? well.Morkite
+                : Count(well) * 100f / Math.Max(1, well.RequiredOre);
+
+            foreach (var threshold in thresholds)
             {
-                if (oreTransform.MapUid != map || !well.OreTypes.Contains(stack.StackTypeId) ||
-                    _containers.IsEntityInContainer(ore))
+                if (percent < threshold || !well.RaidsTriggered.Add(threshold))
                     continue;
-                candidates.Add(ore);
-                if (!well.GroundSince.TryGetValue(ore, out var since))
-                    well.GroundSince[ore] = now;
-                else if (now - since >= well.CollectionDelay)
-                    Insert((uid, well), ore);
-            }
-            foreach (var ore in well.GroundSince.Keys.ToArray())
-            {
-                if (!candidates.Contains(ore))
-                    well.GroundSince.Remove(ore);
+
+                _raids.ForceRaid(map);
             }
         }
     }
 
-    private void UpdateWave(Entity<LavalandBluespaceWellComponent, TransformComponent> ent, TimeSpan now)
+    private void UpdateMorkite(float elapsed)
     {
-        if (!ent.Comp1.WavesEnabled || ent.Comp1.ReturnAt != null ||
-            ent.Comp2.MapUid is not { } mapUid || !HasComp<LavalandMapComponent>(mapUid))
+        if (elapsed <= 0f)
             return;
-
-        var filter = Filter.Empty().AddInMap(ent.Comp2.MapID, EntityManager);
-        if (ent.Comp1.WaveStage == LavalandWellWaveStage.Idle)
+        var wells = EntityQueryEnumerator<LavalandBluespaceWellComponent, TransformComponent>();
+        while (wells.MoveNext(out var uid, out var well, out var xform))
         {
-            if (now < ent.Comp1.NextWaveCheck)
-                return;
-            ent.Comp1.NextWaveCheck = now + ent.Comp1.WaveCheckInterval;
-            if (!_random.Prob(ent.Comp1.WaveChance) || !TryFindOutpost(mapUid, out _))
-                return;
-            ent.Comp1.WaveStage = LavalandWellWaveStage.Warning;
-            ent.Comp1.WaveStageEnd = now + ent.Comp1.WaveWarningDuration;
-            ent.Comp1.NextTimerUpdate = TimeSpan.Zero;
-            _chat.DispatchGlobalAnnouncement(Loc.GetString("lavaland-well-wave-warning"), playSound: true,
-                announcementSound: ent.Comp1.WaveWarningSound,
-                colorOverride: Color.Red);
-        }
-
-        if (ent.Comp1.WaveStage == LavalandWellWaveStage.Warning && now >= ent.Comp1.WaveStageEnd)
-        {
-            ent.Comp1.WaveStage = LavalandWellWaveStage.Active;
-            ent.Comp1.WaveStageEnd = now + ent.Comp1.WaveDuration;
-            ent.Comp1.NextTimerUpdate = TimeSpan.Zero;
-            SpawnWave(ent, mapUid);
-            _chat.DispatchGlobalAnnouncement(Loc.GetString("lavaland-well-wave-active"), playSound: false,
-                colorOverride: Color.CornflowerBlue);
-            if (ent.Comp1.WaveMusic.Count > 0)
-                _audio.PlayGlobal(_random.Pick(ent.Comp1.WaveMusic), filter, false);
-        }
-
-        if (ent.Comp1.WaveStage == LavalandWellWaveStage.Active && now >= ent.Comp1.WaveStageEnd)
-        {
-            foreach (var waveEntity in ent.Comp1.WaveEntities)
-            {
-                if (Exists(waveEntity))
-                    QueueDel(waveEntity);
-            }
-            ent.Comp1.WaveEntities.Clear();
-            ent.Comp1.WaveStage = LavalandWellWaveStage.Idle;
-            RaiseNetworkEvent(new LavalandWellWaveTimerHideEvent(), filter);
-            return;
-        }
-
-        if (ent.Comp1.NextTimerUpdate > now)
-            return;
-        ent.Comp1.NextTimerUpdate = now + TimeSpan.FromSeconds(1);
-        var seconds = Math.Max(0, (int) Math.Ceiling((ent.Comp1.WaveStageEnd - now).TotalSeconds));
-        RaiseNetworkEvent(new LavalandWellWaveTimerEvent(seconds,
-            ent.Comp1.WaveStage == LavalandWellWaveStage.Warning), filter);
-    }
-
-    private bool TryFindOutpost(EntityUid mapUid, out Entity<TransformComponent> outpost)
-    {
-        var query = EntityQueryEnumerator<LavalandOutpostComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var marker, out var transform))
-        {
-            if (marker.Map != mapUid)
+            if (well.ReturnAt != null || !xform.Anchored || well.Morkite >= 100f)
                 continue;
-            outpost = (uid, transform);
-            return true;
+            var rate = _morkite.GetMorkiteRate(uid);
+            if (rate > 0f)
+            {
+                well.WasConnected = true;
+                well.Morkite = Math.Min(100f, well.Morkite + rate * elapsed);
+            }
+            else if (well.WasConnected && well.Morkite > 0f)
+            {
+                // A broken pipe: nothing flows and some morkite leaks out.
+                well.Morkite = Math.Max(0f, well.Morkite - well.MorkiteLeakRate * elapsed);
+            }
         }
-        outpost = default;
-        return false;
     }
 
-    private void SpawnWave(Entity<LavalandBluespaceWellComponent, TransformComponent> ent, EntityUid mapUid)
+    /// <summary>
+    /// One pass over all stacks for every well: loose ore left on a lavaland map long enough is pulled into a well there.
+    /// </summary>
+    private void ScanGroundOre(TimeSpan now)
     {
-        if (!TryFindOutpost(mapUid, out var outpost) || ent.Comp1.WaveTendrils.Count == 0)
-            return;
-        var center = _transform.GetMapCoordinates(outpost);
-        foreach (var prototype in ent.Comp1.WaveTendrils)
+        foreach (var list in _wellsByMap.Values)
+            list.Clear();
+
+        var any = false;
+        var wells = EntityQueryEnumerator<LavalandBluespaceWellComponent, TransformComponent>();
+        while (wells.MoveNext(out var uid, out var well, out var xform))
         {
-            var angle = _random.NextAngle();
-            var distance = _random.NextFloat(ent.Comp1.WaveMinDistance, ent.Comp1.WaveMaxDistance);
-            var coordinates = new EntityCoordinates(mapUid, center.Position + angle.ToWorldVec() * distance);
-            var tendril = Spawn(prototype, coordinates);
-            var despawn = EnsureComp<TimedDespawnComponent>(tendril);
-            despawn.Lifetime = (float) ent.Comp1.WaveDuration.TotalSeconds;
-            ent.Comp1.WaveEntities.Add(tendril);
+            if (well.ReturnAt != null || !xform.Anchored ||
+                xform.MapUid is not { } map || !HasComp<LavalandMapComponent>(map))
+            {
+                continue;
+            }
+
+            if (!_wellsByMap.TryGetValue(map, out var list))
+                _wellsByMap[map] = list = new List<Entity<LavalandBluespaceWellComponent>>();
+            list.Add((uid, well));
+            any = true;
+        }
+
+        if (!any)
+        {
+            _groundSince.Clear();
+            return;
+        }
+
+        _seenOre.Clear();
+        var ores = EntityQueryEnumerator<StackComponent, TransformComponent>();
+        while (ores.MoveNext(out var ore, out var stack, out var oreTransform))
+        {
+            if (oreTransform.MapUid is not { } map ||
+                !_wellsByMap.TryGetValue(map, out var mapWells) || mapWells.Count == 0 ||
+                _containers.IsEntityInContainer(ore))
+            {
+                continue;
+            }
+
+            Entity<LavalandBluespaceWellComponent>? target = null;
+            foreach (var well in mapWells)
+            {
+                if (!well.Comp.OreTypes.Contains(stack.StackTypeId))
+                    continue;
+                target = well;
+                break;
+            }
+
+            if (target is not { } accepting)
+                continue;
+
+            _seenOre.Add(ore);
+            if (!_groundSince.TryGetValue(ore, out var since))
+                _groundSince[ore] = now;
+            else if (now - since >= accepting.Comp.CollectionDelay && Insert(accepting, ore))
+                _groundSince.Remove(ore);
+        }
+
+        foreach (var ore in _groundSince.Keys.ToArray())
+        {
+            if (!_seenOre.Contains(ore))
+                _groundSince.Remove(ore);
         }
     }
 }

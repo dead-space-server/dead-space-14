@@ -1,0 +1,396 @@
+- type: lavalandBossArena
+  id: LavalandLegionArena
+  arenaName: Арена Легиона
+  bossPrototype: MobLavalandLegionMegafauna
+  floorTile: FloorLegionArena
+  wallPrototype: WallLegionArena
+  lightPrototype: LavalandLegionArenaLight
+  decorations:
+  - prototype: FloorLavaEntity
+    count: 22
+    spawnAttempts: 80
+    clusterSize: 3
+    clusterRadius: 1
+    minDistance: 9
+    maxDistance: 15
+    edgePadding: 3
+    minSeparation: 0
+  - prototype: FloraRockSolid
+    count: 4
+    spawnAttempts: 80
+    minDistance: 12
+    maxDistance: 15
+    edgePadding: 3
+    minSeparation: 3
+  - prototype: FloraTreeLavalandAsh
+    count: 5
+    spawnAttempts: 80
+    minDistance: 10
+    maxDistance: 15
+    edgePadding: 3
+    minSeparation: 4
+  - prototype: LavalandEmberWild
+    count: 4
+    spawnAttempts: 60
+    minDistance: 6
+    maxDistance: 15
+    edgePadding: 2
+    minSeparation: 3
+  - prototype: BasaltRandom
+    count: 70
+    spawnAttempts: 100
+    minDistance: 4
+    maxDistance: 16
+    edgePadding: 2
+    minSeparation: 1
+  - decals:
+    - FlowersBROne
+    - FlowersBRTwo
+    - FlowersBRThree
+    decalColor: "#ff6b24"
+    count: 40
+    spawnAttempts: 120
+    minDistance: 3
+    maxDistance: 16
+    edgePadding: 1
+    minSeparation: 0
+  size: 35
+  spawnAttempts: 160
+  minDistance: 170
+  maxDistance: 320
+  mapEdgePadding: 32
+  landingExclusionRadius: 90
+  outpostExclusionRadius: 100
+  ftlBeaconExclusionRadius: 64
+  gridSeparation: 32
+  resetOnEmpty: true
+  emptyResetDelay: 10
+  emptyResetHealFraction: 5
+  emptyResetMinHeal: 450
+
+- type: tile
+  id: FloorLegionArena
+  name: lavaland-legion-floor-name
+  parent: FloorBasalt
+  weather: false
+
+- type: entity
+  parent: WallRockBasaltLavalandBoundary
+  id: WallLegionArena
+  name: стена логова Легиона
+  description: Несокрушимая базальтовая стена, окружающая логово Легиона.
+  suffix: Lavaland, Indestructible
+
+- type: entity
+  id: LavalandLegionArenaLight
+  name: свет логова Легиона
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    noRot: true
+  - type: PointLight
+    radius: 24
+    energy: 1.3
+    softness: 1
+    color: "#b8323a"
+    castShadows: false
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  abstract: true
+  parent: [ BaseMobAsteroid, BaseMobLavalandFauna ]
+  id: BaseMobLavalandLegionMegafauna
+  name: Легион
+  description: Один из многих.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: DestructionResistance
+  - type: IgnoreKudzu
+  - type: StunImmune
+  - type: NoSlip
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      100000: Dead
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Blunt
+        damage: 1000000
+      behaviors:
+      - !type:GibBehavior { }
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+    blackboard:
+      VisionRadius: !type:Single
+        13
+      AggroVisionRadius: !type:Single
+        13
+      NavSmash: !type:Bool
+        false
+  - type: MeleeWeapon
+    resistanceBypass: true
+    soundHit:
+      path: /Audio/Effects/demon_attack1.ogg
+    angle: 0
+    attackRate: 1
+    animation: WeaponArcBite
+    damage:
+      types:
+        Blunt: 25
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.6
+    baseSprintSpeed: 3.6
+  - type: RequireProjectileTarget
+
+- type: entity
+  parent: BaseMobLavalandLegionMegafauna
+  id: MobLavalandLegionMegafauna
+  suffix: Lavaland, Boss
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/Legion.rsi
+    offset: 0,0.5
+    layers:
+    - state: legion
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 1.1
+        density: 300
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: LavalandBoss
+    bossName: Легион
+    maxHealth: 3550
+    musicPool:
+    - /Audio/_DeadSpace/Lavaland/Bosses/title1.ogg
+    - /Audio/_DeadSpace/Lavaland/Bosses/drake_fight.ogg
+    - /Audio/_DeadSpace/Lavaland/Bosses/bubblegum_fight.ogg
+    - /Audio/_DeadSpace/Lavaland/Bosses/colossus_fight.ogg
+    deathSound: /Audio/Effects/demon_dies.ogg
+    deathRewards:
+    - LavalandStormStaff
+    - LavalandNecropolisChest
+  - type: LavalandLegionMegafauna
+    size: 3
+    bodyHealth: 700
+    splitHealthPool: 2850
+    splitInto:
+    - MobLavalandLegionMegafaunaLeft
+    - MobLavalandLegionMegafaunaEye
+    - MobLavalandLegionMegafaunaRight
+    chargeDamage:
+      types:
+        Blunt: 22
+    chargeWindupSound: /Audio/_DeadSpace/Lavaland/Hierophant/sonic_jackhammer.ogg
+    chargeImpactSound: /Audio/Effects/explosion_small1.ogg
+    sentinelSound: /Audio/Effects/bone_rattle.ogg
+
+- type: entity
+  abstract: true
+  parent: BaseMobLavalandLegionMegafauna
+  id: BaseMobLavalandLegionMegafaunaMedium
+  suffix: Lavaland, Boss part
+  components:
+  - type: DestructionResistance
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.7
+        density: 150
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: LavalandLegionMegafauna
+    size: 2
+    bodyHealth: 350
+    splitHealthPool: 600
+    reassemblePrototype: MobLavalandLegionMegafauna
+    splitInto:
+    - MobLavalandLegionMegafaunaSmall
+    - MobLavalandLegionMegafaunaSmall
+    - MobLavalandLegionMegafaunaSmall
+    chargeDamage:
+      types:
+        Blunt: 22
+    chargeWindupSound: /Audio/_DeadSpace/Lavaland/Hierophant/sonic_jackhammer.ogg
+    chargeImpactSound: /Audio/Effects/explosion_small1.ogg
+    sentinelSound: /Audio/Effects/bone_rattle.ogg
+
+- type: entity
+  parent: BaseMobLavalandLegionMegafaunaMedium
+  id: MobLavalandLegionMegafaunaLeft
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/LegionMedium.rsi
+    offset: 0,0.25
+    layers:
+    - state: legion_left
+
+- type: entity
+  parent: BaseMobLavalandLegionMegafaunaMedium
+  id: MobLavalandLegionMegafaunaEye
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/LegionMedium.rsi
+    offset: 0,0.25
+    layers:
+    - state: legion_eye
+
+- type: entity
+  parent: BaseMobLavalandLegionMegafaunaMedium
+  id: MobLavalandLegionMegafaunaRight
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/LegionMedium.rsi
+    offset: 0,0.25
+    layers:
+    - state: legion_right
+
+- type: entity
+  parent: BaseMobLavalandLegionMegafauna
+  id: MobLavalandLegionMegafaunaSmall
+  suffix: Lavaland, Boss part
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/LegionSmall.rsi
+    layers:
+    - state: legion
+    - state: legion_unshaded
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.4
+        density: 80
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: LavalandLegionMegafauna
+    size: 1
+    bodyHealth: 200
+    reassemblePrototype: MobLavalandLegionMegafauna
+    chargeDamage:
+      types:
+        Blunt: 22
+    chargeWindupSound: /Audio/_DeadSpace/Lavaland/Hierophant/sonic_jackhammer.ogg
+    chargeImpactSound: /Audio/Effects/explosion_small1.ogg
+    sentinelSound: /Audio/Effects/bone_rattle.ogg
+
+- type: entity
+  id: LavalandLegionSentinel
+  name: страж Легиона
+  description: Глаз пронзает твою душу.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.35,-0.35,0.35,0.35"
+        density: 100
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/LegionSmall.rsi
+    layers:
+    - state: sentinel
+      shader: unshaded
+  - type: PointLight
+    radius: 2
+    energy: 0.5
+    color: "#ff4040"
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 80
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: LavalandLegionSentinel
+    damage:
+      types:
+        Heat: 19
+    aimSound: /Audio/_DeadSpace/Lavaland/Hierophant/airlockopen.ogg
+    fireSound: /Audio/_DeadSpace/Lavaland/Hierophant/bin_close.ogg
+
+- type: entity
+  id: LavalandLegionSentinelTracer
+  name: кровавый прицел
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Effects/LegionBeam.rsi
+    drawdepth: Effects
+    layers:
+    - state: tracer
+      shader: unshaded
+  - type: Physics
+    canCollide: false
+  - type: Beam
+  - type: TimedDespawn
+    lifetime: 0.8
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: LavalandLegionSentinelTracer
+  id: LavalandLegionSentinelBeam
+  name: кровавый импульс
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Effects/LegionBeam.rsi
+    drawdepth: Effects
+    layers:
+    - state: beam
+      shader: unshaded
+  - type: PointLight
+    radius: 2
+    energy: 1
+    color: "#ff4040"
+  - type: TimedDespawn
+    lifetime: 0.4
+
+- type: entity
+  id: LavalandLegionBeamEndpoint
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 1.5

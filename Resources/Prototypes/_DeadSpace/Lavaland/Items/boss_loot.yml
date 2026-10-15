@@ -1,0 +1,325 @@
+- type: entity
+  parent: BaseItem
+  id: LavalandMayhemBottle
+  name: хаос в бутылке
+  description: Магически заряженная бутылка крови. Её запах сводит всех вокруг с ума от жажды убийства. Разбить — использовать в руке.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Specific/blood_vial.rsi
+    state: icon
+    color: "#ff6060"
+  - type: Item
+    size: Tiny
+  - type: LavalandMayhemBottle
+    range: 7
+    duration: 120
+    weapon: Chainsaw
+    reagent: Omnizine
+    reagentAmount: 25
+    sound: /Audio/Effects/glass_break1.ogg
+  - type: StaticPrice
+    price: 3000
+
+- type: entity
+  parent: ClothingOuterBaseToggleable
+  id: ClothingOuterLavalandHeckSuit
+  name: костюм H.E.C.K.
+  description: Hostile Environment Cross-Kinetic Suit — костюм, созданный выдерживать любые опасности Лаваленда. Последнему владельцу его не хватило.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Clothing/heck_suit.rsi
+    layers:
+    - state: icon-plates
+      color: "#4d4d4d"
+    - state: icon-detail
+      color: "#808080"
+  - type: Clothing
+    sprite: _DeadSpace/Lavaland/Clothing/heck_suit.rsi
+    clothingVisuals:
+      outerClothing:
+      - state: equipped-OUTERCLOTHING-plates
+        color: "#4d4d4d"
+      - state: equipped-OUTERCLOTHING-detail
+        color: "#808080"
+  - type: Item
+    size: Huge
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadLavalandHeckHelmet
+    slot: head
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.3
+        Slash: 0.3
+        Piercing: 0.6
+        Heat: 0.6
+        Caustic: 0.1
+  - type: FireProtection
+    reduction: 1
+  - type: TemperatureProtection
+    heatingCoefficient: 0.001
+    coolingCoefficient: 0.001
+  - type: PressureProtection
+    lowPressureModifier: 14
+  - type: ExplosionResistance
+    damageCoefficient: 0.5
+  - type: LavalandWeatherImmune
+  - type: LavalandCursedWhispers
+    messages:
+    - lavaland-heck-whisper-1
+    - lavaland-heck-whisper-2
+    - lavaland-heck-whisper-3
+    - lavaland-heck-whisper-4
+  - type: StaticPrice
+    price: 5000
+
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadLavalandHeckHelmet
+  categories: [ HideSpawnMenu ]
+  name: шлем H.E.C.K.
+  description: Шлем, созданный выдерживать любые опасности Лаваленда.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Clothing/heck_helmet.rsi
+    layers:
+    - state: icon-head
+      color: "#4d4d4d"
+    - state: icon-jaw
+      color: "#808080"
+    - state: icon-visor
+      color: "#ff3300"
+  - type: Clothing
+    sprite: _DeadSpace/Lavaland/Clothing/heck_helmet.rsi
+    clothingVisuals:
+      head:
+      - state: equipped-HELMET-head
+        color: "#4d4d4d"
+      - state: equipped-HELMET-jaw
+        color: "#808080"
+      - state: equipped-HELMET-visor
+        color: "#ff3300"
+      - state: equipped-HELMET-glass
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.7
+        Slash: 0.7
+        Piercing: 0.8
+        Heat: 0.8
+  - type: PressureProtection
+    lowPressureModifier: 14
+  - type: BreathMask
+
+- type: entity
+  abstract: true
+  id: BaseLavalandAnomalousCrystal
+  name: аномальный кристалл
+  description: Странный кусок кристалла. Рядом с ним вас наполняют восторг и ужас в равной мере.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 300
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Pullable
+  - type: Anchorable
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Structures/anomalous_crystal.rsi
+    layers:
+    - state: crystal
+      shader: unshaded
+      map: [ "enum.LavalandArtifactLayers.Base" ]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.LavalandArtifactVisuals.Active:
+        enum.LavalandArtifactLayers.Base:
+          True: { state: charging }
+          False: { state: crystal }
+  - type: PointLight
+    radius: 8
+    energy: 1
+    color: "#9ad9ff"
+  - type: StaticPrice
+    price: 4000
+
+- type: entity
+  parent: BaseLavalandAnomalousCrystal
+  id: LavalandAnomalousCrystalEmitter
+  suffix: Emitter
+  components:
+  - type: LavalandAnomalousCrystal
+    effect: Emitter
+    observerDescription: lavaland-crystal-observer-emitter
+    cooldown: 5
+    chargeTime: 1
+    sound: /Audio/Effects/break_stone.ogg
+    projectiles:
+    - BulletKinetic
+    - ProjectileFireball
+    - ProjectileIcicle
+    - LavalandColossusDeathBolt
+
+- type: entity
+  parent: BaseLavalandAnomalousCrystal
+  id: LavalandAnomalousCrystalDarkReprise
+  suffix: Revive (skeleton)
+  components:
+  - type: LavalandAnomalousCrystal
+    effect: Revive
+    observerDescription: lavaland-crystal-observer-reprise
+    cooldown: 20
+    chargeTime: 3
+    range: 5
+    reviveSpecies: Skeleton
+    sound: /Audio/Effects/demon_consume.ogg
+
+- type: entity
+  parent: BaseLavalandAnomalousCrystal
+  id: LavalandAnomalousCrystalHonk
+  suffix: Revive (clown)
+  components:
+  - type: LavalandAnomalousCrystal
+    effect: Revive
+    observerDescription: lavaland-crystal-observer-honk
+    cooldown: 20
+    chargeTime: 3
+    range: 5
+    reviveGear: ClownGear
+    sound: /Audio/Items/bikehorn.ogg
+
+- type: entity
+  parent: BaseLavalandAnomalousCrystal
+  id: LavalandAnomalousCrystalThemeWarp
+  suffix: Theme warp
+  components:
+  - type: LavalandAnomalousCrystal
+    effect: ThemeWarp
+    observerDescription: lavaland-crystal-observer-theme
+    cooldown: 20
+    chargeTime: 5
+    range: 4
+    sound: /Audio/Effects/break_stone.ogg
+    themeTiles:
+    - FloorWood
+    - FloorAstroGrass
+    - FloorSnow
+    - FloorGold
+    - FloorSilver
+    - FloorCave
+    - FloorDark
+
+- type: entity
+  parent: MarkerBase
+  id: LavalandAnomalousCrystalRandom
+  name: случайный аномальный кристалл
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - sprite: _DeadSpace/Lavaland/Structures/anomalous_crystal.rsi
+      state: crystal
+  - type: RandomSpawner
+    prototypes:
+    - LavalandAnomalousCrystalEmitter
+    - LavalandAnomalousCrystalDarkReprise
+    - LavalandAnomalousCrystalHonk
+    - LavalandAnomalousCrystalThemeWarp
+    offset: 0.0
+
+- type: entity
+  parent: BaseItem
+  id: LavalandVoiceOfGod
+  name: голосовые связки Колосса
+  description: В них звучит голос древнего бога. Проглотите их, и ваши слова станут приказами для всех вокруг.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Specific/voice_of_god.rsi
+    state: icon
+  - type: Item
+    size: Tiny
+  - type: LavalandVoiceOfGodItem
+    range: 7
+    sound: /Audio/_DeadSpace/Lavaland/Colossus/invoke_general.ogg
+    commands:
+    - words: [ стой, замри, stop, freeze ]
+      stun: 3
+      cooldown: 20
+    - words: [ на колени, лежать, ложись, kneel, down ]
+      knockdown: 4
+      cooldown: 15
+    - words: [ прочь, назад, отойди, get away, back ]
+      repel: 10
+      cooldown: 10
+    - words: [ страдай, умри, гори, suffer, die, burn ]
+      cooldown: 30
+      damage:
+        types:
+          Heat: 15
+  - type: StaticPrice
+    price: 4000
+
+- type: entity
+  parent: BaseItem
+  id: LavalandEliteTrophyBroodmother
+  name: язык голиафа-матки
+  description: Трофей с побеждённой голиаф-матки.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Specific/elite_trophies.rsi
+    state: broodmother_tongue
+  - type: Item
+    size: Small
+  - type: StaticPrice
+    price: 2000
+  - type: Attachment
+    uniqueGroup: BroodmotherTongue
+    description: attachment-desc-trophy-broodmother
+    markDetonationEffects:
+    - !type:AttachmentSpawnAtTarget
+      chance: 0.1
+      prototype: EffectGoliathTentacleSpawn
+  - type: Tag
+    tags:
+    - CrusherTrophy
+
+- type: entity
+  parent: BaseItem
+  id: LavalandEliteTrophyLegionnaire
+  name: позвоночник легионера
+  description: Трофей с побеждённого легионера.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Specific/elite_trophies.rsi
+    state: legionnaire_spine
+  - type: Item
+    size: Small
+  - type: StaticPrice
+    price: 2000
+
+- type: entity
+  parent: BaseItem
+  id: LavalandEliteTrophyPandora
+  name: надежда
+  description: Всё, что осталось на дне ящика Пандоры.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Specific/elite_trophies.rsi
+    state: hope
+  - type: Item
+    size: Small
+  - type: StaticPrice
+    price: 2000

@@ -5,6 +5,8 @@ using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Timing;
+using Content.Shared.DeadSpace.Lavaland; // DS14
+using Robust.Shared.Random; // DS14
 
 namespace Content.Client.GPS.UI;
 
@@ -55,6 +57,13 @@ public sealed class HandheldGpsStatusControl : Control
             var x = (int)pos.X;
             var y = (int)pos.Y;
             posText = $"({x}, {y})";
+            // DS14-start: lavaland deep night jams the GPS
+            if (_entMan.System<LavalandDayCycleSystem>().IsTrackerJammed(transComp.MapUid))
+            {
+                var random = IoCManager.Resolve<IRobustRandom>();
+                posText = $"({random.Next(-999, 1000)}, ???)";
+            }
+            // DS14-end
         }
         _label.SetMarkup(Loc.GetString("handheld-gps-coordinates-title", ("coordinates", posText)));
     }

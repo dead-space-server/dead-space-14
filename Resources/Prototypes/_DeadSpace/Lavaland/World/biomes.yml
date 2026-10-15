@@ -1,7 +1,6 @@
 - type: biomeTemplate
   id: LavalandSurface
   layers:
-  # Fiery flowers are visual decals and never replace traversable ground.
   - !type:BiomeDecalLayer
     divisions: 2
     threshold: 0.84
@@ -76,8 +75,6 @@
     - LavalandBasaltBoulder
     - FloraStalagmite
 
-  # Ash trees use deterministic spacing: they occur throughout open terrain,
-  # while the biome system prevents neighboring trees from forming clusters.
   - !type:BiomeEntityLayer
     threshold: 0.20
     minimumDistance: 3
@@ -110,7 +107,6 @@
     entities:
     - WallRockBasalt
 
-  # Independent roaming mini-boss. Its system clears only the 3x3 starting footprint.
   - !type:BiomeEntityLayer
     threshold: 0.9994
     minimumDistance: 120
@@ -124,6 +120,34 @@
     - FloorLavalandPaleGrass
     entities:
     - MobLavalandMadMiner
+
+  - !type:BiomeEntityLayer
+    threshold: 0.9993
+    minimumDistance: 90
+    noise:
+      seed: 67
+      noiseType: OpenSimplex2
+      frequency: 0.014
+    allowedTiles:
+    - FloorBasalt
+    - FloorLavalandAsh
+    - FloorLavalandPaleGrass
+    entities:
+    - LavalandEliteTumor
+
+  - !type:BiomeEntityLayer
+    threshold: 0.997
+    minimumDistance: 35
+    noise:
+      seed: 71
+      noiseType: OpenSimplex2
+      frequency: 0.05
+    allowedTiles:
+    - FloorBasalt
+    - FloorLavalandAsh
+    - FloorLavalandPaleGrass
+    entities:
+    - LavalandWildWhelpNest
 
   - !type:BiomeDummyLayer
     id: Loot

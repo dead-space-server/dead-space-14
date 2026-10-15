@@ -1,0 +1,422 @@
+- type: lavalandBossArena
+  id: LavalandAshDrakeArena
+  arenaName: арена пепельного дракона
+  bossPrototype: MobLavalandAshDrake
+  floorTile: FloorAshDrakeArena
+  wallPrototype: WallAshDrakeArena
+  lightPrototype: LavalandAshDrakeArenaLight
+  decorations:
+  - prototype: FloorLavaEntity
+    count: 34
+    spawnAttempts: 80
+    clusterSize: 4
+    clusterRadius: 1
+    minDistance: 10
+    maxDistance: 20
+    edgePadding: 3
+    minSeparation: 0
+  - prototype: FloraRockSolid
+    count: 5
+    spawnAttempts: 80
+    minDistance: 16
+    maxDistance: 20
+    edgePadding: 3
+    minSeparation: 3
+  - prototype: BasaltRandom
+    count: 85
+    spawnAttempts: 100
+    minDistance: 5
+    maxDistance: 21
+    edgePadding: 2
+    minSeparation: 1
+  size: 45
+  spawnAttempts: 180
+  minDistance: 180
+  maxDistance: 330
+  mapEdgePadding: 36
+  landingExclusionRadius: 90
+  outpostExclusionRadius: 100
+  ftlBeaconExclusionRadius: 64
+  gridSeparation: 42
+  resetOnEmpty: true
+  emptyResetDelay: 10
+  emptyResetHealFraction: 5
+  emptyResetMinHeal: 450
+
+- type: tile
+  id: FloorAshDrakeArena
+  name: tiles-ash-drake-arena-floor
+  parent: FloorBasalt
+  weather: false
+
+- type: entity
+  parent: WallRockBasaltLavalandBoundary
+  id: WallAshDrakeArena
+  name: стена арены пепельного дракона
+  description: Неразрушимая базальтовая стена, отделяющая логово от остального Лаваленда.
+  suffix: Lavaland, Indestructible
+
+- type: entity
+  id: LavalandAshDrakeArenaLight
+  name: свет арены пепельного дракона
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    noRot: true
+  - type: PointLight
+    radius: 28
+    energy: 1.45
+    softness: 1
+    color: "#ff8a4b"
+    castShadows: false
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: LavalandAshDrakeEffectBase
+  abstract: true
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: TimedDespawn
+    lifetime: 1
+
+- type: entity
+  parent: LavalandAshDrakeEffectBase
+  id: LavalandAshDrakeCageBarrier
+  name: барьер клетки пепельного дракона
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Effects
+    sprite: _DeadSpace/Lavaland/Effects/AshDrakeFire.rsi
+    color: "#ff0000"
+    layers:
+    - state: fire
+      shader: unshaded
+  - type: Physics
+    bodyType: Static
+    canCollide: true
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        density: 100
+        mask:
+        - Impassable
+        layer:
+        - Impassable
+        - HighImpassable
+        - MidImpassable
+        - LowImpassable
+  - type: TimedDespawn
+    lifetime: 10
+  - type: PointLight
+    radius: 2.0
+    energy: 1.4
+    color: "#ff1200"
+
+- type: entity
+  parent: LavalandAshDrakeEffectBase
+  id: LavalandAshDrakeCageFire
+  name: огонь клетки пепельного дракона
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Effects
+    sprite: _DeadSpace/Lavaland/Effects/AshDrakeFire.rsi
+    color: "#ff6b2d"
+    layers:
+    - state: fire
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 1
+  - type: PointLight
+    radius: 2.0
+    energy: 1.4
+    color: "#ff5a25"
+
+- type: entity
+  parent: LavalandAshDrakeEffectBase
+  id: LavalandAshDrakeCageTarget
+  name: безопасная метка клетки
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Effects
+    sprite: _DeadSpace/Lavaland/Effects/AshDrakeTarget.rsi
+    layers:
+    - state: sniper_zoom_green
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 10
+
+- type: entity
+  parent: LavalandAshDrakeEffectBase
+  id: LavalandAshDrakeTarget
+  name: метка пепельного дракона
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Effects
+    sprite: _DeadSpace/Lavaland/Effects/AshDrakeTarget.rsi
+    color: "#ff4f2d"
+    layers:
+    - state: sniper_zoom
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 1
+
+- type: entity
+  parent: LavalandAshDrakeEffectBase
+  id: LavalandAshDrakeFireball
+  name: огненный шар пепельного дракона
+  components:
+  - type: Sprite
+    noRot: false
+    drawdepth: Effects
+    sprite: _DeadSpace/Lavaland/Effects/AshDrakeFireball.rsi
+    layers:
+    - state: fireball
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 1
+  - type: PointLight
+    radius: 2.5
+    energy: 1.4
+    color: "#ff5a25"
+
+- type: entity
+  parent: LavalandAshDrakeEffectBase
+  id: LavalandAshDrakeFire
+  name: пламя пепельного дракона
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Effects
+    sprite: _DeadSpace/Lavaland/Effects/AshDrakeFire.rsi
+    color: "#ff6b2d"
+    layers:
+    - state: fire
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 1.2
+  - type: LavalandAshDrakeFire
+  - type: PointLight
+    radius: 2
+    energy: 1.1
+    color: "#ff5a25"
+
+- type: entity
+  parent: LavalandAshDrakeEffectBase
+  id: LavalandAshDrakeLanding
+  name: удар пепельного дракона
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Effects
+    sprite: _DeadSpace/Lavaland/Effects/AshDrakeLanding.rsi
+    color: "#ff3d1f"
+    layers:
+    - state: landing
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 0.9
+  - type: PointLight
+    radius: 4
+    energy: 2
+    color: "#ff4f2d"
+
+- type: entity
+  parent: [ BaseMobAsteroid, BaseMobLavalandFauna ]
+  id: MobLavalandAshDrake
+  name: пепельный дракон
+  description: Огромный крылатый хранитель некрополя.
+  suffix: Lavaland, Boss
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: DestructionResistance
+  - type: LavalandTrophyDrop
+    trophy: CrusherTrophyTailSpike
+    chance: 1
+    requiredFraction: 0.6
+    proportional: false
+  - type: IgnoreKudzu
+  - type: Insulated
+  - type: StunImmune
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/AshDrake.rsi
+    layers:
+    - state: dragon
+      map: ["enum.LavalandAshDrakeVisualLayers.Base"]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.LavalandAshDrakeVisuals.State:
+        enum.LavalandAshDrakeVisualLayers.Base:
+          Dragon: { state: dragon }
+          Shadow: { state: shadow }
+          Swoop: { state: swoop }
+          Dead: { state: dragon_dead }
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      2500: Dead
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Blunt
+        damage: 1000000
+      behaviors:
+      - !type:GibBehavior { }
+  - type: LavalandBoss
+    bossName: пепельный дракон
+    maxHealth: 2500
+    music: /Audio/_DeadSpace/Lavaland/Bosses/drake_fight.ogg
+    deathSound: /Audio/_DeadSpace/Lavaland/AshDrake/demon_dies.ogg
+    deathRewards:
+    - LavalandNecropolisChest
+    - ClothingOuterSuitAshDrake
+    - LavalandSpectralBlade
+    - LavalandAshDrakeFireballSpellbookDrop
+    - LavalandLavaStaff
+    - AshDrakeTrophy
+  - type: LavalandAshDrake
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+    blackboard:
+      VisionRadius: !type:Single
+        64
+      AggroVisionRadius: !type:Single
+        64
+      NavSmash: !type:Bool
+        false
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/_DeadSpace/Lavaland/AshDrake/demon_attack1.ogg
+    angle: 0
+    attackRate: 0.8
+    animation: WeaponArcBite
+    damage:
+      types:
+        Slash: 40
+        Structural: 40
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2
+    baseSprintSpeed: 2.8
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.65
+        density: 300
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: NoSlip
+  - type: RequireProjectileTarget
+
+- type: entity
+  id: LavalandAshDrakeFireballSpellbookDrop
+  name: fireball spellbook drop
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: EntityTableSpawner
+    offset: 0
+    table: !type:AllSelector
+      children:
+      - id: FireballSpellbook
+        prob: 0.01
+
+- type: entity
+  parent: LavalandAshDrakeEffectBase
+  id: LavalandAshDrakeWhelpTarget
+  name: направление огня пепельного детёныша
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Effects
+    sprite: _DeadSpace/Lavaland/Effects/AshDrakeTarget.rsi
+    color: "#ff6b2d"
+    layers:
+    - state: sniper_zoom
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 2.2
+
+- type: entity
+  parent: [ BaseMobAsteroid, FlyingMobBase, BaseMobLavalandFauna ]
+  id: MobLavalandAshWhelp
+  name: пепельный детёныш
+  description: Молодой дракон, вызванный защищать пепельного владыку.
+  suffix: Lavaland
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/AshWhelp.rsi
+    layers:
+    - state: ash_whelp
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      100: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.5
+    baseSprintSpeed: 3.5
+  - type: MeleeWeapon
+    angle: 0
+    attackRate: 1
+    animation: WeaponArcBite
+    damage:
+      types:
+        Slash: 8
+        Heat: 12
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+    blackboard:
+      VisionRadius: !type:Single
+        32
+      AggroVisionRadius: !type:Single
+        32
+      NavSmash: !type:Bool
+        false
+  - type: TimedDespawn
+    lifetime: 15
+  - type: NoSlip
+
+- type: entity
+  parent: FloorLavaEntity
+  id: LavalandAshDrakeChaseLava
+  name: лава
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 1

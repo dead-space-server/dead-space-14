@@ -163,8 +163,6 @@
       entity_storage: !type:NestedSelector
         tableId: LavalandNecropolisChestHardsuitLootTable
 
-# Main editable loot listing for necropolis chests. Adjust category weights here,
-# then add concrete SS14 entity ids to the category tables below.
 - type: entityTable
   id: LavalandNecropolisChestLootTable
   table: !type:GroupSelector
@@ -190,6 +188,9 @@
     - !type:NestedSelector
       tableId: LavalandNecropolisChestContrabandLootTable
       weight: 0.9
+    - !type:NestedSelector
+      tableId: LavalandNecropolisChestArtifactLootTable
+      weight: 2
 
 - type: entityTable
   id: LavalandNecropolisChestMagicLootTable
@@ -458,6 +459,8 @@
       weight: 0.2
     - id: EnergyKatana
       weight: 0.1
+    - id: ClothingHandsGlovesConcussiveGauntlets
+      weight: 0.5
     - !type:AllSelector
       weight: 0.8
       children:
@@ -557,3 +560,18 @@
       - id: MedkitCombatFilled
     - id: ClothingBackpackDuffelSyndicateC4tBundle
       weight: 0.45
+
+- type: entityTable
+  id: LavalandNecropolisChestArtifactLootTable
+  table: !type:GroupSelector
+    children:
+    - id: LavalandWispLantern
+    - id: LavalandWarpCubeRed
+    - id: LavalandImmortalityTalisman
+    - id: LavalandShipInBottle
+    - id: LavalandFlightPotion
+    - id: LavalandRodOfAsclepius
+    - id: ClothingNeckLavalandMementoMori
+    - id: ClothingOuterLavalandBerserker
+    - id: ClothingHandsGlovesConcussiveGauntlets
+    - id: LavalandParadoxBagRed

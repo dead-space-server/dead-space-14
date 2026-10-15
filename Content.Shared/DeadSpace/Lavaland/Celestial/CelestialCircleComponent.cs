@@ -1,7 +1,7 @@
 using System.Numerics;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared.DeadSpace.Celestial;
+namespace Content.Shared.DeadSpace.Lavaland.Celestial;
 
 /// <summary>
 /// Кружок атаки РАЗНЕСУ: полупрозрачный розовый, медленно дрейфует,

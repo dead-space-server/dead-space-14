@@ -1,6 +1,6 @@
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.DeadSpace.Celestial;
+namespace Content.Shared.DeadSpace.Lavaland.Celestial;
 
 /// <summary>Начало катсцены смерти Селестиала (белый экран).</summary>
 [Serializable, NetSerializable]

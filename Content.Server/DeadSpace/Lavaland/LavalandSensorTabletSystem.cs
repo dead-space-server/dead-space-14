@@ -4,7 +4,6 @@ using System.Numerics;
 using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.DeadSpace.Lavaland.Components;
-using Content.Shared.Maps;
 using Content.Shared.Medical.SuitSensor;
 using Content.Shared.Medical.SuitSensors;
 using Content.Shared.Mining.Components;
@@ -16,6 +15,10 @@ using Robust.Shared.Containers;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Content.Server.DeadSpace.Lavaland.SecretBoss;
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Lavaland;
@@ -24,13 +27,23 @@ public sealed class LavalandSensorTabletSystem : EntitySystem
 {
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly SharedContainerSystem _containers = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly LavalandDayCycleSystem _dayCycle = default!;
+    [Dependency] private readonly LavalandSecretBossSystem _secretBoss = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly SharedPointLightSystem _pointLight = default!;
+
+    private static readonly TimeSpan BaseCacheLifetime = TimeSpan.FromSeconds(30);
+
+    // The outpost barely changes, so its tiles are rescanned rarely instead of on every UI update.
+    private readonly List<LavalandRadarPoint> _baseCache = new();
+    private TimeSpan _baseCacheExpires;
 
     public override void Initialize()
     {
@@ -52,6 +65,8 @@ public sealed class LavalandSensorTabletSystem : EntitySystem
         var query = EntityQueryEnumerator<LavalandSensorTabletComponent>();
         while (query.MoveNext(out var uid, out var tablet))
         {
+            UpdateBeeping((uid, tablet), now);
+
             if (tablet.NextUpdate > now || !_ui.IsUiOpen(uid, LavalandSensorTabletUiKey.Key))
                 continue;
 
@@ -60,31 +75,57 @@ public sealed class LavalandSensorTabletSystem : EntitySystem
         }
     }
 
+    /// <summary>Near the Celestial pit the tablet beeps loudly, faster the closer it gets.</summary>
+    private void UpdateBeeping(Entity<LavalandSensorTabletComponent> ent, TimeSpan now)
+    {
+        if (now < ent.Comp.NextBeep)
+            return;
+
+        var xform = Transform(ent);
+        if (!_secretBoss.TryGetPit(xform.MapUid, out var pit, out _, out var config) || config.BeepSound == null)
+        {
+            ent.Comp.NextBeep = now + TimeSpan.FromSeconds(1);
+            return;
+        }
+
+        var distance = Vector2.Distance(_transform.GetWorldPosition(xform), pit);
+        if (distance > config.BeepRange)
+        {
+            ent.Comp.NextBeep = now + TimeSpan.FromSeconds(0.5);
+            return;
+        }
+
+        var closeness = 1f - Math.Clamp(distance / MathF.Max(0.1f, config.BeepRange), 0f, 1f);
+        var interval = config.BeepIntervalFar + (config.BeepIntervalNear - config.BeepIntervalFar) * closeness;
+        ent.Comp.NextBeep = now + interval;
+        _audio.PlayPvs(config.BeepSound, ent, AudioParams.Default.WithVolume(config.BeepVolume).WithMaxDistance(20f));
+    }
+
     private void UpdateUi(Entity<LavalandSensorTabletComponent> ent)
     {
-        var points = new List<LavalandRadarPoint>();
+        var points = new List<LavalandRadarPoint>(GetBasePoints(ent.Comp));
+        foreach (var (center, radius, color) in _secretBoss.GetNoiseAreas())
+        {
+            points.Add(new LavalandRadarPoint(center, color, radius, LavalandRadarPointKind.CelestialNoise));
+        }
+        // Marker beacons with a message: shown everywhere on lavaland, the text pops up under the mouse.
+        var beacons = EntityQueryEnumerator<LavalandMarkerBeaconComponent, TransformComponent>();
+        while (beacons.MoveNext(out var beaconUid, out var beacon, out var beaconXform))
+        {
+            if (beacon.Message is not { } message ||
+                beaconXform.MapUid is not { } beaconMap || !HasComp<LavalandMapComponent>(beaconMap))
+            {
+                continue;
+            }
+
+            var beaconColor = _pointLight.TryGetLight(beaconUid, out var light) ? light.Color : Color.Orange;
+            points.Add(new LavalandRadarPoint(_transform.GetWorldPosition(beaconXform), beaconColor, 0.6f,
+                LavalandRadarPointKind.Beacon, message));
+        }
+
         var scannedEntities = new HashSet<EntityUid>();
         var scannedTiles = new HashSet<(EntityUid Grid, Vector2i Tile)>();
         var users = new HashSet<EntityUid>();
-        var outposts = EntityQueryEnumerator<LavalandOutpostComponent, MapGridComponent>();
-        while (outposts.MoveNext(out var gridUid, out _, out var baseGrid))
-        {
-            foreach (var tile in _map.GetAllTiles(gridUid, baseGrid))
-            {
-                if (tile.Tile.IsEmpty)
-                    continue;
-                var position = _transform.ToMapCoordinates(_map.ToCenterCoordinates(tile)).Position;
-                points.Add(new LavalandRadarPoint(position, ent.Comp.BaseFloorColor,
-                    ent.Comp.TerrainPointSize, LavalandRadarPointKind.BaseFloor));
-                var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, baseGrid, tile.GridIndices);
-                while (anchored.MoveNext(out var structure))
-                {
-                    if (structure is { } wall && HasComp<WallComponent>(wall))
-                        points.Add(new LavalandRadarPoint(position, ent.Comp.BaseWallColor,
-                            ent.Comp.TerrainPointSize, LavalandRadarPointKind.BaseWall));
-                }
-            }
-        }
 
         var sensors = EntityQueryEnumerator<SuitSensorComponent>();
         var extractors = EntityQueryEnumerator<LavalandMorkiteExtractorComponent, TransformComponent>();
@@ -114,15 +155,35 @@ public sealed class LavalandSensorTabletSystem : EntitySystem
             }
 
             var userPosition = _transform.GetWorldPosition(userXform);
+            var dead = TryComp<MobStateComponent>(user, out var mobState) && mobState.CurrentState == MobState.Dead;
+
+            // Deep night: no surroundings, marks flicker and drift.
+            if (_dayCycle.IsTrackerJammed(mapUid))
+            {
+                if (_random.Prob(ent.Comp.JamDropChance))
+                    continue;
+
+                points.Add(new LavalandRadarPoint(
+                    userPosition + _random.NextAngle().ToVec() * _random.NextFloat(0f, ent.Comp.JamScatter),
+                    dead ? ent.Comp.DeadColor : ent.Comp.LivingColor,
+                    ent.Comp.MobPointSize,
+                    dead ? LavalandRadarPointKind.DeadMiner : LavalandRadarPointKind.LivingMiner));
+                continue;
+            }
+
             var grids = new List<Entity<MapGridComponent>>();
             _mapManager.FindGridsIntersecting(userXform.MapID,
                 Box2.CenteredAround(userPosition, new Vector2(ent.Comp.ScanRadius * 2)),
                 ref grids, includeMap: true);
             foreach (var grid in grids)
+            {
+                // The outpost has its own floor/wall marks; scanning it as terrain would paint over them.
+                if (HasComp<LavalandOutpostComponent>(grid.Owner))
+                    continue;
                 AddTerrain(points, scannedTiles, grid.Owner, grid.Comp, userXform.Coordinates, ent.Comp);
+            }
             AddNearbyEntities(points, scannedEntities, user, userPosition, userXform.MapID, ent.Comp);
 
-            var dead = TryComp<MobStateComponent>(user, out var mobState) && mobState.CurrentState == MobState.Dead;
             points.Add(new LavalandRadarPoint(userPosition,
                 dead ? ent.Comp.DeadColor : ent.Comp.LivingColor,
                 ent.Comp.MobPointSize,
@@ -131,6 +192,40 @@ public sealed class LavalandSensorTabletSystem : EntitySystem
 
         _ui.SetUiState(ent.Owner, LavalandSensorTabletUiKey.Key,
             new LavalandSensorTabletState(points, ent.Comp.ScanRadius));
+    }
+
+    private List<LavalandRadarPoint> GetBasePoints(LavalandSensorTabletComponent tablet)
+    {
+        var now = _timing.CurTime;
+        if (now < _baseCacheExpires)
+            return _baseCache;
+        _baseCacheExpires = now + BaseCacheLifetime;
+        _baseCache.Clear();
+
+        var outposts = EntityQueryEnumerator<LavalandOutpostComponent, MapGridComponent>();
+        while (outposts.MoveNext(out var gridUid, out _, out var baseGrid))
+        {
+            foreach (var tile in _map.GetAllTiles(gridUid, baseGrid))
+            {
+                if (tile.Tile.IsEmpty)
+                    continue;
+                var position = _transform.ToMapCoordinates(_map.ToCenterCoordinates(tile)).Position;
+                _baseCache.Add(new LavalandRadarPoint(position, tablet.BaseFloorColor,
+                    tablet.TerrainPointSize, LavalandRadarPointKind.BaseFloor));
+                var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, baseGrid, tile.GridIndices);
+                while (anchored.MoveNext(out var structure))
+                {
+                    if (structure is { } wall && HasComp<WallComponent>(wall))
+                        _baseCache.Add(new LavalandRadarPoint(position, tablet.BaseWallColor,
+                            tablet.TerrainPointSize, LavalandRadarPointKind.BaseWall));
+                }
+            }
+        }
+
+        // Nothing found yet (outpost still loading): try again on the next update instead of in 30 seconds.
+        if (_baseCache.Count == 0)
+            _baseCacheExpires = now;
+        return _baseCache;
     }
 
     private bool IsEquippedSensor(EntityUid uid, SuitSensorComponent sensor, EntityUid user)
@@ -170,14 +265,12 @@ public sealed class LavalandSensorTabletSystem : EntitySystem
                 if (tile.Tile.IsEmpty)
                     continue;
 
-                var definition = _turf.GetContentTileDefinition(tile);
-                var color = definition.ID.Contains("Lava", StringComparison.OrdinalIgnoreCase)
-                    ? tablet.LavaColor
-                    : tablet.FloorColor;
+                // Lava on lavaland is an entity on top of the floor and is added by AddNearbyEntities;
+                // tile ids like FloorLavalandAsh must not be mistaken for it.
                 var worldPosition = _transform.ToMapCoordinates(new EntityCoordinates(grid,
                     new Vector2(indices.X + 0.5f, indices.Y + 0.5f))).Position;
-                points.Add(new LavalandRadarPoint(worldPosition, color, tablet.TerrainPointSize,
-                    color == tablet.LavaColor ? LavalandRadarPointKind.Lava : LavalandRadarPointKind.Terrain));
+                points.Add(new LavalandRadarPoint(worldPosition, tablet.FloorColor, tablet.TerrainPointSize,
+                    LavalandRadarPointKind.Terrain));
             }
         }
     }

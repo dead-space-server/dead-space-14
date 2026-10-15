@@ -1,7 +1,7 @@
 using System.Numerics;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared.DeadSpace.Celestial;
+namespace Content.Shared.DeadSpace.Lavaland.Celestial;
 
 /// <summary>
 /// Шар из трещины: петляет и быстро летит к игроку, стреляя мелкими лучами.

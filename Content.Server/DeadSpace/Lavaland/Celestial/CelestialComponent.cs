@@ -1,8 +1,8 @@
-using Content.Shared.DeadSpace.Celestial;
+using Content.Shared.DeadSpace.Lavaland.Celestial;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 
-namespace Content.Server.DeadSpace.Celestial;
+namespace Content.Server.DeadSpace.Lavaland.Celestial;
 
 /// <summary>
 /// Компонент босса Селестиала. Разрушает всё вокруг себя, медленно движется,
@@ -294,6 +294,24 @@ public sealed partial class CelestialComponent : Component
     /// <summary>Фаза 2: босс бессмертен, урон сбрасывается.</summary>
     [ViewVariables]
     public bool Phase2;
+
+    // DS14-start: секретный босс лаваленда
+    /// <summary>Сколько урона нужно для второй фазы.</summary>
+    [DataField]
+    public float Phase2Damage = 500000f;
+
+    /// <summary>Во второй фазе урон сбрасывается (ивентовый вариант). Выключено - босса можно убить.</summary>
+    [DataField]
+    public bool Phase2Immortal = true;
+
+    /// <summary>Не телепортируется перед атаками - стоит в центре арены.</summary>
+    [DataField]
+    public bool Stationary;
+
+    /// <summary>Лучи выламывают пол под ударом. Выключено у лавалендского варианта - стеклянная арена цела.</summary>
+    [DataField]
+    public bool BreakTiles = true;
+    // DS14-end
 
     /// <summary>Минимальная пауза между атаками во второй фазе, сек.</summary>
     [DataField]

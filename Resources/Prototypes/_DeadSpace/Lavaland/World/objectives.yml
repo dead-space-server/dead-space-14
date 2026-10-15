@@ -30,7 +30,7 @@
   id: LavalandMorkiteExtractor
   parent: BaseMachine
   name: добытчик моркита
-  description: Извлекает моркит из глубин Лаваленда при подключении к трубопроводу.
+  description: Извлекает моркит из глубин Лаваленда. Питает всё, что подключено к нему трубопроводом через газовый порт под ним, и гонит моркит в блюспейс колодец.
   components:
   - type: Transform
     anchored: true
@@ -39,16 +39,10 @@
     state: icon
   - type: LavalandMorkiteExtractor
     requiredExtractionTime: 480
-    outputPerSecond: 0.20833334
-  - type: NodeContainer
-    nodes:
-      output:
-        !type:CableDeviceNode
-        nodeGroupID: Apc
-  - type: PowerSupplier
-    voltage: Apc
-    supplyRate: 5000
-  - type: PowerProvider
-    voltage: Apc
-  - type: ExtensionCableProvider
-    transferRange: 1000
+    faunaAttractRange: 10
+    faunaPlayerAggroRange: 6
+    faunaBiteRange: 1.3
+    faunaBiteInterval: 1.5
+    faunaBiteDamage:
+      types:
+        Blunt: 15

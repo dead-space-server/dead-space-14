@@ -1,4 +1,3 @@
-﻿# DS14-start: Celestial - manually spawnable, station-wide boss.
 - type: entity
   id: CelestialAttackSphere
   name: celestial orb
@@ -49,14 +48,14 @@
   id: MobCelestial
   name: "Селестиал"
   description: "Нам конец..."
-  suffix: Boss, Ивент Ivan_Kuvalda
   components:
+  - type: DestructionResistance
   - type: IgnoreKudzu
   - type: Insulated
   - type: StunImmune
   - type: NoSlip
   - type: Sprite
-    sprite: _DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/celestial.rsi
+    sprite: _DeadSpace/Lavaland/Celestial/celestial.rsi
     layers:
     - state: Idle
   - type: PointLight
@@ -101,34 +100,33 @@
         - MobLayer
   - type: Celestial
     talkSounds:
-    - path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Celestial_Talk_1.ogg
-    - path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Celestial_Talk_2.ogg
-    - path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Celestial_Talk_3.ogg
+    - path: /Audio/_DeadSpace/Lavaland/Celestial/sounds/Celestial_Talk_1.ogg
+    - path: /Audio/_DeadSpace/Lavaland/Celestial/sounds/Celestial_Talk_2.ogg
+    - path: /Audio/_DeadSpace/Lavaland/Celestial/sounds/Celestial_Talk_3.ogg
     variationSound:
-      path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Fall_Variation_1.ogg
+      path: /Audio/_DeadSpace/Lavaland/Celestial/sounds/Fall_Variation_1.ogg
     beamSound:
-      path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Fall_Variation_2.ogg
+      path: /Audio/_DeadSpace/Lavaland/Celestial/sounds/Fall_Variation_2.ogg
     volleySound:
-      path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Fall_Final.ogg
+      path: /Audio/_DeadSpace/Lavaland/Celestial/sounds/Fall_Final.ogg
     futilityCrackSound:
-      path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Futile_Crack.ogg
+      path: /Audio/_DeadSpace/Lavaland/Celestial/sounds/Futile_Crack.ogg
     futilityOrbSounds:
-    - path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Futile_Variation_1.ogg
-    - path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Futile_Variation_2.ogg
-    - path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Futile_Variation_3.ogg
+    - path: /Audio/_DeadSpace/Lavaland/Celestial/sounds/Futile_Variation_1.ogg
+    - path: /Audio/_DeadSpace/Lavaland/Celestial/sounds/Futile_Variation_2.ogg
+    - path: /Audio/_DeadSpace/Lavaland/Celestial/sounds/Futile_Variation_3.ogg
     cutterChargeSound:
-      path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Cutter_Charge.ogg
+      path: /Audio/_DeadSpace/Lavaland/Celestial/sounds/Cutter_Charge.ogg
     cutterImpactSound:
-      path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Cutter_Impact.ogg
+      path: /Audio/_DeadSpace/Lavaland/Celestial/sounds/Cutter_Impact.ogg
     cutterFinalSound:
-      path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Cutter_Final.ogg
+      path: /Audio/_DeadSpace/Lavaland/Celestial/sounds/Cutter_Final.ogg
     bloomChargeSound:
-      path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Death_in_Bloom_Charge.ogg
+      path: /Audio/_DeadSpace/Lavaland/Celestial/sounds/Death_in_Bloom_Charge.ogg
     bloomFireSound:
-      path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Death_in_Bloom_Firing.ogg
+      path: /Audio/_DeadSpace/Lavaland/Celestial/sounds/Death_in_Bloom_Firing.ogg
     teleportSound:
-      path: /Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Celestial_Talk_1.ogg
-# DS14-end
+      path: /Audio/_DeadSpace/Lavaland/Celestial/sounds/Celestial_Talk_1.ogg
 
 - type: entity
   id: CelestialRift
@@ -186,13 +184,11 @@
     tags:
     - HideContextMenu
 
-# Локальный вариант: катсцены и фразы видят только игроки на карте босса
 - type: entity
   parent: MobCelestial
   id: MobCelestialLocal
   name: "Селестиал (локальный)"
   description: "Нам конец... Но только на этой карте."
-  suffix: Boss, Ивент Ivan_Kuvalda, локальные события
   components:
   - type: Celestial
     localizedEvents: true

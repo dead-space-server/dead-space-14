@@ -1,0 +1,26 @@
+- type: entity
+  id: LavalandGrindSpark
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    sprite: Effects/sparks.rsi
+    scale: 0.45,0.45
+    layers:
+    - state: sparks
+      shader: unshaded
+  - type: Physics
+    bodyType: Dynamic
+    canCollide: false
+    linearDamping: 3
+    fixedRotation: true
+  - type: PointLight
+    radius: 1.2
+    energy: 1.5
+    color: "#ffb347"
+  - type: TimedDespawn
+    lifetime: 0.4
+  - type: Tag
+    tags:
+    - HideContextMenu

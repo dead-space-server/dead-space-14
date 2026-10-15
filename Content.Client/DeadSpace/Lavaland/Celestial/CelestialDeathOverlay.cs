@@ -6,7 +6,7 @@ using Robust.Shared.Enums;
 using Robust.Shared.Graphics;
 using System.Numerics;
 
-namespace Content.Client.DeadSpace.Celestial;
+namespace Content.Client.DeadSpace.Lavaland.Celestial;
 
 /// <summary>
 /// Катсцена смерти Селестиала: полностью белый экран и живой глаз в центре.
@@ -15,7 +15,7 @@ namespace Content.Client.DeadSpace.Celestial;
 /// </summary>
 public sealed class CelestialDeathOverlay : Overlay
 {
-    private const string RsiPath = "/Textures/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/eye.rsi";
+    private const string RsiPath = "/Textures/_DeadSpace/Lavaland/Celestial/eye.rsi";
 
     private readonly RSI _eyeRsi;
     private readonly IClyde _windows;

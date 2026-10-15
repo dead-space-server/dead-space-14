@@ -52,6 +52,7 @@
     LavalandAshDrakeArena: 1
     LavalandBubblegumArena: 1
     LavalandColossusArena: 1
+    LavalandLegionArena: 1
   markerLayers:
   - LavalandOreIron
   - LavalandOreCoal
@@ -67,6 +68,135 @@
   - LavalandOreDiamond
   - LavalandOreBluespaceCrystal
   - LavalandOreGibtonite
+  goldgrubAmbush:
+    enabled: true
+    chance: 0.015
+    playerCooldown: 300
+    requireOre: true
+    prototype: MobLavalandGoldgrub
+  wildWhelps:
+    enabled: true
+    prototype: MobLavalandWildAshWhelp
+    randomInterval: 90
+    randomChance: 0.25
+    playerCooldown: 240
+    minWhelps: 1
+    maxWhelps: 2
+    spawnDistanceMin: 3
+    spawnDistanceMax: 5
+  dayCycle:
+    enabled: true
+    transitionTime: 60
+    startPhase: 0
+    phases:
+    - duration: 900
+      lightColor: "#A34931"
+      message: lavaland-day-cycle-day
+      messageColor: "#ffb347"
+    - duration: 900
+      lightColor: "#2B130D"
+      message: lavaland-day-cycle-night
+      messageColor: "#c46a3a"
+      deepNight:
+        chance: 0.3
+        warningTime: 60
+        duration: 300
+        afterDuration: 600
+        lightColor: "#000000"
+        warning: lavaland-day-cycle-deep-night-warning
+        message: lavaland-day-cycle-deep-night
+        endMessage: lavaland-day-cycle-deep-night-end
+        messageColor: "#8a1c1c"
+        jamTrackers: true
+        blockJaunter: true
+        wispGuide: true
+        blockNightVision: true
+        suppressLavaLight: true
+        pdaLightTime: 10
+        pdaLightCooldown: 180
+        helmetLightTime: 25
+        helmetLightCooldown: 180
+        flashlightTime: 60
+        wispLightRadius: 10
+        wispLightEnergy: 3
+        darknessGrace: 15
+        darknessInterval: 15
+        darknessDamage:
+          types:
+            Heat: 25
+  secretBoss:
+    enabled: true
+    awakenDelay: 10
+    pitMinDistance: 80
+    pitMaxDistance: 170
+    noiseRadius: 70
+    beepRange: 15
+    gatherRange: 5
+    requireAllPlayers: true
+    promptCooldown: 30
+    jumpDuration: 1.2
+    fallDuration: 10
+    mazeCells: 15
+    mazeFloorTile: FloorDark
+    mazeWall: WallRockBasaltLavalandBoundary
+    mazeLightColor: "#2E447F"
+    sleepDelay: 5
+    darkDelay: 5
+    arenaSize: 33
+    arenaTile: FloorRGlass
+    arenaBorder: LavalandCelestialInvisibleWall
+    arenaHoleRadius: 4
+    holeFence: LavalandCelestialHoleFence
+    faunaClearRadius: 25
+    sleepStatusEffect: StatusEffectLavalandCelestialSleep
+    arenaParallax: AsteroidsOutpost
+    bossPrototype: MobCelestialLavaland
+    bossHealth: 6000
+    bossHealthPerExtraPlayer: 2500
+    phase2Fraction: 0.5
+    wipeDelay: 20
+    lossSleep: 60
+    relocatePitOnLoss: true
+    rewardSleep: 60
+    blessings: [ NoSlip, Armor, Health, NoBreathing, Regeneration ]
+    healthBonus: 35
+    regenAmount: 5
+    regenInterval: 10
+    regenExcluded: [ Cellular ]
+  pipeSlide:
+    enabled: true
+    speed: 8
+    mountRange: 1.5
+    sparkInterval: 0.12
+    sparksMin: 1
+    sparksMax: 3
+    sparkSpeedMin: 1
+    sparkSpeedMax: 4
+    sparkPrototype: LavalandGrindSpark
+    grindSoundInterval: 0.6
+    dismountSpeed: 4
+  faunaRaid:
+    enabled: true
+    checkInterval: 2400
+    baseChance: 0.25
+    chanceIncreaseMin: 0.15
+    chanceIncreaseMax: 0.35
+    warningDuration: 60
+    duration: 180
+    minDistance: 12
+    maxDistance: 20
+    warningSound:
+      path: /Audio/_DeadSpace/Announcements/attention.ogg
+    tendrils:
+    - LavalandNecropolisTendrilGoliath
+    - LavalandNecropolisTendrilGoliath
+    - LavalandNecropolisTendrilWatcher
+    - LavalandNecropolisTendrilLegion
+    music:
+    - path: /Audio/_DeadSpace/Lavaland/Bosses/title1.ogg
+    - path: /Audio/_DeadSpace/Lavaland/Bosses/drake_fight.ogg
+    - path: /Audio/_DeadSpace/Lavaland/Bosses/bubblegum_fight.ogg
+    - path: /Audio/_DeadSpace/Lavaland/Bosses/colossus_fight.ogg
   faunaEnabled: true
   faunaInitialSpawnCount: 300
   faunaSoftCap: 300

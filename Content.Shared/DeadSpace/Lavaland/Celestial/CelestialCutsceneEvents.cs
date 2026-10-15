@@ -1,6 +1,6 @@
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.DeadSpace.Celestial;
+namespace Content.Shared.DeadSpace.Lavaland.Celestial;
 
 /// <summary>Начало стартовой катсцены Селестиала.</summary>
 [Serializable, NetSerializable]

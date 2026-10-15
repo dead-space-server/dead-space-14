@@ -4,6 +4,7 @@ using Content.Shared.Damage;
 using System.Numerics;
 using Robust.Shared.Audio;
 using Robust.Shared.Map;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
@@ -13,7 +14,7 @@ namespace Content.Server.DeadSpace.Lavaland.Components;
 public sealed partial class LavalandMadMinerComponent : Component
 {
     [DataField] public float MaxHealth = 1250f;
-    [DataField] public float NoticeRange = 12f;
+    [DataField] public float NoticeRange = 7f;
     [DataField] public float ChaseRange = 160f;
     [DataField] public float BlinkDistance = 4.5f;
     [DataField] public TimeSpan BlinkCooldown = TimeSpan.FromSeconds(1.25);
@@ -49,6 +50,16 @@ public sealed partial class LavalandMadMinerComponent : Component
     [DataField] public float ChainHandChance = 0.5f;
     [DataField] public EntProtoId? ExplosivePkaReward = "PKAUpgradeExplosiveLavaland";
     [DataField] public float ExplosivePkaChance = 0.85f;
+    /// <summary>Rewards that always drop on death.</summary>
+    [DataField] public List<EntProtoId> ExtraRewards = new();
+    [DataField] public float SpeechRadius = 12f;
+    [DataField] public Color SpeechColor = Color.FromHex("#ff3030");
+    [DataField] public TimeSpan SpeechCooldownMin = TimeSpan.FromSeconds(6);
+    [DataField] public TimeSpan SpeechCooldownMax = TimeSpan.FromSeconds(11);
+    [DataField] public float SpeechDuration = 4f;
+    [DataField] public List<LocId> SpeechLines = new();
+    [DataField] public TimeSpan HudInterval = TimeSpan.FromSeconds(0.5);
+    [DataField] public float RageHookDamageMultiplier = 2f;
 
     [ViewVariables] public EntityUid? Target;
     [ViewVariables] public readonly Dictionary<EntityUid, EntityUid> HookTargets = new();
@@ -65,6 +76,9 @@ public sealed partial class LavalandMadMinerComponent : Component
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))] public TimeSpan NextHook;
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))] public TimeSpan HookEnds;
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))] public TimeSpan HookPullStarts;
+    public TimeSpan NextSpeech;
+    public TimeSpan NextHud;
+    public readonly HashSet<ICommonSession> HudRecipients = new();
     public int AttackPattern;
     public int HudId;
     public SoundSpecifier? SelectedMusic;

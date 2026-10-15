@@ -106,6 +106,7 @@
   - type: RotInto
     entity: LavalandLegionSoulInert
     stage: 1
+  - type: LavalandStabilizable
   - type: StaticPrice
     price: 1000
 

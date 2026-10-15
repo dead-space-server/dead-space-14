@@ -1,4 +1,4 @@
-using Content.Shared.DeadSpace.Celestial;
+using Content.Shared.DeadSpace.Lavaland.Celestial;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
@@ -12,7 +12,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Maths;
 using System.Numerics;
 
-namespace Content.Client.DeadSpace.Celestial;
+namespace Content.Client.DeadSpace.Lavaland.Celestial;
 
 /// <summary>
 /// Клиентская сторона Селестиала: субтитры поверх UI-корня (видны и в игре, и в лобби)
@@ -95,7 +95,7 @@ public sealed class CelestialClientSystem : EntitySystem
 
     private void OnSpeak(CelestialSpeakEvent ev, EntitySessionEventArgs args)
     {
-        _subtitles?.Show(ev.Text, ev.Duration);
+        _subtitles?.Show(ev.Text, ev.Duration, ev.Color);
     }
 
     private void OnBeam(CelestialBeamVisualEvent ev)
@@ -114,7 +114,7 @@ public sealed class CelestialClientSystem : EntitySystem
 
         // музыка катсцены
         var intro = _audio.PlayGlobal(
-            "/Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/music/Celestial_Intro.ogg",
+            "/Audio/_DeadSpace/Lavaland/Celestial/music/Celestial_Intro.ogg",
             Filter.Local(),
             false,
             AudioParams.Default.WithVolume(-2f));
@@ -149,7 +149,7 @@ public sealed class CelestialClientSystem : EntitySystem
 
         // музыка концовки
         var deathMusic = _audio.PlayGlobal(
-            "/Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/music/Celestial_Cutscene_Music.ogg",
+            "/Audio/_DeadSpace/Lavaland/Celestial/music/Celestial_Cutscene_Music.ogg",
             Filter.Local(),
             false,
             AudioParams.Default.WithVolume(-2f));
@@ -164,7 +164,7 @@ public sealed class CelestialClientSystem : EntitySystem
 
         // 1 фраза - 1 звук
         _audio.PlayGlobal(
-            "/Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Celestial_Talk_5.ogg",
+            "/Audio/_DeadSpace/Lavaland/Celestial/sounds/Celestial_Talk_5.ogg",
             Filter.Local(),
             false,
             AudioParams.Default.WithVolume(-4f));

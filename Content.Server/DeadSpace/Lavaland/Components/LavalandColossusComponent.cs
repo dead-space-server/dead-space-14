@@ -78,6 +78,53 @@ public sealed partial class LavalandColossusComponent : Component
     [ViewVariables]
     public bool Enraged;
 
+    // DS14: fury below a quarter of health - angry sprite, runs at the players, marked blasts around them.
+
+    [DataField]
+    public float FuryHealthFraction = 0.25f;
+
+    /// <summary>Running speed at the players while furious, tiles per second.</summary>
+    [DataField]
+    public float FuryChaseSpeed = 4.5f;
+
+    [DataField]
+    public float FuryChaseReach = 2f;
+
+    [DataField]
+    public TimeSpan FuryBlastInterval = TimeSpan.FromSeconds(5);
+
+    /// <summary>Between the marks appearing and the blasts.</summary>
+    [DataField]
+    public TimeSpan FuryBlastDelay = TimeSpan.FromSeconds(1.5);
+
+    /// <summary>Marks around each player (one is always under them).</summary>
+    [DataField]
+    public int FuryMarksPerPlayer = 4;
+
+    [DataField]
+    public float FuryMarkRadius = 3.5f;
+
+    [DataField]
+    public string FuryMarkPrototype = "LavalandColossusFuryMark";
+
+    [DataField]
+    public float FuryExplosionIntensity = 30f;
+
+    [DataField]
+    public float FuryExplosionSlope = 6f;
+
+    [DataField]
+    public float FuryExplosionMaxTile = 6f;
+
+    [ViewVariables]
+    public bool Furious;
+
+    [ViewVariables]
+    public TimeSpan NextFuryBlast;
+
+    [ViewVariables]
+    public readonly List<(Robust.Shared.Map.MapCoordinates Coords, TimeSpan At)> PendingFuryBlasts = new();
+
     [ViewVariables]
     public TimeSpan NextShotSound;
 

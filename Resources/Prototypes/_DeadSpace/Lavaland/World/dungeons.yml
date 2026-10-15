@@ -74,7 +74,6 @@
     table: !type:NestedSelector
       tableId: SalvageTreasureSpawnerValuable
 
-
 - type: entityTable
   id: LavalandLavaBrigMobs
   table: !type:GroupSelector
@@ -94,8 +93,6 @@
     - id: MobLavalandLegion
       weight: 1
 
-# Rooms
-# Large
 - type: dungeonRoom
   id: LavalandLavaBrig17x5a
   size: 17,5
@@ -144,7 +141,6 @@
   tags:
   - LavalandLavaBrig
 
-# Medium
 - type: dungeonRoom
   id: LavalandLavaBrig11x5a
   size: 11,5
@@ -273,7 +269,6 @@
   tags:
   - LavalandLavaBrig
 
-# Small
 - type: dungeonRoom
   id: LavalandLavaBrig5x5a
   size: 5,5

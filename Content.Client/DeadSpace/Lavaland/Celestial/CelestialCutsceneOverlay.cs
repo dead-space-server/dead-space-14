@@ -8,7 +8,7 @@ using Robust.Shared.Enums;
 using Robust.Shared.Graphics;
 using System.Numerics;
 
-namespace Content.Client.DeadSpace.Celestial;
+namespace Content.Client.DeadSpace.Lavaland.Celestial;
 
 /// <summary>
 /// Оверлей стартовой катсцены: полупрозрачный чёрный экран,
@@ -16,7 +16,7 @@ namespace Content.Client.DeadSpace.Celestial;
 /// </summary>
 public sealed class CelestialCutsceneOverlay : Overlay
 {
-    private const string RsiPath = "/Textures/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/celestial.rsi";
+    private const string RsiPath = "/Textures/_DeadSpace/Lavaland/Celestial/celestial.rsi";
     private const float FrameTime = 0.1f;
     private const int FrameCount = 30;
     private const float SpriteSize = 950f; // размер спрайта на экране, px

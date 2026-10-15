@@ -1,7 +1,7 @@
 using System.Numerics;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.DeadSpace.Celestial;
+namespace Content.Shared.DeadSpace.Lavaland.Celestial;
 
 /// <summary>
 /// Векторный луч Селестиала: клиент сам рисует толстую полосу от старта до конца.

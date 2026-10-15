@@ -1,4 +1,4 @@
-using Content.Shared.DeadSpace.Celestial;
+using Content.Shared.DeadSpace.Lavaland.Celestial;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Map;
@@ -8,7 +8,7 @@ using System.Numerics;
 using Robust.Shared.Utility;
 using System.Linq;
 
-namespace Content.Client.DeadSpace.Celestial;
+namespace Content.Client.DeadSpace.Lavaland.Celestial;
 
 /// <summary>
 /// Векторная отрисовка атак Селестиала:

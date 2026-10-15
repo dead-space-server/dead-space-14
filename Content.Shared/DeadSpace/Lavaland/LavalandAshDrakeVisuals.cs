@@ -22,3 +22,15 @@ public enum LavalandAshDrakeVisualState : byte
     Swoop,
     Dead,
 }
+/// <summary>The colossus below a quarter of its health (Goob-Station angry animation).</summary>
+[Serializable, NetSerializable]
+public enum LavalandColossusVisuals : byte
+{
+    Angry,
+}
+
+[Serializable, NetSerializable]
+public enum LavalandColossusVisualLayers : byte
+{
+    Base,
+}

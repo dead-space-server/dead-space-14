@@ -173,6 +173,7 @@
   id: SurvivalKnife
   description: Weapon of first and last resort for combatting space carp.
   components:
+  - type: KineticBayonet # DS14
   - type: Sprite
     sprite: Objects/Weapons/Melee/survival_knife.rsi
     state: icon

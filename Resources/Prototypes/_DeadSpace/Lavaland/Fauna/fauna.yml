@@ -5,11 +5,9 @@
   - type: LavalandFauna
   - type: LavalandWeatherImmune
   - type: LavalandChasmImmune
-  # DS14-start: PressureImmunity status effect migration
   - type: PermanentStatusEffects
     statusEffects:
     - StatusEffectPressureImmunity
-  # DS14-end
   - type: Flammable
     maximumFireStacks: 0
     firestacksOnIgnite: 0
@@ -30,6 +28,9 @@
   parent: [ MobGoliath, BaseMobLavalandFauna ]
   suffix: Lavaland
   components:
+  - type: LavalandTrophyDrop
+    trophy: CrusherTrophyGoliathTentacle
+    chance: 0.25
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Mobs/lavaland_monsters.rsi
   - type: Butcherable
@@ -132,6 +133,9 @@
   name: legion
   description: You can still see what was once human under the shifting mass of corruption.
   components:
+  - type: LavalandTrophyDrop
+    trophy: CrusherTrophyLegionSkull
+    chance: 0.25
   - type: Sprite
     drawdepth: Mobs
     sprite: _DeadSpace/Lavaland/Mobs/lavaland_monsters.rsi

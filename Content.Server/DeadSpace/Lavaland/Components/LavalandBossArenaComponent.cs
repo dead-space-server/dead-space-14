@@ -1,5 +1,7 @@
+using Robust.Shared.Audio;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Lavaland.Components;
 
@@ -95,4 +97,30 @@ public sealed partial class LavalandBossArenaComponent : Component
     
     [ViewVariables]
     public float ScaledMaxHealth;
+
+    [ViewVariables]
+    public float SealHealthFraction;
+
+    /// <summary>Players here walk tile by tile (see LavalandHierophantBeatSystem).</summary>
+    [ViewVariables]
+    public bool TileMovement;
+
+    [ViewVariables]
+    public EntProtoId? SealWallPrototype;
+
+    [ViewVariables]
+    public SoundSpecifier? SealSound;
+
+    [ViewVariables]
+    public LocId? SealMessage;
+
+    [ViewVariables]
+    public bool Sealed;
+
+    /// <summary>Sealed because players built something inside: jaunters don't work until the fight ends.</summary>
+    [ViewVariables]
+    public bool SealedByConstruction;
+
+    [ViewVariables]
+    public readonly List<EntityUid> SealWalls = new();
 }

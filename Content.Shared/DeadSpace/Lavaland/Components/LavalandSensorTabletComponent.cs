@@ -22,5 +22,12 @@ public sealed partial class LavalandSensorTabletComponent : Component
     [DataField] public float MobPointSize = 0.65f;
     [DataField] public float TerrainPointSize = 0.52f;
     [DataField] public TimeSpan UpdateInterval = TimeSpan.FromSeconds(1);
+
+    /// <summary>While a day phase jams trackers: chance for a miner mark to vanish for an update.</summary>
+    [DataField] public float JamDropChance = 0.5f;
+
+    /// <summary>While jammed, miner marks are shown up to this many tiles away from the real spot.</summary>
+    [DataField] public float JamScatter = 15f;
     public TimeSpan NextUpdate;
+    public TimeSpan NextBeep;
 }

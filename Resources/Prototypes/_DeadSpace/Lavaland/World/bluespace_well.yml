@@ -2,7 +2,7 @@
   id: LavalandBluespaceWell
   parent: BaseMachine
   name: блюспейс колодец
-  description: Собирает оставленную на лаваленде руду. Альт-клик выгружает содержимое.
+  description: Собирает оставленную на лаваленде руду и моркит из подключённых трубами добытчиков. Альт-клик выгружает руду.
   components:
   - type: Transform
     anchored: true
@@ -10,28 +10,11 @@
     sprite: _DeadSpace/Lavaland/Structures/Machines/bluespace_well.rsi
     state: icon
   - type: LavalandBluespaceWell
+    oreRaidPercents: [ 50 ]
+    morkiteRaidPercents: [ 20 ]
     requiredOre: 1000
     collectionDelay: 60
-    scanInterval: 5
     returnDelay: 60
-    waveCheckInterval: 1800
-    waveChance: 0.35
-    waveWarningDuration: 60
-    waveWarningSound:
-      path: /Audio/_DeadSpace/Announcements/attention.ogg
-    waveDuration: 180
-    waveMinDistance: 12
-    waveMaxDistance: 20
-    waveTendrils:
-    - LavalandNecropolisTendrilGoliath
-    - LavalandNecropolisTendrilGoliath
-    - LavalandNecropolisTendrilWatcher
-    - LavalandNecropolisTendrilLegion
-    waveMusic:
-    - path: /Audio/_DeadSpace/Lavaland/Bosses/title1.ogg
-    - path: /Audio/_DeadSpace/Lavaland/Bosses/drake_fight.ogg
-    - path: /Audio/_DeadSpace/Lavaland/Bosses/bubblegum_fight.ogg
-    - path: /Audio/_DeadSpace/Lavaland/Bosses/colossus_fight.ogg
     oreTypes: [SteelOre, Coal, GoldOre, SilverOre, PlasmaOre, SpaceQuartz, UraniumOre, BananiumOre, DiamondOre, SaltOre, MagmiteOre, BluespaceCrystalOre]
   - type: Damageable
     damageContainer: StructuralInorganic

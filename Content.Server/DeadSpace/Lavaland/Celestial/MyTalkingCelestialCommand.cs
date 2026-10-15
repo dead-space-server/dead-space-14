@@ -6,7 +6,7 @@ using Robust.Shared.Timing;
 using System.Text.RegularExpressions;
 using Robust.Shared.Random;
 
-namespace Content.Server.DeadSpace.Celestial;
+namespace Content.Server.DeadSpace.Lavaland.Celestial;
 
 /// <summary>
 /// mytalkingcelestial "фраза" время_в_секундах —

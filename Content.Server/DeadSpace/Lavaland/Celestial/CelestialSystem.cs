@@ -1,7 +1,7 @@
 using Content.Server.Audio;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
-using Content.Shared.DeadSpace.Celestial;
+using Content.Shared.DeadSpace.Lavaland.Celestial;
 using Content.Shared.Maps;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -19,7 +19,7 @@ using Robust.Shared.Timing;
 using System.Linq;
 using System.Numerics;
 
-namespace Content.Server.DeadSpace.Celestial;
+namespace Content.Server.DeadSpace.Lavaland.Celestial;
 
 /// <summary>
 /// Поведение босса Селестиала: медленно движется, разрушает всё под собой
@@ -143,7 +143,7 @@ public sealed class CelestialSystem : EntitySystem
                 {
                     Announce(
                         new SoundPathSpecifier(
-                            "/Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Celestial_Talk_4.ogg"),
+                            "/Audio/_DeadSpace/Lavaland/Celestial/sounds/Celestial_Talk_4.ogg"),
                         new AudioParams { Volume = -2f },
                         localized,
                         bossMap);
@@ -168,7 +168,7 @@ public sealed class CelestialSystem : EntitySystem
             // финальный крик - без привязки к ентити (босс мог быть удалён)
             Announce(
                 new SoundPathSpecifier(
-                    "/Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Celestial_screams_really_loudly.ogg"),
+                    "/Audio/_DeadSpace/Lavaland/Celestial/sounds/Celestial_screams_really_loudly.ogg"),
                 new AudioParams { Volume = 2f },
                 localized,
                 bossMap);
@@ -195,13 +195,13 @@ public sealed class CelestialSystem : EntitySystem
             DestroySurroundings((uid, comp), frameTime);
 
             // вторая фаза: 500к урона -> рёв и бессмертие
-            if (!comp.Phase2 && TryComp<DamageableComponent>(uid, out var dmgCheck) && dmgCheck.TotalDamage >= 500000f)
+            if (!comp.Phase2 && TryComp<DamageableComponent>(uid, out var dmgCheck) && dmgCheck.TotalDamage >= comp.Phase2Damage)
             {
                 comp.Phase2 = true;
 
                 Sound(
                     new SoundPathSpecifier(
-                        "/Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Roar_Phase2.ogg"),
+                        "/Audio/_DeadSpace/Lavaland/Celestial/sounds/Roar_Phase2.ogg"),
                     uid,
                     2f);
 
@@ -212,6 +212,7 @@ public sealed class CelestialSystem : EntitySystem
 
             // бессмертие: сбрасываем урон только если его реально нанесли
             if (comp.Phase2
+                && comp.Phase2Immortal
                 && TryComp<DamageableComponent>(uid, out var dmgImmortal)
                 && dmgImmortal.TotalDamage > 0f)
             {
@@ -355,6 +356,38 @@ public sealed class CelestialSystem : EntitySystem
         RaiseToMapOrAll(new CelestialDeathEndEvent());
     }
 
+    // DS14-start: секретный босс лаваленда - катсцена смерти только выбранным игрокам
+    private static readonly string[] DeathPhrases =
+    {
+        "ТЫ ВЛАДЕЕШЬ ТЕМ, БЕЗ ЧЕГО ТОТ ЦВЕТОК СГНИЛ,",
+        "СВЕТОМ, ЗАТМЕВАЮЩИМ САМ СВЕТ.",
+        "КОРНЯМИ, ЧТО УХОДЯТ ГЛУБЖЕ САМОЙ БЕЗДНЫ.",
+        "НО ЭТОМУ ПОРОЧНОМУ ФАРСУ НИКОГДА НЕ ДАТЬ ВСХОДОВ.",
+        "ОСЛЕПЛЕННЫЙ СОБСТВЕННЫМ ЖЕ СВЕЧЕНИЕМ,",
+        "ТЫ НЕ ВЕДАЕШЬ О СУДЬБЕ, ЧТО ЖДЕТ ТЕБЯ В ПУСТОТЕ ВНИЗУ.",
+        "КОГДА ТВОИ ЛЕПЕСТКИ БУДУТ ПОГЛОЩЕНЫ ИЗНУТРИ,",
+        "Я ПРЕБУДУ ЗДЕСЬ И ДАЛЬШЕ.",
+        "НАБЛЮДАЯ.",
+        "ВЫЖИДАЯ.",
+    };
+
+    /// <summary>Катсцена смерти для заданных игроков, даже если они сменят карту. Возвращает её длину.</summary>
+    public TimeSpan PlayDeathCutscene(Filter recipients, float phraseDuration = 6f)
+    {
+        RaiseNetworkEvent(new CelestialDeathEvent(), recipients);
+        for (var i = 0; i < DeathPhrases.Length; i++)
+        {
+            var phrase = DeathPhrases[i];
+            Timer.Spawn(TimeSpan.FromSeconds(i * phraseDuration),
+                () => RaiseNetworkEvent(new CelestialDeathSpeakEvent(phrase, phraseDuration), recipients));
+        }
+
+        var length = TimeSpan.FromSeconds(DeathPhrases.Length * phraseDuration);
+        Timer.Spawn(length, () => RaiseNetworkEvent(new CelestialDeathEndEvent(), recipients));
+        return length;
+    }
+    // DS14-end
+
     private void RaiseToMapOrAll(EntityEventArgs ev)
     {
         RaiseToBossMapOrAll(ev, _deathCutsceneMap != null, _deathCutsceneMap ?? MapId.Nullspace);
@@ -439,9 +472,9 @@ public sealed class CelestialSystem : EntitySystem
 
     private readonly List<SoundSpecifier> _talkSounds = new()
     {
-        new SoundPathSpecifier("/Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Celestial_Talk_1.ogg"),
-        new SoundPathSpecifier("/Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Celestial_Talk_2.ogg"),
-        new SoundPathSpecifier("/Audio/_DeadSpace/TEMP_FOR_EVENT/Ivan_KuvalDROID/sounds/Celestial_Talk_3.ogg"),
+        new SoundPathSpecifier("/Audio/_DeadSpace/Lavaland/Celestial/sounds/Celestial_Talk_1.ogg"),
+        new SoundPathSpecifier("/Audio/_DeadSpace/Lavaland/Celestial/sounds/Celestial_Talk_2.ogg"),
+        new SoundPathSpecifier("/Audio/_DeadSpace/Lavaland/Celestial/sounds/Celestial_Talk_3.ogg"),
     };
 
     private void SpeakVoice(Entity<CelestialComponent> ent, float volume)
@@ -588,6 +621,8 @@ public sealed class CelestialSystem : EntitySystem
                 }
 
                 // ломаем пол под ударом
+                if (!comp.BreakTiles)
+                    return;
                 foreach (var gridEnt in _mapManager.GetAllGrids(strikeMap.MapId))
                 {
                     foreach (var tile in _map.GetTilesIntersecting(gridEnt.Owner, gridEnt.Comp, new Circle(strikeMap.Position, 0.6f)))
@@ -1364,7 +1399,7 @@ public sealed class CelestialSystem : EntitySystem
     /// </summary>
     private void TeleportBoss(Entity<CelestialComponent> ent)
     {
-        if (!CanMove(ent))
+        if (!CanMove(ent) || ent.Comp.Stationary)
             return;
 
         var targets = GetTargets(ent, 5);

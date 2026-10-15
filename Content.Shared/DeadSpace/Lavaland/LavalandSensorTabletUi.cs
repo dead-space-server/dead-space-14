@@ -24,15 +24,22 @@ public enum LavalandRadarPointKind : byte
     BaseWall,
     Lava,
     MorkiteSearchArea,
+    /// <summary>Purple interference around the Celestial pit; Size is the radius.</summary>
+    CelestialNoise,
+    /// <summary>A marker beacon with a message; the message is in Label.</summary>
+    Beacon,
 }
 
 [Serializable, NetSerializable]
-public sealed class LavalandRadarPoint(Vector2 position, Color color, float size, LavalandRadarPointKind kind)
+public sealed class LavalandRadarPoint(Vector2 position, Color color, float size, LavalandRadarPointKind kind, string? label = null)
 {
     public Vector2 Position = position;
     public Color Color = color;
     public float Size = size;
     public LavalandRadarPointKind Kind = kind;
+
+    /// <summary>Text shown when the mouse is over the point (beacon messages).</summary>
+    public string? Label = label;
 }
 
 [Serializable, NetSerializable]

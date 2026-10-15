@@ -23,6 +23,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Parallax.Biomes;
 using Content.Shared.PAI;
+using Content.Shared.Popups;
 using Robust.Server.Player;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
@@ -67,6 +68,7 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         Vector2i.Zero,
     };
 
+    [Dependency] private readonly Content.Server.Decals.DecalSystem _decals = default!;
     [Dependency] private readonly BiomeSystem _biome = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -83,6 +85,8 @@ public sealed class LavalandBossArenaSystem : EntitySystem
     [Dependency] private readonly TileSystem _tile = default!;
     [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
     [Dependency] private readonly ShuttleSystem _shuttle = default!;
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
 
     private List<Entity<MapGridComponent>> _nearbyGrids = new();
     private readonly List<EntityUid> _anchoredToDelete = new();
@@ -90,6 +94,7 @@ public sealed class LavalandBossArenaSystem : EntitySystem
     private readonly List<(Vector2i Index, Tile Tile)> _reservedTiles = new();
     private readonly List<(Vector2i Index, Tile Tile)> _terrainTiles = new();
     private readonly HashSet<Vector2i> _decorationTiles = new();
+    private readonly HashSet<Entity<MobStateComponent>> _sealMobs = new();
     private int _nextArenaId = 1;
 
     public override void Initialize()
@@ -137,6 +142,7 @@ public sealed class LavalandBossArenaSystem : EntitySystem
             if (!arena.Ended && arena.FightStarted && arena.NextHudUpdate <= now)
             {
                 arena.NextHudUpdate = now + HudUpdateInterval;
+                TrySealArena((uid, arena));
                 SendHudUpdateToParticipants((uid, arena));
             }
         }
@@ -250,6 +256,11 @@ public sealed class LavalandBossArenaSystem : EntitySystem
             : arenaPrototype.EmptyResetDelay;
         arena.EmptyResetHealFraction = Math.Clamp(arenaPrototype.EmptyResetHealFraction, 0f, 1f);
         arena.EmptyResetMinHeal = Math.Max(0f, arenaPrototype.EmptyResetMinHeal);
+        arena.SealHealthFraction = Math.Clamp(arenaPrototype.SealHealthFraction, 0f, 1f);
+        arena.TileMovement = arenaPrototype.TileMovement;
+        arena.SealWallPrototype = arenaPrototype.SealWallPrototype ?? arenaPrototype.WallPrototype;
+        arena.SealSound = arenaPrototype.SealSound;
+        arena.SealMessage = arenaPrototype.SealMessage;
         arena.BossName = string.IsNullOrWhiteSpace(bossComponent.BossName)
             ? Name(boss)
             : bossComponent.BossName;
@@ -436,7 +447,8 @@ public sealed class LavalandBossArenaSystem : EntitySystem
             if (decoration.Count <= 0)
                 continue;
 
-            if (!_prototype.HasIndex<EntityPrototype>(decoration.Prototype.Id))
+            if (decoration.Decals.Count == 0 &&
+                (decoration.Prototype is not { } decorationPrototype || !_prototype.HasIndex<EntityPrototype>(decorationPrototype.Id)))
             {
                 Log.Error($"Lavaland boss arena decoration cannot spawn: missing entity prototype {decoration.Prototype}.");
                 continue;
@@ -488,7 +500,18 @@ public sealed class LavalandBossArenaSystem : EntitySystem
             if (!IsValidDecorationTile(gridUid, grid, decoration, width, height, tile))
                 continue;
 
-            SpawnAnchored(decoration.Prototype.Id, gridUid, grid, tile);
+            if (decoration.Decals.Count > 0)
+            {
+                // Decals lie on the floor: they do not take the tile from other decorations.
+                var decal = decoration.Decals[random.Next(decoration.Decals.Count)];
+                _decals.TryAddDecal(decal.Id, new EntityCoordinates(gridUid, tile), out _, decoration.DecalColor,
+                    Angle.FromDegrees(random.Next(4) * 90), cleanable: true);
+                current = tile;
+                spawned++;
+                continue;
+            }
+
+            SpawnAnchored(decoration.Prototype!.Value.Id, gridUid, grid, tile);
             _decorationTiles.Add(tile);
             current = tile;
             spawned++;
@@ -714,14 +737,132 @@ public sealed class LavalandBossArenaSystem : EntitySystem
             return;
         }
 
-        var currentHealth = GetCurrentBossHealth(arena.Boss, arena.ScaledMaxHealth);
+        var healthEv = GetHudHealth(arena);
         var ev = new LavalandBossHudUpdateEvent(
             arena.ArenaId,
             arena.BossName,
-            currentHealth,
-            arena.ScaledMaxHealth,
+            healthEv.Current,
+            healthEv.Max,
             arena.Participants.Count);
         RaiseNetworkEvent(ev, session.Channel);
+    }
+
+    /// <summary>Bosses made of several bodies (Legion) report their combined health.</summary>
+    private LavalandBossHudHealthEvent GetHudHealth(LavalandBossArenaComponent arena)
+    {
+        var healthEv = new LavalandBossHudHealthEvent(
+            GetCurrentBossHealth(arena.Boss, arena.ScaledMaxHealth),
+            arena.ScaledMaxHealth,
+            arena.ScaledMaxHealth / Math.Max(1f, arena.MaxHealth));
+        RaiseLocalEvent(arena.Boss, ref healthEv);
+        return healthEv;
+    }
+
+    /// <summary>
+    /// Players built something in the arena: the fight starts right away, the exits close
+    /// and jaunters stop working until the fight is over.
+    /// </summary>
+    public void HandleConstructionViolation(EntityUid arenaGrid)
+    {
+        if (!TryComp<LavalandBossArenaComponent>(arenaGrid, out var arena) || arena.Ended || !Exists(arena.Boss))
+            return;
+
+        if (!arena.FightStarted)
+            StartFight((arenaGrid, arena));
+
+        arena.SealedByConstruction = true;
+        TrySealArena((arenaGrid, arena), true);
+    }
+
+    /// <summary>True if the entity stands in an arena that was sealed because of player construction.</summary>
+    /// <summary>
+    /// The arena is sealed - the boss is at half health or below, or players built inside:
+    /// jaunters do not work until the fight ends.
+    /// </summary>
+    public bool IsInSealedArena(EntityUid uid)
+    {
+        return Transform(uid).GridUid is { } grid &&
+               TryComp<LavalandBossArenaComponent>(grid, out var arena) &&
+               (arena.Sealed || arena.SealedByConstruction) && !arena.Ended;
+    }
+
+    private void TrySealArena(Entity<LavalandBossArenaComponent> arena, bool force = false)
+    {
+        var comp = arena.Comp;
+        if (comp.Sealed || comp.Ended || !comp.FightStarted ||
+            comp.SealWallPrototype is not { } wall || !Exists(comp.Boss) ||
+            !TryComp<MapGridComponent>(comp.Grid, out var grid))
+        {
+            return;
+        }
+
+        if (!force)
+        {
+            if (comp.SealHealthFraction <= 0f)
+                return;
+
+            var health = GetHudHealth(comp);
+            if (health.Max <= 0f || health.Current > health.Max * comp.SealHealthFraction)
+                return;
+        }
+
+        comp.Sealed = true;
+        var halfWidth = comp.Width / 2;
+        var halfHeight = comp.Height / 2;
+        for (var i = -EntranceHalfWidth; i <= EntranceHalfWidth; i++)
+        {
+            SealTile(arena, grid, wall, new Vector2i(i, halfHeight), new Vector2i(0, -1));
+            SealTile(arena, grid, wall, new Vector2i(i, -halfHeight), new Vector2i(0, 1));
+            SealTile(arena, grid, wall, new Vector2i(halfWidth, i), new Vector2i(-1, 0));
+            SealTile(arena, grid, wall, new Vector2i(-halfWidth, i), new Vector2i(1, 0));
+        }
+
+        if (comp.SealSound != null)
+            _audio.PlayPvs(comp.SealSound, comp.Boss);
+
+        if (comp.SealMessage is not { } message)
+            return;
+
+        foreach (var session in _players.Sessions)
+        {
+            if (session.AttachedEntity is { Valid: true } attached && IsCombatParticipant(attached, comp))
+                _popup.PopupEntity(Loc.GetString(message), attached, attached, PopupType.LargeCaution);
+        }
+    }
+
+    /// <summary>Walls off one entrance tile, pushing anyone standing in it into the arena.</summary>
+    private void SealTile(
+        Entity<LavalandBossArenaComponent> arena,
+        MapGridComponent grid,
+        EntProtoId wall,
+        Vector2i tile,
+        Vector2i inward)
+    {
+        var coordinates = _map.GridTileToLocal(arena.Comp.Grid, grid, tile);
+        _sealMobs.Clear();
+        _lookup.GetEntitiesInRange(coordinates, 0.45f, _sealMobs, LookupFlags.Dynamic);
+        foreach (var mob in _sealMobs)
+        {
+            _transform.SetCoordinates(mob, _map.GridTileToLocal(arena.Comp.Grid, grid, tile + inward));
+        }
+
+        _sealMobs.Clear();
+        var uid = Spawn(wall.Id, coordinates);
+        if (TryComp(uid, out TransformComponent? xform) && !xform.Anchored)
+            _transform.AnchorEntity((uid, xform), (arena.Comp.Grid, grid), tile);
+        arena.Comp.SealWalls.Add(uid);
+    }
+
+    private void UnsealArena(LavalandBossArenaComponent arena)
+    {
+        foreach (var wall in arena.SealWalls)
+        {
+            if (!TerminatingOrDeleted(wall))
+                QueueDel(wall);
+        }
+
+        arena.SealWalls.Clear();
+        arena.Sealed = false;
     }
 
     private void SendMusicStart(ICommonSession session, LavalandBossArenaComponent arena)
@@ -785,6 +926,7 @@ public sealed class LavalandBossArenaSystem : EntitySystem
         if (!arena.FightStarted && ShouldStartFightByDamage(arena, args))
             StartFight((arenaUid, arena));
 
+        TrySealArena((arenaUid, arena));
         SendHudUpdateToParticipants((arenaUid, arena));
     }
 
@@ -856,6 +998,8 @@ public sealed class LavalandBossArenaSystem : EntitySystem
             return;
 
         arena.Comp.Ended = true;
+        UnsealArena(arena.Comp);
+        arena.Comp.SealedByConstruction = false;
         if (arena.Comp.DeleteOnBossDeath)
             arena.Comp.CleanupAt = _timing.CurTime + BossDeadCleanupDelay;
 
@@ -882,6 +1026,8 @@ public sealed class LavalandBossArenaSystem : EntitySystem
 
         _transform.SetCoordinates(arena.Comp.Boss, _map.GridTileToLocal(arena.Comp.Grid, grid, arena.Comp.BossSpawnTile));
         HealBossOnReset(arena.Comp);
+        UnsealArena(arena.Comp);
+        arena.Comp.SealedByConstruction = false;
         arena.Comp.FightStarted = false;
         arena.Comp.ScaledMaxHealth = arena.Comp.MaxHealth;
         arena.Comp.PeakParticipantCount = 0;

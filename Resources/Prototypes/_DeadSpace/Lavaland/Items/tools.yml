@@ -53,6 +53,9 @@
     burstProjectilePrototype: LavalandResonanceBolt
     burstProjectileCount: 4
     burstProjectileSpeed: 9
+    bossDamageFalloff: 0.05
+    bossDamageMinMultiplier: 0.1
+    bossDamageWindow: 60
 
 - type: entity
   parent: Pickaxe
@@ -482,17 +485,21 @@
         Blunt: 10
         Heat: 5
   - type: LavalandHierophantStaff
+    blinkCooldown: 14
+    blinkRange: 9
+    blessTime: 5
+    blessCooldown: 200
+    blessRange: 1.5
+  - type: LavalandAltUseAction
   - type: ActionGrant
     actions:
     - ActionLavalandHierophantStaffCross
     - ActionLavalandHierophantStaffBurst
-    - ActionLavalandHierophantStaffBlink
     - ActionLavalandHierophantStaffChaser
   - type: ItemActionGrant
     actions:
     - ActionLavalandHierophantStaffCross
     - ActionLavalandHierophantStaffBurst
-    - ActionLavalandHierophantStaffBlink
     - ActionLavalandHierophantStaffChaser
   - type: EmitSoundOnPickup
     sound:
@@ -810,8 +817,7 @@
         Structural: 50
     bossDamage:
       types:
-        Blunt: 50
-        Structural: 75
+        Blunt: 5
 
 - type: Tag
   id: GunUpgradeExplosiveLavaland

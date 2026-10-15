@@ -4,12 +4,12 @@ using Robust.Shared.Serialization;
 namespace Content.Shared.DeadSpace.Lavaland;
 
 [Serializable, NetSerializable]
-public sealed class LavalandWellWaveTimerEvent : EntityEventArgs
+public sealed class LavalandFaunaRaidTimerEvent : EntityEventArgs
 {
     public int Seconds;
     public bool Warning;
-    public LavalandWellWaveTimerEvent() { }
-    public LavalandWellWaveTimerEvent(int seconds, bool warning)
+    public LavalandFaunaRaidTimerEvent() { }
+    public LavalandFaunaRaidTimerEvent(int seconds, bool warning)
     {
         Seconds = seconds;
         Warning = warning;
@@ -17,4 +17,4 @@ public sealed class LavalandWellWaveTimerEvent : EntityEventArgs
 }
 
 [Serializable, NetSerializable]
-public sealed class LavalandWellWaveTimerHideEvent : EntityEventArgs;
+public sealed class LavalandFaunaRaidTimerHideEvent : EntityEventArgs;
