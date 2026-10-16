@@ -26,7 +26,17 @@ public sealed class CelestialSubtitleRenderer
     private const float EndDuration = 0.55f;        // финальная последовательность
     private const float BlinkPeriod = 0.45f;       // период мигания (два раза)
 
+    // Появление: РЕЗКО. Первый кадр — текст растянут и смещён ВПРАВО, за 2-3 кадра
+    // он уходит на своё место (туда, где стоит обычно). Наложенные копии чуть
+    // отстают и гаснут дольше, поэтому после "основного" кадра ещё немного оффсетятся.
+    private const float IntroWhipTime = 0.06f;      // ~3 кадра при 60 fps — резкий хлыст
+    private const float IntroGhostLagTime = 0.18f;  // копии отстают и гаснут дольше
+    private const float IntroStretch = 3.5f;        // растяжение в первом кадре (во сколько раз)
+    private const float IntroOffsetX = 380f;        // насколько правее стартует текст, px
+    private const int IntroGhosts = 3;              // сколько наложенных копий подмешивать
+
     private static readonly Color TextColor = new(0xFF / 255f, 0x52 / 255f, 0x98 / 255f);
+    private static readonly Color RedTextColor = new(0.82f, 0.08f, 0.08f);
     private static readonly Color White = new(1f, 1f, 1f, 1f);
     private static readonly Color Black = new(0f, 0f, 0f, 1f);
 
@@ -43,6 +53,9 @@ public sealed class CelestialSubtitleRenderer
 
     // DS14: цвет текста вместо розового (фразы безумного шахтёра)
     private Color? _colorOverride;
+
+    // оформление обычных субтитров: 0 - розовый, 3 - красные буквы
+    private int _style;
 
     // блок: (нормированное смещение, размер, задержка появления, альфа)
     private readonly List<(Vector2 offset, Vector2 size, float delay, float alpha, bool whitens)> _blocks = new();
@@ -61,13 +74,15 @@ public sealed class CelestialSubtitleRenderer
 
     public void ShowDeath(string text, float duration)
     {
+        _style = 0;
         _deathMode = true; // ВАЖНО: после Show, чтобы не сбросился
         _colorOverride = null;
         ShowInternal(text, duration);
     }
 
-    public void Show(string text, float duration, Color? color = null)
+    public void Show(string text, float duration, Color? color = null, int style = 0)
     {
+        _style = style;
         _deathMode = false;
         _colorOverride = color;
         ShowInternal(text, duration);
@@ -232,15 +247,32 @@ public sealed class CelestialSubtitleRenderer
         foreach (var line in lines)
             halfW = MathF.Max(halfW, line.width / 2f + 22f);
 
-        // цвет текста: обычный розовый; в смерти - чёрный
-        var textColor = _deathMode ? Black : _colorOverride ?? TextColor;
+        // цвет текста: свой цвет (безумный шахтёр), розовый, красный (стиль 3) или чёрный (смерть)
+        var textColor = _deathMode ? Black : _colorOverride ?? (_style == 3 ? RedTextColor : TextColor);
         if (ending)
         {
             var blinkBlack = (_timeLeft % BlinkPeriod) < BlinkPeriod / 2f;
             textColor = _deathMode ? Black : (blinkBlack ? Black : White);
         }
 
-        // блоки фона
+        // РЕЗКИЙ хлыст: основной текст стартует растянутым и смещённым вправо и за
+        // считанные кадры встаёт на своё место (линейное затухание, без easing'а).
+        // Копии живут дольше — они отстают и гаснут, оставаясь чуть смещёнными.
+        var whip = Math.Clamp(_elapsedTotal / IntroWhipTime, 0f, 1f);
+        var k = 1f - whip;
+        var ghostWhip = Math.Clamp(_elapsedTotal / IntroGhostLagTime, 0f, 1f);
+        var ghostK = 1f - ghostWhip;
+
+        var stretch = 1f + (IntroStretch - 1f) * k;
+        var offsetX = IntroOffsetX * k;
+        var ghosts = ghostK > 0.05f
+            ? Math.Min(IntroGhosts, (int) MathF.Ceiling(IntroGhosts * ghostK))
+            : 0;
+
+        // левый край зоны текста: от него считается растяжение
+        var anchorX = center.X - halfW;
+
+        // блоки фона (едут и растягиваются вместе с текстом)
         foreach (var (offset, size, delay, alpha, whitens) in _blocks)
         {
             if (_elapsedTotal < delay)
@@ -272,20 +304,47 @@ public sealed class CelestialSubtitleRenderer
             // только редкие блоки чуть-чуть выходят за границу зоны
             var escaper = Math.Abs(offset.X) > 90 || Math.Abs(offset.Y) > 90;
             var drift = escaper ? 1f + 0.07f * MathF.Sin(_wobbleTime * 0.6f) : 1f;
+            var blockX = center.X + (offset.X / 100f) * halfW * drift;
+            var blockY = zoneCenterY + (offset.Y / 100f) * halfH * drift;
+            var blockW = size.X * stretch;
             var pos = new Vector2(
-                center.X + (offset.X / 100f) * halfW * drift - size.X / 2f,
-                zoneCenterY + (offset.Y / 100f) * halfH * drift - size.Y / 2f);
+                anchorX + (blockX - anchorX) * stretch + offsetX - blockW / 2f,
+                blockY - size.Y / 2f);
 
-            handle.DrawRect(new UIBox2(pos, pos + size), color);
+            handle.DrawRect(new UIBox2(pos, pos + new Vector2(blockW, size.Y)), color);
+        }
+
+        var firstBaseline = zoneCenterY - totalH / 2f + ascent;
+
+        // наложенные копии — под основным текстом, отстают от него и гаснут
+        for (var g = ghosts; g >= 1; g--)
+        {
+            var ghostColor = textColor.WithAlpha(0.35f * ghostK / g);
+            DrawTextLayer(handle, lines, anchorX, halfW, firstBaseline, lineStep,
+                stretch * (1f + 0.25f * ghostK * g),
+                IntroOffsetX * ghostK * (1f + 0.2f * g),
+                scale, ghostColor);
         }
 
         // буквы ПОВЕРХ фона: лёгкое медленное вращение (5-15°) и дрейф влево-вправо
+        DrawTextLayer(handle, lines, anchorX, halfW, firstBaseline, lineStep, stretch, offsetX, scale, textColor);
+    }
+
+    /// <summary>
+    /// Один слой текста: <paramref name="stretch"/> растягивает буквы и их позиции
+    /// по горизонтали от <paramref name="anchorX"/>, а <paramref name="offsetX"/>
+    /// сдвигает весь слой вправо — вместе это и даёт резкий "хлыст" при появлении.
+    /// </summary>
+    private void DrawTextLayer(DrawingHandleScreen handle, List<Line> lines, float anchorX, float zoneHalfW,
+        float firstBaseline, float lineStep, float stretch, float offsetX, float scale, Color color)
+    {
         var charIndex = 0;
-        var firstBaseline = zoneCenterY - totalH / 2f + ascent;
         foreach (var line in lines)
         {
             var baselineY = firstBaseline + line.index * lineStep;
-            var x = center.X - line.width / 2f;
+
+            // в покое строка стоит по центру экрана, а "хлыст" идёт от левого края зоны
+            var x = anchorX + (zoneHalfW - line.width / 2f);
 
             foreach (var rune in line.text.EnumerateRunes())
             {
@@ -300,13 +359,14 @@ public sealed class CelestialSubtitleRenderer
                 var angle = maxAngle * MathF.Sin(_wobbleTime * 1.3f + anglePhase);
                 var drift = 6f * MathF.Sin(_wobbleTime * 0.9f + driftPhase);
 
-                var charCenter = new Vector2(x + advance / 2f + drift, baselineY);
-                handle.SetTransform(charCenter, Angle.FromDegrees(angle));
+                var charX = x + advance / 2f + drift;
+                var charCenter = new Vector2(anchorX + (charX - anchorX) * stretch + offsetX, baselineY);
+                handle.SetTransform(charCenter, Angle.FromDegrees(angle), new Vector2(stretch, 1f));
 
                 if (_font.TryGetCharMetrics(rune, scale, out _))
-                    _font.DrawChar(handle, rune, new Vector2(-advance / 2f, 0f), scale, textColor);
+                    _font.DrawChar(handle, rune, new Vector2(-advance / 2f, 0f), scale, color);
                 else
-                    handle.DrawString(_font, new Vector2(-advance / 2f, 0f), rune.ToString(), scale, textColor);
+                    handle.DrawString(_font, new Vector2(-advance / 2f, 0f), rune.ToString(), scale, color);
 
                 handle.SetTransform(Vector2.Zero, Angle.Zero);
 

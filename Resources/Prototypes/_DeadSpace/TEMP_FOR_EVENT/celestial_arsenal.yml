@@ -21,7 +21,7 @@
         Heat: 5
   - type: ProjectileSpread
     proto: CelestialPelletLethal
-    count: 9
+    count: 12
     spread: 12
 
 - type: entity
@@ -45,9 +45,16 @@
         Heat: -10
         Bloodloss: -20
     ignoreResistances: true
+  # Поднимает цель даже из смерти: Rejuvenate сбрасывает весь урон с временно
+  # включённым AllowRevives, поэтому моб возвращается в Alive.
+  - type: TriggerOnCollide
+    fixtureID: projectile
+    maxTriggers: 1
+  - type: RejuvenateOnTrigger
+    targetUser: true
   - type: ProjectileSpread
     proto: CelestialPelletHealing
-    count: 9
+    count: 12
     spread: 10
 
 - type: entity
@@ -66,17 +73,24 @@
   - type: Projectile
     damage:
       types:
-        Heat: 10
+        Heat: 20
+        Structural: 100
   - type: ExplodeOnTrigger
+  # DemolitionCharge вместо Default: у Default нет Structural-урона вообще,
+  # поэтому по стенам он давал ~60 урона за залп (стене нужно 300/400).
+  # maxIntensity 18 => 50*18 = 900 Structural, с модификатором StructuralMetallic
+  # (x0.5, -10) это ~445 - сносит обычную стену с одного попадания.
+  # maxTileBreak: 0 - стены ломаем, а пол/обшивку нет (без разгерметизации).
   - type: Explosive
-    explosionType: Default
-    totalIntensity: 80
-    intensitySlope: 2
-    maxIntensity: 7
+    explosionType: DemolitionCharge
+    totalIntensity: 70
+    intensitySlope: 5
+    maxIntensity: 18
+    maxTileBreak: 0
     canCreateVacuum: false
 
 - type: entity
-  parent: BaseWeaponBattery
+  parent: [BaseWeaponBattery, BaseGunWieldable]
   id: WeaponCelestialLMG
   name: лазерный пулемёт
   description: "Двести зарядов чистого света в секунду времени."
@@ -99,6 +113,7 @@
     fireCost: 9
   - type: Battery
     maxCharge: 1800
+    startingCharge: 1800
   - type: StaticPrice
     price: 500
 
@@ -128,14 +143,15 @@
     fireCost: 180
   - type: Battery
     maxCharge: 1800
+    startingCharge: 1800
   - type: StaticPrice
     price: 500
 
 - type: entity
-  parent: BaseWeaponBattery
+  parent: [BaseWeaponBattery, BaseGunWieldable]
   id: WeaponCelestialShotgun
   name: лазерный дробовик
-  description: "Два режима — красный лишает здоровья, зелёный возвращает. Урон волны — как десять дробинок."
+  description: "Два режима — красный лишает здоровья, зелёный возвращает. Урон волны — как дюжина дробинок."
   components:
   - type: GunRequiresWield
   - type: Sprite
@@ -143,6 +159,12 @@
     layers:
     - state: icon
       map: ["enum.GunVisualLayers.Base"]
+  # ВАЖНО: GunWieldBonus прибавляется к углам, и если увести их в минус,
+  # DebugTools.Assert в GunSystem.GetRecoilAngle роняет сервер (проверено).
+  # Оружие и так требует двух рук, так что в бою всегда действуют 7-3=4 и 20-8=12.
+  - type: GunWieldBonus
+    minAngle: -3
+    maxAngle: -8
   - type: Gun
     fireRate: 1.5
     minAngle: 7
@@ -162,6 +184,7 @@
       fireCost: 60
   - type: Battery
     maxCharge: 1800
+    startingCharge: 1800
   - type: StaticPrice
     price: 500
 
@@ -228,35 +251,29 @@
 - type: thiefBackpackSet
   id: CelestialLMGSet
   name: Набор «Двести причин»
-  description: Лазерный пулемёт с гипер-батареей на двести выстрелов и запасной батареей. Скорость решает.
+  description: Лазерный пулемёт со встроенной батареей на двести выстрелов. Скорость решает.
   sprite:
     sprite: Objects/Weapons/Guns/Battery/laser_cannon.rsi
     state: base
   content:
   - WeaponCelestialLMG
-  - PowerCellHyper
-  - PowerCellHyper
 
 - type: thiefBackpackSet
   id: CelestialGLSet
   name: Набор «Десять зелёных»
-  description: Лазерный гранатомёт с батареей на десять выстрелов. Медленно, уверенно, снести стену.
+  description: Лазерный гранатомёт со встроенной батареей на десять выстрелов. Медленно, уверенно, снести стену.
   sprite:
     sprite: Objects/Weapons/Guns/Launchers/china_lake.rsi
     state: icon
   content:
   - WeaponCelestialGL
-  - PowerCellHyper
-  - PowerCellHyper
 
 - type: thiefBackpackSet
   id: CelestialShotgunSet
   name: Набор «Милосердие и кара»
-  description: Лазерный дробовик с двумя режимами — красный карает, зелёный лечит. Гипер-батарея в комплекте.
+  description: Лазерный дробовик с двумя режимами — красный карает, зелёный лечит.
   sprite:
     sprite: Objects/Weapons/Guns/Battery/energy_shotgun.rsi
     state: base
   content:
   - WeaponCelestialShotgun
-  - PowerCellHyper
-  - PowerCellHyper
