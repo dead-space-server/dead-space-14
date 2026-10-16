@@ -35,7 +35,6 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
-using Robust.Shared.Serialization.Manager;
 using Robust.Shared.Timing;
 using Timer = Robust.Shared.Timing.Timer;
 
@@ -63,7 +62,6 @@ public sealed class LavalandChromiteCavesSystem : EntitySystem
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ISerializationManager _serialization = default!;
     [Dependency] private readonly ITileDefinitionManager _tileDefinition = default!;
     [Dependency] private readonly LavalandBossArenaSystem _bossArena = default!;
     [Dependency] private readonly LavalandFaunaRaidSystem _raid = default!;
@@ -184,15 +182,16 @@ public sealed class LavalandChromiteCavesSystem : EntitySystem
         BuildHolding((mapUid, caves), mapId, config, half);
         cancellation.ThrowIfCancellationRequested();
 
-        // Arena placement only needs the size and the edges of the caves: a copy of the planet reshaped to them.
-        var cavesPlanet = _serialization.CreateCopy(planet, notNullableOverride: true);
-        cavesPlanet.Biome = config.Biome;
-        cavesPlanet.MapHalfSize = half;
-        cavesPlanet.BoundaryEnabled = true;
-        cavesPlanet.BoundaryLavaWidth = 0;
-        cavesPlanet.BoundaryWallWidth = Math.Max(1, config.BoundaryWidth);
-        cavesPlanet.TerminalReservationEnabled = false;
-        cavesPlanet.FtlEnabled = false;
+        // Arena placement only needs the size and the edges of the caves: no outpost, no FTL beacon there.
+        var cavesArea = new LavalandArenaArea(
+            half,
+            BoundaryEnabled: true,
+            BoundaryLavaWidth: 0,
+            BoundaryWallWidth: Math.Max(1, config.BoundaryWidth),
+            TerminalReservationEnabled: false,
+            TerminalGridOffset: Vector2.Zero,
+            FtlEnabled: false,
+            FtlBeaconOffset: Vector2.Zero);
 
         foreach (var (arenaId, count) in config.BossArenas)
         {
@@ -204,7 +203,7 @@ public sealed class LavalandChromiteCavesSystem : EntitySystem
 
             for (var i = 0; i < count; i++)
             {
-                await _bossArena.TrySpawnBossArena(mapUid, grid, biome, cavesPlanet, arena, random, cancellation);
+                await _bossArena.TrySpawnBossArena(mapUid, grid, biome, cavesArea, arena, random, cancellation);
                 await Timer.Delay(1, cancellation);
             }
         }

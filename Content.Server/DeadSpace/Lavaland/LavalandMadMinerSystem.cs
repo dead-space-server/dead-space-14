@@ -70,6 +70,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
     [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly Content.Server.NPC.Systems.NPCSystem _npc = default!;
     [Dependency] private readonly Content.Shared.Popups.SharedPopupSystem _popup = default!;
+    [Dependency] private readonly Content.Shared.Jittering.SharedJitteringSystem _jitter = default!;
 
     private int _nextHudId = 100000;
 
@@ -721,7 +722,17 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         var query = EntityQueryEnumerator<LavalandMadMinerComponent>();
         while (query.MoveNext(out var uid, out var miner))
         {
-            if (miner.RiseAt is not { } riseAt || now < riseAt)
+            if (miner.RiseAt is not { } riseAt)
+                continue;
+
+            // The body jerks and shakes harder and harder before it gets up.
+            if (!miner.RiseShaking && now >= riseAt - miner.RiseShakeTime && IsDead(uid))
+            {
+                miner.RiseShaking = true;
+                _jitter.DoJitter(uid, miner.RiseShakeTime + TimeSpan.FromSeconds(0.3), true, 25f, 12f);
+            }
+
+            if (now < riseAt)
                 continue;
 
             miner.RiseAt = null;

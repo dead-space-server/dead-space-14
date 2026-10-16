@@ -10,8 +10,8 @@ using Robust.Shared.Serialization;
 namespace Content.Shared.DeadSpace.Lavaland;
 
 /// <summary>
-/// Cleaving saw from the blood-drunk miner: closed it attacks rapidly, open it cleaves for bonus damage against
-/// lavaland creatures. Both modes build bleed stacks on fauna and bosses.
+/// Cleaving saw from the blood-drunk miner: closed it attacks rapidly and piles bleed on fauna and bosses; open it
+/// swings slowly, cleaves for bonus damage, and only open does the built-up bleed burst - its finishing blow.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
 public sealed partial class LavalandCleavingSawComponent : Component
@@ -19,6 +19,10 @@ public sealed partial class LavalandCleavingSawComponent : Component
     /// <summary>Attack rate multiplier while the saw is closed.</summary>
     [DataField]
     public float ClosedAttackRateMultiplier = 2f;
+
+    /// <summary>Attack rate multiplier while the saw is open: slow, heavy swings.</summary>
+    [DataField]
+    public float OpenAttackRateMultiplier = 0.6f;
 }
 
 [Serializable, NetSerializable]
@@ -51,7 +55,8 @@ public sealed class LavalandCleavingSawSystem : EntitySystem
 
     private void OnGetAttackRate(Entity<LavalandCleavingSawComponent> ent, ref GetMeleeAttackRateEvent args)
     {
-        if (!_toggle.IsActivated(ent.Owner))
-            args.Multipliers *= ent.Comp.ClosedAttackRateMultiplier;
+        args.Multipliers *= _toggle.IsActivated(ent.Owner)
+            ? ent.Comp.OpenAttackRateMultiplier
+            : ent.Comp.ClosedAttackRateMultiplier;
     }
 }

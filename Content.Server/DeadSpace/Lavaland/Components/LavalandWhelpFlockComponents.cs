@@ -7,8 +7,8 @@ using Robust.Shared.Prototypes;
 namespace Content.Server.DeadSpace.Lavaland.Components;
 
 /// <summary>
-/// Invisible trigger on lavaland: when a player comes near but it is still beyond the edge of the screen,
-/// a flock of little whelps appears around it. Once the player sees them, the whole flock scatters away.
+/// Invisible trigger on lavaland: a player who walks up to it gets a flock of little whelps just beyond the edge of
+/// his screen. Once he sees them, the whole flock scatters away.
 /// </summary>
 [RegisterComponent]
 public sealed partial class LavalandWhelpFlockTriggerComponent : Component
@@ -26,9 +26,13 @@ public sealed partial class LavalandWhelpFlockTriggerComponent : Component
     [DataField]
     public float FlockRadius = 3f;
 
-    /// <summary>A player this close (but not seeing the spot yet) makes the flock appear.</summary>
+    /// <summary>Kept for old maps; the flock now appears when a player comes within <see cref="TriggerRadius"/>.</summary>
     [DataField]
     public float SpawnRange = 22f;
+
+    /// <summary>A player this close to the trigger makes the flock appear off his screen.</summary>
+    [DataField]
+    public float TriggerRadius = 5f;
 
     /// <summary>Half size of what a player sees around himself, in tiles: inside it the flock is noticed.</summary>
     [DataField]

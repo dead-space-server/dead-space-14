@@ -17,14 +17,10 @@
     sprite: _DeadSpace/Lavaland/Mobs/MadMiner.rsi
     layers:
     - state: demonic_miner
-    # Risen as a necromorph: the claws.
+    # Risen as a necromorph: the twitcher's claws, worn over the arms the way a necromorph body wears them.
     - sprite: _DeadSpace/Necromorfs/claws.rsi
-      state: inhand-left
+      state: equipped-NECK
       map: [ "enum.LavalandMadMinerLayers.ClawLeft" ]
-      visible: false
-    - sprite: _DeadSpace/Necromorfs/claws.rsi
-      state: inhand-right
-      map: [ "enum.LavalandMadMinerLayers.ClawRight" ]
       visible: false
   - type: GenericVisualizer
     visuals:
@@ -32,9 +28,8 @@
         enum.LavalandMadMinerLayers.ClawLeft:
           True: { visible: true }
           False: { visible: false }
-        enum.LavalandMadMinerLayers.ClawRight:
-          True: { visible: true }
-          False: { visible: false }
+  # Dead it lies on the ground (and gets back up when it rises).
+  - type: StandingState
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -42,7 +37,7 @@
   - type: LavalandMadMiner
     maxHealth: 1250
     # Slower bolts that can be dodged, and a little more time between them.
-    projectileSpeed: 11
+    projectileSpeed: 7
     shootCooldown: 1.8
     hookImpactDamage:
       types:

@@ -18,6 +18,25 @@
     - FlowersBRTwo
     - FlowersBRThree
 
+  # Lava only as fences between the areas of lavaland: thin ridged lines across the map with gaps in them to pass,
+  # never pools in the middle of an area. Ahead of the other layers so a fence runs through rock and trees too.
+  - !type:BiomeEntityLayer
+    threshold: 0.86
+    noise:
+      seed: 91
+      noiseType: OpenSimplex2
+      frequency: 0.02
+      fractalType: Ridged
+      octaves: 2
+      lacunarity: 2
+      gain: 0.5
+    allowedTiles:
+    - FloorBasalt
+    - FloorLavalandAsh
+    - FloorLavalandPaleGrass
+    entities:
+    - FloorLavaEntity
+
   - !type:BiomeEntityLayer
     threshold: 0.97
     noise:

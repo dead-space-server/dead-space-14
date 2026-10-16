@@ -187,7 +187,7 @@ public sealed partial class LavalandBossArenaSystem : EntitySystem
             for (var i = 0; i < Math.Max(0, count); i++)
             {
                 cancellation.ThrowIfCancellationRequested();
-                await TrySpawnBossArena(mapUid, terrainGrid, biome, planet, arenaPrototype, random, cancellation);
+                await TrySpawnBossArena(mapUid, terrainGrid, biome, LavalandArenaArea.From(planet), arenaPrototype, random, cancellation);
                 await Timer.Delay(1, cancellation);
             }
         }
@@ -197,7 +197,7 @@ public sealed partial class LavalandBossArenaSystem : EntitySystem
         EntityUid mapUid,
         MapGridComponent terrainGrid,
         BiomeComponent biome,
-        LavalandPlanetPrototype planet,
+        LavalandArenaArea planet,
         LavalandBossArenaPrototype arenaPrototype,
         Random random,
         CancellationToken cancellation)
@@ -433,7 +433,7 @@ public sealed partial class LavalandBossArenaSystem : EntitySystem
     private bool TryFindArenaCenter(
         EntityUid mapUid,
         MapGridComponent terrainGrid,
-        LavalandPlanetPrototype planet,
+        LavalandArenaArea planet,
         LavalandBossArenaPrototype arenaPrototype,
         Random random,
         int width,
@@ -2208,7 +2208,7 @@ public sealed partial class LavalandBossArenaSystem : EntitySystem
 
     private static bool IsInsideArenaExclusion(
         Vector2 center,
-        LavalandPlanetPrototype planet,
+        LavalandArenaArea planet,
         LavalandBossArenaPrototype arenaPrototype,
         float arenaRadius)
     {
@@ -2239,7 +2239,7 @@ public sealed partial class LavalandBossArenaSystem : EntitySystem
         return false;
     }
 
-    private static int GetPlacementLimit(LavalandPlanetPrototype planet, LavalandBossArenaPrototype arenaPrototype, int width, int height)
+    private static int GetPlacementLimit(LavalandArenaArea planet, LavalandBossArenaPrototype arenaPrototype, int width, int height)
     {
         if (planet.MapHalfSize <= 0)
             return 0;
@@ -2446,5 +2446,33 @@ public sealed partial class LavalandBossArenaSystem : EntitySystem
 
         if (TryComp<MobThresholdsComponent>(arena.Comp.Boss, out var thresholds))
             _mobThreshold.SetMobStateThreshold(arena.Comp.Boss, FixedPoint2.New(newMax), MobState.Dead, thresholds);
+    }
+}
+
+/// <summary>
+/// Where boss arenas may stand on a map: its size, its edges and the spots kept clear (the outpost, the FTL beacon).
+/// Taken from a lavaland planet, or made up for another map (the chromite caves).
+/// </summary>
+public readonly record struct LavalandArenaArea(
+    int MapHalfSize,
+    bool BoundaryEnabled,
+    int BoundaryLavaWidth,
+    int BoundaryWallWidth,
+    bool TerminalReservationEnabled,
+    Vector2 TerminalGridOffset,
+    bool FtlEnabled,
+    Vector2 FtlBeaconOffset)
+{
+    public static LavalandArenaArea From(LavalandPlanetPrototype planet)
+    {
+        return new LavalandArenaArea(
+            planet.MapHalfSize,
+            planet.BoundaryEnabled,
+            planet.BoundaryLavaWidth,
+            planet.BoundaryWallWidth,
+            planet.TerminalReservationEnabled,
+            planet.TerminalGridOffset,
+            planet.FtlEnabled,
+            planet.FtlBeaconOffset);
     }
 }

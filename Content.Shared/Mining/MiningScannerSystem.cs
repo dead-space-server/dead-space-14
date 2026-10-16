@@ -89,6 +89,13 @@ public sealed class MiningScannerSystem : EntitySystem
                 continue;
             }
 
+            // DS14: the crystals of the chromite caves drown the scanner out - no pings down there.
+            if (HasComp<Content.Shared.DeadSpace.Lavaland.ChromiteCaves.LavalandChromiteCavesComponent>(xform.MapUid))
+            {
+                viewer.LastPingLocation = null;
+                continue;
+            }
+
             if (_timing.CurTime < viewer.NextPingTime)
                 continue;
 

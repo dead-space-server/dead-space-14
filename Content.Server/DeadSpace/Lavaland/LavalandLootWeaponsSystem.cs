@@ -90,10 +90,17 @@ public sealed class LavalandLootWeaponsSystem : EntitySystem
             if (!IsLavalandCreature(target) || !TryComp<MobStateComponent>(target, out var mob) || _mobState.IsDead(target, mob))
                 continue;
 
+            // Open: a slow heavy cleave, and the bleed piled up by the closed saw bursts. Closed: quick cuts that
+            // only pile up the bleed - never past the point where an open blow would burst it.
             if (open)
+            {
                 _damageable.TryChangeDamage(target, ent.Comp.OpenBonusDamage, origin: args.User);
-
-            AddBleed(target, ent.Comp.BleedStacksPerHit, ent.Comp.BleedBurstDamage, args.User);
+                TryBurstBleed(target, ent.Comp.BleedBurstDamage, args.User);
+            }
+            else
+            {
+                AddBleed(target, ent.Comp.BleedStacksPerHit, ent.Comp.BleedBurstDamage, args.User);
+            }
         }
     }
 
@@ -101,10 +108,22 @@ public sealed class LavalandLootWeaponsSystem : EntitySystem
     {
         var bleed = EnsureComp<LavalandSawBleedComponent>(target);
         bleed.BurstDamage = burstDamage;
-        bleed.Stacks += stacks;
+        var wasPrimed = bleed.Stacks >= bleed.Threshold;
+        bleed.Stacks = Math.Min(bleed.Threshold, bleed.Stacks + stacks);
         bleed.LastStack = _timing.CurTime;
-        if (bleed.Stacks < bleed.Threshold)
+
+        // Ready for the finishing blow: unfold the saw and strike.
+        if (!wasPrimed && bleed.Stacks >= bleed.Threshold)
+            _popup.PopupEntity(Loc.GetString("lavaland-saw-bleed-primed", ("target", target)), target, user, PopupType.Medium);
+    }
+
+    /// <summary>The open saw's finishing blow: a full pile of bleed bursts at once.</summary>
+    private void TryBurstBleed(EntityUid target, DamageSpecifier burstDamage, EntityUid user)
+    {
+        if (!TryComp<LavalandSawBleedComponent>(target, out var bleed) || bleed.Stacks < bleed.Threshold)
             return;
+
+        bleed.BurstDamage = burstDamage;
 
         // The built-up bleed bursts at once.
         _damageable.TryChangeDamage(target, bleed.BurstDamage, origin: user);

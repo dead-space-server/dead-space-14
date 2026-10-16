@@ -9,6 +9,7 @@ using Content.Shared.Mobs.Systems;
 using Robust.Server.Player;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -26,6 +27,8 @@ public sealed class LavalandWhelpFlockSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly SharedMapSystem _map = default!;
 
     private static readonly TimeSpan TriggerInterval = TimeSpan.FromSeconds(0.5);
 
@@ -96,31 +99,82 @@ public sealed class LavalandWhelpFlockSystem : EntitySystem
             if (trigger.Flock.Count > 0 || now < trigger.NextTrigger)
                 continue;
 
+            // Somebody walked up to it.
             var position = _transform.GetWorldPosition(xform);
-            var near = false;
-            var seen = false;
+            Vector2? walker = null;
             foreach (var (map, viewer) in _viewers)
             {
-                if (map != xform.MapID)
-                    continue;
-
-                if (InView(viewer, position, trigger.ViewHalfSize, trigger.HiddenMargin + trigger.FlockRadius))
+                if (map == xform.MapID &&
+                    Vector2.DistanceSquared(viewer, position) <= trigger.TriggerRadius * trigger.TriggerRadius)
                 {
-                    seen = true;
+                    walker = viewer;
                     break;
                 }
-
-                if (Vector2.DistanceSquared(viewer, position) <= trigger.SpawnRange * trigger.SpawnRange)
-                    near = true;
             }
 
-            // Only behind the edge of every screen around: nobody may see them appear.
-            if (!near || seen)
+            if (walker is not { } player ||
+                !TryPickHiddenSpot(xform.MapID, player, trigger, out var spot))
+            {
                 continue;
+            }
 
             trigger.NextTrigger = now + trigger.Cooldown;
-            SpawnFlock((uid, trigger), xform.Coordinates, now);
+            SpawnFlock((uid, trigger), _transform.ToCoordinates(new MapCoordinates(spot, xform.MapID)), now);
         }
+    }
+
+    /// <summary>
+    /// A spot of open ground just beyond the edge of the player's screen (and of everyone else's), in some direction
+    /// around him: the flock is not seen appearing, but he only has to walk on to run into it.
+    /// </summary>
+    private bool TryPickHiddenSpot(MapId map, Vector2 player, LavalandWhelpFlockTriggerComponent trigger, out Vector2 spot)
+    {
+        var margin = trigger.HiddenMargin + trigger.FlockRadius;
+        for (var attempt = 0; attempt < 16; attempt++)
+        {
+            var direction = _random.NextAngle().ToVec();
+            // Out to the edge of the screen box in that direction, then past it by the margin.
+            var toEdge = MathF.Min(
+                MathF.Abs(direction.X) > 0.001f ? trigger.ViewHalfSize.X / MathF.Abs(direction.X) : float.MaxValue,
+                MathF.Abs(direction.Y) > 0.001f ? trigger.ViewHalfSize.Y / MathF.Abs(direction.Y) : float.MaxValue);
+            spot = player + direction * (toEdge + margin + 0.5f);
+
+            var hidden = true;
+            foreach (var (viewerMap, viewer) in _viewers)
+            {
+                if (viewerMap == map && InView(viewer, spot, trigger.ViewHalfSize, margin))
+                {
+                    hidden = false;
+                    break;
+                }
+            }
+
+            if (hidden && IsOpenGround(new MapCoordinates(spot, map)))
+                return true;
+        }
+
+        spot = default;
+        return false;
+    }
+
+    /// <summary>A floor tile with nothing solid on it: no rock, no wall.</summary>
+    private bool IsOpenGround(MapCoordinates coords)
+    {
+        if (!_mapManager.TryFindGridAt(coords, out var gridUid, out var grid))
+            return false;
+
+        var tile = _map.TileIndicesFor(gridUid, grid, coords);
+        if (!_map.TryGetTileRef(gridUid, grid, tile, out var tileRef) || tileRef.Tile.IsEmpty)
+            return false;
+
+        var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
+        while (anchored.MoveNext(out var uid))
+        {
+            if (TryComp<PhysicsComponent>(uid, out var body) && body.Hard && body.CanCollide)
+                return false;
+        }
+
+        return true;
     }
 
     private void SpawnFlock(Entity<LavalandWhelpFlockTriggerComponent> trigger, EntityCoordinates center, TimeSpan now)

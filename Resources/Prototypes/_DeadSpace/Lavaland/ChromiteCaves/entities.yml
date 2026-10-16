@@ -8,6 +8,9 @@
   description: Из глубины то голубым, то фиолетовым светом мерцают кристаллы. Обратно отсюда так просто не вылезти.
   categories: [ HideSpawnMenu ]
   components:
+  # The storm does not reach the pit nor a couple of tiles around it.
+  - type: LavalandStormShelter
+    radius: 2
   # An ordinary lavaland chasm to look at: only its light and motes shimmer.
   - type: PointLight
     enabled: true
@@ -214,3 +217,16 @@
   name: хромитовая порода
   description: Слишком твёрдая, чтобы её копать.
   suffix: Chromite Caves Boundary, Indestructible
+
+# Invisible: keeps the storm off its tile (around the pits).
+- type: entity
+  id: LavalandStormShelterBlocker
+  name: укрытие от бури
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: BlockWeather
+  - type: Tag
+    tags:
+    - HideContextMenu

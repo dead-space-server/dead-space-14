@@ -85,6 +85,9 @@ public sealed partial class LavalandMadMinerComponent : Component
     [DataField] public SoundSpecifier? RisenBloodSound = new SoundPathSpecifier("/Audio/Effects/gib1.ogg");
     [DataField] public SoundSpecifier? RisenScream = new SoundPathSpecifier("/Audio/_DeadSpace/Necromorfs/necro-scream-other-1.ogg");
     [DataField] public LocId RisenName = "lavaland-mad-miner-risen-name";
+    /// <summary>The body starts twitching this long before it rises.</summary>
+    [DataField] public TimeSpan RiseShakeTime = TimeSpan.FromSeconds(1.8);
+    [ViewVariables] public bool RiseShaking;
     [ViewVariables] public TimeSpan? RiseAt;
     [ViewVariables] public bool Risen;
 
