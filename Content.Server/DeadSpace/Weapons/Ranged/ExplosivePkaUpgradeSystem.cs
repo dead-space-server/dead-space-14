@@ -138,7 +138,8 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
         ent.Comp.DetonationTarget = null;
 
         // DS14: the outpost is safe from these blasts - its walls, doors and machines are not even scratched.
-        var nearOutpost = IsNearOutpost(center, ent.Comp.Radius + 2f);
+        // A wide margin: the blast spreads a few tiles past its visual radius.
+        var nearOutpost = IsNearOutpost(center, ent.Comp.Radius + 6f);
 
         foreach (var victim in _lookup.GetEntitiesInRange(center, ent.Comp.Radius))
         {

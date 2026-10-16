@@ -23,6 +23,9 @@ using Content.Shared.Maps;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.MouseRotator;
+using Content.Shared.Movement.Components;
+using Content.Shared.Popups;
+using Content.Shared.Weapons.Melee;
 using Content.Shared.Physics;
 using Content.Shared.Verbs;
 using Robust.Server.Player;
@@ -60,6 +63,13 @@ public sealed class LavalandMadMinerSystem : EntitySystem
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly Content.Shared.Administration.Systems.RejuvenateSystem _rejuvenate = default!;
+    [Dependency] private readonly Content.Shared.Mobs.Systems.MobThresholdSystem _mobThreshold = default!;
+    [Dependency] private readonly Content.Shared.Movement.Systems.MovementSpeedModifierSystem _speedModifier = default!;
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private readonly MetaDataSystem _metaData = default!;
+    [Dependency] private readonly Content.Server.NPC.Systems.NPCSystem _npc = default!;
+    [Dependency] private readonly Content.Shared.Popups.SharedPopupSystem _popup = default!;
 
     private int _nextHudId = 100000;
 
@@ -92,10 +102,13 @@ public sealed class LavalandMadMinerSystem : EntitySystem
     public override void Update(float frameTime)
     {
         var now = _timing.CurTime;
+        UpdateRising(now);
+
         var query = EntityQueryEnumerator<LavalandMadMinerComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var miner, out var xform))
         {
-            if (miner.NextThink > now || IsDead(uid))
+            // Risen as a necromorph: no more blinks, shots and hooks, it is a plain monster now.
+            if (miner.Risen || miner.NextThink > now || IsDead(uid))
                 continue;
             miner.NextThink = now + TimeSpan.FromSeconds(0.1);
 
@@ -693,11 +706,75 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         if (args.NewMobState != MobState.Dead || ent.Comp.RewardsSpawned)
             return;
         ent.Comp.RewardsSpawned = true;
+        // It falls - and a few seconds later gets up again, as a necromorph.
+        if (!ent.Comp.Risen)
+            ent.Comp.RiseAt = _timing.CurTime + ent.Comp.RiseDelay;
         SpawnReward(ent.Owner, ent.Comp.ChainHandReward, ent.Comp.ChainHandChance);
         SpawnReward(ent.Owner, ent.Comp.ExplosivePkaReward, ent.Comp.ExplosivePkaChance);
         foreach (var reward in ent.Comp.ExtraRewards)
             SpawnReward(ent.Owner, reward, 1f);
         EndFight(ent.Owner, ent.Comp);
+    }
+
+    private void UpdateRising(TimeSpan now)
+    {
+        var query = EntityQueryEnumerator<LavalandMadMinerComponent>();
+        while (query.MoveNext(out var uid, out var miner))
+        {
+            if (miner.RiseAt is not { } riseAt || now < riseAt)
+                continue;
+
+            miner.RiseAt = null;
+            // Gibbed or gone meanwhile: nothing left to rise.
+            if (TerminatingOrDeleted(uid) || !IsDead(uid))
+                continue;
+
+            Rise((uid, miner));
+        }
+    }
+
+    /// <summary>
+    /// Blood bursts out of the body, and it jerks back up with a necromorph's claws: a plain monster now,
+    /// with none of the miner's tricks, that goes for whoever is near.
+    /// </summary>
+    private void Rise(Entity<LavalandMadMinerComponent> ent)
+    {
+        var uid = ent.Owner;
+        var miner = ent.Comp;
+        miner.Risen = true;
+
+        var coordinates = Transform(uid).Coordinates;
+        for (var i = 0; i < miner.RisenBloodCount; i++)
+            Spawn(miner.RisenBlood, coordinates.Offset(_random.NextVector2(1.3f)));
+        if (miner.RisenBloodSound != null)
+            _audio.PlayPvs(miner.RisenBloodSound, uid);
+
+        _rejuvenate.PerformRejuvenate(uid);
+        _mobThreshold.SetMobStateThreshold(uid, FixedPoint2.New(miner.RisenHealth), MobState.Dead);
+
+        if (TryComp<MeleeWeaponComponent>(uid, out var melee))
+        {
+            melee.Damage = new DamageSpecifier(miner.RisenDamage);
+            melee.Animation = "WeaponArcClaw";
+            Dirty(uid, melee);
+        }
+
+        if (TryComp<MovementSpeedModifierComponent>(uid, out var speed))
+            _speedModifier.ChangeBaseSpeed(uid, miner.RisenSpeed * 0.7f, miner.RisenSpeed, speed.Acceleration, speed);
+
+        _appearance.SetData(uid, LavalandMadMinerVisuals.Necromorph, true);
+        _metaData.SetEntityName(uid, Loc.GetString(miner.RisenName));
+
+        // Its own AI goes for whoever is near.
+        if (TryComp<HTNComponent>(uid, out var htn))
+        {
+            _htn.SetHTNEnabled((uid, htn), true);
+            _npc.WakeNPC(uid, htn);
+        }
+
+        if (miner.RisenScream != null)
+            _audio.PlayPvs(miner.RisenScream, uid);
+        _popup.PopupEntity(Loc.GetString("lavaland-mad-miner-risen", ("miner", uid)), uid, PopupType.LargeCaution);
     }
 
     private void SpawnReward(EntityUid uid, EntProtoId? reward, float chance)

@@ -205,6 +205,7 @@ public sealed class LavalandSensorTabletWindow : DefaultWindow
         if (state.BasePoints != null)
             _radar.SetBasePoints(state.BasePoints);
         _radar.SetPoints(state.Points);
+        _radar.Storm = state.Storm;
     }
 }
 
@@ -220,6 +221,9 @@ public sealed class LavalandRadarControl : MapGridControl
 
     /// <summary>Morkite search circles. The Celestial interference is always shown.</summary>
     public bool ShowSearchAreas = true;
+
+    /// <summary>The ash storm: 0 - calm, 1 - coming, 2 - raging.</summary>
+    public byte Storm;
 
     /// <summary>World grid and range rings.</summary>
     public bool ShowGrid = true;
@@ -396,6 +400,7 @@ public sealed class LavalandRadarControl : MapGridControl
         if (ShowSweep)
             DrawSweep(handle, center);
         DrawInterference(handle);
+        DrawStorm(handle);
         DrawScanlines(handle);
         DrawVignette(handle);
         DrawCorners(handle);
@@ -629,6 +634,46 @@ public sealed class LavalandRadarControl : MapGridControl
             handle.DrawLine(previous, current, color);
             previous = current;
         }
+    }
+
+    private static readonly Color StormPink = Color.FromHex("#ff5c8a");
+    private static readonly Color StormRed = Color.FromHex("#e0283f");
+
+    /// <summary>
+    /// The ash storm over the whole screen in pink and red: a haze and streaks of ash blowing across it -
+    /// faint while it is coming, thick while it rages - and its name at the top.
+    /// </summary>
+    private void DrawStorm(DrawingHandleScreen handle)
+    {
+        if (Storm == 0)
+            return;
+
+        var raging = Storm >= 2;
+        var w = PixelSize.X;
+        var h = PixelSize.Y;
+        var pulse = 0.5f + 0.5f * MathF.Sin(_interferenceTime * (raging ? 3f : 1.5f));
+        handle.DrawRect(new UIBox2(0, 0, w, h), StormRed.WithAlpha((raging ? 0.16f : 0.06f) + pulse * 0.04f));
+
+        // Streaks of ash driven across the screen by the wind.
+        var count = raging ? 70 : 24;
+        var speed = raging ? 260f : 110f;
+        for (var i = 0; i < count; i++)
+        {
+            var seed = unchecked((uint) (i * 2654435761u));
+            var lane = (seed & 0xFFFF) / 65535f;
+            var offset = ((seed >> 16) & 0xFFFF) / 65535f;
+            var length = (raging ? 26f : 14f) + (seed % 18);
+            var x = ((offset * (w + 200f) + _interferenceTime * speed * (0.7f + lane * 0.6f)) % (w + 200f)) - 100f;
+            var y = lane * h + MathF.Sin(_interferenceTime * 2f + i) * 6f;
+            var color = (i % 3 == 0 ? StormRed : StormPink).WithAlpha(raging ? 0.55f : 0.3f);
+            handle.DrawLine(new Vector2(x, y), new Vector2(x + length, y + length * 0.35f), color);
+        }
+
+        var label = raging ? "ПЕПЕЛЬНАЯ БУРЯ" : "ПРИБЛИЖАЕТСЯ БУРЯ";
+        var font = UserInterfaceManager.ThemeDefaults.DefaultFont;
+        var labelWidth = handle.GetDimensions(font, label, 1f).X;
+        handle.DrawString(font, new Vector2((w - labelWidth) / 2f, 10f), label, 1f,
+            (raging ? StormRed : StormPink).WithAlpha(0.7f + pulse * 0.3f));
     }
 
     private void DrawInterference(DrawingHandleScreen handle)

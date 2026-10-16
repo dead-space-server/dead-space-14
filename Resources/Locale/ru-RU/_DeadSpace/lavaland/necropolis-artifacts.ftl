@@ -75,3 +75,5 @@ lavaland-tamed-order-stay = Прирученные существа замерл
 lavaland-tamed-order-attack = Прирученные существа вступают в бой! Укажите цель - они нападут на неё.
 lavaland-tamed-emp = { CAPITALIZE(THE($target)) } дёргается - наномашины сбоят, оно снова дикое!
 lavaland-warp-cube-not-lavaland = Куб работает только на Лаваленде или в пещерах, и только если второй куб там же.
+lavaland-mad-miner-risen-name = шахтёр-некроморф
+lavaland-mad-miner-risen = { CAPITALIZE(THE($miner)) } резко встаёт - из рук вырастают клешни!

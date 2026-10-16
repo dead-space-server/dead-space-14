@@ -81,6 +81,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
     [Dependency] private readonly LavalandPitLandingSystem _landing = default!;
     [Dependency] private readonly LavalandChromiteCavesSystem _caves = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly Content.Shared.Camera.SharedCameraRecoilSystem _camera = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -164,6 +165,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             var boss = EnsureComp<LavalandSecretBossComponent>(uid);
             UpdateStage((uid, boss), config, now);
             UpdateAwakenLines((uid, boss), config, now);
+            UpdateAwakenShake((uid, boss), now);
         }
 
         UpdateDescents(now);
@@ -253,19 +255,8 @@ public sealed class LavalandSecretBossSystem : EntitySystem
 
         BuildZone(ent, config);
 
-        var mapId = Transform(mapUid).MapID;
-        var filter = Filter.BroadcastMap(mapId);
-        if (config.AwakenMessageRange > 0f && ent.Comp.Pit is { } awakenPit)
-        {
-            // Heard only around the pit, not by every player on lavaland.
-            var pitCoordinates = _transform.GetMapCoordinates(awakenPit);
-            filter = Filter.Empty().AddInRange(pitCoordinates, config.AwakenMessageRange);
-        }
+        // No roar: the Celestial only speaks from its dream, line by line, right away - to everyone on lavaland.
 
-        if (config.AwakenSound != null)
-            _audio.PlayGlobal(config.AwakenSound, filter, true);
-
-        // The Celestial speaks from its dream, line by line, right away.
         ent.Comp.AwakenLine = config.AwakenLines.Count > 0 ? 0 : -1;
         ent.Comp.NextAwakenLine = _timing.CurTime;
 
@@ -287,15 +278,51 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             return;
         }
 
-        var filter = Filter.BroadcastMap(Transform(ent).MapID);
-        if (config.AwakenMessageRange > 0f && comp.Pit is { } pit && !TerminatingOrDeleted(pit))
-            filter = Filter.Empty().AddInRange(_transform.GetMapCoordinates(pit), config.AwakenMessageRange);
-
         var line = Loc.GetString(config.AwakenLines[comp.AwakenLine]);
-        RaiseNetworkEvent(new CelestialSpeakEvent(line, config.AwakenLineDuration), filter);
+        var audience = LavalandAudience(ent);
+        RaiseNetworkEvent(new CelestialSpeakEvent(line, config.AwakenLineDuration), audience);
+
+        // Its voice with every line, a random one of its talk sounds.
+        if (config.AwakenTalkSounds.Count > 0)
+        {
+            _audio.PlayGlobal(_audio.ResolveSound(_random.Pick(config.AwakenTalkSounds)), audience, false,
+                AudioParams.Default.WithVolume(config.AwakenTalkVolume));
+        }
+
+        // Its next to last words shake all of lavaland.
+        if (comp.AwakenLine == config.AwakenLines.Count - 2)
+            comp.ShakeUntil = now + TimeSpan.FromSeconds(config.AwakenLineDuration);
+
         comp.AwakenLine++;
         comp.NextAwakenLine = now + TimeSpan.FromSeconds(config.AwakenLineDuration);
     }
+
+    /// <summary>Every player on this lavaland and in the chromite caves under it.</summary>
+    private Filter LavalandAudience(EntityUid lavaland)
+    {
+        var filter = Filter.BroadcastMap(Transform(lavaland).MapID);
+        if (_caves.GetCaves(lavaland) is { } caves)
+            filter.AddWhere(session =>
+                session.AttachedEntity is { } mob && Transform(mob).MapUid == caves);
+        return filter;
+    }
+
+    /// <summary>While the Celestial says its next to last words every screen on lavaland shakes hard.</summary>
+    private void UpdateAwakenShake(Entity<LavalandSecretBossComponent> ent, TimeSpan now)
+    {
+        if (now >= ent.Comp.ShakeUntil || now < ent.Comp.NextShake)
+            return;
+
+        ent.Comp.NextShake = now + AwakenShakeInterval;
+        foreach (var session in LavalandAudience(ent).Recipients)
+        {
+            if (session.AttachedEntity is { } mob)
+                _camera.KickCamera(mob, _random.NextAngle().ToVec() * AwakenShakeStrength);
+        }
+    }
+
+    private static readonly TimeSpan AwakenShakeInterval = TimeSpan.FromSeconds(0.08);
+    private const float AwakenShakeStrength = 2.5f;
 
     private bool TryPlacePit(Entity<LavalandSecretBossComponent> ent, LavalandSecretBossConfig config, MapGridComponent grid)
     {

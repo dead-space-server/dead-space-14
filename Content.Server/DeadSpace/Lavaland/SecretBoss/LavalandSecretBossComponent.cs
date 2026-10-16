@@ -114,6 +114,12 @@ public sealed partial class LavalandSecretBossComponent : Component
     [ViewVariables]
     public TimeSpan NextAwakenLine;
 
+    /// <summary>The ground of lavaland shakes under every player there until then (its next to last words).</summary>
+    [ViewVariables]
+    public TimeSpan ShakeUntil;
+
+    public TimeSpan NextShake;
+
     /// <summary>HUD id for the boss bar; arena HUD ids are positive.</summary>
     public const int HudId = -14;
 }

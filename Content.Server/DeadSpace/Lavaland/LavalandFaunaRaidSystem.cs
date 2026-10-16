@@ -370,8 +370,12 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
         }
 
         // A little ahead and a little farther: big mobs like the goliath stop with the wall more than a tile away.
+        // Of everything solid around there, the one most straight ahead: not a wall off to the side, struck askew
+        // while the one in its way stays standing.
         var position = _transform.GetWorldPosition(xform);
         var direction = Vector2.Normalize(towards);
+        EntityUid? best = null;
+        var bestScore = float.MaxValue;
         foreach (var reach in SmashReaches)
         {
             _obstacles.Clear();
@@ -387,11 +391,30 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
                     continue;
                 }
 
-                _combatMode.SetInCombatMode(uid, true);
-                _melee.AttemptLightAttack(uid, weaponUid, weapon, obstacle);
-                return;
+                var toObstacle = _transform.GetWorldPosition(obstacle) - position;
+                var distance = toObstacle.Length();
+                if (distance < 0.01f)
+                    continue;
+
+                // How far off its heading the obstacle is; past ~55 degrees it is beside it, not in its way.
+                var cos = Vector2.Dot(toObstacle / distance, direction);
+                if (cos < 0.57f)
+                    continue;
+
+                var score = (1f - cos) * 4f + distance * 0.1f;
+                if (score >= bestScore)
+                    continue;
+
+                bestScore = score;
+                best = obstacle;
             }
         }
+
+        if (best is not { } target)
+            return;
+
+        _combatMode.SetInCombatMode(uid, true);
+        _melee.AttemptLightAttack(uid, weaponUid, weapon, target);
     }
 
     private static readonly float[] SmashReaches = { 0.9f, 1.4f };

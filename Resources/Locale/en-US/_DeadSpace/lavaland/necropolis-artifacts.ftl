@@ -75,3 +75,5 @@ lavaland-tamed-order-stay = Your tamed creatures stay put.
 lavaland-tamed-order-attack = Your tamed creatures join the fight! Point at a target and they will go for it.
 lavaland-tamed-emp = { CAPITALIZE(THE($target)) } twitches - the nanomachines fail, it is wild again!
 lavaland-warp-cube-not-lavaland = The cube only works on Lavaland or in the caves, with its twin in the same place.
+lavaland-mad-miner-risen-name = necromorph miner
+lavaland-mad-miner-risen = { CAPITALIZE(THE($miner)) } jerks back up - claws burst from its hands!

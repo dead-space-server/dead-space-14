@@ -46,6 +46,18 @@ public sealed partial class LavalandSecretBossConfig
     [DataField]
     public float AwakenLineDuration = 3.2f;
 
+    /// <summary>Its voice under each of <see cref="AwakenLines"/>: one of these at random, like when it speaks in the fight.</summary>
+    [DataField]
+    public List<SoundSpecifier> AwakenTalkSounds = new()
+    {
+        new SoundPathSpecifier("/Audio/_DeadSpace/Lavaland/Celestial/sounds/Celestial_Talk_1.ogg"),
+        new SoundPathSpecifier("/Audio/_DeadSpace/Lavaland/Celestial/sounds/Celestial_Talk_2.ogg"),
+        new SoundPathSpecifier("/Audio/_DeadSpace/Lavaland/Celestial/sounds/Celestial_Talk_3.ogg"),
+    };
+
+    [DataField]
+    public float AwakenTalkVolume = -2f;
+
     /// <summary>Only players this close to the pit hear the awakening (0 - everyone on lavaland).</summary>
     [DataField]
     public float AwakenMessageRange = 60f;

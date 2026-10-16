@@ -46,9 +46,13 @@ public sealed class LavalandRadarPoint(Vector2 position, Color color, float size
 public sealed class LavalandSensorTabletState(
     List<LavalandRadarPoint> points,
     float scanRadius,
-    List<LavalandRadarPoint>? basePoints = null)
+    List<LavalandRadarPoint>? basePoints = null,
+    byte storm = 0)
     : BoundUserInterfaceState
 {
+    /// <summary>The ash storm on lavaland: 0 - calm, 1 - coming, 2 - raging. Shown in pink and red.</summary>
+    public byte Storm = storm;
+
     /// <summary>What moves or changes: miners, fauna, terrain around miners, beacons.</summary>
     public List<LavalandRadarPoint> Points = points;
     public float ScanRadius = scanRadius;

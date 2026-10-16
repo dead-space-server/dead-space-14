@@ -73,6 +73,21 @@ public sealed partial class LavalandMadMinerComponent : Component
     [DataField] public TimeSpan HudInterval = TimeSpan.FromSeconds(0.5);
     [DataField] public float RageHookDamageMultiplier = 2f;
 
+    // DS14: death is not the end - a while after it falls, it rises again as a necromorph.
+    /// <summary>How long it lies dead before it rises.</summary>
+    [DataField] public TimeSpan RiseDelay = TimeSpan.FromSeconds(5);
+    /// <summary>Health of the necromorph it rises as.</summary>
+    [DataField] public float RisenHealth = 175f;
+    [DataField] public DamageSpecifier RisenDamage = new() { DamageDict = new() { { "Slash", 22 }, { "Structural", 30 } } };
+    [DataField] public float RisenSpeed = 3.6f;
+    [DataField] public EntProtoId RisenBlood = "LavalandBubblegumBloodSplatter";
+    [DataField] public int RisenBloodCount = 9;
+    [DataField] public SoundSpecifier? RisenBloodSound = new SoundPathSpecifier("/Audio/Effects/gib1.ogg");
+    [DataField] public SoundSpecifier? RisenScream = new SoundPathSpecifier("/Audio/_DeadSpace/Necromorfs/necro-scream-other-1.ogg");
+    [DataField] public LocId RisenName = "lavaland-mad-miner-risen-name";
+    [ViewVariables] public TimeSpan? RiseAt;
+    [ViewVariables] public bool Risen;
+
     [ViewVariables] public EntityUid? Target;
     [ViewVariables] public readonly Dictionary<EntityUid, EntityUid> HookTargets = new();
     [ViewVariables] public EntityUid? HookAttacker;

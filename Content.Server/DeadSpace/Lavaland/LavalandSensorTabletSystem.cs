@@ -6,10 +6,13 @@ using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.DeadSpace.Lavaland.Components;
 using Content.Shared.Medical.SuitSensor;
 using Content.Shared.Medical.SuitSensors;
+using Content.Shared.Mind;
+using Content.Shared.Mind.Components;
 using Content.Shared.Mining.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Inventory;
+using Robust.Shared.Player;
 using Content.Shared.Wall;
 using Robust.Shared.Containers;
 using Robust.Server.GameObjects;
@@ -159,7 +162,7 @@ public sealed class LavalandSensorTabletSystem : EntitySystem
         while (sensors.MoveNext(out var sensorUid, out var sensor))
         {
             if (sensor.Mode != SuitSensorMode.SensorCords || sensor.User is not { } user ||
-                !IsEquippedSensor(sensorUid, sensor, user) ||
+                !IsEquippedSensor(sensorUid, sensor, user) || !IsPlayerBody(user) ||
                 !TryComp(user, out TransformComponent? userXform) ||
                 userXform.MapUid is not { } mapUid || !HasComp<LavalandMapComponent>(mapUid) ||
                 !users.Add(user))
@@ -204,7 +207,7 @@ public sealed class LavalandSensorTabletSystem : EntitySystem
         }
 
         _ui.SetUiState(ent.Owner, LavalandSensorTabletUiKey.Key,
-            new LavalandSensorTabletState(points, ent.Comp.ScanRadius, sentBase));
+            new LavalandSensorTabletState(points, ent.Comp.ScanRadius, sentBase, GetStorm()));
     }
 
     private List<LavalandRadarPoint> GetBasePoints(LavalandSensorTabletComponent tablet)
@@ -345,5 +348,32 @@ public sealed class LavalandSensorTabletSystem : EntitySystem
 
             points.Add(new LavalandRadarPoint(_transform.GetWorldPosition(xform), color, size, kind));
         }
+    }
+
+    /// <summary>How the ash storm on lavaland stands, for the tablet's screen.</summary>
+    private byte GetStorm()
+    {
+        var storm = LavalandWeatherStage.Calm;
+        var maps = EntityQueryEnumerator<LavalandMapComponent>();
+        while (maps.MoveNext(out _, out var lavaland))
+        {
+            if (lavaland.WeatherStage > storm)
+                storm = lavaland.WeatherStage;
+        }
+
+        return (byte) storm;
+    }
+
+    /// <summary>
+    /// A player or a player's body: somebody is (or was) playing it. Corpses lying about lavaland that nobody ever
+    /// played - unidentified bodies in old suits - are not shown.
+    /// </summary>
+    private bool IsPlayerBody(EntityUid uid)
+    {
+        if (HasComp<ActorComponent>(uid))
+            return true;
+
+        return TryComp<MindContainerComponent>(uid, out var container) && container.Mind is { } mindId &&
+               TryComp<MindComponent>(mindId, out var mind) && (mind.UserId != null || mind.OriginalOwnerUserId != null);
     }
 }
