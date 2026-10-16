@@ -48,7 +48,6 @@
     weight: 1
     maxCount: 10
   bossArenas:
-    LavalandHierophantArena: 1
     LavalandAshDrakeArena: 1
     LavalandBubblegumArena: 1
     LavalandColossusArena: 1
@@ -105,6 +104,8 @@
         message: lavaland-day-cycle-deep-night
         endMessage: lavaland-day-cycle-deep-night-end
         messageColor: "#8a1c1c"
+        sound:
+          path: /Audio/_DeadSpace/Lavaland/lava_warning.ogg
         jamTrackers: true
         blockJaunter: true
         wispGuide: true
@@ -161,6 +162,73 @@
     regenAmount: 5
     regenInterval: 10
     regenExcluded: [ Cellular ]
+  chromiteCaves:
+    enabled: true
+    biome: LavalandChromiteCaves
+    mapName: Хромитовые пещеры
+    mapHalfSize: 140
+    boundaryWidth: 3
+    boundaryTile: FloorChromite
+    boundaryWall: WallRockChromiteCavesBoundary
+    markerLayers:
+    - LavalandCavesOreMagmite
+    - LavalandCavesOreBluespaceCrystal
+    - LavalandCavesOreDiamond
+    - LavalandCavesOreUranium
+    pitPrototype: LavalandChromitePit
+    pitRadius: 1
+    pitMinDistance: 42
+    pitMaxDistance: 58
+    landingClearRadius: 7
+    landingFlowerRadius: 6
+    landingFlowerChance: 0.85
+    landingTile: FloorChromite
+    landingFlowers:
+    - LavalandChromiteLandingFlower
+    - LavalandChromiteLandingFlower
+    - LavalandChromiteLandingFlowerGlow
+    exitPrototype: LavalandChromiteExit
+    landingEffect: LavalandChromiteLandingPetals
+    exitRange: 1.3
+    exitPromptCooldown: 15
+    jumpDuration: 1.1
+    fallDuration: 4.5
+    landingDuration: 2.4
+    hopDuration: 2.1
+    ropeDuration: 0.9
+    flyUpDuration: 0.9
+    hangDuration: 4
+    climbOutDuration: 1.4
+    bossArenas:
+      LavalandHierophantCaveArena: 1
+    elite: MobLavalandPandora
+    eliteMinDistance: 45
+    eliteMaxDistance: 105
+    eliteClearRadius: 5
+    deepDarkLight: "#040510"
+    nightLight: "#2B3A70"
+    glowLight: "#2A2F78"
+    lightFade: 30
+    messageColor: "#7fc8ff"
+    deepNight:
+      lightColor: "#040510"
+      jamTrackers: true
+      blockJaunter: true
+      wispGuide: false
+      blockNightVision: true
+      suppressLavaLight: false
+      pdaLightTime: 10
+      pdaLightCooldown: 180
+      helmetLightTime: 25
+      helmetLightCooldown: 180
+      flashlightTime: 60
+      wispLightRadius: 10
+      wispLightEnergy: 3
+      darknessGrace: 15
+      darknessInterval: 15
+      darknessDamage:
+        types:
+          Heat: 25
   pipeSlide:
     enabled: true
     speed: 8
@@ -181,20 +249,20 @@
     chanceIncreaseMax: 0.35
     warningDuration: 60
     duration: 180
-    minDistance: 12
-    maxDistance: 20
+    # Tendrils rise this far from the outpost's edge (not its center).
+    minDistance: 4
+    maxDistance: 10
     warningSound:
-      path: /Audio/_DeadSpace/Announcements/attention.ogg
+      path: /Audio/_DeadSpace/Lavaland/lava_warning.ogg
     tendrils:
     - LavalandNecropolisTendrilGoliath
     - LavalandNecropolisTendrilGoliath
     - LavalandNecropolisTendrilWatcher
     - LavalandNecropolisTendrilLegion
     music:
-    - path: /Audio/_DeadSpace/Lavaland/Bosses/title1.ogg
-    - path: /Audio/_DeadSpace/Lavaland/Bosses/drake_fight.ogg
-    - path: /Audio/_DeadSpace/Lavaland/Bosses/bubblegum_fight.ogg
-    - path: /Audio/_DeadSpace/Lavaland/Bosses/colossus_fight.ogg
+    - path: /Audio/_DeadSpace/Lavaland/Raid/fauna-raid-1.ogg
+    - path: /Audio/_DeadSpace/Lavaland/Raid/fauna-raid-2.ogg
+    - path: /Audio/_DeadSpace/Lavaland/Raid/fauna-raid-3.ogg
   faunaEnabled: true
   faunaInitialSpawnCount: 300
   faunaSoftCap: 300

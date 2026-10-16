@@ -2,6 +2,7 @@ using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Atmos.EntitySystems;
+using Content.Server.DeadSpace.Lavaland.ChromiteCaves;
 using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Server.Parallax;
 using Content.Server.Procedural;
@@ -40,6 +41,7 @@ public sealed class LavalandSystem : EntitySystem
     [Dependency] private readonly IConfigurationManager _configuration = default!;
     [Dependency] private readonly DungeonSystem _dungeon = default!;
     [Dependency] private readonly LavalandBossArenaSystem _bossArena = default!;
+    [Dependency] private readonly LavalandChromiteCavesSystem _chromiteCaves = default!;
     [Dependency] private readonly LavalandFaunaPopulationSystem _faunaPopulation = default!;
     [Dependency] private readonly LavalandNecropolisTendrilPlacementSystem _tendrilPlacement = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
@@ -217,6 +219,7 @@ public sealed class LavalandSystem : EntitySystem
         LoadCustomGrids(mapId, mapUid, grid, biome, planet, random, placedStructures, cancellation);
         await _bossArena.SpawnConfiguredArenas(mapUid, grid, biome, planet, random, cancellation);
         await _faunaPopulation.SetupMap(mapUid, planet, cancellation);
+        await _chromiteCaves.SetupCaves(mapUid, grid, planet, random, cancellation);
 
         cancellation.ThrowIfCancellationRequested();
         CreateLandingWarp(mapUid, planet);

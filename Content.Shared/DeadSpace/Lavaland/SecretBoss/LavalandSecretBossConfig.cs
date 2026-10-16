@@ -23,12 +23,28 @@ public sealed partial class LavalandSecretBossConfig
     [DataField]
     public TimeSpan AwakenDelay = TimeSpan.FromSeconds(10);
 
-    /// <summary>Celestial-style subtitle everyone on lavaland sees.</summary>
+    /// <summary>
+    /// What the Celestial says from its dream as the way down opens, one subtitle after another,
+    /// heard around the pit (<see cref="AwakenMessageRange"/>).
+    /// </summary>
     [DataField]
-    public LocId AwakenMessage = "lavaland-secret-boss-awaken";
+    public List<LocId> AwakenLines = new()
+    {
+        "lavaland-secret-boss-awaken-line-1",
+        "lavaland-secret-boss-awaken-line-2",
+        "lavaland-secret-boss-awaken-line-3",
+        "lavaland-secret-boss-awaken-line-4",
+        "lavaland-secret-boss-awaken-line-5",
+        "lavaland-secret-boss-awaken-line-6",
+        "lavaland-secret-boss-awaken-line-7",
+        "lavaland-secret-boss-awaken-line-8",
+        "lavaland-secret-boss-awaken-line-9",
+        "lavaland-secret-boss-awaken-line-10",
+    };
 
+    /// <summary>How long each of <see cref="AwakenLines"/> stays on screen.</summary>
     [DataField]
-    public float AwakenMessageDuration = 6f;
+    public float AwakenLineDuration = 3.2f;
 
     /// <summary>Only players this close to the pit hear the awakening (0 - everyone on lavaland).</summary>
     [DataField]
@@ -189,7 +205,8 @@ public sealed partial class LavalandSecretBossConfig
     public TimeSpan IntroLength = TimeSpan.FromSeconds(22);
 
     [DataField]
-    public SoundSpecifier? FightMusic = new SoundPathSpecifier("/Audio/_DeadSpace/Lavaland/Celestial/music/IT_DOESNT_END_HERE.ogg");
+    /// <summary>A collection: one of its tracks is picked at random for each fight.</summary>
+    public SoundSpecifier? FightMusic = new SoundCollectionSpecifier("LavalandCelestialFight");
 
     /// <summary>With no living fighter for this long, the attempt fails and the pit opens again.</summary>
     [DataField]

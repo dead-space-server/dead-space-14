@@ -25,6 +25,36 @@
     impactSound: /Audio/_DeadSpace/Lavaland/Hierophant/repulse.ogg
     subtitle: lavaland-boss-intro-hierophant
 
+# The Hierophant lives in the chromite caves now.
+- type: lavalandBossArena
+  id: LavalandHierophantCaveArena
+  arenaName: Арена Иерофанта
+  gridPath: /Maps/_DeadSpace/Lavaland/hierophant_arena.yml
+  tileMovement: true
+  bossPrototype: MobLavalandHierophant
+  floorTile: FloorHierophantArena
+  wallPrototype: WallHierophantArena
+  spawnAttempts: 200
+  minDistance: 55
+  maxDistance: 105
+  mapEdgePadding: 6
+  landingExclusionRadius: 30
+  outpostExclusionRadius: 0
+  ftlBeaconExclusionRadius: 0
+  gridSeparation: 16
+  naturalFloors:
+    FloorChromite: FloorHierophantArena
+  resetOnEmpty: true
+  emptyResetDelay: 10
+  emptyResetHealFraction: 5
+  emptyResetMinHeal: 450
+  intro:
+    style: Bowling
+    titleColor: "#c47bff"
+    roarSound: /Audio/_DeadSpace/Lavaland/Hierophant/sonic_jackhammer.ogg
+    impactSound: /Audio/_DeadSpace/Lavaland/Hierophant/repulse.ogg
+    subtitle: lavaland-boss-intro-hierophant
+
 - type: tile
   id: FloorHierophantArena
   name: tiles-hierophant-arena-floor
@@ -294,9 +324,13 @@
   - type: LavalandBoss
     bossName: Иерофант
     maxHealth: 2750
-    music: /Audio/_DeadSpace/Lavaland/Bosses/title1.ogg
+    music:
+      path: /Audio/_DeadSpace/Lavaland/Bosses/hierophant_fight.ogg
+      params:
+        volume: 4
     deathSound: /Audio/_DeadSpace/Lavaland/Hierophant/repulse.ogg
     deathRewards:
+    - WeaponGrapplingGun # the only way out of the chromite caves
     - LavalandNecropolisChestHardsuit
     - LavalandNecropolisChest
     - LavalandNecropolisChest

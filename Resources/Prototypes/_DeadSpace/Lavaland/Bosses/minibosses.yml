@@ -27,8 +27,7 @@
       types:
         Blunt: 30
     music:
-    - /Audio/_DeadSpace/Lavaland/Bosses/colossus_fight.ogg
-    - /Audio/_DeadSpace/Lavaland/Bosses/bubblegum_fight.ogg
+    - /Audio/_DeadSpace/Lavaland/Bosses/mad_miner_fight.ogg
     extraRewards:
     - LavalandCleavingSaw
     noticeRange: 7
@@ -153,7 +152,7 @@
     elites:
     - MobLavalandBroodmother
     - MobLavalandLegionnaire
-    - MobLavalandPandora
+    # Pandora waits in the chromite caves instead.
 
 - type: entity
   id: LavalandEliteTumorWall
@@ -261,10 +260,7 @@
     hudName: lavaland-elite-broodmother
     maxHealth: 1000
     music:
-    - /Audio/_DeadSpace/Lavaland/Bosses/title1.ogg
-    - /Audio/_DeadSpace/Lavaland/Bosses/drake_fight.ogg
-    - /Audio/_DeadSpace/Lavaland/Bosses/bubblegum_fight.ogg
-    - /Audio/_DeadSpace/Lavaland/Bosses/colossus_fight.ogg
+    - /Audio/_DeadSpace/Lavaland/Bosses/broodmother_fight.ogg
     rewards:
     - prototype: LavalandNecropolisChest
     - prototype: LavalandEliteTrophyBroodmother
@@ -364,10 +360,7 @@
     hudName: lavaland-elite-legionnaire
     maxHealth: 1000
     music:
-    - /Audio/_DeadSpace/Lavaland/Bosses/title1.ogg
-    - /Audio/_DeadSpace/Lavaland/Bosses/drake_fight.ogg
-    - /Audio/_DeadSpace/Lavaland/Bosses/bubblegum_fight.ogg
-    - /Audio/_DeadSpace/Lavaland/Bosses/colossus_fight.ogg
+    - /Audio/_DeadSpace/Lavaland/Bosses/legionnaire_fight.ogg
     rewards:
     - prototype: LavalandNecropolisChest
     - prototype: LavalandEliteTrophyLegionnaire
@@ -511,11 +504,11 @@
     hudName: lavaland-elite-pandora
     maxHealth: 1000
     music:
-    - /Audio/_DeadSpace/Lavaland/Bosses/title1.ogg
-    - /Audio/_DeadSpace/Lavaland/Bosses/drake_fight.ogg
-    - /Audio/_DeadSpace/Lavaland/Bosses/bubblegum_fight.ogg
-    - /Audio/_DeadSpace/Lavaland/Bosses/colossus_fight.ogg
+    - path: /Audio/_DeadSpace/Lavaland/Bosses/pandora_fight.ogg
+      params:
+        volume: 4
     rewards:
+    - prototype: WeaponGrapplingGun # the only way out of the chromite caves
     - prototype: LavalandNecropolisChest
     - prototype: LavalandEliteTrophyPandora
       chance: 0.5

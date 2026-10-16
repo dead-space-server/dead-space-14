@@ -41,7 +41,7 @@ lavaland-ship-bottle-empty = The bottle is empty, the boat is outside.
 lavaland-ship-bottle-release = You release the boat from the bottle.
 lavaland-ship-bottle-return = The boat returns into the bottle.
 lavaland-potion-nothing = You feel nothing but a terrible aftertaste.
-lavaland-flight-potion-drink = A terrible pain travels down your back as wings burst out! Chasms and lava no longer scare you.
+lavaland-flight-potion-drink = A little white cloud gathers and thickens under your feet. Chasms and lava no longer scare you.
 
 lavaland-asclepius-unworthy = The snake carving comes alive for a moment, but seems to find you incapable of holding its oath.
 lavaland-asclepius-already = You can't possibly handle the responsibility of more than one rod!

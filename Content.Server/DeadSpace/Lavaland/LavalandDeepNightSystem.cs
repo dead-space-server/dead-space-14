@@ -3,6 +3,7 @@
 using System.Linq;
 using Content.Server.DeadSpace.Attachments;
 using Content.Server.DeadSpace.Components.NightVision;
+using Content.Server.DeadSpace.Lavaland.ChromiteCaves;
 using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Server.Light.EntitySystems;
 using Content.Shared.Clothing.Components;
@@ -35,7 +36,9 @@ namespace Content.Server.DeadSpace.Lavaland;
 public sealed class LavalandDeepNightSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly AttachmentSystem _attachment = default!;
+    [Dependency] private readonly LavalandChromiteCavesSystem _caves = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
@@ -129,6 +132,20 @@ public sealed class LavalandDeepNightSystem : EntitySystem
 
             _deepMaps[uid] = deep;
         }
+
+        // While it is day on lavaland the chromite caves are in their own deep night.
+        var caves = EntityQueryEnumerator<Content.Shared.DeadSpace.Lavaland.ChromiteCaves.LavalandChromiteCavesComponent>();
+        while (caves.MoveNext(out var uid, out _))
+        {
+            if (_caves.TryGetDeepNight(uid, out var deep))
+                _deepMaps[uid] = deep;
+        }
+    }
+
+    /// <summary>The deep night the entity is in right now (lavaland, or the chromite caves while it is day above).</summary>
+    public bool TryGetDeepNight(EntityUid uid, out LavalandDeepNightConfig deep)
+    {
+        return TryGetDeep(uid, out deep);
     }
 
     private bool TryGetDeep(EntityUid uid, out LavalandDeepNightConfig deep)
@@ -393,6 +410,17 @@ public sealed class LavalandDeepNightSystem : EntitySystem
     /// <summary>Is there a light shining on this player (the lava's glow does not count, it is gone)?</summary>
     private bool IsLit(EntityUid uid, TransformComponent xform, LavalandDeepNightConfig deep)
     {
+        // A light he carries himself - a flashlight in hand (directional ones too), a helmet lamp, a lit gun -
+        // always counts: the lookup does not always reach items in hands and slots.
+        foreach (var item in _inventory.GetHandOrInventoryEntities(uid))
+        {
+            if (TryComp<PointLightComponent>(item, out var carried) &&
+                carried.Enabled && carried.Radius > 0f && carried.Energy > 0f)
+            {
+                return true;
+            }
+        }
+
         var position = _transform.GetMapCoordinates(uid, xform);
         _nearbyLights.Clear();
         _lookup.GetEntitiesInRange(position, deep.LightSearchRange, _nearbyLights, LookupFlags.All);

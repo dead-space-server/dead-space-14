@@ -39,9 +39,14 @@ public sealed class LavalandSpriteMotionSystem : EntitySystem
         {
             _sprite.SetOffset((ent.Owner, sprite), original.Offset);
             _sprite.SetColor((ent.Owner, sprite), original.Color);
-            _sprite.SetRotation((ent.Owner, sprite), original.Rotation);
+            _sprite.SetRotation((ent.Owner, sprite), EndRotation(ent.Comp, original.Rotation));
             _spriteTree.QueueTreeUpdate((ent.Owner, sprite));
         }
+    }
+
+    private static Angle EndRotation(LavalandSpriteMotionComponent motion, Angle original)
+    {
+        return motion.EndRotation is { } degrees ? original + Angle.FromDegrees(degrees) : original;
     }
 
     /// <summary>Spawns a thing of an intro here, on this client only.</summary>
@@ -111,7 +116,7 @@ public sealed class LavalandSpriteMotionSystem : EntitySystem
             if (motion.Spin != 0f && progress < 1f)
                 _sprite.SetRotation((uid, sprite), sprite.Rotation + new Angle(motion.Spin * frameTime));
             else if (motion.Spin != 0f)
-                _sprite.SetRotation((uid, sprite), original.Rotation);
+                _sprite.SetRotation((uid, sprite), EndRotation(motion, original.Rotation));
 
             var alpha = (motion.FadeIn ? progress : 1f) * (motion.FadeOut ? 1f - progress : 1f);
             if (motion.FadeIn || motion.FadeOut)

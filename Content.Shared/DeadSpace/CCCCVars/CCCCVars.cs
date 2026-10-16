@@ -124,6 +124,12 @@ public sealed class CCCCVars
     public static readonly CVarDef<bool> LavalandAutoGenerate =
         CVarDef.Create("lavaland.auto_generate", true, CVar.SERVERONLY);
 
+    /// <summary>
+    /// Small lavaland particles: sparks and ash over lava, petals, motes and fireflies of the chromite caves.
+    /// </summary>
+    public static readonly CVarDef<bool> LavalandParticles =
+        CVarDef.Create("lavaland.particles", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
     public static readonly CVarDef<bool> AshWalkersEnabled =
         CVarDef.Create("lavaland.ash_walkers_enabled", true, CVar.SERVER | CVar.REPLICATED);
 

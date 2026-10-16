@@ -33,6 +33,9 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: LavalandNecropolisTendril
+  # Explosions don't take tendrils down: only the miners' own blows do.
+  - type: ExplosionResistance
+    damageCoefficient: 0
   - type: PointLight
     radius: 2
     energy: 2

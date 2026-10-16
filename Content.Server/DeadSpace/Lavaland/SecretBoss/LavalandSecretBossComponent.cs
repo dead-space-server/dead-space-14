@@ -107,6 +107,13 @@ public sealed partial class LavalandSecretBossComponent : Component
     [ViewVariables]
     public TimeSpan NextHudUpdate;
 
+    /// <summary>The next of the Celestial's words from its dream, and when it is said.</summary>
+    [ViewVariables]
+    public int AwakenLine = -1;
+
+    [ViewVariables]
+    public TimeSpan NextAwakenLine;
+
     /// <summary>HUD id for the boss bar; arena HUD ids are positive.</summary>
     public const int HudId = -14;
 }

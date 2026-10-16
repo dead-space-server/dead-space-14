@@ -39,6 +39,10 @@ public sealed partial class LavalandBossArenaComponent : Component
     [ViewVariables]
     public TimeSpan? IntroEndsAt;
 
+    /// <summary>Fight theme chosen for the intro of a boss not spawned yet: the fight plays the same one.</summary>
+    [ViewVariables]
+    public Robust.Shared.Audio.SoundSpecifier? IntroMusic;
+
     /// <summary>Players frozen by the intro (released when it ends).</summary>
     [ViewVariables]
     public readonly List<EntityUid> IntroWatchers = new();
@@ -53,6 +57,10 @@ public sealed partial class LavalandBossArenaComponent : Component
     /// <summary>Where the copy of the boss stands at the end of the intro: the real boss is brought out there.</summary>
     [ViewVariables]
     public MapCoordinates? IntroBossSpot;
+
+    /// <summary>Where the watchers knocked flying in the intro really end up: they are moved there when it ends.</summary>
+    [ViewVariables]
+    public readonly List<(EntityUid Watcher, MapCoordinates Spot)> IntroKnockSpots = new();
 
     [ViewVariables]
     public Vector2i BossSpawnTile = Vector2i.Zero;

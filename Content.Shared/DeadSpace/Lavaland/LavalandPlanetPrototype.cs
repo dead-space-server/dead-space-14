@@ -148,6 +148,10 @@ public sealed partial class LavalandPlanetPrototype : IPrototype
     [DataField]
     public Content.Shared.DeadSpace.Lavaland.SecretBoss.LavalandSecretBossConfig SecretBoss = new();
 
+    /// <summary>Chromite caves under the planet. Off unless set in the prototype.</summary>
+    [DataField]
+    public Content.Shared.DeadSpace.Lavaland.ChromiteCaves.LavalandChromiteCavesConfig ChromiteCaves = new() { Enabled = false };
+
     [DataField]
     public float TendrilMapEdgePadding = 24f;
 

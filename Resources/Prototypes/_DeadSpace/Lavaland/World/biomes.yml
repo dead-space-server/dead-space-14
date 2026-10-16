@@ -149,6 +149,20 @@
     entities:
     - LavalandWildWhelpNest
 
+  - !type:BiomeEntityLayer
+    threshold: 0.996
+    minimumDistance: 30
+    noise:
+      seed: 72
+      noiseType: OpenSimplex2
+      frequency: 0.05
+    allowedTiles:
+    - FloorBasalt
+    - FloorLavalandAsh
+    - FloorLavalandPaleGrass
+    entities:
+    - LavalandWhelpFlockTrigger
+
   - !type:BiomeDummyLayer
     id: Loot
 

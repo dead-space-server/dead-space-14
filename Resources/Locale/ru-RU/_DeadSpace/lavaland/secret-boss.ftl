@@ -1,4 +1,3 @@
-lavaland-secret-boss-awaken = РЁВ ДОНОСИТСЯ С ЯМ. КАЖЕТСЯ, ВЫ ЧТО-ТО ПРОБУДИЛИ.
 lavaland-secret-boss-name = Селестиал
 lavaland-secret-boss-gas = Цветок рассыпается фиолетовым газом... веки тяжелеют.
 
@@ -14,3 +13,14 @@ lavaland-blessing-armor = Благословение Селестиала: ва�
 lavaland-blessing-health = Благословение Селестиала: вы стали живучее.
 lavaland-blessing-nobreathing = Благословение Селестиала: вам больше не нужно дышать, а пепельная буря вас не трогает.
 lavaland-blessing-regeneration = Благословение Селестиала: ваши раны затягиваются сами.
+
+lavaland-secret-boss-awaken-line-1 = "..."
+lavaland-secret-boss-awaken-line-2 = "... ВЫ."
+lavaland-secret-boss-awaken-line-3 = "ВЫ ТЕ, КТО ОСМЕЛИЛСЯ РАЗБУДИТЬ МЕНЯ?"
+lavaland-secret-boss-awaken-line-4 = "КАКАЯ..."
+lavaland-secret-boss-awaken-line-5 = "ГОРДЫНЯ."
+lavaland-secret-boss-awaken-line-6 = "ЧЕГО ЖЕ ВЫ ИЩЕТЕ?"
+lavaland-secret-boss-awaken-line-7 = "У МЕНЯ НЕТ ДЛЯ ВАС ОТВЕТОВ, Я НЕ ДАРУЮ СПАСЕНИЯ."
+lavaland-secret-boss-awaken-line-8 = "ЕСЛИ ВЫ ПРИШЛИ СЮДА В ПОИСКАХ СПАСИТЕЛЯ..."
+lavaland-secret-boss-awaken-line-9 = "ВНЕМЛИТЕ МОИМ СЛОВАМ."
+lavaland-secret-boss-awaken-line-10 = "НЕ УПОРСТВУЙТЕ."

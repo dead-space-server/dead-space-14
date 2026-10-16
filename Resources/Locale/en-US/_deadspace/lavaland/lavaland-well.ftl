@@ -33,3 +33,4 @@ lavaland-morkite-hud-leaking = ▲ PIPE BROKEN - morkite is leaking
 lavaland-morkite-hud-not-connected = ○ The well is not connected to the extractors
 lavaland-morkite-hud-no-well = ○ No bluespace well deployed
 lavaland-morkite-hud-close = Close. To open again, click the bluespace well, a morkite extractor or a pipe leading to it.
+lavaland-raid-ruined = Nobody stood up for the outpost - the fauna have torn it apart!

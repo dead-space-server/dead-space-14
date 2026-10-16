@@ -4,9 +4,13 @@ using System.Linq;
 using System.Numerics;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Backmen.Body.Components;
+using Content.Server.DeadSpace.Lavaland.ChromiteCaves;
 using Content.Server.DeadSpace.Lavaland.Celestial;
 using Content.Server.DeadSpace.Lavaland.Components;
+using Content.Server.Chat.Managers;
 using Content.Server.EUI;
+using Content.Shared.Chat;
+using Robust.Shared.Utility;
 using Content.Server.Parallax;
 using Content.Shared.Atmos;
 using Content.Shared.Bed.Sleep;
@@ -65,12 +69,17 @@ public sealed class LavalandSecretBossSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
+    [Dependency] private readonly IChatManager _chatManager = default!;
+
+    private static readonly Color BlessingColor = Color.FromHex("#c47bff");
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly ITileDefinitionManager _tileDefinition = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly MobThresholdSystem _thresholds = default!;
+    [Dependency] private readonly LavalandPitLandingSystem _landing = default!;
+    [Dependency] private readonly LavalandChromiteCavesSystem _caves = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
@@ -154,6 +163,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
 
             var boss = EnsureComp<LavalandSecretBossComponent>(uid);
             UpdateStage((uid, boss), config, now);
+            UpdateAwakenLines((uid, boss), config, now);
         }
 
         UpdateDescents(now);
@@ -216,9 +226,11 @@ public sealed class LavalandSecretBossSystem : EntitySystem
     private bool AllArenaBossesDead(Entity<LavalandSecretBossComponent> ent)
     {
         var arenas = EntityQueryEnumerator<LavalandBossArenaComponent>();
+        var caves = _caves.GetCaves(ent.Owner);
         while (arenas.MoveNext(out var arenaUid, out var arena))
         {
-            if (arena.Map != ent.Owner)
+            // The Hierophant fights in the chromite caves under this lavaland.
+            if (arena.Map != ent.Owner && (caves == null || arena.Map != caves))
                 continue;
 
             ent.Comp.SeenArenas.Add(arenaUid);
@@ -250,13 +262,39 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             filter = Filter.Empty().AddInRange(pitCoordinates, config.AwakenMessageRange);
         }
 
-        RaiseNetworkEvent(new CelestialSpeakEvent(Loc.GetString(config.AwakenMessage), config.AwakenMessageDuration), filter);
         if (config.AwakenSound != null)
             _audio.PlayGlobal(config.AwakenSound, filter, true);
+
+        // The Celestial speaks from its dream, line by line, right away.
+        ent.Comp.AwakenLine = config.AwakenLines.Count > 0 ? 0 : -1;
+        ent.Comp.NextAwakenLine = _timing.CurTime;
 
         ent.Comp.Stage = LavalandSecretBossStage.PitOpen;
         ent.Comp.NextCheck = _timing.CurTime;
         ClearFaunaNearPit(ent, config);
+    }
+
+    /// <summary>The words from the Celestial's dream, one subtitle after another, heard around the pit.</summary>
+    private void UpdateAwakenLines(Entity<LavalandSecretBossComponent> ent, LavalandSecretBossConfig config, TimeSpan now)
+    {
+        var comp = ent.Comp;
+        if (comp.AwakenLine < 0 || now < comp.NextAwakenLine)
+            return;
+
+        if (comp.AwakenLine >= config.AwakenLines.Count)
+        {
+            comp.AwakenLine = -1;
+            return;
+        }
+
+        var filter = Filter.BroadcastMap(Transform(ent).MapID);
+        if (config.AwakenMessageRange > 0f && comp.Pit is { } pit && !TerminatingOrDeleted(pit))
+            filter = Filter.Empty().AddInRange(_transform.GetMapCoordinates(pit), config.AwakenMessageRange);
+
+        var line = Loc.GetString(config.AwakenLines[comp.AwakenLine]);
+        RaiseNetworkEvent(new CelestialSpeakEvent(line, config.AwakenLineDuration), filter);
+        comp.AwakenLine++;
+        comp.NextAwakenLine = now + TimeSpan.FromSeconds(config.AwakenLineDuration);
     }
 
     private bool TryPlacePit(Entity<LavalandSecretBossComponent> ent, LavalandSecretBossConfig config, MapGridComponent grid)
@@ -742,6 +780,8 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             FinishDescent(uid);
             var offset = new Vector2(_random.NextFloat(-1f, 1f), _random.NextFloat(-1f, 1f));
             _transform.SetMapCoordinates(uid, new MapCoordinates(comp.MazeStart.Position + offset, comp.MazeStart.MapId));
+            // The doll drops onto the floor of the own screen and gets up.
+            _landing.StartLanding(uid, TimeSpan.FromSeconds(2.4));
         }
     }
 
@@ -1159,8 +1199,16 @@ public sealed class LavalandSecretBossSystem : EntitySystem
 
             var blessing = _random.Pick(config.Blessings);
             ApplyBlessing(fighter, blessing, config);
-            _popup.PopupEntity(Loc.GetString($"lavaland-blessing-{blessing.ToString().ToLowerInvariant()}"),
-                fighter, fighter, PopupType.Large);
+            var text = Loc.GetString($"lavaland-blessing-{blessing.ToString().ToLowerInvariant()}");
+            _popup.PopupEntity(text, fighter, fighter, PopupType.Large);
+
+            // And in the chat, so it is not lost once the popup is gone.
+            if (_players.TryGetSessionByEntity(fighter, out var session))
+            {
+                _chatManager.ChatMessageToOne(ChatChannel.Server, text,
+                    $"[color=#c47bff][bold]{FormattedMessage.EscapeText(text)}[/bold][/color]",
+                    EntityUid.Invalid, false, session.Channel, BlessingColor);
+            }
         }
 
         ent.Comp.Participants.Clear();

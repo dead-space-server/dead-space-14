@@ -188,6 +188,35 @@
       0: Alive
       60: Dead
     showOverlays: false
+    # A repaired minebot gets back to work.
+    allowRevives: true
+  # Like a borg: a welder mends the frame, cable coils the wiring (cables heal only silicon).
+  - type: Damageable
+    damageContainer: Silicon
+  - type: Repairable
+    damageValue: -10
+    doAfterDelay: 1
+    fuelCost: 0.5
+    allowSelfRepair: false
+  # Borg sounds as it breaks down.
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 40
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Machines/warning_buzzer.ogg
+          params:
+            volume: 5
+    - trigger:
+        !type:DamageTrigger
+        damage: 60
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
   - type: RechargeBasicEntityAmmo
     rechargeCooldown: 1.5
   - type: BasicEntityAmmoProvider
@@ -250,14 +279,14 @@
   components:
   - type: Sprite
     drawdepth: Overdoors
-    sprite: _DeadSpace/Lavaland/Effects/Wisp.rsi
+    sprite: _DeadSpace/Lavaland/Effects/LanternWisp.rsi
     layers:
-    - state: orb
+    - state: wisp
       shader: unshaded
   - type: PointLight
     radius: 6
     energy: 1.2
-    color: "#79f1ff"
+    color: "#a77bff"
   - type: Tag
     tags:
     - HideContextMenu
@@ -363,7 +392,7 @@
   parent: BaseItem
   id: LavalandFlightPotion
   name: странный эликсир
-  description: Фляга с почти святой аурой. На этикетке написано «расправь крылья».
+  description: Фляга с почти святой аурой. На этикетке написано «ходи по облакам».
   components:
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Specific/flight_potion.rsi
@@ -375,12 +404,10 @@
     size: Small
   - type: LavalandPotion
     message: lavaland-flight-potion-drink
-    damage:
-      types:
-        Blunt: 20
     addedComponents:
     - type: LavalandChasmImmune
     - type: CanMoveInAir
+    - type: LavalandCloudWalker # a little white cloud under the feet instead of wings
   - type: StaticPrice
     price: 3000
 

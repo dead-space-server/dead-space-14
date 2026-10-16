@@ -193,6 +193,14 @@ public sealed partial class LavalandLegionMegafaunaComponent : Component
     [ViewVariables]
     public Vector2 LastStuckPosition;
 
+    /// <summary>The grid of the Legion's own lair: its indestructible walls give way to the Legion itself.</summary>
+    [ViewVariables]
+    public EntityUid? Lair;
+
+    /// <summary>Stuck checks in a row it has not moved: from the second one on it breaks all around its body.</summary>
+    [ViewVariables]
+    public int StuckCount;
+
     /// <summary>
     /// Outside an arena: whoever woke the Legion. Every body hunts them across the map until one of them dies.
     /// </summary>

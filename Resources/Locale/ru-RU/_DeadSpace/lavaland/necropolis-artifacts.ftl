@@ -41,7 +41,7 @@ lavaland-ship-bottle-empty = Бутылка пуста — лодка снару
 lavaland-ship-bottle-release = Вы выпускаете лодку из бутылки.
 lavaland-ship-bottle-return = Лодка возвращается в бутылку.
 lavaland-potion-nothing = Вы не чувствуете ничего, кроме ужасного послевкусия.
-lavaland-flight-potion-drink = Жуткая боль пронзает спину — из неё вырываются крылья! Теперь вам не страшны пропасти и лава.
+lavaland-flight-potion-drink = Под вашими ногами клубится и густеет маленькое белое облачко. Теперь вам не страшны пропасти и лава.
 
 lavaland-asclepius-unworthy = Змея на жезле на мгновение оживает, но, кажется, не считает вас достойным клятвы.
 lavaland-asclepius-already = Вы не выдержите ответственности за второй жезл!

@@ -10,5 +10,6 @@ ent-LavalandColossusDeathBolt = death bolt
 lavaland-colossus-speech-cannot-dodge = "You can't dodge."
 lavaland-colossus-speech-judgement = "Judgement."
 lavaland-colossus-speech-die = "Die."
+lavaland-colossus-speech-burst = "Burst."
 lavaland-colossus-speech-see-you = "I see you."
 lavaland-colossus-fury = THE COLOSSUS IS FURIOUS.

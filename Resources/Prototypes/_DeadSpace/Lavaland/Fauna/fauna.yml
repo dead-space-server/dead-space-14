@@ -3,6 +3,8 @@
   abstract: true
   components:
   - type: LavalandFauna
+  # Explosions kill fauna but don't blow the bodies apart, like the bosses.
+  - type: DestructionResistance
   - type: LavalandWeatherImmune
   - type: LavalandChasmImmune
   - type: PermanentStatusEffects
@@ -28,6 +30,9 @@
   parent: [ MobGoliath, BaseMobLavalandFauna ]
   suffix: Lavaland
   components:
+  # The heaviest wall-breaker of lavaland.
+  - type: LavalandFauna
+    structuralDamage: 120
   - type: LavalandTrophyDrop
     trophy: CrusherTrophyGoliathTentacle
     chance: 0.25

@@ -184,6 +184,13 @@ public sealed class LavalandColossusSystem : EntitySystem
             return;
         }
 
+        if (_random.Prob(colossus.BurstChance))
+        {
+            Burst(uid, colossus, now);
+            colossus.NextAttack = now + GetScaledCooldown(colossus.BurstCooldown, rage, colossus.MaxCooldownReduction);
+            return;
+        }
+
         if (_random.Prob(colossus.RandomAttackChance))
         {
             QueueRandomShots(uid, colossus, arena, grid, now);
@@ -332,13 +339,13 @@ public sealed class LavalandColossusSystem : EntitySystem
     {
         for (var i = colossus.PendingFuryBlasts.Count - 1; i >= 0; i--)
         {
-            var (coords, at) = colossus.PendingFuryBlasts[i];
-            if (at > now)
+            var blast = colossus.PendingFuryBlasts[i];
+            if (blast.At > now)
                 continue;
 
             colossus.PendingFuryBlasts.RemoveAt(i);
-            _explosion.QueueExplosion(coords, "Default", colossus.FuryExplosionIntensity, colossus.FuryExplosionSlope,
-                colossus.FuryExplosionMaxTile, uid, tileBreakScale: 0f, maxTileBreak: 0, canCreateVacuum: false);
+            _explosion.QueueExplosion(blast.Coords, "Default", blast.Intensity, blast.Slope,
+                blast.MaxTile, uid, tileBreakScale: 0f, maxTileBreak: 0, canCreateVacuum: false);
         }
 
         if (!colossus.Furious)
@@ -395,11 +402,31 @@ public sealed class LavalandColossusSystem : EntitySystem
                     : center.Position + _random.NextAngle().ToVec() * _random.NextFloat(1.5f, colossus.FuryMarkRadius);
                 var coords = new MapCoordinates(spot, center.MapId);
                 Spawn(colossus.FuryMarkPrototype, coords);
-                colossus.PendingFuryBlasts.Add((coords, now + colossus.FuryBlastDelay));
+                colossus.PendingFuryBlasts.Add(new LavalandColossusPendingBlast(coords, now + colossus.FuryBlastDelay,
+                    colossus.FuryExplosionIntensity, colossus.FuryExplosionSlope, colossus.FuryExplosionMaxTile));
             }
         }
 
         _audio.PlayPvs(colossus.TelegraphSound, uid, AudioParams.Default.WithVolume(2f));
+    }
+
+    /// <summary>"Burst.": storm marks around every player, and a blast on each of them a moment later.</summary>
+    private void Burst(EntityUid uid, LavalandColossusComponent colossus, TimeSpan now)
+    {
+        Popup(uid, "lavaland-colossus-speech-burst");
+        Telegraph(uid, colossus);
+        foreach (var participant in _participants)
+        {
+            var center = _transform.GetMapCoordinates(participant);
+            for (var i = 0; i < colossus.BurstMarksPerPlayer; i++)
+            {
+                var spot = center.Position + _random.NextAngle().ToVec() * _random.NextFloat(0.8f, colossus.BurstMarkRadius);
+                var coords = new MapCoordinates(spot, center.MapId);
+                Spawn(colossus.BurstMarkPrototype, coords);
+                colossus.PendingFuryBlasts.Add(new LavalandColossusPendingBlast(coords, now + colossus.BurstDelay,
+                    colossus.BurstExplosionIntensity, colossus.BurstExplosionSlope, colossus.BurstExplosionMaxTile));
+            }
+        }
     }
 
     private void Telegraph(EntityUid uid, LavalandColossusComponent colossus)

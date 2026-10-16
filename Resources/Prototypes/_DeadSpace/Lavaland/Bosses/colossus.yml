@@ -6,8 +6,10 @@
   wallPrototype: WallColossusArena
   lightPrototype: LavalandColossusArenaLight
   cave:
-    thickness: 12
-    shell: 12
+    # The whole ring is the boss's own wall, 3 tiles, no ore; then a thin band of basalt over the land.
+    thickness: 3
+    shell: 3
+    surround: 3
     shellRock: WallColossusArena
     roughness: 0
     passages: 2
@@ -34,6 +36,14 @@
       WallRockBasaltBluespaceCrystal: 2
       WallRockBasaltArtifactFragment: 2
   decorations:
+  # Ash trees along the walls, like on the land around.
+  - prototype: FloraTreeLavalandAsh
+    count: 7
+    spawnAttempts: 120
+    minDistance: 15
+    maxDistance: 21
+    edgePadding: 1
+    minSeparation: 3
   - prototype: BasaltRandom
     count: 110
     spawnAttempts: 130
@@ -118,6 +128,26 @@
   - type: TimedDespawn
     lifetime: 8
   - type: LavalandColossusProjectile
+  # Hits with its thin glowing core only, not the whole bullet box.
+  - type: Fixtures
+    fixtures:
+      projectile:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.04,-0.04,0.04,0.22"
+        hard: false
+        mask:
+        - Impassable
+        - BulletImpassable
+      fly-by:
+        shape: !type:PhysShapeCircle
+          radius: 1.5
+        layer:
+        - Impassable
+        - MidImpassable
+        - HighImpassable
+        - LowImpassable
+        hard: False
 
 - type: entity
   parent: [ BaseMobAsteroid, BaseMobLavalandFauna ]
@@ -164,7 +194,10 @@
   - type: LavalandBoss
     bossName: Колосс
     maxHealth: 3500
-    music: /Audio/_DeadSpace/Lavaland/Bosses/colossus_fight.ogg
+    music:
+      path: /Audio/_DeadSpace/Lavaland/Bosses/colossus_fight_2.ogg
+      params:
+        volume: 4
     deathSound: /Audio/Effects/demon_dies.ogg
     deathRewards:
     - LavalandNecropolisChestHardsuit
@@ -239,3 +272,17 @@
     energy: 1.5
   - type: TimedDespawn
     lifetime: 1.5
+
+# "Burst.": the storm staff's mark, held until the blast.
+- type: entity
+  parent: LavalandStormStaffTelegraph
+  id: LavalandColossusBurstMark
+  name: метка разрыва
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    color: "#ffffff"
+    radius: 1.5
+    energy: 1.2
+  - type: TimedDespawn
+    lifetime: 2

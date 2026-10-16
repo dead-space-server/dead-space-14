@@ -1,13 +1,17 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Numerics;
+using Content.Client.Audio;
+using Content.Shared.DeadSpace.CCCCVars;
 using Content.Shared.DeadSpace.Lavaland.Bosses;
 using Robust.Client.ComponentTrees;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Client.ResourceManagement;
+using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
@@ -31,6 +35,15 @@ public sealed class LavalandBossIntroSystem : EntitySystem
     [Dependency] private readonly SpriteTreeSystem _spriteTree = default!;
     [Dependency] private readonly LavalandSpriteMotionSystem _motion = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly ContentAudioSystem _contentAudio = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
+
+    private const float MusicFadeIn = 1.5f;
+    private const float MusicFadeOut = 1.5f;
+
+    /// <summary>The boss theme quietly under the scene, and whether its fade out has begun.</summary>
+    private EntityUid? _music;
+    private bool _musicFading;
 
     private static readonly Direction[] LookAround = { Direction.West, Direction.East, Direction.West, Direction.South };
 
@@ -109,6 +122,7 @@ public sealed class LavalandBossIntroSystem : EntitySystem
         _overlay.TitleColor = ev.TitleColor;
         _eyeManager.CurrentEye = scene.Camera;
         _scene = scene;
+        StartMusic(ev);
     }
 
     public override void FrameUpdate(float frameTime)
@@ -126,6 +140,10 @@ public sealed class LavalandBossIntroSystem : EntitySystem
             End();
             return;
         }
+
+        // The theme fades away as the scene ends; the fight brings it in properly.
+        if (!_musicFading && t >= ev.Duration - MusicFadeOut)
+            StopMusic();
 
         UpdateCamera(scene, t, frameTime);
         UpdateDolls(scene, t);
@@ -191,7 +209,8 @@ public sealed class LavalandBossIntroSystem : EntitySystem
     {
         while (scene.NextSound < scene.Sounds.Count && scene.Sounds[scene.NextSound].Time <= t)
         {
-            _audio.PlayGlobal(_audio.ResolveSound(scene.Sounds[scene.NextSound].Sound), Filter.Local(), false);
+            var sound = scene.Sounds[scene.NextSound].Sound;
+            _audio.PlayGlobal(_audio.ResolveSound(sound), Filter.Local(), false, sound.Params);
             scene.NextSound++;
         }
 
@@ -219,6 +238,17 @@ public sealed class LavalandBossIntroSystem : EntitySystem
         var progress = cue.Length <= 0f ? 1f : Math.Clamp(since / cue.Length, 0f, 1f);
         var eased = 1f - (1f - progress) * (1f - progress);
 
+        // Knocked flying: when, for how long, and where each one lands (it stays there afterwards).
+        LavalandIntroDollCue? knock = null;
+        foreach (var candidate in scene.Event.Dolls)
+        {
+            if (candidate.Action == LavalandIntroDollAction.Knocked)
+            {
+                knock = candidate;
+                break;
+            }
+        }
+
         foreach (var watcher in scene.Watchers)
         {
             // A doll flying through the air is drawn by its motion.
@@ -231,6 +261,24 @@ public sealed class LavalandBossIntroSystem : EntitySystem
             var offset = saved.Offset;
             var rotation = saved.Rotation;
             Direction? direction = null;
+
+            if (knock is { } knockCue && t >= knockCue.Time && TryGetKnock(scene.Event, watcher, out var knockOffset))
+            {
+                var flight = knockCue.Length <= 0f ? 1f : Math.Clamp((t - knockCue.Time) / knockCue.Length, 0f, 1f);
+                if (flight < 1f)
+                {
+                    // An arc through the air, spinning, like a pin hit by the ball.
+                    var arc = new Vector2(0f, 2.5f * 4f * flight * (1f - flight));
+                    offset += knockOffset * flight + arc;
+                    rotation += new Angle((t - knockCue.Time) * 12f);
+                    direction = Direction.South;
+                }
+                else
+                {
+                    offset += knockOffset;
+                }
+            }
+
             switch (cue.Action)
             {
                 case LavalandIntroDollAction.WalkIn:
@@ -244,6 +292,9 @@ public sealed class LavalandBossIntroSystem : EntitySystem
 
                 case LavalandIntroDollAction.LookUp:
                     direction = Direction.North;
+                    break;
+
+                case LavalandIntroDollAction.Knocked:
                     break;
 
                 case LavalandIntroDollAction.Lie:
@@ -270,8 +321,58 @@ public sealed class LavalandBossIntroSystem : EntitySystem
         }
     }
 
+    private bool TryGetKnock(LavalandBossIntroEvent ev, EntityUid watcher, out Vector2 offset)
+    {
+        var net = GetNetEntity(watcher);
+        foreach (var knock in ev.Knocks)
+        {
+            if (knock.Watcher != net)
+                continue;
+
+            offset = knock.Offset;
+            return true;
+        }
+
+        offset = default;
+        return false;
+    }
+
+    /// <summary>The boss's fight theme from its middle, quiet, fading in under the scene.</summary>
+    private void StartMusic(LavalandBossIntroEvent ev)
+    {
+        StopMusic();
+        _musicFading = false;
+        if (ev.Music is not { } music || !_cfg.GetCVar(CCCCVars.BossMusicEnabled))
+            return;
+
+        var length = (float) _audio.GetAudioLength(music).TotalSeconds;
+        var gain = _cfg.GetCVar(CCCCVars.BossMusicVolume);
+        if (gain <= 0.001f)
+            return;
+
+        var audioParams = AudioParams.Default
+            .WithVolume(ev.MusicVolume + SharedAudioSystem.GainToVolume(gain))
+            .WithPlayOffset(MathF.Max(0f, length * Math.Clamp(ev.MusicStart, 0f, 0.95f)));
+
+        var stream = _audio.PlayGlobal(music, Filter.Local(), false, audioParams);
+        _music = stream?.Entity;
+        if (stream != null)
+            _contentAudio.FadeIn(_music, stream.Value.Component, MusicFadeIn);
+    }
+
+    private void StopMusic()
+    {
+        _musicFading = true;
+        if (_music == null)
+            return;
+
+        _contentAudio.FadeOut(_music, duration: MusicFadeOut);
+        _music = null;
+    }
+
     private void End()
     {
+        StopMusic();
         if (_scene is not { } scene)
             return;
 

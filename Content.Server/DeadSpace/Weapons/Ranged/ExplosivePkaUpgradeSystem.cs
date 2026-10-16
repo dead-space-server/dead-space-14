@@ -164,7 +164,9 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
         ExplosivePkaProjectileComponent component,
         out global::Content.Shared.Damage.DamageSpecifier damage)
     {
-        if (HasComp<LavalandBossComponent>(target))
+        // Bosses of every kind; the Legion's hands pass their damage on to the Legion, so they count as it.
+        if (HasComp<LavalandBossComponent>(target) || HasComp<LavalandEliteComponent>(target) ||
+            HasComp<LavalandMadMinerComponent>(target) || HasComp<LavalandLegionHandComponent>(target))
         {
             damage = component.BossDamage;
             return true;

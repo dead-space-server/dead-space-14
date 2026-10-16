@@ -293,7 +293,8 @@ public sealed class CelestialSystem : EntitySystem
             sphereDmg.DamageDict.TryAdd("Blunt", comp.DamagePerTick * 0.5f);
             foreach (var victim in _nearbySpheres)
             {
-                if (victim == uid || TerminatingOrDeleted(victim))
+                // Its own attacks never hurt the Celestial.
+                if (victim == uid || TerminatingOrDeleted(victim) || HasComp<CelestialComponent>(victim))
                     continue;
                 _damage.TryChangeDamage(victim, sphereDmg, true);
             }
@@ -845,7 +846,7 @@ public sealed class CelestialSystem : EntitySystem
         var halfLen = length / 2f + orb.BeamRadius;
         foreach (var victim in _lookup.GetEntitiesInRange(new MapCoordinates(mid, mapId), halfLen, LookupFlags.Uncontained))
         {
-            if (TerminatingOrDeleted(victim))
+            if (TerminatingOrDeleted(victim) || HasComp<CelestialComponent>(victim))
                 continue;
             if (DistanceToSegment(_transform.GetMapCoordinates(victim).Position, start, end) > orb.BeamRadius)
                 continue;
@@ -1148,7 +1149,7 @@ public sealed class CelestialSystem : EntitySystem
                 dmg.DamageDict.TryAdd("Blunt", circle.DamagePerTick * 0.5f);
                 foreach (var victim in _nearbySpheres)
                 {
-                    if (victim == uid || TerminatingOrDeleted(victim))
+                    if (victim == uid || TerminatingOrDeleted(victim) || HasComp<CelestialComponent>(victim))
                         continue;
                     _damage.TryChangeDamage(victim, dmg, true);
                 }

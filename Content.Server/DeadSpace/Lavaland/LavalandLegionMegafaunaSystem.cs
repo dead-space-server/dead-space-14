@@ -23,6 +23,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Enums;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
@@ -42,6 +43,7 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly LavalandNecropolisGateSystem _gates = default!;
     [Dependency] private readonly LavalandBossArenaSystem _arenas = default!;
+    [Dependency] private readonly LavalandLegionHandsSystem _hands = default!;
     [Dependency] private readonly HTNSystem _htn = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
@@ -146,6 +148,10 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
             if (UpdateCharge(uid, legion, xform, arena, now))
                 continue;
 
+            // A slam or a throw of the hands is playing out: the Legion holds still.
+            if (_hands.IsBusy(uid))
+                continue;
+
             if (UpdateManeuver(uid, legion, now))
                 continue;
 
@@ -156,6 +162,9 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
                 continue;
 
             legion.NextAttack = now + legion.AttackCooldown;
+            if (_hands.TryAttack(uid, target))
+                continue;
+
             switch (_random.Next(5))
             {
                 case 3:
@@ -433,7 +442,9 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
                !HasComp<GhostComponent>(player) &&
                HasComp<MobStateComponent>(player) &&
                _mobState.IsAlive(player) &&
-               Transform(player).MapID == map;
+               Transform(player).MapID == map &&
+               // A body its player has left (ghosted, aghosted) is not hunted any more.
+               _players.TryGetSessionByEntity(player, out _);
     }
 
     /// <summary>A mapped Legion wakes up and lunges at whoever woke it.</summary>
@@ -481,8 +492,18 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
         var ahead = new MapCoordinates(
             _transform.GetWorldPosition(xform) + direction * legion.LungeBreakRange,
             xform.MapID);
+        BreakAround(uid, legion, ahead, legion.LungeBreakRange);
+    }
+
+    /// <summary>
+    /// Tears down whatever solid and breakable stands in the circle: walls, rocks, trees, crystals - anchored or not.
+    /// The indestructible (lavaland's edge, godmode walls) and anything without health is left alone.
+    /// </summary>
+    private void BreakAround(EntityUid uid, LavalandLegionMegafaunaComponent legion, MapCoordinates center, float range)
+    {
+        var lair = GetLair(uid, legion);
         var broke = false;
-        foreach (var hit in _lookup.GetEntitiesInRange(ahead, legion.LungeBreakRange, LookupFlags.Static))
+        foreach (var hit in _lookup.GetEntitiesInRange(center, range, LookupFlags.Static | LookupFlags.Dynamic))
         {
             if (hit == uid || TerminatingOrDeleted(hit) || HasComp<MobStateComponent>(hit))
                 continue;
@@ -493,11 +514,16 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
                 continue;
             }
 
-            if (!TryComp<TransformComponent>(hit, out var hitXform) || !hitXform.Anchored ||
-                !TryComp<PhysicsComponent>(hit, out var body) || !body.Hard || !body.CanCollide)
+            if (!TryComp<PhysicsComponent>(hit, out var body) || !body.Hard || !body.CanCollide ||
+                body.BodyType != BodyType.Static && !Transform(hit).Anchored)
             {
                 continue;
             }
+
+            // Its own lair's walls are unbreakable for everyone else, not for the Legion.
+            var inLair = lair != null && Transform(hit).GridUid == lair;
+            if (!inLair && (!HasComp<DamageableComponent>(hit) || HasComp<GodmodeComponent>(hit)))
+                continue;
 
             QueueDel(hit);
             broke = true;
@@ -505,6 +531,30 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
 
         if (broke && legion.LungeBreakSound != null)
             _audio.PlayPvs(legion.LungeBreakSound, uid);
+    }
+
+    /// <summary>The arena grid this Legion (or the Legion it split from) was brought out of.</summary>
+    private EntityUid? GetLair(EntityUid uid, LavalandLegionMegafaunaComponent legion)
+    {
+        if (legion.Lair is { } known && !TerminatingOrDeleted(known))
+            return known;
+
+        var arenas = EntityQueryEnumerator<LavalandBossArenaComponent>();
+        while (arenas.MoveNext(out var arenaUid, out var arena))
+        {
+            // Any body of the same Legion counts: the boss role passes between them as it splits.
+            if (arena.Boss != uid && arena.Boss != legion.Root &&
+                !(arena.Boss is { } boss && TryComp<LavalandLegionMegafaunaComponent>(boss, out var bossLegion) &&
+                  bossLegion.Root == legion.Root))
+            {
+                continue;
+            }
+
+            legion.Lair = arenaUid;
+            return arenaUid;
+        }
+
+        return null;
     }
 
     /// <summary>
@@ -524,17 +574,27 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
         var position = _transform.GetWorldPosition(xform);
         var moved = Vector2.Distance(position, legion.LastStuckPosition);
         legion.LastStuckPosition = position;
-        if (moved >= legion.StuckDistance || legion.ChargeEndAt != null ||
+        // Standing still on purpose (a hand attack) is not being stuck.
+        if (moved >= legion.StuckDistance || legion.ChargeEndAt != null || _hands.IsBusy(uid) ||
             !TryFindTarget(xform, legion, arena, out var target))
         {
+            legion.StuckCount = 0;
             return;
         }
 
         var offset = _transform.GetWorldPosition(target) - position;
         if (offset.Length() <= legion.StuckIgnoreRange)
+        {
+            legion.StuckCount = 0;
             return;
+        }
 
+        legion.StuckCount++;
         BreakAhead(uid, xform, legion, Vector2.Normalize(offset));
+
+        // Still jammed: whatever hugs its big body on any side goes too (corners, side rocks, trees).
+        if (legion.StuckCount >= 2)
+            BreakAround(uid, legion, _transform.GetMapCoordinates(xform), legion.LungeBreakRange + 1f);
     }
 
     /// <summary>An awake Legion does not stop at a necropolis gate: it bursts it open.</summary>
@@ -775,8 +835,17 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
 
             foreach (var session in _players.Sessions)
             {
-                if (session.AttachedEntity is not { Valid: true } player || !NearAnyBody(player, bodies))
+                // Only living players near it: a ghost, an aghost or a corpse is out of the hunt.
+                if (session.Status == SessionStatus.Disconnected ||
+                    session.AttachedEntity is not { Valid: true } player ||
+                    !IsValidTarget(player, Transform(player).MapID) ||
+                    !NearAnyBody(player, bodies))
+                {
+                    // Left the hunt: the health bar and the music go away for him.
+                    if (hud.Recipients.Remove(session) && session.Status != SessionStatus.Disconnected)
+                        SendHideAndStop(session, hud.Id);
                     continue;
+                }
 
                 // Players who walk into the hunt get the music too, not only those there at its start.
                 if (hud.Recipients.Add(session) && hud.Music is { } music)
@@ -794,14 +863,18 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
             var hud = _freeHuds[root];
             foreach (var session in hud.Recipients)
             {
-                if (session.Status == SessionStatus.Disconnected)
-                    continue;
-                RaiseNetworkEvent(new LavalandBossHudHideEvent(hud.Id), session.Channel);
-                RaiseNetworkEvent(new LavalandBossMusicStopEvent(hud.Id), session.Channel);
+                if (session.Status != SessionStatus.Disconnected)
+                    SendHideAndStop(session, hud.Id);
             }
 
             _freeHuds.Remove(root);
         }
+    }
+
+    private void SendHideAndStop(ICommonSession session, int hudId)
+    {
+        RaiseNetworkEvent(new LavalandBossHudHideEvent(hudId), session.Channel);
+        RaiseNetworkEvent(new LavalandBossMusicStopEvent(hudId), session.Channel);
     }
 
     private FreeLegionHud? CreateFreeHud(List<EntityUid> bodies)

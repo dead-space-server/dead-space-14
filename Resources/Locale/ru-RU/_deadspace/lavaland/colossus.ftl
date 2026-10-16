@@ -10,5 +10,6 @@ ent-LavalandColossusDeathBolt = болт смерти
 lavaland-colossus-speech-cannot-dodge = «Тебе не увернуться.»
 lavaland-colossus-speech-judgement = «Суд.»
 lavaland-colossus-speech-die = «Умри.»
+lavaland-colossus-speech-burst = «Разорвись.»
 lavaland-colossus-speech-see-you = «Я вижу тебя.»
 lavaland-colossus-fury = КОЛОСС В ЯРОСТИ.

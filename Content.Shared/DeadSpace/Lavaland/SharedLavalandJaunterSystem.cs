@@ -1,5 +1,6 @@
 using Content.Shared.Buckle.Components;
 using Content.Shared.Chasm;
+using Content.Shared.DeadSpace.Lavaland.ChromiteCaves;
 using Content.Shared.DeadSpace.Lavaland.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs.Components;
@@ -29,6 +30,7 @@ public sealed class SharedLavalandJaunterSystem : EntitySystem
     {
         if (!_net.IsClient ||
             args.Cancelled ||
+            HasComp<LavalandChromitePitComponent>(args.Chasm) ||
             !TryFindJaunterOn(args.Tripper, out _))
         {
             return;

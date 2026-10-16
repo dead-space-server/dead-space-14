@@ -43,6 +43,16 @@ public sealed partial class LavalandBossArenaSystem
     private static readonly EntProtoId Flash = "LavalandIntroFlash";
     private static readonly EntProtoId BubblegumShadow = "LavalandIntroBubblegumShadow";
     private static readonly EntProtoId GateDoorPiece = "LavalandIntroGateDoorPiece";
+    private static readonly EntProtoId LegionFistLeft = "LavalandIntroLegionFistLeft";
+    private static readonly EntProtoId LegionFistRight = "LavalandIntroLegionFistRight";
+    private static readonly EntProtoId LegionHandLeft = "LavalandIntroLegionHandLeft";
+    private static readonly EntProtoId LegionHandRight = "LavalandIntroLegionHandRight";
+
+    /// <summary>Where the Legion's real hands float by its sides (as in its hands component).</summary>
+    private static readonly Vector2 LegionHandRest = new(1.6f, 0.2f);
+
+    /// <summary>How long the intro's hands outlive the scene, until the real ones are there.</summary>
+    private const float LegionHandsOverlap = 1.6f;
 
     private const float GateWatchRange = 14f;
 
@@ -58,6 +68,9 @@ public sealed partial class LavalandBossArenaSystem
 
     /// <summary>A thrown doll flies this long into its corner.</summary>
     private const float ThrowFlight = 1.1f;
+
+    /// <summary>The moment the Hierophant reaches the players in its intro.</summary>
+    private const float BowlingHit = 5.9f;
 
     #region Start and end
 
@@ -166,8 +179,31 @@ public sealed partial class LavalandBossArenaSystem
                 break;
         }
 
+        ev.Music = ResolveIntroMusic(arena);
         arena.Comp.IntroEndsAt = _timing.CurTime + TimeSpan.FromSeconds(Math.Max(0.5f, ev.Duration));
         RaiseNetworkEvent(ev, filter);
+    }
+
+    /// <summary>
+    /// The fight theme of the boss, for the background of its scene. A boss that only comes out after the scene has
+    /// none chosen yet: it is chosen here from its prototype and kept for the fight.
+    /// </summary>
+    private ResolvedSoundSpecifier? ResolveIntroMusic(Entity<LavalandBossArenaComponent> arena)
+    {
+        SoundSpecifier? music = null;
+        if (TryComp<LavalandBossComponent>(arena.Comp.Boss, out var boss))
+        {
+            music = boss.SelectedMusic;
+        }
+        else if (arena.Comp.PendingBoss is { } pending &&
+                 _prototype.TryIndex(pending, out var proto) &&
+                 proto.TryGetComponent<LavalandBossComponent>(out var bossProto, EntityManager.ComponentFactory))
+        {
+            music = bossProto.MusicPool.Count > 0 ? _random.Pick(bossProto.MusicPool) : bossProto.Music;
+            arena.Comp.IntroMusic = music;
+        }
+
+        return music == null ? null : _audio.ResolveSound(music);
     }
 
     /// <summary>The scene is over: the real boss stands where its copy is, everyone is released, the fight begins.</summary>
@@ -177,6 +213,12 @@ public sealed partial class LavalandBossArenaSystem
         var gate = arena.Comp.IntroGate;
         var knocker = arena.Comp.IntroKnocker;
         var bossSpot = arena.Comp.IntroBossSpot;
+
+        // The bowled-over players really are where their dolls were knocked to.
+        foreach (var (watcher, knockSpot) in arena.Comp.IntroKnockSpots)
+            MoveTo(watcher, knockSpot);
+        arena.Comp.IntroKnockSpots.Clear();
+
         ReleaseIntroWatchers(arena.Comp);
 
         if (TrySummonBoss(arena.Owner) && Exists(arena.Comp.Boss) && bossSpot is { } spot)
@@ -221,18 +263,30 @@ public sealed partial class LavalandBossArenaSystem
     }
 
     /// <summary>Name of the boss for the intro: it is not spawned yet, so it comes from the prototype.</summary>
+    /// <summary>
+    /// The boss's own name for the title: the scene plays before the boss is spawned, so it is taken from the boss
+    /// prototype first; the arena's name of the boss is still the placeholder then.
+    /// </summary>
     private string GetIntroTitle(LavalandBossArenaComponent arena)
     {
-        if (!string.IsNullOrWhiteSpace(arena.BossName))
+        if (arena.PendingBoss is { } pending && _prototype.TryIndex<EntityPrototype>(pending, out var prototype))
+        {
+            return prototype.TryGetComponent<LavalandBossComponent>(out var boss, EntityManager.ComponentFactory) &&
+                   IsRealName(boss.BossName)
+                ? boss.BossName
+                : prototype.Name;
+        }
+
+        if (IsRealName(arena.BossName))
             return arena.BossName;
 
-        if (arena.PendingBoss is not { } pending || !_prototype.TryIndex<EntityPrototype>(pending, out var prototype))
-            return string.Empty;
+        return arena.Boss is { } spawned && !TerminatingOrDeleted(spawned) ? Name(spawned) : string.Empty;
+    }
 
-        return prototype.TryGetComponent<LavalandBossComponent>(out var boss, EntityManager.ComponentFactory) &&
-               !string.IsNullOrWhiteSpace(boss.BossName)
-            ? boss.BossName
-            : prototype.Name;
+    /// <summary>Not empty and not the "boss" placeholder of the components.</summary>
+    private static bool IsRealName(string? name)
+    {
+        return !string.IsNullOrWhiteSpace(name) && !name.Equals("boss", StringComparison.OrdinalIgnoreCase);
     }
 
     #endregion
@@ -293,6 +347,9 @@ public sealed partial class LavalandBossArenaSystem
         var ev = plan.Event;
         var stage = Stage(plan);
         var corners = Corners(plan, 2.5f);
+        // Every gush of the running blood splashes, quieter than the burst where it all meets.
+        var splash = new SoundPathSpecifier("/Audio/_DeadSpace/Lavaland/Bubblegum/splat.ogg",
+            AudioParams.Default.WithVolume(-5f).WithVariation(0.15f));
         ev.Duration = 14f;
         ev.TitleDelay = 10.6f;
         ev.TitleDuration = 2.8f;
@@ -310,10 +367,17 @@ public sealed partial class LavalandBossArenaSystem
                 Trail(plan, time, corner, stage, along);
                 if (step % 2 == 0)
                     Burst(plan, time, Along(corner, stage, along), BloodParticle, 1, 0f, 0.3f, 0.3f, 0.8f, 0.4f, 0.7f);
+                if (step % 4 == 0)
+                    Sound(plan, splash, time);
             }
 
             for (var step = 0; step < 8; step++)
+            {
                 Trail(plan, 4f + step * 0.15f, corner, stage, 0.7f + step / 8f * 0.3f);
+                // The four trails run in together: one splash per moment for all of them.
+                if (i == 0 && step % 3 == 0)
+                    Sound(plan, splash, 4f + step * 0.15f);
+            }
         }
 
         ev.Shots.Add(new LavalandIntroShot(4f, false, stage.Position, c.ArenaZoom));
@@ -406,11 +470,13 @@ public sealed partial class LavalandBossArenaSystem
         ev.Shots.Add(new LavalandIntroShot(6f, false, landing.Position, 0.72f));
         ev.Dolls.Add(new LavalandIntroDollCue(0f, LavalandIntroDollAction.WalkIn, new Vector2(-2.5f, 0f), 1.2f));
         ev.Dolls.Add(new LavalandIntroDollCue(1.2f, LavalandIntroDollAction.LookAround));
-        ev.Dolls.Add(new LavalandIntroDollCue(5.9f + ThrowFlight, LavalandIntroDollAction.Lie));
+        // The very moment it reaches them they scatter like pins - on the client's clock, not a server timer.
+        ev.Dolls.Add(new LavalandIntroDollCue(BowlingHit, LavalandIntroDollAction.Knocked, length: ThrowFlight));
+        ev.Dolls.Add(new LavalandIntroDollCue(BowlingHit + ThrowFlight, LavalandIntroDollAction.Lie));
         ev.Dolls.Add(new LavalandIntroDollCue(7.4f, LavalandIntroDollAction.StandUp, length: 1f));
         ev.Dolls.Add(new LavalandIntroDollCue(8.4f, LavalandIntroDollAction.None));
         ev.Shakes.Add(new Vector2(3.75f, 0.3f));
-        ev.Shakes.Add(new Vector2(5.9f, 0.8f));
+        ev.Shakes.Add(new Vector2(BowlingHit, 0.8f));
 
         // Everyone comes to the middle; its warning flares under them where they stand.
         var spots = new List<MapCoordinates>();
@@ -442,10 +508,25 @@ public sealed partial class LavalandBossArenaSystem
 
         Sound(plan, c.RoarSound, 3f);
 
-        // It slides in from the side, upright, and bowls them over.
-        BossCopy(plan, 5f, landing, new Vector2(-12f, 0f), Vector2.Zero, 0.9f);
-        Later(plan, 5.9f, () => ThrowToCorners(plan));
-        Sound(plan, c.ImpactSound, 5.9f);
+        // It slides in from the side, upright, grinding over the floor, and bowls them over.
+        const float slideTime = 0.9f;
+        BossCopy(plan, BowlingHit - slideTime, landing, new Vector2(-12f, 0f), Vector2.Zero, slideTime);
+        Sound(plan, new SoundPathSpecifier("/Audio/_DeadSpace/Lavaland/Hierophant/mechmove04.ogg",
+            AudioParams.Default.WithVolume(4f)), BowlingHit - slideTime);
+        Sound(plan, c.ImpactSound, BowlingHit);
+        Sound(plan, new SoundPathSpecifier("/Audio/Effects/hit_kick.ogg", AudioParams.Default.WithVolume(3f)), BowlingHit);
+        Sound(plan, new SoundPathSpecifier("/Audio/Effects/thudswoosh.ogg"), BowlingHit + 0.05f);
+
+        // Each one flies into a corner of the arena; the real bodies are put there when the scene ends.
+        var corners = Corners(plan, 2.5f);
+        _random.Shuffle(corners);
+        plan.Arena.Comp.IntroKnockSpots.Clear();
+        for (var i = 0; i < plan.Watchers.Count; i++)
+        {
+            var corner = corners[i % corners.Count];
+            ev.Knocks.Add(new LavalandIntroKnock(GetNetEntity(plan.Watchers[i]), corner.Position - spots[i].Position));
+            plan.Arena.Comp.IntroKnockSpots.Add((plan.Watchers[i], corner));
+        }
     }
 
     /// <summary>
@@ -483,16 +564,22 @@ public sealed partial class LavalandBossArenaSystem
             }
         });
 
-        for (var hit = 1; hit <= 5; hit++)
+        // Three knocks on the doors.
+        for (var hit = 1; hit <= 3; hit++)
         {
             var at = (float) hit;
-            ev.Shakes.Add(new Vector2(at, hit == 5 ? 1.4f : 0.25f + hit * 0.15f));
+            ev.Shakes.Add(new Vector2(at, 0.25f + hit * 0.15f));
             Sound(plan, c.ImpactSound, at);
             Sound(plan, c.LandSound, at + 0.15f);
         }
 
-        // The fifth blow: the doors fly apart, the Legion spins where they stood.
         var side = new Vector2(inward.Y, -inward.X);
+        PlanFistThroughWall(plan, gateSpot, inward, side);
+
+        // The fifth blow: the doors fly apart, the Legion bursts out with its right fist raised.
+        ev.Shakes.Add(new Vector2(5f, 1.4f));
+        Sound(plan, c.ImpactSound, 5f);
+        Sound(plan, c.LandSound, 5.15f);
         Fx(plan, new LavalandIntroFx(5f, GateDoorPiece, gateSpot.Position, Vector2.Zero, side * 14f + new Vector2(0f, 2f), 1.2f, spin: 7f, fadeOut: true));
         Fx(plan, new LavalandIntroFx(5f, GateDoorPiece, gateSpot.Position, Vector2.Zero, -side * 14f + new Vector2(0f, 2f), 1.2f, spin: -7f, fadeOut: true));
         Debris(plan, 5f, gateSpot, 14, 3f);
@@ -503,8 +590,86 @@ public sealed partial class LavalandBossArenaSystem
                 _gates.Smash(gate);
         });
 
-        BossCopy(plan, 5f, gateSpot.Offset(inward * 1.5f), Vector2.Zero, Vector2.Zero, 2f, spin: 9f);
+        // Out of the depths into the broken doorway.
+        var bossSpot = gateSpot.Offset(inward * 1.5f);
+        BossCopy(plan, 5f, bossSpot, inward * 1.2f, Vector2.Zero, 0.35f);
+        // It bursts out punching: the right fist thrown up over its head, the left one still clenched from the doors.
+        const float punchFor = 0.8f;
+        var rightRaised = bossSpot.Position + new Vector2(1.4f, 1.1f);
+        var leftClenched = bossSpot.Position + new Vector2(-1.5f, 0.1f);
+        Fx(plan, new LavalandIntroFx(5f, LegionFistRight, rightRaised, new Vector2(-0.4f, -1.2f), Vector2.Zero, 0.3f)
+            { Lifetime = punchFor });
+        Fx(plan, new LavalandIntroFx(5f, LegionFistLeft, leftClenched, new Vector2(0.3f, 0.2f), Vector2.Zero, 0.3f)
+            { Lifetime = punchFor });
+
+        // Then the fists open into plain hands and drift to where the real ones float, and stay there until the
+        // real Legion and its hands take over at the very same spots.
+        var openAt = 5f + punchFor;
+        // Held a little past the end of the scene: the real hands come with the real Legion a moment later.
+        var holdFor = MathF.Max(0.1f, ev.Duration - openAt + LegionHandsOverlap);
+        var rightRest = bossSpot.Position + LegionHandRest;
+        var leftRest = bossSpot.Position + new Vector2(-LegionHandRest.X, LegionHandRest.Y);
+        Fx(plan, new LavalandIntroFx(openAt, LegionHandRight, rightRest, rightRaised - rightRest, Vector2.Zero, 0.4f)
+            { Lifetime = holdFor });
+        Fx(plan, new LavalandIntroFx(openAt, LegionHandLeft, leftRest, leftClenched - leftRest, Vector2.Zero, 0.4f)
+            { Lifetime = holdFor });
         Sound(plan, c.RoarSound, 5f);
+    }
+
+    /// <summary>
+    /// After the third knock the left fist punches out through the wall beside the doors, grabs a door from outside
+    /// and tugs at it, trying to wrench the necropolis open.
+    /// </summary>
+    private void PlanFistThroughWall(IntroPlan plan, MapCoordinates gateSpot, Vector2 inward, Vector2 side)
+    {
+        var c = plan.Config;
+        var ev = plan.Event;
+        var wall = gateSpot.Position + side * 1.3f;
+        var outside = -inward * 0.7f;
+
+        // The punch: out of the wall in a blink, chips and dust flying.
+        const float punch = 3.45f;
+        Segment(plan, punch, LegionFistLeft, wall, inward * 0.6f, outside, 0.15f, 0.4f, accelerate: true, spin: 9f);
+        ev.Shakes.Add(new Vector2(punch + 0.15f, 0.9f));
+        Sound(plan, c.ImpactSound, punch + 0.15f);
+        var hole = new MapCoordinates(wall + outside, gateSpot.MapId);
+        Debris(plan, punch + 0.15f, hole, 10, 1.8f);
+        Burst(plan, punch + 0.15f, hole, SmokeParticle, 6, 0.3f, 1.4f, 0.8f, 1.6f, 0.9f, 1.4f);
+
+        // It gropes along the wall to the door's edge...
+        var edge = gateSpot.Position + side * 0.55f + outside;
+        Segment(plan, punch + 0.4f, LegionFistLeft, Vector2.Zero, wall + outside, edge, 0.35f, 0.35f);
+
+        // ...and wrenches at it, back and forth, the doors shuddering.
+        var pulled = edge - inward * 0.35f + side * 0.15f;
+        var time = punch + 0.75f;
+        for (var tug = 0; tug < 4; tug++)
+        {
+            var (from, to) = tug % 2 == 0 ? (edge, pulled) : (pulled, edge);
+            var last = tug == 3;
+            // Twisting the door back and forth as it wrenches at it.
+            Segment(plan, time, LegionFistLeft, Vector2.Zero, from, to, 0.18f, last ? 5f - time : 0.2f,
+                spin: tug % 2 == 0 ? 3.5f : -3.5f);
+            if (tug % 2 == 0)
+            {
+                ev.Shakes.Add(new Vector2(time + 0.18f, 0.35f));
+                Sound(plan, c.LandSound, time + 0.18f);
+            }
+
+            time += 0.2f;
+        }
+    }
+
+    /// <summary>One stretch of a moving prop: it appears at the start and is gone when the next one takes over.</summary>
+    private static void Segment(IntroPlan plan, float time, string prototype, Vector2 origin, Vector2 from, Vector2 to,
+        float duration, float lifetime, bool accelerate = false, float spin = 0f)
+    {
+        // The entity stands at the end point; the sprite moves there from the start.
+        Fx(plan, new LavalandIntroFx(time, prototype, origin + to, from - to, Vector2.Zero, duration, spin: spin)
+        {
+            Accelerate = accelerate,
+            Lifetime = MathF.Max(0.05f, lifetime),
+        });
     }
 
     #endregion
@@ -689,6 +854,8 @@ public sealed partial class LavalandBossArenaSystem
             flight.To = Vector2.Zero;
             flight.Arc = 2.5f;
             flight.Spin = 12f;
+            // Lands lying, as the next cue has it, and only then gets up.
+            flight.EndRotation = 90f;
             Dirty(watcher, flight);
 
             var thrown = watcher;

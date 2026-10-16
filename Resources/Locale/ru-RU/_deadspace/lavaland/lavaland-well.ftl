@@ -33,3 +33,4 @@ lavaland-morkite-hud-leaking = ▲ РАЗРЫВ ТРУБЫ — моркит ут
 lavaland-morkite-hud-not-connected = ○ Колодец не подключён к добытчикам
 lavaland-morkite-hud-no-well = ○ Блюспейс колодец не развёрнут
 lavaland-morkite-hud-close = Закрыть. Открыть снова — кликнуть по блюспейс колодцу, добытчику моркита или трубе к нему.
+lavaland-raid-ruined = Никто не встал на защиту аванпоста — фауна разнесла его на куски!

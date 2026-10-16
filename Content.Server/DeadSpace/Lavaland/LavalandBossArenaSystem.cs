@@ -362,6 +362,9 @@ public sealed partial class LavalandBossArenaSystem : EntitySystem
             SpawnArenaWalls(grid.Owner, grid.Comp, arenaPrototype.WallPrototype, width, height);
         }
 
+        // One floor only: the land's tiles under the arena would cover its lava and rocks (they lie below the floor).
+        ClearTerrainUnderArena(mapUid, terrainGrid, grid, center - origin);
+
         if (loadedGrid == null)
             SpawnArenaDecorations(grid.Owner, grid.Comp, arenaPrototype.Decorations, width, height, random);
 
@@ -568,6 +571,24 @@ public sealed partial class LavalandBossArenaSystem : EntitySystem
             if ((i + 1) % ArenaEntityBatchSize == 0 && i + 1 < tiles.Count)
                 await Timer.Delay(1, cancellation);
         }
+    }
+
+    /// <summary>
+    /// Takes the land's floor away under every floor tile of the arena grid. The arena lies over the land as a grid of
+    /// its own; with floor on both, the land's tiles are drawn over whatever lies low on the arena (lava, rocks).
+    /// The tiles are reserved from the biome already, so it does not put them back.
+    /// </summary>
+    private void ClearTerrainUnderArena(EntityUid terrainUid, MapGridComponent terrainGrid, Entity<MapGridComponent> arenaGrid, Vector2i offset)
+    {
+        _terrainTiles.Clear();
+        var tiles = _map.GetAllTilesEnumerator(arenaGrid.Owner, arenaGrid.Comp);
+        while (tiles.MoveNext(out var tile))
+        {
+            _terrainTiles.Add((tile.Value.GridIndices + offset, Tile.Empty));
+        }
+
+        _map.SetTiles(terrainUid, terrainGrid, _terrainTiles);
+        _terrainTiles.Clear();
     }
 
     private void SpawnArenaWalls(EntityUid gridUid, MapGridComponent grid, EntProtoId? wallPrototype, int width, int height)
@@ -1110,6 +1131,8 @@ public sealed partial class LavalandBossArenaSystem : EntitySystem
 
             if (spawned < decoration.Count)
                 Log.Warning($"Lavaland boss arena decoration {decoration.Prototype} only spawned {spawned}/{decoration.Count} entities.");
+            else
+                Log.Info($"Lavaland boss arena decoration {decoration.Prototype}: {spawned}/{decoration.Count} spawned.");
         }
 
         _decorationTiles.Clear();
@@ -1796,9 +1819,10 @@ public sealed partial class LavalandBossArenaSystem : EntitySystem
             EnsureComp<LavalandFreeBossComponent>(boss);
         }
         bossComponent.MaxHealth = Math.Max(1f, bossComponent.MaxHealth);
-        bossComponent.SelectedMusic = bossComponent.MusicPool.Count > 0
+        // The theme already heard under the intro, or a fresh pick.
+        bossComponent.SelectedMusic = arena.Comp.IntroMusic ?? (bossComponent.MusicPool.Count > 0
             ? bossComponent.MusicPool[random.Next(bossComponent.MusicPool.Count)]
-            : bossComponent.Music;
+            : bossComponent.Music);
         SetBossAiEnabled(boss, false);
 
         arena.Comp.Boss = boss;

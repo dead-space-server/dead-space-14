@@ -138,6 +138,28 @@ public sealed partial class LavalandWispLanternComponent : Component
 
     [ViewVariables]
     public bool GuideWaiting;
+
+    /// <summary>
+    /// Off guiding duty the wisp is not stuck to its owner: it drifts around them at this distance,
+    /// lagging behind when they run, like a free floating hand.
+    /// </summary>
+    [DataField]
+    public float FollowRadius = 1.1f;
+
+    /// <summary>How quickly it catches up with its spot near the owner (higher - tighter).</summary>
+    [DataField]
+    public float FollowSharpness = 2.5f;
+
+    /// <summary>How fast it circles its owner, radians per second.</summary>
+    [DataField]
+    public float FollowOrbitSpeed = 0.7f;
+
+    /// <summary>How far it bobs up and down while hovering.</summary>
+    [DataField]
+    public float FollowBob = 0.2f;
+
+    [ViewVariables]
+    public float FollowPhase;
 }
 
 /// <summary>One of two linked cubes: using it teleports you to the other one.</summary>

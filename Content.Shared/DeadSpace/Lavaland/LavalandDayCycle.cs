@@ -1,6 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Shared.Damage;
+using Content.Shared.DeadSpace.Lavaland.ChromiteCaves;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 
@@ -63,6 +64,13 @@ public sealed partial class LavalandDayPhase
     /// <summary>Released lantern wisps leave their owner and lead them to the outpost.</summary>
     [DataField]
     public bool WispGuide;
+
+    /// <summary>
+    /// Light of the chromite caves during this phase. Null: a phase that can turn into a deep night is a night,
+    /// any other phase is a day (a deep night in the caves).
+    /// </summary>
+    [DataField]
+    public LavalandCavesMode? CavesMode;
 
     /// <summary>With some chance this phase turns into a deep night for a while. Null for never.</summary>
     [DataField]
@@ -163,6 +171,20 @@ public sealed partial class LavalandDeepNightConfig
     /// <summary>Lights farther than this are not looked at.</summary>
     [DataField]
     public float LightSearchRange = 12f;
+
+    /// <summary>
+    /// Anyone kept above a chasm by something (the flight potion, moon boots...) may hang over it only this long;
+    /// then a shadow from below drags him down. Zero turns it off.
+    /// </summary>
+    [DataField]
+    public TimeSpan ChasmHoverTime = TimeSpan.FromSeconds(10);
+
+    /// <summary>How long the shadow pulls before the body drops into the chasm.</summary>
+    [DataField]
+    public TimeSpan ShadowGrabTime = TimeSpan.FromSeconds(1.4);
+
+    [DataField]
+    public LocId ShadowGrabMessage = "lavaland-deep-night-shadow-grab";
 }
 
 public enum LavalandDeepNightStage : byte
@@ -232,6 +254,9 @@ public sealed class LavalandDayCycleSystem : EntitySystem
     /// <summary>True if trackers on this map are jammed by the current phase.</summary>
     public bool IsTrackerJammed(EntityUid? map)
     {
+        if (TryComp<LavalandChromiteCavesComponent>(map, out var caves))
+            return caves.Mode == LavalandCavesMode.DeepDark;
+
         return TryComp<LavalandDayCycleComponent>(map, out var cycle) && cycle.JamTrackers;
     }
 

@@ -37,6 +37,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Lavaland;
@@ -53,6 +54,7 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly GibbingSystem _gibbing = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly LavalandDayCycleSystem _dayCycle = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly MobThresholdSystem _thresholds = default!;
@@ -124,7 +126,12 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
                 _toRelease.Add(uid);
         }
         foreach (var hole in _toRelease)
+        {
+            // Out first: deleting the hole deletes whatever its container still holds - the user too.
+            if (TryComp<LavalandRealityHoleComponent>(hole, out var holeComp))
+                ReleaseFromHole((hole, holeComp));
             QueueDel(hole);
+        }
 
         var rods = EntityQueryEnumerator<LavalandRodOfAsclepiusComponent>();
         while (rods.MoveNext(out _, out var rod))
@@ -167,7 +174,11 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         }
 
         var user = args.User;
-        ent.Comp.Wisp = Spawn(ent.Comp.WispPrototype, new EntityCoordinates(user, new Vector2(0f, 0.6f)));
+        // Free floating, not parented to the owner: it drifts after them by itself.
+        var userCoords = _transform.GetMapCoordinates(user);
+        ent.Comp.Wisp = Spawn(ent.Comp.WispPrototype, userCoords.Offset(new Vector2(0f, 0.6f)));
+        _transform.SetMapCoordinates(ent.Comp.Wisp.Value, userCoords.Offset(new Vector2(0f, 0.6f)));
+        ent.Comp.FollowPhase = _random.NextFloat(0f, MathF.Tau);
         ent.Comp.Holder = user;
         if (ent.Comp.GrantThermalVision && !HasComp<ThermalVisionComponent>(user))
         {
@@ -199,7 +210,8 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
                 !TryGetOutpostCenter(holderXform.MapUid, out var outpost))
             {
                 if (lantern.Guiding)
-                    ReturnWisp(lantern, wisp, holder);
+                    ReturnWisp(lantern);
+                FollowHolder(lantern, wisp, holderXform, frameTime);
                 continue;
             }
 
@@ -242,11 +254,36 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         }
     }
 
-    private void ReturnWisp(LavalandWispLanternComponent lantern, EntityUid wisp, EntityUid holder)
+    private void ReturnWisp(LavalandWispLanternComponent lantern)
     {
         lantern.Guiding = false;
         lantern.GuideWaiting = false;
-        _transform.SetCoordinates(wisp, new EntityCoordinates(holder, new Vector2(0f, 0.6f)));
+    }
+
+    /// <summary>
+    /// The wisp hovers around its owner on its own: it slowly circles them, bobs, and lags behind when they move,
+    /// catching up smoothly. Lost (teleport, another map) - it pops back next to them.
+    /// </summary>
+    private void FollowHolder(LavalandWispLanternComponent lantern, EntityUid wisp, TransformComponent holderXform, float frameTime)
+    {
+        var holderPos = _transform.GetWorldPosition(holderXform);
+        var wispXform = Transform(wisp);
+
+        lantern.FollowPhase = (lantern.FollowPhase + lantern.FollowOrbitSpeed * frameTime) % MathF.Tau;
+        var orbit = new Vector2(MathF.Cos(lantern.FollowPhase), MathF.Sin(lantern.FollowPhase) * 0.6f) * lantern.FollowRadius;
+        var bob = new Vector2(0f, 0.4f + MathF.Sin(lantern.FollowPhase * 3f) * lantern.FollowBob);
+        var target = holderPos + orbit + bob;
+
+        if (wispXform.MapID != holderXform.MapID || wispXform.ParentUid != wispXform.MapUid ||
+            (target - _transform.GetWorldPosition(wispXform)).Length() > lantern.GuideLostDistance)
+        {
+            _transform.SetMapCoordinates(wisp, new MapCoordinates(target, holderXform.MapID));
+            return;
+        }
+
+        var wispPos = _transform.GetWorldPosition(wispXform);
+        var t = 1f - MathF.Exp(-lantern.FollowSharpness * frameTime);
+        _transform.SetWorldPosition(wisp, wispPos + (target - wispPos) * t);
     }
 
     private bool TryGetOutpostCenter(EntityUid? map, out Vector2 center)
@@ -400,6 +437,12 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
     }
 
     private void OnHoleShutdown(Entity<LavalandRealityHoleComponent> ent, ref ComponentShutdown args)
+    {
+        ReleaseFromHole(ent);
+    }
+
+    /// <summary>The user steps back out of the hole, mortal again.</summary>
+    private void ReleaseFromHole(Entity<LavalandRealityHoleComponent> ent)
     {
         if (ent.Comp.User is not { } user || TerminatingOrDeleted(user))
             return;

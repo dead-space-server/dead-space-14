@@ -138,15 +138,13 @@
   - type: LavalandBoss
     bossName: Легион
     maxHealth: 3550
-    musicPool:
-    - /Audio/_DeadSpace/Lavaland/Bosses/title1.ogg
-    - /Audio/_DeadSpace/Lavaland/Bosses/drake_fight.ogg
-    - /Audio/_DeadSpace/Lavaland/Bosses/bubblegum_fight.ogg
-    - /Audio/_DeadSpace/Lavaland/Bosses/colossus_fight.ogg
+    music: /Audio/_DeadSpace/Lavaland/Bosses/legion_fight.ogg
     deathSound: /Audio/Effects/demon_dies.ogg
     deathRewards:
     - LavalandStormStaff
     - LavalandNecropolisChest
+  # Two hands floating by its sides: they slam the floor and throw things.
+  - type: LavalandLegionHands
   - type: LavalandLegionMegafauna
     size: 3
     dormant: true
@@ -358,3 +356,112 @@
   components:
   - type: TimedDespawn
     lifetime: 1.5
+
+# The Legion's hands. Sprites by golubok_epta, one for every pose for now.
+- type: entity
+  id: LavalandLegionHandLeft
+  name: рука Легиона
+  description: Сросшиеся кости и черепа, сжатые в огромный кулак. Каждый удар по ней отзывается во всём Легионе.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    noRot: true
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Mobs/LegionHands.rsi
+    drawdepth: Mobs
+    noRot: true
+    layers:
+    - state: left
+      map: [ "enum.LavalandLegionHandLayers.Base" ]
+  # Open palm, clenched fist drawn back, knuckles-first punch.
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.LavalandLegionHandVisuals.Pose:
+        enum.LavalandLegionHandLayers.Base:
+          Open: { sprite: _DeadSpace/Lavaland/Mobs/LegionHands.rsi, state: left }
+          Fist: { sprite: _DeadSpace/Lavaland/Mobs/LegionFists.rsi, state: fist-left }
+          Punch: { sprite: _DeadSpace/Lavaland/Mobs/LegionFists.rsi, state: punch-left }
+          Throw: { sprite: _DeadSpace/Lavaland/Mobs/LegionArms.rsi, state: arm-left }
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Physics
+    bodyType: Kinematic
+  # Bullets and blows land on it, players walk through.
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.6
+        hard: true
+        layer:
+        - BulletImpassable
+  - type: Damageable
+    damageContainer: Biological
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Effects/gib1.ogg
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          LavalandIntroRockParticle:
+            min: 3
+            max: 5
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: LavalandLegionHandLeft
+  id: LavalandLegionHandRight
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    layers:
+    - state: right
+      map: [ "enum.LavalandLegionHandLayers.Base" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.LavalandLegionHandVisuals.Pose:
+        enum.LavalandLegionHandLayers.Base:
+          Open: { sprite: _DeadSpace/Lavaland/Mobs/LegionHands.rsi, state: right }
+          Fist: { sprite: _DeadSpace/Lavaland/Mobs/LegionFists.rsi, state: fist-right }
+          Punch: { sprite: _DeadSpace/Lavaland/Mobs/LegionFists.rsi, state: punch-right }
+          Throw: { sprite: _DeadSpace/Lavaland/Mobs/LegionArms.rsi, state: arm-right }
+
+# A basalt rock falling from the sky or held in a hand.
+- type: entity
+  id: LavalandLegionFallingRock
+  name: базальтовая глыба
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    noRot: true
+  # Looks like a chunk of basalt rock (WallRockBasalt).
+  - type: Sprite
+    sprite: Structures/Walls/rock.rsi
+    state: rock_wall
+    drawdepth: Mobs
+    noRot: true
+  - type: TimedDespawn
+    lifetime: 15
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+# Where a rock lands: the storm staff's mark.
+- type: entity
+  parent: LavalandStormStaffTelegraph
+  id: LavalandLegionRockMark
+  name: метка удара
+  categories: [ HideSpawnMenu ]
+
+- type: entity
+  parent: StatusEffectSlowdown
+  id: LavalandLegionRockSlowdownStatusEffect
+  name: оглушён камнем Легиона

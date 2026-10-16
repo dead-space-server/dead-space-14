@@ -134,9 +134,22 @@ public enum LavalandIntroDollAction : byte
 
     /// <summary>Backs off by <c>Vector</c> in <c>Length</c> seconds, facing the other way.</summary>
     StepBack,
+
+    /// <summary>
+    /// Knocked flying to its own spot of <see cref="LavalandBossIntroEvent.Knocks"/> in <c>Length</c> seconds, in an arc,
+    /// spinning; it stays there for the rest of the scene. Played on the client clock, exactly on the hit.
+    /// </summary>
+    Knocked,
 }
 
 /// <summary>What the dolls of the players do from a moment of the scene on.</summary>
+[Serializable, NetSerializable]
+public struct LavalandIntroKnock(NetEntity watcher, Vector2 offset)
+{
+    public NetEntity Watcher = watcher;
+    public Vector2 Offset = offset;
+}
+
 [Serializable, NetSerializable]
 public struct LavalandIntroDollCue(float time, LavalandIntroDollAction action, Vector2 vector = default, float length = 0f)
 {
@@ -153,6 +166,15 @@ public sealed class LavalandBossIntroEvent : EntityEventArgs
     /// <summary>Everyone frozen for the scene: their dolls act it out.</summary>
     public List<NetEntity> Watchers = new();
 
+    /// <summary>The boss's fight theme, played quietly from its middle under the scene. Null for silence.</summary>
+    public ResolvedSoundSpecifier? Music;
+
+    /// <summary>How much quieter than the fight the theme plays under the scene, dB.</summary>
+    public float MusicVolume = -14f;
+
+    /// <summary>Where in the track the scene starts it, as a fraction of its length.</summary>
+    public float MusicStart = 0.5f;
+
     public string Title = string.Empty;
     public string? Subtitle;
     public Color TitleColor = Color.White;
@@ -164,6 +186,9 @@ public sealed class LavalandBossIntroEvent : EntityEventArgs
 
     public List<LavalandIntroShot> Shots = new();
     public List<LavalandIntroDollCue> Dolls = new();
+
+    /// <summary>Where each watcher is knocked to by a <see cref="LavalandIntroDollAction.Knocked"/> cue (offset).</summary>
+    public List<LavalandIntroKnock> Knocks = new();
 
     /// <summary>Screen shakes: X is the time, Y the strength in tiles.</summary>
     public List<Vector2> Shakes = new();
@@ -266,4 +291,11 @@ public sealed partial class LavalandSpriteMotionComponent : Component
     /// <summary>Moves faster and faster along the way (falling from the sky).</summary>
     [DataField, AutoNetworkedField]
     public bool Accelerate;
+
+    /// <summary>
+    /// A spinning flight ends in this pose instead of the original one, and keeps it when the motion is removed
+    /// (a thrown doll lands lying and gets up by its own cue, not twice). Degrees from the original rotation.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float? EndRotation;
 }

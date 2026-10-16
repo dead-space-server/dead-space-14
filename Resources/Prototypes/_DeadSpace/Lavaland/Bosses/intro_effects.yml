@@ -113,3 +113,41 @@
     color: "#ffb35c"
   - type: TimedDespawn
     lifetime: 0.35
+
+# The Legion's fists in its intro: knuckles first while it punches its way out.
+- type: entity
+  parent: LavalandIntroEffectBase
+  categories: [ HideSpawnMenu ]
+  id: LavalandIntroLegionFistLeft
+  components:
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _DeadSpace/Lavaland/Mobs/LegionFists.rsi
+    state: punch-left
+
+- type: entity
+  parent: LavalandIntroLegionFistLeft
+  categories: [ HideSpawnMenu ]
+  id: LavalandIntroLegionFistRight
+  components:
+  - type: Sprite
+    state: punch-right
+
+# Then the fists open: plain hands where the real ones will float.
+- type: entity
+  parent: LavalandIntroEffectBase
+  categories: [ HideSpawnMenu ]
+  id: LavalandIntroLegionHandLeft
+  components:
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _DeadSpace/Lavaland/Mobs/LegionHands.rsi
+    state: left
+
+- type: entity
+  parent: LavalandIntroLegionHandLeft
+  categories: [ HideSpawnMenu ]
+  id: LavalandIntroLegionHandRight
+  components:
+  - type: Sprite
+    state: right

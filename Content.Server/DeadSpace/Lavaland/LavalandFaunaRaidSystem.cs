@@ -1,10 +1,29 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using System.Linq;
+using System.Numerics;
 using Content.Server.Chat.Systems;
+using Content.Server.Explosion.EntitySystems;
+using Content.Shared.Damage.Components;
+using Content.Shared.Interaction;
+using Content.Shared.Movement.Components;
+using Content.Shared.Weapons.Melee;
+using Robust.Shared.Physics.Components;
+using Content.Shared.DeadSpace.AshWalkers;
+using Content.Shared.Ghost;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
+using Robust.Server.Player;
 using Content.Server.DeadSpace.Lavaland.Components;
+using Content.Server.NPC;
+using Content.Server.NPC.HTN;
+using Content.Server.Shuttles.Components;
+using Content.Shared.Chasm;
 using Content.Shared.DeadSpace.Lavaland;
+using Content.Shared.Tiles;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -25,6 +44,20 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly HTNSystem _htn = default!;
+    [Dependency] private readonly IPlayerManager _players = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly ExplosionSystem _explosion = default!;
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
+    [Dependency] private readonly SharedMeleeWeaponSystem _melee = default!;
+
+    private const string RaidCompound = "LavalandRaidHostileCompound";
+
+    /// <summary>Raid fauna find the players of the outpost from this far.</summary>
+    private const float RaidVision = 60f;
+    [Dependency] private readonly SharedMapSystem _map = default!;
 
     public override void Initialize()
     {
@@ -40,6 +73,7 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
+        UpdateRaiders();
 
         var now = _timing.CurTime;
         var maps = EntityQueryEnumerator<LavalandMapComponent, TransformComponent>();
@@ -89,8 +123,9 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
                 raid.Stage = LavalandFaunaRaidStage.Active;
                 raid.StageEnd = now + config.Duration;
                 raid.NextTimerUpdate = TimeSpan.Zero;
+                raid.DefenseCheckAt = now + config.DefenseGrace;
                 SpawnTendrils(ent, config);
-                var filter = Filter.BroadcastMap(mapId);
+                var filter = RaidFilter(mapId);
                 _chat.DispatchFilteredAnnouncement(filter, Loc.GetString("lavaland-raid-active"),
                     playSound: false,
                     colorOverride: Color.CornflowerBlue);
@@ -101,6 +136,12 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
             case LavalandFaunaRaidStage.Active when now >= raid.StageEnd:
                 EndRaid(ent, mapId);
                 return;
+
+            case LavalandFaunaRaidStage.Active when raid.DefenseCheckAt is { } checkAt && now >= checkAt:
+                raid.DefenseCheckAt = null;
+                if (TryFindOutpost(ent, out var outpost) && !AnyDefender(outpost))
+                    RuinOutpost(outpost, config, mapId);
+                break;
         }
 
         if (raid.Stage == LavalandFaunaRaidStage.Idle || now < raid.NextTimerUpdate)
@@ -109,7 +150,7 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
         raid.NextTimerUpdate = now + TimeSpan.FromSeconds(1);
         var seconds = Math.Max(0, (int) Math.Ceiling((raid.StageEnd - now).TotalSeconds));
         RaiseNetworkEvent(new LavalandFaunaRaidTimerEvent(seconds, raid.Stage == LavalandFaunaRaidStage.Warning),
-            Filter.BroadcastMap(mapId));
+            RaidFilter(mapId));
     }
 
     private void StartWarning(Entity<LavalandFaunaRaidComponent> ent, LavalandFaunaRaidConfig config, MapId mapId, TimeSpan now)
@@ -119,7 +160,7 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
         raid.Stage = LavalandFaunaRaidStage.Warning;
         raid.StageEnd = now + config.WarningDuration;
         raid.NextTimerUpdate = TimeSpan.Zero;
-        _chat.DispatchFilteredAnnouncement(Filter.BroadcastMap(mapId),
+        _chat.DispatchFilteredAnnouncement(RaidFilter(mapId),
             Loc.GetString("lavaland-raid-warning"),
             playSound: true,
             announcementSound: config.WarningSound,
@@ -130,6 +171,12 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
     /// Starts a raid on the lavaland map right now (guaranteed raids of the bluespace well).
     /// Does nothing if a raid is already coming or going on. The regular schedule is not touched.
     /// </summary>
+    /// <summary>A raid on the outpost of this lavaland is announced or going on.</summary>
+    public bool IsRaidRunning(EntityUid mapUid)
+    {
+        return TryComp<LavalandFaunaRaidComponent>(mapUid, out var raid) && raid.Stage != LavalandFaunaRaidStage.Idle;
+    }
+
     public void ForceRaid(EntityUid mapUid)
     {
         if (!TryComp<LavalandMapComponent>(mapUid, out var lavaland) ||
@@ -162,24 +209,325 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
         var wasRunning = ent.Comp.Stage != LavalandFaunaRaidStage.Idle;
         ent.Comp.Stage = LavalandFaunaRaidStage.Idle;
         if (wasRunning && mapId != MapId.Nullspace)
-            RaiseNetworkEvent(new LavalandFaunaRaidTimerHideEvent(), Filter.BroadcastMap(mapId));
+            RaiseNetworkEvent(new LavalandFaunaRaidTimerHideEvent(), RaidFilter(mapId));
+    }
+
+    private static readonly TimeSpan RaiderThinkInterval = TimeSpan.FromSeconds(0.3);
+
+    /// <summary>A player this close and in plain sight is left to the fauna's own AI.</summary>
+    private const float RaiderSightRange = 9f;
+
+    private readonly HashSet<EntityUid> _obstacles = new();
+
+    /// <summary>
+    /// Raid fauna that see nobody walk straight at the nearest player and beat down the walls, doors, windows and
+    /// machines in the way (their blows carry structural damage). As soon as a player is in sight, their AI takes over.
+    /// </summary>
+    private void UpdateRaiders()
+    {
+        var now = _timing.CurTime;
+        var query = EntityQueryEnumerator<LavalandRaiderComponent, InputMoverComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var raider, out var mover, out var xform))
+        {
+            if (_mobState.IsDead(uid))
+                continue;
+
+            if (now >= raider.NextThink)
+            {
+                raider.NextThink = now + RaiderThinkInterval;
+                ThinkRaider((uid, raider), xform);
+            }
+
+            if (!raider.Assaulting || raider.Target is not { } target || TerminatingOrDeleted(target))
+                continue;
+
+            var offset = _transform.GetWorldPosition(target) - _transform.GetWorldPosition(xform);
+            if (offset.LengthSquared() < 0.01f)
+                continue;
+
+            // Straight at him, the way NPC steering moves its mobs.
+            mover.CurTickSprintMovement = Vector2.Normalize(offset);
+            mover.LastInputTick = _timing.CurTick;
+            mover.LastInputSubTick = ushort.MaxValue;
+        }
+    }
+
+    private void ThinkRaider(Entity<LavalandRaiderComponent> ent, TransformComponent xform)
+    {
+        var position = _transform.GetWorldPosition(xform);
+        EntityUid? best = null;
+        var bestDistance = RaidVision * RaidVision;
+        foreach (var session in _players.Sessions)
+        {
+            if (session.AttachedEntity is not { Valid: true } player || HasComp<GhostComponent>(player) ||
+                HasComp<AshWalkerComponent>(player) || !HasComp<MobStateComponent>(player) || !_mobState.IsAlive(player))
+            {
+                continue;
+            }
+
+            var playerXform = Transform(player);
+            if (playerXform.MapID != xform.MapID)
+                continue;
+
+            var distance = Vector2.DistanceSquared(position, _transform.GetWorldPosition(playerXform));
+            if (distance >= bestDistance)
+                continue;
+
+            bestDistance = distance;
+            best = player;
+        }
+
+        // Nobody about, or somebody in plain sight: the fauna's own AI does the rest.
+        if (best is not { } target ||
+            _interaction.InRangeUnobstructed((ent.Owner, xform), target, RaiderSightRange))
+        {
+            SetAssault(ent, false, null);
+            return;
+        }
+
+        SetAssault(ent, true, target);
+        SmashAhead(ent.Owner, xform, _transform.GetWorldPosition(target) - position);
+    }
+
+    private void SetAssault(Entity<LavalandRaiderComponent> ent, bool assault, EntityUid? target)
+    {
+        ent.Comp.Target = target;
+        if (ent.Comp.Assaulting == assault)
+            return;
+
+        ent.Comp.Assaulting = assault;
+        if (TryComp<HTNComponent>(ent, out var htn))
+            _htn.SetHTNEnabled((ent.Owner, htn), !assault, assault ? 0f : 0.3f);
+    }
+
+    /// <summary>Beats down whatever solid and breakable stands right ahead: walls, doors, windows, machines.</summary>
+    private void SmashAhead(EntityUid uid, TransformComponent xform, Vector2 towards)
+    {
+        if (towards.LengthSquared() < 0.01f || !_melee.TryGetWeapon(uid, out var weaponUid, out var weapon) ||
+            weapon.NextAttack > _timing.CurTime)
+        {
+            return;
+        }
+
+        var ahead = _transform.GetWorldPosition(xform) + Vector2.Normalize(towards) * 0.9f;
+        _obstacles.Clear();
+        _lookup.GetEntitiesInRange(xform.MapID, ahead, 0.5f, _obstacles, LookupFlags.Static | LookupFlags.Dynamic);
+        foreach (var obstacle in _obstacles)
+        {
+            if (obstacle == uid || HasComp<MobStateComponent>(obstacle) || !HasComp<DamageableComponent>(obstacle) ||
+                !TryComp<PhysicsComponent>(obstacle, out var body) || !body.Hard || !body.CanCollide ||
+                !Transform(obstacle).Anchored)
+            {
+                continue;
+            }
+
+            _melee.AttemptLightAttack(uid, weaponUid, weapon, obstacle);
+            return;
+        }
+    }
+
+    /// <summary>Everyone on the map but the ash walkers: the raid is the outpost's trouble.</summary>
+    private Filter RaidFilter(MapId mapId)
+    {
+        return Filter.BroadcastMap(mapId).RemoveWhere(session =>
+            session.AttachedEntity is { } mob && HasComp<AshWalkerComponent>(mob));
+    }
+
+    /// <summary>A living player standing on the outpost grid.</summary>
+    private bool AnyDefender(EntityUid outpost)
+    {
+        foreach (var session in _players.Sessions)
+        {
+            if (session.AttachedEntity is not { Valid: true } mob || HasComp<GhostComponent>(mob) ||
+                !HasComp<MobStateComponent>(mob) || !_mobState.IsAlive(mob))
+            {
+                continue;
+            }
+
+            if (Transform(mob).GridUid == outpost)
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Nobody came: the fauna wreck the outpost. A part of its walls, doors, windows and machines is torn down,
+    /// and blasts go off over it.
+    /// </summary>
+    private void RuinOutpost(EntityUid outpost, LavalandFaunaRaidConfig config, MapId mapId)
+    {
+        if (!TryComp<MapGridComponent>(outpost, out var grid))
+            return;
+
+        var structures = new List<EntityUid>();
+        var tiles = new List<Vector2i>();
+        var enumerator = _map.GetAllTilesEnumerator(outpost, grid);
+        while (enumerator.MoveNext(out var tile))
+        {
+            tiles.Add(tile.Value.GridIndices);
+            var anchored = _map.GetAnchoredEntitiesEnumerator(outpost, grid, tile.Value.GridIndices);
+            while (anchored.MoveNext(out var uid))
+            {
+                if (uid is { } structure && HasComp<DamageableComponent>(structure) && !HasComp<MobStateComponent>(structure))
+                    structures.Add(structure);
+            }
+        }
+
+        _random.Shuffle(structures);
+        var count = (int) MathF.Round(structures.Count * Math.Clamp(config.RuinFraction, 0f, 1f));
+        for (var i = 0; i < count; i++)
+        {
+            QueueDel(structures[i]);
+        }
+
+        for (var i = 0; i < config.RuinBlasts && tiles.Count > 0; i++)
+        {
+            var tile = _random.Pick(tiles);
+            _explosion.QueueExplosion(_transform.ToMapCoordinates(_map.GridTileToLocal(outpost, grid, tile)),
+                "Default", 20f, 4f, 6f, null, tileBreakScale: 0f, maxTileBreak: 0, canCreateVacuum: false);
+        }
+
+        _chat.DispatchFilteredAnnouncement(RaidFilter(mapId), Loc.GetString("lavaland-raid-ruined"),
+            playSound: false,
+            colorOverride: Color.Red);
     }
 
     private void SpawnTendrils(Entity<LavalandFaunaRaidComponent> ent, LavalandFaunaRaidConfig config)
     {
-        if (!TryFindOutpost(ent, out var outpost))
+        if (!TryFindOutpost(ent, out var outpost) || !TryComp<MapGridComponent>(outpost, out var outpostGrid) ||
+            !TryComp<MapGridComponent>(ent, out var terrain))
+        {
             return;
+        }
 
-        var center = _transform.GetMapCoordinates(outpost);
-        var min = config.MinDistance;
+        // Around the outpost's edges, not in its walls: the box of the whole outpost grid.
+        var bounds = _transform.GetWorldMatrix(outpost).TransformBox(outpostGrid.LocalAABB);
+        var docks = new List<Vector2>();
+        var dockQuery = EntityQueryEnumerator<DockingComponent, TransformComponent>();
+        while (dockQuery.MoveNext(out _, out _, out var dockXform))
+        {
+            if (dockXform.GridUid == outpost)
+                docks.Add(_transform.GetWorldPosition(dockXform));
+        }
+
+        var min = Math.Max(2f, config.MinDistance);
         var max = Math.Max(min, config.MaxDistance);
+        var placed = new List<Vector2>();
+        var now = _timing.CurTime;
         foreach (var prototype in config.Tendrils)
         {
-            var offset = _random.NextAngle().ToWorldVec() * _random.NextFloat(min, max);
-            var tendril = Spawn(prototype, new EntityCoordinates(ent, center.Position + offset));
+            if (!TryPickTendrilSpot(ent, terrain, outpost, bounds, docks, placed, min, max, out var spot))
+            {
+                Log.Warning($"Lavaland raid: no free spot for the tendril {prototype} around the outpost.");
+                continue;
+            }
+
+            placed.Add(spot);
+            var tendril = Spawn(prototype, new EntityCoordinates(ent, spot));
             EnsureComp<TimedDespawnComponent>(tendril).Lifetime = (float) config.Duration.TotalSeconds;
+            EnsureComp<LavalandRaidTendrilComponent>(tendril).Map = ent.Owner;
+            // The raid does not wait: the first fauna come out right away.
+            if (TryComp<LavalandNecropolisTendrilComponent>(tendril, out var tendrilComp))
+                tendrilComp.NextSpawnTime = now + TimeSpan.FromSeconds(1);
             ent.Comp.Entities.Add(tendril);
         }
+    }
+
+    /// <summary>
+    /// A spot on the open land around the outpost: off every grid (the outpost, docked shuttles), away from its docking
+    /// ports where shuttles land and from the landing beacon, not on lava or a chasm, not on another raid tendril.
+    /// </summary>
+    private bool TryPickTendrilSpot(
+        Entity<LavalandFaunaRaidComponent> map,
+        MapGridComponent terrain,
+        EntityUid outpost,
+        Box2 bounds,
+        List<Vector2> docks,
+        List<Vector2> placed,
+        float min,
+        float max,
+        out Vector2 spot)
+    {
+        spot = default;
+        var mapId = Transform(map).MapID;
+        var inner = bounds.Enlarged(min);
+        var outer = bounds.Enlarged(max);
+        var beacon = TryComp<LavalandMapComponent>(map, out var lavaland) && lavaland.Planet.Id != null &&
+                     _prototype.TryIndex(lavaland.Planet, out var planet) && planet.FtlEnabled
+            ? planet.FtlBeaconOffset
+            : (Vector2?) null;
+
+        for (var attempt = 0; attempt < 80; attempt++)
+        {
+            var candidate = new Vector2(_random.NextFloat(outer.Left, outer.Right), _random.NextFloat(outer.Bottom, outer.Top));
+            if (inner.Contains(candidate))
+                continue;
+
+            if (docks.Any(dock => Vector2.DistanceSquared(dock, candidate) < 9f * 9f) ||
+                beacon is { } beaconSpot && Vector2.DistanceSquared(beaconSpot, candidate) < 14f * 14f ||
+                placed.Any(other => Vector2.DistanceSquared(other, candidate) < 5f * 5f))
+            {
+                continue;
+            }
+
+            // No grid at all around it but the land itself: the outpost, shuttles, other structures.
+            var clear = true;
+            foreach (var grid in _mapManager.FindGridsIntersecting(mapId, Box2.CenteredAround(candidate, new Vector2(5f))))
+            {
+                if (grid.Owner != map.Owner)
+                {
+                    clear = false;
+                    break;
+                }
+            }
+
+            if (!clear)
+                continue;
+
+            var tile = _map.TileIndicesFor(map.Owner, terrain, new EntityCoordinates(map.Owner, candidate));
+            if (!_map.TryGetTileRef(map.Owner, terrain, tile, out var tileRef) || tileRef.Tile.IsEmpty)
+                continue;
+
+            var anchored = _map.GetAnchoredEntitiesEnumerator(map.Owner, terrain, tile);
+            var hazard = false;
+            while (anchored.MoveNext(out var uid))
+            {
+                if (HasComp<ChasmComponent>(uid) || HasComp<LavaComponent>(uid))
+                {
+                    hazard = true;
+                    break;
+                }
+            }
+
+            if (hazard)
+                continue;
+
+            spot = _map.GridTileToLocal(map.Owner, terrain, tile).Position;
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// A raid tendril's fauna: they see the players of the outpost from afar, go for them even behind walls and
+    /// break through doors, windows and machines on the way.
+    /// </summary>
+    public void MakeRaider(EntityUid mob)
+    {
+        if (!TryComp<HTNComponent>(mob, out var htn))
+            return;
+
+        EnsureComp<LavalandRaiderComponent>(mob);
+        htn.RootTask = new HTNCompoundTask { Task = RaidCompound };
+        // Look for a new target all the time, not only once the current wander is done.
+        htn.ConstantlyReplan = true;
+        htn.Blackboard.SetValue(NPCBlackboard.NavSmash, true);
+        htn.Blackboard.SetValue(NPCBlackboard.NavInteract, true);
+        htn.Blackboard.SetValue("VisionRadius", RaidVision);
+        htn.Blackboard.SetValue("AggroVisionRadius", RaidVision);
+        _htn.Replan(htn);
     }
 
     private bool TryFindOutpost(EntityUid mapUid, out EntityUid outpost)

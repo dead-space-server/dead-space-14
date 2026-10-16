@@ -815,9 +815,10 @@
       types:
         Blunt: 80
         Structural: 50
+    # Megafauna, elites, the mad miner and the Legion's hands.
     bossDamage:
       types:
-        Blunt: 5
+        Blunt: 55
 
 - type: Tag
   id: GunUpgradeExplosiveLavaland

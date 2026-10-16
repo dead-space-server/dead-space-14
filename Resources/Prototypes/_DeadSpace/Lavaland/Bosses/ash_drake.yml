@@ -6,8 +6,10 @@
   wallPrototype: WallAshDrakeArena
   lightPrototype: LavalandAshDrakeArenaLight
   cave:
-    thickness: 12
-    shell: 12
+    # The whole ring is the boss's own wall, 3 tiles, no ore; then a thin band of basalt over the land.
+    thickness: 3
+    shell: 3
+    surround: 3
     shellRock: WallAshDrakeArena
     roughness: 0
     passages: 2
@@ -34,6 +36,14 @@
       WallRockBasaltBluespaceCrystal: 2
       WallRockBasaltArtifactFragment: 2
   decorations:
+  # Ash trees along the walls, like on the land around.
+  - prototype: FloraTreeLavalandAsh
+    count: 7
+    spawnAttempts: 120
+    minDistance: 15
+    maxDistance: 21
+    edgePadding: 1
+    minSeparation: 3
   - prototype: FloorLavaEntity
     pool: true
     count: 34

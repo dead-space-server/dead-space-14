@@ -1,0 +1,78 @@
+# Argocytes of the chromite caves (all but the leviathing): they hunt through the chasms.
+
+- type: entity
+  parent: MobArgocyteSlurva
+  id: MobArgocyteCavesSlurva
+  suffix: Chromite Caves
+  components:
+  - type: LavalandPitJumper
+
+- type: entity
+  parent: MobArgocyteBarrier
+  id: MobArgocyteCavesBarrier
+  suffix: Chromite Caves
+  components:
+  - type: LavalandPitJumper
+
+- type: entity
+  parent: MobArgocyteSkitter
+  id: MobArgocyteCavesSkitter
+  suffix: Chromite Caves
+  components:
+  - type: LavalandPitJumper
+
+- type: entity
+  parent: MobArgocyteSwiper
+  id: MobArgocyteCavesSwiper
+  suffix: Chromite Caves
+  components:
+  - type: LavalandPitJumper
+
+- type: entity
+  parent: MobArgocyteMolder
+  id: MobArgocyteCavesMolder
+  suffix: Chromite Caves
+  components:
+  - type: LavalandPitJumper
+
+- type: entity
+  parent: MobArgocytePouncer
+  id: MobArgocyteCavesPouncer
+  suffix: Chromite Caves
+  components:
+  - type: LavalandPitJumper
+
+- type: entity
+  parent: MobArgocyteGlider
+  id: MobArgocyteCavesGlider
+  suffix: Chromite Caves
+  components:
+  - type: LavalandPitJumper
+
+- type: entity
+  parent: MobArgocyteHarvester
+  id: MobArgocyteCavesHarvester
+  suffix: Chromite Caves
+  components:
+  - type: LavalandPitJumper
+
+- type: entity
+  parent: MobArgocyteCrawler
+  id: MobArgocyteCavesCrawler
+  suffix: Chromite Caves
+  components:
+  - type: LavalandPitJumper
+
+- type: entity
+  parent: MobArgocyteEnforcer
+  id: MobArgocyteCavesEnforcer
+  suffix: Chromite Caves
+  components:
+  - type: LavalandPitJumper
+
+- type: entity
+  parent: MobArgocyteFounder
+  id: MobArgocyteCavesFounder
+  suffix: Chromite Caves
+  components:
+  - type: LavalandPitJumper
