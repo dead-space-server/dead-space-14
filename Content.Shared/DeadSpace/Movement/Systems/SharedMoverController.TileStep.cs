@@ -55,10 +55,32 @@ public abstract partial class SharedMoverController
         if (step.Stepping && step.Parent != xform.ParentUid)
             step.Stepping = false;
 
+        var direction = HeldTileDirection(mover);
+        var speed = GetTileStepSpeed(ent, mover);
+
         if (step.Stepping)
         {
             var left = (step.Target - position).Length();
-            if (left <= TileStepArriveDistance)
+            var stepVector = step.Target - step.From;
+
+            // Turned right back mid-step: straight back to the tile it came from, no finishing the step first.
+            if (direction != Vector2.Zero && stepVector.LengthSquared() > 0.01f &&
+                Vector2.Dot(Vector2.Normalize(direction), Vector2.Normalize(stepVector)) < -0.9f &&
+                left > TileStepArriveDistance)
+            {
+                BeginTileStep(step, xform, step.From, now, step.Target);
+                left = (step.Target - position).Length();
+            }
+
+            // Arriving within this tick with a direction held: the next step starts right now, from the tile it is
+            // about to reach - no tick spent creeping onto the center and no hitch on every tile.
+            if (direction != Vector2.Zero && left <= speed * frameTime + TileStepArriveDistance &&
+                TryPickTileStep(xform, physics, step.Target, direction, out var chained))
+            {
+                BeginTileStep(step, xform, chained, now, step.Target);
+                PlayTileStepSound(ent, mover, xform);
+            }
+            else if (left <= TileStepArriveDistance)
             {
                 step.Stepping = false;
             }
@@ -72,12 +94,11 @@ public abstract partial class SharedMoverController
                 else if (now - step.LastProgress > step.StuckTime)
                 {
                     // Bumped into something: back to the center of the tile we stand on.
-                    BeginTileStep(step, xform, TileCenter(position), now);
+                    BeginTileStep(step, xform, TileCenter(position), now, TileCenter(position));
                 }
             }
         }
 
-        var direction = HeldTileDirection(mover);
         if (!step.Stepping && direction != Vector2.Zero)
         {
             // A wall ahead is not walked into (that only stalls and jerks): a diagonal slides along it instead,
@@ -85,7 +106,7 @@ public abstract partial class SharedMoverController
             var from = TileCenter(position);
             if (TryPickTileStep(xform, physics, from, direction, out var target))
             {
-                BeginTileStep(step, xform, target, now);
+                BeginTileStep(step, xform, target, now, from);
                 PlayTileStepSound(ent, mover, xform);
             }
         }
@@ -95,7 +116,7 @@ public abstract partial class SharedMoverController
             // Idle: settle on the center of the current tile.
             var center = TileCenter(position);
             if ((center - position).Length() > TileStepArriveDistance)
-                BeginTileStep(step, xform, center, now);
+                BeginTileStep(step, xform, center, now, center);
         }
 
         var velocity = Vector2.Zero;
@@ -103,15 +124,17 @@ public abstract partial class SharedMoverController
         {
             var delta = step.Target - position;
             var distance = delta.Length();
-            var speed = GetTileStepSpeed(ent, mover);
             // Never overshoot the center within one tick.
             var stepSpeed = MathF.Min(speed, distance / frameTime);
             velocity = distance > 0f ? delta / distance * stepSpeed : Vector2.Zero;
 
             if (!NoRotateQuery.HasComponent(ent) && delta.LengthSquared() > 0.0001f)
             {
+                // Only when it really turns: setting the same rotation every tick only dirties the transform.
                 var parentRotation = _transform.GetWorldRotation(xform.ParentUid);
-                _transform.SetWorldRotation(xform, parentRotation.RotateVec(delta).ToWorldAngle());
+                var facing = parentRotation.RotateVec(delta).ToWorldAngle();
+                if (!facing.EqualsApprox(_transform.GetWorldRotation(xform), 0.02))
+                    _transform.SetWorldRotation(xform, facing);
             }
 
             velocity = _transform.GetWorldRotation(xform.ParentUid).RotateVec(velocity);
@@ -183,10 +206,12 @@ public abstract partial class SharedMoverController
         return false;
     }
 
-    private static void BeginTileStep(TileStepMovementComponent step, TransformComponent xform, Vector2 target, TimeSpan now)
+    private static void BeginTileStep(TileStepMovementComponent step, TransformComponent xform, Vector2 target, TimeSpan now,
+        Vector2 from)
     {
         step.Stepping = true;
         step.Target = target;
+        step.From = from;
         step.Parent = xform.ParentUid;
         step.LastDistance = (target - xform.LocalPosition).Length();
         step.LastProgress = now;

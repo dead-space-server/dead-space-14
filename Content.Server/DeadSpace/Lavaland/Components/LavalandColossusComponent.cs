@@ -55,7 +55,7 @@ public sealed partial class LavalandColossusComponent : Component
     public float ShotgunChance = 0.7f;
 
     [DataField]
-    public float EnragedMovementSpeedMultiplier = 3.33f;
+    public float EnragedMovementSpeedMultiplier = 2.1f;
 
     [DataField]
     public float MaxCooldownReduction = 0.3f;
@@ -85,7 +85,7 @@ public sealed partial class LavalandColossusComponent : Component
 
     /// <summary>Running speed at the players while furious, tiles per second.</summary>
     [DataField]
-    public float FuryChaseSpeed = 4.5f;
+    public float FuryChaseSpeed = 3f;
 
     [DataField]
     public float FuryChaseReach = 2f;

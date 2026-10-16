@@ -179,7 +179,9 @@ public sealed partial class LavalandBossArenaSystem
                 break;
         }
 
-        ev.Music = ResolveIntroMusic(arena);
+        ev.Music = ResolveIntroMusic(arena, out var musicVolume);
+        // A track mixed quieter (the Hierophant, Pandora) carries its own boost in the boss music: keep it here too.
+        ev.MusicVolume += musicVolume;
         arena.Comp.IntroEndsAt = _timing.CurTime + TimeSpan.FromSeconds(Math.Max(0.5f, ev.Duration));
         RaiseNetworkEvent(ev, filter);
     }
@@ -188,8 +190,9 @@ public sealed partial class LavalandBossArenaSystem
     /// The fight theme of the boss, for the background of its scene. A boss that only comes out after the scene has
     /// none chosen yet: it is chosen here from its prototype and kept for the fight.
     /// </summary>
-    private ResolvedSoundSpecifier? ResolveIntroMusic(Entity<LavalandBossArenaComponent> arena)
+    private ResolvedSoundSpecifier? ResolveIntroMusic(Entity<LavalandBossArenaComponent> arena, out float volume)
     {
+        volume = 0f;
         SoundSpecifier? music = null;
         if (TryComp<LavalandBossComponent>(arena.Comp.Boss, out var boss))
         {
@@ -203,7 +206,11 @@ public sealed partial class LavalandBossArenaSystem
             arena.Comp.IntroMusic = music;
         }
 
-        return music == null ? null : _audio.ResolveSound(music);
+        if (music == null)
+            return null;
+
+        volume = music.Params.Volume;
+        return _audio.ResolveSound(music);
     }
 
     /// <summary>The scene is over: the real boss stands where its copy is, everyone is released, the fight begins.</summary>

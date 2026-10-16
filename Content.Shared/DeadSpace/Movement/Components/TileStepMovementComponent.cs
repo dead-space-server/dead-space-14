@@ -24,12 +24,19 @@ public sealed partial class TileStepMovementComponent : Component
     [AutoNetworkedField]
     public EntityUid? Parent;
 
-    /// <summary>When we last got noticeably closer to the target: no progress for a while means a wall.</summary>
-    [ViewVariables]
+    /// <summary>Center of the tile the step started from: turning back mid-step goes straight back there.</summary>
+    [AutoNetworkedField]
+    public Vector2 From;
+
+    /// <summary>
+    /// When we last got noticeably closer to the target: no progress for a while means something in the way.
+    /// Networked with the step, so the client and the server give up on the same tick.
+    /// </summary>
+    [AutoNetworkedField]
     public TimeSpan LastProgress;
 
     /// <summary>Distance left to the target on the last check.</summary>
-    [ViewVariables]
+    [AutoNetworkedField]
     public float LastDistance;
 
     /// <summary>Give up a step after this long without getting closer.</summary>
