@@ -97,6 +97,38 @@ public sealed class LavalandLegionHandsSystem : EntitySystem
         return false;
     }
 
+    /// <summary>
+    /// The Legion splits: its hands stay as they are (their own health and damage) and go to the body that
+    /// carries on the fight. A hand already destroyed stays destroyed.
+    /// </summary>
+    public void TransferHands(EntityUid from, EntityUid to)
+    {
+        if (!TryComp<LavalandLegionHandsComponent>(from, out var old) || TerminatingOrDeleted(to))
+            return;
+
+        ClearAttacks(old);
+        if (TryComp<LavalandLegionHandsComponent>(to, out var existing))
+            RemoveHands(existing);
+        else
+            existing = CopyComp(from, to, old);
+
+        existing.Left = old.Left;
+        existing.Right = old.Right;
+        existing.LeftLost = old.LeftLost;
+        existing.RightLost = old.RightLost;
+        existing.BusyUntil = TimeSpan.Zero;
+
+        foreach (var hand in new[] { existing.Left, existing.Right })
+        {
+            if (hand is { } uid && TryComp<LavalandLegionHandComponent>(uid, out var handComp))
+                handComp.Legion = to;
+        }
+
+        // Handed over: the old body must not take them with it when it goes.
+        old.Left = null;
+        old.Right = null;
+    }
+
     #endregion
 
     #region Hands

@@ -555,3 +555,18 @@
     event: !type:DrakeArmorTransformActionEvent
       drakeChance: 0.5
       skeletonStunDuration: 0
+
+- type: entity
+  parent: ClothingEyesBase
+  id: ClothingEyesLavalandStormVisor
+  name: штормовой визор
+  description: Визор с фильтрами, отсекающими пепел и снег. В бурю сквозь него видно почти всё - больше он ничего не умеет.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Eyes/Hud/taipan_diagnostichud.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Clothing/Eyes/Hud/taipan_diagnostichud.rsi
+  - type: LavalandStormVisor
+    stormOpacity: 0.15
+  - type: StaticPrice
+    price: 300

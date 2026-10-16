@@ -153,7 +153,7 @@
   parent: [ BaseSimpleMob, MobCombat, MobRobotic ]
   id: MobLavalandMinebot
   name: минбот
-  description: Шахтёрский дрон. Следует за хозяином, отстреливает фауну и собирает руду. Альт-клик — привязать к себе или переключить сбор, клик рукой — выгрузить руду.
+  description: Шахтёрский дрон. Следует за хозяином, отстреливает фауну, сам вскапывает рудные жилы и собирает руду во встроенную сумку боргов. Альт-клик — выгрузить руду; привязать к себе и переключить сбор — через меню.
   components:
   - type: Sprite
     drawdepth: Mobs
@@ -295,7 +295,7 @@
   parent: BaseItem
   id: LavalandWarpCubeRed
   name: красный куб
-  description: Загадочный красный куб. Использование переносит вас к его синему близнецу.
+  description: Загадочный красный куб. Использование переносит вас к его синему близнецу. Работает только на Лаваленде и в пещерах.
   components:
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Specific/warp_cube.rsi
@@ -312,7 +312,7 @@
   parent: BaseItem
   id: LavalandWarpCubeBlue
   name: синий куб
-  description: Загадочный синий куб. Использование переносит вас к его красному близнецу.
+  description: Загадочный синий куб. Использование переносит вас к его красному близнецу. Работает только на Лаваленде и в пещерах.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite

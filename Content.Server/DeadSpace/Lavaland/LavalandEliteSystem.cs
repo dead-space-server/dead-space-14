@@ -42,6 +42,7 @@ public sealed class LavalandEliteSystem : EntitySystem
     private const int HudIdBase = 200000;
 
     [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly LavalandTamingSystem _taming = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly FlammableSystem _flammable = default!;
     [Dependency] private readonly HTNSystem _htn = default!;
@@ -400,6 +401,11 @@ public sealed class LavalandEliteSystem : EntitySystem
             if (hit.Visual != null)
                 Spawn(hit.Visual, hit.Coordinates);
 
+            // Only a warning mark.
+            if (hit.Damage.Empty)
+                continue;
+
+            var hitTile = _transform.ToMapCoordinates(hit.Coordinates).Position;
             _mobs.Clear();
             _lookup.GetEntitiesInRange(hit.Coordinates, 0.5f, _mobs);
             foreach (var mob in _mobs)
@@ -410,6 +416,12 @@ public sealed class LavalandEliteSystem : EntitySystem
                 {
                     continue;
                 }
+
+                // Only who stands on this very tile: brushing the neighbouring ones does not count, or one standing
+                // on the edge between tiles takes the same blow two to four times over.
+                var mobTile = _transform.ToMapCoordinates(TileCenter(Transform(mob).Coordinates)).Position;
+                if (Vector2.DistanceSquared(mobTile, hitTile) > 0.01f)
+                    continue;
 
                 _damageable.TryChangeDamage(mob.Owner, hit.Damage, origin: Exists(hit.Source) ? hit.Source : null);
                 if (hit.Stun > TimeSpan.Zero)
@@ -449,6 +461,8 @@ public sealed class LavalandEliteSystem : EntitySystem
                 {
                     var child = Spawn(ent.Comp.ChildPrototype, Transform(ent).Coordinates);
                     EnsureComp<LavalandBroodmotherChildComponent>(child).Mother = ent.Owner;
+                    // A tamed mother's children are on her tamer's side too.
+                    _taming.InheritSide(ent, child);
                     ent.Comp.Children.Add(child);
                 }
                 _popup.PopupEntity(Loc.GetString("lavaland-broodmother-children", ("elite", ent.Owner)), ent, PopupType.MediumCaution);
@@ -758,8 +772,8 @@ public sealed class LavalandEliteSystem : EntitySystem
                     .GetDir().ToVec();
                 var origin = TileCenter(xform.Coordinates);
                 for (var i = 1; i <= ent.Comp.ShotLength; i++)
-                    QueueHit(now + step * i, origin.Offset(direction * i), ent.Comp.BlastDamage, TimeSpan.Zero, ent, ent.Comp.BlastVisual);
-                return cooldown * 0.5;
+                    PandoraBlast(ent, now + step * i, origin.Offset(direction * i));
+                return cooldown * 0.5 + ent.Comp.WarningTime;
             case 1:
                 // A box of blasts around the target, sparing only its immediate surroundings.
                 for (var x = -3; x <= 3; x++)
@@ -767,26 +781,25 @@ public sealed class LavalandEliteSystem : EntitySystem
                     for (var y = -3; y <= 3; y++)
                     {
                         if (Math.Max(Math.Abs(x), Math.Abs(y)) > 1)
-                            QueueHit(now, targetCoordinates.Offset(new Vector2(x, y)), ent.Comp.BlastDamage, TimeSpan.Zero, ent, ent.Comp.BlastVisual);
+                            PandoraBlast(ent, now, targetCoordinates.Offset(new Vector2(x, y)));
                     }
                 }
-                return cooldown;
+                return cooldown + ent.Comp.WarningTime;
             case 2:
                 if (Vector2.Distance(_transform.GetWorldPosition(xform), _transform.GetWorldPosition(target)) > ent.Comp.TeleportRange)
                     return cooldown;
 
                 var source = TileCenter(xform.Coordinates);
-                Spawn(ent.Comp.TelegraphVisual, source);
-                Spawn(ent.Comp.TelegraphVisual, targetCoordinates);
                 for (var x = -1; x <= 1; x++)
                 {
                     for (var y = -1; y <= 1; y++)
                     {
-                        QueueHit(now + TimeSpan.FromSeconds(0.2), source.Offset(new Vector2(x, y)), ent.Comp.BlastDamage, TimeSpan.Zero, ent, ent.Comp.BlastVisual);
-                        QueueHit(now + TimeSpan.FromSeconds(0.2), targetCoordinates.Offset(new Vector2(x, y)), ent.Comp.BlastDamage, TimeSpan.Zero, ent, ent.Comp.BlastVisual);
+                        PandoraBlast(ent, now, source.Offset(new Vector2(x, y)));
+                        PandoraBlast(ent, now, targetCoordinates.Offset(new Vector2(x, y)));
                     }
                 }
-                _teleports.Add((now + TimeSpan.FromSeconds(0.4), ent.Owner, targetCoordinates));
+                // It moves just as both squares go off.
+                _teleports.Add((now + ent.Comp.WarningTime, ent.Owner, targetCoordinates));
                 if (ent.Comp.TeleportSound != null)
                     _audio.PlayPvs(ent.Comp.TeleportSound, ent);
                 return cooldown * 2;
@@ -799,13 +812,22 @@ public sealed class LavalandEliteSystem : EntitySystem
                         for (var y = -ring; y <= ring; y++)
                         {
                             if (Math.Max(Math.Abs(x), Math.Abs(y)) == ring)
-                                QueueHit(now + TimeSpan.FromSeconds(0.2) + step * ring, targetCoordinates.Offset(new Vector2(x, y)), ent.Comp.BlastDamage, TimeSpan.Zero, ent, ent.Comp.BlastVisual);
+                                PandoraBlast(ent, now + step * ring, targetCoordinates.Offset(new Vector2(x, y)));
                         }
                     }
                 }
-                return cooldown;
+                return cooldown + ent.Comp.WarningTime;
         }
     }
+
+    /// <summary>The mark shows up on the tile at <paramref name="at"/>, the blast goes off there a warning later.</summary>
+    private void PandoraBlast(Entity<LavalandPandoraComponent> ent, TimeSpan at, EntityCoordinates coordinates)
+    {
+        QueueHit(at, coordinates, NoDamage, TimeSpan.Zero, ent, ent.Comp.TelegraphVisual);
+        QueueHit(at + ent.Comp.WarningTime, coordinates, ent.Comp.BlastDamage, TimeSpan.Zero, ent, ent.Comp.BlastVisual);
+    }
+
+    private static readonly DamageSpecifier NoDamage = new();
 
     #endregion
 

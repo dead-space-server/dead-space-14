@@ -20,3 +20,4 @@ lavaland-caves-pit-yes = Прыгнуть
 lavaland-caves-pit-no = Не сейчас
 
 lavaland-deep-night-shadow-grab = Из пропасти взмывает тень и хватает вас за ноги!
+ui-options-actions-restore-item-slots = Возвращать старый акшен от предмета в старую позицию

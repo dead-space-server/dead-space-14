@@ -193,7 +193,9 @@ public sealed partial class LavalandDaggerCrystalComponent : Component
 
 /// <summary>
 /// Soulscythe from bubblegum. Using it calls a ghost to inhabit it: the possessed scythe moves on its own,
-/// spending blood, and gains blood from every hit. Only its master can pick it up.
+/// spending blood, and gains blood from every hit. Only its master can pick it up, and it tears itself out of
+/// whoever's hands it is in when it wants to. It only has its power within <see cref="ActiveRange"/> of its master;
+/// killing the master puts it back to sleep.
 /// </summary>
 [RegisterComponent]
 public sealed partial class LavalandSoulscytheComponent : Component
@@ -210,6 +212,22 @@ public sealed partial class LavalandSoulscytheComponent : Component
 
     [DataField]
     public float MoveCostPerTile = 1f;
+
+    /// <summary>Farther than this from whoever awakened it, it can neither move nor strike.</summary>
+    [DataField]
+    public float ActiveRange = 15f;
+
+    /// <summary>How often it can tear itself out of somebody's hands.</summary>
+    [DataField]
+    public TimeSpan BreakFreeCooldown = TimeSpan.FromSeconds(1.5);
+
+    [DataField]
+    public float BreakFreeThrow = 2.5f;
+
+    [ViewVariables]
+    public bool OutOfRange;
+
+    public TimeSpan NextBreakFree;
 
     [ViewVariables]
     public float Blood;

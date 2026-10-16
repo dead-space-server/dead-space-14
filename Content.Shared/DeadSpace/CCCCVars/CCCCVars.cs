@@ -130,6 +130,13 @@ public sealed class CCCCVars
     public static readonly CVarDef<bool> LavalandParticles =
         CVarDef.Create("lavaland.particles", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 
+    /// <summary>
+    /// An action granted by an item goes back to the hotbar slot it had before when the item is picked up again,
+    /// pushing the actions after it along.
+    /// </summary>
+    public static readonly CVarDef<bool> ActionsRestoreItemSlots =
+        CVarDef.Create("interface.actions_restore_item_slots", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
     public static readonly CVarDef<bool> AshWalkersEnabled =
         CVarDef.Create("lavaland.ash_walkers_enabled", true, CVar.SERVER | CVar.REPLICATED);
 

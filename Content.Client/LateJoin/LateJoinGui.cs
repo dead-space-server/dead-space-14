@@ -354,11 +354,13 @@ namespace Content.Client.LateJoin
         }
 
         // DS14-start
+        private static readonly ProtoId<DepartmentPrototype> LavalandDepartment = "Lavaland";
+
         /// <summary>A "station" whose every job is of the Lavaland department (the ash walkers).</summary>
         private bool IsLavalandOnly(NetEntity station)
         {
             if (!_gameTicker.JobsAvailable.TryGetValue(station, out var jobs) || jobs.Count == 0 ||
-                !_prototypeManager.TryIndex<DepartmentPrototype>("Lavaland", out var lavaland))
+                !_prototypeManager.TryIndex(LavalandDepartment, out var lavaland))
             {
                 return false;
             }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Server.Chat.Systems;
 using Content.Server.Explosion.EntitySystems;
+using Content.Shared.CombatMode;
 using Content.Shared.Damage.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Movement.Components;
@@ -16,7 +17,12 @@ using Content.Shared.Mobs.Systems;
 using Robust.Server.Player;
 using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Server.NPC;
+using Content.Server.NPC.Components;
 using Content.Server.NPC.HTN;
+using Content.Shared.Weapons.Ranged.Components;
+using Content.Shared.Weapons.Ranged.Systems;
+using Content.Server.NPC.Systems;
+using Content.Shared.NPC;
 using Content.Server.Shuttles.Components;
 using Content.Shared.Chasm;
 using Content.Shared.DeadSpace.Lavaland;
@@ -46,12 +52,16 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly HTNSystem _htn = default!;
+    [Dependency] private readonly NPCSystem _npc = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly ExplosionSystem _explosion = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SharedInteractionSystem _interaction = default!;
     [Dependency] private readonly SharedMeleeWeaponSystem _melee = default!;
+    [Dependency] private readonly SharedGunSystem _gun = default!;
+    [Dependency] private readonly NPCUseActionOnTargetSystem _useAction = default!;
+    [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
 
     private const string RaidCompound = "LavalandRaidHostileCompound";
 
@@ -217,6 +227,20 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
     /// <summary>A player this close and in plain sight is left to the fauna's own AI.</summary>
     private const float RaiderSightRange = 9f;
 
+    /// <summary>A player this close (and nothing between) gets the blow instead of the wall.</summary>
+    private const float RaiderBiteRange = 1.6f;
+
+    /// <summary>Shooting and lashing reach.</summary>
+    private const float RaiderShootRange = 9f;
+
+    /// <summary>The tentacle goliath stops coming closer at this distance.</summary>
+    private const float RaiderTentacleHold = 6f;
+
+    /// <summary>Shooters stop coming closer at this distance.</summary>
+    private const float RaiderShooterHold = 5f;
+
+    private readonly HashSet<MapId> _tentaclerMaps = new();
+
     private readonly HashSet<EntityUid> _obstacles = new();
 
     /// <summary>
@@ -226,11 +250,24 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
     private void UpdateRaiders()
     {
         var now = _timing.CurTime;
+
+        // One tentacle goliath per raid: whoever has the job keeps it while alive.
+        _tentaclerMaps.Clear();
+        var tentaclers = EntityQueryEnumerator<LavalandRaiderComponent, TransformComponent>();
+        while (tentaclers.MoveNext(out var uid, out var raider, out var xform))
+        {
+            if (raider.Tentacler && !_mobState.IsDead(uid))
+                _tentaclerMaps.Add(xform.MapID);
+        }
+
         var query = EntityQueryEnumerator<LavalandRaiderComponent, InputMoverComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var raider, out var mover, out var xform))
         {
             if (_mobState.IsDead(uid))
                 continue;
+
+            if (!raider.Tentacler && HasComp<NPCUseActionOnTargetComponent>(uid) && _tentaclerMaps.Add(xform.MapID))
+                raider.Tentacler = true;
 
             if (now >= raider.NextThink)
             {
@@ -245,10 +282,29 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
             if (offset.LengthSquared() < 0.01f)
                 continue;
 
-            // Straight at him, the way NPC steering moves its mobs.
+            // What their AI did and does not now: watchers shoot, legions spit their skulls, the tentacle goliath
+            // lashes out. In sight and in range: they do it, and keep their distance instead of coming close.
+            var distance = offset.Length();
+            if (distance <= RaiderShootRange && UseRangedAttack((uid, raider), xform, target, distance))
+                continue;
+
+            // Close enough and nothing between: the blow goes to him.
+            if (offset.Length() <= RaiderBiteRange && _interaction.InRangeUnobstructed((uid, xform), target, RaiderBiteRange))
+            {
+                if (_melee.TryGetWeapon(uid, out var weaponUid, out var weapon) && weapon.NextAttack <= now)
+                {
+                    // A blow needs combat mode on; with its AI off nothing else turns it on.
+                    _combatMode.SetInCombatMode(uid, true);
+                    _melee.AttemptLightAttack(uid, weaponUid, weapon, target);
+                }
+                continue;
+            }
+
+            // Straight at him, the way NPC steering moves its mobs; whatever stands in the way is smashed.
             mover.CurTickSprintMovement = Vector2.Normalize(offset);
             mover.LastInputTick = _timing.CurTick;
             mover.LastInputSubTick = ushort.MaxValue;
+            SmashAhead(uid, xform, offset);
         }
     }
 
@@ -277,16 +333,16 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
             best = player;
         }
 
-        // Nobody about, or somebody in plain sight: the fauna's own AI does the rest.
-        if (best is not { } target ||
-            _interaction.InRangeUnobstructed((ent.Owner, xform), target, RaiderSightRange))
+        // Nobody about: the fauna's own AI wanders. Somebody there - seen through a window or not - it goes straight
+        // for him by itself: the AI's pathfinding does not find a way from the land onto the outpost grid, and the
+        // mob would only stand and stare at him through the wall.
+        if (best is not { } target)
         {
             SetAssault(ent, false, null);
             return;
         }
 
         SetAssault(ent, true, target);
-        SmashAhead(ent.Owner, xform, _transform.GetWorldPosition(target) - position);
     }
 
     private void SetAssault(Entity<LavalandRaiderComponent> ent, bool assault, EntityUid? target)
@@ -298,6 +354,10 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
         ent.Comp.Assaulting = assault;
         if (TryComp<HTNComponent>(ent, out var htn))
             _htn.SetHTNEnabled((ent.Owner, htn), !assault, assault ? 0f : 0.3f);
+
+        // It moves by itself now: it must not be asleep (asleep its movement is not processed at all).
+        if (assault && !HasComp<ActiveNPCComponent>(ent))
+            _npc.WakeNPC(ent);
     }
 
     /// <summary>Beats down whatever solid and breakable stands right ahead: walls, doors, windows, machines.</summary>
@@ -309,21 +369,59 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
             return;
         }
 
-        var ahead = _transform.GetWorldPosition(xform) + Vector2.Normalize(towards) * 0.9f;
-        _obstacles.Clear();
-        _lookup.GetEntitiesInRange(xform.MapID, ahead, 0.5f, _obstacles, LookupFlags.Static | LookupFlags.Dynamic);
-        foreach (var obstacle in _obstacles)
+        // A little ahead and a little farther: big mobs like the goliath stop with the wall more than a tile away.
+        var position = _transform.GetWorldPosition(xform);
+        var direction = Vector2.Normalize(towards);
+        foreach (var reach in SmashReaches)
         {
-            if (obstacle == uid || HasComp<MobStateComponent>(obstacle) || !HasComp<DamageableComponent>(obstacle) ||
-                !TryComp<PhysicsComponent>(obstacle, out var body) || !body.Hard || !body.CanCollide ||
-                !Transform(obstacle).Anchored)
+            _obstacles.Clear();
+            _lookup.GetEntitiesInRange(xform.MapID, position + direction * reach, 0.6f, _obstacles,
+                LookupFlags.Static | LookupFlags.Dynamic);
+            foreach (var obstacle in _obstacles)
             {
-                continue;
-            }
+                // Walls, basalt and rock, doors, windows, machines: anything solid, anchored and breakable.
+                if (obstacle == uid || HasComp<MobStateComponent>(obstacle) || !HasComp<DamageableComponent>(obstacle) ||
+                    !TryComp<PhysicsComponent>(obstacle, out var body) || !body.Hard || !body.CanCollide ||
+                    !Transform(obstacle).Anchored)
+                {
+                    continue;
+                }
 
-            _melee.AttemptLightAttack(uid, weaponUid, weapon, obstacle);
-            return;
+                _combatMode.SetInCombatMode(uid, true);
+                _melee.AttemptLightAttack(uid, weaponUid, weapon, obstacle);
+                return;
+            }
         }
+    }
+
+    private static readonly float[] SmashReaches = { 0.9f, 1.4f };
+
+    /// <summary>
+    /// The ranged attacks of the raid fauna, done here while their AI is off. True if it holds its ground this tick
+    /// (it attacked from where it stands); false - it keeps running at him.
+    /// </summary>
+    private bool UseRangedAttack(Entity<LavalandRaiderComponent> ent, TransformComponent xform, EntityUid target, float distance)
+    {
+        var uid = ent.Owner;
+        var tentacles = ent.Comp.Tentacler && TryComp<NPCUseActionOnTargetComponent>(uid, out _);
+        var gun = TryComp<GunComponent>(uid, out var gunComp);
+        if (!tentacles && !gun)
+            return false;
+
+        if (!_interaction.InRangeUnobstructed((uid, xform), target, RaiderShootRange))
+            return false;
+
+        _combatMode.SetInCombatMode(uid, true);
+        if (tentacles)
+        {
+            _useAction.TryUseTentacleAttack(uid, target);
+            // Lashing from afar: it does not walk into his reach.
+            return distance <= RaiderTentacleHold;
+        }
+
+        _gun.AttemptShoot(uid, (uid, gunComp!), Transform(target).Coordinates, target);
+        // A watcher keeps away; a legion still comes on to bite, its skulls flying ahead of it.
+        return distance <= RaiderShooterHold && !HasComp<LavalandLegionComponent>(uid);
     }
 
     /// <summary>Everyone on the map but the ash walkers: the raid is the outpost's trouble.</summary>
@@ -411,7 +509,7 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
                 docks.Add(_transform.GetWorldPosition(dockXform));
         }
 
-        var min = Math.Max(2f, config.MinDistance);
+        var min = Math.Max(1f, config.MinDistance);
         var max = Math.Max(min, config.MaxDistance);
         var placed = new List<Vector2>();
         var now = _timing.CurTime;
@@ -435,8 +533,9 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
     }
 
     /// <summary>
-    /// A spot on the open land around the outpost: off every grid (the outpost, docked shuttles), away from its docking
-    /// ports where shuttles land and from the landing beacon, not on lava or a chasm, not on another raid tendril.
+    /// A spot on the open land around the outpost, as close to its walls as it can be: rings around the outpost are
+    /// tried from the innermost out, the first free spot wins. Off every grid (the outpost, docked shuttles), away from
+    /// its docking ports where shuttles land and from the landing beacon, not on lava or a chasm, not on another tendril.
     /// </summary>
     private bool TryPickTendrilSpot(
         Entity<LavalandFaunaRaidComponent> map,
@@ -451,18 +550,48 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
     {
         spot = default;
         var mapId = Transform(map).MapID;
-        var inner = bounds.Enlarged(min);
-        var outer = bounds.Enlarged(max);
         var beacon = TryComp<LavalandMapComponent>(map, out var lavaland) && lavaland.Planet.Id != null &&
                      _prototype.TryIndex(lavaland.Planet, out var planet) && planet.FtlEnabled
             ? planet.FtlBeaconOffset
             : (Vector2?) null;
 
-        for (var attempt = 0; attempt < 80; attempt++)
+        for (var ring = min; ring <= max; ring += 1f)
         {
-            var candidate = new Vector2(_random.NextFloat(outer.Left, outer.Right), _random.NextFloat(outer.Bottom, outer.Top));
-            if (inner.Contains(candidate))
-                continue;
+            if (TryPickOnRing(map, terrain, bounds.Enlarged(ring), mapId, beacon, docks, placed, out spot))
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>A free spot on the edge of this box around the outpost, a random one of them.</summary>
+    private bool TryPickOnRing(
+        Entity<LavalandFaunaRaidComponent> map,
+        MapGridComponent terrain,
+        Box2 ring,
+        MapId mapId,
+        Vector2? beacon,
+        List<Vector2> docks,
+        List<Vector2> placed,
+        out Vector2 spot)
+    {
+        spot = default;
+        var width = ring.Width;
+        var height = ring.Height;
+        var perimeter = 2f * (width + height);
+        for (var attempt = 0; attempt < 48; attempt++)
+        {
+            // A random point on the box's edge.
+            var along = _random.NextFloat(0f, perimeter);
+            Vector2 candidate;
+            if (along < width)
+                candidate = new Vector2(ring.Left + along, ring.Bottom);
+            else if ((along -= width) < height)
+                candidate = new Vector2(ring.Right, ring.Bottom + along);
+            else if ((along -= height) < width)
+                candidate = new Vector2(ring.Right - along, ring.Top);
+            else
+                candidate = new Vector2(ring.Left, ring.Top - (along - width));
 
             if (docks.Any(dock => Vector2.DistanceSquared(dock, candidate) < 9f * 9f) ||
                 beacon is { } beaconSpot && Vector2.DistanceSquared(beaconSpot, candidate) < 14f * 14f ||
@@ -471,9 +600,9 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
                 continue;
             }
 
-            // No grid at all around it but the land itself: the outpost, shuttles, other structures.
+            // No grid right around it but the land itself: not in the outpost's walls, not on a shuttle.
             var clear = true;
-            foreach (var grid in _mapManager.FindGridsIntersecting(mapId, Box2.CenteredAround(candidate, new Vector2(5f))))
+            foreach (var grid in _mapManager.FindGridsIntersecting(mapId, Box2.CenteredAround(candidate, new Vector2(2.5f))))
             {
                 if (grid.Owner != map.Owner)
                 {

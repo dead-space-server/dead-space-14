@@ -46,6 +46,13 @@ public sealed partial class LavalandRaiderComponent : Component
     [ViewVariables]
     public EntityUid? Target;
 
+    /// <summary>
+    /// The one goliath of the raid that keeps its distance and lashes out with its tentacles while the others
+    /// beat down the walls.
+    /// </summary>
+    [ViewVariables]
+    public bool Tentacler;
+
     public TimeSpan NextThink;
 }
 

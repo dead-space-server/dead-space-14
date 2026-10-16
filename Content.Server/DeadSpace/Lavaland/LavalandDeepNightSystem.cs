@@ -5,6 +5,7 @@ using Content.Server.DeadSpace.Attachments;
 using Content.Server.DeadSpace.Components.NightVision;
 using Content.Server.DeadSpace.Lavaland.ChromiteCaves;
 using Content.Server.DeadSpace.Lavaland.Components;
+using Content.Server.Light.Components;
 using Content.Server.Light.EntitySystems;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Damage.Systems;
@@ -59,14 +60,25 @@ public sealed class LavalandDeepNightSystem : EntitySystem
     private TimeSpan _nextDarknessCheck;
 
     private readonly Dictionary<EntityUid, LavalandDeepNightConfig> _deepMaps = new();
-    private readonly Dictionary<EntityUid, LightState> _lights = new();
+    private readonly Dictionary<(EntityUid Uid, LightKind Kind), LightState> _lights = new();
+    private readonly HashSet<EntityUid> _blocked = new();
+    private readonly HashSet<EntityUid> _darkened = new();
     private readonly Dictionary<EntityUid, DarkState> _darkness = new();
     private readonly Dictionary<EntityUid, (float Radius, float Energy)> _wisps = new();
     private readonly HashSet<Entity<PointLightComponent>> _nearbyLights = new();
 
     private sealed class LightState
     {
+        /// <summary>When it was switched on this time.</summary>
         public TimeSpan? OnSince;
+
+        /// <summary>
+        /// Time it shone before, adding up across switching it off and on: flicking it does not get a fresh
+        /// allowance. Forgotten only after it stays off as long as its cooldown.
+        /// </summary>
+        public TimeSpan Used;
+
+        public TimeSpan OffSince;
         public TimeSpan CooldownUntil;
     }
 
@@ -100,6 +112,8 @@ public sealed class LavalandDeepNightSystem : EntitySystem
             _lights.Clear();
             _darkness.Clear();
             RestoreWisps(null);
+            ClearBlocks();
+            RestoreDarkened(true);
             return;
         }
 
@@ -107,7 +121,10 @@ public sealed class LavalandDeepNightSystem : EntitySystem
         UpdateHandheldLights(now);
         UpdatePdaLights(now);
         UpdateWeaponLights(now);
+        UpdateFlares();
         UpdateWisps();
+        UpdateBlocks(now);
+        UpdateDarkened();
 
         if (now >= _nextDarknessCheck)
         {
@@ -179,13 +196,13 @@ public sealed class LavalandDeepNightSystem : EntitySystem
             if (HasComp<LavalandWispLanternComponent>(uid) || !TryGetDeep(uid, out var deep))
                 continue;
 
+            var kind = IsHelmet(uid) ? LightKind.Helmet : LightKind.Flashlight;
             if (!light.Activated)
             {
-                ResetOnTime(uid);
+                ResetOnTime(uid, kind);
                 continue;
             }
 
-            var kind = IsHelmet(uid) ? LightKind.Helmet : LightKind.Flashlight;
             if (!CheckLight(uid, kind, deep, now))
                 continue;
 
@@ -209,12 +226,27 @@ public sealed class LavalandDeepNightSystem : EntitySystem
 
             if (!light.LightOn)
             {
-                ResetOnTime(uid);
+                ResetOnTime(uid, LightKind.Pda);
                 continue;
             }
 
             if (CheckLight(uid, LightKind.Pda, deep, now))
                 _unpoweredFlashlight.SetLight((uid, light), false, quiet: true);
+        }
+    }
+
+    /// <summary>A flare lit in the deep night: it burns out in seconds instead of a quarter of an hour.</summary>
+    private void UpdateFlares()
+    {
+        var query = EntityQueryEnumerator<ExpendableLightComponent>();
+        while (query.MoveNext(out var uid, out var flare))
+        {
+            if (!flare.Activated || !TryGetDeep(uid, out var deep))
+                continue;
+
+            var limit = flare.CurrentState == ExpendableLightState.Lit ? deep.FlareTime : deep.FlareFadeTime;
+            if (flare.StateExpiryTime > (float) limit.TotalSeconds)
+                flare.StateExpiryTime = (float) limit.TotalSeconds;
         }
     }
 
@@ -229,7 +261,7 @@ public sealed class LavalandDeepNightSystem : EntitySystem
 
             if (!holder.LightOn)
             {
-                ResetOnTime(uid);
+                ResetOnTime(uid, LightKind.Flashlight);
                 continue;
             }
 
@@ -255,10 +287,10 @@ public sealed class LavalandDeepNightSystem : EntitySystem
     /// <summary>A light is on; true if it has to go out now.</summary>
     private bool CheckLight(EntityUid uid, LightKind kind, LavalandDeepNightConfig deep, TimeSpan now)
     {
-        if (!_lights.TryGetValue(uid, out var state))
+        if (!_lights.TryGetValue((uid, kind), out var state))
         {
             state = new LightState();
-            _lights[uid] = state;
+            _lights[(uid, kind)] = state;
         }
 
         var holder = GetHolder(uid);
@@ -270,23 +302,22 @@ public sealed class LavalandDeepNightSystem : EntitySystem
             return true;
         }
 
+        var (time, cooldown) = GetLimits(kind, deep);
         if (state.OnSince == null)
         {
+            // Off as long as its cooldown: the allowance is whole again. A flashlight has none - its battery is it.
+            if (cooldown > TimeSpan.Zero && now - state.OffSince >= cooldown)
+                state.Used = TimeSpan.Zero;
             state.OnSince = now;
             return false;
         }
 
-        var (time, cooldown) = kind switch
-        {
-            LightKind.Pda => (deep.PdaLightTime, deep.PdaLightCooldown),
-            LightKind.Helmet => (deep.HelmetLightTime, deep.HelmetLightCooldown),
-            _ => (deep.FlashlightTime, TimeSpan.Zero),
-        };
-
-        if (now - state.OnSince.Value < time)
+        if (state.Used + (now - state.OnSince.Value) < time)
             return false;
 
         state.OnSince = null;
+        state.Used = TimeSpan.Zero;
+        state.OffSince = now;
         state.CooldownUntil = now + cooldown;
         if (holder != null)
         {
@@ -297,10 +328,67 @@ public sealed class LavalandDeepNightSystem : EntitySystem
         return true;
     }
 
-    private void ResetOnTime(EntityUid uid)
+    private static (TimeSpan Time, TimeSpan Cooldown) GetLimits(LightKind kind, LavalandDeepNightConfig deep)
     {
-        if (_lights.TryGetValue(uid, out var state))
-            state.OnSince = null;
+        return kind switch
+        {
+            LightKind.Pda => (deep.PdaLightTime, deep.PdaLightCooldown),
+            LightKind.Helmet => (deep.HelmetLightTime, deep.HelmetLightCooldown),
+            _ => (deep.FlashlightTime, TimeSpan.Zero),
+        };
+    }
+
+    /// <summary>Switched off: the time it shone is kept, not thrown away.</summary>
+    private void ResetOnTime(EntityUid uid, LightKind kind)
+    {
+        if (!_lights.TryGetValue((uid, kind), out var state) || state.OnSince is not { } since)
+            return;
+
+        state.Used += _timing.CurTime - since;
+        state.OnSince = null;
+        state.OffSince = _timing.CurTime;
+    }
+
+    /// <summary>
+    /// Lights on cooldown and night vision in the deep night get the networked block: their toggles refuse to turn
+    /// them on at all, so spamming the button gives no flashes of light.
+    /// </summary>
+    private void UpdateBlocks(TimeSpan now)
+    {
+        _blocked.Clear();
+        foreach (var ((uid, _), state) in _lights)
+        {
+            if (now < state.CooldownUntil && !TerminatingOrDeleted(uid) && TryGetDeep(uid, out _))
+                _blocked.Add(uid);
+        }
+
+        var visions = EntityQueryEnumerator<NightVisionComponent>();
+        while (visions.MoveNext(out var uid, out _))
+        {
+            if (TryGetDeep(uid, out var deep) && deep.BlockNightVision)
+                _blocked.Add(uid);
+        }
+
+        var current = EntityQueryEnumerator<LavalandLightBlockedComponent>();
+        while (current.MoveNext(out var uid, out _))
+        {
+            if (!_blocked.Remove(uid))
+                RemCompDeferred<LavalandLightBlockedComponent>(uid);
+        }
+
+        foreach (var uid in _blocked)
+        {
+            AddComp<LavalandLightBlockedComponent>(uid);
+        }
+    }
+
+    private void ClearBlocks()
+    {
+        var current = EntityQueryEnumerator<LavalandLightBlockedComponent>();
+        while (current.MoveNext(out var uid, out _))
+        {
+            RemCompDeferred<LavalandLightBlockedComponent>(uid);
+        }
     }
 
     private bool IsHelmet(EntityUid uid)
@@ -320,6 +408,46 @@ public sealed class LavalandDeepNightSystem : EntitySystem
         }
 
         return null;
+    }
+
+    #endregion
+
+    #region Lights that go out
+
+    /// <summary>Lights of <see cref="LavalandDeepNightDarkComponent"/> things in a deep night: off.</summary>
+    private void UpdateDarkened()
+    {
+        var query = EntityQueryEnumerator<LavalandDeepNightDarkComponent, PointLightComponent>();
+        while (query.MoveNext(out var uid, out _, out var light))
+        {
+            if (!light.Enabled || !TryGetDeep(uid, out _))
+                continue;
+
+            _pointLight.SetEnabled(uid, false, light);
+            _darkened.Add(uid);
+        }
+
+        RestoreDarkened(false);
+    }
+
+    /// <summary>Gives the light back to what left the deep night (everything if <paramref name="all"/>).</summary>
+    private void RestoreDarkened(bool all)
+    {
+        foreach (var uid in _darkened.ToArray())
+        {
+            if (TerminatingOrDeleted(uid))
+            {
+                _darkened.Remove(uid);
+                continue;
+            }
+
+            if (!all && TryGetDeep(uid, out _))
+                continue;
+
+            if (_pointLight.TryGetLight(uid, out var light))
+                _pointLight.SetEnabled(uid, true, light);
+            _darkened.Remove(uid);
+        }
     }
 
     #endregion

@@ -32,7 +32,7 @@
   components:
   # The heaviest wall-breaker of lavaland.
   - type: LavalandFauna
-    structuralDamage: 120
+    structuralDamage: 150
   - type: LavalandTrophyDrop
     trophy: CrusherTrophyGoliathTentacle
     chance: 0.25

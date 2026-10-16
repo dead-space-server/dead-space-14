@@ -673,6 +673,9 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
         if (HasComp<LavalandBossComponent>(ent))
             TransferBossRole(ent.Owner, successor.Value);
 
+        // The hands outlive the split: they have their own health and keep fighting for the next body.
+        _hands.TransferHands(ent.Owner, successor.Value);
+
         if (firstChild == null &&
             ent.Comp.PieceReward is { } reward &&
             _random.Prob(Math.Clamp(ent.Comp.PieceRewardChance, 0f, 1f)))

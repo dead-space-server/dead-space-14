@@ -1918,8 +1918,8 @@ public sealed partial class LavalandBossArenaSystem : EntitySystem
         }
 
         // An arena whose intro is still to play starts it as soon as someone is this close to the middle.
-        var maxDistance = arena.Comp.Intro != null && !arena.Comp.IntroPlayed
-            ? IntroStartDistance
+        var maxDistance = arena.Comp.Intro is { } intro && !arena.Comp.IntroPlayed
+            ? (intro.StartDistance > 0f ? intro.StartDistance : IntroStartDistance)
             : MathF.Max(0.1f, arena.Comp.FightStartDistance);
         var maxDistanceSquared = maxDistance * maxDistance;
 

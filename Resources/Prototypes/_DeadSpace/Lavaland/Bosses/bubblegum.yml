@@ -370,9 +370,9 @@
     deathRewards:
     - LavalandNecropolisChestHardsuit
     - LavalandNecropolisChest
-    - LavalandSpellBlade
     - LavalandNecropolisChest
-    - LavalandSoulscythe
+    # Either the armour-piercing spell blade or the soulscythe.
+    - LavalandBubblegumWeaponSpawner
     - LavalandMayhemBottle
     - ClothingOuterLavalandHeckSuit
     - BubblegumTrophy
@@ -491,3 +491,20 @@
     lifetime: 3.5
   - type: LavalandBubblegumDeadlyHand
     killTime: 1
+
+- type: entity
+  parent: MarkerBase
+  id: LavalandBubblegumWeaponSpawner
+  name: оружие баблгама
+  suffix: Spawner
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - sprite: _DeadSpace/Lavaland/Objects/Weapons/soulscythe.rsi
+      state: icon
+  - type: RandomSpawner
+    prototypes:
+    - LavalandSpellBlade
+    - LavalandSoulscythe
+    offset: 0.0

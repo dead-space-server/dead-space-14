@@ -30,6 +30,7 @@ lavaland-minebot-collect-on = Включить сбор руды
 lavaland-minebot-collect-off = Выключить сбор руды
 lavaland-minebot-bound = Минбот теперь следует за вами.
 lavaland-minebot-unloaded = Минбот выгружает руду.
+lavaland-minebot-unload-verb = Выгрузить руду
 
 lavaland-wisp-lantern-release = Вы выпускаете огонёк. Он кружится у вашей головы.
 lavaland-wisp-lantern-return = Вы возвращаете огонёк в фонарь.
@@ -68,3 +69,9 @@ lavaland-marker-beacon-message-set = Вы выцарапываете посла�
 lavaland-marker-beacon-message-cleared = Вы стираете послание с маяка.
 lavaland-marker-beacon-message-examine = На маяке нацарапано: [color=yellow]{ $message }[/color]
 lavaland-marker-beacon-message-hint = Отвёрткой можно нацарапать на маяке послание.
+
+lavaland-tamed-order-follow = Прирученные существа следуют за вами.
+lavaland-tamed-order-stay = Прирученные существа замерли на месте.
+lavaland-tamed-order-attack = Прирученные существа вступают в бой! Укажите цель - они нападут на неё.
+lavaland-tamed-emp = { CAPITALIZE(THE($target)) } дёргается - наномашины сбоят, оно снова дикое!
+lavaland-warp-cube-not-lavaland = Куб работает только на Лаваленде или в пещерах, и только если второй куб там же.

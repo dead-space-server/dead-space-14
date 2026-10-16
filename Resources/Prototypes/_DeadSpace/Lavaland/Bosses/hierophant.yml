@@ -20,6 +20,8 @@
   emptyResetMinHeal: 450
   intro:
     style: Bowling
+    # Only at the very middle of the arena.
+    startDistance: 2.5
     titleColor: "#c47bff"
     roarSound: /Audio/_DeadSpace/Lavaland/Hierophant/sonic_jackhammer.ogg
     impactSound: /Audio/_DeadSpace/Lavaland/Hierophant/repulse.ogg
@@ -50,6 +52,8 @@
   emptyResetMinHeal: 450
   intro:
     style: Bowling
+    # Only at the very middle of the arena.
+    startDistance: 2.5
     titleColor: "#c47bff"
     roarSound: /Audio/_DeadSpace/Lavaland/Hierophant/sonic_jackhammer.ogg
     impactSound: /Audio/_DeadSpace/Lavaland/Hierophant/repulse.ogg

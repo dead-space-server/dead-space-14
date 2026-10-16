@@ -34,3 +34,7 @@ lavaland-soulscythe-glows = The scythe begins to glow!
 lavaland-soulscythe-role-name = Soulscythe
 lavaland-soulscythe-role-description = You are a soul bound to an ancient scythe. Move on your own by spending blood and gain blood with every hit.
 lavaland-soulscythe-role-rules = You serve whoever awakened the scythe. Help them and do not attack them.
+lavaland-soulscythe-out-of-range = You are too far from your master - your power fades.
+lavaland-soulscythe-in-range = Your master is near - your power returns.
+lavaland-soulscythe-breaks-free = The scythe tears itself out of { $holder }s hands!
+lavaland-soulscythe-sleeps = The scythe goes still - the one who awakened it is dead.

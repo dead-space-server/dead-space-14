@@ -25,6 +25,14 @@
     LavalandMiningPoint: 350
 
 - type: listing
+  id: LavalandMiningStormVisor
+  productEntity: ClothingEyesLavalandStormVisor
+  categories:
+  - LavalandMiningEquipment
+  cost:
+    LavalandMiningPoint: 1200
+
+- type: listing
   id: LavalandMiningJumpBoots
   productEntity: ClothingShoesBootsJump
   categories:

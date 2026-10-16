@@ -12,6 +12,7 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.Lavaland;
+using Content.Shared.DeadSpace.Lavaland.ChromiteCaves;
 using Content.Shared.DeadSpace.Lavaland.SecretBoss;
 using Content.Shared.DeadSpace.ThermalVision;
 using Content.Shared.DoAfter;
@@ -334,6 +335,16 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
             return;
         }
 
+        // Only on Lavaland - its surface or the chromite caves - and both ends on the same one:
+        // not on the station, and no way out of the caves without a hook.
+        var userMap = Transform(args.User).MapUid;
+        var cubeMap = Transform(linked).MapUid;
+        if (userMap != cubeMap || !IsLavalandOrCaves(userMap))
+        {
+            _popup.PopupEntity(Loc.GetString("lavaland-warp-cube-not-lavaland"), args.User, args.User);
+            return;
+        }
+
         var target = _transform.GetMapCoordinates(linked);
         if (target.MapId == MapId.Nullspace)
         {
@@ -346,6 +357,11 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         Spawn(ent.Comp.Effect, Transform(args.User).Coordinates);
         if (ent.Comp.Sound != null)
             _audio.PlayPvs(ent.Comp.Sound, args.User);
+    }
+
+    private bool IsLavalandOrCaves(EntityUid? map)
+    {
+        return HasComp<LavalandMapComponent>(map) || HasComp<LavalandChromiteCavesComponent>(map);
     }
 
     private void OnCubeShutdown(Entity<LavalandWarpCubeComponent> ent, ref ComponentShutdown args)

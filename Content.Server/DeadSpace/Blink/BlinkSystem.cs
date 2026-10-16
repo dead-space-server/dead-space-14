@@ -108,7 +108,8 @@ public sealed class BlinkSystem : SharedBlinkSystem
         float speed,
         TimeSpan duration,
         TimeSpan stallTimeout,
-        SoundSpecifier? sound = null)
+        SoundSpecifier? sound = null,
+        bool visual = true)
     {
         var origin = _transform.GetMapCoordinates(user);
         var offset = target.Position - origin.Position;
@@ -129,7 +130,9 @@ public sealed class BlinkSystem : SharedBlinkSystem
         _physics.SetLinearVelocity(user, direction * speed, body: physics);
         if (sound != null)
             _audio.PlayPvs(sound, user);
-        RaiseNetworkEvent(new BlinkDashVisualEvent(GetNetEntity(user), duration));
+        // DS14: some dashes (Cain and Abel) go without the bloody blink trail.
+        if (visual)
+            RaiseNetworkEvent(new BlinkDashVisualEvent(GetNetEntity(user), duration));
         return true;
     }
 

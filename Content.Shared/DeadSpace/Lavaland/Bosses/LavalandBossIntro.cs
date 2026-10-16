@@ -38,6 +38,13 @@ public sealed partial class LavalandBossIntroConfig
     [DataField]
     public LavalandBossIntroStyle Style = LavalandBossIntroStyle.Fall;
 
+    /// <summary>
+    /// The scene starts when a player comes this close to where the boss appears (the middle of the arena).
+    /// 0 - the default distance.
+    /// </summary>
+    [DataField]
+    public float StartDistance;
+
     /// <summary>The whole scene; the fight starts after it.</summary>
     [DataField]
     public float Duration = 9.5f;
@@ -144,10 +151,15 @@ public enum LavalandIntroDollAction : byte
 
 /// <summary>What the dolls of the players do from a moment of the scene on.</summary>
 [Serializable, NetSerializable]
-public struct LavalandIntroKnock(NetEntity watcher, Vector2 offset)
+public struct LavalandIntroKnock(NetEntity watcher, Vector2 target)
 {
     public NetEntity Watcher = watcher;
-    public Vector2 Offset = offset;
+
+    /// <summary>
+    /// Where it lands, in world coordinates. The real body is put there the moment it lands, so the doll is drawn
+    /// relative to wherever the body is right now - no jump when the server moves it.
+    /// </summary>
+    public Vector2 Target = target;
 }
 
 [Serializable, NetSerializable]

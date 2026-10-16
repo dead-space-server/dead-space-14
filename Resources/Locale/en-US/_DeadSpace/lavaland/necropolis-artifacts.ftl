@@ -30,6 +30,7 @@ lavaland-minebot-collect-on = Enable ore collection
 lavaland-minebot-collect-off = Disable ore collection
 lavaland-minebot-bound = The minebot now follows you.
 lavaland-minebot-unloaded = The minebot unloads its ore.
+lavaland-minebot-unload-verb = Unload ore
 
 lavaland-wisp-lantern-release = You release the wisp. It begins to bob around your head.
 lavaland-wisp-lantern-return = You return the wisp to the lantern.
@@ -68,3 +69,9 @@ lavaland-marker-beacon-message-set = You scratch a message onto the beacon.
 lavaland-marker-beacon-message-cleared = You scratch the message off the beacon.
 lavaland-marker-beacon-message-examine = Scratched on the beacon: [color=yellow]{ $message }[/color]
 lavaland-marker-beacon-message-hint = A screwdriver can scratch a message onto the beacon.
+
+lavaland-tamed-order-follow = Your tamed creatures follow you.
+lavaland-tamed-order-stay = Your tamed creatures stay put.
+lavaland-tamed-order-attack = Your tamed creatures join the fight! Point at a target and they will go for it.
+lavaland-tamed-emp = { CAPITALIZE(THE($target)) } twitches - the nanomachines fail, it is wild again!
+lavaland-warp-cube-not-lavaland = The cube only works on Lavaland or in the caves, with its twin in the same place.

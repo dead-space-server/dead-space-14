@@ -55,6 +55,9 @@ public sealed class LavalandBossIntroSystem : EntitySystem
         public required LavalandBossIntroEvent Event;
         public readonly List<EntityUid> Watchers = new();
         public readonly Dictionary<EntityUid, (Vector2 Offset, Angle Rotation, bool Override, Direction Direction)> Saved = new();
+
+        /// <summary>Where each knocked watcher was when it was hit.</summary>
+        public readonly Dictionary<EntityUid, Vector2> KnockFrom = new();
         public required Robust.Shared.Graphics.Eye Camera;
         public Vector2 NormalZoom;
         public Vector2 Focus;
@@ -262,20 +265,25 @@ public sealed class LavalandBossIntroSystem : EntitySystem
             var rotation = saved.Rotation;
             Direction? direction = null;
 
-            if (knock is { } knockCue && t >= knockCue.Time && TryGetKnock(scene.Event, watcher, out var knockOffset))
+            if (knock is { } knockCue && t >= knockCue.Time && TryGetKnock(scene.Event, watcher, out var knockTarget))
             {
+                // Drawn relative to where the body is now: the server moves it to the landing spot as it lands.
+                var here = _transform.GetWorldPosition(watcher);
+                if (!scene.KnockFrom.TryGetValue(watcher, out var from))
+                    scene.KnockFrom[watcher] = from = here;
+
                 var flight = knockCue.Length <= 0f ? 1f : Math.Clamp((t - knockCue.Time) / knockCue.Length, 0f, 1f);
                 if (flight < 1f)
                 {
                     // An arc through the air, spinning, like a pin hit by the ball.
                     var arc = new Vector2(0f, 2.5f * 4f * flight * (1f - flight));
-                    offset += knockOffset * flight + arc;
+                    offset += Vector2.Lerp(from, knockTarget, flight) + arc - here;
                     rotation += new Angle((t - knockCue.Time) * 12f);
                     direction = Direction.South;
                 }
                 else
                 {
-                    offset += knockOffset;
+                    offset += knockTarget - here;
                 }
             }
 
@@ -321,7 +329,7 @@ public sealed class LavalandBossIntroSystem : EntitySystem
         }
     }
 
-    private bool TryGetKnock(LavalandBossIntroEvent ev, EntityUid watcher, out Vector2 offset)
+    private bool TryGetKnock(LavalandBossIntroEvent ev, EntityUid watcher, out Vector2 target)
     {
         var net = GetNetEntity(watcher);
         foreach (var knock in ev.Knocks)
@@ -329,11 +337,11 @@ public sealed class LavalandBossIntroSystem : EntitySystem
             if (knock.Watcher != net)
                 continue;
 
-            offset = knock.Offset;
+            target = knock.Target;
             return true;
         }
 
-        offset = default;
+        target = default;
         return false;
     }
 

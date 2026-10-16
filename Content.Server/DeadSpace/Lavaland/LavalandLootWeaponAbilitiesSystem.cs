@@ -11,6 +11,9 @@ using Content.Shared.Actions;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.Examine;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Movement.Components;
+using Content.Shared.Throwing;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
@@ -50,6 +53,8 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly Robust.Shared.Containers.SharedContainerSystem _containers = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _mobs = new();
@@ -69,6 +74,7 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
         SubscribeLocalEvent<LavalandSoulscytheComponent, RefreshMovementSpeedModifiersEvent>(OnScytheSpeed);
         SubscribeLocalEvent<LavalandSoulscytheComponent, GettingPickedUpAttemptEvent>(OnScythePickupAttempt);
         SubscribeLocalEvent<LavalandSoulscytheComponent, ExaminedEvent>(OnScytheExamined);
+        SubscribeLocalEvent<LavalandSoulscytheComponent, AttackAttemptEvent>(OnScytheAttackAttempt);
 
         SubscribeLocalEvent<LavalandConcussiveGauntletsComponent, GotEquippedEvent>(OnGauntletsEquipped);
         SubscribeLocalEvent<LavalandConcussiveGauntletsComponent, GotUnequippedEvent>(OnGauntletsUnequipped);
@@ -164,8 +170,9 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
             var target = _transform.ToMapCoordinates(coordinates);
             var thrower = ent.Comp.Thrower;
             var distance = Vector2.Distance(_transform.GetMapCoordinates(thrower).Position, target.Position);
+            // A plain rush to the dagger, without the blink's trail of blood.
             _blink.TryStartDash(thrower, target, Math.Max(20f, distance / 0.4f), TimeSpan.FromSeconds(0.6),
-                TimeSpan.FromSeconds(0.2));
+                TimeSpan.FromSeconds(0.2), visual: false);
             return;
         }
 
@@ -242,8 +249,21 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
 
     private void UpdateScytheMovement(Entity<LavalandSoulscytheComponent> ent, TransformComponent xform)
     {
+        if (!ent.Comp.Possessed && !ent.Comp.Awakening)
+            return;
+
+        // Kill whoever awakened it and it falls asleep again.
+        if (ent.Comp.Master is not { } owner || TerminatingOrDeleted(owner) || _mobState.IsDead(owner))
+        {
+            PutScytheToSleep(ent);
+            return;
+        }
+
         if (!ent.Comp.Possessed)
             return;
+
+        UpdateScytheRange(ent, xform, owner);
+        TryBreakFree(ent);
 
         var position = _transform.GetMapCoordinates(xform);
         var last = ent.Comp.LastPosition;
@@ -270,8 +290,71 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
 
     private void OnScytheSpeed(Entity<LavalandSoulscytheComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
     {
-        if (ent.Comp.Possessed && ent.Comp.Blood <= 0f)
+        if (ent.Comp.Possessed && (ent.Comp.Blood <= 0f || ent.Comp.OutOfRange))
             args.ModifySpeed(0f, 0f);
+    }
+
+    /// <summary>Too far from its master: no blows.</summary>
+    private void OnScytheAttackAttempt(Entity<LavalandSoulscytheComponent> ent, ref AttackAttemptEvent args)
+    {
+        if (ent.Comp.Possessed && ent.Comp.OutOfRange)
+            args.Cancel();
+    }
+
+    /// <summary>Its power reaches only so far from whoever awakened it.</summary>
+    private void UpdateScytheRange(Entity<LavalandSoulscytheComponent> ent, TransformComponent xform, EntityUid owner)
+    {
+        var ownerXform = Transform(owner);
+        var outOfRange = ownerXform.MapID != xform.MapID ||
+                         Vector2.Distance(_transform.GetWorldPosition(ownerXform), _transform.GetWorldPosition(xform)) >
+                         ent.Comp.ActiveRange;
+        if (outOfRange == ent.Comp.OutOfRange)
+            return;
+
+        ent.Comp.OutOfRange = outOfRange;
+        _movement.RefreshMovementSpeedModifiers(ent);
+        _popup.PopupEntity(Loc.GetString(outOfRange ? "lavaland-soulscythe-out-of-range" : "lavaland-soulscythe-in-range"),
+            ent, ent, PopupType.Medium);
+    }
+
+    /// <summary>Held by someone while it wants to move: it tears itself out of their hands.</summary>
+    private void TryBreakFree(Entity<LavalandSoulscytheComponent> ent)
+    {
+        var now = _timing.CurTime;
+        if (now < ent.Comp.NextBreakFree || ent.Comp.OutOfRange ||
+            !TryComp<InputMoverComponent>(ent, out var mover) ||
+            !mover.HasDirectionalMovement ||
+            !_containers.TryGetContainingContainer(ent.Owner, out var container) ||
+            !_hands.IsHolding(container.Owner, ent))
+        {
+            return;
+        }
+
+        var holder = container.Owner;
+        ent.Comp.NextBreakFree = now + ent.Comp.BreakFreeCooldown;
+        if (!_hands.TryDrop(holder, ent.Owner, checkActionBlocker: false))
+            return;
+
+        var direction = _transform.GetWorldRotation(holder).ToWorldVec();
+        _throwing.TryThrow(ent.Owner, direction * ent.Comp.BreakFreeThrow, recoil: false);
+        _popup.PopupEntity(Loc.GetString("lavaland-soulscythe-breaks-free", ("holder", holder)), holder, PopupType.MediumCaution);
+    }
+
+    /// <summary>Its master is dead: the soul leaves it and it is a plain dormant scythe again.</summary>
+    private void PutScytheToSleep(Entity<LavalandSoulscytheComponent> ent)
+    {
+        if (TryComp<MindContainerComponent>(ent, out var mindContainer) && mindContainer.Mind is { } mindId)
+            _mind.TransferTo(mindId, null, createGhost: true);
+
+        EntityManager.RemoveComponents(ent, ent.Comp.AwakenComponents);
+        ent.Comp.Possessed = false;
+        ent.Comp.Awakening = false;
+        ent.Comp.OutOfRange = false;
+        ent.Comp.Master = null;
+        ent.Comp.Blood = 0f;
+        _appearance.SetData(ent, LavalandArtifactVisuals.Active, false);
+        _movement.RefreshMovementSpeedModifiers(ent);
+        _popup.PopupEntity(Loc.GetString("lavaland-soulscythe-sleeps"), ent, PopupType.Medium);
     }
 
     private void OnScythePickupAttempt(Entity<LavalandSoulscytheComponent> ent, ref GettingPickedUpAttemptEvent args)

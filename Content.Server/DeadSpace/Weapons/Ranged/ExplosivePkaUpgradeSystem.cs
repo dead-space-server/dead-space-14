@@ -6,6 +6,8 @@ using Content.Shared.DeadSpace.Lavaland.Components;
 using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;
 using Content.Shared.DeadSpace.Weapons.Ranged.Upgrades;
 using Content.Shared.Humanoid;
+using Content.Shared.Mobs.Components;
+using Robust.Shared.Audio;
 using Content.Shared.Projectiles;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Physics;
@@ -23,6 +25,8 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
     [Dependency] private readonly DamageableSystem _damage = default!;
     [Dependency] private readonly ExplosionSystem _explosion = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly Robust.Shared.Audio.Systems.SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
@@ -133,15 +137,29 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
         // Once only: hitting a wall and reaching the cursor can happen on the same tick.
         ent.Comp.DetonationTarget = null;
 
+        // DS14: the outpost is safe from these blasts - its walls, doors and machines are not even scratched.
+        var nearOutpost = IsNearOutpost(center, ent.Comp.Radius + 2f);
+
         foreach (var victim in _lookup.GetEntitiesInRange(center, ent.Comp.Radius))
         {
             if (victim == ent.Owner)
+                continue;
+
+            if (!HasComp<MobStateComponent>(victim) && HasComp<LavalandOutpostComponent>(Transform(victim).GridUid))
                 continue;
 
             var damage = TryDamageFor(victim, ent.Comp, out var specializedDamage)
                 ? specializedDamage
                 : ent.Comp.CreatureDamage;
             _damage.TryChangeDamage(victim, damage, true, origin: shooter);
+        }
+
+        // By the outpost only the blow itself above: no explosion that would tear at its walls.
+        if (nearOutpost)
+        {
+            _audio.PlayPvs(OutpostBlastSound, _transform.ToCoordinates(center));
+            QueueDel(ent.Owner);
+            return;
         }
 
         _explosion.QueueExplosion(
@@ -157,6 +175,21 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
             addLog: false);
 
         QueueDel(ent.Owner);
+    }
+
+    private static readonly SoundPathSpecifier OutpostBlastSound = new("/Audio/Effects/explosion_small1.ogg");
+
+    /// <summary>The outpost grid is within this distance of the blast.</summary>
+    private bool IsNearOutpost(MapCoordinates center, float range)
+    {
+        var box = Box2.CenteredAround(center.Position, new System.Numerics.Vector2(range * 2f));
+        foreach (var grid in _mapManager.FindGridsIntersecting(center.MapId, box))
+        {
+            if (HasComp<LavalandOutpostComponent>(grid.Owner))
+                return true;
+        }
+
+        return false;
     }
 
     private bool TryDamageFor(

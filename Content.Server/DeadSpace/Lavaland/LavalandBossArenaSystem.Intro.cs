@@ -517,16 +517,23 @@ public sealed partial class LavalandBossArenaSystem
         Sound(plan, new SoundPathSpecifier("/Audio/Effects/hit_kick.ogg", AudioParams.Default.WithVolume(3f)), BowlingHit);
         Sound(plan, new SoundPathSpecifier("/Audio/Effects/thudswoosh.ogg"), BowlingHit + 0.05f);
 
-        // Each one flies into a corner of the arena; the real bodies are put there when the scene ends.
+        // Each one flies into a corner of the arena. The real body is put there the moment it lands, not at the end
+        // of the scene: no standing before the Hierophant and then popping into the corner.
         var corners = Corners(plan, 2.5f);
         _random.Shuffle(corners);
         plan.Arena.Comp.IntroKnockSpots.Clear();
         for (var i = 0; i < plan.Watchers.Count; i++)
         {
             var corner = corners[i % corners.Count];
-            ev.Knocks.Add(new LavalandIntroKnock(GetNetEntity(plan.Watchers[i]), corner.Position - spots[i].Position));
+            ev.Knocks.Add(new LavalandIntroKnock(GetNetEntity(plan.Watchers[i]), corner.Position));
             plan.Arena.Comp.IntroKnockSpots.Add((plan.Watchers[i], corner));
         }
+
+        Later(plan, BowlingHit + ThrowFlight, () =>
+        {
+            foreach (var (watcher, knockSpot) in plan.Arena.Comp.IntroKnockSpots)
+                MoveTo(watcher, knockSpot);
+        });
     }
 
     /// <summary>

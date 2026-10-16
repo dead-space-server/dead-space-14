@@ -34,3 +34,7 @@ lavaland-soulscythe-glows = Коса начинает светиться!
 lavaland-soulscythe-role-name = Коса душ
 lavaland-soulscythe-role-description = Вы — душа, заточённая в древней косе. Двигайтесь сами, расходуя кровь, и набирайте её ударами.
 lavaland-soulscythe-role-rules = Вы служите тому, кто пробудил косу. Помогайте ему и не нападайте на него.
+lavaland-soulscythe-out-of-range = Вы слишком далеко от хозяина - ваша сила угасает.
+lavaland-soulscythe-in-range = Хозяин рядом - сила возвращается.
+lavaland-soulscythe-breaks-free = Коса вырывается из рук { $holder }!
+lavaland-soulscythe-sleeps = Коса затихает - тот, кто её пробудил, мёртв.

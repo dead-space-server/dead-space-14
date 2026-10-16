@@ -68,6 +68,11 @@ public sealed class NightVisionSystem : EntitySystem
             return;
 
         args.Handled = true;
+
+        // DS14: no night vision in the lavaland deep night - refused, not switched on and off again.
+        if (!component.IsNightVision && HasComp<Content.Shared.DeadSpace.Lavaland.LavalandLightBlockedComponent>(uid))
+            return;
+
         ToggleNightVision(uid, component);
     }
 

@@ -265,6 +265,10 @@ public sealed partial class LavalandPandoraComponent : Component
     [DataField]
     public DamageSpecifier BlastDamage = new();
 
+    /// <summary>Every blast is marked on its tile this long before it goes off: time to step aside.</summary>
+    [DataField]
+    public TimeSpan WarningTime = TimeSpan.FromSeconds(0.8);
+
     [DataField]
     public int ShotLength = 8;
 

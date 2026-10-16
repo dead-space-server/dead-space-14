@@ -147,6 +147,13 @@ public sealed partial class LavalandDeepNightConfig
     [DataField]
     public TimeSpan FlashlightTime = TimeSpan.FromSeconds(60);
 
+    /// <summary>A flare lit in the deep night burns out this fast (and fades in <see cref="FlareFadeTime"/>).</summary>
+    [DataField]
+    public TimeSpan FlareTime = TimeSpan.FromSeconds(10);
+
+    [DataField]
+    public TimeSpan FlareFadeTime = TimeSpan.FromSeconds(1.5);
+
     /// <summary>Released lantern wisps shine this much in the deep night.</summary>
     [DataField]
     public float WispLightRadius = 10f;

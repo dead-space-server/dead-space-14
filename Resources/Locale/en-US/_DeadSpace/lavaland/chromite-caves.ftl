@@ -20,3 +20,4 @@ lavaland-caves-pit-yes = Jump
 lavaland-caves-pit-no = Not now
 
 lavaland-deep-night-shadow-grab = A shadow rises from the chasm and seizes your legs!
+ui-options-actions-restore-item-slots = Return item actions to their old hotbar slot

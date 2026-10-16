@@ -79,16 +79,36 @@ public sealed partial class LavalandMinebotComponent : Component
     [DataField]
     public bool CollectOre = true;
 
+    /// <summary>The slot of its built-in borg ore bag: collected ore goes into the bag.</summary>
     [DataField]
-    public string OreContainer = "minebot-ore";
+    public string BagSlot = "minebot-ore-bag";
+
+    [DataField]
+    public EntProtoId BagPrototype = "BorgOreBag";
 
     [DataField]
     public ProtoId<TagPrototype> OreTag = "Ore";
+
+    /// <summary>With no fauna around it digs out ore veins near it with its kinetic accelerator.</summary>
+    [DataField]
+    public bool MineOre = true;
+
+    [DataField]
+    public float MineRange = 6f;
+
+    [DataField]
+    public TimeSpan MineInterval = TimeSpan.FromSeconds(1.5);
+
+    /// <summary>Fauna this close keeps it fighting instead of digging.</summary>
+    [DataField]
+    public float MineHostileRange = 9f;
 
     [ViewVariables]
     public EntityUid? BoundUser;
 
     public TimeSpan NextCollect;
+
+    public TimeSpan NextMine;
 }
 
 #endregion

@@ -250,7 +250,7 @@
     warningDuration: 60
     duration: 180
     # Tendrils rise this far from the outpost's edge (not its center).
-    minDistance: 4
+    minDistance: 1
     maxDistance: 10
     warningSound:
       path: /Audio/_DeadSpace/Lavaland/lava_warning.ogg

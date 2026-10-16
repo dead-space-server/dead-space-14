@@ -441,10 +441,11 @@ public sealed class LavalandResonatorSystem : EntitySystem
     /// </summary>
     private float ConsumeBossDamageMultiplier(EntityUid target, float falloff, float minMultiplier, TimeSpan window)
     {
+        // Not the Legion: its many bodies (and hands) are fought with resonators at full strength.
         if (falloff <= 0f ||
+            HasComp<LavalandLegionMegafaunaComponent>(target) ||
             !HasComp<LavalandBossComponent>(target) &&
             !HasComp<LavalandMadMinerComponent>(target) &&
-            !HasComp<LavalandLegionMegafaunaComponent>(target) &&
             !HasComp<LavalandEliteComponent>(target))
         {
             return 1f;

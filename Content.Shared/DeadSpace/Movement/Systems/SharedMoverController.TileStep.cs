@@ -80,9 +80,14 @@ public abstract partial class SharedMoverController
         var direction = HeldTileDirection(mover);
         if (!step.Stepping && direction != Vector2.Zero)
         {
+            // A wall ahead is not walked into (that only stalls and jerks): a diagonal slides along it instead,
+            // a straight step into it is not taken at all.
             var from = TileCenter(position);
-            BeginTileStep(step, xform, from + direction, now);
-            PlayTileStepSound(ent, mover, xform);
+            if (TryPickTileStep(xform, physics, from, direction, out var target))
+            {
+                BeginTileStep(step, xform, target, now);
+                PlayTileStepSound(ent, mover, xform);
+            }
         }
 
         if (!step.Stepping && direction == Vector2.Zero)
@@ -129,6 +134,53 @@ public abstract partial class SharedMoverController
             return;
 
         Dirty(ent);
+    }
+
+    /// <summary>
+    /// The neighbouring tile to step to: the held direction if it is free, otherwise for a diagonal one of its
+    /// straight parts. False if every way is blocked by a wall.
+    /// </summary>
+    private bool TryPickTileStep(TransformComponent xform, PhysicsComponent physics, Vector2 from, Vector2 direction, out Vector2 target)
+    {
+        target = from + direction;
+        if (!IsTileStepBlocked(xform, physics, target))
+            return true;
+
+        if (direction.X == 0f || direction.Y == 0f)
+            return false;
+
+        foreach (var part in new[] { new Vector2(direction.X, 0f), new Vector2(0f, direction.Y) })
+        {
+            target = from + part;
+            if (!IsTileStepBlocked(xform, physics, target))
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Something anchored and solid for this mob (a wall, a window, a closed door) stands on the tile.
+    /// Anchored things are the same on the client and the server, so both pick the same step.
+    /// </summary>
+    private bool IsTileStepBlocked(TransformComponent xform, PhysicsComponent physics, Vector2 localTarget)
+    {
+        if (xform.ParentUid != xform.GridUid || !MapGridQuery.TryComp(xform.GridUid, out var grid))
+            return false;
+
+        var gridUid = xform.GridUid.Value;
+        var tile = new Vector2i((int) MathF.Floor(localTarget.X), (int) MathF.Floor(localTarget.Y));
+        var anchored = _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
+        while (anchored.MoveNext(out var other))
+        {
+            if (!PhysicsQuery.TryComp(other, out var otherBody) || !otherBody.CanCollide || !otherBody.Hard)
+                continue;
+
+            if ((otherBody.CollisionLayer & physics.CollisionMask) != 0)
+                return true;
+        }
+
+        return false;
     }
 
     private static void BeginTileStep(TileStepMovementComponent step, TransformComponent xform, Vector2 target, TimeSpan now)

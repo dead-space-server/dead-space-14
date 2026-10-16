@@ -22,7 +22,12 @@ using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Prototypes;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Popups;
+using Content.Shared.Mining.Components;
 using Content.Shared.Stacks;
+using Content.Shared.Storage;
+using Content.Shared.Storage.EntitySystems;
+using Content.Shared.Weapons.Ranged.Components;
+using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Tag;
 using Content.Shared.Verbs;
 using Robust.Shared.Audio.Systems;
@@ -56,8 +61,13 @@ public sealed class LavalandMiningEquipmentSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedStackSystem _stack = default!;
     [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private readonly LavalandTamingSystem _taming = default!;
+    [Dependency] private readonly SharedStorageSystem _storage = default!;
+    [Dependency] private readonly SharedGunSystem _gun = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     private readonly HashSet<Entity<StackComponent>> _ores = new();
+    private readonly HashSet<Entity<OreVeinComponent>> _veins = new();
 
     public override void Initialize()
     {
@@ -89,11 +99,20 @@ public sealed class LavalandMiningEquipmentSystem : EntitySystem
         var minebots = EntityQueryEnumerator<LavalandMinebotComponent, TransformComponent>();
         while (minebots.MoveNext(out var uid, out var minebot, out var xform))
         {
-            if (!minebot.CollectOre || now < minebot.NextCollect || _mobState.IsDead(uid))
+            if (!minebot.CollectOre || _mobState.IsDead(uid))
                 continue;
 
-            minebot.NextCollect = now + minebot.CollectInterval;
-            CollectOre((uid, minebot), xform);
+            if (now >= minebot.NextCollect)
+            {
+                minebot.NextCollect = now + minebot.CollectInterval;
+                CollectOre((uid, minebot), xform);
+            }
+
+            if (minebot.MineOre && now >= minebot.NextMine)
+            {
+                minebot.NextMine = now + minebot.MineInterval;
+                MineOre((uid, minebot), xform);
+            }
         }
     }
 
@@ -275,14 +294,9 @@ public sealed class LavalandMiningEquipmentSystem : EntitySystem
         }
 
         _rejuvenate.PerformRejuvenate(target);
+        // It serves whoever brought it back (its side changes too): they get the orders to follow, stay and attack.
         if (!ent.Comp.Malfunctioning)
-        {
-            _faction.ClearFactions(target, false);
-            _faction.AddFactions(target, ent.Comp.Factions.ToHashSet());
-        }
-
-        // Revived creatures follow whoever brought them back.
-        _npc.SetBlackboard(target, NPCBlackboard.FollowTarget, new EntityCoordinates(args.User, Vector2.Zero));
+            _taming.Tame(target, args.User, ent.Comp.Factions);
 
         ent.Comp.Loaded = false;
         _appearance.SetData(ent, LavalandArtifactVisuals.Charged, false);
@@ -297,7 +311,24 @@ public sealed class LavalandMiningEquipmentSystem : EntitySystem
 
     private void OnMinebotMapInit(Entity<LavalandMinebotComponent> ent, ref MapInitEvent args)
     {
-        _containers.EnsureContainer<Container>(ent, ent.Comp.OreContainer);
+        // A built-in borg ore bag: the ore it picks up goes there.
+        var slot = _containers.EnsureContainer<ContainerSlot>(ent, ent.Comp.BagSlot);
+        if (slot.ContainedEntity == null)
+            SpawnInContainerOrDrop(ent.Comp.BagPrototype, ent, ent.Comp.BagSlot);
+    }
+
+    private bool TryGetBag(Entity<LavalandMinebotComponent> ent, out Entity<StorageComponent> bag)
+    {
+        bag = default;
+        if (!_containers.TryGetContainer(ent, ent.Comp.BagSlot, out var container) ||
+            container.ContainedEntities.Count == 0 ||
+            !TryComp<StorageComponent>(container.ContainedEntities[0], out var storage))
+        {
+            return false;
+        }
+
+        bag = (container.ContainedEntities[0], storage);
+        return true;
     }
 
     private void OnMinebotExamined(Entity<LavalandMinebotComponent> ent, ref ExaminedEvent args)
@@ -311,6 +342,17 @@ public sealed class LavalandMiningEquipmentSystem : EntitySystem
             return;
 
         var user = args.User;
+        // Alt-click: the bag is emptied at its feet.
+        if (TryGetBag(ent, out var bag) && bag.Comp.Container.ContainedEntities.Count > 0)
+        {
+            args.Verbs.Add(new AlternativeVerb
+            {
+                Text = Loc.GetString("lavaland-minebot-unload-verb"),
+                Act = () => UnloadMinebot(ent, user),
+                Priority = 3,
+            });
+        }
+
         args.Verbs.Add(new AlternativeVerb
         {
             Text = Loc.GetString("lavaland-minebot-bind"),
@@ -334,20 +376,25 @@ public sealed class LavalandMiningEquipmentSystem : EntitySystem
 
     private void OnMinebotInteract(Entity<LavalandMinebotComponent> ent, ref InteractHandEvent args)
     {
-        if (args.Handled || !_containers.TryGetContainer(ent, ent.Comp.OreContainer, out var container) ||
-            container.ContainedEntities.Count == 0)
-        {
+        if (args.Handled || !TryGetBag(ent, out var bag) || bag.Comp.Container.ContainedEntities.Count == 0)
             return;
-        }
 
         args.Handled = true;
-        _containers.EmptyContainer(container, destination: Transform(ent).Coordinates);
-        _popup.PopupEntity(Loc.GetString("lavaland-minebot-unloaded"), ent, args.User);
+        UnloadMinebot(ent, args.User);
+    }
+
+    private void UnloadMinebot(Entity<LavalandMinebotComponent> ent, EntityUid user)
+    {
+        if (!TryGetBag(ent, out var bag))
+            return;
+
+        _containers.EmptyContainer(bag.Comp.Container, destination: Transform(ent).Coordinates);
+        _popup.PopupEntity(Loc.GetString("lavaland-minebot-unloaded"), ent, user);
     }
 
     private void CollectOre(Entity<LavalandMinebotComponent> ent, TransformComponent xform)
     {
-        if (!_containers.TryGetContainer(ent, ent.Comp.OreContainer, out var container))
+        if (!TryGetBag(ent, out var bag))
             return;
 
         _ores.Clear();
@@ -356,8 +403,47 @@ public sealed class LavalandMiningEquipmentSystem : EntitySystem
         {
             if (!_tag.HasTag(ore, ent.Comp.OreTag) || _containers.IsEntityInContainer(ore))
                 continue;
-            _containers.Insert(ore.Owner, container);
+
+            // A full bag: the rest stays on the floor until it is unloaded.
+            if (!_storage.Insert(bag, ore, out _, playSound: false, storageComp: bag.Comp))
+                break;
         }
+    }
+
+    /// <summary>
+    /// No fauna around: it shoots the nearest ore vein with its kinetic accelerator, digging the ore out.
+    /// A rock in the way gets dug through as well.
+    /// </summary>
+    private void MineOre(Entity<LavalandMinebotComponent> ent, TransformComponent xform)
+    {
+        if (!TryComp<GunComponent>(ent, out var gun) ||
+            _faction.GetNearbyHostiles(ent.Owner, ent.Comp.MineHostileRange).Any())
+        {
+            return;
+        }
+
+        var position = _transform.GetWorldPosition(xform);
+        EntityUid? best = null;
+        var bestDistance = float.MaxValue;
+        _veins.Clear();
+        _lookup.GetEntitiesInRange(xform.Coordinates, ent.Comp.MineRange, _veins, LookupFlags.Static);
+        foreach (var vein in _veins)
+        {
+            if (vein.Comp.CurrentOre == null)
+                continue;
+
+            var distance = (_transform.GetWorldPosition(vein) - position).LengthSquared();
+            if (distance >= bestDistance)
+                continue;
+
+            best = vein;
+            bestDistance = distance;
+        }
+
+        if (best is not { } target)
+            return;
+
+        _gun.AttemptShoot(ent, (ent.Owner, gun), Transform(target).Coordinates, target);
     }
 
     #endregion

@@ -51,6 +51,13 @@ public sealed partial class LavalandPitJumperComponent : Component
     [DataField]
     public TimeSpan Cooldown = TimeSpan.FromSeconds(8);
 
+    /// <summary>
+    /// Out of a chasm by the player: this soon it may dive again through the next chasm on its way to him.
+    /// Long enough to reach him and bite first, so it does not keep diving the moment it is out.
+    /// </summary>
+    [DataField]
+    public TimeSpan HuntDiveCooldown = TimeSpan.FromSeconds(3);
+
     /// <summary>Every dive in a row at the same player is this much shorter below.</summary>
     [DataField]
     public TimeSpan HiddenTimeReduction = TimeSpan.FromSeconds(1.5);

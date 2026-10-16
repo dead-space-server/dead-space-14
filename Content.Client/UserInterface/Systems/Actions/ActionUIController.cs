@@ -14,6 +14,8 @@ using Content.Client.UserInterface.Systems.Gameplay;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Charges.Systems;
+using Content.Shared.DeadSpace.CCCCVars; // DS14
+using Content.Shared.Item; // DS14
 using Content.Shared.Input;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -22,6 +24,7 @@ using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Configuration; // DS14
 using Robust.Shared.Graphics.RSI;
 using Robust.Shared.Input;
 using Robust.Shared.Input.Binding;
@@ -45,6 +48,7 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly IInputManager _input = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!; // DS14
 
     [UISystemDependency] private readonly ActionsSystem? _actionsSystem = default;
     [UISystemDependency] private readonly InteractionOutlineSystem? _interactionOutline = default;
@@ -53,6 +57,19 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
 
     private ActionButtonContainer? _container;
     private readonly List<EntityUid?> _actions = new();
+
+    // DS14-start
+    /// <summary>
+    /// The hotbar slot each action was last seen in, by a key that survives a change of body (polymorph etc.):
+    /// the action prototype, plus the prototype of the item that grants it.
+    /// </summary>
+    private readonly Dictionary<string, int> _rememberedSlots = new();
+
+    /// <summary>When the actions were last linked to a body: actions arriving right after go back to their slots.</summary>
+    private TimeSpan _linkedAt = TimeSpan.MinValue;
+
+    private static readonly TimeSpan RelinkWindow = TimeSpan.FromSeconds(3);
+    // DS14-end
     private readonly DragDropHelper<ActionButton> _menuDragHelper;
     private readonly TextureRect _dragShadow;
     private ActionsWindow? _window;
@@ -258,6 +275,11 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
         if (action.Comp.Toggled && EntityManager.TryGetComponent<TargetActionComponent>(actionId, out var target))
             StartTargeting((action, action, target));
 
+        // DS14-start: an action coming back (a new body, or an item picked up again) returns to its old slot.
+        var restore = _cfg.GetCVar(CCCCVars.ActionsRestoreItemSlots) || _timing.RealTime - _linkedAt < RelinkWindow;
+        if (restore && TryRestoreSlot(action))
+            return;
+        // DS14-end
 
         _actions.Add(action);
     }
@@ -276,6 +298,7 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
     private void OnActionsUpdated()
     {
         QueueWindowUpdate();
+        RememberLayout(); // DS14
 
         if (_actionsSystem != null)
             _container?.SetActionData(_actionsSystem, _actions.ToArray());
@@ -456,6 +479,7 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
             }
         }
 
+        RememberLayout(); // DS14
         if (updateSlots)
             _container?.SetActionData(_actionsSystem, _actions.ToArray());
     }
@@ -478,6 +502,8 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
 
         if (dragged.Parent is ActionButtonContainer)
             SetAction(dragged, swapAction, false);
+
+        RememberLayout(); // DS14
 
         if (_actionsSystem != null)
             _container?.SetActionData(_actionsSystem, _actions.ToArray());
@@ -765,12 +791,73 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
         actions.Sort(ActionComparer);
 
         _actions.Clear();
+        // DS14-start: a new body (polymorph and the like) - its actions go where the same ones were before.
+        // The new ones first, in the usual order; then each remembered one is put back into its old slot, pushing
+        // the rest along, from the first slot to the last, so they all end up where they were.
+        var remembered = new List<(int Slot, EntityUid Action)>();
         foreach (var (action, _) in actions)
         {
-            if (!_actions.Contains(action))
+            if (_actions.Contains(action))
+                continue;
+
+            if (GetSlotKey(action) is { } key && _rememberedSlots.TryGetValue(key, out var slot))
+                remembered.Add((slot, action));
+            else
                 _actions.Add(action);
         }
+
+        remembered.Sort((a, b) => a.Slot.CompareTo(b.Slot));
+        foreach (var (slot, action) in remembered)
+        {
+            _actions.Insert(Math.Min(slot, _actions.Count), action);
+        }
+
+        _linkedAt = _timing.RealTime;
+        RememberLayout();
+        // DS14-end
     }
+
+    // DS14-start
+    private string? GetSlotKey(EntityUid action)
+    {
+        if (!EntityManager.TryGetComponent(action, out MetaDataComponent? meta) || meta.EntityPrototype is not { } proto)
+            return null;
+
+        // An item's action is told apart by its item; the body's own actions are the same whatever the body.
+        if (EntityManager.TryGetComponent(action, out ActionComponent? comp) &&
+            comp.Container is { } container &&
+            EntityManager.HasComponent<ItemComponent>(container) &&
+            EntityManager.TryGetComponent(container, out MetaDataComponent? containerMeta) &&
+            containerMeta.EntityPrototype is { } containerProto)
+        {
+            return $"{proto.ID}@{containerProto.ID}";
+        }
+
+        return proto.ID;
+    }
+
+    private void RememberLayout()
+    {
+        for (var i = 0; i < _actions.Count; i++)
+        {
+            if (_actions[i] is { } action && GetSlotKey(action) is { } key)
+                _rememberedSlots[key] = i;
+        }
+    }
+
+    /// <summary>
+    /// Puts the action back into the slot it was in before, pushing whatever is there (and everything after it)
+    /// one slot along - no empty slots are left anywhere.
+    /// </summary>
+    private bool TryRestoreSlot(EntityUid action)
+    {
+        if (GetSlotKey(action) is not { } key || !_rememberedSlots.TryGetValue(key, out var slot))
+            return false;
+
+        _actions.Insert(Math.Min(slot, _actions.Count), action);
+        return true;
+    }
+    // DS14-end
 
     /// <summary>
     /// If currently targeting with this slot, stops targeting.
