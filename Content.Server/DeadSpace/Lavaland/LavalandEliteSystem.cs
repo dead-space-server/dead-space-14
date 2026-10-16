@@ -8,6 +8,7 @@ using Content.Server.NPC.HTN;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
+using Content.Shared.Atmos.Components;
 using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.DeadSpace.Lavaland.Bosses;
 using Content.Shared.Ghost;
@@ -740,8 +741,12 @@ public sealed class LavalandEliteSystem : EntitySystem
             _lookup.GetEntitiesInRange(xform.Coordinates, 0.5f, _mobs);
             foreach (var mob in _mobs)
             {
-                if (mob.Owner != bonfire.Legionnaire && !_mobState.IsDead(mob, mob.Comp))
-                    _flammable.AdjustFireStacks(mob, bonfire.FireStacks, ignite: true);
+                // Only what can burn at all (a living light, say, cannot).
+                if (mob.Owner != bonfire.Legionnaire && !_mobState.IsDead(mob, mob.Comp) &&
+                    TryComp<FlammableComponent>(mob, out var flammable))
+                {
+                    _flammable.AdjustFireStacks(mob, bonfire.FireStacks, flammable, ignite: true);
+                }
             }
         }
     }
