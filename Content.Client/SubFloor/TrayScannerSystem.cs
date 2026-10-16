@@ -6,7 +6,7 @@ using Robust.Client.Animations;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
 using Robust.Shared.Timing;
-using Content.Shared.Stealth.Components;
+using Content.Client.DeadSpace.Ninja.Components; //DS14
 using Content.Shared.Ninja.Components;
 
 
@@ -96,9 +96,9 @@ public sealed class TrayScannerSystem : SharedTrayScannerSystem
             }
         }
         // DS-14 Start
-        var ninjas = EntityQueryEnumerator<SpaceNinjaComponent, TransformComponent, SpriteComponent>();
+        var ninjas = EntityQueryEnumerator<SpaceNinjaComponent, TransformComponent>();
 
-        while (ninjas.MoveNext(out var ninjaUid, out var ninja, out var xform, out var sprite))
+        while (ninjas.MoveNext(out var ninjaUid, out var ninja, out var xform))
         {
             if (ninjaUid == player)
                 continue;
@@ -111,11 +111,11 @@ public sealed class TrayScannerSystem : SharedTrayScannerSystem
 
             if (canSee && distance <= range)
             {
-                _sprite.SetVisible((ninjaUid, sprite), true);
+                EnsureComp<NinjaCloakRevealedComponent>(ninjaUid).Revealed = true;
             }
-            else
+            else if (TryComp<NinjaCloakRevealedComponent>(ninjaUid, out var reveal))
             {
-                _sprite.SetVisible((ninjaUid, sprite), false);
+                reveal.Revealed = false;
             }
         }
         // DS-14 End

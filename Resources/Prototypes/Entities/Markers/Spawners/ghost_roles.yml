@@ -273,10 +273,10 @@
     #DS14-start
     requirements:
     - !type:OverallPlaytimeRequirement
-      time: 720000 # 200 hours
+      time: 1080000 # 300 hours
     - !type:DepartmentTimeRequirement
       department: Security
-      time: 72000 # 20 hours
+      time: 144000 # 40 hours
     #DS14-end
     raffle:
       settings: default

@@ -21,6 +21,14 @@ public sealed partial class NinjaSuitComponent : Component
     [DataField]
     public SoundSpecifier RevealSound = new SoundPathSpecifier("/Audio/Effects/chime.ogg");
 
+    //DS14-start
+    [DataField]
+    public EntProtoId RevealEffect = "Exclamation";
+
+    [DataField]
+    public float RevealEffectDistance = 6f;
+    //DS14-end
+
     /// <summary>
     /// ID of the use delay to disable all ninja abilities.
     /// </summary>
@@ -60,6 +68,19 @@ public sealed partial class NinjaSuitComponent : Component
     public float RecallOverMaxChargeRatio = 0.9f;
     // DS14-end
 }
+
+// DS14-start
+[Serializable, NetSerializable]
+public sealed class PlayNinjaRevealEffectMessage : EntityEventArgs
+{
+    public NetEntity Source;
+
+    public PlayNinjaRevealEffectMessage(NetEntity source)
+    {
+        Source = source;
+    }
+}
+// DS14-end
 
 public sealed partial class RecallKatanaEvent : InstantActionEvent;
 public sealed partial class OpenSpiderOSEvent : InstantActionEvent;

@@ -329,6 +329,7 @@
         color: Green
         sound: /Audio/Misc/ninja_greeting.ogg
       components:
+      - type: CustomNameOnSpawn #DS14
       - type: RenegadeCANTSubordinate #DS14
       - type: SpaceNinja
       - type: NpcFactionMember

@@ -90,6 +90,7 @@
         color: "#FFD700"
     blacklistComponents:
       - CartridgeAmmo
+      - SpaceNinja
     blacklistTags:
       - Ore
       - Trash

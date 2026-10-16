@@ -57,6 +57,7 @@ public sealed class NinjaCloakSystem : SharedNinjaCloakSystem
             if (!_ninja.TryUseCharge(user, cost))
             {
                 cloak.Enabled = false;
+                _actions.StartUseDelay(cloak.ActionEntity);
                 Dirty(uid, cloak);
             }
         }

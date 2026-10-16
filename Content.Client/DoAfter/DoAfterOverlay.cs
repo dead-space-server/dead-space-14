@@ -9,6 +9,9 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Robust.Shared.Containers;
+using Content.Shared.Stealth; //DS14
+using Content.Shared.Stealth.Components; //DS14
+using Content.Client.DeadSpace.Ninja.Systems; //DS14
 
 namespace Content.Client.DoAfter;
 
@@ -23,6 +26,8 @@ public sealed class DoAfterOverlay : Overlay
     private readonly MetaDataSystem _meta;
     private readonly ProgressColorSystem _progressColor;
     private readonly SharedContainerSystem _container;
+    private readonly SharedStealthSystem _stealth; //DS14
+    private readonly NinjaCloakSystem _ninjaCloak; //DS14
     private readonly SpriteSystem _sprite;
 
     private readonly Texture _barTexture;
@@ -47,6 +52,8 @@ public sealed class DoAfterOverlay : Overlay
         _transform = _entManager.EntitySysManager.GetEntitySystem<SharedTransformSystem>();
         _meta = _entManager.EntitySysManager.GetEntitySystem<MetaDataSystem>();
         _container = _entManager.EntitySysManager.GetEntitySystem<SharedContainerSystem>();
+        _stealth = _entManager.System<SharedStealthSystem>(); //DS14
+        _ninjaCloak = _entManager.System<NinjaCloakSystem>(); //DS14
         _progressColor = _entManager.System<ProgressColorSystem>();
         _sprite = _entManager.System<SpriteSystem>();
         var sprite = new SpriteSpecifier.Rsi(new("/Textures/Interface/Misc/progress_bar.rsi"), "icon");
@@ -106,12 +113,13 @@ public sealed class DoAfterOverlay : Overlay
             var offset = 0f;
 
             var isInContainer = _container.IsEntityOrParentInContainer(uid, meta, xform);
+            var isInvisible = IsInvisible(uid); //DS14
 
             foreach (var doAfter in comp.DoAfters.Values)
             {
                 // Hide some DoAfters from other players for stealthy actions (ie: thieving gloves)
                 var alpha = 1f;
-                if (doAfter.Args.Hidden || isInContainer)
+                if (doAfter.Args.Hidden || isInContainer || isInvisible) //DS14
                 {
                     if (uid != localEnt)
                         continue;
@@ -167,4 +175,18 @@ public sealed class DoAfterOverlay : Overlay
     {
         return _progressColor.GetProgressColor(progress).WithAlpha(alpha);
     }
+
+    //DS14-start
+    private bool IsInvisible(EntityUid uid)
+    {
+        if (_entManager.TryGetComponent<StealthComponent>(uid, out var stealth)
+            && stealth.Enabled
+            && _stealth.GetVisibility(uid, stealth) < 0.5f)
+            return true;
+
+        if (_ninjaCloak.IsCloaked(uid))
+            return true;
+        return false;
+    }
+    //DS14-end
 }

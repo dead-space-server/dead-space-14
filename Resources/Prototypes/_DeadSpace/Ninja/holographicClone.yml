@@ -37,10 +37,10 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      25: Dead
+      40: Dead
   - type: AutoDeleteOnDeath
   - type: NinjaClone
-    cloningChance: 0.5
+    cloningChance: 0.35
     minSpawnRadius: 1
     maxSpawnRadius: 2
   - type: Tag

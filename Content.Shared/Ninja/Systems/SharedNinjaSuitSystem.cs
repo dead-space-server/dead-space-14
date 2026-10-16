@@ -1,4 +1,3 @@
-using Content.Shared.Actions.Components;
 using Content.Shared.Actions;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Clothing;
@@ -126,10 +125,9 @@ public abstract class SharedNinjaSuitSystem : EntitySystem
         if (TryComp<NinjaCloakComponent>(uid, out var cloak) && cloak.Enabled)
         {
             cloak.Enabled = false;
+            _actions.StartUseDelay(cloak.ActionEntity);
             Dirty(uid, cloak);
             revealed = true;
-            if (TryComp<ActionComponent>(cloak.ActionEntity, out var cloakaction) && cloakaction.UseDelay != null)
-                _actions.SetCooldown(cloak.ActionEntity, cloakaction.UseDelay.Value);
         }
 
         if (TryComp<NinjaDisguiseComponent>(uid, out var disguise) && disguise.Disguised)
@@ -142,6 +140,7 @@ public abstract class SharedNinjaSuitSystem : EntitySystem
         if (!revealed)
             return;
 
+        RaiseNetworkEvent(new PlayNinjaRevealEffectMessage(GetNetEntity(uid)));
         _audio.PlayPvs(comp.RevealSound, uid);
         Popup.PopupEntity(Loc.GetString("ninja-revealed"), user, user, PopupType.MediumCaution);
     }

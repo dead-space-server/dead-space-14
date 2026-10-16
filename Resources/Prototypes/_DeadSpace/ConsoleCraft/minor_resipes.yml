@@ -109,6 +109,7 @@
       blacklistComponents:
         - CartridgeAmmo
       blacklistTags:
+        - SpaceNinja
         - Ore
         - Trash
 

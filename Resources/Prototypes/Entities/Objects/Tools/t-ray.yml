@@ -10,6 +10,7 @@
     - state: tray-off
       map: ["base"]
   - type: TrayScanner
+    range: 1 #DS14
   - type: Item
     sprite: Objects/Tools/t-ray.rsi
   - type: Appearance

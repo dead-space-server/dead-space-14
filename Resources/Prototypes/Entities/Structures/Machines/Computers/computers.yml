@@ -1004,6 +1004,7 @@
     blacklistComponents:
       - CartridgeAmmo
       - Dragon
+      - SpaceNinja
     blacklistTags:
       - Ore
       - Trash

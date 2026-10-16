@@ -7,4 +7,7 @@ public sealed partial class AutoDustMarkerComponent : Component
 {
     [DataField, AutoNetworkedField]
     public EntityUid AutoDustItem;
+
+    [DataField]
+    public EntityUid? LastMind;
 }

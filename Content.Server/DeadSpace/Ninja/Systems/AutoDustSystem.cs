@@ -1,14 +1,18 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Server.Mind;
 using Content.Shared.DeadSpace.Ninja.Components;
 using Content.Shared.DeadSpace.Ninja.Systems;
 using Content.Shared.Gibbing;
+using Content.Shared.Ghost;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Mind;
+using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
+using Content.Shared.Ninja.Components;
 using Content.Shared.Popups;
 using Content.Shared.Tag;
 using Robust.Shared.Containers;
@@ -35,7 +39,10 @@ public sealed class AutoDustSystem : SharedAutoDustSystem
         SubscribeLocalEvent<AutoDustComponent, GotUnequippedEvent>(OnUnequipped);
 
         SubscribeLocalEvent<AutoDustComponent, ToggleAutoDustModeActionEvent>(OnToggleMode);
+
+        SubscribeLocalEvent<AutoDustMarkerComponent, MindRemovedMessage>(OnMindRemoved);
     }
+
     private void OnEquipped(Entity<AutoDustComponent> ent, ref GotEquippedEvent args)
     {
         var marker = EnsureComp<AutoDustMarkerComponent>(args.Equipee);
@@ -46,6 +53,15 @@ public sealed class AutoDustSystem : SharedAutoDustSystem
     private void OnUnequipped(Entity<AutoDustComponent> ent, ref GotUnequippedEvent args)
     {
         RemComp<AutoDustMarkerComponent>(args.Equipee);
+    }
+
+    private void OnMindRemoved(Entity<AutoDustMarkerComponent> ent, ref MindRemovedMessage args)
+    {
+        if (args.TransferEntity is { } target && HasComp<GhostComponent>(target))
+        {
+            ent.Comp.LastMind = args.Mind.Owner;
+            Dirty(ent.Owner, ent.Comp);
+        }
     }
 
     private void OnToggleMode(Entity<AutoDustComponent> ent, ref ToggleAutoDustModeActionEvent args)
@@ -93,6 +109,8 @@ public sealed class AutoDustSystem : SharedAutoDustSystem
         Entity<MindComponent>? mindEnt = null;
         if (_mindSystem.TryGetMind(uid, out var mindId, out var mind))
             mindEnt = (mindId, mind);
+        else if (TryGetGhostMind(component, out var ghostMind))
+            mindEnt = ghostMind;
 
         var ev = new AutoDustEvent(uid, mindEnt, spiderOS);
         RaiseLocalEvent(component.AutoDustItem, ref ev);
@@ -103,6 +121,12 @@ public sealed class AutoDustSystem : SharedAutoDustSystem
 
         if (dust.DeleteItems)
         {
+            if (TryComp<SpaceNinjaComponent>(uid, out var spaceNinja) && spaceNinja.Katana is { Valid: true } katana)
+            {
+                Spawn(dust.SpawnOnDustProto, _transform.GetMapCoordinates(katana));
+                QueueDel(katana);
+            }
+
             var items = _inventory.GetHandOrInventoryEntities(uid).ToList();
             foreach (var item in items)
             {
@@ -129,6 +153,24 @@ public sealed class AutoDustSystem : SharedAutoDustSystem
         }
 
         _gibbing.Gib(uid);
+    }
+
+    private bool TryGetGhostMind(
+        AutoDustMarkerComponent marker,
+        [NotNullWhen(true)] out Entity<MindComponent>? mindEnt)
+    {
+        mindEnt = null;
+
+        if (marker.LastMind is not { } lastMindId ||
+            !TryComp<MindComponent>(lastMindId, out var mind) ||
+            mind.OwnedEntity is not { } owned ||
+            !HasComp<GhostComponent>(owned))
+        {
+            return false;
+        }
+
+        mindEnt = (lastMindId, mind);
+        return true;
     }
 }
 
