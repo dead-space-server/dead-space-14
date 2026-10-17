@@ -76,7 +76,7 @@
   id: HoPGear
   equipment:
     id: HoPPDA
-    eyes: ClothingEyesHudCommand #DS14
+    eyes: ClothingEyesGlassesCommand #DS14
     gloves: ClothingHandsGlovesHop
     ears: ClothingHeadsetAltCommand
     belt: BoxFolderClipboardThreePapers
@@ -84,6 +84,7 @@
   storage:
     back:
     - Flash
+    - Handcuffs #DS14
 
 - type: chameleonOutfit
   id: HeadOfPersonnelChameleonOutfit

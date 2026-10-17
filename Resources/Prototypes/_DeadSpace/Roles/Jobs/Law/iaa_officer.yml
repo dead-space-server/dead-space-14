@@ -1,0 +1,58 @@
+- type: job
+  id: IAAOfficer
+  name: job-name-iaa-officer
+  description: job-description-iaa-officer
+  playTimeTracker: JobIAAOfficer
+  requirements:
+    - !type:DepartmentTimeRequirement
+      department: Law
+      time: 14400 # 4 hours
+    - !type:DepartmentTimeRequirement
+      department: Security
+      time: 72000 # 20 hours
+    - !type:AgeRequirement
+      requiredAge: 21
+  startingGear: IAAOfficerGear
+  icon: "JobIconIAAOfficer"
+  supervisors: job-supervisors-iaa
+  canBeAntag: false
+  access:
+    - Security
+    - Brig
+    - Service
+    - Lawyer
+    - Maintenance
+  minBankBalance: 200
+  maxBankBalance: 400
+  wageDepartment: Law
+  wage: 250
+  special:
+  - !type:AddImplantSpecial
+    implants: [ MindShieldImplant ]
+  - !type:AddComponentSpecial
+    components:
+    - type: Skill
+      group: BaseSkills
+
+- type: startingGear
+  id: IAAOfficerGear
+  equipment:
+    id: IAAOfficerPDA
+    ears: ClothingHeadsetLaw
+    eyes: ClothingEyesGlassesSecurity
+    outerClothing: ClothingOuterArmorBasic
+    belt: ClothingBeltERTSecurityFilled
+    gloves: ClothingHandsGlovesColorBlack
+  storage:
+    back:
+    - IAAOfficerLoadoutSecondary
+    - ClothingMaskGasSecurity
+
+- type: chameleonOutfit
+  id: IAAOfficerChameleonOutfit
+  job: IAAOfficer
+  equipment:
+    head: ClothingHeadHatBeretIAAOfficer
+    gloves: ClothingHandsGlovesColorBlack
+    shoes: ClothingShoesBootsIAAOfficer
+    ears: ClothingHeadsetLaw
