@@ -1,0 +1,56 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+       xmlns:custom="clr-namespace:Content.Client.DeadSpace.PdaPainter.UI"
+       MinSize="640 560"
+       SetSize="700 640"
+       Title="{Loc 'pda-painter-window-title'}">
+  <BoxContainer Orientation="Vertical" VerticalExpand="True">
+    <TabContainer Name="Tabs" VerticalExpand="True">
+
+      <!-- Free-hand drawing tab -->
+      <BoxContainer Orientation="Horizontal" VerticalExpand="True">
+        <BoxContainer Orientation="Vertical" Margin="8 8 4 8" SetWidth="240">
+          <Label Text="{Loc 'pda-painter-palette'}" StyleClasses="LabelSecondary"/>
+          <GridContainer Name="PaletteGrid" Columns="3" Margin="0 4 0 8"/>
+          <ColorSelectorSliders Name="ColorPicker" MinHeight="140"/>
+          <Label Text="{Loc 'pda-painter-tools'}" StyleClasses="LabelSecondary" Margin="0 8 0 4"/>
+          <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+            <Button Name="BrushButton" Text="{Loc 'pda-painter-tool-brush'}" HorizontalExpand="True"/>
+            <Button Name="EraserButton" Text="{Loc 'pda-painter-tool-eraser'}" HorizontalExpand="True"/>
+            <Button Name="PipetteButton" Text="{Loc 'pda-painter-tool-pipette'}" HorizontalExpand="True"/>
+          </BoxContainer>
+          <Label Text="{Loc 'pda-painter-brush-size'}" StyleClasses="LabelSecondary" Margin="0 8 0 4"/>
+          <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+            <Button Name="Size1Button" Text="1" HorizontalExpand="True"/>
+            <Button Name="Size2Button" Text="2" HorizontalExpand="True"/>
+            <Button Name="Size3Button" Text="3" HorizontalExpand="True"/>
+          </BoxContainer>
+          <Control VerticalExpand="True"/>
+          <Label Name="PdaNameLabel" StyleClasses="LabelSecondary" ClipText="True"/>
+        </BoxContainer>
+        <PanelContainer StyleClasses="PdaPainterCanvasPanel" VerticalExpand="True" HorizontalExpand="True" Margin="4 8 8 8">
+          <custom:PdaPainterCanvas Name="FreeCanvas"/>
+        </PanelContainer>
+      </BoxContainer>
+
+      <!-- Template tab -->
+      <BoxContainer Orientation="Horizontal" VerticalExpand="True">
+        <BoxContainer Orientation="Vertical" Margin="8 8 4 8" SetWidth="240">
+          <LineEdit Name="TemplateSearch" PlaceHolder="{Loc 'pda-painter-search'}" Margin="0 0 0 4"/>
+          <Label Text="{Loc 'pda-painter-templates'}" StyleClasses="LabelSecondary"/>
+          <ScrollContainer VerticalExpand="True" Margin="0 4 0 0">
+            <ItemList Name="TemplateList" VerticalExpand="True"/>
+          </ScrollContainer>
+        </BoxContainer>
+        <PanelContainer StyleClasses="PdaPainterCanvasPanel" VerticalExpand="True" HorizontalExpand="True" Margin="4 8 8 8">
+          <custom:PdaPainterCanvas Name="TemplateCanvas"/>
+        </PanelContainer>
+      </BoxContainer>
+
+    </TabContainer>
+    <BoxContainer Orientation="Horizontal" Margin="8 4 8 8" SeparationOverride="8">
+      <Button Name="ResetButton" Text="{Loc 'pda-painter-reset'}"/>
+      <Control HorizontalExpand="True"/>
+      <Button Name="SaveButton" Text="{Loc 'pda-painter-save'}" StyleClasses="OpenRight"/>
+    </BoxContainer>
+  </BoxContainer>
+</DefaultWindow>
