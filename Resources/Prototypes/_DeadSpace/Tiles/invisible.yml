@@ -1,0 +1,15 @@
+- type: tile
+  id: FloorInvisible
+  name: tiles-invisible
+  sprite: /Textures/_DeadSpace/Tiles/invisible.png
+  baseTurf: Space
+  isSubfloor: true
+  isSpace: true
+  weather: true
+  friction: 1.5
+  mass: 800
+  indestructible: true
+  thermalConductivity: 0.4
+  heatCapacity: 700000
+  footstepSounds: null
+  barestepSounds: null

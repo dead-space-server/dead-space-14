@@ -1,0 +1,1 @@
+tiles-invisible = invisible floor
