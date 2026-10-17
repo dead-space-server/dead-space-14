@@ -34,11 +34,15 @@ public sealed partial class DamageEntry
     [DataField]
     public FixedPoint2 DamageTaken { get; private set; } = default!;
 
-    public DamageEntry(TimeSpan timeOfDamageTake, string damageGroup, string damageType, FixedPoint2 damageTaken)
+    [DataField]
+    public string? SourceName { get; private set; }
+
+    public DamageEntry(TimeSpan timeOfDamageTake, string damageGroup, string damageType, FixedPoint2 damageTaken, string? sourceName)
     {
         TimeOfDamageTake = timeOfDamageTake;
         DamageGroup = damageGroup;
         DamageType = damageType;
         DamageTaken = damageTaken;
+        SourceName = sourceName;
     }
 }

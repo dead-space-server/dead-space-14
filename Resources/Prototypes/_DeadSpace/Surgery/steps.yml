@@ -1,0 +1,184 @@
+- type: surgeryStep
+  id: SurgeryStepIncision
+  variants:
+    - tool:
+        tags:
+          - SurgeryToolScalpel
+      conditions:
+        - !type:SurgeryConditionAnatomy
+          inverted: true
+          bodies: [Diona, Skeleton]
+      duration: 3
+      startMessage: surgery-step-incision-start
+      successMessage: surgery-step-incision-success
+      sound:
+        path: /Audio/Weapons/bladeslice.ogg
+      effects:
+        - !type:SurgeryEntityEffect
+          target: Patient
+          effects:
+            - !type:HealthChange
+              damage:
+                types:
+                  Slash: 2
+    - qualities:
+        - Slicing
+      conditions:
+        - !type:SurgeryConditionAnatomy
+          inverted: true
+          bodies: [Diona, Skeleton]
+      duration: 6
+      startMessage: surgery-step-incision-start
+      successMessage: surgery-step-incision-crude
+      sound:
+        path: /Audio/Weapons/bladeslice.ogg
+      effects:
+        - !type:SurgeryEntityEffect
+          target: Patient
+          effects:
+            - !type:HealthChange
+              damage:
+                types:
+                  Slash: 5
+      complications:
+        - SurgeryComplicationJerk
+    - qualities:
+        - Prying
+      conditions:
+        - !type:SurgeryConditionAnatomy
+          bodies: [Diona]
+      duration: 7
+      startMessage: surgery-step-resin-start
+      successMessage: surgery-step-resin-chop
+      sound:
+        path: /Audio/Weapons/bladeslice.ogg
+      effects:
+        - !type:SurgeryEntityEffect
+          target: Patient
+          effects:
+            - !type:HealthChange
+              damage:
+                types:
+                  Slash: 6
+      complications:
+        - SurgeryComplicationJerk
+    - tool:
+        tags:
+          - SurgeryToolSaw
+      conditions:
+        - !type:SurgeryConditionAnatomy
+          bodies: [Diona]
+      duration: 9
+      startMessage: surgery-step-resin-start
+      successMessage: surgery-step-resin-success
+      effects:
+        - !type:SurgeryEntityEffect
+          target: Patient
+          effects:
+            - !type:HealthChange
+              damage:
+                types:
+                  Slash: 3
+    - tool:
+        tags:
+          - SurgeryToolSaw
+          - SurgeryToolDrill
+      conditions:
+        - !type:SurgeryConditionAnatomy
+          bodies: [Skeleton]
+      duration: 8
+      startMessage: surgery-step-bone-start
+      successMessage: surgery-step-bone-success
+      effects:
+        - !type:SurgeryEntityEffect
+          target: Patient
+          effects:
+            - !type:HealthChange
+              damage:
+                types:
+                  Blunt: 5
+      complications:
+        - SurgeryComplicationJerk
+
+- type: surgeryStep
+  id: SurgeryStepRetract
+  variants:
+    - tool:
+        tags:
+          - SurgeryToolRetractor
+      duration: 2.5
+      startMessage: surgery-step-retract-start
+      successMessage: surgery-step-retract-success
+    - tool:
+        tags:
+          - SurgeryTool
+      duration: 6
+      startMessage: surgery-step-retract-start
+      successMessage: surgery-step-retract-crude
+      effects:
+        - !type:SurgeryEntityEffect
+          target: Patient
+          effects:
+            - !type:HealthChange
+              damage:
+                types:
+                  Slash: 4
+      complications:
+        - SurgeryComplicationJerk
+
+- type: surgeryStep
+  id: SurgeryStepClamp
+  variants:
+    - tool:
+        tags:
+          - SurgeryToolHemostat
+      duration: 2
+      startMessage: surgery-step-clamp-start
+      successMessage: surgery-step-clamp-success
+      effects:
+        - !type:SurgeryEntityEffect
+          target: Patient
+          effects:
+            - !type:ModifyBleed
+              amount: -4
+
+- type: surgeryStep
+  id: SurgeryStepCauterize
+  variants:
+    - tool:
+        tags:
+          - SurgeryToolCautery
+      duration: 3
+      startMessage: surgery-step-cauterize-start
+      successMessage: surgery-step-cauterize-success
+      effects:
+        - !type:SurgeryEntityEffect
+          target: Patient
+          effects:
+            - !type:ModifyBleed
+              amount: -6
+            - !type:HealthChange
+              damage:
+                types:
+                  Heat: 2
+
+- type: surgeryStep
+  id: SurgeryStepResinSeal
+  variants:
+    - conditions:
+        - !type:SurgeryConditionAnatomy
+          bodies: [Diona]
+      duration: 5
+      startMessage: surgery-step-resin-seal-start
+      successMessage: surgery-step-resin-seal-success
+      effects:
+        - !type:SurgeryEntityEffect
+          target: Patient
+          effects:
+            - !type:HealthChange
+              damage:
+                types:
+                  Slash: -6
+        - !type:SurgeryDirtEffect
+          target: Surgeon
+          amount: 20

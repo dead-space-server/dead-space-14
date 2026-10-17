@@ -6,6 +6,8 @@
   id: BaseSoap
   name: soap
   components:
+  - type: SurgeryDirtCleaner
+    amount: 40
   - type: Tag
     tags:
     - Soap

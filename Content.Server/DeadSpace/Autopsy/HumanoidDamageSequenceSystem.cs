@@ -4,6 +4,7 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.Autopsy;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Mobs;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -14,11 +15,23 @@ public sealed class HumanoidDamageSequenceSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
 
     public override void Initialize()
     {
         SubscribeLocalEvent<HumanoidDamageSequenceComponent, DamageChangedEvent>(OnDamageChange);
         SubscribeLocalEvent<HumanoidDamageSequenceComponent, MobStateChangedEvent>(OnMobState);
+    }
+
+    private string? ResolveSourceName(EntityUid? origin)
+    {
+        if (origin is not { } source)
+            return null;
+
+        if (_hands.TryGetActiveItem(source, out var held) && held is { } item)
+            return Name(item);
+
+        return Name(source);
     }
 
     private void OnDamageChange(EntityUid uid, HumanoidDamageSequenceComponent component, DamageChangedEvent args)
@@ -36,7 +49,7 @@ public sealed class HumanoidDamageSequenceSystem : EntitySystem
                 {
                     if (group.DamageTypes.Contains(damage.Key))
                     {
-                        DamageEntry damageEntry = new DamageEntry(_gameTiming.CurTime, group.ID, damage.Key, damage.Value);
+                        DamageEntry damageEntry = new DamageEntry(_gameTiming.CurTime, group.ID, damage.Key, damage.Value, ResolveSourceName(args.Origin));
                         component.DamageSequence.Add(damageEntry);
                     }
                 }

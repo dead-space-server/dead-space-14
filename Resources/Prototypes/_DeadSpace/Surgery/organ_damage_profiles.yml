@@ -1,0 +1,95 @@
+- type: organDamageProfile
+  id: default
+  damages:
+    Blunt: autopsy-cause-blunt
+    Slash: autopsy-cause-slash
+    Piercing: autopsy-cause-piercing
+    Heat: autopsy-cause-heat
+    Cold: autopsy-cause-cold
+    Shock: autopsy-cause-shock
+    Poison: autopsy-cause-reagents
+    Radiation: autopsy-cause-radiation
+    Asphyxiation: autopsy-cause-asphyxiation
+    Bloodloss: autopsy-cause-bloodloss
+    Caustic: autopsy-cause-caustic
+    Cellular: autopsy-cause-cellular
+
+- type: organDamageProfile
+  id: brain
+  damages:
+    Radiation: autopsy-cause-radiation
+    Cellular: autopsy-cause-cellular
+    Shock: autopsy-cause-shock
+    Asphyxiation: autopsy-cause-asphyxiation
+    Bloodloss: autopsy-cause-bloodloss
+    Poison: autopsy-cause-reagents
+
+- type: organDamageProfile
+  id: eyes
+  damages:
+    Heat: autopsy-cause-heat
+    Caustic: autopsy-cause-caustic
+    Cellular: autopsy-cause-cellular
+    Blunt: autopsy-cause-blunt
+
+- type: organDamageProfile
+  id: tongue
+  damages:
+    Heat: autopsy-cause-heat
+    Cold: autopsy-cause-cold
+    Caustic: autopsy-cause-caustic
+    Poison: autopsy-cause-reagents
+
+- type: organDamageProfile
+  id: ears
+  damages:
+    Blunt: autopsy-cause-blunt
+    Shock: autopsy-cause-shock
+    Caustic: autopsy-cause-caustic
+
+- type: organDamageProfile
+  id: lungs
+  damages:
+    Asphyxiation: autopsy-cause-asphyxiation
+    Bloodloss: autopsy-cause-bloodloss
+    Heat: autopsy-cause-heat
+    Cold: autopsy-cause-cold
+    Caustic: autopsy-cause-caustic
+    Poison: autopsy-cause-reagents
+
+- type: organDamageProfile
+  id: heart
+  damages:
+    Asphyxiation: autopsy-cause-asphyxiation
+    Bloodloss: autopsy-cause-bloodloss
+    Poison: autopsy-cause-reagents
+    Shock: autopsy-cause-shock
+    Blunt: autopsy-cause-blunt
+
+- type: organDamageProfile
+  id: stomach
+  damages:
+    Poison: autopsy-cause-reagents
+    Caustic: autopsy-cause-caustic
+    Piercing: autopsy-cause-piercing
+
+- type: organDamageProfile
+  id: liver
+  damages:
+    Poison: autopsy-cause-reagents
+    Caustic: autopsy-cause-caustic
+    Radiation: autopsy-cause-radiation
+
+- type: organDamageProfile
+  id: kidneys
+  damages:
+    Poison: autopsy-cause-reagents
+    Bloodloss: autopsy-cause-bloodloss
+    Caustic: autopsy-cause-caustic
+
+- type: organDamageProfile
+  id: appendix
+  damages:
+    Poison: autopsy-cause-reagents
+    Caustic: autopsy-cause-caustic
+    Blunt: autopsy-cause-blunt

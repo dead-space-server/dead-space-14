@@ -6,6 +6,7 @@
   id: BaseMobSpeciesComputer
   abstract: true
   components:
+  - type: SurgeryImmune
   - type: Blindable
   - type: InjectionBlocker
     blockedMessage: injection-blocker-component-ipc-message

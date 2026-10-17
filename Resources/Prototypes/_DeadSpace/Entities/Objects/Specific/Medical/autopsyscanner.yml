@@ -22,8 +22,6 @@
   - type: AutopsyScanner
     scanningSound:
       path: "/Audio/_DeadSpace/Items/Medical/autopsyscanner.ogg"
-    scanningErrorSound:
-      path: "/Audio/_DeadSpace/Items/Medical/autopsyscanner-error.ogg"
   - type: Tag
     tags:
     - DiscreteHealthAnalyzer

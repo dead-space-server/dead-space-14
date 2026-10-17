@@ -1,0 +1,75 @@
+- type: surgeryStep
+  id: SurgeryStepOrganExtraction
+  variants:
+    - tool:
+        tags:
+          - SurgeryToolHemostat
+      duration: 3
+      startMessage: autopsy-extract-start
+      successMessage: autopsy-extract-success
+      effects:
+        - !type:SurgeryExtractOrganEffect
+          amount: 1
+          damageTransfer: 0.25
+    - duration: 6
+      startMessage: autopsy-extract-hands-start
+      successMessage: autopsy-extract-hands-success
+      effects:
+        - !type:SurgeryExtractOrganEffect
+          amount: 1
+          damageTransfer: 0.35
+        - !type:SurgeryDirtEffect
+          target: Surgeon
+          amount: 15
+
+- type: surgeryStep
+  id: SurgeryStepAutopsyStitch
+  variants:
+    - tool:
+        tags:
+          - SurgeryTool
+      duration: 4
+      startMessage: autopsy-stitch-start
+      successMessage: autopsy-stitch-success
+
+- type: surgery
+  id: SurgeryAutopsyOpen
+  name: surgery-autopsy-open
+  description: surgery-autopsy-open-desc
+  priority: 2
+  conditions:
+    - !type:SurgeryConditionMobState
+      states: [Dead]
+    - !type:SurgeryConditionOperatingTable
+  steps:
+    - SurgeryStepIncision
+    - SurgeryStepRetract
+
+- type: surgery
+  id: SurgeryAutopsyExtractOrgans
+  name: surgery-autopsy-extract
+  description: surgery-autopsy-extract-desc
+  priority: 3
+  repeatable: true
+  requires:
+    - SurgeryAutopsyOpen
+  conditions:
+    - !type:SurgeryConditionMobState
+      states: [Dead]
+    - !type:SurgeryConditionOperatingTable
+  steps:
+    - SurgeryStepOrganExtraction
+
+- type: surgery
+  id: SurgeryAutopsyClose
+  name: surgery-autopsy-close
+  description: surgery-autopsy-close-desc
+  priority: 2
+  requires:
+    - SurgeryAutopsyOpen
+  conditions:
+    - !type:SurgeryConditionMobState
+      states: [Dead]
+    - !type:SurgeryConditionOperatingTable
+  steps:
+    - SurgeryStepAutopsyStitch

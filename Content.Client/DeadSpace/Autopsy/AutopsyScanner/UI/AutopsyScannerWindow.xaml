@@ -15,14 +15,11 @@
                 <Label
                     Name="PatientName"/>
                 <Label
-                    Name="TimeOfDeath"
+                    Name="IdentityText"
                     Margin="0 5 0 0"/>
-                <Label
-                    Name="patientDamageAmount"
-                    Margin="0 15 0 0"/>
             </BoxContainer>
             <BoxContainer
-                Name="GroupsContainer"
+                Name="OrgansContainer"
                 Orientation="Vertical">
             </BoxContainer>
         </BoxContainer>

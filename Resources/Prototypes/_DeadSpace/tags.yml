@@ -536,4 +536,22 @@
 - type: Tag
   id: GasGrenadeShellBlue
 
+- type: Tag
+  id: SurgeryToolScalpel
+
+- type: Tag
+  id: SurgeryToolRetractor
+
+- type: Tag
+  id: SurgeryToolHemostat
+
+- type: Tag
+  id: SurgeryToolCautery
+
+- type: Tag
+  id: SurgeryToolSaw
+
+- type: Tag
+  id: SurgeryToolDrill
+
   # Обязательно в алфавитном порядке

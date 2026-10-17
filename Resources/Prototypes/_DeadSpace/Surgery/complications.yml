@@ -1,0 +1,103 @@
+- type: surgeryComplication
+  id: SurgeryComplicationInfection
+  name: surgery-complication-infection
+  chance: 0.0
+  modifiers:
+    - conditions:
+        - !type:SurgeryConditionEquipment
+          slot: gloves
+          inverted: true
+      add: 0.10
+    - conditions:
+        - !type:SurgeryConditionEquipment
+          slot: mask
+          inverted: true
+      add: 0.05
+    - conditions:
+        - !type:SurgeryConditionDirt
+          target: Surgeon
+          threshold: 20
+      add: 0.15
+    - conditions:
+        - !type:SurgeryConditionDirt
+          target: Tool
+          threshold: 20
+      add: 0.15
+    - conditions:
+        - !type:SurgeryConditionTrashNearby
+          radius: 2
+          minCount: 2
+      add: 0.10
+  effects:
+    - !type:SurgeryEntityEffect
+      target: Patient
+      effects:
+        - !type:HealthChange
+          damage:
+            types:
+              Poison: 4
+  message: surgery-complication-infection-message
+  patientMessage: surgery-complication-infection-patient
+
+- type: surgeryComplication
+  id: SurgeryComplicationBleeding
+  name: surgery-complication-bleeding
+  chance: 0.03
+  modifiers:
+    - conditions:
+        - !type:SurgeryConditionSleeping
+          inverted: true
+      add: 0.07
+    - conditions:
+        - !type:SurgeryConditionOperatingTable
+          inverted: true
+      add: 0.05
+  effects:
+    - !type:SurgeryEntityEffect
+      target: Patient
+      effects:
+        - !type:ModifyBleed
+          amount: 6
+  message: surgery-complication-bleeding-message
+  patientMessage: surgery-complication-bleeding-patient
+
+- type: surgeryComplication
+  id: SurgeryComplicationJerk
+  name: surgery-complication-jerk
+  chance: 0.0
+  modifiers:
+    - conditions:
+        - !type:SurgeryConditionSleeping
+          inverted: true
+        - !type:SurgeryConditionMobState
+          states: [Alive]
+      add: 0.25
+  effects:
+    - !type:SurgeryEntityEffect
+      target: Patient
+      effects:
+        - !type:HealthChange
+          damage:
+            types:
+              Slash: 8
+  message: surgery-complication-jerk-message
+  patientMessage: surgery-complication-jerk-patient
+
+- type: surgeryComplication
+  id: SurgeryComplicationContamination
+  name: surgery-complication-contamination
+  chance: 0.0
+  modifiers:
+    - conditions:
+        - !type:SurgeryConditionEquipment
+          slot: gloves
+          inverted: true
+      add: 1.0
+  effects:
+    - !type:SurgeryDirtEffect
+      target: Surgeon
+      amount: 15
+    - !type:SurgeryDirtEffect
+      target: Tool
+      amount: 10
+  message: surgery-complication-contamination-message

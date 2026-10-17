@@ -1,0 +1,57 @@
+- type: surgery
+  id: SurgeryOpening
+  name: surgery-opening
+  description: surgery-opening-desc
+  priority: 0
+  steps:
+    - SurgeryStepIncision
+    - SurgeryStepRetract
+  conditions:
+    - !type:SurgeryConditionMobState
+      states: [Alive, Critical]
+  complications:
+    - SurgeryComplicationInfection
+    - SurgeryComplicationContamination
+    - SurgeryComplicationBleeding
+  effects:
+    - !type:SurgeryEntityEffect
+      target: Patient
+      effects:
+        - !type:HealthChange
+          damage:
+            types:
+              Slash: -2
+
+- type: surgery
+  id: SurgeryClosing
+  name: surgery-closing
+  description: surgery-closing-desc
+  priority: 0
+  requires:
+    - SurgeryOpening
+  steps:
+    - SurgeryStepClamp
+    - SurgeryStepCauterize
+  conditions:
+    - !type:SurgeryConditionMobState
+      states: [Alive, Critical]
+  complications:
+    - SurgeryComplicationInfection
+    - SurgeryComplicationContamination
+
+- type: surgery
+  id: SurgeryDionaResinSeal
+  name: surgery-diona-resin-seal
+  description: surgery-diona-resin-seal-desc
+  priority: 1
+  steps:
+    - SurgeryStepIncision
+    - SurgeryStepResinSeal
+  conditions:
+    - !type:SurgeryConditionAnatomy
+      bodies: [Diona]
+    - !type:SurgeryConditionMobState
+      states: [Alive, Critical]
+  complications:
+    - SurgeryComplicationInfection
+    - SurgeryComplicationContamination

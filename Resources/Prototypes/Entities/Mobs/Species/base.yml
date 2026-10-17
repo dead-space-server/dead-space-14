@@ -9,6 +9,7 @@
   id: BaseMobSpecies
   abstract: true
   components:
+  - type: SurgeryTarget
   - type: CorpseBurning # DS14
   - type: Sprite
     layers:
@@ -250,6 +251,7 @@
   id: BaseMobSpeciesOrganic
   abstract: true
   components:
+  - type: SurgeryDirtiness
   # DS14-start: apply upstream satiation through the current shared organic-species base.
   - type: Satiation
     satiations:

@@ -65,3 +65,4 @@
   - type: Anchorable
   - type: Pullable
   - type: AutopsyTable
+  - type: OperatingTable
