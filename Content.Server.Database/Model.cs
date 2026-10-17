@@ -376,6 +376,7 @@ namespace Content.Server.Database
         // DS14-start
         public bool HairGradientEnabled { get; set; }
         public string HairGradientColor { get; set; } = null!;
+        public string? StationAiLawset { get; set; }
         // DS14-end
         public int SpawnPriority { get; set; } = 0;
         public List<Job> Jobs { get; } = new();

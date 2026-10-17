@@ -288,7 +288,7 @@ public sealed class SiliconLawSystem : SharedSiliconLawSystem
         if (component.Lawset == null)
             component.Lawset = new SiliconLawset();
 
-        component.Lawset.Laws = newLaws;
+        component.Lawset.Laws = newLaws.Select(law => law.ShallowClone()).ToList(); // DS14
         // DS14-start
         if (TryComp<EmaggedComponent>(target, out var emagged))
         {
@@ -301,6 +301,23 @@ public sealed class SiliconLawSystem : SharedSiliconLawSystem
         // DS14-end
         NotifyLawsChanged(target, cue);
     }
+
+    // DS14-start
+    /// <summary>
+    /// Replaces the laws of a single silicon with the given lawset prototype.
+    /// </summary>
+    public void SetLawset(EntityUid target, ProtoId<SiliconLawsetPrototype> lawset, SoundSpecifier? cue = null)
+    {
+        if (!TryComp<SiliconLawProviderComponent>(target, out var component))
+            return;
+
+        component.Laws = lawset;
+        component.Lawset = GetLawset(lawset);
+        component.Subverted = false;
+
+        NotifyLawsChanged(target, cue ?? component.LawUploadSound);
+    }
+    // DS14-end
 
     /// <summary>
     /// Replaces the laws of a single silicon with its own lawset instance and marks it subverted.
@@ -318,7 +335,7 @@ public sealed class SiliconLawSystem : SharedSiliconLawSystem
 
         component.Lawset = new SiliconLawset
         {
-            Laws = newLaws,
+            Laws = newLaws.Select(law => law.ShallowClone()).ToList(), // DS14
             ObeysTo = obeysTo
         };
         component.Subverted = true;
@@ -334,10 +351,19 @@ public sealed class SiliconLawSystem : SharedSiliconLawSystem
 
         var lawset = provider.Lawset ?? GetLawset(provider.Laws);
 
+        // DS14-start
+        var station = _station.GetOwningStation(ent);
+        // DS14-end
+
         var query = EntityManager.CompRegistryQueryEnumerator(ent.Comp.Components);
 
         while (query.MoveNext(out var update))
         {
+            // DS14-start
+            if (station != null && _station.GetOwningStation(update) != station)
+                continue;
+            // DS14-end
+
             SetLaws(lawset.Laws, update, provider.LawUploadSound);
         }
     }
