@@ -125,6 +125,7 @@
     preinstalled:
       - CrewManifestCartridge
       - NotekeeperCartridge
+      - WebGameCartridge # DS14
       - NanoTaskCartridge
       - NewsReaderCartridge
       - MessengerCartridge
@@ -229,6 +230,7 @@
     preinstalled:
       - CrewManifestCartridge
       - NotekeeperCartridge
+      - WebGameCartridge # DS14
       - NanoTaskCartridge
       - NewsReaderCartridge
       - MedTekCartridge
@@ -592,6 +594,7 @@
     preinstalled:
       - CrewManifestCartridge
       - NotekeeperCartridge
+      - WebGameCartridge # DS14
       - NanoTaskCartridge
       - NewsReaderCartridge
       - AstroNavCartridge
@@ -756,6 +759,7 @@
     preinstalled:
       - CrewManifestCartridge
       - NotekeeperCartridge
+      - WebGameCartridge # DS14
       - NanoTaskCartridge
       - NewsReaderCartridge
       - MessengerCartridge
@@ -1024,6 +1028,7 @@
     preinstalled:
       - CrewManifestCartridge
       - NotekeeperCartridge
+      - WebGameCartridge # DS14
       - NanoTaskCartridge
       - NewsReaderCartridge
       - MedTekCartridge
@@ -1051,6 +1056,7 @@
     preinstalled:
       - CrewManifestCartridge
       - NotekeeperCartridge
+      - WebGameCartridge # DS14
       - NanoTaskCartridge
       - NewsReaderCartridge
       - LogProbeCartridge
@@ -1207,6 +1213,7 @@
     uiKey: enum.PdaUiKey.Key
     preinstalled:
       - NotekeeperCartridge
+      - WebGameCartridge # DS14
       - NanoTaskCartridge
       - BankCartridge
       - MedTekCartridge #DS-14
@@ -1246,6 +1253,7 @@
     uiKey: enum.PdaUiKey.Key
     preinstalled:
       - NotekeeperCartridge
+      - WebGameCartridge # DS14
       - NanoTaskCartridge
       - MedTekCartridge
 
@@ -1296,6 +1304,7 @@
     preinstalled:
       - CrewManifestCartridge
       - NotekeeperCartridge
+      - WebGameCartridge # DS14
       - NanoTaskCartridge
       - NewsReaderCartridge
       - MedTekCartridge

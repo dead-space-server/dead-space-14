@@ -1,0 +1,23 @@
+- type: entity
+  parent: BasePDACartridge
+  id: WebGameCartridge
+  name: arcade cartridge
+  description: A PDA program that runs a game.
+  components:
+  - type: Sprite
+    state: cart-y
+  - type: UIFragment
+    ui: !type:WebGameUi
+  - type: Cartridge
+    programName: web-game-program-name
+    icon:
+      sprite: Objects/Misc/books.rsi
+      state: book_icon
+  - type: WebGame
+    games:
+    - name: web-game-doom
+      url: https://BlueDogDoc.github.io/HTMLGames/doom/doom.html
+    - name: web-game-pacman
+      url: https://BlueDogDoc.github.io/HTMLGames/pacman/pacman.html
+    - name: web-game-metal-slug
+      url: https://BlueDogDoc.github.io/HTMLGames/metalslug/metalslug.html

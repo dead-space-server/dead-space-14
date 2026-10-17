@@ -12,10 +12,12 @@
     <PackageReference Include="SixLabors.ImageSharp" />
     <PackageReference Include="Pidgin" />
     <PackageReference Include="Robust.Shared.AuthLib" />
+    <PackageReference Include="Robust.Natives.Cef" />
   </ItemGroup>
 
   <Import Project="..\RobustToolbox\Imports\Lidgren.props" />
   <Import Project="..\RobustToolbox\Imports\Client.props" />
+  <Import Project="..\RobustToolbox\Imports\WebView.props" />
   <Import Project="..\RobustToolbox\Imports\Shared.props" />
 
   <ItemGroup>
@@ -25,4 +27,20 @@
   </ItemGroup>
   <Import Project="..\RobustToolbox\MSBuild\Robust.Properties.targets" />
   <Import Project="..\RobustToolbox\MSBuild\XamlIL.targets" />
+
+  <Target Name="CopyCefNatives" AfterTargets="Build">
+    <PropertyGroup>
+      <CefRid Condition="'$(CefRid)' == '' and $([MSBuild]::IsOSPlatform('Windows'))">win-x64</CefRid>
+      <CefRid Condition="'$(CefRid)' == '' and $([MSBuild]::IsOSPlatform('Linux')) and $([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture) == Arm64">linux-arm64</CefRid>
+      <CefRid Condition="'$(CefRid)' == '' and $([MSBuild]::IsOSPlatform('Linux'))">linux-x64</CefRid>
+      <CefRid Condition="'$(CefRid)' == '' and $([MSBuild]::IsOSPlatform('OSX')) and $([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture) == Arm64">osx-arm64</CefRid>
+      <CefRid Condition="'$(CefRid)' == '' and $([MSBuild]::IsOSPlatform('OSX'))">osx-x64</CefRid>
+      <CefNativeSource>$(NuGetPackageRoot)\robust.natives.cef\131.3.5\runtimes\$(CefRid)\native\</CefNativeSource>
+    </PropertyGroup>
+    <Warning Text="CEF natives not found at $(CefNativeSource)" Condition="!Exists('$(CefNativeSource)')" />
+    <ItemGroup>
+      <CefNativeFile Include="$(CefNativeSource)**\*" Condition="Exists('$(CefNativeSource)')" />
+    </ItemGroup>
+    <Copy SourceFiles="@(CefNativeFile)" DestinationFiles="@(CefNativeFile->'$(TargetDir)%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
 </Project>
