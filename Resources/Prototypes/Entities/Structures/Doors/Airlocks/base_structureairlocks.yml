@@ -149,8 +149,23 @@
     cost: 6
     delay: 8
     fx: EffectRCDDeconstruct8
+
+    # DS14-start: взрывной порог - выбивание на две половины.
+    # Срабатывает раньше общего (250 < 400).
+  - type: ExplosionKnockout
   - type: Destructible
     thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 250
+      behaviors:
+      - !type:AirlockKnockoutBehavior
+        leftPieceProto: AirlockPieceLeft
+        rightPieceProto: AirlockPieceRight
+        impulseForce: 12
+        spreadDegrees: 25
+    # DS14-end
+
     - trigger:
         !type:DamageTrigger
         damage: 400
