@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-4.0",
+  "copyright": "Created by Jaraten for Engenia Project Ported to Dead Space 14 from Goob-Station (Resources/Textures/_Lavaland/Objects/Decoration/Flora/Trees/ashtree_pale.rsi).",
+  "size": {
+    "x": 96,
+    "y": 96
+  },
+  "states": [
+    {
+      "name": "tree1"
+    },
+    {
+      "name": "tree2"
+    }
+  ]
+}

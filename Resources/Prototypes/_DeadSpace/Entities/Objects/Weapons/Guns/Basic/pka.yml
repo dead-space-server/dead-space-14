@@ -4,6 +4,17 @@
   name: протокинетический повторитель
   description: Поздний, модифицированный прототип протокинетического ускорителя с возможностью накапливать заряды для важной ситуации.
   components:
+  - type: AttachmentHolder
+    slotOverlays:
+      bayonet_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: bayonet
+        offset: 0.59375,0.375
+      light_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: flight
+        stateOn: flight_on
+        offset: 0.46875,0.3125
   - type: Akimbo
   - type: AmmoCounter
   - type: Appearance
@@ -57,6 +68,17 @@
   name: протокинетический дробовик
   description: Новейший модифицированный прототип протокинетического ускорителя, что работает как дробовик
   components:
+  - type: AttachmentHolder
+    slotOverlays:
+      bayonet_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: bayonet
+        offset: 0.625,0.375
+      light_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: flight
+        stateOn: flight_on
+        offset: 0.4375,0.3125
   - type: GunSpreadModifier
     spread: 0.85
   - type: AmmoCounter
@@ -113,6 +135,51 @@
   name: протокинетический обрез
   description: Зачем было резать и так исправное оружие?
   components:
+  - type: AttachmentHolder
+    slots:
+    - bayonet_slot
+    - light_slot
+    bayonetSlot: bayonet_slot
+    bayonetAnimation: WeaponArcClaw
+    lightSlot: light_slot
+    slotOverlays:
+      bayonet_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: bayonet
+        offset: 0.46875,0.375
+      light_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: flight
+        stateOn: flight_on
+        offset: 0.46875,0.28125
+    slotComponents:
+      bayonet_slot:
+      - type: MeleeWeapon
+        wideAnimationRotation: -135
+        damage:
+          types:
+            Blunt: 0
+        soundHit:
+          path: /Audio/Weapons/bladeslice.ogg
+      - type: AltFireMelee
+        attackType: Heavy
+  - type: ItemSlots
+    slots:
+      bayonet_slot:
+        name: attachment-slot-bayonet
+        whitelist:
+          components:
+          - KineticBayonet
+      light_slot:
+        name: attachment-slot-light
+        whitelist:
+          components:
+          - KineticFlashlight
+  - type: PointLight
+    enabled: false
+    mask: /Textures/Effects/LightMasks/cone.png
+    autoRot: true
+    radius: 6
   - type: Akimbo
   - type: AmmoCounter
   - type: Appearance
@@ -164,12 +231,17 @@
     node: shotgunsawnkinetik
     deconstructionTarget: null
   - type: UpgradeableGun
+    blacklist:
+      components:
+      - ExplosivePkaUpgrade
     whitelist:
       tags:
       - PKAUpgrade
   - type: ContainerContainer
     containers:
       upgrades: !type:Container
+      bayonet_slot: !type:ContainerSlot
+      light_slot: !type:ContainerSlot
   - type: EmitSoundOnPickup
     sound:
       path: /Audio/_DeadSpace/Items/Handing/gun/gun_pickup.ogg
@@ -186,6 +258,51 @@
   name: продвинутый протокинетический ускоритель
   description: Специальная модификация протокинетического ускорителя, представляющая из себя ослабленный в угоду компактности гибрид протокинетических повторителя и дробовика с выбором режима работы между ними. Спроектирован для повышения эффективности работы ведущих утилизаторов объектов NanoTrasen.
   components:
+  - type: AttachmentHolder
+    slots:
+    - bayonet_slot
+    - light_slot
+    bayonetSlot: bayonet_slot
+    bayonetAnimation: WeaponArcClaw
+    lightSlot: light_slot
+    slotOverlays:
+      bayonet_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: bayonet
+        offset: 0.53125,0.40625
+      light_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: flight
+        stateOn: flight_on
+        offset: 0.40625,0.28125
+    slotComponents:
+      bayonet_slot:
+      - type: MeleeWeapon
+        wideAnimationRotation: -135
+        damage:
+          types:
+            Blunt: 0
+        soundHit:
+          path: /Audio/Weapons/bladeslice.ogg
+      - type: AltFireMelee
+        attackType: Heavy
+  - type: ItemSlots
+    slots:
+      bayonet_slot:
+        name: attachment-slot-bayonet
+        whitelist:
+          components:
+          - KineticBayonet
+      light_slot:
+        name: attachment-slot-light
+        whitelist:
+          components:
+          - KineticFlashlight
+  - type: PointLight
+    enabled: false
+    mask: /Textures/Effects/LightMasks/cone.png
+    autoRot: true
+    radius: 6
   - type: AmmoCounter
   - type: Appearance
   - type: GenericVisualizer
@@ -236,6 +353,8 @@
   - type: ContainerContainer
     containers:
       upgrades: !type:Container
+      bayonet_slot: !type:ContainerSlot
+      light_slot: !type:ContainerSlot
   - type: BatteryWeaponFireModes
     fireModes:
     - proto: BulletKinetic
@@ -264,6 +383,51 @@
   name: магмитовый протокинетический ускоритель
   parent: BaseItem
   components:
+  - type: AttachmentHolder
+    slots:
+    - bayonet_slot
+    - light_slot
+    bayonetSlot: bayonet_slot
+    bayonetAnimation: WeaponArcClaw
+    lightSlot: light_slot
+    slotOverlays:
+      bayonet_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: bayonet
+        offset: 0.625,0.375
+      light_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: flight
+        stateOn: flight_on
+        offset: 0.4375,0.28125
+    slotComponents:
+      bayonet_slot:
+      - type: MeleeWeapon
+        wideAnimationRotation: -135
+        damage:
+          types:
+            Blunt: 0
+        soundHit:
+          path: /Audio/Weapons/bladeslice.ogg
+      - type: AltFireMelee
+        attackType: Heavy
+  - type: ItemSlots
+    slots:
+      bayonet_slot:
+        name: attachment-slot-bayonet
+        whitelist:
+          components:
+          - KineticBayonet
+      light_slot:
+        name: attachment-slot-light
+        whitelist:
+          components:
+          - KineticFlashlight
+  - type: PointLight
+    enabled: false
+    mask: /Textures/Effects/LightMasks/cone.png
+    autoRot: true
+    radius: 6
   - type: Akimbo
   - type: Sprite
     sprite: _DeadSpace/Objects/Weapons/Guns/Basic/magmite.rsi
@@ -317,5 +481,7 @@
   - type: ContainerContainer
     containers:
       upgrades: !type:Container
+      bayonet_slot: !type:ContainerSlot
+      light_slot: !type:ContainerSlot
   - type: UseDelay
     delay: 1

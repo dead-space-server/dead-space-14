@@ -1,0 +1,510 @@
+- type: lavalandBossArena
+  id: LavalandBubblegumArena
+  arenaName: арена баблгама
+  bossPrototype: MobLavalandBubblegum
+  floorTile: FloorBubblegumArena
+  wallPrototype: WallBubblegumArena
+  lightPrototype: LavalandBubblegumArenaLight
+  cave:
+    # The whole ring is the boss's own wall, 3 tiles, no ore; then a thin band of basalt over the land.
+    thickness: 3
+    shell: 3
+    surround: 3
+    shellRock: WallBubblegumArena
+    roughness: 0
+    passages: 2
+    passageHalfWidth: 1
+    collapseChance: 0
+    rubbleChance: 0
+    exitLength: 30
+    exitWander: 0.35
+    oreVeins: 18
+    oreVeinMin: 3
+    oreVeinMax: 7
+    ores:
+      WallRockBasaltTin: 30
+      WallRockBasaltCoal: 30
+      WallRockBasaltPlasma: 15
+      WallRockBasaltQuartz: 15
+      WallRockBasaltSalt: 10
+      WallRockBasaltSilver: 10
+      WallRockBasaltGold: 8
+      WallRockBasaltUranium: 6
+      WallRockBasaltDiamond: 3
+      WallRockBasaltGibtonite: 3
+      WallRockBasaltMagmite: 2
+      WallRockBasaltBluespaceCrystal: 2
+      WallRockBasaltArtifactFragment: 2
+  decorations:
+  # Ash trees along the walls, like on the land around.
+  - prototype: FloraTreeLavalandAsh
+    count: 7
+    spawnAttempts: 120
+    minDistance: 15
+    maxDistance: 21
+    edgePadding: 1
+    minSeparation: 3
+  - prototype: FloorLavaEntity
+    pool: true
+    count: 28
+    spawnAttempts: 80
+    clusterSize: 6
+    clusterRadius: 1
+    minDistance: 12
+    maxDistance: 22
+    edgePadding: 4
+    minSeparation: 0
+  - prototype: FloraRockSolid
+    count: 7
+    spawnAttempts: 90
+    minDistance: 18
+    maxDistance: 22
+    edgePadding: 3
+    minSeparation: 3
+  - prototype: BasaltRandom
+    count: 95
+    spawnAttempts: 110
+    minDistance: 5
+    maxDistance: 23
+    edgePadding: 2
+    minSeparation: 1
+  size: 49
+  spawnAttempts: 200
+  minDistance: 190
+  maxDistance: 335
+  mapEdgePadding: 40
+  landingExclusionRadius: 90
+  outpostExclusionRadius: 100
+  ftlBeaconExclusionRadius: 64
+  gridSeparation: 48
+  resetOnEmpty: true
+  emptyResetDelay: 10
+  emptyResetHealFraction: 5
+  emptyResetMinHeal: 450
+  intro:
+    style: BloodRitual
+    titleColor: "#e0182d"
+    arenaZoom: 1.05
+    landSound: /Audio/_DeadSpace/Lavaland/Bubblegum/meteorimpact.ogg
+    subtitle: lavaland-boss-intro-bubblegum
+
+- type: tile
+  id: FloorBubblegumArena
+  name: tiles-bubblegum-arena-floor
+  parent: FloorBasalt
+  weather: false
+
+- type: entity
+  parent: WallRockBasaltLavalandBoundary
+  id: WallBubblegumArena
+  name: базальт
+  description: Неразрушимая базальтовая стена, отделяющая логово от остального Лаваленда.
+  suffix: Lavaland, Indestructible
+
+- type: entity
+  id: LavalandBubblegumArenaLight
+  name: свет арены баблгама
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    noRot: true
+  - type: PointLight
+    radius: 30
+    energy: 1.55
+    softness: 1
+    color: "#d94040"
+    castShadows: false
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: LavalandBubblegumEffectBase
+  abstract: true
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: TimedDespawn
+    lifetime: 1
+
+- type: entity
+  parent: LavalandBubblegumEffectBase
+  id: LavalandBubblegumBloodPool
+  name: кровь баблгама
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: FloorObjects
+    sprite: _DeadSpace/Lavaland/Effects/BubblegumBlood.rsi
+    layers:
+    - state: floor1
+  - type: RandomSprite
+    available:
+    - 0:
+        floor1: ""
+        floor2: ""
+        floor3: ""
+        floor4: ""
+        floor5: ""
+        floor6: ""
+        floor7: ""
+  - type: TimedDespawn
+    lifetime: 120
+  - type: LavalandBubblegumBloodPool
+
+- type: entity
+  parent: LavalandBubblegumEffectBase
+  id: LavalandBubblegumBloodSplatter
+  name: брызги крови баблгама
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: FloorObjects
+    sprite: _DeadSpace/Lavaland/Effects/BubblegumBlood.rsi
+    layers:
+    - state: splatter1
+      shader: unshaded
+  - type: RandomSprite
+    available:
+    - 0:
+        splatter1: ""
+        splatter2: ""
+        splatter3: ""
+        splatter4: ""
+        splatter5: ""
+        splatter6: ""
+  - type: TimedDespawn
+    lifetime: 1.2
+
+- type: entity
+  parent: LavalandBubblegumEffectBase
+  id: LavalandBubblegumBloodGibs
+  name: густая кровь
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: FloorObjects
+    sprite: _DeadSpace/Lavaland/Effects/BubblegumBlood.rsi
+    layers:
+    - state: gib3
+  - type: RandomSprite
+    available:
+    - 0:
+        gib3: ""
+        gib5: ""
+        gib6: ""
+  - type: TimedDespawn
+    lifetime: 45
+
+- type: entity
+  parent: LavalandBubblegumEffectBase
+  id: LavalandBubblegumLanding
+  name: удар баблгама
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Effects
+    sprite: _DeadSpace/Lavaland/Effects/BubblegumLanding.rsi
+    color: "#ff1f1f"
+    layers:
+    - state: landing
+  - type: TimedDespawn
+    lifetime: 0.9
+  - type: PointLight
+    radius: 4
+    energy: 1.6
+    color: "#ff3030"
+
+- type: entity
+  parent: LavalandBubblegumEffectBase
+  id: LavalandBubblegumRightSmack
+  name: правая рука баблгама
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Effects
+    sprite: _DeadSpace/Lavaland/Effects/BubblegumHands.rsi
+    layers:
+    - state: rightsmack
+  - type: TimedDespawn
+    lifetime: 1.1
+
+- type: entity
+  parent: LavalandBubblegumEffectBase
+  id: LavalandBubblegumLeftSmack
+  name: левая рука баблгама
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Effects
+    sprite: _DeadSpace/Lavaland/Effects/BubblegumHands.rsi
+    layers:
+    - state: leftsmack
+  - type: TimedDespawn
+    lifetime: 1.1
+
+- type: entity
+  parent: LavalandBubblegumEffectBase
+  id: LavalandBubblegumRightPaw
+  name: правая лапа баблгама
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: BelowMobs
+    sprite: _DeadSpace/Lavaland/Effects/BubblegumHands.rsi
+    layers:
+    - state: rightpawgrab
+  - type: TimedDespawn
+    lifetime: 1.2
+
+- type: entity
+  parent: LavalandBubblegumEffectBase
+  id: LavalandBubblegumLeftPaw
+  name: левая лапа баблгама
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: BelowMobs
+    sprite: _DeadSpace/Lavaland/Effects/BubblegumHands.rsi
+    layers:
+    - state: leftpawgrab
+  - type: TimedDespawn
+    lifetime: 1.2
+
+- type: entity
+  parent: LavalandBubblegumEffectBase
+  id: LavalandBubblegumRightThumb
+  name: правый коготь баблгама
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Effects
+    sprite: _DeadSpace/Lavaland/Effects/BubblegumHands.rsi
+    layers:
+    - state: rightthumbgrab
+  - type: TimedDespawn
+    lifetime: 1.2
+
+- type: entity
+  parent: LavalandBubblegumEffectBase
+  id: LavalandBubblegumLeftThumb
+  name: левый коготь баблгама
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Effects
+    sprite: _DeadSpace/Lavaland/Effects/BubblegumHands.rsi
+    layers:
+    - state: leftthumbgrab
+  - type: TimedDespawn
+    lifetime: 1.2
+
+- type: entity
+  id: LavalandBubblegumClone
+  name: bubblegum
+  suffix: Lavaland, Fake
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    noRot: true
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/Bubblegum.rsi
+    color: "#ff4d4db8"
+    layers:
+    - state: bubblegum
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 6
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: [ BaseMobAsteroid, BaseMobLavalandFauna ]
+  id: MobLavalandBubblegum
+  name: баблгам
+  description: Король демонов резни, оставляющий за собой следы густой крови.
+  suffix: Lavaland, Boss
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: DestructionResistance
+  - type: LavalandTrophyDrop
+    trophy: CrusherTrophyDemonClaws
+    chance: 1
+    requiredFraction: 0.6
+    proportional: false
+  - type: IgnoreKudzu
+  - type: Insulated
+  - type: StunImmune
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/Bubblegum.rsi
+    layers:
+    - state: bubblegum
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      2500: Dead
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Blunt
+        damage: 1000000
+      behaviors:
+      - !type:GibBehavior { }
+  - type: LavalandBoss
+    bossName: баблгам
+    maxHealth: 2500
+    music: /Audio/_DeadSpace/Lavaland/Bosses/bubblegum_fight.ogg
+    deathSound: /Audio/_DeadSpace/Lavaland/Bubblegum/enter_blood.ogg
+    deathRewards:
+    - LavalandNecropolisChestHardsuit
+    - LavalandNecropolisChest
+    - LavalandNecropolisChest
+    # Either the armour-piercing spell blade or the soulscythe.
+    - LavalandBubblegumWeaponSpawner
+    - LavalandMayhemBottle
+    - ClothingOuterLavalandHeckSuit
+    - BubblegumTrophy
+  - type: LavalandBubblegum
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+    blackboard:
+      VisionRadius: !type:Single
+        64
+      AggroVisionRadius: !type:Single
+        64
+      NavSmash: !type:Bool
+        false
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/_DeadSpace/Lavaland/Bubblegum/demon_attack1.ogg
+    angle: 0
+    attackRate: 0.8
+    animation: WeaponArcBite
+    damage:
+      types:
+        Slash: 40
+        Structural: 40
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.3
+    baseSprintSpeed: 3
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.75
+        density: 320
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: NoSlip
+  - type: RequireProjectileTarget
+  - type: Tag
+    tags:
+    - CannotSuicide
+
+- type: entity
+  parent: [ BaseMobAsteroid, FlyingMobBase, BaseMobLavalandFauna ]
+  id: MobLavalandBubblegumSlaughterling
+  name: slaughterling
+  description: A half-formed demon crawling out of Bubblegum's blood.
+  suffix: Lavaland
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/Bloodbrood.rsi
+    layers:
+    - state: bloodbrood
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      1: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3
+    baseSprintSpeed: 3.5
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/_DeadSpace/Lavaland/Bubblegum/pierce.ogg
+    angle: 0
+    attackRate: 1.2
+    animation: WeaponArcBite
+    damage:
+      types:
+        Piercing: 2
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+    blackboard:
+      VisionRadius: !type:Single
+        32
+      AggroVisionRadius: !type:Single
+        32
+      NavSmash: !type:Bool
+        false
+  - type: TimedDespawn
+    lifetime: 10
+  - type: NoSlip
+  - type: Tag
+    tags:
+    - CannotSuicide
+
+- type: entity
+  parent: LavalandBubblegumRightPaw
+  id: LavalandBubblegumDeadlyHand
+  name: багровая лапа баблгама
+  description: Эта лапа краснее остальных. Не стойте на ней.
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: BelowMobs
+    sprite: _DeadSpace/Lavaland/Effects/BubblegumHands.rsi
+    color: "#ff1a1a"
+    layers:
+    - state: rightpawgrab
+      shader: unshaded
+  - type: PointLight
+    color: "#ff1a1a"
+    radius: 1.5
+    energy: 2
+  - type: TimedDespawn
+    lifetime: 3.5
+  - type: LavalandBubblegumDeadlyHand
+    killTime: 1
+
+- type: entity
+  parent: MarkerBase
+  id: LavalandBubblegumWeaponSpawner
+  name: оружие баблгама
+  suffix: Spawner
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - sprite: _DeadSpace/Lavaland/Objects/Weapons/soulscythe.rsi
+      state: icon
+  - type: RandomSpawner
+    prototypes:
+    - LavalandSpellBlade
+    - LavalandSoulscythe
+    offset: 0.0

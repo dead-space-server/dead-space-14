@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from tgstation (https://github.com/tgstation/tgstation), master branch as of 2026-10-14; converted to RSI for Dead Space 14",
+    "size": {
+        "x": 32,
+        "y": 64
+    },
+    "states": [
+        {
+            "name": "legionnaire",
+            "directions": 4
+        },
+        {
+            "name": "headless",
+            "directions": 4
+        },
+        {
+            "name": "dead"
+        },
+        {
+            "name": "head",
+            "delays": [
+                [
+                    0.3,
+                    0.1,
+                    0.1,
+                    0.2,
+                    0.1,
+                    0.1
+                ]
+            ]
+        }
+    ]
+}

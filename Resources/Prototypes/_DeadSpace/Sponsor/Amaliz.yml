@@ -559,6 +559,17 @@
   description: Протокинетический инструмент, который был сделан из подручных средств и окрашен. В его структуре видно части водяного пистолета, игрушеченного пистолета и огнемёта. Выглядит как оружие пятиклассника или чья-то несмешная шутка.
   categories: [ HideSpawnMenu ]
   components:
+  - type: AttachmentHolder
+    slotOverlays:
+      bayonet_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: bayonet
+        offset: 0.78125,0.375
+      light_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: flight
+        stateOn: flight_on
+        offset: 0.40625,0.28125
   - type: Sprite
     sprite: _DeadSpace/Sponsor/Amaliz/kinetic_accelerator/kinetic_accelerator1.rsi
     layers:

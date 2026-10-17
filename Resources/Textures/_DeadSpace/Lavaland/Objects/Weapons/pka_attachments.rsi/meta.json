@@ -1,0 +1,20 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from tgstation at commit https://github.com/tgstation/tgstation/commit/b0d43af7cdc3098143186a03b7f35045ce7944bf: icons/obj/weapons/guns/flashlights.dmi (flight, flight_on) and icons/obj/weapons/guns/bayonets.dmi (bayonet)",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "flight"
+        },
+        {
+            "name": "flight_on"
+        },
+        {
+            "name": "bayonet"
+        }
+    ]
+}

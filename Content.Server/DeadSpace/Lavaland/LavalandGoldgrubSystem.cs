@@ -4,6 +4,9 @@ using Content.Server.NPC.Components;
 using Content.Server.NPC.Systems;
 using Content.Server.Stack;
 using Content.Shared.Chasm;
+using Content.Shared.Stunnable;
+using Content.Shared.Throwing;
+using Robust.Shared.Containers;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Ghost;
 using Content.Shared.Humanoid;
@@ -45,6 +48,12 @@ public sealed class LavalandGoldgrubSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly StackSystem _stack = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private readonly ThrowingSystem _throwing = default!;
+    [Dependency] private readonly SharedStunSystem _stun = default!;
+    [Dependency] private readonly IComponentFactory _factory = default!;
+
+    private readonly List<(MapCoordinates Coordinates, EntityUid Victim, EntProtoId Prototype, TimeSpan At)> _pendingAmbushes = new();
+    private readonly Dictionary<EntityUid, TimeSpan> _ambushCooldown = new();
 
     private EntityQuery<GhostComponent> _ghostQuery;
 
@@ -58,6 +67,7 @@ public sealed class LavalandGoldgrubSystem : EntitySystem
         SubscribeLocalEvent<LavalandGoldgrubComponent, DamageChangedEvent>(OnDamageChanged);
         SubscribeLocalEvent<LavalandGoldgrubComponent, MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<LavalandGoldgrubComponent, ComponentShutdown>(OnShutdown);
+        SubscribeLocalEvent<LavalandGoldgrubAmbushTestComponent, MapInitEvent>(OnAmbushTestMapInit);
     }
 
     public override void Update(float frameTime)
@@ -65,10 +75,17 @@ public sealed class LavalandGoldgrubSystem : EntitySystem
         base.Update(frameTime);
 
         var curTime = _timing.CurTime;
+        ProcessPendingAmbushes(curTime);
+        ProcessAmbushes(curTime);
+
         var query = EntityQueryEnumerator<LavalandGoldgrubComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var goldgrub, out var xform))
         {
             if (goldgrub.NextUpdate > curTime)
+                continue;
+
+            // Jumping at its victim: the ambush drives it, not the usual brain.
+            if (goldgrub.AmbushVictim != null && !goldgrub.AmbushDone)
                 continue;
 
             goldgrub.NextUpdate = curTime + goldgrub.UpdateInterval;
@@ -94,6 +111,13 @@ public sealed class LavalandGoldgrubSystem : EntitySystem
             if (goldgrub.BurrowAt is { } burrowAt && burrowAt <= curTime)
             {
                 BurrowAway(uid, goldgrub);
+                continue;
+            }
+
+            // After the robbery it just runs from the miner until it burrows.
+            if (goldgrub.AmbushDone && goldgrub.AmbushVictim is { } robbed && !TerminatingOrDeleted(robbed))
+            {
+                MoveAwayFrom(uid, xform, robbed, goldgrub);
                 continue;
             }
 
@@ -140,6 +164,181 @@ public sealed class LavalandGoldgrubSystem : EntitySystem
             TryEatOrMoveToOre(uid, goldgrub, ore, oreDistance);
         }
     }
+
+    #region Ambush
+
+    /// <summary>
+    /// A miner broke a rock: maybe a goldgrub digs out of it a moment later and jumps at them.
+    /// Called by <see cref="LavalandMiningToolSystem"/>.
+    /// </summary>
+    public void TryAmbush(EntityUid rock, EntityUid miner)
+    {
+        if (!HasComp<ActorComponent>(miner) ||
+            Transform(miner).MapUid is not { } map ||
+            !TryComp<LavalandMapComponent>(map, out var lavaland) ||
+            lavaland.Planet.Id == null ||
+            !_prototype.TryIndex(lavaland.Planet, out var planet))
+        {
+            return;
+        }
+
+        var config = planet.GoldgrubAmbush;
+        var now = _timing.CurTime;
+        if (!config.Enabled ||
+            _ambushCooldown.TryGetValue(miner, out var until) && now < until ||
+            !_random.Prob(config.Chance))
+        {
+            return;
+        }
+
+        if (config.RequireOre &&
+            _prototype.TryIndex(config.Prototype, out var grubPrototype) &&
+            grubPrototype.TryGetComponent<LavalandGoldgrubComponent>(out var grubComp, _factory) &&
+            FindAmbushOre(miner, grubComp.AmbushOre).Count == 0)
+        {
+            return;
+        }
+
+        _ambushCooldown[miner] = now + config.PlayerCooldown;
+        // The rock is gone a moment later: dig out where it stood.
+        _pendingAmbushes.Add((_transform.GetMapCoordinates(rock), miner, config.Prototype, now + TimeSpan.FromSeconds(0.15)));
+    }
+
+    private void OnAmbushTestMapInit(Entity<LavalandGoldgrubAmbushTestComponent> ent, ref MapInitEvent args)
+    {
+        var xform = Transform(ent);
+        var position = _transform.GetWorldPosition(xform);
+        EntityUid? victim = null;
+        var bestDistance = ent.Comp.Range;
+        var players = EntityQueryEnumerator<ActorComponent, MobStateComponent, TransformComponent>();
+        while (players.MoveNext(out var player, out _, out var mobState, out var playerXform))
+        {
+            if (playerXform.MapID != xform.MapID || _ghostQuery.HasComp(player) || _mobState.IsDead(player, mobState))
+                continue;
+
+            var distance = (_transform.GetWorldPosition(playerXform) - position).Length();
+            if (distance > bestDistance)
+                continue;
+
+            bestDistance = distance;
+            victim = player;
+        }
+
+        if (victim != null)
+            _pendingAmbushes.Add((_transform.GetMapCoordinates(ent, xform), victim.Value, ent.Comp.Prototype, _timing.CurTime));
+
+        QueueDel(ent);
+    }
+
+    private void ProcessPendingAmbushes(TimeSpan now)
+    {
+        for (var i = _pendingAmbushes.Count - 1; i >= 0; i--)
+        {
+            var (coordinates, victim, prototype, at) = _pendingAmbushes[i];
+            if (at > now)
+                continue;
+
+            _pendingAmbushes.RemoveAt(i);
+            if (TerminatingOrDeleted(victim))
+                continue;
+
+            var grub = Spawn(prototype, coordinates);
+            var comp = EnsureComp<LavalandGoldgrubComponent>(grub);
+            comp.AmbushVictim = victim;
+            comp.AmbushLeapAt = now + comp.AmbushLeapDelay;
+            _steering.Unregister(grub);
+            _popup.PopupEntity(Loc.GetString("lavaland-goldgrub-ambush-emerge"), grub, PopupType.LargeCaution);
+        }
+    }
+
+    private void ProcessAmbushes(TimeSpan now)
+    {
+        var query = EntityQueryEnumerator<LavalandGoldgrubComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var grub, out var xform))
+        {
+            if (grub.AmbushDone || grub.AmbushVictim is not { } victim)
+                continue;
+
+            if (TerminatingOrDeleted(victim) || IsDead(uid))
+            {
+                grub.AmbushDone = true;
+                continue;
+            }
+
+            if (grub.AmbushLeapAt is { } leapAt && now >= leapAt)
+            {
+                grub.AmbushLeapAt = null;
+                grub.AmbushHitAt = now + grub.AmbushHitDelay;
+                var toVictim = _transform.GetWorldPosition(victim) - _transform.GetWorldPosition(xform);
+                _throwing.TryThrow(uid, toVictim, grub.AmbushLeapSpeed, playSound: false, doSpin: false);
+                continue;
+            }
+
+            if (grub.AmbushHitAt is not { } hitAt || now < hitAt)
+                continue;
+
+            grub.AmbushHitAt = null;
+            grub.AmbushDone = true;
+            var distance = (_transform.GetWorldPosition(victim) - _transform.GetWorldPosition(xform)).Length();
+            if (distance <= grub.AmbushHitRange)
+                Rob(grub, victim);
+            else
+                _popup.PopupEntity(Loc.GetString("lavaland-goldgrub-ambush-miss"), uid, PopupType.Medium);
+
+            StartBurrow(uid, grub, now);
+            EnsureComp<ActiveNPCComponent>(uid);
+        }
+    }
+
+    /// <summary>Knocks the miner down and eats a few whole stacks of their ore.</summary>
+    private void Rob(LavalandGoldgrubComponent component, EntityUid victim)
+    {
+        _stun.TryUpdateParalyzeDuration(victim, component.AmbushStun);
+
+        var stacks = FindAmbushOre(victim, component.AmbushOre);
+        _random.Shuffle(stacks);
+        var count = Math.Min(stacks.Count,
+            _random.Next(Math.Max(0, component.AmbushStacksMin), Math.Max(component.AmbushStacksMin, component.AmbushStacksMax) + 1));
+
+        for (var i = 0; i < count; i++)
+        {
+            var stack = stacks[i];
+            // Stolen ore goes into its gut past the usual limit: kill it to get it back.
+            component.StoredOre[stack.Comp.StackTypeId] =
+                component.StoredOre.GetValueOrDefault(stack.Comp.StackTypeId) + stack.Comp.Count;
+            QueueDel(stack);
+        }
+
+        _popup.PopupEntity(Loc.GetString(count > 0 ? "lavaland-goldgrub-ambush-steal" : "lavaland-goldgrub-ambush-hit"),
+            victim, victim, PopupType.LargeCaution);
+    }
+
+    /// <summary>Stacks of the given ore anywhere on the miner: hands, pockets, bags, the ore bag.</summary>
+    private List<Entity<StackComponent>> FindAmbushOre(EntityUid owner, HashSet<ProtoId<StackPrototype>> ore)
+    {
+        var result = new List<Entity<StackComponent>>();
+        CollectOre(owner, ore, result, 4);
+        return result;
+    }
+
+    private void CollectOre(EntityUid uid, HashSet<ProtoId<StackPrototype>> ore, List<Entity<StackComponent>> result, int depth)
+    {
+        if (depth <= 0 || !TryComp<ContainerManagerComponent>(uid, out var manager))
+            return;
+
+        foreach (var container in manager.Containers.Values)
+        {
+            foreach (var contained in container.ContainedEntities)
+            {
+                if (TryComp<StackComponent>(contained, out var stack) && ore.Contains(stack.StackTypeId) && stack.Count > 0)
+                    result.Add((contained, stack));
+                else
+                    CollectOre(contained, ore, result, depth - 1);
+            }
+        }
+    }
+
+    #endregion
 
     private void OnMapInit(EntityUid uid, LavalandGoldgrubComponent component, MapInitEvent args)
     {

@@ -1,0 +1,398 @@
+- type: lavalandBossArena
+  id: LavalandHierophantArena
+  arenaName: Арена Иерофанта
+  gridPath: /Maps/_DeadSpace/Lavaland/hierophant_arena.yml
+  tileMovement: true
+  bossPrototype: MobLavalandHierophant
+  floorTile: FloorHierophantArena
+  wallPrototype: WallHierophantArena
+  spawnAttempts: 160
+  minDistance: 170
+  maxDistance: 320
+  mapEdgePadding: 32
+  landingExclusionRadius: 90
+  outpostExclusionRadius: 100
+  ftlBeaconExclusionRadius: 64
+  gridSeparation: 32
+  resetOnEmpty: true
+  emptyResetDelay: 10
+  emptyResetHealFraction: 5
+  emptyResetMinHeal: 450
+  intro:
+    style: Bowling
+    # Only at the very middle of the arena.
+    startDistance: 2.5
+    titleColor: "#c47bff"
+    roarSound: /Audio/_DeadSpace/Lavaland/Hierophant/sonic_jackhammer.ogg
+    impactSound: /Audio/_DeadSpace/Lavaland/Hierophant/repulse.ogg
+    subtitle: lavaland-boss-intro-hierophant
+
+# The Hierophant lives in the chromite caves now.
+- type: lavalandBossArena
+  id: LavalandHierophantCaveArena
+  arenaName: Арена Иерофанта
+  gridPath: /Maps/_DeadSpace/Lavaland/hierophant_arena.yml
+  tileMovement: true
+  bossPrototype: MobLavalandHierophant
+  floorTile: FloorHierophantArena
+  wallPrototype: WallHierophantArena
+  spawnAttempts: 200
+  minDistance: 55
+  maxDistance: 105
+  mapEdgePadding: 6
+  landingExclusionRadius: 30
+  outpostExclusionRadius: 0
+  ftlBeaconExclusionRadius: 0
+  gridSeparation: 16
+  naturalFloors:
+    FloorChromite: FloorHierophantArena
+  resetOnEmpty: true
+  emptyResetDelay: 10
+  emptyResetHealFraction: 5
+  emptyResetMinHeal: 450
+  intro:
+    style: Bowling
+    # Only at the very middle of the arena.
+    startDistance: 2.5
+    titleColor: "#c47bff"
+    roarSound: /Audio/_DeadSpace/Lavaland/Hierophant/sonic_jackhammer.ogg
+    impactSound: /Audio/_DeadSpace/Lavaland/Hierophant/repulse.ogg
+    subtitle: lavaland-boss-intro-hierophant
+
+- type: tile
+  id: FloorHierophantArena
+  name: tiles-hierophant-arena-floor
+  parent: FloorBasalt
+  sprite: /Textures/_DeadSpace/Lavaland/Tiles/hierophant_floor.png
+  variants: 1
+  placementVariants:
+  - 1.0
+  weather: false
+
+- type: entity
+  id: LavalandHierophantArenaLight
+  name: свет арены Иерофанта
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    noRot: true
+  - type: PointLight
+    radius: 24
+    energy: 1.25
+    softness: 1
+    color: "#dce8ff"
+    castShadows: false
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: LavalandHierophantArenaFloor
+  name: пол Иерофанта
+  categories: [ HideSpawnMenu ]
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Sprite
+    noRot: true
+    drawdepth: FloorTiles
+    sprite: _DeadSpace/Lavaland/Tiles/HierophantFloorSmooth.rsi
+    state: full
+  - type: IconSmooth
+    key: hierophant_floor
+    base: hiero
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: LavalandHierophantArenaFloor
+  id: LavalandHierophantArenaFloorAlt
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Tiles/HierophantFloorAltSmooth.rsi
+    state: full
+  - type: IconSmooth
+    key: hierophant_floor
+    base: hieroalt
+
+- type: entity
+  parent: BaseWall
+  id: WallHierophantArena
+  name: стена Иерофанта
+  description: Гладкая стена, покрытая светящимися квадратными узорами.
+  suffix: Lavaland, Indestructible
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Structures/HierophantWall.rsi
+  - type: Icon
+    sprite: _DeadSpace/Lavaland/Structures/HierophantWall.rsi
+  - type: IconSmooth
+    key: walls
+    base: hierophant
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 4000
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StructuralMetallicStrong
+  - type: RadiationBlocker
+    resistance: 5
+
+- type: entity
+  parent: WallHierophantArena
+  id: WallHierophantTemporary
+  name: барьер Иерофанта
+  description: Временный барьер из твердого света.
+  suffix: Lavaland
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Structures/HierophantTempWall.rsi
+  - type: Icon
+    sprite: _DeadSpace/Lavaland/Structures/HierophantTempWall.rsi
+  - type: IconSmooth
+    key: walls
+    base: hierotemp
+  - type: TimedDespawn
+    lifetime: 6
+  - type: PointLight
+    radius: 1.5
+    energy: 1
+    color: "#73d7ff"
+
+- type: entity
+  id: LavalandHierophantEffectBase
+  abstract: true
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: TimedDespawn
+    lifetime: 1
+
+- type: entity
+  parent: LavalandHierophantEffectBase
+  id: LavalandHierophantBlast
+  name: взрыв Иерофанта
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: BelowMobs
+    sprite: _DeadSpace/Lavaland/Effects/HierophantBlast.rsi
+    layers:
+    - state: hierophant_blast
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 1.3
+  - type: PointLight
+    radius: 2
+    energy: 1.5
+    color: "#73d7ff"
+
+- type: entity
+  parent: LavalandHierophantEffectBase
+  id: LavalandHierophantSquares
+  name: квадраты Иерофанта
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: BelowMobs
+    sprite: _DeadSpace/Lavaland/Effects/HierophantBlast.rsi
+    layers:
+    - state: hierophant_squares
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 0.75
+
+- type: entity
+  parent: LavalandHierophantEffectBase
+  id: LavalandHierophantTelegraph
+  name: предупреждение Иерофанта
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: BelowMobs
+    sprite: _DeadSpace/Lavaland/Effects/HierophantTelegraph.rsi
+    layers:
+    - state: hierophant_telegraph
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 0.75
+
+- type: entity
+  parent: LavalandHierophantTelegraph
+  id: LavalandHierophantTelegraphCardinal
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: BelowMobs
+    sprite: _DeadSpace/Lavaland/Effects/HierophantTelegraph.rsi
+    layers:
+    - state: hierophant_telegraph_cardinal
+      shader: unshaded
+
+- type: entity
+  parent: LavalandHierophantTelegraph
+  id: LavalandHierophantTelegraphDiagonal
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: BelowMobs
+    sprite: _DeadSpace/Lavaland/Effects/HierophantTelegraph.rsi
+    layers:
+    - state: hierophant_telegraph_diagonal
+      shader: unshaded
+
+- type: entity
+  parent: LavalandHierophantTelegraph
+  id: LavalandHierophantTelegraphEdge
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: BelowMobs
+    sprite: _DeadSpace/Lavaland/Effects/HierophantTelegraph.rsi
+    layers:
+    - state: hierophant_telegraph_edge
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 3.75
+
+- type: entity
+  parent: LavalandHierophantTelegraph
+  id: LavalandHierophantTelegraphTeleport
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: BelowMobs
+    sprite: _DeadSpace/Lavaland/Effects/HierophantTelegraph.rsi
+    layers:
+    - state: hierophant_telegraph_teleport
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 1.25
+
+- type: entity
+  parent: [ BaseMobAsteroid, BaseMobLavalandFauna ]
+  id: MobLavalandHierophant
+  name: Иерофант
+  description: Массивная машина, покрытая пульсирующими квадратными узорами.
+  suffix: Lavaland, Boss
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: DestructionResistance
+  - type: LavalandTrophyDrop
+    trophy: CrusherTrophyVortexTalisman
+    chance: 1
+    requiredFraction: 0.6
+    proportional: false
+  - type: IgnoreKudzu
+  - type: Insulated
+  - type: StunImmune
+  - type: Sprite
+    drawdepth: Mobs
+    scale: 1.2, 1.2
+    sprite: _DeadSpace/Lavaland/Mobs/Hierophant.rsi
+    layers:
+    - state: hierophant
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      2750: Dead
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Blunt
+        damage: 1000000
+      behaviors:
+      - !type:GibBehavior { }
+  - type: LavalandBoss
+    bossName: Иерофант
+    maxHealth: 2750
+    music:
+      path: /Audio/_DeadSpace/Lavaland/Bosses/hierophant_fight.ogg
+      params:
+        volume: 4
+    deathSound: /Audio/_DeadSpace/Lavaland/Hierophant/repulse.ogg
+    deathRewards:
+    - WeaponGrapplingGun # the only way out of the chromite caves
+    - LavalandNecropolisChestHardsuit
+    - LavalandNecropolisChest
+    - LavalandNecropolisChest
+    - LavalandHierophantStaff
+    - HierophantTrophy
+  - type: LavalandHierophant
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+    blackboard:
+      VisionRadius: !type:Single
+        64
+      AggroVisionRadius: !type:Single
+        64
+      NavSmash: !type:Bool
+        false
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/_DeadSpace/Lavaland/Hierophant/sonic_jackhammer.ogg
+    angle: 0
+    attackRate: 0.8
+    animation: WeaponArcPunch
+    damage:
+      types:
+        Blunt: 15
+        Structural: 40
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 1.7
+    baseSprintSpeed: 2.7
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.45
+        density: 200
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: NoSlip
+  - type: RequireProjectileTarget
+
+- type: tile
+  id: FloorHierophant
+  name: tiles-hierophant-floor
+  parent: FloorBasalt
+  sprite: /Textures/_DeadSpace/Lavaland/Tiles/hierophant_floor.png
+  variants: 1
+  placementVariants:
+  - 1.0
+  weather: false
+
+- type: tile
+  id: FloorHierophantAlt
+  name: tiles-hierophant-floor-alt
+  parent: FloorHierophant
+  sprite: /Textures/_DeadSpace/Lavaland/Tiles/hierophant_floor_alt.png

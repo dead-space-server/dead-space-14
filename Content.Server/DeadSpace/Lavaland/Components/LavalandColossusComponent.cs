@@ -55,7 +55,7 @@ public sealed partial class LavalandColossusComponent : Component
     public float ShotgunChance = 0.7f;
 
     [DataField]
-    public float EnragedMovementSpeedMultiplier = 3.33f;
+    public float EnragedMovementSpeedMultiplier = 2.1f;
 
     [DataField]
     public float MaxCooldownReduction = 0.3f;
@@ -78,6 +78,84 @@ public sealed partial class LavalandColossusComponent : Component
     [ViewVariables]
     public bool Enraged;
 
+    // DS14: fury below a quarter of health - angry sprite, runs at the players, marked blasts around them.
+
+    [DataField]
+    public float FuryHealthFraction = 0.25f;
+
+    /// <summary>Running speed at the players while furious, tiles per second.</summary>
+    [DataField]
+    public float FuryChaseSpeed = 3f;
+
+    [DataField]
+    public float FuryChaseReach = 2f;
+
+    [DataField]
+    public TimeSpan FuryBlastInterval = TimeSpan.FromSeconds(5);
+
+    /// <summary>Between the marks appearing and the blasts.</summary>
+    [DataField]
+    public TimeSpan FuryBlastDelay = TimeSpan.FromSeconds(1.5);
+
+    /// <summary>Marks around each player (one is always under them).</summary>
+    [DataField]
+    public int FuryMarksPerPlayer = 4;
+
+    [DataField]
+    public float FuryMarkRadius = 3.5f;
+
+    [DataField]
+    public string FuryMarkPrototype = "LavalandColossusFuryMark";
+
+    [DataField]
+    public float FuryExplosionIntensity = 30f;
+
+    [DataField]
+    public float FuryExplosionSlope = 6f;
+
+    [DataField]
+    public float FuryExplosionMaxTile = 6f;
+
+    // DS14: "Burst." - storm marks around every player, a blast on each a moment later.
+
+    [DataField]
+    public float BurstChance = 0.2f;
+
+    [DataField]
+    public int BurstMarksPerPlayer = 3;
+
+    /// <summary>The marks land this far from the player.</summary>
+    [DataField]
+    public float BurstMarkRadius = 2.5f;
+
+    [DataField]
+    public TimeSpan BurstDelay = TimeSpan.FromSeconds(2);
+
+    [DataField]
+    public TimeSpan BurstCooldown = TimeSpan.FromSeconds(4);
+
+    [DataField]
+    public string BurstMarkPrototype = "LavalandColossusBurstMark";
+
+    [DataField]
+    public float BurstExplosionIntensity = 25f;
+
+    [DataField]
+    public float BurstExplosionSlope = 5f;
+
+    [DataField]
+    public float BurstExplosionMaxTile = 5f;
+
+    [ViewVariables]
+    public bool Furious;
+
+    [ViewVariables]
+    public TimeSpan NextFuryBlast;
+
+    /// <summary>Marked blasts waiting to go off: fury blasts and "Burst." blasts alike.</summary>
+    [ViewVariables]
+    public readonly List<LavalandColossusPendingBlast> PendingFuryBlasts = new();
+
     [ViewVariables]
     public TimeSpan NextShotSound;
 
@@ -87,6 +165,13 @@ public sealed partial class LavalandColossusComponent : Component
     [ViewVariables]
     public readonly HashSet<EntityUid> ActiveProjectiles = new();
 }
+
+public readonly record struct LavalandColossusPendingBlast(
+    Robust.Shared.Map.MapCoordinates Coords,
+    TimeSpan At,
+    float Intensity,
+    float Slope,
+    float MaxTile);
 
 public sealed class LavalandColossusPendingShot
 {

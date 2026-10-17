@@ -1,0 +1,7 @@
+- type: alert
+  id: LavalandHierophantStaffBlink
+  icons:
+  - sprite: /Textures/_DeadSpace/Lavaland/Objects/Specific/Mining/HierophantClub.rsi
+    state: hierophant_club
+  name: Скачок Иерофанта
+  description: Alt + ПКМ по полу с посохом в руке — телепорт со взрывами. Пока идёт отсчёт, скачок недоступен.

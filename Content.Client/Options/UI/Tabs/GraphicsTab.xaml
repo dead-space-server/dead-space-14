@@ -19,6 +19,7 @@
                 <CheckBox Name="ViewportLowResCheckBox" Text="{Loc 'ui-options-vp-low-res'}" />
                 <CheckBox Name="ParallaxLowQualityCheckBox" Text="{Loc 'ui-options-parallax-low-quality'}" />
                 <CheckBox Name="AmbientOcclusionCheckBox" Text="{Loc 'ui-options-ambient-occlusion'}" />
+                <CheckBox Name="LavalandParticlesCheckBox" Text="{Loc 'ui-options-lavaland-particles'}" /> <!-- DS14 -->
 
                 <!-- Interface -->
                 <!-- DS14-start -->

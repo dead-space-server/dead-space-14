@@ -1,0 +1,19 @@
+// Cuts away the part of a sprite layer below a line, as if sunk into the ground: a geist half out of its hole.
+// tCoord2 runs 0..1 across each drawn quad from its bottom-left corner, whatever atlas the texture lives in.
+
+// How much of the layer, from its bottom, is under the ground (0 - all of it shows, 1 - none of it).
+uniform highp float cut;
+
+varying highp vec2 localPosition;
+
+void vertex() {
+    localPosition = tCoord2;
+}
+
+void fragment() {
+    if (localPosition.y < cut) {
+        discard;
+    }
+
+    COLOR = zTexture(UV);
+}

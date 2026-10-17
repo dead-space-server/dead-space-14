@@ -133,6 +133,45 @@ public sealed partial class LavalandBubblegumComponent : Component
     [DataField]
     public string ClonePrototype = "LavalandBubblegumClone";
 
+    // DS14: tgstation hallucination charges and the deadly hand.
+
+    /// <summary>Chance to use the hallucination ring (clones around the target, all charging at once) instead of a charge.</summary>
+    [DataField]
+    public float HallucinationRingChance = 0.3f;
+
+    /// <summary>Chance to use the hallucination surround (clones from close by, then the real charge).</summary>
+    [DataField]
+    public float HallucinationSurroundChance = 0.2f;
+
+    [DataField]
+    public int HallucinationRingClones = 6;
+
+    [DataField]
+    public int HallucinationRingRadius = 6;
+
+    /// <summary>Below half health the ring comes in this many waves, closer and faster each time.</summary>
+    [DataField]
+    public int HallucinationEnragedWaves = 3;
+
+    [DataField]
+    public TimeSpan HallucinationWaveDelay = TimeSpan.FromSeconds(0.9);
+
+    [DataField]
+    public int HallucinationSurroundRounds = 4;
+
+    [DataField]
+    public TimeSpan HallucinationSurroundDelay = TimeSpan.FromSeconds(0.6);
+
+    [DataField]
+    public string DeadlyHandPrototype = "LavalandBubblegumDeadlyHand";
+
+    /// <summary>Chance that a hand attack brings the deadly red hand along.</summary>
+    [DataField]
+    public float DeadlyHandChance = 0.6f;
+
+    [ViewVariables]
+    public readonly List<LavalandBubblegumHallucinationWave> HallucinationWaves = new();
+
     [DataField]
     public float CloneHealthThreshold = 0.5f;
 
@@ -329,6 +368,34 @@ public sealed class LavalandBubblegumActiveClone
 {
     public EntityUid Entity;
     public TimeSpan DespawnAt;
+}
+
+/// <summary>A wave of the hallucination charge, scheduled after the first one.</summary>
+public sealed class LavalandBubblegumHallucinationWave
+{
+    public EntityUid Target;
+    public TimeSpan At;
+    public int Clones;
+    public int Radius;
+    public bool IncludeSelf;
+}
+
+/// <summary>The one hand that is redder than the rest: standing on it for a moment kills.</summary>
+[RegisterComponent]
+public sealed partial class LavalandBubblegumDeadlyHandComponent : Component
+{
+    /// <summary>Seconds a player may stand on it.</summary>
+    [DataField]
+    public float KillTime = 1f;
+
+    [DataField]
+    public DamageSpecifier Damage = new()
+    {
+        DamageDict = new() { { "Blunt", 400 } },
+    };
+
+    [ViewVariables]
+    public readonly Dictionary<EntityUid, float> StandTime = new();
 }
 
 public sealed class LavalandBubblegumCloneCharge

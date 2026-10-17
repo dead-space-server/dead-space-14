@@ -40,6 +40,7 @@
                 <CheckBox Name="OpaqueStorageWindowCheckBox" Text="{Loc 'ui-options-opaque-storage-window'}" />
                 <CheckBox Name="StaticStorageUI" Text="{Loc 'ui-options-static-storage-ui'}" />
                 <CheckBox Name="MultipleInventoryWindowsCheckBox" Text="{Loc 'ui-options-multiple-inventory-windows'}" /><!--DS14-->
+                <CheckBox Name="ActionsRestoreItemSlotsCheckBox" Text="{Loc 'ui-options-actions-restore-item-slots'}" /><!--DS14-->
                 <!-- <CheckBox Name="ToggleWalk" Text="{Loc 'ui-options-hotkey-toggle-walk'}" /> -->
             </BoxContainer>
         </ScrollContainer>

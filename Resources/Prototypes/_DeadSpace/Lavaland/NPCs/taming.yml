@@ -1,0 +1,89 @@
+# Orders for creatures tamed with a lazarus injector (like the rat king's).
+
+- type: entity
+  parent: BaseAction
+  id: ActionLavalandTamedFollow
+  name: Следовать
+  description: Прирученные существа просто идут за вами, не ввязываясь в бой.
+  components:
+  - type: Action
+    useDelay: 1
+    icon:
+      sprite: Interface/Actions/actions_rat_king.rsi
+      state: followOff
+    iconOn:
+      sprite: Interface/Actions/actions_rat_king.rsi
+      state: follow
+    priority: 5
+  - type: InstantAction
+    event: !type:LavalandTamedOrderActionEvent
+      order: Follow
+
+- type: entity
+  parent: BaseAction
+  id: ActionLavalandTamedStay
+  name: Стоять
+  description: Прирученные существа замирают на месте.
+  components:
+  - type: Action
+    useDelay: 1
+    icon:
+      sprite: Interface/Actions/actions_rat_king.rsi
+      state: stayOff
+    iconOn:
+      sprite: Interface/Actions/actions_rat_king.rsi
+      state: stay
+    priority: 6
+  - type: InstantAction
+    event: !type:LavalandTamedOrderActionEvent
+      order: Stay
+
+- type: entity
+  parent: BaseAction
+  id: ActionLavalandTamedAttack
+  name: Атаковать
+  description: Прирученные существа вступают в бой с врагами вокруг. Укажите на цель - и они нападут на неё.
+  components:
+  - type: Action
+    useDelay: 1
+    icon:
+      sprite: Interface/Actions/actions_rat_king.rsi
+      state: attackOff
+    iconOn:
+      sprite: Interface/Actions/actions_rat_king.rsi
+      state: attack
+    priority: 7
+  - type: InstantAction
+    event: !type:LavalandTamedOrderActionEvent
+      order: Attack
+
+# Follow: just walk after the tamer, no fighting.
+- type: htnCompound
+  id: LavalandTamedFollowCompound
+  branches:
+  - tasks:
+    - !type:HTNCompoundTask
+      task: FollowCompound
+  - tasks:
+    - !type:HTNCompoundTask
+      task: IdleCompound
+
+# Attack: the pointed-at target first, then any hostile around; nobody to fight - back to the tamer.
+- type: htnCompound
+  id: LavalandTamedAttackCompound
+  branches:
+  - tasks:
+    - !type:HTNCompoundTask
+      task: RatServantCombatCompound
+  - tasks:
+    - !type:HTNCompoundTask
+      task: InnateRangedCombatCompound
+  - tasks:
+    - !type:HTNCompoundTask
+      task: MeleeCombatCompound
+  - tasks:
+    - !type:HTNCompoundTask
+      task: FollowCompound
+  - tasks:
+    - !type:HTNCompoundTask
+      task: IdleCompound

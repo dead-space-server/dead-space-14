@@ -612,6 +612,17 @@
   name: объятие Фрейи
   description: Стреляет кинетическими зарядами с низким уроном на короткое расстояние.
   components:
+  - type: AttachmentHolder
+    slotOverlays:
+      bayonet_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: bayonet
+        offset: 0.625,0.4375
+      light_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: flight
+        stateOn: flight_on
+        offset: 0.4375,0.375
   - type: Gun
     fireRate: 0.5
     selectedMode: SemiAuto

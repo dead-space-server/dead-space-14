@@ -148,9 +148,13 @@
 
 # Very high burst damage if you land a mark, while also providing a small amount of healing.
 - type: entity
-  parent: [BaseWeaponCrusher, BaseSecurityCargoContraband]
+  parent: [BaseWeaponCrusher, BaseSecurityCargoContraband, BaseCrusherAttachmentSlots] # DS14: attachment slots
   id: WeaponCrusher
   components:
+  #DS14-Start
+  - type: AttachmentOverlaySprite
+    sprite: _Goob/Lavaland/Objects/Weapons/Crushers/crusher_overlays.rsi
+  #DS14-End
   - type: Tag
     tags:
       - Pickaxe
@@ -258,6 +262,10 @@
   name: crusher glaive
   description: An early design of the proto-kinetic accelerator, in glaive form. Provides better healing in exchange for less charged damage.
   components:
+  #DS14-Start
+  - type: AttachmentOverlaySprite
+    sprite: _Goob/Lavaland/Objects/Weapons/Crushers/crusher_glaive_overlays.rsi
+  #DS14-End
   - type: Sprite
     sprite: Objects/Weapons/Melee/crusher_glaive.rsi
     state: icon

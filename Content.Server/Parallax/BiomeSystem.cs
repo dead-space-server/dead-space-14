@@ -13,6 +13,7 @@ using Content.Shared.Decals;
 using Content.Shared.Ghost;
 using Content.Shared.Gravity;
 using Content.Shared.Light.Components;
+using Content.Shared.Mobs.Components; // DS14
 using Content.Shared.Parallax.Biomes;
 using Content.Shared.Parallax.Biomes.Layers;
 using Content.Shared.Parallax.Biomes.Markers;
@@ -918,7 +919,8 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
                 var ent = Spawn(entPrototype, _mapSystem.GridTileToLocal(gridUid, grid, indices));
 
                 // At least for now unless we do lookups or smth, only work with anchoring.
-                if (_xformQuery.TryGetComponent(ent, out var xform) && !xform.Anchored)
+                // DS14: never a creature - anchored it stands frozen on its tile forever (the chromite caves argocytes).
+                if (_xformQuery.TryGetComponent(ent, out var xform) && !xform.Anchored && !HasComp<MobStateComponent>(ent))
                 {
                     _transform.AnchorEntity((ent, xform), (gridUid, grid), indices);
                 }
@@ -951,7 +953,7 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
 
                 foreach (var decal in decals)
                 {
-                    if (!_decals.TryAddDecal(decal.ID, new EntityCoordinates(gridUid, decal.Position), out var dec))
+                    if (!_decals.TryAddDecal(decal.ID, new EntityCoordinates(gridUid, decal.Position), out var dec, color: decal.Color)) // DS14
                         continue;
 
                     loadedDecals.Add(dec, indices);

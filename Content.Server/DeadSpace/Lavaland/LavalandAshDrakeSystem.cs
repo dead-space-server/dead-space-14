@@ -10,6 +10,8 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Movement.Systems;
+using Content.Shared.Popups;
+using Content.Shared.Tiles;
 using Content.Shared.Throwing;
 using Robust.Server.Player;
 using Robust.Shared.Audio;
@@ -42,6 +44,7 @@ public sealed class LavalandAshDrakeSystem : EntitySystem
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ThrowingSystem _throwing = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
 
     private readonly List<EntityUid> _participants = new();
     private readonly HashSet<Vector2i> _detonatingTiles = new();
@@ -62,6 +65,66 @@ public sealed class LavalandAshDrakeSystem : EntitySystem
         SubscribeLocalEvent<LavalandAshDrakeComponent, LavalandBossFightStartedEvent>(OnBossFightStarted);
         SubscribeLocalEvent<LavalandAshDrakeComponent, LavalandBossResetEvent>(OnBossReset);
         SubscribeLocalEvent<LavalandAshDrakeComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMovementSpeed);
+        SubscribeLocalEvent<LavalandAshDrakeComponent, MobStateChangedEvent>(OnDrakeMobStateChanged);
+    }
+
+    /// <summary>The drake is dead: every pool of lava on its arena cools down.</summary>
+    private void OnDrakeMobStateChanged(Entity<LavalandAshDrakeComponent> ent, ref MobStateChangedEvent args)
+    {
+        if (args.NewMobState != MobState.Dead || Transform(ent).GridUid is not { } grid)
+            return;
+
+        ent.Comp.PendingChaseLava.Clear();
+        var lava = EntityQueryEnumerator<LavaComponent, TransformComponent>();
+        while (lava.MoveNext(out var lavaUid, out _, out var lavaXform))
+        {
+            if (lavaXform.GridUid == grid)
+                QueueDel(lavaUid);
+        }
+    }
+
+    /// <summary>
+    /// Below the chase threshold the lava hunts the players: their tile is marked and floods a moment later
+    /// (for a second). Not during the cage - the caged player is safe from it.
+    /// </summary>
+    private void ProcessChaseLava(
+        EntityUid bossUid,
+        LavalandAshDrakeComponent drake,
+        LavalandBossComponent boss,
+        EntityUid gridUid,
+        MapGridComponent grid,
+        TimeSpan now)
+    {
+        for (var i = drake.PendingChaseLava.Count - 1; i >= 0; i--)
+        {
+            var pending = drake.PendingChaseLava[i];
+            if (pending.At > now)
+                continue;
+
+            drake.PendingChaseLava.RemoveAt(i);
+            if (pending.Grid == gridUid && !drake.CageActive)
+                SpawnAnchored(drake.ChaseLavaPrototype, gridUid, grid, pending.Tile);
+        }
+
+        if (drake.CageActive || now < drake.NextChaseLava ||
+            !TryComp<DamageableComponent>(bossUid, out var damageable) || boss.MaxHealth <= 0)
+        {
+            return;
+        }
+
+        var healthFraction = Math.Clamp(1f - (float) damageable.TotalDamage / boss.MaxHealth, 0f, 1f);
+        if (healthFraction > drake.ChaseLavaHealthFraction)
+            return;
+
+        drake.NextChaseLava = now + drake.ChaseLavaInterval;
+        foreach (var participant in _participants)
+        {
+            if (GetEntityTile(participant, gridUid, grid) is not { } tile)
+                continue;
+
+            SpawnAnchored(drake.ChaseLavaWarningPrototype, gridUid, grid, tile);
+            drake.PendingChaseLava.Add((gridUid, tile, now + drake.ChaseLavaDelay));
+        }
     }
 
     public override void Update(float frameTime)
@@ -98,6 +161,7 @@ public sealed class LavalandAshDrakeSystem : EntitySystem
 
             ProcessHealthPhases(uid, drake, boss, arena, arena.Grid, grid, now);
             ProcessWhelpAttacks(drake, grid, now);
+            ProcessChaseLava(uid, drake, boss, arena.Grid, grid, now);
 
             if (drake.CageActive)
             {
@@ -122,6 +186,10 @@ public sealed class LavalandAshDrakeSystem : EntitySystem
                 continue;
 
             RunAttack(uid, drake, arena, arena.Grid, grid, target.Value, now);
+
+            // Enraged after someone escaped its cage: everything comes much faster.
+            if (now < drake.EscapeEnrageUntil && drake.NextAttack > now)
+                drake.NextAttack = now + (drake.NextAttack - now) * drake.EscapeEnrageCooldownMultiplier;
         }
     }
 
@@ -360,6 +428,7 @@ public sealed class LavalandAshDrakeSystem : EntitySystem
         var cageCenter = GetCageCenter(arena, targetTile.Value, drake.CageHalfSize);
 
         drake.CageCenter = cageCenter;
+        drake.CagedPlayer = target;
         drake.CageActive = true;
         drake.CagePhase = 0;
         drake.CageEndAt = now + drake.CageDuration;
@@ -395,6 +464,22 @@ public sealed class LavalandAshDrakeSystem : EntitySystem
         if (now >= drake.CageEndAt)
         {
             EndCageAttack(boss, drake, arena, gridUid, grid, now);
+            return;
+        }
+
+        // tgstation: escaping the cage (teleport, jaunter...) makes the drake furious.
+        if (drake.CagedPlayer is { } caged && !IsDead(caged) &&
+            (TerminatingOrDeleted(caged) || GetEntityTile(caged, gridUid, grid) is not { } cagedTile ||
+             Math.Max(Math.Abs(cagedTile.X - drake.CageCenter.X), Math.Abs(cagedTile.Y - drake.CageCenter.Y)) > drake.CageHalfSize + 1))
+        {
+            EndCageAttack(boss, drake, arena, gridUid, grid, now);
+            drake.EscapeEnrageUntil = now + drake.EscapeEnrageDuration;
+            drake.BusyUntil = now;
+            drake.NextAttack = now;
+            foreach (var participant in _participants)
+            {
+                _popup.PopupEntity(Loc.GetString("lavaland-ash-drake-escape-enrage"), participant, participant, PopupType.LargeCaution);
+            }
             return;
         }
 
@@ -487,6 +572,7 @@ public sealed class LavalandAshDrakeSystem : EntitySystem
         drake.CageSafeTile = null;
         drake.NextCageFillAt = TimeSpan.Zero;
 
+        drake.CagedPlayer = null;
         if (!Exists(boss))
             return;
 

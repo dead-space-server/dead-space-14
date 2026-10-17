@@ -1,0 +1,86 @@
+- type: entity
+  parent: Pickaxe
+  id: PickaxeBoneAshWalker
+  name: bone pickaxe
+  description: A pickaxe of sharpened bone lashed to a sturdy haft.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_pickaxe.rsi
+    state: pickaxe
+  - type: Item
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_pickaxe.rsi
+
+- type: entity
+  parent: SpearBone
+  id: SpearBoneAshWalker
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_spear.rsi
+  - type: Item
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_spear.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_spear.rsi
+  - type: Construction
+    graph: SpearBoneAshWalker
+    node: spear
+
+- type: entity
+  parent: HydroponicsToolHatchet
+  id: HatchetBoneAshWalker
+  name: bone hatchet
+  description: A small bone hatchet for chopping fungal stalks and timber.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_hatchet.rsi
+  - type: Item
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_hatchet.rsi
+
+- type: entity
+  parent: HydroponicsToolMiniHoe
+  id: AshWalkerRake
+  name: bone rake
+  description: A bone rake for loosening ash beds.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_rake.rsi
+  - type: Item
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_rake.rsi
+
+- type: entity
+  parent: HydroponicsToolSpade
+  id: AshWalkerSpade
+  name: bone trowel
+  description: A small bone trowel for digging up and replanting.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_spade.rsi
+  - type: Item
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_spade.rsi
+
+- type: entity
+  parent: Bucket
+  id: AshWalkerBucket
+  name: hide bucket
+  description: A bucket of stretched goliath hide on a bone frame.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/bucket.rsi
+  - type: Item
+    sprite: _DeadSpace/Lavaland/AshWalkers/bucket.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Lavaland/AshWalkers/bucket.rsi
+
+- type: entity
+  parent: ClothingBackpackAshWalkerCrafted
+  id: ClothingBackpackAshWalkerCraftedImproved
+  name: reinforced hide satchel
+  description: A hide satchel reinforced with extra plates of goliath hide. Holds noticeably more.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/hide_satchel_improved.rsi
+  - type: Storage
+    grid:
+    - 0,0,7,3
+  - type: Construction
+    graph: ClothingBackpackAshWalkerCrafted
+    node: improved

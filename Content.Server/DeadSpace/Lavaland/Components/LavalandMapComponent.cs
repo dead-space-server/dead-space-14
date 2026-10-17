@@ -22,6 +22,10 @@ public sealed partial class LavalandMapComponent : Component
     [DataField]
     public bool WeatherInitialized;
 
+    /// <summary>The current storm is a blizzard, not an ash storm.</summary>
+    [DataField]
+    public bool SnowStorm;
+
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
     [AutoPausedField]
     public TimeSpan NextWeatherTime = TimeSpan.Zero;

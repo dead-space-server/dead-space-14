@@ -1,0 +1,36 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from tgstation (https://github.com/tgstation/tgstation), master branch as of 2026-10-14; converted to RSI for Dead Space 14",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "icon-head"
+        },
+        {
+            "name": "icon-jaw"
+        },
+        {
+            "name": "icon-visor"
+        },
+        {
+            "name": "equipped-HELMET-head",
+            "directions": 4
+        },
+        {
+            "name": "equipped-HELMET-jaw",
+            "directions": 4
+        },
+        {
+            "name": "equipped-HELMET-visor",
+            "directions": 4
+        },
+        {
+            "name": "equipped-HELMET-glass",
+            "directions": 4
+        }
+    ]
+}

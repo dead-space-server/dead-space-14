@@ -1,0 +1,580 @@
+- type: entity
+  parent: BaseStructure
+  id: LavalandNecropolisTendrilBase
+  name: necropolis tendril
+  description: A pulsing organic growth that keeps drawing hostile life from below.
+  abstract: true
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Sprite
+    noRot: true
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Structures/NecropolisTendril.rsi
+    layers:
+    - state: tendril
+  - type: Icon
+    sprite: _DeadSpace/Lavaland/Structures/NecropolisTendril.rsi
+    state: tendril
+  - type: Damageable
+    damageContainer: Biological
+    damageModifierSet: Web
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 250
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: LavalandNecropolisTendril
+  # Explosions don't take tendrils down: only the miners' own blows do.
+  - type: ExplosionResistance
+    damageCoefficient: 0
+  - type: PointLight
+    radius: 2
+    energy: 2
+    color: "#9b2e2e"
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 120
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+  - type: Tag
+    tags:
+    - Structure
+  - type: RequireProjectileTarget
+
+- type: entity
+  parent: LavalandNecropolisTendrilBase
+  id: LavalandNecropolisTendrilWatcher
+  suffix: Lavaland, Watcher
+  components:
+  - type: LavalandNecropolisTendril
+    spawnPrototypes:
+    - MobWatcherLavaland
+
+- type: entity
+  parent: LavalandNecropolisTendrilBase
+  id: LavalandNecropolisTendrilGoliath
+  suffix: Lavaland, Goliath
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Structures/NecropolisTendrilGolit.rsi
+    layers:
+    - state: tendril
+    scale: 1.2, 1.2
+  - type: Icon
+    sprite: _DeadSpace/Lavaland/Structures/NecropolisTendrilGolit.rsi
+    state: tendril
+  - type: LavalandNecropolisTendril
+    spawnPrototypes:
+    - MobLavalandGoliath
+
+- type: entity
+  parent: LavalandNecropolisTendrilBase
+  id: LavalandNecropolisTendrilLegion
+  suffix: Lavaland, Legion
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Structures/NecropolisTendrilLegion.rsi
+    layers:
+    - state: tendril
+    scale: 1.6, 1.6
+  - type: Icon
+    sprite: _DeadSpace/Lavaland/Structures/NecropolisTendrilLegion.rsi
+  - type: LavalandNecropolisTendril
+    spawnPrototypes:
+    - MobLavalandLegion
+
+- type: entity
+  id: LavalandNecropolisTendrilCollapse
+  name: collapsing ground
+  description: The ground is shaking violently.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    noRot: true
+    drawdepth: Effects
+    sprite: Effects/chronofield.rsi
+    layers:
+    - state: chronofield
+      color: "#6b1e1e"
+  - type: PointLight
+    radius: 2
+    energy: 1.5
+    color: "#d0472f"
+  - type: LavalandTendrilCollapse
+
+- type: entity
+  parent: CrateGeneric
+  id: LavalandNecropolisChest
+  name: сундук некрополя
+  description: Сундук не дышит.
+  suffix: Lavaland
+  components:
+  - type: Icon
+    sprite: _DeadSpace/Lavaland/Structures/NecropolisChest.rsi
+    state: necrocrate
+  - type: Sprite
+    noRot: true
+    sprite: _DeadSpace/Lavaland/Structures/NecropolisChest.rsi
+    layers:
+    - state: necrocrate
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: paper
+      sprite: Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: EntityStorageVisuals
+    stateDoorOpen: necrocrateopen
+    stateDoorClosed: necrocrate
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: LavalandNecropolisChestLootTable
+  - type: StaticPrice
+    price: 2500
+
+- type: entity
+  parent: LavalandNecropolisChest
+  id: LavalandNecropolisChestHardsuit
+  name: сундук некрополя
+  description: Сундук не дышит.
+  suffix: Lavaland, Скафандры
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: LavalandNecropolisChestHardsuitLootTable
+
+- type: entityTable
+  id: LavalandNecropolisChestLootTable
+  table: !type:GroupSelector
+    children:
+    - !type:NestedSelector
+      tableId: LavalandNecropolisChestMagicLootTable
+      weight: 1
+    - !type:NestedSelector
+      tableId: LavalandNecropolisChestScienceLootTable
+      weight: 1.3
+    - !type:NestedSelector
+      tableId: LavalandNecropolisChestUtilityLootTable
+      weight: 1.5
+    - !type:NestedSelector
+      tableId: LavalandNecropolisChestMedicalLootTable
+      weight: 1.2
+    - !type:NestedSelector
+      tableId: LavalandNecropolisChestHardsuitLootTable
+      weight: 1.1
+    - !type:NestedSelector
+      tableId: LavalandNecropolisChestWeaponLootTable
+      weight: 1
+    - !type:NestedSelector
+      tableId: LavalandNecropolisChestContrabandLootTable
+      weight: 0.9
+    - !type:NestedSelector
+      tableId: LavalandNecropolisChestArtifactLootTable
+      weight: 2
+
+- type: entityTable
+  id: LavalandNecropolisChestMagicLootTable
+  table: !type:GroupSelector
+    children:
+    - id: WeaponStaffHealing
+      weight: 1.2
+    - id: AnimationStaff
+      weight: 0.8
+    - id: WeaponStaffPolymorphDoor
+      weight: 1
+    - id: WeaponWandFireball
+      weight: 1.1
+    - id: WeaponWandPolymorphDoor
+      weight: 1
+    - id: WizardTeleportScroll
+      weight: 0.8
+    - id: BlinkBook
+      weight: 0.6
+    - id: KnockSpellbook
+      weight: 0.5
+    - id: ForceWallSpellbook
+      weight: 0.5
+    - id: ScrollRunes
+      weight: 0.6
+
+- type: entityTable
+  id: LavalandNecropolisChestScienceLootTable
+  table: !type:GroupSelector
+    children:
+    - !type:AllSelector
+      weight: 1.2
+      children:
+      - id: ArtifactFragment1
+        amount: !type:RangeNumberSelector
+          range: 3, 6
+      - id: ResearchDisk5000
+    - !type:AllSelector
+      weight: 0.9
+      children:
+      - id: AnomalyScanner
+      - id: ArtifactFragment1
+        amount: !type:RangeNumberSelector
+          range: 2, 4
+    - id: ResearchDisk10000
+      weight: 0.9
+    - id: TechnologyDiskRare
+      weight: 0.7
+    - id: ComplexXenoArtifactItem
+      weight: 0.4
+    - !type:AllSelector
+      weight: 0.6
+      children:
+      - id: SheetMagmite10
+      - id: SheetBluespaceCrystal10
+    - id: AnomalyCorePyroclastic
+      weight: 0.6
+    - id: AnomalyCoreGravity
+      weight: 0.6
+    - id: AnomalyCoreIce
+      weight: 0.6
+    - id: AnomalyCoreFlesh
+      weight: 0.6
+    - id: AnomalyCoreRock
+      weight: 0.6
+    - id: AnomalyCoreLiquid
+      weight: 0.6
+    - id: AnomalyCoreBluespace
+      weight: 0.5
+    - id: AnomalyCoreElectricity
+      weight: 0.5
+    - id: AnomalyCoreFlora
+      weight: 0.5
+    - id: AnomalyCoreNecro
+      weight: 0.35
+    - id: AnomalyCoreShadow
+      weight: 0.45
+    - id: AnomalyCoreTech
+      weight: 0.45
+
+- type: entityTable
+  id: LavalandNecropolisChestUtilityLootTable
+  table: !type:GroupSelector
+    children:
+    - !type:AllSelector
+      weight: 1
+      children:
+      - id: RCDRecharging
+      - id: RCDAmmo
+        amount: !type:RangeNumberSelector
+          range: 1, 2
+    - !type:AllSelector
+      weight: 0.8
+      children:
+      - id: RCDExperimental
+      - id: RCDAmmo
+        amount: !type:RangeNumberSelector
+          range: 2, 3
+    - !type:AllSelector
+      weight: 1.1
+      children:
+      - id: AdvancedMineralScanner
+      - id: OreBagOfHolding
+    - !type:AllSelector
+      weight: 0.9
+      children:
+      - id: FultonBeacon
+      - id: Fulton
+        amount: 4
+    - !type:AllSelector
+      weight: 1
+      children:
+      - id: PKAUpgradeDamageUp
+      - id: PKAUpgradeRangeUp
+      - id: PKAUpgradeFireRateUp
+    - id: LavalandSuperResonator
+      weight: 1.1
+    - id: LavalandSonicJackhammer
+      weight: 0.9
+    - id: LavalandShelterCapsule
+      weight: 0.9
+    - id: LavalandWormholeJaunter
+      weight: 0.8
+    - id: LavalandMiningVoucher
+      weight: 0.7
+    - id: HandTeleporterResearch
+      weight: 0.7
+    - id: SyndicateJawsOfLife
+      weight: 1
+    - id: OmnitoolSyndicate
+      weight: 0.9
+    - id: BluespaceHandHeldMassScanner
+      weight: 0.8
+    - id: BluespaceBeaker
+      weight: 0.9
+    - id: BluespaceVial
+      weight: 0.7
+    - id: JetpackBlackFilled
+      weight: 0.7
+    - id: ClothingShoesBootsMagSyndie
+      weight: 0.8
+    - id: ClothingEyesHudOmni
+      weight: 0.7
+    - id: ClothingEyesHudAdvanced
+      weight: 0.7
+
+- type: entityTable
+  id: LavalandNecropolisChestMedicalLootTable
+  table: !type:GroupSelector
+    children:
+    - id: LavalandMedkitAdvancedBruteFilled
+      weight: 1.2
+    - id: LavalandMedkitAdvancedBurnFilled
+      weight: 1.2
+    - id: MedkitCombatFilled
+      weight: 1.2
+    - id: MedkitAdvancedFilled
+      weight: 1
+    - !type:AllSelector
+      weight: 0.9
+      children:
+      - id: DefibrillatorCompact
+      - id: CombatMedipen
+        amount: !type:RangeNumberSelector
+          range: 1, 2
+      - id: Tourniquet
+        amount: !type:RangeNumberSelector
+          range: 2, 4
+    - !type:AllSelector
+      weight: 0.9
+      children:
+      - id: BruteAutoInjector
+        amount: !type:RangeNumberSelector
+          range: 2, 4
+      - id: BurnAutoInjector
+        amount: !type:RangeNumberSelector
+          range: 2, 4
+      - id: AirlossAutoInjector
+        amount: !type:RangeNumberSelector
+          range: 1, 3
+      - id: ChemistryBottleOmnizine
+    - !type:AllSelector
+      weight: 0.8
+      children:
+      - id: PunctAutoInjector
+        amount: !type:RangeNumberSelector
+          range: 2, 4
+      - id: PyraAutoInjector
+        amount: !type:RangeNumberSelector
+          range: 2, 4
+      - id: CombatMedipen
+    - id: ADTCyberHypospray
+      weight: 0.5
+    - id: Stimpack
+      weight: 0.8
+    - id: CombatMedipen
+      weight: 1
+    - id: ClothingBackpackDuffelSyndicateMedicalBundleFilled
+      weight: 0.3
+
+- type: entityTable
+  id: LavalandNecropolisChestHardsuitLootTable
+  table: !type:GroupSelector
+    children:
+    - !type:AllSelector
+      weight: 0.1
+      children:
+      - id: ClothingOuterHardsuitSyndie
+      - id: JetpackBlackFilled
+      - id: ClothingMaskGasSyndicate
+      - id: ClothingHandsGlovesCombat
+      - id: DoubleEmergencyOxygenTankFilled
+      - id: DoubleEmergencyNitrogenTankFilled
+    - !type:AllSelector
+      weight: 0.5
+      children:
+      - id: ClothingOuterOldExplorerLavaland
+      - id: JetpackBlackFilled
+      - id: ClothingHandsGlovesCombat
+      - id: DoubleEmergencyOxygenTankFilled
+      - id: DoubleEmergencyNitrogenTankFilled
+    - !type:AllSelector
+      weight: 0.1
+      children:
+      - id: ADTClothingOuterHardsuitCerber
+      - id: ClothingHandsGlovesCombat
+      - id: DoubleEmergencyOxygenTankFilled
+      - id: DoubleEmergencyNitrogenTankFilled
+    - !type:AllSelector
+      weight: 0.3
+      children:
+      - id: ClothingOuterHardsuitWizard
+      - id: ClothingMaskBreath
+      - id: DoubleEmergencyOxygenTankFilled
+      - id: DoubleEmergencyNitrogenTankFilled
+    - !type:AllSelector
+      weight: 0.1
+      children:
+      - id: ADTClothingOuterHardsuitCybersunBodyGuard
+      - id: ClothingMaskBreath
+      - id: ClothingHandsGlovesCombat
+      - id: DoubleEmergencyOxygenTankFilled
+      - id: DoubleEmergencyNitrogenTankFilled
+    - !type:AllSelector
+      weight: 0.5
+      children:
+      - id: ClothingOuterSuitReinforcedExplorerLavaland # был ClothingOuterSpaceMarinne, временная замена.
+      - id: MedkitCombatFilled
+      - id: ClothingEyesHudAdvanced
+      - id: ClothingMaskBreath
+      - id: DoubleEmergencyOxygenTankFilled
+
+- type: entityTable
+  id: LavalandNecropolisChestWeaponLootTable
+  table: !type:GroupSelector
+    children:
+    - id: WeaponPulseCarbine
+      weight: 0.1
+    - id: WeaponPulseRifle
+      weight: 0.001
+    - id: WeaponLaserCannon
+      weight: 0.6
+    - id: WeaponXrayCannon
+      weight: 0.15
+    - id: EnergySword
+      weight: 0.2
+    - id: EnergyKatana
+      weight: 0.1
+    - id: ClothingHandsGlovesConcussiveGauntlets
+      weight: 0.5
+    - !type:AllSelector
+      weight: 0.8
+      children:
+      - id: WeaponShotgunBulldog
+      - id: MagazineShotgun
+        amount: 3
+      - id: MagazineShotgunSlug
+    - !type:AllSelector
+      weight: 0.8
+      children:
+      - id: WeaponRifleAk
+      - id: MagazineLightRifle
+        amount: 4
+    - !type:AllSelector
+      weight: 0.55
+      children:
+      - id: WeaponRifleEstoc
+      - id: MagazineRifle
+        amount: 3
+    - !type:AllSelector
+      weight: 0.35
+      children:
+      - id: WeaponRifleM90GrenadeLauncher
+      - id: MagazineRifle
+        amount: 2
+      - id: GrenadeFrag
+        amount: 2
+    - !type:AllSelector
+      weight: 0.05
+      children:
+      - id: WeaponLightMachineGunL6
+      - id: MagazineLightRifleBox
+        amount: 2
+    - !type:AllSelector
+      weight: 0.15
+      children:
+      - id: WeaponSniperHristov
+      - id: MagazineBoxAntiMateriel
+    - !type:AllSelector
+      weight: 0.8
+      children:
+      - id: WeaponSubMachineGunC20r
+      - id: MagazinePistolSubMachineGun
+        amount: !type:RangeNumberSelector
+          range: 2, 3
+    - !type:AllSelector
+      weight: 0.7
+      children:
+      - id: WeaponRevolverPython
+      - id: MagazineBoxMagnum
+
+- type: entityTable
+  id: LavalandNecropolisChestContrabandLootTable
+  table: !type:GroupSelector
+    children:
+    - id: BoxHoloparasite
+      weight: 0.7
+    - id: Emag
+      weight: 0.5
+    - id: AccessBreaker
+      weight: 0.6
+    - id: ChameleonProjector
+      weight: 0.5
+    - id: AgentIDCard
+      weight: 0.45
+    - id: CameraBug
+      weight: 0.5
+    - id: C4
+      weight: 1
+    - id: EmpGrenade
+      weight: 0.8
+    - id: SingularityGrenade
+      weight: 0.25
+    - id: Telecrystal5
+      weight: 0.8
+    - id: Telecrystal10
+      weight: 0.35
+    - id: FreedomImplanter
+      weight: 0.7
+    - id: StorageImplanter
+      weight: 0.7
+    - id: EmpImplanter
+      weight: 0.6
+    - id: ScramImplanter
+      weight: 0.5
+    - !type:AllSelector
+      weight: 0.5
+      children:
+      - id: RadioJammer
+      - id: EmpGrenade
+        amount: 2
+      - id: EmpImplanter
+    - !type:AllSelector
+      weight: 0.45
+      children:
+      - id: ClothingBackpackDuffelSyndicateFilledStarterKit
+      - id: MedkitCombatFilled
+    - id: ClothingBackpackDuffelSyndicateC4tBundle
+      weight: 0.45
+
+- type: entityTable
+  id: LavalandNecropolisChestArtifactLootTable
+  table: !type:GroupSelector
+    children:
+    - id: LavalandWispLantern
+    - id: LavalandWarpCubeRed
+    - id: LavalandImmortalityTalisman
+    - id: LavalandShipInBottle
+    - id: LavalandFlightPotion
+    - id: LavalandRodOfAsclepius
+    - id: ClothingNeckLavalandMementoMori
+    - id: ClothingOuterLavalandBerserker
+    - id: ClothingHandsGlovesConcussiveGauntlets
+    - id: LavalandParadoxBagRed

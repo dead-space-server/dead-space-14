@@ -1,5 +1,0 @@
-- type: tile
-  id: FloorLavalandAsh
-  parent: FloorAshDrakeArena
-  name: tiles-lavaland-ash-floor
-  weather: true

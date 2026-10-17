@@ -1141,6 +1141,7 @@ public sealed class LavalandHierophantSystem : EntitySystem
     {
         var halfWidth = arena.Width / 2;
         var halfHeight = arena.Height / 2;
-        return (-halfWidth + 1, halfWidth - 1, -halfHeight + 1, halfHeight - 1);
+        var origin = arena.Origin;
+        return (origin.X - halfWidth + 1, origin.X + halfWidth - 1, origin.Y - halfHeight + 1, origin.Y + halfHeight - 1);
     }
 }

@@ -55,6 +55,11 @@ public sealed class NecromorphPlasmaCutterSystem : EntitySystem
         if (HasComp<LeviathanComponent>(target))
             return;
 
+        var attempt = new NecromorphPlasmaCutterHitAttemptEvent(args.Data.ShotDirection, ent.Comp.DetachedPartImpulse);
+        RaiseLocalEvent(target, ref attempt);
+        if (attempt.Handled)
+            return;
+
         if (HasComp<CorpseCollectorComponent>(target))
         {
             DamageByPercentage(target, CompOrNull<NecromorphPlasmaCutterReducedDamageComponent>(target));

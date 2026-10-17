@@ -1,0 +1,39 @@
+// Cuts limbs out of a one-piece sprite layer (or, inverted, keeps nothing but one limb): the mad miner's necromorph.
+// Rects are x0, y0, x1, y1 in the layer quad's own 0..1 space from its bottom-left corner (tCoord2).
+
+uniform highp vec4 rect0;
+uniform highp vec4 rect1;
+uniform highp vec4 rect2;
+uniform highp vec4 rect3;
+
+// 1 - that rect is cut away.
+uniform highp float hidden0;
+uniform highp float hidden1;
+uniform highp float hidden2;
+uniform highp float hidden3;
+
+// 1 - keep only what is inside rect0 (a torn-off limb).
+uniform highp float invert;
+
+varying highp vec2 localPosition;
+
+void vertex() {
+    localPosition = tCoord2;
+}
+
+bool insideRect(highp vec4 rect) {
+    return localPosition.x >= rect.x && localPosition.x <= rect.z && localPosition.y >= rect.y && localPosition.y <= rect.w;
+}
+
+void fragment() {
+    if (invert > 0.5) {
+        if (!insideRect(rect0)) {
+            discard;
+        }
+    } else if ((hidden0 > 0.5 && insideRect(rect0)) || (hidden1 > 0.5 && insideRect(rect1)) ||
+               (hidden2 > 0.5 && insideRect(rect2)) || (hidden3 > 0.5 && insideRect(rect3))) {
+        discard;
+    }
+
+    COLOR = zTexture(UV);
+}

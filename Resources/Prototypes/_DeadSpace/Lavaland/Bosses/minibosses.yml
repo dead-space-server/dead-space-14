@@ -1,0 +1,552 @@
+- type: entity
+  parent: [ BaseMobAsteroid, BaseMobLavalandFauna ]
+  id: MobLavalandMadMiner
+  name: безумный шахтёр
+  description: Шахтёр, который слишком долго пробыл на Лаваленде. От него не получится просто убежать.
+  suffix: Lavaland, Mini-boss
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: DestructionResistance
+  - type: LavalandTrophyDrop
+    trophy: CrusherTrophyMinerEye
+    chance: 1
+    requiredFraction: 0.6
+    proportional: false
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/MadMiner.rsi
+    layers:
+    - state: demonic_miner
+    # Risen as a necromorph: the twitcher's claws, worn over the arms the way a necromorph body wears them.
+    - sprite: _DeadSpace/Necromorfs/claws.rsi
+      state: equipped-NECK
+      map: [ "enum.LavalandMadMinerLayers.ClawLeft" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.LavalandMadMinerVisuals.Necromorph:
+        enum.LavalandMadMinerLayers.ClawLeft:
+          True: { visible: true }
+          False: { visible: false }
+  # Dead it tips over onto the ground smoothly, as people do (and gets back up when it rises).
+  - type: StandingState
+  - type: RotationVisuals
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      1250: Dead
+  - type: LavalandMadMiner
+    maxHealth: 1250
+    # Slower bolts that can be dodged, and a little more time between them.
+    projectileSpeed: 7
+    shootCooldown: 1.8
+    hookImpactDamage:
+      types:
+        Blunt: 30
+    music:
+    - /Audio/_DeadSpace/Lavaland/Bosses/mad_miner_fight.ogg
+    extraRewards:
+    - LavalandCleavingSaw
+    noticeRange: 7
+    speechRadius: 12
+    speechColor: "#ff3030"
+    speechLines:
+    - lavaland-mad-miner-line-1
+    - lavaland-mad-miner-line-2
+    - lavaland-mad-miner-line-3
+    - lavaland-mad-miner-line-4
+    - lavaland-mad-miner-line-5
+    - lavaland-mad-miner-line-6
+    - lavaland-mad-miner-line-7
+    - lavaland-mad-miner-line-8
+    blinkSound: /Audio/Effects/teleport_departure.ogg
+    hookSound: /Audio/_DeadSpace/Necromorfs/TheCircle/Weapon/sfx/hook-sfx/shot_hook.ogg
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+    blackboard:
+      VisionRadius: !type:Single
+        24
+      AggroVisionRadius: !type:Single
+        24
+      NavSmash: !type:Bool
+        true
+  - type: MeleeWeapon
+    resistanceBypass: true
+    attackRate: 1.15
+    animation: WeaponArcPunch
+    damage:
+      types:
+        Blunt: 25
+        Structural: 45
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.8
+    baseSprintSpeed: 4.1
+  - type: StunImmune
+  - type: NoSlip
+  - type: RequireProjectileTarget
+  - type: Tag
+    tags:
+    - CannotSuicide
+
+# A limb torn off the mad miner's necromorph: its own sprite, with everything but the limb cut away by a shader.
+- type: entity
+  parent: BaseItem
+  id: LavalandMadMinerSeveredLimb
+  name: оторванная конечность
+  description: Ещё дёргается.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Mobs/MadMiner.rsi
+    state: demonic_miner
+  - type: Item
+    size: Normal
+  - type: LavalandMadMinerSeveredLimb
+
+- type: entity
+  parent: BaseBullet
+  id: LavalandMadMinerKineticBolt
+  name: перегруженный кинетический заряд
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    noRot: false
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: chronobolt
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Blunt: 18
+        Structural: 35
+  - type: TimedDespawn
+    lifetime: 1.2
+
+- type: entity
+  id: LavalandMadMinerHookVisual
+  name: цепная рука безумного шахтёра
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Clickable
+  - type: Sprite
+    noRot: false
+    sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/melee/hand-hook.rsi
+    state: hook
+
+- type: entity
+  id: LavalandEliteTumor
+  name: пульсирующая опухоль
+  description: Странная пульсирующая масса. Кажется, внутри что-то спит. Прикоснитесь, чтобы разбудить его — и приготовьтесь к бою.
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.9,-0.4,0.9,0.4"
+        density: 1000
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    drawdepth: Objects
+    sprite: _DeadSpace/Lavaland/Structures/elite_tumor.rsi
+    layers:
+    - state: tumor
+      map: [ "enum.LavalandArtifactLayers.Base" ]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.LavalandArtifactVisuals.Active:
+        enum.LavalandArtifactLayers.Base:
+          True: { state: popped }
+          False: { state: tumor }
+  - type: PointLight
+    radius: 3
+    energy: 1
+    color: "#c0485a"
+  - type: LavalandEliteTumor
+    arenaRadius: 10
+    leashTime: 10
+    activateSound: /Audio/Effects/demon_consume.ogg
+    elites:
+    - MobLavalandBroodmother
+    - MobLavalandLegionnaire
+    # Pandora waits in the chromite caves instead.
+
+- type: entity
+  id: LavalandEliteTumorWall
+  name: стена опухоли
+  description: Барьер, не выпускающий никого с арены, пока бой не закончится.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        density: 1000
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+  - type: Sprite
+    drawdepth: Walls
+    sprite: _DeadSpace/Lavaland/Structures/elite_tumor_wall.rsi
+    layers:
+    - state: wall
+      shader: unshaded
+  - type: PointLight
+    radius: 1.5
+    energy: 0.6
+    color: "#b05fd1"
+
+- type: entity
+  abstract: true
+  parent: [ BaseMobAsteroid, BaseMobLavalandFauna ]
+  id: BaseMobLavalandElite
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: DestructionResistance
+  - type: IgnoreKudzu
+  - type: StunImmune
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+    blackboard:
+      VisionRadius: !type:Single
+        12
+      AggroVisionRadius: !type:Single
+        12
+      NavSmash: !type:Bool
+        false
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      1000: Dead
+  - type: RequireProjectileTarget
+
+- type: entity
+  parent: BaseMobLavalandElite
+  id: MobLavalandBroodmother
+  name: голиаф-матка
+  description: Пример полового диморфизма — самка голиафа выглядит совсем иначе, чем самцы, но не менее опасна.
+  suffix: Lavaland, Elite
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/Broodmother.rsi
+    offset: 0,0.5
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: broodmother
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: broodmother
+      Dead:
+        Base: dead
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.8
+        density: 300
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: MeleeWeapon
+    angle: 0
+    animation: WeaponArcBite
+    soundHit:
+      path: /Audio/Weapons/punch3.ogg
+    damage:
+      types:
+        Blunt: 30
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.2
+    baseSprintSpeed: 3.2
+  - type: LavalandElite
+    hudName: lavaland-elite-broodmother
+    maxHealth: 1000
+    music:
+    - /Audio/_DeadSpace/Lavaland/Bosses/broodmother_fight.ogg
+    rewards:
+    - prototype: LavalandNecropolisChest
+    - prototype: LavalandEliteTrophyBroodmother
+  - type: LavalandBroodmother
+    tentacleDamage:
+      types:
+        Blunt: 30
+    tentacleStun: 1
+    maxChildren: 8
+    childrenPerSpawn: 2
+    rageDuration: 6.5
+    rageSpeed: 2
+
+- type: entity
+  parent: [ BaseMobAsteroid, BaseMobLavalandFauna ]
+  id: MobLavalandBroodmotherChild
+  name: детёныш голиафа
+  description: Юный голиаф, недавно рождённый матерью. Может вонзить щупальце под цель на расстоянии.
+  suffix: Lavaland, Elite minion
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/GoliathBaby.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: baby
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: baby
+      Dead:
+        Base: dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      30: Dead
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+  - type: MeleeWeapon
+    angle: 0
+    animation: WeaponArcBite
+    damage:
+      types:
+        Blunt: 5
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.2
+    baseSprintSpeed: 3.2
+  - type: LavalandBroodmotherChild
+    tentacleCooldown: 4
+    tentacleRange: 7
+
+- type: entity
+  parent: BaseMobLavalandElite
+  id: MobLavalandLegionnaire
+  name: легионер
+  description: Огромный скелет, воплощающий ужасающую силу Легиона.
+  suffix: Lavaland, Elite
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/Legionnaire.rsi
+    offset: 0,0.5
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base", "enum.LavalandArtifactLayers.Base" ]
+      state: legionnaire
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: legionnaire
+      Dead:
+        Base: dead
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.LavalandArtifactVisuals.Active:
+        enum.LavalandArtifactLayers.Base:
+          True: { state: headless }
+          False: { state: legionnaire }
+  - type: MeleeWeapon
+    angle: 0
+    animation: WeaponArcSlash
+    soundHit:
+      path: /Audio/Weapons/bladeslice.ogg
+    damage:
+      types:
+        Slash: 35
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3
+    baseSprintSpeed: 4
+  - type: LavalandElite
+    hudName: lavaland-elite-legionnaire
+    maxHealth: 1000
+    music:
+    - /Audio/_DeadSpace/Lavaland/Bosses/legionnaire_fight.ogg
+    rewards:
+    - prototype: LavalandNecropolisChest
+    - prototype: LavalandEliteTrophyLegionnaire
+  - type: LavalandLegionnaire
+    chargeLength: 6
+    chargeSpeed: 14
+    chargeStun: 2
+    chargeKnockback: 10
+    chargeDamage:
+      types:
+        Blunt: 35
+    chargeSound: /Audio/Effects/demon_attack1.ogg
+
+- type: entity
+  parent: [ BaseMobAsteroid, FlyingMobBase, BaseMobLavalandFauna ]
+  id: MobLavalandLegionnaireHead
+  name: голова легионера
+  description: Голова легионера, парящая сама по себе. Лучше не подходить — хотя, если она вас заметила, выбора у вас нет.
+  suffix: Lavaland, Elite minion
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/Legionnaire.rsi
+    offset: 0,0.5
+    layers:
+    - state: head
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      200: Dead
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+  - type: MeleeWeapon
+    angle: 0
+    animation: WeaponArcBite
+    damage:
+      types:
+        Piercing: 20
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4
+    baseSprintSpeed: 5
+
+- type: entity
+  id: LavalandLegionnaireBonfire
+  name: груда костей
+  description: Груда костей, которая время от времени шевелится. Её лучше разбить.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Clickable
+  - type: Sprite
+    drawdepth: FloorObjects
+    sprite: _DeadSpace/Lavaland/Structures/legionnaire_bonfire.rsi
+    layers:
+    - state: bonfire
+  - type: PointLight
+    radius: 4
+    energy: 1.5
+    color: "#ff6b4a"
+  # Goes dark in the deep night like any other fire there.
+  - type: LavalandDeepNightDark
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: LavalandBonfire
+    fireStacks: 5
+
+- type: entity
+  parent: AdminInstantEffectBase
+  id: LavalandLegionnaireSmoke
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SmokeOnTrigger
+    duration: 6
+    spreadAmount: 15
+  - type: EmitSoundOnTrigger
+    sound: /Audio/Effects/smoke.ogg
+
+- type: entity
+  id: LavalandLegionnaireChargeTelegraph
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    drawdepth: FloorObjects
+    sprite: _DeadSpace/Lavaland/Effects/TargetCircle.rsi
+    color: "#202020"
+    layers:
+    - state: target_circle
+  - type: TimedDespawn
+    lifetime: 1
+
+- type: entity
+  parent: BaseMobLavalandElite
+  id: MobLavalandPandora
+  name: пандора
+  description: Большой магический ящик, похожий по силе и устройству на Иерофанта. Если он открылся, закрыть его непросто.
+  suffix: Lavaland, Elite
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/Pandora.rsi
+    offset: 0,0.5
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: pandora
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: pandora
+      Dead:
+        Base: dead
+  - type: MeleeWeapon
+    angle: 0
+    animation: WeaponArcPunch
+    soundHit:
+      path: /Audio/_DeadSpace/Lavaland/Hierophant/sonic_jackhammer.ogg
+    damage:
+      types:
+        Blunt: 15
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 1.2
+    baseSprintSpeed: 1.8
+  - type: LavalandElite
+    hudName: lavaland-elite-pandora
+    maxHealth: 1000
+    music:
+    - path: /Audio/_DeadSpace/Lavaland/Bosses/pandora_fight.ogg
+      params:
+        volume: 4
+    rewards:
+    - prototype: WeaponGrapplingGun # the only way out of the chromite caves
+    - prototype: LavalandNecropolisChest
+    - prototype: LavalandEliteTrophyPandora
+  - type: LavalandPandora
+    shotLength: 8
+    teleportRange: 12
+    teleportSound: /Audio/_DeadSpace/Lavaland/Hierophant/airlockopen.ogg
+    blastDamage:
+      types:
+        Heat: 30

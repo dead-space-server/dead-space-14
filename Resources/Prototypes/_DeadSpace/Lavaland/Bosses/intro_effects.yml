@@ -1,0 +1,153 @@
+- type: entity
+  abstract: true
+  id: LavalandIntroEffectBase
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    noRot: true
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: TimedDespawn
+    lifetime: 3
+
+- type: entity
+  parent: LavalandIntroEffectBase
+  categories: [ HideSpawnMenu ]
+  id: LavalandIntroFireParticle
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Effects/AshDrakeFire.rsi
+    state: fire
+    scale: 0.7, 0.7
+  - type: PointLight
+    radius: 2
+    energy: 1.5
+    color: "#ff7a2e"
+
+- type: entity
+  parent: LavalandIntroEffectBase
+  categories: [ HideSpawnMenu ]
+  id: LavalandIntroSmokeParticle
+  components:
+  - type: Sprite
+    sprite: Effects/chemsmoke.rsi
+    state: chemsmoke
+    scale: 0.45, 0.45
+    color: "#3a3532cc"
+  - type: TimedDespawn
+    lifetime: 3.5
+
+- type: entity
+  parent: LavalandIntroEffectBase
+  categories: [ HideSpawnMenu ]
+  id: LavalandIntroRockParticle
+  components:
+  - type: Sprite
+    sprite: /Textures/Tiles/Planet/basalt.rsi
+    state: basalt1
+    scale: 0.5, 0.5
+  - type: TimedDespawn
+    lifetime: 1.5
+
+- type: entity
+  parent: LavalandIntroEffectBase
+  categories: [ HideSpawnMenu ]
+  id: LavalandIntroBloodParticle
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Effects/BubblegumBlood.rsi
+    state: splatter1
+    scale: 0.7, 0.7
+  - type: TimedDespawn
+    lifetime: 2
+
+- type: entity
+  parent: LavalandIntroEffectBase
+  categories: [ HideSpawnMenu ]
+  id: LavalandIntroBloodTrail
+  components:
+  - type: Sprite
+    drawdepth: FloorObjects
+    sprite: _DeadSpace/Lavaland/Effects/BubblegumBlood.rsi
+    state: floor1
+  - type: TimedDespawn
+    lifetime: 18
+
+- type: entity
+  parent: LavalandIntroEffectBase
+  categories: [ HideSpawnMenu ]
+  id: LavalandIntroBubblegumShadow
+  components:
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _DeadSpace/Lavaland/Mobs/Bubblegum.rsi
+    state: bubblegum
+    color: "#000000b0"
+  - type: TimedDespawn
+    lifetime: 1
+
+- type: entity
+  parent: LavalandIntroEffectBase
+  categories: [ HideSpawnMenu ]
+  id: LavalandIntroGateDoorPiece
+  components:
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _DeadSpace/Lavaland/Structures/Necropolis/necropolis_gate.rsi
+    state: door
+  - type: TimedDespawn
+    lifetime: 1.4
+
+- type: entity
+  parent: LavalandIntroEffectBase
+  categories: [ HideSpawnMenu ]
+  id: LavalandIntroFlash
+  components:
+  - type: PointLight
+    radius: 7
+    energy: 4
+    color: "#ffb35c"
+  - type: TimedDespawn
+    lifetime: 0.35
+
+# The Legion's fists in its intro: knuckles first while it punches its way out.
+- type: entity
+  parent: LavalandIntroEffectBase
+  categories: [ HideSpawnMenu ]
+  id: LavalandIntroLegionFistLeft
+  components:
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _DeadSpace/Lavaland/Mobs/LegionFists.rsi
+    state: punch-left
+
+- type: entity
+  parent: LavalandIntroLegionFistLeft
+  categories: [ HideSpawnMenu ]
+  id: LavalandIntroLegionFistRight
+  components:
+  - type: Sprite
+    state: punch-right
+
+# Then the fists open: plain hands where the real ones will float.
+- type: entity
+  parent: LavalandIntroEffectBase
+  categories: [ HideSpawnMenu ]
+  id: LavalandIntroLegionHandLeft
+  components:
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _DeadSpace/Lavaland/Mobs/LegionHands.rsi
+    state: left
+
+- type: entity
+  parent: LavalandIntroLegionHandLeft
+  categories: [ HideSpawnMenu ]
+  id: LavalandIntroLegionHandRight
+  components:
+  - type: Sprite
+    state: right

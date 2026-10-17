@@ -1,0 +1,46 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from tgstation, resprited by golubok_epta (Discord)",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "full"
+        },
+        {
+            "name": "ashwall0",
+            "directions": 4
+        },
+        {
+            "name": "ashwall1",
+            "directions": 4
+        },
+        {
+            "name": "ashwall2",
+            "directions": 4
+        },
+        {
+            "name": "ashwall3",
+            "directions": 4
+        },
+        {
+            "name": "ashwall4",
+            "directions": 4
+        },
+        {
+            "name": "ashwall5",
+            "directions": 4
+        },
+        {
+            "name": "ashwall6",
+            "directions": 4
+        },
+        {
+            "name": "ashwall7",
+            "directions": 4
+        }
+    ]
+}

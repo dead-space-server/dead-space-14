@@ -1,0 +1,278 @@
+- type: entity
+  id: BaseMobLavalandFauna
+  abstract: true
+  components:
+  - type: LavalandFauna
+  # Explosions kill fauna but don't blow the bodies apart, like the bosses.
+  - type: DestructionResistance
+  - type: LavalandWeatherImmune
+  - type: LavalandChasmImmune
+  - type: PermanentStatusEffects
+    statusEffects:
+    - StatusEffectPressureImmunity
+  - type: Flammable
+    maximumFireStacks: 0
+    firestacksOnIgnite: 0
+    fireSpread: false
+    canResistFire: false
+    damage:
+      types: {}
+  - type: TemperatureDamage
+    heatDamageThreshold: 100000
+    coldDamageThreshold: -1
+    heatDamage:
+      types: {}
+    coldDamage:
+      types: {}
+
+- type: entity
+  id: MobLavalandGoliath
+  parent: [ MobGoliath, BaseMobLavalandFauna ]
+  suffix: Lavaland
+  components:
+  # The heaviest wall-breaker of lavaland.
+  - type: LavalandFauna
+    structuralDamage: 150
+  - type: LavalandTrophyDrop
+    trophy: CrusherTrophyGoliathTentacle
+    chance: 0.25
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Mobs/lavaland_monsters.rsi
+  - type: Butcherable
+    spawned:
+    - id: FoodMeatGoliath
+      amount: 2
+    - id: MaterialGoliathHide1
+      amount: 2
+      maxAmount: 4
+    - id: MaterialBones1
+      amount: 2
+    - id: PKAUpgradeDamageUp
+      prob: 0.01
+
+- type: entity
+  id: MobLavalandBasilisk
+  parent: [ MobBasilisk, BaseMobLavalandFauna ]
+  suffix: Lavaland
+  components:
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      150: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.1
+    baseSprintSpeed: 3.1
+  - type: MeleeWeapon
+    angle: 0
+    animation: WeaponArcBite
+    soundHit:
+      path: /Audio/Effects/bite.ogg
+    damage:
+      types:
+        Slash: 10
+        Piercing: 8
+  - type: Butcherable
+    spawned:
+    - id: DiamondOre1
+      amount: 2
+      maxAmount: 4
+
+- type: entity
+  id: MobLavalandGoldgrub
+  parent: [ BaseMobAsteroid, BaseMobLavalandFauna ]
+  name: goldgrub
+  description: A skittish ore-fed grub with a hoard of valuable minerals in its gut.
+  suffix: Lavaland
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/lavaland_monsters.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: goldgrub
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: goldgrub
+      Dead:
+        Base: goldgrub_dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3.6
+    baseSprintSpeed: 4
+  - type: LavalandGoldgrub
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      45: Dead
+  - type: Reflect
+    reflectProb: 1
+  - type: Tag
+    tags:
+    - CannotSuicide
+    - FootstepSound
+  - type: NoSlip
+
+- type: entity
+  id: MobLavalandHivelord
+  parent: [ MobHivelord, BaseMobLavalandFauna ]
+  suffix: Lavaland
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Mobs/lavaland_monsters.rsi
+  - type: BasicEntityAmmoProvider
+    proto: MobLavalandHivelordBrood
+    capacity: 1
+    count: 1
+
+- type: entity
+  id: MobLavalandHivelordBrood
+  parent: [ MobHivelordBrood, BaseMobLavalandFauna ]
+  suffix: Lavaland
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Mobs/lavaland_monsters.rsi
+
+- type: entity
+  id: MobLavalandLegion
+  parent: [ BaseMobAsteroid, MobBloodstream, BaseMobLavalandFauna ]
+  name: legion
+  description: You can still see what was once human under the shifting mass of corruption.
+  components:
+  - type: LavalandTrophyDrop
+    trophy: CrusherTrophyLegionSkull
+    chance: 0.25
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/lavaland_monsters.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: legion
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: legion
+      Dead:
+        Base: legion_dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2
+    baseSprintSpeed: 2.4
+  - type: LavalandLegion
+    maxActiveHeads: 2
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      250: Dead
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/Weapons/bladeslice.ogg
+    angle: 0
+    attackRate: 0.9
+    animation: WeaponArcPunch
+    damage:
+      types:
+        Slash: 15
+        Structural: 30
+  - type: Gun
+    fireRate: 0.5
+    selectedMode: SemiAuto
+    showExamineText: false
+    availableModes:
+    - SemiAuto
+    soundGunshot: null
+  - type: RechargeBasicEntityAmmo
+    showExamineText: false
+    rechargeCooldown: 2
+    rechargeSound: null
+  - type: BasicEntityAmmoProvider
+    proto: MobLavalandLegionHead
+    capacity: 1
+    count: 1
+  - type: TriggerOnMobstateChange
+    mobState:
+    - Dead
+  - type: SpawnOnTrigger
+    proto: MobLavalandLegionHead
+    useMapCoords: true
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: HTN
+    rootTask:
+      task: SimpleRangedHostileCompound
+    blackboard:
+      VisionRadius: !type:Single
+        15
+      AggroVisionRadius: !type:Single
+        16
+      NavSmash: !type:Bool
+        true
+  - type: Tag
+    tags:
+    - CannotSuicide
+    - FootstepSound
+  - type: NoSlip
+  - type: Butcherable
+    spawned:
+    - id: LavalandLegionSoul
+      amount: 1
+    - id: LavalandLegionSkull
+      prob: 0.35
+    - id: MaterialBones1
+      amount: 2
+
+- type: entity
+  id: MobLavalandLegionHead
+  parent: [ BaseMobAsteroid, FlyingMobBase, BaseMobLavalandFauna ]
+  name: legion head
+  description: One of many.
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/lavaland_monsters.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: legion_head
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: legion_head
+      Dead:
+        Base: legion_head
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4
+    baseSprintSpeed: 4.5
+  - type: LavalandLegionHead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      50: Dead
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/Weapons/bladeslice.ogg
+    angle: 0
+    attackRate: 1.2
+    range: 0.75
+    animation: WeaponArcBite
+    damage:
+      types:
+        Piercing: 10
+  - type: Ammo
+    muzzleFlash: null
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+    blackboard:
+      VisionRadius: !type:Single
+        15
+      AggroVisionRadius: !type:Single
+        16
+      NavSmash: !type:Bool
+        true
+  - type: TimedDespawn
+    lifetime: 14
+  - type: Tag
+    tags:
+    - CannotSuicide

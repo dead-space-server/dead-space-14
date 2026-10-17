@@ -194,6 +194,10 @@ namespace Content.Server.Light.EntitySystems
                 return false;
             }
 
+            // DS14: the lavaland deep night keeps it off (a helmet light on cooldown).
+            if (HasComp<Content.Shared.DeadSpace.Lavaland.LavalandLightBlockedComponent>(uid))
+                return false;
+
             if (!_powerCell.TryGetBatteryFromSlotOrEntity(uid.Owner, out var battery))
             {
                 _audio.PlayPvs(_audio.ResolveSound(component.TurnOnFailSound), uid);

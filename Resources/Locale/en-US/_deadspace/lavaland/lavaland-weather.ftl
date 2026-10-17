@@ -1,2 +1,19 @@
 lavaland-ash-storm-warning = The weather seems to be changing. Find shelter.
 lavaland-ash-storm-sender = Lavaland weather sensors
+
+lavaland-day-cycle-sender = Lavaland sensors
+lavaland-day-cycle-day = Day breaks over Lavaland.
+lavaland-day-cycle-night = The sun sets and Lavaland grows dark.
+lavaland-day-cycle-deep-night = The moon hides behind the ash - deep night has fallen! Jaunters, night vision and trackers already fail, lights die and the darkness burns. Return to the outpost or stay in the light - only the necropolis lantern wisp shines bright and leads home.
+lavaland-day-cycle-morning = The sky brightens - morning on Lavaland.
+lavaland-jaunter-night = The jaunter stays silent: it cannot find an anchor in the deep night.
+lavaland-wisp-guide-start = The wisp darts off and beckons you to follow it - back to the outpost.
+lavaland-snow-storm-warning = It is getting cold fast and snow is falling. A blizzard is coming - find shelter.
+lavaland-day-cycle-deep-night-end = The moon shows again from behind the ash. Equipment works again, but the night is not over yet.
+lavaland-deep-night-nvg-blocked = The night vision does not turn on - there is nothing to amplify in the deep night.
+lavaland-deep-night-light-out = The darkness swallows the light - it goes out.
+lavaland-deep-night-light-cooldown = The light does not turn on. Try again in { $seconds } s.
+lavaland-deep-night-battery-dead = The flashlight battery dies - it goes out.
+lavaland-deep-night-darkness-warning = The darkness creeps up on you. Find some light!
+lavaland-deep-night-darkness = The darkness burns you!
+lavaland-deep-night-bonfire-out = The darkness smothers the bonfire - it goes out and falls apart into firewood.

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from https://github.com/tgstation/tgstation",
+  "copyright": "Taken from https://github.com/tgstation/tgstation; colossus_angry: eva_attack from Goob-Station (Resources/Textures/_Lavaland/Mobs/Bosses/96x96.rsi, tgstation 64x64megafauna.dmi, CC-BY-3.0)",
   "size": {
     "x": 96,
     "y": 96
@@ -11,10 +11,42 @@
       "name": "colossus",
       "directions": 4,
       "delays": [
-        [ 1, 0.5, 0.5 ],
-        [ 1, 0.5, 0.5 ],
-        [ 1, 0.5, 0.5 ],
-        [ 1, 0.5, 0.5 ]
+        [
+          1,
+          0.5,
+          0.5
+        ],
+        [
+          1,
+          0.5,
+          0.5
+        ],
+        [
+          1,
+          0.5,
+          0.5
+        ],
+        [
+          1,
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "colossus_angry",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
       ]
     }
   ]

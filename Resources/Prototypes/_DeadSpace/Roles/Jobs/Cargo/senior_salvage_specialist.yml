@@ -36,6 +36,9 @@
     back:
     - LavalandMiningVoucher
     - RubberStampSeniorSalvage
+    - LavalandBluespaceWellFlatpack
+    - LavalandObjectiveFolder
+    - LavalandSensorTablet
 
 - type: chameleonOutfit
   id: SeniorSalvageSpecialistChameleonOutfit
