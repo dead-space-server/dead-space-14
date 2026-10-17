@@ -1,0 +1,45 @@
+- type: entity
+  parent: BaseMachineCircuitboard
+  id: BluespaceMinerMachineCircuitboard
+  name: bluespace miner machine board
+  description: A bluespace machine board that, when inserted into an exofab, prints a bluespace miner.
+  components:
+  - type: Sprite
+    state: supply
+  - type: MachineBoard
+    prototype: BluespaceMiner
+    stackRequirements:
+      Manipulator: 4
+      Plasma: 5
+      Glass: 2
+      Cable: 1
+
+- type: latheRecipe
+  parent: [ BaseGoldCircuitboardRecipe, BaseSupplyMachineRecipeCategory ]
+  id: BluespaceMinerMachineCircuitboard
+  result: BluespaceMinerMachineCircuitboard
+
+- type: entity
+  parent: CrateGenericSteel
+  id: CrateBluespaceMinerBoard
+  name: bluespace miner board crate
+  description: A single bluespace miner machine board, worth every credit.
+  components:
+  - type: StorageFill
+    contents:
+      - id: BluespaceMinerMachineCircuitboard
+
+- type: cargoProduct
+  id: CargoBluespaceMinerBoard
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: supply
+  product: CrateBluespaceMinerBoard
+  cost: 9999
+  category: cargoproduct-category-name-materials
+  group: general
+
+- type: latheRecipePack
+  id: BluespaceBoards
+  recipes:
+  - BluespaceMinerMachineCircuitboard
