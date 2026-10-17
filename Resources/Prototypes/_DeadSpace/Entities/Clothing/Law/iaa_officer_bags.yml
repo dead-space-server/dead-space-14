@@ -1,0 +1,26 @@
+- type: entity
+  parent: ClothingBackpackSecurity
+  id: ClothingBackpackIAAOfficer
+  name: рюкзак офицера ВД
+  description: Прочный рюкзак офицера отдела внутренних дел.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Back/Backpacks/iaa_officer.rsi
+
+- type: entity
+  parent: ClothingBackpackSatchelSecurity
+  id: ClothingBackpackSatchelIAAOfficer
+  name: сумка офицера ВД
+  description: Прочная сумка офицера отдела внутренних дел.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Back/Satchels/iaa_officer.rsi
+
+- type: entity
+  parent: ClothingBackpackDuffelSecurity
+  id: ClothingBackpackDuffelIAAOfficer
+  name: вещмешок офицера ВД
+  description: Большой вещмешок офицера отдела внутренних дел.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Clothing/Back/Duffels/iaa_officer.rsi

@@ -156,6 +156,7 @@ namespace Content.IntegrationTests.Tests
             "Boxer",
             "Zookeeper",
             "Lawyer",
+            "IAAOfficer",
         };
         // DS14-end
 

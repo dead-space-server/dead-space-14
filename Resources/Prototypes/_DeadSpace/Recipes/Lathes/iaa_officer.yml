@@ -1,0 +1,20 @@
+# Офицер ВД
+- type: latheRecipe
+  parent: BaseJumpsuitRecipe
+  id: ClothingUniformJumpsuitIAAOfficer1
+  result: ClothingUniformJumpsuitIAAOfficer1
+
+- type: latheRecipe
+  parent: BaseJumpsuitRecipe
+  id: ClothingUniformJumpsuitIAAOfficer2
+  result: ClothingUniformJumpsuitIAAOfficer2
+
+- type: latheRecipe
+  parent: BaseJumpsuitRecipe
+  id: ClothingUniformJumpsuitIAAOfficer3
+  result: ClothingUniformJumpsuitIAAOfficer3
+
+- type: latheRecipe
+  parent: BaseHatRecipe
+  id: ClothingHeadHatBeretIAAOfficer
+  result: ClothingHeadHatBeretIAAOfficer

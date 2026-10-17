@@ -83,6 +83,7 @@
     ERTSecurityGamma: 0
     ERTSecurityRed: 0
     IAA: 0
+    IAAOfficer: 0 # DS14
     Magistrat: 0
     MedicalSurgeon: 0
     SCNTAgent: 0
