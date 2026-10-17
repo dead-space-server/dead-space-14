@@ -13,6 +13,7 @@ public static class PdaArcadeGame
     public const string Rocks = "rocks";
     public const string Flap = "flap";
     public const string Match = "match";
+    public const string Casino = "casino";
 }
 
 [Serializable, NetSerializable]
