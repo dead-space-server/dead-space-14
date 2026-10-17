@@ -19,6 +19,7 @@
             <cc:CommandButton Command="achatwindow" Text="{Loc admin-player-actions-window-admin-chat}"/>
             <cc:CommandButton Command="votecallui" Text="{Loc administration-ui-round-tab-call-vote}" />
             <cc:CommandButton Command="gamerulesui" Text="{Loc admin-ui-manage-gamerules}" />
+            <cc:CommandButton Command="timetransferui" Text="{Loc time-transfer-window-title}" />
         </GridContainer>
     </BoxContainer>
 </Control>
