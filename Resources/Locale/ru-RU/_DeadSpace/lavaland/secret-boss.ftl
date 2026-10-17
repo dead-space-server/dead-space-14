@@ -24,3 +24,4 @@ lavaland-secret-boss-awaken-line-7 = "У МЕНЯ НЕТ ДЛЯ ВАС ОТВЕ�
 lavaland-secret-boss-awaken-line-8 = "ЕСЛИ ВЫ ПРИШЛИ СЮДА В ПОИСКАХ СПАСИТЕЛЯ..."
 lavaland-secret-boss-awaken-line-9 = "ВНЕМЛИТЕ МОИМ СЛОВАМ."
 lavaland-secret-boss-awaken-line-10 = "НЕ УПОРСТВУЙТЕ."
+lavaland-teleport-jammed = Что-то глушит телепортацию...

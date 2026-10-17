@@ -34,6 +34,14 @@ public sealed partial class CelestialOrbComponent : Component
     [DataField]
     public float BeamDamageMax = 30f;
 
+    /// <summary>Урон при касании: долетев до игрока, шар взрывается на нём.</summary>
+    [DataField]
+    public float ContactDamage = 25f;
+
+    /// <summary>Радиус взрыва при касании, метры.</summary>
+    [DataField]
+    public float ContactRadius = 1f;
+
     /// <summary>Радиус попадания мелкого луча, метры.</summary>
     [DataField]
     public float BeamRadius = 0.5f;

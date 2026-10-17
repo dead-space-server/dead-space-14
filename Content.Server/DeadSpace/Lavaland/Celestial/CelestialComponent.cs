@@ -105,9 +105,9 @@ public sealed partial class CelestialComponent : Component
     [DataField]
     public float FutilityRepeatDelay = 1.2f;
 
-    /// <summary>Скорость шара, м/с.</summary>
+    /// <summary>Скорость шара, м/с. Медленнее бегущего игрока: от шара можно убежать, но не стоять на месте.</summary>
     [DataField]
-    public float OrbSpeed = 9f;
+    public float OrbSpeed = 4.2f;
 
     /// <summary>Максимальное время жизни шара, сек.</summary>
     [DataField]
@@ -119,7 +119,7 @@ public sealed partial class CelestialComponent : Component
 
     /// <summary>Неповоротливость шаров: скорость поворота, рад/сек. Чем меньше - тем тяжелее им доворачивать за игроком.</summary>
     [DataField]
-    public float OrbTurnRate = 1.4f;
+    public float OrbTurnRate = 3.2f;
 
     /// <summary>Звук открытия рифта.</summary>
     [DataField]

@@ -16,3 +16,4 @@ lavaland-deep-night-light-cooldown = Свет не загорается. Поп�
 lavaland-deep-night-battery-dead = Батарея фонаря садится — он гаснет.
 lavaland-deep-night-darkness-warning = Тьма подбирается к вам. Найдите свет!
 lavaland-deep-night-darkness = Тьма обжигает вас!
+lavaland-deep-night-bonfire-out = Тьма душит костёр - он гаснет и разваливается на дрова.

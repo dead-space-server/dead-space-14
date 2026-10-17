@@ -7,7 +7,7 @@ attachment-slot-crusher-handle = Рукоять
 attachment-slot-crusher-trophy = Трофей
 
 attachment-desc-crusher-marker = заменяет выстрел крашера на кинетический маркер (перезарядка 1 с).
-attachment-desc-crusher-rude-buster = стреляет мощным снарядом rude buster (40 колющего, 40 термического, перезарядка 8 с).
+attachment-desc-crusher-rude-buster = стреляет мощным снарядом rude buster (10 ударного, 10 термического, перезарядка 8 с).
 attachment-desc-crusher-lava = +5 термического урона, поджигает и нагревает цель.
 attachment-desc-crusher-ice = +4 урона холодом, охлаждает цель.
 attachment-desc-crusher-sharpness = +7 режущего урона.
@@ -23,6 +23,8 @@ attachment-desc-trophy-demon-claws = +2 урона в двух руках, уд�
 attachment-desc-trophy-blaster-tubes = выстрел маркером можно делать между ударами.
 attachment-desc-trophy-vortex = детонация метки посылает к цели преследователя Иерофанта.
 attachment-desc-trophy-broodmother = детонация метки с шансом 10% призывает под целью щупальце голиафа.
+attachment-desc-trophy-legionnaire = детонация метки с шансом 20% призывает верный череп легиона на 20 с.
+attachment-desc-trophy-pandora = детонация метки с шансом 20% бьёт магией Пандоры крестом тайлов вокруг цели.
 
 attachment-slot-bayonet = Штык
 attachment-slot-light = Фонарик

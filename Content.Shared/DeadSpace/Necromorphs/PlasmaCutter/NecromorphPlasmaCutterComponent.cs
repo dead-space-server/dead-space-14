@@ -61,3 +61,13 @@ public sealed partial class NecromorphPlasmaCutterReducedDamageComponent : Compo
     [DataField]
     public int HitsToKill = 5;
 }
+
+/// <summary>
+/// Raised on a necromorph hit by a plasma cutter before the usual wounds: a necromorph with limbs of its own kind
+/// (not body parts) can tear one off here and set <see cref="Handled"/>.
+/// </summary>
+[ByRefEvent]
+public record struct NecromorphPlasmaCutterHitAttemptEvent(System.Numerics.Vector2 ShotDirection, float Impulse)
+{
+    public bool Handled;
+}

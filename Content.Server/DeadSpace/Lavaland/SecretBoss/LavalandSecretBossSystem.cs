@@ -2,6 +2,7 @@
 
 using System.Linq;
 using System.Numerics;
+using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Backmen.Body.Components;
 using Content.Server.DeadSpace.Lavaland.ChromiteCaves;
@@ -13,6 +14,7 @@ using Content.Shared.Chat;
 using Robust.Shared.Utility;
 using Content.Server.Parallax;
 using Content.Shared.Atmos;
+using Content.Shared.Humanoid;
 using Content.Shared.Bed.Sleep;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
@@ -64,6 +66,9 @@ public sealed class LavalandSecretBossSystem : EntitySystem
     [Dependency] private readonly BiomeSystem _biome = default!;
     [Dependency] private readonly CelestialSystem _celestial = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly Content.Shared.Inventory.InventorySystem _inventory = default!;
+    [Dependency] private readonly Content.Shared.Hands.EntitySystems.SharedHandsSystem _hands = default!;
+    [Dependency] private readonly Content.Shared.Humanoid.SharedHumanoidAppearanceSystem _humanoid = default!;
     [Dependency] private readonly EuiManager _eui = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -79,6 +84,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly MobThresholdSystem _thresholds = default!;
     [Dependency] private readonly LavalandPitLandingSystem _landing = default!;
+    [Dependency] private readonly LavalandPitDropSystem _pitDrop = default!;
     [Dependency] private readonly LavalandChromiteCavesSystem _caves = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly Content.Shared.Camera.SharedCameraRecoilSystem _camera = default!;
@@ -97,6 +103,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
+        SubscribeLocalEvent<LavalandCelestialDreamerComponent, BeforeDamageChangedEvent>(OnDreamerDamage);
 
         SubscribeLocalEvent<ChasmFallingAttemptEvent>(OnChasmFallingAttempt);
         SubscribeLocalEvent<LavalandSecretBossMobComponent, MobStateChangedEvent>(OnBossMobStateChanged);
@@ -532,6 +539,8 @@ public sealed class LavalandSecretBossSystem : EntitySystem
         }
 
         var grid = _mapManager.CreateGridEntity(mapId);
+        // No grid atmosphere of its own: the walled-in rooms would start out as vacuum. It breathes the map's air.
+        RemComp<GridAtmosphereComponent>(grid.Owner);
         _metaData.SetEntityName(grid.Owner, "Celestial maze");
         RemComp<ImplicitRoofComponent>(grid.Owner);
         if (!_tileDefinition.TryGetDefinition(config.MazeFloorTile, out var floorDef))
@@ -574,6 +583,8 @@ public sealed class LavalandSecretBossSystem : EntitySystem
 
         // A tiny grid far away where falling players wait: they see only each other.
         var holding = _mapManager.CreateGridEntity(mapId);
+        // No grid atmosphere of its own: the walled-in rooms would start out as vacuum. It breathes the map's air.
+        RemComp<GridAtmosphereComponent>(holding.Owner);
         _transform.SetMapCoordinates(holding.Owner, new MapCoordinates(new Vector2(size + 500, size + 500), mapId));
         var holdingTiles = new List<(Vector2i, Tile)>();
         for (var x = -1; x <= 1; x++)
@@ -595,6 +606,8 @@ public sealed class LavalandSecretBossSystem : EntitySystem
         Dirty(mapUid, parallax);
 
         var grid = _mapManager.CreateGridEntity(mapId);
+        // No grid atmosphere of its own: the walled-in rooms would start out as vacuum. It breathes the map's air.
+        RemComp<GridAtmosphereComponent>(grid.Owner);
         _metaData.SetEntityName(grid.Owner, "Celestial arena");
         RemComp<ImplicitRoofComponent>(grid.Owner);
         if (!_tileDefinition.TryGetDefinition(config.ArenaTile, out var glass))
@@ -716,10 +729,21 @@ public sealed class LavalandSecretBossSystem : EntitySystem
     {
         if (args.Cancelled ||
             !TryComp<LavalandCelestialPitComponent>(args.Chasm, out var pit) ||
-            !HasComp<MobStateComponent>(args.Tripper) ||
             !TryComp<LavalandSecretBossComponent>(pit.LavalandMap, out var comp) ||
             comp.Stage == LavalandSecretBossStage.Done)
         {
+            return;
+        }
+
+        // A thing thrown in falls down into the maze a while later.
+        if (!HasComp<MobStateComponent>(args.Tripper))
+        {
+            if (comp.MazeMap is { } maze && !TerminatingOrDeleted(maze))
+            {
+                args.Cancel();
+                _pitDrop.Drop(args.Tripper, comp.FallHolding, comp.MazeStart);
+            }
+
             return;
         }
 
@@ -930,12 +954,28 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             };
         }
 
+        // The fight is a dream: the real bodies sleep by the pit, untouchable, and an exact copy of each player
+        // (looks, clothes, what is in the hands, the wounds) fights on the arena - the player in it.
+        comp.DreamOriginals.Clear();
+        comp.Participants.Clear();
         var radius = Math.Max(3f, config.ArenaSize / 2f - 3f);
         for (var i = 0; i < fighters.Count; i++)
         {
             var angle = MathF.Tau * i / fighters.Count;
             var position = comp.ArenaCenter.Position + new Vector2(MathF.Cos(angle), MathF.Sin(angle)) * radius;
-            _transform.SetMapCoordinates(fighters[i], new MapCoordinates(position, comp.ArenaCenter.MapId));
+            var original = fighters[i];
+            var copy = MakeDreamCopy(original, new MapCoordinates(position, comp.ArenaCenter.MapId));
+
+            comp.DreamOriginals[copy] = original;
+            comp.Participants.Add(copy);
+            Sleep(copy, config.IntroLength + TimeSpan.FromSeconds(10), config);
+
+            FinishDescent(original);
+            MoveNearPit(comp, original);
+            EnsureComp<LavalandCelestialDreamerComponent>(original);
+            Sleep(original, TimeSpan.FromHours(1), config);
+            if (_mind.TryGetMind(original, out var mindId, out var mind))
+                _mind.Visit(mindId, copy, mind);
         }
 
         // Spawned after the players are there: its intro cutscene goes to everyone on the arena map.
@@ -1033,6 +1073,81 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             Fail(ent, config);
     }
 
+    /// <summary>The body asleep by the pit while its copy fights: nothing harms it meanwhile.</summary>
+    private void OnDreamerDamage(Entity<LavalandCelestialDreamerComponent> ent, ref BeforeDamageChangedEvent args)
+    {
+        args.Cancelled = true;
+    }
+
+    /// <summary>
+    /// A copy of the player for the dream: the same body prototype and looks, the same name, a copy of everything worn
+    /// and held, the same wounds. It and everything on it are deleted when the dream ends.
+    /// </summary>
+    private EntityUid MakeDreamCopy(EntityUid original, MapCoordinates at)
+    {
+        var proto = MetaData(original).EntityPrototype?.ID ?? "MobHuman";
+        var copy = Spawn(proto, at);
+        _metaData.SetEntityName(copy, Name(original));
+        if (HasComp<HumanoidAppearanceComponent>(original) && HasComp<HumanoidAppearanceComponent>(copy))
+            _humanoid.CloneAppearance(original, copy);
+
+        if (_inventory.TryGetSlots(original, out var slots))
+        {
+            foreach (var slot in slots)
+            {
+                if (!_inventory.TryGetSlotEntity(original, slot.Name, out var item) ||
+                    MetaData(item.Value).EntityPrototype is not { } itemProto)
+                {
+                    continue;
+                }
+
+                var clone = Spawn(itemProto.ID, at);
+                if (!_inventory.TryEquip(copy, clone, slot.Name, silent: true, force: true))
+                    QueueDel(clone);
+            }
+        }
+
+        foreach (var held in _hands.EnumerateHeld(original))
+        {
+            if (MetaData(held).EntityPrototype is not { } heldProto)
+                continue;
+
+            var clone = Spawn(heldProto.ID, at);
+            if (!_hands.TryPickupAnyHand(copy, clone, checkActionBlocker: false))
+                QueueDel(clone);
+        }
+
+        if (TryComp<DamageableComponent>(original, out var damage) && TryComp<DamageableComponent>(copy, out var copyDamage))
+            _damageable.SetDamage((copy, copyDamage), new DamageSpecifier(damage.Damage));
+
+        return copy;
+    }
+
+    /// <summary>The dream is over: every player back in his own body by the pit, the copies and their things gone.</summary>
+    private void EndDream(LavalandSecretBossComponent comp)
+    {
+        if (comp.DreamOriginals.Count == 0)
+            return;
+
+        var originals = new List<EntityUid>();
+        foreach (var (copy, original) in comp.DreamOriginals)
+        {
+            if (!TerminatingOrDeleted(original))
+            {
+                if (_mind.TryGetMind(original, out var mindId, out var mind) && mind.VisitingEntity != null)
+                    _mind.UnVisit(mindId, mind);
+                originals.Add(original);
+            }
+
+            if (!TerminatingOrDeleted(copy))
+                QueueDel(copy);
+        }
+
+        comp.DreamOriginals.Clear();
+        comp.Participants.Clear();
+        comp.Participants.UnionWith(originals);
+    }
+
     private Filter FightersFilter(LavalandSecretBossComponent comp)
     {
         var filter = Filter.Empty();
@@ -1063,6 +1178,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
         comp.Boss = null;
 
         var now = _timing.CurTime;
+        EndDream(comp);
         foreach (var fighter in comp.Participants)
         {
             if (TerminatingOrDeleted(fighter))
@@ -1071,6 +1187,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             FinishDescent(fighter);
             Wake(fighter);
             MoveNearPit(comp, fighter);
+            RemComp<LavalandCelestialDreamerComponent>(fighter);
             if (comp.Snapshots.TryGetValue(fighter, out var snapshot))
                 RestoreFighter(fighter, snapshot);
 
@@ -1186,6 +1303,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
         comp.Boss = null;
 
         var sleepFor = TimeSpan.FromSeconds(Math.Max(length.TotalSeconds, config.RewardSleep.TotalSeconds));
+        EndDream(comp);
         foreach (var fighter in comp.Participants)
         {
             if (TerminatingOrDeleted(fighter))
@@ -1219,6 +1337,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
                 continue;
 
             // Every player of the fight gets one random blessing; the fallen keep it for when they are revived.
+            RemComp<LavalandCelestialDreamerComponent>(fighter);
             if (_mobState.IsAlive(fighter))
                 Wake(fighter);
             if (config.Blessings.Count == 0)

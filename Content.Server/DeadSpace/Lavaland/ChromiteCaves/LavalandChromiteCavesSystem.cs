@@ -64,6 +64,7 @@ public sealed class LavalandChromiteCavesSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ITileDefinitionManager _tileDefinition = default!;
     [Dependency] private readonly LavalandBossArenaSystem _bossArena = default!;
+    [Dependency] private readonly LavalandPitDropSystem _pitDrop = default!;
     [Dependency] private readonly LavalandFaunaRaidSystem _raid = default!;
     [Dependency] private readonly LavalandPitLandingSystem _landing = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
@@ -664,9 +665,9 @@ public sealed class LavalandChromiteCavesSystem : EntitySystem
             return;
         }
 
-        // Things and bodies just drop into the flowers.
+        // Things and bodies fall for a while and drop into the flowers below.
         StopPulling(args.Tripper);
-        _transform.SetMapCoordinates(args.Tripper, RandomLandingSpot(caves));
+        _pitDrop.Drop(args.Tripper, caves.Holding, RandomLandingSpot(caves), 0.5f);
     }
 
     /// <summary>Players walking up to the edge of the pit are asked whether to jump.</summary>

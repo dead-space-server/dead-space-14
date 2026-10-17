@@ -28,8 +28,9 @@
         enum.LavalandMadMinerLayers.ClawLeft:
           True: { visible: true }
           False: { visible: false }
-  # Dead it lies on the ground (and gets back up when it rises).
+  # Dead it tips over onto the ground smoothly, as people do (and gets back up when it rises).
   - type: StandingState
+  - type: RotationVisuals
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -90,6 +91,21 @@
   - type: Tag
     tags:
     - CannotSuicide
+
+# A limb torn off the mad miner's necromorph: its own sprite, with everything but the limb cut away by a shader.
+- type: entity
+  parent: BaseItem
+  id: LavalandMadMinerSeveredLimb
+  name: оторванная конечность
+  description: Ещё дёргается.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Mobs/MadMiner.rsi
+    state: demonic_miner
+  - type: Item
+    size: Normal
+  - type: LavalandMadMinerSeveredLimb
 
 - type: entity
   parent: BaseBullet
@@ -280,7 +296,6 @@
     rewards:
     - prototype: LavalandNecropolisChest
     - prototype: LavalandEliteTrophyBroodmother
-      chance: 0.5
   - type: LavalandBroodmother
     tentacleDamage:
       types:
@@ -380,7 +395,6 @@
     rewards:
     - prototype: LavalandNecropolisChest
     - prototype: LavalandEliteTrophyLegionnaire
-      chance: 0.5
   - type: LavalandLegionnaire
     chargeLength: 6
     chargeSpeed: 14
@@ -446,6 +460,8 @@
     radius: 4
     energy: 1.5
     color: "#ff6b4a"
+  # Goes dark in the deep night like any other fire there.
+  - type: LavalandDeepNightDark
   - type: Damageable
     damageContainer: Inorganic
   - type: Destructible
@@ -527,7 +543,6 @@
     - prototype: WeaponGrapplingGun # the only way out of the chromite caves
     - prototype: LavalandNecropolisChest
     - prototype: LavalandEliteTrophyPandora
-      chance: 0.5
   - type: LavalandPandora
     shotLength: 8
     teleportRange: 12

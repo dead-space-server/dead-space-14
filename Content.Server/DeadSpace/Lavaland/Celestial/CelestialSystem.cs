@@ -825,6 +825,24 @@ public sealed class CelestialSystem : EntitySystem
         return spawnedAny;
     }
 
+    private void OrbContact(EntityUid uid, CelestialOrbComponent orb, Vector2 at)
+    {
+        var mapId = _transform.GetMapCoordinates(uid).MapId;
+        var damage = new DamageSpecifier();
+        damage.DamageDict.TryAdd("Heat", orb.ContactDamage * 0.5f);
+        damage.DamageDict.TryAdd("Blunt", orb.ContactDamage * 0.5f);
+
+        RaiseVisual(mapId, new CelestialBeamVisualEvent(at - new Vector2(orb.ContactRadius, 0f),
+            at + new Vector2(orb.ContactRadius, 0f), (int) mapId, 0.2f, 0.3f, 0.9f), orb.LocalizedEvents);
+
+        foreach (var victim in _lookup.GetEntitiesInRange(new MapCoordinates(at, mapId), orb.ContactRadius, LookupFlags.Uncontained))
+        {
+            if (TerminatingOrDeleted(victim) || HasComp<CelestialComponent>(victim) || victim == uid)
+                continue;
+            _damage.TryChangeDamage(victim, damage, true);
+        }
+    }
+
     private void FireSmallBeam(Vector2 from, MapId mapId, CelestialOrbComponent orb)
     {
         var angle = _random.NextFloat(0f, MathF.Tau);
@@ -956,6 +974,8 @@ public sealed class CelestialSystem : EntitySystem
             var dist = toTarget.Length();
             if (dist < 0.8f)
             {
+                // догнал - взрывается на цели и всех рядом
+                OrbContact(uid, orb, orbPos);
                 QueueDel(uid);
                 continue;
             }

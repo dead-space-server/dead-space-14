@@ -24,3 +24,4 @@ lavaland-secret-boss-awaken-line-7 = "I HAVE NO ANSWERS FOR YOU, I GRANT NO SALV
 lavaland-secret-boss-awaken-line-8 = "IF YOU CAME HERE LOOKING FOR A SAVIOUR..."
 lavaland-secret-boss-awaken-line-9 = "HEED MY WORDS."
 lavaland-secret-boss-awaken-line-10 = "DO NOT PERSIST."
+lavaland-teleport-jammed = Something is jamming the teleportation...

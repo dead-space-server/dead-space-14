@@ -101,6 +101,13 @@ public sealed partial class LavalandSecretBossComponent : Component
     [ViewVariables]
     public readonly Dictionary<EntityUid, LavalandFighterSnapshot> Snapshots = new();
 
+    /// <summary>
+    /// The fight is a dream: each fighter on the arena is a copy of a player whose real body sleeps by the pit.
+    /// Copy -> the original body.
+    /// </summary>
+    [ViewVariables]
+    public readonly Dictionary<EntityUid, EntityUid> DreamOriginals = new();
+
     [ViewVariables]
     public TimeSpan? WipeSince;
 
@@ -195,3 +202,7 @@ public sealed partial class LavalandPitDescentComponent : Component
     [ViewVariables]
     public TimeSpan NextStep;
 }
+
+/// <summary>A player's real body asleep by the Celestial pit while its copy fights in the dream: nothing harms it.</summary>
+[RegisterComponent]
+public sealed partial class LavalandCelestialDreamerComponent : Component;

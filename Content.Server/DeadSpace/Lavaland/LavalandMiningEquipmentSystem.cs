@@ -287,6 +287,15 @@ public sealed class LavalandMiningEquipmentSystem : EntitySystem
             return;
         }
 
+        // Megafauna and mini-bosses are far too much for the nanomachines.
+        if (HasComp<LavalandBossComponent>(target) || HasComp<LavalandEliteComponent>(target) ||
+            HasComp<LavalandMadMinerComponent>(target) || HasComp<LavalandLegionMegafaunaComponent>(target) ||
+            HasComp<Content.Server.DeadSpace.Lavaland.Celestial.CelestialComponent>(target))
+        {
+            _popup.PopupEntity(Loc.GetString("lavaland-lazarus-too-strong"), target, args.User);
+            return;
+        }
+
         if (!_mobState.IsDead(target, mob))
         {
             _popup.PopupEntity(Loc.GetString("lavaland-lazarus-not-dead"), target, args.User);
@@ -429,7 +438,8 @@ public sealed class LavalandMiningEquipmentSystem : EntitySystem
         _lookup.GetEntitiesInRange(xform.Coordinates, ent.Comp.MineRange, _veins, LookupFlags.Static);
         foreach (var vein in _veins)
         {
-            if (vein.Comp.CurrentOre == null)
+            // Not the outpost's own walls: ore showing on the base grid is not for digging.
+            if (vein.Comp.CurrentOre == null || HasComp<LavalandOutpostComponent>(Transform(vein).GridUid))
                 continue;
 
             var distance = (_transform.GetWorldPosition(vein) - position).LengthSquared();

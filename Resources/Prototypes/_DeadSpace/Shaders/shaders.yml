@@ -19,3 +19,17 @@
   path: "/Textures/_DeadSpace/Shaders/containment_field_hack.swsl"
   params:
     progress: 0.0
+
+# A geist of the Circle half sunk into a lavaland chasm: everything below the ground line is cut away.
+- type: shader
+  id: LavalandGeistHoleCut
+  kind: source
+  path: "/Textures/_DeadSpace/Shaders/geist_hole_cut.swsl"
+  params:
+    cut: 0
+
+# The mad miner's necromorph: limbs cut out of its one-piece sprite, or a torn-off limb alone.
+- type: shader
+  id: LavalandMadMinerLimbMask
+  kind: source
+  path: "/Textures/_DeadSpace/Shaders/limb_mask.swsl"

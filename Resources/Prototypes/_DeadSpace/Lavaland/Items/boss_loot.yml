@@ -51,7 +51,7 @@
       coefficients:
         Blunt: 0.3
         Slash: 0.3
-        Piercing: 0.6
+        Piercing: 0.7
         Heat: 0.6
         Caustic: 0.1
   - type: FireProtection
@@ -309,6 +309,17 @@
     size: Small
   - type: StaticPrice
     price: 2000
+  - type: Attachment
+    uniqueGroup: LegionnaireSpine
+    description: attachment-desc-trophy-legionnaire
+    markDetonationEffects:
+    - !type:AttachmentSummonAlly
+      chance: 0.2
+      prototype: MobLavalandLegionHead
+      lifetime: 20
+  - type: Tag
+    tags:
+    - CrusherTrophy
 
 - type: entity
   parent: BaseItem
@@ -323,3 +334,24 @@
     size: Small
   - type: StaticPrice
     price: 2000
+  - type: Attachment
+    uniqueGroup: PandoraHope
+    description: attachment-desc-trophy-pandora
+    markDetonationEffects:
+    - !type:AttachmentTargetBlast
+      chance: 0.2
+      effect: LavalandHierophantBlast
+      sound:
+        path: /Audio/Magic/blink.ogg
+      offsets:
+      - 0, 0
+      - 1, 0
+      - -1, 0
+      - 0, 1
+      - 0, -1
+      damage:
+        types:
+          Heat: 15
+  - type: Tag
+    tags:
+    - CrusherTrophy

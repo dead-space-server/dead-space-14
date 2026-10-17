@@ -4,6 +4,7 @@ using System.Numerics;
 using Content.Shared.DeadSpace.Movement.Components;
 using Content.Shared.Movement.Components;
 using Robust.Shared.Network;
+using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 
 namespace Content.Shared.Movement.Systems;
@@ -18,6 +19,7 @@ public abstract partial class SharedMoverController
     [Dependency] private readonly INetManager _tileStepNet = default!;
 
     protected EntityQuery<TileStepMovementComponent> TileStepQuery;
+    protected EntityQuery<FixturesComponent> TileStepFixturesQuery;
 
     /// <summary>Close enough to a tile center to count as standing on it.</summary>
     private const float TileStepArriveDistance = 0.02f;
@@ -199,8 +201,19 @@ public abstract partial class SharedMoverController
             if (!PhysicsQuery.TryComp(other, out var otherBody) || !otherBody.CanCollide || !otherBody.Hard)
                 continue;
 
-            if ((otherBody.CollisionLayer & physics.CollisionMask) != 0)
+            if ((otherBody.CollisionLayer & physics.CollisionMask) == 0)
+                continue;
+
+            // Only a hard fixture in our way blocks: a bear trap is hard as an item but its trigger on the
+            // impassable layer is not, and the body's layer is the union of all of its fixtures.
+            if (!TileStepFixturesQuery.TryComp(other, out var fixtures))
                 return true;
+
+            foreach (var fixture in fixtures.Fixtures.Values)
+            {
+                if (fixture.Hard && (fixture.CollisionLayer & physics.CollisionMask) != 0)
+                    return true;
+            }
         }
 
         return false;

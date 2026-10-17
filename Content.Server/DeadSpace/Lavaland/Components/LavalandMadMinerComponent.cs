@@ -90,6 +90,14 @@ public sealed partial class LavalandMadMinerComponent : Component
     [ViewVariables] public bool RiseShaking;
     [ViewVariables] public TimeSpan? RiseAt;
     [ViewVariables] public bool Risen;
+    /// <summary>The second stage's theme, started from its middle and faded in.</summary>
+    [DataField] public SoundSpecifier? RisenMusic = new SoundPathSpecifier("/Audio/_DeadSpace/Necromorfs/plasma_cutters_are_your_friend.ogg");
+    /// <summary>A limb torn off it: its own sprite with everything but the limb cut away.</summary>
+    [DataField] public EntProtoId SeveredLimb = "LavalandMadMinerSeveredLimb";
+    [DataField] public float SeveredLimbImpulse = 6f;
+    /// <summary>Its speed before it lost a leg to a plasma cutter.</summary>
+    [ViewVariables] public float RisenWalkSpeed;
+    [ViewVariables] public float RisenSprintSpeed;
 
     [ViewVariables] public EntityUid? Target;
     [ViewVariables] public readonly Dictionary<EntityUid, EntityUid> HookTargets = new();

@@ -30,6 +30,7 @@ public sealed class BearTrapSystem : EntitySystem
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly CollisionWakeSystem _collisionWake = default!;
 
     private readonly List<EntityUid> _activeToRemove = new();
 
@@ -157,16 +158,20 @@ public sealed class BearTrapSystem : EntitySystem
             RemComp<EnsnaringComponent>(ent);
         _transform.Unanchor(ent);
         _transform.SetLocalRotation(ent, Angle.Zero);
+        _collisionWake.SetEnabled(ent, true);
         Dirty(ent);
     }
 
-    private void Arm(Entity<BearTrapComponent> ent, EntityUid user)
+    /// <summary>Arms the trap where it lies. <paramref name="user"/> may step off it safely; null - nobody (placed traps).</summary>
+    public void Arm(Entity<BearTrapComponent> ent, EntityUid? user)
     {
         ent.Comp.Arming = true;
         ent.Comp.ArmsAt = _timing.CurTime + ent.Comp.ArmingTime;
         _appearance.SetData(ent, BearTrapVisuals.Armed, true);
         _transform.AnchorEntity(ent);
         _transform.SetLocalRotation(ent, Angle.Zero);
+        // An anchored body with nobody on it falls asleep and collision wake would switch its collision off.
+        _collisionWake.SetEnabled(ent, false);
         ConfigureEnsnaring(ent);
         EnsureComp<ActiveBearTrapComponent>(ent);
         ent.Comp.Installer = user;
@@ -252,6 +257,7 @@ public sealed class BearTrapSystem : EntitySystem
         ent.Comp.ArmsAt = null;
         ent.Comp.Opacity = 1f;
         _appearance.SetData(ent, BearTrapVisuals.Armed, false);
+        _collisionWake.SetEnabled(ent, true);
         EnsureComp<ActiveBearTrapComponent>(ent);
         _transform.SetLocalRotation(ent, Angle.Zero);
         Dirty(ent);

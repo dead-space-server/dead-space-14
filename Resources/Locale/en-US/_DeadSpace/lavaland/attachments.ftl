@@ -7,7 +7,7 @@ attachment-slot-crusher-handle = Handle
 attachment-slot-crusher-trophy = Trophy
 
 attachment-desc-crusher-marker = replaces the crusher shot with a kinetic marker (1 s recharge).
-attachment-desc-crusher-rude-buster = fires a powerful rude buster (40 piercing, 40 heat, 8 s recharge).
+attachment-desc-crusher-rude-buster = fires a powerful rude buster (10 blunt, 10 heat, 8 s recharge).
 attachment-desc-crusher-lava = +5 heat damage, ignites and heats the target.
 attachment-desc-crusher-ice = +4 cold damage, chills the target.
 attachment-desc-crusher-sharpness = +7 slash damage.
@@ -23,6 +23,8 @@ attachment-desc-trophy-demon-claws = +2 wielded damage, hits heal 1; mark detona
 attachment-desc-trophy-blaster-tubes = marker shots can be fired between swings.
 attachment-desc-trophy-vortex = mark detonation sends a hierophant chaser at the target.
 attachment-desc-trophy-broodmother = mark detonation has a 10% chance to summon a goliath tentacle under the target.
+attachment-desc-trophy-legionnaire = mark detonation has a 20% chance to summon a loyal legion skull for 20 s.
+attachment-desc-trophy-pandora = mark detonation has a 20% chance to blast a cross of tiles around the target with Pandora's magic.
 
 attachment-slot-bayonet = Bayonet
 attachment-slot-light = Flashlight

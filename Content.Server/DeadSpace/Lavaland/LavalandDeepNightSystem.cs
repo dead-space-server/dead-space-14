@@ -1,6 +1,8 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Linq;
+using Content.Shared.Stacks;
+using Content.Shared.Temperature.Components;
 using Content.Server.DeadSpace.Attachments;
 using Content.Server.DeadSpace.Components.NightVision;
 using Content.Server.DeadSpace.Lavaland.ChromiteCaves;
@@ -50,6 +52,7 @@ public sealed class LavalandDeepNightSystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedPointLightSystem _pointLight = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly SharedStackSystem _stack = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly UnpoweredFlashlightSystem _unpoweredFlashlight = default!;
 
@@ -63,6 +66,7 @@ public sealed class LavalandDeepNightSystem : EntitySystem
     private readonly Dictionary<(EntityUid Uid, LightKind Kind), LightState> _lights = new();
     private readonly HashSet<EntityUid> _blocked = new();
     private readonly HashSet<EntityUid> _darkened = new();
+    private readonly Dictionary<EntityUid, TimeSpan> _bonfires = new();
     private readonly Dictionary<EntityUid, DarkState> _darkness = new();
     private readonly Dictionary<EntityUid, (float Radius, float Energy)> _wisps = new();
     private readonly HashSet<Entity<PointLightComponent>> _nearbyLights = new();
@@ -114,6 +118,7 @@ public sealed class LavalandDeepNightSystem : EntitySystem
             RestoreWisps(null);
             ClearBlocks();
             RestoreDarkened(true);
+            _bonfires.Clear();
             return;
         }
 
@@ -122,6 +127,7 @@ public sealed class LavalandDeepNightSystem : EntitySystem
         UpdatePdaLights(now);
         UpdateWeaponLights(now);
         UpdateFlares();
+        UpdateBonfires(now);
         UpdateWisps();
         UpdateBlocks(now);
         UpdateDarkened();
@@ -234,6 +240,45 @@ public sealed class LavalandDeepNightSystem : EntitySystem
                 _unpoweredFlashlight.SetLight((uid, light), false, quiet: true);
         }
     }
+
+    /// <summary>A bonfire in the deep night - lit there or carried in - falls apart into firewood a few seconds later.</summary>
+    private void UpdateBonfires(TimeSpan now)
+    {
+        var query = EntityQueryEnumerator<AlwaysHotComponent, MetaDataComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out _, out var meta, out var xform))
+        {
+            if (meta.EntityPrototype is not { } proto || !BonfirePrototypes.Contains(proto.ID) ||
+                xform.MapUid is not { } map || !_deepMaps.TryGetValue(map, out var deep))
+            {
+                continue;
+            }
+
+            if (!_bonfires.TryGetValue(uid, out var since))
+            {
+                _bonfires[uid] = now;
+                continue;
+            }
+
+            if (now - since < deep.BonfireTime)
+                continue;
+
+            _bonfires.Remove(uid);
+            var wood = Spawn(BonfireWood, xform.Coordinates);
+            _stack.SetCount(wood, BonfireWoodCount);
+            _popup.PopupCoordinates(Loc.GetString("lavaland-deep-night-bonfire-out"), xform.Coordinates, PopupType.MediumCaution);
+            QueueDel(uid);
+        }
+
+        foreach (var uid in _bonfires.Keys.ToArray())
+        {
+            if (TerminatingOrDeleted(uid))
+                _bonfires.Remove(uid);
+        }
+    }
+
+    private static readonly HashSet<string> BonfirePrototypes = new() { "Bonfire", "BonfireStake" };
+    private static readonly EntProtoId BonfireWood = "MaterialWoodPlank1";
+    private const int BonfireWoodCount = 5;
 
     /// <summary>A flare lit in the deep night: it burns out in seconds instead of a quarter of an hour.</summary>
     private void UpdateFlares()

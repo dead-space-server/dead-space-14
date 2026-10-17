@@ -11,7 +11,7 @@ using Robust.Shared.Serialization;
 namespace Content.Shared.DeadSpace.Lavaland;
 
 /// <summary>Hooked by the mad miner: no walking away until the hook is gone (it ends, or is pulled out).</summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class LavalandMadMinerHookedComponent : Component
 {
     [ViewVariables, AutoNetworkedField] public EntityUid Miner;
@@ -40,6 +40,19 @@ public sealed class LavalandMadMinerHookSystem : EntitySystem
         SubscribeLocalEvent<LavalandMadMinerHookedComponent, UpdateCanMoveEvent>(OnUpdateCanMove);
         SubscribeLocalEvent<LavalandMadMinerHookedComponent, ComponentStartup>(OnChanged);
         SubscribeLocalEvent<LavalandMadMinerHookedComponent, ComponentShutdown>(OnChanged);
+        SubscribeLocalEvent<LavalandMadMinerHookedComponent, AfterAutoHandleStateEvent>(OnChanged);
+    }
+
+    /// <summary>
+    /// Hooks the player to this miner. The miner is set after the component starts, so whether the player can move is
+    /// worked out again here - at startup nobody held the hook yet and the player was left free to walk.
+    /// </summary>
+    public void SetMiner(Entity<LavalandMadMinerHookedComponent> ent, EntityUid miner)
+    {
+        ent.Comp.Miner = miner;
+        ent.Comp.Removing = false;
+        Dirty(ent);
+        _blocker.UpdateCanMove(ent);
     }
 
     private void OnUpdateCanMove(Entity<LavalandMadMinerHookedComponent> ent, ref UpdateCanMoveEvent args)

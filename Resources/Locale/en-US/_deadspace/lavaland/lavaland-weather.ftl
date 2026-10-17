@@ -16,3 +16,4 @@ lavaland-deep-night-light-cooldown = The light does not turn on. Try again in { 
 lavaland-deep-night-battery-dead = The flashlight battery dies - it goes out.
 lavaland-deep-night-darkness-warning = The darkness creeps up on you. Find some light!
 lavaland-deep-night-darkness = The darkness burns you!
+lavaland-deep-night-bonfire-out = The darkness smothers the bonfire - it goes out and falls apart into firewood.

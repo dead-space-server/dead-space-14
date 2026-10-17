@@ -300,8 +300,8 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 40
-        Heat: 40
+        Blunt: 10
+        Heat: 10
         Structural: 80
     penetrationThreshold: 500
   - type: StaminaDamageOnCollide
@@ -440,13 +440,17 @@
     size: Normal
     sprite: _Goob/Lavaland/Objects/Weapons/Secondary/kinetic_claws-inhands.rsi
   - type: MeleeWeapon
-    attackRate: 2.5
+    attackRate: 3
     wideAnimationRotation: -135
     damage:
       types:
         Slash: 7
     soundHit:
-      collection: AlienClaw
+      collection: MantisAttack
+    soundNoDamage:
+      collection: MantisAttack
+    soundSwing:
+      collection: MantisAttack
     angle: 30
     animation: WeaponArcClaw
     range: 1.1

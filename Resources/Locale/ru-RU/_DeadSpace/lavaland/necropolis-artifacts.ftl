@@ -77,3 +77,5 @@ lavaland-tamed-emp = { CAPITALIZE(THE($target)) } дёргается - нано�
 lavaland-warp-cube-not-lavaland = Куб работает только на Лаваленде или в пещерах, и только если второй куб там же.
 lavaland-mad-miner-risen-name = шахтёр-некроморф
 lavaland-mad-miner-risen = { CAPITALIZE(THE($miner)) } резко встаёт - из рук вырастают клешни!
+lavaland-lazarus-too-strong = Наномашины бессильны - эта тварь слишком могущественна.
+lavaland-geist-ambush-shot = Гейст вздрагивает и проваливается обратно в яму!

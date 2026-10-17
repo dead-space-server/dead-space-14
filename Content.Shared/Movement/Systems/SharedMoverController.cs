@@ -101,6 +101,7 @@ public abstract partial class SharedMoverController : VirtualController
         PilotQuery = GetEntityQuery<PilotComponent>();
         PreventPilotQuery = GetEntityQuery<PreventPilotComponent>();
         TileStepQuery = GetEntityQuery<Content.Shared.DeadSpace.Movement.Components.TileStepMovementComponent>(); // DS14
+        TileStepFixturesQuery = GetEntityQuery<FixturesComponent>(); // DS14
 
         SubscribeLocalEvent<MovementSpeedModifierComponent, TileFrictionEvent>(OnTileFriction);
         SubscribeLocalEvent<InputMoverComponent, ComponentStartup>(OnMoverStartup);

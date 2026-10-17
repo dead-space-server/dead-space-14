@@ -7,12 +7,15 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.NPC.Components;
+using Content.Shared.NPC.Systems;
 using Content.Shared.Throwing;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.GameStates;
+using Robust.Shared.Spawners;
 using Robust.Shared.Timing;
 
 namespace Content.Shared.DeadSpace.Attachments;
@@ -187,6 +190,89 @@ public sealed partial class AttachmentSpawnAtTarget : AttachmentEffect
         {
             entMan.SpawnEntity(Prototype, new MapCoordinates(coords.Position + offset, coords.MapId));
         }
+    }
+}
+
+/// <summary>
+/// Summons a creature at the user's side, fighting for the user's factions for a while. Legionnaire spine skulls.
+/// </summary>
+public sealed partial class AttachmentSummonAlly : AttachmentEffect
+{
+    [DataField(required: true)]
+    public EntProtoId Prototype;
+
+    /// <summary>Seconds before it is gone; 0 - it stays.</summary>
+    [DataField]
+    public float Lifetime = 20f;
+
+    public override void Apply(in AttachmentEffectArgs args, DamageSpecifier bonusDamage)
+    {
+        var entMan = args.EntityManager;
+        var transform = entMan.System<SharedTransformSystem>();
+        var user = transform.GetMapCoordinates(args.User);
+        var target = transform.GetMapCoordinates(args.Target);
+        var toward = target.Position - user.Position;
+        var offset = toward.LengthSquared() > 0.0001f ? Vector2.Normalize(toward) * 0.5f : Vector2.Zero;
+        var ally = entMan.SpawnEntity(Prototype, new MapCoordinates(user.Position + offset, user.MapId));
+
+        var faction = entMan.System<NpcFactionSystem>();
+        if (entMan.HasComponent<NpcFactionMemberComponent>(ally))
+        {
+            faction.ClearFactions(ally, false);
+            if (entMan.TryGetComponent<NpcFactionMemberComponent>(args.User, out var member))
+                faction.AddFactions(ally, member.Factions);
+        }
+
+        if (Lifetime > 0f)
+            entMan.EnsureComponent<TimedDespawnComponent>(ally).Lifetime = Lifetime;
+    }
+}
+
+/// <summary>
+/// Blasts the tiles on and around the target: every living thing there except the user is hurt once. Pandora's hope.
+/// </summary>
+public sealed partial class AttachmentTargetBlast : AttachmentEffect
+{
+    [DataField(required: true)]
+    public DamageSpecifier Damage = new();
+
+    /// <summary>Tile offsets from the target to blast.</summary>
+    [DataField]
+    public List<Vector2> Offsets = new() { Vector2.Zero };
+
+    [DataField]
+    public EntProtoId? Effect;
+
+    [DataField]
+    public SoundSpecifier? Sound;
+
+    public override void Apply(in AttachmentEffectArgs args, DamageSpecifier bonusDamage)
+    {
+        var entMan = args.EntityManager;
+        var lookup = entMan.System<EntityLookupSystem>();
+        var transform = entMan.System<SharedTransformSystem>();
+        var mobState = entMan.System<MobStateSystem>();
+        var damageable = entMan.System<DamageableSystem>();
+
+        var center = transform.GetMapCoordinates(args.Target);
+        var hit = new HashSet<EntityUid>();
+        foreach (var offset in Offsets)
+        {
+            var coords = new MapCoordinates(center.Position + offset, center.MapId);
+            if (Effect != null)
+                entMan.SpawnEntity(Effect, coords);
+
+            foreach (var victim in lookup.GetEntitiesInRange<MobStateComponent>(coords, 0.5f))
+            {
+                if (victim.Owner == args.User || mobState.IsDead(victim, victim.Comp) || !hit.Add(victim))
+                    continue;
+
+                damageable.TryChangeDamage(victim.Owner, Damage, true, origin: args.User);
+            }
+        }
+
+        if (Sound != null)
+            entMan.System<SharedAudioSystem>().PlayPvs(Sound, args.Target);
     }
 }
 

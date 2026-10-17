@@ -1,0 +1,91 @@
+# The geists of the Circle haunting lavaland.
+
+- type: startingGear
+  id: LavalandGeistPhantomGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitUnitology
+    outerClothing: ClothingOuterHardsuitUnitologyGeist
+    head: ClothingHeadHelmetUnitologyGeist
+    neck: ClothingNeckUnitologyGeistMantle
+    gloves: ClothingHandsGlovesCombatUnitology
+    shoes: ADTClothingFootWrapsBlack
+
+# A geist: nothing harms it, it runs fast, it is never caught.
+- type: entity
+  parent: MobHuman
+  id: LavalandGeistPhantom
+  name: ???
+  description: Кажется вы его видели...
+  suffix: Lavaland
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Loadout
+    prototypes: [ LavalandGeistPhantomGear ]
+  - type: LavalandGeistPhantom
+  - type: StunImmune
+  - type: LavalandWeatherImmune
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 6
+    baseSprintSpeed: 8.5
+
+# Lays an ordinary bear trap of the Circle in the flowers, armed, and is gone.
+- type: entity
+  parent: MarkerBase
+  id: LavalandGeistTrapSpawner
+  name: капкан гейста
+  suffix: Lavaland, спавнер
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+  - type: LavalandGeistTrapSpawner
+
+- type: entity
+  parent: MarkerBase
+  id: LavalandGeistWatchTrigger
+  name: взгляд гейста
+  suffix: Lavaland, триггер
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+  - type: LavalandGeistWatchTrigger
+
+- type: entity
+  parent: MarkerBase
+  id: LavalandGeistAmbushTrigger
+  name: засада гейста
+  suffix: Lavaland, триггер
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+  - type: LavalandGeistAmbushTrigger
+
+# The hole a geist rises from: a dark rim of dust where it stands half sunk.
+- type: entity
+  id: LavalandGeistHoleDust
+  name: облако пыли
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    drawdepth: OverMobs
+    sprite: Effects/chemsmoke.rsi
+    noRot: true
+    layers:
+    # The rim of the hole at the ground line (its legs are cut away by a shader, not hidden by this).
+    - state: chemsmoke
+      color: "#050302ff"
+      scale: 0.6, 0.16
+      offset: 0, -0.4
+    - state: chemsmoke
+      color: "#0b0806ee"
+      scale: 0.75, 0.1
+      offset: 0, -0.36
+  - type: TimedDespawn
+    lifetime: 5
+  - type: Tag
+    tags:
+    - HideContextMenu

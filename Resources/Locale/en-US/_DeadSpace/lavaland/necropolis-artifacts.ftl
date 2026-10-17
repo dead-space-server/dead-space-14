@@ -77,3 +77,5 @@ lavaland-tamed-emp = { CAPITALIZE(THE($target)) } twitches - the nanomachines fa
 lavaland-warp-cube-not-lavaland = The cube only works on Lavaland or in the caves, with its twin in the same place.
 lavaland-mad-miner-risen-name = necromorph miner
 lavaland-mad-miner-risen = { CAPITALIZE(THE($miner)) } jerks back up - claws burst from its hands!
+lavaland-lazarus-too-strong = The nanomachines are powerless - this creature is far too mighty.
+lavaland-geist-ambush-shot = The geist flinches and drops back into its hole!

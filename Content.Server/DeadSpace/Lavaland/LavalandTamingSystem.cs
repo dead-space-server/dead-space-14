@@ -75,7 +75,7 @@ public sealed class LavalandTamingSystem : EntitySystem
         SubscribeLocalEvent<LavalandTamerComponent, LavalandTamedOrderActionEvent>(OnOrder);
         SubscribeLocalEvent<LavalandTamerComponent, AfterPointedAtEvent>(OnPointedAt);
         SubscribeLocalEvent<LavalandTamerComponent, ComponentShutdown>(OnTamerShutdown);
-        SubscribeLocalEvent<LavalandTamedComponent, AmmoShotEvent>(OnTamedShot);
+        SubscribeLocalEvent<LavalandTamedComponent, GunShotEvent>(OnTamedShot);
         SubscribeLocalEvent<LavalandTamedComponent, MobStateChangedEvent>(OnTamedStateChanged);
         SubscribeLocalEvent<LavalandTamedComponent, EmpPulseEvent>(OnTamedEmp);
     }
@@ -357,11 +357,17 @@ public sealed class LavalandTamingSystem : EntitySystem
 
     #endregion
 
-    /// <summary>A hivelord's brood, a legion's head: what a tamed creature shoots out is on its side.</summary>
-    private void OnTamedShot(Entity<LavalandTamedComponent> ent, ref AmmoShotEvent args)
+    /// <summary>
+    /// A hivelord's brood, a legion's head: what a tamed creature shoots out is on its side.
+    /// (Not <see cref="AmmoShotEvent"/>: a creature without a projectile component is thrown, not shot, and is left out of it.)
+    /// </summary>
+    private void OnTamedShot(Entity<LavalandTamedComponent> ent, ref GunShotEvent args)
     {
-        foreach (var projectile in args.FiredProjectiles)
+        foreach (var (ammo, _) in args.Ammo)
         {
+            if (ammo is not { } projectile || TerminatingOrDeleted(projectile))
+                continue;
+
             InheritSide(ent, projectile);
             if (ent.Comp.Tamer is { } tamer && HasComp<HTNComponent>(projectile))
                 _npc.SetBlackboard(projectile, NPCBlackboard.FollowTarget, new EntityCoordinates(tamer, Vector2.Zero));

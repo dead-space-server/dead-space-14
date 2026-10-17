@@ -22,6 +22,8 @@ using Content.Shared.Interaction;
 using Content.Shared.Maps;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;
+using Content.Shared.DeadSpace.Necromorphs.PlasmaCutter;
 using Content.Shared.MouseRotator;
 using Content.Shared.Movement.Components;
 using Content.Shared.Popups;
@@ -71,6 +73,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
     [Dependency] private readonly Content.Server.NPC.Systems.NPCSystem _npc = default!;
     [Dependency] private readonly Content.Shared.Popups.SharedPopupSystem _popup = default!;
     [Dependency] private readonly Content.Shared.Jittering.SharedJitteringSystem _jitter = default!;
+    [Dependency] private readonly LavalandMadMinerHookSystem _hook = default!;
 
     private int _nextHudId = 100000;
 
@@ -81,6 +84,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         SubscribeLocalEvent<LavalandMadMinerComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<LavalandMadMinerComponent, MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<LavalandMadMinerComponent, DamageChangedEvent>(OnDamageChanged);
+        SubscribeLocalEvent<LavalandMadMinerComponent, NecromorphPlasmaCutterHitAttemptEvent>(OnPlasmaCutterHit);
         SubscribeLocalEvent<LavalandMadMinerHookedComponent, GetVerbsEvent<AlternativeVerb>>(OnHookedGetVerbs);
         SubscribeLocalEvent<LavalandMadMinerHookedComponent, LavalandRemoveMadMinerHookDoAfterEvent>(OnHookRemoved);
         SubscribeLocalEvent<LavalandMadMinerHookVisualComponent, InteractHandEvent>(OnHookVisualInteract);
@@ -108,10 +112,17 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         var query = EntityQueryEnumerator<LavalandMadMinerComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var miner, out var xform))
         {
-            // Risen as a necromorph: no more blinks, shots and hooks, it is a plain monster now.
-            if (miner.Risen || miner.NextThink > now || IsDead(uid))
+            if (miner.NextThink > now || IsDead(uid))
                 continue;
             miner.NextThink = now + TimeSpan.FromSeconds(0.1);
+
+            // Risen as a necromorph - the second stage: no shots or hooks any more, its own AI claws at whoever is
+            // near, but it still blinks after a player who runs, and the fight still has its health bar.
+            if (miner.Risen)
+            {
+                ThinkRisen(uid, miner, xform, now);
+                continue;
+            }
 
             TrySpeak(uid, miner, now);
 
@@ -557,9 +568,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         EnsureComp<LavalandMadMinerHookVisualComponent>(visual).Target = target;
         miner.HookTargets[target] = visual;
         var hooked = EnsureComp<LavalandMadMinerHookedComponent>(target);
-        hooked.Miner = uid;
-        hooked.Removing = false;
-        Dirty(target, hooked);
+        _hook.SetMiner((target, hooked), uid);
     }
 
     private void RemoveHookTarget(LavalandMadMinerComponent miner, EntityUid target)
@@ -704,6 +713,13 @@ public sealed class LavalandMadMinerSystem : EntitySystem
 
     private void OnMobStateChanged(Entity<LavalandMadMinerComponent> ent, ref MobStateChangedEvent args)
     {
+        // The necromorph dead for good: the fight is over.
+        if (args.NewMobState == MobState.Dead && ent.Comp.Risen)
+        {
+            EndFight(ent.Owner, ent.Comp);
+            return;
+        }
+
         if (args.NewMobState != MobState.Dead || ent.Comp.RewardsSpawned)
             return;
         ent.Comp.RewardsSpawned = true;
@@ -774,6 +790,23 @@ public sealed class LavalandMadMinerSystem : EntitySystem
             _speedModifier.ChangeBaseSpeed(uid, miner.RisenSpeed * 0.7f, miner.RisenSpeed, speed.Acceleration, speed);
 
         _appearance.SetData(uid, LavalandMadMinerVisuals.Necromorph, true);
+
+        // Its arms tear off and fly away - the claws grow in their place.
+        EnsureComp<LavalandMadMinerLimbsComponent>(uid);
+        Sever(uid, miner, LavalandMadMinerLimb.ArmRight, _random.NextAngle().ToVec());
+        Sever(uid, miner, LavalandMadMinerLimb.ArmLeft, _random.NextAngle().ToVec());
+        if (TryComp<MovementSpeedModifierComponent>(uid, out var risenSpeed))
+        {
+            miner.RisenWalkSpeed = risenSpeed.BaseWalkSpeed;
+            miner.RisenSprintSpeed = risenSpeed.BaseSprintSpeed;
+        }
+
+        // A real necromorph now: what works on necromorphs (the plasma cutter) works on it. Its own claws do the damage.
+        if (!HasComp<NecromorfComponent>(uid))
+        {
+            var strain = new InfectionDeadStrainData { DamageMulty = 0f, SpeedMulty = 1f };
+            AddComp(uid, new NecromorfComponent(strain));
+        }
         _metaData.SetEntityName(uid, Loc.GetString(miner.RisenName));
 
         // Its own AI goes for whoever is near.
@@ -786,6 +819,74 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         if (miner.RisenScream != null)
             _audio.PlayPvs(miner.RisenScream, uid);
         _popup.PopupEntity(Loc.GetString("lavaland-mad-miner-risen", ("miner", uid)), uid, PopupType.LargeCaution);
+
+        // The second stage: a fight of its own, with its own health bar and theme.
+        miner.HudId = _nextHudId++;
+        miner.SelectedMusic = miner.RisenMusic;
+        miner.NextBlink = _timing.CurTime + TimeSpan.FromSeconds(1);
+    }
+
+    private void ThinkRisen(EntityUid uid, LavalandMadMinerComponent miner, TransformComponent xform, TimeSpan now)
+    {
+        if (!TryPickTarget(uid, miner, xform, out var target))
+        {
+            if (miner.Active)
+                EndFight(uid, miner);
+            return;
+        }
+
+        miner.Target = target;
+        if (!miner.Active)
+            StartFight(uid, miner, now);
+
+        var distance = Vector2.Distance(_transform.GetWorldPosition(xform), _transform.GetWorldPosition(target));
+        if (distance > miner.BlinkDistance && now >= miner.NextBlink)
+            BlinkBehind(uid, miner, target, now);
+
+        SendHud(uid, miner);
+    }
+
+    /// <summary>A plasma cutter tears its legs off one by one; with both gone the cutter just burns it.</summary>
+    private void OnPlasmaCutterHit(Entity<LavalandMadMinerComponent> ent, ref NecromorphPlasmaCutterHitAttemptEvent args)
+    {
+        if (!ent.Comp.Risen || IsDead(ent.Owner) || !TryComp<LavalandMadMinerLimbsComponent>(ent, out var limbs))
+            return;
+
+        var leg = (limbs.Severed & LavalandMadMinerLimb.LegRight) == 0 ? LavalandMadMinerLimb.LegRight
+            : (limbs.Severed & LavalandMadMinerLimb.LegLeft) == 0 ? LavalandMadMinerLimb.LegLeft
+            : LavalandMadMinerLimb.None;
+        if (leg == LavalandMadMinerLimb.None)
+            return;
+
+        args.Handled = true;
+        Sever(ent.Owner, ent.Comp, leg, args.ShotDirection);
+
+        // Half its speed on one leg, crawling on none.
+        const LavalandMadMinerLimb legs = LavalandMadMinerLimb.LegRight | LavalandMadMinerLimb.LegLeft;
+        var factor = (limbs.Severed & legs) == legs ? 0.1f : 0.5f;
+        if (TryComp<MovementSpeedModifierComponent>(ent, out var speed))
+        {
+            _speedModifier.ChangeBaseSpeed(ent, ent.Comp.RisenWalkSpeed * factor, ent.Comp.RisenSprintSpeed * factor,
+                speed.Acceleration, speed);
+        }
+    }
+
+    /// <summary>Cuts the limb out of its sprite and throws it off as a piece of its own.</summary>
+    private void Sever(EntityUid uid, LavalandMadMinerComponent miner, LavalandMadMinerLimb limb, Vector2 direction)
+    {
+        var limbs = EnsureComp<LavalandMadMinerLimbsComponent>(uid);
+        if ((limbs.Severed & limb) != 0)
+            return;
+
+        limbs.Severed |= limb;
+        Dirty(uid, limbs);
+
+        var piece = Spawn(miner.SeveredLimb, Transform(uid).Coordinates);
+        var severed = EnsureComp<LavalandMadMinerSeveredLimbComponent>(piece);
+        severed.Limb = limb;
+        Dirty(piece, severed);
+        if (direction.LengthSquared() > 0.0001f)
+            _physics.ApplyLinearImpulse(piece, Vector2.Normalize(direction) * miner.SeveredLimbImpulse);
     }
 
     private void SpawnReward(EntityUid uid, EntProtoId? reward, float chance)
@@ -802,19 +903,24 @@ public sealed class LavalandMadMinerSystem : EntitySystem
             return;
         miner.NextHud = now + miner.HudInterval;
 
-        var health = miner.MaxHealth;
+        var maxHealth = miner.Risen ? miner.RisenHealth : miner.MaxHealth;
+        var health = maxHealth;
         if (TryComp<DamageableComponent>(uid, out var damageable))
-            health = Math.Max(0, miner.MaxHealth - damageable.TotalDamage.Float());
-        var name = Loc.GetString("lavaland-mad-miner-hud-name");
+            health = Math.Max(0, maxHealth - damageable.TotalDamage.Float());
+        var name = Loc.GetString(miner.Risen ? miner.RisenName : "lavaland-mad-miner-hud-name");
         foreach (var session in GetNearbySessions(uid, miner.ChaseRange))
         {
             // Players who walk into an ongoing fight also get the music, not only those present at its start.
             if (miner.HudRecipients.Add(session) && miner.SelectedMusic != null)
             {
-                RaiseNetworkEvent(new LavalandBossMusicStartEvent(miner.HudId,
-                    _audio.ResolveSound(miner.SelectedMusic), miner.SelectedMusic.Params.WithLoop(true)), session.Channel);
+                var resolved = _audio.ResolveSound(miner.SelectedMusic);
+                var musicParams = miner.SelectedMusic.Params.WithLoop(true);
+                // The necromorph's theme comes in from the middle of the track (the client fades it in).
+                if (miner.Risen)
+                    musicParams = musicParams.WithPlayOffset((float) _audio.GetAudioLength(resolved).TotalSeconds / 2f);
+                RaiseNetworkEvent(new LavalandBossMusicStartEvent(miner.HudId, resolved, musicParams), session.Channel);
             }
-            RaiseNetworkEvent(new LavalandBossHudUpdateEvent(miner.HudId, name, health, miner.MaxHealth, 1), session.Channel);
+            RaiseNetworkEvent(new LavalandBossHudUpdateEvent(miner.HudId, name, health, maxHealth, 1), session.Channel);
         }
     }
 
