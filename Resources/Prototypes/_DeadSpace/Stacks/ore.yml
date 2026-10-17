@@ -11,3 +11,10 @@
   name: stack-bluespace
   icon: { sprite: /Textures/_DeadSpace/Objects/Materials/bluespace-crystal-ore.rsi, state: bluespace_crystal_ore }
   spawn: BluespaceCrystalOre1
+
+- type: stack
+  parent: BaseMediumStack
+  id: RedspaceCrystalRaw
+  name: stack-redspace
+  icon: { sprite: /Textures/_DeadSpace/Objects/Materials/redspace-crystal-raw.rsi, state: redspace_crystal_raw }
+  spawn: RedspaceCrystalRaw1

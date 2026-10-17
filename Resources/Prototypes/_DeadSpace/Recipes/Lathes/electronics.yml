@@ -161,3 +161,8 @@
   parent: [ BaseCircuitboardRecipe, BaseGeneralMachineRecipeCategory ]
   id: TaipanHolopadMachineCircuitboard
   result: TaipanHolopadMachineCircuitboard
+
+- type: latheRecipe
+  parent: [ BaseCircuitboardRecipe, BaseGeneralMachineRecipeCategory ]
+  id: RedSpaceMachineCircuitboardTaipan
+  result: RedSpaceMachineCircuitboardTaipan

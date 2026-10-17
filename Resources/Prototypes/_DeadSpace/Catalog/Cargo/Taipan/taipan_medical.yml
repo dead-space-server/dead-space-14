@@ -177,3 +177,13 @@
   cost: 85000
   category: cargoproduct-category-name-medical
   group: taipan_market
+
+- type: cargoProduct
+  id: TerratosomochromolinTaipan
+  icon:
+    sprite: Objects/Specific/Chemistry/vial.rsi
+    state: vial
+  product: CrateTerratosomochromolinTaipanFilled
+  cost: 9800
+  category: cargoproduct-category-name-medical
+  group: taipan_market

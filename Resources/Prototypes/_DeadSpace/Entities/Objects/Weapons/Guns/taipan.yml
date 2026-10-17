@@ -1,0 +1,19 @@
+- type: entity
+  name: шприцемёт
+  parent: LauncherSyringe
+  id: TaipanLauncherSyringe
+  description: Наполненный отравленными шприцами шприцемёт, будьте с ним аккуратнее!!!
+  components:
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,6,0
+    whitelist:
+      tags:
+      - SyringeGunAmmo
+  - type: Gun
+    fireRate: 2
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    - FullAuto

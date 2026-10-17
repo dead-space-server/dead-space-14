@@ -59,6 +59,7 @@
   - HandHeldMassScanner
   - ClothingMaskWeldingGas
   - SignallerAdvanced
+  - SignallerRedspace # DS-14
   - HandCuttingMachineRecipe # DS14
   - ClothingEyesHudDiagnostic # DS14
   - ClothingEyesHudMedical # DS14

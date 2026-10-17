@@ -64,7 +64,7 @@
     state: uranium
   discipline: TaipanWeaponry
   tier: 1
-  cost: 7500
+  cost: 9000
   diskAvailable: false
   recipeUnlocks:
   - MagazineRifleUranium
@@ -87,7 +87,7 @@
     state: icon
   discipline: TaipanWeaponry
   tier: 1
-  cost: 7500
+  cost: 10000
   diskAvailable: false
   recipeUnlocks:
   - Truncheon
@@ -135,7 +135,7 @@
     state: icon
   discipline: TaipanWeaponry
   tier: 1
-  cost: 7500
+  cost: 9000
   diskAvailable: false
   recipeUnlocks:
   - WeaponPistolViper
@@ -149,7 +149,7 @@
     state: syndicateknuckleduster
   discipline: TaipanWeaponry
   tier: 1
-  cost: 7500
+  cost: 8000
   diskAvailable: false
   recipeUnlocks:
   - ClothingHandsKnuckleDustersSyndicate
@@ -163,7 +163,7 @@
     state: icon
   discipline: TaipanWeaponry
   tier: 1
-  cost: 7500
+  cost: 10000
   diskAvailable: false
   recipeUnlocks:
   - ClothingHandsGlovesNorthStar
@@ -192,7 +192,7 @@
     state: base
   discipline: TaipanWeaponry
   tier: 2
-  cost: 15000
+  cost: 20000
   diskAvailable: false
   recipeUnlocks:
   - PowerCageRechargerCircuitboard
@@ -219,7 +219,7 @@
     state: icon
   discipline: TaipanWeaponry
   tier: 2
-  cost: 15000
+  cost: 17500
   diskAvailable: false
   recipeUnlocks:
   - ClothingEyesPNVAdvSyndicate
@@ -277,6 +277,18 @@
   - BorgModuleC20r
   technologyPrerequisites:
   - TaipanBasicRifles
+
+- type: technology
+  id: RedspaceSignaller
+  name: research-technology-redspace-signaller
+  icon:
+    sprite: Objects/Devices/signaller.rsi
+    state: redspace
+  discipline: TaipanWeaponry
+  tier: 2
+  cost: 15000
+  recipeUnlocks:
+  - SignallerRedspace
 
 - type: technology
   id: TaipanCarbines

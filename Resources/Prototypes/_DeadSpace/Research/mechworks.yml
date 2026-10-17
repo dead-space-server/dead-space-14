@@ -66,7 +66,7 @@
     state: building
   discipline: TaipanMechworks
   tier: 1
-  cost: 7500
+  cost: 9000
   diskAvailable: false
   recipeUnlocks:
   - AutolatheHyperConvectionMachineCircuitboardTaipan
@@ -184,6 +184,19 @@
   - TaipanAtmosphericTech
 
 - type: technology
+  id: TaipanRedspaceBackpack
+  name: research-technology-redspace-backpack
+  icon:
+    sprite: _DeadSpace/Clothing/Back/Backpacks/redspace_backpack.rsi
+    state: icon
+  discipline: TaipanMechworks
+  tier: 2
+  cost: 20000
+  diskAvailable: false
+  recipeUnlocks:
+    - ClothingBackpackRedspace
+
+- type: technology
   id: TaipanAdvancedToolsTechnology
   name: research-technology-advanced-tools
   icon:
@@ -237,7 +250,7 @@
     state: handdrill
   discipline: TaipanMechworks
   tier: 2
-  cost: 15000
+  cost: 20000
   diskAvailable: false
   recipeUnlocks:
   - MiningDrillDiamond
@@ -288,13 +301,15 @@
     state: microreactor
   discipline: TaipanMechworks
   tier: 3
-  cost: 30000
+  cost: 25000
   diskAvailable: false
   recipeUnlocks:
   - PowerCellMicroreactor
   - PowerCellHyper
   technologyPrerequisites:
   - TaipanAdvancedPowercells
+
+# Tier 4
 
 - type: technology
   id: TaipanEliteHardsuits
@@ -303,16 +318,14 @@
     sprite: Clothing/OuterClothing/Hardsuits/syndieelite.rsi
     state: icon
   discipline: TaipanMechworks
-  tier: 3
-  cost: 30000
+  tier: 4
+  cost: 50000
   diskAvailable: false
   recipeUnlocks:
   - ClothingOuterHardsuitSyndieElite
   - ClothingOuterHardsuitSyndieCommander
   technologyPrerequisites:
   - TaipanHardsuits
-
-# Tier 4
 
 - type: technology
   id: TaipanHeavyHardsuits
@@ -322,7 +335,7 @@
     state: icon
   discipline: TaipanMechworks
   tier: 4
-  cost: 50000
+  cost: 100000
   diskAvailable: false
   recipeUnlocks:
   - ClothingOuterHardsuitJuggernaut

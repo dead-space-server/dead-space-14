@@ -1,0 +1,45 @@
+- type: entity
+  id: TaipanMedalCase
+  name: футляр для медалей
+  description: Футляр для медалей, как бы то ни было удивительно.
+  parent: [ BaseStorageItem, BaseBagOpenClose, BaseCommandContraband ]
+  suffix: Тайпан
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Storage/taipan_medalcase.rsi
+    layers:
+    - state: closed
+      map: ["closeLayer"]
+    - state: open
+      map: ["openLayer"]
+  - type: Appearance
+  - type: Item
+    sprite: _DeadSpace/Objects/Storage/taipan_medalcase.rsi
+    size: Normal
+  - type: Storage
+    grid:
+    - 0,0,7,1
+    whitelist:
+      tags:
+        - Medal
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: ClothingNeckGoldmedal
+        - id: ClothingNeckBronzeheart
+        - id: ClothingNeckTaipanCargomedal
+        - id: ClothingNeckTaipanEngineermedal
+        - id: ClothingNeckMedicalmedal
+        - id: ClothingNeckTaipanSciencemedal
+        - id: ClothingNeckTaipanSecuritymedal
+        - id: ClothingNeckTaipanClownmedal
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/matchbox_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/matchbox_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/matchbox_drop.ogg

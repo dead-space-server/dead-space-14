@@ -1,0 +1,16 @@
+- type: material
+  id: RawRedspaceCrystal
+  stackEntity: RedspaceCrystalRaw1
+  name: редспейс кристалл
+  unit: materials-unit-piece
+  icon: { sprite: /Textures/_DeadSpace/Objects/Materials/redspace-crystal-raw.rsi, state: redspace_crystal_raw }
+  color: "#821111"
+  price: 1000
+
+- type: material
+  id: RedspaceCrystal
+  stackEntity: SheetRedspaceCrystal1
+  name: очищенный редспейс кристалл
+  icon: { sprite: /Textures/_DeadSpace/Objects/Materials/Sheets/redspace-crystal-sheet.rsi, state: synthetic_redspace_crystal }
+  color: "#b80606"
+  price: 10000

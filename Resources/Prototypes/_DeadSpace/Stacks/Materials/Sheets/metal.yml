@@ -27,6 +27,13 @@
   maxCount: 30
 
 - type: stack
+  id: ClearRedspaceCrystal
+  name: stack-redspace-sheet
+  icon: { sprite: /Textures/_DeadSpace/Objects/Materials/Sheets/redspace-crystal-sheet.rsi, state: synthetic_redspace_crystal }
+  spawn: SheetRedspaceCrystal1
+  maxCount: 30
+
+- type: stack
   id: ScrapGlassBroken
   name: stack-glass-scrap
   icon: { sprite: /Textures/Objects/Materials/Scrap/generic.rsi, state: glass-2 }

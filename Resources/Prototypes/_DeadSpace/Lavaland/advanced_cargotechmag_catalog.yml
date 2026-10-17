@@ -44,7 +44,7 @@
   categories:
   - CargoTechMagTaipan
   cost:
-    LavalandMiningPoint: 7500
+    LavalandMiningPoint: 20000
 
 - type: listing
   id: TaipanTechBoxArkalyse
@@ -52,7 +52,7 @@
   categories:
   - CargoTechMagTaipan
   cost:
-    LavalandMiningPoint: 10000
+    LavalandMiningPoint: 25000
 
 - type: listing
   id: TaipanTechSandevistanImplantCase

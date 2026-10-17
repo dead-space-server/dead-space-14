@@ -75,6 +75,20 @@
       Glass: 1
 
 - type: entity
+  id: RedSpaceMachineCircuitboardTaipan
+  parent: BaseMachineCircuitboardTaipan
+  name: редспейс генератор кристаллов (машинная плата)
+  description: Печатная плата генератора редспейс кристаллов.
+  components:
+  - type: MachineBoard
+    prototype: RedspaceCrystalGeneratorTaipan
+    stackRequirements:
+      Uranium: 5
+      Glass: 50
+      Steel: 50
+      Manipulator: 25
+
+- type: entity
   id: AutolatheHyperConvectionMachineCircuitboardTaipan
   parent: BaseMachineCircuitboardTaipan
   name: гиперконвекционный автолат (машинная плата)
