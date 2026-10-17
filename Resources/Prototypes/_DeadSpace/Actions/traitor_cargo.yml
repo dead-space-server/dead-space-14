@@ -1,0 +1,22 @@
+- type: entity
+  parent: BaseAction
+  id: ActionTraitorRequestCargo
+  name: Отправить запрос
+  description: Отправить запрос на заказ груза важной шишке.
+  components:
+  - type: Action
+    icon: { sprite: _DeadSpace/Interface/Actions/traitor_cargo.rsi, state: request }
+  - type: InstantAction
+    event: !type:AgentRequestActionEvent
+
+- type: entity
+  parent: BaseAction
+  id: ActionTraitorReceiveCargo
+  name: Получить груз
+  description: Получить груз отправленный важной шишкой
+  components:
+  - type: Action
+    icon: { sprite: _DeadSpace/Interface/Actions/traitor_cargo.rsi, state: receive }
+  - type: InstantAction
+    event: !type:AgentReceiveActionEvent
+

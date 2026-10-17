@@ -1,0 +1,18 @@
+- type: entity
+  parent: BoxBase
+  id: SyndicateAgentExchangeBag
+  name: Непонятное устройство
+  description: Странное на вид устройство, имеет выемку на задней части и дырку сверху, выглядит страшно, но, блин, красиво.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Storage/taipan-agent-box.rsi
+    state: icon
+  - type: Item
+    size: Huge
+    shape:
+    - 0,0,2,2
+  - type: Storage
+    maxItemSize: Large
+    grid:
+    - 0,0,3,3
+  - type: AgentExchangeBag

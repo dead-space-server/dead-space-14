@@ -1,0 +1,29 @@
+- type: entity
+  parent: BaseComputer
+  id: ComputerTaipanTerminal
+  name: терминал
+  description: Компьютер с установленной на него системой SyndiOS. Честно говоря, он не выглядит новым.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Machines/Taipan/computers.rsi
+    layers:
+    - map: ["computerLayerBody"]
+      state: computer
+    - map: ["computerLayerKeyboard"]
+      state: generic_keyboard
+    - map: ["computerLayerScreen"]
+      state: rdcomp
+    - map: ["computerLayerKeys"]
+      state: generic_keys
+    - map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
+      visible: false
+      state: generic_panel_open
+  - type: Terminal
+  - type: ActivatableUI
+    key: enum.TerminalUiKey.Key
+  - type: Computer
+    board: TerminalCircuitboardTaipan
+  - type: UserInterface
+    interfaces:
+      enum.TerminalUiKey.Key:
+        type: TerminalBoundUserInterface
