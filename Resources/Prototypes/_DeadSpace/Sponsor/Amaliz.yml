@@ -195,6 +195,7 @@
     sprite: _DeadSpace/Sponsor/Amaliz/headset.rsi
   - type: Headset
     color: "#379CCFFF"
+    colorEnd: "#3BECFFFF"
   - type: EncryptionKeyHolder
     keySlots: 5
   - type: Tag
