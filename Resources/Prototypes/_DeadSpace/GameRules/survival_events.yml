@@ -64,7 +64,7 @@
     children:
     - id: ParadoxCloneSpawn
     - id: SleeperAgents
-    #- id: NinjaSpawn Временно, пока не будут завершены тесты.
+    - id: NinjaSpawn
     - id: KingRatMigration
     - id: MonkeyKingSpawn
     - id: PirateRaid

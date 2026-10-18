@@ -47,7 +47,7 @@
   table: !type:AllSelector # we need to pass a list of rules, since rules have further restrictions to consider via StationEventComp
     children:
     - id: DragonSpawn
-    #- id: NinjaSpawn Временно, пока не будут завершены тесты.
+    - id: NinjaSpawn
     - id: ParadoxCloneSpawn
     - id: SleeperAgents
     - id: ZombieOutbreak
