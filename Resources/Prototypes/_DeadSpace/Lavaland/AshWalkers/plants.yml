@@ -70,6 +70,9 @@
   components:
   - type: LavalandWildPlant
     plant: LavalandPolyporePlant
+  # Mushrooms grow in the same black ash bed as the ash walkers' garden beds.
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/garden_bed.rsi
 
 - type: entity
   parent: SeedBase
@@ -140,6 +143,9 @@
   components:
   - type: LavalandWildPlant
     plant: LavalandPorciniPlant
+  # Mushrooms grow in the same black ash bed as the ash walkers' garden beds.
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/garden_bed.rsi
 
 - type: entity
   parent: SeedBase
@@ -235,6 +241,9 @@
   components:
   - type: LavalandWildPlant
     plant: LavalandInocybePlant
+  # Mushrooms grow in the same black ash bed as the ash walkers' garden beds.
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/garden_bed.rsi
 
 - type: entity
   parent: SeedBase

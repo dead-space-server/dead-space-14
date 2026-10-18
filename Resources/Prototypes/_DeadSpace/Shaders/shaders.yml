@@ -28,8 +28,8 @@
   params:
     cut: 0
 
-# The mad miner's necromorph: limbs cut out of its one-piece sprite, or a torn-off limb alone.
+# Legs and head a plasma cutter took off a necromorph, cut out of all of its sprite layers (suits and helmets too).
 - type: shader
-  id: LavalandMadMinerLimbMask
+  id: NecromorphSeveredMask
   kind: source
-  path: "/Textures/_DeadSpace/Shaders/limb_mask.swsl"
+  path: "/Textures/_DeadSpace/Shaders/severed_mask.swsl"

@@ -74,6 +74,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
     [Dependency] private readonly Content.Shared.Popups.SharedPopupSystem _popup = default!;
     [Dependency] private readonly Content.Shared.Jittering.SharedJitteringSystem _jitter = default!;
     [Dependency] private readonly LavalandMadMinerHookSystem _hook = default!;
+    [Dependency] private readonly Content.Shared.Throwing.ThrowingSystem _throwing = default!;
 
     private int _nextHudId = 100000;
 
@@ -84,7 +85,6 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         SubscribeLocalEvent<LavalandMadMinerComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<LavalandMadMinerComponent, MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<LavalandMadMinerComponent, DamageChangedEvent>(OnDamageChanged);
-        SubscribeLocalEvent<LavalandMadMinerComponent, NecromorphPlasmaCutterHitAttemptEvent>(OnPlasmaCutterHit);
         SubscribeLocalEvent<LavalandMadMinerHookedComponent, GetVerbsEvent<AlternativeVerb>>(OnHookedGetVerbs);
         SubscribeLocalEvent<LavalandMadMinerHookedComponent, LavalandRemoveMadMinerHookDoAfterEvent>(OnHookRemoved);
         SubscribeLocalEvent<LavalandMadMinerHookVisualComponent, InteractHandEvent>(OnHookVisualInteract);
@@ -112,6 +112,11 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         var query = EntityQueryEnumerator<LavalandMadMinerComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var miner, out var xform))
         {
+            // The hook pulls every tick: pulled only on thinks the player was slowed down by friction in between and
+            // never reached the miner to be hit.
+            if (!miner.Risen && miner.HookTargets.Count > 0 && !IsDead(uid))
+                ProcessHook(uid, miner, miner.Target ?? uid, now);
+
             if (miner.NextThink > now || IsDead(uid))
                 continue;
             miner.NextThink = now + TimeSpan.FromSeconds(0.1);
@@ -138,7 +143,6 @@ public sealed class LavalandMadMinerSystem : EntitySystem
                 StartFight(uid, miner, now);
 
             TryBeginSplitPursuit(uid, miner, now);
-            ProcessHook(uid, miner, target, now);
             if (miner.HookTargets.Count > 0)
             {
                 SendHud(uid, miner);
@@ -179,7 +183,8 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         target = default;
         var best = float.MaxValue;
         var origin = _transform.GetWorldPosition(xform);
-        var range = miner.Active ? miner.ChaseRange : miner.NoticeRange;
+        // Risen it is already hunting: the fight (and its health bar) starts as soon as anyone is in chase range.
+        var range = miner.Active || miner.Risen ? miner.ChaseRange : miner.NoticeRange;
         foreach (var session in _players.Sessions)
         {
             if (session.AttachedEntity is not { Valid: true } player || IsDead(player) ||
@@ -398,24 +403,28 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         switch (miner.AttackPattern++ % 3)
         {
             case 0:
-                Fire(uid, miner, baseAngle);
+                Fire(uid, miner, baseAngle, target);
                 break;
             case 1:
+                // The spread is weak pellets: point blank all of them hit at once.
                 foreach (var offset in ShotgunSpread)
-                    Fire(uid, miner, baseAngle + Angle.FromDegrees(offset));
+                    Fire(uid, miner, baseAngle + Angle.FromDegrees(offset), target, miner.ShotgunProjectile);
                 break;
             default:
-                Fire(uid, miner, baseAngle - Angle.FromDegrees(5));
-                Fire(uid, miner, baseAngle);
-                Fire(uid, miner, baseAngle + Angle.FromDegrees(5));
+                Fire(uid, miner, baseAngle - Angle.FromDegrees(5), target);
+                Fire(uid, miner, baseAngle, target);
+                Fire(uid, miner, baseAngle + Angle.FromDegrees(5), target);
                 break;
         }
         miner.NextShot = now + miner.ShootCooldown;
     }
 
-    private void Fire(EntityUid uid, LavalandMadMinerComponent miner, Angle angle)
+    private void Fire(EntityUid uid, LavalandMadMinerComponent miner, Angle angle, EntityUid target,
+        EntProtoId? prototype = null)
     {
-        var projectile = Spawn(miner.Projectile, Transform(uid).Coordinates);
+        var projectile = Spawn(prototype ?? miner.Projectile, Transform(uid).Coordinates);
+        // Aimed at the player, so it hits a player lying down too - shots fly over anyone lying who is not their target.
+        _gun.SetProjectileTarget(projectile, target);
         _gun.ShootProjectile(projectile, angle.ToWorldVec(), Vector2.Zero, uid, uid, miner.ProjectileSpeed);
     }
 
@@ -521,9 +530,11 @@ public sealed class LavalandMadMinerSystem : EntitySystem
                     ? miner.HookImpactDamage * miner.RageHookDamageMultiplier
                     : miner.HookImpactDamage;
                 _damage.TryChangeDamage(target, damage, ignoreResistances: true, origin: uid);
-                if (TryComp<PhysicsComponent>(target, out var body) && distance > 0.01f)
-                    _physics.SetLinearVelocity(target, -Vector2.Normalize(direction) * miner.HookKnockback, body: body);
+                // Let go first (the hook holds it in place), then thrown off a few tiles ahead of the miner.
                 RemoveHookTarget(miner, target);
+                var away = distance > 0.01f ? -Vector2.Normalize(direction) : _random.NextAngle().ToVec();
+                _throwing.TryThrow(target, away * miner.HookThrowDistance, miner.HookKnockback, uid,
+                    recoil: false, doSpin: false);
                 continue;
             }
             if (TryComp<PhysicsComponent>(target, out var physics) && distance > 0.01f)
@@ -791,16 +802,6 @@ public sealed class LavalandMadMinerSystem : EntitySystem
 
         _appearance.SetData(uid, LavalandMadMinerVisuals.Necromorph, true);
 
-        // Its arms tear off and fly away - the claws grow in their place.
-        EnsureComp<LavalandMadMinerLimbsComponent>(uid);
-        Sever(uid, miner, LavalandMadMinerLimb.ArmRight, _random.NextAngle().ToVec());
-        Sever(uid, miner, LavalandMadMinerLimb.ArmLeft, _random.NextAngle().ToVec());
-        if (TryComp<MovementSpeedModifierComponent>(uid, out var risenSpeed))
-        {
-            miner.RisenWalkSpeed = risenSpeed.BaseWalkSpeed;
-            miner.RisenSprintSpeed = risenSpeed.BaseSprintSpeed;
-        }
-
         // A real necromorph now: what works on necromorphs (the plasma cutter) works on it. Its own claws do the damage.
         if (!HasComp<NecromorfComponent>(uid))
         {
@@ -839,54 +840,13 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         if (!miner.Active)
             StartFight(uid, miner, now);
 
+        // With a leg cut off by a plasma cutter it can only crawl after them - no more blinking.
+        var legless = TryComp<NecromorphPlasmaCutterWoundsComponent>(uid, out var wounds) && wounds.RemovedLegs > 0;
         var distance = Vector2.Distance(_transform.GetWorldPosition(xform), _transform.GetWorldPosition(target));
-        if (distance > miner.BlinkDistance && now >= miner.NextBlink)
+        if (!legless && distance > miner.BlinkDistance && now >= miner.NextBlink)
             BlinkBehind(uid, miner, target, now);
 
         SendHud(uid, miner);
-    }
-
-    /// <summary>A plasma cutter tears its legs off one by one; with both gone the cutter just burns it.</summary>
-    private void OnPlasmaCutterHit(Entity<LavalandMadMinerComponent> ent, ref NecromorphPlasmaCutterHitAttemptEvent args)
-    {
-        if (!ent.Comp.Risen || IsDead(ent.Owner) || !TryComp<LavalandMadMinerLimbsComponent>(ent, out var limbs))
-            return;
-
-        var leg = (limbs.Severed & LavalandMadMinerLimb.LegRight) == 0 ? LavalandMadMinerLimb.LegRight
-            : (limbs.Severed & LavalandMadMinerLimb.LegLeft) == 0 ? LavalandMadMinerLimb.LegLeft
-            : LavalandMadMinerLimb.None;
-        if (leg == LavalandMadMinerLimb.None)
-            return;
-
-        args.Handled = true;
-        Sever(ent.Owner, ent.Comp, leg, args.ShotDirection);
-
-        // Half its speed on one leg, crawling on none.
-        const LavalandMadMinerLimb legs = LavalandMadMinerLimb.LegRight | LavalandMadMinerLimb.LegLeft;
-        var factor = (limbs.Severed & legs) == legs ? 0.1f : 0.5f;
-        if (TryComp<MovementSpeedModifierComponent>(ent, out var speed))
-        {
-            _speedModifier.ChangeBaseSpeed(ent, ent.Comp.RisenWalkSpeed * factor, ent.Comp.RisenSprintSpeed * factor,
-                speed.Acceleration, speed);
-        }
-    }
-
-    /// <summary>Cuts the limb out of its sprite and throws it off as a piece of its own.</summary>
-    private void Sever(EntityUid uid, LavalandMadMinerComponent miner, LavalandMadMinerLimb limb, Vector2 direction)
-    {
-        var limbs = EnsureComp<LavalandMadMinerLimbsComponent>(uid);
-        if ((limbs.Severed & limb) != 0)
-            return;
-
-        limbs.Severed |= limb;
-        Dirty(uid, limbs);
-
-        var piece = Spawn(miner.SeveredLimb, Transform(uid).Coordinates);
-        var severed = EnsureComp<LavalandMadMinerSeveredLimbComponent>(piece);
-        severed.Limb = limb;
-        Dirty(piece, severed);
-        if (direction.LengthSquared() > 0.0001f)
-            _physics.ApplyLinearImpulse(piece, Vector2.Normalize(direction) * miner.SeveredLimbImpulse);
     }
 
     private void SpawnReward(EntityUid uid, EntProtoId? reward, float chance)

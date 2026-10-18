@@ -32,6 +32,8 @@ public sealed class LavalandShadowChasmSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     private static readonly TimeSpan CheckInterval = TimeSpan.FromSeconds(0.2);
 
@@ -132,6 +134,13 @@ public sealed class LavalandShadowChasmSystem : EntitySystem
                 continue;
 
             chasm = (uid.Value, comp);
+            return true;
+        }
+
+        // A chasm that is not anchored to the tile (spawned by hand and the like) is still a chasm under him.
+        foreach (var found in _lookup.GetEntitiesInRange<ChasmComponent>(_transform.GetMapCoordinates(mob, xform), 0.3f))
+        {
+            chasm = found;
             return true;
         }
 

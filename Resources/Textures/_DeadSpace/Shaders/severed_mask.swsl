@@ -1,0 +1,30 @@
+// Cuts the legs and head a plasma cutter took off a necromorph out of every layer of its sprite (a suit or a helmet
+// would keep drawing them). Rects are x0, y0, x1, y1 in the layer quad's own 0..1 space from its bottom-left corner.
+
+uniform highp vec4 rect0;
+uniform highp vec4 rect1;
+uniform highp vec4 rect2;
+
+// 1 - that rect is cut away.
+uniform highp float hidden0;
+uniform highp float hidden1;
+uniform highp float hidden2;
+
+varying highp vec2 localPosition;
+
+void vertex() {
+    localPosition = tCoord2;
+}
+
+bool insideRect(highp vec4 rect) {
+    return localPosition.x >= rect.x && localPosition.x <= rect.z && localPosition.y >= rect.y && localPosition.y <= rect.w;
+}
+
+void fragment() {
+    if ((hidden0 > 0.5 && insideRect(rect0)) || (hidden1 > 0.5 && insideRect(rect1)) ||
+        (hidden2 > 0.5 && insideRect(rect2))) {
+        discard;
+    }
+
+    COLOR = zTexture(UV);
+}

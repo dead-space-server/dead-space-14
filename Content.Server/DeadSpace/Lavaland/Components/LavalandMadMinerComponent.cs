@@ -53,6 +53,8 @@ public sealed partial class LavalandMadMinerComponent : Component
     [DataField] public TimeSpan SplitPursuitCooldown = TimeSpan.FromSeconds(10);
     [DataField] public DamageSpecifier HookImpactDamage = new();
     [DataField] public EntProtoId Projectile = "LavalandMadMinerKineticBolt";
+    /// <summary>Its shotgun spread: weak pellets, as all of them hit point blank.</summary>
+    [DataField] public EntProtoId ShotgunProjectile = "LavalandMadMinerKineticPellet";
     [DataField] public EntProtoId HookProjectile = "LavalandMadMinerHookVisual";
     [DataField] public float ProjectileSpeed = 24f;
     [DataField] public List<SoundSpecifier> Music = new();
@@ -92,12 +94,8 @@ public sealed partial class LavalandMadMinerComponent : Component
     [ViewVariables] public bool Risen;
     /// <summary>The second stage's theme, started from its middle and faded in.</summary>
     [DataField] public SoundSpecifier? RisenMusic = new SoundPathSpecifier("/Audio/_DeadSpace/Necromorfs/plasma_cutters_are_your_friend.ogg");
-    /// <summary>A limb torn off it: its own sprite with everything but the limb cut away.</summary>
-    [DataField] public EntProtoId SeveredLimb = "LavalandMadMinerSeveredLimb";
-    [DataField] public float SeveredLimbImpulse = 6f;
-    /// <summary>Its speed before it lost a leg to a plasma cutter.</summary>
-    [ViewVariables] public float RisenWalkSpeed;
-    [ViewVariables] public float RisenSprintSpeed;
+    /// <summary>How far a player pulled in by the hook is thrown off on impact (tiles).</summary>
+    [DataField] public float HookThrowDistance = 3f;
 
     [ViewVariables] public EntityUid? Target;
     [ViewVariables] public readonly Dictionary<EntityUid, EntityUid> HookTargets = new();

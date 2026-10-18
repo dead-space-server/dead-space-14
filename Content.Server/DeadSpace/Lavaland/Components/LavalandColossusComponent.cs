@@ -54,8 +54,9 @@ public sealed partial class LavalandColossusComponent : Component
     [DataField]
     public float ShotgunChance = 0.7f;
 
+    /// <summary>Enraged it moves at its walk speed times this (NPCs move at their sprint speed otherwise).</summary>
     [DataField]
-    public float EnragedMovementSpeedMultiplier = 2.1f;
+    public float EnragedMovementSpeedMultiplier = 2.4f;
 
     [DataField]
     public float MaxCooldownReduction = 0.3f;
@@ -91,7 +92,7 @@ public sealed partial class LavalandColossusComponent : Component
     public float FuryChaseReach = 2f;
 
     [DataField]
-    public TimeSpan FuryBlastInterval = TimeSpan.FromSeconds(5);
+    public TimeSpan FuryBlastInterval = TimeSpan.FromSeconds(2);
 
     /// <summary>Between the marks appearing and the blasts.</summary>
     [DataField]

@@ -235,7 +235,7 @@
         Structural: 45
   - type: MovementSpeedModifier
     baseWalkSpeed: 1.8
-    baseSprintSpeed: 2.8
+    baseSprintSpeed: 2
   - type: Fixtures
     fixtures:
       fix1:

@@ -28,9 +28,17 @@
         enum.LavalandMadMinerLayers.ClawLeft:
           True: { visible: true }
           False: { visible: false }
-  # Dead it tips over onto the ground smoothly, as people do (and gets back up when it rises).
+  # Dead it tips over onto the ground smoothly, as people do (and gets back up when it rises). The base of all mobs
+  # sets both angles to 0 - no tipping over at all - so they are set as for people.
   - type: StandingState
   - type: RotationVisuals
+    defaultRotation: 90
+    horizontalRotation: 90
+  # A human body (legs, head), and the plasma cutter takes it apart like a humanoid necromorph: legs, then the head.
+  - type: Body
+    prototype: Human
+  - type: NecromorphPlasmaCutterDismemberable
+    layout: MadMiner
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -59,7 +67,7 @@
     - lavaland-mad-miner-line-6
     - lavaland-mad-miner-line-7
     - lavaland-mad-miner-line-8
-    blinkSound: /Audio/Effects/teleport_departure.ogg
+    blinkSound: /Audio/_DeadSpace/Necromorfs/TheCircle/scout_blink.ogg
     hookSound: /Audio/_DeadSpace/Necromorfs/TheCircle/Weapon/sfx/hook-sfx/shot_hook.ogg
   - type: NpcFactionMember
     factions:
@@ -92,21 +100,6 @@
     tags:
     - CannotSuicide
 
-# A limb torn off the mad miner's necromorph: its own sprite, with everything but the limb cut away by a shader.
-- type: entity
-  parent: BaseItem
-  id: LavalandMadMinerSeveredLimb
-  name: оторванная конечность
-  description: Ещё дёргается.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Sprite
-    sprite: _DeadSpace/Lavaland/Mobs/MadMiner.rsi
-    state: demonic_miner
-  - type: Item
-    size: Normal
-  - type: LavalandMadMinerSeveredLimb
-
 - type: entity
   parent: BaseBullet
   id: LavalandMadMinerKineticBolt
@@ -126,6 +119,18 @@
         Structural: 35
   - type: TimedDespawn
     lifetime: 1.2
+
+# A pellet of the mad miner's shotgun spread: weak, as point blank all five hit at once.
+- type: entity
+  parent: LavalandMadMinerKineticBolt
+  id: LavalandMadMinerKineticPellet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Blunt: 6
+        Structural: 12
 
 - type: entity
   id: LavalandMadMinerHookVisual

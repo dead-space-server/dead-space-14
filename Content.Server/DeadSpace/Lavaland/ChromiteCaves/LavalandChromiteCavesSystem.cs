@@ -50,6 +50,15 @@ namespace Content.Server.DeadSpace.Lavaland.ChromiteCaves;
 public sealed class LavalandChromiteCavesSystem : EntitySystem
 {
     private const int BoundaryBatchSize = 256;
+
+    /// <summary>Boundary walls go up a chunk of this many tiles at a time.</summary>
+    private const int BoundaryChunkSize = 16;
+
+    /// <summary>The walls of a boundary chunk go up once anyone is this close to it (tiles): well beyond sight.</summary>
+    private const float BoundaryLoadRange = 48f;
+
+    private static readonly TimeSpan BoundaryInterval = TimeSpan.FromSeconds(0.5);
+    private TimeSpan _nextBoundaryCheck;
     private const int HookSearchDepth = 3;
 
     [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
@@ -176,7 +185,7 @@ public sealed class LavalandChromiteCavesSystem : EntitySystem
         _map.InitializeMap(mapId);
         _map.SetPaused(mapUid, true);
 
-        await BuildBoundary(mapUid, grid, config, half, cancellation);
+        await BuildBoundary((mapUid, caves), grid, config, half, cancellation);
         BuildLanding((mapUid, caves), grid, biome, config, random);
         // Generate everything around the landing now, not in the moment the first player drops in.
         _biome.Preload(mapUid, biome, Box2.CenteredAround(Vector2.Zero, new Vector2(config.PreloadRadius * 2f)));
@@ -234,8 +243,12 @@ public sealed class LavalandChromiteCavesSystem : EntitySystem
         return new GasMixture(moles, atmosphere.Temperature, atmosphere.Volume);
     }
 
+    /// <summary>
+    /// Lays the boundary's floor all round the caves right away, but only notes its chunks for the walls:
+    /// those go up when somebody comes near (<see cref="UpdateBoundary"/>).
+    /// </summary>
     private async Task BuildBoundary(
-        EntityUid mapUid,
+        Entity<LavalandChromiteCavesComponent> caves,
         MapGridComponent grid,
         LavalandChromiteCavesConfig config,
         int half,
@@ -246,38 +259,85 @@ public sealed class LavalandChromiteCavesSystem : EntitySystem
             return;
 
         var tiles = new List<(Vector2i, Tile)>(BoundaryBatchSize);
-        for (var x = -half; x < half; x++)
+        foreach (var index in BoundaryTiles(half, width, new Box2i(-half, -half, half, half)))
         {
-            for (var y = -half; y < half; y++)
-            {
-                var edge = Math.Min(Math.Min(x + half, half - 1 - x), Math.Min(y + half, half - 1 - y));
-                if (edge >= width)
-                    continue;
+            tiles.Add((index, new Tile(tileDef.TileId)));
+            caves.Comp.PendingBoundaryChunks.Add(new Vector2i(
+                (int) MathF.Floor(index.X / (float) BoundaryChunkSize),
+                (int) MathF.Floor(index.Y / (float) BoundaryChunkSize)));
 
-                tiles.Add((new Vector2i(x, y), new Tile(tileDef.TileId)));
-                if (tiles.Count < BoundaryBatchSize)
-                    continue;
+            if (tiles.Count < BoundaryBatchSize)
+                continue;
 
-                FlushBoundary(mapUid, grid, config, tiles);
-                await Timer.Delay(1, cancellation);
-            }
+            _map.SetTiles(caves.Owner, grid, tiles);
+            tiles.Clear();
+            await Timer.Delay(1, cancellation);
         }
 
-        FlushBoundary(mapUid, grid, config, tiles);
+        if (tiles.Count > 0)
+            _map.SetTiles(caves.Owner, grid, tiles);
     }
 
-    private void FlushBoundary(EntityUid mapUid, MapGridComponent grid, LavalandChromiteCavesConfig config, List<(Vector2i Index, Tile Tile)> tiles)
+    /// <summary>The boundary tiles (the outer <paramref name="width"/> rings of the map) inside an area.</summary>
+    private static IEnumerable<Vector2i> BoundaryTiles(int half, int width, Box2i area)
     {
-        if (tiles.Count == 0)
-            return;
-
-        _map.SetTiles(mapUid, grid, tiles);
-        foreach (var (index, _) in tiles)
+        var left = Math.Max(area.Left, -half);
+        var bottom = Math.Max(area.Bottom, -half);
+        var right = Math.Min(area.Right, half);
+        var top = Math.Min(area.Top, half);
+        for (var x = left; x < right; x++)
         {
-            Spawn(config.BoundaryWall, _map.GridTileToLocal(mapUid, grid, index));
+            for (var y = bottom; y < top; y++)
+            {
+                var edge = Math.Min(Math.Min(x + half, half - 1 - x), Math.Min(y + half, half - 1 - y));
+                if (edge < width)
+                    yield return new Vector2i(x, y);
+            }
         }
+    }
 
-        tiles.Clear();
+    /// <summary>Puts up the walls of the boundary chunks anyone has come near.</summary>
+    private void UpdateBoundary(TimeSpan now)
+    {
+        if (now < _nextBoundaryCheck)
+            return;
+        _nextBoundaryCheck = now + BoundaryInterval;
+
+        var query = EntityQueryEnumerator<LavalandChromiteCavesComponent, MapGridComponent>();
+        while (query.MoveNext(out var uid, out var caves, out var grid))
+        {
+            if (caves.PendingBoundaryChunks.Count == 0 || !TryGetCavesConfig(uid, out _, out var config))
+                continue;
+
+            var mapId = Transform(uid).MapID;
+            var half = Math.Max(16, config.MapHalfSize);
+            var width = Math.Clamp(config.BoundaryWidth, 1, half);
+            foreach (var session in _players.Sessions)
+            {
+                if (session.AttachedEntity is not { Valid: true } player)
+                    continue;
+
+                var coords = _transform.GetMapCoordinates(player);
+                if (coords.MapId != mapId)
+                    continue;
+
+                foreach (var chunk in caves.PendingBoundaryChunks.ToArray())
+                {
+                    var origin = chunk * BoundaryChunkSize;
+                    var bounds = new Box2(origin, origin + new Vector2i(BoundaryChunkSize, BoundaryChunkSize));
+                    var nearest = Vector2.Clamp(coords.Position, bounds.BottomLeft, bounds.TopRight);
+                    if (Vector2.DistanceSquared(nearest, coords.Position) > BoundaryLoadRange * BoundaryLoadRange)
+                        continue;
+
+                    caves.PendingBoundaryChunks.Remove(chunk);
+                    var area = new Box2i(origin.X, origin.Y, origin.X + BoundaryChunkSize, origin.Y + BoundaryChunkSize);
+                    foreach (var index in BoundaryTiles(half, width, area))
+                    {
+                        Spawn(config.BoundaryWall, _map.GridTileToLocal(uid, grid, index));
+                    }
+                }
+            }
+        }
     }
 
     /// <summary>A clearing in glowing flowers with the beam of light in the middle.</summary>
@@ -527,6 +587,7 @@ public sealed class LavalandChromiteCavesSystem : EntitySystem
             UpdateModes(now);
         }
 
+        UpdateBoundary(now);
         UpdateLights(now);
         UpdateJumpPrompts(now);
         UpdateExitPrompts(now);

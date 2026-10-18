@@ -9,6 +9,7 @@ using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.Effects;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Weapons.Reflect;
@@ -126,6 +127,7 @@ public sealed class LavalandColossusSystem : EntitySystem
     private void PrepareFight(EntityUid uid, LavalandColossusComponent colossus)
     {
         colossus.Furious = false;
+        _movement.RefreshMovementSpeedModifiers(uid);
         colossus.PendingFuryBlasts.Clear();
         _appearance.SetData(uid, LavalandColossusVisuals.Angry, false);
         SetEnraged(uid, colossus, false);
@@ -357,6 +359,8 @@ public sealed class LavalandColossusSystem : EntitySystem
             }
 
             colossus.Furious = true;
+            // From now on it only runs at the players at its fury chase speed, its own walking stops.
+            _movement.RefreshMovementSpeedModifiers(uid);
             colossus.NextFuryBlast = now + TimeSpan.FromSeconds(1);
             _appearance.SetData(uid, LavalandColossusVisuals.Angry, true);
             Telegraph(uid, colossus);
@@ -523,8 +527,27 @@ public sealed class LavalandColossusSystem : EntitySystem
         Entity<LavalandColossusComponent> ent,
         ref RefreshMovementSpeedModifiersEvent args)
     {
-        if (ent.Comp.Enraged)
+        // Furious it is moved by its fury chase alone (at FuryChaseSpeed): its own walking on top of that
+        // made it twice as fast.
+        if (ent.Comp.Furious)
+        {
+            args.ModifySpeed(0f, 0f);
+            return;
+        }
+
+        if (!ent.Comp.Enraged)
+            return;
+
+        // NPCs always move at their sprint speed, so the multiplier is taken off its walk speed for both:
+        // multiplying the sprint speed made an enraged colossus far faster than intended.
+        if (!TryComp<MovementSpeedModifierComponent>(ent, out var speed) || speed.BaseSprintSpeed <= 0f)
+        {
             args.ModifySpeed(ent.Comp.EnragedMovementSpeedMultiplier, ent.Comp.EnragedMovementSpeedMultiplier);
+            return;
+        }
+
+        var target = speed.BaseWalkSpeed * ent.Comp.EnragedMovementSpeedMultiplier;
+        args.ModifySpeed(ent.Comp.EnragedMovementSpeedMultiplier, target / speed.BaseSprintSpeed);
     }
 
     private void SetEnraged(EntityUid uid, LavalandColossusComponent colossus, bool enraged)

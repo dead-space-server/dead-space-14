@@ -24,6 +24,11 @@ public sealed class LavalandPitDropSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly Robust.Shared.Containers.SharedContainerSystem _containers = default!;
+    [Dependency] private readonly Robust.Shared.Physics.Systems.SharedPhysicsSystem _physics = default!;
+
+    /// <summary>How long a thing shrinks away into the pit before it is gone down it.</summary>
+    private const float SinkDuration = 0.6f;
 
     /// <summary>How long a thing falls before it lands.</summary>
     public static readonly TimeSpan FallTime = TimeSpan.FromSeconds(10);
@@ -40,6 +45,9 @@ public sealed class LavalandPitDropSystem : EntitySystem
     private sealed class PendingDrop
     {
         public EntityUid Item;
+        /// <summary>Still sinking into the pit until then, where it fell in.</summary>
+        public TimeSpan? GoneAt;
+        public MapCoordinates Holding;
         public TimeSpan LandAt;
         public MapCoordinates Destination;
         public float Spread;
@@ -57,11 +65,22 @@ public sealed class LavalandPitDropSystem : EntitySystem
                 return;
         }
 
-        _transform.SetMapCoordinates(item, holding);
+        // First it sinks into the pit where it fell in, as into any chasm; only then is it gone down.
+        var now = _timing.CurTime;
+        _physics.SetLinearVelocity(item, Vector2.Zero);
+        var sink = EnsureComp<LavalandSkyDropComponent>(item);
+        sink.Start = now;
+        sink.Duration = SinkDuration;
+        sink.Sinking = true;
+        sink.Rising = false;
+        Dirty(item, sink);
+
         _pending.Add(new PendingDrop
         {
             Item = item,
-            LandAt = _timing.CurTime + FallTime,
+            GoneAt = now + TimeSpan.FromSeconds(SinkDuration),
+            Holding = holding,
+            LandAt = now + TimeSpan.FromSeconds(SinkDuration) + FallTime,
             Destination = destination,
             Spread = spread,
         });
@@ -75,6 +94,31 @@ public sealed class LavalandPitDropSystem : EntitySystem
         for (var i = _pending.Count - 1; i >= 0; i--)
         {
             var pending = _pending[i];
+            if (pending.GoneAt is { } goneAt)
+            {
+                if (now < goneAt)
+                    continue;
+
+                pending.GoneAt = null;
+                if (TerminatingOrDeleted(pending.Item))
+                {
+                    _pending.RemoveAt(i);
+                    continue;
+                }
+
+                RemComp<LavalandSkyDropComponent>(pending.Item);
+
+                // Snatched up while it was going down: it stays with whoever caught it.
+                if (_containers.IsEntityInContainer(pending.Item))
+                {
+                    _pending.RemoveAt(i);
+                    continue;
+                }
+
+                _transform.SetMapCoordinates(pending.Item, pending.Holding);
+                continue;
+            }
+
             if (now < pending.LandAt)
                 continue;
 
@@ -111,6 +155,7 @@ public sealed class LavalandPitDropSystem : EntitySystem
         drop.Duration = DropDuration;
         drop.Height = DropHeight;
         drop.Rising = false;
+        drop.Sinking = false;
         Dirty(pending.Item, drop);
         _dropping.Add((pending.Item, now + TimeSpan.FromSeconds(DropDuration + 0.2f)));
     }

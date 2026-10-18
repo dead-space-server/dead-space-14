@@ -46,6 +46,13 @@ public sealed partial class LavalandChromiteCavesComponent : Component
     [ViewVariables]
     public EntityUid? Exit;
 
+    /// <summary>
+    /// Server: chunks of the boundary whose walls are not put up yet - they go up only when somebody comes near,
+    /// instead of thousands of walls at once when the caves are generated.
+    /// </summary>
+    [ViewVariables]
+    public HashSet<Vector2i> PendingBoundaryChunks = new();
+
     [ViewVariables]
     public bool ModeInitialized;
 

@@ -81,4 +81,8 @@ public sealed partial class LavalandSkyDropComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool Rising;
+
+    /// <summary>Sinking into a pit instead: shrinking away where it lies, as things falling into a chasm do.</summary>
+    [DataField, AutoNetworkedField]
+    public bool Sinking;
 }
