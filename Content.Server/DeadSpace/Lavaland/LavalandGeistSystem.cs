@@ -37,7 +37,6 @@ public sealed class LavalandGeistSystem : EntitySystem
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly Content.Shared.Examine.ExamineSystemShared _examine = default!;
     [Dependency] private readonly Robust.Shared.Audio.Systems.SharedAudioSystem _audio = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
