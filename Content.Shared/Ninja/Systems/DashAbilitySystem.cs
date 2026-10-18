@@ -60,7 +60,8 @@ public abstract class SharedDashAbilitySystem : EntitySystem
     //DS14-start
     private void OnEquippedHand(Entity<DashAbilityComponent> ent, ref GotEquippedHandEvent args)
     {
-        ShowAlert(args.User, ent);
+        if (CheckDash(ent, args.User))
+            ShowAlert(args.User, ent);
     }
 
     private void OnUnequippedHand(Entity<DashAbilityComponent> ent, ref GotUnequippedHandEvent args)
