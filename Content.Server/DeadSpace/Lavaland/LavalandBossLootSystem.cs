@@ -302,7 +302,8 @@ public sealed class LavalandBossLootSystem : EntitySystem
         if (now < ent.Comp.NextCommand || args.ObfuscatedMessage != null)
             return;
 
-        var message = args.Message.ToLowerInvariant();
+        // What was said, before any accent mangled it: a unathi hissing an order still gives it.
+        var message = (string.IsNullOrEmpty(args.OriginalMessage) ? args.Message : args.OriginalMessage).ToLowerInvariant();
         LavalandVoiceCommand? command = null;
         foreach (var candidate in ent.Comp.Commands)
         {
