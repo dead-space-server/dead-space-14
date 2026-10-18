@@ -3,6 +3,8 @@ using Content.Client.Actions.UI;
 using Content.Client.Cooldown;
 using Content.Shared.Alert;
 using Content.Shared.DeadSpace.ERT.Components;
+using Content.Shared.Hands.EntitySystems; // DS14
+using Content.Shared.Ninja.Components; // DS14
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
@@ -105,6 +107,30 @@ namespace Content.Client.UserInterface.Systems.Alerts.Controls
                 return new ActionAlertTooltip(trackingMsg, trackingDesc) { Cooldown = Cooldown };
             }
             // DS14-ERT-Tracking-End
+
+            // DS14-start
+            if (Alert.ID == "DashCooldown")
+            {
+                var altClick = false;
+                if (_playerManager.LocalEntity is { } player)
+                {
+                    var hands = _entityManager.System<SharedHandsSystem>();
+                    foreach (var held in hands.EnumerateHeld(player))
+                    {
+                        if (_entityManager.TryGetComponent<DashAbilityComponent>(held, out var dash))
+                        {
+                            altClick = dash.AltClickDash;
+                            break;
+                        }
+                    }
+                }
+
+                var dashMsg = FormattedMessage.FromMarkupOrThrow(Loc.GetString(Alert.Name));
+                var dashDesc = FormattedMessage.FromMarkupOrThrow(Loc.GetString(
+                    altClick ? "dash-alert-desc-alt" : "dash-alert-desc"));
+                return new ActionAlertTooltip(dashMsg, dashDesc) { Cooldown = Cooldown };
+            }
+            // DS14-end
 
             var msg = FormattedMessage.FromMarkupOrThrow(Loc.GetString(Alert.Name));
             var desc = FormattedMessage.FromMarkupOrThrow(Loc.GetString(Alert.Description));

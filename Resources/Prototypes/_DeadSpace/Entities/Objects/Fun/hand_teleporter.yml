@@ -12,6 +12,7 @@
     sprite: _DeadSpace/Objects/Fun/hand_teleporter.rsi
     size: Normal
   - type: DashAbility
+    cooldown: 0
   - type: LimitedCharges
     maxCharges: 2
   - type: AutoRecharge

@@ -219,6 +219,9 @@
     corruptByBluespaceItems: true
     teleportPulledEntity: true
     beamProto: NinjaBeam
+    altClickDash: true
+    cooldown: 0.5
+    dashAction: null
   # DS14-end
   - type: LimitedCharges
     maxCharges: 3
