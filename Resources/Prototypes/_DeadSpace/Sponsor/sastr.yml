@@ -91,6 +91,7 @@
     - 0,0,7,1
   - type: Sprite
     sprite: _DeadSpace/Sponsor/sastr/belt.rsi
+    scale: 0.8, 0.8
     layers:
     - state: icon
       map: [ "unfoldedLayer" ]
@@ -200,6 +201,8 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
+  - type: ClothingVisualLayerAnchor
+    slot: belt
   - type: HideLayerClothing
     slots:
     - Hair
@@ -223,6 +226,7 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/sastr/outer.rsi
+    scale: 0.8, 0.8
   - type: Clothing
     sprite: _DeadSpace/Sponsor/sastr/outer.rsi
   - type: SolutionContainerManager
@@ -244,6 +248,7 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/sastr/helmet2.rsi
+    scale: 0.75, 0.75
     layers:
     - state: icon
       map: [ "unfoldedLayer" ]
@@ -288,31 +293,24 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/sastr/jumpsuit.rsi
-    layers:
-    - state: icon
-      map: [ "unfoldedLayer" ]
-    - state: h-icon
-      map: ["foldedLayer"]
-      visible: false
+    sprite: _DeadSpace/Sponsor/sastr/jumpicon.rsi
+    scale: 0.7, 0.7
   - type: Clothing
     sprite: _DeadSpace/Sponsor/sastr/jumpsuit.rsi
-  - type: Appearance
-  - type: Foldable
-    canFoldInsideContainer: true
-  - type: GroupExamine
-  - type: FoldableClothing
-    foldedEquippedPrefix: h
-    foldedHeldPrefix: h
-  - type: GenericVisualizer
-    visuals:
-      enum.FoldedVisuals.State:
-        foldedLayer:
-          True: {visible: true}
-          False: {visible: false}
-        unfoldedLayer:
-          True: {visible: false}
-          False: {visible: true}
+  - type: Tag
+    tags: [ ]
+
+# jumpsuit2.rsi
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitsastr2
+  name: форма Klecsh //
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/sastr/jumpsuit2.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/sastr/jumpsuit2.rsi
   - type: Tag
     tags: [ ]
 
@@ -339,10 +337,12 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/sastr/headset.rsi
+    scale: 0.75, 0.75
   - type: Clothing
     sprite: _DeadSpace/Sponsor/sastr/headset.rsi
   - type: Headset
-    color: "#111111"
+    color: "#2a3424" 
+    colorEnd: "#000000"
   - type: EncryptionKeyHolder
     keySlots: 5
   - type: FlashbangProtection
@@ -359,6 +359,7 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/sastr/gloves.rsi
+    scale: 0.8, 0.8
   - type: Clothing
     sprite: _DeadSpace/Sponsor/sastr/gloves.rsi
   - type: Tag
@@ -373,6 +374,7 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/sastr/cloak.rsi
+    scale: 0.8, 0.8
     layers:
     - state: icon
       map: [ "unfoldedLayer" ]
@@ -467,6 +469,7 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/sastr/hud.rsi
+    scale: 0.8, 0.8
     layers:
     - state: icon
       map: [ "unfoldedLayer" ]
@@ -506,6 +509,7 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/sastr/gasmask.rsi
+    scale: 0.8, 0.8
   - type: Clothing
     sprite: _DeadSpace/Sponsor/sastr/gasmask.rsi
   - type: HideLayerClothing
