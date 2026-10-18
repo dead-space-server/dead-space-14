@@ -25,6 +25,15 @@
         {
             "name": "wielded-inhand-right",
             "directions": 4
-        }
+        },
+    {
+      "name": "icon2"
+    },
+    {
+      "name": "icon3"
+    },
+    {
+      "name": "icon4"
+    }
   ]
 }

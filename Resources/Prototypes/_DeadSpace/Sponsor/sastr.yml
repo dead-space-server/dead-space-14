@@ -941,6 +941,138 @@
   idleState: default3
   offset: 0.125, 0.125
 
+# kinetic_accelerator.rsi
+- type: entity
+  parent: WeaponProtoKineticAcceleratorReapeter
+  id: WeaponProtoKineticAcceleratorsastr
+  categories: [ HideSpawnMenu ]
+  name: 
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/sastr/kinetic_accelerator.rsi
+    layers:
+    - state: icon
+    - state: animation-icon
+      visible: false
+      map: [ "empty-icon" ]
+  - type: BasicEntityAmmoProvider
+    proto: BulletChargesastr2
+    capacity: 3
+    count: 3
+  - type: Item
+    sprite: _DeadSpace/Sponsor/sastr/kinetic_accelerator.rsi
+    size: Normal
+    heldPrefix: null
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/sastr/kinetic_accelerator.rsi
+    quickEquip: false
+    slots:
+    - suitStorage
+    - Belt
+
+- type: entity
+  id: BulletChargesastr2
+  name: charge bolt
+  parent: BulletKinetic
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/sastr/crusher.rsi
+    noRot: false
+    layers:
+      - state: icon4
+        shader: unshaded
+
+# crusher.rsi
+- type: entity
+  parent: [ BaseWeaponCrusher, BaseSecurityCargoContraband ]
+  categories: [ HideSpawnMenu ]
+  id: WeaponCrushersastr
+  name: протокинетическое копьё Klecsh //
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/sastr/crusher.rsi
+    scale: 0.8, 0.8
+    layers:
+    - state: icon
+      map: [ base ]
+    - state: icon2
+      map: [ plunger ]
+      visible: false
+  - type: Item
+    sprite: _DeadSpace/Sponsor/sastr/crusher.rsi
+    size: Huge
+  - type: AmmoCounter
+  - type: UseDelayOnShoot
+  - type: UseDelay
+    delay: 0.9
+  - type: LeechOnMarker
+    leech:
+      groups:
+        Brute: -11
+  - type: Gun
+    soundGunshot: /Audio/_DeadSpace/Sponsor/pvrsifvlAlt2/crusher_shot.ogg
+    fireRate: 1
+    useKey: false
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 0.5
+    rechargeSound:
+      path: /Audio/_DeadSpace/Sponsor/pvrsifvlAlt2/crusher_reload.ogg
+  - type: BasicEntityAmmoProvider
+    proto: BulletChargesastr
+    capacity: 1
+    count: 1
+  - type: MeleeWeapon
+    attackRate: 1
+    wideAnimationRotation: -135
+    damage:
+      types:
+        Blunt: 6
+        Slash: 4
+    soundHit:
+      collection: MetalThud
+  - type: Wieldable
+  - type: IncreaseDamageOnWield
+    damage:
+      types:
+        Blunt: 6
+        Slash: 2
+        Structural: 30
+  - type: GenericVisualizer
+    visuals:
+      enum.WieldableVisuals.Wielded:
+        plunger:
+          True: { state: icon }
+          False: { state: icon }
+        base:
+          True: { state: icon2 }
+          False: { state: icon }
+  - type: Appearance
+  - type: PointLight
+    color: "#aef633"
+    enabled: false
+    radius: 4
+  - type: GunRequiresWield
+  - type: DisarmMalus
+  - type: Prying
+
+- type: entity
+  id: BulletChargesastr
+  name: charge bolt
+  parent: BulletCharge
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/sastr/crusher.rsi
+    noRot: false
+    layers:
+      - state: icon4
+        shader: unshaded
+  - type: DamageMarkerOnCollide
+    effect:
+      sprite: _DeadSpace/Sponsor/sastr/crusher.rsi
+      state: icon3
+
 # документ
 - type: entity
   parent: PaperPrintedCentcomm
