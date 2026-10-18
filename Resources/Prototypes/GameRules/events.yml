@@ -305,7 +305,7 @@
     # - DoorjackObjective # DS14 ninja balance
     - SpiderChargeObjective
     - TerrorObjective
-    - MassArrestObjective
+    # - MassArrestObjective # DS14
     - NinjaSurviveObjective
     - NinjaKillRandomPersonObjective # DS14 ninja balance
     #DS14-start

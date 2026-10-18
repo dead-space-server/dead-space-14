@@ -1,4 +1,6 @@
+using Content.Shared.DoAfter;
 using Robust.Shared.Audio;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.Ninja.Components;
 
@@ -10,6 +12,9 @@ public sealed partial class NinjaAiHackComponent : Component
 
     [DataField]
     public LocId StartedMessage = "ninja-ai-hack-started";
+
+    [DataField]
+    public LocId HalfHackMessage = "ninja-ai-hack-half-announcement";
 
     [DataField]
     public LocId HackedMessage = "ninja-ai-hack-announcement";
@@ -28,4 +33,14 @@ public sealed partial class NinjaAiHackComponent : Component
 
     [DataField]
     public SoundSpecifier? AnnouncementSound = new SoundPathSpecifier("/Audio/_DeadSpace/Effects/Random/phone-gone-crazy-in-the-cathedral.ogg");
+
+    [DataField]
+    public EntProtoId EffectPrototype = "EffectSparks";
+
+    [DataField]
+    public LocId? HalfwayPopup;
+
+    public DoAfterId? ActiveDoAfter;
+
+    public byte TriggeredStages;
 }

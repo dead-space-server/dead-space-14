@@ -317,16 +317,19 @@
     - objective: StealResearchObjective
       components:
       - type: ResearchStealer
+        halfwayPopup: ninja-research-steal-halfway #DS14
     - objective: TerrorObjective
       components:
       - type: CommsHacker
         threats: NinjaThreats
+        halfwayPopup: ninja-comms-hack-halfway #DS14
     - objective: MassArrestObjective
       components:
       - type: CriminalRecordsHacker
     - objective: NinjaAiHackObjective
       components:
       - type: NinjaAiHack
+        halfwayPopup: ninja-ai-hack-halfway #DS14
 
 - type: entity
   parent: [ ClothingHandsGlovesColorBlack, BaseSecurityEngineeringContraband ]

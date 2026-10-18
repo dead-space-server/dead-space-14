@@ -1,3 +1,4 @@
+using Content.Shared.DoAfter; //DS14
 using Content.Shared.Random;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -22,6 +23,18 @@ public sealed partial class CommsHackerComponent : Component
     /// </summary>
     [DataField(required: true)]
     public ProtoId<WeightedRandomPrototype> Threats = string.Empty;
+
+    //DS14-start
+    [DataField]
+    public EntProtoId SparksEffectPrototype = "EffectSparks";
+
+    [DataField]
+    public LocId? HalfwayPopup;
+
+    public DoAfterId? ActiveDoAfter;
+
+    public byte TriggeredStages;
+    //DS14-end
 }
 
 /// <summary>

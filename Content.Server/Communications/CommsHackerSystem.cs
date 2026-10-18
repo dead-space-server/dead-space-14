@@ -1,14 +1,14 @@
-using Content.Server.Chat.Systems;
 using Content.Server.GameTicking;
 using Content.Server.Ninja.Systems;
 using Content.Shared.Communications;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
+using Content.Shared.Popups; //DS14
 using Content.Shared.Random;
 using Content.Shared.Random.Helpers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
-using Robust.Shared.Serialization;
+using Robust.Shared.Timing; //DS14
 
 namespace Content.Server.Communications;
 
@@ -21,6 +21,8 @@ public sealed class CommsHackerSystem : SharedCommsHackerSystem
     // TODO: remove when generic check event is used
     [Dependency] private readonly NinjaGlovesSystem _gloves = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!; //DS14
+    [Dependency] private readonly IGameTiming _timing = default!; //DS14
 
     public override void Initialize()
     {
@@ -28,6 +30,7 @@ public sealed class CommsHackerSystem : SharedCommsHackerSystem
 
         SubscribeLocalEvent<CommsHackerComponent, BeforeInteractHandEvent>(OnBeforeInteractHand);
         SubscribeLocalEvent<CommsHackerComponent, TerrorDoAfterEvent>(OnDoAfter);
+        SubscribeLocalEvent<CommsHackerComponent, DoAfterAttemptEvent<TerrorDoAfterEvent>>(OnDoAfterAttempt); //DS14
     }
 
     /// <summary>
@@ -47,12 +50,58 @@ public sealed class CommsHackerSystem : SharedCommsHackerSystem
             BreakOnDamage = true,
             BreakOnMove = true,
             MovementThreshold = 0.5f,
-            CancelDuplicate = false
+            CancelDuplicate = false,
+            AttemptFrequency = AttemptFrequency.EveryTick, //DS14
         };
 
         _doAfter.TryStartDoAfter(doAfterArgs);
         args.Handled = true;
     }
+
+    //DS14-start
+    private void OnDoAfterAttempt(Entity<CommsHackerComponent> uid, ref DoAfterAttemptEvent<TerrorDoAfterEvent> args)
+    {
+        var comp = uid.Comp;
+        var doAfter = args.DoAfter;
+
+        if (comp.ActiveDoAfter != doAfter.Id)
+        {
+            comp.ActiveDoAfter = doAfter.Id;
+            comp.TriggeredStages = 0;
+        }
+
+        var duration = Math.Max(doAfter.Args.Delay.TotalSeconds, 0.1);
+        var progress = Math.Clamp((_timing.CurTime - doAfter.StartTime).TotalSeconds / duration, 0d, 1d);
+
+        if (progress >= 0.25 && (comp.TriggeredStages & 1) == 0)
+        {
+            comp.TriggeredStages |= 1;
+            SpawnSparkEffect(doAfter.Args.Target, doAfter.Args.User, comp.SparksEffectPrototype);
+        }
+
+        if (progress >= 0.5 && (comp.TriggeredStages & 2) == 0)
+        {
+            comp.TriggeredStages |= 2;
+            if (comp.HalfwayPopup is { } popup)
+                _popup.PopupEntity(Loc.GetString(popup), doAfter.Args.Target ?? doAfter.Args.User, PopupType.LargeCaution);
+        }
+
+        if (progress >= 0.75 && (comp.TriggeredStages & 4) == 0)
+        {
+            comp.TriggeredStages |= 4;
+            SpawnSparkEffect(doAfter.Args.Target, doAfter.Args.User, comp.SparksEffectPrototype);
+        }
+    }
+
+    private void SpawnSparkEffect(EntityUid? target, EntityUid user, EntProtoId effect)
+    {
+        var coords = target is { } targetUid && !Deleted(targetUid)
+            ? Transform(targetUid).Coordinates
+            : Transform(user).Coordinates;
+
+        Spawn(effect, coords);
+    }
+    //DS14-end
 
     /// <summary>
     /// Call in a random threat and do cleanup.

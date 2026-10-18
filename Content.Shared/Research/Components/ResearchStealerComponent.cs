@@ -1,5 +1,7 @@
+using Content.Shared.DoAfter; //DS14
 using Content.Shared.Research.Systems;
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes; //DS14
 
 namespace Content.Shared.Research.Components;
 
@@ -26,4 +28,16 @@ public sealed partial class ResearchStealerComponent : Component
     /// </summary>
     [DataField]
     public int MaxToSteal = 8;
+
+    //DS14-start
+    [DataField]
+    public EntProtoId EffectPrototype = "EffectSparks";
+
+    [DataField]
+    public LocId? HalfwayPopup;
+
+    public DoAfterId? ActiveDoAfter;
+
+    public byte TriggeredStages;
+    //DS14-end
 }

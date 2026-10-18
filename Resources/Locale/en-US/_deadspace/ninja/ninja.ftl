@@ -166,6 +166,7 @@ ninja-info-ui-teleport = Teleport
 # Ninja AI hack
 chat-manager-ninja-ai-wrap-message = [font size=28]{$message}[/font]
 ninja-ai-hack-started = Attention! Unauthorized interference with the upload system detected!
+ninja-ai-hack-half-announcement = Attention! Unauthorized overwrite of the laws subsystem continues! @%!$#... Progress: 50%... Security protocols not responding... #@&*!...
 ninja-ai-hack-announcement = Attention! The laws subsystem has been overwritten! Laws deleted... @%!$#!... recovery attempt aborted... #@&*!... laws updated!
 ninja-ai-hack-no-ai = The station AI core is currently offline.
 ninja-ai-hack-crew-announcement = Attention all crew! Unauthorized interference with the laws subsystem detected! @%!%#$... Laws corrupted... @#&*!...
@@ -190,3 +191,9 @@ ninja-disguise-scan-success = The image of "{$name}" was saved to the disguise b
 ninja-disguise-applied = Disguise applied: you now look like "{$name}".
 ninja-disguise-reset = Disguise reset.
 ninja-disguise-strip-attempt = Someone is trying to strip you!
+
+# Ninja hack popups
+
+ninja-research-steal-halfway = The server sparks and starts humming a little louder.
+ninja-ai-hack-halfway = The console sparks as static appears on the screen.
+ninja-comms-hack-halfway = The console sparks as static appears on the screen.

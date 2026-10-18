@@ -14,6 +14,7 @@ using Content.Shared.Silicons.Laws.Components;
 using Content.Shared.Tag;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 using Content.Shared.Chat;
 using Content.Server.Ninja.Systems;
 
@@ -33,6 +34,7 @@ public sealed class NinjaAiHackSystem : EntitySystem
     [Dependency] private readonly EmagSystem _emag = default!;
     [Dependency] private readonly TagSystem _tags = default!;
     [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     public override void Initialize()
     {
@@ -40,6 +42,7 @@ public sealed class NinjaAiHackSystem : EntitySystem
 
         SubscribeLocalEvent<NinjaAiHackComponent, BeforeInteractHandEvent>(OnBeforeInteractHand);
         SubscribeLocalEvent<NinjaAiHackComponent, NinjaAiHackDoAfterEvent>(OnDoAfter);
+        SubscribeLocalEvent<NinjaAiHackComponent, DoAfterAttemptEvent<NinjaAiHackDoAfterEvent>>(OnDoAfterAttempt);
     }
 
     private void OnBeforeInteractHand(EntityUid uid, NinjaAiHackComponent comp, BeforeInteractHandEvent args)
@@ -61,11 +64,56 @@ public sealed class NinjaAiHackSystem : EntitySystem
             BreakOnDamage = true,
             BreakOnMove = true,
             MovementThreshold = 0.5f,
-            CancelDuplicate = true
+            CancelDuplicate = true,
+            AttemptFrequency = AttemptFrequency.EveryTick,
         };
 
         if (_doAfter.TryStartDoAfter(doAfterArgs))
             args.Handled = true;
+    }
+
+    private void OnDoAfterAttempt(Entity<NinjaAiHackComponent> uid, ref DoAfterAttemptEvent<NinjaAiHackDoAfterEvent> args)
+    {
+        var comp = uid.Comp;
+        var doAfter = args.DoAfter;
+
+        if (comp.ActiveDoAfter != doAfter.Id)
+        {
+            comp.ActiveDoAfter = doAfter.Id;
+            comp.TriggeredStages = 0;
+        }
+
+        var duration = Math.Max(doAfter.Args.Delay.TotalSeconds, 0.1);
+        var progress = Math.Clamp((_timing.CurTime - doAfter.StartTime).TotalSeconds / duration, 0d, 1d);
+
+        if (progress >= 0.25 && (comp.TriggeredStages & 1) == 0)
+        {
+            comp.TriggeredStages |= 1;
+            SpawnSparkEffect(doAfter.Args.Target, doAfter.Args.User, comp.EffectPrototype);
+        }
+
+        if (progress >= 0.5 && (comp.TriggeredStages & 2) == 0)
+        {
+            comp.TriggeredStages |= 2;
+            if (comp.HalfwayPopup is { } popup)
+                _popup.PopupEntity(Loc.GetString(popup), doAfter.Args.Target ?? doAfter.Args.User, PopupType.LargeCaution);
+            NotifyStationAiPlayers(comp.HalfHackMessage);
+        }
+
+        if (progress >= 0.75 && (comp.TriggeredStages & 4) == 0)
+        {
+            comp.TriggeredStages |= 4;
+            SpawnSparkEffect(doAfter.Args.Target, doAfter.Args.User, comp.EffectPrototype);
+        }
+    }
+
+    private void SpawnSparkEffect(EntityUid? target, EntityUid user, EntProtoId effect)
+    {
+        var coords = target is { } targetUid && !Deleted(targetUid)
+            ? Transform(targetUid).Coordinates
+            : Transform(user).Coordinates;
+
+        Spawn(effect, coords);
     }
 
     private void OnDoAfter(EntityUid uid, NinjaAiHackComponent comp, NinjaAiHackDoAfterEvent args)
