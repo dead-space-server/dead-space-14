@@ -178,7 +178,7 @@ public abstract class SharedSmartFridgeSystem : EntitySystem
 
         if (_receiver.IsPowered(ent.Owner))
         {
-            _popup.PopupPredicted(Loc.GetString("smart-fridge-component-try-eject-energy-cancell"), ent, args.User);
+            _popup.PopupPredicted(Loc.GetString("smart-fridge-component-try-extract-powered-cancell"), ent, args.User);
             return;
         }
 
