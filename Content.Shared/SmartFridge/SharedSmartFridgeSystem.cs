@@ -7,16 +7,16 @@ using Content.Shared.Popups;
 using Content.Shared.Storage.Components;
 using Content.Shared.Verbs;
 using Content.Shared.Whitelist;
-using Content.Shared.DoAfter;
-using Content.Shared.Power.EntitySystems;
-using Content.Shared.Database;
+using Content.Shared.DoAfter;//DS14
+using Content.Shared.Power.EntitySystems;//DS14
+using Content.Shared.Database;//DS14
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
-using Robust.Shared.Player;
-using Robust.Shared.Serialization;
-using System.Linq;
+using Robust.Shared.Player;//DS14
+using Robust.Shared.Serialization;//DS14
+using System.Linq;//DS14
 
 namespace Content.Shared.SmartFridge;
 
@@ -29,8 +29,8 @@ public abstract class SharedSmartFridgeSystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedPowerReceiverSystem _receiver = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private readonly SharedPowerReceiverSystem _receiver = default!;//DS14
+    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;//DS14
 
     public override void Initialize()
     {
@@ -45,8 +45,8 @@ public abstract class SharedSmartFridgeSystem : EntitySystem
         SubscribeLocalEvent<SmartFridgeComponent, GetDumpableVerbEvent>(OnGetDumpableVerb);
         SubscribeLocalEvent<SmartFridgeComponent, DumpEvent>(OnDump);
 
-        SubscribeLocalEvent<SmartFridgeComponent, GetVerbsEvent<Verb>>(OnGetVerb);// DS14-start
-        SubscribeLocalEvent<SmartFridgeComponent, ExtractItemDoAfterEvent>(OnExtractItem);// DS14-start
+        SubscribeLocalEvent<SmartFridgeComponent, GetVerbsEvent<Verb>>(OnGetVerb);//DS14
+        SubscribeLocalEvent<SmartFridgeComponent, ExtractItemDoAfterEvent>(OnExtractItem);//DS14
 
         Subs.BuiEvents<SmartFridgeComponent>(SmartFridgeUiKey.Key,
             sub =>
