@@ -152,9 +152,34 @@ public sealed class LavalandLegionHandsSystem : EntitySystem
         return hand;
     }
 
+    /// <summary>
+    /// Both hands go up over its head and shake there for <paramref name="duration"/>: whatever they were doing
+    /// is dropped.
+    /// </summary>
+    public void RaiseHandsInFright(EntityUid legion, TimeSpan duration)
+    {
+        if (!TryComp<LavalandLegionHandsComponent>(legion, out var hands))
+            return;
+
+        ClearAttacks(hands);
+        hands.HandsUpUntil = _timing.CurTime + duration;
+        foreach (var hand in new[] { hands.Left, hands.Right })
+        {
+            if (hand is { } open)
+                SetPose(open, LavalandLegionHandPose.Open);
+        }
+    }
+
     private Vector2 RestSpot(Entity<LavalandLegionHandsComponent> ent, bool left, Vector2 legion, TimeSpan now)
     {
         var time = (float) now.TotalSeconds;
+        if (ent.Comp.HandsUpUntil is { } upUntil && now < upUntil)
+        {
+            // Up over the head, trembling.
+            var shake = new Vector2(MathF.Sin(time * 47f + (left ? 0f : 1.3f)), MathF.Cos(time * 39f + (left ? 0.7f : 0f))) * 0.09f;
+            return legion + new Vector2(left ? -0.95f : 0.95f, 1.7f) + shake;
+        }
+
         var bob = MathF.Sin(time * 2.2f + (left ? 0f : MathF.PI)) * ent.Comp.BobHeight;
         return legion + new Vector2(left ? -ent.Comp.HandOffset.X : ent.Comp.HandOffset.X, ent.Comp.HandOffset.Y + bob);
     }

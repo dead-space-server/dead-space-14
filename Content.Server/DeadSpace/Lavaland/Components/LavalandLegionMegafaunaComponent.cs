@@ -207,6 +207,36 @@ public sealed partial class LavalandLegionMegafaunaComponent : Component
     [ViewVariables]
     public EntityUid? Pursued;
 
+    /// <summary>Outside an arena: where it came into the world. A raid on the outpost sends it back there.</summary>
+    [ViewVariables]
+    public Robust.Shared.Map.MapCoordinates? Home;
+
+    /// <summary>Tiles per second it flies home when a raid starts.</summary>
+    [DataField]
+    public float HomeFlightSpeed = 9f;
+
+    /// <summary>Flying home from a raid.</summary>
+    [ViewVariables]
+    public bool ReturningHome;
+
+    /// <summary>
+    /// Before it flies off from a raid it freezes in fright for this long: shaking, its hands (if any) up over its
+    /// head.
+    /// </summary>
+    [DataField]
+    public TimeSpan RaidPanicTime = TimeSpan.FromSeconds(2.5);
+
+    [ViewVariables]
+    public TimeSpan? RaidPanicUntil;
+
+    /// <summary>Has fled this raid already: woken at home meanwhile, it fights there instead of fleeing again.</summary>
+    [ViewVariables]
+    public bool FledRaid;
+
+    /// <summary>Back home from a raid, asleep: the first player within <see cref="AggroRange"/> wakes it.</summary>
+    [ViewVariables]
+    public bool WaitingAtHome;
+
     /// <summary>Outside an arena, once the pursued one is gone: other players this close are attacked.</summary>
     [DataField]
     public float PursuitRange = 80f;

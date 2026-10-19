@@ -13,6 +13,10 @@ namespace Content.Server.DeadSpace.Lavaland.Components;
 [RegisterComponent]
 public sealed partial class LavalandMadMinerComponent : Component
 {
+    /// <summary>Out of the way of a raid on the outpost: it hunts nobody until the raid is over.</summary>
+    [ViewVariables]
+    public bool RaidRetreat;
+
     [DataField] public float MaxHealth = 1250f;
     [DataField] public float NoticeRange = 7f;
     [DataField] public float ChaseRange = 160f;

@@ -22,6 +22,10 @@ public sealed partial class LavalandLegionHandsComponent : Component
     [DataField]
     public EntProtoId LeftHand = "LavalandLegionHandLeft";
 
+    /// <summary>Hands up over the head (the Legion fleeing a raid in fright) until then, shaking.</summary>
+    [ViewVariables]
+    public TimeSpan? HandsUpUntil;
+
     [DataField]
     public EntProtoId RightHand = "LavalandLegionHandRight";
 

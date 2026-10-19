@@ -43,6 +43,8 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly LavalandNecropolisGateSystem _gates = default!;
     [Dependency] private readonly LavalandBossArenaSystem _arenas = default!;
+    [Dependency] private readonly LavalandFaunaRaidSystem _raids = default!;
+    [Dependency] private readonly Content.Shared.Jittering.SharedJitteringSystem _jitter = default!;
     [Dependency] private readonly LavalandLegionHandsSystem _hands = default!;
     [Dependency] private readonly HTNSystem _htn = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -98,6 +100,7 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
     {
         if (!ent.Comp.Root.IsValid())
             ent.Comp.Root = ent.Owner;
+        ent.Comp.Home ??= _transform.GetMapCoordinates(ent.Owner);
         ent.Comp.NextAttack = _timing.CurTime + TimeSpan.FromSeconds(1);
     }
 
@@ -126,8 +129,19 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
             if (!legion.Free && HasComp<LavalandFreeBossComponent>(uid))
                 legion.Free = true;
 
+            // Back home from a raid: asleep until a player comes close.
+            if (legion.WaitingAtHome)
+            {
+                WakeAtHomeIfApproached((uid, legion), xform);
+                continue;
+            }
+
             // Asleep until its gate opens; then in an arena it fights while the fight is on, outside one always.
             if (legion.Dormant)
+                continue;
+
+            // A raid on the outpost: it does not follow the players there, it flies home and waits for them.
+            if (legion.Free && !TryGetArena(legion, out _) && FlyHomeFromRaid((uid, legion), xform, frameTime))
                 continue;
 
             LavalandBossArenaComponent? arena = null;
@@ -179,6 +193,100 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
             }
         }
     }
+
+    #region Raids
+
+    /// <summary>
+    /// While a raid is on the outpost, a free Legion drops the chase and flies straight home - over everything -
+    /// to fall asleep there. False while there is no raid: it goes on as before.
+    /// </summary>
+    private bool FlyHomeFromRaid(Entity<LavalandLegionMegafaunaComponent> ent, TransformComponent xform, float frameTime)
+    {
+        var legion = ent.Comp;
+        if (xform.MapUid is not { } map || !_raids.IsRaidRunning(map) ||
+            legion.Home is not { } home || home.MapId != xform.MapID)
+        {
+            legion.FledRaid = false;
+            return false;
+        }
+
+        var now = _timing.CurTime;
+        var position = _transform.GetWorldPosition(xform);
+        var offset = home.Position - position;
+        var distance = offset.Length();
+
+        if (!legion.ReturningHome)
+        {
+            // Fled this raid already, or close to home anyway: it fights as usual.
+            if (legion.FledRaid || distance < 8f)
+                return false;
+
+            legion.ReturningHome = true;
+            legion.FledRaid = true;
+            legion.Pursued = null;
+            legion.Lunging = false;
+            legion.ChargeStartAt = null;
+            legion.ChargeEndAt = null;
+            legion.ChargeHit.Clear();
+            SetAi(ent, false);
+            SetSpinning(ent, false);
+
+            // Frozen in fright first: shaking all over, the hands up.
+            legion.RaidPanicUntil = now + legion.RaidPanicTime;
+            _jitter.DoJitter(ent, legion.RaidPanicTime, true, 30f, 12f);
+            _hands.RaiseHandsInFright(ent, legion.RaidPanicTime + TimeSpan.FromSeconds(1.5));
+            _popup.PopupEntity(Loc.GetString("lavaland-legion-raid-panic", ("legion", ent.Owner)), ent,
+                PopupType.MediumCaution);
+        }
+
+        if (TryComp<PhysicsComponent>(ent, out var stillBody))
+            _physics.SetLinearVelocity(ent, Vector2.Zero, body: stillBody);
+
+        if (legion.RaidPanicUntil is { } panicUntil)
+        {
+            if (now < panicUntil)
+                return true;
+
+            // And off it goes, spinning away.
+            legion.RaidPanicUntil = null;
+            SetSpinning(ent, true);
+        }
+
+        if (distance > 0.5f)
+        {
+            var step = MathF.Min(legion.HomeFlightSpeed * frameTime, distance);
+            _transform.SetWorldPosition(ent, position + offset / distance * step);
+            return true;
+        }
+
+        // Home: asleep again until someone comes for it.
+        legion.ReturningHome = false;
+        legion.WaitingAtHome = true;
+        legion.Dormant = true;
+        SetSpinning(ent, false);
+        return true;
+    }
+
+    private void WakeAtHomeIfApproached(Entity<LavalandLegionMegafaunaComponent> ent, TransformComponent xform)
+    {
+        var position = _transform.GetWorldPosition(xform);
+        var range = ent.Comp.AggroRange * ent.Comp.AggroRange;
+        foreach (var session in _players.Sessions)
+        {
+            if (session.AttachedEntity is not { Valid: true } player ||
+                !IsValidTarget(player, xform.MapID) ||
+                Vector2.DistanceSquared(position, _transform.GetWorldPosition(player)) > range)
+            {
+                continue;
+            }
+
+            ent.Comp.WaitingAtHome = false;
+            Wake(ent, player);
+            return;
+        }
+    }
+
+    #endregion
 
     #region Attacks
 
@@ -657,6 +765,7 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
             childComp.Arena = ent.Comp.Arena;
             childComp.Free = ent.Comp.Free;
             childComp.Pursued = ent.Comp.Pursued;
+            childComp.Home = ent.Comp.Home;
             childComp.NextAttack = now + TimeSpan.FromSeconds(_random.NextFloat(0.8f, 1.6f));
             firstChild ??= child;
         }
