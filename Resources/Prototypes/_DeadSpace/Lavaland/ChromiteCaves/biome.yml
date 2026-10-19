@@ -138,6 +138,44 @@
     - MobArgocyteCavesEnforcer
     - MobArgocyteCavesFounder
 
+  # Bear traps of the Circle hidden among the blue flowers, rarely.
+  - !type:BiomeEntityLayer
+    threshold: 0.95
+    minimumDistance: 25
+    noise:
+      seed: 90
+      noiseType: OpenSimplex2
+      frequency: 0.32
+    allowedTiles:
+    - FloorChromite
+    entities:
+    - LavalandGeistTrapSpawner
+
+  # A geist glimpsed at the edge of sight, and a geist's ambush with traps.
+  - !type:BiomeEntityLayer
+    threshold: 0.996
+    minimumDistance: 45
+    noise:
+      seed: 93
+      noiseType: OpenSimplex2
+      frequency: 0.05
+    allowedTiles:
+    - FloorChromite
+    entities:
+    - LavalandGeistWatchTrigger
+
+  - !type:BiomeEntityLayer
+    threshold: 0.997
+    minimumDistance: 45
+    noise:
+      seed: 94
+      noiseType: OpenSimplex2
+      frequency: 0.05
+    allowedTiles:
+    - FloorChromite
+    entities:
+    - LavalandGeistAmbushTrigger
+
   # A great many pits in the open.
   - !type:BiomeEntityLayer
     threshold: 0.2

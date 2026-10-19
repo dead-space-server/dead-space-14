@@ -34,50 +34,6 @@
       gain: 0.45
     template: LavalandLavaAwayFromAsh
 
-  # Bear traps of the Circle hidden among the fiery flowers (same noise as the flowers), rarely.
-  - !type:BiomeEntityLayer
-    threshold: 0.95
-    minimumDistance: 25
-    noise:
-      seed: 51
-      noiseType: OpenSimplex2
-      frequency: 0.32
-    allowedTiles:
-    - FloorBasalt
-    - FloorLavalandAsh
-    - FloorLavalandPaleGrass
-    entities:
-    - LavalandGeistTrapSpawner
-
-  # A geist glimpsed at the edge of sight, and a geist's ambush with traps.
-  - !type:BiomeEntityLayer
-    threshold: 0.996
-    minimumDistance: 45
-    noise:
-      seed: 93
-      noiseType: OpenSimplex2
-      frequency: 0.05
-    allowedTiles:
-    - FloorBasalt
-    - FloorLavalandAsh
-    - FloorLavalandPaleGrass
-    entities:
-    - LavalandGeistWatchTrigger
-
-  - !type:BiomeEntityLayer
-    threshold: 0.997
-    minimumDistance: 45
-    noise:
-      seed: 94
-      noiseType: OpenSimplex2
-      frequency: 0.05
-    allowedTiles:
-    - FloorBasalt
-    - FloorLavalandAsh
-    - FloorLavalandPaleGrass
-    entities:
-    - LavalandGeistAmbushTrigger
-
   - !type:BiomeEntityLayer
     threshold: 0.97
     noise:

@@ -1,9 +1,19 @@
 - type: entity
   id: LavalandSensorTablet
-  parent: BaseHandheldComputer
+  # Works without a power cell: not a handheld computer, only its sounds.
+  parent: BaseItem
   name: планшет разведки лаваленда
   description: Показывает координаты шахтёров, передающих данные костюмных датчиков.
   components:
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_drop.ogg
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/SensorTablet.rsi
     state: tablet

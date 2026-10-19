@@ -154,7 +154,7 @@
     bossHealthPerExtraPlayer: 750
     phase2Fraction: 0.5
     wipeDelay: 20
-    lossSleep: 60
+    lossSleep: 15
     relocatePitOnLoss: true
     rewardSleep: 60
     blessings: [ NoSlip, Armor, Health, NoBreathing, Regeneration ]

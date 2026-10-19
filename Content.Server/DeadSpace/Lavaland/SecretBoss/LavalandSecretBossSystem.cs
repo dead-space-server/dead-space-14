@@ -94,6 +94,9 @@ public sealed class LavalandSecretBossSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SleepingSystem _sleeping = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private readonly Robust.Shared.Containers.SharedContainerSystem _containers = default!;
+    [Dependency] private readonly Content.Shared.Stacks.SharedStackSystem _stacks = default!;
+    [Dependency] private readonly Content.Shared.Storage.EntitySystems.SharedStorageSystem _storage = default!;
 
     private static readonly TimeSpan CheckInterval = TimeSpan.FromSeconds(1);
     private static readonly TimeSpan HudInterval = TimeSpan.FromSeconds(0.5);
@@ -144,6 +147,24 @@ public sealed class LavalandSecretBossSystem : EntitySystem
     }
 
     #endregion
+
+    /// <summary>
+    /// Admin command: the pit and the Celestial's maze open on this lavaland right away, whether the arena bosses
+    /// are dead or not. False if the secret boss is off there or the way down is already open (or was gone through).
+    /// </summary>
+    public bool ForceOpen(EntityUid map)
+    {
+        if (!TryGetConfig(map, out _))
+            return false;
+
+        var comp = EnsureComp<LavalandSecretBossComponent>(map);
+        if (comp.Stage is not (LavalandSecretBossStage.Dormant or LavalandSecretBossStage.Awakening))
+            return false;
+
+        comp.Stage = LavalandSecretBossStage.Awakening;
+        comp.StageTime = _timing.CurTime;
+        return true;
+    }
 
     private bool TryGetConfig(EntityUid map, out LavalandSecretBossConfig config)
     {
@@ -1123,7 +1144,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
                     continue;
                 }
 
-                var clone = Spawn(itemProto.ID, at);
+                var clone = CloneItem(item.Value, at, 0);
                 if (!_inventory.TryEquip(copy, clone, slot.Name, silent: true, force: true))
                     QueueDel(clone);
             }
@@ -1131,10 +1152,10 @@ public sealed class LavalandSecretBossSystem : EntitySystem
 
         foreach (var held in _hands.EnumerateHeld(original))
         {
-            if (MetaData(held).EntityPrototype is not { } heldProto)
+            if (MetaData(held).EntityPrototype == null)
                 continue;
 
-            var clone = Spawn(heldProto.ID, at);
+            var clone = CloneItem(held, at, 0);
             if (!_hands.TryPickupAnyHand(copy, clone, checkActionBlocker: false))
                 QueueDel(clone);
         }
@@ -1143,6 +1164,56 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             _damageable.SetDamage((copy, copyDamage), new DamageSpecifier(damage.Damage));
 
         return copy;
+    }
+
+    /// <summary>Containers inside containers this deep are still copied (a box in a bag on a belt).</summary>
+    private const int CloneDepth = 4;
+
+    /// <summary>
+    /// A copy of an item for the dream copy: the same prototype and stack size, and copies of everything inside it
+    /// (a backpack's or a belt's things, a gun's magazine) instead of whatever the prototype starts with.
+    /// </summary>
+    private EntityUid CloneItem(EntityUid item, MapCoordinates at, int depth)
+    {
+        var clone = Spawn(MetaData(item).EntityPrototype!.ID, at);
+        if (TryComp<Content.Shared.Stacks.StackComponent>(item, out var stack) &&
+            TryComp<Content.Shared.Stacks.StackComponent>(clone, out var cloneStack))
+        {
+            _stacks.SetCount((clone, cloneStack), stack.Count);
+        }
+
+        if (depth >= CloneDepth || !TryComp<Robust.Shared.Containers.ContainerManagerComponent>(item, out var manager))
+            return clone;
+
+        foreach (var container in _containers.GetAllContainers(item, manager))
+        {
+            if (!_containers.TryGetContainer(clone, container.ID, out var target))
+                continue;
+
+            // What the prototype starts with goes: the original's contents come instead.
+            foreach (var starting in target.ContainedEntities.ToArray())
+            {
+                _containers.Remove(starting, target, force: true);
+                QueueDel(starting);
+            }
+
+            foreach (var inner in container.ContainedEntities)
+            {
+                if (MetaData(inner).EntityPrototype == null || HasComp<MobStateComponent>(inner))
+                    continue;
+
+                var innerClone = CloneItem(inner, at, depth + 1);
+                // Into a bag through the storage (it finds a place in the grid); failing that, straight in.
+                var inserted = TryComp<Content.Shared.Storage.StorageComponent>(clone, out var storage) &&
+                               target == storage.Container &&
+                               _storage.Insert(clone, innerClone, out _, storageComp: storage, playSound: false,
+                                   stackAutomatically: false);
+                if (!inserted && !_containers.Insert(innerClone, target, force: true))
+                    QueueDel(innerClone);
+            }
+        }
+
+        return clone;
     }
 
     /// <summary>The dream is over: every player back in his own body by the pit, the copies and their things gone.</summary>
@@ -1154,6 +1225,11 @@ public sealed class LavalandSecretBossSystem : EntitySystem
 
         if (_mind.TryGetMind(original, out var mindId, out var mind) && mind.VisitingEntity != null)
             _mind.UnVisit(mindId, mind);
+
+        // Out of the fight: awake and on the feet by the pit at once, not asleep until the others are done.
+        RemComp<LavalandCelestialDreamerComponent>(original);
+        Wake(original);
+        Unfreeze(original);
 
         if (!_players.TryGetSessionByEntity(original, out var session))
             return;

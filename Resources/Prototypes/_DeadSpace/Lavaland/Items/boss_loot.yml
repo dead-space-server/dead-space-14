@@ -256,11 +256,11 @@
     sound: /Audio/_DeadSpace/Lavaland/Colossus/invoke_general.ogg
     commands:
     - words: [ стой, замри, stop, freeze ]
-      stun: 3
-      cooldown: 20
+      stun: 2
+      cooldown: 50
     - words: [ на колени, лежать, ложись, kneel, down ]
-      knockdown: 4
-      cooldown: 15
+      knockdown: 3
+      cooldown: 40
     - words: [ прочь, назад, отойди, get away, back ]
       repel: 10
       cooldown: 10

@@ -32,7 +32,7 @@ public sealed partial class LavalandAshDrakeComponent : Component
     public TimeSpan SwoopStepDelay = TimeSpan.FromSeconds(0.085);
 
     [DataField]
-    public TimeSpan SwoopRecover = TimeSpan.FromSeconds(0.35);
+    public TimeSpan SwoopRecover = TimeSpan.FromSeconds(0.55);
 
     [DataField]
     public TimeSpan ChainedSwoopDelay = TimeSpan.FromSeconds(0.28);

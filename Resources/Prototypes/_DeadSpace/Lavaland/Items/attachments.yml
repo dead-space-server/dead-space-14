@@ -455,6 +455,8 @@
       collection: MantisAttack
     angle: 30
     animation: WeaponArcClaw
+    # Right button: the demons' arrow arc instead of swinging the sprite.
+    wideAnimation: WeaponArcStatic
     range: 1.1
     mustBeEquippedToUse: true
   - type: Sharp
@@ -513,9 +515,16 @@
       collection: MetalThud
     angle: 0
     animation: WeaponArcThrust
+    # The sprite turned a quarter so the blade points where it strikes.
+    wideAnimationRotation: 90
     range: 2
   # Right button in combat mode: a crusher mark; held, the mark builds up (the crit grows), held too long it blows up.
   - type: LavalandChargedMarker
+  # Detonating the mark heals the wielder, like the crusher.
+  - type: LeechOnMarker
+    leech:
+      groups:
+        Brute: -6
   - type: LavalandPressureDamage
   - type: Item
     size: Normal

@@ -183,8 +183,36 @@ public sealed class LavalandWildWhelpSystem : EntitySystem
             return false;
         }
 
-        return xform.GridUid is not { } grid ||
-               !HasComp<LavalandOutpostComponent>(grid) && !HasComp<LavalandBossArenaComponent>(grid);
+        if (xform.GridUid is { } grid &&
+            (HasComp<LavalandOutpostComponent>(grid) || HasComp<LavalandBossArenaComponent>(grid)))
+        {
+            return false;
+        }
+
+        // Not by the outpost either: from just outside they flew in and set people alight at the base itself.
+        return !NearOutpost(_transform.GetMapCoordinates(xform), OutpostPlayerMargin);
+    }
+
+    /// <summary>Players this close to the outpost (tiles from its edge) get no visits.</summary>
+    private const float OutpostPlayerMargin = 15f;
+
+    /// <summary>Whelps land and spit fire no closer than this to the outpost (tiles from its edge).</summary>
+    private const float OutpostFireMargin = 3f;
+
+    private bool NearOutpost(Robust.Shared.Map.MapCoordinates coords, float margin)
+    {
+        var outposts = EntityQueryEnumerator<LavalandOutpostComponent, MapGridComponent, TransformComponent>();
+        while (outposts.MoveNext(out _, out _, out var grid, out var xform))
+        {
+            if (xform.MapID != coords.MapId)
+                continue;
+
+            var box = _transform.GetWorldMatrix(xform).TransformBox(grid.LocalAABB).Enlarged(margin);
+            if (box.Contains(coords.Position))
+                return true;
+        }
+
+        return false;
     }
 
     private void Visit(EntityUid player, LavalandWildWhelpConfig config, TimeSpan now)
@@ -205,8 +233,11 @@ public sealed class LavalandWildWhelpSystem : EntitySystem
                              _random.NextFloat(config.SpawnDistanceMin, MathF.Max(config.SpawnDistanceMin, config.SpawnDistanceMax));
                 var coords = _transform.ToCoordinates(gridUid, new Robust.Shared.Map.MapCoordinates(playerPos + offset, xform.MapID));
                 var tile = _map.LocalToTile(gridUid, grid, coords);
-                if (!IsFreeTile(gridUid, grid, tile))
+                if (!IsFreeTile(gridUid, grid, tile) ||
+                    NearOutpost(new Robust.Shared.Map.MapCoordinates(playerPos + offset, xform.MapID), OutpostFireMargin))
+                {
                     continue;
+                }
 
                 SpawnWhelp(config.Prototype, player, gridUid, grid, tile, now);
                 break;
@@ -321,7 +352,14 @@ public sealed class LavalandWildWhelpSystem : EntitySystem
         if (xform.GridUid is { } gridUid && TryComp<MapGridComponent>(gridUid, out var grid))
         {
             foreach (var tile in whelp.Tiles)
-                Spawn(whelp.FirePrototype, _map.GridTileToLocal(gridUid, grid, tile));
+            {
+                // The target ran to the outpost meanwhile: no fire at the base.
+                var at = _map.GridTileToLocal(gridUid, grid, tile);
+                if (NearOutpost(_transform.ToMapCoordinates(at), OutpostFireMargin))
+                    continue;
+
+                Spawn(whelp.FirePrototype, at);
+            }
         }
 
         whelp.Tiles.Clear();

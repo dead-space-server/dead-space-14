@@ -7,9 +7,11 @@ using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Server.NPC;
 using Content.Server.NPC.HTN;
 using Content.Server.NPC.Systems;
+using Content.Shared.Abilities.Goliath;
 using Content.Shared.Actions;
 using Content.Shared.CombatMode;
 using Content.Shared.DeadSpace.Lavaland;
+using Content.Shared.DeadSpace.Lavaland.Components;
 using Content.Shared.DeadSpace.Lavaland.ChromiteCaves;
 using Content.Shared.DeadSpace.Lavaland.SecretBoss;
 using Content.Shared.Emp;
@@ -78,6 +80,7 @@ public sealed class LavalandTamingSystem : EntitySystem
         SubscribeLocalEvent<LavalandTamedComponent, GunShotEvent>(OnTamedShot);
         SubscribeLocalEvent<LavalandTamedComponent, MobStateChangedEvent>(OnTamedStateChanged);
         SubscribeLocalEvent<LavalandTamedComponent, EmpPulseEvent>(OnTamedEmp);
+        SubscribeLocalEvent<LavalandTamedComponent, GoliathSummonTentacleAction>(OnTamedTentacles);
     }
 
     #region Public
@@ -161,6 +164,18 @@ public sealed class LavalandTamingSystem : EntitySystem
 
     #endregion
 
+    /// <summary>The tentacles come up after their spawn effect and stay a moment: the tamer is safe from them that long.</summary>
+    private static readonly TimeSpan TentacleSafeTime = TimeSpan.FromSeconds(1.5);
+
+    /// <summary>A tamed goliath's tentacles do not knock its own tamer down.</summary>
+    private void OnTamedTentacles(Entity<LavalandTamedComponent> ent, ref GoliathSummonTentacleAction args)
+    {
+        if (ent.Comp.Tamer is not { } tamer || TerminatingOrDeleted(tamer))
+            return;
+
+        EnsureComp<LavalandTentacleSafeComponent>(tamer).Until = _timing.CurTime + TentacleSafeTime;
+    }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -168,6 +183,13 @@ public sealed class LavalandTamingSystem : EntitySystem
         UpdateAttacks();
 
         var now = _timing.CurTime;
+        var safeQuery = EntityQueryEnumerator<LavalandTentacleSafeComponent>();
+        while (safeQuery.MoveNext(out var safeUid, out var safe))
+        {
+            if (now >= safe.Until)
+                RemCompDeferred<LavalandTentacleSafeComponent>(safeUid);
+        }
+
         var query = EntityQueryEnumerator<LavalandTamerComponent>();
         while (query.MoveNext(out var uid, out var tamer))
         {

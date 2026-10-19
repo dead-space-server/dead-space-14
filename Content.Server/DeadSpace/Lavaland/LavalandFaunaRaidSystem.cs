@@ -14,6 +14,7 @@ using Content.Shared.DeadSpace.AshWalkers;
 using Content.Shared.Ghost;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.DeadSpace.Lavaland.Bosses;
 using Robust.Server.Player;
 using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Server.NPC;
@@ -62,6 +63,7 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
     [Dependency] private readonly SharedGunSystem _gun = default!;
     [Dependency] private readonly NPCUseActionOnTargetSystem _useAction = default!;
     [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
+    [Dependency] private readonly Content.Shared.Damage.Systems.DamageableSystem _damageable = default!;
 
     private const string RaidCompound = "LavalandRaidHostileCompound";
 
@@ -139,8 +141,12 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
                 _chat.DispatchFilteredAnnouncement(filter, Loc.GetString("lavaland-raid-active"),
                     playSound: false,
                     colorOverride: Color.CornflowerBlue);
+                // Through the boss music: its volume and switch apply.
                 if (config.Music.Count > 0)
-                    raid.MusicStream = _audio.PlayGlobal(_random.Pick(config.Music), filter, false)?.Entity;
+                {
+                    RaiseNetworkEvent(new LavalandBossMusicStartEvent(LavalandBossMusicStartEvent.RaidMusicId,
+                        _audio.ResolveSound(_random.Pick(config.Music)), null), filter);
+                }
                 break;
 
             case LavalandFaunaRaidStage.Active when now >= raid.StageEnd:
@@ -217,6 +223,9 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
         ent.Comp.Entities.Clear();
         ent.Comp.MusicStream = _audio.Stop(ent.Comp.MusicStream);
         var wasRunning = ent.Comp.Stage != LavalandFaunaRaidStage.Idle;
+        // To everyone: those who left the planet mid-raid still hear it otherwise.
+        if (wasRunning)
+            RaiseNetworkEvent(new LavalandBossMusicStopEvent(LavalandBossMusicStartEvent.RaidMusicId), Filter.Broadcast());
         ent.Comp.Stage = LavalandFaunaRaidStage.Idle;
         if (wasRunning && mapId != MapId.Nullspace)
             RaiseNetworkEvent(new LavalandFaunaRaidTimerHideEvent(), RaidFilter(mapId));
@@ -414,7 +423,23 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
             return;
 
         _combatMode.SetInCombatMode(uid, true);
-        _melee.AttemptLightAttack(uid, weaponUid, weapon, target);
+        if (_interaction.InRangeUnobstructed(uid, target, weapon.Range))
+        {
+            _melee.AttemptLightAttack(uid, weaponUid, weapon, target);
+            return;
+        }
+
+        // At a corner the wall in its way is off its reach or behind the next wall for a melee swing, and the blow
+        // only whiffed: it lands on that wall anyway.
+        var now = _timing.CurTime;
+        _damageable.TryChangeDamage(target, _melee.GetDamage(weaponUid, uid, weapon), origin: uid);
+        weapon.NextAttack = now + TimeSpan.FromSeconds(1f / Math.Max(0.1f, _melee.GetAttackRate(weaponUid, uid, weapon)));
+        Dirty(weaponUid, weapon);
+        if (weapon.HitSound != null)
+            _audio.PlayPvs(weapon.HitSound, target);
+
+        var local = Vector2.Transform(_transform.GetWorldPosition(target), _transform.GetInvWorldMatrix(xform));
+        _melee.DoLunge(uid, weaponUid, Angle.Zero, local, weapon.Animation, predicted: false);
     }
 
     private static readonly float[] SmashReaches = { 0.9f, 1.4f };

@@ -165,6 +165,34 @@ public sealed partial class LavalandColossusComponent : Component
 
     [ViewVariables]
     public readonly HashSet<EntityUid> ActiveProjectiles = new();
+
+    /// <summary>A target farther than this (off the screen) gets aimed shots instead of the usual patterns.</summary>
+    [DataField]
+    public float OffscreenRange = 8.5f;
+
+    [DataField]
+    public int AimedShots = 3;
+
+    /// <summary>How far, in degrees, each aimed shot may stray from the target.</summary>
+    [DataField]
+    public float AimedSpread = 4f;
+
+    [DataField]
+    public TimeSpan AimedShotDelay = TimeSpan.FromSeconds(0.2);
+
+    [DataField]
+    public TimeSpan AimedCooldown = TimeSpan.FromSeconds(1.5);
+
+    /// <summary>Players outside the arena it does not chase; they become targets again once back inside.</summary>
+    [ViewVariables]
+    public readonly HashSet<EntityUid> IgnoredOutside = new();
+
+    /// <summary>Nobody is left inside the arena: its AI is off and it walks to the arena's middle.</summary>
+    [ViewVariables]
+    public bool ReturningToCenter;
+
+    [ViewVariables]
+    public TimeSpan NextArenaCheck;
 }
 
 public readonly record struct LavalandColossusPendingBlast(
@@ -179,4 +207,8 @@ public sealed class LavalandColossusPendingShot
     public Angle Angle;
     public TimeSpan FireAt;
     public bool PlaySound;
+
+    /// <summary>Aimed at this entity when it fires, give or take <see cref="Jitter"/> degrees.</summary>
+    public EntityUid? AimAt;
+    public float Jitter;
 }

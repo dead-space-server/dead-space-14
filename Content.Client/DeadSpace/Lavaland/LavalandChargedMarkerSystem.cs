@@ -17,18 +17,16 @@ namespace Content.Client.DeadSpace.Lavaland;
 
 /// <summary>
 /// The kinetic machete's charged marker on the client: the right button in combat mode starts and releases the charge
-/// (the server times it), and a ring by the cursor fills up while it is held.
+/// (predicted, the server spawns the bolt), and a ring by the cursor fills up while it is held.
 /// </summary>
-public sealed class LavalandChargedMarkerSystem : EntitySystem
+public sealed class LavalandChargedMarkerSystem : SharedLavalandChargedMarkerSystem
 {
     [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IInputManager _input = default!;
     [Dependency] private readonly IOverlayManager _overlays = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly InputSystem _inputSystem = default!;
     [Dependency] private readonly SharedCombatModeSystem _combat = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     private bool _wasDown;
@@ -37,7 +35,7 @@ public sealed class LavalandChargedMarkerSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        _overlays.AddOverlay(new LavalandChargedMarkerOverlay(EntityManager, _timing, _input, _player));
+        _overlays.AddOverlay(new LavalandChargedMarkerOverlay(EntityManager, Timing, _input, _player));
     }
 
     public override void Shutdown()
@@ -50,7 +48,7 @@ public sealed class LavalandChargedMarkerSystem : EntitySystem
     {
         base.Update(frameTime);
 
-        if (!_timing.IsFirstTimePredicted)
+        if (!Timing.IsFirstTimePredicted)
             return;
 
         var down = _inputSystem.CmdStates.GetState(EngineKeyFunctions.UseSecondary) == BoundKeyState.Down;
@@ -61,13 +59,13 @@ public sealed class LavalandChargedMarkerSystem : EntitySystem
         if (_player.LocalEntity is not { } user)
             return;
 
-        var held = _hands.GetActiveItem(user);
+        var held = Hands.GetActiveItem(user);
         var usable = held is { } weapon && HasComp<LavalandChargedMarkerComponent>(weapon) && _combat.IsInCombatMode(user);
 
         if (pressed && usable)
         {
             _charging = held;
-            RaiseNetworkEvent(new LavalandChargedMarkerStartEvent(GetNetEntity(held!.Value)));
+            RaisePredictiveEvent(new LavalandChargedMarkerStartEvent(GetNetEntity(held!.Value)));
             return;
         }
 
@@ -79,7 +77,7 @@ public sealed class LavalandChargedMarkerSystem : EntitySystem
                 return;
 
             var target = _transform.ToCoordinates(mouse);
-            RaiseNetworkEvent(new LavalandChargedMarkerReleaseEvent(GetNetEntity(charging), GetNetCoordinates(target)));
+            RaisePredictiveEvent(new LavalandChargedMarkerReleaseEvent(GetNetEntity(charging), GetNetCoordinates(target)));
         }
     }
 }

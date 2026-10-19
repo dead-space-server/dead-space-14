@@ -150,6 +150,8 @@
     blacklist:
       tags:
       - Goliath
+      components: # DS14: the tamer of the goliath that summoned them
+      - LavalandTentacleSafe
   - type: Fixtures
     fixtures:
       fix:

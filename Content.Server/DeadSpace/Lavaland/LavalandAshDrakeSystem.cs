@@ -962,7 +962,7 @@ public sealed class LavalandAshDrakeSystem : EntitySystem
 
         // It shoots up out of sight (no shadow on the ground) and flies there to its mark.
         SetVisual(boss, LavalandAshDrakeVisualState.Dragon);
-        SkyMove(boss, now, Math.Min(0.35f, (float) drake.SwoopWindup.TotalSeconds), rising: true, slant: 0f);
+        SkyMove(boss, now, (float) drake.SwoopWindup.TotalSeconds, rising: true, slant: 0f);
         _movement.RefreshMovementSpeedModifiers(boss);
 
         drake.BusyUntil = now + drake.SwoopWindup + TimeSpan.FromSeconds(drake.SwoopStepDelay.TotalSeconds * steps) + drake.SwoopRecover;
@@ -1092,8 +1092,8 @@ public sealed class LavalandAshDrakeSystem : EntitySystem
 
         var tile = GetEntityTile(boss, gridUid, grid) ?? Vector2i.Zero;
         SpawnAnchored(drake.LandingPrototype, gridUid, grid, tile);
-        SetVisual(boss, LavalandAshDrakeVisualState.Swoop);
-        // Down on the mark at a slant, from one side or the other.
+        // The dragon itself drops out of the sky onto the mark at a slant, from one side or the other.
+        SetVisual(boss, LavalandAshDrakeVisualState.Dragon);
         SkyMove(boss, now, (float) drake.SwoopRecover.TotalSeconds, rising: false, slant: _random.Prob(0.5f) ? 0.6f : -0.6f);
 
         drake.SwoopImpactAt = now + drake.SwoopRecover;

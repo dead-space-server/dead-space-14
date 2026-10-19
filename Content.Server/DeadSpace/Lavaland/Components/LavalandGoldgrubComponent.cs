@@ -116,7 +116,7 @@ public sealed partial class LavalandGoldgrubComponent : Component
     public float AmbushHitRange = 1.8f;
 
     [DataField]
-    public TimeSpan AmbushStun = TimeSpan.FromSeconds(4);
+    public TimeSpan AmbushStun = TimeSpan.FromSeconds(2);
 
     /// <summary>How many whole stacks of ore it eats from the miner.</summary>
     [DataField]

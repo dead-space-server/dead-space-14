@@ -75,6 +75,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
     [Dependency] private readonly Content.Shared.Jittering.SharedJitteringSystem _jitter = default!;
     [Dependency] private readonly LavalandMadMinerHookSystem _hook = default!;
     [Dependency] private readonly Content.Shared.Throwing.ThrowingSystem _throwing = default!;
+    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
 
     private int _nextHudId = 100000;
 
@@ -90,12 +91,44 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         SubscribeLocalEvent<LavalandMadMinerHookVisualComponent, InteractHandEvent>(OnHookVisualInteract);
     }
 
+    /// <summary>A miner the planet put this close (tiles) to another grid - the base, the ash walkers - is not spawned.</summary>
+    private const float OtherGridExclusion = 60f;
+
     private void OnMapInit(Entity<LavalandMadMinerComponent> ent, ref MapInitEvent args)
     {
+        if (IsNearOtherGrid(ent.Owner))
+        {
+            QueueDel(ent.Owner);
+            return;
+        }
+
         ent.Comp.HudId = _nextHudId++;
         ent.Comp.SpawnCoordinates = _transform.GetMapCoordinates(ent.Owner);
         ent.Comp.SelectedMusic = ent.Comp.Music.Count == 0 ? null : _random.Pick(ent.Comp.Music);
         BuildPlatform(ent.Owner);
+    }
+
+    private bool IsNearOtherGrid(EntityUid uid)
+    {
+        var xform = Transform(uid);
+        // Only where the planet itself spawned it: on its own terrain, not on a grid.
+        if (xform.MapUid is not { } mapUid || xform.GridUid != mapUid)
+            return false;
+
+        var box = Box2.CenteredAround(_transform.GetWorldPosition(xform), new Vector2(OtherGridExclusion * 2f));
+        foreach (var other in _mapManager.FindGridsIntersecting(xform.MapID, box))
+        {
+            if (other.Owner != mapUid)
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>The hook flies straight: no catching anyone behind a wall.</summary>
+    private bool CanHook(EntityUid from, EntityUid target, float range)
+    {
+        return _interaction.InRangeUnobstructed(from, target, range);
     }
 
     private void OnShutdown(Entity<LavalandMadMinerComponent> ent, ref ComponentShutdown args)
@@ -165,7 +198,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
             else if (distance <= 9f && now >= miner.NextFeint)
                 Feint(uid, miner, target, now);
 
-            if (now >= miner.NextHook && distance <= 14f)
+            if (now >= miner.NextHook && distance <= 14f && CanHook(uid, target, 14f))
             {
                 miner.NextHook = now + miner.HookCooldown;
                 if (_random.Prob(miner.HookAttackChance))
@@ -219,7 +252,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
             var distance = Vector2.Distance(origin, _transform.GetWorldPosition(player));
             if (distance > miner.ChaseRange)
                 continue;
-            if (distance <= miner.SplitPursuitNearRadius)
+            if (distance <= miner.SplitPursuitNearRadius && CanHook(uid, player, miner.SplitPursuitNearRadius + 1f))
                 nearby.Add(player);
             if (distance <= farDistance)
                 continue;
@@ -457,7 +490,8 @@ public sealed class LavalandMadMinerSystem : EntitySystem
             if (session.AttachedEntity is not { Valid: true } victim ||
                 IsDead(victim) || HasComp<GhostComponent>(victim) ||
                 Transform(victim).MapID != Transform(uid).MapID ||
-                Vector2.DistanceSquared(impactCenter, _transform.GetWorldPosition(victim)) > miner.HookSplashRadius * miner.HookSplashRadius)
+                Vector2.DistanceSquared(impactCenter, _transform.GetWorldPosition(victim)) > miner.HookSplashRadius * miner.HookSplashRadius ||
+                victim != target && !CanHook(target, victim, miner.HookSplashRadius + 1f))
                 continue;
             AddHookTarget(uid, miner, victim);
         }

@@ -2009,7 +2009,7 @@ public sealed partial class LavalandBossArenaSystem : EntitySystem
                IsEntityInsideInnerArena(uid, arena);
     }
 
-    private bool IsEntityInsideInnerArena(EntityUid uid, LavalandBossArenaComponent arena)
+    public bool IsEntityInsideInnerArena(EntityUid uid, LavalandBossArenaComponent arena)
     {
         if (!TryComp(uid, out TransformComponent? xform) ||
             xform.GridUid != arena.Grid ||

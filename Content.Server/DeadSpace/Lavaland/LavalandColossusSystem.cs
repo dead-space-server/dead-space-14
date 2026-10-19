@@ -1,6 +1,9 @@
 using System.Numerics;
 using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Server.Explosion.EntitySystems;
+using Content.Server.NPC.Components;
+using Content.Server.NPC.HTN;
+using Content.Server.NPC.Systems;
 using Robust.Shared.Map;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared.Camera;
@@ -11,6 +14,7 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
+using Content.Shared.NPC.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Weapons.Reflect;
 using Robust.Server.Player;
@@ -47,9 +51,16 @@ public sealed class LavalandColossusSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ExplosionSystem _explosion = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private readonly LavalandBossArenaSystem _arenas = default!;
+    [Dependency] private readonly HTNSystem _htn = default!;
+    [Dependency] private readonly NPCSteeringSystem _steering = default!;
+    [Dependency] private readonly NpcFactionSystem _factions = default!;
 
     private readonly List<EntityUid> _participants = new();
     private readonly List<EntityUid> _telegraphTargets = new();
+    private readonly List<EntityUid> _released = new();
+
+    private static readonly TimeSpan ArenaCheckInterval = TimeSpan.FromSeconds(0.5);
 
     public override void Initialize()
     {
@@ -81,10 +92,19 @@ public sealed class LavalandColossusSystem : EntitySystem
                 SetEnraged(uid, colossus, false);
                 ClearRuntime(colossus);
                 DeleteProjectiles(colossus);
+                ReleaseArenaHold(uid, colossus, false);
                 continue;
             }
 
+            // Only those inside the arena are fought; the rest are left alone until they come back.
             CollectParticipants(arena);
+            if (now >= colossus.NextArenaCheck)
+            {
+                colossus.NextArenaCheck = now + ArenaCheckInterval;
+                UpdateIgnoredOutside(uid, colossus, arena, xform);
+                UpdateReturnToCenter(uid, colossus, arena, grid);
+            }
+
             if (_participants.Count == 0)
             {
                 SetEnraged(uid, colossus, false);
@@ -116,12 +136,14 @@ public sealed class LavalandColossusSystem : EntitySystem
     private void OnReset(Entity<LavalandColossusComponent> ent, ref LavalandBossResetEvent args)
     {
         DeleteProjectiles(ent.Comp);
+        ReleaseArenaHold(ent.Owner, ent.Comp, false);
         PrepareFight(ent.Owner, ent.Comp);
     }
 
     private void OnShutdown(Entity<LavalandColossusComponent> ent, ref ComponentShutdown args)
     {
         DeleteProjectiles(ent.Comp);
+        ReleaseArenaHold(ent.Owner, ent.Comp, false);
     }
 
     private void PrepareFight(EntityUid uid, LavalandColossusComponent colossus)
@@ -165,6 +187,17 @@ public sealed class LavalandColossusSystem : EntitySystem
 
         var anger = GetAnger(uid, arena);
         var rage = anger / 20f;
+
+        // Off the screen: no patterns to dodge at the edge of sight, it shoots almost straight at them.
+        var distance = (_transform.GetWorldPosition(target) - _transform.GetWorldPosition(uid)).Length();
+        if (distance > colossus.OffscreenRange)
+        {
+            QueueAimed(colossus, target, now);
+            colossus.BusyUntil = now + colossus.AimedShotDelay * (colossus.AimedShots - 1);
+            colossus.NextAttack = now + GetScaledCooldown(colossus.AimedCooldown, rage, colossus.MaxCooldownReduction);
+            return;
+        }
+
         colossus.NextAttack = now + GetScaledCooldown(colossus.DefaultCooldown, rage, colossus.MaxCooldownReduction);
         if (_random.Prob(Math.Clamp(colossus.MajorAttackChance + anger / 100f, 0f, 1f)))
         {
@@ -283,6 +316,20 @@ public sealed class LavalandColossusSystem : EntitySystem
             QueueShot(colossus, targetAngle + Angle.FromDegrees(offsets[i]), fireAt, i == 0);
     }
 
+    private static void QueueAimed(LavalandColossusComponent colossus, EntityUid target, TimeSpan now)
+    {
+        for (var i = 0; i < colossus.AimedShots; i++)
+        {
+            colossus.PendingShots.Add(new LavalandColossusPendingShot
+            {
+                FireAt = now + colossus.AimedShotDelay * i,
+                PlaySound = i == 0,
+                AimAt = target,
+                Jitter = colossus.AimedSpread,
+            });
+        }
+    }
+
     private static void QueueShot(
         LavalandColossusComponent colossus,
         Angle angle,
@@ -305,7 +352,19 @@ public sealed class LavalandColossusSystem : EntitySystem
             if (shot.FireAt > now)
                 continue;
 
-            Fire(uid, colossus, shot.Angle, shot.PlaySound);
+            var angle = shot.Angle;
+            if (shot.AimAt is { } aimAt)
+            {
+                if (!Exists(aimAt) || !TryGetDirection(uid, aimAt, out angle))
+                {
+                    colossus.PendingShots.RemoveAt(i);
+                    continue;
+                }
+
+                angle += Angle.FromDegrees(_random.NextFloat(-shot.Jitter, shot.Jitter));
+            }
+
+            Fire(uid, colossus, angle, shot.PlaySound);
             colossus.PendingShots.RemoveAt(i);
         }
     }
@@ -462,7 +521,8 @@ public sealed class LavalandColossusSystem : EntitySystem
                 !Exists(attached) ||
                 IsDead(attached) ||
                 !TryComp(attached, out TransformComponent? xform) ||
-                xform.GridUid != arena.Grid)
+                xform.GridUid != arena.Grid ||
+                !_arenas.IsEntityInsideInnerArena(attached, arena))
             {
                 continue;
             }
@@ -633,6 +693,101 @@ public sealed class LavalandColossusSystem : EntitySystem
         colossus.PendingFuryBlasts.Clear();
         colossus.BusyUntil = TimeSpan.Zero;
         colossus.NextShotSound = TimeSpan.Zero;
+    }
+
+    /// <summary>
+    /// Players outside the arena are not chased (its AI would follow them out): ignored while outside, fought again
+    /// once they are back.
+    /// </summary>
+    private void UpdateIgnoredOutside(EntityUid uid, LavalandColossusComponent colossus, LavalandBossArenaComponent arena,
+        TransformComponent xform)
+    {
+        _released.Clear();
+        foreach (var ignored in colossus.IgnoredOutside)
+        {
+            if (!Exists(ignored) || _arenas.IsEntityInsideInnerArena(ignored, arena))
+                _released.Add(ignored);
+        }
+
+        foreach (var ignored in _released)
+        {
+            colossus.IgnoredOutside.Remove(ignored);
+            if (Exists(ignored))
+                _factions.UnignoreEntity(uid, ignored);
+        }
+
+        foreach (var session in _players.Sessions)
+        {
+            if (session.AttachedEntity is not { Valid: true } player ||
+                colossus.IgnoredOutside.Contains(player) ||
+                !TryComp(player, out TransformComponent? playerXform) ||
+                playerXform.MapUid != xform.MapUid ||
+                _arenas.IsEntityInsideInnerArena(player, arena))
+            {
+                continue;
+            }
+
+            colossus.IgnoredOutside.Add(player);
+            _factions.IgnoreEntity(uid, player);
+        }
+    }
+
+    /// <summary>Nobody left inside the arena: it walks back to the middle and waits there.</summary>
+    private void UpdateReturnToCenter(EntityUid uid, LavalandColossusComponent colossus, LavalandBossArenaComponent arena,
+        MapGridComponent grid)
+    {
+        if (_participants.Count > 0 || colossus.Furious)
+        {
+            if (colossus.ReturningToCenter)
+            {
+                colossus.ReturningToCenter = false;
+                _steering.Unregister(uid);
+                SetAi(uid, true);
+            }
+
+            return;
+        }
+
+        if (!colossus.ReturningToCenter)
+        {
+            colossus.ReturningToCenter = true;
+            SetAi(uid, false);
+        }
+
+        if (TryComp<NPCSteeringComponent>(uid, out var existing) && existing.Status == SteeringStatus.Moving)
+            return;
+
+        var steering = _steering.Register(uid, _map.GridTileToLocal(arena.Grid, grid, arena.Origin));
+        steering.Range = 1.5f;
+        steering.Status = SteeringStatus.Moving;
+    }
+
+    /// <summary>Stops walking to the middle and forgets the ignored players; <paramref name="enableAi"/> - gives the AI back.</summary>
+    private void ReleaseArenaHold(EntityUid uid, LavalandColossusComponent colossus, bool enableAi)
+    {
+        foreach (var ignored in colossus.IgnoredOutside)
+        {
+            if (Exists(ignored))
+                _factions.UnignoreEntity(uid, ignored);
+        }
+
+        colossus.IgnoredOutside.Clear();
+        if (!colossus.ReturningToCenter)
+            return;
+
+        colossus.ReturningToCenter = false;
+        if (TerminatingOrDeleted(uid))
+            return;
+
+        _steering.Unregister(uid);
+        if (enableAi)
+            SetAi(uid, true);
+    }
+
+    private void SetAi(EntityUid uid, bool enabled)
+    {
+        if (TryComp<HTNComponent>(uid, out var htn))
+            _htn.SetHTNEnabled((uid, htn), enabled, enabled ? 0.75f : 0f);
     }
 
     private void DeleteProjectiles(LavalandColossusComponent colossus)

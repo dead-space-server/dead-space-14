@@ -264,6 +264,9 @@
     sprite: _DeadSpace/Lavaland/Objects/Weapons/cain_and_abel.rsi
   - type: MeleeWeapon
     wideAnimationRotation: -135
+    # The demons' claw arc; right button - their arrow arc instead of swinging the sprite.
+    animation: WeaponArcClaw
+    wideAnimation: WeaponArcStatic
     range: 2.2
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg

@@ -1,5 +1,7 @@
 using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Server.Chat.Systems;
+using Content.Server.Temperature.Systems;
+using Content.Shared.Temperature.Components;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
@@ -30,6 +32,7 @@ public sealed class LavalandWeatherSystem : EntitySystem
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SharedWeatherSystem _weather = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private readonly TemperatureSystem _temperature = default!;
 
     private EntityQuery<LavalandWeatherImmuneComponent> _immuneQuery;
     private EntityQuery<MapGridComponent> _gridQuery;
@@ -168,6 +171,8 @@ public sealed class LavalandWeatherSystem : EntitySystem
         lavaland.NextWeatherDamageTime = TimeSpan.Zero;
         lavaland.SnowStorm = false;
         RemComp<LavalandSnowCoverComponent>(mapUid);
+        // Ended early (the staff of storms): the ash, the snow and their sound go with it, not when they were due.
+        _weather.SetWeather(Transform(mapUid).MapID, null, null);
         ScheduleNextStorm(lavaland, planet, curTime);
     }
 
@@ -228,7 +233,8 @@ public sealed class LavalandWeatherSystem : EntitySystem
         lavaland.NextWeatherDamageTime = curTime + ClampDamageInterval(planet);
 
         var stormDamage = lavaland.SnowStorm ? planet.SnowStormDamage : planet.AshStormDamage;
-        if (stormDamage.Empty)
+        var cooling = lavaland.SnowStorm ? planet.SnowStormCooling : 0f;
+        if (stormDamage.Empty && cooling <= 0f)
             return;
 
         var damage = new DamageSpecifier(stormDamage);
@@ -264,7 +270,17 @@ public sealed class LavalandWeatherSystem : EntitySystem
                 continue;
             }
 
-            _damageable.TryChangeDamage((uid, damageable), damage, interruptsDoAfters: false, origin: mapUid);
+            if (!stormDamage.Empty)
+                _damageable.TryChangeDamage((uid, damageable), damage, interruptsDoAfters: false, origin: mapUid);
+
+            // The blizzard chills the body; cold protection of the clothes takes its share off.
+            if (cooling > 0f &&
+                TryComp<TemperatureComponent>(uid, out var temperature) &&
+                temperature.CurrentTemperature > planet.SnowStormMinTemperature)
+            {
+                var heat = -cooling * _temperature.GetHeatCapacity(uid, temperature);
+                _temperature.ChangeHeat(uid, heat, false, temperature);
+            }
         }
 
         _weatherEntities.Clear();

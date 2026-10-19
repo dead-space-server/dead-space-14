@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Robust.Shared.Random;
 using Robust.Shared.Utility;
 using Robust.Shared.Player;
 using Content.Server.Administration;
@@ -64,10 +65,12 @@ public sealed class LavalandMiningEquipmentSystem : EntitySystem
     [Dependency] private readonly LavalandTamingSystem _taming = default!;
     [Dependency] private readonly SharedStorageSystem _storage = default!;
     [Dependency] private readonly SharedGunSystem _gun = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     private readonly HashSet<Entity<StackComponent>> _ores = new();
     private readonly HashSet<Entity<OreVeinComponent>> _veins = new();
+    private readonly HashSet<Entity<MobStateComponent>> _inLine = new();
 
     public override void Initialize()
     {
@@ -376,10 +379,40 @@ public sealed class LavalandMiningEquipmentSystem : EntitySystem
         });
     }
 
+    /// <summary>Its owner, another minebot or anyone else stands between it and the ore: it does not shoot through them.</summary>
+    private bool IsLineOfFireBlocked(EntityUid bot, Vector2 from, Vector2 to)
+    {
+        var line = to - from;
+        var length = line.Length();
+        if (length < 0.01f)
+            return false;
+
+        var direction = line / length;
+        foreach (var mob in _inLine)
+        {
+            if (mob.Owner == bot)
+                continue;
+
+            var offset = _transform.GetWorldPosition(mob) - from;
+            var along = Vector2.Dot(offset, direction);
+            if (along <= 0f || along >= length)
+                continue;
+
+            if ((offset - direction * along).LengthSquared() < MinebotLineOfFireWidth * MinebotLineOfFireWidth)
+                return true;
+        }
+
+        return false;
+    }
+
+    private const float MinebotLineOfFireWidth = 0.6f;
+
     private void BindMinebot(Entity<LavalandMinebotComponent> ent, EntityUid user)
     {
         ent.Comp.BoundUser = user;
-        _npc.SetBlackboard(ent, NPCBlackboard.FollowTarget, new EntityCoordinates(user, Vector2.Zero));
+        // Each its own spot around the owner: several minebots do not move about as one, shooting into each other.
+        var spot = _random.NextAngle().ToVec() * _random.NextFloat(1f, 2.2f);
+        _npc.SetBlackboard(ent, NPCBlackboard.FollowTarget, new EntityCoordinates(user, spot));
         _popup.PopupEntity(Loc.GetString("lavaland-minebot-bound"), ent, user);
     }
 
@@ -436,14 +469,17 @@ public sealed class LavalandMiningEquipmentSystem : EntitySystem
         var bestDistance = float.MaxValue;
         _veins.Clear();
         _lookup.GetEntitiesInRange(xform.Coordinates, ent.Comp.MineRange, _veins, LookupFlags.Static);
+        _inLine.Clear();
+        _lookup.GetEntitiesInRange(xform.Coordinates, ent.Comp.MineRange, _inLine);
         foreach (var vein in _veins)
         {
             // Not the outpost's own walls: ore showing on the base grid is not for digging.
             if (vein.Comp.CurrentOre == null || HasComp<LavalandOutpostComponent>(Transform(vein).GridUid))
                 continue;
 
-            var distance = (_transform.GetWorldPosition(vein) - position).LengthSquared();
-            if (distance >= bestDistance)
+            var veinPosition = _transform.GetWorldPosition(vein);
+            var distance = (veinPosition - position).LengthSquared();
+            if (distance >= bestDistance || IsLineOfFireBlocked(ent.Owner, position, veinPosition))
                 continue;
 
             best = vein;

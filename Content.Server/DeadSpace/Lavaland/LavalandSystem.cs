@@ -215,8 +215,9 @@ public sealed class LavalandSystem : EntitySystem
         await GenerateStructures(mapUid, grid, planet, random, placedStructures, cancellation);
         cancellation.ThrowIfCancellationRequested();
 
-        await _tendrilPlacement.SetupMap(mapUid, planet, cancellation);
+        // The custom grids (the ash walkers' base) first: the tendrils keep away from them.
         LoadCustomGrids(mapId, mapUid, grid, biome, planet, random, placedStructures, cancellation);
+        await _tendrilPlacement.SetupMap(mapUid, planet, cancellation);
         await _bossArena.SpawnConfiguredArenas(mapUid, grid, biome, planet, random, cancellation);
         await _faunaPopulation.SetupMap(mapUid, planet, cancellation);
         await _chromiteCaves.SetupCaves(mapUid, grid, planet, random, cancellation);

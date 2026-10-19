@@ -39,3 +39,4 @@ lavaland-soulscythe-in-range = Your master is near - your power returns.
 lavaland-soulscythe-breaks-free = The scythe tears itself out of { $holder }s hands!
 lavaland-soulscythe-sleeps = The scythe goes still - the one who awakened it is dead.
 lavaland-saw-bleed-primed = { CAPITALIZE(THE($target)) } is bleeding out - unfold the saw and finish it!
+lavaland-storm-staff-dispel-cooldown = The staff is not ready to dispel another storm: { $minutes } min left.

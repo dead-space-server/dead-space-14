@@ -39,3 +39,4 @@ lavaland-soulscythe-in-range = Хозяин рядом - сила возвращ
 lavaland-soulscythe-breaks-free = Коса вырывается из рук { $holder }!
 lavaland-soulscythe-sleeps = Коса затихает - тот, кто её пробудил, мёртв.
 lavaland-saw-bleed-primed = { CAPITALIZE(THE($target)) } истекает кровью - разложите пилу и добейте!
+lavaland-storm-staff-dispel-cooldown = Посох ещё не готов разогнать новую бурю: осталось { $minutes } мин.

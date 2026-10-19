@@ -851,7 +851,16 @@
   categories:
   - LavalandMiningMedical
   cost:
-    LavalandMiningPoint: 7000
+    LavalandMiningPoint: 3000
+
+# A full stack: mends the minebot and other synthetics.
+- type: listing
+  id: LavalandNanopaste
+  productEntity: Nanopaste
+  categories:
+  - LavalandMiningMedical
+  cost:
+    LavalandMiningPoint: 500
 
 - type: listing
   id: LavalandMinebot

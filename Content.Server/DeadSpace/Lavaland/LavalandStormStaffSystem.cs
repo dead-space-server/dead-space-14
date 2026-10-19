@@ -52,6 +52,11 @@ public sealed class LavalandStormStaffSystem : EntitySystem
     {
         args.PushMarkup(Loc.GetString("lavaland-storm-staff-charges",
             ("charges", ent.Comp.Charges), ("max", ent.Comp.MaxCharges)));
+        if (_timing.CurTime < ent.Comp.NextDispel)
+        {
+            args.PushMarkup(Loc.GetString("lavaland-storm-staff-dispel-cooldown",
+                ("minutes", (int) Math.Ceiling((ent.Comp.NextDispel - _timing.CurTime).TotalMinutes))));
+        }
     }
 
     private void OnAfterInteract(Entity<LavalandStormStaffComponent> ent, ref AfterInteractEvent args)
@@ -118,6 +123,13 @@ public sealed class LavalandStormStaffSystem : EntitySystem
             return;
         }
 
+        if (_timing.CurTime < ent.Comp.NextDispel)
+        {
+            _popup.PopupEntity(Loc.GetString("lavaland-storm-staff-dispel-cooldown",
+                ("minutes", (int) Math.Ceiling((ent.Comp.NextDispel - _timing.CurTime).TotalMinutes))), args.User, args.User);
+            return;
+        }
+
         _popup.PopupEntity(Loc.GetString("lavaland-storm-staff-dispel-start"), args.User, args.User);
         _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, ent.Comp.DispelTime,
             new LavalandStormStaffDispelDoAfterEvent(), ent.Owner, used: ent.Owner)
@@ -134,12 +146,14 @@ public sealed class LavalandStormStaffSystem : EntitySystem
             return;
 
         args.Handled = true;
-        if (Transform(args.User).MapUid is not { } map || !_weather.TryDispelStorm(map))
+        if (_timing.CurTime < ent.Comp.NextDispel ||
+            Transform(args.User).MapUid is not { } map || !_weather.TryDispelStorm(map))
         {
             _popup.PopupEntity(Loc.GetString("lavaland-storm-staff-no-storm"), args.User, args.User);
             return;
         }
 
+        ent.Comp.NextDispel = _timing.CurTime + ent.Comp.DispelCooldown;
         _popup.PopupEntity(Loc.GetString("lavaland-storm-staff-dispelled", ("user", args.User)), args.User,
             PopupType.Large);
         if (ent.Comp.DispelSound != null)

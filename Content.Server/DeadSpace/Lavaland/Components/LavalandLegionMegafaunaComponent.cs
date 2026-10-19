@@ -297,6 +297,13 @@ public sealed partial class LavalandStormStaffComponent : Component
     [DataField]
     public TimeSpan DispelTime = TimeSpan.FromSeconds(3);
 
+    /// <summary>After a storm is dispelled the staff cannot dispel another for this long.</summary>
+    [DataField]
+    public TimeSpan DispelCooldown = TimeSpan.FromMinutes(16);
+
+    [ViewVariables]
+    public TimeSpan NextDispel;
+
     [DataField]
     public float Range = 12f;
 

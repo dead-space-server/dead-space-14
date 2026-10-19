@@ -21,6 +21,12 @@ public sealed class LavalandSkyDropSystem : EntitySystem
     [Dependency] private readonly SpriteSystem _sprite = default!;
     [Dependency] private readonly SpriteTreeSystem _spriteTree = default!;
 
+    /// <summary>
+    /// When this client first saw each drop start. The state comes in late, and a short rise would be mostly over by
+    /// then - the thing would just vanish; played from the moment it is seen, it is seen whole.
+    /// </summary>
+    private readonly Dictionary<EntityUid, (TimeSpan ServerStart, TimeSpan LocalStart)> _seen = new();
+
     public override void Initialize()
     {
         base.Initialize();
@@ -36,9 +42,15 @@ public sealed class LavalandSkyDropSystem : EntitySystem
         var query = EntityQueryEnumerator<LavalandSkyDropComponent, SpriteComponent>();
         while (query.MoveNext(out var uid, out var drop, out var sprite))
         {
+            if (!_seen.TryGetValue(uid, out var seen) || seen.ServerStart != drop.Start)
+            {
+                seen = (drop.Start, drop.Start > now ? drop.Start : now);
+                _seen[uid] = seen;
+            }
+
             var progress = drop.Duration <= 0f
                 ? 1f
-                : Math.Clamp((float) (now - drop.Start).TotalSeconds / drop.Duration, 0f, 1f);
+                : Math.Clamp((float) (now - seen.LocalStart).TotalSeconds / drop.Duration, 0f, 1f);
 
             if (drop.Sinking)
             {
@@ -48,9 +60,9 @@ public sealed class LavalandSkyDropSystem : EntitySystem
                 continue;
             }
 
-            // Falls faster and faster; rises slowly at first.
+            // Shoots up sharply and slows high up; falls faster and faster.
             var height = drop.Rising
-                ? drop.Height * progress * progress
+                ? drop.Height * (1f - (1f - progress) * (1f - progress))
                 : drop.Height * (1f - progress) * (1f - progress);
 
             // The offset is in the sprite's own frame: a thrown item lies turned any way, and "up" for it would be
@@ -66,6 +78,7 @@ public sealed class LavalandSkyDropSystem : EntitySystem
 
     private void OnShutdown(Entity<LavalandSkyDropComponent> ent, ref ComponentShutdown args)
     {
+        _seen.Remove(ent.Owner);
         if (!TryComp<SpriteComponent>(ent, out var sprite))
             return;
 

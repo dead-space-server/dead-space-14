@@ -317,6 +317,10 @@
     thresholds:
       0: Alive
       2500: Dead
+  # The boss HUD shows its health; no health bar over it through a medical visor.
+  - type: Damageable
+    damageContainer: Biological
+    healthBarThreshold: 1000000
   - type: Destructible
     thresholds:
     - trigger:

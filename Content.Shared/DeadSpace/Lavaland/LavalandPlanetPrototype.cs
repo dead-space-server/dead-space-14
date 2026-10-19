@@ -365,6 +365,17 @@ public sealed partial class LavalandPlanetPrototype : IPrototype
         },
     };
 
+    /// <summary>
+    /// How much the blizzard chills those caught out in it, in kelvin per damage interval (before cold protection:
+    /// a winter coat or a hardsuit keeps most of it off).
+    /// </summary>
+    [DataField]
+    public float SnowStormCooling = 3f;
+
+    /// <summary>The blizzard chills no further than this, in kelvin.</summary>
+    [DataField]
+    public float SnowStormMinTemperature = 200f;
+
     /// <summary>How deep from the map border the snow cover creeps in, in tiles.</summary>
     [DataField]
     public float SnowCoverDepth = 90f;
