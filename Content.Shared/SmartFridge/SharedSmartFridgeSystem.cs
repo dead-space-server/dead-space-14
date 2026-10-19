@@ -170,6 +170,9 @@ public abstract class SharedSmartFridgeSystem : EntitySystem
 
     private void OnExtractItem(Entity<SmartFridgeComponent> ent, ref ExtractItemDoAfterEvent args)
     {
+        if (args.Cancelled)
+            return;
+
         if (!_timing.IsFirstTimePredicted)
             return;
 
@@ -187,7 +190,6 @@ public abstract class SharedSmartFridgeSystem : EntitySystem
             if (!_container.TryRemoveFromContainer(GetEntity(item)))
                 continue;
 
-            _audio.PlayPredicted(ent.Comp.SoundVend, ent, args.User);
             contained.Remove(item);
             Dirty(ent);
             UpdateUI(ent);
@@ -278,7 +280,7 @@ public abstract class SharedSmartFridgeSystem : EntitySystem
             {
                 Priority = component.Entries.Count - i,
                 IconEntity = netEnt,
-                Category = VerbCategory.PingSelect,
+                Category = VerbCategory.Eject,
                 Text = entry.Name,
                 Impact = LogImpact.Low,
                 DoContactInteraction = false,
@@ -296,8 +298,6 @@ public abstract class SharedSmartFridgeSystem : EntitySystem
         if (!_accessReader.IsAllowed(user, target))
             return;
 
-        _audio.PlayPredicted(target.Comp.SoundCreaking, target, user);
-
         var doAfterArgs = new DoAfterArgs(EntityManager, user, TimeSpan.FromSeconds(3), new ExtractItemDoAfterEvent(entry), target) // DS14
         {
             BreakOnMove = true,
@@ -306,7 +306,10 @@ public abstract class SharedSmartFridgeSystem : EntitySystem
             DistanceThreshold = 1f,
         };
 
-        _doAfter.TryStartDoAfter(doAfterArgs);
+        if (!_doAfter.TryStartDoAfter(doAfterArgs))
+            return;
+
+        _audio.PlayPredicted(target.Comp.SoundCreaking, target, user);
     }
 
     protected virtual void UpdateUI(Entity<SmartFridgeComponent> ent)
