@@ -7,17 +7,16 @@ using Content.Shared.Popups;
 using Content.Shared.Storage.Components;
 using Content.Shared.Verbs;
 using Content.Shared.Whitelist;
+using Content.Shared.DoAfter;
+using Content.Shared.Power.EntitySystems;
+using Content.Shared.Database;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
-using System.Linq;
-using Content.Shared.Database;
 using Robust.Shared.Player;
-using Content.Shared.DoAfter;
-using Content.Shared.Power.EntitySystems;
 using Robust.Shared.Serialization;
-
+using System.Linq;
 
 namespace Content.Shared.SmartFridge;
 
@@ -168,6 +167,7 @@ public abstract class SharedSmartFridgeSystem : EntitySystem
         _popup.PopupPredicted(Loc.GetString("smart-fridge-component-try-eject-out-of-stock"), ent, args.Actor);
     }
 
+    //DS14-start
     private void OnExtractItem(Entity<SmartFridgeComponent> ent, ref ExtractItemDoAfterEvent args)
     {
         if (args.Cancelled)
@@ -198,6 +198,7 @@ public abstract class SharedSmartFridgeSystem : EntitySystem
 
         _popup.PopupPredicted(Loc.GetString("smart-fridge-component-try-eject-out-of-stock"), ent, args.User);
     }
+    //DS14-end
 
     private void OnGetAltVerb(Entity<SmartFridgeComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
     {
@@ -252,7 +253,7 @@ public abstract class SharedSmartFridgeSystem : EntitySystem
         DoInsert(ent, args.User, args.DumpQueue, false);
     }
 
-
+    // DS14-start
     private void OnGetVerb(EntityUid uid, SmartFridgeComponent component, GetVerbsEvent<Verb> args)
     {
         if (HasComp<ActorComponent>(uid) ||
@@ -290,7 +291,8 @@ public abstract class SharedSmartFridgeSystem : EntitySystem
         }
     }
 
-    private void TryExtractItem(Entity<SmartFridgeComponent> target, EntityUid user, SmartFridgeEntry entry) // DS14
+
+    private void TryExtractItem(Entity<SmartFridgeComponent> target, EntityUid user, SmartFridgeEntry entry)
     {
         if (_receiver.IsPowered(target.Owner))
             return;
@@ -311,12 +313,14 @@ public abstract class SharedSmartFridgeSystem : EntitySystem
 
         _audio.PlayPredicted(target.Comp.SoundCreaking, target, user);
     }
+    // DS14-end
 
     protected virtual void UpdateUI(Entity<SmartFridgeComponent> ent)
     {
 
     }
 }
+// DS14-start
 [Serializable, NetSerializable]
 public sealed partial class ExtractItemDoAfterEvent : SimpleDoAfterEvent
 {
@@ -327,3 +331,4 @@ public sealed partial class ExtractItemDoAfterEvent : SimpleDoAfterEvent
         Entry = entry;
     }
 }
+// DS14-end
