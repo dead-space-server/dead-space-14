@@ -31,8 +31,6 @@ public class ActionButtonContainer : GridContainer
     public void SetActionData(ActionsSystem system, params EntityUid?[] actionTypes)
     {
         var uniqueCount = Math.Min(system.GetClientActions().Count(), actionTypes.Length + 1);
-        // DS14: empty slots kept for actions that come back - the buttons after them still show.
-        uniqueCount = Math.Max(uniqueCount, Array.FindLastIndex(actionTypes, a => a != null) + 2);
         var keys = ContentKeyFunctions.GetHotbarBoundKeys();
 
         for (var i = 0; i < uniqueCount; i++)

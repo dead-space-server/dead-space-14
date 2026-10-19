@@ -60,15 +60,19 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
 
     // DS14-start
     /// <summary>
-    /// The hotbar slot each action was last seen in, by a key that survives a change of body (polymorph etc.):
-    /// the action prototype, plus the prototype of the item that grants it.
+    /// Slots of item actions whose item was dropped: picked up again, the same action goes back there. Keyed by the
+    /// action entity itself - an item keeps its action entities while it is not held. No empty slots are kept.
     /// </summary>
-    private readonly Dictionary<string, int> _rememberedSlots = new();
+    private readonly Dictionary<EntityUid, int> _droppedSlots = new();
 
-    /// <summary>When the actions were last linked to a body: actions arriving right after go back to their slots.</summary>
-    private TimeSpan _linkedAt = TimeSpan.MinValue;
-
-    private static readonly TimeSpan RelinkWindow = TimeSpan.FromSeconds(3);
+    /// <summary>
+    /// The order of every kind of action ever on the hotbar, by a key that is the same in any body (polymorph, a new
+    /// body, back from a ghost): the action prototype, the item's prototype for an item's action, and which one of
+    /// several alike it was. A body's actions are reordered among their own places only, the places of the kinds it
+    /// does not have stay put - so going through a body with fewer actions and back leaves the order as it was.
+    /// No slot numbers are kept, nothing is pushed around.
+    /// </summary>
+    private readonly List<string> _layoutOrder = new();
     // DS14-end
     private readonly DragDropHelper<ActionButton> _menuDragHelper;
     private readonly TextureRect _dragShadow;
@@ -275,13 +279,29 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
         if (action.Comp.Toggled && EntityManager.TryGetComponent<TargetActionComponent>(actionId, out var target))
             StartTargeting((action, action, target));
 
-        // DS14-start: an action coming back (a new body, or an item picked up again) returns to its old slot.
-        var restore = _cfg.GetCVar(CCCCVars.ActionsRestoreItemSlots) || _timing.RealTime - _linkedAt < RelinkWindow;
-        if (restore && TryRestoreSlot(action))
+        // DS14-start: an item's action coming back (the item picked up again) takes its old slot back.
+        if (_droppedSlots.Remove(action, out var slot) && _cfg.GetCVar(CCCCVars.ActionsRestoreItemSlots))
+        {
+            _actions.Insert(Math.Min(slot, _actions.Count), action);
             return;
-        // DS14-end
+        }
 
+        // A kind of action seen before (a body's actions arriving one by one): into its place in the remembered
+        // order, before the first one that came after it. A never seen one goes to the end.
         _actions.Add(action);
+        var keys = GetLayoutKeys();
+        var added = keys.FindIndex(k => k.Action == action.Owner);
+        var rank = added >= 0 ? _layoutOrder.IndexOf(keys[added].Key) : -1;
+        if (rank >= 0)
+        {
+            var before = keys.FindIndex(k => k.Action != action.Owner && _layoutOrder.IndexOf(k.Key) > rank);
+            if (before >= 0)
+            {
+                _actions.Remove(action);
+                _actions.Insert(_actions.IndexOf(keys[before].Action), action);
+            }
+        }
+        // DS14-end
     }
 
     private void OnActionRemoved(EntityUid actionId)
@@ -292,13 +312,20 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
         if (actionId == SelectingTargetFor)
             StopTargeting();
 
+        // DS14-start: an item's slot is remembered for when the item is picked up again.
+        var index = _actions.IndexOf(actionId);
+        if (index >= 0 && IsItemAction(actionId))
+            _droppedSlots[actionId] = index;
+        // DS14-end
+
         _actions.RemoveAll(x => x == actionId);
     }
 
     private void OnActionsUpdated()
     {
         QueueWindowUpdate();
-        RememberLayout(); // DS14
+        _droppedSlots.Keys.Where(a => !EntityManager.EntityExists(a)).ToList().ForEach(a => _droppedSlots.Remove(a)); // DS14
+        RememberLayoutOrder(); // DS14
 
         if (_actionsSystem != null)
             _container?.SetActionData(_actionsSystem, _actions.ToArray());
@@ -479,7 +506,6 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
             }
         }
 
-        RememberLayout(); // DS14
         if (updateSlots)
             _container?.SetActionData(_actionsSystem, _actions.ToArray());
     }
@@ -503,7 +529,7 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
         if (dragged.Parent is ActionButtonContainer)
             SetAction(dragged, swapAction, false);
 
-        RememberLayout(); // DS14
+        RememberLayoutOrder(); // DS14
 
         if (_actionsSystem != null)
             _container?.SetActionData(_actionsSystem, _actions.ToArray());
@@ -791,71 +817,109 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
         actions.Sort(ActionComparer);
 
         _actions.Clear();
-        // DS14-start: a new body (polymorph and the like) - its actions go where the same ones were before.
-        // The new ones first, in the usual order; then each remembered one is put back into its old slot, pushing
-        // the rest along, from the first slot to the last, so they all end up where they were.
-        var remembered = new List<(int Slot, EntityUid Action)>();
+        _droppedSlots.Clear(); // DS14
         foreach (var (action, _) in actions)
         {
-            if (_actions.Contains(action))
-                continue;
-
-            if (GetSlotKey(action) is { } key && _rememberedSlots.TryGetValue(key, out var slot))
-                remembered.Add((slot, action));
-            else
+            if (!_actions.Contains(action))
                 _actions.Add(action);
         }
 
-        remembered.Sort((a, b) => a.Slot.CompareTo(b.Slot));
-        foreach (var (slot, action) in remembered)
-        {
-            _actions.Insert(Math.Min(slot, _actions.Count), action);
-        }
-
-        _linkedAt = _timing.RealTime;
-        RememberLayout();
-        // DS14-end
+        ApplyLayoutOrder(); // DS14: the actions seen before go in the order they had
     }
 
     // DS14-start
-    private string? GetSlotKey(EntityUid action)
+    /// <summary>
+    /// The layout keys of the bar, in order: the same kind of action in any body gets the same key; several alike
+    /// are told apart by their count so far.
+    /// </summary>
+    private List<(EntityUid Action, string Key)> GetLayoutKeys()
     {
-        if (!EntityManager.TryGetComponent(action, out MetaDataComponent? meta) || meta.EntityPrototype is not { } proto)
-            return null;
-
-        // An item's action is told apart by its item; the body's own actions are the same whatever the body.
-        if (EntityManager.TryGetComponent(action, out ActionComponent? comp) &&
-            comp.Container is { } container &&
-            EntityManager.HasComponent<ItemComponent>(container) &&
-            EntityManager.TryGetComponent(container, out MetaDataComponent? containerMeta) &&
-            containerMeta.EntityPrototype is { } containerProto)
+        var keys = new List<(EntityUid, string)>();
+        var seen = new Dictionary<string, int>();
+        foreach (var slot in _actions)
         {
-            return $"{proto.ID}@{containerProto.ID}";
+            if (slot is not { } action ||
+                !EntityManager.TryGetComponent(action, out MetaDataComponent? meta) ||
+                meta.EntityPrototype is not { } proto)
+            {
+                continue;
+            }
+
+            var key = proto.ID;
+            if (EntityManager.TryGetComponent(action, out ActionComponent? comp) &&
+                comp.Container is { } container &&
+                EntityManager.HasComponent<ItemComponent>(container) &&
+                EntityManager.TryGetComponent(container, out MetaDataComponent? itemMeta) &&
+                itemMeta.EntityPrototype is { } itemProto)
+            {
+                key += "@" + itemProto.ID;
+            }
+
+            var count = seen.GetValueOrDefault(key);
+            seen[key] = count + 1;
+            keys.Add((action, $"{key}#{count}"));
         }
 
-        return proto.ID;
+        return keys;
     }
 
-    private void RememberLayout()
+    /// <summary>Notes the order of what is on the bar now; kinds not on it keep their places in the order.</summary>
+    private void RememberLayoutOrder()
     {
-        for (var i = 0; i < _actions.Count; i++)
+        var present = GetLayoutKeys().Select(k => k.Key).ToList();
+        var presentSet = present.ToHashSet();
+
+        // The known ones take the places they already hold, in the bar's order now.
+        var places = new List<int>();
+        for (var i = 0; i < _layoutOrder.Count; i++)
         {
-            if (_actions[i] is { } action && GetSlotKey(action) is { } key)
-                _rememberedSlots[key] = i;
+            if (presentSet.Contains(_layoutOrder[i]))
+                places.Add(i);
+        }
+
+        var knownSet = _layoutOrder.Where(presentSet.Contains).ToHashSet();
+        var known = present.Where(knownSet.Contains).ToList();
+        for (var i = 0; i < places.Count; i++)
+        {
+            _layoutOrder[places[i]] = known[i];
+        }
+
+        // New ones go right after the one before them on the bar (or first, if nothing is before them).
+        for (var i = 0; i < present.Count; i++)
+        {
+            if (knownSet.Contains(present[i]))
+                continue;
+
+            var at = i == 0 ? 0 : _layoutOrder.IndexOf(present[i - 1]) + 1;
+            _layoutOrder.Insert(at, present[i]);
+            knownSet.Add(present[i]);
         }
     }
 
     /// <summary>
-    /// Puts the action back into the slot it was in before, pushing whatever is there (and everything after it)
-    /// one slot along - no empty slots are left anywhere.
+    /// A new body: its actions seen before are lined up in their remembered order at the front, the never seen ones
+    /// after them in the usual order. No gaps.
     /// </summary>
-    private bool TryRestoreSlot(EntityUid action)
+    private void ApplyLayoutOrder()
     {
-        if (GetSlotKey(action) is not { } key || !_rememberedSlots.TryGetValue(key, out var slot))
-            return false;
+        var keys = GetLayoutKeys();
+        var known = keys.Where(k => _layoutOrder.Contains(k.Key))
+            .OrderBy(k => _layoutOrder.IndexOf(k.Key))
+            .Select(k => (EntityUid?) k.Action);
+        var unknown = keys.Where(k => !_layoutOrder.Contains(k.Key)).Select(k => (EntityUid?) k.Action);
+        var ordered = known.Concat(unknown).ToList();
 
-        _actions.Insert(Math.Min(slot, _actions.Count), action);
-        return true;
+        _actions.Clear();
+        _actions.AddRange(ordered);
+        RememberLayoutOrder();
+    }
+
+    /// <summary>An action granted by an item (not by the body itself).</summary>
+    private bool IsItemAction(EntityUid action)
+    {
+        return EntityManager.TryGetComponent(action, out ActionComponent? comp) &&
+               comp.Container is { } container &&
+               EntityManager.HasComponent<ItemComponent>(container);
     }
     // DS14-end
 
