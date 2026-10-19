@@ -202,11 +202,11 @@ public sealed partial class LavalandSecretBossConfig
     public LocId BossName = "lavaland-secret-boss-name";
 
     [DataField]
-    public float BossHealth = 6000f;
+    public float BossHealth = 4500f;
 
     /// <summary>Added for each fighter after the first.</summary>
     [DataField]
-    public float BossHealthPerExtraPlayer = 2500f;
+    public float BossHealthPerExtraPlayer = 750f;
 
     /// <summary>Health fraction at which the Celestial enters its second phase.</summary>
     [DataField]

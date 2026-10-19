@@ -65,6 +65,16 @@ public abstract partial class SharedStackSystem
         if (amount > 0)
             transferred = Math.Min(transferred, amount.Value);
 
+        // DS14-start: the stacks may refuse to merge (fultons linked to different beacons).
+        var attempt = new StackMergeAttemptEvent(recipient.Owner);
+        RaiseLocalEvent(donor.Owner, ref attempt);
+        if (attempt.Cancelled)
+        {
+            transferred = 0;
+            return false;
+        }
+        // DS14-end
+
         var ev = new StackMergedEvent(recipient.Owner, transferred);
         RaiseLocalEvent(donor.Owner, ref ev);
 
@@ -320,3 +330,12 @@ public abstract partial class SharedStackSystem
 
 [ByRefEvent]
 public readonly record struct StackMergedEvent(EntityUid Recipient, int Amount);
+
+// DS14-start
+/// <summary>Raised on the donor before it merges into <see cref="Recipient"/>; cancel to keep the stacks apart.</summary>
+[ByRefEvent]
+public record struct StackMergeAttemptEvent(EntityUid Recipient)
+{
+    public bool Cancelled;
+}
+// DS14-end

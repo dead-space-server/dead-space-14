@@ -960,7 +960,9 @@ public sealed class LavalandAshDrakeSystem : EntitySystem
             drake.NextQueuedSwoop = TimeSpan.Zero;
         }
 
-        SetVisual(boss, LavalandAshDrakeVisualState.Shadow);
+        // It shoots up out of sight (no shadow on the ground) and flies there to its mark.
+        SetVisual(boss, LavalandAshDrakeVisualState.Dragon);
+        SkyMove(boss, now, Math.Min(0.35f, (float) drake.SwoopWindup.TotalSeconds), rising: true, slant: 0f);
         _movement.RefreshMovementSpeedModifiers(boss);
 
         drake.BusyUntil = now + drake.SwoopWindup + TimeSpan.FromSeconds(drake.SwoopStepDelay.TotalSeconds * steps) + drake.SwoopRecover;
@@ -1016,7 +1018,6 @@ public sealed class LavalandAshDrakeSystem : EntitySystem
             nextTile = ClampToInnerArena(arena, nextTile);
 
         _transform.SetCoordinates(boss, _map.GridTileToLocal(gridUid, grid, nextTile));
-        SetVisual(boss, LavalandAshDrakeVisualState.Shadow);
 
         drake.SwoopRemainingSteps--;
         drake.NextSwoopStep = now + drake.SwoopStepDelay;
@@ -1092,6 +1093,8 @@ public sealed class LavalandAshDrakeSystem : EntitySystem
         var tile = GetEntityTile(boss, gridUid, grid) ?? Vector2i.Zero;
         SpawnAnchored(drake.LandingPrototype, gridUid, grid, tile);
         SetVisual(boss, LavalandAshDrakeVisualState.Swoop);
+        // Down on the mark at a slant, from one side or the other.
+        SkyMove(boss, now, (float) drake.SwoopRecover.TotalSeconds, rising: false, slant: _random.Prob(0.5f) ? 0.6f : -0.6f);
 
         drake.SwoopImpactAt = now + drake.SwoopRecover;
         drake.BusyUntil = drake.SwoopImpactAt + TimeSpan.FromSeconds(0.25);
@@ -1118,6 +1121,7 @@ public sealed class LavalandAshDrakeSystem : EntitySystem
         drake.SwoopFireRainTilesQueued = 0;
 
         SetVisual(boss, LavalandAshDrakeVisualState.Dragon);
+        RemComp<LavalandSkyDropComponent>(boss);
         _movement.RefreshMovementSpeedModifiers(boss);
 
         if (drake.PendingSwoops > 0)
@@ -1652,6 +1656,8 @@ public sealed class LavalandAshDrakeSystem : EntitySystem
     private void ClearRuntimeState(EntityUid uid, LavalandAshDrakeComponent drake, bool restoreVisual)
     {
         drake.PendingTiles.Clear();
+        // Reset mid-swoop: back down out of the sky.
+        RemComp<LavalandSkyDropComponent>(uid);
         drake.Swooping = false;
         drake.SwoopInvulnerable = false;
         drake.SwoopTarget = null;
@@ -1734,6 +1740,22 @@ public sealed class LavalandAshDrakeSystem : EntitySystem
             return;
 
         drake.LastPressureByTarget[target] = now;
+    }
+
+    /// <summary>Height of the swoop above the arena, in tiles: well out of sight.</summary>
+    private const float SwoopHeight = 14f;
+
+    /// <summary>Moves the drake's sprite up into the sky or down out of it (the drake itself stays on the ground).</summary>
+    private void SkyMove(EntityUid uid, TimeSpan now, float duration, bool rising, float slant)
+    {
+        var drop = EnsureComp<LavalandSkyDropComponent>(uid);
+        drop.Start = now;
+        drop.Duration = Math.Max(0.05f, duration);
+        drop.Height = SwoopHeight;
+        drop.Rising = rising;
+        drop.Sinking = false;
+        drop.Slant = slant;
+        Dirty(uid, drop);
     }
 
     private void SetVisual(EntityUid uid, LavalandAshDrakeVisualState state)

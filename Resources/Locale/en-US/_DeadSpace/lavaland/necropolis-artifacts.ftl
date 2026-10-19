@@ -64,7 +64,7 @@ lavaland-berserker-charged = The berserker armour is fully charged!
 lavaland-berserker-on = { CAPITALIZE(THE($user)) } flies into a berserker rage!
 lavaland-berserker-off = { CAPITALIZE(THE($user)) }'s rage fades.
 lavaland-marker-beacon-message-title = Beacon message
-lavaland-marker-beacon-message-prompt = Text (shown on examine and on the lavaland tablet; empty to erase)
+lavaland-marker-beacon-message-prompt = You leave on the marker:
 lavaland-marker-beacon-message-set = You scratch a message onto the beacon.
 lavaland-marker-beacon-message-cleared = You scratch the message off the beacon.
 lavaland-marker-beacon-message-examine = Scratched on the beacon: [color=yellow]{ $message }[/color]

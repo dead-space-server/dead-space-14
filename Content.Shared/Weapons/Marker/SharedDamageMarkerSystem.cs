@@ -26,6 +26,18 @@ public abstract class SharedDamageMarkerSystem : EntitySystem
         SubscribeLocalEvent<DamageMarkerComponent, AttackedEvent>(OnMarkerAttacked);
     }
 
+    // DS14-start
+    /// <summary>Sets the detonation damage of the mark a marker projectile will put on its target.</summary>
+    public void SetMarkDamage(Entity<DamageMarkerOnCollideComponent?> ent, DamageSpecifier damage)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return;
+
+        ent.Comp.Damage = new DamageSpecifier(damage);
+        Dirty(ent);
+    }
+    // DS14-end
+
     private void OnMarkerAttacked(EntityUid uid, DamageMarkerComponent component, AttackedEvent args)
     {
         if (component.Marker != args.Used)

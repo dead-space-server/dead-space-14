@@ -39,3 +39,6 @@ attachment-menu-eject = Remove
 attachment-light-missing = There is no flashlight on the weapon.
 lavaland-pressure-damage-examine = [color=orange]Made for the thin lavaland air:[/color] outside { $min }-{ $max } kPa it deals only { $percent }% damage.
 attachment-light-no-power = The flashlight battery is dead.
+
+lavaland-machete-recharging = The machete is not ready to fire yet: { $seconds } s.
+lavaland-machete-overcharge = { CAPITALIZE(THE($weapon)) } overcharges and blows up in the hand!

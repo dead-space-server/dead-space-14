@@ -108,6 +108,10 @@ public sealed partial class LavalandSecretBossComponent : Component
     [ViewVariables]
     public readonly Dictionary<EntityUid, EntityUid> DreamOriginals = new();
 
+    /// <summary>Copies that died in the dream: their players are already back in their sleeping bodies.</summary>
+    [ViewVariables]
+    public readonly HashSet<EntityUid> WokenFromDream = new();
+
     [ViewVariables]
     public TimeSpan? WipeSince;
 

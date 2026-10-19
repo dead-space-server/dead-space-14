@@ -64,7 +64,7 @@ lavaland-berserker-charged = Доспех берсерка полностью з
 lavaland-berserker-on = { CAPITALIZE(THE($user)) } впадает в ярость берсерка!
 lavaland-berserker-off = Ярость { THE($user) } угасает.
 lavaland-marker-beacon-message-title = Послание на маяке
-lavaland-marker-beacon-message-prompt = Текст (виден при осмотре и на планшете лаваленда; пусто — стереть)
+lavaland-marker-beacon-message-prompt = Вы оставляете на маркере:
 lavaland-marker-beacon-message-set = Вы выцарапываете послание на маяке.
 lavaland-marker-beacon-message-cleared = Вы стираете послание с маяка.
 lavaland-marker-beacon-message-examine = На маяке нацарапано: [color=yellow]{ $message }[/color]

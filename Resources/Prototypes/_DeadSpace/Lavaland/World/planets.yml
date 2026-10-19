@@ -150,8 +150,8 @@
     sleepStatusEffect: StatusEffectLavalandCelestialSleep
     arenaParallax: AsteroidsOutpost
     bossPrototype: MobCelestialLavaland
-    bossHealth: 6000
-    bossHealthPerExtraPlayer: 2500
+    bossHealth: 4500
+    bossHealthPerExtraPlayer: 750
     phase2Fraction: 0.5
     wipeDelay: 20
     lossSleep: 60

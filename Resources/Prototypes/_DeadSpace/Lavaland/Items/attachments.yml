@@ -187,7 +187,7 @@
       multiplierOnExisting: 0.5
     - !type:Ignite
     - !type:AdjustTemperature
-      amount: 7500
+      amount: 20
     layers:
     - state: upgrade-lava-aspect
 
@@ -206,7 +206,7 @@
         Cold: 4
     targetHitEffects:
     - !type:AdjustTemperature
-      amount: -7500
+      amount: -20
     layers:
     - state: upgrade-ice-frost
 
@@ -441,6 +441,8 @@
     sprite: _Goob/Lavaland/Objects/Weapons/Secondary/kinetic_claws-inhands.rsi
   - type: MeleeWeapon
     attackRate: 3
+    # Held down, the attack (light or wide) keeps going, like the mantis blades.
+    autoAttack: true
     wideAnimationRotation: -135
     damage:
       types:
@@ -460,6 +462,20 @@
   - type: UseDelay
     delay: 1
   - type: LavalandPressureDamage
+  # One crusher blade fits on the claws.
+  - type: ContainerContainer
+    containers:
+      upgrade_slot_blade: !type:ContainerSlot
+  - type: AttachmentHolder
+    slots:
+    - upgrade_slot_blade
+  - type: ItemSlots
+    slots:
+      upgrade_slot_blade:
+        name: attachment-slot-crusher-blade
+        whitelist:
+          tags:
+          - CrusherUpgradeBlade
   - type: Fiber
     fiberMaterial: fibers-synthetic
     fiberColor: fibers-purple
@@ -498,6 +514,8 @@
     angle: 0
     animation: WeaponArcThrust
     range: 2
+  # Right button in combat mode: a crusher mark; held, the mark builds up (the crit grows), held too long it blows up.
+  - type: LavalandChargedMarker
   - type: LavalandPressureDamage
   - type: Item
     size: Normal

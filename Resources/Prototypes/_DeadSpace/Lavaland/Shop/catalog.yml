@@ -210,7 +210,7 @@
   categories:
   - LavalandMiningTools
   cost:
-    LavalandMiningPoint: 6500
+    LavalandMiningPoint: 12000
 
 - type: listing
   id: LavalandMiningPKAUpgradeDamage
@@ -851,7 +851,7 @@
   categories:
   - LavalandMiningMedical
   cost:
-    LavalandMiningPoint: 1000
+    LavalandMiningPoint: 7000
 
 - type: listing
   id: LavalandMinebot

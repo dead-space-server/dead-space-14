@@ -71,7 +71,7 @@ public sealed partial class LavalandHierophantComponent : Component
     public int MaxBlinkSpamCount = 4;
 
     [DataField]
-    public int MaxBurstRange = 8;
+    public int MaxBurstRange = 6;
 
     [DataField]
     public int MaxBeamRange = 12;

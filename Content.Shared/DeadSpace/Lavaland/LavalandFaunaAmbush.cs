@@ -85,4 +85,8 @@ public sealed partial class LavalandSkyDropComponent : Component
     /// <summary>Sinking into a pit instead: shrinking away where it lies, as things falling into a chasm do.</summary>
     [DataField, AutoNetworkedField]
     public bool Sinking;
+
+    /// <summary>Sideways offset per tile of height: it comes down (or goes up) at a slant, not straight.</summary>
+    [DataField, AutoNetworkedField]
+    public float Slant;
 }

@@ -39,3 +39,6 @@ attachment-menu-eject = Снять
 attachment-light-missing = В оружии нет фонарика.
 lavaland-pressure-damage-examine = [color=orange]Сделано для разреженного воздуха лаваленда:[/color] вне давления { $min }-{ $max } кПа наносит только { $percent }% урона.
 attachment-light-no-power = Батарея фонарика разряжена.
+
+lavaland-machete-recharging = Мачете ещё не готово выстрелить: { $seconds } с.
+lavaland-machete-overcharge = { CAPITALIZE(THE($weapon)) } перегружается и взрывается в руке!

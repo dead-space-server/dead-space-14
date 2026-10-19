@@ -56,7 +56,7 @@ public sealed class LavalandSkyDropSystem : EntitySystem
             // The offset is in the sprite's own frame: a thrown item lies turned any way, and "up" for it would be
             // to the side. Turned back by the sprite's rotation, it is straight up the screen.
             var spriteRotation = sprite.NoRotation ? -eyeRotation : _transform.GetWorldRotation(uid);
-            var screenUp = (-eyeRotation).RotateVec(new Vector2(0f, height));
+            var screenUp = (-eyeRotation).RotateVec(new Vector2(drop.Slant * height, height));
             _sprite.SetOffset((uid, sprite), (-spriteRotation).RotateVec(screenUp));
 
             // Keep the place of the sprite in the render tree with it, or it is culled high up in the air.

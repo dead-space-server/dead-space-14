@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
+using Content.Shared.Atmos.Components;
 using Content.Server.Backmen.Body.Components;
 using Content.Server.DeadSpace.Lavaland.ChromiteCaves;
 using Content.Server.DeadSpace.Lavaland.Celestial;
@@ -539,8 +540,6 @@ public sealed class LavalandSecretBossSystem : EntitySystem
         }
 
         var grid = _mapManager.CreateGridEntity(mapId);
-        // No grid atmosphere of its own: the walled-in rooms would start out as vacuum. It breathes the map's air.
-        RemComp<GridAtmosphereComponent>(grid.Owner);
         _metaData.SetEntityName(grid.Owner, "Celestial maze");
         RemComp<ImplicitRoofComponent>(grid.Owner);
         if (!_tileDefinition.TryGetDefinition(config.MazeFloorTile, out var floorDef))
@@ -583,8 +582,6 @@ public sealed class LavalandSecretBossSystem : EntitySystem
 
         // A tiny grid far away where falling players wait: they see only each other.
         var holding = _mapManager.CreateGridEntity(mapId);
-        // No grid atmosphere of its own: the walled-in rooms would start out as vacuum. It breathes the map's air.
-        RemComp<GridAtmosphereComponent>(holding.Owner);
         _transform.SetMapCoordinates(holding.Owner, new MapCoordinates(new Vector2(size + 500, size + 500), mapId));
         var holdingTiles = new List<(Vector2i, Tile)>();
         for (var x = -1; x <= 1; x++)
@@ -592,6 +589,20 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             holdingTiles.Add((new Vector2i(x, y), new Tile(floorDef.TileId)));
         _map.SetTiles(holding.Owner, holding.Comp, holdingTiles);
         comp.FallHolding = _transform.ToMapCoordinates(_map.GridTileToLocal(holding.Owner, holding.Comp, Vector2i.Zero));
+
+        FillWithAir(grid.Owner, grid.Comp);
+        FillWithAir(holding.Owner, holding.Comp);
+    }
+
+    /// <summary>
+    /// Air on every tile of a zone grid, walled-in rooms too. Removing its grid atmosphere is no use: once its tiles
+    /// are laid the grid is heavy enough to get one back automatically - an empty one, and its rooms are vacuum.
+    /// </summary>
+    private void FillWithAir(EntityUid gridUid, MapGridComponent grid)
+    {
+        var atmos = EnsureComp<GridAtmosphereComponent>(gridUid);
+        EnsureComp<GasTileOverlayComponent>(gridUid);
+        _atmosphere.RebuildGridAtmosphere((gridUid, atmos, grid));
     }
 
     /// <summary>Reinforced glass square over the void with The Circle parallax, walled in.</summary>
@@ -606,8 +617,6 @@ public sealed class LavalandSecretBossSystem : EntitySystem
         Dirty(mapUid, parallax);
 
         var grid = _mapManager.CreateGridEntity(mapId);
-        // No grid atmosphere of its own: the walled-in rooms would start out as vacuum. It breathes the map's air.
-        RemComp<GridAtmosphereComponent>(grid.Owner);
         _metaData.SetEntityName(grid.Owner, "Celestial arena");
         RemComp<ImplicitRoofComponent>(grid.Owner);
         if (!_tileDefinition.TryGetDefinition(config.ArenaTile, out var glass))
@@ -642,6 +651,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
         }
 
         comp.ArenaCenter = _transform.ToMapCoordinates(_map.GridTileToLocal(grid.Owner, grid.Comp, Vector2i.Zero));
+        FillWithAir(grid.Owner, grid.Comp);
     }
 
     #endregion
@@ -1050,6 +1060,18 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             RaiseNetworkEvent(hud, FightersFilter(comp));
         }
 
+        // Killed in the dream: the player is back in the body sleeping by the pit at once, without the fight's music,
+        // health bar or backdrop. As a ghost of the copy they would be out of reach of all of it, and when the copy
+        // was deleted the ghost was thrown off to the station.
+        foreach (var (copy, original) in comp.DreamOriginals)
+        {
+            if (comp.WokenFromDream.Contains(copy) || !TerminatingOrDeleted(copy) && !_mobState.IsDead(copy))
+                continue;
+
+            comp.WokenFromDream.Add(copy);
+            WakeFromDream(original);
+        }
+
         // Anyone teleported out of the fight by some trick is put back.
         var alive = 0;
         foreach (var fighter in comp.Participants)
@@ -1124,8 +1146,27 @@ public sealed class LavalandSecretBossSystem : EntitySystem
     }
 
     /// <summary>The dream is over: every player back in his own body by the pit, the copies and their things gone.</summary>
+    /// <summary>The player of a copy killed in the dream goes back to the original body; the fight is over for them.</summary>
+    private void WakeFromDream(EntityUid original)
+    {
+        if (TerminatingOrDeleted(original))
+            return;
+
+        if (_mind.TryGetMind(original, out var mindId, out var mind) && mind.VisitingEntity != null)
+            _mind.UnVisit(mindId, mind);
+
+        if (!_players.TryGetSessionByEntity(original, out var session))
+            return;
+
+        var filter = Filter.SinglePlayer(session);
+        RaiseNetworkEvent(new LavalandBossHudHideEvent(LavalandSecretBossComponent.HudId), filter);
+        RaiseNetworkEvent(new LavalandBossMusicStopEvent(LavalandSecretBossComponent.HudId), filter);
+        RaiseNetworkEvent(new CelestialCutsceneEndEvent(), filter);
+    }
+
     private void EndDream(LavalandSecretBossComponent comp)
     {
+        comp.WokenFromDream.Clear();
         if (comp.DreamOriginals.Count == 0)
             return;
 

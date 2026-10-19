@@ -57,6 +57,7 @@ public abstract partial class SharedFultonSystem : EntitySystem
         SubscribeLocalEvent<FultonComponent, AfterInteractEvent>(OnFultonInteract, before: [typeof(SharedStorageSystem)]); //DS14
 
         SubscribeLocalEvent<FultonComponent, StackSplitEvent>(OnFultonSplit);
+        InitializeBeaconQueue(); // DS14
     }
 
     private void OnFultonContainerInserted(EntityUid uid, FultonedComponent component, EntGotInsertedIntoContainerMessage args)
@@ -117,7 +118,7 @@ public abstract partial class SharedFultonSystem : EntitySystem
         }
 
         var fultoned = AddComp<FultonedComponent>(args.Target.Value);
-        fultoned.Beacon = fulton.Beacon;
+        fultoned.Beacon = TakeNextBeacon((args.Used.Value, fulton)); // DS14: merged stacks go beacon by beacon
         fultoned.NextFulton = Timing.CurTime + fulton.FultonDuration;
         fultoned.FultonDuration = fulton.FultonDuration;
         fultoned.Removeable = fulton.Removeable;
@@ -136,6 +137,10 @@ public abstract partial class SharedFultonSystem : EntitySystem
             if (!_foldable.IsFolded(args.Target.Value))
             {
                 component.Beacon = args.Target.Value;
+                // DS14-start: the whole stack is linked to it
+                component.BeaconQueue.Clear();
+                Dirty(uid, component);
+                // DS14-end
                 Audio.PlayPredicted(beacon.LinkSound, uid, args.User);
                 _popup.PopupClient(Loc.GetString("fulton-linked"), uid, args.User);
             }
@@ -153,7 +158,7 @@ public abstract partial class SharedFultonSystem : EntitySystem
 
     private bool TryStartFulton(EntityUid used, FultonComponent component, EntityUid user, EntityUid target)
     {
-        if (Deleted(component.Beacon))
+        if (Deleted(NextBeacon(component))) // DS14
         {
             _popup.PopupClient(Loc.GetString("fulton-not-found"), used, user);
             return false;
@@ -186,6 +191,7 @@ public abstract partial class SharedFultonSystem : EntitySystem
     {
         var newFulton = EnsureComp<FultonComponent>(args.NewId);
         newFulton.Beacon = component.Beacon;
+        SplitBeaconQueue((uid, component), (args.NewId, newFulton)); // DS14
         Dirty(args.NewId, newFulton);
     }
 

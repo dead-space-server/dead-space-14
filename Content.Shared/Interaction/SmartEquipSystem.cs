@@ -188,6 +188,10 @@ public sealed class SmartEquipSystem : EntitySystem
                 if (reason != null)
                     _popup.PopupClient(Loc.GetString(reason), uid, uid);
 
+                // DS14-start: no room - a fulton stack may offer to merge with one of another beacon
+                var failed = new StorageStackInsertFailedEvent(slotItem, uid);
+                RaiseLocalEvent(handItem.Value, ref failed);
+                // DS14-end
                 return;
             }
 
