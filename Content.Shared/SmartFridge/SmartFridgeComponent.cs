@@ -74,11 +74,13 @@ public sealed partial class SmartFridgeComponent : Component
     [DataField]
     public SoundSpecifier SoundDeny = new SoundCollectionSpecifier("VendingDeny");
 
+    //DS14-start
     [DataField]
     public SoundSpecifier? SoundCreaking = new SoundPathSpecifier("/Audio/Machines/airlock_creaking.ogg")
     {
         Params = AudioParams.Default.WithVolume(-3f),
     };
+    //DS14-end
 }
 
 /// <summary>
