@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Numerics;
 using Content.Server.DeadSpace.Lavaland.Components;
+using Content.Shared.DeadSpace.Lavaland.Components;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
@@ -12,7 +13,10 @@ using Content.Shared.Throwing;
 using Robust.Server.Player;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -99,6 +103,8 @@ public sealed class LavalandBubblegumSystem : EntitySystem
 
             if (GetHealthFraction(uid) <= Math.Clamp(bubblegum.CloneCriticalHealthThreshold, 0f, 1f))
                 TrySpawnCriticalClones(uid, bubblegum, arena, arena.Grid, grid, now);
+
+            ProcessKiting(uid, bubblegum, arena, arena.Grid, grid, frameTime);
 
             if (ProcessCharge(uid, bubblegum, arena, arena.Grid, grid, now) ||
                 ProcessQueuedCharge(uid, bubblegum, arena, arena.Grid, grid, now))
@@ -1818,6 +1824,12 @@ public sealed class LavalandBubblegumSystem : EntitySystem
                 bubblegum.BloodPools.RemoveAt(i);
         }
 
+        for (var i = bubblegum.BloodWalls.Count - 1; i >= 0; i--)
+        {
+            if (!Exists(bubblegum.BloodWalls[i]))
+                bubblegum.BloodWalls.RemoveAt(i);
+        }
+
         for (var i = bubblegum.Slaughterlings.Count - 1; i >= 0; i--)
         {
             var summon = bubblegum.Slaughterlings[i];
@@ -1826,8 +1838,131 @@ public sealed class LavalandBubblegumSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    /// Whoever keeps running away from it gets a wall of blood across the way: the longer the fight goes (the less
+    /// health it has), the sooner.
+    /// </summary>
+    private void ProcessKiting(
+        EntityUid boss,
+        LavalandBubblegumComponent bubblegum,
+        LavalandBossArenaComponent arena,
+        EntityUid gridUid,
+        MapGridComponent grid,
+        float frameTime)
+    {
+        var bossPosition = _transform.GetWorldPosition(boss);
+        var health = Math.Clamp(GetHealthFraction(boss), 0f, 1f);
+        var threshold = bubblegum.KiteTimeLowHealth +
+                        (bubblegum.KiteTimeFullHealth - bubblegum.KiteTimeLowHealth) * health;
+
+        foreach (var key in bubblegum.KiteTime.Keys.ToArray())
+        {
+            if (!_participants.Contains(key))
+                bubblegum.KiteTime.Remove(key);
+        }
+
+        foreach (var player in _participants)
+        {
+            var away = _transform.GetWorldPosition(player) - bossPosition;
+            if (away.Length() <= bubblegum.KiteDistance)
+            {
+                bubblegum.KiteTime.Remove(player);
+                continue;
+            }
+
+            var time = bubblegum.KiteTime.GetValueOrDefault(player) + frameTime;
+            if (time < threshold)
+            {
+                bubblegum.KiteTime[player] = time;
+                continue;
+            }
+
+            bubblegum.KiteTime.Remove(player);
+            SpawnBloodWall(bubblegum, arena, gridUid, grid, player, away);
+        }
+    }
+
+    /// <summary>A line of blood across the runner's way, a little ahead of them.</summary>
+    private void SpawnBloodWall(
+        LavalandBubblegumComponent bubblegum,
+        LavalandBossArenaComponent arena,
+        EntityUid gridUid,
+        MapGridComponent grid,
+        EntityUid player,
+        Vector2 awayFromBoss)
+    {
+        // Where they run; standing still, away from it.
+        var direction = TryComp<PhysicsComponent>(player, out var body) && body.LinearVelocity.LengthSquared() > 0.25f
+            ? body.LinearVelocity
+            : awayFromBoss;
+        if (direction.LengthSquared() < 0.0001f)
+            return;
+
+        direction = Vector2.Normalize(direction);
+        var across = new Vector2(-direction.Y, direction.X);
+        var center = _transform.GetWorldPosition(player) + direction * bubblegum.BloodWallAhead;
+        var gridXform = Transform(gridUid);
+        var spawned = false;
+        _cloneTiles.Clear();
+
+        var half = bubblegum.BloodWallLength / 2f;
+        for (var step = -half; step <= half; step += 0.5f)
+        {
+            var world = center + across * step;
+            var local = Vector2.Transform(world, _transform.GetInvWorldMatrix(gridXform));
+            var tile = _map.LocalToTile(gridUid, grid, new EntityCoordinates(gridUid, local));
+            if (_cloneTiles.Contains(tile) || !IsInsideInnerArena(arena, tile) || !IsFreeForBloodWall(gridUid, grid, tile))
+                continue;
+
+            _cloneTiles.Add(tile);
+            var wall = Spawn(bubblegum.BloodWallPrototype, _map.GridTileToLocal(gridUid, grid, tile));
+            if (TryComp(wall, out TransformComponent? wallXform) && !wallXform.Anchored)
+                _transform.AnchorEntity((wall, wallXform), (gridUid, grid), tile);
+            bubblegum.BloodWalls.Add(wall);
+            spawned = true;
+        }
+
+        _cloneTiles.Clear();
+        if (spawned && bubblegum.BloodWallSound != null)
+            _audio.PlayPvs(bubblegum.BloodWallSound, _map.GridTileToLocal(gridUid, grid,
+                _map.LocalToTile(gridUid, grid, new EntityCoordinates(gridUid,
+                    Vector2.Transform(center, _transform.GetInvWorldMatrix(gridXform))))));
+    }
+
+    /// <summary>No wall of blood in a wall or on top of anyone: it would shut them in.</summary>
+    private bool IsFreeForBloodWall(EntityUid gridUid, MapGridComponent grid, Vector2i tile)
+    {
+        if (!_map.TryGetTileRef(gridUid, grid, tile, out var tileRef) || tileRef.Tile.IsEmpty)
+            return false;
+
+        _tileEntities.Clear();
+        _lookup.GetLocalEntitiesIntersecting(gridUid, tile, _tileEntities,
+            flags: LookupFlags.Dynamic | LookupFlags.Static | LookupFlags.Sundries, gridComp: grid);
+        foreach (var entity in _tileEntities)
+        {
+            if (HasComp<MobStateComponent>(entity) || HasComp<LavalandBloodWallComponent>(entity))
+                return false;
+
+            if (TryComp<PhysicsComponent>(entity, out var physics) && physics.BodyType == BodyType.Static &&
+                physics.CanCollide && physics.Hard)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private void ClearRuntimeState(EntityUid uid, LavalandBubblegumComponent bubblegum, bool refreshMovement)
     {
+        bubblegum.KiteTime.Clear();
+        foreach (var wall in bubblegum.BloodWalls)
+        {
+            if (Exists(wall))
+                QueueDel(wall);
+        }
+
+        bubblegum.BloodWalls.Clear();
         bubblegum.PendingBloodTiles.Clear();
         bubblegum.PendingHandAttacks.Clear();
         bubblegum.Charging = false;

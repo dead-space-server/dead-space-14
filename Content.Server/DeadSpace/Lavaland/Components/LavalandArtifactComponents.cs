@@ -385,3 +385,15 @@ public sealed partial class LavalandBerserkerWearerComponent : Component
 }
 
 #endregion
+
+/// <summary>A boss on its way to tear apart a player kept alive by a memento mori.</summary>
+[RegisterComponent]
+public sealed partial class LavalandBossExecutingComponent : Component
+{
+    [ViewVariables]
+    public EntityUid Target;
+
+    /// <summary>It strikes by then, there or not.</summary>
+    [ViewVariables]
+    public TimeSpan Until;
+}

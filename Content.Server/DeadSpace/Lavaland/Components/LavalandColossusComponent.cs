@@ -92,7 +92,7 @@ public sealed partial class LavalandColossusComponent : Component
     public float FuryChaseReach = 2f;
 
     [DataField]
-    public TimeSpan FuryBlastInterval = TimeSpan.FromSeconds(2);
+    public TimeSpan FuryBlastInterval = TimeSpan.FromSeconds(3.5);
 
     /// <summary>Between the marks appearing and the blasts.</summary>
     [DataField]

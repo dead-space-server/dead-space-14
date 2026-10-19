@@ -135,6 +135,38 @@
   - type: TimedDespawn
     lifetime: 1
 
+# A tile of the wall of blood across the way of whoever runs from Bubblegum: drawn by the client as the Circle's
+# blink blood, no sprite of its own.
+- type: entity
+  id: LavalandBubblegumBloodWall
+  name: стена крови
+  description: Густая кровь стоит стеной и не пускает дальше.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        hard: true
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: LavalandBloodWall
+    lifetime: 6
+  - type: TimedDespawn
+    lifetime: 6
+
 - type: entity
   parent: LavalandBubblegumEffectBase
   id: LavalandBubblegumBloodPool

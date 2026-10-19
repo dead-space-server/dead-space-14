@@ -79,3 +79,5 @@ lavaland-mad-miner-risen-name = necromorph miner
 lavaland-mad-miner-risen = { CAPITALIZE(THE($miner)) } jerks back up - claws burst from its hands!
 lavaland-lazarus-too-strong = The nanomachines are powerless - this creature is far too mighty.
 lavaland-geist-ambush-shot = The geist flinches and drops back into its hole!
+lavaland-boss-execute-start = { CAPITALIZE(THE($boss)) } senses the death clinging to { THE($target) } and comes to claim it!
+lavaland-boss-execute = { CAPITALIZE(THE($boss)) } tears { THE($target) } apart - the memento mori holds no longer!

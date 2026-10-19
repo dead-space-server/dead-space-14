@@ -106,6 +106,44 @@ public sealed partial class LavalandBubblegumComponent : Component
     [DataField]
     public string BloodGibsPrototype = "LavalandBubblegumBloodGibs";
 
+    // Walls of blood: a player it has not caught up with for long enough gets a line of blood across the way,
+    // sooner and sooner as its health goes down.
+
+    [DataField]
+    public string BloodWallPrototype = "LavalandBubblegumBloodWall";
+
+    /// <summary>
+    /// Closer than this (tiles) it has caught up with the player: the running away starts over. Its charges and warps
+    /// pass by often, so only really getting at them counts.
+    /// </summary>
+    [DataField]
+    public float KiteDistance = 3f;
+
+    /// <summary>Seconds of getting away from it before a wall, at full health.</summary>
+    [DataField]
+    public float KiteTimeFullHealth = 5f;
+
+    /// <summary>Seconds of getting away from it before a wall, near death.</summary>
+    [DataField]
+    public float KiteTimeLowHealth = 1.5f;
+
+    /// <summary>Tiles across the way.</summary>
+    [DataField]
+    public int BloodWallLength = 7;
+
+    /// <summary>How far ahead of the runner (tiles) the wall rises.</summary>
+    [DataField]
+    public float BloodWallAhead = 2.5f;
+
+    [DataField]
+    public SoundSpecifier? BloodWallSound = new SoundPathSpecifier("/Audio/_DeadSpace/Necromorfs/TheCircle/scout_blink.ogg");
+
+    [ViewVariables]
+    public readonly Dictionary<EntityUid, float> KiteTime = new();
+
+    [ViewVariables]
+    public readonly List<EntityUid> BloodWalls = new();
+
     [DataField]
     public string LandingPrototype = "LavalandBubblegumLanding";
 

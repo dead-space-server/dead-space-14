@@ -244,9 +244,9 @@
   faunaRaid:
     enabled: true
     checkInterval: 2400
-    baseChance: 0.25
-    chanceIncreaseMin: 0.15
-    chanceIncreaseMax: 0.35
+    baseChance: 0.12
+    chanceIncreaseMin: 0.07
+    chanceIncreaseMax: 0.17
     warningDuration: 60
     duration: 180
     # Tendrils rise this far from the outpost's edge (not its center).

@@ -691,6 +691,20 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         Mori(ent);
     }
 
+    /// <summary>The wearer of a linked memento mori dies as if they took it off: to ash. False if not linked.</summary>
+    public bool TryMori(EntityUid wearer)
+    {
+        if (!TryComp<LavalandMementoBoundComponent>(wearer, out var bound) ||
+            !TryComp<LavalandMementoMoriComponent>(bound.Pendant, out var pendant) ||
+            pendant.LinkedUser != wearer)
+        {
+            return false;
+        }
+
+        Mori((bound.Pendant, pendant));
+        return true;
+    }
+
     private void Mori(Entity<LavalandMementoMoriComponent> ent)
     {
         if (ent.Comp.LinkedUser is not { } owner)
