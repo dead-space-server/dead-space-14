@@ -73,6 +73,8 @@
     - id: MedkitAdvancedFilled
     - id: ClothingHeadHelmetsastr
     - id: ClothingMasksastr
+    - id: WeaponProtoKineticAcceleratorsastr
+    - id: WeaponCrushersastr
   - type: TypingIndicatorClothing
     proto: TypingIndicatorsastr
   - type: Tag
