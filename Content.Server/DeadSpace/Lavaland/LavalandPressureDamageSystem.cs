@@ -28,7 +28,13 @@ public sealed class LavalandPressureDamageSystem : EntitySystem
     /// <summary>True if the weapon is outside of the pressure range and should be weakened.</summary>
     public bool IsWeakened(Entity<LavalandPressureDamageComponent> ent)
     {
-        var pressure = _atmos.GetTileMixture((ent.Owner, Transform(ent)))?.Pressure ?? 0f;
+        var xform = Transform(ent);
+
+        // Places fought with lavaland gear under breathable air (the Celestial zone).
+        if (xform.MapUid is { } map && HasComp<LavalandKineticZoneComponent>(map))
+            return false;
+
+        var pressure = _atmos.GetTileMixture((ent.Owner, xform))?.Pressure ?? 0f;
         return pressure < ent.Comp.LowerBound || pressure > ent.Comp.UpperBound;
     }
 

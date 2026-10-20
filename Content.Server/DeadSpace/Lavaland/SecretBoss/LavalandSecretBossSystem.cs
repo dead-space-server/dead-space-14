@@ -451,6 +451,9 @@ public sealed class LavalandSecretBossSystem : EntitySystem
         var mapUid = _map.CreateMap(out mapId);
         EnsureComp<LavalandNoTeleportZoneComponent>(mapUid);
 
+        // Breathable air for the players, full strength for their kinetic weapons.
+        EnsureComp<LavalandKineticZoneComponent>(mapUid);
+
         var mapLight = EnsureComp<MapLightComponent>(mapUid);
         mapLight.AmbientLightColor = light;
         Dirty(mapUid, mapLight);
@@ -1359,9 +1362,24 @@ public sealed class LavalandSecretBossSystem : EntitySystem
         if (!TryPlacePit(ent, config, grid))
             return;
 
-        if (oldPit is { } old && !TerminatingOrDeleted(old))
-            RemComp<LavalandCelestialPitComponent>(old);
+        if (oldPit is { } old)
+            MakeOrdinaryPit(old, config);
         ClearFaunaNearPit(ent, config);
+    }
+
+    /// <summary>
+    /// The pit is no longer the way down: it becomes an ordinary chasm on the same spot,
+    /// without the purple light and the name of the Celestial pit.
+    /// </summary>
+    private void MakeOrdinaryPit(EntityUid pit, LavalandSecretBossConfig config)
+    {
+        if (TerminatingOrDeleted(pit))
+            return;
+
+        var coordinates = Transform(pit).Coordinates;
+        QueueDel(pit);
+        if (_prototype.HasIndex<EntityPrototype>(config.OrdinaryPitPrototype))
+            Spawn(config.OrdinaryPitPrototype, coordinates);
     }
 
     private void UpdatePenalties(TimeSpan now)
@@ -1433,7 +1451,8 @@ public sealed class LavalandSecretBossSystem : EntitySystem
 
         // The way down is gone: the pit is an ordinary pit again.
         if (comp.Pit is { } pit)
-            RemComp<LavalandCelestialPitComponent>(pit);
+            MakeOrdinaryPit(pit, config);
+        comp.Pit = null;
 
         DeleteZone(comp);
         comp.Stage = LavalandSecretBossStage.Done;

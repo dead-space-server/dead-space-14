@@ -68,6 +68,10 @@ public sealed partial class LavalandSecretBossConfig
     [DataField]
     public EntProtoId PitPrototype = "LavalandCelestialPit";
 
+    /// <summary>What a pit that is no longer the way down becomes: an ordinary chasm, no light, no name of its own.</summary>
+    [DataField]
+    public EntProtoId OrdinaryPitPrototype = "FloorChasmEntity";
+
     /// <summary>The pit is placed this far from the lavaland outpost.</summary>
     [DataField]
     public float PitMinDistance = 80f;

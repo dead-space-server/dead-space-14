@@ -488,11 +488,54 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         var facing = TryComp<MouseRotatorComponent>(target, out var mouse) && mouse.GoalRotation is { } goal
             ? goal.ToVec()
             : _transform.GetWorldRotation(target).ToVec();
-        var destination = _transform.GetMapCoordinates(target).Offset(-facing * 1.3f);
+
+        // Behind the back if it is free, else the nearest free side: never into a wall.
+        if (!TryFindOpenSpot(_transform.GetMapCoordinates(target), -facing, out var destination))
+            return;
+
         var distance = Vector2.Distance(_transform.GetMapCoordinates(uid).Position, destination.Position);
         var speed = Math.Max(28f, distance / Math.Max(0.05f, (float) miner.BlinkDuration.TotalSeconds));
         if (_blink.TryStartDash(uid, destination, speed, miner.BlinkDuration, miner.BlinkStallTimeout, miner.BlinkSound))
+        {
             miner.NextBlink = now + miner.BlinkCooldown;
+            HoldFire(miner, now);
+        }
+    }
+
+    /// <summary>Just blinked to a player: no point-blank shot right on arrival.</summary>
+    private static void HoldFire(LavalandMadMinerComponent miner, TimeSpan now)
+    {
+        var allowed = now + miner.BlinkDuration + miner.PostBlinkShotDelay;
+        if (miner.NextShot < allowed)
+            miner.NextShot = allowed;
+    }
+
+    /// <summary>
+    /// A free spot by the target: in the wanted direction first, then turning away from it step by step,
+    /// a little closer or farther. False if everything around is wall, lava or chasm.
+    /// </summary>
+    private bool TryFindOpenSpot(MapCoordinates target, Vector2 wanted, out MapCoordinates spot)
+    {
+        spot = target;
+        if (wanted.LengthSquared() < 0.01f)
+            wanted = new Vector2(0f, -1f);
+        wanted = Vector2.Normalize(wanted);
+
+        foreach (var distance in new[] { 1.3f, 1.8f, 2.4f })
+        {
+            foreach (var turn in new[] { 0f, 45f, -45f, 90f, -90f, 135f, -135f, 180f })
+            {
+                var direction = Angle.FromDegrees(turn).RotateVec(wanted);
+                var candidate = target.Offset(direction * distance);
+                if (!IsOpenGround(candidate))
+                    continue;
+
+                spot = candidate;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>A far target: jump onto open ground a few tiles from it instead of pathing across the map.</summary>
@@ -517,6 +560,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
             if (miner.BlinkSound != null)
                 _audio.PlayPvs(miner.BlinkSound, uid);
             miner.NextBlink = now + miner.BlinkCooldown;
+            HoldFire(miner, now);
             return;
         }
     }
@@ -547,12 +591,29 @@ public sealed class LavalandMadMinerSystem : EntitySystem
 
     private void Feint(EntityUid uid, LavalandMadMinerComponent miner, EntityUid target, TimeSpan now)
     {
-        var angle = _random.NextAngle();
-        var destination = _transform.GetMapCoordinates(target).Offset(angle.ToVec() * _random.NextFloat(1.4f, 3.2f));
-        var distance = Vector2.Distance(_transform.GetMapCoordinates(uid).Position, destination.Position);
+        var targetCoordinates = _transform.GetMapCoordinates(target);
+        MapCoordinates? destination = null;
+        for (var attempt = 0; attempt < 8; attempt++)
+        {
+            var candidate = targetCoordinates.Offset(_random.NextAngle().ToVec() * _random.NextFloat(1.4f, 3.2f));
+            if (!IsOpenGround(candidate))
+                continue;
+
+            destination = candidate;
+            break;
+        }
+
+        // Nowhere free around: no feint into a wall.
+        if (destination is not { } spot)
+            return;
+
+        var distance = Vector2.Distance(_transform.GetMapCoordinates(uid).Position, spot.Position);
         var speed = Math.Max(28f, distance / Math.Max(0.05f, (float) miner.BlinkDuration.TotalSeconds));
-        if (_blink.TryStartDash(uid, destination, speed, miner.BlinkDuration, miner.BlinkStallTimeout, miner.BlinkSound))
+        if (_blink.TryStartDash(uid, spot, speed, miner.BlinkDuration, miner.BlinkStallTimeout, miner.BlinkSound))
+        {
             miner.NextFeint = now + miner.FeintCooldown;
+            HoldFire(miner, now);
+        }
     }
 
     private void FirePattern(EntityUid uid, LavalandMadMinerComponent miner, EntityUid target, TimeSpan now)
