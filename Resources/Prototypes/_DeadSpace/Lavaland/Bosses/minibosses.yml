@@ -4,6 +4,7 @@
   id: LavalandMadMinerSpawner
   name: безумный шахтёр
   suffix: Lavaland, спавнер
+  categories: [ Spawner ]
   components:
   - type: Sprite
     layers:
