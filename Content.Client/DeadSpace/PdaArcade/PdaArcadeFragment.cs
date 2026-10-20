@@ -139,6 +139,7 @@ public sealed class PdaArcadeFragment : BoxContainer
         [PdaArcadeGame.Rocks] = () => new PdaRocksBoard(),
         [PdaArcadeGame.Flap] = () => new PdaFlapBoard(),
         [PdaArcadeGame.Match] = () => new PdaMatchBoard(),
+        [PdaArcadeGame.Casino] = () => new PdaCasinoBoard(),
     };
 
     private void AddGameButton(PdaArcadeGamePrototype game)

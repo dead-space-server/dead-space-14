@@ -38,6 +38,7 @@ pda-arcade-game-blocks = Блоки
 pda-arcade-game-rocks = Обломки
 pda-arcade-game-flap = Прыжок
 pda-arcade-game-match = Три в ряд
+pda-arcade-game-casino = Казино
 pda-arcade-finish = Завершить
 pda-arcade-pause = Пауза
 pda-arcade-again = Ещё раз
