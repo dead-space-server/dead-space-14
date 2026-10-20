@@ -69,7 +69,7 @@
   - LavalandOreGibtonite
   goldgrubAmbush:
     enabled: true
-    chance: 0.015
+    chance: 0.006
     playerCooldown: 300
     requireOre: true
     prototype: MobLavalandGoldgrub
