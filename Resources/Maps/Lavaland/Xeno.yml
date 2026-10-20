@@ -786,10 +786,6 @@ entities:
       rot: 2.5930726565420628 rad
       pos: 3.720149,-3.9923713
       parent: 1
-    - type: UserInterface
-      actors:
-        enum.StorageUiKey.Key:
-        - invalid
     - type: ActiveUserInterface
 - proto: ComputerFrame
   entities:

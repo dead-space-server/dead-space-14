@@ -8083,11 +8083,6 @@ entities:
           hard: False
           restitution: 0
           friction: 0.4
-    - type: ThrownItem
-      playLandSound: True
-      landTime: 1689.0198534
-      thrownTime: 1688.85
-      thrower: invalid
 - proto: XenoborgOilChemistryAmpoule
   entities:
   - uid: 11
