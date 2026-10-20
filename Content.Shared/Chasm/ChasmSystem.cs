@@ -6,6 +6,14 @@ using Content.Shared.Movement.Events;
 using Content.Shared.StepTrigger.Systems;
 using Content.Shared.Weapons.Misc;
 using Content.Shared.Gravity; //DS14
+// DS14-start
+using Content.Shared.Clothing.Components;
+using Content.Shared.DeadSpace.Chasm;
+using Content.Shared.Inventory;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Popups;
+// DS14-end
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map; //DS14
 using Robust.Shared.Network;
@@ -28,6 +36,8 @@ public sealed class ChasmSystem : EntitySystem
     [Dependency] private readonly SharedGravitySystem _gravity = default!; //DS14
     [Dependency] private readonly EntityLookupSystem _lookup = default!; //DS14
     [Dependency] private readonly SharedTransformSystem _transform = default!; //DS14
+    [Dependency] private readonly InventorySystem _inventory = default!; //DS14
+    [Dependency] private readonly SharedPopupSystem _popup = default!; //DS14
 
     public override void Initialize()
     {
@@ -37,6 +47,7 @@ public sealed class ChasmSystem : EntitySystem
         SubscribeLocalEvent<ChasmComponent, StepTriggeredOffEvent>(OnStepTriggered);
         SubscribeLocalEvent<ChasmComponent, StepTriggerAttemptEvent>(OnStepTriggerAttempt);
         SubscribeLocalEvent<ChasmFallingComponent, UpdateCanMoveEvent>(OnUpdateCanMove);
+        SubscribeLocalEvent<ChasmHoverGraceComponent, MobStateChangedEvent>(OnHoverGraceMobStateChanged); //DS14
     }
 
     //DS14-start
@@ -63,6 +74,10 @@ public sealed class ChasmSystem : EntitySystem
                 continue;
 
             if (_gravity.IsWeightless(entity))
+                continue;
+
+            // The step trigger picks it up once the grace runs out.
+            if (TryHoldOffFall(component, entity))
                 continue;
 
             StartFalling(uid, component, entity);
@@ -148,6 +163,13 @@ public sealed class ChasmSystem : EntitySystem
             args.Cancelled = true;
             return;
         }
+
+        // Cancelled, the step trigger tries again every tick: it falls in once the grace is over.
+        if (TryHoldOffFall(component, args.Tripper))
+        {
+            args.Cancelled = true;
+            return;
+        }
         //DS14-end
 
         args.Continue = true;
@@ -157,4 +179,62 @@ public sealed class ChasmSystem : EntitySystem
     {
         args.Cancel();
     }
+
+    // DS14-start
+    /// <summary>Off every chasm this long, the next one starts a fresh grace.</summary>
+    private static readonly TimeSpan HoverGraceGap = TimeSpan.FromSeconds(1);
+
+    /// <summary>
+    /// Anti-gravity clothing keeps one over a chasm only while standing. Gone down into pre-crit or crit, one gets
+    /// <see cref="ChasmComponent.CritHoverGrace"/> to reach solid ground or get back up first.
+    /// </summary>
+    private bool TryHoldOffFall(ChasmComponent chasm, EntityUid tripper)
+    {
+        if (chasm.CritHoverGrace <= TimeSpan.Zero ||
+            !TryComp<MobStateComponent>(tripper, out var mobState) ||
+            mobState.CurrentState is not (MobState.PreCritical or MobState.Critical) ||
+            !WearsAntiGravityClothing(tripper))
+        {
+            return false;
+        }
+
+        var now = _timing.CurTime;
+        if (!TryComp<ChasmHoverGraceComponent>(tripper, out var grace) || now - grace.LastSeen > HoverGraceGap)
+        {
+            grace = EnsureComp<ChasmHoverGraceComponent>(tripper);
+            grace.FallAt = now + chasm.CritHoverGrace;
+            Dirty(tripper, grace);
+            if (_net.IsServer)
+            {
+                _popup.PopupEntity(Loc.GetString("chasm-hover-grace-warning",
+                        ("seconds", (int) chasm.CritHoverGrace.TotalSeconds)),
+                    tripper, tripper, PopupType.LargeCaution);
+            }
+        }
+
+        grace.LastSeen = now;
+        return now < grace.FallAt;
+    }
+
+    private bool WearsAntiGravityClothing(EntityUid uid)
+    {
+        if (!_inventory.TryGetContainerSlotEnumerator(uid, out var slots, SlotFlags.WITHOUT_POCKET))
+            return false;
+
+        while (slots.NextItem(out var item))
+        {
+            if (HasComp<AntiGravityClothingComponent>(item))
+                return true;
+        }
+
+        return false;
+    }
+
+    private void OnHoverGraceMobStateChanged(EntityUid uid, ChasmHoverGraceComponent component, MobStateChangedEvent args)
+    {
+        // Back on its feet: the boots hold it again, and a later fall starts a fresh grace.
+        if (args.NewMobState == MobState.Alive)
+            RemCompDeferred(uid, component);
+    }
+    // DS14-end
 }

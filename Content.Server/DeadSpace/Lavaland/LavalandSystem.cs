@@ -665,37 +665,17 @@ public sealed class LavalandSystem : EntitySystem
 
         _random.Shuffle(grids);
 
-        // Each ruin is loaded on a scratch map and only moved onto the planet once it has a spot: loaded straight
-        // onto the planet it would first sit at the origin, on top of the outpost.
-        var scratchMap = _map.CreateMap(out var scratchMapId);
-        try
-        {
-            PlaceCustomGrids(mapId, scratchMapId, mapUid, terrainGrid, biome, planet, random, placed, grids, cancellation);
-        }
-        finally
-        {
-            QueueDel(scratchMap);
-        }
-    }
+        // Each ruin is loaded far past the planet's edge and only moved in once it has a spot: loaded at the origin
+        // it would first sit on top of the outpost. Still on the planet's own map, as its map init remembers the map
+        // (the ash walkers' nest takes it for their home).
+        var loadOffset = new Vector2(Math.Max(planet.MapHalfSize, planet.MaxStructureDistance) * 2f + 512f, 0f);
 
-    private void PlaceCustomGrids(
-        MapId mapId,
-        MapId scratchMapId,
-        EntityUid mapUid,
-        MapGridComponent terrainGrid,
-        BiomeComponent biome,
-        LavalandPlanetPrototype planet,
-        Random random,
-        List<Vector2i> placed,
-        List<LavalandCustomGridEntry> grids,
-        CancellationToken cancellation)
-    {
         var loaded = 0;
         foreach (var entry in grids)
         {
             cancellation.ThrowIfCancellationRequested();
 
-            if (!_mapLoader.TryLoadGrid(scratchMapId, entry.Path, out var customGrid))
+            if (!_mapLoader.TryLoadGrid(mapId, entry.Path, out var customGrid, offset: loadOffset))
             {
                 Log.Error($"Failed to load Lavaland custom grid {entry.Path} for planet {planet.ID}.");
                 continue;
