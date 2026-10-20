@@ -30,6 +30,7 @@ using Content.Shared.Weapons.Ranged.Components;
 using Robust.Server.Player;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
+using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
@@ -73,6 +74,7 @@ public sealed class LavalandChromiteCavesSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ITileDefinitionManager _tileDefinition = default!;
     [Dependency] private readonly LavalandBossArenaSystem _bossArena = default!;
+    [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
     [Dependency] private readonly LavalandPitDropSystem _pitDrop = default!;
     [Dependency] private readonly LavalandFaunaRaidSystem _raid = default!;
     [Dependency] private readonly LavalandPitLandingSystem _landing = default!;
@@ -218,11 +220,151 @@ public sealed class LavalandChromiteCavesSystem : EntitySystem
             }
         }
 
+        LoadCustomGrids(mapUid, mapId, grid, biome, config, random, half, cancellation);
         SpawnElite(mapUid, grid, biome, config, random, half);
         _map.SetPaused(mapUid, false);
 
         if (!TryPlacePit(lavalandMap, lavalandGrid, config, random, link))
             Log.Warning("Chromite caves: no room for the pit near the outpost, the caves are unreachable.");
+    }
+
+    /// <summary>Rock cleared this many tiles round a ruin of the caves.</summary>
+    private const int CustomGridMargin = 2;
+
+    /// <summary>
+    /// The caves' ruins: each where there is room for it - away from the landing, the boss arenas (and any other
+    /// grid) and the other ruins - with the rock, pits and flowers under it and just around it gone.
+    /// </summary>
+    private void LoadCustomGrids(
+        EntityUid mapUid,
+        MapId mapId,
+        MapGridComponent terrain,
+        BiomeComponent biome,
+        LavalandChromiteCavesConfig config,
+        Random random,
+        int half,
+        CancellationToken cancellation)
+    {
+        var placed = new List<(Vector2 Position, float Radius)>();
+        foreach (var entry in config.CustomGrids)
+        {
+            for (var i = 0; i < Math.Max(0, entry.Count); i++)
+            {
+                cancellation.ThrowIfCancellationRequested();
+                if (!_mapLoader.TryLoadGrid(mapId, entry.Path, out var custom))
+                {
+                    Log.Error($"Chromite caves: failed to load the custom grid {entry.Path}.");
+                    continue;
+                }
+
+                var bounds = custom.Value.Comp.LocalAABB;
+                var radius = MathF.Max(MathF.Max(MathF.Abs(bounds.Left), MathF.Abs(bounds.Right)),
+                    MathF.Max(MathF.Abs(bounds.Bottom), MathF.Abs(bounds.Top))) + CustomGridMargin;
+                if (!TryPickCustomGridSpot(mapUid, mapId, custom.Value, config, entry, random, half, radius, placed, out var spot))
+                {
+                    Log.Warning($"Chromite caves: no room for the custom grid {entry.Path}.");
+                    Del(custom.Value);
+                    continue;
+                }
+
+                if (!string.IsNullOrWhiteSpace(entry.Name))
+                    _metaData.SetEntityName(custom.Value, entry.Name);
+
+                _transform.SetMapCoordinates(custom.Value.Owner, new MapCoordinates(spot, mapId));
+                ClearUnderGrid(mapUid, terrain, biome, custom.Value, spot);
+                placed.Add((spot, radius));
+            }
+        }
+    }
+
+    private bool TryPickCustomGridSpot(
+        EntityUid mapUid,
+        MapId mapId,
+        EntityUid custom,
+        LavalandChromiteCavesConfig config,
+        LavalandCustomGridEntry entry,
+        Random random,
+        int half,
+        float radius,
+        List<(Vector2 Position, float Radius)> placed,
+        out Vector2 spot)
+    {
+        spot = default;
+        // Inside the boundary walls with room to spare, clear of the landing.
+        var limit = half - Math.Max(1, config.BoundaryWidth) - radius - 2f;
+        var min = MathF.Max(entry.MinDistance ?? 0, config.LandingClearRadius + radius + 6f);
+        var max = MathF.Min(entry.MaxDistance ?? limit, limit);
+        if (max < min)
+            return false;
+
+        var separation = entry.MinSeparation ?? 8;
+        for (var attempt = 0; attempt < Math.Max(1, entry.SpawnAttempts); attempt++)
+        {
+            var angle = random.NextDouble() * Math.PI * 2;
+            var distance = min + (float) random.NextDouble() * (max - min);
+            var candidate = new Vector2(MathF.Round((float) Math.Cos(angle) * distance), MathF.Round((float) Math.Sin(angle) * distance));
+
+            if (placed.Any(other => Vector2.Distance(other.Position, candidate) < other.Radius + radius + separation))
+                continue;
+
+            var clear = true;
+            foreach (var other in _mapManager.FindGridsIntersecting(mapId, Box2.CenteredAround(candidate, new Vector2((radius + separation) * 2f))))
+            {
+                if (other.Owner == mapUid || other.Owner == custom)
+                    continue;
+
+                clear = false;
+                break;
+            }
+
+            if (!clear)
+                continue;
+
+            spot = candidate;
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>The caves' tiles under the ruin and a couple round it: kept from the biome, emptied of rock.</summary>
+    private void ClearUnderGrid(EntityUid mapUid, MapGridComponent terrain, BiomeComponent biome, Entity<MapGridComponent> custom, Vector2 spot)
+    {
+        var rotation = Transform(custom).LocalRotation;
+        var tiles = new HashSet<Vector2i>();
+        var enumerator = _map.GetAllTilesEnumerator(custom, custom.Comp);
+        while (enumerator.MoveNext(out var tile))
+        {
+            var world = spot + rotation.RotateVec((Vector2) tile.Value.GridIndices + new Vector2(0.5f, 0.5f));
+            var center = new Vector2i((int) MathF.Floor(world.X), (int) MathF.Floor(world.Y));
+            for (var x = -CustomGridMargin; x <= CustomGridMargin; x++)
+            {
+                for (var y = -CustomGridMargin; y <= CustomGridMargin; y++)
+                {
+                    tiles.Add(center + new Vector2i(x, y));
+                }
+            }
+        }
+
+        var reserved = new List<(Vector2i Index, Tile Tile)>();
+        var toDelete = new List<EntityUid>();
+        foreach (var tile in tiles)
+        {
+            _biome.ReserveTiles(mapUid, new Box2(tile.X + 0.1f, tile.Y + 0.1f, tile.X + 0.9f, tile.Y + 0.9f), reserved, biome, terrain);
+            reserved.Clear();
+
+            var anchored = _map.GetAnchoredEntitiesEnumerator(mapUid, terrain, tile);
+            while (anchored.MoveNext(out var uid))
+            {
+                if (uid is { } entity && !TerminatingOrDeleted(entity))
+                    toDelete.Add(entity);
+            }
+        }
+
+        foreach (var entity in toDelete)
+        {
+            QueueDel(entity);
+        }
     }
 
     private static GasMixture CopyAtmosphere(GasMixture? atmosphere)

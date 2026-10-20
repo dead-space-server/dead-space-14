@@ -76,6 +76,8 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
         SubscribeLocalEvent<LavalandSoulscytheComponent, GettingPickedUpAttemptEvent>(OnScythePickupAttempt);
         SubscribeLocalEvent<LavalandSoulscytheComponent, ExaminedEvent>(OnScytheExamined);
         SubscribeLocalEvent<LavalandSoulscytheComponent, AttackAttemptEvent>(OnScytheAttackAttempt);
+        SubscribeLocalEvent<LavalandBossComponent, DamageModifyEvent>(OnBossDamageModify);
+        SubscribeLocalEvent<LavalandEliteComponent, DamageModifyEvent>(OnEliteDamageModify);
 
         SubscribeLocalEvent<LavalandConcussiveGauntletsComponent, GotEquippedEvent>(OnGauntletsEquipped);
         SubscribeLocalEvent<LavalandConcussiveGauntletsComponent, GotUnequippedEvent>(OnGauntletsUnequipped);
@@ -299,6 +301,31 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
     }
 
     /// <summary>Too far from its master: no blows.</summary>
+    /// <summary>
+    /// The awakened scythe fighting on its own barely scratches bosses and elites: its master kept away while it
+    /// alone cut down any boss.
+    /// </summary>
+    private const float ScytheBossDamageFactor = 0.25f;
+
+    private void OnBossDamageModify(EntityUid uid, LavalandBossComponent component, DamageModifyEvent args)
+    {
+        ReduceScytheDamage(args);
+    }
+
+    private void OnEliteDamageModify(EntityUid uid, LavalandEliteComponent component, DamageModifyEvent args)
+    {
+        ReduceScytheDamage(args);
+    }
+
+    private void ReduceScytheDamage(DamageModifyEvent args)
+    {
+        if (args.Origin is { } origin &&
+            TryComp<LavalandSoulscytheComponent>(origin, out var scythe) && scythe.Possessed)
+        {
+            args.Damage *= ScytheBossDamageFactor;
+        }
+    }
+
     private void OnScytheAttackAttempt(Entity<LavalandSoulscytheComponent> ent, ref AttackAttemptEvent args)
     {
         if (ent.Comp.Possessed && ent.Comp.OutOfRange)

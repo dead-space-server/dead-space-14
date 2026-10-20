@@ -581,10 +581,26 @@ public sealed partial class LavalandBossArenaSystem : EntitySystem
     private void ClearTerrainUnderArena(EntityUid terrainUid, MapGridComponent terrainGrid, Entity<MapGridComponent> arenaGrid, Vector2i offset)
     {
         _terrainTiles.Clear();
+        var under = new List<EntityUid>();
         var tiles = _map.GetAllTilesEnumerator(arenaGrid.Owner, arenaGrid.Comp);
         while (tiles.MoveNext(out var tile))
         {
-            _terrainTiles.Add((tile.Value.GridIndices + offset, Tile.Empty));
+            var terrainTile = tile.Value.GridIndices + offset;
+            _terrainTiles.Add((terrainTile, Tile.Empty));
+
+            // What stands on the land there goes too: with its tile gone it would only come loose and hang over the
+            // arena's floor - the caves' pits showed up as black holes in it.
+            var anchored = _map.GetAnchoredEntitiesEnumerator(terrainUid, terrainGrid, terrainTile);
+            while (anchored.MoveNext(out var uid))
+            {
+                if (uid is { } entity && !TerminatingOrDeleted(entity))
+                    under.Add(entity);
+            }
+        }
+
+        foreach (var entity in under)
+        {
+            QueueDel(entity);
         }
 
         _map.SetTiles(terrainUid, terrainGrid, _terrainTiles);
@@ -1997,6 +2013,8 @@ public sealed partial class LavalandBossArenaSystem : EntitySystem
     {
         return !HasComp<GuardianComponent>(uid) &&
                !HasComp<PAIComponent>(uid) &&
+               // The awakened soul scythe is its master's weapon: no extra health for the boss, no target of its own.
+               !HasComp<LavalandSoulscytheComponent>(uid) &&
                IsCombatParticipant(uid, arena);
     }
 

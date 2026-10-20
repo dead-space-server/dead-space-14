@@ -160,6 +160,13 @@ public sealed partial class LavalandChromiteCavesConfig
     [DataField]
     public Dictionary<ProtoId<LavalandBossArenaPrototype>, int> BossArenas = new();
 
+    /// <summary>
+    /// Ruins loaded into the caves, like the custom grids of the surface: placed away from the landing, the arenas
+    /// and each other; the rock under them and right around them is cleared.
+    /// </summary>
+    [DataField]
+    public List<LavalandCustomGridEntry> CustomGrids = new();
+
     /// <summary>An elite waiting somewhere in the caves, like the mad miner on the surface.</summary>
     [DataField]
     public EntProtoId? Elite = "MobLavalandPandora";

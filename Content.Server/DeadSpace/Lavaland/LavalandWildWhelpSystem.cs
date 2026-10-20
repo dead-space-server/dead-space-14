@@ -183,11 +183,9 @@ public sealed class LavalandWildWhelpSystem : EntitySystem
             return false;
         }
 
-        if (xform.GridUid is { } grid &&
-            (HasComp<LavalandOutpostComponent>(grid) || HasComp<LavalandBossArenaComponent>(grid)))
-        {
+        // On any grid of its own - the outpost, an arena, a shuttle set down on the lava, a ruin - not on the land.
+        if (xform.GridUid is { } grid && grid != xform.MapUid)
             return false;
-        }
 
         // Not by the outpost either: from just outside they flew in and set people alight at the base itself.
         return !NearOutpost(_transform.GetMapCoordinates(xform), OutpostPlayerMargin);
@@ -199,17 +197,27 @@ public sealed class LavalandWildWhelpSystem : EntitySystem
     /// <summary>Whelps land and spit fire no closer than this to the outpost (tiles from its edge).</summary>
     private const float OutpostFireMargin = 3f;
 
+    /// <summary>By the outpost or by a shuttle (one landed on the lava too): no whelps there.</summary>
     private bool NearOutpost(Robust.Shared.Map.MapCoordinates coords, float margin)
     {
         var outposts = EntityQueryEnumerator<LavalandOutpostComponent, MapGridComponent, TransformComponent>();
         while (outposts.MoveNext(out _, out _, out var grid, out var xform))
         {
-            if (xform.MapID != coords.MapId)
-                continue;
-
-            var box = _transform.GetWorldMatrix(xform).TransformBox(grid.LocalAABB).Enlarged(margin);
-            if (box.Contains(coords.Position))
+            if (xform.MapID == coords.MapId &&
+                _transform.GetWorldMatrix(xform).TransformBox(grid.LocalAABB).Enlarged(margin).Contains(coords.Position))
+            {
                 return true;
+            }
+        }
+
+        var shuttles = EntityQueryEnumerator<Content.Server.Shuttles.Components.ShuttleComponent, MapGridComponent, TransformComponent>();
+        while (shuttles.MoveNext(out _, out _, out var grid, out var xform))
+        {
+            if (xform.MapID == coords.MapId &&
+                _transform.GetWorldMatrix(xform).TransformBox(grid.LocalAABB).Enlarged(margin).Contains(coords.Position))
+            {
+                return true;
+            }
         }
 
         return false;
