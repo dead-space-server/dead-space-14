@@ -262,7 +262,7 @@ public sealed class LavalandChromiteCavesSystem : EntitySystem
                     MathF.Max(MathF.Abs(bounds.Bottom), MathF.Abs(bounds.Top))) + CustomGridMargin;
                 if (!TryPickCustomGridSpot(mapUid, mapId, custom.Value, config, entry, random, half, radius, placed, out var spot))
                 {
-                    Log.Warning($"Chromite caves: no room for the custom grid {entry.Path}.");
+                    Log.Info($"Chromite caves: no room for the custom grid {entry.Path}, skipped.");
                     Del(custom.Value);
                     continue;
                 }

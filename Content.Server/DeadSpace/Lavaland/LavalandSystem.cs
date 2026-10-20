@@ -688,7 +688,8 @@ public sealed class LavalandSystem : EntitySystem
             var footprint = Math.Max(Math.Max(1, entry.FootprintRadius), (int) MathF.Ceiling(MathF.Max(extents.X, extents.Y)));
             if (!TryPickCustomGridPosition(mapUid, terrainGrid, customGrid.Value, planet, entry, footprint, random, placed, out var position))
             {
-                Log.Warning($"Failed to place Lavaland custom grid {entry.Path} for planet {planet.ID}.");
+                // No room this time (the map is busy): an ordinary outcome, the ruin is just left out.
+                Log.Info($"No room for Lavaland custom grid {entry.Path} for planet {planet.ID}, skipped.");
                 Del(customGrid.Value);
                 continue;
             }
@@ -766,26 +767,20 @@ public sealed class LavalandSystem : EntitySystem
     private const int CustomGridTerrainMargin = 2;
 
     /// <summary>
-    /// The planet's tiles under a custom grid placed at <paramref name="position"/> (its own rotation kept), and
-    /// <paramref name="margin"/> tiles around each of them.
+    /// The planet's tiles under a custom grid placed at <paramref name="position"/> (its own rotation kept): the
+    /// rectangle of the grid's own bounds, <paramref name="margin"/> tiles wider - not a whole square footprint.
     /// </summary>
     private HashSet<Vector2i> GetCustomGridTerrainTiles(Entity<MapGridComponent> grid, Vector2i position, int margin)
     {
         var result = new HashSet<Vector2i>();
-        var rotation = Transform(grid).LocalRotation;
-        var origin = new Vector2(position.X, position.Y);
-        var enumerator = _map.GetAllTilesEnumerator(grid, grid.Comp);
-        while (enumerator.MoveNext(out var tile))
+        var bounds = new Box2Rotated(grid.Comp.LocalAABB, Transform(grid).LocalRotation, Vector2.Zero)
+            .CalcBoundingBox()
+            .Translated(new Vector2(position.X, position.Y));
+        for (var x = (int) MathF.Floor(bounds.Left) - margin; x < (int) MathF.Ceiling(bounds.Right) + margin; x++)
         {
-            var local = (Vector2) tile.Value.GridIndices + new Vector2(0.5f, 0.5f);
-            var world = origin + rotation.RotateVec(local);
-            var center = new Vector2i((int) MathF.Floor(world.X), (int) MathF.Floor(world.Y));
-            for (var x = -margin; x <= margin; x++)
+            for (var y = (int) MathF.Floor(bounds.Bottom) - margin; y < (int) MathF.Ceiling(bounds.Top) + margin; y++)
             {
-                for (var y = -margin; y <= margin; y++)
-                {
-                    result.Add(center + new Vector2i(x, y));
-                }
+                result.Add(new Vector2i(x, y));
             }
         }
 
