@@ -124,7 +124,11 @@ public sealed class DamagedSiliconAccentSystem : EntitySystem
         }
 
         // Linear interpolation of character damage probability
-        var damagePercent = Math.Clamp((float)totalDamage / (float)damageAtMaxCorruption, 0, 1);
+        // DS14-start: no corruption below the start threshold
+        var start = (float) ent.Comp.DamageAtCorruptionStart;
+        var span = Math.Max(0.001f, (float) damageAtMaxCorruption - start);
+        var damagePercent = Math.Clamp(((float) totalDamage - start) / span, 0, 1);
+        // DS14-end
         var chanceToCorruptLetter = damagePercent * ent.Comp.MaxDamageCorruption;
         foreach (var letter in message)
         {

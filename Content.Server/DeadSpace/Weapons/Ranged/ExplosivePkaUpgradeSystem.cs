@@ -162,9 +162,15 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
             _damage.TryChangeDamage(victim, damage, true, origin: shooter);
         }
 
-        // By the outpost only the blow itself above: no explosion that would tear at its walls.
+        // By the outpost only the blow itself above and the look of the blast: no explosion that would tear at its walls.
         if (nearOutpost)
         {
+            _explosion.SpawnExplosionVisual(
+                center,
+                "LavalandPkaVisual",
+                ent.Comp.ExplosionIntensity,
+                ent.Comp.ExplosionSlope,
+                ent.Comp.ExplosionMaxIntensity);
             _audio.PlayPvs(OutpostBlastSound, _transform.ToCoordinates(center));
             QueueDel(ent.Owner);
             return;

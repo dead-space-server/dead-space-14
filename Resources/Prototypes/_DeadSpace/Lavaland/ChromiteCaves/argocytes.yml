@@ -6,6 +6,7 @@
   suffix: Chromite Caves
   components:
   - type: LavalandPitJumper
+  - type: LavalandLazarusRevivable
 
 - type: entity
   parent: MobArgocyteBarrier
@@ -13,6 +14,7 @@
   suffix: Chromite Caves
   components:
   - type: LavalandPitJumper
+  - type: LavalandLazarusRevivable
 
 - type: entity
   parent: MobArgocyteSkitter
@@ -20,6 +22,7 @@
   suffix: Chromite Caves
   components:
   - type: LavalandPitJumper
+  - type: LavalandLazarusRevivable
 
 - type: entity
   parent: MobArgocyteSwiper
@@ -27,6 +30,7 @@
   suffix: Chromite Caves
   components:
   - type: LavalandPitJumper
+  - type: LavalandLazarusRevivable
 
 - type: entity
   parent: MobArgocyteMolder
@@ -34,6 +38,7 @@
   suffix: Chromite Caves
   components:
   - type: LavalandPitJumper
+  - type: LavalandLazarusRevivable
 
 - type: entity
   parent: MobArgocytePouncer
@@ -41,6 +46,7 @@
   suffix: Chromite Caves
   components:
   - type: LavalandPitJumper
+  - type: LavalandLazarusRevivable
 
 - type: entity
   parent: MobArgocyteGlider
@@ -48,6 +54,7 @@
   suffix: Chromite Caves
   components:
   - type: LavalandPitJumper
+  - type: LavalandLazarusRevivable
 
 - type: entity
   parent: MobArgocyteHarvester

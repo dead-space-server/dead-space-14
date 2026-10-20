@@ -132,6 +132,10 @@
           False: { state: empty }
   - type: LavalandLazarusInjector
     factions: [ PetsNT ]
+    whitelist:
+      components:
+      - LavalandFauna
+      - LavalandLazarusRevivable
     sound: /Audio/Items/hypospray.ogg
   - type: StaticPrice
     price: 1000
