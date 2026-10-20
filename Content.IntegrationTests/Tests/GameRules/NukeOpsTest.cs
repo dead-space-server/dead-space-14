@@ -102,6 +102,13 @@ public sealed class NukeOpsTest
         await pair.WaitCommand("forcepreset Nukeops");
         await pair.RunTicksSync(10);
 
+        // DS14-start: spawning everyone in can take a few ticks more than ten (the maps are loading): wait for it.
+        for (var i = 0; i < 60 && !ticker.PlayerGameStatuses.Values.All(x => x == PlayerGameStatus.JoinedGame); i++)
+        {
+            await pair.RunTicksSync(10);
+        }
+        // DS14-end
+
         // Game should have started
         Assert.That(ticker.RunLevel, Is.EqualTo(GameRunLevel.InRound));
         Assert.That(ticker.PlayerGameStatuses.Values.All(x => x == PlayerGameStatus.JoinedGame));
