@@ -158,8 +158,9 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
                 if (TryFindOutpost(ent, out var outpost) && !AnyDefender(outpost))
                 {
                     RuinOutpost(outpost, config, mapId);
-                    // Nobody came: the outpost is torn apart and the raid is over - tendrils, timer and music go.
-                    EndRaid(ent, mapId);
+                    // Nobody came: the outpost is torn apart and the raid is over - tendrils, timer, music and the
+                    // fauna that tore it apart go.
+                    EndRaid(ent, mapId, removeRaiders: true);
                     return;
                 }
                 break;
@@ -217,7 +218,10 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
         StartWarning((mapUid, raid), planet.FaunaRaid, Transform(mapUid).MapID, now);
     }
 
-    private void EndRaid(Entity<LavalandFaunaRaidComponent> ent, MapId mapId)
+    /// <param name="removeRaiders">
+    /// The fauna it sent go with it - only when nobody came to defend the outpost; the fauna fought off stay.
+    /// </param>
+    private void EndRaid(Entity<LavalandFaunaRaidComponent> ent, MapId mapId, bool removeRaiders = false)
     {
         foreach (var spawned in ent.Comp.Entities)
         {
@@ -226,6 +230,15 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
         }
 
         ent.Comp.Entities.Clear();
+
+        // The undefended outpost's raiders go back with the raid, alive or dead; not one tamed meanwhile.
+        var raiders = EntityQueryEnumerator<LavalandRaiderComponent, TransformComponent>();
+        while (removeRaiders && raiders.MoveNext(out var raider, out _, out var raiderXform))
+        {
+            if (raiderXform.MapUid == ent.Owner && !HasComp<LavalandTamedComponent>(raider))
+                QueueDel(raider);
+        }
+
         ent.Comp.MusicStream = _audio.Stop(ent.Comp.MusicStream);
         var wasRunning = ent.Comp.Stage != LavalandFaunaRaidStage.Idle;
         // To everyone: those who left the planet mid-raid still hear it otherwise.

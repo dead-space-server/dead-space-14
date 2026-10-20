@@ -104,7 +104,7 @@ public sealed class LavalandBubblegumSystem : EntitySystem
             if (GetHealthFraction(uid) <= Math.Clamp(bubblegum.CloneCriticalHealthThreshold, 0f, 1f))
                 TrySpawnCriticalClones(uid, bubblegum, arena, arena.Grid, grid, now);
 
-            ProcessKiting(uid, bubblegum, arena, arena.Grid, grid, frameTime);
+            ProcessKiting(uid, bubblegum, arena, arena.Grid, grid, frameTime, now);
 
             if (ProcessCharge(uid, bubblegum, arena, arena.Grid, grid, now) ||
                 ProcessQueuedCharge(uid, bubblegum, arena, arena.Grid, grid, now))
@@ -1848,8 +1848,11 @@ public sealed class LavalandBubblegumSystem : EntitySystem
         LavalandBossArenaComponent arena,
         EntityUid gridUid,
         MapGridComponent grid,
-        float frameTime)
+        float frameTime,
+        TimeSpan now)
     {
+        RaisePendingBloodWalls(bubblegum, gridUid, grid, now);
+
         var bossPosition = _transform.GetWorldPosition(boss);
         var health = Math.Clamp(GetHealthFraction(boss), 0f, 1f);
         var threshold = bubblegum.KiteTimeLowHealth +
@@ -1863,6 +1866,10 @@ public sealed class LavalandBubblegumSystem : EntitySystem
 
         foreach (var player in _participants)
         {
+            // Just got a wall: a breather before the next.
+            if (bubblegum.NextBloodWall.TryGetValue(player, out var next) && now < next)
+                continue;
+
             var away = _transform.GetWorldPosition(player) - bossPosition;
             if (away.Length() <= bubblegum.KiteDistance)
             {
@@ -1878,18 +1885,48 @@ public sealed class LavalandBubblegumSystem : EntitySystem
             }
 
             bubblegum.KiteTime.Remove(player);
-            SpawnBloodWall(bubblegum, arena, gridUid, grid, player, away);
+            bubblegum.NextBloodWall[player] = now + bubblegum.BloodWallCooldown;
+            MarkBloodWall(bubblegum, arena, gridUid, grid, player, away, now);
         }
     }
 
-    /// <summary>A line of blood across the runner's way, a little ahead of them.</summary>
-    private void SpawnBloodWall(
+    /// <summary>The marked-out walls whose time has come rise - but not on a tile someone stepped onto meanwhile.</summary>
+    private void RaisePendingBloodWalls(LavalandBubblegumComponent bubblegum, EntityUid gridUid, MapGridComponent grid, TimeSpan now)
+    {
+        for (var i = bubblegum.PendingBloodWalls.Count - 1; i >= 0; i--)
+        {
+            var (at, tiles, soundTile) = bubblegum.PendingBloodWalls[i];
+            if (now < at)
+                continue;
+
+            bubblegum.PendingBloodWalls.RemoveAt(i);
+            var spawned = false;
+            foreach (var tile in tiles)
+            {
+                if (!IsFreeForBloodWall(gridUid, grid, tile))
+                    continue;
+
+                var wall = Spawn(bubblegum.BloodWallPrototype, _map.GridTileToLocal(gridUid, grid, tile));
+                if (TryComp(wall, out TransformComponent? wallXform) && !wallXform.Anchored)
+                    _transform.AnchorEntity((wall, wallXform), (gridUid, grid), tile);
+                bubblegum.BloodWalls.Add(wall);
+                spawned = true;
+            }
+
+            if (spawned && bubblegum.BloodWallSound != null)
+                _audio.PlayPvs(bubblegum.BloodWallSound, _map.GridTileToLocal(gridUid, grid, soundTile));
+        }
+    }
+
+    /// <summary>A line of blood across the runner's way, a little ahead of them: marked out now, risen a moment later.</summary>
+    private void MarkBloodWall(
         LavalandBubblegumComponent bubblegum,
         LavalandBossArenaComponent arena,
         EntityUid gridUid,
         MapGridComponent grid,
         EntityUid player,
-        Vector2 awayFromBoss)
+        Vector2 awayFromBoss,
+        TimeSpan now)
     {
         // Where they run; standing still, away from it.
         var direction = TryComp<PhysicsComponent>(player, out var body) && body.LinearVelocity.LengthSquared() > 0.25f
@@ -1902,31 +1939,26 @@ public sealed class LavalandBubblegumSystem : EntitySystem
         var across = new Vector2(-direction.Y, direction.X);
         var center = _transform.GetWorldPosition(player) + direction * bubblegum.BloodWallAhead;
         var gridXform = Transform(gridUid);
-        var spawned = false;
-        _cloneTiles.Clear();
+        var invMatrix = _transform.GetInvWorldMatrix(gridXform);
+        var tiles = new List<Vector2i>();
 
         var half = bubblegum.BloodWallLength / 2f;
         for (var step = -half; step <= half; step += 0.5f)
         {
             var world = center + across * step;
-            var local = Vector2.Transform(world, _transform.GetInvWorldMatrix(gridXform));
-            var tile = _map.LocalToTile(gridUid, grid, new EntityCoordinates(gridUid, local));
-            if (_cloneTiles.Contains(tile) || !IsInsideInnerArena(arena, tile) || !IsFreeForBloodWall(gridUid, grid, tile))
+            var tile = _map.LocalToTile(gridUid, grid, new EntityCoordinates(gridUid, Vector2.Transform(world, invMatrix)));
+            if (tiles.Contains(tile) || !IsInsideInnerArena(arena, tile) || !IsFreeForBloodWall(gridUid, grid, tile))
                 continue;
 
-            _cloneTiles.Add(tile);
-            var wall = Spawn(bubblegum.BloodWallPrototype, _map.GridTileToLocal(gridUid, grid, tile));
-            if (TryComp(wall, out TransformComponent? wallXform) && !wallXform.Anchored)
-                _transform.AnchorEntity((wall, wallXform), (gridUid, grid), tile);
-            bubblegum.BloodWalls.Add(wall);
-            spawned = true;
+            tiles.Add(tile);
+            Spawn(bubblegum.BloodWallMarkPrototype, _map.GridTileToLocal(gridUid, grid, tile));
         }
 
-        _cloneTiles.Clear();
-        if (spawned && bubblegum.BloodWallSound != null)
-            _audio.PlayPvs(bubblegum.BloodWallSound, _map.GridTileToLocal(gridUid, grid,
-                _map.LocalToTile(gridUid, grid, new EntityCoordinates(gridUid,
-                    Vector2.Transform(center, _transform.GetInvWorldMatrix(gridXform))))));
+        if (tiles.Count == 0)
+            return;
+
+        var soundTile = _map.LocalToTile(gridUid, grid, new EntityCoordinates(gridUid, Vector2.Transform(center, invMatrix)));
+        bubblegum.PendingBloodWalls.Add((now + bubblegum.BloodWallWarning, tiles, soundTile));
     }
 
     /// <summary>No wall of blood in a wall or on top of anyone: it would shut them in.</summary>
@@ -1956,6 +1988,8 @@ public sealed class LavalandBubblegumSystem : EntitySystem
     private void ClearRuntimeState(EntityUid uid, LavalandBubblegumComponent bubblegum, bool refreshMovement)
     {
         bubblegum.KiteTime.Clear();
+        bubblegum.NextBloodWall.Clear();
+        bubblegum.PendingBloodWalls.Clear();
         foreach (var wall in bubblegum.BloodWalls)
         {
             if (Exists(wall))

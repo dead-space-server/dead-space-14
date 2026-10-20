@@ -8,8 +8,8 @@ attachment-slot-crusher-trophy = Трофей
 
 attachment-desc-crusher-marker = заменяет выстрел крашера на кинетический маркер (перезарядка 1 с).
 attachment-desc-crusher-rude-buster = стреляет мощным снарядом rude buster (10 ударного, 10 термического, перезарядка 8 с).
-attachment-desc-crusher-lava = +5 термического урона, поджигает и нагревает цель.
-attachment-desc-crusher-ice = +4 урона холодом, охлаждает цель.
+attachment-desc-crusher-lava = +5 термического урона, поджигает цель и нагревает её на 20 °C за удар.
+attachment-desc-crusher-ice = +4 урона холодом, охлаждает цель на 20 °C за удар.
 attachment-desc-crusher-sharpness = +7 режущего урона.
 attachment-desc-crusher-weights = удары отбрасывают цель на 3 тайла.
 attachment-desc-crusher-lightweight = скорость атаки +30%.

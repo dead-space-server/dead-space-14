@@ -168,7 +168,7 @@ public sealed partial class LavalandColossusComponent : Component
 
     /// <summary>A target farther than this (off the screen) gets aimed shots instead of the usual patterns.</summary>
     [DataField]
-    public float OffscreenRange = 8.5f;
+    public float OffscreenRange = 13f;
 
     [DataField]
     public int AimedShots = 3;

@@ -167,6 +167,27 @@
   - type: TimedDespawn
     lifetime: 6
 
+# Where a wall of blood is about to rise: a second's warning to get past.
+- type: entity
+  id: LavalandBubblegumBloodWallMark
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Sprite
+    drawdepth: FloorObjects
+    sprite: _DeadSpace/Lavaland/Effects/TargetCircle.rsi
+    color: "#d0101a"
+    layers:
+    - state: target_circle
+      shader: unshaded
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: TimedDespawn
+    lifetime: 1
+
 - type: entity
   parent: LavalandBubblegumEffectBase
   id: LavalandBubblegumBloodPool

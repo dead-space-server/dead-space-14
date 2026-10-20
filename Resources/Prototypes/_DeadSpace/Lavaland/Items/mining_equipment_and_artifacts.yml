@@ -351,6 +351,9 @@
   - type: LavalandImmortalityTalisman
     duration: 10
     cooldown: 60
+  # Shows the recharge on the icon, like any item with a use delay; the same 60 seconds.
+  - type: UseDelay
+    delay: 60
   - type: StaticPrice
     price: 3000
 

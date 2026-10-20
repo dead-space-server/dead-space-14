@@ -65,10 +65,25 @@ public sealed class RechargeBasicEntityAmmoSystem : EntitySystem
                 continue;
             }
 
-            recharge.NextCharge = recharge.NextCharge.Value + TimeSpan.FromSeconds(recharge.RechargeCooldown);
+            recharge.NextCharge = recharge.NextCharge.Value + TimeSpan.FromSeconds(GetCooldown(uid, recharge)); // DS14
             Dirty(uid, recharge);
         }
     }
+
+    // DS14-start
+    /// <summary>
+    /// The recharge, quickened by whatever speeds up the gun's fire (a fire rate upgrade): on a gun that has to wait
+    /// for its charges (a kinetic shotgun or repeater) the faster fire alone changed nothing.
+    /// </summary>
+    private float GetCooldown(EntityUid uid, RechargeBasicEntityAmmoComponent recharge)
+    {
+        if (!TryComp<GunComponent>(uid, out var gun) || gun.FireRate <= 0f || gun.FireRateModified <= 0f)
+            return recharge.RechargeCooldown;
+
+        var boost = gun.FireRateModified / gun.FireRate;
+        return boost > 1f ? recharge.RechargeCooldown / boost : recharge.RechargeCooldown;
+    }
+    // DS14-end
 
     private void OnInit(Entity<RechargeBasicEntityAmmoComponent> ent, ref MapInitEvent args)
     {
@@ -100,7 +115,7 @@ public sealed class RechargeBasicEntityAmmoSystem : EntitySystem
 
         if (ent.Comp.NextCharge == null || ent.Comp.NextCharge < _timing.CurTime)
         {
-            ent.Comp.NextCharge = _timing.CurTime + TimeSpan.FromSeconds(ent.Comp.RechargeCooldown);
+            ent.Comp.NextCharge = _timing.CurTime + TimeSpan.FromSeconds(GetCooldown(ent, ent.Comp)); // DS14
             Dirty(ent);
         }
     }

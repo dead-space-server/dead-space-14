@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using System.Linq;
 using Content.Shared.Damage;
 using Content.Shared.DeadSpace.Attachments;
 using Content.Shared.Containers.ItemSlots;
@@ -160,6 +161,17 @@ public sealed class AttachmentSystem : SharedAttachmentSystem
             return;
 
         ApplyComponents(holder, attachment, attachment.Comp.AddComponents, attachment.Comp.RemoveComponents);
+    }
+
+    /// <summary>Anything put in or taken out, through the menu or straight into the weapon: open menus show it.</summary>
+    protected override void AttachmentsChanged(Entity<AttachmentHolderComponent> holder)
+    {
+        base.AttachmentsChanged(holder);
+
+        foreach (var actor in _ui.GetActors(holder.Owner, AttachmentUiKey.Key).ToList())
+        {
+            UpdateMenu(holder, actor);
+        }
     }
 
     protected override void OnSlotFilled(Entity<AttachmentHolderComponent> holder, string slot, EntityUid item)

@@ -35,3 +35,7 @@ public sealed partial class LavalandAsclepiusOathDoAfterEvent : SimpleDoAfterEve
 
 [Serializable, NetSerializable]
 public sealed partial class LavalandMementoMoriDoAfterEvent : SimpleDoAfterEvent;
+
+/// <summary>A warp cube held up for a while before it takes its holder to its twin.</summary>
+[Serializable, NetSerializable]
+public sealed partial class LavalandWarpCubeDoAfterEvent : SimpleDoAfterEvent;

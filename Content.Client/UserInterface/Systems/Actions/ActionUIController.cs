@@ -280,7 +280,14 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
             StartTargeting((action, action, target));
 
         // DS14-start: an item's action coming back (the item picked up again) takes its old slot back.
-        if (_droppedSlots.Remove(action, out var slot) && _cfg.GetCVar(CCCCVars.ActionsRestoreItemSlots))
+        // The option off: the plain behaviour, a new action goes to the end.
+        if (!KeepLayout)
+        {
+            _actions.Add(action);
+            return;
+        }
+
+        if (_droppedSlots.Remove(action, out var slot))
         {
             _actions.Insert(Math.Min(slot, _actions.Count), action);
             return;
@@ -314,7 +321,7 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
 
         // DS14-start: an item's slot is remembered for when the item is picked up again.
         var index = _actions.IndexOf(actionId);
-        if (index >= 0 && IsItemAction(actionId))
+        if (KeepLayout && index >= 0 && IsItemAction(actionId))
             _droppedSlots[actionId] = index;
         // DS14-end
 
@@ -325,7 +332,8 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
     {
         QueueWindowUpdate();
         _droppedSlots.Keys.Where(a => !EntityManager.EntityExists(a)).ToList().ForEach(a => _droppedSlots.Remove(a)); // DS14
-        RememberLayoutOrder(); // DS14
+        if (KeepLayout) // DS14
+            RememberLayoutOrder(); // DS14
 
         if (_actionsSystem != null)
             _container?.SetActionData(_actionsSystem, _actions.ToArray());
@@ -529,7 +537,8 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
         if (dragged.Parent is ActionButtonContainer)
             SetAction(dragged, swapAction, false);
 
-        RememberLayoutOrder(); // DS14
+        if (KeepLayout) // DS14
+            RememberLayoutOrder(); // DS14
 
         if (_actionsSystem != null)
             _container?.SetActionData(_actionsSystem, _actions.ToArray());
@@ -824,10 +833,14 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
                 _actions.Add(action);
         }
 
-        ApplyLayoutOrder(); // DS14: the actions seen before go in the order they had
+        if (KeepLayout) // DS14: the actions seen before go in the order they had
+            ApplyLayoutOrder(); // DS14
     }
 
     // DS14-start
+    /// <summary>The option: keep the hotbar layout (between bodies, for items picked up again). Off - as upstream.</summary>
+    private bool KeepLayout => _cfg.GetCVar(CCCCVars.ActionsRestoreItemSlots);
+
     /// <summary>
     /// The layout keys of the bar, in order: the same kind of action in any body gets the same key; several alike
     /// are told apart by their count so far.

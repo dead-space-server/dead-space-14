@@ -29,6 +29,8 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
     [Dependency] private readonly Robust.Shared.Audio.Systems.SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly Robust.Shared.Containers.SharedContainerSystem _containers = default!;
+    [Dependency] private readonly Content.Shared.Weapons.Ranged.Upgrades.GunUpgradeSystem _upgrades = default!;
 
     public override void Initialize()
     {
@@ -44,6 +46,7 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
         if (!HasComp<LavalandMapComponent>(Transform(args.User).MapUid))
             return;
 
+        var upgradeDamage = GetUpgradeDamage(ent);
         foreach (var (ammo, _) in args.Ammo)
         {
             if (ammo is not { } projectile ||
@@ -56,6 +59,7 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
             explosive.HumanDamage = ent.Comp.HumanDamage;
             explosive.CreatureDamage = ent.Comp.CreatureDamage;
             explosive.BossDamage = ent.Comp.BossDamage;
+            explosive.UpgradeDamage = upgradeDamage;
             explosive.ExplosionIntensity = ent.Comp.ExplosionIntensity;
             explosive.ExplosionSlope = ent.Comp.ExplosionSlope;
             explosive.ExplosionMaxIntensity = ent.Comp.ExplosionMaxIntensity;
@@ -152,6 +156,9 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
             var damage = TryDamageFor(victim, ent.Comp, out var specializedDamage)
                 ? specializedDamage
                 : ent.Comp.CreatureDamage;
+            // The damage upgrades in the gun make the blast stronger too - for the fauna and the bosses, not people.
+            if (!HasComp<HumanoidAppearanceComponent>(victim))
+                damage = damage + ent.Comp.UpgradeDamage;
             _damage.TryChangeDamage(victim, damage, true, origin: shooter);
         }
 
@@ -191,6 +198,25 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
         }
 
         return false;
+    }
+
+    /// <summary>The damage of the ordinary damage upgrades sitting in the same gun.</summary>
+    private Content.Shared.Damage.DamageSpecifier GetUpgradeDamage(EntityUid upgrade)
+    {
+        var total = new Content.Shared.Damage.DamageSpecifier();
+        if (!_containers.TryGetContainingContainer((upgrade, null, null), out var container) ||
+            !TryComp<Content.Shared.Weapons.Ranged.Upgrades.Components.UpgradeableGunComponent>(container.Owner, out var gun))
+        {
+            return total;
+        }
+
+        foreach (var other in _upgrades.GetCurrentUpgrades((container.Owner, gun)))
+        {
+            if (TryComp<Content.Shared.Weapons.Ranged.Upgrades.Components.GunUpgradeDamageComponent>(other, out var damage))
+                total += damage.Damage;
+        }
+
+        return total;
     }
 
     private bool TryDamageFor(

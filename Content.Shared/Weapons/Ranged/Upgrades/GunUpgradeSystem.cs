@@ -37,7 +37,8 @@ public sealed class GunUpgradeSystem : EntitySystem
 
         SubscribeLocalEvent<GunUpgradeFireRateComponent, GunRefreshModifiersEvent>(OnFireRateRefresh);
         SubscribeLocalEvent<GunUpgradeSpeedComponent, GunRefreshModifiersEvent>(OnSpeedRefresh);
-        SubscribeLocalEvent<GunUpgradeDamageComponent, GunShotEvent>(OnDamageGunShot);
+        // DS14: the damage goes onto every projectile of the shot (a shotgun's pellets), not the first one only.
+        SubscribeLocalEvent<UpgradeableGunComponent, AmmoShotEvent>(OnAmmoShotDamage); // DS14
     }
 
     private void RelayEvent<T>(Entity<UpgradeableGunComponent> ent, ref T args) where T : notnull
@@ -111,14 +112,34 @@ public sealed class GunUpgradeSystem : EntitySystem
         args.ProjectileSpeed *= ent.Comp.Coefficient;
     }
 
-    private void OnDamageGunShot(Entity<GunUpgradeDamageComponent> ent, ref GunShotEvent args)
+    // DS14-start
+    /// <summary>
+    /// The upgrade's damage spread over all the projectiles of the shot: the gun shot event only knows the first one
+    /// of a shotgun's spread - it got the whole bonus and the other pellets nothing.
+    /// </summary>
+    private void OnAmmoShotDamage(EntityUid uid, UpgradeableGunComponent component, AmmoShotEvent args)
     {
-        foreach (var (ammo, _) in args.Ammo)
+        var count = args.FiredProjectiles.Count;
+        if (count == 0)
+            return;
+
+        foreach (var upgrade in GetCurrentUpgrades((uid, component)))
         {
-            if (TryComp<ProjectileComponent>(ammo, out var proj))
-                proj.Damage += ent.Comp.Damage;
+            if (!_entityWhitelist.CheckBoth(upgrade.Owner, blacklist: component.Blacklist) ||
+                !TryComp<GunUpgradeDamageComponent>(upgrade, out var damage))
+            {
+                continue;
+            }
+
+            var share = damage.Damage * (1f / count);
+            foreach (var projectile in args.FiredProjectiles)
+            {
+                if (TryComp<ProjectileComponent>(projectile, out var proj))
+                    proj.Damage += share;
+            }
         }
     }
+    // DS14-end
 
     /// <summary>
     /// Gets the entities inside the gun's upgrade container.

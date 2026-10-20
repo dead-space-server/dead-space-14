@@ -103,6 +103,81 @@
     spawnPrototypes:
     - MobLavalandLegion
 
+# A raid's tendril: it cannot be destroyed while the raid lasts - hold out until it ends. Reddened and glowing bright.
+- type: entity
+  parent: LavalandNecropolisTendrilWatcher
+  id: LavalandNecropolisTendrilRaidWatcher
+  suffix: Lavaland, Watcher, Raid
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    color: "#ff9090"
+  - type: PointLight
+    radius: 3.5
+    energy: 4
+    color: "#ff2020"
+  - type: LightBehaviour
+    behaviours:
+    - !type:PulseBehaviour
+      interpolate: Cubic
+      maxDuration: 1.2
+      startValue: 2
+      endValue: 5
+      property: Energy
+      isLooped: true
+      enabled: true
+  - type: Godmode
+
+# A raid's tendril: it cannot be destroyed while the raid lasts - hold out until it ends. Reddened and glowing bright.
+- type: entity
+  parent: LavalandNecropolisTendrilGoliath
+  id: LavalandNecropolisTendrilRaidGoliath
+  suffix: Lavaland, Goliath, Raid
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    color: "#ff9090"
+  - type: PointLight
+    radius: 3.5
+    energy: 4
+    color: "#ff2020"
+  - type: LightBehaviour
+    behaviours:
+    - !type:PulseBehaviour
+      interpolate: Cubic
+      maxDuration: 1.2
+      startValue: 2
+      endValue: 5
+      property: Energy
+      isLooped: true
+      enabled: true
+  - type: Godmode
+
+# A raid's tendril: it cannot be destroyed while the raid lasts - hold out until it ends. Reddened and glowing bright.
+- type: entity
+  parent: LavalandNecropolisTendrilLegion
+  id: LavalandNecropolisTendrilRaidLegion
+  suffix: Lavaland, Legion, Raid
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    color: "#ff9090"
+  - type: PointLight
+    radius: 3.5
+    energy: 4
+    color: "#ff2020"
+  - type: LightBehaviour
+    behaviours:
+    - !type:PulseBehaviour
+      interpolate: Cubic
+      maxDuration: 1.2
+      startValue: 2
+      endValue: 5
+      property: Energy
+      isLooped: true
+      enabled: true
+  - type: Godmode
+
 - type: entity
   id: LavalandNecropolisTendrilCollapse
   name: collapsing ground

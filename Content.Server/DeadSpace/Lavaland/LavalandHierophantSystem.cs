@@ -1,5 +1,6 @@
 using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Shared.Damage;
+using Content.Shared.Weapons.Melee;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs;
@@ -684,6 +685,9 @@ public sealed class LavalandHierophantSystem : EntitySystem
         return direction;
     }
 
+    /// <summary>No melee blow this soon after a teleport.</summary>
+    private static readonly TimeSpan PostTeleportMeleeDelay = TimeSpan.FromSeconds(0.5);
+
     private void ProcessTeleports(
         LavalandHierophantComponent hierophant,
         LavalandBossArenaComponent arena,
@@ -706,6 +710,17 @@ public sealed class LavalandHierophantSystem : EntitySystem
                 var destTile = _map.LocalToTile(gridUid, grid, _map.GridTileToLocal(gridUid, grid, pending.Destination));
                 SpawnAnchored(hierophant.TelegraphTeleportPrototype, gridUid, grid, destTile);
                 _transform.SetLocalRotation(pending.Boss, xform.LocalRotation);
+
+                // Out of a teleport onto someone: a moment before the first blow, a chance to step away.
+                if (TryComp<MeleeWeaponComponent>(pending.Boss, out var melee))
+                {
+                    var ready = now + PostTeleportMeleeDelay;
+                    if (melee.NextAttack < ready)
+                    {
+                        melee.NextAttack = ready;
+                        Dirty(pending.Boss, melee);
+                    }
+                }
             }
 
             hierophant.PendingTeleports.RemoveAt(i);

@@ -4,6 +4,8 @@
   id: LavalandMadMinerSpawner
   name: безумный шахтёр
   suffix: Lavaland, спавнер
+  # It spawns the miner and goes: the entity count tests leave spawners out.
+  categories: [ Spawner ]
   components:
   - type: Sprite
     layers:
@@ -512,9 +514,11 @@
   - type: Sprite
     drawdepth: FloorObjects
     sprite: _DeadSpace/Lavaland/Effects/TargetCircle.rsi
-    color: "#202020"
+    # Bright and unshaded: the dark one was lost on the basalt and in the dark.
+    color: "#ff6a2a"
     layers:
     - state: target_circle
+      shader: unshaded
   - type: TimedDespawn
     lifetime: 1
 

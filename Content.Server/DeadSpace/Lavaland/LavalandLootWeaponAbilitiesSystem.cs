@@ -39,6 +39,7 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// </summary>
 public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
 {
+    [Dependency] private readonly Content.Shared.Actions.SharedActionsSystem _actions = default!;
     [Dependency] private readonly BlinkSystem _blink = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
@@ -147,7 +148,10 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
         if (target.MapId != origin.MapId || direction.LengthSquared() < 0.01f)
             return;
 
-        ent.Comp.NextThrow = now + (ent.Comp.LaunchMode ? ent.Comp.LaunchCooldown : ent.Comp.CrystalsCooldown);
+        var cooldown = ent.Comp.LaunchMode ? ent.Comp.LaunchCooldown : ent.Comp.CrystalsCooldown;
+        ent.Comp.NextThrow = now + cooldown;
+        // The action button shows the same recharge.
+        _actions.SetCooldown(ent.Comp.ThrowActionEntity, now, now + cooldown);
         var dagger = Spawn(ent.Comp.DaggerProjectile, Transform(user).Coordinates);
         var daggerComp = EnsureComp<LavalandCainAndAbelDaggerComponent>(dagger);
         daggerComp.Weapon = ent.Owner;

@@ -138,8 +138,26 @@ public sealed partial class LavalandBubblegumComponent : Component
     [DataField]
     public SoundSpecifier? BloodWallSound = new SoundPathSpecifier("/Audio/_DeadSpace/Necromorfs/TheCircle/scout_blink.ogg");
 
+    /// <summary>Marks on its tiles first: the wall rises this much later, a chance to get past it.</summary>
+    [DataField]
+    public TimeSpan BloodWallWarning = TimeSpan.FromSeconds(1);
+
+    /// <summary>After a wall the runner gets this long before the next one can come.</summary>
+    [DataField]
+    public TimeSpan BloodWallCooldown = TimeSpan.FromSeconds(6);
+
+    [DataField]
+    public string BloodWallMarkPrototype = "LavalandBubblegumBloodWallMark";
+
     [ViewVariables]
     public readonly Dictionary<EntityUid, float> KiteTime = new();
+
+    [ViewVariables]
+    public readonly Dictionary<EntityUid, TimeSpan> NextBloodWall = new();
+
+    /// <summary>Walls marked out and about to rise: when, and on which tiles.</summary>
+    [ViewVariables]
+    public readonly List<(TimeSpan At, List<Vector2i> Tiles, Vector2i SoundTile)> PendingBloodWalls = new();
 
     [ViewVariables]
     public readonly List<EntityUid> BloodWalls = new();

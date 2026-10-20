@@ -1,3 +1,5 @@
+using Robust.Shared.Physics.Events;
+using Content.Shared.Projectiles;
 using System.Numerics;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.DeadSpace.Lavaland.Components;
@@ -62,6 +64,7 @@ public sealed class LavalandAshDrakeSystem : EntitySystem
         SubscribeLocalEvent<LavalandAshDrakeComponent, BeforeDamageChangedEvent>(OnBeforeDamage);
         SubscribeLocalEvent<LavalandAshDrakeComponent, AttackAttemptEvent>(OnAttackAttempt);
         SubscribeLocalEvent<LavalandAshDrakeComponent, GettingAttackedAttemptEvent>(OnGettingAttackedAttempt);
+        SubscribeLocalEvent<LavalandAshDrakeComponent, PreventCollideEvent>(OnPreventCollide);
         SubscribeLocalEvent<LavalandAshDrakeComponent, LavalandBossFightStartedEvent>(OnBossFightStarted);
         SubscribeLocalEvent<LavalandAshDrakeComponent, LavalandBossResetEvent>(OnBossReset);
         SubscribeLocalEvent<LavalandAshDrakeComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMovementSpeed);
@@ -271,6 +274,13 @@ public sealed class LavalandAshDrakeSystem : EntitySystem
             args.Cancelled = true;
     }
 
+    /// <summary>Up in the sky (or coming down): shots fly through where its body stands below.</summary>
+    private void OnPreventCollide(Entity<LavalandAshDrakeComponent> ent, ref PreventCollideEvent args)
+    {
+        if (IsSwoopUntargetable(ent.Comp) && HasComp<ProjectileComponent>(args.OtherEntity))
+            args.Cancelled = true;
+    }
+
     private static bool IsSwoopUntargetable(LavalandAshDrakeComponent component)
     {
         return component.Swooping ||
@@ -441,9 +451,7 @@ public sealed class LavalandAshDrakeSystem : EntitySystem
 
         SpawnCageBorder(drake, gridUid, grid, cageCenter);
 
-        var (minX, maxX, minY, maxY) = GetInnerBounds(arena);
-        var centerTile = new Vector2i((minX + maxX) / 2, (minY + maxY) / 2);
-        _transform.SetCoordinates(boss, _map.GridTileToLocal(gridUid, grid, centerTile));
+        _transform.SetCoordinates(boss, _map.GridTileToLocal(gridUid, grid, GetRestTileOutsideCage(arena, drake, cageCenter)));
 
         _audio.PlayPvs(drake.FireSound, boss, AudioParams.Default.WithVolume(2f));
 
@@ -579,14 +587,53 @@ public sealed class LavalandAshDrakeSystem : EntitySystem
         SetVisual(boss, LavalandAshDrakeVisualState.Dragon);
         _movement.RefreshMovementSpeedModifiers(boss);
 
-        var (minX, maxX, minY, maxY) = GetInnerBounds(arena);
-        var centerTile = new Vector2i((minX + maxX) / 2, (minY + maxY) / 2);
-        _transform.SetCoordinates(boss, _map.GridTileToLocal(gridUid, grid, centerTile));
+        _transform.SetCoordinates(boss, _map.GridTileToLocal(gridUid, grid, GetRestTileOutsideCage(arena, drake, drake.CageCenter)));
 
         _audio.PlayPvs(drake.ImpactSound, boss, AudioParams.Default.WithVolume(0f));
 
         drake.BusyUntil = now + TimeSpan.FromSeconds(1.5);
         drake.NextAttack = now + TimeSpan.FromSeconds(3.0);
+        // Out of the cage the player gets a moment before the lava starts chasing them again.
+        drake.NextChaseLava = now + CageChaseLavaGrace;
+        drake.PendingChaseLava.Clear();
+    }
+
+    /// <summary>After the fire cage the chasing lava waits this long.</summary>
+    private static readonly TimeSpan CageChaseLavaGrace = TimeSpan.FromSeconds(1);
+
+    /// <summary>
+    /// Where the drake waits out (and comes down after) the fire cage: the arena's middle, unless the cage covers it -
+    /// then the arena corner farthest from the cage. Never inside the cage with the player.
+    /// </summary>
+    private Vector2i GetRestTileOutsideCage(LavalandBossArenaComponent arena, LavalandAshDrakeComponent drake, Vector2i cageCenter)
+    {
+        var (minX, maxX, minY, maxY) = GetInnerBounds(arena);
+        var center = new Vector2i((minX + maxX) / 2, (minY + maxY) / 2);
+        var clearance = drake.CageHalfSize + 3;
+        if (ChebyshevDistance(center, cageCenter) > clearance)
+            return center;
+
+        Vector2i[] corners =
+        [
+            new(minX + 2, minY + 2),
+            new(maxX - 2, minY + 2),
+            new(minX + 2, maxY - 2),
+            new(maxX - 2, maxY - 2),
+        ];
+
+        var best = center;
+        var bestDistance = -1;
+        foreach (var corner in corners)
+        {
+            var distance = ChebyshevDistance(corner, cageCenter);
+            if (distance <= bestDistance)
+                continue;
+
+            best = corner;
+            bestDistance = distance;
+        }
+
+        return best;
     }
 
     private void SpawnCageBorder(

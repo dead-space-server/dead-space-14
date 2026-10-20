@@ -216,8 +216,10 @@
   - type: Item
     sprite: _DeadSpace/Objects/Weapons/Guns/Basic/sawnpka.rsi
     size: Small
+  # A bit quicker than its fire rate (0.5 s): equal, the client sometimes thought the charge back before the server
+  # and played a shot that never flew.
   - type: RechargeBasicEntityAmmo
-    rechargeCooldown: 0.5
+    rechargeCooldown: 0.4
     rechargeSound:
       path: /Audio/Weapons/Guns/MagIn/kinetic_reload.ogg
   - type: Clothing

@@ -73,4 +73,8 @@ public sealed partial class ExplosivePkaProjectileComponent : Component
 
     [DataField]
     public DamageSpecifier BossDamage = new();
+
+    /// <summary>The damage upgrades in the gun alongside: added to the blast on fauna and bosses.</summary>
+    [DataField]
+    public DamageSpecifier UpgradeDamage = new();
 }

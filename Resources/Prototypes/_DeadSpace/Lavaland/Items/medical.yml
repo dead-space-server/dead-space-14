@@ -2,14 +2,14 @@
   id: LavalandMedkitAdvancedBruteFilled
   parent: MedkitBrute
   name: продвинутый набор для лечения механических травм
-  description: Содержит в себе 3 пачки медицинских нитей, и 1 пачку крови.
+  description: Содержит в себе 3 пачки медицинских нитей и 1 баночку бикаридина.
   suffix: Filled, Lavaland
   components:
   - type: StorageFill
     contents:
     - id: MedicatedSuture
       amount: 3
-    - id: Bloodpack
+    - id: PillCanisterBicaridine
 
 - type: entity
   id: LavalandMedkitAdvancedBurnFilled

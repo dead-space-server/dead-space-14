@@ -255,10 +255,10 @@
     warningSound:
       path: /Audio/_DeadSpace/Lavaland/lava_warning.ogg
     tendrils:
-    - LavalandNecropolisTendrilGoliath
-    - LavalandNecropolisTendrilGoliath
-    - LavalandNecropolisTendrilWatcher
-    - LavalandNecropolisTendrilLegion
+    - LavalandNecropolisTendrilRaidGoliath
+    - LavalandNecropolisTendrilRaidGoliath
+    - LavalandNecropolisTendrilRaidWatcher
+    - LavalandNecropolisTendrilRaidLegion
     music:
     - path: /Audio/_DeadSpace/Lavaland/Raid/fauna-raid-1.ogg
     - path: /Audio/_DeadSpace/Lavaland/Raid/fauna-raid-2.ogg

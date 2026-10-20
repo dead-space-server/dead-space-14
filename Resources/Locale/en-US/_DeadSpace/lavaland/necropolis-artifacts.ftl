@@ -81,3 +81,8 @@ lavaland-lazarus-too-strong = The nanomachines are powerless - this creature is 
 lavaland-geist-ambush-shot = The geist flinches and drops back into its hole!
 lavaland-boss-execute-start = { CAPITALIZE(THE($boss)) } senses the death clinging to { THE($target) } and comes to claim it!
 lavaland-boss-execute = { CAPITALIZE(THE($boss)) } tears { THE($target) } apart - the memento mori holds no longer!
+lavaland-memento-skeleton = There is no life left in a skeleton for the memento mori to take.
+lavaland-memento-released = The memento mori lets go of you and slips off.
+lavaland-talisman-recharging = [color=gray]The talisman is recharging: { $seconds } s left.[/color]
+lavaland-talisman-ready = [color=#b48cff]The talisman is ready.[/color]
+lavaland-warp-cube-start = The cube starts to flicker...

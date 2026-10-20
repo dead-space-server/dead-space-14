@@ -51,6 +51,7 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
     private const string HoleContainer = "reality-hole";
 
     [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly Content.Shared.Inventory.InventorySystem _inventory = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly GibbingSystem _gibbing = default!;
@@ -80,10 +81,13 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         SubscribeLocalEvent<LavalandWispLanternComponent, UseInHandEvent>(OnLanternUse);
         SubscribeLocalEvent<LavalandWarpCubeComponent, MapInitEvent>(OnCubeMapInit);
         SubscribeLocalEvent<LavalandWarpCubeComponent, UseInHandEvent>(OnCubeUse);
+        SubscribeLocalEvent<LavalandWarpCubeComponent, LavalandWarpCubeDoAfterEvent>(OnCubeDoAfter);
         SubscribeLocalEvent<LavalandWarpCubeComponent, ComponentShutdown>(OnCubeShutdown);
         SubscribeLocalEvent<LavalandImmortalityTalismanComponent, UseInHandEvent>(OnTalismanUse);
+        SubscribeLocalEvent<LavalandImmortalityTalismanComponent, ExaminedEvent>(OnTalismanExamined);
         SubscribeLocalEvent<LavalandParadoxBagComponent, MapInitEvent>(OnParadoxMapInit);
         SubscribeLocalEvent<LavalandParadoxBagComponent, ComponentShutdown>(OnParadoxShutdown);
+        SubscribeLocalEvent<LavalandParadoxBagComponent, ContainerIsInsertingAttemptEvent>(OnParadoxInsertAttempt);
         Subs.BuiEvents<LavalandParadoxBagComponent>(StorageComponent.StorageUiKey.Key, subs =>
         {
             subs.Event<BoundUIOpenedEvent>(OnParadoxOpened);
@@ -321,42 +325,74 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         ent.Comp.Linked = other;
     }
 
+    /// <summary>Held up for this long before it takes its holder away: no spamming the cubes back and forth.</summary>
+    private static readonly TimeSpan WarpCubeTime = TimeSpan.FromSeconds(5);
+
     private void OnCubeUse(Entity<LavalandWarpCubeComponent> ent, ref UseInHandEvent args)
     {
         if (args.Handled)
             return;
         args.Handled = true;
 
-        if (ent.Comp.Linked is not { } linked || TerminatingOrDeleted(linked) ||
-            HasComp<LavalandNoTeleportZoneComponent>(Transform(args.User).MapUid) ||
-            HasComp<LavalandNoTeleportZoneComponent>(Transform(linked).MapUid))
-        {
-            _popup.PopupEntity(Loc.GetString("lavaland-warp-cube-fizzle"), args.User, args.User);
+        if (!CanWarp(ent, args.User, out _))
             return;
-        }
 
-        // Only on Lavaland - its surface or the chromite caves - and both ends on the same one:
-        // not on the station, and no way out of the caves without a hook.
-        var userMap = Transform(args.User).MapUid;
-        var cubeMap = Transform(linked).MapUid;
-        if (userMap != cubeMap || !IsLavalandOrCaves(userMap))
+        _popup.PopupEntity(Loc.GetString("lavaland-warp-cube-start"), args.User, args.User);
+        _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, WarpCubeTime,
+            new LavalandWarpCubeDoAfterEvent(), ent.Owner, used: ent.Owner)
         {
-            _popup.PopupEntity(Loc.GetString("lavaland-warp-cube-not-lavaland"), args.User, args.User);
-            return;
-        }
+            BreakOnMove = true,
+            BreakOnDamage = true,
+            NeedHand = true,
+        });
+    }
 
-        var target = _transform.GetMapCoordinates(linked);
-        if (target.MapId == MapId.Nullspace)
-        {
-            _popup.PopupEntity(Loc.GetString("lavaland-warp-cube-fizzle"), args.User, args.User);
+    private void OnCubeDoAfter(Entity<LavalandWarpCubeComponent> ent, ref LavalandWarpCubeDoAfterEvent args)
+    {
+        if (args.Handled || args.Cancelled)
             return;
-        }
+        args.Handled = true;
+
+        if (!CanWarp(ent, args.User, out var target))
+            return;
 
         Spawn(ent.Comp.Effect, Transform(args.User).Coordinates);
         _transform.SetMapCoordinates(args.User, target);
         Spawn(ent.Comp.Effect, Transform(args.User).Coordinates);
         if (ent.Comp.Sound != null)
             _audio.PlayPvs(ent.Comp.Sound, args.User);
+    }
+
+    /// <summary>The twin is there and both are on the same lavaland (or its caves); where it would take the user.</summary>
+    private bool CanWarp(Entity<LavalandWarpCubeComponent> ent, EntityUid user, out MapCoordinates target)
+    {
+        target = MapCoordinates.Nullspace;
+        if (ent.Comp.Linked is not { } linked || TerminatingOrDeleted(linked) ||
+            HasComp<LavalandNoTeleportZoneComponent>(Transform(user).MapUid) ||
+            HasComp<LavalandNoTeleportZoneComponent>(Transform(linked).MapUid))
+        {
+            _popup.PopupEntity(Loc.GetString("lavaland-warp-cube-fizzle"), user, user);
+            return false;
+        }
+
+        // Only on Lavaland - its surface or the chromite caves - and both ends on the same one:
+        // not on the station, and no way out of the caves without a hook.
+        var userMap = Transform(user).MapUid;
+        var cubeMap = Transform(linked).MapUid;
+        if (userMap != cubeMap || !IsLavalandOrCaves(userMap))
+        {
+            _popup.PopupEntity(Loc.GetString("lavaland-warp-cube-not-lavaland"), user, user);
+            return false;
+        }
+
+        target = _transform.GetMapCoordinates(linked);
+        if (target.MapId == MapId.Nullspace)
+        {
+            _popup.PopupEntity(Loc.GetString("lavaland-warp-cube-fizzle"), user, user);
+            return false;
+        }
+
+        return true;
     }
 
     private bool IsLavalandOrCaves(EntityUid? map)
@@ -414,13 +450,49 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
             return;
         }
 
-        foreach (var item in twin.Container.ContainedEntities.ToArray())
-            _storage.Insert(ent, item, out _, playSound: false);
+        _pullingParadox = true;
+        try
+        {
+            foreach (var item in twin.Container.ContainedEntities.ToArray())
+                _storage.Insert(ent, item, out _, playSound: false);
+        }
+        finally
+        {
+            _pullingParadox = false;
+        }
+    }
+
+    /// <summary>Moving the twin's things over: that insert is the bag's own.</summary>
+    private bool _pullingParadox;
+
+    /// <summary>
+    /// The two bags are one storage: things lie in one of them at a time. While the twin still holds something
+    /// (both opened at once, say), nothing goes into this one - open it again and it takes the twin's things over.
+    /// </summary>
+    private void OnParadoxInsertAttempt(Entity<LavalandParadoxBagComponent> ent, ref ContainerIsInsertingAttemptEvent args)
+    {
+        if (_pullingParadox || args.Cancelled ||
+            !TryComp<StorageComponent>(ent, out var storage) || args.Container != storage.Container ||
+            ent.Comp.Linked is not { } linked || TerminatingOrDeleted(linked) ||
+            !TryComp<StorageComponent>(linked, out var twin) || twin.Container.ContainedEntities.Count == 0)
+        {
+            return;
+        }
+
+        args.Cancel();
     }
 
     #endregion
 
     #region Immortality talisman
+
+    private void OnTalismanExamined(Entity<LavalandImmortalityTalismanComponent> ent, ref ExaminedEvent args)
+    {
+        var left = ent.Comp.NextUse - _timing.CurTime;
+        args.PushMarkup(left > TimeSpan.Zero
+            ? Loc.GetString("lavaland-talisman-recharging", ("seconds", (int) Math.Ceiling(left.TotalSeconds)))
+            : Loc.GetString("lavaland-talisman-ready"));
+    }
 
     private void OnTalismanUse(Entity<LavalandImmortalityTalismanComponent> ent, ref UseInHandEvent args)
     {
@@ -641,8 +713,18 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
 
     private void OnMementoAction(Entity<LavalandMementoMoriComponent> ent, ref LavalandMementoMoriActionEvent args)
     {
-        if (args.Handled || ent.Comp.LinkedUser != null || !HasComp<HumanoidAppearanceComponent>(args.Performer))
+        if (args.Handled || ent.Comp.LinkedUser != null ||
+            !TryComp<HumanoidAppearanceComponent>(args.Performer, out var humanoid))
+        {
             return;
+        }
+
+        // Nothing left in a skeleton for it to drink of.
+        if (humanoid.Species == "Skeleton")
+        {
+            _popup.PopupEntity(Loc.GetString("lavaland-memento-skeleton"), args.Performer, args.Performer);
+            return;
+        }
         args.Handled = true;
 
         _popup.PopupEntity(Loc.GetString("lavaland-memento-draining"), args.Performer, args.Performer, PopupType.MediumCaution);
@@ -691,6 +773,38 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         Mori(ent);
     }
 
+    /// <summary>
+    /// The wearer turns into a skeleton (the drake armour): the memento mori lets go of them without a death and
+    /// slips off. Nothing happens if it is not linked to them.
+    /// </summary>
+    public void ReleaseMemento(EntityUid wearer)
+    {
+        if (!TryComp<LavalandMementoBoundComponent>(wearer, out var bound) ||
+            !TryComp<LavalandMementoMoriComponent>(bound.Pendant, out var pendant) ||
+            pendant.LinkedUser != wearer)
+        {
+            return;
+        }
+
+        var pendantUid = bound.Pendant;
+        pendant.LinkedUser = null;
+        _appearance.SetData(pendantUid, LavalandArtifactVisuals.Active, false);
+        RestoreThresholds(wearer, bound);
+        RemComp<LavalandMementoBoundComponent>(wearer);
+
+        if (_inventory.TryGetContainingSlot(pendantUid, out var slot))
+            _inventory.TryUnequip(wearer, slot.Name, silent: true, force: true);
+        _popup.PopupEntity(Loc.GetString("lavaland-memento-released"), wearer, wearer, PopupType.MediumCaution);
+    }
+
+    private void RestoreThresholds(EntityUid owner, LavalandMementoBoundComponent bound)
+    {
+        if (bound.OldCritThreshold is { } crit)
+            _thresholds.SetMobStateThreshold(owner, crit, MobState.Critical);
+        if (bound.OldDeadThreshold is { } dead)
+            _thresholds.SetMobStateThreshold(owner, dead, MobState.Dead);
+    }
+
     /// <summary>The wearer of a linked memento mori dies as if they took it off: to ash. False if not linked.</summary>
     public bool TryMori(EntityUid wearer)
     {
@@ -718,10 +832,7 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
 
         if (TryComp<LavalandMementoBoundComponent>(owner, out var bound))
         {
-            if (bound.OldCritThreshold is { } crit)
-                _thresholds.SetMobStateThreshold(owner, crit, MobState.Critical);
-            if (bound.OldDeadThreshold is { } dead)
-                _thresholds.SetMobStateThreshold(owner, dead, MobState.Dead);
+            RestoreThresholds(owner, bound);
             RemComp<LavalandMementoBoundComponent>(owner);
         }
 

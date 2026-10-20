@@ -186,8 +186,9 @@
       multiplier: 2
       multiplierOnExisting: 0.5
     - !type:Ignite
-    - !type:AdjustTemperature
-      amount: 20
+    # Degrees, not joules: a hit warms the body up by 20 K.
+    - !type:LavalandAdjustBodyTemperature
+      kelvin: 20
     layers:
     - state: upgrade-lava-aspect
 
@@ -205,8 +206,9 @@
       types:
         Cold: 4
     targetHitEffects:
-    - !type:AdjustTemperature
-      amount: -20
+    # Degrees, not joules: a hit chills the body down by 20 K.
+    - !type:LavalandAdjustBodyTemperature
+      kelvin: -20
     layers:
     - state: upgrade-ice-frost
 
@@ -659,6 +661,8 @@
     description: attachment-desc-trophy-blaster-tubes
     removeComponents:
     - type: UseDelayOnShoot
+    # The marker really comes faster: twice the fire rate - and with it the charge back twice as soon.
+    fireRateMultiplier: 2
 
 - type: entity
   parent: BaseCrusherTrophy
