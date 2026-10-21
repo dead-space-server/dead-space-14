@@ -57,6 +57,11 @@
     thresholds:
       0: Alive
       1250: Dead
+  # The explosive PKA modkit is not sold: it only drops from the lavaland's strongest.
+  - type: LavalandDeathDrop
+    drops:
+    - id: PKAUpgradeExplosiveLavaland
+      chance: 0.5
   - type: LavalandMadMiner
     maxHealth: 1250
     # Slower bolts that can be dodged, and a little more time between them.
@@ -264,6 +269,10 @@
       0: Alive
       1000: Dead
   - type: RequireProjectileTarget
+  - type: LavalandDeathDrop
+    drops:
+    - id: PKAUpgradeExplosiveLavaland
+      chance: 0.25
 
 - type: entity
   parent: BaseMobLavalandElite
@@ -522,6 +531,40 @@
   - type: TimedDespawn
     lifetime: 1
 
+# Pandora marks every blast on its own tile: the hierophant's mark spans three tiles and spilled over the
+# safe middle of the box attack.
+- type: entity
+  parent: LavalandHierophantTelegraph
+  id: LavalandPandoraTelegraph
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: BelowMobs
+    sprite: _DeadSpace/Lavaland/Effects/HierophantTelegraph.rsi
+    scale: 0.3333, 0.3333
+    layers:
+    - state: hierophant_telegraph
+      shader: unshaded
+
+# The safe middle of the box attack: green, unlike the purple danger marks around it.
+- type: entity
+  parent: LavalandPandoraTelegraph
+  id: LavalandPandoraSafeTelegraph
+  name: безопасная зона
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: BelowMobs
+    sprite: _DeadSpace/Lavaland/Effects/HierophantTelegraph.rsi
+    scale: 0.3333, 0.3333
+    layers:
+    - state: pandora_safe
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 0.85
+
 - type: entity
   parent: BaseMobLavalandElite
   id: MobLavalandPandora
@@ -565,6 +608,7 @@
     - prototype: LavalandNecropolisChest
     - prototype: LavalandEliteTrophyPandora
   - type: LavalandPandora
+    telegraphVisual: LavalandPandoraTelegraph
     shotLength: 8
     teleportRange: 12
     teleportSound: /Audio/_DeadSpace/Lavaland/Hierophant/airlockopen.ogg

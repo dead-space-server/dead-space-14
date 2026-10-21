@@ -29,8 +29,9 @@
   productEntity: ClothingEyesLavalandStormVisor
   categories:
   - LavalandMiningEquipment
+  # No night vision in it, and the storm staff calms the storm for everyone: cheaper than the night vision goggles.
   cost:
-    LavalandMiningPoint: 1200
+    LavalandMiningPoint: 600
 
 - type: listing
   id: LavalandMiningJumpBoots
@@ -105,8 +106,9 @@
   productEntity: LavalandDiamondPickaxe
   categories:
   - LavalandMiningTools
+  # A little under the upgraded PKA modkits: at an equal price it stood in between them.
   cost:
-    LavalandMiningPoint: 1500
+    LavalandMiningPoint: 1450
 
 - type: listing
   id: LavalandMiningDrill
@@ -203,14 +205,6 @@
   - LavalandMiningTools
   cost:
     LavalandMiningPoint: 25000
-
-- type: listing
-  id: LavalandMiningPKAUpgradeExplosive
-  productEntity: PKAUpgradeExplosiveLavaland
-  categories:
-  - LavalandMiningTools
-  cost:
-    LavalandMiningPoint: 12000
 
 - type: listing
   id: LavalandMiningPKAUpgradeDamage
@@ -464,6 +458,7 @@
 - type: listing
   id: LavalandMiningGrapplingGun
   productEntity: WeaponGrapplingGun
+  description: Стреляет крюком на тросе, который цепляется за стены и предметы, и подтягивает вас к ним. Пока крюк держится, пропасть вас не утянет.
   categories:
   - LavalandMiningUtility
   - LavalandMiningUtilityTaipan

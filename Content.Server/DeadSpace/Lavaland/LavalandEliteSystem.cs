@@ -780,13 +780,17 @@ public sealed class LavalandEliteSystem : EntitySystem
                     PandoraBlast(ent, now + step * i, origin.Offset(direction * i));
                 return cooldown * 0.5 + ent.Comp.WarningTime;
             case 1:
-                // A box of blasts around the target, sparing only its immediate surroundings.
+                // A box of blasts around the target, sparing only its immediate surroundings - marked as safe.
+                var boxCenter = PandoraBoxCenter(ent, target, targetCoordinates);
                 for (var x = -3; x <= 3; x++)
                 {
                     for (var y = -3; y <= 3; y++)
                     {
+                        var tile = boxCenter.Offset(new Vector2(x, y));
                         if (Math.Max(Math.Abs(x), Math.Abs(y)) > 1)
-                            PandoraBlast(ent, now, targetCoordinates.Offset(new Vector2(x, y)));
+                            PandoraBlast(ent, now, tile);
+                        else if (ent.Comp.SafeVisual is { } safe)
+                            QueueHit(now, tile, NoDamage, TimeSpan.Zero, ent, safe);
                     }
                 }
                 return cooldown + ent.Comp.WarningTime;
@@ -833,6 +837,23 @@ public sealed class LavalandEliteSystem : EntitySystem
     }
 
     private static readonly DamageSpecifier NoDamage = new();
+
+    /// <summary>Where the target will be once the box goes off, by its run: up to <c>BoxLead</c> tiles ahead.</summary>
+    private EntityCoordinates PandoraBoxCenter(Entity<LavalandPandoraComponent> ent, EntityUid target,
+        EntityCoordinates targetCoordinates)
+    {
+        if (ent.Comp.BoxLead <= 0f || !TryComp<PhysicsComponent>(target, out var physics))
+            return targetCoordinates;
+
+        var lead = physics.LinearVelocity * (float) ent.Comp.WarningTime.TotalSeconds;
+        if (lead.LengthSquared() < 0.25f)
+            return targetCoordinates;
+
+        if (lead.Length() > ent.Comp.BoxLead)
+            lead = Vector2.Normalize(lead) * ent.Comp.BoxLead;
+
+        return TileCenter(targetCoordinates.Offset(new Vector2(MathF.Round(lead.X), MathF.Round(lead.Y))));
+    }
 
     #endregion
 

@@ -150,6 +150,9 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
                 break;
 
             case LavalandFaunaRaidStage.Active when now >= raid.StageEnd:
+                // Held out to the end: a guaranteed raid fought off spares the next guaranteed one.
+                if (raid.Guaranteed)
+                    raid.SkipNextGuaranteed = true;
                 EndRaid(ent, mapId);
                 return;
 
@@ -212,10 +215,18 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
         if (raid.Stage != LavalandFaunaRaidStage.Idle)
             return;
 
+        // Every other guaranteed raid, after the salvagers fought one off.
+        if (raid.SkipNextGuaranteed)
+        {
+            raid.SkipNextGuaranteed = false;
+            return;
+        }
+
         var now = _timing.CurTime;
         if (raid.NextCheck == TimeSpan.Zero)
             raid.NextCheck = now + planet.FaunaRaid.CheckInterval;
         StartWarning((mapUid, raid), planet.FaunaRaid, Transform(mapUid).MapID, now);
+        raid.Guaranteed = true;
     }
 
     /// <param name="removeRaiders">
@@ -245,6 +256,7 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
         if (wasRunning)
             RaiseNetworkEvent(new LavalandBossMusicStopEvent(LavalandBossMusicStartEvent.RaidMusicId), Filter.Broadcast());
         ent.Comp.Stage = LavalandFaunaRaidStage.Idle;
+        ent.Comp.Guaranteed = false;
         if (wasRunning && mapId != MapId.Nullspace)
             RaiseNetworkEvent(new LavalandFaunaRaidTimerHideEvent(), RaidFilter(mapId));
     }

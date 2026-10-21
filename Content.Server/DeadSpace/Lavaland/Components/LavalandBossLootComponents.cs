@@ -147,9 +147,13 @@ public sealed partial class LavalandVoiceCommand
     [DataField]
     public DamageSpecifier? Damage;
 
-    /// <summary>Pushes listeners away from the speaker with this speed.</summary>
+    /// <summary>Throws listeners away from the speaker with this speed.</summary>
     [DataField]
     public float Repel;
+
+    /// <summary>How far (tiles) the listeners are thrown by <see cref="Repel"/>.</summary>
+    [DataField]
+    public float RepelDistance = 5f;
 }
 
 /// <summary>H.E.C.K. suit curse: every now and then whispers to its wearer.</summary>

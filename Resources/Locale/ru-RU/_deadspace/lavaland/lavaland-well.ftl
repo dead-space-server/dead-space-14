@@ -1,6 +1,7 @@
 lavaland-well-progress = Руда: { $count } / { $required } ({ $percent }%).
 lavaland-well-unload = Выгрузить руду
 lavaland-well-send = Отправить
+lavaland-well-inserted = В колодец загружено руды: { $count }.
 lavaland-raid-warning = Фауна пробуждается около базы утилизаторов! Подготовьтесь: осталась одна минута.
 lavaland-raid-active = Тендрилы атакуют базу утилизаторов! Продержитесь!
 lavaland-raid-timer-warning = ПРОБУЖДЕНИЕ ФАУНЫ: { $time }
@@ -34,3 +35,4 @@ lavaland-morkite-hud-not-connected = ○ Колодец не подключён 
 lavaland-morkite-hud-no-well = ○ Блюспейс колодец не развёрнут
 lavaland-morkite-hud-close = Закрыть. Открыть снова — кликнуть по блюспейс колодцу, добытчику моркита или трубе к нему.
 lavaland-raid-ruined = Никто не встал на защиту аванпоста — фауна разнесла его на куски!
+lavaland-well-reward-radio = Экспедиционное задание утилизаторов выполнено. На счёт отдела снабжения зачислено { $credits } кредитов.

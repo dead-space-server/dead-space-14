@@ -30,6 +30,16 @@ public sealed partial class LavalandFaunaRaidComponent : Component
     public TimeSpan? DefenseCheckAt;
     public EntityUid? MusicStream;
     public readonly List<EntityUid> Entities = new();
+
+    /// <summary>The current raid is a guaranteed one (the bluespace well's).</summary>
+    [ViewVariables]
+    public bool Guaranteed;
+
+    /// <summary>
+    /// A guaranteed raid was fought off: the next guaranteed one does not come, the one after it does.
+    /// </summary>
+    [ViewVariables]
+    public bool SkipNextGuaranteed;
 }
 
 /// <summary>

@@ -3,7 +3,13 @@ using System.Linq;
 using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Shared.Examine;
 using Content.Shared.GameTicking;
+using Content.Server.Radio.EntitySystems;
+using Content.Server.Station.Systems;
+using Content.Shared.Cargo;
+using Content.Shared.Cargo.Components;
 using Content.Shared.Interaction;
+using Content.Shared.Inventory;
+using Content.Shared.Popups;
 using Content.Shared.Stacks;
 using Content.Shared.Storage;
 using Content.Shared.Verbs;
@@ -26,6 +32,12 @@ public sealed class LavalandBluespaceWellSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly LavalandMorkiteMissionSystem _morkite = default!;
     [Dependency] private readonly LavalandFaunaRaidSystem _raids = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private readonly LavalandMiningSystem _mining = default!;
+    [Dependency] private readonly SharedCargoSystem _cargo = default!;
+    [Dependency] private readonly RadioSystem _radio = default!;
+    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
 
     private TimeSpan _nextScan;
 
@@ -38,6 +50,7 @@ public sealed class LavalandBluespaceWellSystem : EntitySystem
     {
         SubscribeLocalEvent<LavalandBluespaceWellComponent, ComponentInit>(OnInit);
         SubscribeLocalEvent<LavalandBluespaceWellComponent, InteractUsingEvent>(OnInsert);
+        SubscribeLocalEvent<LavalandBluespaceWellComponent, InteractHandEvent>(OnInteractHand);
         SubscribeLocalEvent<LavalandBluespaceWellComponent, ExaminedEvent>(OnExamine);
         SubscribeLocalEvent<LavalandBluespaceWellComponent, GetVerbsEvent<AlternativeVerb>>(OnUnloadVerb);
         SubscribeLocalEvent<LavalandBluespaceWellComponent, GetVerbsEvent<Verb>>(OnSendVerb);
@@ -81,12 +94,48 @@ public sealed class LavalandBluespaceWellSystem : EntitySystem
         if (args.Handled || ent.Comp.ReturnAt != null)
             return;
         if (TryComp<StorageComponent>(args.Used, out var storage))
-        {
-            foreach (var ore in storage.Container.ContainedEntities.ToArray())
-                args.Handled |= Insert(ent, ore);
-        }
+            args.Handled = EmptyStorage(ent, storage, args.User) > 0;
         else
             args.Handled = Insert(ent, args.Used);
+    }
+
+    /// <summary>
+    /// An empty hand on the well: at once all the ore from every bag the miner carries (the satchel on the belt
+    /// too) goes in, no bag in hand and no waiting.
+    /// </summary>
+    private void OnInteractHand(Entity<LavalandBluespaceWellComponent> ent, ref InteractHandEvent args)
+    {
+        if (args.Handled || ent.Comp.ReturnAt != null)
+            return;
+
+        var moved = 0;
+        foreach (var item in _inventory.GetHandOrInventoryEntities(args.User))
+        {
+            if (TryComp<StorageComponent>(item, out var storage))
+                moved += EmptyStorage(ent, storage, null);
+        }
+
+        if (moved == 0)
+            return;
+
+        args.Handled = true;
+        _popup.PopupEntity(Loc.GetString("lavaland-well-inserted", ("count", moved)), ent, args.User);
+    }
+
+    /// <summary>All the ore the well takes from the storage; how much went in.</summary>
+    private int EmptyStorage(Entity<LavalandBluespaceWellComponent> ent, StorageComponent storage, EntityUid? user)
+    {
+        var moved = 0;
+        foreach (var ore in storage.Container.ContainedEntities.ToArray())
+        {
+            var amount = TryComp<StackComponent>(ore, out var stack) ? stack.Count : 1;
+            if (Insert(ent, ore))
+                moved += amount;
+        }
+
+        if (moved > 0 && user != null)
+            _popup.PopupEntity(Loc.GetString("lavaland-well-inserted", ("count", moved)), ent, user.Value);
+        return moved;
     }
 
     private void OnExamine(Entity<LavalandBluespaceWellComponent> ent, ref ExaminedEvent args)
@@ -134,12 +183,39 @@ public sealed class LavalandBluespaceWellSystem : EntitySystem
                 ent.Comp.Morkite = 0f;
                 ent.Comp.RaidsTriggered.Clear();
                 ent.Comp.WasConnected = false;
+                ent.Comp.RewardPending = true;
                 ent.Comp.ReturnAt = _timing.CurTime + ent.Comp.ReturnDelay;
                 ent.Comp.ReturnCoordinates = Transform(ent).Coordinates;
                 TeleportEffect(ent);
                 _transform.DetachEntity(ent, Transform(ent));
             },
         });
+    }
+
+    /// <summary>The well is back in place: the salvagers' mission is done.</summary>
+    private void PayReward(Entity<LavalandBluespaceWellComponent> ent)
+    {
+        if (!ent.Comp.RewardPending)
+            return;
+
+        ent.Comp.RewardPending = false;
+        if (ent.Comp.RewardCredits > 0 &&
+            Transform(ent).MapUid is { } map &&
+            TryComp<LavalandMapComponent>(map, out var lavaland) &&
+            TryComp<StationBankAccountComponent>(lavaland.Station, out var bank))
+        {
+            _cargo.UpdateBankAccount((lavaland.Station, bank), ent.Comp.RewardCredits, bank.PrimaryAccount);
+
+            // Said from the station itself: a radio on the lavaland map does not reach the station's telecoms.
+            if (_station.GetLargestGrid(lavaland.Station) is { } stationGrid)
+            {
+                _radio.SendRadioMessage(ent, Loc.GetString("lavaland-well-reward-radio", ("credits", ent.Comp.RewardCredits)),
+                    ent.Comp.RewardChannel, stationGrid);
+            }
+        }
+
+        if (ent.Comp.RewardPoints > 0)
+            _mining.AwardMiningPoints(ent.Comp.RewardPoints, ent.Comp.RewardAccess);
     }
 
     private void TeleportEffect(Entity<LavalandBluespaceWellComponent> ent)
@@ -167,6 +243,7 @@ public sealed class LavalandBluespaceWellSystem : EntitySystem
                 _transform.SetCoordinates(uid, well.ReturnCoordinates);
                 _transform.AnchorEntity((uid, transform));
                 TeleportEffect((uid, well));
+                PayReward((uid, well));
             }
         }
 

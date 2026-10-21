@@ -261,8 +261,10 @@
     - words: [ на колени, лежать, ложись, kneel, down ]
       knockdown: 3
       cooldown: 40
-    - words: [ прочь, назад, отойди, get away, back ]
-      repel: 10
+    # Not "назад" / "back": said all the time without meaning it as an order.
+    - words: [ прочь, отойди, отступите, get away ]
+      repel: 12
+      repelDistance: 6
       cooldown: 10
     - words: [ страдай, умри, гори, suffer, die, burn ]
       cooldown: 30

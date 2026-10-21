@@ -76,6 +76,10 @@
     - id: DiamondOre1
       amount: 2
       maxAmount: 4
+  - type: LavalandDeathDrop
+    drops:
+    - id: PKAUpgradeExplosiveLavaland
+      chance: 0.015
 
 - type: entity
   id: MobLavalandGoldgrub

@@ -1,6 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Shared.Damage;
+using Content.Shared.FixedPoint;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 
@@ -223,6 +224,15 @@ public sealed partial class LavalandSoulscytheComponent : Component
 
     [DataField]
     public float BreakFreeThrow = 2.5f;
+
+    /// <summary>What a hand grabbing the awakened scythe, not its master's, gets.</summary>
+    [DataField]
+    public DamageSpecifier GrabPunishDamage = new() { DamageDict = { ["Slash"] = FixedPoint2.New(5) } };
+
+    [DataField]
+    public TimeSpan GrabPunishCooldown = TimeSpan.FromSeconds(1);
+
+    public TimeSpan NextGrabPunish;
 
     [ViewVariables]
     public bool OutOfRange;

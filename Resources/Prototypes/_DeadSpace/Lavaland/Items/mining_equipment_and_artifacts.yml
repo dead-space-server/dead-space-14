@@ -224,7 +224,7 @@
   - type: RechargeBasicEntityAmmo
     rechargeCooldown: 1.5
   - type: BasicEntityAmmoProvider
-    proto: BulletKinetic
+    proto: BulletKineticMinebot
     capacity: 1
     count: 1
   - type: Gun
@@ -249,6 +249,14 @@
   - type: LavalandMinebot
     collectRange: 1.5
     oreTag: Ore
+
+# The minebot's bolt flies through the miners and the other drones in its way.
+- type: entity
+  parent: BulletKinetic
+  id: BulletKineticMinebot
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ProjectileHostilesOnly
 
 - type: entity
   parent: BaseItem

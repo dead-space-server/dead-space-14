@@ -13,6 +13,8 @@ using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Spawners;
+using Content.Shared.DeadSpace.Weapons.Ranged.Upgrades;
 
 namespace Content.Shared.Weapons.Ranged.Upgrades;
 
@@ -96,16 +98,49 @@ public sealed class GunUpgradeSystem : EntitySystem
 
         _audio.PlayPredicted(ent.Comp.InsertSound, ent, args.User);
         _popup.PopupClient(Loc.GetString("gun-upgrade-popup-insert", ("upgrade", args.Used),("gun", ent.Owner)), args.User);
-        _gun.RefreshModifiers(ent.Owner);
         args.Handled = _container.Insert(args.Used, _container.GetContainer(ent, ent.Comp.UpgradesContainerId));
+        // DS14-start: refreshed after the insert - before it the new upgrade was not counted till the next one went in.
+        _gun.RefreshModifiers(ent.Owner);
+        // DS14-end
 
         _adminLog.Add(LogType.Action, LogImpact.Low, $"{ToPrettyString(args.User):player} inserted gun upgrade {ToPrettyString(args.Used)} into {ToPrettyString(ent.Owner)}.");
     }
 
     private void OnFireRateRefresh(Entity<GunUpgradeFireRateComponent> ent, ref GunRefreshModifiersEvent args)
     {
+        // DS14-start: on such a gun the upgrade only quickens the recharge (see GetFireRateUpgradeBoost).
+        if (HasComp<FireRateUpgradeRechargeOnlyComponent>(args.Gun))
+            return;
+        // DS14-end
+
         args.FireRate *= ent.Comp.Coefficient;
     }
+
+    // DS14-start
+    /// <summary>
+    /// The fire rate upgrades of a gun that only quicken its recharge, multiplied together; 1 for any other gun.
+    /// </summary>
+    public float GetFireRateUpgradeBoost(EntityUid gun)
+    {
+        if (!HasComp<FireRateUpgradeRechargeOnlyComponent>(gun) ||
+            !TryComp<UpgradeableGunComponent>(gun, out var upgradeable))
+        {
+            return 1f;
+        }
+
+        var boost = 1f;
+        foreach (var upgrade in GetCurrentUpgrades((gun, upgradeable)))
+        {
+            if (_entityWhitelist.CheckBoth(upgrade.Owner, blacklist: upgradeable.Blacklist) &&
+                TryComp<GunUpgradeFireRateComponent>(upgrade, out var fireRate))
+            {
+                boost *= fireRate.Coefficient;
+            }
+        }
+
+        return boost;
+    }
+    // DS14-end
 
     private void OnSpeedRefresh(Entity<GunUpgradeSpeedComponent> ent, ref GunRefreshModifiersEvent args)
     {
@@ -125,11 +160,22 @@ public sealed class GunUpgradeSystem : EntitySystem
 
         foreach (var upgrade in GetCurrentUpgrades((uid, component)))
         {
-            if (!_entityWhitelist.CheckBoth(upgrade.Owner, blacklist: component.Blacklist) ||
-                !TryComp<GunUpgradeDamageComponent>(upgrade, out var damage))
-            {
+            if (!_entityWhitelist.CheckBoth(upgrade.Owner, blacklist: component.Blacklist))
                 continue;
+
+            // The range upgrade: the projectiles live longer.
+            if (TryComp<GunUpgradeSpeedComponent>(upgrade, out var speed) &&
+                MathF.Abs(speed.LifetimeCoefficient - 1f) > 0.001f)
+            {
+                foreach (var projectile in args.FiredProjectiles)
+                {
+                    if (TryComp<TimedDespawnComponent>(projectile, out var despawn))
+                        despawn.Lifetime *= speed.LifetimeCoefficient;
+                }
             }
+
+            if (!TryComp<GunUpgradeDamageComponent>(upgrade, out var damage))
+                continue;
 
             var share = damage.Damage * (1f / count);
             foreach (var projectile in args.FiredProjectiles)

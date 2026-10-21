@@ -239,9 +239,10 @@ namespace Content.Server.Atmos.EntitySystems
                                 break; // We're done here now. Let's not do more work than needed.
 
                             var otherTile2 = otherTile.AdjacentTiles[k];
-                            // DS14: the same guard as in the takers' loop below - a tile cut off from everything still
-                            // left in its neighbour's list is no way for the gas to go.
+                            // DS14-start: the same guard as in the takers' loop below - a tile cut off from everything
+                            // still left in its neighbour's list is no way for the gas to go.
                             if (otherTile2 == null || otherTile2.AdjacentBits == 0 || otherTile2.MonstermosInfo.LastQueueCycle != queueCycle) continue;
+                            // DS14-end
                             DebugTools.Assert(otherTile2.AdjacentBits.IsFlagSet((AtmosDirection) (1 << (k ^ 1)))); // DS14
                             if (otherTile2.MonstermosInfo.LastSlowQueueCycle == queueCycleSlow) continue;
                             _equalizeQueue[queueLength++] = otherTile2;

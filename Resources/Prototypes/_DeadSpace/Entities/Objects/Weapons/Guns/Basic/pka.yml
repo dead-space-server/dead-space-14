@@ -53,6 +53,8 @@
     - 0,0,2,1
   - type: RechargeBasicEntityAmmo
     rechargeCooldown: 2.5
+  # The fire rate upgrades quicken the recharge only, not the stored shots.
+  - type: FireRateUpgradeRechargeOnly
     rechargeSound:
       path: /Audio/Weapons/Guns/MagIn/kinetic_reload.ogg
   - type: Clothing
@@ -232,6 +234,8 @@
     graph: ShotgunSawnKinetik
     node: shotgunsawnkinetik
     deconstructionTarget: null
+  # Built for the thin lavaland air like any proto-kinetic gun: half damage anywhere else.
+  - type: LavalandPressureDamage
   - type: UpgradeableGun
     blacklist:
       components:

@@ -10,6 +10,7 @@ using Content.Shared.Access.Systems;
 using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.DeadSpace.Lavaland.Components;
+using Content.Shared.DeadSpace.Lavaland.ChromiteCaves;
 using Content.Shared.Emag.Systems;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
@@ -42,6 +43,7 @@ public sealed class LavalandMiningSystem : EntitySystem
     [Dependency] private readonly SharedAccessSystem _access = default!;
     [Dependency] private readonly EmagSystem _emag = default!;
     [Dependency] private readonly IdCardSystem _idCard = default!;
+    [Dependency] private readonly Robust.Server.Player.IPlayerManager _players = default!;
     [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
     [Dependency] private readonly MaterialStorageSystem _materialStorage = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
@@ -886,6 +888,31 @@ public sealed class LavalandMiningSystem : EntitySystem
         points = pointsComp;
         cardUid = item;
         return true;
+    }
+
+    /// <summary>
+    /// Mining points onto the ID card of every player down on a lavaland or in its chromite caves whose card has one
+    /// of these accesses: a salvage mission's reward.
+    /// </summary>
+    public void AwardMiningPoints(int amount, HashSet<ProtoId<AccessLevelPrototype>> access)
+    {
+        foreach (var session in _players.Sessions)
+        {
+            if (session.AttachedEntity is not { Valid: true } player ||
+                Transform(player).MapUid is not { } map ||
+                !HasComp<LavalandMapComponent>(map) && !HasComp<LavalandChromiteCavesComponent>(map) ||
+                !_idCard.TryFindIdCard(player, out var idCard) ||
+                !HasMiningAccess(idCard.Owner, access))
+            {
+                continue;
+            }
+
+            var points = EnsureComp<LavalandMiningPointsComponent>(idCard.Owner);
+            points.Balance += amount;
+            Dirty(idCard.Owner, points);
+            _popup.PopupEntity(Loc.GetString("lavaland-mission-reward", ("points", amount)), player, player,
+                PopupType.Medium);
+        }
     }
 
     private bool HasMiningAccess(EntityUid cardUid, HashSet<ProtoId<AccessLevelPrototype>>? allowedAccess)
