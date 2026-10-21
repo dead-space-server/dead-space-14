@@ -53,10 +53,10 @@
     - 0,0,2,1
   - type: RechargeBasicEntityAmmo
     rechargeCooldown: 2.5
-  # The fire rate upgrades quicken the recharge only, not the stored shots.
-  - type: FireRateUpgradeRechargeOnly
     rechargeSound:
       path: /Audio/Weapons/Guns/MagIn/kinetic_reload.ogg
+  # The fire rate upgrades quicken the recharge only, not the stored shots.
+  - type: FireRateUpgradeRechargeOnly
   - type: Clothing
     sprite: _DeadSpace/Objects/Weapons/Guns/Basic/reapeterpka.rsi
     quickEquip: false

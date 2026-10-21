@@ -41,6 +41,13 @@ public sealed partial class LavalandFaunaRaidConfig
     [DataField]
     public TimeSpan DefenseGrace = TimeSpan.FromSeconds(45);
 
+    /// <summary>
+    /// A player this far (tiles) around the outpost's grid still defends it: the fight is often out on the rock
+    /// between the outpost and the tendrils, not on the outpost itself.
+    /// </summary>
+    [DataField]
+    public float DefenseMargin = 20f;
+
     [DataField]
     public float RuinFraction = 0.5f;
 
