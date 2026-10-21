@@ -3,6 +3,7 @@
 using Content.Shared.DeadSpace.Weapons.Ranged.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.NPC.Components;
+using Content.Shared.NPC.Systems;
 using Content.Shared.Projectiles;
 using Robust.Shared.Physics.Events;
 
@@ -10,6 +11,8 @@ namespace Content.Shared.DeadSpace.Weapons.Ranged.Systems;
 
 public sealed class ProjectileHostilesOnlySystem : EntitySystem
 {
+    [Dependency] private readonly NpcFactionSystem _faction = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -20,17 +23,13 @@ public sealed class ProjectileHostilesOnlySystem : EntitySystem
     {
         if (args.Cancelled || !HasComp<MobStateComponent>(args.OtherEntity) ||
             !TryComp<ProjectileComponent>(ent, out var projectile) ||
-            !TryComp<NpcFactionMemberComponent>(projectile.Shooter, out var shooter))
+            projectile.Shooter is not { } shooter ||
+            !HasComp<NpcFactionMemberComponent>(shooter))
         {
             return;
         }
 
-        if (TryComp<NpcFactionMemberComponent>(args.OtherEntity, out var other) &&
-            shooter.HostileFactions.Overlaps(other.Factions))
-        {
-            return;
-        }
-
-        args.Cancelled = true;
+        if (!_faction.IsEntityHostile(shooter, args.OtherEntity))
+            args.Cancelled = true;
     }
 }
