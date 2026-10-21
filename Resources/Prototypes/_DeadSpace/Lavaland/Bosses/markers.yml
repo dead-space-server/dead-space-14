@@ -1,0 +1,27 @@
+- type: entity
+  parent: MarkerBase
+  id: LavalandBossArenaSpawnPoint
+  name: точка появления босса арены
+  description: Ставится на грид арены босса. Босс арены появится здесь, а не в центре пола.
+  suffix: Lavaland, Mapping
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+  - type: LavalandBossSpawnPoint
+
+- type: entity
+  parent: MarkerBase
+  id: LavalandLegionSpawner
+  name: спавнер Легиона
+  description: При загрузке карты здесь появляется Легион. Он стоит на месте, пока не откроют врата Легиона рядом или не ударят его, и тут же бросается на игрока.
+  suffix: Lavaland, Mapping
+  categories: [ Spawner ]
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - sprite: _DeadSpace/Lavaland/Mobs/Legion.rsi
+      state: legion
+  - type: LavalandBossSpawner
+    boss: MobLavalandLegionMegafauna

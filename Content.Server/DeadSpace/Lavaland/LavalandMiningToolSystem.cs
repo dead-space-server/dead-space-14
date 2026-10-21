@@ -23,6 +23,7 @@ public sealed class LavalandMiningToolSystem : EntitySystem
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
     [Dependency] private readonly GatherableSystem _gatherable = default!;
+    [Dependency] private readonly LavalandGoldgrubSystem _goldgrub = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly LavalandSonicJackhammerSystem _sonicJackhammer = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
@@ -42,6 +43,8 @@ public sealed class LavalandMiningToolSystem : EntitySystem
         _sonicJackhammer.TryHandleGatherAttempt(ent, ref args);
         if (args.Cancelled)
             return;
+
+        _goldgrub.TryAmbush(ent.Owner, args.User);
 
         if (!TryComp<LavalandMiningToolComponent>(args.Used, out var tool) ||
             !IsMineableWall(ent, args.Used))

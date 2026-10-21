@@ -92,6 +92,7 @@
   id: FlashlightSeclite
   description: A robust flashlight used by security.
   components:
+  - type: KineticFlashlight # DS14
   - type: Tag
     tags:
       - SecBeltEquip

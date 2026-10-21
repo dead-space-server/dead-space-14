@@ -2,6 +2,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Content.Server.Construction.Components;
+using Content.Server.DeadSpace.Construction; // DS14
 using Content.Shared.ActionBlocker;
 using Content.Shared.Construction;
 using Content.Shared.Construction.Prototypes;
@@ -278,6 +279,8 @@ namespace Content.Server.Construction
                 Del(newEntity); // Screw you, make proper construction graphs.
                 return null;
             }
+
+            EnsureComp<PlayerConstructedComponent>(newEntity); // DS14
 
             // We attempt to set the pathfinding target.
             SetPathfindingTarget(newEntity, targetNode.Name, construction);

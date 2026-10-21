@@ -1,0 +1,619 @@
+- type: stack
+  parent: BaseMediumStack
+  id: LavalandMarkerBeacon
+  name: stack-lavaland-marker-beacon
+  icon: { sprite: /Textures/_DeadSpace/Lavaland/Objects/Specific/Mining/marker_beacon.rsi, state: icon }
+  spawn: LavalandMarkerBeaconStack1
+  maxCount: 100
+
+- type: entity
+  parent: BaseItem
+  id: LavalandMarkerBeaconStack
+  name: маркерный маяк
+  description: Светящиеся маркеры для разметки пути. Используйте в руке, чтобы поставить маяк под собой; альт-клик меняет цвет.
+  suffix: 10
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Specific/Mining/marker_beacon.rsi
+    layers:
+    - state: burgundy
+      map: [ "enum.LavalandArtifactLayers.Base" ]
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: LavalandMarkerBeacon
+    count: 10
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.LavalandArtifactVisuals.Color:
+        enum.LavalandArtifactLayers.Base:
+          burgundy: { state: burgundy }
+          bronze: { state: bronze }
+          yellow: { state: yellow }
+          lime: { state: lime }
+          olive: { state: olive }
+          jade: { state: jade }
+          teal: { state: teal }
+          cerulean: { state: cerulean }
+          indigo: { state: indigo }
+          purple: { state: purple }
+          violet: { state: violet }
+          fuchsia: { state: fuchsia }
+  - type: LavalandMarkerBeaconStack
+    colors: [ burgundy, bronze, yellow, lime, olive, jade, teal, cerulean, indigo, purple, violet, fuchsia ]
+    lightColors:
+      burgundy: "#d9473f"
+      bronze: "#d18b3f"
+      yellow: "#e6dc5c"
+      lime: "#9fe65c"
+      olive: "#6fa03c"
+      jade: "#3cc28b"
+      teal: "#5cdde6"
+      cerulean: "#3f8bd9"
+      indigo: "#3f4fd9"
+      purple: "#8b3fd9"
+      violet: "#c18ce6"
+      fuchsia: "#e65cc6"
+  - type: StackPrice
+    price: 5
+
+- type: entity
+  parent: LavalandMarkerBeaconStack
+  id: LavalandMarkerBeaconStack1
+  suffix: 1
+  components:
+  - type: Stack
+    stackType: LavalandMarkerBeacon
+    count: 1
+
+- type: entity
+  id: LavalandMarkerBeacon
+  name: маркерный маяк
+  description: Закреплённый светящийся маркер. Можно подобрать рукой.
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    drawdepth: FloorObjects
+    sprite: _DeadSpace/Lavaland/Objects/Specific/Mining/marker_beacon.rsi
+    layers:
+    - state: burgundy-on
+      shader: unshaded
+      map: [ "enum.LavalandArtifactLayers.Base" ]
+  - type: PointLight
+    radius: 2
+    energy: 3
+    color: "#d9473f"
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.LavalandArtifactVisuals.Color:
+        enum.LavalandArtifactLayers.Base:
+          burgundy: { state: burgundy-on }
+          bronze: { state: bronze-on }
+          yellow: { state: yellow-on }
+          lime: { state: lime-on }
+          olive: { state: olive-on }
+          jade: { state: jade-on }
+          teal: { state: teal-on }
+          cerulean: { state: cerulean-on }
+          indigo: { state: indigo-on }
+          purple: { state: purple-on }
+          violet: { state: violet-on }
+          fuchsia: { state: fuchsia-on }
+  - type: LavalandMarkerBeacon
+
+- type: entity
+  parent: BaseItem
+  id: LavalandLazarusInjector
+  name: инъектор Лазаря
+  description: Коктейль из наномашин и химикатов, способный вернуть к жизни животное и сделать его дружелюбным к тому, кто его оживил. Бесполезен на более сложных формах жизни.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Specific/Medical/lazarus_injector.rsi
+    layers:
+    - state: icon
+      map: [ "enum.LavalandArtifactLayers.Base" ]
+  - type: Item
+    size: Small
+    sprite: _DeadSpace/Lavaland/Objects/Specific/Medical/lazarus_injector.rsi
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.LavalandArtifactVisuals.Charged:
+        enum.LavalandArtifactLayers.Base:
+          True: { state: icon }
+          False: { state: empty }
+  - type: LavalandLazarusInjector
+    factions: [ PetsNT ]
+    whitelist:
+      components:
+      - LavalandFauna
+      - LavalandLazarusRevivable
+    sound: /Audio/Items/hypospray.ogg
+  - type: StaticPrice
+    price: 1000
+
+- type: htnCompound
+  id: LavalandMinebotCompound
+  branches:
+  - tasks:
+    - !type:HTNCompoundTask
+      task: InnateRangedCombatCompound
+  - tasks:
+    - !type:HTNCompoundTask
+      task: FollowCompound
+  - tasks:
+    - !type:HTNCompoundTask
+      task: IdleCompound
+
+- type: entity
+  parent: [ BaseSimpleMob, MobCombat, MobRobotic ]
+  id: MobLavalandMinebot
+  name: минбот
+  description: Шахтёрский дрон. Следует за хозяином, отстреливает фауну, сам вскапывает рудные жилы и собирает руду во встроенную сумку боргов. Альт-клик — выгрузить руду; привязать к себе и переключить сбор — через меню.
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/Minebot.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: minebot
+  - type: HTN
+    rootTask:
+      task: LavalandMinebotCompound
+    blackboard:
+      FollowRange: !type:Single
+        3
+      FollowCloseRange: !type:Single
+        1.5
+  - type: NpcFactionMember
+    factions:
+    - PetsNT
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 60
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      60: Dead
+    showOverlays: false
+    # A repaired minebot gets back to work.
+    allowRevives: true
+  # Like a borg: a welder mends the frame, cable coils the wiring (cables heal only silicon).
+  - type: Damageable
+    damageContainer: Silicon
+  - type: Repairable
+    damageValue: -10
+    doAfterDelay: 1
+    fuelCost: 0.5
+    allowSelfRepair: false
+  # Borg sounds as it breaks down.
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 40
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Machines/warning_buzzer.ogg
+          params:
+            volume: 5
+    - trigger:
+        !type:DamageTrigger
+        damage: 60
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 1.5
+  - type: BasicEntityAmmoProvider
+    proto: BulletKineticMinebot
+    capacity: 1
+    count: 1
+  - type: Gun
+    fireRate: 0.7
+    useKey: false
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot: /Audio/Weapons/Guns/Gunshots/kinetic_accel.ogg
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3
+    baseSprintSpeed: 4.5
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+    - Unimplantable
+  - type: Speech
+    speechVerb: Robotic
+    speechSounds: Borg
+  - type: LavalandWeatherImmune
+  - type: LavalandChasmImmune
+  - type: LavalandMinebot
+    collectRange: 1.5
+    oreTag: Ore
+
+# The minebot's bolt flies through the miners and the other drones in its way.
+- type: entity
+  parent: BulletKinetic
+  id: BulletKineticMinebot
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ProjectileHostilesOnly
+
+- type: entity
+  parent: BaseItem
+  id: LavalandWispLantern
+  name: жуткий фонарь
+  description: Фонарь не светит сам, но в нём живёт дружелюбный огонёк. Выпущенный огонёк освещает путь и даёт тепловое зрение.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Specific/wisp_lantern.rsi
+    layers:
+    - state: icon
+      map: [ "enum.LavalandArtifactLayers.Base" ]
+  - type: Item
+    size: Normal
+    sprite: _DeadSpace/Lavaland/Objects/Specific/wisp_lantern.rsi
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.LavalandArtifactVisuals.Charged:
+        enum.LavalandArtifactLayers.Base:
+          True: { state: icon }
+          False: { state: icon-empty }
+  - type: LavalandWispLantern
+  - type: StaticPrice
+    price: 3000
+
+- type: entity
+  id: LavalandLanternWisp
+  name: дружелюбный огонёк
+  description: Рад осветить вам путь.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _DeadSpace/Lavaland/Effects/LanternWisp.rsi
+    layers:
+    - state: wisp
+      shader: unshaded
+  - type: PointLight
+    radius: 6
+    energy: 1.2
+    color: "#a77bff"
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: BaseItem
+  id: LavalandWarpCubeRed
+  name: красный куб
+  description: Загадочный красный куб. Использование переносит вас к его синему близнецу. Работает только на Лаваленде и в пещерах.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Specific/warp_cube.rsi
+    state: red
+  - type: Item
+    size: Small
+  - type: LavalandWarpCube
+    spawnPair: LavalandWarpCubeBlue
+    sound: /Audio/Effects/teleport_arrival.ogg
+  - type: StaticPrice
+    price: 2000
+
+- type: entity
+  parent: BaseItem
+  id: LavalandWarpCubeBlue
+  name: синий куб
+  description: Загадочный синий куб. Использование переносит вас к его красному близнецу. Работает только на Лаваленде и в пещерах.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Specific/warp_cube.rsi
+    state: blue
+  - type: Item
+    size: Small
+  - type: LavalandWarpCube
+    sound: /Audio/Effects/teleport_arrival.ogg
+  - type: StaticPrice
+    price: 2000
+
+- type: entity
+  id: LavalandWarpCubeEffect
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: Effects/chemsmoke.rsi
+    state: chemsmoke
+    color: "#3fbafdaa"
+  - type: TimedDespawn
+    lifetime: 1
+
+- type: entity
+  parent: BaseItem
+  id: LavalandImmortalityTalisman
+  name: талисман бессмертия
+  description: Жуткий талисман. Использование вырывает вас из реальности на 10 секунд — вы неуязвимы, но ничего не можете сделать.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Specific/immortality_talisman.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: LavalandImmortalityTalisman
+    duration: 10
+    cooldown: 60
+  # Shows the recharge on the icon, like any item with a use delay; the same 60 seconds.
+  - type: UseDelay
+    delay: 60
+  - type: StaticPrice
+    price: 3000
+
+- type: entity
+  id: LavalandRealityHole
+  name: дыра в реальности
+  description: Очень похожа по форме на человека.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: Effects/chemsmoke.rsi
+    state: chemsmoke
+    color: "#000000aa"
+  - type: ContainerContainer
+    containers:
+      reality-hole: !type:Container
+
+- type: entity
+  parent: BaseItem
+  id: LavalandShipInBottle
+  name: корабль в бутылке
+  description: В бутылке плещется крошечная лодка для плавания по лаве. Используйте, чтобы выпустить её; ударьте бутылкой по лодке, чтобы убрать обратно.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Specific/ship_in_a_bottle.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: LavalandShipInBottle
+    boatPrototype: LavaBoat
+  - type: StaticPrice
+    price: 1500
+
+- type: entity
+  parent: BaseItem
+  id: LavalandFlightPotion
+  name: странный эликсир
+  description: Фляга с почти святой аурой. На этикетке написано «ходи по облакам».
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Specific/flight_potion.rsi
+    layers:
+    - state: icon
+    - state: fill
+    - state: cap
+  - type: Item
+    size: Small
+  - type: LavalandPotion
+    message: lavaland-flight-potion-drink
+    addedComponents:
+    - type: LavalandChasmImmune
+    - type: CanMoveInAir
+    - type: LavalandCloudWalker # a little white cloud under the feet instead of wings
+  - type: StaticPrice
+    price: 3000
+
+- type: entity
+  parent: BaseItem
+  id: LavalandRodOfAsclepius
+  name: жезл Асклепия
+  description: Деревянный жезл, обвитый резной змеёй. Принесите клятву, и змея свяжет вас с жезлом — вы станете пацифистом, но вокруг вас будут исцеляться все живые.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Specific/rod_of_asclepius.rsi
+    layers:
+    - state: icon
+      map: [ "enum.LavalandArtifactLayers.Base" ]
+  - type: Item
+    size: Normal
+    sprite: _DeadSpace/Lavaland/Objects/Specific/rod_of_asclepius.rsi
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.LavalandArtifactVisuals.Active:
+        enum.LavalandArtifactLayers.Base:
+          True: { state: icon-active }
+          False: { state: icon }
+  - type: LavalandRodOfAsclepius
+    oathLines:
+    - lavaland-asclepius-oath-1
+    - lavaland-asclepius-oath-2
+    - lavaland-asclepius-oath-3
+    - lavaland-asclepius-oath-4
+    lineDelay: 3
+    auraRange: 7
+    auraInterval: 2.6
+    auraHeal:
+      types:
+        Blunt: -1.4
+        Slash: -1.4
+        Piercing: -1.4
+        Heat: -1.4
+        Cold: -1.4
+        Poison: -1.4
+        Asphyxiation: -1.4
+    selfHeal:
+      types:
+        Blunt: -0.6
+        Slash: -0.6
+        Piercing: -0.6
+        Heat: -0.6
+        Poison: -0.6
+        Asphyxiation: -0.6
+  - type: StaticPrice
+    price: 3000
+
+- type: entity
+  id: ActionLavalandMementoMori
+  name: Memento Mori
+  description: Связать свою жизнь с медальоном.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    icon: { sprite: _DeadSpace/Lavaland/Clothing/memento_mori.rsi, state: icon }
+    useDelay: 5
+  - type: InstantAction
+    event: !type:LavalandMementoMoriActionEvent
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckLavalandMementoMori
+  name: Memento Mori
+  description: Таинственный медальон с надписью «Верная смерть завтра значит верную жизнь сегодня». Связав с ним жизнь, вы не умрёте, пока он на вас, — но снять его значит обратиться в пепел.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Clothing/memento_mori.rsi
+    layers:
+    - state: icon
+      map: [ "enum.LavalandArtifactLayers.Base" ]
+  - type: Clothing
+    sprite: _DeadSpace/Lavaland/Clothing/memento_mori.rsi
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.LavalandArtifactVisuals.Active:
+        enum.LavalandArtifactLayers.Base:
+          True: { state: icon-active }
+          False: { state: icon }
+  - type: ActionGrant
+    actions:
+    - ActionLavalandMementoMori
+  - type: ItemActionGrant
+    actions:
+    - ActionLavalandMementoMori
+    activeIfWorn: true
+  - type: LavalandMementoMori
+    linkTime: 4
+  - type: StaticPrice
+    price: 3000
+
+- type: entity
+  id: ActionLavalandBerserk
+  name: Берсерк
+  description: Впасть в ярость, когда доспех заряжен.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    icon: { sprite: _DeadSpace/Lavaland/Clothing/berserker_suit.rsi, state: icon }
+    useDelay: 1
+  - type: InstantAction
+    event: !type:LavalandBerserkActionEvent
+
+- type: entity
+  parent: ClothingOuterBaseToggleable
+  id: ClothingOuterLavalandBerserker
+  name: доспех берсерка
+  description: Громоздкий доспех, одержимый тёмной силой. Получая урон, он копит ярость; на полном заряде можно впасть в берсерк — урон по вам режется, вы быстрее, но стрелять не сможете.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Clothing/berserker_suit.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Lavaland/Clothing/berserker_suit.rsi
+  - type: Item
+    size: Huge
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadLavalandBerserkerHood
+    slot: head
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.7
+        Slash: 0.7
+        Piercing: 0.7
+        Heat: 0.8
+        Cold: 0.8
+  - type: FireProtection
+    reduction: 0.5
+  - type: LavalandBerserkerSuit
+    maxCharge: 100
+    damageToCharge: 0.75
+    drainPerSecond: 5
+    speedMultiplier: 1.25
+    activeModifiers:
+      coefficients:
+        Blunt: 0.5
+        Slash: 0.5
+        Piercing: 0.5
+    activateSound: /Audio/Effects/demon_attack1.ogg
+  - type: StaticPrice
+    price: 4000
+
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadLavalandBerserkerHood
+  categories: [ HideSpawnMenu ]
+  name: шлем берсерка
+  description: Тяжёлый шлем, одержимый тёмной силой.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Clothing/berserker_hood.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Lavaland/Clothing/berserker_hood.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.85
+        Slash: 0.85
+        Piercing: 0.85
+
+- type: entity
+  parent: ClothingBeltStorageBase
+  id: LavalandParadoxBagRed
+  name: сумка-парадокс
+  description: Каким-то образом она находится в двух местах одновременно. Открыв одну из двух сумок, вы найдёте в ней всё, что лежало во второй.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Specific/paradox_bag.rsi
+    state: icon
+  - type: Clothing
+    sprite: _DeadSpace/Lavaland/Objects/Specific/paradox_bag.rsi
+  - type: Item
+    size: Normal
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,6,2
+  - type: LavalandParadoxBag
+    spawnPair: LavalandParadoxBagBlue
+  - type: StaticPrice
+    price: 3000
+
+- type: entity
+  parent: LavalandParadoxBagRed
+  id: LavalandParadoxBagBlue
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: LavalandParadoxBag

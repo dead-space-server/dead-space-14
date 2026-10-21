@@ -17,10 +17,19 @@ public sealed partial class LavalandBossComponent : Component
     public SoundSpecifier? Music;
 
     [DataField]
+    public List<SoundSpecifier> MusicPool = new();
+
+    public SoundSpecifier? SelectedMusic;
+
+    [DataField]
     public SoundSpecifier? DeathSound;
 
     [DataField]
     public List<EntProtoId> DeathRewards = new();
+
+    /// <summary>The boss' unique loot: only one of these, picked at random, drops besides <see cref="DeathRewards"/>.</summary>
+    [DataField]
+    public List<EntProtoId> UniqueRewards = new();
 
     [ViewVariables]
     public EntityUid? Arena;
@@ -39,3 +48,9 @@ public sealed class LavalandBossFightStartedEvent(EntityUid arena) : EntityEvent
 {
     public readonly EntityUid Arena = arena;
 }
+
+/// <summary>
+/// Raised on the arena boss before its health is sent to the boss HUD, so multi-body bosses can report combined health.
+/// </summary>
+[ByRefEvent]
+public record struct LavalandBossHudHealthEvent(float Current, float Max, float HealthScale);

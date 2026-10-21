@@ -42,7 +42,7 @@ entities:
     - type: MetaData
       name: LavaLand
     - type: Transform
-      pos: -6.4804506,-2.6413803
+      pos: 0,0
       parent: invalid
     - type: MapGrid
       chunks:

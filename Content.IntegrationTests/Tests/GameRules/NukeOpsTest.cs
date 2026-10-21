@@ -96,15 +96,29 @@ public sealed class NukeOpsTest
         Assert.That(entMan.Count<NukeOpsShuttleComponent>(), Is.Zero);
         Assert.That(entMan.Count<NukeOperativeSpawnerComponent>(), Is.Zero);
 
+        // DS14-start: only this test's players - a pooled server keeps the statuses of players gone with earlier tests,
+        // and they never join this round.
+        var testUsers = dummies.Select(x => x.UserId).Append(client.User!.Value).ToArray();
+        bool AllStatus(PlayerGameStatus status) =>
+            testUsers.All(user => ticker.PlayerGameStatuses.TryGetValue(user, out var s) && s == status);
+        // DS14-end
+
         // Ready up and start nukeops
         ticker.ToggleReadyAll(true);
-        Assert.That(ticker.PlayerGameStatuses.Values.All(x => x == PlayerGameStatus.ReadyToPlay));
+        Assert.That(AllStatus(PlayerGameStatus.ReadyToPlay)); // DS14
         await pair.WaitCommand("forcepreset Nukeops");
         await pair.RunTicksSync(10);
 
+        // DS14-start: spawning everyone in can take a few ticks more than ten (the maps are loading): wait for it.
+        for (var i = 0; i < 60 && !AllStatus(PlayerGameStatus.JoinedGame); i++)
+        {
+            await pair.RunTicksSync(10);
+        }
+        // DS14-end
+
         // Game should have started
         Assert.That(ticker.RunLevel, Is.EqualTo(GameRunLevel.InRound));
-        Assert.That(ticker.PlayerGameStatuses.Values.All(x => x == PlayerGameStatus.JoinedGame));
+        Assert.That(AllStatus(PlayerGameStatus.JoinedGame)); // DS14
         Assert.That(client.EntMan.EntityExists(client.AttachedEntity));
 
         var dummyEnts = dummies.Select(x => x.AttachedEntity ?? default).ToArray();

@@ -48,7 +48,7 @@ stack-plastitanium =
 
 ent-Nanopaste = нанопаста
     .suffix = Полный
-    .desc = { ent-BaseHealingItem.desc }
+    .desc = Медицинский препарат для лечения повреждений синтетиков и киборгов: наноботы восстанавливают повреждённые узлы и улучшают работу систем.
 ent-Nanopaste1 = { ent-Nanopaste }
     .suffix = Один
     .desc = { ent-Nanopaste.desc }

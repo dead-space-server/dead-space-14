@@ -44,6 +44,9 @@ public sealed class LavalandBossHudHideEvent : EntityEventArgs
 [Serializable, NetSerializable]
 public sealed class LavalandBossMusicStartEvent : EntityEventArgs
 {
+    /// <summary>The fauna raid's music goes through the boss music too (its volume and switch); a boss fight wins over it.</summary>
+    public const int RaidMusicId = int.MinValue;
+
     public int ArenaId;
     public ResolvedSoundSpecifier Specifier = default!;
     public AudioParams? AudioParams;

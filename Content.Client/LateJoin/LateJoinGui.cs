@@ -93,7 +93,9 @@ namespace Content.Client.LateJoin
             if (!_gameTicker.DisallowedLateJoin && _gameTicker.StationNames.Count == 0)
                 _sawmill.Warning("No stations exist, nothing to display in late-join GUI");
 
-            foreach (var (id, name) in _gameTicker.StationNames)
+            // DS14-start: the station first (opened), lavaland with the ash walkers below it
+            foreach (var (id, name) in _gameTicker.StationNames.OrderBy(pair => IsLavalandOnly(pair.Key) ? 1 : 0).ToList())
+            // DS14-end
             {
                 var jobList = new BoxContainer
                 {
@@ -350,6 +352,22 @@ namespace Content.Client.LateJoin
                 }
             }
         }
+
+        // DS14-start
+        private static readonly ProtoId<DepartmentPrototype> LavalandDepartment = "Lavaland";
+
+        /// <summary>A "station" whose every job is of the Lavaland department (the ash walkers).</summary>
+        private bool IsLavalandOnly(NetEntity station)
+        {
+            if (!_gameTicker.JobsAvailable.TryGetValue(station, out var jobs) || jobs.Count == 0 ||
+                !_prototypeManager.TryIndex(LavalandDepartment, out var lavaland))
+            {
+                return false;
+            }
+
+            return jobs.Keys.All(job => lavaland.Roles.Contains(job));
+        }
+        // DS14-end
 
         // DS14-start
         internal static string GetJobRowStyleClass(int rowIndex)

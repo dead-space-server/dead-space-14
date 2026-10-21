@@ -665,6 +665,9 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         if (component.HeavyAttackResistanceBypass is { } heavyAttackResistanceBypass) // DS14
             resistanceBypass = heavyAttackResistanceBypass; // DS14
         var entities = GetEntityList(ev.Entities);
+        // DS14-start: the client may list entities the server does not know (client-side ones, or already deleted)
+        entities.RemoveAll(uid => !uid.IsValid() || TerminatingOrDeleted(uid));
+        // DS14-end
 
         if (entities.Count == 0)
         {

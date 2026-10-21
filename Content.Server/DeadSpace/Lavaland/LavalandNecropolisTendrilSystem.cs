@@ -4,6 +4,8 @@ using Content.Server.Parallax;
 using Content.Server.Tiles;
 using Content.Shared.Chasm;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
+using Content.Shared.DeadSpace.Lavaland.Components;
 using Content.Shared.Destructible;
 using Content.Shared.Maps;
 using Content.Shared.Mobs.Components;
@@ -22,6 +24,7 @@ namespace Content.Server.DeadSpace.Lavaland;
 public sealed class LavalandNecropolisTendrilSystem : EntitySystem
 {
     [Dependency] private readonly AudioSystem _audio = default!;
+    [Dependency] private readonly LavalandFaunaRaidSystem _raid = default!;
     [Dependency] private readonly BiomeSystem _biome = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
@@ -39,6 +42,7 @@ public sealed class LavalandNecropolisTendrilSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<LavalandNecropolisTendrilComponent, MapInitEvent>(OnTendrilMapInit);
+        SubscribeLocalEvent<LavalandNecropolisTendrilComponent, BeforeDamageChangedEvent>(OnTendrilBeforeDamage);
         SubscribeLocalEvent<LavalandNecropolisTendrilComponent, DestructionEventArgs>(OnTendrilDestroyed);
         SubscribeLocalEvent<LavalandTendrilCollapseComponent, MapInitEvent>(OnCollapseMapInit);
     }
@@ -72,6 +76,29 @@ public sealed class LavalandNecropolisTendrilSystem : EntitySystem
 
             Collapse((uid, collapse, xform));
         }
+    }
+
+    /// <summary>
+    /// Its own fauna (and any other) don't break tendrils, smashing their way to the outpost - with their claws,
+    /// their shots or what they throw. A raid's tendril takes no damage from nobody in particular either.
+    /// </summary>
+    private void OnTendrilBeforeDamage(Entity<LavalandNecropolisTendrilComponent> ent, ref BeforeDamageChangedEvent args)
+    {
+        if (args.Origin is not { } origin)
+        {
+            if (HasComp<LavalandRaidTendrilComponent>(ent))
+                args.Cancelled = true;
+            return;
+        }
+
+        // A shot or a thrown thing counts as whoever sent it.
+        if (TryComp<Content.Shared.Projectiles.ProjectileComponent>(origin, out var projectile) && projectile.Shooter is { } shooter)
+            origin = shooter;
+        else if (TryComp<Content.Shared.Throwing.ThrownItemComponent>(origin, out var thrown) && thrown.Thrower is { } thrower)
+            origin = thrower;
+
+        if (HasComp<LavalandFaunaComponent>(origin))
+            args.Cancelled = true;
     }
 
     private void OnTendrilMapInit(Entity<LavalandNecropolisTendrilComponent> ent, ref MapInitEvent args)
@@ -116,6 +143,10 @@ public sealed class LavalandNecropolisTendrilSystem : EntitySystem
         var prototype = _random.Pick(ent.Comp1.SpawnPrototypes);
         var spawned = Spawn(prototype.Id, coordinates);
         ent.Comp1.ActiveMobs.Add(spawned);
+
+        // A raid tendril sends its fauna at the outpost.
+        if (HasComp<LavalandRaidTendrilComponent>(ent))
+            _raid.MakeRaider(spawned);
     }
 
     private bool TryGetMobSpawnCoordinates(

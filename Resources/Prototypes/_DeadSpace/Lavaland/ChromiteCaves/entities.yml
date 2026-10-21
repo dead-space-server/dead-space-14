@@ -1,0 +1,232 @@
+# Chromite caves under lavaland. Only sprites that already exist in the build are used, recolored where needed.
+
+# Entrance: a 3x3 pit near the outpost, shimmering blue and purple.
+- type: entity
+  parent: FloorChasmEntity
+  id: LavalandChromitePit
+  name: переливающаяся яма
+  description: Из глубины то голубым, то фиолетовым светом мерцают кристаллы. Обратно отсюда так просто не вылезти.
+  categories: [ HideSpawnMenu ]
+  components:
+  # The storm does not reach the pit nor a couple of tiles around it.
+  - type: LavalandStormShelter
+    radius: 2
+  # An ordinary lavaland chasm to look at: only its light and motes shimmer.
+  - type: PointLight
+    enabled: true
+    color: "#58c8ff"
+    radius: 2.5
+    energy: 1.2
+    softness: 2
+    castShadows: false
+  - type: LavalandChromitePit
+    colorA: "#58c8ff"
+    colorB: "#b05cff"
+    period: 4
+    spriteTint: 0
+  - type: LavalandParticleEmitter
+    kind: Mote
+    rate: 0.6
+    colors: [ "#7fd8ff", "#c08bff", "#e2f4ff" ]
+    lifetimeMin: 1.5
+    lifetimeMax: 3
+    sizeMin: 0.03
+    sizeMax: 0.06
+    speed: 0.5
+    spread: 0.45
+
+# Exit: a beam of light falling from above at the landing point. No sprite: light and rising motes.
+- type: entity
+  id: LavalandChromiteExit
+  name: луч света сверху
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: PointLight
+    enabled: true
+    color: "#cdeeff"
+    radius: 7
+    energy: 3
+    softness: 1.5
+    castShadows: false
+  - type: LavalandChromiteExit
+    pulsePeriod: 3.5
+    pulseDepth: 0.25
+  - type: LavalandParticleEmitter
+    kind: Mote
+    rate: 9
+    glowBoost: 1.5
+    colors: [ "#ffffff", "#cdeeff", "#9fdcff" ]
+    lifetimeMin: 2
+    lifetimeMax: 4
+    sizeMin: 0.025
+    sizeMax: 0.06
+    speed: 0.9
+    spread: 0.4
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+# Flowers of the landing point.
+- type: entity
+  id: LavalandChromiteLandingFlower
+  name: светящиеся цветы
+  description: Голубые цветы, с которых при каждом дуновении слетают лепестки.
+  categories: [ HideSpawnMenu ]
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: Sprite
+    sprite: Decals/Flora/flora_flowers.rsi
+    drawdepth: FloorObjects
+    color: "#7fd0ff"
+    layers:
+    - state: flowersbr1
+      map: [ "random" ]
+      shader: unshaded
+  - type: RandomSprite
+    available:
+    - random:
+        flowersbr1: ""
+        flowersbr2: ""
+        flowersbr3: ""
+        flowerspv1: ""
+        flowerspv2: ""
+        flowerspv3: ""
+  - type: LavalandParticleEmitter
+    kind: Petal
+    rate: 0.25
+    glowBoost: 3
+    colors: [ "#8fd8ff", "#bfe8ff", "#6fa8ff" ]
+    lifetimeMin: 2
+    lifetimeMax: 3.5
+    sizeMin: 0.05
+    sizeMax: 0.08
+    speed: 0.7
+    spread: 0.35
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: LavalandChromiteLandingFlower
+  id: LavalandChromiteLandingFlowerGlow
+  categories: [ HideSpawnMenu ]
+  components:
+  # No light of its own: dozens of small lights at the landing point were the landing lag. The beam lights them.
+  - type: LavalandParticleEmitter
+    kind: Mote
+    rate: 0.4
+    glowBoost: 3
+    colors: [ "#9fe4ff", "#d4f2ff" ]
+    lifetimeMin: 2
+    lifetimeMax: 4
+    sizeMin: 0.03
+    sizeMax: 0.055
+    speed: 0.35
+    spread: 0.4
+
+# Burst of petals where somebody lands.
+- type: entity
+  id: LavalandChromiteLandingPetals
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+  - type: TimedDespawn
+    lifetime: 0.5
+  - type: LavalandParticleEmitter
+    kind: Petal
+    rate: 40
+    colors: [ "#8fd8ff", "#bfe8ff", "#6fa8ff", "#c8b4ff" ]
+    lifetimeMin: 1.5
+    lifetimeMax: 2.8
+    sizeMin: 0.05
+    sizeMax: 0.09
+    speed: 1.6
+    spread: 0.5
+
+# Small glowing crystals scattered over the floor.
+- type: entity
+  id: LavalandChromiteFloorCrystal
+  name: светящиеся кристаллики
+  description: Мелкие кристаллы, проросшие сквозь хромит.
+  categories: [ HideSpawnMenu ]
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: Sprite
+    sprite: Structures/Decoration/crystal.rsi
+    drawdepth: FloorObjects
+    scale: 0.45, 0.45
+    color: "#6fd8ff"
+    noRot: true
+    layers:
+    - state: crystal_grey
+  - type: PointLight
+    enabled: true
+    color: "#4fb8ff"
+    radius: 1.6
+    energy: 0.9
+    castShadows: false
+  - type: LavalandParticleEmitter
+    kind: Mote
+    rate: 0.15
+    glowBoost: 4
+    colors: [ "#8fdcff" ]
+    lifetimeMin: 2
+    lifetimeMax: 4
+    sizeMin: 0.025
+    sizeMax: 0.045
+    speed: 0.3
+    spread: 0.25
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: LavalandChromiteFloorCrystal
+  id: LavalandChromiteFloorCrystalPurple
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    color: "#b98aff"
+  - type: PointLight
+    color: "#9a5cff"
+  - type: LavalandParticleEmitter
+    kind: Mote
+    rate: 0.15
+    glowBoost: 4
+    colors: [ "#c9a8ff" ]
+    lifetimeMin: 2
+    lifetimeMax: 4
+    sizeMin: 0.025
+    sizeMax: 0.045
+    speed: 0.3
+    spread: 0.25
+
+- type: entity
+  parent: [ WallRockChromite, WallIndestructible ]
+  id: WallRockChromiteCavesBoundary
+  name: хромитовая порода
+  description: Слишком твёрдая, чтобы её копать.
+  suffix: Chromite Caves Boundary, Indestructible
+
+# Invisible: keeps the storm off its tile (around the pits).
+- type: entity
+  id: LavalandStormShelterBlocker
+  name: укрытие от бури
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: BlockWeather
+  - type: Tag
+    tags:
+    - HideContextMenu

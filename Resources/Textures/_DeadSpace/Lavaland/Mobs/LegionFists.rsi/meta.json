@@ -1,0 +1,23 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Created by golubok_epta for Dead Space 14.",
+    "size": {
+        "x": 64,
+        "y": 64
+    },
+    "states": [
+        {
+            "name": "fist-left"
+        },
+        {
+            "name": "fist-right"
+        },
+        {
+            "name": "punch-left"
+        },
+        {
+            "name": "punch-right"
+        }
+    ]
+}

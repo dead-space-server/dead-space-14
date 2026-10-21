@@ -7,6 +7,7 @@ using Content.Shared.Parallax.Biomes.Markers;
 using Content.Shared.Procedural;
 using Content.Shared.Weather;
 using Content.Shared.Whitelist;
+using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
@@ -128,6 +129,28 @@ public sealed partial class LavalandPlanetPrototype : IPrototype
 
     [DataField]
     public int TendrilClearRadius = 1;
+
+    [DataField]
+    public LavalandFaunaRaidConfig FaunaRaid = new();
+
+    [DataField]
+    public LavalandPipeSlideConfig PipeSlide = new();
+
+    [DataField]
+    public LavalandGoldgrubAmbushConfig GoldgrubAmbush = new();
+
+    [DataField]
+    public LavalandWildWhelpConfig WildWhelps = new();
+
+    [DataField]
+    public LavalandDayCycleConfig DayCycle = new();
+
+    [DataField]
+    public Content.Shared.DeadSpace.Lavaland.SecretBoss.LavalandSecretBossConfig SecretBoss = new();
+
+    /// <summary>Chromite caves under the planet. Off unless set in the prototype.</summary>
+    [DataField]
+    public Content.Shared.DeadSpace.Lavaland.ChromiteCaves.LavalandChromiteCavesConfig ChromiteCaves = new() { Enabled = false };
 
     [DataField]
     public float TendrilMapEdgePadding = 24f;
@@ -313,6 +336,78 @@ public sealed partial class LavalandPlanetPrototype : IPrototype
             { "Heat", 4.0f },
         },
     };
+
+    // Snow storm: some storms are blizzards instead of ash. Same timings and shelter rules as the ash storm.
+
+    /// <summary>Chance for a storm to be a blizzard. 0 disables blizzards.</summary>
+    [DataField]
+    public float SnowStormChance = 0.3f;
+
+    [DataField]
+    public ProtoId<WeatherPrototype>? SnowStormWarningWeather = "SnowfallLight";
+
+    [DataField]
+    public ProtoId<WeatherPrototype>? SnowStormWeather = "SnowfallHeavy";
+
+    [DataField]
+    public LocId SnowStormWarning = "lavaland-snow-storm-warning";
+
+    [DataField]
+    public Color SnowStormWarningColor = Color.FromHex("#5aa9ff");
+
+    /// <summary>Weak radiation instead of burns.</summary>
+    [DataField]
+    public DamageSpecifier SnowStormDamage = new()
+    {
+        DamageDict = new()
+        {
+            { "Radiation", 0.5f },
+        },
+    };
+
+    /// <summary>
+    /// How much the blizzard chills those caught out in it, in kelvin per damage interval (before cold protection:
+    /// a winter coat or a hardsuit keeps most of it off).
+    /// </summary>
+    [DataField]
+    public float SnowStormCooling = 3f;
+
+    /// <summary>The blizzard chills no further than this, in kelvin.</summary>
+    [DataField]
+    public float SnowStormMinTemperature = 200f;
+
+    /// <summary>How deep from the map border the snow cover creeps in, in tiles.</summary>
+    [DataField]
+    public float SnowCoverDepth = 90f;
+
+    /// <summary>Time for the snow cover to reach its full depth.</summary>
+    [DataField]
+    public TimeSpan SnowCoverGrowTime = TimeSpan.FromSeconds(90);
+
+    [DataField]
+    public Color SnowCoverColor = Color.FromHex("#eef5ff");
+}
+
+/// <summary>
+/// Blizzard on lavaland: the map edges whiten. Lives on the map entity during a snow storm, drawn by the client.
+/// </summary>
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+public sealed partial class LavalandSnowCoverComponent : Component
+{
+    [DataField, AutoNetworkedField]
+    public TimeSpan Start;
+
+    [DataField, AutoNetworkedField]
+    public float GrowSeconds = 90f;
+
+    [DataField, AutoNetworkedField]
+    public float Depth = 90f;
+
+    [DataField, AutoNetworkedField]
+    public float HalfSize = 350f;
+
+    [DataField, AutoNetworkedField]
+    public Color Color = Color.White;
 }
 
 [DataDefinition]

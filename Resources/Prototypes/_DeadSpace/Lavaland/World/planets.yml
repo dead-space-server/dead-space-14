@@ -1,0 +1,430 @@
+- type: lavalandPlanet
+  id: Lavaland
+  biome: LavalandSurface
+  mapName: Lavaland
+  lightColor: "#A34931"
+  mapHalfSize: 350
+  boundaryEnabled: true
+  boundaryWallWidth: 2
+  boundaryLavaWidth: 3
+  boundaryTile: FloorBasalt
+  boundaryWallEntity: WallRockBasaltLavalandBoundary
+  boundaryLavaEntity: FloorLavaEntity
+  landingPadRadius: 24
+  landingPadTile: FloorBasalt
+  terminalReservationEnabled: true
+  terminalReservationSize: 70
+  terminalTile: FloorBasalt
+  terminalGridPath: /Maps/_DeadSpace/Lavaland/LavaLandBase.yml
+  terminalGridName: Lavaland Mining Outpost
+  jaunterDestinationOffset: -10,-0.15
+  minStructureDistance: 140
+  maxStructureDistance: 310
+  minStructureSeparation: 95
+  structures:
+    LavalandLavaBrig: 4
+  tendrilsEnabled: true
+  tendrilSpawnCount: 36
+  tendrilRespawnInterval: 900
+  tendrilRespawnBatchMin: 1
+  tendrilRespawnBatchMax: 2
+  tendrilSpawnAttempts: 460
+  tendrilMinDistance: 105
+  tendrilMaxDistance: 325
+  tendrilMinSeparation: 72
+  tendrilClearRadius: 1
+  tendrilMapEdgePadding: 24
+  tendrilOutpostExclusionRadius: 92
+  tendrilLandingExclusionRadius: 56
+  tendrilFtlBeaconExclusionRadius: 56
+  tendrilSpawns:
+  - prototype: LavalandNecropolisTendrilWatcher
+    weight: 2
+    maxCount: 10
+  - prototype: LavalandNecropolisTendrilGoliath
+    weight: 3
+    maxCount: 16
+  - prototype: LavalandNecropolisTendrilLegion
+    weight: 1
+    maxCount: 10
+  bossArenas:
+    LavalandAshDrakeArena: 1
+    LavalandBubblegumArena: 1
+    LavalandColossusArena: 1
+    LavalandLegionArena: 1
+  markerLayers:
+  - LavalandOreIron
+  - LavalandOreCoal
+  - LavalandOrePlasma
+  - LavalandOreQuartz
+  - LavalandOreSalt
+  - LavalandOreSilver
+  - LavalandOreGold
+  - LavalandOreMagmite
+  - LavalandOreUranium
+  - LavalandOreBananium
+  - LavalandOreArtifactFragment
+  - LavalandOreDiamond
+  - LavalandOreBluespaceCrystal
+  - LavalandOreGibtonite
+  goldgrubAmbush:
+    enabled: true
+    chance: 0.006
+    playerCooldown: 300
+    requireOre: true
+    prototype: MobLavalandGoldgrub
+  wildWhelps:
+    enabled: true
+    prototype: MobLavalandWildAshWhelp
+    randomInterval: 90
+    randomChance: 0.25
+    playerCooldown: 240
+    minWhelps: 1
+    maxWhelps: 2
+    spawnDistanceMin: 3
+    spawnDistanceMax: 5
+  dayCycle:
+    enabled: true
+    transitionTime: 60
+    startPhase: 0
+    phases:
+    - duration: 900
+      lightColor: "#A34931"
+      message: lavaland-day-cycle-day
+      messageColor: "#ffb347"
+    - duration: 900
+      lightColor: "#16213D"
+      message: lavaland-day-cycle-night
+      messageColor: "#c46a3a"
+      deepNight:
+        chance: 0.3
+        duration: 300
+        afterDuration: 600
+        lightColor: "#000000"
+        message: lavaland-day-cycle-deep-night
+        endMessage: lavaland-day-cycle-deep-night-end
+        messageColor: "#8a1c1c"
+        sound:
+          path: /Audio/_DeadSpace/Lavaland/lava_warning.ogg
+        jamTrackers: true
+        blockJaunter: true
+        wispGuide: true
+        blockNightVision: true
+        suppressLavaLight: true
+        pdaLightTime: 10
+        pdaLightCooldown: 180
+        helmetLightTime: 25
+        helmetLightCooldown: 180
+        flashlightTime: 60
+        wispLightRadius: 10
+        wispLightEnergy: 3
+        darknessGrace: 15
+        darknessInterval: 15
+        darknessDamage:
+          types:
+            Heat: 25
+  secretBoss:
+    enabled: true
+    awakenDelay: 10
+    pitMinDistance: 80
+    pitMaxDistance: 170
+    noiseRadius: 70
+    beepRange: 15
+    gatherRange: 5
+    requireAllPlayers: true
+    promptCooldown: 30
+    jumpDuration: 1.2
+    fallDuration: 10
+    mazeCells: 15
+    mazeFloorTile: FloorDark
+    mazeWall: WallRockBasaltLavalandBoundary
+    mazeLightColor: "#2E447F"
+    sleepDelay: 5
+    darkDelay: 5
+    arenaSize: 33
+    arenaTile: FloorRGlass
+    arenaBorder: LavalandCelestialInvisibleWall
+    arenaHoleRadius: 4
+    holeFence: LavalandCelestialHoleFence
+    faunaClearRadius: 25
+    sleepStatusEffect: StatusEffectLavalandCelestialSleep
+    arenaParallax: AsteroidsOutpost
+    bossPrototype: MobCelestialLavaland
+    bossHealth: 4500
+    bossHealthPerExtraPlayer: 750
+    phase2Fraction: 0.5
+    wipeDelay: 20
+    lossSleep: 15
+    relocatePitOnLoss: true
+    rewardSleep: 60
+    blessings: [ NoSlip, Armor, Health, NoBreathing, Regeneration ]
+    healthBonus: 35
+    regenAmount: 5
+    regenInterval: 10
+    regenExcluded: [ Cellular ]
+  chromiteCaves:
+    enabled: true
+    biome: LavalandChromiteCaves
+    mapName: Хромитовые пещеры
+    mapHalfSize: 140
+    boundaryWidth: 3
+    boundaryTile: FloorChromite
+    boundaryWall: WallRockChromiteCavesBoundary
+    markerLayers:
+    - LavalandCavesOreMagmite
+    - LavalandCavesOreBluespaceCrystal
+    - LavalandCavesOreDiamond
+    - LavalandCavesOreUranium
+    pitPrototype: LavalandChromitePit
+    pitRadius: 1
+    pitMinDistance: 42
+    pitMaxDistance: 58
+    landingClearRadius: 7
+    landingFlowerRadius: 6
+    landingFlowerChance: 0.85
+    landingTile: FloorChromite
+    landingFlowers:
+    - LavalandChromiteLandingFlower
+    - LavalandChromiteLandingFlower
+    - LavalandChromiteLandingFlowerGlow
+    exitPrototype: LavalandChromiteExit
+    landingEffect: LavalandChromiteLandingPetals
+    exitRange: 1.3
+    exitPromptCooldown: 15
+    jumpDuration: 1.1
+    fallDuration: 4.5
+    landingDuration: 2.4
+    hopDuration: 2.1
+    ropeDuration: 0.9
+    flyUpDuration: 0.9
+    hangDuration: 4
+    climbOutDuration: 1.4
+    bossArenas:
+      LavalandHierophantCaveArena: 1
+    customGrids:
+    - path: /Maps/Lavaland/Chromite.yml
+      count: 1
+      name: Хромитовые обломки
+      minDistance: 35
+      minSeparation: 12
+      spawnAttempts: 200
+    - path: /Maps/Lavaland/Xenoborg2.yml
+      count: 1
+      name: Заваленый шаттл
+      minDistance: 35
+      minSeparation: 12
+      spawnAttempts: 200
+    elite: MobLavalandPandora
+    eliteMinDistance: 45
+    eliteMaxDistance: 105
+    eliteClearRadius: 5
+    deepDarkLight: "#040510"
+    nightLight: "#2B3A70"
+    glowLight: "#2A2F78"
+    lightFade: 30
+    messageColor: "#7fc8ff"
+    deepNight:
+      lightColor: "#040510"
+      jamTrackers: true
+      blockJaunter: true
+      wispGuide: false
+      blockNightVision: true
+      suppressLavaLight: false
+      pdaLightTime: 10
+      pdaLightCooldown: 180
+      helmetLightTime: 25
+      helmetLightCooldown: 180
+      flashlightTime: 60
+      wispLightRadius: 10
+      wispLightEnergy: 3
+      darknessGrace: 15
+      darknessInterval: 15
+      darknessDamage:
+        types:
+          Heat: 25
+  pipeSlide:
+    enabled: true
+    speed: 8
+    mountRange: 1.5
+    sparkInterval: 0.12
+    sparksMin: 1
+    sparksMax: 3
+    sparkSpeedMin: 1
+    sparkSpeedMax: 4
+    sparkPrototype: LavalandGrindSpark
+    grindSoundInterval: 0.6
+    dismountSpeed: 4
+  faunaRaid:
+    enabled: true
+    checkInterval: 2400
+    baseChance: 0.12
+    chanceIncreaseMin: 0.07
+    chanceIncreaseMax: 0.17
+    warningDuration: 60
+    duration: 180
+    # Tendrils rise this far from the outpost's edge (not its center).
+    minDistance: 1
+    maxDistance: 10
+    warningSound:
+      path: /Audio/_DeadSpace/Lavaland/lava_warning.ogg
+    tendrils:
+    - LavalandNecropolisTendrilRaidGoliath
+    - LavalandNecropolisTendrilRaidGoliath
+    - LavalandNecropolisTendrilRaidWatcher
+    - LavalandNecropolisTendrilRaidLegion
+    music:
+    - path: /Audio/_DeadSpace/Lavaland/Raid/fauna-raid-1.ogg
+    - path: /Audio/_DeadSpace/Lavaland/Raid/fauna-raid-2.ogg
+    - path: /Audio/_DeadSpace/Lavaland/Raid/fauna-raid-3.ogg
+  faunaEnabled: true
+  faunaInitialSpawnCount: 300
+  faunaSoftCap: 300
+  faunaHardCap: 340
+  faunaUpdateInterval: 70
+  faunaSpawnBatchMin: 4
+  faunaSpawnBatchMax: 7
+  faunaLowPopulationThreshold: 180
+  faunaLowPopulationBatchMax: 14
+  faunaSpawnAttempts: 520
+  faunaSpawnClearance: 1
+  faunaMapEdgePadding: 18
+  faunaMinDistance: 85
+  faunaMaxDistance: 325
+  faunaMinPlayerDistance: 26
+  faunaOutpostExclusionRadius: 72
+  faunaLandingExclusionRadius: 36
+  faunaFtlBeaconExclusionRadius: 32
+  faunaSectorSize: 48
+  faunaSectorCooldown: 480
+  faunaSpawns:
+  - prototype: MobWatcherLavaland
+    weight: 22
+    maxCount: 86
+  - prototype: MobLavalandHivelord
+    weight: 18
+    maxCount: 70
+  - prototype: MobLavalandBasilisk
+    weight: 14
+    maxCount: 56
+  - prototype: MobLavalandGoliath
+    weight: 11
+    maxCount: 44
+  - prototype: MobWatcherMagmawing
+    weight: 5
+    maxCount: 24
+  - prototype: MobWatcherIcewing
+    weight: 5
+    maxCount: 24
+  - prototype: MobLavalandLegion
+    weight: 3
+    maxCount: 20
+  - prototype: MobLavalandGoldgrub
+    weight: 1
+    maxCount: 12
+  atmosphere:
+    volume: 2500
+    temperature: 300
+    moles:
+    - 14
+    - 23
+  ashStormEnabled: true
+  ashStormWarningWeather: AshfallLight
+  ashStormWeather: AshfallHeavy
+  ashStormWarningDuration: 45
+  ashStormDurationMin: 100
+  ashStormDurationMax: 150
+  ashStormCooldownMin: 600
+  ashStormCooldownMax: 750
+  ashStormDamageInterval: 1
+  ashStormDamage:
+    types:
+      Heat: 20
+  ftlBeaconName: Lavaland Landing Zone
+  ftlBeaconOffset: 0,-180
+  ftlFallbackMinOffset: 8
+  ftlFallbackMaxOffset: 96
+  ftlDockWhitelist:
+    components:
+    - LavalandShuttle
+  customGrids:
+  - path: /Maps/Lavaland/Chill.yml
+    count: 1
+    name: Чил зона
+    minDistance: 120
+    maxDistance: 300
+    minSeparation: 80
+    footprintRadius: 8
+    spawnAttempts: 160
+  - path: /Maps/Lavaland/Dinooo.yml
+    count: 1
+    name: Научный обломок
+    minDistance: 120
+    maxDistance: 300
+    minSeparation: 80
+    footprintRadius: 8
+    spawnAttempts: 160
+  - path: /Maps/Lavaland/LavaScrap.yml
+    count: 1
+    name: Лавовые обломки
+    minDistance: 120
+    maxDistance: 300
+    minSeparation: 80
+    footprintRadius: 8
+    spawnAttempts: 160
+  - path: /Maps/Lavaland/Xeno.yml
+    count: 1
+    name: Разбитый шаттл
+    minDistance: 120
+    maxDistance: 300
+    minSeparation: 80
+    footprintRadius: 8
+    spawnAttempts: 160
+  # Far out, at the edge of the map: well away from the miners' outpost in the middle.
+  - path: /Maps/Lavaland/ds_ashwalkers_base.yml
+    count: 1
+    name: База пеплоходцев
+    minDistance: 250
+    maxDistance: 320
+    minSeparation: 120
+    footprintRadius: 10
+    spawnAttempts: 160
+  - path: /Maps/Lavaland/ds_mini_ratvar.yml
+    count: 2
+    name: Заброшеный мостик
+    minDistance: 120
+    maxDistance: 220
+    minSeparation: 90
+    footprintRadius: 5
+    spawnAttempts: 160
+  - path: /Maps/Lavaland/clown_minibase.yml
+    count: 1
+    name: Местечко клоунов
+    minDistance: 160
+    maxDistance: 300
+    minSeparation: 120
+    footprintRadius: 10
+    spawnAttempts: 160
+  - path: /Maps/Lavaland/latun_church.yml
+    count: 1
+    name: Латунная церковь
+    minDistance: 120
+    maxDistance: 320
+    minSeparation: 90
+    footprintRadius: 10
+    spawnAttempts: 160
+  - path: /Maps/Lavaland/lava_bridge.yml
+    count: 1
+    name: Стальные столбы
+    minDistance: 160
+    maxDistance: 300
+    minSeparation: 120
+    footprintRadius: 12
+    spawnAttempts: 160
+  - path: /Maps/Lavaland/labyrint_rofl.yml
+    count: 1
+    name: Рофлянный лабиринт
+    minDistance: 120
+    maxDistance: 220
+    minSeparation: 90
+    footprintRadius: 14
+    spawnAttempts: 160

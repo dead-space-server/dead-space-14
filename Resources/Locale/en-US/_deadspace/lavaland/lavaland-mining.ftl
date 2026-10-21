@@ -63,3 +63,5 @@ lavaland-spectral-blade-summon-yes = Yes
 lavaland-spectral-blade-summon-no = No
 lavaland-spectral-blade-summon-accepted = You answer the spectral blade's call.
 lavaland-spectral-blade-spirit-joined = A spirit answers the blade. Bound spirits: {$spirits}.
+gun-upgrade-examine-text-explosive-lavaland = Fires [color=#ff7a2a][bold]explosive charges.[/bold][/color]
+lavaland-mission-reward = Expedition objective complete! { $points } mining points were added to your ID card.

@@ -49,6 +49,15 @@ public sealed partial class PdaArcadeGamePrototype : IPrototype
     public bool Quiet;
 
     [DataField]
+    public bool Together;
+
+    [DataField]
+    public Dictionary<string, SoundSpecifier> Noises = new();
+
+    [DataField]
+    public Dictionary<string, float> Numbers = new();
+
+    [DataField]
     public SpriteSpecifier? Floor;
 
     [DataField]
@@ -65,6 +74,9 @@ public sealed partial class PdaArcadeGamePrototype : IPrototype
 
     [DataField]
     public Color? Settled;
+
+    [DataField]
+    public List<SpriteSpecifier> Obstacles = new();
 
     [DataField]
     public List<Color> Colors = new();

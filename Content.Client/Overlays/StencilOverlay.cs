@@ -27,6 +27,7 @@ public sealed partial class StencilOverlay : Overlay
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IPrototypeManager _protoManager = default!;
+    [Dependency] private readonly Robust.Client.Player.IPlayerManager _player = default!; // DS14
     private readonly ParallaxSystem _parallax;
     private readonly SharedTransformSystem _transform;
     private readonly SharedMapSystem _map;
@@ -72,6 +73,7 @@ public sealed partial class StencilOverlay : Overlay
                     continue;
 
                 var alpha = _weather.GetPercent(weather, mapUid);
+                alpha *= GetStormVisorOpacity(proto); // DS14
                 DrawWeather(args, res, weatherProto, alpha, invMatrix);
             }
         }

@@ -1,9 +1,14 @@
 using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Shared.Humanoid;
+using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.NPC.Prototypes;
+using Content.Shared.NPC.Systems;
+using Robust.Shared.Prototypes;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Systems;
+using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
 
@@ -14,7 +19,11 @@ public sealed class LavalandLegionSystem : EntitySystem
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly NpcFactionSystem _faction = default!;
+
+    private static readonly ProtoId<NpcFactionPrototype> WildFaction = "SimpleHostile";
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly SharedContainerSystem _container = default!;
 
     public override void Initialize()
     {
@@ -25,6 +34,8 @@ public sealed class LavalandLegionSystem : EntitySystem
         SubscribeLocalEvent<LavalandLegionComponent, ComponentShutdown>(OnLegionShutdown);
         SubscribeLocalEvent<LavalandLegionHeadComponent, MeleeHitEvent>(OnHeadMeleeHit);
         SubscribeLocalEvent<LavalandLegionHeadComponent, ComponentShutdown>(OnHeadShutdown);
+        SubscribeLocalEvent<LavalandLegionInfestedComponent, MobStateChangedEvent>(OnInfestedStateChanged);
+        SubscribeLocalEvent<LavalandLegionInfestedComponent, EntityTerminatingEvent>(OnInfestedTerminating);
     }
 
     public override void Update(float frameTime)
@@ -123,7 +134,10 @@ public sealed class LavalandLegionSystem : EntitySystem
 
     private bool TryInfestTarget(Entity<LavalandLegionHeadComponent> head, EntityUid target)
     {
+        // Only a wild head raises a legion: one on a miner's side (summoned by a legionnaire trophy, or shot by a
+        // tamed legion) would raise one hostile to that very miner.
         if (target == head.Owner ||
+            !_faction.IsMember(head.Owner, WildFaction) ||
             HasComp<LavalandLegionInfestedComponent>(target) ||
             !HasComp<HumanoidAppearanceComponent>(target) ||
             !TryComp<MobStateComponent>(target, out var mobState) ||
@@ -139,11 +153,46 @@ public sealed class LavalandLegionSystem : EntitySystem
 
         EnsureComp<LavalandLegionInfestedComponent>(target);
         var legion = Spawn(head.Comp.InfestPrototype, targetCoordinates, rotation: _transform.GetWorldRotation(targetXform));
-        EnsureComp<LavalandLegionInfestedComponent>(legion);
-        QueueDel(target);
+        var infested = EnsureComp<LavalandLegionInfestedComponent>(legion);
+        // The corpse is carried inside, not destroyed: it falls out again once this legion is dead.
+        var container = _container.EnsureContainer<ContainerSlot>(legion, LavalandLegionInfestedComponent.BodyContainerId);
+        if (_container.Insert(target, container))
+            infested.Body = target;
+        else
+            QueueDel(target);
         QueueDel(head.Owner);
 
         return true;
+    }
+
+    private void OnInfestedStateChanged(EntityUid uid, LavalandLegionInfestedComponent component, MobStateChangedEvent args)
+    {
+        if (args.NewMobState == MobState.Dead)
+            DropBody((uid, component));
+    }
+
+    private void OnInfestedTerminating(Entity<LavalandLegionInfestedComponent> ent, ref EntityTerminatingEvent args)
+    {
+        // Gibbed or deleted alive: the corpse must not go with it.
+        DropBody(ent);
+    }
+
+    private void DropBody(Entity<LavalandLegionInfestedComponent> ent)
+    {
+        if (ent.Comp.Body is not { } body)
+            return;
+
+        ent.Comp.Body = null;
+        if (!_container.TryGetContainer(ent, LavalandLegionInfestedComponent.BodyContainerId, out var container) ||
+            !container.Contains(body))
+        {
+            return;
+        }
+
+        _container.Remove(body, container);
+        var map = _transform.GetMapCoordinates(ent);
+        if (map.MapId != MapId.Nullspace)
+            _transform.SetMapCoordinates(body, map);
     }
 
     private void PruneHeads(Entity<LavalandLegionComponent> ent)

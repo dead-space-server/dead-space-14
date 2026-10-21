@@ -64,6 +64,10 @@ public sealed class NightVisionSystem : EntitySystem
 
         args.Handled = true;
 
+        // DS14: the lavaland deep night keeps it off - not even switched on here for a moment.
+        if (!component.IsNightVision && HasComp<Content.Shared.DeadSpace.Lavaland.LavalandLightBlockedComponent>(uid))
+            return;
+
         component.ClientLastToggleTick = _timing.CurTick.Value;
         component.IsToggled = true;
 

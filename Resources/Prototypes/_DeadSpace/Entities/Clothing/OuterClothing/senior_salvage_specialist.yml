@@ -9,15 +9,3 @@
     sprite: Clothing/OuterClothing/Hardsuits/seniorsalvage.rsi
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitSeniorSalvage
-  - type: ClothingSpeedModifier
-    walkModifier: 0.8
-    sprintModifier: 0.8
-  - type: Armor
-    modifiers:
-      coefficients:
-        Blunt: 0.6
-        Slash: 0.6
-        Piercing: 0.6
-        Heat: 0.7
-        Radiation: 0.3
-        Caustic: 0.5

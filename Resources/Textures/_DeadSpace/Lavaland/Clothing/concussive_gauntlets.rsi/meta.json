@@ -1,0 +1,44 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from tgstation (https://github.com/tgstation/tgstation), master branch as of 2026-10-13; converted to RSI for Dead Space 14",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "icon",
+            "delays": [
+                [
+                    0.15,
+                    0.15,
+                    0.15,
+                    0.15
+                ]
+            ]
+        },
+        {
+            "name": "equipped-HAND",
+            "directions": 4,
+            "delays": [
+                [
+                    0.15,
+                    0.15
+                ],
+                [
+                    0.15,
+                    0.15
+                ],
+                [
+                    0.15,
+                    0.15
+                ],
+                [
+                    0.15,
+                    0.15
+                ]
+            ]
+        }
+    ]
+}

@@ -133,6 +133,25 @@ public sealed class WeatherSystem : SharedWeatherSystem
     }
 
     // DS14-start
+    /// <summary>
+    /// Left the map mid-storm: that map drops out of view and its weather is no longer run, so nothing else would
+    /// stop its sound.
+    /// </summary>
+    public override void FrameUpdate(float frameTime)
+    {
+        base.FrameUpdate(frameTime);
+
+        var query = EntityQueryEnumerator<WeatherComponent>();
+        while (query.MoveNext(out var uid, out var component))
+        {
+            foreach (var weather in component.Weather.Values)
+            {
+                if (weather.Stream != null && !TryGetWeatherAudioTarget(uid, out _))
+                    StopWeatherAudio(weather);
+            }
+        }
+    }
+
     private void SetAmbienceVolume(float value)
     {
         _ambienceVolume = SharedAudioSystem.GainToVolume(value);

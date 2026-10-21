@@ -100,6 +100,8 @@ public abstract partial class SharedMoverController : VirtualController
         FTLQuery = GetEntityQuery<FTLComponent>();
         PilotQuery = GetEntityQuery<PilotComponent>();
         PreventPilotQuery = GetEntityQuery<PreventPilotComponent>();
+        TileStepQuery = GetEntityQuery<Content.Shared.DeadSpace.Movement.Components.TileStepMovementComponent>(); // DS14
+        TileStepFixturesQuery = GetEntityQuery<FixturesComponent>(); // DS14
 
         SubscribeLocalEvent<MovementSpeedModifierComponent, TileFrictionEvent>(OnTileFriction);
         SubscribeLocalEvent<InputMoverComponent, ComponentStartup>(OnMoverStartup);
@@ -267,6 +269,14 @@ public abstract partial class SharedMoverController : VirtualController
 
         // Get current tile def for things like speed/friction mods
         ContentTileDefinition? tileDef = null;
+
+        // DS14-Start: tile-by-tile movement (blessing of the Hierophant)
+        if (TileStepQuery.TryComp(uid, out var tileStep) &&
+            HandleTileStepMovement((uid, tileStep), mover, physicsComponent, xform, weightless || inAirHelpless, frameTime))
+        {
+            return;
+        }
+        // DS14-End
 
         var touching = false;
         // Whether we use tilefriction or not

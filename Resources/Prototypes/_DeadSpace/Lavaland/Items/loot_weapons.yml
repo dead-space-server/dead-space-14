@@ -1,0 +1,448 @@
+- type: entity
+  parent: BaseItem
+  id: LavalandStormStaff
+  name: посох бурь
+  description: Древний посох из останков Легиона. Ветер вздымается, когда его взмахивают. Удар по цели призывает молнию, использование в руке разгоняет пепельную бурю.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Weapons/storm_staff.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: _DeadSpace/Lavaland/Objects/Weapons/storm_staff.rsi
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    soundHit:
+      path: /Audio/Effects/Lightning/lightningshock.ogg
+    damage:
+      types:
+        Heat: 20
+  - type: LavalandStormStaff
+    boltDamage:
+      types:
+        Shock: 15
+    aimSound: /Audio/Effects/Lightning/lightningshock.ogg
+    boltSound: /Audio/Effects/Lightning/lightningbolt.ogg
+    dispelSound: /Audio/Magic/staff_change.ogg
+  - type: StaticPrice
+    price: 5000
+
+- type: entity
+  id: LavalandStormStaffTelegraph
+  name: метка молнии
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _DeadSpace/Lavaland/Effects/TargetCircle.rsi
+    layers:
+    - state: target_circle
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 1.5
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: LavalandStormStaffThunderbolt
+  name: молния
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _DeadSpace/Lavaland/Effects/Thunderbolt.rsi
+    offset: 0,1
+    layers:
+    - state: thunderbolt
+      shader: unshaded
+  - type: PointLight
+    radius: 4
+    energy: 3
+    color: "#c8d8ff"
+  - type: TimedDespawn
+    lifetime: 0.6
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: LavalandStormStaffSpark
+  name: разряд
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    drawdepth: Effects
+    sprite: Effects/electricity.rsi
+    layers:
+    - state: electrified
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 0.6
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: BaseItem
+  id: LavalandSoulStabilizer
+  name: стабилизирующая сыворотка
+  description: Введите её в душу легиона, чтобы та не угасла.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Specific/Medical/stabilizer.rsi
+    state: icon
+  - type: Item
+    size: Tiny
+  - type: LavalandSoulStabilizer
+  - type: StaticPrice
+    price: 200
+
+- type: entity
+  parent: BaseItem
+  id: LavalandLavaStaff
+  name: посох лавы
+  description: Позволяет залить лавой всё что угодно. Направьте на пол, чтобы превратить его в лаву, или на лаву, чтобы её остудить.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Weapons/lava_staff.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: _DeadSpace/Lavaland/Objects/Weapons/lava_staff.rsi
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    soundHit:
+      path: /Audio/_DeadSpace/Lavaland/Hierophant/sear.ogg
+    damage:
+      types:
+        Heat: 18
+  - type: LavalandLavaStaff
+    sound: /Audio/Magic/fireball.ogg
+  - type: StaticPrice
+    price: 5000
+
+- type: entity
+  id: LavalandLavaStaffWarning
+  name: раскалённая земля
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    drawdepth: FloorObjects
+    sprite: _DeadSpace/Lavaland/Effects/LavaStaffWarn.rsi
+    layers:
+    - state: warn
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 5
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: BaseItem
+  id: LavalandCleavingSaw
+  name: пила-тесак
+  description: Пила, отлично пускающая кровь зверям, раскладывается в длинный тесак. Сложенной бьёт очень быстро и копит кровотечение у фауны, разложенной рубит медленно, с бонусным уроном, и только она добивает - накопленное кровотечение взрывается мощным уроном.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Weapons/cleaving_saw.rsi
+    layers:
+    - state: icon
+      map: [ "enum.ToggleableVisuals.Layer" ]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: { state: icon-on }
+          False: { state: icon }
+  - type: Item
+    size: Large
+    sprite: _DeadSpace/Lavaland/Objects/Weapons/cleaving_saw_inhands.rsi
+  - type: ItemToggle
+    onActivate: true
+    soundActivate:
+      collection: MantisExtend
+    soundDeactivate:
+      collection: MantisRetract
+  - type: ItemTogglePrefix
+    prefixOn: on
+  - type: ItemToggleMeleeWeapon
+    activatedDamage:
+      types:
+        Slash: 20
+    deactivatedDamage:
+      types:
+        Slash: 12
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    soundHit:
+      path: /Audio/Weapons/bladeslice.ogg
+    damage:
+      types:
+        Slash: 12
+  - type: Sharp
+  - type: LavalandCleavingSaw
+  - type: LavalandCleavingSawEffects
+    openBonusDamage:
+      types:
+        Slash: 30
+    bleedBurstDamage:
+      types:
+        Slash: 200
+  - type: UseDelay
+    delay: 0.3
+  - type: StaticPrice
+    price: 5000
+
+- type: entity
+  parent: BaseItem
+  id: LavalandSoulscythe
+  name: коса душ
+  description: Древняя реликвия ада, созданная дьяволами, чтобы утвердить свою власть над демонами. Сейчас она спит.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Weapons/soulscythe.rsi
+    layers:
+    - state: icon
+    - state: gem
+      shader: unshaded
+      visible: false
+      map: [ "enum.LavalandArtifactLayers.Base" ]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.LavalandArtifactVisuals.Active:
+        enum.LavalandArtifactLayers.Base:
+          True: { visible: true }
+          False: { visible: false }
+  - type: LavalandSoulscythe
+    maxBlood: 100
+    bloodPerHit: 10
+    moveCostPerTile: 1
+    awakenComponents:
+    - type: GhostRole
+      name: lavaland-soulscythe-role-name
+      description: lavaland-soulscythe-role-description
+      rules: lavaland-soulscythe-role-rules
+    - type: GhostTakeoverAvailable
+    - type: CombatMode
+  - type: Item
+    size: Huge
+    sprite: _DeadSpace/Lavaland/Objects/Weapons/soulscythe_inhands.rsi
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    soundHit:
+      path: /Audio/Weapons/bladeslice.ogg
+    damage:
+      types:
+        Slash: 25
+  - type: Sharp
+  - type: StaticPrice
+    price: 5000
+
+- type: entity
+  parent: BaseItem
+  id: LavalandCainAndAbel
+  name: Каин и Авель
+  description: Парные кинжалы Колосса. Серия ударов по крупным существам усиливает каждый следующий удар и призывает огоньки; удар по вам сбрасывает серию. Клик вдаль выпускает огоньки в цель.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Weapons/cain_and_abel.rsi
+    state: icon
+  - type: Item
+    size: Small
+    sprite: _DeadSpace/Lavaland/Objects/Weapons/cain_and_abel.rsi
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    # The demons' claw arc; right button - their arrow arc instead of swinging the sprite.
+    animation: WeaponArcClaw
+    wideAnimation: WeaponArcStatic
+    range: 2.2
+    soundHit:
+      path: /Audio/Weapons/bladeslice.ogg
+    damage:
+      types:
+        Slash: 15
+  - type: Sharp
+  - type: LavalandDeepNightDark
+  - type: PointLight
+    radius: 3
+    energy: 2
+    color: "#3db9db"
+  - type: LavalandCainAndAbel
+    wispFireSound: /Audio/Magic/blink.ogg
+    crystalsCooldown: 15
+    launchCooldown: 7
+    crystalRingRadius: 2
+  - type: StaticPrice
+    price: 5000
+
+- type: entity
+  id: LavalandCainAndAbelWisp
+  name: огонёк
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _DeadSpace/Lavaland/Effects/CainAndAbel.rsi
+    layers:
+    - state: wisp
+      shader: unshaded
+  - type: LavalandDeepNightDark
+  - type: PointLight
+    radius: 1.5
+    energy: 1
+    color: "#3db9db"
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: BaseBullet
+  id: LavalandCainAndAbelWispBolt
+  name: огонёк
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    noRot: false
+    sprite: _DeadSpace/Lavaland/Effects/CainAndAbel.rsi
+    layers:
+    - state: wisp
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Slash: 25
+  - type: TimedDespawn
+    lifetime: 1
+
+- type: entity
+  parent: ClothingHandsBase
+  id: ClothingHandsGlovesConcussiveGauntlets
+  name: сотрясающие рукавицы
+  description: Кирки... для рук! Удары крушат породу и врагов.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Clothing/concussive_gauntlets.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Lavaland/Clothing/concussive_gauntlets.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.8
+        Heat: 0.85
+  - type: Insulated
+  - type: LavalandConcussiveGauntlets
+    bumpCooldown: 0.4
+  - type: MeleeWeapon
+    attackRate: 1.5
+    soundHit:
+      collection: Punch
+    animation: WeaponArcFist
+    damage:
+      types:
+        Blunt: 10
+        Structural: 60
+  - type: Tag
+    tags:
+    - WhitelistChameleon
+    - Pickaxe
+  - type: StaticPrice
+    price: 3000
+
+- type: entity
+  id: ActionLavalandCainAndAbelThrow
+  name: Бросок кинжала
+  description: Метнуть кинжал. Режим (кристаллы или рывок) переключается использованием Каина и Авеля в руке.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 1
+    icon: { sprite: _DeadSpace/Lavaland/Objects/Weapons/cain_and_abel.rsi, state: icon }
+  - type: TargetAction
+    range: 9
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:LavalandCainAndAbelThrowActionEvent
+
+- type: entity
+  parent: BaseBullet
+  id: LavalandCainAndAbelDagger
+  name: брошенный кинжал
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    noRot: false
+    sprite: _DeadSpace/Lavaland/Effects/CainAndAbel.rsi
+    layers:
+    - state: slash
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Slash: 10
+  - type: TimedDespawn
+    lifetime: 0.6
+
+- type: entity
+  id: LavalandCainAndAbelEngraved
+  name: метка кинжала
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    drawdepth: FloorObjects
+    sprite: _DeadSpace/Lavaland/Effects/CainAndAbel.rsi
+    layers:
+    - state: engraved
+      shader: unshaded
+  - type: LavalandDeepNightDark
+  - type: PointLight
+    radius: 2
+    energy: 1
+    color: "#3db9db"
+  - type: TimedDespawn
+    lifetime: 3
+
+- type: entity
+  id: LavalandCainAndAbelCrystal
+  name: кристалл Авеля
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Effects/CainAndAbel.rsi
+    layers:
+    - state: crystal
+      shader: unshaded
+  - type: LavalandDeepNightDark
+  - type: PointLight
+    radius: 3
+    energy: 1
+    color: "#3db9db"
+  - type: TimedDespawn
+    lifetime: 3
+  - type: LavalandDaggerCrystal
+    radius: 0.5
+    stun: 1.6
+    largeDamage:
+      types:
+        Piercing: 50
+    smallDamage:
+      types:
+        Piercing: 5

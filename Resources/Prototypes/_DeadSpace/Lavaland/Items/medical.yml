@@ -1,0 +1,60 @@
+- type: entity
+  id: LavalandMedkitAdvancedBruteFilled
+  parent: MedkitBrute
+  name: продвинутый набор для лечения механических травм
+  description: Содержит в себе 3 пачки медицинских нитей и 1 баночку бикаридина.
+  suffix: Filled, Lavaland
+  components:
+  - type: StorageFill
+    contents:
+    - id: MedicatedSuture
+      amount: 3
+    - id: PillCanisterBicaridine
+
+- type: entity
+  id: LavalandMedkitAdvancedBurnFilled
+  parent: MedkitBurn
+  name: продвинутый набор для лечения ожогов
+  description: Содержит в себе 3 пачек регенеративной сетки, и 1 баночку дермалина.
+  suffix: Filled, Lavaland
+  components:
+  - type: StorageFill
+    contents:
+    - id: RegenerativeMesh
+      amount: 3
+    - id: PillCanisterDermaline
+
+- type: entity
+  parent: ChemicalMedipen
+  id: LavalandSurvMedipen
+  name: медипен выживание Лаваленда
+  description: Содержит ророриум и ещё какуе-то хрень.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Necromorfs/medipen.rsi
+    layers:
+    - state: OPPY-OPNY-Medipen
+      map: ["enum.SolutionContainerLayers.Fill"]
+  - type: SolutionContainerVisuals
+    maxFillLevels: 1
+    changeColor: false
+    emptySpriteName: OPPY-OPNY-Medipen-Empty
+  - type: Injector
+    solutionName: pen
+    currentTransferAmount: null
+    activeModeProtoId: HyposprayInjectMode
+    allowedModes:
+    - HyposprayInjectMode
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 15
+        reagents:
+          - ReagentId: Rororium
+            Quantity: 5
+          - ReagentId: Saline
+            Quantity: 5
+          - ReagentId: Dermaline
+            Quantity: 5
+  - type: StaticPrice
+    price: 300

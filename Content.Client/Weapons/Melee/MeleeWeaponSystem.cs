@@ -155,6 +155,14 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
             return;
         }
 
+        // DS14-start: the right button of the kinetic machete charges its marker shot instead.
+        if (altDown == BoundKeyState.Down &&
+            HasComp<Content.Shared.DeadSpace.Lavaland.LavalandChargedMarkerComponent>(weaponUid))
+        {
+            return;
+        }
+        // DS14-end
+
         // Heavy attack.
         if (altDown == BoundKeyState.Down)
         {

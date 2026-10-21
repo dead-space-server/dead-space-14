@@ -7,3 +7,7 @@ ent-MobLavalandGoldgrub = goldgrub
 
 lavaland-goldgrub-burrow-start = The goldgrub starts burrowing into the ground!
 lavaland-goldgrub-burrow-away = The goldgrub burrows away with its ore.
+lavaland-goldgrub-ambush-emerge = A goldgrub digs out from under the rock!
+lavaland-goldgrub-ambush-steal = The goldgrub knocks you down and gobbles up your ore!
+lavaland-goldgrub-ambush-hit = The goldgrub knocks you down!
+lavaland-goldgrub-ambush-miss = The goldgrub misses and runs for it.

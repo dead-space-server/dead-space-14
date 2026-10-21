@@ -41,6 +41,7 @@ public sealed class LavalandNecropolisTendrilPlacementSystem : EntitySystem
     [Dependency] private readonly BiomeSystem _biome = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
@@ -284,6 +285,7 @@ public sealed class LavalandNecropolisTendrilPlacementSystem : EntitySystem
                 (int) MathF.Round(MathF.Sin(angle) * distance));
 
             if (IsInsideExclusion(candidate, planet) ||
+                IsNearOtherGrid(mapUid, grid, candidate) ||
                 !IsSeparated(candidate, placed, minSeparationSquared) ||
                 !IsTileSafe(mapUid, grid, biome, candidate))
             {
@@ -292,6 +294,27 @@ public sealed class LavalandNecropolisTendrilPlacementSystem : EntitySystem
 
             indices = candidate;
             return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>Tendrils keep this far (tiles) from any other grid on the planet: the ash walkers' base, ruins.</summary>
+    private const float OtherGridExclusion = 32f;
+
+    /// <summary>
+    /// Another grid on the planet (the ash walkers' base and the like) close by: a tendril there kept pouring fauna
+    /// onto it, as if a raid had come.
+    /// </summary>
+    private bool IsNearOtherGrid(EntityUid mapUid, MapGridComponent grid, Vector2i indices)
+    {
+        var position = _map.GridTileToWorldPos(mapUid, grid, indices);
+        var mapId = Transform(mapUid).MapID;
+        var box = Box2.CenteredAround(position, new Vector2(OtherGridExclusion * 2f));
+        foreach (var other in _mapManager.FindGridsIntersecting(mapId, box))
+        {
+            if (other.Owner != mapUid)
+                return true;
         }
 
         return false;

@@ -1,8 +1,15 @@
+using Content.Shared.Alert;
 using Content.Shared.Damage;
+using Content.Shared.DoAfter;
+using Content.Shared.Hands;
+using Content.Shared.Movement.Components;
+using Content.Shared.Popups;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
+using Content.Shared.DeadSpace.Attachments;
 using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.DeadSpace.Lavaland.Components;
+using Content.Shared.DeadSpace.Lavaland.SecretBoss;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Maps;
@@ -37,6 +44,10 @@ public sealed class LavalandHierophantStaffSystem : EntitySystem
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private readonly AlertsSystem _alerts = default!;
+    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly LavalandHierophantBeatSystem _beat = default!;
 
     private readonly List<PendingBlast> _pendingBlasts = new();
     private readonly List<PendingTeleport> _pendingTeleports = new();
@@ -52,7 +63,127 @@ public sealed class LavalandHierophantStaffSystem : EntitySystem
         SubscribeLocalEvent<LavalandHierophantStaffComponent, LavalandHierophantStaffBurstActionEvent>(OnBurst);
         SubscribeLocalEvent<LavalandHierophantStaffComponent, LavalandHierophantStaffBlinkActionEvent>(OnBlink);
         SubscribeLocalEvent<LavalandHierophantStaffComponent, LavalandHierophantStaffChaserActionEvent>(OnChaser);
+        SubscribeLocalEvent<AttachmentHierophantChaserEvent>(OnAttachmentChaser);
+        SubscribeLocalEvent<LavalandHierophantStaffComponent, LavalandAltUseEvent>(OnAltUse);
+        SubscribeLocalEvent<LavalandHierophantStaffComponent, LavalandHierophantBlessDoAfterEvent>(OnBlessDoAfter);
+        SubscribeLocalEvent<LavalandHierophantStaffComponent, GotEquippedHandEvent>(OnEquippedHand);
+        SubscribeLocalEvent<LavalandHierophantStaffComponent, GotUnequippedHandEvent>(OnUnequippedHand);
     }
+
+    #region Alt + right click: blink and blessing
+
+    private void OnAltUse(Entity<LavalandHierophantStaffComponent> ent, ref LavalandAltUseEvent args)
+    {
+        var user = args.User;
+        if (!CanUseStaff(ent, user))
+            return;
+
+        // On a creature: the blessing. Anywhere else: the blink.
+        if (args.Target is { } target && target != ent.Owner &&
+            HasComp<InputMoverComponent>(target) && HasComp<MobStateComponent>(target) && !IsDead(target))
+        {
+            TryStartBlessing(ent, user, target);
+            return;
+        }
+
+        var now = _timing.CurTime;
+        if (now < ent.Comp.NextBlink)
+        {
+            _popup.PopupEntity(Loc.GetString("lavaland-hierophant-staff-blink-cooldown",
+                ("seconds", (int) Math.Ceiling((ent.Comp.NextBlink - now).TotalSeconds))), user, user);
+            return;
+        }
+
+        var userPosition = _transform.GetMapCoordinates(user);
+        var targetPosition = _transform.ToMapCoordinates(args.Coordinates);
+        if (userPosition.MapId != targetPosition.MapId ||
+            (userPosition.Position - targetPosition.Position).Length() > ent.Comp.BlinkRange)
+        {
+            _popup.PopupEntity(Loc.GetString("lavaland-hierophant-staff-blink-range"), user, user);
+            return;
+        }
+
+        if (!TryBlink(user, args.Coordinates, ent.Comp.Blink))
+            return;
+
+        ent.Comp.NextBlink = now + ent.Comp.BlinkCooldown;
+        UpdateAlerts(ent, user);
+    }
+
+    private void TryStartBlessing(Entity<LavalandHierophantStaffComponent> ent, EntityUid user, EntityUid target)
+    {
+        var userPosition = _transform.GetMapCoordinates(user);
+        var targetPosition = _transform.GetMapCoordinates(target);
+        if (userPosition.MapId != targetPosition.MapId ||
+            (userPosition.Position - targetPosition.Position).Length() > ent.Comp.BlessRange)
+        {
+            _popup.PopupEntity(Loc.GetString("lavaland-hierophant-staff-bless-range"), user, user);
+            return;
+        }
+
+        // Ending the walk is free; giving it takes the charge.
+        var now = _timing.CurTime;
+        if (!_beat.IsBlessed(target) && now < ent.Comp.NextBless)
+        {
+            _popup.PopupEntity(Loc.GetString("lavaland-hierophant-staff-bless-cooldown",
+                ("seconds", (int) Math.Ceiling((ent.Comp.NextBless - now).TotalSeconds))), user, user);
+            return;
+        }
+
+        var doAfter = new DoAfterArgs(EntityManager, user, ent.Comp.BlessTime, new LavalandHierophantBlessDoAfterEvent(), ent, target, ent)
+        {
+            BreakOnMove = true,
+            BreakOnDamage = true,
+            NeedHand = true,
+            DistanceThreshold = ent.Comp.BlessRange + 0.5f,
+        };
+
+        if (_doAfter.TryStartDoAfter(doAfter))
+            _popup.PopupEntity(Loc.GetString("lavaland-hierophant-staff-bless-start"), user, PopupType.Medium);
+    }
+
+    private void OnBlessDoAfter(Entity<LavalandHierophantStaffComponent> ent, ref LavalandHierophantBlessDoAfterEvent args)
+    {
+        if (args.Cancelled || args.Handled || args.Target is not { } target || TerminatingOrDeleted(target))
+            return;
+
+        args.Handled = true;
+        if (_beat.IsBlessed(target))
+        {
+            _beat.SetBlessed(target, false);
+            _popup.PopupEntity(Loc.GetString("lavaland-hierophant-staff-bless-end"), target, PopupType.Medium);
+            return;
+        }
+
+        var now = _timing.CurTime;
+        if (now < ent.Comp.NextBless)
+            return;
+
+        _beat.SetBlessed(target, true);
+        ent.Comp.NextBless = now + ent.Comp.BlessCooldown;
+        UpdateAlerts(ent, args.User);
+        _popup.PopupEntity(Loc.GetString("lavaland-hierophant-staff-bless-done"), target, PopupType.Medium);
+    }
+
+    private void OnEquippedHand(Entity<LavalandHierophantStaffComponent> ent, ref GotEquippedHandEvent args)
+    {
+        UpdateAlerts(ent, args.User);
+    }
+
+    private void OnUnequippedHand(Entity<LavalandHierophantStaffComponent> ent, ref GotUnequippedHandEvent args)
+    {
+        _alerts.ClearAlert(args.User, ent.Comp.BlinkAlert);
+    }
+
+    /// <summary>The blink alert at the side of the screen, with its cooldown.</summary>
+    private void UpdateAlerts(Entity<LavalandHierophantStaffComponent> ent, EntityUid user)
+    {
+        var now = _timing.CurTime;
+        _alerts.ShowAlert(user, ent.Comp.BlinkAlert,
+            cooldown: ent.Comp.NextBlink > now ? (now, ent.Comp.NextBlink) : null, autoRemove: false);
+    }
+
+    #endregion
 
     public override void Update(float frameTime)
     {
@@ -128,12 +259,20 @@ public sealed class LavalandHierophantStaffSystem : EntitySystem
 
     private void OnBlink(EntityUid uid, LavalandHierophantStaffComponent component, LavalandHierophantStaffBlinkActionEvent args)
     {
-        if (args.Handled ||
-            !CanUseStaff(uid, args.Performer) ||
-            !TryGetWorldTargetTile(args.Performer, args.Target, out var gridUid, out var grid, out var targetTile, out var performerTile) ||
+        if (args.Handled || !CanUseStaff(uid, args.Performer))
+            return;
+
+        args.Handled = TryBlink(args.Performer, args.Target, args);
+    }
+
+    /// <summary>Teleport to the target tile with blasts at both ends.</summary>
+    private bool TryBlink(EntityUid performer, EntityCoordinates target, LavalandHierophantStaffBlinkActionEvent args)
+    {
+        if (HasComp<LavalandNoTeleportZoneComponent>(Transform(performer).MapUid) ||
+            !TryGetWorldTargetTile(performer, target, out var gridUid, out var grid, out var targetTile, out var performerTile) ||
             !CanTeleportTo(gridUid, grid, targetTile))
         {
-            return;
+            return false;
         }
 
         var now = _timing.CurTime;
@@ -144,18 +283,18 @@ public sealed class LavalandHierophantStaffSystem : EntitySystem
         PlayTile(args.BlinkSourceSound, gridUid, grid, performerTile, -2f);
         PlayTile(args.BlinkDestinationSound, gridUid, grid, targetTile, -2f);
 
-        QueueRadiusBlasts(gridUid, grid, performerTile, radius, args.SquaresPrototype, now, detonateAt, args.BlastPrototype, args.BlinkDamage, args.Performer, args.BlastSound, args.HitSound);
-        QueueRadiusBlasts(gridUid, grid, targetTile, radius, args.SquaresPrototype, now, detonateAt, args.BlastPrototype, args.BlinkDamage, args.Performer, args.BlastSound, args.HitSound);
+        QueueRadiusBlasts(gridUid, grid, performerTile, radius, args.SquaresPrototype, now, detonateAt, args.BlastPrototype, args.BlinkDamage, performer, args.BlastSound, args.HitSound);
+        QueueRadiusBlasts(gridUid, grid, targetTile, radius, args.SquaresPrototype, now, detonateAt, args.BlastPrototype, args.BlinkDamage, performer, args.BlastSound, args.HitSound);
 
         _pendingTeleports.Add(new PendingTeleport
         {
-            Performer = args.Performer,
+            Performer = performer,
             Grid = gridUid,
             Destination = targetTile,
             ExecuteAt = blinkAt,
         });
 
-        args.Handled = true;
+        return true;
     }
 
     private void OnChaser(EntityUid uid, LavalandHierophantStaffComponent component, LavalandHierophantStaffChaserActionEvent args)
@@ -186,6 +325,35 @@ public sealed class LavalandHierophantStaffSystem : EntitySystem
         });
 
         args.Handled = true;
+    }
+
+    /// <summary>Vortex talisman on a crusher: a chaser with the staff's look but the trophy's damage.</summary>
+    private void OnAttachmentChaser(ref AttachmentHierophantChaserEvent args)
+    {
+        if (args.Target == args.User ||
+            IsDead(args.Target) ||
+            !TryGetEntityTargetTiles(args.User, args.Target, out var gridUid, out _, out var performerTile, out _))
+        {
+            return;
+        }
+
+        var defaults = new LavalandHierophantStaffChaserActionEvent();
+        _pendingChasers.Add(new PendingChaser
+        {
+            Performer = args.User,
+            Target = args.Target,
+            Grid = gridUid,
+            Tile = performerTile,
+            NextStep = _timing.CurTime,
+            StepDelay = defaults.StepDelay,
+            MaxSteps = Math.Clamp(args.MaxSteps, 1, 12),
+            TelegraphDelay = defaults.TelegraphDelay,
+            SquaresPrototype = defaults.SquaresPrototype,
+            BlastPrototype = defaults.BlastPrototype,
+            Damage = new(args.Damage),
+            BlastSound = defaults.BlastSound,
+            HitSound = defaults.HitSound,
+        });
     }
 
     private void ProcessTeleports(TimeSpan now)

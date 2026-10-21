@@ -1,0 +1,135 @@
+- type: entity
+  parent: MaterialBase
+  id: LavalandWatcherSinew
+  name: watcher sinew
+  description: Tough strands of sinew cut from a watcher.
+  suffix: Full
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Materials/fauna_rewards.rsi
+    layers:
+    - state: sinew
+      map: [ "base" ]
+  - type: Appearance
+  - type: Stack
+    stackType: LavalandWatcherSinew
+    baseLayer: base
+    layerStates:
+    - sinew
+    - sinew_2
+    - sinew_3
+  - type: Item
+    size: Small
+  - type: StackPrice
+    price: 120
+
+- type: entity
+  parent: LavalandWatcherSinew
+  id: LavalandWatcherSinew1
+  suffix: 1
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: BaseItem
+  id: LavalandWatcherWing
+  name: watcher wing
+  description: A sinewy wing torn from a watcher. It is useful as a rare lavaland trophy.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Materials/fauna_rewards.rsi
+    state: sinew
+  - type: Item
+    size: Small
+  - type: StaticPrice
+    price: 500
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/glove_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/glove_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/glove_drop.ogg
+
+- type: entity
+  parent: BaseItem
+  id: LavalandLegionSkull
+  name: legion skull
+  description: A skull left behind by a legion host.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Materials/fauna_rewards.rsi
+    state: skull
+  - type: Item
+    size: Small
+  - type: StaticPrice
+    price: 300
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_drop.ogg
+
+- type: entity
+  parent: FoodBase
+  id: LavalandLegionSoul
+  name: legion soul
+  description: A flickering remnant torn out of a legion. It still contains unstable regenerative compounds.
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 4
+        reagents:
+        - ReagentId: Rororium
+          Quantity: 4
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Specific/Medical/legion_soul.rsi
+    state: legion_soul
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - FelinidFood
+    - ReptilianFood
+  - type: Perishable
+    rotAfter: 180
+    molsPerSecondPerUnitMass: 0
+    forceRotProgression: true
+  - type: RotInto
+    entity: LavalandLegionSoulInert
+    stage: 1
+  - type: LavalandStabilizable
+  - type: StaticPrice
+    price: 1000
+
+- type: entity
+  parent: BaseItem
+  id: LavalandLegionSoulInert
+  name: inert legion soul
+  description: A burned-out legion soul. Whatever power it held is gone.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/Specific/Medical/legion_soul.rsi
+    state: legion_soul_inert
+  - type: Item
+    size: Small
+  - type: SpaceGarbage
+  - type: StaticPrice
+    price: 100
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_drop.ogg

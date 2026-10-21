@@ -62,3 +62,5 @@ lavaland-spectral-blade-summon-yes = Да
 lavaland-spectral-blade-summon-no = Нет
 lavaland-spectral-blade-summon-accepted = Вы отвечаете на зов спектрального клинка.
 lavaland-spectral-blade-spirit-joined = Дух отвечает клинку. Удержано духов: {$spirits}.
+gun-upgrade-examine-text-explosive-lavaland = Стреляет [color=#ff7a2a][bold]взрывными зарядами.[/bold][/color]
+lavaland-mission-reward = Экспедиционное задание выполнено! На вашу ID-карту начислено { $points } шахтёрских очков.

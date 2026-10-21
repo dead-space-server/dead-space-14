@@ -2249,7 +2249,7 @@ entities:
     - type: Transform
       pos: 1.5096223,7.4990907
       parent: 1
-- proto: PlushieWillie
+- proto: PlushieZutiIgna
   entities:
   - uid: 335
     components:

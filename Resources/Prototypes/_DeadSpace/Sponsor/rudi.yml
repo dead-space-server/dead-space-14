@@ -407,6 +407,17 @@
   name: кинетическое оружие «Каратель»
   description: Тестовое оружие Республиканских Коммандос, рассчитанное на точное и надежное поражение целей, ЗА РЕСПУБЛИКУ! 
   components:
+  - type: AttachmentHolder
+    slotOverlays:
+      bayonet_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: bayonet
+        offset: 0.71875,0.40625
+      light_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: flight
+        stateOn: flight_on
+        offset: 0.40625,0.3125
   - type: Gun
     fireRate: 0.5
     selectedMode: SemiAuto

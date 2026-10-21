@@ -218,3 +218,5 @@
       - !type:ModifyStatusEffect
         effectProto: StatusEffectAdrenaline
         time: 120
+      - !type:ModifyBleed #DS14
+        amount: -1.5

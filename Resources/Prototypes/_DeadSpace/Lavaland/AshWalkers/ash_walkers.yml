@@ -187,6 +187,10 @@
   name: ash walker uniform
   description: Simple tribal clothing, made for life among the ashes.
   components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/uniform.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Lavaland/AshWalkers/uniform.rsi
   - type: SuitSensor
     controlsLocked: true
     randomMode: false
@@ -197,9 +201,9 @@
   equipment:
     jumpsuit: ClothingUniformAshWalker
     head: ClothingHeadHatGladiator
-    back: ClothingBackpackSatchelLeather
+    back: ClothingBackpackAshWalkerCrafted
   inhand:
-  - SpearBone
+  - SpearBoneAshWalker
   storage:
     back:
     - DrinkFlaskOldWater

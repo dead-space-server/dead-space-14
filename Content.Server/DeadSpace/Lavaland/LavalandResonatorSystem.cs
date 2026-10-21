@@ -14,6 +14,7 @@ using Content.Shared.Mining.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
+using Content.Shared.Projectiles;
 using Content.Shared.Timing;
 using Content.Shared.Verbs;
 using Content.Shared.Wall;
@@ -63,6 +64,7 @@ public sealed class LavalandResonatorSystem : EntitySystem
         SubscribeLocalEvent<LavalandResonatorComponent, GetVerbsEvent<AlternativeVerb>>(OnGetAlternativeVerbs);
         SubscribeLocalEvent<GatherableComponent, GetVerbsEvent<AlternativeVerb>>(OnMineableGetAlternativeVerbs);
         SubscribeLocalEvent<LavalandResonanceFieldComponent, ComponentShutdown>(OnFieldShutdown);
+        SubscribeLocalEvent<LavalandResonatorBoltComponent, BeforeProjectileHitEvent>(OnBoltBeforeHit);
     }
 
     public override void Update(float frameTime)
@@ -218,6 +220,9 @@ public sealed class LavalandResonatorSystem : EntitySystem
         fieldComp.BonusYieldChance = ent.Comp.BonusYieldChance;
         fieldComp.BonusYieldMultiplier = ent.Comp.BonusYieldMultiplier;
         fieldComp.BurstSound = ent.Comp.BurstSound;
+        fieldComp.BossDamageFalloff = ent.Comp.BossDamageFalloff;
+        fieldComp.BossDamageMinMultiplier = ent.Comp.BossDamageMinMultiplier;
+        fieldComp.BossDamageWindow = ent.Comp.BossDamageWindow;
 
         ent.Comp.Fields.Add(fieldUid);
         _audio.PlayPvs(ent.Comp.PlaceSound, fieldUid);
@@ -377,9 +382,13 @@ public sealed class LavalandResonatorSystem : EntitySystem
                 continue;
             }
 
+            var bossMultiplier = ConsumeBossDamageMultiplier(uid,
+                field.BossDamageFalloff,
+                field.BossDamageMinMultiplier,
+                field.BossDamageWindow);
             _damageable.TryChangeDamage(
                 (uid, damageable),
-                new DamageSpecifier(damage),
+                damage * bossMultiplier,
                 interruptsDoAfters: false,
                 origin: field.Creator ?? activator ?? field.Resonator);
         }
@@ -399,6 +408,13 @@ public sealed class LavalandResonatorSystem : EntitySystem
         for (var i = 0; i < count; i++)
         {
             var projectile = Spawn(projectilePrototype, fieldXform.Coordinates);
+            if (field.BossDamageFalloff > 0f)
+            {
+                var bolt = EnsureComp<LavalandResonatorBoltComponent>(projectile);
+                bolt.BossDamageFalloff = field.BossDamageFalloff;
+                bolt.BossDamageMinMultiplier = field.BossDamageMinMultiplier;
+                bolt.BossDamageWindow = field.BossDamageWindow;
+            }
             _gun.ShootProjectile(
                 projectile,
                 CardinalDirections[i],
@@ -407,6 +423,42 @@ public sealed class LavalandResonatorSystem : EntitySystem
                 shooter,
                 field.BurstProjectileSpeed);
         }
+    }
+
+    private void OnBoltBeforeHit(Entity<LavalandResonatorBoltComponent> ent, ref BeforeProjectileHitEvent args)
+    {
+        var multiplier = ConsumeBossDamageMultiplier(args.Target,
+            ent.Comp.BossDamageFalloff,
+            ent.Comp.BossDamageMinMultiplier,
+            ent.Comp.BossDamageWindow);
+        if (multiplier < 1f)
+            args.Damage = args.Damage * multiplier;
+    }
+
+    /// <summary>
+    /// Returns the damage multiplier for a resonator hit on a boss and records the hit:
+    /// every hit within the window makes the next one weaker.
+    /// </summary>
+    private float ConsumeBossDamageMultiplier(EntityUid target, float falloff, float minMultiplier, TimeSpan window)
+    {
+        // Not the Legion: its many bodies (and hands) are fought with resonators at full strength.
+        if (falloff <= 0f ||
+            HasComp<LavalandLegionMegafaunaComponent>(target) ||
+            !HasComp<LavalandBossComponent>(target) &&
+            !HasComp<LavalandMadMinerComponent>(target) &&
+            !HasComp<LavalandEliteComponent>(target))
+        {
+            return 1f;
+        }
+
+        var now = _timing.CurTime;
+        var pressure = EnsureComp<LavalandResonatorPressureComponent>(target);
+        while (pressure.Hits.Count > 0 && now - pressure.Hits.Peek() >= window)
+            pressure.Hits.Dequeue();
+
+        var multiplier = Math.Max(Math.Clamp(minMultiplier, 0f, 1f), 1f - falloff * pressure.Hits.Count);
+        pressure.Hits.Enqueue(now);
+        return multiplier;
     }
 
     private bool TryResetUseDelay(EntityUid uid)

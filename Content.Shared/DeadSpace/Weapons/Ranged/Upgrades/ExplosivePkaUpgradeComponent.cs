@@ -31,7 +31,7 @@ public sealed partial class ExplosivePkaUpgradeComponent : Component
     public DamageSpecifier CreatureDamage = Damage(80);
 
     [DataField]
-    public DamageSpecifier BossDamage = Damage(125);
+    public DamageSpecifier BossDamage = Damage(25);
 
     [DataField]
     public DamageSpecifier BulletDamage = Damage(20);
@@ -73,4 +73,8 @@ public sealed partial class ExplosivePkaProjectileComponent : Component
 
     [DataField]
     public DamageSpecifier BossDamage = new();
+
+    /// <summary>The damage upgrades in the gun alongside: added to the blast on fauna and bosses.</summary>
+    [DataField]
+    public DamageSpecifier UpgradeDamage = new();
 }

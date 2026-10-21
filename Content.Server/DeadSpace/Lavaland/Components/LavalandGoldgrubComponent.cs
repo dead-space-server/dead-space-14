@@ -3,6 +3,17 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.DeadSpace.Lavaland.Components;
 
+/// <summary>Admin test: on spawn, a goldgrub digs out here and ambushes the nearest player (no chance, no cooldown).</summary>
+[RegisterComponent]
+public sealed partial class LavalandGoldgrubAmbushTestComponent : Component
+{
+    [DataField]
+    public float Range = 15f;
+
+    [DataField]
+    public EntProtoId Prototype = "MobLavalandGoldgrub";
+}
+
 [RegisterComponent]
 public sealed partial class LavalandGoldgrubComponent : Component
 {
@@ -86,6 +97,57 @@ public sealed partial class LavalandGoldgrubComponent : Component
 
     [DataField]
     public Dictionary<ProtoId<StackPrototype>, int> StoredOre = new();
+
+    // Ambush: digs out of the rock a miner breaks, jumps at them, stuns them and eats their ore, then flees to burrow.
+    // How often - goldgrubAmbush in World/planets.yml.
+
+    /// <summary>From digging out to the jump.</summary>
+    [DataField]
+    public TimeSpan AmbushLeapDelay = TimeSpan.FromSeconds(0.6);
+
+    [DataField]
+    public float AmbushLeapSpeed = 9f;
+
+    /// <summary>From the jump to the hit.</summary>
+    [DataField]
+    public TimeSpan AmbushHitDelay = TimeSpan.FromSeconds(0.35);
+
+    [DataField]
+    public float AmbushHitRange = 1.8f;
+
+    [DataField]
+    public TimeSpan AmbushStun = TimeSpan.FromSeconds(2);
+
+    /// <summary>How many whole stacks of ore it eats from the miner.</summary>
+    [DataField]
+    public int AmbushStacksMin = 2;
+
+    [DataField]
+    public int AmbushStacksMax = 4;
+
+    /// <summary>Ore it eats from the miner (the ore bag included).</summary>
+    [DataField]
+    public HashSet<ProtoId<StackPrototype>> AmbushOre =
+    [
+        "SilverOre",
+        "GoldOre",
+        "UraniumOre",
+        "DiamondOre",
+        "BluespaceCrystalOre",
+        "MagmiteOre",
+    ];
+
+    [ViewVariables]
+    public EntityUid? AmbushVictim;
+
+    [ViewVariables]
+    public TimeSpan? AmbushLeapAt;
+
+    [ViewVariables]
+    public TimeSpan? AmbushHitAt;
+
+    [ViewVariables]
+    public bool AmbushDone;
 
     [ViewVariables]
     public TimeSpan NextUpdate;

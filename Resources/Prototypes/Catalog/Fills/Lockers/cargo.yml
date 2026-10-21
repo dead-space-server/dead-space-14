@@ -12,6 +12,7 @@
   table: !type:AllSelector
     children:
     - id: WeaponProtoKineticAccelerator #DS14
+    - id: FlashlightSeclite # DS14: deep night on lavaland
     - id: ClothingBeltUtilityFilled
     - id: SurvivalKnife
     - id: HandheldGPSBasic

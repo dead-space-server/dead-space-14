@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared.DeadSpace.Lavaland; // DS14
 using Content.Shared.Light.Components;
 using Robust.Client.Graphics;
 using Robust.Shared.Enums;
@@ -18,6 +19,7 @@ public sealed class TileEmissionOverlay : Overlay
     private SharedTransformSystem _xformSystem;
 
     private readonly EntityLookupSystem _lookup;
+    private readonly LavalandDayCycleSystem _lavalandDayCycle; // DS14
 
     private readonly EntityQuery<TransformComponent> _xformQuery;
     private readonly HashSet<Entity<TileEmissionComponent>> _entities = new();
@@ -33,6 +35,7 @@ public sealed class TileEmissionOverlay : Overlay
         _lookup = entManager.System<EntityLookupSystem>();
         _mapSystem = entManager.System<SharedMapSystem>();
         _xformSystem = entManager.System<SharedTransformSystem>();
+        _lavalandDayCycle = entManager.System<LavalandDayCycleSystem>(); // DS14
 
         _xformQuery = entManager.GetEntityQuery<TransformComponent>();
         ZIndex = ContentZIndex;
@@ -44,6 +47,10 @@ public sealed class TileEmissionOverlay : Overlay
             return;
 
         var mapId = args.MapId;
+        // DS14-Start: the lava does not glow in the lavaland deep night
+        if (_lavalandDayCycle.IsLavaLightSuppressed(_mapSystem.GetMapOrInvalid(mapId)))
+            return;
+        // DS14-End
         var worldHandle = args.WorldHandle;
         var lightoverlay = _overlay.GetOverlay<BeforeLightTargetOverlay>();
         var bounds = lightoverlay.EnlargedBounds;
