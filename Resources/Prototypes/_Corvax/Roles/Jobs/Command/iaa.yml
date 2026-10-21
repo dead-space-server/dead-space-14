@@ -17,6 +17,11 @@
       time: 144000 # 40 hours
     - !type:AgeRequirement
       requiredAge: 26
+    # DS14-start: no felinids
+    - !type:SpeciesRequirement
+      inverted: true
+      species: [ Felinid ]
+    # DS14-end
   startingGear: IAAGear
   icon: "JobIconIAA"
   supervisors: job-supervisors-centcom

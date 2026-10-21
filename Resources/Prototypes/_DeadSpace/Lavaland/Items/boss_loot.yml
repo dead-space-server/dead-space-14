@@ -263,7 +263,8 @@
       cooldown: 40
     # Not "назад" / "back": said all the time without meaning it as an order.
     - words: [ прочь, отойди, отступите, get away ]
-      repel: 12
+      # Throw speed: as fast as the clown's push horn.
+      repel: 50
       repelDistance: 6
       cooldown: 10
     - words: [ страдай, умри, гори, suffer, die, burn ]

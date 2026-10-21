@@ -185,15 +185,26 @@ public sealed class ChasmSystem : EntitySystem
     private static readonly TimeSpan HoverGraceGap = TimeSpan.FromSeconds(1);
 
     /// <summary>
-    /// Anti-gravity clothing keeps one over a chasm only while standing. Gone down into pre-crit or crit, one gets
-    /// <see cref="ChasmComponent.CritHoverGrace"/> to reach solid ground or get back up first.
+    /// Anti-gravity clothing keeps one over a chasm only while standing. Gone down, one gets
+    /// <see cref="ChasmComponent.CritHoverGrace"/> to reach solid ground or get back up first: in pre-crit or crit,
+    /// or lying down for any reason in clothing with <see cref="AntiGravityChasmHoldComponent.Timer"/>. Clothing with
+    /// that component and no timer holds its living wearer up for good.
     /// </summary>
     private bool TryHoldOffFall(ChasmComponent chasm, EntityUid tripper)
     {
+        if (!TryComp<MobStateComponent>(tripper, out var mobState) ||
+            mobState.CurrentState == MobState.Dead ||
+            GetAntiGravityClothing(tripper) is not { } clothing)
+        {
+            return false;
+        }
+
+        var hold = CompOrNull<AntiGravityChasmHoldComponent>(clothing);
+        if (hold is { Timer: false })
+            return true;
+
         if (chasm.CritHoverGrace <= TimeSpan.Zero ||
-            !TryComp<MobStateComponent>(tripper, out var mobState) ||
-            mobState.CurrentState is not (MobState.PreCritical or MobState.Critical) ||
-            !WearsAntiGravityClothing(tripper))
+            hold == null && mobState.CurrentState is not (MobState.PreCritical or MobState.Critical))
         {
             return false;
         }
@@ -216,18 +227,18 @@ public sealed class ChasmSystem : EntitySystem
         return now < grace.FallAt;
     }
 
-    private bool WearsAntiGravityClothing(EntityUid uid)
+    private EntityUid? GetAntiGravityClothing(EntityUid uid)
     {
         if (!_inventory.TryGetContainerSlotEnumerator(uid, out var slots, SlotFlags.WITHOUT_POCKET))
-            return false;
+            return null;
 
         while (slots.NextItem(out var item))
         {
             if (HasComp<AntiGravityClothingComponent>(item))
-                return true;
+                return item;
         }
 
-        return false;
+        return null;
     }
 
     private void OnHoverGraceMobStateChanged(EntityUid uid, ChasmHoverGraceComponent component, MobStateChangedEvent args)

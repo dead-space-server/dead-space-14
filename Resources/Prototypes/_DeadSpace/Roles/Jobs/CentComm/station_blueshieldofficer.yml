@@ -20,6 +20,9 @@
       time: 324000 # 90 hours
     - !type:AgeRequirement
       requiredAge: 24
+    - !type:SpeciesRequirement
+      inverted: true
+      species: [ Felinid ]
   startingGear: BlueShieldOfficerGear
   icon: "JobIconBlueShieldOfficer"
   supervisors: job-supervisors-centcom

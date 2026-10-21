@@ -23,6 +23,11 @@
       time: 140h
     - !type:AgeRequirement
       requiredAge: 26
+    # DS14-start: no felinids
+    - !type:SpeciesRequirement
+      inverted: true
+      species: [ Felinid ]
+    # DS14-end
   startingGear: CaptainGear
   icon: "JobIconCaptain"
   joinNotifyCrew: true
