@@ -61,7 +61,8 @@ public sealed class NecromorphPlasmaCutterSystem : EntitySystem
             return;
         }
 
-        if (!HasComp<HumanoidAppearanceComponent>(target) || !HasComp<BodyComponent>(target))
+        if ((!HasComp<HumanoidAppearanceComponent>(target) && !HasComp<NecromorphPlasmaCutterDismemberableComponent>(target)) ||
+            !HasComp<BodyComponent>(target))
         {
             DamageByPercentage(target, CompOrNull<NecromorphPlasmaCutterReducedDamageComponent>(target));
             return;
@@ -72,8 +73,9 @@ public sealed class NecromorphPlasmaCutterSystem : EntitySystem
         var oneLegWalkSpeed = movement?.BaseWalkSpeed ?? 0f;
         var oneLegSprintSpeed = movement?.BaseSprintSpeed ?? 0f;
         var oneLegAcceleration = movement?.BaseAcceleration ?? 0f;
-        if (wounds.RemovedLegs < 2 && TryDetachFirstPart(target, BodyPartType.Leg, args.Data.ShotDirection, ent.Comp.DetachedPartImpulse))
+        if (wounds.RemovedLegs < 2 && TryDetachFirstPart(target, BodyPartType.Leg, args.Data.ShotDirection, ent.Comp.DetachedPartImpulse, out var leg))
         {
+            MarkSevered(target, leg?.Symmetry == BodyPartSymmetry.Left ? NecromorphSeveredPart.LegLeft : NecromorphSeveredPart.LegRight);
             if (wounds.RemovedLegs == 0 && movement != null)
             {
                 wounds.OriginalWalkSpeed = movement.BaseWalkSpeed;
@@ -91,16 +93,30 @@ public sealed class NecromorphPlasmaCutterSystem : EntitySystem
             return;
         }
 
-        if (!TryDetachFirstPart(target, BodyPartType.Head, args.Data.ShotDirection, ent.Comp.DetachedPartImpulse))
+        if (!TryDetachFirstPart(target, BodyPartType.Head, args.Data.ShotDirection, ent.Comp.DetachedPartImpulse, out _))
             return;
+
+        MarkSevered(target, NecromorphSeveredPart.Head);
 
         EnsureComp<NecromorphMissingHeadComponent>(target);
         _mobState.ChangeMobState(target, MobState.Dead);
     }
 
-    private bool TryDetachFirstPart(EntityUid target, BodyPartType type, Vector2 shotDirection, float impulse)
+    /// <summary>The part is gone from its sprite too - a suit or a helmet would keep drawing it.</summary>
+    private void MarkSevered(EntityUid target, NecromorphSeveredPart part)
+    {
+        var severed = EnsureComp<NecromorphSeveredPartsComponent>(target);
+        severed.Severed |= part;
+        severed.Layout = CompOrNull<NecromorphPlasmaCutterDismemberableComponent>(target)?.Layout ??
+                         NecromorphSpriteLayout.Humanoid;
+        Dirty(target, severed);
+    }
+
+    private bool TryDetachFirstPart(EntityUid target, BodyPartType type, Vector2 shotDirection, float impulse,
+        out BodyPartComponent? detached)
     {
         var part = _body.GetBodyChildrenOfType(target, type).FirstOrDefault();
+        detached = part.Component;
         if (part.Id == EntityUid.Invalid ||
             !_containers.TryGetContainingContainer((part.Id, null, null), out var container))
         {

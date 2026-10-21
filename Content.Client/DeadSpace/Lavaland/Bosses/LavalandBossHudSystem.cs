@@ -90,6 +90,10 @@ public sealed class LavalandBossHudSystem : EntitySystem
 
     private void OnMusicStart(LavalandBossMusicStartEvent ev)
     {
+        // A boss fight starting during a raid takes the music over.
+        if (_activeArena == LavalandBossMusicStartEvent.RaidMusicId && ev.ArenaId != LavalandBossMusicStartEvent.RaidMusicId)
+            _activeArena = null;
+
         if (_activeArena != null && _activeArena != ev.ArenaId)
             return;
 
@@ -110,6 +114,9 @@ public sealed class LavalandBossHudSystem : EntitySystem
             return;
 
         FadeOutCurrentMusic(true);
+        // Music without a HUD (the raid's) leaves nothing behind to block the next fight's music.
+        if (_activeArena == ev.ArenaId && (_hud == null || !_hud.Visible))
+            _activeArena = null;
     }
 
     private void OnRoundRestart(RoundRestartCleanupEvent ev)

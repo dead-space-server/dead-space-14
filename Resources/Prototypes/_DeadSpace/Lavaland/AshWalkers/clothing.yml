@@ -26,6 +26,12 @@
   name: ash walker bone helmet
   description: A reinforced skull helmet fitted for an ash walker's head.
   components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_helmet.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_helmet.rsi
+  - type: Item
+    sprite: _DeadSpace/Lavaland/AshWalkers/bone_helmet.rsi
   - type: AshWalkerClothing
   - type: Armor
     modifiers:

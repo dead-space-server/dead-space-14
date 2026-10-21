@@ -4,6 +4,11 @@
   name: ash walker hunting crate
   description: Bone armor, knives, bows and arrows for three hunters.
   components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/hide_chest.rsi
+  - type: Icon
+    sprite: _DeadSpace/Lavaland/AshWalkers/hide_chest.rsi
+    state: crate_icon
   - type: EntityTableContainerFill
     containers:
       entity_storage: !type:AllSelector
@@ -25,15 +30,20 @@
   name: ash walker workshop crate
   description: Mining and building tools, buckets, materials and spare light batteries for a small settlement.
   components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/hide_chest.rsi
+  - type: Icon
+    sprite: _DeadSpace/Lavaland/AshWalkers/hide_chest.rsi
+    state: crate_icon
   - type: EntityTableContainerFill
     containers:
       entity_storage: !type:AllSelector
         children:
-        - id: Pickaxe
+        - id: PickaxeBoneAshWalker
           amount: 3
         - id: Shovel
-        - id: HydroponicsToolHatchet
-        - id: Bucket
+        - id: HatchetBoneAshWalker
+        - id: AshWalkerBucket
           amount: 2
         - id: Crowbar
         - id: Wrench
@@ -55,6 +65,11 @@
   name: ash walker provisions crate
   description: Eighteen bottles of drinking water and twelve cooked steaks for the settlement's first hunts.
   components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/hide_chest.rsi
+  - type: Icon
+    sprite: _DeadSpace/Lavaland/AshWalkers/hide_chest.rsi
+    state: crate_icon
   - type: EntityTableContainerFill
     containers:
       entity_storage: !type:AllSelector
@@ -70,6 +85,11 @@
   name: ash walker medical crate
   description: Bandages, ointment, trauma supplies, blood packs and emergency injectors for three hunters.
   components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/hide_chest.rsi
+  - type: Icon
+    sprite: _DeadSpace/Lavaland/AshWalkers/hide_chest.rsi
+    state: crate_icon
   - type: EntityTableContainerFill
     containers:
       entity_storage: !type:AllSelector
@@ -91,6 +111,11 @@
   name: ash walker farming crate
   description: Lavaland spores and seeds, a sieve, a mortar, bowls and tools for tending the settlement's gardens.
   components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/AshWalkers/hide_chest.rsi
+  - type: Icon
+    sprite: _DeadSpace/Lavaland/AshWalkers/hide_chest.rsi
+    state: crate_icon
   - type: EntityTableContainerFill
     containers:
       entity_storage: !type:AllSelector
@@ -111,7 +136,7 @@
           amount: 3
         - id: AshWalkerMushroomLantern
           amount: 3
-        - id: Bucket
-        - id: HydroponicsToolMiniHoe
-        - id: HydroponicsToolSpade
+        - id: AshWalkerBucket
+        - id: AshWalkerRake
+        - id: AshWalkerSpade
         - id: MaterialWoodPlank

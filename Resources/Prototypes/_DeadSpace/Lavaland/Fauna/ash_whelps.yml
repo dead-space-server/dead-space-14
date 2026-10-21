@@ -1,0 +1,123 @@
+- type: entity
+  id: MobLavalandWildAshWhelp
+  name: пепельный детёныш
+  description: Дикий детёныш пепельного дракона. Его не поймать и не убить — плюнет огнём и улетит.
+  suffix: Lavaland, неуязвимый
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _DeadSpace/Lavaland/Mobs/AshWhelp.rsi
+    layers:
+    - state: ash_whelp
+  - type: Clickable
+  - type: InteractionOutline
+  - type: PointLight
+    radius: 2
+    energy: 1
+    color: "#ff7a2d"
+  - type: LavalandWildWhelp
+    dropTime: 0.8
+    dropHeight: 8
+    aimTime: 1.1
+    fireRange: 5
+    fleeSpeed: 6
+    fleeTime: 1.6
+    riseTime: 0.7
+  - type: LavalandSkyDrop
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: MarkerBase
+  id: LavalandWildWhelpNest
+  name: гнездо пепельных детёнышей
+  suffix: Lavaland, триггер
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Mobs/AshWhelp.rsi
+    layers:
+    - state: ash_whelp
+  - type: LavalandWildWhelpNest
+    radius: 4
+    cooldown: 300
+
+- type: entity
+  parent: MarkerBase
+  id: LavalandWildWhelpTestSpawner
+  name: тест — дикие пепельные детёныши
+  suffix: Lavaland, тест
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Mobs/AshWhelp.rsi
+    layers:
+    - state: ash_whelp
+  - type: LavalandWildWhelpTest
+
+- type: entity
+  parent: MarkerBase
+  id: LavalandGoldgrubAmbushTestSpawner
+  name: тест — засада золотой личинки
+  suffix: Lavaland, тест
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Mobs/lavaland_monsters.rsi
+    layers:
+    - state: goldgrub
+  - type: LavalandGoldgrubAmbushTest
+
+# Flocks of little whelps: they appear just off screen and scatter the moment a player sees them.
+- type: entity
+  id: MobLavalandWhelpFlockling
+  name: пепельный птенец
+  description: Совсем мелкий детёныш пепельного дракона. Такие держатся стайками и разлетаются от любого взгляда.
+  suffix: Lavaland, стая
+  components:
+  - type: Transform
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/AshWhelp.rsi
+    scale: 0.6, 0.6
+    layers:
+    - state: ash_whelp
+  - type: Clickable
+  - type: PointLight
+    radius: 1.2
+    energy: 0.6
+    color: "#ff7a2d"
+    castShadows: false
+  - type: LavalandWhelpFlock
+    wanderSpeed: 0.8
+    scatterSpeedMin: 5
+    scatterSpeedMax: 8
+    scatterSpread: 70
+    scatterTime: 1.3
+    maxStartleDelay: 0.35
+    riseTime: 0.7
+    riseHeight: 8
+    idleLifetime: 120
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: MarkerBase
+  id: LavalandWhelpFlockTrigger
+  name: стая пепельных птенцов
+  suffix: Lavaland, триггер
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Mobs/AshWhelp.rsi
+    layers:
+    - state: ash_whelp
+  - type: LavalandWhelpFlockTrigger
+    prototype: MobLavalandWhelpFlockling
+    minCount: 6
+    maxCount: 11
+    flockRadius: 3
+    spawnRange: 22
+    viewHalfSize: 11, 8
+    hiddenMargin: 3
+    cooldown: 480

@@ -1,0 +1,151 @@
+- type: biomeMarkerLayer
+  id: LavalandOreIron
+  entityMask:
+    WallRockBasalt: WallRockBasaltTin
+  maxCount: 86
+  minGroupSize: 7
+  maxGroupSize: 12
+  radius: 4
+
+- type: biomeMarkerLayer
+  id: LavalandOreCoal
+  entityMask:
+    WallRockBasalt: WallRockBasaltCoal
+  maxCount: 94
+  minGroupSize: 5
+  maxGroupSize: 9
+  radius: 4
+
+- type: biomeMarkerLayer
+  id: LavalandOrePlasma
+  entityMask:
+    WallRockBasalt: WallRockBasaltPlasma
+  maxCount: 82
+  minGroupSize: 5
+  maxGroupSize: 9
+  radius: 4
+
+- type: biomeMarkerLayer
+  id: LavalandOreQuartz
+  entityMask:
+    WallRockBasalt: WallRockBasaltQuartz
+  maxCount: 80
+  minGroupSize: 4
+  maxGroupSize: 8
+  radius: 4
+
+- type: biomeMarkerLayer
+  id: LavalandOreSalt
+  entityMask:
+    WallRockBasalt: WallRockBasaltSalt
+  maxCount: 88
+  minGroupSize: 4
+  maxGroupSize: 7
+  radius: 4
+
+- type: biomeMarkerLayer
+  id: LavalandOreSilver
+  entityMask:
+    WallRockBasalt: WallRockBasaltSilver
+  maxCount: 74
+  minGroupSize: 4
+  maxGroupSize: 8
+  radius: 4
+
+- type: biomeMarkerLayer
+  id: LavalandOreGold
+  entityMask:
+    WallRockBasalt: WallRockBasaltGold
+  maxCount: 74
+  minGroupSize: 4
+  maxGroupSize: 8
+  radius: 4
+
+- type: biomeMarkerLayer
+  id: LavalandOreMagmite
+  entityMask:
+    WallRockBasalt: WallRockBasaltMagmite
+  maxCount: 26
+  minGroupSize: 2
+  maxGroupSize: 4
+  radius: 4
+
+- type: biomeMarkerLayer
+  id: LavalandOreUranium
+  entityMask:
+    WallRockBasalt: WallRockBasaltUranium
+  maxCount: 68
+  minGroupSize: 3
+  maxGroupSize: 6
+  radius: 4
+
+- type: biomeMarkerLayer
+  id: LavalandOreBananium
+  entityMask:
+    WallRockBasalt: WallRockBasaltBananium
+  maxCount: 15
+  minGroupSize: 1
+  maxGroupSize: 3
+  radius: 4
+
+- type: biomeMarkerLayer
+  id: LavalandOreArtifactFragment
+  entityMask:
+    WallRockBasalt: WallRockBasaltArtifactFragment
+  maxCount: 42
+  minGroupSize: 1
+  maxGroupSize: 3
+  radius: 4
+
+- type: biomeMarkerLayer
+  id: LavalandOreDiamond
+  entityMask:
+    WallRockBasalt: WallRockBasaltDiamond
+  maxCount: 26
+  minGroupSize: 2
+  maxGroupSize: 3
+  radius: 6
+
+- type: biomeMarkerLayer
+  id: LavalandOreBluespaceCrystal
+  entityMask:
+    WallRockBasalt: WallRockBasaltBluespaceCrystal
+  maxCount: 21
+  minGroupSize: 2
+  maxGroupSize: 3
+  radius: 4
+
+- type: biomeMarkerLayer
+  id: LavalandOreGibtonite
+  entityMask:
+    WallRockBasalt: WallRockBasaltGibtonite
+  maxCount: 28
+  minGroupSize: 2
+  maxGroupSize: 3
+  radius: 4
+
+- type: biomeMarkerLayer
+  id: LavalandChasms
+  prototype: FloorChasmEntity
+  maxCount: 2
+  minGroupSize: 1
+  maxGroupSize: 2
+  radius: 48
+
+- type: biomeMarkerLayer
+  id: LavalandChasmsMedium
+  prototype: FloorChasmEntity
+  maxCount: 1
+  minGroupSize: 5
+  maxGroupSize: 9
+  radius: 80
+  size: 192
+
+- type: biomeMarkerLayer
+  id: LavalandChasmsLarge
+  prototype: FloorChasmEntity
+  maxCount: 1
+  minGroupSize: 14
+  maxGroupSize: 22
+  radius: 170
+  size: 384

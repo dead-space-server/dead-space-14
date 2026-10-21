@@ -19,3 +19,17 @@
   path: "/Textures/_DeadSpace/Shaders/containment_field_hack.swsl"
   params:
     progress: 0.0
+
+# A geist of the Circle half sunk into a lavaland chasm: everything below the ground line is cut away.
+- type: shader
+  id: LavalandGeistHoleCut
+  kind: source
+  path: "/Textures/_DeadSpace/Shaders/geist_hole_cut.swsl"
+  params:
+    cut: 0
+
+# Legs and head a plasma cutter took off a necromorph, cut out of all of its sprite layers (suits and helmets too).
+- type: shader
+  id: NecromorphSeveredMask
+  kind: source
+  path: "/Textures/_DeadSpace/Shaders/severed_mask.swsl"

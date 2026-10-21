@@ -1,0 +1,590 @@
+# Necropolis structures for mapping (tgstation): gates, arch, walls, floor, stone tiles.
+- type: entity
+  id: NecropolisGate
+  name: ворота некрополя
+  description: Массивные каменные врата.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    drawdepth: Walls
+    sprite: _DeadSpace/Lavaland/Structures/Necropolis/necropolis_gate.rsi
+    layers:
+    - state: gate_dais
+    - state: gate_top
+    - state: door
+      map: [ "enum.LavalandNecropolisGateLayers.Door" ]
+  - type: Icon
+    sprite: _DeadSpace/Lavaland/Structures/Necropolis/necropolis_gate.rsi
+    state: gate_full
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.LavalandNecropolisGateVisuals.State:
+        enum.LavalandNecropolisGateLayers.Door:
+          Closed: { state: door, visible: true }
+          Opening: { state: door_opening, visible: true }
+          Open: { visible: false }
+          Closing: { state: door_closing, visible: true }
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 4000
+  - type: Occluder
+  - type: PointLight
+    radius: 8
+    energy: 1.2
+    color: "#c48a18"
+  - type: LavalandNecropolisGate
+  - type: LavalandStructureFront
+    front: NecropolisGateFront
+
+- type: entity
+  id: NecropolisGateFront
+  name: ворота некрополя
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _DeadSpace/Lavaland/Structures/Necropolis/necropolis_gate.rsi
+    layers:
+    - state: gate_bottom
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: NecropolisGate
+  id: NecropolisGateLocked
+  suffix: Заперты
+  components:
+  - type: LavalandNecropolisGate
+    locked: true
+
+- type: entity
+  parent: NecropolisGate
+  id: NecropolisGateLegion
+  name: врата некрополя
+  description: Огромные, невозможно большие врата, встроенные в массивную каменную башню.
+  suffix: Легион
+  components:
+  - type: LavalandNecropolisGate
+    legionGate: true
+
+- type: entity
+  id: NecropolisArch
+  name: арка некрополя
+  description: Массивная арка над вратами некрополя, встроенная в огромную каменную башню.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Sprite
+    drawdepth: Walls
+    sprite: _DeadSpace/Lavaland/Structures/Necropolis/necropolis_arch.rsi
+    offset: 0,0.75
+    layers:
+    - state: arch_top
+  - type: Icon
+    sprite: _DeadSpace/Lavaland/Structures/Necropolis/necropolis_arch.rsi
+    state: arch_full
+  - type: Clickable
+  - type: LavalandStructureFront
+    front: NecropolisArchFront
+
+- type: entity
+  id: NecropolisArchFront
+  name: арка некрополя
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _DeadSpace/Lavaland/Structures/Necropolis/necropolis_arch.rsi
+    offset: 0,0.75
+    layers:
+    - state: arch_bottom
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: NecropolisDrakeStatue
+  name: статуя дракона
+  description: Высокая базальтовая скульптура гордого и величественного дракона. Его глаза — шесть светящихся самоцветов.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Structures/Necropolis/drake_statue.rsi
+    state: drake_statue
+    offset: 0,0.5
+    noRot: true
+  - type: Clickable
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        density: 1000
+        mask:
+        - MachineMask
+        layer:
+        - WallLayer
+
+- type: entity
+  parent: NecropolisDrakeStatue
+  id: NecropolisDrakeStatueFalling
+  name: разрушающаяся статуя дракона
+  description: Высокая базальтовая скульптура дракона. По её поверхности бегут трещины, а часть уже отвалилась.
+  components:
+  - type: Sprite
+    state: drake_statue_falling
+
+- type: entity
+  id: WallNecropolisLavaland
+  name: стена некрополя
+  description: С виду непробиваемая стена.
+  suffix: Некрополь, неразрушимая
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Clickable
+  - type: Wall
+  - type: IsRoof
+  - type: Icon
+    sprite: _DeadSpace/Lavaland/Structures/Necropolis/necropolis_wall.rsi
+    state: full
+  - type: Sprite
+    drawdepth: Walls
+    sprite: _DeadSpace/Lavaland/Structures/Necropolis/necropolis_wall.rsi
+    layers:
+    - state: full
+  - type: PlacementReplacement
+    key: walls
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 4000
+  - type: Airtight
+  - type: RadiationBlocker
+    resistance: 2
+  - type: BlockWeather
+  - type: Occluder
+
+- type: entity
+  abstract: true
+  id: NecropolisStoneTileBase
+  name: каменная плита
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    drawdepth: FloorObjects
+    sprite: _DeadSpace/Lavaland/Structures/Necropolis/stone_tiles.rsi
+  - type: Clickable
+
+- type: entity
+  parent: NecropolisStoneTileBase
+  id: NecropolisStoneSurroundingTile
+  name: окаймляющая каменная плитка
+  components:
+  - type: Sprite
+    layers:
+    - state: pristine_surrounding_tile1
+      map: [ "random" ]
+  - type: RandomSprite
+    available:
+    - random:
+        pristine_surrounding_tile1: ""
+        pristine_surrounding_tile2: ""
+
+- type: entity
+  parent: NecropolisStoneTileBase
+  id: NecropolisStoneSurrounding
+  name: окаймляющая каменная плита
+  components:
+  - type: Sprite
+    layers:
+    - state: pristine_surrounding1
+      map: [ "random" ]
+  - type: RandomSprite
+    available:
+    - random:
+        pristine_surrounding1: ""
+        pristine_surrounding2: ""
+
+- type: entity
+  parent: NecropolisStoneTileBase
+  id: NecropolisStoneCenter
+  name: центральная каменная плитка
+  components:
+  - type: Sprite
+    layers:
+    - state: pristine_center1
+      map: [ "random" ]
+  - type: RandomSprite
+    available:
+    - random:
+        pristine_center1: ""
+        pristine_center2: ""
+        pristine_center3: ""
+        pristine_center4: ""
+
+- type: entity
+  parent: NecropolisStoneTileBase
+  id: NecropolisStoneBlock
+  name: каменный блок
+  components:
+  - type: Sprite
+    layers:
+    - state: pristine_block1
+      map: [ "random" ]
+  - type: RandomSprite
+    available:
+    - random:
+        pristine_block1: ""
+        pristine_block2: ""
+        pristine_block3: ""
+        pristine_block4: ""
+
+- type: entity
+  parent: NecropolisStoneTileBase
+  id: NecropolisStoneSlab
+  name: каменная плита
+  components:
+  - type: Sprite
+    layers:
+    - state: pristine_slab1
+      map: [ "random" ]
+  - type: RandomSprite
+    available:
+    - random:
+        pristine_slab1: ""
+        pristine_slab2: ""
+        pristine_slab3: ""
+        pristine_slab4: ""
+
+- type: entity
+  parent: NecropolisStoneTileBase
+  id: NecropolisStoneTile
+  name: каменная плитка
+  components:
+  - type: Sprite
+    layers:
+    - state: pristine_tile1
+      map: [ "random" ]
+  - type: RandomSprite
+    available:
+    - random:
+        pristine_tile1: ""
+        pristine_tile2: ""
+        pristine_tile3: ""
+        pristine_tile4: ""
+        pristine_tile5: ""
+        pristine_tile6: ""
+        pristine_tile7: ""
+        pristine_tile8: ""
+        pristine_tile9: ""
+        pristine_tile10: ""
+        pristine_tile11: ""
+        pristine_tile12: ""
+        pristine_tile13: ""
+        pristine_tile14: ""
+        pristine_tile15: ""
+        pristine_tile16: ""
+        pristine_tile17: ""
+        pristine_tile18: ""
+        pristine_tile19: ""
+        pristine_tile20: ""
+        pristine_tile21: ""
+        pristine_tile22: ""
+        pristine_tile23: ""
+        pristine_tile24: ""
+
+- type: entity
+  parent: NecropolisStoneTileBase
+  id: NecropolisStoneSurroundingTileCracked
+  name: треснувшая окаймляющая каменная плитка
+  components:
+  - type: Sprite
+    layers:
+    - state: cracked_surrounding_tile1
+      map: [ "random" ]
+  - type: RandomSprite
+    available:
+    - random:
+        cracked_surrounding_tile1: ""
+        cracked_surrounding_tile2: ""
+
+- type: entity
+  parent: NecropolisStoneTileBase
+  id: NecropolisStoneSurroundingCracked
+  name: треснувшая окаймляющая каменная плита
+  components:
+  - type: Sprite
+    layers:
+    - state: cracked_surrounding1
+      map: [ "random" ]
+  - type: RandomSprite
+    available:
+    - random:
+        cracked_surrounding1: ""
+
+- type: entity
+  parent: NecropolisStoneTileBase
+  id: NecropolisStoneCenterCracked
+  name: треснувшая центральная каменная плитка
+  components:
+  - type: Sprite
+    layers:
+    - state: cracked_center1
+      map: [ "random" ]
+  - type: RandomSprite
+    available:
+    - random:
+        cracked_center1: ""
+        cracked_center2: ""
+        cracked_center3: ""
+        cracked_center4: ""
+
+- type: entity
+  parent: NecropolisStoneTileBase
+  id: NecropolisStoneBlockCracked
+  name: треснувшая каменный блок
+  components:
+  - type: Sprite
+    layers:
+    - state: cracked_block1
+      map: [ "random" ]
+  - type: RandomSprite
+    available:
+    - random:
+        cracked_block1: ""
+        cracked_block2: ""
+        cracked_block3: ""
+        cracked_block4: ""
+
+- type: entity
+  parent: NecropolisStoneTileBase
+  id: NecropolisStoneSlabCracked
+  name: треснувшая каменная плита
+  components:
+  - type: Sprite
+    layers:
+    - state: cracked_slab1
+      map: [ "random" ]
+  - type: RandomSprite
+    available:
+    - random:
+        cracked_slab1: ""
+
+- type: entity
+  parent: NecropolisStoneTileBase
+  id: NecropolisStoneTileCracked
+  name: треснувшая каменная плитка
+  components:
+  - type: Sprite
+    layers:
+    - state: cracked_tile1
+      map: [ "random" ]
+  - type: RandomSprite
+    available:
+    - random:
+        cracked_tile1: ""
+        cracked_tile2: ""
+        cracked_tile3: ""
+        cracked_tile4: ""
+        cracked_tile5: ""
+        cracked_tile6: ""
+        cracked_tile7: ""
+        cracked_tile8: ""
+        cracked_tile9: ""
+        cracked_tile10: ""
+        cracked_tile11: ""
+        cracked_tile12: ""
+        cracked_tile13: ""
+        cracked_tile14: ""
+        cracked_tile15: ""
+        cracked_tile16: ""
+        cracked_tile17: ""
+        cracked_tile18: ""
+        cracked_tile19: ""
+        cracked_tile20: ""
+        cracked_tile21: ""
+        cracked_tile22: ""
+        cracked_tile23: ""
+        cracked_tile24: ""
+
+- type: entity
+  parent: NecropolisStoneTileBase
+  id: NecropolisStoneSurroundingTileBurnt
+  name: обгоревшая окаймляющая каменная плитка
+  components:
+  - type: Sprite
+    layers:
+    - state: burnt_surrounding_tile1
+      map: [ "random" ]
+  - type: RandomSprite
+    available:
+    - random:
+        burnt_surrounding_tile1: ""
+        burnt_surrounding_tile2: ""
+
+- type: entity
+  parent: NecropolisStoneTileBase
+  id: NecropolisStoneSurroundingBurnt
+  name: обгоревшая окаймляющая каменная плита
+  components:
+  - type: Sprite
+    layers:
+    - state: burnt_surrounding1
+      map: [ "random" ]
+  - type: RandomSprite
+    available:
+    - random:
+        burnt_surrounding1: ""
+        burnt_surrounding2: ""
+
+- type: entity
+  parent: NecropolisStoneTileBase
+  id: NecropolisStoneCenterBurnt
+  name: обгоревшая центральная каменная плитка
+  components:
+  - type: Sprite
+    layers:
+    - state: burnt_center1
+      map: [ "random" ]
+  - type: RandomSprite
+    available:
+    - random:
+        burnt_center1: ""
+        burnt_center2: ""
+        burnt_center3: ""
+        burnt_center4: ""
+
+- type: entity
+  parent: NecropolisStoneTileBase
+  id: NecropolisStoneBlockBurnt
+  name: обгоревшая каменный блок
+  components:
+  - type: Sprite
+    layers:
+    - state: burnt_block1
+      map: [ "random" ]
+  - type: RandomSprite
+    available:
+    - random:
+        burnt_block1: ""
+        burnt_block2: ""
+        burnt_block3: ""
+        burnt_block4: ""
+
+- type: entity
+  parent: NecropolisStoneTileBase
+  id: NecropolisStoneSlabBurnt
+  name: обгоревшая каменная плита
+  components:
+  - type: Sprite
+    layers:
+    - state: burnt_slab1
+      map: [ "random" ]
+  - type: RandomSprite
+    available:
+    - random:
+        burnt_slab1: ""
+        burnt_slab2: ""
+        burnt_slab3: ""
+        burnt_slab4: ""
+
+- type: entity
+  parent: NecropolisStoneTileBase
+  id: NecropolisStoneTileBurnt
+  name: обгоревшая каменная плитка
+  components:
+  - type: Sprite
+    layers:
+    - state: burnt_tile1
+      map: [ "random" ]
+  - type: RandomSprite
+    available:
+    - random:
+        burnt_tile1: ""
+        burnt_tile2: ""
+        burnt_tile3: ""
+        burnt_tile4: ""
+        burnt_tile5: ""
+        burnt_tile6: ""
+        burnt_tile7: ""
+        burnt_tile8: ""
+        burnt_tile9: ""
+        burnt_tile10: ""
+        burnt_tile11: ""
+        burnt_tile12: ""
+        burnt_tile13: ""
+        burnt_tile14: ""
+        burnt_tile15: ""
+        burnt_tile16: ""
+        burnt_tile17: ""
+        burnt_tile18: ""
+        burnt_tile19: ""
+        burnt_tile20: ""
+        burnt_tile21: ""
+        burnt_tile22: ""
+        burnt_tile23: ""
+        burnt_tile24: ""
+
+- type: tile
+  id: FloorNecropolis
+  name: tiles-necropolis-floor
+  parent: FloorBasalt
+  sprite: /Textures/_DeadSpace/Lavaland/Tiles/necropolis.png
+  variants: 3
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0

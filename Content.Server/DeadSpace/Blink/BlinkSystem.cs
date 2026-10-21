@@ -13,6 +13,7 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
 using Content.Shared.Physics;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Audio;
 using Content.Shared.Tag;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
@@ -89,34 +90,50 @@ public sealed class BlinkSystem : SharedBlinkSystem
         var now = _timing.CurTime;
 
         if (now < blink.NextUse || now < damage.LastDamaged + blink.DamageLockout ||
-            origin.MapId != targetMap.MapId || !TryComp<PhysicsComponent>(user, out var physics))
+            origin.MapId != targetMap.MapId)
             return;
 
-        var offset = targetMap.Position - origin.Position;
-        if (offset.LengthSquared() < 0.001f)
+        if (Vector2.Distance(origin.Position, targetMap.Position) > blink.Range ||
+            !TryStartDash(user, targetMap, blink.DashSpeed, blink.DashTimeout, blink.DashStallTimeout, blink.DashSound))
             return;
-
-        var distance = offset.Length();
-        if (distance > blink.Range)
-            return;
-
-        var direction = offset.Normalized();
-        var active = EnsureComp<ActiveBlinkDashComponent>(user);
-        active.Direction = direction;
-        active.Speed = blink.DashSpeed;
-        active.Target = new MapCoordinates(origin.Position + direction * distance, origin.MapId);
-        active.EndTime = now + blink.DashTimeout;
-        active.StallTimeout = blink.DashStallTimeout;
-        active.LastPosition = origin.Position;
-        active.LastProgress = now;
-        ApplyDashCollision(user, active, physics);
-        _physics.SetLinearVelocity(user, direction * blink.DashSpeed, body: physics);
-        _audio.PlayPvs(blink.DashSound, user);
-        RaiseNetworkEvent(new BlinkDashVisualEvent(GetNetEntity(user), blink.DashTimeout));
 
         blink.NextUse = now + blink.Cooldown;
         Dirty(item, blink);
         _alerts.ShowAlert(user, blink.CooldownAlert, cooldown: (now, blink.NextUse), autoRemove: false);
+    }
+
+    public bool TryStartDash(
+        EntityUid user,
+        MapCoordinates target,
+        float speed,
+        TimeSpan duration,
+        TimeSpan stallTimeout,
+        SoundSpecifier? sound = null,
+        bool visual = true)
+    {
+        var origin = _transform.GetMapCoordinates(user);
+        var offset = target.Position - origin.Position;
+        if (origin.MapId != target.MapId || offset.LengthSquared() < 0.001f ||
+            !TryComp<PhysicsComponent>(user, out var physics))
+            return false;
+
+        var direction = offset.Normalized();
+        var active = EnsureComp<ActiveBlinkDashComponent>(user);
+        active.Direction = direction;
+        active.Speed = speed;
+        active.Target = target;
+        active.EndTime = _timing.CurTime + duration;
+        active.StallTimeout = stallTimeout;
+        active.LastPosition = origin.Position;
+        active.LastProgress = _timing.CurTime;
+        ApplyDashCollision(user, active, physics);
+        _physics.SetLinearVelocity(user, direction * speed, body: physics);
+        if (sound != null)
+            _audio.PlayPvs(sound, user);
+        // DS14: some dashes (Cain and Abel) go without the bloody blink trail.
+        if (visual)
+            RaiseNetworkEvent(new BlinkDashVisualEvent(GetNetEntity(user), duration));
+        return true;
     }
 
     private void OnDashCollide(Entity<ActiveBlinkDashComponent> ent, ref StartCollideEvent args)

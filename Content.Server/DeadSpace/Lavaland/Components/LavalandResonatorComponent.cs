@@ -55,6 +55,18 @@ public sealed partial class LavalandResonatorComponent : Component
         },
     };
 
+    /// <summary>
+    /// Each resonator hit a boss took within <see cref="BossDamageWindow"/> lowers further resonator damage by this fraction.
+    /// </summary>
+    [DataField]
+    public float BossDamageFalloff;
+
+    [DataField]
+    public float BossDamageMinMultiplier = 0.1f;
+
+    [DataField]
+    public TimeSpan BossDamageWindow = TimeSpan.FromMinutes(1);
+
     [DataField]
     public SoundSpecifier PlaceSound = new SoundPathSpecifier("/Audio/Effects/sparks4.ogg");
 

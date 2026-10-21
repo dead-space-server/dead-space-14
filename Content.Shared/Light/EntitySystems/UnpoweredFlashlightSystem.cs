@@ -112,6 +112,10 @@ public sealed class UnpoweredFlashlightSystem : EntitySystem
         if (ent.Comp.LightOn == value)
             return;
 
+        // DS14: the lavaland deep night keeps it off - refused here, on the client too, so it does not even flash.
+        if (value && HasComp<Content.Shared.DeadSpace.Lavaland.LavalandLightBlockedComponent>(ent))
+            return;
+
         if (!_light.TryGetLight(ent, out var light))
             return;
 

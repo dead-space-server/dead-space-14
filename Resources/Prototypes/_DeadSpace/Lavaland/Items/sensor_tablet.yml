@@ -1,0 +1,44 @@
+- type: entity
+  id: LavalandSensorTablet
+  # Works without a power cell: not a handheld computer, only its sounds.
+  parent: BaseItem
+  name: планшет разведки лаваленда
+  description: Показывает координаты шахтёров, передающих данные костюмных датчиков.
+  components:
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_drop.ogg
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Objects/SensorTablet.rsi
+    state: tablet
+  - type: Item
+    size: Normal
+    sprite: _DeadSpace/Lavaland/Objects/SensorTablet.rsi
+    heldPrefix: null
+  - type: ActivatableUI
+    key: enum.LavalandSensorTabletUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.LavalandSensorTabletUiKey.Key:
+        type: LavalandSensorTabletBoundUserInterface
+  - type: ScaleVisuals
+    scale: 0.65,0.65
+  - type: LavalandSensorTablet
+    scanRadius: 10
+    livingColor: White
+    deadColor: Black
+    faunaColor: Red
+    oreColor: Gold
+    lavaColor: OrangeRed
+    floorColor: "#50372d"
+    rockColor: "#96694b"
+    mobPointSize: 0.65
+    terrainPointSize: 0.52
+  - type: StaticPrice
+    price: 1000

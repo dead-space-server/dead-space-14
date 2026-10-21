@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Imported from ds13-2.0 via Scrubby, source icons/obj/modular_tablet.dmi, state tablet-brown, commit 9c1bfc3a52f1c47aff076ac1fecaeb447bb29901",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "tablet"
+    }
+  ]
+}

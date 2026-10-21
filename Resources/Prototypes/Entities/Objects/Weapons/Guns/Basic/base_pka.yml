@@ -55,9 +55,63 @@
   - type: ContainerContainer
     containers:
       upgrades: !type:Container
+      # DS14-Start
+      bayonet_slot: !type:ContainerSlot
+      light_slot: !type:ContainerSlot
+      # DS14-End
   - type: UseDelay
     delay: 1
   #DS14-Start
+  # Attachments: a knife as a bayonet (melee with the knife's damage), a flashlight (alt-click to toggle).
+  - type: AttachmentHolder
+    slots:
+    - bayonet_slot
+    - light_slot
+    bayonetSlot: bayonet_slot
+    bayonetAnimation: WeaponArcClaw # the demons' strike
+    lightSlot: light_slot
+    slotOverlays:
+      bayonet_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: bayonet
+        offset: 0.625,0.375
+      light_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: flight
+        stateOn: flight_on
+        offset: 0.4375,0.28125
+    slotComponents:
+      bayonet_slot:
+      - type: MeleeWeapon
+        wideAnimationRotation: -135
+        damage:
+          types:
+            Blunt: 0
+        soundHit:
+          path: /Audio/Weapons/bladeslice.ogg
+      # Guns stab only through the alt-fire (right click): a wide swing over an area, like a knife.
+      - type: AltFireMelee
+        attackType: Heavy
+  # Built for the thin lavaland air: half damage anywhere else.
+  - type: LavalandPressureDamage
+  # Light of a flashlight in the light slot: a cone like the flashlight's, off until it is switched on.
+  - type: PointLight
+    enabled: false
+    mask: /Textures/Effects/LightMasks/cone.png
+    autoRot: true
+    radius: 6
+  - type: ItemSlots
+    slots:
+      bayonet_slot:
+        name: attachment-slot-bayonet
+        whitelist:
+          components:
+          - KineticBayonet
+      light_slot:
+        name: attachment-slot-light
+        whitelist:
+          components:
+          - KineticFlashlight
   - type: EmitSoundOnPickup
     sound:
       path: /Audio/_DeadSpace/Items/Handing/gun/gun_pickup.ogg

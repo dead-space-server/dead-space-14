@@ -115,11 +115,10 @@
   description: A dense carapace bound to a round hide shield. It absorbs heavy blows, but each impact wears away its ancient shell.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Melee/buckler-shield.rsi
+    sprite: _DeadSpace/Lavaland/AshWalkers/colossus_shield.rsi
     state: icon
-    color: "#B08C62"
   - type: Item
-    sprite: Objects/Weapons/Melee/buckler-shield.rsi
+    sprite: _DeadSpace/Lavaland/AshWalkers/colossus_shield.rsi
     heldPrefix: icon
   - type: Blocking
     passiveBlockModifier:

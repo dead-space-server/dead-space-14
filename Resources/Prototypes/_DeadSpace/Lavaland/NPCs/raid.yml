@@ -1,0 +1,40 @@
+# Fauna of a raid on the outpost: they fight as usual while they can see a player, and otherwise go for him anyway,
+# through the outpost's walls, doors and machines (the raid sets NavSmash on them).
+- type: htnCompound
+  id: LavalandRaidHostileCompound
+  branches:
+    - tasks:
+        - !type:HTNCompoundTask
+          task: InnateRangedCombatCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: MeleeCombatCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: LavalandRaidAssaultCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: IdleCompound
+
+# Pick a player even behind walls or out of reach, then make the way to him.
+- type: htnCompound
+  id: LavalandRaidAssaultCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:UtilityOperator
+            proto: LavalandRaidTargets
+        - !type:HTNCompoundTask
+          task: BeforeMeleeAttackTargetCompound
+
+- type: utilityQuery
+  id: LavalandRaidTargets
+  query:
+    - !type:NearbyHostilesQuery
+  considerations:
+    - !type:TargetIsAliveCon
+      includePreCritical: true
+      curve: !type:BoolCurve
+    - !type:TargetDistanceCon
+      curve: !type:PresetCurve
+        preset: TargetDistance

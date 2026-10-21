@@ -6,9 +6,13 @@ using Content.Shared.DeadSpace.Lavaland.Components;
 using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;
 using Content.Shared.DeadSpace.Weapons.Ranged.Upgrades;
 using Content.Shared.Humanoid;
+using Content.Shared.Mobs.Components;
+using Robust.Shared.Audio;
 using Content.Shared.Projectiles;
 using Content.Shared.Weapons.Ranged.Systems;
+using Content.Shared.Physics;
 using Robust.Shared.Map;
+using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
@@ -21,18 +25,28 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
     [Dependency] private readonly DamageableSystem _damage = default!;
     [Dependency] private readonly ExplosionSystem _explosion = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly Robust.Shared.Audio.Systems.SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly Robust.Shared.Containers.SharedContainerSystem _containers = default!;
+    [Dependency] private readonly Content.Shared.Weapons.Ranged.Upgrades.GunUpgradeSystem _upgrades = default!;
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<ExplosivePkaUpgradeComponent, GunShotEvent>(OnGunShot);
         SubscribeLocalEvent<ExplosivePkaProjectileComponent, PreventCollideEvent>(OnPreventCollide);
+        SubscribeLocalEvent<ExplosivePkaProjectileComponent, ProjectileHitEvent>(OnProjectileHit);
     }
 
     private void OnGunShot(Entity<ExplosivePkaUpgradeComponent> ent, ref GunShotEvent args)
     {
+        // Only on lavaland: anywhere else the shot is an ordinary kinetic bolt.
+        if (!HasComp<LavalandMapComponent>(Transform(args.User).MapUid))
+            return;
+
+        var upgradeDamage = GetUpgradeDamage(ent);
         foreach (var (ammo, _) in args.Ammo)
         {
             if (ammo is not { } projectile ||
@@ -45,6 +59,7 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
             explosive.HumanDamage = ent.Comp.HumanDamage;
             explosive.CreatureDamage = ent.Comp.CreatureDamage;
             explosive.BossDamage = ent.Comp.BossDamage;
+            explosive.UpgradeDamage = upgradeDamage;
             explosive.ExplosionIntensity = ent.Comp.ExplosionIntensity;
             explosive.ExplosionSlope = ent.Comp.ExplosionSlope;
             explosive.ExplosionMaxIntensity = ent.Comp.ExplosionMaxIntensity;
@@ -73,9 +88,27 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    /// Flies over creatures to the cursor, but walls and rock stop it: it blows up where it hits them.
+    /// </summary>
     private void OnPreventCollide(Entity<ExplosivePkaProjectileComponent> ent, ref PreventCollideEvent args)
     {
+        if (args.OtherBody.BodyType == BodyType.Static &&
+            args.OtherFixture.Hard &&
+            (args.OtherFixture.CollisionLayer & (int) CollisionGroup.Impassable) != 0)
+        {
+            return;
+        }
+
         args.Cancelled = true;
+    }
+
+    private void OnProjectileHit(Entity<ExplosivePkaProjectileComponent> ent, ref ProjectileHitEvent args)
+    {
+        if (TerminatingOrDeleted(ent) || ent.Comp.DetonationTarget == null)
+            return;
+
+        Detonate(ent, _transform.GetMapCoordinates(ent), args.Shooter);
     }
 
     public override void Update(float frameTime)
@@ -105,16 +138,44 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
         MapCoordinates center,
         EntityUid? shooter)
     {
+        // Once only: hitting a wall and reaching the cursor can happen on the same tick.
+        ent.Comp.DetonationTarget = null;
 
-        foreach (var victim in _lookup.GetEntitiesInRange(center, ent.Comp.Radius))
+        // DS14: the outpost is safe from these blasts - its walls, doors and machines are not even scratched.
+        // A wide margin: the blast spreads a few tiles past its visual radius.
+        var nearOutpost = IsNearOutpost(center, ent.Comp.Radius + 6f);
+
+        // Only what lies or stands in the open: the default lookup also reached into bags and backpacks, and the
+        // blast broke everything carried in them.
+        foreach (var victim in _lookup.GetEntitiesInRange(center, ent.Comp.Radius, LookupFlags.Uncontained))
         {
             if (victim == ent.Owner)
+                continue;
+
+            if (!HasComp<MobStateComponent>(victim) && HasComp<LavalandOutpostComponent>(Transform(victim).GridUid))
                 continue;
 
             var damage = TryDamageFor(victim, ent.Comp, out var specializedDamage)
                 ? specializedDamage
                 : ent.Comp.CreatureDamage;
+            // The damage upgrades in the gun make the blast stronger too - for the fauna and the bosses, not people.
+            if (!HasComp<HumanoidAppearanceComponent>(victim))
+                damage = damage + ent.Comp.UpgradeDamage;
             _damage.TryChangeDamage(victim, damage, true, origin: shooter);
+        }
+
+        // By the outpost only the blow itself above and the look of the blast: no explosion that would tear at its walls.
+        if (nearOutpost)
+        {
+            _explosion.SpawnExplosionVisual(
+                center,
+                "LavalandPkaVisual",
+                ent.Comp.ExplosionIntensity,
+                ent.Comp.ExplosionSlope,
+                ent.Comp.ExplosionMaxIntensity);
+            _audio.PlayPvs(OutpostBlastSound, _transform.ToCoordinates(center));
+            QueueDel(ent.Owner);
+            return;
         }
 
         _explosion.QueueExplosion(
@@ -132,12 +193,48 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
         QueueDel(ent.Owner);
     }
 
+    private static readonly SoundPathSpecifier OutpostBlastSound = new("/Audio/Effects/explosion_small1.ogg");
+
+    /// <summary>The outpost grid is within this distance of the blast.</summary>
+    private bool IsNearOutpost(MapCoordinates center, float range)
+    {
+        var box = Box2.CenteredAround(center.Position, new System.Numerics.Vector2(range * 2f));
+        foreach (var grid in _mapManager.FindGridsIntersecting(center.MapId, box))
+        {
+            if (HasComp<LavalandOutpostComponent>(grid.Owner))
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>The damage of the ordinary damage upgrades sitting in the same gun.</summary>
+    private Content.Shared.Damage.DamageSpecifier GetUpgradeDamage(EntityUid upgrade)
+    {
+        var total = new Content.Shared.Damage.DamageSpecifier();
+        if (!_containers.TryGetContainingContainer((upgrade, null, null), out var container) ||
+            !TryComp<Content.Shared.Weapons.Ranged.Upgrades.Components.UpgradeableGunComponent>(container.Owner, out var gun))
+        {
+            return total;
+        }
+
+        foreach (var other in _upgrades.GetCurrentUpgrades((container.Owner, gun)))
+        {
+            if (TryComp<Content.Shared.Weapons.Ranged.Upgrades.Components.GunUpgradeDamageComponent>(other, out var damage))
+                total += damage.Damage;
+        }
+
+        return total;
+    }
+
     private bool TryDamageFor(
         EntityUid target,
         ExplosivePkaProjectileComponent component,
         out global::Content.Shared.Damage.DamageSpecifier damage)
     {
-        if (HasComp<LavalandBossComponent>(target))
+        // Bosses of every kind; the Legion's hands pass their damage on to the Legion, so they count as it.
+        if (HasComp<LavalandBossComponent>(target) || HasComp<LavalandEliteComponent>(target) ||
+            HasComp<LavalandMadMinerComponent>(target) || HasComp<LavalandLegionHandComponent>(target))
         {
             damage = component.BossDamage;
             return true;

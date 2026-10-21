@@ -102,7 +102,9 @@
       Unsexed: IPC
   - type: DamagedSiliconAccent
     enableDamageCorruption: true
-    damageAtMaxCorruption: 60
+    # Speech breaks only below 60% health: 40 of the 100 before crit.
+    damageAtCorruptionStart: 40
+    damageAtMaxCorruption: 100
     enableChargeCorruption: false
   - type: Language
     selectedLanguage: GeneralLanguage

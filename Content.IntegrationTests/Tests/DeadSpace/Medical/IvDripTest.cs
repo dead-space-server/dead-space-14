@@ -85,7 +85,7 @@ public sealed class IvDripTest : InteractionTest
         await Server.WaitPost(() =>
         {
             var coords = SEntMan.GetComponent<TransformComponent>(SPlayer).Coordinates;
-            patient = SEntMan.SpawnEntity(TargetProto, coords);
+            patient = SEntMan.SpawnEntity(TargetProto, coords.Offset(new Vector2(0f, -1f))); // DS14: not on the player: pushed off it, the patient left the drip's range
             drip = SEntMan.SpawnEntity(Drip, coords.Offset(new Vector2(1.0f, 0f)));
 
             var foldable = SEntMan.System<FoldableSystem>();
@@ -497,7 +497,7 @@ public sealed class IvDripTest : InteractionTest
         await Server.WaitPost(() =>
         {
             var coords = SEntMan.GetComponent<TransformComponent>(SPlayer).Coordinates;
-            patient = SEntMan.SpawnEntity(TargetProto, coords);
+            patient = SEntMan.SpawnEntity(TargetProto, coords.Offset(new Vector2(0f, -1f))); // DS14: not on the player: pushed off it, the patient left the drip's range
             drip = SEntMan.SpawnEntity(Drip, coords.Offset(new Vector2(1.0f, 0f)));
 
             SEntMan.System<FoldableSystem>()
@@ -582,7 +582,7 @@ public sealed class IvDripTest : InteractionTest
         await Server.WaitPost(() =>
         {
             var coords = SEntMan.GetComponent<TransformComponent>(SPlayer).Coordinates;
-            var patient = SEntMan.SpawnEntity(TargetProto, coords);
+            var patient = SEntMan.SpawnEntity(TargetProto, coords.Offset(new Vector2(0f, -1f))); // DS14: not on the player: pushed off it, the patient left the drip's range
             drip = SEntMan.SpawnEntity(Drip, coords.Offset(new Vector2(1.0f, 0f)));
             SEntMan.System<FoldableSystem>().SetFolded(drip, SEntMan.GetComponent<FoldableComponent>(drip), false);
 

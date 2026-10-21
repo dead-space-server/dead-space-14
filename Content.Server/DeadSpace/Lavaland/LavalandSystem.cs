@@ -2,6 +2,7 @@ using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Atmos.EntitySystems;
+using Content.Server.DeadSpace.Lavaland.ChromiteCaves;
 using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Server.Parallax;
 using Content.Server.Procedural;
@@ -40,6 +41,7 @@ public sealed class LavalandSystem : EntitySystem
     [Dependency] private readonly IConfigurationManager _configuration = default!;
     [Dependency] private readonly DungeonSystem _dungeon = default!;
     [Dependency] private readonly LavalandBossArenaSystem _bossArena = default!;
+    [Dependency] private readonly LavalandChromiteCavesSystem _chromiteCaves = default!;
     [Dependency] private readonly LavalandFaunaPopulationSystem _faunaPopulation = default!;
     [Dependency] private readonly LavalandNecropolisTendrilPlacementSystem _tendrilPlacement = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
@@ -213,10 +215,12 @@ public sealed class LavalandSystem : EntitySystem
         await GenerateStructures(mapUid, grid, planet, random, placedStructures, cancellation);
         cancellation.ThrowIfCancellationRequested();
 
-        await _tendrilPlacement.SetupMap(mapUid, planet, cancellation);
+        // The custom grids (the ash walkers' base) first: the tendrils keep away from them.
         LoadCustomGrids(mapId, mapUid, grid, biome, planet, random, placedStructures, cancellation);
+        await _tendrilPlacement.SetupMap(mapUid, planet, cancellation);
         await _bossArena.SpawnConfiguredArenas(mapUid, grid, biome, planet, random, cancellation);
         await _faunaPopulation.SetupMap(mapUid, planet, cancellation);
+        await _chromiteCaves.SetupCaves(mapUid, grid, planet, random, cancellation);
 
         cancellation.ThrowIfCancellationRequested();
         CreateLandingWarp(mapUid, planet);
@@ -661,12 +665,17 @@ public sealed class LavalandSystem : EntitySystem
 
         _random.Shuffle(grids);
 
+        // Each ruin is loaded far past the planet's edge and only moved in once it has a spot: loaded at the origin
+        // it would first sit on top of the outpost. Still on the planet's own map, as its map init remembers the map
+        // (the ash walkers' nest takes it for their home).
+        var loadOffset = new Vector2(Math.Max(planet.MapHalfSize, planet.MaxStructureDistance) * 2f + 512f, 0f);
+
         var loaded = 0;
         foreach (var entry in grids)
         {
             cancellation.ThrowIfCancellationRequested();
 
-            if (!_mapLoader.TryLoadGrid(mapId, entry.Path, out var customGrid))
+            if (!_mapLoader.TryLoadGrid(mapId, entry.Path, out var customGrid, offset: loadOffset))
             {
                 Log.Error($"Failed to load Lavaland custom grid {entry.Path} for planet {planet.ID}.");
                 continue;
@@ -684,13 +693,16 @@ public sealed class LavalandSystem : EntitySystem
             var footprint = Math.Max(Math.Max(1, entry.FootprintRadius), (int) MathF.Ceiling(MathF.Max(extents.X, extents.Y)));
             if (!TryPickCustomGridPosition(mapUid, terrainGrid, customGrid.Value, planet, entry, footprint, random, placed, out var position))
             {
-                Log.Warning($"Failed to place Lavaland custom grid {entry.Path} for planet {planet.ID}.");
+                // No room this time (the map is busy): an ordinary outcome, the ruin is just left out.
+                Log.Info($"No room for Lavaland custom grid {entry.Path} for planet {planet.ID}, skipped.");
                 Del(customGrid.Value);
                 continue;
             }
 
-            var footprintBounds = GetCustomGridFootprintBounds(position, footprint);
-            PrepareCustomGridTerrain(mapUid, terrainGrid, biome, planet, random, footprintBounds);
+            // Only under the grid itself and a little around it: a whole square cleared and kept from the biome
+            // stood out as a bare black patch around the ruin.
+            var underGrid = GetCustomGridTerrainTiles(customGrid.Value, position, CustomGridTerrainMargin);
+            PrepareCustomGridTerrain(mapUid, terrainGrid, biome, planet, random, underGrid);
 
             if (!string.IsNullOrWhiteSpace(entry.Name))
                 _metadata.SetEntityName(customGrid.Value, entry.Name);
@@ -756,32 +768,49 @@ public sealed class LavalandSystem : EntitySystem
         return false;
     }
 
+    /// <summary>Terrain tiles cleared around a custom grid's own tiles.</summary>
+    private const int CustomGridTerrainMargin = 2;
+
+    /// <summary>
+    /// The planet's tiles under a custom grid placed at <paramref name="position"/> (its own rotation kept): the
+    /// rectangle of the grid's own bounds, <paramref name="margin"/> tiles wider - not a whole square footprint.
+    /// </summary>
+    private HashSet<Vector2i> GetCustomGridTerrainTiles(Entity<MapGridComponent> grid, Vector2i position, int margin)
+    {
+        var result = new HashSet<Vector2i>();
+        var bounds = new Box2Rotated(grid.Comp.LocalAABB, Transform(grid).LocalRotation, Vector2.Zero)
+            .CalcBoundingBox()
+            .Translated(new Vector2(position.X, position.Y));
+        for (var x = (int) MathF.Floor(bounds.Left) - margin; x < (int) MathF.Ceiling(bounds.Right) + margin; x++)
+        {
+            for (var y = (int) MathF.Floor(bounds.Bottom) - margin; y < (int) MathF.Ceiling(bounds.Top) + margin; y++)
+            {
+                result.Add(new Vector2i(x, y));
+            }
+        }
+
+        return result;
+    }
+
     private void PrepareCustomGridTerrain(
         EntityUid mapUid,
         MapGridComponent terrainGrid,
         BiomeComponent biome,
         LavalandPlanetPrototype planet,
         Random random,
-        Box2i bounds)
+        HashSet<Vector2i> tiles)
     {
         _reservedTiles.Clear();
-        _biome.ReserveTiles(mapUid, ToBox2(bounds), _reservedTiles, biome, terrainGrid);
-        _reservedTiles.Clear();
-
-        ClearClearableTerrainEntities(mapUid, terrainGrid, bounds);
-
-        var tileDef = _tileDefinition[planet.BoundaryTile];
-        _terrainTiles.Clear();
-        for (var x = bounds.Left; x < bounds.Right; x++)
+        foreach (var tile in tiles)
         {
-            for (var y = bounds.Bottom; y < bounds.Top; y++)
-            {
-                _terrainTiles.Add((new Vector2i(x, y), CreateTile(tileDef, random)));
-            }
+            // Kept from the biome tile by tile: rock and lava never grow back under or right by the grid.
+            _biome.ReserveTiles(mapUid, new Box2(tile.X + 0.1f, tile.Y + 0.1f, tile.X + 0.9f, tile.Y + 0.9f),
+                _reservedTiles, biome, terrainGrid);
+            _reservedTiles.Clear();
+            ClearClearableTerrainEntities(mapUid, terrainGrid, new Box2i(tile, tile + Vector2i.One));
         }
 
-        _map.SetTiles(mapUid, terrainGrid, _terrainTiles);
-        _terrainTiles.Clear();
+        // The floor stays the biome's own (the reserve laid it): no patch of another tile around the ruin.
     }
 
     private Vector2i PickStructurePosition(
@@ -889,16 +918,6 @@ public sealed class LavalandSystem : EntitySystem
             edgePadding += Math.Max(0, planet.BoundaryLavaWidth) + Math.Max(1, planet.BoundaryWallWidth);
 
         return Math.Max(0, planet.MapHalfSize - edgePadding);
-    }
-
-    private static Box2i GetCustomGridFootprintBounds(Vector2i center, int radius)
-    {
-        radius = Math.Max(1, radius);
-        return new Box2i(
-            center.X - radius,
-            center.Y - radius,
-            center.X + radius + 1,
-            center.Y + radius + 1);
     }
 
     private static bool IsInsideTerminalReservation(

@@ -94,6 +94,20 @@ public sealed partial class NpcFactionSystem
         }
     }
 
+    // DS14-start
+    /// <summary>
+    /// Lets an entity ignored with <see cref="IgnoreEntity"/> be attacked again.
+    /// </summary>
+    public void UnignoreEntity(Entity<FactionExceptionComponent?> ent, EntityUid target)
+    {
+        if (!Resolve(ent, ref ent.Comp, false) || !ent.Comp.Ignored.Remove(target))
+            return;
+
+        if (_trackerQuery.TryGetComponent(target, out var tracker))
+            tracker.Entities.Remove(ent);
+    }
+    // DS14-end
+
     /// <summary>
     /// Makes an entity always be considered hostile.
     /// </summary>

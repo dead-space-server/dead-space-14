@@ -156,6 +156,16 @@ public sealed class SwapTeleporterSystem : EntitySystem
         var teleXform = Transform(teleEnt);
         var otherTeleXform = Transform(otherTeleEnt);
 
+        // DS14-start: the Celestial's maze and arena allow no teleporting in or out.
+        if (HasComp<Content.Shared.DeadSpace.Lavaland.SecretBoss.LavalandNoTeleportZoneComponent>(teleXform.MapUid) ||
+            HasComp<Content.Shared.DeadSpace.Lavaland.SecretBoss.LavalandNoTeleportZoneComponent>(otherTeleXform.MapUid))
+        {
+            _popup.PopupEntity(Loc.GetString("lavaland-teleport-jammed"), teleEnt, teleEnt, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("lavaland-teleport-jammed"), otherTeleEnt, otherTeleEnt, PopupType.MediumCaution);
+            return;
+        }
+        // DS14-end
+
         if (!CanSwapTeleport((teleEnt, teleXform), (otherTeleEnt, otherTeleXform)))
         {
             _popup.PopupEntity(Loc.GetString("swap-teleporter-popup-teleport-fail",

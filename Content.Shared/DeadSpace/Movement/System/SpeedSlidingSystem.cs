@@ -1,4 +1,5 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+using Content.Shared.DeadSpace.Movement.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
@@ -14,6 +15,10 @@ public sealed class SpeedSlidingSystem : EntitySystem
     public bool TrySlide(EntityUid uid)
     {
         if (!TryComp<SpeedSlidingComponent>(uid, out var slide))
+            return false;
+
+        // Tile-by-tile walkers do not slide.
+        if (HasComp<TileStepMovementComponent>(uid))
             return false;
 
         if (!TryComp<PhysicsComponent>(uid, out var physics))

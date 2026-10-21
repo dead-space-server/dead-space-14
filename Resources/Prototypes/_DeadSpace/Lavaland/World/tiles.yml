@@ -1,0 +1,52 @@
+- type: tile
+  id: FloorLavalandAsh
+  parent: FloorAshDrakeArena
+  name: tiles-lavaland-ash-floor
+  weather: true
+  sprite: /Textures/_Goob/Lavaland/Tiles/Planet/Ash/ash.png
+  variants: 1
+  placementVariants: [1]
+  edgeSpritePriority: 2
+  baseTurf: FloorBasalt
+  edgeSprites:
+    SouthEast: /Textures/_Goob/Lavaland/Tiles/Planet/Ash/single_edge.png
+    NorthEast: /Textures/_Goob/Lavaland/Tiles/Planet/Ash/single_edge.png
+    NorthWest: /Textures/_Goob/Lavaland/Tiles/Planet/Ash/single_edge.png
+    SouthWest: /Textures/_Goob/Lavaland/Tiles/Planet/Ash/single_edge.png
+    South: /Textures/_Goob/Lavaland/Tiles/Planet/Ash/double_edge.png
+    East: /Textures/_Goob/Lavaland/Tiles/Planet/Ash/double_edge.png
+    North: /Textures/_Goob/Lavaland/Tiles/Planet/Ash/double_edge.png
+    West: /Textures/_Goob/Lavaland/Tiles/Planet/Ash/double_edge.png
+
+- type: tile
+  id: FloorLavalandPaleGrass
+  parent: FloorLavalandAsh
+  sprite: /Textures/_Goob/Lavaland/Tiles/Planet/LightGrass/grass.png
+  variants: 2
+  placementVariants: [1, 1]
+  edgeSpritePriority: 3
+  edgeSprites:
+    SouthEast: /Textures/_Goob/Lavaland/Tiles/Planet/LightGrass/single_edge_SE.png
+    NorthEast: /Textures/_Goob/Lavaland/Tiles/Planet/LightGrass/single_edge_NE.png
+    NorthWest: /Textures/_Goob/Lavaland/Tiles/Planet/LightGrass/single_edge_NW.png
+    SouthWest: /Textures/_Goob/Lavaland/Tiles/Planet/LightGrass/single_edge_SW.png
+    South: /Textures/_Goob/Lavaland/Tiles/Planet/LightGrass/double_edge_S.png
+    East: /Textures/_Goob/Lavaland/Tiles/Planet/LightGrass/double_edge_E.png
+    North: /Textures/_Goob/Lavaland/Tiles/Planet/LightGrass/double_edge_N.png
+    West: /Textures/_Goob/Lavaland/Tiles/Planet/LightGrass/double_edge_W.png
+
+# Arena floors that look like the land around them but shelter from storms.
+- type: tile
+  id: FloorBasaltArena
+  parent: FloorBasalt
+  weather: false
+
+- type: tile
+  id: FloorLavalandAshArena
+  parent: FloorLavalandAsh
+  weather: false
+
+- type: tile
+  id: FloorLavalandPaleGrassArena
+  parent: FloorLavalandPaleGrass
+  weather: false

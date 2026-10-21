@@ -1,5 +1,6 @@
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
+using Content.Shared.DeadSpace.Attachments; // DS14
 using Content.Shared.Projectiles;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Whitelist;
@@ -25,12 +26,29 @@ public abstract class SharedDamageMarkerSystem : EntitySystem
         SubscribeLocalEvent<DamageMarkerComponent, AttackedEvent>(OnMarkerAttacked);
     }
 
+    // DS14-start
+    /// <summary>Sets the detonation damage of the mark a marker projectile will put on its target.</summary>
+    public void SetMarkDamage(Entity<DamageMarkerOnCollideComponent?> ent, DamageSpecifier damage)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return;
+
+        ent.Comp.Damage = new DamageSpecifier(damage);
+        Dirty(ent);
+    }
+    // DS14-end
+
     private void OnMarkerAttacked(EntityUid uid, DamageMarkerComponent component, AttackedEvent args)
     {
         if (component.Marker != args.Used)
             return;
 
         args.BonusDamage += component.Damage;
+        // DS14-start: crusher attachments (trophies) react to the detonation
+        var detonated = new DamageMarkerDetonatedEvent(uid, args.User, new DamageSpecifier());
+        RaiseLocalEvent(args.Used, ref detonated);
+        args.BonusDamage += detonated.BonusDamage;
+        // DS14-end
         RemCompDeferred<DamageMarkerComponent>(uid);
         _audio.PlayPredicted(component.Sound, uid, args.User);
 

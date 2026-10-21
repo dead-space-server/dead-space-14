@@ -10,6 +10,21 @@
   - type: Lava
   - type: TileEmission
     color: "#FF4500"
+  # DS14-Start: ash and sparks rising from the lava.
+  - type: LavalandParticleEmitter
+    kind: Ember
+    rate: 0.35
+    colors: [ "#ffb347", "#ff7a1f", "#ffd27a", "#ff4d1a" ]
+    lifetimeMin: 0.9
+    lifetimeMax: 2
+    sizeMin: 0.025
+    sizeMax: 0.055
+    speed: 0.9
+    spread: 0.45
+    altKind: Ash
+    altRate: 0.2
+    altColors: [ "#6b6460", "#8a827c", "#4a4542" ]
+  # DS14-End
   - type: StepTrigger
     requiredTriggeredSpeed: 0
     intersectRatio: 0.1

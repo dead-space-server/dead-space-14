@@ -4,6 +4,9 @@
   name: магмитовый крушитель
   description: Поздний прототип протокинетического ускорителя, модифицированный с применением магмитовой стали. Лечит равномерно 25 механического и физического повреждения.
   components:
+  # Own art: overlays are drawn only if this RSI ever gets upgrade-* states.
+  - type: AttachmentOverlaySprite
+    sprite: _DeadSpace/Objects/Weapons/Melee/magmite/magmite-crusher.rsi
   - type: Sprite
     sprite: _DeadSpace/Objects/Weapons/Melee/magmite/magmite-crusher.rsi
     layers:

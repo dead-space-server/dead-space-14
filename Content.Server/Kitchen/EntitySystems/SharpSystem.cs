@@ -133,6 +133,10 @@ public sealed class SharpSystem : EntitySystem
             args.Args.User,
             popupType);
 
+        // DS14-start: lavaland fauna resist destruction only so explosions leave their bodies; a butchered one goes.
+        if (HasComp<Content.Shared.DeadSpace.Lavaland.Components.LavalandFaunaComponent>(args.Args.Target.Value))
+            RemComp<Content.Shared.Changeling.Components.DestructionResistanceComponent>(args.Args.Target.Value);
+        // DS14-end
         _gibbing.Gib(args.Args.Target.Value); // does nothing if ent can't be gibbed
         _destructibleSystem.DestroyEntity(args.Args.Target.Value);
 

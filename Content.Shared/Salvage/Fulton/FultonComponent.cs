@@ -22,6 +22,15 @@ public sealed partial class FultonComponent : Component
     [ViewVariables(VVAccess.ReadWrite), DataField("beacon"), AutoNetworkedField]
     public EntityUid? Beacon;
 
+    // DS14-start
+    /// <summary>
+    /// Stacks of fultons linked to different beacons, merged: the first fultons of the stack go to these beacons, in
+    /// order, and the rest to <see cref="Beacon"/>.
+    /// </summary>
+    [ViewVariables, DataField, AutoNetworkedField]
+    public List<EntityUid> BeaconQueue = new(); // EntityUid.Invalid - no beacon
+    // DS14-end
+
     /// <summary>
     /// Applies Removeable to the <see cref="FultonedComponent"/>.
     /// </summary>

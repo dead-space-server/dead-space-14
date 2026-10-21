@@ -185,6 +185,17 @@
         doAfter: 2
   - node: satchel
     entity: ClothingBackpackAshWalkerCrafted
+    edges:
+    - to: improved
+      steps:
+      - material: AshWalkerLeather
+        amount: 3
+        doAfter: 3
+      - material: LavalandWatcherSinew
+        amount: 1
+        doAfter: 2
+  - node: improved
+    entity: ClothingBackpackAshWalkerCraftedImproved
 
 - type: constructionGraph
   id: AshWalkerWoundDressing

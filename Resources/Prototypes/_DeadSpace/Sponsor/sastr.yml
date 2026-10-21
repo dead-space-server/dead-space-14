@@ -70,9 +70,11 @@
     - id: DoubleEmergencyOxygenTanksastr
     - id: ClothingUniformJumpsuitsastr
     - id: PDAsastr
-    - id: MedkitAdvancedFilled
+    - id: MedkitCombatsastr
     - id: ClothingHeadHelmetsastr
     - id: ClothingMasksastr
+    - id: WeaponProtoKineticAcceleratorsastr
+    - id: WeaponCrushersastr
   - type: TypingIndicatorClothing
     proto: TypingIndicatorsastr
   - type: Tag
@@ -201,8 +203,6 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
-  - type: ClothingVisualLayerAnchor
-    slot: belt
   - type: HideLayerClothing
     slots:
     - Hair
@@ -387,6 +387,8 @@
   - type: Foldable
     canFoldInsideContainer: true
   - type: GroupExamine
+  - type: ClothingVisualLayerAnchor
+    slot: head
   - type: FoldableClothing
     foldedEquippedPrefix: h
     foldedHeldPrefix: h
@@ -605,9 +607,9 @@
       - AstroNavCartridge
       - MessengerCartridge
   - type: PdaBorderColor
-    borderColor: "#2a3424"
-    accentHColor: "#242424"
-    accentVColor: "#3a4533"
+    borderColor: "#010101"
+    accentHColor: "#010101"
+    accentVColor: "#010101"
   - type: Tag
     tags: [ ]
 
@@ -946,7 +948,7 @@
   parent: WeaponProtoKineticAcceleratorReapeter
   id: WeaponProtoKineticAcceleratorsastr
   categories: [ HideSpawnMenu ]
-  name: 
+  name: протокинетическая винтовка Klecsh //
   components:
   - type: Sprite
     sprite: _DeadSpace/Sponsor/sastr/kinetic_accelerator.rsi
@@ -969,6 +971,21 @@
     slots:
     - suitStorage
     - Belt
+  - type: AttachmentHolder
+    slotOverlays:
+      bayonet_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: bayonet
+        offset: 0.71875,0.4375
+      light_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: flight
+        stateOn: flight_on
+        offset: 0.46875,0.34375
+  - type: PointLight
+    color: "#aef633"
+    enabled: false
+    radius: 4
 
 - type: entity
   id: BulletChargesastr2
@@ -985,11 +1002,13 @@
 
 # crusher.rsi
 - type: entity
-  parent: [ BaseWeaponCrusher, BaseSecurityCargoContraband ]
+  parent: [ BaseWeaponCrusher, BaseSecurityCargoContraband , BaseCrusherAttachmentSlots]
   categories: [ HideSpawnMenu ]
   id: WeaponCrushersastr
   name: протокинетическое копьё Klecsh //
   components:
+  - type: AttachmentOverlaySprite
+    sprite: _Goob/Lavaland/Objects/Weapons/Crushers/crusher_overlays.rsi
   - type: Sprite
     sprite: _DeadSpace/Sponsor/sastr/crusher.rsi
     scale: 0.8, 0.8
@@ -1072,6 +1091,28 @@
     effect:
       sprite: _DeadSpace/Sponsor/sastr/crusher.rsi
       state: icon3
+
+# MEDKIT
+- type: entity
+  parent: MedkitCombat
+  id: MedkitCombatsastr
+  name: боевая аптечка Klecsh //
+  description: Экстренная помощь, возвращающая с того света.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/sastr/misk.rsi
+    state: icon
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,3,1
+  - type: StorageFill
+    contents:
+    - id: MedicatedSuture
+      amount: 2
+    - id: RegenerativeMesh
+    - id: Bloodpack
 
 # документ
 - type: entity
@@ -1234,4 +1275,4 @@
   spritePath: _DeadSpace/Sponsor/sastr/s.rsi
   alpha: 0.6
   name: / / / 
-  description:   / / /   
+  description: / / /   

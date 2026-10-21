@@ -157,15 +157,15 @@
       coefficients:
         Blunt: 0.6 #DS14-value
         Slash: 0.6
-        Piercing: 0.65 #DS14-value
+        Piercing: 0.6 #DS14-value
         Heat: 0.7
         Radiation: 0.3
-        Caustic: 0.7
+        Caustic: 0.5 #ds14-value
   - type: StaminaResistance #DS14
     damageCoefficient: 0.7
   - type: ClothingSpeedModifier
-    walkModifier: 0.75
-    sprintModifier: 0.75
+    walkModifier: 0.8 #ds14-value
+    sprintModifier: 0.8 #ds14-value
   - type: HeldSpeedModifier
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitSalvage

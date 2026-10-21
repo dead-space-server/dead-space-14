@@ -282,6 +282,19 @@ public abstract partial class SharedGunSystem : EntitySystem
     }
     // DS14-end
 
+    // DS14-start
+    /// <summary>
+    /// Aims a projectile shot without a gun at a target, so it hits the target even lying down
+    /// (shots fly over anyone lying who isn't their target).
+    /// </summary>
+    public void SetProjectileTarget(EntityUid projectile, EntityUid target)
+    {
+        var targeted = EnsureComp<TargetedProjectileComponent>(projectile);
+        targeted.Target = target;
+        Dirty(projectile, targeted);
+    }
+    // DS14-end
+
     /// <summary>
     /// Attempts to shoot at the target coordinates. Resets the shot counter after every shot.
     /// </summary>

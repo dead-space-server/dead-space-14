@@ -32,7 +32,7 @@ public sealed partial class LavalandAshDrakeComponent : Component
     public TimeSpan SwoopStepDelay = TimeSpan.FromSeconds(0.085);
 
     [DataField]
-    public TimeSpan SwoopRecover = TimeSpan.FromSeconds(0.35);
+    public TimeSpan SwoopRecover = TimeSpan.FromSeconds(0.55);
 
     [DataField]
     public TimeSpan ChainedSwoopDelay = TimeSpan.FromSeconds(0.28);
@@ -293,6 +293,45 @@ public sealed partial class LavalandAshDrakeComponent : Component
 
     [ViewVariables]
     public readonly List<EntityUid> PhaseEntities = new();
+
+    // DS14: chasing lava, cage escape enrage (tgstation arena_escape_enrage).
+
+    /// <summary>Below this health the lava chases the players: it marks their tile and floods it a moment later.</summary>
+    [DataField]
+    public float ChaseLavaHealthFraction = 0.1f;
+
+    [DataField]
+    public TimeSpan ChaseLavaInterval = TimeSpan.FromSeconds(0.5);
+
+    /// <summary>Between the mark and the lava.</summary>
+    [DataField]
+    public TimeSpan ChaseLavaDelay = TimeSpan.FromSeconds(0.45);
+
+    [DataField]
+    public string ChaseLavaPrototype = "LavalandAshDrakeChaseLava";
+
+    [DataField]
+    public string ChaseLavaWarningPrototype = "LavalandAshDrakeTarget";
+
+    [ViewVariables]
+    public TimeSpan NextChaseLava;
+
+    [ViewVariables]
+    public readonly List<(EntityUid Grid, Vector2i Tile, TimeSpan At)> PendingChaseLava = new();
+
+    /// <summary>Whom the current cage is built around: escaping it (teleport) enrages the drake.</summary>
+    [ViewVariables]
+    public EntityUid? CagedPlayer;
+
+    [DataField]
+    public TimeSpan EscapeEnrageDuration = TimeSpan.FromSeconds(10);
+
+    /// <summary>While enraged, attack cooldowns are multiplied by this.</summary>
+    [DataField]
+    public float EscapeEnrageCooldownMultiplier = 0.4f;
+
+    [ViewVariables]
+    public TimeSpan EscapeEnrageUntil;
 }
 
 public sealed class LavalandAshDrakeWhelpAttack

@@ -30,6 +30,10 @@
   name: basalt floor tiles
   suffix: 4
   components:
+  - type: FloorTile
+    outputs:
+    - Plating
+    - FloorAshWalkerStone
   - type: Stack
     count: 4
   - type: Construction
@@ -64,7 +68,7 @@
   parent: BaseMediumStack
   id: AshWalkerLeather
   name: stack-ash-walker-leather
-  icon: { sprite: /Textures/Objects/Materials/hide.rsi, state: goliath_hide }
+  icon: { sprite: /Textures/_DeadSpace/Lavaland/AshWalkers/goliath_plates.rsi, state: goliath_hide }
   spawn: MaterialAshWalkerLeather1
 
 - type: entity
@@ -75,11 +79,11 @@
   description: A piece of goliath hide, scraped clean and dried over warm coals. Ready for sewing.
   components:
   - type: Sprite
-    sprite: Objects/Materials/hide.rsi
+    sprite: _DeadSpace/Lavaland/AshWalkers/goliath_plates.rsi
     state: goliath_hide
     color: "#B18050"
   - type: Item
-    sprite: Objects/Materials/hide.rsi
+    sprite: _DeadSpace/Lavaland/AshWalkers/goliath_plates.rsi
     heldPrefix: goliathhide
   - type: Stack
     stackType: AshWalkerLeather
@@ -108,3 +112,13 @@
     graph: DryAshWalkerHide
     node: wet
     defaultTarget: leather
+
+- type: tile
+  id: FloorAshWalkerStone
+  name: tiles-ashwalker-stone-floor
+  parent: FloorBasalt
+  sprite: /Textures/_DeadSpace/Lavaland/Tiles/ashwalker_stone.png
+  variants: 1
+  placementVariants:
+  - 1.0
+  itemDrop: FloorTileAshWalkerStone4

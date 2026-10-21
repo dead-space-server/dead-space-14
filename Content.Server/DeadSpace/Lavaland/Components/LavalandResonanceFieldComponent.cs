@@ -47,4 +47,39 @@ public sealed partial class LavalandResonanceFieldComponent : Component
 
     [ViewVariables]
     public bool Bursting;
+
+    [ViewVariables]
+    public float BossDamageFalloff;
+
+    [ViewVariables]
+    public float BossDamageMinMultiplier = 0.1f;
+
+    [ViewVariables]
+    public TimeSpan BossDamageWindow = TimeSpan.FromMinutes(1);
+}
+
+/// <summary>
+/// Burst bolt fired by a resonance field; carries the boss damage falloff of its resonator.
+/// </summary>
+[RegisterComponent]
+public sealed partial class LavalandResonatorBoltComponent : Component
+{
+    [ViewVariables]
+    public float BossDamageFalloff;
+
+    [ViewVariables]
+    public float BossDamageMinMultiplier = 0.1f;
+
+    [ViewVariables]
+    public TimeSpan BossDamageWindow = TimeSpan.FromMinutes(1);
+}
+
+/// <summary>
+/// Recent resonator hits on a boss, used to scale down repeated resonator damage.
+/// </summary>
+[RegisterComponent]
+public sealed partial class LavalandResonatorPressureComponent : Component
+{
+    [ViewVariables]
+    public readonly Queue<TimeSpan> Hits = new();
 }

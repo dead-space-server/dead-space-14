@@ -1,0 +1,254 @@
+# Chromite caves: chromite rock and floor, blue flowers almost everywhere, chromite (glowing and shadow) trees,
+# glowing crystals and a great many pits. Later layers win over earlier ones.
+- type: biomeTemplate
+  id: LavalandChromiteCaves
+  layers:
+  # Blue flowers over most of the floor.
+  - !type:BiomeDecalLayer
+    divisions: 1
+    threshold: -0.45
+    noise:
+      seed: 81
+      noiseType: OpenSimplex2
+      frequency: 0.35
+    allowedTiles:
+    - FloorChromite
+    color: "#5fb4ff"
+    decals:
+    - Flowersbr1
+    - Flowersbr2
+    - Flowersbr3
+    - Flowerspv1
+    - Flowerspv2
+    - Flowerspv3
+    - Flowersy1
+    - Flowersy2
+    - Flowersy3
+    - Flowersy4
+
+  - !type:BiomeDecalLayer
+    divisions: 2
+    threshold: 0.55
+    noise:
+      seed: 82
+      noiseType: OpenSimplex2
+      frequency: 0.5
+    allowedTiles:
+    - FloorChromite
+    color: "#a8e6ff"
+    decals:
+    - Flowersbr1
+    - Flowersbr2
+    - Flowersbr3
+    - Flowersy1
+    - Flowersy2
+
+  # Glowing cracks of shadow stone.
+  - !type:BiomeEntityLayer
+    threshold: 0.88
+    noise:
+      seed: 83
+      noiseType: OpenSimplex2
+      frequency: 1
+    allowedTiles:
+    - FloorChromite
+    entities:
+    - ShadowBasaltOne
+    - ShadowBasaltTwo
+    - ShadowBasaltThree
+    - ShadowBasaltFour
+    - ShadowBasaltFive
+
+  # Small glowing crystals on the floor.
+  - !type:BiomeEntityLayer
+    threshold: 0.93
+    minimumDistance: 3
+    noise:
+      seed: 84
+      noiseType: OpenSimplex2
+      frequency: 0.9
+    allowedTiles:
+    - FloorChromite
+    entities:
+    - LavalandChromiteFloorCrystal
+    - LavalandChromiteFloorCrystal
+    - LavalandChromiteFloorCrystalPurple
+
+  # Big crystals.
+  - !type:BiomeEntityLayer
+    threshold: 0.975
+    minimumDistance: 6
+    noise:
+      seed: 85
+      noiseType: OpenSimplex2
+      frequency: 0.15
+    allowedTiles:
+    - FloorChromite
+    entities:
+    - CrystalBlue
+    - CrystalCyan
+    - CrystalPink
+
+  # Chromite trees: glowing and shadow ones, as the shadow anomaly grows them.
+  - !type:BiomeEntityLayer
+    threshold: 0.42
+    minimumDistance: 3
+    noise:
+      seed: 86
+      noiseType: OpenSimplex2
+      frequency: 0.85
+    allowedTiles:
+    - FloorChromite
+    entities:
+    - LightTree
+    - ShadowTree
+    - ShadowTree
+
+  # Argocytes standing about, waiting to spot somebody.
+  - !type:BiomeEntityLayer
+    # The spacing keeps them apart, the threshold only picks the spots.
+    threshold: 0.9
+    minimumDistance: 14
+    noise:
+      seed: 89
+      noiseType: OpenSimplex2
+      frequency: 0.4
+    allowedTiles:
+    - FloorChromite
+    entities:
+    - MobArgocyteCavesSlurva
+    - MobArgocyteCavesSlurva
+    - MobArgocyteCavesBarrier
+    - MobArgocyteCavesSkitter
+    - MobArgocyteCavesSkitter
+    - MobArgocyteCavesSkitter
+    - MobArgocyteCavesSwiper
+    - MobArgocyteCavesSwiper
+    - MobArgocyteCavesSwiper
+    - MobArgocyteCavesMolder
+    - MobArgocyteCavesMolder
+    - MobArgocyteCavesPouncer
+    - MobArgocyteCavesPouncer
+    - MobArgocyteCavesGlider
+    - MobArgocyteCavesGlider
+    - MobArgocyteCavesHarvester
+    - MobArgocyteCavesHarvester
+    - MobArgocyteCavesCrawler
+    - MobArgocyteCavesCrawler
+    - MobArgocyteCavesEnforcer
+    - MobArgocyteCavesFounder
+
+  # Bear traps of the Circle hidden among the blue flowers, rarely.
+  - !type:BiomeEntityLayer
+    threshold: 0.95
+    minimumDistance: 25
+    noise:
+      seed: 90
+      noiseType: OpenSimplex2
+      frequency: 0.32
+    allowedTiles:
+    - FloorChromite
+    entities:
+    - LavalandGeistTrapSpawner
+
+  # A geist glimpsed at the edge of sight, and a geist's ambush with traps.
+  - !type:BiomeEntityLayer
+    threshold: 0.996
+    minimumDistance: 45
+    noise:
+      seed: 93
+      noiseType: OpenSimplex2
+      frequency: 0.05
+    allowedTiles:
+    - FloorChromite
+    entities:
+    - LavalandGeistWatchTrigger
+
+  - !type:BiomeEntityLayer
+    threshold: 0.997
+    minimumDistance: 45
+    noise:
+      seed: 94
+      noiseType: OpenSimplex2
+      frequency: 0.05
+    allowedTiles:
+    - FloorChromite
+    entities:
+    - LavalandGeistAmbushTrigger
+
+  # A great many pits in the open.
+  - !type:BiomeEntityLayer
+    threshold: 0.2
+    noise:
+      seed: 87
+      noiseType: OpenSimplex2
+      frequency: 0.09
+      fractalType: FBm
+      octaves: 4
+      lacunarity: 2
+      gain: 0.45
+    allowedTiles:
+    - FloorChromite
+    entities:
+    - FloorChromiteChasm
+
+  # Cave walls.
+  - !type:BiomeEntityLayer
+    threshold: -0.3
+    noise:
+      seed: 88
+      noiseType: Cellular
+      frequency: 0.05
+      lacunarity: 2
+      fractalType: FBm
+      octaves: 5
+      cellularDistanceFunction: Euclidean
+      cellularReturnType: Distance2
+    allowedTiles:
+    - FloorChromite
+    entities:
+    - WallRockChromite
+
+  - !type:BiomeDummyLayer
+    id: Loot
+
+  - !type:BiomeTileLayer
+    threshold: -1
+    tile: FloorChromite
+
+# Only magmite, bluespace crystals, diamonds and uranium grow in the caves.
+- type: biomeMarkerLayer
+  id: LavalandCavesOreMagmite
+  entityMask:
+    WallRockChromite: WallRockChromiteMagmite
+  maxCount: 40
+  minGroupSize: 3
+  maxGroupSize: 6
+  radius: 4
+
+- type: biomeMarkerLayer
+  id: LavalandCavesOreBluespaceCrystal
+  entityMask:
+    WallRockChromite: WallRockChromiteBluespaceCrystal
+  maxCount: 34
+  minGroupSize: 2
+  maxGroupSize: 5
+  radius: 4
+
+- type: biomeMarkerLayer
+  id: LavalandCavesOreDiamond
+  entityMask:
+    WallRockChromite: WallRockChromiteDiamond
+  maxCount: 36
+  minGroupSize: 2
+  maxGroupSize: 5
+  radius: 4
+
+- type: biomeMarkerLayer
+  id: LavalandCavesOreUranium
+  entityMask:
+    WallRockChromite: WallRockChromiteUranium
+  maxCount: 56
+  minGroupSize: 3
+  maxGroupSize: 7
+  radius: 4

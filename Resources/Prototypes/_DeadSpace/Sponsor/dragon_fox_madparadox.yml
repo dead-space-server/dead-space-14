@@ -925,6 +925,17 @@
   name: «Искривитель»
   description: Это не просто винтовка, а портативный генератор гравитационных аномалий, построенный на протокинетной технологии. Название отражает её суть - она не столько стреляет, сколько искривляет ткань пространства‑времени, заставляя снаряд двигаться по неестественно эффективной траектории.
   components:
+  - type: AttachmentHolder
+    slotOverlays:
+      bayonet_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: bayonet
+        offset: 0.84375,0.375
+      light_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: flight
+        stateOn: flight_on
+        offset: 0.4375,0.25
   - type: Gun
     fireRate: 2
     selectedMode: SemiAuto

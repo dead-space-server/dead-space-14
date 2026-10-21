@@ -32,3 +32,4 @@ tiles-ruraniumglass = урановый бронестеклянный пол
 tiles-diamond = алмазный пол
 tiles-plasma = плазменный пол
 tiles-uranium = урановый пол
+tiles-invisible = невидимый пол
