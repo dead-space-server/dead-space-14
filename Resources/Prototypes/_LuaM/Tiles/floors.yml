@@ -1,0 +1,27 @@
+- type: tile
+  id: HullReinforcedCornerNE
+  parent: FloorHullReinforced
+  name: tiles-HullReinforcedcornerNE
+  sprite: /Textures/_LuaM/Tiles/hull_reinforced/ne.png
+  #vertices: ["1, 0", "1, 1", "0, 1"] #ds14
+
+- type: tile
+  id: HullReinforcedCornerNW
+  parent: FloorHullReinforced
+  name: tiles-HullReinforcedcornerNW
+  sprite: /Textures/_LuaM/Tiles/hull_reinforced/nw.png
+  #vertices: ["0, 0", "1, 1", "0, 1"] #ds14
+
+- type: tile
+  id: HullReinforcedCornerSE
+  parent: FloorHullReinforced
+  name: tiles-HullReinforcedcornerSE
+  sprite: /Textures/_LuaM/Tiles/hull_reinforced/se.png
+  #vertices: ["0, 0", "1, 0", "1, 1"] #ds14
+
+- type: tile
+  id: HullReinforcedCornerSW
+  parent: FloorHullReinforced
+  name: tiles-HullReinforcedcornerSW
+  sprite: /Textures/_LuaM/Tiles/hull_reinforced/sw.png
+  #vertices: ["0, 0", "1, 0", "0, 1"] #ds14
