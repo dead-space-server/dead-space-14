@@ -418,5 +418,6 @@ ui-options-save-button = Сохранить
 ui-options-function-open-language-menu = Открыть меню выбора языка
 ui-options-function-use-world-target-action = Использовать способность по кнопке
 ui-options-function-parry = Парирование
+ui-options-function-limb-doll = Кукла прицела
 ##DS14-end
 ui-options-function-switch-component-mode = Переключить режим компонентов предмета

@@ -235,6 +235,8 @@
         Slash: 10
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
+  - type: LimbCut
+    factor: 3
   - type: Tool
     speedModifier: 0.5
 
@@ -254,6 +256,8 @@
         Slash: 15
     soundHit:
       path: /Audio/Items/drill_hit.ogg
+  - type: LimbCut
+    factor: 3
   - type: Tool
     speedModifier: 1.5
 

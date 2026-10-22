@@ -6,6 +6,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Inventory;
 using Content.Shared.Storage;
 using Content.Shared.Throwing;
+using Content.Shared.Weapons.Ranged.Components; //DS-14
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
@@ -221,6 +222,11 @@ public abstract partial class SharedProjectileSystem : EntitySystem
     private void OnBeingShot(Entity<ProjectileComponent> entity, ref ProjectileShotEvent args) // DS14
     {
         entity.Comp.WhenToStopIgnoringShooter = _timing.CurTime + entity.Comp.DelayToAcknowledgeShooter;
+        entity.Comp.LimbShotOrigin = _transform.GetWorldPosition(entity); // DS14
+        if (entity.Comp.Weapon is { } weapon // DS14
+            && TryComp<GunComponent>(weapon, out var gun) // DS14
+            && gun.ShootCoordinates is { } coords) // DS14
+            entity.Comp.LimbAimPoint = _transform.ToMapCoordinates(coords).Position; // DS14
         Dirty(entity);
     }
 

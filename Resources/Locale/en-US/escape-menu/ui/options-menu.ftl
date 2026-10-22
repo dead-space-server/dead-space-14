@@ -435,3 +435,4 @@ ui-options-admin-strip-overlay-setting = Show strip overlay by default
 ui-options-function-use-world-target-action = Use targeted ability
 ui-options-function-switch-component-mode = Switch held item component mode
 ui-options-function-parry = Parry
+ui-options-function-limb-doll = Aim doll

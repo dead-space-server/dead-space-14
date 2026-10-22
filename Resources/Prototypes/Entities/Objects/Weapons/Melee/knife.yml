@@ -27,6 +27,8 @@
       - Slicing
     useSound:
       path: /Audio/Items/Culinary/chop.ogg
+  - type: LimbCut
+    factor: 0.4
   #DS14-Start
   - type: EmitSoundOnPickup
     sound:

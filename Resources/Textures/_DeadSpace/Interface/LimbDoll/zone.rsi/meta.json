@@ -1,0 +1,158 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "taken from tgstation at commit https://github.com/tgstation/tgstation/commit/50689f89a40e5e7a2732a0c5fb38c787b69f7d28",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "block"
+    },
+    {
+      "name": "headDEAD"
+    },
+    {
+      "name": "chestDEAD"
+    },
+    {
+      "name": "r_armDEAD"
+    },
+    {
+      "name": "l_armDEAD"
+    },
+    {
+      "name": "r_legDEAD"
+    },
+    {
+      "name": "l_legDEAD"
+    },
+    {
+      "name": "head"
+    },
+    {
+      "name": "eyes"
+    },
+    {
+      "name": "mouth"
+    },
+    {
+      "name": "chest"
+    },
+    {
+      "name": "groin"
+    },
+    {
+      "name": "r_arm"
+    },
+    {
+      "name": "l_arm"
+    },
+    {
+      "name": "r_leg"
+    },
+    {
+      "name": "l_leg"
+    },
+    {
+      "name": "head0"
+    },
+    {
+      "name": "head1"
+    },
+    {
+      "name": "head2"
+    },
+    {
+      "name": "head4"
+    },
+    {
+      "name": "chest0"
+    },
+    {
+      "name": "chest1"
+    },
+    {
+      "name": "chest2"
+    },
+    {
+      "name": "chest4"
+    },
+    {
+      "name": "r_arm0"
+    },
+    {
+      "name": "r_arm1"
+    },
+    {
+      "name": "r_arm2"
+    },
+    {
+      "name": "r_arm4"
+    },
+    {
+      "name": "l_arm0"
+    },
+    {
+      "name": "l_arm1"
+    },
+    {
+      "name": "l_arm2"
+    },
+    {
+      "name": "l_arm4"
+    },
+    {
+      "name": "r_leg0"
+    },
+    {
+      "name": "r_leg1"
+    },
+    {
+      "name": "r_leg2"
+    },
+    {
+      "name": "r_leg4"
+    },
+    {
+      "name": "l_leg0"
+    },
+    {
+      "name": "l_leg1"
+    },
+    {
+      "name": "l_leg2"
+    },
+    {
+      "name": "l_leg4"
+    },
+    {
+      "name": "head_idle"
+    },
+    {
+      "name": "chest_idle"
+    },
+    {
+      "name": "groin_idle"
+    },
+    {
+      "name": "r_arm_idle"
+    },
+    {
+      "name": "l_arm_idle"
+    },
+    {
+      "name": "r_leg_idle"
+    },
+    {
+      "name": "l_leg_idle"
+    },
+    {
+      "name": "eyes_idle"
+    },
+    {
+      "name": "mouth_idle"
+    }
+  ]
+}

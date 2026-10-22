@@ -38,7 +38,7 @@
   #end-backmen: currency
   special:
   - !type:AddImplantSpecial
-    implants: [ MindShieldImplant ]
+    implants: [ MindShieldImplant, CombatAdrenalineImplant ] # DS14
   - !type:AddComponentSpecial
     components:
       - type: CommandStaff

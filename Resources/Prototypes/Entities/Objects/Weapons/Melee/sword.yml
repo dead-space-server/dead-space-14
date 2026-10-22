@@ -14,6 +14,8 @@
   - type: Tag
     tags:
     - ParryStandardWeapon
+  - type: LimbCut
+    factor: 1.3
   # DS14-end
   - type: Sharp
   - type: Execution
@@ -154,6 +156,10 @@
     slots:
     - Back
     - Belt
+  # DS14
+  - type: LimbCut
+    factor: 2.7
+    sever: true
   - type: DisarmMalus
 
 - type: entity
@@ -207,6 +213,10 @@
       sprite: Objects/Weapons/Melee/energykatana_storage_64x.rsi #Done in 64x64 because it looks way too puny in 32x32
     shape:
     - 0,0,0,3
+  - type: LimbCut
+    factor: 2.7
+    sever: true
+    severChance: 0.35
   - type: EnergyKatana
   - type: NinjaAppearanceItem
   # DS14-start

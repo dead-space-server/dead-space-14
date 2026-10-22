@@ -25,6 +25,8 @@
         Structural: 10
     soundHit:
       collection: MetalThud
+  - type: LimbCut
+    factor: 1.6
   - type: Wieldable
   - type: IncreaseDamageOnWield
     damage:

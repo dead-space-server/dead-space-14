@@ -39,6 +39,10 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
+  # DS14
+  - type: LimbCover
+    zones:
+    - Head
 
 #Basic Helmet (Security Helmet)
 - type: entity
@@ -55,6 +59,11 @@
     tags:
     - WhitelistChameleon
     - SecurityHelmet
+  # DS14
+  - type: LimbCover
+    zones:
+    - Head
+    ricochet: true
 
 #Mercenary Helmet
 - type: entity
@@ -91,6 +100,12 @@
         Heat: 0.80
         Radiation: 0.80
         Caustic: 0.95
+  # DS14
+  - type: LimbCover
+    zones:
+    - Head
+    face: true
+    ricochet: true
   - type: ExplosionResistance
     damageCoefficient: 0.75
   - type: HideLayerClothing

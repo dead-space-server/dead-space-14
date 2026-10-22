@@ -5,6 +5,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Rejuvenate;
 using Content.Shared.Temperature;
 using Content.Shared.Projectiles;
+using Content.Shared.DeadSpace.Body.Limbs; // DS14
 using Content.Shared.Temperature.Components;
 using Content.Shared.Temperature.Systems;
 
@@ -115,6 +116,14 @@ public sealed partial class TemperatureSystem : SharedTemperatureSystem
 
     private void OnRejuvenate(EntityUid uid, TemperatureComponent comp, RejuvenateEvent args)
     {
+        // DS14-start
+        if (HasComp<LimbBodyComponent>(uid))
+        {
+            ForceChangeTemperature(uid, Atmospherics.T0C + LimbWoundRules.LivingCelsius, comp);
+            return;
+        }
+        // DS14-end
+
         ForceChangeTemperature(uid, Atmospherics.T20C, comp);
     }
 

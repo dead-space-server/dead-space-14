@@ -12,6 +12,15 @@
   - type: PsychogenFilter
   - type: IngestionBlocker
   - type: IdentityBlocker
+  # DS14
+  - type: LimbCover
+    face: true
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.92
+        Slash: 0.92
+        Piercing: 0.92
   - type: Tag
     tags:
     - HamsterWearable
