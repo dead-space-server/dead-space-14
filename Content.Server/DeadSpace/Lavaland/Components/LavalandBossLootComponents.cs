@@ -147,7 +147,7 @@ public sealed partial class LavalandVoiceCommand
     [DataField]
     public DamageSpecifier? Damage;
 
-    /// <summary>Throws listeners away from the speaker with this speed.</summary>
+    /// <summary>Throws listeners away from the speaker with this speed (the push horn uses 50).</summary>
     [DataField]
     public float Repel;
 

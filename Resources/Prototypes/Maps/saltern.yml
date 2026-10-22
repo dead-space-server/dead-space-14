@@ -20,7 +20,6 @@
             BlueShieldOfficer: [ 1, 1 ]
             # law
             IAA: [ 1, 1 ]
-            IAAOfficer: [ 1, 1 ]
             Lawyer: [ 2, 2 ]
             # sec
             HeadOfSecurity: [ 1, 1 ]

@@ -20,6 +20,24 @@
       time: 324000 # 90 hours
     - !type:AgeRequirement
       requiredAge: 24
+    # Every round-start species but the felinids.
+    - !type:SpeciesRequirement
+      species:
+        - Human
+        - SlimePerson
+        - Reptilian
+        - Demon
+        - Moth
+        - Vulpkanin
+        - Tajaran
+        - Arachnid
+        - IPC
+        - Shark
+        - Diona
+        - Dwarf
+        - Kobolt
+        - Vox
+        - Xenomorph
   startingGear: BlueShieldOfficerGear
   icon: "JobIconBlueShieldOfficer"
   supervisors: job-supervisors-centcom

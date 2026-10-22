@@ -38,6 +38,13 @@ public sealed partial class AttachmentHolderComponent : Component
     [DataField]
     public string? BayonetSlot;
 
+    /// <summary>
+    /// tg bayonet: a left click on a creature within the knife's reach stabs instead of shooting. Off - the knife
+    /// strikes only with the right button, and a left click always shoots.
+    /// </summary>
+    [DataField]
+    public bool BayonetOnLeftClick;
+
     /// <summary>Stab animation of the bayonet instead of the knife's own. Null keeps the knife's.</summary>
     [DataField]
     public EntProtoId? BayonetAnimation;

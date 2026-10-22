@@ -391,6 +391,8 @@ entities:
             Nitrogen: 82.10312
         chunkSize: 4
     - type: GasTileOverlay
+    - type: IFF
+      flags: Hide
     - type: RadiationGridResistance
     - type: ExplosionAirtightGrid
 - proto: AirlockAssemblyEngineeringGlass

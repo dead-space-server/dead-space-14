@@ -406,7 +406,7 @@
 - type: entity
   parent: WeaponStaffBase
   id: LavalandFireStaff
-  name: посох лавы
+  name: посох огненного шара
   description: Магический посох, выпускающий огненные шары и медленно восстанавливающий заряды.
   suffix: Lavaland
   components:

@@ -352,14 +352,15 @@ public sealed class LavalandBossLootSystem : EntitySystem
                 _stun.TryKnockdown(mob.Owner, command.Knockdown);
             if (command.Damage is { } damage)
                 _damageable.TryChangeDamage(mob.Owner, damage, true, origin: ent);
-            // Thrown, not just nudged: a bare velocity was eaten by the floor's friction in a step.
+            // Thrown like the clown's push horn does it: fast, and with the floor's friction made up for, so they
+            // really land RepelDistance away - a slow throw was eaten by a mob's own friction within a tile or two.
             if (command.Repel > 0f && command.RepelDistance > 0f)
             {
                 var away = _transform.GetWorldPosition(mob) - origin;
                 if (away.LengthSquared() > 0.01f)
                 {
                     _throwing.TryThrow(mob.Owner, Vector2.Normalize(away) * command.RepelDistance, command.Repel, ent.Owner,
-                        recoil: false, doSpin: false);
+                        pushbackRatio: 0f, compensateFriction: true, recoil: false, doSpin: false);
                 }
             }
         }

@@ -423,6 +423,8 @@
     - type: LavalandChasmImmune
     - type: CanMoveInAir
     - type: LavalandCloudWalker # a little white cloud under the feet instead of wings
+    # Walks through space like over the station's floor: never weightless.
+    - type: MovementIgnoreGravity
   - type: StaticPrice
     price: 3000
 
