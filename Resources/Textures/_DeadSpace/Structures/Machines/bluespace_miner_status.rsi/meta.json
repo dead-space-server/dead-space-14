@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Base sprite taken from tgstation silo (MrDoomBringer), recolored for DS14 bluespace miner",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "icon_running",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "blue",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "red",
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    }
+  ]
+}

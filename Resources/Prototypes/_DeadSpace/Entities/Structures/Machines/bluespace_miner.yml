@@ -1,0 +1,45 @@
+- type: entity
+  id: BluespaceMiner
+  parent: [ BaseMachinePowered, ConstructibleMachine ]
+  name: bluespace miner
+  description: A machine of unknown design that extracts various materials from bluespace. It requires an extremely cold, pressurized environment and produces large amounts of hot carbon dioxide.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Machines/bluespace_miner_status.rsi
+    snapCardinals: true
+    layers:
+    - state: icon
+      map: [ "base" ]
+    - state: blue
+      shader: unshaded
+      map: [ "enum.BluespaceMinerVisuals.Status" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.BluespaceMinerVisuals.Status:
+        enum.BluespaceMinerVisuals.Status:
+          0: { state: blue } # Ok
+          1: { state: red } # BadConditions
+          2: { state: red } # Unpowered
+  - type: Appearance
+  - type: AtmosDevice
+  - type: BluespaceMiner
+  - type: MaterialStorage
+    ignoreColor: true
+    storageLimit: 2000000
+  - type: OreSilo
+  - type: Machine
+    board: BluespaceMinerMachineCircuitboard
+  - type: ApcPowerReceiver
+    powerLoad: 100000
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: WiresVisuals
