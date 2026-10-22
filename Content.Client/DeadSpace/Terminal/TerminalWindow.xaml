@@ -1,0 +1,26 @@
+<DefaultWindow xmlns="https://spacestation14.io" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client" x:Class="Content.Client.DeadSpace.Terminal.TerminalWindow" Title="Terminal" MinSize="500 300" SetSize="600 400">
+    <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="4" HorizontalExpand="True" VerticalExpand="True">
+        <PanelContainer Name="TerminalPanel" VerticalExpand="True" HorizontalExpand="True">
+            <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#000000" />
+            </PanelContainer.PanelOverride>
+            <ScrollContainer Name="OutputScroll" HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False">
+                <RichTextLabel Name="Output" HorizontalExpand="True" VerticalAlignment="Top" VerticalExpand="False" />
+            </ScrollContainer>
+        </PanelContainer>
+        <PanelContainer Name="EditorPanel" Visible="False" VerticalExpand="True" HorizontalExpand="True">
+            <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#000000" />
+            </PanelContainer.PanelOverride>
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" Margin="8" SeparationOverride="4">
+                <TextEdit Name="Editor" HorizontalExpand="True" VerticalExpand="True" />
+                <Label Name="EditorStatus" Text="nano" />
+                <BoxContainer Name="EditorButtons" Orientation="Horizontal" SeparationOverride="4">
+                    <Button Name="SaveButton" Text="Save" />
+                    <Button Name="ExitButton" Text="Exit" />
+                </BoxContainer>
+            </BoxContainer>
+        </PanelContainer>
+        <LineEdit Name="CommandInput" HorizontalExpand="True" PlaceHolder="command" />
+    </BoxContainer>
+</DefaultWindow>

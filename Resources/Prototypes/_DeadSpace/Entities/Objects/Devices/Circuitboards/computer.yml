@@ -39,6 +39,15 @@
 
 - type: entity
   parent: BaseComputerCircuitboardTaipan
+  id: TerminalCircuitboardTaipan
+  name: компьютерный терминал (консольная плата)
+  description: Консольная плата для компьютерного терминала.
+  components:
+  - type: ComputerBoard
+    prototype: ComputerTaipanTerminal
+
+- type: entity
+  parent: BaseComputerCircuitboardTaipan
   id: CargoBountyComputerCircuitboardTaipan
   name: консоль запросов (консольная плата)
   description: Консольная плата для консоли запросов.
