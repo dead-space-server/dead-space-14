@@ -2,6 +2,7 @@
 
 using System.Numerics;
 using Content.Shared.DeadSpace.Movement.Components;
+using Content.Shared.Doors.Components;
 using Content.Shared.Movement.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Physics;
@@ -184,8 +185,11 @@ public abstract partial class SharedMoverController
         return false;
     }
 
+    /// <summary>Half the size of the middle of a tile a step goes through.</summary>
+    private const float TileStepCenterHalfSize = 0.2f;
+
     /// <summary>
-    /// Something anchored and solid for this mob (a wall, a window, a closed door) stands on the tile.
+    /// Something anchored and solid for this mob (a wall, a window) fills the middle of the tile.
     /// Anchored things are the same on the client and the server, so both pick the same step.
     /// </summary>
     private bool IsTileStepBlocked(TransformComponent xform, PhysicsComponent physics, Vector2 localTarget)
@@ -195,9 +199,14 @@ public abstract partial class SharedMoverController
 
         var gridUid = xform.GridUid.Value;
         var tile = new Vector2i((int) MathF.Floor(localTarget.X), (int) MathF.Floor(localTarget.Y));
+        var middle = Box2.CenteredAround(TileCenter(localTarget), new Vector2(TileStepCenterHalfSize * 2f));
         var anchored = _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
         while (anchored.MoveNext(out var other))
         {
+            // A door is stepped into: the bump opens it, and a locked one stops the step like any obstacle.
+            if (HasComp<DoorComponent>(other))
+                continue;
+
             if (!PhysicsQuery.TryComp(other, out var otherBody) || !otherBody.CanCollide || !otherBody.Hard)
                 continue;
 
@@ -206,12 +215,19 @@ public abstract partial class SharedMoverController
 
             // Only a hard fixture in our way blocks: a bear trap is hard as an item but its trigger on the
             // impassable layer is not, and the body's layer is the union of all of its fixtures.
-            if (!TileStepFixturesQuery.TryComp(other, out var fixtures))
+            if (!TileStepFixturesQuery.TryComp(other, out var fixtures) || !XformQuery.TryComp(other, out var otherXform))
                 return true;
 
+            // And only one across the middle of the tile: a wall lamp, a camera or a railing along an edge leaves
+            // the way free. Overlap, not a touch: a camera's corner ends right on the middle's edge.
+            var transform = new Transform(otherXform.LocalPosition, otherXform.LocalRotation);
             foreach (var fixture in fixtures.Fixtures.Values)
             {
-                if (fixture.Hard && (fixture.CollisionLayer & physics.CollisionMask) != 0)
+                if (!fixture.Hard || (fixture.CollisionLayer & physics.CollisionMask) == 0)
+                    continue;
+
+                var overlap = fixture.Shape.ComputeAABB(transform, 0).Intersect(middle);
+                if (overlap.Width > 0.01f && overlap.Height > 0.01f)
                     return true;
             }
         }

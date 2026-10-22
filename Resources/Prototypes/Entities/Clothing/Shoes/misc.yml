@@ -184,9 +184,11 @@
   - type: Clothing
     sprite: Clothing/Shoes/Boots/moonboots.rsi
   - type: AntiGravityClothing
-  # DS14-start: keep their living wearer over a chasm even lying down; timer: true - a countdown, then the fall.
+  # DS14-start: lying down over a chasm, the wearer has 15 seconds (10 in the deep night) to get out or get up.
   - type: AntiGravityChasmHold
-    timer: false
+    timer: true
+    grace: 15
+    deepNightGrace: 10
   # DS14-end
   - type: StaticPrice
     price: 75

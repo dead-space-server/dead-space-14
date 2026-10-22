@@ -8,6 +8,10 @@ using Content.Shared.Weapons.Misc;
 using Content.Shared.Gravity; //DS14
 // DS14-start
 using Content.Shared.Clothing.Components;
+using Content.Shared.DeadSpace.Lavaland;
+using Content.Shared.DeadSpace.Lavaland.ChromiteCaves;
+using Content.Shared.DeadSpace.Lavaland.Components;
+using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.DeadSpace.Chasm;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
@@ -38,6 +42,7 @@ public sealed class ChasmSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!; //DS14
     [Dependency] private readonly InventorySystem _inventory = default!; //DS14
     [Dependency] private readonly SharedPopupSystem _popup = default!; //DS14
+    [Dependency] private readonly LavalandDayCycleSystem _dayCycle = default!; //DS14
 
     public override void Initialize()
     {
@@ -170,6 +175,13 @@ public sealed class ChasmSystem : EntitySystem
             args.Cancelled = true;
             return;
         }
+
+        // Carried over by someone who walks on air: let go of it - or stunned - and it drops in on the next tick.
+        if (IsPulledOverChasm(args.Tripper))
+        {
+            args.Cancelled = true;
+            return;
+        }
         //DS14-end
 
         args.Continue = true;
@@ -203,7 +215,12 @@ public sealed class ChasmSystem : EntitySystem
         if (hold is { Timer: false })
             return true;
 
-        if (chasm.CritHoverGrace <= TimeSpan.Zero ||
+        // The clothing's own timer (shorter in the deep night), or the chasm's for anything else in crit.
+        var duration = hold != null
+            ? IsDeepNight(tripper) ? hold.DeepNightGrace : hold.Grace
+            : chasm.CritHoverGrace;
+
+        if (duration <= TimeSpan.Zero ||
             hold == null && mobState.CurrentState is not (MobState.PreCritical or MobState.Critical))
         {
             return false;
@@ -213,18 +230,43 @@ public sealed class ChasmSystem : EntitySystem
         if (!TryComp<ChasmHoverGraceComponent>(tripper, out var grace) || now - grace.LastSeen > HoverGraceGap)
         {
             grace = EnsureComp<ChasmHoverGraceComponent>(tripper);
-            grace.FallAt = now + chasm.CritHoverGrace;
+            grace.FallAt = now + duration;
             Dirty(tripper, grace);
             if (_net.IsServer)
             {
                 _popup.PopupEntity(Loc.GetString("chasm-hover-grace-warning",
-                        ("seconds", (int) chasm.CritHoverGrace.TotalSeconds)),
+                        ("seconds", (int) duration.TotalSeconds)),
                     tripper, tripper, PopupType.LargeCaution);
             }
         }
 
         grace.LastSeen = now;
         return now < grace.FallAt;
+    }
+
+    /// <summary>
+    /// Pulled by someone held over chasms (anti-gravity clothing while standing, a flight potion) who can still act.
+    /// </summary>
+    private bool IsPulledOverChasm(EntityUid uid)
+    {
+        if (!TryComp<PullableComponent>(uid, out var pullable) || pullable.Puller is not { } puller ||
+            TerminatingOrDeleted(puller) || !_blocker.CanInteract(puller, null))
+        {
+            return false;
+        }
+
+        return _gravity.IsWeightless(puller) ||
+               HasComp<LavalandChasmImmuneComponent>(puller) && !HasComp<ChasmFallingComponent>(puller);
+    }
+
+    /// <summary>The lavaland's deep night, or the chromite caves' deep dark.</summary>
+    private bool IsDeepNight(EntityUid uid)
+    {
+        var map = Transform(uid).MapUid;
+        if (TryComp<LavalandChromiteCavesComponent>(map, out var caves))
+            return caves.Mode == LavalandCavesMode.DeepDark;
+
+        return _dayCycle.IsDeepNight(map);
     }
 
     private EntityUid? GetAntiGravityClothing(EntityUid uid)

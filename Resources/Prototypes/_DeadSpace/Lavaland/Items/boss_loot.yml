@@ -110,6 +110,8 @@
   - type: PressureProtection
     lowPressureModifier: 14
   - type: BreathMask
+  # The ash storm needs both the suit and the helmet protected.
+  - type: LavalandWeatherImmune
 
 - type: entity
   abstract: true

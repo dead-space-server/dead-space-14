@@ -12,8 +12,15 @@ public sealed partial class AntiGravityChasmHoldComponent : Component
 {
     /// <summary>
     /// False: no timer, the wearer stays up over the chasm as long as they live.
-    /// True: lying over a chasm the chasm's <c>CritHoverGrace</c> runs, then they fall.
+    /// True: lying over a chasm <see cref="Grace"/> (<see cref="DeepNightGrace"/> in the deep night) runs, then they fall.
     /// </summary>
     [DataField]
     public bool Timer;
+
+    [DataField]
+    public TimeSpan Grace = TimeSpan.FromSeconds(15);
+
+    /// <summary>The timer in the lavaland's deep night or the chromite caves' deep dark.</summary>
+    [DataField]
+    public TimeSpan DeepNightGrace = TimeSpan.FromSeconds(10);
 }
