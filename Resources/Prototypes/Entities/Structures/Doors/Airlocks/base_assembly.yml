@@ -36,6 +36,18 @@
     fx: EffectRCDDeconstruct8
   - type: Destructible
     thresholds:
+    # DS14-start: взрывной порог - выбивание на две половины.
+    # Срабатывает раньше общего (250 < 300).
+    - trigger:
+        !type:DamageTrigger
+        damage: 250
+      behaviors:
+      - !type:AirlockKnockoutBehavior
+        leftPieceProto: AirlockPieceLeft
+        rightPieceProto: AirlockPieceRight
+        impulseForce: 12
+        spreadDegrees: 25
+    # DS14-end
     - trigger:
         !type:DamageTrigger
         damage: 300

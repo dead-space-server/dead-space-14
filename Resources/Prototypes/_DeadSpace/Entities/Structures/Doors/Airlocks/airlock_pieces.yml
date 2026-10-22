@@ -1,0 +1,59 @@
+- type: entity
+  id: AirlockPieceBase
+  parent: BaseItem
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: Structures/Doors/Airlocks/Standard/basic.rsi
+    state: closed
+    scale: 0.6, 1.0
+  - type: Physics
+    bodyType: Dynamic
+    fixedRotation: false
+    linearDamping: 1.5
+    angularDamping: 2.0
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.20,-0.45,0.20,0.45"
+        density: 30
+        mask:
+        - ItemMask
+        layer:
+        - Opaque
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 120
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+
+- type: entity
+  id: AirlockPieceLeft
+  parent: AirlockPieceBase
+  name: обломок шлюза
+  description: Левая половина выбитого шлюза.
+  components:
+  - type: Sprite
+    sprite: Structures/Doors/Airlocks/Standard/basic.rsi
+    state: closed
+    offset: -0.15, 0
+    scale: 0.6, 1.0
+
+- type: entity
+  id: AirlockPieceRight
+  parent: AirlockPieceBase
+  name: обломок шлюза
+  description: Правая половина выбитого шлюза.
+  components:
+  - type: Sprite
+    sprite: Structures/Doors/Airlocks/Standard/basic.rsi
+    state: closed
+    offset: 0.15, 0
+    scale: 0.6, 1.0
