@@ -70,6 +70,6 @@
       sprite: _DeadSpace/Actions/cqc_actions.rsi
       state: concentration_on
     priority: -4
-    useDelay: 60
+    useDelay: 30
   - type: InstantAction
     event: !type:CQCConcentrationEvent {}

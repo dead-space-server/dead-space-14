@@ -167,6 +167,16 @@ public sealed class SpeedModifierContactsSystem : EntitySystem
             var evMax = new GetSpeedModifierContactCapEvent();
             RaiseLocalEvent(uid, ref evMax);
 
+            var resistance = Math.Clamp(evMax.SlowdownResistance, 0f, 1f);
+            if (resistance > 0f)
+            {
+                if (walkSpeed < 1f)
+                    walkSpeed = 1f - (1f - walkSpeed) * (1f - resistance);
+
+                if (sprintSpeed < 1f)
+                    sprintSpeed = 1f - (1f - sprintSpeed) * (1f - resistance);
+            }
+
             walkSpeed = MathF.Max(walkSpeed, evMax.MaxWalkSlowdown);
             sprintSpeed = MathF.Max(sprintSpeed, evMax.MaxSprintSlowdown);
 

@@ -14,9 +14,16 @@ public record struct GetSpeedModifierContactCapEvent() : IInventoryRelayEvent
 
     public float MaxWalkSlowdown = 0f;
 
+    public float SlowdownResistance = 0f;
+
     public void SetIfMax(float valueSprint, float valueWalk)
     {
         MaxSprintSlowdown = MathF.Max(MaxSprintSlowdown, valueSprint);
         MaxWalkSlowdown = MathF.Max(MaxWalkSlowdown, valueWalk);
+    }
+
+    public void SetIfMaxResistance(float value)
+    {
+        SlowdownResistance = MathF.Max(SlowdownResistance, value);
     }
 }
