@@ -27,6 +27,10 @@ public sealed partial class LavalandBossComponent : Component
     [DataField]
     public List<EntProtoId> DeathRewards = new();
 
+    /// <summary>The boss' unique loot: only one of these, picked at random, drops besides <see cref="DeathRewards"/>.</summary>
+    [DataField]
+    public List<EntProtoId> UniqueRewards = new();
+
     [ViewVariables]
     public EntityUid? Arena;
 

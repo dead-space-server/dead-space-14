@@ -27,7 +27,15 @@ public sealed partial class LavalandLegionHeadComponent : Component
     public EntityUid? Source;
 }
 
+/// <summary>
+/// On a corpse a head has raised a legion from (it cannot be raised twice) and on that legion, which carries
+/// the corpse inside and drops it once it dies.
+/// </summary>
 [RegisterComponent]
 public sealed partial class LavalandLegionInfestedComponent : Component
 {
+    public const string BodyContainerId = "legion_body";
+
+    [ViewVariables]
+    public EntityUid? Body;
 }

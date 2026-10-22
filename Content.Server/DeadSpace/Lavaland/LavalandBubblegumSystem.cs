@@ -1918,7 +1918,10 @@ public sealed class LavalandBubblegumSystem : EntitySystem
         }
     }
 
-    /// <summary>A line of blood across the runner's way, a little ahead of them: marked out now, risen a moment later.</summary>
+    /// <summary>
+    /// A line of blood across the runner's way, ahead of them by as much as they run while it is only marked, and a
+    /// second one on another side of them: marked out now, risen a moment later.
+    /// </summary>
     private void MarkBloodWall(
         LavalandBubblegumComponent bubblegum,
         LavalandBossArenaComponent arena,
@@ -1937,21 +1940,34 @@ public sealed class LavalandBubblegumSystem : EntitySystem
 
         direction = Vector2.Normalize(direction);
         var across = new Vector2(-direction.Y, direction.X);
-        var center = _transform.GetWorldPosition(player) + direction * bubblegum.BloodWallAhead;
+        var position = _transform.GetWorldPosition(player);
+
+        // Ahead by what they cover before it rises, and a little more: running on, they meet it standing.
+        var speed = body?.LinearVelocity.Length() ?? 0f;
+        var ahead = Math.Clamp(speed * (float) bubblegum.BloodWallWarning.TotalSeconds + bubblegum.BloodWallSpeedMargin,
+            bubblegum.BloodWallAhead, Math.Max(bubblegum.BloodWallAhead, bubblegum.BloodWallMaxAhead));
+        var center = position + direction * ahead;
+
         var gridXform = Transform(gridUid);
         var invMatrix = _transform.GetInvWorldMatrix(gridXform);
         var tiles = new List<Vector2i>();
+        MarkBloodWallLine(bubblegum, arena, gridUid, grid, invMatrix, center, across, tiles);
 
-        var half = bubblegum.BloodWallLength / 2f;
-        for (var step = -half; step <= half; step += 0.5f)
+        // The second side: left, right or behind, picked at random.
+        if (bubblegum.BloodWallSecondSide)
         {
-            var world = center + across * step;
-            var tile = _map.LocalToTile(gridUid, grid, new EntityCoordinates(gridUid, Vector2.Transform(world, invMatrix)));
-            if (tiles.Contains(tile) || !IsInsideInnerArena(arena, tile) || !IsFreeForBloodWall(gridUid, grid, tile))
-                continue;
-
-            tiles.Add(tile);
-            Spawn(bubblegum.BloodWallMarkPrototype, _map.GridTileToLocal(gridUid, grid, tile));
+            var side = _random.Next(3) switch
+            {
+                0 => across,
+                1 => -across,
+                _ => -direction,
+            };
+            // A side wall runs along the way, from the runner up to the wall ahead; the one behind runs across.
+            var sideCenter = side == -direction
+                ? position + side * bubblegum.BloodWallSideDistance
+                : position + direction * (ahead / 2f) + side * bubblegum.BloodWallSideDistance;
+            var sideLine = side == -direction ? across : direction;
+            MarkBloodWallLine(bubblegum, arena, gridUid, grid, invMatrix, sideCenter, sideLine, tiles);
         }
 
         if (tiles.Count == 0)
@@ -1959,6 +1975,30 @@ public sealed class LavalandBubblegumSystem : EntitySystem
 
         var soundTile = _map.LocalToTile(gridUid, grid, new EntityCoordinates(gridUid, Vector2.Transform(center, invMatrix)));
         bubblegum.PendingBloodWalls.Add((now + bubblegum.BloodWallWarning, tiles, soundTile));
+    }
+
+    /// <summary>Marks <see cref="LavalandBubblegumComponent.BloodWallLength"/> tiles along <paramref name="line"/>.</summary>
+    private void MarkBloodWallLine(
+        LavalandBubblegumComponent bubblegum,
+        LavalandBossArenaComponent arena,
+        EntityUid gridUid,
+        MapGridComponent grid,
+        Matrix3x2 invMatrix,
+        Vector2 center,
+        Vector2 line,
+        List<Vector2i> tiles)
+    {
+        var half = bubblegum.BloodWallLength / 2f;
+        for (var step = -half; step <= half; step += 0.5f)
+        {
+            var world = center + line * step;
+            var tile = _map.LocalToTile(gridUid, grid, new EntityCoordinates(gridUid, Vector2.Transform(world, invMatrix)));
+            if (tiles.Contains(tile) || !IsInsideInnerArena(arena, tile) || !IsFreeForBloodWall(gridUid, grid, tile))
+                continue;
+
+            tiles.Add(tile);
+            Spawn(bubblegum.BloodWallMarkPrototype, _map.GridTileToLocal(gridUid, grid, tile));
+        }
     }
 
     /// <summary>No wall of blood in a wall or on top of anyone: it would shut them in.</summary>

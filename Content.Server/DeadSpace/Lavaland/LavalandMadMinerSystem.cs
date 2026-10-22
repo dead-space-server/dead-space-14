@@ -208,13 +208,16 @@ public sealed class LavalandMadMinerSystem : EntitySystem
             else if (distance <= 9f && now >= miner.NextFeint)
                 Feint(uid, miner, target, now);
 
-            if (now >= miner.NextHook && distance <= 14f && CanHook(uid, target, 14f))
+            // Not mid-blink: the hook's retreat would be reckoned from where the blink is only leaving.
+            if (now >= miner.NextHook && distance <= 14f && !HasComp<ActiveBlinkDashComponent>(uid) &&
+                CanHook(uid, target, 14f))
             {
                 miner.NextHook = now + miner.HookCooldown;
                 if (_random.Prob(miner.HookAttackChance))
                     BeginHook(uid, miner, target, now);
             }
-            else if (now >= miner.NextShot && distance <= 16f)
+            // No shots of any kind on the move of a blink - only once it has landed (and HoldFire has run out).
+            else if (now >= miner.NextShot && distance <= 16f && !HasComp<ActiveBlinkDashComponent>(uid))
                 FirePattern(uid, miner, target, now);
 
             SendHud(uid, miner);
@@ -670,14 +673,21 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         var minerPosition = _transform.GetMapCoordinates(uid);
         var targetPosition = _transform.GetMapCoordinates(target);
         var retreat = minerPosition.Position - targetPosition.Position;
+        var current = retreat.Length();
         if (retreat.LengthSquared() < 0.01f)
             retreat = _random.NextAngle().ToVec();
-        var destination = new MapCoordinates(
-            targetPosition.Position + Vector2.Normalize(retreat) * miner.HookRetreatDistance,
-            targetPosition.MapId);
-        var distance = Vector2.Distance(minerPosition.Position, destination.Position);
-        var speed = Math.Max(28f, distance / Math.Max(0.05f, (float) miner.BlinkDuration.TotalSeconds));
-        _blink.TryStartDash(uid, destination, speed, miner.BlinkDuration, miner.BlinkStallTimeout, miner.BlinkSound);
+        // Only ever back, away from the target: already farther than the retreat distance, it stays where it is
+        // instead of jumping in towards the players.
+        if (current < miner.HookRetreatDistance - 0.5f)
+        {
+            var destination = new MapCoordinates(
+                targetPosition.Position + Vector2.Normalize(retreat) * miner.HookRetreatDistance,
+                targetPosition.MapId);
+            var distance = Vector2.Distance(minerPosition.Position, destination.Position);
+            var speed = Math.Max(28f, distance / Math.Max(0.05f, (float) miner.BlinkDuration.TotalSeconds));
+            if (_blink.TryStartDash(uid, destination, speed, miner.BlinkDuration, miner.BlinkStallTimeout, miner.BlinkSound))
+                HoldFire(miner, now);
+        }
 
         var impactCenter = _transform.GetWorldPosition(target);
         foreach (var session in _players.Sessions)

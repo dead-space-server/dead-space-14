@@ -425,6 +425,31 @@
     thresholds:
       0: Alive
       500: Dead
+  # DS14-start: gibbed by blunt only well past death - the default 400 tore it apart while it still lived.
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Blunt
+        damage: 1000
+      behaviors:
+      - !type:GibBehavior { }
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Heat
+        damage: 1500
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawnInContainer: true
+        spawn:
+          Ash:
+            min: 1
+            max: 1
+      - !type:BurnBodyBehavior
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MeatLaserImpact
+  # DS14-end
   - type: MeleeWeapon
     damage:
       types:
@@ -471,6 +496,31 @@
     thresholds:
       0: Alive
       1000: Dead
+  # DS14-start: gibbed by blunt only well past death - the default 400 tore it apart while it still lived.
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Blunt
+        damage: 2000
+      behaviors:
+      - !type:GibBehavior { }
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Heat
+        damage: 1500
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawnInContainer: true
+        spawn:
+          Ash:
+            min: 1
+            max: 1
+      - !type:BurnBodyBehavior
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MeatLaserImpact
+  # DS14-end
   - type: MeleeWeapon
     damage:
       types:

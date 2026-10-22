@@ -15,6 +15,11 @@
     blacklist:
       tags:
       - Catwalk
+  # DS14-start: like the lava - those who walk on air (the flight potion) and the lavaland fauna are not set alight.
+  - type: StepTriggerCollisionFilter
+    ignoreCanMoveInAir: true
+    ignoreLavalandFauna: true
+  # DS14-end
   - type: TileEntityEffect
     effects:
     - !type:Flammable

@@ -3,6 +3,8 @@
   name: job-name-iaa-officer
   description: job-description-iaa-officer
   playTimeTracker: JobIAAOfficer
+  # Withdrawn: on no station, and not offered in the character editor or late join.
+  setPreference: false
   requirements:
     - !type:DepartmentTimeRequirement
       department: Law

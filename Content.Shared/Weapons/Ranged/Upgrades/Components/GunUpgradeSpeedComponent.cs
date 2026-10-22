@@ -13,4 +13,13 @@ public sealed partial class GunUpgradeSpeedComponent : Component
     /// </summary>
     [DataField]
     public float Coefficient = 1;
+
+    // DS14-start
+    /// <summary>
+    /// Multiplier for how long the projectile flies (<c>TimedDespawn</c>): the range grows without the speed,
+    /// too fast a projectile skips through walls and mobs.
+    /// </summary>
+    [DataField]
+    public float LifetimeCoefficient = 1;
+    // DS14-end
 }

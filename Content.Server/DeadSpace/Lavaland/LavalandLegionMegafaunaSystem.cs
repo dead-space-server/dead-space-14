@@ -819,6 +819,7 @@ public sealed class LavalandLegionMegafaunaSystem : EntitySystem
         boss.SelectedMusic = old.SelectedMusic;
         boss.DeathSound = old.DeathSound;
         boss.DeathRewards = new(old.DeathRewards);
+        boss.UniqueRewards = new(old.UniqueRewards);
         boss.DeathRewardsSpawned = old.DeathRewardsSpawned;
         boss.Arena = old.Arena;
 

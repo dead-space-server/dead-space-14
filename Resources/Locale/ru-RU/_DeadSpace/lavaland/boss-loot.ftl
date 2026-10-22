@@ -27,3 +27,5 @@ lavaland-legionnaire-regrow = Из позвоночника { THE($elite) } со
 lavaland-legionnaire-bonfire = { CAPITALIZE(THE($elite)) } призывает костёр из костей!
 lavaland-legionnaire-swap = { CAPITALIZE(THE($elite)) } растекается в груду костей и встаёт из костра!
 lavaland-legionnaire-smoke = { CAPITALIZE(THE($elite)) } извергает дым!
+
+lavaland-voice-of-god-cooldown = Голос ещё не восстановился: { $seconds } сек.

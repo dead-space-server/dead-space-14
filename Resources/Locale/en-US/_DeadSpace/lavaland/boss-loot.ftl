@@ -27,3 +27,5 @@ lavaland-legionnaire-regrow = The top of { THE($elite) }'s spine leaks a black l
 lavaland-legionnaire-bonfire = { CAPITALIZE(THE($elite)) } summons a bonfire of bones!
 lavaland-legionnaire-swap = { CAPITALIZE(THE($elite)) } melts into a pile of bones and rises from the bonfire!
 lavaland-legionnaire-smoke = { CAPITALIZE(THE($elite)) } spews smoke!
+
+lavaland-voice-of-god-cooldown = Your voice has not recovered yet: { $seconds } s.

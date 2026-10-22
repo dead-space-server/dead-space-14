@@ -33,6 +33,15 @@ public sealed partial class DamagedSiliconAccentComponent : Component
     [DataField]
     public FixedPoint2? DamageAtMaxCorruption;
 
+    // DS14-start
+    /// <summary>
+    ///     Below this total damage speech is not corrupted at all; from it the probability grows linearly up to
+    ///     <see cref="DamageAtMaxCorruption" />.
+    /// </summary>
+    [DataField]
+    public FixedPoint2 DamageAtCorruptionStart = FixedPoint2.Zero;
+    // DS14-end
+
     /// <summary>
     ///     Enable charge level corruption effects
     /// </summary>

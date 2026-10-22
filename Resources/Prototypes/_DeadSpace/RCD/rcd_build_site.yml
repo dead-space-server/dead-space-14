@@ -1,0 +1,10 @@
+- type: entity
+  id: RcdBuildSite
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: RcdBuildSite

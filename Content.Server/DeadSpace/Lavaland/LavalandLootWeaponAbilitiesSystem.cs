@@ -3,6 +3,7 @@
 using System.Numerics;
 using Content.Server.DeadSpace.Blink;
 using Content.Server.DeadSpace.Lavaland.Components;
+using Content.Shared.DeadSpace.Lavaland.Components;
 using Content.Server.Gatherable;
 using Content.Server.Gatherable.Components;
 using Content.Server.Mind;
@@ -14,6 +15,7 @@ using Content.Shared.Examine;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Movement.Components;
 using Content.Shared.Throwing;
+using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
@@ -73,7 +75,7 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
         SubscribeLocalEvent<LavalandSoulscytheComponent, MindAddedMessage>(OnScytheMindAdded);
         SubscribeLocalEvent<LavalandSoulscytheComponent, MeleeHitEvent>(OnScytheHit);
         SubscribeLocalEvent<LavalandSoulscytheComponent, RefreshMovementSpeedModifiersEvent>(OnScytheSpeed);
-        SubscribeLocalEvent<LavalandSoulscytheComponent, GettingPickedUpAttemptEvent>(OnScythePickupAttempt);
+        SubscribeLocalEvent<LavalandSoulscytheComponent, InteractHandEvent>(OnScytheGrabbed);
         SubscribeLocalEvent<LavalandSoulscytheComponent, ExaminedEvent>(OnScytheExamined);
         SubscribeLocalEvent<LavalandSoulscytheComponent, AttackAttemptEvent>(OnScytheAttackAttempt);
         SubscribeLocalEvent<LavalandBossComponent, DamageModifyEvent>(OnBossDamageModify);
@@ -230,6 +232,9 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
 
         ent.Comp.Possessed = true;
         ent.Comp.Awakening = false;
+        var bound = EnsureComp<LavalandSoulscytheBoundComponent>(ent);
+        bound.Master = ent.Comp.Master;
+        Dirty(ent, bound);
         _mind.MakeSentient(ent);
         _appearance.SetData(ent, LavalandArtifactVisuals.Active, true);
         _movement.RefreshMovementSpeedModifiers(ent);
@@ -378,6 +383,7 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
             _mind.TransferTo(mindId, null, createGhost: true);
 
         EntityManager.RemoveComponents(ent, ent.Comp.AwakenComponents);
+        RemComp<LavalandSoulscytheBoundComponent>(ent);
         ent.Comp.Possessed = false;
         ent.Comp.Awakening = false;
         ent.Comp.OutOfRange = false;
@@ -388,10 +394,23 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("lavaland-soulscythe-sleeps"), ent, PopupType.Medium);
     }
 
-    private void OnScythePickupAttempt(Entity<LavalandSoulscytheComponent> ent, ref GettingPickedUpAttemptEvent args)
+    /// <summary>
+    /// Somebody else grabs the awakened scythe: it will not be picked up (see LavalandSoulscytheBoundSystem) and
+    /// slashes the hand that tried.
+    /// </summary>
+    private void OnScytheGrabbed(Entity<LavalandSoulscytheComponent> ent, ref InteractHandEvent args)
     {
-        if (ent.Comp.Possessed && ent.Comp.Master is { } master && args.User != master)
-            args.Cancel();
+        if (!ent.Comp.Possessed || ent.Comp.Master is not { } master || args.User == master)
+            return;
+
+        args.Handled = true;
+        var now = _timing.CurTime;
+        if (now < ent.Comp.NextGrabPunish)
+            return;
+
+        ent.Comp.NextGrabPunish = now + ent.Comp.GrabPunishCooldown;
+        _damageable.TryChangeDamage(args.User, ent.Comp.GrabPunishDamage, origin: ent);
+        _popup.PopupEntity(Loc.GetString("lavaland-soulscythe-grab-punish"), args.User, args.User, PopupType.MediumCaution);
     }
 
     #endregion

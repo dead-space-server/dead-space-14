@@ -97,6 +97,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
     [Dependency] private readonly Robust.Shared.Containers.SharedContainerSystem _containers = default!;
     [Dependency] private readonly Content.Shared.Stacks.SharedStackSystem _stacks = default!;
     [Dependency] private readonly Content.Shared.Storage.EntitySystems.SharedStorageSystem _storage = default!;
+    [Dependency] private readonly Content.Shared.Chemistry.EntitySystems.SharedSolutionContainerSystem _solutionContainer = default!;
 
     private static readonly TimeSpan CheckInterval = TimeSpan.FromSeconds(1);
     private static readonly TimeSpan HudInterval = TimeSpan.FromSeconds(0.5);
@@ -1185,11 +1186,19 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             _stacks.SetCount((clone, cloneStack), stack.Count);
         }
 
+        CopySolutions(item, clone);
+
         if (depth >= CloneDepth || !TryComp<Robust.Shared.Containers.ContainerManagerComponent>(item, out var manager))
             return clone;
 
+        TryComp<Content.Shared.Storage.StorageComponent>(item, out var originalStorage);
         foreach (var container in _containers.GetAllContainers(item, manager))
         {
+            // The solutions live in containers of their own: they are copied above, as they are.
+            var containerId = container.ID;
+            if (containerId.StartsWith(SolutionContainerPrefix, StringComparison.Ordinal))
+                continue;
+
             if (!_containers.TryGetContainer(clone, container.ID, out var target))
                 continue;
 
@@ -1206,17 +1215,48 @@ public sealed class LavalandSecretBossSystem : EntitySystem
                     continue;
 
                 var innerClone = CloneItem(inner, at, depth + 1);
-                // Into a bag through the storage (it finds a place in the grid); failing that, straight in.
-                var inserted = TryComp<Content.Shared.Storage.StorageComponent>(clone, out var storage) &&
-                               target == storage.Container &&
-                               _storage.Insert(clone, innerClone, out _, storageComp: storage, playSound: false,
+                // Into a bag at the very place it has in the original's grid, turned the same way: anywhere else the
+                // bag got shuffled and what no longer fitted fell out. Failing that, anywhere in the grid, then
+                // straight in.
+                var inserted = false;
+                if (TryComp<Content.Shared.Storage.StorageComponent>(clone, out var storage) &&
+                    target == storage.Container)
+                {
+                    inserted = originalStorage != null &&
+                               originalStorage.StoredItems.TryGetValue(inner, out var location) &&
+                               _storage.InsertAt((clone, storage), innerClone, location, out _, playSound: false,
                                    stackAutomatically: false);
+                    inserted |= !inserted && _storage.Insert(clone, innerClone, out _, storageComp: storage,
+                        playSound: false, stackAutomatically: false);
+                }
+
                 if (!inserted && !_containers.Insert(innerClone, target, force: true))
                     QueueDel(innerClone);
             }
         }
 
         return clone;
+    }
+
+    private const string SolutionContainerPrefix = "solution@";
+
+    /// <summary>
+    /// The original's solutions, as they are, in the copy: a used medipen or a half-eaten pill stays so, and a full
+    /// one is not spawned empty.
+    /// </summary>
+    private void CopySolutions(EntityUid item, EntityUid clone)
+    {
+        if (!HasComp<Content.Shared.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent>(item))
+            return;
+
+        foreach (var (name, solution) in _solutionContainer.EnumerateSolutions(item))
+        {
+            if (name == null || !_solutionContainer.TryGetSolution(clone, name, out var cloneSolution, out _))
+                continue;
+
+            _solutionContainer.RemoveAllSolution(cloneSolution.Value);
+            _solutionContainer.TryAddSolution(cloneSolution.Value, solution.Comp.Solution.Clone());
+        }
     }
 
     /// <summary>The dream is over: every player back in his own body by the pit, the copies and their things gone.</summary>

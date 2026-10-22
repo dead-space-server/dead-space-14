@@ -66,12 +66,27 @@
       board: [ DoorElectronicsBlueShield ]
 
 - type: entity
+  parent: AirlockCentralCommand
+  id: AirlockBlueShieldLocked
+  name: шлюз
+  description: Он открывается, он закрывается и он может вас раздавить.
+  suffix: Офицер "Синий Щит", Закрыт
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Standard/blue_shield.rsi
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsBlueShield ]
+
+- type: entity
   parent: AirlockCentralCommandGlass
   id: AirlockBlueShieldGlassLocked
   name: стеклянный шлюз
   description: Он открывается, он закрывается и он может вас раздавить.
   suffix: Офицер "Синий Щит", Закрыт
   components:
+  - type: Sprite
+    sprite: _DeadSpace/Structures/Doors/Airlocks/Glass/blue_shield.rsi
   - type: ContainerFill
     containers:
       board: [ DoorElectronicsBlueShield ]

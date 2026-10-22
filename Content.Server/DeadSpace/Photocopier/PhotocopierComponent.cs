@@ -107,6 +107,12 @@ public sealed partial class PhotocopierComponent : Component
     [ViewVariables]
     public int MaxTonerAmount = 30;
 
+    /// <summary>
+    /// The most copies one print request may ask for. The window allows 1 to 6; anything else is a forged request.
+    /// </summary>
+    [DataField]
+    public int MaxCopiesPerPrint = 6;
+
     [DataField]
     public SoundSpecifier TonerRestock = new SoundPathSpecifier("/Audio/_DeadSpace/Machines/vending_restock_done_cuted.ogg");
 }

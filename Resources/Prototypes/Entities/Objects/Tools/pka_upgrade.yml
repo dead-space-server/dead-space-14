@@ -68,7 +68,10 @@
     tags: [ GunUpgradeRange ]
     examineText: gun-upgrade-examine-text-range
   - type: GunUpgradeSpeed
-    coefficient: 1.5
+    # DS14-start: a longer flight instead of a faster one - too fast a bolt skipped through walls and mobs.
+    coefficient: 1
+    lifetimeCoefficient: 1.5
+    # DS14-end
 
 - type: entity
   id: PKAUpgradeFireRate

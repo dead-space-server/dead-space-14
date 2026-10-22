@@ -145,7 +145,9 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
         // A wide margin: the blast spreads a few tiles past its visual radius.
         var nearOutpost = IsNearOutpost(center, ent.Comp.Radius + 6f);
 
-        foreach (var victim in _lookup.GetEntitiesInRange(center, ent.Comp.Radius))
+        // Only what lies or stands in the open: the default lookup also reached into bags and backpacks, and the
+        // blast broke everything carried in them.
+        foreach (var victim in _lookup.GetEntitiesInRange(center, ent.Comp.Radius, LookupFlags.Uncontained))
         {
             if (victim == ent.Owner)
                 continue;
@@ -162,9 +164,15 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
             _damage.TryChangeDamage(victim, damage, true, origin: shooter);
         }
 
-        // By the outpost only the blow itself above: no explosion that would tear at its walls.
+        // By the outpost only the blow itself above and the look of the blast: no explosion that would tear at its walls.
         if (nearOutpost)
         {
+            _explosion.SpawnExplosionVisual(
+                center,
+                "LavalandPkaVisual",
+                ent.Comp.ExplosionIntensity,
+                ent.Comp.ExplosionSlope,
+                ent.Comp.ExplosionMaxIntensity);
             _audio.PlayPvs(OutpostBlastSound, _transform.ToCoordinates(center));
             QueueDel(ent.Owner);
             return;

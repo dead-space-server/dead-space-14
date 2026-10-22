@@ -82,3 +82,177 @@
   order: 7
   quiet: true
   field: "#1c2230"
+
+- type: pdaArcadeGame
+  id: deck
+  name: pda-arcade-game-deck
+  order: 5
+  floor: Tiles/steel.png
+  sprites:
+    wall:
+      sprite: Structures/Walls/solid.rsi
+      state: full
+    gun:
+      sprite: Objects/Weapons/Guns/Battery/laser_retro.rsi
+      state: icon
+    carp:
+      sprite: Mobs/Aliens/Carps/space.rsi
+      state: icon
+    tick:
+      sprite: Mobs/Aliens/Xenos/spacetick.rsi
+      state: icon
+    bot:
+      sprite: Mobs/Aliens/hivebot.rsi
+      state: basic
+    meat:
+      sprite: Structures/Walls/meat.rsi
+      state: full
+    coin:
+      sprite: Objects/Misc/coins.rsi
+      state: coin_gold
+    poster:
+      sprite: Structures/Wallmounts/posters.rsi
+      state: poster1_legit
+    chair:
+      sprite: Structures/Furniture/chairs.rsi
+      state: chair
+    plant:
+      sprite: Structures/Furniture/potted_plants.rsi
+      state: plant-01
+    table:
+      sprite: Structures/Furniture/Tables/generic.rsi
+      state: full
+  noises:
+    shoot:
+      path: /Audio/Weapons/Guns/Gunshots/laser.ogg
+  numbers:
+    shootVolume: -8
+
+- type: pdaArcadeGame
+  id: road
+  name: pda-arcade-game-road
+  order: 8
+  floor: Tiles/grass.png
+  sprites:
+    car:
+      sprite: Objects/Vehicles/atv.rsi
+      state: vehicle
+    fuel:
+      sprite: Objects/Tanks/emergency.rsi
+      state: icon
+    truck:
+      sprite: Structures/Storage/Crates/generic.rsi
+      state: icon
+  obstacles:
+  - sprite: Objects/Vehicles/secway.rsi
+    state: vehicle
+  - sprite: Objects/Vehicles/janicart.rsi
+    state: vehicle
+  - sprite: Objects/Vehicles/motorbike.rsi
+    state: vehicle
+  noises:
+    ambient:
+      path: /Audio/Effects/shuttle_thruster.ogg
+    crash:
+      path: /Audio/Effects/hit_kick.ogg
+    fuel:
+      path: /Audio/Effects/Arcade/player_charge.ogg
+    pass:
+      path: /Audio/Effects/Arcade/win.ogg
+  numbers:
+    ambientVolume: -24
+    crashVolume: -8
+    fuelVolume: -10
+    passVolume: -6
+    carSize: 64
+    truckSize: 84
+    hitX: 0.16
+    hitY: 0.11
+    milestone: 1000
+    passScore: 50
+    fuelFast: 9
+    fuelCruise: 5
+    startX: 0.5
+    startSpeed: 0.35
+    startFuel: 100
+    startSpawn: 0.4
+    spinSteer: 1.4
+    spinStop: 0.15
+    steer: 0.85
+    laneMin: 0.12
+    laneMax: 0.88
+    brake: -0.45
+    accel: 0.55
+    cruise: 0.12
+    speedMin: 0.15
+    speedFast: 1.35
+    speedCruise: 0.72
+    scroll: 140
+    edge: 0.16
+    edgeFuel: 28
+    resetSpeed: 0.3
+    trafficPace: 0.85
+    playerY: 0.78
+    fuelGain: 28
+    fuelScore: 100
+    spinForce: 1.1
+    crashFuel: 8
+    passY: 1.05
+    lane0: 0.22
+    laneStep: 0.28
+    spawnY: -0.08
+    paceMin: 0.15
+    paceSpan: 0.25
+    spawnMin: 0.35
+    spawnBase: 0.95
+    spawnTighten: 0.0004
+    roadLeft: 0.12
+    roadSpan: 0.76
+
+- type: pdaArcadeGame
+  id: pong
+  name: pda-arcade-game-pong
+  order: 12
+  together: true
+  numbers:
+    ballStart: 0.28
+    ballLift: 0.18
+    speedCap: 1.15
+    speedGain: 0.05
+    paddle: 0.85
+    rallyBase: 0.28
+    rallyStep: 0.035
+    liftBase: 0.16
+    liftStep: 0.08
+    bump: 0.02
+    win: 5
+    wall: 0.04
+    goal: 0.08
+    reach: 0.14
+    padMin: 0.12
+    padMax: 0.88
+
+- type: pdaArcadeGame
+  id: chess
+  name: pda-arcade-game-chess
+  order: 20
+  together: true
+  sprites:
+    pawn:
+      sprite: Objects/Fun/figurines.rsi
+      state: passenger
+    king:
+      sprite: Objects/Fun/figurines.rsi
+      state: captain
+    queen:
+      sprite: Objects/Fun/figurines.rsi
+      state: hos
+    bishop:
+      sprite: Objects/Fun/figurines.rsi
+      state: cmo
+    rook:
+      sprite: Objects/Fun/figurines.rsi
+      state: hop
+    knight:
+      sprite: Mobs/Animals/cow.rsi
+      state: cow

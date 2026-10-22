@@ -131,9 +131,30 @@ public sealed partial class LavalandBubblegumComponent : Component
     [DataField]
     public int BloodWallLength = 7;
 
-    /// <summary>How far ahead of the runner (tiles) the wall rises.</summary>
+    /// <summary>How far ahead of the runner (tiles) the wall rises, at the least.</summary>
     [DataField]
     public float BloodWallAhead = 2.5f;
+
+    /// <summary>
+    /// Ahead of a running player the wall goes as far as they get while it is only marked
+    /// (<see cref="BloodWallWarning"/>) plus this many tiles: they cannot just run past the marks.
+    /// </summary>
+    [DataField]
+    public float BloodWallSpeedMargin = 1.5f;
+
+    /// <summary>The wall ahead goes no farther than this (tiles), however fast the runner.</summary>
+    [DataField]
+    public float BloodWallMaxAhead = 9f;
+
+    /// <summary>
+    /// A second wall on one more side picked at random - to the left, to the right or behind - this many tiles off:
+    /// with the one ahead, a corner of a box around the runner.
+    /// </summary>
+    [DataField]
+    public float BloodWallSideDistance = 2.5f;
+
+    [DataField]
+    public bool BloodWallSecondSide = true;
 
     [DataField]
     public SoundSpecifier? BloodWallSound = new SoundPathSpecifier("/Audio/_DeadSpace/Necromorfs/TheCircle/scout_blink.ogg");

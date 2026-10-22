@@ -51,7 +51,7 @@ public abstract class SharedAttachmentSystem : EntitySystem
     /// </summary>
     private void OnShotAttempted(Entity<AttachmentHolderComponent> ent, ref ShotAttemptedEvent args)
     {
-        if (args.Cancelled ||
+        if (args.Cancelled || !ent.Comp.BayonetOnLeftClick ||
             GetSlotItem(ent, ent.Comp.BayonetSlot) == null ||
             args.Used.Comp.Target is not { } target ||
             target == args.User ||

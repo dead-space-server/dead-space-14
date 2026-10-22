@@ -2,6 +2,7 @@
 
 using System.Numerics;
 using Content.Shared.DeadSpace.Movement.Components;
+using Content.Shared.Doors.Components;
 using Content.Shared.Movement.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Physics;
@@ -95,8 +96,14 @@ public abstract partial class SharedMoverController
                 }
                 else if (now - step.LastProgress > step.StuckTime)
                 {
-                    // Bumped into something: back to the center of the tile we stand on.
-                    BeginTileStep(step, xform, TileCenter(position), now, TileCenter(position));
+                    // Bumped into something: back to the center of the tile we stand on - unless the body cannot
+                    // stand there (a railing along the edge leaves no room): then stop where we are, and a held
+                    // direction starts a fresh step below instead of pushing at the railing for good.
+                    var here = TileCenter(position);
+                    if (CanStandOnTileCenter(ent, xform, here))
+                        BeginTileStep(step, xform, here, now, here);
+                    else
+                        step.Stepping = false;
                 }
             }
         }
@@ -115,9 +122,9 @@ public abstract partial class SharedMoverController
 
         if (!step.Stepping && direction == Vector2.Zero)
         {
-            // Idle: settle on the center of the current tile.
+            // Idle: settle on the center of the current tile, if the body fits there.
             var center = TileCenter(position);
-            if ((center - position).Length() > TileStepArriveDistance)
+            if ((center - position).Length() > TileStepArriveDistance && CanStandOnTileCenter(ent, xform, center))
                 BeginTileStep(step, xform, center, now, center);
         }
 
@@ -184,8 +191,11 @@ public abstract partial class SharedMoverController
         return false;
     }
 
+    /// <summary>Half the size of the middle of a tile a step goes through.</summary>
+    private const float TileStepCenterHalfSize = 0.2f;
+
     /// <summary>
-    /// Something anchored and solid for this mob (a wall, a window, a closed door) stands on the tile.
+    /// Something anchored and solid for this mob (a wall, a window) fills the middle of the tile.
     /// Anchored things are the same on the client and the server, so both pick the same step.
     /// </summary>
     private bool IsTileStepBlocked(TransformComponent xform, PhysicsComponent physics, Vector2 localTarget)
@@ -195,9 +205,14 @@ public abstract partial class SharedMoverController
 
         var gridUid = xform.GridUid.Value;
         var tile = new Vector2i((int) MathF.Floor(localTarget.X), (int) MathF.Floor(localTarget.Y));
+        var middle = Box2.CenteredAround(TileCenter(localTarget), new Vector2(TileStepCenterHalfSize * 2f));
         var anchored = _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
         while (anchored.MoveNext(out var other))
         {
+            // A door is stepped into: the bump opens it, and a locked one stops the step like any obstacle.
+            if (HasComp<DoorComponent>(other))
+                continue;
+
             if (!PhysicsQuery.TryComp(other, out var otherBody) || !otherBody.CanCollide || !otherBody.Hard)
                 continue;
 
@@ -206,17 +221,77 @@ public abstract partial class SharedMoverController
 
             // Only a hard fixture in our way blocks: a bear trap is hard as an item but its trigger on the
             // impassable layer is not, and the body's layer is the union of all of its fixtures.
-            if (!TileStepFixturesQuery.TryComp(other, out var fixtures))
+            if (!TileStepFixturesQuery.TryComp(other, out var fixtures) || !XformQuery.TryComp(other, out var otherXform))
                 return true;
 
+            // And only one across the middle of the tile: a wall lamp, a camera or a railing along an edge leaves
+            // the way free. Overlap, not a touch: a camera's corner ends right on the middle's edge.
+            var transform = new Transform(otherXform.LocalPosition, otherXform.LocalRotation);
             foreach (var fixture in fixtures.Fixtures.Values)
             {
-                if (fixture.Hard && (fixture.CollisionLayer & physics.CollisionMask) != 0)
+                if (!fixture.Hard || (fixture.CollisionLayer & physics.CollisionMask) == 0)
+                    continue;
+
+                var overlap = fixture.Shape.ComputeAABB(transform, 0).Intersect(middle);
+                if (overlap.Width > 0.01f && overlap.Height > 0.01f)
                     return true;
             }
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// The mob's own body fits on the tile center: nothing anchored there (a railing along the edge) would overlap it.
+    /// </summary>
+    private bool CanStandOnTileCenter(EntityUid uid, TransformComponent xform, Vector2 center)
+    {
+        if (xform.ParentUid != xform.GridUid || !MapGridQuery.TryComp(xform.GridUid, out var grid) ||
+            !TileStepFixturesQuery.TryComp(uid, out var ownFixtures) || !PhysicsQuery.TryComp(uid, out var physics))
+        {
+            return true;
+        }
+
+        var bodyTransform = new Transform(center, xform.LocalRotation);
+        Box2? body = null;
+        foreach (var fixture in ownFixtures.Fixtures.Values)
+        {
+            if (!fixture.Hard)
+                continue;
+
+            var box = fixture.Shape.ComputeAABB(bodyTransform, 0);
+            body = body is { } so ? so.Union(box) : box;
+        }
+
+        if (body is not { } bodyBox)
+            return true;
+
+        var gridUid = xform.GridUid.Value;
+        var tile = new Vector2i((int) MathF.Floor(center.X), (int) MathF.Floor(center.Y));
+        var anchored = _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
+        while (anchored.MoveNext(out var other))
+        {
+            if (other == uid || HasComp<DoorComponent>(other) ||
+                !PhysicsQuery.TryComp(other, out var otherBody) || !otherBody.CanCollide || !otherBody.Hard ||
+                (otherBody.CollisionLayer & physics.CollisionMask) == 0 ||
+                !TileStepFixturesQuery.TryComp(other, out var fixtures) || !XformQuery.TryComp(other, out var otherXform))
+            {
+                continue;
+            }
+
+            var otherTransform = new Transform(otherXform.LocalPosition, otherXform.LocalRotation);
+            foreach (var fixture in fixtures.Fixtures.Values)
+            {
+                if (!fixture.Hard || (fixture.CollisionLayer & physics.CollisionMask) == 0)
+                    continue;
+
+                var overlap = fixture.Shape.ComputeAABB(otherTransform, 0).Intersect(bodyBox);
+                if (overlap.Width > 0.01f && overlap.Height > 0.01f)
+                    return false;
+            }
+        }
+
+        return true;
     }
 
     private static void BeginTileStep(TileStepMovementComponent step, TransformComponent xform, Vector2 target, TimeSpan now,

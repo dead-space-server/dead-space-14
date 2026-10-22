@@ -262,6 +262,17 @@ public sealed partial class LavalandPandoraComponent : Component
     [DataField]
     public EntProtoId TelegraphVisual = "LavalandHierophantTelegraph";
 
+    /// <summary>Marks the safe middle of the box attack, so it does not look like one more danger.</summary>
+    [DataField]
+    public EntProtoId? SafeVisual = "LavalandPandoraSafeTelegraph";
+
+    /// <summary>
+    /// The box attack is laid where the target will be when it goes off, at most this many tiles ahead:
+    /// laid on the spot, a running player had already left it and had to turn back into the box.
+    /// </summary>
+    [DataField]
+    public float BoxLead = 2f;
+
     [DataField]
     public DamageSpecifier BlastDamage = new();
 

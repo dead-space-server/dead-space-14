@@ -25,12 +25,12 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Stunnable;
+using Content.Shared.Throwing;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
-using Robust.Shared.Physics.Components;
-using Robust.Shared.Physics.Systems;
 using Robust.Shared.Random;
+using Robust.Shared.Spawners;
 using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Lavaland;
@@ -56,10 +56,10 @@ public sealed class LavalandBossLootSystem : EntitySystem
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoid = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly StationSpawningSystem _spawning = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _mobs = new();
@@ -69,6 +69,7 @@ public sealed class LavalandBossLootSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<LavalandMayhemBottleComponent, UseInHandEvent>(OnMayhem);
+        SubscribeLocalEvent<LavalandMayhemAffectedComponent, ComponentShutdown>(OnMayhemShutdown);
         SubscribeLocalEvent<LavalandAnomalousCrystalComponent, InteractHandEvent>(OnCrystalTouch);
         SubscribeLocalEvent<LavalandAnomalousCrystalComponent, ExaminedEvent>(OnCrystalExamined);
         SubscribeLocalEvent<LavalandVoiceOfGodItemComponent, UseInHandEvent>(OnVoiceItemUse);
@@ -151,6 +152,8 @@ public sealed class LavalandBossLootSystem : EntitySystem
 
         var weapon = Spawn(bottle.Weapon, Transform(target).Coordinates);
         EnsureComp<UnremoveableComponent>(weapon);
+        // It goes on its own too: a gibbed berserker drops it, and nothing would ever take it away then.
+        EnsureComp<TimedDespawnComponent>(weapon).Lifetime = (float) bottle.Duration.TotalSeconds;
         _hands.PickupOrDrop(target, weapon);
 
         if (bottle.Reagent is { } reagent)
@@ -165,10 +168,15 @@ public sealed class LavalandBossLootSystem : EntitySystem
 
     private void EndMayhem(EntityUid target)
     {
-        if (TryComp<LavalandMayhemAffectedComponent>(target, out var affected) && affected.Weapon is { } weapon)
-            QueueDel(weapon);
         RemComp<LavalandMayhemAffectedComponent>(target);
         _popup.PopupEntity(Loc.GetString("lavaland-mayhem-end"), target, target);
+    }
+
+    /// <summary>The frenzy is over, whatever ended it (time, death, the body gone): the weapon goes with it.</summary>
+    private void OnMayhemShutdown(Entity<LavalandMayhemAffectedComponent> ent, ref ComponentShutdown args)
+    {
+        if (ent.Comp.Weapon is { } weapon && !TerminatingOrDeleted(weapon))
+            QueueDel(weapon);
     }
 
     #endregion
@@ -299,7 +307,7 @@ public sealed class LavalandBossLootSystem : EntitySystem
     private void OnVoiceSpoke(Entity<LavalandVoiceOfGodComponent> ent, ref EntitySpokeEvent args)
     {
         var now = _timing.CurTime;
-        if (now < ent.Comp.NextCommand || args.ObfuscatedMessage != null)
+        if (args.ObfuscatedMessage != null)
             return;
 
         // What was said, before any accent mangled it: a unathi hissing an order still gives it.
@@ -307,7 +315,7 @@ public sealed class LavalandBossLootSystem : EntitySystem
         LavalandVoiceCommand? command = null;
         foreach (var candidate in ent.Comp.Commands)
         {
-            if (candidate.Words.Any(word => message.Contains(word)))
+            if (candidate.Words.Any(word => ContainsWord(message, word)))
             {
                 command = candidate;
                 break;
@@ -316,6 +324,14 @@ public sealed class LavalandBossLootSystem : EntitySystem
 
         if (command == null)
             return;
+
+        // An order given too soon: the speaker learns how long the voice still needs.
+        if (now < ent.Comp.NextCommand)
+        {
+            var left = (int) Math.Ceiling((ent.Comp.NextCommand - now).TotalSeconds);
+            _popup.PopupEntity(Loc.GetString("lavaland-voice-of-god-cooldown", ("seconds", left)), ent.Owner, ent.Owner);
+            return;
+        }
 
         ent.Comp.NextCommand = now + command.Cooldown;
         if (ent.Comp.Sound != null)
@@ -329,21 +345,48 @@ public sealed class LavalandBossLootSystem : EntitySystem
             if (mob.Owner == ent.Owner || _mobState.IsDead(mob, mob.Comp))
                 continue;
 
+            // Frozen on the spot, still standing: knocking down is the kneel command's job.
             if (command.Stun > TimeSpan.Zero)
-                _stun.TryUpdateParalyzeDuration(mob, command.Stun);
+                _stun.TryUpdateStunDuration(mob.Owner, command.Stun);
             if (command.Knockdown > TimeSpan.Zero)
                 _stun.TryKnockdown(mob.Owner, command.Knockdown);
             if (command.Damage is { } damage)
                 _damageable.TryChangeDamage(mob.Owner, damage, true, origin: ent);
-            if (command.Repel > 0f && TryComp<PhysicsComponent>(mob, out var physics))
+            // Thrown like the clown's push horn does it: fast, and with the floor's friction made up for, so they
+            // really land RepelDistance away - a slow throw was eaten by a mob's own friction within a tile or two.
+            if (command.Repel > 0f && command.RepelDistance > 0f)
             {
                 var away = _transform.GetWorldPosition(mob) - origin;
                 if (away.LengthSquared() > 0.01f)
-                    _physics.SetLinearVelocity(mob, Vector2.Normalize(away) * command.Repel, body: physics);
+                {
+                    _throwing.TryThrow(mob.Owner, Vector2.Normalize(away) * command.RepelDistance, command.Repel, ent.Owner,
+                        pushbackRatio: 0f, compensateFriction: true, recoil: false, doSpin: false);
+                }
             }
         }
 
         _adminLog.Add(LogType.Action, LogImpact.Medium, $"{ToPrettyString(ent.Owner):user} used the voice of god: {args.Message}");
+    }
+
+    /// <summary>
+    /// The word on its own, not inside another one: "гори" must not go off on "горит".
+    /// </summary>
+    private static bool ContainsWord(string message, string word)
+    {
+        var start = 0;
+        while ((start = message.IndexOf(word, start, StringComparison.Ordinal)) >= 0)
+        {
+            var end = start + word.Length;
+            if ((start == 0 || !char.IsLetterOrDigit(message[start - 1])) &&
+                (end == message.Length || !char.IsLetterOrDigit(message[end])))
+            {
+                return true;
+            }
+
+            start++;
+        }
+
+        return false;
     }
 
     #endregion

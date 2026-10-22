@@ -41,3 +41,4 @@ lavaland-soulscythe-sleeps = Коса затихает - тот, кто её п�
 lavaland-saw-bleed-primed = { CAPITALIZE(THE($target)) } истекает кровью - разложите пилу и добейте!
 lavaland-storm-staff-dispel-cooldown = Посох ещё не готов разогнать новую бурю: осталось { $minutes } мин.
 lavaland-legion-raid-panic = { CAPITALIZE(THE($legion)) } застывает от ужаса... и спешно улетает прочь!
+lavaland-soulscythe-grab-punish = Коса вырывается из ваших рук и полосует вас!

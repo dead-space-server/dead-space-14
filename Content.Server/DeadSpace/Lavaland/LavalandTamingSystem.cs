@@ -55,6 +55,8 @@ public sealed class LavalandTamingSystem : EntitySystem
     [Dependency] private readonly SharedMeleeWeaponSystem _melee = default!;
     [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly IComponentFactory _factory = default!;
 
     private static readonly EntProtoId FollowAction = "ActionLavalandTamedFollow";
     private static readonly EntProtoId StayAction = "ActionLavalandTamedStay";
@@ -343,12 +345,13 @@ public sealed class LavalandTamingSystem : EntitySystem
         var offset = _transform.GetWorldPosition(target) - _transform.GetWorldPosition(xform);
         var distance = offset.Length();
 
-        // Something that shoots: from range, if it can see the target.
+        // Something that shoots: from range, if it can see the target. One that shoots out creatures (a legion's
+        // heads, a hivelord's brood) and cannot right now - it already has all it may - goes in and bites itself.
         if (TryComp<GunComponent>(uid, out var gun) && distance <= ShootRange &&
             _interaction.InRangeUnobstructed(uid, target, ShootRange))
         {
-            _gun.AttemptShoot(uid, (uid, gun), Transform(target).Coordinates, target);
-            return;
+            if (_gun.AttemptShoot(uid, (uid, gun), Transform(target).Coordinates, target) || !ShootsCreatures(uid))
+                return;
         }
 
         if (distance > BiteRange && TryComp<InputMoverComponent>(uid, out var mover))
@@ -366,6 +369,13 @@ public sealed class LavalandTamingSystem : EntitySystem
             _combatMode.SetInCombatMode(uid, true);
             _melee.AttemptLightAttack(uid, weaponUid, weapon, target);
         }
+    }
+
+    /// <summary>Its gun's ammo is a creature of its own: a legion's heads, a hivelord's brood.</summary>
+    private bool ShootsCreatures(EntityUid uid)
+    {
+        return TryComp<BasicEntityAmmoProviderComponent>(uid, out var ammo) && ammo.Proto is { } proto &&
+               _proto.TryIndex<EntityPrototype>(proto, out var prototype) && prototype.TryGetComponent<MobStateComponent>(out _, _factory);
     }
 
     /// <summary>An EMP scrambles the nanomachines: the creature is wild again.</summary>
@@ -393,6 +403,9 @@ public sealed class LavalandTamingSystem : EntitySystem
             InheritSide(ent, projectile);
             if (ent.Comp.Tamer is { } tamer && HasComp<HTNComponent>(projectile))
                 _npc.SetBlackboard(projectile, NPCBlackboard.FollowTarget, new EntityCoordinates(tamer, Vector2.Zero));
+            // Shot out at the pointed-at target, it goes for that target: it does not just stand there.
+            if (ent.Comp.Target is { } target && !TerminatingOrDeleted(target))
+                _faction.AggroEntity(projectile, target);
         }
     }
 

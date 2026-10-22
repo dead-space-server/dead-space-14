@@ -150,12 +150,15 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
                 break;
 
             case LavalandFaunaRaidStage.Active when now >= raid.StageEnd:
+                // Held out to the end: a guaranteed raid fought off spares the next guaranteed one.
+                if (raid.Guaranteed)
+                    raid.SkipNextGuaranteed = true;
                 EndRaid(ent, mapId);
                 return;
 
             case LavalandFaunaRaidStage.Active when raid.DefenseCheckAt is { } checkAt && now >= checkAt:
                 raid.DefenseCheckAt = null;
-                if (TryFindOutpost(ent, out var outpost) && !AnyDefender(outpost))
+                if (TryFindOutpost(ent, out var outpost) && !AnyDefender(outpost, config.DefenseMargin))
                 {
                     RuinOutpost(outpost, config, mapId);
                     // Nobody came: the outpost is torn apart and the raid is over - tendrils, timer, music and the
@@ -212,10 +215,18 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
         if (raid.Stage != LavalandFaunaRaidStage.Idle)
             return;
 
+        // Every other guaranteed raid, after the salvagers fought one off.
+        if (raid.SkipNextGuaranteed)
+        {
+            raid.SkipNextGuaranteed = false;
+            return;
+        }
+
         var now = _timing.CurTime;
         if (raid.NextCheck == TimeSpan.Zero)
             raid.NextCheck = now + planet.FaunaRaid.CheckInterval;
         StartWarning((mapUid, raid), planet.FaunaRaid, Transform(mapUid).MapID, now);
+        raid.Guaranteed = true;
     }
 
     /// <param name="removeRaiders">
@@ -245,6 +256,7 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
         if (wasRunning)
             RaiseNetworkEvent(new LavalandBossMusicStopEvent(LavalandBossMusicStartEvent.RaidMusicId), Filter.Broadcast());
         ent.Comp.Stage = LavalandFaunaRaidStage.Idle;
+        ent.Comp.Guaranteed = false;
         if (wasRunning && mapId != MapId.Nullspace)
             RaiseNetworkEvent(new LavalandFaunaRaidTimerHideEvent(), RaidFilter(mapId));
     }
@@ -498,8 +510,14 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
     }
 
     /// <summary>A living player standing on the outpost grid.</summary>
-    private bool AnyDefender(EntityUid outpost)
+    /// <summary>Anybody alive on the outpost or out around it, within <paramref name="margin"/> tiles of it.</summary>
+    private bool AnyDefender(EntityUid outpost, float margin)
     {
+        var outpostXform = Transform(outpost);
+        Box2? area = TryComp<MapGridComponent>(outpost, out var grid)
+            ? _transform.GetWorldMatrix(outpostXform).TransformBox(grid.LocalAABB).Enlarged(margin)
+            : null;
+
         foreach (var session in _players.Sessions)
         {
             if (session.AttachedEntity is not { Valid: true } mob || HasComp<GhostComponent>(mob) ||
@@ -508,8 +526,15 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
                 continue;
             }
 
-            if (Transform(mob).GridUid == outpost)
+            var mobXform = Transform(mob);
+            if (mobXform.GridUid == outpost)
                 return true;
+
+            if (area is { } box && mobXform.MapID == outpostXform.MapID &&
+                box.Contains(_transform.GetWorldPosition(mobXform)))
+            {
+                return true;
+            }
         }
 
         return false;

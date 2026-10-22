@@ -367,6 +367,17 @@ public sealed partial class LavalandStormStaffComponent : Component
     [DataField]
     public SoundSpecifier? DispelSound;
 
+    /// <summary>Thunder heard all over the map once the storm is dispelled.</summary>
+    [DataField]
+    public SoundSpecifier? DispelThunderSound;
+
+    /// <summary>The flash of lightning everyone on the map sees with it.</summary>
+    [DataField]
+    public TimeSpan DispelFlashDuration = TimeSpan.FromSeconds(0.8);
+
+    [DataField]
+    public float DispelFlashStrength = 0.7f;
+
     public readonly List<TimeSpan> RechargeAt = new();
     public readonly List<(TimeSpan At, EntityUid Grid, Vector2i Tile, bool Boosted, EntityUid User)> PendingBolts = new();
 }

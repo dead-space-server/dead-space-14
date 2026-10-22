@@ -15,6 +15,7 @@ public sealed class RechargeBasicEntityAmmoSystem : EntitySystem
     [Dependency] private readonly MetaDataSystem _metadata = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedGunSystem _gun = default!;
+    [Dependency] private readonly Content.Shared.Weapons.Ranged.Upgrades.GunUpgradeSystem _gunUpgrade = default!; // DS14
 
     private EntityQuery<EmpDisabledComponent> _empDisabledQuery;
 
@@ -80,7 +81,8 @@ public sealed class RechargeBasicEntityAmmoSystem : EntitySystem
         if (!TryComp<GunComponent>(uid, out var gun) || gun.FireRate <= 0f || gun.FireRateModified <= 0f)
             return recharge.RechargeCooldown;
 
-        var boost = gun.FireRateModified / gun.FireRate;
+        // Upgrades kept off the fire rate itself (the repeater) still count here.
+        var boost = gun.FireRateModified / gun.FireRate * _gunUpgrade.GetFireRateUpgradeBoost(uid);
         return boost > 1f ? recharge.RechargeCooldown / boost : recharge.RechargeCooldown;
     }
     // DS14-end

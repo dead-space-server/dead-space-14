@@ -191,6 +191,9 @@
         damage: 1000000
       behaviors:
       - !type:GibBehavior { }
+  # Strikes in melee only at someone who stays within its reach for a second.
+  - type: LavalandMeleeWindup
+    delay: 1
   - type: LavalandBoss
     bossName: Колосс
     maxHealth: 3500
@@ -201,13 +204,15 @@
     deathSound: /Audio/Effects/demon_dies.ogg
     deathRewards:
     - LavalandNecropolisChestHardsuit
-    - LavalandDarkInfusedBlade
     - LavalandNecropolisChest
+    - ColossusTrophy
+    # Only one of its unique items drops.
+    uniqueRewards:
+    - LavalandDarkInfusedBlade
     - LavalandFireStaff
     - LavalandCainAndAbel
     - LavalandAnomalousCrystalRandom
     - LavalandVoiceOfGod
-    - ColossusTrophy
   - type: LavalandColossus
   - type: NpcFactionMember
     factions:

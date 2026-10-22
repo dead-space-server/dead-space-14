@@ -41,3 +41,4 @@ lavaland-soulscythe-sleeps = The scythe goes still - the one who awakened it is 
 lavaland-saw-bleed-primed = { CAPITALIZE(THE($target)) } is bleeding out - unfold the saw and finish it!
 lavaland-storm-staff-dispel-cooldown = The staff is not ready to dispel another storm: { $minutes } min left.
 lavaland-legion-raid-panic = { CAPITALIZE(THE($legion)) } freezes in horror... and hurries away!
+lavaland-soulscythe-grab-punish = The scythe wrenches itself out of your hands and slashes you!

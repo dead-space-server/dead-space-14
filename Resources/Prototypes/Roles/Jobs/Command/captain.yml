@@ -23,6 +23,25 @@
       time: 140h
     - !type:AgeRequirement
       requiredAge: 26
+    # DS14-start: every round-start species but the felinids
+    - !type:SpeciesRequirement
+      species:
+        - Human
+        - SlimePerson
+        - Reptilian
+        - Demon
+        - Moth
+        - Vulpkanin
+        - Tajaran
+        - Arachnid
+        - IPC
+        - Shark
+        - Diona
+        - Dwarf
+        - Kobolt
+        - Vox
+        - Xenomorph
+    # DS14-end
   startingGear: CaptainGear
   icon: "JobIconCaptain"
   joinNotifyCrew: true

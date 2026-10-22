@@ -1,6 +1,7 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Shared.DeadSpace.PdaArcade;
+using Robust.Shared.Network;
 using Content.Shared.Input;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
@@ -15,10 +16,21 @@ namespace Content.Client.DeadSpace.PdaArcade;
 public sealed class PdaArcadeFragment : BoxContainer
 {
     public event Action<string, int>? ScoreReady;
+    public event Action? NearbyReady;
+    public event Action<string, NetEntity>? InviteReady;
+    public event Action<string>? MoveReady;
+    public event Action? LeaveReady;
+    public event Action? AgainReady;
 
     private readonly BoxContainer _menu;
+    private readonly BoxContainer _solo;
     private readonly BoxContainer _play;
     private readonly BoxContainer _scores;
+    private readonly BoxContainer _coop;
+    private readonly BoxContainer _people;
+    private readonly BoxContainer _match;
+    private readonly PdaTableBoard _table;
+    private readonly Button _again;
     private readonly BoxContainer _host;
     private PanelContainer _overlay = default!;
     private Label _overlayTitle = default!;
@@ -31,6 +43,8 @@ public sealed class PdaArcadeFragment : BoxContainer
     private PdaArcadeBoard? _board;
     private string _game = "";
     private PdaArcadeEntry[] _entries = Array.Empty<PdaArcadeEntry>();
+    private PdaArcadePerson[] _nearby = Array.Empty<PdaArcadePerson>();
+    private string _together = "";
 
     public PdaArcadeFragment()
     {
@@ -40,19 +54,49 @@ public sealed class PdaArcadeFragment : BoxContainer
         MouseFilter = MouseFilterMode.Stop;
 
         _menu = new BoxContainer { Orientation = LayoutOrientation.Vertical, VerticalExpand = true };
+        _solo = new BoxContainer { Orientation = LayoutOrientation.Vertical, VerticalExpand = true };
         _play = new BoxContainer { Orientation = LayoutOrientation.Vertical, VerticalExpand = true, Visible = false };
         _scores = new BoxContainer { Orientation = LayoutOrientation.Vertical, VerticalExpand = true, Visible = false };
+        _coop = new BoxContainer { Orientation = LayoutOrientation.Vertical, VerticalExpand = true, Visible = false };
+        _people = new BoxContainer { Orientation = LayoutOrientation.Vertical };
+        _match = new BoxContainer { Orientation = LayoutOrientation.Vertical, VerticalExpand = true, Visible = false };
+        _table = new PdaTableBoard();
+        _again = new Button { Text = Loc.GetString("pda-arcade-again"), Visible = false, Margin = new Thickness(4, 2) };
+        _again.OnPressed += _ => AgainReady?.Invoke();
+        _table.Moved += move => MoveReady?.Invoke(move);
+        _table.FocusReady += GrabKeyboardFocus;
 
         AddChild(_menu);
         AddChild(_play);
         AddChild(_scores);
+        AddChild(_match);
 
-        _menu.AddChild(new Label { Text = Loc.GetString("pda-arcade-menu"), Margin = new Thickness(6, 4) });
+        var tabs = new BoxContainer { Orientation = LayoutOrientation.Horizontal, Margin = new Thickness(6, 4) };
+        var soloTab = new Button { Text = Loc.GetString("pda-arcade-solo"), Margin = new Thickness(2) };
+        var togetherTab = new Button { Text = Loc.GetString("pda-arcade-together"), Margin = new Thickness(2) };
+        soloTab.OnPressed += _ => ShowTab(false);
+        togetherTab.OnPressed += _ => ShowTab(true);
+        tabs.AddChild(soloTab);
+        tabs.AddChild(togetherTab);
+        _menu.AddChild(tabs);
+        _menu.AddChild(_solo);
+        _menu.AddChild(_coop);
         foreach (var game in PdaArcadeArt.Games())
-            AddGameButton(game);
+        {
+            if (!game.Together)
+                AddGameButton(game);
+        }
         var boardButton = new Button { Text = Loc.GetString("pda-arcade-board"), Margin = new Thickness(6, 8, 6, 4) };
         boardButton.OnPressed += _ => ShowScores();
         _menu.AddChild(boardButton);
+        BuildTogether();
+        var matchTop = new BoxContainer { Orientation = LayoutOrientation.Horizontal, Margin = new Thickness(4, 2) };
+        var matchBack = new Button { Text = Loc.GetString("pda-arcade-back") };
+        matchBack.OnPressed += _ => LeaveReady?.Invoke();
+        matchTop.AddChild(matchBack);
+        matchTop.AddChild(_again);
+        _match.AddChild(matchTop);
+        _match.AddChild(_table);
 
         var top = new BoxContainer { Orientation = LayoutOrientation.Horizontal, Margin = new Thickness(4, 2) };
         var back = new Button { Text = Loc.GetString("pda-arcade-back") };
@@ -124,11 +168,92 @@ public sealed class PdaArcadeFragment : BoxContainer
         return false;
     }
 
-    public void Apply(PdaArcadeEntry[] entries)
+    public void Apply(PdaArcadeUiState state)
     {
-        _entries = entries;
+        _entries = state.Entries;
+        _nearby = state.Nearby;
         if (_scores.Visible)
             FillScores();
+        if (_coop.Visible)
+            FillPeople();
+
+        if (state.InMatch)
+            ShowMatch(state);
+        else if (_match.Visible)
+            ShowMenu();
+    }
+
+    private void ShowTab(bool together)
+    {
+        _solo.Visible = !together;
+        _coop.Visible = together;
+        if (together)
+            NearbyReady?.Invoke();
+    }
+
+    private void ShowMatch(PdaArcadeUiState state)
+    {
+        _menu.Visible = false;
+        _play.Visible = false;
+        _scores.Visible = false;
+        _match.Visible = true;
+        _table.Game = state.MatchGame;
+        _table.Board = state.MatchBoard;
+        _table.Yours = state.MatchYours && !state.MatchOver;
+        _table.Rolling = state.Rolling;
+        _table.YourDie = state.YourDie;
+        _table.TheirDie = state.TheirDie;
+        _table.MineBottom = state.MineBottom;
+        _again.Visible = state.MatchOver;
+        GrabKeyboardFocus();
+    }
+
+    private void BuildTogether()
+    {
+        var back = new Button { Text = Loc.GetString("pda-arcade-back"), Margin = new Thickness(6, 4) };
+        back.OnPressed += _ => ShowMenu();
+        _coop.AddChild(back);
+        _coop.AddChild(new Label { Text = Loc.GetString("pda-arcade-together"), Margin = new Thickness(6, 2) });
+        foreach (var game in PdaArcadeGame.Together)
+        {
+            var id = game;
+            var button = new Button { Text = Loc.GetString("pda-arcade-game-" + id), Margin = new Thickness(6, 2) };
+            button.OnPressed += _ =>
+            {
+                _together = id;
+                NearbyReady?.Invoke();
+                FillPeople();
+            };
+            _coop.AddChild(button);
+        }
+
+        _coop.AddChild(_people);
+    }
+
+    private void FillPeople()
+    {
+        _people.RemoveAllChildren();
+        if (_together == "")
+            return;
+
+        _people.AddChild(new Label
+        {
+            Text = Loc.GetString("pda-arcade-pick", ("game", Loc.GetString("pda-arcade-game-" + _together))),
+            Margin = new Thickness(6, 6, 6, 2),
+        });
+        if (_nearby.Length == 0)
+        {
+            _people.AddChild(new Label { Text = Loc.GetString("pda-arcade-nobody"), Margin = new Thickness(6) });
+            return;
+        }
+
+        foreach (var person in _nearby)
+        {
+            var target = person;
+            var button = new Button { Text = person.Name, Margin = new Thickness(6, 2) };
+            button.OnPressed += _ => InviteReady?.Invoke(_together, target.Entity);
+            _people.AddChild(button);
+        }
     }
 
     private static readonly Dictionary<string, Func<PdaArcadeBoard>> Boards = new()
@@ -139,6 +264,8 @@ public sealed class PdaArcadeFragment : BoxContainer
         [PdaArcadeGame.Rocks] = () => new PdaRocksBoard(),
         [PdaArcadeGame.Flap] = () => new PdaFlapBoard(),
         [PdaArcadeGame.Match] = () => new PdaMatchBoard(),
+        [PdaArcadeGame.Deck] = () => new PdaDeckBoard(),
+        [PdaArcadeGame.Road] = () => new PdaRoadBoard(),
     };
 
     private void AddGameButton(PdaArcadeGamePrototype game)
@@ -149,7 +276,7 @@ public sealed class PdaArcadeFragment : BoxContainer
             Margin = new Thickness(6, 2),
         };
         button.OnPressed += _ => Open(game);
-        _menu.AddChild(button);
+        _solo.AddChild(button);
     }
 
     private void Open(PdaArcadeGamePrototype game)
@@ -268,9 +395,6 @@ public sealed class PdaArcadeFragment : BoxContainer
 
     private void RouteKey(GUIBoundKeyEventArgs args, bool down)
     {
-        if (!_play.Visible || _board == null || _overlay.Visible)
-            return;
-
         string? command = null;
         if (args.Function == ContentKeyFunctions.ArcadeLeft || args.Function == EngineKeyFunctions.MoveLeft || args.Function == EngineKeyFunctions.TextCursorLeft)
             command = "left";
@@ -284,6 +408,16 @@ public sealed class PdaArcadeFragment : BoxContainer
             command = "act";
 
         if (command == null)
+            return;
+
+        if (_match.Visible)
+        {
+            args.Handle();
+            _table.Steer(command, down);
+            return;
+        }
+
+        if (!_play.Visible || _board == null || _overlay.Visible)
             return;
 
         args.Handle();
@@ -336,6 +470,9 @@ public sealed class PdaArcadeFragment : BoxContainer
         _board = null;
         _play.Visible = false;
         _scores.Visible = false;
+        _match.Visible = false;
+        _solo.Visible = true;
+        _coop.Visible = false;
         _menu.Visible = true;
     }
 
@@ -345,6 +482,7 @@ public sealed class PdaArcadeFragment : BoxContainer
         _board = null;
         _menu.Visible = false;
         _play.Visible = false;
+        _coop.Visible = false;
         _scores.Visible = true;
         FillScores();
     }

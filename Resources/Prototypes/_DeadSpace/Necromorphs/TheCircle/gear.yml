@@ -115,6 +115,7 @@
       - NanoTaskCartridge
       - BankCartridge
       - AstroNavCartridge
+      - PdaGamesCartridge
 
 - type: entity
   parent: UnitologyPDA
@@ -130,6 +131,7 @@
       - BankCartridge
       - AstroNavCartridge
       - MedTekCartridge
+      - PdaGamesCartridge
 
 - type: entity
   parent: UnitologyPDA

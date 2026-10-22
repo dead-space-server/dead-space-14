@@ -7,6 +7,8 @@ using Content.Shared.Tag;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 
+using Content.Shared.Whitelist;
+
 namespace Content.Server.DeadSpace.Lavaland.Components;
 
 #region Mining equipment
@@ -62,9 +64,17 @@ public sealed partial class LavalandLazarusInjectorComponent : Component
     [DataField]
     public bool Malfunctioning;
 
+    /// <summary>Only these creatures can be brought back (lavaland fauna and the weak cave argocytes).</summary>
+    [DataField]
+    public EntityWhitelist? Whitelist;
+
     [DataField]
     public SoundSpecifier? Sound;
 }
+
+/// <summary>Marks a creature the Lazarus injector can bring back besides the lavaland fauna (the weak cave argocytes).</summary>
+[RegisterComponent]
+public sealed partial class LavalandLazarusRevivableComponent : Component;
 
 /// <summary>Mining drone: follows its owner, shoots fauna and collects nearby ore while in collect mode.</summary>
 [RegisterComponent]
@@ -192,6 +202,10 @@ public sealed partial class LavalandWarpCubeComponent : Component
 
     [DataField]
     public EntProtoId Effect = "LavalandWarpCubeEffect";
+
+    /// <summary>How long the cube is used before it warps.</summary>
+    [DataField]
+    public TimeSpan UseTime = TimeSpan.FromSeconds(1);
 
     [DataField]
     public SoundSpecifier? Sound;

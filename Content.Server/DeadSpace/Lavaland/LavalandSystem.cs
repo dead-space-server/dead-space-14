@@ -665,12 +665,17 @@ public sealed class LavalandSystem : EntitySystem
 
         _random.Shuffle(grids);
 
+        // Each ruin is loaded far past the planet's edge and only moved in once it has a spot: loaded at the origin
+        // it would first sit on top of the outpost. Still on the planet's own map, as its map init remembers the map
+        // (the ash walkers' nest takes it for their home).
+        var loadOffset = new Vector2(Math.Max(planet.MapHalfSize, planet.MaxStructureDistance) * 2f + 512f, 0f);
+
         var loaded = 0;
         foreach (var entry in grids)
         {
             cancellation.ThrowIfCancellationRequested();
 
-            if (!_mapLoader.TryLoadGrid(mapId, entry.Path, out var customGrid))
+            if (!_mapLoader.TryLoadGrid(mapId, entry.Path, out var customGrid, offset: loadOffset))
             {
                 Log.Error($"Failed to load Lavaland custom grid {entry.Path} for planet {planet.ID}.");
                 continue;

@@ -5,6 +5,7 @@ using System.Linq;
 using Content.Shared.DeadSpace.PdaArcade;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Shared.Graphics.RSI;
 using Robust.Client.ResourceManagement;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -40,6 +41,12 @@ public static class PdaArcadeArt
     {
         _sprites ??= IoCManager.Resolve<IEntityManager>().System<SpriteSystem>();
         return _sprites.Frame0(specifier);
+    }
+
+    public static Texture Facing(SpriteSpecifier specifier, RsiDirection direction)
+    {
+        _sprites ??= IoCManager.Resolve<IEntityManager>().System<SpriteSystem>();
+        return _sprites.RsiStateLike(specifier).GetFrame(direction, 0);
     }
 
     public static Font Font(int size)

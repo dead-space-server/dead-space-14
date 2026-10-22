@@ -64,4 +64,23 @@ public sealed partial class ExplosionSystem
 
         return explosionEntity;
     }
+
+    // DS14-start
+    /// <summary>
+    ///     Draws an explosion exactly as a queued one would look, but touches nothing: no damage, no throwing,
+    ///     no tiles. For blasts that must stay harmless somewhere.
+    /// </summary>
+    public void SpawnExplosionVisual(MapCoordinates epicenter, string typeId, float totalIntensity, float slope, float maxIntensity)
+    {
+        var results = GetExplosionTiles(epicenter, typeId, totalIntensity, slope, maxIntensity);
+        if (results == null)
+            return;
+
+        var (_, iterationIntensity, spaceData, gridData, spaceMatrix) = results.Value;
+        var visualEnt = CreateExplosionVisualEntity(epicenter, typeId, spaceMatrix, spaceData, gridData.Values, iterationIntensity);
+        _appearance.SetData(visualEnt, ExplosionAppearanceData.Progress, int.MaxValue);
+        EnsureComp<Robust.Shared.Spawners.TimedDespawnComponent>(visualEnt).Lifetime =
+            _cfg.GetCVar(Content.Shared.CCVar.CCVars.ExplosionPersistence);
+    }
+    // DS14-end
 }

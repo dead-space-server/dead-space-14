@@ -132,6 +132,10 @@
           False: { state: empty }
   - type: LavalandLazarusInjector
     factions: [ PetsNT ]
+    whitelist:
+      components:
+      - LavalandFauna
+      - LavalandLazarusRevivable
     sound: /Audio/Items/hypospray.ogg
   - type: StaticPrice
     price: 1000
@@ -220,7 +224,7 @@
   - type: RechargeBasicEntityAmmo
     rechargeCooldown: 1.5
   - type: BasicEntityAmmoProvider
-    proto: BulletKinetic
+    proto: BulletKineticMinebot
     capacity: 1
     count: 1
   - type: Gun
@@ -245,6 +249,14 @@
   - type: LavalandMinebot
     collectRange: 1.5
     oreTag: Ore
+
+# The minebot's bolt flies through the miners and the other drones in its way.
+- type: entity
+  parent: BulletKinetic
+  id: BulletKineticMinebot
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ProjectileHostilesOnly
 
 - type: entity
   parent: BaseItem
@@ -411,6 +423,8 @@
     - type: LavalandChasmImmune
     - type: CanMoveInAir
     - type: LavalandCloudWalker # a little white cloud under the feet instead of wings
+    # Walks through space like over the station's floor: never weightless.
+    - type: MovementIgnoreGravity
   - type: StaticPrice
     price: 3000
 

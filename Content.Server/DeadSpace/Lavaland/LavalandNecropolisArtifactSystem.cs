@@ -325,9 +325,7 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         ent.Comp.Linked = other;
     }
 
-    /// <summary>Held up for this long before it takes its holder away: no spamming the cubes back and forth.</summary>
-    private static readonly TimeSpan WarpCubeTime = TimeSpan.FromSeconds(5);
-
+    /// <summary>Held up for <see cref="LavalandWarpCubeComponent.UseTime"/> before it takes its holder away.</summary>
     private void OnCubeUse(Entity<LavalandWarpCubeComponent> ent, ref UseInHandEvent args)
     {
         if (args.Handled)
@@ -338,7 +336,7 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
             return;
 
         _popup.PopupEntity(Loc.GetString("lavaland-warp-cube-start"), args.User, args.User);
-        _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, WarpCubeTime,
+        _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, ent.Comp.UseTime,
             new LavalandWarpCubeDoAfterEvent(), ent.Owner, used: ent.Owner)
         {
             BreakOnMove = true,

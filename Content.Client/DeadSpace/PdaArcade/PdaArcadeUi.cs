@@ -27,11 +27,26 @@ public sealed partial class PdaArcadeUi : UIFragment
                 Score = score,
             }));
         };
+        _fragment.NearbyReady += () => userInterface.SendMessage(new CartridgeUiMessage(new PdaArcadeNearbyMessage()));
+        _fragment.InviteReady += (game, target) =>
+        {
+            userInterface.SendMessage(new CartridgeUiMessage(new PdaArcadeInviteMessage
+            {
+                Game = game,
+                Target = target,
+            }));
+        };
+        _fragment.MoveReady += move =>
+        {
+            userInterface.SendMessage(new CartridgeUiMessage(new PdaArcadeMoveMessage { Move = move }));
+        };
+        _fragment.LeaveReady += () => userInterface.SendMessage(new CartridgeUiMessage(new PdaArcadeLeaveMessage()));
+        _fragment.AgainReady += () => userInterface.SendMessage(new CartridgeUiMessage(new PdaArcadeAgainMessage()));
     }
 
     public override void UpdateState(BoundUserInterfaceState state)
     {
         if (state is PdaArcadeUiState arcade)
-            _fragment?.Apply(arcade.Entries);
+            _fragment?.Apply(arcade);
     }
 }

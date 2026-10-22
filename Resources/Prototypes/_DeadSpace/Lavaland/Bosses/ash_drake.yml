@@ -329,6 +329,9 @@
         damage: 1000000
       behaviors:
       - !type:GibBehavior { }
+  # Strikes in melee only at someone who stays within its reach for a second.
+  - type: LavalandMeleeWindup
+    delay: 1
   - type: LavalandBoss
     bossName: пепельный дракон
     maxHealth: 2500
@@ -336,11 +339,11 @@
     deathSound: /Audio/_DeadSpace/Lavaland/AshDrake/demon_dies.ogg
     deathRewards:
     - LavalandNecropolisChest
+    - AshDrakeTrophy
+    uniqueRewards:
     - ClothingOuterSuitAshDrake
     - LavalandSpectralBlade
-    - LavalandAshDrakeFireballSpellbookDrop
     - LavalandLavaStaff
-    - AshDrakeTrophy
   - type: LavalandAshDrake
   - type: NpcFactionMember
     factions:

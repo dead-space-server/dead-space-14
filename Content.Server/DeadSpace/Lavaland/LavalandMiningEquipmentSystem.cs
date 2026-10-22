@@ -37,6 +37,8 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Timing;
 
+using Content.Shared.Whitelist;
+
 namespace Content.Server.DeadSpace.Lavaland;
 
 /// <summary>
@@ -45,6 +47,7 @@ namespace Content.Server.DeadSpace.Lavaland;
 public sealed class LavalandMiningEquipmentSystem : EntitySystem
 {
     [Dependency] private readonly Content.Shared.Tools.Systems.SharedToolSystem _tool = default!;
+    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
     [Dependency] private readonly Content.Server.Administration.QuickDialogSystem _quickDialog = default!;
     [Dependency] private readonly Content.Shared.Interaction.SharedInteractionSystem _interaction = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -284,7 +287,8 @@ public sealed class LavalandMiningEquipmentSystem : EntitySystem
         args.Handled = true;
         // Only simple creatures: crew and other humanoids are far too complex for the nanomachines.
         if (HasComp<HumanoidAppearanceComponent>(target) || !TryComp<MobStateComponent>(target, out var mob) ||
-            !HasComp<NpcFactionMemberComponent>(target))
+            !HasComp<NpcFactionMemberComponent>(target) ||
+            ent.Comp.Whitelist != null && !_whitelist.IsValid(ent.Comp.Whitelist, target))
         {
             _popup.PopupEntity(Loc.GetString("lavaland-lazarus-invalid"), target, args.User);
             return;

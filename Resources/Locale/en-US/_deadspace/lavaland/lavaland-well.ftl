@@ -1,6 +1,7 @@
 lavaland-well-progress = Ore: { $count } / { $required } ({ $percent }%).
 lavaland-well-unload = Unload ore
 lavaland-well-send = Send
+lavaland-well-inserted = Loaded { $count } ore into the well.
 lavaland-raid-warning = Fauna is awakening near the salvage base! One minute remains to prepare.
 lavaland-raid-active = Tendrils are attacking the salvage base! Hold out!
 lavaland-raid-timer-warning = FAUNA AWAKENING: { $time }
@@ -34,3 +35,4 @@ lavaland-morkite-hud-not-connected = ○ The well is not connected to the extrac
 lavaland-morkite-hud-no-well = ○ No bluespace well deployed
 lavaland-morkite-hud-close = Close. To open again, click the bluespace well, a morkite extractor or a pipe leading to it.
 lavaland-raid-ruined = Nobody stood up for the outpost - the fauna have torn it apart!
+lavaland-well-reward-radio = The salvage expedition objective is complete. { $credits } credits were added to the cargo account.

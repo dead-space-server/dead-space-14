@@ -790,7 +790,7 @@ entities:
     - type: RadiationGridResistance
     - type: IFF
       color: '#1510B3FF'
-      flags: HideLabel
+      flags: Hide
     - type: TileHistory
       chunkHistory: {}
 - proto: AirlockXeno

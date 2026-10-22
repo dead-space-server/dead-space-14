@@ -274,8 +274,6 @@
   id: LavalandNecropolisChestMagicLootTable
   table: !type:GroupSelector
     children:
-    - id: WeaponStaffHealing
-      weight: 1.2
     - id: AnimationStaff
       weight: 0.8
     - id: WeaponStaffPolymorphDoor

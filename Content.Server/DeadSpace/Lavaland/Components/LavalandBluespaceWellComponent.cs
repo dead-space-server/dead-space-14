@@ -1,4 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+using Content.Shared.Access;
+using Content.Shared.Radio;
 using Content.Shared.Stacks;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
@@ -37,4 +39,18 @@ public sealed partial class LavalandBluespaceWellComponent : Component
 
     /// <summary>Morkite has flowed into the well in this filling: losing the flow now means a cut pipeline.</summary>
     [ViewVariables] public bool WasConnected;
+
+    /// <summary>The mission is done once the sent well comes back: this much goes to the station's budget...</summary>
+    [DataField] public int RewardCredits = 100000;
+
+    /// <summary>...and this many mining points onto the ID of everyone with <see cref="RewardAccess"/>.</summary>
+    [DataField] public int RewardPoints = 1500;
+
+    [DataField] public HashSet<ProtoId<AccessLevelPrototype>> RewardAccess = new() { "Salvage", "SeniorSalvage" };
+
+    /// <summary>The credits paid are announced on this channel (cargo's).</summary>
+    [DataField] public ProtoId<RadioChannelPrototype> RewardChannel = "Supply";
+
+    /// <summary>Sent full: the reward is paid when it returns.</summary>
+    [ViewVariables] public bool RewardPending;
 }

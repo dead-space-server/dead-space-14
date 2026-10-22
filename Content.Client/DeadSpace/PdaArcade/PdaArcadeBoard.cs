@@ -6,6 +6,8 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.GameObjects;
+using Robust.Shared.Graphics.RSI;
 using Robust.Shared.Input;
 using Robust.Shared.Maths;
 using Robust.Shared.Player;
@@ -27,6 +29,7 @@ public abstract class PdaArcadeBoard : Control
     protected bool Over;
     private bool _sent;
     private SharedAudioSystem? _audio;
+    private EntityUid? _hum;
 
     protected PdaArcadeBoard()
     {
@@ -83,6 +86,7 @@ public abstract class PdaArcadeBoard : Control
 
     public void Restart()
     {
+        Silence();
         Score = 0;
         Over = false;
         Won = false;
@@ -114,6 +118,7 @@ public abstract class PdaArcadeBoard : Control
 
         Over = true;
         Won = won;
+        Silence();
         Sound(won ? PdaArcadeArt.Profile.Win : PdaArcadeArt.Profile.Lose);
         if (_sent)
             return;
@@ -129,10 +134,61 @@ public abstract class PdaArcadeBoard : Control
         Sound(PdaArcadeArt.Profile.Action);
     }
 
+    protected void Show(int score)
+    {
+        Score = score;
+        Scored?.Invoke(Score);
+    }
+
     protected void Sound(SoundSpecifier sound)
     {
+        Sound(sound, -6f);
+    }
+
+    protected void Sound(SoundSpecifier sound, float volume)
+    {
         _audio ??= IoCManager.Resolve<IEntityManager>().System<SharedAudioSystem>();
-        _audio.PlayGlobal(sound, Filter.Local(), false, AudioParams.Default.WithVolume(-6f));
+        _audio.PlayGlobal(sound, Filter.Local(), false, AudioParams.Default.WithVolume(volume));
+    }
+
+    protected void Noise(string key)
+    {
+        if (!Visual.Noises.TryGetValue(key, out var sound))
+            return;
+
+        Sound(sound, Num(key + "Volume", -14f));
+    }
+
+    protected void Hum(string key)
+    {
+        if (_hum != null || !Visual.Noises.TryGetValue(key, out var sound))
+            return;
+
+        _audio ??= IoCManager.Resolve<IEntityManager>().System<SharedAudioSystem>();
+        var played = _audio.PlayGlobal(sound, Filter.Local(), false, AudioParams.Default.WithVolume(Num(key + "Volume", -18f)).WithLoop(true));
+        if (played != null)
+            _hum = played.Value.Entity;
+    }
+
+    protected void Silence()
+    {
+        if (_hum == null)
+            return;
+
+        _audio ??= IoCManager.Resolve<IEntityManager>().System<SharedAudioSystem>();
+        _audio.Stop(_hum);
+        _hum = null;
+    }
+
+    protected override void ExitedTree()
+    {
+        Silence();
+        base.ExitedTree();
+    }
+
+    protected float Num(string key, float fallback)
+    {
+        return Visual.Numbers.TryGetValue(key, out var value) ? value : fallback;
     }
 
     private string _gameId = "";
@@ -147,6 +203,11 @@ public abstract class PdaArcadeBoard : Control
     protected Texture Sprite(string key)
     {
         return PdaArcadeArt.Texture(Visual.Sprites[key]);
+    }
+
+    protected Texture Facing(string key, RsiDirection direction)
+    {
+        return PdaArcadeArt.Facing(Visual.Sprites[key], direction);
     }
 
     protected void DrawFloor(DrawingHandleScreen handle, int index = 0)
