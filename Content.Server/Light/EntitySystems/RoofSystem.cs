@@ -1,4 +1,5 @@
 using Content.Server.Light.Components;
+using Content.Shared.Light.Components;
 using Content.Shared.Light.EntitySystems;
 using Robust.Shared.Map.Components;
 
@@ -25,7 +26,10 @@ public sealed class RoofSystem : SharedRoofSystem
         if (_gridQuery.TryComp(xform.GridUid, out var grid))
         {
             var index = _maps.LocalToTile(xform.GridUid.Value, grid, xform.Coordinates);
-            SetRoof((xform.GridUid.Value, grid, null), index, ent.Comp.Value);
+            // The grid may not have roof data yet (e.g. procedurally generated or custom grids
+            // only get ImplicitRoofComponent). Without this the marker would silently do nothing.
+            var roof = EnsureComp<RoofComponent>(xform.GridUid.Value);
+            SetRoof((xform.GridUid.Value, grid, roof), index, ent.Comp.Value);
         }
 
         QueueDel(ent.Owner);
