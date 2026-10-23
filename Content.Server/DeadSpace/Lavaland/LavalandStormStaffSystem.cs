@@ -16,6 +16,7 @@ using Content.Shared.Popups;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Lavaland;
@@ -158,6 +159,13 @@ public sealed class LavalandStormStaffSystem : EntitySystem
             PopupType.Large);
         if (ent.Comp.DispelSound != null)
             _audio.PlayPvs(ent.Comp.DispelSound, args.User);
+
+        // The whole planet hears the thunder and sees the flash: the others can tell why the storm is gone.
+        var everyone = Filter.BroadcastMap(Transform(map).MapID);
+        if (ent.Comp.DispelThunderSound != null)
+            _audio.PlayGlobal(ent.Comp.DispelThunderSound, everyone, true);
+        RaiseNetworkEvent(new LavalandSkyFlashEvent((float) ent.Comp.DispelFlashDuration.TotalSeconds,
+            ent.Comp.DispelFlashStrength), everyone);
     }
 
     public override void Update(float frameTime)

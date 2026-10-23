@@ -340,11 +340,9 @@
     deathRewards:
     - LavalandNecropolisChest
     - AshDrakeTrophy
-    # Only one of its unique items drops.
     uniqueRewards:
     - ClothingOuterSuitAshDrake
     - LavalandSpectralBlade
-    - LavalandAshDrakeFireballSpellbookDrop
     - LavalandLavaStaff
   - type: LavalandAshDrake
   - type: NpcFactionMember

@@ -8,6 +8,10 @@ using Content.Shared.Weapons.Misc;
 using Content.Shared.Gravity; //DS14
 // DS14-start
 using Content.Shared.Clothing.Components;
+using Content.Shared.DeadSpace.Lavaland;
+using Content.Shared.DeadSpace.Lavaland.ChromiteCaves;
+using Content.Shared.DeadSpace.Lavaland.Components;
+using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.DeadSpace.Chasm;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
@@ -38,6 +42,7 @@ public sealed class ChasmSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!; //DS14
     [Dependency] private readonly InventorySystem _inventory = default!; //DS14
     [Dependency] private readonly SharedPopupSystem _popup = default!; //DS14
+    [Dependency] private readonly LavalandDayCycleSystem _dayCycle = default!; //DS14
 
     public override void Initialize()
     {
@@ -92,6 +97,8 @@ public sealed class ChasmSystem : EntitySystem
         // don't predict queuedels on client
         if (_net.IsClient)
             return;
+
+        UpdateHovering(); // DS14
 
         var query = EntityQueryEnumerator<ChasmFallingComponent>();
         while (query.MoveNext(out var uid, out var chasm))
@@ -170,6 +177,13 @@ public sealed class ChasmSystem : EntitySystem
             args.Cancelled = true;
             return;
         }
+
+        // Carried over by someone who walks on air: let go of it - or stunned - and it drops in on the next tick.
+        if (IsPulledOverChasm(args.Tripper))
+        {
+            args.Cancelled = true;
+            return;
+        }
         //DS14-end
 
         args.Continue = true;
@@ -185,29 +199,54 @@ public sealed class ChasmSystem : EntitySystem
     private static readonly TimeSpan HoverGraceGap = TimeSpan.FromSeconds(1);
 
     /// <summary>
-    /// Anti-gravity clothing keeps one over a chasm only while standing. Gone down into pre-crit or crit, one gets
-    /// <see cref="ChasmComponent.CritHoverGrace"/> to reach solid ground or get back up first.
+    /// Anti-gravity clothing keeps one over a chasm only while standing. Gone down, one gets
+    /// <see cref="ChasmComponent.CritHoverGrace"/> to reach solid ground or get back up first: in pre-crit or crit,
+    /// or lying down for any reason in clothing with <see cref="AntiGravityChasmHoldComponent.Timer"/>. Clothing with
+    /// that component and no timer holds its living wearer up for good.
     /// </summary>
     private bool TryHoldOffFall(ChasmComponent chasm, EntityUid tripper)
     {
-        if (chasm.CritHoverGrace <= TimeSpan.Zero ||
-            !TryComp<MobStateComponent>(tripper, out var mobState) ||
-            mobState.CurrentState is not (MobState.PreCritical or MobState.Critical) ||
-            !WearsAntiGravityClothing(tripper))
+        if (!TryComp<MobStateComponent>(tripper, out var mobState) ||
+            mobState.CurrentState == MobState.Dead ||
+            GetAntiGravityClothing(tripper) is not { } clothing)
         {
             return false;
         }
 
+        var hold = CompOrNull<AntiGravityChasmHoldComponent>(clothing);
+        if (hold is { Timer: false })
+            return true;
+
+        // The clothing's own timer (shorter in the deep night), or the chasm's for anything else in crit.
+        var duration = hold != null
+            ? IsDeepNight(tripper) ? hold.DeepNightGrace : hold.Grace
+            : chasm.CritHoverGrace;
+
+        if (duration <= TimeSpan.Zero ||
+            hold == null && mobState.CurrentState is not (MobState.PreCritical or MobState.Critical))
+        {
+            return false;
+        }
+
+        return TickHoverGrace(tripper, duration);
+    }
+
+    /// <summary>
+    /// Counts down the time held over a chasm, starting it (with a warning) on the first tick over one.
+    /// True while there is time left.
+    /// </summary>
+    private bool TickHoverGrace(EntityUid tripper, TimeSpan duration)
+    {
         var now = _timing.CurTime;
         if (!TryComp<ChasmHoverGraceComponent>(tripper, out var grace) || now - grace.LastSeen > HoverGraceGap)
         {
             grace = EnsureComp<ChasmHoverGraceComponent>(tripper);
-            grace.FallAt = now + chasm.CritHoverGrace;
+            grace.FallAt = now + duration;
             Dirty(tripper, grace);
             if (_net.IsServer)
             {
                 _popup.PopupEntity(Loc.GetString("chasm-hover-grace-warning",
-                        ("seconds", (int) chasm.CritHoverGrace.TotalSeconds)),
+                        ("seconds", (int) duration.TotalSeconds)),
                     tripper, tripper, PopupType.LargeCaution);
             }
         }
@@ -216,18 +255,81 @@ public sealed class ChasmSystem : EntitySystem
         return now < grace.FallAt;
     }
 
-    private bool WearsAntiGravityClothing(EntityUid uid)
+    private readonly HashSet<Entity<ChasmComponent>> _hoverChasms = new();
+
+    /// <summary>
+    /// Standing in anti-gravity clothing with a timer the wearer is weightless, and a chasm's step trigger leaves the
+    /// weightless alone: the countdown over a chasm runs here, and at its end they fall in all the same.
+    /// </summary>
+    private void UpdateHovering()
+    {
+        var query = EntityQueryEnumerator<AntiGravityChasmHoldComponent, TransformComponent>();
+        while (query.MoveNext(out var item, out var hold, out var itemXform))
+        {
+            var wearer = itemXform.ParentUid;
+            if (!hold.Timer || !wearer.IsValid() || HasComp<ChasmFallingComponent>(wearer) ||
+                !_gravity.IsWeightless(wearer) || GetAntiGravityClothing(wearer) != item ||
+                !TryComp<MobStateComponent>(wearer, out var mobState) || mobState.CurrentState == MobState.Dead ||
+                _grapple.IsEntityHooked(wearer))
+            {
+                continue;
+            }
+
+            _hoverChasms.Clear();
+            _lookup.GetEntitiesInRange(_transform.GetMapCoordinates(wearer), 0.05f, _hoverChasms);
+            Entity<ChasmComponent>? chasm = null;
+            foreach (var found in _hoverChasms)
+            {
+                chasm = found;
+                break;
+            }
+
+            if (chasm is not { } over)
+                continue;
+
+            var duration = IsDeepNight(wearer) ? hold.DeepNightGrace : hold.Grace;
+            if (duration > TimeSpan.Zero && !TickHoverGrace(wearer, duration))
+                StartFalling(over, over.Comp, wearer);
+        }
+    }
+
+    /// <summary>
+    /// Pulled by someone held over chasms (anti-gravity clothing while standing, a flight potion) who can still act.
+    /// </summary>
+    private bool IsPulledOverChasm(EntityUid uid)
+    {
+        if (!TryComp<PullableComponent>(uid, out var pullable) || pullable.Puller is not { } puller ||
+            TerminatingOrDeleted(puller) || !_blocker.CanInteract(puller, null))
+        {
+            return false;
+        }
+
+        return _gravity.IsWeightless(puller) ||
+               HasComp<LavalandChasmImmuneComponent>(puller) && !HasComp<ChasmFallingComponent>(puller);
+    }
+
+    /// <summary>The lavaland's deep night, or the chromite caves' deep dark.</summary>
+    private bool IsDeepNight(EntityUid uid)
+    {
+        var map = Transform(uid).MapUid;
+        if (TryComp<LavalandChromiteCavesComponent>(map, out var caves))
+            return caves.Mode == LavalandCavesMode.DeepDark;
+
+        return _dayCycle.IsDeepNight(map);
+    }
+
+    private EntityUid? GetAntiGravityClothing(EntityUid uid)
     {
         if (!_inventory.TryGetContainerSlotEnumerator(uid, out var slots, SlotFlags.WITHOUT_POCKET))
-            return false;
+            return null;
 
         while (slots.NextItem(out var item))
         {
             if (HasComp<AntiGravityClothingComponent>(item))
-                return true;
+                return item;
         }
 
-        return false;
+        return null;
     }
 
     private void OnHoverGraceMobStateChanged(EntityUid uid, ChasmHoverGraceComponent component, MobStateChangedEvent args)

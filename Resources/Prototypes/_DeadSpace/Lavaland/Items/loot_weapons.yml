@@ -24,6 +24,7 @@
     aimSound: /Audio/Effects/Lightning/lightningshock.ogg
     boltSound: /Audio/Effects/Lightning/lightningbolt.ogg
     dispelSound: /Audio/Magic/staff_change.ogg
+    dispelThunderSound: /Audio/_DeadSpace/Wizard/Effect/lightning_start.ogg
   - type: StaticPrice
     price: 5000
 

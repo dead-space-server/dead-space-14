@@ -1763,12 +1763,53 @@ public sealed partial class LavalandBossArenaSystem : EntitySystem
             }
 
             var offset = RewardOffsets[Math.Min(i, RewardOffsets.Length - 1)];
-            var tile = center + offset;
-            if (!_map.TryGetTileRef(gridUid, grid, tile, out var tileRef) || tileRef.Tile.IsEmpty)
-                tile = center;
+            var tile = FindRewardTile(gridUid, grid, center + offset, center);
 
             Spawn(reward.Id, _map.GridTileToLocal(gridUid, grid, tile));
         }
+    }
+
+    /// <summary>
+    /// The wanted tile, or the nearest one around it where loot is safe: lava sets it on fire and a chasm swallows it,
+    /// and the reward was simply gone.
+    /// </summary>
+    private Vector2i FindRewardTile(EntityUid gridUid, MapGridComponent grid, Vector2i wanted, Vector2i center)
+    {
+        if (IsRewardTileSafe(gridUid, grid, wanted))
+            return wanted;
+
+        for (var radius = 1; radius <= 3; radius++)
+        {
+            for (var x = -radius; x <= radius; x++)
+            {
+                for (var y = -radius; y <= radius; y++)
+                {
+                    if (Math.Max(Math.Abs(x), Math.Abs(y)) != radius)
+                        continue;
+
+                    var tile = wanted + new Vector2i(x, y);
+                    if (IsRewardTileSafe(gridUid, grid, tile))
+                        return tile;
+                }
+            }
+        }
+
+        return center;
+    }
+
+    private bool IsRewardTileSafe(EntityUid gridUid, MapGridComponent grid, Vector2i tile)
+    {
+        if (!_map.TryGetTileRef(gridUid, grid, tile, out var tileRef) || tileRef.Tile.IsEmpty)
+            return false;
+
+        var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
+        while (anchored.MoveNext(out var uid))
+        {
+            if (HasComp<Content.Shared.Tiles.LavaComponent>(uid) || HasComp<Content.Shared.Chasm.ChasmComponent>(uid))
+                return false;
+        }
+
+        return true;
     }
 
     private void EndArena(Entity<LavalandBossArenaComponent> arena)

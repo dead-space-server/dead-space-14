@@ -107,6 +107,8 @@ entities:
           moles: {}
         chunkSize: 4
     - type: GasTileOverlay
+    - type: IFF
+      flags: Hide
     - type: RadiationGridResistance
     - type: ExplosionAirtightGrid
 - proto: ADTFoodSausageRaw

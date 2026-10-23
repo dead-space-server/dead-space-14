@@ -3,6 +3,7 @@ using Content.Client.Gameplay;
 using Content.Client.Hands.Systems;
 using Content.Shared.Hands.Components;
 using Content.Shared.Interaction;
+using Content.Shared.RCD; //DS-14
 using Content.Shared.RCD.Components;
 using Content.Shared.RCD.Systems;
 using Robust.Client.Placement;
@@ -10,6 +11,7 @@ using Robust.Client.Player;
 using Robust.Client.State;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Prototypes; //DS-14
 
 namespace Content.Client.RCD;
 
@@ -22,6 +24,7 @@ public sealed class AlignRCDConstruction : PlacementMode
     private readonly RCDSystem _rcdSystem;
     private readonly SharedTransformSystem _transformSystem;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!; //DS-14
     [Dependency] private readonly IStateManager _stateManager = default!;
 
     private const float SearchBoxSize = 2f;
@@ -72,6 +75,18 @@ public sealed class AlignRCDConstruction : PlacementMode
 
     public override bool IsValidPosition(EntityCoordinates position)
     {
+        //DS-14 start
+        var preview = new Color(20, 180, 20);
+        if (_playerManager.LocalEntity is { } wearer &&
+            _handsSystem.GetActiveItem(wearer) is { } held &&
+            _entityManager.TryGetComponent<RCDComponent>(held, out var heldRcd) &&
+            _proto.TryIndex(heldRcd.ProtoId, out var setting) &&
+            setting.Mode == RcdMode.Deconstruct)
+            preview = new Color(180, 20, 20);
+
+        ValidPlaceColor = preview.WithAlpha(PlaceColorBaseAlpha);
+        //DS-14 end
+
         var player = _playerManager.LocalSession?.AttachedEntity;
 
         // If the destination is out of interaction range, set the placer alpha to zero
