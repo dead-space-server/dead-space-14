@@ -17,3 +17,7 @@ lavaland-deep-night-battery-dead = The flashlight battery dies - it goes out.
 lavaland-deep-night-darkness-warning = The darkness creeps up on you. Find some light!
 lavaland-deep-night-darkness = The darkness burns you!
 lavaland-deep-night-bonfire-out = The darkness smothers the bonfire - it goes out and falls apart into firewood.
+
+lavaland-strong-storm-warning = WARNING: a strong storm is rolling in from the horizon! In a minute a wind will rise that throws people off their feet. It cannot be dispelled - get under a roof!
+lavaland-strong-storm-start = The strong storm has hit lavaland! The wind throws everyone out in the open.
+lavaland-strong-storm-end = The strong storm dies down.

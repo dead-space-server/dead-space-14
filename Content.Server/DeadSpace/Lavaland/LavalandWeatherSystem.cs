@@ -94,6 +94,25 @@ public sealed class LavalandWeatherSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    /// Out in the open on the planet itself: on its land (not on a grid of its own), under the sky (no roof), and not
+    /// a creature the weather does not touch. Clothes do not count: the strong storm's wind throws everyone.
+    /// </summary>
+    public bool IsUnderOpenSky(EntityUid uid, TransformComponent xform)
+    {
+        if (xform.MapUid is not { } mapUid ||
+            xform.GridUid != mapUid ||
+            !_gridQuery.TryGetComponent(mapUid, out var grid) ||
+            !_map.TryGetTileRef(mapUid, grid, xform.Coordinates, out var tile) ||
+            tile.Tile.IsEmpty ||
+            _immuneQuery.HasComponent(uid))
+        {
+            return false;
+        }
+
+        return _weather.CanWeatherAffect(mapUid, grid, tile);
+    }
+
     public bool IsStormActive(EntityUid mapUid)
     {
         return TryComp<LavalandMapComponent>(mapUid, out var lavaland) &&

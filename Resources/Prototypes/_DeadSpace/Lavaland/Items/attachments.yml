@@ -343,6 +343,13 @@
   parent: [ BaseWeaponCrusher, BaseCrusherAttachmentSlots, BaseSecurityCargoContraband ]
   id: BaseWeaponGoobCrusher
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: Item
     size: Ginormous
   - type: MeleeWeapon
@@ -432,6 +439,13 @@
   name: кинетические когти
   description: Одноручные когти, достаточно маленькие, чтобы поместиться в рюкзак.
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: Appearance
   - type: Sprite
     sprite: _Goob/Lavaland/Objects/Weapons/Secondary/kinetic_claws.rsi
@@ -497,6 +511,13 @@
   name: кинетическое мачете
   description: Уменьшенный одноручный вариант крашера, позволяющий бить издалека.
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: Sprite
     sprite: _Goob/Lavaland/Objects/Weapons/Secondary/kinetic_machete.rsi
     state: icon

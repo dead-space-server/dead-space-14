@@ -143,6 +143,9 @@ public sealed partial class LavalandPlanetPrototype : IPrototype
     public LavalandWildWhelpConfig WildWhelps = new();
 
     [DataField]
+    public LavalandStrongStormConfig StrongStorm = new();
+
+    [DataField]
     public LavalandDayCycleConfig DayCycle = new();
 
     [DataField]

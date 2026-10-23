@@ -147,6 +147,13 @@
   name: resonant bone maul
   description: A hierophant crystal suspended in a cage of bone. A two-handed blow knocks prey away from its wielder.
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Specific/Mining/HierophantClub.rsi
     state: hierophant_club
@@ -178,6 +185,13 @@
   name: blood claw
   description: Bubblegum's serrated claw bound into a bone grip. Its curved edge tears deep wounds and makes short work of a hunter's kill.
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: Sprite
     color: "#D87474"
   - type: Sharp

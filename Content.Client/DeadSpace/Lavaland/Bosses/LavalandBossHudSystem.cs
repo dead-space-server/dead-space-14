@@ -77,7 +77,7 @@ public sealed class LavalandBossHudSystem : EntitySystem
         _activeArena = ev.ArenaId;
 
         hud.Visible = true;
-        hud.UpdateState(ev.BossName, ev.CurrentHealth, ev.MaxHealth, ev.Participants);
+        hud.UpdateState(ev.BossName, ev.CurrentHealth, ev.MaxHealth, ev.Participants, ev.Hint);
     }
 
     private void OnHudHide(LavalandBossHudHideEvent ev)

@@ -4,6 +4,13 @@
   name: посох бурь
   description: Древний посох из останков Легиона. Ветер вздымается, когда его взмахивают. Удар по цели призывает молнию, использование в руке разгоняет пепельную бурю.
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Weapons/storm_staff.rsi
     state: icon
@@ -111,6 +118,13 @@
   name: посох лавы
   description: Позволяет залить лавой всё что угодно. Направьте на пол, чтобы превратить его в лаву, или на лаву, чтобы её остудить.
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Weapons/lava_staff.rsi
     state: icon
@@ -154,6 +168,13 @@
   name: пила-тесак
   description: Пила, отлично пускающая кровь зверям, раскладывается в длинный тесак. Сложенной бьёт очень быстро и копит кровотечение у фауны, разложенной рубит медленно, с бонусным уроном, и только она добивает - накопленное кровотечение взрывается мощным уроном.
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Weapons/cleaving_saw.rsi
     layers:
@@ -211,6 +232,13 @@
   name: коса душ
   description: Древняя реликвия ада, созданная дьяволами, чтобы утвердить свою власть над демонами. Сейчас она спит.
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Weapons/soulscythe.rsi
     layers:
@@ -257,6 +285,13 @@
   name: Каин и Авель
   description: Парные кинжалы Колосса. Серия ударов по крупным существам усиливает каждый следующий удар и призывает огоньки; удар по вам сбрасывает серию. Клик вдаль выпускает огоньки в цель.
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Weapons/cain_and_abel.rsi
     state: icon

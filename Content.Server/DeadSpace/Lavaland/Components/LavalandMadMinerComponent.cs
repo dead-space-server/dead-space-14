@@ -103,7 +103,8 @@ public sealed partial class LavalandMadMinerComponent : Component
     /// <summary>Health of the necromorph it rises as.</summary>
     [DataField] public float RisenHealth = 175f;
     [DataField] public DamageSpecifier RisenDamage = new() { DamageDict = new() { { "Slash", 22 }, { "Structural", 30 } } };
-    [DataField] public float RisenSpeed = 3.6f;
+    [DataField] public float RisenSpeed = 5.1f;
+    [DataField] public float RisenWalkSpeed = 4.02f;
     [DataField] public EntProtoId RisenBlood = "LavalandBubblegumBloodSplatter";
     [DataField] public int RisenBloodCount = 9;
     [DataField] public SoundSpecifier? RisenBloodSound = new SoundPathSpecifier("/Audio/Effects/gib1.ogg");

@@ -1,0 +1,343 @@
+# AshWolf LQ-829: the secret boss the strong storm brings to the miners' outpost. It lies there until hit, gets up in a
+# scene of its own, and fights with rushes, a shield, leaps, saws from the sky, a retreat with saws and a pounce with a
+# quick time event. Beaten, it becomes the borg BorgChassisAshWolf.
+- type: entity
+  parent: BaseMobAsteroid
+  id: MobLavalandAshWolf
+  name: AshWolf LQ-829
+  description: Заброшенный боевой борг тайного клана. Вокруг корпуса намотаны лезвия, а в оптике всё ещё теплится огонёк.
+  suffix: Lavaland, секретный босс
+  components:
+  - type: DestructionResistance
+  - type: LavalandWeatherImmune
+  - type: LavalandChasmImmune
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/AshWolf.rsi
+    layers:
+    - state: bladewolfmk2
+      map: [ "enum.LavalandAshWolfLayers.Body" ]
+    - state: eyes-bladewolfmk2
+      shader: unshaded
+      map: [ "enum.LavalandAshWolfLayers.Eyes" ]
+  - type: LavalandAshWolfEyes
+  # Stars over its head while it is stunned.
+  - type: StunVisuals
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.LavalandAshWolfVisuals.State:
+        enum.LavalandAshWolfLayers.Body:
+          Dormant: { state: bladewolfmk2, visible: true, rotation: 90 }
+          Normal: { state: bladewolfmk2, visible: true, rotation: 0 }
+          Roll: { state: bladewolfmk2-roll-moving, visible: true, rotation: 0 }
+          Shield: { state: bladewolfmk2-shield, visible: true, rotation: 0 }
+          Hidden: { visible: false }
+          EyesOnly: { visible: false }
+        enum.LavalandAshWolfLayers.Eyes:
+          Dormant: { visible: false }
+          Normal: { state: eyes-bladewolfmk2, visible: true }
+          Roll: { state: eyes-bladewolfmk2-roll, visible: true }
+          Shield: { state: eyes-bladewolfmk2, visible: true }
+          Hidden: { visible: false }
+          EyesOnly: { state: eyes-bladewolfmk2-roll, visible: true }
+  - type: PointLight
+    radius: 2
+    energy: 1.2
+    color: "#ff3b2e"
+  # Its own system ends the fight (and makes it a borg): the thresholds are never reached.
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      100000: Dead
+  - type: ParryableBoss
+  - type: LavalandAshWolf
+    maxHealth: 2200
+    music:
+    - /Audio/_DeadSpace/Lavaland/Bosses/ash_wolf_fight.ogg
+    - /Audio/_DeadSpace/Lavaland/Bosses/ash_wolf_fight_2.ogg
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4.4
+    baseSprintSpeed: 4.4
+  - type: StunImmune
+  - type: NoSlip
+  - type: RequireProjectileTarget
+  - type: Tag
+    tags:
+    - CannotSuicide
+
+- type: entity
+  id: LavalandAshWolfSaw
+  name: пила AshWolf
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    sprite: _DeadSpace/Lavaland/Effects/AshWolfSaw.rsi
+    layers:
+    - state: saw
+  - type: LavalandSpin
+    spinning: true
+    speed: 18
+  - type: PointLight
+    radius: 1.5
+    energy: 0.8
+    color: "#ffb35c"
+  # Its system deletes it; this is only in case it is left over.
+  - type: TimedDespawn
+    lifetime: 15
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+# A shadow copy of the rushing wolf (second phase): dark and eyeless, it only looks the part.
+- type: entity
+  id: LavalandAshWolfShadow
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/AshWolf.rsi
+    color: "#1c1619b0"
+    layers:
+    - state: bladewolfmk2-roll-moving
+  - type: TimedDespawn
+    lifetime: 3
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: LavalandIntroSmokeParticle
+  id: LavalandAshWolfDust
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Effects/chemsmoke.rsi
+    state: chemsmoke
+    scale: 1.1, 1.1
+    color: "#6e5c4bdd"
+  - type: TimedDespawn
+    lifetime: 4
+
+- type: entity
+  id: LavalandAshWolfLeapMark
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Effects
+    sprite: _DeadSpace/Lavaland/Effects/AshDrakeTarget.rsi
+    color: "#ff8a1e"
+    layers:
+    - state: sniper_zoom
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 2.2
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: LavalandAshWolfLeapMark
+  id: LavalandAshWolfSkyMark
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Effects
+    sprite: _DeadSpace/Lavaland/Effects/AshDrakeTarget.rsi
+    color: "#ffd24a"
+    layers:
+    - state: sniper_zoom
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 1.6
+
+# Its scene: the copy that rolls round the players, and the huge dust it throws up.
+- type: entity
+  parent: LavalandIntroEffectBase
+  id: LavalandIntroAshWolfRoll
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/AshWolf.rsi
+    layers:
+    - state: bladewolfmk2-roll-moving
+    - state: eyes-bladewolfmk2-roll
+      shader: unshaded
+
+- type: entity
+  parent: LavalandIntroSmokeParticle
+  id: LavalandIntroAshWolfDust
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Effects/chemsmoke.rsi
+    state: chemsmoke
+    scale: 1.3, 1.3
+    color: "#6e5c4be0"
+  - type: TimedDespawn
+    lifetime: 4
+
+# Beaten, it is a borg: ordinary laws, a brain that can be changed, and room for any four modules. Whoever is put in
+# it keeps its rush, leap, retreat and pounce.
+- type: entity
+  parent: BaseBorgChassisNT
+  id: BorgChassisAshWolf
+  name: AshWolf LQ-829
+  description: Бывший секретный босс Лаваленда, перепрошитый под обычные законы. Лезвия на месте.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Mobs/AshWolf.rsi
+    layers:
+    - state: bladewolfmk2
+      map: [ "enum.BorgVisualLayers.Body", "enum.LavalandAshWolfLayers.Body" ]
+    - state: eyes-bladewolfmk2
+      map: [ "enum.BorgVisualLayers.Light" ]
+      shader: unshaded
+      visible: false
+    - state: eyes-bladewolfmk2
+      shader: unshaded
+      map: [ "light" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.LavalandAshWolfVisuals.State:
+        enum.LavalandAshWolfLayers.Body:
+          Normal: { state: bladewolfmk2 }
+          Roll: { state: bladewolfmk2-roll-moving }
+          Shield: { state: bladewolfmk2-shield }
+  - type: BorgChassis
+    maxModules: 4
+    hasMindState: eyes-bladewolfmk2
+    noMindState: eyes-bladewolfmk2
+  - type: BorgTransponder
+    sprite:
+      sprite: _DeadSpace/Lavaland/Mobs/AshWolf.rsi
+      state: bladewolfmk2
+    name: AshWolf LQ-829
+  - type: InteractionPopup
+    interactSuccessString: petting-success-generic-cyborg
+    interactFailureString: petting-failure-generic-cyborg
+  - type: ContainerFill
+    containers:
+      borg_brain:
+      - PositronicBrain
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: PowerCellHigh
+  # Its rushes and saws are still parried like the boss's.
+  - type: ParryableBoss
+  - type: LavalandAshWolfBorg
+  # Built for the ash storms, as the boss was.
+  - type: LavalandWeatherImmune
+  - type: LavalandAshWolf
+    tamed: true
+  - type: ActionGrant
+    actions:
+    - ActionViewLaws
+    - ActionPAIOpenMap
+    - ActionAshWolfRush
+    - ActionAshWolfLeap
+    - ActionAshWolfRetreat
+    - ActionAshWolfPounce
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3.5
+    baseSprintSpeed: 4.5
+  # Its own blades: with an empty hand it strikes with them.
+  - type: MeleeWeapon
+    attackRate: 1.5
+    angle: 30
+    range: 1.3
+    animation: WeaponArcClaw
+    wideAnimation: WeaponArcSlash
+    damage:
+      types:
+        Slash: 12
+    soundHit:
+      path: /Audio/Weapons/bladeslice.ogg
+    soundSwing:
+      path: /Audio/Weapons/punchmiss.ogg
+  - type: TTS
+    voices:
+      silero: Soundwave
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepBorgSec
+
+- type: entity
+  parent: BaseAction
+  id: ActionAshWolfRush
+  name: рывок
+  description: Свернуться в колесо из лезвий и прокатиться к точке, кромсая первого встречного.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 8
+    icon:
+      sprite: _DeadSpace/Lavaland/Mobs/AshWolf.rsi
+      state: bladewolfmk2-roll
+  - type: TargetAction
+    range: 8
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:LavalandAshWolfRushActionEvent
+
+- type: entity
+  parent: BaseAction
+  id: ActionAshWolfLeap
+  name: прыжок
+  description: Прыгнуть в точку; при приземлении земля дрожит, а две пилы разлетаются по спирали.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 15
+    icon:
+      sprite: _DeadSpace/Lavaland/Effects/AshWolfSaw.rsi
+      state: saw
+  - type: TargetAction
+    range: 8
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:LavalandAshWolfLeapActionEvent
+
+- type: entity
+  parent: BaseAction
+  id: ActionAshWolfRetreat
+  name: отскок с пилами
+  description: Отпрыгнуть назад и метнуть три пилы в сторону точки.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 10
+    icon:
+      sprite: _DeadSpace/Lavaland/Mobs/AshWolf.rsi
+      state: bladewolfmk2
+  - type: TargetAction
+    range: 12
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:LavalandAshWolfRetreatActionEvent
+
+- type: entity
+  parent: BaseAction
+  id: ActionAshWolfPounce
+  name: наскок
+  description: Прыгнуть на цель под щитом и прижать её к земле. Очень долго перезаряжается.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 180
+    icon:
+      sprite: _DeadSpace/Lavaland/Mobs/AshWolf.rsi
+      state: bladewolfmk2-shield
+  - type: TargetAction
+    range: 6
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:LavalandAshWolfPounceActionEvent
