@@ -21,6 +21,8 @@
       shader: unshaded
       map: [ "enum.LavalandAshWolfLayers.Eyes" ]
   - type: LavalandAshWolfEyes
+  # Stars over its head while it is stunned.
+  - type: StunVisuals
   - type: Appearance
   - type: GenericVisualizer
     visuals:

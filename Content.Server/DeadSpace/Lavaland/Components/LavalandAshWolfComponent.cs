@@ -105,7 +105,15 @@ public sealed partial class LavalandAshWolfComponent : Component
     public float RushSpeed = 15f;
 
     [DataField]
-    public float RushWindup = 0.6f;
+    public float RushWindup = 0.9f;
+
+    /// <summary>How high it leaps when it rushes at a player, tiles.</summary>
+    [DataField]
+    public float RushHop = 1.1f;
+
+    /// <summary>After each of its patterns it is stunned (stars over its head) for this long.</summary>
+    [DataField]
+    public float PatternStun = 1f;
 
     [DataField]
     public float RushOvershoot = 2.5f;
@@ -316,6 +324,18 @@ public sealed partial class LavalandAshWolfComponent : Component
     /// <summary>Stunned after a parry or a lost quick time event: idle, and a blow knocks it back.</summary>
     [ViewVariables]
     public TimeSpan StaggerUntil;
+
+    /// <summary>The stars over its head are shown.</summary>
+    [ViewVariables]
+    public bool SeeingStars;
+
+    /// <summary>When the next flames rise from under its feet in the rush's windup.</summary>
+    [ViewVariables]
+    public TimeSpan NextEmber;
+
+    /// <summary>The slide is a leap: its sprite arcs up, and comes back down when the slide ends.</summary>
+    [ViewVariables]
+    public bool SlideHop;
 
     /// <summary>The second phase: a parried rush leaves it open, and only a blow then knocks it away.</summary>
     [ViewVariables]

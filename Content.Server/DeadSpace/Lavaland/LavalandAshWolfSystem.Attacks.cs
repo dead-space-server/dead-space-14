@@ -24,9 +24,17 @@ public sealed partial class LavalandAshWolfSystem
             return;
         }
 
-        // Whoever it went for is gone: another one, if anyone is left.
-        if (!comp.Tamed && !IsAliveTarget(comp.Target) && players.Count > 0)
+        // Whoever it went for is down (critical, dead) or gone: another one, or it lets the attack go.
+        if (!comp.Tamed && !IsAliveTarget(comp.Target))
+        {
+            if (players.Count == 0)
+            {
+                EndAttack(ent, now);
+                return;
+            }
+
             comp.Target = Nearest(ent, players);
+        }
 
         switch (comp.Attack)
         {
@@ -101,13 +109,54 @@ public sealed partial class LavalandAshWolfSystem
             foreach (var victim in GetVictims(ent, comp, coordinates, ContactRange))
             {
                 comp.Sliding = false;
+                Land(ent);
                 OnContact(ent, victim, now);
                 return;
             }
         }
 
         if (t >= 1f)
+        {
             comp.Sliding = false;
+            Land(ent);
+        }
+    }
+
+    /// <summary>Its sprite leaps up and comes down over the given time.</summary>
+    private void Hop(Entity<LavalandAshWolfComponent> ent, float duration, float height)
+    {
+        var motion = EnsureComp<LavalandSpriteMotionComponent>(ent);
+        motion.Start = _timing.CurTime;
+        motion.Duration = duration;
+        motion.From = Vector2.Zero;
+        motion.To = Vector2.Zero;
+        motion.Arc = height;
+        motion.Spin = 0f;
+        motion.FadeOut = false;
+        Dirty(ent, motion);
+        ent.Comp.SlideHop = true;
+    }
+
+    private void Land(Entity<LavalandAshWolfComponent> ent)
+    {
+        if (!ent.Comp.SlideHop)
+            return;
+
+        ent.Comp.SlideHop = false;
+        RemComp<LavalandSpriteMotionComponent>(ent);
+    }
+
+    /// <summary>Flames like the drake's rising from under its feet.</summary>
+    private void RisingFlames(Entity<LavalandAshWolfComponent> ent)
+    {
+        var mapId = Transform(ent).MapID;
+        var at = Position(ent);
+        for (var i = 0; i < 3; i++)
+        {
+            var spot = at + new Vector2(_random.NextFloat(-0.55f, 0.55f), _random.NextFloat(-0.45f, 0f));
+            var fire = Spawn(FlameParticle, new MapCoordinates(spot, mapId));
+            Drift(fire, new Vector2(_random.NextFloat(-0.15f, 0.15f), _random.NextFloat(1.1f, 2f)), _random.NextFloat(0.5f, 0.8f));
+        }
     }
 
     /// <summary>A rush or a pounce lands on someone.</summary>
@@ -200,12 +249,22 @@ public sealed partial class LavalandAshWolfSystem
         var comp = ent.Comp;
         switch (comp.Step)
         {
-            // Curls up into a blade wheel.
+            // Curls up into a blade wheel, flames rising from under it.
             case 0:
                 SetVisual(ent, LavalandAshWolfVisualState.Roll);
                 PlaySound(comp.RushSound, ent);
                 comp.StepTime = now + TimeSpan.FromSeconds(comp.Tamed ? 0.25f : comp.RushWindup / Haste(comp));
+                comp.NextEmber = now;
                 comp.Step = 1;
+                break;
+
+            case 1 when now < comp.StepTime:
+                if (!comp.Tamed && now >= comp.NextEmber)
+                {
+                    RisingFlames(ent);
+                    comp.NextEmber = now + TimeSpan.FromSeconds(0.12);
+                }
+
                 break;
 
             case 1 when now >= comp.StepTime:
@@ -219,6 +278,9 @@ public sealed partial class LavalandAshWolfSystem
                 var to = goal + direction.Normalized() * comp.RushOvershoot;
                 SetVisual(ent, LavalandAshWolfVisualState.Roll);
                 Slide(ent, to, Vector2.Distance(from, to) / (comp.RushSpeed * Haste(comp)), LavalandAshWolfContact.Rush, now);
+                // It leaps at the player.
+                if (!comp.Tamed)
+                    Hop(ent, comp.SlideDuration, comp.RushHop);
                 if (comp.SecondPhaseReached && !comp.Tamed)
                     SpawnShadows(ent, goal, now);
                 comp.Step = 2;
@@ -772,6 +834,7 @@ public sealed partial class LavalandAshWolfSystem
     #region Dust
 
     private static readonly Robust.Shared.Prototypes.EntProtoId DustPuffParticle = "LavalandIntroSmokeParticle";
+    private static readonly Robust.Shared.Prototypes.EntProtoId FlameParticle = "LavalandIntroFireParticle";
 
     private void DustPuff(Entity<LavalandAshWolfComponent> ent, Vector2 at)
     {

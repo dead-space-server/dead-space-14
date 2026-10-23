@@ -210,6 +210,8 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
                 continue;
             }
 
+            UpdateStars(ent, now);
+
             switch (comp.Stage)
             {
                 case LavalandAshWolfStage.Waking when now >= comp.StageTime:
@@ -376,11 +378,21 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
         comp.GrindLeft = 0;
         comp.PendingSlash = TimeSpan.Zero;
         RemComp<LavalandSkyDropComponent>(ent);
+        Land(ent);
         DeleteShadows(comp);
         SetVisual(ent, LavalandAshWolfVisualState.Normal);
 
+        // Each pattern leaves it stunned for a moment, stars over its head.
+        if (!comp.Tamed && comp.PatternStun > 0f)
+        {
+            var stun = now + TimeSpan.FromSeconds(comp.PatternStun / Haste(comp));
+            if (stun > comp.StaggerUntil)
+                comp.StaggerUntil = stun;
+        }
+
         var pause = comp.Frenzied ? comp.FrenzyPause : comp.SecondPhaseReached ? 0.8f : 1.3f;
-        comp.NextAttack = now + TimeSpan.FromSeconds(pause + _random.NextFloat(-0.3f, 0.3f));
+        var rested = comp.StaggerUntil > now ? comp.StaggerUntil : now;
+        comp.NextAttack = rested + TimeSpan.FromSeconds(MathF.Max(0f, pause + _random.NextFloat(-0.3f, 0.3f)));
 
         if (comp.Tamed)
             RemComp<LavalandAshWolfDashingComponent>(ent);
@@ -417,6 +429,17 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
     #region Helpers
 
     private const int RecoverStep = 99;
+
+    /// <summary>Stunned (after a pattern, a parry, an escape from under it): stars over its head.</summary>
+    private void UpdateStars(Entity<LavalandAshWolfComponent> ent, TimeSpan now)
+    {
+        var stars = ent.Comp.Stage == LavalandAshWolfStage.Fight && now < ent.Comp.StaggerUntil;
+        if (stars == ent.Comp.SeeingStars)
+            return;
+
+        ent.Comp.SeeingStars = stars;
+        _appearance.SetData(ent, SharedStunSystem.StunVisuals.SeeingStars, stars);
+    }
 
     /// <summary>How much faster than usual it does everything: frenzied, a lot.</summary>
     private static float Haste(LavalandAshWolfComponent comp)
