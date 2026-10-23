@@ -422,6 +422,7 @@
   # Strikes in melee only at someone who stays within its reach for a second.
   - type: LavalandMeleeWindup
     delay: 1
+  - type: ParryableBoss
   - type: LavalandBoss
     bossName: баблгам
     maxHealth: 2500

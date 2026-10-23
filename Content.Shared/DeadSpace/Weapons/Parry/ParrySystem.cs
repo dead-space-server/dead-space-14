@@ -6,6 +6,7 @@ using Content.Shared.Hands;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Input;
+using Content.Shared.Inventory.Events;
 using Content.Shared.Item.ItemToggle;
 using Content.Shared.Item.ItemToggle.Components;
 using Content.Shared.Popups;
@@ -33,12 +34,12 @@ public sealed class ParrySystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly ItemToggleSystem _itemToggle = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly AlertsSystem _alerts = default!;
     [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly SharedMeleeWeaponSystem _melee = default!;
 
     private static readonly ProtoId<TagPrototype> ParryAllTag = "ParryAll";
 
@@ -50,6 +51,8 @@ public sealed class ParrySystem : EntitySystem
         SubscribeLocalEvent<ParryComponent, HandDeselectedEvent>(OnHandDeselected);
         SubscribeLocalEvent<ParryComponent, GotUnequippedHandEvent>(OnUnequippedHand);
         SubscribeLocalEvent<ParryComponent, ItemToggledEvent>(OnItemToggled);
+        SubscribeLocalEvent<ParryComponent, GotEquippedEvent>(OnEquipped);
+        SubscribeLocalEvent<ParryComponent, GotUnequippedEvent>(OnUnequipped);
         SubscribeAllEvent<ParryPressedEvent>(OnParryPressed);
 
         CommandBinds.Builder
@@ -122,6 +125,37 @@ public sealed class ParrySystem : EntitySystem
         }
     }
 
+    /// <summary>
+    /// A blow that is not a melee attack (a boss rushing, a saw flying in) meets the defender: if the parry of its
+    /// held weapon is up and that weapon can parry <paramref name="source"/>, it is spent as a success and true is
+    /// returned. The caller decides what the parry does.
+    /// </summary>
+    public bool TryConsumeParry(EntityUid defender, EntityUid source)
+    {
+        if (!TryGetParryWeapon(defender, out var parryWeapon) ||
+            parryWeapon.Comp.ActiveUntil <= _timing.CurTime ||
+            !CanParry(parryWeapon, source))
+        {
+            return false;
+        }
+
+        SetCooldown(parryWeapon, parryWeapon.Comp.SuccessCooldown);
+        parryWeapon.Comp.ActiveUntil = TimeSpan.Zero;
+        Dirty(parryWeapon);
+        UpdateAlert(defender, parryWeapon.Comp);
+
+        if (_net.IsServer)
+        {
+            _audio.PlayPvs(parryWeapon.Comp.SuccessSound, defender);
+            var popup = _random.Prob(parryWeapon.Comp.RarePopupChance)
+                ? "parry-success-rare-popup"
+                : "parry-success-popup";
+            _popup.PopupEntity(Loc.GetString(popup), defender, PopupType.LargeCaution);
+        }
+
+        return true;
+    }
+
     private bool CanParry(Entity<ParryComponent> parryWeapon, EntityUid attackingWeapon)
     {
         if (_tag.HasTag(parryWeapon, ParryAllTag))
@@ -147,6 +181,19 @@ public sealed class ParrySystem : EntitySystem
     {
         if (!TryGetParryWeapon(args.User, out _))
             _alerts.ClearAlert(args.User, weapon.Comp.CooldownAlert);
+    }
+
+    /// <summary>Claws put on: they are the weapon now if the hand is empty.</summary>
+    private void OnEquipped(Entity<ParryComponent> weapon, ref GotEquippedEvent args)
+    {
+        if (TryGetParryWeapon(args.Equipee, out var active) && active.Owner == weapon.Owner)
+            UpdateAlert(args.Equipee, weapon.Comp);
+    }
+
+    private void OnUnequipped(Entity<ParryComponent> weapon, ref GotUnequippedEvent args)
+    {
+        if (!TryGetParryWeapon(args.Equipee, out _))
+            _alerts.ClearAlert(args.Equipee, weapon.Comp.CooldownAlert);
     }
 
     private void OnItemToggled(Entity<ParryComponent> weapon, ref ItemToggledEvent args)
@@ -175,19 +222,20 @@ public sealed class ParrySystem : EntitySystem
         _alerts.ShowAlert(user, component.CooldownAlert, cooldown: cooldown, autoRemove: false);
     }
 
+    /// <summary>The weapon the defender would hit with now: held, or worn on the hands (claws), parries.</summary>
     private bool TryGetParryWeapon(EntityUid defender, out Entity<ParryComponent> parryWeapon)
     {
         parryWeapon = default;
-        if (!TryComp<HandsComponent>(defender, out var hands) ||
-            !_hands.TryGetActiveItem((defender, hands), out var held) ||
-            !TryComp<ParryComponent>(held, out var parry) ||
-            !HasComp<MeleeWeaponComponent>(held) ||
-            parry.RequiresActiveToggle && !_itemToggle.IsActivated(held.Value))
+        if (!HasComp<HandsComponent>(defender) ||
+            !_melee.TryGetWeapon(defender, out var weapon, out _) ||
+            weapon == defender ||
+            !TryComp<ParryComponent>(weapon, out var parry) ||
+            parry.RequiresActiveToggle && !_itemToggle.IsActivated(weapon))
         {
             return false;
         }
 
-        parryWeapon = (held.Value, parry);
+        parryWeapon = (weapon, parry);
         return true;
     }
 

@@ -135,6 +135,12 @@
     enabled: false
     radius: 4
   #DS14-Start
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: EmitSoundOnPickup
     sound:
       path: /Audio/_DeadSpace/Items/Handing/gun/gun_pickup.ogg

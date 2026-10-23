@@ -2,6 +2,7 @@ using System.Numerics;
 using Content.Client.DeadSpace.Stylesheets;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Utility;
 
 namespace Content.Client.DeadSpace.Lavaland.Bosses;
 
@@ -11,6 +12,7 @@ public sealed class LavalandBossHudControl : PanelContainer
     private readonly Label _participants;
     private readonly Label _healthText;
     private readonly ProgressBar _healthBar;
+    private readonly RichTextLabel _hint;
 
     public LavalandBossHudControl()
     {
@@ -71,10 +73,29 @@ public sealed class LavalandBossHudControl : PanelContainer
             FontColorOverride = Color.FromHex("#d8d8df"),
         };
         root.AddChild(_healthText);
+
+        // An OOC tip for a boss that needs one (how to parry the Ash Wolf).
+        _hint = new RichTextLabel
+        {
+            Visible = false,
+            HorizontalExpand = true,
+            MaxWidth = 420,
+        };
+        root.AddChild(_hint);
     }
 
-    public void UpdateState(string bossName, float currentHealth, float maxHealth, int participants)
+    public void UpdateState(string bossName, float currentHealth, float maxHealth, int participants, string? hint = null)
     {
+        _hint.Visible = !string.IsNullOrEmpty(hint);
+        if (_hint.Visible)
+        {
+            var message = new FormattedMessage();
+            message.PushColor(Color.FromHex("#e8b04a"));
+            message.AddText(hint!);
+            message.Pop();
+            _hint.SetMessage(message);
+        }
+
         maxHealth = MathF.Max(1f, maxHealth);
         currentHealth = Math.Clamp(currentHealth, 0f, maxHealth);
 

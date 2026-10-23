@@ -1,0 +1,15 @@
+lavaland-ash-wolf-hud-name = AshWolf LQ-829
+lavaland-ash-wolf-subtitle = Заброшеный борг тайного клана
+lavaland-ash-wolf-hud-hint = Этот босс требует хорошое внимание и уметь парировать, чтобы парировать нужно нажать F, также чтобы пройти квик тайм ивент нажимайте ЛКМ/Пробел
+lavaland-ash-wolf-wake-popup = Борг дёргается, оптика вспыхивает...
+lavaland-ash-wolf-phase-popup = AshWolf перегревается! Тени срываются с его корпуса.
+lavaland-ash-wolf-frenzy-popup = AshWolf впадает в бешенство! Буря стихла, а он только разогнался.
+lavaland-ash-wolf-open-popup = Он раскрылся - бейте!
+lavaland-ash-wolf-saw-back-popup = Пила вонзается в своего хозяина!
+lavaland-ash-wolf-qte-popup = AshWolf прижал вас к земле!
+lavaland-ash-wolf-qte-success-popup = Вы сбрасываете AshWolf!
+lavaland-ash-wolf-qte-keys = ЛКМ / ПКМ / ПРОБЕЛ в жёлтой зоне
+lavaland-ash-wolf-qte-escaped = ВЫРВАЛИСЬ
+lavaland-ash-wolf-qte-failed = ПРОВАЛ
+lavaland-ash-wolf-dying-popup = AshWolf искрит и трясётся, из корпуса вырывается пламя!
+lavaland-ash-wolf-tamed-popup = AshWolf затихает. Теперь это обычный борг.

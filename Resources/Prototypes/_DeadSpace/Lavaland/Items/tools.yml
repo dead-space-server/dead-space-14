@@ -63,6 +63,13 @@
   name: серебряная кирка
   description: Специальная кирка что позволет добыть чутка больше руды.
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Specific/Mining/silver_pickaxe.rsi
     state: icon
@@ -97,6 +104,13 @@
   name: алмазная кирка
   description: Алмазная кирка что позволяет добыть ну очень много руды. А ну и ещё, оно даёт вам напоминание об первом правиле при копании руды.
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Specific/Mining/diamond_pickaxe.rsi
     state: icon
@@ -131,6 +145,13 @@
   name: скоростной отбойный молоток
   description: Отбойный молоток что делает тунели при копании.
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Specific/Mining/sonic_jackhammer.rsi
     state: icon
@@ -263,6 +284,13 @@
   description: Призрачный клинок с Некрополя. Почти бесполезен сам по себе, но становится сильнее, когда рядом есть мертвые гуманоиды или призванные духи.
   suffix: Lavaland
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Weapons/Melee/spectral_blade.rsi
     layers:
@@ -301,6 +329,13 @@
   description: Магический клинок, выпускающий разящие энергетические лезвия.
   suffix: Lavaland
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Weapons/Melee/spell_blade.rsi
     layers:
@@ -464,6 +499,13 @@
   description: Странный артефакт с квадратным узором, проводящий ослабленные атаки Иерофанта.
   suffix: Lavaland
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Specific/Mining/HierophantClub.rsi
     layers:
@@ -710,6 +752,13 @@
   description: Клинок выпускает режущее облако тёмного пламени, укрывающее своего владельца.
   suffix: Lavaland
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Weapons/Melee/dark_blade_infused.rsi
     state: icon

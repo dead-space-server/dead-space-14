@@ -17,3 +17,7 @@ lavaland-deep-night-battery-dead = Батарея фонаря садится �
 lavaland-deep-night-darkness-warning = Тьма подбирается к вам. Найдите свет!
 lavaland-deep-night-darkness = Тьма обжигает вас!
 lavaland-deep-night-bonfire-out = Тьма душит костёр - он гаснет и разваливается на дрова.
+
+lavaland-strong-storm-warning = ВНИМАНИЕ: с горизонта надвигается сильная буря! Через минуту поднимется ветер, что сбивает с ног и швыряет по сторонам. Её не развеять - укройтесь под крышей!
+lavaland-strong-storm-start = Сильная буря обрушилась на Лаваленд! Ветер швыряет всех, кто под открытым небом.
+lavaland-strong-storm-end = Сильная буря стихает.

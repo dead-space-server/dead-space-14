@@ -62,6 +62,7 @@
     drops:
     - id: PKAUpgradeExplosiveLavaland
       chance: 0.5
+  - type: ParryableBoss
   - type: LavalandMadMiner
     maxHealth: 1250
     # Slower bolts that can be dodged, and a little more time between them.
@@ -110,8 +111,8 @@
         Blunt: 25
         Structural: 45
   - type: MovementSpeedModifier
-    baseWalkSpeed: 2.8
-    baseSprintSpeed: 4.1
+    baseWalkSpeed: 3.8
+    baseSprintSpeed: 4.8
   - type: StunImmune
   - type: NoSlip
   - type: RequireProjectileTarget
@@ -248,6 +249,7 @@
   id: BaseMobLavalandElite
   categories: [ HideSpawnMenu ]
   components:
+  - type: ParryableBoss
   - type: DestructionResistance
   - type: IgnoreKudzu
   - type: StunImmune

@@ -1,0 +1,15 @@
+lavaland-ash-wolf-hud-name = AshWolf LQ-829
+lavaland-ash-wolf-subtitle = The abandoned borg of a secret clan
+lavaland-ash-wolf-hud-hint = This boss needs close attention and parrying: press F to parry, and press LMB/Space to win the quick time event
+lavaland-ash-wolf-wake-popup = The borg twitches, its optics flare...
+lavaland-ash-wolf-phase-popup = AshWolf overheats! Shadows tear off its frame.
+lavaland-ash-wolf-frenzy-popup = AshWolf goes berserk! The storm is over, but it is only getting started.
+lavaland-ash-wolf-open-popup = It is open - strike now!
+lavaland-ash-wolf-saw-back-popup = The saw bites into its master!
+lavaland-ash-wolf-qte-popup = AshWolf pins you to the ground!
+lavaland-ash-wolf-qte-success-popup = You throw AshWolf off!
+lavaland-ash-wolf-qte-keys = LMB / RMB / SPACE in the yellow zone
+lavaland-ash-wolf-qte-escaped = ESCAPED
+lavaland-ash-wolf-qte-failed = FAILED
+lavaland-ash-wolf-dying-popup = AshWolf sparks and shakes, flames burst from its frame!
+lavaland-ash-wolf-tamed-popup = AshWolf goes quiet. It is an ordinary borg now.

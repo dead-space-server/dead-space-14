@@ -93,8 +93,12 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         SubscribeLocalEvent<LavalandMadMinerHookVisualComponent, InteractHandEvent>(OnHookVisualInteract);
     }
 
-    /// <summary>A miner the planet would put this close (tiles) to another grid - the base, the ash walkers - is not spawned.</summary>
-    private const float OtherGridExclusion = 60f;
+    /// <summary>
+    /// A miner the planet would put this close (tiles) to another grid - the base, the ash walkers, a ruin - is not
+    /// spawned. Wider than this, with all the ruins on the planet now, there was nearly always a grid in reach and
+    /// the miner never came at all.
+    /// </summary>
+    private const float OtherGridExclusion = 24f;
 
     /// <summary>The planet's spawn of a miner: not next to the outpost or any other grid; the marker itself goes.</summary>
     private void OnSpawnerMapInit(Entity<LavalandMadMinerSpawnerComponent> ent, ref MapInitEvent args)
@@ -1037,7 +1041,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         }
 
         if (TryComp<MovementSpeedModifierComponent>(uid, out var speed))
-            _speedModifier.ChangeBaseSpeed(uid, miner.RisenSpeed * 0.7f, miner.RisenSpeed, speed.Acceleration, speed);
+            _speedModifier.ChangeBaseSpeed(uid, miner.RisenWalkSpeed, miner.RisenSpeed, speed.Acceleration, speed);
 
         _appearance.SetData(uid, LavalandMadMinerVisuals.Necromorph, true);
 

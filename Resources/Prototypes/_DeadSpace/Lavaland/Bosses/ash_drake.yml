@@ -332,6 +332,7 @@
   # Strikes in melee only at someone who stays within its reach for a second.
   - type: LavalandMeleeWindup
     delay: 1
+  - type: ParryableBoss
   - type: LavalandBoss
     bossName: пепельный дракон
     maxHealth: 2500

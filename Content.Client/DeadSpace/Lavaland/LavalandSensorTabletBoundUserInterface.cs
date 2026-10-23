@@ -5,6 +5,9 @@ using Content.Client.UserInterface.Controls;
 using Content.Shared.DeadSpace.Lavaland;
 using JetBrains.Annotations;
 using Robust.Client.Graphics;
+using Robust.Client.ResourceManagement;
+using Robust.Shared.Graphics.RSI;
+using Robust.Shared.Utility;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
@@ -383,6 +386,10 @@ public sealed class LavalandRadarControl : MapGridControl
                     }
                     break;
 
+                case LavalandRadarPointKind.BossHead:
+                    DrawBossHead(handle, position, point.Color);
+                    break;
+
                 case LavalandRadarPointKind.BaseWall:
                     handle.DrawRect(new UIBox2(position.X - radius - 1.5f, position.Y - radius - 1.5f,
                         position.X + radius + 1.5f, position.Y + radius + 1.5f), point.Color.WithAlpha(0.18f));
@@ -407,6 +414,38 @@ public sealed class LavalandRadarControl : MapGridControl
 
         if (hovered?.Label is { } label)
             DrawBeaconTooltip(handle, hoveredPosition, label);
+    }
+
+    private static readonly ResPath AshWolfSprite = new("/Textures/_DeadSpace/Lavaland/Mobs/AshWolf.rsi");
+
+    /// <summary>The head on the Ash Wolf's front frame, in its pixels.</summary>
+    private static readonly UIBox2 AshWolfHead = new(9, 8, 23, 20);
+
+    private Texture? _bossHead;
+
+    /// <summary>The secret boss: the orange head of the Ash Wolf, pulsing.</summary>
+    private void DrawBossHead(DrawingHandleScreen handle, Vector2 position, Color color)
+    {
+        if (_bossHead == null &&
+            IoCManager.Resolve<IResourceCache>().TryGetResource<RSIResource>(AshWolfSprite, out var resource) &&
+            resource.RSI.TryGetState("bladewolfmk2", out var state))
+        {
+            _bossHead = state.GetFrame(RsiDirection.South, 0);
+        }
+
+        var pulse = 0.5f + 0.5f * MathF.Sin(_interferenceTime * 4f);
+        handle.DrawCircle(position, 11f + pulse * 3f, color.WithAlpha(0.22f));
+        if (_bossHead == null)
+        {
+            handle.DrawCircle(position, 5f, color);
+            return;
+        }
+
+        var size = new Vector2(AshWolfHead.Width, AshWolfHead.Height) * 1.6f;
+        var rect = UIBox2.FromDimensions(position - size / 2f, size);
+        // Lit orange: drawn twice, the second time added on top.
+        handle.DrawTextureRectRegion(_bossHead, rect, AshWolfHead, color);
+        handle.DrawTextureRectRegion(_bossHead, rect, AshWolfHead, color.WithAlpha(0.5f + 0.3f * pulse));
     }
 
     /// <summary>A marker beacon: a small diamond with a glow.</summary>
