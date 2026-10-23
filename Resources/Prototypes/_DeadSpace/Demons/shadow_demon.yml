@@ -46,6 +46,18 @@
         Base: running
   - type: Input
     context: "ghost"
+  - type: Hands
+    hands:
+      hand_right:
+        location: Right
+    sortedHands:
+    - hand_right
+    activeHandId: hand_right
+    canBeStripped: false
+  - type: ContainerFill
+    containers:
+      hand_right:
+      - WeaponDemonShadowHand
   - type: Fixtures
     fixtures:
       fix1:
@@ -56,6 +68,10 @@
   - type: Damageable
     damageContainer: BiologicalMetaphysical
     damageModifierSet: DemonShadow
+  - type: DamagedByFlashing
+    flashDamage:
+      types:
+        Heat: 2
   - type: NoSlip
   - type: Examiner
     skipChecks: true
@@ -152,6 +168,92 @@
     sound: /Audio/_DeadSpace/Demons/shadow_hand.ogg
   - type: TimedDespawn
     lifetime: 1
+
+- type: entity
+  id: WeaponDemonShadowHand
+  name: теневая рука
+  description: Теневая длань демона, способная выстрелить крюком или ударить вблизи.
+  parent: BaseItem
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: DemonShadowHand
+  - type: Unremoveable
+    deleteOnDrop: false
+  - type: Sprite
+    sprite: /Textures/_DeadSpace/Demons/shadow_hand_weapon.rsi
+    layers:
+    - state: hand
+      shader: unshaded
+  - type: Item
+    size: Normal
+  - type: MeleeWeapon
+    attackRate: 1
+    animation: WeaponArcClaw
+    useWeaponSpriteForAnimation: false
+    soundHit:
+      path: /Audio/Effects/demon_attack1.ogg
+    damage:
+      types:
+        Slash: 4
+        Blunt: 6
+        Piercing: 2
+        Heat: 8
+        Structural: 40
+  - type: Gun
+    fireRate: 0.5
+    soundGunshot:
+      path: /Audio/_DeadSpace/Demons/shadow_hand.ogg
+  - type: BasicEntityAmmoProvider
+    proto: DemonShadowHandProjectile
+    capacity: 1
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 8
+    rechargeSound:
+      path: /Audio/_DeadSpace/Demons/shadow.ogg
+      params:
+        volume: -10
+  - type: AltFireMelee
+    attackType: Heavy
+  - type: NinjaJohyo
+    pullAcceleration: 400
+    maxPullSpeed: 15
+    arrivalDistance: 1.5
+    maxDistance: 10
+
+- type: entity
+  id: DemonShadowHandProjectile
+  name: теневой крюк
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EmbeddableProjectile
+    deleteOnRemove: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    noRot: false
+    sprite: /Textures/_DeadSpace/Demons/shadow_hand.rsi
+    rotation: 180
+    layers:
+    - state: hand
+      shader: unshaded
+  - type: Physics
+    bodyType: Dynamic
+    linearDamping: 0
+    angularDamping: 0
+  - type: Projectile
+    deleteOnCollide: false
+    damage:
+      types:
+        Slash: 5
+    soundHit:
+      path: /Audio/_DeadSpace/Demons/shadow_hand.ogg
+  - type: NinjaJohyoProjectile
+  - type: StunOnCollide
+    stunAmount: 3
+    knockdownAmount: 3
+    refresh: false
+    drop: true
 
 - type: entity
   id: ShadowCocoon

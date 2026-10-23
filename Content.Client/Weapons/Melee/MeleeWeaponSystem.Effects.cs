@@ -51,6 +51,7 @@ public sealed partial class MeleeWeaponSystem
             && TryComp(weapon, out MeleeWeaponComponent? meleeWeaponComponent))
         {
             if (user != weapon
+                && meleeWeaponComponent.UseWeaponSpriteForAnimation
                 && TryComp(weapon, out SpriteComponent? weaponSpriteComponent))
                 _sprite.CopySprite((weapon, weaponSpriteComponent), (animationUid, sprite));
 
