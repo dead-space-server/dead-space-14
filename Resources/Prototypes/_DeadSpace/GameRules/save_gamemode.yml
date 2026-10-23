@@ -1,0 +1,29 @@
+- type: entity
+  id: SaveGamemodeDeathmatch
+  parent: BaseGameRule
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SaveGamemodeRule
+    saveSlot: Deathmatch
+    loadOnStart: false
+    saveOnRoundEnd: true
+    deleteSaveOnRoundEnd: false
+    nextPreset: SaveGamemodeExtended
+  - type: GameRule
+    minPlayers: 0
+    cancelPresetOnTooFewPlayers: false
+
+- type: entity
+  id: SaveGamemodeExtended
+  parent: BaseGameRule
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SaveGamemodeRule
+    saveSlot: Deathmatch
+    loadOnStart: true
+    saveOnRoundEnd: false
+    deleteSaveOnRoundEnd: true
+    nextPreset: null
+  - type: GameRule
+    minPlayers: 0
+    cancelPresetOnTooFewPlayers: false
