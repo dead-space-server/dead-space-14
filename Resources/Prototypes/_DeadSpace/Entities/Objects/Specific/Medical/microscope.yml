@@ -1,0 +1,40 @@
+- type: entity
+  id: Microscope
+  parent: BaseItem
+  name: микроскоп
+  description: Портативный микроскоп для детального осмотра извлечённых органов. Показывает не только сам орган, но и все его раны.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Medical/microscope.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: _DeadSpace/Objects/Specific/Medical/microscope.rsi
+  - type: Microscope
+    slotId: microscope_organ_slot
+    insertSound:
+      path: /Audio/Effects/Fluids/blood1.ogg
+    ejectSound:
+      path: /Audio/Effects/Fluids/blood2.ogg
+  - type: ItemSlots
+    slots:
+      microscope_organ_slot:
+        name: microscope-organ-slot-name
+        whitelist:
+          components:
+          - Organ
+  - type: ActivatableUI
+    key: enum.MicroscopeUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.MicroscopeUiKey.Key:
+        type: MicroscopeBoundUserInterface
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_drop.ogg

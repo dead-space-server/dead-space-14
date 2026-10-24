@@ -1,0 +1,13 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+        xmlns:ui="clr-namespace:Content.Client.DeadSpace.Microscope.UI"
+        SetSize="430 520">
+    <BoxContainer Orientation="Vertical" Margin="10 10 10 10" SeparationOverride="8">
+        <PanelContainer VerticalExpand="True">
+            <ui:OrganView Name="OrganView" />
+        </PanelContainer>
+        <Label Name="OrganNameLabel" Align="Center" />
+        <ProgressBar Name="DamageBar" MinValue="0" MaxValue="1" MinHeight="16" />
+        <Label Name="StatusLabel" Align="Center" />
+        <Button Name="EjectButton" Text="{Loc microscope-ui-eject}" />
+    </BoxContainer>
+</DefaultWindow>

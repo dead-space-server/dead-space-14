@@ -36,6 +36,7 @@
   - Drill
   - Saw
   - Hemostat
+  - Microscope # DS14
 
 - type: latheRecipePack
   id: MedicalStatic
