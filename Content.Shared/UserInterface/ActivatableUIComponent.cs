@@ -1,4 +1,4 @@
-﻿using Content.Shared.Whitelist;
+using Content.Shared.Whitelist;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization.TypeSerializers.Implementations;
 
@@ -27,6 +27,12 @@ namespace Content.Shared.UserInterface
 
         [DataField]
         public LocId VerbText = "ui-verb-toggle-open";
+
+        [DataField]
+        public int VerbPriority; //DS-14
+
+        [DataField]
+        public string VerbIcon = ""; //DS-14
 
         /// <summary>
         ///     Whether you need to be able to do complex interactions to operate this UI.

@@ -4,6 +4,13 @@
   id: FireAxe
   description: Truly, the weapon of a madman. Who would think to fight fire with an axe?
   components:
+  - type: SurgeryTool
+    precision: 0.8
+    slip: 0.35
+    wobble: 26
+    verbs:
+    - Amputate
+    - SawBone
   - type: Tag
     tags:
     - FireAxe

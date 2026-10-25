@@ -54,6 +54,12 @@
   parent: BaseCrowbar
   id: Crowbar
   components:
+  - type: SurgeryTool
+    precision: 0.75
+    slip: 0.2
+    wobble: 18
+    verbs:
+    - Retract
   - type: Sprite
     state: icon
   - type: Item

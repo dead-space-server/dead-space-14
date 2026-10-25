@@ -1,0 +1,18 @@
+- type: entity
+  parent: BaseItem
+  id: SurgeryXrayTablet
+  name: рентген-планшет
+  description: Ручной рентген. Включите в руке и проведите по человеку.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Medical/xray_tablet.rsi
+    state: tablet
+  - type: Item
+    size: Small
+    sprite: _DeadSpace/Objects/Medical/xray_tablet.rsi
+  - type: SurgeryXray
+    sprite: /Textures/_DeadSpace/Mobs/Surgery/skeleton.rsi
+    state: skeleton
+    boneless:
+    - Diona
+    - SlimePerson

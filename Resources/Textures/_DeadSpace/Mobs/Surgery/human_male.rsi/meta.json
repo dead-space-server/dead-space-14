@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Created by Blue Dog Doc for Space Station 14 server Мёртвый Космос",
+  "size": { "x": 32, "y": 32 },
+  "states": [
+    { "name": "none" },
+    { "name": "torso_cut1" }, { "name": "torso_cut2" }, { "name": "torso_cut3" }, { "name": "torso_cut4" },
+    { "name": "torso_open" }, { "name": "torso_open_l" }, { "name": "torso_open_r" }, { "name": "torso_organs" },
+    { "name": "head_cut1" }, { "name": "head_cut2" }, { "name": "head_cut3" }, { "name": "head_cut4" },
+    { "name": "head_open" }, { "name": "head_ribs" }, { "name": "head_organs" },
+    { "name": "arml_cut1" }, { "name": "arml_cut2" }, { "name": "arml_cut3" }, { "name": "arml_cut4" }, { "name": "arml_open" },
+    { "name": "armr_cut1" }, { "name": "armr_cut2" }, { "name": "armr_cut3" }, { "name": "armr_cut4" }, { "name": "armr_open" },
+    { "name": "legl_cut1" }, { "name": "legl_cut2" }, { "name": "legl_cut3" }, { "name": "legl_cut4" }, { "name": "legl_open" },
+    { "name": "legr_cut1" }, { "name": "legr_cut2" }, { "name": "legr_cut3" }, { "name": "legr_cut4" }, { "name": "legr_open" },
+    { "name": "handl_cut1" }, { "name": "handl_cut2" }, { "name": "handl_cut3" }, { "name": "handl_cut4" }, { "name": "handl_open" },
+    { "name": "handr_cut1" }, { "name": "handr_cut2" }, { "name": "handr_cut3" }, { "name": "handr_cut4" }, { "name": "handr_open" },
+    { "name": "footl_cut1" }, { "name": "footl_cut2" }, { "name": "footl_cut3" }, { "name": "footl_cut4" }, { "name": "footl_open" },
+    { "name": "footr_cut1" }, { "name": "footr_cut2" }, { "name": "footr_cut3" }, { "name": "footr_cut4" }, { "name": "footr_open" }
+  ]
+}

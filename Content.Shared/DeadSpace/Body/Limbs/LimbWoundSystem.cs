@@ -4,6 +4,7 @@ using System.Numerics;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Body.Components;
+using Content.Shared.DeadSpace.Surgery;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Prototypes;
 using Content.Shared.Body.Systems;
@@ -33,6 +34,7 @@ using Content.Shared.Medical;
 using Content.Shared.Medical.Cryogenics;
 using Content.Shared.Medical.Healing;
 using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Events;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Rejuvenate;
@@ -69,7 +71,7 @@ using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 namespace Content.Shared.DeadSpace.Body.Limbs;
 
-public sealed class LimbWoundSystem : EntitySystem
+public sealed partial class LimbWoundSystem : EntitySystem
 {
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -81,6 +83,7 @@ public sealed class LimbWoundSystem : EntitySystem
     [Dependency] private readonly DamageableSystem _damage = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly MobStateSystem _mobs = default!;
+    [Dependency] private readonly MobThresholdSystem _thresholds = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
     [Dependency] private readonly SharedBodySystem _body = default!;
     [Dependency] private readonly SharedContainerSystem _containers = default!;
@@ -215,7 +218,7 @@ public sealed class LimbWoundSystem : EntitySystem
             var spec = new DamageSpecifier();
             if (bleed > LimbWoundRules.TickBleed || failure.Bloodloss > 0f)
             {
-                var loss = bleed * LimbWoundRules.BleedPerFlesh + failure.Bloodloss;
+                var loss = bleed * LimbWoundRules.BleedLocal + failure.Bloodloss;
                 spec.DamageDict["Bloodloss"] = FixedPoint2.New(loss);
                 var open = 0f;
                 for (var i = 0; i < zones.Length; i++)
@@ -1005,7 +1008,7 @@ public sealed class LimbWoundSystem : EntitySystem
         var life = LimbWoundRules.Life(
             ent.Comp.Zones[LimbWoundRules.Index(LimbZone.Head)].Health,
             ent.Comp.Zones[LimbWoundRules.Index(LimbZone.Torso)].Health);
-        if (life == LimbLife.Dead)
+        if (life == LimbLife.Dead || VitalGone(ent.Comp))
             args.State = MobState.Dead;
         else if (life == LimbLife.Crit && args.State == MobState.Alive)
             args.State = MobState.Critical;
@@ -1579,6 +1582,42 @@ public sealed class LimbWoundSystem : EntitySystem
         RefreshActive(uid, limbs);
     }
 
+    private bool VitalGone(LimbBodyComponent limbs)
+    {
+        foreach (var organ in _proto.EnumeratePrototypes<SurgeryOrganPrototype>())
+        {
+            if (!organ.Vital || !Enum.TryParse<LimbOrgan>(organ.ID, out var kind))
+                continue;
+
+            if (Gone(limbs, kind, (LimbOrganMask) (1 << (int) kind)))
+                return true;
+        }
+
+        return false;
+    }
+
+    private static bool Gone(LimbBodyComponent limbs, LimbOrgan organ, LimbOrganMask mask)
+    {
+        if ((limbs.Present & mask) == 0)
+            return false;
+
+        var index = (int) organ;
+        return (uint) index < (uint) limbs.Organs.Count && limbs.Organs[index].Missing;
+    }
+
+    private void ReleaseOrganDeath(EntityUid uid, LimbBodyComponent limbs)
+    {
+        if (!_net.IsServer || VitalGone(limbs))
+            return;
+
+        var head = limbs.Zones[LimbWoundRules.Index(LimbZone.Head)].Health;
+        var torso = limbs.Zones[LimbWoundRules.Index(LimbZone.Torso)].Health;
+        var life = LimbWoundRules.Life(head, torso);
+        var state = life == LimbLife.Dead ? MobState.Dead : life == LimbLife.Crit ? MobState.Critical : MobState.Alive;
+        _thresholds.SetCurrentThresholdState(uid, state);
+        _mobs.ChangeMobState(uid, state);
+    }
+
     private void ApplyLife(EntityUid uid, LimbBodyComponent limbs)
     {
         if (!_net.IsServer)
@@ -1586,7 +1625,7 @@ public sealed class LimbWoundSystem : EntitySystem
 
         var head = limbs.Zones[LimbWoundRules.Index(LimbZone.Head)].Health;
         var torso = limbs.Zones[LimbWoundRules.Index(LimbZone.Torso)].Health;
-        switch (LimbWoundRules.Life(head, torso))
+        switch (VitalGone(limbs) ? LimbLife.Dead : LimbWoundRules.Life(head, torso))
         {
             case LimbLife.Dead:
                 _mobs.ChangeMobState(uid, MobState.Dead);

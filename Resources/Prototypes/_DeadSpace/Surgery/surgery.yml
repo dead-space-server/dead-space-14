@@ -1,0 +1,884 @@
+﻿- type: surgeryAnatomy
+  id: FleshLimb
+  operation: OpenLimb
+  layers:
+  - Skin
+  - Bone
+
+- type: surgeryAnatomy
+  id: Torso
+  operation: TakeHeart
+  layers:
+  - Skin
+  - Bone
+  - Cavity
+
+- type: surgeryAnatomy
+  id: Groin
+  operation: OpenGroin
+  layers:
+  - Skin
+  - Cavity
+
+- type: surgeryAnatomy
+  id: Head
+  operation: OpenHead
+  layers:
+  - Skin
+  - Bone
+  - Cavity
+
+- type: surgeryAnatomy
+  id: Eyes
+  operation: OpenEyes
+  layers:
+  - Skin
+  - Globe
+
+- type: surgeryAnatomy
+  id: Mouth
+  operation: TakeTongue
+  layers:
+  - Skin
+  - Cavity
+
+- type: surgeryAnatomy
+  id: SkeletonLimb
+  operation: OpenSkeleton
+  layers:
+  - Bone
+
+- type: surgeryAnatomy
+  id: Slime
+  operation: OpenSlime
+  layers:
+  - Skin
+  - Cavity
+
+- type: surgeryAnatomy
+  id: Plant
+  operation: OpenPlant
+  layers:
+  - Skin
+  - Cavity
+
+- type: surgerySpecies
+  id: Diona
+  limb: Plant
+  torso: Plant
+  head: Plant
+  groin: Plant
+  eyes: Eyes
+
+- type: surgerySpecies
+  id: SlimePerson
+  limb: Slime
+  torso: Slime
+  head: Slime
+  groin: Slime
+  eyes: Eyes
+
+- type: surgeryPlace
+  id: Floor
+  slip: 0.7
+  boneFloor: 25
+  jerk: 0.35
+
+- type: surgeryPlace
+  id: Table
+  slip: 0.15
+  boneFloor: 0
+  jerk: 0.1
+
+- type: surgeryPlace
+  id: Field
+  slip: 0.45
+  boneFloor: 25
+  jerk: 0.2
+
+- type: surgeryOrgan
+  id: Heart
+  slot: heart
+  zone: Torso
+  vital: true
+  spots:
+  - state: heart-off
+    x: 11
+    y: 9
+    w: 6
+    h: 9
+    cx: 0.50
+    cy: 0.40
+    height: 0.34
+    hitX: 13
+    hitY: 12
+    hitW: 5
+    hitH: 6
+
+- type: surgeryOrgan
+  id: Lungs
+  slot: lungs
+  zone: Torso
+  spots:
+  - state: lung-l
+    x: 9
+    y: 9
+    w: 7
+    h: 14
+    cx: 0.30
+    cy: 0.36
+    height: 0.40
+    hitX: 10
+    hitY: 11
+    hitW: 6
+    hitH: 6
+  - state: lung-r
+    x: 15
+    y: 9
+    w: 7
+    h: 14
+    cx: 0.70
+    cy: 0.36
+    height: 0.40
+
+- type: surgeryOrgan
+  id: Stomach
+  slot: stomach
+  zone: Torso
+  spots:
+  - state: stomach
+    x: 8
+    y: 6
+    w: 15
+    h: 18
+    cx: 0.66
+    cy: 0.66
+    height: 0.24
+    hitX: 14
+    hitY: 16
+    hitW: 5
+    hitH: 4
+
+- type: surgeryOrgan
+  id: Liver
+  slot: liver
+  zone: Torso
+  spots:
+  - state: liver
+    x: 9
+    y: 12
+    w: 14
+    h: 11
+    cx: 0.34
+    cy: 0.64
+    height: 0.22
+    hitX: 10
+    hitY: 16
+    hitW: 5
+    hitH: 4
+
+- type: surgeryOrgan
+  id: Kidneys
+  slot: kidneys
+  zone: Groin
+  spots:
+  - state: kidney-l
+    x: 8
+    y: 10
+    w: 8
+    h: 13
+    cx: 0.38
+    cy: 0.86
+    height: 0.16
+    hitX: 12
+    hitY: 19
+    hitW: 6
+    hitH: 3
+  - state: kidney-r
+    x: 16
+    y: 10
+    w: 8
+    h: 13
+    cx: 0.62
+    cy: 0.86
+    height: 0.16
+
+- type: surgeryOrgan
+  id: Intestines
+  slot: intestines
+  zone: Groin
+
+- type: surgeryOrgan
+  id: Brain
+  slot: brain
+  zone: Head
+  vital: true
+
+- type: surgeryOrgan
+  id: Eyes
+  slot: eyes
+  zone: Eyes
+
+- type: surgeryOrgan
+  id: Core
+  slot: core
+  zone: Torso
+
+- type: surgeryMiss
+  id: Incise
+  damage:
+    types:
+      Slash: 8
+
+- type: surgeryMiss
+  id: SawBone
+  damage:
+    types:
+      Slash: 12
+
+- type: surgeryMiss
+  id: Cauterize
+  damage:
+    types:
+      Heat: 8
+
+- type: surgeryMark
+  id: Torso
+  prefix: torso
+  self: false
+  ax: 15
+  ay: 11
+  bx: 15
+  by: 20
+  hx: 11
+  hy: 10
+  hw: 8
+  hh: 12
+
+- type: surgeryMark
+  id: Head
+  prefix: head
+  self: false
+  ax: 12
+  ay: 6
+  bx: 19
+  by: 6
+  hx: 11
+  hy: 1
+  hw: 10
+  hh: 9
+
+- type: surgeryMark
+  id: ArmLeft
+  prefix: arml
+  ax: 21
+  ay: 11
+  bx: 21
+  by: 17
+  hx: 19
+  hy: 10
+  hw: 6
+  hh: 8
+
+- type: surgeryMark
+  id: ArmRight
+  prefix: armr
+  ax: 8
+  ay: 11
+  bx: 8
+  by: 17
+  hx: 7
+  hy: 10
+  hw: 6
+  hh: 8
+
+- type: surgeryMark
+  id: HandLeft
+  prefix: handl
+  ax: 21
+  ay: 18
+  bx: 21
+  by: 20
+  hx: 18
+  hy: 16
+  hw: 6
+  hh: 7
+
+- type: surgeryMark
+  id: HandRight
+  prefix: handr
+  ax: 8
+  ay: 18
+  bx: 8
+  by: 20
+  hx: 5
+  hy: 16
+  hw: 6
+  hh: 7
+
+- type: surgeryMark
+  id: LegLeft
+  prefix: legl
+  ax: 17
+  ay: 23
+  bx: 17
+  by: 28
+  hx: 15
+  hy: 21
+  hw: 5
+  hh: 8
+
+- type: surgeryMark
+  id: LegRight
+  prefix: legr
+  ax: 12
+  ay: 23
+  bx: 12
+  by: 28
+  hx: 11
+  hy: 21
+  hw: 5
+  hh: 8
+
+- type: surgeryMark
+  id: FootLeft
+  prefix: footl
+  ax: 18
+  ay: 29
+  bx: 18
+  by: 31
+  hx: 16
+  hy: 28
+  hw: 5
+  hh: 4
+
+- type: surgeryMark
+  id: FootRight
+  prefix: footr
+  ax: 11
+  ay: 29
+  bx: 11
+  by: 31
+  hx: 9
+  hy: 28
+  hw: 5
+  hh: 4
+
+- type: surgeryMark
+  id: Groin
+  ax: 12
+  ay: 22
+  bx: 20
+  by: 22
+  hx: 12
+  hy: 20
+  hw: 8
+  hh: 5
+
+- type: surgeryMark
+  id: Eyes
+  ax: 13
+  ay: 6
+  bx: 18
+  by: 6
+  hx: 12
+  hy: 4
+  hw: 8
+  hh: 3
+  start:
+  - Extract
+
+- type: surgeryMark
+  id: Mouth
+  ax: 14
+  ay: 8
+  bx: 17
+  by: 8
+  hx: 13
+  hy: 7
+  hw: 6
+  hh: 2
+  start:
+  - Extract
+
+- type: surgeryHint
+  id: Incise
+  icons:
+  - sprite: /Textures/Objects/Specific/Medical/Surgery/scalpel.rsi
+    state: scalpel
+  - sprite: /Textures/Objects/Specific/Medical/Surgery/scalpel.rsi
+    state: shiv
+
+- type: surgeryHint
+  id: Retract
+  icons:
+  - sprite: /Textures/Objects/Specific/Medical/Surgery/scissors.rsi
+    state: retractor
+
+- type: surgeryHint
+  id: SawBone
+  icons:
+  - sprite: /Textures/Objects/Specific/Medical/Surgery/saw.rsi
+    state: saw
+  - sprite: /Textures/Objects/Specific/Medical/Surgery/drill.rsi
+    state: drill
+
+- type: surgeryHint
+  id: Clamp
+  icons:
+  - sprite: /Textures/Objects/Specific/Medical/Surgery/scissors.rsi
+    state: hemostat
+
+- type: surgeryHint
+  id: Extract
+  icons:
+  - sprite: /Textures/Objects/Specific/Medical/Surgery/scissors.rsi
+    state: hemostat
+
+- type: surgeryHint
+  id: Cauterize
+  icons:
+  - sprite: /Textures/Objects/Specific/Medical/Surgery/cautery.rsi
+    state: cautery
+
+- type: surgeryOperation
+  id: TakeHeart
+  zone: Torso
+  name: surgery-op-take-heart
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    undo: Retract
+  - verb: SawBone
+    layer: Bone
+    undo: Cauterize
+  - verb: Retract
+    layer: Bone
+    undo: Retract
+  - verb: Clamp
+    layer: Cavity
+    undo: Clamp
+  - verb: Extract
+    layer: Cavity
+    undo: Insert
+    organ: Heart
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+  close:
+  - verb: Cauterize
+    layer: Bone
+    undo: Incise
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: TakeLungs
+  zone: Torso
+  name: surgery-op-take-lungs
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    undo: Retract
+  - verb: SawBone
+    layer: Bone
+    undo: Cauterize
+  - verb: Retract
+    layer: Bone
+    undo: Retract
+  - verb: Clamp
+    layer: Cavity
+    undo: Clamp
+  - verb: Extract
+    layer: Cavity
+    undo: Insert
+    organ: Lungs
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+  close:
+  - verb: Cauterize
+    layer: Bone
+    undo: Incise
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: OpenTorso
+  zone: Torso
+  name: surgery-op-open-torso
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    undo: Retract
+  - verb: SawBone
+    layer: Bone
+    undo: Cauterize
+  - verb: Retract
+    layer: Bone
+    undo: Retract
+  close:
+  - verb: Cauterize
+    layer: Bone
+    undo: Incise
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: OpenHead
+  zone: Head
+  name: surgery-op-open-head
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    undo: Retract
+  - verb: SawBone
+    layer: Bone
+    undo: Cauterize
+  - verb: Retract
+    layer: Bone
+    undo: Retract
+  close:
+  - verb: Cauterize
+    layer: Bone
+    undo: Incise
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: OpenLimb
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    undo: Retract
+  - verb: SawBone
+    layer: Bone
+    undo: Cauterize
+  - verb: Retract
+    layer: Bone
+    undo: Retract
+  close:
+  - verb: Cauterize
+    layer: Bone
+    undo: Incise
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: OpenGroin
+  zone: Groin
+  name: surgery-op-open-groin
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    undo: Retract
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: OpenEyes
+  steps:
+  - verb: Retract
+    layer: Skin
+    undo: Retract
+  - verb: Incise
+    layer: Globe
+    undo: Cauterize
+  close:
+  - verb: Cauterize
+    layer: Globe
+    undo: Incise
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: OpenSkeleton
+  steps:
+  - verb: SawBone
+    layer: Bone
+    undo: Cauterize
+  - verb: Retract
+    layer: Bone
+    undo: Retract
+  close:
+  - verb: Cauterize
+    layer: Bone
+    undo: Incise
+
+- type: surgeryOperation
+  id: OpenSlime
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    undo: Retract
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: OpenPlant
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    undo: Retract
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryLodge
+  id: Lodge
+  blocked:
+  - Organ
+  - SubdermalImplant
+  - Implanter
+  - SurgeryTool
+
+- type: surgerySpeech
+  id: Mumble
+  accent: Mumble
+
+- type: surgeryPart
+  id: Brain
+  zone: Head
+  anatomy: Head
+  operation: TakeBrain
+  state: brain
+  order: 0
+  ax: 12
+  ay: 6
+  bx: 19
+  by: 6
+
+- type: surgeryPart
+  id: EyeRight
+  zone: Head
+  anatomy: Eyes
+  operation: TakeEye
+  state: eyeball-r
+  order: 1
+  ax: 13
+  ay: 6
+  bx: 15
+  by: 6
+
+- type: surgeryPart
+  id: EyeLeft
+  zone: Head
+  anatomy: Eyes
+  operation: TakeEye
+  state: eyeball-l
+  order: 2
+  ax: 17
+  ay: 6
+  bx: 19
+  by: 6
+
+- type: surgeryPart
+  id: Tongue
+  zone: Head
+  anatomy: Mouth
+  operation: TakeTongue
+  state: tongue
+  order: 3
+  ax: 15
+  ay: 8
+  bx: 17
+  by: 8
+
+- type: surgeryPart
+  id: Teeth
+  zone: Head
+  anatomy: Mouth
+  state: ""
+  order: 4
+  ax: 14
+  ay: 8
+  bx: 18
+  by: 8
+
+- type: surgeryOperation
+  id: TakeBrain
+  zone: Head
+  name: surgery-op-take-brain
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    undo: Retract
+  - verb: SawBone
+    layer: Bone
+    undo: Cauterize
+  - verb: Retract
+    layer: Bone
+    undo: Retract
+  - verb: Clamp
+    layer: Cavity
+    undo: Clamp
+  - verb: Extract
+    layer: Cavity
+    undo: Insert
+    organ: Brain
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+  close:
+  - verb: Cauterize
+    layer: Bone
+    undo: Incise
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: PutBrain
+  zone: Head
+  name: surgery-op-put-brain
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    undo: Retract
+  - verb: SawBone
+    layer: Bone
+    undo: Cauterize
+  - verb: Retract
+    layer: Bone
+    undo: Retract
+  - verb: Insert
+    layer: Cavity
+    undo: Extract
+    organ: Brain
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+  close:
+  - verb: Cauterize
+    layer: Bone
+    undo: Incise
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: TakeEye
+  zone: Head
+  name: surgery-op-take-eye
+  steps:
+  - verb: Retract
+    layer: Skin
+    undo: Retract
+  - verb: Incise
+    layer: Globe
+    undo: Cauterize
+  - verb: Extract
+    layer: Globe
+    undo: Insert
+    organ: Eyes
+  close:
+  - verb: Cauterize
+    layer: Globe
+    undo: Incise
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: PutEye
+  zone: Head
+  name: surgery-op-put-eye
+  steps:
+  - verb: Insert
+    layer: Globe
+    undo: Extract
+    organ: Eyes
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: TakeTongue
+  zone: Head
+  name: surgery-op-take-tongue
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    undo: Retract
+  - verb: Extract
+    layer: Cavity
+    undo: Insert
+    speech: Mumble
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: PutTongue
+  zone: Head
+  name: surgery-op-put-tongue
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+    undo: Retract
+  - verb: Insert
+    layer: Cavity
+    undo: Extract
+    speech: Clear
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise

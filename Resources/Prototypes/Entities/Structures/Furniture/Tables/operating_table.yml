@@ -4,6 +4,8 @@
   name: operating table
   description: Special medical table for surgery. This one just seems to be a useless prop, though.
   components:
+  - type: SurgerySurface
+    place: Table
   - type: Sprite
     sprite: Structures/Furniture/Tables/optable.rsi
     state: operating_table

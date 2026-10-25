@@ -47,6 +47,12 @@
   name: kitchen knife
   description: A general purpose Chef's Knife made by Asters Merchant Guild. Guaranteed to stay sharp for years to come..
   components:
+  - type: SurgeryTool
+    precision: 0.7
+    slip: 0.25
+    wobble: 22
+    verbs:
+    - Incise
   - type: Tag
     tags:
     - Knife

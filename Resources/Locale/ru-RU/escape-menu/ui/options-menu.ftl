@@ -61,6 +61,7 @@ ui-options-highlights-color-example = Это подсвеченный текст
 
 ui-options-show-held-item = Показать удерживаемый элемент рядом с курсором
 ui-options-show-combat-mode-indicators = Показать индикатор боевого режима рядом с курсором
+ui-options-surgery-window = Хирургия в окне
 ui-options-opaque-storage-window = Непрозрачность окна хранилища
 ui-options-show-ooc-patron-color = Цветной ник в OOC для патронов с Patreon
 ui-options-show-looc-on-head = Показывать LOOC-чат над головами персонажей

@@ -1,0 +1,111 @@
+- type: entity
+  parent: BaseItem
+  id: SurgeryXrayShard
+  name: рентген-осколок
+  suffix: Admin
+  description: Проверочный инородный предмет для снимка.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Medical/xray_tablet.rsi
+    state: icon
+  - type: Item
+    size: Tiny
+
+- type: entity
+  parent: Pill
+  id: SurgeryXrayPillCrack
+  name: таблетка трещины
+  suffix: Admin, рентген
+  description: После проглатывания трещина на всех костях.
+  components:
+  - type: Pill
+    pillType: 1
+  - type: Sprite
+    state: pill1
+  - type: SurgeryXrayMarkPill
+    kind: Crack
+
+- type: entity
+  parent: Pill
+  id: SurgeryXrayPillClosedFracture
+  name: таблетка закрытого перелома
+  suffix: Admin, рентген
+  description: После проглатывания закрытый перелом всех костей.
+  components:
+  - type: Pill
+    pillType: 2
+  - type: Sprite
+    state: pill2
+  - type: SurgeryXrayMarkPill
+    kind: ClosedFracture
+
+- type: entity
+  parent: Pill
+  id: SurgeryXrayPillOpenFracture
+  name: таблетка открытого перелома
+  suffix: Admin, рентген
+  description: После проглатывания открытый перелом всех костей.
+  components:
+  - type: Pill
+    pillType: 3
+  - type: Sprite
+    state: pill3
+  - type: SurgeryXrayMarkPill
+    kind: OpenFracture
+
+- type: entity
+  parent: Pill
+  id: SurgeryXrayPillBleed
+  name: таблетка внутреннего кровотечения
+  suffix: Admin, рентген
+  description: После проглатывания внутреннее кровотечение во всех частях.
+  components:
+  - type: Pill
+    pillType: 4
+  - type: Sprite
+    state: pill4
+  - type: SurgeryXrayMarkPill
+    kind: Bleed
+
+- type: entity
+  parent: Pill
+  id: SurgeryXrayPillRupture
+  name: таблетка разрыва органов
+  suffix: Admin, рентген
+  description: После проглатывания разрыв мозга, глаз, сердца, лёгких, желудка, печени, почек и кишок.
+  components:
+  - type: Pill
+    pillType: 5
+  - type: Sprite
+    state: pill5
+  - type: SurgeryXrayMarkPill
+    kind: Rupture
+
+- type: entity
+  parent: Pill
+  id: SurgeryXrayPillEmbedded
+  name: таблетка осколка
+  suffix: Admin, рентген
+  description: После проглатывания застрявший осколок во всех частях.
+  components:
+  - type: Pill
+    pillType: 6
+  - type: Sprite
+    state: pill6
+  - type: SurgeryXrayMarkPill
+    kind: Embedded
+
+- type: entity
+  parent: Pill
+  id: SurgeryXrayPillForeign
+  name: таблетка инородного предмета
+  suffix: Admin, рентген
+  description: После проглатывания предметы в голове, брюшной полости и груди.
+  components:
+  - type: Pill
+    pillType: 7
+  - type: Sprite
+    state: pill7
+  - type: SurgeryXrayMarkPill
+    kind: Foreign

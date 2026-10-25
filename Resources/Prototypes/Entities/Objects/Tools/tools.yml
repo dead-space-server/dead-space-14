@@ -4,6 +4,13 @@
   id: Wirecutter
   description: This kills the wire.
   components:
+  - type: SurgeryTool
+    precision: 0.5
+    slip: 0.3
+    wobble: 20
+    verbs:
+    - Clamp
+    - SawBone
   - type: EmitSoundOnLand
     sound:
       path: /Audio/Items/wirecutter_drop.ogg
@@ -59,6 +66,12 @@
   id: Screwdriver
   description: Industrial grade torque in a small screwdriving package.
   components:
+  - type: SurgeryTool
+    precision: 0.45
+    slip: 0.3
+    wobble: 18
+    verbs:
+    - MendBone
   - type: EmitSoundOnLand
     sound:
       path: /Audio/Items/screwdriver_drop.ogg
@@ -111,6 +124,12 @@
   id: Wrench
   description: 'A common tool for assembly and disassembly. Remember: lefty latchy, righty removey.'
   components:
+  - type: SurgeryTool
+    precision: 0.7
+    slip: 0.15
+    wobble: 14
+    verbs:
+    - SetBone
   - type: EmitSoundOnLand
     sound:
       path: /Audio/Items/wrench_drop.ogg

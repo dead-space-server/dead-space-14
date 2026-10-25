@@ -4,6 +4,12 @@
   id: Welder
   description: "Melts anything as long as it's fueled, don't forget your eye protection!"
   components:
+  - type: SurgeryTool
+    precision: 0.55
+    slip: 0.25
+    wobble: 20
+    verbs:
+    - Cauterize
   - type: EmitSoundOnLand
     sound:
       path: /Audio/Items/welder_drop.ogg

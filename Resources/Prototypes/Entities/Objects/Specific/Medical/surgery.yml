@@ -31,6 +31,12 @@
   parent: BaseToolSurgery
   description: A surgical tool used to cauterize open wounds.
   components:
+  - type: SurgeryTool
+    precision: 0.95
+    slip: 0.02
+    wobble: 8
+    verbs:
+    - Cauterize
   - type: Sprite
     sprite: Objects/Specific/Medical/Surgery/cautery.rsi
     state: cautery
@@ -52,6 +58,12 @@
   parent: BaseToolSurgery
   description: A surgical drill for making holes into hard material.
   components:
+  - type: SurgeryTool
+    precision: 0.4
+    slip: 0.3
+    wobble: 22
+    verbs:
+    - SawBone
   - type: Sprite
     sprite: Objects/Specific/Medical/Surgery/drill.rsi
     state: drill
@@ -77,6 +89,12 @@
   parent: BaseToolSurgery
   description: A surgical tool used to make incisions into flesh.
   components:
+  - type: SurgeryTool
+    precision: 0.92
+    slip: 0.05
+    wobble: 10
+    verbs:
+    - Incise
   - type: Sharp
     butcherDelayModifier: 1.5 # Butchering with a scalpel, regardless of the type, will take 50% longer
   - type: Tool
@@ -119,6 +137,12 @@
   parent: Scalpel
   description: A pointy piece of glass, abraded to an edge and wrapped in tape for a handle. # Could become a decent tool or weapon with right tool mods.
   components:
+  - type: SurgeryTool
+    precision: 0.55
+    slip: 0.35
+    wobble: 28
+    verbs:
+    - Incise
   - type: Sprite
     state: shiv
   - type: Item
@@ -141,6 +165,12 @@
   parent: Scalpel
   description: Made of more expensive materials, sharper and generally more reliable.
   components:
+  - type: SurgeryTool
+    precision: 0.97
+    slip: 0.02
+    wobble: 6
+    verbs:
+    - Incise
   - type: Sprite
     state: advanced
   - type: Item
@@ -156,6 +186,13 @@
   parent: Scalpel
   description: A scalpel which uses a directed laser to slice instead of a blade, for more precise surgery while also cauterizing as it cuts.
   components:
+  - type: SurgeryTool
+    precision: 0.95
+    slip: 0.03
+    wobble: 8
+    verbs:
+    - Incise
+    - Cauterize
   - type: Sprite
     state: laser
   - type: Item
@@ -169,6 +206,12 @@
   parent: BaseToolSurgery
   description: A surgical tool used to hold open incisions.
   components:
+  - type: SurgeryTool
+    precision: 0.95
+    slip: 0.05
+    wobble: 8
+    verbs:
+    - Retract
   - type: Sprite
     sprite: Objects/Specific/Medical/Surgery/scissors.rsi
     state: retractor
@@ -182,6 +225,14 @@
   parent: Retractor
   description: A surgical tool used to compress blood vessels to prevent bleeding.
   components:
+  - type: SurgeryTool
+    precision: 0.95
+    slip: 0.05
+    wobble: 8
+    verbs:
+    - Clamp
+    - Extract
+    - PullEmbedded
   - type: Sprite
     state: hemostat
   - type: Item
@@ -202,6 +253,13 @@
   parent: BaseToolSurgery
   description: For cutting wood and other objects to pieces. Or sawing bones, in case of emergency.
   components:
+  - type: SurgeryTool
+    precision: 0.9
+    slip: 0.08
+    wobble: 12
+    verbs:
+    - SawBone
+    - Amputate
   - type: Sharp
   - type: Utensil
     types:
@@ -224,6 +282,13 @@
   parent: Saw
   description: A wicked serrated blade made of whatever nasty sharp things you could find. # It would make a pretty decent weapon, given there are more space for some tool mods too.
   components:
+  - type: SurgeryTool
+    precision: 0.45
+    slip: 0.4
+    wobble: 30
+    verbs:
+    - SawBone
+    - Amputate
   - type: Sprite
     state: improv
   - type: Item
@@ -267,6 +332,13 @@
   parent: [ SawElectric, BaseSyndicateContraband ]
   description: Interdyne's state-of-the-art surgical saw. Guaranteed to stay spotless and sterile, no matter how messy the job.
   components:
+  - type: SurgeryTool
+    precision: 0.96
+    slip: 0.04
+    wobble: 7
+    verbs:
+    - SawBone
+    - Amputate
   - type: Sprite
     state: advanced
   - type: Item
