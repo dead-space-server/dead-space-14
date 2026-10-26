@@ -86,6 +86,15 @@
     LavalandMiningPoint: 800
 
 - type: listing
+  id: LavalandMiningOreBoxFlatpack
+  productEntity: OreBoxFlatpack
+  categories:
+  - LavalandMiningUtility
+  - LavalandMiningUtilityTaipan
+  cost:
+    LavalandMiningPoint: 1000
+
+- type: listing
   id: LavalandMiningPickaxe
   productEntity: Pickaxe
   categories:

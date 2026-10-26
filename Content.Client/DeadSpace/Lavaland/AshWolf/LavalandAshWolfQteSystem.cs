@@ -3,6 +3,7 @@
 using System.Numerics;
 using Content.Client.Resources;
 using Content.Shared.DeadSpace.Lavaland.AshWolf;
+using Content.Shared.Input;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
 using Robust.Client.ResourceManagement;
@@ -13,8 +14,9 @@ namespace Content.Client.DeadSpace.Lavaland.AshWolf;
 
 /// <summary>
 /// The quick time event of the Ash Wolf's pounce, played on the client's own clock so the ping does not matter:
-/// a needle goes round a dial, and LMB, RMB or Space has to be pressed while it is in the bright zone, a few times
-/// in a row. A press outside the zone, or a full turn without one, fails it. Only the result goes to the server.
+/// a needle goes round a dial, and left click, right click, Space or the parry key has to be pressed while it is in
+/// the bright zone, a few times in a row. A press outside the zone, or a full turn without one, fails it. Only the result goes to the server. It starts
+/// with a moment to get ready.
 /// </summary>
 public sealed class LavalandAshWolfQteSystem : EntitySystem
 {
@@ -57,6 +59,8 @@ public sealed class LavalandAshWolfQteSystem : EntitySystem
 
     public TimeSpan Now => _timing.RealTime;
 
+    public string KeyName => _input.GetKeyFunctionButtonString(ContentKeyFunctions.Parry);
+
     /// <summary>Where the needle is in its turn (0..1); negative before the turn starts.</summary>
     public float Needle => Event is { } ev ? (float) ((Now - CheckStart).TotalSeconds / ev.TurnTime) : 0f;
 
@@ -89,13 +93,10 @@ public sealed class LavalandAshWolfQteSystem : EntitySystem
 
     private void OnKey(KeyEventArgs args, KeyEventType type)
     {
-        if (Event is not { } ev || type != KeyEventType.Down || args.IsRepeat ||
-            args.Key is not (Keyboard.Key.MouseLeft or Keyboard.Key.MouseRight or Keyboard.Key.Space))
-        {
+        if (Event is not { } ev || type != KeyEventType.Down || args.IsRepeat || !IsQteKey(args.Key))
             return;
-        }
 
-        // Pinned, the keys do nothing else meanwhile.
+        // Pinned, these keys do nothing else meanwhile.
         args.Handle();
 
         var needle = Needle;
@@ -118,6 +119,15 @@ public sealed class LavalandAshWolfQteSystem : EntitySystem
         }
 
         CheckStart = Now + TimeSpan.FromSeconds(ev.Gap);
+    }
+
+    /// <summary>Left or right click, Space, or the parry key (F, or as it is bound).</summary>
+    private bool IsQteKey(Keyboard.Key key)
+    {
+        if (key is Keyboard.Key.MouseLeft or Keyboard.Key.MouseRight or Keyboard.Key.Space)
+            return true;
+
+        return _input.TryGetKeyBinding(ContentKeyFunctions.Parry, out var binding) && key == binding.BaseKey;
     }
 
     private void Finish(bool success)
@@ -198,7 +208,10 @@ public sealed class LavalandAshWolfQteOverlay : Overlay
 
         handle.DrawCircle(center, 4f, NeedleColor);
         DrawCentered(handle, _font, $"{_system.Check + 1}/{ev.Checks}", center + new Vector2(0f, -18f), Ring);
-        DrawCentered(handle, _small, Loc.GetString("lavaland-ash-wolf-qte-keys"), center + new Vector2(0f, Radius + 30f), Zone);
+        // Before the first turn: get ready, blinking.
+        if (waiting && _system.Check == 0 && (int) (_system.Now.TotalSeconds * 4) % 2 == 0)
+            DrawCentered(handle, _font, Loc.GetString("lavaland-ash-wolf-qte-ready"), center + new Vector2(0f, -Radius - 30f), NeedleColor);
+        DrawCentered(handle, _small, Loc.GetString("lavaland-ash-wolf-qte-keys", ("key", _system.KeyName)), center + new Vector2(0f, Radius + 30f), Zone);
     }
 
     /// <summary>A point on the dial: 0 at the top, going clockwise.</summary>

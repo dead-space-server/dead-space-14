@@ -161,6 +161,20 @@
   name: basalt boulder
   description: A weathered block of basalt. Break it with a pickaxe to obtain building stone.
   components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Structures/basalt_boulder.rsi
+    layers:
+    - state: rock1
+      map: ["random"]
+  - type: RandomSprite
+    available:
+    - random:
+        rock1: ""
+        rock2: ""
+        rock3: ""
+        rock4: ""
+  # Outlined under the cursor like the rock mimic, or that would give it away.
+  - type: InteractionOutline
   - type: Damageable
     damageContainer: StructuralInorganic
     damageModifierSet: Rock

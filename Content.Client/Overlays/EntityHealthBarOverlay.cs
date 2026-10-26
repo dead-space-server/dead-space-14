@@ -144,6 +144,14 @@ public sealed class EntityHealthBarOverlay : Overlay
     /// </summary>
     private (float ratio, bool inCrit)? CalcProgress(EntityUid uid, MobStateComponent component, DamageableComponent dmg, MobThresholdsComponent thresholds)
     {
+        // DS14-start: a boss that keeps its own health: the bar counts from it, not from the thresholds
+        if (_entManager.TryGetComponent<Content.Shared.DeadSpace.Lavaland.Components.LavalandHealthBarComponent>(uid, out var ownHealth) &&
+            ownHealth.MaxHealth > 0f)
+        {
+            return (Math.Clamp(1f - dmg.TotalDamage.Float() / ownHealth.MaxHealth, 0f, 1f), false);
+        }
+        // DS14-end
+
         if (_mobStateSystem.IsAlive(uid, component))
         {
             if (dmg.HealthBarThreshold != null && dmg.TotalDamage < dmg.HealthBarThreshold)

@@ -5,8 +5,11 @@ using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.DeadSpace.Lavaland.AshWolf;
 using Content.Shared.DeadSpace.Lavaland.Bosses;
+using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Robust.Shared.Map;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.Lavaland;
@@ -81,12 +84,15 @@ public sealed partial class LavalandAshWolfSystem
 
     #region Slides and blows
 
-    private void Slide(Entity<LavalandAshWolfComponent> ent, Vector2 to, float duration, LavalandAshWolfContact contact, TimeSpan now)
+    private void Slide(Entity<LavalandAshWolfComponent> ent, Vector2 to, float duration, LavalandAshWolfContact contact, TimeSpan now,
+        EntityUid? target = null)
     {
         var comp = ent.Comp;
         comp.Sliding = true;
+        comp.SlideTarget = target;
         comp.SlideFrom = Position(ent);
-        comp.SlideTo = to;
+        // Walls stop it: it rolls up to them, never through.
+        comp.SlideTo = ClearPath(ent, comp.SlideFrom, to);
         comp.SlideStart = now;
         comp.SlideDuration = MathF.Max(0.05f, duration);
         comp.SlideContact = contact;
@@ -100,6 +106,33 @@ public sealed partial class LavalandAshWolfSystem
             return;
 
         var t = Math.Clamp((float) (now - comp.SlideStart).TotalSeconds / comp.SlideDuration, 0f, 1f);
+
+        // Homing in: wherever they run, the slide ends on them (short of a wall, if one is in the way).
+        if (comp.SlideTarget is { } homing && comp.SlideContact != LavalandAshWolfContact.None)
+        {
+            if (!IsAliveTarget(homing))
+            {
+                comp.SlideTarget = null;
+            }
+            else
+            {
+                var targetPosition = Position(homing);
+                comp.SlideTo = ClearPath(ent, comp.SlideFrom, targetPosition);
+                var homed = Vector2.Lerp(comp.SlideFrom, comp.SlideTo, t);
+                MoveTo(ent, homed);
+                var reached = Vector2.Distance(homed, targetPosition) <= ContactRange;
+                var blocked = Vector2.Distance(comp.SlideTo, targetPosition) > ContactRange + WallMargin;
+                if (reached || t >= 1f && !blocked)
+                {
+                    comp.Sliding = false;
+                    comp.SlideTarget = null;
+                    Land(ent);
+                    OnContact(ent, homing, now);
+                    return;
+                }
+            }
+        }
+
         var position = Vector2.Lerp(comp.SlideFrom, comp.SlideTo, t);
         MoveTo(ent, position);
 
@@ -118,9 +151,35 @@ public sealed partial class LavalandAshWolfSystem
         if (t >= 1f)
         {
             comp.Sliding = false;
+            comp.SlideTarget = null;
             Land(ent);
         }
     }
+
+    /// <summary>
+    /// How far along the way it gets before a wall (anything anchored and impassable): a little short of it, so it
+    /// never ends up inside or behind one.
+    /// </summary>
+    private Vector2 ClearPath(EntityUid uid, Vector2 from, Vector2 to)
+    {
+        var delta = to - from;
+        var length = delta.Length();
+        if (length < 0.01f)
+            return to;
+
+        var direction = delta / length;
+        var ray = new CollisionRay(from, direction, (int) CollisionGroup.Impassable);
+        var clear = length;
+        foreach (var hit in _physics.IntersectRay(Transform(uid).MapID, ray, length, uid, returnOnFirstHit: false))
+        {
+            if (TryComp<PhysicsComponent>(hit.HitEntity, out var body) && body.BodyType == BodyType.Static)
+                clear = MathF.Min(clear, hit.Distance);
+        }
+
+        return clear >= length ? to : from + direction * MathF.Max(0f, clear - WallMargin);
+    }
+
+    private const float WallMargin = 0.45f;
 
     /// <summary>Its sprite leaps up and comes down over the given time.</summary>
     private void Hop(Entity<LavalandAshWolfComponent> ent, float duration, float height)
@@ -277,7 +336,8 @@ public sealed partial class LavalandAshWolfSystem
 
                 var to = goal + direction.Normalized() * comp.RushOvershoot;
                 SetVisual(ent, LavalandAshWolfVisualState.Roll);
-                Slide(ent, to, Vector2.Distance(from, to) / (comp.RushSpeed * Haste(comp)), LavalandAshWolfContact.Rush, now);
+                Slide(ent, to, Vector2.Distance(from, to) / (comp.RushSpeed * Haste(comp)), LavalandAshWolfContact.Rush, now,
+                    comp.Tamed ? null : comp.Target);
                 // It leaps at the player.
                 if (!comp.Tamed)
                     Hop(ent, comp.SlideDuration, comp.RushHop);
@@ -433,7 +493,6 @@ public sealed partial class LavalandAshWolfSystem
                     SetVisual(ent, LavalandAshWolfVisualState.Shield);
                     if (comp.Target is { } dashTarget && !TerminatingOrDeleted(dashTarget))
                         Face(ent, Position(dashTarget) - Position(ent));
-                    DustPuff(ent, Position(ent));
                     comp.PendingSlash = now + TimeSpan.FromSeconds(0.3);
                     break;
                 }
@@ -548,7 +607,9 @@ public sealed partial class LavalandAshWolfSystem
                 break;
 
             case 2 when now >= comp.StepTime:
-                MoveTo(ent, Reach(ent, AimAt(ent), 8f));
+                // The borg comes down on this side of a wall; the boss, out on the lavaland, anywhere.
+                var landing = Reach(ent, AimAt(ent), 8f);
+                MoveTo(ent, comp.Tamed ? ClearPath(ent, Position(ent), landing) : landing);
                 SkyMove(ent, now, comp.LeapFall, rising: false);
                 comp.StepTime = now + TimeSpan.FromSeconds(comp.LeapFall);
                 comp.Step = 3;
@@ -759,12 +820,19 @@ public sealed partial class LavalandAshWolfSystem
         var comp = ent.Comp;
         switch (comp.Step)
         {
-            // Crouches behind its shield.
+            // Crouches behind its shield - and the one it is about to pin is warned: a buzz, a popup, a mark.
             case 0:
                 SetVisual(ent, LavalandAshWolfVisualState.Shield);
                 comp.Reduction = comp.PounceShield;
-                comp.StepTime = now + TimeSpan.FromSeconds(comp.Tamed ? 0.3f : 0.7f);
+                comp.StepTime = now + TimeSpan.FromSeconds(comp.Tamed ? 0.3f : comp.PounceWarning / Haste(comp));
                 comp.Step = 1;
+                if (!comp.Tamed && comp.Target is { } pounceTarget && IsAliveTarget(pounceTarget))
+                {
+                    PlaySound(comp.PounceWarningSound, ent);
+                    _popup.PopupEntity(Loc.GetString("lavaland-ash-wolf-pounce-warning"), pounceTarget, pounceTarget, PopupType.LargeCaution);
+                    Spawn(comp.LeapMark, _transform.GetMapCoordinates(pounceTarget));
+                }
+
                 break;
 
             case 1 when now >= comp.StepTime:
@@ -777,7 +845,8 @@ public sealed partial class LavalandAshWolfSystem
 
                 var to = goal + direction.Normalized();
                 SetVisual(ent, LavalandAshWolfVisualState.Roll);
-                Slide(ent, to, Vector2.Distance(from, to) / (comp.PounceSpeed * Haste(comp)), LavalandAshWolfContact.Pounce, now);
+                Slide(ent, to, Vector2.Distance(from, to) / (comp.PounceSpeed * Haste(comp)), LavalandAshWolfContact.Pounce, now,
+                    comp.Tamed ? null : comp.Target);
                 comp.Step = 2;
                 break;
             }

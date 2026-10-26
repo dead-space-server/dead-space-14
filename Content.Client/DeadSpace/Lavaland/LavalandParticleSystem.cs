@@ -350,7 +350,7 @@ public sealed class LavalandParticleSystem : EntitySystem
     }
 
     /// <summary>
-    /// Nothing solid under the feet: a chasm, lava, water or open space. Only there the cloud gathers under him.
+    /// Nothing solid under the feet: a chasm, lava, water, liquid plasma or open space. Only there the cloud gathers under him.
     /// </summary>
     private bool IsOverAbyss(TransformComponent xform)
     {
@@ -364,8 +364,10 @@ public sealed class LavalandParticleSystem : EntitySystem
         var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
         while (anchored.MoveNext(out var uid))
         {
+            var id = MetaData(uid.Value).EntityPrototype?.ID;
             if (HasComp<ChasmComponent>(uid) || HasComp<LavaComponent>(uid) ||
-                MetaData(uid.Value).EntityPrototype?.ID.Contains("Water", StringComparison.Ordinal) == true)
+                id?.Contains("Water", StringComparison.Ordinal) == true ||
+                id?.Contains("LiquidPlasma", StringComparison.Ordinal) == true)
             {
                 return true;
             }

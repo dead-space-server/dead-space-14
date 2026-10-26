@@ -250,6 +250,33 @@ public sealed partial class LavalandDayCycleComponent : Component
     [ViewVariables]
     public Color FromColor;
 
+    /// <summary>
+    /// A hue laid over every phase's light from now on (the purple left over the lavaland once the Celestial is
+    /// beaten). Null - the phases' own colours.
+    /// </summary>
+    [ViewVariables]
+    public Color? Tint;
+
+    /// <summary>The phase's own colour the light is fading to, before the tint.</summary>
+    [ViewVariables]
+    public Color BaseColor;
+
+    /// <summary>
+    /// Till then the light of the whole map shimmers between two colours, as the chromite caves' pit does (the
+    /// Celestial's death); then it goes back to the phase's own.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan PulseUntil;
+
+    [ViewVariables]
+    public Color PulseA;
+
+    [ViewVariables]
+    public Color PulseB;
+
+    [ViewVariables]
+    public float PulsePeriod = 2f;
+
     [ViewVariables]
     public Color ToColor;
 

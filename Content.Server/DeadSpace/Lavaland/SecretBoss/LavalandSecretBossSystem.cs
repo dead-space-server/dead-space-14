@@ -87,6 +87,11 @@ public sealed class LavalandSecretBossSystem : EntitySystem
     [Dependency] private readonly LavalandPitLandingSystem _landing = default!;
     [Dependency] private readonly LavalandPitDropSystem _pitDrop = default!;
     [Dependency] private readonly LavalandChromiteCavesSystem _caves = default!;
+    [Dependency] private readonly LavalandDayNightSystem _dayNight = default!;
+
+    private static readonly Color CelestialTint = Color.FromHex("#b46bff");
+    private static readonly Color CelestialPulsePink = Color.FromHex("#ff7fc8");
+    private static readonly Color CelestialPulseWhite = Color.FromHex("#fff4fb");
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly Content.Shared.Camera.SharedCameraRecoilSystem _camera = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
@@ -762,7 +767,8 @@ public sealed class LavalandSecretBossSystem : EntitySystem
 
     private void OnChasmFallingAttempt(ChasmFallingAttemptEvent args)
     {
-        if (args.Cancelled ||
+        // Walking on clouds (the strange elixir) keeps one out of every chasm but this one: into it they still jump.
+        if (args.Cancelled && !HasComp<LavalandChasmImmuneComponent>(args.Tripper) ||
             !TryComp<LavalandCelestialPitComponent>(args.Chasm, out var pit) ||
             !TryComp<LavalandSecretBossComponent>(pit.LavalandMap, out var comp) ||
             comp.Stage == LavalandSecretBossStage.Done)
@@ -1085,12 +1091,13 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             RaiseNetworkEvent(hud, FightersFilter(comp));
         }
 
-        // Killed in the dream: the player is back in the body sleeping by the pit at once, without the fight's music,
-        // health bar or backdrop. As a ghost of the copy they would be out of reach of all of it, and when the copy
-        // was deleted the ghost was thrown off to the station.
+        // Killed (or downed: critical is the end of the dream too) in the dream: the player is back in the body
+        // sleeping by the pit at once, without the fight's music, health bar or backdrop. As a ghost of the copy they
+        // would be out of reach of all of it, and when the copy was deleted the ghost was thrown off to the station;
+        // left in a critical copy, they waited for the others to finish.
         foreach (var (copy, original) in comp.DreamOriginals)
         {
-            if (comp.WokenFromDream.Contains(copy) || !TerminatingOrDeleted(copy) && !_mobState.IsDead(copy))
+            if (comp.WokenFromDream.Contains(copy) || !TerminatingOrDeleted(copy) && _mobState.IsAlive(copy))
                 continue;
 
             comp.WokenFromDream.Add(copy);
@@ -1473,18 +1480,30 @@ public sealed class LavalandSecretBossSystem : EntitySystem
 
         StopHud(comp);
         var length = _celestial.PlayDeathCutscene(FightersFilter(comp));
+        // While its death plays, the whole lavaland shimmers pink and white, as the chromite caves' pit does.
+        _dayNight.Pulse(ent.Owner, CelestialPulsePink, CelestialPulseWhite,
+            TimeSpan.FromSeconds(Math.Max(length.TotalSeconds, config.RewardSleep.TotalSeconds)));
         if (comp.Boss is { } boss && !TerminatingOrDeleted(boss))
             QueueDel(boss);
         comp.Boss = null;
 
         var sleepFor = TimeSpan.FromSeconds(Math.Max(length.TotalSeconds, config.RewardSleep.TotalSeconds));
+        // Those killed in the dream are already awake by the pit: they do not see the cutscene, so they are not put
+        // to sleep for it either (they would only stand frozen).
+        var alreadyAwake = new HashSet<EntityUid>();
+        foreach (var copy in comp.WokenFromDream)
+        {
+            if (comp.DreamOriginals.TryGetValue(copy, out var original))
+                alreadyAwake.Add(original);
+        }
+
         EndDream(comp);
         foreach (var fighter in comp.Participants)
         {
             if (TerminatingOrDeleted(fighter))
                 continue;
 
-            if (_mobState.IsAlive(fighter))
+            if (_mobState.IsAlive(fighter) && !alreadyAwake.Contains(fighter))
                 Sleep(fighter, sleepFor + TimeSpan.FromSeconds(5));
             MoveNearPit(comp, fighter);
         }
@@ -1507,6 +1526,8 @@ public sealed class LavalandSecretBossSystem : EntitySystem
     private void WakeAndBless(Entity<LavalandSecretBossComponent> ent, LavalandSecretBossConfig config)
     {
         ent.Comp.PlayersAwake = true;
+        // The last of its cutscenes is over: the Celestial's purple stays over the whole lavaland.
+        _dayNight.SetTint(ent.Owner, CelestialTint);
         foreach (var fighter in ent.Comp.Participants)
         {
             if (TerminatingOrDeleted(fighter))

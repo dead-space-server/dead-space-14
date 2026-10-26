@@ -63,6 +63,9 @@
     - id: PKAUpgradeExplosiveLavaland
       chance: 0.5
   - type: ParryableBoss
+  # Dead is dead: no defibrillator brings a boss back.
+  - type: Unrevivable
+    analyzable: false
   - type: LavalandMadMiner
     maxHealth: 1250
     # Slower bolts that can be dodged, and a little more time between them.
@@ -250,6 +253,9 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: ParryableBoss
+  # Dead is dead: no defibrillator brings a boss back.
+  - type: Unrevivable
+    analyzable: false
   - type: DestructionResistance
   - type: IgnoreKudzu
   - type: StunImmune

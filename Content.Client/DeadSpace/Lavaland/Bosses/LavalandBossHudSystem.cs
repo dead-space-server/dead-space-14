@@ -5,7 +5,9 @@ using Content.Client.Viewport;
 using Content.Shared.DeadSpace.CCCCVars;
 using Content.Shared.DeadSpace.Lavaland.Bosses;
 using Content.Shared.GameTicking;
+using Content.Shared.Input;
 using Robust.Client.Audio;
+using Robust.Client.Input;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Audio;
@@ -26,6 +28,7 @@ public sealed class LavalandBossHudSystem : EntitySystem
     [Dependency] private readonly ContentAudioSystem _contentAudio = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IUserInterfaceManager _ui = default!;
+    [Dependency] private readonly IInputManager _input = default!;
 
     private LavalandBossHudControl? _hud;
     private LayoutContainer? _viewportRoot;
@@ -77,7 +80,19 @@ public sealed class LavalandBossHudSystem : EntitySystem
         _activeArena = ev.ArenaId;
 
         hud.Visible = true;
-        hud.UpdateState(ev.BossName, ev.CurrentHealth, ev.MaxHealth, ev.Participants, ev.Hint);
+        hud.UpdateState(ev.BossName, ev.CurrentHealth, ev.MaxHealth, ev.Participants, LocalizeHint(ev.Hint));
+    }
+
+    /// <summary>A hint sent as a locale id gets the parry key as this player has it bound.</summary>
+    private string? LocalizeHint(string? hint)
+    {
+        if (hint == null || !Loc.TryGetString(hint, out var text,
+                ("parry", _input.GetKeyFunctionButtonString(ContentKeyFunctions.Parry))))
+        {
+            return hint;
+        }
+
+        return text;
     }
 
     private void OnHudHide(LavalandBossHudHideEvent ev)

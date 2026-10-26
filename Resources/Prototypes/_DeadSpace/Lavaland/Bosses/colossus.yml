@@ -195,6 +195,9 @@
   - type: LavalandMeleeWindup
     delay: 1
   - type: ParryableBoss
+  # Dead is dead: no defibrillator brings a boss back.
+  - type: Unrevivable
+    analyzable: false
   - type: LavalandBoss
     bossName: Колосс
     maxHealth: 3500

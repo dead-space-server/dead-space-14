@@ -292,17 +292,29 @@
       - ParryStandardWeapon
       components:
       - ParryableBoss
+  # Abel (blue) for the ring of ice, Cain (red) for the dash to the dagger.
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Weapons/cain_and_abel.rsi
-    state: icon
+    layers:
+    - state: icon
+      map: [ "enum.LavalandCainAndAbelLayers.Base" ]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.LavalandCainAndAbelVisuals.Cain:
+        enum.LavalandCainAndAbelLayers.Base:
+          True: { state: icon-cain }
+          False: { state: icon }
   - type: Item
     size: Small
     sprite: _DeadSpace/Lavaland/Objects/Weapons/cain_and_abel.rsi
+  # One dagger in each hand.
+  - type: Wieldable
   - type: MeleeWeapon
     wideAnimationRotation: -135
-    # The demons' claw arc; right button - their arrow arc instead of swinging the sprite.
-    animation: WeaponArcClaw
-    wideAnimation: WeaponArcStatic
+    # Abel's blade swinging (Cain's when it is in front).
+    animation: LavalandWeaponArcAbel
+    wideAnimation: LavalandWeaponArcAbelWide
     range: 2.2
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
@@ -334,7 +346,8 @@
     layers:
     - state: wisp
       shader: unshaded
-  - type: LavalandDeepNightDark
+  # Like the lantern's wisp: the deep night does not put it out, it shines brightly there.
+  - type: LavalandDeepNightWisp
   - type: PointLight
     radius: 1.5
     energy: 1
@@ -398,10 +411,65 @@
   - type: StaticPrice
     price: 3000
 
+# The swing of the blade in front: a stab (left click), a sweep (right). Its own sprite, not the daggers' icon.
+- type: entity
+  parent: WeaponArcThrust
+  id: LavalandWeaponArcAbel
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Effects/CainAndAbelArc.rsi
+    state: abel
+  - type: WeaponArcVisuals
+    animation: Thrust
+    keepOwnSprite: true
+
+- type: entity
+  parent: WeaponArcSlash
+  id: LavalandWeaponArcAbelWide
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Effects/CainAndAbelArc.rsi
+    state: abel
+  - type: WeaponArcVisuals
+    animation: Slash
+    keepOwnSprite: true
+
+- type: entity
+  parent: LavalandWeaponArcAbel
+  id: LavalandWeaponArcCain
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Effects/CainAndAbelArc.rsi
+    state: cain
+
+- type: entity
+  parent: LavalandWeaponArcAbelWide
+  id: LavalandWeaponArcCainWide
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Effects/CainAndAbelArc.rsi
+    state: cain
+
+- type: entity
+  id: ActionLavalandCainAndAbelSwap
+  name: Сменить кинжал
+  description: Выставить вперёд другой клинок. Брошенный Каин тянет хозяина за собой, брошенный Авель поднимает кольцо льда.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 0.5
+    icon: { sprite: _DeadSpace/Lavaland/Objects/Weapons/cain_and_abel.rsi, state: icon }
+  - type: InstantAction
+    event: !type:LavalandCainAndAbelSwapActionEvent
+
 - type: entity
   id: ActionLavalandCainAndAbelThrow
   name: Бросок кинжала
-  description: Метнуть кинжал. Режим (кристаллы или рывок) переключается использованием Каина и Авеля в руке.
+  description: "Метнуть кинжал, что сейчас впереди: Каин утянет к себе, Авель поднимет кольцо льда."
   categories: [ HideSpawnMenu ]
   components:
   - type: Action

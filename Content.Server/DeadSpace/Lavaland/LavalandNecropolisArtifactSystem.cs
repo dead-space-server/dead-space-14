@@ -64,6 +64,7 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedContainerSystem _containers = default!;
+    [Dependency] private readonly Robust.Shared.Physics.Systems.SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedGodmodeSystem _godmode = default!;
     [Dependency] private readonly SharedItemSystem _item = default!;
@@ -83,10 +84,12 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         SubscribeLocalEvent<LavalandWarpCubeComponent, UseInHandEvent>(OnCubeUse);
         SubscribeLocalEvent<LavalandWarpCubeComponent, LavalandWarpCubeDoAfterEvent>(OnCubeDoAfter);
         SubscribeLocalEvent<LavalandWarpCubeComponent, ComponentShutdown>(OnCubeShutdown);
+        SubscribeLocalEvent<LavalandWarpCubeComponent, EntGotInsertedIntoContainerMessage>(OnCubeInserted);
         SubscribeLocalEvent<LavalandImmortalityTalismanComponent, UseInHandEvent>(OnTalismanUse);
         SubscribeLocalEvent<LavalandImmortalityTalismanComponent, ExaminedEvent>(OnTalismanExamined);
         SubscribeLocalEvent<LavalandParadoxBagComponent, MapInitEvent>(OnParadoxMapInit);
         SubscribeLocalEvent<LavalandParadoxBagComponent, ComponentShutdown>(OnParadoxShutdown);
+        SubscribeLocalEvent<LavalandParadoxBagComponent, EntGotInsertedIntoContainerMessage>(OnParadoxInserted);
         SubscribeLocalEvent<LavalandParadoxBagComponent, ContainerIsInsertingAttemptEvent>(OnParadoxInsertAttempt);
         Subs.BuiEvents<LavalandParadoxBagComponent>(StorageComponent.StorageUiKey.Key, subs =>
         {
@@ -323,6 +326,26 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         var otherComp = EnsureComp<LavalandWarpCubeComponent>(other);
         otherComp.Linked = ent.Owner;
         ent.Comp.Linked = other;
+        ent.Comp.LooseTwin = StoreTwin(ent.Owner, other) ? null : other;
+    }
+
+    private void OnCubeInserted(Entity<LavalandWarpCubeComponent> ent, ref EntGotInsertedIntoContainerMessage args)
+    {
+        if (ent.Comp.LooseTwin is { } twin)
+            StoreTwin(ent.Owner, twin);
+        ent.Comp.LooseTwin = null;
+    }
+
+    /// <summary>
+    /// A pair spawned in a chest: the twin is spawned at the chest, loose, and would lie on the floor beside it - or be
+    /// lost with it. It is put in the same container instead, if there is one and it fits.
+    /// </summary>
+    private bool StoreTwin(EntityUid original, EntityUid twin)
+    {
+        return !TerminatingOrDeleted(twin) &&
+               _containers.TryGetContainingContainer(original, out var container) &&
+               !_containers.IsEntityInContainer(twin) &&
+               _containers.Insert(twin, container);
     }
 
     /// <summary>Held up for <see cref="LavalandWarpCubeComponent.UseTime"/> before it takes its holder away.</summary>
@@ -423,6 +446,14 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         EnsureComp<LavalandParadoxBagComponent>(other).Linked = ent.Owner;
         EntityManager.InitializeAndStartEntity(other);
         ent.Comp.Linked = other;
+        ent.Comp.LooseTwin = StoreTwin(ent.Owner, other) ? null : other;
+    }
+
+    private void OnParadoxInserted(Entity<LavalandParadoxBagComponent> ent, ref EntGotInsertedIntoContainerMessage args)
+    {
+        if (ent.Comp.LooseTwin is { } twin)
+            StoreTwin(ent.Owner, twin);
+        ent.Comp.LooseTwin = null;
     }
 
     /// <summary>The paradox collapses with either bag: the twin goes too, spilling what it held.</summary>
@@ -596,6 +627,9 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         }
 
         EntityManager.AddComponents(user, ent.Comp.AddedComponents, false);
+        // Drunk standing on lava or liquid plasma: the contacts made before must be filtered anew (walking on air
+        // they no longer set him alight).
+        _physics.RegenerateContacts(user);
         if (!ent.Comp.Damage.Empty)
             _damageable.TryChangeDamage(user, ent.Comp.Damage, true, origin: user);
         _popup.PopupEntity(Loc.GetString(ent.Comp.Message), user, user, PopupType.LargeCaution);

@@ -85,6 +85,41 @@ public sealed partial class LavalandCainAndAbelComponent : Component
     [DataField]
     public int MaxCombo = 6;
 
+    /// <summary>Cain strikes fast, blow after blow; it takes this many of them to light a wisp.</summary>
+    [DataField]
+    public int CainHitsPerWisp = 3;
+
+    [DataField]
+    public float CainAttackRate = 3f;
+
+    /// <summary>Each of Cain's quick blows does this share of the daggers' damage.</summary>
+    [DataField]
+    public float CainDamageMultiplier = 0.45f;
+
+    /// <summary>The swing shown with the blade in front: Abel's and Cain's, a stab (left click) and a sweep (right).</summary>
+    [DataField]
+    public EntProtoId AbelArc = "LavalandWeaponArcAbel";
+
+    [DataField]
+    public EntProtoId AbelWideArc = "LavalandWeaponArcAbelWide";
+
+    [DataField]
+    public EntProtoId CainArc = "LavalandWeaponArcCain";
+
+    [DataField]
+    public EntProtoId CainWideArc = "LavalandWeaponArcCainWide";
+
+    /// <summary>Abel's own attack rate and damage, as the prototype gave them.</summary>
+    [ViewVariables]
+    public float AbelAttackRate;
+
+    [ViewVariables]
+    public DamageSpecifier? AbelDamage;
+
+    /// <summary>Cain's blows since the last wisp was lit.</summary>
+    [ViewVariables]
+    public int CainHits;
+
     [DataField]
     public float DamageBoost = 1.15f;
 
@@ -120,6 +155,12 @@ public sealed partial class LavalandCainAndAbelComponent : Component
 
     [DataField]
     public EntProtoId ThrowAction = "ActionLavalandCainAndAbelThrow";
+
+    [DataField]
+    public EntProtoId SwapAction = "ActionLavalandCainAndAbelSwap";
+
+    [ViewVariables]
+    public EntityUid? SwapActionEntity;
 
     [DataField]
     public EntProtoId DaggerProjectile = "LavalandCainAndAbelDagger";

@@ -504,19 +504,32 @@ public sealed class LavalandDeepNightSystem : EntitySystem
         var query = EntityQueryEnumerator<LavalandWispLanternComponent>();
         while (query.MoveNext(out _, out var lantern))
         {
-            if (lantern.Wisp is not { } wisp || TerminatingOrDeleted(wisp) ||
-                !TryGetDeep(wisp, out var deep) || _wisps.ContainsKey(wisp) ||
-                !_pointLight.TryGetLight(wisp, out var light))
-            {
-                continue;
-            }
+            if (lantern.Wisp is { } wisp)
+                BrightenWisp(wisp);
+        }
 
-            _wisps[wisp] = (light.Radius, light.Energy);
-            _pointLight.SetRadius(wisp, deep.WispLightRadius, light);
-            _pointLight.SetEnergy(wisp, deep.WispLightEnergy, light);
+        // Other wisps that shine as the lantern's does (Cain and Abel's).
+        var others = EntityQueryEnumerator<LavalandDeepNightWispComponent>();
+        while (others.MoveNext(out var wisp, out _))
+        {
+            BrightenWisp(wisp);
         }
 
         RestoreWisps(_deepMaps);
+    }
+
+    /// <summary>A wisp in a deep night shines brightly; its own light is kept to give back after.</summary>
+    private void BrightenWisp(EntityUid wisp)
+    {
+        if (TerminatingOrDeleted(wisp) || !TryGetDeep(wisp, out var deep) || _wisps.ContainsKey(wisp) ||
+            !_pointLight.TryGetLight(wisp, out var light))
+        {
+            return;
+        }
+
+        _wisps[wisp] = (light.Radius, light.Energy);
+        _pointLight.SetRadius(wisp, deep.WispLightRadius, light);
+        _pointLight.SetEnergy(wisp, deep.WispLightEnergy, light);
     }
 
     /// <summary>Gives the wisps outside a deep night (all of them if null) their own light back.</summary>

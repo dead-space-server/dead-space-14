@@ -455,7 +455,7 @@
     - lavaland-asclepius-oath-2
     - lavaland-asclepius-oath-3
     - lavaland-asclepius-oath-4
-    lineDelay: 3
+    lineDelay: 8
     auraRange: 7
     auraInterval: 2.6
     auraHeal:

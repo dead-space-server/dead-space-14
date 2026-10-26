@@ -48,8 +48,6 @@ public sealed partial class LavalandMadMinerComponent : Component
 
     [DataField] public TimeSpan CatchUpCooldown = TimeSpan.FromSeconds(4);
 
-    /// <summary>After a blink to a player he holds his fire this long once landed: no point-blank shot on arrival.</summary>
-    [DataField] public TimeSpan PostBlinkShotDelay = TimeSpan.FromSeconds(0.9);
     public TimeSpan NextCatchUp;
     [DataField] public TimeSpan BlinkCooldown = TimeSpan.FromSeconds(1.25);
     [DataField] public TimeSpan BlinkDuration = TimeSpan.FromSeconds(0.45);

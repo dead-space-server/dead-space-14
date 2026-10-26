@@ -188,7 +188,7 @@
   parent: BaseBorgChassisNT
   id: BorgChassisAshWolf
   name: AshWolf LQ-829
-  description: Бывший секретный босс Лаваленда, перепрошитый под обычные законы. Лезвия на месте.
+  description: Боевой борг тайного клана, перепрошитый под обычные законы. Лезвия вокруг корпуса никуда не делись.
   components:
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Mobs/AshWolf.rsi
@@ -246,9 +246,47 @@
     - ActionAshWolfLeap
     - ActionAshWolfRetreat
     - ActionAshWolfPounce
+    - ActionAshWolfMode
   - type: MovementSpeedModifier
     baseWalkSpeed: 3.5
     baseSprintSpeed: 4.5
+  # Sturdier than an ordinary borg: it was built for the lavaland.
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      250: Critical
+      300: Dead
+    stateAlertDict:
+      Alive: BorgHealth
+      Critical: BorgCrit
+      Dead: BorgDead
+    showOverlays: false
+    allowRevives: true
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Machines/warning_buzzer.ogg
+          params:
+            volume: 5
+    - trigger:
+        !type:DamageTrigger
+        damage: 500
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:EmptyContainersBehaviour
+        containers:
+        - borg_brain
+        - borg_module
+        - cell_slot
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
   # Its own blades: with an empty hand it strikes with them.
   - type: MeleeWeapon
     attackRate: 1.5
@@ -326,9 +364,64 @@
 
 - type: entity
   parent: BaseAction
+  id: ActionAshWolfMode
+  name: режим боя
+  description: Сменить манеру боя - рубить лезвиями вблизи или метать пилы издалека, хоть и нечасто.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 1
+    icon:
+      sprite: _DeadSpace/Lavaland/Effects/AshWolfSaw.rsi
+      state: saw
+  - type: InstantAction
+    event: !type:LavalandAshWolfModeActionEvent
+
+# The borg's saw mode: these components are put on it (and taken off) when it switches. Shoots, but not often.
+- type: entity
+  id: LavalandAshWolfSawGun
+  name: пилы AshWolf
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Gun
+    fireRate: 0.5
+    projectileSpeed: 16
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/kinetic_accel.ogg
+  - type: BasicEntityAmmoProvider
+    proto: LavalandAshWolfSawBolt
+
+# The borg's saw shot: a spinning saw flying straight.
+- type: entity
+  parent: BaseBullet
+  id: LavalandAshWolfSawBolt
+  name: пила AshWolf
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: _DeadSpace/Lavaland/Effects/AshWolfSaw.rsi
+    layers:
+    - state: saw
+  - type: LavalandSpin
+    spinning: true
+    speed: 18
+  - type: Projectile
+    damage:
+      types:
+        Slash: 18
+        Structural: 10
+  - type: TimedDespawn
+    lifetime: 0.6
+
+- type: entity
+  parent: BaseAction
   id: ActionAshWolfPounce
   name: наскок
-  description: Прыгнуть на цель под щитом и прижать её к земле. Очень долго перезаряжается.
+  description: Прыгнуть на цель под щитом и прижать её к земле. После такого рывка приводам нужно долго остывать.
   categories: [ HideSpawnMenu ]
   components:
   - type: Action

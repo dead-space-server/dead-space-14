@@ -2,6 +2,8 @@
 
 using System.Numerics;
 using Content.Server.DeadSpace.Lavaland.Components;
+using Content.Server.Ghost.Roles.Components;
+using Content.Shared.Silicons.Borgs.Components;
 using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.DeadSpace.Lavaland.AshWolf;
 using Content.Shared.DeadSpace.Lavaland.Bosses;
@@ -256,8 +258,9 @@ public sealed partial class LavalandAshWolfSystem
         {
             Id = comp.QteId,
             Duration = comp.QteDuration,
-            FirstDelay = 0.35f,
-            TurnTime = 1.1f,
+            // Time to see the dial and get ready before the first turn.
+            FirstDelay = 1.2f,
+            TurnTime = 1.3f,
             Gap = 0.35f,
             ZoneWidth = 0.14f,
         };
@@ -402,6 +405,17 @@ public sealed partial class LavalandAshWolfSystem
         var borg = Spawn(ent.Comp.Borg, _transform.ToMapCoordinates(coordinates));
         _transform.SetWorldRotation(borg, rotation);
         _damage.TryChangeDamage(borg, ent.Comp.BorgDamage, ignoreResistances: true);
+        // Its brain sits in the frame where no hand can switch it on: it is looking for a mind already, as if switched
+        // on by hand - the ghosts see it as AshWolf.
+        if (TryComp<BorgChassisComponent>(borg, out var chassis) && chassis.BrainEntity is { } brain)
+        {
+            _ghostRoles.ActivateGhostRole(brain);
+            if (TryComp<GhostRoleComponent>(brain, out var role))
+            {
+                role.RoleName = Loc.GetString("lavaland-ash-wolf-ghost-role-name");
+                role.RoleDescription = Loc.GetString("lavaland-ash-wolf-ghost-role-description");
+            }
+        }
         _popup.PopupEntity(Loc.GetString("lavaland-ash-wolf-tamed-popup"), borg, PopupType.Large);
         QueueDel(ent);
     }

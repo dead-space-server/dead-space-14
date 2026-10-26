@@ -10,6 +10,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
+using Content.Shared.Timing;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -30,6 +31,7 @@ public sealed class LavalandLavaStaffSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private readonly UseDelaySystem _useDelay = default!;
 
     public override void Initialize()
     {
@@ -52,7 +54,7 @@ public sealed class LavalandLavaStaffSystem : EntitySystem
         if (TryGetLava(gridUid, grid, tile, ent.Comp, out var lava))
         {
             QueueDel(lava);
-            ent.Comp.NextUse = _timing.CurTime + ent.Comp.ResetCooldown;
+            SetCooldown(ent, ent.Comp.ResetCooldown);
             _popup.PopupEntity(Loc.GetString("lavaland-lava-staff-reset", ("user", user)), user, PopupType.Medium);
             if (ent.Comp.Sound != null)
                 _audio.PlayPvs(ent.Comp.Sound, coordinates);
@@ -76,9 +78,17 @@ public sealed class LavalandLavaStaffSystem : EntitySystem
             return;
         }
 
-        ent.Comp.NextUse = _timing.CurTime + ent.Comp.CreateDelay + TimeSpan.FromSeconds(1);
+        SetCooldown(ent, ent.Comp.CreateDelay + TimeSpan.FromSeconds(1));
         ent.Comp.Warning = Spawn(ent.Comp.WarningPrototype, coordinates);
         _popup.PopupEntity(Loc.GetString("lavaland-lava-staff-point", ("user", user)), user, PopupType.MediumCaution);
+    }
+
+    /// <summary>The staff's recharge, shown on the item like any use delay.</summary>
+    private void SetCooldown(Entity<LavalandLavaStaffComponent> ent, TimeSpan length)
+    {
+        ent.Comp.NextUse = _timing.CurTime + length;
+        _useDelay.SetLength(ent.Owner, length);
+        _useDelay.TryResetDelay(ent.Owner);
     }
 
     private void OnDoAfter(Entity<LavalandLavaStaffComponent> ent, ref LavalandLavaStaffDoAfterEvent args)
@@ -93,7 +103,7 @@ public sealed class LavalandLavaStaffSystem : EntitySystem
 
         if (args.Cancelled)
         {
-            ent.Comp.NextUse = _timing.CurTime;
+            SetCooldown(ent, TimeSpan.Zero);
             return;
         }
 
@@ -109,7 +119,7 @@ public sealed class LavalandLavaStaffSystem : EntitySystem
         if (!Transform(lava).Anchored)
             _transform.AnchorEntity(lava, Transform(lava));
 
-        ent.Comp.NextUse = _timing.CurTime + ent.Comp.CreateCooldown;
+        SetCooldown(ent, ent.Comp.CreateCooldown);
         _popup.PopupEntity(Loc.GetString("lavaland-lava-staff-created", ("user", args.User)), args.User, PopupType.MediumCaution);
         if (ent.Comp.Sound != null)
             _audio.PlayPvs(ent.Comp.Sound, coordinates);

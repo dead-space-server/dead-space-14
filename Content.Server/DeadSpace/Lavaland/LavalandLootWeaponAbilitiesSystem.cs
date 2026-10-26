@@ -9,6 +9,8 @@ using Content.Server.Gatherable.Components;
 using Content.Server.Mind;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared.Actions;
+using Content.Shared.Damage;
+using Content.Shared.Weapons.Melee;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.Examine;
@@ -28,10 +30,13 @@ using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Content.Shared.Stunnable;
 using Content.Shared.Wall;
+using Content.Shared.Wieldable;
+using Content.Shared.Wieldable.Components;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Timing;
+using Robust.Shared.Utility;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
@@ -57,6 +62,7 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly SharedItemSystem _item = default!;
     [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly Robust.Shared.Containers.SharedContainerSystem _containers = default!;
 
@@ -66,7 +72,9 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<LavalandCainAndAbelComponent, UseInHandEvent>(OnCainAbelUseInHand);
+        SubscribeLocalEvent<LavalandCainAndAbelComponent, LavalandCainAndAbelSwapActionEvent>(OnCainAbelSwap);
+        SubscribeLocalEvent<LavalandCainAndAbelComponent, ItemWieldedEvent>(OnCainAbelWielded, after: [typeof(SharedWieldableSystem)]);
+        SubscribeLocalEvent<LavalandCainAndAbelComponent, ItemUnwieldedEvent>(OnCainAbelUnwielded, after: [typeof(SharedWieldableSystem)]);
         SubscribeLocalEvent<LavalandCainAndAbelComponent, GetItemActionsEvent>(OnCainAbelGetActions);
         SubscribeLocalEvent<LavalandCainAndAbelComponent, LavalandCainAndAbelThrowActionEvent>(OnCainAbelThrow);
         SubscribeLocalEvent<LavalandCainAndAbelDaggerComponent, ProjectileHitEvent>(OnDaggerHit);
@@ -114,7 +122,10 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
 
     #region Cain and Abel throws
 
-    private void OnCainAbelUseInHand(Entity<LavalandCainAndAbelComponent> ent, ref UseInHandEvent args)
+    private const string CainAbelRsi = "/Textures/_DeadSpace/Lavaland/Objects/Weapons/cain_and_abel.rsi";
+
+    /// <summary>The other dagger to the fore: Cain for the dash to the dagger, Abel for the ring of ice.</summary>
+    private void OnCainAbelSwap(Entity<LavalandCainAndAbelComponent> ent, ref LavalandCainAndAbelSwapActionEvent args)
     {
         if (args.Handled)
             return;
@@ -123,13 +134,79 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
         ent.Comp.LaunchMode = !ent.Comp.LaunchMode;
         _popup.PopupEntity(Loc.GetString(ent.Comp.LaunchMode
             ? "lavaland-cain-abel-mode-launch"
-            : "lavaland-cain-abel-mode-crystals"), args.User, args.User);
+            : "lavaland-cain-abel-mode-crystals"), args.Performer, args.Performer);
+        UpdateCainAbelLook(ent);
+    }
+
+    /// <summary>
+    /// Cain strikes fast, as twin blades on chains do, each blow lighter; Abel as the daggers were made. The swing
+    /// shown is the blade in front.
+    /// </summary>
+    private void UpdateCainAbelBlows(Entity<LavalandCainAndAbelComponent> ent)
+    {
+        if (!TryComp<MeleeWeaponComponent>(ent, out var melee))
+            return;
+
+        // The first time: Abel's own, as the prototype gave them.
+        if (ent.Comp.AbelDamage == null)
+        {
+            ent.Comp.AbelAttackRate = melee.AttackRate;
+            ent.Comp.AbelDamage = new DamageSpecifier(melee.Damage);
+        }
+
+        var cain = ent.Comp.LaunchMode;
+        melee.AttackRate = cain ? ent.Comp.CainAttackRate : ent.Comp.AbelAttackRate;
+        melee.Damage = cain ? ent.Comp.AbelDamage * ent.Comp.CainDamageMultiplier : new DamageSpecifier(ent.Comp.AbelDamage);
+        melee.Animation = cain ? ent.Comp.CainArc : ent.Comp.AbelArc;
+        melee.WideAnimation = cain ? ent.Comp.CainWideArc : ent.Comp.AbelWideArc;
+        Dirty(ent, melee);
+        ent.Comp.CainHits = 0;
+    }
+
+    // Wielding sets its own prefix: the right one for the dagger in front goes over it.
+    private void OnCainAbelWielded(Entity<LavalandCainAndAbelComponent> ent, ref ItemWieldedEvent args)
+    {
+        UpdateCainAbelLook(ent);
+    }
+
+    private void OnCainAbelUnwielded(Entity<LavalandCainAndAbelComponent> ent, ref ItemUnwieldedEvent args)
+    {
+        UpdateCainAbelLook(ent);
+    }
+
+    /// <summary>
+    /// Cain (red) for the dash to the dagger, Abel (blue) for the ring of ice: in one hand or both, on the floor, on
+    /// the actions.
+    /// </summary>
+    private void UpdateCainAbelLook(Entity<LavalandCainAndAbelComponent> ent)
+    {
+        var cain = ent.Comp.LaunchMode;
+        UpdateCainAbelBlows(ent);
+        var wielded = TryComp<WieldableComponent>(ent, out var wieldable) && wieldable.Wielded;
+        _appearance.SetData(ent, LavalandCainAndAbelVisuals.Cain, cain);
+        _item.SetHeldPrefix(ent, (cain, wielded) switch
+        {
+            (true, true) => "cain-wielded",
+            (true, false) => "cain",
+            (false, true) => "wielded",
+            _ => null,
+        });
+
+        var icon = new SpriteSpecifier.Rsi(new ResPath(CainAbelRsi), cain ? "icon-cain" : "icon");
+        if (ent.Comp.ThrowActionEntity is { } action)
+            _actions.SetIcon(action, icon);
+        if (ent.Comp.SwapActionEntity is { } swap)
+            _actions.SetIcon(swap, icon);
     }
 
     private void OnCainAbelGetActions(Entity<LavalandCainAndAbelComponent> ent, ref GetItemActionsEvent args)
     {
-        if (args.InHands)
-            args.AddAction(ref ent.Comp.ThrowActionEntity, ent.Comp.ThrowAction);
+        if (!args.InHands)
+            return;
+
+        args.AddAction(ref ent.Comp.ThrowActionEntity, ent.Comp.ThrowAction);
+        args.AddAction(ref ent.Comp.SwapActionEntity, ent.Comp.SwapAction);
+        UpdateCainAbelLook(ent);
     }
 
     private void OnCainAbelThrow(Entity<LavalandCainAndAbelComponent> ent, ref LavalandCainAndAbelThrowActionEvent args)

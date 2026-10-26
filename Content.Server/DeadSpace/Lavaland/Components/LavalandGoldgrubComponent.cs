@@ -137,6 +137,28 @@ public sealed partial class LavalandGoldgrubComponent : Component
         "MagmiteOre",
     ];
 
+    /// <summary>After the robbery it runs off for no longer than this...</summary>
+    [DataField]
+    public TimeSpan AmbushFleeTime = TimeSpan.FromSeconds(3);
+
+    /// <summary>...and no farther than this many tiles, then stops and digs in.</summary>
+    [DataField]
+    public float AmbushFleeDistance = 5f;
+
+    /// <summary>Digging in takes this long; every hit meanwhile starts it over.</summary>
+    [DataField]
+    public TimeSpan AmbushDigDelay = TimeSpan.FromSeconds(1);
+
+    [ViewVariables]
+    public TimeSpan? AmbushFleeUntil;
+
+    [ViewVariables]
+    public System.Numerics.Vector2 AmbushFleeFrom;
+
+    /// <summary>Stopped after the robbery and digging into the ground.</summary>
+    [ViewVariables]
+    public bool AmbushDigging;
+
     [ViewVariables]
     public EntityUid? AmbushVictim;
 

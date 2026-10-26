@@ -280,3 +280,98 @@
   - type: Tag
     tags:
     - CannotSuicide
+
+# A boulder of the lavaland's surface - now and then a rock mimic instead.
+- type: entity
+  parent: MarkerBase
+  id: LavalandBasaltBoulderSpawner
+  name: basalt boulder spawner
+  suffix: Lavaland, sometimes a mimic
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - sprite: _DeadSpace/Lavaland/Structures/basalt_boulder.rsi
+      state: rock2
+  - type: RandomSpawner
+    prototypes:
+    - LavalandBasaltBoulder
+    rarePrototypes:
+    - MobLavalandRockMimic
+    rareChance: 0.08
+    offset: 0
+
+# Looks like a boulder (it even is the second of them). Seen, it may take a liking to the player and creep after them
+# whenever nobody looks; it harms no one until it is hit. Broken, it dies and spills 1 to 6 of some ore.
+- type: entity
+  parent: [ BaseMobAsteroid, BaseMobLavalandFauna ]
+  id: MobLavalandRockMimic
+  name: basalt boulder
+  description: A weathered block of basalt. Break it with a pickaxe to obtain building stone.
+  suffix: Lavaland, мимик
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _DeadSpace/Lavaland/Mobs/rock_mimic.rsi
+    layers:
+    - state: rock
+      map: [ "enum.LavalandRockMimicLayers.Base" ]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.LavalandRockMimicVisuals.State:
+        enum.LavalandRockMimicLayers.Base:
+          Rock: { state: rock }
+          Waking: { state: wake }
+          Walking: { state: walk }
+          Awake: { state: sleep }
+          Dead: { state: dead }
+  # Passes for a boulder: no health on examine, and no health bar (as the lavaland's bosses hide theirs).
+  - type: LavalandRockDisguise
+  - type: Damageable
+    damageContainer: Biological
+    healthBarThreshold: 1000000
+  - type: LavalandRockMimic
+    ores:
+    - SteelOre
+    - Coal
+    - GoldOre
+    - SilverOre
+    - PlasmaOre
+    - UraniumOre
+    - DiamondOre
+    - MagmiteOre
+    angryComponents:
+    - type: HTN
+      rootTask:
+        task: SimpleHostileCompound
+      blackboard:
+        NavSmash: !type:Bool
+          false
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      90: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.6
+    baseSprintSpeed: 3.2
+  - type: MeleeWeapon
+    angle: 0
+    attackRate: 0.8
+    animation: WeaponArcFist
+    soundHit:
+      path: /Audio/Effects/break_stone.ogg
+    damage:
+      types:
+        Blunt: 14
+        Structural: 20
+  # Harms no one, until someone hits it: then that one.
+  - type: NpcFactionMember
+    factions:
+    - Passive
+  - type: NPCRetaliation
+    attackMemoryLength: 20
+  - type: FactionException
+  - type: Tag
+    tags:
+    - CannotSuicide

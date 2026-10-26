@@ -184,8 +184,18 @@ public sealed class LavalandLootWeaponsSystem : EntitySystem
                 _damageable.TryChangeDamage(target, args.BaseDamage * multiplier, origin: args.User);
         }
 
-        if (hitLarge)
-            SetCombo(ent, ent.Comp.Combo + 1);
+        if (!hitLarge)
+            return;
+
+        // Abel lights a wisp with every blow; Cain, quick as it is, with every few.
+        if (ent.Comp.LaunchMode)
+        {
+            if (++ent.Comp.CainHits < Math.Max(1, ent.Comp.CainHitsPerWisp))
+                return;
+            ent.Comp.CainHits = 0;
+        }
+
+        SetCombo(ent, ent.Comp.Combo + 1);
     }
 
     private void OnCainAbelAfterInteract(Entity<LavalandCainAndAbelComponent> ent, ref AfterInteractEvent args)

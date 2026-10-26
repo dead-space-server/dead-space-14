@@ -114,10 +114,27 @@ public sealed class LavalandGoldgrubSystem : EntitySystem
                 continue;
             }
 
-            // After the robbery it just runs from the miner until it burrows.
+            // After the robbery it runs from the miner a few tiles, a few seconds - then stops and digs in, a moment
+            // that every hit starts over.
             if (goldgrub.AmbushDone && goldgrub.AmbushVictim is { } robbed && !TerminatingOrDeleted(robbed))
             {
-                MoveAwayFrom(uid, xform, robbed, goldgrub);
+                var fled = (_transform.GetWorldPosition(xform) - goldgrub.AmbushFleeFrom).Length();
+                if (!goldgrub.AmbushDigging &&
+                    goldgrub.AmbushFleeUntil is { } fleeUntil && curTime < fleeUntil &&
+                    fled < goldgrub.AmbushFleeDistance)
+                {
+                    MoveAwayFrom(uid, xform, robbed, goldgrub);
+                    continue;
+                }
+
+                if (!goldgrub.AmbushDigging)
+                {
+                    goldgrub.AmbushDigging = true;
+                    goldgrub.BurrowAt = curTime + goldgrub.AmbushDigDelay;
+                    _steering.Unregister(uid);
+                    _popup.PopupEntity(Loc.GetString("lavaland-goldgrub-burrow-start"), uid, PopupType.MediumCaution);
+                }
+
                 continue;
             }
 
@@ -285,7 +302,8 @@ public sealed class LavalandGoldgrubSystem : EntitySystem
             else
                 _popup.PopupEntity(Loc.GetString("lavaland-goldgrub-ambush-miss"), uid, PopupType.Medium);
 
-            StartBurrow(uid, grub, now);
+            grub.AmbushFleeUntil = now + grub.AmbushFleeTime;
+            grub.AmbushFleeFrom = _transform.GetWorldPosition(xform);
             EnsureComp<ActiveNPCComponent>(uid);
         }
     }
@@ -355,6 +373,17 @@ public sealed class LavalandGoldgrubSystem : EntitySystem
     private void OnDamageChanged(EntityUid uid, LavalandGoldgrubComponent component, DamageChangedEvent args)
     {
         if (!args.DamageIncreased || IsDead(uid))
+            return;
+
+        // Digging in after a robbery: a hit knocks it out of the hole, it starts over.
+        if (component.AmbushDigging)
+        {
+            component.BurrowAt = _timing.CurTime + component.AmbushDigDelay;
+            return;
+        }
+
+        // Running off after a robbery: it keeps running, then digs in.
+        if (component.AmbushDone && component.AmbushVictim != null)
             return;
 
         StartBurrow(uid, component, _timing.CurTime);

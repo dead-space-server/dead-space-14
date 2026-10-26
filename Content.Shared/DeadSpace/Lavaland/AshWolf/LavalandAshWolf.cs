@@ -113,3 +113,6 @@ public sealed partial class LavalandAshWolfRetreatActionEvent : WorldTargetActio
 
 /// <summary>The tamed Ash Wolf pounces and pins whoever it lands on.</summary>
 public sealed partial class LavalandAshWolfPounceActionEvent : WorldTargetActionEvent;
+
+/// <summary>The tamed Ash Wolf switches how it fights: its blades up close, or now and then a saw shot from afar.</summary>
+public sealed partial class LavalandAshWolfModeActionEvent : InstantActionEvent;

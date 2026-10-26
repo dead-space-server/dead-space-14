@@ -18,6 +18,29 @@ public sealed partial class LavalandAshWolfSystem
         SubscribeLocalEvent<LavalandAshWolfComponent, LavalandAshWolfLeapActionEvent>(OnLeapAction);
         SubscribeLocalEvent<LavalandAshWolfComponent, LavalandAshWolfRetreatActionEvent>(OnRetreatAction);
         SubscribeLocalEvent<LavalandAshWolfComponent, LavalandAshWolfPounceActionEvent>(OnPounceAction);
+        SubscribeLocalEvent<LavalandAshWolfComponent, LavalandAshWolfModeActionEvent>(OnModeAction);
+    }
+
+    /// <summary>Blades (left and right click strike) or saws (a click shoots one, not often).</summary>
+    private void OnModeAction(Entity<LavalandAshWolfComponent> ent, ref LavalandAshWolfModeActionEvent args)
+    {
+        if (args.Handled || !ent.Comp.Tamed)
+            return;
+
+        args.Handled = true;
+        ent.Comp.SawMode = !ent.Comp.SawMode;
+        // The saw gun is the components of its own prototype, put on and taken off: with a gun on it the borg's left
+        // click shoots, without one it strikes.
+        if (_prototype.TryIndex(ent.Comp.SawGun, out var sawGun))
+        {
+            if (ent.Comp.SawMode)
+                EntityManager.AddComponents(ent, sawGun.Components, removeExisting: true);
+            else
+                EntityManager.RemoveComponents(ent, sawGun.Components);
+        }
+
+        _popup.PopupEntity(Loc.GetString(ent.Comp.SawMode ? "lavaland-ash-wolf-mode-saws" : "lavaland-ash-wolf-mode-blades"),
+            ent, ent);
     }
 
     private void OnRushAction(Entity<LavalandAshWolfComponent> ent, ref LavalandAshWolfRushActionEvent args)

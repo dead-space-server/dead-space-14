@@ -871,3 +871,13 @@
 
 - type: Tag
   id: GunUpgradeExplosiveLavaland
+
+# The miners' ore box, packed flat to be carried down to the lavaland.
+- type: entity
+  parent: BaseFlatpack
+  id: OreBoxFlatpack
+  name: упакованный ящик для руды
+  description: Сложенный ящик для руды. Разверните его на месте, и в него войдёт вся добыча.
+  components:
+  - type: Flatpack
+    entity: OreBox

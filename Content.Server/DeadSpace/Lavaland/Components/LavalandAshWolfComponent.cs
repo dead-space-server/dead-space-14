@@ -111,6 +111,18 @@ public sealed partial class LavalandAshWolfComponent : Component
     [DataField]
     public float RushHop = 1.1f;
 
+    /// <summary>The tamed borg takes this share less damage while it is in one of its attacks.</summary>
+    [DataField]
+    public float TamedAttackGuard = 0.7f;
+
+    /// <summary>The tamed borg's saw mode: the prototype whose gun components it puts on.</summary>
+    [DataField]
+    public EntProtoId SawGun = "LavalandAshWolfSawGun";
+
+    /// <summary>The tamed borg shoots saws instead of striking with its blades.</summary>
+    [ViewVariables]
+    public bool SawMode;
+
     /// <summary>After each of its patterns it is stunned (stars over its head) for this long.</summary>
     [DataField]
     public float PatternStun = 1f;
@@ -192,6 +204,13 @@ public sealed partial class LavalandAshWolfComponent : Component
     [DataField]
     public float PounceSpeed = 13f;
 
+    /// <summary>The warning before the pounce: the target is told, hears it and sees a mark under its feet.</summary>
+    [DataField]
+    public float PounceWarning = 1.2f;
+
+    [DataField]
+    public SoundSpecifier? PounceWarningSound = new SoundPathSpecifier("/Audio/Machines/warning_buzzer.ogg");
+
     [DataField]
     public float PounceShield = 0.9f;
 
@@ -243,7 +262,7 @@ public sealed partial class LavalandAshWolfComponent : Component
 
     /// <summary>The borg is left broken by the fight: past its critical threshold, to be welded back to life.</summary>
     [DataField]
-    public DamageSpecifier BorgDamage = new() { DamageDict = { ["Blunt"] = 130 } };
+    public DamageSpecifier BorgDamage = new() { DamageDict = { ["Blunt"] = 260 } };
 
     [DataField]
     public List<SoundSpecifier> Music = new();
@@ -360,6 +379,10 @@ public sealed partial class LavalandAshWolfComponent : Component
     /// <summary>A rush or pounce stops at the first one it meets.</summary>
     [ViewVariables]
     public LavalandAshWolfContact SlideContact;
+
+    /// <summary>The slide homes in on them and is sure to reach them (the rush and the pounce of the boss).</summary>
+    [ViewVariables]
+    public EntityUid? SlideTarget;
 
     [ViewVariables]
     public EntityUid? Victim;

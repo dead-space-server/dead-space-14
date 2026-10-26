@@ -11,6 +11,7 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.Borgs;
 using Content.Shared.DeadSpace.Lavaland;
+using Content.Shared.DeadSpace.Lavaland.Components;
 using Content.Shared.DeadSpace.Lavaland.AshWolf;
 using Content.Shared.DeadSpace.Lavaland.Bosses;
 using Content.Shared.DeadSpace.Weapons.Parry;
@@ -18,6 +19,7 @@ using Content.Shared.Ghost;
 using Content.Shared.Jittering;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Popups;
 using Content.Shared.Stunnable;
 using Robust.Server.Player;
@@ -43,6 +45,10 @@ namespace Content.Server.DeadSpace.Lavaland;
 public sealed partial class LavalandAshWolfSystem : EntitySystem
 {
     [Dependency] private readonly DamageableSystem _damage = default!;
+    [Dependency] private readonly LavalandFaunaRaidSystem _raids = default!;
+    [Dependency] private readonly MetaDataSystem _metaData = default!;
+    [Dependency] private readonly Content.Server.Ghost.Roles.ToggleableGhostRoleSystem _ghostRoles = default!;
+    [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly GatherableSystem _gatherable = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -75,7 +81,8 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<LavalandAshWolfComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<LavalandAshWolfComponent, MapInitEvent>(OnMapInit,
+            after: [typeof(Content.Server.NameIdentifier.NameIdentifierSystem), typeof(Content.Server.RandomMetadata.RandomMetadataSystem)]);
         SubscribeLocalEvent<LavalandAshWolfComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<LavalandAshWolfComponent, BeforeDamageChangedEvent>(OnBeforeDamage);
         SubscribeLocalEvent<LavalandAshWolfComponent, DamageModifyEvent>(OnDamageModify);
@@ -96,6 +103,20 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
         {
             RemComp<StrapComponent>(ent);
             RemComp<BorgRideComponent>(ent);
+
+            // AshWolf LQ-829, not a borg's random name or serial number.
+            RemComp<Content.Shared.NameIdentifier.NameIdentifierComponent>(ent);
+            _metaData.SetEntityName(ent, Loc.GetString(ent.Comp.Name));
+        }
+        // The boss is not dragged around, asleep (to be woken in the brig) or awake.
+        else
+        {
+            RemComp<PullableComponent>(ent);
+
+            // The health bar over its head counts from its own health, not the thresholds it never reaches.
+            var bar = EnsureComp<LavalandHealthBarComponent>(ent);
+            bar.MaxHealth = ent.Comp.MaxHealth;
+            Dirty(ent, bar);
         }
     }
 
@@ -144,6 +165,10 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
 
         if (comp.Reduction > 0f)
             args.Damage *= Math.Clamp(1f - comp.Reduction, 0f, 1f);
+
+        // The borg's attacks are made to dive into melee: it is well armoured while in one.
+        if (comp.Tamed && comp.Attack != LavalandAshWolfAttack.None)
+            args.Damage *= Math.Clamp(1f - comp.TamedAttackGuard, 0f, 1f);
     }
 
     private void OnDamageChanged(EntityUid uid, LavalandAshWolfComponent comp, DamageChangedEvent args)
@@ -295,6 +320,13 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
         if (now < comp.StaggerUntil || comp.Sliding)
             return;
 
+        // The fauna is raiding the outpost: it holds back and watches, one trouble at a time.
+        if (Transform(ent).MapUid is { } map && _raids.IsRaidRunning(map))
+        {
+            comp.NextAttack = now + TimeSpan.FromSeconds(1);
+            return;
+        }
+
         var target = Nearest(ent.Owner, players);
         comp.Target = target;
         WalkTowards(ent.Owner, Position(target), comp.WalkSpeed * Haste(comp) * frameTime, 2.5f);
@@ -407,7 +439,8 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
         comp.NextHud = now + HudInterval;
         var health = GetHealth(ent, comp);
         var name = Loc.GetString(comp.Name);
-        var hint = Loc.GetString(comp.Hint);
+        // The client fills in the keys as they are bound there.
+        var hint = comp.Hint.Id;
         var sessions = GetNearbySessions(ent, ChaseRange(comp)).ToList();
         foreach (var session in sessions)
         {

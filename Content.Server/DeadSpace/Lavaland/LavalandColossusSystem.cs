@@ -192,6 +192,7 @@ public sealed class LavalandColossusSystem : EntitySystem
         var distance = (_transform.GetWorldPosition(target) - _transform.GetWorldPosition(uid)).Length();
         if (distance > colossus.OffscreenRange)
         {
+            Popup(uid, "lavaland-colossus-speech-aimed");
             QueueAimed(colossus, target, now);
             colossus.BusyUntil = now + colossus.AimedShotDelay * (colossus.AimedShots - 1);
             colossus.NextAttack = now + GetScaledCooldown(colossus.AimedCooldown, rage, colossus.MaxCooldownReduction);
@@ -228,6 +229,7 @@ public sealed class LavalandColossusSystem : EntitySystem
 
         if (_random.Prob(colossus.RandomAttackChance))
         {
+            Popup(uid, "lavaland-colossus-speech-rain");
             QueueRandomShots(uid, colossus, arena, grid, now);
             colossus.NextAttack = now + GetScaledCooldown(colossus.RandomCooldown, rage, colossus.MaxCooldownReduction);
             return;
@@ -235,6 +237,7 @@ public sealed class LavalandColossusSystem : EntitySystem
 
         if (_random.Prob(colossus.ShotgunChance))
         {
+            Popup(uid, "lavaland-colossus-speech-shotgun");
             QueueShotgun(colossus, targetAngle, IsBelowTwoThirds(uid, arena), now);
 
             PushBack(uid, -targetAngle.ToVec());
@@ -242,6 +245,7 @@ public sealed class LavalandColossusSystem : EntitySystem
             return;
         }
 
+        Popup(uid, "lavaland-colossus-speech-cross");
         QueueVolley(colossus, Diagonals, now);
         QueueVolley(colossus, Cardinals, now + colossus.AlternatingStepDelay);
         QueueVolley(colossus, Diagonals, now + colossus.AlternatingStepDelay * 2);

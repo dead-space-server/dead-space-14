@@ -197,7 +197,7 @@
     capacity: 1
     count: 1
   - type: Gun
-    fireRate: 2
+    fireRate: 1
     selectedMode: SemiAuto
     minAngle: 45
     maxAngle: 55
