@@ -7,8 +7,8 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared.DeadSpace.Lavaland;
 
 /// <summary>
-/// The strong storm of lavaland: a wind no staff dispels. Once a second it throws everyone out in the open a few
-/// tiles one way or another. It may only come after <see cref="EarliestStart"/> into the round, and it brings the
+/// The strong storm of lavaland: a wind no staff dispels. Every few seconds it throws everyone out in the open
+/// several tiles one way or another (magboots switched on hold them closer). It may only come after <see cref="EarliestStart"/> into the round, and it brings the
 /// Ash Wolf to the miners' outpost.
 /// </summary>
 [DataDefinition]
@@ -40,11 +40,15 @@ public sealed partial class LavalandStrongStormConfig
     public TimeSpan Duration = TimeSpan.FromSeconds(180);
 
     [DataField]
-    public TimeSpan ThrowInterval = TimeSpan.FromSeconds(1);
+    public TimeSpan ThrowInterval = TimeSpan.FromSeconds(3);
 
-    /// <summary>Farthest a gust throws someone (tiles); the nearest is a third of it.</summary>
+    /// <summary>How far a gust throws someone (tiles).</summary>
     [DataField]
-    public float ThrowDistance = 5f;
+    public float ThrowDistance = 7f;
+
+    /// <summary>How far a gust throws someone with magboots switched on (tiles).</summary>
+    [DataField]
+    public float MagbootsThrowDistance = 3f;
 
     [DataField]
     public float ThrowSpeed = 9f;

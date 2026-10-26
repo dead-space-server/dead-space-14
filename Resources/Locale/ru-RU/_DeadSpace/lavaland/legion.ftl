@@ -15,6 +15,9 @@ lavaland-stabilizer-already = Эта душа уже стабилизирова�
 lavaland-stabilizer-success = Душа легиона стабилизирована и больше не угаснет.
 lavaland-stabilizer-examine-stable = [color=lightblue]Душа стабилизирована и не угаснет.[/color]
 lavaland-stabilizer-examine-decaying = [color=orange]Душа нестабильна и скоро угаснет. Стабилизирующая сыворотка это предотвратит.[/color]
+lavaland-regenerative-core-self = Сила души легиона разом затягивает ваши раны!
+lavaland-regenerative-core-other = Сила души легиона разом затягивает раны { THE($target) }!
+lavaland-regenerative-core-dead = Мёртвых душа легиона не поднимает.
 
 lavaland-lava-staff-point = { CAPITALIZE(THE($user)) } направляет посох лавы на землю!
 lavaland-lava-staff-created = Земля под посохом { THE($user) } превращается в лаву!

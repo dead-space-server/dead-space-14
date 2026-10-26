@@ -15,6 +15,9 @@ lavaland-stabilizer-already = This soul is already stabilized.
 lavaland-stabilizer-success = The legion soul is stabilized and will no longer fade.
 lavaland-stabilizer-examine-stable = [color=lightblue]The soul is stabilized and will not fade.[/color]
 lavaland-stabilizer-examine-decaying = [color=orange]The soul is unstable and will fade soon. A stabilizing serum would prevent that.[/color]
+lavaland-regenerative-core-self = The legion soul's power closes your wounds at once!
+lavaland-regenerative-core-other = The legion soul's power closes { THE($target) }'s wounds at once!
+lavaland-regenerative-core-dead = A legion soul cannot raise the dead.
 
 lavaland-lava-staff-point = { CAPITALIZE(THE($user)) } points the staff of lava at the ground!
 lavaland-lava-staff-created = The ground under { THE($user) }'s staff turns into lava!

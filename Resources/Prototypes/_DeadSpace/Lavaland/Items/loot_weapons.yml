@@ -101,7 +101,7 @@
   parent: BaseItem
   id: LavalandSoulStabilizer
   name: стабилизирующая сыворотка
-  description: Введите её в душу легиона, чтобы та не угасла.
+  description: Введите её в душу легиона, чтобы та не угасла и сохранила свою целебную силу.
   components:
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Specific/Medical/stabilizer.rsi
@@ -211,7 +211,7 @@
       path: /Audio/Weapons/bladeslice.ogg
     damage:
       types:
-        Slash: 12
+        Slash: 21
   - type: Sharp
   - type: LavalandCleavingSaw
   - type: LavalandCleavingSawEffects
@@ -310,17 +310,21 @@
     sprite: _DeadSpace/Lavaland/Objects/Weapons/cain_and_abel.rsi
   # One dagger in each hand.
   - type: Wieldable
+  # The pair shown in the hands as soon as they are wielded; Cain in both hands flings its blade out on the chain.
+  - type: LavalandCainAndAbelLook
   - type: MeleeWeapon
     wideAnimationRotation: -135
     # Abel's blade swinging (Cain's when it is in front).
     animation: LavalandWeaponArcAbel
     wideAnimation: LavalandWeaponArcAbelWide
     range: 2.2
+    # Abel in one hand; the other blows (Cain, both hands) are the LavalandCainAndAbel component's.
+    attackRate: 2.5
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
     damage:
       types:
-        Slash: 15
+        Heat: 6
   - type: Sharp
   - type: LavalandDeepNightDark
   - type: PointLight
@@ -453,6 +457,29 @@
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Effects/CainAndAbelArc.rsi
     state: cain
+
+# Cain in both hands: the blade flung out on its chain and pulled back, the chain drawn from the wielder to it.
+- type: entity
+  parent: LavalandWeaponArcCain
+  id: LavalandWeaponArcCainChain
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: LavalandChainArc
+    sprite:
+      sprite: _DeadSpace/Objects/Weapons/Guns/ninja.rsi
+      state: chain
+    color: "#ffb08a"
+
+- type: entity
+  parent: LavalandWeaponArcCainWide
+  id: LavalandWeaponArcCainChainWide
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: LavalandChainArc
+    sprite:
+      sprite: _DeadSpace/Objects/Weapons/Guns/ninja.rsi
+      state: chain
+    color: "#ffb08a"
 
 - type: entity
   id: ActionLavalandCainAndAbelSwap

@@ -462,7 +462,7 @@
     wideAnimationRotation: -135
     damage:
       types:
-        Slash: 7
+        Slash: 12
     soundHit:
       collection: MantisAttack
     soundNoDamage:
@@ -533,7 +533,7 @@
     attackRate: 1.0
     damage:
       types:
-        Slash: 15
+        Slash: 26
     soundHit:
       collection: MetalThud
     angle: 0

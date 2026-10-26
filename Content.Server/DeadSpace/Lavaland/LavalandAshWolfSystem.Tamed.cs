@@ -8,7 +8,7 @@ namespace Content.Server.DeadSpace.Lavaland;
 
 /// <summary>
 /// The tamed Ash Wolf, a borg now: whoever is put in it has its rush, leap, retreat and pounce as actions (the pounce
-/// on a long cooldown). They work as the boss's own do, against anyone alive.
+/// on a long cooldown). They work as the boss's own do, against anyone alive; the rush goes straight ahead.
 /// </summary>
 public sealed partial class LavalandAshWolfSystem
 {
@@ -43,9 +43,15 @@ public sealed partial class LavalandAshWolfSystem
             ent, ent);
     }
 
+    /// <summary>Straight ahead, where the borg faces: no point to aim at, it always rolls its full distance.</summary>
     private void OnRushAction(Entity<LavalandAshWolfComponent> ent, ref LavalandAshWolfRushActionEvent args)
     {
-        TryTamedAttack(ent, args, LavalandAshWolfAttack.Rush);
+        if (args.Handled || !ent.Comp.Tamed || ent.Comp.Attack != LavalandAshWolfAttack.None || !_mobState.IsAlive(ent))
+            return;
+
+        ent.Comp.AimPoint = Position(ent) + _transform.GetWorldRotation(ent).ToWorldVec() * ent.Comp.TamedRushDistance;
+        BeginAttack(ent, LavalandAshWolfAttack.Rush, _timing.CurTime);
+        args.Handled = true;
     }
 
     private void OnLeapAction(Entity<LavalandAshWolfComponent> ent, ref LavalandAshWolfLeapActionEvent args)

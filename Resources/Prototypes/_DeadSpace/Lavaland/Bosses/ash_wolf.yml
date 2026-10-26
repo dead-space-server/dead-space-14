@@ -20,6 +20,11 @@
     - state: eyes-bladewolfmk2
       shader: unshaded
       map: [ "enum.LavalandAshWolfLayers.Eyes" ]
+    # The shield is only an outline: drawn over the body while it is up.
+    - state: bladewolfmk2-shield
+      shader: unshaded
+      visible: false
+      map: [ "enum.LavalandAshWolfLayers.Shield" ]
   - type: LavalandAshWolfEyes
   # Stars over its head while it is stunned.
   - type: StunVisuals
@@ -31,7 +36,7 @@
           Dormant: { state: bladewolfmk2, visible: true, rotation: 90 }
           Normal: { state: bladewolfmk2, visible: true, rotation: 0 }
           Roll: { state: bladewolfmk2-roll-moving, visible: true, rotation: 0 }
-          Shield: { state: bladewolfmk2-shield, visible: true, rotation: 0 }
+          Shield: { state: bladewolfmk2, visible: true, rotation: 0 }
           Hidden: { visible: false }
           EyesOnly: { visible: false }
         enum.LavalandAshWolfLayers.Eyes:
@@ -41,6 +46,13 @@
           Shield: { state: eyes-bladewolfmk2, visible: true }
           Hidden: { visible: false }
           EyesOnly: { state: eyes-bladewolfmk2-roll, visible: true }
+        enum.LavalandAshWolfLayers.Shield:
+          Dormant: { visible: false }
+          Normal: { visible: false }
+          Roll: { visible: false }
+          Shield: { visible: true }
+          Hidden: { visible: false }
+          EyesOnly: { visible: false }
   - type: PointLight
     radius: 2
     energy: 1.2
@@ -52,7 +64,7 @@
       100000: Dead
   - type: ParryableBoss
   - type: LavalandAshWolf
-    maxHealth: 2200
+    maxHealth: 3500
     music:
     - /Audio/_DeadSpace/Lavaland/Bosses/ash_wolf_fight.ogg
     - /Audio/_DeadSpace/Lavaland/Bosses/ash_wolf_fight_2.ogg
@@ -203,13 +215,21 @@
       shader: unshaded
       map: [ "light" ]
       visible: false
+    - state: bladewolfmk2-shield
+      shader: unshaded
+      visible: false
+      map: [ "enum.LavalandAshWolfLayers.Shield" ]
   - type: GenericVisualizer
     visuals:
       enum.LavalandAshWolfVisuals.State:
         enum.LavalandAshWolfLayers.Body:
           Normal: { state: bladewolfmk2 }
           Roll: { state: bladewolfmk2-roll-moving }
-          Shield: { state: bladewolfmk2-shield }
+          Shield: { state: bladewolfmk2 }
+        enum.LavalandAshWolfLayers.Shield:
+          Normal: { visible: false }
+          Roll: { visible: false }
+          Shield: { visible: true }
   - type: BorgChassis
     maxModules: 4
     hasMindState: eyes-bladewolfmk2
@@ -312,7 +332,7 @@
   parent: BaseAction
   id: ActionAshWolfRush
   name: рывок
-  description: Свернуться в колесо из лезвий и прокатиться к точке, кромсая первого встречного.
+  description: Разогнаться, свернувшись в колесо из лезвий, и пролететь вперёд, кромсая первого встречного.
   categories: [ HideSpawnMenu ]
   components:
   - type: Action
@@ -320,10 +340,7 @@
     icon:
       sprite: _DeadSpace/Lavaland/Mobs/AshWolf.rsi
       state: bladewolfmk2-roll
-  - type: TargetAction
-    range: 8
-    checkCanAccess: false
-  - type: WorldTargetAction
+  - type: InstantAction
     event: !type:LavalandAshWolfRushActionEvent
 
 - type: entity
@@ -336,10 +353,10 @@
   - type: Action
     useDelay: 15
     icon:
-      sprite: _DeadSpace/Lavaland/Effects/AshWolfSaw.rsi
-      state: saw
+      sprite: Interface/Actions/jump.rsi
+      state: icon
   - type: TargetAction
-    range: 8
+    range: 16
     checkCanAccess: false
   - type: WorldTargetAction
     event: !type:LavalandAshWolfLeapActionEvent
@@ -354,10 +371,10 @@
   - type: Action
     useDelay: 10
     icon:
-      sprite: _DeadSpace/Lavaland/Mobs/AshWolf.rsi
-      state: bladewolfmk2
+      sprite: _DeadSpace/Actions/mantisblades_actions.rsi
+      state: mantis-dash
   - type: TargetAction
-    range: 12
+    range: 16
     checkCanAccess: false
   - type: WorldTargetAction
     event: !type:LavalandAshWolfRetreatActionEvent
@@ -372,8 +389,8 @@
   - type: Action
     useDelay: 1
     icon:
-      sprite: _DeadSpace/Lavaland/Effects/AshWolfSaw.rsi
-      state: saw
+      sprite: _DeadSpace/Actions/mantisblades_actions.rsi
+      state: mantis-toggle
   - type: InstantAction
     event: !type:LavalandAshWolfModeActionEvent
 
@@ -389,8 +406,9 @@
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
+    # The smart weapon's heavy shot, not the kinetic accelerator's click.
     soundGunshot:
-      path: /Audio/Weapons/Guns/Gunshots/kinetic_accel.ogg
+      path: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/shingen_shot.ogg
   - type: BasicEntityAmmoProvider
     proto: LavalandAshWolfSawBolt
 
@@ -430,7 +448,7 @@
       sprite: _DeadSpace/Lavaland/Mobs/AshWolf.rsi
       state: bladewolfmk2-shield
   - type: TargetAction
-    range: 6
+    range: 16
     checkCanAccess: false
   - type: WorldTargetAction
     event: !type:LavalandAshWolfPounceActionEvent

@@ -201,16 +201,16 @@
     wideAnimationRotation: -135
     damage:
       types:
-        Blunt: 6
-        Slash: 4
+        Blunt: 10 # DS14-value
+        Slash: 7 # DS14-value
     soundHit:
       collection: MetalThud
   - type: Wieldable
   - type: IncreaseDamageOnWield
     damage:
       types:
-        Blunt: 6
-        Slash: 2
+        Blunt: 10 # DS14-value
+        Slash: 4 # DS14-value
         Structural: 30
   - type: GunRequiresWield
   - type: DisarmMalus
@@ -302,11 +302,11 @@
     wideAnimationRotation: -135
     damage:
       types:
-        Blunt: 3
-        Slash: 7
+        Blunt: 5 # DS14-value
+        Slash: 12 # DS14-value
   - type: IncreaseDamageOnWield
     damage:
       types:
-        Blunt: 2
-        Slash: 6
+        Blunt: 4 # DS14-value
+        Slash: 10 # DS14-value
         Structural: 20

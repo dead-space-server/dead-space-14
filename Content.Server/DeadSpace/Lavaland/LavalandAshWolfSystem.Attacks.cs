@@ -312,13 +312,13 @@ public sealed partial class LavalandAshWolfSystem
             case 0:
                 SetVisual(ent, LavalandAshWolfVisualState.Roll);
                 PlaySound(comp.RushSound, ent);
-                comp.StepTime = now + TimeSpan.FromSeconds(comp.Tamed ? 0.25f : comp.RushWindup / Haste(comp));
+                comp.StepTime = now + TimeSpan.FromSeconds(comp.Tamed ? comp.TamedRushWindup : comp.RushWindup / Haste(comp));
                 comp.NextEmber = now;
                 comp.Step = 1;
                 break;
 
             case 1 when now < comp.StepTime:
-                if (!comp.Tamed && now >= comp.NextEmber)
+                if (now >= comp.NextEmber)
                 {
                     RisingFlames(ent);
                     comp.NextEmber = now + TimeSpan.FromSeconds(0.12);
@@ -329,18 +329,18 @@ public sealed partial class LavalandAshWolfSystem
             case 1 when now >= comp.StepTime:
             {
                 var from = Position(ent);
-                var goal = Reach(ent, AimAt(ent), 7f);
+                var goal = Reach(ent, AimAt(ent), comp.TamedRushDistance);
                 var direction = goal - from;
                 if (direction.LengthSquared() < 0.01f)
                     direction = _transform.GetWorldRotation(ent).ToWorldVec();
 
-                var to = goal + direction.Normalized() * comp.RushOvershoot;
+                // The borg rolls its distance exactly; the boss rolls on past its target.
+                var to = comp.Tamed ? goal : goal + direction.Normalized() * comp.RushOvershoot;
                 SetVisual(ent, LavalandAshWolfVisualState.Roll);
                 Slide(ent, to, Vector2.Distance(from, to) / (comp.RushSpeed * Haste(comp)), LavalandAshWolfContact.Rush, now,
                     comp.Tamed ? null : comp.Target);
-                // It leaps at the player.
-                if (!comp.Tamed)
-                    Hop(ent, comp.SlideDuration, comp.RushHop);
+                // It leaps forward (at the player, for the boss).
+                Hop(ent, comp.SlideDuration, comp.RushHop);
                 if (comp.SecondPhaseReached && !comp.Tamed)
                     SpawnShadows(ent, goal, now);
                 comp.Step = 2;

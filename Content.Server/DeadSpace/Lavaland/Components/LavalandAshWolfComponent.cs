@@ -55,7 +55,7 @@ public sealed partial class LavalandAshWolfComponent : Component
     public bool Tamed;
 
     [DataField]
-    public float MaxHealth = 2200f;
+    public float MaxHealth = 3500f;
 
     /// <summary>Below this share of its health its rushes come with shadow copies.</summary>
     [DataField]
@@ -94,6 +94,10 @@ public sealed partial class LavalandAshWolfComponent : Component
     [DataField]
     public TimeSpan WakeDelay = TimeSpan.FromSeconds(3);
 
+    /// <summary>Woken again after it shut down: a short twitch, no scene.</summary>
+    [DataField]
+    public TimeSpan RewakeDelay = TimeSpan.FromSeconds(1);
+
     /// <summary>Nobody in reach this long: the fight is over, its health bar goes.</summary>
     [DataField]
     public TimeSpan LoseInterest = TimeSpan.FromSeconds(20);
@@ -129,6 +133,13 @@ public sealed partial class LavalandAshWolfComponent : Component
 
     [DataField]
     public float RushOvershoot = 2.5f;
+
+    /// <summary>The tamed borg's rush: its run-up (flames rising, as the boss's), then this far straight ahead.</summary>
+    [DataField]
+    public float TamedRushWindup = 0.45f;
+
+    [DataField]
+    public float TamedRushDistance = 7f;
 
     [DataField]
     public float KnockbackDistance = 3f;
@@ -294,6 +305,18 @@ public sealed partial class LavalandAshWolfComponent : Component
 
     [ViewVariables]
     public bool Active;
+
+    /// <summary>Its scene was played: woken again, it gets straight up and fights on.</summary>
+    [ViewVariables]
+    public bool IntroSeen;
+
+    /// <summary>A fauna raid began mid-fight: it jumped back and shuts itself down at this time.</summary>
+    [ViewVariables]
+    public TimeSpan ShutdownAt;
+
+    /// <summary>It already shut down for the raid that is going on: woken during it, it fights through it.</summary>
+    [ViewVariables]
+    public bool ShutDownForRaid;
 
     [ViewVariables]
     public TimeSpan LastSeenPlayer;

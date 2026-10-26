@@ -187,10 +187,10 @@ public sealed class LavalandLootWeaponsSystem : EntitySystem
         if (!hitLarge)
             return;
 
-        // Abel lights a wisp with every blow; Cain, quick as it is, with every few.
-        if (ent.Comp.LaunchMode)
+        // A heavy blow lights a wisp; quick ones (Cain in both hands, Abel in one), every few.
+        if (ent.Comp.FastBlows)
         {
-            if (++ent.Comp.CainHits < Math.Max(1, ent.Comp.CainHitsPerWisp))
+            if (++ent.Comp.CainHits < Math.Max(1, ent.Comp.FastHitsPerWisp))
                 return;
             ent.Comp.CainHits = 0;
         }

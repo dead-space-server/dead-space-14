@@ -314,7 +314,7 @@
     wideAnimationRotation: -135
     damage:
       types:
-        Slash: 6
+        Slash: 10
     soundHit:
       path: /Audio/_DeadSpace/Lavaland/SpectralBlade/ghost2.ogg
       params:
@@ -360,7 +360,7 @@
     resistanceBypass: true
     damage:
       types:
-        Slash: 20
+        Slash: 35
     soundHit:
       path: /Audio/_DeadSpace/Lavaland/SpellBlade/rapierhit.ogg
       params:
@@ -771,7 +771,7 @@
       path: /Audio/Weapons/bladeslice.ogg
     damage:
       types:
-        Slash: 18
+        Slash: 32
   - type: ActionGrant
     actions:
     - ActionSmokeBlade

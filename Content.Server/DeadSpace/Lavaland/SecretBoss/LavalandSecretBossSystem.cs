@@ -1526,7 +1526,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
     private void WakeAndBless(Entity<LavalandSecretBossComponent> ent, LavalandSecretBossConfig config)
     {
         ent.Comp.PlayersAwake = true;
-        // The last of its cutscenes is over: the Celestial's purple stays over the whole lavaland.
+        // The last of its cutscenes is over: from now on the lavaland's nights are the Celestial's purple, and glow.
         _dayNight.SetTint(ent.Owner, CelestialTint);
         foreach (var fighter in ent.Comp.Participants)
         {

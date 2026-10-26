@@ -3,6 +3,7 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
 using Content.Shared.DeadSpace.CCCCVars;
+using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.DeadSpace.Lavaland.ChromiteCaves;
 using Content.Shared.Chasm;
 using Content.Shared.Examine;
@@ -19,7 +20,8 @@ namespace Content.Client.DeadSpace.Lavaland;
 /// <summary>
 /// Small client-only particles: ash and sparks over lava (like in minecraft), petals and motes over the flowers
 /// of the chromite caves, and the ambience of the caves themselves - fireflies at night, a milky way of
-/// twinkling specks and swarms of fireflies when they glow. Can be turned off with <see cref="CCCCVars.LavalandParticles"/>;
+/// twinkling specks and swarms of fireflies when they glow. The lavaland's nights glow so too, in purple, once the
+/// Celestial is beaten. Can be turned off with <see cref="CCCCVars.LavalandParticles"/>;
 /// the cloud under the feet of a flight potion drinker is always shown, it tells that he walks over chasms.
 /// </summary>
 public sealed class LavalandParticleSystem : EntitySystem
@@ -64,6 +66,17 @@ public sealed class LavalandParticleSystem : EntitySystem
     private static readonly Color[] FireflyColors =
     {
         Color.FromHex("#c8ff7a"), Color.FromHex("#8fffd8"), Color.FromHex("#9fd8ff"),
+    };
+
+    // The Celestial's nights over the lavaland: its purple, pink and white.
+    private static readonly Color[] CelestialStarColors =
+    {
+        Color.FromHex("#ffffff"), Color.FromHex("#f2c9ff"), Color.FromHex("#d7a4ff"), Color.FromHex("#ff9fd6"),
+    };
+
+    private static readonly Color[] CelestialFireflyColors =
+    {
+        Color.FromHex("#c77dff"), Color.FromHex("#ff7fc8"), Color.FromHex("#e6b8ff"),
     };
 
     private readonly List<(EntityUid Uid, LavalandParticleEmitterComponent Comp, Vector2 Position)> _emitters = new();
@@ -139,6 +152,8 @@ public sealed class LavalandParticleSystem : EntitySystem
             EmitFromEmitters(eye.MapId, glowing, frameTime);
             if (caves != null)
                 UpdateCavesAmbience(eye.MapId, view, caves.Mode, frameTime);
+            else if (CompOrNull<LavalandDayCycleComponent>(_map.GetMapOrInvalid(eye.MapId)) is { CelestialNight: true })
+                UpdateCavesAmbience(eye.MapId, view, LavalandCavesMode.Glow, frameTime, CelestialStarColors, CelestialFireflyColors);
         }
 
         EmitClouds(eye.MapId, view, frameTime);
@@ -266,8 +281,11 @@ public sealed class LavalandParticleSystem : EntitySystem
     /// Night - a few fireflies; glow - a band of twinkling specks across the screen like the milky way and swarms
     /// of fireflies; deep night - only rare faint motes.
     /// </summary>
-    private void UpdateCavesAmbience(MapId map, Box2 view, LavalandCavesMode mode, float frameTime)
+    private void UpdateCavesAmbience(MapId map, Box2 view, LavalandCavesMode mode, float frameTime,
+        Color[]? starColors = null, Color[]? fireflyColors = null)
     {
+        starColors ??= StarColors;
+        fireflyColors ??= FireflyColors;
         var (stars, fireflies, motes) = mode switch
         {
             LavalandCavesMode.Glow => (28f, 3f, 2f),
@@ -303,7 +321,7 @@ public sealed class LavalandParticleSystem : EntitySystem
                 Life = _random.NextFloat(2.5f, 6f),
                 Size = _random.NextFloat(0.03f, MathF.Abs(across) < 1f ? 0.08f : 0.05f),
                 Phase = _random.NextFloat(0f, MathF.Tau),
-                Color = _random.Pick(StarColors),
+                Color = _random.Pick(starColors),
                 Kind = LavalandParticleKind.Star,
             });
         }
@@ -323,7 +341,7 @@ public sealed class LavalandParticleSystem : EntitySystem
                 Life = _random.NextFloat(4f, 8f),
                 Size = _random.NextFloat(0.05f, 0.08f),
                 Phase = _random.NextFloat(0f, MathF.Tau),
-                Color = _random.Pick(FireflyColors),
+                Color = _random.Pick(fireflyColors),
                 Kind = LavalandParticleKind.Firefly,
             });
         }

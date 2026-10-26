@@ -99,6 +99,8 @@ public sealed class LavalandDayNightSystem : EntitySystem
         var phase = config.Phases[index];
         var cycle = ent.Comp;
         cycle.Phase = index;
+        cycle.Night = phase.DeepNight != null;
+        cycle.CelestialNight = cycle.Night && cycle.Tint != null;
         cycle.PhaseStart = now;
         cycle.PhaseEnd = now + (phase.Duration > TimeSpan.Zero ? phase.Duration : TimeSpan.FromMinutes(1));
         SetFlags(cycle, phase.JamTrackers, phase.BlockJaunter, phase.WispGuide, false, false);
@@ -169,8 +171,8 @@ public sealed class LavalandDayNightSystem : EntitySystem
     }
 
     /// <summary>
-    /// From now on every light of this lavaland's day takes the hue: it fades into it at once, and each next phase
-    /// comes in it.
+    /// From now on the nights of this lavaland take the hue and glow as the chromite caves do; the days keep their own
+    /// light. If it is night now, it fades into it at once.
     /// </summary>
     public void SetTint(EntityUid map, Color tint)
     {
@@ -179,6 +181,8 @@ public sealed class LavalandDayNightSystem : EntitySystem
 
         var target = cycle.Fading ? cycle.BaseColor : EnsureComp<MapLightComponent>(map).AmbientLightColor;
         cycle.Tint = tint;
+        cycle.CelestialNight = cycle.Night;
+        Dirty(map, cycle);
         FadeTo((map, cycle), target, _timing.CurTime);
     }
 
@@ -221,10 +225,10 @@ public sealed class LavalandDayNightSystem : EntitySystem
 
     private static readonly TimeSpan PulseUpdateInterval = TimeSpan.FromSeconds(0.1);
 
-    /// <summary>The phase's colour turned towards the tint, as bright as it was.</summary>
+    /// <summary>A night's colour turned towards the tint, as bright as it was; a day's as it is.</summary>
     private static Color Tinted(LavalandDayCycleComponent cycle, Color color)
     {
-        if (cycle.Tint is not { } tint)
+        if (cycle.Tint is not { } tint || !cycle.Night)
             return color;
 
         var brightness = MathF.Max(MathF.Max(color.R, color.G), MathF.Max(color.B, 0.08f));
@@ -232,7 +236,7 @@ public sealed class LavalandDayNightSystem : EntitySystem
         return Color.InterpolateBetween(color, hued, TintStrength);
     }
 
-    private const float TintStrength = 0.6f;
+    private const float TintStrength = 0.75f;
 
     private void FadeTo(Entity<LavalandDayCycleComponent> ent, Color color, TimeSpan now)
     {

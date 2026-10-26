@@ -17,6 +17,9 @@ public enum LavalandAshWolfLayers : byte
 {
     Body,
     Eyes,
+
+    /// <summary>The shield's outline, drawn over the body while it is up.</summary>
+    Shield,
 }
 
 /// <summary>How the Ash Wolf looks right now.</summary>
@@ -102,8 +105,8 @@ public sealed class LavalandAshWolfQteStopEvent(int id) : EntityEventArgs
     public int Id = id;
 }
 
-/// <summary>The rush of the tamed Ash Wolf (a borg now): a blade wheel at where it looks.</summary>
-public sealed partial class LavalandAshWolfRushActionEvent : WorldTargetActionEvent;
+/// <summary>The rush of the tamed Ash Wolf (a borg now): a short run-up, then a blade wheel straight ahead.</summary>
+public sealed partial class LavalandAshWolfRushActionEvent : InstantActionEvent;
 
 /// <summary>The leap of the tamed Ash Wolf: up and down on the spot, saws spiral away from the landing.</summary>
 public sealed partial class LavalandAshWolfLeapActionEvent : WorldTargetActionEvent;

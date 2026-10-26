@@ -40,7 +40,7 @@ public sealed partial class LavalandAshWolfSystem
     {
         var comp = ent.Comp;
         comp.Stage = LavalandAshWolfStage.Waking;
-        comp.StageTime = _timing.CurTime + comp.WakeDelay;
+        comp.StageTime = _timing.CurTime + (comp.IntroSeen ? comp.RewakeDelay : comp.WakeDelay);
         _jitter.AddJitter(ent, 6f, 10f);
         PlaySound(comp.WakeSound, ent);
         _popup.PopupEntity(Loc.GetString("lavaland-ash-wolf-wake-popup"), ent, PopupType.LargeCaution);
@@ -53,6 +53,17 @@ public sealed partial class LavalandAshWolfSystem
     private void StartIntro(Entity<LavalandAshWolfComponent> ent, TimeSpan now)
     {
         var comp = ent.Comp;
+        // Its scene is played once: woken again, it is up and fighting at once.
+        if (comp.IntroSeen)
+        {
+            SetVisual(ent, LavalandAshWolfVisualState.Normal);
+            comp.Stage = LavalandAshWolfStage.Fight;
+            comp.Step = 0;
+            StartFight(ent, now);
+            return;
+        }
+
+        comp.IntroSeen = true;
         comp.Stage = LavalandAshWolfStage.Intro;
         comp.StageTime = now;
         comp.Step = 0;

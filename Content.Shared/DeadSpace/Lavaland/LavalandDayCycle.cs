@@ -251,11 +251,22 @@ public sealed partial class LavalandDayCycleComponent : Component
     public Color FromColor;
 
     /// <summary>
-    /// A hue laid over every phase's light from now on (the purple left over the lavaland once the Celestial is
-    /// beaten). Null - the phases' own colours.
+    /// A hue laid over the nights' light from now on (the purple the lavaland's nights turn once the Celestial is
+    /// beaten); the days keep their own. Null - the phases' own colours.
     /// </summary>
     [ViewVariables]
     public Color? Tint;
+
+    /// <summary>The current phase is a night (one that can turn deep).</summary>
+    [ViewVariables]
+    public bool Night;
+
+    /// <summary>
+    /// A night under the Celestial's purple: the lavaland glows as the chromite caves do, a band of twinkling specks
+    /// and swarms of fireflies.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool CelestialNight;
 
     /// <summary>The phase's own colour the light is fading to, before the tint.</summary>
     [ViewVariables]

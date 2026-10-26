@@ -393,3 +393,14 @@ public sealed partial class LavalandStabilizableComponent : Component
     [ViewVariables]
     public bool Stabilized;
 }
+
+/// <summary>
+/// A legion soul's regenerative power (tgstation's regenerative core): used in hand, or on someone, it heals all their
+/// wounds at once and is spent. Only while it has not faded - a stabilizing serum keeps it so.
+/// </summary>
+[RegisterComponent]
+public sealed partial class LavalandRegenerativeCoreComponent : Component
+{
+    [DataField]
+    public SoundSpecifier? HealSound = new SoundPathSpecifier("/Audio/Effects/Fluids/splat.ogg");
+}

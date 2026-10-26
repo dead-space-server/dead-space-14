@@ -77,28 +77,19 @@
     sound:
       path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_drop.ogg
 
+# The regenerative core: used in hand or on someone it heals every wound at once, until it fades.
 - type: entity
-  parent: FoodBase
+  parent: BaseItem
   id: LavalandLegionSoul
   name: legion soul
-  description: A flickering remnant torn out of a legion. It still contains unstable regenerative compounds.
+  description: A flickering remnant torn out of a legion. Pressed to a wound, its regenerative power closes every injury at once - until it fades.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 4
-        reagents:
-        - ReagentId: Rororium
-          Quantity: 4
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Specific/Medical/legion_soul.rsi
     state: legion_soul
   - type: Item
     size: Small
-  - type: Tag
-    tags:
-    - FelinidFood
-    - ReptilianFood
+  - type: LavalandRegenerativeCore
   - type: Perishable
     rotAfter: 180
     molsPerSecondPerUnitMass: 0

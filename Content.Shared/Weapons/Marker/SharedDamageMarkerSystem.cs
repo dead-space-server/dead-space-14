@@ -43,9 +43,9 @@ public abstract class SharedDamageMarkerSystem : EntitySystem
         if (component.Marker != args.Used)
             return;
 
-        args.BonusDamage += component.Damage;
-        // DS14-start: crusher attachments (trophies) react to the detonation
-        var detonated = new DamageMarkerDetonatedEvent(uid, args.User, new DamageSpecifier());
+        // DS14-start: the mark's damage goes through the weapon - crusher attachments (trophies) add to it, lavaland
+        // weapons scale it (args.BonusDamage += component.Damage upstream)
+        var detonated = new DamageMarkerDetonatedEvent(uid, args.User, new DamageSpecifier(component.Damage));
         RaiseLocalEvent(args.Used, ref detonated);
         args.BonusDamage += detonated.BonusDamage;
         // DS14-end

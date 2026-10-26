@@ -295,7 +295,10 @@ public sealed partial class AttachmentHierophantChaser : AttachmentEffect
 [ByRefEvent]
 public record struct AttachmentHierophantChaserEvent(EntityUid User, EntityUid Target, DamageSpecifier Damage, int MaxSteps);
 
-/// <summary>Raised on a weapon when a crusher mark it placed is detonated by a melee hit.</summary>
+/// <summary>
+/// Raised on a weapon when a crusher mark it placed is detonated by a melee hit. <see cref="BonusDamage"/> starts as the
+/// mark's own damage; whatever it ends up as is dealt with the hit.
+/// </summary>
 [ByRefEvent]
 public record struct DamageMarkerDetonatedEvent(EntityUid Target, EntityUid User, DamageSpecifier BonusDamage);
 

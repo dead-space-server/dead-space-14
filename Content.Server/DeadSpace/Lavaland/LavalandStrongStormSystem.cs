@@ -7,7 +7,10 @@ using Content.Server.GameTicking;
 using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.DeadSpace.Lavaland.Components;
 using Content.Shared.DeadSpace.Lavaland.SecretBoss;
+using Content.Shared.Clothing;
 using Content.Shared.Ghost;
+using Content.Shared.Inventory;
+using Content.Shared.Item.ItemToggle;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Throwing;
 using Content.Shared.Weather;
@@ -24,14 +27,16 @@ namespace Content.Server.DeadSpace.Lavaland;
 
 /// <summary>
 /// The strong storm (<see cref="LavalandStrongStormConfig"/>): late in the round, with an alarm like the deep night's,
-/// a wind rises that no staff of storms dispels. Once a second every player out in the open is thrown a few tiles -
-/// forward, back, to the left or to the right. Its first time it brings the Ash Wolf to the miners' outpost.
+/// a wind rises that no staff of storms dispels. Every few seconds every player out in the open is thrown several
+/// tiles - forward, back, to the left or to the right; switched on magboots hold them closer. Its first time it brings the Ash Wolf to the miners' outpost.
 /// </summary>
 public sealed class LavalandStrongStormSystem : EntitySystem
 {
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly GameTicker _ticker = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private readonly ItemToggleSystem _toggle = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
@@ -215,9 +220,16 @@ public sealed class LavalandStrongStormSystem : EntitySystem
             var facing = _transform.GetWorldRotation(xform);
             var turn = Angle.FromDegrees(90 * _random.Next(4));
             var direction = (facing + turn).ToWorldVec();
-            var distance = _random.NextFloat(config.ThrowDistance / 3f, config.ThrowDistance);
+            var distance = HasActiveMagboots(player) ? config.MagbootsThrowDistance : config.ThrowDistance;
             _throwing.TryThrow(player, direction * distance, config.ThrowSpeed, recoil: false, playSound: false);
         }
+    }
+
+    private bool HasActiveMagboots(EntityUid player)
+    {
+        return _inventory.TryGetSlotEntity(player, "shoes", out var boots) &&
+               HasComp<MagbootsComponent>(boots) &&
+               _toggle.IsActivated(boots.Value);
     }
 
     /// <summary>Open ground a little way out from the outpost's edge, on a random side.</summary>

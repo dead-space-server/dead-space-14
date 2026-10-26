@@ -62,7 +62,7 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedItemSystem _item = default!;
+    [Dependency] private readonly LavalandCainAndAbelLookSystem _cainAbelLook = default!;
     [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly Robust.Shared.Containers.SharedContainerSystem _containers = default!;
 
@@ -139,7 +139,8 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
     }
 
     /// <summary>
-    /// Cain strikes fast, as twin blades on chains do, each blow lighter; Abel as the daggers were made. The swing
+    /// Cain in one hand cuts heavy and slow, in both hands it flings its blade on the chain - quick light cuts from
+    /// afar. Abel the other way round: quick light burns in one hand, heavy burns reaching further in both. The swing
     /// shown is the blade in front.
     /// </summary>
     private void UpdateCainAbelBlows(Entity<LavalandCainAndAbelComponent> ent)
@@ -147,23 +148,32 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
         if (!TryComp<MeleeWeaponComponent>(ent, out var melee))
             return;
 
-        // The first time: Abel's own, as the prototype gave them.
-        if (ent.Comp.AbelDamage == null)
-        {
-            ent.Comp.AbelAttackRate = melee.AttackRate;
-            ent.Comp.AbelDamage = new DamageSpecifier(melee.Damage);
-        }
+        // The first time: the one-hand reach, as the prototype gave it.
+        if (ent.Comp.Range <= 0f)
+            ent.Comp.Range = melee.Range;
 
-        var cain = ent.Comp.LaunchMode;
-        melee.AttackRate = cain ? ent.Comp.CainAttackRate : ent.Comp.AbelAttackRate;
-        melee.Damage = cain ? ent.Comp.AbelDamage * ent.Comp.CainDamageMultiplier : new DamageSpecifier(ent.Comp.AbelDamage);
-        melee.Animation = cain ? ent.Comp.CainArc : ent.Comp.AbelArc;
-        melee.WideAnimation = cain ? ent.Comp.CainWideArc : ent.Comp.AbelWideArc;
+        var comp = ent.Comp;
+        var cain = comp.LaunchMode;
+        var wielded = TryComp<WieldableComponent>(ent, out var wieldable) && wieldable.Wielded;
+        var chained = cain && wielded;
+        var (damage, rate) = (cain, wielded) switch
+        {
+            (true, false) => (comp.CainDamage, comp.CainAttackRate),
+            (true, true) => (comp.CainWieldedDamage, comp.CainWieldedAttackRate),
+            (false, false) => (comp.AbelDamage, comp.AbelAttackRate),
+            (false, true) => (comp.AbelWieldedDamage, comp.AbelWieldedAttackRate),
+        };
+        melee.Damage = new DamageSpecifier(damage);
+        melee.AttackRate = rate;
+        melee.Range = wielded ? comp.WieldedRange : comp.Range;
+        comp.FastBlows = cain == wielded;
+        melee.Animation = chained ? ent.Comp.CainWieldedArc : cain ? ent.Comp.CainArc : ent.Comp.AbelArc;
+        melee.WideAnimation = chained ? ent.Comp.CainWieldedWideArc : cain ? ent.Comp.CainWideArc : ent.Comp.AbelWideArc;
         Dirty(ent, melee);
         ent.Comp.CainHits = 0;
     }
 
-    // Wielding sets its own prefix: the right one for the dagger in front goes over it.
+    // In both hands Cain flings its blade on the chain (the held look is the shared system's).
     private void OnCainAbelWielded(Entity<LavalandCainAndAbelComponent> ent, ref ItemWieldedEvent args)
     {
         UpdateCainAbelLook(ent);
@@ -182,15 +192,9 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
     {
         var cain = ent.Comp.LaunchMode;
         UpdateCainAbelBlows(ent);
-        var wielded = TryComp<WieldableComponent>(ent, out var wieldable) && wieldable.Wielded;
         _appearance.SetData(ent, LavalandCainAndAbelVisuals.Cain, cain);
-        _item.SetHeldPrefix(ent, (cain, wielded) switch
-        {
-            (true, true) => "cain-wielded",
-            (true, false) => "cain",
-            (false, true) => "wielded",
-            _ => null,
-        });
+        if (TryComp<LavalandCainAndAbelLookComponent>(ent, out var look))
+            _cainAbelLook.SetCain((ent, look), cain);
 
         var icon = new SpriteSpecifier.Rsi(new ResPath(CainAbelRsi), cain ? "icon-cain" : "icon");
         if (ent.Comp.ThrowActionEntity is { } action)
@@ -309,6 +313,8 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
 
         ent.Comp.Possessed = true;
         ent.Comp.Awakening = false;
+        // It wakes up full of blood: with none it could not move a tile, nor reach anyone to drink more.
+        ent.Comp.Blood = ent.Comp.MaxBlood;
         var bound = EnsureComp<LavalandSoulscytheBoundComponent>(ent);
         bound.Master = ent.Comp.Master;
         Dirty(ent, bound);

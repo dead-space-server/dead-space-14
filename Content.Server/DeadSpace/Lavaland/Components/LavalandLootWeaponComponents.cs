@@ -85,16 +85,41 @@ public sealed partial class LavalandCainAndAbelComponent : Component
     [DataField]
     public int MaxCombo = 6;
 
-    /// <summary>Cain strikes fast, blow after blow; it takes this many of them to light a wisp.</summary>
+    /// <summary>Quick blows (Cain in both hands, Abel in one) light a wisp only every this many.</summary>
     [DataField]
-    public int CainHitsPerWisp = 3;
+    public int FastHitsPerWisp = 3;
+
+    /// <summary>Cain in one hand: heavy slow cuts.</summary>
+    [DataField]
+    public DamageSpecifier CainDamage = new() { DamageDict = new() { { "Slash", 15 } } };
 
     [DataField]
-    public float CainAttackRate = 3f;
+    public float CainAttackRate = 0.8f;
 
-    /// <summary>Each of Cain's quick blows does this share of the daggers' damage.</summary>
+    /// <summary>Cain in both hands: its blade flung on the chain, quick light cuts from afar.</summary>
     [DataField]
-    public float CainDamageMultiplier = 0.45f;
+    public DamageSpecifier CainWieldedDamage = new() { DamageDict = new() { { "Slash", 6 } } };
+
+    [DataField]
+    public float CainWieldedAttackRate = 2.5f;
+
+    /// <summary>Abel in one hand: quick light burns.</summary>
+    [DataField]
+    public DamageSpecifier AbelDamage = new() { DamageDict = new() { { "Heat", 6 } } };
+
+    [DataField]
+    public float AbelAttackRate = 2.5f;
+
+    /// <summary>Abel in both hands: heavy burns, reaching further.</summary>
+    [DataField]
+    public DamageSpecifier AbelWieldedDamage = new() { DamageDict = new() { { "Heat", 15 } } };
+
+    [DataField]
+    public float AbelWieldedAttackRate = 1f;
+
+    /// <summary>The reach of either in both hands.</summary>
+    [DataField]
+    public float WieldedRange = 3f;
 
     /// <summary>The swing shown with the blade in front: Abel's and Cain's, a stab (left click) and a sweep (right).</summary>
     [DataField]
@@ -109,14 +134,22 @@ public sealed partial class LavalandCainAndAbelComponent : Component
     [DataField]
     public EntProtoId CainWideArc = "LavalandWeaponArcCainWide";
 
-    /// <summary>Abel's own attack rate and damage, as the prototype gave them.</summary>
-    [ViewVariables]
-    public float AbelAttackRate;
+    /// <summary>Cain held in both hands: its blade flung out on a chain.</summary>
+    [DataField]
+    public EntProtoId CainWieldedArc = "LavalandWeaponArcCainChain";
 
-    [ViewVariables]
-    public DamageSpecifier? AbelDamage;
+    [DataField]
+    public EntProtoId CainWieldedWideArc = "LavalandWeaponArcCainChainWide";
 
-    /// <summary>Cain's blows since the last wisp was lit.</summary>
+    /// <summary>The one-hand reach, as the prototype gave it.</summary>
+    [ViewVariables]
+    public float Range;
+
+    /// <summary>The blows now are the quick ones.</summary>
+    [ViewVariables]
+    public bool FastBlows;
+
+    /// <summary>Quick blows since the last wisp was lit.</summary>
     [ViewVariables]
     public int CainHits;
 

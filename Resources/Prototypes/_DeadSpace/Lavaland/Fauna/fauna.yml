@@ -217,8 +217,10 @@
   - type: NoSlip
   - type: Butcherable
     spawned:
+    # Rare: a legion seldom leaves its soul behind.
     - id: LavalandLegionSoul
       amount: 1
+      prob: 0.15
     - id: LavalandLegionSkull
       prob: 0.35
     - id: MaterialBones1

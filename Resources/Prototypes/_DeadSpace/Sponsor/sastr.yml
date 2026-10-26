@@ -1046,16 +1046,16 @@
     wideAnimationRotation: -135
     damage:
       types:
-        Blunt: 6
-        Slash: 4
+        Blunt: 10
+        Slash: 7
     soundHit:
       collection: MetalThud
   - type: Wieldable
   - type: IncreaseDamageOnWield
     damage:
       types:
-        Blunt: 6
-        Slash: 2
+        Blunt: 10
+        Slash: 4
         Structural: 30
   - type: GenericVisualizer
     visuals:

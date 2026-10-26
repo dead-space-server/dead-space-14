@@ -45,13 +45,13 @@ namespace Content.Server.DeadSpace.Lavaland;
 public sealed partial class LavalandAshWolfSystem : EntitySystem
 {
     [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly LavalandFaunaRaidSystem _raids = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly Content.Server.Ghost.Roles.ToggleableGhostRoleSystem _ghostRoles = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly GatherableSystem _gatherable = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly LavalandFaunaRaidSystem _raids = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
@@ -124,6 +124,7 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
     {
         // Deleted mid-fight or mid-scene: nobody keeps its health bar, music, saws or a frozen body.
         StopQte(ent.Comp);
+        ReleaseVictim(ent.Comp);
         EndFight(ent.Comp);
         ReleaseWatchers(ent.Comp);
         DeleteShadows(ent.Comp);
@@ -271,6 +272,45 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
         ent.Comp.LastSeenPlayer = now;
     }
 
+    /// <summary>
+    /// The fauna raids the outpost mid-fight: it jumps back, blows up a little and shuts itself down, lying as the storm
+    /// left it, until somebody strikes it again (then it gets up at once, no scene). Once a raid: woken during it, it
+    /// fights on. True while it is shutting down.
+    /// </summary>
+    private bool UpdateRaidShutdown(Entity<LavalandAshWolfComponent> ent, TimeSpan now)
+    {
+        var comp = ent.Comp;
+        var raid = Transform(ent).MapUid is { } map && _raids.IsRaidRunning(map);
+        if (!raid)
+            comp.ShutDownForRaid = false;
+
+        if (comp.ShutdownAt == TimeSpan.Zero)
+        {
+            if (!raid || comp.ShutDownForRaid || !comp.Active)
+                return false;
+
+            comp.ShutDownForRaid = true;
+            EndAttack(ent, now);
+            var players = GetPlayers(ent.Owner, ChaseRange(comp));
+            var awayFrom = players.Count > 0 ? Position(Nearest(ent.Owner, players)) : Position(ent) - _transform.GetWorldRotation(ent).ToWorldVec();
+            KnockBack(ent, awayFrom, comp.KnockbackDistance, now);
+            comp.ShutdownAt = now + TimeSpan.FromSeconds(0.6);
+            return true;
+        }
+
+        if (now < comp.ShutdownAt || comp.Sliding)
+            return true;
+
+        comp.ShutdownAt = TimeSpan.Zero;
+        Blast(ent, Position(ent));
+        EndFight(comp);
+        DeleteShadows(comp);
+        comp.Stage = LavalandAshWolfStage.Dormant;
+        comp.Target = null;
+        SetVisual(ent, LavalandAshWolfVisualState.Dormant);
+        return true;
+    }
+
     private void EndFight(LavalandAshWolfComponent comp)
     {
         comp.Active = false;
@@ -291,6 +331,9 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
         var comp = ent.Comp;
         UpdateSlide(ent, now);
         UpdateGrind(ent, now);
+
+        if (UpdateRaidShutdown(ent, now))
+            return;
 
         var players = GetPlayers(ent.Owner, ChaseRange(comp));
         if (players.Count == 0)
@@ -319,13 +362,6 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
 
         if (now < comp.StaggerUntil || comp.Sliding)
             return;
-
-        // The fauna is raiding the outpost: it holds back and watches, one trouble at a time.
-        if (Transform(ent).MapUid is { } map && _raids.IsRaidRunning(map))
-        {
-            comp.NextAttack = now + TimeSpan.FromSeconds(1);
-            return;
-        }
 
         var target = Nearest(ent.Owner, players);
         comp.Target = target;
@@ -375,7 +411,7 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
         comp.LastAttack = attack;
         comp.Step = 0;
         comp.StepTime = now;
-        comp.Victim = null;
+        ReleaseVictim(comp);
 
         if (attack == LavalandAshWolfAttack.Pounce)
             comp.NextPounce = now + comp.PounceCooldown / (comp.Tamed ? 1f : Haste(comp));
@@ -384,6 +420,18 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
 
         if (comp.Tamed)
             EnsureComp<LavalandAshWolfDashingComponent>(ent);
+    }
+
+    /// <summary>
+    /// Off its victim. While it sat on them they could not stand up (no room), and the knockdown then stops trying on
+    /// its own: they stand up again once it is gone.
+    /// </summary>
+    private void ReleaseVictim(LavalandAshWolfComponent comp)
+    {
+        if (comp.Victim is { } victim && !TerminatingOrDeleted(victim))
+            _stun.SetAutoStand(victim, true);
+
+        comp.Victim = null;
     }
 
     /// <summary>The attack is over: a short breath, then the next.</summary>
@@ -405,7 +453,7 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
         comp.Step = 0;
         comp.Reduction = 0f;
         comp.Untouchable = false;
-        comp.Victim = null;
+        ReleaseVictim(comp);
         comp.KnockOnHit = false;
         comp.GrindLeft = 0;
         comp.PendingSlash = TimeSpan.Zero;
@@ -486,13 +534,13 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
     }
 
     /// <summary>
-    /// The strong storm has died down: it is frenzied for the rest of its life, as if at its last breath - second
-    /// phase at once, everything far faster, hardly a pause. If it was still lying there, it gets up.
+    /// The strong storm has died down: if it is fighting, it is frenzied for the rest of its life, as if at its last
+    /// breath - second phase at once, everything far faster, hardly a pause. If nobody woke it, it lies on.
     /// </summary>
     public void Frenzy(Entity<LavalandAshWolfComponent> ent)
     {
         var comp = ent.Comp;
-        if (comp.Tamed || comp.Frenzied || comp.Stage == LavalandAshWolfStage.Dying)
+        if (comp.Tamed || comp.Frenzied || comp.Stage is LavalandAshWolfStage.Dormant or LavalandAshWolfStage.Dying)
             return;
 
         comp.Frenzied = true;
@@ -500,9 +548,6 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
         comp.NextAttack = TimeSpan.Zero;
         _jitter.AddJitter(ent, 8f, 14f);
         _popup.PopupEntity(Loc.GetString("lavaland-ash-wolf-frenzy-popup"), ent, PopupType.LargeCaution);
-
-        if (comp.Stage == LavalandAshWolfStage.Dormant)
-            Wake(ent);
     }
 
     private void SetVisual(EntityUid uid, LavalandAshWolfVisualState state)
@@ -539,7 +584,13 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
 
     private bool IsAliveTarget(EntityUid? uid)
     {
-        return uid is { } target && !TerminatingOrDeleted(target) && _mobState.IsAlive(target);
+        return uid is { } target && !TerminatingOrDeleted(target) && IsStanding(target);
+    }
+
+    /// <summary>Still on their feet, if barely (pre-critical too): it finishes them off to critical, then leaves them.</summary>
+    private bool IsStanding(EntityUid target, MobStateComponent? mob = null)
+    {
+        return _mobState.IsAlive(target, mob) || _mobState.IsPreCritical(target, mob);
     }
 
     /// <summary>Living players on its map within the range, ghosts aside.</summary>
@@ -553,7 +604,7 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
             if (session.AttachedEntity is not { Valid: true } player ||
                 player == uid ||
                 HasComp<GhostComponent>(player) ||
-                !_mobState.IsAlive(player) ||
+                !IsStanding(player) ||
                 Transform(player).MapID != xform.MapID ||
                 Vector2.DistanceSquared(origin, Position(player)) > range * range)
             {
@@ -615,7 +666,7 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
         _lookup.GetEntitiesInRange(at, range, _mobs);
         foreach (var mob in _mobs)
         {
-            if (mob.Owner != wolf && _mobState.IsAlive(mob, mob.Comp) && !HasComp<GhostComponent>(mob))
+            if (mob.Owner != wolf && IsStanding(mob, mob.Comp) && !HasComp<GhostComponent>(mob))
                 result.Add(mob.Owner);
         }
 

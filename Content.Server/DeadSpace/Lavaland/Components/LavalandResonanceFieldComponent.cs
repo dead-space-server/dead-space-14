@@ -83,3 +83,14 @@ public sealed partial class LavalandResonatorPressureComponent : Component
     [ViewVariables]
     public readonly Queue<TimeSpan> Hits = new();
 }
+
+/// <summary>
+/// Recent hits on a boss by bullets of ordinary (not kinetic) guns: each one in the window makes the next weaker, as
+/// the super resonator's do.
+/// </summary>
+[RegisterComponent]
+public sealed partial class LavalandGunPressureComponent : Component
+{
+    [ViewVariables]
+    public readonly Queue<TimeSpan> Hits = new();
+}
