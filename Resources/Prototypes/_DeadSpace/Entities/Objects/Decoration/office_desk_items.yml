@@ -47,6 +47,10 @@
       map: [ "base" ]
   - type: Item
     size: Small
+  - type: ContainerContainer
+    containers:
+      pen1: !type:ContainerSlot {}
+      pen2: !type:ContainerSlot {}
   - type: ItemSlots
     slots:
       pen1:
