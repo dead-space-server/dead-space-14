@@ -1,0 +1,78 @@
+- type: entity
+  parent: BaseItem
+  id: DeskGlobe
+  name: настольный глобус Марса
+  description: "Небольшой глобус на подставке. Рыжая поверхность, каньоны и пыльные равнины: красная планета в миниатюре."
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Decoration/Office/globe.rsi
+    state: icon
+  - type: Item
+    size: Normal
+
+- type: entity
+  parent: BaseItem
+  id: DeskGlobe2
+  name: настольный глобус Луны
+  description: "Небольшой глобус на подставке. Серая, изрытая кратерами поверхность: вечный спутник в миниатюре."
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Decoration/Office/globe2.rsi
+    state: icon
+  - type: Item
+    size: Normal
+
+- type: entity
+  parent: BaseItem
+  id: DeskFlag
+  name: настольный флажок НаноТрейзен
+  description: Небольшой флажок корпорации НаноТрейзен на подставке. Напоминает, кому именно принадлежит ваше рабочее место, да и вы сами.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Decoration/Office/table_flag.rsi
+    state: icon
+  - type: Item
+    size: Small
+
+- type: entity
+  parent: BaseItem
+  id: PenCup
+  name: стаканчик для ручек
+  description: Сюда удобно ставить ручки, чтобы они не терялись по всему столу.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Decoration/Office/pen_cup.rsi
+    layers:
+    - state: icon
+      map: [ "base" ]
+  - type: Item
+    size: Small
+  - type: ItemSlots
+    slots:
+      pen1:
+        name: Первая ручка
+        insertVerbText: Поставить ручку
+        ejectVerbText: Достать ручку
+        whitelist:
+          tags:
+          - Pen
+      pen2:
+        name: Вторая ручка
+        insertVerbText: Поставить ручку
+        ejectVerbText: Достать ручку
+        whitelist:
+          tags:
+          - Pen
+  - type: ItemMapper
+    mapLayers:
+      pen-1:
+        minCount: 1
+        whitelist:
+          tags:
+          - Pen
+      pen-2:
+        minCount: 2
+        whitelist:
+          tags:
+          - Pen
+  - type: Appearance
