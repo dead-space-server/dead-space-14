@@ -135,6 +135,11 @@
   components:
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Mobs/lavaland_monsters.rsi
+  # The fauna's explosion resistance keeps its destruction from going off: gone the moment it dies instead.
+  - type: TriggerOnMobstateChange
+    mobState:
+    - Dead
+  - type: DeleteOnTrigger
 
 - type: entity
   id: MobLavalandLegion
@@ -279,6 +284,11 @@
         true
   - type: TimedDespawn
     lifetime: 14
+  # No corpse left behind to trip over.
+  - type: TriggerOnMobstateChange
+    mobState:
+    - Dead
+  - type: DeleteOnTrigger
   - type: Tag
     tags:
     - CannotSuicide

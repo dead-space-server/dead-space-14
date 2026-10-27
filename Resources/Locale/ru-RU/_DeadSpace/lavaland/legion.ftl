@@ -28,6 +28,7 @@ lavaland-saw-bleed-burst = Кровь хлещет из { THE($target) }!
 lavaland-cain-abel-mode-launch = Режим броска: рывок к метке.
 lavaland-cain-abel-mode-crystals = Режим броска: кольцо кристаллов.
 lavaland-cain-abel-not-ready = Кинжал ещё не вернулся.
+lavaland-cain-abel-swap-verb = Сменить кинжал
 
 lavaland-soulscythe-possessed = В косе живёт душа.
 lavaland-soulscythe-dormant = Коса спит. Используйте её в руке, чтобы пробудить.

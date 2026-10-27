@@ -30,9 +30,6 @@ public sealed partial class LavalandBerserkActionEvent : InstantActionEvent;
 
 public sealed partial class LavalandCainAndAbelThrowActionEvent : WorldTargetActionEvent;
 
-/// <summary>Cain and Abel: the other dagger to the fore (the dash to the dagger, or the ring of ice).</summary>
-public sealed partial class LavalandCainAndAbelSwapActionEvent : InstantActionEvent;
-
 [Serializable, NetSerializable]
 public sealed partial class LavalandAsclepiusOathDoAfterEvent : SimpleDoAfterEvent;
 

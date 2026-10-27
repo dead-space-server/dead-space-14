@@ -186,7 +186,7 @@ public sealed class LavalandHierophantSystem : EntitySystem
 
         if (ChebyshevDistance(targetTile.Value, bossTile.Value) <= 2)
         {
-            QueueBurst(hierophant, arena, gridUid, grid, bossTile.Value, burstRange, now, 0.25f);
+            QueueBurst(hierophant, arena, gridUid, grid, bossTile.Value, burstRange, now, hierophant.CloseBurstSpread);
             MarkPressure(hierophant, now, "close-burst", false, target);
             hierophant.NextAttack = now + GetFinalAttackCooldown(boss, hierophant, hierophant.RangedCooldown, rage);
             return;

@@ -148,6 +148,9 @@ public sealed class EntityHealthBarOverlay : Overlay
         if (_entManager.TryGetComponent<Content.Shared.DeadSpace.Lavaland.Components.LavalandHealthBarComponent>(uid, out var ownHealth) &&
             ownHealth.MaxHealth > 0f)
         {
+            if (ownHealth.Hidden)
+                return null;
+
             return (Math.Clamp(1f - dmg.TotalDamage.Float() / ownHealth.MaxHealth, 0f, 1f), false);
         }
         // DS14-end

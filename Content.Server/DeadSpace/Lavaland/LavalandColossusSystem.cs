@@ -178,13 +178,15 @@ public sealed class LavalandColossusSystem : EntitySystem
 
             SetEnraged(uid, colossus, true);
             Telegraph(uid, colossus);
-            QueueVolley(colossus, AllDirections, now);
-            colossus.NextAttack = now + GetScaledCooldown(colossus.RandomCooldown, 1f, colossus.MaxCooldownReduction);
+            QueueVolley(colossus, AllDirections, now + colossus.SpeechLead);
+            colossus.NextAttack = now + colossus.SpeechLead + GetScaledCooldown(colossus.RandomCooldown, 1f, colossus.MaxCooldownReduction);
             return;
         }
 
         SetEnraged(uid, colossus, false);
 
+        // Its words come first, the attack they name a moment later.
+        var start = now + colossus.SpeechLead;
         var anger = GetAnger(uid, arena);
         var rage = anger / 20f;
 
@@ -193,13 +195,13 @@ public sealed class LavalandColossusSystem : EntitySystem
         if (distance > colossus.OffscreenRange)
         {
             Popup(uid, "lavaland-colossus-speech-aimed");
-            QueueAimed(colossus, target, now);
-            colossus.BusyUntil = now + colossus.AimedShotDelay * (colossus.AimedShots - 1);
-            colossus.NextAttack = now + GetScaledCooldown(colossus.AimedCooldown, rage, colossus.MaxCooldownReduction);
+            QueueAimed(colossus, target, start);
+            colossus.BusyUntil = start + colossus.AimedShotDelay * (colossus.AimedShots - 1);
+            colossus.NextAttack = start + GetScaledCooldown(colossus.AimedCooldown, rage, colossus.MaxCooldownReduction);
             return;
         }
 
-        colossus.NextAttack = now + GetScaledCooldown(colossus.DefaultCooldown, rage, colossus.MaxCooldownReduction);
+        colossus.NextAttack = start + GetScaledCooldown(colossus.DefaultCooldown, rage, colossus.MaxCooldownReduction);
         if (_random.Prob(Math.Clamp(colossus.MajorAttackChance + anger / 100f, 0f, 1f)))
         {
             Telegraph(uid, colossus);
@@ -214,8 +216,8 @@ public sealed class LavalandColossusSystem : EntitySystem
             else
             {
                 Popup(uid, "lavaland-colossus-speech-judgement");
-                QueueSpiral(colossus, now, _random.Prob(0.5f), 8);
-                colossus.BusyUntil = now + TimeSpan.FromSeconds(colossus.SpiralStepDelay.TotalSeconds * colossus.SpiralShots);
+                QueueSpiral(colossus, start, _random.Prob(0.5f), 8);
+                colossus.BusyUntil = start + TimeSpan.FromSeconds(colossus.SpiralStepDelay.TotalSeconds * colossus.SpiralShots);
             }
             return;
         }
@@ -230,28 +232,28 @@ public sealed class LavalandColossusSystem : EntitySystem
         if (_random.Prob(colossus.RandomAttackChance))
         {
             Popup(uid, "lavaland-colossus-speech-rain");
-            QueueRandomShots(uid, colossus, arena, grid, now);
-            colossus.NextAttack = now + GetScaledCooldown(colossus.RandomCooldown, rage, colossus.MaxCooldownReduction);
+            QueueRandomShots(uid, colossus, arena, grid, start);
+            colossus.NextAttack = start + GetScaledCooldown(colossus.RandomCooldown, rage, colossus.MaxCooldownReduction);
             return;
         }
 
         if (_random.Prob(colossus.ShotgunChance))
         {
             Popup(uid, "lavaland-colossus-speech-shotgun");
-            QueueShotgun(colossus, targetAngle, IsBelowTwoThirds(uid, arena), now);
+            QueueShotgun(colossus, targetAngle, IsBelowTwoThirds(uid, arena), start);
 
             PushBack(uid, -targetAngle.ToVec());
-            colossus.NextAttack = now + GetScaledCooldown(colossus.ShotgunCooldown, rage, colossus.MaxCooldownReduction);
+            colossus.NextAttack = start + GetScaledCooldown(colossus.ShotgunCooldown, rage, colossus.MaxCooldownReduction);
             return;
         }
 
         Popup(uid, "lavaland-colossus-speech-cross");
-        QueueVolley(colossus, Diagonals, now);
-        QueueVolley(colossus, Cardinals, now + colossus.AlternatingStepDelay);
-        QueueVolley(colossus, Diagonals, now + colossus.AlternatingStepDelay * 2);
-        QueueVolley(colossus, Cardinals, now + colossus.AlternatingStepDelay * 3);
-        colossus.BusyUntil = now + colossus.AlternatingStepDelay * 3;
-        colossus.NextAttack = now + GetScaledCooldown(colossus.AlternatingCooldown, rage, colossus.MaxCooldownReduction);
+        QueueVolley(colossus, Diagonals, start);
+        QueueVolley(colossus, Cardinals, start + colossus.AlternatingStepDelay);
+        QueueVolley(colossus, Diagonals, start + colossus.AlternatingStepDelay * 2);
+        QueueVolley(colossus, Cardinals, start + colossus.AlternatingStepDelay * 3);
+        colossus.BusyUntil = start + colossus.AlternatingStepDelay * 3;
+        colossus.NextAttack = start + GetScaledCooldown(colossus.AlternatingCooldown, rage, colossus.MaxCooldownReduction);
     }
 
     private void QueueRandomShots(
@@ -265,7 +267,7 @@ public sealed class LavalandColossusSystem : EntitySystem
             return;
 
         var center = _map.LocalToTile(gridUid, grid, Transform(uid).Coordinates);
-        TryPlayShotSound(uid, colossus, now, 0f);
+        var first = true;
         for (var x = center.X - colossus.RandomShotRadius; x <= center.X + colossus.RandomShotRadius; x++)
         {
             for (var y = center.Y - colossus.RandomShotRadius; y <= center.Y + colossus.RandomShotRadius; y++)
@@ -275,7 +277,8 @@ public sealed class LavalandColossusSystem : EntitySystem
                     continue;
 
                 var direction = (Vector2) (tile - center);
-                QueueShot(colossus, direction.ToAngle(), now);
+                QueueShot(colossus, direction.ToAngle(), now, first);
+                first = false;
             }
         }
     }

@@ -4,23 +4,24 @@ using Content.Server.Atmos.EntitySystems;
 using Content.Server.DeadSpace.Attachments;
 using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Shared.Damage;
+using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.DeadSpace.Attachments;
 using Content.Shared.DeadSpace.Lavaland.Components;
 using Content.Shared.Examine;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Projectiles;
-using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Systems;
-using Content.Shared.Wieldable;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
 /// <summary>Weakens kinetic weapons outside of lavaland-like pressure. See <see cref="LavalandPressureDamageComponent"/>.</summary>
-public sealed class LavalandPressureDamageSystem : EntitySystem
+public sealed class LavalandPressureDamageSystem : SharedLavalandPressureDamageSystem
 {
     [Dependency] private readonly AtmosphereSystem _atmos = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly MobThresholdSystem _threshold = default!;
 
@@ -29,11 +30,38 @@ public sealed class LavalandPressureDamageSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<LavalandPressureDamageComponent, ExaminedEvent>(OnExamined);
-        SubscribeLocalEvent<LavalandPressureDamageComponent, GetMeleeDamageEvent>(OnGetMeleeDamage,
-            after: new[] { typeof(SharedWieldableSystem) });
         SubscribeLocalEvent<LavalandPressureDamageComponent, GunShotEvent>(OnGunShot);
         SubscribeLocalEvent<LavalandPressureDamageComponent, DamageMarkerDetonatedEvent>(OnMarkDetonated,
             after: new[] { typeof(AttachmentSystem) });
+    }
+
+    /// <summary>How often a weapon's air is looked at, so its holder's client knows how hard it hits.</summary>
+    private static readonly TimeSpan PressureCheckInterval = TimeSpan.FromSeconds(0.5);
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var now = _timing.CurTime;
+        var query = EntityQueryEnumerator<LavalandPressureDamageComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (now < comp.NextPressureCheck)
+                continue;
+
+            comp.NextPressureCheck = now + PressureCheckInterval;
+            RefreshWeakened((uid, comp));
+        }
+    }
+
+    protected override void RefreshWeakened(Entity<LavalandPressureDamageComponent> ent)
+    {
+        var weakened = IsWeakened(ent);
+        if (ent.Comp.Weakened == weakened)
+            return;
+
+        ent.Comp.Weakened = weakened;
+        Dirty(ent);
     }
 
     /// <summary>True if the weapon is outside of the pressure range and should be weakened.</summary>
@@ -47,12 +75,6 @@ public sealed class LavalandPressureDamageSystem : EntitySystem
 
         var pressure = _atmos.GetTileMixture((ent.Owner, xform))?.Pressure ?? 0f;
         return pressure < ent.Comp.LowerBound || pressure > ent.Comp.UpperBound;
-    }
-
-    private void OnGetMeleeDamage(Entity<LavalandPressureDamageComponent> ent, ref GetMeleeDamageEvent args)
-    {
-        if (ent.Comp.ApplyToMelee && IsWeakened(ent))
-            args.Damage *= ent.Comp.OutOfRangeModifier;
     }
 
     private void OnGunShot(Entity<LavalandPressureDamageComponent> ent, ref GunShotEvent args)

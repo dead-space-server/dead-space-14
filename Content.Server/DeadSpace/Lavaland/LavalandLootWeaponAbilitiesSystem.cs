@@ -29,6 +29,7 @@ using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Content.Shared.Stunnable;
+using Content.Shared.Verbs;
 using Content.Shared.Wall;
 using Content.Shared.Wieldable;
 using Content.Shared.Wieldable.Components;
@@ -72,7 +73,7 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<LavalandCainAndAbelComponent, LavalandCainAndAbelSwapActionEvent>(OnCainAbelSwap);
+        SubscribeLocalEvent<LavalandCainAndAbelComponent, GetVerbsEvent<AlternativeVerb>>(OnCainAbelSwapVerb);
         SubscribeLocalEvent<LavalandCainAndAbelComponent, ItemWieldedEvent>(OnCainAbelWielded, after: [typeof(SharedWieldableSystem)]);
         SubscribeLocalEvent<LavalandCainAndAbelComponent, ItemUnwieldedEvent>(OnCainAbelUnwielded, after: [typeof(SharedWieldableSystem)]);
         SubscribeLocalEvent<LavalandCainAndAbelComponent, GetItemActionsEvent>(OnCainAbelGetActions);
@@ -124,17 +125,29 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
 
     private const string CainAbelRsi = "/Textures/_DeadSpace/Lavaland/Objects/Weapons/cain_and_abel.rsi";
 
-    /// <summary>The other dagger to the fore: Cain for the dash to the dagger, Abel for the ring of ice.</summary>
-    private void OnCainAbelSwap(Entity<LavalandCainAndAbelComponent> ent, ref LavalandCainAndAbelSwapActionEvent args)
+    /// <summary>
+    /// The other dagger to the fore on an alt-click: Cain for the dash to the dagger, Abel for the ring of ice.
+    /// </summary>
+    private void OnCainAbelSwapVerb(Entity<LavalandCainAndAbelComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
     {
-        if (args.Handled)
+        if (!args.CanAccess || !args.CanInteract)
             return;
-        args.Handled = true;
 
+        var user = args.User;
+        args.Verbs.Add(new AlternativeVerb
+        {
+            Text = Loc.GetString("lavaland-cain-abel-swap-verb"),
+            Icon = new SpriteSpecifier.Rsi(new ResPath(CainAbelRsi), ent.Comp.LaunchMode ? "icon" : "icon-cain"),
+            Act = () => SwapCainAbel(ent, user),
+        });
+    }
+
+    private void SwapCainAbel(Entity<LavalandCainAndAbelComponent> ent, EntityUid user)
+    {
         ent.Comp.LaunchMode = !ent.Comp.LaunchMode;
         _popup.PopupEntity(Loc.GetString(ent.Comp.LaunchMode
             ? "lavaland-cain-abel-mode-launch"
-            : "lavaland-cain-abel-mode-crystals"), args.Performer, args.Performer);
+            : "lavaland-cain-abel-mode-crystals"), user, user);
         UpdateCainAbelLook(ent);
     }
 
@@ -199,8 +212,6 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
         var icon = new SpriteSpecifier.Rsi(new ResPath(CainAbelRsi), cain ? "icon-cain" : "icon");
         if (ent.Comp.ThrowActionEntity is { } action)
             _actions.SetIcon(action, icon);
-        if (ent.Comp.SwapActionEntity is { } swap)
-            _actions.SetIcon(swap, icon);
     }
 
     private void OnCainAbelGetActions(Entity<LavalandCainAndAbelComponent> ent, ref GetItemActionsEvent args)
@@ -209,7 +220,6 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
             return;
 
         args.AddAction(ref ent.Comp.ThrowActionEntity, ent.Comp.ThrowAction);
-        args.AddAction(ref ent.Comp.SwapActionEntity, ent.Comp.SwapAction);
         UpdateCainAbelLook(ent);
     }
 

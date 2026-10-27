@@ -141,10 +141,24 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
         switch (ent.Comp.Stage)
         {
             case LavalandAshWolfStage.Dormant:
-                // The first blow does nothing but wake it (heat, pressure and the like with no one behind them do not).
-                if (args.Origin is { } origin && origin != ent.Owner)
-                    Wake(ent);
                 args.Cancelled = true;
+                // Only a player's blow wakes it: not heat or pressure, and not the fauna of a raid beating at
+                // everything near the outpost.
+                if (args.Origin is not { } origin || origin == ent.Owner || !HasComp<ActorComponent>(origin))
+                    break;
+
+                // While the fauna raids the outpost it lies behind a force field: no waking it to finish it off.
+                if (Transform(ent).MapUid is { } map && _raids.IsRaidRunning(map))
+                {
+                    if (_timing.CurTime >= ent.Comp.NextShieldPopup)
+                    {
+                        ent.Comp.NextShieldPopup = _timing.CurTime + TimeSpan.FromSeconds(1);
+                        _popup.PopupEntity(Loc.GetString("lavaland-ash-wolf-raid-shield"), ent, origin);
+                    }
+                    break;
+                }
+
+                Wake(ent);
                 break;
 
             case LavalandAshWolfStage.Waking:
@@ -453,6 +467,7 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
         comp.Step = 0;
         comp.Reduction = 0f;
         comp.Untouchable = false;
+        SetUpInSky(ent, false);
         ReleaseVictim(comp);
         comp.KnockOnHit = false;
         comp.GrindLeft = 0;
@@ -540,8 +555,16 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
     public void Frenzy(Entity<LavalandAshWolfComponent> ent)
     {
         var comp = ent.Comp;
-        if (comp.Tamed || comp.Frenzied || comp.Stage is LavalandAshWolfStage.Dormant or LavalandAshWolfStage.Dying)
+        if (comp.Tamed || comp.Frenzied || comp.Stage == LavalandAshWolfStage.Dying)
             return;
+
+        // Asleep when the storm died down: it lies on, but whoever wakes it later meets it frenzied, not an easy prey.
+        if (comp.Stage == LavalandAshWolfStage.Dormant)
+        {
+            comp.Frenzied = true;
+            comp.SecondPhaseReached = true;
+            return;
+        }
 
         comp.Frenzied = true;
         comp.SecondPhaseReached = true;

@@ -2,6 +2,7 @@ using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.DeadSpace.Lavaland.Components;
+using Content.Server.DeadSpace.Lavaland.SecretBoss;
 using Content.Server.Parallax;
 using Content.Server.Tiles;
 using Content.Shared.Chasm;
@@ -46,6 +47,7 @@ public sealed class LavalandNecropolisTendrilPlacementSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private readonly LavalandSecretBossSystem _secretBoss = default!;
 
     private readonly Dictionary<EntProtoId, int> _counts = new();
     private readonly List<Vector2i> _placed = new();
@@ -285,6 +287,7 @@ public sealed class LavalandNecropolisTendrilPlacementSystem : EntitySystem
                 (int) MathF.Round(MathF.Sin(angle) * distance));
 
             if (IsInsideExclusion(candidate, planet) ||
+                IsNearCelestialPit(mapUid, candidate) ||
                 IsNearOtherGrid(mapUid, grid, candidate) ||
                 !IsSeparated(candidate, placed, minSeparationSquared) ||
                 !IsTileSafe(mapUid, grid, biome, candidate))
@@ -430,6 +433,18 @@ public sealed class LavalandNecropolisTendrilPlacementSystem : EntitySystem
         }
 
         return false;
+    }
+
+    /// <summary>While the Celestial's pit is open, nothing grows in the area the players search it in.</summary>
+    private bool IsNearCelestialPit(EntityUid mapUid, Vector2i indices)
+    {
+        if (!_secretBoss.TryGetPit(mapUid, out var pit, out var noiseCenter, out var config))
+            return false;
+
+        var position = new Vector2(indices.X, indices.Y);
+        var radius = Math.Max(config.NoiseRadius, config.FaunaClearRadius);
+        return Vector2.DistanceSquared(position, noiseCenter) <= radius * radius ||
+               Vector2.DistanceSquared(position, pit) <= radius * radius;
     }
 
     private static float GetFtlBeaconExclusionRadius(float configuredRadius, LavalandPlanetPrototype planet)

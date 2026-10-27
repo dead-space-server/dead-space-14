@@ -13,4 +13,8 @@ public sealed partial class LavalandHealthBarComponent : Component
 {
     [DataField, AutoNetworkedField]
     public float MaxHealth = 100f;
+
+    /// <summary>No bar at all for now (the Ash Wolf up in the sky: there is nothing to see where it was).</summary>
+    [DataField, AutoNetworkedField]
+    public bool Hidden;
 }

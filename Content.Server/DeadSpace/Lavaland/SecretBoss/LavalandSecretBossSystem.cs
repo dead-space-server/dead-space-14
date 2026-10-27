@@ -252,8 +252,19 @@ public sealed class LavalandSecretBossSystem : EntitySystem
                 return;
 
             case LavalandSecretBossStage.Done:
-                if (!comp.PlayersAwake && now >= comp.StageTime)
+                if (comp.PlayersAwake)
+                    return;
+                if (now >= comp.StageTime)
+                {
                     WakeAndBless(ent, config);
+                    return;
+                }
+
+                // Asleep through its death by the pit: no fauna comes near them meanwhile.
+                if (now < comp.NextCheck)
+                    return;
+                comp.NextCheck = now + CheckInterval;
+                ClearFaunaNearPit(ent, config);
                 return;
         }
     }
@@ -1358,7 +1369,8 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             if (comp.Snapshots.TryGetValue(fighter, out var snapshot))
                 RestoreFighter(fighter, snapshot);
 
-            // A minute of sleep as the price of the defeat.
+            // A minute of sleep as the price of the defeat - untouchable meanwhile, the storm and the fauna too.
+            EnsureComp<LavalandCelestialDreamerComponent>(fighter);
             Sleep(fighter, config.LossSleep, config);
             var penalty = EnsureComp<LavalandCelestialPenaltyComponent>(fighter);
             penalty.WakeAt = now + config.LossSleep;
@@ -1445,6 +1457,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
                 _statusEffects.TryRemoveStatusEffect(uid, penalty.SleepEffect);
             _sleeping.TryWaking(new Entity<SleepingComponent?>(uid, null), true);
             Unfreeze(uid);
+            RemComp<LavalandCelestialDreamerComponent>(uid);
             RemComp<LavalandCelestialPenaltyComponent>(uid);
         }
     }
@@ -1506,13 +1519,11 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             if (_mobState.IsAlive(fighter) && !alreadyAwake.Contains(fighter))
                 Sleep(fighter, sleepFor + TimeSpan.FromSeconds(5));
             MoveNearPit(comp, fighter);
+            // Nothing harms them by the pit until the cutscene is over and they are up again.
+            EnsureComp<LavalandCelestialDreamerComponent>(fighter);
         }
 
-        // The way down is gone: the pit is an ordinary pit again.
-        if (comp.Pit is { } pit)
-            MakeOrdinaryPit(pit, config);
-        comp.Pit = null;
-
+        // The pit stays the Celestial's (with its shelter from the storm) until they wake.
         DeleteZone(comp);
         comp.Stage = LavalandSecretBossStage.Done;
         comp.StageTime = _timing.CurTime + sleepFor;
@@ -1555,6 +1566,11 @@ public sealed class LavalandSecretBossSystem : EntitySystem
         }
 
         ent.Comp.Participants.Clear();
+
+        // The way down is gone: the pit is an ordinary pit again.
+        if (ent.Comp.Pit is { } pit)
+            MakeOrdinaryPit(pit, config);
+        ent.Comp.Pit = null;
     }
 
     private void ApplyBlessing(EntityUid mob, LavalandBlessing blessing, LavalandSecretBossConfig config)

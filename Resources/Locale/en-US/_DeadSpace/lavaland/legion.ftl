@@ -28,6 +28,7 @@ lavaland-saw-bleed-burst = Blood bursts out of { THE($target) }!
 lavaland-cain-abel-mode-launch = Throw mode: dash to the mark.
 lavaland-cain-abel-mode-crystals = Throw mode: ring of crystals.
 lavaland-cain-abel-not-ready = The dagger has not returned yet.
+lavaland-cain-abel-swap-verb = Swap dagger
 
 lavaland-soulscythe-possessed = A soul inhabits the scythe.
 lavaland-soulscythe-dormant = The scythe is dormant. Use it in hand to awaken it.

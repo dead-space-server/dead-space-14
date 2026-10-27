@@ -5,6 +5,7 @@ using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.DeadSpace.Lavaland.AshWolf;
 using Content.Shared.DeadSpace.Lavaland.Bosses;
+using Content.Shared.DeadSpace.Lavaland.Components;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Robust.Shared.Map;
@@ -237,12 +238,18 @@ public sealed partial class LavalandAshWolfSystem
         comp.Step = 3;
     }
 
+    /// <summary>
+    /// How far from the victim's center it stays on them: right up against them, but not inside - closer, and one
+    /// could hardly click it to strike back.
+    /// </summary>
+    private const float SitOnDistance = 0.7f;
+
     private void SitOn(Entity<LavalandAshWolfComponent> ent, EntityUid victim)
     {
         var at = Position(victim);
         var from = Position(ent);
         var delta = from - at;
-        MoveTo(ent, delta.LengthSquared() > 0.01f ? at + delta.Normalized() * 0.35f : at);
+        MoveTo(ent, at + (delta.LengthSquared() > 0.01f ? delta.Normalized() : _random.NextAngle().ToVec()) * SitOnDistance);
         Face(ent, at - from);
     }
 
@@ -630,6 +637,22 @@ public sealed partial class LavalandAshWolfSystem
         }
     }
 
+    /// <summary>
+    /// Up in the sky its body is gone from where it stood: shots pass through (no marks on empty ground) and its
+    /// health bar does not hang over the spot.
+    /// </summary>
+    private void SetUpInSky(EntityUid uid, bool up)
+    {
+        if (TryComp<PhysicsComponent>(uid, out var body) && body.CanCollide == up)
+            _physics.SetCanCollide(uid, !up, body: body);
+
+        if (TryComp<LavalandHealthBarComponent>(uid, out var bar) && bar.Hidden != up)
+        {
+            bar.Hidden = up;
+            Dirty(uid, bar);
+        }
+    }
+
     private void SkyMove(EntityUid uid, TimeSpan now, float duration, bool rising)
     {
         var drop = EnsureComp<LavalandSkyDropComponent>(uid);
@@ -688,6 +711,7 @@ public sealed partial class LavalandAshWolfSystem
             case 0:
                 SkyMove(ent, now, 0.5f, rising: true);
                 comp.Untouchable = true;
+                SetUpInSky(ent, true);
                 comp.StepTime = now + TimeSpan.FromSeconds(0.5);
                 comp.Step = 1;
                 break;
@@ -748,6 +772,7 @@ public sealed partial class LavalandAshWolfSystem
             case 4 when now >= comp.StepTime:
                 RemComp<LavalandSkyDropComponent>(ent);
                 comp.Untouchable = false;
+                SetUpInSky(ent, false);
                 Land(ent, Position(ent), heavy: false);
                 Recover(ent, now, 0.8f);
                 break;

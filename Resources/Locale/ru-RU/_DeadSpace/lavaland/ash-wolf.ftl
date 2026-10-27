@@ -19,3 +19,4 @@ lavaland-ash-wolf-mode-blades = Режим: лезвия.
 lavaland-ash-wolf-mode-saws = Режим: пилы.
 lavaland-ash-wolf-ghost-role-name = AshWolf LQ-829
 lavaland-ash-wolf-ghost-role-description = Боевой борг тайного клана, найденный на Лаваленде и перепрошитый под законы. Корпус разбит - сначала дождитесь ремонта.
+lavaland-ash-wolf-raid-shield = Пока фауна штурмует аванпост, AshWolf окружён силовым полем.

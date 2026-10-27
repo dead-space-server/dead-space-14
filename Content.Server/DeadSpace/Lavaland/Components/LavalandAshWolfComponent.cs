@@ -318,6 +318,9 @@ public sealed partial class LavalandAshWolfComponent : Component
     [ViewVariables]
     public bool ShutDownForRaid;
 
+    /// <summary>When the "force field" popup may show again to someone striking it asleep during a raid.</summary>
+    public TimeSpan NextShieldPopup;
+
     [ViewVariables]
     public TimeSpan LastSeenPlayer;
 

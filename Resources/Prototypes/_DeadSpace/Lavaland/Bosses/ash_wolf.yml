@@ -332,7 +332,7 @@
   parent: BaseAction
   id: ActionAshWolfRush
   name: рывок
-  description: Разогнаться, свернувшись в колесо из лезвий, и пролететь вперёд, кромсая первого встречного.
+  description: Разогнаться, свернувшись в колесо из лезвий, и пролететь в сторону точки, кромсая первого встречного.
   categories: [ HideSpawnMenu ]
   components:
   - type: Action
@@ -340,7 +340,10 @@
     icon:
       sprite: _DeadSpace/Lavaland/Mobs/AshWolf.rsi
       state: bladewolfmk2-roll
-  - type: InstantAction
+  - type: TargetAction
+    range: 16
+    checkCanAccess: false
+  - type: WorldTargetAction
     event: !type:LavalandAshWolfRushActionEvent
 
 - type: entity

@@ -19,3 +19,4 @@ lavaland-ash-wolf-mode-blades = Mode: blades.
 lavaland-ash-wolf-mode-saws = Mode: saws.
 lavaland-ash-wolf-ghost-role-name = AshWolf LQ-829
 lavaland-ash-wolf-ghost-role-description = A combat borg of a secret clan, found on the lavaland and reflashed with laws. Its frame is wrecked - wait to be repaired first.
+lavaland-ash-wolf-raid-shield = While the fauna storms the outpost, AshWolf lies behind a force field.

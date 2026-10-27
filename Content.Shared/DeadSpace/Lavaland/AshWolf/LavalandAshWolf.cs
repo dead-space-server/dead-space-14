@@ -105,8 +105,8 @@ public sealed class LavalandAshWolfQteStopEvent(int id) : EntityEventArgs
     public int Id = id;
 }
 
-/// <summary>The rush of the tamed Ash Wolf (a borg now): a short run-up, then a blade wheel straight ahead.</summary>
-public sealed partial class LavalandAshWolfRushActionEvent : InstantActionEvent;
+/// <summary>The rush of the tamed Ash Wolf (a borg now): a short run-up, then a blade wheel towards the aimed point.</summary>
+public sealed partial class LavalandAshWolfRushActionEvent : WorldTargetActionEvent;
 
 /// <summary>The leap of the tamed Ash Wolf: up and down on the spot, saws spiral away from the landing.</summary>
 public sealed partial class LavalandAshWolfLeapActionEvent : WorldTargetActionEvent;

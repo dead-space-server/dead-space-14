@@ -43,13 +43,25 @@ public sealed partial class LavalandAshWolfSystem
             ent, ent);
     }
 
-    /// <summary>Straight ahead, where the borg faces: no point to aim at, it always rolls its full distance.</summary>
+    /// <summary>
+    /// Towards the aimed point, but always its full distance. Where the borg faced is no good: walked up to a wall,
+    /// it faces the wall and would roll nowhere.
+    /// </summary>
     private void OnRushAction(Entity<LavalandAshWolfComponent> ent, ref LavalandAshWolfRushActionEvent args)
     {
         if (args.Handled || !ent.Comp.Tamed || ent.Comp.Attack != LavalandAshWolfAttack.None || !_mobState.IsAlive(ent))
             return;
 
-        ent.Comp.AimPoint = Position(ent) + _transform.GetWorldRotation(ent).ToWorldVec() * ent.Comp.TamedRushDistance;
+        var target = _transform.ToMapCoordinates(args.Target);
+        if (target.MapId != Transform(ent).MapID)
+            return;
+
+        var from = Position(ent);
+        var direction = target.Position - from;
+        if (direction.LengthSquared() < 0.01f)
+            direction = _transform.GetWorldRotation(ent).ToWorldVec();
+
+        ent.Comp.AimPoint = from + direction.Normalized() * ent.Comp.TamedRushDistance;
         BeginAttack(ent, LavalandAshWolfAttack.Rush, _timing.CurTime);
         args.Handled = true;
     }

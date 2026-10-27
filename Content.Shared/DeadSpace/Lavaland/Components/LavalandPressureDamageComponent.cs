@@ -2,6 +2,7 @@
 
 using Content.Shared.Atmos;
 using Content.Shared.Damage.Prototypes;
+using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.Lavaland.Components;
@@ -11,7 +12,7 @@ namespace Content.Shared.DeadSpace.Lavaland.Components;
 /// outside of the pressure range their melee hits, projectiles and crusher mark detonations are weaker. On a boss a
 /// detonated mark also takes away a share of its health.
 /// </summary>
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class LavalandPressureDamageComponent : Component
 {
     [DataField]
@@ -37,4 +38,14 @@ public sealed partial class LavalandPressureDamageComponent : Component
     /// <summary>The damage type of that share.</summary>
     [DataField]
     public ProtoId<DamageTypePrototype> BossMarkDamageType = "Slash";
+
+    /// <summary>
+    /// Out of the pressure range when the server last looked. The client predicts melee blows with it; the server
+    /// keeps it fresh.
+    /// </summary>
+    [ViewVariables, AutoNetworkedField]
+    public bool Weakened;
+
+    [ViewVariables]
+    public TimeSpan NextPressureCheck;
 }

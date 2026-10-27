@@ -482,18 +482,6 @@
     color: "#ffb08a"
 
 - type: entity
-  id: ActionLavalandCainAndAbelSwap
-  name: Сменить кинжал
-  description: Выставить вперёд другой клинок. Брошенный Каин тянет хозяина за собой, брошенный Авель поднимает кольцо льда.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Action
-    useDelay: 0.5
-    icon: { sprite: _DeadSpace/Lavaland/Objects/Weapons/cain_and_abel.rsi, state: icon }
-  - type: InstantAction
-    event: !type:LavalandCainAndAbelSwapActionEvent
-
-- type: entity
   id: ActionLavalandCainAndAbelThrow
   name: Бросок кинжала
   description: "Метнуть кинжал, что сейчас впереди: Каин утянет к себе, Авель поднимет кольцо льда."

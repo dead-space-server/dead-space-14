@@ -190,12 +190,6 @@ public sealed partial class LavalandCainAndAbelComponent : Component
     public EntProtoId ThrowAction = "ActionLavalandCainAndAbelThrow";
 
     [DataField]
-    public EntProtoId SwapAction = "ActionLavalandCainAndAbelSwap";
-
-    [ViewVariables]
-    public EntityUid? SwapActionEntity;
-
-    [DataField]
     public EntProtoId DaggerProjectile = "LavalandCainAndAbelDagger";
 
     [DataField]
