@@ -29,6 +29,17 @@ public sealed partial class LavalandLegionHandsComponent : Component
     [DataField]
     public EntProtoId RightHand = "LavalandLegionHandRight";
 
+    /// <summary>
+    /// A blast hurts the Legion through one part only (the head or a hand, whichever it reaches first): every other
+    /// part it reaches within this time is spared. Otherwise one bomb hits it three times over through the hands.
+    /// </summary>
+    [DataField]
+    public TimeSpan ExplosionShareTime = TimeSpan.FromSeconds(0.5);
+
+    /// <summary>Until then a blast has already hurt the Legion through one of its parts.</summary>
+    [ViewVariables]
+    public TimeSpan ExplosionHitUntil;
+
     /// <summary>Where the hands rest beside the Legion.</summary>
     [DataField]
     public Vector2 HandOffset = new(1.6f, 0.2f);

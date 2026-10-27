@@ -20,6 +20,7 @@ loadout-group-senior-courier-head = Ведущий логист, голова
 loadout-group-senior-courier-jumpsuit = Ведущий логист, комбинезон
 loadout-group-senior-courier-outerclothing = Ведущий логист, верхняя одежда
 loadout-group-senior-courier-underwear = Ведущий логист, нижнее бельё
+loadout-group-senior-salvage-specialist-weapon = Ведущий утилизатор, оружие
 loadout-group-senior-courier-belt = Ведущий логист, пояс
 
 # Law

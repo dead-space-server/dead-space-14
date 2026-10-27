@@ -174,13 +174,15 @@ public sealed class LavalandDayNightSystem : EntitySystem
     /// From now on the nights of this lavaland take the hue and glow as the chromite caves do; the days keep their own
     /// light. If it is night now, it fades into it at once.
     /// </summary>
-    public void SetTint(EntityUid map, Color tint)
+    public void SetTint(EntityUid map, Color tint, float brightness = 1f, float minBrightness = 0.08f)
     {
         if (!TryComp<LavalandDayCycleComponent>(map, out var cycle))
             return;
 
         var target = cycle.Fading ? cycle.BaseColor : EnsureComp<MapLightComponent>(map).AmbientLightColor;
         cycle.Tint = tint;
+        cycle.TintBrightness = brightness;
+        cycle.TintMinBrightness = minBrightness;
         cycle.CelestialNight = cycle.Night;
         Dirty(map, cycle);
         FadeTo((map, cycle), target, _timing.CurTime);
@@ -225,14 +227,22 @@ public sealed class LavalandDayNightSystem : EntitySystem
 
     private static readonly TimeSpan PulseUpdateInterval = TimeSpan.FromSeconds(0.1);
 
-    /// <summary>A night's colour turned towards the tint, as bright as it was; a day's as it is.</summary>
+    /// <summary>
+    /// A night's colour turned towards the tint, as bright as it was times the tint's brightness, but never darker than
+    /// its floor; a day's as it is.
+    /// </summary>
     private static Color Tinted(LavalandDayCycleComponent cycle, Color color)
     {
         if (cycle.Tint is not { } tint || !cycle.Night)
             return color;
 
-        var brightness = MathF.Max(MathF.Max(color.R, color.G), MathF.Max(color.B, 0.08f));
-        var hued = new Color(tint.R * brightness, tint.G * brightness, tint.B * brightness, color.A);
+        var brightness = MathF.Max(MathF.Max(color.R, color.G), color.B) * cycle.TintBrightness;
+        brightness = Math.Clamp(MathF.Max(brightness, cycle.TintMinBrightness), 0f, 1f);
+        var hued = new Color(
+            MathF.Min(1f, tint.R * brightness),
+            MathF.Min(1f, tint.G * brightness),
+            MathF.Min(1f, tint.B * brightness),
+            color.A);
         return Color.InterpolateBetween(color, hued, TintStrength);
     }
 

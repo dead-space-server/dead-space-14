@@ -1,0 +1,6 @@
+# Weapon
+- type: loadout
+  id: SeniorSalvageSpecialistSeniorKinetik
+  storage:
+    back:
+    - WeaponSeniorKinetik

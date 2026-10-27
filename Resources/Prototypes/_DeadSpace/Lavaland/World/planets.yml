@@ -157,6 +157,8 @@
     lossSleep: 15
     relocatePitOnLoss: true
     rewardSleep: 60
+    nightBrightness: 1.3
+    nightMinBrightness: 0.18
     blessings: [ NoSlip, Armor, Health, NoBreathing, Regeneration ]
     healthBonus: 35
     regenAmount: 5

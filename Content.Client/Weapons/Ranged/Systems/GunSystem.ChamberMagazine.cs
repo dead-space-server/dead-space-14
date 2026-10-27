@@ -64,6 +64,9 @@ public sealed partial class GunSystem
     {
         if (args.Control is not ChamberMagazineStatusControl control) return;
 
+        if (UsesAmmoSlot(ent)) // DS14
+            return; // DS14
+
         var chambered = GetChamberEntity(ent);
         var magEntity = GetMagazineEntity(ent);
         var ammoCountEv = new GetAmmoCountEvent();

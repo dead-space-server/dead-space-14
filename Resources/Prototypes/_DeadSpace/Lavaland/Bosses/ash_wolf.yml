@@ -7,6 +7,8 @@
   name: AshWolf LQ-829
   description: Заброшенный боевой борг тайного клана. Вокруг корпуса намотаны лезвия, а в оптике всё ещё теплится огонёк.
   suffix: Lavaland, секретный босс
+  # Secret: not in the spawn menu.
+  categories: [ HideSpawnMenu ]
   components:
   - type: DestructionResistance
   - type: LavalandWeatherImmune
@@ -194,13 +196,15 @@
   - type: TimedDespawn
     lifetime: 4
 
-# Beaten, it is a borg: ordinary laws, a brain that can be changed, and room for any four modules. Whoever is put in
+# Beaten, it is a borg: the paladin's laws, a brain that can be changed, and room for any four modules. Whoever is put in
 # it keeps its rush, leap, retreat and pounce.
 - type: entity
   parent: BaseBorgChassisNT
   id: BorgChassisAshWolf
   name: AshWolf LQ-829
-  description: Боевой борг тайного клана, перепрошитый под обычные законы. Лезвия вокруг корпуса никуда не делись.
+  description: Боевой борг тайного клана, перепрошитый под кодекс паладина. Лезвия вокруг корпуса никуда не делись.
+  # Secret: not in the spawn menu.
+  categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Mobs/AshWolf.rsi
@@ -251,6 +255,9 @@
       cell_slot:
         name: power-cell-slot-component-slot-name-default
         startingItem: PowerCellHigh
+  # A knight's code instead of the borgs' usual laws.
+  - type: SiliconLawProvider
+    laws: PaladinLawset
   # Its rushes and saws are still parried like the boss's.
   - type: ParryableBoss
   - type: LavalandAshWolfBorg

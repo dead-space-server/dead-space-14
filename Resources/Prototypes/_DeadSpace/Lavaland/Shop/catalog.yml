@@ -184,6 +184,14 @@
     LavalandMiningPoint: 250
 
 - type: listing
+  id: LavalandMiningSeniorKineticAccelerator
+  productEntity: WeaponSeniorKinetik
+  categories:
+  - LavalandMiningTools
+  cost:
+    LavalandMiningPoint: 450
+
+- type: listing
   id: LavalandWeaponPlasmaCutter
   productEntity: WeaponPlasmaCutter
   categories:

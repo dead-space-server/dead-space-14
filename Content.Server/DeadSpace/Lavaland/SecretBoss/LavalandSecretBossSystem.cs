@@ -235,6 +235,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
                     return;
                 comp.NextCheck = now + CheckInterval;
                 ClearFaunaNearPit(ent, config);
+                JumpHoveringIntoPit(ent, config);
                 UpdateGathering(ent, config, now);
                 return;
 
@@ -742,6 +743,35 @@ public sealed class LavalandSecretBossSystem : EntitySystem
 
             ent.Comp.OpenPrompts.Add(session);
             _eui.OpenEui(new LavalandCelestialPitEui(this, ent.Owner), session);
+        }
+    }
+
+    /// <summary>
+    /// Walking on air (the strange elixir's cloud and the like) never sets the pit off underfoot: whoever stands right
+    /// over it jumps in all the same, without waiting for the prompt.
+    /// </summary>
+    private void JumpHoveringIntoPit(Entity<LavalandSecretBossComponent> ent, LavalandSecretBossConfig config)
+    {
+        if (ent.Comp.Pit is not { } pit || TerminatingOrDeleted(pit))
+            return;
+
+        var pitXform = Transform(pit);
+        if (pitXform.GridUid is not { } gridUid || !TryComp<MapGridComponent>(gridUid, out var grid))
+            return;
+
+        var pitTile = _map.TileIndicesFor(gridUid, grid, pitXform.Coordinates);
+        foreach (var (_, mob) in LivingPlayersOn(ent.Owner))
+        {
+            var xform = Transform(mob);
+            if (xform.GridUid != gridUid ||
+                HasComp<LavalandPitDescentComponent>(mob) ||
+                HasComp<ChasmFallingComponent>(mob) ||
+                _map.TileIndicesFor(gridUid, grid, xform.Coordinates) != pitTile)
+            {
+                continue;
+            }
+
+            StartJump(ent, config, mob);
         }
     }
 
@@ -1538,7 +1568,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
     {
         ent.Comp.PlayersAwake = true;
         // The last of its cutscenes is over: from now on the lavaland's nights are the Celestial's purple, and glow.
-        _dayNight.SetTint(ent.Owner, CelestialTint);
+        _dayNight.SetTint(ent.Owner, CelestialTint, config.NightBrightness, config.NightMinBrightness);
         foreach (var fighter in ent.Comp.Participants)
         {
             if (TerminatingOrDeleted(fighter))

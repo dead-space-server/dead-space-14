@@ -44,7 +44,7 @@ public sealed class LavalandSkyDropSystem : EntitySystem
         {
             if (!_seen.TryGetValue(uid, out var seen) || seen.ServerStart != drop.Start)
             {
-                seen = (drop.Start, drop.Start > now ? drop.Start : now);
+                seen = (drop.Start, GetLocalStart(drop.Start, now));
                 _seen[uid] = seen;
             }
 
@@ -75,6 +75,21 @@ public sealed class LavalandSkyDropSystem : EntitySystem
             _spriteTree.QueueTreeUpdate((uid, sprite));
         }
     }
+
+    /// <summary>
+    /// A drop seen just as it starts (its state only late by the ping) plays from now, whole. One that has been going
+    /// on for a while - a flying drake coming into view from across the arena - goes on as it is on the server:
+    /// started over, it would dive down and rise again every time it comes into sight.
+    /// </summary>
+    private static TimeSpan GetLocalStart(TimeSpan serverStart, TimeSpan now)
+    {
+        if (serverStart > now)
+            return serverStart;
+
+        return now - serverStart <= LateStateGrace ? now : serverStart;
+    }
+
+    private static readonly TimeSpan LateStateGrace = TimeSpan.FromSeconds(0.5);
 
     private void OnShutdown(Entity<LavalandSkyDropComponent> ent, ref ComponentShutdown args)
     {

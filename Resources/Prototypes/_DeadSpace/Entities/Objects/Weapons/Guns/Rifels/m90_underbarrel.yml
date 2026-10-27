@@ -1,0 +1,51 @@
+# A test of the fire modes (GunAmmoModes): the M-90gl's own fire, and its underbarrel launcher loaded with one
+# 40 mm grenade at a time - the China Lake's rounds (frag, blast, EMP and the rest).
+- type: entity
+  parent: WeaponRifleM90GrenadeLauncher
+  id: WeaponRifleM90GrenadeLauncherUnderbarrel
+  name: М-90gl
+  suffix: Тест, подствол
+  description: Карабин старой модели, выполненный по схеме булл-пап, с подствольным гранатомётом. Использует патроны калибра 5.56х45 мм, подствол заряжается 40-мм гранатами.
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: MagazineRifle
+        insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+        ejectSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - ADTExtMagazineRifle
+          - MagazineRifle
+        whitelistFailPopup: gun-magazine-whitelist-fail
+      gun_chamber:
+        name: Chamber
+        priority: 1
+        whitelist:
+          tags:
+          - CartridgeRifle
+      underbarrel_slot:
+        name: gun-underbarrel-slot
+        insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+        ejectSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
+        priority: 0
+        whitelist:
+          tags:
+          - Grenade
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+      underbarrel_slot: !type:ContainerSlot
+  - type: GunAmmoModes
+    modes:
+    # The rifle itself: magazine and bolt as usual.
+    - name: gun-ammo-mode-main
+    # One grenade in the underbarrel, fired slowly and with the launcher's thump.
+    - name: gun-ammo-mode-underbarrel
+      slot: underbarrel_slot
+      fireRateMultiplier: 0.2
+      soundGunshot:
+        path: /Audio/Weapons/Guns/Gunshots/grenade_launcher.ogg

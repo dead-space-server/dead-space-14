@@ -11,6 +11,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.DeadSpace.Lavaland.Bosses;
 using Content.Shared.DeadSpace.Lavaland.Components;
+using Content.Shared.Explosion;
 using Content.Shared.FixedPoint;
 using Content.Shared.Ghost;
 using Content.Shared.Mobs.Components;
@@ -59,8 +60,10 @@ public sealed class LavalandLegionHandsSystem : EntitySystem
 
         SubscribeLocalEvent<LavalandLegionHandsComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<LavalandLegionHandsComponent, LavalandBossResetEvent>(OnReset);
+        SubscribeLocalEvent<LavalandLegionHandsComponent, GetExplosionResistanceEvent>(OnLegionExplosion);
         SubscribeLocalEvent<LavalandLegionHandComponent, DamageChangedEvent>(OnHandDamaged);
         SubscribeLocalEvent<LavalandLegionHandComponent, ComponentShutdown>(OnHandShutdown);
+        SubscribeLocalEvent<LavalandLegionHandComponent, GetExplosionResistanceEvent>(OnHandExplosion);
     }
 
     #region Public
@@ -281,6 +284,30 @@ public sealed class LavalandLegionHandsSystem : EntitySystem
 
         if (forwarded.DamageDict.Count > 0)
             _damageable.TryChangeDamage(ent.Comp.Legion, forwarded, true, false, args.Origin);
+    }
+
+    private void OnLegionExplosion(Entity<LavalandLegionHandsComponent> ent, ref GetExplosionResistanceEvent args)
+    {
+        ShareExplosion(ent.Comp, ref args);
+    }
+
+    private void OnHandExplosion(Entity<LavalandLegionHandComponent> ent, ref GetExplosionResistanceEvent args)
+    {
+        if (TryComp<LavalandLegionHandsComponent>(ent.Comp.Legion, out var hands))
+            ShareExplosion(hands, ref args);
+    }
+
+    /// <summary>The first part a blast reaches takes it; the rest of the Legion is spared that blast.</summary>
+    private void ShareExplosion(LavalandLegionHandsComponent hands, ref GetExplosionResistanceEvent args)
+    {
+        var now = _timing.CurTime;
+        if (now < hands.ExplosionHitUntil)
+        {
+            args.DamageCoefficient = 0f;
+            return;
+        }
+
+        hands.ExplosionHitUntil = now + hands.ExplosionShareTime;
     }
 
     private void OnHandShutdown(Entity<LavalandLegionHandComponent> ent, ref ComponentShutdown args)

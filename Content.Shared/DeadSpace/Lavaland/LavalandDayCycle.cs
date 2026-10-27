@@ -257,6 +257,14 @@ public sealed partial class LavalandDayCycleComponent : Component
     [ViewVariables]
     public Color? Tint;
 
+    /// <summary>The tinted nights' brightness is multiplied by this.</summary>
+    [ViewVariables]
+    public float TintBrightness = 1f;
+
+    /// <summary>The tinted nights (a deep one too) are never darker than this, 0-1.</summary>
+    [ViewVariables]
+    public float TintMinBrightness = 0.08f;
+
     /// <summary>The current phase is a night (one that can turn deep).</summary>
     [ViewVariables]
     public bool Night;

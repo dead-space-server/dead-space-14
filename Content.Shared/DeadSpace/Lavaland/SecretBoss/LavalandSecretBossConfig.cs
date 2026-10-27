@@ -247,6 +247,17 @@ public sealed partial class LavalandSecretBossConfig
     [DataField]
     public TimeSpan RewardSleep = TimeSpan.FromSeconds(60);
 
+    /// <summary>The purple nights after the Celestial's death are this much brighter than the plain ones.</summary>
+    [DataField]
+    public float NightBrightness = 1.3f;
+
+    /// <summary>
+    /// The purple nights are never darker than this (0-1): even a deep night, black elsewhere, keeps a faint glow to
+    /// see by.
+    /// </summary>
+    [DataField]
+    public float NightMinBrightness = 0.18f;
+
     /// <summary>Each survivor gets one of these at random.</summary>
     [DataField]
     public List<LavalandBlessing> Blessings = new()
