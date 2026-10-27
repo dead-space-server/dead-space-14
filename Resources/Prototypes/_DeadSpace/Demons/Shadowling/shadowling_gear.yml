@@ -1,0 +1,15 @@
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackShadowling
+  name: рюкзак тенеморфа
+  description: Рюкзак, сросшийся с телом тенеморфа. Снять его невозможно.
+  components:
+  - type: Unremoveable
+  - type: Clothing
+    clothingVisuals:
+      back: []
+
+- type: startingGear
+  id: ShadowlingGear
+  equipment:
+    back: ClothingBackpackShadowling

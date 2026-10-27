@@ -7,6 +7,7 @@
   - MobCombat
   - MobDamageable
   - BaseMob
+  - StripableInventoryBase
   name: Тенеморф
   suffix: Тенеморф
   description: Жуткий.
@@ -53,12 +54,16 @@
   - type: ShowJobIcons
   - type: ShowMindShieldIcons
   - type: Hands
+  - type: Inventory
+    templateId: shadowling
+  - type: Loadout
+    prototypes: [ShadowlingGear]
   - type: ComplexInteraction
   - type: CombatMode
   - type: InteractionPopup
   - type: Puller
-  - type: Strippable
   - type: NoSlip
+  - type: ProtectedFromStepTriggers
   - type: Speech
   - type: Emoting
   - type: ZombieImmune

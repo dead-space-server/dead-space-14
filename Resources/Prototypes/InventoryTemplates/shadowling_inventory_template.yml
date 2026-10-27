@@ -1,0 +1,27 @@
+- type: inventoryTemplate
+  id: shadowling
+  slots:
+  - name: id
+    slotTexture: id
+    fullTextureName: template_small
+    slotFlags: IDCARD
+    slotGroup: MainHotbar
+    stripTime: 6
+    uiWindowPos: 1,0
+    strippingWindowPos: 0,0
+    displayName: ID
+    whitelist:
+      components:
+      - IdCard
+    blacklist:
+      components:
+      - Pda
+  - name: back
+    slotTexture: back
+    fullTextureName: template_small
+    slotFlags: BACK
+    slotGroup: SecondHotbar
+    stripTime: 6
+    uiWindowPos: 2,0
+    strippingWindowPos: 0,1
+    displayName: Back
