@@ -316,7 +316,7 @@
         acts: [ "Destruction" ]
   # Its own blades: with an empty hand it strikes with them.
   - type: MeleeWeapon
-    attackRate: 1.5
+    attackRate: 2.3
     angle: 30
     range: 1.3
     animation: WeaponArcClaw
