@@ -29,4 +29,9 @@ public enum PathFlags : byte
     /// Can we open stuff that requires interaction (e.g. click-open doors).
     /// </summary>
     Interact = 1 << 4,
+
+    /// <summary>
+    /// Can cross empty tiles. Set for mobs that move in the air.
+    /// </summary>
+    Space = 1 << 5, //DS-14
 }

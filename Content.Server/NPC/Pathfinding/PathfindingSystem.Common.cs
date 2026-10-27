@@ -47,7 +47,8 @@ public sealed partial class PathfindingSystem
         var modifier = 1f;
 
         // TODO
-        if ((end.Data.Flags & PathfindingBreadcrumbFlag.Space) != 0x0)
+        if ((end.Data.Flags & PathfindingBreadcrumbFlag.Space) != 0x0 &&
+            (request.Flags & PathFlags.Space) == 0) //DS-14
         {
             return 0f;
         }

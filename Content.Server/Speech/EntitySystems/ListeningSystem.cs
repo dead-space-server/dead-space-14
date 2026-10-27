@@ -4,6 +4,7 @@ using Content.Shared.DeadSpace.Languages.Prototypes;
 using Content.Shared.Ghost;
 using Content.Shared.Speech;
 using Content.Shared.Speech.Components;
+using Content.Shared.Telephone; // DS-14
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.Speech.EntitySystems;
@@ -31,7 +32,8 @@ public sealed class ListeningSystem : EntitySystem
         EntityUid source,
         string message,
         string? obfuscatedMessage,
-        ProtoId<LanguagePrototype> languageId)
+        ProtoId<LanguagePrototype> languageId,
+        bool looc = false) // DS-14
     // DS14-end
     {
         // DS14-start
@@ -47,12 +49,15 @@ public sealed class ListeningSystem : EntitySystem
         var sourcePos = _xforms.GetWorldPosition(sourceXform, xformQuery);
 
         var attemptEv = new ListenAttemptEvent(source);
-        var ev = new ListenEvent(message, source, languageId); // DS14
+        var ev = new ListenEvent(message, source, languageId, looc); // DS14
         var obfuscatedEv = obfuscatedMessage == null ? null : new ListenEvent(obfuscatedMessage, source, languageId); // DS14
         var query = EntityQueryEnumerator<ActiveListenerComponent, TransformComponent>();
 
         while(query.MoveNext(out var listenerUid, out var listener, out var xform))
         {
+            if (looc && !HasComp<TelephoneComponent>(listenerUid)) // DS-14
+                continue;
+
             if (xform.MapID != sourceXform.MapID)
                 continue;
 

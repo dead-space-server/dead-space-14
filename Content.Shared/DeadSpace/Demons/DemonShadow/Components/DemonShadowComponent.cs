@@ -13,12 +13,6 @@ namespace Content.Shared.DeadSpace.Demons.DemonShadow.Components;
 public sealed partial class DemonShadowComponent : Component
 {
     [DataField]
-    public EntProtoId DemonShadowGrapple = "ActionDemonShadowGrapple";
-
-    [DataField, AutoNetworkedField]
-    public EntityUid? DemonShadowGrappleActionEntity;
-
-    [DataField]
     public EntProtoId DemonShadowCrawl = "ActionDemonShadowCrawl";
 
     [ViewVariables(VVAccess.ReadOnly)]
@@ -36,22 +30,11 @@ public sealed partial class DemonShadowComponent : Component
     [ViewVariables(VVAccess.ReadOnly)]
     public bool IsShadowPosition = false;
 
-    [ViewVariables(VVAccess.ReadOnly)]
-    public EntityUid? TeleportTarget = null;
-
     [DataField]
     public TimeSpan CheckDuration = TimeSpan.FromSeconds(1);
 
     [DataField]
     public TimeSpan TimeToCheck = TimeSpan.Zero;
-
-    [DataField]
-    [ViewVariables(VVAccess.ReadOnly)]
-    public TimeSpan TeleportDuration = TimeSpan.FromSeconds(1);
-
-    [DataField]
-    [ViewVariables(VVAccess.ReadOnly)]
-    public TimeSpan TimeUtilTeleport = TimeSpan.Zero;
 
     [DataField]
     [ViewVariables(VVAccess.ReadOnly)]

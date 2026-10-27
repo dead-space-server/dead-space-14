@@ -91,6 +91,18 @@ public sealed class TelephoneSystem : SharedTelephoneSystem
         if (!_recentChatMessages.Add((args.Source, args.Message, entity)))
             return;
 
+        // DS-14
+        if (args.Looc)
+        {
+            var sent = new TelephoneMessageSentEvent(args.Message, new MsgChatMessage(), args.Source);
+            RaiseLocalEvent(entity, ref sent);
+
+            foreach (var receiver in entity.Comp.LinkedTelephones)
+                RelayTelephoneSpeech(args.Source, args.Message, receiver, entity, looc: true);
+
+            return;
+        }
+
         SendTelephoneMessage(args.Source, args.Message, entity);
     }
 
@@ -113,14 +125,16 @@ public sealed class TelephoneSystem : SharedTelephoneSystem
         string message,
         Entity<TelephoneComponent> receiver,
         Entity<TelephoneComponent>? sourceTelephone = null,
-        ChatTransmitRange? rangeOverride = null)
+        ChatTransmitRange? rangeOverride = null,
+        bool looc = false)
     {
         var nameEv = new TransformSpeakerNameEvent(messageSource, Name(messageSource));
         RaiseLocalEvent(messageSource, nameEv);
 
         var speaker = receiver.Comp.Speaker != null ? receiver.Comp.Speaker.Value.Owner : receiver.Owner;
-        
-        SyncRelayedSpeakerState(messageSource, speaker);
+
+        if (!looc)
+            SyncRelayedSpeakerState(messageSource, speaker);
         // DS14-end
 
         var name = Loc.GetString("chat-telephone-name-relay",
@@ -132,6 +146,13 @@ public sealed class TelephoneSystem : SharedTelephoneSystem
                     (sourceTelephone != null && sourceTelephone.Value.Comp.LinkedTelephones.Count > 1
                         ? ChatTransmitRange.HideChat
                         : ChatTransmitRange.GhostRangeLimit);
+
+        if (looc)
+        {
+            _chat.SendLooc(speaker, message, range, name);
+            return;
+        }
+
         var volume = receiver.Comp.SpeakerVolume == TelephoneVolume.Speak ? InGameICChatType.Speak : InGameICChatType.Whisper;
 
         _chat.TrySendInGameICMessage(speaker, message, volume, range, nameOverride: name, checkRadioPrefix: false);

@@ -34,6 +34,7 @@ using Content.Shared.Verbs;
 using Content.Shared.Tools.Systems;
 using Content.Shared.GameTicking;
 using Content.Shared.SSDIndicator;
+using Content.Shared.Silicons.Borgs.Components;
 using Content.Shared.SurveillanceCamera.Components;
 using Content.Shared.TextScreen;
 using Robust.Shared.Configuration;
@@ -295,6 +296,9 @@ public sealed class CameraArchiveSystem : EntitySystem
 
     private void OnEmagged(Entity<SurveillanceCameraComponent> ent, ref GotEmaggedEvent args)
     {
+        if (HasComp<BorgChassisComponent>(ent))
+            return;
+
         if (!_emag.CompareFlag(args.Type, EmagType.Interaction) || HasComp<CameraArchiveBurnedComponent>(ent))
             return;
 
@@ -845,7 +849,7 @@ public sealed class CameraArchiveSystem : EntitySystem
 
     private void OnLabel(Entity<SurveillanceCameraComponent> ent, ref InteractUsingEvent args)
     {
-        if (!HasComp<HandLabelerComponent>(args.Used))
+        if (!HasComp<HandLabelerComponent>(args.Used) || HasComp<BorgChassisComponent>(ent))
             return;
 
         EnsureComp<CameraArchiveSealedComponent>(ent);

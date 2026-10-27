@@ -77,17 +77,20 @@ public sealed class SlimeFormSystem : EntitySystem
         }
 
         args.Handled = ent.Comp.IsSlime
-            ? StartChange(ent, new SlimeFormExitDoAfterEvent(), dropLimbs: false)
-            : StartChange(ent, new SlimeFormEnterDoAfterEvent(), dropLimbs: true);
+            ? StartExit(ent)
+            : StartChange(ent, dropLimbs: true);
     }
 
     private void OnEnter(Entity<SlimeFormComponent> ent, ref SlimeFormEnterDoAfterEvent args)
     {
-        var apply = !args.Cancelled && !_mobState.IsDead(ent);
-        FinishChange(ent);
-        if (!apply)
-            return;
+        if (args.Cancelled)
+        {
+            var left = ent.Comp.EndsAt - _timing.CurTime;
+            if (left > TimeSpan.FromMilliseconds(100) && Resume(ent, left))
+                return;
+        }
 
+        FinishChange(ent);
         DropRestraints(ent);
         _polymorph.PolymorphEntity(ent, SlimePolymorph);
     }
@@ -128,13 +131,48 @@ public sealed class SlimeFormSystem : EntitySystem
             : new(appearance.TtsVoices);
     }
 
-    private bool StartChange(Entity<SlimeFormComponent> ent, DoAfterEvent doAfterEvent, bool dropLimbs)
+    private bool StartChange(Entity<SlimeFormComponent> ent, bool dropLimbs)
     {
         if (ent.Comp.Busy || _mobState.IsDead(ent))
             return false;
 
         var time = TimeSpan.FromSeconds(Math.Max(ent.Comp.FormDuration, 0f));
-        var doAfter = new DoAfterArgs(EntityManager, ent, time, doAfterEvent, ent)
+        ent.Comp.EndsAt = _timing.CurTime + time;
+        if (!Resume(ent, time))
+            return false;
+
+        ent.Comp.Busy = true;
+        _jitter.DoJitter(ent, time, true, 4f, 8f);
+        if (dropLimbs)
+            QueueLimbs(ent, time);
+
+        return true;
+    }
+
+    private bool Resume(Entity<SlimeFormComponent> ent, TimeSpan time)
+    {
+        var doAfter = new DoAfterArgs(EntityManager, ent, time, new SlimeFormEnterDoAfterEvent(), ent)
+        {
+            BreakOnMove = false,
+            BreakOnDamage = false,
+            NeedHand = false,
+            RequireCanInteract = false,
+            BreakOnWeightlessMove = false,
+            CancelDuplicate = false,
+            BlockDuplicate = false,
+            DuplicateCondition = DuplicateConditions.SameEvent,
+        };
+
+        return _doAfter.TryStartDoAfter(doAfter);
+    }
+
+    private bool StartExit(Entity<SlimeFormComponent> ent)
+    {
+        if (ent.Comp.Busy || _mobState.IsDead(ent))
+            return false;
+
+        var time = TimeSpan.FromSeconds(Math.Max(ent.Comp.FormDuration, 0f));
+        var doAfter = new DoAfterArgs(EntityManager, ent, time, new SlimeFormExitDoAfterEvent(), ent)
         {
             BreakOnMove = true,
             BreakOnDamage = true,
@@ -148,9 +186,6 @@ public sealed class SlimeFormSystem : EntitySystem
 
         ent.Comp.Busy = true;
         _jitter.DoJitter(ent, time, true, 4f, 8f);
-        if (dropLimbs)
-            QueueLimbs(ent, time);
-
         return true;
     }
 

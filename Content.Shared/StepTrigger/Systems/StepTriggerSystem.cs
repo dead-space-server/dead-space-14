@@ -59,22 +59,10 @@ public sealed class StepTriggerSystem : EntitySystem
             return true;
         }
 
-        if (component.Blacklist != null && TryComp<MapGridComponent>(transform.GridUid, out var grid))
-        {
-            var positon = _map.LocalToTile(transform.GridUid.Value, grid, transform.Coordinates);
-            var anch = _map.GetAnchoredEntitiesEnumerator(uid, grid, positon);
-
-            while (anch.MoveNext(out var ent))
-            {
-                if (ent == uid)
-                    continue;
-
-                if (_whitelistSystem.IsWhitelistPass(component.Blacklist, ent.Value))
-                {
-                    return false;
-                }
-            }
-        }
+        //DS-14 start
+        if (IsBlacklistBlocked(uid, component, transform))
+            return false;
+        //DS-14 end
 
         foreach (var otherUid in component.Colliding)
         {
@@ -129,6 +117,33 @@ public sealed class StepTriggerSystem : EntitySystem
         component.CurrentlySteppedOn.Add(otherUid);
         Dirty(uid, component);
     }
+
+    //DS-14 start
+    public bool IsBlacklistBlocked(EntityUid uid, StepTriggerComponent? component = null, TransformComponent? transform = null)
+    {
+        if (!Resolve(uid, ref component, false) || component.Blacklist == null)
+            return false;
+
+        if (!Resolve(uid, ref transform, false) || transform.GridUid is not { } gridUid)
+            return false;
+
+        if (!TryComp(gridUid, out MapGridComponent? grid))
+            return false;
+
+        var position = _map.LocalToTile(gridUid, grid, transform.Coordinates);
+        var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, position);
+        while (anchored.MoveNext(out var ent))
+        {
+            if (ent == uid)
+                continue;
+
+            if (_whitelistSystem.IsWhitelistPass(component.Blacklist, ent.Value))
+                return true;
+        }
+
+        return false;
+    }
+    //DS-14 end
 
     private bool CanTrigger(EntityUid uid, EntityUid otherUid, StepTriggerComponent component)
     {

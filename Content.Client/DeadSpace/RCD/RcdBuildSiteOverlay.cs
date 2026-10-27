@@ -5,6 +5,7 @@ using Content.Shared.DeadSpace.RCD;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Robust.Client.Graphics;
+using Robust.Client.Player;
 using Robust.Shared.Enums;
 
 namespace Content.Client.DeadSpace.RCD;
@@ -12,6 +13,7 @@ namespace Content.Client.DeadSpace.RCD;
 public sealed class RcdBuildSiteOverlay : Overlay
 {
     private readonly IEntityManager _entities;
+    private readonly IPlayerManager _player;
     private readonly RcdBuildSiteSystem _sites;
     private readonly SharedHandsSystem _hands;
     private readonly SharedTransformSystem _transform;
@@ -21,6 +23,7 @@ public sealed class RcdBuildSiteOverlay : Overlay
     public RcdBuildSiteOverlay(IEntityManager entities)
     {
         _entities = entities;
+        _player = IoCManager.Resolve<IPlayerManager>();
         _sites = entities.System<RcdBuildSiteSystem>();
         _hands = entities.System<SharedHandsSystem>();
         _transform = entities.System<SharedTransformSystem>();
@@ -32,6 +35,9 @@ public sealed class RcdBuildSiteOverlay : Overlay
         while (query.MoveNext(out _, out var site, out var xform))
         {
             if (xform.MapID != args.MapId)
+                continue;
+
+            if (!site.Active && !OwnFrozen(site))
                 continue;
 
             var width = site.Path.Width;
@@ -53,6 +59,14 @@ public sealed class RcdBuildSiteOverlay : Overlay
 
             DrawSite(args.WorldHandle, origin, rotation, site, _sites.ProgressOf(site), hand);
         }
+    }
+
+    private bool OwnFrozen(RcdBuildSiteComponent site)
+    {
+        if (site.Progress <= 0.001f)
+            return false;
+
+        return _player.LocalEntity is { } local && _entities.GetEntity(site.User) == local;
     }
 
     private Vector2 HandOrigin(EntityUid user)

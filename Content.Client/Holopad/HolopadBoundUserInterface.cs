@@ -20,6 +20,10 @@ public sealed class HolopadBoundUserInterface : BoundUserInterface
 
     protected override void Open()
     {
+        // DS-14
+        if (IsOpened)
+            return;
+
         base.Open();
 
         _window = this.CreateWindow<HolopadWindow>();

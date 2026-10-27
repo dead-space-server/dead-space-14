@@ -216,44 +216,33 @@ public sealed class ThermalVisionExperimentalOverlay : Overlay
             if (!sprite.Visible && !thermal.DrawWhenInvisible)
                 continue;
 
-            var drawUid = uid;
-            var drawSprite = sprite;
-            var drawXform = xform;
-
             var parentUid = xform.ParentUid;
+            var inInventory = false;
             while (parentUid.IsValid() && !_entityManager.HasComponent<MapGridComponent>(parentUid))
             {
                 if (_entityManager.HasComponent<InventoryComponent>(parentUid))
                 {
-                    drawUid = EntityUid.Invalid;
+                    inInventory = true;
                     break;
-                }
-
-                if (_entityManager.TryGetComponent(parentUid, out SpriteComponent? parentSprite) &&
-                    _entityManager.TryGetComponent(parentUid, out TransformComponent? parentXform))
-                {
-                    drawUid = parentUid;
-                    drawSprite = parentSprite;
-                    drawXform = parentXform;
                 }
 
                 parentUid = _entityManager.GetComponent<TransformComponent>(parentUid).ParentUid;
             }
 
-            if (drawUid == EntityUid.Invalid)
+            if (inInventory)
                 continue;
 
-            var worldPos = _xformSys.GetWorldPosition(drawXform);
-            var worldRot = _xformSys.GetWorldRotation(drawXform);
+            var worldPos = _xformSys.GetWorldPosition(xform);
+            var worldRot = _xformSys.GetWorldRotation(xform);
 
-            var oldColor = drawSprite.Color;
-            _spriteSys.SetColor((drawUid, drawSprite), new Color(
+            var oldColor = sprite.Color;
+            _spriteSys.SetColor((uid, sprite), new Color(
                 oldColor.R * TintR * alpha,
                 oldColor.G * TintG * alpha,
                 oldColor.B * TintB * alpha,
                 oldColor.A * alpha));
-            _spriteSys.RenderSprite((drawUid, drawSprite), worldHandle, eyeRot, worldRot, worldPos);
-            _spriteSys.SetColor((drawUid, drawSprite), oldColor);
+            _spriteSys.RenderSprite((uid, sprite), worldHandle, eyeRot, worldRot, worldPos);
+            _spriteSys.SetColor((uid, sprite), oldColor);
         }
     }
 }

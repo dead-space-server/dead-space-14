@@ -5,6 +5,8 @@ using Content.Shared.Gravity;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Slippery;
+using Content.Shared.StepTrigger.Components;
+using Content.Shared.StepTrigger.Systems;
 using Content.Shared.Whitelist;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
@@ -20,6 +22,7 @@ public sealed class SpeedModifierContactsSystem : EntitySystem
     [Dependency] private readonly MovementSpeedModifierSystem _speedModifierSystem = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly StepTriggerSystem _stepTrigger = default!; //DS-14
 
     // TODO full-game-save
     // Either these need to be processed before a map is saved, or slowed/slowing entities need to update on init.
@@ -40,6 +43,18 @@ public sealed class SpeedModifierContactsSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
+
+        //DS-14 start
+        var covered = EntityQueryEnumerator<StepTriggerActiveComponent, StepTriggerComponent, SpeedModifierContactsComponent>();
+        while (covered.MoveNext(out _, out _, out var trigger, out _))
+        {
+            if (trigger.Blacklist == null)
+                continue;
+
+            foreach (var mob in trigger.Colliding)
+                _toUpdate.Add(mob);
+        }
+        //DS-14 end
 
         _toRemove.Clear();
 
@@ -133,6 +148,14 @@ public sealed class SpeedModifierContactsSystem : EntitySystem
                 if (isAirborne && !slowContactsComponent.AffectAirborne)
                     continue;
 
+                //DS-14 start
+                if (_stepTrigger.IsBlacklistBlocked(ent))
+                {
+                    remove = false;
+                    continue;
+                }
+                //DS-14 end
+
                 walkSpeed += slowContactsComponent.WalkSpeedModifier;
                 sprintSpeed += slowContactsComponent.SprintSpeedModifier;
                 speedModified = true;
@@ -166,6 +189,16 @@ public sealed class SpeedModifierContactsSystem : EntitySystem
 
             var evMax = new GetSpeedModifierContactCapEvent();
             RaiseLocalEvent(uid, ref evMax);
+
+            var resistance = Math.Clamp(evMax.SlowdownResistance, 0f, 1f);
+            if (resistance > 0f)
+            {
+                if (walkSpeed < 1f)
+                    walkSpeed = 1f - (1f - walkSpeed) * (1f - resistance);
+
+                if (sprintSpeed < 1f)
+                    sprintSpeed = 1f - (1f - sprintSpeed) * (1f - resistance);
+            }
 
             walkSpeed = MathF.Max(walkSpeed, evMax.MaxWalkSlowdown);
             sprintSpeed = MathF.Max(sprintSpeed, evMax.MaxSprintSlowdown);

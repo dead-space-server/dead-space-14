@@ -116,6 +116,8 @@ public sealed partial class LavalandMinebotComponent : Component
     [ViewVariables]
     public EntityUid? BoundUser;
 
+    public bool FollowPulledToGrid;
+
     public TimeSpan NextCollect;
 
     public TimeSpan NextMine;

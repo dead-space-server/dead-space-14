@@ -23,6 +23,8 @@ public sealed partial class SlimeFormComponent : Component
 
     public bool Busy;
 
+    public TimeSpan EndsAt;
+
     public EntityUid? Action;
 
     public TimeSpan NextLimbDrop;

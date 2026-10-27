@@ -13,6 +13,16 @@
     state: Fine
   locationPreference: Left # Corvax-TypingIndicator
 
+# DS14-Start
+- type: healthIcon
+  parent: HealthIcon
+  id: HealthIconPreCritical
+  icon:
+    sprite: /Textures/Interface/Misc/health_icons.rsi
+    state: PreCritical
+  locationPreference: Left # Corvax-TypingIndicator
+# DS14-End
+
 - type: healthIcon
   id: HealthIconCritical
   parent: HealthIcon

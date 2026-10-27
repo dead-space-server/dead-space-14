@@ -2,6 +2,7 @@
 
 using System.Linq;
 using Content.Shared.DeadSpace.CameraArchives;
+using Content.Shared.Silicons.Borgs.Components;
 using Robust.Client.GameObjects;
 
 namespace Content.Client.DeadSpace.CameraArchives;
@@ -42,7 +43,7 @@ public sealed class CameraArchiveSealSystem : EntitySystem
 
     private void Paint(EntityUid uid, Color color)
     {
-        if (!TryComp<SpriteComponent>(uid, out var sprite))
+        if (HasComp<BorgChassisComponent>(uid) || !TryComp<SpriteComponent>(uid, out var sprite))
             return;
 
         sprite.Color = color;

@@ -493,7 +493,7 @@
     jumpsuit: ClothingUniformJumpsuitBrigmedic
     outerClothing: ClothingOuterVestSecurityMedic
     shoes: ClothingShoesBootsBrigmedic
-    eyes: ClothingEyesHudMedical
+    eyes: ClothingEyesHudMedSec
     head: ClothingHeadHatBeretBrigmedic
     belt: ClothingBeltMedicalSecurityWebbingFilled
     socks: ClothingUnderwearSocksBrigmedic

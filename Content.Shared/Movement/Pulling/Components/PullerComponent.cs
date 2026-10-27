@@ -31,15 +31,19 @@ public sealed partial class PullerComponent : Component
     public TimeSpan ThrowCooldown = TimeSpan.FromSeconds(1);
 
     // Before changing how this is updated, please see SharedPullerSystem.RefreshMovementSpeed
-    public float WalkSpeedModifier => Pulling == default ? 1.0f : 0.95f;
+    public float WalkSpeedModifier => Pulling == default || PullingWithoutSpeedPenalty ? 1.0f : 0.95f; //DS-14
 
-    public float SprintSpeedModifier => Pulling == default ? 1.0f : 0.95f;
+    public float SprintSpeedModifier => Pulling == default || PullingWithoutSpeedPenalty ? 1.0f : 0.95f; // DS-14
 
     /// <summary>
     /// Entity currently being pulled if applicable.
     /// </summary>
     [AutoNetworkedField, DataField]
     public EntityUid? Pulling;
+    // DS-14-start
+    [AutoNetworkedField, DataField]
+    public bool PullingWithoutSpeedPenalty;
+    // DS-14-end
 
     /// <summary>
     ///     Does this entity need hands to be able to pull something?

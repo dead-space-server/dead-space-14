@@ -165,7 +165,6 @@ public sealed class RcdBuildSiteSystem : EntitySystem
         site.Progress = progress;
         site.StartProgress = progress;
         site.Active = false;
-        site.User = NetEntity.Invalid;
         site.Touched = _timing.CurTime;
         Dirty(uid, site);
     }
