@@ -32,6 +32,7 @@ public enum CandyEffectKind : byte
     Butterfingers,
     Jinx,
     ImAdequate,
+    VulpEater,
 }
 
 /// <summary>

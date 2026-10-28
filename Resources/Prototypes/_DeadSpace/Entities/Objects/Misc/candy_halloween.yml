@@ -233,6 +233,14 @@
   - type: Candy
     effect: ImAdequate
 
+- type: entity
+  parent: HalloweenCandy
+  id: CandyVulpEater
+  suffix: VulpEater
+  components:
+  - type: Candy
+    effect: VulpEater
+
 # Random pick among all specific candy prototypes (for loot tables).
 - type: entityTable
   id: RandomCandyTable
@@ -261,4 +269,5 @@
     - id: CandyButterfingers
     - id: CandyJinx
     - id: CandyImAdequate
+    - id: CandyVulpEater
 # DS14-end

@@ -1,17 +1,16 @@
 using Content.Server.Access.Systems;
 using Content.Server.Cargo.Components;
 using Content.Server.Damage.Components;
-using Content.Server.Damage.Components;
 using Content.Server.Damage.Systems;
 using Content.Shared.Access.Components;
 using Content.Shared.Access;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
-using Content.Shared.Damage.Systems;
 using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.DeadSpace.Halloween;
+using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -19,6 +18,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Nutrition;
 using Content.Shared.Stacks;
+using Content.Server.Speech.Components;
 using Content.Shared.StatusEffect;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.Throwing;
@@ -56,6 +56,7 @@ public sealed class CandySystem : EntitySystem
     [Dependency] private readonly GodmodeSystem _godmode = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoid = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly MobThresholdSystem _threshold = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
@@ -166,6 +167,9 @@ public sealed class CandySystem : EntitySystem
             case CandyEffectKind.Jinx:
                 _status.TryAddStatusEffect<TemporaryBlindnessComponent>(user, "TemporaryBlindness",
                     TimeSpan.FromSeconds(30), true);
+                break;
+            case CandyEffectKind.VulpEater:
+                VulpEater(user);
                 break;
             case CandyEffectKind.ImAdequate:
                 _newStatus.TryAddStatusEffectDuration(user, "StatusEffectParacusia", TimeSpan.FromSeconds(30));
@@ -435,6 +439,12 @@ public sealed class CandySystem : EntitySystem
 
         if (TryComp<ActorComponent>(user, out var actor))
             RaiseNetworkEvent(new CandyScreenTintEvent(TimeSpan.FromSeconds(20)), actor.PlayerSession.Channel);
+    }
+
+    private void VulpEater(EntityUid user)
+    {
+        _humanoid.SetSpecies(user, "Vulpkanin");
+        EnsureComp<RoarAccentComponent>(user);
     }
 
     // Nothing?: a random item disappears from the player's bag.

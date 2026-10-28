@@ -93,3 +93,9 @@ ent-CandyJinx = surprise candy
 
 ent-CandyImAdequate = surprise candy
     .desc = A candy with no wrapper markings at all. There's no telling what effect it will have.
+
+# DS14-start: vulp easter candy
+ent-CandyVulpEater = surprise candy
+    .desc = A candy with no wrapper markings at all. There's no telling what effect it will have.
+candy-effect-VulpEater = Vulp eater
+# DS14-end
