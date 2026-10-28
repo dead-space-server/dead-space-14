@@ -36,11 +36,11 @@ public sealed class ParryAlertIconSystem : EntitySystem
         var spriteView = args.SpriteViewEnt;
         if (TryComp<IconComponent>(weapon, out var icon))
         {
-            _sprite.LayerSetTexture((spriteView.Owner, (SpriteComponent?) spriteView.Comp), AlertControl.AlertVisualLayers.Base, _sprite.GetIcon(icon));
+            _sprite.LayerSetTexture((spriteView.Owner, (SpriteComponent?) spriteView.Comp), AlertVisualLayers.Base, _sprite.GetIcon(icon));
             return;
         }
 
         if (MetaData(weapon).EntityPrototype is { } proto)
-            _sprite.LayerSetTexture((spriteView.Owner, (SpriteComponent?) spriteView.Comp), AlertControl.AlertVisualLayers.Base, _sprite.GetPrototypeIcon(proto.ID).Default);
+            _sprite.LayerSetTexture((spriteView.Owner, (SpriteComponent?) spriteView.Comp), AlertVisualLayers.Base, _sprite.GetPrototypeIcon(proto.ID).Default);
     }
 }
