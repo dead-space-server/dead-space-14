@@ -24,5 +24,6 @@
     JugSulfur: 1
     ArtifexiumChemistryVial: 2
   contrabandInventory:
-    StrangePill: 3
+    # DS14: halloween candies instead of strange pills
+    HalloweenCandy: 3
     ChemistryBottleToxin: 1

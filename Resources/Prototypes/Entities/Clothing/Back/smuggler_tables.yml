@@ -60,9 +60,12 @@
     - id: PillSpaceDrugs
       amount: !type:RangeNumberSelector
         range: 1, 2
-    - id: StrangePill
-      amount: !type:RangeNumberSelector
+# DS14-start: halloween candies instead of strange pills
+    - !type:NestedSelector
+      tableId: RandomCandyTable
+      rolls: !type:RangeNumberSelector
         range: 1, 5
+# DS14-end
 
 - type: entityTable #5x tiny
   id: RandomSatchelCannabisTable
