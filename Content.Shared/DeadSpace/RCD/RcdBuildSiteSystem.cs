@@ -18,6 +18,12 @@ public sealed class RcdBuildSiteSystem : EntitySystem
 {
     private static readonly EntProtoId SitePrototype = "RcdBuildSite";
     private static readonly TimeSpan IdleLifetime = TimeSpan.FromSeconds(180);
+
+    /// <summary>
+    /// A site this fresh is not cleaned up even if it looks stale: one deleted a few ticks after it was spawned
+    /// reaches the clients as a ghost that lingers (and breaks the spawn/delete entity count test).
+    /// </summary>
+    private static readonly TimeSpan StaleGrace = TimeSpan.FromSeconds(5);
     private static readonly Box2 TileBox = new(-0.5f, -0.5f, 0.5f, 0.5f);
 
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -34,6 +40,7 @@ public sealed class RcdBuildSiteSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
+        SubscribeLocalEvent<RcdBuildSiteComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<RcdBuildSiteComponent, EntityUnpausedEvent>(OnUnpaused);
         SubscribeLocalEvent<RcdBuildSiteComponent, ComponentShutdown>(OnShutdown);
     }
@@ -70,9 +77,18 @@ public sealed class RcdBuildSiteSystem : EntitySystem
                 continue;
             }
 
+            if (_timing.CurTime - site.Touched < StaleGrace)
+                continue;
+
             if (_timing.CurTime - site.Touched >= IdleLifetime || IsStale(site))
                 QueueDel(uid);
         }
+    }
+
+    private void OnMapInit(Entity<RcdBuildSiteComponent> ent, ref MapInitEvent args)
+    {
+        if (ent.Comp.Touched == TimeSpan.Zero)
+            ent.Comp.Touched = _timing.CurTime;
     }
 
     public float RemainingDelay(
