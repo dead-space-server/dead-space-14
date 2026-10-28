@@ -150,31 +150,17 @@ public sealed partial class StationJobsSystem
                 .ThenBy(x => x.Key.Id)
                 .ToList();
 
-            // DS14-start: first only players for whom the job is the best one still open to them. Otherwise a
-            // medium-priority job filled earlier (by weight, then by id) takes a player away from his high one.
-            var filled = new Dictionary<ProtoId<JobPrototype>, int>();
             foreach (var (job, minimum) in requiredJobs)
             {
-                var count = 0;
-                while (count < minimum!.Value && profiles.Count > 0 && stationJobs[station][job] is not <= 0 &&
-                       TryPickPreferringCandidate(job, station, stationJobs, jobCandidates, playerCandidates, out var preferred))
-                {
-                    AssignPlayer(preferred, job, station, stationJobs, jobCandidates, playerCandidates, profiles, assigned);
-                    count++;
-                }
-
-                filled[job] = count;
-            }
-            // DS14-end
-
-            foreach (var (job, minimum) in requiredJobs)
-            {
-                for (var assignedToJob = filled.GetValueOrDefault(job); assignedToJob < minimum!.Value && profiles.Count > 0; assignedToJob++) // DS14
+                for (var assignedToJob = 0; assignedToJob < minimum!.Value && profiles.Count > 0; assignedToJob++)
                 {
                     if (stationJobs[station][job] is <= 0)
                         break;
 
-                    if (!TryPickCandidate(job, jobCandidates, out var player) &&
+                    // DS14: first a player for whom the job is the best one still open to them - otherwise a
+                    // medium-priority job takes a player away from his high one while others want it more.
+                    if (!TryPickPreferringCandidate(job, station, stationJobs, jobCandidates, playerCandidates, out var player) && // DS14
+                        !TryPickCandidate(job, jobCandidates, out player) &&
                         !TryPickMinimumJobFallbackCandidate(
                             job, profiles, jobFallback, out player))
                     {
