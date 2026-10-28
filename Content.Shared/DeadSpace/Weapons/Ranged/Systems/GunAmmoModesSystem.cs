@@ -1,13 +1,13 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Shared.ActionBlocker;
-using Content.Shared.CombatMode;
+using Content.Shared.Actions;
 using Content.Shared.Containers.ItemSlots;
+using Content.Shared.DeadSpace;
 using Content.Shared.DeadSpace.Weapons.Ranged.Components;
 using Content.Shared.DeadSpace.Weapons.Ranged.Events;
 using Content.Shared.Examine;
 using Content.Shared.Hands.EntitySystems;
-using Content.Shared.Input;
 using Content.Shared.Popups;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
@@ -22,15 +22,15 @@ using Robust.Shared.Player;
 namespace Content.Shared.DeadSpace.Weapons.Ranged.Systems;
 
 /// <summary>
-/// Fire modes of a gun (<see cref="GunAmmoModesComponent"/>), switched with the middle mouse button in combat mode: each fires the gun's
+/// Fire modes of a gun (<see cref="GunAmmoModesComponent"/>), switched with the gun's own action or the item mode key from the settings: each fires the gun's
 /// own self-recharging shots or the ammo loaded into one of its slots.
 /// </summary>
 public sealed class GunAmmoModesSystem : EntitySystem
 {
     [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private readonly ActionContainerSystem _actionContainer = default!;
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly RechargeBasicEntityAmmoSystem _recharge = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
@@ -51,9 +51,12 @@ public sealed class GunAmmoModesSystem : EntitySystem
         SubscribeLocalEvent<GunAmmoModesComponent, GunShotEvent>(OnShot);
         SubscribeLocalEvent<GunAmmoModesComponent, TakeAmmoEvent>(OnTakeAmmo);
         SubscribeLocalEvent<GunAmmoModesComponent, GetAmmoCountEvent>(OnAmmoCount);
+        SubscribeLocalEvent<GunAmmoModesComponent, GetItemActionsEvent>(OnGetActions);
+        SubscribeLocalEvent<GunAmmoModesComponent, GunAmmoModeSwitchActionEvent>(OnSwitchAction);
 
+        // The same rebindable key as any other item's mode (Controls in the settings).
         CommandBinds.Builder
-            .Bind(ContentKeyFunctions.MouseMiddle, new PointerInputCmdHandler(OnMiddleClick))
+            .Bind(DeadSpaceKeys.SwitchComponentMode, new PointerInputCmdHandler(OnSwitchKey))
             .Register<GunAmmoModesSystem>();
     }
 
@@ -65,6 +68,10 @@ public sealed class GunAmmoModesSystem : EntitySystem
 
     private void OnMapInit(Entity<GunAmmoModesComponent> ent, ref MapInitEvent args)
     {
+        if (ent.Comp.SwitchAction is { } action)
+            _actionContainer.EnsureAction(ent, ref ent.Comp.SwitchActionEntity, action);
+        Dirty(ent);
+
         ApplyMode(ent);
     }
 
@@ -77,12 +84,18 @@ public sealed class GunAmmoModesSystem : EntitySystem
 
     #region Switching
 
-    /// <summary>The middle mouse button in combat mode switches the mode of the gun in the active hand.</summary>
-    private bool OnMiddleClick(ICommonSession? session, EntityCoordinates coordinates, EntityUid target)
+    /// <summary>The switch is an action of the gun while it is held: the player puts it on whatever key suits him.</summary>
+    private void OnGetActions(Entity<GunAmmoModesComponent> ent, ref GetItemActionsEvent args)
+    {
+        if (ent.Comp.Modes.Count >= 2 && args.InHands)
+            args.AddAction(ent.Comp.SwitchActionEntity);
+    }
+
+    /// <summary>The mode switch key: the gun in the active hand goes to its next mode.</summary>
+    private bool OnSwitchKey(ICommonSession? session, EntityCoordinates coordinates, EntityUid target)
     {
         if (_net.IsClient ||
             session?.AttachedEntity is not { Valid: true } user ||
-            !_combatMode.IsInCombatMode(user) ||
             _hands.GetActiveItem(user) is not { } gun ||
             !TryComp<GunAmmoModesComponent>(gun, out var modes) ||
             modes.Modes.Count < 2 ||
@@ -92,7 +105,16 @@ public sealed class GunAmmoModesSystem : EntitySystem
         }
 
         SetMode((gun, modes), (modes.Selected + 1) % modes.Modes.Count, user);
-        return true;
+        return false;
+    }
+
+    private void OnSwitchAction(Entity<GunAmmoModesComponent> ent, ref GunAmmoModeSwitchActionEvent args)
+    {
+        if (args.Handled || ent.Comp.Modes.Count < 2 || !_actionBlocker.CanInteract(args.Performer, ent))
+            return;
+
+        args.Handled = true;
+        SetMode(ent, (ent.Comp.Selected + 1) % ent.Comp.Modes.Count, args.Performer);
     }
 
     /// <summary>Switches the gun's mode; server-side, the switch reaches the client with the component's state.</summary>

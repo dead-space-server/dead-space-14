@@ -8,3 +8,6 @@ namespace Content.Shared.DeadSpace.Weapons.Ranged.Events;
 /// </summary>
 [ByRefEvent]
 public record struct RechargeBasicEntityAmmoCooldownEvent(float Cooldown);
+
+/// <summary>The action of a gun with several fire modes: on to the next mode.</summary>
+public sealed partial class GunAmmoModeSwitchActionEvent : Content.Shared.Actions.InstantActionEvent;

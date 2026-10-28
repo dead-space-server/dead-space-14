@@ -855,7 +855,8 @@ public sealed partial class LavalandAshWolfSystem
                 {
                     PlaySound(comp.PounceWarningSound, ent);
                     _popup.PopupEntity(Loc.GetString("lavaland-ash-wolf-pounce-warning"), pounceTarget, pounceTarget, PopupType.LargeCaution);
-                    Spawn(comp.LeapMark, _transform.GetMapCoordinates(pounceTarget));
+                    if (comp.PounceMark is { } pounceMark)
+                        Spawn(pounceMark, _transform.GetMapCoordinates(pounceTarget));
                 }
 
                 break;

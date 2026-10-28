@@ -5,3 +5,5 @@ lavaland-hierophant-staff-bless-cooldown = Благословение ещё н�
 lavaland-hierophant-staff-bless-start = Посох начинает отбивать ритм Иерофанта...
 lavaland-hierophant-staff-bless-done = Шаги подчиняются ритму Иерофанта.
 lavaland-hierophant-staff-bless-end = Ритм Иерофанта стихает.
+
+lavaland-hierophant-staff-bless-verb = Благословить

@@ -1,0 +1,14 @@
+# The switch of a gun with several fire modes (GunAmmoModes): given while the gun is held, bindable to any key.
+- type: entity
+  parent: BaseAction
+  id: ActionGunAmmoModeSwitch
+  name: сменить тип выстрела
+  description: Переключить оружие на следующий тип выстрела.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 0.5
+    itemIconStyle: BigItem
+    icon: Interface/VerbIcons/refresh.svg.192dpi.png
+  - type: InstantAction
+    event: !type:GunAmmoModeSwitchActionEvent

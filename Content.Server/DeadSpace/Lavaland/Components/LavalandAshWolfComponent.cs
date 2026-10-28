@@ -215,7 +215,7 @@ public sealed partial class LavalandAshWolfComponent : Component
     [DataField]
     public float PounceSpeed = 13f;
 
-    /// <summary>The warning before the pounce: the target is told, hears it and sees a mark under its feet.</summary>
+    /// <summary>The warning before the pounce: the target is told and hears it (see <see cref="PounceMark"/>).</summary>
     [DataField]
     public float PounceWarning = 1.2f;
 
@@ -258,6 +258,13 @@ public sealed partial class LavalandAshWolfComponent : Component
 
     [DataField]
     public EntProtoId LeapMark = "LavalandAshWolfLeapMark";
+
+    /// <summary>
+    /// A mark under the target's feet as the pounce is coming. None by default: the pounce cannot be dodged, and a
+    /// mark would only suggest it can.
+    /// </summary>
+    [DataField]
+    public EntProtoId? PounceMark;
 
     [DataField]
     public EntProtoId SkyMark = "LavalandAshWolfSkyMark";

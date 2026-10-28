@@ -5,3 +5,5 @@ lavaland-hierophant-staff-bless-cooldown = The blessing is not ready yet: { $sec
 lavaland-hierophant-staff-bless-start = The staff starts beating the rhythm of the Hierophant...
 lavaland-hierophant-staff-bless-done = Your steps obey the beat of the Hierophant.
 lavaland-hierophant-staff-bless-end = The beat of the Hierophant fades.
+
+lavaland-hierophant-staff-bless-verb = Bless

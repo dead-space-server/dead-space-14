@@ -197,7 +197,7 @@
     capacity: 1
     count: 1
   - type: Gun
-    fireRate: 1
+    fireRate: 2
     selectedMode: SemiAuto
     minAngle: 45
     maxAngle: 55
@@ -224,14 +224,14 @@
     rechargeCooldown: 0.4
     rechargeSound:
       path: /Audio/Weapons/Guns/MagIn/kinetic_reload.ogg
-  # Fired in a quick string (some five shots running) the barrel overheats: the charge comes back slower, the
-  # hotter the slower.
+  # Fired on and on (some ten shots running) the barrel overheats: the charge comes back slower, the hotter the
+  # slower, but never more than two and a half times.
   - type: GunOverheat
     heatPerShot: 1
-    cooling: 0.4
-    threshold: 2.5
-    slowdownPerHeat: 0.6
-    maxSlowdown: 4
+    cooling: 1
+    threshold: 6
+    slowdownPerHeat: 0.3
+    maxSlowdown: 2.5
   - type: Clothing
     sprite: _DeadSpace/Objects/Weapons/Guns/Basic/sawnpka.rsi
     quickEquip: false
@@ -317,6 +317,7 @@
     mask: /Textures/Effects/LightMasks/cone.png
     autoRot: true
     radius: 6
+  - type: Akimbo
   - type: AmmoCounter
   - type: Appearance
   - type: GenericVisualizer
@@ -326,7 +327,7 @@
           True: { visible: False }
           False: { visible: True }
         #todo: add other 'empty' animations
-  # Two charges of its own: a bolt takes one, the spread both.
+  # Two charges of its own. The spread takes one too, but fires half as often and its charge comes back half as fast.
   - type: BasicEntityAmmoProvider
     proto: BulletKinetic
     capacity: 2
@@ -337,7 +338,8 @@
       proto: BulletKinetic
     - name: gun-ammo-mode-kinetic-spread
       proto: BulletKineticSeniorSpread
-      cost: 2
+      fireRateMultiplier: 0.5
+      rechargeMultiplier: 2
   - type: Gun
     fireRate: 1
     selectedMode: SemiAuto
@@ -374,6 +376,8 @@
     whitelist:
       tags:
       - PKAUpgrade
+  # Built for the thin lavaland air like any proto-kinetic gun: half damage anywhere else.
+  - type: LavalandPressureDamage
   - type: ContainerContainer
     containers:
       upgrades: !type:Container

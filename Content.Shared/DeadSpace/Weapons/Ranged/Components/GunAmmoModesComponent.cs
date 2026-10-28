@@ -8,7 +8,7 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared.DeadSpace.Weapons.Ranged.Components;
 
 /// <summary>
-/// A gun with several fire modes, switched with the middle mouse button in combat mode. A mode either fires the gun's own
+/// A gun with several fire modes, switched with its own action. A mode either fires the gun's own
 /// self-recharging shots (<see cref="GunAmmoMode.Proto"/> - the bolt its BasicEntityAmmoProvider makes) or takes its
 /// ammo from one of the gun's item slots (<see cref="GunAmmoMode.Slot"/>): a magazine, a single shell or grenade loaded
 /// into it, like an underbarrel launcher.
@@ -22,6 +22,13 @@ public sealed partial class GunAmmoModesComponent : Component
 
     [DataField, AutoNetworkedField]
     public int Selected;
+
+    /// <summary>The action, given while the gun is held, that switches to the next mode.</summary>
+    [DataField]
+    public EntProtoId? SwitchAction = "ActionGunAmmoModeSwitch";
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? SwitchActionEntity;
 
     [DataField]
     public SoundSpecifier? SwitchSound = new SoundPathSpecifier("/Audio/Weapons/Guns/Misc/selector.ogg");

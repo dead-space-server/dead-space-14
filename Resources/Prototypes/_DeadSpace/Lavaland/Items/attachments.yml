@@ -390,13 +390,13 @@
     wideAnimationRotation: -135
     damage:
       types:
-        Blunt: 12
+        Blunt: 20
     soundHit:
       collection: MetalThud
   - type: IncreaseDamageOnWield
     damage:
       types:
-        Blunt: 13
+        Blunt: 22
         Structural: 15
 
 - type: entity
@@ -422,15 +422,15 @@
     wideAnimationRotation: -135
     damage:
       types:
-        Slash: 6
-        Blunt: 5
+        Slash: 10
+        Blunt: 8
     soundHit:
       collection: MetalThud
   - type: IncreaseDamageOnWield
     damage:
       types:
-        Piercing: 3
-        Slash: 3
+        Piercing: 5
+        Slash: 5
         Structural: 15
 
 - type: entity

@@ -261,8 +261,13 @@
   # Its rushes and saws are still parried like the boss's.
   - type: ParryableBoss
   - type: LavalandAshWolfBorg
-  # Built for the ash storms, as the boss was.
+  # Built for the ash storms, as the boss was: unharmed by them, and its optics see through the ash.
   - type: LavalandWeatherImmune
+  - type: LavalandStormVisor
+    stormOpacity: 0.15
+  # Its lamp burns red, as the clan's borgs did.
+  - type: PointLight
+    color: "#dd200b"
   - type: LavalandAshWolf
     tamed: true
   - type: ActionGrant
@@ -316,14 +321,15 @@
         acts: [ "Destruction" ]
   # Its own blades: with an empty hand it strikes with them.
   - type: MeleeWeapon
-    attackRate: 2.3
+    attackRate: 2
     angle: 30
     range: 1.3
     animation: WeaponArcClaw
     wideAnimation: WeaponArcSlash
     damage:
       types:
-        Slash: 12
+        Slash: 20
+        Structural: 10
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
     soundSwing:
