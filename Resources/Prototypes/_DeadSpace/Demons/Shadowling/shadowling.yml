@@ -12,6 +12,7 @@
   suffix: Тенеморф
   description: Жуткий.
   components:
+  - type: Stripping
 
   - type: MovementSpeedModifier
     baseWalkSpeed: 4
