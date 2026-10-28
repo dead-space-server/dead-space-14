@@ -48,6 +48,7 @@ public sealed class LavalandChromiteCavesClientSystem : EntitySystem
         SubscribeLocalEvent<LavalandCaveHopComponent, ComponentRemove>(OnHopRemove);
         SubscribeLocalEvent<LavalandCaveClimbComponent, AfterAutoHandleStateEvent>(OnClimbState);
         SubscribeLocalEvent<LavalandCaveClimbComponent, ComponentRemove>(OnClimbRemove);
+        SubscribeLocalEvent<LavalandChromiteExitComponent, ComponentRemove>(OnExitRemove);
     }
 
     public override void Shutdown()
@@ -55,6 +56,12 @@ public sealed class LavalandChromiteCavesClientSystem : EntitySystem
         base.Shutdown();
         _overlays.RemoveOverlay(_rope);
         _overlays.RemoveOverlay(_alerts);
+    }
+
+    /// <summary>The exit's own light energy is kept only while it is there.</summary>
+    private void OnExitRemove(Entity<LavalandChromiteExitComponent> ent, ref ComponentRemove args)
+    {
+        _baseEnergy.Remove(ent.Owner);
     }
 
     public override void FrameUpdate(float frameTime)

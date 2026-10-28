@@ -438,6 +438,13 @@ public sealed partial class LavalandAshWolfComponent : Component
     [ViewVariables]
     public TimeSpan QteDeadline;
 
+    /// <summary>
+    /// The quick time event cannot be won before this: the needle has to reach every zone. The answer comes back
+    /// late by the ping, never early, so an earlier "escaped" is made up by the client.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan QteEarliestSuccess;
+
     [ViewVariables]
     public bool? QteResult;
 

@@ -281,6 +281,15 @@ public sealed partial class LavalandAshWolfSystem
             ev.ZoneStarts.Add(_random.NextFloat(0.3f, 0.78f));
         }
 
+        // The fastest honest run: the wait, the needle to the start of each zone, the gaps between the checks.
+        var earliest = ev.FirstDelay + ev.Gap * Math.Max(0, ev.Checks - 1);
+        foreach (var zone in ev.ZoneStarts)
+        {
+            earliest += zone * ev.TurnTime;
+        }
+
+        comp.QteEarliestSuccess = now + TimeSpan.FromSeconds(earliest);
+
         RaiseNetworkEvent(ev, session.Channel);
         _popup.PopupEntity(Loc.GetString("lavaland-ash-wolf-qte-popup"), victim, victim, PopupType.LargeCaution);
     }
@@ -296,6 +305,9 @@ public sealed partial class LavalandAshWolfSystem
         comp.QteId = 0;
     }
 
+    /// <summary>A frame or so of the client's clock running ahead.</summary>
+    private static readonly TimeSpan QteEarlyTolerance = TimeSpan.FromSeconds(0.1);
+
     /// <summary>Only the pinned player's answer counts, and only in time (the client plays it on its own clock).</summary>
     private void OnQteResult(LavalandAshWolfQteResultEvent ev, EntitySessionEventArgs args)
     {
@@ -309,7 +321,8 @@ public sealed partial class LavalandAshWolfSystem
             if (comp.QteId != ev.Id || comp.Victim != sender || comp.QteResult != null || now > comp.QteDeadline)
                 continue;
 
-            comp.QteResult = ev.Success;
+            // Escaped faster than the needle could go round: not a press, a made-up answer - it fails.
+            comp.QteResult = ev.Success && now >= comp.QteEarliestSuccess - QteEarlyTolerance;
             return;
         }
     }
