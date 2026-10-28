@@ -10,6 +10,7 @@ using Robust.Shared.Map;
 using Content.Shared.Coordinates.Helpers;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Content.Shared.DeadSpace.EntityPanel;
 using Content.Shared.Mobs.Components;
 using Content.Server.Spreader;
@@ -27,6 +28,11 @@ public sealed class SpawnAgainstSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SpreaderSystem _spreader = default!;
+
+    /// <summary>
+    /// Those the server has just shown the menu to, through their own action: only they may pick, and only once.
+    /// </summary>
+    private readonly HashSet<EntityUid> _awaitingSelection = new();
 
     public override void Initialize()
     {
@@ -66,22 +72,29 @@ public sealed class SpawnAgainstSystem : EntitySystem
 
             ev.Prototypes.Sort();
             RaiseNetworkEvent(ev, actorComponent.PlayerSession);
-
+            _awaitingSelection.Add(uid);
         }
 
         args.Handled = true;
     }
 
-    private void OnSelectEntity(SelectEntityEvent msg)
+    private void OnSelectEntity(SelectEntityEvent msg, EntitySessionEventArgs args)
     {
-        if (!msg.IsUseEvolutionSystem && !msg.IsUseSpawnPointSystem)
+        if (msg.IsUseEvolutionSystem || msg.IsUseSpawnPointSystem)
+            return;
+
+        // The client names neither whom nor what freely: its own body, the menu it was shown, one of its options.
+        if (args.SenderSession.AttachedEntity is not { Valid: true } uid ||
+            uid.Id != msg.Target ||
+            !TryComp<SpawnAgainstComponent>(uid, out var spawnAgainstComponent) ||
+            !_awaitingSelection.Remove(uid) ||
+            !spawnAgainstComponent.SpawnedEntities.Contains(new EntProtoId(msg.PrototypeId)))
         {
-            if (TryComp<SpawnAgainstComponent>(new EntityUid(msg.Target), out var spawnAgainstComponent))
-            {
-                spawnAgainstComponent.SelectEntity = msg.PrototypeId;
-                SpawnAgainst(new EntityUid(msg.Target), spawnAgainstComponent);
-            }
+            return;
         }
+
+        spawnAgainstComponent.SelectEntity = msg.PrototypeId;
+        SpawnAgainst(uid, spawnAgainstComponent);
     }
     private void SpawnAgainst(EntityUid uid, SpawnAgainstComponent comp)
     {

@@ -4,6 +4,7 @@ using Content.Shared.DeadSpace.Abilities.Evolution.Components;
 using Content.Shared.DeadSpace.Abilities.Evolution;
 using Content.Shared.Mind;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Ghost.Roles;
 using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;
@@ -23,6 +24,11 @@ public sealed class EvolutionSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly GhostRoleSystem _ghost = default!;
     [Dependency] private readonly ISharedPlayerManager _player = default!;
+
+    /// <summary>
+    /// Those the server has just shown the menu to, through their own action: only they may pick, and only once.
+    /// </summary>
+    private readonly HashSet<EntityUid> _awaitingSelection = new();
 
     public override void Initialize()
     {
@@ -107,21 +113,29 @@ public sealed class EvolutionSystem : EntitySystem
             }
             ev.Prototypes.Sort();
             RaiseNetworkEvent(ev, actorComponent.PlayerSession);
+            _awaitingSelection.Add(uid);
         }
 
         args.Handled = true;
     }
 
-    private void OnSelectEntity(SelectEntityEvent msg)
+    private void OnSelectEntity(SelectEntityEvent msg, EntitySessionEventArgs args)
     {
-        if (msg.IsUseEvolutionSystem)
+        if (!msg.IsUseEvolutionSystem)
+            return;
+
+        // The client names neither whom nor what freely: its own body, the menu it was shown, one of its options.
+        if (args.SenderSession.AttachedEntity is not { Valid: true } uid ||
+            uid.Id != msg.Target ||
+            !TryComp<EvolutionComponent>(uid, out var evolutionComponent) ||
+            !_awaitingSelection.Remove(uid) ||
+            !evolutionComponent.SpawnedEntities.Contains(new EntProtoId(msg.PrototypeId)))
         {
-            if (TryComp<EvolutionComponent>(new EntityUid(msg.Target), out var evolutionComponent))
-            {
-                evolutionComponent.SelectEntity = msg.PrototypeId;
-                OnEvolutionAction(new EntityUid(msg.Target), evolutionComponent);
-            }
+            return;
         }
+
+        evolutionComponent.SelectEntity = msg.PrototypeId;
+        OnEvolutionAction(uid, evolutionComponent);
     }
 
     private void OnEvolutionAction(EntityUid uid, EvolutionComponent comp)

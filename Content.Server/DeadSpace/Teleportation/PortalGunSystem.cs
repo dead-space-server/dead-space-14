@@ -2,6 +2,7 @@
 
 using Content.Shared.DeadSpace.Teleportation.Components;
 using Content.Shared.Teleportation;
+using Content.Shared.Teleportation.Components;
 using Content.Shared.Teleportation.Systems;
 using Content.Shared.Warps;
 using Content.Shared.Trigger;
@@ -25,6 +26,7 @@ public sealed class PortalGunSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedTeleportLocationsSystem _teleportLocations = default!;
 
     private const string PortalTriggerKey = "openportal";
 
@@ -40,6 +42,13 @@ public sealed class PortalGunSystem : EntitySystem
     {
         if (!TryGetEntity(args.NetEnt, out var target) || !HasComp<WarpPointComponent>(target))
             return;
+
+        // Only a point the gun's own menu offered, not any warp point the client names.
+        if (!TryComp<TeleportLocationsComponent>(ent, out var locations) ||
+            !_teleportLocations.IsOfferedWarp(locations, args.NetEnt))
+        {
+            return;
+        }
         ent.Comp.SelectedDestination = target;
         _popup.PopupEntity(Loc.GetString("portal-gun-destination-set"), args.Actor, args.Actor);
     }

@@ -213,6 +213,10 @@ public sealed class PatrolTabletSystem : EntitySystem
         if (!comp.SquadManagementEnabled)
             return;
 
+        // Only a squad of this tablet: the id comes from the client.
+        if (comp.Squads.Find(s => s.Id == msg.SquadId) == null)
+            return;
+
         var query = EntityQueryEnumerator<PatrolSquadCardComponent>();
         while (query.MoveNext(out var cardUid, out var squadCard))
         {

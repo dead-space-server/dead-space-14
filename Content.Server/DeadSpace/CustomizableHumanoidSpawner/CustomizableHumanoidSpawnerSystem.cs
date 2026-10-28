@@ -20,6 +20,8 @@ using Content.Shared.Speech;
 using Content.Shared.Tag;
 using Robust.Shared.Serialization.Manager;
 using Content.Server.Traits;
+using Content.Shared.CCVar;
+using Robust.Shared.Configuration;
 
 namespace Content.Server.DeadSpace.CustomizableHumanoidSpawner;
 
@@ -39,6 +41,10 @@ public sealed class CustomizableHumanoidSpawnerSystem : EntitySystem
     [Dependency] private readonly ISerializationManager _serialization = default!;
     [Dependency] private readonly TraitSystem _trait = default!;
     [Dependency] private readonly JobSystem _jobs = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
+
+    /// <summary>The random name the menu offered, where the name may not be changed: the client's own is ignored.</summary>
+    private readonly Dictionary<EntityUid, string> _offeredNames = new();
 
     public override void Initialize()
     {
@@ -82,6 +88,10 @@ public sealed class CustomizableHumanoidSpawnerSystem : EntitySystem
             return;
 
         var isRandomizedName = TryGetRandomName(comp, out var randomizedName);
+        if (isRandomizedName)
+            _offeredNames[uid] = randomizedName!;
+        else
+            _offeredNames.Remove(uid);
 
         var state = new CustomizableHumanoidSpawnerBuiState(
             GetAvailableCharacters(actor, comp),
@@ -94,17 +104,56 @@ public sealed class CustomizableHumanoidSpawnerSystem : EntitySystem
 
     private void OnUiMessage(EntityUid uid, CustomizableHumanoidSpawnerComponent comp, CustomizableHumanoidSpawnerMessage msg)
     {
-        if (!TryComp<ActorComponent>(uid, out var actor))
+        if (!TryComp<ActorComponent>(uid, out var actor) || msg.Actor != uid)
             return;
 
+        var name = string.Empty;
+        var useCustomDescription = false;
+        var description = string.Empty;
+
+        if (!msg.UseRandom)
+        {
+            // Only one of the player's own characters, of a species this spawner allows - the menu's list is the
+            // client's, the check is the server's.
+            var prefs = _prefs.GetPreferences(actor.PlayerSession.UserId);
+            if (!prefs.Characters.TryGetValue(msg.CharacterIndex, out var chosen) ||
+                chosen is not HumanoidCharacterProfile humanoid ||
+                comp.AllowedSpecies.Count > 0 && !comp.AllowedSpecies.Contains(humanoid.Species))
+            {
+                return;
+            }
+
+            if (_offeredNames.TryGetValue(uid, out var offered))
+            {
+                // The name is not the player's to choose here.
+                name = offered;
+            }
+            else
+            {
+                name = Clip(msg.CustomName, _cfg.GetCVar(CCVars.MaxNameLength));
+                if (name.Length == 0)
+                    name = humanoid.Name;
+
+                useCustomDescription = msg.UseCustomDescription;
+                description = Clip(msg.CustomDescription, _cfg.GetCVar(CCVars.MaxFlavorTextLength));
+            }
+        }
+
+        _offeredNames.Remove(uid);
         Spawn(uid,
             comp,
             actor,
             msg.UseRandom,
             msg.CharacterIndex,
-            msg.CustomName,
-            msg.UseCustomDescription,
-            msg.CustomDescription);
+            name,
+            useCustomDescription,
+            description);
+    }
+
+    private static string Clip(string? text, int maxLength)
+    {
+        var trimmed = text?.Trim() ?? string.Empty;
+        return trimmed.Length > maxLength ? trimmed[..maxLength] : trimmed;
     }
 
     private void Spawn(EntityUid uid,

@@ -1,4 +1,5 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+using Content.Shared.ActionBlocker;
 using Content.Shared.DeadSpace;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Popups;
@@ -19,6 +20,7 @@ namespace Content.Shared.DeadSpace.ComponentModeSwitcher;
 /// </summary>
 public sealed class ComponentModeSwitcherSystem : EntitySystem
 {
+    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
@@ -48,6 +50,10 @@ public sealed class ComponentModeSwitcherSystem : EntitySystem
 
         if (_hands.GetActiveItem(user) is not { } item ||
             !TryComp<ComponentModeSwitcherComponent>(item, out var switcher))
+            return false;
+
+        // Not while cuffed, stunned or otherwise unable to use the thing.
+        if (!_actionBlocker.CanInteract(user, item))
             return false;
 
         TryCycleMode((item, switcher), user);
