@@ -53,7 +53,7 @@ public sealed class LavalandSoulStabilizerSystem : EntitySystem
         UseCore(ent, args.User, target);
     }
 
-    /// <summary>The soul's power closes every wound at once; the dead it does not bring back.</summary>
+    /// <summary>The soul's power closes the wounds at once; the dead it does not bring back.</summary>
     private void UseCore(Entity<LavalandRegenerativeCoreComponent> ent, EntityUid user, EntityUid target)
     {
         if (!TryComp<MobStateComponent>(target, out var mob) || _mobState.IsDead(target, mob))
@@ -62,7 +62,10 @@ public sealed class LavalandSoulStabilizerSystem : EntitySystem
             return;
         }
 
-        _damageable.ClearAllDamage(target);
+        if (ent.Comp.Heal is { } heal)
+            _damageable.TryChangeDamage(target, heal, true, origin: user);
+        else
+            _damageable.ClearAllDamage(target);
         _bloodstream.TryModifyBleedAmount(target, -1000f);
         _audio.PlayPvs(ent.Comp.HealSound, target);
         if (user == target)

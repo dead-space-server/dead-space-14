@@ -77,12 +77,12 @@
     sound:
       path: /Audio/_DeadSpace/Items/Handing/gas_analyzer/gas_analyzer_drop.ogg
 
-# The regenerative core: used in hand or on someone it heals every wound at once, until it fades.
+# The regenerative core: used in hand or on someone it heals wounds at once, until it fades.
 - type: entity
   parent: BaseItem
   id: LavalandLegionSoul
   name: legion soul
-  description: A flickering remnant torn out of a legion. Pressed to a wound, its regenerative power closes every injury at once - until it fades.
+  description: A flickering remnant torn out of a legion. Pressed to a wound, its regenerative power closes injuries at once - until it fades.
   components:
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Specific/Medical/legion_soul.rsi
@@ -90,6 +90,10 @@
   - type: Item
     size: Small
   - type: LavalandRegenerativeCore
+    heal:
+      groups:
+        Brute: -20
+        Burn: -20
   - type: Perishable
     rotAfter: 180
     molsPerSecondPerUnitMass: 0
