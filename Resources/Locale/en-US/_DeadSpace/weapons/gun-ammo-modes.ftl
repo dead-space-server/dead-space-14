@@ -11,3 +11,5 @@ gun-ammo-mode-underbarrel = underbarrel
 gun-underbarrel-slot = Underbarrel
 
 ui-options-gun-ammo-mode-action = Shot type switch button on the action bar
+gun-upgrade-overheat-popup = The gun overheats!
+gun-upgrade-overheat-locked = The gun is cooling down: { $seconds } s left.

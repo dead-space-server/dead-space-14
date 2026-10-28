@@ -11,3 +11,5 @@ gun-ammo-mode-underbarrel = подствол
 gun-underbarrel-slot = Подствол
 
 ui-options-gun-ammo-mode-action = Кнопка смены типа выстрела на панели действий
+gun-upgrade-overheat-popup = Оружие перегрелось!
+gun-upgrade-overheat-locked = Оружие остывает: ещё { $seconds } с.

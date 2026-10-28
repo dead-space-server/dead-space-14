@@ -80,7 +80,12 @@ public sealed class LavalandHierophantStaffSystem : EntitySystem
         if (!CanUseStaff(ent, user))
             return;
 
-        // Only the blink here: the blessing is the staff's own action on a creature (see OnGetBlessVerb).
+        // On a living creature it is the blessing (the same as the verb in OnGetBlessVerb); anywhere else the blink.
+        if (args.Target is { } target && CanBless(target))
+        {
+            TryStartBlessing(ent, user, target);
+            return;
+        }
 
         var now = _timing.CurTime;
         if (now < ent.Comp.NextBlink)
@@ -115,8 +120,7 @@ public sealed class LavalandHierophantStaffSystem : EntitySystem
         if (!args.CanAccess || !args.CanInteract ||
             args.Using is not { } staff ||
             !TryComp<LavalandHierophantStaffComponent>(staff, out var staffComp) ||
-            !HasComp<InputMoverComponent>(target) || !HasComp<MobStateComponent>(target) || IsDead(target) ||
-            !CanUseStaff(staff, user))
+            !CanBless(target) || !CanUseStaff(staff, user))
         {
             return;
         }
@@ -128,6 +132,13 @@ public sealed class LavalandHierophantStaffSystem : EntitySystem
             Priority = 5,
             Act = () => TryStartBlessing((staff, staffComp), user, targetUid),
         });
+    }
+
+    /// <summary>A living creature that walks on its own: the blessing is only for such.</summary>
+    private bool CanBless(EntityUid target)
+    {
+        return HasComp<MobThresholdsComponent>(target) && HasComp<InputMoverComponent>(target) &&
+               HasComp<MobStateComponent>(target) && !IsDead(target);
     }
 
     private void TryStartBlessing(Entity<LavalandHierophantStaffComponent> ent, EntityUid user, EntityUid target)

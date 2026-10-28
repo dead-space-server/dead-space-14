@@ -868,6 +868,11 @@
     bossDamage:
       types:
         Blunt: 55
+  # Four quick shots and the gun overheats: it will not fire for a few seconds.
+  - type: GunUpgradeOverheat
+    shots: 4
+    resetDelay: 2
+    lockout: 4
 
 - type: Tag
   id: GunUpgradeExplosiveLavaland
