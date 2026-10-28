@@ -682,6 +682,9 @@
     description: attachment-desc-trophy-blaster-tubes
     removeComponents:
     - type: UseDelayOnShoot
+    # The mark and the swing at once, as with the kinetic machete.
+    addComponents:
+    - type: GunMeleeIndependent
     # The marker really comes faster: twice the fire rate - and with it the charge back twice as soon.
     fireRateMultiplier: 2
 

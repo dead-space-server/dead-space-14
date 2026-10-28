@@ -1,3 +1,4 @@
+using Content.Shared.DeadSpace.Weapons.Ranged.Components;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -123,6 +124,9 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
     private void OnMeleeShotAttempted(EntityUid uid, MeleeWeaponComponent comp, ref ShotAttemptedEvent args)
     {
+        if (HasComp<GunMeleeIndependentComponent>(uid)) // DS14
+            return; // DS14
+
         if (comp.NextAttack > Timing.CurTime)
             args.Cancel();
     }
@@ -131,6 +135,9 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
     {
         if (!TryComp<GunComponent>(uid, out var gun))
             return;
+
+        if (HasComp<GunMeleeIndependentComponent>(uid)) // DS14
+            return; // DS14
 
         if (gun.NextFire > component.NextAttack)
         {
