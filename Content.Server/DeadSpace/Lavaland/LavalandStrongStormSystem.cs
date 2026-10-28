@@ -104,7 +104,9 @@ public sealed class LavalandStrongStormSystem : EntitySystem
             return;
 
         ent.Comp.NextCheck = now + config.CheckInterval;
-        if (_ticker.RoundDuration() < config.EarliestStart || lavaland.WeatherStage != LavalandWeatherStage.Calm)
+        // Only in a running round: a lavaland made ready in the lobby must not get its storm (and its boss) early.
+        if (_ticker.RunLevel != GameRunLevel.InRound ||
+            _ticker.RoundDuration() < config.EarliestStart || lavaland.WeatherStage != LavalandWeatherStage.Calm)
             return;
 
         if (ent.Comp.Chance <= 0f)

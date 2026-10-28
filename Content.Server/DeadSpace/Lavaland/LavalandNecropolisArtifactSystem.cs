@@ -551,6 +551,8 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
         holeComp.ReleaseAt = now + ent.Comp.Duration;
         ent.Comp.NextUse = now + ent.Comp.Cooldown;
         _godmode.EnableGodmode(user);
+        // Out of reality: no shooting or striking from the hole while nothing can touch them.
+        EnsureComp<LavalandRealityHiddenComponent>(user);
     }
 
     private void OnHoleShutdown(Entity<LavalandRealityHoleComponent> ent, ref ComponentShutdown args)
@@ -566,6 +568,7 @@ public sealed class LavalandNecropolisArtifactSystem : EntitySystem
 
         ent.Comp.User = null;
         _godmode.DisableGodmode(user);
+        RemComp<LavalandRealityHiddenComponent>(user);
         if (_containers.TryGetContainer(ent, HoleContainer, out var container))
             _containers.Remove(user, container, destination: Transform(ent).Coordinates);
         _popup.PopupEntity(Loc.GetString("lavaland-talisman-return", ("user", user)), user, PopupType.MediumCaution);

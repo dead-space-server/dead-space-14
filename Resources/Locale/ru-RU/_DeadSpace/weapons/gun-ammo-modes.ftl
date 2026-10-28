@@ -9,3 +9,5 @@ gun-overheat-examine = [color=orange]Ствол раскалён - заряды 
 gun-ammo-mode-main = основной
 gun-ammo-mode-underbarrel = подствол
 gun-underbarrel-slot = Подствол
+
+ui-options-gun-ammo-mode-action = Кнопка смены типа выстрела на панели действий

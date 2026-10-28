@@ -270,10 +270,40 @@
     color: "#dd200b"
   - type: LavalandAshWolf
     tamed: true
+  # Out of a mine pit in one leap, no grappling hook needed.
+  - type: LavalandCaveLeaper
+  # The miners' radio on top of the borgs' own channels.
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Binary
+    - Common
+    - Supply
+  - type: ActiveRadio
+    channels:
+    - Binary
+    - Common
+    - Supply
+  # A lavaland sensor map of its own, as the miners' tablet.
+  - type: UserInterface
+    interfaces:
+      enum.LavalandSensorTabletUiKey.Key:
+        type: LavalandSensorTabletBoundUserInterface
+        requireInputValidation: false
+  - type: LavalandSensorTablet
+    scanRadius: 10
+    livingColor: White
+    deadColor: Black
+    faunaColor: Red
+    oreColor: Gold
+    lavaColor: OrangeRed
+    floorColor: "#50372d"
+    rockColor: "#96694b"
+    mobPointSize: 0.65
+    terrainPointSize: 0.52
+  # The laws and the station map come from the borg chassis itself.
   - type: ActionGrant
     actions:
-    - ActionViewLaws
-    - ActionPAIOpenMap
+    - ActionAshWolfLavalandMap
     - ActionAshWolfRush
     - ActionAshWolfLeap
     - ActionAshWolfRetreat
@@ -340,6 +370,22 @@
   - type: FootstepModifier
     footstepSoundCollection:
       collection: FootstepBorgSec
+
+- type: entity
+  parent: BaseAction
+  id: ActionAshWolfLavalandMap
+  name: карта Лаваленда
+  description: Открыть встроенную карту разведки Лаваленда.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    icon:
+      sprite: _DeadSpace/Lavaland/Objects/SensorTablet.rsi
+      state: tablet
+    itemIconStyle: NoItem
+  - type: InstantAction
+    event: !type:OpenUiActionEvent
+      key: enum.LavalandSensorTabletUiKey.Key
 
 - type: entity
   parent: BaseAction

@@ -137,6 +137,13 @@ public sealed class CCCCVars
     public static readonly CVarDef<bool> ActionsRestoreItemSlots =
         CVarDef.Create("interface.actions_restore_item_slots", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 
+    /// <summary>
+    /// A gun with several shot types puts its switch on the hotbar while held. Off - only its key and using it in hand
+    /// switch it. Replicated: the server gives out the action.
+    /// </summary>
+    public static readonly CVarDef<bool> GunAmmoModeAction =
+        CVarDef.Create("interface.gun_ammo_mode_action", true, CVar.CLIENT | CVar.REPLICATED | CVar.ARCHIVE);
+
     public static readonly CVarDef<bool> AshWalkersEnabled =
         CVarDef.Create("lavaland.ash_walkers_enabled", true, CVar.SERVER | CVar.REPLICATED);
 

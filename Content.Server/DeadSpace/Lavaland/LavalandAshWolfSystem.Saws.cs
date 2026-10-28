@@ -4,9 +4,12 @@ using System.Numerics;
 using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Server.Gatherable.Components;
 using Content.Shared.DeadSpace.Lavaland;
+using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
@@ -144,6 +147,9 @@ public sealed partial class LavalandAshWolfSystem
         saw.Angle += SpiralTurnSpeed * frameTime;
         saw.Velocity.X += SpiralGrowSpeed * frameTime;
         var position = saw.Origin + new Vector2(MathF.Cos(saw.Angle), MathF.Sin(saw.Angle)) * saw.Velocity.X;
+        if (BreakOnWall(uid, position))
+            return;
+
         _transform.SetWorldPosition(uid, position);
 
         foreach (var victim in GetVictims(wolf, wolf.Comp, new MapCoordinates(position, Transform(uid).MapID), SawHitRange))
@@ -162,6 +168,9 @@ public sealed partial class LavalandAshWolfSystem
         TransformComponent xform, float frameTime)
     {
         var position = _transform.GetWorldPosition(xform) + saw.Velocity * frameTime;
+        if (BreakOnWall(uid, position))
+            return;
+
         _transform.SetWorldPosition(uid, position);
         foreach (var victim in GetVictims(wolf, wolf.Comp, new MapCoordinates(position, xform.MapID), SawHitRange))
         {
@@ -213,8 +222,55 @@ public sealed partial class LavalandAshWolfSystem
             return;
         }
 
-        if (distance > 0.01f)
-            _transform.SetWorldPosition(uid, position + delta / distance * MathF.Min(distance, wolf.Comp.SkySawSpeed * Haste(wolf.Comp) * frameTime));
+        if (distance <= 0.01f)
+            return;
+
+        var next = position + delta / distance * MathF.Min(distance, wolf.Comp.SkySawSpeed * Haste(wolf.Comp) * frameTime);
+        if (!BreakOnWall(uid, next))
+            _transform.SetWorldPosition(uid, next);
+    }
+
+    /// <summary>
+    /// A saw does not just go through walls. Rock and ore it cuts (see <see cref="CutRock"/>); any other wall it strikes
+    /// for <see cref="LavalandAshWolfComponent.SawWallDamage"/>: broken, the saw flies on through the gap; standing,
+    /// the saw shatters there and is gone, hurting no one behind it.
+    /// </summary>
+    private bool BreakOnWall(EntityUid saw, Vector2 position)
+    {
+        if (!TryComp<LavalandAshWolfSawComponent>(saw, out var sawComp) ||
+            !TryComp<LavalandAshWolfComponent>(sawComp.Wolf, out var wolf))
+        {
+            return false;
+        }
+
+        var xform = Transform(saw);
+        if (xform.GridUid is not { } gridUid || !TryComp<MapGridComponent>(gridUid, out var grid))
+            return false;
+
+        var local = Vector2.Transform(position, _transform.GetInvWorldMatrix(gridUid));
+        var tile = _map.LocalToTile(gridUid, grid, new EntityCoordinates(gridUid, local));
+        var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
+        while (anchored.MoveNext(out var blocker))
+        {
+            if (blocker is not { } blockerUid ||
+                HasComp<GatherableComponent>(blockerUid) ||
+                !TryComp<PhysicsComponent>(blockerUid, out var body) ||
+                !body.Hard || !body.CanCollide ||
+                (body.CollisionLayer & (int) CollisionGroup.Impassable) == 0)
+            {
+                continue;
+            }
+
+            _damage.TryChangeDamage(blockerUid, wolf.SawWallDamage, origin: sawComp.Wolf);
+            PlaySound(wolf.SawSound, blockerUid, -4f);
+            if (TerminatingOrDeleted(blockerUid) || EntityManager.IsQueuedForDeletion(blockerUid))
+                continue;
+
+            QueueDel(saw);
+            return true;
+        }
+
+        return false;
     }
 
     private void UpdateReturningSaw(EntityUid uid, LavalandAshWolfSawComponent saw, Entity<LavalandAshWolfComponent> wolf, float frameTime)

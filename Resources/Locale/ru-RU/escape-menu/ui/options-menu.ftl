@@ -419,4 +419,5 @@ ui-options-function-open-language-menu = Открыть меню выбора я
 ui-options-function-use-world-target-action = Использовать способность по кнопке
 ui-options-function-parry = Парирование
 ##DS14-end
-ui-options-function-switch-component-mode = Переключить режим предмета в руке (в т.ч. тип выстрела)
+ui-options-function-switch-component-mode = Переключить режим компонентов предмета
+ui-options-function-switch-gun-ammo-mode = Переключить тип выстрела оружия

@@ -30,6 +30,10 @@ public sealed partial class GunAmmoModesComponent : Component
     [DataField, AutoNetworkedField]
     public EntityUid? SwitchActionEntity;
 
+    /// <summary>Using the gun in hand switches the mode too (off where that key does something else, a bolt).</summary>
+    [DataField]
+    public bool SwitchOnUse = true;
+
     [DataField]
     public SoundSpecifier? SwitchSound = new SoundPathSpecifier("/Audio/Weapons/Guns/Misc/selector.ogg");
 
@@ -55,6 +59,13 @@ public sealed partial class GunAmmoMode
     /// </summary>
     [DataField]
     public string? Slot;
+
+    /// <summary>
+    /// How many of the gun's own charges this mode holds (the repeater's two, the shotgun's one); null - as it is.
+    /// Switched to a smaller one, the charges over it are lost; to a larger one, the rest recharge.
+    /// </summary>
+    [DataField]
+    public int? Capacity;
 
     /// <summary>Charges of the gun's own ammo spent on a shot; the mode does not fire with fewer left.</summary>
     [DataField]

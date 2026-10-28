@@ -1,6 +1,8 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Numerics;
+using Content.Shared.Chasm;
+using Content.Shared.DeadSpace.Chasm;
 using Content.Shared.DeadSpace.Lavaland.ChromiteCaves;
 using Robust.Client.Animations;
 using Robust.Client.ComponentTrees;
@@ -169,13 +171,19 @@ public sealed class LavalandShadowOverlay : Overlay
 
     private void DrawCountdown(DrawingHandleScreen handle)
     {
-        if (_player.LocalEntity is not { } local ||
-            !_entities.TryGetComponent<LavalandShadowTimerComponent>(local, out var timer))
-        {
+        if (_player.LocalEntity is not { } local)
             return;
-        }
 
-        var left = (timer.EndTime - _timing.CurTime).TotalSeconds;
+        // The deep night's shadows, or else the moon boots' (and the like) hold over a chasm while it lasts.
+        TimeSpan endTime;
+        if (_entities.TryGetComponent<LavalandShadowTimerComponent>(local, out var timer))
+            endTime = timer.EndTime;
+        else if (_entities.TryGetComponent<ChasmHoverGraceComponent>(local, out var grace) && IsOverChasm(local))
+            endTime = grace.FallAt;
+        else
+            return;
+
+        var left = (endTime - _timing.CurTime).TotalSeconds;
         if (left <= 0)
             return;
 
@@ -193,6 +201,26 @@ public sealed class LavalandShadowOverlay : Overlay
         var position = screen - size / 2f;
         handle.DrawString(_font, position + new Vector2(2f, 2f), text, Color.Black.WithAlpha(0.7f));
         handle.DrawString(_font, position, text, color);
+    }
+
+    private bool IsOverChasm(EntityUid uid)
+    {
+        var xform = _entities.GetComponent<TransformComponent>(uid);
+        if (xform.GridUid is not { } gridUid ||
+            !_entities.TryGetComponent<Robust.Shared.Map.Components.MapGridComponent>(gridUid, out var grid))
+        {
+            return false;
+        }
+
+        var map = _entities.System<SharedMapSystem>();
+        var anchored = map.GetAnchoredEntitiesEnumerator(gridUid, grid, map.TileIndicesFor(gridUid, grid, xform.Coordinates));
+        while (anchored.MoveNext(out var anchoredUid))
+        {
+            if (_entities.HasComponent<ChasmComponent>(anchoredUid))
+                return true;
+        }
+
+        return false;
     }
 
     private void DrawShadows(DrawingHandleWorld handle, Robust.Shared.Map.MapId map)

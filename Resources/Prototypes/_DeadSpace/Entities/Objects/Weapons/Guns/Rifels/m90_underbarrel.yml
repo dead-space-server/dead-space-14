@@ -40,6 +40,8 @@
       gun_chamber: !type:ContainerSlot
       underbarrel_slot: !type:ContainerSlot
   - type: GunAmmoModes
+    # Using it in hand racks the bolt: the mode is switched by its action or the mode key.
+    switchOnUse: false
     modes:
     # The rifle itself: magazine and bolt as usual.
     - name: gun-ammo-mode-main

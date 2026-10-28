@@ -37,6 +37,12 @@ public sealed class RechargeBasicEntityAmmoSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
+
+        // DS14-start: the server alone gives charges back. Predicted on the client's clock, a charge came back a moment
+        // early now and then, and the client played a shot the server never fired (phantom shots).
+        if (_netManager.IsClient)
+            return;
+        // DS14-end
         var query = EntityQueryEnumerator<RechargeBasicEntityAmmoComponent, BasicEntityAmmoProviderComponent>();
 
         while (query.MoveNext(out var uid, out var recharge, out var ammo))

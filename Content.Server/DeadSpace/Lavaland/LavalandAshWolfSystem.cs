@@ -6,6 +6,7 @@ using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Server.Gatherable;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Camera;
+using Content.Shared.Chasm;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
@@ -17,9 +18,11 @@ using Content.Shared.DeadSpace.Lavaland.Bosses;
 using Content.Shared.DeadSpace.Weapons.Parry;
 using Content.Shared.Ghost;
 using Content.Shared.Jittering;
+using Content.Shared.Maps;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Pulling.Components;
+using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Stunnable;
 using Robust.Server.Player;
@@ -27,6 +30,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Enums;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
@@ -45,6 +49,7 @@ namespace Content.Server.DeadSpace.Lavaland;
 public sealed partial class LavalandAshWolfSystem : EntitySystem
 {
     [Dependency] private readonly DamageableSystem _damage = default!;
+    [Dependency] private readonly Content.Shared.Examine.ExamineSystemShared _examine = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly Content.Server.Ghost.Roles.ToggleableGhostRoleSystem _ghostRoles = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
@@ -66,6 +71,7 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
     [Dependency] private readonly SharedStaminaSystem _stamina = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly TurfSystem _turf = default!;
 
     private static readonly TimeSpan HudInterval = TimeSpan.FromSeconds(0.25);
 
@@ -85,6 +91,7 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
             after: [typeof(Content.Server.NameIdentifier.NameIdentifierSystem), typeof(Content.Server.RandomMetadata.RandomMetadataSystem)]);
         SubscribeLocalEvent<LavalandAshWolfComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<LavalandAshWolfComponent, BeforeDamageChangedEvent>(OnBeforeDamage);
+        SubscribeLocalEvent<LavalandAshWolfComponent, ChasmFallingAttemptEvent>(OnChasmFallingAttempt);
         SubscribeLocalEvent<LavalandAshWolfComponent, DamageModifyEvent>(OnDamageModify);
         SubscribeLocalEvent<LavalandAshWolfComponent, DamageChangedEvent>(OnDamageChanged);
         SubscribeNetworkEvent<LavalandAshWolfQteResultEvent>(OnQteResult);
@@ -349,10 +356,20 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
         if (UpdateRaidShutdown(ent, now))
             return;
 
+        // Only those it can see are hunted: no leaping on a miner behind the rock, out of its sight.
         var players = GetPlayers(ent.Owner, ChaseRange(comp));
+        players.RemoveAll(player => !_examine.InRangeUnOccluded(ent.Owner, player, ChaseRange(comp)));
+
+        // Once the fight is over it takes up a new one only with someone close by and in sight, not anyone in range.
+        if (!comp.Active)
+        {
+            var watch = comp.WatchRange;
+            players.RemoveAll(player => (Position(player) - Position(ent)).LengthSquared() > watch * watch);
+        }
+
         if (players.Count == 0)
         {
-            // Everyone ran or died: it waits, and after a while the fight is over.
+            // Everyone ran, hid or died: it waits, and after a while the fight is over.
             if (comp.Active && now - comp.LastSeenPlayer > comp.LoseInterest)
             {
                 EndAttack(ent, now);
@@ -377,12 +394,79 @@ public sealed partial class LavalandAshWolfSystem : EntitySystem
         if (now < comp.StaggerUntil || comp.Sliding)
             return;
 
+        // Thrown or walked onto a chasm between its attacks: it does not hang there, it leaps off.
+        if (TryLeapOffChasm(ent))
+            return;
+
         var target = Nearest(ent.Owner, players);
         comp.Target = target;
         WalkTowards(ent.Owner, Position(target), comp.WalkSpeed * Haste(comp) * frameTime, 2.5f);
 
         if (now >= comp.NextAttack)
             ChooseAttack(ent, now);
+    }
+
+    /// <summary>
+    /// The tamed wolf, alive and on its feet, does not fall into a chasm: it leaps off on the next update instead.
+    /// Critical or dead, it falls as any borg.
+    /// </summary>
+    private void OnChasmFallingAttempt(Entity<LavalandAshWolfComponent> ent, ref ChasmFallingAttemptEvent args)
+    {
+        if (ent.Comp.Tamed && _mobState.IsAlive(ent))
+            args.Cancel();
+    }
+
+    /// <summary>
+    /// The boss (immune to chasms, as all of the lavaland's bosses) does not stand over one: it leaps to the nearest
+    /// solid tile around, as far as <see cref="LavalandAshWolfComponent.ChasmLeapRange"/>.
+    /// </summary>
+    private bool TryLeapOffChasm(Entity<LavalandAshWolfComponent> ent)
+    {
+        var xform = Transform(ent);
+        if (xform.GridUid is not { } gridUid || !TryComp<MapGridComponent>(gridUid, out var grid))
+            return false;
+
+        var here = _map.TileIndicesFor(gridUid, grid, xform.Coordinates);
+        if (!IsChasm(gridUid, grid, here))
+            return false;
+
+        for (var radius = 1; radius <= ent.Comp.ChasmLeapRange; radius++)
+        {
+            for (var x = -radius; x <= radius; x++)
+            {
+                for (var y = -radius; y <= radius; y++)
+                {
+                    if (Math.Max(Math.Abs(x), Math.Abs(y)) != radius)
+                        continue;
+
+                    var tile = here + new Vector2i(x, y);
+                    if (!_map.TryGetTileRef(gridUid, grid, tile, out var tileRef) || tileRef.Tile.IsEmpty ||
+                        IsChasm(gridUid, grid, tile) || _turf.IsTileBlocked(tileRef, CollisionGroup.Impassable))
+                    {
+                        continue;
+                    }
+
+                    Spawn(ent.Comp.Dust, xform.Coordinates);
+                    MoveTo(ent, _transform.ToMapCoordinates(_map.GridTileToLocal(gridUid, grid, tile)).Position);
+                    Spawn(ent.Comp.Dust, Transform(ent).Coordinates);
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private bool IsChasm(EntityUid gridUid, MapGridComponent grid, Vector2i tile)
+    {
+        var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
+        while (anchored.MoveNext(out var uid))
+        {
+            if (HasComp<ChasmComponent>(uid))
+                return true;
+        }
+
+        return false;
     }
 
     private void ChooseAttack(Entity<LavalandAshWolfComponent> ent, TimeSpan now)

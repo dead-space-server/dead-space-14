@@ -97,7 +97,7 @@
       message: lavaland-day-cycle-night
       messageColor: "#c46a3a"
       deepNight:
-        chance: 0.3
+        chance: 0.15
         duration: 300
         afterDuration: 600
         lightColor: "#000000"

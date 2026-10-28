@@ -434,4 +434,5 @@ ui-options-admin-strip-overlay-setting = Show strip overlay by default
 
 ui-options-function-use-world-target-action = Use targeted ability
 ui-options-function-switch-component-mode = Switch held item component mode
+ui-options-function-switch-gun-ammo-mode = Switch weapon shot type
 ui-options-function-parry = Parry

@@ -8,7 +8,16 @@ public partial class GunSystem
     {
         base.InitializeBasicEntity();
         SubscribeLocalEvent<BasicEntityAmmoProviderComponent, UpdateAmmoCounterEvent>(OnBasicEntityAmmoCount);
+        SubscribeLocalEvent<BasicEntityAmmoProviderComponent, AfterAutoHandleStateEvent>(OnBasicEntityState); // DS14
     }
+
+    // DS14-start
+    /// <summary>The server alone recharges the ammo: its new count is drawn as it comes.</summary>
+    private void OnBasicEntityState(Entity<BasicEntityAmmoProviderComponent> ent, ref AfterAutoHandleStateEvent args)
+    {
+        UpdateAmmoCount(ent, prediction: false);
+    }
+    // DS14-end
 
     private void OnBasicEntityAmmoCount(Entity<BasicEntityAmmoProviderComponent> ent, ref UpdateAmmoCounterEvent args)
     {

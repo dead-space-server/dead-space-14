@@ -390,13 +390,13 @@
     wideAnimationRotation: -135
     damage:
       types:
-        Blunt: 20
+        Blunt: 25
     soundHit:
       collection: MetalThud
   - type: IncreaseDamageOnWield
     damage:
       types:
-        Blunt: 22
+        Blunt: 30
         Structural: 15
 
 - type: entity
@@ -422,15 +422,15 @@
     wideAnimationRotation: -135
     damage:
       types:
-        Slash: 10
-        Blunt: 8
+        Slash: 12
+        Blunt: 9
     soundHit:
       collection: MetalThud
   - type: IncreaseDamageOnWield
     damage:
       types:
-        Piercing: 5
-        Slash: 5
+        Piercing: 6
+        Slash: 6
         Structural: 15
 
 - type: entity
@@ -538,8 +538,8 @@
       collection: MetalThud
     angle: 0
     animation: WeaponArcThrust
-    # The sprite turned a quarter so the blade points where it strikes.
-    wideAnimationRotation: 90
+    # The blade on the icon points up and right: turned so it points where it strikes.
+    wideAnimationRotation: -135
     range: 2
   # Right button in combat mode: a crusher mark; held, the mark builds up (the crit grows), held too long it blows up.
   - type: LavalandChargedMarker

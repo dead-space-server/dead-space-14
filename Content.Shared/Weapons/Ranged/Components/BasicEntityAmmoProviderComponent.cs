@@ -8,11 +8,12 @@ namespace Content.Shared.Weapons.Ranged.Components;
 ///     Simply provides a certain capacity of entities that cannot be reloaded through normal means and have
 ///     no special behavior like cycling, magazine
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)] // DS14: the client redraws the counter on a recharge
 public sealed partial class BasicEntityAmmoProviderComponent : AmmoProviderComponent
 {
     [ViewVariables(VVAccess.ReadWrite)]
     [DataField("proto", required: true, customTypeSerializer:typeof(PrototypeIdSerializer<EntityPrototype>))]
+    [AutoNetworkedField] // DS14: added at runtime (a crusher capsule) or switched (fire modes), the client must know it
     public string Proto = default!;
 
     /// <summary>

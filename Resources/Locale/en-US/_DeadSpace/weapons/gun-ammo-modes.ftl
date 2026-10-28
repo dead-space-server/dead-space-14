@@ -9,3 +9,5 @@ gun-overheat-examine = [color=orange]The barrel is red-hot - charges come back s
 gun-ammo-mode-main = main
 gun-ammo-mode-underbarrel = underbarrel
 gun-underbarrel-slot = Underbarrel
+
+ui-options-gun-ammo-mode-action = Shot type switch button on the action bar

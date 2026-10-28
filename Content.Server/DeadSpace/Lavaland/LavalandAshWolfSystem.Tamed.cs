@@ -98,6 +98,11 @@ public sealed partial class LavalandAshWolfSystem
     private void UpdateTamed(Entity<LavalandAshWolfComponent> ent, TimeSpan now)
     {
         var comp = ent.Comp;
+
+        // Alive, it leaps off a chasm it stepped on (see OnChasmFallingAttempt); broken, it falls like any borg.
+        if (comp.Attack == LavalandAshWolfAttack.None && !comp.Sliding && _mobState.IsAlive(ent))
+            TryLeapOffChasm(ent);
+
         if (comp.Attack == LavalandAshWolfAttack.None)
             return;
 

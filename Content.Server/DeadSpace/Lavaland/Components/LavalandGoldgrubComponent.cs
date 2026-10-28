@@ -139,15 +139,15 @@ public sealed partial class LavalandGoldgrubComponent : Component
 
     /// <summary>After the robbery it runs off for no longer than this...</summary>
     [DataField]
-    public TimeSpan AmbushFleeTime = TimeSpan.FromSeconds(3);
+    public TimeSpan AmbushFleeTime = TimeSpan.FromSeconds(6);
 
     /// <summary>...and no farther than this many tiles, then stops and digs in.</summary>
     [DataField]
-    public float AmbushFleeDistance = 5f;
+    public float AmbushFleeDistance = 8f;
 
     /// <summary>Digging in takes this long; every hit meanwhile starts it over.</summary>
     [DataField]
-    public TimeSpan AmbushDigDelay = TimeSpan.FromSeconds(1);
+    public TimeSpan AmbushDigDelay = TimeSpan.FromSeconds(4);
 
     [ViewVariables]
     public TimeSpan? AmbushFleeUntil;

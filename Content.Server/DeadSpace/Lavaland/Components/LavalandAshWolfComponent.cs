@@ -88,6 +88,17 @@ public sealed partial class LavalandAshWolfComponent : Component
     [DataField]
     public float WatchRange = 16f;
 
+    /// <summary>
+    /// What a boss saw does to a wall in its way that it cannot cut like rock: breaking it, the saw flies on; if not,
+    /// it shatters.
+    /// </summary>
+    [DataField]
+    public DamageSpecifier SawWallDamage = new() { DamageDict = { ["Structural"] = 100 } };
+
+    /// <summary>How far (tiles) it looks for solid ground to leap to off a chasm.</summary>
+    [DataField]
+    public int ChasmLeapRange = 4;
+
     [DataField]
     public float WalkSpeed = 4.4f;
 

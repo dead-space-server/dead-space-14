@@ -327,7 +327,7 @@
           True: { visible: False }
           False: { visible: True }
         #todo: add other 'empty' animations
-  # Two charges of its own. The spread takes one too, but fires half as often and its charge comes back half as fast.
+  # A bolt holds two charges, as the repeater; the spread one, as the shotgun, and it comes back half as fast.
   - type: BasicEntityAmmoProvider
     proto: BulletKinetic
     capacity: 2
@@ -336,9 +336,10 @@
     modes:
     - name: gun-ammo-mode-kinetic-bolt
       proto: BulletKinetic
+      capacity: 2
     - name: gun-ammo-mode-kinetic-spread
       proto: BulletKineticSeniorSpread
-      fireRateMultiplier: 0.5
+      capacity: 1
       rechargeMultiplier: 2
   - type: Gun
     fireRate: 1

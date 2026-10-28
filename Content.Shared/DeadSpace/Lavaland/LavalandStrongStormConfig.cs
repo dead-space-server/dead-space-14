@@ -26,11 +26,11 @@ public sealed partial class LavalandStrongStormConfig
     public TimeSpan CheckInterval = TimeSpan.FromMinutes(5);
 
     [DataField]
-    public float BaseChance = 0.25f;
+    public float BaseChance = 0.125f;
 
     /// <summary>Added to the chance after each roll that brought nothing.</summary>
     [DataField]
-    public float ChanceIncrease = 0.1f;
+    public float ChanceIncrease = 0.05f;
 
     /// <summary>The alarm before the wind rises.</summary>
     [DataField]

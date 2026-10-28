@@ -199,6 +199,7 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(ContentKeyFunctions.ToggleItemPriority); // DS14
             AddButton(ContentKeyFunctions.UseWorldTargetAction); // DS14
             AddButton(DeadSpaceKeys.SwitchComponentMode); // DS14
+            AddButton(DeadSpaceKeys.SwitchGunAmmoMode); // DS14
             AddButton(ContentKeyFunctions.Parry); // DS14
 
             AddHeader("ui-options-header-interaction-adv");
