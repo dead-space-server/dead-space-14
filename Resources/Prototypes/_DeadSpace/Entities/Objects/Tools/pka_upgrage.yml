@@ -61,4 +61,4 @@
     tags: [ GunUpgradeReloadSpeed ]
     examineText: gun-upgrade-examine-text-reload
   - type: GunUpgradeFireRate
-    coefficient: 2.2
+    coefficient: 1.8

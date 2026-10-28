@@ -283,6 +283,8 @@
     - Binary
     - Common
     - Supply
+  # A handheld radio built in: its frequency heard and spoken on, switched on from its own action bar.
+  - type: IntegratedRadio
   # A lavaland sensor map of its own, as the miners' tablet.
   - type: UserInterface
     interfaces:
