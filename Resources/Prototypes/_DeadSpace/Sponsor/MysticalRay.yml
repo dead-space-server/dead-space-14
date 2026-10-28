@@ -24,6 +24,7 @@
     - id: ClothingShoesBootsMagMysticalRay
     - id: ClothingOuterCoatMysticalRay
     - id: ClothingBeltHolsterMysticalRay
+    - id: ClothingBeltHolsterMysticalRay2
     - id: WhistleMysticalRay
     - id: ClothingEyesHudMedicalMysticalRay
     - id: JetpackVoidFilleddMysticalRay
@@ -173,7 +174,7 @@
 
 # Mask
 - type: entity
-  parent: ClothingMaskGas
+  parent: ClothingMaskGasSponsor
   id: ClothingMaskMysticalRay
   name: Заслон CriticalForce
   description: Вы недостойны смотреть ему в глаза.
@@ -228,17 +229,19 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Icon
-    sprite: _DeadSpace/Sponsor/Wisdom/pda.rsi
+    sprite: _DeadSpace/Sponsor/MysticalRay/pda.rsi
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/Wisdom/pda.rsi
+    sprite: _DeadSpace/Sponsor/MysticalRay/pda.rsi
   - type: CartridgeLoader
     uiKey: enum.PdaUiKey.Key
     preinstalled:
     - CrewManifestCartridge
     - NotekeeperCartridge
     - NewsReaderCartridge
+    - BankCartridge
     - AstroNavCartridge
     - MedTekCartridge
+    - MessengerCartridge
   - type: PdaBorderColor
     borderColor: "#222227"
   - type: Tag
@@ -253,9 +256,9 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/Wisdom/coat.rsi
+    sprite: _DeadSpace/Sponsor/MysticalRay/coat.rsi
   - type: Clothing
-    sprite: _DeadSpace/Sponsor/Wisdom/coat.rsi
+    sprite: _DeadSpace/Sponsor/MysticalRay/coat.rsi
   - type: Item
     size: Normal
     shape:
@@ -267,14 +270,30 @@
 - type: entity
   parent: ClothingNeckBase
   id: ClothingBeltHolsterMysticalRay
-  name: набедренная сумка CriticalForce
-  description: Набедренная сумка для удобного ношения дефибриллятора.
+  name: накидка CriticalForce 
+  description: Нося эту накидку вы чувствуете что должны спасти кого то особенного. И конечно же за кредиты.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Sponsor/Wisdom/hipbag.rsi
+    sprite: _DeadSpace/Sponsor/MysticalRay/hipbag.rsi
   - type: Clothing
-    sprite: _DeadSpace/Sponsor/Wisdom/hipbag.rsi
+    sprite: _DeadSpace/Sponsor/MysticalRay/hipbag.rsi
+    slots:
+    - neck
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingBeltHolsterMysticalRay2
+  name: медаль CriticalForce 
+  description: Высшая награда за проявленную работу среди сотрудников CriticalForce.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/MysticalRay/neck.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/MysticalRay/neck.rsi
     slots:
     - neck
   - type: Tag
@@ -284,8 +303,8 @@
 - type: entity
   parent: BaseItem
   id: WhistleMysticalRay
-  name: свисток CriticalForce
-  description: Внимание! Белый металлический свисток с эмблемой CriticalForce.
+  name: Внимание! 
+  description: Вас видят.
   categories: [ HideSpawnMenu ]
   components:
   - type: Item
