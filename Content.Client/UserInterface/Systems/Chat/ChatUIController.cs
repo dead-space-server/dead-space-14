@@ -993,7 +993,9 @@ public sealed partial class ChatUIController : UIController
     public void ProcessChatMessage(ChatMessage msg, bool speechBubble = true)
     {
         //DS-14 start
-        _ent.System<PsychiatryClientSystem>().GarbleHeard(msg);
+        // A chat message may come before the entity systems are up (connecting, a test pair being reset).
+        if (_ent.TrySystem<PsychiatryClientSystem>(out var psychiatry))
+            psychiatry.GarbleHeard(msg);
         //DS-14 end
         // color the name unless it's something like "the old man"
         if ((msg.Channel == ChatChannel.Local || msg.Channel == ChatChannel.Whisper) && _chatNameColorsEnabled)
