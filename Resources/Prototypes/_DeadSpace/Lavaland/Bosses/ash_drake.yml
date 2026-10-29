@@ -342,6 +342,8 @@
     music: /Audio/_DeadSpace/Lavaland/Bosses/drake_fight.ogg
     deathSound: /Audio/_DeadSpace/Lavaland/AshDrake/demon_dies.ogg
     deathRewards:
+    - LavalandNecropolisChestHardsuit
+    - LavalandNecropolisChest
     - LavalandNecropolisChest
     - AshDrakeTrophy
     uniqueRewards:
