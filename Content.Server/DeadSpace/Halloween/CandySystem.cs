@@ -70,6 +70,8 @@ public sealed class CandySystem : EntitySystem
     [Dependency] private readonly SharedContentEyeSystem _eye = default!;
     [Dependency] private readonly ThrowingSystem _throwing = default!;
 
+    private static readonly ProtoId<TagPrototype> HighRiskItemTag = "HighRiskItem";
+
     private readonly Dictionary<EntityUid, string> _lastCandy = new();
 
     public override void Initialize()
@@ -155,12 +157,10 @@ public sealed class CandySystem : EntitySystem
             case CandyEffectKind.BodySwap:
                 BodySwap(user);
                 break;
-// DS14-start: put the player into the DS14 half-critical (PreCritical) state
             case CandyEffectKind.TooSweet:
                 if (_mobState.IsAlive(user))
                     _mobState.ChangeMobState(user, MobState.PreCritical, origin: user);
                 break;
-// DS14-end
             case CandyEffectKind.Earplugs:
                 if (TryComp<ActorComponent>(user, out var earActor))
                     RaiseNetworkEvent(new CandyMuteEvent(TimeSpan.FromSeconds(30)), earActor.PlayerSession.Channel);
@@ -327,10 +327,8 @@ public sealed class CandySystem : EntitySystem
 
     private void CloneItem(EntityUid item, EntityCoordinates coords)
     {
-        // DS14-start: never duplicate high-risk items (nuke disk, captain ID, hyposprays, etc.)
-        if (_tags.HasTag(item, "HighRiskItem"))
+        if (_tags.HasTag(item, HighRiskItemTag))
             return;
-        // DS14-end
 
         var proto = MetaData(item).EntityPrototype;
         if (proto == null || proto.Abstract || proto.HideSpawnMenu)
