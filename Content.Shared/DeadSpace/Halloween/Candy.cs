@@ -26,7 +26,7 @@ public enum CandyEffectKind : byte
     Nausea,
     Oops,
     CrispyToffee,
-    BodySwap,
+    ControlInvert,
     TooSweet,
     Earplugs,
     Butterfingers,
@@ -117,3 +117,8 @@ public sealed partial class CandyMoneyTrailComponent : Component
     [DataField]
     public TimeSpan NextDrop;
 }
+/// <summary>
+/// Marks a player whose movement controls are inverted (CandyControlInvert effect).
+/// </summary>
+[RegisterComponent, NetworkedComponent]
+public sealed partial class CandyInvertControlsComponent : Component;

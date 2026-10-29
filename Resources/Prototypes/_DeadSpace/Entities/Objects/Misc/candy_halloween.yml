@@ -1,4 +1,3 @@
-# DS14-start: halloween candy prototypes
 - type: entity
   parent: FoodBase
   id: HalloweenCandy
@@ -43,9 +42,7 @@
   - type: Tag
     tags:
     - FoodSnack
-# DS14-start: allow special-digestion races (xenomorph etc.) to eat candies
     - Pill
-# DS14-end
 
 # Individual candy prototypes: one per effect. Sprites stay random (inherited RandomSprite).
 
@@ -187,11 +184,11 @@
 
 - type: entity
   parent: HalloweenCandy
-  id: CandyBodySwap
-  suffix: BodySwap
+  id: CandyControlInvert
+  suffix: ControlInvert
   components:
   - type: Candy
-    effect: BodySwap
+    effect: ControlInvert
 
 - type: entity
   parent: HalloweenCandy
@@ -263,11 +260,10 @@
     - id: CandyNausea
     - id: CandyOops
     - id: CandyCrispyToffee
-    - id: CandyBodySwap
+    - id: CandyControlInvert
     - id: CandyTooSweet
     - id: CandyEarplugs
     - id: CandyButterfingers
     - id: CandyJinx
     - id: CandyImAdequate
     - id: CandyVulpEater
-# DS14-end

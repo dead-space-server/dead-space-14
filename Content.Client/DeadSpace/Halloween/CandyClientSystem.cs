@@ -16,11 +16,9 @@ namespace Content.Client.DeadSpace.Halloween;
 /// </summary>
 public sealed class CandyClientSystem : EntitySystem
 {
-    // DS14-start: candy effect sound, played locally with a smooth fade-out
     private const string AnnounceSound = "/Audio/_DeadSpace/Halloween/Candy.ogg";
     private const float FadeOutSeconds = 2f;
     private const float FadeOutVolumeDb = -50f;
-    // DS14-end
 
     [Dependency] private readonly AudioSystem _audio = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
@@ -32,7 +30,6 @@ public sealed class CandyClientSystem : EntitySystem
 
     private TimeSpan _tintEndTime = TimeSpan.Zero;
     private TimeSpan _muteEndTime = TimeSpan.Zero;
-    // DS14: candy effect sound fade state
     private EntityUid? _announceSound;
     private TimeSpan _announceSoundStart;
     private TimeSpan _announceSoundEnd;
@@ -57,8 +54,6 @@ public sealed class CandyClientSystem : EntitySystem
             _overlayMan.RemoveOverlay(_tintOverlay);
             _tintOverlay = null;
         }
-
-        // DS14-start: smooth fade-out of the candy effect sound
         if (_announceSound != null)
         {
             var length = _announceSoundEnd - _announceSoundStart;
@@ -76,7 +71,6 @@ public sealed class CandyClientSystem : EntitySystem
                 _audio.SetVolume(_announceSound, FadeOutVolumeDb * t);
             }
         }
-        // DS14-end
 
         if (_muteEndTime != TimeSpan.Zero && _timing.CurTime >= _muteEndTime)
         {
@@ -105,8 +99,6 @@ public sealed class CandyClientSystem : EntitySystem
         _announceOverlay.Show(name, 4f);
         _audio.PlayGlobal(new SoundPathSpecifier(AnnounceSound), Filter.Local(), false, AudioParams.Default.WithVolume(-4f));
     }
-
-    // DS14-start: play the sound and smoothly fade it out at the end
     private void StartAnnounceSound()
     {
         if (_announceSound != null)
@@ -121,8 +113,6 @@ public sealed class CandyClientSystem : EntitySystem
         _announceSoundEnd = _timing.CurTime + TimeSpan.FromSeconds(length);
         _announceSoundStart = _timing.CurTime;
     }
-
-    // DS14-end
 
     private void OnScreenTint(CandyScreenTintEvent ev)
     {

@@ -154,12 +154,11 @@ public sealed class CandySystem : EntitySystem
             case CandyEffectKind.CrispyToffee:
                 CrispyToffee(user);
                 break;
-            case CandyEffectKind.BodySwap:
-                BodySwap(user);
+            case CandyEffectKind.ControlInvert:
+                InvertControls(user);
                 break;
             case CandyEffectKind.TooSweet:
-                if (_mobState.IsAlive(user))
-                    _mobState.ChangeMobState(user, MobState.PreCritical, origin: user);
+                TooSweet(user);
                 break;
             case CandyEffectKind.Earplugs:
                 if (TryComp<ActorComponent>(user, out var earActor))
@@ -325,9 +324,32 @@ public sealed class CandySystem : EntitySystem
         }
     }
 
+    private void TooSweet(EntityUid user)
+    {
+        if (!_mobState.IsAlive(user))
+            return;
+
+        // Pin the total damage exactly at the PreCritical threshold, otherwise the state
+        // gets recalculated back to Alive a moment later. A single Blunt entry keeps the
+        // total equal to the threshold (SetAllDamage would multiply it across every type).
+        if (_threshold.TryGetThresholdForState(user, MobState.PreCritical, out var threshold) &&
+            threshold is { } thresholdValue &&
+            TryComp<DamageableComponent>(user, out var damageable))
+        {
+            var spec = new DamageSpecifier { DamageDict = { ["Blunt"] = thresholdValue } };
+            _damageable.SetDamage((user, damageable), spec);
+        }
+
+        _mobState.ChangeMobState(user, MobState.PreCritical, origin: user);
+    }
+
     private void CloneItem(EntityUid item, EntityCoordinates coords)
     {
         if (_tags.HasTag(item, HighRiskItemTag))
+            return;
+
+        // The eaten candy itself must not duplicate.
+        if (HasComp<CandyComponent>(item))
             return;
 
         var proto = MetaData(item).EntityPrototype;
@@ -528,32 +550,20 @@ public sealed class CandySystem : EntitySystem
     }
 
     // Body swap: swaps the player's position with a random other player's.
-    private void BodySwap(EntityUid user)
+    private void InvertControls(EntityUid user)
     {
-        var candidates = new List<EntityUid>();
-        foreach (var session in _players.Sessions)
-        {
-            if (session.AttachedEntity is not { } other || other == user)
-                continue;
-
-            if (!HasComp<MobStateComponent>(other))
-                continue;
-
-            if (_transform.GetMapId(other) != _transform.GetMapId(user))
-                continue;
-
-            candidates.Add(other);
-        }
-
-        if (candidates.Count == 0)
+        if (HasComp<CandyInvertControlsComponent>(user))
             return;
 
-        var target = _random.Pick(candidates);
-        var posA = _transform.GetWorldPosition(user);
-        var posB = _transform.GetWorldPosition(target);
+        EnsureComp<CandyInvertControlsComponent>(user);
 
-        _transform.SetWorldPosition(user, posB);
-        _transform.SetWorldPosition(target, posA);
+        Timer.Spawn(TimeSpan.FromSeconds(20), () =>
+        {
+            if (!Exists(user) || TerminatingOrDeleted(user))
+                return;
+
+            RemComp<CandyInvertControlsComponent>(user);
+        });
     }
 
     // Butterfingers: everything on the player falls to the floor.

@@ -296,7 +296,7 @@
   description: Long fangs and a glowing hood, and the alluring look begs to come closer.
   components:
 # DS14-start: halloween candy drop
-  - type: CandyDrop
+    - type: CandyDrop
 # DS14-end
     - type: Sprite
       drawdepth: Mobs

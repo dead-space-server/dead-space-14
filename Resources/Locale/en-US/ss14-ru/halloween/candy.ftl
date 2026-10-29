@@ -18,7 +18,7 @@ candy-effect-Nothing = Nothing?
 candy-effect-Nausea = Nausea
 candy-effect-Oops = Oops
 candy-effect-CrispyToffee = Quite a crispy toffee
-candy-effect-BodySwap = Body swap
+candy-effect-ControlInvert = Inverted controls
 candy-effect-TooSweet = Sweet to death
 candy-effect-Earplugs = Earplugs
 candy-effect-Butterfingers = Butterfingers
@@ -76,7 +76,7 @@ ent-CandyOops = surprise candy
 ent-CandyCrispyToffee = surprise candy
     .desc = A candy with no wrapper markings at all. There's no telling what effect it will have.
 
-ent-CandyBodySwap = surprise candy
+ent-CandyControlInvert = surprise candy
     .desc = A candy with no wrapper markings at all. There's no telling what effect it will have.
 
 ent-CandyTooSweet = surprise candy

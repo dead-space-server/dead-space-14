@@ -174,7 +174,7 @@
   suffix: Angry
   components:
 # DS14-start: halloween candy drop
-  - type: CandyDrop
+    - type: CandyDrop
 # DS14-end
     - type: NpcFactionMember
       factions:
@@ -221,7 +221,7 @@
   suffix: Angry
   components:
 # DS14-start: halloween candy drop
-  - type: CandyDrop
+    - type: CandyDrop
 # DS14-end
     - type: NpcFactionMember
       factions:
@@ -267,7 +267,7 @@
   suffix: Angry
   components:
 # DS14-start: halloween candy drop
-  - type: CandyDrop
+    - type: CandyDrop
 # DS14-end
     - type: NpcFactionMember
       factions:

@@ -18,7 +18,7 @@ candy-effect-Nothing = Ничего?
 candy-effect-Nausea = Тошнота
 candy-effect-Oops = Ой-ой
 candy-effect-CrispyToffee = Довольно хрустящая ириска
-candy-effect-BodySwap = Обмен телами
+candy-effect-ControlInvert = Инверсия управления
 candy-effect-TooSweet = До смерти сладко
 candy-effect-Earplugs = Беруши
 candy-effect-Butterfingers = Баттерфингерс
@@ -76,7 +76,7 @@ ent-CandyOops = конфета-сюрприз
 ent-CandyCrispyToffee = конфета-сюрприз
     .desc = Конфета без опознавательных знаков на фантике. Даже неизвестно, какой эффект она даст.
 
-ent-CandyBodySwap = конфета-сюрприз
+ent-CandyControlInvert = конфета-сюрприз
     .desc = Конфета без опознавательных знаков на фантике. Даже неизвестно, какой эффект она даст.
 
 ent-CandyTooSweet = конфета-сюрприз
