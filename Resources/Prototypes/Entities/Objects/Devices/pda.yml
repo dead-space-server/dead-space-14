@@ -122,6 +122,7 @@
     range: 500
   - type: CartridgeLoader
     uiKey: enum.PdaUiKey.Key
+    diskSpace: 99 # DS14
     preinstalled:
       - CrewManifestCartridge
       - NotekeeperCartridge

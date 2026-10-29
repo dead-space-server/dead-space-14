@@ -4,11 +4,6 @@ using Content.Shared.Actions;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.DeadSpace.Demons.DemonShadow;
-public sealed partial class ShadowGrappleEvent : EntityTargetActionEvent
-{
-
-}
-
 public sealed partial class ShadowCrawlActionEvent : InstantActionEvent
 {
 

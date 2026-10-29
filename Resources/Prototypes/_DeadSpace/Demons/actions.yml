@@ -67,21 +67,6 @@
     event: !type:DemonDashEvent
 
 - type: entity
-  id: ActionDemonShadowGrapple
-  name: Притянуть существо
-  description: Оглушает и притягивает выбранное существо, гася свет вокруг.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Action
-    useDelay: 25
-    icon: _DeadSpace/Demons/ability_icons/shadow_grapple.png
-  - type: TargetAction
-    checkCanAccess: false
-    range: 10
-  - type: EntityTargetAction
-    event: !type:ShadowGrappleEvent
-
-- type: entity
   id: ActionLockShadowCocoon
   name: Засунуть в кокон
   description: Помещает существо в теневой кокон.

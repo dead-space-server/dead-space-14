@@ -10,7 +10,7 @@
   parent: BaseItem
   id: LavalandMarkerBeaconStack
   name: маркерный маяк
-  description: Светящиеся маркеры для разметки пути. Используйте в руке, чтобы поставить маяк под собой; альт-клик меняет цвет.
+  description: Светящиеся маркеры для разметки пути. Ставятся маяком прямо под ноги; цвет свечения можно сменить.
   suffix: 10
   components:
   - type: Sprite
@@ -136,6 +136,9 @@
       components:
       - LavalandFauna
       - LavalandLazarusRevivable
+    blacklist:
+      components:
+      - LavalandRockMimic
     sound: /Audio/Items/hypospray.ogg
   - type: StaticPrice
     price: 1000
@@ -157,7 +160,7 @@
   parent: [ BaseSimpleMob, MobCombat, MobRobotic ]
   id: MobLavalandMinebot
   name: минбот
-  description: Шахтёрский дрон. Следует за хозяином, отстреливает фауну, сам вскапывает рудные жилы и собирает руду во встроенную сумку боргов. Альт-клик — выгрузить руду; привязать к себе и переключить сбор — через меню.
+  description: Шахтёрский дрон. Следует за хозяином, отстреливает фауну, сам вскапывает рудные жилы и собирает руду во встроенную сумку боргов. Добычу можно выгрузить из него, а также привязать дрон к себе и включить или выключить сбор.
   components:
   - type: Sprite
     drawdepth: Mobs
@@ -455,7 +458,7 @@
     - lavaland-asclepius-oath-2
     - lavaland-asclepius-oath-3
     - lavaland-asclepius-oath-4
-    lineDelay: 3
+    lineDelay: 8
     auraRange: 7
     auraInterval: 2.6
     auraHeal:

@@ -139,6 +139,17 @@ public sealed class LavalandSensorTabletSystem : EntitySystem
                 LavalandRadarPointKind.Beacon, message));
         }
 
+        // The Ash Wolf is marked with its orange head wherever it is on lavaland, lying or fighting.
+        var wolves = EntityQueryEnumerator<LavalandAshWolfComponent, TransformComponent>();
+        while (wolves.MoveNext(out _, out var wolf, out var wolfXform))
+        {
+            if (wolf.Tamed || wolfXform.MapUid is not { } wolfMap || !HasComp<LavalandMapComponent>(wolfMap))
+                continue;
+
+            points.Add(new LavalandRadarPoint(_transform.GetWorldPosition(wolfXform), Color.FromHex("#ff8a1e"), 1f,
+                LavalandRadarPointKind.BossHead));
+        }
+
         var scannedEntities = new HashSet<EntityUid>();
         var scannedTiles = new HashSet<(EntityUid Grid, Vector2i Tile)>();
         var users = new HashSet<EntityUid>();

@@ -224,6 +224,14 @@
     rechargeCooldown: 0.4
     rechargeSound:
       path: /Audio/Weapons/Guns/MagIn/kinetic_reload.ogg
+  # Fired on and on (some ten shots running) the barrel overheats: the charge comes back slower, the hotter the
+  # slower, but never more than two and a half times.
+  - type: GunOverheat
+    heatPerShot: 1
+    cooling: 1
+    threshold: 6
+    slowdownPerHeat: 0.3
+    maxSlowdown: 2.5
   - type: Clothing
     sprite: _DeadSpace/Objects/Weapons/Guns/Basic/sawnpka.rsi
     quickEquip: false
@@ -309,6 +317,7 @@
     mask: /Textures/Effects/LightMasks/cone.png
     autoRot: true
     radius: 6
+  - type: Akimbo
   - type: AmmoCounter
   - type: Appearance
   - type: GenericVisualizer
@@ -318,11 +327,24 @@
           True: { visible: False }
           False: { visible: True }
         #todo: add other 'empty' animations
-  - type: BatteryAmmoProvider
+  # A bolt holds two charges, as the repeater; the spread one, as the shotgun, and it comes back half as fast.
+  - type: BasicEntityAmmoProvider
     proto: BulletKinetic
-    fireCost: 50
+    capacity: 2
+    count: 2
+  - type: GunAmmoModes
+    modes:
+    - name: gun-ammo-mode-kinetic-bolt
+      proto: BulletKinetic
+      capacity: 2
+    - name: gun-ammo-mode-kinetic-spread
+      proto: BulletKineticSeniorSpread
+      capacity: 1
+      rechargeMultiplier: 2
   - type: Gun
     fireRate: 1
+    # As fast as the other proto-kinetic guns: its bolts fly as far as theirs and do not skip through fauna or walls.
+    projectileSpeed: 25
     selectedMode: SemiAuto
     minAngle: 0
     maxAngle: 4
@@ -344,6 +366,7 @@
     - 0,0,2,1
     size: Large
   - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 1
     rechargeSound:
       path: /Audio/Weapons/Guns/MagIn/kinetic_reload.ogg
   - type: Clothing
@@ -356,23 +379,13 @@
     whitelist:
       tags:
       - PKAUpgrade
+  # Built for the thin lavaland air like any proto-kinetic gun: half damage anywhere else.
+  - type: LavalandPressureDamage
   - type: ContainerContainer
     containers:
       upgrades: !type:Container
       bayonet_slot: !type:ContainerSlot
       light_slot: !type:ContainerSlot
-  - type: BatteryWeaponFireModes
-    fireModes:
-    - proto: BulletKinetic
-      fireCost: 50
-    - proto: BulletKineticSeniorSpread
-      fireCost: 100
-  - type: BatterySelfRecharger
-    autoRechargeRate: 50
-    autoRechargePauseTime: 1
-  - type: Battery
-    maxCharge: 100
-    startingCharge: 100
   - type: EmitSoundOnPickup
     sound:
       path: /Audio/_DeadSpace/Items/Handing/gun/gun_pickup.ogg

@@ -1161,7 +1161,7 @@ public sealed class PsychiatryClientSystem : SharedPsychiatrySystem
             ("fontSize", 12),
             ("verb", Loc.GetString("psychiatry-radio-verb")),
             ("channel", $"\\[{Loc.GetString("chat-radio-common")}\\]"),
-            ("name", FormattedMessage.EscapeText(ev.SpeakerName)),
+            ("headset-name", FormattedMessage.EscapeText(ev.SpeakerName)),
             ("message", FormattedMessage.EscapeText(ev.Message)),
             ("headset-color", headset),
             ("job", job));

@@ -187,7 +187,7 @@ public abstract partial class SharedStunSystem : EntitySystem
         return true;
     }
 
-    public bool TryUpdateStunDuration(EntityUid uid, TimeSpan? duration)
+    public bool TryUpdateStunDuration(EntityUid uid, TimeSpan? duration, bool drop = true) // DS14
     {
         if (HasComp<StunImmuneComponent>(uid))
             return false;
@@ -195,7 +195,7 @@ public abstract partial class SharedStunSystem : EntitySystem
         if (!_status.TryUpdateStatusEffectDuration(uid, StunId, duration))
             return false;
 
-        OnStunnedSuccessfully(uid, duration);
+        OnStunnedSuccessfully(uid, duration, drop); // DS14
         return true;
     }
 

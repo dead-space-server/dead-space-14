@@ -93,8 +93,12 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         SubscribeLocalEvent<LavalandMadMinerHookVisualComponent, InteractHandEvent>(OnHookVisualInteract);
     }
 
-    /// <summary>A miner the planet would put this close (tiles) to another grid - the base, the ash walkers - is not spawned.</summary>
-    private const float OtherGridExclusion = 60f;
+    /// <summary>
+    /// A miner the planet would put this close (tiles) to another grid - the base, the ash walkers, a ruin - is not
+    /// spawned. Wider than this, with all the ruins on the planet now, there was nearly always a grid in reach and
+    /// the miner never came at all.
+    /// </summary>
+    private const float OtherGridExclusion = 24f;
 
     /// <summary>The planet's spawn of a miner: not next to the outpost or any other grid; the marker itself goes.</summary>
     private void OnSpawnerMapInit(Entity<LavalandMadMinerSpawnerComponent> ent, ref MapInitEvent args)
@@ -216,8 +220,8 @@ public sealed class LavalandMadMinerSystem : EntitySystem
                 if (_random.Prob(miner.HookAttackChance))
                     BeginHook(uid, miner, target, now);
             }
-            // No shots of any kind on the move of a blink - only once it has landed (and HoldFire has run out).
-            else if (now >= miner.NextShot && distance <= 16f && !HasComp<ActiveBlinkDashComponent>(uid))
+            // It shoots on the move of a blink too.
+            else if (now >= miner.NextShot && distance <= 16f)
                 FirePattern(uid, miner, target, now);
 
             SendHud(uid, miner);
@@ -501,16 +505,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         if (_blink.TryStartDash(uid, destination, speed, miner.BlinkDuration, miner.BlinkStallTimeout, miner.BlinkSound))
         {
             miner.NextBlink = now + miner.BlinkCooldown;
-            HoldFire(miner, now);
         }
-    }
-
-    /// <summary>Just blinked to a player: no point-blank shot right on arrival.</summary>
-    private static void HoldFire(LavalandMadMinerComponent miner, TimeSpan now)
-    {
-        var allowed = now + miner.BlinkDuration + miner.PostBlinkShotDelay;
-        if (miner.NextShot < allowed)
-            miner.NextShot = allowed;
     }
 
     /// <summary>
@@ -563,7 +558,6 @@ public sealed class LavalandMadMinerSystem : EntitySystem
             if (miner.BlinkSound != null)
                 _audio.PlayPvs(miner.BlinkSound, uid);
             miner.NextBlink = now + miner.BlinkCooldown;
-            HoldFire(miner, now);
             return;
         }
     }
@@ -615,7 +609,6 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         if (_blink.TryStartDash(uid, spot, speed, miner.BlinkDuration, miner.BlinkStallTimeout, miner.BlinkSound))
         {
             miner.NextFeint = now + miner.FeintCooldown;
-            HoldFire(miner, now);
         }
     }
 
@@ -685,8 +678,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
                 targetPosition.MapId);
             var distance = Vector2.Distance(minerPosition.Position, destination.Position);
             var speed = Math.Max(28f, distance / Math.Max(0.05f, (float) miner.BlinkDuration.TotalSeconds));
-            if (_blink.TryStartDash(uid, destination, speed, miner.BlinkDuration, miner.BlinkStallTimeout, miner.BlinkSound))
-                HoldFire(miner, now);
+            _blink.TryStartDash(uid, destination, speed, miner.BlinkDuration, miner.BlinkStallTimeout, miner.BlinkSound);
         }
 
         var impactCenter = _transform.GetWorldPosition(target);
@@ -1037,7 +1029,7 @@ public sealed class LavalandMadMinerSystem : EntitySystem
         }
 
         if (TryComp<MovementSpeedModifierComponent>(uid, out var speed))
-            _speedModifier.ChangeBaseSpeed(uid, miner.RisenSpeed * 0.7f, miner.RisenSpeed, speed.Acceleration, speed);
+            _speedModifier.ChangeBaseSpeed(uid, miner.RisenWalkSpeed, miner.RisenSpeed, speed.Acceleration, speed);
 
         _appearance.SetData(uid, LavalandMadMinerVisuals.Necromorph, true);
 

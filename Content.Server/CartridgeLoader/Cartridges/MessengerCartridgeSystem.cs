@@ -5,11 +5,14 @@ using Content.Shared.CartridgeLoader;
 using Content.Shared.CartridgeLoader.Cartridges;
 using Content.Shared.Popups;
 using Content.Shared.Radio.Components;
+using Content.Server.Administration.Logs; //DS-14
 using Content.Server.Popups;
 using Content.Server.Power.Components;
 using Content.Server.GameTicking;
+using Content.Shared.Database; //DS-14
 using Robust.Server.GameObjects; // DS14
 using Robust.Shared.Localization;
+using Robust.Shared.Player; //DS-14
 
 namespace Content.Server.CartridgeLoader.Cartridges;
 
@@ -19,6 +22,7 @@ public sealed partial class MessengerCartridgeSystem : EntitySystem
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private PopupSystem _popupSystem = default!;
     [Dependency] private UserInterfaceSystem _userInterfaceSystem = default!; // DS14
+    [Dependency] private IAdminLogManager _adminLog = default!; //DS-14
 
     public override void Initialize()
     {
@@ -283,6 +287,10 @@ public sealed partial class MessengerCartridgeSystem : EntitySystem
             //DS14-end
             Dirty(server.Value.Uid, server.Value.Component);
 
+            //DS-14 start
+            LogNanoChat(args.Actor, userData.Value.Name, userData.Value.JobTitle, server.Value.Component, sendMessage.ReceiverId, content, false);
+            //DS-14 end
+
             UpdateUiState(uid, loaderUid.Value);
 
             if (receiverCartridgeUid == null)
@@ -370,6 +378,7 @@ public sealed partial class MessengerCartridgeSystem : EntitySystem
                 return;
             if (message.SenderId != userData.Value.Id)
                 return;
+            LogNanoChat(args.Actor, userData.Value.Name, userData.Value.JobTitle, server.Value.Component, message.ReceiverId, message.Content, true); //DS-14
             server.Value.Component.Messages.Remove(message);
             Dirty(server.Value.Uid, server.Value.Component);
             UpdateUiState(uid, loaderUid.Value);
@@ -494,4 +503,64 @@ public sealed partial class MessengerCartridgeSystem : EntitySystem
         var state = new MessengerCartridgeUiState(status, users, messages, isBlocked, isBlocking, incomingMessagesDisabled); //DS14
         _cartridgeLoaderSystem.UpdateCartridgeUiState(loaderUid, state);
     }
+
+    //DS-14 start
+    private void LogNanoChat(EntityUid sender, string senderName, string senderJob, MessengerServerComponent server, int receiverId, string content, bool deleted)
+    {
+        var receiverName = "unknown";
+        var receiverJob = "unknown";
+        if (server.Users.TryGetValue(receiverId, out var receiverUser))
+        {
+            receiverName = receiverUser.Name;
+            receiverJob = receiverUser.JobTitle;
+        }
+
+        var receiver = FindPdaActor(receiverId);
+        var impact = deleted ? LogImpact.Medium : LogImpact.Low;
+        if (receiver != null)
+        {
+            if (deleted)
+            {
+                _adminLog.Add(LogType.Chat, impact,
+                    $"NanoChat delete by {sender:sender} ({senderName}, {senderJob}) to {receiver:receiver} ({receiverName}, {receiverJob}): {content}");
+            }
+            else
+            {
+                _adminLog.Add(LogType.Chat, impact,
+                    $"NanoChat from {sender:sender} ({senderName}, {senderJob}) to {receiver:receiver} ({receiverName}, {receiverJob}): {content}");
+            }
+
+            return;
+        }
+
+        if (deleted)
+        {
+            _adminLog.Add(LogType.Chat, impact,
+                $"NanoChat delete by {sender:sender} ({senderName}, {senderJob}) to {receiverName} ({receiverJob}): {content}");
+        }
+        else
+        {
+            _adminLog.Add(LogType.Chat, impact,
+                $"NanoChat from {sender:sender} ({senderName}, {senderJob}) to {receiverName} ({receiverJob}): {content}");
+        }
+    }
+
+    private EntityUid? FindPdaActor(int userId)
+    {
+        var cartridge = GetCartridgeByUserId(userId);
+        if (cartridge == null)
+            return null;
+
+        var current = GetLoaderUid(cartridge.Value);
+        while (current != null && current.Value.IsValid())
+        {
+            if (HasComp<ActorComponent>(current.Value))
+                return current;
+
+            current = Transform(current.Value).ParentUid;
+        }
+
+        return null;
+    }
+    //DS-14 end
 }

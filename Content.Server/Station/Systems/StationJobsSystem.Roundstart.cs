@@ -157,7 +157,10 @@ public sealed partial class StationJobsSystem
                     if (stationJobs[station][job] is <= 0)
                         break;
 
-                    if (!TryPickCandidate(job, jobCandidates, out var player) &&
+                    // DS14: first a player for whom the job is the best one still open to them - otherwise a
+                    // medium-priority job takes a player away from his high one while others want it more.
+                    if (!TryPickPreferringCandidate(job, station, stationJobs, jobCandidates, playerCandidates, out var player) && // DS14
+                        !TryPickCandidate(job, jobCandidates, out player) &&
                         !TryPickMinimumJobFallbackCandidate(
                             job, profiles, jobFallback, out player))
                     {
@@ -221,6 +224,63 @@ public sealed partial class StationJobsSystem
         player = default;
         return false;
     }
+
+    // DS14-start
+    /// <summary>
+    /// A candidate for a required job who has no higher-priority job still open on this station; none - false.
+    /// </summary>
+    private bool TryPickPreferringCandidate(
+        ProtoId<JobPrototype> job,
+        EntityUid station,
+        Dictionary<EntityUid, Dictionary<ProtoId<JobPrototype>, int?>> stationJobs,
+        Dictionary<ProtoId<JobPrototype>, Dictionary<JobPriority, HashSet<NetUserId>>> jobCandidates,
+        Dictionary<NetUserId, Dictionary<JobPriority, List<ProtoId<JobPrototype>>>> playerCandidates,
+        out NetUserId player)
+    {
+        player = default;
+        if (!jobCandidates.TryGetValue(job, out var candidates))
+            return false;
+
+        for (var priority = JobPriority.High; priority > JobPriority.Never; priority--)
+        {
+            if (!candidates.TryGetValue(priority, out var players) || players.Count == 0)
+                continue;
+
+            var free = players
+                .Where(candidate => !WantsHigherJob(candidate, priority, station, stationJobs, playerCandidates))
+                .ToList();
+            if (free.Count == 0)
+                continue;
+
+            player = _random.Pick(free);
+            return true;
+        }
+
+        return false;
+    }
+
+    private static bool WantsHigherJob(
+        NetUserId player,
+        JobPriority priority,
+        EntityUid station,
+        Dictionary<EntityUid, Dictionary<ProtoId<JobPrototype>, int?>> stationJobs,
+        Dictionary<NetUserId, Dictionary<JobPriority, List<ProtoId<JobPrototype>>>> playerCandidates)
+    {
+        if (!playerCandidates.TryGetValue(player, out var preferences))
+            return false;
+
+        for (var higher = JobPriority.High; higher > priority; higher--)
+        {
+            if (preferences.TryGetValue(higher, out var jobs) &&
+                jobs.Any(other => stationJobs[station].TryGetValue(other, out var slots) && slots is null or > 0))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    // DS14-end
 
     private bool TryPickJob(
         NetUserId player,

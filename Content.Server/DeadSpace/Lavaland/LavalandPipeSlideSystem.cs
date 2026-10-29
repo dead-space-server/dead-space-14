@@ -3,14 +3,17 @@
 using System.Numerics;
 using Content.Server.DeadSpace.Lavaland.Components;
 using Content.Server.NodeContainer.Nodes;
+using Content.Shared.ActionBlocker;
 using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.DeadSpace.Lavaland.Components;
+using Content.Shared.Interaction;
 using Content.Shared.Maps;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Components;
 using Content.Shared.NodeContainer;
 using Content.Shared.Physics;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Containers;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
@@ -27,10 +30,13 @@ namespace Content.Server.DeadSpace.Lavaland;
 /// </summary>
 public sealed class LavalandPipeSlideSystem : EntitySystem
 {
+    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly SharedContainerSystem _container = default!;
+    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
@@ -82,6 +88,15 @@ public sealed class LavalandPipeSlideSystem : EntitySystem
         var pipePos = _transform.GetWorldPosition(pipe);
         if (Transform(pipe).MapID != Transform(user).MapID || Vector2.Distance(userPos, pipePos) > config.MountRange)
             return;
+
+        // Not a way out of cuffs, a stun, a buckle or a locker, and not through a wall.
+        if (!_actionBlocker.CanMove(user) ||
+            !_actionBlocker.CanInteract(user, pipe) ||
+            _container.IsEntityOrParentInContainer(user) ||
+            !_interaction.InRangeUnobstructed(user, pipe, config.MountRange))
+        {
+            return;
+        }
 
         // Head the way the rider is facing.
         var facing = _transform.GetWorldRotation(user).ToWorldVec();

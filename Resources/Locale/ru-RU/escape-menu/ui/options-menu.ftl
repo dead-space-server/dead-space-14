@@ -422,3 +422,4 @@ ui-options-function-parry = Парирование
 ui-options-function-limb-doll = Кукла прицела
 ##DS14-end
 ui-options-function-switch-component-mode = Переключить режим компонентов предмета
+ui-options-function-switch-gun-ammo-mode = Переключить тип выстрела оружия

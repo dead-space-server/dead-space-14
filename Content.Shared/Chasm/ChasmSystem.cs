@@ -41,7 +41,6 @@ public sealed class ChasmSystem : EntitySystem
     [Dependency] private readonly EntityLookupSystem _lookup = default!; //DS14
     [Dependency] private readonly SharedTransformSystem _transform = default!; //DS14
     [Dependency] private readonly InventorySystem _inventory = default!; //DS14
-    [Dependency] private readonly SharedPopupSystem _popup = default!; //DS14
     [Dependency] private readonly LavalandDayCycleSystem _dayCycle = default!; //DS14
 
     public override void Initialize()
@@ -243,12 +242,7 @@ public sealed class ChasmSystem : EntitySystem
             grace = EnsureComp<ChasmHoverGraceComponent>(tripper);
             grace.FallAt = now + duration;
             Dirty(tripper, grace);
-            if (_net.IsServer)
-            {
-                _popup.PopupEntity(Loc.GetString("chasm-hover-grace-warning",
-                        ("seconds", (int) duration.TotalSeconds)),
-                    tripper, tripper, PopupType.LargeCaution);
-            }
+            // No popup: the seconds left count down over the player's head, as the deep night's shadows do.
         }
 
         grace.LastSeen = now;

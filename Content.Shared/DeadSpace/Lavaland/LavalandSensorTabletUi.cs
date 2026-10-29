@@ -28,6 +28,8 @@ public enum LavalandRadarPointKind : byte
     CelestialNoise,
     /// <summary>A marker beacon with a message; the message is in Label.</summary>
     Beacon,
+    /// <summary>A secret boss (the Ash Wolf): drawn as its head.</summary>
+    BossHead,
 }
 
 [Serializable, NetSerializable]

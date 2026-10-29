@@ -1,14 +1,18 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Shared.Atmos;
+using Content.Shared.Damage.Prototypes;
+using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.Lavaland.Components;
 
 /// <summary>
 /// Kinetic weapons are made for the thin lavaland air (Goob-Station PressureDamageChange):
-/// outside of the pressure range their melee hits and projectiles are weaker.
+/// outside of the pressure range their melee hits, projectiles and crusher mark detonations are weaker. On a boss a
+/// detonated mark also takes away a share of its health.
 /// </summary>
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class LavalandPressureDamageComponent : Component
 {
     [DataField]
@@ -26,4 +30,22 @@ public sealed partial class LavalandPressureDamageComponent : Component
 
     [DataField]
     public bool ApplyToProjectiles = true;
+
+    /// <summary>A mark detonated on a lavaland boss also deals this share of its full health.</summary>
+    [DataField]
+    public float BossMarkHealthFraction = 0.02f;
+
+    /// <summary>The damage type of that share.</summary>
+    [DataField]
+    public ProtoId<DamageTypePrototype> BossMarkDamageType = "Slash";
+
+    /// <summary>
+    /// Out of the pressure range when the server last looked. The client predicts melee blows with it; the server
+    /// keeps it fresh.
+    /// </summary>
+    [ViewVariables, AutoNetworkedField]
+    public bool Weakened;
+
+    [ViewVariables]
+    public TimeSpan NextPressureCheck;
 }

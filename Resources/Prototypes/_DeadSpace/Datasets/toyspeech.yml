@@ -350,7 +350,7 @@
   id: PlushieMysticalRaypeech
   values:
     prefix: plushies-mystical-
-    count: 3
+    count: 4
 
 - type: localizedDataset
   id: PlushieWalkflisSpeech

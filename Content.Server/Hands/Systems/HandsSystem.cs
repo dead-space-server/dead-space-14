@@ -6,6 +6,7 @@ using Content.Shared.Body.Part;
 using Content.Shared.CombatMode;
 using Content.Shared.Damage.Systems;
 // DS14-start
+using Content.Shared.DeadSpace.Items;
 using Content.Shared.DeadSpace.TheCircle.Geist;
 // DS14-end
 using Content.Shared.Explosion;
@@ -100,6 +101,14 @@ namespace Content.Server.Hands.Systems
         {
             if (args.Handled)
                 return;
+
+            // DS14-start: disarm effects that bypass DisarmAttemptEvent must not throw protected items.
+            if (TryGetActiveItem((uid, component), out var activeItem) &&
+                HasComp<PreventForcedDropComponent>(activeItem.Value))
+            {
+                return;
+            }
+            // DS14-end
 
             // Break any pulls
             if (TryComp(uid, out PullerComponent? puller) && TryComp(puller.Pulling, out PullableComponent? pullable))

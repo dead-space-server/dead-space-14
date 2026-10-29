@@ -12,6 +12,9 @@ public sealed class LavalandBossHudUpdateEvent : EntityEventArgs
     public float MaxHealth;
     public int Participants;
 
+    /// <summary>An OOC tip under the health bar (how to fight this boss); null for none.</summary>
+    public string? Hint;
+
     public LavalandBossHudUpdateEvent()
     {
     }

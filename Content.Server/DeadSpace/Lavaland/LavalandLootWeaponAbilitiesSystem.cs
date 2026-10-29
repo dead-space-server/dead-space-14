@@ -9,6 +9,8 @@ using Content.Server.Gatherable.Components;
 using Content.Server.Mind;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared.Actions;
+using Content.Shared.Damage;
+using Content.Shared.Weapons.Melee;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.Examine;
@@ -27,11 +29,15 @@ using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Content.Shared.Stunnable;
+using Content.Shared.Verbs;
 using Content.Shared.Wall;
+using Content.Shared.Wieldable;
+using Content.Shared.Wieldable.Components;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Timing;
+using Robust.Shared.Utility;
 
 namespace Content.Server.DeadSpace.Lavaland;
 
@@ -57,6 +63,7 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly LavalandCainAndAbelLookSystem _cainAbelLook = default!;
     [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly Robust.Shared.Containers.SharedContainerSystem _containers = default!;
 
@@ -66,7 +73,9 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<LavalandCainAndAbelComponent, UseInHandEvent>(OnCainAbelUseInHand);
+        SubscribeLocalEvent<LavalandCainAndAbelComponent, GetVerbsEvent<AlternativeVerb>>(OnCainAbelSwapVerb);
+        SubscribeLocalEvent<LavalandCainAndAbelComponent, ItemWieldedEvent>(OnCainAbelWielded, after: [typeof(SharedWieldableSystem)]);
+        SubscribeLocalEvent<LavalandCainAndAbelComponent, ItemUnwieldedEvent>(OnCainAbelUnwielded, after: [typeof(SharedWieldableSystem)]);
         SubscribeLocalEvent<LavalandCainAndAbelComponent, GetItemActionsEvent>(OnCainAbelGetActions);
         SubscribeLocalEvent<LavalandCainAndAbelComponent, LavalandCainAndAbelThrowActionEvent>(OnCainAbelThrow);
         SubscribeLocalEvent<LavalandCainAndAbelDaggerComponent, ProjectileHitEvent>(OnDaggerHit);
@@ -114,22 +123,104 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
 
     #region Cain and Abel throws
 
-    private void OnCainAbelUseInHand(Entity<LavalandCainAndAbelComponent> ent, ref UseInHandEvent args)
-    {
-        if (args.Handled)
-            return;
-        args.Handled = true;
+    private const string CainAbelRsi = "/Textures/_DeadSpace/Lavaland/Objects/Weapons/cain_and_abel.rsi";
 
+    /// <summary>
+    /// The other dagger to the fore on an alt-click: Cain for the dash to the dagger, Abel for the ring of ice.
+    /// </summary>
+    private void OnCainAbelSwapVerb(Entity<LavalandCainAndAbelComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
+    {
+        if (!args.CanAccess || !args.CanInteract)
+            return;
+
+        var user = args.User;
+        args.Verbs.Add(new AlternativeVerb
+        {
+            Text = Loc.GetString("lavaland-cain-abel-swap-verb"),
+            Icon = new SpriteSpecifier.Rsi(new ResPath(CainAbelRsi), ent.Comp.LaunchMode ? "icon" : "icon-cain"),
+            Act = () => SwapCainAbel(ent, user),
+        });
+    }
+
+    private void SwapCainAbel(Entity<LavalandCainAndAbelComponent> ent, EntityUid user)
+    {
         ent.Comp.LaunchMode = !ent.Comp.LaunchMode;
         _popup.PopupEntity(Loc.GetString(ent.Comp.LaunchMode
             ? "lavaland-cain-abel-mode-launch"
-            : "lavaland-cain-abel-mode-crystals"), args.User, args.User);
+            : "lavaland-cain-abel-mode-crystals"), user, user);
+        UpdateCainAbelLook(ent);
+    }
+
+    /// <summary>
+    /// Cain in one hand cuts heavy and slow, in both hands it flings its blade on the chain - quick light cuts from
+    /// afar. Abel the other way round: quick light burns in one hand, heavy burns reaching further in both. The swing
+    /// shown is the blade in front.
+    /// </summary>
+    private void UpdateCainAbelBlows(Entity<LavalandCainAndAbelComponent> ent)
+    {
+        if (!TryComp<MeleeWeaponComponent>(ent, out var melee))
+            return;
+
+        // The first time: the one-hand reach, as the prototype gave it.
+        if (ent.Comp.Range <= 0f)
+            ent.Comp.Range = melee.Range;
+
+        var comp = ent.Comp;
+        var cain = comp.LaunchMode;
+        var wielded = TryComp<WieldableComponent>(ent, out var wieldable) && wieldable.Wielded;
+        var chained = cain && wielded;
+        var (damage, rate) = (cain, wielded) switch
+        {
+            (true, false) => (comp.CainDamage, comp.CainAttackRate),
+            (true, true) => (comp.CainWieldedDamage, comp.CainWieldedAttackRate),
+            (false, false) => (comp.AbelDamage, comp.AbelAttackRate),
+            (false, true) => (comp.AbelWieldedDamage, comp.AbelWieldedAttackRate),
+        };
+        melee.Damage = new DamageSpecifier(damage);
+        melee.AttackRate = rate;
+        melee.Range = wielded ? comp.WieldedRange : comp.Range;
+        comp.FastBlows = cain == wielded;
+        melee.Animation = chained ? ent.Comp.CainWieldedArc : cain ? ent.Comp.CainArc : ent.Comp.AbelArc;
+        melee.WideAnimation = chained ? ent.Comp.CainWieldedWideArc : cain ? ent.Comp.CainWideArc : ent.Comp.AbelWideArc;
+        Dirty(ent, melee);
+        ent.Comp.CainHits = 0;
+    }
+
+    // In both hands Cain flings its blade on the chain (the held look is the shared system's).
+    private void OnCainAbelWielded(Entity<LavalandCainAndAbelComponent> ent, ref ItemWieldedEvent args)
+    {
+        UpdateCainAbelLook(ent);
+    }
+
+    private void OnCainAbelUnwielded(Entity<LavalandCainAndAbelComponent> ent, ref ItemUnwieldedEvent args)
+    {
+        UpdateCainAbelLook(ent);
+    }
+
+    /// <summary>
+    /// Cain (red) for the dash to the dagger, Abel (blue) for the ring of ice: in one hand or both, on the floor, on
+    /// the actions.
+    /// </summary>
+    private void UpdateCainAbelLook(Entity<LavalandCainAndAbelComponent> ent)
+    {
+        var cain = ent.Comp.LaunchMode;
+        UpdateCainAbelBlows(ent);
+        _appearance.SetData(ent, LavalandCainAndAbelVisuals.Cain, cain);
+        if (TryComp<LavalandCainAndAbelLookComponent>(ent, out var look))
+            _cainAbelLook.SetCain((ent, look), cain);
+
+        var icon = new SpriteSpecifier.Rsi(new ResPath(CainAbelRsi), cain ? "icon-cain" : "icon");
+        if (ent.Comp.ThrowActionEntity is { } action)
+            _actions.SetIcon(action, icon);
     }
 
     private void OnCainAbelGetActions(Entity<LavalandCainAndAbelComponent> ent, ref GetItemActionsEvent args)
     {
-        if (args.InHands)
-            args.AddAction(ref ent.Comp.ThrowActionEntity, ent.Comp.ThrowAction);
+        if (!args.InHands)
+            return;
+
+        args.AddAction(ref ent.Comp.ThrowActionEntity, ent.Comp.ThrowAction);
+        UpdateCainAbelLook(ent);
     }
 
     private void OnCainAbelThrow(Entity<LavalandCainAndAbelComponent> ent, ref LavalandCainAndAbelThrowActionEvent args)
@@ -232,6 +323,8 @@ public sealed class LavalandLootWeaponAbilitiesSystem : EntitySystem
 
         ent.Comp.Possessed = true;
         ent.Comp.Awakening = false;
+        // It wakes up full of blood: with none it could not move a tile, nor reach anyone to drink more.
+        ent.Comp.Blood = ent.Comp.MaxBlood;
         var bound = EnsureComp<LavalandSoulscytheBoundComponent>(ent);
         bound.Master = ent.Comp.Master;
         Dirty(ent, bound);

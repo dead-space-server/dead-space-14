@@ -4,6 +4,13 @@
   name: посох бурь
   description: Древний посох из останков Легиона. Ветер вздымается, когда его взмахивают. Удар по цели призывает молнию, использование в руке разгоняет пепельную бурю.
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Weapons/storm_staff.rsi
     state: icon
@@ -94,7 +101,7 @@
   parent: BaseItem
   id: LavalandSoulStabilizer
   name: стабилизирующая сыворотка
-  description: Введите её в душу легиона, чтобы та не угасла.
+  description: Введите её в душу легиона, чтобы та не угасла и сохранила свою целебную силу.
   components:
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Specific/Medical/stabilizer.rsi
@@ -111,6 +118,13 @@
   name: посох лавы
   description: Позволяет залить лавой всё что угодно. Направьте на пол, чтобы превратить его в лаву, или на лаву, чтобы её остудить.
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Weapons/lava_staff.rsi
     state: icon
@@ -154,6 +168,13 @@
   name: пила-тесак
   description: Пила, отлично пускающая кровь зверям, раскладывается в длинный тесак. Сложенной бьёт очень быстро и копит кровотечение у фауны, разложенной рубит медленно, с бонусным уроном, и только она добивает - накопленное кровотечение взрывается мощным уроном.
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Weapons/cleaving_saw.rsi
     layers:
@@ -190,7 +211,7 @@
       path: /Audio/Weapons/bladeslice.ogg
     damage:
       types:
-        Slash: 12
+        Slash: 21
   - type: Sharp
   - type: LavalandCleavingSaw
   - type: LavalandCleavingSawEffects
@@ -211,6 +232,13 @@
   name: коса душ
   description: Древняя реликвия ада, созданная дьяволами, чтобы утвердить свою власть над демонами. Сейчас она спит.
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Weapons/soulscythe.rsi
     layers:
@@ -257,23 +285,46 @@
   name: Каин и Авель
   description: Парные кинжалы Колосса. Серия ударов по крупным существам усиливает каждый следующий удар и призывает огоньки; удар по вам сбрасывает серию. Клик вдаль выпускает огоньки в цель.
   components:
+  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
+  - type: Parry
+    parryableWeapons:
+      tags:
+      - ParryStandardWeapon
+      components:
+      - ParryableBoss
+  # Abel (blue) for the ring of ice, Cain (red) for the dash to the dagger.
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Weapons/cain_and_abel.rsi
-    state: icon
+    layers:
+    - state: icon
+      map: [ "enum.LavalandCainAndAbelLayers.Base" ]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.LavalandCainAndAbelVisuals.Cain:
+        enum.LavalandCainAndAbelLayers.Base:
+          True: { state: icon-cain }
+          False: { state: icon }
   - type: Item
     size: Small
     sprite: _DeadSpace/Lavaland/Objects/Weapons/cain_and_abel.rsi
+  # One dagger in each hand.
+  - type: Wieldable
+  # The pair shown in the hands as soon as they are wielded; Cain in both hands flings its blade out on the chain.
+  - type: LavalandCainAndAbelLook
   - type: MeleeWeapon
     wideAnimationRotation: -135
-    # The demons' claw arc; right button - their arrow arc instead of swinging the sprite.
-    animation: WeaponArcClaw
-    wideAnimation: WeaponArcStatic
+    # Abel's blade swinging (Cain's when it is in front).
+    animation: LavalandWeaponArcAbel
+    wideAnimation: LavalandWeaponArcAbelWide
     range: 2.2
+    # Abel in one hand; the other blows (Cain, both hands) are the LavalandCainAndAbel component's.
+    attackRate: 2.5
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
     damage:
       types:
-        Slash: 15
+        Heat: 6
   - type: Sharp
   - type: LavalandDeepNightDark
   - type: PointLight
@@ -299,7 +350,8 @@
     layers:
     - state: wisp
       shader: unshaded
-  - type: LavalandDeepNightDark
+  # Like the lantern's wisp: the deep night does not put it out, it shines brightly there.
+  - type: LavalandDeepNightWisp
   - type: PointLight
     radius: 1.5
     energy: 1
@@ -363,10 +415,76 @@
   - type: StaticPrice
     price: 3000
 
+# The swing of the blade in front: a stab (left click), a sweep (right). Its own sprite, not the daggers' icon.
+- type: entity
+  parent: WeaponArcThrust
+  id: LavalandWeaponArcAbel
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Effects/CainAndAbelArc.rsi
+    state: abel
+  - type: WeaponArcVisuals
+    animation: Thrust
+    keepOwnSprite: true
+
+- type: entity
+  parent: WeaponArcSlash
+  id: LavalandWeaponArcAbelWide
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Effects/CainAndAbelArc.rsi
+    state: abel
+  - type: WeaponArcVisuals
+    animation: Slash
+    keepOwnSprite: true
+
+- type: entity
+  parent: LavalandWeaponArcAbel
+  id: LavalandWeaponArcCain
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Effects/CainAndAbelArc.rsi
+    state: cain
+
+- type: entity
+  parent: LavalandWeaponArcAbelWide
+  id: LavalandWeaponArcCainWide
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Lavaland/Effects/CainAndAbelArc.rsi
+    state: cain
+
+# Cain in both hands: the blade flung out on its chain and pulled back, the chain drawn from the wielder to it.
+- type: entity
+  parent: LavalandWeaponArcCain
+  id: LavalandWeaponArcCainChain
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: LavalandChainArc
+    sprite:
+      sprite: _DeadSpace/Objects/Weapons/Guns/ninja.rsi
+      state: chain
+    color: "#ffb08a"
+
+- type: entity
+  parent: LavalandWeaponArcCainWide
+  id: LavalandWeaponArcCainChainWide
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: LavalandChainArc
+    sprite:
+      sprite: _DeadSpace/Objects/Weapons/Guns/ninja.rsi
+      state: chain
+    color: "#ffb08a"
+
 - type: entity
   id: ActionLavalandCainAndAbelThrow
   name: Бросок кинжала
-  description: Метнуть кинжал. Режим (кристаллы или рывок) переключается использованием Каина и Авеля в руке.
+  description: "Метнуть кинжал, что сейчас впереди: Каин утянет к себе, Авель поднимет кольцо льда."
   categories: [ HideSpawnMenu ]
   components:
   - type: Action

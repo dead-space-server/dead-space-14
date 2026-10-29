@@ -2,11 +2,11 @@
 
 using System.Linq;
 using System.Numerics;
-using Content.Server.Beam;
 using Content.Server.GameTicking;
 using Content.Server.Light.Components;
 using Content.Server.StationEvents.Events;
 using Content.Server.DeadSpace.Abilities.Cocoon;
+using Content.Server.DeadSpace.Demons.Demon;
 using Content.Server.DeadSpace.Demons.DemonShadow.Components;
 using Content.Shared.Actions;
 using Content.Shared.Damage;
@@ -16,14 +16,17 @@ using Content.Shared.DeadSpace.Demons.DemonShadow.Components;
 using Content.Shared.Examine;
 using Content.Shared.Eye;
 using Content.Shared.Ghost;
+using Content.Shared.Hands.Components;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.IgnitionSource;
+using Content.Shared.Interaction.Components;
 using Content.Shared.Item;
 using Content.Shared.Item.ItemToggle;
 using Content.Shared.Item.ItemToggle.Components;
 using Content.Shared.Light;
-using Content.Shared.Interaction;
 using Content.Shared.Light.Components;
 using Content.Shared.Maps;
+using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Systems;
@@ -32,10 +35,12 @@ using Content.Shared.NPC.Prototypes;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
+using Content.Shared.Projectiles;
 using Content.Shared.Storage.Components;
 using Content.Shared.Stunnable;
 using Content.Shared.Tag;
 using Content.Shared.Weapons.Melee.Events;
+using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -61,24 +66,22 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
-    [Dependency] private readonly BeamSystem _beam = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly VisibilitySystem _visibility = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly ExamineSystemShared _examine = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly NpcFactionSystem _faction = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
     [Dependency] private readonly TagSystem _tag = default!;
     [Dependency] private readonly SharedPointLightSystem _light = default!;
     [Dependency] private readonly SharedHandheldLightSystem _handheldLight = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly ItemToggleSystem _itemToggle = default!;
     [Dependency] private readonly SharedItemSystem _item = default!;
     [Dependency] private readonly SharedIgnitionSourceSystem _ignitionSource = default!;
@@ -92,11 +95,15 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
         base.Initialize();
 
         SubscribeLocalEvent<DemonShadowComponent, ShadowCrawlActionEvent>(DoShadowCrawl);
-        SubscribeLocalEvent<DemonShadowComponent, ShadowGrappleEvent>(DoShadowGrapple);
+        SubscribeLocalEvent<DemonShadowHandComponent, GunShotEvent>(OnDemonShadowHandShot);
         SubscribeLocalEvent<DemonShadowComponent, ComponentStartup>(OnStartup);
         SubscribeLocalEvent<DemonShadowComponent, ComponentInit>(OnComponentInit);
         SubscribeLocalEvent<DemonShadowComponent, ComponentShutdown>(OnComponentShutdown);
         SubscribeLocalEvent<DemonShadowComponent, MeleeHitEvent>(OnMeleeHit);
+        SubscribeLocalEvent<DemonShadowHandComponent, MeleeHitEvent>(OnHandMeleeHit);
+        SubscribeLocalEvent<DemonShadowFlareDamageComponent, ProjectileHitEvent>(OnFlareProjectileHit);
+        SubscribeLocalEvent<DemonShadowComponent, MobStateChangedEvent>(OnDemonShadowDeath,
+            before: new[] { typeof(AutoDeleteOnDeathSystem) });
         SubscribeLocalEvent<DemonShadowComponent, EntGotInsertedIntoContainerMessage>(OnInserted);
         SubscribeLocalEvent<DemonShadowComponent, LockCocoonEvent>(OnLockCocoon, before: new[] { typeof(LockCocoonSystem) });
 
@@ -137,9 +144,6 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
                 if (_gameTiming.CurTime >= component.TimeUtilPhaseEnd)
                     EndPhase(uid, component);
             }
-
-            if (_gameTiming.CurTime >= component.TimeUtilTeleport && component.TeleportTarget != null)
-                Teleport(uid, component.TeleportTarget.Value, component);
 
             if (_gameTiming.CurTime >= component.TimeUtilShadowCrawl && component.IsStartShadowCrawl)
                 Crawl(uid, component);
@@ -219,10 +223,22 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
     private void OnComponentInit(EntityUid uid, DemonShadowComponent component, ComponentInit args)
     {
         _actionsSystem.AddAction(uid, ref component.DemonShadowCrawlActionEntity, component.DemonShadowCrawl, uid);
-        _actionsSystem.AddAction(uid, ref component.DemonShadowGrappleActionEntity, component.DemonShadowGrapple, uid);
     }
 
     private void OnMeleeHit(EntityUid uid, DemonShadowComponent component, MeleeHitEvent args)
+    {
+        ApplyDemonMeleeDamage(uid, component, args);
+    }
+
+    private void OnHandMeleeHit(EntityUid uid, DemonShadowHandComponent component, MeleeHitEvent args)
+    {
+        if (!TryComp<DemonShadowComponent>(args.User, out var demon))
+            return;
+
+        ApplyDemonMeleeDamage(args.User, demon, args);
+    }
+
+    private void ApplyDemonMeleeDamage(EntityUid uid, DemonShadowComponent component, MeleeHitEvent args)
     {
         if (component.IsShadowCrawl)
         {
@@ -257,6 +273,35 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
         }
 
         args.Handled = true;
+    }
+
+    private void OnDemonShadowDeath(EntityUid uid, DemonShadowComponent component, MobStateChangedEvent args)
+    {
+        if (args.NewMobState != MobState.Dead)
+            return;
+
+        if (!TryComp<HandsComponent>(uid, out var hands))
+            return;
+
+        foreach (var held in _hands.EnumerateHeld((uid, hands)).ToList())
+        {
+            if (!HasComp<DemonShadowHandComponent>(held))
+                continue;
+
+            RemComp<UnremoveableComponent>(held);
+            _hands.TryDrop((uid, hands), held, checkActionBlocker: false);
+        }
+    }
+
+    private void OnFlareProjectileHit(EntityUid uid, DemonShadowFlareDamageComponent component,
+        ref ProjectileHitEvent args)
+    {
+        if (!TryComp<DemonShadowComponent>(args.Target, out var demon))
+            return;
+
+        args.Damage = new DamageSpecifier();
+        _damageable.TryChangeDamage(args.Target, demon.LightDamage * component.LightDamageMultiplier,
+            ignoreResistances: true, origin: args.Shooter);
     }
 
     private void OnComponentShutdown(EntityUid uid, DemonShadowComponent component, ComponentShutdown args)
@@ -424,7 +469,6 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
 
         if (isAstral)
         {
-            _actionsSystem.SetEnabled(component.DemonShadowGrappleActionEntity, false);
             ToggleVisible(uid, false);
             ToggleFixtures(uid, false);
             _appearance.SetData(uid, DemonShadowVisuals.Shadow, true);
@@ -434,7 +478,6 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
         }
         else
         {
-            _actionsSystem.SetEnabled(component.DemonShadowGrappleActionEntity, true);
             ToggleVisible(uid, true);
             ToggleFixtures(uid, true);
             _appearance.SetData(uid, DemonShadowVisuals.Shadow, false);
@@ -451,42 +494,9 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
         }
     }
 
-    private void DoShadowGrapple(EntityUid uid, DemonShadowComponent component, ShadowGrappleEvent args)
+    private void OnDemonShadowHandShot(EntityUid uid, DemonShadowHandComponent component, ref GunShotEvent args)
     {
-        if (!_gameTiming.IsFirstTimePredicted)
-            return;
-
-        if (args.Handled)
-            return;
-
-        var user = args.Performer;
-        var target = args.Target;
-
-        if (!TryComp<MobStateComponent>(target, out var stateComponent))
-            return;
-
-        if (!_interaction.InRangeUnobstructed(user, target, 0f, CollisionGroup.BulletImpassable))
-        {
-            _popup.PopupEntity(Loc.GetString("Не могу пройти через препятствие!"), uid, uid);
-            return;
-        }
-
-        args.Handled = true;
-
-        ExtinguishLights(user, LightExtinguishRadius);
-
-        _beam.TryCreateBeam(uid, target, "ShadowHand");
-        _stun.TryUpdateParalyzeDuration(target, TimeSpan.FromSeconds(3));
-
-        component.TeleportTarget = target;
-        component.TimeUtilTeleport = _gameTiming.CurTime + component.TeleportDuration;
-    }
-
-    private void Teleport(EntityUid uid, EntityUid target, DemonShadowComponent component)
-    {
-        component.TeleportTarget = null;
-        _transform.SetCoordinates(target, Transform(uid).Coordinates);
-        _transform.AttachToGridOrMap(target);
+        ExtinguishLights(args.User, LightExtinguishRadius);
     }
 
     private void ExtinguishLights(EntityUid uid, float radius)

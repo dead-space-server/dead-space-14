@@ -751,6 +751,17 @@ public sealed class LavalandFaunaRaidSystem : EntitySystem
     }
 
     /// <summary>The middle of the outpost on this lavaland, in world coordinates.</summary>
+    /// <summary>The box of the outpost on this lavaland, in world coordinates.</summary>
+    public bool TryGetOutpostBounds(EntityUid mapUid, out Box2 bounds)
+    {
+        bounds = default;
+        if (!TryFindOutpost(mapUid, out var outpost) || !TryComp<MapGridComponent>(outpost, out var grid))
+            return false;
+
+        bounds = _transform.GetWorldMatrix(outpost).TransformBox(grid.LocalAABB);
+        return true;
+    }
+
     public bool TryGetOutpostCenter(EntityUid mapUid, out Vector2 center)
     {
         center = default;

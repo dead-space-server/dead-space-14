@@ -37,6 +37,8 @@
     -  id: PlushieAnarchistVanity
     -  id: AnarchistVanityMedkitAdvanced
     -  id: PaperAnarchistVanity
+    -  id: WeaponCrusherAnarchistVanity
+    -  id: WeaponProtokineticAnarchistVanity
 
 
 # Belt
@@ -550,3 +552,78 @@
     - stampedColor: '#00BE00FF'
       stampedName: Одобрено
     content: paper-law-anarchistvanity
+
+# Crusher
+- type: entity
+  parent: WeaponCrusher
+  id: WeaponCrusherAnarchistVanity
+  name: алебарда "Патриот"
+  description: Пока рука способна держать копьё, солдат не имеет права пасть Говорят, оружие старого воина хранит память о каждом сражении. На его поверхности остаются следы ударов, на металле — отметины времени, а в каждом изгибе ощущается тяжесть прожитых лет. Со временем оружие стало отражением самого хозяина суровым, тяжёлым и почти неуязвимым.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/crusher.rsi
+    state: icon
+  - type: Item
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/crusher.rsi
+    size: Huge
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/crusher.rsi
+  - type: PointLight
+    color: "#b11616"
+    enabled: false
+    radius: 4
+  - type: Gun
+    soundGunshot:
+      path: /Audio/_DeadSpace/Sponsor/AnarchistVanity/crusher-shot.ogg
+  - type: RechargeBasicEntityAmmo
+    rechargeSound:
+      path: /Audio/_DeadSpace/Sponsor/AnarchistVanity/crusher-reload.ogg
+  - type: BasicEntityAmmoProvider
+    proto: BulletChargeAmaliz # Разрешено правообладателем
+    capacity: 1
+    count: 1
+
+# Protokinetic
+- type: entity
+  parent: WeaponProtoKineticAccelerator
+  id: WeaponProtokineticAnarchistVanity
+  name: старомодный кинетик "Последний рубеж"
+  description: «Оружие не обязано быть красивым. Оно обязано работать, когда всё остальное уже отказало» В архивах старых военных подразделений Урусуса сохранились упоминания об экспериментальных кинетических ускорителях, разработанных для ведения боя в условиях, где обычное огнестрельное оружие оказывалось недостаточно надёжным. Внутри корпуса находится кинетический механизм, издающий низкий металлический гул при активации. При выстреле раздаётся резкий импульсный звук, напоминающий удар тяжёлого молота по стальной плите.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: AttachmentHolder
+    slotOverlays:
+      bayonet_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: bayonet
+        offset: 0.78125,0.375
+      light_slot:
+        sprite: _DeadSpace/Lavaland/Objects/Weapons/pka_attachments.rsi
+        state: flight
+        stateOn: flight_on
+        offset: 0.40625,0.28125
+  - type: Sprite
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/kinetic_accelerator.rsi
+    layers:
+    - state: icon
+    - state: icon-overlay
+  - type: Item
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/kinetic_accelerator.rsi
+    size: Normal
+    heldPrefix: null
+  - type: Clothing
+    sprite: _DeadSpace/Sponsor/AnarchistVanity/kinetic_accelerator.rsi
+  - type: PointLight
+    enabled: true
+    radius: 4
+    color: "#bc0303"
+    mask: null
+    autoRot: false
+  - type: GunRequiresWield
+  - type: Gun
+    soundGunshot:
+      path: /Audio/_DeadSpace/Sponsor/AnarchistVanity/accelerator-shot.ogg
+  - type: RechargeBasicEntityAmmo
+    rechargeSound:
+      path: /Audio/_DeadSpace/Sponsor/AnarchistVanity/accelerator-reload.ogg

@@ -127,7 +127,7 @@
     components:
     - Vocal
     tags:
-    - FelinidEmotes
+    - CatEmotes
   blacklist:
     tags:
     - SiliconEmotes

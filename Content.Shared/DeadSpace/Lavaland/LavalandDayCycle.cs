@@ -250,6 +250,52 @@ public sealed partial class LavalandDayCycleComponent : Component
     [ViewVariables]
     public Color FromColor;
 
+    /// <summary>
+    /// A hue laid over the nights' light from now on (the purple the lavaland's nights turn once the Celestial is
+    /// beaten); the days keep their own. Null - the phases' own colours.
+    /// </summary>
+    [ViewVariables]
+    public Color? Tint;
+
+    /// <summary>The tinted nights' brightness is multiplied by this.</summary>
+    [ViewVariables]
+    public float TintBrightness = 1f;
+
+    /// <summary>The tinted nights (a deep one too) are never darker than this, 0-1.</summary>
+    [ViewVariables]
+    public float TintMinBrightness = 0.08f;
+
+    /// <summary>The current phase is a night (one that can turn deep).</summary>
+    [ViewVariables]
+    public bool Night;
+
+    /// <summary>
+    /// A night under the Celestial's purple: the lavaland glows as the chromite caves do, a band of twinkling specks
+    /// and swarms of fireflies.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool CelestialNight;
+
+    /// <summary>The phase's own colour the light is fading to, before the tint.</summary>
+    [ViewVariables]
+    public Color BaseColor;
+
+    /// <summary>
+    /// Till then the light of the whole map shimmers between two colours, as the chromite caves' pit does (the
+    /// Celestial's death); then it goes back to the phase's own.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan PulseUntil;
+
+    [ViewVariables]
+    public Color PulseA;
+
+    [ViewVariables]
+    public Color PulseB;
+
+    [ViewVariables]
+    public float PulsePeriod = 2f;
+
     [ViewVariables]
     public Color ToColor;
 

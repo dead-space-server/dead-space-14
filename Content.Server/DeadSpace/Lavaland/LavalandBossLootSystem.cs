@@ -345,11 +345,12 @@ public sealed class LavalandBossLootSystem : EntitySystem
             if (mob.Owner == ent.Owner || _mobState.IsDead(mob, mob.Comp))
                 continue;
 
-            // Frozen on the spot, still standing: knocking down is the kneel command's job.
+            // Frozen on the spot, still standing: knocking down is the kneel command's job. Whatever they hold
+            // stays in their hands either way.
             if (command.Stun > TimeSpan.Zero)
-                _stun.TryUpdateStunDuration(mob.Owner, command.Stun);
+                _stun.TryUpdateStunDuration(mob.Owner, command.Stun, drop: false);
             if (command.Knockdown > TimeSpan.Zero)
-                _stun.TryKnockdown(mob.Owner, command.Knockdown);
+                _stun.TryKnockdown(mob.Owner, command.Knockdown, drop: false);
             if (command.Damage is { } damage)
                 _damageable.TryChangeDamage(mob.Owner, damage, true, origin: ent);
             // Thrown like the clown's push horn does it: fast, and with the floor's friction made up for, so they

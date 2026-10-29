@@ -33,6 +33,7 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
     [Dependency] private readonly VocalSystem _vocal = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedSubdermalImplantSystem _implants = default!;
+    [Dependency] private readonly SharedActionsSystem _actions = default!;
 
     public override void Initialize()
     {
@@ -134,6 +135,9 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
         EnsureComp<UnremoveableComponent>(uid);
 
         comp.PunishmentImplantEntity = _implants.AddImplant(wearer, comp.PunishmentImplant);
+        // The implant is the item's, not the wearer's: no button for them to press.
+        if (TryComp<SubdermalImplantComponent>(comp.PunishmentImplantEntity, out var implant) && implant.Action is { } action)
+            _actions.RemoveAction(wearer, action);
 
         _popupSystem.PopupEntity(
             Loc.GetString("hardsuit-identification-error-spikes"),
@@ -141,22 +145,23 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
             wearer,
             Shared.Popups.PopupType.Large);
 
+        // The item counts down itself, whether it has a voice or not (a backpack has none).
         Timer.Spawn(1000,
             () => _chat.TrySendInGameICMessage(uid,
                 Loc.GetString("hardsuit-identification-error"),
-                InGameICChatType.Speak, true));
+                InGameICChatType.Speak, true, ignoreActionBlocker: true));
 
         Timer.Spawn(1500,
             () => { if (TryComp(wearer, out VocalComponent? v)) _vocal.TryPlayScreamSound(wearer, v); });
 
         Timer.Spawn(2000,
-            () => _chat.TrySendInGameICMessage(uid, "3", InGameICChatType.Speak, true));
+            () => _chat.TrySendInGameICMessage(uid, "3", InGameICChatType.Speak, true, ignoreActionBlocker: true));
 
         Timer.Spawn(2500,
             () => { if (TryComp(wearer, out VocalComponent? v)) _vocal.TryPlayScreamSound(wearer, v); });
 
         Timer.Spawn(3000,
-            () => _chat.TrySendInGameICMessage(uid, "2", InGameICChatType.Speak, true));
+            () => _chat.TrySendInGameICMessage(uid, "2", InGameICChatType.Speak, true, ignoreActionBlocker: true));
 
         Timer.Spawn(3500,
             () => { if (TryComp(wearer, out VocalComponent? v)) _vocal.TryPlayScreamSound(wearer, v); });
@@ -164,7 +169,7 @@ public sealed class HardsuitIdentificationSystem : EntitySystem
         Timer.Spawn(4000,
             () =>
             {
-                _chat.TrySendInGameICMessage(uid, "1", InGameICChatType.Speak, true);
+                _chat.TrySendInGameICMessage(uid, "1", InGameICChatType.Speak, true, ignoreActionBlocker: true);
                 if (TryComp(wearer, out VocalComponent? v)) _vocal.TryPlayScreamSound(wearer, v);
             });
 

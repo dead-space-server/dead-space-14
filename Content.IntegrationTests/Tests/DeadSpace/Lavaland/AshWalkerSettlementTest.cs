@@ -216,4 +216,35 @@ public sealed class AshWalkerSettlementTest
         });
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task RoofMarkerCreatesRoofDataAndBlocksWeather()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var server = pair.Server;
+        var entMan = server.EntMan;
+        var maps = server.System<SharedMapSystem>();
+        var roofs = server.System<SharedRoofSystem>();
+        var weather = server.System<SharedWeatherSystem>();
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var tiles = server.ResolveDependency<ITileDefinitionManager>();
+            var basalt = tiles["FloorBasalt"];
+            maps.SetTile(map.Grid, map.Grid.Comp, map.Tile.GridIndices, new Tile(basalt.TileId));
+            var tile = maps.GetTileRef(map.Grid, map.Grid.Comp, map.Tile.GridIndices);
+
+            Assert.That(entMan.HasComponent<RoofComponent>(map.Grid), Is.False);
+            Assert.That(weather.CanWeatherAffect(map.Grid, map.Grid.Comp, tile), Is.True);
+
+            entMan.SpawnEntity("RoofMarker",
+                maps.GridTileToLocal(map.Grid, map.Grid.Comp, tile.GridIndices));
+
+            Assert.That(entMan.TryGetComponent<RoofComponent>(map.Grid, out var roof), Is.True);
+            Assert.That(roofs.IsRooved((map.Grid, map.Grid.Comp, roof!), tile.GridIndices), Is.True);
+            Assert.That(weather.CanWeatherAffect(map.Grid, map.Grid.Comp, tile), Is.False);
+        });
+        await pair.CleanReturnAsync();
+    }
 }

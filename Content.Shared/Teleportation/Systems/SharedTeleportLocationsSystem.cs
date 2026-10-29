@@ -43,6 +43,22 @@ public abstract partial class SharedTeleportLocationsSystem : EntitySystem
         args.Cancel();
     }
 
+    // DS14-start
+    /// <summary>
+    /// Only a warp point the server put in the menu: the client may name any other (a blacklisted one, another map's).
+    /// </summary>
+    public bool IsOfferedWarp(TeleportLocationsComponent comp, NetEntity warp)
+    {
+        foreach (var point in comp.AvailableWarps)
+        {
+            if (point.TelePoint == warp)
+                return true;
+        }
+
+        return false;
+    }
+    // DS14-end
+
     protected virtual void OnTeleportToLocationRequest(Entity<TeleportLocationsComponent> ent, ref TeleportLocationDestinationMessage args)
     {
         //DS14-start
@@ -51,6 +67,9 @@ public abstract partial class SharedTeleportLocationsSystem : EntitySystem
         //DS14-end
         if (!TryGetEntity(args.NetEnt, out var telePointEnt) || TerminatingOrDeleted(telePointEnt) || !HasComp<WarpPointComponent>(telePointEnt) || IsDelayed(ent))
             return;
+
+        if (!IsOfferedWarp(ent.Comp, args.NetEnt)) // DS14
+            return; // DS14
 
         var comp = ent.Comp;
         var originEnt = args.Actor;

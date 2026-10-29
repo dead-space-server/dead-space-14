@@ -1121,6 +1121,7 @@
         Heat: 0.1
         Cold: 0.1
         Radiation: 0.1
+        Shock: 0.7 #ds14-value
   - type: StaminaResistance #DS14
     damageCoefficient: 0.6
   - type: ClothingSpeedModifier
@@ -1158,7 +1159,7 @@
         Piercing: 0.5 # DS14-value
         Poison: 0.6 # DS14-value: what is poison?
         Heat: 0.55 # DS14-value
-        Shock: 0.7
+#        Shock: 0.7 #DS14-value
         Radiation: 0.6
         Caustic: 0.4
   - type: StaminaResistance #DS14

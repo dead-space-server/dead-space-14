@@ -484,9 +484,23 @@ public sealed partial class PathfindingSystem
 
                                 // Do an AABB check first as it's probably faster, then do an actual point check.
                                 var intersects = false;
+                                var thinHit = false; //DS-14
+                                //DS-14 start
+                                var tileBox = new Box2(gridOrigin.X + x, gridOrigin.Y + y, gridOrigin.X + x + 1f, gridOrigin.Y + y + 1f);
+                                //DS-14 end
 
                                 foreach (var proxy in fixture.Proxies)
                                 {
+                                    //DS-14 start
+                                    if ((proxy.AABB.Width <= 0.3f || proxy.AABB.Height <= 0.3f) &&
+                                        proxy.AABB.Intersects(tileBox))
+                                    {
+                                        intersects = true;
+                                        thinHit = true;
+                                        break;
+                                    }
+                                    //DS-14 end
+
                                     if (!proxy.AABB.Contains(localPos))
                                         continue;
 
@@ -499,7 +513,7 @@ public sealed partial class PathfindingSystem
                                     continue;
                                 }
 
-                                if (!_fixtures.TestPoint(fixture.Shape, new Transform(xform.LocalPosition, xform.LocalRotation), localPos))
+                                if (!thinHit && !_fixtures.TestPoint(fixture.Shape, new Transform(xform.LocalPosition, xform.LocalRotation), localPos)) //DS-14
                                 {
                                     continue;
                                 }

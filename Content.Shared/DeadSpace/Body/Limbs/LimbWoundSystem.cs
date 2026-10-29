@@ -1348,17 +1348,21 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 continue;
 
             if (!_containers.TryGetContainingContainer((part.Id, null, null), out var container))
-                return;
+                continue;
 
             var bare = false;
             var eyesRemain = true;
+            LimbZoneState? woundState = null;
             if (TryComp<LimbBodyComponent>(body, out var limbs))
             {
                 EnsureZones(limbs);
                 var zones = CollectionsMarshal.AsSpan(limbs.Zones);
                 var index = LimbWoundRules.Index(zone);
                 if (index < zones.Length)
+                {
                     bare = zones[index].SkinBare;
+                    woundState = zones[index];
+                }
 
                 eyesRemain = limbs.EyesGone < 2;
                 if (zone == LimbZone.Head)
@@ -1389,6 +1393,24 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 CopyLook(flesh, look, zone, eyesRemain);
 
             Dirty(part.Id, flesh);
+
+            if (woundState is { } ws)
+            {
+                var wound = EnsureComp<LimbPartWoundComponent>(part.Id);
+                wound.Zone = zone;
+                wound.State = ws;
+                Dirty(part.Id, wound);
+
+                if (TryComp<LimbWoundVisualsComponent>(body, out var bodyVis))
+                {
+                    var partVis = EnsureComp<LimbWoundVisualsComponent>(part.Id);
+                    partVis.Thresholds = bodyVis.Thresholds;
+                    partVis.States = bodyVis.States;
+                    partVis.Groups = bodyVis.Groups;
+                    Dirty(part.Id, partVis);
+                }
+            }
+
             var fresh = EnsureComp<LimbFreshComponent>(part.Id);
             if (limbs != null && limbs.Died is { } died)
             {

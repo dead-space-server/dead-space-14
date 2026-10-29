@@ -69,6 +69,7 @@ public sealed partial class ChatSystem : SharedChatSystem
     [Dependency] private readonly LanguageSystem _language = default!; // DS14-Languages
     [Dependency] private readonly ServerGlobalSoundSystem _sound = default!; // DS14
     [Dependency] private readonly PsychiatrySystem _psychiatry = default!; //DS-14
+    [Dependency] private readonly ListeningSystem _listening = default!; // DS-14
     private IServerChatFilter? _chatFilter; // DS14-chat-filter
 
     // DS14: last words must remain visible to their speaker despite critical hearing suppression.
@@ -930,6 +931,19 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         SendInVoiceRange(ChatChannel.LOOC, message, wrappedMessage, source, hideChat ? ChatTransmitRange.HideChat : ChatTransmitRange.Normal, player.UserId);
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"LOOC from {source}: {message}");
+
+        // DS-14
+        _listening.PingListeners(source, message, null, default, true);
+    }
+
+    // DS-14
+    public void SendLooc(EntityUid source, string message, ChatTransmitRange range, string name)
+    {
+        var wrappedMessage = Loc.GetString("chat-manager-entity-looc-wrap-message",
+            ("entityName", FormattedMessage.EscapeText(name)),
+            ("message", FormattedMessage.EscapeText(message)));
+
+        SendInVoiceRange(ChatChannel.LOOC, message, wrappedMessage, source, range);
     }
 
     private void SendDeadChat(EntityUid source, ICommonSession player, string message, bool hideChat)

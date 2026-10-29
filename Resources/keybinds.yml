@@ -673,3 +673,7 @@ binds:
 - function: SwitchComponentMode
   type: State
   key: F
+- function: SwitchGunAmmoMode # DS14
+  type: State
+  key: MouseMiddle
+  canFocus: true

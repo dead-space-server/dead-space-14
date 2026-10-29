@@ -98,7 +98,7 @@ namespace Content.Client.Sandbox
                 && TryComp(uid, out MetaDataComponent? comp)
                 && !comp.EntityDeleted)
             {
-                if (comp.EntityPrototype == null || comp.EntityPrototype.HideSpawnMenu || comp.EntityPrototype.Abstract)
+                if (comp.EntityPrototype == null || comp.EntityPrototype.Abstract) //DS-14
                     return false;
 
                 if (_placement.Eraser)

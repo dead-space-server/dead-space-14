@@ -5,7 +5,7 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared.DeadSpace.Body.Limbs;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class LimbBodyComponent : Component
 {
     [DataField, AutoNetworkedField]

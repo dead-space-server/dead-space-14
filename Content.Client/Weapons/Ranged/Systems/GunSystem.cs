@@ -94,6 +94,7 @@ public sealed partial class GunSystem : SharedGunSystem
 
         InitializeMagazineVisuals();
         InitializeSpentAmmo();
+        InitializeAmmoModes(); // DS14
     }
 
 

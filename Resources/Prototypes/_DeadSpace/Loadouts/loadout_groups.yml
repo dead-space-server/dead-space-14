@@ -93,6 +93,14 @@
   - ServiceJumpskirtNew
 
 # Cargo
+## Senior salvage specialist
+- type: loadoutGroup
+  id: SeniorSalvageSpecialistWeapon
+  name: loadout-group-senior-salvage-specialist-weapon
+  minLimit: 0
+  defaultSelected: 1
+  loadouts:
+  - SeniorSalvageSpecialistSeniorKinetik
 
 # Law
 - type: loadoutGroup
