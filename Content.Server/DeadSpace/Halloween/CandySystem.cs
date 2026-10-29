@@ -19,6 +19,7 @@ using Content.Shared.Movement.Systems;
 using Content.Shared.Nutrition;
 using Content.Shared.Stacks;
 using Content.Server.Speech.Components;
+using Content.Shared.Tag;
 using Content.Shared.StatusEffect;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.Throwing;
@@ -56,6 +57,7 @@ public sealed class CandySystem : EntitySystem
     [Dependency] private readonly GodmodeSystem _godmode = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private readonly TagSystem _tags = default!;
     [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoid = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly MobThresholdSystem _threshold = default!;
@@ -153,10 +155,12 @@ public sealed class CandySystem : EntitySystem
             case CandyEffectKind.BodySwap:
                 BodySwap(user);
                 break;
+// DS14-start: put the player into the DS14 half-critical (PreCritical) state
             case CandyEffectKind.TooSweet:
                 if (_mobState.IsAlive(user))
-                    _mobState.ChangeMobState(user, MobState.Dead, origin: user);
+                    _mobState.ChangeMobState(user, MobState.PreCritical, origin: user);
                 break;
+// DS14-end
             case CandyEffectKind.Earplugs:
                 if (TryComp<ActorComponent>(user, out var earActor))
                     RaiseNetworkEvent(new CandyMuteEvent(TimeSpan.FromSeconds(30)), earActor.PlayerSession.Channel);
@@ -323,6 +327,11 @@ public sealed class CandySystem : EntitySystem
 
     private void CloneItem(EntityUid item, EntityCoordinates coords)
     {
+        // DS14-start: never duplicate high-risk items (nuke disk, captain ID, hyposprays, etc.)
+        if (_tags.HasTag(item, "HighRiskItem"))
+            return;
+        // DS14-end
+
         var proto = MetaData(item).EntityPrototype;
         if (proto == null || proto.Abstract || proto.HideSpawnMenu)
             return;
