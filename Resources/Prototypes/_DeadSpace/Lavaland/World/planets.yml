@@ -144,7 +144,7 @@
     arenaSize: 33
     arenaTile: FloorRGlass
     arenaBorder: LavalandCelestialInvisibleWall
-    arenaHoleRadius: 4
+    arenaHoleRadius: 0
     holeFence: LavalandCelestialHoleFence
     faunaClearRadius: 25
     sleepStatusEffect: StatusEffectLavalandCelestialSleep

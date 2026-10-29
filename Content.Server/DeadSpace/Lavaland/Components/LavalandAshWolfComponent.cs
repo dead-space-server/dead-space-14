@@ -150,7 +150,11 @@ public sealed partial class LavalandAshWolfComponent : Component
     public float TamedRushWindup = 0.45f;
 
     [DataField]
-    public float TamedRushDistance = 7f;
+    public float TamedRushDistance = 5f;
+
+    /// <summary>The tamed borg's rush, on whoever it catches: one cut, and it jumps back off them.</summary>
+    [DataField]
+    public DamageSpecifier TamedRushDamage = new() { DamageDict = { ["Slash"] = 30 } };
 
     [DataField]
     public float KnockbackDistance = 3f;

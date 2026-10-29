@@ -136,6 +136,9 @@
       components:
       - LavalandFauna
       - LavalandLazarusRevivable
+    blacklist:
+      components:
+      - LavalandRockMimic
     sound: /Audio/Items/hypospray.ogg
   - type: StaticPrice
     price: 1000

@@ -106,7 +106,7 @@
         Blunt: 0.9
         Slash: 0.9
         Piercing: 0.9
-        Heat: 0.09
+        Heat: 0.9
   - type: PressureProtection
     lowPressureModifier: 14
   - type: BreathMask

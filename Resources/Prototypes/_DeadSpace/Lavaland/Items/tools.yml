@@ -63,13 +63,7 @@
   name: серебряная кирка
   description: Специальная кирка что позволет добыть чутка больше руды.
   components:
-  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
-  - type: Parry
-    parryableWeapons:
-      tags:
-      - ParryStandardWeapon
-      components:
-      - ParryableBoss
+  # A mining tool, not a weapon: no parry (as the ordinary pickaxe).
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Specific/Mining/silver_pickaxe.rsi
     state: icon
@@ -104,13 +98,7 @@
   name: алмазная кирка
   description: Алмазная кирка что позволяет добыть ну очень много руды. А ну и ещё, оно даёт вам напоминание об первом правиле при копании руды.
   components:
-  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
-  - type: Parry
-    parryableWeapons:
-      tags:
-      - ParryStandardWeapon
-      components:
-      - ParryableBoss
+  # A mining tool, not a weapon: no parry (as the ordinary pickaxe).
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Specific/Mining/diamond_pickaxe.rsi
     state: icon
@@ -145,13 +133,7 @@
   name: скоростной отбойный молоток
   description: Отбойный молоток что делает тунели при копании.
   components:
-  # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.
-  - type: Parry
-    parryableWeapons:
-      tags:
-      - ParryStandardWeapon
-      components:
-      - ParryableBoss
+  # A mining tool, not a weapon: no parry (as the ordinary pickaxe).
   - type: Sprite
     sprite: _DeadSpace/Lavaland/Objects/Specific/Mining/sonic_jackhammer.rsi
     state: icon
@@ -496,7 +478,7 @@
   parent: BaseItem
   id: LavalandHierophantStaff
   name: посох Иерофанта
-  description: Странный артефакт с квадратным узором, проводящий ослабленные атаки Иерофанта.
+  description: Странный артефакт с квадратным узором, проводящий ослабленные атаки Иерофанта. Им же можно благословить живое существо - его шаги подчинятся ритму Иерофанта.
   suffix: Lavaland
   components:
   # The lavaland melee weapons parry the bosses (and their rushes and saws) and ordinary swords.

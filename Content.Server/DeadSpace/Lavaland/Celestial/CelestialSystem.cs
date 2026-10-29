@@ -785,7 +785,7 @@ public sealed class CelestialSystem : EntitySystem
         for (var i = 0; i < orbsToSpawn; i++)
         {
             var riftAngle = _random.NextFloat(0f, MathF.Tau);
-            var riftDist = _random.NextFloat(1.5f, 3.5f);
+            var riftDist = _random.NextFloat(comp.RiftMinDistance, MathF.Max(comp.RiftMinDistance, comp.RiftMaxDistance));
             var riftCenter = targetPos.Position +
                 new Vector2(MathF.Cos(riftAngle) * riftDist, MathF.Sin(riftAngle) * riftDist);
 

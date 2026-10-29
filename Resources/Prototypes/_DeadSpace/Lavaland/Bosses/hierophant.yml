@@ -348,6 +348,8 @@
     - LavalandHierophantStaff
     - HierophantTrophy
   - type: LavalandHierophant
+    # The square it raises under itself when someone comes close spreads slower than one walks: there is time to get out.
+    closeBurstSpread: 2.5
   - type: NpcFactionMember
     factions:
     - SimpleHostile

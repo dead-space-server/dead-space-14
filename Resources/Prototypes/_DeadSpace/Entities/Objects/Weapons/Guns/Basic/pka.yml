@@ -343,6 +343,8 @@
       rechargeMultiplier: 2
   - type: Gun
     fireRate: 1
+    # As fast as the other proto-kinetic guns: its bolts fly as far as theirs and do not skip through fauna or walls.
+    projectileSpeed: 25
     selectedMode: SemiAuto
     minAngle: 0
     maxAngle: 4

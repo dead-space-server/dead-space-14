@@ -3,6 +3,7 @@
 using System.Numerics;
 using Content.Shared.DeadSpace.Movement.Components;
 using Content.Shared.Doors.Components;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Movement.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Physics;
@@ -78,7 +79,7 @@ public abstract partial class SharedMoverController
             // Arriving within this tick with a direction held: the next step starts right now, from the tile it is
             // about to reach - no tick spent creeping onto the center and no hitch on every tile.
             if (direction != Vector2.Zero && left <= speed * frameTime + TileStepArriveDistance &&
-                TryPickTileStep(xform, physics, step.Target, direction, out var chained))
+                TryPickTileStep(ent, xform, physics, step.Target, direction, out var chained))
             {
                 BeginTileStep(step, xform, chained, now, step.Target);
                 PlayTileStepSound(ent, mover, xform);
@@ -96,12 +97,13 @@ public abstract partial class SharedMoverController
                 }
                 else if (now - step.LastProgress > step.StuckTime)
                 {
-                    // Bumped into something: back to the center of the tile we stand on - unless the body cannot
-                    // stand there (a railing along the edge leaves no room): then stop where we are, and a held
-                    // direction starts a fresh step below instead of pushing at the railing for good.
-                    var here = TileCenter(position);
-                    if (CanStandOnTileCenter(ent, xform, here))
-                        BeginTileStep(step, xform, here, now, here);
+                    // Bumped into something: back to the tile the step came from - unless it was already the way
+                    // back that got stuck, or the body cannot stand there (a crate pushed onto it, a railing along
+                    // the edge): then stop where we are, and a held direction starts a fresh step below. Never
+                    // pushing at the same spot for good: that held the mob in place and swallowed the input.
+                    var returning = step.Target == step.From;
+                    if (!returning && CanStandOnTileCenter(ent, xform, step.From))
+                        BeginTileStep(step, xform, step.From, now, step.From);
                     else
                         step.Stepping = false;
                 }
@@ -113,7 +115,7 @@ public abstract partial class SharedMoverController
             // A wall ahead is not walked into (that only stalls and jerks): a diagonal slides along it instead,
             // a straight step into it is not taken at all.
             var from = TileCenter(position);
-            if (TryPickTileStep(xform, physics, from, direction, out var target))
+            if (TryPickTileStep(ent, xform, physics, from, direction, out var target))
             {
                 BeginTileStep(step, xform, target, now, from);
                 PlayTileStepSound(ent, mover, xform);
@@ -170,22 +172,34 @@ public abstract partial class SharedMoverController
 
     /// <summary>
     /// The neighbouring tile to step to: the held direction if it is free, otherwise for a diagonal one of its
-    /// straight parts. False if every way is blocked by a wall.
+    /// straight parts. A diagonal is only taken with both of its straight parts free too: cutting the corner of a
+    /// wall the body bumps into it and is sent back (it would not let one into a passage). False if every way is
+    /// blocked.
     /// </summary>
-    private bool TryPickTileStep(TransformComponent xform, PhysicsComponent physics, Vector2 from, Vector2 direction, out Vector2 target)
+    private bool TryPickTileStep(EntityUid uid, TransformComponent xform, PhysicsComponent physics, Vector2 from,
+        Vector2 direction, out Vector2 target)
     {
         target = from + direction;
-        if (!IsTileStepBlocked(xform, physics, target))
+        if (direction.X == 0f || direction.Y == 0f)
+            return !IsTileStepBlocked(uid, xform, physics, target);
+
+        var horizontal = from + new Vector2(direction.X, 0f);
+        var vertical = from + new Vector2(0f, direction.Y);
+        var horizontalFree = !IsTileStepBlocked(uid, xform, physics, horizontal);
+        var verticalFree = !IsTileStepBlocked(uid, xform, physics, vertical);
+        if (horizontalFree && verticalFree && !IsTileStepBlocked(uid, xform, physics, target))
             return true;
 
-        if (direction.X == 0f || direction.Y == 0f)
-            return false;
-
-        foreach (var part in new[] { new Vector2(direction.X, 0f), new Vector2(0f, direction.Y) })
+        if (horizontalFree)
         {
-            target = from + part;
-            if (!IsTileStepBlocked(xform, physics, target))
-                return true;
+            target = horizontal;
+            return true;
+        }
+
+        if (verticalFree)
+        {
+            target = vertical;
+            return true;
         }
 
         return false;
@@ -195,44 +209,52 @@ public abstract partial class SharedMoverController
     private const float TileStepCenterHalfSize = 0.2f;
 
     /// <summary>
-    /// Something anchored and solid for this mob (a wall, a window) fills the middle of the tile.
-    /// Anchored things are the same on the client and the server, so both pick the same step.
+    /// Something solid for this mob (a wall, a window, a crate, a cactus) fills the middle of the tile.
+    /// Not only anchored things: walking into a loose crate held the mob against it.
     /// </summary>
-    private bool IsTileStepBlocked(TransformComponent xform, PhysicsComponent physics, Vector2 localTarget)
+    private bool IsTileStepBlocked(EntityUid uid, TransformComponent xform, PhysicsComponent physics, Vector2 localTarget)
     {
-        if (xform.ParentUid != xform.GridUid || !MapGridQuery.TryComp(xform.GridUid, out var grid))
+        if (xform.ParentUid != xform.GridUid || !MapGridQuery.TryComp(xform.GridUid, out _))
             return false;
 
-        var gridUid = xform.GridUid.Value;
-        var tile = new Vector2i((int) MathF.Floor(localTarget.X), (int) MathF.Floor(localTarget.Y));
         var middle = Box2.CenteredAround(TileCenter(localTarget), new Vector2(TileStepCenterHalfSize * 2f));
-        var anchored = _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
-        while (anchored.MoveNext(out var other))
+        return TileStepObstacleOverlaps(uid, xform.GridUid.Value, physics, middle);
+    }
+
+    private readonly HashSet<EntityUid> _tileStepObstacles = new();
+
+    /// <summary>
+    /// Something hard for this mob overlaps the box (grid-local). Doors and turnstiles do not count: a door is
+    /// stepped into (the bump opens it, a locked one stops the step like any obstacle), a turnstile lets one through
+    /// from its side. Nor do mobs: they pass through one another.
+    /// </summary>
+    private bool TileStepObstacleOverlaps(EntityUid uid, EntityUid gridUid, PhysicsComponent physics, Box2 box)
+    {
+        _tileStepObstacles.Clear();
+        _lookup.GetLocalEntitiesIntersecting(gridUid, box, _tileStepObstacles, LookupFlags.Static | LookupFlags.Dynamic);
+        foreach (var other in _tileStepObstacles)
         {
-            // A door is stepped into: the bump opens it, and a locked one stops the step like any obstacle.
-            if (HasComp<DoorComponent>(other))
+            if (other == uid || HasComp<DoorComponent>(other) || HasComp<TurnstileComponent>(other) ||
+                HasComp<MobStateComponent>(other) ||
+                !PhysicsQuery.TryComp(other, out var otherBody) || !otherBody.CanCollide || !otherBody.Hard ||
+                (otherBody.CollisionLayer & physics.CollisionMask) == 0 ||
+                !TileStepFixturesQuery.TryComp(other, out var fixtures) || !XformQuery.TryComp(other, out var otherXform) ||
+                otherXform.ParentUid != gridUid)
+            {
                 continue;
-
-            if (!PhysicsQuery.TryComp(other, out var otherBody) || !otherBody.CanCollide || !otherBody.Hard)
-                continue;
-
-            if ((otherBody.CollisionLayer & physics.CollisionMask) == 0)
-                continue;
+            }
 
             // Only a hard fixture in our way blocks: a bear trap is hard as an item but its trigger on the
-            // impassable layer is not, and the body's layer is the union of all of its fixtures.
-            if (!TileStepFixturesQuery.TryComp(other, out var fixtures) || !XformQuery.TryComp(other, out var otherXform))
-                return true;
-
-            // And only one across the middle of the tile: a wall lamp, a camera or a railing along an edge leaves
-            // the way free. Overlap, not a touch: a camera's corner ends right on the middle's edge.
+            // impassable layer is not, and the body's layer is the union of all of its fixtures. And only one
+            // across the box, overlapping it, not touching: a wall lamp, a camera or a railing along an edge leaves
+            // the way free.
             var transform = new Transform(otherXform.LocalPosition, otherXform.LocalRotation);
             foreach (var fixture in fixtures.Fixtures.Values)
             {
                 if (!fixture.Hard || (fixture.CollisionLayer & physics.CollisionMask) == 0)
                     continue;
 
-                var overlap = fixture.Shape.ComputeAABB(transform, 0).Intersect(middle);
+                var overlap = fixture.Shape.ComputeAABB(transform, 0).Intersect(box);
                 if (overlap.Width > 0.01f && overlap.Height > 0.01f)
                     return true;
             }
@@ -242,11 +264,12 @@ public abstract partial class SharedMoverController
     }
 
     /// <summary>
-    /// The mob's own body fits on the tile center: nothing anchored there (a railing along the edge) would overlap it.
+    /// The mob's own body fits on the tile center: nothing solid there (a railing along the edge, a crate pushed
+    /// halfway onto it) would overlap it.
     /// </summary>
     private bool CanStandOnTileCenter(EntityUid uid, TransformComponent xform, Vector2 center)
     {
-        if (xform.ParentUid != xform.GridUid || !MapGridQuery.TryComp(xform.GridUid, out var grid) ||
+        if (xform.ParentUid != xform.GridUid || !MapGridQuery.TryComp(xform.GridUid, out _) ||
             !TileStepFixturesQuery.TryComp(uid, out var ownFixtures) || !PhysicsQuery.TryComp(uid, out var physics))
         {
             return true;
@@ -263,35 +286,7 @@ public abstract partial class SharedMoverController
             body = body is { } so ? so.Union(box) : box;
         }
 
-        if (body is not { } bodyBox)
-            return true;
-
-        var gridUid = xform.GridUid.Value;
-        var tile = new Vector2i((int) MathF.Floor(center.X), (int) MathF.Floor(center.Y));
-        var anchored = _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
-        while (anchored.MoveNext(out var other))
-        {
-            if (other == uid || HasComp<DoorComponent>(other) ||
-                !PhysicsQuery.TryComp(other, out var otherBody) || !otherBody.CanCollide || !otherBody.Hard ||
-                (otherBody.CollisionLayer & physics.CollisionMask) == 0 ||
-                !TileStepFixturesQuery.TryComp(other, out var fixtures) || !XformQuery.TryComp(other, out var otherXform))
-            {
-                continue;
-            }
-
-            var otherTransform = new Transform(otherXform.LocalPosition, otherXform.LocalRotation);
-            foreach (var fixture in fixtures.Fixtures.Values)
-            {
-                if (!fixture.Hard || (fixture.CollisionLayer & physics.CollisionMask) == 0)
-                    continue;
-
-                var overlap = fixture.Shape.ComputeAABB(otherTransform, 0).Intersect(bodyBox);
-                if (overlap.Width > 0.01f && overlap.Height > 0.01f)
-                    return false;
-            }
-        }
-
-        return true;
+        return body is not { } bodyBox || !TileStepObstacleOverlaps(uid, xform.GridUid.Value, physics, bodyBox);
     }
 
     private static void BeginTileStep(TileStepMovementComponent step, TransformComponent xform, Vector2 target, TimeSpan now,

@@ -90,6 +90,17 @@ public sealed partial class LavalandSecretBossConfig
     [DataField]
     public float FaunaClearRadius = 25f;
 
+    /// <summary>
+    /// The pit opens no closer than this to a necropolis tendril: the fauna around the pit is driven off, and a tendril
+    /// next to it would give its loot away for nothing.
+    /// </summary>
+    [DataField]
+    public float TendrilClearRadius = 30f;
+
+    /// <summary>How many spots are tried for the pit before one by a tendril is taken anyway.</summary>
+    [DataField]
+    public int PitPlacementAttempts = 30;
+
     #endregion
 
     #region Tablet beeping
@@ -184,9 +195,26 @@ public sealed partial class LavalandSecretBossConfig
     [DataField]
     public EntProtoId ArenaBorder = "LavalandCelestialInvisibleWall";
 
-    /// <summary>Half-size of the hole in the middle the Celestial hangs over; players can't get into it.</summary>
+    /// <summary>
+    /// Radius of a round hole in the middle for the Celestial to hang over, fenced off; 0 - none: a fence between it
+    /// and the players kept their blows and shots off it.
+    /// </summary>
     [DataField]
-    public int ArenaHoleRadius = 4;
+    public int ArenaHoleRadius = 0;
+
+    /// <summary>
+    /// During the fight whoever comes this close to the Celestial's center (tiles) is thrown back off it: one can come
+    /// up to it and strike, but not stand inside it.
+    /// </summary>
+    [DataField]
+    public float CenterRepelRadius = 2f;
+
+    /// <summary>How far from its center they are thrown (tiles).</summary>
+    [DataField]
+    public float CenterRepelDistance = 4f;
+
+    [DataField]
+    public float CenterRepelSpeed = 8f;
 
     /// <summary>Fence around the hole: stops players but lets shots and blows through.</summary>
     [DataField]

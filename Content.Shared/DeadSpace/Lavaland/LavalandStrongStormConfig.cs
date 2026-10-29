@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Shared.Damage;
 using Content.Shared.Weather;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
@@ -8,8 +9,9 @@ namespace Content.Shared.DeadSpace.Lavaland;
 
 /// <summary>
 /// The strong storm of lavaland: a wind no staff dispels. Every few seconds it throws everyone out in the open
-/// several tiles one way or another (magboots switched on hold them closer). It may only come after <see cref="EarliestStart"/> into the round, and it brings the
-/// Ash Wolf to the miners' outpost.
+/// several tiles one way or another (magboots switched on hold them closer) and burns them like the ash storm. It comes
+/// in place of an ordinary ash storm, only after <see cref="EarliestStart"/> into the round, and it brings the Ash Wolf
+/// to the miners' outpost.
 /// </summary>
 [DataDefinition]
 public sealed partial class LavalandStrongStormConfig
@@ -21,16 +23,22 @@ public sealed partial class LavalandStrongStormConfig
     [DataField]
     public TimeSpan EarliestStart = TimeSpan.FromMinutes(45);
 
-    /// <summary>How often the chance is rolled.</summary>
+    /// <summary>The chance that an ordinary ash storm, about to come, is the strong one instead.</summary>
     [DataField]
-    public TimeSpan CheckInterval = TimeSpan.FromMinutes(5);
+    public float Chance = 0.15f;
+
+    /// <summary>What it does to everyone out in the open, every <see cref="DamageInterval"/>.</summary>
+    [DataField]
+    public DamageSpecifier Damage = new()
+    {
+        DamageDict = new()
+        {
+            { "Heat", 4.0f },
+        },
+    };
 
     [DataField]
-    public float BaseChance = 0.125f;
-
-    /// <summary>Added to the chance after each roll that brought nothing.</summary>
-    [DataField]
-    public float ChanceIncrease = 0.05f;
+    public TimeSpan DamageInterval = TimeSpan.FromSeconds(1);
 
     /// <summary>The alarm before the wind rises.</summary>
     [DataField]

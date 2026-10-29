@@ -377,10 +377,10 @@
       types:
         Blunt: 14
         Structural: 20
-  # Harms no one, until someone hits it: then that one.
+  # Harms no one, until someone hits it: then that one. The fauna takes it for a boulder and is no enemy of it.
   - type: NpcFactionMember
     factions:
-    - Passive
+    - LavalandRockMimic
   - type: NPCRetaliation
     attackMemoryLength: 20
   - type: FactionException

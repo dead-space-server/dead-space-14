@@ -288,7 +288,8 @@ public sealed class LavalandMiningEquipmentSystem : EntitySystem
         // Only simple creatures: crew and other humanoids are far too complex for the nanomachines.
         if (HasComp<HumanoidAppearanceComponent>(target) || !TryComp<MobStateComponent>(target, out var mob) ||
             !HasComp<NpcFactionMemberComponent>(target) ||
-            ent.Comp.Whitelist != null && !_whitelist.IsValid(ent.Comp.Whitelist, target))
+            ent.Comp.Whitelist != null && !_whitelist.IsValid(ent.Comp.Whitelist, target) ||
+            ent.Comp.Blacklist != null && _whitelist.IsValid(ent.Comp.Blacklist, target))
         {
             _popup.PopupEntity(Loc.GetString("lavaland-lazarus-invalid"), target, args.User);
             return;

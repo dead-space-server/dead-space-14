@@ -40,6 +40,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Parallax;
 using Content.Shared.Parallax.Biomes;
 using Content.Shared.Popups;
+using Content.Shared.Throwing;
 using Content.Shared.Slippery;
 using Content.Shared.StatusEffectNew;
 using Robust.Server.Player;
@@ -97,6 +98,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly SleepingSystem _sleeping = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
     [Dependency] private readonly Robust.Shared.Containers.SharedContainerSystem _containers = default!;
@@ -382,10 +384,29 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             halfSize = planet.MapHalfSize - 24f;
         }
 
-        var angle = _random.NextAngle();
-        var distance = _random.NextFloat(config.PitMinDistance, Math.Max(config.PitMinDistance, config.PitMaxDistance));
-        var position = origin + angle.ToVec() * distance;
-        position = Vector2.Clamp(position, new Vector2(-halfSize), new Vector2(halfSize));
+        // Away from the necropolis tendrils: the fauna is driven off around the pit, a tendril there would be free loot.
+        var tendrils = new List<Vector2>();
+        var tendrilQuery = EntityQueryEnumerator<LavalandNecropolisTendrilComponent, TransformComponent>();
+        while (tendrilQuery.MoveNext(out _, out _, out var tendrilXform))
+        {
+            if (tendrilXform.MapUid == mapUid)
+                tendrils.Add(_transform.GetWorldPosition(tendrilXform));
+        }
+
+        var position = Vector2.Zero;
+        var attempts = Math.Max(1, config.PitPlacementAttempts);
+        for (var attempt = 0; attempt < attempts; attempt++)
+        {
+            var angle = _random.NextAngle();
+            var distance = _random.NextFloat(config.PitMinDistance, Math.Max(config.PitMinDistance, config.PitMaxDistance));
+            position = origin + angle.ToVec() * distance;
+            position = Vector2.Clamp(position, new Vector2(-halfSize), new Vector2(halfSize));
+
+            var candidate = position;
+            if (!tendrils.Any(t => Vector2.DistanceSquared(t, candidate) < config.TendrilClearRadius * config.TendrilClearRadius))
+                break;
+        }
+
         var center = new Vector2i((int) MathF.Round(position.X), (int) MathF.Round(position.Y));
 
         // Clear a small basalt patch around the pit so rock or lava doesn't swallow it.
@@ -671,8 +692,8 @@ public sealed class LavalandSecretBossSystem : EntitySystem
         {
             for (var y = -half - 1; y <= half + 1; y++)
             {
-                // The Celestial hangs over a hole in the middle of the square.
-                if (Math.Max(Math.Abs(x), Math.Abs(y)) < hole)
+                // The Celestial hangs over a round hole in the middle of the square.
+                if (MathF.Sqrt(x * x + y * y) < hole)
                     continue;
                 tiles.Add((new Vector2i(x, y), new Tile(glass.TileId)));
             }
@@ -685,9 +706,12 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             for (var y = -half - 1; y <= half + 1; y++)
             {
                 var ring = Math.Max(Math.Abs(x), Math.Abs(y));
+                // Round, as its body: from anywhere along it the Celestial is within a blow (a square one kept
+                // the corners too far off).
+                var distance = MathF.Sqrt(x * x + y * y);
                 if (ring == half + 1)
                     Spawn(config.ArenaBorder, _map.GridTileToLocal(grid.Owner, grid.Comp, new Vector2i(x, y)));
-                else if (hole > 0 && ring == hole)
+                else if (hole > 0 && distance >= hole && distance < hole + 1)
                     Spawn(config.HoleFence, _map.GridTileToLocal(grid.Owner, grid.Comp, new Vector2i(x, y)));
             }
         }
@@ -1145,7 +1169,7 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             WakeFromDream(original);
         }
 
-        // Anyone teleported out of the fight by some trick is put back.
+        // Anyone teleported out of the fight by some trick is put back; anyone right in the Celestial is thrown off it.
         var alive = 0;
         foreach (var fighter in comp.Participants)
         {
@@ -1155,6 +1179,8 @@ public sealed class LavalandSecretBossSystem : EntitySystem
             alive++;
             if (Transform(fighter).MapUid != comp.ArenaMap)
                 _transform.SetMapCoordinates(fighter, comp.ArenaCenter.Offset(new Vector2(0f, config.ArenaSize / 2f - 3f)));
+            else
+                RepelFromCenter(comp, config, fighter);
         }
 
         if (alive > 0)
@@ -1166,6 +1192,26 @@ public sealed class LavalandSecretBossSystem : EntitySystem
         comp.WipeSince ??= now;
         if (now - comp.WipeSince >= config.WipeDelay)
             Fail(ent, config);
+    }
+
+    /// <summary>Too close to the Celestial's center: thrown back off it, away from the center.</summary>
+    private void RepelFromCenter(LavalandSecretBossComponent comp, LavalandSecretBossConfig config, EntityUid fighter)
+    {
+        if (config.CenterRepelRadius <= 0f || HasComp<ThrownItemComponent>(fighter))
+            return;
+
+        var position = _transform.GetMapCoordinates(fighter);
+        if (position.MapId != comp.ArenaCenter.MapId)
+            return;
+
+        var offset = position.Position - comp.ArenaCenter.Position;
+        var distance = offset.Length();
+        if (distance > config.CenterRepelRadius)
+            return;
+
+        var direction = distance > 0.01f ? offset / distance : _random.NextAngle().ToVec();
+        var push = MathF.Max(0.5f, config.CenterRepelDistance - distance);
+        _throwing.TryThrow(fighter, direction * push, config.CenterRepelSpeed, recoil: false, playSound: false);
     }
 
     /// <summary>The body asleep by the pit while its copy fights: nothing harms it meanwhile.</summary>

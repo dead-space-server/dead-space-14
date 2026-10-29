@@ -13,6 +13,7 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.NPC;
+using Content.Shared.NPC.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
@@ -31,6 +32,7 @@ public sealed class LavalandRockMimicSystem : EntitySystem
     [Dependency] private readonly ISharedPlayerManager _players = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly NpcFactionSystem _faction = default!;
     [Dependency] private readonly NPCSteeringSystem _steering = default!;
     [Dependency] private readonly NPCSystem _npc = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
@@ -61,11 +63,18 @@ public sealed class LavalandRockMimicSystem : EntitySystem
     /// <summary>Hit: it gets up and fights back (whom - its retaliation remembers).</summary>
     private void OnDamageChanged(Entity<LavalandRockMimicComponent> ent, ref DamageChangedEvent args)
     {
-        if (ent.Comp.Angry || !args.DamageIncreased || args.Origin is not { } origin || origin == ent.Owner ||
-            !_mobState.IsAlive(ent))
+        if (!args.DamageIncreased || args.Origin is not { } origin || origin == ent.Owner ||
+            !_mobState.IsAlive(ent) ||
+            // Caught in the fauna's blows (a drake's fire, a goliath's tentacles): it stays a boulder.
+            _faction.IsEntityFriendly(ent.Owner, origin))
         {
             return;
         }
+
+        ent.Comp.Enemy = origin;
+        ent.Comp.LastHit = _timing.CurTime;
+        if (ent.Comp.Angry)
+            return;
 
         ent.Comp.Angry = true;
         RemComp<LavalandRockDisguiseComponent>(ent);
@@ -110,6 +119,16 @@ public sealed class LavalandRockMimicSystem : EntitySystem
             // Angry, it fights as any beast: walking while it moves, standing up while it does not.
             if (mimic.Angry)
             {
+                if (now >= mimic.NextUpdate)
+                {
+                    mimic.NextUpdate = now + mimic.UpdateInterval;
+                    if (ShouldCalmDown(ent, now))
+                    {
+                        CalmDown(ent);
+                        continue;
+                    }
+                }
+
                 if (mimic.State != LavalandRockMimicState.Waking)
                 {
                     var moving = TryComp<PhysicsComponent>(uid, out var body) && body.LinearVelocity.LengthSquared() > 0.01f;
@@ -218,6 +237,29 @@ public sealed class LavalandRockMimicSystem : EntitySystem
         if (TryComp<PhysicsComponent>(ent, out var body))
             _physics.SetLinearVelocity(ent, System.Numerics.Vector2.Zero, body: body);
         SetState(ent, LavalandRockMimicState.Rock);
+    }
+
+    /// <summary>Not hit for a while, and the one who hit it is dead or gone from its sight.</summary>
+    private bool ShouldCalmDown(Entity<LavalandRockMimicComponent> ent, TimeSpan now)
+    {
+        if (now - ent.Comp.LastHit < ent.Comp.CalmDelay)
+            return false;
+
+        return ent.Comp.Enemy is not { } enemy ||
+               TerminatingOrDeleted(enemy) ||
+               !_mobState.IsAlive(enemy) ||
+               !_examine.InRangeUnOccluded(ent.Owner, enemy, ent.Comp.SightRange);
+    }
+
+    /// <summary>The fight is over: it settles down where it stands and is a boulder again, as before it was hit.</summary>
+    private void CalmDown(Entity<LavalandRockMimicComponent> ent)
+    {
+        ent.Comp.Angry = false;
+        ent.Comp.Enemy = null;
+        _npc.SleepNPC(ent);
+        EntityManager.RemoveComponents(ent, ent.Comp.AngryComponents);
+        EnsureComp<LavalandRockDisguiseComponent>(ent);
+        StopFollowing(ent);
     }
 
     private void StopFollowing(Entity<LavalandRockMimicComponent> ent)

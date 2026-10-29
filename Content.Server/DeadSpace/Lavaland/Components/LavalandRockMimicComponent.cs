@@ -41,6 +41,12 @@ public sealed partial class LavalandRockMimicComponent : Component
     [DataField]
     public ComponentRegistry AngryComponents = new();
 
+    /// <summary>
+    /// Not hit for this long, and whoever hit it is dead or out of its sight: it calms down and is a boulder again.
+    /// </summary>
+    [DataField]
+    public TimeSpan CalmDelay = TimeSpan.FromSeconds(20);
+
     /// <summary>Spilled when it dies: one kind of these, 1 to 6 of it.</summary>
     [DataField]
     public List<ProtoId<StackPrototype>> Ores = new();
@@ -70,4 +76,11 @@ public sealed partial class LavalandRockMimicComponent : Component
 
     [ViewVariables]
     public bool Angry;
+
+    /// <summary>The last one who hit it.</summary>
+    [ViewVariables]
+    public EntityUid? Enemy;
+
+    [ViewVariables]
+    public TimeSpan LastHit;
 }

@@ -3,11 +3,13 @@
 using System.Numerics;
 using Content.Server.Chat.Systems;
 using Content.Server.DeadSpace.Lavaland.Components;
+using Content.Server.DeadSpace.Lavaland.SecretBoss;
 using Content.Server.GameTicking;
 using Content.Shared.DeadSpace.Lavaland;
 using Content.Shared.DeadSpace.Lavaland.Components;
 using Content.Shared.DeadSpace.Lavaland.SecretBoss;
 using Content.Shared.Clothing;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Ghost;
 using Content.Shared.Inventory;
 using Content.Shared.Item.ItemToggle;
@@ -26,13 +28,14 @@ using Robust.Shared.Timing;
 namespace Content.Server.DeadSpace.Lavaland;
 
 /// <summary>
-/// The strong storm (<see cref="LavalandStrongStormConfig"/>): late in the round, with an alarm like the deep night's,
-/// a wind rises that no staff of storms dispels. Every few seconds every player out in the open is thrown several
+/// The strong storm (<see cref="LavalandStrongStormConfig"/>): late in the round, now and then in place of an ordinary
+/// ash storm and with an alarm like the deep night's, a wind rises that no staff of storms dispels. Every few seconds every player out in the open is thrown several
 /// tiles - forward, back, to the left or to the right; switched on magboots hold them closer. Its first time it brings the Ash Wolf to the miners' outpost.
 /// </summary>
 public sealed class LavalandStrongStormSystem : EntitySystem
 {
     [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly GameTicker _ticker = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
@@ -67,10 +70,6 @@ public sealed class LavalandStrongStormSystem : EntitySystem
             var storm = EnsureComp<LavalandStrongStormComponent>(uid);
             switch (storm.Stage)
             {
-                case LavalandStrongStormStage.Idle:
-                    TryRoll((uid, storm), lavaland, config, now);
-                    break;
-
                 case LavalandStrongStormStage.Warning when now >= storm.StageEnd:
                     Begin((uid, storm), lavaland, config, now);
                     break;
@@ -79,9 +78,19 @@ public sealed class LavalandStrongStormSystem : EntitySystem
                     End((uid, storm), lavaland, config, now);
                     break;
 
-                case LavalandStrongStormStage.Active when now >= storm.NextThrow:
-                    storm.NextThrow = now + config.ThrowInterval;
-                    Gust(uid, config);
+                case LavalandStrongStormStage.Active:
+                    if (now >= storm.NextThrow)
+                    {
+                        storm.NextThrow = now + config.ThrowInterval;
+                        Gust(uid, config);
+                    }
+
+                    if (now >= storm.NextDamage)
+                    {
+                        storm.NextDamage = now + config.DamageInterval;
+                        Burn(uid, config);
+                    }
+
                     break;
             }
         }
@@ -97,28 +106,26 @@ public sealed class LavalandStrongStormSystem : EntitySystem
         return true;
     }
 
-    /// <summary>Only late in the round and only when the sky is calm; a miss makes the next roll likelier.</summary>
-    private void TryRoll(Entity<LavalandStrongStormComponent> ent, LavalandMapComponent lavaland, LavalandStrongStormConfig config, TimeSpan now)
+    /// <summary>
+    /// An ordinary ash storm is about to come (<see cref="LavalandWeatherSystem"/>): late enough in the round, with
+    /// the config's chance, the strong storm comes in its place. True - it did, the ash storm is off.
+    /// </summary>
+    public bool TryReplaceAshStorm(EntityUid mapUid, LavalandMapComponent lavaland)
     {
-        if (now < ent.Comp.NextCheck)
-            return;
-
-        ent.Comp.NextCheck = now + config.CheckInterval;
-        // Only in a running round: a lavaland made ready in the lobby must not get its storm (and its boss) early.
-        if (_ticker.RunLevel != GameRunLevel.InRound ||
-            _ticker.RoundDuration() < config.EarliestStart || lavaland.WeatherStage != LavalandWeatherStage.Calm)
-            return;
-
-        if (ent.Comp.Chance <= 0f)
-            ent.Comp.Chance = config.BaseChance;
-
-        if (!_random.Prob(Math.Clamp(ent.Comp.Chance, 0f, 1f)))
+        if (!TryGetConfig(lavaland, out var config) ||
+            // Only in a running round: a lavaland made ready in the lobby must not get its storm (and its boss) early.
+            _ticker.RunLevel != GameRunLevel.InRound ||
+            _ticker.RoundDuration() < config.EarliestStart)
         {
-            ent.Comp.Chance = Math.Min(1f, ent.Comp.Chance + config.ChanceIncrease);
-            return;
+            return false;
         }
 
-        StartWarning(ent, lavaland, config, now);
+        var storm = EnsureComp<LavalandStrongStormComponent>(mapUid);
+        if (storm.Stage != LavalandStrongStormStage.Idle || !_random.Prob(Math.Clamp(config.Chance, 0f, 1f)))
+            return false;
+
+        StartWarning((mapUid, storm), lavaland, config, _timing.CurTime);
+        return true;
     }
 
     /// <summary>Starts the strong storm's alarm on the lavaland right now (the admin command). False if it is already coming.</summary>
@@ -139,7 +146,6 @@ public sealed class LavalandStrongStormSystem : EntitySystem
     {
         ent.Comp.Stage = LavalandStrongStormStage.Warning;
         ent.Comp.StageEnd = now + config.WarningDuration;
-        ent.Comp.Chance = config.BaseChance;
         HoldAshStorm(lavaland, ent.Comp.StageEnd + config.Duration);
 
         if (config.WarningWeather is { } warningId && _prototype.TryIndex(warningId, out var warning))
@@ -153,6 +159,7 @@ public sealed class LavalandStrongStormSystem : EntitySystem
         ent.Comp.Stage = LavalandStrongStormStage.Active;
         ent.Comp.StageEnd = now + config.Duration;
         ent.Comp.NextThrow = now + config.ThrowInterval;
+        ent.Comp.NextDamage = now + config.DamageInterval;
         HoldAshStorm(lavaland, ent.Comp.StageEnd);
 
         if (config.Weather is { } weatherId && _prototype.TryIndex(weatherId, out var weather))
@@ -170,7 +177,6 @@ public sealed class LavalandStrongStormSystem : EntitySystem
     private void End(Entity<LavalandStrongStormComponent> ent, LavalandMapComponent lavaland, LavalandStrongStormConfig config, TimeSpan now)
     {
         ent.Comp.Stage = LavalandStrongStormStage.Idle;
-        ent.Comp.NextCheck = now + config.CheckInterval;
         _weather.SetWeather(Transform(ent).MapID, null, null);
         Announce(ent, config.EndMessage, config, playSound: false);
 
@@ -201,15 +207,18 @@ public sealed class LavalandStrongStormSystem : EntitySystem
             _audio.PlayGlobal(config.WarningSound, filter, true);
     }
 
-    /// <summary>A gust: every living player out in the open is thrown forward, back, left or right.</summary>
-    private void Gust(EntityUid map, LavalandStrongStormConfig config)
+    /// <summary>Every living player out in the open on the map - whom the wind reaches.</summary>
+    private List<(EntityUid Player, TransformComponent Xform)> PlayersInTheOpen(EntityUid map)
     {
+        var result = new List<(EntityUid, TransformComponent)>();
         foreach (var session in _players.Sessions)
         {
             if (session.AttachedEntity is not { Valid: true } player ||
                 HasComp<GhostComponent>(player) ||
                 // Watching a boss scene: the wind waits.
                 HasComp<LavalandPitFrozenComponent>(player) ||
+                // Asleep by the Celestial's pit: nothing touches them there.
+                HasComp<LavalandCelestialDreamerComponent>(player) ||
                 HasComp<LavalandWeatherImmuneComponent>(player) ||
                 !_mobState.IsAlive(player) ||
                 !TryComp(player, out TransformComponent? xform) ||
@@ -218,6 +227,30 @@ public sealed class LavalandStrongStormSystem : EntitySystem
             {
                 continue;
             }
+
+            result.Add((player, xform));
+        }
+
+        return result;
+    }
+
+    /// <summary>The hot ash the wind carries burns everyone out in the open.</summary>
+    private void Burn(EntityUid map, LavalandStrongStormConfig config)
+    {
+        if (config.Damage.Empty)
+            return;
+
+        foreach (var (player, _) in PlayersInTheOpen(map))
+        {
+            _damageable.TryChangeDamage(player, config.Damage, interruptsDoAfters: false, origin: map);
+        }
+    }
+
+    /// <summary>A gust: every living player out in the open is thrown forward, back, left or right.</summary>
+    private void Gust(EntityUid map, LavalandStrongStormConfig config)
+    {
+        foreach (var (player, xform) in PlayersInTheOpen(map))
+        {
 
             var facing = _transform.GetWorldRotation(xform);
             var turn = Angle.FromDegrees(90 * _random.Next(4));

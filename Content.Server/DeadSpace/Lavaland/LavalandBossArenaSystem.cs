@@ -2018,6 +2018,16 @@ public sealed partial class LavalandBossArenaSystem : EntitySystem
         if (now - arena.Comp.BossOutsideArenaSince < BossLeashResetDelay)
             return;
 
+        // The fight goes on: the boss is only put back in its arena, its wounds stay. Healed it is only on a reset of an
+        // empty arena.
+        if (arena.Comp.Participants.Count > 0 &&
+            TryComp<MapGridComponent>(arena.Comp.Grid, out var grid))
+        {
+            _transform.SetCoordinates(arena.Comp.Boss, _map.GridTileToLocal(arena.Comp.Grid, grid, arena.Comp.BossSpawnTile));
+            arena.Comp.BossOutsideArenaSince = null;
+            return;
+        }
+
         ResetBoss(arena, now);
     }
 

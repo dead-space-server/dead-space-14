@@ -68,6 +68,10 @@ public sealed partial class LavalandLazarusInjectorComponent : Component
     [DataField]
     public EntityWhitelist? Whitelist;
 
+    /// <summary>Never brought back, even if on the whitelist (the rock mimics).</summary>
+    [DataField]
+    public EntityWhitelist? Blacklist;
+
     [DataField]
     public SoundSpecifier? Sound;
 }

@@ -20,10 +20,7 @@ public sealed partial class LavalandStrongStormComponent : Component
     public TimeSpan StageEnd;
 
     [ViewVariables]
-    public TimeSpan NextCheck;
-
-    [ViewVariables]
-    public float Chance;
+    public TimeSpan NextDamage;
 
     [ViewVariables]
     public TimeSpan NextThrow;

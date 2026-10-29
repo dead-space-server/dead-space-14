@@ -23,6 +23,7 @@ namespace Content.Server.DeadSpace.Lavaland;
 public sealed class LavalandWeatherSystem : EntitySystem
 {
     [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly LavalandStrongStormSystem _strongStorm = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
@@ -141,6 +142,13 @@ public sealed class LavalandWeatherSystem : EntitySystem
         LavalandPlanetPrototype planet,
         TimeSpan curTime)
     {
+        // Now and then the strong storm comes in its place; the next ash storm is due after it.
+        if (_strongStorm.TryReplaceAshStorm(mapUid, lavaland))
+        {
+            ScheduleNextStorm(lavaland, planet, curTime);
+            return;
+        }
+
         var duration = ClampDuration(planet.AshStormWarningDuration);
         lavaland.SnowStorm = planet.SnowStormChance > 0f && _random.Prob(Math.Clamp(planet.SnowStormChance, 0f, 1f));
         if (lavaland.SnowStorm)

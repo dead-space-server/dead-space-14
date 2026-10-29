@@ -6,6 +6,7 @@ using Content.Shared.DeadSpace.Lavaland.Components;
 using Content.Shared.DeadSpace.Necromorphs.InfectionDead.Components;
 using Content.Shared.DeadSpace.Weapons.Ranged.Upgrades;
 using Content.Shared.Humanoid;
+using Content.Shared.Silicons.Borgs.Components;
 using Content.Shared.Mobs.Components;
 using Robust.Shared.Audio;
 using Content.Shared.Projectiles;
@@ -159,7 +160,7 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
                 ? specializedDamage
                 : ent.Comp.CreatureDamage;
             // The damage upgrades in the gun make the blast stronger too - for the fauna and the bosses, not people.
-            if (!HasComp<HumanoidAppearanceComponent>(victim))
+            if (!HasComp<HumanoidAppearanceComponent>(victim) && !IsPlainBorg(victim))
                 damage = damage + ent.Comp.UpgradeDamage;
             _damage.TryChangeDamage(victim, damage, true, origin: shooter);
         }
@@ -227,6 +228,11 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
         return total;
     }
 
+    private bool IsPlainBorg(EntityUid target)
+    {
+        return HasComp<BorgChassisComponent>(target) && !HasComp<LavalandAshWolfComponent>(target);
+    }
+
     private bool TryDamageFor(
         EntityUid target,
         ExplosivePkaProjectileComponent component,
@@ -246,7 +252,8 @@ public sealed class ExplosivePkaUpgradeSystem : EntitySystem
             return true;
         }
 
-        if (HasComp<HumanoidAppearanceComponent>(target))
+        // Borgs are spared like people - all but the Ash Wolf's, a boss for all its chassis.
+        if (HasComp<HumanoidAppearanceComponent>(target) || IsPlainBorg(target))
         {
             damage = component.HumanDamage;
             return true;

@@ -223,6 +223,17 @@ public sealed partial class LavalandAshWolfSystem
     private void OnContact(Entity<LavalandAshWolfComponent> ent, EntityUid victim, TimeSpan now)
     {
         var comp = ent.Comp;
+
+        // The borg's rush does not stop on anyone: a cut in passing, and it jumps back off them.
+        if (comp.Tamed && comp.SlideContact == LavalandAshWolfContact.Rush)
+        {
+            _damage.TryChangeDamage(victim, comp.TamedRushDamage, origin: ent);
+            PlaySound(comp.SawSound, victim, -4f);
+            KnockBack(ent, Position(victim), comp.KnockbackDistance, now);
+            Recover(ent, now, 0.6f);
+            return;
+        }
+
         comp.Victim = victim;
         comp.ContactResolve = now + TimeSpan.FromSeconds(comp.ParryGrace);
         SitOn(ent, victim);
