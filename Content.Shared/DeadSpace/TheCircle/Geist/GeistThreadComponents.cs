@@ -17,7 +17,7 @@ public sealed partial class GeistThreadComponent : Component
 
     /// <summary>Who tied it: the only one who sees the thread.</summary>
     [DataField, AutoNetworkedField]
-    public EntityUid? Owner;
+    public EntityUid? TiedBy;
 
     public override bool SessionSpecific => true;
 }

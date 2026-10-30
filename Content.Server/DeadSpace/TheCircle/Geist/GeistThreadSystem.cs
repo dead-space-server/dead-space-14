@@ -57,7 +57,7 @@ public sealed class GeistThreadSystem : EntitySystem
 
         var thread = EnsureComp<GeistThreadComponent>(target);
         thread.Spool = ent;
-        thread.Owner = args.User;
+        thread.TiedBy = args.User;
         Dirty(target, thread);
         ent.Comp.Target = target;
         ent.Comp.Reeling = false;
@@ -92,7 +92,7 @@ public sealed class GeistThreadSystem : EntitySystem
     private void OnThreadGetStateAttempt(Entity<GeistThreadComponent> ent, ref ComponentGetStateAttemptEvent args)
     {
         // Replays (no player) record it.
-        if (args.Player is { } player && player.AttachedEntity != ent.Comp.Owner)
+        if (args.Player is { } player && player.AttachedEntity != ent.Comp.TiedBy)
             args.Cancelled = true;
     }
 
@@ -143,7 +143,7 @@ public sealed class GeistThreadSystem : EntitySystem
             // Past its reach, or a wall between: it snaps.
             if (!_examine.InRangeUnOccluded(origin, uid, spool.MaxRange))
             {
-                if (thread.Owner is { } owner && Exists(owner))
+                if (thread.TiedBy is { } owner && Exists(owner))
                     _popup.PopupEntity(Loc.GetString("geist-thread-snapped"), owner, owner);
                 _snapped.Add(uid);
                 continue;

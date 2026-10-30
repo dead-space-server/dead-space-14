@@ -52,7 +52,7 @@ public sealed class GeistThreadOverlay : Overlay
         var query = _entManager.EntityQueryEnumerator<GeistThreadComponent, TransformComponent>();
         while (query.MoveNext(out var thread, out var xform))
         {
-            if (thread.Owner != local ||
+            if (thread.TiedBy != local ||
                 thread.Spool is not { } spool ||
                 xform.MapID != args.MapId ||
                 !_entManager.TryGetComponent(spool, out TransformComponent? spoolXform) ||

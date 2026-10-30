@@ -95,7 +95,9 @@
     heldPrefix: splinter
   - type: NecroobeliskShard
   - type: Anchorable
+  - type: CollideOnAnchor
   - type: SubFloorHide
+  - type: Visibility
   - type: Tag
     tags:
     - NecroobeliskShard
