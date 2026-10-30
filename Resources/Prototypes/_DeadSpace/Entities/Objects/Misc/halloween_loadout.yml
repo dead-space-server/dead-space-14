@@ -22,6 +22,7 @@
       - HalloweenCandy
       - HalloweenCandy
       - HalloweenCandy
+      - HalloweenCandy
 - type: entity
   parent: ClothingNeckBase
   id: ClothingNeckReaper
@@ -36,7 +37,7 @@
   parent: ClothingBackpack
   id: HalloweenLoadoutKit
   name: хэллоуинский вещмешок
-  description: Обычный вещмешок, внутри которого лежит праздничный наряд — плащ, одежда, перчатки, тыква и сумка конфет.
+  description: Обычный вещмешок, внутри которого лежит праздничный наряд — плащ, одежда, перчатки и немного конфет.
   components:
   - type: ContainerFill
     containers:
@@ -44,4 +45,6 @@
       - ClothingNeckReaper
       - ClothingUniformTurtleneckBlack
       - ClothingHandsGlovesColorBlack
-      - ClothingBackpackSatchelLeatherCandy
+      - HalloweenCandy
+      - HalloweenCandy
+      - HalloweenCandy
