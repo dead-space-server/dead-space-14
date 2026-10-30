@@ -454,9 +454,10 @@ public sealed class SuperNecroobeliskSystem : SharedSuperNecroobeliskSystem
     }
 
     /// <summary>
-    /// The Circle's geist's ritual: the activation runs to its end at the next check, whatever mode the round is.
+    /// The Circle's geist's ritual: the activation is no longer held at 99% outside the unitologists' modes,
+    /// and runs at its usual pace (starting it, if it hasn't been).
     /// </summary>
-    public void ForceCompleteActivation(EntityUid target, SuperMatterialNecroObeliskComponent component)
+    public void LiftActivationCap(EntityUid target, SuperMatterialNecroObeliskComponent component)
     {
         if (component.StateEnum == SuperMatterialNecroObeliskState.Hundred)
             return;
@@ -466,8 +467,6 @@ public sealed class SuperNecroobeliskSystem : SharedSuperNecroobeliskSystem
 
         component.ForceCompletion = true;
         component.SequenceStarted = true;
-        component.Percents = Math.Max(component.Percents, 99);
-        component.NextCheckPercents = _gameTiming.CurTime;
     }
 
     public void ToggleObeliskActive(EntityUid target, SuperMatterialNecroObeliskComponent component)

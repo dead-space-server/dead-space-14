@@ -1,9 +1,10 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
-using System.Numerics;
 using Content.Server.Hands.Systems;
 using Content.Shared.DeadSpace.TheCircle.Geist;
 using Content.Shared.Examine;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Input;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
@@ -12,9 +13,11 @@ using Content.Shared.Throwing;
 using Content.Shared.Verbs;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
+using Robust.Shared.Input;
+using Robust.Shared.Input.Binding;
+using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
-using Robust.Shared.Player;
 
 namespace Content.Server.DeadSpace.TheCircle.Geist;
 
@@ -39,6 +42,16 @@ public sealed class GeistThreadSystem : EntitySystem
         SubscribeLocalEvent<GeistThreadComponent, ComponentShutdown>(OnThreadShutdown);
         SubscribeLocalEvent<GeistThreadComponent, ComponentGetStateAttemptEvent>(OnThreadGetStateAttempt);
         SubscribeLocalEvent<GeistThreadComponent, GetVerbsEvent<AlternativeVerb>>(OnThreadGetVerbs);
+
+        CommandBinds.Builder
+            .BindBefore(ContentKeyFunctions.UseItemInHand, new PointerInputCmdHandler(OnReelInput, ignoreUp: false), typeof(SharedHandsSystem))
+            .Register<GeistThreadSystem>();
+    }
+
+    public override void Shutdown()
+    {
+        CommandBinds.Unregister<GeistThreadSystem>();
+        base.Shutdown();
     }
 
     /// <summary>Tied to an item within reach: the old thread, if any, is let go.</summary>
@@ -60,18 +73,43 @@ public sealed class GeistThreadSystem : EntitySystem
         thread.TiedBy = args.User;
         Dirty(target, thread);
         ent.Comp.Target = target;
-        ent.Comp.Reeling = false;
         _popup.PopupEntity(Loc.GetString("geist-thread-tied", ("item", target)), args.User, args.User);
     }
 
+    /// <summary>The use key itself is read in <see cref="OnReelInput"/>: held down, it reels; here it only does nothing else.</summary>
     private void OnSpoolUseInHand(Entity<GeistThreadSpoolComponent> ent, ref UseInHandEvent args)
     {
-        if (args.Handled || ent.Comp.Target == null)
-            return;
+        if (ent.Comp.Target != null)
+            args.Handled = true;
+    }
 
-        args.Handled = true;
-        ent.Comp.Reeling = true;
-        _popup.PopupEntity(Loc.GetString("geist-thread-reel"), args.User, args.User);
+    /// <summary>While the use key is held with the spool in hand, the item is reeled in; let go, it stops.</summary>
+    private bool OnReelInput(in PointerInputCmdHandler.PointerInputCmdArgs args)
+    {
+        if (args.Session?.AttachedEntity is not { } user)
+            return false;
+
+        foreach (var held in _hands.EnumerateHeld(user))
+        {
+            if (!TryComp<GeistThreadSpoolComponent>(held, out var spool) || spool.Target is not { } target)
+                continue;
+
+            if (args.State == BoundKeyState.Down)
+            {
+                if (spool.Reeler == null)
+                    _popup.PopupEntity(Loc.GetString("geist-thread-reel"), user, user);
+                spool.Reeler = user;
+            }
+            else if (spool.Reeler == user)
+            {
+                StopReeling(spool, target);
+            }
+
+            // The default use in hand still runs; the spool's own UseInHandEvent does nothing.
+            return false;
+        }
+
+        return false;
     }
 
     private void OnSpoolShutdown(Entity<GeistThreadSpoolComponent> ent, ref ComponentShutdown args)
@@ -81,11 +119,11 @@ public sealed class GeistThreadSystem : EntitySystem
 
     private void OnThreadShutdown(Entity<GeistThreadComponent> ent, ref ComponentShutdown args)
     {
-        if (TryComp<GeistThreadSpoolComponent>(ent.Comp.Spool, out var spool) && spool.Target == ent.Owner)
-        {
-            spool.Target = null;
-            spool.Reeling = false;
-        }
+        if (!TryComp<GeistThreadSpoolComponent>(ent.Comp.Spool, out var spool) || spool.Target != ent.Owner)
+            return;
+
+        StopReeling(spool, ent.Owner);
+        spool.Target = null;
     }
 
     /// <summary>Only the one who tied it knows of the thread: nobody else's client gets it.</summary>
@@ -149,16 +187,8 @@ public sealed class GeistThreadSystem : EntitySystem
                 continue;
             }
 
-            if (holder == null ||
-                _container.IsEntityInContainer(uid) ||
-                xform.Anchored ||
-                HasComp<ThrownItemComponent>(uid) ||
-                !TryComp<PhysicsComponent>(uid, out var body))
-            {
-                continue;
-            }
-
-            Drag((uid, body), spool, _transform.GetWorldPosition(holder.Value) - _transform.GetWorldPosition(xform));
+            if (spool.Reeler != null)
+                Reel(spool, (uid, xform), holder);
         }
 
         foreach (var uid in _snapped)
@@ -167,34 +197,63 @@ public sealed class GeistThreadSystem : EntitySystem
         }
     }
 
-    /// <summary>Reeled in, it flies to the holder; walked away from, it is dragged after them like a pulled thing.</summary>
-    private void Drag(Entity<PhysicsComponent> item, GeistThreadSpoolComponent spool, Vector2 toHolder)
+    /// <summary>
+    /// Drawn through the air toward the reeler, as long as they hold the spool and the key.
+    /// Someone else holding it has it yanked out of their hands.
+    /// </summary>
+    private void Reel(GeistThreadSpoolComponent spool, Entity<TransformComponent> item, EntityUid? holder)
     {
-        var distance = toHolder.Length();
-        if (distance < 0.01f)
-            return;
-
-        var direction = toHolder / distance;
-        if (spool.Reeling)
+        if (holder is { } puller &&
+            puller == spool.Reeler &&
+            _container.TryGetContainingContainer(item.Owner, out var container) &&
+            container.Owner != puller &&
+            _hands.IsHolding(container.Owner, item) &&
+            _hands.TryDrop(container.Owner, item.Owner, checkActionBlocker: false))
         {
-            if (distance <= spool.ReelStop)
-            {
-                spool.Reeling = false;
-                _physics.SetLinearVelocity(item, Vector2.Zero, body: item.Comp);
-                return;
-            }
+            _popup.PopupEntity(Loc.GetString("geist-thread-yanked", ("item", item.Owner)), container.Owner, container.Owner, PopupType.MediumCaution);
+        }
 
-            _physics.SetLinearVelocity(item, direction * spool.ReelSpeed, body: item.Comp);
-            _physics.WakeBody(item, body: item.Comp);
+        if (holder is not { } reeler ||
+            reeler != spool.Reeler ||
+            _container.IsEntityInContainer(item) ||
+            item.Comp.Anchored ||
+            HasComp<ThrownItemComponent>(item) ||
+            !TryComp<PhysicsComponent>(item, out var body))
+        {
+            StopReeling(spool, item);
             return;
         }
 
-        if (distance <= spool.Length)
+        var toHolder = _transform.GetWorldPosition(reeler) - _transform.GetWorldPosition(item.Comp);
+        var distance = toHolder.Length();
+        if (distance <= spool.ReelStop)
+        {
+            StopReeling(spool, item);
+            return;
+        }
+
+        // In the air the floor's friction doesn't eat the pull.
+        _physics.SetBodyStatus(item, body, BodyStatus.InAir);
+        _physics.SetLinearVelocity(item, toHolder / distance * spool.ReelSpeed, body: body);
+        _physics.WakeBody(item, body: body);
+    }
+
+    private void StopReeling(GeistThreadSpoolComponent spool, EntityUid item)
+    {
+        if (spool.Reeler == null)
             return;
 
-        var speed = MathF.Min(spool.DragSpeed, (distance - spool.Length) * spool.DragSpeed);
-        _physics.SetLinearVelocity(item, direction * speed, body: item.Comp);
-        _physics.WakeBody(item, body: item.Comp);
+        spool.Reeler = null;
+        if (TerminatingOrDeleted(item) ||
+            HasComp<ThrownItemComponent>(item) ||
+            !TryComp<PhysicsComponent>(item, out var body) ||
+            body.BodyStatus != BodyStatus.InAir)
+        {
+            return;
+        }
+
+        _physics.SetLinearVelocity(item, default, body: body);
+        _physics.SetBodyStatus(item, body, BodyStatus.OnGround);
     }
 
     private void Untie(Entity<GeistThreadSpoolComponent> spool)
@@ -206,7 +265,7 @@ public sealed class GeistThreadSystem : EntitySystem
         }
 
         spool.Comp.Target = null;
-        spool.Comp.Reeling = false;
+        spool.Comp.Reeler = null;
     }
 
     private void Untie(GeistThreadComponent thread)

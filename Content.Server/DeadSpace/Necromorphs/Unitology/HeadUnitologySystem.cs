@@ -97,7 +97,7 @@ public sealed class UnitologyHeadSystem : EntitySystem
         if (args.Handled)
             return;
 
-        // The Circle's geist on its own drives a supermatter obelisk nearby to its end instead.
+        // The Circle's geist on its own instead lets a supermatter obelisk nearby reach 100% in any mode.
         if (TryComp<TheCircleGeistSaboteurComponent>(uid, out var saboteur) &&
             TryGetSuperObelisk(uid, saboteur.SuperObeliskRange, out var superObelisk))
         {
@@ -126,7 +126,8 @@ public sealed class UnitologyHeadSystem : EntitySystem
         }
 
         if (!_hands.TryGetActiveItem(uid, out var splinter) ||
-            !HasComp<NecroobeliskSplinterComponent>(splinter))
+            !TryComp<NecroobeliskSplinterComponent>(splinter, out var heldSplinter) ||
+            !heldSplinter.CanSummonObelisk)
         {
             _popup.PopupEntity(Loc.GetString("unitology-obelisk-summon-no-splinter"), uid, uid);
             return;
@@ -162,7 +163,7 @@ public sealed class UnitologyHeadSystem : EntitySystem
         if (args.Args.Target is { } target &&
             TryComp<SuperMatterialNecroObeliskComponent>(target, out var superObelisk))
         {
-            _superObelisk.ForceCompleteActivation(target, superObelisk);
+            _superObelisk.LiftActivationCap(target, superObelisk);
             args.Handled = true;
             return;
         }
@@ -173,7 +174,8 @@ public sealed class UnitologyHeadSystem : EntitySystem
         if (!_unitologyRule.AreSummoningConditionsComplete(uid) ||
             !_hands.TryGetActiveItem(uid, out var activeItem) ||
             activeItem != splinter ||
-            !TryComp<NecroobeliskSplinterComponent>(splinter, out var splinterComponent))
+            !TryComp<NecroobeliskSplinterComponent>(splinter, out var splinterComponent) ||
+            !splinterComponent.CanSummonObelisk)
         {
             _popup.PopupEntity(Loc.GetString("unitology-obelisk-summon-interrupted"), uid, uid);
             return;

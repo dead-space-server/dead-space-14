@@ -23,9 +23,8 @@ public sealed partial class GeistThreadComponent : Component
 }
 
 /// <summary>
-/// The geist's thread spool: used on an item it ties a thread to it. Held in a hand, the item is dragged after its
-/// holder once further away than the thread's slack; used in the hand, it reels the item in. The thread snaps past
-/// its reach or behind a wall.
+/// The geist's thread spool: used on an item it ties a thread to it. The item stays where it is left; with the use
+/// key held down and the spool in hand, it is reeled in. The thread snaps past its reach or behind a wall.
 /// </summary>
 [RegisterComponent]
 public sealed partial class GeistThreadSpoolComponent : Component
@@ -34,23 +33,17 @@ public sealed partial class GeistThreadSpoolComponent : Component
     [ViewVariables]
     public EntityUid? Target;
 
-    /// <summary>Being reeled in, until it is close.</summary>
+    /// <summary>Who is reeling it in right now, holding the use key.</summary>
     [ViewVariables]
-    public bool Reeling;
-
-    /// <summary>Slack: no farther than this the item lies still.</summary>
-    [DataField]
-    public float Length = 2.5f;
+    public EntityUid? Reeler;
 
     /// <summary>Past this, or with a wall between, the thread snaps.</summary>
     [DataField]
     public float MaxRange = 10f;
 
+    /// <summary>How fast the reeled item is drawn in.</summary>
     [DataField]
-    public float DragSpeed = 5f;
-
-    [DataField]
-    public float ReelSpeed = 9f;
+    public float ReelSpeed = 5f;
 
     /// <summary>Reeled in this close, it stops.</summary>
     [DataField]
