@@ -248,6 +248,10 @@
     - Xenomorph
     - IPC
     - Felinid
+  - type: AntagObjectives
+    objectives:
+    - UniSubmissionObjective
+    - UniAssemblyObjective
   - type: AntagSelection
     definitions:
     - spawnerPrototype: SpawnPointGhostGeistMidround
