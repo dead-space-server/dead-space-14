@@ -51,7 +51,6 @@ public sealed class CandySystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly AccessSystem _access = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly GodmodeSystem _godmode = default!;
