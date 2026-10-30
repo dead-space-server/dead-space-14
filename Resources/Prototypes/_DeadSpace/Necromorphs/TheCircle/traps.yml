@@ -227,3 +227,66 @@
         density: 30
         mask:
         - ItemMask
+
+- type: entity
+  parent: GrenadeBase
+  id: TripwireNecroGasGrenade
+  name: газовый заряд для растяжки (некрогаз)
+  description: Заряженный баллон с некрогазом без ручного взрывателя. Срабатывает только после подключения к растяжке и заполняет газом около десяти тайлов.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Grenades/tear_gas.rsi
+    layers:
+    - state: icon
+      map: ["enum.TriggerVisualLayers.Base"]
+  - type: TimerTrigger
+    examinable: false
+  - type: EmitSoundOnTrigger
+    keysIn:
+    - timer
+    sound: /Audio/Items/smoke_grenade_smoke.ogg
+    positional: true
+  - type: ReleaseGasOnTrigger
+    keysIn:
+    - timer
+    removeFraction: 0.25
+    air:
+      volume: 1000
+      moles:
+        InfectionDeadSpace: 1039.28
+      temperature: 293.15
+
+- type: entity
+  parent: TripwireNecroGasGrenade
+  id: TripwireFrezonGasGrenade
+  name: газовый заряд для растяжки (фрезон)
+  description: Заряженный баллон с фрезоном без ручного взрывателя. Срабатывает только после подключения к растяжке и заполняет газом около шести тайлов.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Grenades/smoke.rsi
+    layers:
+    - state: icon
+      map: ["enum.TriggerVisualLayers.Base"]
+  - type: ReleaseGasOnTrigger
+    keysIn:
+    - timer
+    removeFraction: 0.25
+    air:
+      volume: 1000
+      moles:
+        Frezon: 623.57
+      temperature: 293.15
+
+- type: entity
+  parent: BaseItem
+  id: GeistThreadSpool
+  name: катушка тонкой нити
+  description: Почти невидимая нить на маленькой катушке. Привязанную к вещи нить можно тянуть издалека.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/traps/geist_thread.rsi
+    state: icon
+  - type: Item
+    size: Tiny
+    sprite: _DeadSpace/Necromorfs/TheCircle/Weapon/traps/geist_thread.rsi
+  - type: GeistThreadSpool

@@ -23,12 +23,17 @@ public sealed class ContainerHeldSystem : EntitySystem
 
     private void OnContainerModified(EntityUid uid, ContainerHeldComponent comp, ContainerModifiedMessage args)
     {
-        if (!(HasComp<StorageComponent>(uid)
+        if (!(TryComp<StorageComponent>(uid, out var storage) // DS14
               && TryComp<AppearanceComponent>(uid, out var appearance)
               && TryComp<ItemComponent>(uid, out var item)))
         {
             return;
         }
+
+        // DS14-start: a pre-filled storage can get its contents in the client's state before its container is set up.
+        if (storage.Container == null)
+            return;
+        // DS14-end
         if (_storage.GetCumulativeItemAreas(uid) >= comp.Threshold)
         {
             _item.SetHeldPrefix(uid, "full", component: item);

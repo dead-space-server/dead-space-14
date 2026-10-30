@@ -129,6 +129,7 @@
       tags:
       - CanPilot # People
       - VimPilot # Pets
+      - NecroobeliskShard # DS14: the experimental obelisk shard is destroyed only here
   - type: Appearance
   - type: GenericVisualizer
     visuals:

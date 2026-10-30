@@ -145,7 +145,8 @@ public sealed class SuperNecroobeliskSystem : SharedSuperNecroobeliskSystem
             if (component.Percents < 100)
                 continue;
 
-            if (!_gameTicker.AllPreviousGameRules.Any(x => x.Item2 == "SiegeOfTheCircle" || x.Item2 == "Unitology"))
+            if (!component.ForceCompletion &&
+                !_gameTicker.AllPreviousGameRules.Any(x => x.Item2 == "SiegeOfTheCircle" || x.Item2 == "Unitology"))
             {
                 component.Percents = 99;
                 continue;
@@ -450,6 +451,23 @@ public sealed class SuperNecroobeliskSystem : SharedSuperNecroobeliskSystem
 
         component.SequenceStarted = true;
         AnnounceActivation(target, component);
+    }
+
+    /// <summary>
+    /// The Circle's geist's ritual: the activation runs to its end at the next check, whatever mode the round is.
+    /// </summary>
+    public void ForceCompleteActivation(EntityUid target, SuperMatterialNecroObeliskComponent component)
+    {
+        if (component.StateEnum == SuperMatterialNecroObeliskState.Hundred)
+            return;
+
+        if (!component.SequenceStarted)
+            AnnounceActivation(target, component);
+
+        component.ForceCompletion = true;
+        component.SequenceStarted = true;
+        component.Percents = Math.Max(component.Percents, 99);
+        component.NextCheckPercents = _gameTiming.CurTime;
     }
 
     public void ToggleObeliskActive(EntityUid target, SuperMatterialNecroObeliskComponent component)

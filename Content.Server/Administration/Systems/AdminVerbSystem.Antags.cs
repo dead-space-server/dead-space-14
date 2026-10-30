@@ -50,6 +50,7 @@ public sealed partial class AdminVerbSystem
     private static readonly EntProtoId DragonSpawnRule = "DragonSpawn";
     private static readonly EntProtoId RenegadeRule = "RenegadeSpawn";
     private static readonly EntProtoId DefaultHooliganRule = "Hooligan";
+    private static readonly EntProtoId CircleGeistRule = "GeistMidroundSpawn";
     // DS14-end
     private static readonly ProtoId<StartingGearPrototype> PirateGearId = "PirateGear";
 
@@ -187,6 +188,21 @@ public sealed partial class AdminVerbSystem
             Message = string.Join(": ", dragonName, Loc.GetString("admin-verb-make-dragon")),
         };
         args.Verbs.Add(dragon);
+
+        var circleGeistName = Loc.GetString("admin-verb-text-make-circle-geist");
+        Verb circleGeist = new()
+        {
+            Text = circleGeistName,
+            Category = VerbCategory.Antag,
+            Icon = new SpriteSpecifier.Rsi(new("/Textures/_DeadSpace/Necromorfs/TheCircle/Helmet/geist.rsi"), "icon"),
+            Act = () =>
+            {
+                _antag.ForceMakeAntag<RuleGridsComponent>(targetPlayer, CircleGeistRule);
+            },
+            Impact = LogImpact.High,
+            Message = string.Join(": ", circleGeistName, Loc.GetString("admin-verb-make-circle-geist")),
+        };
+        args.Verbs.Add(circleGeist);
 
         var shadowlingName = Loc.GetString("admin-verb-text-make-shadowling");
         Verb shadowling = new()
