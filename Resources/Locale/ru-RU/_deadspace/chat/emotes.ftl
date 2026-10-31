@@ -44,5 +44,4 @@ chat-emote-msg-shiver = дрожит
 chat-emote-msg-turnred = краснеет
 chat-emote-msg-chill = чилит
 chat-emote-msg-teeth-clack = клацает зубами
-# Для ивента
-chat-emote-name-spingun-nss = крутит револьвер на пальце
+chat-emote-name-spingun = крутит револьвер на пальце

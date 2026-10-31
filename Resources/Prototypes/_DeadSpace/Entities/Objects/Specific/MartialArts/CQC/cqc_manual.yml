@@ -13,7 +13,7 @@
       itemAfterLerning: CQCManualAfter
       params:
         - hitDamageForPowerPunch: 20
-          hitDamageForMuteAtack: 5
+          hitDamageForEyeAttack: 5
           ignoreResist: true
           damageTypeForPowerPunch: "Blunt"
           effectPowerPunch: EffectPowerPunchCarp

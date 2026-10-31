@@ -171,6 +171,6 @@
   chatMessages: ["chat-emote-msg-workout"]
 
 - type: emote
-  id: SpinGunNSS
-  name: chat-emote-name-spingun-nss
-  chatMessages: ["chat-emote-name-spingun-nss"]
+  id: SpinGun
+  name: chat-emote-name-spingun
+  chatMessages: ["chat-emote-name-spingun"]

@@ -532,6 +532,7 @@
     - CQCBlueShieldSet
     - TruncheonsecBlueShieldSet
     - PistolBlueShieldUpgradeKitSet
+    - DuelistBlueShieldSet
   - type: ActivatableUI
     key: enum.ThiefBackpackUIKey.Key
   - type: UserInterface
@@ -1071,6 +1072,24 @@
   - MagazinePistolHighCapacity
   - MagazinePistolHighCapacity
   - TelescopicShield
+
+- type: thiefBackpackSet
+  id: DuelistBlueShieldSet
+  name: ert-loadout-category-duelistbs-name
+  description: ert-loadout-category-duelistbs-description
+  sprite:
+    sprite: _DeadSpace/Clothing/Head/Hats/cowboy_hat_bs.rsi
+    state: icon
+  content:
+  - WeaponRevolverBlueShieldKR19
+  - WeaponRevolverBlueShieldKR19
+  - ClothingHeadHatBlueShield
+  - ClothingNeckPonchoBlueShield
+  - SpeedLoaderMagnum
+  - SpeedLoaderMagnum
+  - SpeedLoaderMagnum
+  - MagazineBoxMagnum
+  - ClothingBeltHolsterBlueShield
 
 - type: thiefBackpackSet
   id: BerettaM92Set

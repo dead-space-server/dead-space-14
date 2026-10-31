@@ -30,7 +30,7 @@ public sealed partial class CQCComponent : Component
     public readonly List<EntProtoId> BaseCQC = new() // Список всех Action, которые будут выдаваться пользователю при концентрации
     {
         "ActionPowerPunchCQCAttack",
-        "ActionMutedCQCAttack",
+        "ActionEyePunchCQCAttack",
         "ActionRelaxCQC",
         "ActionCQCStepPunch",
     };
@@ -54,5 +54,5 @@ public sealed partial class CQCComponent : Component
 public enum CQCList
 {
     PowerPunch,
-    MuteAttack,
+    EyeAttack,
 }

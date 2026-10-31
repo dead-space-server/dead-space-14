@@ -6,7 +6,7 @@ using Robust.Shared.Serialization;
 namespace Content.Shared.DeadSpace.MartialArts.CQC;
 
 public sealed partial class CQCPowerPunchEvent : InstantActionEvent { }
-public sealed partial class CQCMuteEvent : InstantActionEvent { }
+public sealed partial class CQCEyeAttackEvent : InstantActionEvent { }
 public sealed partial class CQCRelaxEvent : InstantActionEvent { }
 public sealed partial class CQCStepPunchEvent : InstantActionEvent { }
 public sealed partial class CQCConcentrationEvent : InstantActionEvent { }
