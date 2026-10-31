@@ -1,0 +1,151 @@
+- type: entity
+  name: G-58 «Дянь»
+  parent: [BaseWeaponSubMachineGun, BaseSecurityContraband]
+  id: WeaponSmartDian
+  description: Умный пистолет-пулемет, разработка дочерней организацией Nakamura Engineering - ЧВК "Asahi". По настоящему раскрывается с технологией «Смартлинк».
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Guns/Smart/dian2.rsi
+    layers:
+      - state: base
+        map: ["enum.GunVisualLayers.Base"]
+      - state: mag-0
+        map: ["enum.GunVisualLayers.Mag"]
+  - type: Clothing
+    sprite: _DeadSpace/Objects/Weapons/Guns/Smart/dian1.rsi
+  - type: Wieldable
+    unwieldOnUse: false
+  - type: GunWieldBonus
+    minAngle: -23
+    maxAngle: -21
+  - type: Gun
+    minAngle: 21
+    maxAngle: 32
+    fireRate: 7.5
+    burstFireRate: 20
+    soundGunshot:
+      path: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/dian/fire_dian.ogg
+    selectedMode: FullAuto
+    availableModes:
+    - Burst
+    - FullAuto
+    - SemiAuto
+    shotsPerBurst: 3
+    burstCooldown: 0.375
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: MagazineSmartWeaponDian
+        insertSound: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/dian/mag_in_dian.ogg
+        ejectSound: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/dian/mag_out_dian.ogg
+        priority: 2
+        whitelist:
+          tags:
+            - MagazineSmartWeaponDian
+        whitelistFailPopup: gun-magazine-whitelist-fail
+      gun_chamber:
+        name: Chamber
+        priority: 1
+        whitelist:
+          tags:
+            - CartridgePistol
+  - type: MagazineVisuals
+    magState: mag
+    steps: 1
+    zeroVisible: true
+  - type: Appearance
+  - type: Item
+    sprite: _DeadSpace/Objects/Weapons/Guns/Smart/dian1.rsi
+    size: Normal
+    shape:
+      - 0,0,3,1
+  - type: SmartWeapon
+    crosshairColor: "#e6a600"
+    targetHighlightColor: "#ffa000"
+    targetMarkerCrossColor: "#00ffef"
+    debugZoneColor: "#20ff027f"
+    ammoDigitsColor: "#ffba38"
+    magnetismDelay: 0.01
+    magnetismUpdateInterval: 0.002
+    magnetismMaxAngle: 5
+    crosshairAlpha: 0.7
+    cornerStickTexture: /Textures/_DeadSpace/Interface/SmartWeapon/corner_stick.png
+    crossTexture: /Textures/_DeadSpace/Interface/SmartWeapon/cross.png
+    targetLockSound: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/target_on.ogg
+    targetLostSound: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/target_off.ogg
+    crosshairInnerTexture: /Textures/_DeadSpace/Interface/SmartWeapon/ring_inner.png
+    crosshairOuterTexture: /Textures/_DeadSpace/Interface/SmartWeapon/ring_outer.png
+
+- type: entity
+  parent: [ BaseStorageItem, BaseBagOpenClose ]
+  id: DianCase
+  name: кейс G-58 «Дянь»
+  description: Фирменный кейс Asahi для G-58 «Дянь».
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Guns/Smart/case_dian.rsi
+    layers:
+    - state: open
+      map: [ "openLayer" ]
+      visible: false
+    - state: sl
+      map: [ "sl" ]
+      visible: false
+    - state: sg
+      map: [ "sg" ]
+      visible: false
+    - state: mg
+      map: [ "mg" ]
+      visible: false
+    - state: closed
+      map: [ "closeLayer" ]
+  - type: Item
+    size: Large
+    sprite: _DeadSpace/Objects/Weapons/Guns/Smart/case_dian.rsi
+    inhandVisuals:
+      left:
+      - state: inhand-left
+      right:
+      - state: inhand-right
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+      - 0,0,5,1
+      - 0,1,5,1
+      - 2,2,3,2
+  - type: ItemMapper
+    mapLayers:
+      sl:
+        whitelist:
+          components:
+          - Implanter
+      sg:
+        whitelist:
+          components:
+          - SmartWeapon
+      mg:
+        whitelist:
+          components:
+          - BallisticAmmoProvider
+  - type: StorageFill
+    contents:
+    - id: MagazineSmartWeaponDian
+    - id: WeaponSmartDian
+    - id: MagazineSmartWeaponDian
+    - id: SmartLinkImplanter
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/evidence_bag_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/evidence_bag_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/evidence_bag_drop.ogg
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 10
+    attackRate: 1
+    angle: 120

@@ -8,3 +8,17 @@
     proto: BulletShingen
   - type: Sprite
     sprite: _DeadSpace/Objects/Weapons/Guns/Ammunition/Casings/smart.rsi
+
+- type: entity
+  parent: BaseCartridgeRifle
+  id: CartridgeSaidwinder
+  name: патрон (5.56х45 мм Smart™)
+  description: 
+  components:
+  - type: Tag
+    tags:
+      - CartridgeSaidwinder
+  - type: CartridgeAmmo
+    proto: BulletSaidwinder
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Guns/Ammunition/Casings/smart.rsi

@@ -1,0 +1,153 @@
+- type: entity
+  name: D-5 «Сайдвиндер»
+  parent: [BaseWeaponRifle, BaseSecurityContraband]
+  id: WeaponSmartSaidwinder
+  description: Умный автомат, новая разработка концерна Vitezstvi. Стреляет усовершенствованными 5.56 с умным наведением.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Guns/Smart/saidwinder2.rsi
+    layers:
+      - state: base
+        map: ["enum.GunVisualLayers.Base"]
+      - state: mag-0
+        map: ["enum.GunVisualLayers.Mag"]
+  - type: Clothing
+    sprite: _DeadSpace/Objects/Weapons/Guns/Smart/saidwinder1.rsi
+  - type: Wieldable
+    unwieldOnUse: false
+  - type: GunWieldBonus
+    minAngle: -23
+    maxAngle: -21
+  - type: Gun
+    minAngle: 21
+    maxAngle: 32
+    fireRate: 5.5
+    burstFireRate: 2
+    selectedMode: FullAuto
+    soundGunshot:
+      path: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/saidwinder/fire_saidwinder.ogg
+    availableModes:
+    - Burst
+    - FullAuto
+    - SemiAuto
+    shotsPerBurst: 3
+    burstCooldown: 0.375
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: MagazineSmartWeaponSaidwinder
+        insertSound: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/saidwinder/mag_in_saidwinder.ogg
+        ejectSound: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/saidwinder/mag_out_saidwinder.ogg
+        priority: 2
+        whitelist:
+          tags:
+            - MagazineSmartWeaponSaidwinder
+        whitelistFailPopup: gun-magazine-whitelist-fail
+      gun_chamber:
+        name: Chamber
+        priority: 1
+        whitelist:
+          tags:
+            - CartridgeSaidwinder
+  - type: MagazineVisuals
+    magState: mag
+    steps: 1
+    zeroVisible: true
+  - type: Appearance
+  - type: Item
+    size: Large
+    sprite: _DeadSpace/Objects/Weapons/Guns/Smart/saidwinder1.rsi
+  - type: SmartWeapon
+    crosshairColor: "#9e0b00"
+    targetHighlightColor: "#ffa000"
+    targetMarkerCrossColor: "#9e0004"
+    debugZoneColor: "#20ff027f"
+    ammoDigitsColor: "#c20800"
+    magnetismDelay: 0.01
+    magnetismUpdateInterval: 0.002
+    magnetismMaxAngle: 5
+    crosshairAlpha: 0.7
+    cornerStickTexture: /Textures/_DeadSpace/Interface/SmartWeapon/corner_stick.png
+    crossTexture: /Textures/_DeadSpace/Interface/SmartWeapon/cross.png
+    targetLockSound: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/target_on.ogg
+    targetLostSound: /Audio/_DeadSpace/Weapons/Guns/SmartWeapon/target_off.ogg
+    crosshairInnerTexture: /Textures/_DeadSpace/Interface/SmartWeapon/ring_inner.png
+    crosshairOuterTexture: /Textures/_DeadSpace/Interface/SmartWeapon/ring_outer.png
+
+
+- type: entity
+  parent: [ BaseStorageItem, BaseBagOpenClose ]
+  id: SaidwinderCase
+  name: кейс D-5 «Сайдвиндер»
+  description: Фирменный кейс Vitezstvi для D-5 «Сайдвиндер».
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Weapons/Guns/Smart/case_saidwinder.rsi
+    layers:
+    - state: open
+      map: [ "openLayer" ]
+      visible: false
+    - state: sl
+      map: [ "sl" ]
+      visible: false
+    - state: sg
+      map: [ "sg" ]
+      visible: false
+    - state: mg
+      map: [ "mg" ]
+      visible: false
+    - state: closed
+      map: [ "closeLayer" ]
+  - type: Item
+    size: Ginormous
+    sprite: _DeadSpace/Objects/Weapons/Guns/Smart/case_saidwinder.rsi
+    inhandVisuals:
+      left:
+      - state: inhand-left
+      right:
+      - state: inhand-right
+    shape:
+    - 0,0,8,3
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+      - 0,0,5,1
+      - 0,1,5,2
+      - 2,2,3,3
+  - type: ItemMapper
+    mapLayers:
+      sl:
+        whitelist:
+          components:
+          - Implanter
+      sg:
+        whitelist:
+          components:
+          - SmartWeapon
+      mg:
+        whitelist:
+          components:
+          - BallisticAmmoProvider
+  - type: StorageFill
+    contents:
+      - id: WeaponSmartSaidwinder
+      - id: MagazineSmartWeaponSaidwinder
+        amount: 3
+      - id: SmartLinkImplanter        
+  - type: Appearance
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/evidence_bag_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/evidence_bag_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/evidence_bag_drop.ogg
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 10
+    attackRate: 1
+    angle: 120
