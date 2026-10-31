@@ -108,6 +108,8 @@ namespace Content.Server.Hands.Systems
             {
                 return;
             }
+            if (HasComp<BorgChassisComponent>(uid))
+                return;
             // DS14-end
 
             // Break any pulls

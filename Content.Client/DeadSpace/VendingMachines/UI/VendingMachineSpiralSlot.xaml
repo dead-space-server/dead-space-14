@@ -1,0 +1,29 @@
+<PanelContainer xmlns="https://spacestation14.io"
+                xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+                MinSize="96 112"
+                Margin="3"
+                MouseFilter="Stop">
+    <PanelContainer.PanelOverride>
+        <gfx:StyleBoxFlat BackgroundColor="#16181d" BorderColor="#30343c" BorderThickness="1" />
+    </PanelContainer.PanelOverride>
+    <BoxContainer Orientation="Vertical" Margin="4" SeparationOverride="2">
+        <SpriteView Name="ItemPrototype"
+                    HorizontalAlignment="Center"
+                    MinSize="48 48"
+                    SetSize="48 48" />
+        <BoxContainer Name="SpiralCoils"
+                      Orientation="Horizontal"
+                      HorizontalAlignment="Center"
+                      SeparationOverride="2"
+                      MinHeight="8" />
+        <Label Name="AmountLabel"
+               HorizontalAlignment="Center"
+               StyleClasses="LabelSubText" />
+        <PanelContainer HorizontalAlignment="Center">
+            <PanelContainer.PanelOverride>
+                <gfx:StyleBoxFlat BackgroundColor="#c9b458" ContentMarginLeftOverride="6" ContentMarginRightOverride="6" />
+            </PanelContainer.PanelOverride>
+            <Label Name="CodeLabel" FontColorOverride="#111111" />
+        </PanelContainer>
+    </BoxContainer>
+</PanelContainer>

@@ -1,0 +1,47 @@
+<controls:FancyWindow
+    xmlns="https://spacestation14.io"
+    xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+    MinSize="440 520"
+    SetSize="460 620">
+    <BoxContainer Orientation="Vertical" Margin="4">
+        <PanelContainer VerticalExpand="True">
+            <PanelContainer.PanelOverride>
+                <gfx:StyleBoxFlat BackgroundColor="#0b1418" BorderColor="#4a6a78" BorderThickness="2" />
+            </PanelContainer.PanelOverride>
+            <ScrollContainer HScrollEnabled="False" VerticalExpand="True" Margin="4">
+                <BoxContainer Orientation="Vertical">
+                    <GridContainer Name="SpiralGrid" HorizontalAlignment="Center" />
+                    <Label Name="EmptyLabel"
+                           Visible="False"
+                           HorizontalAlignment="Center"
+                           Text="{Loc 'vending-machine-component-try-eject-out-of-stock'}" />
+                </BoxContainer>
+            </ScrollContainer>
+        </PanelContainer>
+
+        <BoxContainer Orientation="Horizontal" Margin="0 6 0 0" SeparationOverride="8">
+            <PanelContainer HorizontalExpand="True" VerticalAlignment="Top">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#001c00" BorderColor="#1f4a1f" BorderThickness="1" />
+                </PanelContainer.PanelOverride>
+                <BoxContainer Orientation="Vertical" Margin="6 4">
+                    <Label Name="CodeDisplay" FontColorOverride="#4cff4c" />
+                    <Label Name="StatusDisplay" FontColorOverride="#4cff4c" ClipText="True" />
+                </BoxContainer>
+            </PanelContainer>
+            <GridContainer Name="KeypadGrid" Columns="3" />
+        </BoxContainer>
+
+        <BoxContainer Orientation="Vertical" Margin="0 4 0 0">
+            <PanelContainer StyleClasses="LowDivider" />
+            <BoxContainer Orientation="Horizontal" Margin="10 2 5 0">
+                <Label Text="{Loc 'vending-machine-flavor-left'}" StyleClasses="WindowFooterText" />
+                <Label Text="{Loc 'vending-machine-flavor-right'}" StyleClasses="WindowFooterText"
+                       HorizontalAlignment="Right" HorizontalExpand="True" Margin="0 0 5 0" />
+                <TextureRect StyleClasses="NTLogoDark" Stretch="KeepAspectCentered"
+                             VerticalAlignment="Center" HorizontalAlignment="Right" SetSize="19 19" />
+            </BoxContainer>
+        </BoxContainer>
+    </BoxContainer>
+</controls:FancyWindow>
