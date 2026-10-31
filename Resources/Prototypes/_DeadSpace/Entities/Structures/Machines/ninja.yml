@@ -94,3 +94,119 @@
         - MachineMask
         layer:
         - MachineLayer
+
+- type: entity
+  parent: BaseMajorContraband
+  id: NinjaHackBeacon
+  name: маяк взлома клана паука и тд
+  decription: крутой маяк
+  components:
+  - type: NinjaHackBeacon
+  - type: Item
+    size: Normal
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.4,0.25,0.1"
+        density: 20
+        mask:
+          - Impassable
+  - type: Foldable
+    folded: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.FoldedVisuals.State:
+        foldedLayer:
+          True: { state: folded_extraction }
+          False: { state: extraction_point }
+  - type: Sprite
+    sprite: Objects/Tools/thief_beacon.rsi
+    drawdepth: SmallObjects
+    noRot: true
+    layers:
+      - state: extraction_point
+        map: [ "foldedLayer" ]
+  - type: AccessReader
+    access: [["Ninja"]]
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+  - type: ActivatableUIRequiresAccess
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+  - type: Store
+    categories:
+    - NinjaHackCategory
+    currencyWhitelist:
+    - NinjaHackCurrency
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StructuralMetallicStrong
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 400
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: currency
+  id: NinjaHackCurrency
+  displayName: SC
+  canWithdraw: false
+
+- type: storeCategory
+  id: NinjaHackCategory
+  name: store-category-abilities
+
+- type: listing
+  id: NinjaHackPunctAutoInjector
+  name: PunctAutoInjector-ninja-hack-name
+  description: PunctAutoInjector-ninja-hack-desc
+  productEntity: PunctAutoInjector
+  cost:
+    NinjaHackCurrency: 20
+  categories:
+  - NinjaHackCategory
+
+- type: listing
+  id: NinjaHackBurnAutoInjector
+  name: BurnAutoInjector-ninja-hack-name
+  description: BurnAutoInjector-ninja-hack-desc
+  productEntity: BurnAutoInjector
+  cost:
+    NinjaHackCurrency: 20
+  categories:
+  - NinjaHackCategory
+
+- type: listing
+  id: NinjaHackManacles
+  name: Manacles-ninja-hack-name
+  description: Manacles-ninja-hack-desc
+  productEntity: Manacles
+  cost:
+    NinjaHackCurrency: 10
+  categories:
+  - NinjaHackCategory
+
+- type: listing
+  id: NinjaHackPowerCellHyper
+  name: PowerCellHyper-ninja-hack-name
+  description: PowerCellHyper-ninja-hack-desc
+  productEntity: PowerCellHyper
+  cost:
+    NinjaHackCurrency: 50
+  categories:
+  - NinjaHackCategory
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1

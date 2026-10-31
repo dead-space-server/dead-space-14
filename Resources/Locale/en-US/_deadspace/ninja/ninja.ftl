@@ -197,3 +197,16 @@ ninja-disguise-strip-attempt = Someone is trying to strip you!
 ninja-research-steal-halfway = The server sparks and starts humming a little louder.
 ninja-ai-hack-halfway = The console sparks as static appears on the screen.
 ninja-comms-hack-halfway = The console sparks as static appears on the screen.
+
+# Ninja hack beacon
+
+ninja-hack-beacon-verb-enable = Enable
+ninja-hack-beacon-verb-disable = Disable
+ninja-hack-beacon-inactive = The beacon is [color=gray]inactive[/color].
+ninja-hack-beacon-next-mine = Next withdrawal in [color=yellow]{ $seconds }[/color] sec.
+ninja-hack-beacon-transfer-broadcast = [bold]Transferred { $amount } credits from account { $name1 } \[{ $code1 }\] to { $name2 }[/bold]
+
+cargo-console-funds-blocked-by-hack = Account operations are blocked: unauthorized access to the station's banking system detected!
+
+objective-condition-ninja-steal-money-title = Steal the station's funds
+ninja-steal-money-objective-description = You need to steal {$count} credits. Deploy and activate the hacking beacon to start withdrawing funds from the station's accounts.
