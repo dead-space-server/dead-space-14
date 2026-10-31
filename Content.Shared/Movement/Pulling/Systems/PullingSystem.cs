@@ -5,6 +5,7 @@ using Content.Shared.Buckle.Components;
 using Content.Shared.Cuffs;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.Database;
+using Content.Shared.DeadSpace.HandPull; // DS-14
 using Content.Shared.Hands;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
@@ -291,26 +292,17 @@ public sealed class PullingSystem : EntitySystem
         }
     }
 
-    // DS-14-start
-    public void RemovePullJoint(EntityUid pullableUID, PullableComponent pullable)
-    {
-        if (pullable.PullJointId is not { } jointId)
-            return;
-        pullable.PullJointId = null;
-        Dirty(pullableUID, pullable);
-        _joints.RemoveJoint(pullableUID, jointId);
-    }
-    // DS-14-end
-
     private void OnRefreshMovespeed(EntityUid uid, PullerComponent component, RefreshMovementSpeedModifiersEvent args)
     {
         // DS-14-start
-        if (component.PullingWithoutSpeedPenalty)
+        if (TryComp<HandPullerComponent>(uid, out var handPuller) &&
+            handPuller.LifeStage <= ComponentLifeStage.Running &&
+            handPuller.Target == component.Pulling)
         {
-            args.ModifySpeed(1.0f, 1.0f);
             return;
         }
         // DS-14-end
+
         if (TryComp<HeldSpeedModifierComponent>(component.Pulling, out var heldMoveSpeed) && component.Pulling.HasValue)
         {
             var (walkMod, sprintMod) =
@@ -400,7 +392,6 @@ public sealed class PullingSystem : EntitySystem
             var pullerUid = oldPuller.Value;
             _alertsSystem.ClearAlert(pullerUid, pullerComp.PullingAlert);
             pullerComp.Pulling = null;
-            pullerComp.PullingWithoutSpeedPenalty = false; // DS-14
             Dirty(oldPuller.Value, pullerComp);
 
             // Messaging
@@ -524,7 +515,7 @@ public sealed class PullingSystem : EntitySystem
     }
 
     public bool TryStartPull(EntityUid pullerUid, EntityUid pullableUid,
-        PullerComponent? pullerComp = null, PullableComponent? pullableComp = null, bool noSpeedPenalty = false) //DS-14
+        PullerComponent? pullerComp = null, PullableComponent? pullableComp = null)
     {
         if (!Resolve(pullerUid, ref pullerComp, false) ||
             !Resolve(pullableUid, ref pullableComp, false))
@@ -532,18 +523,8 @@ public sealed class PullingSystem : EntitySystem
             return false;
         }
 
-        // DS-14-start
         if (pullerComp.Pulling == pullableUid)
-        {
-            if (noSpeedPenalty && !pullerComp.PullingWithoutSpeedPenalty)
-            {
-                pullerComp.PullingWithoutSpeedPenalty = true;
-                Dirty(pullerUid, pullerComp);
-                _modifierSystem.RefreshMovementSpeedModifiers(pullerUid);
-            }
             return true;
-        }
-        // DS-14-end
 
         if (!CanPull(pullerUid, pullableUid))
             return false;
@@ -587,7 +568,6 @@ public sealed class PullingSystem : EntitySystem
 
         EnsureComp<ActivePullerComponent>(pullerUid);
         pullerComp.Pulling = pullableUid;
-        pullerComp.PullingWithoutSpeedPenalty = noSpeedPenalty; // DS-14
         pullableComp.Puller = pullerUid;
 
         // store the pulled entity's physics FixedRotation setting in case we change it
