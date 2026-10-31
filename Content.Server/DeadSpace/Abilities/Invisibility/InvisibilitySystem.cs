@@ -3,6 +3,7 @@ using Content.Shared.DeadSpace.Abilities.Invisibility;
 using Content.Shared.DeadSpace.Abilities.Invisibility.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Stealth.Components;
 using Content.Shared.Weapons.Melee.Events;
 
 namespace Content.Server.DeadSpace.Abilities.Invisibility;
@@ -30,8 +31,9 @@ public sealed partial class InvisibilitySystem : SharedInvisibilitySystem
     {
         _actionsSystem.RemoveAction(uid, component.ActionInvisibilityEntity);
 
-        if (component.IsInvisible)
-            TogleInvisibility(uid, component);
+        // Стелс может остаться, даже если IsInvisible уже сброшен — снимаем всегда,
+        // иначе клиент застревает в синем виде стелс-шейдера.
+        RemComp<StealthComponent>(uid);
     }
 
     public void DoInvisibility(EntityUid uid, InvisibilityComponent component, InvisibilityActionEvent args)
