@@ -1,3 +1,4 @@
+using System.Numerics; //DS-14
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Audio;
@@ -110,4 +111,10 @@ public sealed partial class ProjectileComponent : Component
     /// </summary>
     [DataField]
     public FixedPoint2 PenetrationAmount = FixedPoint2.Zero;
+
+    // DS14
+    public Vector2? LimbShotOrigin;
+
+    // DS14
+    public Vector2? LimbAimPoint;
 }

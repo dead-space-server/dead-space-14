@@ -1,5 +1,6 @@
 ﻿using Content.Shared.Clothing.Components;
 using Content.Shared.Damage;
+using Content.Shared.DeadSpace.Body.Limbs; // DS14
 using Content.Shared.Damage.Systems;
 using Content.Shared.Examine;
 using Content.Shared.Inventory;
@@ -51,6 +52,9 @@ public abstract class SharedArmorSystem : EntitySystem
         if (TryComp<MaskComponent>(ent, out var mask) && mask.IsToggled)
             return;
 
+        if (!CoversHit(ent, args.Owner)) // DS14
+            return; // DS14
+
         foreach (var armorCoefficient in ent.Comp.Modifiers.Coefficients)
         {
             args.Args.DamageModifiers.Coefficients[armorCoefficient.Key] = args.Args.DamageModifiers.Coefficients.TryGetValue(armorCoefficient.Key, out var coefficient) ? coefficient * armorCoefficient.Value : armorCoefficient.Value;
@@ -65,8 +69,21 @@ public abstract class SharedArmorSystem : EntitySystem
         if (component.Modifiers == null) // DS14
             return; // DS14
 
+        if (!CoversHit(uid, args.Owner)) // DS14
+            return; // DS14
+
         args.Args.Damage = DamageSpecifier.ApplyModifierSet(args.Args.Damage, component.Modifiers);
     }
+
+    // DS14-start
+    private bool CoversHit(EntityUid clothing, EntityUid wearer)
+    {
+        if (!TryComp<LimbBodyComponent>(wearer, out var body) || body.ArmorZone is not { } zone)
+            return true;
+
+        return LimbCoverRules.Covers(clothing, zone, EntityManager);
+    }
+    // DS14-end
 
     private void OnBorgDamageModify(EntityUid uid, ArmorComponent component,
         ref BorgModuleRelayedEvent<DamageModifyEvent> args)

@@ -135,9 +135,24 @@
       coefficients:
         Blunt: 0.90
         Slash: 0.90
-        Piercing: 0.95
+        Piercing: 0.55
         Heat: 0.90
         Radiation: 0.25
+  # DS14
+  - type: LimbCover
+    stopsFire: true
+    blast: true
+    zones:
+    - Torso
+    - Groin
+    - ArmLeft
+    - ArmRight
+    - HandLeft
+    - HandRight
+    - LegLeft
+    - LegRight
+    - FootLeft
+    - FootRight
   - type: ToggleableClothing
     slot: head
     storeExistingItem: true # DS14

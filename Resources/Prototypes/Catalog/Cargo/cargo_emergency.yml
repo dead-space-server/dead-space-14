@@ -64,7 +64,7 @@
     sprite: Objects/Tanks/red.rsi
     state: icon
   product: CrateNitrogenInternals
-  cost: 350
+  cost: 450 # DS14
   category: cargoproduct-category-name-emergency
   group: engineering # DS14
 

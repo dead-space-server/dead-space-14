@@ -3,6 +3,7 @@ using Content.Shared.Body.Components;
 // DS14-start
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Reagent;
+using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.Cloning;
 using Content.Shared.EntityConditions.Conditions;
 using Content.Shared.EntityEffects.Effects.Damage;
@@ -23,6 +24,7 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Item.ItemToggle;
 using Content.Shared.Item.ItemToggle.Components;
 using Content.Shared.MedicalScanner;
+using Content.Shared.Mobs; // DS14
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Content.Shared.PowerCell;
@@ -248,7 +250,11 @@ public sealed class HealthAnalyzerSystem : EntitySystem
                 Name(target),
                 damageDict,
                 totalDamage,
-                uiState.Reagents
+                uiState.Reagents,
+                uiState.HasLimbs, // DS14
+                uiState.LimbSummary, // DS14
+                uiState.LimbIssues, // DS14
+                uiState.LimbShades // DS14
             );
         }
         //DS14-end
@@ -283,6 +289,12 @@ public sealed class HealthAnalyzerSystem : EntitySystem
                           temperatureDamage.DamageCap > 0 &&
                           temperatureDamage.HeatDamage.DamageDict.GetValueOrDefault("Heat") > 0 &&
                           damageable.Damage.DamageDict.ContainsKey("Heat");
+
+        if (TryComp<LimbBodyComponent>(entity, out var timed)
+            && timed.Died is { } died
+            && TryComp<MobStateComponent>(entity, out var mob)
+            && mob.CurrentState == MobState.Dead)
+            bodyTemperature = LimbWoundRules.CorpseKelvin((float) (_timing.CurTime - died).TotalMinutes);
         // DS14-end
 
         var bloodAmount = float.NaN;
@@ -306,6 +318,27 @@ public sealed class HealthAnalyzerSystem : EntitySystem
         // DS14-start
         if (HasComp<UncloningComponent>(entity))
             unclonable = true;
+
+        var hasLimbs = false;
+        var limbSummary = new LimbScanSummary();
+        var limbIssues = new List<LimbScanIssue>();
+        var limbShades = new List<byte>();
+        var limbParts = new List<LimbPartDamage>();
+        if (TryComp<LimbBodyComponent>(entity, out var limbs))
+        {
+            hasLimbs = true;
+            LimbScan.Build(limbs.Zones, limbs.Organs, out limbSummary, limbIssues);
+            var count = Math.Min(limbs.Zones.Count, LimbWoundRules.BodyZoneCount);
+            for (var i = 0; i < count; i++)
+            {
+                var zone = limbs.Zones[i];
+                limbShades.Add(LimbScan.Shade((LimbZone) i, zone));
+                if (zone.HitBlunt <= 0f && zone.HitSlash <= 0f && zone.HitPierce <= 0f && zone.HitHeat <= 0f && zone.HitCaustic <= 0f && zone.HitBlood <= 0f && zone.HitAir <= 0f)
+                    continue;
+
+                limbParts.Add(new LimbPartDamage((byte) i, zone.HitBlunt, zone.HitSlash, zone.HitPierce, zone.HitHeat, zone.HitCaustic, zone.HitBlood, zone.HitAir));
+            }
+        }
         // DS14-end
 
         return new HealthAnalyzerUiState(
@@ -318,7 +351,12 @@ public sealed class HealthAnalyzerSystem : EntitySystem
                     // DS14-start
                     unclonable,
                     reagents,
-                    overheating
+                    overheating,
+                    hasLimbs,
+                    limbSummary,
+                    limbIssues,
+                    limbShades,
+                    limbParts
                     // DS14-end
                 );
     }
@@ -413,7 +451,18 @@ public sealed class HealthAnalyzerSystem : EntitySystem
         sb.AppendLine("-----------------------------------");
         sb.AppendLine("[bold]Повреждения:[/bold]");
         sb.AppendLine($"[bold]Общие повреждения:[/bold] [color=darkred]{data.TotalDamage}[/color]");
-        if (data.DamageDict == null || data.DamageDict.Count == 0 || data.TotalDamage == 0)
+        if (data.HasLimbs)
+        {
+            var lines = LimbScanText.Areas(data.LimbShades, null);
+            if (lines.Count == 0)
+                sb.AppendLine("[color=green]• Повреждений не обнаружено[/color]");
+            else
+            {
+                foreach (var line in lines)
+                    sb.AppendLine($"• {line}");
+            }
+        }
+        else if (data.DamageDict == null || data.DamageDict.Count == 0 || data.TotalDamage == 0)
         {
             sb.AppendLine("[color=green]• Повреждений не обнаружено[/color]");
         }

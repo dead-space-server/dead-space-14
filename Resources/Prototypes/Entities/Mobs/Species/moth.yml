@@ -39,8 +39,8 @@
       reagents:
       - ReagentId: InsectBlood
         Quantity: 300
-  - type: DamageVisuals
-    damageOverlayGroups:
+  - type: LimbWoundVisuals
+    groups:
       Brute:
         sprite: Mobs/Effects/brute_damage.rsi
         color: "#808A51"

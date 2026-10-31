@@ -69,8 +69,8 @@
         Heat: -0.14
       groups:
         Brute: -0.14
-  - type: DamageVisuals
-    damageOverlayGroups:
+  - type: LimbWoundVisuals
+    groups:
       Brute:
         sprite: Mobs/Effects/brute_damage.rsi
         color: "#2cf274"

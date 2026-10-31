@@ -201,6 +201,8 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(DeadSpaceKeys.SwitchComponentMode); // DS14
             AddButton(DeadSpaceKeys.SwitchGunAmmoMode); // DS14
             AddButton(ContentKeyFunctions.Parry); // DS14
+            AddButton(ContentKeyFunctions.AimShot); // DS14
+            AddButton(ContentKeyFunctions.LimbDoll); // DS14
 
             AddHeader("ui-options-header-interaction-adv");
             AddButton(ContentKeyFunctions.SmartEquipBackpack);

@@ -20,8 +20,8 @@
   - type: Damageable
     damageContainer: Biological
     damageModifierSet: Gingerbread
-  - type: DamageVisuals
-    damageOverlayGroups:
+  - type: LimbWoundVisuals
+    groups:
       Brute:
         sprite: Mobs/Effects/brute_damage.rsi
         color: "#896e55"

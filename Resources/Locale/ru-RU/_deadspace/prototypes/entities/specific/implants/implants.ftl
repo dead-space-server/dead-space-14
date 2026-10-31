@@ -1,3 +1,8 @@
+ent-CombatAdrenalineImplant = имплант боевого адреналина
+    .desc = При сильной ране тело само вырабатывает адреналин, если носитель готов к бою.
+ent-CombatAdrenalineImplanter = { ent-Implanter }
+    .suffix = Боевой адреналин
+    .desc = { ent-BaseImplantOnlyImplanter.desc }
 ent-AdrenalImplant = адреналиновый имплант
     .desc = Имплант, который введёт в вас дозу стимуляторов.
 ent-AdrenalImplanter = { ent-Implanter }

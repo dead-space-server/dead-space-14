@@ -1,0 +1,26 @@
+- type: limbSpecies
+  id: Human
+  wound: 1
+  organs:
+  - Brain
+  - Eyes
+  - Heart
+  - Lungs
+  - Stomach
+  - Liver
+  - Kidneys
+  - Intestines
+
+- type: limbSpecies
+  id: Diona
+  wound: 0.7
+  organs:
+  - Brain
+  - Eyes
+
+- type: limbSpecies
+  id: SlimePerson
+  wound: 1.4
+  liquidSever: 1.5
+  organs:
+  - Core

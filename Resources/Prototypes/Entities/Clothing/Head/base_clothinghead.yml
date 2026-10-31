@@ -191,6 +191,11 @@
         Piercing: 0.95
         Heat: 0.90
         Radiation: 0.25
+  # DS14
+  - type: LimbCover
+    face: true
+    zones:
+    - Head
   - type: GroupExamine
   - type: IngestionBlocker
   - type: Tag

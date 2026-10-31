@@ -6,6 +6,8 @@ namespace Content.Shared.Input
     public static class ContentKeyFunctions
     {
         public static readonly BoundKeyFunction Parry = "Parry"; // DS14
+        public static readonly BoundKeyFunction AimShot = "AimShot"; // DS14
+        public static readonly BoundKeyFunction LimbDoll = "LimbDoll"; // DS14
 
         public static readonly BoundKeyFunction ToggleKnockdown = "ToggleKnockdown";
         public static readonly BoundKeyFunction UseItemInHand = "ActivateItemInHand";

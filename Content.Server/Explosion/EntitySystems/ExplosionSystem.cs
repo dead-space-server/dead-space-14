@@ -136,8 +136,17 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
     private void RelayedResistance(EntityUid uid, ExplosionResistanceComponent component,
         InventoryRelayedEvent<GetExplosionResistanceEvent> args)
     {
-        if (component.Worn)
-            OnGetResistance(uid, component, ref args.Args);
+        if (!component.Worn)
+            return;
+
+        // DS14-start
+        if (TryComp<Content.Shared.DeadSpace.Body.Limbs.LimbBodyComponent>(args.Owner, out var body)
+            && body.ArmorZone is { } zone
+            && !Content.Shared.DeadSpace.Body.Limbs.LimbCoverRules.Covers(uid, zone, EntityManager))
+            return;
+        // DS14-end
+
+        OnGetResistance(uid, component, ref args.Args);
     }
 
     private void OnGetResistance(EntityUid uid, ExplosionResistanceComponent component, ref GetExplosionResistanceEvent args)

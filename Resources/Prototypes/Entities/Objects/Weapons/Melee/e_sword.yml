@@ -30,6 +30,8 @@
     - type: Execution
       doAfterDuration: 4.0
   - type: ItemToggleHot
+  - type: LimbCut
+    factor: 1.5
   - type: ItemToggleSize
     activatedSize: Ginormous
   - type: ItemTogglePointLight

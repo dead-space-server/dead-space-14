@@ -287,7 +287,7 @@
       coefficients:
         Blunt: 0.6
         Slash: 0.6
-        Piercing: 0.6
+        Piercing: 0.4
         Heat: 0.8
         Caustic: 0.7
   - type: StaminaResistance # DS14

@@ -1,3 +1,4 @@
+using Content.Shared.DeadSpace.Body.Limbs; // DS14
 using Content.Shared.FixedPoint; // DS14
 using Robust.Shared.Serialization;
 
@@ -34,10 +35,15 @@ public struct HealthAnalyzerUiState
     public bool? Unclonable;
     public bool Overheating;
     public List<HealthAnalyzerReagentEntry> Reagents = new(); // DS14
+    public bool HasLimbs; // DS14
+    public LimbScanSummary LimbSummary; // DS14
+    public List<LimbScanIssue> LimbIssues = new(); // DS14
+    public List<byte> LimbShades = new(); // DS14
+    public List<LimbPartDamage> LimbParts = new(); // DS14
 
     public HealthAnalyzerUiState() {}
 
-    public HealthAnalyzerUiState(NetEntity? targetEntity, float temperature, float bloodLevel, bool? scanMode, bool? bleeding, bool? unrevivable, bool? unclonable = null, List<HealthAnalyzerReagentEntry>? reagents = null, bool overheating = false)
+    public HealthAnalyzerUiState(NetEntity? targetEntity, float temperature, float bloodLevel, bool? scanMode, bool? bleeding, bool? unrevivable, bool? unclonable = null, List<HealthAnalyzerReagentEntry>? reagents = null, bool overheating = false, bool hasLimbs = false, LimbScanSummary limbSummary = default, List<LimbScanIssue>? limbIssues = null, List<byte>? limbShades = null, List<LimbPartDamage>? limbParts = null)
     {
         TargetEntity = targetEntity;
         Temperature = temperature;
@@ -48,6 +54,11 @@ public struct HealthAnalyzerUiState
         Unclonable = unclonable; // DS14
         Overheating = overheating;
         Reagents = reagents ?? new List<HealthAnalyzerReagentEntry>(); // DS14
+        HasLimbs = hasLimbs; // DS14
+        LimbSummary = limbSummary; // DS14
+        LimbIssues = limbIssues ?? new List<LimbScanIssue>(); // DS14
+        LimbShades = limbShades ?? new List<byte>(); // DS14
+        LimbParts = limbParts ?? new List<LimbPartDamage>(); // DS14
     }
     // DS14-end
 }
