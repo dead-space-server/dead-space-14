@@ -1,6 +1,5 @@
 using Content.Server.Access.Systems;
 using Content.Server.Cargo.Components;
-using Content.Server.Damage.Components;
 using Content.Server.Damage.Systems;
 using Content.Shared.Access.Components;
 using Content.Shared.Access;
@@ -12,6 +11,7 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.DeadSpace.Halloween;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
+using Content.Shared.Item;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -21,20 +21,14 @@ using Content.Shared.Stacks;
 using Content.Server.Speech.Components;
 using Content.Shared.Tag;
 using Content.Shared.StatusEffect;
-using Content.Shared.StatusEffectNew;
 using Content.Shared.Throwing;
-using Content.Shared.Eye;
-using Content.Shared.FixedPoint;
 using OldStatusEffects = Content.Shared.StatusEffect.StatusEffectsSystem;
 using NewStatusEffects = Content.Shared.StatusEffectNew.StatusEffectsSystem;
 using Robust.Shared.Containers;
-using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
-using Robust.Shared.Physics.Components;
 using System.Numerics;
 using System.Linq;
 using Robust.Server.GameObjects;
-using Robust.Server.Player;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -72,6 +66,16 @@ public sealed class CandySystem : EntitySystem
     private static readonly ProtoId<TagPrototype> HighRiskItemTag = "HighRiskItem";
 
     private readonly Dictionary<EntityUid, string> _lastCandy = new();
+    private TimeSpan _nextLastCandyPrune;
+
+    private List<EntProtoId>? _cornSticksPool;
+
+    private static readonly string[] CornSticksExcludedComponents =
+    {
+        "Explosive",
+        "ExplodeOnTrigger",
+        "NukeDisk",
+    };
 
     public override void Initialize()
     {
@@ -188,6 +192,14 @@ public sealed class CandySystem : EntitySystem
         base.Update(frameTime);
 
         var now = _timing.CurTime;
+
+        if (now >= _nextLastCandyPrune)
+        {
+            _nextLastCandyPrune = now + TimeSpan.FromMinutes(1);
+
+            foreach (var key in _lastCandy.Keys.Where(k => !Exists(k)).ToList())
+                _lastCandy.Remove(key);
+        }
 
         // Money walk: drop one credit behind the player for 30 seconds.
         var trailQuery = EntityQueryEnumerator<CandyMoneyTrailComponent>();
@@ -391,25 +403,44 @@ public sealed class CandySystem : EntitySystem
     }
 
     // Corn sticks: spits out a random item from the unsafe gift pool.
-    private void CornSticks(EntityUid user)
+    private List<EntProtoId> BuildCornSticksPool()
     {
-        var physicsCompName = Factory.GetComponentName<PhysicsComponent>();
+        var itemCompName = Factory.GetComponentName<ItemComponent>();
+        var tagCompName = Factory.GetComponentName<TagComponent>();
         var pool = new List<EntProtoId>();
+
         foreach (var proto in _proto.EnumeratePrototypes<EntityPrototype>())
         {
             if (proto.Abstract || proto.HideSpawnMenu)
                 continue;
 
-            if (!proto.Components.ContainsKey(physicsCompName))
+            if (!proto.Components.ContainsKey(itemCompName))
                 continue;
+
+            if (CornSticksExcludedComponents.Any(proto.Components.ContainsKey))
+                continue;
+
+            if (proto.Components.TryGetValue(tagCompName, out var tagEntry) &&
+                tagEntry.Component is TagComponent tags &&
+                _tags.HasTag(tags, HighRiskItemTag))
+            {
+                continue;
+            }
 
             pool.Add(new EntProtoId(proto.ID));
         }
 
-        if (pool.Count == 0)
+        return pool;
+    }
+
+    private void CornSticks(EntityUid user)
+    {
+        _cornSticksPool ??= BuildCornSticksPool();
+
+        if (_cornSticksPool.Count == 0)
             return;
 
-        var pick = _random.Pick(pool);
+        var pick = _random.Pick(_cornSticksPool);
         var item = Spawn(pick, _transform.GetMoverCoordinates(user).Offset(new Vector2(
             _random.NextFloat(-0.5f, 0.5f),
             _random.NextFloat(-0.5f, 0.5f))));
@@ -486,7 +517,7 @@ public sealed class CandySystem : EntitySystem
 
         var items = new List<EntityUid>();
         foreach (var container in manager.Containers.Values)
-            items.AddRange(container.ContainedEntities);
+            items.AddRange(container.ContainedEntities.Where(e => !_tags.HasTag(e, HighRiskItemTag)));
 
         if (items.Count == 0)
             return;

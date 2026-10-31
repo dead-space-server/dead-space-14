@@ -1,7 +1,7 @@
 using Content.Shared.Mobs;
-using Content.Shared.Mobs.Components;
 
 namespace Content.Server.DeadSpace.Halloween;
+
 public sealed class CandyDropSystem : EntitySystem
 {
     public override void Initialize()
@@ -13,8 +13,10 @@ public sealed class CandyDropSystem : EntitySystem
 
     private void OnMobStateChanged(Entity<CandyDropComponent> ent, ref MobStateChangedEvent args)
     {
-        if (args.NewMobState != MobState.Dead)
+        if (args.NewMobState != MobState.Dead || ent.Comp.Dropped)
             return;
+
+        ent.Comp.Dropped = true;
 
         var coords = Transform(ent).Coordinates;
 

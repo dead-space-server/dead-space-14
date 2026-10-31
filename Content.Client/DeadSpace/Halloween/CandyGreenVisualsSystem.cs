@@ -22,6 +22,7 @@ public sealed class CandyGreenVisualsSystem : EntitySystem
         SubscribeLocalEvent<CandyGreenComponent, ComponentStartup>(OnAdded);
         SubscribeLocalEvent<CandyGreenComponent, ComponentShutdown>(OnRemoved);
         SubscribeLocalEvent<CandyGreenComponent, EntInsertedIntoContainerMessage>(OnInserted);
+        SubscribeLocalEvent<CandyGreenComponent, EntRemovedFromContainerMessage>(OnContainerRemoved);
     }
 
     private void OnAdded(Entity<CandyGreenComponent> ent, ref ComponentStartup args)
@@ -40,6 +41,11 @@ public sealed class CandyGreenVisualsSystem : EntitySystem
     private void OnInserted(Entity<CandyGreenComponent> ent, ref EntInsertedIntoContainerMessage args)
     {
         TintTree(args.Entity, ent.Owner);
+    }
+
+    private void OnContainerRemoved(Entity<CandyGreenComponent> ent, ref EntRemovedFromContainerMessage args)
+    {
+        RestoreTree(args.Entity, ent.Owner);
     }
 
     private void TintTree(EntityUid uid, EntityUid root)

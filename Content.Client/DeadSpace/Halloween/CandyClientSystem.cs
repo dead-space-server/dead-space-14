@@ -3,7 +3,6 @@ using Robust.Client.Audio;
 using Robust.Client.Graphics;
 using Robust.Shared;
 using Robust.Shared.Audio;
-using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
@@ -17,8 +16,6 @@ namespace Content.Client.DeadSpace.Halloween;
 public sealed class CandyClientSystem : EntitySystem
 {
     private const string AnnounceSound = "/Audio/_DeadSpace/Halloween/Candy.ogg";
-    private const float FadeOutSeconds = 2f;
-    private const float FadeOutVolumeDb = -50f;
 
     [Dependency] private readonly AudioSystem _audio = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
@@ -30,9 +27,8 @@ public sealed class CandyClientSystem : EntitySystem
 
     private TimeSpan _tintEndTime = TimeSpan.Zero;
     private TimeSpan _muteEndTime = TimeSpan.Zero;
-    private EntityUid? _announceSound;
-    private TimeSpan _announceSoundStart;
-    private TimeSpan _announceSoundEnd;
+
+    private float? _savedMasterVolume;
 
     public override void Initialize()
     {
@@ -54,36 +50,16 @@ public sealed class CandyClientSystem : EntitySystem
             _overlayMan.RemoveOverlay(_tintOverlay);
             _tintOverlay = null;
         }
-        if (_announceSound != null)
-        {
-            var length = _announceSoundEnd - _announceSoundStart;
-            var fadeStart = _announceSoundEnd - TimeSpan.FromSeconds(FadeOutSeconds);
-            var now = _timing.CurTime;
-
-            if (now >= _announceSoundEnd || !_audio.IsPlaying(_announceSound))
-            {
-                _audio.Stop(_announceSound);
-                _announceSound = null;
-            }
-            else if (now >= fadeStart && length > TimeSpan.FromSeconds(FadeOutSeconds))
-            {
-                var t = (float) ((now - fadeStart) / TimeSpan.FromSeconds(FadeOutSeconds));
-                _audio.SetVolume(_announceSound, FadeOutVolumeDb * t);
-            }
-        }
 
         if (_muteEndTime != TimeSpan.Zero && _timing.CurTime >= _muteEndTime)
-        {
-            _cfg.SetCVar(CVars.AudioMasterVolume, 1f);
-            _muteEndTime = TimeSpan.Zero;
-        }
+            RestoreMasterVolume();
     }
 
     public override void Shutdown()
     {
         base.Shutdown();
 
-        _cfg.SetCVar(CVars.AudioMasterVolume, 1f);
+        RestoreMasterVolume();
     }
 
     private void OnAnnounce(CandyAnnounceEvent ev)
@@ -99,20 +75,6 @@ public sealed class CandyClientSystem : EntitySystem
         _announceOverlay.Show(name, 4f);
         _audio.PlayGlobal(new SoundPathSpecifier(AnnounceSound), Filter.Local(), false, AudioParams.Default.WithVolume(-4f));
     }
-    private void StartAnnounceSound()
-    {
-        if (_announceSound != null)
-            _audio.Stop(_announceSound);
-
-        var length = (float) _audio.GetAudioLength(AnnounceSound).TotalSeconds;
-                var stream = _audio.PlayGlobal(AnnounceSound, Filter.Local(), false, AudioParams.Default.WithVolume(0f));
-        if (stream == null)
-            return;
-
-        _announceSound = stream.Value.Entity;
-        _announceSoundEnd = _timing.CurTime + TimeSpan.FromSeconds(length);
-        _announceSoundStart = _timing.CurTime;
-    }
 
     private void OnScreenTint(CandyScreenTintEvent ev)
     {
@@ -127,7 +89,20 @@ public sealed class CandyClientSystem : EntitySystem
 
     private void OnMute(CandyMuteEvent ev)
     {
+        _savedMasterVolume ??= _cfg.GetCVar(CVars.AudioMasterVolume);
+
         _cfg.SetCVar(CVars.AudioMasterVolume, 0f);
         _muteEndTime = _timing.CurTime + ev.Duration;
+    }
+
+    private void RestoreMasterVolume()
+    {
+        if (_savedMasterVolume is { } saved)
+        {
+            _cfg.SetCVar(CVars.AudioMasterVolume, saved);
+            _savedMasterVolume = null;
+        }
+
+        _muteEndTime = TimeSpan.Zero;
     }
 }
