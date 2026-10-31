@@ -92,3 +92,18 @@ laws-ui-state-law = Объявить законы:
 laws-notify = Вы обязаны соблюдать законы ИИ, ознакомиться с которыми можно через панель действий. Вы должны всегда следовать своим законам.
 laws-update-notify = Ваши законы были обновлены. Ознакомиться с изменениями можно через панель действий.
 laws-notify-subverted = Законы этого шасси изменены. Обязательно ознакомьтесь с ними.
+
+# DS14-start
+law-crewsimov-name = Крюзимов
+law-crewsimov-ai-name = Крюзимов
+law-corporate-name = Корпорат
+law-ntdefault-name = НТ стандарт
+law-commandments-name = Десять заповедей
+law-paladin-name = Паладин
+law-efficiency-name = Эффективность станции
+law-game-name = Игровой мастер
+law-painter-name = Художник
+law-nutimov-name = Орехимов
+law-servant-name = Слуга
+law-robocop-name = Робокоп
+# DS14-end
