@@ -468,6 +468,21 @@
       - CloningPodMachineCircuitboard
 
 - type: entity
+  id: OrganPrinterMachineCircuitboard
+  parent: BaseMachineCircuitboard
+  name: плата органомеха-3000
+  description: Плата для машины, печатающей органы из биомассы.
+  components:
+    - type: Sprite
+      state: medical
+    - type: MachineBoard
+      prototype: OrganPrinter
+      stackRequirements:
+        Manipulator: 3
+        Glass: 1
+        Cable: 1
+
+- type: entity
   id: MedicalScannerMachineCircuitboard
   parent: BaseMachineCircuitboard
   name: medical scanner machine board

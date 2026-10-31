@@ -1,0 +1,150 @@
+<!--Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT-->
+<DefaultWindow xmlns="https://spacestation14.io"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               x:Class="Content.Client.DeadSpace.OrganPrinter.OrganPrinterWindow"
+               Title="{Loc organ-printer-title}"
+               MinSize="620 440"
+               SetSize="720 540">
+
+    <BoxContainer Orientation="Vertical" VerticalExpand="True" HorizontalExpand="True">
+
+        <BoxContainer Name="MainContainer"
+                      Orientation="Horizontal"
+                      VerticalExpand="True"
+                      HorizontalExpand="True"
+                      SeparationOverride="8"
+                      Margin="4">
+
+            <BoxContainer Orientation="Vertical"
+                          HorizontalExpand="True"
+                          VerticalExpand="True"
+                          SizeFlagsStretchRatio="5"
+                          SeparationOverride="4">
+                <Label Text="{Loc organ-printer-organs-label}"
+                       StyleClasses="DeadSpaceSectionTitle"
+                       HorizontalAlignment="Center" />
+                <PanelContainer VerticalExpand="True" StyleClasses="DeadSpaceInset">
+                    <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
+                        <BoxContainer Name="OrganList"
+                                      Orientation="Vertical"
+                                      HorizontalExpand="True"
+                                      VerticalExpand="True"
+                                      RectClipContent="True"
+                                      SeparationOverride="2"
+                                      Margin="2" />
+                    </ScrollContainer>
+                </PanelContainer>
+            </BoxContainer>
+
+            <BoxContainer Orientation="Vertical"
+                          HorizontalExpand="True"
+                          VerticalExpand="True"
+                          SizeFlagsStretchRatio="6"
+                          SeparationOverride="6">
+
+                <PanelContainer VerticalExpand="True" StyleClasses="DeadSpaceSurfaceDark">
+                    <BoxContainer Name="PreviewContainer"
+                                  Orientation="Vertical"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  SeparationOverride="4">
+                        <EntityPrototypeView Name="PreviewSprite"
+                                             Scale="6 6"
+                                             HorizontalAlignment="Center"
+                                             VerticalAlignment="Center"
+                                             MinSize="192 192" />
+                        <Label Name="PreviewNameLabel"
+                               StyleClasses="LabelBig"
+                               HorizontalAlignment="Center" />
+                        <Label Name="PreviewDescLabel"
+                               HorizontalAlignment="Center"
+                               MaxWidth="280"
+                               Align="Center"
+                               StyleClasses="LabelSubText" />
+                        <Label Name="PreviewHintLabel"
+                               Text="{Loc organ-printer-select-hint}"
+                               HorizontalAlignment="Center"
+                               StyleClasses="LabelSubText" />
+                    </BoxContainer>
+                </PanelContainer>
+
+                <PanelContainer StyleClasses="DeadSpaceInset">
+                    <BoxContainer Orientation="Horizontal"
+                                  SeparationOverride="8"
+                                  Margin="6 4 6 4">
+                        <BoxContainer Orientation="Vertical"
+                                      HorizontalExpand="True"
+                                      VerticalAlignment="Center"
+                                      SeparationOverride="2">
+                            <Label Name="BiomassLabel" />
+                            <Label Name="CostLabel" />
+                        </BoxContainer>
+                        <Button Name="PrintButton"
+                                Text="{Loc organ-printer-print-button}"
+                                StyleClasses="ButtonBig"
+                                MinWidth="140"
+                                VerticalAlignment="Center"
+                                Disabled="True" />
+                    </BoxContainer>
+                </PanelContainer>
+            </BoxContainer>
+        </BoxContainer>
+
+        <BoxContainer Name="GameOverlay"
+                      Orientation="Vertical"
+                      Visible="False"
+                      VerticalExpand="True"
+                      HorizontalExpand="True"
+                      SeparationOverride="4"
+                      Margin="4">
+
+            <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                <Label Name="GameTitleLabel"
+                       Text="{Loc organ-printer-game-splicing}"
+                       StyleClasses="LabelBig"
+                       HorizontalExpand="True" />
+                <Label Name="GameCoverageLabel" StyleClasses="LabelSubText" />
+                <Label Name="GameWasteLabel" StyleClasses="LabelSubText" />
+                <Label Name="GameIntegrityLabel" StyleClasses="LabelSubText" />
+            </BoxContainer>
+
+            <Label Name="GameResultLabel"
+                   HorizontalAlignment="Center"
+                   StyleClasses="LabelBig"
+                   Visible="False" />
+
+            <PanelContainer VerticalExpand="True" StyleClasses="DeadSpaceSurfaceDark">
+                <BoxContainer Name="GameCanvasContainer"
+                              Orientation="Vertical"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center" />
+            </PanelContainer>
+
+            <Label Name="GameModeHintLabel"
+                   Text="{Loc organ-printer-game-goal}"
+                   HorizontalAlignment="Center"
+                   StyleClasses="LabelSubText" />
+
+            <BoxContainer Orientation="Horizontal" SeparationOverride="8" Align="Center">
+                <Button Name="GameFastButton"
+                        Text="{Loc organ-printer-game-fast}"
+                        ToolTip="{Loc organ-printer-game-fast-desc}"
+                        StyleClasses="ButtonBig"
+                        MinWidth="160" />
+                <Button Name="GameFineButton"
+                        Text="{Loc organ-printer-game-fine}"
+                        ToolTip="{Loc organ-printer-game-fine-desc}"
+                        StyleClasses="ButtonBig"
+                        MinWidth="160" />
+                <Button Name="GameAbortButton"
+                        Text="{Loc organ-printer-game-abort}"
+                        MinWidth="100" />
+                <Button Name="GameDoneButton"
+                        Text="{Loc organ-printer-game-done}"
+                        StyleClasses="ButtonBig"
+                        MinWidth="100"
+                        Visible="False" />
+            </BoxContainer>
+        </BoxContainer>
+    </BoxContainer>
+</DefaultWindow>

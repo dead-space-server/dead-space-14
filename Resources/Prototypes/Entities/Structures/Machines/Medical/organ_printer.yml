@@ -1,0 +1,68 @@
+- type: entity
+  id: OrganPrinter
+  parent: [ BaseMachinePowered, ConstructibleMachine ]
+  name: ОрганоМех-3000
+  description: Печатает свежие органы прямо из биомассы. Доставка тела не требуется, гарантия производителя не распространяется на мозг.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/Medical/biomass_reclaimer.rsi
+    state: icon
+    snapCardinals: true
+  - type: OrganPrinter
+    entries:
+    - product: OrganHumanHeart
+      cost: 30
+    - product: OrganHumanLungs
+      cost: 25
+    - product: OrganHumanLiver
+      cost: 25
+    - product: OrganHumanKidneys
+      cost: 20
+    - product: OrganHumanStomach
+      cost: 20
+    - product: OrganHumanEyes
+      cost: 15
+    - product: OrganHumanTongue
+      cost: 15
+    - product: OrganHumanEars
+      cost: 15
+    - product: OrganHumanAppendix
+      cost: 10
+    - product: OrganHumanBrain
+      cost: 50
+  - type: MaterialStorage
+    materialWhiteList:
+    - Biomass
+  - type: Machine
+    board: OrganPrinterMachineCircuitboard
+  - type: UserInterface
+    interfaces:
+      enum.OrganPrinterUiKey.Key:
+        type: OrganPrinterBoundUserInterface
+  - type: ActivatableUI
+    key: enum.OrganPrinterUiKey.Key
+  - type: ActivatableUIRequiresPower
+  - type: PointLight
+    radius: 1.5
+    energy: 1.2
+    color: "#ff6b6b"
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StrongMetallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
+      - !type:ChangeConstructionNodeBehavior
+        node: machineFrame
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: StaticPrice
+    price: 500
