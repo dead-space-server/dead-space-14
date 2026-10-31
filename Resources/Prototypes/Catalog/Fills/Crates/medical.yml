@@ -75,6 +75,7 @@
         - id: Drill
         - id: Saw
         - id: Hemostat
+        - id: Microscope # DS14
         - id: ClothingMaskSterile
 
 - type: entity

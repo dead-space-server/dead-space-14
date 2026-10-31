@@ -1,4 +1,4 @@
-- type: entity
+﻿- type: entity
   id: BaseHumanOrgan
   parent: BaseItem
   abstract: true
@@ -6,6 +6,8 @@
   - type: Sprite
     sprite: Mobs/Species/Human/organs.rsi
   - type: Organ
+  - type: Appearance
+  - type: OrganDamageVisual
   - type: Edible
   - type: Extractable
     grindableSolutionName: organ
@@ -68,6 +70,12 @@
   - type: Item
     size: Small
     heldPrefix: brain
+  - type: OrganDamageable
+    maxDamage: 200
+    damageMultipliers:
+      Blunt: 0.6
+      Cellular: 0.3
+    surgerySlotId: brain
 
 - type: entity
   id: OrganHumanEyes
@@ -82,6 +90,11 @@
   - type: Item
     size: Small
     heldPrefix: eyeballs
+  - type: OrganDamageable
+    maxDamage: 100
+    damageMultipliers:
+      Heat: 0.5
+    surgerySlotId: eyes
 
 - type: entity
   id: OrganHumanTongue
@@ -125,6 +138,14 @@
   - type: Item
     size: Small
     heldPrefix: lungs
+  - type: OrganDamageable
+    maxDamage: 250
+    damageMultipliers:
+      Asphyxiation: 0.7
+      Piercing: 0.3
+    surgerySlotId: lungs
+    deadBodyDamagePerSecond:
+      Asphyxiation: 4
   - type: Lung
   - type: Metabolizer
     removeEmpty: true
@@ -170,6 +191,14 @@
   - type: Item
     size: Small
     heldPrefix: heart
+  - type: OrganDamageable
+    maxDamage: 200
+    damageMultipliers:
+      Shock: 0.7
+      Blunt: 0.2
+    surgerySlotId: heart
+    deadBodyDamagePerSecond:
+      Asphyxiation: 6
 
 - type: entity
   id: OrganHumanStomach
@@ -182,6 +211,12 @@
   - type: Item
     size: Small
     heldPrefix: stomach
+  - type: OrganDamageable
+    maxDamage: 250
+    damageMultipliers:
+      Poison: 0.8
+      Caustic: 0.6
+    surgerySlotId: stomach
   - type: SolutionContainerManager
     solutions:
       stomach:
@@ -214,6 +249,14 @@
   - type: Item
     size: Small
     heldPrefix: liver
+  - type: OrganDamageable
+    maxDamage: 300
+    damageMultipliers:
+      Poison: 1.0
+      Cellular: 0.3
+    surgerySlotId: liver
+    deadBodyDamagePerSecond:
+      Poison: 2
   - type: Metabolizer # The liver metabolizes certain chemicals only, like alcohol.
     maxReagents: 1
     metabolizerTypes: [Human]
@@ -233,6 +276,14 @@
   - type: Item
     size: Small
     heldPrefix: kidneys
+  - type: OrganDamageable
+    maxDamage: 300
+    damageMultipliers:
+      Radiation: 0.8
+      Poison: 0.3
+    surgerySlotId: kidneys
+    deadBodyDamagePerSecond:
+      Poison: 1.5
   # The kidneys just remove anything that doesn't currently have any metabolisms, as a stopgap.
   - type: Metabolizer
     maxReagents: 5

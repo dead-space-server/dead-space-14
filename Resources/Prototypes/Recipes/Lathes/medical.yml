@@ -42,6 +42,12 @@
   id: Hemostat
   result: Hemostat
 
+# DS14
+- type: latheRecipe
+  parent: BaseSurgicalRecipe
+  id: Microscope
+  result: Microscope
+
 - type: latheRecipe
   id: BodyBag
   result: BodyBagFolded
