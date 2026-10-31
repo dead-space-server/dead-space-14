@@ -1,0 +1,54 @@
+// нормали, будет больно.
+uniform sampler2D normalMap;
+uniform highp vec4 normalUV;
+
+// шаг сэмплирования градиента lightmap в UV-пространстве (не экранные пиксели:
+// SCREEN_PIXEL_SIZE в мировом проходе не совпадает с разрешением lightmap,
+// из-за чего смещение выходит суб-тексельным и градиент обнуляется)
+const highp float GRADIENT_STEP = 0.02;
+// насколько сильно градиент карты освещения показывается как направление света
+const highp float LIGHT_GRADIENT_STRENGTH = 60.0;
+// насколько нормаль может осветлить ИЛИ затемнить принимаемый свет
+const highp float NORMAL_SHADING_STRENGTH = 0.9;
+// ОТЛАДКА: 1.0 = раскрасить спрайт: R/G каналы = нормаль (фиолетовый = плоско),
+// зелёный поверх = сила градиента света. 0.0 = нормальный режим.
+const highp float DEBUG_COLORS = 0.0;
+
+void fragment() {
+    // базовый цвет спрайта — как в стандартном спрайтовом шейдере
+    COLOR = zTexture(UV);
+
+    highp vec2 nSample = texture2D(normalMap, mix(normalUV.xy, normalUV.zw, UV2)).xy;
+    highp vec2 n = nSample * 2.0 - 1.0;
+
+    highp vec2 grad = vec2(0.0);
+    highp float gMag = 0.0;
+
+    // ВАЖНО: тело fragment() вставляется в середину main() базового шейдера,
+    // поэтому `return` здесь нельзя — он пропустит финальную запись gl_FragColor.
+    if (dot(n, n) >= 0.001) {
+        highp vec2 d = vec2(GRADIENT_STEP);
+        highp float lR = dot(texture2D(lightMap, Pos + vec2(d.x, 0.0)).rgb, vec3(0.2126, 0.7152, 0.0722));
+        highp float lL = dot(texture2D(lightMap, Pos - vec2(d.x, 0.0)).rgb, vec3(0.2126, 0.7152, 0.0722));
+        highp float lT = dot(texture2D(lightMap, Pos + vec2(0.0, d.y)).rgb, vec3(0.2126, 0.7152, 0.0722));
+        highp float lB = dot(texture2D(lightMap, Pos - vec2(0.0, d.y)).rgb, vec3(0.2126, 0.7152, 0.0722));
+
+        grad = vec2(lR - lL, lT - lB);
+        gMag = length(grad);
+        if (gMag >= 0.0001) {
+            // направление света в сторону более яркого источника и интенсивность окружающего освещения
+            highp vec2 lightDir = grad / gMag;
+            highp float lightAmount = clamp(gMag * LIGHT_GRADIENT_STRENGTH, 0.0, 1.0);
+
+            // на ярком свету гасим эффект: там градиент lightmap шумит и даёт полосы
+            highp float atten = 1.0 - clamp(dot(lightSample, vec3(0.2126, 0.7152, 0.0722)) * 0.9, 0.0, 1.0);
+            lightSample *= clamp(1.0 + lightAmount * atten * dot(n, lightDir) * NORMAL_SHADING_STRENGTH, 0.45, 1.55);
+        }
+    }
+
+    if (DEBUG_COLORS > 0.5) {
+        highp float gradVis = clamp(gMag * LIGHT_GRADIENT_STRENGTH, 0.0, 1.0);
+        COLOR.rgb = vec3(n.x * 0.5 + 0.5, n.y * 0.5 + 0.5, 1.0 - gradVis * 0.7);
+        COLOR.a = max(COLOR.a, 0.35);
+    }
+}

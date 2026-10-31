@@ -1,0 +1,4 @@
+- type: shader
+  id: NormalMapped
+  kind: source
+  path: "/Textures/Shaders/normal_map.swsl"
