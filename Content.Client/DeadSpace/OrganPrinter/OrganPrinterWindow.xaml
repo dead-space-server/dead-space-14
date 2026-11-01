@@ -8,59 +8,68 @@
 
     <BoxContainer Orientation="Vertical" VerticalExpand="True" HorizontalExpand="True">
 
+        <!-- Основной режим -->
         <BoxContainer Name="MainContainer"
                       Orientation="Horizontal"
                       VerticalExpand="True"
                       HorizontalExpand="True"
-                      SeparationOverride="8"
-                      Margin="4">
+                      SeparationOverride="10"
+                      Margin="6">
 
+            <!-- Каталог органов -->
             <BoxContainer Orientation="Vertical"
                           HorizontalExpand="True"
                           VerticalExpand="True"
                           SizeFlagsStretchRatio="5"
-                          SeparationOverride="4">
-                <Label Text="{Loc organ-printer-organs-label}"
-                       StyleClasses="DeadSpaceSectionTitle"
-                       HorizontalAlignment="Center" />
+                          SeparationOverride="6">
+                <PanelContainer StyleClasses="DeadSpaceSectionHeader">
+                    <Label Text="{Loc organ-printer-organs-label}"
+                           StyleClasses="DeadSpaceSectionTitle"
+                           HorizontalAlignment="Center" />
+                </PanelContainer>
+                <OptionButton Name="GroupFilter"
+                              StyleClasses="DeadSpaceFormField"
+                              MinHeight="34" />
                 <PanelContainer VerticalExpand="True" StyleClasses="DeadSpaceInset">
-                    <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
+                    <ScrollContainer VerticalExpand="True" HScrollEnabled="False" Margin="4">
                         <BoxContainer Name="OrganList"
                                       Orientation="Vertical"
                                       HorizontalExpand="True"
-                                      VerticalExpand="True"
-                                      RectClipContent="True"
-                                      SeparationOverride="2"
-                                      Margin="2" />
+                                      SeparationOverride="3" />
                     </ScrollContainer>
                 </PanelContainer>
             </BoxContainer>
 
+            <!-- Карточка органа и статус -->
             <BoxContainer Orientation="Vertical"
                           HorizontalExpand="True"
                           VerticalExpand="True"
-                          SizeFlagsStretchRatio="6"
-                          SeparationOverride="6">
+                          SizeFlagsStretchRatio="7"
+                          SeparationOverride="8">
 
                 <PanelContainer VerticalExpand="True" StyleClasses="DeadSpaceSurfaceDark">
                     <BoxContainer Name="PreviewContainer"
                                   Orientation="Vertical"
-                                  HorizontalAlignment="Center"
-                                  VerticalAlignment="Center"
-                                  SeparationOverride="4">
-                        <EntityPrototypeView Name="PreviewSprite"
-                                             Scale="6 6"
-                                             HorizontalAlignment="Center"
-                                             VerticalAlignment="Center"
-                                             MinSize="192 192" />
+                                  HorizontalExpand="True"
+                                  VerticalExpand="True"
+                                  SeparationOverride="8"
+                                  Margin="12">
+                        <PanelContainer MinSize="200 200"
+                                        MaxSize="200 200"
+                                        RectClipContent="True"
+                                        HorizontalAlignment="Center"
+                                        StyleClasses="DeadSpaceInset">
+                            <EntityPrototypeView Name="PreviewSprite"
+                                                 Scale="6 6"
+                                                 HorizontalExpand="True"
+                                                 VerticalExpand="True" />
+                        </PanelContainer>
                         <Label Name="PreviewNameLabel"
-                               StyleClasses="LabelBig"
+                               StyleClasses="DeadSpaceTitle"
                                HorizontalAlignment="Center" />
-                        <Label Name="PreviewDescLabel"
-                               HorizontalAlignment="Center"
-                               MaxWidth="280"
-                               Align="Center"
-                               StyleClasses="LabelSubText" />
+                        <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
+                            <RichTextLabel Name="PreviewDescLabel" StyleClasses="LabelSubText" />
+                        </ScrollContainer>
                         <Label Name="PreviewHintLabel"
                                Text="{Loc organ-printer-select-hint}"
                                HorizontalAlignment="Center"
@@ -70,19 +79,20 @@
 
                 <PanelContainer StyleClasses="DeadSpaceInset">
                     <BoxContainer Orientation="Horizontal"
-                                  SeparationOverride="8"
-                                  Margin="6 4 6 4">
+                                  Margin="10 6 10 6"
+                                  SeparationOverride="12">
                         <BoxContainer Orientation="Vertical"
                                       HorizontalExpand="True"
                                       VerticalAlignment="Center"
-                                      SeparationOverride="2">
+                                      SeparationOverride="3">
+                            <Label Text="{Loc organ-printer-biomass-title}" StyleClasses="LabelSubText" />
                             <Label Name="BiomassLabel" />
                             <Label Name="CostLabel" />
                         </BoxContainer>
                         <Button Name="PrintButton"
                                 Text="{Loc organ-printer-print-button}"
                                 StyleClasses="ButtonBig"
-                                MinWidth="140"
+                                MinWidth="170"
                                 VerticalAlignment="Center"
                                 Disabled="True" />
                     </BoxContainer>
@@ -90,6 +100,7 @@
             </BoxContainer>
         </BoxContainer>
 
+        <!-- Оверлей мини-игры «Сплайсинг ткани» -->
         <BoxContainer Name="GameOverlay"
                       Orientation="Vertical"
                       Visible="False"
@@ -98,7 +109,7 @@
                       SeparationOverride="4"
                       Margin="4">
 
-            <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+            <BoxContainer Orientation="Horizontal" SeparationOverride="10">
                 <Label Name="GameTitleLabel"
                        Text="{Loc organ-printer-game-splicing}"
                        StyleClasses="LabelBig"
@@ -116,8 +127,8 @@
             <PanelContainer VerticalExpand="True" StyleClasses="DeadSpaceSurfaceDark">
                 <BoxContainer Name="GameCanvasContainer"
                               Orientation="Vertical"
-                              HorizontalAlignment="Center"
-                              VerticalAlignment="Center" />
+                              HorizontalExpand="True"
+                              VerticalExpand="True" />
             </PanelContainer>
 
             <Label Name="GameModeHintLabel"

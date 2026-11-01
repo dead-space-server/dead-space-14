@@ -14,6 +14,25 @@ public enum OrganPrinterVisuals : byte
 }
 
 /// <summary>
+/// Группы рас для печати органов: деление используется в интерфейсе принтера и хирургии.
+/// Группы собраны по факту использования органов в прототипах тел рас.
+/// </summary>
+[Serializable, NetSerializable]
+public enum OrganSpeciesGroup : byte
+{
+    Humanoid = 0,
+    Feline = 1,
+    Canine = 2,
+    Reptilian = 3,
+    Moth = 4,
+    Kobolt = 5,
+    Shark = 6,
+    Demon = 7,
+    Vox = 9,
+    Arachnid = 10,
+}
+
+/// <summary>
 /// Орган, доступный для печати на ОрганоМехе, и его стоимость в биомассе.
 /// </summary>
 [DataDefinition]
@@ -30,6 +49,13 @@ public sealed partial class OrganPrinterEntry
     /// </summary>
     [DataField(required: true)]
     public int Cost;
+
+    /// <summary>
+    /// Группа рас, для чьих тел подходит орган.
+    /// Один орган может быть указан в нескольких группах отдельными записями.
+    /// </summary>
+    [DataField]
+    public OrganSpeciesGroup Group = OrganSpeciesGroup.Humanoid;
 }
 
 /// <summary>

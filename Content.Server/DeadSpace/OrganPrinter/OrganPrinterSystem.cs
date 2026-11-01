@@ -158,7 +158,7 @@ public sealed class OrganPrinterSystem : EntitySystem
         foreach (var entry in comp.Entries)
         {
             if (_proto.HasIndex(entry.Product))
-                products.Add(new OrganPrinterProduct(entry.Product, entry.Cost));
+                products.Add(new OrganPrinterProduct(entry.Product, entry.Cost, entry.Group));
             else
                 Log.Error($"Organ printer {ToPrettyString(uid)} has unknown product {entry.Product}");
         }

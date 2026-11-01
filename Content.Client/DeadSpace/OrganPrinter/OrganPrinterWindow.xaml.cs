@@ -8,6 +8,7 @@ using Robust.Client.GameObjects;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
+using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
@@ -24,6 +25,8 @@ public sealed partial class OrganPrinterWindow : DefaultWindow
     private readonly SplicingGameControl _game = new();
 
     private List<OrganPrinterProduct> _products = new();
+    private List<OrganPrinterProduct> _filtered = new();
+    private OrganSpeciesGroup? _groupFilter;
     private EntProtoId? _selected;
     private int _biomass;
 
@@ -42,6 +45,18 @@ public sealed partial class OrganPrinterWindow : DefaultWindow
         _game.HorizontalExpand = true;
         _game.VerticalExpand = true;
         _game.Visible = false;
+
+        var groups = Enum.GetValues<OrganSpeciesGroup>().ToList();
+        GroupFilter.AddItem(Loc.GetString("organ-printer-group-all"));
+        foreach (var group in groups)
+            GroupFilter.AddItem(Loc.GetString($"organ-printer-group-{group.ToString().ToLowerInvariant()}"));
+        GroupFilter.SelectId(0);
+        GroupFilter.OnItemSelected += args =>
+        {
+            GroupFilter.SelectId(args.Id);
+            _groupFilter = args.Id == 0 ? null : groups[args.Id - 1];
+            RebuildList();
+        };
 
         GameFastButton.OnPressed += _ => StartGame(true);
         GameFineButton.OnPressed += _ => StartGame(false);
@@ -149,9 +164,13 @@ public sealed partial class OrganPrinterWindow : DefaultWindow
 
     private void RebuildList()
     {
+        _filtered = _products
+            .Where(p => _groupFilter == null || p.Group == _groupFilter)
+            .ToList();
+
         OrganList.RemoveAllChildren();
 
-        if (_products.Count == 0)
+        if (_filtered.Count == 0)
         {
             OrganList.AddChild(new Label
             {
@@ -162,7 +181,7 @@ public sealed partial class OrganPrinterWindow : DefaultWindow
             return;
         }
 
-        foreach (var product in _products)
+        foreach (var product in _filtered)
         {
             var row = new Button
             {
@@ -174,15 +193,26 @@ public sealed partial class OrganPrinterWindow : DefaultWindow
             var content = new BoxContainer
             {
                 Orientation = BoxContainer.LayoutOrientation.Horizontal,
-                SeparationOverride = 6,
+                HorizontalExpand = true,
+                SeparationOverride = 8,
             };
 
-            var icon = new EntityPrototypeView();
+            var iconBox = new PanelContainer
+            {
+                MinSize = new Vector2(44, 36),
+                MaxSize = new Vector2(44, 36),
+                RectClipContent = true,
+                StyleClasses = { "DeadSpaceInset" },
+            };
+
+            var icon = new EntityPrototypeView
+            {
+                HorizontalExpand = true,
+                VerticalExpand = true,
+            };
             icon.SetPrototype(product.Product);
             icon.Scale = new Vector2(2, 2);
-            icon.MinSize = new Vector2(32, 32);
-            icon.HorizontalAlignment = HAlignment.Center;
-            icon.VerticalAlignment = VAlignment.Center;
+            iconBox.AddChild(icon);
 
             var name = new Label
             {
@@ -192,14 +222,14 @@ public sealed partial class OrganPrinterWindow : DefaultWindow
                 ClipText = true,
             };
 
-            var cost = new RichTextLabel
+            var cost = new Label
             {
+                Text = Loc.GetString("organ-printer-cost-short", ("cost", product.Cost)),
+                FontColorOverride = Color.FromHex("#ffb13b"),
                 VerticalAlignment = VAlignment.Center,
             };
-            cost.SetMessage(FormattedMessage.FromMarkupPermissive(
-                $"[color=#8A9A5B]{Loc.GetString("organ-printer-cost-short", ("cost", product.Cost))}[/color]"));
 
-            content.AddChild(icon);
+            content.AddChild(iconBox);
             content.AddChild(name);
             content.AddChild(cost);
             row.AddChild(content);
@@ -226,7 +256,7 @@ public sealed partial class OrganPrinterWindow : DefaultWindow
         {
             PreviewSprite.SetPrototype(null);
             PreviewNameLabel.Text = string.Empty;
-            PreviewDescLabel.Text = string.Empty;
+            PreviewDescLabel.SetMessage(FormattedMessage.Empty);
             PreviewHintLabel.Visible = _products.Count > 0;
             RefreshRowToggles();
             return;
@@ -236,7 +266,7 @@ public sealed partial class OrganPrinterWindow : DefaultWindow
         var proto = _proto.Index<EntityPrototype>(selected);
         PreviewSprite.SetPrototype(selected);
         PreviewNameLabel.Text = proto.Name;
-        PreviewDescLabel.Text = proto.Description;
+        PreviewDescLabel.SetMessage(FormattedMessage.FromMarkupPermissive(proto.Description));
         RefreshRowToggles();
     }
 
@@ -248,7 +278,7 @@ public sealed partial class OrganPrinterWindow : DefaultWindow
             if (child is not Button row)
                 continue;
 
-            row.Pressed = _selected != null && _products[i].Product == _selected;
+            row.Pressed = _selected != null && _filtered[i].Product == _selected;
             i++;
         }
     }
@@ -256,17 +286,22 @@ public sealed partial class OrganPrinterWindow : DefaultWindow
     private void UpdateBottomPanel()
     {
         BiomassLabel.Text = Loc.GetString("organ-printer-biomass-label", ("amount", _biomass));
+        BiomassLabel.FontColorOverride = Color.FromHex("#7dffb0");
 
         if (_selected is not { } selected)
         {
             CostLabel.Text = Loc.GetString("organ-printer-cost-none");
+            CostLabel.FontColorOverride = Color.FromHex("#9aa79b");
             PrintButton.Disabled = true;
             return;
         }
 
         var entry = _products.FirstOrDefault(p => p.Product == selected);
         var cost = entry?.Cost ?? 0;
+        var affordable = _biomass >= cost;
+
         CostLabel.Text = Loc.GetString("organ-printer-cost-label", ("cost", cost));
-        PrintButton.Disabled = _biomass < cost;
+        CostLabel.FontColorOverride = affordable ? Color.FromHex("#ffb13b") : Color.FromHex("#ff6b6b");
+        PrintButton.Disabled = !affordable;
     }
 }

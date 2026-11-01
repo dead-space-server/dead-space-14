@@ -15,7 +15,7 @@ public enum OrganPrinterUiKey : byte
 /// Запись о печатаемом органе для UI.
 /// </summary>
 [Serializable, NetSerializable]
-public sealed record OrganPrinterProduct(EntProtoId Product, int Cost);
+public sealed record OrganPrinterProduct(EntProtoId Product, int Cost, OrganSpeciesGroup Group);
 
 [Serializable, NetSerializable]
 public sealed class OrganPrinterUpdateState : BoundUserInterfaceState

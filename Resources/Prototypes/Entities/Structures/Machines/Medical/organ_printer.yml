@@ -26,36 +26,242 @@
   - type: OrganPrinter
     printDuration: 6
     entries:
+    # человечьи: люди
     - product: OrganHumanHeart
       cost: 30
+      group: Humanoid
     - product: OrganHumanLungs
       cost: 25
+      group: Humanoid
     - product: OrganHumanLiver
       cost: 25
+      group: Humanoid
     - product: OrganHumanKidneys
       cost: 20
+      group: Humanoid
     - product: OrganHumanStomach
       cost: 20
+      group: Humanoid
     - product: OrganHumanEyes
       cost: 15
+      group: Humanoid
     - product: OrganHumanTongue
       cost: 15
+      group: Humanoid
     - product: OrganHumanEars
       cost: 15
-    - product: OrganHumanAppendix
-      cost: 10
+      group: Humanoid
     - product: OrganHumanBrain
       cost: 50
+      group: Humanoid
+    # человечьи: дворфы
+    - product: OrganDwarfHeart
+      cost: 30
+      group: Humanoid
+    - product: OrganDwarfStomach
+      cost: 20
+      group: Humanoid
+    - product: OrganDwarfLiver
+      cost: 25
+      group: Humanoid
+    # кошачьи: таяры
     - product: OrganAnimalHeart
       cost: 30
+      group: Feline
     - product: OrganAnimalLiver
       cost: 25
+      group: Feline
     - product: OrganTajaranStomach
       cost: 20
-    - product: OrganReptilianStomach
+      group: Feline
+    - product: OrganHumanBrain
+      cost: 50
+      group: Feline
+    - product: OrganHumanEyes
+      cost: 15
+      group: Feline
+    - product: OrganHumanLungs
+      cost: 25
+      group: Feline
+    - product: OrganHumanKidneys
       cost: 20
+      group: Feline
+    # собачьи: вульпканы
+    - product: OrganAnimalHeart
+      cost: 30
+      group: Canine
+    - product: OrganAnimalLiver
+      cost: 25
+      group: Canine
     - product: OrganVulpkaninStomach
       cost: 20
+      group: Canine
+    - product: OrganHumanBrain
+      cost: 50
+      group: Canine
+    - product: OrganHumanEyes
+      cost: 15
+      group: Canine
+    - product: OrganHumanLungs
+      cost: 25
+      group: Canine
+    - product: OrganHumanKidneys
+      cost: 20
+      group: Canine
+    # рептилоиды: рептилоиды и фелиниды
+    - product: OrganAnimalHeart
+      cost: 30
+      group: Reptilian
+    - product: OrganAnimalLiver
+      cost: 25
+      group: Reptilian
+    - product: OrganReptilianStomach
+      cost: 20
+      group: Reptilian
+    - product: OrganHumanBrain
+      cost: 50
+      group: Reptilian
+    - product: OrganHumanEyes
+      cost: 15
+      group: Reptilian
+    - product: OrganHumanLungs
+      cost: 25
+      group: Reptilian
+    - product: OrganHumanKidneys
+      cost: 20
+      group: Reptilian
+    # мотыльки
+    - product: OrganAnimalHeart
+      cost: 30
+      group: Moth
+    - product: OrganAnimalLiver
+      cost: 25
+      group: Moth
+    - product: OrganMothStomach
+      cost: 20
+      group: Moth
+    - product: OrganHumanBrain
+      cost: 50
+      group: Moth
+    - product: OrganHumanEyes
+      cost: 15
+      group: Moth
+    - product: OrganHumanLungs
+      cost: 25
+      group: Moth
+    - product: OrganHumanKidneys
+      cost: 20
+      group: Moth
+    # кобольды
+    - product: OrganAnimalHeart
+      cost: 30
+      group: Kobolt
+    - product: OrganAnimalLiver
+      cost: 25
+      group: Kobolt
+    - product: OrganKoboltStomach
+      cost: 20
+      group: Kobolt
+    - product: OrganHumanBrain
+      cost: 50
+      group: Kobolt
+    - product: OrganHumanEyes
+      cost: 15
+      group: Kobolt
+    - product: OrganHumanLungs
+      cost: 25
+      group: Kobolt
+    - product: OrganHumanKidneys
+      cost: 20
+      group: Kobolt
+    # акулы
+    - product: OrganAnimalHeart
+      cost: 30
+      group: Shark
+    - product: OrganAnimalLiver
+      cost: 25
+      group: Shark
+    - product: OrganSharkStomach
+      cost: 20
+      group: Shark
+    - product: OrganHumanBrain
+      cost: 50
+      group: Shark
+    - product: OrganHumanEyes
+      cost: 15
+      group: Shark
+    - product: OrganHumanLungs
+      cost: 25
+      group: Shark
+    - product: OrganHumanKidneys
+      cost: 20
+      group: Shark
+    # демоны
+    - product: OrganAnimalHeart
+      cost: 30
+      group: Demon
+    - product: OrganAnimalLiver
+      cost: 25
+      group: Demon
+    - product: OrganDemonStomach
+      cost: 20
+      group: Demon
+    - product: OrganHumanBrain
+      cost: 50
+      group: Demon
+    - product: OrganHumanEyes
+      cost: 15
+      group: Demon
+    - product: OrganHumanLungs
+      cost: 25
+      group: Demon
+    - product: OrganHumanKidneys
+      cost: 20
+      group: Demon
+    # воки
+    - product: OrganVoxBrain
+      cost: 50
+      group: Vox
+    - product: OrganVoxEyes
+      cost: 15
+      group: Vox
+    - product: OrganVoxHeart
+      cost: 30
+      group: Vox
+    - product: OrganVoxLungs
+      cost: 25
+      group: Vox
+    - product: OrganVoxStomach
+      cost: 20
+      group: Vox
+    - product: OrganVoxLiver
+      cost: 25
+      group: Vox
+    - product: OrganVoxKidneys
+      cost: 20
+      group: Vox
+    # арахниды
+    - product: OrganHumanBrain
+      cost: 50
+      group: Arachnid
+    - product: OrganArachnidEyes
+      cost: 15
+      group: Arachnid
+    - product: OrganArachnidHeart
+      cost: 30
+      group: Arachnid
+    - product: OrganArachnidLungs
+      cost: 25
+      group: Arachnid
+    - product: OrganArachnidStomach
+      cost: 20
+      group: Arachnid
+    - product: OrganArachnidLiver
+      cost: 25
+      group: Arachnid
+    - product: OrganArachnidKidneys
+      cost: 20
+      group: Arachnid
   - type: MaterialStorage
     materialWhiteList:
     - Biomass
