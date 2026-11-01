@@ -128,7 +128,7 @@ public sealed class PdaArcadeSystem : EntitySystem
             return;
 
         var target = maybe.Value;
-        if (!Near(actor, target) || !Alive(target) || !TryComp(target, out ActorComponent? guestActor))
+        if (!Living(target) || !Near(actor, target) || !TryComp(target, out ActorComponent? guestActor))
             return;
 
         if (Pending(actor) || Pending(target))
@@ -162,7 +162,7 @@ public sealed class PdaArcadeSystem : EntitySystem
             return;
 
         _invites.Remove(found);
-        if (!accept || !Near(found.Host, found.Guest) || !Alive(found.Host) || !Alive(found.Guest))
+        if (!accept || !CanHost(found.Host) || !Living(found.Guest) || !CloseEnough(found.Host, found.Guest))
         {
             _popup.PopupEntity(Loc.GetString("pda-arcade-declined"), found.Host, found.Host);
             return;
@@ -592,9 +592,9 @@ public sealed class PdaArcadeSystem : EntitySystem
     {
         var list = new List<PdaArcadePerson>();
         var query = EntityQueryEnumerator<ActorComponent, MobStateComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out _, out var state, out _))
+        while (query.MoveNext(out var uid, out _, out _, out _))
         {
-            if (uid == actor || state.CurrentState != MobState.Alive || !Near(actor, uid))
+            if (uid == actor || !Living(uid) || !Near(actor, uid))
                 continue;
 
             list.Add(new PdaArcadePerson(GetNetEntity(uid), MetaName(uid)));
@@ -613,9 +613,32 @@ public sealed class PdaArcadeSystem : EntitySystem
         return from.Coordinates.TryDistance(EntityManager, to.Coordinates, out var distance) && distance <= 3f;
     }
 
+    private bool CloseEnough(EntityUid host, EntityUid guest)
+    {
+        if (Aghost(host))
+            return Transform(host).MapID == Transform(guest).MapID;
+
+        return Near(host, guest);
+    }
+
     private bool Alive(EntityUid uid)
     {
         return TryComp(uid, out MobStateComponent? state) && state.CurrentState == MobState.Alive;
+    }
+
+    private bool Aghost(EntityUid uid)
+    {
+        return TryComp<GhostComponent>(uid, out var ghost) && ghost.CanGhostInteract;
+    }
+
+    private bool Living(EntityUid uid)
+    {
+        return Alive(uid) && !HasComp<GhostComponent>(uid);
+    }
+
+    private bool CanHost(EntityUid uid)
+    {
+        return Aghost(uid) || Living(uid);
     }
 
     private bool Busy(EntityUid uid)
