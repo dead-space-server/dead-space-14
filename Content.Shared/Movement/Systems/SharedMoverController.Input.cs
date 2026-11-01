@@ -3,6 +3,7 @@ using Content.Shared.Alert;
 using Content.Shared.CCVar;
 using Content.Shared.Follower.Components;
 using Content.Shared.Input;
+using Content.Shared.DeadSpace.Halloween;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Events;
 using Robust.Shared.GameStates;
@@ -337,6 +338,20 @@ namespace Content.Shared.Movement.Systems
                 var relayMoveEvent = new ContainerRelayMovementEntityEvent(entity);
                 RaiseLocalEvent(xform.ParentUid, ref relayMoveEvent);
             }
+
+            // DS14-start: candy effect - invert movement controls
+            if (HasComp<CandyInvertControlsComponent>(entity))
+            {
+                dir = dir switch
+                {
+                    Direction.North => Direction.South,
+                    Direction.South => Direction.North,
+                    Direction.East => Direction.West,
+                    Direction.West => Direction.East,
+                    _ => dir,
+                };
+            }
+            // DS14-end
 
             SetVelocityDirection((entity, moverComp), dir, subTick, state);
         }

@@ -19,7 +19,6 @@ using Content.Shared.Ghost;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.IgnitionSource;
-using Content.Shared.Interaction.Components;
 using Content.Shared.Item;
 using Content.Shared.Item.ItemToggle;
 using Content.Shared.Item.ItemToggle.Components;
@@ -175,6 +174,9 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
         if (component.IsShadowPosition)
             return;
 
+        if (component.IsShadowCrawl || component.IsStartShadowCrawl)
+            return;
+
         if (!TryComp<MobStateComponent>(uid, out var mobStateComponent))
             return;
 
@@ -283,13 +285,11 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
         if (!TryComp<HandsComponent>(uid, out var hands))
             return;
 
+        // Рука не должна выпадать после смерти демона — она исчезает вместе с ним.
         foreach (var held in _hands.EnumerateHeld((uid, hands)).ToList())
         {
-            if (!HasComp<DemonShadowHandComponent>(held))
-                continue;
-
-            RemComp<UnremoveableComponent>(held);
-            _hands.TryDrop((uid, hands), held, checkActionBlocker: false);
+            if (HasComp<DemonShadowHandComponent>(held))
+                QueueDel(held);
         }
     }
 
@@ -298,6 +298,12 @@ public sealed class DemonShadowSystem : SharedDemonShadowSystem
     {
         if (!TryComp<DemonShadowComponent>(args.Target, out var demon))
             return;
+
+        if (demon.IsShadowCrawl || demon.IsStartShadowCrawl)
+        {
+            args.Damage = new DamageSpecifier();
+            return;
+        }
 
         args.Damage = new DamageSpecifier();
         _damageable.TryChangeDamage(args.Target, demon.LightDamage * component.LightDamageMultiplier,

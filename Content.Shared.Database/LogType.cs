@@ -487,4 +487,9 @@ public enum LogType
 
     //backmen
     Transactions = 120,
+
+    /// <summary>
+    /// A player started or finished controlling a shuttle.
+    /// </summary>
+    ShuttlePilot = 121, //DS-14
 }

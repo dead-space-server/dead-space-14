@@ -23,6 +23,20 @@
     event: !type:HeraldSpawnActionEvent
 
 - type: entity
+  id: ActionShadowSpawn
+  name: Материализоваться
+  description: Обретите плоть в выбранном месте. Помните — свет губителен для вас, материализуйтесь в тени!
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 1
+    icon:
+      sprite: _DeadSpace/Demons/demon_shadow.rsi
+      state: running
+  - type: InstantAction
+    event: !type:ShadowSpawnActionEvent
+
+- type: entity
   id: ActionStunAttack
   name: Оглушающая атака
   description: Ваша следующая атака собьёт жертву с ног.

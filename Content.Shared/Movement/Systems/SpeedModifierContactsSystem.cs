@@ -126,6 +126,12 @@ public sealed class SpeedModifierContactsSystem : EntitySystem
 
         bool remove = true;
         var entries = 0;
+        // DS14-Start
+        var contactEntries = 0;
+        var slipperyEntries = 0;
+        var slipperyWalk = 0.0f;
+        var slipperySprint = 0.0f;
+        // DS14-end
         foreach (var ent in _physics.GetContactingEntities(uid, physicsComponent))
         {
             // DS14-start
@@ -158,6 +164,7 @@ public sealed class SpeedModifierContactsSystem : EntitySystem
 
                 walkSpeed += slowContactsComponent.WalkSpeedModifier;
                 sprintSpeed += slowContactsComponent.SprintSpeedModifier;
+                contactEntries++; // DS14
                 speedModified = true;
             }
 
@@ -169,8 +176,11 @@ public sealed class SpeedModifierContactsSystem : EntitySystem
 
                 if (!MathHelper.CloseTo(evSlippery.SlowdownModifier, 1))
                 {
-                    walkSpeed += evSlippery.SlowdownModifier;
-                    sprintSpeed += evSlippery.SlowdownModifier;
+                    // DS14-start
+                    slipperyWalk += evSlippery.SlowdownModifier;
+                    slipperySprint += evSlippery.SlowdownModifier;
+                    slipperyEntries++;
+                    // DS14-end
                     speedModified = true;
                 }
             }
@@ -182,28 +192,44 @@ public sealed class SpeedModifierContactsSystem : EntitySystem
             }
         }
 
-        if (entries > 0 && (!MathHelper.CloseTo(walkSpeed, entries) || !MathHelper.CloseTo(sprintSpeed, entries)))
+        if (entries > 0 && (!MathHelper.CloseTo(walkSpeed, contactEntries) || !MathHelper.CloseTo(sprintSpeed, contactEntries) || slipperyEntries > 0)) // DS14
         {
-            walkSpeed /= entries;
-            sprintSpeed /= entries;
-
+            // DS14-start
             var evMax = new GetSpeedModifierContactCapEvent();
             RaiseLocalEvent(uid, ref evMax);
 
-            var resistance = Math.Clamp(evMax.SlowdownResistance, 0f, 1f);
-            if (resistance > 0f)
+            if (contactEntries > 0)
             {
-                if (walkSpeed < 1f)
-                    walkSpeed = 1f - (1f - walkSpeed) * (1f - resistance);
+                walkSpeed /= contactEntries;
+                sprintSpeed /= contactEntries;
 
-                if (sprintSpeed < 1f)
-                    sprintSpeed = 1f - (1f - sprintSpeed) * (1f - resistance);
+                var resistance = Math.Clamp(evMax.SlowdownResistance, 0f, 1f);
+                if (resistance > 0f)
+                {
+                    if (walkSpeed < 1f)
+                        walkSpeed = 1f - (1f - walkSpeed) * (1f - resistance);
+
+                    if (sprintSpeed < 1f)
+                        sprintSpeed = 1f - (1f - sprintSpeed) * (1f - resistance);
+                }
+            }
+            else
+            {
+                walkSpeed = 1f;
+                sprintSpeed = 1f;
+            }
+
+            if (slipperyEntries > 0)
+            {
+                walkSpeed *= slipperyWalk / slipperyEntries;
+                sprintSpeed *= slipperySprint / slipperyEntries;
             }
 
             walkSpeed = MathF.Max(walkSpeed, evMax.MaxWalkSlowdown);
             sprintSpeed = MathF.Max(sprintSpeed, evMax.MaxSprintSlowdown);
 
             args.ModifySpeed(walkSpeed, sprintSpeed);
+            // DS14-end
         }
 
         // no longer colliding with anything

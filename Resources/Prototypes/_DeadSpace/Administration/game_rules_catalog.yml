@@ -386,6 +386,10 @@
   name: Одиночный ядерный оперативник (от ~ 90 минут)
 
 - type: gameRuleDisplayName
+  id: GeistMidroundSpawn
+  name: Гейст Круга (от ~ 90 минут)
+
+- type: gameRuleDisplayName
   id: SyndicateRaid
   name: Рейдеры синдиката (от ~ 90 минут)
 

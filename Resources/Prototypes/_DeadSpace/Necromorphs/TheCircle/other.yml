@@ -111,3 +111,20 @@
   components:
   - type: Paper
     content: paper-medic-circle
+
+- type: entity
+  parent: CandyBucket
+  id: GeistCandyBag
+  name: корзинка для конфет
+  description: Тыквенная корзинка, набитая сладостями.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: FoodSnackSwirlLollipop
+          amount: 2
+        - id: FoodSnackCnDs
+          amount: 2
+        - id: FoodSnackChocolate
+          amount: 2

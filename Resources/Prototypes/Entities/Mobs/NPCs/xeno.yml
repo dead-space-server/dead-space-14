@@ -402,6 +402,9 @@
   id: MobPurpleSnake
   description: A menacing purple snake from Kepler-283c.
   components:
+# DS14-start: halloween candy drop
+  - type: CandyDrop
+# DS14-end
   - type: Sprite
     drawdepth: Mobs
     sprite: Mobs/Aliens/Xenos/purple_snake.rsi
@@ -487,6 +490,9 @@
   suffix: small
   description: A smaller version of the menacing purple snake from Kepler-283c.
   components:
+# DS14-start: halloween candy drop
+  - type: CandyDrop
+# DS14-end
   - type: Sprite
     drawdepth: Mobs
     sprite: Mobs/Aliens/Xenos/purple_snake.rsi

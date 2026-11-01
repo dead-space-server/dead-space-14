@@ -52,6 +52,7 @@
     - id: SleeperAgents
     - id: ZombieOutbreak
     - id: LoneOpsSpawn
+    - id: GeistMidroundSpawn # DS14
     - id: WizardSpawn
     # DS14-start
     - id: SyndicateRaid

@@ -24,7 +24,9 @@
     JugSulfur: 1
   contrabandInventory:
     DrinkLithiumFlask: 1
-    StrangePill: 3
+# DS14-start: halloween candies instead of strange pills
+    HalloweenCandy: 3
+# DS14-end
     ChemistryBottleToxin: 1
   emaggedInventory:
     VestineChemistryVial: 1
@@ -59,7 +61,9 @@
     TerratosomochromolinChemistryVial: 1 # DS14
   contrabandInventory:
     DrinkLithiumFlask: 1
-    StrangePill: 3
+# DS14-start: halloween candies instead of strange pills
+    HalloweenCandy: 3
+# DS14-end
     ChemistryBottlePax: 3
     ChemistryBottleMuteToxin: 3
     ChemistryBottleLead: 2

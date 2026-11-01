@@ -9,6 +9,11 @@ public sealed partial class ShadowCrawlActionEvent : InstantActionEvent
 
 }
 
+public sealed partial class ShadowSpawnActionEvent : InstantActionEvent
+{
+
+}
+
 [NetSerializable, Serializable]
 public enum DemonShadowVisuals : byte
 {

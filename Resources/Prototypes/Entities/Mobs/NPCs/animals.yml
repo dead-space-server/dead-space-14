@@ -3008,6 +3008,10 @@
   - MobSpiderAngryBase
   - MobGiantSpider
   id: MobGiantSpiderAngry
+# DS14-start: halloween candy drop
+  components:
+    - type: CandyDrop
+# DS14-end
 
 - type: entity
   name: clown spider
@@ -3015,6 +3019,9 @@
   id: MobClownSpider
   description: Combines the two most terrifying things in existence, spiders and clowns.
   components:
+# DS14-start: halloween candy drop
+    - type: CandyDrop
+# DS14-end
     - type: Sprite
       drawdepth: Mobs
       layers:

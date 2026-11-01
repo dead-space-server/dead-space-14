@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from tgstation",
+  "states": [
+    {
+      "name": "candy1"
+    },
+    {
+      "name": "candy2"
+    },
+    {
+      "name": "candy3"
+    },
+    {
+      "name": "candy4"
+    },
+    {
+      "name": "candy5"
+    },
+    {
+      "name": "candy6"
+    },
+    {
+      "name": "candy7"
+    },
+    {
+      "name": "candy8"
+    },
+    {
+      "name": "candy9"
+    },
+    {
+      "name": "candy10"
+    },
+    {
+      "name": "candy11"
+    },
+    {
+      "name": "candy12"
+    },
+    {
+      "name": "candy13"
+    },
+    {
+      "name": "candy14"
+    },
+    {
+      "name": "candy15"
+    },
+    {
+      "name": "candy16"
+    }
+  ]
+}

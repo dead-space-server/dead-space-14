@@ -1,0 +1,269 @@
+- type: entity
+  parent: FoodBase
+  id: HalloweenCandy
+  components:
+  - type: Candy
+  - type: Sprite
+    sprite: _DeadSpace/Halloween/candy_halloween.rsi
+    layers:
+    - state: candy1
+      map: [ "candyVariant" ]
+  - type: RandomSprite
+    available:
+    - candyVariant:
+        candy1: ""
+        candy2: ""
+        candy3: ""
+        candy4: ""
+        candy5: ""
+        candy6: ""
+        candy7: ""
+        candy8: ""
+        candy9: ""
+        candy10: ""
+        candy11: ""
+        candy12: ""
+        candy13: ""
+        candy14: ""
+        candy15: ""
+        candy16: ""
+  - type: Item
+    size: Tiny
+    sprite: _DeadSpace/Halloween/candy_halloween.rsi
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 4
+        - ReagentId: Sugar
+          Quantity: 3
+  - type: Tag
+    tags:
+    - FoodSnack
+    - Pill
+
+# Individual candy prototypes: one per effect. Sprites stay random (inherited RandomSprite).
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyGoodAftertaste
+  suffix: GoodAftertaste
+  components:
+  - type: Candy
+    effect: GoodAftertaste
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyPerfectAftertaste
+  suffix: PerfectAftertaste
+  components:
+  - type: Candy
+    effect: PerfectAftertaste
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyChocolateCoin
+  suffix: ChocolateCoin
+  components:
+  - type: Candy
+    effect: ChocolateCoin
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyCinnamon
+  suffix: Cinnamon
+  components:
+  - type: Candy
+    effect: Cinnamon
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyDuplicate
+  suffix: Duplicate
+  components:
+  - type: Candy
+    effect: Duplicate
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyGlowstick
+  suffix: Glowstick
+  components:
+  - type: Candy
+    effect: Glowstick
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyMoneyWalk
+  suffix: MoneyWalk
+  components:
+  - type: Candy
+    effect: MoneyWalk
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyCornSticks
+  suffix: CornSticks
+  components:
+  - type: Candy
+    effect: CornSticks
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyRegurgitation
+  suffix: Regurgitation
+  components:
+  - type: Candy
+    effect: Regurgitation
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyToothBreaker
+  suffix: ToothBreaker
+  components:
+  - type: Candy
+    effect: ToothBreaker
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyForAmateurs
+  suffix: ForAmateurs
+  components:
+  - type: Candy
+    effect: ForAmateurs
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyFragility
+  suffix: Fragility
+  components:
+  - type: Candy
+    effect: Fragility
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyYourElement
+  suffix: YourElement
+  components:
+  - type: Candy
+    effect: YourElement
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyNothing
+  suffix: Nothing
+  components:
+  - type: Candy
+    effect: Nothing
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyNausea
+  suffix: Nausea
+  components:
+  - type: Candy
+    effect: Nausea
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyOops
+  suffix: Oops
+  components:
+  - type: Candy
+    effect: Oops
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyCrispyToffee
+  suffix: CrispyToffee
+  components:
+  - type: Candy
+    effect: CrispyToffee
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyControlInvert
+  suffix: ControlInvert
+  components:
+  - type: Candy
+    effect: ControlInvert
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyTooSweet
+  suffix: TooSweet
+  components:
+  - type: Candy
+    effect: TooSweet
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyEarplugs
+  suffix: Earplugs
+  components:
+  - type: Candy
+    effect: Earplugs
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyButterfingers
+  suffix: Butterfingers
+  components:
+  - type: Candy
+    effect: Butterfingers
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyJinx
+  suffix: Jinx
+  components:
+  - type: Candy
+    effect: Jinx
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyImAdequate
+  suffix: ImAdequate
+  components:
+  - type: Candy
+    effect: ImAdequate
+
+- type: entity
+  parent: HalloweenCandy
+  id: CandyVulpEater
+  suffix: VulpEater
+  components:
+  - type: Candy
+    effect: VulpEater
+
+# Random pick among all specific candy prototypes (for loot tables).
+- type: entityTable
+  id: RandomCandyTable
+  table: !type:GroupSelector
+    children:
+    - id: CandyGoodAftertaste
+    - id: CandyPerfectAftertaste
+    - id: CandyChocolateCoin
+    - id: CandyCinnamon
+    - id: CandyDuplicate
+    - id: CandyGlowstick
+    - id: CandyMoneyWalk
+    - id: CandyCornSticks
+    - id: CandyRegurgitation
+    - id: CandyToothBreaker
+    - id: CandyForAmateurs
+    - id: CandyFragility
+    - id: CandyYourElement
+    - id: CandyNothing
+    - id: CandyNausea
+    - id: CandyOops
+    - id: CandyCrispyToffee
+    - id: CandyControlInvert
+    - id: CandyTooSweet
+    - id: CandyEarplugs
+    - id: CandyButterfingers
+    - id: CandyJinx
+    - id: CandyImAdequate
+    - id: CandyVulpEater

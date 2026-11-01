@@ -69,6 +69,8 @@
       state: alive
     - map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
       state: alive-unshaded
+    - map: [ "eyes" ]
+      state: alive-eyes
       shader: unshaded
   - type: Appearance
   - type: DamageStateVisuals

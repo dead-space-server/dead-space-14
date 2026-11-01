@@ -153,6 +153,91 @@
     groupPrototype: DemonShadowping
 
 - type: entity
+  id: MobGhostShadowDemon
+  parent:
+  - BaseMob
+  name: неизвестный
+  components:
+  - type: MindContainer
+  - type: InputMover
+  - type: MobMover
+  - type: Input
+    context: "ghost"
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4
+    baseSprintSpeed: 6
+  - type: Sprite
+    noRot: true
+    drawdepth: Ghosts
+    sprite: _DeadSpace/Demons/demon_shadow.rsi
+    layers:
+    - state: running
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Physics
+    bodyType: KinematicController
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 15
+  - type: MovementIgnoreGravity
+  - type: Damageable
+    damageContainer: Biological
+  - type: Examiner
+  - type: NoSlip
+  - type: Actions
+  - type: Eye
+    drawFov: false
+    visMask:
+      - Normal
+      - Ghost
+  - type: ContentEye
+    maxZoom: 1.2, 1.2
+  - type: DoAfter
+  - type: Alerts
+  - type: NameIdentifier
+    group: GenericNumber
+  - type: Visibility
+    layer: 2
+  - type: NightVision
+    isNightVision: true
+    animation: true
+    transitionSpeed: 100
+    color: "#DC143C11"
+    actionToggleNightVision: ActionToggleNightVision
+  - type: Speech
+    speechVerb: Ghost
+  - type: Language
+    selectedLanguage: DemonLanguage
+    knownLanguages:
+    - DemonLanguage
+    - GeneralLanguage
+  - type: DemonShadowGhost
+  - type: GhostTakeoverAvailable
+  - type: GhostRole
+    allowMovement: true
+    allowSpeech: true
+    makeSentient: true
+    name: ghost-role-information-shadow-name
+    description: ghost-role-information-shadow-description
+    rules: ghost-role-information-shadow-rules
+    raffle:
+      settings: default
+    requirements:
+    - !type:OverallPlaytimeRequirement
+      time: 720000 # 200 hours
+  - type: Vocal
+    sounds:
+      Male: Demon
+      Female: Demon
+      Unsexed: Demon
+  - type: GhostRoleNotifys
+    groupPrototype: DemonShadowping
+
+- type: entity
   name: теневая рука
   id: ShadowHand
   parent: BaseLightning
@@ -207,7 +292,7 @@
     proto: DemonShadowHandProjectile
     capacity: 1
   - type: RechargeBasicEntityAmmo
-    rechargeCooldown: 8
+    rechargeCooldown: 25
     rechargeSound:
       path: /Audio/_DeadSpace/Demons/shadow.ogg
       params:

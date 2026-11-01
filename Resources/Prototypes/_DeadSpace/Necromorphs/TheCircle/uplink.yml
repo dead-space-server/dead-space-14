@@ -752,6 +752,46 @@
   - UniPhoneGeistUplinkTraps
 
 - type: listing
+  id: UniPhoneGeistUplinkTripwireNecroGasGrenade
+  name: Газовый заряд для растяжки (некрогаз)
+  description: Срабатывает только от растяжки и заполняет некрогазом около десяти тайлов.
+  productEntity: TripwireNecroGasGrenade
+  cost:
+    Telecrystal: 2
+  categories:
+  - UniPhoneGeistUplinkTraps
+
+- type: listing
+  id: UniPhoneGeistUplinkTripwireFrezonGasGrenade
+  name: Газовый заряд для растяжки (фрезон)
+  description: Срабатывает только от растяжки и заполняет фрезоном около шести тайлов.
+  productEntity: TripwireFrezonGasGrenade
+  cost:
+    Telecrystal: 2
+  categories:
+  - UniPhoneGeistUplinkTraps
+
+- type: listing
+  id: UniPhoneGeistUplinkThreadSpool
+  name: Катушка тонкой нити
+  description: Привяжите нить к вещи, бросьте её и тяните издалека. Нить видите только вы.
+  productEntity: GeistThreadSpool
+  cost:
+    Telecrystal: 1
+  categories:
+  - UniPhoneGeistUplinkTraps
+
+- type: listing
+  id: UniPhoneGeistUplinkCandyBag
+  name: Корзинка для конфет
+  description: Это просто корзинка, что набита конфетами... Вы действительно её хотите купить, чтобы леской тянуть конфетку к капкану?
+  productEntity: GeistCandyBag
+  cost:
+    Telecrystal: 1
+  categories:
+  - UniPhoneGeistUplinkTraps
+
+- type: listing
   id: UniPhoneGeistUplinkBearTrap
   name: Капкан
   productEntity: BearTrap

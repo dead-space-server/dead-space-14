@@ -1,0 +1,10 @@
+- type: entity
+  parent: MobHuman
+  id: MobHumanHeadless
+  name: Урист МакЧеловек (безголовый)
+  description: Голый человек без головы. Идеально подходит для кастомизации и рисования спрайтов.
+  components:
+  - type: Body
+    prototype: BodyHumanHeadless
+    requiredLegs: 2
+  - type: HeadlessHuman

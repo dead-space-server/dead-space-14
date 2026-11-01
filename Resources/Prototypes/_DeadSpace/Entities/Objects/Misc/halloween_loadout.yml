@@ -1,0 +1,50 @@
+- type: entity
+  parent: ClothingBackpackSatchelLeather
+  id: ClothingBackpackSatchelLeatherCandy
+  name: кожаный подсумок с конфетами
+  description: Набит доверху конфетами. Откуда они только берутся?
+  components:
+  - type: ContainerFill
+    containers:
+      storagebase:
+      - HalloweenCandy
+      - HalloweenCandy
+      - HalloweenCandy
+      - HalloweenCandy
+      - HalloweenCandy
+      - HalloweenCandy
+      - HalloweenCandy
+      - HalloweenCandy
+      - HalloweenCandy
+      - HalloweenCandy
+      - HalloweenCandy
+      - HalloweenCandy
+      - HalloweenCandy
+      - HalloweenCandy
+      - HalloweenCandy
+      - HalloweenCandy
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckReaper
+  name: плащ жнеца
+  description: Тяжёлый чёрный плащ, в котором так удобно собирать души на Хэллоуин. Капюшона почему-то нет.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Renegade/bondrewd_mantle.rsi
+  - type: Clothing
+    sprite: _DeadSpace/Renegade/bondrewd_mantle.rsi
+- type: entity
+  parent: ClothingBackpack
+  id: HalloweenLoadoutKit
+  name: хэллоуинский вещмешок
+  description: Обычный вещмешок, внутри которого лежит праздничный наряд — плащ, одежда, перчатки и немного конфет.
+  components:
+  - type: ContainerFill
+    containers:
+      storagebase:
+      - ClothingNeckReaper
+      - ClothingUniformTurtleneckBlack
+      - ClothingHandsGlovesColorBlack
+      - HalloweenCandy
+      - HalloweenCandy
+      - HalloweenCandy

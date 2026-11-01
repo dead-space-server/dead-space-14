@@ -64,7 +64,10 @@
       - id: ToyAmongPequeno
       - id: WhoopieCushion
       - id: Brutepack
-      - id: StrangePill
+# DS14-start: halloween candies instead of strange pills
+      - !type:NestedSelector
+        tableId: RandomCandyTable
+# DS14-end
       - id: Shiv
     - !type:GroupSelector
       prob: 0.1

@@ -96,9 +96,12 @@
     children:
     - id: ResearchDisk5000
     - id: JointRainbow
-    - id: StrangePill
-      amount: !type:RangeNumberSelector
+# DS14-start: halloween candies instead of strange pills
+    - !type:NestedSelector
+      tableId: RandomCandyTable
+      rolls: !type:RangeNumberSelector
         range: 1, 3
+# DS14-end
     - !type:GroupSelector
       children:
       - id: Brutepack

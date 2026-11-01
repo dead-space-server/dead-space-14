@@ -5,6 +5,7 @@
   description: Редкий радужный слайм, обладающий спокойным характером и ядром с лекарственным эффектом.
   suffix: Добрый
   components:
+  - type: CandyDrop
   - type: Sprite
     layers:
     - map: [ "enum.DamageStateVisualLayers.Base" ]
@@ -82,6 +83,7 @@
   id: MobAdultSlimesGalacticAngry
   suffix: Злой
   components:
+  - type: CandyDrop
   - type: NpcFactionMember
     factions:
     - SimpleHostile

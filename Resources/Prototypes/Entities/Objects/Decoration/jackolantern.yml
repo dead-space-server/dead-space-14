@@ -9,6 +9,17 @@
     state: carved
   - type: Item
     size: Normal
+# DS14-start: regular pumpkins can be worn on the head
+  - type: Clothing
+    slots:
+    - head
+    sprite: Clothing/Head/Misc/pumpkin.rsi
+    clothingVisuals:
+      head:
+      - sprite: Clothing/Head/Misc/pumpkin.rsi
+        state: equipped-helmet
+  - type: IdentityBlocker
+# DS14-end
   - type: Construction
     graph: PumpkinAddLight
     node: start

@@ -22,6 +22,7 @@ public sealed class ServerJukeboxSongsSyncManager : JukeboxSongsSyncManager
     private int _round;
     private CancellationTokenSource _roundCancel = new();
     private readonly HashSet<INetChannel> _receivingUploads = new();
+    private readonly SemaphoreSlim _sendGate = new(1, 1);
 
     public override void Initialize()
     {
@@ -100,9 +101,19 @@ public sealed class ServerJukeboxSongsSyncManager : JukeboxSongsSyncManager
     {
         try
         {
-            await using var stream = TransferManager.StartTransfer(channel, DownloadKey);
-            var round = int.Parse(path.CanonPath.AsSpan(0, path.CanonPath.IndexOf('-')), CultureInfo.InvariantCulture);
-            await Task.Run(() => WriteSong(stream, path.ToString(), data, new NetEntity(round)));
+            await _sendGate.WaitAsync();
+            try
+            {
+                if (!channel.IsConnected)
+                    return;
+                await using var stream = TransferManager.StartTransfer(channel, DownloadKey);
+                var round = int.Parse(path.CanonPath.AsSpan(0, path.CanonPath.IndexOf('-')), CultureInfo.InvariantCulture);
+                await WriteSong(stream, path.ToString(), data, new NetEntity(round));
+            }
+            finally
+            {
+                _sendGate.Release();
+            }
         }
         catch (Exception e)
         {

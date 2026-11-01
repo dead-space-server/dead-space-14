@@ -173,6 +173,9 @@
   id: MobAdultSlimesBlueAngry
   suffix: Angry
   components:
+# DS14-start: halloween candy drop
+    - type: CandyDrop
+# DS14-end
     - type: NpcFactionMember
       factions:
         - SimpleHostile
@@ -217,6 +220,9 @@
   id: MobAdultSlimesGreenAngry
   suffix: Angry
   components:
+# DS14-start: halloween candy drop
+    - type: CandyDrop
+# DS14-end
     - type: NpcFactionMember
       factions:
         - SimpleHostile
@@ -260,6 +266,9 @@
   id: MobAdultSlimesYellowAngry
   suffix: Angry
   components:
+# DS14-start: halloween candy drop
+    - type: CandyDrop
+# DS14-end
     - type: NpcFactionMember
       factions:
         - SimpleHostile

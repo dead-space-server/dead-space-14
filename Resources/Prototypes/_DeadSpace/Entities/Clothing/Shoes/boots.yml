@@ -113,6 +113,8 @@
     slowdownModifier: 0.8
   - type: SpeedModifierContactCapClothing
     slowdownResistance: 0.7
+    maxContactWalkSlowdown: 0.8
+    maxContactSprintSlowdown: 0.8
 
 - type: entity
   parent: ClothingShoesBootsJack

@@ -609,6 +609,7 @@
       - id: C4
         amount: 4
       - id: TripwireStack
+      - id: GeistThreadSpool
       - id: PinpointerNecroobelisk
       - id: TheCircleRemoteCarController
 

@@ -291,6 +291,20 @@
         orGroup: GiftPool
       - id: PlushieSastrBon
         orGroup: GiftPool
+      - id: PlushieIvanKuvalda
+        orGroup: GiftPool
+      - id: PlushieBog
+        orGroup: GiftPool
+      - id: PlushieMargo
+        orGroup: GiftPool
+      - id: PlushieGenesis
+        orGroup: GiftPool
+      - id: PlushieScarlett
+        orGroup: GiftPool
+      - id: PlushieGnar
+        orGroup: GiftPool
+      - id: PlushieFyrmorAlt
+        orGroup: GiftPool
       # DS14-start
       - id: Akiplushie1
         orGroup: GiftPool

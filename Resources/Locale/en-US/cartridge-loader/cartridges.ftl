@@ -44,6 +44,7 @@ pda-arcade-game-tiles = Tiles
 pda-arcade-game-blocks = Blocks
 pda-arcade-game-rocks = Rocks
 pda-arcade-game-flap = Hop
+pda-arcade-game-casino = Casino
 pda-arcade-game-match = Match three
 pda-arcade-game-deck = Corridors
 pda-arcade-game-road = Road
