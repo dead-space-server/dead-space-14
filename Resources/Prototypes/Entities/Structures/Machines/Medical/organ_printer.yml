@@ -7,10 +7,24 @@
     mode: SnapgridCenter
   components:
   - type: Sprite
-    sprite: Structures/Machines/Medical/biomass_reclaimer.rsi
-    state: icon
+    sprite: _DeadSpace/Structures/Machines/bioprinter.rsi
     snapCardinals: true
+    layers:
+    - state: roboprinter
+      map: ["base"]
+    - state: lights_working
+      map: ["enum.OrganPrinterVisuals.Working"]
+      shader: unshaded
+      visible: false
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.OrganPrinterVisuals.Working:
+        enum.OrganPrinterVisuals.Working:
+          True: { visible: true }
+          False: { visible: false }
   - type: OrganPrinter
+    printDuration: 6
     entries:
     - product: OrganHumanHeart
       cost: 30

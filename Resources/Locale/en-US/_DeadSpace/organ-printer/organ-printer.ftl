@@ -27,3 +27,5 @@ organ-printer-game-win = Tissue spliced! Quality: {$quality}%, waste: {$waste} b
 organ-printer-game-lose = Necrosis consumed the print. The OrganoMech is damaged.
 organ-printer-game-failed = The print was ruined - the OrganoMech is damaged!
 organ-printer-game-waste = Waste: {$count}
+organ-printer-started = Printing started.
+organ-printer-busy = The printer is already manufacturing something!

@@ -27,3 +27,5 @@ organ-printer-game-win = Ткань сплайсирована! Качество
 organ-printer-game-lose = Некроз поглотил принт. ОрганоМех повреждён.
 organ-printer-game-failed = Печать сорвана - органомех повреждён!
 organ-printer-game-waste = Отходы: {$count}
+organ-printer-started = Печать запущена.
+organ-printer-busy = Принтер уже что-то изготовляет!

@@ -11,6 +11,7 @@ using Content.Shared.UserInterface;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Server.DeadSpace.OrganPrinter;
 
@@ -22,19 +23,53 @@ public sealed class OrganPrinterSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly SharedMaterialStorageSystem _material = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
+        SubscribeLocalEvent<OrganPrinterComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<OrganPrinterComponent, BeforeActivatableUIOpenEvent>(OnBeforeUiOpen);
         SubscribeLocalEvent<OrganPrinterComponent, MaterialAmountChangedEvent>(OnMaterialAmountChanged);
         SubscribeLocalEvent<OrganPrinterComponent, OrganPrinterPrintRequestMessage>(OnPrintRequest);
         SubscribeLocalEvent<OrganPrinterComponent, OrganPrinterGameFailedMessage>(OnGameFailed);
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var query = EntityQueryEnumerator<OrganPrinterComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (comp.PrintingProduct == null || _timing.CurTime < comp.PrintEndTime)
+                continue;
+
+            var product = comp.PrintingProduct.Value;
+            comp.PrintingProduct = null;
+            _appearance.SetData(uid, OrganPrinterVisuals.Working, false);
+
+            var printed = Spawn(product, _transform.GetMapCoordinates(uid), null, _transform.GetWorldRotation(uid));
+            _audio.PlayPvs(comp.PrintSound, uid);
+            _popup.PopupEntity(
+                Loc.GetString("organ-printer-printed",
+                    ("name", Name(printed)), ("quality", comp.PrintQuality), ("waste", comp.PrintWaste)),
+                uid);
+
+            if (_ui.HasUi(uid, OrganPrinterUiKey.Key))
+                _ui.SetUiState(uid, OrganPrinterUiKey.Key, BuildState(uid, comp));
+        }
+    }
+
+    private void OnMapInit(Entity<OrganPrinterComponent> ent, ref MapInitEvent args)
+    {
+        _appearance.SetData(ent.Owner, OrganPrinterVisuals.Working, false);
     }
 
     private void OnBeforeUiOpen(Entity<OrganPrinterComponent> ent, ref BeforeActivatableUIOpenEvent args)
@@ -58,6 +93,12 @@ public sealed class OrganPrinterSystem : EntitySystem
             return;
         }
 
+        if (ent.Comp.PrintingProduct != null)
+        {
+            _popup.PopupEntity(Loc.GetString("organ-printer-busy"), ent.Owner, args.Actor);
+            return;
+        }
+
         var productId = args.Product.Id;
         var entry = ent.Comp.Entries.FirstOrDefault(e => e.Product.Id == productId);
         if (entry == null)
@@ -77,12 +118,13 @@ public sealed class OrganPrinterSystem : EntitySystem
         if (!_material.TryChangeMaterialAmount(ent.Owner, ent.Comp.Material, -effectiveCost))
             return;
 
-        var printed = Spawn(entry.Product, _transform.GetMapCoordinates(ent.Owner), null, _transform.GetWorldRotation(ent.Owner));
+        ent.Comp.PrintingProduct = entry.Product;
+        ent.Comp.PrintEndTime = _timing.CurTime + ent.Comp.PrintDuration;
+        ent.Comp.PrintQuality = quality;
+        ent.Comp.PrintWaste = waste;
+        _appearance.SetData(ent.Owner, OrganPrinterVisuals.Working, true);
 
-        _audio.PlayPvs(ent.Comp.PrintSound, ent.Owner);
-        _popup.PopupEntity(
-            Loc.GetString("organ-printer-printed", ("name", Name(printed)), ("quality", quality), ("waste", waste)),
-            ent.Owner, args.Actor);
+        _popup.PopupEntity(Loc.GetString("organ-printer-started"), ent.Owner, args.Actor);
         UpdateUi(ent);
     }
 
@@ -107,16 +149,20 @@ public sealed class OrganPrinterSystem : EntitySystem
         if (!_ui.HasUi(ent.Owner, OrganPrinterUiKey.Key))
             return;
 
+        _ui.SetUiState(ent.Owner, OrganPrinterUiKey.Key, BuildState(ent.Owner, ent.Comp));
+    }
+
+    private OrganPrinterUpdateState BuildState(EntityUid uid, OrganPrinterComponent comp)
+    {
         var products = new List<OrganPrinterProduct>();
-        foreach (var entry in ent.Comp.Entries)
+        foreach (var entry in comp.Entries)
         {
             if (_proto.HasIndex(entry.Product))
                 products.Add(new OrganPrinterProduct(entry.Product, entry.Cost));
             else
-                Log.Error($"Organ printer {ToPrettyString(ent.Owner)} has unknown product {entry.Product}");
+                Log.Error($"Organ printer {ToPrettyString(uid)} has unknown product {entry.Product}");
         }
 
-        _ui.SetUiState(ent.Owner, OrganPrinterUiKey.Key,
-            new OrganPrinterUpdateState(products, _material.GetMaterialAmount(ent.Owner, ent.Comp.Material)));
+        return new OrganPrinterUpdateState(products, _material.GetMaterialAmount(uid, comp.Material));
     }
 }

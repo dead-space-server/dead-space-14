@@ -3,8 +3,15 @@
 using Content.Shared.Materials;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared.DeadSpace.OrganPrinter;
+
+[Serializable, NetSerializable]
+public enum OrganPrinterVisuals : byte
+{
+    Working,
+}
 
 /// <summary>
 /// Орган, доступный для печати на ОрганоМехе, и его стоимость в биомассе.
@@ -48,6 +55,36 @@ public sealed partial class OrganPrinterComponent : Component
     /// </summary>
     [DataField]
     public float WasteCost = 0.1f;
+
+    /// <summary>
+    /// Сколько длится печать одного органа.
+    /// </summary>
+    [DataField]
+    public TimeSpan PrintDuration = TimeSpan.FromSeconds(3);
+
+    /// <summary>
+    /// Орган, печатаемый прямо сейчас. null, если принтер свободен.
+    /// </summary>
+    [ViewVariables]
+    public EntProtoId? PrintingProduct;
+
+    /// <summary>
+    /// Момент окончания текущей печати.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan PrintEndTime;
+
+    /// <summary>
+    /// Качество ткани органа, печатаемого прямо сейчас.
+    /// </summary>
+    [ViewVariables]
+    public int PrintQuality;
+
+    /// <summary>
+    /// Отходы печати, которые уже списаны.
+    /// </summary>
+    [ViewVariables]
+    public int PrintWaste;
 
     /// <summary>
     /// Звук печати органа.
