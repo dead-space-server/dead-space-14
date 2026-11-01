@@ -72,7 +72,7 @@ public sealed class HitscanBasicRaycastSystem : EntitySystem
         // DS14: visuals are fired after the hit attempt so reflected traces can be rendered together.
 
         // Admin logging
-        if (result?.HitEntity != null)
+        if (result?.HitEntity != null && !HasComp<HitscanBasicDamageComponent>(ent.Owner)) // DS14
         {
             _log.Add(LogType.HitScanHit,
                 $"{ToPrettyString(shooter):user} hit {ToPrettyString(result.Value.HitEntity):target}"
