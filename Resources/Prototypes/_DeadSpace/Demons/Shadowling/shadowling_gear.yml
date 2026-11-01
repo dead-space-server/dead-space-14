@@ -1,13 +1,21 @@
 - type: entity
   parent: ClothingBackpack
   id: ClothingBackpackShadowling
-  name: рюкзак тенеморфа
-  description: Рюкзак, сросшийся с телом тенеморфа. Снять его невозможно.
+  name: Теневое хранилище
+  description: Летающая зловещая пылинка.я
   components:
-  - type: Unremoveable
+  - type: Sprite
+    sprite: _DeadSpace/Demons/shadowling.rsi
+    state: backpack_icon
   - type: Clothing
-    clothingVisuals:
-      back: []
+    sprite: _DeadSpace/Demons/shadowling.rsi
+    state: backpack_icon
+  - type: Unremoveable
+  - type: Item
+    size: Ginormous
+    sprite: _DeadSpace/Demons/shadowling.rsi
+    heldPrefix: null
+    state: backpack_icon
 
 - type: startingGear
   id: ShadowlingGear
