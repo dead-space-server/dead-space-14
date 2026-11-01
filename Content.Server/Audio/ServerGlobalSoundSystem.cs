@@ -6,6 +6,7 @@ using Content.Shared.GameTicking;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Console;
+using Robust.Shared.ContentPack;
 using Robust.Shared.Enums;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -21,10 +22,23 @@ public sealed class ServerGlobalSoundSystem : SharedGlobalSoundSystem
     [Dependency] private readonly StationSystem _stationSystem = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IGameTiming _timing = default!; // DS14
+    [Dependency] private readonly IResourceManager _resourceManager = default!; // DS14
 
     // DS14-start
     private int _nextAdminSoundId;
     private ActiveAdminSound? _activeAdminSound;
+    private readonly List<AdminQueuedSound> _adminQueue = new();
+
+    /// <summary>
+    /// Raised whenever the active admin sound or the admin sound queue changes,
+    /// so open global sound EUIs can refresh their state.
+    /// </summary>
+    public event Action? AdminSoundQueueChanged;
+
+    public IReadOnlyList<AdminQueuedSound> AdminQueue => _adminQueue;
+    public bool HasActiveAdminSound => _activeAdminSound != null;
+
+    public sealed record AdminQueuedSound(string Path, int Volume, string? CKey);
 
     public override void Initialize()
     {
@@ -37,7 +51,11 @@ public sealed class ServerGlobalSoundSystem : SharedGlobalSoundSystem
     {
         base.Update(frameTime);
         if (_activeAdminSound is { Paused: false } sound && GetPlaybackPosition(sound) >= sound.Duration)
+        {
             _activeAdminSound = null;
+            AdminSoundQueueChanged?.Invoke();
+            PlayNextQueuedSound();
+        }
     }
     // DS14-end
 
@@ -70,6 +88,7 @@ public sealed class ServerGlobalSoundSystem : SharedGlobalSoundSystem
             _timing.CurTime,
             parameters.PlayOffsetSeconds,
             (float) _audio.GetAudioLength(specifier).TotalSeconds);
+        AdminSoundQueueChanged?.Invoke();
     }
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
@@ -95,18 +114,112 @@ public sealed class ServerGlobalSoundSystem : SharedGlobalSoundSystem
             case AdminGlobalSoundControl.FadeOut:
                 SendControlEvent(sound, action, 1.5f);
                 _activeAdminSound = null;
+                AdminSoundQueueChanged?.Invoke();
                 return true;
             case AdminGlobalSoundControl.Stop:
                 SendControlEvent(sound, action);
                 _activeAdminSound = null;
+                AdminSoundQueueChanged?.Invoke();
                 return true;
             default:
                 return false;
         }
 
         SendControlEvent(sound, action);
+        AdminSoundQueueChanged?.Invoke();
         return true;
     }
+
+    // DS14-start
+    /// <summary>
+    /// Adds a track to the admin sound queue. Returns false if the path is not a loadable OGG file.
+    /// </summary>
+    public bool TryEnqueueAdminSound(string path, int volume, string? ckey)
+    {
+        if (!IsValidAdminAudioPath(path))
+            return false;
+
+        _adminQueue.Add(new AdminQueuedSound(
+            path,
+            Math.Clamp(volume, -24, 12),
+            string.IsNullOrWhiteSpace(ckey) ? null : ckey.Trim()));
+        AdminSoundQueueChanged?.Invoke();
+        return true;
+    }
+
+    public bool TryRemoveAdminQueueEntry(int index)
+    {
+        if (index < 0 || index >= _adminQueue.Count)
+            return false;
+
+        _adminQueue.RemoveAt(index);
+        AdminSoundQueueChanged?.Invoke();
+        return true;
+    }
+
+    public void ClearAdminQueue()
+    {
+        if (_adminQueue.Count == 0)
+            return;
+
+        _adminQueue.Clear();
+        AdminSoundQueueChanged?.Invoke();
+    }
+
+    /// <summary>
+    /// Plays the next queued track. Entries whose target player is gone are skipped.
+    /// </summary>
+    public void PlayNextQueuedSound()
+    {
+        while (_adminQueue.Count > 0)
+        {
+            var entry = _adminQueue[0];
+            _adminQueue.RemoveAt(0);
+
+            if (TryPlayQueuedSound(entry))
+                return;
+        }
+
+        AdminSoundQueueChanged?.Invoke();
+    }
+
+    private bool TryPlayQueuedSound(AdminQueuedSound entry)
+    {
+        Filter filter;
+        ICommonSession[]? recipients = null;
+
+        if (entry.CKey == null)
+        {
+            filter = Filter.Empty().AddAllPlayers(_playerManager);
+        }
+        else if (_playerManager.TryGetSessionByUsername(entry.CKey, out var target))
+        {
+            recipients = [target];
+            filter = Filter.Empty().AddPlayer(target);
+        }
+        else
+        {
+            return false;
+        }
+
+        var resolved = _audio.ResolveSound(new SoundPathSpecifier(entry.Path));
+        PlayAdminGlobal(
+            filter,
+            resolved,
+            AudioParams.Default.WithVolume(entry.Volume - 8),
+            replay: true,
+            recipients,
+            entry.Path);
+        return true;
+    }
+
+    public bool IsValidAdminAudioPath(string path)
+    {
+        return path.StartsWith("/Audio/", StringComparison.OrdinalIgnoreCase)
+            && path.EndsWith(".ogg", StringComparison.OrdinalIgnoreCase)
+            && _resourceManager.ContentFileExists(path);
+    }
+    // DS14-end
 
     private void OnPlayerStatusChanged(object? sender, SessionStatusEventArgs args)
     {

@@ -29,6 +29,7 @@ public sealed class AdminGlobalSoundEui : BaseEui
     private string _currentPath = AudioRoot;
     private List<AdminGlobalSoundEntry> _entries = [];
     private string? _error;
+    private readonly Random _random = new();
 
     public AdminGlobalSoundEui()
     {
@@ -43,19 +44,35 @@ public sealed class AdminGlobalSoundEui : BaseEui
             return;
         }
 
+        _entityManager.System<ServerGlobalSoundSystem>().AdminSoundQueueChanged += OnSoundQueueChanged;
         RefreshEntries();
+        StateDirty();
+    }
+
+    public override void Closed()
+    {
+        _entityManager.System<ServerGlobalSoundSystem>().AdminSoundQueueChanged -= OnSoundQueueChanged;
+    }
+
+    private void OnSoundQueueChanged()
+    {
         StateDirty();
     }
 
     public override EuiStateBase GetNewState()
     {
         var soundSystem = _entityManager.System<ServerGlobalSoundSystem>();
+        var queue = soundSystem.AdminQueue
+            .Select(entry => new AdminGlobalSoundQueueEntry(entry.Path))
+            .ToList();
+
         return new AdminGlobalSoundEuiState(
             _currentPath,
             _entries,
             soundSystem.ActiveAdminSoundPath,
             soundSystem.ActiveAdminSoundPaused,
-            _error);
+            _error,
+            queue);
     }
 
     public override void HandleMessage(EuiMessageBase msg)
@@ -82,6 +99,32 @@ public sealed class AdminGlobalSoundEui : BaseEui
             case AdminGlobalSoundEuiMessage.Control control:
                 _entityManager.System<ServerGlobalSoundSystem>().ControlAdminGlobalSound(control.Action);
                 _error = null;
+                break;
+            case AdminGlobalSoundEuiMessage.QueueAdd add:
+                QueueAdd(add);
+                break;
+            case AdminGlobalSoundEuiMessage.QueueRemove remove:
+                if (_entityManager.System<ServerGlobalSoundSystem>().TryRemoveAdminQueueEntry(remove.Index))
+                    _error = null;
+                break;
+            case AdminGlobalSoundEuiMessage.QueueClear:
+                _entityManager.System<ServerGlobalSoundSystem>().ClearAdminQueue();
+                _error = null;
+                break;
+            case AdminGlobalSoundEuiMessage.QueueSkip:
+                _entityManager.System<ServerGlobalSoundSystem>().ControlAdminGlobalSound(AdminGlobalSoundControl.Stop);
+                _error = null;
+                break;
+            case AdminGlobalSoundEuiMessage.QueueStop:
+            {
+                var soundSystem = _entityManager.System<ServerGlobalSoundSystem>();
+                soundSystem.ClearAdminQueue();
+                soundSystem.ControlAdminGlobalSound(AdminGlobalSoundControl.Stop);
+                _error = null;
+                break;
+            }
+            case AdminGlobalSoundEuiMessage.QueueFolder folder:
+                QueueFolder(folder);
                 break;
         }
 
@@ -145,6 +188,88 @@ public sealed class AdminGlobalSoundEui : BaseEui
             recipients,
             request.Path);
         _error = null;
+    }
+
+    private void QueueAdd(AdminGlobalSoundEuiMessage.QueueAdd request)
+    {
+        var soundSystem = _entityManager.System<ServerGlobalSoundSystem>();
+
+        if (!soundSystem.TryEnqueueAdminSound(request.Path, request.Volume, request.CKey))
+        {
+            _error = Loc.GetString("admin-global-sound-invalid-file");
+            return;
+        }
+
+        if (!soundSystem.HasActiveAdminSound)
+            soundSystem.PlayNextQueuedSound();
+
+        _error = null;
+    }
+
+    private void QueueFolder(AdminGlobalSoundEuiMessage.QueueFolder request)
+    {
+        if (!request.Path.StartsWith(AudioRoot, StringComparison.OrdinalIgnoreCase))
+        {
+            _error = Loc.GetString("admin-global-sound-invalid-directory");
+            return;
+        }
+
+        var files = GetAudioFilesInDirectory(request.Path);
+        if (files.Count == 0)
+        {
+            _error = Loc.GetString("admin-global-sound-empty-directory");
+            return;
+        }
+
+        if (request.Shuffle)
+            ShuffleList(files);
+
+        var soundSystem = _entityManager.System<ServerGlobalSoundSystem>();
+        foreach (var file in files)
+        {
+            soundSystem.TryEnqueueAdminSound(file, request.Volume, request.CKey);
+        }
+
+        if (!soundSystem.HasActiveAdminSound)
+            soundSystem.PlayNextQueuedSound();
+
+        _error = null;
+    }
+
+    private List<string> GetAudioFilesInDirectory(string path)
+    {
+        var results = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var directory = new ResPath(path);
+
+        foreach (var entry in _resourceManager.ContentGetDirectoryEntries(directory))
+        {
+            if (entry.EndsWith('/') || !entry.EndsWith(".ogg", StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            results.Add((directory / entry).ToString());
+        }
+
+        foreach (var audio in _prototypeManager.EnumeratePrototypes<AudioMetadataPrototype>())
+        {
+            var audioPath = new ResPath(audio.ID);
+            if (!audioPath.TryRelativeTo(directory, out var relative) || relative is not { } relativePath)
+                continue;
+
+            var segments = relativePath.ToString().Split('/', StringSplitOptions.RemoveEmptyEntries);
+            if (segments.Length == 1 && segments[0].EndsWith(".ogg", StringComparison.OrdinalIgnoreCase))
+                results.Add(audioPath.ToString());
+        }
+
+        return results.ToList();
+    }
+
+    private void ShuffleList(List<string> list)
+    {
+        for (var i = list.Count - 1; i > 0; i--)
+        {
+            var j = _random.Next(i + 1);
+            (list[i], list[j]) = (list[j], list[i]);
+        }
     }
 
     private void RefreshEntries()
