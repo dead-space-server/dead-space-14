@@ -6,6 +6,7 @@ using Content.Server.EUI;
 using Content.Server.Popups;
 using Content.Shared.CartridgeLoader;
 using Content.Shared.DeadSpace.PdaArcade;
+using Content.Shared.Ghost;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
@@ -31,7 +32,7 @@ public sealed class PdaArcadeSystem : EntitySystem
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
 
-    private readonly List<PdaArcadeEntry> _scores = new();
+    private readonly List<StoredScore> _scores = new();
     private readonly List<Match> _matches = new();
     private readonly List<Invite> _invites = new();
     private int _nextInvite = 1;
@@ -79,7 +80,7 @@ public sealed class PdaArcadeSystem : EntitySystem
         switch (args)
         {
             case PdaArcadeScoreMessage score:
-                Record(score.Game, MetaName(args.Actor), score.Score);
+                Record(score.Game, args.Actor, score.Score);
                 Push(GetEntity(score.LoaderUid), args.Actor);
                 RefreshOpen();
                 break;
@@ -128,6 +129,9 @@ public sealed class PdaArcadeSystem : EntitySystem
 
         var target = maybe.Value;
         if (!Near(actor, target) || !Alive(target) || !TryComp(target, out ActorComponent? guestActor))
+            return;
+
+        if (Pending(actor) || Pending(target))
             return;
 
         if (Busy(actor) || Busy(target))
@@ -291,10 +295,10 @@ public sealed class PdaArcadeSystem : EntitySystem
     {
         match.Over = true;
         if (hostScore > 0)
-            Record(match.Game, MetaName(match.Host), hostScore);
+            Record(match.Game, match.Host, hostScore);
 
         if (guestScore > 0)
-            Record(match.Game, MetaName(match.Guest), guestScore);
+            Record(match.Game, match.Guest, guestScore);
 
         string? winner = null;
         if (hostScore > guestScore)
@@ -393,17 +397,46 @@ public sealed class PdaArcadeSystem : EntitySystem
         return null;
     }
 
-    private void Record(string game, string name, int score)
+    private void Record(string game, EntityUid actor, int score)
     {
         if (score <= 0 || score > 1000000 || string.IsNullOrEmpty(game))
             return;
 
+        var user = UserKey(actor);
+        var name = MetaName(actor);
         if (string.IsNullOrWhiteSpace(name))
             name = "—";
 
-        _scores.Add(new PdaArcadeEntry(game, name, score));
+        var playing = InRound(actor);
+        for (var i = 0; i < _scores.Count; i++)
+        {
+            var entry = _scores[i];
+            if (entry.Game != game || !SamePlayer(entry, user, name))
+                continue;
+
+            if (!playing || score <= entry.Score)
+                return;
+
+            entry.Score = score;
+            entry.Name = name;
+            if (entry.User == "")
+                entry.User = user;
+
+            Save();
+            return;
+        }
+
+        _scores.Add(new StoredScore { Game = game, Name = name, Score = score, User = user });
         Trim(game);
         Save();
+    }
+
+    private static bool SamePlayer(StoredScore entry, string user, string name)
+    {
+        if (entry.User != "" && entry.User == user)
+            return true;
+
+        return entry.User == "" && entry.Name == name;
     }
 
     private void Load()
@@ -415,7 +448,7 @@ public sealed class PdaArcadeSystem : EntitySystem
         {
             using var reader = _resources.UserData.OpenText(ScoresPath);
             var text = reader.ReadToEnd();
-            var loaded = JsonSerializer.Deserialize<List<PdaArcadeEntry>>(text, JsonOpts);
+            var loaded = JsonSerializer.Deserialize<List<StoredScore>>(text, JsonOpts);
             if (loaded == null)
                 return;
 
@@ -442,17 +475,30 @@ public sealed class PdaArcadeSystem : EntitySystem
 
     private void Trim(string game)
     {
-        var kept = 0;
+        var ranked = new List<int>();
+        for (var i = 0; i < _scores.Count; i++)
+        {
+            if (_scores[i].Game == game)
+                ranked.Add(i);
+        }
+
+        if (ranked.Count <= MaxPerGame)
+            return;
+
+        ranked.Sort((a, b) =>
+        {
+            var byScore = _scores[b].Score.CompareTo(_scores[a].Score);
+            return byScore != 0 ? byScore : a.CompareTo(b);
+        });
+
+        var drop = new HashSet<int>();
+        for (var i = MaxPerGame; i < ranked.Count; i++)
+            drop.Add(ranked[i]);
+
         for (var i = _scores.Count - 1; i >= 0; i--)
         {
-            if (_scores[i].Game != game)
-                continue;
-
-            kept++;
-            if (kept <= MaxPerGame)
-                continue;
-
-            _scores.RemoveAt(i);
+            if (drop.Contains(i))
+                _scores.RemoveAt(i);
         }
     }
 
@@ -470,7 +516,10 @@ public sealed class PdaArcadeSystem : EntitySystem
 
     private void Push(EntityUid loader, EntityUid? actor)
     {
-        var copy = _scores.ToArray();
+        var copy = new PdaArcadeEntry[_scores.Count];
+        for (var i = 0; i < _scores.Count; i++)
+            copy[i] = new PdaArcadeEntry(_scores[i].Game, _scores[i].Name, _scores[i].Score);
+
         Array.Sort(copy, (a, b) => b.Score.CompareTo(a.Score));
         var state = new PdaArcadeUiState { Entries = copy };
         if (actor != null)
@@ -580,6 +629,31 @@ public sealed class PdaArcadeSystem : EntitySystem
         return false;
     }
 
+    private bool Pending(EntityUid uid)
+    {
+        foreach (var invite in _invites)
+        {
+            if (invite.Host == uid || invite.Guest == uid)
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool InRound(EntityUid uid)
+    {
+        return Alive(uid) && !HasComp<GhostComponent>(uid);
+    }
+
+    private string UserKey(EntityUid uid)
+    {
+        if (TryComp(uid, out ActorComponent? actor))
+            return actor.PlayerSession.UserId.ToString();
+
+        var name = MetaName(uid);
+        return string.IsNullOrWhiteSpace(name) ? "—" : name;
+    }
+
     private string MetaName(EntityUid uid)
     {
         return MetaData(uid).EntityName;
@@ -608,6 +682,14 @@ public sealed class PdaArcadeSystem : EntitySystem
             Guest = guest;
             Board = board;
         }
+    }
+
+    private sealed class StoredScore
+    {
+        public string Game = "";
+        public string Name = "";
+        public int Score;
+        public string User = "";
     }
 
     private sealed class Invite
