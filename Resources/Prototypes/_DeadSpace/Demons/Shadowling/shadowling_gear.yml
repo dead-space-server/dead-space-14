@@ -2,7 +2,7 @@
   parent: ClothingBackpack
   id: ClothingBackpackShadowling
   name: Теневое хранилище
-  description: Летающая зловещая пылинка.я
+  description: Летающая зловещая пылинка.
   components:
   - type: Sprite
     sprite: _DeadSpace/Demons/shadowling.rsi
