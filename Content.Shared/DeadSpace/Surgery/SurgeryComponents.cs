@@ -363,7 +363,7 @@ public static class SurgeryWounds
 public sealed partial class OrganFindingComponent : Component
 {
     [DataField]
-    public string Owner = string.Empty;
+    public string Donor = string.Empty;
 
     [DataField]
     public float Damage;

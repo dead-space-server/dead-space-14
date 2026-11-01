@@ -1,5 +1,3 @@
-# Field chemistry: what surgery fixes inside, brewed by a chemist.
-
 - type: reagent
   id: Hemostatin
   name: reagent-name-hemostatin
@@ -99,7 +97,8 @@
 - type: reaction
   id: Hemostatin
   impact: Medium
-  minTemp: 320
+  minTemp: 310
+  priority: 1
   reactants:
     TranexamicAcid:
       amount: 1

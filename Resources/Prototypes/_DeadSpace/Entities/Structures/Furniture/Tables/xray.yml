@@ -68,6 +68,9 @@
   - type: SurgerySurface
     place: Table
   - type: SurgeryTankMount
+  - type: ContainerContainer
+    containers:
+      surgery_tank: !type:ContainerSlot
   - type: ItemSlots
     slots:
       surgery_tank:

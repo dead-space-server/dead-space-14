@@ -1,6 +1,3 @@
-# Limb implant slots — surgery install/extract only.
-# One fan icon per slot (surgeryPart): take when something is installed, put only when a fitting implant lies nearby or is held.
-
 - type: entity
   id: ActionLimbImplantHudBase
   abstract: true
@@ -563,7 +560,7 @@
     layer: Skin
     undo: Incise
 
-# Back (prone patient: no fan parts, so these stay as fan operations)
+# Back
 
 - type: surgeryOperation
   id: PutImplantBack

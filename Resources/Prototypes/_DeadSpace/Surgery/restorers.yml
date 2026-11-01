@@ -1,5 +1,3 @@
-# Field restorers: prime in hand, then hold on the patient (or yourself). They do what surgery does without the table.
-
 - type: entity
   parent: BaseItem
   id: BaseLimbRestorer
@@ -145,8 +143,6 @@
     - MissingOrgans
   - type: StaticPrice
     price: 2000
-
-# Emergency implants: no hands needed, fires on its own when the wearer drops into crit.
 
 - type: entity
   id: ActionLimbRestorerImplant

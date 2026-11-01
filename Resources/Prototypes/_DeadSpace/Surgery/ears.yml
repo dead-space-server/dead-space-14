@@ -1,5 +1,3 @@
-# Ears and the IPC hearing module. Like the tongue: cut out drops the organ, a new one goes back in.
-
 - type: surgeryAnatomy
   id: Ears
   operation: TakeEars

@@ -262,7 +262,7 @@ public sealed class SurgeryLimbPort : EntitySystem
     private void Stamp(EntityUid organ, EntityUid patient, LimbOrgan kind, in SurgeryResult result)
     {
         var finding = EnsureComp<OrganFindingComponent>(organ);
-        finding.Owner = Name(patient);
+        finding.Donor = Name(patient);
         finding.Organ = kind.ToString();
         finding.Ruptured = result.Rupture;
         if (TryComp<LimbBodyComponent>(patient, out var limbs))

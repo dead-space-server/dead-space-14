@@ -33,6 +33,7 @@
 
 - type: reaction
   id: Morphine
+  minTemp: 380
   reactants:
     Diethylamine:
       amount: 1
