@@ -381,7 +381,7 @@ public sealed class SurgeryHint : Control
     private const float Disc = 17f;
     private const float Pad = 7f;
     private const float Gap = 8f;
-    private const float Height = Pad * 2f + Disc * 2f;
+    private const float HintHeight = Pad * 2f + Disc * 2f;
 
     public static readonly Color Back = new(0.07f, 0.09f, 0.11f, 0.93f);
 
@@ -394,7 +394,7 @@ public sealed class SurgeryHint : Control
         var cache = IoCManager.Resolve<IResourceCache>();
         _font = cache.NotoStack(variation: "Bold", size: 11);
         _small = cache.NotoStack(size: 9);
-        MinSize = new Vector2(Pad * 2f + Disc * 2f, Height);
+        MinSize = new Vector2(Pad * 2f + Disc * 2f, HintHeight);
         MouseFilter = MouseFilterMode.Ignore;
     }
 
@@ -415,7 +415,7 @@ public sealed class SurgeryHint : Control
             width += Disc * 2f + 6f + Measure(_font, _shown[i].Text);
         }
 
-        MinSize = new Vector2(MathF.Max(Pad * 2f + Disc * 2f, width + Pad), Height);
+        MinSize = new Vector2(MathF.Max(Pad * 2f + Disc * 2f, width + Pad), HintHeight);
     }
 
     private void Add(string id, string suffix)

@@ -13,6 +13,7 @@ namespace Content.Server.DeadSpace.Surgery;
 
 public sealed class SurgeryCavitySystem : EntitySystem
 {
+    private static readonly ProtoId<SurgeryLodgePrototype> Lodge = "Lodge";
     private static readonly ProtoId<ItemSizePrototype> Tiny = "Tiny";
     private static readonly ProtoId<ItemSizePrototype> Small = "Small";
     private static readonly ProtoId<ItemSizePrototype> Normal = "Normal";
@@ -68,7 +69,7 @@ public sealed class SurgeryCavitySystem : EntitySystem
 
     public bool Blocked(EntityUid item)
     {
-        if (!_prototypes.TryIndex<SurgeryLodgePrototype>("Lodge", out var lodge))
+        if (!_prototypes.TryIndex(Lodge, out SurgeryLodgePrototype? lodge))
             return false;
 
         foreach (var name in lodge.Blocked)

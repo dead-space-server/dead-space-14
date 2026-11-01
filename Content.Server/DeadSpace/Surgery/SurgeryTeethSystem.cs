@@ -21,6 +21,7 @@ namespace Content.Server.DeadSpace.Surgery;
 public sealed class SurgeryTeethSystem : EntitySystem
 {
     private const string Pocket = "surgery-teeth";
+    private const string CapId = "Teeth";
     private static readonly EntProtoId BiteAction = "ActionSurgeryBitePill";
 
     [Dependency] private readonly SharedContainerSystem _containers = default!;
@@ -118,7 +119,7 @@ public sealed class SurgeryTeethSystem : EntitySystem
 
     private int Max(SurgeryTeethComponent? teeth)
     {
-        if (_prototype.TryIndex<SurgeryTeethPrototype>("Teeth", out var cap) && cap.Max > 0)
+        if (_prototype.TryIndex<SurgeryTeethPrototype>(CapId, out var cap) && cap.Max > 0)
             return cap.Max;
 
         return 3;

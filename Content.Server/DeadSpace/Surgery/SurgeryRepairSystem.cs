@@ -12,6 +12,7 @@ public sealed class SurgeryRepairSystem : EntitySystem
 {
     private const string Effect = "MachineRepair";
     private const string OrganMend = "OrganMend";
+    private const string Rules = "Default";
 
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
@@ -60,7 +61,7 @@ public sealed class SurgeryRepairSystem : EntitySystem
             ClearAtrophy = true,
         });
 
-        if (_prototype.TryIndex<SurgeryRepairPrototype>("Default", out var rules))
+        if (_prototype.TryIndex<SurgeryRepairPrototype>(Rules, out var rules))
             _damage.TryChangeDamage(ent.Owner, rules.Heal, true, false);
     }
 

@@ -40,6 +40,7 @@ namespace Content.Client.DeadSpace.Surgery;
 public sealed class SurgeryClientSystem : EntitySystem
 {
     private const string WoundPrefix = "surgery-wound-";
+    private const string PenTag = "Pen";
     private const string LinePrefix = "line";
     private static readonly ResPath Rsi = new("/Textures/_DeadSpace/Mobs/Surgery/human_male.rsi");
     private static readonly ResPath LineRsi = new("/Textures/_DeadSpace/Mobs/Surgery/line.rsi");
@@ -1526,7 +1527,7 @@ public sealed class SurgeryClientSystem : EntitySystem
         if (TryComp<SurgeryToolComponent>(held, out var tool) && tool.Probe)
             return machine;
 
-        return !machine && (HasComp<SurgeryMarkerComponent>(held) || _tags.HasTag(held.Value, "Pen"));
+        return !machine && (HasComp<SurgeryMarkerComponent>(held) || _tags.HasTag(held.Value, PenTag));
     }
 
     private bool MarkHand(EntityUid user, out bool thick, out Color ink)
@@ -1545,7 +1546,7 @@ public sealed class SurgeryClientSystem : EntitySystem
         if (HasComp<SurgeryMarkerComponent>(held))
             return true;
 
-        if (!_tags.HasTag(held.Value, "Pen"))
+        if (!_tags.HasTag(held.Value, PenTag))
             return false;
 
         thick = false;

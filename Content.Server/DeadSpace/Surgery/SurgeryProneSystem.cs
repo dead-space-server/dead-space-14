@@ -3,7 +3,6 @@
 using Content.Shared.Buckle.Components;
 using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.Surgery;
-using Content.Shared.Interaction;
 using Content.Shared.Standing;
 using Content.Shared.Verbs;
 using Robust.Shared.Utility;
@@ -12,9 +11,6 @@ namespace Content.Server.DeadSpace.Surgery;
 
 public sealed class SurgeryProneSystem : EntitySystem
 {
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly StandingStateSystem _standing = default!;
-
     public override void Initialize()
     {
         base.Initialize();

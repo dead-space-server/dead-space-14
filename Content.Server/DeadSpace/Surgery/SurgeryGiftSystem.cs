@@ -64,7 +64,7 @@ public sealed class SurgeryGiftSystem : EntitySystem
                 if (TryComp<SurgeryGiftComponent>(organ, out var gift))
                     Collect(wanted, gift);
 
-                foreach (var comp in EntityManager.GetComponents(organ))
+                foreach (var comp in AllComps(organ))
                     present.Add(_factory.GetComponentName(comp.GetType()));
             }
 

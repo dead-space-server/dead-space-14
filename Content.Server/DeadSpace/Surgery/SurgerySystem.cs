@@ -83,6 +83,8 @@ public sealed class SurgerySystem : EntitySystem
     [Dependency] private readonly IComponentFactory _factory = default!;
 
     private const string HealthRules = "Default";
+    private const string FloorPlace = "Floor";
+    private const string PenTag = "Pen";
 
     public override void Initialize()
     {
@@ -1616,7 +1618,7 @@ public sealed class SurgerySystem : EntitySystem
             && _prototype.TryIndex(surface.Place, out SurgeryPlacePrototype? place))
             return (place.Slip, place.BoneFloor);
 
-        if (_prototype.TryIndex<SurgeryPlacePrototype>("Floor", out var floor))
+        if (_prototype.TryIndex<SurgeryPlacePrototype>(FloorPlace, out var floor))
             return (floor.Slip, floor.BoneFloor);
 
         return (0.7f, 25f);
@@ -2233,7 +2235,7 @@ public sealed class SurgerySystem : EntitySystem
         if (TryComp<SurgeryToolComponent>(held.Value, out var tool) && tool.Probe)
             return machine;
 
-        return !machine && (HasComp<SurgeryMarkerComponent>(held.Value) || _tags.HasTag(held.Value, "Pen"));
+        return !machine && (HasComp<SurgeryMarkerComponent>(held.Value) || _tags.HasTag(held.Value, PenTag));
     }
 
     private bool VerbAllowed(SurgeryVerbKind verb, EntityUid? held, SurgerySiteComponent site)

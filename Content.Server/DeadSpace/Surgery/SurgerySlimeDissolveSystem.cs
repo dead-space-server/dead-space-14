@@ -9,6 +9,9 @@ namespace Content.Server.DeadSpace.Surgery;
 
 public sealed class SurgerySlimeDissolveSystem : EntitySystem
 {
+    private const string SlimeGel = "SlimeGel";
+    private const string Slime = "Slime";
+
     [Dependency] private readonly SharedPuddleSystem _puddle = default!;
 
     public override void Update(float frameTime)
@@ -21,8 +24,8 @@ public sealed class SurgerySlimeDissolveSystem : EntitySystem
                 continue;
 
             var solution = new Solution();
-            solution.AddReagent("SlimeGel", FixedPoint2.New(dissolve.Amount * 0.5f));
-            solution.AddReagent("Slime", FixedPoint2.New(dissolve.Amount * 0.5f));
+            solution.AddReagent(SlimeGel, FixedPoint2.New(dissolve.Amount * 0.5f));
+            solution.AddReagent(Slime, FixedPoint2.New(dissolve.Amount * 0.5f));
             _puddle.TrySpillAt(xform.Coordinates, solution, out _);
             QueueDel(uid);
         }
