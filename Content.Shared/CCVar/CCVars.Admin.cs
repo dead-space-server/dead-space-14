@@ -198,9 +198,10 @@ public sealed partial class CCVars
 
     /// <summary>
     /// Whether admins should gain role playtime even when playing while not de-adminned.
+    /// When true, time is tracked both for the admin tracker and for the role they are currently playing.
     /// </summary>
     public static readonly CVarDef<bool> GameAdminJobTracking =
-        CVarDef.Create("game.admin_job_tracking", false, CVar.SERVERONLY);
+        CVarDef.Create("game.admin_job_tracking", true, CVar.SERVERONLY);
 
     //DS14-start
     public static readonly CVarDef<bool> EvacLocked =
