@@ -3,8 +3,8 @@
                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                x:Class="Content.Client.DeadSpace.OrganPrinter.OrganPrinterWindow"
                Title="{Loc organ-printer-title}"
-               MinSize="620 440"
-               SetSize="720 540">
+               MinSize="680 560"
+               SetSize="850 660">
 
     <BoxContainer Orientation="Vertical" VerticalExpand="True" HorizontalExpand="True">
 
@@ -103,9 +103,9 @@
                        Text="{Loc organ-printer-game-splicing}"
                        StyleClasses="LabelBig"
                        HorizontalExpand="True" />
-                <Label Name="GameCoverageLabel" StyleClasses="LabelSubText" />
-                <Label Name="GameWasteLabel" StyleClasses="LabelSubText" />
-                <Label Name="GameIntegrityLabel" StyleClasses="LabelSubText" />
+                <Label Name="GameCoverageLabel" StyleClasses="LabelSubText" MinWidth="130" />
+                <Label Name="GameWasteLabel" StyleClasses="LabelSubText" MinWidth="130" />
+                <Label Name="GameIntegrityLabel" StyleClasses="LabelSubText" MinWidth="130" />
             </BoxContainer>
 
             <Label Name="GameResultLabel"

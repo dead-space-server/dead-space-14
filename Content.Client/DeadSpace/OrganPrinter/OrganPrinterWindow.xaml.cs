@@ -39,6 +39,8 @@ public sealed partial class OrganPrinterWindow : DefaultWindow
         };
 
         GameCanvasContainer.AddChild(_game);
+        _game.HorizontalExpand = true;
+        _game.VerticalExpand = true;
         _game.Visible = false;
 
         GameFastButton.OnPressed += _ => StartGame(true);

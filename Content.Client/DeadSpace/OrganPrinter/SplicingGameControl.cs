@@ -1107,19 +1107,23 @@ public sealed class SplicingGameControl : Control
 
     private void DrawField(DrawingHandleScreen handle, float time)
     {
-        var origin = new Vector2((PixelSize.X - FieldW * CellPx) / 2f, (PixelSize.Y - FieldH * CellPx) / 2f);
+        var scale = MathF.Min(
+            PixelSize.X / (float) (FieldW * CellPx),
+            PixelSize.Y / (float) (FieldH * CellPx));
+        var cell = CellPx * scale;
+        var origin = new Vector2((PixelSize.X - FieldW * cell) / 2f, (PixelSize.Y - FieldH * cell) / 2f);
 
-        handle.DrawRect(new UIBox2(origin, origin + new Vector2(FieldW * CellPx, FieldH * CellPx)), Color.FromHex("#0b1f10"));
+        handle.DrawRect(new UIBox2(origin, origin + new Vector2(FieldW * cell, FieldH * cell)), Color.FromHex("#0b1f10"));
 
         for (var gx = 0; gx <= FieldW; gx++)
         {
-            handle.DrawLine(origin + new Vector2(gx * CellPx, 0), origin + new Vector2(gx * CellPx, FieldH * CellPx),
+            handle.DrawLine(origin + new Vector2(gx * cell, 0), origin + new Vector2(gx * cell, FieldH * cell),
                 Color.FromHex("#14361c"));
         }
 
         for (var gy = 0; gy <= FieldH; gy++)
         {
-            handle.DrawLine(origin + new Vector2(0, gy * CellPx), origin + new Vector2(FieldW * CellPx, gy * CellPx),
+            handle.DrawLine(origin + new Vector2(0, gy * cell), origin + new Vector2(FieldW * cell, gy * cell),
                 Color.FromHex("#14361c"));
         }
 
@@ -1127,11 +1131,11 @@ public sealed class SplicingGameControl : Control
         {
             for (var y = 0; y < FieldH; y++)
             {
-                var rect = new UIBox2(origin + new Vector2(x * CellPx, y * CellPx),
-                    origin + new Vector2((x + 1) * CellPx, (y + 1) * CellPx));
-                var cell = _cells[x, y];
+                var rect = new UIBox2(origin + new Vector2(x * cell, y * cell),
+                    origin + new Vector2((x + 1) * cell, (y + 1) * cell));
+                var cellState = _cells[x, y];
 
-                if (cell == Cell.Wall)
+                if (cellState == Cell.Wall)
                 {
                     handle.DrawRect(rect, Color.FromHex("#26221f"));
                     handle.DrawRect(new UIBox2(rect.Left, rect.Top, rect.Right, rect.Top + 1), Color.FromHex("#6b2020"));
@@ -1141,9 +1145,9 @@ public sealed class SplicingGameControl : Control
                     continue;
                 }
 
-                if (cell is Cell.Filled or Cell.Rival)
+                if (cellState is Cell.Filled or Cell.Rival)
                 {
-                    var rival = cell == Cell.Rival;
+                    var rival = cellState == Cell.Rival;
                     var shade = (x * 7 + y * 13) % 3;
                     var color = rival
                         ? shade switch
@@ -1168,11 +1172,12 @@ public sealed class SplicingGameControl : Control
                     continue;
                 }
 
-                if (cell is Cell.Trail or Cell.RivalTrail)
+                if (cellState is Cell.Trail or Cell.RivalTrail)
                 {
-                    var rival = cell == Cell.RivalTrail;
+                    var rival = cellState == Cell.RivalTrail;
                     handle.DrawRect(rect, (rival ? Color.FromHex("#c084fc") : Color.FromHex("#d8ff5f")).WithAlpha(0.75f));
-                    handle.DrawRect(new UIBox2(rect.Left + 3, rect.Top + 3, rect.Right - 3, rect.Bottom - 3),
+                    var inset = 3f * scale;
+                    handle.DrawRect(new UIBox2(rect.Left + inset, rect.Top + inset, rect.Right - inset, rect.Bottom - inset),
                         rival ? Color.FromHex("#f3e8ff") : Color.FromHex("#f4ffd9"));
                     continue;
                 }
@@ -1192,56 +1197,58 @@ public sealed class SplicingGameControl : Control
             }
         }
 
-        var seedCenter = origin + new Vector2(_seed.X + 1f, _seed.Y + 1f) * CellPx;
+        var seedCenter = origin + new Vector2(_seed.X + 1f, _seed.Y + 1f) * cell;
         var seedPulse = 1f + MathF.Sin(time * 4f) * 0.1f;
-        handle.DrawCircle(seedCenter, 9.5f * seedPulse, Color.FromHex("#3ed26b").WithAlpha(0.22f));
-        handle.DrawCircle(seedCenter, 6.5f * seedPulse, Color.FromHex("#3ed26b").WithAlpha(0.6f));
-        handle.DrawCircle(seedCenter, 4f, Color.FromHex("#0b1f10"));
-        handle.DrawCircle(seedCenter, 2.2f, Color.FromHex("#7dffb0"));
+        handle.DrawCircle(seedCenter, 9.5f * scale * seedPulse, Color.FromHex("#3ed26b").WithAlpha(0.22f));
+        handle.DrawCircle(seedCenter, 6.5f * scale * seedPulse, Color.FromHex("#3ed26b").WithAlpha(0.6f));
+        handle.DrawCircle(seedCenter, 4f * scale, Color.FromHex("#0b1f10"));
+        handle.DrawCircle(seedCenter, 2.2f * scale, Color.FromHex("#7dffb0"));
 
         if (_trail.Count > 1)
         {
             for (var i = 1; i < _trail.Count; i++)
             {
-                var a = origin + new Vector2(_trail[i - 1].X + 0.5f, _trail[i - 1].Y + 0.5f) * CellPx;
-                var b = origin + new Vector2(_trail[i].X + 0.5f, _trail[i].Y + 0.5f) * CellPx;
+                var a = origin + new Vector2(_trail[i - 1].X + 0.5f, _trail[i - 1].Y + 0.5f) * cell;
+                var b = origin + new Vector2(_trail[i].X + 0.5f, _trail[i].Y + 0.5f) * cell;
                 handle.DrawLine(a, b, Color.FromHex("#d8ff5f"));
             }
         }
         foreach (var n in _necrosis)
         {
-            var pos = origin + new Vector2(n.X, n.Y) * CellPx;
-            var pulse = 3.4f + MathF.Sin(time * 8f + n.Phase) * 0.9f;
-            handle.DrawCircle(pos, pulse + 2.5f, Color.FromHex("#ff3b3b").WithAlpha(0.25f));
+            var pos = origin + new Vector2(n.X, n.Y) * cell;
+            var pulse = (3.4f + MathF.Sin(time * 8f + n.Phase) * 0.9f) * scale;
+            handle.DrawCircle(pos, pulse + 2.5f * scale, Color.FromHex("#ff3b3b").WithAlpha(0.25f));
             handle.DrawCircle(pos, pulse, Color.FromHex("#ff3b3b"));
             handle.DrawCircle(pos, pulse * 0.45f, Color.FromHex("#7a0f0f"));
         }
 
         foreach (var g in _glitches)
         {
-            var pos = origin + new Vector2(g.X + 0.5f, g.Y + 0.5f) * CellPx;
-            handle.DrawRect(new UIBox2(pos - new Vector2(4, 4), pos + new Vector2(4, 4)), Color.FromHex("#3fa7ff"));
-            handle.DrawRect(new UIBox2(pos - new Vector2(1.5f, 1.5f), pos + new Vector2(1.5f, 1.5f)),
+            var pos = origin + new Vector2(g.X + 0.5f, g.Y + 0.5f) * cell;
+            var half = 4f * scale;
+            handle.DrawRect(new UIBox2(pos - new Vector2(half, half), pos + new Vector2(half, half)), Color.FromHex("#3fa7ff"));
+            var core = 1.5f * scale;
+            handle.DrawRect(new UIBox2(pos - new Vector2(core, core), pos + new Vector2(core, core)),
                 Color.FromHex("#cfebff"));
         }
 
-        var rp = origin + new Vector2(_rival.X + 0.5f, _rival.Y + 0.5f) * CellPx;
-        handle.DrawCircle(rp, 6f, Color.FromHex("#a855f7").WithAlpha(0.3f));
-        handle.DrawCircle(rp, 4f, Color.FromHex("#a855f7"));
-        handle.DrawCircle(rp, 1.8f, Color.FromHex("#2a0a3a"));
+        var rp = origin + new Vector2(_rival.X + 0.5f, _rival.Y + 0.5f) * cell;
+        handle.DrawCircle(rp, 6f * scale, Color.FromHex("#a855f7").WithAlpha(0.3f));
+        handle.DrawCircle(rp, 4f * scale, Color.FromHex("#a855f7"));
+        handle.DrawCircle(rp, 1.8f * scale, Color.FromHex("#2a0a3a"));
 
         var stepInterval = _fastMode ? 0.085f : 0.15f;
         var progress = _running ? Math.Clamp(_stepAccum / stepInterval, 0f, 1f) : 1f;
         var lerped = new Vector2(
             MathHelper.Lerp(_playerFrom.X + 0.5f, _player.X + 0.5f, progress),
             MathHelper.Lerp(_playerFrom.Y + 0.5f, _player.Y + 0.5f, progress));
-        var playerPos = origin + lerped * CellPx;
+        var playerPos = origin + lerped * cell;
 
         var glow = _fastMode ? Color.FromHex("#ffb13b") : Color.FromHex("#4fe3ff");
         var blinkAlpha = _invuln > 0f && MathF.Sin(time * 20f) > 0f ? 0.35f : 1f;
-        handle.DrawCircle(playerPos, 7f, glow.WithAlpha(0.3f * blinkAlpha));
-        handle.DrawCircle(playerPos, 4.5f, glow.WithAlpha(blinkAlpha));
-        handle.DrawCircle(playerPos, 2f, Color.White.WithAlpha(blinkAlpha));
+        handle.DrawCircle(playerPos, 7f * scale, glow.WithAlpha(0.3f * blinkAlpha));
+        handle.DrawCircle(playerPos, 4.5f * scale, glow.WithAlpha(blinkAlpha));
+        handle.DrawCircle(playerPos, 2f * scale, Color.White.WithAlpha(blinkAlpha));
     }
 
     #endregion
