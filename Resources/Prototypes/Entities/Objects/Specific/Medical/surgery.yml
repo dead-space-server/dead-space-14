@@ -37,6 +37,7 @@
     wobble: 8
     verbs:
     - Cauterize
+    - Stanch # DS14
   - type: Sprite
     sprite: Objects/Specific/Medical/Surgery/cautery.rsi
     state: cautery
@@ -64,6 +65,7 @@
     wobble: 22
     verbs:
     - SawBone
+    - Drill
   - type: Sprite
     sprite: Objects/Specific/Medical/Surgery/drill.rsi
     state: drill
@@ -95,6 +97,9 @@
     wobble: 10
     verbs:
     - Incise
+    softVerbs: # DS14
+    - Incise
+    - Amputate # DS14
   - type: Sharp
     butcherDelayModifier: 1.5 # Butchering with a scalpel, regardless of the type, will take 50% longer
   - type: Tool
@@ -212,6 +217,10 @@
     wobble: 8
     verbs:
     - Retract
+    softVerbs: # DS14
+    - Retract
+    plantVerbs: # DS14
+    - Retract
   - type: Sprite
     sprite: Objects/Specific/Medical/Surgery/scissors.rsi
     state: retractor
@@ -230,6 +239,14 @@
     slip: 0.05
     wobble: 8
     verbs:
+    - Clamp
+    - Extract
+    - PullEmbedded
+    softVerbs: # DS14
+    - Clamp
+    - Extract
+    - PullEmbedded
+    plantVerbs: # DS14
     - Clamp
     - Extract
     - PullEmbedded
@@ -257,6 +274,7 @@
     precision: 0.9
     slip: 0.08
     wobble: 12
+    sawHits: 3 # DS14
     verbs:
     - SawBone
     - Amputate
@@ -286,6 +304,7 @@
     precision: 0.45
     slip: 0.4
     wobble: 30
+    sawHits: 4 # DS14
     verbs:
     - SawBone
     - Amputate
@@ -311,6 +330,16 @@
   parent: Saw
   description: For heavy duty cutting.
   components:
+  # DS14-start
+  - type: SurgeryTool
+    precision: 0.93
+    slip: 0.06
+    wobble: 10
+    sawHits: 2
+    verbs:
+    - SawBone
+    - Amputate
+  # DS14-end
   - type: Sprite
     state: electric
   - type: Item
@@ -336,6 +365,7 @@
     precision: 0.96
     slip: 0.04
     wobble: 7
+    sawHits: 1 # DS14
     verbs:
     - SawBone
     - Amputate

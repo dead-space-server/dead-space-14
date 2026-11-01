@@ -161,6 +161,7 @@
       enum.MagicMirrorUiKey.Key:
         toggleAction: HairstyleAction
   - type: SlimeForm
+  - type: SurgerySlimeRegrow # DS14
   # DS14-end
 
 - type: entity

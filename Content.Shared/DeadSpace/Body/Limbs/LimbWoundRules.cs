@@ -404,21 +404,28 @@ public static class LimbWoundRules
         for (var i = 0; i < count; i++)
         {
             ref var state = ref zones[i];
-            if (state.Bleed <= TickBleed)
+            if (state.Bleed <= TickBleed || state.Severed)
                 continue;
 
             any = true;
-            if (state.Severed || state.Atrophied || state.Health <= 0f)
+            var limb = IsLimb((LimbZone) i);
+            if (state.Atrophied || state.Health <= 0f)
             {
-                if (!state.Severed)
-                    state.Atrophied = true;
-                overflow += state.Bleed * BleedLocal;
+                state.Atrophied = true;
+                if (limb)
+                    state.Bleed = 0f;
+                else
+                    overflow += state.Bleed * BleedLocal;
                 continue;
             }
 
             state.Health = MathF.Max(0f, state.Health - state.Bleed * BleedLocal);
-            if (state.Health <= 0f)
-                state.Atrophied = true;
+            if (state.Health > 0f)
+                continue;
+
+            state.Atrophied = true;
+            if (limb)
+                state.Bleed = 0f;
         }
 
         if (overflow <= TickBleed || (uint) Index(LimbZone.Torso) >= (uint) zones.Length)
@@ -458,11 +465,25 @@ public static class LimbWoundRules
         return true;
     }
 
+    public static bool IsLimb(LimbZone zone)
+    {
+        return zone is LimbZone.ArmLeft or LimbZone.ArmRight or LimbZone.HandLeft or LimbZone.HandRight
+            or LimbZone.LegLeft or LimbZone.LegRight or LimbZone.FootLeft or LimbZone.FootRight;
+    }
+
+    public static bool DeadLimb(LimbZone zone, in LimbZoneState state)
+    {
+        return IsLimb(zone) && state.Atrophied && !state.Severed;
+    }
+
     public static void MarkSevered(ref LimbZoneState state)
     {
         state.Severed = true;
         state.Scar = 0;
-        state.Bleed = state.Bandaged ? 0f : MathF.Max(state.Bleed, StumpBleed);
+        state.Bleed = 0f;
+        state.Fire = 0f;
+        state.Skin = 0f;
+        state.Heat = 0f;
     }
 
     public static float CorpseKelvin(float minutes)
@@ -512,7 +533,7 @@ public static class LimbWoundRules
         new(LimbZone.Mouth, 5f),
     };
 
-    public static bool ApplyBlast(ref LimbZoneState state, float heat, float pierce, float blunt, float slash)
+    public static bool ApplyBlast(ref LimbZoneState state, float heat, float pierce, float blunt, float slash, bool soft = false)
     {
         if (state.Severed || heat <= 0f && pierce <= 0f && blunt <= 0f && slash <= 0f)
             return false;
@@ -529,7 +550,8 @@ public static class LimbWoundRules
             state.Pierce += pierce;
             state.Embedded = true;
             state.Flesh += pierce;
-            state.Bleed += pierce * ShrapnelBleed;
+            if (!soft)
+                state.Bleed += pierce * ShrapnelBleed;
             state.Health = MathF.Max(0f, state.Health - pierce * BlastPierceHealth);
         }
         else if (pierce > 0f)
@@ -541,7 +563,10 @@ public static class LimbWoundRules
 
         if (blunt > 0f)
         {
-            state.Bone += blunt;
+            if (soft)
+                state.Flesh += blunt;
+            else
+                state.Bone += blunt;
             state.Health = MathF.Max(0f, state.Health - blunt * BlastBluntHealth);
         }
 
@@ -549,7 +574,8 @@ public static class LimbWoundRules
         {
             state.Cut += slash;
             state.Flesh += slash;
-            state.Bleed += slash * BleedPerFlesh;
+            if (!soft)
+                state.Bleed += slash * BleedPerFlesh;
             state.Health = MathF.Max(0f, state.Health - slash * BlastPierceHealth);
         }
 
@@ -728,7 +754,7 @@ public static class LimbWoundRules
 
     public static bool BlastStrips(float damage, float wound)
     {
-        return damage * wound >= RawSkin;
+        return damage * wound >= LimbTuning.BurnThird;
     }
 
     public static bool IsHeavyPoint(float pierce)
@@ -787,7 +813,7 @@ public static class LimbWoundRules
         return 4;
     }
 
-    public static LimbStrikeResult Apply(ref LimbZoneState state, LimbStrike strike)
+    public static LimbStrikeResult Apply(ref LimbZoneState state, LimbStrike strike, bool soft = false)
     {
         if (strike.ShieldBlocked && strike.Projectile && TryRicochet(strike))
             return LimbStrikeResult.Glanced();
@@ -824,7 +850,7 @@ public static class LimbWoundRules
             return LimbStrikeResult.Miss();
         }
 
-        if (!IsBody(strike.Zone) || state.Severed)
+        if (!IsBody(strike.Zone) || state.Severed || DeadLimb(strike.Zone, state))
             return LimbStrikeResult.Miss();
 
         var amount = strike.Amount * strike.WoundMultiplier;
@@ -847,7 +873,10 @@ public static class LimbWoundRules
                 if (strike.BehindArmor && strike.Amount >= HeavyPoint)
                 {
                     state.Flesh += amount * BehindArmorFlesh;
-                    state.Bone += strike.Amount * BehindArmorBone;
+                    if (soft)
+                        state.Flesh += strike.Amount * BehindArmorBone;
+                    else
+                        state.Bone += strike.Amount * BehindArmorBone;
                     break;
                 }
 
@@ -855,10 +884,18 @@ public static class LimbWoundRules
                 if (strike.Projectile && strike.Roll < (strike.Aimed ? AimedEmbedChance : EmbedChance))
                     state.Embedded = true;
                 if (strike.Projectile && strike.Aimed && strike.SecondaryRoll < AimedShatterChance)
-                    state.Bone += amount;
+                {
+                    if (soft)
+                        state.Flesh += amount;
+                    else
+                        state.Bone += amount;
+                }
                 break;
             case LimbMark.Blunt:
-                state.Bone += amount;
+                if (soft)
+                    state.Flesh += amount;
+                else
+                    state.Bone += amount;
                 break;
             case LimbMark.Heat:
                 state.Heat += amount;
@@ -877,10 +914,15 @@ public static class LimbWoundRules
             state.SkinBare = true;
 
         if (strike.RoundBone > 0f)
-            state.Bone += strike.RoundBone * strike.WoundMultiplier;
+        {
+            if (soft)
+                state.Flesh += strike.RoundBone * strike.WoundMultiplier;
+            else
+                state.Bone += strike.RoundBone * strike.WoundMultiplier;
+        }
 
         var bleedAdded = 0f;
-        if (strike.RoundBleed > 0f)
+        if (!soft && strike.RoundBleed > 0f)
         {
             var internalBleed = strike.RoundBleed * strike.WoundMultiplier;
             if (state.Bandaged)
@@ -889,7 +931,7 @@ public static class LimbWoundRules
             state.Bleed += internalBleed;
             bleedAdded += internalBleed;
         }
-        if (state.Flesh >= StrainFlesh && strike.Mark is LimbMark.Edge or LimbMark.Point)
+        if (!soft && state.Flesh >= StrainFlesh && strike.Mark is LimbMark.Edge or LimbMark.Point)
         {
             var open = amount * BleedPerFlesh;
             if (state.Bandaged)
@@ -956,8 +998,8 @@ public static class LimbWoundRules
             state.Bone = 0f;
         }
 
-        if (state.Skin >= RawSkin)
-            state.Skin = RawSkin * 0.5f;
+        if (state.Skin >= LimbTuning.BurnThird)
+            state.Skin = LimbTuning.BurnThird * 0.5f;
         else
             state.Skin = MathF.Max(0f, state.Skin - 20f);
 

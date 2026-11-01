@@ -125,7 +125,7 @@ public sealed class LimbWoundRulesTest
         {
             Assert.That(cut.Severed, Is.True);
             Assert.That(state.Severed, Is.True);
-            Assert.That(state.Bleed, Is.EqualTo(LimbWoundRules.StumpBleed));
+            Assert.That(state.Bleed, Is.EqualTo(0f));
         });
     }
 
@@ -666,6 +666,21 @@ public sealed class LimbWoundRulesTest
     }
 
     [Test]
+    public void SoftBodyDoesNotTakeBoneOrBleed()
+    {
+        var state = new LimbZoneState();
+        LimbWoundRules.Apply(ref state, Strike(LimbZone.ArmLeft, LimbMark.Blunt, 30f, 0f), soft: true);
+        LimbWoundRules.Apply(ref state, Strike(LimbZone.ArmLeft, LimbMark.Point, 20f, 0.05f, projectile: true, pierce: 20f, roundBone: 20f, roundBleed: 2f), soft: true);
+        Assert.Multiple(() =>
+        {
+            Assert.That(state.Bone, Is.EqualTo(0f));
+            Assert.That(state.Bleed, Is.EqualTo(0f));
+            Assert.That(state.Flesh, Is.GreaterThan(0f));
+            Assert.That(state.Embedded, Is.True);
+        });
+    }
+
+    [Test]
     public void EveryAimBandCanBeHit()
     {
         Assert.Multiple(() =>
@@ -782,7 +797,7 @@ public sealed class LimbWoundRulesTest
     }
 
     [Test]
-    public void BleedTakesItsLimbFirstThenTheRestHarder()
+    public void ADrainedLimbStopsBleedingAndSparesTheChest()
     {
         var zones = LimbZoneState.CreateAll();
         var span = CollectionsMarshal.AsSpan(zones);
@@ -803,15 +818,30 @@ public sealed class LimbWoundRulesTest
         }
 
         Assert.That(span[arm].Atrophied, Is.True);
+        Assert.That(span[arm].Bleed, Is.EqualTo(0f));
         Assert.That(span[head].Health, Is.EqualTo(headFull));
         var chest = span[LimbWoundRules.Index(LimbZone.Torso)].Health;
         LimbWoundRules.DrainBleed(span);
-        Assert.That(span[LimbWoundRules.Index(LimbZone.Torso)].Health, Is.LessThan(chest));
+        Assert.That(span[LimbWoundRules.Index(LimbZone.Torso)].Health, Is.EqualTo(chest));
         Assert.That(span[head].Health, Is.EqualTo(headFull));
 
+        span[arm].Bleed = 5f;
+        LimbWoundRules.DrainBleed(span);
+        Assert.That(span[arm].Bleed, Is.EqualTo(0f), "a dead limb has no blood to lose");
+        Assert.That(span[LimbWoundRules.Index(LimbZone.Torso)].Health, Is.EqualTo(chest));
+
+        var groin = LimbWoundRules.Index(LimbZone.Groin);
+        span[groin].Health = 0f;
+        span[groin].Bleed = 10f;
+        LimbWoundRules.DrainBleed(span);
+        Assert.That(span[LimbWoundRules.Index(LimbZone.Torso)].Health, Is.LessThan(chest), "the groin still drains into the chest");
+        span[groin].Bleed = 0f;
+
+        var chestAfter = span[LimbWoundRules.Index(LimbZone.Torso)].Health;
         span[arm].Severed = true;
         span[arm].Bleed = LimbWoundRules.StumpBleed;
         LimbWoundRules.DrainBleed(span);
+        Assert.That(span[LimbWoundRules.Index(LimbZone.Torso)].Health, Is.EqualTo(chestAfter));
         Assert.That(span[head].Health, Is.EqualTo(headFull));
         LimbWoundRules.Bandage(ref span[arm]);
         Assert.That(span[arm].Bleed, Is.EqualTo(0f));

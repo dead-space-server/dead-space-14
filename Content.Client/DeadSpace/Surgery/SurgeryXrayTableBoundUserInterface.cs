@@ -20,7 +20,6 @@ public sealed class SurgeryXrayTableBoundUserInterface : BoundUserInterface
         _window = new SurgeryXrayTableWindow();
         _window.OnClose += Close;
         _window.PrintRequested += (zone, image) => SendMessage(new SurgeryXrayTablePrintMessage { Zone = zone, Image = image ?? Array.Empty<byte>() });
-        _window.StartRequested += operation => SendMessage(new SurgeryXrayTableStartMessage { Operation = operation });
         _window.OpenCentered();
     }
 

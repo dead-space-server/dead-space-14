@@ -32,7 +32,7 @@ public enum LimbOrganMask : ushort
     Kidneys = 1 << 6,
     Core = 1 << 7,
     Intestines = 1 << 8,
-    Standard = Brain | Eyes | Heart | Lungs | Stomach | Liver | Kidneys | Intestines,
+    Standard = Brain | Eyes | Heart | Lungs | Stomach | Liver | Kidneys,
 }
 
 [DataDefinition, Serializable, NetSerializable]

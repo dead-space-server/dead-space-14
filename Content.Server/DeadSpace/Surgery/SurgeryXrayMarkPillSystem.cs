@@ -4,6 +4,7 @@ using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.Surgery;
 using Content.Shared.Nutrition;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 
 namespace Content.Server.DeadSpace.Surgery;
 
@@ -13,6 +14,8 @@ public sealed class SurgeryXrayMarkPillSystem : EntitySystem
 
     [Dependency] private readonly LimbWoundSystem _limbs = default!;
     [Dependency] private readonly SurgeryCavitySystem _cavity = default!;
+    [Dependency] private readonly SurgeryInfectionSystem _infection = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
 
     public override void Initialize()
     {
@@ -54,7 +57,6 @@ public sealed class SurgeryXrayMarkPillSystem : EntitySystem
                 Rupture(args.User, LimbOrgan.Stomach);
                 Rupture(args.User, LimbOrgan.Liver);
                 Rupture(args.User, LimbOrgan.Kidneys);
-                Rupture(args.User, LimbOrgan.Intestines);
                 break;
             case SurgeryXrayMarkKind.Embedded:
                 foreach (var zone in Zones)
@@ -71,6 +73,30 @@ public sealed class SurgeryXrayMarkPillSystem : EntitySystem
                 Lodge(args.User, LimbZone.Groin);
                 Lodge(args.User, LimbZone.Torso);
                 break;
+            case SurgeryXrayMarkKind.Infection:
+                Infect(args.User);
+                break;
+        }
+    }
+
+    private void Infect(EntityUid user)
+    {
+        if (!TryComp<LimbBodyComponent>(user, out var limbs))
+            return;
+
+        var open = new List<LimbZone>();
+        foreach (var zone in Zones)
+        {
+            var index = LimbWoundRules.Index(zone);
+            if ((uint) index < (uint) limbs.Zones.Count && !limbs.Zones[index].Severed)
+                open.Add(zone);
+        }
+
+        _random.Shuffle(open);
+        foreach (var zone in open)
+        {
+            if (_infection.Infect(user, zone))
+                return;
         }
     }
 

@@ -57,11 +57,17 @@ public static class LimbScanText
         return lines;
     }
 
-    public static List<string> Lines(IReadOnlyList<LimbScanIssue> issues)
+    public static List<string> Lines(IReadOnlyList<LimbScanIssue> issues, bool machine = false, LimbZone? only = null, bool soft = false)
     {
         var grouped = new List<(bool Organ, byte Index, List<LimbIssueKind> Kinds)>();
         foreach (var issue in issues)
         {
+            if (only is { } zone)
+            {
+                if (issue.Organ || issue.Index != (byte) zone)
+                    continue;
+            }
+
             var found = -1;
             for (var i = 0; i < grouped.Count; i++)
             {
@@ -82,6 +88,7 @@ public static class LimbScanText
         }
 
         var lines = new List<string>(grouped.Count);
+        var prefix = machine ? "health-analyzer-issue-machine-" : soft ? "health-analyzer-issue-soft-" : "health-analyzer-issue-";
         foreach (var (organ, index, kinds) in grouped)
         {
             var name = organ
@@ -93,7 +100,8 @@ public static class LimbScanText
                 if (kind == LimbIssueKind.Severed)
                     continue;
 
-                text.Add(Loc.GetString($"health-analyzer-issue-{(byte) kind}"));
+                var key = soft ? SoftKey(kind) : $"{prefix}{(byte) kind}";
+                text.Add(Loc.GetString(key));
             }
 
             if (text.Count == 0)
@@ -103,5 +111,17 @@ public static class LimbScanText
         }
 
         return lines;
+    }
+
+    private static string SoftKey(LimbIssueKind kind)
+    {
+        return kind switch
+        {
+            LimbIssueKind.OpenWound or LimbIssueKind.BoneStrain => "health-analyzer-issue-soft-scaffold",
+            LimbIssueKind.Embedded => "health-analyzer-issue-soft-shard",
+            LimbIssueKind.Bleed => "health-analyzer-issue-soft-weep",
+            LimbIssueKind.ClosedFracture or LimbIssueKind.OpenFracture or LimbIssueKind.Fracture => "health-analyzer-issue-soft-scaffold",
+            _ => $"health-analyzer-issue-{(byte) kind}",
+        };
     }
 }

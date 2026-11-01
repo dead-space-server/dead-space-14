@@ -8,9 +8,6 @@ using Content.Shared.Inventory.Events;
 
 namespace Content.Server.DeadSpace.Body;
 
-/// <summary>
-/// Keeps equipment and identity consistent when visible body parts are severed.
-/// </summary>
 public sealed class DetachedBodyPartSystem : EntitySystem
 {
     [Dependency] private readonly InventorySystem _inventory = default!;

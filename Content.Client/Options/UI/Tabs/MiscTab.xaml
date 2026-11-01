@@ -37,7 +37,6 @@
                 <Label Text="{Loc 'ui-options-general-storage'}"
                        StyleClasses="DeadSpaceSectionTitle"/>
                 <!-- DS14-end -->
-                <CheckBox Name="SurgeryWindowCheckBox" Text="{Loc 'ui-options-surgery-window'}" /><!--DS14-->
                 <CheckBox Name="OpaqueStorageWindowCheckBox" Text="{Loc 'ui-options-opaque-storage-window'}" />
                 <CheckBox Name="StaticStorageUI" Text="{Loc 'ui-options-static-storage-ui'}" />
                 <CheckBox Name="MultipleInventoryWindowsCheckBox" Text="{Loc 'ui-options-multiple-inventory-windows'}" /><!--DS14-->

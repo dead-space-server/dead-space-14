@@ -9,18 +9,108 @@
   - Stomach
   - Liver
   - Kidneys
-  - Intestines
+  implants:
+  - id: Head
+  - id: Torso
+  - id: Groin
+  - id: Back
+  - id: ArmLeft
+  - id: ArmRight
+  - id: HandLeft
+  - id: HandRight
+  - id: LegLeft
+  - id: LegRight
+  - id: FootLeft
+  - id: FootRight
+  - id: Brain
+  - id: Eyes
+  - id: Heart
+  - id: Lungs
+  - id: Stomach
+  - id: Liver
+  - id: Kidneys
+  - id: Intestines
+
+- type: limbSpecies
+  id: Felinid
+  organs:
+  - Brain
+  - Eyes
+  - Heart
+  - Lungs
+  - Stomach
+  - Kidneys
+
+- type: limbSpecies
+  id: Skeleton
+  organs: []
 
 - type: limbSpecies
   id: Diona
   wound: 0.7
+  burn: 1.5
+  plant: true
+  ears: false
   organs:
   - Brain
   - Eyes
+  - Lungs
+  - Stomach
+  implants:
+  - id: Head
+  - id: Eyes
+  - id: Brain
+
+- type: limbSpecies
+  id: Xenomorph
+  organs:
+  - Brain
+  - Eyes
+  - Heart
+  - Stomach
+  implants:
+  - id: Head
+  - id: Torso
+  - id: Groin
+  - id: Back
+  - id: ArmLeft
+  - id: ArmRight
+  - id: HandLeft
+  - id: HandRight
+  - id: LegLeft
+  - id: LegRight
+  - id: FootLeft
+  - id: FootRight
+  - id: Brain
+  - id: Eyes
+  - id: Heart
+  - id: Stomach
+
+- type: limbSpecies
+  id: IPC
+  organs:
+  - Brain
+  - Eyes
+  - Core
+  - Heart
+  - Lungs
+  vital:
+  - Core
+  - Heart
+  ownImplants: true
+  implants: []
 
 - type: limbSpecies
   id: SlimePerson
   wound: 1.4
+  burn: 0.7
   liquidSever: 1.5
+  soft: true
+  ears: false
+  headVital: false
   organs:
   - Core
+  vital:
+  - Core
+  implants:
+  - id: Core

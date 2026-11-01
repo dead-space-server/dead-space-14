@@ -42,6 +42,24 @@ public static class SurgeryProcedure
         if (verb == SurgeryVerbKind.Extract)
             return result.RemoveOrgan;
 
+        if (verb == SurgeryVerbKind.Amputate)
+            return result.Sever;
+
+        if (verb == SurgeryVerbKind.SetBone)
+            return result.Finished;
+
+        if (verb == SurgeryVerbKind.PullEmbedded)
+            return result.ClearEmbedded;
+
+        if (verb == SurgeryVerbKind.Seat)
+            return result.Attach;
+
+        if (verb == SurgeryVerbKind.Insert)
+            return result.PlaceOrgan || result.PlaceImplant;
+
+        if (verb is SurgeryVerbKind.Graft or SurgeryVerbKind.MendBone or SurgeryVerbKind.Stanch or SurgeryVerbKind.Bandage or SurgeryVerbKind.Inject or SurgeryVerbKind.Append or SurgeryVerbKind.Shock or SurgeryVerbKind.SealSap)
+            return result.Finished;
+
         return Done(verb, layer);
     }
 
@@ -49,11 +67,11 @@ public static class SurgeryProcedure
     {
         return verb switch
         {
-            SurgeryVerbKind.Incise => layer.Integrity <= 0.2f,
-            SurgeryVerbKind.SawBone or SurgeryVerbKind.Amputate => layer.Integrity <= CutDone,
+            SurgeryVerbKind.Incise or SurgeryVerbKind.Chop => layer.Integrity <= 0.2f,
+            SurgeryVerbKind.SawBone or SurgeryVerbKind.Drill => layer.Integrity <= CutDone,
             SurgeryVerbKind.Retract => layer.Retracted,
             SurgeryVerbKind.Extract => false,
-            SurgeryVerbKind.Cauterize => layer.Integrity >= 0.85f && !layer.Retracted,
+            SurgeryVerbKind.Cauterize or SurgeryVerbKind.SealSap => layer.Integrity >= 0.85f && !layer.Retracted,
             _ => false,
         };
     }
@@ -67,6 +85,20 @@ public static class SurgeryProcedure
         }
 
         return -1;
+    }
+
+    public static void Conceal(List<SurgeryLayerState> layers, int index)
+    {
+        if (index < 0 || index + 1 >= layers.Count)
+            return;
+
+        var next = layers[index + 1];
+        if (next.Kind is not (SurgeryLayerKind.Cavity or SurgeryLayerKind.Globe))
+            return;
+
+        next.Integrity = 1f;
+        next.Retracted = false;
+        layers[index + 1] = next;
     }
 
     public static void Reveal(List<SurgeryLayerState> layers)
@@ -86,24 +118,45 @@ public static class SurgeryProcedure
         }
     }
 
-    public static string Wound(string part, ReadOnlySpan<byte> kinds, ReadOnlySpan<float> integrity, ReadOnlySpan<byte> retracted, float amount)
+    public static string Wound(string part, ReadOnlySpan<byte> kinds, ReadOnlySpan<float> integrity, ReadOnlySpan<byte> retracted, float amount, bool ribs = false)
     {
         if (Sealed(kinds, integrity, retracted, SurgeryLayerKind.Skin))
             return "none";
 
         if (Shows(kinds, integrity, retracted, SurgeryLayerKind.Cavity) && GateOpen(kinds, retracted, SurgeryLayerKind.Cavity)
             || Shows(kinds, integrity, retracted, SurgeryLayerKind.Globe) && GateOpen(kinds, retracted, SurgeryLayerKind.Globe))
-            return part is "torso" or "head" ? part + "_organs" : part + "_open";
+            return ribs ? part + "_organs" : part + "_open";
 
         if (Shows(kinds, integrity, retracted, SurgeryLayerKind.Bone))
-            return part is "torso" or "head" ? part + "_ribs" : part + "_open";
+            return ribs ? part + "_ribs" : part + "_open";
 
-        if (Held(kinds, retracted, SurgeryLayerKind.Skin)
-            || Held(kinds, retracted, SurgeryLayerKind.Fat)
-            || Held(kinds, retracted, SurgeryLayerKind.Muscle))
+        if (Held(kinds, retracted, SurgeryLayerKind.Skin))
             return part + "_open";
 
         return CutMark(part, amount);
+    }
+
+    public static SurgeryGameKind Game(SurgeryVerbKind verb)
+    {
+        return verb switch
+        {
+            SurgeryVerbKind.Retract => SurgeryGameKind.Spread,
+            SurgeryVerbKind.SawBone => SurgeryGameKind.Saw,
+            SurgeryVerbKind.Chop => SurgeryGameKind.Chop,
+            SurgeryVerbKind.Drill => SurgeryGameKind.Drill,
+            SurgeryVerbKind.Clamp => SurgeryGameKind.Clamp,
+            SurgeryVerbKind.Extract => SurgeryGameKind.Sever,
+            SurgeryVerbKind.Graft => SurgeryGameKind.Hold,
+            SurgeryVerbKind.Cauterize => SurgeryGameKind.Sear,
+            SurgeryVerbKind.SealSap => SurgeryGameKind.Hold,
+            SurgeryVerbKind.MendBone => SurgeryGameKind.Glue,
+            SurgeryVerbKind.Stanch => SurgeryGameKind.Stanch,
+            SurgeryVerbKind.Bandage => SurgeryGameKind.Hold,
+            SurgeryVerbKind.Inject => SurgeryGameKind.Inject,
+            SurgeryVerbKind.Append => SurgeryGameKind.Hold,
+            SurgeryVerbKind.Shock => SurgeryGameKind.Tap,
+            _ => SurgeryGameKind.Cut,
+        };
     }
 
     private static string CutMark(string part, float amount)

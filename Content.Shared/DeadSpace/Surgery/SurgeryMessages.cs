@@ -1,10 +1,22 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Shared.Actions;
 using Content.Shared.DeadSpace.Body.Limbs;
+using Content.Shared.DoAfter;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.DeadSpace.Surgery;
+
+[Serializable, NetSerializable]
+public sealed partial class SurgeryStepDoAfterEvent : SimpleDoAfterEvent
+{
+    [DataField]
+    public byte Verb;
+
+    [DataField]
+    public byte Organ = 255;
+}
 
 [Serializable, NetSerializable]
 public sealed class SurgeryBoardMessage : EntityEventArgs
@@ -33,8 +45,14 @@ public sealed class SurgeryBoardMessage : EntityEventArgs
     public string Part = "";
     public byte CloseVerb = 255;
     public byte UndoVerb = 255;
+    public byte SawHits = 3;
+    public byte Drill;
+    public byte Across;
+    public byte Finished;
     public string Lodged = "";
     public NetEntity LodgedItem;
+    public string StepHint = "";
+    public byte Bleeds;
 }
 
 [Serializable, NetSerializable]
@@ -55,6 +73,7 @@ public sealed class SurgeryZoneMessage : EntityEventArgs
     public NetEntity Patient;
     public byte Zone;
     public string Part = "";
+    public string Operation = "";
 }
 
 [Serializable, NetSerializable]
@@ -83,6 +102,7 @@ public struct SurgeryRequest
     public SurgeryLayerKind Kind;
     public float Integrity;
     public bool Retracted;
+    public bool Intact;
     public bool DeeperCut;
     public bool CavityReady;
     public bool LayersOpen;
@@ -101,6 +121,11 @@ public struct SurgeryRequest
     public bool Atrophied;
     public bool Embedded;
     public int Scar;
+    public bool Implant;
+}
+
+public sealed partial class SurgeryBitePillEvent : InstantActionEvent
+{
 }
 
 public struct SurgeryResult
@@ -120,9 +145,12 @@ public struct SurgeryResult
     public bool ClearSkinBare;
     public bool Sever;
     public bool Attach;
+    public bool Finished;
     public bool Crude;
     public bool RemoveOrgan;
     public bool PlaceOrgan;
+    public bool RemoveImplant;
+    public bool PlaceImplant;
     public bool Rupture;
     public float OrganDamage;
     public int Eyes;

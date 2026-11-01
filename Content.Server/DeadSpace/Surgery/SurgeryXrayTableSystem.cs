@@ -2,10 +2,12 @@
 
 using System.Numerics;
 using Content.Server.Paper;
+using Content.Shared.Body.Components;
 using Content.Shared.Buckle.Components;
 using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.CameraArchives;
 using Content.Shared.DeadSpace.Surgery;
+using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Paper;
@@ -122,7 +124,9 @@ public sealed class SurgeryXrayTableSystem : EntitySystem
                 : SurgeryXrayReport.Life(default);
             TryComp<SurgeryCavityComponent>(person, out var hold);
             var zone = args.Zone == 255 ? (LimbZone?) null : (LimbZone) args.Zone;
-            card = SurgeryXrayReport.Make(limbs, hold, zone, life);
+            var machine = TryComp<HumanoidAppearanceComponent>(person, out var look)
+                && SurgerySpeciesPrototype.IsMachine(_prototype, look.Species.Id);
+            card = SurgeryXrayReport.Make(limbs, hold, zone, life, CompOrNull<SurgeryInfectionComponent>(person), CompOrNull<BloodstreamComponent>(person)?.BleedAmount ?? 0f, machine);
         }
 
         var text = SurgeryXrayReport.Paper(name, card, args.Image.Length > 0);

@@ -20,7 +20,7 @@ public sealed class SurgeryProcedureTest
         Assert.That(steps.Find(step => step.Verb == SurgeryVerbKind.Extract)!.Organ, Is.EqualTo("Heart"));
         Assert.That(lungs.Find(step => step.Verb == SurgeryVerbKind.Extract)!.Organ, Is.EqualTo("Lungs"));
 
-        var layers = Fresh(SurgeryLayerKind.Skin, SurgeryLayerKind.Fat, SurgeryLayerKind.Muscle, SurgeryLayerKind.Bone, SurgeryLayerKind.Cavity);
+        var layers = Fresh(SurgeryLayerKind.Skin, SurgeryLayerKind.Bone, SurgeryLayerKind.Cavity);
         var cursor = 0;
         string picture;
 
@@ -44,7 +44,7 @@ public sealed class SurgeryProcedureTest
         Assert.That(extracted, Is.True);
         Assert.That(picture, Is.EqualTo("torso_organs"));
 
-        picture = Run(steps, layers, ref cursor, SurgeryVerbKind.Cauterize);
+        picture = Run(steps, layers, ref cursor, SurgeryVerbKind.MendBone);
         Assert.That(picture, Is.EqualTo("torso_open"));
 
         picture = Run(steps, layers, ref cursor, SurgeryVerbKind.Cauterize);
@@ -57,11 +57,14 @@ public sealed class SurgeryProcedureTest
     public void AShortCutStillOpensWhenPulled()
     {
         var steps = Load("TakeHeart");
-        var layers = Fresh(SurgeryLayerKind.Skin, SurgeryLayerKind.Fat, SurgeryLayerKind.Muscle, SurgeryLayerKind.Bone, SurgeryLayerKind.Cavity);
+        var layers = Fresh(SurgeryLayerKind.Skin, SurgeryLayerKind.Bone, SurgeryLayerKind.Cavity);
         var cursor = 0;
 
         var cut = Run(steps, layers, ref cursor, SurgeryVerbKind.Incise, progress: 0.3f);
         Assert.That(cut, Is.EqualTo("torso_cut1"));
+        Assert.That(steps[cursor].Verb, Is.EqualTo(SurgeryVerbKind.Incise));
+
+        Run(steps, layers, ref cursor, SurgeryVerbKind.Incise);
         Assert.That(steps[cursor].Verb, Is.EqualTo(SurgeryVerbKind.Retract));
 
         var open = Run(steps, layers, ref cursor, SurgeryVerbKind.Retract);
@@ -75,10 +78,41 @@ public sealed class SurgeryProcedureTest
         var torso = Load("OpenTorso");
         var head = Load("OpenHead");
 
-        Assert.That(head.Count, Is.LessThan(torso.Count));
+        Assert.That(head.Count, Is.EqualTo(torso.Count));
         Assert.That(head[0].Layer, Is.EqualTo(SurgeryLayerKind.Skin));
-        Assert.That(head[^1].Verb, Is.EqualTo(SurgeryVerbKind.Retract));
-        Assert.That(head[^1].Layer, Is.EqualTo(SurgeryLayerKind.Bone));
+        Assert.That(head.Exists(step => step.Verb == SurgeryVerbKind.SawBone && step.Layer == SurgeryLayerKind.Bone), Is.True);
+        Assert.That(head[^1].Verb, Is.EqualTo(SurgeryVerbKind.Cauterize));
+        Assert.That(head[^1].Layer, Is.EqualTo(SurgeryLayerKind.Skin));
+    }
+
+    [Test]
+    public void AnOpenChestStaysWhenTheHeadIsChosen()
+    {
+        var site = new SurgerySiteComponent
+        {
+            Zone = LimbZone.Head,
+            Done = false,
+            Layers =
+            {
+                new SurgeryLayerState { Kind = SurgeryLayerKind.Skin, Integrity = 1f },
+            },
+            Kept =
+            {
+                [SurgeryWounds.Key(LimbZone.Torso, "", false)] = new SurgeryKept
+                {
+                    Zone = LimbZone.Torso,
+                    Layers =
+                    {
+                        new SurgeryLayerState { Kind = SurgeryLayerKind.Skin, Integrity = 0f, Retracted = true },
+                        new SurgeryLayerState { Kind = SurgeryLayerKind.Bone, Integrity = 0f, Retracted = true },
+                    },
+                },
+            },
+        };
+
+        var open = new List<SurgeryKept>();
+        SurgeryWounds.Collect(site, open);
+        Assert.That(open.ConvertAll(wound => wound.Zone), Is.EqualTo(new[] { LimbZone.Torso }));
     }
 
     private static string Run(
@@ -87,7 +121,7 @@ public sealed class SurgeryProcedureTest
         ref int cursor,
         SurgeryVerbKind verb,
         bool sawOrgan = false,
-        Action<bool>? removed = null,
+        Action<bool> removed = null,
         float progress = 1f)
     {
         Assert.That(steps[cursor].Verb, Is.EqualTo(verb));
@@ -165,7 +199,7 @@ public sealed class SurgeryProcedureTest
             retracted[i] = layers[i].Retracted ? (byte) 1 : (byte) 0;
         }
 
-        return SurgeryProcedure.Wound("torso", kinds, integrity, retracted, amount);
+        return SurgeryProcedure.Wound("torso", kinds, integrity, retracted, amount, true);
     }
 
     private static List<SurgeryLayerState> Fresh(params SurgeryLayerKind[] kinds)
@@ -197,7 +231,6 @@ public sealed class SurgeryProcedureTest
         var steps = new List<SurgeryStep>();
         var grab = false;
         SurgeryVerbKind verb = SurgeryVerbKind.Inspect;
-        var haveVerb = false;
         foreach (var raw in lines)
         {
             var line = raw.Trim();
@@ -219,7 +252,6 @@ public sealed class SurgeryProcedureTest
                     ? line["- verb:".Length..]
                     : line["verb:".Length..];
                 verb = Enum.Parse<SurgeryVerbKind>(value.Trim());
-                haveVerb = true;
                 continue;
             }
 
@@ -230,7 +262,6 @@ public sealed class SurgeryProcedureTest
                     Verb = verb,
                     Layer = Enum.Parse<SurgeryLayerKind>(line["layer:".Length..].Trim()),
                 });
-                haveVerb = false;
                 continue;
             }
 

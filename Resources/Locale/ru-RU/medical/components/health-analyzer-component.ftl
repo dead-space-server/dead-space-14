@@ -15,6 +15,8 @@ health-analyzer-window-damage-type-text = { $damageType }: { $amount }
 health-analyzer-window-entity-unrevivable-text = [color=red]Обнаружено уникальное строение тела! Пациент не может быть реанимирован стандартными средствами![/color]
 health-analyzer-window-entity-bleeding-text = [color=red]У пациента кровотечение![/color]
 health-analyzer-window-entity-uncloning-text = [color=violet]Обнаружен нестабильный генетический код! Пациент не может быть клонирован![/color]
+# DS14
+health-analyzer-window-entity-infection-text = [color=#a6c64a]Воспалительный процесс: в теле что-то не так. Нужен рентген.[/color]
 health-analyzer-window-scan-mode-text = Режим сканирования:
 health-analyzer-window-scan-mode-active = Активен
 health-analyzer-window-scan-mode-inactive = Неактивен
@@ -79,3 +81,22 @@ health-analyzer-issue-15 = закрытый перелом рёбер
 health-analyzer-issue-16 = открытый перелом рёбер
 health-analyzer-issue-17 = омертвела
 health-analyzer-issue-18 = кровотечение
+health-analyzer-issue-machine-0 = нет части
+health-analyzer-issue-machine-1 = трещина каркаса
+health-analyzer-issue-machine-2 = трещина пластины
+health-analyzer-issue-machine-3 = разрыв обшивки
+health-analyzer-issue-machine-4 = сорвана обшивка
+health-analyzer-issue-machine-5 = горит
+health-analyzer-issue-machine-6 = осколок внутри
+health-analyzer-issue-machine-7 = царапина
+health-analyzer-issue-machine-8 = модуль повреждён
+health-analyzer-issue-machine-9 = оплавление I степени
+health-analyzer-issue-machine-10 = оплавление II степени
+health-analyzer-issue-machine-11 = оплавление III степени
+health-analyzer-issue-machine-12 = закрытая трещина каркаса
+health-analyzer-issue-machine-13 = открытая трещина каркаса
+health-analyzer-issue-machine-14 = трещина рёбер каркаса
+health-analyzer-issue-machine-15 = закрытая трещина рёбер каркаса
+health-analyzer-issue-machine-16 = открытая трещина рёбер каркаса
+health-analyzer-issue-machine-17 = отключена
+health-analyzer-issue-machine-18 = утечка гидравлики

@@ -6,6 +6,14 @@
   components:
   - type: SurgerySurface
     place: Table
+  - type: SurgeryTankMount # DS14
+  - type: ItemSlots # DS14
+    slots:
+      surgery_tank:
+        name: surgery-tank-slot
+        whitelist:
+          components:
+          - GasTank
   - type: Sprite
     sprite: Structures/Furniture/Tables/optable.rsi
     state: operating_table

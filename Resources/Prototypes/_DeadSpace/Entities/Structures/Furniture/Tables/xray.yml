@@ -1,8 +1,8 @@
 - type: entity
   id: XrayTable
   parent: BaseStructure
-  name: рентгеновский стол
-  description: Стационарный рентген. Уложите пациента и откройте осмотр. Сам аппарат не облучает.
+  name: x-ray table
+  description: A fixed X-ray. Strap the patient in and open the exam. The machine itself does not irradiate.
   components:
   - type: Appearance
   - type: Physics
@@ -12,10 +12,12 @@
       fix1:
         shape:
           !type:PhysShapeAabb
-          bounds: "-0.45,-0.45,0.45,0.05"
+          bounds: "-0.45,-0.45,0.45,0.45"
         density: 190
         mask:
         - TableMask
+        layer:
+        - TableLayer
   - type: Sprite
     sprite: _DeadSpace/Structures/Furniture/Tables/xraytable.rsi
     layers:
@@ -40,8 +42,8 @@
     position: Down
     rotation: -90
   - type: Construction
-    graph: bed
-    node: bed
+    graph: XrayTable
+    node: xray
   - type: Damageable
     damageContainer: Inorganic
     damageModifierSet: Metallic
@@ -65,6 +67,14 @@
   - type: Pullable
   - type: SurgerySurface
     place: Table
+  - type: SurgeryTankMount
+  - type: ItemSlots
+    slots:
+      surgery_tank:
+        name: surgery-tank-slot
+        whitelist:
+          components:
+          - GasTank
   - type: SurgeryXrayTable
   - type: ActivatableUI
     key: enum.SurgeryXrayTableUiKey.Key

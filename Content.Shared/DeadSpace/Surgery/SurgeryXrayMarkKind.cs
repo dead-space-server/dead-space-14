@@ -14,4 +14,5 @@ public enum SurgeryXrayMarkKind : byte
     Rupture,
     Embedded,
     Foreign,
+    Infection,
 }

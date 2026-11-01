@@ -72,6 +72,8 @@
     wobble: 18
     verbs:
     - MendBone
+    machineVerbs: # DS14
+    - Incise
   - type: EmitSoundOnLand
     sound:
       path: /Audio/Items/screwdriver_drop.ogg
@@ -180,6 +182,14 @@
   id: Multitool
   description: An advanced tool to copy, store, and send electrical pulses and signals through wires and machines.
   components:
+  - type: SurgeryTool # DS14
+    passive: true
+    probe: true
+    precision: 0.8
+    slip: 0.1
+    wobble: 12
+    machineVerbs:
+    - Amputate
   - type: EmitSoundOnLand
     sound:
       path: /Audio/Items/multitool_drop.ogg

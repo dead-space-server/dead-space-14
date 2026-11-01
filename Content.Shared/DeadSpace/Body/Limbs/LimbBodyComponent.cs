@@ -14,17 +14,41 @@ public sealed partial class LimbBodyComponent : Component
     [DataField, AutoNetworkedField]
     public List<LimbOrganState> Organs = LimbOrganRules.CreateAll();
 
-    [DataField]
+    [DataField, AutoNetworkedField]
     public LimbOrganMask Present = LimbOrganMask.Standard;
+
+    [DataField]
+    public List<LimbOrgan>? Vital;
 
     [DataField]
     public float Wound = 1f;
 
     [DataField]
+    public float Burn = 1f;
+
+    [DataField]
     public float LiquidSever;
 
     [DataField, AutoNetworkedField]
+    public bool Soft;
+
+    [DataField, AutoNetworkedField]
+    public bool Plant;
+
+    [DataField, AutoNetworkedField]
+    public bool HeadVital = true;
+
+    [DataField, AutoNetworkedField]
     public float Mouth;
+
+    [DataField, AutoNetworkedField]
+    public float Ears;
+
+    [DataField, AutoNetworkedField]
+    public bool EarsGone;
+
+    [DataField, AutoNetworkedField]
+    public bool HasEars = true;
 
     [DataField, AutoNetworkedField]
     public byte EyesGone;
@@ -57,8 +81,16 @@ public sealed partial class LimbBodyComponent : Component
 
     public int LedgerSilence;
 
+    public TimeSpan NextGraspPopup;
+
     [DataField]
     public TimeSpan? Died;
+
+    [DataField]
+    public bool LimbDeath;
+
+    [DataField]
+    public bool LimbCrit;
 
     public TimeSpan PelletUntil;
 
@@ -84,6 +116,12 @@ public sealed partial class LimbAimComponent : Component
 
 [ByRefEvent]
 public readonly record struct LimbSeveredEvent(LimbZone Zone);
+
+[ByRefEvent]
+public record struct LimbGraftAttemptEvent(LimbZone Zone, EntityUid Part, bool Cancelled = false);
+
+[ByRefEvent]
+public readonly record struct LimbGraftedEvent(LimbZone Zone, EntityUid Part);
 
 [ByRefEvent]
 public readonly record struct LimbConcussionEvent(bool Heavy);

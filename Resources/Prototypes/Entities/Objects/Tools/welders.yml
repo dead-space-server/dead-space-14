@@ -10,6 +10,8 @@
     wobble: 20
     verbs:
     - Cauterize
+    machineVerbs: # DS14
+    - Cauterize
   - type: EmitSoundOnLand
     sound:
       path: /Audio/Items/welder_drop.ogg

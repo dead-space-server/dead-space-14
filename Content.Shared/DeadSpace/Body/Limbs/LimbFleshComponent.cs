@@ -15,6 +15,15 @@ public sealed partial class LimbFleshComponent : Component
     public Color Skin = Color.White;
 
     [DataField, AutoNetworkedField]
+    public string Species = "";
+
+    [DataField]
+    public string Dna = "";
+
+    [DataField]
+    public bool Unstable;
+
+    [DataField, AutoNetworkedField]
     public Color Eyes = Color.White;
 
     [DataField, AutoNetworkedField]
@@ -25,4 +34,10 @@ public sealed partial class LimbFleshComponent : Component
 
     [DataField, AutoNetworkedField]
     public string EyeState = "";
+
+    [DataField, AutoNetworkedField]
+    public List<string> CarrySprites = new();
+
+    [DataField, AutoNetworkedField]
+    public List<string> CarryStates = new();
 }

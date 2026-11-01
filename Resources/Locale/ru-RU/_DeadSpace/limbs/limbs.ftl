@@ -1,6 +1,9 @@
 limb-doll-title = Прицел
 limb-doll-empty = Часть не выбрана
 limb-doll-short-clear = Сброс
+limb-analyzer-zone-damage = Урон части:
+limb-doll-clear-ring = Сбросить цель
+limb-doll-lost = Нет части: { $part }
 limb-doll-short-head = Голова
 limb-doll-short-eyes = Глаза
 limb-doll-short-mouth = Рот
@@ -31,11 +34,12 @@ limb-target-foot-left = Целиться в левую стопу
 limb-target-foot-right = Целиться в правую стопу
 limb-aim-on = Прицельная стрельба
 limb-aim-off = Обычная стрельба
-limb-fresh = Часть ещё свежая.
+limb-fresh = Ещё свежее.
 limb-fresh-cold = Холод держит свежесть.
-limb-fresh-spent = Часть испортилась.
+limb-fresh-spent = [color=#7a9a3a]Сгнило.[/color]
 limb-grasp-burn = Руки не держат.
 limb-harvest-pick = Сначала выберите часть на кукле.
 limb-harvest-torso = Грудь так не отрезать.
 limb-harvest-gone = Этой части уже нет.
+limb-harvest-armored = Сквозь скафандр не прорезать, сначала снимите его.
 limb-examine-zone = { $zone }: плоть { $flesh }, кость { $bone }, огонь { $fire }

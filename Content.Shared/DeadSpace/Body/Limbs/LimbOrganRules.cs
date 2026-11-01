@@ -6,14 +6,15 @@ public static class LimbOrganRules
 {
     public const int Count = 9;
     public const float Rupture = 40f;
-    public const float HeartBleed = 1.5f;
+    public const float HeartBleed = 0.5f;
     public const float LungAir = 1f;
-    public const float BrainAir = 0.5f;
-    public const float LiverPoison = 0.75f;
-    public const float KidneyPoison = 0.5f;
-    public const float StomachPoison = 0.25f;
-    public const float IntestineBleed = 1f;
-    public const float IntestinePoison = 0.4f;
+    public const float BrainAir = 0.2f;
+    public const float LiverPoison = 0.25f;
+    public const float KidneyPoison = 0.15f;
+    public const float StomachPoison = 0.1f;
+    public const float IntestineBleed = 0.3f;
+    public const float IntestinePoison = 0.15f;
+    public const float LungTornAir = 0.9f;
     public const int EyeRuptureDamage = 9;
     public const float LungHitAir = 18f;
     public const float ConcussionHit = 12f;
@@ -174,7 +175,7 @@ public static class LimbOrganRules
     public static float Breath(float damage, bool ruptured)
     {
         if (ruptured || damage >= Rupture)
-            return 2.2f;
+            return LungTornAir;
 
         if (damage >= 15f)
             return 0.7f;

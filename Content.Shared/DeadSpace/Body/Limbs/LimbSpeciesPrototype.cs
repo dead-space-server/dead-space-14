@@ -17,7 +17,32 @@ public sealed partial class LimbSpeciesPrototype : IPrototype
     public float Wound = 1f;
 
     [DataField]
+    public float Burn = 1f;
+
+    [DataField]
     public float LiquidSever;
+
+    [DataField]
+    public List<LimbOrgan>? Vital;
+
+    [DataField]
+    public List<LimbImplantSlotDef> Implants = new();
+
+    [DataField]
+    public bool OwnImplants;
+
+    [DataField]
+    public bool Soft;
+
+    [DataField]
+    public bool Plant;
+
+    [DataField]
+    public bool HeadVital = true;
+
+    [DataField]
+    public bool Ears = true;
+
 }
 
 public static class LimbSpeciesRules

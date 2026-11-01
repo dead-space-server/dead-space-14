@@ -1,0 +1,447 @@
+# Field restorers: prime in hand, then hold on the patient (or yourself). They do what surgery does without the table.
+
+- type: entity
+  parent: BaseItem
+  id: BaseLimbRestorer
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Medical/limb_restorers.rsi
+  - type: Item
+    size: Small
+  - type: LimbRestorer
+    primeSound:
+      path: /Audio/Machines/high_tech_confirm.ogg
+    useSound:
+      path: /Audio/Effects/teleport_arrival.ogg
+      params:
+        volume: -4
+
+- type: entity
+  parent: [ BaseLimbRestorer, BaseSyndicateContraband ]
+  id: LimbRestorerSyndicate
+  name: Cybersun bluespace reconstructor
+  description: A bluespace field rebuilds the patient from a backup scan. Sets bones, stops internal bleeding, pulls shards, mends organs and grows lost ones back. Does not grow limbs.
+  components:
+  - type: Sprite
+    state: syndicate
+  - type: LimbRestorer
+    charges: 3
+    prime: 4
+    delay: 8
+    selfDelay: 12
+    health: 0.6
+    heal:
+    - Bleed
+    - Fracture
+    - Shard
+    - Flesh
+    - Skin
+    - Atrophy
+    - Health
+    - Organs
+    - Infection
+    - Rejection
+    - MissingOrgans
+  - type: StaticPrice
+    price: 2500
+
+- type: entity
+  parent: BaseLimbRestorer
+  id: LimbRestorerNecro
+  name: necro reliquary
+  description: A shard of the Marker in a brass frame. Its whisper knits flesh, bone and organs, and even pushes out new limbs. The body pays for it.
+  components:
+  - type: Sprite
+    state: necro
+  - type: LimbRestorer
+    charges: 2
+    prime: 6
+    delay: 10
+    selfDelay: 14
+    health: 0.5
+    regrow: 0.3
+    primedLine: limb-restorer-primed-necro
+    doneLine: limb-restorer-done-necro
+    primeSound:
+      path: /Audio/_DeadSpace/Necromorfs/marker_red.ogg
+      params:
+        volume: -8
+    cost:
+      types:
+        Cellular: 15
+    heal:
+    - Bleed
+    - Fracture
+    - Shard
+    - Flesh
+    - Skin
+    - Atrophy
+    - Health
+    - Organs
+    - Infection
+    - Rejection
+    - MissingOrgans
+    - Limbs
+  - type: StaticPrice
+    price: 2500
+
+- type: entity
+  parent: BaseLimbRestorer
+  id: LimbRestorerPirate
+  name: smuggler's bluespace balm
+  description: A tin of stolen bluespace slurry. Sets bones, stops internal bleeding, pulls shards and patches organs. Tastes like a fuel tank.
+  components:
+  - type: Sprite
+    state: pirate
+  - type: LimbRestorer
+    charges: 2
+    prime: 5
+    delay: 9
+    selfDelay: 12
+    health: 0.4
+    cost:
+      types:
+        Poison: 8
+    heal:
+    - Bleed
+    - Fracture
+    - Shard
+    - Flesh
+    - Skin
+    - Health
+    - Organs
+    - Infection
+  - type: StaticPrice
+    price: 1500
+
+- type: entity
+  parent: BaseLimbRestorer
+  id: LimbRestorerERT
+  name: ERT field autosurgeon
+  description: A Nanotrasen field autosurgeon for response team medics. Does a full internal repair and regrows organs, but only on someone else.
+  components:
+  - type: Sprite
+    state: ert
+  - type: LimbRestorer
+    charges: 6
+    prime: 3
+    delay: 7
+    allowSelf: false
+    health: 0.6
+    primeSound:
+      path: /Audio/Machines/twobeep.ogg
+    heal:
+    - Bleed
+    - Fracture
+    - Shard
+    - Flesh
+    - Skin
+    - Atrophy
+    - Health
+    - Organs
+    - Infection
+    - Rejection
+    - MissingOrgans
+  - type: StaticPrice
+    price: 2000
+
+# Emergency implants: no hands needed, fires on its own when the wearer drops into crit.
+
+- type: entity
+  id: ActionLimbRestorerImplant
+  name: Emergency reconstruction
+  description: Fire the implant. Rebuilds the inside of the body in a second.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    priority: -20
+    icon:
+      sprite: _DeadSpace/Objects/Medical/limb_restorers.rsi
+      state: implant
+    useDelay: 20
+    checkCanInteract: false
+  - type: InstantAction
+    event: !type:LimbRestorerImplantEvent
+
+- type: entity
+  id: ActionLimbRestorerImplantNecro
+  parent: ActionLimbRestorerImplant
+  name: Marker's heartbeat
+  description: Wake the shard under your skin. It knits you together and takes its share.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    icon:
+      sprite: _DeadSpace/Objects/Medical/limb_restorers.rsi
+      state: implant_necro
+
+- type: entity
+  id: LimbRestorerImplantSyndicate
+  name: emergency reconstruction implant
+  description: A Cybersun bluespace node under the skin. Two charges, fires by itself when the wearer goes critical.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SubdermalImplant
+    implantAction: ActionLimbRestorerImplant
+  - type: LimbRestorer
+    charges: 2
+    autoCrit: true
+    health: 0.5
+    useSound:
+      path: /Audio/Effects/teleport_arrival.ogg
+      params:
+        volume: -4
+    cost:
+      types:
+        Blunt: -15
+        Slash: -15
+        Piercing: -15
+        Heat: -10
+        Cellular: 4
+    heal:
+    - Bleed
+    - Fracture
+    - Shard
+    - Flesh
+    - Skin
+    - Atrophy
+    - Health
+    - Organs
+    - Infection
+    - Rejection
+    - MissingOrgans
+
+- type: entity
+  id: LimbRestorerImplantNecro
+  name: Marker's heart
+  description: A sliver of the Marker sewn under the skin. Two charges, wakes by itself when the wearer goes critical, and even pushes out lost limbs.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SubdermalImplant
+    implantAction: ActionLimbRestorerImplantNecro
+  - type: LimbRestorer
+    charges: 2
+    autoCrit: true
+    health: 0.5
+    regrow: 0.3
+    doneLine: limb-restorer-done-necro
+    useSound:
+      path: /Audio/_DeadSpace/Necromorfs/marker_red.ogg
+      params:
+        volume: -8
+    cost:
+      types:
+        Blunt: -15
+        Slash: -15
+        Piercing: -15
+        Cellular: 12
+    heal:
+    - Bleed
+    - Fracture
+    - Shard
+    - Flesh
+    - Skin
+    - Atrophy
+    - Health
+    - Organs
+    - Infection
+    - Rejection
+    - MissingOrgans
+    - Limbs
+
+- type: entity
+  id: LimbRestorerImplantPirate
+  name: smuggler's patch-up implant
+  description: A cheap bluespace capsule under the skin. One charge, cracks open by itself when the wearer goes critical.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SubdermalImplant
+    implantAction: ActionLimbRestorerImplant
+  - type: LimbRestorer
+    charges: 1
+    autoCrit: true
+    health: 0.4
+    useSound:
+      path: /Audio/Effects/teleport_arrival.ogg
+      params:
+        volume: -4
+    cost:
+      types:
+        Blunt: -10
+        Slash: -10
+        Piercing: -10
+        Poison: 8
+    heal:
+    - Bleed
+    - Fracture
+    - Shard
+    - Flesh
+    - Skin
+    - Health
+    - Organs
+    - Infection
+
+- type: entity
+  id: LimbRestorerImplanterSyndicate
+  suffix: emergency reconstruction
+  parent: BaseImplantOnlyImplanterSyndi
+  components:
+  - type: Implanter
+    implant: LimbRestorerImplantSyndicate
+
+- type: entity
+  id: LimbRestorerImplanterNecro
+  suffix: Marker's heart
+  parent: BaseImplantOnlyImplanterSyndi
+  components:
+  - type: Implanter
+    implant: LimbRestorerImplantNecro
+
+- type: entity
+  id: LimbRestorerImplanterPirate
+  suffix: smuggler's patch-up
+  parent: BaseImplantOnlyImplanterSyndi
+  components:
+  - type: Implanter
+    implant: LimbRestorerImplantPirate
+
+- type: listing
+  id: UplinkLimbRestorerImplant
+  name: uplink-limb-restorer-implant-name
+  description: uplink-limb-restorer-implant-desc
+  productEntity: LimbRestorerImplanterSyndicate
+  icon: { sprite: _DeadSpace/Objects/Medical/limb_restorers.rsi, state: implant }
+  cost:
+    Telecrystal: 12
+  categories:
+  - UplinkImplants
+
+- type: listing
+  id: TraitorUltraUplinkLimbRestorerImplant
+  name: uplink-limb-restorer-implant-name
+  description: uplink-limb-restorer-implant-desc
+  productEntity: LimbRestorerImplanterSyndicate
+  icon: { sprite: _DeadSpace/Objects/Medical/limb_restorers.rsi, state: implant }
+  cost:
+    Telecrystal: 12
+  categories:
+  - TraitorUltraUplinkImplants
+
+- type: listing
+  id: UniPhoneUplinkLimbRestorerImplant
+  name: uplink-limb-restorer-implant-name
+  description: uplink-limb-restorer-implant-desc
+  productEntity: LimbRestorerImplanterSyndicate
+  icon: { sprite: _DeadSpace/Objects/Medical/limb_restorers.rsi, state: implant }
+  cost:
+    Telecrystal: 12
+  categories:
+  - UniPhoneUplinkImplants
+
+- type: listing
+  id: UnitologyLimbRestorerImplantList
+  name: uplink-limb-restorer-implant-necro-name
+  description: uplink-limb-restorer-implant-necro-desc
+  productEntity: LimbRestorerImplanterNecro
+  icon: { sprite: _DeadSpace/Objects/Medical/limb_restorers.rsi, state: implant_necro }
+  cost:
+    Telecrystal: 8
+  categories:
+  - UplinkUnitologyInfection
+
+- type: listing
+  id: PirateLimbRestorerImplantList
+  name: uplink-limb-restorer-implant-pirate-name
+  description: uplink-limb-restorer-implant-pirate-desc
+  productEntity: LimbRestorerImplanterPirate
+  icon: { sprite: _DeadSpace/Objects/Medical/limb_restorers.rsi, state: implant }
+  cost:
+    SpaceCash: 10000
+  categories:
+  - PirateUplinkImplants
+
+- type: listing
+  id: UplinkLimbImplantSyndicateHud
+  name: uplink-limb-implant-syndicate-hud-name
+  description: uplink-limb-implant-syndicate-hud-desc
+  productEntity: LimbImplantSyndicateHud
+  icon: { sprite: _DeadSpace/Objects/Medical/limb_implants.rsi, state: synhud }
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkImplants
+
+- type: listing
+  id: UplinkLimbRestorer
+  name: uplink-limb-restorer-name
+  description: uplink-limb-restorer-desc
+  productEntity: LimbRestorerSyndicate
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 6
+  cost:
+    Telecrystal: 10
+  categories:
+  - UplinkChemicals
+
+- type: listing
+  id: TraitorUltraUplinkLimbRestorer
+  name: uplink-limb-restorer-name
+  description: uplink-limb-restorer-desc
+  productEntity: LimbRestorerSyndicate
+  cost:
+    Telecrystal: 10
+  categories:
+  - TraitorUltraUplinkChemicals
+
+- type: listing
+  id: UniPhoneUplinkLimbRestorer
+  name: uplink-limb-restorer-name
+  description: uplink-limb-restorer-desc
+  productEntity: LimbRestorerSyndicate
+  cost:
+    Telecrystal: 10
+  categories:
+  - UniPhoneUplinkMedical
+
+- type: listing
+  id: UnitologyLimbRestorerList
+  name: uplink-limb-restorer-necro-name
+  description: uplink-limb-restorer-necro-desc
+  productEntity: LimbRestorerNecro
+  cost:
+    Telecrystal: 6
+  categories:
+  - UplinkUnitologyInfection
+
+- type: listing
+  id: UnitologyFieldChemistryList
+  name: uplink-field-chemistry-name
+  description: uplink-field-chemistry-desc
+  productEntity: FieldChemistryBox
+  cost:
+    Telecrystal: 3
+  categories:
+  - UplinkUnitologyInfection
+
+- type: listing
+  id: PirateFieldChemistryList
+  name: uplink-field-chemistry-name
+  description: uplink-field-chemistry-desc
+  productEntity: FieldChemistryBox
+  cost:
+    SpaceCash: 3000
+  categories:
+  - PirateUplinkChemicals
+
+- type: listing
+  id: PirateLimbRestorerList
+  name: uplink-limb-restorer-pirate-name
+  description: uplink-limb-restorer-pirate-desc
+  productEntity: LimbRestorerPirate
+  cost:
+    SpaceCash: 9000
+  categories:
+  - PirateUplinkChemicals

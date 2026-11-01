@@ -3,12 +3,14 @@
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
+using Content.Shared.Body.Prototypes;
 using Content.Shared.Body.Systems;
 using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.Surgery;
 using Content.Shared.Damage;
-using Content.Shared.Mobs;
-using Content.Shared.Mobs.Systems;
+using Content.Shared.Humanoid;
+using Content.Shared.Rotation;
+using Content.Shared.Standing;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 using System.Numerics;
@@ -22,7 +24,75 @@ public sealed class SurgeryLimbPort : EntitySystem
     [Dependency] private readonly SharedContainerSystem _containers = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly MobStateSystem _mobs = default!;
+    [Dependency] private readonly SurgeryOrganSystem _organs = default!;
+    [Dependency] private readonly StandingStateSystem _standing = default!;
+    [Dependency] private readonly SurgeryOrganFreshSystem _fresh = default!;
+    [Dependency] private readonly SurgeryGraftSystem _graft = default!;
+
+    private readonly HashSet<EntityUid> _restock = new();
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        SubscribeLocalEvent<BodyComponent, Content.Shared.Rejuvenate.RejuvenateEvent>((uid, _, _) => _restock.Add(uid));
+    }
+
+    public override void Update(float frameTime)
+    {
+        if (_restock.Count == 0)
+            return;
+
+        foreach (var body in _restock)
+            RestockOrgans(body);
+        _restock.Clear();
+    }
+
+    private void RestockOrgans(EntityUid body)
+    {
+        if (TerminatingOrDeleted(body)
+            || !TryComp<BodyComponent>(body, out var comp)
+            || comp.Prototype is not { } protoId
+            || !_prototype.TryIndex(protoId, out BodyPrototype? prototype))
+            return;
+
+        var any = false;
+        foreach (var slot in prototype.Slots.Values)
+        {
+            foreach (var (organSlot, organId) in slot.Organs)
+            {
+                if (!TryPart(body, organSlot, out var part)
+                    || !_containers.TryGetContainer(part, SharedBodySystem.GetOrganContainerId(organSlot), out var container)
+                    || container.ContainedEntities.Count > 0)
+                    continue;
+
+                var organ = Spawn(organId, Transform(body).Coordinates);
+                if (_body.InsertOrgan(part, organ, organSlot))
+                    any = true;
+                else
+                    QueueDel(organ);
+            }
+        }
+
+        if (any)
+            _organs.Refresh(body);
+    }
+
+    private Vector2? CutAt(EntityUid patient, LimbZone zone)
+    {
+        if (!_prototype.TryIndex<SurgeryMarkPrototype>(zone.ToString(), out var mark))
+            return null;
+
+        var x = (mark.Ax + mark.Bx) / 2f;
+        var y = (mark.Ay + mark.By) / 2f;
+        if (HasComp<SurgeryProneComponent>(patient))
+            x = 31f - x;
+
+        var local = new Vector2((x - 16f) / 32f, (16f - y) / 32f);
+        var turn = _standing.IsDown(patient) && TryComp<RotationVisualsComponent>(patient, out var rotation)
+            ? rotation.HorizontalRotation
+            : Angle.Zero;
+        return turn.RotateVec(local);
+    }
 
     public void Apply(EntityUid patient, LimbZone zone, LimbOrgan? organ, in SurgeryResult result, EntityUid? held)
     {
@@ -48,18 +118,7 @@ public sealed class SurgeryLimbPort : EntitySystem
 
         if (organ is { } picked)
         {
-            if (result.RemoveOrgan && picked == LimbOrgan.Eyes
-                && TryComp<LimbBodyComponent>(patient, out var eyes) && eyes.EyesGone < 1)
-            {
-                _limbs.ApplyOrganEdit(patient, picked, new LimbOrganEdit
-                {
-                    Damage = result.OrganDamage,
-                    SetRuptured = result.Rupture,
-                    Ruptured = result.Rupture,
-                    EyesGone = 1,
-                });
-            }
-            else if (result.RemoveOrgan)
+            if (result.RemoveOrgan)
                 Take(patient, picked, result);
 
             if (result.PlaceOrgan && picked == LimbOrgan.Eyes
@@ -67,8 +126,12 @@ public sealed class SurgeryLimbPort : EntitySystem
                 && (uint) LimbOrgan.Eyes < (uint) seeing.Organs.Count && !seeing.Organs[(int) LimbOrgan.Eyes].Missing
                 && held is { } spare)
             {
-                _limbs.ApplyOrganEdit(patient, picked, new LimbOrganEdit { EyesGone = -1 });
-                Del(spare);
+                if (_graft.Accepts(patient, spare))
+                {
+                    _graft.Grafted(patient, spare, LimbOrganHomes.Home(picked), picked.ToString(), null);
+                    _limbs.ApplyOrganEdit(patient, picked, new LimbOrganEdit { EyesGone = -seeing.EyesGone });
+                    Del(spare);
+                }
             }
             else if (result.PlaceOrgan && held is { } item)
                 Place(patient, picked, item, result);
@@ -85,8 +148,11 @@ public sealed class SurgeryLimbPort : EntitySystem
             }
         }
 
+        if (organ != null && (result.RemoveOrgan || result.PlaceOrgan))
+            _organs.Refresh(patient);
+
         if (result.Sever)
-            _limbs.SeverPart(patient, zone);
+            _limbs.Amputate(patient, zone, CutAt(patient, zone));
 
         if (result.Attach && held is { } part)
             _limbs.TryReattach(patient, zone, part, result.Crude);
@@ -101,20 +167,26 @@ public sealed class SurgeryLimbPort : EntitySystem
             Ruptured = result.Rupture,
             SetMissing = true,
             Missing = true,
-            EyesGone = result.Eyes,
+            EyesGone = organ == LimbOrgan.Eyes ? 2 : result.Eyes,
         };
 
-        if (!TryOrgan(patient, organ, out var entity) || !_body.RemoveOrgan(entity))
+        if (!TryOrgan(patient, organ, out var entity))
+            return;
+
+        EnsureComp<SurgeryKeepOrganComponent>(entity);
+        var removed = _body.RemoveOrgan(entity);
+        RemComp<SurgeryKeepOrganComponent>(entity);
+        if (!removed)
             return;
 
         Stamp(entity, patient, organ, result);
         _transform.SetCoordinates(entity, Transform(patient).Coordinates.Offset(new Vector2(0.45f, 0.15f)));
         _limbs.ApplyOrganEdit(patient, organ, edit);
-        if (organ is LimbOrgan.Heart or LimbOrgan.Brain)
+        if (_limbs.IsVital(patient, organ))
         {
-            var zone = organ == LimbOrgan.Brain ? LimbZone.Head : LimbZone.Torso;
+            var zone = LimbOrganHomes.Home(organ);
             _limbs.ApplyEdit(patient, zone, new LimbEdit { SetHealth = true, Health = 0f });
-            _mobs.ChangeMobState(patient, MobState.Dead);
+            _limbs.KillByLimbs(patient);
         }
     }
 
@@ -123,9 +195,7 @@ public sealed class SurgeryLimbPort : EntitySystem
         if (!TryComp<OrganComponent>(item, out _))
             return;
 
-        if (!TryComp<MetaDataComponent>(item, out var meta)
-            || meta.EntityPrototype == null
-            || !meta.EntityPrototype.ID.Contains(organ.ToString()))
+        if (!SurgeryOrganKindComponent.Matches(EntityManager, item, organ.ToString(), Machine(patient)))
             return;
 
         if (!_prototype.TryIndex<SurgeryOrganPrototype>(organ.ToString(), out var slot))
@@ -134,19 +204,59 @@ public sealed class SurgeryLimbPort : EntitySystem
         if (!TryPart(patient, slot.Slot, out var part))
             return;
 
+        if (!_graft.Accepts(patient, item))
+            return;
+
+        var decay = _fresh.Spoil(item);
         if (!_body.InsertOrgan(part, item, slot.Slot))
             return;
 
+        _graft.Grafted(patient, item, LimbOrganHomes.Home(organ), organ.ToString(), null);
+        var rotten = decay >= 1f;
         _limbs.ApplyOrganEdit(patient, organ, new LimbOrganEdit
         {
             SetMissing = true,
             Missing = false,
             SetDamage = true,
-            Damage = result.Rupture ? 40f : 0f,
+            Damage = MathF.Max(result.Rupture ? LimbOrganRules.Rupture : 0f, decay * LimbOrganRules.Rupture),
             SetRuptured = true,
-            Ruptured = result.Rupture,
-            EyesGone = organ == LimbOrgan.Eyes ? -1 : 0,
+            Ruptured = result.Rupture || rotten,
+            EyesGone = organ == LimbOrgan.Eyes ? -2 : 0,
         });
+        if (rotten && HasComp<BrainComponent>(item))
+            _fresh.MarkRotten(patient);
+    }
+
+    public bool Regrow(EntityUid patient, LimbOrgan organ)
+    {
+        if (!TryComp<BodyComponent>(patient, out var body)
+            || body.Prototype is not { } protoId
+            || !_prototype.TryIndex(protoId, out BodyPrototype? prototype)
+            || !_prototype.TryIndex<SurgeryOrganPrototype>(organ.ToString(), out var slot))
+            return false;
+
+        string? grown = null;
+        foreach (var bodySlot in prototype.Slots.Values)
+        {
+            if (bodySlot.Organs.TryGetValue(slot.Slot, out var id))
+            {
+                grown = id;
+                break;
+            }
+        }
+
+        if (grown == null || !TryPart(patient, slot.Slot, out _))
+            return false;
+
+        var item = Spawn(grown, Transform(patient).Coordinates);
+        Place(patient, organ, item, new SurgeryResult());
+        if (!TerminatingOrDeleted(item) && !_containers.IsEntityInContainer(item))
+        {
+            QueueDel(item);
+            return false;
+        }
+
+        return true;
     }
 
     private void Stamp(EntityUid organ, EntityUid patient, LimbOrgan kind, in SurgeryResult result)
@@ -169,12 +279,10 @@ public sealed class SurgeryLimbPort : EntitySystem
         if (!TryComp<BodyComponent>(patient, out var body))
             return false;
 
+        var machine = Machine(patient);
         foreach (var organEnt in _body.GetBodyOrgans(patient, body))
         {
-            if (!TryComp<MetaDataComponent>(organEnt.Id, out var meta) || meta.EntityPrototype == null)
-                continue;
-
-            if (!meta.EntityPrototype.ID.Contains(organ.ToString(), StringComparison.OrdinalIgnoreCase))
+            if (!SurgeryOrganKindComponent.Matches(EntityManager, organEnt.Id, organ.ToString(), machine))
                 continue;
 
             entity = organEnt.Id;
@@ -182,6 +290,11 @@ public sealed class SurgeryLimbPort : EntitySystem
         }
 
         return false;
+    }
+
+    private bool Machine(EntityUid patient)
+    {
+        return TryComp<HumanoidAppearanceComponent>(patient, out var look) && SurgerySpeciesPrototype.IsMachine(_prototype, look.Species.Id);
     }
 
     private bool TryPart(EntityUid patient, string slot, out EntityUid part)

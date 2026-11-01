@@ -87,7 +87,7 @@
   id: MMI
   result: MMI
   icon:
-    sprite: Objects/Specific/Robotics/mmi.rsi
+    sprite: _DeadSpace/Objects/Specific/Robotics/mmi.rsi # DS14
     state: mmi_off
   materials:
     Steel: 1000

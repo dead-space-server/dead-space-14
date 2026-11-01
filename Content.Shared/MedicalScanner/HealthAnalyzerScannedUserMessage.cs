@@ -40,6 +40,7 @@ public struct HealthAnalyzerUiState
     public List<LimbScanIssue> LimbIssues = new(); // DS14
     public List<byte> LimbShades = new(); // DS14
     public List<LimbPartDamage> LimbParts = new(); // DS14
+    public bool Infected; // DS14
 
     public HealthAnalyzerUiState() {}
 

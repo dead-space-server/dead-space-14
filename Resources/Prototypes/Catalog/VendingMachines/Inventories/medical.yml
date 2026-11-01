@@ -67,6 +67,8 @@
     HandheldEncephalograph: 1 # DS14
     ClothingHeadNeuroMesh: 1 # DS14
     ClothingMaskMedicalGag: 1 # DS14
+    VoxAnesthesiaTankFilled: 1 # DS14
+    ChemistryBottleMorphine: 2 # DS14
   contrabandInventory:
     PillCanisterRandom: 3
     PillSpaceDrugs: 3

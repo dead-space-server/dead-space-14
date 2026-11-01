@@ -6,6 +6,7 @@ health-analyzer-window-entity-unknown-value-text = N/A
 health-analyzer-window-entity-alive-text = Alive
 health-analyzer-window-entity-dead-text = Dead
 health-analyzer-window-entity-critical-text = Critical
+health-analyzer-window-entity-pre-critical-text = Shocked
 
 health-analyzer-window-entity-temperature-text = Temperature:
 health-analyzer-window-entity-blood-level-text = Blood Level:
@@ -18,6 +19,8 @@ health-analyzer-window-damage-type-text = {$damageType}: {$amount}
 health-analyzer-window-entity-unrevivable-text = [color=yellow]Unique body composition detected! Patient can not be resuscitated by normal means![/color]
 health-analyzer-window-entity-bleeding-text = [color=red]Patient has open wounds![/color]
 health-analyzer-window-entity-uncloning-text = [color=violet]Unstable genetic code detected! Patient can not be cloned![/color]
+# DS14
+health-analyzer-window-entity-infection-text = [color=#a6c64a]Inflammation: something is wrong inside. An X-ray is needed.[/color]
 
 health-analyzer-window-scan-mode-text = Scan Mode:
 health-analyzer-window-scan-mode-active = Active
@@ -84,3 +87,22 @@ health-analyzer-issue-15 = closed rib fracture
 health-analyzer-issue-16 = open rib fracture
 health-analyzer-issue-17 = necrotic
 health-analyzer-issue-18 = bleeding
+health-analyzer-issue-machine-0 = missing
+health-analyzer-issue-machine-1 = chassis crack
+health-analyzer-issue-machine-2 = plate crack
+health-analyzer-issue-machine-3 = torn plating
+health-analyzer-issue-machine-4 = plating stripped
+health-analyzer-issue-machine-5 = on fire
+health-analyzer-issue-machine-6 = shard lodged
+health-analyzer-issue-machine-7 = scratch
+health-analyzer-issue-machine-8 = module damaged
+health-analyzer-issue-machine-9 = first-degree melt
+health-analyzer-issue-machine-10 = second-degree melt
+health-analyzer-issue-machine-11 = third-degree melt
+health-analyzer-issue-machine-12 = closed chassis crack
+health-analyzer-issue-machine-13 = open chassis crack
+health-analyzer-issue-machine-14 = cracked chassis ribs
+health-analyzer-issue-machine-15 = closed chassis rib crack
+health-analyzer-issue-machine-16 = open chassis rib crack
+health-analyzer-issue-machine-17 = offline
+health-analyzer-issue-machine-18 = hydraulic leak

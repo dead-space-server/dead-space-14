@@ -142,6 +142,7 @@
   - type: LimbCover
     stopsFire: true
     blast: true
+    sever: true
     zones:
     - Torso
     - Groin

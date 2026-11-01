@@ -51,10 +51,10 @@ public static class LimbCatalog
         new(LimbZone.Torso, LimbMark.Blunt, LimbHooks.Organ, 1f, LimbOrgan.Core),
         new(LimbZone.Torso, LimbMark.Point, LimbHooks.Organ, 1f, LimbOrgan.Core),
         new(LimbZone.Torso, LimbMark.Liquid, LimbHooks.Organ, 0.5f, LimbOrgan.Core),
-        new(LimbZone.Groin, LimbMark.Point, LimbHooks.Organ, 1f, LimbOrgan.Intestines),
-        new(LimbZone.Groin, LimbMark.Edge, LimbHooks.Organ, 0.8f, LimbOrgan.Intestines),
-        new(LimbZone.Groin, LimbMark.Blunt, LimbHooks.Organ, 0.5f, LimbOrgan.Intestines),
-        new(LimbZone.Groin, LimbMark.Liquid, LimbHooks.Organ, 0.6f, LimbOrgan.Intestines),
+        new(LimbZone.Groin, LimbMark.Point, LimbHooks.Organ, 1f, LimbOrgan.Kidneys),
+        new(LimbZone.Groin, LimbMark.Edge, LimbHooks.Organ, 0.8f, LimbOrgan.Kidneys),
+        new(LimbZone.Groin, LimbMark.Blunt, LimbHooks.Organ, 0.5f, LimbOrgan.Kidneys),
+        new(LimbZone.Groin, LimbMark.Liquid, LimbHooks.Organ, 0.6f, LimbOrgan.Kidneys),
     };
 
     public static bool Fits(in LimbRow row, LimbZone zone, LimbMark mark, bool projectile)

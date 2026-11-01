@@ -5,6 +5,8 @@ using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.Cloning;
+using Content.Shared.DeadSpace.Surgery;
+using Content.Shared.Humanoid;
 using Content.Shared.EntityConditions.Conditions;
 using Content.Shared.EntityEffects.Effects.Damage;
 using Content.Shared.FixedPoint;
@@ -283,7 +285,6 @@ public sealed class HealthAnalyzerSystem : EntitySystem
             bodyTemperature = temp.CurrentTemperature;
 
         // DS14-start
-        // Use the same effective threshold as temperature damage, including container protection.
         var overheating = TryComp<TemperatureDamageComponent>(entity, out var temperatureDamage) &&
                           bodyTemperature > (temperatureDamage.ParentHeatDamageThreshold ?? temperatureDamage.HeatDamageThreshold) &&
                           temperatureDamage.DamageCap > 0 &&
@@ -311,6 +312,28 @@ public sealed class HealthAnalyzerSystem : EntitySystem
             bleeding = bloodstream.BleedAmount > 0;
             reagents = GetInjectedReagents(bloodSolution, bloodstream); // DS14
         }
+
+        // DS14-start
+        if (TryComp<HumanoidAppearanceComponent>(entity, out var look)
+            && SurgerySpeciesPrototype.IsMachine(_prototype, look.Species.Id))
+        {
+            bleeding = false;
+            bloodAmount = float.NaN;
+        }
+        else if (TryComp<LimbBodyComponent>(entity, out var vessel) && bleeding)
+        {
+            var open = false;
+            var count = Math.Min(vessel.Zones.Count, LimbWoundRules.BodyZoneCount);
+            for (var i = 0; i < count; i++)
+            {
+                if (!vessel.Zones[i].Severed && vessel.Zones[i].Bleed > LimbWoundRules.TickBleed)
+                    open = true;
+            }
+
+            if (!open)
+                bleeding = false;
+        }
+        // DS14-end
 
         if (TryComp<UnrevivableComponent>(entity, out var unrevivableComp) && unrevivableComp.Analyzable)
             unrevivable = true;
@@ -358,7 +381,10 @@ public sealed class HealthAnalyzerSystem : EntitySystem
                     limbShades,
                     limbParts
                     // DS14-end
-                );
+                )
+        {
+            Infected = TryComp<Content.Shared.DeadSpace.Surgery.SurgeryInfectionComponent>(entity, out var infection) && infection.Rotting.Count > 0, // DS14
+        };
     }
 
     // DS14-start
@@ -454,10 +480,13 @@ public sealed class HealthAnalyzerSystem : EntitySystem
         if (data.HasLimbs)
         {
             var lines = LimbScanText.Areas(data.LimbShades, null);
-            if (lines.Count == 0)
+            var issues = LimbScanText.Lines(data.LimbIssues);
+            if (lines.Count == 0 && issues.Count == 0)
                 sb.AppendLine("[color=green]• Повреждений не обнаружено[/color]");
             else
             {
+                foreach (var line in issues)
+                    sb.AppendLine($"• {line}");
                 foreach (var line in lines)
                     sb.AppendLine($"• {line}");
             }

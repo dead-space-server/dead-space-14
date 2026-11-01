@@ -1,0 +1,14 @@
+- type: entity
+  parent: BaseMentalAction
+  id: ActionSurgeryBitePill
+  name: Crack a pill
+  description: Crack the pill hidden in a tooth.
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    priority: 8
+    icon:
+      sprite: Objects/Specific/Chemistry/pills.rsi
+      state: pill1
+  - type: InstantAction
+    event: !type:SurgeryBitePillEvent

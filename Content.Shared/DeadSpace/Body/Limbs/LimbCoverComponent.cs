@@ -28,18 +28,15 @@ public sealed partial class LimbCoverComponent : Component
     [DataField, AutoNetworkedField]
     public bool Blast;
 
-    /// <summary>
-    /// Raised shield only. Back and sides stay open.
-    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool Sever;
+
     [DataField, AutoNetworkedField]
     public bool OnlyWhenBlocking;
 
     [DataField, AutoNetworkedField]
     public float WoundMultiplier = 1f;
 
-    /// <summary>
-    /// Plate stops a clean hole and dumps blunt trauma behind it.
-    /// </summary>
     [DataField, AutoNetworkedField]
     public bool BluntBackface;
 
@@ -80,7 +77,7 @@ public static class LimbCoverRules
         if ((worn.Slots & SlotFlags.MASK) != 0)
             return zone is LimbZone.Head or LimbZone.Eyes or LimbZone.Mouth;
 
-        if ((worn.Slots & SlotFlags.OUTERCLOTHING) != 0)
+        if ((worn.Slots & (SlotFlags.OUTERCLOTHING | SlotFlags.INNERCLOTHING)) != 0)
             return zone is LimbZone.Torso or LimbZone.Groin or LimbZone.ArmLeft or LimbZone.ArmRight or LimbZone.LegLeft or LimbZone.LegRight;
 
         return false;

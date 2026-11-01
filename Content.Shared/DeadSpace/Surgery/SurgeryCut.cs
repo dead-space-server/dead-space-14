@@ -22,7 +22,15 @@ public static class SurgeryCut
         switch (request.Verb)
         {
             case SurgeryVerbKind.Incise:
+            case SurgeryVerbKind.Chop:
                 Incise(request, progress, slips, messy, ref result);
+                if (request.Verb == SurgeryVerbKind.Chop)
+                {
+                    result.Bleed = 0f;
+                    if (slips > 0)
+                        result.Health = StrayHealth(request, slips) + slips * 2f;
+                    result.Key = slips > 0 ? "surgery-chop-miss" : "surgery-chop";
+                }
                 break;
             case SurgeryVerbKind.Retract:
                 Retract(request, progress, ref result);
@@ -32,21 +40,50 @@ public static class SurgeryCut
                 result.Key = "surgery-clamped";
                 break;
             case SurgeryVerbKind.SawBone:
+            case SurgeryVerbKind.Drill:
                 Saw(request, progress, slips, messy, ref result);
                 break;
             case SurgeryVerbKind.Amputate:
                 Amputate(request, progress, slips, messy, ref result);
                 break;
             case SurgeryVerbKind.Cauterize:
+            case SurgeryVerbKind.SealSap:
                 Cauterize(request, progress, slips, messy, ref result);
+                if (request.Verb == SurgeryVerbKind.SealSap)
+                {
+                    result.Bleed = 0f;
+                    result.Finished = progress >= 0.85f || result.Integrity >= 0.85f;
+                    result.Key = result.Finished ? "surgery-sap-sealed" : "surgery-sap-short";
+                }
                 break;
             case SurgeryVerbKind.SetBone:
                 SetBone(request, progress, slips, ref result);
                 break;
             case SurgeryVerbKind.MendBone:
-                result.Bone = -MathF.Min(request.CurrentBone, 8f * progress);
-                result.Gel = progress > 0.7f;
-                result.Key = "surgery-gel";
+                MendBone(request, progress, ref result);
+                break;
+            case SurgeryVerbKind.Stanch:
+                result.Bleed = -request.CurrentBleed * progress * (request.BoneFloor > 0f ? 0.7f : 1f);
+                result.Germs = request.BoneFloor > 0f ? 4f : 0f;
+                result.Finished = progress > 0.85f;
+                result.Key = result.Finished ? "surgery-stanched" : "surgery-searing";
+                break;
+            case SurgeryVerbKind.Bandage:
+                result.Finished = progress > 0.85f;
+                result.Bleed = result.Finished ? -request.CurrentBleed : -request.CurrentBleed * progress * 0.5f;
+                result.Key = result.Finished ? "surgery-bandaged" : "surgery-bandage-short";
+                break;
+            case SurgeryVerbKind.Inject:
+                result.Finished = progress > 0.85f;
+                result.Key = result.Finished ? "surgery-injected" : "surgery-inject-short";
+                break;
+            case SurgeryVerbKind.Append:
+                result.Finished = progress > 0.85f;
+                result.Key = result.Finished ? "surgery-appended" : "surgery-seat-short";
+                break;
+            case SurgeryVerbKind.Shock:
+                result.Finished = progress > 0.5f;
+                result.Key = result.Finished ? "surgery-shocked" : string.Empty;
                 break;
             case SurgeryVerbKind.Extract:
                 Extract(request, progress, slips, messy, ref result);
@@ -74,6 +111,19 @@ public static class SurgeryCut
             case SurgeryVerbKind.Inspect:
                 result.Examined = progress > 0.9f;
                 result.Key = result.Examined ? "surgery-examined" : "surgery-examine-short";
+                break;
+            case SurgeryVerbKind.Graft:
+                if (progress <= 0.8f)
+                {
+                    result.Key = "surgery-graft-short";
+                    break;
+                }
+
+                result.ClearSkinBare = true;
+                result.Integrity = 0.4f;
+                result.Retracted = false;
+                result.Finished = true;
+                result.Key = "surgery-grafted";
                 break;
             case SurgeryVerbKind.Seat:
                 result.Attach = progress > 0.75f;
@@ -107,9 +157,11 @@ public static class SurgeryCut
         }
 
         var power = 0.35f + request.ToolPrecision * 0.7f;
-        result.Integrity = MathF.Max(0f, request.Integrity - progress * power);
+        result.Integrity = progress >= 0.95f
+            ? 0f
+            : MathF.Max(0f, request.Integrity - progress * power);
         result.Bleed = slips * 0.8f * messy;
-        result.Flesh = request.Kind is SurgeryLayerKind.Muscle or SurgeryLayerKind.Globe ? slips * 1.6f : slips * 0.6f;
+        result.Flesh = request.Kind is SurgeryLayerKind.Globe ? slips * 1.6f : slips * 0.6f;
         result.Health = StrayHealth(request, slips);
         if (slips > 0)
             result.NextLoss = 0.12f + slips * (1f - request.ToolPrecision) * 0.1f;
@@ -129,7 +181,7 @@ public static class SurgeryCut
             result.Key = "surgery-debrided";
         }
 
-        if (request.Atrophied && progress > 0.9f && slips < 4 && request.Kind is SurgeryLayerKind.Muscle or SurgeryLayerKind.Skin)
+        if (request.Atrophied && progress > 0.9f && slips < 4 && request.Kind is SurgeryLayerKind.Skin)
         {
             result.ClearAtrophy = true;
             result.SetHealth = true;
@@ -156,7 +208,7 @@ public static class SurgeryCut
 
     private static void Retract(in SurgeryRequest request, float progress, ref SurgeryResult result)
     {
-        if (request.Integrity > 0.92f)
+        if (request.Integrity > 0.92f && !request.Intact)
         {
             result.Rejected = true;
             result.Key = "surgery-not-open";
@@ -218,9 +270,47 @@ public static class SurgeryCut
         result.Key = request.LayersOpen ? "surgery-amputated" : "surgery-amputated-raw";
     }
 
+    private static void MendBone(in SurgeryRequest request, float progress, ref SurgeryResult result)
+    {
+        if (request.Kind is SurgeryLayerKind.Skin)
+        {
+            var flesh = MathF.Max(0f, request.CurrentFlesh - LimbWoundRules.StrainFlesh);
+            result.Flesh = -flesh * progress;
+            result.Gel = progress > 0.7f;
+            result.Finished = progress > 0.85f;
+            if (result.Finished)
+            {
+                result.Integrity = 1f;
+                result.Retracted = false;
+            }
+
+            result.Key = result.Finished ? "surgery-slime-gel" : "surgery-slime-gel-short";
+            return;
+        }
+
+        if (request.Kind is not SurgeryLayerKind.Bone)
+        {
+            result.Rejected = true;
+            result.Key = "surgery-bone-shut";
+            return;
+        }
+
+        var span = MathF.Max(0f, request.CurrentBone - request.BoneFloor);
+        result.Bone = -span * progress;
+        result.Gel = progress > 0.7f;
+        result.Finished = progress > 0.85f;
+        if (result.Finished)
+        {
+            result.Integrity = 1f;
+            result.Retracted = false;
+        }
+
+        result.Key = result.Finished ? "surgery-gel" : "surgery-gel-short";
+    }
+
     private static void Cauterize(in SurgeryRequest request, float progress, int slips, float messy, ref SurgeryResult result)
     {
-        var seal = progress * (0.4f + request.ToolPrecision * 0.6f);
+        var seal = progress >= 0.95f ? 1f : progress * (0.4f + request.ToolPrecision * 0.6f);
         result.Integrity = MathF.Min(1f, request.Integrity + seal);
         if (result.Integrity > 0.2f)
             result.Retracted = false;
@@ -234,7 +324,7 @@ public static class SurgeryCut
             return;
         }
 
-        result.Bleed = -request.CurrentBleed * progress * 0.65f;
+        result.Bleed = progress >= 0.95f && slips == 0 ? -request.CurrentBleed : -request.CurrentBleed * progress * 0.65f;
         result.Germs = -5f * progress;
         result.Health = StrayHealth(request, slips);
         result.Key = result.Integrity > 0.85f ? "surgery-sealed" : "surgery-searing";
@@ -242,7 +332,7 @@ public static class SurgeryCut
 
     private static void SetBone(in SurgeryRequest request, float progress, int slips, ref SurgeryResult result)
     {
-        if (request.Kind is not SurgeryLayerKind.Bone || request.Integrity > 0.2f && !request.Retracted)
+        if (request.Kind is not SurgeryLayerKind.Bone || request.Integrity > 0.2f && !request.Retracted && request.BoneFloor <= 0f)
         {
             result.Rejected = true;
             result.Key = "surgery-bone-shut";
@@ -252,6 +342,7 @@ public static class SurgeryCut
         var span = MathF.Max(0f, request.CurrentBone - request.BoneFloor);
         var kept = Math.Clamp(1f - slips * 0.08f, 0.25f, 1f);
         result.Bone = -span * progress * kept;
+        result.Finished = progress > 0.85f;
         if (slips > 3)
             result.Scar = 1;
         result.Key = request.BoneFloor > 0f ? "surgery-bone-field" : "surgery-bone-set";
@@ -259,7 +350,14 @@ public static class SurgeryCut
 
     private static void Extract(in SurgeryRequest request, float progress, int slips, float messy, ref SurgeryResult result)
     {
-        if (!request.CavityReady && request.Kind is not SurgeryLayerKind.Globe)
+        if (!request.Implant && !request.CavityReady && request.Kind is not SurgeryLayerKind.Globe)
+        {
+            result.Rejected = true;
+            result.Key = "surgery-cavity-shut";
+            return;
+        }
+
+        if (request.Implant && !request.LayersOpen && !request.CavityReady && request.Kind is not SurgeryLayerKind.Globe)
         {
             result.Rejected = true;
             result.Key = "surgery-cavity-shut";
@@ -268,26 +366,48 @@ public static class SurgeryCut
 
         if (request.Yank || slips > 6)
         {
-            result.RemoveOrgan = true;
-            result.Rupture = true;
-            result.OrganDamage = 20f;
+            if (request.Implant)
+                result.RemoveImplant = true;
+            else
+            {
+                result.RemoveOrgan = true;
+                result.Rupture = true;
+                result.OrganDamage = 20f;
+                result.Eyes = request.Kind is SurgeryLayerKind.Globe ? 1 : 0;
+            }
+
             result.Bleed = 8f * messy;
-            result.Eyes = request.Kind is SurgeryLayerKind.Globe ? 1 : 0;
             result.Key = "surgery-yank";
             return;
         }
 
         if (progress > 0.85f)
         {
-            result.RemoveOrgan = true;
-            result.Bleed = 1.5f * messy;
-            result.Key = "surgery-organ-out";
+            if (request.Implant)
+            {
+                result.RemoveImplant = true;
+                result.Bleed = 1f * messy;
+                result.Key = "surgery-implant-out";
+            }
+            else
+            {
+                result.RemoveOrgan = true;
+                result.Bleed = 1.5f * messy;
+                result.Key = "surgery-organ-out";
+            }
         }
     }
 
     private static void Insert(in SurgeryRequest request, float progress, int slips, float messy, ref SurgeryResult result)
     {
-        if (!request.CavityReady && request.Kind is not SurgeryLayerKind.Globe)
+        if (!request.Implant && !request.CavityReady && request.Kind is not SurgeryLayerKind.Globe)
+        {
+            result.Rejected = true;
+            result.Key = "surgery-cavity-shut";
+            return;
+        }
+
+        if (request.Implant && !request.LayersOpen && !request.CavityReady && request.Kind is not SurgeryLayerKind.Globe)
         {
             result.Rejected = true;
             result.Key = "surgery-cavity-shut";
@@ -297,6 +417,14 @@ public static class SurgeryCut
         if (progress <= 0.8f)
         {
             result.Key = "surgery-insert-short";
+            return;
+        }
+
+        if (request.Implant)
+        {
+            result.PlaceImplant = true;
+            result.Bleed = slips * messy;
+            result.Key = "surgery-implant-in";
             return;
         }
 

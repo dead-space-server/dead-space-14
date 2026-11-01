@@ -1,6 +1,9 @@
 limb-doll-title = Aim
 limb-doll-empty = No part selected
 limb-doll-short-clear = Clear
+limb-analyzer-zone-damage = Part damage:
+limb-doll-clear-ring = Clear the target
+limb-doll-lost = Missing: { $part }
 limb-doll-short-head = Head
 limb-doll-short-eyes = Eyes
 limb-doll-short-mouth = Mouth
@@ -31,11 +34,12 @@ limb-target-foot-left = Aim at the left foot
 limb-target-foot-right = Aim at the right foot
 limb-aim-on = Aimed fire
 limb-aim-off = Ordinary fire
-limb-fresh = The part is still fresh.
+limb-fresh = Still fresh.
 limb-fresh-cold = The cold is holding it.
-limb-fresh-spent = The part has gone bad.
+limb-fresh-spent = [color=#7a9a3a]It has rotted.[/color]
 limb-grasp-burn = The hands cannot hold anything.
 limb-harvest-pick = Choose a part on the doll first.
 limb-harvest-torso = The chest does not come off this way.
 limb-harvest-gone = That part is already gone.
+limb-harvest-armored = You can't cut through the suit. Take it off first.
 limb-examine-zone = { $zone }: flesh { $flesh }, bone { $bone }, fire { $fire }

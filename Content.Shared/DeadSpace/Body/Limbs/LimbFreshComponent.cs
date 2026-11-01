@@ -4,7 +4,7 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared.DeadSpace.Body.Limbs;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class LimbFreshComponent : Component
 {
     [DataField]
@@ -15,4 +15,12 @@ public sealed partial class LimbFreshComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool Spent;
+
+    [DataField]
+    public bool ColdKeeps = true;
+
+    public float Spoil => Spent || Total <= 0f ? 1f : Math.Clamp(1f - Left / Total, 0f, 1f);
 }
+
+[RegisterComponent, NetworkedComponent]
+public sealed partial class LimbFreshLockComponent : Component;

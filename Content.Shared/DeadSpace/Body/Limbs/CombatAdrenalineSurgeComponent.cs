@@ -2,9 +2,6 @@
 
 namespace Content.Shared.DeadSpace.Body.Limbs;
 
-/// <summary>
-/// Marker on the self-made adrenaline status effect. Injected epinephrine does not have it.
-/// </summary>
 [RegisterComponent]
 public sealed partial class CombatAdrenalineSurgeComponent : Component
 {

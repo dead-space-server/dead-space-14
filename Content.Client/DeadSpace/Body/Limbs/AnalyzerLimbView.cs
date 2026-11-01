@@ -84,18 +84,22 @@ public sealed class AnalyzerLimbView : Control
                 continue;
 
             var tintZone = zone == LimbZone.Eyes ? LimbZone.Head : zone;
-            handle.DrawTextureRect(texture, box, Color.White);
-            handle.DrawTextureRect(texture, box, Tint(tintZone));
             if (zone != LimbZone.Torso || texture.Height <= 0)
+            {
+                handle.DrawTextureRect(texture, box, Color.White);
+                handle.DrawTextureRect(texture, box, Tint(tintZone));
                 continue;
+            }
 
-            var top = 18f / 32f;
-            var span = 4f / 32f;
-            var sub = new UIBox2(0f, texture.Height * top, texture.Width, texture.Height * (top + span));
-            var destTop = box.Top + box.Height * top;
-            var dest = new UIBox2(box.Left, destTop, box.Right, destTop + box.Height * span);
-            handle.DrawTextureRectRegion(texture, dest, sub, Color.White);
-            handle.DrawTextureRectRegion(texture, dest, sub, Tint(LimbZone.Groin));
+            var cut = 18f / 32f;
+            var chestSrc = new UIBox2(0f, 0f, texture.Width, texture.Height * cut);
+            var groinSrc = new UIBox2(0f, texture.Height * cut, texture.Width, texture.Height);
+            var chestDst = new UIBox2(box.Left, box.Top, box.Right, box.Top + box.Height * cut);
+            var groinDst = new UIBox2(box.Left, chestDst.Bottom, box.Right, box.Bottom);
+            handle.DrawTextureRectRegion(texture, chestDst, chestSrc, Color.White);
+            handle.DrawTextureRectRegion(texture, chestDst, chestSrc, Tint(LimbZone.Torso));
+            handle.DrawTextureRectRegion(texture, groinDst, groinSrc, Color.White);
+            handle.DrawTextureRectRegion(texture, groinDst, groinSrc, Tint(LimbZone.Groin));
         }
     }
 

@@ -26,7 +26,7 @@ public sealed class LimbFreshSystem : EntitySystem
         var query = EntityQueryEnumerator<LimbFreshComponent, TemperatureComponent>();
         while (query.MoveNext(out var uid, out var fresh, out var temp))
         {
-            if (fresh.Spent || Preserved(uid, temp))
+            if (fresh.Spent || Preserved(uid, temp, fresh))
                 continue;
 
             fresh.Left -= frameTime;
@@ -56,7 +56,7 @@ public sealed class LimbFreshSystem : EntitySystem
             return;
         }
 
-        if (Preserved(ent, null))
+        if (Preserved(ent, null, ent.Comp))
         {
             args.PushMarkup(Loc.GetString("limb-fresh-cold"));
             return;
@@ -65,15 +65,26 @@ public sealed class LimbFreshSystem : EntitySystem
         args.PushMarkup(Loc.GetString("limb-fresh"));
     }
 
-    private bool Preserved(EntityUid uid, TemperatureComponent? temp)
+    private bool Preserved(EntityUid uid, TemperatureComponent? temp, LimbFreshComponent fresh)
     {
+        var current = uid;
+        while (_container.TryGetContainingContainer((current, null, null), out var container))
+        {
+            if (HasComp<LimbFreshLockComponent>(container.Owner))
+                return true;
+
+            if (fresh.ColdKeeps && HasComp<AntiRottingContainerComponent>(container.Owner))
+                return true;
+
+            current = container.Owner;
+        }
+
+        if (!fresh.ColdKeeps)
+            return false;
+
         if (temp == null)
             TryComp(uid, out temp);
 
-        if (temp != null && temp.CurrentTemperature < Atmospherics.T0C + 0.85f)
-            return true;
-
-        return _container.TryGetOuterContainer(uid, Transform(uid), out var container)
-               && HasComp<AntiRottingContainerComponent>(container.Owner);
+        return temp != null && temp.CurrentTemperature < Atmospherics.T0C + 0.85f;
     }
 }

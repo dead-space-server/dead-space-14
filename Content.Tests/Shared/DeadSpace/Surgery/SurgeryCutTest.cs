@@ -40,13 +40,56 @@ public sealed class SurgeryCutTest
         {
             Verb = SurgeryVerbKind.Extract,
             Zone = LimbZone.Torso,
-            Kind = SurgeryLayerKind.Muscle,
+            Kind = SurgeryLayerKind.Skin,
             CavityReady = false,
             Progress = 1f,
         });
 
         Assert.That(result.RemoveOrgan, Is.False);
         Assert.That(result.Rejected, Is.True);
+    }
+
+    [Test]
+    public void SlimeGelMendsScaffoldOnSkin()
+    {
+        var result = SurgeryCut.Resolve(new SurgeryRequest
+        {
+            Verb = SurgeryVerbKind.MendBone,
+            Zone = LimbZone.Torso,
+            Kind = SurgeryLayerKind.Skin,
+            Integrity = 0.2f,
+            Retracted = true,
+            Progress = 1f,
+            CurrentFlesh = 40f,
+        });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.Finished, Is.True);
+            Assert.That(result.Flesh, Is.LessThan(0f));
+            Assert.That(result.Key, Is.EqualTo("surgery-slime-gel"));
+        });
+    }
+
+    [Test]
+    public void ChopSplitsBarkWithoutBleed()
+    {
+        var result = SurgeryCut.Resolve(new SurgeryRequest
+        {
+            Verb = SurgeryVerbKind.Chop,
+            Zone = LimbZone.Torso,
+            Kind = SurgeryLayerKind.Skin,
+            Integrity = 1f,
+            Progress = 1f,
+            ToolPrecision = 0.8f,
+        });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.Integrity, Is.EqualTo(0f));
+            Assert.That(result.Bleed, Is.EqualTo(0f));
+            Assert.That(result.Key, Is.EqualTo("surgery-chop"));
+        });
     }
 
     [Test]
@@ -153,6 +196,22 @@ public sealed class SurgeryCutTest
     }
 
     [Test]
+    public void AFinishedInciseOpensTheLayerEvenWithACoarseTool()
+    {
+        var result = SurgeryCut.Resolve(new SurgeryRequest
+        {
+            Verb = SurgeryVerbKind.Incise,
+            Zone = LimbZone.Torso,
+            Kind = SurgeryLayerKind.Skin,
+            Integrity = 1f,
+            Progress = 1f,
+            ToolPrecision = 0.45f,
+        });
+
+        Assert.That(result.Integrity, Is.EqualTo(0f));
+    }
+
+    [Test]
     public void AStrayCutCostsLimbHealth()
     {
         var stray = SurgeryCut.Resolve(new SurgeryRequest
@@ -193,6 +252,50 @@ public sealed class SurgeryCutTest
             Assert.That(40f + floor.Bone, Is.EqualTo(25f).Within(0.01f));
             Assert.That(40f + table.Bone, Is.EqualTo(0f).Within(0.01f));
         });
+    }
+
+    [Test]
+    public void AnImplantSeatsWhenTheLimbIsOpen()
+    {
+        var result = SurgeryCut.Resolve(new SurgeryRequest
+        {
+            Verb = SurgeryVerbKind.Insert,
+            Zone = LimbZone.HandLeft,
+            Kind = SurgeryLayerKind.Skin,
+            Integrity = 0f,
+            Retracted = true,
+            LayersOpen = true,
+            Implant = true,
+            Progress = 1f,
+            ToolPrecision = 1f,
+        });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.PlaceImplant, Is.True);
+            Assert.That(result.PlaceOrgan, Is.False);
+            Assert.That(result.Key, Is.EqualTo("surgery-implant-in"));
+        });
+    }
+
+    [Test]
+    public void AnImplantWillNotSeatInAClosedLimb()
+    {
+        var result = SurgeryCut.Resolve(new SurgeryRequest
+        {
+            Verb = SurgeryVerbKind.Insert,
+            Zone = LimbZone.HandLeft,
+            Kind = SurgeryLayerKind.Skin,
+            Integrity = 1f,
+            Retracted = false,
+            LayersOpen = false,
+            CavityReady = false,
+            Implant = true,
+            Progress = 1f,
+            ToolPrecision = 1f,
+        });
+
+        Assert.That(result.Rejected, Is.True);
     }
 
     private static SurgeryRequest Bone(float floor)

@@ -556,7 +556,7 @@ public sealed class IvDripTest : InteractionTest
             var comp = Comp<IvDripComponent>();
             Assert.That(comp.TankSolution, Is.EqualTo("tank"));
             Assert.That(comp.NeedlePrototype.Id, Is.EqualTo("IvDripNeedle"));
-            Assert.That(comp.SlowTransfer, Is.EqualTo(0.5f));
+            Assert.That(comp.SlowTransfer, Is.EqualTo(0.25f));
             Assert.That(comp.MediumTransfer, Is.EqualTo(1.5f));
             Assert.That(comp.FastTransfer, Is.EqualTo(3f));
             Assert.That(comp.AttachDelay, Is.EqualTo(1.5f));

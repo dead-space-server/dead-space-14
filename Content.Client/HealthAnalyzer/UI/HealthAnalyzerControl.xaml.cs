@@ -11,6 +11,7 @@ using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.IdentityManagement;
 using Content.Client.DeadSpace.Body.Limbs; // DS14
 using Content.Shared.DeadSpace.Body.Limbs; // DS14
+using Content.Shared.DeadSpace.Surgery; // DS14
 using Content.Shared.MedicalScanner;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -74,7 +75,7 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
             AlertsDivider.Visible = false;
             // DS14-end
             DrawInjectedReagents(null); // DS14
-            DrawLimbs(null, false, null); // DS14
+            DrawLimbs(null, false, null, null); // DS14
             return;
         }
 
@@ -132,7 +133,7 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
         // Alerts
 
         // DS14-start
-        var showAlerts = state.Overheating || state.Unrevivable == true || (state.Bleeding == true && state.HasLimbs != true) || state.Unclonable == true;
+        var showAlerts = state.Overheating || state.Unrevivable == true || state.Bleeding == true || state.Unclonable == true || state.Infected;
         // DS14-end
 
         AlertsDivider.Visible = showAlerts;
@@ -160,7 +161,7 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
                 MaxWidth = 300
             });
 
-        if (state.Bleeding == true && state.HasLimbs != true)
+        if (state.Bleeding == true)
             AlertsContainer.AddChild(new RichTextLabel
             {
                 Text = Loc.GetString("health-analyzer-window-entity-bleeding-text"),
@@ -173,6 +174,14 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
             AlertsContainer.AddChild(new RichTextLabel
             {
                 Text = Loc.GetString("health-analyzer-window-entity-uncloning-text"),
+                Margin = new Thickness(0, 4),
+                MaxWidth = 300
+            });
+
+        if (state.Infected)
+            AlertsContainer.AddChild(new RichTextLabel
+            {
+                Text = Loc.GetString("health-analyzer-window-entity-infection-text"),
                 Margin = new Thickness(0, 4),
                 MaxWidth = 300
             });
@@ -193,24 +202,26 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
         if (state.HasLimbs && scanning) // DS14
             SpriteView.Visible = false; // DS14
 
-        DrawLimbs(state.TargetEntity, state.HasLimbs && scanning, state.LimbShades); // DS14
+        DrawLimbs(state.TargetEntity, state.HasLimbs && scanning, state.LimbShades, state.LimbIssues); // DS14
         ShowDamage(); // DS14
         DrawInjectedReagents(state.Reagents); // DS14
     }
 
     // DS14-start
-    private void DrawLimbs(NetEntity? patient, bool hasLimbs, IReadOnlyList<byte>? shades)
+    private void DrawLimbs(NetEntity? patient, bool hasLimbs, IReadOnlyList<byte>? shades, IReadOnlyList<LimbScanIssue>? issues)
     {
         LimbsContainer.RemoveAllChildren();
         LimbsDivider.Visible = hasLimbs;
         LimbsContainer.Visible = hasLimbs;
         _outline.Visible = hasLimbs;
-        _hideGroups = hasLimbs;
         if (!hasLimbs)
         {
             _limbPick = null;
             _limbText = null;
             _limbShadeCache = null;
+            _limbIssueCache = null;
+            _limbMachine = false;
+            _limbSoft = false;
             return;
         }
 
@@ -230,6 +241,15 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
         };
         LimbsContainer.AddChild(text);
         _limbShadeCache = shades;
+        _limbIssueCache = issues;
+        _limbMachine = patient != null
+            && _entityManager.TryGetEntity(patient.Value, out var body)
+            && _entityManager.TryGetComponent<HumanoidAppearanceComponent>(body.Value, out var look)
+            && SurgerySpeciesPrototype.IsMachine(_prototypes, look.Species.Id);
+        _limbSoft = patient != null
+            && _entityManager.TryGetEntity(patient.Value, out var softBody)
+            && _entityManager.TryGetComponent<LimbBodyComponent>(softBody.Value, out var limbs)
+            && limbs.Soft;
         WriteLimbText(text);
         LimbsDivider.Visible = text.ChildCount > 0;
         LimbsContainer.Visible = text.ChildCount > 0;
@@ -238,7 +258,9 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
 
     private BoxContainer? _limbText;
     private IReadOnlyList<byte>? _limbShadeCache;
-    private bool _hideGroups;
+    private IReadOnlyList<LimbScanIssue>? _limbIssueCache;
+    private bool _limbMachine;
+    private bool _limbSoft;
     private Dictionary<string, FixedPoint2>? _generalGroups;
     private Dictionary<string, FixedPoint2>? _generalTypes;
     private FixedPoint2 _generalTotal;
@@ -247,6 +269,7 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
     {
         _limbPick = zone;
         _outline.Selected = zone;
+        ShowDamage();
         if (_limbText == null)
             return;
 
@@ -258,25 +281,95 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
 
     private void WriteLimbText(BoxContainer text)
     {
+        if (_limbIssueCache != null)
+        {
+            foreach (var line in LimbScanText.Lines(_limbIssueCache, _limbMachine, _limbPick, _limbSoft))
+                text.AddChild(new Label { Text = line });
+        }
+
         if (_limbShadeCache == null)
             return;
 
         foreach (var line in LimbScanText.Areas(_limbShadeCache, _limbPick))
+        {
+            if (text.Children.Any(child => child is Label label && label.Text == line))
+                continue;
+
             text.AddChild(new Label { Text = line });
+        }
     }
 
     private void ShowDamage()
     {
+        if (ShowZoneDamage())
+            return;
+
         DamageTitleLabel.Text = Loc.GetString("health-analyzer-window-entity-damage-total-text");
         DamageLabel.Text = _generalTotal.ToString();
-        if (_hideGroups)
-        {
-            GroupsContainer.RemoveAllChildren();
-            return;
-        }
-
         if (_generalGroups != null && _generalTypes != null)
             DrawDiagnosticGroups(_generalGroups, _generalTypes);
+    }
+
+    /// <summary>
+    /// The picked part's share of each damage type, split by the per-zone hit ledger, so the parts add up to the total.
+    /// </summary>
+    private bool ShowZoneDamage()
+    {
+        if (_limbPick is not { } pick
+            || _generalTypes == null
+            || _limbPatient is not { } net
+            || !_entityManager.TryGetEntity(net, out var body)
+            || !_entityManager.TryGetComponent<LimbBodyComponent>(body.Value, out var limbs))
+            return false;
+
+        if (LimbWoundRules.IsSmall(pick))
+            pick = LimbZone.Head;
+
+        var index = LimbWoundRules.Index(pick);
+        if (!LimbWoundRules.IsBody(pick) || (uint) index >= (uint) limbs.Zones.Count)
+            return false;
+
+        var wounds = _entityManager.System<LimbWoundSystem>();
+        var types = new Dictionary<string, FixedPoint2>();
+        var total = FixedPoint2.Zero;
+        foreach (var (type, amount) in _generalTypes)
+        {
+            if (amount <= FixedPoint2.Zero)
+                continue;
+
+            var all = 0f;
+            for (var i = 0; i < limbs.Zones.Count && i < LimbWoundRules.BodyZoneCount; i++)
+                all += wounds.LedgerFor(limbs.Zones[i], type);
+
+            var share = all > 0f
+                ? wounds.LedgerFor(limbs.Zones[index], type) / all
+                : pick == LimbZone.Torso ? 1f : 0f;
+            var part = amount * share;
+            if (part <= FixedPoint2.Zero)
+                continue;
+
+            types[type] = part;
+            total += part;
+        }
+
+        var groups = new Dictionary<string, FixedPoint2>();
+        foreach (var group in _prototypes.EnumeratePrototypes<DamageGroupPrototype>())
+        {
+            var sum = FixedPoint2.Zero;
+            foreach (var type in group.DamageTypes)
+            {
+                if (types.TryGetValue(type, out var value))
+                    sum += value;
+            }
+
+            if (sum > FixedPoint2.Zero)
+                groups[group.ID] = sum;
+        }
+
+        DamageTitleLabel.Text = Loc.GetString("limb-analyzer-zone-damage");
+        DamageLabel.Text = total.ToString();
+        DrawDiagnosticGroups(groups.OrderByDescending(g => g.Value).ToDictionary(g => g.Key, g => g.Value), types);
+        return true;
     }
     // DS14-end
 

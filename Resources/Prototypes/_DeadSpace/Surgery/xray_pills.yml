@@ -1,23 +1,23 @@
 - type: entity
   parent: BaseItem
   id: SurgeryXrayShard
-  name: рентген-осколок
+  name: x-ray shard
   suffix: Admin
-  description: Проверочный инородный предмет для снимка.
+  description: A test foreign object for a radiograph.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _DeadSpace/Objects/Medical/xray_tablet.rsi
-    state: icon
+    sprite: Objects/Materials/Shards/shard.rsi
+    state: shard1
   - type: Item
     size: Tiny
 
 - type: entity
   parent: Pill
   id: SurgeryXrayPillCrack
-  name: таблетка трещины
-  suffix: Admin, рентген
-  description: После проглатывания трещина на всех костях.
+  name: crack pill
+  suffix: Admin, X-ray
+  description: After swallowing, every bone is cracked.
   components:
   - type: Pill
     pillType: 1
@@ -29,9 +29,9 @@
 - type: entity
   parent: Pill
   id: SurgeryXrayPillClosedFracture
-  name: таблетка закрытого перелома
-  suffix: Admin, рентген
-  description: После проглатывания закрытый перелом всех костей.
+  name: closed fracture pill
+  suffix: Admin, X-ray
+  description: After swallowing, every bone has a closed fracture.
   components:
   - type: Pill
     pillType: 2
@@ -43,9 +43,9 @@
 - type: entity
   parent: Pill
   id: SurgeryXrayPillOpenFracture
-  name: таблетка открытого перелома
-  suffix: Admin, рентген
-  description: После проглатывания открытый перелом всех костей.
+  name: open fracture pill
+  suffix: Admin, X-ray
+  description: After swallowing, every bone has an open fracture.
   components:
   - type: Pill
     pillType: 3
@@ -57,9 +57,9 @@
 - type: entity
   parent: Pill
   id: SurgeryXrayPillBleed
-  name: таблетка внутреннего кровотечения
-  suffix: Admin, рентген
-  description: После проглатывания внутреннее кровотечение во всех частях.
+  name: internal bleeding pill
+  suffix: Admin, X-ray
+  description: After swallowing, every body part bleeds internally.
   components:
   - type: Pill
     pillType: 4
@@ -71,9 +71,9 @@
 - type: entity
   parent: Pill
   id: SurgeryXrayPillRupture
-  name: таблетка разрыва органов
-  suffix: Admin, рентген
-  description: После проглатывания разрыв мозга, глаз, сердца, лёгких, желудка, печени, почек и кишок.
+  name: organ rupture pill
+  suffix: Admin, X-ray
+  description: After swallowing, the brain, eyes, heart, lungs, stomach, liver, and kidneys rupture.
   components:
   - type: Pill
     pillType: 5
@@ -85,9 +85,9 @@
 - type: entity
   parent: Pill
   id: SurgeryXrayPillEmbedded
-  name: таблетка осколка
-  suffix: Admin, рентген
-  description: После проглатывания застрявший осколок во всех частях.
+  name: shrapnel pill
+  suffix: Admin, X-ray
+  description: After swallowing, a fragment lodges in every body part.
   components:
   - type: Pill
     pillType: 6
@@ -99,9 +99,9 @@
 - type: entity
   parent: Pill
   id: SurgeryXrayPillForeign
-  name: таблетка инородного предмета
-  suffix: Admin, рентген
-  description: После проглатывания предметы в голове, брюшной полости и груди.
+  name: foreign object pill
+  suffix: Admin, X-ray
+  description: After swallowing, objects appear in the head, abdomen, and chest.
   components:
   - type: Pill
     pillType: 7
@@ -109,3 +109,17 @@
     state: pill7
   - type: SurgeryXrayMarkPill
     kind: Foreign
+
+- type: entity
+  parent: Pill
+  id: SurgeryXrayPillInfection
+  name: infection pill
+  suffix: Admin, X-ray
+  description: After swallowing, a random body part becomes infected. After a few minutes the infection turns to rot.
+  components:
+  - type: Pill
+    pillType: 8
+  - type: Sprite
+    state: pill8
+  - type: SurgeryXrayMarkPill
+    kind: Infection

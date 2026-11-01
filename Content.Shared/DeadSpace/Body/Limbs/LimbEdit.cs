@@ -19,6 +19,7 @@ public struct LimbEdit
     public bool SetEmbedded;
     public bool Embedded;
     public bool ClearAtrophy;
+    public bool SetAtrophy;
     public bool ClearEmbedded;
     public bool ClearSevered;
     public bool ClearSkinBare;

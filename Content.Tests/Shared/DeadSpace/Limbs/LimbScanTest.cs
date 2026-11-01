@@ -1,11 +1,13 @@
+// Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
+
 using System.Collections.Generic;
 using Content.Shared.DeadSpace.Body.Limbs;
 using NUnit.Framework;
 
 namespace Content.Tests.Shared.DeadSpace.Limbs;
 
-[TestFixture, Parallelizable]
-public sealed class LimbScanTest
+[TestFixture]
+public sealed class LimbScanTest : Content.Tests.ContentUnitTest
 {
     [Test]
     public void IntactBodyIsHealthy()
@@ -50,6 +52,28 @@ public sealed class LimbScanTest
             Assert.That(summary.Ruptures, Is.EqualTo(1));
             Assert.That(issues, Has.Some.Matches<LimbScanIssue>(issue => issue.Organ && issue.Index == (byte) LimbOrgan.Heart));
             Assert.That(issues, Has.None.Matches<LimbScanIssue>(issue => !issue.Organ && issue.Index == (byte) LimbZone.HandLeft && issue.Kind == LimbIssueKind.OpenWound));
+        });
+    }
+
+    [Test]
+    public void FractureAndBleedAreNamedInTheScan()
+    {
+        var lines = LimbScanText.Lines(new[]
+        {
+            new LimbScanIssue(false, (byte) LimbZone.Torso, LimbIssueKind.Fracture),
+            new LimbScanIssue(false, (byte) LimbZone.Torso, LimbIssueKind.Bleed),
+            new LimbScanIssue(false, (byte) LimbZone.Torso, LimbIssueKind.Severed),
+        });
+
+        var severed = LimbScanText.Lines(new[]
+        {
+            new LimbScanIssue(false, (byte) LimbZone.Torso, LimbIssueKind.Severed),
+        });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(lines, Has.Count.EqualTo(1));
+            Assert.That(severed, Is.Empty);
         });
     }
 }

@@ -1,0 +1,167 @@
+- type: entity
+  parent: BaseItem
+  id: SurgeryAppendageTailBase
+  abstract: true
+  name: tail
+  description: A severed tail. With a marker in the other hand it can be sewn onto any patient's groin.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Mobs/Surgery/human_male.rsi
+    state: none
+  - type: Item
+    size: Small
+  - type: SurgeryAppendage
+    appendage: Tail
+
+- type: entity
+  parent: SurgeryAppendageTailBase
+  id: SurgeryAppendageTail
+  categories: [ HideSpawnMenu ]
+
+- type: entity
+  parent: SurgeryAppendageTailBase
+  id: SurgeryAppendageTailLizard
+  name: unathi tail
+  components:
+  - type: SurgeryAppendage
+    appendage: Tail
+    carry:
+    - Wagging
+    markings:
+    - markingId: LizardTailSmooth
+      markingColor:
+      - "#34a223"
+      - "#34a223"
+    grant:
+    - type: Puller
+      needsHands: false
+    revoke:
+    - type: Puller
+      needsHands: true
+
+- type: entity
+  parent: SurgeryAppendageTailBase
+  id: SurgeryAppendageTailKobolt
+  name: kobolt tail
+  components:
+  - type: SurgeryAppendage
+    appendage: Tail
+    carry:
+    - Wagging
+    markings:
+    - markingId: LizardTailSmoothKobolt
+      markingColor:
+      - "#34a223"
+    grant:
+    - type: Puller
+      needsHands: false
+    revoke:
+    - type: Puller
+      needsHands: true
+
+- type: entity
+  parent: SurgeryAppendageTailBase
+  id: SurgeryAppendageTailVulp
+  name: vulpkanin tail
+  components:
+  - type: SurgeryAppendage
+    appendage: Tail
+    markings:
+    - markingId: VulpTailVulp
+      markingColor:
+      - "#5a3f2d"
+      - "#e8d8c8"
+
+- type: entity
+  parent: SurgeryAppendageTailBase
+  id: SurgeryAppendageTailFelinid
+  name: felinid tail
+  components:
+  - type: SurgeryAppendage
+    appendage: Tail
+    markings:
+    - markingId: FelinidTailBasic
+      markingColor:
+      - "#c8a070"
+
+- type: entity
+  parent: SurgeryAppendageTailBase
+  id: SurgeryAppendageTailTajaran
+  name: tajaran tail
+  components:
+  - type: SurgeryAppendage
+    appendage: Tail
+    markings:
+    - markingId: TailColor
+      markingColor:
+      - "#9a7650"
+
+- type: entity
+  parent: SurgeryAppendageTailBase
+  id: SurgeryAppendageTailVox
+  name: vox tail
+  components:
+  - type: SurgeryAppendage
+    appendage: Tail
+    markings:
+    - markingId: VoxTail
+      markingColor:
+      - "#6ea85a"
+
+- type: entity
+  parent: SurgeryAppendageTailBase
+  id: SurgeryAppendageTailShark
+  name: shark tail
+  components:
+  - type: SurgeryAppendage
+    appendage: Tail
+    markings:
+    - markingId: SharkTailDefault
+      markingColor:
+      - "#6f8a9e"
+
+- type: entity
+  parent: SurgeryAppendageTailBase
+  id: SurgeryAppendageTailArkan
+  name: arkan tail
+  components:
+  - type: SurgeryAppendage
+    appendage: Tail
+    markings:
+    - markingId: DemonTail1
+      markingColor:
+      - "#8a2e2e"
+
+- type: entity
+  parent: SurgeryAppendageTailBase
+  id: SurgeryAppendageTailXeno
+  name: xenomorph tail
+  components:
+  - type: SurgeryAppendage
+    appendage: Tail
+    markings:
+    - markingId: XenoTail
+      markingColor:
+      - "#2a2a33"
+
+- type: entity
+  parent: NitrousOxideTankFilled
+  id: VoxAnesthesiaTankFilled
+  name: vox anesthesia tank
+  description: Nitrogen and carbon dioxide, no oxygen. Nitrous oxide does not take a vox, and carbon dioxide puts them to sleep without poisoning them.
+  suffix: Filled
+  components:
+  - type: Sprite
+    color: "#9fc3e8"
+  - type: PhysicalComposition
+    materialComposition: {}
+  - type: StaticPrice
+    price: 0
+  - type: GasTank
+    outputPressure: 30.4
+    air:
+      volume: 5
+      moles:
+        Nitrogen: 1.435965335
+        CarbonDioxide: 0.615413715
+      temperature: 293.15

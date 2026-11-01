@@ -1,0 +1,56 @@
+ent-BaseLimbRestorer = field restorer
+    .desc = Prime it in hand, then hold it on the patient.
+ent-LimbRestorerSyndicate = Cybersun bluespace reconstructor
+    .desc = A bluespace field rebuilds the patient from a backup scan. Sets bones, stops internal bleeding, pulls shards, mends organs and grows lost ones back. Does not grow limbs.
+ent-LimbRestorerNecro = necro reliquary
+    .desc = A shard of the Marker in a brass frame. Its whisper knits flesh, bone and organs, and even pushes out new limbs. The body pays for it.
+ent-LimbRestorerPirate = smuggler's bluespace balm
+    .desc = A tin of stolen bluespace slurry. Sets bones, stops internal bleeding, pulls shards and patches organs. Tastes like a fuel tank.
+ent-LimbRestorerERT = ERT field autosurgeon
+    .desc = A Nanotrasen field autosurgeon for response team medics. Does a full internal repair and regrows organs, but only on someone else.
+
+ent-ActionLimbRestorerImplant = Emergency reconstruction
+    .desc = Fire the implant. Rebuilds the inside of the body in a second.
+ent-ActionLimbRestorerImplantNecro = Marker's heartbeat
+    .desc = Wake the shard under your skin. It knits you together and takes its share.
+ent-LimbRestorerImplantSyndicate = emergency reconstruction implant
+    .desc = A Cybersun bluespace node under the skin. Two charges, fires by itself when the wearer goes critical.
+ent-LimbRestorerImplantNecro = Marker's heart
+    .desc = A sliver of the Marker sewn under the skin. Two charges, wakes by itself when the wearer goes critical, and even pushes out lost limbs.
+ent-LimbRestorerImplantPirate = smuggler's patch-up implant
+    .desc = A cheap bluespace capsule under the skin. One charge, cracks open by itself when the wearer goes critical.
+ent-LimbRestorerImplanterSyndicate = { ent-BaseImplantOnlyImplanterSyndi }
+    .suffix = emergency reconstruction
+    .desc = { ent-BaseImplantOnlyImplanterSyndi.desc }
+ent-LimbRestorerImplanterNecro = { ent-BaseImplantOnlyImplanterSyndi }
+    .suffix = Marker's heart
+    .desc = { ent-BaseImplantOnlyImplanterSyndi.desc }
+ent-LimbRestorerImplanterPirate = { ent-BaseImplantOnlyImplanterSyndi }
+    .suffix = patch-up implant
+    .desc = { ent-BaseImplantOnlyImplanterSyndi.desc }
+limb-restorer-implant-empty = The implant is empty.
+uplink-limb-restorer-implant-name = Emergency reconstruction implant
+uplink-limb-restorer-implant-desc = Two charges. Fire it with a button, no hands needed, or it fires by itself in crit: bones, bleeding, shards, organs and their regrowth, infection, plus some wound healing. Does not grow limbs.
+uplink-limb-restorer-implant-necro-name = Marker's heart
+uplink-limb-restorer-implant-necro-desc = Two charges. Fire it with a button, no hands needed, or it wakes by itself in crit. Fixes everything inside, regrows limbs, heals some wounds. Costs cellular damage.
+uplink-limb-restorer-implant-pirate-name = Smuggler's patch-up implant
+uplink-limb-restorer-implant-pirate-desc = One charge. Fire it with a button, no hands needed, or it cracks open by itself in crit. Bones, bleeding, shards and organs, heals some wounds and poisons a little.
+limb-restorer-charges = Charges left: [color=yellow]{ $count }[/color].
+limb-restorer-examine-primed = [color=cyan]Primed[/color] and waiting for a patient.
+limb-restorer-primed = The device is primed. Hold it on the patient.
+limb-restorer-primed-necro = The reliquary whispers and fills with red.
+limb-restorer-not-primed = Prime the device in your hand first.
+limb-restorer-no-self = This device does not work on yourself.
+limb-restorer-done = The body is put back together.
+limb-restorer-done-necro = Flesh knits under the red light.
+
+uplink-limb-implant-syndicate-hud-name = Ocular syndicate HUD implant
+uplink-limb-implant-syndicate-hud-desc = Shows your fellow agents and security data right in your eyes, no visor needed. Installed surgically in the eyes.
+uplink-limb-restorer-name = Bluespace reconstructor
+uplink-limb-restorer-desc = Three charges of field surgery without a table: bones, internal bleeding, shards, organs and their regrowth, infection and rejection. Prime 4 s, 8 s on another, 12 s on yourself. Does not grow limbs.
+uplink-limb-restorer-necro-name = Necro reliquary
+uplink-limb-restorer-necro-desc = Two charges. Fixes everything inside, regrows organs and limbs. Costs the patient cellular damage.
+uplink-field-chemistry-name = Field chemistry box
+uplink-field-chemistry-desc = Hemostatin, calcigen, ferrolysin and myoregen, 30 units each. Internal bleeding, fractures, shards and dead limbs without surgery.
+uplink-limb-restorer-pirate-name = Smuggler's bluespace balm
+uplink-limb-restorer-pirate-desc = Two charges. Bones, internal bleeding, shards, organs and infection. Does not regrow organs or limbs, and poisons a little.

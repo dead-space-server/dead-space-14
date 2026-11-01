@@ -2,6 +2,7 @@ using Content.Shared.Alert;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Atmos.EntitySystems;
 using Content.Shared.Body.Components;
+using Content.Shared.DeadSpace.Surgery; //DS-14
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.Components;
 using Content.Shared.IdentityManagement;
@@ -271,6 +272,13 @@ public abstract class SharedInternalsSystem : EntitySystem
 
         if (!Resolve(user, ref user.Comp2, ref user.Comp3))
             return null;
+
+        // DS-14-start
+        var mounted = new FindInternalsTankEvent();
+        RaiseLocalEvent(user, ref mounted);
+        if (mounted.Tank is { } mountedTank && _gasTank.CanConnectToInternals(mountedTank))
+            return mountedTank;
+        // DS-14-end
 
         if (_inventory.TryGetSlotEntity(user, "back", out var backEntity, user.Comp2, user.Comp3) &&
             TryComp<GasTankComponent>(backEntity, out var backGasTank) &&

@@ -5,6 +5,8 @@ using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Body.Components;
 using Content.Shared.DeadSpace.Surgery;
+using Content.Shared.DeadSpace.Cloning;
+using Content.Shared.Forensics.Components;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Prototypes;
 using Content.Shared.Body.Systems;
@@ -96,9 +98,12 @@ public sealed partial class LimbWoundSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly StandingStateSystem _standing = default!;
     [Dependency] private readonly StatusEffectsSystem _status = default!;
+    [Dependency] private readonly LimbImplantSystem _implants = default!;
 
     private readonly Dictionary<string, int> _fields = new();
     private readonly bool[] _fireBlocked = new bool[LimbWoundRules.BodyZoneCount];
+
+    private const SlotFlags Worn = SlotFlags.WITHOUT_POCKET;
 
     public override void Initialize()
     {
@@ -122,6 +127,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         SubscribeLocalEvent<LimbBodyComponent, AttackedEvent>(OnMelee);
         SubscribeLocalEvent<LimbBodyComponent, PickupAttemptEvent>(OnPickup);
         SubscribeLocalEvent<LimbBodyComponent, LimbArmorZoneEvent>(OnArmorZone);
+        SubscribeLocalEvent<LimbBodyComponent, DamageModifyEvent>(OnDeadLimbHit);
         SubscribeLocalEvent<LimbBodyComponent, BeforeMeleeDamageEvent>(OnBeforeMelee, after: [typeof(ParrySystem)]);
         SubscribeLocalEvent<MeleeWeaponComponent, GetMeleeAttackRateEvent>(OnMeleeRate);
         SubscribeLocalEvent<GunComponent, GunRefreshModifiersEvent>(OnGunModifiers);
@@ -199,13 +205,17 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 zones[i].Cloth = 0f;
             }
 
+            if (TryComp<FlammableComponent>(uid, out var flame) && flame.OnFire
+                && LimbWoundRules.Hottest(zones) is var hot && hot >= 0 && zones[hot].Fire < flame.FireStacks)
+                zones[hot].Fire = flame.FireStacks;
+
             LimbWoundRules.SpreadFire(zones, blocked);
             BurnClothing(uid, zones);
             Dirty(uid, limbs);
         }
 
         var bleed = BleedTotal(uid, limbs);
-        if (LimbWoundRules.DrainBleed(zones))
+        if (!Machine(uid) && LimbWoundRules.DrainBleed(zones))
             Dirty(uid, limbs);
         ApplyLife(uid, limbs);
         var failure = LimbOrganRules.Tick(CollectionsMarshal.AsSpan(limbs.Organs));
@@ -339,7 +349,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (LimbWoundRules.IsSmall(strike.Zone))
         {
             var dummy = span[LimbWoundRules.Index(LimbZone.Head)];
-            var small = LimbWoundRules.Apply(ref dummy, strike);
+            var small = LimbWoundRules.Apply(ref dummy, strike, limbs.Soft);
             if (small.Applied)
                 ApplySmallToHead(span, strike);
             ApplyOrgans(uid, limbs, strike, small, ready);
@@ -349,7 +359,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         }
 
         ref var state = ref span[LimbWoundRules.Index(strike.Zone)];
-        var result = LimbWoundRules.Apply(ref state, strike);
+        var result = LimbWoundRules.Apply(ref state, strike, limbs.Soft);
         ApplyOrgans(uid, limbs, strike, result, ready);
         var pelletSevered = ApplyPelletSever(uid, limbs, strike);
         Dirty(uid, limbs);
@@ -400,9 +410,18 @@ public sealed partial class LimbWoundSystem : EntitySystem
             return 0f;
 
         EnsureZones(limbs);
+        if (Machine(uid))
+            return 0f;
+
         var total = 0f;
-        foreach (var zone in CollectionsMarshal.AsSpan(limbs.Zones))
-            total += zone.Bleed;
+        var zones = CollectionsMarshal.AsSpan(limbs.Zones);
+        for (var i = 0; i < zones.Length; i++)
+        {
+            if (zones[i].Severed || LimbWoundRules.DeadLimb((LimbZone) i, zones[i]))
+                continue;
+
+            total += zones[i].Bleed;
+        }
 
         return total;
     }
@@ -452,6 +471,10 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (TryComp<LimbTargetComponent>(args.User, out var picked) && picked.Selected is { } selected)
             selectedIndex = LimbWoundRules.Index(selected);
         index = LimbWoundRules.TreatIndex(zones, selectedIndex);
+        var burnOnly = (Heals(healing.Damage, "Heat") || Heals(healing.Damage, "Caustic"))
+                       && healing.BloodlossModifier >= 0 && !Heals(healing.Damage, "Blunt");
+        if (selectedIndex < 0 && burnOnly && MostBurned(zones) is var hot && hot >= 0)
+            index = hot;
         if (index >= 0)
             ent.Comp.LedgerZone = (LimbZone) index;
         if (index < 0)
@@ -473,6 +496,22 @@ public sealed partial class LimbWoundSystem : EntitySystem
         Dirty(ent);
         _movement.RefreshMovementSpeedModifiers(ent);
         RefreshActive(ent, ent.Comp);
+    }
+
+    private static int MostBurned(Span<LimbZoneState> zones)
+    {
+        var best = -1;
+        var worst = 0f;
+        for (var i = 0; i < zones.Length && i < LimbWoundRules.BodyZoneCount; i++)
+        {
+            if (zones[i].Severed || zones[i].Skin <= worst)
+                continue;
+
+            worst = zones[i].Skin;
+            best = i;
+        }
+
+        return best;
     }
 
     private void OnIgnited(Entity<LimbBodyComponent> ent, ref IgnitedEvent args)
@@ -525,7 +564,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
         var zone = LimbZone.Torso;
         if (TryComp<LimbTargetComponent>(args.User, out var picked) && picked.Selected is { } selected)
-            zone = selected;
+            zone = Present(limbs, selected);
 
         limbs.LedgerZone = zone;
         limbs.ArmorZone = zone;
@@ -595,7 +634,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         }
         else if (!fromStrike && args.DamageIncreased && HeatOf(args.DamageDelta) > 0f && AnyFire(limbs))
         {
-            LimbWoundRules.Scorch(zones, HeatOf(args.DamageDelta));
+            LimbWoundRules.Scorch(zones, HeatOf(args.DamageDelta) * limbs.Burn);
             changed = true;
             ref var state = ref zones[LimbWoundRules.Index(zone)];
             foreach (var (type, value) in args.DamageDelta.DamageDict)
@@ -746,6 +785,11 @@ public sealed partial class LimbWoundSystem : EntitySystem
         }
     }
 
+    public float LedgerFor(in LimbZoneState state, string type)
+    {
+        return FieldOf(state, Field(type));
+    }
+
     private void Note(ref LimbZoneState state, string type, float amount)
     {
         var field = Field(type);
@@ -848,7 +892,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var aimPoint = ent.Comp.LimbAimPoint ?? hit;
         var aimed = ZoneForShot(aiming, aim, args.Target, from, hit, aimPoint);
         var slip = shooter != null ? Cover(args.Target, shooter.Value, aimed).Slip : 0f;
-        var zone = Place(aimed, distance, ready, slip);
+        var zone = Present(limbs, Place(aimed, distance, ready, slip));
         limbs.LedgerZone = zone;
         limbs.ArmorZone = zone;
         limbs.FireOrigin = zone;
@@ -866,6 +910,27 @@ public sealed partial class LimbWoundSystem : EntitySystem
             limbs.LedgerZone = null;
             args = args with { Damage = new DamageSpecifier() };
         }
+    }
+
+    private void OnDeadLimbHit(EntityUid uid, LimbBodyComponent limbs, DamageModifyEvent args)
+    {
+        if (!LimbTuning.Enabled || limbs.LedgerSilence > 0 || limbs.ArmorZone is not { } zone || !LimbWoundRules.IsLimb(zone)
+            || limbs.FireOriginTime != _timing.CurTime)
+            return;
+
+        EnsureZones(limbs);
+        var index = LimbWoundRules.Index(zone);
+        if ((uint) index >= (uint) limbs.Zones.Count || !LimbWoundRules.DeadLimb(zone, limbs.Zones[index]))
+            return;
+
+        var kept = new DamageSpecifier();
+        foreach (var (type, value) in args.Damage.DamageDict)
+        {
+            if (value < 0)
+                kept.DamageDict[type] = value;
+        }
+
+        args.Damage = kept;
     }
 
     private void OnArmorZone(Entity<LimbBodyComponent> ent, ref LimbArmorZoneEvent args)
@@ -891,7 +956,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (TryComp<GunComponent>(args.Data.Gun, out var gun) && gun.ShootCoordinates is { } coords)
             aimPoint = _transform.ToMapCoordinates(coords).Position;
         var aimed = ZoneForShot(aiming, aim, ent, from, hit, aimPoint);
-        ent.Comp.ArmorZone = Place(aimed, distance, ready, Cover(ent, shooter, aimed).Slip);
+        ent.Comp.ArmorZone = Present(ent.Comp, Place(aimed, distance, ready, Cover(ent, shooter, aimed).Slip));
         ent.Comp.FireOrigin = ent.Comp.ArmorZone;
         ent.Comp.FireOriginTime = _timing.CurTime;
         ent.Comp.StrikeOpen = true;
@@ -911,7 +976,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (TryComp<GunComponent>(args.Data.Gun, out var gun) && gun.ShootCoordinates is { } coords)
             aimPoint = _transform.ToMapCoordinates(coords).Position;
         var aimed = ZoneForShot(aiming, aim, args.Target, from, hit, aimPoint);
-        var zone = Place(aimed, distance, ready, Cover(args.Target, shooter, aimed).Slip);
+        var zone = Present(limbs, Place(aimed, distance, ready, Cover(args.Target, shooter, aimed).Slip));
         limbs.ArmorZone = zone;
         var incoming = ent.Comp.IgnoreResistances ? new DamageSpecifier(ent.Comp.Damage) : Resist(args.Target, ent.Comp.Damage, shooter);
         limbs.ArmorZone = null;
@@ -982,9 +1047,16 @@ public sealed partial class LimbWoundSystem : EntitySystem
             return;
 
         ent.Comp.Present = LimbSpeciesRules.Mask(profile.Organs);
+        ent.Comp.Vital = profile.Vital;
         ent.Comp.Wound = profile.Wound;
+        ent.Comp.Burn = profile.Burn;
         ent.Comp.LiquidSever = profile.LiquidSever;
+        ent.Comp.Soft = profile.Soft;
+        ent.Comp.Plant = profile.Plant;
+        ent.Comp.HeadVital = profile.HeadVital;
+        ent.Comp.HasEars = profile.Ears;
         Dirty(ent);
+        _implants.EnsureSlots(ent.Owner);
     }
 
     private void OnMobState(Entity<LimbBodyComponent> ent, ref MobStateChangedEvent args)
@@ -993,10 +1065,15 @@ public sealed partial class LimbWoundSystem : EntitySystem
         {
             if (ent.Comp.Died == null)
                 ent.Comp.Died = _timing.CurTime;
+            if (!_net.IsClient)
+                _standing.Down(ent.Owner, playSound: false, dropHeldItems: true, force: true);
             return;
         }
 
         ent.Comp.Died = null;
+        ent.Comp.LimbDeath = false;
+        if (args.NewMobState == MobState.Alive)
+            ent.Comp.LimbCrit = false;
     }
 
     private void OnLimbLife(Entity<LimbBodyComponent> ent, ref UpdateMobStateEvent args)
@@ -1006,10 +1083,14 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
         EnsureZones(ent.Comp);
         var life = LimbWoundRules.Life(
-            ent.Comp.Zones[LimbWoundRules.Index(LimbZone.Head)].Health,
+            HeadHealth(ent.Comp),
             ent.Comp.Zones[LimbWoundRules.Index(LimbZone.Torso)].Health);
         if (life == LimbLife.Dead || VitalGone(ent.Comp))
+        {
+            if (args.State != MobState.Dead)
+                ent.Comp.LimbDeath = true;
             args.State = MobState.Dead;
+        }
         else if (life == LimbLife.Crit && args.State == MobState.Alive)
             args.State = MobState.Critical;
     }
@@ -1019,6 +1100,8 @@ public sealed partial class LimbWoundSystem : EntitySystem
         ent.Comp.Zones = LimbZoneState.CreateAll();
         ent.Comp.Organs = LimbOrganRules.CreateAll();
         ent.Comp.Mouth = 0f;
+        ent.Comp.Ears = 0f;
+        ent.Comp.EarsGone = false;
         ent.Comp.EyesGone = 0;
         ent.Comp.EyeBurn = 0f;
         ent.Comp.LungWhistle = false;
@@ -1044,8 +1127,14 @@ public sealed partial class LimbWoundSystem : EntitySystem
             return;
 
         ent.Comp.Present = LimbSpeciesRules.Mask(profile.Organs);
+        ent.Comp.Vital = profile.Vital;
         ent.Comp.Wound = profile.Wound;
+        ent.Comp.Burn = profile.Burn;
         ent.Comp.LiquidSever = profile.LiquidSever;
+        ent.Comp.Soft = profile.Soft;
+        ent.Comp.Plant = profile.Plant;
+        ent.Comp.HeadVital = profile.HeadVital;
+        ent.Comp.HasEars = profile.Ears;
     }
 
     private void RestoreParts(EntityUid body)
@@ -1133,8 +1222,11 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
         EnsureZones(target.Comp);
         if (!extract && target.Comp.Zones[LimbWoundRules.Index(zone)].Severed)
+            return false;
+
+        if (!extract && SeverProof(target, zone))
         {
-            _popup.PopupEntity(Loc.GetString("limb-harvest-gone"), target, user);
+            _popup.PopupEntity(Loc.GetString("limb-harvest-armored"), target, user);
             return true;
         }
 
@@ -1228,13 +1320,25 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private bool BlastBlocked(EntityUid uid, LimbZone zone)
     {
-        var slots = _inventory.GetSlotEnumerator(uid);
+        var slots = _inventory.GetSlotEnumerator(uid, Worn);
         while (slots.NextItem(out var item))
         {
-            if (!TryComp<LimbCoverComponent>(item, out var cover) || !cover.Blast || !cover.Covers(zone))
+            if (!TryComp<LimbCoverComponent>(item, out var cover) || !(cover.Blast || cover.Sever) || !cover.Covers(zone))
                 continue;
 
             return true;
+        }
+
+        return false;
+    }
+
+    public bool SeverProof(EntityUid uid, LimbZone zone)
+    {
+        var slots = _inventory.GetSlotEnumerator(uid, Worn);
+        while (slots.NextItem(out var item))
+        {
+            if (TryComp<LimbCoverComponent>(item, out var cover) && cover.Sever && cover.Covers(zone))
+                return true;
         }
 
         return false;
@@ -1287,7 +1391,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 if (zones[i].Severed)
                     continue;
 
-                if (LimbWoundRules.ApplyBlast(ref zones[i], heat[i] * wound * share, pierce[i] * wound * share, blunt[i] * wound * share, slash[i] * wound * share))
+                if (LimbWoundRules.ApplyBlast(ref zones[i], heat[i] * ent.Comp.Burn * share, pierce[i] * wound * share, blunt[i] * wound * share, slash[i] * wound * share, ent.Comp.Soft))
                     changed = true;
 
                 if (caustic[i] > 0f || other[i] > 0f)
@@ -1382,15 +1486,30 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 eyes = look.EyeColor;
             }
 
+            var grafted = TryComp<LimbFleshComponent>(part.Id, out var donor) && donor.Species.Length > 0
+                          && look != null && (donor.Species != look.Species.Id || donor.Skin != look.SkinColor);
             var flesh = EnsureComp<LimbFleshComponent>(part.Id);
             flesh.Bare = bare;
-            flesh.Skin = skin;
             flesh.Eyes = eyes;
-            flesh.Marks.Clear();
             flesh.EyeSprite = "";
             flesh.EyeState = "";
-            if (!bare && look != null)
-                CopyLook(flesh, look, zone, eyesRemain);
+            if (!grafted)
+            {
+                flesh.Skin = skin;
+                flesh.Species = look?.Species.Id ?? "";
+                flesh.Dna = CompOrNull<DnaComponent>(body)?.DNA ?? "";
+                flesh.Unstable = HasComp<UncloningComponent>(body);
+                flesh.Marks.Clear();
+                flesh.CarrySprites.Clear();
+                flesh.CarryStates.Clear();
+                if (look != null)
+                    CopyCarried(flesh, look, zone);
+                if (!bare && look != null)
+                    CopyLook(flesh, look, zone, eyesRemain);
+            }
+
+            if (look != null)
+                ClearGraftLook(body, look, zone);
 
             Dirty(part.Id, flesh);
 
@@ -1423,13 +1542,41 @@ public sealed partial class LimbWoundSystem : EntitySystem
             EnsureComp<TemperatureComponent>(part.Id);
             HidePart(body, zone);
 
+            if (limbs is { Soft: true })
+                EnsureComp<SurgerySlimeDissolveComponent>(part.Id);
+
             _containers.Remove(part.Id, container, force: true);
+            _transform.SetCoordinates(part.Id, Transform(body).Coordinates.Offset(new Vector2(0.55f, -0.2f)));
+            if (_dropAt is { } at)
+                _transform.SetWorldPosition(part.Id, _transform.GetWorldPosition(body) + at);
             return;
+        }
+    }
+
+    private void CopyCarried(LimbFleshComponent flesh, HumanoidAppearanceComponent look, LimbZone zone)
+    {
+        if (!LimbWoundRules.TryCarried(zone, out var child)
+            || !_proto.TryIndex<SpeciesPrototype>(look.Species, out var species)
+            || !_proto.TryIndex<HumanoidSpeciesBaseSpritesPrototype>(species.SpriteSet, out var sprites))
+            return;
+
+        var layers = new List<HumanoidVisualLayers>();
+        LimbLookRules.Collect(child, layers);
+        foreach (var layer in layers)
+        {
+            if (!sprites.Sprites.TryGetValue(layer, out var layerId)
+                || !_proto.TryIndex<HumanoidSpeciesSpriteLayer>(layerId, out var sprite)
+                || sprite.BaseSprite is not SpriteSpecifier.Rsi rsi)
+                continue;
+
+            flesh.CarrySprites.Add(rsi.RsiPath.ToString());
+            flesh.CarryStates.Add(rsi.RsiState);
         }
     }
 
     private void CopyLook(LimbFleshComponent flesh, HumanoidAppearanceComponent look, LimbZone zone, bool eyesRemain)
     {
+        var carried = LimbWoundRules.TryCarried(zone, out var child);
         foreach (var list in look.MarkingSet.Markings.Values)
         {
             foreach (var marking in list)
@@ -1437,7 +1584,8 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 if (!marking.Visible || !_proto.TryIndex<MarkingPrototype>(marking.MarkingId, out var proto))
                     continue;
 
-                if (!LimbLookRules.Fits(zone, proto.BodyPart, eyesRemain))
+                if (!LimbLookRules.Fits(zone, proto.BodyPart, eyesRemain)
+                    && !(carried && LimbLookRules.Fits(child, proto.BodyPart, eyesRemain)))
                     continue;
 
                 flesh.Marks.Add(new Marking(marking));
@@ -1548,7 +1696,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
                     var concussion = new LimbConcussionEvent(heavy);
                     RaiseLocalEvent(uid, ref concussion);
                     break;
-                case LimbHooks.Crit when _mobs.IsAlive(uid) && strike.WoundMultiplier > 0.99f && !strike.ThroughArmor:
+                case LimbHooks.Crit when hit.Organ == LimbOrgan.Heart && hit.Ruptured && HeartBurst(uid) && _mobs.IsAlive(uid) && strike.WoundMultiplier > 0.99f && !strike.ThroughArmor:
                     _mobs.ChangeMobState(uid, MobState.Critical);
                     break;
                 case LimbHooks.Air:
@@ -1578,6 +1726,14 @@ public sealed partial class LimbWoundSystem : EntitySystem
         }
     }
 
+    private bool HeartBurst(EntityUid uid)
+    {
+        var index = (int) LimbOrgan.Heart;
+        return TryComp<LimbBodyComponent>(uid, out var limbs)
+               && (uint) index < (uint) limbs.Organs.Count
+               && limbs.Organs[index].Ruptured;
+    }
+
     private void FinishHit(EntityUid uid, LimbBodyComponent limbs, LimbStrike strike, LimbStrikeResult result)
     {
         if (strike.Zone != LimbZone.Mouth && !result.Applied && result.EyeDamage <= 0)
@@ -1604,8 +1760,32 @@ public sealed partial class LimbWoundSystem : EntitySystem
         RefreshActive(uid, limbs);
     }
 
+    private static float HeadHealth(LimbBodyComponent limbs)
+    {
+        return limbs.HeadVital ? limbs.Zones[LimbWoundRules.Index(LimbZone.Head)].Health : LimbWoundRules.HealthFor(LimbZone.Head);
+    }
+
+    public bool IsVital(EntityUid body, LimbOrgan organ)
+    {
+        if (TryComp<LimbBodyComponent>(body, out var limbs) && limbs.Vital != null)
+            return limbs.Vital.Contains(organ);
+
+        return _proto.TryIndex<SurgeryOrganPrototype>(organ.ToString(), out var proto) && proto.Vital;
+    }
+
     private bool VitalGone(LimbBodyComponent limbs)
     {
+        if (limbs.Vital != null)
+        {
+            foreach (var kind in limbs.Vital)
+            {
+                if (Gone(limbs, kind, (LimbOrganMask) (1 << (int) kind)))
+                    return true;
+            }
+
+            return false;
+        }
+
         foreach (var organ in _proto.EnumeratePrototypes<SurgeryOrganPrototype>())
         {
             if (!organ.Vital || !Enum.TryParse<LimbOrgan>(organ.ID, out var kind))
@@ -1632,7 +1812,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (!_net.IsServer || VitalGone(limbs))
             return;
 
-        var head = limbs.Zones[LimbWoundRules.Index(LimbZone.Head)].Health;
+        var head = HeadHealth(limbs);
         var torso = limbs.Zones[LimbWoundRules.Index(LimbZone.Torso)].Health;
         var life = LimbWoundRules.Life(head, torso);
         var state = life == LimbLife.Dead ? MobState.Dead : life == LimbLife.Crit ? MobState.Critical : MobState.Alive;
@@ -1645,17 +1825,59 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (!_net.IsServer)
             return;
 
-        var head = limbs.Zones[LimbWoundRules.Index(LimbZone.Head)].Health;
+        var head = HeadHealth(limbs);
         var torso = limbs.Zones[LimbWoundRules.Index(LimbZone.Torso)].Health;
-        switch (VitalGone(limbs) ? LimbLife.Dead : LimbWoundRules.Life(head, torso))
+        var life = VitalGone(limbs) ? LimbLife.Dead : LimbWoundRules.Life(head, torso);
+        if (life == LimbLife.Dead)
         {
-            case LimbLife.Dead:
-                _mobs.ChangeMobState(uid, MobState.Dead);
-                break;
-            case LimbLife.Crit:
-                _mobs.ChangeMobState(uid, MobState.Critical);
-                break;
+            KillByLimbs(uid, limbs);
+            return;
         }
+
+        if (_mobs.IsDead(uid))
+        {
+            if (limbs.LimbDeath && !DeadByDamage(uid))
+            {
+                limbs.LimbDeath = false;
+                _mobs.UpdateMobState(uid);
+            }
+
+            return;
+        }
+
+        if (life == LimbLife.Crit)
+        {
+            if (_mobs.IsAlive(uid))
+                limbs.LimbCrit = true;
+            _mobs.ChangeMobState(uid, MobState.Critical);
+            return;
+        }
+
+        if (limbs.LimbCrit && _mobs.IsCritical(uid))
+        {
+            limbs.LimbCrit = false;
+            _mobs.UpdateMobState(uid);
+        }
+    }
+
+    public void KillByLimbs(EntityUid uid, LimbBodyComponent? limbs = null)
+    {
+        if (!Resolve(uid, ref limbs, false))
+            return;
+
+        if (_mobs.IsDead(uid))
+            return;
+
+        limbs.LimbDeath = true;
+        _mobs.ChangeMobState(uid, MobState.Dead);
+    }
+
+    private bool DeadByDamage(EntityUid uid)
+    {
+        return TryComp<MobThresholdsComponent>(uid, out var thresholds)
+            && TryComp<DamageableComponent>(uid, out var damage)
+            && (thresholds.CurrentThresholdState == MobState.Dead && !thresholds.AllowRevives
+                || _thresholds.TryGetThresholdForState(uid, MobState.Dead, out var dead, thresholds) && damage.TotalDamage >= dead.Value);
     }
 
     private void NoteFace(EntityUid uid, LimbBodyComponent limbs, LimbStrike strike)
@@ -1729,10 +1951,11 @@ public sealed partial class LimbWoundSystem : EntitySystem
             return;
 
         args.Cancel();
-        if (!args.ShowPopup)
+        if (!args.ShowPopup || !_timing.IsFirstTimePredicted || _timing.CurTime < limbs.NextGraspPopup)
             return;
 
-        _popup.PopupEntity(Loc.GetString("limb-grasp-burn"), uid, args.User);
+        limbs.NextGraspPopup = _timing.CurTime + TimeSpan.FromSeconds(2);
+        _popup.PopupClient(Loc.GetString("limb-grasp-burn"), uid, args.User);
     }
 
     private void OnAccent(EntityUid uid, LimbBodyComponent limbs, AccentGetEvent args)
@@ -1743,21 +1966,26 @@ public sealed partial class LimbWoundSystem : EntitySystem
         args.Message = LimbWoundRules.Garble(args.Message, limbs.Mouth);
     }
 
+    private static LimbZone Present(LimbBodyComponent limbs, LimbZone zone)
+    {
+        for (var i = 0; i < 4 && LimbWoundRules.IsBody(zone); i++)
+        {
+            var index = LimbWoundRules.Index(zone);
+            if ((uint) index >= (uint) limbs.Zones.Count || !limbs.Zones[index].Severed)
+                return zone;
+
+            zone = LimbWoundRules.SlipTo(zone);
+        }
+
+        return LimbWoundRules.IsBody(zone) ? zone : LimbZone.Torso;
+    }
+
     private LimbZone Place(LimbZone zone, float distance, bool ready, float extra = 0f)
     {
         if (_random.NextFloat() < LimbWoundRules.SlipChance(LimbWoundRules.TargetSize(zone), distance, ready, extra))
             return LimbWoundRules.SlipTo(zone);
 
         return zone;
-    }
-
-    private static DamageSpecifier Invert(DamageSpecifier damage)
-    {
-        var heal = new DamageSpecifier();
-        foreach (var (type, value) in damage.DamageDict)
-            heal.DamageDict[type] = -value;
-
-        return heal;
     }
 
     private void ApplyResult(EntityUid uid, LimbZone zone, LimbStrikeResult result)
@@ -1802,7 +2030,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         limbs.PelletHits = 0;
         EnsureZones(limbs);
         ref var state = ref CollectionsMarshal.AsSpan(limbs.Zones)[LimbWoundRules.Index(zone)];
-        if (state.Severed)
+        if (state.Severed || SeverProof(uid, zone))
             return false;
 
         if (LimbWoundRules.StripsSkin(true, strike.Distance, state.Skin))
@@ -1857,7 +2085,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var liquid = 0f;
         if (TryComp<LimbBodyComponent>(target, out var body))
         {
-            amount *= body.Wound;
+            amount *= mark == LimbMark.Heat ? body.Burn : body.Wound;
             harm *= body.Wound;
             liquid = body.LiquidSever;
         }
@@ -1878,7 +2106,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
             if (TryComp<LimbCutComponent>(held, out var cutComp))
             {
                 cut = cutComp.Factor;
-                sharp = cutComp.Sever;
+                sharp = cutComp.Sever && !SeverProof(target, zone);
                 severChance = cutComp.SeverChance;
             }
 
@@ -1933,7 +2161,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
             }
         }
 
-        var slots = _inventory.GetSlotEnumerator(target);
+        var slots = _inventory.GetSlotEnumerator(target, Worn);
         while (slots.NextItem(out var item))
         {
             if (TryComp<LimbCoverComponent>(item, out var comp))
@@ -2040,10 +2268,10 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
             state.Cloth = 0f;
             var zone = (LimbZone) i;
-            var slots = _inventory.GetSlotEnumerator(uid);
+            var slots = _inventory.GetSlotEnumerator(uid, Worn);
             while (slots.NextItem(out var item))
             {
-                if (!TryComp<LimbCoverComponent>(item, out var cover) || cover.StopsFire || !cover.Covers(zone))
+                if (!Flammable(item) || !LimbCoverRules.Covers(item, zone, EntityManager))
                     continue;
 
                 if (!doomed.Contains(item))
@@ -2055,11 +2283,19 @@ public sealed partial class LimbWoundSystem : EntitySystem
             QueueDel(item);
     }
 
+    private bool Flammable(EntityUid item)
+    {
+        if (HasComp<Content.Shared.Armor.ArmorComponent>(item) || HasComp<Content.Shared.Clothing.Components.FireProtectionComponent>(item))
+            return false;
+
+        return !TryComp<LimbCoverComponent>(item, out var cover) || !cover.StopsFire;
+    }
+
     private bool[] FireBlocked(EntityUid uid)
     {
         Array.Clear(_fireBlocked);
         var blocked = _fireBlocked;
-        var slots = _inventory.GetSlotEnumerator(uid);
+        var slots = _inventory.GetSlotEnumerator(uid, Worn);
         while (slots.NextItem(out var item))
         {
             if (!TryComp<LimbCoverComponent>(item, out var comp) || !comp.StopsFire)

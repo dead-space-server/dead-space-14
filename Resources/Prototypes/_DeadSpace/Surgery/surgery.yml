@@ -1,4 +1,4 @@
-﻿- type: surgeryAnatomy
+- type: surgeryAnatomy
   id: FleshLimb
   operation: OpenLimb
   layers:
@@ -7,7 +7,7 @@
 
 - type: surgeryAnatomy
   id: Torso
-  operation: TakeHeart
+  operation: OpenTorso
   layers:
   - Skin
   - Bone
@@ -69,6 +69,35 @@
   head: Plant
   groin: Plant
   eyes: Eyes
+  woundSprite: /Textures/_DeadSpace/Mobs/Surgery/diona.rsi
+  ink: Bark
+  graft: false
+  plant: true
+  graftStack: WoodPlank
+  organSprite: /Textures/Mobs/Species/Diona/organs.rsi
+  organStates:
+    Brain: brain
+    Lungs: lungs
+    Stomach: stomach
+  organSpots:
+    Lungs:
+    - state: lungs
+      x: 8
+      y: 3
+      w: 15
+      h: 27
+      cx: 0.5
+      cy: 0.38
+      height: 0.48
+    Stomach:
+    - state: stomach
+      x: 1
+      y: 2
+      w: 29
+      h: 22
+      cx: 0.5
+      cy: 0.78
+      height: 0.26
 
 - type: surgerySpecies
   id: SlimePerson
@@ -77,6 +106,185 @@
   head: Slime
   groin: Slime
   eyes: Eyes
+  woundSprite: /Textures/_DeadSpace/Mobs/Surgery/slime.rsi
+  ink: Gel
+  graft: false
+  soft: true
+  painless: true
+  organSprite: /Textures/Mobs/Species/Slime/organs.rsi
+  organStates:
+    Core: brain-slime
+  organSpots:
+    Core:
+    - state: brain-slime
+      x: 11
+      y: 11
+      w: 11
+      h: 11
+      cx: 0.5
+      cy: 0.55
+      height: 0.34
+  organNames:
+    Core: surgery-organ-slime-core
+  lacking:
+    part:Head:
+    - type: PermanentBlindness
+    - type: SurgeryMute
+      popup: surgery-headless-mute
+
+- type: surgerySpecies
+  id: IPC
+  wounds: true
+  woundSprite: /Textures/_DeadSpace/Mobs/Surgery/ipc.rsi
+  graft: false
+  machine: true
+  painless: true
+  limb: MachineLimb
+  torso: MachineTorso
+  head: MachineHead
+  groin: MachineGroin
+  organSprite: /Textures/_DeadSpace/Mobs/Species/IPC/ipc_modules.rsi
+  organNames:
+    Core: surgery-organ-ipc-core
+    Heart: surgery-organ-ipc-battery
+    Lungs: surgery-organ-ipc-status
+    Brain: surgery-organ-ipc-voice
+    Eyes: surgery-organ-ipc-eyes
+  organStates:
+    Core: core
+    Heart: battery
+    Lungs: status
+    Brain: voice
+    Eyes: optics
+  organSpots:
+    Core:
+    - state: core
+      x: 8
+      y: 7
+      w: 16
+      h: 18
+      cx: 0.5
+      cy: 0.72
+      height: 0.28
+    Heart:
+    - state: battery
+      x: 10
+      y: 7
+      w: 11
+      h: 18
+      cx: 0.22
+      cy: 0.36
+      height: 0.3
+    Lungs:
+    - state: status
+      x: 7
+      y: 10
+      w: 18
+      h: 12
+      cx: 0.76
+      cy: 0.36
+      height: 0.22
+    Brain:
+    - state: voice
+      x: 8
+      y: 8
+      w: 16
+      h: 20
+      cx: 0.5
+      cy: 0.68
+      height: 0.32
+    Eyes:
+    - state: optics
+      x: 5
+      y: 9
+      w: 22
+      h: 13
+      cx: 0.5
+      cy: 0.24
+      height: 0.2
+  lacking:
+    SurgeryVoiceModule:
+    - type: SurgeryMute
+    SurgeryStatusModule:
+    - type: SurgeryNoHealthIcon
+
+- type: surgerySpecies
+  id: Xenomorph
+  woundSprite: /Textures/_DeadSpace/Mobs/Surgery/xeno.rsi
+  ink: Acid
+  graft: false
+
+- type: surgeryGraft
+  id: Default
+  amount: 5
+  early: 90
+  death: 300
+  rotHealth: 0.04
+  poison: 0.4
+  stages:
+    60: surgery-graft-stage-numb
+    150: surgery-graft-stage-burn
+    240: surgery-graft-stage-black
+
+- type: surgerySpecies
+  id: Human
+  lineage: Human
+
+- type: surgerySpecies
+  id: Dwarf
+  lineage: Human
+
+- type: surgerySpecies
+  id: Arachnid
+  lineage: Arachnid
+
+- type: surgerySpecies
+  id: Felinid
+  lineage: Feline
+
+- type: surgerySpecies
+  id: Tajaran
+  lineage: Feline
+
+- type: surgerySpecies
+  id: Vulpkanin
+  lineage: Canine
+
+- type: surgerySpecies
+  id: Reptilian
+  lineage: Reptile
+
+- type: surgerySpecies
+  id: Kobolt
+  lineage: Reptile
+
+- type: surgerySpecies
+  id: Moth
+  lineage: Moth
+
+- type: surgerySpecies
+  id: Vox
+  lineage: Vox
+
+- type: surgerySpecies
+  id: Shark
+  lineage: Shark
+
+- type: surgerySpecies
+  id: SuperSoldier
+  operable: false
+
+- type: surgerySpecies
+  id: Demon
+  lineage: Demon
+
+- type: surgerySpecies
+  id: Skeleton
+  operable: false
+
+- type: surgerySpecies
+  id: Gingerbread
+  operable: false
 
 - type: surgeryPlace
   id: Floor
@@ -114,11 +322,34 @@
     hitY: 12
     hitW: 5
     hitH: 6
+  machineSpots:
+  - state: heart-c-on
+    x: 13
+    y: 11
+    w: 7
+    h: 10
+    cx: 0.22
+    cy: 0.34
+    height: 0.28
+    hitX: 9
+    hitY: 12
+    hitW: 5
+    hitH: 6
+  film:
+  - kind: Oval
+    ax: 16.3
+    ay: 15
+    w: 2.2
+    h: 3.2
+    color: "#c03848"
+    sprite: /Textures/Mobs/Species/Human/organs.rsi
+    state: heart-off
 
 - type: surgeryOrgan
   id: Lungs
   slot: lungs
   zone: Torso
+  pair: true
   spots:
   - state: lung-l
     x: 9
@@ -140,6 +371,36 @@
     cx: 0.70
     cy: 0.36
     height: 0.40
+  machineSpots:
+  - state: lungs-c
+    x: 8
+    y: 8
+    w: 15
+    h: 16
+    cx: 0.78
+    cy: 0.34
+    height: 0.28
+    hitX: 18
+    hitY: 11
+    hitW: 5
+    hitH: 6
+  film:
+  - kind: Oval
+    ax: 13
+    ay: 14.2
+    w: 2.8
+    h: 5.6
+    color: "#e8a8a0"
+    sprite: /Textures/Mobs/Species/Human/organs.rsi
+    state: lung-l
+  - kind: Oval
+    ax: 18
+    ay: 14.2
+    w: 2.8
+    h: 5.6
+    color: "#e8a8a0"
+    sprite: /Textures/Mobs/Species/Human/organs.rsi
+    state: lung-r
 
 - type: surgeryOrgan
   id: Stomach
@@ -158,6 +419,15 @@
     hitY: 16
     hitW: 5
     hitH: 4
+  film:
+  - kind: Oval
+    ax: 18
+    ay: 17.8
+    w: 2.6
+    h: 3.1
+    color: "#d8904c"
+    sprite: /Textures/Mobs/Species/Human/organs.rsi
+    state: stomach
 
 - type: surgeryOrgan
   id: Liver
@@ -176,6 +446,15 @@
     hitY: 16
     hitW: 5
     hitH: 4
+  film:
+  - kind: Oval
+    ax: 13.6
+    ay: 17.8
+    w: 3.8
+    h: 3
+    color: "#8a3328"
+    sprite: /Textures/Mobs/Species/Human/organs.rsi
+    state: liver
 
 - type: surgeryOrgan
   id: Kidneys
@@ -202,27 +481,137 @@
     cx: 0.62
     cy: 0.86
     height: 0.16
-
-- type: surgeryOrgan
-  id: Intestines
-  slot: intestines
-  zone: Groin
+  film:
+  - kind: Oval
+    zone: Groin
+    ax: 13
+    ay: 19.9
+    w: 1.3
+    h: 2.1
+    color: "#9a3a72"
+    sprite: /Textures/Mobs/Species/Human/organs.rsi
+    state: kidney-l
+  - kind: Oval
+    zone: Groin
+    ax: 18
+    ay: 19.9
+    w: 1.3
+    h: 2.1
+    color: "#9a3a72"
+    sprite: /Textures/Mobs/Species/Human/organs.rsi
+    state: kidney-r
 
 - type: surgeryOrgan
   id: Brain
   slot: brain
   zone: Head
   vital: true
+  machineSpots:
+  - state: tonguerobot
+    x: 8
+    y: 5
+    w: 18
+    h: 20
+    cx: 0.5
+    cy: 0.70
+    height: 0.28
+    hitX: 13
+    hitY: 14
+    hitW: 6
+    hitH: 6
+  film:
+  - kind: Oval
+    zone: Head
+    ax: 15.5
+    ay: 4.9
+    w: 5.4
+    h: 4.4
+    color: "#e0b8c8"
+    sprite: /Textures/Mobs/Species/Human/organs.rsi
+    state: brain
+    depth: -1
 
 - type: surgeryOrgan
   id: Eyes
   slot: eyes
   zone: Eyes
+  pair: true
+  machineZone: Head
+  machineSpots:
+  - state: cybernetic_eyeballs
+    x: 3
+    y: 5
+    w: 26
+    h: 22
+    cx: 0.5
+    cy: 0.24
+    height: 0.26
+    hitX: 12
+    hitY: 4
+    hitW: 8
+    hitH: 4
+  film:
+  - kind: Oval
+    zone: Head
+    ax: 14.1
+    ay: 6
+    w: 1.4
+    h: 1.3
+    color: "#f0f0f0"
+    sprite: /Textures/Mobs/Species/Human/organs.rsi
+    state: eyeball-l
+    depth: 1
+  - kind: Oval
+    zone: Head
+    ax: 16.9
+    ay: 6
+    w: 1.4
+    h: 1.3
+    color: "#f0f0f0"
+    sprite: /Textures/Mobs/Species/Human/organs.rsi
+    state: eyeball-r
+    depth: 1
 
 - type: surgeryOrgan
   id: Core
   slot: core
   zone: Torso
+  spots:
+  - state: brain
+    x: 12
+    y: 14
+    w: 7
+    h: 6
+    cx: 0.5
+    cy: 0.58
+    height: 0.24
+    hitX: 13
+    hitY: 15
+    hitW: 5
+    hitH: 4
+  machineSpots:
+  - state: posibrain
+    x: 8
+    y: 7
+    w: 16
+    h: 18
+    cx: 0.5
+    cy: 0.72
+    height: 0.28
+    hitX: 13
+    hitY: 18
+    hitW: 5
+    hitH: 4
+  film:
+  - kind: Oval
+    zone: Torso
+    ax: 15.5
+    ay: 16.2
+    w: 3.2
+    h: 3.2
+    color: "#6ec8d0"
+    sprite: /Textures/_DeadSpace/Mobs/Species/IPC/organs.rsi
+    state: posibrain
 
 - type: surgeryMiss
   id: Incise
@@ -237,6 +626,18 @@
       Slash: 12
 
 - type: surgeryMiss
+  id: Drill
+  damage:
+    types:
+      Piercing: 4
+
+- type: surgeryMiss
+  id: Amputate
+  damage:
+    types:
+      Slash: 6
+
+- type: surgeryMiss
   id: Cauterize
   damage:
     types:
@@ -245,155 +646,187 @@
 - type: surgeryMark
   id: Torso
   prefix: torso
+  ribs: true
+  halves: true
   self: false
-  ax: 15
+  ax: 15.5
   ay: 11
-  bx: 15
-  by: 20
+  bx: 15.5
+  by: 18.5
   hx: 11
   hy: 10
-  hw: 8
-  hh: 12
+  hw: 9
+  hh: 9
 
 - type: surgeryMark
   id: Head
   prefix: head
+  ribs: true
+  brain: true
   self: false
-  ax: 12
-  ay: 6
-  bx: 19
-  by: 6
+  ax: 13.5
+  ay: 4.5
+  bx: 17.5
+  by: 4.5
+  cx: 12.5
+  cy: 10
+  dx: 18.5
+  dy: 10
   hx: 11
-  hy: 1
-  hw: 10
-  hh: 9
+  hy: 2
+  hw: 9
+  hh: 8
 
 - type: surgeryMark
   id: ArmLeft
-  prefix: arml
-  ax: 21
-  ay: 11
-  bx: 21
-  by: 17
-  hx: 19
+  ax: 22
+  ay: 11.5
+  bx: 22
+  by: 17.5
+  cx: 20.5
+  cy: 12
+  dx: 23.5
+  dy: 12
+  hx: 20
   hy: 10
-  hw: 6
+  hw: 5
   hh: 8
 
 - type: surgeryMark
   id: ArmRight
-  prefix: armr
-  ax: 8
-  ay: 11
-  bx: 8
-  by: 17
-  hx: 7
+  ax: 9
+  ay: 11.5
+  bx: 9
+  by: 17.5
+  cx: 7.5
+  cy: 12
+  dx: 10.5
+  dy: 12
+  hx: 6
   hy: 10
-  hw: 6
+  hw: 5
   hh: 8
 
 - type: surgeryMark
   id: HandLeft
-  prefix: handl
-  ax: 21
-  ay: 18
-  bx: 21
-  by: 20
-  hx: 18
-  hy: 16
-  hw: 6
-  hh: 7
+  ax: 22
+  ay: 18.5
+  bx: 22
+  by: 21.5
+  cx: 20.5
+  cy: 18.8
+  dx: 23.5
+  dy: 18.8
+  hx: 20
+  hy: 18
+  hw: 5
+  hh: 4
 
 - type: surgeryMark
   id: HandRight
-  prefix: handr
-  ax: 8
-  ay: 18
-  bx: 8
-  by: 20
-  hx: 5
-  hy: 16
-  hw: 6
-  hh: 7
+  ax: 9
+  ay: 18.5
+  bx: 9
+  by: 21.5
+  cx: 7.5
+  cy: 18.8
+  dx: 10.5
+  dy: 18.8
+  hx: 6
+  hy: 18
+  hw: 5
+  hh: 4
 
 - type: surgeryMark
   id: LegLeft
-  prefix: legl
-  ax: 17
-  ay: 23
-  bx: 17
-  by: 28
-  hx: 15
-  hy: 21
-  hw: 5
-  hh: 8
+  ax: 18
+  ay: 23.5
+  bx: 18
+  by: 28.5
+  cx: 16.5
+  cy: 24
+  dx: 19.5
+  dy: 24
+  hx: 16
+  hy: 24
+  hw: 4
+  hh: 5
 
 - type: surgeryMark
   id: LegRight
-  prefix: legr
-  ax: 12
-  ay: 23
-  bx: 12
-  by: 28
+  ax: 13
+  ay: 23.5
+  bx: 13
+  by: 28.5
+  cx: 11.5
+  cy: 24
+  dx: 14.5
+  dy: 24
   hx: 11
-  hy: 21
-  hw: 5
-  hh: 8
+  hy: 24
+  hw: 4
+  hh: 5
 
 - type: surgeryMark
   id: FootLeft
-  prefix: footl
-  ax: 18
-  ay: 29
-  bx: 18
-  by: 31
+  ax: 16.5
+  ay: 30.5
+  bx: 21.5
+  by: 30.5
+  cx: 16.5
+  cy: 29.3
+  dx: 21.5
+  dy: 29.3
   hx: 16
-  hy: 28
-  hw: 5
-  hh: 4
+  hy: 29
+  hw: 6
+  hh: 3
 
 - type: surgeryMark
   id: FootRight
-  prefix: footr
-  ax: 11
-  ay: 29
-  bx: 11
-  by: 31
+  ax: 9.5
+  ay: 30.5
+  bx: 14.5
+  by: 30.5
+  cx: 9.5
+  cy: 29.3
+  dx: 14.5
+  dy: 29.3
   hx: 9
-  hy: 28
-  hw: 5
-  hh: 4
+  hy: 29
+  hw: 6
+  hh: 3
 
 - type: surgeryMark
   id: Groin
   ax: 12
-  ay: 22
-  bx: 20
-  by: 22
-  hx: 12
-  hy: 20
-  hw: 8
+  ay: 19.5
+  bx: 19
+  by: 19.5
+  hx: 11
+  hy: 19
+  hw: 9
   hh: 5
 
 - type: surgeryMark
   id: Eyes
-  ax: 13
-  ay: 6
-  bx: 18
-  by: 6
-  hx: 12
-  hy: 4
-  hw: 8
-  hh: 3
+  ax: 13.5
+  ay: 6.5
+  bx: 17.5
+  by: 6.5
+  hx: 13
+  hy: 5
+  hw: 5
+  hh: 2
   start:
   - Extract
 
 - type: surgeryMark
   id: Mouth
-  ax: 14
-  ay: 8
-  bx: 17
-  by: 8
+  ax: 14.5
+  ay: 8.5
+  bx: 16.5
+  by: 8.5
   hx: 13
   hy: 7
   hw: 6
@@ -401,48 +834,192 @@
   start:
   - Extract
 
+- type: surgeryMark
+  id: TorsoBack
+  prefix: back
+  ax: 15.5
+  ay: 11
+  bx: 15.5
+  by: 19
+  hx: 11
+  hy: 10
+  hw: 9
+  hh: 9
+
+- type: surgeryMark
+  id: GroinBack
+  ax: 13
+  ay: 21.5
+  bx: 18
+  by: 21.5
+  hx: 11
+  hy: 19
+  hw: 9
+  hh: 5
+
 - type: surgeryHint
   id: Incise
+  name: surgery-hint-incise
+  color: "#e0453a"
   icons:
   - sprite: /Textures/Objects/Specific/Medical/Surgery/scalpel.rsi
     state: scalpel
-  - sprite: /Textures/Objects/Specific/Medical/Surgery/scalpel.rsi
-    state: shiv
 
 - type: surgeryHint
   id: Retract
+  name: surgery-hint-retract-short
+  color: "#4aa3df"
   icons:
   - sprite: /Textures/Objects/Specific/Medical/Surgery/scissors.rsi
     state: retractor
 
 - type: surgeryHint
   id: SawBone
+  name: surgery-hint-saw
+  color: "#e8902a"
   icons:
   - sprite: /Textures/Objects/Specific/Medical/Surgery/saw.rsi
     state: saw
+
+- type: surgeryHint
+  id: Amputate
+  name: surgery-hint-amputate
+  color: "#e8902a"
+  icons:
+  - sprite: /Textures/Objects/Specific/Medical/Surgery/saw.rsi
+    state: saw
+
+- type: surgeryHint
+  id: Drill
+  name: surgery-hint-drill
+  color: "#e8902a"
+  icons:
   - sprite: /Textures/Objects/Specific/Medical/Surgery/drill.rsi
     state: drill
 
 - type: surgeryHint
   id: Clamp
+  name: surgery-hint-clamp
+  color: "#a46ee0"
   icons:
   - sprite: /Textures/Objects/Specific/Medical/Surgery/scissors.rsi
     state: hemostat
 
 - type: surgeryHint
   id: Extract
+  name: surgery-hint-extract-short
+  color: "#3cc4b0"
   icons:
   - sprite: /Textures/Objects/Specific/Medical/Surgery/scissors.rsi
     state: hemostat
 
 - type: surgeryHint
+  id: PullEmbedded
+  name: surgery-hint-shard
+  color: "#3cc4b0"
+  icons:
+  - sprite: /Textures/Objects/Specific/Medical/Surgery/scissors.rsi
+    state: hemostat
+
+- type: surgeryHint
+  id: Insert
+  name: surgery-hint-insert
+  color: "#5ccf6a"
+  icons:
+  - sprite: /Textures/Mobs/Species/Human/organs.rsi
+    state: heart-off
+
+- type: surgeryHint
+  id: SetBone
+  name: surgery-hint-setbone
+  color: "#d9c27a"
+  icons:
+  - sprite: /Textures/Mobs/Species/Human/parts.rsi
+    state: r_hand
+
+- type: surgeryHint
+  id: Seat
+  name: surgery-hint-seat
+  color: "#d9c27a"
+  icons:
+  - sprite: /Textures/Mobs/Species/Human/parts.rsi
+    state: r_arm
+
+- type: surgeryHint
   id: Cauterize
+  name: surgery-hint-cauterize
+  color: "#ffb52e"
   icons:
   - sprite: /Textures/Objects/Specific/Medical/Surgery/cautery.rsi
     state: cautery
 
+- type: surgeryHint
+  id: Graft
+  name: surgery-hint-graft
+  color: "#f0b4a0"
+  icons:
+  - sprite: /Textures/_DeadSpace/Objects/Medical/skin_roll.rsi
+    state: icon
+
+- type: surgeryHint
+  id: MendBone
+  name: surgery-hint-gel
+  color: "#efe6c8"
+  icons:
+  - sprite: /Textures/_DeadSpace/Objects/Medical/bone_gel.rsi
+    state: icon
+
+- type: surgeryHint
+  id: Stanch
+  name: surgery-hint-stanch
+  color: "#ff5a3c"
+  icons:
+  - sprite: /Textures/Objects/Specific/Medical/Surgery/cautery.rsi
+    state: cautery
+
+- type: surgeryHint
+  id: Bandage
+  name: surgery-hint-bandage
+  color: "#f2f2f2"
+  icons:
+  - sprite: /Textures/Objects/Specific/Medical/medical.rsi
+    state: gauze
+
+- type: surgeryHint
+  id: Shock
+  name: surgery-hint-shock
+  color: "#ffd84a"
+  icons:
+  - sprite: /Textures/_DeadSpace/Psychiatry/shock_paddles.rsi
+    state: off-3
+
+- type: surgeryHint
+  id: Inject
+  name: surgery-hint-inject
+  color: "#5ccf6a"
+  icons:
+  - sprite: /Textures/Objects/Specific/Chemistry/syringe.rsi
+    state: syringe_base0
+
+- type: surgeryHint
+  id: Append
+  name: surgery-hint-append
+  color: "#d9c27a"
+  icons:
+  - sprite: /Textures/Mobs/Species/Human/parts.rsi
+    state: r_arm
+
+- type: surgeryHint
+  id: Pill
+  name: surgery-hint-pill
+  color: "#5ccf6a"
+  icons:
+  - sprite: /Textures/Objects/Specific/Chemistry/pills.rsi
+    state: pill1
+
 - type: surgeryOperation
   id: TakeHeart
+  side: Front
   zone: Torso
   name: surgery-op-take-heart
   steps:
@@ -451,13 +1028,11 @@
     undo: Cauterize
   - verb: Retract
     layer: Skin
-    undo: Retract
   - verb: SawBone
     layer: Bone
-    undo: Cauterize
+    undo: MendBone
   - verb: Retract
     layer: Bone
-    undo: Retract
   - verb: Clamp
     layer: Cavity
     undo: Clamp
@@ -465,19 +1040,16 @@
     layer: Cavity
     undo: Insert
     organ: Heart
-  - verb: Cauterize
-    layer: Skin
-    undo: Incise
   close:
-  - verb: Cauterize
+  - verb: MendBone
     layer: Bone
-    undo: Incise
   - verb: Cauterize
     layer: Skin
     undo: Incise
 
 - type: surgeryOperation
   id: TakeLungs
+  side: Front
   zone: Torso
   name: surgery-op-take-lungs
   steps:
@@ -486,13 +1058,11 @@
     undo: Cauterize
   - verb: Retract
     layer: Skin
-    undo: Retract
   - verb: SawBone
     layer: Bone
-    undo: Cauterize
+    undo: MendBone
   - verb: Retract
     layer: Bone
-    undo: Retract
   - verb: Clamp
     layer: Cavity
     undo: Clamp
@@ -500,19 +1070,21 @@
     layer: Cavity
     undo: Insert
     organ: Lungs
-  - verb: Cauterize
-    layer: Skin
-    undo: Incise
   close:
-  - verb: Cauterize
+  - verb: MendBone
     layer: Bone
-    undo: Incise
   - verb: Cauterize
     layer: Skin
     undo: Incise
 
 - type: surgeryOperation
   id: OpenTorso
+  side: Front
+  order: 0
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/Surgery/scalpel.rsi
+    state: scalpel
+  refill: true
   zone: Torso
   name: surgery-op-open-torso
   steps:
@@ -521,23 +1093,21 @@
     undo: Cauterize
   - verb: Retract
     layer: Skin
-    undo: Retract
   - verb: SawBone
     layer: Bone
-    undo: Cauterize
+    undo: MendBone
   - verb: Retract
     layer: Bone
-    undo: Retract
   close:
-  - verb: Cauterize
+  - verb: MendBone
     layer: Bone
-    undo: Incise
   - verb: Cauterize
     layer: Skin
     undo: Incise
 
 - type: surgeryOperation
   id: OpenHead
+  side: Front
   zone: Head
   name: surgery-op-open-head
   steps:
@@ -546,46 +1116,41 @@
     undo: Cauterize
   - verb: Retract
     layer: Skin
-    undo: Retract
   - verb: SawBone
     layer: Bone
-    undo: Cauterize
+    undo: MendBone
   - verb: Retract
     layer: Bone
-    undo: Retract
   close:
-  - verb: Cauterize
+  - verb: MendBone
     layer: Bone
-    undo: Incise
   - verb: Cauterize
     layer: Skin
     undo: Incise
 
 - type: surgeryOperation
   id: OpenLimb
+  side: Front
+  name: surgery-op-open-limb
   steps:
   - verb: Incise
     layer: Skin
     undo: Cauterize
   - verb: Retract
     layer: Skin
-    undo: Retract
-  - verb: SawBone
-    layer: Bone
-    undo: Cauterize
-  - verb: Retract
-    layer: Bone
-    undo: Retract
   close:
-  - verb: Cauterize
-    layer: Bone
-    undo: Incise
   - verb: Cauterize
     layer: Skin
     undo: Incise
 
 - type: surgeryOperation
   id: OpenGroin
+  side: Front
+  order: 0
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/Surgery/scalpel.rsi
+    state: scalpel
+  refill: true
   zone: Groin
   name: surgery-op-open-groin
   steps:
@@ -594,7 +1159,6 @@
     undo: Cauterize
   - verb: Retract
     layer: Skin
-    undo: Retract
   close:
   - verb: Cauterize
     layer: Skin
@@ -602,10 +1166,12 @@
 
 - type: surgeryOperation
   id: OpenEyes
+  side: Front
+  name: surgery-op-open-eyes
   steps:
   - verb: Retract
     layer: Skin
-    undo: Retract
+    intact: true
   - verb: Incise
     layer: Globe
     undo: Cauterize
@@ -619,45 +1185,56 @@
 
 - type: surgeryOperation
   id: OpenSkeleton
+  side: Front
+  name: surgery-op-open-skeleton
   steps:
   - verb: SawBone
     layer: Bone
-    undo: Cauterize
+    undo: MendBone
   - verb: Retract
     layer: Bone
-    undo: Retract
   close:
-  - verb: Cauterize
+  - verb: MendBone
     layer: Bone
-    undo: Incise
 
 - type: surgeryOperation
   id: OpenSlime
+  side: Front
+  soft: true
+  name: surgery-op-open-slime
   steps:
   - verb: Incise
     layer: Skin
-    undo: Cauterize
+    hint: SlimeStretch
+    undo: MendBone
   - verb: Retract
     layer: Skin
-    undo: Retract
+    game: Steady
   close:
-  - verb: Cauterize
+  - verb: MendBone
     layer: Skin
+    game: Glue
+    hint: SlimeStir
     undo: Incise
 
 - type: surgeryOperation
   id: OpenPlant
+  side: Front
+  plant: true
+  name: surgery-op-open-plant
   steps:
-  - verb: Incise
+  - verb: Chop
     layer: Skin
-    undo: Cauterize
+    game: Chop
+    undo: SealSap
   - verb: Retract
     layer: Skin
-    undo: Retract
+    game: Spread
   close:
-  - verb: Cauterize
+  - verb: SealSap
     layer: Skin
-    undo: Incise
+    game: Hold
+    undo: Chop
 
 - type: surgeryLodge
   id: Lodge
@@ -666,6 +1243,9 @@
   - SubdermalImplant
   - Implanter
   - SurgeryTool
+  - SurgerySkinRoll
+  - SurgeryMarker
+  - SurgeryAppendage
 
 - type: surgerySpeech
   id: Mumble
@@ -676,62 +1256,125 @@
   zone: Head
   anatomy: Head
   operation: TakeBrain
+  put: PutBrain
+  organ: Brain
   state: brain
   order: 0
-  ax: 12
-  ay: 6
-  bx: 19
-  by: 6
-
-- type: surgeryPart
-  id: EyeRight
-  zone: Head
-  anatomy: Eyes
-  operation: TakeEye
-  state: eyeball-r
-  order: 1
   ax: 13
-  ay: 6
-  bx: 15
-  by: 6
+  ay: 4.5
+  bx: 18
+  by: 4.5
 
 - type: surgeryPart
-  id: EyeLeft
+  id: Eyes
   zone: Head
   anatomy: Eyes
   operation: TakeEye
-  state: eyeball-l
-  order: 2
-  ax: 17
-  ay: 6
-  bx: 19
-  by: 6
+  put: PutEye
+  organ: Eyes
+  states:
+  - eyeball-l
+  - eyeball-r
+  wound: false
+  order: 1
+  ax: 13.5
+  ay: 6.5
+  bx: 17.5
+  by: 6.5
 
 - type: surgeryPart
   id: Tongue
   zone: Head
   anatomy: Mouth
   operation: TakeTongue
+  put: PutTongue
   state: tongue
+  wound: false
   order: 3
-  ax: 15
-  ay: 8
-  bx: 17
-  by: 8
+  ax: 12.5
+  ay: 8.5
+  bx: 18.5
+  by: 8.5
 
 - type: surgeryPart
   id: Teeth
   zone: Head
-  anatomy: Mouth
-  state: ""
+  anatomy: Head
+  operation: DrillTooth
+  pill: true
+  state: tooth
+  wound: false
   order: 4
-  ax: 14
-  ay: 8
-  bx: 18
-  by: 8
+  sprite: /Textures/_DeadSpace/Objects/Medical/tooth.rsi
+  ax: 13.5
+  ay: 8.5
+  bx: 17.5
+  by: 8.5
+
+- type: surgeryPart
+  id: Kidneys
+  zone: Groin
+  anatomy: Groin
+  operation: TakeKidneys
+  put: PutKidneys
+  organ: Kidneys
+  states:
+  - kidney-l
+  - kidney-r
+  order: 0
+  ax: 12
+  ay: 19.5
+  bx: 19
+  by: 19.5
+
+- type: surgeryOperation
+  id: TakeKidneys
+  side: Front
+  zone: Groin
+  name: surgery-op-take-kidneys
+  across: true
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: Clamp
+    layer: Cavity
+    undo: Clamp
+  - verb: Extract
+    layer: Cavity
+    undo: Insert
+    organ: Kidneys
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: PutKidneys
+  side: Front
+  zone: Groin
+  name: surgery-op-put-kidneys
+  across: true
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: Insert
+    layer: Cavity
+    undo: Extract
+    organ: Kidneys
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
 
 - type: surgeryOperation
   id: TakeBrain
+  side: Front
   zone: Head
   name: surgery-op-take-brain
   steps:
@@ -740,13 +1383,11 @@
     undo: Cauterize
   - verb: Retract
     layer: Skin
-    undo: Retract
   - verb: SawBone
     layer: Bone
-    undo: Cauterize
+    undo: MendBone
   - verb: Retract
     layer: Bone
-    undo: Retract
   - verb: Clamp
     layer: Cavity
     undo: Clamp
@@ -754,19 +1395,48 @@
     layer: Cavity
     undo: Insert
     organ: Brain
+  close:
+  - verb: MendBone
+    layer: Bone
   - verb: Cauterize
     layer: Skin
     undo: Incise
-  close:
-  - verb: Cauterize
+
+- type: surgeryOperation
+  id: BrainShock
+  side: Front
+  zone: Head
+  name: surgery-op-brain-shock
+  order: 2
+  nearby:
+  - ShockTherapy
+  icon:
+    sprite: /Textures/_DeadSpace/Psychiatry/shock_paddles.rsi
+    state: off-3
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: SawBone
     layer: Bone
-    undo: Incise
+    undo: MendBone
+  - verb: Retract
+    layer: Bone
+  - verb: Shock
+    layer: Cavity
+    effect: HeadTrauma
+  close:
+  - verb: MendBone
+    layer: Bone
   - verb: Cauterize
     layer: Skin
     undo: Incise
 
 - type: surgeryOperation
   id: PutBrain
+  side: Front
   zone: Head
   name: surgery-op-put-brain
   steps:
@@ -775,36 +1445,31 @@
     undo: Cauterize
   - verb: Retract
     layer: Skin
-    undo: Retract
   - verb: SawBone
     layer: Bone
-    undo: Cauterize
+    undo: MendBone
   - verb: Retract
     layer: Bone
-    undo: Retract
   - verb: Insert
     layer: Cavity
     undo: Extract
     organ: Brain
-  - verb: Cauterize
-    layer: Skin
-    undo: Incise
   close:
-  - verb: Cauterize
+  - verb: MendBone
     layer: Bone
-    undo: Incise
   - verb: Cauterize
     layer: Skin
     undo: Incise
 
 - type: surgeryOperation
   id: TakeEye
+  side: Front
   zone: Head
   name: surgery-op-take-eye
   steps:
   - verb: Retract
     layer: Skin
-    undo: Retract
+    intact: true
   - verb: Incise
     layer: Globe
     undo: Cauterize
@@ -822,23 +1487,28 @@
 
 - type: surgeryOperation
   id: PutEye
+  side: Front
   zone: Head
   name: surgery-op-put-eye
   steps:
+  - verb: Retract
+    layer: Skin
+    intact: true
   - verb: Insert
     layer: Globe
     undo: Extract
     organ: Eyes
-  - verb: Cauterize
-    layer: Skin
-    undo: Incise
   close:
+  - verb: Cauterize
+    layer: Globe
+    undo: Incise
   - verb: Cauterize
     layer: Skin
     undo: Incise
 
 - type: surgeryOperation
   id: TakeTongue
+  side: Front
   zone: Head
   name: surgery-op-take-tongue
   steps:
@@ -847,14 +1517,15 @@
     undo: Cauterize
   - verb: Retract
     layer: Skin
-    undo: Retract
   - verb: Extract
     layer: Cavity
     undo: Insert
     speech: Mumble
-  - verb: Cauterize
-    layer: Skin
-    undo: Incise
+    drop: OrganHumanTongue
+    dropBySpecies:
+      Vox: OrganVoxTongueA
+      Arachnid: OrganArachnidTongue
+      Xenomorph: OrganXenoTongue
   close:
   - verb: Cauterize
     layer: Skin
@@ -862,6 +1533,7 @@
 
 - type: surgeryOperation
   id: PutTongue
+  side: Front
   zone: Head
   name: surgery-op-put-tongue
   steps:
@@ -870,15 +1542,658 @@
     undo: Cauterize
   - verb: Retract
     layer: Skin
-    undo: Retract
   - verb: Insert
     layer: Cavity
     undo: Extract
     speech: Clear
-  - verb: Cauterize
-    layer: Skin
-    undo: Incise
+    need:
+    - OrganHumanTongue
+    - OrganArachnidTongue
+    - OrganVoxTongueA
+    - OrganVoxTongueB
+    - OrganXenoTongue
   close:
   - verb: Cauterize
     layer: Skin
     undo: Incise
+
+- type: surgeryTeeth
+  id: Teeth
+  max: 3
+
+- type: surgeryOperation
+  id: DrillTooth
+  side: Front
+  zone: Head
+  name: surgery-op-drill-tooth
+  sterile: false
+  steps:
+  - verb: Drill
+    layer: Bone
+    game: Drill
+    flinch: false
+  - verb: Insert
+    layer: Bone
+    hint: Pill
+
+- type: surgeryOperation
+  id: MendFracture
+  side: Front
+  name: surgery-op-mend-fracture
+  when: ClosedFracture
+  limb: true
+  order: 1
+  icon:
+    sprite: /Textures/_DeadSpace/Objects/Medical/bone_gel.rsi
+    state: icon
+  zones:
+  - Head
+  - Torso
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: MendBone
+    layer: Bone
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: SealBleed
+  side: Front
+  name: surgery-op-seal-bleed
+  when: Bleed
+  order: 2
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/Surgery/cautery.rsi
+    state: cautery
+  zones:
+  - Head
+  - Torso
+  - Groin
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: Stanch
+    layer: Cavity
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: MendOrgans
+  side: Front
+  name: surgery-op-mend-organs
+  when: OrganCrack
+  order: 2
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/Surgery/scissors.rsi
+    state: hemostat
+  zones:
+  - Head
+  - Torso
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: SawBone
+    layer: Bone
+    undo: MendBone
+  - verb: Retract
+    layer: Bone
+  - verb: Clamp
+    layer: Cavity
+    undo: Clamp
+  - verb: Stanch
+    layer: Cavity
+    effect: OrganMend
+  close:
+  - verb: MendBone
+    layer: Bone
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: MendOrgansGroin
+  side: Front
+  zone: Groin
+  name: surgery-op-mend-organs
+  when: OrganCrack
+  order: 2
+  across: true
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/Surgery/scissors.rsi
+    state: hemostat
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: Clamp
+    layer: Cavity
+    undo: Clamp
+  - verb: Stanch
+    layer: Cavity
+    effect: OrganMend
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: PullShard
+  side: Front
+  name: surgery-op-pull-shard
+  when: Shard
+  order: 3
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/Surgery/scissors.rsi
+    state: hemostat
+  zones:
+  - Head
+  - Torso
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: PullEmbedded
+    layer: Bone
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: PullShardGroin
+  side: Front
+  name: surgery-op-pull-shard
+  when: Shard
+  order: 3
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/Surgery/scissors.rsi
+    state: hemostat
+  zone: Groin
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: PullEmbedded
+    layer: Cavity
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: FixOpenFracture
+  side: Front
+  name: surgery-op-open-fracture
+  when: OpenFracture
+  order: 0
+  icon:
+    sprite: /Textures/_DeadSpace/Objects/Medical/bone_gel.rsi
+    state: icon
+  zones:
+  - Head
+  - Torso
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: MendBone
+    layer: Bone
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: AmputateLimb
+  side: Front
+  name: surgery-op-amputate
+  limb: true
+  order: 5
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/Surgery/saw.rsi
+    state: saw
+  across: true
+  whole: true
+  zones:
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: Amputate
+    layer: Bone
+    game: Saw
+  close:
+  - verb: Cauterize
+    layer: Skin
+  - verb: Bandage
+    layer: Skin
+
+- type: surgeryOperation
+  id: AmputateHead
+  side: Front
+  name: surgery-op-amputate
+  order: 10
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/Surgery/saw.rsi
+    state: saw
+  zone: Head
+  across: true
+  whole: true
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: Amputate
+    layer: Bone
+    game: Saw
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: GraftSkin
+  side: Front
+  name: surgery-op-graft
+  when: Skin
+  limb: true
+  order: 4
+  icon:
+    sprite: /Textures/_DeadSpace/Objects/Medical/skin_roll.rsi
+    state: icon
+  zones:
+  - Head
+  - Torso
+  - Groin
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Graft
+    layer: Skin
+    game: Hold
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: AttachLimb
+  side: Front
+  name: surgery-op-attach
+  limb: true
+  order: 6
+  icon:
+    sprite: /Textures/Mobs/Species/Human/parts.rsi
+    state: r_arm
+  across: true
+  stump: true
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Seat
+    layer: Skin
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: CureInfection
+  side: Front
+  name: surgery-op-cure
+  when: Infection
+  order: -1
+  icon:
+    sprite: /Textures/Objects/Specific/Chemistry/syringe.rsi
+    state: syringe_base0
+  zones:
+  - Head
+  - Torso
+  - Groin
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: Inject
+    layer: Skin
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: SpineOpen
+  name: surgery-op-spine-open
+  zone: Torso
+  side: Back
+  order: -1
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/Surgery/scalpel.rsi
+    state: scalpel
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: SpineMend
+  name: surgery-op-spine
+  zone: Torso
+  side: Back
+  when: Fracture
+  order: 0
+  icon:
+    sprite: /Textures/_DeadSpace/Objects/Medical/bone_gel.rsi
+    state: icon
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: MendBone
+    layer: Bone
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: SpineShard
+  name: surgery-op-pull-shard
+  zone: Torso
+  side: Back
+  when: Shard
+  order: 1
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/Surgery/scissors.rsi
+    state: hemostat
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: PullEmbedded
+    layer: Bone
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: TailRemove
+  name: surgery-op-tail
+  zones:
+  - Groin
+  side: Back
+  appendage: Tail
+  across: true
+  order: 0
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/Surgery/saw.rsi
+    state: saw
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: Amputate
+    layer: Skin
+    game: Saw
+  close:
+  - verb: Cauterize
+    layer: Skin
+  - verb: Bandage
+    layer: Skin
+
+- type: surgeryOperation
+  id: TailAttach
+  name: surgery-op-tail-attach
+  zones:
+  - Groin
+  side: Back
+  nearby:
+  - SurgeryAppendage
+  appendage: Tail
+  attach: true
+  across: true
+  order: 1
+  icon:
+    sprite: /Textures/Mobs/Species/Human/parts.rsi
+    state: r_arm
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Append
+    layer: Skin
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryAppendage
+  id: Tail
+  category: Tail
+  item: SurgeryAppendageTail
+  items:
+    Reptilian: SurgeryAppendageTailLizard
+    Kobolt: SurgeryAppendageTailKobolt
+    Vulpkanin: SurgeryAppendageTailVulp
+    Felinid: SurgeryAppendageTailFelinid
+    Tajaran: SurgeryAppendageTailTajaran
+    Vox: SurgeryAppendageTailVox
+    Shark: SurgeryAppendageTailShark
+    Demon: SurgeryAppendageTailArkan
+    Xenomorph: SurgeryAppendageTailXeno
+  except:
+  - Moth
+  - Arachnid
+  carry:
+  - Wagging
+
+- type: surgeryHealth
+  id: Default
+  keep: 0.1
+  slip: 0.06
+  flinch: 0.03
+  cost:
+    Incise: 0.08
+    Retract: 0.03
+    SawBone: 0.1
+    Drill: 0.04
+    Clamp: 0.01
+    Extract: 0.05
+    Insert: 0.03
+    PullEmbedded: 0.04
+    Seat: 0.05
+    Graft: 0.02
+    Inject: 0.02
+    Append: 0.03
+  restore:
+  - Cauterize
+  - MendBone
+  - Bandage
+  - Stanch
+
+- type: surgeryOrganRole
+  id: Stomach
+  organ: Stomach
+  missing:
+    hungerDrain: 0.35
+    eat: false
+
+- type: surgeryOrganRole
+  id: Kidneys
+  organ: Kidneys
+  missing:
+    thirstDrain: 0.35
+    drink: false
+
+- type: surgeryOrganRole
+  id: Liver
+  organ: Liver
+  alcoholPoison: 0.03
+  missing:
+    alcohol: 3
+
+- type: surgeryWrap
+  id: Default
+  tags:
+  - Gauze
+  - Brutepack
+
+- type: surgerySterile
+  id: Default
+  enabled: true
+  gloves:
+  - ClothingHandsGlovesLatex
+  - ClothingHandsGlovesNitrile
+  mask:
+  - ClothingMaskSterile
+  head:
+  - ClothingHeadHatSurgcapBlue
+  - ClothingHeadHatSurgcapGreen
+  - ClothingHeadHatSurgcapPurple
+  noGloves: 8
+  noMask: 5
+  noHead: 2
+  puddle: 3
+  puddleRange: 2
+  offTable: 6
+  threshold: 12
+  delayMin: 240
+  delayMax: 480
+  rotEvery: 20
+  rotHealth: 4
+  rotFlesh: 1
+  rotPoison: 1.5
+
+- type: surgeryAnesthesia
+  id: Default
+  enabled: true
+  amount: 1
+  reagents:
+  - ChloralHydrate
+  - Nocturine
+  - NitrousOxide
+  - Morphine
+  alcohol: Ethanol
+  alcoholClash: 50
+  alcoholNumb: 120
+  clashPoison: 2
+  calm:
+  - AdrenalImplant
+  - CombatAdrenalineImplant
+  flinchChance: 0.35
+  flinchProgress: 0.5
+  flinchBleed: 1
+  tearBleed: 3
+  sleepAmount: 1.5
+  sleepTime: 4
+  hold: 0.6
+
+- type: surgeryDecay
+  id: Default
+  organ: 900
+  brain: 600
+
+- type: surgeryCure
+  id: Default
+  amount: 5
+  reagents:
+  - Ethanol
+  - Dylovene
+  - Ambuzol
+  - AmbuzolPlus
+

@@ -20,6 +20,15 @@ public enum SurgeryVerbKind : byte
     PullEmbedded = 10,
     Inspect = 11,
     Seat = 12,
+    Drill = 13,
+    Graft = 14,
+    Bandage = 15,
+    Stanch = 16,
+    Inject = 17,
+    Append = 18,
+    Shock = 19,
+    Chop = 20,
+    SealSap = 21,
 }
 
 [Serializable, NetSerializable]
@@ -30,20 +39,39 @@ public enum SurgeryGameKind : byte
     Saw = 2,
     Clamp = 3,
     Sever = 4,
-    Twist = 5,
-    Click = 6,
     Hold = 7,
     Tap = 8,
+    Drill = 9,
+    Sear = 10,
+    Glue = 11,
+    Stanch = 12,
+    Inject = 13,
+    Dots = 14,
+    Steady = 15,
+    Chop = 16,
+}
+
+public enum SurgeryInk : byte
+{
+    Flesh,
+    Machine,
+    Gel,
+    Bark,
+    Acid,
+}
+
+public enum SurgerySide : byte
+{
+    Front,
+    Back,
+    Any,
 }
 
 [Serializable, NetSerializable]
 public enum SurgeryLayerKind : byte
 {
     Skin = 0,
-    Fat = 1,
-    Muscle = 2,
     Bone = 3,
-    Vessel = 4,
     Cavity = 5,
     Globe = 6,
 }

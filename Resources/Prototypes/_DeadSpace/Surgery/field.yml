@@ -1,0 +1,148 @@
+- type: surgeryOperation
+  id: FieldSealBleed
+  side: Front
+  name: surgery-op-field-bleed
+  field: true
+  when: Bleed
+  order: 0
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/medical.rsi
+    state: gauze
+  zones:
+  - Head
+  - Torso
+  - Groin
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Bandage
+    layer: Skin
+    game: Hold
+
+- type: surgeryOperation
+  id: FieldPullShard
+  side: Front
+  name: surgery-op-field-shard
+  field: true
+  when: Shard
+  order: 1
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/Surgery/scissors.rsi
+    state: hemostat
+  zones:
+  - Head
+  - Torso
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: PullEmbedded
+    layer: Bone
+  close:
+  - verb: Bandage
+    layer: Skin
+
+- type: surgeryOperation
+  id: FieldPullShardGroin
+  side: Front
+  name: surgery-op-field-shard
+  field: true
+  when: Shard
+  order: 1
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/Surgery/scissors.rsi
+    state: hemostat
+  zone: Groin
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: PullEmbedded
+    layer: Cavity
+  close:
+  - verb: Bandage
+    layer: Skin
+
+- type: surgeryOperation
+  id: FieldMendFracture
+  side: Front
+  name: surgery-op-field-fracture
+  field: true
+  when: Fracture
+  limb: true
+  order: 2
+  icon:
+    sprite: /Textures/Mobs/Species/Human/parts.rsi
+    state: r_hand
+  steps:
+  - verb: SetBone
+    layer: Bone
+    game: Hold
+  - verb: Bandage
+    layer: Skin
+    game: Hold
+
+- type: surgeryOperation
+  id: FieldAmputate
+  side: Front
+  name: surgery-op-amputate
+  field: true
+  limb: true
+  across: true
+  whole: true
+  order: 5
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/Surgery/saw.rsi
+    state: saw
+  zones:
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Amputate
+    layer: Bone
+    game: Saw
+  close:
+  - verb: Bandage
+    layer: Skin
+
+- type: surgeryOperation
+  id: FieldAttach
+  side: Front
+  name: surgery-op-attach
+  field: true
+  limb: true
+  across: true
+  stump: true
+  order: 6
+  icon:
+    sprite: /Textures/Mobs/Species/Human/parts.rsi
+    state: r_arm
+  steps:
+  - verb: Seat
+    layer: Skin
+  close:
+  - verb: Bandage
+    layer: Skin

@@ -49,7 +49,8 @@ public sealed class CombatAdrenalineSystem : EntitySystem
         }
 
         var surging = Surging(ent);
-        if (CombatAdrenalineRules.TryRefresh(surging, positive))
+        var hit = args.Origin != null || positive >= 5f;
+        if (hit && CombatAdrenalineRules.TryRefresh(surging, positive))
             _status.TryUpdateStatusEffectDuration(ent, SurgeEffect, TimeSpan.FromSeconds(CombatAdrenalineRules.SurgeSeconds));
         else
             TrySurge(ent, positive);
@@ -117,7 +118,10 @@ public sealed class CombatAdrenalineSystem : EntitySystem
 
     private void KeepStanding(EntityUid uid)
     {
-        if (!CombatAdrenalineRules.CanStayUp(LegSevered(uid, LimbZone.LegLeft), LegSevered(uid, LimbZone.LegRight)))
+        if (_mobs.IsIncapacitated(uid))
+            return;
+
+        if (!CombatAdrenalineRules.CanStayUp(LegGone(uid, LimbZone.LegLeft, LimbZone.FootLeft), LegGone(uid, LimbZone.LegRight, LimbZone.FootRight)))
         {
             _standing.Down(uid, playSound: false, dropHeldItems: false, force: true);
             return;
@@ -128,13 +132,15 @@ public sealed class CombatAdrenalineSystem : EntitySystem
         _standing.Stand(uid, force: true);
     }
 
-    private bool LegSevered(EntityUid uid, LimbZone zone)
+    private bool LegGone(EntityUid uid, LimbZone leg, LimbZone foot)
     {
         if (!TryComp<LimbBodyComponent>(uid, out var limbs))
             return false;
 
-        var index = LimbWoundRules.Index(zone);
-        return index < limbs.Zones.Count && limbs.Zones[index].Severed;
+        var legIndex = LimbWoundRules.Index(leg);
+        var footIndex = LimbWoundRules.Index(foot);
+        return legIndex < limbs.Zones.Count && LimbWoundRules.Useless(limbs.Zones[legIndex])
+               || footIndex < limbs.Zones.Count && LimbWoundRules.Useless(limbs.Zones[footIndex]);
     }
 
     private bool Surging(EntityUid uid)

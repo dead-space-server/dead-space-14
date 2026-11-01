@@ -142,6 +142,7 @@
     - HandheldHealthAnalyzer
     - CombatMedipen
     - DeathAcidifierImplanter
+    - LimbRestorerSyndicate # DS14
 
 - type: chameleonOutfit
   id: NukeopsMedicOutfit

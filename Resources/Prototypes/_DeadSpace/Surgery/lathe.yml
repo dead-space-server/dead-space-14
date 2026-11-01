@@ -1,0 +1,141 @@
+- type: latheRecipePack
+  id: DeadSpaceSurgeryStatic
+  recipes:
+  - SurgeryMarker
+  - SurgeryHatchet
+  - SurgeryFieldStapler
+  - SurgeryFieldClamp
+  - SurgeryBoneGel
+  - SurgerySlimeGel
+  - SurgeryDionaSap
+  - SurgerySkinRoll
+  - SurgeryOrganCooler
+  - LimbImplantMedicalHud
+  - LimbImplantDiagnosticHud
+  - LimbImplantNutritionHud
+  - LimbImplantFlashShield
+  - LimbImplantWeldShield
+  - LimbImplantChemicalHud
+
+- type: latheRecipePack
+  id: DeadSpaceSecurityImplantsStatic
+  recipes:
+  - LimbImplantSecurityHud
+  - LimbImplantCommandHud
+
+- type: latheRecipe
+  abstract: true
+  id: BaseLimbImplantHudRecipe
+  completetime: 4
+  materials:
+    Steel: 100
+    Glass: 200
+    Plastic: 100
+
+- type: latheRecipe
+  parent: BaseLimbImplantHudRecipe
+  id: LimbImplantMedicalHud
+  result: LimbImplantMedicalHud
+
+- type: latheRecipe
+  parent: BaseLimbImplantHudRecipe
+  id: LimbImplantDiagnosticHud
+  result: LimbImplantDiagnosticHud
+
+- type: latheRecipe
+  parent: BaseLimbImplantHudRecipe
+  id: LimbImplantNutritionHud
+  result: LimbImplantNutritionHud
+
+- type: latheRecipe
+  parent: BaseLimbImplantHudRecipe
+  id: LimbImplantFlashShield
+  result: LimbImplantFlashShield
+
+- type: latheRecipe
+  parent: BaseLimbImplantHudRecipe
+  id: LimbImplantWeldShield
+  result: LimbImplantWeldShield
+
+- type: latheRecipe
+  parent: BaseLimbImplantHudRecipe
+  id: LimbImplantChemicalHud
+  result: LimbImplantChemicalHud
+
+- type: latheRecipe
+  parent: BaseLimbImplantHudRecipe
+  id: LimbImplantSecurityHud
+  result: LimbImplantSecurityHud
+
+- type: latheRecipe
+  parent: BaseLimbImplantHudRecipe
+  id: LimbImplantCommandHud
+  result: LimbImplantCommandHud
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: SurgeryMarker
+  result: SurgeryMarker
+  completetime: 1
+  materials:
+    Plastic: 100
+
+- type: latheRecipe
+  parent: BaseSurgicalRecipe
+  id: SurgeryHatchet
+  result: SurgeryHatchet
+
+- type: latheRecipe
+  parent: BaseSurgicalRecipe
+  id: SurgeryFieldStapler
+  result: SurgeryFieldStapler
+  materials:
+    Steel: 150
+    Plastic: 50
+
+- type: latheRecipe
+  parent: BaseSurgicalRecipe
+  id: SurgeryFieldClamp
+  result: SurgeryFieldClamp
+  materials:
+    Steel: 150
+
+- type: latheRecipe
+  id: SurgeryBoneGel
+  result: SurgeryBoneGel
+  completetime: 2
+  materials:
+    Plastic: 100
+    Glass: 50
+
+- type: latheRecipe
+  id: SurgerySlimeGel
+  result: SurgerySlimeGel
+  completetime: 2
+  materials:
+    Plastic: 100
+    Glass: 50
+
+- type: latheRecipe
+  id: SurgeryDionaSap
+  result: SurgeryDionaSap
+  completetime: 2
+  materials:
+    Plastic: 100
+    Glass: 50
+
+- type: latheRecipe
+  id: SurgerySkinRoll
+  result: SurgerySkinRoll
+  completetime: 2
+  materials:
+    Cloth: 200
+    Plastic: 50
+
+- type: latheRecipe
+  id: SurgeryOrganCooler
+  result: SurgeryOrganCooler
+  completetime: 3
+  materials:
+    Steel: 100
+    Plastic: 300

@@ -2,6 +2,7 @@
 
 using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.Surgery;
+using Content.Shared.Gibbing;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Item;
 using Robust.Shared.Containers;
@@ -26,6 +27,7 @@ public sealed class SurgeryCavitySystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<LimbBodyComponent, ComponentStartup>(OnBody);
+        SubscribeLocalEvent<SurgeryCavityComponent, BeingGibbedEvent>(OnGib);
     }
 
     private void OnBody(Entity<LimbBodyComponent> ent, ref ComponentStartup args)
@@ -46,6 +48,22 @@ public sealed class SurgeryCavitySystem : EntitySystem
         pocket.ShowContents = show;
         if (TryComp<ContainerManagerComponent>(body, out var manager))
             Dirty(body, manager);
+    }
+
+    private void OnGib(Entity<SurgeryCavityComponent> ent, ref BeingGibbedEvent args)
+    {
+        Spill(ent, SurgeryCavityComponent.Head, args.Giblets);
+        Spill(ent, SurgeryCavityComponent.Chest, args.Giblets);
+        Spill(ent, SurgeryCavityComponent.Abdomen, args.Giblets);
+    }
+
+    private void Spill(EntityUid body, string id, HashSet<EntityUid> dropped)
+    {
+        if (!_containers.TryGetContainer(body, id, out var cavity))
+            return;
+
+        foreach (var item in cavity.ContainedEntities)
+            dropped.Add(item);
     }
 
     public bool Blocked(EntityUid item)

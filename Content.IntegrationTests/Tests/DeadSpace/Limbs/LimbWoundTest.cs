@@ -4,9 +4,12 @@ using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.CombatMode;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.FixedPoint;
+using Content.Shared.Inventory;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -162,6 +165,144 @@ public sealed class LimbWoundTest
             {
                 Assert.That(status.TryGetStatusEffect(fighter, "StatusEffectCombatAdrenaline", out _), Is.True);
                 Assert.That(status.TryGetStatusEffect(civilian, "StatusEffectCombatAdrenaline", out _), Is.False);
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task LosingAnArmAndALegKeepsYouConscious()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var human = EntityUid.Invalid;
+
+        await server.WaitAssertion(() =>
+        {
+            human = server.EntMan.SpawnEntity("MobHuman", new MapCoordinates(Vector2.Zero, map.MapId));
+            var wounds = server.EntMan.System<LimbWoundSystem>();
+            foreach (var zone in new[] { LimbZone.ArmLeft, LimbZone.LegLeft })
+            {
+                var cut = false;
+                for (var i = 0; i < 12 && !cut; i++)
+                    cut = wounds.Strike(human, new LimbStrike(zone, LimbMark.Edge, 40f, 0f, 0f, false, false, false, false, false, 1f, Sharp: true)).Severed;
+                Assert.That(cut, Is.True, zone.ToString());
+            }
+        });
+
+        await server.WaitRunTicks(600);
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(server.EntMan.System<MobStateSystem>().IsAlive(human), Is.True);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ADeadArmTakesAndPassesNoDamage()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var at = new MapCoordinates(Vector2.Zero, map.MapId);
+            var dead = server.EntMan.SpawnEntity("MobHuman", at);
+            var alive = server.EntMan.SpawnEntity("MobHuman", at);
+            var wounds = server.EntMan.System<LimbWoundSystem>();
+            var damage = server.EntMan.System<DamageableSystem>();
+            var now = server.ResolveDependency<Robust.Shared.Timing.IGameTiming>().CurTime;
+            wounds.ApplyEdit(dead, LimbZone.ArmLeft, new LimbEdit { SetAtrophy = true });
+
+            var hit = new DamageSpecifier();
+            hit.DamageDict["Slash"] = FixedPoint2.New(20);
+            foreach (var body in new[] { dead, alive })
+            {
+                var limbs = server.EntMan.GetComponent<LimbBodyComponent>(body);
+                limbs.ArmorZone = LimbZone.ArmLeft;
+                limbs.FireOriginTime = now;
+                damage.ChangeDamage(body, hit);
+                limbs.ArmorZone = null;
+            }
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(server.EntMan.GetComponent<DamageableComponent>(dead).TotalDamage, Is.EqualTo(FixedPoint2.Zero));
+                Assert.That(server.EntMan.GetComponent<DamageableComponent>(alive).TotalDamage, Is.EqualTo(FixedPoint2.New(20)));
+                Assert.That(wounds.BleedTotal(dead), Is.EqualTo(0f));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task FireBurnsClothesButNotArmor()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var suit = EntityUid.Invalid;
+        var vest = EntityUid.Invalid;
+
+        await server.WaitAssertion(() =>
+        {
+            var at = new MapCoordinates(Vector2.Zero, map.MapId);
+            var human = server.EntMan.SpawnEntity("MobHuman", at);
+            var inventory = server.EntMan.System<InventorySystem>();
+            suit = server.EntMan.SpawnEntity("ClothingUniformJumpsuitColorGrey", at);
+            vest = server.EntMan.SpawnEntity("ClothingOuterArmorBasic", at);
+            Assert.That(inventory.TryEquip(human, suit, "jumpsuit", silent: true, force: true), Is.True);
+            Assert.That(inventory.TryEquip(human, vest, "outerClothing", silent: true, force: true), Is.True);
+
+            var limbs = server.EntMan.GetComponent<LimbBodyComponent>(human);
+            var zones = limbs.Zones;
+            var torso = zones[LimbWoundRules.Index(LimbZone.Torso)];
+            torso.Fire = 10f;
+            zones[LimbWoundRules.Index(LimbZone.Torso)] = torso;
+            server.EntMan.EnsureComponent<LimbActiveComponent>(human);
+        });
+
+        await server.WaitRunTicks(300);
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(server.EntMan.Deleted(suit), Is.True, "the jumpsuit burns");
+                Assert.That(server.EntMan.Deleted(vest), Is.False, "the armor vest does not burn");
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task RigKeepsLimbsOn()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var at = new MapCoordinates(Vector2.Zero, map.MapId);
+            var human = server.EntMan.SpawnEntity("MobHuman", at);
+            var wounds = server.EntMan.System<LimbWoundSystem>();
+            Assert.That(wounds.SeverProof(human, LimbZone.LegLeft), Is.False);
+
+            var suit = server.EntMan.SpawnEntity("ClothingOuterRIGSecurity", at);
+            Assert.That(server.EntMan.System<InventorySystem>().TryEquip(human, suit, "outerClothing", silent: true, force: true), Is.True);
+            Assert.Multiple(() =>
+            {
+                Assert.That(wounds.SeverProof(human, LimbZone.LegLeft), Is.True);
+                Assert.That(wounds.SeverProof(human, LimbZone.HandRight), Is.True);
+                Assert.That(wounds.SeverProof(human, LimbZone.Head), Is.False, "the helmet is still in the suit");
             });
         });
 

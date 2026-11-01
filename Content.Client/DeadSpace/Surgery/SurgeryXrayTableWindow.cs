@@ -1,8 +1,10 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Numerics;
+using Content.Shared.Body.Components;
 using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.Surgery;
+using Content.Shared.Humanoid;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Robust.Client.GameObjects;
@@ -22,7 +24,6 @@ namespace Content.Client.DeadSpace.Surgery;
 public sealed class SurgeryXrayTableWindow : DefaultWindow
 {
     public event Action<byte, byte[]?>? PrintRequested;
-    public event Action<string>? StartRequested;
 
     private readonly RichTextLabel _patient;
     private readonly RichTextLabel _status;
@@ -35,6 +36,7 @@ public sealed class SurgeryXrayTableWindow : DefaultWindow
     private readonly SurgeryFilmView _film;
     private readonly SurgeryXrayClientSystem _xray;
     private readonly IEntityManager _ents;
+    private readonly IPrototypeManager _proto;
     private NetEntity _body;
     private byte _zone = 255;
     private bool _skeleton;
@@ -45,6 +47,7 @@ public sealed class SurgeryXrayTableWindow : DefaultWindow
         Title = Loc.GetString("surgery-xray-table");
         MinSize = new Vector2(1100, 640);
         _ents = IoCManager.Resolve<IEntityManager>();
+        _proto = IoCManager.Resolve<IPrototypeManager>();
         _xray = _ents.System<SurgeryXrayClientSystem>();
         _pawn = new SurgeryPawnView { MinSize = new Vector2(460, 520) };
         _pawn.Picked += zone =>
@@ -64,6 +67,13 @@ public sealed class SurgeryXrayTableWindow : DefaultWindow
                 _film.Reset();
             ShowPicture();
         };
+        var layer = new SurgeryScreenButton(LayerCaption());
+        layer.Pressed += () =>
+        {
+            _xray.Mode = (SurgeryFilmMode) (((int) _xray.Mode + 1) % 4);
+            layer.Caption = LayerCaption();
+            ShowPicture();
+        };
         var print = new SurgeryScreenButton(Loc.GetString("surgery-xray-print"));
         print.Pressed += () =>
         {
@@ -79,6 +89,7 @@ public sealed class SurgeryXrayTableWindow : DefaultWindow
             SeparationOverride = 8,
         };
         bar.AddChild(_mode);
+        bar.AddChild(layer);
         bar.AddChild(print);
 
         var stage = new BoxContainer
@@ -107,7 +118,7 @@ public sealed class SurgeryXrayTableWindow : DefaultWindow
             HorizontalExpand = true,
             SeparationOverride = 6,
         };
-        form.AddChild(Mark("[font size=11][italic][color=#6a9bb8]МЕД[/color][/italic][/font]"));
+        form.AddChild(Mark($"[font size=11][italic][color=#6a9bb8]{Loc.GetString("surgery-xray-mark")}[/color][/italic][/font]"));
         form.AddChild(Mark($"[font size=20][bold][color=#d7eeff]{Loc.GetString("surgery-xray-title")}[/color][/bold][/font]"));
         form.AddChild(_patient);
         form.AddChild(_status);
@@ -117,53 +128,6 @@ public sealed class SurgeryXrayTableWindow : DefaultWindow
         form.AddChild(_focus);
         _running = new RichTextLabel();
         form.AddChild(_running);
-        var search = new LineEdit { PlaceHolder = Loc.GetString("surgery-xray-find") };
-        search.OnTextChanged += args =>
-        {
-            _query = args.Text;
-            FillOps();
-        };
-        _opsPage = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 6,
-            Visible = false,
-        };
-        _opsPage.AddChild(search);
-        _ops = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 4,
-        };
-        _opsPage.AddChild(_ops);
-        FillOps();
-        var pages = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            HorizontalExpand = true,
-            VerticalExpand = true,
-        };
-        pages.AddChild(form);
-        pages.AddChild(_opsPage);
-        var exam = new SurgeryScreenButton(Loc.GetString("surgery-xray-tab-exam"));
-        var operations = new SurgeryScreenButton(Loc.GetString("surgery-xray-tab-ops"));
-        exam.Pressed += () =>
-        {
-            form.Visible = true;
-            _opsPage.Visible = false;
-        };
-        operations.Pressed += () =>
-        {
-            form.Visible = false;
-            _opsPage.Visible = true;
-        };
-        var tabs = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            SeparationOverride = 8,
-        };
-        tabs.AddChild(exam);
-        tabs.AddChild(operations);
         var column = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
@@ -171,8 +135,7 @@ public sealed class SurgeryXrayTableWindow : DefaultWindow
             HorizontalExpand = true,
             VerticalExpand = true,
         };
-        column.AddChild(tabs);
-        column.AddChild(pages);
+        column.AddChild(form);
         var scroll = new ScrollContainer
         {
             MinSize = new Vector2(0, 520),
@@ -246,7 +209,11 @@ public sealed class SurgeryXrayTableWindow : DefaultWindow
             : SurgeryXrayReport.Life(default);
         _ents.TryGetComponent<SurgeryCavityComponent>(body.Value, out var hold);
         var zone = _zone == 255 ? (LimbZone?) null : (LimbZone) _zone;
-        var card = SurgeryXrayReport.Make(limbs, hold, zone, life);
+        _ents.TryGetComponent<SurgeryInfectionComponent>(body.Value, out var infection);
+        _ents.TryGetComponent<BloodstreamComponent>(body.Value, out var bloodstream);
+        var machine = _ents.TryGetComponent<HumanoidAppearanceComponent>(body.Value, out var look)
+            && SurgerySpeciesPrototype.IsMachine(_proto, look.Species.Id);
+        var card = SurgeryXrayReport.Make(limbs, hold, zone, life, infection, bloodstream?.BleedAmount ?? 0f, machine);
         var name = Safe(_ents.GetComponent<MetaDataComponent>(body.Value).EntityName);
         _patient.Text = $"[font size=18][bold][color=#f4f8fc]{name}[/color][/bold][/font]";
         _life = mob?.CurrentState ?? MobState.Alive;
@@ -261,9 +228,6 @@ public sealed class SurgeryXrayTableWindow : DefaultWindow
     }
 
     private readonly RichTextLabel _running;
-    private readonly BoxContainer _ops;
-    private readonly BoxContainer _opsPage;
-    private string _query = "";
 
     private string Running(EntityUid body)
     {
@@ -284,28 +248,6 @@ public sealed class SurgeryXrayTableWindow : DefaultWindow
             ? Loc.GetString(operation.Name)
             : id;
         return Loc.GetString("surgery-xray-running", ("op", title));
-    }
-
-    private void FillOps()
-    {
-        _ops.RemoveAllChildren();
-        var prototypes = IoCManager.Resolve<IPrototypeManager>();
-        foreach (var operation in prototypes.EnumeratePrototypes<SurgeryOperationPrototype>())
-        {
-            if (operation.Zone.Length == 0)
-                continue;
-
-            var title = operation.Name.Length > 0 ? Loc.GetString(operation.Name) : operation.ID;
-            if (_query.Length > 0
-                && title.IndexOf(_query, StringComparison.OrdinalIgnoreCase) < 0
-                && operation.ID.IndexOf(_query, StringComparison.OrdinalIgnoreCase) < 0)
-                continue;
-
-            var id = operation.ID;
-            var button = new SurgeryScreenButton(title);
-            button.Pressed += () => StartRequested?.Invoke(id);
-            _ops.AddChild(button);
-        }
     }
 
     private MobState _life = MobState.Alive;
@@ -363,6 +305,11 @@ public sealed class SurgeryXrayTableWindow : DefaultWindow
 
         _shot = _xray.Sheet(body.Value);
         _film.Shot = _shot;
+    }
+
+    private string LayerCaption()
+    {
+        return Loc.GetString("surgery-xray-mode-" + _xray.Mode.ToString().ToLowerInvariant());
     }
 
     protected override void Dispose(bool disposing)

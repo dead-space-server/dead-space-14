@@ -1,6 +1,9 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Shared.Damage;
+using Content.Shared.DeadSpace.Body.Limbs;
+using Robust.Shared.Audio;
+using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DeadSpace.Surgery;
@@ -28,16 +31,28 @@ public sealed partial class SurgeryMarkPrototype : IPrototype
     public string Prefix = string.Empty;
 
     [DataField]
-    public int Ax;
+    public float Ax;
 
     [DataField]
-    public int Ay;
+    public float Ay;
 
     [DataField]
-    public int Bx;
+    public float Bx;
 
     [DataField]
-    public int By;
+    public float By;
+
+    [DataField]
+    public float Cx;
+
+    [DataField]
+    public float Cy;
+
+    [DataField]
+    public float Dx;
+
+    [DataField]
+    public float Dy;
 
     [DataField]
     public int Hx;
@@ -56,6 +71,15 @@ public sealed partial class SurgeryMarkPrototype : IPrototype
 
     [DataField]
     public bool Self = true;
+
+    [DataField]
+    public bool Ribs;
+
+    [DataField]
+    public bool Brain;
+
+    [DataField]
+    public bool Halves;
 }
 
 [Prototype]
@@ -76,6 +100,12 @@ public sealed partial class SurgeryHintPrototype : IPrototype
 
     [DataField]
     public List<SurgeryHintIcon> Icons = new();
+
+    [DataField]
+    public string Name = "";
+
+    [DataField]
+    public Color Color = Color.White;
 }
 
 [DataDefinition]
@@ -108,6 +138,179 @@ public sealed partial class SurgerySpeciesPrototype : IPrototype
 
     [DataField]
     public ProtoId<SurgeryAnatomyPrototype>? Eyes;
+
+    [DataField]
+    public bool Wounds = true;
+
+    [DataField]
+    public bool Operable = true;
+
+    [DataField]
+    public bool Graft = true;
+
+    [DataField]
+    public string Lineage = "";
+
+    [DataField]
+    public bool Machine;
+
+    [DataField]
+    public bool Painless;
+
+    [DataField]
+    public bool Soft;
+
+    [DataField]
+    public bool Plant;
+
+    [DataField]
+    public string GraftStack = "";
+
+    [DataField]
+    public List<string>? Vital;
+
+    [DataField]
+    public Dictionary<string, LocId> OrganNames = new();
+
+    [DataField]
+    public string OrganSprite = "";
+
+    [DataField]
+    public Dictionary<string, string> OrganStates = new();
+
+    [DataField]
+    public string WoundSprite = "";
+
+    [DataField]
+    public SurgeryInk Ink = SurgeryInk.Flesh;
+
+    [DataField]
+    public Dictionary<string, List<SurgeryOrganSpot>> OrganSpots = new();
+
+    [DataField]
+    public Dictionary<string, ComponentRegistry> Lacking = new();
+
+    public static SurgeryInk InkOf(IPrototypeManager prototypes, string species)
+    {
+        if (!prototypes.TryIndex<SurgerySpeciesPrototype>(species, out var proto))
+            return SurgeryInk.Flesh;
+
+        return proto.Machine ? SurgeryInk.Machine : proto.Ink;
+    }
+
+    public static bool IsMachine(IPrototypeManager prototypes, string species)
+    {
+        return prototypes.TryIndex<SurgerySpeciesPrototype>(species, out var proto) && proto.Machine;
+    }
+
+    public static bool IsSoft(IPrototypeManager prototypes, string species)
+    {
+        return prototypes.TryIndex<SurgerySpeciesPrototype>(species, out var proto) && proto.Soft;
+    }
+
+    public static bool IsPlant(IPrototypeManager prototypes, string species)
+    {
+        return prototypes.TryIndex<SurgerySpeciesPrototype>(species, out var proto) && proto.Plant;
+    }
+
+    public static string OrganName(IPrototypeManager prototypes, string species, string organ)
+    {
+        if (prototypes.TryIndex<SurgerySpeciesPrototype>(species, out var proto) && proto.OrganNames.TryGetValue(organ, out var name))
+            return Loc.GetString(name);
+
+        return Loc.GetString("surgery-organ-" + organ.ToLowerInvariant());
+    }
+
+    public static bool CanOperate(IPrototypeManager prototypes, string species)
+    {
+        return !prototypes.TryIndex<SurgerySpeciesPrototype>(species, out var proto) || proto.Operable;
+    }
+
+    public static string? LineageOf(IPrototypeManager prototypes, string species)
+    {
+        if (!prototypes.TryIndex<SurgerySpeciesPrototype>(species, out var proto))
+            return species;
+
+        if (!proto.Operable || !proto.Graft)
+            return null;
+
+        return proto.Lineage.Length > 0 ? proto.Lineage : species;
+    }
+}
+
+[Prototype]
+public sealed partial class SurgeryRepairPrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField]
+    public DamageSpecifier Heal = new();
+}
+
+[Prototype]
+public sealed partial class SurgeryGameRollPrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField(required: true)]
+    public List<SurgeryGameKind> Games = new();
+}
+
+[Prototype]
+public sealed partial class SurgerySoundPrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField(required: true)]
+    public SoundSpecifier Sound = default!;
+}
+
+[Prototype]
+public sealed partial class SurgeryGraftPrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField]
+    public string Cells = "GraftCells";
+
+    [DataField]
+    public string Mutagen = "GraftMutagen";
+
+    [DataField]
+    public float CellsKeep = 1f;
+
+    [DataField]
+    public float CellsTop = 2f;
+
+    [DataField]
+    public float Amount = 1f;
+
+    [DataField]
+    public float Early = 90f;
+
+    [DataField]
+    public float Death = 300f;
+
+    [DataField]
+    public float Black = 240f;
+
+    [DataField]
+    public float RotHealth = 0.04f;
+
+    [DataField]
+    public float Poison = 0.4f;
+
+    [DataField]
+    public Dictionary<float, string> Stages = new();
+
+    public static string PairId(string prefix, string a, string b)
+    {
+        return string.CompareOrdinal(a, b) <= 0 ? prefix + a + b : prefix + b + a;
+    }
 }
 
 [Prototype]
@@ -123,10 +326,33 @@ public sealed partial class SurgeryOrganPrototype : IPrototype
     public string Zone = "Torso";
 
     [DataField]
+    public string MachineZone = "";
+
+    [DataField]
     public bool Vital;
 
     [DataField]
+    public bool Pair;
+
+    [DataField]
     public List<SurgeryOrganSpot> Spots = new();
+
+    [DataField]
+    public List<SurgeryOrganSpot> MachineSpots = new();
+
+    [DataField]
+    public List<SurgeryFilmShape> Film = new();
+
+    public bool InZone(LimbZone zone, bool machine)
+    {
+        var home = machine && MachineZone.Length > 0 ? MachineZone : Zone;
+        return home == zone.ToString();
+    }
+
+    public IReadOnlyList<SurgeryOrganSpot> SpotsFor(bool machine)
+    {
+        return machine && MachineSpots.Count > 0 ? MachineSpots : Spots;
+    }
 }
 
 [DataDefinition]
@@ -202,6 +428,171 @@ public sealed partial class SurgeryOperationPrototype : IPrototype
 
     [DataField]
     public List<SurgeryStep> Close = new();
+
+    [DataField]
+    public bool Across;
+
+    [DataField]
+    public bool Field;
+
+    [DataField]
+    public bool Whole;
+
+    [DataField]
+    public bool Stump;
+
+    [DataField]
+    public string When = "";
+
+    [DataField]
+    public SurgeryHintIcon? Icon;
+
+    [DataField]
+    public bool Limb;
+
+    [DataField]
+    public int Order;
+
+    [DataField]
+    public bool Sterile = true;
+
+    [DataField]
+    public bool Machine;
+
+    [DataField]
+    public bool Soft;
+
+    [DataField]
+    public bool Plant;
+
+    [DataField]
+    public SurgerySide Side = SurgerySide.Front;
+
+    [DataField]
+    public List<string> Nearby = new();
+
+    [DataField]
+    public float NearbyRange = 1.5f;
+
+    [DataField]
+    public string Appendage = "";
+
+    [DataField]
+    public bool Attach;
+
+    [DataField]
+    public bool Refill;
+
+    [DataField]
+    public List<string> Zones = new();
+
+    [DataField]
+    public string Implant = "";
+
+    [DataField]
+    public bool ImplantPut;
+
+    public bool Faces(bool prone)
+    {
+        return Side == SurgerySide.Any || Side == SurgerySide.Back == prone;
+    }
+
+    public bool Suits(bool machine, bool soft, bool plant)
+    {
+        return Machine == machine && Soft == soft && Plant == plant;
+    }
+
+    public bool Fits(LimbZone zone)
+    {
+        if (Zones.Count > 0)
+            return Zones.Contains(zone.ToString());
+
+        if (Zone.Length > 0)
+            return Zone == zone.ToString();
+
+        return !Limb || LimbWoundRules.CanSever(zone);
+    }
+}
+
+[Prototype]
+public sealed partial class SurgeryWrapPrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField]
+    public List<string> Tags = new();
+}
+
+[Prototype]
+public sealed partial class SurgerySterilePrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField]
+    public bool Enabled = true;
+
+    [DataField]
+    public List<string> Gloves = new();
+
+    [DataField]
+    public List<string> Mask = new();
+
+    [DataField]
+    public List<string> Head = new();
+
+    [DataField]
+    public float NoGloves = 8f;
+
+    [DataField]
+    public float NoMask = 5f;
+
+    [DataField]
+    public float NoHead = 2f;
+
+    [DataField]
+    public float Puddle = 3f;
+
+    [DataField]
+    public float PuddleRange = 2f;
+
+    [DataField]
+    public float OffTable = 6f;
+
+    [DataField]
+    public float Threshold = 12f;
+
+    [DataField]
+    public float DelayMin = 240f;
+
+    [DataField]
+    public float DelayMax = 480f;
+
+    [DataField]
+    public float RotEvery = 20f;
+
+    [DataField]
+    public float RotHealth = 3f;
+
+    [DataField]
+    public float RotFlesh = 1f;
+
+    [DataField]
+    public float RotPoison = 1.5f;
+}
+
+[Prototype]
+public sealed partial class SurgeryCurePrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField]
+    public List<string> Reagents = new();
+
+    [DataField]
+    public float Amount = 5f;
 }
 
 [Prototype]
@@ -220,22 +611,56 @@ public sealed partial class SurgeryPartPrototype : IPrototype
     public string Operation = "";
 
     [DataField]
+    public bool Machine;
+
+    [DataField]
+    public string Sprite = "/Textures/Mobs/Species/Human/organs.rsi";
+
+    [DataField]
+    public bool Wound = true;
+
+    [DataField]
     public string State = "";
 
     [DataField]
-    public int Ax;
+    public List<string> States = new();
 
     [DataField]
-    public int Ay;
+    public string Organ = "";
 
     [DataField]
-    public int Bx;
+    public string Implant = "";
 
     [DataField]
-    public int By;
+    public string Put = "";
+
+    [DataField]
+    public float Ax;
+
+    [DataField]
+    public float Ay;
+
+    [DataField]
+    public float Bx;
+
+    [DataField]
+    public float By;
 
     [DataField]
     public int Order;
+
+    [DataField]
+    public bool Pill;
+}
+
+[Prototype]
+public sealed partial class SurgeryTeethPrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField]
+    public int Max = 3;
 }
 
 [Prototype]
@@ -271,6 +696,9 @@ public sealed partial class SurgeryStep
     public string Organ = "";
 
     [DataField]
+    public string Implant = "";
+
+    [DataField]
     public string Game = "";
 
     [DataField]
@@ -278,4 +706,99 @@ public sealed partial class SurgeryStep
 
     [DataField]
     public string Undo = "";
+
+    [DataField]
+    public bool Intact;
+
+    [DataField]
+    public string Hint = "";
+
+    [DataField]
+    public bool Flinch = true;
+
+    [DataField]
+    public EntProtoId? Drop;
+
+    [DataField]
+    public Dictionary<string, EntProtoId> DropBySpecies = new();
+
+    [DataField]
+    public List<EntProtoId> Need = new();
+
+    [DataField]
+    public string Effect = "";
+}
+
+[Prototype]
+public sealed partial class SurgeryHealthPrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField]
+    public Dictionary<SurgeryVerbKind, float> Cost = new();
+
+    [DataField]
+    public List<SurgeryVerbKind> Restore = new();
+
+    [DataField]
+    public float Slip = 0.06f;
+
+    [DataField]
+    public float Flinch = 0.03f;
+
+    [DataField]
+    public float Keep = 0.1f;
+}
+
+[Prototype]
+public sealed partial class SurgeryAnesthesiaPrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField]
+    public bool Enabled = true;
+
+    [DataField]
+    public List<string> Reagents = new();
+
+    [DataField]
+    public float Amount = 1f;
+
+    [DataField]
+    public List<string> Calm = new();
+
+    [DataField]
+    public float FlinchChance = 0.35f;
+
+    [DataField]
+    public float FlinchProgress = 0.5f;
+
+    [DataField]
+    public float FlinchBleed = 1f;
+
+    [DataField]
+    public float TearBleed = 3f;
+
+    [DataField]
+    public float SleepAmount = 2f;
+
+    [DataField]
+    public float SleepTime = 4f;
+
+    [DataField]
+    public float Hold = 0.6f;
+
+    [DataField]
+    public string Alcohol = "";
+
+    [DataField]
+    public float AlcoholClash = 50f;
+
+    [DataField]
+    public float AlcoholNumb = 120f;
+
+    [DataField]
+    public float ClashPoison = 2f;
 }

@@ -28,14 +28,14 @@ public static class SurgeryXrayReport
         };
     }
 
-    public static SurgeryXrayCard Make(LimbBodyComponent limbs, SurgeryCavityComponent? hold, LimbZone? zone, string status)
+    public static SurgeryXrayCard Make(LimbBodyComponent limbs, SurgeryCavityComponent? hold, LimbZone? zone, string status, SurgeryInfectionComponent? infection = null, float vessel = 0f, bool machine = false)
     {
         var issues = new List<LimbScanIssue>();
         LimbScan.Build(limbs.Zones, limbs.Organs, out var summary, issues);
         var card = new SurgeryXrayCard
         {
             Status = status,
-            Overview = Overview(limbs, summary, issues, hold),
+            Overview = Overview(limbs, summary, issues, hold, Foci(infection), vessel, machine),
         };
 
         if (zone == null)
@@ -46,14 +46,26 @@ public static class SurgeryXrayReport
         }
 
         card.FocusTitle = Loc.GetString($"health-analyzer-zone-{(byte) zone.Value}");
-        card.Focus = Focus(limbs, zone.Value, issues, hold);
+        card.Focus = Focus(limbs, zone.Value, issues, hold, machine);
+        if (infection != null && infection.Focus(zone.Value))
+            card.Focus += "\n" + Loc.GetString("surgery-xray-infection");
         return card;
+    }
+
+    private static int Foci(SurgeryInfectionComponent? infection)
+    {
+        if (infection == null)
+            return 0;
+
+        var zones = new HashSet<LimbZone>(infection.Rotting);
+        zones.UnionWith(infection.Latent);
+        return zones.Count;
     }
 
     public static string Paper(string name, SurgeryXrayCard card, bool image)
     {
         var text = $"""
-            [bold]МЕД[/bold]
+            [bold]{Loc.GetString("surgery-xray-mark")}[/bold]
             ═════════════════════════════════════
             [bold]{Loc.GetString("surgery-xray-title")}[/bold]
             ═════════════════════════════════════
@@ -78,30 +90,46 @@ public static class SurgeryXrayReport
         return text;
     }
 
-    private static string Overview(LimbBodyComponent limbs, LimbScanSummary summary, List<LimbScanIssue> issues, SurgeryCavityComponent? hold)
+    private static string Overview(LimbBodyComponent limbs, LimbScanSummary summary, List<LimbScanIssue> issues, SurgeryCavityComponent? hold, int foci, float vessel, bool machine)
     {
-        var bleeds = 0f;
+        var bleeds = machine ? 0f : MathF.Max(0f, vessel);
         var count = Math.Min(limbs.Zones.Count, LimbWoundRules.BodyZoneCount);
         for (var i = 0; i < count; i++)
         {
+            if (machine || limbs.Zones[i].Severed)
+                continue;
+
             if (limbs.Zones[i].Bleed > LimbWoundRules.TickBleed)
                 bleeds += limbs.Zones[i].Bleed;
         }
 
         var foreign = HasForeign(hold);
-        if (summary.Healthy && bleeds == 0 && !foreign)
+        if (summary.Healthy && bleeds == 0 && !foreign && foci == 0)
             return Loc.GetString("surgery-xray-clear");
 
-        var text = Loc.GetString("surgery-xray-count-fracture", ("n", summary.Fractures))
-               + "\n" + Loc.GetString("surgery-xray-count-bleed", ("n", MathF.Round(bleeds)))
-               + "\n" + Loc.GetString("surgery-xray-count-rupture", ("n", summary.Ruptures))
-               + "\n" + Loc.GetString("surgery-xray-count-embedded", ("n", summary.Embedded));
+        var lines = new List<string>();
+        if (summary.Fractures > 0)
+            lines.Add(Loc.GetString("surgery-xray-count-fracture", ("n", summary.Fractures)));
+        if (bleeds > LimbWoundRules.TickBleed)
+            lines.Add(Loc.GetString("surgery-xray-bleed", ("level", BleedLevel(bleeds))));
+        if (summary.Ruptures > 0)
+            lines.Add(Loc.GetString("surgery-xray-count-rupture", ("n", summary.Ruptures)));
+        if (summary.Embedded > 0)
+            lines.Add(Loc.GetString("surgery-xray-count-embedded", ("n", summary.Embedded)));
+        if (foci > 0)
+            lines.Add(Loc.GetString("surgery-xray-count-infection", ("n", foci)));
         if (foreign)
-            text += "\n" + Loc.GetString("surgery-xray-foreign");
-        return text;
+            lines.Add(Loc.GetString("surgery-xray-foreign"));
+        return lines.Count == 0 ? Loc.GetString("surgery-xray-clear") : string.Join("\n", lines);
     }
 
-    private static string Focus(LimbBodyComponent limbs, LimbZone zone, List<LimbScanIssue> issues, SurgeryCavityComponent? hold)
+    public static string BleedLevel(float bleed)
+    {
+        var level = bleed < 1f ? 0 : bleed < 3f ? 1 : bleed < 6f ? 2 : 3;
+        return Loc.GetString($"surgery-xray-bleed-level-{level}");
+    }
+
+    private static string Focus(LimbBodyComponent limbs, LimbZone zone, List<LimbScanIssue> issues, SurgeryCavityComponent? hold, bool machine)
     {
         var index = LimbWoundRules.Index(zone);
         if ((uint) index >= (uint) limbs.Zones.Count)
@@ -114,7 +142,10 @@ public static class SurgeryXrayReport
             if (issue.Organ || issue.Index != (byte) zone || issue.Kind == LimbIssueKind.Severed)
                 continue;
 
-            findings.Add(Loc.GetString($"health-analyzer-issue-{(byte) issue.Kind}"));
+            if (issue.Kind == LimbIssueKind.Bleed)
+                continue;
+
+            findings.Add(Loc.GetString("surgery-xray-found", ("what", IssueName(issue.Kind, machine))));
         }
 
         foreach (var issue in issues)
@@ -126,22 +157,16 @@ public static class SurgeryXrayReport
                 continue;
 
             var organ = Loc.GetString($"health-analyzer-organ-{issue.Index}");
-            findings.Add(Loc.GetString("surgery-xray-rupture", ("organ", organ)));
+            findings.Add(Loc.GetString("surgery-xray-found", ("what", Loc.GetString("surgery-xray-rupture", ("organ", organ)))));
         }
 
-        var found = findings.Count == 0
-            ? Loc.GetString("health-analyzer-limbs-part-ok")
-            : string.Join(", ", findings);
         var text = Loc.GetString("surgery-xray-integrity", ("health", MathF.Round(state.Health)), ("pool", MathF.Round(LimbWoundRules.HealthFor(zone))));
-        if (state.Bone >= LimbWoundRules.StrainBone)
-            text += "\n" + Loc.GetString("surgery-xray-bone", ("n", MathF.Round(state.Bone)));
-        if (state.Flesh >= LimbWoundRules.StrainFlesh)
-            text += "\n" + Loc.GetString("surgery-xray-flesh", ("n", MathF.Round(state.Flesh)));
-        if (state.Bleed > LimbWoundRules.TickBleed)
-            text += "\n" + Loc.GetString("surgery-xray-bleed", ("n", MathF.Round(state.Bleed)));
-        text += "\n" + Loc.GetString("surgery-xray-findings", ("text", found));
-        if (zone is LimbZone.Head or LimbZone.Torso or LimbZone.Groin && ItemName(hold, zone).Length > 0)
-            text += "\n" + Loc.GetString("surgery-xray-foreign");
+        if (!machine && !state.Severed && state.Bleed > LimbWoundRules.TickBleed)
+            text += "\n" + Loc.GetString("surgery-xray-bleed", ("level", BleedLevel(state.Bleed)));
+        foreach (var line in findings)
+            text += "\n" + line;
+        if (zone is LimbZone.Head or LimbZone.Torso or LimbZone.Groin && ItemName(hold, zone) is { Length: > 0 } item)
+            text += "\n" + Loc.GetString("surgery-xray-item", ("name", item));
         return text;
     }
 
@@ -175,5 +200,13 @@ public static class SurgeryXrayReport
 
         var prototypes = IoCManager.Resolve<IPrototypeManager>();
         return prototypes.TryIndex<EntityPrototype>(proto, out var found) ? found.Name : proto;
+    }
+
+    private static string IssueName(LimbIssueKind kind, bool machine)
+    {
+        if (machine)
+            return Loc.GetString($"health-analyzer-issue-machine-{(byte) kind}");
+
+        return Loc.GetString($"health-analyzer-issue-{(byte) kind}");
     }
 }

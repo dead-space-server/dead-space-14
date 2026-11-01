@@ -47,11 +47,80 @@
 - type: entity
   id: OrganIPCEyes
   parent: BaseIPCOrgan
-  name: eyes
-  description: "I see you!"
+  name: optical sensors
+  description: A pair of cameras the IPC sees with.
   components:
   - type: Sprite
-    state: cybernetic_eyeballs
+    sprite: _DeadSpace/Mobs/Species/IPC/ipc_modules.rsi
+    state: optics
+  - type: SurgeryOrganKind
+    organ: Eyes
+    machine: true
+  - type: SurgeryGift
+
+- type: entity
+  id: OrganIPCPositronic
+  parent: BaseIPCOrganUnGibbable
+  name: positronic brain
+  description: The heart of an IPC's self. Without it the chassis is empty.
+  components:
+  - type: Sprite
+    state: posibrain
+  - type: Organ
+  - type: Input
+    context: "ghost"
+  - type: Brain
+  - type: InputMover
+  - type: Examiner
+  - type: BlockMovement
+  - type: SurgeryOrganKind
+    organ: Core
+    machine: true
+  - type: SurgeryGift
+
+- type: entity
+  id: OrganIPCBattery
+  parent: BaseIPCOrgan
+  name: IPC battery
+  description: Powers the whole chassis. Without it the IPC shuts down.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Mobs/Species/IPC/ipc_modules.rsi
+    state: battery
+  - type: SurgeryOrganKind
+    organ: Heart
+    machine: true
+  - type: SurgeryGift
+
+- type: entity
+  id: OrganIPCStatusModule
+  parent: BaseIPCOrgan
+  name: status module
+  description: Reports damage to medical interfaces.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Mobs/Species/IPC/ipc_modules.rsi
+    state: status
+  - type: SurgeryOrganKind
+    organ: Lungs
+    machine: true
+  - type: SurgeryStatusModule
+  - type: SurgeryGift
+
+- type: entity
+  id: OrganIPCVoiceModule
+  parent: BaseIPCOrgan
+  name: voice module
+  description: A speech synthesizer. Without it the IPC cannot speak.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Mobs/Species/IPC/ipc_modules.rsi
+    state: voice
+  - type: SurgeryOrganKind
+    organ: Brain
+    machine: true
+  - type: SurgeryVoiceModule
+  - type: SurgeryGift
 
 - type: entity
   id: OrganIPCTongue

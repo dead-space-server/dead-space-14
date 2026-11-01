@@ -1,16 +1,20 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using System.Numerics;
+using Content.Client.DeadSpace.Surgery;
 using Content.Client.Gameplay;
-using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.Alerts.Widgets;
 using Content.Client.UserInterface.Systems.Gameplay;
 using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.Input;
+using Robust.Client.Graphics;
+using Robust.Client.Input;
 using Robust.Client.Player;
+using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.Controllers;
+using Robust.Shared.Graphics.RSI;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Timing;
 
@@ -20,11 +24,26 @@ public sealed class LimbDollUIController : UIController, IOnStateChanged<Gamepla
 {
     [Dependency] private readonly IEntityManager _entities = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private readonly IInputManager _input = default!;
+
+    private static readonly Color Normal = new(0.45f, 0.72f, 0.82f);
+    private static readonly Color Gone = new(0.42f, 0.44f, 0.47f);
+    private static readonly Color Clear = new(0.66f, 0.7f, 0.74f);
+
+    private static readonly LimbZone[] RingOrder =
+    {
+        LimbZone.Head, LimbZone.Eyes, LimbZone.Mouth,
+        LimbZone.ArmLeft, LimbZone.HandLeft, LimbZone.LegLeft, LimbZone.FootLeft,
+        LimbZone.Groin,
+        LimbZone.FootRight, LimbZone.LegRight, LimbZone.HandRight, LimbZone.ArmRight,
+        LimbZone.Torso,
+    };
 
     private LimbDollHud? _hud;
     private LimbHealthView? _health;
     private LimbAimView? _aim;
-    private SimpleRadialMenu? _menu;
+    private SurgeryFan? _menu;
+    private Vector2 _menuAt;
     private bool _alive;
 
     public override void Initialize()
@@ -45,10 +64,14 @@ public sealed class LimbDollUIController : UIController, IOnStateChanged<Gamepla
         }
 
         if (_hud == null)
+        {
             ShowDoll();
+            if (_hud == null)
+                return;
+        }
 
-        if (_hud == null)
-            return;
+        if (_menu != null && (_input.MouseScreenPosition.Position - _menuAt).Length() > (_menu.MinSize.X * 0.5f + 48f) * UiScale())
+            CloseMenu();
 
         if (_health == null || _health.Parent == null || _aim == null || _aim.Parent == null)
             PlaceHealth();
@@ -174,38 +197,66 @@ public sealed class LimbDollUIController : UIController, IOnStateChanged<Gamepla
 
     private void OpenRadial()
     {
-        if (!LimbTuning.Enabled || _menu != null)
+        if (_menu != null)
+        {
+            CloseMenu();
+            return;
+        }
+
+        if (!LimbTuning.Enabled)
             return;
 
         var selected = Current();
-        var options = new List<RadialMenuOptionBase>();
-        foreach (var part in LimbDollLayout.Parts)
-            options.Add(Option(part, selected));
-
-        options.Add(new RadialMenuActionOption<LimbZone?>(Choose, null)
+        var body = Body();
+        var icons = new List<SurgeryFanIcon>();
+        var picks = new List<LimbZone?>();
+        foreach (var zone in RingOrder)
         {
-            ToolTip = Loc.GetString(LimbDollLayout.ClearShort),
-            Order = LimbDollLayout.Parts.Length,
-            BackgroundColor = LimbDollPalette.Idle,
-            HoverBackgroundColor = LimbDollPalette.Hover,
-        });
+            if (!LimbDollLayout.TryPart(zone, out var part))
+                continue;
 
-        _menu = new SimpleRadialMenu();
-        _menu.SetButtons(options, new SimpleRadialMenuSettings { DefaultContainerRadius = LimbDollPalette.RadialRadius });
-        _menu.OnClose += CloseMenu;
-        _menu.Open();
-        _menu.OpenOverMouseScreenPosition();
+            var lost = Lost(body, zone);
+            var color = selected == zone ? LimbDollPalette.Picked : lost ? Gone : Normal;
+            var name = lost
+                ? Loc.GetString("limb-doll-lost", ("part", Loc.GetString(part.Short)))
+                : Loc.GetString(part.Name);
+            icons.Add(new SurgeryFanIcon(new List<Texture>(), SurgeryFanBadge.None, color, name, Loc.GetString(part.Short)));
+            picks.Add(zone);
+        }
+
+        icons.Add(new SurgeryFanIcon(new List<Texture>(), SurgeryFanBadge.None, Clear, Loc.GetString("limb-doll-clear-ring"), Loc.GetString(LimbDollLayout.ClearShort)));
+        picks.Add(null);
+
+        var fan = new SurgeryFan();
+        fan.SetIcons(icons);
+        fan.Picked += index =>
+        {
+            if ((uint) index < (uint) picks.Count)
+                Choose(picks[index]);
+            CloseMenu();
+        };
+
+        UIManager.WindowRoot.AddChild(fan);
+        LayoutContainer.SetAnchorPreset(fan, LayoutContainer.LayoutPreset.TopLeft);
+        _menuAt = _input.MouseScreenPosition.Position;
+        var at = _menuAt / UiScale();
+        LayoutContainer.SetMarginLeft(fan, at.X - fan.MinSize.X * fan.Origin.X);
+        LayoutContainer.SetMarginTop(fan, at.Y - fan.MinSize.Y * fan.Origin.Y);
+        _menu = fan;
     }
 
-    private RadialMenuActionOption<LimbZone?> Option(LimbDollPart part, LimbZone? selected)
+    private static bool Lost(IReadOnlyList<LimbZoneState>? body, LimbZone zone)
     {
-        return new RadialMenuActionOption<LimbZone?>(Choose, part.Zone)
-        {
-            ToolTip = Loc.GetString(part.Short),
-            Order = part.Order,
-            BackgroundColor = selected == part.Zone ? LimbDollPalette.Picked : LimbDollPalette.Idle,
-            HoverBackgroundColor = LimbDollPalette.Hover,
-        };
+        if (body == null || !LimbWoundRules.IsBody(zone))
+            return false;
+
+        var index = LimbWoundRules.Index(zone);
+        return (uint) index < (uint) body.Count && body[index].Severed;
+    }
+
+    private float UiScale()
+    {
+        return MathF.Max(0.01f, UIManager.RootControl.UIScale);
     }
 
     private void Choose(LimbZone? zone)
@@ -260,6 +311,6 @@ public sealed class LimbDollUIController : UIController, IOnStateChanged<Gamepla
 
         var menu = _menu;
         _menu = null;
-        menu.Close();
+        menu.Orphan();
     }
 }

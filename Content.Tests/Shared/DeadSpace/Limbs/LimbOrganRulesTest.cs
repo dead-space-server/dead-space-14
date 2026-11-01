@@ -11,8 +11,8 @@ public sealed class LimbOrganRulesTest
     {
         Assert.Multiple(() =>
         {
-            Assert.That(Target(LimbZone.Groin, LimbMark.Point), Is.EqualTo(LimbOrgan.Intestines));
-            Assert.That(Target(LimbZone.Groin, LimbMark.Edge), Is.EqualTo(LimbOrgan.Intestines));
+            Assert.That(Target(LimbZone.Groin, LimbMark.Point), Is.EqualTo(LimbOrgan.Kidneys));
+            Assert.That(Target(LimbZone.Groin, LimbMark.Edge), Is.EqualTo(LimbOrgan.Kidneys));
             Assert.That(Target(LimbZone.Torso, LimbMark.Point), Is.EqualTo(LimbOrgan.Heart));
             Assert.That(Target(LimbZone.Torso, LimbMark.Edge), Is.EqualTo(LimbOrgan.Lungs));
             Assert.That(Target(LimbZone.Torso, LimbMark.Blunt), Is.EqualTo(LimbOrgan.Kidneys));
