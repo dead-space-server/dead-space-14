@@ -928,13 +928,9 @@
         - id: PillSpaceDrugs
           weight: 0.75
           amount: *Range1to6
-# DS14-start: halloween candies instead of strange pills
-        - !type:NestedSelector
-          tableId: RandomCandyTable
+        - id: StrangePill
           weight: 0.75
-          rolls: !type:RangeNumberSelector
-            range: 1, 6
-# DS14-end
+          amount: *Range1to6
 
 # Syringes
 - type: entity
@@ -1179,10 +1175,7 @@
     - id: PillKelotane
     - id: PillPotassiumIodide
     - id: PillTricordrazine
-# DS14-start: halloween candies instead of strange pills
-    - !type:NestedSelector
-      tableId: RandomCandyTable
-# DS14-end
+    - id: StrangePill
 
 - type: entityTable
   id: RandomSafeSyringeTable

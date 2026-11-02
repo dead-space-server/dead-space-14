@@ -187,11 +187,8 @@
   id: MaintenanceLockerLoot
   table: !type:AllSelector
     children:
-# DS14-start: halloween candies instead of strange pills
-    - !type:NestedSelector
-      tableId: RandomCandyTable
+    - id: StrangePill
       prob: 0.20
-# DS14-end
     # Tools
     - !type:NestedSelector
       tableId: MaintToolsTable

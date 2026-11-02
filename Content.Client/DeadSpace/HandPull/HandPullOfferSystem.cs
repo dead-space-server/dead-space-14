@@ -1,15 +1,16 @@
 using Content.Client.Eui;
 using Content.Shared.DeadSpace.HandPull;
-using Content.Shared.Mindshield.Components;
 using Robust.Client.Graphics;
 
 namespace Content.Client.DeadSpace.HandPull;
 
 public sealed class HandPullOfferSystem : EntitySystem
 {
+    [Dependency] private readonly IClyde _clyde = default!;
+
     private YesNoWindow? _window;
-    private int? _requstID;
-    private bool _serverClosing;
+    private NetEntity? _offerUser;
+    private bool _closing;
 
     public override void Initialize()
     {
@@ -29,49 +30,52 @@ public sealed class HandPullOfferSystem : EntitySystem
     private void OnOffer(HandPullOfferMessage msg, EntitySessionEventArgs args)
     {
         CloseWindow();
-        _requstID = msg.RequestID;
-        _window = new YesNoWindow(Loc.GetString("hand-pull-window-title"), Loc.GetString("hand-pull-window-message", ("user", msg.UserName)));
+
+        _offerUser = msg.User;
+        _window = new YesNoWindow(
+            Loc.GetString("hand-pull-window-title"),
+            Loc.GetString("hand-pull-window-message", ("user", msg.UserName)));
+
         _window.YesButton.Text = Loc.GetString("hand-pull-window-accept");
         _window.NoButton.Text = Loc.GetString("hand-pull-window-decline");
+
         _window.YesButton.OnPressed += _ => SendAnswer(true);
         _window.NoButton.OnPressed += _ => SendAnswer(false);
-        _window.OnClose += OnWindowClosed;
+        _window.OnClose += () =>
+        {
+            if (!_closing)
+                SendAnswer(false);
+        };
 
-        IoCManager.Resolve<IClyde>().RequestWindowAttention();
+        _clyde.RequestWindowAttention();
         _window.OpenCentered();
     }
 
     private void OnOfferClosed(HandPullOfferClosedMessage msg, EntitySessionEventArgs args)
     {
-        if (_requstID != msg.RequestID)
-            return;
-        CloseWindow();
-    }
-
-    private void OnWindowClosed()
-    {
-        if (_serverClosing)
-            return;
-        SendAnswer(false);
+        if (_offerUser == msg.User)
+            CloseWindow();
     }
 
     private void SendAnswer(bool accepted)
     {
-        if (_requstID is not { } requestID)
+        if (_offerUser is not { } user)
             return;
-        RaiseNetworkEvent(new HandPullAnswerMessage(requestID, accepted));
+
+        RaiseNetworkEvent(new HandPullAnswerMessage(user, accepted));
         CloseWindow();
     }
 
     private void CloseWindow()
     {
-        _requstID = null;
+        _offerUser = null;
 
         if (_window == null)
             return;
-        _serverClosing = true;
+
+        _closing = true;
         _window.Close();
-        _serverClosing = false;
+        _closing = false;
         _window = null;
     }
 }
