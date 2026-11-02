@@ -1445,7 +1445,10 @@ public sealed class SurgerySystem : EntitySystem
             return 255;
 
         var step = NextClose(operation, site);
-        return step == null ? (byte) 255 : (byte) step.Verb;
+        if (step == null || site.Step < operation.Steps.Count && step.Verb != SurgeryVerbKind.Cauterize)
+            return 255;
+
+        return (byte) step.Verb;
     }
 
     private byte UndoVerb(EntityUid patient, SurgerySiteComponent site)

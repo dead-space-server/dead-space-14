@@ -29,6 +29,7 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
+using Content.Shared.IdentityManagement;
 using Content.Shared.Input;
 using Content.Shared.Inventory;
 using System.Runtime.InteropServices;
@@ -49,6 +50,7 @@ using Content.Shared.Speech;
 using Content.Shared.Standing;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.Temperature.Components;
+using Content.Shared.Throwing;
 using Content.Shared.Traits.Assorted;
 using Content.Shared.DeadSpace.Weapons.Parry;
 using Content.Shared.Weapons.Melee;
@@ -98,13 +100,17 @@ public sealed partial class LimbWoundSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly StandingStateSystem _standing = default!;
     [Dependency] private readonly StatusEffectsSystem _status = default!;
+    [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly LimbImplantSystem _implants = default!;
     [Dependency] private readonly Robust.Shared.Audio.Systems.SharedAudioSystem _audio = default!;
 
     private static readonly Robust.Shared.Audio.SoundSpecifier HarvestSound = new Robust.Shared.Audio.SoundPathSpecifier("/Audio/Effects/Fluids/splat.ogg");
+    private static readonly Robust.Shared.Audio.SoundSpecifier SeverSound = new Robust.Shared.Audio.SoundCollectionSpecifier("gib");
+    private static readonly Robust.Shared.Audio.SoundSpecifier ButcherSound = new Robust.Shared.Audio.SoundCollectionSpecifier("SpikeButcher");
 
     private readonly Dictionary<string, int> _fields = new();
     private readonly bool[] _fireBlocked = new bool[LimbWoundRules.BodyZoneCount];
+    private readonly HashSet<EntityUid> _legless = new();
 
     private const SlotFlags Worn = SlotFlags.WITHOUT_POCKET;
 
@@ -169,6 +175,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (_net.IsClient || !LimbTuning.Enabled)
             return;
 
+        DropLegless();
         var query = EntityQueryEnumerator<LimbActiveComponent, LimbBodyComponent>();
         while (query.MoveNext(out var uid, out var active, out var limbs))
         {
@@ -454,7 +461,23 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (!LimbTuning.Enabled || _net.IsClient || MissingLegs(limbs) < 2)
             return;
 
-        _standing.Down(uid, playSound: false, dropHeldItems: false, force: true);
+        _legless.Add(uid);
+    }
+
+    private void DropLegless()
+    {
+        if (_legless.Count == 0)
+            return;
+
+        foreach (var uid in _legless)
+        {
+            if (!TryComp<LimbBodyComponent>(uid, out var limbs) || MissingLegs(limbs) < 2)
+                continue;
+
+            _standing.Down(uid, playSound: false, dropHeldItems: false, force: true);
+        }
+
+        _legless.Clear();
     }
 
     private void OnHeal(Entity<LimbBodyComponent> ent, ref HealingDoAfterEvent args)
@@ -984,13 +1007,14 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var armored = worn.GetTotal() + 0.05f < ent.Comp.Damage.GetTotal();
         var strike = BuildStrike(args.Target, shooter, zone, worn, projectile: true, distance, tool: ent.Owner, catalogPierce: born, throughArmor: armored);
         Strike(args.Target, strike, limbs, ready);
-        if (!LimbWoundRules.IsBody(zone) || zone == LimbZone.Torso)
+        var landed = LimbWoundRules.IsSmall(zone) ? LimbZone.Head : zone;
+        if (!LimbWoundRules.IsBody(landed) || landed == LimbZone.Torso)
             return;
 
         EnsureZones(limbs);
         var zones = CollectionsMarshal.AsSpan(limbs.Zones);
         ref var fromZone = ref zones[LimbWoundRules.Index(LimbZone.Torso)];
-        ref var toZone = ref zones[LimbWoundRules.Index(zone)];
+        ref var toZone = ref zones[LimbWoundRules.Index(landed)];
         foreach (var (type, value) in args.DamageDealt.DamageDict)
         {
             if (value <= 0)
@@ -1109,6 +1133,8 @@ public sealed partial class LimbWoundSystem : EntitySystem
         ent.Comp.EyeBurn = 0f;
         ent.Comp.LungWhistle = false;
         ent.Comp.Died = null;
+        ent.Comp.LimbDeath = false;
+        ent.Comp.LimbCrit = false;
         ent.Comp.PendingRefund = null;
         CopySpecies(ent);
         if (_net.IsServer)
@@ -1119,6 +1145,11 @@ public sealed partial class LimbWoundSystem : EntitySystem
         RemComp<LimbWhistleComponent>(ent);
         RemComp<LimbActiveComponent>(ent);
         Dirty(ent);
+        if (_net.IsServer)
+        {
+            _mobs.UpdateMobState(ent.Owner);
+            RefreshPosture(ent.Owner, ent.Comp);
+        }
     }
 
     private void CopySpecies(Entity<LimbBodyComponent> ent)
@@ -1234,7 +1265,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
             cut = blade.Factor;
 
         var slash = Amount(damage, "Slash");
-        var pace = extract ? 1f : cut * MathF.Max(1f, slash / 6f);
+        var pace = extract ? 1f : LimbWoundRules.HarvestPace(cut, slash);
         var delay = TimeSpan.FromSeconds(LimbWoundRules.HarvestSeconds(zone, pace));
         var doAfter = new DoAfterArgs(EntityManager, user, delay, new LimbHarvestDoAfterEvent(zone, extract), target, target, weapon)
         {
@@ -1243,7 +1274,17 @@ public sealed partial class LimbWoundSystem : EntitySystem
             NeedHand = true,
             BlockDuplicate = true,
         };
-        _doAfter.TryStartDoAfter(doAfter);
+        if (_doAfter.TryStartDoAfter(doAfter))
+        {
+            _audio.PlayPvs(ButcherSound, Transform(target).Coordinates);
+            _popup.PopupEntity(Loc.GetString("limb-harvest-start",
+                    ("user", Identity.Entity(user, EntityManager)),
+                    ("target", Identity.Entity(target, EntityManager)),
+                    ("zone", zone.ToString())),
+                target,
+                PopupType.LargeCaution);
+        }
+
         return true;
     }
 
@@ -1284,8 +1325,10 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (state.Severed)
             return;
 
+        var at = Transform(ent).Coordinates;
         DropZone(ent.Owner, ent.Comp, args.Zone);
-        _audio.PlayPvs(HarvestSound, ent);
+        _audio.PlayPvs(ButcherSound, at);
+        _audio.PlayPvs(SeverSound, at);
     }
 
     private void CoveredBlast(Entity<LimbBodyComponent> ent, DamageSpecifier damage, LimbZone zone, out float heat, out float pierce, out float blunt, out float slash, out float caustic, out float other)
@@ -1548,9 +1591,16 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 EnsureComp<SurgerySlimeDissolveComponent>(part.Id);
 
             _containers.Remove(part.Id, container, force: true);
-            _transform.SetCoordinates(part.Id, Transform(body).Coordinates.Offset(new Vector2(0.55f, -0.2f)));
             if (_dropAt is { } at)
+            {
+                _transform.SetCoordinates(part.Id, Transform(body).Coordinates);
                 _transform.SetWorldPosition(part.Id, _transform.GetWorldPosition(body) + at);
+                return;
+            }
+
+            _transform.SetCoordinates(part.Id, Transform(body).Coordinates);
+            var fling = _random.NextAngle().ToVec() * _random.NextFloat(LimbWoundRules.FlingMin, LimbWoundRules.FlingMax);
+            _throwing.TryThrow(part.Id, fling, LimbWoundRules.FlingSpeed, recoil: false, playSound: false);
             return;
         }
     }
@@ -1974,6 +2024,9 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private static LimbZone Present(LimbBodyComponent limbs, LimbZone zone)
     {
+        if (LimbWoundRules.IsSmall(zone))
+            return Present(limbs, LimbZone.Head) == LimbZone.Head ? zone : Present(limbs, LimbZone.Torso);
+
         for (var i = 0; i < 4 && LimbWoundRules.IsBody(zone); i++)
         {
             var index = LimbWoundRules.Index(zone);

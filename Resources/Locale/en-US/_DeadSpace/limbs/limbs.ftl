@@ -42,4 +42,18 @@ limb-harvest-pick = Choose a part on the doll first.
 limb-harvest-torso = The chest does not come off this way.
 limb-harvest-gone = That part is already gone.
 limb-harvest-armored = You can't cut through the suit. Take it off first.
+limb-harvest-start = { CAPITALIZE(THE($user)) } is { $zone ->
+        [Eyes] gouging out the eyes
+        [Mouth] cutting out the mouth
+        [Head] cutting off the head
+        [ArmLeft] cutting off the left arm
+        [ArmRight] cutting off the right arm
+        [HandLeft] cutting off the left hand
+        [HandRight] cutting off the right hand
+        [LegLeft] cutting off the left leg
+        [LegRight] cutting off the right leg
+        [FootLeft] cutting off the left foot
+        [FootRight] cutting off the right foot
+       *[other] cutting off a body part
+    } of { THE($target) }!
 limb-examine-zone = { $zone }: flesh { $flesh }, bone { $bone }, fire { $fire }

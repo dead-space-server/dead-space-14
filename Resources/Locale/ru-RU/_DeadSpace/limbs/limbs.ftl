@@ -42,4 +42,18 @@ limb-harvest-pick = Сначала выберите часть на кукле.
 limb-harvest-torso = Грудь так не отрезать.
 limb-harvest-gone = Этой части уже нет.
 limb-harvest-armored = Сквозь скафандр не прорезать, сначала снимите его.
+limb-harvest-start = { CAPITALIZE($user) } { $zone ->
+        [Eyes] выкалывает глаза
+        [Mouth] вырезает рот
+        [Head] отрезает голову
+        [ArmLeft] отрезает левую руку
+        [ArmRight] отрезает правую руку
+        [HandLeft] отрезает левую кисть
+        [HandRight] отрезает правую кисть
+        [LegLeft] отрезает левую ногу
+        [LegRight] отрезает правую ногу
+        [FootLeft] отрезает левую стопу
+        [FootRight] отрезает правую стопу
+       *[other] отрезает часть тела
+    } у { $target }!
 limb-examine-zone = { $zone }: плоть { $flesh }, кость { $bone }, огонь { $fire }

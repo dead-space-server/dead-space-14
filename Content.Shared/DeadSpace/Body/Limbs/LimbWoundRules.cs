@@ -529,21 +529,32 @@ public static class LimbWoundRules
         return false;
     }
 
+    public const float HarvestMinSeconds = 6f;
+    public const float FlingMin = 0.8f;
+    public const float FlingMax = 1.8f;
+    public const float FlingSpeed = 4f;
+
     public static readonly LimbWork[] Harvest =
     {
-        new(LimbZone.Head, 14f),
-        new(LimbZone.Torso, 10f),
-        new(LimbZone.ArmLeft, 7f),
-        new(LimbZone.ArmRight, 7f),
-        new(LimbZone.LegLeft, 7f),
-        new(LimbZone.LegRight, 7f),
-        new(LimbZone.HandLeft, 4f),
-        new(LimbZone.HandRight, 4f),
-        new(LimbZone.FootLeft, 4f),
-        new(LimbZone.FootRight, 4f),
-        new(LimbZone.Eyes, 5f),
-        new(LimbZone.Mouth, 5f),
+        new(LimbZone.Head, 30f),
+        new(LimbZone.Torso, 20f),
+        new(LimbZone.ArmLeft, 18f),
+        new(LimbZone.ArmRight, 18f),
+        new(LimbZone.LegLeft, 20f),
+        new(LimbZone.LegRight, 20f),
+        new(LimbZone.HandLeft, 12f),
+        new(LimbZone.HandRight, 12f),
+        new(LimbZone.FootLeft, 12f),
+        new(LimbZone.FootRight, 12f),
+        new(LimbZone.Eyes, 8f),
+        new(LimbZone.Mouth, 8f),
     };
+
+    public static float HarvestPace(float cut, float slash)
+    {
+        var blade = MathF.Sqrt(MathF.Max(0.1f, cut));
+        return Math.Clamp(blade * Math.Clamp(slash / 12f, 0.75f, 1.5f), 0.5f, 2f);
+    }
 
     public static bool ApplyBlast(ref LimbZoneState state, float heat, float pierce, float blunt, float slash, bool soft = false)
     {
@@ -613,7 +624,7 @@ public static class LimbWoundRules
         }
 
         var tool = cut <= 0f ? 1f : cut;
-        return MathF.Max(1.5f, seconds / tool);
+        return MathF.Max(HarvestMinSeconds, seconds / tool);
     }
 
     public static bool KeepsBodyDamage(LimbZone zone)

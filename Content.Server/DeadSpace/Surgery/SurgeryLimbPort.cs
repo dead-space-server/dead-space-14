@@ -39,7 +39,14 @@ public sealed class SurgeryLimbPort : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<BodyComponent, Content.Shared.Rejuvenate.RejuvenateEvent>((uid, _, _) => _restock.Add(uid));
+        SubscribeLocalEvent<BodyComponent, Content.Shared.Rejuvenate.RejuvenateEvent>(OnRejuvenate);
+    }
+
+    private void OnRejuvenate(EntityUid uid, BodyComponent body, Content.Shared.Rejuvenate.RejuvenateEvent args)
+    {
+        _restock.Add(uid);
+        RemComp<SurgeryInfectionComponent>(uid);
+        RemComp<SurgeryRejectionComponent>(uid);
     }
 
     public override void Update(float frameTime)
