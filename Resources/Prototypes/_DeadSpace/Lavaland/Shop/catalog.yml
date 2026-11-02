@@ -189,7 +189,7 @@
   categories:
   - LavalandMiningTools
   cost:
-    LavalandMiningPoint: 450
+    LavalandMiningPoint: 2000
 
 - type: listing
   id: LavalandWeaponPlasmaCutter
