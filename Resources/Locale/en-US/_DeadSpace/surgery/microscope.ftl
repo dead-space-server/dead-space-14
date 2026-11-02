@@ -1,5 +1,7 @@
 microscope-organ-slot-name = Organ slot
 
+microscope-ui-title = Microscope
+microscope-ui-damage-title = Organ integrity
 microscope-ui-eject = Extract organ
 microscope-ui-flip = Flip organ
 microscope-ui-empty = Place an extracted organ into the microscope slot

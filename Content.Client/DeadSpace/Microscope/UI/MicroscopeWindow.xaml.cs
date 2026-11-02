@@ -56,8 +56,8 @@ public sealed partial class MicroscopeWindow : DefaultWindow
             {
                 StatusLabel.Text = Loc.GetString(
                     "microscope-ui-organ-damage",
-                    ("damage", state.Damage.Float()),
-                    ("max", state.MaxDamage.Float()));
+                    ("damage", Math.Round(state.Damage.Float(), 1).ToString("0.#")),
+                    ("max", Math.Round(state.MaxDamage.Float(), 1).ToString("0.#")));
                 StatusLabel.ModulateSelfOverride = Color.White;
             }
         }

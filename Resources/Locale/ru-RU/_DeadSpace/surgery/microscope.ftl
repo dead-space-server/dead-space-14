@@ -1,5 +1,7 @@
 microscope-organ-slot-name = Слот для органа
 
+microscope-ui-title = Микроскоп
+microscope-ui-damage-title = Целостность органа
 microscope-ui-eject = Извлечь орган
 microscope-ui-flip = Перевернуть орган
 microscope-ui-empty = Поместите извлечённый орган в слот микроскопа
