@@ -135,6 +135,12 @@ public sealed class SandboxUIController : UIController, IOnStateChanged<Gameplay
         _window.ToggleShadowsButton.OnToggled += _ => _sandbox.ToggleShadows();
         _window.SuicideButton.OnPressed += _ => _sandbox.Suicide();
         _window.ToggleSubfloorButton.OnPressed += _ => _sandbox.ToggleSubFloor();
+        //DS-14 start
+        _window.ToggleDeviceLinksButton.OnPressed += _ =>
+        {
+            _window.ToggleDeviceLinksButton.Pressed = _sandbox.ToggleDeviceLinks();
+        };
+        //DS-14 end
         _window.ShowMarkersButton.OnPressed += _ => _sandbox.ShowMarkers();
         _window.ShowBbButton.OnPressed += _ => _sandbox.ShowBb();
         _window.ToggleThermalVisionButton.OnToggled += _ => _sandbox.ToggleThermalVision();

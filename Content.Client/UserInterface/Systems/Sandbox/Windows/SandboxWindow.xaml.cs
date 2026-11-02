@@ -1,4 +1,5 @@
-﻿using Content.Client.Markers;
+﻿using Content.Client.DeadSpace.DeviceLinkVis; //DS-14
+using Content.Client.Markers;
 using Content.Client.SubFloor;
 using Content.Client.Stylesheets;
 using Content.Shared.Silicons.StationAi;
@@ -20,6 +21,7 @@ public sealed partial class SandboxWindow : DefaultWindow
     private readonly DebugPhysicsSystem _debugPhysicsSystem;
     private readonly MarkerSystem _markerSystem;
     private readonly SubFloorHideSystem _subFloorSystem;
+    private readonly DeviceLinkVisSystem _deviceLinks; //DS-14
 
     public SandboxWindow()
     {
@@ -29,6 +31,7 @@ public sealed partial class SandboxWindow : DefaultWindow
         _debugPhysicsSystem = _entManager.System<DebugPhysicsSystem>();
         _markerSystem = _entManager.System<MarkerSystem>();
         _subFloorSystem = _entManager.System<SubFloorHideSystem>();
+        _deviceLinks = _entManager.System<DeviceLinkVisSystem>(); //DS-14
     }
 
     protected override void Opened()
@@ -36,6 +39,7 @@ public sealed partial class SandboxWindow : DefaultWindow
         base.Opened();
 
         ToggleSubfloorButton.Pressed = _subFloorSystem.ShowAll;
+        ToggleDeviceLinksButton.Pressed = _deviceLinks.Enabled; //DS-14
         ToggleLightButton.Pressed = !_lightManager.Enabled;
         // ToggleFovButton.Pressed = !_eyeManager.CurrentEye.DrawFov;
         ToggleShadowsButton.Pressed = !_lightManager.DrawShadows;
