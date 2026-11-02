@@ -1,6 +1,8 @@
 decal-placer-window-title = Установщик декалей
 decal-placer-window-use-color = Свой цвет
 decal-placer-window-rotation = Поворот
+decal-placer-window-offset-x = Смещение X
+decal-placer-window-offset-y = Смещение Y
 decal-placer-window-zindex = С глубиной
 decal-placer-window-enable-auto = Использовать автонастройки
 decal-placer-window-enable-snap = Привязка к тайлу

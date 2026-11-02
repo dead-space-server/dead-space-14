@@ -34,16 +34,17 @@ public sealed class DecalPlacementSystem : EntitySystem
     private bool _snap;
     private int _zIndex;
     private bool _cleanable;
+    private Vector2 _offsetPixels; //DS-14
 
     private bool _active;
     private bool _placing;
     private bool _erasing;
 
-    public (DecalPrototype? Decal, bool Snap, Angle Angle, Color Color) GetActiveDecal()
+    public (DecalPrototype? Decal, bool Snap, Angle Angle, Color Color, Vector2 Offset) GetActiveDecal() //DS-14
     {
         return _active && _decalId != null ?
-            (_protoMan.Index<DecalPrototype>(_decalId), _snap, _decalAngle, _decalColor) :
-            (null, false, Angle.Zero, Color.Wheat);
+            (_protoMan.Index<DecalPrototype>(_decalId), _snap, _decalAngle, _decalColor, _offsetPixels / EyeManager.PixelsPerMeter) : //DS-14
+            (null, false, Angle.Zero, Color.Wheat, Vector2.Zero); //DS-14
     }
 
     public override void Initialize()
@@ -69,6 +70,7 @@ public sealed class DecalPlacementSystem : EntitySystem
                 }
 
                 coords = coords.Offset(new Vector2(-0.5f, -0.5f));
+                coords = coords.Offset(_offsetPixels / EyeManager.PixelsPerMeter); //DS-14
 
                 if (!coords.IsValid(EntityManager))
                     return false;
@@ -130,6 +132,7 @@ public sealed class DecalPlacementSystem : EntitySystem
         }
 
         args.Target = args.Target.Offset(new Vector2(-0.5f, -0.5f));
+        args.Target = args.Target.Offset(_offsetPixels / EyeManager.PixelsPerMeter); //DS-14
 
         var decal = new Decal(args.Target.Position, args.DecalId, args.Color, Angle.FromDegrees(args.Rotation), args.ZIndex, args.Cleanable);
         RaiseNetworkEvent(new RequestDecalPlacementEvent(decal, GetNetCoordinates(args.Target)));
@@ -176,7 +179,7 @@ public sealed class DecalPlacementSystem : EntitySystem
         CommandBinds.Unregister<DecalPlacementSystem>();
     }
 
-    public void UpdateDecalInfo(string id, Color color, float rotation, bool snap, int zIndex, bool cleanable)
+    public void UpdateDecalInfo(string id, Color color, float rotation, bool snap, int zIndex, bool cleanable, float offsetX = 0f, float offsetY = 0f) //DS-14
     {
         _decalId = id;
         _decalColor = color;
@@ -184,6 +187,7 @@ public sealed class DecalPlacementSystem : EntitySystem
         _snap = snap;
         _zIndex = zIndex;
         _cleanable = cleanable;
+        _offsetPixels = new Vector2(offsetX, offsetY); //DS-14
     }
 
     public void SetActive(bool active)
