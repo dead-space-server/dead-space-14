@@ -158,7 +158,9 @@ namespace Content.Shared.SubFloor
         private void SetUnderCover(Entity<SubFloorHideComponent> entity, bool value)
         {
             // If it's not undercover or it always has visible layers then normal visibility.
-            _visibility.SetLayer(entity.Owner, value && entity.Comp.VisibleLayers.Count == 0 ? (ushort) VisibilityFlags.Subfloor : (ushort) VisibilityFlags.Normal);
+            var hiddenLayer = value && entity.Comp.VisibleLayers.Count == 0; //DS-14
+            var layer = hiddenLayer ? SubfloorViewLayers.ToFlag(entity.Comp.ViewLayer) : VisibilityFlags.Normal; //DS-14
+            _visibility.SetLayer(entity.Owner, (ushort) layer); //DS-14
 
             if (entity.Comp.IsUnderCover == value)
                 return;
@@ -212,7 +214,7 @@ namespace Content.Shared.SubFloor
         [Serializable, NetSerializable]
         protected sealed class ShowSubfloorRequestEvent : EntityEventArgs
         {
-            public bool Value;
+            public int Mask; //DS-14
         }
     }
 

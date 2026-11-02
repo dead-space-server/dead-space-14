@@ -1,4 +1,5 @@
 using Content.Client.UserInterface.Systems.Sandbox;
+using Content.Shared.Eye; //DS-14
 using Content.Shared.SubFloor;
 using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
@@ -12,25 +13,53 @@ public sealed class SubFloorHideSystem : SharedSubFloorHideSystem
     [Dependency] private readonly SpriteSystem _sprite = default!;
     [Dependency] private readonly IUserInterfaceManager _ui = default!;
 
-    private bool _showAll;
+    private VisibilityFlags _showLayers; //DS-14
 
     [ViewVariables(VVAccess.ReadWrite)]
     public bool ShowAll
     {
-        get => _showAll;
-        set
-        {
-            if (_showAll == value) return;
-            _showAll = value;
-            _ui.GetUIController<SandboxUIController>().SetToggleSubfloors(value);
-
-            var ev = new ShowSubfloorRequestEvent()
-            {
-                Value = value,
-            };
-            RaiseNetworkEvent(ev);
-        }
+        get => (_showLayers & SubfloorVisibility.All) == SubfloorVisibility.All; //DS-14
+        set => SetShowLayers(value ? SubfloorVisibility.All : VisibilityFlags.None); //DS-14
     }
+
+    //DS-14 start
+    public VisibilityFlags ShowLayers => _showLayers;
+
+    public void ToggleLayers(VisibilityFlags layers)
+    {
+        layers &= SubfloorVisibility.All;
+        if (layers == VisibilityFlags.None)
+            return;
+
+        if ((_showLayers & layers) == layers)
+            SetShowLayers(_showLayers & ~layers);
+        else
+            SetShowLayers(_showLayers | layers);
+    }
+
+    private void SetShowLayers(VisibilityFlags value)
+    {
+        value &= SubfloorVisibility.All;
+        var categories = VisibilityFlags.SubfloorCable | VisibilityFlags.SubfloorAtmos | VisibilityFlags.SubfloorDisposal; //DS-14
+        if ((value & categories) == 0) //DS-14
+            value &= ~VisibilityFlags.Subfloor; //DS-14
+        if (_showLayers == value)
+            return;
+
+        _showLayers = value;
+        _ui.GetUIController<SandboxUIController>().SetSubfloorLayers(value);
+
+        RaiseNetworkEvent(new ShowSubfloorRequestEvent
+        {
+            Mask = (int) value,
+        });
+    }
+
+    private bool IsLayerShown(SubfloorViewLayer layer)
+    {
+        return (_showLayers & SubfloorViewLayers.ToFlag(layer)) != 0;
+    }
+    //DS-14 end
 
     public override void Initialize()
     {
@@ -61,9 +90,10 @@ public sealed class SubFloorHideSystem : SharedSubFloorHideSystem
         _appearance.TryGetData<bool>(uid, SubFloorVisuals.Covered, out var covered, args.Component);
         _appearance.TryGetData<bool>(uid, SubFloorVisuals.ScannerRevealed, out var scannerRevealed, args.Component);
 
-        scannerRevealed &= !ShowAll; // no transparency for show-subfloor mode.
+        var layerShown = IsLayerShown(component.ViewLayer); //DS-14
+        scannerRevealed &= !layerShown; // no transparency for show-subfloor mode. //DS-14
 
-        var revealed = !covered || ShowAll || scannerRevealed;
+        var revealed = !covered || layerShown || scannerRevealed; //DS-14
 
         // set visibility & color of each layer
         foreach (var layer in args.Sprite.AllLayers)
@@ -87,7 +117,7 @@ public sealed class SubFloorHideSystem : SharedSubFloorHideSystem
 
         _sprite.SetVisible((uid, args.Sprite), hasVisibleLayer || revealed);
 
-        if (ShowAll)
+        if (layerShown) //DS-14
         {
             // Allows sandbox mode to make wires visible over other stuff.
             component.OriginalDrawDepth ??= args.Sprite.DrawDepth;

@@ -148,9 +148,9 @@ namespace Content.Client.Sandbox
             _consoleHost.ExecuteCommand("toggleshadows");
         }
 
-        public void ToggleSubFloor()
+        public void ToggleSubfloorLayer(string layer) //DS-14
         {
-            _consoleHost.ExecuteCommand("showsubfloor");
+            _consoleHost.ExecuteCommand($"showsubfloor {layer}"); //DS-14
         }
 
         public void ShowMarkers()
