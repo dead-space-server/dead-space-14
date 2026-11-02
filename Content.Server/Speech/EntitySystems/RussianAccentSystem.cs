@@ -9,7 +9,7 @@ public sealed class RussianAccentSystem : EntitySystem
     [Dependency] private readonly ReplacementAccentSystem _replacement = default!;
     public override void Initialize()
     {
-        SubscribeLocalEvent<RussianAccentComponent, AccentGetEvent>(OnAccent);
+        SubscribeLocalEvent<RussianAccentComponent, AccentGetEvent>(OnAccent, before: [typeof(ReplacementAccentSystem)]); // DS14
     }
 
     public string Accentuate(string message)
