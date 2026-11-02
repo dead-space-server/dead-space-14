@@ -27,12 +27,103 @@
 
 - type: entity
   name: игрушечная энергокатана
-  parent: [EnergyKatana, BaseToySword]
+  parent: [BaseItem, BaseToySword]
   id: ToyEnergyKatana
   description: Катана, наделённая сильной энергией.
   components:
+  - type: Sprite
+    sprite: Objects/Weapons/Melee/energykatana.rsi
+    layers:
+    - state: icon
+    - state: icon-unshaded
+      shader: unshaded
   - type: MeleeWeapon
-    attackRate: 1
+    wideAnimationRotation: -60
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/katana/katana-equip.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/katana/katana-unequip.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/knife/knife_drop.ogg
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left
+      - state: inhand-left-unshaded
+        shader: unshaded
+      right:
+      - state: inhand-right
+      - state: inhand-right-unshaded
+        shader: unshaded
+    storedSprite:
+      state: storage
+      sprite: Objects/Weapons/Melee/energykatana_storage_64x.rsi
+    shape:
+    - 0,0,0,3
+  - type: NinjaAppearanceItem
+  - type: Clothing
+    sprite: Objects/Weapons/Melee/energykatana.rsi
+    slots:
+    - Back
+    - Belt
+
+- type: entity
+  name: energy katana
+  parent: EnergyKatana
+  id: ReflectEnergyKatana
+  description: A katana infused with strong energy.
+  suffix: Отражение
+  components:
+  - type: Reflect
+    reflectProb: 0.35
+    slotFlags:
+    - NONE
+  - type: Construction
+    graph: UpgradeEnergyKatana
+    node: reflect
+
+- type: entity
+  name: energy katana
+  parent: EnergyKatana
+  id: DamageEnergyKatana
+  description: A katana infused with strong energy.
+  suffix: Урон
+  components:
+  - type: MeleeWeapon
+    wideAnimationRotation: -60
     damage:
       types:
-        Piercing: 1
+        Slash: 35
+    soundHit:
+      collection: KatanaHitSound
+  - type: SolutionContainerManager
+    solutions:
+      melee:
+        maxVol: 5
+  - type: MeleeChemicalInjector
+    solution: melee
+  - type: RefillableSolution
+    solution: melee
+  - type: InjectableSolution
+    solution: melee
+  - type: SolutionTransfer
+    maxTransferAmount: 5
+  - type: Construction
+    graph: UpgradeEnergyKatana
+    node: damage
+
+- type: entity
+  name: energy katana
+  parent: EnergyKatana
+  id: RechargeEnergyKatana
+  description: A katana infused with strong energy.
+  suffix: Зарядка
+  components:
+  - type: AutoRecharge
+    rechargeDuration: 15
+  - type: Construction
+    graph: UpgradeEnergyKatana
+    node: recharge

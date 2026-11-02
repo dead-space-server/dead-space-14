@@ -7,8 +7,9 @@ spider-os-modules = Suit modules
 spider-os-modules-ghost = Ghost
 spider-os-modules-snake = Snake
 spider-os-modules-steel = Steel
+
 spider-os-module-ghost-1 = Smoke Screen
-spider-os-module-ghost-1-desc = The suit releases a thick smoke cloud, hiding you from enemies.
+spider-os-module-ghost-1-desc = Creates a thick smoke cloud that can help you escape. Or attack. Has an automatic mode in which it triggers, in a weakened form and at a reduced cost, when you use certain other abilities. These abilities include Phase Cloak, Holographic Clones, Emergency Blink and Caltrop. Smoke synergizes well with your visor's thermal mode. Cooldown: 3 seconds.
 spider-os-module-ghost-2 = Phase Cloak
 spider-os-module-ghost-2-desc = Makes the ninja invisible. Hey, what are those sparks in the middle of the corridor? Note that prolonged use of this ability significantly heats up the suit. The longer this module stays active, the more "special effects" appear around you. To cool the suit down, run around without invisibility for a while.
 spider-os-module-ghost-3 = Holographic Clones
@@ -17,6 +18,7 @@ spider-os-module-ghost-4 = Chameleon
 spider-os-module-ghost-4-desc = This module allows you to change your appearance and voice, for example into that of a station crew member. To pull this off, you need to scan a player's character with the scanner. Impersonating someone with this ability not only masks your appearance, but also fools the station's security sensors.
 spider-os-module-ghost-5 = Spirit Form
 spider-os-module-ghost-5-desc = Makes your body more spectral, allowing you to walk through walls. It would be unfortunate to run out of power inside a sealed room, wouldn't it?
+
 spider-os-module-snake-1 = Kunai
 spider-os-module-snake-1-desc = Gives you a chain kunai with which you can pull your victim to you. A pulled victim is stunned for a brief moment.
 spider-os-module-snake-2 = Healing Cocktail
@@ -27,6 +29,7 @@ spider-os-module-snake-4 = Caltrop
 spider-os-module-snake-4-desc = Places caltrops 3 tiles behind you. Stepping on them deals some burns and knocks you down. Works well when fleeing a chase, and pairs brilliantly with the smoke screen's automatic mode.
 spider-os-module-snake-5 = Second Chance
 spider-os-module-snake-5-desc = If you die, grants you a chance to make things right. There will be no third chance.
+
 spider-os-module-steel-1 = Shuriken
 spider-os-module-steel-1-desc = Lets you fire energy shurikens. They work through glass and deal stamina damage while leaving burns.
 spider-os-module-steel-2 = Adrenaline
@@ -92,7 +95,7 @@ spider-os-boot-releasing-mask = Releasing mask..
 spider-os-boot-releasing-gloves = Releasing gloves..
 spider-os-boot-releasing-boots = Releasing boots..
 spider-os-boot-power-up = Powering up suit systems..
-spider-os-boot-battery-capacity = Installed power source capacity: {capacity}
+spider-os-boot-battery-capacity = Installed power source capacity: { $capacity }
 spider-os-boot-final = Suit online.
 spider-os-boot-shutdown = Initiating suit shutdown..
 spider-os-boot-offline = Suit offline.
@@ -164,8 +167,9 @@ ninja-info-ui-eject = Eject
 ninja-info-ui-teleport = Teleport
 
 # Ninja AI hack
+
 chat-manager-ninja-ai-wrap-message = [font size=28]{$message}[/font]
-ninja-ai-hack-started = Attention! Unauthorized interference with the upload system detected!
+ninja-ai-hack-started = Attention! Unauthorized interference with the upload system detected! Source of the intrusion unknown. Access lockout procedure initiated... @%!$#... lockout failed!
 ninja-ai-hack-half-announcement = Attention! Unauthorized overwrite of the laws subsystem continues! @%!$#... Progress: 50%... Security protocols not responding... #@&*!...
 ninja-ai-hack-announcement = Attention! The laws subsystem has been overwritten! Laws deleted... @%!$#!... recovery attempt aborted... #@&*!... laws updated!
 ninja-ai-hack-no-ai = The station AI core is currently offline.
@@ -173,7 +177,7 @@ ninja-ai-hack-crew-announcement = Attention all crew! Unauthorized interference 
 ninja-ai-hack-crew-announcement-sender = Station Artificial Intelligence
 
 objective-condition-ninja-ai-hack-title = Hack Station AI
-objective-condition-ninja-ai-hack-description = Disable the Station Artificial Intelligence by hacking it with your gloves. Use the AI ​​upload console. Be careful; the AI's security might be better than you expected.
+objective-condition-ninja-ai-hack-description = Disable the Station Artificial Intelligence by hacking it with your gloves. Use the AI upload console. Be careful; the AI's security might be better than you expected.
 
 # Ninja disguise base
 
@@ -197,3 +201,69 @@ ninja-disguise-strip-attempt = Someone is trying to strip you!
 ninja-research-steal-halfway = The server sparks and starts humming a little louder.
 ninja-ai-hack-halfway = The console sparks as static appears on the screen.
 ninja-comms-hack-halfway = The console sparks as static appears on the screen.
+
+# Ninja hack beacon
+
+ninja-hack-beacon-verb-enable = Enable
+ninja-hack-beacon-verb-disable = Disable
+ninja-hack-beacon-inactive = The beacon is [color=gray]inactive[/color].
+ninja-hack-beacon-next-mine = Next withdrawal in [color=yellow]{ $seconds }[/color] sec.
+ninja-hack-beacon-transfer-broadcast = [bold]Transferred { $amount } credits from account { $name1 } \[{ $code1 }\] to { $name2 }[/bold]
+
+cargo-console-funds-blocked-by-hack = Account operations are blocked: unauthorized access to the station's banking system detected!
+
+objective-condition-ninja-steal-money-title = Steal the station's funds
+ninja-steal-money-objective-description = You need to steal {$count} credits. Deploy and activate the hacking beacon to start withdrawing funds from the station's accounts.
+
+# Ninja hack beacon store
+
+store-ui-ninja-hack-title = Hack Beacon
+
+store-category-ninja-hack = Equipment
+
+PunctAutoInjector-ninja-hack-name = Puncturase Autoinjector
+PunctAutoInjector-ninja-hack-desc = A single-use autoinjector with a drug for treating puncture wounds.
+
+BurnAutoInjector-ninja-hack-name = Physical Damage Autoinjector
+BurnAutoInjector-ninja-hack-desc = A single-use autoinjector with a drug for treating physical damage.
+
+Manacles-ninja-hack-name = Manacles
+Manacles-ninja-hack-desc = Sturdy manacles for restraining detainees.
+
+PowerCellHyper-ninja-hack-name = Hyper Power Cell
+PowerCellHyper-ninja-hack-desc = A high-capacity power cell. Suitable for powering the suit.
+
+SpiderclanFlippo-ninja-hack-name = Spider Clan Lighter
+SpiderclanFlippo-ninja-hack-desc = A metal lighter bearing the Spider Clan emblem.
+
+PinpointerUniversal-ninja-hack-name = Universal Pinpointer
+PinpointerUniversal-ninja-hack-desc = A device that points toward the selected target.
+
+BluespaceHandHeldMassScannerEmpty-ninja-hack-name = Bluespace Handheld Mass Scanner
+BluespaceHandHeldMassScannerEmpty-ninja-hack-desc = A portable mass scanner built around a bluespace crystal. Comes without a battery.
+
+NinjaRefreshToken-ninja-hack-name = Recharge Crystal
+NinjaRefreshToken-ninja-hack-desc = A crystal that restores the used charges of the suit's abilities.
+
+NinjaUpgradeCase-ninja-hack-name = Katana Upgrade Kit
+NinjaUpgradeCase-ninja-hack-desc = A kit of katana upgrades. Lets you choose one of three upgrades.
+
+stack-ninja-refresh-token = green crystal
+
+# Ninja katana upgrades
+
+construction-graph-tag-weapon-energy-katana-upgrade-damage = katana damage upgrade
+construction-graph-tag-weapon-energy-katana-upgrade-reflect = katana reflect upgrade
+construction-graph-tag-weapon-energy-katana-upgrade-recharge = katana recharge upgrade
+
+ninja-mod-case-loadout-tool-name = Katana Upgrade Kit
+ninja-mod-case-loadout-tool-description = Choose one upgrade for the katana.
+
+ninja-mod-case-loadout-damage-name = Damage Upgrade
+ninja-mod-case-loadout-damage-description = Increases the katana's damage and allows applying poisons to the blade.
+
+ninja-mod-case-loadout-reflect-name = Reflect Upgrade
+ninja-mod-case-loadout-reflect-description = Improves the katana's ability to deflect attacks.
+
+ninja-mod-case-loadout-recharge-name = Recharge Upgrade
+ninja-mod-case-loadout-recharge-description = Speeds up the katana's charge recovery.

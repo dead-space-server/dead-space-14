@@ -314,6 +314,7 @@
     - NinjaAiHackObjective
     - NinjaProtectPersonObjective
     - NinjaInfoScanObjective
+    - NinjaStealMoneyObjective
     #DS14-end
   - type: AntagSelection
     agentName: ninja-round-end-agent-name

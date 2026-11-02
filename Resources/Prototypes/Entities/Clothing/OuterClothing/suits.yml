@@ -211,12 +211,18 @@
   - type: AutoDust
   - type: NinjaSuitRefill
     actionMaterials:
-      ActionNinjaHealingCocktail:
-        stack: ClearBluspaceCrystal
-        amount: 10
-      ActionNinjaAdrenal:
-        stack: Uranium
-        amount: 10
+    - action: ActionNinjaHealingCocktail
+      stack: ClearBluspaceCrystal
+      amount: 10
+    - action: ActionNinjaAdrenal
+      stack: Uranium
+      amount: 10
+    - action: ActionNinjaHealingCocktail
+      stack: NinjaRefreshToken
+      amount: 1
+    - action: ActionNinjaAdrenal
+      stack: NinjaRefreshToken
+      amount: 1
   - type: Jetpack
     requiresGas: false
     toggleAction: NinjaActionToggleJetpack
