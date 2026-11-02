@@ -36,6 +36,7 @@ public sealed class SurgeryAnesthesiaSystem : EntitySystem
     [Dependency] private readonly DamageableSystem _damage = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly MobStateSystem _mobs = default!;
+    [Dependency] private readonly SleepingSystem _sleeping = default!;
 
     private readonly Dictionary<EntityUid, Dictionary<string, FixedPoint2>> _seen = new();
     private readonly HashSet<EntityUid> _live = new();
@@ -63,13 +64,17 @@ public sealed class SurgeryAnesthesiaSystem : EntitySystem
                 _damage.TryChangeDamage(uid, poison, true, false);
             }
 
+            var waking = rules.Wake.Count > 0 && Measure(uid, rules.Wake) >= rules.WakeAmount;
+            if (waking)
+                Rouse(uid, bloodstream, rules);
+
             if (!Operating(uid))
                 continue;
 
             Panic(uid);
             _live.Add(uid);
-            Hold(uid, bloodstream, rules);
-            if (!clash && Dose(uid, rules) >= rules.SleepAmount)
+            Hold(uid, bloodstream, rules, !waking);
+            if (!clash && !waking && Dose(uid, rules) >= rules.SleepAmount)
                 _status.TryUpdateStatusEffectDuration(uid, SleepingSystem.StatusEffectForcedSleeping, TimeSpan.FromSeconds(rules.SleepTime));
         }
 
@@ -145,11 +150,16 @@ public sealed class SurgeryAnesthesiaSystem : EntitySystem
 
     private float Dose(EntityUid patient, SurgeryAnesthesiaPrototype rules)
     {
+        return Measure(patient, rules.Reagents);
+    }
+
+    private float Measure(EntityUid patient, List<string> reagents)
+    {
         var best = 0f;
         if (TryComp<BloodstreamComponent>(patient, out var bloodstream)
             && _solutions.TryGetSolution(patient, bloodstream.BloodSolutionName, out _, out var blood))
         {
-            foreach (var reagent in rules.Reagents)
+            foreach (var reagent in reagents)
                 best = MathF.Max(best, blood.GetTotalPrototypeQuantity(reagent).Float());
         }
 
@@ -158,14 +168,30 @@ public sealed class SurgeryAnesthesiaSystem : EntitySystem
             if (lung.Comp1.Solution is not { } air)
                 continue;
 
-            foreach (var reagent in rules.Reagents)
+            foreach (var reagent in reagents)
                 best = MathF.Max(best, air.Comp.Solution.GetTotalPrototypeQuantity(reagent).Float());
         }
 
         return best;
     }
 
-    private void Hold(EntityUid patient, BloodstreamComponent bloodstream, SurgeryAnesthesiaPrototype rules)
+    private void Rouse(EntityUid patient, BloodstreamComponent bloodstream, SurgeryAnesthesiaPrototype rules)
+    {
+        if (_mobs.IsIncapacitated(patient))
+            return;
+
+        if (rules.WakePurge > 0f && _solutions.TryGetSolution(patient, bloodstream.BloodSolutionName, out var solution, out _))
+        {
+            foreach (var reagent in rules.Reagents)
+                _solutions.RemoveReagent(solution.Value, reagent, FixedPoint2.New(rules.WakePurge));
+        }
+
+        _status.TryRemoveStatusEffect(patient, SleepingSystem.StatusEffectForcedSleeping);
+        if (HasComp<SleepingComponent>(patient))
+            _sleeping.TryWaking(patient, true);
+    }
+
+    private void Hold(EntityUid patient, BloodstreamComponent bloodstream, SurgeryAnesthesiaPrototype rules, bool refill)
     {
         if (!_solutions.TryGetSolution(patient, bloodstream.BloodSolutionName, out var solution, out var blood))
             return;
@@ -179,7 +205,7 @@ public sealed class SurgeryAnesthesiaSystem : EntitySystem
         foreach (var reagent in rules.Reagents)
         {
             var now = blood.GetTotalPrototypeQuantity(reagent);
-            if (rules.Hold > 0f && last.TryGetValue(reagent, out var before) && now < before && now > FixedPoint2.Zero)
+            if (refill && rules.Hold > 0f && last.TryGetValue(reagent, out var before) && now < before && now > FixedPoint2.Zero)
             {
                 var back = (before - now) * rules.Hold;
                 _solutions.TryAddReagent(solution.Value, reagent, back, out var added);

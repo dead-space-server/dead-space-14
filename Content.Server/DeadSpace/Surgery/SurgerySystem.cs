@@ -364,10 +364,15 @@ public sealed class SurgerySystem : EntitySystem
             || !CanMark(user, patient.Value))
             return;
 
-        var site = EnsureComp<SurgerySiteComponent>(patient.Value);
         var zone = (LimbZone) message.Zone;
         if (!LimbWoundRules.IsBody(zone) && zone != LimbZone.Eyes)
             return;
+
+        var askedOperation = message.Part.Length > 0 ? PartOperation(patient.Value, message.Part) : message.Operation.Length > 0 ? message.Operation : null;
+        if (!SelfOk(user, patient.Value, zone, askedOperation))
+            return;
+
+        var site = EnsureComp<SurgerySiteComponent>(patient.Value);
 
         if (Covered(patient.Value, zone))
         {
@@ -554,6 +559,12 @@ public sealed class SurgerySystem : EntitySystem
 
         var verb = (SurgeryVerbKind) message.Verb;
         var held = Held(user);
+        if (!SelfOk(user, patient.Value, site.Zone, Operation(patient.Value, site, out var selfOperation) ? selfOperation.ID : null))
+        {
+            Send(patient.Value, user, site, held, "surgery-self", false);
+            return;
+        }
+
         if (site.Layers.Count > 0 && site.Back != HasComp<SurgeryProneComponent>(patient.Value))
         {
             Send(patient.Value, user, site, held, "surgery-wrong-side", false);
@@ -1017,7 +1028,8 @@ public sealed class SurgerySystem : EntitySystem
             PlayStep(patient.Value, "Miss");
         _port.Apply(patient.Value, site.Zone, organ, result, held);
         Wither(patient.Value, site.Zone);
-        if (verb == SurgeryVerbKind.Seat && result.Attach && !site.Done && !ZoneSevered(patient.Value, site.Zone))
+        if (verb == SurgeryVerbKind.Seat && result.Attach && !site.Done && !ZoneSevered(patient.Value, site.Zone)
+            && (!Operation(patient.Value, site, out var seated) || site.Step >= seated.Steps.Count))
             Finish(patient.Value, site);
         else if (verb == SurgeryVerbKind.Seat && result.Attach)
             result.Key = "surgery-wrong-hand";
@@ -2055,7 +2067,8 @@ public sealed class SurgerySystem : EntitySystem
     public void Queue(EntityUid patient, EntityUid user, string operationId)
     {
         if (!_prototype.TryIndex<SurgeryOperationPrototype>(operationId, out var operation)
-            || !Enum.TryParse<LimbZone>(operation.Zone, out var zone))
+            || !Enum.TryParse<LimbZone>(operation.Zone, out var zone)
+            || !SelfOk(user, patient, zone, operation.ID))
             return;
 
         if (TryComp<SurgerySiteComponent>(patient, out var existing)
@@ -2212,6 +2225,11 @@ public sealed class SurgerySystem : EntitySystem
             return true;
 
         return TryComp<BuckleComponent>(uid, out var buckle) && buckle.Buckled;
+    }
+
+    private bool SelfOk(EntityUid user, EntityUid patient, LimbZone zone, string? operation)
+    {
+        return user != patient || SurgeryMarkPrototype.SelfAllowed(_prototype, zone, operation);
     }
 
     private bool Near(EntityUid user, EntityUid patient)

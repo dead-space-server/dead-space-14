@@ -648,7 +648,6 @@
   prefix: torso
   ribs: true
   halves: true
-  self: false
   ax: 15.5
   ay: 11
   bx: 15.5
@@ -810,6 +809,7 @@
 
 - type: surgeryMark
   id: Eyes
+  self: false
   ax: 13.5
   ay: 6.5
   bx: 17.5
@@ -823,6 +823,7 @@
 
 - type: surgeryMark
   id: Mouth
+  self: false
   ax: 14.5
   ay: 8.5
   bx: 16.5
@@ -1567,6 +1568,7 @@
   zone: Head
   name: surgery-op-drill-tooth
   sterile: false
+  self: true
   steps:
   - verb: Drill
     layer: Bone
@@ -1898,6 +1900,15 @@
     state: r_arm
   across: true
   stump: true
+  zones:
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
   steps:
   - verb: Incise
     layer: Skin
@@ -1908,6 +1919,30 @@
   - verb: Cauterize
     layer: Skin
     undo: Incise
+
+- type: surgeryOperation
+  id: AttachHead
+  side: Front
+  name: surgery-op-attach-head
+  zone: Head
+  order: 6
+  icon:
+    sprite: /Textures/Mobs/Species/Human/parts.rsi
+    state: head_m
+  across: true
+  stump: true
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: Seat
+    layer: Skin
+  - verb: MendBone
+    layer: Bone
+  - verb: Cauterize
+    layer: Skin
 
 - type: surgeryOperation
   id: CureInfection
@@ -2182,6 +2217,10 @@
   sleepAmount: 1.5
   sleepTime: 4
   hold: 0.6
+  wake:
+  - Ammonia
+  wakeAmount: 1
+  wakePurge: 2
 
 - type: surgeryDecay
   id: Default

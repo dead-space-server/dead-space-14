@@ -80,6 +80,16 @@ public sealed partial class SurgeryMarkPrototype : IPrototype
 
     [DataField]
     public bool Halves;
+
+    public static bool SelfAllowed(IPrototypeManager prototypes, LimbZone zone, string? operation)
+    {
+        if (!prototypes.TryIndex<SurgeryMarkPrototype>(zone.ToString(), out var mark) || mark.Self)
+            return true;
+
+        return operation != null
+               && prototypes.TryIndex<SurgeryOperationPrototype>(operation, out var proto)
+               && proto.Self;
+    }
 }
 
 [Prototype]
@@ -492,6 +502,9 @@ public sealed partial class SurgeryOperationPrototype : IPrototype
     [DataField]
     public bool ImplantPut;
 
+    [DataField]
+    public bool Self;
+
     public bool Faces(bool prone)
     {
         return Side == SurgerySide.Any || Side == SurgerySide.Back == prone;
@@ -801,4 +814,13 @@ public sealed partial class SurgeryAnesthesiaPrototype : IPrototype
 
     [DataField]
     public float ClashPoison = 2f;
+
+    [DataField]
+    public List<string> Wake = new();
+
+    [DataField]
+    public float WakeAmount = 1f;
+
+    [DataField]
+    public float WakePurge = 2f;
 }

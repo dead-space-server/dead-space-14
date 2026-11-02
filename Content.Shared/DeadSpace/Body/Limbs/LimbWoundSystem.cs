@@ -1971,7 +1971,8 @@ public sealed partial class LimbWoundSystem : EntitySystem
         for (var i = 0; i < 4 && LimbWoundRules.IsBody(zone); i++)
         {
             var index = LimbWoundRules.Index(zone);
-            if ((uint) index >= (uint) limbs.Zones.Count || !limbs.Zones[index].Severed)
+            if ((uint) index >= (uint) limbs.Zones.Count
+                || !limbs.Zones[index].Severed && !LimbWoundRules.DeadLimb(zone, limbs.Zones[index]))
                 return zone;
 
             zone = LimbWoundRules.SlipTo(zone);

@@ -175,6 +175,8 @@ public sealed partial class SurgeryNoHealthIconComponent : Component;
 [RegisterComponent]
 public sealed partial class SurgeryMarkerComponent : Component
 {
+    [DataField]
+    public float HeadBrainDelay = 4f;
 }
 
 [RegisterComponent]

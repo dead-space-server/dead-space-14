@@ -19,6 +19,11 @@ public sealed partial class SurgeryStepDoAfterEvent : SimpleDoAfterEvent
 }
 
 [Serializable, NetSerializable]
+public sealed partial class SurgeryHeadBrainDoAfterEvent : SimpleDoAfterEvent
+{
+}
+
+[Serializable, NetSerializable]
 public sealed class SurgeryBoardMessage : EntityEventArgs
 {
     public NetEntity Patient;

@@ -1320,6 +1320,7 @@ public sealed class SurgeryClientSystem : EntitySystem
     private void PlaceNicks()
     {
         _guide.Cuts.Clear();
+        _nicks.RemoveAll(nick => !Exists(nick.Body) || Healed(nick.Body, nick.Zone));
         foreach (var nick in _nicks)
         {
             if (!Exists(nick.Body) || ZoneSevered(nick.Body, nick.Zone))
@@ -1327,6 +1328,25 @@ public sealed class SurgeryClientSystem : EntitySystem
 
             _guide.Cuts.Add((ToWorld(nick.Body, nick.Local - nick.Dir * 0.05f), ToWorld(nick.Body, nick.Local + nick.Dir * 0.05f)));
         }
+    }
+
+    private bool Healed(EntityUid body, LimbZone zone)
+    {
+        if (_standing.IsDown(body) || TryComp<BuckleComponent>(body, out var buckle) && buckle.Buckled)
+            return false;
+
+        if (!LimbWoundRules.IsBody(zone) || !TryComp<LimbBodyComponent>(body, out var limbs))
+            return true;
+
+        var index = LimbWoundRules.Index(zone);
+        if ((uint) index >= (uint) limbs.Zones.Count)
+            return true;
+
+        var state = limbs.Zones[index];
+        return !state.Atrophied
+               && state.Health >= LimbWoundRules.HealthFor(zone) * 0.95f
+               && state.Flesh <= 0f
+               && state.Bleed <= LimbWoundRules.TickBleed;
     }
 
     private static bool Cuts(SurgeryVerbKind verb)
@@ -1709,6 +1729,9 @@ public sealed class SurgeryClientSystem : EntitySystem
                     partOperation = part.Put;
             }
 
+            if (!SelfFits(patient, zone, partOperation))
+                continue;
+
             var (partColor, partName) = FanLook(partOperation);
             entries.Add(new SurgeryFanIcon(layers, badge, partColor, partName));
             var id = part.ID;
@@ -1721,7 +1744,7 @@ public sealed class SurgeryClientSystem : EntitySystem
         var hasField = false;
         foreach (var operation in _proto.EnumeratePrototypes<SurgeryOperationPrototype>())
         {
-            if (!MenuFits(patient, zone, operation))
+            if (!MenuFits(patient, zone, operation) || !SelfFits(patient, zone, operation.ID))
                 continue;
 
             operations.Add(operation);
@@ -1771,8 +1794,34 @@ public sealed class SurgeryClientSystem : EntitySystem
         return (color, name);
     }
 
+    private bool SelfFits(EntityUid patient, LimbZone zone, string? operation)
+    {
+        return patient != _players.LocalEntity || SurgeryMarkPrototype.SelfAllowed(_proto, zone, operation);
+    }
+
+    private bool SelfOffers(EntityUid patient, LimbZone zone)
+    {
+        var name = zone.ToString();
+        foreach (var part in _proto.EnumeratePrototypes<SurgeryPartPrototype>())
+        {
+            if (part.Zone == name && part.Machine == MachineBody(patient) && SelfFits(patient, zone, part.Operation))
+                return true;
+        }
+
+        foreach (var operation in _proto.EnumeratePrototypes<SurgeryOperationPrototype>())
+        {
+            if (operation.Self && MenuFits(patient, zone, operation))
+                return true;
+        }
+
+        return false;
+    }
+
     private bool Offers(EntityUid patient, LimbZone zone)
     {
+        if (!SelfFits(patient, zone, null) && !SelfOffers(patient, zone))
+            return false;
+
         if (!Prone(patient))
             return true;
 
