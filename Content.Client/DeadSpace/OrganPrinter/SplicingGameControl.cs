@@ -98,7 +98,6 @@ public sealed class SplicingGameControl : Control
     private bool _fastMode = true;
     private bool _running;
     private bool _finished;
-    private bool _won;
 
     private (int X, int Y) _player = (FieldW / 2, 0);
     private (int X, int Y) _respawn = (FieldW / 2, 0);
@@ -235,7 +234,6 @@ public sealed class SplicingGameControl : Control
 
         _running = true;
         _finished = false;
-        _won = false;
         _integrity = 100f;
         _coverage = 0f;
         _waste = 0;
@@ -596,7 +594,6 @@ public sealed class SplicingGameControl : Control
     {
         _running = false;
         _finished = true;
-        _won = true;
 
         var baseQuality = _fastMode ? 40 : 70;
         var coverageBonus = (float) ((_coverage - TargetCoverage) * (_fastMode ? 100f : 120f));
@@ -1021,7 +1018,6 @@ public sealed class SplicingGameControl : Control
     {
         _running = false;
         _finished = true;
-        _won = false;
 
         _audio.PlayGlobal("/Audio/Effects/Arcade/gameover.ogg", Filter.Local(), false, AudioParams.Default.WithVolume(-4f));
         OnFinished?.Invoke(false, 0, 0);
