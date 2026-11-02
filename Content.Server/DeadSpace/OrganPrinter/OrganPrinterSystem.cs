@@ -3,6 +3,8 @@
 using System.Linq;
 using Content.Server.Popups;
 using Content.Server.Power.EntitySystems;
+using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.OrganPrinter;
@@ -25,6 +27,7 @@ public sealed class OrganPrinterSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly SharedMaterialStorageSystem _material = default!;
+    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -35,8 +38,9 @@ public sealed class OrganPrinterSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<OrganPrinterComponent, MapInitEvent>(OnMapInit);
-        SubscribeLocalEvent<OrganPrinterComponent, BeforeActivatableUIOpenEvent>(OnBeforeUiOpen);
+        SubscribeLocalEvent<OrganPrinterComponent, AfterActivatableUIOpenEvent>(OnAfterUiOpen);
         SubscribeLocalEvent<OrganPrinterComponent, MaterialAmountChangedEvent>(OnMaterialAmountChanged);
+        SubscribeLocalEvent<OrganPrinterComponent, SolutionChangedEvent>(OnSolutionChanged);
         SubscribeLocalEvent<OrganPrinterComponent, OrganPrinterPrintRequestMessage>(OnPrintRequest);
         SubscribeLocalEvent<OrganPrinterComponent, OrganPrinterGameFailedMessage>(OnGameFailed);
     }
@@ -72,13 +76,21 @@ public sealed class OrganPrinterSystem : EntitySystem
         _appearance.SetData(ent.Owner, OrganPrinterVisuals.Working, false);
     }
 
-    private void OnBeforeUiOpen(Entity<OrganPrinterComponent> ent, ref BeforeActivatableUIOpenEvent args)
+    private void OnAfterUiOpen(EntityUid uid, OrganPrinterComponent comp, AfterActivatableUIOpenEvent args)
     {
-        UpdateUi(ent);
+        UpdateUi((uid, comp));
     }
 
     private void OnMaterialAmountChanged(Entity<OrganPrinterComponent> ent, ref MaterialAmountChangedEvent args)
     {
+        UpdateUi(ent);
+    }
+
+    private void OnSolutionChanged(Entity<OrganPrinterComponent> ent, ref SolutionChangedEvent args)
+    {
+        if (args.Solution.Owner != ent.Owner)
+            return;
+
         UpdateUi(ent);
     }
 
@@ -100,13 +112,24 @@ public sealed class OrganPrinterSystem : EntitySystem
         }
 
         var productId = args.Product.Id;
-        var entry = ent.Comp.Entries.FirstOrDefault(e => e.Product.Id == productId);
+        var entry = FindEntry(ent.Comp, productId, args.Group);
         if (entry == null)
             return;
 
         var quality = Math.Clamp(args.Quality, 0, 100);
         var waste = Math.Max(0, args.Waste);
         var effectiveCost = entry.Cost + (int) Math.Ceiling(waste * ent.Comp.WasteCost);
+        var particles = entry.RequiresParticles ? ent.Comp.ParticlesPerPrint : 0f;
+
+        if (particles > 0f && !HasParticles(ent.Owner, ent.Comp, entry.Group, particles))
+        {
+            _popup.PopupEntity(
+                Loc.GetString("organ-printer-no-particles",
+                    ("need", particles), ("reagent", ReagentName(ent.Comp, entry.Group))),
+                ent.Owner,
+                args.Actor);
+            return;
+        }
 
         if (_material.GetMaterialAmount(ent.Owner, ent.Comp.Material) < effectiveCost)
         {
@@ -117,6 +140,9 @@ public sealed class OrganPrinterSystem : EntitySystem
 
         if (!_material.TryChangeMaterialAmount(ent.Owner, ent.Comp.Material, -effectiveCost))
             return;
+
+        if (particles > 0f)
+            ConsumeParticles(ent.Owner, ent.Comp, entry.Group, particles);
 
         ent.Comp.PrintingProduct = entry.Product;
         ent.Comp.PrintEndTime = _timing.CurTime + ent.Comp.PrintDuration;
@@ -135,6 +161,20 @@ public sealed class OrganPrinterSystem : EntitySystem
 
         if (!this.IsPowered(ent.Owner, EntityManager))
             return;
+
+        // Сорванная печать тоже тратит частицу вида: попытка уже была начата.
+        var entry = FindEntry(ent.Comp, args.Product.Id, args.Group);
+        if (entry == null)
+            return;
+
+        var particles = entry.RequiresParticles ? ent.Comp.ParticlesPerPrint : 0f;
+        if (particles > 0f)
+        {
+            if (!HasParticles(ent.Owner, ent.Comp, args.Group, particles))
+                return;
+
+            ConsumeParticles(ent.Owner, ent.Comp, args.Group, particles);
+        }
 
         var damage = new DamageSpecifier();
         damage.DamageDict.Add("Blunt", args.FastMode ? 25 : 12);
@@ -158,11 +198,67 @@ public sealed class OrganPrinterSystem : EntitySystem
         foreach (var entry in comp.Entries)
         {
             if (_proto.HasIndex(entry.Product))
-                products.Add(new OrganPrinterProduct(entry.Product, entry.Cost, entry.Group));
+                products.Add(new OrganPrinterProduct(entry.Product, entry.Cost, entry.Group, entry.RequiresParticles));
             else
                 Log.Error($"Organ printer {ToPrettyString(uid)} has unknown product {entry.Product}");
         }
 
-        return new OrganPrinterUpdateState(products, _material.GetMaterialAmount(uid, comp.Material));
+        var species = new List<OrganPrinterSpecies>();
+        foreach (var (group, reagent) in comp.SpeciesReagents)
+        {
+            if (!_proto.HasIndex(reagent))
+            {
+                Log.Error($"Organ printer {ToPrettyString(uid)} has unknown species reagent {reagent}");
+                continue;
+            }
+
+            species.Add(new OrganPrinterSpecies(group, reagent, ParticlesIn(uid, comp, group)));
+        }
+
+        return new OrganPrinterUpdateState(
+            products, _material.GetMaterialAmount(uid, comp.Material), species, comp.ParticlesPerPrint);
+    }
+
+    private static OrganPrinterEntry? FindEntry(OrganPrinterComponent comp, string product, OrganSpeciesGroup group)
+    {
+        foreach (var entry in comp.Entries)
+        {
+            if (entry.Product.Id == product && entry.Group == group)
+                return entry;
+        }
+
+        return null;
+    }
+
+    private float ParticlesIn(EntityUid uid, OrganPrinterComponent comp, OrganSpeciesGroup group)
+    {
+        if (!comp.SpeciesReagents.TryGetValue(group, out var reagent))
+            return 0f;
+
+        return _solutions.GetTotalPrototypeQuantity(uid, reagent.Id).Float();
+    }
+
+    private bool HasParticles(EntityUid uid, OrganPrinterComponent comp, OrganSpeciesGroup group, float amount)
+    {
+        return comp.SpeciesReagents.ContainsKey(group) && ParticlesIn(uid, comp, group) >= amount;
+    }
+
+    private void ConsumeParticles(EntityUid uid, OrganPrinterComponent comp, OrganSpeciesGroup group, float amount)
+    {
+        if (!comp.SpeciesReagents.TryGetValue(group, out var reagent))
+            return;
+
+        if (!_solutions.TryGetSolution(uid, comp.Solution, out var solutionEnt, out _))
+            return;
+
+        _solutions.RemoveReagent(solutionEnt.Value, reagent.Id, amount);
+    }
+
+    private string ReagentName(OrganPrinterComponent comp, OrganSpeciesGroup group)
+    {
+        if (!comp.SpeciesReagents.TryGetValue(group, out var reagent) || !_proto.TryIndex(reagent, out var proto))
+            return string.Empty;
+
+        return proto.LocalizedName;
     }
 }

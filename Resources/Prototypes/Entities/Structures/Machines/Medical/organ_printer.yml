@@ -25,6 +25,21 @@
           False: { visible: false }
   - type: OrganPrinter
     printDuration: 6
+    solution: beaker
+    particlesPerPrint: 1
+    # Частицы вида: именно залитая частица решает, чьи органы печатает машина.
+    # Линии соответствуют surgerySpecies (кобольды идут по линии рептилий).
+    speciesReagents:
+      Humanoid: GraftParticlesHuman
+      Feline: GraftParticlesFeline
+      Canine: GraftParticlesCanine
+      Reptilian: GraftParticlesReptile
+      Moth: GraftParticlesMoth
+      Kobolt: GraftParticlesReptile
+      Shark: GraftParticlesShark
+      Demon: GraftParticlesDemon
+      Vox: GraftParticlesVox
+      Arachnid: GraftParticlesArachnid
     entries:
     # человечьи: люди
     - product: OrganHumanHeart
@@ -262,9 +277,24 @@
     - product: OrganArachnidKidneys
       cost: 20
       group: Arachnid
+    # универсальное: рулон донорской кожи, частицы вида не нужны
+    - product: SurgerySkinRoll
+      cost: 20
+      group: Universal
+      requiresParticles: false
   - type: MaterialStorage
     materialWhiteList:
     - Biomass
+  - type: SolutionContainerManager
+    solutions:
+      beaker:
+        maxVol: 100
+  - type: RefillableSolution
+    solution: beaker
+  - type: InjectableSolution
+    solution: beaker
+  - type: ExaminableSolution
+    solution: beaker
   - type: Machine
     board: OrganPrinterMachineCircuitboard
   - type: UserInterface

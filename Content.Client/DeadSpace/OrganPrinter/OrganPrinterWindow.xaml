@@ -88,6 +88,7 @@
                             <Label Text="{Loc organ-printer-biomass-title}" StyleClasses="LabelSubText" />
                             <Label Name="BiomassLabel" />
                             <Label Name="CostLabel" />
+                            <Label Name="ParticlesLabel" />
                         </BoxContainer>
                         <Button Name="PrintButton"
                                 Text="{Loc organ-printer-print-button}"

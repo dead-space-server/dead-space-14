@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Materials;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
@@ -30,6 +31,11 @@ public enum OrganSpeciesGroup : byte
     Demon = 7,
     Vox = 9,
     Arachnid = 10,
+
+    /// <summary>
+    /// Универсальные изделия: подходят любому телу и частиц вида не требуют.
+    /// </summary>
+    Universal = 11,
 }
 
 /// <summary>
@@ -56,6 +62,12 @@ public sealed partial class OrganPrinterEntry
     /// </summary>
     [DataField]
     public OrganSpeciesGroup Group = OrganSpeciesGroup.Humanoid;
+
+    /// <summary>
+    /// Требуются ли для печати частицы вида. Универсальные изделия печатаются без них.
+    /// </summary>
+    [DataField]
+    public bool RequiresParticles = true;
 }
 
 /// <summary>
@@ -75,6 +87,24 @@ public sealed partial class OrganPrinterComponent : Component
     /// </summary>
     [DataField]
     public ProtoId<MaterialPrototype> Material = "Biomass";
+
+    /// <summary>
+    /// Имя раствора машины, в который заливают частицы вида.
+    /// </summary>
+    [DataField]
+    public string Solution = "beaker";
+
+    /// <summary>
+    /// Сколько единиц частиц вида уходит на одну попытку печати — удачную или сорванную.
+    /// </summary>
+    [DataField]
+    public float ParticlesPerPrint = 1f;
+
+    /// <summary>
+    /// Частицы вида для каждой группы рас. Именно залитая частица решает, чьи органы можно печатать.
+    /// </summary>
+    [DataField]
+    public Dictionary<OrganSpeciesGroup, ProtoId<ReagentPrototype>> SpeciesReagents = new();
 
     /// <summary>
     /// Сколько биомассы стоит один поглощённый куб вне силуэта органа.
