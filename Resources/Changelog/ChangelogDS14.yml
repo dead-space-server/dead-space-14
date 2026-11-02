@@ -9427,3 +9427,10 @@ Entries:
   changes:
   - type: Tweak
     message: Генерация списка участников наночат-а
+- id: 906
+  author: BlueDogDoc
+  time: '2026-11-02T04:14:15.479223+00:00'
+  pr: 2627
+  changes:
+  - type: Add
+    message: Логи пуль и для хитскан баллистики.
