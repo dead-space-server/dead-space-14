@@ -7,7 +7,7 @@ terminal-run-usage = run (путь до .run файла)
 terminal-run-extension = Сценарий должен иметь расширение .run.
 terminal-run-not-found = Файл сценария { $path } не найден.
 terminal-run-syntax = Ошибка сценария, строка { $line }: { $reason }.
-terminal-run-limit == Сценарий остановлен: превышен лимит выполнения.
+terminal-run-limit = Сценарий остановлен: превышен лимит выполнения.
 terminal-run-command-unsupported = Команда { $command } не поддерживается внутри сценария.
 terminal-many-args = Слишком много аргументов.
 terminal-ping-host-not-found = При проверке связи не удалось обнаружить узел { $ip } \nПроверьте имя узла и повторите попытку.
@@ -21,6 +21,8 @@ terminal-is-directory = { $args } дериктория.
 terminal-parent-dir-not-exist = { $args } родительская директория не существует.
 terminal-nano-file-saved = Сохранено в { $filePath }.
 terminal-no-such-file = { $args }: файла не существует.
+terminal-nano-usage = nano (имя файла)
+terminal-verb-open = Открыть терминал
 
 agent-request-title = Запросить груз
 agent-request-prompt = Запрос
@@ -44,3 +46,7 @@ agent-cargo-terminal-missing = Турминал, отправивший груз
 agent-cargo-storage-unavailable = Мульти-Трансфер недоступен.
 agent-cargo-storage-full = Нет места.
 agent-cargo-receive-verb = Принять груз
+
+cmd-terminalrootpassword-desc = Показывает пароль root для терминалов в текущем раунде.
+cmd-terminalrootpassword-help = Использование: terminalrootpassword
+cmd-terminalrootpassword-result = Пароль root терминалов: { $password }

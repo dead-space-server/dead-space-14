@@ -1,4 +1,3 @@
-using Content.Shared.Actions;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.DeadSpace.Terminal;
@@ -24,12 +23,18 @@ public sealed class TerminalCommandMessage : BoundUserInterfaceMessage
 public sealed class TerminalBoundUserInterfaceState : BoundUserInterfaceState
 {
     public string OutputText { get; }
+    public string Prompt { get; }
+    public bool HideInput { get; }
+    public bool Clear { get; }
     public string? EditorPath { get; }
     public string? EditorContent { get; }
 
-    public TerminalBoundUserInterfaceState(string outputText, string? editorPath = null, string? editorContent = null)
+    public TerminalBoundUserInterfaceState(string outputText, string prompt, bool hideInput = false, bool clear = false, string? editorPath = null, string? editorContent = null)
     {
         OutputText = outputText;
+        Prompt = prompt;
+        HideInput = hideInput;
+        Clear = clear;
         EditorPath = editorPath;
         EditorContent = editorContent;
     }
@@ -47,7 +52,3 @@ public sealed class TerminalSaveFileMessage : BoundUserInterfaceMessage
         Content = content;
     }
 }
-
-
-public sealed partial class AgentRequestActionEvent : InstantActionEvent;
-public sealed partial class AgentReceiveActionEvent : InstantActionEvent;

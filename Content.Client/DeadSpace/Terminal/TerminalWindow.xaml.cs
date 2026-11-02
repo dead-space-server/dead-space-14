@@ -55,9 +55,10 @@ public sealed partial class TerminalWindow : DefaultWindow
 
     public void SetOutput(string text)
     {
-        _output.SetMessage(FormattedMessage.FromMarkupOrThrow(text));
+        _output.SetMessage(FormattedMessage.FromMarkupPermissive(text));
         ScrollToBottom();
     }
+
     private void ScrollToBottom()
     {
         UserInterfaceManager.DeferAction(() =>
@@ -65,34 +66,6 @@ public sealed partial class TerminalWindow : DefaultWindow
             var maxScroll = Math.Max(0f, _output.PixelHeight - _outputScroll.PixelHeight);
             _outputScroll.VScrollTarget = maxScroll;
         });
-    }
-
-    public void AddPrompt(string prompt)
-    {
-        _output.Text += $"{prompt}";
-        ScrollToBottom();
-    }
-
-    public void AddCommand(string prompt, string command)
-    {
-        _output.Text += $"{prompt}{command}\n";
-        ScrollToBottom();
-    }
-
-    public void AddOutput(string text)
-    {
-        if (text == "\x01CLEAR")
-        {
-            _output.SetMessage(string.Empty);
-            ScrollToBottom();
-            return;
-        }
-
-        _output.Text += text;
-
-        if (!text.EndsWith('\n'))
-            _output.Text += "\n";
-        ScrollToBottom();
     }
 
     private void OnCommandEntered(LineEdit.LineEditEventArgs args)

@@ -1,16 +1,18 @@
 using Content.Shared.DeadSpace.Terminal;
-using Robust.Client.GameStates;
 using Robust.Client.UserInterface;
-using System.Collections.Generic;
+using Robust.Shared.Utility;
 
 namespace Content.Client.DeadSpace.Terminal;
 
 public sealed class TerminalBoundUserInterface : BoundUserInterface
 {
+    private const int MaxHistoryLength = 32_000;
+
     private TerminalWindow? _window;
-    private readonly IEntityManager _entityManager = IoCManager.Resolve<IEntityManager>();
     private readonly Queue<string> _pendingCommands = new();
-    private string _history = "";
+    private string _history = string.Empty;
+    private bool _hideNextInput;
+
     public TerminalBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
     }
@@ -21,16 +23,21 @@ public sealed class TerminalBoundUserInterface : BoundUserInterface
 
         _window = this.CreateWindowCenteredLeft<TerminalWindow>();
         _window.CommandEntered += OnCommandEntered;
-        _window.ClearOutput();
-        _window.FocusInput();
         _window.FileSaved += OnFileSaved;
         _window.EditorClosed += OnEditorClosed;
-        if (!_entityManager.TryGetComponent<TerminalComponent>(Owner, out var terminal))
-            return;
-        if (string.IsNullOrEmpty(_history))
+        _window.ClearOutput();
+        _window.FocusInput();
+
+        if (string.IsNullOrEmpty(_history) && EntMan.TryGetComponent<TerminalComponent>(Owner, out var terminal))
         {
-            _history = $"Welcome to TempOS 107.05 LTS\n" + $"System information\n" + $"Memory usage: {Random.Shared.Next(5, 10)}%\n" + $"IPv4 address for eth0: {terminal.IpAdress}\n" + $"[color=#16C60C]user@TEMPUser{terminal.UserIndex}[/color]:" + $"[color=#3B78FF]{terminal.CurrentDir}[/color]$ ";
+            _history = FormattedMessage.EscapeText($"Welcome to {terminal.OsName}\n");
+            if (!string.IsNullOrWhiteSpace(terminal.Motd))
+                _history += FormattedMessage.EscapeText($"{terminal.Motd.TrimEnd()}\n");
+            _history += FormattedMessage.EscapeText($" * Documentation: https://tos-service.online/tempos/docs.html\n * Support:       https://tos-service.online/tempos/\n");
+            _history += FormattedMessage.EscapeText($"\nSystem information\nMemory usage: {Random.Shared.Next(5, 10)}%\nIPv4 address for eth0: {terminal.IpAdress}\n\n");
+            _history += terminal.Prompt;
         }
+
         _window.SetOutput(_history);
     }
 
@@ -40,34 +47,33 @@ public sealed class TerminalBoundUserInterface : BoundUserInterface
 
         if (state is not TerminalBoundUserInterfaceState terminalState)
             return;
-        if (!_entityManager.TryGetComponent<TerminalComponent>(Owner, out var terminal))
-            return;
+
         if (_pendingCommands.TryDequeue(out var command))
-        {
-            _window?.AddCommand($"", command);
-        }
+            _history += FormattedMessage.EscapeText(command) + "\n";
 
-        if (terminalState.EditorPath != null)
-        {
-            _window?.OpenEditor(terminalState.EditorPath, terminalState.EditorContent ?? string.Empty);
-            return;
-        }
+        if (terminalState.Clear)
+            _history = string.Empty;
 
-        if (terminalState.OutputText == "\x01Clear")
+        if (!string.IsNullOrEmpty(terminalState.OutputText))
         {
-            _history = "";
-        }
-        else
-        {
-            _history += terminalState.OutputText;
+            _history += FormattedMessage.EscapeText(terminalState.OutputText);
             if (!terminalState.OutputText.EndsWith('\n'))
                 _history += "\n";
         }
 
-        _window?.AddOutput(terminalState.OutputText);
-        var prompt = $"[color=#16C60C]user@TEMPUser{terminal.UserIndex}[/color]:" + $"[color=#3365D5]{terminal.CurrentDir}[/color]$ ";
-        _history += prompt;
-        _window?.AddPrompt(prompt);
+        _history += terminalState.Prompt;
+        _hideNextInput = terminalState.HideInput;
+
+        if (_history.Length > MaxHistoryLength)
+        {
+            var cut = _history.IndexOf('\n', _history.Length - MaxHistoryLength);
+            _history = cut < 0 ? _history[^MaxHistoryLength..] : _history[(cut + 1)..];
+        }
+
+        _window?.SetOutput(_history);
+
+        if (terminalState.EditorPath != null)
+            _window?.OpenEditor(terminalState.EditorPath, terminalState.EditorContent ?? string.Empty);
     }
 
     private void OnFileSaved(string path, string content)
@@ -80,6 +86,13 @@ public sealed class TerminalBoundUserInterface : BoundUserInterface
         _window?.FocusInput();
     }
 
+    private void OnCommandEntered(string command)
+    {
+        _pendingCommands.Enqueue(_hideNextInput ? string.Empty : command);
+        _hideNextInput = false;
+        SendMessage(new TerminalCommandMessage(command));
+    }
+
     protected override void Dispose(bool disposing)
     {
         if (disposing && _window != null)
@@ -88,12 +101,7 @@ public sealed class TerminalBoundUserInterface : BoundUserInterface
             _window.FileSaved -= OnFileSaved;
             _window.EditorClosed -= OnEditorClosed;
         }
-        base.Dispose(disposing);
-    }
 
-    private void OnCommandEntered(string command)
-    {
-        _pendingCommands.Enqueue(command);
-        SendMessage(new TerminalCommandMessage(command));
+        base.Dispose(disposing);
     }
 }
