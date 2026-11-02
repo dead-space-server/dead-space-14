@@ -9434,3 +9434,10 @@ Entries:
   changes:
   - type: Add
     message: Логи пуль и для хитскан баллистики.
+- id: 907
+  author: Manstari
+  time: '2026-11-02T07:57:05.805368+00:00'
+  pr: 2614
+  changes:
+  - type: Tweak
+    message: Переделана система обоюдного таскания за лапку
