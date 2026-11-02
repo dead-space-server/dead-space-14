@@ -174,7 +174,7 @@ ninja-ai-hack-half-announcement = Внимание! Несанкциониров
 ninja-ai-hack-announcement = Внимание! Подсистема законов была перезаписана! Законы удалены... @%!$#!... попытка восстановления отменена... #@&*!... законы обновлены!
 ninja-ai-hack-no-ai = Станционное ядро ИИ сейчас не в сети.
 ninja-ai-hack-crew-announcement = Внимание всему экипажу! Обнаружено несанкционированное вмешательство в подсистему законов! @%!%#$... Законы повреждены... @#&*!...
-ninja-ai-hack-crew-announcement-sender = Станционный Искуственный интелект
+ninja-ai-hack-crew-announcement-sender = Станционный Искусственный Интеллект
 
 objective-condition-ninja-ai-hack-title = Взлом Станционного ИИ
 objective-condition-ninja-ai-hack-description = Необходимо вывести из строя Станционный Искусственный Интеллект путём взлома его с помощью своих перчаток. Используйте консоль загрузки ИИ. Будьте аккуратны, безопасность ИИ может быть лучше, чем вы ожидали.
@@ -214,4 +214,57 @@ ninja-hack-beacon-transfer-broadcast = [bold]Выполнен перевод { $
 cargo-console-funds-blocked-by-hack = Операции со счетами заблокированы: обнаружен несанкционированный доступ к банковской системе станции!
 
 objective-condition-ninja-steal-money-title = Украсть средства станции
-ninja-steal-money-objective-description = Вам необходимо украсть {$count} кредитов. Установите и активируйте хакерский маяк, чтобы начать вывод средств со счетов станции.
+ninja-steal-money-objective-description = Клан передал вам важное задание - присвоить {$count} кредитов станции в интересах клана. Часть средств, конвертированных устройством, вы можете потратить на собственные нужды.
+
+# Ninja hack beacon store
+
+store-ui-ninja-hack-title = Маяк взлома
+
+store-category-ninja-hack = Снаряжение
+
+PunctAutoInjector-ninja-hack-name = Автоинъектор пунктураза
+PunctAutoInjector-ninja-hack-desc = Одноразовый автоинъектор с препаратом для лечения колотых ран.
+
+BurnAutoInjector-ninja-hack-name = Автоинъектор от физических повреждений
+BurnAutoInjector-ninja-hack-desc = Одноразовый автоинъектор с препаратом для лечения физических повреждений.
+
+Manacles-ninja-hack-name = Кандалы
+Manacles-ninja-hack-desc = Прочные кандалы для удержания задержанных.
+
+PowerCellHyper-ninja-hack-name = Гипер батарея
+PowerCellHyper-ninja-hack-desc = Батарея повышенной ёмкости. Подходит для питания костюма.
+
+SpiderclanFlippo-ninja-hack-name = Зажигалка Клана Паука
+SpiderclanFlippo-ninja-hack-desc = Металлическая зажигалка с эмблемой Клана Паука.
+
+PinpointerUniversal-ninja-hack-name = Универсальный пинпоинтер
+PinpointerUniversal-ninja-hack-desc = Устройство, указывающее направление на выбранную цель.
+
+BluespaceHandHeldMassScannerEmpty-ninja-hack-name = Блюспейс ручной сканер массы
+BluespaceHandHeldMassScannerEmpty-ninja-hack-desc = Портативный сканер массы на блюспейс-кристалле. Поставляется без батареи.
+
+NinjaRefreshToken-ninja-hack-name = Кристалл перезарядки
+NinjaRefreshToken-ninja-hack-desc = Кристалл, который восстанавливает использованные заряды способностей костюма.
+
+NinjaUpgradeCase-ninja-hack-name = Набор модификаций для катаны
+NinjaUpgradeCase-ninja-hack-desc = Набор модификаций для катаны. Позволяет выбрать одну из трёх модификаций.
+
+stack-ninja-refresh-token = зелёный кристалл
+
+# Ninja katana upgrades
+
+construction-graph-tag-weapon-energy-katana-upgrade-damage = модификация для катаны на урон
+construction-graph-tag-weapon-energy-katana-upgrade-reflect = модификация для катаны на отражение
+construction-graph-tag-weapon-energy-katana-upgrade-recharge = модификация для катаны на перезарядку
+
+ninja-mod-case-loadout-tool-name = Набор модификаций для катаны
+ninja-mod-case-loadout-tool-description = Выберите одну модификацию для катаны.
+
+ninja-mod-case-loadout-damage-name = Модификация урона
+ninja-mod-case-loadout-damage-description = Увеличивает урон катаны и позволяет наносить яды на лезвие.
+
+ninja-mod-case-loadout-reflect-name = Модификация отражения
+ninja-mod-case-loadout-reflect-description = Улучшает способность катаны отражать атаки.
+
+ninja-mod-case-loadout-recharge-name = Модификация перезарядки
+ninja-mod-case-loadout-recharge-description = Ускоряет восстановление зарядов катаны.

@@ -12,7 +12,7 @@ public sealed partial class NinjaHackBeaconComponent : Component
     public ProtoId<CurrencyPrototype> SpiderCoinCurrencyPrototype = "NinjaHackCurrency";
 
     [DataField]
-    public TimeSpan MineDelay = TimeSpan.FromSeconds(10f);
+    public TimeSpan MineDelay = TimeSpan.FromSeconds(25f);
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan NextMineTime = TimeSpan.Zero;

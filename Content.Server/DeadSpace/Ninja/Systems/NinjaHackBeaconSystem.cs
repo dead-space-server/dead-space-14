@@ -5,7 +5,6 @@ using Content.Shared.Examine;
 using Robust.Shared.Timing;
 using Content.Shared.Access.Systems;
 using Robust.Shared.Utility;
-using Content.Shared.Construction.EntitySystems;
 using Content.Server.Station.Systems;
 using Content.Server.Store.Systems;
 using Content.Shared.FixedPoint;
@@ -25,8 +24,6 @@ public sealed class NinjaHackBeaconSystem : EntitySystem
     [Dependency] private readonly SharedAmbientSoundSystem _ambient = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly AccessReaderSystem _accessReaderSystem = default!;
-    [Dependency] private readonly AnchorableSystem _anchorable = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly StoreSystem _store = default!;
     [Dependency] private readonly RadioSystem _radio = default!;

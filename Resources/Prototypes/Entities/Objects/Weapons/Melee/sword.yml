@@ -239,6 +239,9 @@
     tags:
     - EnergyKatana
     - ParryEnergySword
+  - type: Construction #DS14
+    graph: UpgradeEnergyKatana
+    node: start
 
 #Greatswords
 - type: entity

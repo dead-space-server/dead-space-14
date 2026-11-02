@@ -1,0 +1,30 @@
+- type: constructionGraph
+  id: UpgradeEnergyKatana
+  start: start
+  graph:
+    - node: start
+      edges:
+        - to: damage
+          steps:
+            - tag: EnergyKatanaDamageUpgrade
+              name: construction-graph-tag-weapon-energy-katana-upgrade-damage
+              doAfter: 2
+        - to: reflect
+          steps:
+            - tag: EnergyKatanaReflectUpgrade
+              name: construction-graph-tag-weapon-energy-katana-upgrade-reflect
+              doAfter: 2
+        - to: recharge
+          steps:
+            - tag: EnergyKatanaRechargeUpgrade
+              name: construction-graph-tag-weapon-energy-katana-upgrade-recharge
+              doAfter: 2
+
+    - node: damage
+      entity: DamageEnergyKatana
+
+    - node: reflect
+      entity: ReflectEnergyKatana
+
+    - node: recharge
+      entity: RechargeEnergyKatana

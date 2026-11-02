@@ -1,17 +1,17 @@
 - type: sourcePort
   id: NinjaScannerPort
-  name: Инфо-сканер
+  name: Сканер разума
   description: Порт для передачи данных и команд между консолью и сканером.
 
 - type: sinkPort
   id: NinjaScannerPort
-  name: Инфо-сканер
+  name: Сканер разума
   description: Порт для передачи данных и команд между консолью и сканером.
 
 - type: entity
   parent: BaseStructure
   id: NinjaInfoScanner
-  name: сканнер разума
+  name: сканер разума
   description: Высокотехнологичная капсула для извлечения данных из живых субъектов.
   components:
   - type: NinjaInfoScanner
@@ -98,8 +98,8 @@
 - type: entity
   parent: BaseMajorContraband
   id: NinjaHackBeacon
-  name: маяк взлома клана паука и тд
-  decription: крутой маяк
+  name: старая запчасть механизма
+  description: Выглядит как старая и совершенно ненужная деталь некогда работавшего механизма. Откуда она — сказать сложно. Видимо, обычный космический мусор.
   components:
   - type: NinjaHackBeacon
   - type: Item
@@ -143,6 +143,7 @@
       enum.StoreUiKey.Key:
         type: StoreBoundUserInterface
   - type: Store
+    name: store-ui-ninja-hack-title
     categories:
     - NinjaHackCategory
     currencyWhitelist:
@@ -158,6 +159,12 @@
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
+  - type: AmbientSound
+    volume: 10
+    range: 25
+    enabled: false
+    sound:
+      path: /Audio/Ambience/Objects/server_fans.ogg
 
 - type: currency
   id: NinjaHackCurrency
@@ -166,7 +173,7 @@
 
 - type: storeCategory
   id: NinjaHackCategory
-  name: store-category-abilities
+  name: store-category-ninja-hack
 
 - type: listing
   id: NinjaHackPunctAutoInjector
@@ -202,9 +209,106 @@
   id: NinjaHackPowerCellHyper
   name: PowerCellHyper-ninja-hack-name
   description: PowerCellHyper-ninja-hack-desc
-  productEntity: PowerCellHyper
+  productEntity: PowerCellHyperPrinted
   cost:
     NinjaHackCurrency: 50
+  categories:
+  - NinjaHackCategory
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: NinjaHackSpiderclanFlippo
+  name: SpiderclanFlippo-ninja-hack-name
+  description: SpiderclanFlippo-ninja-hack-desc
+  productEntity: SpiderclanFlippo
+  cost:
+    NinjaHackCurrency: 50
+  categories:
+  - NinjaHackCategory
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: NinjaHackPinpointerUniversal
+  name: PinpointerUniversal-ninja-hack-name
+  description: PinpointerUniversal-ninja-hack-desc
+  productEntity: PinpointerUniversal
+  cost:
+    NinjaHackCurrency: 30
+  categories:
+  - NinjaHackCategory
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: NinjaHackBluespaceHandHeldMassScannerEmpty
+  name: BluespaceHandHeldMassScannerEmpty-ninja-hack-name
+  description: BluespaceHandHeldMassScannerEmpty-ninja-hack-desc
+  productEntity: BluespaceHandHeldMassScannerEmpty
+  cost:
+    NinjaHackCurrency: 50
+  categories:
+  - NinjaHackCategory
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: NinjaHackRefreshToken
+  name: NinjaRefreshToken-ninja-hack-name
+  description: NinjaRefreshToken-ninja-hack-desc
+  productEntity: NinjaRefreshToken
+  cost:
+    NinjaHackCurrency: 25
+  categories:
+  - NinjaHackCategory
+
+- type: entity
+  name: зелёный кристалл
+  parent: [BaseItem, BaseMajorContraband]
+  id: NinjaRefreshToken
+  description: Кажется, он пульсирует подозрительно заманчивой энергией.
+  components:
+  - type: Sprite
+    sprite: _DeadSpace/Objects/Specific/Ninja/refreshCrystal.rsi
+    state: icon
+  - type: Item
+    sprite: _DeadSpace/Objects/Specific/Ninja/refreshCrystal.rsi
+    size: Tiny
+  - type: Stack
+    count: 1
+    stackType: NinjaRefreshToken
+  - type: StaticPrice
+    price: 0
+  - type: StackPrice
+    price: 500
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/pill_bottle_pickup.ogg
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/pill_bottle_drop.ogg
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_DeadSpace/Items/Handing/pill_bottle_drop.ogg
+
+- type: stack
+  id: NinjaRefreshToken
+  name: stack-ninja-refresh-token
+  icon: { sprite: /Textures/_DeadSpace/Objects/Specific/Ninja/refreshCrystal.rsi, state: icon }
+  spawn: NinjaRefreshToken
+
+- type: listing
+  id: NinjaUpgradeCase
+  name: NinjaUpgradeCase-ninja-hack-name
+  description: NinjaUpgradeCase-ninja-hack-desc
+  productEntity: NinjaUpgradeCase
+  cost:
+    NinjaHackCurrency: 500
   categories:
   - NinjaHackCategory
   conditions:

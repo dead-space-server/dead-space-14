@@ -30,16 +30,15 @@ public sealed class NinjaSuitRefillSystem : EntitySystem
         if (args.Handled)
             return;
 
-        // Проверяем что предмет это стак
         if (!TryComp<StackComponent>(args.Used, out var stack))
             return;
 
-        foreach (var (actionProtoId, cost) in ent.Comp.ActionMaterials)
+        foreach (var cost in ent.Comp.ActionMaterials)
         {
             if (stack.StackTypeId != cost.Stack)
                 continue;
 
-            if (!TryFindAction(ent.Owner, actionProtoId, out var actionUid))
+            if (!TryFindAction(ent.Owner, cost.Action, out var actionUid))
                 continue;
 
             if (!TryComp<LimitedChargesComponent>(actionUid, out var charges))
@@ -54,9 +53,11 @@ public sealed class NinjaSuitRefillSystem : EntitySystem
             if (!_stack.TryUse(args.Used, cost.Amount))
                 continue;
 
-            _charges.AddCharges((actionUid, charges), 1);
+            _charges.AddCharges((actionUid, charges), cost.Charges);
             _popup.PopupEntity(Loc.GetString("ninja-action-refill", ("action", MetaData(actionUid).EntityName)), args.User, args.User, PopupType.Small);
+
             args.Handled = true;
+            break;
         }
     }
 
