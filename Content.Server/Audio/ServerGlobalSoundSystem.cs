@@ -94,6 +94,7 @@ public sealed class ServerGlobalSoundSystem : SharedGlobalSoundSystem
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
         _activeAdminSound = null;
+        ClearAdminQueue();
     }
 
     public bool ControlAdminGlobalSound(AdminGlobalSoundControl action)

@@ -112,17 +112,22 @@ public sealed class AdminGlobalSoundEui : BaseEui
                 _error = null;
                 break;
             case AdminGlobalSoundEuiMessage.QueueSkip:
-                _entityManager.System<ServerGlobalSoundSystem>().ControlAdminGlobalSound(AdminGlobalSoundControl.Stop);
-                _error = null;
-                break;
+                {
+                    var soundSystem = _entityManager.System<ServerGlobalSoundSystem>();
+                    soundSystem.ControlAdminGlobalSound(AdminGlobalSoundControl.Stop);
+                    soundSystem.PlayNextQueuedSound();
+                    _error = null;
+                    break;
+                }
+
             case AdminGlobalSoundEuiMessage.QueueStop:
-            {
-                var soundSystem = _entityManager.System<ServerGlobalSoundSystem>();
-                soundSystem.ClearAdminQueue();
-                soundSystem.ControlAdminGlobalSound(AdminGlobalSoundControl.Stop);
-                _error = null;
-                break;
-            }
+                {
+                    var soundSystem = _entityManager.System<ServerGlobalSoundSystem>();
+                    soundSystem.ClearAdminQueue();
+                    soundSystem.ControlAdminGlobalSound(AdminGlobalSoundControl.Stop);
+                    _error = null;
+                    break;
+                }
             case AdminGlobalSoundEuiMessage.QueueFolder folder:
                 QueueFolder(folder);
                 break;
@@ -138,7 +143,7 @@ public sealed class AdminGlobalSoundEui : BaseEui
 
     private void Browse(string path)
     {
-        if (!_entries.Any(entry => entry.IsDirectory && entry.Path == path))
+        if (!IsValidEntry(path, true))
         {
             _error = Loc.GetString("admin-global-sound-invalid-directory");
             return;
@@ -151,7 +156,7 @@ public sealed class AdminGlobalSoundEui : BaseEui
 
     private void Play(AdminGlobalSoundEuiMessage.Play request)
     {
-        if (!_entries.Any(entry => !entry.IsDirectory && entry.Path == request.Path))
+        if (!IsValidEntry(request.Path, false))
         {
             _error = Loc.GetString("admin-global-sound-invalid-file");
             return;
@@ -192,6 +197,12 @@ public sealed class AdminGlobalSoundEui : BaseEui
 
     private void QueueAdd(AdminGlobalSoundEuiMessage.QueueAdd request)
     {
+        if (!IsValidEntry(request.Path, false))
+        {
+            _error = Loc.GetString("admin-global-sound-invalid-file");
+            return;
+        }
+
         var soundSystem = _entityManager.System<ServerGlobalSoundSystem>();
 
         if (!soundSystem.TryEnqueueAdminSound(request.Path, request.Volume, request.CKey))
@@ -208,13 +219,17 @@ public sealed class AdminGlobalSoundEui : BaseEui
 
     private void QueueFolder(AdminGlobalSoundEuiMessage.QueueFolder request)
     {
-        if (!request.Path.StartsWith(AudioRoot, StringComparison.OrdinalIgnoreCase))
+        if (!IsValidEntry(request.Path, true))
         {
             _error = Loc.GetString("admin-global-sound-invalid-directory");
             return;
         }
 
-        var files = GetAudioFilesInDirectory(request.Path);
+        var files = _entries
+            .Where(entry => !entry.IsDirectory)
+            .Select(entry => entry.Path)
+            .ToList();
+
         if (files.Count == 0)
         {
             _error = Loc.GetString("admin-global-sound-empty-directory");
@@ -225,42 +240,14 @@ public sealed class AdminGlobalSoundEui : BaseEui
             ShuffleList(files);
 
         var soundSystem = _entityManager.System<ServerGlobalSoundSystem>();
+
         foreach (var file in files)
-        {
             soundSystem.TryEnqueueAdminSound(file, request.Volume, request.CKey);
-        }
 
         if (!soundSystem.HasActiveAdminSound)
             soundSystem.PlayNextQueuedSound();
 
         _error = null;
-    }
-
-    private List<string> GetAudioFilesInDirectory(string path)
-    {
-        var results = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        var directory = new ResPath(path);
-
-        foreach (var entry in _resourceManager.ContentGetDirectoryEntries(directory))
-        {
-            if (entry.EndsWith('/') || !entry.EndsWith(".ogg", StringComparison.OrdinalIgnoreCase))
-                continue;
-
-            results.Add((directory / entry).ToString());
-        }
-
-        foreach (var audio in _prototypeManager.EnumeratePrototypes<AudioMetadataPrototype>())
-        {
-            var audioPath = new ResPath(audio.ID);
-            if (!audioPath.TryRelativeTo(directory, out var relative) || relative is not { } relativePath)
-                continue;
-
-            var segments = relativePath.ToString().Split('/', StringSplitOptions.RemoveEmptyEntries);
-            if (segments.Length == 1 && segments[0].EndsWith(".ogg", StringComparison.OrdinalIgnoreCase))
-                results.Add(audioPath.ToString());
-        }
-
-        return results.ToList();
     }
 
     private void ShuffleList(List<string> list)
@@ -328,5 +315,12 @@ public sealed class AdminGlobalSoundEui : BaseEui
         return separator < AudioRoot.Length - 1
             ? AudioRoot
             : trimmed[..(separator + 1)];
+    }
+
+    private bool IsValidEntry(string path, bool isDirectory)
+    {
+        return _entries.Any(entry =>
+            entry.IsDirectory == isDirectory &&
+            string.Equals(entry.Path, path, StringComparison.OrdinalIgnoreCase));
     }
 }
