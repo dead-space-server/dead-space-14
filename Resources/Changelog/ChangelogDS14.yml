@@ -9487,3 +9487,10 @@ Entries:
     message: Тенеморфу добавлен рюкзак и слот под айди карту.
   - type: Tweak
     message: За место Замененного скафандра Чемпиона выпадает скафандр Берсерка.
+- id: 912
+  author: IvanKuvalda
+  time: '2026-11-02T14:19:59.946115+00:00'
+  pr: 2621
+  changes:
+  - type: Add
+    message: Команда для луны на обелиске - spawnnecromoon
