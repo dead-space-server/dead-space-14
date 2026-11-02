@@ -9441,3 +9441,16 @@ Entries:
   changes:
   - type: Tweak
     message: Переделана система обоюдного таскания за лапку
+- id: 908
+  author: BlueDogDoc
+  time: '2026-11-02T07:58:54.534503+00:00'
+  pr: 2628
+  changes:
+  - type: Tweak
+    message: В думлайк игре добавлена возможность стрейфить
+  - type: Tweak
+    message: Агосты могут играть с игроками и агостами в кооп КПК игры
+  - type: Tweak
+    message: Правило фиксации Таблицы Лидеров
+  - type: Fix
+    message: Фикс спам уведомлениями.
