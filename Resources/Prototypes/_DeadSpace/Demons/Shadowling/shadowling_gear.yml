@@ -9,13 +9,12 @@
     state: backpack_icon
   - type: Clothing
     sprite: _DeadSpace/Demons/shadowling.rsi
-    state: backpack_icon
+    equippedState: backpack_icon
   - type: Unremoveable
   - type: Item
     size: Ginormous
     sprite: _DeadSpace/Demons/shadowling.rsi
     heldPrefix: null
-    state: backpack_icon
 
 - type: startingGear
   id: ShadowlingGear
