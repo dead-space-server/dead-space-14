@@ -13,24 +13,30 @@ public sealed class AdminGlobalSoundEuiState : EuiStateBase
     public string? CurrentTrack;
     public bool Paused;
     public string? Error;
+    public List<AdminGlobalSoundQueueEntry> Queue;
 
     public AdminGlobalSoundEuiState(
         string currentPath,
         List<AdminGlobalSoundEntry> entries,
         string? currentTrack,
         bool paused,
-        string? error)
+        string? error,
+        List<AdminGlobalSoundQueueEntry> queue)
     {
         CurrentPath = currentPath;
         Entries = entries;
         CurrentTrack = currentTrack;
         Paused = paused;
         Error = error;
+        Queue = queue;
     }
 }
 
 [Serializable, NetSerializable]
 public readonly record struct AdminGlobalSoundEntry(string Name, string Path, bool IsDirectory);
+
+[Serializable, NetSerializable]
+public readonly record struct AdminGlobalSoundQueueEntry(string Path);
 
 public static class AdminGlobalSoundEuiMessage
 {
@@ -52,6 +58,38 @@ public static class AdminGlobalSoundEuiMessage
     public sealed class Control : EuiMessageBase
     {
         public AdminGlobalSoundControl Action;
+    }
+
+    [Serializable, NetSerializable]
+    public sealed class QueueAdd : EuiMessageBase
+    {
+        public string Path = default!;
+        public int Volume;
+        public string CKey = "";
+    }
+
+    [Serializable, NetSerializable]
+    public sealed class QueueRemove : EuiMessageBase
+    {
+        public int Index;
+    }
+
+    [Serializable, NetSerializable]
+    public sealed class QueueClear : EuiMessageBase;
+
+    [Serializable, NetSerializable]
+    public sealed class QueueSkip : EuiMessageBase;
+
+    [Serializable, NetSerializable]
+    public sealed class QueueStop : EuiMessageBase;
+
+    [Serializable, NetSerializable]
+    public sealed class QueueFolder : EuiMessageBase
+    {
+        public string Path = default!;
+        public int Volume;
+        public string CKey = "";
+        public bool Shuffle;
     }
 }
 

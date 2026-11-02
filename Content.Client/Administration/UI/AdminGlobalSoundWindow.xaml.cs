@@ -12,10 +12,17 @@ public sealed partial class AdminGlobalSoundWindow : DefaultWindow
 {
     private string? _selectedFile;
     private string? _currentPath;
+    private int _selectedQueueIndex = -1;
 
     public event Action<AdminGlobalSoundEuiMessage.Browse>? BrowseRequested;
     public event Action<AdminGlobalSoundEuiMessage.Play>? PlayRequested;
     public event Action<AdminGlobalSoundControl>? ControlRequested;
+    public event Action<AdminGlobalSoundEuiMessage.QueueAdd>? QueueAddRequested;
+    public event Action<AdminGlobalSoundEuiMessage.QueueRemove>? QueueRemoveRequested;
+    public event Action<AdminGlobalSoundEuiMessage.QueueClear>? QueueClearRequested;
+    public event Action<AdminGlobalSoundEuiMessage.QueueSkip>? QueueSkipRequested;
+    public event Action<AdminGlobalSoundEuiMessage.QueueStop>? QueueStopRequested;
+    public event Action<AdminGlobalSoundEuiMessage.QueueFolder>? FolderQueueRequested;
 
     public AdminGlobalSoundWindow()
     {
@@ -24,6 +31,56 @@ public sealed partial class AdminGlobalSoundWindow : DefaultWindow
         PauseButton.OnPressed += _ => ControlRequested?.Invoke(AdminGlobalSoundControl.Pause);
         ResumeButton.OnPressed += _ => ControlRequested?.Invoke(AdminGlobalSoundControl.Resume);
         FadeButton.OnPressed += _ => ControlRequested?.Invoke(AdminGlobalSoundControl.FadeOut);
+        StopButton.OnPressed += _ => QueueStopRequested?.Invoke(new AdminGlobalSoundEuiMessage.QueueStop());
+
+        QueueAddButton.OnPressed += _ =>
+        {
+            if (_selectedFile == null)
+            {
+                Error.Text = Loc.GetString("admin-global-sound-no-selection");
+                return;
+            }
+
+            if (!TryGetVolume())
+                return;
+
+            QueueAddRequested?.Invoke(new AdminGlobalSoundEuiMessage.QueueAdd
+            {
+                Path = _selectedFile,
+                Volume = GetVolume(),
+                CKey = CKey.Text,
+            });
+        };
+
+        QueueRemoveButton.OnPressed += _ =>
+        {
+            if (_selectedQueueIndex >= 0)
+                QueueRemoveRequested?.Invoke(new AdminGlobalSoundEuiMessage.QueueRemove { Index = _selectedQueueIndex });
+        };
+
+        QueueClearButton.OnPressed += _ => QueueClearRequested?.Invoke(new AdminGlobalSoundEuiMessage.QueueClear());
+        QueueSkipButton.OnPressed += _ => QueueSkipRequested?.Invoke(new AdminGlobalSoundEuiMessage.QueueSkip());
+
+        QueueList.OnItemSelected += args =>
+        {
+            // Clicking the already selected item deselects it.
+            _selectedQueueIndex = _selectedQueueIndex == args.ItemIndex ? -1 : args.ItemIndex;
+            QueueRemoveButton.Disabled = _selectedQueueIndex < 0;
+        };
+
+        FolderQueueButton.OnPressed += _ =>
+        {
+            if (!TryGetVolume() || _currentPath == null)
+                return;
+
+            FolderQueueRequested?.Invoke(new AdminGlobalSoundEuiMessage.QueueFolder
+            {
+                Path = _currentPath,
+                Volume = GetVolume(),
+                CKey = CKey.Text,
+                Shuffle = ShuffleCheck.Pressed,
+            });
+        };
     }
 
     public void UpdateState(AdminGlobalSoundEuiState state)
@@ -39,7 +96,10 @@ public sealed partial class AdminGlobalSoundWindow : DefaultWindow
         PauseButton.Disabled = state.CurrentTrack == null || state.Paused;
         ResumeButton.Disabled = state.CurrentTrack == null || !state.Paused;
         FadeButton.Disabled = state.CurrentTrack == null;
+        StopButton.Disabled = state.CurrentTrack == null;
         SelectedFile.Text = _selectedFile ?? Loc.GetString("admin-global-sound-no-selection");
+
+        UpdateQueue(state.Queue);
 
         Entries.RemoveAllChildren();
         foreach (var entry in state.Entries)
@@ -66,6 +126,37 @@ public sealed partial class AdminGlobalSoundWindow : DefaultWindow
         }
     }
 
+    private void UpdateQueue(List<AdminGlobalSoundQueueEntry> queue)
+    {
+        QueueList.Clear();
+        _selectedQueueIndex = -1;
+        QueueRemoveButton.Disabled = true;
+
+        for (var i = 0; i < queue.Count; i++)
+        {
+            QueueList.AddItem($"{i + 1}. {queue[i].Path}", metadata: i);
+        }
+    }
+
+    private bool TryGetVolume()
+    {
+        if (!int.TryParse(Volume.Text, System.Globalization.NumberStyles.Integer,
+                System.Globalization.CultureInfo.InvariantCulture, out var volume) ||
+            volume is < -24 or > 12)
+        {
+            Error.Text = Loc.GetString("admin-global-sound-invalid-volume");
+            return false;
+        }
+
+        return true;
+    }
+
+    private int GetVolume()
+    {
+        return int.Parse(Volume.Text, System.Globalization.NumberStyles.Integer,
+            System.Globalization.CultureInfo.InvariantCulture);
+    }
+
     private void OnPlayPressed(BaseButton.ButtonEventArgs args)
     {
         if (_selectedFile == null)
@@ -74,18 +165,13 @@ public sealed partial class AdminGlobalSoundWindow : DefaultWindow
             return;
         }
 
-        if (!int.TryParse(Volume.Text, System.Globalization.NumberStyles.Integer,
-                System.Globalization.CultureInfo.InvariantCulture, out var volume) ||
-            volume is < -24 or > 12)
-        {
-            Error.Text = Loc.GetString("admin-global-sound-invalid-volume");
+        if (!TryGetVolume())
             return;
-        }
 
         PlayRequested?.Invoke(new AdminGlobalSoundEuiMessage.Play
         {
             Path = _selectedFile,
-            Volume = volume,
+            Volume = GetVolume(),
             CKey = CKey.Text,
         });
     }
