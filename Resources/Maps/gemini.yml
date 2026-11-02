@@ -20058,8 +20058,6 @@ entities:
       pos: 12.5,-35.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
   - uid: 175
     components:
     - type: Transform
@@ -23338,8 +23336,6 @@ entities:
       pos: -32.5,-14.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 110
   - uid: 687
@@ -29036,8 +29032,6 @@ entities:
       pos: 1.5,25.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
   - uid: 1657
     components:
     - type: Transform
@@ -160317,8 +160311,6 @@ entities:
       pos: 13.5,-35.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
     - type: DeviceLinkSource
       linkedPorts:
         174:
@@ -160349,8 +160341,6 @@ entities:
       pos: 2.5,20.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
     - type: DeviceLinkSource
       linkedPorts:
         1656:
