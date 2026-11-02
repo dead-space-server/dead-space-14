@@ -223,6 +223,7 @@ public sealed class SurgerySystem : EntitySystem
             }
 
             if (!HasComp<LimbImplantComponent>(args.Used)
+                && !Unpocketable(args.Used)
                 && TryComp<SurgerySiteComponent>(ent.Owner, out var pocket)
                 && OpenCavity(pocket)
                 && _cavity.TryLodge(ent.Owner, pocket.Zone, args.Used))
@@ -277,6 +278,14 @@ public sealed class SurgerySystem : EntitySystem
         }
 
         Send(ent.Owner, args.User, site, args.Used, string.Empty, true);
+    }
+
+    private bool Unpocketable(EntityUid used)
+    {
+        return HasComp<InjectorComponent>(used)
+               || HasComp<FitsInDispenserComponent>(used)
+               || HasComp<MixableSolutionComponent>(used)
+               || HasComp<Content.Shared.Medical.Healing.HealingComponent>(used);
     }
 
     private void OnPick(SurgeryPickMessage message, EntitySessionEventArgs args)
@@ -637,7 +646,7 @@ public sealed class SurgerySystem : EntitySystem
             if (_prototype.TryIndex<SurgeryMissPrototype>(verb.ToString(), out var slip))
                 _damage.TryChangeDamage(patient.Value, slip.Damage, origin: user);
             if (LimbWoundRules.IsBody(site.Zone))
-                _limbs.ApplyEdit(patient.Value, site.Zone, new LimbEdit { Health = -LimbWoundRules.HealthFor(site.Zone) * 0.04f, Bleed = 0.5f });
+                _limbs.ApplyEdit(patient.Value, site.Zone, new LimbEdit { Health = -LimbWoundRules.HealthFor(site.Zone, CompOrNull<LimbBodyComponent>(patient.Value)) * 0.04f, Bleed = 0.5f });
             Send(patient.Value, user, site, held, "surgery-saw-slip", false);
             return;
         }
@@ -666,6 +675,7 @@ public sealed class SurgerySystem : EntitySystem
         var implantSlot = ImplantOf(patient.Value, site, before);
         var request = new SurgeryRequest
         {
+            Pool = LimbWoundRules.HealthFor(site.Zone, CompOrNull<LimbBodyComponent>(patient.Value)),
             Verb = verb,
             Zone = site.Zone,
             Kind = layer.Kind,
@@ -936,7 +946,7 @@ public sealed class SurgerySystem : EntitySystem
                 site.Cut -= gain;
             }
 
-            result.Health = (gain - loss) * LimbWoundRules.HealthFor(site.Zone);
+            result.Health = (gain - loss) * LimbWoundRules.HealthFor(site.Zone, CompOrNull<LimbBodyComponent>(patient.Value));
         }
 
         LimbOrgan? organ = null;
@@ -1114,6 +1124,18 @@ public sealed class SurgerySystem : EntitySystem
         Dirty(item, part);
         for (var i = list.Count - 1; i >= 0; i--)
             _humanoid.RemoveMarking(patient, appendage.Category, i, look);
+
+        if (appendage.Slots.Count == 0)
+            return;
+
+        var locked = EnsureComp<SurgerySlotLockComponent>(patient);
+        foreach (var slot in appendage.Slots)
+        {
+            _inventory.TryUnequip(patient, slot, silent: true, force: true);
+            locked.Slots.Add(slot);
+        }
+
+        Dirty(patient, locked);
     }
 
     private bool AttachAppendage(EntityUid patient, EntityUid? held)
@@ -1137,6 +1159,18 @@ public sealed class SurgerySystem : EntitySystem
 
         if (part.Grant.Count > 0)
             EntityManager.AddComponents(patient, part.Grant);
+
+        if (TryComp<SurgerySlotLockComponent>(patient, out var locked)
+            && _prototype.TryIndex<SurgeryAppendagePrototype>(part.Appendage, out var appendage))
+        {
+            foreach (var slot in appendage.Slots)
+                locked.Slots.Remove(slot);
+
+            if (locked.Slots.Count == 0)
+                RemComp(patient, locked);
+            else
+                Dirty(patient, locked);
+        }
 
         Del(item);
         return true;
@@ -1397,7 +1431,7 @@ public sealed class SurgerySystem : EntitySystem
     {
         if (Machine(patient) && site.Cut > 0f)
         {
-            _limbs.ApplyEdit(patient, site.Zone, new LimbEdit { Health = site.Cut * LimbWoundRules.HealthFor(site.Zone) });
+            _limbs.ApplyEdit(patient, site.Zone, new LimbEdit { Health = site.Cut * LimbWoundRules.HealthFor(site.Zone, CompOrNull<LimbBodyComponent>(patient)) });
             site.Cut = 0f;
         }
 

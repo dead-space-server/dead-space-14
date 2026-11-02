@@ -9,6 +9,23 @@ namespace Content.Shared.DeadSpace.Body.Limbs;
 public sealed partial class LimbBodyComponent : Component
 {
     [DataField, AutoNetworkedField]
+    public float ExtremityPool = LimbWoundRules.ExtremityHealth;
+
+    [DataField, AutoNetworkedField]
+    public float LimbPool = LimbWoundRules.LimbHealth;
+
+    [DataField, AutoNetworkedField]
+    public float HeadPool = LimbWoundRules.HeadHealth;
+
+    [DataField, AutoNetworkedField]
+    public float TorsoPool = LimbWoundRules.TorsoHealth;
+
+    [DataField, AutoNetworkedField]
+    public float GroinPool = LimbWoundRules.GroinHealth;
+
+    public float Chiyuri;
+
+    [DataField, AutoNetworkedField]
     public List<LimbZoneState> Zones = LimbZoneState.CreateAll();
 
     [DataField, AutoNetworkedField]

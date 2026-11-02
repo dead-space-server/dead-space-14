@@ -82,7 +82,7 @@ public sealed class SurgerySlimeRegrowSystem : EntitySystem
         }
 
         var hurt = new DamageSpecifier();
-        hurt.DamageDict["Blunt"] = LimbWoundRules.HealthFor(target.Value) * 0.15f;
+        hurt.DamageDict["Blunt"] = LimbWoundRules.HealthFor(target.Value, CompOrNull<LimbBodyComponent>(ent.Owner)) * 0.15f;
         _damage.TryChangeDamage(ent.Owner, hurt, true, false);
         _popup.PopupEntity(Loc.GetString("surgery-slime-regrow-ok", ("zone", Loc.GetString($"health-analyzer-zone-{(byte) target.Value}"))), ent.Owner, ent.Owner);
     }

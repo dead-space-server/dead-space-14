@@ -101,7 +101,7 @@ public sealed class LimbWoundVisualsSystem : EntitySystem
                 continue;
 
             var state = zones[i];
-            Apply(ent, vis, layers, zone, in state, LimbWoundVisualRules.BodyVisible(in state));
+            Apply(ent, vis, layers, zone, in state, LimbWoundVisualRules.BodyVisible(in state), body);
         }
     }
 
@@ -263,7 +263,7 @@ public sealed class LimbWoundVisualsSystem : EntitySystem
     }
 
     private void Apply(Entity<SpriteComponent> ent, LimbWoundVisualsComponent vis, WoundLayers layers,
-        LimbZone zone, in LimbZoneState state, bool visible)
+        LimbZone zone, in LimbZoneState state, bool visible, LimbBodyComponent? body = null)
     {
         if (!layers.ByZone.TryGetValue(zone, out var list))
             return;
@@ -275,7 +275,7 @@ public sealed class LimbWoundVisualsSystem : EntitySystem
             {
                 stage = wound.Group == LimbWoundVisualRules.Bandage
                     ? LimbWoundVisualRules.BandageStage(in state)
-                    : LimbWoundVisualRules.Stage(LimbWoundVisualRules.Severity(wound.Group, zone, in state), vis.Thresholds);
+                    : LimbWoundVisualRules.Stage(LimbWoundVisualRules.Severity(wound.Group, zone, in state, body), vis.Thresholds);
             }
 
             if (stage == wound.Stage)

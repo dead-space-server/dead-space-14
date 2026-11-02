@@ -16,7 +16,8 @@ public static class LimbOrganRules
     public const float IntestinePoison = 0.15f;
     public const float LungTornAir = 0.9f;
     public const int EyeRuptureDamage = 9;
-    public const float LungHitAir = 18f;
+    public const float LungHitAir = 6f;
+    public const float LungHitShare = 0.3f;
     public const float ConcussionHit = 12f;
     public const float ConcussionBrain = 15f;
 

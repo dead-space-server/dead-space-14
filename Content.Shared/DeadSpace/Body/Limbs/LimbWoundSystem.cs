@@ -99,6 +99,9 @@ public sealed partial class LimbWoundSystem : EntitySystem
     [Dependency] private readonly StandingStateSystem _standing = default!;
     [Dependency] private readonly StatusEffectsSystem _status = default!;
     [Dependency] private readonly LimbImplantSystem _implants = default!;
+    [Dependency] private readonly Robust.Shared.Audio.Systems.SharedAudioSystem _audio = default!;
+
+    private static readonly Robust.Shared.Audio.SoundSpecifier HarvestSound = new Robust.Shared.Audio.SoundPathSpecifier("/Audio/Effects/Fluids/splat.ogg");
 
     private readonly Dictionary<string, int> _fields = new();
     private readonly bool[] _fireBlocked = new bool[LimbWoundRules.BodyZoneCount];
@@ -141,11 +144,6 @@ public sealed partial class LimbWoundSystem : EntitySystem
             .Register<LimbWoundSystem>();
 
         Subs.CVar(_cfg, CCVars.LimbEnabled, value => LimbTuning.Enabled = value, true);
-        Subs.CVar(_cfg, CCVars.LimbHealthExtremity, value => LimbTuning.ExtremityHealth = value, true);
-        Subs.CVar(_cfg, CCVars.LimbHealthLimb, value => LimbTuning.LimbHealth = value, true);
-        Subs.CVar(_cfg, CCVars.LimbHealthHead, value => LimbTuning.HeadHealth = value, true);
-        Subs.CVar(_cfg, CCVars.LimbHealthTorso, value => LimbTuning.TorsoHealth = value, true);
-        Subs.CVar(_cfg, CCVars.LimbHealthGroin, value => LimbTuning.GroinHealth = value, true);
         Subs.CVar(_cfg, CCVars.LimbBurnFirst, value => LimbTuning.BurnFirst = value, true);
         Subs.CVar(_cfg, CCVars.LimbBurnSecond, value => LimbTuning.BurnSecond = value, true);
         Subs.CVar(_cfg, CCVars.LimbBurnThird, value => LimbTuning.BurnThird = value, true);
@@ -215,7 +213,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         }
 
         var bleed = BleedTotal(uid, limbs);
-        if (!Machine(uid) && LimbWoundRules.DrainBleed(zones))
+        if (!Machine(uid) && LimbWoundRules.DrainBleed(zones, limbs.TorsoPool))
             Dirty(uid, limbs);
         ApplyLife(uid, limbs);
         var failure = LimbOrganRules.Tick(CollectionsMarshal.AsSpan(limbs.Organs));
@@ -491,7 +489,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (Heals(healing.Damage, "Heat") || Heals(healing.Damage, "Caustic"))
             LimbWoundRules.Ointment(ref state, LimbWoundRules.OintmentDose);
 
-        LimbWoundRules.Mend(ref state, HealAmount(healing.Damage), LimbWoundRules.HealthFor(zone));
+        LimbWoundRules.Mend(ref state, HealAmount(healing.Damage), LimbWoundRules.HealthFor(zone, ent.Comp));
 
         Dirty(ent);
         _movement.RefreshMovementSpeedModifiers(ent);
@@ -619,10 +617,11 @@ public sealed partial class LimbWoundSystem : EntitySystem
         var zones = CollectionsMarshal.AsSpan(limbs.Zones);
         var aimedHeal = false;
         var zone = LimbZone.Torso;
-        if (limbs.LedgerZone is { } picked && LimbWoundRules.IsBody(picked))
+        var picked = limbs.LedgerZone is { } aimed && LimbWoundRules.IsSmall(aimed) ? LimbZone.Head : limbs.LedgerZone;
+        if (picked is { } body && LimbWoundRules.IsBody(body))
         {
             aimedHeal = true;
-            zone = picked;
+            zone = body;
         }
         limbs.LedgerZone = null;
         var fromStrike = limbs.StrikeOpen;
@@ -1040,8 +1039,12 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private void OnSpecies(Entity<LimbBodyComponent> ent, ref MapInitEvent args)
     {
+        FitPools(ent.Comp);
         if (!TryComp<HumanoidAppearanceComponent>(ent, out var look))
+        {
+            Dirty(ent);
             return;
+        }
 
         if (!_proto.TryIndex<LimbSpeciesPrototype>(look.Species, out var profile))
             return;
@@ -1202,20 +1205,16 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (!TryComp<LimbTargetComponent>(user, out var selected) || selected.Selected is not { } zone)
             return false;
 
+        if (weapon == user)
+            return false;
+
         var damage = _melee.GetDamage(weapon, user);
-        var mark = LimbWoundRules.MarkFromAmounts(
-            Amount(damage, "Slash"),
-            Amount(damage, "Piercing"),
-            Amount(damage, "Blunt"),
-            Amount(damage, "Heat"),
-            Amount(damage, "Caustic"));
-        var extract = mark == LimbMark.Point || zone is LimbZone.Eyes or LimbZone.Mouth;
+        var extract = zone == LimbZone.Eyes;
+        if (extract ? Amount(damage, "Piercing") <= 0f : Amount(damage, "Slash") <= 0f)
+            return false;
+
         if (!extract && !LimbWoundRules.CanSever(zone))
-        {
-            var key = zone == LimbZone.Groin ? "limb-harvest-groin" : "limb-harvest-torso";
-            _popup.PopupEntity(Loc.GetString(key), target, user);
-            return true;
-        }
+            return false;
 
         if (!extract && !LimbWoundRules.IsBody(zone))
             return false;
@@ -1244,7 +1243,8 @@ public sealed partial class LimbWoundSystem : EntitySystem
             NeedHand = true,
             BlockDuplicate = true,
         };
-        return _doAfter.TryStartDoAfter(doAfter);
+        _doAfter.TryStartDoAfter(doAfter);
+        return true;
     }
 
     private void OnHarvest(Entity<LimbBodyComponent> ent, ref LimbHarvestDoAfterEvent args)
@@ -1272,6 +1272,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 ent.Comp.Organs[(int) organ] = organState;
             }
 
+            _audio.PlayPvs(HarvestSound, ent);
             Dirty(ent);
             return;
         }
@@ -1284,6 +1285,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
             return;
 
         DropZone(ent.Owner, ent.Comp, args.Zone);
+        _audio.PlayPvs(HarvestSound, ent);
     }
 
     private void CoveredBlast(Entity<LimbBodyComponent> ent, DamageSpecifier damage, LimbZone zone, out float heat, out float pierce, out float blunt, out float slash, out float caustic, out float other)
@@ -1699,14 +1701,18 @@ public sealed partial class LimbWoundSystem : EntitySystem
                 case LimbHooks.Crit when hit.Organ == LimbOrgan.Heart && hit.Ruptured && HeartBurst(uid) && _mobs.IsAlive(uid) && strike.WoundMultiplier > 0.99f && !strike.ThroughArmor:
                     _mobs.ChangeMobState(uid, MobState.Critical);
                     break;
-                case LimbHooks.Air:
+                case LimbHooks.Air when hit.Organ == LimbOrgan.Lungs:
+                    var gasp = MathF.Min(row.Factor * LimbOrganRules.LungHitAir, scaled * LimbOrganRules.LungHitShare);
+                    if (gasp <= 0f)
+                        break;
+
                     var air = new DamageSpecifier();
-                    air.DamageDict["Asphyxiation"] = FixedPoint2.New(row.Factor * LimbOrganRules.LungHitAir);
+                    air.DamageDict["Asphyxiation"] = FixedPoint2.New(gasp);
                     if (TryComp<LimbBodyComponent>(uid, out var lungs))
                     {
                         lungs.LedgerSilence++;
                         EnsureZones(lungs);
-                        CollectionsMarshal.AsSpan(lungs.Zones)[LimbWoundRules.Index(LimbZone.Torso)].HitAir += row.Factor * LimbOrganRules.LungHitAir;
+                        CollectionsMarshal.AsSpan(lungs.Zones)[LimbWoundRules.Index(LimbZone.Torso)].HitAir += gasp;
                     }
 
                     _damage.TryChangeDamage(uid, air, interruptsDoAfters: false);
@@ -1762,7 +1768,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private static float HeadHealth(LimbBodyComponent limbs)
     {
-        return limbs.HeadVital ? limbs.Zones[LimbWoundRules.Index(LimbZone.Head)].Health : LimbWoundRules.HealthFor(LimbZone.Head);
+        return limbs.HeadVital ? limbs.Zones[LimbWoundRules.Index(LimbZone.Head)].Health : LimbWoundRules.HealthFor(LimbZone.Head, limbs);
     }
 
     public bool IsVital(EntityUid body, LimbOrgan organ)
@@ -2418,12 +2424,29 @@ public sealed partial class LimbWoundSystem : EntitySystem
         return damage.DamageDict.TryGetValue(type, out var value) ? value.Float() : 0f;
     }
 
+    private static void FitPools(LimbBodyComponent limbs)
+    {
+        EnsureZones(limbs);
+        for (var i = 0; i < limbs.Zones.Count && i < LimbWoundRules.BodyZoneCount; i++)
+        {
+            var zone = (LimbZone) i;
+            var state = limbs.Zones[i];
+            var plain = LimbWoundRules.HealthFor(zone);
+            var pool = LimbWoundRules.HealthFor(zone, limbs);
+            if (MathF.Abs(state.Health - plain) > 0.01f || MathF.Abs(plain - pool) <= 0.01f)
+                continue;
+
+            state.Health = pool;
+            limbs.Zones[i] = state;
+        }
+    }
+
     private static void EnsureZones(LimbBodyComponent limbs)
     {
         while (limbs.Zones.Count < LimbWoundRules.BodyZoneCount)
         {
             var zone = (LimbZone) limbs.Zones.Count;
-            limbs.Zones.Add(new LimbZoneState { Health = LimbWoundRules.HealthFor(zone) });
+            limbs.Zones.Add(new LimbZoneState { Health = LimbWoundRules.HealthFor(zone, limbs) });
         }
     }
 

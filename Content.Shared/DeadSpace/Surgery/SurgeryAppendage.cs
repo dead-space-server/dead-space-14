@@ -27,6 +27,9 @@ public sealed partial class SurgeryAppendagePrototype : IPrototype
     [DataField]
     public List<string> Except = new();
 
+    [DataField]
+    public List<string> Slots = new();
+
     public static bool Allowed(IPrototypeManager prototypes, IEntityManager entities, EntityUid patient, string id)
     {
         return prototypes.TryIndex<SurgeryAppendagePrototype>(id, out var appendage)

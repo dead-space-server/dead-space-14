@@ -253,7 +253,7 @@ public sealed class SurgeryGraftSystem : EntitySystem
                     if (organ is { } hurt)
                         _limbs.ApplyOrganEdit(uid, hurt, new LimbOrganEdit { Damage = LimbOrganRules.Rupture * rules.RotHealth * 0.5f });
                     else if (IsLimb(entry))
-                        _limbs.ApplyEdit(uid, entry.Zone, new LimbEdit { Health = -LimbWoundRules.HealthFor(entry.Zone) * rules.RotHealth });
+                        _limbs.ApplyEdit(uid, entry.Zone, new LimbEdit { Health = -LimbWoundRules.HealthFor(entry.Zone, CompOrNull<LimbBodyComponent>(uid)) * rules.RotHealth });
 
                     var poison = new DamageSpecifier();
                     poison.DamageDict["Poison"] = FixedPoint2.New(rules.Poison);

@@ -235,6 +235,7 @@ public sealed class HealthAnalyzerSystem : EntitySystem
 
         var uiState = GetHealthAnalyzerUiState(target);
         uiState.ScanMode = scanMode;
+        uiState.Detailed = HasComp<Content.Shared.DeadSpace.Ninja.Components.SelfHealthAnalyzerComponent>(healthAnalyzer) && Transform(healthAnalyzer).ParentUid == target; // DS14
 
         //DS14-start
         if (TryComp<HealthAnalyzerComponent>(healthAnalyzer, out var analyzerComp))
@@ -355,7 +356,7 @@ public sealed class HealthAnalyzerSystem : EntitySystem
             for (var i = 0; i < count; i++)
             {
                 var zone = limbs.Zones[i];
-                limbShades.Add(LimbScan.Shade((LimbZone) i, zone));
+                limbShades.Add(LimbScan.Shade((LimbZone) i, zone, limbs));
                 if (zone.HitBlunt <= 0f && zone.HitSlash <= 0f && zone.HitPierce <= 0f && zone.HitHeat <= 0f && zone.HitCaustic <= 0f && zone.HitBlood <= 0f && zone.HitAir <= 0f)
                     continue;
 
@@ -395,6 +396,9 @@ public sealed class HealthAnalyzerSystem : EntitySystem
         foreach (var (reagentId, quantity) in bloodSolution)
         {
             if (quantity <= FixedPoint2.Zero || IsBloodReagent(reagentId.Prototype, bloodstream))
+                continue;
+
+            if (reagentId.Prototype.StartsWith("GraftCells") || reagentId.Prototype.StartsWith("GraftParticles"))
                 continue;
 
             result.Add(new HealthAnalyzerReagentEntry(

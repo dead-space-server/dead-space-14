@@ -29,6 +29,7 @@ public sealed class SurgeryCavitySystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<LimbBodyComponent, ComponentStartup>(OnBody);
         SubscribeLocalEvent<SurgeryCavityComponent, BeingGibbedEvent>(OnGib);
+        SubscribeLocalEvent<SurgeryCavityComponent, EntRemovedFromContainerMessage>(OnRemoved);
     }
 
     private void OnBody(Entity<LimbBodyComponent> ent, ref ComponentStartup args)
@@ -49,6 +50,29 @@ public sealed class SurgeryCavitySystem : EntitySystem
         pocket.ShowContents = show;
         if (TryComp<ContainerManagerComponent>(body, out var manager))
             Dirty(body, manager);
+    }
+
+    private void OnRemoved(Entity<SurgeryCavityComponent> ent, ref EntRemovedFromContainerMessage args)
+    {
+        var id = args.Container.ID;
+        LimbZone zone;
+        if (id == SurgeryCavityComponent.Head)
+            zone = LimbZone.Head;
+        else if (id == SurgeryCavityComponent.Chest)
+            zone = LimbZone.Torso;
+        else if (id == SurgeryCavityComponent.Abdomen)
+            zone = LimbZone.Groin;
+        else
+            return;
+
+        EntityUid? left = null;
+        foreach (var item in args.Container.ContainedEntities)
+        {
+            left = item;
+            break;
+        }
+
+        Remember(ent, zone, left);
     }
 
     private void OnGib(Entity<SurgeryCavityComponent> ent, ref BeingGibbedEvent args)

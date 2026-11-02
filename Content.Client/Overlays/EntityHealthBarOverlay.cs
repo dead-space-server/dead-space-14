@@ -34,6 +34,7 @@ public sealed class EntityHealthBarOverlay : Overlay
     private readonly StatusIconSystem _statusIconSystem;
     private readonly SpriteSystem _spriteSystem;
     private readonly ProgressColorSystem _progressColor;
+    private readonly Content.Client.DeadSpace.Surgery.SurgeryClientSystem _surgery; //DS-14
 
 
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowFOV;
@@ -51,6 +52,7 @@ public sealed class EntityHealthBarOverlay : Overlay
         _statusIconSystem = _entManager.System<StatusIconSystem>();
         _spriteSystem = _entManager.System<SpriteSystem>();
         _progressColor = _entManager.System<ProgressColorSystem>();
+        _surgery = _entManager.System<Content.Client.DeadSpace.Surgery.SurgeryClientSystem>(); //DS-14
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -91,6 +93,9 @@ public sealed class EntityHealthBarOverlay : Overlay
             {
                 continue;
             }
+
+            if (_surgery.Operating == uid) //DS-14
+                continue; //DS-14
 
             // we use the status icon component bounds if specified otherwise use sprite
             var bounds = _entManager.GetComponentOrNull<StatusIconComponent>(uid)?.Bounds ?? _spriteSystem.GetLocalBounds((uid, spriteComponent));

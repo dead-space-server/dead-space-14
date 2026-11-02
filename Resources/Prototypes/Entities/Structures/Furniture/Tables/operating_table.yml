@@ -17,10 +17,38 @@
         whitelist:
           components:
           - GasTank
+  # DS14-start
+  - type: Appearance
+  - type: SurgeryXrayTable
+  - type: ActivatableUI
+    key: enum.SurgeryXrayTableUiKey.Key
+    verbOnly: true
+    verbText: surgery-xray-open
+    verbPriority: 1000
+    verbIcon: /Textures/Interface/VerbIcons/examine.svg.192dpi.png
+  - type: UserInterface
+    interfaces:
+      enum.SurgeryXrayTableUiKey.Key:
+        type: SurgeryXrayTableBoundUserInterface
   - type: Sprite
-    sprite: Structures/Furniture/Tables/optable.rsi
-    state: operating_table
     noRot: true
+    sprite: _DeadSpace/Structures/Furniture/Tables/xraytable.rsi
+    layers:
+    - state: table
+      map: [ "enum.AutopsyTableLayers.Base" ]
+    - state: device
+      map: [ "enum.AutopsyTableLayers.WithDevice" ]
+      shader: unshaded
+      visible: false
+    - state: device1
+      map: [ "enum.AutopsyTableLayers.WithDevice1" ]
+      shader: unshaded
+      visible: false
+    - state: device2
+      map: [ "enum.AutopsyTableLayers.WithDevice2" ]
+      shader: unshaded
+      visible: false
   - type: Icon
-    sprite: Structures/Furniture/Tables/optable.rsi
-    state: operating_table
+    sprite: _DeadSpace/Structures/Furniture/Tables/xraytable.rsi
+    state: table
+  # DS14-end

@@ -185,7 +185,7 @@ public static class SurgeryCut
         {
             result.ClearAtrophy = true;
             result.SetHealth = true;
-            result.Health = LimbWoundRules.HealthFor(request.Zone) * (request.BoneFloor > 0f ? 0.3f : 0.6f);
+            result.Health = Pool(request) * (request.BoneFloor > 0f ? 0.3f : 0.6f);
             result.Flesh = LimbWoundRules.StrainFlesh - request.CurrentFlesh;
             result.Scar = 1;
             result.Key = "surgery-debrided";
@@ -435,11 +435,16 @@ public static class SurgeryCut
         result.Key = result.Rupture ? "surgery-insert-torn" : "surgery-inserted";
     }
 
+    private static float Pool(in SurgeryRequest request)
+    {
+        return request.Pool > 0f ? request.Pool : LimbWoundRules.HealthFor(request.Zone);
+    }
+
     private static float StrayHealth(in SurgeryRequest request, int slips)
     {
         if (slips <= 0)
             return 0f;
 
-        return -LimbWoundRules.HealthFor(request.Zone) * 0.4f * slips;
+        return -Pool(request) * 0.4f * slips;
     }
 }

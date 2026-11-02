@@ -280,15 +280,27 @@ public static class LimbWoundRules
         };
     }
 
-    public static float HealthFor(LimbZone zone)
+    public static float HealthFor(LimbZone zone, LimbBodyComponent? body = null)
     {
+        if (body != null)
+        {
+            return zone switch
+            {
+                LimbZone.Head => body.HeadPool,
+                LimbZone.Torso => body.TorsoPool,
+                LimbZone.Groin => body.GroinPool,
+                LimbZone.HandLeft or LimbZone.HandRight or LimbZone.FootLeft or LimbZone.FootRight => body.ExtremityPool,
+                _ => body.LimbPool,
+            };
+        }
+
         return zone switch
         {
-            LimbZone.Head => LimbTuning.HeadHealth,
-            LimbZone.Torso => LimbTuning.TorsoHealth,
-            LimbZone.Groin => LimbTuning.GroinHealth,
-            LimbZone.HandLeft or LimbZone.HandRight or LimbZone.FootLeft or LimbZone.FootRight => LimbTuning.ExtremityHealth,
-            _ => LimbTuning.LimbHealth,
+            LimbZone.Head => HeadHealth,
+            LimbZone.Torso => TorsoHealth,
+            LimbZone.Groin => GroinHealth,
+            LimbZone.HandLeft or LimbZone.HandRight or LimbZone.FootLeft or LimbZone.FootRight => ExtremityHealth,
+            _ => LimbHealth,
         };
     }
 
@@ -396,7 +408,7 @@ public static class LimbWoundRules
         state.Health = MathF.Min(cap, state.Health + amount);
     }
 
-    public static bool DrainBleed(Span<LimbZoneState> zones)
+    public static bool DrainBleed(Span<LimbZoneState> zones, float torsoPool = TorsoHealth)
     {
         var count = Math.Min(zones.Length, BodyZoneCount);
         var any = false;
@@ -432,7 +444,7 @@ public static class LimbWoundRules
             return any;
 
         ref var chest = ref zones[Index(LimbZone.Torso)];
-        var half = HealthFor(LimbZone.Torso) * 0.5f;
+        var half = torsoPool * 0.5f;
         if (!chest.Severed && chest.Health > half)
         {
             chest.Health = MathF.Max(0f, chest.Health - overflow);

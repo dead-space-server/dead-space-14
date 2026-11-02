@@ -160,7 +160,7 @@ public static class SurgeryXrayReport
             findings.Add(Loc.GetString("surgery-xray-found", ("what", Loc.GetString("surgery-xray-rupture", ("organ", organ)))));
         }
 
-        var text = Loc.GetString("surgery-xray-integrity", ("health", MathF.Round(state.Health)), ("pool", MathF.Round(LimbWoundRules.HealthFor(zone))));
+        var text = Loc.GetString("surgery-xray-integrity", ("health", MathF.Round(state.Health)), ("pool", MathF.Round(LimbWoundRules.HealthFor(zone, limbs))));
         if (!machine && !state.Severed && state.Bleed > LimbWoundRules.TickBleed)
             text += "\n" + Loc.GetString("surgery-xray-bleed", ("level", BleedLevel(state.Bleed)));
         foreach (var line in findings)

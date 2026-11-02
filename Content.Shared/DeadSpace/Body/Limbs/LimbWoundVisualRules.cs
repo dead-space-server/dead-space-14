@@ -66,9 +66,9 @@ public static class LimbWoundVisualRules
         _ => "Chest",
     };
 
-    public static float Severity(string group, LimbZone zone, in LimbZoneState state)
+    public static float Severity(string group, LimbZone zone, in LimbZoneState state, LimbBodyComponent? body = null)
     {
-        var pool = LimbWoundRules.HealthFor(zone);
+        var pool = LimbWoundRules.HealthFor(zone, body);
         if (pool <= 0f)
             return 0f;
 

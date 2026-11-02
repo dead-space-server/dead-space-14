@@ -112,7 +112,7 @@ public sealed class AnalyzerLimbView : Control
 
         var color = shade switch
         {
-            LimbScan.Missing => Color.Black,
+            LimbScan.Missing => Color.FromHex("#6a6a72"),
             LimbScan.Hurt => Color.FromHex("#d6c14a"),
             LimbScan.Bad => Color.FromHex("#e07a2f"),
             LimbScan.Critical => Color.FromHex("#c43838"),

@@ -10,21 +10,6 @@ public sealed partial class CCVars
     public static readonly CVarDef<bool> LimbEnabled =
         CVarDef.Create("limb.enabled", true, CVar.SERVER | CVar.REPLICATED);
 
-    public static readonly CVarDef<float> LimbHealthExtremity =
-        CVarDef.Create("limb.health_extremity", LimbWoundRules.ExtremityHealth, CVar.SERVER | CVar.REPLICATED);
-
-    public static readonly CVarDef<float> LimbHealthLimb =
-        CVarDef.Create("limb.health_limb", LimbWoundRules.LimbHealth, CVar.SERVER | CVar.REPLICATED);
-
-    public static readonly CVarDef<float> LimbHealthHead =
-        CVarDef.Create("limb.health_head", LimbWoundRules.HeadHealth, CVar.SERVER | CVar.REPLICATED);
-
-    public static readonly CVarDef<float> LimbHealthTorso =
-        CVarDef.Create("limb.health_torso", LimbWoundRules.TorsoHealth, CVar.SERVER | CVar.REPLICATED);
-
-    public static readonly CVarDef<float> LimbHealthGroin =
-        CVarDef.Create("limb.health_groin", LimbWoundRules.GroinHealth, CVar.SERVER | CVar.REPLICATED);
-
     public static readonly CVarDef<float> LimbBurnFirst =
         CVarDef.Create("limb.burn_first", LimbWoundRules.BurnFirst, CVar.SERVER | CVar.REPLICATED);
 

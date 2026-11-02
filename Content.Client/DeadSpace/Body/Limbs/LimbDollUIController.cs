@@ -81,7 +81,10 @@ public sealed class LimbDollUIController : UIController, IOnStateChanged<Gamepla
         PinDoll();
         _hud.Doll.Selected = Current();
         if (_health != null)
+        {
             _health.Zones = Body();
+            _health.Pools = Pools();
+        }
         if (_aim != null)
         {
             _aim.Aimed = Aiming();
@@ -278,7 +281,10 @@ public sealed class LimbDollUIController : UIController, IOnStateChanged<Gamepla
         PinDoll();
         _hud.Doll.Selected = Current();
         if (_health != null)
+        {
             _health.Zones = Body();
+            _health.Pools = Pools();
+        }
     }
 
     private bool Aiming()
@@ -298,10 +304,15 @@ public sealed class LimbDollUIController : UIController, IOnStateChanged<Gamepla
 
     private IReadOnlyList<LimbZoneState>? Body()
     {
+        return Pools()?.Zones;
+    }
+
+    private LimbBodyComponent? Pools()
+    {
         if (_player.LocalEntity is not { } uid || !_entities.TryGetComponent(uid, out LimbBodyComponent? body))
             return null;
 
-        return body.Zones;
+        return body;
     }
 
     private void CloseMenu()

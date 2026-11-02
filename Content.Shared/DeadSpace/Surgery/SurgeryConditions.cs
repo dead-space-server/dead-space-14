@@ -7,6 +7,7 @@ namespace Content.Shared.DeadSpace.Surgery;
 public static class SurgeryConditions
 {
     public const float OrganCrackMin = 5f;
+    public const float TraumaMin = 50f;
 
     public static readonly string[] Order =
     {
@@ -18,6 +19,9 @@ public static class SurgeryConditions
         "ClosedFracture",
         "Fracture",
         "OrganCrack",
+        "Bruised",
+        "Lacerated",
+        "Punctured",
         "Scaffold",
         "Skin",
         "Damaged",
@@ -36,6 +40,9 @@ public static class SurgeryConditions
             "Bleed" => !state.Severed && state.Bleed >= 1f,
             "Fracture" => hasBone && !state.Severed && state.Bone >= LimbWoundRules.BreakBone,
             "OrganCrack" => organCrack && !state.Severed,
+            "Bruised" => !state.Severed && state.HitBlunt > TraumaMin,
+            "Lacerated" => !state.Severed && state.HitSlash > TraumaMin,
+            "Punctured" => !state.Severed && state.HitPierce > TraumaMin,
             "Scaffold" => !hasBone && !state.Severed && state.Flesh >= LimbWoundRules.StrainFlesh,
             "Skin" => !state.Severed && (state.SkinBare || state.Skin >= LimbWoundRules.BurnSecond),
             "Damaged" => !state.Severed && (state.Atrophied || state.Flesh >= LimbWoundRules.StrainFlesh || state.Bone >= LimbWoundRules.StrainBone || state.Skin >= LimbWoundRules.BurnFirst || state.Bleed >= 0.5f),

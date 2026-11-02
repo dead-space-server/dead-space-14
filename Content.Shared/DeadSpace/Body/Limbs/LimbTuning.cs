@@ -5,11 +5,6 @@ namespace Content.Shared.DeadSpace.Body.Limbs;
 public static class LimbTuning
 {
     public static bool Enabled = true;
-    public static float ExtremityHealth = LimbWoundRules.ExtremityHealth;
-    public static float LimbHealth = LimbWoundRules.LimbHealth;
-    public static float HeadHealth = LimbWoundRules.HeadHealth;
-    public static float TorsoHealth = LimbWoundRules.TorsoHealth;
-    public static float GroinHealth = LimbWoundRules.GroinHealth;
     public static float BurnFirst = LimbWoundRules.BurnFirst;
     public static float BurnSecond = LimbWoundRules.BurnSecond;
     public static float BurnThird = LimbWoundRules.RawSkin;

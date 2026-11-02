@@ -41,7 +41,7 @@ public sealed partial class LimbWoundSystem
         state.Skin = MathF.Max(0f, state.Skin + edit.Skin);
         state.Bleed = edit.SetBleed ? MathF.Max(0f, edit.Bleed) : MathF.Max(0f, state.Bleed + edit.Bleed);
         state.Scar = Math.Max(0, state.Scar + edit.Scar);
-        var cap = LimbWoundRules.HealthFor(zone);
+        var cap = LimbWoundRules.HealthFor(zone, limbs);
         state.Health = edit.SetHealth
             ? Math.Clamp(edit.Health, 0f, cap)
             : Math.Clamp(state.Health + edit.Health, 0f, cap);
@@ -192,7 +192,7 @@ public sealed partial class LimbWoundSystem
         state.Bone = 0f;
         state.Bleed = 0f;
         state.Scar = 0;
-        state.Health = LimbWoundRules.HealthFor(zone) * Math.Clamp(healthFraction, 0.05f, 0.1f);
+        state.Health = LimbWoundRules.HealthFor(zone, limbs) * Math.Clamp(healthFraction, 0.05f, 0.1f);
 
         if (LimbWoundRules.TryCarried(zone, out var child))
         {
@@ -283,7 +283,7 @@ public sealed partial class LimbWoundSystem
         else if (crude)
         {
             state.Atrophied = false;
-            state.Health = LimbWoundRules.HealthFor(zone) * MathF.Max(0.35f, fraction);
+            state.Health = LimbWoundRules.HealthFor(zone, limbs) * MathF.Max(0.35f, fraction);
             state.Flesh = LimbWoundRules.StrainFlesh;
             state.Bone = LimbWoundRules.BreakBone;
             state.Bleed = LimbWoundRules.StumpBleed * 0.5f;
@@ -291,7 +291,7 @@ public sealed partial class LimbWoundSystem
         else
         {
             state.Atrophied = false;
-            state.Health = LimbWoundRules.HealthFor(zone) * fraction;
+            state.Health = LimbWoundRules.HealthFor(zone, limbs) * fraction;
             state.Flesh = LimbWoundRules.StrainFlesh;
             state.Bone = 0f;
             state.Bleed = 0f;

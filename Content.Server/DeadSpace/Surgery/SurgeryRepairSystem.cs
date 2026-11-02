@@ -1,5 +1,6 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.Surgery;
@@ -13,6 +14,18 @@ public sealed class SurgeryRepairSystem : EntitySystem
     private const string Effect = "MachineRepair";
     private const string OrganMend = "OrganMend";
     private const string Rules = "Default";
+
+    private static readonly Dictionary<string, string[]> ZoneHeals = new()
+    {
+        ["BruiseMend"] = new[] { "Blunt" },
+        ["CutMend"] = new[] { "Slash" },
+        ["PunctureMend"] = new[] { "Piercing" },
+        ["FractureClosedMend"] = new[] { "Blunt" },
+        ["FractureOpenMend"] = new[] { "Blunt", "Slash" },
+        ["ShardMend"] = new[] { "Piercing" },
+    };
+
+    private static readonly string[] OrganMendHeals = { "Piercing", "Slash" };
 
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
@@ -39,6 +52,14 @@ public sealed class SurgeryRepairSystem : EntitySystem
         {
             args.Handled = true;
             MendOrgans(ent, args.User);
+            HealZone(ent, ent.Comp.Zone, OrganMendHeals);
+            return;
+        }
+
+        if (!args.Handled && ZoneHeals.TryGetValue(args.Effect, out var types))
+        {
+            args.Handled = true;
+            HealZone(ent, ent.Comp.Zone, types);
             return;
         }
 
@@ -50,7 +71,7 @@ public sealed class SurgeryRepairSystem : EntitySystem
         _limbs.ApplyEdit(ent, zone, new LimbEdit
         {
             SetHealth = true,
-            Health = LimbWoundRules.HealthFor(zone),
+            Health = LimbWoundRules.HealthFor(zone, CompOrNull<LimbBodyComponent>(ent)),
             SetBone = true,
             Bone = 0f,
             SetFlesh = true,
@@ -63,6 +84,31 @@ public sealed class SurgeryRepairSystem : EntitySystem
 
         if (_prototype.TryIndex<SurgeryRepairPrototype>(Rules, out var rules))
             _damage.TryChangeDamage(ent.Owner, rules.Heal, true, false);
+    }
+
+    public void HealZone(EntityUid body, LimbZone zone, IReadOnlyList<string> types)
+    {
+        if (!LimbWoundRules.IsBody(zone) || !TryComp<LimbBodyComponent>(body, out var limbs))
+            return;
+
+        var index = LimbWoundRules.Index(zone);
+        if ((uint) index >= (uint) limbs.Zones.Count || limbs.Zones[index].Severed)
+            return;
+
+        var heal = new DamageSpecifier();
+        foreach (var type in types)
+        {
+            var have = _limbs.LedgerFor(limbs.Zones[index], type);
+            if (have > 0f)
+                heal.DamageDict[type] = -have;
+        }
+
+        if (heal.DamageDict.Count == 0)
+            return;
+
+        limbs.LedgerZone = zone;
+        _damage.TryChangeDamage(body, heal, true, false);
+        limbs.LedgerZone = null;
     }
 
     private void MendOrgans(Entity<SurgerySiteComponent> ent, EntityUid user)

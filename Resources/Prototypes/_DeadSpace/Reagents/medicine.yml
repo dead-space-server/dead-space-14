@@ -43,6 +43,7 @@
   color: "#E9FFCC"
   metabolisms:
     Medicine:
+      metabolismRate: 0.5
       effects:
       - !type:EvenHealthChange
         damage:

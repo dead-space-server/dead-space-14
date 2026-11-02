@@ -79,7 +79,7 @@ public sealed partial class LimbMendSystem : EntityEffectSystem<LimbBodyComponen
 
             if (effect.Revive > 0f && state.Atrophied)
             {
-                edit.Health = LimbWoundRules.HealthFor(zone) * effect.Revive * scale;
+                edit.Health = LimbWoundRules.HealthFor(zone, entity.Comp) * effect.Revive * scale;
                 edit.ClearAtrophy = true;
                 touched = true;
             }

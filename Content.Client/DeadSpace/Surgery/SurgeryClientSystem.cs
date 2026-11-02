@@ -81,6 +81,7 @@ public sealed class SurgeryClientSystem : EntitySystem
 
     private SurgeryBoardMessage? _board;
     private EntityUid? _patient;
+    public EntityUid? Operating => _board != null ? _patient : null;
     private EntityUid? _picking;
     private EntityUid? _stay;
     private Control? _headMenu;
@@ -446,6 +447,12 @@ public sealed class SurgeryClientSystem : EntitySystem
         if (args.Handled || _board == null || _patient != ent.Owner)
             return;
 
+        if (HasComp<OrganComponent>(args.Used) || HasComp<BodyPartComponent>(args.Used))
+        {
+            args.Handled = true;
+            return;
+        }
+
         var wanted = _step switch
         {
             SurgeryVerbKind.Bandage => Wraps(args.Used),
@@ -486,7 +493,7 @@ public sealed class SurgeryClientSystem : EntitySystem
                 if (_verb != next)
                 {
                     _verb = next;
-                    _game = message.StepGame == 255 ? SurgeryProcedure.Game(next) : (SurgeryGameKind) message.StepGame;
+                    _game = GameOf(message, next);
                     _armed = false;
                     _frontier = OpenAmount(message);
                     _grab = 0;
@@ -523,7 +530,7 @@ public sealed class SurgeryClientSystem : EntitySystem
         _step = message.StepVerb == 255 ? verb : (SurgeryVerbKind) message.StepVerb;
         var continuing = !switched && _zoomed && _verb == verb;
         _verb = verb;
-        _game = message.StepGame == 255 ? SurgeryProcedure.Game(verb) : (SurgeryGameKind) message.StepGame;
+        _game = GameOf(message, verb);
         _layer = message.StepLayer != 255 ? message.StepLayer : (byte) Math.Max(0, Top(message));
         if (!continuing)
         {
@@ -1344,7 +1351,7 @@ public sealed class SurgeryClientSystem : EntitySystem
 
         var state = limbs.Zones[index];
         return !state.Atrophied
-               && state.Health >= LimbWoundRules.HealthFor(zone) * 0.95f
+               && state.Health >= LimbWoundRules.HealthFor(zone, limbs) * 0.95f
                && state.Flesh <= 0f
                && state.Bleed <= LimbWoundRules.TickBleed;
     }
@@ -2612,6 +2619,14 @@ public sealed class SurgeryClientSystem : EntitySystem
         }
 
         return board.Retracted.Length - 1;
+    }
+
+    private static SurgeryGameKind GameOf(SurgeryBoardMessage message, SurgeryVerbKind verb)
+    {
+        if (message.StepGame == 255 || message.StepVerb != 255 && (SurgeryVerbKind) message.StepVerb != verb)
+            return SurgeryProcedure.Game(verb);
+
+        return (SurgeryGameKind) message.StepGame;
     }
 
     private static SurgeryVerbKind StepOf(SurgeryBoardMessage message)

@@ -8,6 +8,8 @@ using Content.Shared.Body.Systems;
 using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.DeadSpace.Surgery;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Humanoid;
 using Content.Shared.Rotation;
 using Content.Shared.Standing;
@@ -28,6 +30,9 @@ public sealed class SurgeryLimbPort : EntitySystem
     [Dependency] private readonly StandingStateSystem _standing = default!;
     [Dependency] private readonly SurgeryOrganFreshSystem _fresh = default!;
     [Dependency] private readonly SurgeryGraftSystem _graft = default!;
+    [Dependency] private readonly DamageableSystem _damage = default!;
+
+    private const float Detox = 0.6f;
 
     private readonly HashSet<EntityUid> _restock = new();
 
@@ -225,6 +230,22 @@ public sealed class SurgeryLimbPort : EntitySystem
         });
         if (rotten && HasComp<BrainComponent>(item))
             _fresh.MarkRotten(patient);
+
+        if (!rotten && !result.Rupture && organ is LimbOrgan.Kidneys or LimbOrgan.Liver)
+            Cleanse(patient, 1f - decay);
+    }
+
+    private void Cleanse(EntityUid patient, float share)
+    {
+        if (share <= 0f
+            || !TryComp<DamageableComponent>(patient, out var damageable)
+            || !damageable.Damage.DamageDict.TryGetValue("Poison", out var poison)
+            || poison <= 0)
+            return;
+
+        var heal = new DamageSpecifier();
+        heal.DamageDict["Poison"] = -poison * Detox * share;
+        _damage.TryChangeDamage(patient, heal, true, false);
     }
 
     public bool Regrow(EntityUid patient, LimbOrgan organ)

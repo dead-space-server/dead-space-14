@@ -245,7 +245,7 @@ public sealed class LimbRestorerSystem : EntitySystem
             if (heal.Contains(LimbRestore.Shard))
                 edit.ClearEmbedded = true;
 
-            var floor = LimbWoundRules.HealthFor(zone) * restorer.Health;
+            var floor = LimbWoundRules.HealthFor(zone, limbs) * restorer.Health;
             if (heal.Contains(LimbRestore.Health) && state.Health < floor)
             {
                 edit.SetHealth = true;

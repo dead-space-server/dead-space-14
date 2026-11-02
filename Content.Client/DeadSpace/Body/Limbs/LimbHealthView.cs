@@ -12,6 +12,7 @@ namespace Content.Client.DeadSpace.Body.Limbs;
 public sealed class LimbHealthView : Control
 {
     public IReadOnlyList<LimbZoneState>? Zones;
+    public LimbBodyComponent? Pools;
 
     private RSI? _sheet;
 
@@ -36,7 +37,7 @@ public sealed class LimbHealthView : Control
                 var state = Zones[index];
                 tone = state.Severed || state.Atrophied || state.Health <= 0f
                     ? -1
-                    : LimbWoundRules.Tone(state.Health, LimbWoundRules.HealthFor(icon.Zone));
+                    : LimbWoundRules.Tone(state.Health, LimbWoundRules.HealthFor(icon.Zone, Pools));
             }
 
             var name = LimbDollLayout.HealthState(icon, tone);

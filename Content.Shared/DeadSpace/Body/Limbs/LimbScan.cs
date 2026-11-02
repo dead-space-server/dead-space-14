@@ -93,7 +93,7 @@ public static class LimbScan
     public const byte Critical = 3;
     public const byte Fine = 4;
 
-    public static byte Shade(LimbZone zone, in LimbZoneState state)
+    public static byte Shade(LimbZone zone, in LimbZoneState state, LimbBodyComponent? body = null)
     {
         if (state.Severed)
             return Missing;
@@ -101,7 +101,7 @@ public static class LimbScan
         if (state.Atrophied || state.Health <= 0f)
             return Critical;
 
-        var pool = LimbWoundRules.HealthFor(zone);
+        var pool = LimbWoundRules.HealthFor(zone, body);
         var left = pool <= 0f ? 1f : state.Health / pool;
         if (left <= 0.34f)
             return Critical;

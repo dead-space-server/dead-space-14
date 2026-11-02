@@ -1607,6 +1607,7 @@
     layer: Skin
   - verb: MendBone
     layer: Bone
+    effect: FractureClosedMend
   close:
   - verb: Cauterize
     layer: Skin
@@ -1738,6 +1739,7 @@
     layer: Skin
   - verb: PullEmbedded
     layer: Bone
+    effect: ShardMend
   close:
   - verb: Cauterize
     layer: Skin
@@ -1761,6 +1763,113 @@
     layer: Skin
   - verb: PullEmbedded
     layer: Cavity
+    effect: ShardMend
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: MendBruise
+  side: Front
+  name: surgery-op-mend-bruise
+  when: Bruised
+  order: 3
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/Surgery/scissors.rsi
+    state: hemostat
+  zones:
+  - Head
+  - Torso
+  - Groin
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: Stanch
+    layer: Cavity
+    effect: BruiseMend
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: MendCuts
+  side: Front
+  name: surgery-op-mend-cuts
+  when: Lacerated
+  order: 3
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/Surgery/cautery.rsi
+    state: cautery
+  zones:
+  - Head
+  - Torso
+  - Groin
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: Clamp
+    layer: Cavity
+    undo: Clamp
+    effect: CutMend
+  close:
+  - verb: Cauterize
+    layer: Skin
+    undo: Incise
+
+- type: surgeryOperation
+  id: MendPunctures
+  side: Front
+  name: surgery-op-mend-punctures
+  when: Punctured
+  order: 3
+  icon:
+    sprite: /Textures/Objects/Specific/Medical/Surgery/scissors.rsi
+    state: hemostat
+  zones:
+  - Head
+  - Torso
+  - Groin
+  - ArmLeft
+  - ArmRight
+  - HandLeft
+  - HandRight
+  - LegLeft
+  - LegRight
+  - FootLeft
+  - FootRight
+  steps:
+  - verb: Incise
+    layer: Skin
+    undo: Cauterize
+  - verb: Retract
+    layer: Skin
+  - verb: Stanch
+    layer: Cavity
+    effect: PunctureMend
   close:
   - verb: Cauterize
     layer: Skin
@@ -1794,6 +1903,7 @@
     layer: Skin
   - verb: MendBone
     layer: Bone
+    effect: FractureOpenMend
   close:
   - verb: Cauterize
     layer: Skin
@@ -1913,12 +2023,14 @@
   - verb: Incise
     layer: Skin
     undo: Cauterize
+  - verb: Retract
+    layer: Skin
   - verb: Seat
     layer: Skin
-  close:
+  - verb: MendBone
+    layer: Bone
   - verb: Cauterize
     layer: Skin
-    undo: Incise
 
 - type: surgeryOperation
   id: AttachHead
@@ -2039,6 +2151,7 @@
     layer: Skin
   - verb: PullEmbedded
     layer: Bone
+    effect: ShardMend
   close:
   - verb: Cauterize
     layer: Skin
@@ -2116,6 +2229,8 @@
   - Arachnid
   carry:
   - Wagging
+  slots:
+  - tailbag
 
 - type: surgeryHealth
   id: Default

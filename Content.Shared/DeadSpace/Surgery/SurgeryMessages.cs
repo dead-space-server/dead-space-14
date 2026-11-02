@@ -104,6 +104,7 @@ public struct SurgeryRequest
 {
     public SurgeryVerbKind Verb;
     public LimbZone Zone;
+    public float Pool;
     public SurgeryLayerKind Kind;
     public float Integrity;
     public bool Retracted;
