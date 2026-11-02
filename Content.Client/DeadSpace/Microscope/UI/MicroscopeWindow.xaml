@@ -1,0 +1,62 @@
+<!--Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT-->
+<DefaultWindow xmlns="https://spacestation14.io"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:ui="clr-namespace:Content.Client.DeadSpace.Microscope.UI"
+               Title="{Loc microscope-ui-title}"
+               MinSize="430 520"
+               SetSize="460 560">
+
+    <BoxContainer Orientation="Vertical"
+                  VerticalExpand="True"
+                  HorizontalExpand="True"
+                  Margin="6"
+                  SeparationOverride="8">
+
+        <!-- Область осмотра органа -->
+        <PanelContainer VerticalExpand="True" StyleClasses="DeadSpaceSurfaceDark">
+            <BoxContainer Orientation="Vertical"
+                          HorizontalExpand="True"
+                          VerticalExpand="True"
+                          SeparationOverride="8"
+                          Margin="10">
+
+                <PanelContainer VerticalExpand="True" StyleClasses="DeadSpaceInset">
+                    <ui:OrganView Name="OrganView" />
+                </PanelContainer>
+
+                <Label Name="OrganNameLabel"
+                       StyleClasses="DeadSpaceTitle"
+                       HorizontalAlignment="Center" />
+
+                <!-- Шкала повреждений -->
+                <BoxContainer Orientation="Vertical" SeparationOverride="3">
+                    <Label Text="{Loc microscope-ui-damage-title}" StyleClasses="LabelSubText" />
+                    <ProgressBar Name="DamageBar"
+                                 MinValue="0"
+                                 MaxValue="1"
+                                 MinHeight="18"
+                                 HorizontalExpand="True" />
+                    <Label Name="StatusLabel"
+                           HorizontalAlignment="Center"
+                           StyleClasses="LabelSubText" />
+                </BoxContainer>
+            </BoxContainer>
+        </PanelContainer>
+
+        <!-- Кнопки управления -->
+        <BoxContainer Orientation="Horizontal"
+                      SeparationOverride="8"
+                      Margin="0 2 0 2">
+            <Button Name="FlipButton"
+                    Text="{Loc microscope-ui-flip}"
+                    StyleClasses="DeadSpaceFormField"
+                    HorizontalExpand="True"
+                    MinHeight="34" />
+            <Button Name="EjectButton"
+                    Text="{Loc microscope-ui-eject}"
+                    StyleClasses="DeadSpaceFormField"
+                    HorizontalExpand="True"
+                    MinHeight="34" />
+        </BoxContainer>
+    </BoxContainer>
+</DefaultWindow>
