@@ -317,7 +317,6 @@
     mask: /Textures/Effects/LightMasks/cone.png
     autoRot: true
     radius: 6
-  - type: Akimbo
   - type: AmmoCounter
   - type: Appearance
   - type: GenericVisualizer
