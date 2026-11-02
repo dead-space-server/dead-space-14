@@ -220,12 +220,12 @@ public sealed class OrganDamageableSystem : EntitySystem
 
         if (TryComp<HandsComponent>(origin, out var hands) &&
             _hands.GetActiveItem((origin.Value, hands)) is { Valid: true } item &&
-            MetaData(item, out var itemMeta) is not null)
+            TryComp(item, out MetaDataComponent? itemMeta))
         {
             return itemMeta.EntityName;
         }
 
-        if (TryComp<MetaDataComponent>(origin, out var meta))
+        if (TryComp(origin, out MetaDataComponent? meta))
             return meta.EntityName;
 
         return null;
