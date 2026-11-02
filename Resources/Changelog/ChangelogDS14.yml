@@ -9494,3 +9494,10 @@ Entries:
   changes:
   - type: Add
     message: Команда для луны на обелиске - spawnnecromoon
+- id: 913
+  author: IvanKuvalda
+  time: '2026-11-02T14:42:11.842989+00:00'
+  pr: 2622
+  changes:
+  - type: Add
+    message: Очередь в управлении глобальной музыкой
