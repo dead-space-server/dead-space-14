@@ -1,36 +1,31 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
 using Content.Shared.Actions;
-using Content.Shared.Clothing;
-using Content.Shared.Hands.EntitySystems;
-using Content.Shared.Storage;
-using Content.Shared.Inventory;
-using Robust.Shared.Containers;
+using Content.Shared.DeadSpace.Clothing;
 using Content.Shared.Hands.Components;
-using System.Linq;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Inventory;
 using Content.Shared.Popups;
+using Content.Shared.Storage;
 
-
-namespace Content.Server.Clothing;
+namespace Content.Server.DeadSpace.Clothing;
 
 public sealed class HolsterDrawSystem : EntitySystem
 {
     [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {
         base.Initialize();
+
         SubscribeLocalEvent<HolsterDrawComponent, GetItemActionsEvent>(OnGetActions);
         SubscribeLocalEvent<HolsterDrawComponent, HolsterDrawActionEvent>(OnDrawAction);
     }
 
     private void OnGetActions(Entity<HolsterDrawComponent> ent, ref GetItemActionsEvent args)
     {
-        if (!_inventory.TryGetSlotEntity(args.User, "belt", out var beltEntity)
-            || beltEntity != ent.Owner)
+        if (args.SlotFlags != SlotFlags.BELT)
             return;
 
         args.AddAction(ref ent.Comp.ActionEntity, ent.Comp.ActionProto.Id, ent.Owner);
@@ -43,78 +38,52 @@ public sealed class HolsterDrawSystem : EntitySystem
 
         var user = args.Performer;
 
-        if (!TryComp<StorageComponent>(ent, out var storage))
+        if (!TryComp<StorageComponent>(ent, out var storage) ||
+            !TryComp<HandsComponent>(user, out var hands))
             return;
-        var targetProtoId = ent.Comp.WeaponProto.Id;
-        var revolvers = new List<EntityUid>();
+
+        var weapons = new List<EntityUid>();
         foreach (var item in storage.Container.ContainedEntities)
         {
-            if (MetaData(item).EntityPrototype?.ID == targetProtoId)
-                revolvers.Add(item);
+            if (MetaData(item).EntityPrototype?.ID == ent.Comp.WeaponProto.Id)
+                weapons.Add(item);
         }
-        if (revolvers.Count == 0)
-            return;
-        if (!TryComp<HandsComponent>(user, out var hands))
-            return;
 
-        var freeHandIds = new List<string>();
+        if (weapons.Count == 0)
+        {
+            _popup.PopupEntity(Loc.GetString("holster-draw-empty"), user, user);
+            return;
+        }
+
+        var activeHand = _hands.GetActiveHand((user, hands));
+        var freeHands = new List<string>();
+
+        if (activeHand != null && _hands.HandIsEmpty((user, hands), activeHand))
+            freeHands.Add(activeHand);
+
         foreach (var handId in hands.Hands.Keys)
         {
-            if (_hands.HandIsEmpty(user, handId))
-                freeHandIds.Add(handId);
+            if (handId != activeHand && _hands.HandIsEmpty((user, hands), handId))
+                freeHands.Add(handId);
         }
 
-        if (freeHandIds.Count == 0)
+        if (freeHands.Count == 0)
         {
-            _popup.PopupEntity(
-                "Все ваши руки заняты! Вы не можете достать револьверы",
-                user,
-                user);
+            _popup.PopupEntity(Loc.GetString("holster-draw-hands-full"), user, user);
             return;
         }
 
-        var orderedHandIds = new List<string>(freeHandIds.Count);
+        var drawn = 0;
 
-        var activeHandId = _hands.GetActiveHand((user, hands));
-
-        if (activeHandId != null && freeHandIds.Contains(activeHandId))
+        foreach (var handId in freeHands)
         {
-            orderedHandIds.Add(activeHandId);
-            foreach (var handId in freeHandIds)
-            {
-                if (handId != activeHandId)
-                    orderedHandIds.Add(handId);
-            }
-        }
-        else
-        {
-            orderedHandIds.AddRange(freeHandIds);
-        }
-
-        var drawnCount = 0;
-
-        for (var i = 0; i < orderedHandIds.Count; i++)
-        {
-            if (drawnCount >= revolvers.Count)
+            if (drawn >= weapons.Count)
                 break;
 
-            var rev = revolvers[drawnCount];
-            var handId = orderedHandIds[i];
-
-            if (!_container.Remove(rev, storage.Container))
-                continue;
-
-            if (_hands.TryPickup(user, rev, handId))
-            {
-                drawnCount++;
-            }
-            else
-            {
-                _container.Insert(rev, storage.Container);
-                break;
-            }
+            if (_hands.TryPickup(user, weapons[drawn], handId))
+                drawn++;
         }
 
-        args.Handled = true;
+        args.Handled = drawn > 0;
     }
 }

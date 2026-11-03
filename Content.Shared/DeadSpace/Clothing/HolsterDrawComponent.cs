@@ -2,22 +2,20 @@
 
 using Content.Shared.Actions;
 using Robust.Shared.Prototypes;
-using Robust.Shared.GameStates;
 
-namespace Content.Shared.Clothing;
+namespace Content.Shared.DeadSpace.Clothing;
 
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent]
 public sealed partial class HolsterDrawComponent : Component
 {
-    [DataField("actionProto")]
-    public EntProtoId ActionProto = "ActionHolsterDrawBlueShield";
-    [DataField("weaponProto", required: true)]
+    [DataField(required: true)]
+    public EntProtoId ActionProto;
+
+    [DataField(required: true)]
     public EntProtoId WeaponProto;
 
     [DataField]
     public EntityUid? ActionEntity;
 }
 
-public sealed partial class HolsterDrawActionEvent : InstantActionEvent
-{
-}
+public sealed partial class HolsterDrawActionEvent : InstantActionEvent { }
