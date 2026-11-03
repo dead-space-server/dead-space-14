@@ -555,6 +555,15 @@
   id: EncryptionService # ItemMapper: TelecomServer
 
 - type: Tag
+  id: EnergyKatanaDamageUpgrade # ConstructionGraph: UpgradeEnergyKatana
+
+- type: Tag
+  id: EnergyKatanaReflectUpgrade # ConstructionGraph: UpgradeEnergyKatana
+
+- type: Tag
+  id: EnergyKatanaRechargeUpgrade # ConstructionGraph: UpgradeEnergyKatana
+
+- type: Tag
   id: Enzyme # Storage whitelist: ClothingBeltChef. ItemMapper: ClothingBeltChef
 
 - type: Tag

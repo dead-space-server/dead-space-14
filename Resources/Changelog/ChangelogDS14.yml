@@ -9410,3 +9410,108 @@ Entries:
     message: Токсикология на марафон
   - type: Tweak
     message: Расположение некоторых машин в нио на марафоне
+- id: 904
+  author: pe4enkakris
+  time: '2026-11-02T02:28:45.659862+00:00'
+  pr: 2629
+  changes:
+  - type: Remove
+    message: У продвинутого протокинетического ускорителя удалено Акимбо.
+  - type: Tweak
+    message: Цена спидлоудера ББ на питон 4 -> 3. Цена продвинутого протокинетического
+      ускорителя увеличена до 2000.
+- id: 905
+  author: BlueDogDoc
+  time: '2026-11-02T04:12:38.336990+00:00'
+  pr: 2630
+  changes:
+  - type: Tweak
+    message: Генерация списка участников наночат-а
+- id: 906
+  author: BlueDogDoc
+  time: '2026-11-02T04:14:15.479223+00:00'
+  pr: 2627
+  changes:
+  - type: Add
+    message: Логи пуль и для хитскан баллистики.
+- id: 907
+  author: Manstari
+  time: '2026-11-02T07:57:05.805368+00:00'
+  pr: 2614
+  changes:
+  - type: Tweak
+    message: Переделана система обоюдного таскания за лапку
+- id: 908
+  author: BlueDogDoc
+  time: '2026-11-02T07:58:54.534503+00:00'
+  pr: 2628
+  changes:
+  - type: Tweak
+    message: В думлайк игре добавлена возможность стрейфить
+  - type: Tweak
+    message: Агосты могут играть с игроками и агостами в кооп КПК игры
+  - type: Tweak
+    message: Правило фиксации Таблицы Лидеров
+  - type: Fix
+    message: Фикс спам уведомлениями.
+- id: 909
+  author: zubekkk
+  time: '2026-11-02T10:27:29.749715+00:00'
+  pr: 2632
+  changes:
+  - type: Add
+    message: Новая цель на воровство денег со счетов станции.
+  - type: Add
+    message: Модификации катаны.
+  - type: Tweak
+    message: Потребление "формы призрака" уменьшено 0.25 -> 0.10
+- id: 910
+  author: HiAmaliz
+  time: '2026-11-02T13:48:28.127084+00:00'
+  pr: 2633
+  changes:
+  - type: Add
+    message: Токсвенд, газодобытчик оксида азота на гемини
+  - type: Fix
+    message: Маяк АВД в каюте дека на боксе был аннигилирован
+  - type: Fix
+    message: Багфиксы на гемини
+  - type: Fix
+    message: Удалены прекрасные дебаг камни в утильской на карте кластер
+- id: 911
+  author: pe4enkakris
+  time: '2026-11-02T13:54:12.826743+00:00'
+  pr: 2626
+  changes:
+  - type: Add
+    message: Тенеморфу добавлен рюкзак и слот под айди карту.
+  - type: Tweak
+    message: За место Замененного скафандра Чемпиона выпадает скафандр Берсерка.
+- id: 912
+  author: IvanKuvalda
+  time: '2026-11-02T14:19:59.946115+00:00'
+  pr: 2621
+  changes:
+  - type: Add
+    message: Команда для луны на обелиске - spawnnecromoon
+- id: 913
+  author: IvanKuvalda
+  time: '2026-11-02T14:42:11.842989+00:00'
+  pr: 2622
+  changes:
+  - type: Add
+    message: Очередь в управлении глобальной музыкой
+- id: 914
+  author: BlueDogDoc
+  time: '2026-11-03T03:19:39.853737+00:00'
+  pr: 2637
+  changes:
+  - type: Add
+    message: Раздельно смотреть слои подпольной истории (атмос, карго, проводка)
+- id: 915
+  author: BlueDogDoc
+  time: '2026-11-03T03:24:43.273951+00:00'
+  pr: 2636
+  changes:
+  - type: Add
+    message: Смещение декалей по Х,У координатам.

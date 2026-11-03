@@ -10,13 +10,16 @@ using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Ninja.Components;
 using Content.Shared.Popups;
 using Content.Shared.Examine;
-using Robust.Shared.Random;
 using Content.Shared.Inventory;
 using Content.Shared.Tag;
 using Robust.Shared.Audio; // DS14
 using Robust.Shared.Prototypes;
 using Robust.Shared.Map;
 using Robust.Shared.Timing; // DS14
+using Content.Shared.Random.Helpers; // DS14
+using System.Numerics; // DS14
+using System.Linq; // DS14
+using Robust.Shared.Containers; // DS14
 
 namespace Content.Shared.Ninja.Systems;
 
@@ -39,9 +42,9 @@ public abstract class SharedDashAbilitySystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly IGameTiming _timing = default!; // DS14
     //DS14-start
-    [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly TagSystem _tagSystem = default!;
+    [Dependency] private readonly SharedContainerSystem _container = default!;
 
     private static readonly ProtoId<TagPrototype> CorruptTeleportTag = "CorruptTeleportItem";
     //DS14-end
@@ -55,6 +58,7 @@ public abstract class SharedDashAbilitySystem : EntitySystem
         SubscribeLocalEvent<DashAbilityComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<DashAbilityComponent, GotEquippedHandEvent>(OnEquippedHand); // DS14
         SubscribeLocalEvent<DashAbilityComponent, GotUnequippedHandEvent>(OnUnequippedHand); // DS14
+        SubscribeLocalEvent<DashAbilityComponent, ExaminedEvent>(OnExamined); // DS14
     }
 
     //DS14-start
@@ -132,7 +136,7 @@ public abstract class SharedDashAbilitySystem : EntitySystem
         if (_timing.CurTime < comp.NextUse)
             return false;
 
-        if (!_hands.IsHolding(user, uid, out var _))
+        if (!_hands.IsHolding(user, uid, out _))
         {
             DashPopup(predicted, "dash-ability-not-held", uid, user);
             return false;
@@ -166,22 +170,9 @@ public abstract class SharedDashAbilitySystem : EntitySystem
                 _pullingSystem.TryStopPull(puller.Pulling.Value, pullable);
         }
 
-        bool corrupted = false;
-        if (comp.CorruptByBluespaceItems)
-        {
-            var items = _inventory.GetHandOrInventoryEntities(user);
-            foreach (var item in items)
-            {
-                if (_tagSystem.HasTag(item, CorruptTeleportTag))
-                {
-                    corrupted = true;
-                    break;
-                }
-            }
-        }
+        bool corrupted = CheckCorruption(user, comp);
 
-        var offset = _random.NextVector2(comp.CorruptMinDistance, comp.CorruptMaxDistance);
-        var targetFinal = corrupted ? target.Offset(offset) : target;
+        var targetFinal = corrupted ? target.Offset(GetCorruptOffset(user, comp)) : target;
         DoTeleport(user, targetFinal, comp.BeamProto, pulledUid, comp.DashSound);
 
         var now = _timing.CurTime;
@@ -191,6 +182,7 @@ public abstract class SharedDashAbilitySystem : EntitySystem
         _alerts.ShowAlert(user, comp.CooldownAlert, cooldown: (now, comp.NextUse), autoRemove: false);
         return true;
     }
+    //DS14-end
 
     //DS14-start
     private void DashPopup(bool predicted, string locKey, EntityUid item, EntityUid user)
@@ -211,6 +203,62 @@ public abstract class SharedDashAbilitySystem : EntitySystem
         RaiseLocalEvent(uid, ref ev);
         return !ev.Cancelled;
     }
+
+    //DS14-start
+    private void OnExamined(Entity<DashAbilityComponent> ent, ref ExaminedEvent args)
+    {
+        if (!args.IsInDetailsRange)
+            return;
+        if (CheckCorruption(args.Examiner, ent.Comp) && CheckDash(ent, args.Examiner))
+        {
+            args.PushMarkup(Loc.GetString("dash-ability-corrupted"));
+        }
+    }
+
+    private bool CheckCorruption(EntityUid user, DashAbilityComponent comp)
+    {
+        if (!comp.CorruptByBluespaceItems)
+            return false;
+
+        foreach (var item in _inventory.GetHandOrInventoryEntities(user))
+        {
+            if (HasCorruptItem(item))
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool HasCorruptItem(EntityUid item, int depth = 0)
+    {
+        if (_tagSystem.HasTag(item, CorruptTeleportTag))
+            return true;
+
+        if (depth >= 3 || !HasComp<ContainerManagerComponent>(item))
+            return false;
+
+        foreach (var container in _container.GetAllContainers(item))
+        {
+            foreach (var contained in container.ContainedEntities)
+            {
+                if (HasCorruptItem(contained, depth + 1))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    private Vector2 GetCorruptOffset(EntityUid user, DashAbilityComponent comp)
+    {
+        var random = SharedRandomExtensions.PredictedRandom(_timing, GetNetEntity(user));
+
+        var angle = random.NextDouble() * Math.Tau;
+        var dist = comp.CorruptMinDistance + random.NextDouble() * (comp.CorruptMaxDistance - comp.CorruptMinDistance);
+
+        return new Vector2((float) (Math.Cos(angle) * dist), (float) (Math.Sin(angle) * dist));
+    }
+    //DS14-end
 }
 
 /// <summary>

@@ -8,6 +8,7 @@ using Content.Shared.UserInterface;
 // DS14-start
 using Content.Shared.Cargo.Prototypes;
 using Robust.Shared.Prototypes;
+using Content.Shared.DeadSpace.Ninja.Components;
 // DS14-end
 
 namespace Content.Server.Cargo.Systems;
@@ -48,6 +49,15 @@ public sealed partial class CargoSystem
             PlayDenySound(ent, ent.Comp);
             return;
         }
+
+        // DS14-start
+        if (IsStationBeingMined(station))
+        {
+            ConsolePopup(args.Actor, Loc.GetString("cargo-console-funds-blocked-by-hack"));
+            PlayDenySound(ent, ent.Comp);
+            return;
+        }
+        // DS14-end
 
         ent.Comp.NextAccountActionTime = Timing.CurTime + ent.Comp.AccountActionDelay;
         UpdateBankAccount((station, bank), -args.Amount,  ent.Comp.Account, dirty: false);
@@ -168,6 +178,20 @@ public sealed partial class CargoSystem
         if (_station.GetOwningStation(ent) is { } station)
             _uiSystem.SetUiState(ent.Owner, FundingAllocationConsoleUiKey.Key, new FundingAllocationConsoleBuiState(GetNetEntity(station)));
     }
+
+    // DS14-start
+    private bool IsStationBeingMined(EntityUid station)
+    {
+        var query = EntityQueryEnumerator<NinjaHackBeaconComponent>();
+        while (query.MoveNext(out var uid, out var beacon))
+        {
+            if (beacon.Active && _station.GetOwningStation(uid) == station)
+                return true;
+        }
+
+        return false;
+    }
+    // DS14-end
 
     // DS14-start
     #region Revenue distribution

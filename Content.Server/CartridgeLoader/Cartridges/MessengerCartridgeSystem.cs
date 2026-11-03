@@ -1,6 +1,8 @@
 using System.Linq;
 using Content.Shared.PDA;
 using Content.Shared.Access.Components;
+using Content.Shared.Station; //DS-14
+using Content.Shared.StationRecords; //DS-14
 using Content.Shared.CartridgeLoader;
 using Content.Shared.CartridgeLoader.Cartridges;
 using Content.Shared.Popups;
@@ -23,6 +25,7 @@ public sealed partial class MessengerCartridgeSystem : EntitySystem
     [Dependency] private PopupSystem _popupSystem = default!;
     [Dependency] private UserInterfaceSystem _userInterfaceSystem = default!; // DS14
     [Dependency] private IAdminLogManager _adminLog = default!; //DS-14
+    [Dependency] private SharedStationSystem _station = default!; //DS-14
 
     public override void Initialize()
     {
@@ -80,6 +83,9 @@ public sealed partial class MessengerCartridgeSystem : EntitySystem
                 continue;
 
             activeUserIdsByServer.TryAdd(server.Value.Uid, new HashSet<int>());
+            if (!CrewListed(cartridgeUid)) //DS-14
+                continue;
+
             activeUserIdsByServer[server.Value.Uid].Add(userData.Value.Id);
 
             SendUserData(cartridgeUid);
@@ -220,7 +226,7 @@ public sealed partial class MessengerCartridgeSystem : EntitySystem
     private void OnUiMessage(EntityUid uid, MessengerCartridgeComponent component, CartridgeMessageEvent args)
     {
         var userData = GetUserData(uid);
-        if (userData == null)
+        if (userData == null || !CrewListed(uid)) //DS-14
             return;
 
         var server = GetServerForCartridge(uid);
@@ -431,6 +437,24 @@ public sealed partial class MessengerCartridgeSystem : EntitySystem
     /// <summary>
     /// Getting user data from the IDcard
     /// </summary>
+    //DS-14 start
+    private bool CrewListed(EntityUid cartridgeUid)
+    {
+        var pdaUid = GetLoaderUid(cartridgeUid);
+        if (pdaUid == null || !TryComp<PdaComponent>(pdaUid, out var pda) || pda.ContainedId is not { } id)
+            return false;
+
+        if (!TryComp<StationRecordKeyStorageComponent>(id, out var storage) || storage.Key is not { } key)
+            return false;
+
+        var server = GetServerForCartridge(cartridgeUid);
+        if (server == null)
+            return false;
+
+        return _station.GetOwningStation(server.Value.Uid) == key.OriginStation;
+    }
+    //DS-14 end
+
     public (int Id, string Name, string JobIconId, string JobTitle)? GetUserData(EntityUid cartridgeUid)
     {
         var pdaUid = GetLoaderUid(cartridgeUid);

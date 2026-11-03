@@ -26,6 +26,7 @@
   storage:
     back:
     - BoxMRE
+    - NinjaHackBeacon
 
 - type: chameleonOutfit
   id: NinjaChameleonOutfit
@@ -33,4 +34,4 @@
   icon: "JobIconNinja"
   startingGear: SpaceNinjaGear
   equipment:
-    neck: ClothingNeckGoldmedal
+    neck: ClothingNeckScarfNinja

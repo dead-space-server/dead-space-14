@@ -11,7 +11,7 @@ public sealed class SubFloorHideSystem : SharedSubFloorHideSystem
     [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly SharedEyeSystem _eye = default!;
 
-    private HashSet<ICommonSession> _showFloors = new();
+    private readonly Dictionary<ICommonSession, VisibilityFlags> _showLayers = new(); //DS-14
 
     public override void Initialize()
     {
@@ -27,7 +27,7 @@ public sealed class SubFloorHideSystem : SharedSubFloorHideSystem
         if (e.NewStatus == SessionStatus.Connected)
             return;
 
-        _showFloors.Remove(e.Session);
+        _showLayers.Remove(e.Session); //DS-14
 
         if (e.Session.AttachedEntity != null)
             _eye.RefreshVisibilityMask(e.Session.AttachedEntity.Value);
@@ -38,10 +38,8 @@ public sealed class SubFloorHideSystem : SharedSubFloorHideSystem
         if (!TryComp(ev.Entity, out ActorComponent? actor))
             return;
 
-        if (_showFloors.Contains(actor.PlayerSession))
-        {
-            ev.VisibilityMask |= (int)VisibilityFlags.Subfloor;
-        }
+        if (_showLayers.TryGetValue(actor.PlayerSession, out var layers)) //DS-14
+            ev.VisibilityMask |= (int) layers; //DS-14
     }
 
     private void OnShowSubfloor(ShowSubfloorRequestEvent ev, EntitySessionEventArgs args)
@@ -52,20 +50,19 @@ public sealed class SubFloorHideSystem : SharedSubFloorHideSystem
         if (!TryComp(ent, out EyeComponent? eyeComp))
             return;
 
-        if (ev.Value)
-        {
-            _showFloors.Add(args.SenderSession);
-        }
+        //DS-14 start
+        var mask = (VisibilityFlags) ev.Mask & SubfloorVisibility.All;
+        if (mask == VisibilityFlags.None)
+            _showLayers.Remove(args.SenderSession);
         else
-        {
-            _showFloors.Remove(args.SenderSession);
-        }
+            _showLayers[args.SenderSession] = mask;
+        //DS-14 end
 
         _eye.RefreshVisibilityMask((ent.Value, eyeComp));
 
         RaiseNetworkEvent(new ShowSubfloorRequestEvent()
         {
-            Value = ev.Value,
+            Mask = (int) mask, //DS-14
         }, args.SenderSession);
     }
 }

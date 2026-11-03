@@ -5,6 +5,7 @@ using Content.Client.Sandbox;
 using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.DecalPlacer;
 using Content.Client.UserInterface.Systems.Sandbox.Windows;
+using Content.Shared.Eye; //DS-14
 using Content.Shared.Input;
 using JetBrains.Annotations;
 using Robust.Client.Input;
@@ -141,6 +142,9 @@ public sealed class SandboxUIController : UIController, IOnStateChanged<Gameplay
             _window.ToggleDeviceLinksButton.Pressed = _sandbox.ToggleDeviceLinks();
         };
         //DS-14 end
+        _window.ToggleDisposalButton.OnPressed += _ => _sandbox.ToggleSubfloorLayer("disposal"); //DS-14
+        _window.ToggleCableButton.OnPressed += _ => _sandbox.ToggleSubfloorLayer("cable"); //DS-14
+        _window.ToggleAtmosButton.OnPressed += _ => _sandbox.ToggleSubfloorLayer("atmos"); //DS-14
         _window.ShowMarkersButton.OnPressed += _ => _sandbox.ShowMarkers();
         _window.ShowBbButton.OnPressed += _ => _sandbox.ShowBb();
         _window.ToggleThermalVisionButton.OnToggled += _ => _sandbox.ToggleThermalVision();
@@ -214,12 +218,16 @@ public sealed class SandboxUIController : UIController, IOnStateChanged<Gameplay
 
     #region Buttons
 
-    public void SetToggleSubfloors(bool value)
+    public void SetSubfloorLayers(VisibilityFlags layers) //DS-14
     {
         if (_window == null)
             return;
 
-        _window.ToggleSubfloorButton.Pressed = value;
+        //DS-14 start
+        _window.ToggleDisposalButton.Pressed = (layers & VisibilityFlags.SubfloorDisposal) != 0;
+        _window.ToggleCableButton.Pressed = (layers & VisibilityFlags.SubfloorCable) != 0;
+        _window.ToggleAtmosButton.Pressed = (layers & VisibilityFlags.SubfloorAtmos) != 0;
+        //DS-14 end
     }
 
     #endregion

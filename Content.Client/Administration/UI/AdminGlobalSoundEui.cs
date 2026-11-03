@@ -16,6 +16,12 @@ public sealed class AdminGlobalSoundEui : BaseEui
         _window.PlayRequested += message => SendMessage(message);
         _window.ControlRequested += action =>
             SendMessage(new AdminGlobalSoundEuiMessage.Control { Action = action });
+        _window.QueueAddRequested += message => SendMessage(message);
+        _window.QueueRemoveRequested += message => SendMessage(message);
+        _window.QueueClearRequested += message => SendMessage(message);
+        _window.QueueSkipRequested += message => SendMessage(message);
+        _window.QueueStopRequested += message => SendMessage(message);
+        _window.FolderQueueRequested += message => SendMessage(message);
     }
 
     public override void HandleState(EuiStateBase state)

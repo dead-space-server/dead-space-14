@@ -185,4 +185,14 @@
       sprite: _DeadSpace/Objects/Devices/pinpointer.rsi
       state: pinpointer-black
   - type: NinjaInfoCondition
+
+- type: entity
+  parent: [BaseNinjaObjective, BaseCodeObjective]
+  id: NinjaStealMoneyObjective
+  components:
+  - type: Objective
+    icon:
+      sprite: Objects/Tools/thief_beacon.rsi
+      state: extraction_point
+  - type: NinjaStealMoneyCondition
 # DS14-end

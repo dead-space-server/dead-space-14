@@ -10,4 +10,5 @@ dash-ability-blocked = There is no room at the destination.
 dash-alert-name = Dash
 dash-alert-desc = Shows the dash cooldown.
 dash-alert-desc-alt = Shows the dash cooldown. Dash is performed with Alt+Left click.
+dash-ability-corrupted = Teleport [color=yellow]corrupted[/color].
 # DS14-end

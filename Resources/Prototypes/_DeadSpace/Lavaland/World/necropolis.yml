@@ -513,7 +513,7 @@
     - !type:AllSelector
       weight: 0.5
       children:
-      - id: ClothingOuterSuitReinforcedExplorerLavaland # был ClothingOuterSpaceMarinne, временная замена.
+      - id: ClothingOuterLavalandBerserker
       - id: MedkitCombatFilled
       - id: ClothingEyesHudAdvanced
       - id: ClothingMaskBreath
