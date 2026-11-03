@@ -48,15 +48,11 @@ public sealed partial class BluespaceMinerComponent : Component
     [DataField]
     public Dictionary<ProtoId<MaterialPrototype>, float> MaterialWeights = new()
     {
-        { "Glass", 20f },
-        { "Steel", 20f },
-        { "Plastic", 18f },
-        { "Silver", 13f },
+        { "Glass", 24f },
+        { "Steel", 24f },
+        { "Silver", 15f },
         { "Gold", 8f },
         { "Uranium", 6f },
-        { "Diamond", 4f },
-        { "Magmite", 3f },
-        { "BluespaceCrystal", 3f },
     };
 
     /// <summary>Какой газ выделяется при работе.</summary>
