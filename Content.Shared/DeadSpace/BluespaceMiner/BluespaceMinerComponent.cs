@@ -52,7 +52,6 @@ public sealed partial class BluespaceMinerComponent : Component
         { "Steel", 24f },
         { "Silver", 15f },
         { "Gold", 8f },
-        { "Uranium", 6f },
     };
 
     /// <summary>Какой газ выделяется при работе.</summary>
