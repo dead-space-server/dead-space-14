@@ -156,7 +156,7 @@ public sealed class LimbWoundTest
 
             var damage = server.EntMan.System<DamageableSystem>();
             var spec = new DamageSpecifier();
-            spec.DamageDict["Blunt"] = FixedPoint2.New(25);
+            spec.DamageDict["Blunt"] = FixedPoint2.New(30);
             damage.ChangeDamage(fighter, spec);
             damage.ChangeDamage(civilian, spec);
 
@@ -233,7 +233,7 @@ public sealed class LimbWoundTest
             Assert.Multiple(() =>
             {
                 Assert.That(server.EntMan.GetComponent<DamageableComponent>(dead).TotalDamage, Is.EqualTo(FixedPoint2.Zero));
-                Assert.That(server.EntMan.GetComponent<DamageableComponent>(alive).TotalDamage, Is.EqualTo(FixedPoint2.New(20)));
+                Assert.That(server.EntMan.GetComponent<DamageableComponent>(alive).TotalDamage, Is.EqualTo(FixedPoint2.New(14)));
                 Assert.That(wounds.BleedTotal(dead), Is.EqualTo(0f));
             });
         });

@@ -102,6 +102,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
     [Dependency] private readonly StatusEffectsSystem _status = default!;
     [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly LimbImplantSystem _implants = default!;
+    [Dependency] private readonly PlayerStubArmorSystem _stub = default!;
     [Dependency] private readonly Robust.Shared.Audio.Systems.SharedAudioSystem _audio = default!;
 
     private static readonly Robust.Shared.Audio.SoundSpecifier HarvestSound = new Robust.Shared.Audio.SoundPathSpecifier("/Audio/Effects/Fluids/splat.ogg");
@@ -686,7 +687,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         }
 
         var worn = Resist(uid, incoming, args.User);
-        var armored = worn.GetTotal() + 0.05f < melee.Damage.GetTotal();
+        var armored = _stub.BeforeStub(uid, worn.GetTotal()) + 0.05f < melee.Damage.GetTotal();
         var strike = BuildStrike(uid, args.User, zone, worn, projectile: false, tool: args.Used, throughArmor: armored);
         Strike(uid, strike, limbs, ready);
     }
@@ -1000,7 +1001,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         limbs.DropHeavyOnly = false;
         var worn = Resist(args.Target, args.Damage, shooter);
         var born = Amount(ent.Comp.Damage, "Piercing");
-        var armored = worn.GetTotal() + 0.05f < args.Damage.GetTotal();
+        var armored = _stub.BeforeStub(args.Target, worn.GetTotal()) + 0.05f < args.Damage.GetTotal();
         var strike = BuildStrike(args.Target, shooter ?? args.Target, zone, worn, projectile: true, distance, tool: ent.Owner, catalogPierce: born, throughArmor: armored, called: aiming ? aimed : zone);
         var result = Strike(args.Target, strike, limbs, ready);
         if (result.Ricochet)
@@ -1080,7 +1081,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         limbs.ArmorZone = null;
         var worn = incoming;
         var born = Amount(ent.Comp.Damage, "Piercing");
-        var armored = worn.GetTotal() + 0.05f < ent.Comp.Damage.GetTotal();
+        var armored = _stub.BeforeStub(args.Target, worn.GetTotal()) + 0.05f < ent.Comp.Damage.GetTotal();
         var strike = BuildStrike(args.Target, shooter, zone, worn, projectile: true, distance, tool: ent.Owner, catalogPierce: born, throughArmor: armored);
         Strike(args.Target, strike, limbs, ready);
         var landed = LimbWoundRules.IsSmall(zone) ? LimbZone.Head : zone;
