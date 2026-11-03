@@ -122,6 +122,7 @@ public sealed class LimbDollUIController : UIController, IOnStateChanged<Gamepla
         LayoutContainer.SetAnchorAndMarginPreset(_hud, LayoutContainer.LayoutPreset.BottomRight, margin: LimbDollPalette.Corner);
         _health = new LimbHealthView();
         _aim = new LimbAimView();
+        _aim.Pressed += _ => ToggleAim();
         PlaceHealth();
         RefreshDoll();
     }
@@ -285,6 +286,16 @@ public sealed class LimbDollUIController : UIController, IOnStateChanged<Gamepla
             _health.Zones = Body();
             _health.Pools = Pools();
         }
+    }
+
+    private void ToggleAim()
+    {
+        if (_player.LocalEntity is not { } uid || !_entities.TryGetComponent(uid, out LimbAimComponent? aim))
+            return;
+
+        var next = !aim.Aiming;
+        _entities.RaisePredictiveEvent(new LimbAimSetEvent(next));
+        _entities.System<LimbWoundSystem>().SetAiming(uid, next);
     }
 
     private bool Aiming()

@@ -875,6 +875,14 @@
     state: retractor
 
 - type: surgeryHint
+  id: RetractClose
+  name: surgery-hint-retract-close
+  color: "#4aa3df"
+  icons:
+  - sprite: /Textures/Objects/Specific/Medical/Surgery/scissors.rsi
+    state: retractor
+
+- type: surgeryHint
   id: SawBone
   name: surgery-hint-saw
   color: "#e8902a"
@@ -1938,11 +1946,22 @@
   - verb: Amputate
     layer: Bone
     game: Saw
+  closeRetract: false
   close:
+  - verb: Seat
+    layer: Skin
+    optional: true
+    order: 0
+  - verb: MendBone
+    layer: Bone
+    optional: true
+    order: 1
   - verb: Cauterize
     layer: Skin
+    order: 2
   - verb: Bandage
     layer: Skin
+    order: 3
 
 - type: surgeryOperation
   id: AmputateHead

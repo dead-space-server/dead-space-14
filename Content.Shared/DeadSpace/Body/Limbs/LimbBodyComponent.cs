@@ -117,6 +117,18 @@ public sealed partial class LimbBodyComponent : Component
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+public sealed partial class LimbHarvestingComponent : Component
+{
+    [AutoNetworkedField]
+    public NetEntity Target;
+
+    [AutoNetworkedField]
+    public ushort Index;
+
+    public uint StartedTick;
+}
+
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class LimbTargetComponent : Component
 {
     [DataField, AutoNetworkedField]

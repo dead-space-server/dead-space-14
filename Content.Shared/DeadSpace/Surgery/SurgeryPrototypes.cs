@@ -440,6 +440,9 @@ public sealed partial class SurgeryOperationPrototype : IPrototype
     public List<SurgeryStep> Close = new();
 
     [DataField]
+    public bool CloseRetract = true;
+
+    [DataField]
     public bool Across;
 
     [DataField]
@@ -740,6 +743,12 @@ public sealed partial class SurgeryStep
 
     [DataField]
     public string Effect = "";
+
+    [DataField]
+    public bool Optional;
+
+    [DataField]
+    public int Order = -1;
 }
 
 [Prototype]

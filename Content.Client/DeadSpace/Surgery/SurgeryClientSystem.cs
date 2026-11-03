@@ -118,6 +118,9 @@ public sealed class SurgeryClientSystem : EntitySystem
     private bool _didPull;
     private float _nickWait;
     private bool _cutSent;
+    private bool _carryClick;
+    private byte _boardVerb = 255;
+    private byte _boardGame = 255;
     private float _time;
     private readonly List<(EntityUid Body, LimbZone Zone, Vector2 Local, Vector2 Dir)> _nicks = new();
     private readonly List<(float Along, float Left)> _sear = new();
@@ -136,6 +139,7 @@ public sealed class SurgeryClientSystem : EntitySystem
         SubscribeLocalEvent<LimbBodyComponent, CanDragEvent>(OnCanDrag, after: [typeof(SharedBodySystem)]);
         SubscribeLocalEvent<LimbBodyComponent, InteractUsingEvent>(OnUse);
         SubscribeLocalEvent<LimbBodyComponent, TargetBeforeInjectEvent>(OnBeforeInject);
+        SubscribeLocalEvent<LimbBodyComponent, InjectorUseAttemptEvent>(OnInjectorUse);
         SubscribeLocalEvent<SurgerySiteComponent, AfterAutoHandleStateEvent>(OnSite);
         SubscribeLocalEvent<SurgerySiteComponent, ComponentShutdown>(OnSiteGone);
         SubscribeLocalEvent<SurgeryProneComponent, ComponentStartup>(OnProne);
@@ -386,6 +390,8 @@ public sealed class SurgeryClientSystem : EntitySystem
             var step = (SurgeryVerbKind) _board.StepVerb;
             var close = _board.CloseVerb == 255 ? SurgeryVerbKind.Inspect : (SurgeryVerbKind) _board.CloseVerb;
             var undo = _board.UndoVerb == 255 ? SurgeryVerbKind.Inspect : (SurgeryVerbKind) _board.UndoVerb;
+            var previousVerb = _verb;
+            var previousGame = _game;
             _step = step;
             if (_tool != null && ToolHas(step))
                 _verb = step;
@@ -399,11 +405,14 @@ public sealed class SurgeryClientSystem : EntitySystem
                 _verb = step;
             else
                 _verb = SurgeryVerbKind.Inspect;
-            _game = _verb == step || _verb == close || _verb == undo
+            var game = _verb == step || _verb == close || _verb == undo
                 ? _board.StepGame == 255 || _verb != step ? SurgeryProcedure.Game(_verb) : (SurgeryGameKind) _board.StepGame
                 : _verb == SurgeryVerbKind.Extract ? SurgeryProcedure.Game(_verb) : SurgeryGameKind.Cut;
             if (_verb == SurgeryVerbKind.Retract && (_verb != step || _board.StepGame == 255))
-                _game = SurgeryGameKind.Spread;
+                game = SurgeryGameKind.Spread;
+            if (game != previousGame || _verb != previousVerb)
+                ArmGame();
+            _game = game;
             if (_game is not (SurgeryGameKind.Sear or SurgeryGameKind.Inject or SurgeryGameKind.Dots or SurgeryGameKind.Steady))
                 _sear.Clear();
             if (_game != SurgeryGameKind.Glue)
@@ -411,6 +420,14 @@ public sealed class SurgeryClientSystem : EntitySystem
         }
 
         var down = _input.IsKeyDown(Keyboard.Key.MouseLeft);
+        if (_carryClick)
+        {
+            if (!down)
+                _carryClick = false;
+            else
+                down = false;
+        }
+
         if (_input.IsKeyDown(Keyboard.Key.MouseRight))
         {
             EndView();
@@ -470,6 +487,12 @@ public sealed class SurgeryClientSystem : EntitySystem
         args.Cancel();
     }
 
+    private void OnInjectorUse(Entity<LimbBodyComponent> ent, ref InjectorUseAttemptEvent args)
+    {
+        if (_patient == ent.Owner && _step == SurgeryVerbKind.Inject)
+            args.Cancelled = true;
+    }
+
     private void OnUse(Entity<LimbBodyComponent> ent, ref InteractUsingEvent args)
     {
         if (args.Handled || _board == null || _patient != ent.Owner)
@@ -518,8 +541,9 @@ public sealed class SurgeryClientSystem : EntitySystem
                 _board = message;
                 _step = message.StepVerb == 255 ? StepOf(message) : (SurgeryVerbKind) message.StepVerb;
                 var next = StepOf(message);
-                if (_verb != next)
+                if (message.StepVerb != _boardVerb)
                 {
+                    _boardVerb = message.StepVerb;
                     _verb = next;
                     _game = GameOf(message, next);
                     _armed = false;
@@ -533,6 +557,10 @@ public sealed class SurgeryClientSystem : EntitySystem
                     _cutSent = false;
                     if (_game is SurgeryGameKind.Hold or SurgeryGameKind.Steady)
                         _frontier = 0f;
+                }
+                else if (_game == SurgeryGameKind.Stanch)
+                {
+                    _map?.StopBleed();
                 }
                 else if (_cutSent && _game is SurgeryGameKind.Sear or SurgeryGameKind.Inject or SurgeryGameKind.Glue or SurgeryGameKind.Dots)
                 {
@@ -549,16 +577,35 @@ public sealed class SurgeryClientSystem : EntitySystem
             return;
         }
 
-        _board = message;
         var switched = _patient != patient;
+        if (!switched && _zoomed && _board != null
+            && message.Zone == _board.Zone
+            && message.Part == _board.Part
+            && message.StepVerb == _boardVerb
+            && (byte) GameOf(message, StepOf(message)) == _boardGame)
+        {
+            _board = message;
+            _step = message.StepVerb == 255 ? StepOf(message) : (SurgeryVerbKind) message.StepVerb;
+            _layer = message.StepLayer != 255 ? message.StepLayer : _layer;
+            return;
+        }
+
+        _board = message;
         _patient = patient;
         _tool = _hands.TryGetActiveItem(user, out var held) ? held : null;
         _organ = message.Organs.Length > 0 ? message.Organs[0] : (byte) 255;
         var verb = StepOf(message);
         _step = message.StepVerb == 255 ? verb : (SurgeryVerbKind) message.StepVerb;
         var continuing = !switched && _zoomed && _verb == verb;
+        var nextGame = GameOf(message, verb);
+        if (message.StepVerb != _boardVerb || (byte) nextGame != _boardGame)
+        {
+            ArmGame();
+            _boardVerb = message.StepVerb;
+            _boardGame = (byte) nextGame;
+        }
         _verb = verb;
-        _game = GameOf(message, verb);
+        _game = nextGame;
         _layer = message.StepLayer != 255 ? message.StepLayer : (byte) Math.Max(0, Top(message));
         if (!continuing)
         {
@@ -742,16 +789,32 @@ public sealed class SurgeryClientSystem : EntitySystem
         }
     }
 
+    private void ArmGame()
+    {
+        _sear.Clear();
+        _glue.Clear();
+        _cutSent = false;
+        _frontier = 0f;
+        _armed = false;
+        _left = 0f;
+        _right = 0f;
+        if (_input.IsKeyDown(Keyboard.Key.MouseLeft))
+            _carryClick = true;
+    }
+
     private void TraceSear(bool down, Vector2 mouse, Vector2 start, Vector2 end, float frameTime)
     {
         var length = (end - start).Length();
         var dots = _game == SurgeryGameKind.Dots;
         if (_sear.Count == 0)
         {
-            var count = dots
-                ? Math.Clamp((int) MathF.Round(length / 0.05f), 3, 5)
-                : Math.Clamp((int) MathF.Round(length / 0.065f), 1, 4);
-            var radius = dots ? 0.04f : Math.Clamp(length / (count * 2.6f), 0.03f, 0.06f);
+            var shortLine = length < 0.2f;
+            var count = shortLine
+                ? 1
+                : dots
+                    ? Math.Clamp((int) MathF.Round(length / 0.05f), 3, 5)
+                    : Math.Clamp((int) MathF.Round(length / 0.065f), 1, 4);
+            var radius = shortLine ? 0.08f : dots ? 0.05f : Math.Clamp(length / (count * 2.6f), 0.05f, 0.07f);
             for (var i = 0; i < count; i++)
                 _sear.Add(((i + 0.5f) / count, radius));
             _searRadius = radius;
@@ -767,7 +830,7 @@ public sealed class SurgeryClientSystem : EntitySystem
                     continue;
 
                 var center = start + (end - start) * along;
-                if ((mouse - center).Length() > left + (dots ? 0.04f : 0.025f))
+                if ((mouse - center).Length() > left + (dots ? 0.05f : 0.04f))
                     continue;
 
                 _sear[i] = (along, dots ? 0f : MathF.Max(0f, left - _searRadius * frameTime / SearTime));
@@ -805,7 +868,8 @@ public sealed class SurgeryClientSystem : EntitySystem
         }
 
         var center = start + (end - start) * target;
-        if (down && (mouse - center).Length() <= 0.06f)
+        var reach = MathF.Max(0.1f, (end - start).Length() * 0.25f);
+        if (down && (mouse - center).Length() <= reach)
             _frontier = MathF.Min(1f, _frontier + frameTime * 0.45f);
 
         if (_frontier < 1f)
@@ -852,6 +916,9 @@ public sealed class SurgeryClientSystem : EntitySystem
                     _glue[i] = (crack, local, true);
             }
         }
+
+        if (_glue.Count == 0)
+            return;
 
         foreach (var (_, _, done) in _glue)
         {
@@ -1157,9 +1224,15 @@ public sealed class SurgeryClientSystem : EntitySystem
         if (_hint.Parent is { } root && _hint.GetPositionInParent() != root.ChildCount - 1)
             _hint.SetPositionLast();
 
-        var shown = (SurgeryVerbKind) _board.StepVerb;
-        if (_board.CloseVerb != 255 && _verb == (SurgeryVerbKind) _board.CloseVerb)
-            shown = _verb;
+        var stepVerb = (SurgeryVerbKind) _board.StepVerb;
+        var close = _board.CloseVerb == 255 ? SurgeryVerbKind.Inspect : (SurgeryVerbKind) _board.CloseVerb;
+        var undo = _board.UndoVerb == 255 ? SurgeryVerbKind.Inspect : (SurgeryVerbKind) _board.UndoVerb;
+        var alternate = close != SurgeryVerbKind.Inspect && close != stepVerb;
+        var shown = alternate && stepVerb == SurgeryVerbKind.Seat ? close : stepVerb;
+        var back = undo != SurgeryVerbKind.Inspect && undo != stepVerb && _verb != close
+            ? undo
+            : alternate ? close : SurgeryVerbKind.Inspect;
+        var other = shown == stepVerb ? back : stepVerb;
         var need = _board.SawHits < 1 ? 3 : _board.SawHits;
         var suffix = _game is SurgeryGameKind.Saw or SurgeryGameKind.Drill or SurgeryGameKind.Chop
             ? Loc.GetString("surgery-hint-left", ("n", Math.Max(1, need - _passes)))
@@ -1167,7 +1240,7 @@ public sealed class SurgeryClientSystem : EntitySystem
         var extra = "";
         if (Lodged() || OrgansReady())
             extra = _patient is { } body && MachineBody(body) ? "MachinePry" : "Extract";
-        _hint.Show(shown, SurgeryVerbKind.Inspect, shown == (SurgeryVerbKind) _board.StepVerb ? _board.StepHint : "", suffix, extra);
+        _hint.Show(shown, other, shown == stepVerb ? _board.StepHint : "", suffix, extra);
         _hint.SetSize = _hint.MinSize;
         var size = _hint.MinSize * UiScale();
         var view = _ui.RootControl.PixelSize;
@@ -1264,17 +1337,25 @@ public sealed class SurgeryClientSystem : EntitySystem
     private void TraceSpread(bool down, float signed, float along)
     {
         var side = MathF.Abs(signed);
-        var onArrow = along > 0.02f && along < 0.98f && side < 0.22f;
+        var onArrow = along > -0.1f && along < 1.1f && side < 0.32f;
         if (down && !_down && onArrow)
         {
             _grab = signed >= 0f ? 1 : -1;
             _armed = true;
         }
 
+        var closing = Closing();
         if (down && _grab != 0)
         {
-            var pulled = Math.Clamp(side, 0.04f, 0.2f);
-            if (_grab > 0)
+            var pulled = Math.Clamp(side, closing ? 0.02f : 0.04f, 0.2f);
+            if (closing)
+            {
+                if (_grab > 0)
+                    _right = _right <= 0f ? pulled : MathF.Min(_right, pulled);
+                else
+                    _left = _left <= 0f ? pulled : MathF.Min(_left, pulled);
+            }
+            else if (_grab > 0)
                 _right = MathF.Max(_right, pulled);
             else
                 _left = MathF.Max(_left, pulled);
@@ -1286,11 +1367,40 @@ public sealed class SurgeryClientSystem : EntitySystem
 
         _grab = 0;
         _armed = false;
-        var opened = _left > 0.09f && _right > 0.09f || MathF.Max(_left, _right) > 0.14f;
-        _left = 0.035f;
-        _right = 0.035f;
-        if (opened && !LayerHeld())
-            Send(1f, 0, false);
+        var chest = _board != null && (LimbZone) _board.Zone == LimbZone.Torso;
+        bool done;
+        if (closing)
+        {
+            var leftShut = _left > 0f && _left < 0.05f;
+            var rightShut = _right > 0f && _right < 0.05f;
+            done = chest ? leftShut && rightShut : leftShut || rightShut;
+        }
+        else
+            done = chest ? _left > 0.09f && _right > 0.09f : MathF.Max(_left, _right) > 0.14f;
+
+        if (!chest)
+        {
+            _left = 0f;
+            _right = 0f;
+        }
+
+        if (!done || !closing && LayerHeld())
+            return;
+
+        _left = 0f;
+        _right = 0f;
+        Send(1f, 0, false);
+    }
+
+    private bool Closing()
+    {
+        if (_board == null || _verb != SurgeryVerbKind.Retract)
+            return false;
+
+        if (_board.StepVerb != (byte) SurgeryVerbKind.Retract)
+            return _board.UndoVerb == (byte) SurgeryVerbKind.Retract;
+
+        return _board.StepLayer < _board.Retracted.Length && _board.Retracted[_board.StepLayer] != 0;
     }
 
     private bool LayerHeld()
@@ -1407,8 +1517,9 @@ public sealed class SurgeryClientSystem : EntitySystem
         _guide.Radius = 0.014f;
         _guide.Cover = _frontier;
         _guide.Fill = _game is SurgeryGameKind.Hold or SurgeryGameKind.Steady && _verb != SurgeryVerbKind.Inspect ? _frontier : 0f;
-        _guide.Left = MathF.Max(_left, 0.08f);
-        _guide.Right = MathF.Max(_right, 0.08f);
+        _guide.Inward = Closing();
+        _guide.Left = _guide.Inward && _left <= 0f ? 1f : _left;
+        _guide.Right = _guide.Inward && _right <= 0f ? 1f : _right;
         _guide.Sear.Clear();
         _guide.Sear.AddRange(_sear);
         _guide.SearGreen = _game == SurgeryGameKind.Inject;
@@ -2272,6 +2383,9 @@ public sealed class SurgeryClientSystem : EntitySystem
         _map?.Orphan();
         _hint?.Orphan();
         _board = null;
+        _boardVerb = 255;
+        _boardGame = 255;
+        _carryClick = false;
         _patient = null;
         _tool = null;
         _armed = false;
@@ -2291,14 +2405,17 @@ public sealed class SurgeryClientSystem : EntitySystem
             && _game == SurgeryGameKind.Spread
             && _didPull)
         {
-            var left = _left > 0.08f;
-            var right = _right > 0.08f;
+            var closing = Closing();
+            var left = closing ? _left <= 0f || _left > 0.06f : _left > 0.08f;
+            var right = closing ? _right <= 0f || _right > 0.06f : _right > 0.08f;
             if (left && !right)
                 state = mark.Prefix + "_open_l";
             else if (right && !left)
                 state = mark.Prefix + "_open_r";
             else if (left && right)
                 state = mark.Prefix + "_open";
+            else if (closing)
+                state = CutLook(mark.Prefix, 1f);
         }
 
         ShowWound(patient, (LimbZone) board.Zone, board.Part, board.Across != 0, state);
@@ -2482,14 +2599,46 @@ public sealed class SurgeryClientSystem : EntitySystem
             _woundKeys.Remove(uid);
     }
 
+    private static readonly string[] ClothingLayers =
+    {
+        "head", "mask", "neck", "underweart", "underwearb", "jumpsuit", "outerClothing",
+        "suitstorage", "gloves", "shoes", "socks", "back", "belt",
+    };
+
+    private int? ClothingIndex(SpriteComponent sprite)
+    {
+        int? index = null;
+        foreach (var key in ClothingLayers)
+        {
+            if (!sprite.LayerMapTryGet(key, out var layer, false))
+                continue;
+
+            if (index == null || layer < index)
+                index = layer;
+        }
+
+        return index;
+    }
+
     private void SetWoundLayer(EntityUid uid, SpriteComponent sprite, string key, ResPath rsi, string? state)
     {
+        var cover = ClothingIndex(sprite);
         if (!sprite.LayerMapTryGet(key, out var layer))
         {
             if (state == null)
                 return;
 
-            layer = sprite.AddLayer(new SpriteSpecifier.Rsi(rsi, state));
+            var specifier = new SpriteSpecifier.Rsi(rsi, state);
+            layer = cover is int at
+                ? _sprites.AddLayer((uid, sprite), specifier, at)
+                : _sprites.AddLayer((uid, sprite), specifier);
+            sprite.LayerMapSet(key, layer);
+        }
+        else if (state != null && cover is int above && layer >= above)
+        {
+            _sprites.RemoveLayer((uid, sprite), layer);
+            var insert = above > layer ? above - 1 : above;
+            layer = _sprites.AddLayer((uid, sprite), new SpriteSpecifier.Rsi(rsi, state), insert);
             sprite.LayerMapSet(key, layer);
         }
         else if (state != null)

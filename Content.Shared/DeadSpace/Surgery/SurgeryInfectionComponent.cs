@@ -25,11 +25,6 @@ public sealed partial class SurgeryInfectionComponent : Component
     {
         return Rotting.Contains(zone);
     }
-
-    public bool Focus(LimbZone zone)
-    {
-        return Rotting.Contains(zone) || Latent.Contains(zone);
-    }
 }
 
 [DataDefinition, Serializable, NetSerializable]

@@ -1,6 +1,8 @@
 // Мёртвый Космос, Licensed under custom terms with restrictions on public hosting and commercial use, full text: https://raw.githubusercontent.com/dead-space-server/space-station-14-fobos/master/LICENSE.TXT
 
+using Content.Shared.Atmos.Components;
 using Content.Shared.Clothing.Components;
+using Content.Shared.DeadSpace.Psychiatry;
 using Content.Shared.Inventory;
 using Robust.Shared.GameObjects;
 using Robust.Shared.GameStates;
@@ -88,6 +90,14 @@ public static class LimbCoverRules
         var slots = inventory.GetSlotEnumerator(body);
         while (slots.NextItem(out var item, out var slot))
         {
+            if (entities.HasComponent<BreathToolComponent>(item) || entities.HasComponent<MedicalGagComponent>(item))
+            {
+                if (zone == LimbZone.Mouth)
+                    return true;
+
+                continue;
+            }
+
             if (entities.TryGetComponent(item, out LimbCoverComponent? cover))
             {
                 if (!cover.OnlyWhenBlocking && cover.Covers(zone))
@@ -105,8 +115,11 @@ public static class LimbCoverRules
 
     public static bool SlotCovers(SlotFlags flags, LimbZone zone)
     {
-        if ((flags & (SlotFlags.HEAD | SlotFlags.MASK)) != 0
+        if ((flags & SlotFlags.HEAD) != 0
             && zone is LimbZone.Head or LimbZone.Eyes or LimbZone.Mouth)
+            return true;
+
+        if ((flags & SlotFlags.MASK) != 0 && zone == LimbZone.Mouth)
             return true;
 
         if ((flags & SlotFlags.EYES) != 0 && zone == LimbZone.Eyes)

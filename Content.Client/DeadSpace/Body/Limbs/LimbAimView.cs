@@ -4,12 +4,15 @@ using System.Numerics;
 using Content.Shared.DeadSpace.Body.Limbs;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
+using Robust.Shared.Input;
 
 namespace Content.Client.DeadSpace.Body.Limbs;
 
 public sealed class LimbAimView : Control
 {
     public bool Aimed;
+
+    public event Action<GUIBoundKeyEventArgs>? Pressed;
 
     public LimbAimView()
     {
@@ -30,5 +33,15 @@ public sealed class LimbAimView : Control
             var at = center + new Vector2(MathF.Cos(angle), MathF.Sin(angle)) * span;
             handle.DrawRect(UIBox2.FromDimensions(at - new Vector2(2, 2), new Vector2(4, 4)), color);
         }
+    }
+
+    protected override void KeyBindDown(GUIBoundKeyEventArgs args)
+    {
+        base.KeyBindDown(args);
+        if (args.Function != EngineKeyFunctions.UIClick)
+            return;
+
+        Pressed?.Invoke(args);
+        args.Handle();
     }
 }

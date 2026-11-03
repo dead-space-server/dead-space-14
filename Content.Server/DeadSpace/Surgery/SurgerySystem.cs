@@ -86,12 +86,14 @@ public sealed class SurgerySystem : EntitySystem
     private const string HealthRules = "Default";
     private const string FloorPlace = "Floor";
     private const string PenTag = "Pen";
+    private static readonly SurgeryStep SkinBack = new() { Verb = SurgeryVerbKind.Retract, Layer = SurgeryLayerKind.Skin, Hint = "RetractClose" };
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<LimbBodyComponent, InteractUsingEvent>(OnUse);
         SubscribeLocalEvent<LimbBodyComponent, TargetBeforeInjectEvent>(OnBeforeInject);
+        SubscribeLocalEvent<LimbBodyComponent, InjectorUseAttemptEvent>(OnInjectorUse);
         SubscribeLocalEvent<LimbBodyComponent, SurgeryStepDoAfterEvent>(OnStepDoAfter);
         SubscribeLocalEvent<SurgeryFocusComponent, PlayerDetachedEvent>(OnFocusDetach);
         SubscribeNetworkEvent<SurgeryCutMessage>(OnCut);
@@ -189,6 +191,15 @@ public sealed class SurgerySystem : EntitySystem
 
         args.OverrideMessage = "";
         args.Cancel();
+    }
+
+    private void OnInjectorUse(Entity<LimbBodyComponent> ent, ref InjectorUseAttemptEvent args)
+    {
+        if (args.Cancelled || !TryComp<SurgerySiteComponent>(ent, out var site) || site.Done || site.Layers.Count == 0)
+            return;
+
+        if (StepNow(ent, site) is { Verb: SurgeryVerbKind.Inject })
+            args.Cancelled = true;
     }
 
     private void OnUse(Entity<LimbBodyComponent> ent, ref InteractUsingEvent args)
@@ -638,7 +649,7 @@ public sealed class SurgerySystem : EntitySystem
 
         if (verb == SurgeryVerbKind.Cauterize
             && Operation(patient.Value, site, out var open)
-            && site.Step > 0
+            && (site.Step > 0 || WoundOpen(site))
             && site.Step < open.Steps.Count
             && open.Steps[site.Step].Verb != SurgeryVerbKind.Cauterize)
         {
@@ -683,6 +694,7 @@ public sealed class SurgerySystem : EntitySystem
         Operation(patient.Value, site, out var before);
         var closeIndex = before == null || site.Step < before.Steps.Count ? -1 : CloseIndex(before, site);
         var closedStep = false;
+        var reported = message.Progress;
         var asleep = Asleep(patient.Value);
         var flinched = message.Progress > 0f && _anesthesia.Flinch(patient.Value, asleep, StepNow(patient.Value, site), site.Zone);
         if (flinched)
@@ -731,6 +743,15 @@ public sealed class SurgerySystem : EntitySystem
         }
 
         var result = SurgeryCut.Resolve(request);
+        var rejoin = verb == SurgeryVerbKind.Retract && closeIndex >= 0 && before != null
+                     && CloseSteps(before, site)[closeIndex].Verb == SurgeryVerbKind.Retract;
+        if (rejoin)
+        {
+            result.Rejected = false;
+            result.Retracted = layer.Retracted && message.Progress <= 0.8f;
+            result.Key = result.Retracted ? "surgery-retract-short" : string.Empty;
+        }
+
         var tail = verb == SurgeryVerbKind.Amputate && before is { Appendage.Length: > 0, Attach: false };
         if (tail)
         {
@@ -756,10 +777,16 @@ public sealed class SurgerySystem : EntitySystem
             site.Layers[index + 1] = next;
         }
 
-        if (verb == SurgeryVerbKind.Retract)
+        if (verb == SurgeryVerbKind.Retract && !rejoin)
             Reveal(site);
         if (verb == SurgeryVerbKind.MendBone && layer.Kind == SurgeryLayerKind.Bone && !layer.Retracted && layer.Integrity >= 0.85f)
             SurgeryProcedure.Conceal(site.Layers, index);
+        if (verb == SurgeryVerbKind.Cauterize && reported >= 0.95f)
+        {
+            layer.Integrity = 1f;
+            layer.Retracted = false;
+            site.Layers[index] = layer;
+        }
         var stepVerb = SurgeryVerbKind.Inspect;
         string stepOrgan = "";
         if (Operation(patient.Value, site, out var operation) && site.Step < operation.Steps.Count)
@@ -943,7 +970,7 @@ public sealed class SurgerySystem : EntitySystem
             }
         }
         else if (before != null && closeIndex >= 0 && CloseSteps(before, site)[closeIndex] is { } closing && closing.Verb == verb
-                 && (Explicit(verb) ? result.Finished : Closed(closing, site.Layers[index])))
+                 && CloseReady(closing, site.Layers[index], result))
         {
             site.CloseStep = closeIndex + 1;
             closedStep = true;
@@ -1055,10 +1082,7 @@ public sealed class SurgerySystem : EntitySystem
             PlayStep(patient.Value, "Miss");
         _port.Apply(patient.Value, site.Zone, organ, result, held);
         Wither(patient.Value, site.Zone);
-        if (verb == SurgeryVerbKind.Seat && result.Attach && !site.Done && !ZoneSevered(patient.Value, site.Zone)
-            && (!Operation(patient.Value, site, out var seated) || site.Step >= seated.Steps.Count))
-            Finish(patient.Value, site);
-        else if (verb == SurgeryVerbKind.Seat && result.Attach)
+        if (verb == SurgeryVerbKind.Seat && result.Attach && ZoneSevered(patient.Value, site.Zone))
             result.Key = "surgery-wrong-hand";
         RemComp<SurgeryBusyComponent>(user);
         Send(patient.Value, user, site, held, result.Key, false);
@@ -1391,12 +1415,14 @@ public sealed class SurgerySystem : EntitySystem
     private List<SurgeryStep> CloseSteps(SurgeryOperationPrototype operation, SurgerySiteComponent site)
     {
         var steps = new List<SurgeryStep>(operation.Close);
+        SurgeryOperationPrototype? opened = null;
         if (site.Part.Length == 0
             && _prototype.TryIndex<SurgeryAnatomyPrototype>(AnatomyId(site.Owner, site.Zone), out var anatomy)
             && anatomy.Operation is { } open
             && open.Id != operation.ID
             && _prototype.TryIndex<SurgeryOperationPrototype>(open, out var opening))
         {
+            opened = opening;
             foreach (var step in opening.Close)
             {
                 if (SurgeryProcedure.Index(site.Layers, step.Layer) >= 0 && !steps.Exists(own => own.Layer == step.Layer))
@@ -1404,7 +1430,26 @@ public sealed class SurgerySystem : EntitySystem
             }
         }
 
-        return steps.OrderByDescending(step => LayerIndex(site, step.Layer)).ToList();
+        steps = steps.Exists(step => step.Order >= 0)
+            ? steps.OrderBy(step => step.Order < 0 ? int.MaxValue : step.Order).ToList()
+            : steps.OrderByDescending(step => LayerIndex(site, step.Layer)).ToList();
+
+        if (!operation.CloseRetract
+            || !SpreadsSkin(operation) && (opened == null || !SpreadsSkin(opened))
+            || steps.Exists(step => step.Verb == SurgeryVerbKind.Retract))
+            return steps;
+
+        var seal = steps.FindIndex(step => step.Layer == SurgeryLayerKind.Skin
+                                           && step.Verb is SurgeryVerbKind.Cauterize or SurgeryVerbKind.SealSap);
+        if (seal >= 0)
+            steps.Insert(seal, SkinBack);
+
+        return steps;
+    }
+
+    private static bool SpreadsSkin(SurgeryOperationPrototype operation)
+    {
+        return operation.Steps.Exists(step => step is { Verb: SurgeryVerbKind.Retract, Layer: SurgeryLayerKind.Skin });
     }
 
     private int CloseIndex(SurgeryOperationPrototype operation, SurgerySiteComponent site)
@@ -1428,6 +1473,20 @@ public sealed class SurgerySystem : EntitySystem
         return -1;
     }
 
+    private static bool CloseReady(SurgeryStep step, SurgeryLayerState layer, SurgeryResult result)
+    {
+        if (step.Optional)
+        {
+            return step.Verb switch
+            {
+                SurgeryVerbKind.Seat => result.Attach,
+                _ => result.Finished,
+            };
+        }
+
+        return Explicit(step.Verb) ? result.Finished : Closed(step, layer);
+    }
+
     private static bool Explicit(SurgeryVerbKind verb)
     {
         return verb is SurgeryVerbKind.Bandage or SurgeryVerbKind.Stanch or SurgeryVerbKind.Inject;
@@ -1435,7 +1494,19 @@ public sealed class SurgerySystem : EntitySystem
 
     private static bool Closed(SurgeryStep step, SurgeryLayerState layer)
     {
+        if (step.Optional)
+            return false;
+
+        if (step.Verb == SurgeryVerbKind.Retract)
+            return !layer.Retracted;
+
         return !Explicit(step.Verb) && !layer.Retracted && layer.Integrity >= 0.85f;
+    }
+
+    private static bool StepClosed(SurgerySiteComponent site, SurgeryStep step)
+    {
+        var index = LayerIndex(site, step.Layer);
+        return index < 0 || Closed(step, site.Layers[index]);
     }
 
     private static int LayerIndex(SurgerySiteComponent site, SurgeryLayerKind kind)
@@ -1464,11 +1535,21 @@ public sealed class SurgerySystem : EntitySystem
         if (site.Step > 0 && site.Step < operation.Steps.Count)
             return (byte) SurgeryVerbKind.Cauterize;
 
-        var step = NextClose(operation, site);
-        if (step == null)
+        var steps = CloseSteps(operation, site);
+        var index = CloseIndex(steps, site);
+        if (index < 0)
             return 255;
 
-        return (byte) step.Verb;
+        if (steps[index].Optional && site.CloseStep == 0)
+        {
+            for (var i = index + 1; i < steps.Count; i++)
+            {
+                if (!steps[i].Optional && !StepClosed(site, steps[i]))
+                    return (byte) steps[i].Verb;
+            }
+        }
+
+        return (byte) steps[index].Verb;
     }
 
     private void Abort(EntityUid patient, SurgerySiteComponent site)
@@ -1497,13 +1578,13 @@ public sealed class SurgerySystem : EntitySystem
         if (target >= operation.Steps.Count)
             return 255;
 
-        return UndoOf(operation.Steps[target]);
+        return UndoOf(operation.Steps[target], site.Step >= operation.Steps.Count);
     }
 
-    private static byte UndoOf(SurgeryStep step)
+    private static byte UndoOf(SurgeryStep step, bool closing)
     {
         if (step.Verb == SurgeryVerbKind.Retract)
-            return 255;
+            return closing ? (byte) 255 : (byte) SurgeryVerbKind.Retract;
 
         return ParseUndo(step.Undo);
     }
@@ -1517,7 +1598,10 @@ public sealed class SurgerySystem : EntitySystem
         if (target >= operation.Steps.Count)
             return false;
 
-        if (UndoOf(operation.Steps[target]) != (byte) verb)
+        if (site.Step < operation.Steps.Count && operation.Steps[site.Step].Verb == verb)
+            return false;
+
+        if (UndoOf(operation.Steps[target], site.Step >= operation.Steps.Count) != (byte) verb)
             return false;
 
         var undone = operation.Steps[target];
@@ -1756,6 +1840,33 @@ public sealed class SurgerySystem : EntitySystem
         SurgeryProcedure.Reveal(site.Layers);
     }
 
+    private void SkipOptional(SurgerySiteComponent site, SurgeryOperationPrototype operation, SurgeryVerbKind verb)
+    {
+        if (site.CloseStep != 0 || site.Step < operation.Steps.Count)
+            return;
+
+        var steps = CloseSteps(operation, site);
+        var index = CloseIndex(steps, site);
+        if (index < 0 || !steps[index].Optional || steps[index].Verb == verb)
+            return;
+
+        var target = -1;
+        for (var i = index; i < steps.Count; i++)
+        {
+            if (steps[i].Optional || StepClosed(site, steps[i]))
+                continue;
+
+            if (steps[i].Verb == verb)
+                target = i;
+            break;
+        }
+
+        if (target < 0)
+            return;
+
+        site.CloseStep = target;
+    }
+
     private int StepIndex(EntityUid patient, SurgerySiteComponent site, SurgeryVerbKind verb)
     {
         if (!Operation(patient, site, out var operation))
@@ -1763,6 +1874,7 @@ public sealed class SurgerySystem : EntitySystem
 
         Rewind(site, operation);
         site.Step = SurgeryProcedure.CatchUp(operation.Steps, site.Layers, site.Step);
+        SkipOptional(site, operation, verb);
         var step = site.Step;
         if (step >= 0 && step < operation.Steps.Count && operation.Steps[step].Verb == verb)
             return LayerIndex(site, operation.Steps[step].Layer);
@@ -2451,7 +2563,7 @@ public sealed class SurgerySystem : EntitySystem
 
     private void SpendHeld(EntityUid? held)
     {
-        if (held == null)
+        if (held == null || !HasComp<StackComponent>(held.Value))
             return;
 
         _stack.TryUse(held.Value, 1);

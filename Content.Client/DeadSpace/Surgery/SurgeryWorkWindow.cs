@@ -405,7 +405,7 @@ public sealed class SurgeryHint : Control
         if (extra.Length > 0)
             Add(extra, "");
         else if (undo != SurgeryVerbKind.Inspect && undo != verb)
-            Add(undo.ToString(), "");
+            Add(undo == SurgeryVerbKind.Retract ? "RetractClose" : undo.ToString(), "");
 
         var width = Pad;
         for (var i = 0; i < _shown.Count; i++)

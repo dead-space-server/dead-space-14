@@ -17,19 +17,10 @@ public sealed class PlayerStubArmorSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<LimbBodyComponent, DamageModifyEvent>(OnDamageModify);
         Subs.CVar(_cfg, CCVars.LimbStubArmor, value => _coefficient = value, true);
     }
 
-    public FixedPoint2 BeforeStub(EntityUid uid, FixedPoint2 total)
-    {
-        if (!HasComp<LimbBodyComponent>(uid) || _coefficient <= 0f)
-            return total;
-
-        return total / _coefficient;
-    }
-
-    private void OnDamageModify(EntityUid uid, LimbBodyComponent limbs, DamageModifyEvent args)
+    public void Apply(DamageModifyEvent args)
     {
         if (_coefficient >= 1f)
             return;
@@ -42,5 +33,13 @@ public sealed class PlayerStubArmorSystem : EntitySystem
         }
 
         args.Damage = scaled;
+    }
+
+    public FixedPoint2 BeforeStub(EntityUid uid, FixedPoint2 total)
+    {
+        if (!HasComp<LimbBodyComponent>(uid) || _coefficient <= 0f)
+            return total;
+
+        return total / _coefficient;
     }
 }

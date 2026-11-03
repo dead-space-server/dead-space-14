@@ -82,8 +82,6 @@ public sealed class SurgeryXrayClientSystem : EntitySystem
         {
             foreach (var zone in infection.Rotting)
                 hash = hash * 31 + (int) zone + 101;
-            foreach (var zone in infection.Latent)
-                hash = hash * 31 + (int) zone + 211;
         }
 
         if (TryComp<SurgeryCavityComponent>(body, out var hold))
@@ -597,7 +595,6 @@ public sealed class SurgeryXrayClientSystem : EntitySystem
             return;
 
         var foci = new HashSet<LimbZone>(infection.Rotting);
-        foci.UnionWith(infection.Latent);
         foreach (var zone in foci)
         {
             var (at, _, width) = Anchor(rules, zone);

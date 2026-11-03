@@ -263,6 +263,13 @@ public sealed partial class InjectorSystem : EntitySystem
     // DS14-start
     private bool IsInjectBlockedBeforeDoAfter(Entity<InjectorComponent> injector, EntityUid user, EntityUid target)
     {
+        // DS14-start
+        var attempt = new InjectorUseAttemptEvent();
+        RaiseLocalEvent(target, ref attempt);
+        if (attempt.Cancelled)
+            return true;
+        // DS14-end
+
         if (!_prototypeManager.Resolve(injector.Comp.ActiveModeProtoId, out var activeMode))
             return false;
 
@@ -421,6 +428,13 @@ public sealed partial class InjectorSystem : EntitySystem
     /// <exception cref="ArgumentOutOfRangeException">The injector has a different <see cref="InjectorBehavior"/>.</exception>
     private bool TryUseInjector(Entity<InjectorComponent> injector, EntityUid user, EntityUid target)
     {
+        // DS14-start
+        var attempt = new InjectorUseAttemptEvent();
+        RaiseLocalEvent(target, ref attempt);
+        if (attempt.Cancelled)
+            return false;
+        // DS14-end
+
         if (!_prototypeManager.Resolve(injector.Comp.ActiveModeProtoId, out var activeMode))
             return false;
 

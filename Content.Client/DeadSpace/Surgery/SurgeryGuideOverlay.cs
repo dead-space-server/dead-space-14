@@ -36,6 +36,7 @@ public sealed class SurgeryGuideOverlay : Overlay
     public float Fill;
     public float Left = 0.035f;
     public float Right = 0.035f;
+    public bool Inward;
     public Vector2 LocalA;
     public Vector2 LocalB;
     public Vector2 Start;
@@ -268,24 +269,25 @@ public sealed class SurgeryGuideOverlay : Overlay
     private void Triangles(DrawingHandleWorld handle, Vector2 dir, Vector2 side, Color ink)
     {
         var length = (End - Start).Length();
-        var near = Math.Clamp(length * 0.25f, 0.02f, 0.08f);
-        var far = Math.Clamp(length * 0.7f, near, 0.2f);
-        var size = Math.Clamp(length * 0.3f, 0.015f, 0.045f);
+        var near = Inward ? 0.02f : Math.Clamp(length * 0.25f, 0.02f, 0.08f);
+        var far = Math.Clamp(length * 0.7f, Inward ? 0.08f : near, 0.2f);
+        var size = Math.Clamp(length * 0.45f, 0.035f, 0.075f);
         var left = Math.Clamp(Left, near, far);
         var right = Math.Clamp(Right, near, far);
+        var aim = Inward ? -1f : 1f;
         var rows = length < 0.15f ? 1 : 3;
         for (var i = 1; i <= rows; i++)
         {
             var at = Start + (End - Start) * (i / (rows + 1f));
-            Triangle(handle, at - side * left, -side, dir, size, ink);
-            Triangle(handle, at + side * right, side, dir, size, ink);
+            Triangle(handle, at - side * left, -side * aim, dir, size, ink);
+            Triangle(handle, at + side * right, side * aim, dir, size, ink);
         }
     }
 
     private static void Triangle(DrawingHandleWorld handle, Vector2 tip, Vector2 aim, Vector2 dir, float size, Color ink)
     {
         var baseAt = tip - aim * size;
-        var wing = dir * size * 0.45f;
+        var wing = dir * size * 0.6f;
         handle.DrawPrimitives(DrawPrimitiveTopology.TriangleFan, new[] { tip, baseAt + wing, baseAt - wing }, ink);
     }
 

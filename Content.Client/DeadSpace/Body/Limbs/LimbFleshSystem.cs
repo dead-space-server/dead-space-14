@@ -4,6 +4,7 @@ using System.Numerics;
 using Content.Shared.DeadSpace.Body.Limbs;
 using Content.Shared.Humanoid.Markings;
 using Robust.Client.GameObjects;
+using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
@@ -55,6 +56,9 @@ public sealed class LimbFleshSystem : EntitySystem
         if (!TryComp<SpriteComponent>(ent, out var sprite))
             return;
 
+        sprite.NoRotation = true;
+        sprite.EnableDirectionOverride = true;
+        sprite.DirectionOverride = Direction.South;
         _sprite.SetColor((ent.Owner, sprite), CompOrNull<LimbFreshComponent>(ent) is { Spent: true } ? Rotten : Color.White);
         if (sprite.TryGetLayer(0, out _))
             _sprite.LayerSetColor((ent.Owner, sprite), 0, LimbSpeciesRules.Look(ent.Comp.Bare, ent.Comp.Skin));

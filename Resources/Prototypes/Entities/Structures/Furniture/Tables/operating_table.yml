@@ -7,6 +7,7 @@
   - type: SurgerySurface
     place: Table
   - type: SurgeryTankMount # DS14
+  - type: InteractionOutline # DS14
   - type: ContainerContainer # DS14
     containers:
       surgery_tank: !type:ContainerSlot

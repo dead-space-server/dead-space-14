@@ -41,3 +41,8 @@ public sealed class SelfBeforeInjectEvent(EntityUid user, EntityUid usedInjector
 [ByRefEvent]
 public sealed class TargetBeforeInjectEvent(EntityUid user, EntityUid usedInjector, EntityUid target, string? overrideMessage = null)
     : BeforeInjectTargetEvent(user, usedInjector, target, overrideMessage);
+
+// DS14-start
+[ByRefEvent]
+public record struct InjectorUseAttemptEvent(bool Cancelled = false);
+// DS14-end

@@ -124,6 +124,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
         SubscribeLocalEvent<LimbBodyComponent, UpdateMobStateEvent>(OnLimbLife, after: [typeof(MobThresholdSystem)]);
         SubscribeLocalEvent<LimbBodyComponent, RejuvenateEvent>(OnRejuvenate);
         SubscribeLocalEvent<LimbBodyComponent, LimbHarvestDoAfterEvent>(OnHarvest);
+        SubscribeLocalEvent<LimbHarvestingComponent, MeleeAttackEvent>(OnHarvestSwing);
         SubscribeLocalEvent<LimbBodyComponent, BeforeExplodeEvent>(OnBlast);
         SubscribeLocalEvent<LimbBodyComponent, AccentGetEvent>(OnAccent);
         SubscribeLocalEvent<LimbBodyComponent, RefreshMovementSpeedModifiersEvent>(OnMove);
@@ -942,6 +943,13 @@ public sealed partial class LimbWoundSystem : EntitySystem
         if (!LimbTuning.Enabled || args.Cancelled)
             return;
 
+        if (_mobs.IsDead(ent.Owner) && Harvesting(args.Attacker, ent.Owner))
+        {
+            if (TryComp<LimbHarvestingComponent>(args.Attacker, out var harvesting))
+                _doAfter.Cancel(args.Attacker, harvesting.Index);
+            return;
+        }
+
         if (!args.Wide && _mobs.IsDead(ent.Owner) && _combat.IsInCombatMode(args.Attacker) && TryHarvest(args.Attacker, ent, args.Weapon))
             args.Cancelled = true;
     }
@@ -1013,6 +1021,7 @@ public sealed partial class LimbWoundSystem : EntitySystem
 
     private void OnDeadLimbHit(EntityUid uid, LimbBodyComponent limbs, DamageModifyEvent args)
     {
+        _stub.Apply(args);
         if (!LimbTuning.Enabled || limbs.LedgerSilence > 0 || limbs.ArmorZone is not { } zone || !LimbWoundRules.IsLimb(zone)
             || limbs.FireOriginTime != _timing.CurTime)
             return;
@@ -1306,6 +1315,11 @@ public sealed partial class LimbWoundSystem : EntitySystem
         }
     }
 
+    private bool Harvesting(EntityUid user, EntityUid target)
+    {
+        return TryComp<LimbHarvestingComponent>(user, out var harvesting) && harvesting.Target == GetNetEntity(target);
+    }
+
     private bool TryHarvest(EntityUid user, Entity<LimbBodyComponent> target, EntityUid weapon)
     {
         if (_net.IsClient)
@@ -1354,8 +1368,13 @@ public sealed partial class LimbWoundSystem : EntitySystem
             CancelDuplicate = true,
             DuplicateCondition = DuplicateConditions.SameEvent,
         };
-        if (_doAfter.TryStartDoAfter(doAfter))
+        if (_doAfter.TryStartDoAfter(doAfter, out var id))
         {
+            var harvesting = EnsureComp<LimbHarvestingComponent>(user);
+            harvesting.Target = GetNetEntity(target.Owner);
+            harvesting.Index = id!.Value.Index;
+            harvesting.StartedTick = _timing.CurTick.Value;
+            Dirty(user, harvesting);
             _audio.PlayPvs(ButcherSound, Transform(target).Coordinates);
             _popup.PopupEntity(Loc.GetString("limb-harvest-start",
                     ("user", Identity.Entity(user, EntityManager)),
@@ -1368,9 +1387,22 @@ public sealed partial class LimbWoundSystem : EntitySystem
         return true;
     }
 
+    private void OnHarvestSwing(Entity<LimbHarvestingComponent> ent, ref MeleeAttackEvent args)
+    {
+        if (ent.Comp.StartedTick == _timing.CurTick.Value)
+            return;
+
+        _doAfter.Cancel(ent.Owner, ent.Comp.Index);
+    }
+
     private void OnHarvest(Entity<LimbBodyComponent> ent, ref LimbHarvestDoAfterEvent args)
     {
-        if (args.Cancelled || args.Handled || _net.IsClient)
+        if (args.Handled || _net.IsClient)
+            return;
+
+        if (TryComp<LimbHarvestingComponent>(args.User, out var harvesting) && harvesting.Target == GetNetEntity(ent.Owner))
+            RemComp<LimbHarvestingComponent>(args.User);
+        if (args.Cancelled)
             return;
 
         args.Handled = true;

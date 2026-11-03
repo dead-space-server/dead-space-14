@@ -57,6 +57,17 @@ public sealed class SurgeryXrayTableWindow : DefaultWindow
         };
         _glow = new SurgeryPawnGlow(_pawn);
         _film = new SurgeryFilmView { MinSize = new Vector2(460, 520), Visible = false };
+        _film.Clicked += pixel =>
+        {
+            if (!_film.TryBodySpot(pixel, out var spot))
+                return;
+
+            var zone = LimbDollLayout.SpriteHit(spot);
+            if (zone is LimbZone.Eyes or LimbZone.Mouth)
+                zone = LimbZone.Head;
+            _zone = zone == null ? (byte) 255 : (byte) zone.Value;
+            WriteCard();
+        };
 
         _mode = new SurgeryScreenButton(Loc.GetString("surgery-xray-button"));
         _mode.Pressed += () =>
@@ -399,9 +410,12 @@ public sealed class SurgeryFilmView : Control
     public Texture? Shot;
     public Vector2 Pan;
     public float Zoom = 1f;
+    public event Action<Vector2>? Clicked;
     private float _minZoom = 1f;
     private bool _fitted;
+    private bool _down;
     private bool _drag;
+    private Vector2 _start;
     private Vector2 _last;
 
     public SurgeryFilmView()
@@ -453,27 +467,56 @@ public sealed class SurgeryFilmView : Control
         Pan = mouse - center - before * Zoom;
     }
 
+    public bool TryBodySpot(Vector2 pixel, out Vector2 spot)
+    {
+        spot = default;
+        if (Zoom <= 0f)
+            return false;
+
+        var size = 32f * Zoom;
+        var left = PixelWidth / 2f + Pan.X - size / 2f;
+        var top = PixelHeight / 2f + Pan.Y - size / 2f;
+        var local = new Vector2((pixel.X - left) / Zoom, (pixel.Y - top) / Zoom);
+        if (local.X < 0f || local.Y < 0f || local.X > 32f || local.Y > 32f)
+            return false;
+
+        spot = local;
+        return true;
+    }
+
     protected override void KeyBindDown(GUIBoundKeyEventArgs args)
     {
         base.KeyBindDown(args);
         if (args.Function != EngineKeyFunctions.UIClick)
             return;
 
-        _drag = true;
-        _last = args.RelativePixelPosition;
+        _down = true;
+        _drag = false;
+        _start = args.RelativePixelPosition;
+        _last = _start;
         args.Handle();
     }
 
     protected override void KeyBindUp(GUIBoundKeyEventArgs args)
     {
         base.KeyBindUp(args);
-        if (args.Function == EngineKeyFunctions.UIClick)
-            _drag = false;
+        if (args.Function != EngineKeyFunctions.UIClick)
+            return;
+
+        if (_down && !_drag)
+            Clicked?.Invoke(args.RelativePixelPosition);
+        _down = false;
+        _drag = false;
     }
 
     protected override void MouseMove(GUIMouseMoveEventArgs args)
     {
         base.MouseMove(args);
+        if (!_down)
+            return;
+
+        if (!_drag && (args.RelativePixelPosition - _start).Length() > 6f)
+            _drag = true;
         if (!_drag)
             return;
 
@@ -484,6 +527,7 @@ public sealed class SurgeryFilmView : Control
     protected override void MouseExited()
     {
         base.MouseExited();
+        _down = false;
         _drag = false;
     }
 }

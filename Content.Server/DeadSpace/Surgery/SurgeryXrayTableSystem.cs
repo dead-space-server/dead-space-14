@@ -37,6 +37,7 @@ public sealed class SurgeryXrayTableSystem : EntitySystem
     private static readonly SoundPathSpecifier PrintSound = new("/Audio/Machines/printer.ogg");
 
     private readonly Dictionary<EntityUid, TimeSpan> _next = new();
+    private readonly Dictionary<EntityUid, TimeSpan> _printed = new();
 
     public override void Initialize()
     {
@@ -107,6 +108,13 @@ public sealed class SurgeryXrayTableSystem : EntitySystem
 
     private void OnPrint(Entity<SurgeryXrayTableComponent> ent, ref SurgeryXrayTablePrintMessage args)
     {
+        if (_printed.TryGetValue(ent.Owner, out var due) && _timing.CurTime < due)
+        {
+            _popup.PopupEntity(Loc.GetString("surgery-xray-print-wait"), ent.Owner, args.Actor);
+            return;
+        }
+
+        _printed[ent.Owner] = _timing.CurTime + TimeSpan.FromSeconds(3);
         var patient = Patient(ent.Owner);
         var name = patient is { } body ? Name(body) : "";
         var card = new SurgeryXrayCard { Focus = Loc.GetString("surgery-xray-empty") };

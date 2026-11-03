@@ -47,7 +47,7 @@ public static class SurgeryXrayReport
 
         card.FocusTitle = Loc.GetString($"health-analyzer-zone-{(byte) zone.Value}");
         card.Focus = Focus(limbs, zone.Value, issues, hold, machine);
-        if (infection != null && infection.Focus(zone.Value))
+        if (infection != null && infection.Rots(zone.Value))
             card.Focus += "\n" + Loc.GetString("surgery-xray-infection");
         return card;
     }
@@ -57,9 +57,7 @@ public static class SurgeryXrayReport
         if (infection == null)
             return 0;
 
-        var zones = new HashSet<LimbZone>(infection.Rotting);
-        zones.UnionWith(infection.Latent);
-        return zones.Count;
+        return new HashSet<LimbZone>(infection.Rotting).Count;
     }
 
     public static string Paper(string name, SurgeryXrayCard card, bool image)
